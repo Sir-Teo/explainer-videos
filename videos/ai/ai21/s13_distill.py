@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import (CD_C, DATA, DMD_C, FM_C, HIST, NOISE, PART, PROG_C, Panel, bars_chart, distill_picture,
+from videos.ai.ai21.common import (ladder, CD_C, DATA, DMD_C, FM_C, HIST, NOISE, PART, PROG_C, Panel, bars_chart, distill_picture,
                                    load, take_away)
 
 
@@ -52,7 +52,7 @@ class Distill(VoiceoverScene):
         verdict = (f"After {nh} halvings the one-step student lands {s1:.3f} from the data, against the teacher's "
                    f"{t64:.3f} with {n0} steps." if rise < 1.5 else
                    f"After {nh} halvings the one-step student lands {s1:.3f} from the data, against the teacher's "
-                   f"{t64:.3f} with {n0} steps: each halving loses a little.")
+                   f"{t64:.3f} with {n0} steps: the final student has higher measured discrepancy.")
         with self.voiceover(
             "Solvers can only do so much: a curved path needs steps. Distillation changes the network instead. "
             "<bookmark mark='a'/> A slow teacher's results become the targets that a fast student learns to hit. "
@@ -104,7 +104,7 @@ class Distill(VoiceoverScene):
         whys = [why(r"$f(x, 1) = x$: \ at the data end, \ nothing to do"),
                 why(r"$x_{\tau + \Delta}$: \ one teacher step along the ODE")]
         step = ladder(self, rows, whys, keep=2, top=3.1, x=-0.2, buff=0.6, edge=6.85)
-        pn = Panel(3.6, center=[4.6, -1.3, 0])
+        pn = Panel(3.6, center=[4.6, -1.3, 0], xlim=(-3.0, 3.0))
         pts = pn.dots(snaps[0], CD_C, radius=0.02)
         cnt = label(rf"step ${at[0]:,}$".replace(",", "{,}"), font_size=22, color=CD_C).next_to(pn, UP, buff=0.1)
         card = history_card(2024, r"Lu \& Song: \ continuous-time consistency (sCM)", r"$1.5$ billion parameters, \ two "
@@ -148,32 +148,32 @@ class Distill(VoiceoverScene):
         sw = np.asarray(d["dmd_sw"])
         rows = [
             cmath(r"\min_\theta", r"\;", r"\mathbb E_t\, \mathrm{KL}\big(p_{\text{fake}, t} \,\|\, p_{\text{real}, t}\big),"
-                  r"\qquad x = G_\theta(z)", font_size=30),
-            cmath(r"\nabla_\theta \mathrm{KL}", r"=", r"\mathbb E_z\Big[\big(\nabla \log p_{\text{fake}}(x) - \nabla \log "
-                  r"p_{\text{real}}(x)\big)\; \frac{\partial x}{\partial \theta}\Big]", font_size=30),
+                  r"\qquad x_t = \alpha_t G_\theta(z) + \sigma_t\varepsilon", font_size=30),
+            cmath(r"\nabla_\theta \mathrm{KL}_t", r"=", r"\mathbb E_{z,\varepsilon}\Big[\Big(\frac{\partial x_t}{\partial \theta}\Big)^\top "
+                  r"\big(s_{\text{fake},t}(x_t)-s_{\text{real},t}(x_t)\big)\Big]", font_size=28),
             cmath(r"\nabla \log p", r"\approx", r"\text{a diffusion model's score: \ the teacher (real), \ a second "
                   r"model of } G\text{'s samples (fake)}", font_size=26),
         ]
-        whys = [why(r"match distributions, \ not paths"), why(r"through the sample; \ $\mathbb E[\partial_\theta \log p] = 0$"),
+        whys = [why(r"fake: \ the law of $x_t$; \ real: \ noised data"), why(r"$\mathbb E_{p_{\mathrm{fake},t}}[\partial_\theta \log p_{\mathrm{fake},t}(x_t)]=0$ at fixed $x_t$"),
                 why(r"two scores")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.6, buff=0.55, edge=6.85)
         pn = Panel(3.8, center=[-4.4, -1.6, 0])
         pts = pn.dots(snaps[0], DMD_C, radius=0.02)
         cnt = label(rf"generator step ${at[0]:,}$".replace(",", "{,}"), font_size=20, color=DMD_C).next_to(pn, UP, buff=0.1)
-        pub = VGroup(history_card(2024, r"Yin et al.: \ DMD", r"one step: \ FID $2.62$ on ImageNet $64^2$; \ $20$ "
-                                  r"images a second", color=HIST, width=4.4, font_size=17),
-                     history_card(2024, r"Yin et al.: \ DMD2", r"plus a GAN loss on real images: \ FID $1.28$ (Part 20)",
+        pub = VGroup(history_card(2024, r"Yin et al.: \ DMD", r"one step: \ FID $2.62$ on ImageNet $64^2$; \ includes teacher-output regression", color=HIST, width=4.4, font_size=17),
+                     history_card(2024, r"Yin et al.: \ DMD2", r"revised training with GAN loss; \ longer-budget FID $1.28$ on ImageNet $64^2$",
                                   color=HIST, width=4.4, font_size=17)).arrange(DOWN, buff=0.15).move_to([3.9, -2.25, 0])
         with self.voiceover(
             "A third way matches distributions rather than paths. Tianwei Yin and colleagues' distribution matching "
             "distillation trains a one-step generator so that, blurred to every noise level, its samples look like "
-            "the teacher's. <bookmark mark='a'/> The gradient of that KL divergence, taken through each sample, is "
+            "the teacher's. <bookmark mark='a'/> At each noise level, differentiate through the noised sample, including its noise-map Jacobian. The gradient is "
             "the difference of two scores: the generator's own distribution's, minus the real one's. "
             "<bookmark mark='b'/> The real score is the teacher. The fake score comes from a second diffusion model, "
             "trained all along on the generator's latest samples. <bookmark mark='c'/> Ours: the generator starts as "
             f"the teacher's single blurry step and is pushed, sample by sample, onto the letters: {sw.mean():.3f} from "
-            f"the data at the end, over {len(sw)} seeds. <bookmark mark='d'/> At scale, one step, an FID of 2.62 on "
-            "small ImageNet images; with a GAN loss added, DMD2 reached 1.28."
+            f"the data at the end, over {len(sw)} seeds. <bookmark mark='d'/> Our demonstration uses a normalized score-difference adaptation. "
+            "Published DMD also used teacher-output regression and reached an FID of 2.62 on 64-pixel ImageNet. "
+            "DMD2 revised the training, including a GAN loss, and reached 1.28 with a longer budget."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -216,7 +216,7 @@ class Distill(VoiceoverScene):
             v0 = ch.vals[0]
             ch.vals[0].become(MathTex(f"{vals['t1'].mean():.3f}", font_size=20, color=cols["t1"]).move_to(v0))
         ch.move_to([-2.2, -0.2, 0])
-        head = label(rf"one step from noise \ (distance from the data; \ floor ${float(d['floor']):.3f}$; \ "
+        head = label(rf"one step from noise \ (distance from the data; \ sampling baseline ${float(d['floor']):.3f}$; \ "
                      rf"${len(vals['cd'])}$ seeds)", font_size=24, color=GREY_A).to_edge(UP, buff=0.5)
         S = Group()
         for i, (k, key) in enumerate((("prog", "prog_one"), ("cd", "cd_one"), ("dmd", "dmd_one"))):
@@ -229,11 +229,8 @@ class Distill(VoiceoverScene):
         spoken = {"prog": "progressive distillation", "cd": "consistency distillation", "dmd": "distribution matching"}
         gap = vals[best].mean() / max(vals["t64"].mean(), 1e-9)
         n0 = int(d["rounds"][0])
-        pc = 100 * (gap - 1)
-        verdict = (f"The best student here is {spoken[best]}, at {vals[best].mean():.3f}, within {pc:.0f} percent of "
-                   f"the teacher's {n0} steps." if gap < 2 else
-                   f"The best student here is {spoken[best]}, at {vals[best].mean():.3f}, still {gap:.1f} times the "
-                   f"teacher's distance with {n0} steps.")
+        verdict = (f"The best student here is {spoken[best]}, at {vals[best].mean():.3f}, or {gap:.2f} times the "
+                   f"teacher's measured distance with {n0} steps.")
         with self.voiceover(
             "Side by side, one step from the same noise. The teacher's own single step is a blur, "
             f"{vals['t1'].mean():.3f} from the data. <bookmark mark='a'/> {verdict} <bookmark mark='b'/> The "

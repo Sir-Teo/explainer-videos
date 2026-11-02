@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import (DDIM_C, EPS_C, F_C, HEUN_C, NOISE, PART, SCORE, X0_C, bars_chart, legend, load,
+from videos.ai.ai21.common import (ladder, DDIM_C, EPS_C, F_C, HEUN_C, NOISE, PART, SCORE, X0_C, bars_chart, legend, load,
                                    log_axes, logcurve, take_away)
 
 PNAME = {"eps": r"predict the noise", "x0": r"predict the clean point", "F": r"EDM's mixture $F$"}
@@ -100,7 +100,7 @@ class EDM(VoiceoverScene):
             "as little as possible, <bookmark mark='c'/> and then the output scale that makes the target have unit "
             "variance too. <bookmark mark='d'/> Why it matters: predict the noise, and an error in the output moves "
             "the clean guess by sigma times as much, eighty times at the top. Predict the clean point, and the "
-            "network must output the whole answer even at almost no noise. EDM's mixture is never worse than either. "
+            "network must output the whole answer even at almost no noise. EDM's output error-amplification factor is bounded by both sigma and the data spread. "
             f"On our letters, with a data spread sigma d of {sd:.2f}, its target's spread stays between "
             f"{tf.min():.2f} and {tf.max():.2f} at every noise level."
         ) as vo:
@@ -125,7 +125,7 @@ class EDM(VoiceoverScene):
         vals = np.concatenate([np.maximum(D[p], 1e-6).ravel() for p in ps])
         lo, hi = math.floor(math.log10(vals.min())), math.ceil(math.log10(vals.max()))
         g = log_axes([math.log10(sig[0]) - 0.1, math.log10(sig[-1]) + 0.1], [lo, hi], x_length=6.0, y_length=3.8,
-                     xlabel=r"noise level $\sigma$", ylabel=r"error against the exact denoiser", xticks=sig,
+                     xlabel=r"noise level $\sigma$", ylabel=r"mean squared denoiser error", xticks=sig,
                      yticks=[10.0 ** k for k in range(lo, hi + 1)], yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}",
                      center=[-3.0, -0.2, 0])
         lines = VGroup()
@@ -137,7 +137,7 @@ class EDM(VoiceoverScene):
         ch = bars_chart([heun[p].mean() for p in ps], [PCOL[p] for p in ps], [r"noise", r"clean point", r"EDM"],
                         height=2.2, bar_w=0.8, gap=0.5, spread=[(heun[p].min(), heun[p].max()) for p in ps], digits=3,
                         font_size=18).move_to([4.2, -1.3, 0])
-        chl = label(rf"distance from the data, \ Heun, $35$ evaluations \\ (floor ${float(a['floor']):.3f}$; \ "
+        chl = label(rf"distance from the data, \ Heun, $35$ evaluations \\ (sampling baseline ${float(a['floor']):.3f}$; \ "
                     rf"${len(heun['eps'])}$ seeds)", font_size=18, color=GREY_A).next_to(ch, UP, buff=0.3)
         lg = legend([(PCOL[p], PNAME[p]) for p in ps], font_size=19).move_to([4.2, 2.3, 0])
         top_err = {p: D[p][:, -1].mean() for p in ps}
@@ -147,7 +147,7 @@ class EDM(VoiceoverScene):
         best = min(ps, key=lambda p: heun[p].mean())
         f_good = all(D["F"].mean(0) <= 1.5 * np.minimum(D["eps"].mean(0), D["x0"].mean(0)) + 1e-5)
         claim = ("EDM's mixture is close to the better of the two at every level." if f_good else
-                 "EDM's mixture is not the best at every level, but it avoids both failures.")
+                 "EDM's relative accuracy varies with the noise level.")
         with self.voiceover(
             "We tested it: the same network, the same noise levels from EDM's log-normal, the same budget, three "
             f"ways of reading its output, {len(heun['eps'])} seeds each. <bookmark mark='a'/> Against the exact "
@@ -212,8 +212,8 @@ class EDM(VoiceoverScene):
             "curved path it overshoots. <bookmark mark='a'/> Heun's method takes that Euler step, measures the slope "
             "where it lands, and redoes the step with the average of the two slopes: second order, so halving the "
             "step cuts the error by four, for two network evaluations a step. EDM's last step is plain Euler. "
-            f"<bookmark mark='b'/> On our letters, {low}at {nfe_h[j31]} evaluations Heun's error is {ratio:.1f} times "
-            f"smaller than Euler's, and at {nfe_h[j63]}, {ratio63:.1f} times. With these two ideas and a careful spacing of the steps, Karras and colleagues "
+            f"<bookmark mark='b'/> On our letters, {low}at {nfe_h[j31]} evaluations the Euler-to-Heun error ratio is {ratio:.1f}, "
+            f"and at {nfe_h[j63]}, {ratio63:.1f}. With these two ideas and a careful spacing of the steps, Karras and colleagues "
             "reached an FID of 1.79 on CIFAR-10 with thirty-five evaluations."
         ) as vo:
             self.play(FadeIn(tag), Create(arc), FadeIn(ends), FadeIn(labs[0]))

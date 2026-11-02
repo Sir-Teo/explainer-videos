@@ -71,17 +71,17 @@ class Pictures(VoiceoverScene):
         sheets = [glyph_sheet(s_, 2, 8, size=0.66, gap=0.06).move_to([-2.4, 1.3, 0]) for s_ in snaps]
         cl = [label(rf"after ${c:,}$ training steps".replace(",", "{,}"), font_size=24, color=FM_C).next_to(sheets[0], UP, buff=0.15)
               for c in checks]
-        top = float(np.percentile(L[:, 1], 99)) * 1.05
+        top = float(L[:, 1].max()) * 1.05
         ax = axes([0, checks[-1]], [0, top], x_length=4.0, y_length=2.0, xlabel=r"training step", ylabel=r"the loss",
-                  xticks=[0, checks[-1]], yticks=[0, round(top, 2)], center=[4.6, 1.2, 0], font_size=18)
+                  xticks=[0, checks[-1]], yticks=[0, float(np.floor(top * 100) / 100)], center=[4.6, 1.2, 0], font_size=18)
         J = np.asarray(g["journey"])
         steps = Group(*[gray_image(im, 0.95) for im in J]).arrange(RIGHT, buff=0.1).move_to([0, -2.2, 0])
-        sl = label(r"one sample, \ from noise to a letter: \ every $5$ steps of $50$", font_size=22, color=GREY_A).next_to(steps, UP, buff=0.15)
+        sl = label(r"one sample: \ every $5$ steps of $50$", font_size=22, color=GREY_A).next_to(steps, UP, buff=0.15)
         with self.voiceover(
             "Here it is learning: sixteen pictures from the same noise at each checkpoint. <bookmark mark='a'/> At "
             "first, static. <bookmark mark='b'/> Then grey blobs where letters tend to be, <bookmark mark='c'/> then "
-            "shapes, and finally letters. <bookmark mark='d'/> And here is one picture being born: static, then a "
-            "blur, then a shape, then a letter."
+            "strokes and capital-like shapes, still noisy and sometimes ambiguous. <bookmark mark='d'/> And here is "
+            "one sample's path from static toward a letter-like image."
         ) as vo:
             self.play(FadeIn(sheets[0]), FadeIn(cl[0]), FadeIn(ax))
             vo.wait_until("a")
@@ -110,21 +110,21 @@ class Pictures(VoiceoverScene):
         far = near.mean() > 1.3 * tn
         nn = VGroup(label(rf"each sample's distance to its nearest training picture: \ ${near.mean():.2f}$ on average",
                           font_size=20, color=GREY_A),
-                    label(rf"a training picture's distance to its nearest other: \ ${tn:.2f}$", font_size=20, color=GREY_A),
+                    label(rf"training pictures' nearest positive-distance neighbour: \ ${tn:.2f}$", font_size=20, color=GREY_A),
                     label(r"(root mean square, \ pixels from $0$ to $1$)", font_size=18, color=GREY_B)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.12)
         if nn.width > 5.6:
             nn.width = 5.6
         nn.next_to(grid, RIGHT, buff=0.4)
-        verdict = ("further from the training set than the training pictures are from each other: these are new "
-                   "pictures, not copies." if far else
-                   "about as close to the training set as the training pictures are to each other: some may be near "
-                   "copies.")
+        verdict = ("further from the training set on average than the positive-distance training-neighbour baseline. "
+                   "This average does not rule out individual copies." if far else
+                   "about as close to the training set as the positive-distance training-neighbour baseline. "
+                   "This average does not rule out individual copies.")
         with self.voiceover(
-            "A batch of samples: rough, speckled, mostly recognizable capitals in a mix of styles. "
+            "A batch of samples: noisy capitals mixed with ambiguous shapes, in a range of styles. "
             "<bookmark mark='a'/> Are they copies? Each sample is, on average, "
-            f"{near.mean():.2f} from its nearest training picture; a training picture is {tn:.2f} from its nearest "
-            f"neighbour. So the samples are {verdict}"
+            f"{near.mean():.2f} from its nearest training picture; the training pictures average {tn:.2f} to the nearest "
+            f"different image, excluding zero distances. So the samples are {verdict}"
         ) as vo:
             self.play(FadeIn(grid), FadeIn(gl))
             vo.wait_until("a")
@@ -172,8 +172,7 @@ class Pictures(VoiceoverScene):
                          color=HIST, width=6.4, font_size=22),
             history_card(2024, r"Sora; \ SD3; \ FLUX.1; \ Movie Gen", r"diffusion transformers on spacetime patches; \ "
                          r"flow-matching transformers at $12$ to $30$ billion parameters", color=HIST, width=6.4, font_size=22),
-            history_card(2025, r"Veo 3; \ Wan 2.1", r"latent diffusion over video and sound together; \ open video "
-                         r"weights", color=HIST, width=6.4, font_size=22),
+            history_card(2025, r"Veo 3; \ Wan 2.1", r"Veo 3: native video and audio; \ Wan 2.1: open video weights", color=HIST, width=6.4, font_size=22),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.25, 0.25)).next_to(el, DOWN, buff=0.35)
         if cards.width > 13.2:
             cards.width = 13.2

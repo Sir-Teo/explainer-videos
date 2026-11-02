@@ -5,7 +5,7 @@ TITLE = '人工智能，从零搭建 · 第21部分：扩散与流'
 CHAPTERS = {
     'Hook': '从噪声开始',
     'Forward': '1. 慢慢地摧毁数据',
-    'ELBO': '2. 下界，以及猜噪声',
+    'ELBO': '2. 变分界，以及猜噪声',
     'Tweedie': '3. 特威迪公式',
     'DSM': '4. 去噪分数匹配',
     'SDE': '5. 让时间倒流',
@@ -41,11 +41,11 @@ ZH = {
         "<bookmark mark='h'/>2026年，Google发布了一个开放权重的扩散语言模型。",
 
     'This is Part 21 of AI, Built: diffusion and flow.':
-        "这是《人工智能，从零搭建》的第21部分：扩散与流。<bookmark mark='a'/>本部分的内容：前向过程，以及训练反向过程的那个下界；"
+        "这是《人工智能，从零搭建》的第21部分：扩散与流。<bookmark mark='a'/>本部分的内容：前向过程，以及训练反向过程的那个变分界；"
         "为什么猜噪声就是在学分数函数；<bookmark mark='b'/>让时间倒流，用随机方程或确定性方程，以及求解它们的采样器；"
         "<bookmark mark='c'/>各种设计选择，从噪声调度到EDM和DPM-Solver；<bookmark mark='d'/>流匹配与最优传输；"
         "<bookmark mark='e'/>怎样从50步走到1步；怎样要求它画出特定的东西；<bookmark mark='f'/>还有用于文本的扩散，"
-        "我们自己的一个语言模型也会登上记分牌。<bookmark mark='g'/>这里的每一个模型，都是在这台电脑上训练的。",
+        "我们自己的一个语言模型也会登上记分牌。<bookmark mark='g'/>本部分我们自己的玩具模型，都在这台电脑上训练。",
 
     # ------------------------------------------------------------------ Forward
     'Chapter one. Destroying data slowly.':
@@ -84,24 +84,24 @@ ZH = {
 
     # ------------------------------------------------------------------ ELBO
     'Chapter two. The bound, and guessing the noise.':
-        '第2章。下界，以及猜噪声。',
+        '第2章。变分界，以及猜噪声。',
 
     "Part 20's variational autoencoder had a code and a bound.":
-        "第20部分的变分自编码器有一个编码，还有一个下界。这里的编码，是那些带噪声的版本，从x 1到x T，而编码器就是前向过程，固定不变。"
+        "第20部分的变分自编码器有一个编码，还有一个变分界。这里的编码，是那些带噪声的版本，从x 1到x T，而编码器就是前向过程，固定不变。"
         "<bookmark mark='a'/>解码器把这条链倒着运行，每一步是一个高斯分布，它的均值由一个网络来决定。詹森不等式给出的，"
         "还是和以前一样的对数似然下界。<bookmark mark='b'/>两条链都是各步的乘积，所以这个下界是对各步的求和。<bookmark mark='c'/>"
         "现在用上一章的那个事实：在已知干净点的条件下，用贝叶斯公式改写每一个前向步。多出来的那些跳跃两两抵消，剩下的是一串KL散度，"
         "每步一个：在已知干净点时，网络往回走的一步，离真正往回走的一步有多远。",
 
-    'Each term compares two Gaussians with the same variance':
-        "每一项比较的是两个方差相同的高斯分布，所以它就是两者均值之间距离的平方。<bookmark mark='a'/>把干净的点代换掉，"
+    'Each KL term compares two Gaussians.':
+        "每个KL项比较两个高斯分布。方差固定时，依赖网络的部分是均值差的平方；余下的常数不依赖theta。<bookmark mark='a'/>把干净的点代换掉，"
         "用带噪声的点和造成它的那份噪声来写出真正的均值。<bookmark mark='b'/>这提示了乔纳森·何、贾因和阿比尔在2020年选用的参数化方式："
-        "让网络输出对噪声的猜测，再用同样的方式构造它的均值。<bookmark mark='c'/>这样，下界的每一项，都是一个权重拉姆达t，"
+        "让网络输出对噪声的猜测，再用同样的方式构造它的均值。<bookmark mark='c'/>这样，中间各步高斯KL项中与网络有关的部分，是一个权重拉姆达t，"
         "乘以噪声猜测的平方误差。训练扩散模型就是做回归：看着一个带噪声的点，说出加进去的是什么噪声。",
 
     'f"How big are the weights?':
         "这些权重有多大？在DDPM的调度下，把每一步的方差设成贝塔，拉姆达从第一步的{lam[0]:.2f}，降到最后一步的{lam[-1]:.3f}，"
-        "相差{ratio:.0f}倍：这个下界最在意的，是那些几乎干净的步。<bookmark mark='a'/>乔纳森·何和同事发现，干脆把权重全部去掉，"
+        "相差{ratio:.0f}倍：这个变分界最在意的，是那些几乎干净的步。<bookmark mark='a'/>乔纳森·何和同事发现，干脆把权重全部去掉，"
         "每一步一视同仁，画出来的图反而更好：在CIFAR-10上FID达到3.17，是当时最好的成绩。<bookmark mark='b'/>这就是简化损失，"
         "此后几乎所有的扩散模型，训练用的都是类似它的损失。精确的加权会在第7章回来：它其实是在选择最常练习哪些噪声水平。",
 
@@ -113,7 +113,7 @@ ZH = {
         "训练的每一步，只要求它猜出一个模糊的点里的噪声；字母就从数百万次这样的猜测中浮现出来。",
 
     "f'Within {checks[k1]} steps the loss has made":
-        '不到{checks[k1]}步，损失就已经完成了整个降幅的{pct:.0f}%，这些点也收拢成了一团，离数据{sw[k1]:.2f}。',
+        '不到{checks[k1]}步，损失就已经完成了记录到的降幅的{pct:.0f}%，这些点也收拢成了一团，离数据{sw[k1]:.2f}。',
 
     "f'Within {checks[k1]} steps the points have pulled in":
         '不到{checks[k1]}步，这些点就收拢成了一团，离数据{sw[k1]:.2f}，损失还在下降。',
@@ -141,16 +141,16 @@ ZH = {
         "按5万个干净点各自产生这个带噪声点的可能性来加权。<bookmark mark='c'/>这些估计平均落在离公式{worst_mc:.3f}以内的地方。"
         "<bookmark mark='d'/>{net_says}",
 
-    'f"Our trained network\'s guesses sit within':
-        '我们训练出来的网络，它的猜测离公式的结果在{worst_net:.3f}以内，和{spread:.2f}的散布相比很小：它学会了分数函数。',
+    'f"Our trained network\'s maximum mean distance over these levels is {worst_net:.3f}, small':
+        '我们训练出来的网络，在这些噪声水平上，与公式结果的平均距离最大为{worst_net:.3f}，和{spread:.2f}的散布相比很小：在这些水平上近似较好。',
 
-    'f"Our trained network\'s guesses are within':
-        '我们训练出来的网络，它的猜测离公式的结果在{worst_net:.3f}以内，而散布是{spread:.2f}：接近，但不精确。',
+    'f"Our trained network\'s maximum mean distance over these levels is {worst_net:.3f}, against':
+        '我们训练出来的网络，在这些噪声水平上，与公式结果的平均距离最大为{worst_net:.3f}，而散布是{spread:.2f}：接近，但不精确。',
 
     'f"What does the best denoiser do with very noisy points?':
         "面对噪声很大的点，最好的去噪器会怎么做？这是它对500个带噪声的点的猜测，在4个噪声水平下。<bookmark mark='a'/>噪声很大时，"
         "每个猜测都落在字母的中间附近：一个平均的字母，平方误差是{e0:.2f}。<bookmark mark='b'/>随着噪声减小，猜测散开到笔画上，"
-        "误差降到{e1:.3f}。<bookmark mark='c'/>所以不能一步从纯噪声跳到一个样本：最好的一跳，落在一片模糊上。采样器于是改走许多小步，"
+        "误差降到{e1:.3f}。<bookmark mark='c'/>所以只靠这个后验均值去噪器，不能一步把纯噪声变成样本：最佳猜测是一片模糊。采样器于是改走许多小步，"
         "随着噪声降低不断重新猜测：这是第5章和第6章的内容。",
 
     # ------------------------------------------------------------------ DSM
@@ -160,8 +160,8 @@ ZH = {
     'f"Tweedie says the network should learn the score.':
         "特威迪公式说，网络应该学分数函数。可是，没有人会把真实图像的分数函数交给我们去拟合。2005年，阿波·许韦里宁在能量模型上"
         "遇到了同样的问题：在目标未知的情况下，用平方误差把一个函数s拟合到分数函数上。<bookmark mark='a'/>分部积分把目标消掉了："
-        "剩下的是s的雅可比矩阵的迹，加上它长度的平方，再对数据取平均。<bookmark mark='b'/>可是这个迹，每个维度都要做一次反向传播："
-        "一张512乘512像素的彩色图像，就要{d:,}次，而且每个训练样本都要这么多。",
+        "剩下的是s的雅可比矩阵的迹，加上它长度的平方，再对数据取平均。<bookmark mark='b'/>但是朴素地精确计算这个迹时，每个维度都要做一次反向传播："
+        "一张512乘512像素的彩色图像，就要{d:,}次，而且每个训练样本都要这么多。随机投影估计可以降低这项成本。",
 
     'In 2011 Pascal Vincent found the way around.':
         "2011年，帕斯卡尔·文森特找到了绕过去的办法。给每个样本加上噪声，然后去拟合这份噪声本身的分数函数，这是我们确切知道的。"
@@ -174,8 +174,8 @@ ZH = {
         "在我们的字母上，可以直接检验这个定理，因为那里的精确分数函数是已知的。取我们的去噪器在训练中每个检查点的状态，"
         "在最低的噪声水平，t等于{ts[k]:g}。<bookmark mark='a'/>白色曲线是在新噪声上的损失。灰色的线是那个常数：就连精确的分数函数，"
         "也会有这么大的损失，因为一个带噪声的点里的噪声，没法被完全恢复。<bookmark mark='b'/>橙色曲线是网络相对于精确分数函数的误差，"
-        "是直接测出来的。<bookmark mark='c'/>定理说，损失减去常数就是这个误差，而那些点正好落在曲线上：到最后，{f0[0]:.4f}减"
-        "{f0[1]:.4f}，对比{f0[2]:.4f}。证明中说会平均掉的那个交叉项，在训练结束时最多只有{cross:.4f}，{n_seeds}个随机种子都是如此。"
+        "是直接测出来的。<bookmark mark='c'/>定理说的是期望相等；有限样本中，损失减去常数是在估计这个误差：到最后，{f0[0]:.4f}减"
+        "{f0[1]:.4f}，对比{f0[2]:.4f}。训练结束时，{n_seeds}个随机种子中，样本交叉项的绝对值最大为{cross:.4f}；它解释了测量中的差距。"
         "<bookmark mark='d'/>损失永远到不了0，也不需要到0：高出常数的那一截，才是训练能够去掉的部分。",
 
     "f'Where is the score hardest to learn?":
@@ -215,21 +215,11 @@ ZH.update({
         "同一个分数函数的又一种用法。",
 
     'f"Here are both, run with the exact score from the same forty starting points.':
-        "这是两者，都用精确的分数函数，从同样的40个起点出发。<bookmark mark='a'/>SDE的路径弯弯绕绕：平均每条长{float(s['sde_len']):.1f}。"
+        "这是两者，都用精确的分数函数，从同样的40个起点出发。<bookmark mark='a'/>SDE的路径弯弯绕绕：把50个记录片段连接起来，平均每条长{float(s['sde_len']):.1f}。"
         "ODE的路径则是滑过去的，{float(s['ode_len']):.1f}。它们的终点不一样。<bookmark mark='b'/>但是，在每一个时刻，把整团点云和真实密度的"
-        "新样本相比。{verdict}<bookmark mark='c'/>而且ODE可以双向运行：从数据到噪声，再回来，点回到起点，精确到小数点后{dec}位："
-        "一个可逆的映射，也就是第20部分的连续归一化流，带有精确的似然。一个学到的分数函数，两条回去的路；接下来几章讲的，"
+        "新样本相比。{verdict}<bookmark mark='c'/>而且ODE可以双向运行：从数据到噪声，再回来，平均返回误差为{rt:.2g}："
+        "这是数值上近似可逆的映射；理想ODE对应第20部分的连续归一化流，求似然还需要对散度积分。一个学到的分数函数，两条回去的路；接下来几章讲的，"
         "就是怎样用尽可能少的步数求解它们。",
-
-    'Both stay as close to the true marginals':
-        '两者都和真实边缘分布的新样本一样接近它，在我们测量的每一个时刻都是如此。',
-
-    'f"The ODE stays as close to the true marginals':
-        'ODE一路下来，都和真实边缘分布的新样本一样接近它；SDE用了{n_sde:,}个随机步，在最后稍有偏离，{end_s:.3f}，对比ODE的{end_o:.3f}：'
-        '随机的步子需要更小。',
-
-    "f'Both stay near the true marginals":
-        '两者都在真实边缘分布附近；到最后，SDE离它{end_s:.3f}，ODE离它{end_o:.3f}。',
 
     # ------------------------------------------------------------------ Samplers
     'Chapter six. DDPM and DDIM.':
@@ -250,7 +240,7 @@ ZH.update({
     'f"How few steps will do?':
         "最少几步就够？量一量样本落在离数据多远的地方，<bookmark mark='w'/>用切片瓦瑟斯坦距离：把两团点都投到许多条随机的直线上，"
         "比较它们的点落在哪里。<bookmark mark='a'/>用5步DDIM，字母是模糊的，距离{sw[0]:.2f}；{close}到100步时是{sw[-1]:.3f}，"
-        "而数据本身的一份新样本是{floor:.3f}，这是下限。<bookmark mark='b'/>每一步都要运行一次网络，所以步数越少，出图越快。"
+        "而数据本身的一份新样本是{floor:.3f}，这是抽样参照。<bookmark mark='b'/>每一步都要运行一次网络，所以步数越少，出图越快。"
         "这些路径是弯的，而弯的路径需要很多小步：接下来三章，讲的都是怎样少走几步。",
 
     'f"by {k_close} it is about as close':
@@ -267,19 +257,19 @@ ZH.update({
         "噪声调度规定了每个时刻有多少信号保留下来。它的核心是一个数：信噪比，阿尔法平方除以西格玛平方，最好在对数尺度上看。"
         "<bookmark mark='a'/>DDPM的线性贝塔、亚历克斯·尼科尔和普拉富拉·达里瓦尔的余弦调度、我们的调度，以及流匹配的直线，"
         "都是从信号充足走到几乎没有信号，只是速度各不相同。<bookmark mark='b'/>有一个细节很要紧：DDPM的最后一步，对数信噪比还有"
-        "{lt:.1f}，而不是负无穷。<bookmark mark='c'/>2024年，Shanchuan Lin和同事指出，一个从来没在纯噪声上训练过的模型，"
-        "画不出很暗或很亮的图片，于是他们重新缩放调度，让它在终点降到0。",
+        "{lt:.1f}，而不是负无穷。<bookmark mark='c'/>2024年，Shanchuan Lin和同事指出，训练的终端信噪比不为零，而推理却从纯噪声开始，"
+        "会导致两者不匹配；在Stable Diffusion中，这限制了亮度范围。他们提出让终端SNR为零，并同时改进训练和采样器。",
 
     'Does the schedule change what is being learned?':
-        "调度会不会改变学到的东西？2021年，迪德里克·金马、蒂姆·萨利曼斯、本·普尔和乔纳森·何把这个下界推广到连续时间："
-        "对时间积分的干净点误差，权重是信噪比下降的快慢。<bookmark mark='a'/>把变量换成信噪比本身，调度就消失了：只剩下它的两个端点。"
-        "端点相同的调度，下界都一样。<bookmark mark='b'/>调度真正改变的是练习：时间均匀抽取时，每种调度访问各个噪声水平的频率不同，"
-        "而网络在练得最多的地方学得最好。<bookmark mark='c'/>下一章的EDM干脆跳过调度，直接从对数正态分布里抽噪声水平。",
+        "调度会不会改变学到的东西？2021年，迪德里克·金马、蒂姆·萨利曼斯、本·普尔和乔纳森·何把这个变分界推广到连续时间："
+        "对时间积分的干净点误差，权重是信噪比下降的快慢。<bookmark mark='a'/>把变量换成信噪比本身。去噪器也表示成这个比率的函数时，端点相同的单调调度给出相同的连续时间变分界。"
+        "这里比较的是重新参数化的去噪器，不是把原有权重原封不动地换到新的时间输入下。<bookmark mark='b'/>调度真正改变的是练习：时间均匀抽取时，每种调度访问各个噪声水平的频率不同，"
+        "从而改变了哪些噪声水平提供梯度更新。<bookmark mark='c'/>下一章的EDM干脆跳过调度，直接从对数正态分布里抽噪声水平。",
 
     'f"We trained the same noise-guessing network four ways':
         "我们用4种方式训练同一个猜噪声的网络，只改变它练习哪些噪声水平：预算相同，每种{len(heun['cos'])}个随机种子。"
-        "<bookmark mark='a'/>因为我们字母的精确去噪器是已知的，可以看出每一种错在哪里。在低噪声时，它们都一致。"
-        "<bookmark mark='b'/>在最高的噪声水平，{SPOKEN[hi_err]}偏得最远，而{SPOKEN[lo_hi]}最接近：正是在那里练得最多的那一个。"
+        "<bookmark mark='a'/>因为我们字母的精确去噪器是已知的，可以比较每种模型在各个噪声水平的误差。"
+        "<bookmark mark='b'/>在最高的噪声水平，{SPOKEN[hi_err]}偏得最远，而{SPOKEN[lo_hi]}是这些实验中最接近的。"
         "<bookmark mark='c'/>{verdict}",
 
     "f'After sampling, the spreads overlap":
@@ -329,7 +319,7 @@ ZH.update({
         "加上一个缩放过的网络。<bookmark mark='a'/>把输入缩放到单位方差，<bookmark mark='b'/>选择跳跃连接的系数，让网络的误差被放大得尽量少，"
         "<bookmark mark='c'/>然后选输出的缩放，让目标也具有单位方差。<bookmark mark='d'/>为什么这很重要：如果预测噪声，输出里的一个误差，"
         "会让干净点的猜测移动西格玛倍那么多，在最高处是80倍。如果预测干净的点，那么即使几乎没有噪声，网络也得把整个答案输出出来。"
-        "EDM的混合目标从来不比两者中的任何一个差。在我们的字母上，数据的散布西格玛d是{sd:.2f}，它的目标的散布，"
+        "EDM输出误差的放大系数同时不大于西格玛和数据的散布。在我们的字母上，数据的散布西格玛d是{sd:.2f}，它的目标的散布，"
         "在每个噪声水平都保持在{tf.min():.2f}和{tf.max():.2f}之间。",
 
     'f"We tested it: the same network':
@@ -340,14 +330,14 @@ ZH.update({
     "EDM's mixture is close to the better of the two":
         'EDM的混合目标在每个水平上，都接近两者中较好的那一个。',
 
-    "EDM's mixture is not the best at every level":
-        'EDM的混合目标并不是在每个水平上都最好，但它避开了两种失败。',
+    "EDM's relative accuracy varies with the noise level.":
+        'EDM的相对精度随噪声水平变化。',
 
     'f"Their second idea is the solver.':
         "他们的第二个想法是求解器。欧拉法沿着一步起点处的斜率走，在弯曲的路径上，它会冲过头。<bookmark mark='a'/>休恩法先走这一个欧拉步，"
         "量出落点处的斜率，再用两个斜率的平均值重走这一步：这是二阶方法，步长减半，误差就降为四分之一，每步需要两次网络调用。"
-        "EDM的最后一步是普通的欧拉步。<bookmark mark='b'/>在我们的字母上，{low}在{nfe_h[j31]}次调用时，休恩法的误差比欧拉法小"
-        "{ratio:.1f}倍，在{nfe_h[j63]}次时，小{ratio63:.1f}倍。靠这两个想法，再加上精心安排的步长间隔，卡拉斯和同事在CIFAR-10上，"
+        "EDM的最后一步是普通的欧拉步。<bookmark mark='b'/>在我们的字母上，{low}在{nfe_h[j31]}次调用时，欧拉误差除以休恩误差的比值为"
+        "{ratio:.1f}，在{nfe_h[j63]}次时为{ratio63:.1f}。靠这两个想法，再加上精心安排的步长间隔，卡拉斯和同事在CIFAR-10上，"
         "用35次调用就达到了1.79的FID。",
 
     "f'below about {cross} evaluations":
@@ -365,21 +355,21 @@ ZH.update({
 
     'To do better, approximate how the denoiser changes':
         "要做得更好，就得近似去噪器在这一步里怎样变化。<bookmark mark='a'/>DPM-Solver-2在这一步的中点，按拉姆达来算的中点，"
-        "多花一次调用，用那里的去噪器。<bookmark mark='b'/>DPM-Solver++的两步多步形式，什么额外的都不花：它重用上一步的去噪器，"
+        "多花一次调用。我们这里采用数据预测的DPM-Solver++(2S)变体，用拉姆达中点处的去噪器。<bookmark mark='b'/>DPM-Solver++的两步多步形式，什么额外的都不花：它重用上一步的去噪器，"
         "并把经过这两点的直线延长出去。每步一次网络调用，二阶精度。<bookmark mark='c'/>在CIFAR-10上，最初的版本用10次调用达到了4.70的FID，"
         "用20次达到2.87；它的多步形式，已经收进了常用的扩散模型软件库。",
 
     'f"Here is the whole family on our letters':
         "这是整个家族在我们字母上的表现，都用精确的去噪器，所以唯一的误差来自求解器，全部用EDM的间隔方式，从同一份噪声出发。"
-        "误差是相对于ODE精确解来测的。<bookmark mark='a'/>在对数坐标上，一阶方法的直线斜率是负1，二阶方法是负2。"
+        "误差是相对于高分辨率ODE参考解来测的。<bookmark mark='a'/>在对数坐标上，一阶方法的直线斜率是负1，二阶方法是负2。"
         "<bookmark mark='b'/>大约8次调用时，最好的是{SPOKEN[b8]}，误差{e8['err']:.3f}。大约32次时，{SPOKEN[b32]}比DDIM精确"
         "{r32:.0f}倍。<bookmark mark='c'/>{euler_note}<bookmark mark='d'/>{ddpm_note}",
 
     "f'DDPM, with its fresh noise, has no single path":
-        'DDPM每步都加新的噪声，没有一条单一的路径可以比较；它的样本要到{n_ok}次调用，才进入下限的1.5倍以内。',
+        'DDPM每步都加新的噪声，没有一条单一的路径可以比较；它的样本要到{n_ok}次调用，才进入抽样参照的1.5倍以内。',
 
     'DDPM, with its fresh noise, has no single path to compare, and even at 128':
-        'DDPM每步都加新的噪声，没有一条单一的路径可以比较，而且即使到128次调用，它的样本离下限还差得远。',
+        'DDPM每步都加新的噪声，没有一条单一的路径可以比较，而且即使到128次调用，它的样本离抽样参照还差得远。',
 
     "f'One surprise: on our letters, plain Euler":
         '有一个意外：在我们的字母上，在方差保持的时间里用普通欧拉法，反而胜过DDIM，在16次时是{eu:.3f}对{dm:.3f}。'
@@ -392,8 +382,8 @@ ZH.update({
         '{bs}的点离它最近，{ws}的点偏得最远。',
 
     'f"Here are three of them after about {budget} evaluations':
-        "这是其中三种在大约{budget}次调用之后的结果，旁边是精确解。{close_note}"
-        "<bookmark mark='a'/>{verdict}而网络自己的误差设定了一个下限：精确求解时，它的ODE落在离数据{net_ref:.3f}的地方，"
+        "这是其中三种在大约{budget}次调用之后的结果，旁边是高分辨率参考解。{close_note}"
+        "<bookmark mark='a'/>{verdict}高分辨率求解网络的ODE，所得样本离数据{net_ref:.3f}的地方，"
         "而字母的一份新样本是{fl:.3f}。<bookmark mark='b'/>那么，10到30次调用，再配上一个懂得这个方程的求解器。比这更少，"
         "就需要另一种想法：第12章。",
 
@@ -411,8 +401,8 @@ ZH.update({
 
     'Step back to an older question.':
         "退回到一个更古老的问题。1781年，加斯帕尔·蒙日问：怎样用最少的功，把一堆土移进一个坑里。<bookmark mark='a'/>"
-        "把每一点噪声和每一点数据配成对，让平均的移动距离平方尽可能小：这是列昂尼德·康托罗维奇1942年的版本，它的最小值就是"
-        "第20部分的瓦瑟斯坦距离。<bookmark mark='b'/>2000年，让-大卫·贝纳穆和扬·布雷尼耶把同一个问题写成一个流："
+        "把每一点噪声和每一点数据配成对，让平方位移的平均值尽可能小：这是列昂尼德·康托罗维奇1942年的版本，它的最小值就是"
+        "第20部分的瓦瑟斯坦距离的平方。<bookmark mark='b'/>2000年，让-大卫·贝纳穆和扬·布雷尼耶把同一个问题写成一个流："
         "在所有把一个密度带到另一个密度的速度场里，找出动能最小的那个。<bookmark mark='c'/>答案让每个粒子都以恒定的速度走直线，"
         "而且这些直线从不相交。",
 
@@ -430,17 +420,17 @@ ZH.update({
         "但看看这些路径：它们是弯的，直度只有{st:.2f}。<bookmark mark='c'/>再看代价：{cost_note}它的动能是{act:.2f}，远高于它的代价："
         "路径是弯的，速度也不均匀。流匹配不是最优传输；它是一个好的开始。",
 
-    'f"the flow\'s own map moves points {cf:.3f} on average, close':
-        '这个流自己的映射，平均把点移动{cf:.3f}，接近最优的{co:.3f}，远低于随机配对的{ci:.2f}。',
+    'f"the flow\'s own map has mean squared displacement {cf:.3f}, close':
+        '这个流自己的映射，平均平方位移为{cf:.3f}，接近相同端点间最优配对的{co:.3f}，低于独立配对的{ci:.2f}。',
 
-    'f"the flow\'s map moves points {cf:.3f} on average, between':
-        '这个流的映射，平均把点移动{cf:.3f}，介于最优的{co:.3f}和随机配对的{ci:.2f}之间。',
+    'f"the flow\'s map has mean squared displacement {cf:.3f}, compared':
+        '这个流的映射，平均平方位移为{cf:.3f}，相同端点间最优配对为{co:.3f}，独立配对为{ci:.2f}。',
 
-    'At every time we checked, they are as close to it as fresh samples are':
-        '在我们检查的每一个时刻，它们都和新样本一样接近它：定理成立。',
+    'At every checked time, the discrepancy is no greater than the largest fresh-sample discrepancy':
+        '在每个检查时刻，测得的差距都不大于新样本差距的最大值，与定理相符。',
 
-    'At every time we checked, they are close to it, nearly as close':
-        '在我们检查的每一个时刻，它们都很接近它，几乎和新样本一样接近。',
+    'At least one checked time exceeds the largest fresh-sample discrepancy':
+        '至少一个检查时刻的差距超过了新样本差距的最大值；采样与数值离散化都会影响这项比较。',
 
     '"Albergo and Vanden-Eijnden\'s framing makes the family clear':
         "阿尔贝戈和范登-艾因登的框架，让这一族方法看得很清楚：随机插值用任意两条系数曲线混合噪声和数据，还可以再加上噪声。"
@@ -465,15 +455,14 @@ ZH.update({
 
     'Xingchao Liu, Chengyue Gong and Qiang Liu called the fix reflow.':
         "刘星超、Chengyue Gong和刘强把这个修正叫作重流。<bookmark mark='a'/>运行训练好的流，把每个噪声点和流实际把它带去的地方配成一对。"
-        "这些配对彼此不再相交，于是用它们训练第二个流：那个把路径弄弯的平均，已经没有东西可平均了。<bookmark mark='b'/>"
-        "他们证明，对任何凸的代价，新的配对的运输代价都不会更高，而且重复下去，路径会越来越直。<bookmark mark='c'/>"
+        "ODE给出了确定的配对。沿这些端点间的直线训练第二个流；这些弦仍然可能相交。<bookmark mark='b'/>"
+        "他们证明，理想的精确整流不会增加任何凸运输代价，重复整流能让路径变直；有限训练的网络是在近似这一过程。<bookmark mark='c'/>"
         "在我们的字母上，做一次，再做两次。",
 
-    'f"Measured, at the same budget for every model':
-        "测量结果，每个模型的预算相同，各3个随机种子：用给定步数的欧拉法之后，与数据的距离。<bookmark mark='a'/>普通的流匹配需要很多步："
+    'f"Measured, with the same update budget per trained network':
+        "测量结果，每个训练网络的更新步数相同，各3个随机种子：用给定步数的欧拉法之后，与数据的距离。<bookmark mark='a'/>普通的流匹配需要很多步："
         "只走一步时，它的样本离数据{fm1:.3f}，而噪声本身是{noise:.2f}。<bookmark mark='b'/>{rf_note}最好的单步结果属于{KS[best1]}，"
-        "距离{one[best1].mean():.3f}，{sep_note}<bookmark mark='c'/>{ot_vs}<bookmark mark='d'/>直度说明了原因：在一条直的路径上，"
-        "一个欧拉步就是精确的。",
+        "距离{one[best1].mean():.3f}，{sep_note}<bookmark mark='c'/>{ot_vs}<bookmark mark='d'/>直度衡量几何形状。路径速度恒定时，一个欧拉步是精确的；仅有几何上的直线还不够。教师和重流配对也增加计算开销。",
 
     "f'Pairing each batch optimally, as Alexander Tong":
         '像亚历山大·童和同事、阿拉姆-亚历山大·普拉迪安和同事在2023年提出的那样，在每个批次里做最优配对，只训练一次就走完了大部分路：'
@@ -509,8 +498,8 @@ ZH.update({
     'f"After {nh} halvings the one-step student lands {s1:.3f} from the data, against the teacher\'s {t64:.3f} with {n0} steps."':
         '减半{nh}次之后，一步的学生落在离数据{s1:.3f}的地方，而老师用{n0}步是{t64:.3f}。',
 
-    'f"After {nh} halvings the one-step student lands {s1:.3f} from the data, against the teacher\'s {t64:.3f} with {n0} steps: each':
-        '减半{nh}次之后，一步的学生落在离数据{s1:.3f}的地方，而老师用{n0}步是{t64:.3f}：每减半一次，就损失一点。',
+    'f"After {nh} halvings the one-step student lands {s1:.3f} from the data, against the teacher\'s {t64:.3f} with {n0} steps: the final':
+        '减半{nh}次之后，一步的学生落在离数据{s1:.3f}的地方，而老师用{n0}步是{t64:.3f}：最终学生测得的差距更大。',
 
     'f"Consistency models, from Yang Song':
         "一致性模型，由宋飏、普拉富拉·达里瓦尔、陈马克和伊利亚·苏茨克维在2023年提出，省掉了一轮一轮的减半。<bookmark mark='a'/>"
@@ -522,11 +511,11 @@ ZH.update({
 
     'f"A third way matches distributions rather than paths.':
         "第三种方法匹配的是分布，而不是路径。Tianwei Yin和同事的分布匹配蒸馏，训练一个一步的生成器，让它的样本在被模糊到每一个噪声水平时，"
-        "都和老师的样本看起来一样。<bookmark mark='a'/>那个KL散度的梯度，沿着每个样本求出来，是两个分数函数之差："
+        "都和老师的样本看起来一样。<bookmark mark='a'/>在每个噪声水平上，对加噪样本求导，要包括加噪映射的雅可比。梯度由两个分数函数之差给出："
         "生成器自己分布的分数函数，减去真实分布的。<bookmark mark='b'/>真实的分数函数就是老师。假的那个，来自第二个扩散模型，"
         "它一直在生成器最新的样本上训练。<bookmark mark='c'/>我们的版本：生成器一开始就是老师那模糊的一步，然后被一个样本一个样本地"
-        "推到字母上：最后离数据{sw.mean():.3f}，{len(sw)}个随机种子。<bookmark mark='d'/>大规模时，一步就在小尺寸的ImageNet图像上"
-        "达到2.62的FID；再加上GAN损失，DMD2达到了1.28。",
+        "推到字母上：最后离数据{sw.mean():.3f}，{len(sw)}个随机种子。<bookmark mark='d'/>我们的演示使用了归一化分数之差的改编更新。"
+        "发表的DMD还使用了教师输出回归，在64像素ImageNet上达到2.62的FID。DMD2改进了训练，包括加入GAN损失，并用更长预算达到1.28。",
 
     'f"Side by side, one step from the same noise.':
         "并排放在一起，都从同一份噪声出发走一步。老师自己的一步是一片模糊，离数据{vals['t1'].mean():.3f}。<bookmark mark='a'/>"
@@ -534,11 +523,8 @@ ZH.update({
         "都是蒸馏出来的；比如FLUX.1最快的版本，用的是一种对抗形式的蒸馏，1到4步就能出图。它们都需要一个老师。"
         "一个模型能不能从零开始就一步生成？",
 
-    'f"The best student here is {spoken[best]}, at {vals[best].mean():.3f}, within':
-        '这里最好的学生是{spoken[best]}，距离{vals[best].mean():.3f}，和老师的{n0}步相差不到{pc:.0f}%。',
-
-    'f"The best student here is {spoken[best]}, at {vals[best].mean():.3f}, still':
-        '这里最好的学生是{spoken[best]}，距离{vals[best].mean():.3f}，仍然是老师用{n0}步时距离的{gap:.1f}倍。',
+    'f"The best student here is {spoken[best]}, at {vals[best].mean():.3f}, or':
+        '这里最好的学生是{spoken[best]}，距离{vals[best].mean():.3f}，是老师用{n0}步时测得距离的{gap:.2f}倍。',
 
     # ------------------------------------------------------------------ OneStep
     'Chapter thirteen. One step from scratch.':
@@ -559,9 +545,9 @@ ZH.update({
         "<bookmark mark='b'/>看它们俩都学会落在字母上。",
 
     'f"Here is every one-step model of this part':
-        "这是本部分所有的一步模型，都从同一份噪声出发，每个网络的训练步数大致相同，各{len(rows[0][3])}个随机种子。<bookmark mark='a'/>"
+        "这是本部分所有的一步模型，都从同一份噪声出发。训练预算各不相同，教师和辅助模型也会增加开销；每种方法有{len(rows[0][3])}个随机种子。<bookmark mark='a'/>"
         "最好的单步结果属于{best_name}，距离{best[3].mean():.3f}，{sep_note}<bookmark mark='b'/>在没有老师的模型里，最好的是"
-        "{bs_name}，距离{bs[3].mean():.3f}。<bookmark mark='c'/>普通流匹配的一步，距离{rows[0][3].mean():.3f}，是每种方法的起点，那片模糊。",
+        "{bs_name}，距离{bs[3].mean():.3f}。<bookmark mark='c'/>普通流匹配的一步，距离{rows[0][3].mean():.3f}，是这组比较的一步流匹配基线。",
 
     "f'and every one of its seeds beats":
         '而且它的每个随机种子都胜过亚军{second_name}的每个随机种子。',
@@ -582,7 +568,7 @@ ZH.update({
     "The first way to ask came from Bayes' rule.":
         "第一种提要求的方法来自贝叶斯公式。<bookmark mark='a'/>取对数再求梯度，符合一个标签的图像的分数函数，等于普通的分数函数，"
         "加上一个分类器对数概率的梯度：证据p of y不依赖于x，所以消失了。<bookmark mark='b'/>把分类器的推力乘以一个大于1的权重w，"
-        "就是从一个锐化的版本里采样，数据被重新加权，偏向分类器最有把握的那些。<bookmark mark='c'/>普拉富拉·达里瓦尔和亚历克斯·尼科尔"
+        "在每个噪声水平上，这个分数函数沿着锐化后的密度，数据被重新加权，偏向分类器最有把握的那些。<bookmark mark='c'/>普拉富拉·达里瓦尔和亚历克斯·尼科尔"
         "在2021年这样做了，用的是一个在带噪声图像上训练的分类器，在ImageNet上击败了GAN。",
 
     'Classifier guidance needs a second network.':
@@ -592,9 +578,9 @@ ZH.update({
         "这就是无分类器引导，它成了文生图模型遵循提示词的标准做法。",
 
     'f"Ask for an A, from the same starting noise, at three weights.':
-        "从同一份起始噪声出发，用三个权重要求它画一个A。<bookmark mark='a'/>w等于0时，要求被忽略了：{100 * on[0.0]:.0f}%的样本落在A上。"
-        "<bookmark mark='b'/>等于1时，就是普通的条件模型：{100 * on[1.0]:.0f}%。<bookmark mark='c'/>到4时，你是故意推过头："
-        "{100 * on[4.0]:.0f}%，样本挤向最像A的那些笔画，散布从{sp[1.0]:.2f}缩小到{sp[4.0]:.2f}。<bookmark mark='d'/>"
+        "从同一份起始噪声出发，用三个权重要求它画一个A。我们记录x小于0的比例，这是左侧区域的代理指标，并计算这些点的平均半径。<bookmark mark='a'/>w等于0时，要求被忽略了：{100 * on[0.0]:.0f}%的样本满足x小于0。"
+        "<bookmark mark='b'/>等于1时，就是普通的条件模型：{100 * on[1.0]:.0f}%。<bookmark mark='c'/>到4时，我们沿条件方向继续外推："
+        "{100 * on[4.0]:.0f}%；x小于0的点的平均半径从{sp[1.0]:.2f}变为{sp[4.0]:.2f}。<bookmark mark='d'/>"
         "在整个扫描中，用{len(np.asarray(g['cfg_prec']))}个随机种子：精确率，也就是看起来像真实A的样本所占的比例，在w等于{ws[jr]:g}时最高。"
         "{drop_note}",
 
@@ -605,23 +591,23 @@ ZH.update({
     '"Guidance trades variety for fidelity.':
         "引导是用多样性换忠实度。把每个权重画在一个平面上：横轴是召回率，纵轴是精确率。<bookmark mark='a'/>{cls_note}"
         "<bookmark mark='b'/>2024年，泰罗·卡拉斯和同事问：为什么非得远离无条件模型？它的毛病在于它更差：那就改用同一个条件模型的"
-        "一个更小、训练得更少的版本来引导。<bookmark mark='d'/>这样的推力纠正的是模型自己的错误，而不会把它拖向另一个分布。"
+        "一个更小、训练得更少的版本来引导。<bookmark mark='d'/>他们的目标，是用同一条件模型的较弱版本来纠正其误差。"
         "<bookmark mark='e'/>他们在ImageNet上创下纪录：64像素时FID为1.01，512像素时为1.25。<bookmark mark='c'/>我们的弱模型更窄，训练时间只有八分之一。{verdict}",
 
-    'Classifier-free guidance and classifier guidance trace similar curves.':
-        '无分类器引导和分类器引导画出的曲线很相似。',
+    'The best F1 scores of classifier-free guidance and classifier guidance differ by less than 0.05 here.':
+        '这里无分类器引导与分类器引导的最高F1分数相差不到0.05。',
 
-    'Classifier-free guidance reaches a better balance':
-        '无分类器引导达到的平衡，比用我们这个小的带噪声分类器的分类器引导更好。',
+    'Classifier-free guidance has a higher maximum F1':
+        '在这些权重网格上，无分类器引导的最高F1高于使用这个小的噪声分类器的分类器引导。',
 
-    'Classifier guidance, with our small noisy classifier, reaches a better balance':
-        '用我们这个小的带噪声分类器，分类器引导达到的平衡，比无分类器引导更好。',
+    'Classifier guidance, with our small noisy classifier, has a higher maximum F1':
+        '在这些权重网格上，使用这个小噪声分类器的分类器引导，其最高F1高于无分类器引导。',
 
-    'f"On our letters the best balance of fidelity and variety is autoguidance':
-        '在我们的字母上，忠实度和多样性之间最好的平衡属于自引导，在w等于{wbest[\'auto\']:g}时。',
+    'f"On our letters the highest measured F1 on these weight grids is autoguidance':
+        '在我们的字母上，所扫描权重中测得的最高F1来自自引导，在w等于{wbest[\'auto\']:g}时。',
 
-    'f"On our letters the best balance of fidelity and variety is {MSPOKEN[best]}':
-        '在我们的字母上，忠实度和多样性之间最好的平衡属于{MSPOKEN[best]}，在w等于{wbest[best]:g}时；自引导的最好结果也很接近。',
+    'f"On our letters the highest measured F1 on these weight grids is {MSPOKEN[best]}':
+        '在我们的字母上，所扫描权重中测得的最高F1来自{MSPOKEN[best]}，在w等于{wbest[best]:g}时；图中也显示了自引导测得的取舍。',
 
     # ------------------------------------------------------------------ Pictures
     'Chapter fifteen. From points to pictures.':
@@ -633,18 +619,18 @@ ZH.update({
 
     'Here it is learning: sixteen pictures':
         "这是它在学习的样子：每个检查点，都从同一份噪声画出16张图。<bookmark mark='a'/>一开始，是雪花噪点。<bookmark mark='b'/>"
-        "然后，在字母通常出现的地方出现灰色的团块，<bookmark mark='c'/>然后是形状，最后是字母。<bookmark mark='d'/>"
-        "这是一张图片诞生的过程：雪花噪点，然后一片模糊，然后一个形状，然后一个字母。",
+        "然后，在字母通常出现的地方出现灰色的团块，<bookmark mark='c'/>然后浮现笔画和类似大写字母的形状，仍有噪声，也有模糊之处。<bookmark mark='d'/>"
+        "这是一个样本从雪花噪声走向字母状图像的过程。",
 
-    'f"A batch of samples: rough, speckled':
-        "一批样本：粗糙、有斑点，大多是认得出来的大写字母，风格各异。<bookmark mark='a'/>它们是复制品吗？平均来看，每个样本离它最近的"
-        "训练图片{near.mean():.2f}；而一张训练图片离它最近的另一张是{tn:.2f}。所以这些样本{verdict}",
+    'f"A batch of samples: noisy capitals mixed':
+        "一批样本：带噪声的大写字母和模糊不明的形状混在一起，风格各异。<bookmark mark='a'/>它们是复制品吗？平均来看，每个样本离它最近的"
+        "训练图片{near.mean():.2f}；训练图片到最近的不同图像的平均距离是{tn:.2f}，这里排除了零距离。所以这些样本{verdict}",
 
-    'further from the training set than the training pictures':
-        '离训练集的距离，比训练图片彼此之间的距离还远：它们是新的图片，不是复制品。',
+    'further from the training set on average':
+        '平均离训练集更远，相比之下参照是训练图片间的最近正距离。这个平均值不能排除个别复制品。',
 
-    'about as close to the training set as the training pictures':
-        '离训练集的距离，和训练图片彼此之间差不多：有些可能接近复制品。',
+    'about as close to the training set as the positive-distance':
+        '平均离训练集的距离，和训练图片间最近正距离的参照差不多。这个平均值不能排除个别复制品。',
 
     'f"Real images have millions of numbers':
         "真实的图像有数百万个数，给每一个都去噪代价很高。2022年，罗宾·龙巴赫、帕特里克·埃塞尔、比约恩·奥默和同事改在一个压缩的空间里"
@@ -666,26 +652,26 @@ ZH.update({
         "而它之后就一直是空白：吸收态噪声。空白赢了。到最后，一切都是空白，反向过程则把空白填上。",
 
     'With blanks, the bound becomes remarkably simple.':
-        "有了空白，这个下界变得出奇地简单。每个字母以概率t成为空白。<bookmark mark='a'/>从时刻t往回走到更早的时刻s，"
+        "有了空白，这个上界变得出奇地简单。每个字母以概率t成为空白。<bookmark mark='a'/>从时刻t往回走到更早的时刻s，"
         "一个空白要么保持空白，概率是s除以t，要么露出它的字母。<bookmark mark='b'/>模型往回走的一步，只可能在露出哪个字母上有所不同，"
-        "所以每一项KL，都是露出的概率乘以猜这个字母的交叉熵。<bookmark mark='c'/>把各步加起来，下界就成了一个积分："
+        "所以每一项KL，都是露出的概率乘以猜这个字母的交叉熵。<bookmark mark='c'/>把各步加起来，上界就成了一个积分："
         "t分之1，乘以根据仍然可见的字母猜出每一个空白的交叉熵。2024年，三个团队推导出了这一点。<bookmark mark='d'/>"
-        "再换一次变量，从时间换成空白的个数k，t分之1就变成了k分之1：这个下界，是对每一种空白个数，求每个空白的平均损失，再取平均。"
-        "<bookmark mark='e'/>这就是一个自回归模型的损失，在字母可能被揭开的每一种顺序上取平均。",
+        "按空白个数k重新分组，再对时间积分：每个k都贡献该掩码中平均损失的期望。对k求和得到整段序列的界；除以序列长度，才是每字符损失。"
+        "<bookmark mark='e'/>整个序列的界，就是自回归序列损失对所有揭开顺序的平均。",
 
     'f"Check it where everything can be enumerated':
         "在一切都能枚举的地方检验它：由a、b、c组成的{L}个字母的字符串，来自一个马尔可夫链，每个概率都已知。三个模型来预测空白："
         "<bookmark mark='m'/>精确的条件概率，<bookmark mark='n'/>同样的条件概率但向均匀分布模糊了一些，<bookmark mark='o'/>"
-        "以及一个忽略上下文的模型。<bookmark mark='a'/>T步链的下界，精确计算："
-        "只有一步时，精确模型的下界是每个字母{d1:.4f}比特；{Ts[-1]:,}步时是{dT:.4f}，逐渐落到那个积分上，也就是那些虚线。"
+        "以及一个忽略上下文的模型。<bookmark mark='a'/>T步链的上界，精确计算："
+        "只有一步时，精确模型的上界是每个字母{d1:.4f}比特；{Ts[-1]:,}步时是{dT:.4f}，逐渐落到那个积分上，也就是那些虚线。"
         "<bookmark mark='b'/>积分、加权交叉熵，以及对每一种揭开顺序的平均，对每个模型都在小数点后{dp}位上一致。<bookmark mark='c'/>"
         "{tight_note}",
 
     'And with the exact conditionals, the bound equals the true entropy':
-        '而用精确的条件概率时，这个下界等于真实的熵：它是紧的。一个把条件概率学得完美的模型，不会为这个下界付出任何代价。',
+        '而用精确的条件概率时，这个上界等于真实的熵：它是紧的。一个把条件概率学得完美的模型，不会为这个上界付出任何代价。',
 
     'And with the exact conditionals, the bound is close to the true entropy.':
-        '而用精确的条件概率时，这个下界接近真实的熵。',
+        '而用精确的条件概率时，这个上界接近真实的熵。',
 
     'The idea has a lineage.':
         "这个想法有它的谱系。2014年，贝尼尼奥·乌里亚、伊恩·默里和雨果·拉罗谢尔，为一个自回归模型的每一种顺序训练了同一个网络；"
@@ -705,66 +691,63 @@ ZH.update({
         "大小完全一样，在小说上训练，初始权重、批次和步数都相同。唯一的区别是注意力掩码和任务。",
 
     'f"Here they are learning.':
-        "这是它们在学习的样子。在保留的文本上，自回归模型精确的每字符比特数，和扩散模型的下界，都在下降。<bookmark mark='a'/>"
+        "这是它们在学习的样子。在保留的文本上，自回归模型精确的每字符比特数，和扩散模型的上界，都在下降。<bookmark mark='a'/>"
         "上面，扩散模型在每个检查点，填补测试段落里被涂掉一半字符的一行；下面，另一个模型自己在写。<bookmark mark='b'/>"
         "到最后，扩散模型猜对了{100 * fr:.0f}%的空白。{gap_note}",
 
     "f'Its bound ends at {m0:.2f} bits per character; the autoregressive":
-        '它的下界最后是每字符{m0:.2f}比特；自回归模型是{a0:.2f}，低{gap:.2f}。',
+        '它的上界最后是每字符{m0:.2f}比特；自回归模型是{a0:.2f}，低{gap:.2f}。',
 
     'f"Its bound ends at {m0:.2f} bits per character, below':
-        '它的下界最后是每字符{m0:.2f}比特，低于自回归模型的{a0:.2f}。',
+        '它的上界最后是每字符{m0:.2f}比特，低于自回归模型的{a0:.2f}。',
 
     'f"And here is ours writing {T} characters':
         "这是我们的模型在写{T}个字符，从全是空白开始，分{len(frames) - 1}轮。<bookmark mark='a'/>每一轮，它猜出每一个空白，"
-        "保留它最有把握的那些猜测，其余的仍然留空，这是LLaDA的规则。<bookmark mark='b'/>词语哪里先有把握，就先出现在哪里，"
-        "其余的再围绕着它们填上：先一下子全部写出，再慢慢修改，而不是从左往右写。",
+        "保留它最有把握的那些猜测，其余的仍然留空，这是LLaDA的规则。<bookmark mark='b'/>字符先出现在最有把握的位置。"
+        "每轮填入多个空白，先前的选择保持不变；位置不必从左往右推进。",
 
     'f"At equal size, data and steps':
-        "在同样的规模、数据和步数下，在{T}个字符的保留文本块上，{winner}：下界是每字符{np.mean(mv):.3f}比特，对比{np.mean(av):.3f}。"
-        "<bookmark mark='a'/>对这个下界的三种不同估计，按推导它们的期望是相等的，{agree_note}。<bookmark mark='b'/>{l2r_note}"
+        "在同样的规模、数据和步数下，在{T}个字符的保留文本块上，{winner}：上界是每字符{np.mean(mv):.3f}比特，对比{np.mean(av):.3f}。"
+        "<bookmark mark='a'/>对这个上界的三种不同估计，按推导它们的期望是相等的，{agree_note}。<bookmark mark='b'/>{l2r_note}"
         "<bookmark mark='c'/>这个差距并不是故事的结局：2025年，米希尔·普拉布德赛和同事发现，当数据稀缺、必须重复很多个轮次时，"
         "扩散模型在自回归模型过拟合之后，仍然在进步。",
 
     "f'Read strictly left to right, the diffusion model scores {l2r:.3f}, better":
-        '严格地从左往右读，扩散模型的得分是{l2r:.3f}，比它自己的下界还好：大多数揭开顺序都比按顺序读更难，而下界要为所有顺序付账。',
+        '严格地从左往右读，扩散模型的得分是{l2r:.3f}，比它自己的上界还好：估计的顺序平均界高于这个特定顺序的得分。',
 
     "f'Read strictly left to right, the diffusion model scores {l2r:.3f}, no better":
-        '严格地从左往右读，扩散模型的得分是{l2r:.3f}，并不比它的下界好：它从来没有被训练去偏爱这个顺序。',
+        '严格地从左往右读，扩散模型的得分是{l2r:.3f}，并不比它的上界好：训练使用随机遮盖的上下文，没有偏爱这个顺序。',
 
     'f"On the scoreboard\'s passage, in blocks of':
-        "在记分牌的测试段落上，按{int(t['T'])}个字符一块：掩码扩散模型的下界是每字符{m:.2f}比特，误差大约{se:.2f}，"
+        "在记分牌的测试段落上，按{int(t['T'])}个字符一块：掩码扩散模型的上界是每字符{m:.2f}比特，误差大约{se:.2f}，"
         "自回归的孪生模型是{a:.2f}。<bookmark mark='a'/>第13部分的Transformer，上下文是它们的{ratio}倍，得分{tf['bits']:.2f}。"
-        "下界是一个上限：扩散模型真正的编码长度只会更低。",
+        "历史行保留各自原来的评分方案，所以这里不是相同目标位置上的排名。这个界是负对数似然的上界，而我们的蒙特卡洛数值是在估计这个界。",
 
     'f"Writing {T} characters one round per character':
-        "每轮写一个字符，写{T}个字符就要{T}次网络调用，和自回归模型一样。扩散的承诺是轮数更少，每轮写好几个字符。这在质量上要付出多少代价？"
-        "用另一个随机种子的自回归模型来评判每个样本：越低，读起来越像那些小说；真实的文本得分{judge_real:.2f}。<bookmark mark='a'/>"
+        "每轮写一个字符，写{T}个字符就要{T}次网络调用，和自回归模型一样。扩散可以用更少的轮数，每轮写多个字符。"
+        "我们用另一个随机种子的自回归模型给样本计分。这是该评判模型的似然分数；连贯性和多样性需要另外检查。真实文本得分{judge_real:.2f}。<bookmark mark='a'/>"
         "用{T}轮时是{c64['judge']:.2f}；用8轮时是{c8['judge']:.2f}；一次全部写出时是{c1['judge']:.2f}：一下子独立地猜许多个字符，"
-        "会让它们彼此对不上。<bookmark mark='b'/>{order_note}<bookmark mark='c'/>{blk_note}",
+        "没有建模这些位置之间的依赖。<bookmark mark='b'/>{order_note}<bookmark mark='c'/>{blk_note}",
 
     "f'Writing in four blocks, left to right":
         '分成4块从左往右写，总共16轮，得分{b16[\'judge\']:.2f}，而整串一次性写是{w16[\'judge\']:.2f}。',
 
-    "f'Revealing the surest guesses first reads better":
-        '先揭开最有把握的猜测，读起来比随机揭开更好，{c64[\'judge\']:.2f}比特对{r64[\'judge\']:.2f}比特，尽管下界描述的是随机揭开。',
-
-    "f'Revealing at random reads as well as the surest-first rule":
-        '随机揭开读起来和最有把握优先的规则一样好，{r64[\'judge\']:.2f}对{c64[\'judge\']:.2f}。',
+    'f"Our AR judge assigns':
+        "我们的自回归评判模型给最有把握优先的样本每字符{c64['judge']:.2f}比特，随机揭开为{r64['judge']:.2f}；变分界对随机顺序取平均。",
 
     'Fixed-length writing has a cost':
         "定长的写法有代价：什么都没法缓存，长度也得事先定好。玛丽安娜·阿里奥拉和同事的块扩散取了个折中：块与块之间从左往右，"
         "像自回归模型，每块之内则用扩散。<bookmark mark='a'/>2025年，Inception Labs推出了Mercury，号称第一个商用的扩散语言模型，"
-        "在一块GPU上每秒能写1000多个词元；<bookmark mark='b'/>Google的Gemini Diffusion报告的速度接近每秒1500个，代码能力大约相当于"
+        "在H100硬件上报告每秒1000多个词元；<bookmark mark='b'/>Google的Gemini Diffusion报告的速度接近每秒1500个词元，不计额外开销；代码能力大约相当于"
         "一个小号的Gemini；<bookmark mark='c'/>Fast-dLLM给开放的模型加上了缓存和有把握时的并行解码，最多快了27倍；<bookmark mark='d'/>"
         "LLaDA 2.0通过改造一个自回归模型，达到了1000亿参数。<bookmark mark='e'/>2026年6月，Google发布了开放权重的DiffusionGemma："
-        "每块256个词元，在一块GPU上每秒超过1000个词元，而且按Google自己的说法，质量低于标准的Gemma 4。这个交换是用一点质量换速度，"
-        "也正是我们那两个小模型测出来的。",
+        "每块256个词元，在一块GPU上每秒超过1000个词元，而且按Google自己的说法，质量低于标准的Gemma 4。速度和任务质量必须一起测量；"
+        "单凭一个似然界，并不能确定这个交换。",
 
     # ------------------------------------------------------------------ Outro
     "Let's take stock. A diffusion model destroys data slowly":
-        "我们来盘点一下。扩散模型用噪声慢慢地摧毁数据，再学会把它复原。训练它的那个下界，是一串猜噪声误差的和，"
-        "而由特威迪公式，最好的噪声猜测就是分数函数；去噪分数匹配用普通的回归把它学出来。时间可以用随机方程或确定性方程倒着运行；"
+        "我们来盘点一下。扩散模型用噪声慢慢地摧毁数据，再学会把它复原。训练界中各个中间高斯KL项，通过带权重的猜噪声误差训练网络，"
+        "而由特威迪公式，最好的噪声猜测等于负的噪声尺度乘以分数函数；去噪分数匹配用普通的回归把它学出来。时间可以用随机方程或确定性方程倒着运行；"
         "DDPM和DDIM把它们离散化，EDM和DPM-Solver用10到30步把它们解出来。流匹配学的是沿直线的速度，重流把路径拉直，"
         "蒸馏或MeanFlow则做到了一步。引导把一个要求变成一股推力。同一套机制能画出图片，而用空白当作噪声，还能写出文字。",
 
@@ -774,7 +757,7 @@ ZH.update({
         "那是第25部分；世界模型用它来想象下一帧画面，那是第29部分；而让它变快，是第19部分故事的一部分。",
 
     'Here are six problems, from the forward process':
-        '这里有6道习题，从前向过程的闭式解，到掩码扩散的下界。请在这里暂停，动手做一做；完整的解答在本部分的讲义里。',
+        '这里有6道习题，从前向过程的闭式解，到掩码扩散的变分界。请在这里暂停，动手做一做；完整的解答在本部分的讲义里。',
 
     'Next time: images, video and 3D.':
         "下一次：图像、视频与3D。一张图片被切成一个个图像块，这些图像块变成词元，<bookmark mark='a'/>这样，第13部分的Transformer"
@@ -785,15 +768,21 @@ ZH.update({
         "感谢观看，我们第22部分再见。",
 })
 
+ZH.update({
+    'Recall does not fall below half its w equal to zero value in this sweep.':
+        '在这个扫描中，召回率没有降到w为0时的一半以下。',
+    'f"At the measured endpoint the SDE discrepancy is':
+        "在测量终点，SDE的差距为{end_s:.3f}，ODE为{end_o:.3f}，新样本差距的均值为{floor[-1]:.3f}。采样波动和数值积分误差都会影响这些距离。",
+})
+
 ZH.update({  # spliced sentences, also listed by --todo
     'on the whole, if not at every checkpoint': '总体上如此，虽然不是每个检查点都这样',
-    'come close, though not within their error bars': '很接近，但不在误差范围之内',
-    'the autoregressive model wins in both seeds': '两个随机种子里都是自回归模型赢',
+    'do not all overlap within the displayed one-standard-error bars': '没有在显示的一倍标准误差范围内全部重叠',
 })
 
 PHRASES.update({
     # spliced-in English values
-    'Recall stays high across the sweep.': '在整个扫描中，召回率都保持在高位。',
+    'Recall does not fall below half its w equal to zero value in this sweep.': '在这个扫描中，召回率没有降到w为0时的一半以下。',
     'on the whole, if not at every checkpoint': '总体上如此，虽然不是每个检查点都这样',
     'at every checkpoint': '每个检查点都是如此',
     'our cosine schedule': '我们的余弦调度',
@@ -826,8 +815,14 @@ PHRASES.update({
     'classifier-free guidance': '无分类器引导',
     'classifier guidance': '分类器引导',
     'autoguidance': '自引导',
-    'the autoregressive model wins in both seeds': '两个随机种子里都是自回归模型赢',
     'the two overlap across seeds': '两者在不同随机种子之间互相重叠',
     'agree within their error bars': '在误差范围内一致',
-    'come close, though not within their error bars': '很接近，但不在误差范围之内',
+    'do not all overlap within the displayed one-standard-error bars': '没有在显示的一倍标准误差范围内全部重叠',
+})
+
+PHRASES.update({
+    "the autoregressive model's exact loss is lower than the diffusion bound in both seeds": "两个种子中，自回归模型的精确损失都低于扩散模型的上界",
+    "the diffusion bound is lower than the autoregressive model's exact loss in both seeds": "两个种子中，扩散模型的上界都低于自回归模型的精确损失",
+    "the two measured ranges overlap across seeds": "两种测量值在不同种子间的范围重叠",
+    "DPM-Solver plus plus two S": "DPM-Solver++(2S)",
 })

@@ -3,12 +3,78 @@
 from __future__ import annotations
 
 import math
+from functools import partial
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from explainer import lang as _caption_language
+from .reviewed_inputs import load, validate_captions  # noqa: F401
+
+validate_captions(_caption_language.LANG)
+
+
+_derivation_ladder = ladder
+
+
+def ladder(scene, rows, whys, **kwargs):
+    """Fit Part 21 equations about their alignment anchor before arranging them.
+
+    Scaling an off-centre row about its centre can leave its right edge outside
+    the frame. Reserve both sides of the equality anchor before the shared
+    ladder positions and annotates the rows. Sequential writes keep retained
+    equations free of superposed morph copies during each reveal.
+    """
+    anchor_index = kwargs.get("align_index", 1)
+    if anchor_index is not None:
+        x, edge = kwargs.get("x", 0.0), kwargs.get("edge", 6.6)
+        for row in rows:
+            anchor = row[anchor_index].get_center()
+            left = anchor[0] - row.get_left()[0]
+            right = row.get_right()[0] - anchor[0]
+            factor = min(1.0, (edge + x) / max(left, 1e-9), (edge - x) / max(right, 1e-9))
+            if factor < 1.0:
+                row.scale(factor, about_point=anchor)
+    return partial(_derivation_ladder(scene, rows, whys, **kwargs), transform=False)
+
+
+def play_path(scene, panel, dots, path, duration, colors=None):
+    """Follow stored segments in one frame-aligned animation.
+
+    Many sub-frame plays are rounded independently by the movie writer, while
+    cached Cairo plays can advance the narration clock by their requested
+    durations. One play avoids that accumulated difference. Linear interpolation
+    follows the stored polyline; it does not evaluate the model between samples.
+    """
+    points = np.asarray(path, dtype=float)
+    if (points.ndim != 3 or points.shape[0] < 2 or points.shape[1] != len(dots)
+            or points.shape[2] != 2 or not np.isfinite(points).all()):
+        raise ValueError("path must contain finite (frames, dots, 2) coordinates")
+    if not math.isfinite(duration) or duration <= 0:
+        raise ValueError("path duration must be positive and finite")
+    fps = float(config.frame_rate)
+    frames = max(1, math.ceil(duration * fps - 1e-9))
+    aligned_duration = frames / fps
+
+    # The panel stays fixed during these paths. Capture numeric projections, not
+    # the mutable panel object, in the animation callback.
+    locations = np.array([panel.pts(frame) for frame in points])
+    color_values = None if colors is None else np.array([ManimColor(color).to_rgba() for color in colors])
+
+    def update(group, alpha):
+        alpha = float(np.clip(alpha, 0.0, 1.0))
+        position = alpha * (len(locations) - 1)
+        left = min(int(position), len(locations) - 2)
+        fraction = position - left
+        positions = (1 - fraction) * locations[left] + fraction * locations[left + 1]
+        for dot, location in zip(group, positions):
+            dot.move_to(location)
+        if color_values is not None:
+            group.set_color(ManimColor((1 - alpha) * color_values[0] + alpha * color_values[1]))
+
+    scene.play(UpdateFromAlphaFunc(dots, update), run_time=aligned_duration, rate_func=linear)
+
 
 PART = 21
 MONO = "DejaVu Sans Mono"
@@ -28,7 +94,7 @@ SCHED = {"cos": C.BITS, "linb": C.SURPRISE, "fm": C.INTERVAL, "logn": "#B39DDB",
 HIST = C.HUMAN
 PANEL = "#121722"
 SOLVER_C = {"euler_vp": EULER_C, "ddim": DDIM_C, "heun": HEUN_C, "dpm2": DPM2_C, "dpmpp2m": DPMPP_C, "ddpm": DDPM_C}
-SOLVER_NAME = {"euler_vp": r"Euler (VP time)", "ddim": r"DDIM", "heun": r"Heun (EDM)", "dpm2": r"DPM-Solver-2",
+SOLVER_NAME = {"euler_vp": r"Euler (VP time)", "ddim": r"DDIM", "heun": r"Heun (EDM)", "dpm2": r"DPM-Solver++(2S)",
                "dpmpp2m": r"DPM-Solver++(2M)", "ddpm": r"DDPM"}
 
 

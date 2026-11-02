@@ -5,17 +5,18 @@ where many small flow-matching steps would. Time runs as in the rest of Part 21:
 
     meanflow   (Geng et al., 2025) the identity u = v + (t - s) du/ds along the path, its derivative taken by one
                forward-mode pass (a Jacobian-vector product); half the pairs have s = t, which is plain flow matching;
-               a plain squared error (the paper's adaptive weighting, each error divided by itself held fixed, aims
-               at a weighted median of the targets rather than their mean: on these 2-D letters, whose velocity
-               targets are spread wide, it learned a biased field, about 0.4 from the data in one jump)
+               a plain squared error, an adaptation of the paper's adaptively weighted loss. The historical
+               local ablation reported a different field with adaptive weighting; those outcomes are not a
+               general claim about the paper's objective and require their original evidence for comparison.
     shortcut   (Frans et al., 2024) self-consistency: one jump of size 2d must equal two jumps of size d, for d a
                power of two; jumps of size 0 are plain flow matching
 
 Both use the same network, whose time features are slower than the part's other networks' (frequencies scaled by
-1/8): MeanFlow differentiates the network along time, and with the faster features that derivative was so noisy that
-one jump landed 0.2 to 0.5 from the data (three seeds), against about 0.06 with the slower ones.
+1/8): MeanFlow differentiates the network along time. The original notes reported worse results with faster
+features; those ablation outputs were not restored, so their historical comparison is not verified by this QA.
+The current frequency scale is unchanged.
 
-Recorded, for three seeds at the same budget as every other model of the part: samples after 1, 2 and 4 jumps, their
+Recorded, for three seeds with STEPS updates per student (teacher and auxiliary costs elsewhere differ): samples after 1, 2 and 4 jumps, their
 sliced Wasserstein distance from the data, one-jump paths, and (seed 0) one jump from the same noise during training.
 """
 

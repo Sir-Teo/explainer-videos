@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, NOISE, PART, Panel, load, take_away
+from videos.ai.ai21.common import ladder, DATA, NOISE, PART, Panel, load, take_away
 
 COL = {r"x_0": DATA, r"\varepsilon": NOISE, r"\bar\alpha_t": C.BITS}
 
@@ -30,7 +30,7 @@ class Forward(VoiceoverScene):
         f = load("forward")
         frames, keep = np.asarray(f["frames"]), [int(k) for k in f["keep"]]
         T = int(f["T"])
-        pn = Panel(6.4, center=[0, -0.2, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))  # slides left for the card
+        pn = Panel(6.4, center=[0, -0.2, 0], xlim=(-4.6, 4.8), ylim=(-4.2, 3.8))  # slides left for the card
         dots = pn.dots(frames[0], DATA, radius=0.022)
         cnt = label(r"step $0$", font_size=26, color=GREY_A).next_to(pn, UP, buff=0.15)
         d = definition_card(r"the forward process", VGroup(
@@ -160,11 +160,11 @@ class Forward(VoiceoverScene):
         ]
         whys = [why(r"Bayes: \ the step forward, \ times the jump to $t-1$"),
                 why(r"two Gaussians in $x_{t-1}$: \ complete the square"), why(r"a blend of the clean point and the noisy one")]
-        step = ladder(self, rows, whys, keep=3, top=2.7, x=-1.0, buff=0.6, edge=6.8)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=0.0, align_index=None, buff=0.45, edge=6.6)
         vp = VGroup(label(r"in continuous time:", font_size=24, color=GREY_A),
                     MathTex(r"x_t = \alpha_t\, x_0 + \sigma_t\, \varepsilon, \qquad \alpha_t^2 + \sigma_t^2 = 1", font_size=32),
                     label(r"variance preserving; \ ours: \ $\alpha_t = \cos(\pi t/2)$, \ $\sigma_t = \sin(\pi t/2)$, \ $t \in [0, 1]$",
-                          font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15).move_to([0, -1.25, 0])
+                          font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15).move_to([0, -2.0, 0])
         ta = take_away(r"Given the clean point, every step back is a Gaussian we can write down. \ The model must do it "
                        r"without the clean point.")
         with self.voiceover(

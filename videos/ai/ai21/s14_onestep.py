@@ -126,10 +126,9 @@ class OneStep(VoiceoverScene):
     def shortcut(self):
         m = load("fewstep")
         panels = Group()
-        lim = np.array([4.0, 3.3])
         for i, (k, col, nm) in enumerate((("meanflow", MF_C, r"MeanFlow"), ("shortcut", SC_C, r"shortcut model"))):
-            pn = Panel(4.6, center=[-3.5 + 7.0 * i, 0.4, 0], xlim=(-3.4, 3.4), ylim=(-2.8, 2.4))
-            sn = np.clip(np.asarray(m[f"{k}_snaps"]), -lim, lim)
+            pn = Panel(4.6, center=[-3.5 + 7.0 * i, 0.4, 0], xlim=(-3.8, 3.8), ylim=(-2.8, 2.6))
+            sn = np.asarray(m[f"{k}_snaps"])
             panels.add(Group(pn, pn.dots(sn[0], col, radius=0.018), label(nm, font_size=24, color=col).next_to(pn, UP, buff=0.1)))
         sc = cmath(r"u(z, s, s + 2d) = \tfrac12\big[\,u(z, s, s + d) + u(z', s + d, s + 2d)\,\big]", font_size=28)
         sc.to_edge(DOWN, buff=0.35)
@@ -151,7 +150,7 @@ class OneStep(VoiceoverScene):
             for j in range(1, max(len(steps["meanflow"]), len(steps["shortcut"]))):
                 anims = []
                 for i, k in enumerate(("meanflow", "shortcut")):
-                    sn = np.clip(np.asarray(m[f"{k}_snaps"]), -lim, lim)
+                    sn = np.asarray(m[f"{k}_snaps"])
                     if j < len(sn):
                         anims += panels[i][0].move(panels[i][1], sn[j])
                 self.play(*anims, run_time=0.8)
@@ -196,10 +195,12 @@ class OneStep(VoiceoverScene):
         fl = float(f["floor"])
         flo = DashedLine([x0 + W * fl / hi, 2.65, 0], [x0 + W * fl / hi, 2.3 - 0.56 * (len(rows) - 1) - 0.3, 0], color=GREY_B,
                          stroke_width=1.5)
-        fll = label(r"floor", font_size=16, color=GREY_B).next_to(flo, UP, buff=0.05)
+        fll = label(r"sampling baseline", font_size=16, color=GREY_B).next_to(flo, UP, buff=0.05)
         head = label(rf"one step from noise: \ distance from the data \ (mean; \ whiskers: ${len(rows[0][3])}$ seeds) \\ "
-                     rf"each network about ${int(d['steps']):,}$ training steps, \ plus its teacher's where marked".replace(",", "{,}"),
+                     r"training budgets differ; \ teachers and auxiliary models add cost".replace(",", "{,}"),
                      font_size=20, color=GREY_A).to_edge(UP, buff=0.2)
+        if head.width > 13.0:
+            head.scale_to_fit_width(13.0)
         order = sorted(rows, key=lambda r: r[3].mean())
         best, second = order[0], order[1]
         scratch = [r for r in rows if not teach[r[0]] and r[0] != "fm"]
@@ -215,11 +216,11 @@ class OneStep(VoiceoverScene):
             sep_note = f"though its seeds overlap with the runner-up's, {second_name}."
         ta = take_away(r"Fifty steps to one: \ straighter paths, \ a student that jumps, \ or a network that learns the jump.")
         with self.voiceover(
-            "Here is every one-step model of this part, from the same noise, each network trained for about the same "
-            f"number of steps, {len(rows[0][3])} seeds each. <bookmark mark='a'/> The best single step is {best_name}'s, at {best[3].mean():.3f}, "
+            "Here is every one-step model of this part, from the same noise. Training budgets differ, and teachers "
+            f"and auxiliary models add cost. Each method has {len(rows[0][3])} seeds. <bookmark mark='a'/> The best single step is {best_name}'s, at {best[3].mean():.3f}, "
             + sep_note + " <bookmark mark='b'/> Among the models with no teacher, the best is " + bs_name
             + f", at {bs[3].mean():.3f}. <bookmark mark='c'/> Plain flow matching's single step, at "
-            f"{rows[0][3].mean():.3f}, is the blur every method starts from."
+            f"{rows[0][3].mean():.3f}, is the comparison's one-step flow-matching baseline."
         ) as vo:
             self.play(FadeIn(head), Create(flo), FadeIn(fll))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in g], lag_ratio=0.12), run_time=2.5)

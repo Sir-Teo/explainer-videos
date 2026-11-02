@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import AUTO_C, CFG_C, CLS_C, FM_C, PART, Panel, legend, load, take_away
+from videos.ai.ai21.common import ladder, AUTO_C, CFG_C, CLS_C, FM_C, PART, Panel, legend, load, take_away
 
 GX = (-3.0, 3.0)
 GY = (-1.6, 1.6)
@@ -58,7 +58,7 @@ class Guidance(VoiceoverScene):
         fl = label(r"told the letter, \ or (one time in five) \ told nothing", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.12)
         snaps = np.asarray(g["snaps"])
         steps = [int(s) for s in g["snap_steps"]]
-        pr = Panel(5.6, center=[3.7, 0.3, 0], xlim=GX, ylim=GY)
+        pr = Panel(5.2, center=[3.7, 0.1, 0], xlim=(-4.2, 4.2), ylim=(-3.7, 3.7))
         rd = pr.dots(snaps[0], FM_C, radius=0.018)
         rl = label(rf"asked for ``A'', \ training step ${steps[0]}$", font_size=20, color=FM_C).next_to(pr, UP, buff=0.1)
         cite_ = cite(r"J.~Ho \& T.~Salimans, \textit{Classifier-Free Diffusion Guidance} (2022)", corner=DR)
@@ -102,7 +102,7 @@ class Guidance(VoiceoverScene):
             "The first way to ask came from Bayes' rule. <bookmark mark='a'/> Take logs and gradients, and the "
             "score of the images that fit a label is the ordinary score plus the gradient of a classifier's log "
             "probability: the evidence, p of y, doesn't depend on x, so it disappears. <bookmark mark='b'/> Multiply "
-            "the classifier's push by a weight w above one, and you sample from a sharpened version, the data "
+            "the classifier's push by a weight w above one, and at each noise level this score points along a sharpened density, "
             "reweighted towards what the classifier is surest of. <bookmark mark='c'/> Prafulla Dhariwal and Alex "
             "Nichol did this in 2021, with a classifier trained on noisy images, and beat GANs on ImageNet."
         ) as vo:
@@ -155,13 +155,16 @@ class Guidance(VoiceoverScene):
         panels = Group()
         for i, w in enumerate(show):
             j = ws.index(w)
-            pn = Panel(4.1, center=[-4.45 + 4.45 * i, 1.2, 0], xlim=GX, ylim=GY)
+            pn = Panel(4.1, center=[-4.45 + 4.45 * i, 1.2, 0], xlim=GX, ylim=(-1.75, 1.75))
             on, sp = np.asarray(g["cfg_onA"])[:, j], np.asarray(g["cfg_spread"])[:, j]
             panels.add(Group(pn, pn.scatter(X[j], CFG_C, radius_px=1.5, res=300),
                              label(rf"$w = {w:g}$", font_size=26, color=CFG_C).next_to(pn, UP, buff=0.1),
-                             label(rf"${100 * on.mean():.0f}\%$ on the A; \ spread ${sp.mean():.2f}$", font_size=19,
+                             label(rf"${100 * on.mean():.0f}\%$ with $x<0$ \\ mean radius there ${sp.mean():.2f}$", font_size=19,
                                    color=GREY_A).next_to(pn, DOWN, buff=0.08)))
-        sub = label(r"the same $1{,}000$ starting points in every panel", font_size=18, color=GREY_B).next_to(panels, UP, buff=0.12)
+        sub = label(rf"shown: ${len(X[0])}$ points from seed $0$; \ metrics: $1{{,}}000$ per seed, ${len(g['seeds'])}$ seeds",
+                    font_size=18, color=GREY_B).next_to(panels, UP, buff=0.12)
+        if sub.width > 13.2:
+            sub.width = 13.2
         on = {w: float(np.asarray(g["cfg_onA"])[:, ws.index(w)].mean()) for w in show}
         sp = {w: float(np.asarray(g["cfg_spread"])[:, ws.index(w)].mean()) for w in show}
         prec = np.asarray(g["cfg_prec"]).mean(0)
@@ -178,13 +181,12 @@ class Guidance(VoiceoverScene):
         jr = int(np.argmax(prec))
         r_drop = next((w for w, r in zip(ws, rec) if r < 0.5 * rec[0]), None)
         drop_note = (f"Recall, how much of the real A the samples cover, halves by w equal to {r_drop:g}: more "
-                     "faithful, less varied." if r_drop is not None else "Recall stays high across the sweep.")
+                     "faithful, less varied." if r_drop is not None else "Recall does not fall below half its w equal to zero value in this sweep.")
         with self.voiceover(
-            f"Ask for an A, from the same starting noise, at three weights. <bookmark mark='a'/> At w equal to zero "
-            f"the request is ignored: {100 * on[0.0]:.0f} percent of the samples land on the A. <bookmark mark='b'/> "
+            f"Ask for an A, from the same starting noise, at three weights. We track the share with x below zero, a left-region proxy, and those points' mean radius. <bookmark mark='a'/> At w equal to zero "
+            f"the request is ignored: {100 * on[0.0]:.0f} percent have x below zero. <bookmark mark='b'/> "
             f"At one, the plain conditional model: {100 * on[1.0]:.0f} percent. <bookmark mark='c'/> At four you "
-            f"overshoot on purpose: {100 * on[4.0]:.0f} percent, crowded towards the most A-like strokes, the spread "
-            f"shrinking from {sp[1.0]:.2f} to {sp[4.0]:.2f}. <bookmark mark='d'/> Across the whole sweep, with "
+            f"extrapolate beyond the conditional velocity: {100 * on[4.0]:.0f} percent; the mean radius in the negative-x region changes from {sp[1.0]:.2f} to {sp[4.0]:.2f}. <bookmark mark='d'/> Across the whole sweep, with "
             f"{len(np.asarray(g['cfg_prec']))} seeds: precision, the share of samples that look like real A's, peaks "
             f"at w equal to {ws[jr]:g}. {drop_note}"
         ) as vo:
@@ -231,24 +233,25 @@ class Guidance(VoiceoverScene):
         f1 = {m: float(np.max(2 * P[m] * R[m] / np.maximum(P[m] + R[m], 1e-9))) for m in ms}
         best = max(ms, key=lambda m: f1[m])
         wbest = {m: W[m][int(np.argmax(2 * P[m] * R[m] / np.maximum(P[m] + R[m], 1e-9)))] for m in ms}
-        verdict = (f"On our letters the best balance of fidelity and variety is autoguidance's, at w equal to "
+        verdict = (f"On our letters the highest measured F1 on these weight grids is autoguidance's, at w equal to "
                    f"{wbest['auto']:g}." if best == "auto" else
-                   f"On our letters the best balance of fidelity and variety is {MSPOKEN[best]}'s, at w equal to "
-                   f"{wbest[best]:g}; autoguidance's best comes close.")
+                   f"On our letters the highest measured F1 on these weight grids is {MSPOKEN[best]}'s, at w equal to "
+                   f"{wbest[best]:g}. The curves show autoguidance's measured trade-off too.")
         if abs(f1["cfg"] - f1["cls"]) < 0.05:
-            cls_note = "Classifier-free guidance and classifier guidance trace similar curves."
+            cls_note = "The best F1 scores of classifier-free guidance and classifier guidance differ by less than 0.05 here."
         elif f1["cfg"] > f1["cls"]:
-            cls_note = "Classifier-free guidance reaches a better balance than classifier guidance with our small noisy classifier."
+            cls_note = "Classifier-free guidance has a higher maximum F1 on these grids than classifier guidance with our small noisy classifier."
         else:
-            cls_note = "Classifier guidance, with our small noisy classifier, reaches a better balance than classifier-free guidance."
+            cls_note = "Classifier guidance, with our small noisy classifier, has a higher maximum F1 on these grids than classifier-free guidance."
+        balance = label(r"balance: \ $F_1 = 2PR/(P+R)$ \\ $P,R$: seed means", font_size=20, color=GREY_A).move_to([3.5, -2.35, 0])
         ta = take_away(r"Guidance trades variety for fidelity; \ which push you add decides the rate of exchange.")
         with self.voiceover(
             "Guidance trades variety for fidelity. Plot every weight on a plane: recall across, precision up. "
             "<bookmark mark='a'/> " + cls_note + " "
             "<bookmark mark='b'/> In 2024 Tero Karras and colleagues asked why push away from the unconditional "
             "model at all. Its fault is that it is worse: so guide instead with a smaller, less-trained version of "
-            "the same conditional model. <bookmark mark='d'/> The push then corrects the model's own errors, "
-            "without dragging it towards a different distribution. <bookmark mark='e'/> They set records on "
+            "the same conditional model. <bookmark mark='d'/> Their aim is to correct errors in the conditional model using a weaker "
+            "version of that same conditional model. <bookmark mark='e'/> They set records on "
             "ImageNet: an FID of 1.01 at 64 pixels and 1.25 at 512. <bookmark mark='c'/> Our weak model is narrower "
             f"and trained an eighth as long. {verdict}"
         ) as vo:
@@ -262,7 +265,7 @@ class Guidance(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("c")
-            self.play(Indicate(curves[ms.index(best)], color=WHITE, scale_factor=1.05))
+            self.play(FadeIn(balance), Indicate(curves[ms.index(best)], color=WHITE, scale_factor=1.05))
             self.play(FadeIn(ta, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()

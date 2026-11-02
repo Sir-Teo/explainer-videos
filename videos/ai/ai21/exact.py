@@ -10,7 +10,7 @@ score, and the best guess of the clean point E[x0 | x] (``posterior``).  That ma
                 (x + sigma^2 score) / alpha; and the best denoiser's guesses at four noise levels
     sde         the reverse SDE and the probability-flow ODE (linear-beta VP), from the same noise: marginals at every
                 time against direct samples, paths, and the ODE run there and back
-    solvers     samplers with the exact denoiser: DDPM, Euler, DDIM, Heun (EDM), DPM-Solver-2, DPM-Solver++(2M); error
+    solvers     samplers with the exact denoiser: DDPM, Euler, DDIM, Heun (EDM), DPM-Solver++(2S), DPM-Solver++(2M); error
                 against a reference solution and distance from the data, by number of network evaluations
     schedules   noise schedules: log-SNR curves, where training spends its noise levels, the linear schedule's terminal
                 SNR, and time-step spacings for DDIM compared
@@ -127,7 +127,7 @@ def dist(x):
 
 
 def floor(n, reps=8):
-    """The distance from the data of a fresh sample of the data itself, n points: the best any sampler can score."""
+    """Mean discrepancy of fresh n-point data samples: a sampling baseline, not a lower bound."""
     return float(np.mean([dist(sample(n, 900 + r)) for r in range(reps)]))
 
 
@@ -381,7 +381,7 @@ def sigmas(kind, n):
 def solve(D, z, kind, n, spacing="edm", seed=0):
     """Sample with denoiser D(x, s) from x = SMAX z.  Returns (x at SMIN, network evaluations)."""
     s = sigmas(spacing, n)
-    x = SMAX * z if kind != "euler_vp" else z.copy()
+    x = SMAX * z if kind != "euler_vp" else (SMAX / math.sqrt(1 + SMAX ** 2)) * z
     nfe = 0
     if kind in ("ddim", "euler_s"):  # Euler in s on dx/ds = (x - D)/s: the same as DDIM, and as DPM-Solver-1
         for i in range(n):
@@ -402,7 +402,7 @@ def solve(D, z, kind, n, spacing="edm", seed=0):
             else:
                 x = xe
         return x, nfe
-    if kind == "dpm2":  # DPM-Solver-2 (singlestep, data prediction): a half step in log-SNR, then the full step
+    if kind == "dpm2":  # historical key: DPM-Solver++(2S), midpoint data prediction; recipe unchanged
         for i in range(n):
             d = D(x, s[i])
             sm = math.sqrt(s[i] * s[i + 1])  # the midpoint in lambda = -log s

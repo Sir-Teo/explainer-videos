@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, DDIM_C, DDPM_C, NOISE, PART, SCORE, Panel, load
+from videos.ai.ai21.common import ladder, DATA, DDIM_C, DDPM_C, NOISE, PART, SCORE, Panel, load
 
 COL = {r"\hat\varepsilon": SCORE, r"\hat x_0": DATA}
 
@@ -48,8 +48,8 @@ class Samplers(VoiceoverScene):
         d = load("denoiser")
         P1, P2 = np.asarray(d["ddpm_path"]), np.asarray(d["ddim_path"])
         n = 150
-        p1 = Panel(6.2, center=[-3.4, -0.5, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
-        p2 = Panel(6.2, center=[3.4, -0.5, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
+        p1 = Panel(6.2, center=[-3.4, -0.5, 0], xlim=(-4.2, 4.4), ylim=(-3.9, 3.5))
+        p2 = Panel(6.2, center=[3.4, -0.5, 0], xlim=(-4.2, 4.4), ylim=(-3.9, 3.5))
         d1, d2 = p1.dots(P1[0][:n], NOISE, radius=0.03), p2.dots(P2[0][:n], NOISE, radius=0.03)
         t1 = label(r"DDPM: \ $200$ steps, \ each with fresh noise", font_size=26, color=DDPM_C).next_to(p1, UP, buff=0.15)
         t2 = label(r"DDIM: \ $50$ steps, \ no noise added", font_size=26, color=DDIM_C).next_to(p2, UP, buff=0.15)
@@ -124,7 +124,7 @@ class Samplers(VoiceoverScene):
         yn.align_to(ax, LEFT)
         c = VGroup(curve(ax, lx, sw, DDIM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=DDIM_C) for a, b in zip(lx, sw)])
         fl = DashedLine(ax.c2p(0.6, floor), ax.c2p(2.1, floor), color=GREY_B, stroke_width=1.5)
-        fll = label(r"the floor: \ a fresh sample \\ of the data itself", font_size=20, color=GREY_B).next_to(fl.get_end(), RIGHT, buff=0.12)
+        fll = label(r"the sampling baseline: \ a fresh sample \\ of the data itself", font_size=20, color=GREY_B).next_to(fl.get_end(), RIGHT, buff=0.12)
         fll.shift(DOWN * 0.3)
         yt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(0.6, v), LEFT, buff=0.08)
                       for v in np.arange(ystep, hi + 1e-9, ystep)])
@@ -145,7 +145,7 @@ class Samplers(VoiceoverScene):
             "How few steps will do? Measure how far the samples land from the data, <bookmark mark='w'/> with the "
             "sliced Wasserstein distance: drop both clouds onto many random lines, and compare where their points "
             f"fall. <bookmark mark='a'/> With five DDIM steps the letters are blurred, at {sw[0]:.2f}; " + close
-            + f"at a hundred, {sw[-1]:.3f}, against a floor of {floor:.3f} for a fresh sample of the data itself. "
+            + f"at a hundred, {sw[-1]:.3f}, against a sampling baseline of {floor:.3f} for a fresh sample of the data itself. "
             "<bookmark mark='b'/> Each step is one run of the network, so fewer steps is faster pictures. The paths "
             "are curved, and curved paths need many small steps: the next three chapters are about taking fewer."
         ) as vo:

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, NOISE, PART, SCORE, Panel, load
+from videos.ai.ai21.common import ladder, DATA, NOISE, PART, SCORE, Panel, load
 
 COL = {r"\varepsilon": NOISE, r"\hat\varepsilon_\theta": SCORE, r"x_0": DATA}
 
@@ -46,8 +46,8 @@ class ELBO(VoiceoverScene):
             cmath(r"\mathcal L", r"=", r"\mathbb E_q\Big[-\log p(x_T) - \sum_{t \ge 1} \log \frac{p_\theta(x_{t-1} \mid x_t)}"
                   r"{q(x_t \mid x_{t-1})}\Big]", font_size=32),
             cmath(r"\mathcal L", r"=", r"\underbrace{\mathrm{KL}\big(q(x_T \mid x_0) \,\|\, p(x_T)\big)}_{\approx\, 0} + "
-                  r"\sum_{t > 1} \mathrm{KL}\big(q(x_{t-1} \mid x_t, x_0) \,\|\, p_\theta(x_{t-1} \mid x_t)\big)"
-                  r" - \log p_\theta(x_0 \mid x_1)", font_size=28),
+                  r"\mathbb E_q\!\Big[\sum_{t > 1} \mathrm{KL}\big(q(x_{t-1} \mid x_t, x_0) \,\|\, p_\theta(x_{t-1} \mid x_t)\big)"
+                  r" - \log p_\theta(x_0 \mid x_1)\Big]", font_size=28),
         ]
         whys = [why(r"Jensen, \ as for the VAE \ (Part 20)"), why(r"both chains are products of their steps"),
                 why(r"Bayes on each step, \ given $x_0$; \ the jumps cancel in pairs")]
@@ -76,26 +76,26 @@ class ELBO(VoiceoverScene):
     # ------------------------------------------------------------------
     def noise(self):
         rows = [
-            cmath(r"\mathrm{KL}_t", r"=", r"\frac{1}{2\sigma_t^2}\, \big\| \tilde\mu_t - \mu_\theta(x_t, t) \big\|^2", font_size=34),
+            cmath(r"\mathrm{KL}_t", r"=", r"\frac{1}{2\sigma_t^2}\, \big\| \tilde\mu_t - \mu_\theta(x_t, t) \big\|^2 + C_t", font_size=34),
             cmath(r"\tilde\mu_t", r"=", r"\frac{1}{\sqrt{1-\beta_t}}\Big(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,",
                   r"\varepsilon", r"\Big)", colors=COL, font_size=34),
             cmath(r"\mu_\theta", r"=", r"\frac{1}{\sqrt{1-\beta_t}}\Big(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,",
                   r"\hat\varepsilon_\theta(x_t, t)", r"\Big)", colors=COL, font_size=34),
             cmath(r"\mathrm{KL}_t", r"=", r"\lambda_t\, \big\|", r"\varepsilon", r"-", r"\hat\varepsilon_\theta(x_t, t)",
-                  r"\big\|^2, \qquad \lambda_t = \frac{\beta_t^2}{2\sigma_t^2 (1-\beta_t)(1-\bar\alpha_t)}", colors=COL,
+                  r"\big\|^2 + C_t, \qquad \lambda_t = \frac{\beta_t^2}{2\sigma_t^2 (1-\beta_t)(1-\bar\alpha_t)}", colors=COL,
                   font_size=32),
         ]
-        whys = [why(r"two Gaussians, \ the same variance"),
+        whys = [why(r"fixed variances: \ $C_t$ is independent of $\theta$"),
                 why(r"put $x_0 = (x_t - \sqrt{1-\bar\alpha_t}\,\varepsilon)/\sqrt{\bar\alpha_t}$ into $\tilde\mu_t$"),
                 why(r"so let the network guess $\varepsilon$"), why(r"the means differ only in the noise")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.3, buff=0.55, edge=6.85)
         cite_ = cite(r"J.~Ho, A.~Jain \& P.~Abbeel, \textit{Denoising Diffusion Probabilistic Models} (2020)", corner=DR)
         with self.voiceover(
-            "Each term compares two Gaussians with the same variance, so it is just the squared distance between "
-            "their means. <bookmark mark='a'/> Write the true mean in terms of the noisy point and the noise that "
+            "Each KL term compares two Gaussians. With fixed variances, the part that depends on the network is "
+            "the squared distance between their means; the remaining constant does not depend on theta. <bookmark mark='a'/> Write the true mean in terms of the noisy point and the noise that "
             "made it, by substituting for the clean point. <bookmark mark='b'/> That suggests the parameterization "
             "Ho, Jain and Abbeel chose in 2020: let the network output a guess of the noise, and build its mean the "
-            "same way. <bookmark mark='c'/> Then each term of the bound is a weight lambda t times the squared error "
+            "same way. <bookmark mark='c'/> Then the network-dependent part of each intermediate Gaussian KL is a weight lambda t times the squared error "
             "of the noise guess. Training a diffusion model is a regression: look at a noisy point, say what noise "
             "was added."
         ) as vo:
@@ -160,15 +160,14 @@ class ELBO(VoiceoverScene):
         snaps = np.asarray(d["snaps"])
         L = np.asarray(d["losses"])
         sw = [float(v) for v in d["snap_sw"]]
-        pn = Panel(6.0, center=[-3.3, -0.3, 0])
+        pn = Panel(6.0, center=[-3.3, -0.3, 0], xlim=(-4.4, 4.4), ylim=(-4.4, 4.4))
         pts = pn.dots(snaps[0], DATA, radius=0.022)
-        top = float(np.percentile(L[:, 1], 99)) * 1.05
-        L = np.stack([L[:, 0], np.minimum(L[:, 1], top)], 1)  # the first few losses run off the top: drawn at it
+        top = float(L[:, 1].max()) * 1.05
         g = axes([0, checks[-1]], [0, top], x_length=4.8, y_length=2.8, xlabel=r"training step",
-                 ylabel=r"the simple loss", xticks=[0, checks[-1]], yticks=[0, round(top, 1)], center=[3.6, 0.5, 0])
+                 ylabel=r"the simple loss, \ per coordinate", xticks=[0, checks[-1]], yticks=[0, float(np.floor(top * 10) / 10)], center=[3.6, 0.5, 0])
         tk = ValueTracker(0)
         dot = always_redraw(lambda: Dot(g.ax.c2p(tk.get_value(), float(np.interp(tk.get_value(), L[:, 0], L[:, 1]))),
-                                        radius=0.07, color=SCORE))
+                                        radius=0.07, color=SCORE).set_opacity(1.0 if tk.get_value() >= L[0, 0] else 0.0))
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(tk.get_value()):,}".replace(",", "{,}"), font_size=28,
                                             color=SCORE).next_to(pn, UP, buff=0.12))
         swl = always_redraw(lambda: label(rf"distance from the data: \ ${np.interp(tk.get_value(), checks, sw):.2f}$",
@@ -178,17 +177,17 @@ class ELBO(VoiceoverScene):
         k1 = 1 if len(checks) > 2 else len(checks) - 1
         l1 = float(np.interp(checks[k1], L[:, 0], L[:, 1]))
         drop = (L[0, 1] - l1) / max(L[0, 1] - L[-1, 1], 1e-9)
-        pct = 100 * min(drop, 1)
+        pct = 100 * drop
         # the first checkpoint whose points are within 60 percent of the final distance: the letters can be read
         ks = next(k for k in range(k1, len(checks)) if sw[k] < 1.6 * sw[-1])
         ks = min(max(ks, k1 + 1), len(checks) - 2)  # strictly between the blob and the end
         if drop > 0.5:
-            early = (f"Within {checks[k1]} steps the loss has made {pct:.0f} percent of its whole fall, and the "
+            early = (f"Within {checks[k1]} steps the loss has made {pct:.0f} percent of its recorded fall, and the "
                      f"points have pulled in to a blob, {sw[k1]:.2f} from the data. ")
         else:
             early = (f"Within {checks[k1]} steps the points have pulled in to a blob, {sw[k1]:.2f} from the data, "
                      "and the loss is still falling. ")
-        if any(b > a + 0.005 for a, b in zip(sw[ks:], sw[ks + 1:])):
+        if any(b > a + 1e-12 for a, b in zip(sw[ks:], sw[ks + 1:])):
             trend = "on the whole, if not at every checkpoint"
         else:
             trend = "at every checkpoint"

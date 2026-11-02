@@ -6,16 +6,28 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai21.common import AR_C, HIST, MDM_C, MONO, PART, bars_chart, legend, load, take_away
+from videos.ai.ai21.reviewed_inputs import load_upstream
+
+
+def comparison_verdict(mdm, ar):
+    """Compare the measured bound with exact AR losses, without asserting likelihood ordering."""
+    if max(ar) < min(mdm):
+        return "the autoregressive model's exact loss is lower than the diffusion bound in both seeds"
+    if max(mdm) < min(ar):
+        return "the diffusion bound is lower than the autoregressive model's exact loss in both seeds"
+    return "the two measured ranges overlap across seeds"
+
+
+def intervals_overlap(estimates, errors):
+    """Whether the displayed plus/minus one-standard-error intervals intersect."""
+    return max(v - e for v, e in zip(estimates, errors)) <= min(v + e for v, e in zip(estimates, errors))
 
 
 def board_rows():
     """Part 1's scoreboard, Part 13's transformer, and this chapter's two models (seed 0)."""
-    from videos.ai.ai1 import compute as c1
-    from videos.ai.ai13 import compute as c13
-
-    t, tf = load("textlm"), c13.load("tf")
+    t, tf = load("textlm"), load_upstream("tf")
     T = int(t["T"])
-    rows = [dict(r) for r in c1.load("scoreboard")["rows"]]
+    rows = [dict(r) for r in load_upstream("scoreboard")["rows"]]
     i = next(j for j, r in enumerate(rows) if r["key"] == "best") + 1
     rows.insert(i, dict(key="tf", label=rf"Part 13's transformer, \ ${int(tf['ctx'])}$ characters", bits=float(tf["passage_bits"]),
                         part=13, kind="lm"))
@@ -195,8 +207,8 @@ class TextLM(VoiceoverScene):
         with self.voiceover(
             f"And here is ours writing {T} characters, from all blanks, in {len(frames) - 1} rounds. "
             "<bookmark mark='a'/> Each round it guesses every blank, keeps the guesses it is surest of, and leaves "
-            "the rest blank, LLaDA's rule. <bookmark mark='b'/> Words appear wherever the model is confident first, "
-            "and the rest fills in around them: written all at once, then refined, rather than left to right."
+            "the rest blank, LLaDA's rule. <bookmark mark='b'/> Characters appear at the most confident positions first. "
+            "Each round fills several blanks while earlier choices stay fixed; positions need not proceed left to right."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(VGroup(b_, c_)) for b_, c_ in zip(slots, cur)], lag_ratio=0.01), FadeIn(counter),
                       run_time=1.2)
@@ -253,19 +265,18 @@ class TextLM(VoiceoverScene):
         ests.move_to([-2.9, -1.2, 0])
         mv = [float(t[f"mdm{s}_valid"]) for s in seeds]
         av = [float(t[f"ar{s}_valid"]) for s in seeds]
-        sep = max(av) < min(mv)
         e = [float(t[k]) for k in ("est_t", "est_k", "est_order")]
-        se = max(float(t[k + "_se"]) for k in ("est_t", "est_k", "est_order"))
-        agree = (max(e) - min(e)) < 3 * se
+        errors = [float(t[k + "_se"]) for k in ("est_t", "est_k", "est_order")]
+        agree = intervals_overlap(e, errors)
         l2r, b0 = float(t["l2r"]), float(t["est_k"])
-        winner = ("the autoregressive model wins in both seeds" if sep else "the two overlap across seeds")
-        agree_note = ("agree within their error bars" if agree else "come close, though not within their error bars")
+        winner = comparison_verdict(mv, av)
+        agree_note = ("agree within their error bars" if agree else "do not all overlap within the displayed one-standard-error bars")
         if l2r < b0:
             l2r_note = (f"Read strictly left to right, the diffusion model scores {l2r:.3f}, better than its own bound: "
-                        "most orders of revealing are harder than reading in order, and the bound pays for all of them.")
+                        "the estimated order-averaged bound is higher than this particular order's score.")
         else:
             l2r_note = (f"Read strictly left to right, the diffusion model scores {l2r:.3f}, no better than its bound: it "
-                        "was never trained to favour that order.")
+                        "was trained over randomly masked contexts, without favouring this order.")
         cite_ = cite(r"Prabhudesai et al., \textit{Diffusion Beats Autoregressive in Data-Constrained Settings} (2025)",
                      corner=DR, font_size=18)
         with self.voiceover(
@@ -291,19 +302,19 @@ class TextLM(VoiceoverScene):
         t = load("textlm")
         rows, i_ar, i_md = board_rows()
         board = scoreboard(rows, highlight=(i_ar, i_md), max_bits=8.0, row_h=0.38, font_size=20)
-        board.scale_to_fit_height(min(board.height, 6.8)).move_to(DOWN * 0.1)
+        board.scale_to_fit_height(min(board.height, 6.2)).move_to(UP * 0.1)
+        scope = note(r"historical rows retain their original scoring protocols", font_size=18).to_edge(DOWN, buff=0.25)
         m, se, a = float(t["mdm0_passage"]), float(t["mdm0_passage_se"]), float(t["ar0_passage"])
         tf = next(r for r in rows if r["key"] == "tf")
-        from videos.ai.ai13 import compute as c13
-
-        ratio = int(c13.load("tf")["ctx"]) // int(t["T"])
+        ratio = int(load_upstream("tf")["ctx"]) // int(t["T"])
         with self.voiceover(
             f"On the scoreboard's passage, in blocks of {int(t['T'])} characters: the masked-diffusion model's bound, "
             f"{m:.2f} bits per character, give or take {se:.2f}, and the autoregressive twin, {a:.2f}. "
             f"<bookmark mark='a'/> Part 13's transformer, with {ratio} times the context, "
-            f"is at {tf['bits']:.2f}. A bound is an upper limit: the diffusion model's true code length could only be lower."
+            f"is at {tf['bits']:.2f}. Historical rows retain their original scoring protocols, so this is not a matched-target ranking. "
+            "A bound is an upper limit on negative log likelihood; our Monte Carlo number estimates that bound."
         ) as vo:
-            self.play(FadeIn(board))
+            self.play(FadeIn(board), FadeIn(scope))
             vo.wait_until("a")
             self.play(Indicate(board.rows[i_md], color=MDM_C))
         self.wait(0.4)
@@ -346,22 +357,19 @@ class TextLM(VoiceoverScene):
         c8 = next(w for w in conf if int(w["steps"]) == 8)
         c1 = next(w for w in conf if int(w["steps"]) == 1)
         r64 = next(w for w in rnd if int(w["steps"]) == T)
-        conf_better = c64["judge"] < r64["judge"]
-        order_note = (f"Revealing the surest guesses first reads better than revealing at random, {c64['judge']:.2f} "
-                      f"against {r64['judge']:.2f} bits, though at random is what the bound describes." if conf_better
-                      else f"Revealing at random reads as well as the surest-first rule, {r64['judge']:.2f} against "
-                      f"{c64['judge']:.2f}.")
+        order_note = (f"Our AR judge assigns {c64['judge']:.2f} bits per character to confidence-first samples, "
+                      f"versus {r64['judge']:.2f} for random revealing; the bound averages random orders.")
         b16 = next((w for w in blk if int(w["steps"]) == 16), None)
         w16 = next(w for w in conf if int(w["steps"]) == 16)
         blk_note = (f"Writing in four blocks, left to right, with sixteen rounds in all, scores {b16['judge']:.2f}, against "
                     f"{w16['judge']:.2f} for the whole string at once." if b16 else "")
         with self.voiceover(
             f"Writing {T} characters one round per character costs {T} network evaluations, like an autoregressive "
-            "model. The promise of diffusion is fewer rounds, several characters each. How much does it cost in "
-            "quality? Judge each sample by an autoregressive model of the other seed: lower reads more like the "
-            f"novels; real text scores {judge_real:.2f}. <bookmark mark='a'/> With {T} rounds, {c64['judge']:.2f}; "
+            "model. Diffusion can use fewer rounds with several characters each. We score the samples with an "
+            "autoregressive model from the other seed. This is that judge's likelihood score; coherence and diversity "
+            f"need separate checks. Real text scores {judge_real:.2f}. <bookmark mark='a'/> With {T} rounds, {c64['judge']:.2f}; "
             f"with eight, {c8['judge']:.2f}; all at once, {c1['judge']:.2f}: guessing many characters independently, "
-            "in one go, makes them disagree with each other. <bookmark mark='b'/> " + order_note
+            "in one go, leaves their dependencies unmodeled. <bookmark mark='b'/> " + order_note
             + " <bookmark mark='c'/> " + blk_note
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), Create(rl), Create(al))
@@ -381,9 +389,8 @@ class TextLM(VoiceoverScene):
             history_card(2025, r"Arriola et al.: \ block diffusion", r"left to right across blocks, \ diffusion within each: \ "
                          r"any length, \ a key-value cache", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Inception Labs: \ Mercury", r"billed as the first commercial diffusion language models: \ "
-                         r"$1{,}109$ tokens a second on an H100", color=HIST, width=6.3, font_size=21),
-            history_card(2025, r"Google DeepMind: \ Gemini Diffusion", r"$1{,}479$ tokens a second, \ about the quality "
-                         r"of Gemini 2.0 Flash-Lite on code", color=HIST, width=6.3, font_size=21),
+                         r"Coder Mini: $1{,}109$ tokens/s on H100 hardware", color=HIST, width=6.3, font_size=21),
+            history_card(2025, r"Google DeepMind: \ Gemini Diffusion", r"$1{,}479$ tokens/s excluding overhead; \ about Gemini 2.0 Flash-Lite on code", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Wu et al.: \ Fast-dLLM", r"an approximate cache, \ and decoding many tokens only when "
                          r"confident: \ up to $27.6\times$ faster", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Ant Group et al.: \ LLaDA2.0", r"$100$ billion parameters, \ converted from an "
@@ -397,20 +404,20 @@ class TextLM(VoiceoverScene):
         if cards.height > 5.7:
             cards.height = 5.7
         cards.move_to(UP * 0.55)
-        ta = take_away(r"Diffusion language models trade a little quality per parameter for writing many tokens at once.")
+        ta = take_away(r"Parallel denoising can write many tokens per round; quality and speed depend on the model and decoding budget.")
         with self.voiceover(
             "Fixed-length writing has a cost: nothing can be cached, and the length is set in advance. Marianne "
             "Arriola and colleagues' block diffusion splits the difference: blocks left to right, like an "
             "autoregressive model, diffusion inside each block. <bookmark mark='a'/> In 2025 Inception Labs launched "
             "Mercury, billed as the first commercial diffusion language models, at over a thousand tokens a second "
-            "on one GPU; "
-            "<bookmark mark='b'/> Google's Gemini Diffusion reported nearly fifteen hundred, at about the coding quality of "
+            "on H100 hardware; "
+            "<bookmark mark='b'/> Google's Gemini Diffusion reported nearly fifteen hundred tokens per second excluding overhead, at about the coding quality of "
             "a small Gemini; <bookmark mark='c'/> Fast-dLLM added caching and confident parallel decoding to open "
             "models, up to twenty-seven times faster; <bookmark mark='d'/> LLaDA two point oh reached a hundred "
             "billion parameters by converting an autoregressive model. <bookmark mark='e'/> And in June 2026 Google "
             "released DiffusionGemma with open weights: 256 tokens a block, over a thousand tokens a second on one "
-            "GPU, and, in Google's own words, lower in quality than the standard Gemma 4. The trade is speed for a "
-            "little quality, the one our two small models measured."
+            "GPU, and, in Google's own words, lower in quality than the standard Gemma 4. Speed and task quality must "
+            "be measured together; a likelihood bound alone does not settle that trade."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.1))
             for k, mk in enumerate("abcde", 1):
