@@ -9,9 +9,8 @@ from videos.quant.quant14.common import BAD, IV, OPT, PART, ROUGH, RV, VAR, illu
 class Lift(VoiceoverScene):
     def construct(self):
         L = load("lift")
-        rh = load("rheston")
         self.card()
-        self.kernel(rh)
+        self.kernel(L)
         self.errors(L)
 
     def card(self):
@@ -20,9 +19,9 @@ class Lift(VoiceoverScene):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def kernel(self, rh):
+    def kernel(self, L):
         from scipy.special import gamma as G
-        H = rh["params"]["H"]
+        H = L["H"]
         a = H + 0.5
         t = np.exp(np.linspace(np.log(1e-3), np.log(1.0), 200))
         K = t ** (a - 1) / G(a)
@@ -81,13 +80,13 @@ class Lift(VoiceoverScene):
             row[1].set_x(tab[0][1].get_x())
         tab[1:].next_to(tab[0], DOWN, buff=0.35)
         tab.move_to(LEFT * 2.2)
-        side = wrapped_label(r"against rough Heston as fitted to the Surface in chapter 4, solved exactly by the fractional "
+        side = wrapped_label(r"against rough Heston with $H = 0.1$, fitted to the Surface in chapter 4, solved exactly by the fractional "
                              r"Adams scheme; the lift is a Heston model with $N$ variance factors and no fractional calculus",
                              4.6, 20, GREY_A).to_edge(RIGHT, buff=0.6)
         src = illustration(r"13 strikes, $\pm 30\%$; the House's \texttt{lifted\_heston\_cf}")
         with self.voiceover(
-            "How many factors are enough? Price the thirty-day smile of the rough Heston model fitted in chapter "
-            "four, exactly, and with lifts of growing size. <bookmark mark='a'/> One factor is a Heston model with the wrong memory, and "
+            "How many factors are enough? Price the thirty-day smile of a rough Heston model with H of a tenth, fitted "
+            "to the Surface in chapter four, exactly, and with lifts of growing size. <bookmark mark='a'/> One factor is a Heston model with the wrong memory, and "
             "misses. A handful of factors brings the error down, and twenty are close enough for a trading desk. The "
             "roughness was never magic: it is many time scales at once, and a model with enough of them behaves the "
             "same."

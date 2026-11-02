@@ -302,7 +302,8 @@ def compute_rprofile() -> dict:
 
 
 def compute_lift() -> dict:
-    p = load("rheston")["x"]
+    # the rough Heston fit with H = 0.1 from the profile: the lift is built for genuinely rough kernels
+    p = next(r["x"] for r in load("rprofile")["rows"] if abs(r["H"] - 0.1) < 1e-9)
     v0, lam, theta, nu, rho, H = p
     u = np.linspace(0.2, 20, 60)
     T = 30 / 365
@@ -315,7 +316,7 @@ def compute_lift() -> dict:
         err = float(np.abs(cfN(u, T) - ref).max())
         iv = sv.model_iv(cfN, 1.0, K, T)
         rows.append({"N": N, "cf_err": err, "iv_err": float(np.sqrt(np.nanmean((iv - iv_ref) ** 2)) * 100)})
-    return _json({"rows": rows, "T": T})
+    return _json({"rows": rows, "T": T, "x": p, "H": H})
 
 
 def compute_hawkes() -> dict:
