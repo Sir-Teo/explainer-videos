@@ -173,7 +173,8 @@ def build(video: str, lang: str, args) -> None:
         env["EXPLAINER_TTS"] = "silent"
     elif series_of(video) in BILINGUAL:
         env.setdefault("EXPLAINER_TTS", "server")
-        env.setdefault("EXPLAINER_VOICE", "qwen3-calm-a")
+        if env["EXPLAINER_TTS"] == "server":  # --cpu-voice keeps Kokoro's own voices
+            env.setdefault("EXPLAINER_VOICE", "qwen3-calm-a")
     if lang != "en":
         # the lines come from the English render: it runs first
         run([sys.executable, "tools/zh_lines.py", video, "--verify", "--lang", lang], LOGS / f"{video}.{lang}.log",
