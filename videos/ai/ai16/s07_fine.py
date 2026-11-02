@@ -43,11 +43,11 @@ class Fine(VoiceoverScene):
             rows.scale_to_fit_width(9.0).move_to([-1.9, -0.5, 0])
         card = history_card(2024, r"Damai Dai et al.\ (DeepSeek)", r"\textit{DeepSeekMoE}: \ fine-grained segmentation and "
                             r"shared-expert isolation", width=4.0, color=HISTC).to_corner(UR, buff=0.3)
-        tag = note(r"the same arithmetic in all three: \ two big experts' worth", font_size=20).to_edge(DOWN, buff=0.35)
+        tag = note(r"matched expert matrix work: \ two big experts' worth", font_size=20).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "In January 2024 Damai Dai and colleagues at DeepSeek asked how big an expert should be. "
             "<bookmark mark='a'/> Mixtral used a few big experts and chose two. <bookmark mark='b'/> Cut every expert "
-            "into four smaller ones, and choose four times as many: the same parameters, the same arithmetic per "
+            "into four smaller ones, and choose four times as many: the same total expert matrix size and matrix work per "
             "token, but each token's mixture is assembled from finer pieces. <bookmark mark='c'/> And set one expert "
             "aside to be shared by every token, so that what every token needs, like common words and grammar, is "
             "learned once instead of being copied into every expert. They called these fine-grained segmentation and "
@@ -102,11 +102,11 @@ class Fine(VoiceoverScene):
                   font_size=38),
         ]
         whys = [why(r"ways to choose $2$ of $8$: \ our coarse mixture"), why(r"$8$ of $32$: \ ours, \ fine-grained"),
-                why(r"the standard bounds: \ a power of $k$"), why(r"DeepSeekMoE's own example, \ same compute")]
+                why(r"the standard bounds: \ a power of $k$"), why(r"DeepSeekMoE's own example, \ matched expert matrix work")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.8, buff=0.42, edge=6.8)
         with self.voiceover(
             "Why should finer pieces help? Count the teams a token can get. <bookmark mark='a'/> Two of eight experts "
-            f"can be chosen {c1} ways. <bookmark mark='b'/> Eight of thirty-two, the same arithmetic, can be chosen "
+            f"can be chosen {c1} ways. <bookmark mark='b'/> Eight of thirty-two, the same expert matrix work, can be chosen "
             f"{c2 / 1e6:.1f} million ways. <bookmark mark='c'/> The count grows like a power of k: it's "
             "squeezed between N over k and e N over k, to the power k. <bookmark mark='d'/> DeepSeek's own example: two of sixteen experts gives "
             f"{d1} teams; cut each into four and choose eight of sixty-four, and there are {d2 / 1e9:.1f} billion. "
@@ -170,7 +170,7 @@ class Fine(VoiceoverScene):
         ta = take_away(r"DeepSeek-V3: \ $256$ fine experts, \ $8$ chosen, \ $1$ shared \ $\cdot$ \ Kimi K3: \ $896$, \ "
                        r"$16$ chosen, \ $2$ shared", color=SHAREDC, font_size=24)
         with self.voiceover(
-            "We trained all three, with the same parameters and the same arithmetic per character, two seeds each. "
+            "We trained all three with matched total expert matrix size and active expert width, two seeds each. Router parameters and estimated FLOPs differ slightly. "
             "<bookmark mark='a'/> " + v1 + "<bookmark mark='v'/>" + v2 + "<bookmark mark='b'/> At the frontier the direction is clear: DeepSeek-V3 "
             "has two hundred and fifty-six fine experts and chooses eight, plus one shared; Kimi K3 has eight hundred "
             "and ninety-six, chooses sixteen, and shares two."

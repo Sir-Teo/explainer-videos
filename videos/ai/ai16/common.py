@@ -8,8 +8,11 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from explainer import lang as _caption_language
 from . import facts as F  # noqa: F401
+from .reviewed_inputs import load, validate_captions  # noqa: F401
+
+validate_captions(_caption_language.LANG)
 
 PART = 16
 MONO = "DejaVu Sans Mono"

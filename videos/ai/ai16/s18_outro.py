@@ -125,13 +125,13 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def problems(self):
         ps = problem_set([
-            r"For DeepSeek-V3's gates $g_i = \sigma(s_i) / \sum_{j \in \mathcal K} \sigma(s_j)$, \ show that "
+            r"For DeepSeek-V3's normalized gates before the $2.5$ routed-sum scale, \ $g_i = \sigma(s_i) / \sum_{j \in \mathcal K} \sigma(s_j)$, \ show that "
             r"$\partial L / \partial s_j = (1 - \sigma(s_j))\, g_j\, (u_j - \bar u)$ for $j \in \mathcal K$, \ and $0$ otherwise.",
             r"Show that if $f = P$, \ Switch's $E \sum_i f_i P_i \ge 1$, \ with equality only when every $f_i = 1/E$. "
             r"\ Why does it matter that $f$ has no gradient?",
             r"Show that $(N/k)^k \le \binom{N}{k} \le (eN/k)^k$, \ and compute $\binom{64}{8} / \binom{16}{2}$.",
             r"Eight experts get these shares of the token-slots: \ $0.3, 0.2, 0.2, 0.1, 0.1, 0.05, 0.03, 0.02$. \ What "
-            r"share is dropped at capacity factors $1$ and $1.25$?",
+            r"share is dropped at capacity factors $1$ and $1.25$, \ ignoring integer rounding?",
             r"DeepSeek-V4-Pro: \ $d = 7{,}168$, \ experts of width $3{,}072$, \ $6$ routed per token. \ Compute the "
             r"all-to-all bytes per token per layer (FP8 out, BF16 back), \ the experts' FLOPs, \ and their ratio.",
             r"Mixtral 8x7B: \ $32$ layers, \ $d = 4{,}096$, \ SwiGLU experts of width $14{,}336$, \ $32$ query heads "

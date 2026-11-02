@@ -185,7 +185,7 @@ class Origins(VoiceoverScene):
     # ------------------------------------------------------------------
     def sparse(self):
         colors = {r"H(x)_i": ROUTER, r"\epsilon_i": C.SURPRISE}
-        f1 = cmath(r"H(x)_i", r"= (W_g x)_i +", r"\epsilon_i", r"\cdot \operatorname{softplus}\big((W_{\text{noise}}\, x)_i\big)",
+        f1 = cmath(r"H(x)_i", r"= (W_g x)_i", r"+", r"\epsilon_i", r"\cdot \operatorname{softplus}\big((W_{\text{noise}}\, x)_i\big)",
                    colors=colors, font_size=32)
         f2 = cmath(r"g(x) = \operatorname{softmax}\big(\operatorname{KeepTopK}(", r"H(x)", r", k)\big)",
                    colors={r"H(x)": ROUTER}, font_size=32)
@@ -202,7 +202,7 @@ class Origins(VoiceoverScene):
         exps = VGroup(*[Square(0.2, stroke_width=0.8, stroke_color=EXPERTC, fill_color=EXPERTC,
                                fill_opacity=0.85 if i in (5, 22) else 0.05) for i in range(32)])
         exps.arrange_in_grid(rows=2, cols=16, buff=0.06).move_to([-2.4, -2.0, 0])
-        el = label(r"only the chosen experts compute: \ the work stays the same as the experts multiply", font_size=22,
+        el = label(r"fixed $k$: \ expert work stays fixed; \ routing adds overhead", font_size=22,
                    color=C.BITS).next_to(exps, DOWN, buff=0.2)
         cite_ = cite(r"N.~Shazeer et al., \textit{Outrageously Large Neural Networks}, ICLR (2017)", corner=UL)
         old = cmath(r"y = \sum_{i=1}^{n}", r"g_i(x)", r"\, E_i(x)", r"\quad \text{(every } E_i \text{ runs)}",
@@ -214,7 +214,8 @@ class Origins(VoiceoverScene):
             "to grow. Keep only the top k gate scores, and set the rest to minus infinity, so their gates are "
             "exactly zero and those experts need never run. <bookmark mark='c'/> Add a little noise to the scores, "
             "so the router keeps trying other experts. <bookmark mark='d'/> Then the number of experts can grow "
-            "without the work per token growing: they put thousands of experts between the layers of an LSTM, a "
+            "without the expert work per token growing at fixed k; routing still adds overhead. They put thousands of "
+            "experts between the layers of an LSTM, a "
             "hundred and thirty-seven billion parameters, more than a thousand times the capacity of the models "
             "before. That's the sparse mixture of experts every model in this part uses."
         ) as vo:

@@ -86,15 +86,15 @@ class Structured(VoiceoverScene):
             vals.append((nm, ms([p[f"{k}_s{s}"] for s in seeds]), col))
         vals.append((r"$2{:}4$ by size, \ retrained", ms([p[f"magnitude_24_ft_s{s}"] for s in seeds]), C.BITS))
         vals.append((r"$2{:}4$ by Wanda, \ retrained", ms([p[f"wanda_24_ft_s{s}"] for s in seeds]), C.HOT))
-        lo = dense[0] - 0.05
+        lo = 0.0
         hi_raw = max(v[1][2] for v in vals)
-        hi = min(hi_raw, dense[0] + 2.5)
+        hi = hi_raw
         W = 5.4
         rows = VGroup()
         for i, (nm, (m_, a_, b_), col) in enumerate(vals):
             y = 2.3 - i * 0.68
             w = W * (min(m_, hi) - lo) / (hi - lo)
-            bar = Rectangle(width=max(w, 0.03), height=0.42, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            bar = Rectangle(width=w, height=0.42, stroke_width=0, fill_color=col, fill_opacity=0.85)
             bar.move_to([-0.6 + w / 2, y, 0])
             rngl = Line([-0.6 + W * (min(a_, hi) - lo) / (hi - lo), y, 0], [-0.6 + W * (min(b_, hi) - lo) / (hi - lo), y, 0],
                         color=WHITE, stroke_width=2)
@@ -102,8 +102,14 @@ class Structured(VoiceoverScene):
             v = MathTex(f"{m_:.3f}" + (r"\,\to" if m_ > hi else ""), font_size=22, color=col)
             v.next_to([max(bar.get_right()[0], rngl.get_right()[0]), y, 0], RIGHT, buff=0.15)
             rows.add(VGroup(nm_, bar, rngl, v))
-        head = label(r"held-out bits per character, \ every weight matrix pruned \ (three seeds: \ white lines)", font_size=22,
+        head = label(r"held-out bits per character, \ block attention and feed-forward matrices pruned \ (white: seed range)", font_size=22,
                      color=GREY_A).to_edge(UP, buff=0.3)
+        # True-zero common scale. Keep the complete seed range visible and retain raw value labels.
+        scale_note = label(r"bars start at $0$ bits per character", font_size=16, color=GREY_B).move_to([0, 3.12, 0])
+        protocol_note = label(r"initial: $200$ held-out windows; retrained: $64$ \ \textperiodcentered\ no matched-budget dense retraining control",
+                              font_size=16, color=GREY_B).move_to([0, 2.83, 0])
+        baseline = Line([-0.6, 2.55, 0], [-0.6, -2.05, 0], color=GREY_C, stroke_width=1)
+        head = VGroup(head, scale_note, protocol_note, baseline)
         foot = label(rf"Wanda: \ score $|W_{{ij}}| \cdot \|x_j\|$, \ the weight's size times its input's \ (Sun et al., 2023) "
                      rf"\ $\cdot$ \ retrained: \ ${int(p['ft_steps'])}$ steps with the pattern held", font_size=18,
                      color=GREY_A).to_edge(DOWN, buff=0.3)
@@ -121,7 +127,7 @@ class Structured(VoiceoverScene):
         else:
             v3 = f"A short retraining recovers part of it: {mf - dense[0]:.2f} bits behind after {int(p['ft_steps'])} steps. "
         with self.voiceover(
-            "What does two in four cost? We pruned every weight matrix of our dense model, three seeds. "
+            "What does two in four cost? We pruned the block attention and feed-forward matrices, three seeds; embeddings and output stayed dense. "
             "<bookmark mark='a'/> " + v1 + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
             + "That's NVIDIA's recipe: prune once, then retrain. For big language models, SparseGPT in 2023 pruned "
             "without retraining, using part nineteen's GPTQ machinery."
@@ -140,7 +146,8 @@ class Structured(VoiceoverScene):
     def activations(self):
         a = load("actsparse")
         edges = np.asarray(a["edges"], float)
-        H = np.asarray(a["hist_s0"], float)[0]
+        # Match the percentage below: every seed and both blocks, with equal calibration counts.
+        H = np.asarray([a[f"hist_s{s}"] for s in a["seeds"]], float).sum(axis=(0, 1))
         H = H / H.sum()
         mids = (edges[:-1] + edges[1:]) / 2
         ax = Axes(x_range=[edges[0], edges[-1], 0.25], y_range=[0, float(H.max()) * 1.1, float(H.max()) / 2], x_length=6.0,
@@ -149,7 +156,7 @@ class Structured(VoiceoverScene):
                                   fill_color=C.MLP if abs(m) >= 0.1 else C.BITS, fill_opacity=0.85)
                         .move_to(ax.c2p(m, 0), aligned_edge=DOWN) for m, h in zip(mids, H)])
         xt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1) for v in (0, 0.5, 1.0, 1.5)])
-        xl = label(r"a feed-forward activation's value, \ after GELU \ (block 1)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+        xl = label(r"after GELU: \ all seeds and blocks \ (displayed range)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         small = np.asarray([a[f"small_s{s}"] for s in a["seeds"]], float)  # seeds, layers, cuts
         cut_i = list(a["cuts"]).index(0.1)
         sh = float(small[:, :, cut_i].mean())
@@ -160,18 +167,18 @@ class Structured(VoiceoverScene):
                    tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.8, 0.2, 0])
         x2 = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=20, color=GREY_B).next_to(ax2.c2p(v, float(B.min()) - 0.02), DOWN, buff=0.1)
                       for v in (0, 0.5, 0.9)])
-        l2 = label(r"smallest activations set to zero", font_size=20, color=GREY_A).next_to(x2, DOWN, buff=0.1)
-        y2 = label(r"held-out bits", font_size=20, color=GREY_A).next_to(ax2, UP, buff=0.1).align_to(ax2, LEFT)
+        l2 = label(r"calibration quantile target \\ (dense training batch)", font_size=20, color=GREY_A).next_to(x2, DOWN, buff=0.1)
+        y2 = label(r"held-out bits \\ (fixed thresholds)", font_size=20, color=GREY_A).next_to(ax2, UP, buff=0.1).align_to(ax2, LEFT)
         c2 = VGroup(band(ax2, fr, B.min(0), B.max(0), C.MLP, 0.2), curve(ax2, fr, B.mean(0), C.MLP, 3),
                     *[Dot(ax2.c2p(x, y), radius=0.045, color=C.MLP) for x, y in zip(fr, B.mean(0))])
         i50, i90 = fr.index(0.5), fr.index(0.9)
         d50, d90 = float((B[:, i50] - B[:, 0]).mean()), float((B[:, i90] - B[:, 0]).mean())
         with self.voiceover(
             "Sparsity also hides in the activations. <bookmark mark='a'/> Here are our dense model's feed-forward "
-            f"activations, after the GELU: {100 * sh:.0f} percent of them are smaller than a tenth. A neuron "
-            "whose activation is zero needn't be computed, nor its weights read. <bookmark mark='b'/> So set the "
-            "smallest ones to zero and see what it costs. "
-            f"Zeroing half of them costs {d50:.3f} bits a character; zeroing ninety percent costs {d90:.2f}."
+            f"activations, after the GELU: {100 * sh:.0f} percent of them have magnitude below a tenth. A neuron "
+            "whose activation is zero needn't be computed, nor its weights read. <bookmark mark='b'/> Calibrate fixed "
+            "thresholds on the dense model's training batch, then score held-out text. "
+            f"Targets of half and ninety percent cost {d50:.3f} and {d90:.2f} bits a character."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(xl))
             vo.wait_until("a")
@@ -190,7 +197,7 @@ class Structured(VoiceoverScene):
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, 0.0, 0])
         yt = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in (0, 0.5, 1)])
         xl = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.15)
-        yl = label(r"ReLU units exactly zero \ (the lottery network)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        yl = label(r"ReLU activation zeros \\ (training batch snapshots)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         ln = VGroup(*[curve(ax, z[:, 0], z[:, 1 + j], col, 3) for z in Z for j, col in ((0, C.MLP), (1, C.BITS))])
         names = VGroup(label(r"first hidden layer", font_size=20, color=C.MLP), label(r"second hidden layer", font_size=20, color=C.BITS))
         names.arrange(RIGHT, buff=0.5).next_to(xl, DOWN, buff=0.2)
@@ -205,7 +212,7 @@ class Structured(VoiceoverScene):
         ta = take_away(r"sparsity pays when the hardware can skip it: \ experts, \ blocks, \ two in four", color=TICKETC, font_size=24)
         with self.voiceover(
             "With ReLU the zeros are exact. In the small ReLU network of the lottery chapter, "
-            f"{100 * fin:.0f} percent of hidden units are exactly zero for a given input by the end of training. "
+            f"the last recorded training batch snapshots average {100 * fin:.0f} percent zero activations across both hidden layers and seeds. "
             "<bookmark mark='a'/> In 2022 Zonglin Li and colleagues found that only three percent of T5-Base's activations "
             "are nonzero, and called it the lazy neuron phenomenon. <bookmark mark='b'/> Modern models use GELU and "
             "SwiGLU, without exact zeros, but in 2024 TEAL zeroed the smallest forty to fifty percent of Llama's "

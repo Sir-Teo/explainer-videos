@@ -95,6 +95,7 @@ class Hook(VoiceoverScene):
             return xb + (x1 - xb) * (t - TB) / (T1 - TB)
 
         head = label(r"How we got here: \ three kinds of sparsity", font_size=34).to_edge(UP, buff=0.3)
+        scale_note = note(r"before $2015$: \ compressed time scale", font_size=18).next_to(head, DOWN, buff=0.14)
         rows = VGroup()
         ys = [1.45, -0.5, -2.45]
         for (name, col, evs), y in zip(lanes, ys):
@@ -103,14 +104,16 @@ class Hook(VoiceoverScene):
             ev = VGroup()
             for j, (t, txt) in enumerate(evs):
                 d = Dot([X(t), y, 0], radius=0.07, color=col)
-                lab = label(txt, font_size=16, color=col)
+                lab = label(txt, font_size=18, color=col)
                 lab.next_to(d, UP if j % 2 == 0 else DOWN, buff=0.12 if (j // 2) % 2 == 0 else 0.62)
                 lab.set_x(min(max(lab.get_x(), -4.2 + lab.width / 2), 6.9 - lab.width / 2))
                 ev.add(VGroup(d, lab))
             rows.add(VGroup(ln, nm, ev))
-        years = VGroup(*[Text(str(t), font_size=16, color=GREY_B).move_to([X(t), -3.8, 0]) for t in (1990, 2000, 2015, 2020, 2025)])
+        years = VGroup(*[Text(str(t), font_size=18, color=GREY_B).move_to([X(t), -3.8, 0]) for t in (1990, 2000, 2015, 2020, 2025)])
         ticks = VGroup(*[DashedLine([X(t), 2.4, 0], [X(t), -3.6, 0], dash_length=0.05, stroke_width=1, color=GREY_D)
                          for t in (1990, 2000, 2015, 2020, 2025)])
+        breaks = VGroup(*[Line([xb + dx - 0.035, y - 0.1, 0], [xb + dx + 0.035, y + 0.1, 0],
+                              color=GREY_B, stroke_width=1.4) for y in ys for dx in (-0.06, 0.06)])
         with self.voiceover(
             "How did we get here? Three threads, which this part follows. <bookmark mark='a'/> The first is experts. "
             "In 1991 Robert Jacobs, Michael Jordan, Steven Nowlan and Geoffrey Hinton proposed a gate that picks "
@@ -123,7 +126,8 @@ class Hook(VoiceoverScene):
             "<bookmark mark='e'/> The third is the oldest: removing weights. Yann LeCun's optimal brain damage in "
             "1990, the lottery tickets of 2018, and the two-in-four pattern NVIDIA built into its chips in 2020."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(years), FadeIn(ticks), *[FadeIn(VGroup(r[0], r[1])) for r in rows])
+            self.play(FadeIn(head), FadeIn(scale_note), FadeIn(years), FadeIn(ticks), FadeIn(breaks),
+                      *[FadeIn(VGroup(r[0], r[1])) for r in rows])
             vo.wait_until("a")
             self.play(FadeIn(rows[0][2][0]))
             vo.wait_until("b")
@@ -160,6 +164,6 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
+            self.play(Succession(FadeOut(smap), FadeIn(obj), run_time=1.0))
         self.wait(0.5)
         self.clear_scene()

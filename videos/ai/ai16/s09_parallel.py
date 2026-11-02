@@ -138,7 +138,7 @@ class Parallel(VoiceoverScene):
             fair = DashedLine(base.get_left() + UP * 9.0 / D, base.get_right() + UP * 9.0 / D, color=GREY_B, stroke_width=1.5)
             gl = VGroup(*[label(rf"GPU {j + 1}", font_size=18, color=GREY_B).next_to(b_, DOWN, buff=0.1) for j, b_ in enumerate(bars)])
             t = label(name, font_size=26, color=col)
-            s = label(rf"the step waits for the busiest: \\ ${p[f'{k}_slowdown']:.2f}\times$ a fair share", font_size=24, color=WHITE)
+            s = label(rf"mean busiest-device factor: \\ ${p[f'{k}_slowdown']:.2f}\times$ a fair share", font_size=24, color=WHITE)
             grp = VGroup(VGroup(bars, base, fair, gl), t, s)
             t.next_to(grp[0], UP, buff=0.4)
             s.next_to(grp[0], DOWN, buff=0.15).shift(DOWN * 0.3)
@@ -146,10 +146,11 @@ class Parallel(VoiceoverScene):
         groups.arrange(RIGHT, buff=0.9, aligned_edge=DOWN).move_to([0, -0.4, 0])
         head = label(r"our routers, \ their experts spread over $4$ GPUs: \ each GPU's share of the work \ (block 1)",
                      font_size=24).to_edge(UP, buff=0.35)
-        tag = note(r"three seeds' mean; \ dashed: \ a quarter each; \ a simulation of the placement", font_size=18)
+        tag = note(r"bars: \ block 1, \ mean over seeds; \ factors: \ mean of each seed/block's maximum; \ simulated placement",
+                   font_size=17)
         tag.to_edge(DOWN, buff=0.25)
         sl = {k: float(p[f"{k}_slowdown"]) for k, _, _ in MODES}
-        ta = take_away(r"balance is speed: \ every GPU waits for the busiest", color=COMMC, font_size=26)
+        ta = take_away(r"balance is speed: \ every GPU waits for the busiest", color=COMMC, font_size=26).next_to(tag, UP, buff=0.2)
         with self.voiceover(
             "And balance, which looked like a matter of using every parameter, turns out to be a matter of speed. "
             "Put our trained experts on four GPUs, two each, and count each GPU's share of the work. "

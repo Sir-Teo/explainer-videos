@@ -74,26 +74,102 @@ seeds and the spread shown; the computed results are listed under [Results](#res
   MiniMax-M3, Kimi K3).
 * **Recap**, where it comes back (Parts 17, 18, 19, 22, 30), problems, Part 17's teaser, references.
 
-## Run
+## Reviewed cached inputs and rendering
 
-From the repo root:
+Scenes and the result reporter use the part-local `reviewed_inputs.py` reader. They do not call the scientific
+producer or the shared cache's compute-on-missing loader. Missing, unreviewed, incompatible or changed input files
+raise an error; rendering never repairs or regenerates them.
 
+Before rendering, an independent operator must supply `.cache/ai16/render-manifest.json` and the reviewed JSON/NPZ
+files it describes. No manifest, model weights, datasets, scientific results or corrected Special producer are
+included with this source change. The manifest is an acceptance/compatibility record, not proof of scientific
+correctness. It must be issued after checking the original input and producer provenance, numerical outputs,
+matching populations and reproducibility. Do not create an acceptance record merely to bypass a missing-input error.
+
+The manifest uses `schema_version: 1`, `part: "ai16"`, and two mappings:
+
+- `compatibility_sources`: repository-relative paths for this part's `compute.py`, `runs.py`, `nets.py`, `recall.py`,
+  `prune.py`, `lottery.py` and `facts.py`, each bound to its reviewed SHA256. These current-source compatibility pins
+  do not replace the separate record of sources and inputs that actually produced an artifact.
+- `products`: one entry per required product. Each entry declares `json: {bytes, sha256}`, explicit `npz: null` or
+  `{bytes, sha256, arrays: {name: {dtype, shape}}}`, and
+  `review: {accepted: true, recipe, producer_sha256, input_sha256: {input_role: sha256}}`.
+  Recipe is `original-recipe`, except corrected Special requires `within-window-v2`.
+
+All hashes must be complete SHA256 values from the review. Paths are fixed to the part's cache; the reader accepts
+regular files, verifies exact bytes and declared arrays, rejects incompatible inputs, and uses no cache writes or
+lock files. It requires POSIX directory-descriptor/no-follow support (validated on Linux); unsupported platforms fail
+explicitly. A changed input or source requires a new independent review. The reader does not certify training
+provenance or the scientific validity of a manifest someone wrote.
+
+Special's scene deliberately requests `special_within_window_v2`, never the old `special` artifact. This source-only
+change includes its interface and explanatory templates, not its scientific producer or numerical payload. The
+original producer remains unchanged and cannot create the corrected version. The obsolete persisted Special
+information narration was removed rather than publishing newly corrected MI measurements as a translation fixture;
+the parameterized English/Chinese templates format a separately accepted input. The fine/coarse caption is also
+numeric-template based, so no corrected MI outcomes are baked into the shared caption delta.
+
+A separately reviewed corrected producer must retain each original 64-token input window, exclude position zero
+only from measurement, and use the same 16,128 positions (256 windows times 63 positions) for previous/current/next
+MI, shuffled reference, class summaries and routing tables. It must preserve the original deterministic validation
+window selection, model/checkpoint and original corpus identities, coarse seeds 0/1/2, fine seeds 0/1, and both
+blocks. Pair previous/current/next labels inside each window before flattening; use PCG64(16), shuffling token labels
+before expert-slot repetition. Compare fine and coarse on the same two seeds. Independently check all MI results,
+counts, normalization and ranges against preserved original checkpoints. Record producer/input/checkpoint/runtime
+pins and review outcomes separately. Do not rename an old artifact, mutate its historical status, overwrite baseline
+results or infer a causal explanation from the MI ordering. The loader checks the declared interface/population;
+that is only one part of the required scientific review.
+
+For Chinese, `text_zh_reviewed.json` is a separate narrow caption delta: exact strings plus numeric regex templates.
+The integration owner must merge only those entries into `videos/ai/ai_text_zh.json`, preserving every unrelated
+entry. `validate_captions("zh")` fails if the declared delta is absent or incompatible. It does not modify the shared
+table or silently install an in-memory overlay. The part-local source branch alone therefore does not approve a
+Chinese production render before caption composition.
+
+The shared QA integration adds 68 new exact captions and two regex templates. Two existing exact captions
+(the even-routing capacity question and the topic-versus-syntax expert description) retain their existing
+Chinese wording and line breaks; this local declaration is aligned to those preserved translations.
+No unrelated translation is replaced. Caption composition alone does not establish render or audio acceptance.
+
+After the reviewed inputs and caption composition are available, run from the repository root:
+
+```sh
+python tools/build.py ai16
+python tools/build.py ai16 --lang zh
+python -m videos.ai.ai16.results  # read-only reporting from reviewed inputs
 ```
-python tools/make.py ai16                          # everything: the numbers, then both languages
-python -m videos.ai.ai16.compute                   # only the numbers (about 3 CPU-hours; resumable)
-python tools/build.py ai16                         # English
-python tools/build.py ai16 --lang zh               # Chinese
+
+The original recipes remain an explicit opt-in producer command:
+
+```sh
+python -m videos.ai.ai16.compute  # original recipes only; not invoked by scenes
 ```
 
-`compute.py` reads Part 1's books and passage, Part 11's characters (`char_data`), Part 13's transformer
-(`.cache/ai13/tf.pt`) and Parts 13 and 14's scoreboards. The long item, `lm_runs` (33 character transformers), runs in
-a pool of single-threaded worker processes started with `spawn` (`AI16_WORKERS`, default 2) and keeps every finished
-run in `.cache/ai16/lm_runs.partial.json` and its weights in `.cache/ai16/models/`, so an interrupted run resumes;
-`recall` and `lottery` keep their pieces the same way. Every random choice is seeded.
+That command may train models/read upstream data and does not produce the corrected Special artifact or its review
+manifest. The stock "make everything" wrapper is consequently not a complete workflow for this reviewed scene set.
+Existing recipes read Part 1's books/passage, Part 11's characters, Part 13's transformer and earlier scoreboards.
+No scientific production or upstream regeneration was performed to prepare this source publication.
+
+## Bounded source tests and acceptance limits
+
+```sh
+python -m unittest discover -s videos/ai/ai16 -p 'test_*.py'
+```
+
+The read-only loader tests use temporary synthetic fixtures and no real caches, scenes, models or renderer.
+Source-preservation tests compare with the public QA baseline `46006f71195a9fe0fdadc29164d9803e7feaed89`; that public
+object must be present in the local Git object database (fetch that public commit explicitly in a shallow checkout).
+They check code/translation contracts and do not validate experimental outcomes. Scientific producer/model files
+remain unchanged. Previously sampled bilingual native evidence informed the source edits; the new checked-input
+loader, fresh public base and separately composed captions still require their own runtime/visual acceptance.
+Continuous playback, actual listening/pronunciation, speech synchronization and final production are separate gates.
 
 ## Results
 
-Computed here (regenerate the list with `python -m videos.ai.ai16.results`):
+Historical original-recipe results are retained below for provenance. In particular, the MI rows describe the
+legacy `special` population and its window-boundary pairing; they do not satisfy the corrected Special contract.
+These lines are not receipts for corrected outputs or for experiments performed with this source branch. Read-only
+`python -m videos.ai.ai16.results` requires independently reviewed inputs and reports the versioned Special data.
 
 * Mixture against dense (held-out bits per character, mean (range) of 3 seeds, 2,000 steps): dense with the mixture's arithmetic 2.246 (2.241–2.255), the mixture 2.146 (2.133–2.168), dense with its parameters 2.164 (2.155–2.179); on the scoreboard's passage 2.438, 2.343, 2.365. Parameters (total/used per character): 120,320/109,632, 317,952/110,656, 316,928.
 * Milliseconds per training step on one core: dense 92, mixture 177, wide dense 175.
@@ -133,8 +209,8 @@ Computed here (regenerate the list with `python -m videos.ai.ai16.results`):
   GLM-4.5: model cards and config.json (GLM-5: 744B/40B, 256 + 1, 8 active, DSA with 32 indexer heads; GLM-4.5:
   160 + 1, 8 active). MiniMax-M2: model card (230B/10B) and config.json (256 experts, 8 active, full attention in all
   62 layers); MiniMax's post "Why Did M2 End Up as a Full Attention Model?". MiniMax-M3: model card (≈428B/23B,
-  MiniMax Sparse Attention, 1M context). Mistral Large 4: model card (≈1T, 52B active including embeddings, 49B
-  without; 128 routed + 1 shared, 4 active; weights 29 October 2026). Llama 4: Meta's blog (5 April 2025). Kimi K2:
+  MiniMax Sparse Attention, 1M context). Mistral Large 4: model card (≈1T, 52B active including embedding and output layers,
+  49B excluding both; 128 routed + 1 shared, 4 active; weights 29 October 2026). Llama 4: Meta's blog (5 April 2025). Kimi K2:
   model card. gpt-oss: model card.
 * Switch-C: 1,571B parameters, 2,048 experts (Fedus et al., Table 9); α = 10⁻². GLaM: 1.2T, 96.6B activated (8%).
   GShard: 600B, 2,048 TPU v3, 4 days. Shazeer et al.: up to 137B parameters, >1000× capacity. DeepSeekMoE: 2B ≈ GShard

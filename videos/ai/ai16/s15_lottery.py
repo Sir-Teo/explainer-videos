@@ -72,7 +72,7 @@ class Lottery(VoiceoverScene):
                               kind=r"Algorithm").move_to([-2.8, 1.2, 0])
         pic = heat(np.ones((48, 48)), width=3.2, height=3.2, color=TICKETC, gamma=1.0, vmax=1.0).move_to([4.2, 0.6, 0])
         frame = SurroundingRectangle(pic, buff=0, color=GREY_C, stroke_width=1.5)
-        pl = label(r"a corner of the second layer's weights: \ lit if kept", font_size=18, color=GREY_A).next_to(pic, UP, buff=0.12)
+        pl = label(r"a corner of the second layer's weights: \ lit if kept \\ percentages: all matrix weights; \ biases unpruned", font_size=18, color=GREY_A).next_to(pic, UP, buff=0.12)
         rem = [float(x) for x in d["remain_s0"]]
         cnt = label(r"round $0$: \ $100\%$ of weights", font_size=22, color=TICKETC).next_to(pic, DOWN, buff=0.2)
         net = label(rf"a ReLU network: \ $3$ characters in, \ two layers of $128$, \\ the next character out \ "
@@ -125,11 +125,11 @@ class Lottery(VoiceoverScene):
         yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(float(lx.min()) - 0.05, v), LEFT, buff=0.1)
                       for v in np.arange(math.ceil(y0 * 10) / 10, y1 + 1e-9, 0.2)])
         xl = label(r"weights remaining \ (log scale)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"held-out bits per character \ (two seeds)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        yl = label(r"held-out bits per character \ (two seeds) \\ line: mean; \ band: seed range", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         base = DashedLine(ax.c2p(float(lx.min()) - 0.05, dense), ax.c2p(0.05, dense), color=GREY_B, stroke_width=1.5)
-        bl = label(r"the dense network", font_size=18, color=GREY_B).next_to(ax.c2p(float(lx.min()), dense), UP, buff=0.05).align_to(ax, LEFT).shift(RIGHT * 0.1)
+        bl = label(r"the dense network", font_size=18, color=GREY_B).next_to(base, RIGHT, buff=0.18)
         cols = {"ticket": (TICKETC, r"the ticket \ (rewound)"), "reinit": (REINITC, r"same mask, \ fresh weights"),
-                "random": (RANDC, r"random mask")}
+                "random": (RANDC, r"random mask \ (rewound weights)")}
         lines = {}
         for k, (col, _) in cols.items():
             a = np.clip(data[k], y0, y1)

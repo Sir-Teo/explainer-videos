@@ -39,15 +39,17 @@ class Counting(VoiceoverScene):
             cmath(r"\text{attention}", r"=", rf"{c['layers']} \times {a['attn_layer'] / 1e6:.1f}\,\text{{M}}", r"=",
                   rf"{P['attention'] / 1e9:.1f}\,\text{{B}}", font_size=36),
             cmath(r"\text{total}", r"=", rf"{a['total'] / 1e9:.1f}\,\text{{B}}", font_size=36),
-            cmath(r"\text{active}", r"=", rf"{a['n_moe']} \times ({c['k']} + {c['shared']}) \times", r"3\, d\, h",
+            cmath(r"\text{accounted active}", r"=", rf"{a['n_moe']} \times ({c['k']} + {c['shared']}) \times", r"3\, d\, h",
                   r"+ \ldots =", rf"{a['active_with_embed'] / 1e9:.1f}\,\text{{B}}", colors=colors, font_size=36),
         ]
         whys = [why(r"SwiGLU: \ gate, \ up, \ down"), why(rf"${a['n_moe']}$ MoE layers \ (the first ${c['dense_layers']}$ are dense)"),
                 why(r"MLA, \ every layer \ (Part 15)"), why(r"$+$ dense layers, \ shared experts, \ routers, \ embeddings"),
-                why(r"$8$ routed $+$ $1$ shared per layer, \ $+$ attention, \ dense, \ embeddings")]
+                why(r"$8$ routed $+$ $1$ shared; \ full input embedding table counted")]
         step = ladder(self, rows, whys, keep=5, top=2.9, x=-2.2, buff=0.5, edge=6.8)
         cite_ = cite(r"deepseek-ai/DeepSeek-V3, \ \texttt{config.json}; \ the report gives $671$B and $37$B", corner=DL,
                      font_size=18)
+        account_note = note(r"accounting convention: \ full input embedding table included; \ lookup reads one row",
+                            font_size=16).to_edge(DOWN, buff=0.55)
         with self.voiceover(
             "What do numbers like six hundred and seventy-one billion parameters, thirty-seven billion active, actually "
             "count? We can work them out from DeepSeek-V3's published configuration. <bookmark mark='a'/> One expert "
@@ -56,11 +58,12 @@ class Counting(VoiceoverScene):
             f"{P['routed'] / 1e9:.0f} billion, nearly everything. <bookmark mark='c'/> Attention, part fifteen's "
             f"latent attention, adds {P['attention'] / 1e9:.1f} billion across all {c['layers']} layers. "
             f"<bookmark mark='d'/> With the three dense layers, the shared experts, the routers and the embeddings, "
-            f"the total comes to {a['total'] / 1e9:.1f} billion: the report's 671. <bookmark mark='e'/> A token uses "
-            f"nine experts per layer, eight routed and one shared, plus all the rest: {a['active_with_embed'] / 1e9:.1f} "
-            "billion, the report's thirty-seven."
+            f"the total comes to {a['total'] / 1e9:.1f} billion: the report's 671. <bookmark mark='e'/> Count "
+            f"nine experts per MoE layer, eight routed and one shared. Our accounted active proxy is "
+            f"{a['active_with_embed'] / 1e9:.1f} billion, including the full input embedding table; a lookup reads "
+            "one row. The report gives thirty-seven billion under its active-parameter convention."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(account_note))
             step(0)
             for i, mk in zip((1, 2, 3, 4), "bcde"):
                 vo.wait_until(mk)
@@ -96,7 +99,7 @@ class Counting(VoiceoverScene):
                     ("embeddings", P["embed"] + P["head"], C.EMBED)]
         act = column(act_vals, -1.2)
         tl = label(rf"all: \ ${a['total'] / 1e9:.0f}$B", font_size=24).next_to(tot, UP, buff=0.12)
-        al = label(rf"used per token: \ ${a['active_with_embed'] / 1e9:.1f}$B", font_size=24, color=C.BITS).next_to(act, UP, buff=0.12)
+        al = label(rf"accounted active: \ ${a['active_with_embed'] / 1e9:.1f}$B", font_size=24, color=C.BITS).next_to(act, UP, buff=0.12)
         key = VGroup(*[VGroup(Square(0.2, stroke_width=0, fill_color=col, fill_opacity=0.85), label(n, font_size=20, color=col))
                        .arrange(RIGHT, buff=0.12) for n, _, col in segs]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         key.move_to([-5.6, 1.0, 0])
@@ -111,25 +114,30 @@ class Counting(VoiceoverScene):
         mxl = VGroup(label(r"Mixtral 8x7B:", font_size=24, color=MOEC),
                      label(rf"$8 \times 7$B would be $56$B, \ but it has ${mx['total'] / 1e9:.1f}$B", font_size=22),
                      label(r"the attention is shared: \ only the feed-forward layers are copied", font_size=20, color=GREY_A),
-                     label(rf"${mx['active'] / 1e9:.1f}$B used per token, \ $2$ experts of $8$", font_size=22, color=C.BITS))
+                     label(rf"${mx['active'] / 1e9:.1f}$B active proxy, \ $2$ experts of $8$", font_size=22, color=C.BITS))
         mxl.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         mxl.scale_to_fit_width(min(mxl.width, 5.0)).move_to([4.3, 1.6, 0])
         mtp = label(rf"Hugging Face lists ${(a['total'] + a['mtp']) / 1e9:.0f}$B: \\ the ${a['mtp'] / 1e9:.0f}$B module "
                     r"that predicts a second token \ (Part 18)", font_size=20, color=GREY_B).move_to([4.3, -1.0, 0])
+        stack_note = note(r"small segments enlarged for visibility; \ router omitted from bars \\ "
+                          r"active proxy includes full input embedding table; \ lookup reads one row",
+                          font_size=16).to_edge(DOWN, buff=0.18)
         ex_share = (act_vals[0][1] + act_vals[1][1]) / a["active_with_embed"]
         at_share = P["attention"] / a["active_with_embed"]
         with self.voiceover(
-            "Drawn to scale, DeepSeek-V3's parameters are almost all routed experts. <bookmark mark='a'/> A token "
-            f"uses only {100 * a['active_with_embed'] / a['total']:.1f} percent of them. Inside that slice the "
-            f"experts are {100 * ex_share:.0f} percent, and attention, which every token uses in full, is "
+            "Routed experts hold nearly all of DeepSeek-V3's parameters. Small segments are enlarged here, and the "
+            "router is omitted from the bars. <bookmark mark='a'/> The accounted active proxy is "
+            f"{100 * a['active_with_embed'] / a['total']:.1f} percent of total capacity, including the full input "
+            f"embedding table. Within this proxy the experts are {100 * ex_share:.0f} percent, and attention is "
             f"{100 * at_share:.0f} percent. "
             "<bookmark mark='b'/> The same arithmetic explains Mixtral's name. Eight times seven billion would be "
             f"fifty-six, but Mixtral 8x7B has {mx['total'] / 1e9:.1f} billion, because only the feed-forward layers "
-            f"are copied eight times; the attention is shared. It uses {mx['active'] / 1e9:.1f} billion per token. "
+            f"are copied eight times; the attention is shared. Its active proxy is {mx['active'] / 1e9:.1f} billion "
+            "per token under the same full-table convention. "
             "<bookmark mark='c'/> And when you see six hundred and eighty-five billion for DeepSeek-V3, that includes "
             "a module that predicts a second token ahead, part eighteen's multi-token prediction."
         ) as vo:
-            self.play(FadeIn(tot), FadeIn(tl), FadeIn(key))
+            self.play(FadeIn(tot), FadeIn(tl), FadeIn(key), FadeIn(stack_note))
             vo.wait_until("a")
             self.play(FadeIn(act), FadeIn(al))
             self.play(Create(rays), FadeIn(zoom), FadeIn(zl))
@@ -182,26 +190,28 @@ class Counting(VoiceoverScene):
         u = load("upcycle")
         at = int(u["at"])
         up, half, moe = (np.asarray(u[k], float) for k in ("up_curve", "half_curve", "moe_curve"))
-        allv = np.concatenate([up[:, :, 1].ravel(), half[:, 3:, 1].ravel(), moe[:, 3:, 1].ravel()])
-        lo = math.floor((allv.min() - 0.03) * 10) / 10
-        hi = lo + 0.8
-        ax = Axes(x_range=[0, 2000, 500], y_range=[lo, hi, 0.2], x_length=7.4, y_length=4.2, tips=False,
+        # The first dense/scratch snapshot shown is step 50; cover every displayed value.
+        visible = np.concatenate([up[:, :, 1].ravel(), half[:, 1:, 1].ravel(), moe[:, 1:, 1].ravel()])
+        y_tick = 0.5 if visible.max() - visible.min() > 1.5 else 0.2
+        lo = math.floor((visible.min() - 0.03) / y_tick) * y_tick
+        hi = math.ceil((visible.max() + 0.03) / y_tick) * y_tick
+        ax = Axes(x_range=[0, 2000, 500], y_range=[lo, hi, y_tick], x_length=7.4, y_length=4.2, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.2, -0.3, 0])
         yl = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
-                      for v in np.arange(lo, hi + 1e-9, 0.2)])
+                      for v in np.arange(lo, hi + 1e-9, y_tick)])
         xv = VGroup(*[MathTex(f"{v:,}".replace(",", "{,}"), font_size=20, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.1)
                       for v in (0, 1000, 2000)])
         xl = label(r"training steps", font_size=20, color=GREY_A).next_to(xv, DOWN, buff=0.08)
         yn = label(r"held-out bits per character \ (two seeds)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        noise_note = note(r"expert copies initialized with $1\%$ multiplicative noise", font_size=18).to_edge(DOWN, buff=0.2)
 
-        def clip(a):
-            b = a.copy()
-            b[:, :, 1] = np.minimum(b[:, :, 1], hi)
-            return b
+        sample_note = note(r"curves: $96$ windows; \ end summary: $400$ windows \\ "
+                           r"step $0$ omitted; \ first dense/mixture snapshot: step $50$",
+                           font_size=16).to_edge(UP, buff=0.25)
 
-        c_half = seed_curves(ax, clip(half[:, 1:]), DENSEC)
-        c_moe = seed_curves(ax, clip(moe[:, 1:]), MOEC)
-        c_up = seed_curves(ax, clip(up), UPC)
+        c_half = seed_curves(ax, half[:, 1:], DENSEC)
+        c_moe = seed_curves(ax, moe[:, 1:], MOEC)
+        c_up = seed_curves(ax, up, UPC)
         vline = DashedLine(ax.c2p(at, lo), ax.c2p(at, hi), color=GREY_C, stroke_width=1.5)
         vl = label(r"upcycled here", font_size=18, color=GREY_B).next_to(ax.c2p(at, hi), DOWN, buff=0.1)
         names = VGroup(label(r"dense, \ one expert's width, \ kept dense", font_size=20, color=DENSEC),
@@ -211,31 +221,32 @@ class Counting(VoiceoverScene):
         keep_in_frame(names)
         vu, vh, vm = ms(u["upcycled_valid"]), ms(u["dense_half_valid"]), ms(u["moe_valid"])
         cu, cm = float(u["compute_up"]), float(u["compute_moe"])
-        stats = VGroup(label(rf"end: \ ${vh[0]:.3f}$, \ ${vu[0]:.3f}$, \ ${vm[0]:.3f}$", font_size=22, color=WHITE),
-                       label(rf"training compute: \ upcycled ${100 * cu / cm:.0f}\%$ of from scratch", font_size=20, color=GREY_A)
+        stats = VGroup(label(rf"end ($400$ windows): \ ${vh[0]:.3f}$, \ ${vu[0]:.3f}$, \ ${vm[0]:.3f}$", font_size=22, color=WHITE),
+                       label(rf"estimated training FLOPs: \\ upcycled ${100 * cu / cm:.0f}\%$ of scratch", font_size=20, color=GREY_A),
+                       note(r"relative estimate, \ not measured CPU time", font_size=16)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(names, DOWN, buff=0.5).align_to(names, LEFT)
         keep_in_frame(stats)
         if vu[0] < vh[0] - 0.005:
-            v1 = (f"The upcycled model drops below the dense one it came from right away, and ends at {vu[0]:.3f} bits "
+            v1 = (f"The upcycled model ends at {vu[0]:.3f} bits "
                   f"against {vh[0]:.3f} for the dense model trained just as long. ")
         else:
             v1 = f"The upcycled model ends at {vu[0]:.3f}, about where the dense model does, {vh[0]:.3f}. "
         pc_ = 100 * cu / cm
         if vu[0] < vm[0] - 0.003:
             v2 = (f"It even ends ahead of the mixture trained from scratch, {vm[0]:.3f}, with {pc_:.0f} percent of its "
-                  "training compute.")
+                  "estimated training FLOPs.")
         elif abs(vu[0] - vm[0]) <= 0.003:
             v2 = (f"It ends close to the mixture trained from scratch, {vm[0]:.3f}, with {pc_:.0f} percent of its "
-                  "training compute.")
+                  "estimated training FLOPs.")
         else:
             v2 = (f"It doesn't catch the mixture trained from scratch, {vm[0]:.3f}, but it spent only {pc_:.0f} percent "
-                  "of its training compute.")
+                  "of its estimated training FLOPs.")
         with self.voiceover(
             "We tried it. A dense model one expert wide, trained for a thousand steps, then copied into eight experts "
-            "and trained for a thousand more, beside the same dense model kept dense, and our mixture trained from "
-            "scratch. <bookmark mark='a'/> " + v1 + "<bookmark mark='b'/> " + v2
+            "with one percent multiplicative noise, and trained for a thousand more, beside the same dense model kept dense, and our mixture trained from "
+            "scratch. Curves use ninety-six held-out windows; final values use four hundred. <bookmark mark='a'/> " + v1 + "<bookmark mark='b'/> " + v2
         ) as vo:
-            self.play(Create(ax), FadeIn(yl), FadeIn(xv), FadeIn(xl), FadeIn(yn), FadeIn(c_half), FadeIn(names[0]),
+            self.play(Create(ax), FadeIn(yl), FadeIn(xv), FadeIn(xl), FadeIn(yn), FadeIn(noise_note), FadeIn(sample_note), FadeIn(c_half), FadeIn(names[0]),
                       FadeIn(c_moe), FadeIn(names[2]))
             vo.wait_until("a")
             self.play(Create(vline), FadeIn(vl))

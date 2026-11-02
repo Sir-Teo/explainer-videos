@@ -80,29 +80,30 @@ class Ours(VoiceoverScene):
         D = {k: np.asarray(m[f"{k}_curve"], float) for k in keys}
         steps = D["moe"][0, :, 0]
         total = float(steps[-1])
-        allv = np.concatenate([D[k][:, 2:, 1].ravel() for k in keys])
+        displayed = {k: D[k][:, 1:].copy() for k in keys}  # initialization omitted; retain every displayed value
+        allv = np.concatenate([displayed[k][:, :, 1].ravel() for k in keys])
         lo = math.floor((allv.min() - 0.05) * 4) / 4
-        hi = lo + 1.0
-        ax = Axes(x_range=[0, total, 500], y_range=[lo, hi, 0.25], x_length=7.6, y_length=4.4, tips=False,
+        hi = math.ceil((allv.max() + 0.05) * 4) / 4
+        tick = 0.5 if hi - lo > 1.5 else 0.25
+        ax = Axes(x_range=[0, total, 500], y_range=[lo, hi, tick], x_length=7.6, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.9, -0.3, 0])
         yl = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
-                      for v in np.arange(lo, hi + 1e-9, 0.25)])
+                      for v in np.arange(lo, hi + 1e-9, tick)])
         ax.y_axis.set_stroke(opacity=1)
         xv = VGroup(*[MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=20, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.1)
                       for v in (0, 1000, total)])
         xl = label(r"training steps", font_size=22, color=GREY_A).next_to(xv, DOWN, buff=0.1)
-        yn = label(r"held-out bits per character \ (lines: mean of $3$ seeds; \ bands: lowest to highest)", font_size=20,
+        yn = label(r"held-out bits per character \\ $96$ fixed windows; initialization omitted \\ "
+                   r"lines: mean of $3$ seeds; bands: lowest to highest", font_size=18,
                    color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
 
-        def clip(arr):
-            a = arr.copy()
-            a[:, :, 1] = np.minimum(a[:, :, 1], hi)
-            return a[:, 1:]
-
-        lines = {k: seed_curves(ax, clip(D[k]), NAMES[k][1]) for k in keys}
+        lines = {k: seed_curves(ax, displayed[k], NAMES[k][1]) for k in keys}
         names = VGroup(*[label(NAMES[k][0], font_size=22, color=NAMES[k][1]) for k in keys]).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         names.move_to([4.6, 1.2, 0])
         keep_in_frame(names)
+        final_note = label(r"final means: $400$ fixed windows", font_size=18, color=GREY_A)
+        final_note.next_to(names, UP, buff=0.2).align_to(names, LEFT)
+        keep_in_frame(final_note)
         mv, av, tv = (ms(m[f"{k}_valid"]) for k in ("moe", "dense_active", "dense_total"))
         finals = VGroup(*[label(rf"${ms(m[f'{k}_valid'])[0]:.3f}$", font_size=22, color=NAMES[k][1]) for k in keys])
         finals.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(names, RIGHT, buff=0.25)
@@ -111,8 +112,8 @@ class Ours(VoiceoverScene):
         when = int(b_[ahead[0], 0]) if ahead else None
         wins = int(m["wins_active"])
         if mv[0] < av[0] and wins == 3 and when is not None:
-            v1 = (f"The mixture pulls ahead of the dense model with the same arithmetic by step {when:,} and stays "
-                  f"ahead, in every seed: {mv[0]:.3f} bits a character at the end, against {av[0]:.3f}. ")
+            v1 = (f"The mixture is ahead of the dense model with the same arithmetic at the saved checkpoint at step {when:,} "
+                  f"and every later saved checkpoint, in every seed: {mv[0]:.3f} bits a character at the end, against {av[0]:.3f}. ")
         elif mv[0] < av[0]:
             v1 = (f"On average the mixture ends ahead of the dense model with the same arithmetic, {mv[0]:.3f} bits "
                   f"against {av[0]:.3f}, but only in {wins} of the 3 seeds. ")
@@ -127,11 +128,12 @@ class Ours(VoiceoverScene):
             v2 = (f"And the dense model with all the parameters, doing three times the arithmetic, ends at {tv[0]:.3f}: "
                   "no better than the mixture, after the same short training.")
         with self.voiceover(
-            "Here are all nine runs. Held-out bits per character at eight points in training; each line is the "
-            "mean of three seeds, and the band runs from the best seed to the worst. <bookmark mark='a'/> " + v1
+            "Here are all nine runs. Shown are seven post-initialization checkpoints on ninety-six fixed held-out windows; "
+            "each line is the mean of three seeds, and the band runs from the best seed to the worst. "
+            "Final scores at right use four hundred windows. <bookmark mark='a'/> " + v1
             + "<bookmark mark='b'/> " + v2
         ) as vo:
-            self.play(Create(ax), FadeIn(yl), FadeIn(xv), FadeIn(xl), FadeIn(yn))
+            self.play(Create(ax), FadeIn(yl), FadeIn(xv), FadeIn(xl), FadeIn(yn), FadeIn(final_note))
             self.play(FadeIn(lines["dense_active"]), FadeIn(names[0]), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(lines["moe"]), FadeIn(names[1]), FadeIn(finals[:2]), run_time=2.0)
@@ -170,19 +172,18 @@ class Ours(VoiceoverScene):
         t = ValueTracker(0)
         cnt = always_redraw(lambda: label(rf"training step ${int(t.get_value()):,}$".replace(",", "{,}"), font_size=26,
                                           color=WHITE).to_edge(UP, buff=0.3))
-        note_ = note(r"columns: \ the character just read; \ rows: \ the experts; \ bright: \ its share of that "
-                     r"character's tokens \ (both of the $2$ choices)", font_size=18).to_edge(DOWN, buff=0.25)
+        note_ = note(r"first seed; \ columns: the character just read; \ rows: the experts \\ "
+                     r"brightness: share of both routing choices \ (at most $50\%$ per expert)",
+                     font_size=18).to_edge(DOWN, buff=0.25)
         sharp = [float(R[k].max(-1).mean()) for k in range(len(steps))]
-        if abs(sharp[-1] - sharp[2]) > 0.03:
-            settle = (f"Then it settles, at {100 * sharp[-1]:.0f} percent by the end, and the pattern keeps shifting as "
-                      "the experts get better at what they're sent. ")
-        else:
-            settle = f"And it stays that decided, {100 * sharp[-1]:.0f} percent by the end. "
+        settle = (f"By the end the corresponding share is {100 * sharp[-1]:.0f} percent. "
+                  "The routing patterns rearrange during training; this share is not a confidence probability. ")
         with self.voiceover(
-            "And here is the mixture's routing as it trains, replayed: for each common character, which experts its "
-            "tokens are sent to, in both blocks. <bookmark mark='a'/> At first the router is random and nearly "
-            f"uniform: on average a character's favourite expert gets {100 * sharp[0]:.0f} percent of its tokens. "
-            f"<bookmark mark='b'/> Within {steps[2]} steps the router has committed: {100 * sharp[2]:.0f} percent. "
+            "Here is the first seed's routing replay: which experts receive each common character, in both blocks. "
+            "Each token has two distinct choices, and shares count both slots, so any expert's share is at most fifty percent. "
+            "<bookmark mark='a'/> With randomly initialized parameters the choices are already concentrated by character: "
+            f"the average largest expert share is {100 * sharp[0]:.0f} percent. "
+            f"<bookmark mark='b'/> At the saved checkpoint at step {steps[2]}, it is {100 * sharp[2]:.0f} percent. "
             "<bookmark mark='c'/> " + settle + "<bookmark mark='q'/>What the experts end up doing is chapter ten's question."
         ) as vo:
             self.play(FadeIn(cur), FadeIn(names), FadeIn(layer_l), FadeIn(el), FadeIn(note_))

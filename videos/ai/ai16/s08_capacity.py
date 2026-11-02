@@ -85,19 +85,19 @@ class Capacity(VoiceoverScene):
         colors = {r"f_i": C.BALANCE, r"c": C.BITS}
         rows = [
             cmath(r"n_i", r"=", r"f_i", r"\, kN", colors=colors, font_size=38),
-            cmath(r"C", r"=", r"c", r"\, \frac{kN}{E}", colors=colors, font_size=38),
+            cmath(r"C", r"\simeq", r"c", r"\, \frac{kN}{E}", colors=colors, font_size=38),
             cmath(r"\text{dropped}", r"=", r"\frac{1}{kN} \sum_i \max\big(0,\ n_i - C\big)", colors=colors, font_size=38),
-            cmath(r"\text{dropped}", r"=", r"\sum_i \max\Big(0,\ ", r"f_i", r"- \frac{", r"c", r"}{E}\Big)", colors=colors,
+            cmath(r"\text{dropped}", r"\simeq", r"\sum_i \max\Big(0,\ ", r"f_i", r"- \frac{", r"c", r"}{E}\Big)", colors=colors,
                   font_size=38),
         ]
         whys = [why(r"expert $i$ is asked for $n_i$ slots: \ its share $f_i$ of all $kN$"),
-                why(r"its buffer"), why(r"whatever doesn't fit"), why(r"divide through by $kN$")]
+                why(r"its buffer, \ ignoring integer rounding"), why(r"whatever doesn't fit"), why(r"divide through by $kN$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.45, edge=6.8)
         pc = pause_card(r"With perfectly even routing, \ what capacity factor drops nothing? \ And with one expert at twice its share?",
                         width=8.6, font_size=24).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "How much is dropped? Expert i is asked for f i times k N slots, its share of all of them. "
-            "<bookmark mark='a'/> Its buffer holds c times k N over E. <bookmark mark='b'/> Whatever doesn't fit is "
+            "<bookmark mark='a'/> Ignoring integer rounding, its buffer holds c times k N over E. <bookmark mark='b'/> Whatever doesn't fit is "
             "dropped. <bookmark mark='c'/> Divide by the number of slots, and the dropped share is the sum over experts "
             "of how far each one's share exceeds c over E. <bookmark mark='d'/> Pause and predict: with perfectly even "
             "routing, what factor drops nothing? One. And if one expert gets twice its share, a factor of one drops "
@@ -117,16 +117,18 @@ class Capacity(VoiceoverScene):
         d = load("capacity")
         cfs = [float(c) for c in d["cfs"]]
         fin = [c for c in cfs if c > 0]
-        xs = list(range(len(fin)))
-        ax1 = Axes(x_range=[-0.3, len(fin) - 0.7, 1], y_range=[0, 0.5, 0.1], x_length=5.6, y_length=3.4, tips=False,
+        xs = fin  # Numeric capacity factors, excluding the no-limit sentinel.
+        x_pad = (max(fin) - min(fin)) * 0.06
+        x_range = [min(fin) - x_pad, max(fin) + x_pad, 0.25]
+        ax1 = Axes(x_range=x_range, y_range=[0, 0.5, 0.1], x_length=5.6, y_length=3.4, tips=False,
                    axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, -0.4, 0])
         drops = {k: np.asarray(d[f"{k}_drops"], float)[:, :len(fin)] for k, _, _ in MODES}
         bits = {k: np.asarray(d[f"{k}_bits"], float) for k, _, _ in MODES}
         top = max(0.1, float(max(v.max() for v in drops.values())) * 1.1)
-        ax1 = Axes(x_range=[-0.3, len(fin) - 0.7, 1], y_range=[0, top, top / 4], x_length=5.6, y_length=3.4, tips=False,
+        ax1 = Axes(x_range=x_range, y_range=[0, top, top / 4], x_length=5.6, y_length=3.4, tips=False,
                    axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, -0.4, 0])
-        xt = VGroup(*[MathTex(f"{c:g}", font_size=22, color=GREY_B).next_to(ax1.c2p(i, 0), DOWN, buff=0.1) for i, c in enumerate(fin)])
-        yt = VGroup(*[MathTex(rf"{100 * v:.0f}\%", font_size=20, color=GREY_B).next_to(ax1.c2p(-0.3, v), LEFT, buff=0.08)
+        xt = VGroup(*[MathTex(f"{c:g}", font_size=22, color=GREY_B).next_to(ax1.c2p(c, 0), DOWN, buff=0.1) for c in fin])
+        yt = VGroup(*[MathTex(rf"{100 * v:.0f}\%", font_size=20, color=GREY_B).next_to(ax1.c2p(x_range[0], v), LEFT, buff=0.08)
                       for v in np.linspace(0, top, 5)[::2]])
         xl = label(r"capacity factor $c$", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"token-slots dropped", font_size=20, color=GREY_A).next_to(ax1, UP, buff=0.1).align_to(ax1, LEFT)
@@ -137,10 +139,10 @@ class Capacity(VoiceoverScene):
         # bits lost against no limit
         loss = {k: (bits[k][:, :len(fin)] - bits[k][:, -1:]) for k, _, _ in MODES}
         ltop = max(0.02, float(max(v.max() for v in loss.values())) * 1.1)
-        ax2 = Axes(x_range=[-0.3, len(fin) - 0.7, 1], y_range=[0, ltop, ltop / 4], x_length=5.6, y_length=3.4, tips=False,
+        ax2 = Axes(x_range=x_range, y_range=[0, ltop, ltop / 4], x_length=5.6, y_length=3.4, tips=False,
                    axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, -0.4, 0])
-        xt2 = VGroup(*[MathTex(f"{c:g}", font_size=22, color=GREY_B).next_to(ax2.c2p(i, 0), DOWN, buff=0.1) for i, c in enumerate(fin)])
-        yt2 = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax2.c2p(-0.3, v), LEFT, buff=0.08)
+        xt2 = VGroup(*[MathTex(f"{c:g}", font_size=22, color=GREY_B).next_to(ax2.c2p(c, 0), DOWN, buff=0.1) for c in fin])
+        yt2 = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax2.c2p(x_range[0], v), LEFT, buff=0.08)
                        for v in np.linspace(0, ltop, 5)[::2]])
         xl2 = label(r"capacity factor $c$", font_size=20, color=GREY_A).next_to(xt2, DOWN, buff=0.1)
         yl2 = label(r"bits lost, \ against no limit", font_size=20, color=GREY_A).next_to(ax2, UP, buff=0.1).align_to(ax2, LEFT)
@@ -183,8 +185,11 @@ class Capacity(VoiceoverScene):
         d = load("capacity")
         cf, nocf = ms(d["cf_train_valid"]), ms(d["nocf_train_valid"])
         tr = np.asarray(d["cf_train_drops"], float)  # seeds, time
-        ax = Axes(x_range=[0, tr.shape[1] - 1, 25], y_range=[0, max(0.05, float(tr.max()) * 1.1), 0.05], x_length=6.0,
+        top = max(0.05, float(tr.max()) * 1.1)
+        ax = Axes(x_range=[0, tr.shape[1] - 1, 25], y_range=[0, top, 0.05], x_length=6.0,
                   y_length=3.0, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.2, -0.2, 0])
+        yt = VGroup(*[MathTex(rf"{100 * v:.0f}\%", font_size=18, color=GREY_B)
+                      .next_to(ax.c2p(0, v), LEFT, buff=0.08) for v in (0.0, 0.2, 0.4) if v <= top])
         every = 20
         xs = np.arange(tr.shape[1])
         ln = VGroup(band(ax, xs, tr.min(0), tr.max(0), DROPC, 0.2), curve(ax, xs, tr.mean(0), DROPC, 3))
@@ -213,7 +218,7 @@ class Capacity(VoiceoverScene):
             "meets again. DeepSeek-V3 drops nothing at all: its balance is good enough, and its kernels flexible "
             "enough, to take whatever arrives."
         ) as vo:
-            self.play(Create(ax), FadeIn(yl), FadeIn(xl))
+            self.play(Create(ax), FadeIn(yt), FadeIn(yl), FadeIn(xl))
             vo.wait_until("a")
             self.play(FadeIn(ln), run_time=2.0)
             vo.wait_until("b")

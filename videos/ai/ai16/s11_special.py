@@ -22,7 +22,7 @@ class Special(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def table(self):
-        s = load("special")
+        s = load("special_within_window_v2")
         chars = [str(c_) for c_ in s["route_chars"]]
         nl = sum(1 for k in s if k.startswith("moe_s0_l"))
         li = nl - 1  # the last block
@@ -81,11 +81,11 @@ class Special(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def information(self):
-        s = load("special")
+        s = load("special_within_window_v2")
         seeds = [int(x) for x in s["seeds"]]
         nl = sum(1 for k in s if k.startswith("moe_s0_l"))
         kinds = [("prv", r"the character before", GREY_B), ("cur", r"the character just read", C.BITS),
-                 ("nxt", r"the character to come", C.TRUE_P), ("shuf", r"shuffled \ (chance)", GREY_D)]
+                 ("nxt", r"the character to come", C.TRUE_P), ("shuf", r"shuffled \ (chance)", GREY_C)]
         vals = {(li, k): [float(s[f"moe_s{sd}_l{li}"][k]) for sd in seeds] for li in range(nl) for k, _, _ in kinds}
         top = max(max(v) for v in vals.values()) * 1.15
         groups = VGroup()
@@ -97,7 +97,7 @@ class Special(VoiceoverScene):
                 bar = Rectangle(width=0.55, height=max(h, 0.02), stroke_width=0, fill_color=col, fill_opacity=0.85)
                 bar.move_to([j * 0.75, h / 2, 0])
                 er = Line([j * 0.75, 3.4 * lo / top, 0], [j * 0.75, 3.4 * hi / top, 0], color=WHITE, stroke_width=2)
-                v = MathTex(f"{mu:.2f}", font_size=20, color=col).next_to(bar, UP, buff=0.08)
+                v = MathTex(f"{mu:.2f}", font_size=20, color=col).next_to([j * 0.75, 3.4 * max(mu, hi) / top, 0], UP, buff=0.08)
                 g.add(VGroup(bar, er, v))
             base = Line([-0.4, 0, 0], [3 * 0.75 + 0.4, 0, 0], color=GREY_C)
             t = label(rf"block {li + 1}", font_size=24, color=WHITE).next_to(base, DOWN, buff=0.25)
@@ -108,7 +108,7 @@ class Special(VoiceoverScene):
         key.move_to([4.7, 0.6, 0])
         head = label(r"how much an expert's being chosen tells you about... \ (mutual information, bits)", font_size=24)
         head.to_edge(UP, buff=0.35)
-        tag = note(r"three seeds: \ bars the mean, \ lines the range; \ $16{,}384$ held-out tokens, both choices",
+        tag = note(r"three seeds: \ bars the mean, \ lines the range; \\ $16{,}128$ within-window tokens, both choices; \ window starts excluded",
                    font_size=18).to_edge(DOWN, buff=0.25)
         last = nl - 1
         cur, nxt, prv = (ms(vals[(last, k)])[0] for k in ("cur", "nxt", "prv"))
@@ -121,23 +121,21 @@ class Special(VoiceoverScene):
                   f"one just read, {cur:.2f}. ")
         else:
             v1 = f"In the last block the choice says most about the character before, {prv:.2f} bits. "
-        v2 = ("So the experts sort tokens mostly by what they are, on the surface, not by what the model must predict: "
-              "the router is a fast lookup on the current token. " if cur > nxt else
-              "So the router is sorting by what the model must predict. ")
+        v2 = ("This is an association on these held-out positions. It does not establish which contextual information "
+              "causes the router's choice. ")
         fseeds = [int(x) for x in range(2)]
         fcur = ms([float(s[f"fine_s{sd}_l{last}"]["cur"]) for sd in fseeds])[0]
+        fcoarse = ms([float(s[f"moe_s{sd}_l{last}"]["cur"]) for sd in fseeds])[0]
         fH = float(s[f"fine_s0_l{last}"]["H"])
-        fl_ = label(rf"$32$ fine experts: \\ ${fcur:.2f}$ bits about the character just read, \\ of at most ${fH:.0f}$",
-                    font_size=20, color=C.BITS).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
+        fl_ = label(rf"$32$ fine experts: \\ ${fcur:.2f}$ bits (of at most ${fH:.0f}$) \\ $8$ coarse experts: \\ ${fcoarse:.2f}$ bits \\ (same two seeds)",
+                    font_size=18, color=C.BITS).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
         keep_in_frame(fl_)
-        v3 = (f"With thirty-two smaller experts there's more room to sort: the choice says {fcur:.2f} bits about the "
-              f"current character, against {cur:.2f} with eight. " if fcur > cur + 0.05 else
-              f"With thirty-two smaller experts, the choice says {fcur:.2f} bits about the current character, much as "
-              f"with eight. ")
+        v3 = (f"Comparing the same two seeds, the choice of thirty-two smaller experts carries {fcur:.2f} bits about "
+              f"the current character, against {fcoarse:.2f} with eight. ")
         with self.voiceover(
             "Mutual information, from part one: how many bits the choice of expert tells you about a character. "
-            "<bookmark mark='a'/> " + v1 + "<bookmark mark='v'/>" + v2 + "<bookmark mark='b'/> The shuffled bars are chance: what a router "
-            "that ignored the characters would score, given this much text. <bookmark mark='c'/> " + v3
+            "<bookmark mark='a'/> " + v1 + "<bookmark mark='v'/>" + v2 + "<bookmark mark='b'/> The shuffled bars use permuted character labels "
+            "as a reference on the same positions. <bookmark mark='c'/> " + v3
         ) as vo:
             self.play(FadeIn(head), FadeIn(key), FadeIn(tag), *[FadeIn(VGroup(g_[1], g_[2])) for g_ in groups])
             vo.wait_until("a")

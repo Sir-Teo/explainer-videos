@@ -36,7 +36,7 @@ class Router(VoiceoverScene):
             b = Rectangle(width=0.32, height=max(2.6 * p, 0.03), stroke_width=0, fill_color=ROUTER, fill_opacity=0.85)
             b.move_to([-1.9 + 0.42 * i, -0.9 + 1.3 * p, 0])
             bars.add(b)
-        bl = label(r"scores $s_i$, \ softmax over the experts", font_size=20, color=GREY_A).next_to(bars, DOWN, buff=0.2)
+        bl = label(r"full softmax of $s_i$ \\ (display only)", font_size=20, color=GREY_A).next_to(bars, DOWN, buff=0.2)
         experts = VGroup(*[RoundedRectangle(width=0.9, height=0.55, corner_radius=0.1, stroke_color=EXPERT_COLORS[i],
                                             stroke_width=2).move_to([2.4, 2.75 - 0.7 * i, 0]) for i in range(E)])
         el = VGroup(*[MathTex(rf"E_{i + 1}", font_size=24, color=EXPERT_COLORS[i]).move_to(e_) for i, e_ in enumerate(experts)])
@@ -141,8 +141,13 @@ class Router(VoiceoverScene):
             g = VGroup()
             for i, v in enumerate(vals):
                 h = 1.6 * abs(v) / top
-                b = Rectangle(width=0.2, height=max(h, 0.02), stroke_width=0, fill_color=col, fill_opacity=0.9)
-                b.move_to(ax.c2p(i + off, 0) + (UP if v >= 0 else DOWN) * max(h, 0.02) / 2)
+                if v == 0:
+                    # An exact zero is a baseline mark, never a positive-height bar.
+                    center = ax.c2p(i + off, 0)
+                    b = Line(center + LEFT * 0.1, center + RIGHT * 0.1, color=col, stroke_width=2)
+                else:
+                    b = Rectangle(width=0.2, height=h, stroke_width=0, fill_color=col, fill_opacity=0.9)
+                    b.move_to(ax.c2p(i + off, 0) + (UP if v > 0 else DOWN) * h / 2)
                 g.add(b)
             sets.add(g)
         xl = VGroup(*[MathTex(rf"s_{i + 1}", font_size=24, color=EXPERT_COLORS[i] if i in chosen else GREY_C)
