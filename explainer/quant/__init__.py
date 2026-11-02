@@ -138,7 +138,7 @@ TIMELINE = [
     (1979, r"binomial trees; Harrison--Kreps", IDEA),
     (1980, r"Grossman--Stiglitz", IDEA),
     (1981, r"Harrison--Pliska", IDEA),
-    (1982, r"Engle: ARCH; Renaissance founded", FIRM),
+    (1982, r"Engle: ARCH; Hansen: GMM; Renaissance founded", FIRM),
     (1985, r"Kyle; Glosten--Milgrom; Leland", IDEA),
     (1986, r"Black: noise", IDEA),
     (1987, r"Black Monday", CRISIS),
