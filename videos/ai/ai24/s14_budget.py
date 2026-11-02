@@ -173,9 +173,9 @@ class Budget(VoiceoverScene):
         else:
             mv = (f"Fine-tuning helps the masked models less than the literature would suggest: MAE ends at {pct(mae)} "
                   f"percent, I-JEPA at {pct(ij)}.")
-        if mae < sc + 0.01:
-            mv2 = (f"But that only brings MAE back to where training from scratch gets, {pct(sc)} percent: its "
-                   "pre-training gave no head start.")
+        if mae <= sc:
+            mv2 = (f"MAE ends at {pct(mae)} percent, against {pct(sc)} from scratch: no observed mean accuracy "
+                   "advantage at this budget.")
         else:
             mv2 = f"MAE ends {pct(mae - sc)} points above training from scratch."
         bf = max(ssl, key=lambda n: fewp[n])
@@ -285,13 +285,17 @@ class Budget(VoiceoverScene):
         res = label(rf"Spearman's rank correlation: \ ${rho:+.2f}$".replace("+", r"+"), font_size=26,
                     color=C.BITS).to_corner(DR, buff=0.5)
         if rho > 0.5:
-            v = (f"Across our methods, the rank correlation is {rho:.2f}: a fuller representation usually means a "
-                 "better one, as RankMe found.")
+            v = (f"Across our methods, the rank correlation is {rho:.2f}: higher rank tended to go with higher "
+                 "accuracy from ten labels per digit in this comparison. This association is not a universal or causal rule.")
         elif rho > 0.2:
-            v = f"Across our methods, the rank correlation is only {rho:.2f}: a hint, not a rule."
+            v = (f"Across our methods, the rank correlation is only {rho:.2f}: a weak positive association in this "
+                 "toy comparison, not a universal or causal rule.")
+        elif rho < -0.2:
+            v = (f"Across our methods, the rank correlation is {rho:.2f}: higher rank tended to go with lower "
+                 "accuracy from ten labels per digit in this toy comparison. This association is not a universal or causal rule.")
         else:
-            v = (f"Across our methods, the rank correlation is {rho:.2f}: no useful relation. Filling the dimensions "
-                 "does not, by itself, make them useful.")
+            v = (f"Across our methods, the rank correlation is {rho:.2f}: little observed monotonic association "
+                 "in this toy comparison. Filling dimensions does not, by itself, guarantee useful task information.")
         tk = take_away(r"judge a representation on the task you care about: \ here, \ learning from ten labels")
         with self.voiceover(
             "Can you tell which representation is good without any labels at all? Quentin Garrido and colleagues "

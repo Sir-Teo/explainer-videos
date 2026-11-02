@@ -89,12 +89,13 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. A pretext puzzle teaches what the puzzle needs, blind spots and all. A contrastive "
             "loss is a classifier over candidates, and a bound on information capped at the log of their number. "
-            "On the sphere it is two forces, alignment and uniformity, balanced by the temperature. Without "
-            "something pushing apart, agreement collapses to a constant, and we can measure it. BYOL and SimSiam "
+            "On the sphere it is two forces, alignment and uniformity, balanced by the temperature. An agreement-only "
+            "loss admits a constant minimum; our naive network becomes nearly constant, and we measure the remaining "
+            "spread. BYOL and SimSiam "
             "escape by asymmetry, Barlow Twins and VICReg by decorrelating dimensions, DINO by balancing a "
             "teacher between two collapses. Masked models learn by filling in; JEPAs predict meanings instead of "
-            "pixels. And four different losses, contrastive and not, end with nearly the same representation: a "
-            f"CKA of at least {lo:.2f} between each pair."
+            "pixels. And four different losses, contrastive and not, end with very similar geometry: "
+            f"the minimum pairwise CKA here is about {lo:.2f}."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),

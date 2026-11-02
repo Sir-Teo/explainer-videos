@@ -259,15 +259,16 @@ class Sphere(VoiceoverScene):
         s = load("simclr")
         runs, keys = s["runs"], s["keys"]
         lo_t, hi_t = TAUS[0], TAUS[-1]
-        W_lo, W_hi = np.asarray(s[f"wsorted_{lo_t:g}"]), np.asarray(s[f"wsorted_{hi_t:g}"])
-        top_lo = np.mean([runs[k]["extra"]["top10"] for k in keys[TAU_KEY[lo_t]]])
-        top_hi = np.mean([runs[k]["extra"]["top10"] for k in keys[TAU_KEY[hi_t]]])
+        W_lo, W_hi = np.asarray(s[f"wsorted_{float(lo_t):g}"]), np.asarray(s[f"wsorted_{float(hi_t):g}"])
+        top_lo = float(runs[keys[TAU_KEY[lo_t]][0]]["extra"]["top10"])
+        top_hi = float(runs[keys[TAU_KEY[hi_t]][0]]["extra"]["top10"])
         n_neg = 510
 
         def panel(W, t, center, col):
             m = 30
             ax = axes([0, m], [0, float(max(W_lo[0], W_hi[0])) * 1.1], x_length=4.6, y_length=2.6,
-                      xlabel=r"negatives, \ hardest first", center=center)
+                      xlabel=r"negatives, \ hardest first", xticks=[0.5, m - 0.5],
+                      xfmt=lambda v: f"{int(round(v + 0.5))}", center=center)
             bars = VGroup(*[Rectangle(width=4.6 / m * 0.8, height=max(ax.ax.c2p(0, float(w))[1] - ax.ax.c2p(0, 0)[1],
                                                                        0.005),
                                       stroke_width=0, fill_color=col, fill_opacity=0.85).move_to(
@@ -281,7 +282,7 @@ class Sphere(VoiceoverScene):
                                                                                                      buff=0.35)
         s2 = label(rf"ten hardest: \ ${pct(top_hi, 0)}\%$ of the push", font_size=24, color=SIMCLR).next_to(p2, DOWN,
                                                                                                         buff=0.35)
-        head = label(rf"Held-out diagnostic: \ share of negative push over ${n_neg}$ negatives", font_size=30)
+        head = label(rf"Held-out diagnostic: seed $0$ \\ share of negative push over ${n_neg}$ negatives", font_size=30)
         head.to_edge(UP, buff=0.4)
         src = cite(r"Wang \& Liu (2021): \ the uniformity--tolerance dilemma")
         tk = take_away(r"the temperature sets how hard the loss pushes on the most similar other digits")

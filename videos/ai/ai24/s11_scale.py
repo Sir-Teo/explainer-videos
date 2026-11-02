@@ -166,7 +166,8 @@ class Scale(VoiceoverScene):
         tg = tag(r"computed: \ the same SimCLR, \ same steps, \ two seeds each")
         with self.voiceover(
             "Then train the same SimCLR, for the same number of steps, on each pool, and test on the usual balanced "
-            "test set. <bookmark mark='a'/> Here is the accuracy on each digit, the commonest in the raw pool on the "
+            "test set. For weighted nearest-neighbour evaluation, both encoders use all sixty thousand labeled "
+            "training digits as the reference bank. <bookmark mark='a'/> Here is the accuracy on each digit, the commonest in the raw pool on the "
             f"left. <bookmark mark='b'/> {v}"
         ) as vo:
             self.play(Create(axis), FadeIn(yl), FadeIn(leg), FadeIn(tg))

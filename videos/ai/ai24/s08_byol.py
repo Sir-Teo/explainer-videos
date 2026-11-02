@@ -113,7 +113,7 @@ class BYOL(VoiceoverScene):
             "vector is treated as a constant. <bookmark mark='a'/> We trained it, three times with the stop-gradient "
             f"and twice without. <bookmark mark='b'/> {v} <bookmark mark='c'/> On the sphere, with three output "
             "numbers, SimSiam keeps the digits apart without ever pushing on them, while the pull-together network "
-            "sits on one point."
+            "bunches its outputs near one point."
         ) as vo:
             self.play(Write(f), FadeIn(src), FadeIn(ax), FadeIn(leg))
             vo.wait_until("a")
@@ -146,7 +146,7 @@ class BYOL(VoiceoverScene):
                 why(r"weights fixed: \ the best target is the average view"),
                 why(r"one sampled view stands in; \ the predictor learns the average")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-2.0, buff=0.55, edge=6.9)
-        note_ = label(r"a constant is still a minimum: \ the alternation just does not walk there; \\ "
+        note_ = label(r"a constant is still a minimum: \ our runs avoid that solution; \\ "
                       r"Tian, Chen \& Ganguli (2021): \ the predictor's dynamics keep the directions alive",
                       font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
         src = cite(r"Chen \& He (2021)", corner=DR)
@@ -157,8 +157,8 @@ class BYOL(VoiceoverScene):
             "network: that is exactly what the stop-gradient does. <bookmark mark='b'/> With the network fixed, "
             "the best target is the average output over all views of the image. <bookmark mark='c'/> SimSiam uses "
             "one sampled view in place of the average, and the predictor learns to make up the difference. "
-            "<bookmark mark='d'/> Collapsing to a constant still minimizes the loss; this way of descending simply "
-            "does not lead there. Yuandong Tian, Xinlei Chen and Surya Ganguli worked out the dynamics: the "
+            "<bookmark mark='d'/> Collapsing to a constant still minimizes the loss, but our runs do not end there. "
+            "Yuandong Tian, Xinlei Chen and Surya Ganguli worked out the dynamics: the "
             "predictor and the stop-gradient together keep the useful directions from dying."
         ) as vo:
             step(0)

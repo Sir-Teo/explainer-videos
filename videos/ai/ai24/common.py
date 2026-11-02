@@ -222,19 +222,40 @@ class Hypersphere(Group):
 
 
 class Scrub(Group):
-    """Shows one of ``frames`` (mobjects, already placed): the one at round(``tracker``). Images can't morph into each
-    other, so a replay of pictures swaps them as the tracker moves."""
+    """Replay equal-topology frames while keeping the rendered object family stable.
+
+    Cairo caches a flattened moving family at each play's start. Replacing child
+    objects mid-play leaves old descendants in that family, so update the live
+    points, styles and image pixels instead. Source frames stay untouched.
+    """
 
     def __init__(self, frames, tracker: ValueTracker):
-        super().__init__()
-        self.frames, self.tr, self.cur = list(frames), tracker, -1
+        frames = list(frames)
+        if not frames:
+            raise ValueError("Scrub needs at least one frame")
+        display = frames[0].copy()
+        super().__init__(display)
+        self.frames, self.tr, self.cur = frames, tracker, -1
+        self._display_members = display.get_family()
+        self._source_members = [frame.get_family() for frame in frames]
+        topology = tuple((type(member), len(member.submobjects)) for member in self._display_members)
+        if any(tuple((type(member), len(member.submobjects)) for member in family) != topology
+               for family in self._source_members):
+            raise ValueError("Scrub frames must have the same object-family topology")
         self._show()
         self.add_updater(lambda m: m._show())
 
     def _show(self):
         i = int(np.clip(round(self.tr.get_value()), 0, len(self.frames) - 1))
         if i != self.cur:
-            self.submobjects = [self.frames[i]]
+            for live, source in zip(self._display_members, self._source_members[i], strict=True):
+                live.points = source.points.copy()
+                live.z_index = source.z_index
+                if isinstance(live, ImageMobject):
+                    live.pixel_array = source.pixel_array.copy()
+                    live.orig_alpha_pixel_array = source.orig_alpha_pixel_array.copy()
+                elif isinstance(live, VMobject):
+                    live.match_style(source, family=False)
             self.cur = i
         return self
 

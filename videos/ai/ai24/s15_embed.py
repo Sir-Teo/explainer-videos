@@ -32,11 +32,13 @@ class Embeddings(VoiceoverScene):
         mt = load("matryoshka")
         pool, pool_y = np.asarray(s["pool"]), np.asarray(s["pool_y"])
         Q = list(mt["queries"])
-        sh = nn_sheet(pool, pool_y, Q[:4], np.asarray(mt["plain_nn128"])[:4], size=0.6).move_to([-2.2, -0.3, 0])
+        shown_q = Q[:4]
+        shown_nn = np.asarray(mt["plain_nn128"])[:len(shown_q)]
+        sh = nn_sheet(pool, pool_y, shown_q, shown_nn, size=0.6).move_to([-2.2, -0.3, 0])
         ql = label(r"query", font_size=20, color=GREY_A).next_to(sh, UP, buff=0.15).align_to(sh, LEFT)
         rl = label(r"nearest of $2{,}000$ by the embedding", font_size=20, color=GREY_A).next_to(sh, UP, buff=0.15)
         rl.shift(RIGHT * 0.8)
-        same = float(np.mean([pool_y[j] == pool_y[q] for q, row in zip(Q, np.asarray(mt["plain_nn128"]))
+        same = float(np.mean([pool_y[j] == pool_y[q] for q, row in zip(shown_q, shown_nn)
                               for j in row]))
         steps = VGroup(node_box(r"embed every item once", SIMCLR, font_size=28),
                        node_box(r"embed the query", SIMCLR, font_size=28),

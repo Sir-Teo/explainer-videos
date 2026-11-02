@@ -215,11 +215,8 @@ class Pretext(VoiceoverScene):
                          digit(np.rot90(d, 2), 0.8, frame=True)).arrange(RIGHT, buff=0.15))
         ex.arrange(DOWN, buff=0.3).move_to([5.3, 0.4, 0])
         names = ", ".join(str(c) for c in worst[:2]) + f" and {worst[2]}"
-        sym = set(worst[:3]) & {0, 1, 8}
-        why_ = ("These are the digits that look much the same turned half a turn, so the puzzle has no answer for "
-                "them, and the network learns nothing from them about which way is up."
-                if len(sym) >= 2 else
-                "Some of these look much the same turned around, so for them the puzzle is partly unanswerable.")
+        why_ = ("Some digits are nearly half-turn symmetric, while others can resemble another digit after rotation. "
+                "These ambiguities make the rotation task harder, yet the network often still finds the correct turn.")
         with self.voiceover(
             "The puzzle has blind spots, and we can measure them. This is how often the trained network finds the "
             "right turn, digit by digit, averaged over the three seeds. <bookmark mark='a'/> The worst are the "
@@ -329,6 +326,6 @@ class Pretext(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(h2))
             vo.wait_until("c")
-            self.play(Indicate(cells[0], color=cols[0]))
+            self.play(Circumscribe(cells[0][0], color=cols[0], buff=0.04, stroke_width=3))
         self.wait(0.3)
         self.clear_scene()

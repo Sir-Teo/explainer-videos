@@ -123,7 +123,7 @@ class Barlow(VoiceoverScene):
         f[2].set_color(VICREG_C)
         f[4].set_color(RED)
         names = VGroup(label(r"invariance", font_size=22, color=INV).next_to(f[0], DOWN, buff=0.15),
-                       label(r"variance: \ every dimension keeps a spread of at least 1", font_size=22,
+                       label(r"variance: \ penalize stabilized std below $1$", font_size=22,
                              color=VICREG_C).next_to(f[2], DOWN, buff=0.15),
                        label(r"covariance", font_size=22, color=RED).next_to(f[4], DOWN, buff=0.15))
         S_ = runs[K["vicreg"][0]]["steps"][-1]
@@ -135,7 +135,7 @@ class Barlow(VoiceoverScene):
             return xs, ys
 
         ax = axes([0, S_], [0, 1.1], x_length=5.6, y_length=3.0, xlabel=r"training step",
-                  ylabel=r"typical std of a dimension (up to 1)", xticks=[0, S_], yticks=[0, 0.5, 1],
+                  ylabel=r"logged mean clipped std proxy \\ $\langle\min(\sqrt{s^2+10^{-4}},1)\rangle$", xticks=[0, S_], yticks=[0, 0.5, 1],
                   center=[-2.6, -1.3, 0])
         cv = VGroup(*[curve(ax.ax, *std_curve(k), VICREG_C, 3 if i == 0 else 1.8) for i, k in enumerate(K["vicreg"])])
         cn = VGroup(*[curve(ax.ax, *std_curve(k), NAIVE, 3 if i == 0 else 1.8) for i, k in enumerate(K["vicreg_novar"])])
@@ -147,18 +147,21 @@ class Barlow(VoiceoverScene):
         kn = float(np.mean([runs[k]["final"]["knn"] for k in K["vicreg_novar"]]))
         kv = float(np.mean([runs[k]["final"]["knn"] for k in K["vicreg"]]))
         collapsed = s_n < 0.2 * max(s_v, 1e-6)
-        v = (f"Without it, the spread of each dimension falls to {s_n:.3f}: the other two terms are happiest with "
-             f"everything at zero, and the network obliges. Its nearest-neighbour accuracy ends at {pct(kn)} percent, "
+        v = (f"Without it, the mean clipped standard-deviation proxy falls to {s_n:.3f}. The other two terms admit "
+             f"constant outputs, and here the outputs become nearly constant. Its nearest-neighbour accuracy ends at {pct(kn)} percent, "
              f"against {pct(kv)} for VICReg." if collapsed else
-             f"Without it, the spread ends at {s_n:.2f}, against {s_v:.2f}.")
-        src = cite(r"Bardes, Ponce \& LeCun (2022): \ VICReg; \ $\lambda = \mu = 25$, \ $\nu = 1$", corner=DR)
+             f"Without it, the mean clipped standard-deviation proxy ends at {s_n:.2f}, against {s_v:.2f} for VICReg.")
+        src = cite(r"Bardes, Ponce \& LeCun (2022): \ VICReg \\ schematic terms: averages and both views implicit \\ code weights: $\lambda = \mu = 25$, $\nu = 1$", corner=DR)
         with self.voiceover(
             "VICReg, from Adrien Bardes, Jean Ponce and Yann LeCun, splits the same idea into three named terms. "
+            "They act on raw projection outputs, before unit normalization. "
             "<bookmark mark='a'/> Invariance: the two views' vectors should be close. <bookmark mark='b'/> "
-            "Variance: every dimension must keep a standard deviation of at least one across the batch, a hinge "
-            "that only bites when a dimension starts to collapse. <bookmark mark='c'/> Covariance: different "
+            "Variance penalizes each dimension's stabilized standard deviation when it falls below one across the "
+            "batch, encouraging variation. <bookmark mark='c'/> Covariance: different "
             "dimensions should not be correlated. <bookmark mark='d'/> Each term can be removed to see what it "
-            f"does, so we removed the variance term. {v}"
+            "does, so we removed the variance term. The graph uses sample variances plus one ten-thousandth under "
+            "the square root, caps the results at one, then averages across dimensions, both views and each logging "
+            f"interval. {v}"
         ) as vo:
             self.play(FadeIn(src))
             vo.wait_until("a")

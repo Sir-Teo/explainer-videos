@@ -26,7 +26,7 @@ class Hook(VoiceoverScene):
         key_h = label(r"colour: \ the digit's label", font_size=22, color=GREY_A).next_to(key, UP, buff=0.25)
         never = label(r"never shown to the network", font_size=22, color=NAIVE).next_to(key, DOWN, buff=0.25)
         zk = float(sp["simclr_zknn"])
-        acc = VGroup(label(r"nearest neighbours on the sphere \\ name the digit", font_size=22, color=GREY_A),
+        acc = VGroup(label(r"weighted $20$-NN after centring \\ $10{,}000$ test digits", font_size=22, color=GREY_A),
                      MathTex(pct(zk) + r"\%", font_size=44, color=POS)).arrange(DOWN, buff=0.15)
         acc.next_to(never, DOWN, buff=0.5)
         tg = tag(r"computed: \ trained on this computer, \ MNIST test digits")
@@ -34,8 +34,9 @@ class Hook(VoiceoverScene):
             "These six hundred dots are handwritten digits. A network has squeezed each one into just three "
             "numbers, a point on a sphere. <bookmark mark='a'/> The colours are the digits' labels, zero to nine. "
             "<bookmark mark='b'/> But the network never saw a label. All it was ever asked was which two distorted "
-            "copies of a picture came from the same digit. <bookmark mark='c'/> And yet, ask a digit's nearest "
-            f"neighbours on this sphere what it is, and they are right {pct(zk, 0)} percent of the time."
+            "copies of a picture came from the same digit. <bookmark mark='c'/> And yet, after centring and "
+            "renormalizing these embeddings, a weighted vote of the twenty nearest training embeddings names the "
+            f"ten thousand test digits correctly {pct(zk, 0)} percent of the time."
         ) as vo:
             self.add(hs)
             self.play(FadeIn(hs), run_time=1.0)
@@ -84,8 +85,8 @@ class Hook(VoiceoverScene):
             "smudged. It pulls the two versions of each digit together, <bookmark mark='b'/> and pushes everything "
             "else apart. Nothing in this rule mentions a five or a seven. <bookmark mark='c'/> The clusters appear "
             "anyway, because two smudged copies of a five resemble each other in the same ways that all fives "
-            "resemble each other. <bookmark mark='d'/> Leave out the push, and the network finds a lazier answer: "
-            "every digit on the same spot."
+            "resemble each other. <bookmark mark='d'/> Leave out the push, and the outputs bunch near the same "
+            "spot. Sending every digit to one fixed point on the sphere would attain the loss minimum."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hs), FadeIn(sl))
             vo.wait_until("a")

@@ -127,11 +127,7 @@ class Masked(VoiceoverScene):
                                          color=GREY_A).next_to(f0, UP, buff=0.25))
         tg = tag(r"computed: \ $75\%$ hidden, \ the same masks at every snapshot; \ three seeds")
         with self.voiceover(
-            "Here is ours learning, on six test digits, with the same patches hidden at every snapshot. <bookmark "
-            "mark='a'/> At first it paints almost nothing into the hidden patches, then noise. <bookmark mark='b'/> "
-            "Then soft blobs where the ink should be, and by the end blurry strokes that continue the visible ones: "
-            "the two and the three can be read in its guesses. <bookmark mark='c'/> To do that it has to know "
-            "something about how digits are drawn."
+            "Here is ours learning, on six test digits, with the same patches hidden at every snapshot. <bookmark mark='a'/> The top row is what the model sees, the middle row its reconstruction, and the bottom row the original. <bookmark mark='b'/> At the end, some guesses have blurry digit-like strokes, while others remain ambiguous or differ from the original. <bookmark mark='c'/> The falling training loss does not guarantee a readable reconstruction of every digit."
         ) as vo:
             self.play(FadeIn(sh), FadeIn(rl), FadeIn(st), FadeIn(tg), FadeIn(ax))
             vo.wait_until("a")
@@ -162,19 +158,20 @@ class Masked(VoiceoverScene):
             k = m["keys"][r][0]
             ex.append(k)
         best = rs[int(np.argmax([x[0] for x in lin]))]
-        v = (f"Hiding three quarters gives the best probe, {pct(lin[1][0])} percent; half gives {pct(lin[0][0])}, "
+        v = (f"Hiding three quarters gives the highest observed probe in these runs, {pct(lin[1][0])} percent; half gives {pct(lin[0][0])}, "
              f"nine tenths {pct(lin[2][0])}." if best == "0.75" else
-             f"On our digits the best ratio is {pct(float(best), 0)} percent hidden: probes of {pct(lin[0][0])}, "
+             f"The highest observed probe in these runs is at {pct(float(best), 0)} percent hidden: probes of {pct(lin[0][0])}, "
              f"{pct(lin[1][0])} and {pct(lin[2][0])} percent for half, three quarters and nine tenths.")
         un = float(np.mean([r["linear"] for r in load("baselines")["random_cnn"]]))
-        caveat = (f"All three sit below the untrained network's {pct(un)} percent, and the two other ratios had one "
-                  "seed each." if max(x[0] for x in lin) < un else "")
+        caveat = (f"All three sit below the untrained network's {pct(un)} percent."
+                  if max(x[0] for x in lin) < un else "")
         n1 = label(r"too little hidden: \ copy from the neighbours", font_size=22, color=GREY_A).move_to([3.6, 0.8, 0])
         n2 = label(r"too much hidden: \ guess blindly", font_size=22, color=GREY_A).move_to([3.6, -0.2, 0])
         tg = tag(r"computed: \ $75\%$: three seeds; \ $50\%$ and $90\%$: one each")
         with self.voiceover(
             "How much to hide? Too little, and the network can copy from the neighbours; too much, and it can only "
-            f"guess. <bookmark mark='a'/> We trained ours at three ratios. <bookmark mark='b'/> {v} <bookmark mark='c'/> {caveat}"
+            f"guess. <bookmark mark='a'/> We tried three ratios: three seeds at seventy-five percent hidden, one "
+            f"each at fifty and ninety percent. This is a limited comparison. <bookmark mark='b'/> {v} <bookmark mark='c'/> {caveat}"
         ) as vo:
             self.play(FadeIn(n1), FadeIn(n2), FadeIn(cl), FadeIn(ch[0]), FadeIn(ch.names))
             vo.wait_until("a")

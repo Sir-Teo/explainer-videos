@@ -33,7 +33,7 @@ class Collapse(VoiceoverScene):
         steps = np.asarray(sp["rec_steps"])
         n = len(steps)
         pc = pause_card(r"Train a network only to give the two views of each digit the same vector: \ no negatives, "
-                        r"\ nothing else. \ What does it learn?", width=9.0, font_size=28)
+                        r"\ nothing else. \ What does it learn?", width=9.3, font_size=28)
         f = MathTex(r"\mathcal L", r"=", r"-\cos\big(z, z'\big)", font_size=44).move_to([3.6, 1.6, 0])
         f[2].set_color(NAIVE)
         hs = Hypersphere(Z, [DIGIT[c] for c in lab], radius=2.6, center=[-3.0, -0.4, 0], dot=0.045)
@@ -41,23 +41,23 @@ class Collapse(VoiceoverScene):
         sp_ = load("sphere")
         st = always_redraw(lambda: label(rf"step ${steps[int(np.clip(round(hs.t.get_value()), 0, n - 1))]}$",
                                          font_size=22, color=GREY_A).move_to([-3.0, 3.1, 0]))
-        lossl = label(r"the loss reaches its minimum, $-1$, \\ and stays there", font_size=24, color=NAIVE)
+        lossl = label(r"the loss approaches its minimum, $-1$", font_size=24, color=NAIVE)
         lossl.next_to(f, DOWN, buff=0.5)
-        same = label(r"every digit, \ the same point", font_size=28, color=NAIVE).next_to(lossl, DOWN, buff=0.6)
+        same = label(r"the digits bunch \ near one point", font_size=28, color=NAIVE).next_to(lossl, DOWN, buff=0.6)
         tg = tag(r"computed: \ the naive siamese net, \ three output numbers")
         U = Z / np.linalg.norm(Z, axis=2, keepdims=True)
         r0, r1 = float(np.linalg.norm(U[0].mean(0))), float(np.linalg.norm(U[-1].mean(0)))
         if r0 > 0.99 and r1 > 0.99:
-            how = ("Like the contrastive network, it starts with every digit bunched in one spot; <bookmark "
-                   "mark='b'/> unlike it, it never leaves.")
+            how = ("Like the contrastive network, it starts with the digits bunched in one spot; <bookmark "
+                   "mark='b'/> unlike it, it stays closely bunched.")
         else:
-            how = "It minimizes it <bookmark mark='b'/> by sending every digit to the same point."
+            how = "It drives the loss down <bookmark mark='b'/> by bunching the outputs near one point."
         with self.voiceover(
             "Before going further, a question. Suppose the only rule is: give the two views of each digit the same "
             "vector. No negatives, nothing pushing apart. What does the network learn? Pause and think. <bookmark "
             "mark='a'/> Here is what ours did. The loss is minus the cosine between the two views' vectors. "
-            f"{how} The two views agree perfectly, the loss sits at its minimum, and the vector says nothing at all "
-            "about the input. This is collapse."
+            f"{how} The two views nearly agree and the loss approaches minus one. The outputs are nearly constant, "
+            "although small residual differences can remain. This is near collapse."
         ) as vo:
             self.play(FadeIn(pc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -134,7 +134,7 @@ class Collapse(VoiceoverScene):
         cliff = int(np.argmax(lg(sv_s) < -3)) + 1 if np.any(lg(sv_s) < -3) else len(sv_s)
         ls = label(r"SimCLR: \ a slow decline, \\ then a cliff" if cliff < len(sv_s) else r"SimCLR: \ a slow decline",
                    font_size=22, color=SIMCLR).move_to([4.8, 1.2, 0])
-        ln = label(r"pull together only: \\ one dominant direction, \ then small residuals", font_size=22, color=NAIVE)
+        ln = label(r"pull together only: \\ one dominant direction, \\ then small residuals", font_size=22, color=NAIVE)
         ln.move_to([4.8, -1.4, 0])
         kinds = VGroup(label(r"complete collapse: \ one point", font_size=22, color=NAIVE),
                        label(r"dimensional collapse: \ a few directions", font_size=22, color=SIMCLR))
@@ -202,7 +202,7 @@ class Collapse(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def margin(self):
-        f = MathTex(r"\mathcal L", r"=", r"y\, d^2", r"+", r"(1 - y)\, \max(0,\, m - d)^2", font_size=40)
+        f = MathTex(r"\mathcal L", r"=", r"\tfrac12 y\, d^2", r"+", r"\tfrac12(1 - y)\, \max(0,\, m - d)^2", font_size=40)
         f.move_to([0, 2.2, 0])
         f[2].set_color(POSC)
         f[4].set_color(NEGC)
@@ -212,10 +212,11 @@ class Collapse(VoiceoverScene):
                   center=[0, -1.3, 0])
         ds = np.linspace(0, 3, 120)
         c1 = curve(ax.ax, ds, ds ** 2 / 2, POSC, 3)
-        c2 = curve(ax.ax, ds, np.maximum(0, 2.0 - ds) ** 2, NEGC, 3)
+        c2 = curve(ax.ax, ds, np.maximum(0, 2.0 - ds) ** 2 / 2, NEGC, 3)
         l1 = label(r"similar: \ pull together", font_size=20, color=POSC).next_to(ax.ax.c2p(2.6, 3.4), LEFT, buff=0.1)
         l2 = label(r"dissimilar: \ push to the margin $m$", font_size=20, color=NEGC).next_to(ax.ax.c2p(0.3, 3.9),
                                                                                              RIGHT, buff=0.1)
+        m_note = MathTex(r"m = 2", font_size=20, color=NEGC).next_to(ax, RIGHT, buff=0.35)
         src = cite(r"Hadsell, Chopra \& LeCun (2006); \ Chopra, Hadsell \& LeCun (2005)")
         with self.voiceover(
             "This trap is old. In 2005 and 2006 Raia Hadsell, Sumit Chopra and Yann LeCun trained siamese networks "
@@ -226,9 +227,9 @@ class Collapse(VoiceoverScene):
         ) as vo:
             self.play(Write(f), FadeIn(dl), FadeIn(src), FadeIn(ax))
             vo.wait_until("a")
-            self.play(Create(c1), FadeIn(l1), Indicate(f[2], color=POSC))
+            self.play(Create(c1), FadeIn(l1), Indicate(f[2], color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
-            self.play(Create(c2), FadeIn(l2), Indicate(f[4], color=NEGC))
+            self.play(Create(c2), FadeIn(l2), FadeIn(m_note), Indicate(f[4], color=WHITE, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()
 
