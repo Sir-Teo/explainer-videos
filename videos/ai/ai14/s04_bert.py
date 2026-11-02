@@ -45,7 +45,8 @@ class BERT(VoiceoverScene):
                      color=ENCODER).move_to([1.2, -2.0, 0])
         nsp = label(r"and a second task: \ does passage B follow passage A?", font_size=22, color=GREY_A)
         nsp.next_to(goal, DOWN, buff=0.35)
-        tag = note(r"example after Devlin et al.\ (2018), App.\ A.1").to_corner(DR, buff=0.2)
+        tag = note(r"illustrative outcomes, not proportions; \ Devlin et al.\ (2018), App.\ A.1",
+                   font_size=18).to_corner(DR, buff=0.2)
         with self.voiceover(
             "October 2018: Jacob Devlin, Ming-Wei Chang, Kenton Lee and Kristina Toutanova at Google. BERT keeps the "
             "Transformer's encoder alone, so every position sees the whole input, both ways. <bookmark mark='a'/> But "
@@ -78,7 +79,7 @@ class BERT(VoiceoverScene):
             cmath(r"\mathcal L_{\mathrm{LM}}", r"=", r"-\sum_{i=1}^{n} \log P(x_i \mid x_{<i})", font_size=38),
             cmath(r"\mathcal L_{\mathrm{MLM}}", r"=", r"-\sum_{i \in M} \log P(x_i \mid \tilde x)", font_size=38),
             cmath(r"\mathbb E\,|M|", r"=", rf"{B['mask']:g}\, n", font_size=38),
-            cmath(r"\frac{n}{\mathbb E\,|M|}", r"=", rf"{1 / B['mask']:.1f}", font_size=38),
+            cmath(r"\frac{n}{\mathbb E\,|M|}", r"\approx", rf"{1 / B['mask']:.1f}", font_size=38),
         ]
         rows[0][0].set_color(DECODER)
         rows[1][0].set_color(ENCODER)
@@ -95,7 +96,7 @@ class BERT(VoiceoverScene):
             "position a target, predicted from the words before it. <bookmark mark='b'/> The masked model's loss sums "
             "only over the picked positions, each predicted from the whole corrupted sentence. <bookmark mark='c'/> "
             "On average that is fifteen percent of the positions, <bookmark mark='d'/> so per sequence of text, the "
-            "left-to-right model gets about six and a half times as many targets to learn from. <bookmark mark='e'/> "
+            "left-to-right model gets about six point seven times as many targets to learn from. <bookmark mark='e'/> "
             "BERT's authors measured the cost: their masked model learned slightly more slowly, step for step, but "
             "overtook a left-to-right model on the tasks almost immediately. We'll test that claim ourselves in "
             "chapter thirteen."

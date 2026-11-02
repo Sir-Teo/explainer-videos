@@ -82,7 +82,7 @@ class Frontier(VoiceoverScene):
                          color=OPEN),
             history_card(2025, r"gpt-oss \ (OpenAI, August)", rf"{human(oss['params'])} parameters, "
                          rf"{human(oss['active'])} active; \ 4-bit weights fit one 80 GB GPU; \ Apache 2.0: \ OpenAI's "
-                         r"first open weights since GPT-2", width=6.4, color=OPEN),
+                         r"first open language-model weights since GPT-2", width=6.4, color=OPEN),
         ).arrange_in_grid(rows=2, cols=2, buff=0.3).move_to(DOWN * 0.1)
         head = label(r"the open frontier fills in, \ 2025", font_size=34, color=OPEN).to_edge(UP, buff=0.45)
         cite_ = cite(r"Qwen Team (2025); \ Kimi Team (2025); \ GLM-4.5 Team (2025); \ OpenAI (2025)")
@@ -92,7 +92,7 @@ class Frontier(VoiceoverScene):
             "thinking and non-thinking modes in one model. <bookmark mark='b'/> Kimi K2, from Moonshot AI in July: a "
             "trillion parameters, 32 billion active, trained on 15.5 trillion tokens with a new optimizer, MuonClip, "
             "without a single spike in the loss. <bookmark mark='c'/> GLM-4.5, from Zhipu, the same month. "
-            "<bookmark mark='d'/> And in August, OpenAI's first open weights since GPT-2: gpt-oss, 117 billion "
+            "<bookmark mark='d'/> And in August, OpenAI's first open language-model weights since GPT-2: gpt-oss, 117 billion "
             "parameters with 5.1 billion active, its weights in a four-bit format so that it fits on a single GPU, "
             "under the Apache license."
         ) as vo:

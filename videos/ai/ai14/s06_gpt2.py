@@ -50,7 +50,7 @@ class GPT2(VoiceoverScene):
                           fill_color=DECODER, fill_opacity=0.12 + 0.12 * i)
             bars.add(r)
         for r in bars:
-            r.move_to([1.2, -2.9, 0], aligned_edge=DL)
+            r.move_to([0.6, -2.9, 0], aligned_edge=DL)
         tags = VGroup(*[label(rf"{nm} \ ({L} layers $\times$ {d})", font_size=18, color=DECODER)
                         .next_to(bars[-1], RIGHT, buff=0.15).set_y(r.get_top()[1] - 0.12) for (nm, L, d), r in
                         zip(sizes, bars)])

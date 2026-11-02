@@ -34,7 +34,7 @@ ZH = {
         "一个为翻译句子而造的模型，怎么就成了几乎一切的引擎？这就是本部分要讲的故事。<bookmark mark='a'/>它从做翻译的Transformer开始，经过GPT和BERT、T5、GPT-2和GPT-3，到ChatGPT，再到今天的开放权重模型。<bookmark mark='b'/>每一步，我们都会问：谁在什么时候做了什么；这一步改变了什么；它为什么奏效。",
 
     'f"Along the way we\'ll rebuild the lineage in miniature':
-        "一路上，我们会在这台制作视频的电脑上，用本系列读的那三十部小说，把这条谱系缩小重建一遍。<bookmark mark='a'/>一个GPT式的模型，学着预测下一个词；一个BERT式的模型，学着填空；两者大小完全相同，训练用的算力完全相同，比较也力求公平。<bookmark mark='b'/>再加上一族大小递增的GPT式模型，从大约27万到420万个参数，看看从提示里的例子中学习，也就是GPT-3带来的惊喜，在我们这个规模上会不会出现。",
+        "一路上，我们会在这台制作视频的电脑上，用本系列读的那三十部小说，把这条谱系缩小重建一遍。<bookmark mark='a'/>一个GPT式的模型，学着预测下一个词；一个BERT式的模型，学着填空；两者大小完全相同，近似训练预算相同，比较也力求公平。<bookmark mark='b'/>再加上一族大小递增的GPT式模型，从大约27万到420万个参数，看看从提示里的例子中学习，也就是GPT-3带来的惊喜，在我们这个规模上会不会出现。",
 
     'This is Part 14 of AI, Built, in its third act':
         "这是《人工智能，从零搭建》的第14部分，属于第三幕：Transformer时代。<bookmark mark='a'/>本部分讲：2017年的Transformer，以及切分它的三种方式；预训练，从ULMFiT和GPT-1到BERT和T5；规模，从GPT-2到GPT-3，以及从提示中学习；一个文本预测器怎样变成了助手；开放权重，它们趋同的设计，以及2026年的前沿；算力、成本和数据的趋势；还有我们自己的实验。",
@@ -56,7 +56,7 @@ ZH = {
         "这样的数字是怎么来的？论文的算法值得一看，因为这个领域至今还是这样计算算力的。<bookmark mark='a'/>训练时间：三天半是302400秒。<bookmark mark='b'/>乘以GPU的数量，8块，再乘以一块GPU能持续的速度：作者假设P100每秒9.5万亿次运算。<bookmark mark='c'/>乘积大约是2.3乘以10的19次方次运算，正是他们表里的数字。<bookmark mark='d'/>在第6章，我们会用第二种方法算同一个量：根据模型的大小，和它读过的词元数。",
 
     'Why did it win? Three reasons, and each matters more as we go.':
-        "它为什么赢了？有三个原因，而且越往后越重要。每个位置同时计算，所以训练能充分利用并行硬件。任意一个词一步就能到达任意另一个词，所以长距离的依赖容易学到。而且计算几乎全是矩阵乘法，这正是显卡擅长的，那是第17部分的主题。<bookmark mark='a'/>编码器-解码器是为翻译而造的。不到十八个月，这个领域就把它切成了三种：只保留编码器，像BERT那样；只保留解码器，像GPT那样；或者两者都保留，像T5那样。<bookmark mark='b'/>哪一种切法赢了，为什么，是本部分的主线。",
+        "它为什么赢了？有三个原因，而且越往后越重要。每个位置同时计算，所以训练能充分利用并行硬件。任意一个词一步就能到达任意另一个词，所以长距离的依赖容易学到。而且计算几乎全是矩阵乘法，这正是显卡擅长的，那是第17部分的主题。<bookmark mark='a'/>编码器-解码器是为翻译而造的。到2019年末，这个领域就把它切成了三种：只保留编码器，像BERT那样；只保留解码器，像GPT那样；或者两者都保留，像T5那样。<bookmark mark='b'/>哪一种切法赢了，为什么，是本部分的主线。",
 
     # ------------------------------------------------------------------ 2. Pretrain
     'Chapter two. Pretrain, then fine-tune.':
@@ -85,7 +85,7 @@ ZH = {
         "2018年10月：谷歌的雅各布·德夫林和同事。BERT只保留Transformer的编码器，所以每个位置都能看到整个输入，两个方向都能看。<bookmark mark='a'/>但一个能看到一切的模型，没法训练它预测下一个词：它直接看一眼就行了。所以BERT改为把词藏起来。随机挑出15%的位置。<bookmark mark='b'/>其中80%换成一个特殊的掩码词元，10%换成一个随机词，10%保持不变。<bookmark mark='c'/>然后训练模型，在每个挑出的位置上恢复原来的词。随机词和不变的词很重要：之后微调模型时，输入里没有掩码词元，所以它不能只在看到掩码的地方才用心。<bookmark mark='d'/>第二个任务，是判断一段话是否真的接在另一段后面。",
 
     'Put the two objectives side by side.':
-        "把两个目标放在一起看。<bookmark mark='a'/>像GPT这样从左往右的模型，让每个位置都成为目标，用它前面的词来预测。<bookmark mark='b'/>掩码模型的损失只对挑出的位置求和，每个都由整个被破坏的句子来预测。<bookmark mark='c'/>平均下来，那是15%的位置，<bookmark mark='d'/>所以同样一段文本，从左往右的模型能学的目标大约是它的6.5倍。<bookmark mark='e'/>BERT的作者测量过这个代价：他们的掩码模型按步数来看学得稍慢一点，但几乎马上就在任务上超过了从左往右的模型。我们会在第13章亲自检验这个说法。",
+        "把两个目标放在一起看。<bookmark mark='a'/>像GPT这样从左往右的模型，让每个位置都成为目标，用它前面的词来预测。<bookmark mark='b'/>掩码模型的损失只对挑出的位置求和，每个都由整个被破坏的句子来预测。<bookmark mark='c'/>平均下来，那是15%的位置，<bookmark mark='d'/>所以同样一段文本，从左往右的模型能学的目标大约是它的6.7倍。<bookmark mark='e'/>BERT的作者测量过这个代价：他们的掩码模型按步数来看学得稍慢一点，但几乎马上就在任务上超过了从左往右的模型。我们会在第13章亲自检验这个说法。",
 
     'f"BERT came in two sizes.':
         "BERT有两种大小。Base：12层，1.1亿个参数，和GPT一样大，这样两者才能比较。Large：24层，3.4亿个参数。两者都用书和英文维基百科训练，33亿个词，训练一百万步。<bookmark mark='a'/>在GLUE排行榜上，BERT-Large得到80.5分，GPT是72.8分；它在问答上也创了新纪录。<bookmark mark='b'/>更好的是，作者检查了提升从哪里来。他们用第二种方式预训练同一个Base模型：像GPT一样从左往右，其他一切都相同。<bookmark mark='c'/>掩码在全部五个任务上都赢了：在情感分析上只赢一点点，在问答上赢了大约10分，而在问答里，看到一个词后面的词最重要。",
@@ -215,7 +215,7 @@ ZH = {
         "2024年12月：DeepSeek-V3。6710亿个参数，每个词元用370亿。<bookmark mark='a'/>一个由256个小专家外加1个共享专家组成的混合专家，每个词元选8个；潜在注意力；一种不需要额外损失就能让专家保持均衡的办法；训练时一次预测两个词元；而且第一次在这样的规模上用8位浮点数训练。14.8万亿个词元。<bookmark mark='b'/>它的报告写明了成本：278.8万个GPU小时，按每小时2美元算，大约560万美元，这只是最后一次训练，不包括之前的研究。<bookmark mark='c'/>一个月后是DeepSeek-R1，它从V3出发，用强化学习在答案可以核对的问题上训练。它的纯强化学习版本，在训练过程中，AIME 2024数学竞赛的成绩从15.6%升到77.9%。开放权重，MIT许可证；第28部分会讲它是怎么做到的。",
 
     'Through 2025 the open frontier filled in.':
-        "2025年，开放前沿被逐渐填满。<bookmark mark='a'/>4月的Qwen3：稠密模型和混合专家模型，从6亿到2350亿个参数，36万亿个词元，119种语言，思考模式和非思考模式合在一个模型里。<bookmark mark='b'/>7月，月之暗面的Kimi K2：一万亿个参数，激活320亿，用一种新的优化器MuonClip在15.5万亿个词元上训练，损失曲线上一次尖峰都没有。<bookmark mark='c'/>同月还有智谱的GLM-4.5。<bookmark mark='d'/>8月，OpenAI自GPT-2以来第一次开放权重：gpt-oss，1170亿个参数，激活51亿，权重用4位格式存储，一块GPU就放得下，采用Apache许可证。",
+        "2025年，开放前沿被逐渐填满。<bookmark mark='a'/>4月的Qwen3：稠密模型和混合专家模型，从6亿到2350亿个参数，36万亿个词元，119种语言，思考模式和非思考模式合在一个模型里。<bookmark mark='b'/>7月，月之暗面的Kimi K2：一万亿个参数，激活320亿，用一种新的优化器MuonClip在15.5万亿个词元上训练，损失曲线上一次尖峰都没有。<bookmark mark='c'/>同月还有智谱的GLM-4.5。<bookmark mark='d'/>8月，OpenAI自GPT-2以来第一次开放语言模型权重：gpt-oss，1170亿个参数，激活51亿，权重用4位格式存储，一块GPU就放得下，采用Apache许可证。",
 
     'f"Put the models of this part on one chart':
         "把本部分的模型放到一张图上：横轴是总参数，纵轴是每个词元实际用到的参数。<bookmark mark='a'/>稠密模型落在对角线上：GPT-3、PaLM、LLaMA、Llama 3.1对每个词元都用上每一个参数。<bookmark mark='b'/>开放前沿移到了对角线下方。混合专家让每个词元只经过几百个小网络中的几个，所以容量增长了，每个词元的成本却没有。<bookmark mark='c'/>Kimi K3在它的2.8万亿个参数里只用1040亿：{100 * share['kimik3']:.1f}%。前沿是稀疏的，第16部分讲它怎样运作。",
@@ -259,7 +259,7 @@ ZH = {
         '这是第13章：我们自己的谱系，GPT对决BERT。',
 
     'f"Now our own version of the 2018 question.':
-        "现在来做我们自己版本的2018年之问。两个形状完全相同的模型：{sh['layers']}层，宽度{sh['d']}，{sh['heads']}个头，{p['total'] / 1000000.0:.2f}百万个参数，用第10章的现代模块搭成。<bookmark mark='a'/>它们从完全相同的权重出发，按相同的顺序读三十部小说里同样的{g['tokens'] / 1000000.0:.1f}百万个词元，用同样的优化器和学习率安排。<bookmark mark='b'/>只有两处不同。GPT式模型的注意力只往回看，它预测每一个下一个词元。BERT式模型的注意力两边都看，它预测我们遮住的那15%的词元。<bookmark mark='c'/>所以算力完全相同：6，乘以每个词元经过的参数，再乘以词元数。<bookmark mark='d'/>这就是这里所说的公平：同样的模型，同样的数据，同样的算力，只换了目标函数；然后在两个模型都能做的任务上测试。",
+        "现在来做我们自己版本的2018年之问。两个形状完全相同的模型：{sh['layers']}层，宽度{sh['d']}，{sh['heads']}个头，{p['total'] / 1000000.0:.2f}百万个参数，用第10章的现代模块搭成。<bookmark mark='a'/>它们从完全相同的权重出发，按相同的顺序读三十部小说里同样的{g['tokens'] / 1000000.0:.1f}百万个词元，用同样的优化器和学习率安排。<bookmark mark='b'/>只有两处不同。GPT式模型的注意力只往回看，它预测每一个下一个词元。BERT式模型的注意力两边都看，它预测我们遮住的那15%的词元。<bookmark mark='c'/>按同一个6ND估算，两者的训练预算相同：6，乘以每个词元经过的参数，再乘以词元数。<bookmark mark='d'/>这就是这里所说的公平：同样的模型，同样的数据，同样的估算预算，只换了目标函数；然后在两个模型都能做的任务上测试。",
 
     '"Watch the GPT-style model learn.':
         "看GPT式模型学习。左边是它在留出文本上的损失随训练的变化；右边是它在“The door opened, and”这几个词后面写出的东西，在每个检查点冻结，每次都用同一个随机种子。<bookmark mark='a'/>{start}<bookmark mark='b'/>让它读下去。每个点是它在从不用来训练的文本上的损失，淡淡的线是它在训练批次上的损失。检查点按几何级数分布：前面密，因为那时变化最快。{fit}<bookmark mark='c'/>到最后，损失是{last['val']:.2f}奈特，它写出的东西有点像它读过的小说：还谈不上意思，但有了小说的用词和节奏。",
@@ -270,11 +270,11 @@ ZH = {
     "f'Untrained, its loss is {first['val']:.2f} nats per token, and":
         "未训练时，它的损失是每个词元{first['val']:.2f}奈特，写出来的是噪声。",
 
-    'The two stay together: it is learning the language of the novels':
-        '两者一直靠在一起：它在学小说的语言，而不是在背它的训练批次。',
+    'The training and held-out losses finish within a tenth of a nat here':
+        '这里训练损失和留出损失在结束时相差不到0.1奈特；单凭这个比较不能检验模型是否记忆了训练内容。',
 
-    "f'By the end the training loss is {gap:.2f} nats below":
-        "到最后，训练损失比留出损失低了{gap:.2f}奈特：它开始记住它读过的东西了。",
+    "f'By the end the held-out loss minus the training loss is":
+        "到最后，留出损失减去训练损失是{gap:.2f}奈特：这是泛化检查，并不是对记忆训练内容的直接检验。",
 
     'f"The BERT-style model learns to fill blanks.':
         "BERT式模型学的是填空。这里有一个句子，遮住了三个词，下面是它在同样的检查点上对每个词的最佳猜测。<bookmark mark='a'/>它的损失只在被遮住的词上计算，降到了{last['val']:.2f}奈特。<bookmark mark='b'/>{cmp_}要公平地比较这两个模型，我们需要两个都能做的任务。",
@@ -289,25 +289,25 @@ ZH = {
         "任务一：填空。从两个模型都没读过的段落里取一个句子，去掉一个词，给出{k}个候选：真正的那个词，加上{k - 1}个差不多常见的词。<bookmark mark='a'/>BERT式模型读的是空缺处放着掩码的句子，挑出它认为可能性最大的候选。GPT式模型看不到空缺后面，但它可以把每个候选放进去，比较整句话的概率，这样也用上了空缺后面的词。作为对照，我们也让它只根据空缺前面的词来判断。<bookmark mark='b'/>在{L['cloze_n']}个句子上，随机猜的正确率是{100 / k:.1f}%：只看左边，GPT式模型答对{pct(gl_)}%。<bookmark mark='c'/>给整句打分，答对{pct(g_)}%。<bookmark mark='d'/>{verdict}",
 
     'f"The masked model wins,':
-        "掩码模型赢了，{pct(b_)}%对{pct(g_)}%：正如BERT的作者发现的，直接读两边，胜过通过整句话的似然去间接推断。",
+        "掩码模型赢了，{pct(b_)}%对{pct(g_)}%：在这个留出测试上，直接对掩码词打分，优于整句似然打分。",
 
     "f'Here the GPT-style model wins,":
-        "这里GPT式模型赢了，{pct(g_)}%对{pct(b_)}%：给整句打分让它也能用上空缺后面的词，而且它从每一个词元学习，而不只是15%。",
+        "这里GPT式模型赢了，{pct(g_)}%对{pct(b_)}%。整句打分也用到了空缺后面的词；这个比较不能单独确定差异的原因。",
 
-    "f'They tie,":
-        "两者打平，{pct(g_)}%和{pct(b_)}%：一旦GPT式模型给整句打分，它对空缺后面那些词的利用，就和掩码模型一样好。",
+    "f'Scores are close,":
+        "分数接近，{pct(g_)}%和{pct(b_)}%：两种打分方法都用了空缺后面的词，但这次运行并不能确立两者普遍等效。",
 
     'f"Task two is the kind of test GLUE was made of':
         "任务二是GLUE里那种测试：给一个句子分类。它出自三十部小说中的哪一部？<bookmark mark='a'/>把每个模型冻结，让一个句子通过它，对整句的最终状态取平均，再在上面训练同样的简单线性分类器，每个模型都用同样的方法。<bookmark mark='b'/>随机猜的正确率是{100 / nc:.1f}%。<bookmark mark='c'/>{verdict}",
 
     'f"The BERT-style model\'s features name the book':
-        "BERT式模型的特征有{pct(pb)}%的时候能说出是哪本书，GPT式模型的特征是{pct(pg)}%：在GLUE式的测试上，双向特征又赢了。",
+        "BERT式模型的特征有{pct(pb)}%的时候能说出是哪本书，GPT式模型的特征是{pct(pg)}%：在这次运行中，它的冻结特征给出了更高的线性探针准确率。",
 
     'f"Here the GPT-style model\'s features do better':
-        "这里GPT式模型的特征更好，{pct(pg)}%对{pct(pb)}%：在我们这么小的规模上，从每个词元学习，似乎比能看两边更重要。",
+        "这里GPT式模型的特征更好，{pct(pg)}%对{pct(pb)}%。这是这次运行中更高的探针准确率；这个比较不能单独确定特征为何不同。",
 
-    "f'The two are about equal":
-        "两者差不多，{pct(pg)}%和{pct(pb)}%：在这个测试上、在这个规模上，目标函数几乎没有影响。",
+    "f'The probe scores are close":
+        "探针分数接近，{pct(pg)}%和{pct(pb)}%：一次运行并不能确立两种目标函数等效。",
 
     'f"And the task only one of them can really do: write.':
         "还有一个只有其中一个模型真正能做的任务：写作。<bookmark mark='a'/>给出开头，GPT式模型一个词元接一个词元地采样。<bookmark mark='b'/>BERT式模型也可以被逼着写：在末尾放一个掩码，填上，再放，再填，但它从来没被训练过在后面什么都没有的情况下猜一个词。<bookmark mark='c'/>而且只有因果模型能通过第1部分的链式法则给整段文本一个概率，所以只有它能进入记分板：在《马耳他之鹰》那段文字上，每个字符{ours['bits']:.2f}比特。掩码模型的猜测乘不出一段文本的概率，所以它没有这一行。<bookmark mark='d'/>这就是解码器胜出的更深层原因。一个文本概率的模型，可以采样、可以打分、可以用提示来驱动：一个模型包揽一切，而且规模越大越好。",
@@ -355,26 +355,26 @@ ZH = {
     "None of the family copies; only the series' own model":
         '家族里没有一个会复制；只有本系列自己的模型，更大、训练得更久，会。',
 
-    'f"The smaller models don\'t copy':
-        "较小的模型不会复制；从模型{tag_of(first)}开始，就会了。",
+    'f"Model {tag_of(first)} is the first':
+        "在这张列表里，模型{tag_of(first)}是第一个在这项测试中表现出复制的模型。",
 
     "f'For {who_of(first)}, the second copy":
-        "对{who_of(first)}来说，第二遍要容易得多：它猜对了{100 * first['acc2']:.0f}%的词，第一遍只有{100 * first['acc1']:.0f}%。这就是从上下文中复制：第13部分的归纳头。",
+        "对{who_of(first)}来说，第二遍要容易得多：它猜对了{100 * first['acc2']:.0f}%的词，第一遍只有{100 * first['acc1']:.0f}%。这说明它在从上下文中复制；要识别归纳头，还需要单独的分析。",
 
     'f"None of our models does much better the second time':
-        "我们没有一个模型在第二遍上明显更好：最好的也只提高了{100 * max(jumps.values()):.0f}个百分点，损失最多只降了{drop:.2f}奈特。在我们的规模和训练长度下，复制的回路，也就是第13部分的归纳头，还没有形成；第13部分那个小Transformer也不会复制。",
+        "我们没有一个模型在第二遍上明显更好：最好的提高约{100 * max(jumps.values()):.0f}个百分点，最大的损失下降约为{drop:.2f}奈特。在我们的规模和训练长度下，这项测试没有显示出有用的复制；它不能告诉我们，第13部分讲的归纳头回路是否已经形成。",
 
     'f" In model L\'s training, it switched on between':
         "在模型L的训练中，它是在读了{sn[max(0, sn.index(on) - 1)]['tokens'] / 1000000.0:.2f}到{on['tokens'] / 1000000.0:.2f}百万个词元之间出现的。",
 
     '"Finally, GPT-3\'s own kind of test':
-        "最后，是GPT-3自己那种测试，用小说搭成。两本书；提示里有几个带标签的例子，每个例子是一个句子加上它出自哪本书；然后是一个来自模型从没读过的段落的新句子，我们比较模型给两个书名的概率。<bookmark mark='a'/>小模型往往不管句子是什么，都偏爱某一个书名，所以，按照Tony Zhao和同事在2021年提出的办法，我们先减去每个书名在一个毫无内容的句子后面得到的分数。<bookmark mark='d'/>每个模型都试零个、一个、两个、四个和八个例子。<bookmark mark='b'/>{v0}<bookmark mark='c'/>{v1}<bookmark mark='e'/>{v2}",
+        "最后，是GPT-3自己那种测试，用小说搭成。两本书；提示里有几个带标签的例子，每个例子是一个句子加上它出自哪本书；然后是一个来自模型从没读过的段落的新句子，我们比较模型给两个书名的概率。<bookmark mark='a'/>小模型往往不管句子是什么，都偏爱某一个书名，所以，按照Tony Zhao和同事在2021年提出的办法，我们先减去每个书名在一个毫无内容的句子后面得到的分数。<bookmark mark='d'/>我们请求零个、一个、两个、四个或八个例子，然后在模型256个词元的上下文内给每个书名评分。提示过长时，真实句子和N/A查询实际保留的上下文可能不同。<bookmark mark='b'/>{v0}<bookmark mark='c'/>{v1}<bookmark mark='e'/>{v2}",
 
-    'f"Even with no examples, the models do better than chance':
-        "即使一个例子都没有，模型也比随机猜好，最高达到{100 * best0:.0f}%：书名常常是某个人物的名字，而一个提到这个人物的句子，会让这个名字更可能出现。",
+    "f'Even with no examples, at least one model":
+        "没有例子时，至少一个模型的得分超过随机猜，约{100 * best0:.0f}%。书名里的角色名字可能有帮助，但这项测试不能单独确定原因。",
 
     "f'With no examples the models are near chance":
-        "没有例子时，模型接近随机猜，最高{100 * best0:.0f}%。",
+        "没有例子时，模型接近随机猜；最佳成绩约为{100 * best0:.0f}%。",
 
     "f'For {who}, examples help":
         "对{who}来说，例子有帮助：从没有例子时的{100 * big['fewshot'][0]:.0f}%，升到{shots[-1]}个例子时的{100 * big['fewshot'][-1]:.0f}%。",
@@ -388,11 +388,11 @@ ZH = {
     "f' And with {shots[-1]} examples, the largest":
         "而在{shots[-1]}个例子时，家族中最大的模型比最小的高出{100 * sz:.0f}个百分点。",
 
-    'f" With {shots[-1]} examples, the family\'s sizes':
-        "在{shots[-1]}个例子时，家族中各个大小的模型彼此相差在{100 * abs(sz):.0f}个百分点以内。",
+    'f" With {shots[-1]} examples, the family\'s scores':
+        "在{shots[-1]}个例子时，家族中各个大小模型的分数跨度约为{100 * spread:.0f}个百分点。",
 
     '"So what did our small models show?':
-        "那么，我们的小模型说明了什么？<bookmark mark='a'/>{t1}<bookmark mark='f'/>{t2}<bookmark mark='g'/>{t3}<bookmark mark='b'/>在GPT-3自己的图里，少样本学习要到几十亿参数才变得有用。第13部分给出了机制，也就是会查找和复制的注意力头；第12部分给出了让更大的模型物有所值的规模定律。",
+        "那么，我们的小模型说明了什么？<bookmark mark='a'/>{t1}<bookmark mark='f'/>{t2}<bookmark mark='g'/>{t3}<bookmark mark='b'/>GPT-3的结果显示，规模更大时少样本表现更强；这并没有给出一个普遍适用的参数门槛。第13部分讲了注意力；第12部分讲了解释表现趋势的规模定律。",
 
     'Our models use their context more as they grow.':
         '我们的模型越大，越会利用上下文。',
@@ -400,24 +400,24 @@ ZH = {
     "Our larger models don't use their context much more":
         '我们较大的模型对上下文的利用，并不比较小的模型多多少。',
 
-    'Copying from the context appears with size.':
-        '从上下文中复制，随着规模出现了。',
+    'At least one model shows copying on this test.':
+        '至少有一个模型在这项测试中表现出复制。',
 
-    "Copying from the context hasn't appeared at our scale.":
-        '在我们的规模上，从上下文中复制还没有出现。',
+    'No model gains over twenty points on the repeated-list test.':
+        '在重复词表测试中，没有模型的提升超过20个百分点。',
 
     'And examples in the prompt help the largest model choose.':
         '而提示里的例子能帮助最大的模型做出选择。',
 
-    "But learning a task from examples in the prompt hasn't appeared":
-        '但从提示里的例子中学会一个任务，在我们的规模上还没有出现。',
+    'For the largest model, eight requested examples add at most five points on this book-choice test.':
+        '对最大的模型来说，8个请求的例子带来的提升在这项选书测试中不超过5个百分点。',
 
     # ------------------------------------------------------------------ Outro
     'Before the recap, here is the whole lineage on one page':
-        "在回顾之前，先把整个谱系放在一页上，时间从左往右走。<bookmark mark='a'/>2017年，Transformer：一个编码器加一个解码器，为翻译而造。<bookmark mark='b'/>不到两年，它分成了三支：编码器，比如赢下各项基准的BERT；编码器-解码器，比如T5；还有解码器，比如GPT。<bookmark mark='c'/>解码器这一支扩大了规模：GPT-3、Codex、InstructGPT、ChatGPT、GPT-4。而随着规模扩大，它也封闭了。<bookmark mark='d'/>从2023年起，旁边出现了开放的分支：Meta的LLaMA，然后是Mistral，每一个都建立在之前公开的设计之上。<bookmark mark='e'/>然后是DeepSeek、月之暗面的Kimi、阿里巴巴的Qwen，甚至OpenAI也再次开放了权重。<bookmark mark='f'/>今天前沿上的每一个开放模型，都是解码器。编码器还活着，用在搜索和分类里，但前沿是从这一支长出来的。",
+        "在回顾之前，先把整个谱系放在一页上，时间从左往右走。<bookmark mark='a'/>2017年，Transformer：一个编码器加一个解码器，为翻译而造。<bookmark mark='b'/>到2019年末，它分成了三支：编码器，比如赢下各项基准的BERT；编码器-解码器，比如T5；还有解码器，比如GPT。<bookmark mark='c'/>解码器这一支扩大了规模：GPT-3、Codex、InstructGPT、ChatGPT、GPT-4。而随着规模扩大，它也封闭了。<bookmark mark='d'/>从2023年起，旁边出现了开放的分支：Meta的LLaMA，然后是Mistral，每一个都建立在之前公开的设计之上。<bookmark mark='e'/>然后是DeepSeek、月之暗面的Kimi、阿里巴巴的Qwen，甚至OpenAI也再次开放了权重。<bookmark mark='f'/>今天前沿上的每一个开放模型，都是解码器。编码器还活着，用在搜索和分类里，但前沿是从这一支长出来的。",
 
     "Let's take stock.":
-        "来盘点一下。2017年，一个翻译模型让注意力成了整个架构。2018年，先在原始文本上预训练、再微调，成了标准做法，而像BERT这样的掩码模型赢下了当时的基准。然后解码器开始扩大规模：GPT-2能做从没训练过的任务，而GPT-3用了3乘以10的23次方次运算，能从提示里的例子中学习。指令微调和人类反馈把它变成了ChatGPT。开放模型先趋同到同一套配方，然后变得稀疏，又开始分化，与此同时算力每年增长大约5倍。而在我们自己的小模型上，在同样的算力下，我们测出了每种目标函数能换来什么。",
+        "来盘点一下。2017年，一个翻译模型让注意力成了整个架构。2018年，先在原始文本上预训练、再微调，成了标准做法，而像BERT这样的掩码模型赢下了当时的基准。然后解码器开始扩大规模：GPT-2能做从没训练过的任务，而GPT-3用了3乘以10的23次方次运算，能从提示里的例子中学习。指令微调和人类反馈把它变成了ChatGPT。开放模型先趋同到同一套配方，然后变得稀疏，又开始分化，与此同时算力每年增长大约5倍。而在我们自己的小模型上，在同样的估算预算下，我们测出了每种目标函数能换来什么。",
 
     'All of this comes back.':
         "这一切都会再出现。过去词元的记忆、潜在注意力和混合架构，是第15部分。混合专家和稀疏注意力，第16部分。让规模成为可能的硬件，第17部分；一次前沿训练实际上是怎么组织的，第18部分。便宜地部署这些模型，第19部分。在我们自己的模型上实现指令微调和人类反馈，第27部分；还有推理，第28部分。",

@@ -43,7 +43,8 @@ class Hook(VoiceoverScene):
         for c, d in zip(pts, dots):
             if c["key"] in names:
                 dirn, t = names[c["key"]]
-                tags.add(label(t, font_size=20, color=ARCH_COLOR[c["arch"]]).next_to(d, dirn, buff=0.08))
+                gap = 0.30 if c["key"] == "kimik3" else 0.08
+                tags.add(label(t, font_size=20, color=ARCH_COLOR[c["arch"]]).next_to(d, dirn, buff=gap))
         key = VGroup(*[VGroup(Dot(radius=0.07, color=col), label(t, font_size=18, color=col)).arrange(RIGHT, buff=0.1)
                        for col, t in ((ENCDEC, r"encoder--decoder"), (ENCODER, r"encoder only"),
                                       (DECODER, r"decoder only"))]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
@@ -146,7 +147,7 @@ class Hook(VoiceoverScene):
             "Along the way we'll rebuild the lineage in miniature, on the computer making this video, with the thirty "
             "novels this series reads. <bookmark mark='a'/> A GPT-style model, which learns to predict the next "
             "word, and a BERT-style model, which learns to fill in blanks, of exactly the same size, trained with "
-            "exactly the same compute, and compared fairly. <bookmark mark='b'/> And a family of GPT-style models of "
+            "the same approximate training budget, and compared fairly. <bookmark mark='b'/> And a family of GPT-style models of "
             f"growing size, from {human(rows[0]['total'], 2)[:-1]} thousand to {rows[-1]['total'] / 1e6:.1f} million "
             "parameters, to see whether learning from examples in the prompt, the surprise of GPT-3, shows up at our "
             "scale."

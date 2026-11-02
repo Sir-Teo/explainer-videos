@@ -147,7 +147,7 @@ class Converge(VoiceoverScene):
             cmath(r"x_{l+1}", r"=", r"\mathrm{LN}\big(x_l + F_l(x_l)\big)", font_size=36),
             cmath(r"x_{l+1}", r"=", r"x_l + F_l\big(\mathrm{N}(x_l)\big)", font_size=36),
             cmath(r"x_L", r"=", r"x_l + \sum_{k=l}^{L-1} F_k\big(\mathrm{N}(x_k)\big)", font_size=36),
-            cmath(r"\frac{\partial x_L}{\partial x_l}", r"=", r"I + \sum_{k=l}^{L-1} \frac{\partial F_k}{\partial x_l}",
+            cmath(r"\frac{\partial x_L}{\partial x_l}", r"=", r"I + \sum_{k=l}^{L-1} \frac{\partial F_k(\mathrm{N}(x_k))}{\partial x_l}",
                   font_size=36),
             cmath(r"\mathrm{RMS}(x)", r"=", r"\sqrt{\tfrac1d \textstyle\sum_i x_i^2}, \quad \mathrm{N}(x) = g \odot "
                                             r"\frac{x}{\mathrm{RMS}(x)}", font_size=36),
@@ -192,7 +192,7 @@ class Converge(VoiceoverScene):
             cmath(r"\mathrm{FFN}(x)", r"=", r"W_2\, \mathrm{ReLU}(W_1 x)", font_size=36),
             cmath(r"\mathrm{SwiGLU}(x)", r"=", r"W_2 \big(\mathrm{Swish}(W_1 x) \odot W_3 x\big)", font_size=36),
             cmath(r"3\, d\, h", r"=", r"2\, d \cdot 4d \ \Rightarrow\ h = \tfrac{2}{3} \cdot 4d", font_size=36),
-            cmath(r"h", r"=", rf"\tfrac{{8}}{{3}} \times {d:,} = {P['swiglu_exact']:,.1f} \to {P['swiglu_llama']:,}"
+            cmath(r"h", r"=", rf"\tfrac{{8}}{{3}} \times {d:,} \approx {P['swiglu_exact']:,.1f} \to {P['swiglu_llama']:,}"
                   .replace(",", "{,}"), font_size=36),
         ]
         whys = [why(r"2017: \ two matrices, \ hidden width $4d$"),

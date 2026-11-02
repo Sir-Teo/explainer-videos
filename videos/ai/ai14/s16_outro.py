@@ -101,7 +101,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Before the recap, here is the whole lineage on one page, with time running left to right. "
             "<bookmark mark='a'/> In 2017, the Transformer: an encoder and a decoder, built to translate. "
-            "<bookmark mark='b'/> Within two years it had split into three branches: encoders, like BERT, which won "
+            "<bookmark mark='b'/> By late 2019 it had split into three branches: encoders, like BERT, which won "
             "the benchmarks; encoder-decoders, like T5; and decoders, like GPT. <bookmark mark='c'/> The decoder "
             "branch scaled: GPT-3, Codex, InstructGPT, ChatGPT, GPT-4. And as it scaled, it closed. "
             "<bookmark mark='d'/> From 2023, open lanes appear beside it: Meta's LLaMA, then Mistral, each built on "
@@ -210,7 +210,7 @@ class Outro(VoiceoverScene):
             "day. Then the decoder scaled: GPT-2 did tasks it was never trained for, and GPT-3, at three times ten to "
             "the twenty-three operations, learned from examples in its prompt. Instruction tuning and human feedback "
             "turned it into ChatGPT. Open models converged on one recipe, then grew sparse and began to diverge "
-            "again, while compute grew about five times a year. And on our own small models, at equal compute, we "
+            "again, while compute grew about five times a year. And on our own small models, at equal estimated budgets, we "
             "measured what each objective buys."
         ) as vo:
             self.play(FadeIn(head))

@@ -179,7 +179,7 @@ class GPT3(VoiceoverScene):
                  "plush girafe => girafe peluche", "cheese =>"]
         prompt = VGroup(*[said(t, chars=34, font_size=19, max_lines=1, box_color=CONTEXT if 0 < i < 4 else GREY_B)
                           for i, t in enumerate(lines)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        prompt.move_to([3.1, 0.6, 0])
+        prompt.move_to([2.7, 0.6, 0])
         brace = Brace(prompt[1:4], RIGHT, color=CONTEXT)
         bl = label(r"examples", font_size=20, color=CONTEXT).next_to(brace, RIGHT, buff=0.1)
         kinds = VGroup(label(r"zero-shot: \ the description only", font_size=24, color=GREY_A),

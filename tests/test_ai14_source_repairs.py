@@ -1,0 +1,335 @@
+"""Synthetic scene/narration and cache-contract checks without models or scene imports."""
+from __future__ import annotations
+
+import ast
+import json
+from pathlib import Path
+import re
+import tempfile
+import types
+import unittest
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+PART = ROOT / "videos" / "ai" / "ai14"
+
+
+class ScientificCacheContractTests(unittest.TestCase):
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.root = Path(self.directory.name)
+        self.calls = []
+        tree = ast.parse((PART / "common.py").read_text())
+        body = [node for node in tree.body if
+                (isinstance(node, ast.Assign) and any(
+                    isinstance(target, ast.Name) and target.id == "_SCIENTIFIC_ITEMS"
+                    for target in node.targets)) or
+                (isinstance(node, ast.FunctionDef) and node.name == "load")]
+        self.namespace = dict(_json=json, np=np,
+                              _CACHE=types.SimpleNamespace(path=lambda name: self.root / (name + ".json")),
+                              _load=lambda name: self.calls.append(name) or {"loaded": name})
+        exec(compile(ast.Module(body=body, type_ignores=[]), "<cache contract>", "exec"), self.namespace)
+        self.load = self.namespace["load"]
+
+    def save(self, name, data):
+        (self.root / (name + ".json")).write_text(json.dumps(data), encoding="utf-8")
+
+    def test_missing_scientific_items_never_reach_the_generating_loader(self):
+        for name in sorted(self.namespace["_SCIENTIFIC_ITEMS"]):
+            with self.subTest(name=name), self.assertRaises(FileNotFoundError):
+                self.load(name)
+        self.assertEqual(self.calls, [])
+
+    def test_unversioned_or_incompatible_probes_fail_before_loading(self):
+        for data in ({}, {"probe_protocol": "older"}, []):
+            self.save("lineage", data)
+            with self.assertRaises(ValueError):
+                self.load("lineage")
+        self.assertEqual(self.calls, [])
+
+    def test_every_repeat_row_and_snapshot_requires_the_matched_cohort(self):
+        for name in ("icl", "icl_base", "gpt_xs", "gpt_s", "gpt_m", "gpt_l"):
+            key = "rows" if name.startswith("icl") else "snaps"
+            good = {"repeat_protocol": "matched-all-words-v1"}
+            for rows in (None, [], [good, {}], [good, {"repeat_protocol": "older"}], [False]):
+                self.save(name, {key: rows})
+                with self.subTest(name=name, rows=rows), self.assertRaises(ValueError):
+                    self.load(name)
+        self.assertEqual(self.calls, [])
+
+    def test_valid_contracts_pass_through_without_changing_the_result(self):
+        for name in sorted(self.namespace["_SCIENTIFIC_ITEMS"]):
+            data = {"probe_protocol": "exact-length-batches-v1"}
+            data["rows" if name.startswith("icl") else "snaps"] = [
+                {"repeat_protocol": "matched-all-words-v1"}]
+            self.save(name, data)
+            self.assertEqual(self.load(name), data)
+        self.assertEqual(self.calls, [])
+
+    def test_malformed_scientific_metadata_fails_closed(self):
+        (self.root / "family.json").write_text("{unfinished", encoding="utf-8")
+        with self.assertRaises(ValueError):
+            self.load("family")
+        self.assertEqual(self.calls, [])
+
+    def test_scientific_arrays_are_read_without_the_generating_loader(self):
+        data = {"snaps": [{"repeat_protocol": "matched-all-words-v1"}]}
+        self.save("gpt_m", data)
+        np.savez(self.root / "gpt_m.npz", example=np.array([2, 5, 9]))
+        result = self.load("gpt_m")
+        np.testing.assert_array_equal(result.pop("example"), [2, 5, 9])
+        self.assertEqual(result, data)
+        self.assertEqual(self.calls, [])
+
+    def test_arrays_cannot_replace_validated_protocol_metadata(self):
+        self.save("lineage", {"probe_protocol": "exact-length-batches-v1"})
+        np.savez(self.root / "lineage.npz", probe_protocol=np.array("older"))
+        with self.assertRaises(ValueError):
+            self.load("lineage")
+        self.assertEqual(self.calls, [])
+
+    def test_published_source_derivations_keep_the_existing_loader(self):
+        self.assertEqual(self.load("published"), {"loaded": "published"})
+        self.assertEqual(self.calls, ["published"])
+
+
+def assignments(method, names, env):
+    tree = ast.parse((PART / "s15_icl.py").read_text())
+    cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "Emergence")
+    fn = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == method)
+    body = [n for n in fn.body if isinstance(n, ast.Assign)
+            and any(isinstance(t, ast.Name) and t.id in names for t in n.targets)]
+    exec(compile(ast.Module(body=body, type_ignores=[]), "<isolated narrative assignments>", "exec"), env)
+    return env
+
+
+class FamilyRangeTests(unittest.TestCase):
+    def claim(self, scores, base=None):
+        rows = [dict(name=nm, fewshot=[s]) for nm, s in zip(("gpt_xs", "gpt_s", "gpt_m", "gpt_l"), scores)]
+        if base is not None:
+            rows.append(dict(name="base", fewshot=[base]))
+        return assignments("few_shot", {"fam", "sz", "spread", "v2"}, dict(rows=rows, shots=[8]))["v2"]
+
+    def test_nonmonotonic_intermediate_models_determine_range(self):
+        self.assertIn("span about 80 points", self.claim([0.5, 0.9, 0.1, 0.51]))
+
+    def test_base_is_excluded_from_family_range(self):
+        self.assertIn("span about 20 points", self.claim([0.5, 0.6, 0.4, 0.51], base=1.0))
+
+    def test_rounded_range_is_approximate_rather_than_a_false_upper_bound(self):
+        text = self.claim([0.5, 0.534, 0.51, 0.52])
+        self.assertIn("span about 3 points", text)
+        self.assertNotIn("within", text)
+
+    def test_endpoint_improvement_claim_remains_an_endpoint_comparison(self):
+        self.assertIn("largest of the family beats the smallest by 10 points", self.claim([0.5, 0.9, 0.1, 0.6]))
+
+
+class CopyingBranchTests(unittest.TestCase):
+    def lead(self, passers):
+        rows = [dict(name=nm, acc1=0.1, acc2=0.6 if nm in passers else 0.1,
+                     loss1=1.0, loss2=1.0) for nm in ("XS", "S", "M", "L", "base")]
+        tree = ast.parse((PART / "s15_icl.py").read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "Emergence")
+        fn = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == "copying")
+        body = [n for n in fn.body if
+                (isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {"jumps", "copiers"}
+                                                 for t in n.targets))
+                or (isinstance(n, ast.If) and isinstance(n.test, ast.Name) and n.test.id == "copiers")]
+        env = dict(rows=rows, tag_of=lambda r: r["name"], who_of=lambda r: r["name"])
+        exec(compile(ast.Module(body=body, type_ignores=[]), "<isolated copying branches>", "exec"), env)
+        return env["lead"]
+
+    def test_first_passing_model_does_not_imply_later_models_pass(self):
+        self.assertEqual(self.lead({"XS"}),
+                         "Model XS is the first in this list to show copying on this test.")
+        self.assertEqual(self.lead({"S", "L"}),
+                         "Model S is the first in this list to show copying on this test.")
+
+    def test_all_and_base_only_claims_require_their_actual_cohorts(self):
+        self.assertEqual(self.lead({"XS", "S", "M", "L", "base"}), "Every one of our models copies.")
+        self.assertIn("only the series' own model", self.lead({"base"}))
+        self.assertEqual(self.lead(set()), "")
+
+
+def translator():
+    """Execute the existing text-only helper without importing the explainer package."""
+    tree = ast.parse((ROOT / "explainer" / "zh_templates.py").read_text())
+    tree.body = [n for n in tree.body
+                 if not (isinstance(n, ast.ImportFrom) and n.module == "explainer.paths")
+                 and not (isinstance(n, ast.FunctionDef) and n.name == "table")]
+    tables = {}
+    for n in ast.parse((PART / "zh_lines.py").read_text()).body:
+        if isinstance(n, ast.Assign) and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name):
+            tables[n.targets[0].id] = ast.literal_eval(n.value)
+    ns = dict(video_dir=lambda video: PART, table=lambda video: tables)
+    exec(compile(ast.fix_missing_locations(tree), "<text-only translation helper>", "exec"), ns)
+    return ns["Translator"]("ai14")
+
+
+class BilingualWordingTests(unittest.TestCase):
+    def test_rounded_scores_and_loss_drops_are_approximate_not_upper_bounds(self):
+        tr = translator()
+        for score in (0.5531, 0.5779):
+            text = assignments("few_shot", {"best0", "v0"}, {"rows": [{"fewshot": [score]}]})["v0"]
+            self.assertIn("about", text)
+            self.assertNotIn("at most", text)
+            self.assertNotIn("up to", text)
+            self.assertIn("约", tr(text))
+        tree = ast.parse((PART / "s15_icl.py").read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "Emergence")
+        fn = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == "copying")
+        values = [n.value for n in ast.walk(fn) if isinstance(n, ast.Assign)
+                  and any(isinstance(t, ast.Name) and t.id == "verdict" for t in n.targets)]
+        env = dict(first=dict(acc1=0.1, acc2=0.6), who_of=lambda r: "model S",
+                   jumps={"S": 0.0}, drop=0.2044)
+        text = next(s for value in values if (s := eval(compile(ast.Expression(value), "<copy claim>", "eval"), env))
+                    .startswith("None of our models"))
+        self.assertIn("about 0.20 nats", text)
+        self.assertNotIn("at most", text)
+        self.assertIn("约为0.20", tr(text))
+
+    def test_summary_reports_test_bounds_without_a_universal_size_threshold(self):
+        env = assignments("verdict", {"t1", "t2", "t3"}, dict(grows=True, copies=False, fs=False))
+        tr = translator()
+        self.assertIn("twenty points", env["t2"])
+        self.assertIn("five points", env["t3"])
+        self.assertIn("20个百分点", tr(env["t2"]))
+        self.assertIn("5个百分点", tr(env["t3"]))
+        tree = ast.parse((PART / "s15_icl.py").read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "Emergence")
+        fn = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == "verdict")
+        call = next(n for n in ast.walk(fn) if isinstance(n, ast.Call)
+                    and isinstance(n.func, ast.Attribute) and n.func.attr == "voiceover")
+        text = eval(compile(ast.Expression(call.args[0]), "<isolated summary wording>", "eval"), env)
+        translated = tr(text)
+        self.assertIn("do not set a universal parameter threshold", text)
+        self.assertIn("普遍适用的参数门槛", translated)
+        self.assertEqual(re.findall(r"<bookmark mark='(.*?)'/>", text), ["a", "f", "g", "b"])
+        self.assertEqual(re.findall(r"<bookmark mark='(.*?)'/>", translated), ["a", "f", "g", "b"])
+
+    def test_all_cloze_and_probe_outcomes_translate_with_run_scoped_claims(self):
+        tree = ast.parse((PART / "s14_ours.py").read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "OurLineage")
+        for method, names in (("cloze", ("b_", "g_")), ("probe", ("pb", "pg"))):
+            fn = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == method)
+            branch = next(n for n in fn.body if isinstance(n, ast.If) and any(
+                isinstance(a, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "verdict" for t in a.targets)
+                for a in ast.walk(n)))
+            for a, b in ((0.8, 0.5), (0.5, 0.8), (0.5, 0.51)):
+                env = dict(zip(names, (a, b)), pct=lambda v: f"{100 * v:.1f}")
+                exec(compile(ast.Module(body=[branch], type_ignores=[]), "<isolated task interpretation>", "exec"), env)
+                text = env["verdict"]
+                self.assertTrue("this run" in text or "this held-out test" in text or "one run" in text
+                                or "does not isolate" in text)
+                self.assertNotIn("objective hardly matters", text)
+                self.assertNotIn("learning from every token seems", text)
+                self.assertNotIn("They tie", text)
+                translated = translator()(text)
+                self.assertIsNotNone(translated, text)
+                self.assertNotIn("{", translated)
+
+    def test_loss_gap_is_not_a_memorization_test_in_either_language(self):
+        tree = ast.parse((PART / "s14_ours.py").read_text())
+        fit = next(n for n in ast.walk(tree) if isinstance(n, ast.Assign)
+                   and any(isinstance(t, ast.Name) and t.id == "fit" for t in n.targets))
+        for gap in (-0.6, -0.04, 0.04, 0.6):
+            env = {"gap": gap}
+            exec(compile(ast.Module(body=[fit], type_ignores=[]), "<isolated loss interpretation>", "exec"), env)
+            text = env["fit"]
+            self.assertIn("not", text)
+            self.assertIn("memorization", text)
+            self.assertEqual("within a tenth" in text, abs(gap) < 0.1)
+            if abs(gap) >= 0.1:
+                self.assertIn(f"{gap:.2f}", text)
+            translated = translator()(text)
+            self.assertIsNotNone(translated)
+            self.assertIn("检验", translated)
+            self.assertNotIn("它开始记住", translated)
+
+    def test_factual_timeline_lines_translate_with_original_bookmarks(self):
+        tr = translator()
+        expected_marks = {"s02_transformer.py": ["a", "b"], "s16_outro.py": list("abcdef")}
+        for filename in expected_marks:
+            tree = ast.parse((PART / filename).read_text())
+            text = next(n.value for n in ast.walk(tree) if isinstance(n, ast.Constant)
+                        and isinstance(n.value, str) and "By late 2019" in n.value)
+            translated = tr(text)
+            self.assertIsNotNone(translated)
+            self.assertIn("2019年末", translated)
+            self.assertEqual(re.findall(r"<bookmark mark='(.*?)'/>", text), expected_marks[filename])
+            self.assertEqual(re.findall(r"<bookmark mark='(.*?)'/>", translated), expected_marks[filename])
+
+    def test_spread_placeholder_translates_without_stale_endpoint_value(self):
+        tr = translator()
+        source = FamilyRangeTests().claim([0.5, 0.9, 0.1, 0.51])
+        translated = tr(source)
+        self.assertIsNotNone(translated)
+        self.assertIn("80个百分点", translated)
+        self.assertNotIn("{", translated)
+
+    def test_both_copying_outcomes_translate_without_circuit_claim(self):
+        tr = translator()
+        tree = ast.parse((PART / "s15_icl.py").read_text())
+        verdicts = [n.value for n in ast.walk(tree) if isinstance(n, ast.Assign)
+                    and any(isinstance(t, ast.Name) and t.id == "verdict" for t in n.targets)]
+        env = dict(first=dict(acc1=0.1, acc2=0.6), who_of=lambda r: "model S",
+                   jumps={"S": 0.0}, drop=0.2)
+        for node in verdicts:
+            text = eval(compile(ast.Expression(node), "<synthetic copying verdict>", "eval"), env)
+            translated = tr(text)
+            self.assertIsNotNone(translated)
+            self.assertNotIn("{", translated)
+            self.assertNotIn("hasn't formed", text)
+            self.assertNotIn("还没有形成", translated)
+            self.assertTrue("separate analysis" in text or "doesn't tell us whether" in text)
+
+    def test_nonmonotonic_copying_lead_and_summary_translate(self):
+        tr = translator()
+        for text in ("Model S is the first in this list to show copying on this test.",
+                     "At least one model shows copying on this test."):
+            self.assertIsNotNone(tr(text))
+
+
+class ProtocolClarityTests(unittest.TestCase):
+    def test_owned_caption_entries_resolve_in_the_shared_table(self):
+        owned = json.loads((PART / "text_zh_add.json").read_text())["strings"]
+        shared = json.loads((ROOT / "videos" / "ai" / "ai_text_zh.json").read_text())["strings"]
+        for key, value in owned.items():
+            with self.subTest(caption=key):
+                self.assertEqual(shared.get(key), value)
+
+    def test_budget_equation_is_explicitly_approximate(self):
+        tree = ast.parse((PART / "s14_ours.py").read_text())
+        equation = next(n for n in ast.walk(tree) if isinstance(n, ast.Call)
+                        and isinstance(n.func, ast.Name) and n.func.id == "cmath"
+                        and n.args and isinstance(n.args[0], ast.Constant) and n.args[0].value == "C")
+        self.assertEqual(ast.literal_eval(equation.args[1]), r"\approx")
+        self.assertEqual(ast.literal_eval(equation.args[3]), r"\approx")
+
+    def test_fewshot_axis_and_narration_disclose_requested_window(self):
+        source = (PART / "s15_icl.py").read_text()
+        self.assertIn('xlabel=r"requested examples, $k$"', source)
+        self.assertIn("long prompts are left-truncated", source)
+        self.assertIn("Long prompts can retain different context for the real and N/A queries.", source)
+
+    def test_new_owned_caption_translations_cover_literal_source_strings(self):
+        translations = json.loads((PART / "text_zh_add.json").read_text())["strings"]
+        needles = ["illustrative outcomes, not proportions", r"each, \ the same approximate",
+                   "same model,", "requested examples,"]
+        checked = set()
+        for name in ["s04_bert.py", "s14_ours.py", "s15_icl.py"]:
+            for n in ast.walk(ast.parse((PART / name).read_text())):
+                if isinstance(n, ast.Constant) and isinstance(n.value, str):
+                    for needle in needles:
+                        if n.value.startswith(needle):
+                            self.assertIn(n.value, translations)
+                            self.assertRegex(translations[n.value], "[一-鿿]")
+                            checked.add(needle)
+        self.assertEqual(checked, set(needles))
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -21022,7 +21022,19 @@
     "our novels model: \\ $6.8$ million weights, \\ thirty novels": "我们的小说模型：\\ $6.8$ 百万个权重，\\ 三十部小说",
     "PAC-Bayes: \\ $36\\%$, \\\\ illustrative calculation": "PAC-贝叶斯：\\ $36\\%$，\\\\ 示意计算",
     "rank $i$ \\ (one draw); \\ heights $\\sigma_i/\\sqrt p$": "序号 $i$ \\ （单次抽样）；\\ 高度为 $\\sigma_i/\\sqrt p$",
-    "median $\\sigma_{\\min}/\\sqrt p$ over $5$ draws": "$5$ 次抽样的中位数：\\ $\\sigma_{\\min}/\\sqrt p$"
+    "median $\\sigma_{\\min}/\\sqrt p$ over $5$ draws": "$5$ 次抽样的中位数：\\ $\\sigma_{\\min}/\\sqrt p$",
+    "illustrative outcomes, not proportions; \\ Devlin et al.\\ (2018), App.\\ A.1": "三种结果的示意，并非比例；\\ Devlin等（2018），附录A.1",
+    "requested examples, $k$": "请求的例子数$k$",
+    "two books, \\ $k$ requested examples, \\ then a held-out sentence \\ ($300$ prompts) \\\\ 256-token scoring context; \\ long prompts are left-truncated": "两本书，\\ 请求$k$个例子，\\ 再给一个留出的句子（$300$个提示）\\\\ 评分上下文为256个词元；\\ 提示过长时从左侧截断",
+    "each, \\ the same approximate matrix-compute budget": "两者相同的近似矩阵计算预算",
+    "same model, \\ same data, \\ matched approximate $6ND$ budget: \\ the attention mask and the objective differ. \\ Judged on tasks both can do.": "相同的模型，\\ 相同的数据，\\ 匹配的近似$6ND$预算：\\ 注意力掩码和目标不同。\\ 用两者都能做的任务评判。",
+    "117B parameters, 5.1B active; \\ 4-bit weights fit one 80 GB GPU; \\ Apache 2.0: \\ OpenAI's first open language-model weights since GPT-2": "117B参数，激活5.1B；\\ 4位权重放得进一块80 GB的GPU；\\ Apache 2.0：\\ OpenAI自GPT-2以来第一次开放语言模型权重",
+    "\\frac{12 \\log_{10} 2}{b} \\approx 5.1\\ \\text{months}": "\\frac{12 \\log_{10} 2}{b} \\approx 5.1\\ \\text{个月}",
+    "With matched estimated budgets, what changes?": "在匹配的估算预算下，结果有何不同？",
+    "no clear copying gain on this test": "这项测试中没有明显的复制增益",
+    "in these runs, \\ on these tests:": "在这些运行和测试中：",
+    "GPT-3's few-shot performance improved with scale: \\ attention in Part 13, \\ scaling laws in Part 12": "GPT-3的少样本表现随规模改善：\\ 注意力在第13部分，\\ 规模定律在第12部分",
+    "family: same $3$M tokens each": "家族模型：每个都读$3$M个词元"
   },
   "phrases": {
     "width": "宽度",

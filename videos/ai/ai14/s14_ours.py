@@ -25,8 +25,8 @@ class OurLineage(VoiceoverScene):
         self.writing()
 
     def card(self):
-        card = chapter_card(13, r"Our own lineage: \ GPT against BERT", r"On equal compute, which objective learns "
-                            r"more?", lit=(2018,), part=PART)
+        card = chapter_card(13, r"Our own lineage: \ GPT against BERT", r"With matched estimated budgets, what changes?",
+                            lit=(2018,), part=PART)
         with self.voiceover("Chapter thirteen. Our own lineage: GPT against BERT."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -50,13 +50,13 @@ class OurLineage(VoiceoverScene):
             label(r"same starting weights, \ same text in the same order", font_size=22, color=WHITE),
             label(rf"same ${g['tokens'] / 1e6:.1f}$ million tokens, \ optimizer, \ schedule", font_size=22, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([-3.2, -1.7, 0])
-        flops = cmath(r"C", r"=", r"6 N D", r"=", rf"6 \times {p['compute'] / 1e6:.2f}\text{{M}} \times "
+        flops = cmath(r"C", r"\approx", r"6 N D", r"\approx", rf"6 \times {p['compute'] / 1e6:.2f}\text{{M}} \times "
                                                   rf"{g['tokens'] / 1e6:.1f}\text{{M}} \approx " + sci(g["flops"], 1),
                       font_size=30).move_to([3.4, 1.6, 0])
         flops[0].set_color(C_COL)
-        fl = label(r"each, \ counting the matrices every token passes through", font_size=18, color=GREY_B)
+        fl = label(r"each, \ the same approximate matrix-compute budget", font_size=18, color=GREY_B)
         fl.next_to(flops, DOWN, buff=0.12)
-        d = definition_card(r"fair, \ here", r"equal model, \ equal data, \ equal compute: \ only the attention mask and "
+        d = definition_card(r"fair, \ here", r"same model, \ same data, \ matched approximate $6ND$ budget: \ the attention mask and "
                             r"the objective differ. \ Judged on tasks both can do.", color=C.BITS, width=6.0,
                             font_size=22).move_to([3.4, -1.0, 0])
         tag = note(r"computed: \ trained on this computer, \ on Part 1's thirty novels").to_corner(DR, buff=0.2)
@@ -68,9 +68,9 @@ class OurLineage(VoiceoverScene):
             "order, with the same optimizer and learning-rate schedule. <bookmark mark='b'/> Only two things differ. "
             "The GPT-style model's attention looks back only, and it predicts every next token. The BERT-style "
             "model's attention looks both ways, and it predicts the fifteen percent of tokens we hide. "
-            "<bookmark mark='c'/> So the compute is identical: six, times the parameters each token passes through, "
+            "<bookmark mark='c'/> By the same six-N-D estimate, their training budgets match: six, times the parameters each token passes through, "
             "times the tokens. <bookmark mark='d'/> That is what fair means here: the same model, the same data, the "
-            "same compute, with only the objective changed; and then a test on tasks both can do."
+            "same estimated budget, with only the objective changed; and then a test on tasks both can do."
         ) as vo:
             self.play(FadeIn(pair), FadeIn(tag))
             self.play(FadeIn(same[0]), FadeIn(same[1]))
@@ -123,10 +123,11 @@ class OurLineage(VoiceoverScene):
         cv = np.asarray(r["curve"])
         train_end = float(np.mean(cv[-max(5, len(cv) // 20):, 2]))
         gap = last["val"] - train_end
-        fit = ("The two stay together: it is learning the language of the novels, not memorizing its batches."
-               if gap < 0.1 else
-               f"By the end the training loss is {gap:.2f} nats below the held-out loss: it has begun to memorize "
-               "what it reads.")
+        fit = ("The training and held-out losses finish within a tenth of a nat here; this comparison alone does "
+               "not test memorization."
+               if abs(gap) < 0.1 else
+               f"By the end the held-out loss minus the training loss is {gap:.2f} nats: a generalization check, "
+               "not a direct test for memorization.")
         with self.voiceover(
             "Watch the GPT-style model learn. On the left, its loss on held-out text as training goes on; on the right, "
             "what it writes after the words 'The door opened, and', frozen at each checkpoint, with the same random "
@@ -243,14 +244,14 @@ class OurLineage(VoiceoverScene):
         tag = note(rf"computed: \ ${L['cloze_n']}$ sentences from paragraphs neither model read").to_corner(DR, buff=0.2)
         b_, g_, gl_ = L["cloze_bert"], L["cloze_gpt"], L["cloze_gpt_left"]
         if b_ > g_ + 0.02:
-            verdict = (f"The masked model wins, {pct(b_)} percent against {pct(g_)}: as BERT's authors found, reading "
-                       "both sides directly beats inferring them through the likelihood of the whole sentence.")
+            verdict = (f"The masked model wins, {pct(b_)} percent against {pct(g_)}: on this held-out test, direct "
+                       "masked-word scoring outperforms whole-sentence likelihood.")
         elif g_ > b_ + 0.02:
-            verdict = (f"Here the GPT-style model wins, {pct(g_)} percent against {pct(b_)}: scoring whole sentences "
-                       "lets it use the words after the gap too, and it learned from every token, not fifteen percent.")
+            verdict = (f"Here the GPT-style model wins, {pct(g_)} percent against {pct(b_)}. Whole-sentence scoring "
+                       "uses words after the gap too; this comparison does not isolate the cause of the difference.")
         else:
-            verdict = (f"They tie, {pct(g_)} and {pct(b_)} percent: once the GPT-style model scores whole sentences, "
-                       "it uses the words after the gap as well as the masked model does.")
+            verdict = (f"Scores are close, {pct(g_)} and {pct(b_)} percent: both scoring methods use words after "
+                       "the gap, with no general equivalence established by this run.")
         with self.voiceover(
             "Task one: fill in a blank. Take a sentence from a paragraph neither model has read, remove one word, and "
             f"offer {k} candidates: the real word and {k - 1} others about as common. <bookmark mark='a'/> The "
@@ -301,13 +302,13 @@ class OurLineage(VoiceoverScene):
         cl = label(rf"chance: \ ${100 / nc:.1f}\%$", font_size=18, color=GREY_B).next_to(chance, RIGHT, buff=0.1)
         if pb > pg + 0.02:
             verdict = (f"The BERT-style model's features name the book {pct(pb)} percent of the time, against "
-                       f"{pct(pg)} for the GPT-style model's: on a GLUE-style test, bidirectional features win again.")
+                       f"{pct(pg)} for the GPT-style model's: its frozen features give higher probe accuracy in this run.")
         elif pg > pb + 0.02:
-            verdict = (f"Here the GPT-style model's features do better, {pct(pg)} percent against {pct(pb)}: at our "
-                       "small scale, learning from every token seems to matter more than seeing both ways.")
+            verdict = (f"Here the GPT-style model's features do better, {pct(pg)} percent against {pct(pb)}. This is "
+                       "higher probe accuracy in this run; the comparison does not isolate why the features differ.")
         else:
-            verdict = (f"The two are about equal, {pct(pg)} and {pct(pb)} percent: on this test, at this scale, the "
-                       "objective hardly matters.")
+            verdict = (f"The probe scores are close, {pct(pg)} and {pct(pb)} percent: one run does not establish "
+                       "that the objectives are equivalent.")
         with self.voiceover(
             "Task two is the kind of test GLUE was made of: classify a sentence. Which of the thirty novels is it "
             "from? <bookmark mark='a'/> Freeze each model, run a sentence through it, average its final states over "
@@ -346,7 +347,7 @@ class OurLineage(VoiceoverScene):
         rows.append(dict(label=rf"our GPT-style model, \ ${ours['params'] / 1e6:.1f}$M", bits=ours["bits"], kind="lm"))
         board = scoreboard(rows, highlight=(len(rows) - 1,), max_bits=6.0, row_h=0.46, font_size=20, bar_width=5.0,
                            label_width=3.8).scale(0.9)
-        board.move_to([-1.3, -1.25, 0])
+        board.move_to([-1.3, -1.05, 0])
         bl = label(r"bits per character on the scoreboard's passage", font_size=20, color=GREY_B).next_to(board, UP, buff=0.1)
         nob = label(r"our BERT-style model: \\ no row \\ (its guesses don't multiply \\ into a probability of text)",
                     font_size=18, color=ENCODER).next_to(board, RIGHT, buff=0.4)

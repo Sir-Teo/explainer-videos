@@ -56,6 +56,7 @@ class Trends(VoiceoverScene):
             if nm.get_bottom()[1] > b.get_top()[1]:
                 v.next_to(nm, UP, buff=0.06)
             bars.add(VGroup(b, nm, yr, v))
+        VGroup(axis, ticks, al, bars).shift(RIGHT * 0.4)
         key = VGroup(VGroup(Square(0.22, stroke_color=C_COL, fill_color=C_COL, fill_opacity=0.75),
                             label(r"reported by the paper", font_size=18, color=GREY_A)).arrange(RIGHT, buff=0.12),
                      VGroup(Square(0.22, stroke_color=C_COL, fill_color=C_COL, fill_opacity=0.15),
@@ -102,9 +103,9 @@ class Trends(VoiceoverScene):
                     ax.c2p(xs[1], f["icept"] + f["slope"] * (xs[1] - 2020)), color=WHITE, stroke_width=3)
         rows = [
             cmath(r"\log_{10} C", r"=", r"a + b\, t", font_size=32),
-            cmath(r"b", r"=", rf"{f['slope']:.3f}", font_size=32),
-            cmath(r"10^{b}", r"=", rf"{f['per_year']:.1f}\ \text{{per year}}", font_size=32),
-            cmath(r"T_2", r"=", rf"\frac{{12 \log_{{10}} 2}}{{b}} = {f['doubling_months']:.1f}\ \text{{months}}",
+            cmath(r"b", r"\approx", rf"{f['slope']:.3f}", font_size=32),
+            cmath(r"10^{b}", r"\approx", rf"{f['per_year']:.1f}\ \text{{per year}}", font_size=32),
+            cmath(r"T_2", r"=", rf"\frac{{12 \log_{{10}} 2}}{{b}} \approx {f['doubling_months']:.1f}\ \text{{months}}",
                   font_size=32),
         ]
         for r in rows:
