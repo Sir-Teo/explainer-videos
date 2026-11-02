@@ -30,7 +30,7 @@ Every number is computed by the series' own code ([`compute.py`](compute.py), th
   SSVI: no butterfly arbitrage.
 * **3. Local volatility.** Dupire (1994), Derman–Kani, and Gyöngy's projection. Local vol is taken from the SSVI fit,
   and a Monte Carlo of 40,000 paths gives the 30-day forward smile 60 days out. Its skew (90% minus 110%) is
-  2.6 points, against 6.5 today: local vol flattens the future smile.
+  3.4 points, against 6.5 today: local vol flattens the future smile.
 * **4. Variance swaps and the VIX.** Itô and Carr–Madan give the 1/K² strip (DDKZ 1999). On the Surface, √K_var is
   48.8% against 43.7% at the money. The VIX recipe, run at Deribit-like strikes and interpolated to 30 days, gives
   48.8%, against DVOL's 45.9% at the same moment.

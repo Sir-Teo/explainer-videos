@@ -53,7 +53,7 @@ def _fit_day(q):
 
 
 def _ssvi_iv(fit, k, T):
-    th = np.interp(T, fit["T"], fit["theta"])
+    th = V.theta_at(fit, T)
     return np.sqrt(V.ssvi_w(k, th, fit["rho"], fit["eta"], fit["gamma"]) / T)
 
 
@@ -102,7 +102,7 @@ def compute_surface() -> dict:
 def compute_localvol() -> dict:
     s = load("surface")
     fit = s["ssvi"]
-    f = lambda k, T: V.ssvi_w(k, np.interp(T, fit["T"], fit["theta"]), fit["rho"], fit["eta"], fit["gamma"])  # noqa: E731
+    f = lambda k, T: V.ssvi_surface_w(fit, k, T)  # noqa: E731
     ks = np.linspace(-0.4, 0.4, 41)
     Ts = np.array([7, 14, 30, 60, 90, 180]) / 365
     lv = np.zeros((len(Ts), len(ks)))
@@ -110,26 +110,18 @@ def compute_localvol() -> dict:
         w, dw, d2w, dT = V.numeric_derivs(f, ks, T, h=2e-3, hT=2e-3)
         lv[i] = np.sqrt(np.maximum(V.dupire_local_var(ks, w, dw, d2w, dT), 1e-6))
     # forward smile under local vol: Monte Carlo of dS/S = sigma_loc(log S/F, t) dW, a 30-day option starting in 60 days
-    g = np.random.default_rng(120)
-    n_paths, dt = 40000, 1 / 365
+    # (the House's simulator, shared with Part 13's comparison of models)
     steps1, steps2 = 60, 30
-    x = np.zeros(n_paths)
-    lv_fn = lambda k, t: np.sqrt(np.maximum(V.dupire_local_var(k, *V.numeric_derivs(f, k, max(t, 2 / 365), h=2e-3,  # noqa: E731
-                                                                                     hT=2e-3)), 1e-6))
-    t = 0.0
-    for i in range(steps1 + steps2):
-        sig = lv_fn(np.clip(x, -1.0, 1.0), t + dt)
-        x = x - 0.5 * sig ** 2 * dt + sig * np.sqrt(dt) * g.standard_normal(n_paths)
-        t += dt
-        if i == steps1 - 1:
-            x_start = x.copy()
+    X = V.local_vol_paths(fit, steps1 + steps2, 40000, seed=7)
+    x, x_start = X[-1], X[steps1]
     Rk = np.linspace(-0.25, 0.25, 11)
     ret = np.exp(x - x_start)
     T2 = steps2 / 365
     fwd_iv = []
-    for k in Rk:
-        c = np.mean(np.maximum(ret - np.exp(k), 0))
-        fwd_iv.append(float(bs.implied_vol(c, 1.0, np.exp(k), T2)))
+    for k in Rk:  # out-of-the-money options, as quoted
+        cp = 1 if k >= 0 else -1
+        c = np.mean(np.maximum(cp * (ret - np.exp(k)), 0))
+        fwd_iv.append(float(bs.implied_vol(c, 1.0, np.exp(k), T2, 0.0, 0.0, cp)))
     today_iv = [float(_ssvi_iv(fit, k, T2)) for k in Rk]
     return _json({"k": ks, "T": Ts, "lv": lv, "fwd_k": Rk, "fwd_iv": fwd_iv, "spot_iv_30d": today_iv,
                   "fwd_skew": float(fwd_iv[3] - fwd_iv[7]), "spot_skew": float(today_iv[3] - today_iv[7])})

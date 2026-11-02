@@ -35,7 +35,7 @@ class Hook(VoiceoverScene, ThreeDScene):
         ax.shift(DOWN * 0.6)
 
         def f(k, T):
-            th = np.interp(T, fit["T"], fit["theta"])
+            th = V.theta_at(fit, T)
             return float(np.sqrt(V.ssvi_w(k, th, fit["rho"], fit["eta"], fit["gamma"]) / T))
 
         surf = Surface(lambda u, v: ax.c2p(u, v, np.clip(f(u, v), 0.3, 0.8)), u_range=[-0.4, 0.4], v_range=[0.03, 0.5],

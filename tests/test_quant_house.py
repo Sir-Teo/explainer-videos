@@ -681,3 +681,18 @@ def test_sabr_atm_and_calibration_roundtrip():
          "vega": np.ones_like(K)}
     r = sv.calibrate("Heston", Q)
     assert r["rmse"] < 0.05
+
+
+def test_theta_at_and_local_vol_paths_reprice():
+    from explainer.quant.house import bs as B, volsurface as V
+
+    fit = {"T": np.array([0.1, 0.3]), "theta": np.array([0.016, 0.048]), "rho": -0.3, "eta": 0.6, "gamma": 0.5}
+    # linear from zero, and the last forward variance carried past the last expiry
+    assert np.allclose(V.theta_at(fit, [0.05, 0.2, 0.5]), [0.008, 0.032, 0.08])
+    X = V.local_vol_paths(fit, 73, 40_000, seed=3)
+    T = 73 / 365
+    for k in (-0.15, 0.0, 0.15):
+        cp = 1 if k >= 0 else -1
+        p = np.mean(np.maximum(cp * (np.exp(X[-1]) - np.exp(k)), 0))
+        iv = B.implied_vol(p, 1.0, np.exp(k), T, 0.0, 0.0, cp)
+        assert abs(iv - np.sqrt(V.ssvi_surface_w(fit, k, T) / T)) < 0.01

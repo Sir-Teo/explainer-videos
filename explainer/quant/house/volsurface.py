@@ -60,6 +60,50 @@ def fit_ssvi(k, T, w, weights=None, theta_atm=None) -> dict:
             "rmse": float(np.sqrt(np.mean((resid(r.x) / np.sqrt(wt)) ** 2)))}
 
 
+def theta_at(fit: dict, T):
+    """The ATM total variance of an SSVI fit at any maturity: linear between the fitted expiries, from zero at T = 0
+    (so the short end keeps its forward variance), and extended past the last expiry at the last forward variance.
+    Clamping instead would make the forward variance zero outside the quoted range, and Dupire's local volatility
+    with it."""
+    Tn = np.concatenate([[0.0], np.asarray(fit["T"], float)])
+    th = np.concatenate([[0.0], np.asarray(fit["theta"], float)])
+    T = np.asarray(T, float)
+    slope = (th[-1] - th[-2]) / (Tn[-1] - Tn[-2])
+    return np.where(T > Tn[-1], th[-1] + slope * (T - Tn[-1]), np.interp(T, Tn, th))
+
+
+def ssvi_surface_w(fit: dict, k, T):
+    """Total variance w(k, T) of an SSVI fit at any (k, T)."""
+    return ssvi_w(k, theta_at(fit, T), fit["rho"], fit["eta"], fit["gamma"])
+
+
+def local_vol_fn(fit: dict):
+    """Dupire's local volatility sigma(k, t) of an SSVI fit, by finite differences (k = log S/F, zero rates)."""
+    f = lambda k, T: ssvi_surface_w(fit, k, T)  # noqa: E731
+
+    def lv(k, t):
+        t = max(t, 0.25 / 365)
+        w, dw, d2w, dT = numeric_derivs(f, k, t, h=2e-3, hT=min(2e-3, 0.5 * t))
+        return np.sqrt(np.clip(dupire_local_var(k, w, dw, d2w, dT), 1e-4, 25.0))
+    return lv
+
+
+def local_vol_paths(fit: dict, days: int, n_paths: int, seed=0, substeps=4) -> np.ndarray:
+    """Daily log(S_t/S_0) under Dupire's local volatility of an SSVI fit (log-Euler, ``substeps`` per day: the short
+    end is steep, and a daily step underprices by about a vol point). Returns (days + 1, n_paths)."""
+    lv = local_vol_fn(fit)
+    g = np.random.default_rng(seed)
+    h = 1 / 365 / substeps
+    X = np.zeros((days + 1, n_paths))
+    x = np.zeros(n_paths)
+    for i in range(days):
+        for j in range(substeps):
+            s = lv(np.clip(x, -1.2, 1.2), (i * substeps + j + 1) * h)
+            x = x - 0.5 * s * s * h + s * np.sqrt(h) * g.standard_normal(n_paths)
+        X[i + 1] = x
+    return X
+
+
 # ---------------------------------------------------------------------------
 def g_function(k, w, dw, d2w):
     """Gatheral's g(k) = (1 - k w'/(2w))^2 - (w'^2/4)(1/w + 1/4) + w''/2; the implied density is proportional to g

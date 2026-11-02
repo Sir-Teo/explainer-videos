@@ -281,7 +281,7 @@ Facts checked:
 - **Built** (compute, 9 scenes, README EN/ZH, zh_lines 33/33). Results:
   - SSVI fits to 0.74 vol points (vega-weighted), rho -0.23; min g 0.075 (SVI) and 0.26 (SSVI).
   - sticky test: sticky moneyness misses next-day quotes by 2.6 vol points, sticky strike by 3.0.
-  - local vol: 30-day forward smile 60 days out has skew 2.6 points against 6.5 today.
+  - local vol: 30-day forward smile 60 days out has skew 3.4 points against 6.5 today.
   - variance swap 48.8% against ATM 43.7%; our VIX recipe 48.8% against DVOL 45.9%.
   - VRP: 54% implied against 47.6% realized, positive 76% of weeks, Newey-West t 3.6; SVIX bound 31% a year.
   - VAE (2-d latent, CPU): rebuilds to 1.9 vol points; corr(z1, ATM) 0.96, corr(z2, skew) -0.39.
