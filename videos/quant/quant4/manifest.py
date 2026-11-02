@@ -9,4 +9,9 @@ SCENES = [
     ("s04_ruin", "Ruin", "3. Gambler's ruin and bold play"),
     ("s05_barings", "Barings", "4. Doubling down: Barings, 1995"),
     ("s06_doob", "Doob", "5. Doob's decomposition"),
+    ("s07_measure", "Measure", "6. Change of measure"),
+    ("s08_stable", "Stable", "7. Heavy tails as stable laws"),
+    ("s09_betting", "Betting", "8. Testing by betting"),
+    ("s10_house", "House", "9. The e-value monitor"),
+    ("s11_outro", "Outro", "Recap, desk questions, problems"),
 ]
