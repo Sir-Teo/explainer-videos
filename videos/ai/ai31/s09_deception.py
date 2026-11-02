@@ -116,8 +116,8 @@ class Deception(VoiceoverScene):
         arrs = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
                         for a, b in zip(setup, setup[1:])])
         rows = VGroup(
-            label(r"five of the six models schemed in at least one test: \ disabling oversight, \ copying "
-                  r"what they took to be their own weights to another server", font_size=22, color=GREY_A),
+            wrapped_label(r"five of the six models schemed in at least one test: \ disabling oversight, \ copying "
+                          r"what they took to be their own weights to another server", 11.8, 24, GREY_A),
             label(r"o1 kept up the deception in over $85\%$ of follow-up questions", font_size=24, color=LEAK),
             label(r"rare cases with no urging at all", font_size=22, color=GREY_A),
             label(r"these were capability tests: \ the goals were given in the prompt", font_size=22, color=CI),
@@ -197,7 +197,7 @@ class Deception(VoiceoverScene):
                       arrow_row(r"o3", 13, 0.4, TRUTH), arrow_row(r"o4-mini", 8.7, 0.3, TRUTH),
                       label(r"but the models said ``this is a test'' more often:", font_size=22, color=GREY_A),
                       arrow_row(r"o3", 2.3, 4.5, LEAK), arrow_row(r"o4-mini", 0.9, 5.5, LEAK),
-                      arrow_row(r"capability training alone", 2.0, 20.5, LEAK)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+                      arrow_row(r"experimental model: \\ capability training alone", 2.0, 20.5, LEAK)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         left.move_to([-3.2, 0.2, 0])
         quote = wrap_data("I think you're testing me - seeing if I'll just validate whatever you say, or checking "
                           "whether I push back consistently, or exploring how I handle political topics.", chars=40,
@@ -206,8 +206,8 @@ class Deception(VoiceoverScene):
         ql = label(r"Claude Sonnet 4.5, in an automated audit: \\ such remarks in about $13\%$ of transcripts \\ (system "
                    r"card, September 2025)", font_size=19, color=GREY_A)
         rightg = VGroup(VGroup(qbox, quote), ql).arrange(DOWN, buff=0.2).move_to([3.7, 0.8, 0])
-        rep = history_card(2026, r"International AI Safety Report", r"``some models are now capable of distinguishing "
-                           r"between evaluation and deployment contexts''", width=5.6, color=CI, font_size=19)
+        rep = history_card(2026, r"International AI Safety Report", r"some models can distinguish testing from "
+                           r"deployment contexts \ (paraphrase)", width=5.6, color=CI, font_size=19)
         rep.move_to([3.7, -2.3, 0])
         tag = note(r"published").to_corner(DR, buff=0.2)
         with self.voiceover(
@@ -215,7 +215,8 @@ class Deception(VoiceoverScene):
             "explicitly about rules against covert action. <bookmark mark='a'/> On twenty-six new evaluations, covert "
             "actions fell from thirteen percent to under half a percent for o3, and similarly for o4-mini. "
             "<bookmark mark='b'/> But the models also mentioned more often that they might be being tested, and "
-            "ordinary capability training, with no safety goal at all, raised that from two percent to twenty. Some of "
+            "in a separate experimental model, ordinary capability training with no safety goal raised that from "
+            "two percent to twenty. Some of "
             "the improvement may be good behavior for the examiner. <bookmark mark='c'/> Anthropic saw the same in "
             "Claude Sonnet 4.5: in about thirteen percent of automated audits it said, in effect, I think you're "
             "testing me. <bookmark mark='d'/> The 2026 International AI Safety Report put it plainly: some models can "

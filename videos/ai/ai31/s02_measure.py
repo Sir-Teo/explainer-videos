@@ -46,9 +46,9 @@ class Measure(VoiceoverScene):
         ml = label(r"the headline number: \ their average, \ weighted by length", font_size=22, color=GREY_A)
         ml.next_to(mean, UP, buff=0.1)
         tag = tagline(rf"computed: \ ${d['n_par']}$ paragraphs, \ ${d['chars']:,}$ characters".replace(",", "{,}"))
-        from videos.ai.ai1 import compute as c1
+        from videos.ai.ai31.compute import read_original_text
 
-        paras = [p_ for p_ in c1.text("passage").split("\n") if len(p_) > 120]
+        paras = [p_ for p_ in read_original_text("passage").split("\n") if len(p_) > 120]
         text = wrap_data(paras[0][:330] + "...", chars=64, font_size=22, color=GREY_B, max_lines=5)
         text.next_to(big, DOWN, buff=0.6)
         src = label(r"\textit{The Maltese Falcon}, \ chapter 2: \ the passage", font_size=20, color=GREY_C)
@@ -264,11 +264,11 @@ class Measure(VoiceoverScene):
         lg = legend([(GREY_B, rf"true accuracy ${int(p1 * 100)}\%$"), (EST, rf"true accuracy ${int(p2 * 100)}\%$")],
                     font_size=18).next_to(g.ax, UP, buff=0.1).align_to(g.ax, RIGHT)
         tag = note(r"illustrative accuracies; \ the arithmetic is exact").next_to(g, DOWN, buff=0.15)
-        s1 = stat_card(rf"\pm {d['se1'] * 100:.1f}\%", r"standard error of one score", GREY_B, width=3.6)
+        s1 = stat_card(rf"\pm {d['se1'] * 100:.1f}", r"standard error (percentage points)", GREY_B, width=3.6)
         s2 = stat_card(rf"{d['worse_ge'] * 100:.0f}\%", r"the worse model scores at least as high", C.PENALTY,
                        width=3.6)
-        s3 = stat_card(rf"{d['se_unpaired'] * 100:.1f}\% \to {d['se_paired'] * 100:.1f}\%",
-                       rf"error of the gap, \\ unpaired $\to$ paired \\ (the models disagree on ${int(d['disagree'] * 100)}\%$)",
+        s3 = stat_card(rf"{d['se_unpaired'] * 100:.1f} \to {d['se_paired'] * 100:.1f}",
+                       rf"gap error (percentage points), \\ unpaired $\to$ paired \\ (disagreement: ${int(d['disagree'] * 100)}\%$)",
                        CI, width=3.6, value_size=36)
         stats = VGroup(s1, s2, s3).arrange(DOWN, buff=0.25).move_to([3.9, 0.55, 0])
         cards = VGroup(

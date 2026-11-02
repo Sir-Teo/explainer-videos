@@ -82,7 +82,7 @@ class OpenProblems(VoiceoverScene):
             problem_card(r"saying what we mean", r"patch the hacks we find; \ shape rewards safely; \ inoculate",
                          r"write an objective that cannot be gamed by something smarter than its author", HACK),
             problem_card(r"overseeing the stronger", r"recover part of the gap with a weak supervisor; \ debate helps "
-                         r"weak judges", rf"show it works across a large gap; \ our students copied their supervisor's "
+                         r"weak judges", rf"establish reliable oversight across superhuman capability gaps; \ our students copied their supervisor's "
                          rf"mistakes ${aw:.0f}\%$ of the time", C.NEURAL),
             problem_card(r"finding deception", r"catch planted backdoors with probes; \ read chains of thought",
                          r"detect deception that arises on its own, \ in a model that may hide its reasoning", JUDGE),
@@ -92,8 +92,9 @@ class OpenProblems(VoiceoverScene):
         with self.voiceover(
             "Second, alignment and oversight. <bookmark mark='a'/> We patch the reward hacks we find, but we can't "
             "write an objective that something smarter than its author can't game. <bookmark mark='b'/> A weak "
-            "supervisor recovers part of the gap, and debate helps weak judges, but nobody has shown either working "
-            f"across a large gap; our own students copied their supervisor's mistakes {aw:.0f} percent of the time. "
+            "supervisor can recover part of the gap, and debate helps weak judges, but reliable oversight across "
+            f"superhuman capability gaps remains unproven; our own students copied their supervisor's mistakes "
+            f"{aw:.0f} percent of the time. "
             "<bookmark mark='c'/> Probes catch deception we planted, but we have no reliable test for deception that "
             "arises on its own, in a model that can hide its reasoning. <bookmark mark='d'/> And interpretability, "
             "Part 30, finds features and circuits, but cannot yet account for most of what a frontier model computes."
@@ -129,8 +130,9 @@ class OpenProblems(VoiceoverScene):
         with self.voiceover(
             "Third, security. <bookmark mark='a'/> Layered classifiers and thousands of hours of red-teaming raise "
             "the bar, but no defense of a language model has been shown to hold against an attacker who adapts. "
-            "<bookmark mark='b'/> Differential privacy gives a real guarantee, at a cost in accuracy that is still too "
-            "high for the frontier. <bookmark mark='c'/> We don't know how to get a model to tell us what it knows when "
+            "<bookmark mark='b'/> Differential privacy gives a real guarantee when its conditions hold. Its privacy "
+            "and utility tradeoff at frontier scale remains an open measurement question. <bookmark mark='c'/> "
+            "We don't know how to get a model to tell us what it knows when "
             "it would rather not, the problem the Alignment Research Center called eliciting latent knowledge. "
             "<bookmark mark='d'/> And outsiders can read frameworks and system cards, but cannot yet check a "
             "developer's claims without trusting the developer."

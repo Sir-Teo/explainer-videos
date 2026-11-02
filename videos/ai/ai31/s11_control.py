@@ -142,7 +142,7 @@ class Control(VoiceoverScene):
         lab = VGroup(label(r"honest code", font_size=20, color=BLUE), label(r"backdoored code", font_size=20, color=RED))
         lab[0].move_to(g.ax.c2p(-1.6, 0.42))
         lab[1].move_to(g.ax.c2p(3.6, 0.42))
-        cl = label(r"audit the top $2\%$", font_size=20, color=JUDGE).next_to(cut, UP, buff=0.05)
+        cl = label(r"cutoff: \ $2\%$ of honest code", font_size=20, color=JUDGE).next_to(cut, UP, buff=0.05)
         ql = MathTex(rf"q = {q:.2f}", font_size=30, color=RED).move_to(g.ax.c2p(4.6, 0.22))
         # red's chance of winning against its attack rate, for trusted monitoring and for upfront auditing
         curve_ = np.asarray(d["red_curve"])
@@ -154,15 +154,17 @@ class Control(VoiceoverScene):
                  center=[3.5, 0.4, 0])
         c1 = curve(h.ax, np.log10(ps), curve_[:, 1], C.KL, 3)
         c2 = curve(h.ax, np.log10(ps), up, GREY_B, 3)
-        lg = legend([(GREY_B, r"upfront auditing: \ the first $2\%$"), (C.KL, r"trusted monitoring: \ the top $2\%$")],
+        lg = legend([(GREY_B, r"upfront auditing: \ the first $2\%$"),
+                     (C.KL, r"monitoring: \ honest-code $2\%$ cutoff")],
                     font_size=18).next_to(h, DOWN, buff=0.25)
-        tag = tagline(rf"simulated: \ suspicion of backdoors $\sim N({mu:g}, 1)$, \ a backdoor works with prob.\ ${s_:g}$")
+        tag = tagline(r"simulated: \ fixed cutoff; \ no hard audit cap")
         up_s, tm_s = d["upfront"]["safety"], d["rows"][0]["safety"]
         with self.voiceover(
             "Simulate it, with suspicion scores drawn from two bell curves: honest code around zero, backdoored code "
             f"{mu:g} standard deviations higher, and a backdoor that works {s_ * 100:.0f} percent of the time. "
-            "<bookmark mark='a'/> Trusted monitoring audits the two percent of submissions the trusted model finds "
-            f"most suspicious. A backdoor lands in that top two percent with probability {q:.2f}. "
+            "<bookmark mark='a'/> Set a fixed suspicion cutoff that flags two percent of honest code. This simplified "
+            "simulation has no hard cap on audits; attacks can increase the workload. "
+            f"A backdoor exceeds the cutoff with probability {q:.2f}. "
             "<bookmark mark='b'/> Now plot the red team's chance of winning against how often it attacks. Against "
             "upfront auditing, which simply checks the first two percent of problems, the red team's best move is to "
             f"attack rarely, and wait out the audit: it wins {(1 - up_s) * 100:.0f} percent of games. "
@@ -230,7 +232,7 @@ class Control(VoiceoverScene):
     def frontier(self):
         d = load("control")
         rows = d["rows"]
-        g = axes([0, 1], [0, 1], x_length=5.6, y_length=4.2, xlabel=r"usefulness \ (share of U's code used)",
+        g = axes([0, 1], [0, 1], x_length=5.6, y_length=4.2, xlabel=r"honest-task usefulness \ (share of U's code used)",
                  ylabel=r"safety", xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[-3.2, -0.4, 0])
         pts = [(r["usefulness"], r["safety"]) for r in rows]
         fr = curve(g.ax, [p[0] for p in pts], [p[1] for p in pts], TRUSTED, 4)
@@ -243,7 +245,7 @@ class Control(VoiceoverScene):
         r10 = next(r for r in rows if abs(r["defer"] - 0.1) < 1e-9)
         r20 = next(r for r in rows if abs(r["defer"] - 0.2) < 1e-9)
         pub = VGroup(
-            label(r"published, \ with real GPT-4 and GPT-3.5:", font_size=22, color=WHITE),
+            label(r"published: \ safety / scaled usefulness", font_size=20, color=WHITE),
             label(r"upfront auditing: \ safety $15\%$", font_size=20, color=GREY_A),
             label(r"trusted monitoring: \ $62\%$ safe, \ $97\%$ useful", font_size=20, color=GREY_A),
             label(r"\ \dots deferring $10\%$ to T: \ $83\%$, \ $93\%$", font_size=20, color=GREY_A),
@@ -251,7 +253,7 @@ class Control(VoiceoverScene):
             label(r"trusted editing ($20\%$): \ $92\%$, \ $94\%$", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, 0.9, 0])
         agent = history_card(2025, r"Ctrl-Z \ (Bhatt et al., April)", r"control for agents running shell commands: "
-                             r"\ resampling suspicious steps cut attack success from $58\%$ to $7\%$, \ at a $5\%$ cost",
+                             r"\ resampling plus prior-step analysis cut attack success from $58\%$ to $7\%$, \ at a $5\%$ cost",
                              width=6.0, color=BLUE, font_size=19).move_to([3.4, -2.3, 0])
         tag = tagline(r"simulated curve; \ published numbers, \ Greenblatt et al.\ (2023)")
         zones = VGroup(*[Rectangle(width=w_, height=0.5, stroke_width=1.5, stroke_color=col, fill_color=col,
@@ -265,13 +267,13 @@ class Control(VoiceoverScene):
         with self.voiceover(
             "The blue team has one more move: defer to the trusted model. When code is suspicious, but not suspicious "
             "enough to audit, throw it away and use the weaker model's own solution. <bookmark mark='a'/> Each "
-            f"threshold is a point on a frontier. Deferring the top ten percent raises safety from "
+            f"threshold is a point on a frontier. Using the honest-code ten-percent cutoff raises safety from "
             f"{tm['safety'] * 100:.0f} to {r10['safety'] * 100:.0f} percent, at a cost of "
-            f"{(1 - r10['usefulness']) * 100:.0f} percent of the useful work; the top twenty percent, to "
+            f"{(1 - r10['usefulness']) * 100:.0f} percent of the honest-task useful work; the twenty-percent cutoff, to "
             f"{r20['safety'] * 100:.0f}. <bookmark mark='b'/> The real experiment, with GPT-4's own backdoors and "
             "GPT-3.5 as the monitor, found the same shape: sixty-two percent safe with monitoring alone, eighty-three "
             "deferring ten percent, ninety-two with the trusted model editing the suspicious code. "
-            "<bookmark mark='c'/> Control has since moved to agents: in 2025, resampling an agent's suspicious steps "
+            "<bookmark mark='c'/> Control has since moved to agents: in 2025, resampling suspicious steps and analyzing prior steps "
             "cut the success of attacks in a system-administration benchmark from fifty-eight percent to seven. "
             "Control doesn't need the model to be aligned, only the protocol to be good."
         ) as vo:

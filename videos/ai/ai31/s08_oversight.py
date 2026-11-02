@@ -101,8 +101,8 @@ class Oversight(VoiceoverScene):
             g.add(label(title, font_size=20, color=WHITE).move_to([x, 1.75, 0]))
             return g
 
-        groups = VGroup(pair(r"MNIST, \ judge sees $6$ pixels", 59.4, 88.9, JUDGE, -5.0),
-                        pair(r"MNIST, \ judge sees $4$ pixels", 48.2, 85.2, JUDGE, -1.7),
+        groups = VGroup(pair(r"MNIST: \ precommitted claims \\ judge sees $6$ pixels", 59.4, 88.9, JUDGE, -5.0),
+                        pair(r"MNIST: \ precommitted claims \\ judge sees $4$ pixels", 48.2, 85.2, JUDGE, -1.7),
                         pair(r"reading questions, \ human judges", 60, 88, CI, 1.7),
                         pair(r"reading questions, \ model judges", 48, 76, CI, 5.0))
         cite_ = cite(r"Irving, Christiano \& Amodei (2018); \ Khan et al., \textit{Debating with more persuasive LLMs "
@@ -111,7 +111,8 @@ class Oversight(VoiceoverScene):
         tag = note(r"published").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Does it work? <bookmark mark='a'/> The 2018 paper tried a toy: a judge shown only six pixels of a "
-            "handwritten digit, chosen by two debaters, rose from fifty-nine percent accuracy to eighty-nine. "
+            "handwritten digit, chosen by two debaters who precommitted to their claims, rose from fifty-nine "
+            "percent accuracy to eighty-nine. "
             "<bookmark mark='b'/> In 2024 Akbir Khan and colleagues gave judges reading-comprehension questions "
             "without the text, while two expert models who could read it debated. Human judges went from sixty "
             "percent to eighty-eight, model judges from forty-eight to seventy-six; and the more persuasive the "
@@ -224,8 +225,9 @@ class Oversight(VoiceoverScene):
                     f"than its teacher's {w:.1f}. It recovers {pgr.mean() * 100:.0f} percent of the gap to the ceiling of "
                     f"{ce:.1f}, with seeds ranging from {pgr.min() * 100:.0f} to {pgr.max() * 100:.0f}.")
         else:
-            gist = (f"Here the strong student, taught by the weak labels, gets {s:.1f} percent, no better than its "
-                    f"teacher's {w:.1f}, though the ceiling is {ce:.1f}: it imitated the supervisor, errors and all.")
+            gist = (f"Here the strong student, taught by the weak labels, gets {s:.1f} percent, close to its "
+                    f"teacher's {w:.1f}, though the ceiling is {ce:.1f}. These observed scores alone do not "
+                    "establish a significant improvement.")
         if c > s + 1:
             conf_said = (f"With the confidence loss it reaches {c:.1f}, a gap recovered of {pgrc.mean() * 100:.0f} "
                          "percent.")

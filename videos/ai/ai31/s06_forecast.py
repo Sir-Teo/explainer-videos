@@ -52,7 +52,7 @@ class Forecast(VoiceoverScene):
                  yticks=[1.7, 2.0, 2.5], log_x=True, center=[-3.1, -0.3, 0])
         line = curve(g.ax, C_, L_, EST, 4)
         floor = DashedLine(g.ax.c2p(18, 1.69), g.ax.c2p(27, 1.69), color=GREY_B, dash_length=0.08)
-        fl = label(r"$E = 1.69$: \ the text's own entropy, \ by the fit", font_size=18, color=GREY_B)
+        fl = label(r"$E = 1.69$: \ fitted irreducible loss", font_size=18, color=GREY_B)
         fl.next_to(floor, UP, buff=0.06).align_to(floor, LEFT).shift(RIGHT * 0.15)
         law = cmath(r"L(N, D)", r"=", r"E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}", font_size=36)
         law.next_to(g, UP, buff=0.3)
@@ -89,17 +89,20 @@ class Forecast(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def horizon_def(self):
-        g = axes([0, 9], [0, 1], x_length=6.6, y_length=3.4, xlabel=r"time the task takes a skilled person "
-                 r"\ (log scale)", ylabel=r"the model's success rate", xticks=[0, 3, 6, 9], yticks=[0, 0.5, 1],
-                 xfmt=lambda v: {0: r"\text{1 s}", 3: r"\text{1 min}", 6: r"\text{1 h}", 9: r"\text{1 day}"}.get(v, ""),
+        ticks = [0, np.log2(60), np.log2(3600), np.log2(86400)]
+        tick_labels = [r"\text{1 s}", r"\text{1 min}", r"\text{1 h}", r"\text{1 day}"]
+        xmax = ticks[-1]
+        g = axes([0, xmax], [0, 1], x_length=6.6, y_length=3.4, xlabel=r"time the task takes a skilled person "
+                 r"\ (log scale)", ylabel=r"the model's success rate", xticks=ticks, yticks=[0, 0.5, 1],
+                 xfmt=lambda v: tick_labels[int(np.argmin(np.abs(np.asarray(ticks) - v)))],
                  center=[-3.1, -0.4, 0])
-        x = np.linspace(0, 9, 200)
-        h = 5.0
-        p = 1 / (1 + np.exp(-1.4 * (h - x)))
+        x = np.linspace(0, xmax, 200)
+        h = np.log2(20 * 60)
+        p = 1 / (1 + np.exp(-0.8 * (h - x)))
         cv = curve(g.ax, x, p, EST, 4)
         rng_ = np.random.default_rng(2)
-        tx = rng_.uniform(0.3, 8.7, 36)
-        ty = (rng_.random(36) < 1 / (1 + np.exp(-1.4 * (h - tx)))).astype(float)
+        tx = rng_.uniform(0.3, xmax - 0.3, 36)
+        ty = (rng_.random(36) < 1 / (1 + np.exp(-0.8 * (h - tx)))).astype(float)
         dots = VGroup(*[Dot(g.ax.c2p(a, 0.03 + 0.94 * b), radius=0.05, color=TRUTH if b else C.PENALTY, fill_opacity=0.8)
                         for a, b in zip(tx, ty)])
         half = DashedLine(g.ax.c2p(0, 0.5), g.ax.c2p(h, 0.5), color=GREY_B, dash_length=0.06)
@@ -138,7 +141,9 @@ class Forecast(VoiceoverScene):
     # ------------------------------------------------------------------
     def chart(self, d, x1=4.0):
         """Time horizon (minutes, log scale) against release date, 2019 to 2027."""
-        g = axes([-4.0, x1], [-5, 12], x_length=10.2, y_length=5.2, xlabel=r"release date",
+        ymin = float(np.floor(min(np.log2(r["lo"]) for r in d["rows"])))
+        ymax = float(max(12, np.ceil(max(np.log2(r["hi"]) for r in d["rows"]))))
+        g = axes([-4.0, x1], [ymin, ymax], x_length=10.2, y_length=5.2, xlabel=r"release date",
                  ylabel=r"$50\%$ time horizon \ (log scale)", xticks=[-4, -2, 0, 2, 4][: 4 + (x1 >= 4)],
                  yticks=[0, np.log2(60), np.log2(60 * 8), np.log2(60 * 40)],
                  xfmt=lambda v: rf"{int(v + YEAR0)}",

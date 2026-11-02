@@ -44,6 +44,8 @@ Items:
 from __future__ import annotations
 
 import math
+import hashlib
+import json
 import os
 import re
 import zlib
@@ -55,8 +57,66 @@ from explainer.ai.cache import Cache
 from videos.ai.ai31 import sims as S
 
 CACHE = Cache("ai31")
-load = CACHE.load
 THREADS = int(os.environ.get("AI31_THREADS", "2"))
+RECIPES = {"measure": "all-bootstrap-resamples-v2", "arena": "common-rating-origin-v2",
+           "hacking": "terminal-timeouts-reviewed-replay-v3",
+           "dpsgd": "poisson-window-demo-v2"}
+
+
+def load(name):
+    """Read existing results only; rendering must never regenerate an experiment.
+
+    Recipe tags check compatibility, not scientific acceptance or provenance.
+    The integration owner must separately review the restored inputs and outputs.
+    """
+    if name not in ITEMS:
+        raise ValueError(f"Unknown ai31 result: {name!r}")
+    result = _read_result(CACHE.path(name))
+    if name in RECIPES and result.get("recipe") != RECIPES[name]:
+        raise ValueError(f"ai31/{name} uses a legacy scientific recipe. Preserve it, then recompute with "
+                         f"python -m videos.ai.ai31.compute --force {name}")
+    return result
+
+
+def _read_result(path):
+    """Read cached bytes without calling any part's compute-on-missing loader."""
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing reviewed input: {path}. "
+                                "Restore and review the original product before rendering; "
+                                "producers run only through the explicit compute command.")
+    result = json.loads(path.read_text())
+    if not isinstance(result, dict):
+        raise ValueError(f"{path} must contain a result mapping")
+    arrays = path.with_suffix(".npz")
+    if arrays.exists():
+        with np.load(arrays, allow_pickle=False) as archive:
+            if (set(result).intersection(archive.files)
+                    or {"recipe", "schema_version"}.intersection(archive.files)):
+                raise ValueError(f"{path} has conflicting JSON and NPZ keys")
+            result.update({key: archive[key] for key in archive.files})
+    return result
+
+
+def read_upstream(mod, name):
+    """Read an original scoreboard product; never invoke mod.load or its producers."""
+    path = mod.CACHE.path(name) if hasattr(mod, "CACHE") else mod.path(name)
+    result = _read_result(path)
+    schema = getattr(mod, "CACHE_SCHEMAS", {}).get(name)
+    if not result or (schema is not None and result.get("schema_version") != schema):
+        raise ValueError(f"Missing or stale original result: {path}; restore and review it before rendering")
+    return result
+
+
+def read_original_text(kind):
+    """Read restored Part1 text without its corpus-generation fallback."""
+    from videos.ai.ai1 import compute as c1
+
+    if kind not in ("train", "valid", "passage"):
+        raise ValueError(f"Unknown original text: {kind!r}")
+    path = c1.DATA_DIR / f"{kind}.txt"
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing original text: {path}; restore and review it before rendering")
+    return path.read_text()
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -118,7 +178,7 @@ def compute_measure(orders=(1, 2, 3, 4, 5, 6, 7), boots=10_000):
     tr, ps = enc(train), enc(passage)
     pid = paragraph_ids(passage)
     n_par = int(pid[-1]) + 1
-    out = {"orders": list(orders), "n_par": n_par, "chars": len(passage)}
+    out = {"orders": list(orders), "n_par": n_par, "chars": len(passage), "recipe": RECIPES["measure"]}
     bits_p, n_p, bpc = {}, {}, {}
     for k in orders:
         alpha = raw["rows"][k]["alpha"]
@@ -136,7 +196,7 @@ def compute_measure(orders=(1, 2, 3, 4, 5, 6, 7), boots=10_000):
         r = boot_ratio(bits_p[k], n_p[k], idx)
         ci[k] = (float(np.percentile(r, 2.5)), float(np.percentile(r, 97.5)))
         if k == 4:
-            out["boot_4"] = r[:4000]  # the resamples drawn on screen
+            out["boot_4"] = r  # all resamples named in the animation and narration
     out["ci"] = [ci[k] for k in orders]
     # the two closest rivals: order 4 (the scoreboard's best counting model) and order 5
     A, B = 4, 5
@@ -309,7 +369,7 @@ def compute_arena(n_total=50_000, checkpoints=(100, 300, 1000, 3000, 10_000, 30_
     M = len(TRUE_ELO)
     theta = (np.array(TRUE_ELO, float) - np.mean(TRUE_ELO)) / S.ELO
     i, j, y = S.battles(g, theta, n_total)
-    out = {"true": TRUE_ELO, "names": ARENA_NAMES, "checkpoints": list(checkpoints)}
+    out = {"true": TRUE_ELO, "names": ARENA_NAMES, "checkpoints": list(checkpoints), "recipe": RECIPES["arena"]}
     est, lo, hi, se, order_ok = [], [], [], [], []
     true_rank = np.argsort(np.argsort(-theta))
     for n in checkpoints:
@@ -329,12 +389,12 @@ def compute_arena(n_total=50_000, checkpoints=(100, 300, 1000, 3000, 10_000, 30_
     width = (np.array(hi) - np.array(lo)).mean(1)
     out["width"] = width
     # online Elo on the same votes: its path, and its spread over orderings of the same 10,000 votes
-    _, path = S.online_elo(i[:10_000], j[:10_000], y[:10_000], M, K=32, every=100)
+    _, path = S.online_elo(i[:10_000], j[:10_000], y[:10_000], M, K=32, every=100, init=mean_true)
     out["elo_path"] = path
     finals = []
     for s in range(20):
         perm = rng(100 + s).permutation(10_000)
-        finals.append(S.online_elo(i[perm], j[perm], y[perm], M, K=32)[0])
+        finals.append(S.online_elo(i[perm], j[perm], y[perm], M, K=32, init=mean_true)[0])
     finals = np.array(finals)
     out["elo_perm_sd"] = float(finals.std(0).mean())
     out["elo_perm"] = finals
@@ -504,7 +564,8 @@ def compute_forecast(boots=5000):
 
     week, month = reach(40 * 60, b23), reach(167 * 60, b23)
     to_date = lambda yrs: (date(2023, 1, 1).toordinal() + yrs * 365.25)  # noqa: E731
-    # Chinchilla's fitted loss at the compute-optimal allocation (D = 20 N, C = 6 N D), Hoffmann et al. (2022)
+    # Chinchilla's fitted loss along an illustrative D = 20 N allocation (C = 6 N D), Hoffmann et al. (2022).
+    # With unequal fitted exponents this fixed ratio is not the exact optimum at every compute budget.
     E, A_, B_, al, be = 1.69, 406.4, 410.7, 0.34, 0.28
     C = np.logspace(18, 27, 60)
     N = np.sqrt(C / 120)
@@ -524,18 +585,22 @@ def compute_forecast(boots=5000):
 def compute_hacking(seeds=5, episodes=2000, snaps=(0, 50, 200, 600, 2000)):
     env = S.BoatRace()
     out = {"track": S.TRACK, "targets": S.TARGETS, "start": env.start, "finish": env.finish,
-           "horizon": env.horizon, "episodes": episodes, "seeds": seeds, "snaps": list(snaps)}
+           "horizon": env.horizon, "episodes": episodes, "seeds": seeds, "snaps": list(snaps),
+           "recipe": RECIPES["hacking"], "evaluation_every": 50, "replay_seed": {},
+           "replay_selection": "proxy: highest final greedy reward; other modes: seed 0"}
     for mode in ("proxy", "sparse", "shaped"):
-        curves, first_fin = [], []
+        curves, first_fin, replays = [], [], []
         for sd in range(seeds):
             cur, trajs, _ = S.q_learning(env, mode, episodes=episodes, seed=sd, snaps=snaps)
             curves.append(cur)
             fin = cur[:, 2] > 0
             first_fin.append(float(cur[np.argmax(fin), 0]) if fin.any() else -1.0)
-            if sd == 0:
-                for e, p in trajs.items():
-                    out[f"traj_{mode}_{e}"] = np.array(p)
+            replays.append(trajs)
         curves = np.stack(curves)
+        replay_seed = int(np.argmax(curves[:, -1, 1])) if mode == "proxy" else 0
+        out["replay_seed"][mode] = replay_seed
+        for e, p in replays[replay_seed].items():
+            out[f"traj_{mode}_{e}"] = np.array(p)
         out[f"{mode}_ret"] = curves[:, :, 1]
         out[f"{mode}_fin"] = curves[:, :, 2]
         out[f"{mode}_steps"] = curves[:, :, 3]
@@ -591,22 +656,33 @@ SECRET_PREFIX, SECRET_DIGITS = "the secret number is ", "281974"
 
 
 def _dp_text(n_chars=400_000):
-    from videos.ai.ai1 import compute as c1
-
-    t = c1.text("train").lower()
+    t = read_original_text("train").lower()
     t = re.sub(r"[^a-z .,']+", " ", t)
     t = re.sub(r" +", " ", t)
-    v = c1.text("valid").lower()
+    v = read_original_text("valid").lower()
     v = re.sub(r" +", " ", re.sub(r"[^a-z .,']+", " ", v))
     start = len(t) // 3
     return t[start:start + n_chars], v[:60_000]
 
 
-def _dp_train(text, valid, private, steps=1000, batch=2048, ctx=10, sigma=1.0, clip=1.0, lr=None, seed=0):
+def _poisson_indices(n, sample_rate, generator):
+    """Independent inclusion, at most once per window; q is a public, fixed run parameter."""
+    import torch
+
+    if not 0 <= sample_rate <= 1:
+        raise ValueError("sample_rate must be between zero and one")
+    return torch.nonzero(torch.rand(n, generator=generator) < sample_rate, as_tuple=True)[0]
+
+
+def _dp_train(text, valid, private, steps=1000, batch=2048, ctx=10, sigma=1.0, clip=1.0, lr=None, seed=0,
+              sample_rate=None, expected_batch=None):
     """A tiny character model (10 characters in, an embedding of 12 per character, 160 tanh units, the next character
     out) trained by momentum SGD; with ``private``, DP-SGD (Abadi et al. 2016): every example's gradient is clipped
     to norm ``clip`` and Gaussian noise of standard deviation ``sigma * clip`` is added to the sum.  The per-example
-    gradients of this small network are computed in closed form (outer products), so clipping costs little."""
+    gradients of this small network are computed in closed form (outer products), so clipping costs little.
+    Private batches use independent Poisson inclusion, matching rdp_epsilon. Hold sample_rate and expected_batch
+    fixed for add/remove-one-window adjacency. The public seed makes this a reproducible mechanism demonstration,
+    not a private release; an operational privacy guarantee requires fresh private randomness."""
     import torch
 
     torch.manual_seed(seed)
@@ -615,6 +691,9 @@ def _dp_train(text, valid, private, steps=1000, batch=2048, ctx=10, sigma=1.0, c
     idx = {c: i for i, c in enumerate(DP_ALPHABET)}
     X = torch.tensor([idx[c] for c in text]).unfold(0, ctx + 1, 1)
     n = len(X)
+    if private and (sample_rate is None or expected_batch is None or expected_batch <= 0):
+        raise ValueError("private training needs fixed public sample_rate and expected_batch")
+    denominator = float(expected_batch) if private else batch
     g = torch.Generator().manual_seed(seed)
     P = {"emb": 0.3 * torch.randn(V, 12, generator=g), "W1": torch.randn(160, 12 * ctx, generator=g) / math.sqrt(12 * ctx),
          "b1": torch.zeros(160), "W2": torch.randn(V, 160, generator=g) / math.sqrt(160), "b2": torch.zeros(V)}
@@ -622,25 +701,28 @@ def _dp_train(text, valid, private, steps=1000, batch=2048, ctx=10, sigma=1.0, c
     mom = {k: torch.zeros_like(v) for k, v in P.items()}
     clipped_share = []
     for step in range(steps):
-        b = X[torch.randint(0, n, (batch,), generator=g)]
+        pick = (_poisson_indices(n, sample_rate, g) if private else
+                torch.randint(0, n, (batch,), generator=g))
+        b = X[pick]
+        actual_batch = len(b)
         x, y = b[:, :-1], b[:, -1]
         e = P["emb"][x]
         a1 = e.flatten(1)
         h = torch.tanh(a1 @ P["W1"].T + P["b1"])
         z2 = h @ P["W2"].T + P["b2"]
         dz2 = torch.softmax(z2, -1)
-        dz2[torch.arange(batch), y] -= 1  # d loss_i / d logits_i
+        dz2[torch.arange(actual_batch), y] -= 1  # d loss_i / d logits_i
         dz1 = (dz2 @ P["W2"]) * (1 - h * h)
-        de = (dz1 @ P["W1"]).view(batch, ctx, 12)
+        de = (dz1 @ P["W1"]).reshape(actual_batch, ctx, 12)
         if private:
             onehot = torch.nn.functional.one_hot(x, V).float()
             ge = torch.einsum("btv,btd->bvd", onehot, de)
             sq = ((dz2 * dz2).sum(1) * (1 + (h * h).sum(1)) + (dz1 * dz1).sum(1) * (1 + (a1 * a1).sum(1))
                   + (ge * ge).sum((1, 2)))
             c = torch.clamp(clip / (sq.sqrt() + 1e-12), max=1.0)
-            clipped_share.append(float((c < 1).float().mean()))
+            clipped_share.append(float((c < 1).float().mean()) if actual_batch else 0.0)
         else:
-            c = torch.ones(batch)
+            c = torch.ones(actual_batch)
         grads = {"W2": (c[:, None] * dz2).T @ h, "b2": (c[:, None] * dz2).sum(0),
                  "W1": (c[:, None] * dz1).T @ a1, "b1": (c[:, None] * dz1).sum(0),
                  "emb": torch.zeros(V, 12).index_add_(0, x.flatten(), (c[:, None, None] * de).reshape(-1, 12))}
@@ -648,7 +730,8 @@ def _dp_train(text, valid, private, steps=1000, batch=2048, ctx=10, sigma=1.0, c
             grads = {k: v + sigma * clip * torch.randn(v.shape, generator=g) for k, v in grads.items()}
         cur = lr * min(1.0, (step + 1) / 50) * 0.5 * (1 + math.cos(math.pi * step / steps))
         for k in P:
-            mom[k] = 0.9 * mom[k] + grads[k] / batch
+            # Empty Poisson batches still take a noise-only step, with the same public normalization.
+            mom[k] = 0.9 * mom[k] + grads[k] / denominator
             P[k] = P[k] - cur * mom[k]
 
     def net(xb):
@@ -701,9 +784,16 @@ def compute_dpsgd(reps=(0, 1, 4, 16), steps=1000, batch=2048, sigma=1.0, clip=1.
         return "".join(parts) + text[prev:]
 
     k_dp = max(reps)
-    texts = [plant(k) for k in reps] + [plant(k_dp)]  # drawn in this order, before any training
+    texts = [plant(k) for k in reps]
+    private_text = texts[list(reps).index(k_dp)]  # matched insertion locations, not a fresh draw
+    sample_rate = batch / (len(private_text) - 10)
+    out.update(recipe=RECIPES["dpsgd"], privacy_unit="one precomputed 11-character training window",
+               seeded_demo=True, sample_rate=sample_rate, expected_batch=batch,
+               paired_text_sha256=hashlib.sha256(private_text.encode()).hexdigest(),
+               learning_rates={"plain": 0.5, "private": 2.0})
     # one piece per trained model, saved as it finishes: a killed run resumes
-    part = CACHE.partial("dpsgd", dict(reps=list(reps), steps=steps, batch=batch, sigma=sigma, clip=clip))
+    part = CACHE.partial("dpsgd", dict(recipe=RECIPES["dpsgd"], reps=list(reps), steps=steps, batch=batch,
+                                     sigma=sigma, clip=clip, delta=delta, sample_rate=sample_rate))
     plain = []
     for k, t in zip(reps, texts):
         if f"plain_{k}" not in part:
@@ -713,15 +803,16 @@ def compute_dpsgd(reps=(0, 1, 4, 16), steps=1000, batch=2048, sigma=1.0, clip=1.
         plain.append(part[f"plain_{k}"])
     out["plain"] = plain
     if "dp" not in part:
-        net, held, n = _dp_train(texts[-1], valid, private=True, steps=steps, batch=batch, sigma=sigma, clip=clip)
+        net, held, n = _dp_train(private_text, valid, private=True, steps=steps, batch=batch, sigma=sigma, clip=clip,
+                                 sample_rate=sample_rate, expected_batch=batch)
         rank, expo, bits = _exposure(net)
         part["dp"] = dict(rank=rank, exposure=expo, bits=bits, held=held, n=n, clipped=net.clipped)
     rank, expo, bits, held, n = (part["dp"][k] for k in ("rank", "exposure", "bits", "held", "n"))
-    eps = rdp_epsilon(batch / n, sigma, steps, delta)
+    eps = rdp_epsilon(sample_rate, sigma, steps, delta)
     # the accountant against Abadi et al. (2016): q = 0.01, sigma = 4, 10,000 steps, delta = 1e-5 -> about 1.26
     check = rdp_epsilon(0.01, 4.0, 10_000, 1e-5)
     assert 0.8 < check < 1.6, check
-    out["dp"] = dict(reps=k_dp, rank=rank, exposure=expo, bits=bits, held=held, eps=eps, q=batch / n,
+    out["dp"] = dict(reps=k_dp, rank=rank, exposure=expo, bits=bits, held=held, eps=eps, q=sample_rate,
                      clipped=part["dp"]["clipped"])
     # the same secret, a model of letter frequencies alone (what knowing nothing scores)
     counts = np.bincount([DP_ALPHABET.index(c) for c in text], minlength=len(DP_ALPHABET)) + 1

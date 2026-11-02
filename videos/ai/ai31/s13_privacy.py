@@ -89,7 +89,7 @@ class Privacy(VoiceoverScene):
                         for k in range(18)]).arrange(RIGHT, buff=0.06).move_to([0, -3.0, 0])
         tl1 = label(r"$k$ tokens of prompt", font_size=20, color=GREY_A).next_to(toks[:10], UP, buff=0.12)
         tl2 = label(r"$s$: \ the text that followed", font_size=20, color=TRAIN).next_to(toks[10:], UP, buff=0.12)
-        strip = VGroup(toks, tl1, tl2)
+        strip = VGroup(toks, tl1, tl2).shift(DOWN * 0.55)
         with self.voiceover(
             "We can test our own model. First, a precise definition. <bookmark mark='a'/> A training text is "
             "extractable with k tokens of context if, prompted with the k tokens that came before it, the model's "
@@ -130,6 +130,14 @@ class Privacy(VoiceoverScene):
         cv = curve(g.ax, x, va["rate"], HELD, 4)
         lg = legend([(TRAIN, r"text it trained on"), (HELD, r"held-out text, \ same books")], font_size=20)
         lg.move_to(g.ax.c2p(np.log2(ks[-1]), ytop), aligned_edge=UR)
+        # Coincident zero curves must remain distinguishable without inventing positive rates.
+        train_marks = VGroup(*[Circle(radius=0.055, stroke_color=TRAIN, stroke_width=2.5)
+                              .move_to(g.ax.c2p(a, b)) for a, b in zip(x, tr["rate"])])
+        held_marks = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.024, color=HELD) for a, b in zip(x, va["rate"])])
+        zero_note = VGroup()
+        if max(tr["rate"]) == 0 and max(va["rate"]) == 0:
+            zero_note.add(label(rf"$0/{d['n_win']}$ for both sets, \ at every tested prefix", font_size=20,
+                                color=GREY_A).move_to(g.ax.c2p(float(x.mean()), ytop * 0.72)))
         ex = d["examples"]["train"]
         k64 = list(d["prefixes"]).index(64)
         pre = wrap_data("..." + ex["prefix"], chars=34, font_size=18, color=GREY_B, max_lines=3)
@@ -178,9 +186,9 @@ class Privacy(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(exg))
             vo.wait_until("a")
-            self.play(FadeIn(bt), Create(ct), FadeIn(lg[0]))
+            self.play(FadeIn(bt), Create(ct), FadeIn(train_marks), FadeIn(lg[0]))
             vo.wait_until("b")
-            self.play(FadeIn(bv), Create(cv), FadeIn(lg[1]))
+            self.play(FadeIn(bv), Create(cv), FadeIn(held_marks), FadeIn(lg[1]), FadeIn(zero_note))
             vo.wait_until("c")
             self.play(Indicate(exg[-1], color=TRAIN, scale_factor=1.02))
         self.wait(0.4)
@@ -197,9 +205,11 @@ class Privacy(VoiceoverScene):
                  yticks=[0, round(top / 2, 2), round(top, 2)], yfmt=lambda v: rf"{v * 100:.0f}\%", center=[-3.4, -0.4, 0])
         bars = VGroup()
         for k in keep:
-            p0, p1 = g.ax.c2p(k + 0.2, 0), g.ax.c2p(k + 0.8, max(rates[k], 0.0005))
-            bars.add(VGroup(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=TRAIN,
-                                      fill_opacity=0.85).move_to((p0 + p1) / 2),
+            p0, p1 = g.ax.c2p(k + 0.2, 0), g.ax.c2p(k + 0.8, rates[k])
+            value = (Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=TRAIN,
+                               fill_opacity=0.85).move_to((p0 + p1) / 2) if rates[k] > 0 else
+                     Line(p0, p1, color=TRAIN, stroke_width=3))
+            bars.add(VGroup(value,
                             Line(g.ax.c2p(k + 0.5, cis[k][0]), g.ax.c2p(k + 0.5, cis[k][1]), color=WHITE, stroke_width=2),
                             label(names[k], font_size=18, color=GREY_A).next_to(g.ax.c2p(k + 0.5, 0), DOWN, buff=0.12)))
         xl = label(r"how often the continuation occurs in the training text", font_size=18, color=GREY_A)
@@ -233,8 +243,8 @@ class Privacy(VoiceoverScene):
             f"occurs in it. {dup_said} <bookmark mark='b'/> And even without exact copies, the model knows its "
             "training text better: passages it trained on have lower loss than held-out ones. An attacker who sees "
             f"only the loss can guess which passages were in the training set with an AUC of {auc:.2f}, where half "
-            "is guessing. That is a membership-inference attack, and it works on every model that fits its training "
-            "data better than the world."
+            "is guessing. That is a membership-inference attack: train-test loss differences can reveal membership, "
+            "even without an exact memorized continuation."
         ) as vo:
             self.play(FadeIn(g), FadeIn(xl), FadeIn(tag))
             vo.wait_until("a")
@@ -261,10 +271,11 @@ class Privacy(VoiceoverScene):
                 why(r"$q$: \ batch share, \ $T$: \ steps; \ Abadi et al.\ (2016)")]
         step = ladder(self, rows, whys, keep=3, top=1.0, x=-1.8, buff=0.55, edge=6.9)
         cards = VGroup(
-            history_card(2016, r"Abadi et al.", r"MNIST at $97\%$ with $\varepsilon = 8$", width=4.5, color=PRIVATE,
+            history_card(2016, r"Abadi et al.", r"MNIST at $97\%$: \ $\varepsilon = 8$, \ $\delta = 10^{-5}$", width=4.5, color=PRIVATE,
                          font_size=19),
             history_card(2025, r"VaultGemma \ (Google, September)", r"a $1$B model pretrained with DP-SGD, \ "
-                         r"$\varepsilon \le 2$ per $1{,}024$-token sequence; \ no detectable memorization", width=6.4,
+                         r"$\varepsilon \le 2$, \ $\delta \le 1.1\times 10^{-10}$ per $1{,}024$-token sequence; \ "
+                         r"no detectable memorization in their tests", width=6.4,
                          color=PRIVATE, font_size=19),
         ).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.3)
         dset = VGroup(*[Square(0.3, stroke_width=0, fill_color=GREY_B, fill_opacity=0.8) for _ in range(9)])
@@ -293,7 +304,7 @@ class Privacy(VoiceoverScene):
             "that no single example can push the model far; <bookmark mark='b'/> add Gaussian noise scaled to that "
             "clip; <bookmark mark='c'/> and keep an account of how much privacy every step spends. "
             "<bookmark mark='d'/> In 2025 Google trained VaultGemma, a billion-parameter language model, this way from "
-            "scratch, at epsilon two per sequence, and found no detectable memorization."
+            "scratch, at epsilon two per sequence, and found no detectable memorization in their tests."
         ) as vo:
             self.play(FadeIn(defn, shift=DOWN * 0.15), FadeIn(pic))
             vo.wait_until("a")
@@ -336,9 +347,14 @@ class Privacy(VoiceoverScene):
                      r"probability", font_size=18, color=GREY_A).next_to(cap, DOWN, buff=0.2)
         cost = label(rf"held-out bits per character: \ SGD ${plain[reps[-1]]['held']:.2f}$, \ DP-SGD ${dp['held']:.2f}$",
                      font_size=20, color=GREY_A).next_to(capl, DOWN, buff=0.3)
-        epsl = label(rf"DP-SGD: \ $\varepsilon = {dp['eps']:.1f}$, \ $\delta = 10^{{-5}}$", font_size=22,
+        epsl = label(rf"window accountant: \ $\varepsilon = {dp['eps']:.1f}$, \ $\delta = 10^{{-5}}$", font_size=20,
                      color=PRIVATE).next_to(cost, DOWN, buff=0.2)
-        tag = tagline(r"computed: \ a $10$-character context, \ $160$ hidden units")
+        demo = label(r"seeded mechanism demo; \ private noise required for a privacy guarantee", font_size=16,
+                     color=GREY_A).next_to(epsl, DOWN, buff=0.12)
+        if VGroup(cap, capl, cost, epsl, demo).width > 5.3:
+            right = VGroup(cap, capl, cost, epsl, demo)
+            right.scale_to_fit_width(5.3).move_to([4.0, -0.8, 0])
+        tag = tagline(r"computed: \ one example = one $11$-character window")
         from videos.ai.ai31.compute import _dp_text
 
         text = _dp_text()[0]
@@ -359,11 +375,11 @@ class Privacy(VoiceoverScene):
             plain_said = (f"Planted {reps[-1]} times, ordinary training ranks it {pmax['rank']:,}: this model hardly "
                           "memorizes it.")
         if dp["exposure"] < 4:
-            dp_said = f"it ranks {dp['rank']:,}, indistinguishable from a number never seen."
+            dp_said = f"it ranks {dp['rank']:,}, with little measured exposure in this run."
         else:
             dp_said = (f"it ranks {dp['rank']:,}: exposure falls from {pmax['exposure']:.0f} bits to "
-                       f"{dp['exposure']:.0f}. Not to nothing: epsilon bounds what one example can do, and "
-                       f"{dp['reps']} copies of a secret are {dp['reps']} examples.")
+                       f"{dp['exposure']:.0f}. The accounting unit is one eleven-character training window, not a "
+                       "whole secret or document; each insertion changes many overlapping windows.")
         with self.voiceover(
             "We can watch privacy work on a model small enough to train many times. Plant a secret, the secret number "
             "is two eight one nine seven four, in four hundred thousand characters of the novels, and train a tiny "
@@ -371,9 +387,11 @@ class Privacy(VoiceoverScene):
             "six-digit numbers is after the words the secret number is. The rank of the true number gives its "
             "exposure: twenty bits means it ranks first; zero means it is lost in the crowd. <bookmark mark='b'/> "
             f"Never planted, it ranks {plain[0]['rank']:,}: nothing. Planted once: {p1_['rank']:,}. " + plain_said +
-            f" <bookmark mark='c'/> Train the same model with DP-SGD, at epsilon {dp['eps']:.1f}, the secret planted "
-            f"{dp['reps']} times: " + dp_said + f" The price is accuracy: {dp['held']:.2f} bits per character on "
-            f"held-out text, against {pmax['held']:.2f}."
+            f" <bookmark mark='c'/> A seeded DP-SGD demonstration on the same planted text gives an accountant "
+            f"epsilon of {dp['eps']:.1f} per window, the secret planted "
+            f"{dp['reps']} times: " + dp_said + f" The private recipe scores {dp['held']:.2f} bits per character on "
+            f"held-out text, against {pmax['held']:.2f}; their learning rates also differ. A real privacy guarantee "
+            "requires fresh private randomness, rather than this public reproducibility seed."
         ) as vo:
             self.play(FadeIn(top), FadeIn(tl), FadeIn(tag), FadeIn(snip))
             vo.wait_until("a")
@@ -383,6 +401,7 @@ class Privacy(VoiceoverScene):
             for k in range(len(reps)):
                 self.play(GrowFromEdge(bars[k], DOWN), FadeIn(labs[k]), FadeIn(vals[k]), run_time=0.8)
             vo.wait_until("c")
-            self.play(GrowFromEdge(bars[-1], DOWN), FadeIn(labs[-1]), FadeIn(vals[-1]), FadeIn(cost), FadeIn(epsl))
+            self.play(GrowFromEdge(bars[-1], DOWN), FadeIn(labs[-1]), FadeIn(vals[-1]), FadeIn(cost), FadeIn(epsl),
+                      FadeIn(demo))
         self.wait(0.4)
         self.clear_scene()

@@ -156,7 +156,7 @@ class Monitoring(VoiceoverScene):
                              r"the monitors, \ it could sandbag undetected; \ no sign of hidden codes in its reasoning",
                              width=5.7, color=HACK, font_size=19)
         faith = history_card(2025, r"and it was never the whole story", r"reasoning models often use a hint without "
-                             r"saying so: \ reveal rates mostly below $20\%$ \ (Chen et al.; \ Part 30)", width=5.7,
+                             r"saying so: \ reveal rates often below $20\%$ \ (Chen et al.; \ Part 30)", width=5.7,
                              color=JUDGE, font_size=19)
         VGroup(astra, faith).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.3)
         with self.voiceover(
