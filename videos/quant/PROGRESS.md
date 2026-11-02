@@ -119,10 +119,23 @@ merge), Chinese dry run, narrated build. Facts verified: Enron (restatement 8 No
 18 Feb-18 Apr 2019), Mitchell-Pulvino (4,750 mergers 1963-98, ~4%/yr excess after costs), AbbVie-Shire (withdrew
 15 Oct 2014 after Treasury notice of 22 Sep; $1.635bn fee), McLean-Pontiff (97 predictors; 26% / 58% lower).
 
+## Part 4 (Martingales and Measure), 2 Nov 2026
+
+House `martingale.py` (doubling, gamblers_ruin, doob_decomposition, likelihood_ratio, stable_mcculloch validated
+against scipy's levy_stable, return_probability, EProcess) tested. `compute.py` items: doob (US log wealth 9.06 =
+7.28 drift + 1.78 martingale; EWMA compensator 2.893 vs QV 2.894), measure (median L_300 0.002 = e^{-300 KL}), ruin
+(bold 48.6% vs timid 0.45% at 100 units), stable (McCulloch alpha US 1.40, BTC 1.27; Mantegna-Stanley alpha 1.67, 1962-86
+1.44, Gaussian 1.99), nikkei (FRED NIKKEI225; 19,331 -> 17,785 -> 16,809), peeking (t-test 50% vs e-process 3.2%),
+eprocess (sign continuation: 1926 start passes 20 in Feb 1929, 1975 start in Mar 1976, 2000 start max 6.7, BTC max
+1.4), envelope (Nikkei sealed; two tests registered; trials 10). 11 scenes written and previewed; README with
+solutions (EN, ZH); zh_lines 44 of 44. Remaining: on-screen text (collect running), Chinese dry run, narrated build.
+`data.fred` now fetches a series' whole history on first use (a cached file from a later start is refetched).
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
    time on CPU, so not in a 4-core cloud container): `python tools/make.py quant10` (English and Chinese, 1080p30),
    or `tools/colab_narrate.py` on a Colab GPU. Then `tools/dead_air.py` on the narrated cut.
-2. Act II (Parts 4-8), following SYLLABUS.md section 6; Part 4 next.
+2. Act II: Part 5 (Stochastic Calculus) next, then 6-8, following SYLLABUS.md section 6. Part 5 assumes
+   `videos/math/stochastic` (the gentle version) and adds the House simulation library.
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
