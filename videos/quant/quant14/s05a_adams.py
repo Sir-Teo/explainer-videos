@@ -238,6 +238,7 @@ class Adams(VoiceoverScene, ThreeDScene):
             "almost everywhere, most of all at three days, a smile no fit here gets right. From a tenth upward the "
             "differences are small, and with vega weighting the long expiries dominate. On one day of bitcoin "
             "options, rough Heston prefers to be smooth."
+            " Where does roughness come from? Next."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(ts), FadeIn(tsl), FadeIn(dots))
             self.play(t.animate.set_value(len(Hs) - 1), run_time=5, rate_func=linear)

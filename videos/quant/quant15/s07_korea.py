@@ -231,6 +231,7 @@ class Korea(VoiceoverScene):
             "hundred and sixty million more, on what it called some specific products traded with clients in Asia. "
             "In its words, the model used to manage them had led to a hedging strategy that proved deficient in the "
             "market conditions. Bloomberg reported that it stopped creating the notes."
+            " Many of those notes were written on several indices at once. Next: worst-of, and correlation."
         ):
             self.play(FadeIn(card, shift=UP * 0.2))
         self.wait(0.5)

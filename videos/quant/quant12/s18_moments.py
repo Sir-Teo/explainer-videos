@@ -171,6 +171,7 @@ class Moments(VoiceoverScene):
             "condition. It assumes the asset's falls arrive in bad times for whoever holds it at the margin. For the "
             "stock market that is plausible; for Bitcoin it is an assumption nobody has tested, and a lower bound "
             "under an assumption is not a forecast."
+            " Next: the products built to trade the VIX, and how they work."
         ) as vo:
             self.play(FadeIn(notes[0]))
             vo.wait_until("a")

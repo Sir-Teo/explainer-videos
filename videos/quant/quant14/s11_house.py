@@ -205,6 +205,7 @@ class House(VoiceoverScene):
             f"scoreboard: on prices, {surf} wins on our Surface; on forecasts, the head-to-head goes to {fc}; on "
             f"tracking implied volatility, the {trk}. Elegance is not evidence. No strategy was tested, and the "
             f"counter still reads {env['trials']}."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

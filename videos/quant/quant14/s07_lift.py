@@ -171,6 +171,7 @@ class Lift(VoiceoverScene):
             f"between lifted and exact paths is still {lp['rows'][3]['dist']:.2f} standard deviations at fifty factors, "
             "because the kernel's spike lives below the fastest factor's time scale. The roughness was never magic: it is many time scales at once, and a model with enough of "
             "them prices the same."
+            " If a few factors price like roughness, is volatility really rough? Next: the debate."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(side), FadeIn(src))
             vo.wait_until("a")

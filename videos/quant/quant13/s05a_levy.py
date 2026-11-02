@@ -250,6 +250,7 @@ class Levy(VoiceoverScene):
             "inverse-Gaussian clock, and CGMY with Y confined below one and above one. <bookmark mark='a'/> All stall "
             f"well above Heston's {hes:.1f}. {v1} <bookmark mark='v'/> {v2} <bookmark mark='b'/> Why none can match "
             "stochastic volatility is the next chapter's picture."
+            " Next: how the skew decays with maturity, model by model."
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))

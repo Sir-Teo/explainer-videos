@@ -211,6 +211,7 @@ class Smile(VoiceoverScene):
             "every day since 1987; Bitcoin's buyers have often paid more for the upside than for the crash. Pause and "
             "predict: a market whose risk-neutral returns are positively skewed: which way does its smile tilt? Toward "
             "the calls."
+            " A smile is a snapshot. Next: how the whole surface moves."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=3),
                       FadeIn(leg))

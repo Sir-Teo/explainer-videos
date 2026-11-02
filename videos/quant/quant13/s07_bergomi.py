@@ -242,6 +242,7 @@ class Bergomi(VoiceoverScene, ThreeDScene):
             "<bookmark mark='c'/> Divide by chapter four's skew: R equals two, like local volatility. "
             f"<bookmark mark='d'/> Exactly on our fit: {r2['R']:.2f} at two days, falling to {r365['R']:.2f} at a year. "
             "Short-dated, SV and local vol agree on how the smile moves; further out, they part."
+            " Where the models disagree is the forward smile. Next: forward smiles and cliquets."
         )
         ) as vo:
             step(0)

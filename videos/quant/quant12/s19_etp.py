@@ -181,6 +181,7 @@ class ETP(VoiceoverScene, ThreeDScene):
             f"itself. The note lost {abs(f5):.1f} percent in a day. Pause and predict: a billion-dollar inverse note, its "
             "index up ten percent. How much must the hedge buy? Two hundred million dollars of futures, in the last "
             "minutes of trading, whatever the price."
+            " Next: the day those mechanics broke."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(g2))
             self.add(ci, cn)

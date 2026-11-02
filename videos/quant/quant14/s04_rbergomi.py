@@ -206,6 +206,7 @@ class RBergomi(VoiceoverScene):
             f"misses by {rs['heston_rmse_same']:.2f}, with five free numbers and an absurd vol of vol. Three numbers "
             "and the market's variance curve beat five. Part seventeen calibrates this model every week, with a "
             "neural network standing in for the Monte Carlo."
+            " Every number from that model comes from simulating a rough path. Next: how to do it right."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(src))
             vo.wait_until("a")

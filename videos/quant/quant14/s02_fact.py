@@ -161,6 +161,7 @@ class Fact(VoiceoverScene, ThreeDScene):
             "stays finite as expiry nears. <bookmark mark='c'/> Pause and predict. If H is a tenth, how much steeper "
             "is a one-day option's skew than a one-month option's? <bookmark mark='d'/> Thirty days to one is a "
             "factor of thirty, raised to the power four-tenths: about three point nine."
+            " Why a power law? Next."
         ) as vo:
             step(0)
             vo.wait_until("a")

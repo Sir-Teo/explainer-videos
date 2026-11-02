@@ -308,6 +308,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
             "the same thing next week, and hedges that do not lurch. Pause and predict: overnight kappa jumped from "
             "three to twenty and the fit barely moved. Which prices changed? Vanillas hardly at all. Forward starts, "
             "cliquets and every hedge ratio, a lot."
+            " Next: who builds these models, and how desks judge them."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g))
             vo.wait_until("a")

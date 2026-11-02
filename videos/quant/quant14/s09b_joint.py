@@ -228,6 +228,7 @@ class Joint(VoiceoverScene):
             f"<bookmark mark='b'/> Any model that fits both smiles must price the claim between {lo['value']:.3f} and "
             f"{up['value']:.3f}. Rough Bergomi says {jb['rbergomi']:.3f}: {verdict}. Guyon's construction adds "
             "the VIX smile as a third constraint, and so finds a model that fits all three exactly."
+            " Next: a model class flexible enough to fit both, signature volatility."
         ) as vo:
             self.play(FadeIn(card), FadeIn(warn))
             vo.wait_until("a")

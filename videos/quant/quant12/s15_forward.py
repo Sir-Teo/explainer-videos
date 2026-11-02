@@ -155,6 +155,7 @@ class Forward(VoiceoverScene):
             "priced under local volatility would be priced on smiles that will not exist. Pause and predict: two "
             "models with identical local volatility, one of them local volatility itself. Same price for a "
             "thirty-day option starting in sixty days? No: Part thirteen prices it across models."
+            " Next: a contract that pays on volatility itself, whatever the model."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(today), FadeIn(leg[0]))
             vo.wait_until("a")

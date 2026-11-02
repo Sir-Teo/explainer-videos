@@ -157,6 +157,7 @@ class Flows(VoiceoverScene):
             "hedging costs mount. <bookmark mark='a'/> It also reported desks losing money on autocall hedges after "
             "the HSCEI's fall in 2015 and 2016. The book's vega and the direction of its trades are arithmetic; how "
             "much they moved prices is disputed."
+            " Hedging a whole book every day needs prices fast. Next: a neural pricer, trained on screen."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

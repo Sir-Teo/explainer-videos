@@ -225,6 +225,7 @@ class Replicate(VoiceoverScene):
             "<bookmark mark='b'/> Pause and predict: on the same month, which strike is higher as a volatility, the "
             "variance swap's or the volatility swap's? The variance swap's, always: the buyer of variance owns the "
             "convexity, and pays for it."
+            " The same strip, quoted as an index, is the VIX. Next."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(sq))
             self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.005, run_time=2))

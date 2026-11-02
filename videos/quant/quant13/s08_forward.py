@@ -242,6 +242,7 @@ class Forward(VoiceoverScene):
             f"option, struck at the money in sixty days: {100 * (v2.max() - v2.min()) / v2.mean():.0f} percent apart, "
             "local volatility dearest. <bookmark mark='b'/> No vanilla can settle this. The spread is model risk, and "
             "an honest desk reports it."
+            " Next: the hardest joint test, the SPX/VIX puzzle, measured on Bitcoin."
         )
         ) as vo:
             self.play(FadeIn(p1[:2]), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p1[2]], lag_ratio=0.15), FadeIn(p1[3]))

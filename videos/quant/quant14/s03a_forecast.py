@@ -193,6 +193,7 @@ class Forecast(VoiceoverScene):
             "of the same dial: H below one half, paths rougher than Brownian motion. Its kernel still decays "
             "slowly, so it keeps a long memory too, without needing H above a half. Same exponent, opposite "
             "claims."
+            " Next: the first rough model for option prices, rough Bergomi."
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")

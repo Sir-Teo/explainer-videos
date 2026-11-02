@@ -140,6 +140,7 @@ class Buyers(VoiceoverScene):
             "and embedded fees of about six to seven percent a year. <bookmark mark='b'/> But design is not only a "
             "trap. Laurent Calvet and his co-authors found Swedish capital-guaranteed products drawing cautious "
             "households into the stock market, to their benefit."
+            " Every note in this part is built from a few pieces. Next: the first, the barrier."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cards[:2]], lag_ratio=0.5))
             vo.wait_until("a")

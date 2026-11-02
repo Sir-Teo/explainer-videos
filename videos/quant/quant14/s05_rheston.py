@@ -216,6 +216,7 @@ class RHeston(VoiceoverScene):
             "rough Heston are steep enough to reach that point, and overshoot the days just after it. No single model "
             "here gets every expiry. The rough kernel bends the curve the right way; the market's variance curve does "
             "much of the rest."
+            " Next: solving its Riccati equation, step by step."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[0]), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.1))
             vo.wait_until("a")

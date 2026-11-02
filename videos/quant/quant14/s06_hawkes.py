@@ -217,6 +217,7 @@ class Hawkes(VoiceoverScene):
             "exact value. <bookmark mark='c'/> Omar El Euch, Masaaki Fukasawa and Rosenbaum showed no-arbitrage also "
             "forces the leverage effect, and Paul Jusselin and Rosenbaum tied rough volatility to power-law market "
             "impact. Roughness, on this account, is reactive order flow seen from a distance."
+            " Many time scales at once can also be built directly. Next: Markovian lifts."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

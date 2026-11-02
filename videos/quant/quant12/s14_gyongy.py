@@ -146,6 +146,7 @@ class Gyongy(VoiceoverScene):
             f"{r0['rmse_ssvi']:.2f} at {r0['days']} days. The short end is hardest: local volatility is steepest there, "
             "and a simulation in quarter-day steps has to resolve it. One function of price and time really does reprice "
             "the whole Surface."
+            " Matching today's surface is not the same as getting tomorrow's right. Next."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(target), FadeIn(leg), FadeIn(cnt), Create(cur))
             vo.wait_until("a")

@@ -205,6 +205,7 @@ class Barriers(VoiceoverScene, ThreeDScene):
             "delta. A vanilla's delta near this spot would be modest. The barrier's delta stands as a ridge along "
             "the wall: the option is worth almost nothing there, yet its hedge is large, and it falls to zero the "
             "instant the barrier is touched."
+            " Real barriers are watched at the close, and there is a way to hedge them without trading. Next."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), Create(surf), run_time=3)
             vo.wait_until("a")

@@ -208,6 +208,7 @@ class Moves(VoiceoverScene):
             "out-of-the-money index puts have been dear: Rubinstein's skew, and Bates's priced crash fears. "
             "<bookmark mark='b'/> Pause and predict: Bitcoin rose ten percent today. Does implied volatility rise or "
             "fall? Both have happened."
+            " If volatility moves, what does that do to option prices? Next: random volatility makes a smile."
         )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))

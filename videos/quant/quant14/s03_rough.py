@@ -200,6 +200,7 @@ class Rough(VoiceoverScene):
             f"and {a['btc_deseasonalized']:.2f}. <bookmark mark='a'/> Gatheral, Jaisson and Rosenbaum found H of "
             "order a tenth for the S&P 500 and other equity indices. Bitcoin agrees. Whether the estimator can be "
             "trusted is another matter, and chapter eleven will try hard to fool it."
+            " Before the debate, what roughness buys a forecaster. Next."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.25))
             vo.wait_until("a")

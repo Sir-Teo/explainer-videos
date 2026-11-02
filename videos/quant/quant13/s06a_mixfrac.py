@@ -157,6 +157,7 @@ class MixFrac(VoiceoverScene):
             "particle method made that practical: any setting of the dial can be calibrated to the vanillas in a "
             "single simulation. Then the remaining exotics are priced in between. In crypto, with few liquid "
             "exotics, the dial is a modelling choice, and its range is model risk."
+            " Next: a different state for the model, forward variance."
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

@@ -232,6 +232,7 @@ class SVI(VoiceoverScene):
             f"{gmin:.2f}: each slice on its own is free of butterflies. Claude Martini and Arianna Mingone mapped, in "
             "2022, exactly which SVI parameters guarantee that; and Chapter three showed that slices which are clean "
             "one by one can still cross. The cure is to fit the surface as one object."
+            " Next: SSVI."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]))
             self.play(LaggedStart(*[FadeIn(x) for x in tab[1:]], lag_ratio=0.15, run_time=4))

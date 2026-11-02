@@ -183,6 +183,7 @@ class VIX(VoiceoverScene):
             "<bookmark mark='b'/> Underneath, the VIX divided by its three-month cousin. Below one, the term "
             f"structure slopes up: that was true on {cg:.0f} percent of days since December 2007. On the second of "
             f"February 2018 the ratio was {r1:.3f}; on the fifth, {r2:.3f}."
+            " Next: by how much the VIX overstates the volatility that follows."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=3)
             self.play(FadeIn(mx), FadeIn(mxl))

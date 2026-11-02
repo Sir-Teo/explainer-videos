@@ -205,6 +205,7 @@ class VarSwap(VoiceoverScene):
             "<bookmark mark='a'/> For a rise they nearly agree. For a fall they part: a fall of twenty percent in log terms leaves the "
             f"hedge short by about {pct:.0f} percent of that jump's variance. Whoever sold variance and hedged with "
             "options is short the crash; and that is one reason variance swaps on single stocks carry caps."
+            " Next: that replication, run on real Bitcoin."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(rv), Create(lc), FadeIn(leg))
             vo.wait_until("a")

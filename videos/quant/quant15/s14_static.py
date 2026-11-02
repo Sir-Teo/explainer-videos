@@ -259,6 +259,7 @@ class Static(VoiceoverScene):
             "at 100, so the hedge is too dear. It still covers the barrier, and at every touch the puts sell for more "
             "than the call costs, as the ledger shows; but nobody can charge a client its price. Static hedges are "
             "exact only under symmetry."
+            " Next: the simplest exotic of all, the digital."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")

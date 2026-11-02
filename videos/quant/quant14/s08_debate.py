@@ -233,6 +233,7 @@ class Debate(VoiceoverScene, ThreeDScene):
             "<bookmark mark='b'/> Rama Cont and Purba Das showed the artefact we just simulated. "
             "<bookmark mark='c'/> And the minimax theory says how little one number can settle. What can choose? "
             "Lags shorter than a day, and the options. That is the next chapter."
+            " Next: what the options say."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

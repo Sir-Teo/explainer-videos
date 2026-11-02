@@ -204,6 +204,7 @@ class Arbitrage(VoiceoverScene):
             f"are finite up to about power {1 + pr:.1f} on the upside. Pause and predict: a wing of slope two and a "
             "half: what can you do? <bookmark mark='b'/> Sell the far calls. Their implied price exceeds what any "
             "distribution with that forward allows, and the bound says so before any model is chosen."
+            " Next: a smile in five numbers that can be made to respect those bounds."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lim), FadeIn(limt), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(x) for x in dl], lag_ratio=0.1), LaggedStart(*[FadeIn(x) for x in dr],

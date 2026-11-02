@@ -229,6 +229,7 @@ class SABR(VoiceoverScene, ThreeDScene):
             "rates. Today's fit barely sees beta; the hedge does. Bitcoin's smile moved with the price in Part "
             "twelve's test: beta near one. And it is why Hagan wrote the paper: local volatility predicts the smile "
             "moves the wrong way, and its deltas were worse than Black–Scholes's."
+            " But Hagan's formula has a flaw. Next."
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[2]), FadeIn(leg[2]))

@@ -174,6 +174,7 @@ class Asian(VoiceoverScene):
             "from the matrix of minimum times, and a Black–Scholes formula with those two numbers. "
             "<bookmark mark='a'/> Run it on the one-year call. The geometric Asian is worth "
             f"{a['geo_cf']:.2f}, the arithmetic one, by simulation with this control variate, {a['price']:.2f}."
+            " With the pieces in hand, the snowball itself. Next."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

@@ -235,6 +235,7 @@ class Simulate(VoiceoverScene):
             "<bookmark mark='a'/> Choi and Kwok, in 2024, made exact-type sampling fast with Poisson conditioning. "
             "<bookmark mark='b'/> And Andersen and Piterbarg showed that moments of the price can explode in finite "
             "time, which bounds the smile's wings: the link to Lee's formula in Part twelve."
+            " Next: the model rates and currency desks prefer, SABR."
         )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))

@@ -211,6 +211,7 @@ class ModelRisk(VoiceoverScene):
             f"a probability of {100 * pl[i1]:.0f} percent instead of {100 * pl[0]:.0f}. A small, believable change "
             "of model costs the buyer several points. The curve is a menu for the desk: pick how much model doubt to "
             "price, and read off the reserve."
+            " Next: what happens when every desk hedges the same book. Dealer flows."
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), FadeIn(src))
             self.add(lines, tr)

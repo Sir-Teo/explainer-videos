@@ -272,6 +272,7 @@ class Industry(VoiceoverScene):
             "every model, martingale-checked; Fourier pricing matched to the benchmark and to Merton's series; a "
             "calibrator that records its path, fixes parameters and regularises; arbitrage-free SABR; simulators, "
             "particles, the vol index, forward smiles, and the minimum-variance hedge. Each has a test."
+            " Last, the frontier."
         )
         ) as vo:
             self.play(FadeIn(chart))

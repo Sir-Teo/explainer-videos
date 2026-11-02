@@ -201,6 +201,7 @@ class Mixing(VoiceoverScene):
             f"the exact implied volatility is {100 * r['cos_iv'][6]:.2f} percent and the conditional estimate "
             f"{100 * r['cond_iv'][6]:.2f}. <bookmark mark='b'/> Across all thirteen strikes: {verdict} Desks use this "
             "conditional Monte Carlo whenever a model is Gaussian given its volatility path."
+            " Next: the model desks use most, Heston, starting from its characteristic function."
         )
         )
         ) as vo:

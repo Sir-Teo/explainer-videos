@@ -242,6 +242,7 @@ class Snowball(VoiceoverScene):
             f"80, and it rises to {100 * bk[3]['coupon']:.1f}. <bookmark mark='c'/> Risk.net reported "
             "issuers blaming a narrowing futures discount for shrinking coupons, and Bloomberg reported brokers "
             "offering coupons above forty percent after the 2024 selloff."
+            " Next: what the issuer must hedge, in three dimensions."
         ) as vo:
             self.play(FadeIn(g1), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in b1], lag_ratio=0.2), FadeIn(rows[0]))
             vo.wait_until("a")

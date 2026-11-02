@@ -173,6 +173,7 @@ class Industry(VoiceoverScene):
             "least two models, holds a reserve for the gap, and simulates its hedge through the worst path on "
             "record, including what the hedge must trade on the day a barrier breaks. No strategy was tested, and "
             f"the counter still reads {env['trials']}."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))

@@ -218,6 +218,7 @@ class SkewMath(VoiceoverScene, ThreeDScene):
             "formula has rough Bergomi's slope but not its level, since the fitted vol of vol is far from small. <bookmark mark='d'/> The market's own short-end exponent is "
             f"{m['market']['short']:.2f}. One factor with one time scale cannot make a power law; a kernel with all "
             "time scales can."
+            " A kernel with all time scales means rough volatility. Next: is volatility rough? Measured again."
         ) as vo:
             self.play(FadeIn(g), FadeIn(dots), FadeIn(src), FadeIn(q))
             vo.wait_until("a")

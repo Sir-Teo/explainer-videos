@@ -262,6 +262,7 @@ class Learning(VoiceoverScene, ThreeDScene):
             f"{c:.2f}. {branch}<bookmark mark='a'/> {branch2}Pause and predict: if the network fits better, why might a "
             "desk still quote SSVI? Because SSVI extrapolates with a guarantee, fits in milliseconds, moves smoothly "
             "from one day to the next, and its parameters mean something to a trader."
+            " Next: who builds surfaces, and who sells them."
         ) as vo:
             self.play(FadeIn(tab), FadeIn(note_))
             vo.wait_until("a")

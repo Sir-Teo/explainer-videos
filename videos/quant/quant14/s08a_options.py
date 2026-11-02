@@ -188,6 +188,7 @@ class Options(VoiceoverScene):
             f"rough Bergomi's {rbm:.2f}. So {verdict}. One day of one market settles nothing; the honest "
             "reading is that rough and multi-factor models are close competitors on prices, and the choice turns on "
             "dynamics, speed and hedging."
+            " A third view says volatility is driven by the price path itself. Next."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(src))
             rp.play(self, run_time=6)

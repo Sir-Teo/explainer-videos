@@ -278,6 +278,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             f"smallest bump. <bookmark mark='b'/> In green, common random numbers: the spread falls to "
             f"{spread_crn:.2f}, but the smallest bump still wobbles, by {sp_small:.2f}, as paths flip across the "
             "barrier, and the largest straddles it and is biased. There is no free bump size near a cliff."
+            " Next: what happened when those Greeks met a falling market."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

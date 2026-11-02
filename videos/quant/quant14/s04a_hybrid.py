@@ -192,6 +192,7 @@ class Hybrid(VoiceoverScene):
             f"at-the-money volatility is {100 * at['hybrid']:.0f} percent with the hybrid scheme and "
             f"{100 * at['riemann']:.0f} with the naive one. <bookmark mark='c'/> On speed, the hybrid scheme scales "
             f"like n log n, {verdict}."
+            " Simulation is slow. Next: a rough model with a near-closed form, rough Heston."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

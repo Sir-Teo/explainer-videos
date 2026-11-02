@@ -162,6 +162,7 @@ class Surrogate(VoiceoverScene):
             f"{1e6 * s['t_net']:.1f} microseconds, against {s['t_mc']:.0f} seconds for one Monte Carlo price: "
             "millions of times faster. That speed is what made chapter nine's daily hedge of a whole book possible, "
             "and Part seventeen does it at scale."
+            " Next: how desks mark, reserve and report."
         ) as vo:
             self.play(FadeIn(g), Create(diag), FadeIn(src), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots],
                                                                         lag_ratio=0.01, run_time=2), FadeIn(side[0]))

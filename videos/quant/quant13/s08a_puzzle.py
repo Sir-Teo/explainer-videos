@@ -226,6 +226,7 @@ class Puzzle(VoiceoverScene):
             f"{verdict} <bookmark mark='b'/> One caveat: a vol of vol fitted under the pricing measure, against DVOL's "
             "history. Legitimate within the model; in the world the gap also holds a volatility risk premium. Either "
             "way the direction is Guyon's."
+            " Every result here depends on calibration. Next: its valleys and instabilities."
         )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), Create(h30[0]), FadeIn(h30[1:]), FadeIn(side[0]))

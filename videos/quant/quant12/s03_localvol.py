@@ -222,6 +222,7 @@ class LocalVol(VoiceoverScene, ThreeDScene):
             f"<bookmark mark='b'/> With forty steps over three months, the tree's own smile at maturity lands within "
             f"{err:.2f} volatility points of the Surface near the money, and its node volatilities match Dupire's "
             f"function to {gap:.1f} points. A tree and a formula, built the same year, are the same object."
+            " Why does one function of price and time suffice? Next: Gyöngy's theorem."
         ) as vo:
             self.play(FadeIn(crr), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")

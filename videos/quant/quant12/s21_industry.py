@@ -130,6 +130,7 @@ class Industry(VoiceoverScene):
             "butterfly and wing checks; local volatility as a formula and as a tree; variance, indices and moments "
             "from strips; the futures index and the notes built on it; and a network that learns a surface without "
             "arbitrage."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.4, run_time=6))

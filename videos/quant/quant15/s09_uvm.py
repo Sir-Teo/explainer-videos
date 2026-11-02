@@ -186,6 +186,7 @@ class UVM(VoiceoverScene):
             "If some vanillas trade, buy or sell them at their market prices, and let only what is left bear the "
             "worst case. Search over the amounts. Here the optimiser looks for the best quantities of the 90 and "
             f"110 calls, and the hedged worst case falls as it goes, {verdict}"
+            " Next: the same vanillas, and how different the exotics can be."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")

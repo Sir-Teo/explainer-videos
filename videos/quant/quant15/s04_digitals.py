@@ -226,7 +226,7 @@ class Digitals(VoiceoverScene):
             "term makes the digital dearer. <bookmark mark='b'/> On the bitcoin Surface, thirty days out, the "
             f"digital at the money is {100 * d['atm_diff']:.1f} points dearer than the flat-volatility price{tail} "
             "The white dots check it by differentiating call prices on the smile. A digital is a bet on the "
-            "smile's slope as much as on the spot."
+            "smile's slope as much as on the spot. Next: options on averages and extremes."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")

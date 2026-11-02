@@ -205,6 +205,7 @@ class Cliquet(VoiceoverScene, ThreeDScene):
             "<bookmark mark='b'/> And the model risk: Part "
             "thirteen priced one cliquet under five models, all fitted to the same Surface, and found them "
             f"{100 * (q or 0):.1f} percent apart, on a product whose Black–Scholes vega can be zero."
+            " If the models disagree, price the worst case. Next: uncertain volatility."
         ) as vo:
             self.play(FadeIn(g1), Create(l1))
             vo.wait_until("a")

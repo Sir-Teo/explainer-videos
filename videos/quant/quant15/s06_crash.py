@@ -207,6 +207,7 @@ class Crash(VoiceoverScene):
             "volatility notes. <bookmark mark='a'/> Others were sceptical: the notional outstanding was modest next "
             "to the futures market, and hedges do not all point one way. How much the hedging moved the market is "
             "disputed. That the knock-ins forced hedges to be sold at the worst moment is arithmetic."
+            " The same story had played out before, in Korea. Next."
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")

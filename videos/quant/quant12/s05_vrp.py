@@ -232,6 +232,7 @@ class VRP(VoiceoverScene):
             f"above realized variance on {s:.0f} percent of days. The exceptions are spikes no index priced in time; the "
             "worst start date was late February 2020. <bookmark mark='b'/> Ian Dew-Becker and co-authors found the "
             "premium concentrated at the shortest maturities."
+            " Variance is one thing option prices tell us. Next: what else they say about the future."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), Create(lv_), Create(lr), run_time=3)
             vo.wait_until("a")

@@ -226,6 +226,7 @@ class HestonFit(VoiceoverScene, ThreeDScene):
             f"{sl['skew_formula']:.3f}, the model at two days {sl['skew_2d']:.3f}. To match a steep three-day skew, "
             "xi must be enormous; the curvature grows with xi squared. <bookmark mark='e'/> Pause: make rho positive. "
             "The short skew flips to calls, as in 2023's rally."
+            " Prices come from the formula; hedges and exotics need paths. Next: simulating Heston honestly."
         )
         ) as vo:
             step(0)

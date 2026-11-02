@@ -253,6 +253,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
             "trusted between expiries. A desk quotes from the surface that cannot be arbitraged, and pays for it in "
             "the first few days, where one smile shape cannot follow the quotes; beyond a month the gap is a fraction "
             "of a point. Extensions such as eSSVI let the tilt vary with maturity and close part of the gap."
+            " A fitted surface is a price list. Next: the model hiding inside it, Dupire's local volatility."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(ticks), FadeIn(xl))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.05, run_time=3))

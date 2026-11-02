@@ -6641,7 +6641,10 @@
     "the House's data desk stores each market's rules beside its prices": "我们公司的数据台把各市场的规则和价格存在一起",
     "A stock closes limit-up with buyers queued. What is tomorrow's expected return, and can you trade it?": "一只股票涨停收盘、买方排队。明天的期望收益是多少？你能交易吗？",
     "positive, since the limit stopped the price short; but the queue didn't clear, so nobody bought at that close": "为正，因为涨停让价格没涨到位；但队伍没有成交，所以没人能在那个收盘价买到",
-    "simulated: daily vol 3\\%, jumps on 5\\% of days (12\\% s.d.), 5,000 days, 8 seeds": "模拟：日波动率3\\%，5\\%的交易日有跳跃（标准差12\\%），5,000天，8个种子"
+    "simulated: daily vol 3\\%, jumps on 5\\% of days (12\\% s.d.), 5,000 days, 8 seeds": "模拟：日波动率3\\%，5\\%的交易日有跳跃（标准差12\\%），5,000天，8个种子",
+    "the spread can halve, but depth at the best price thins and stepping ahead of a queue costs half a cent: small orders gain, large ones may not": "价差可能减半，但最优价位的深度变薄，插到队伍前面只需半美分：小单受益，大单未必",
+    "it raises it: the owner borrows cash at $-1\\%$ instead of 4\\%, five points a year for a quarter, about 1.25 per 100": "价格上升：持有人以 $-1\\%$ 而非4\\%借入现金，一年五个点、持续一个季度，每100元约1.25",
+    "the same share is lent twice: sold short, bought, lent again. Shorts owe shares back; longs add up to more than the float too": "同一股被借出两次：卖空、被买入、再借出。空头欠回股票；多头加起来也超过流通股"
   },
   "phrases": {
     "you owe": "你欠",

@@ -167,6 +167,7 @@ class Volmageddon(VoiceoverScene):
             "And the product's design made the crash worse. Pause and predict: why did the issuer have to buy at the "
             "close, not earlier in the day? Because the note promised the close-to-close return, and the hedge is only "
             "exact at the close: buying earlier is a bet that the move will hold."
+            " Today a feedback of this kind runs through dealers' option hedges. Next."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -281,6 +281,7 @@ class Jumps(VoiceoverScene):
             "price; Broadie, Chernov and Johannes found such jumps needed for S&P options. <bookmark mark='a'/> On "
             "Bitcoin, Hou, Wang, Chen and Härdle found jumps in price and variance, anti-correlated. "
             "<bookmark mark='b'/> The extreme jump, to zero, is default: Part twenty."
+            " Next: pure-jump models, and time changes."
         )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))

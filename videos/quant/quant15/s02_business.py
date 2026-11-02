@@ -197,6 +197,7 @@ class Business(VoiceoverScene):
             "sold. <bookmark mark='b'/> And the risk that stays with them is crowded: thousands of notes on the same "
             "index, with the same barriers, hedged by a handful of desks that must trade in the same direction at the "
             "same moment."
+            " Who is on the other side of these notes? Next."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

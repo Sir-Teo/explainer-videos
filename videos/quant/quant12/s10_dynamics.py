@@ -242,6 +242,7 @@ class Dynamics(VoiceoverScene, ThreeDScene):
             f"{e3:.0f} percent. Three numbers a week carry {tot:.0f} percent of the motion of sixty-eight, the same "
             "low dimension, and nearly the same three shapes, that Cont and da Fonseca found for the S&P 500. "
             "Chapter seventeen will let a neural network find its own coordinates."
+            " Before fitting any surface, we need to know which shapes are impossible. Next."
         ) as vo:
             self.play(Create(ax), FadeIn(head), FadeIn(src))
             self.add(s)

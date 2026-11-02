@@ -264,6 +264,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
             "volatility is, and desks model it with local correlation, calibrated by Guyon and Henry-Labordère's "
             "particle method. <bookmark mark='a'/> And the mountain range: the Himalaya, the Everest, the Altiplano, "
             "all bets on correlation, sold as coupons."
+            " Next: a product whose risk vega cannot see, the cliquet."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

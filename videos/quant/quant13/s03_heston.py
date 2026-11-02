@@ -242,6 +242,7 @@ class Heston(VoiceoverScene, ThreeDScene):
             "<bookmark mark='a'/> It reproduces Fang and Oosterlee's benchmark to "
             f"{-np.floor(np.log10(b['err'])):.0f} decimal places, and finds where the original form breaks. "
             "<bookmark mark='b'/> Pause: is the log price normal given the variance path? Only if rho is zero."
+            " Next: what each parameter does to the smile."
         )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))

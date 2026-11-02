@@ -218,6 +218,7 @@ class SABRFix(VoiceoverScene, ThreeDScene):
             "forward with alpha fixed. <bookmark mark='b'/> But alpha moves with the forward: its expected move is "
             "rho nu over F to the beta. <bookmark mark='c'/> Add it, and you have Bartlett's 2006 delta: smaller for a "
             "call when rho is negative. Chapter seventeen tests the idea on Bitcoin."
+            " Diffusions move continuously. Next: prices that jump."
         )
         ) as vo:
             step(0)

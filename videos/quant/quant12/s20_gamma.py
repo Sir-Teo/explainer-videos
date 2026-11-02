@@ -182,6 +182,7 @@ class Gamma(VoiceoverScene):
             "estimate that retail traders lose on them. Pause and predict: dealers short gamma at the six-thousand "
             "strike, the index at six thousand and ten, an hour to go. Their hedging pushes it away; long gamma would "
             "pin it."
+            " Next: can a network learn the surface?"
         ) as vo:
             self.play(FadeIn(cards[0]))
             vo.wait_until("a")

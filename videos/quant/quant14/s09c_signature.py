@@ -189,6 +189,7 @@ class Signature(VoiceoverScene):
             f"model. Lowest: {best_name}. <bookmark mark='b'/> With Janka Möller, the same group showed in "
             "2025 that signature models fit S&P and VIX options jointly, with neither jumps nor roughness: "
             "path dependence, again, doing the work."
+            " Next: what desks actually use, and the House's rough lab."
         ) as vo:
             self.play(FadeIn(rp))
             rp.play(self, run_time=7)

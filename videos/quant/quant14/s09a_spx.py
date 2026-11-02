@@ -202,6 +202,7 @@ class SPX(VoiceoverScene):
             "Bitcoin's spike was a price phenomenon, which the path explains; the VIX's was largely a quote "
             "phenomenon, which it does not. <bookmark mark='c'/> Top right, the Surface's skew term structure the "
             "week before and two days after: the whole curve lifted, steepest at the short end."
+            " Next: fitting the S&P and the VIX together."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lc), FadeIn(lh), FadeIn(src))
             self.play(tr.animate.set_value(len(hh) - 1), run_time=5, rate_func=linear)

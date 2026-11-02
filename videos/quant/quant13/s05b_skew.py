@@ -186,6 +186,7 @@ class Skew(VoiceoverScene):
             "Two repairs. Carr, Geman, Madan and Yor's additive processes, with independent but non-identical "
             "increments, fix the Lévy term structure. <bookmark mark='a'/> And Abi Jaber and De Carvalho showed that "
             "Heston with very fast mean reversion imitates jumps; chapter eighteen pushes our fit that way."
+            " No single model fits every maturity. Next: combining stochastic and local volatility."
         )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
