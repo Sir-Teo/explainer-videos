@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load
+from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, sci
 
 
 class Hook(VoiceoverScene):
@@ -38,7 +38,7 @@ class Hook(VoiceoverScene):
                 continue
             b = best[m]
             rows.add(VGroup(label(m, font_size=24, color=METHOD_COL[m]),
-                            MathTex(rf"\text{{error}}\ {b['err']:.0e}", font_size=28),
+                            MathTex(rf"\text{{error}}\ {sci(b['err'])}", font_size=28),
                             MathTex(rf"{b['time']:.4f}\,\text{{s}}", font_size=28)))
         for row in rows:
             row[0].set_x(-3.6)

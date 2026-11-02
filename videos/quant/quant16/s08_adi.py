@@ -65,15 +65,16 @@ class ADI(VoiceoverScene):
             MathTex(rf"\text{{reference (COS):}}\ {a['ref']:.4f}", font_size=28),
             MathTex(rf"{best['nS']}\times{best['nv']}:\ {best['price']:.4f}\ \ ({best['time']:.1f}\,\text{{s}})", font_size=28,
                     color=GOOD),
-            wrapped_label(r"both schemes converge at second order; with Feller's condition broken and strong correlation the "
-                          r"variants differ more, which is why desks keep several", 4.2, 18, GREY_A),
+            wrapped_label(r"each doubling of the grid cuts the error roughly four- to ninefold; here, with Feller's condition broken and "
+                          r"strong correlation, Douglas is slightly ahead. In 't Hout and Foulon found the ranking depends on "
+                          r"the case, which is why desks keep several", 4.2, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
         src = illustration(r"Heston: $v_0 = \theta = 0.04$, $\kappa = 1.5$, $\xi = 0.5$, $\rho = -0.7$; one-year call at the money")
         with self.voiceover(
             "Here they are on a one-year Heston call, against the exact Fourier price, as the grid is refined. "
-            "<bookmark mark='a'/> Both converge at second order. On the finest grid, "
-            f"{best['nS']} by {best['nv']} points, the price is {best['price']:.4f} against {a['ref']:.4f}, in about "
-            f"{best['time']:.0f} seconds on one core. A Fourier method gets the European price faster, as the next "
+            "<bookmark mark='a'/> Both converge fast: each doubling of the grid cuts the error roughly four to nine times. On "
+            f"the finest grid, {best['nS']} by {best['nv']} points, the price is {best['price']:.4f} against "
+            f"{a['ref']:.4f}, in {best['time']:.1f} seconds on one core. A Fourier method gets the European price faster, as the next "
             "chapter shows; the grid earns its keep for barriers, early exercise and the Greeks of a whole book."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]))

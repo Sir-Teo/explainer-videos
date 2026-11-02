@@ -33,3 +33,13 @@ def loglog(x_lo, x_hi, y_lo, y_hi, xlabel, ylabel, x_length=6.4, y_length=4.2, x
     return axes([x_lo, x_hi], [y_lo, y_hi], x_length=x_length, y_length=y_length, xlabel=xlabel, ylabel=ylabel,
                 xticks=xt, yticks=yt, xfmt=lambda u: f"10^{{{int(round(u))}}}", yfmt=lambda u: f"10^{{{int(round(u))}}}",
                 log_x=True, font_size=font_size)
+
+
+def sci(x: float, digits: int = 0) -> str:
+    """A number in scientific notation for MathTex: 2\\times 10^{-2}, not 2e-02."""
+    import math
+    e = int(math.floor(math.log10(abs(x))))
+    m = x / 10 ** e
+    if round(m, digits) >= 10:
+        m, e = m / 10, e + 1
+    return rf"{m:.{digits}f}\times 10^{{{e}}}"

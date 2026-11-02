@@ -44,14 +44,13 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
 
 ## Builds queued (CPU voice, 720p)
 
-Scratchpad scripts chain the builds: queue.sh (quant10, quant1, quant2) -> queue2.sh (quant3) -> queue3.sh (quant4) ->
-queue4.sh (quant5) -> queue5.sh (quant6). After a container restart, rerun `python tools/make.py quantN --cpu-voice -q m --steps build check`
-for each part in order; finished scenes are cached.
+Built: Parts 10, 1, 2 (English and Chinese; Part 2's Chinese is rebuilt after a missing string was added). One serial
+queue (a lock file, no `pgrep`: the old chained scripts deadlocked because their parent shells' command lines matched
+the pattern they waited on) builds, in order: quant3, quant4, quant5, quant6, quant7, quant8, quant9, quant13,
+quant11, quant12, quant2, quant14, then quant15 and quant16 once their on-screen text is translated. After a container
+restart, rerun for each unbuilt part in that order (each rerun resumes from cached scenes):
 
-
-Part 10 (zh running), then Part 1 and Part 2 (en, zh): `python tools/make.py quantN --cpu-voice -q m --steps build check`
-(logs `renders/make/quantN_cpu_voice.log`). Each rerun resumes. Part 1's and Part 2's Chinese text and narration
-are complete; Part 1's Chinese dry run passed for all 16 chapters.
+    python tools/make.py quantN --cpu-voice -q m --steps build check   # log: renders/make/quantN_cpu_voice.log
 
 ## Part 2 plan (The Machinery of Markets), facts checked 2 Nov 2026
 
@@ -349,6 +348,23 @@ Facts checked:
   22 Jan - 5 Feb; dealer hedge 15 -> 25 -> 15 notes' worth. Korea: 6 of 12 2021 notes lost 38-54%. Worst-of vs rho;
   measured rho 0.46. UVM bounds [0.31, 0.62] vs BS 0.45-0.48. Surrogate: 0.017 error, 0.4 us vs 3 s.
 - **Built** (compute, 12 scenes, README EN/ZH, zh_lines 42/42). Remaining: on-screen text, dry runs, build.
+
+## Part 16 (Computing Prices), 2 Nov 2026
+
+- **House** `engine.py` (tested): Monte Carlo with antithetics, control variates, importance sampling and Sobol
+  (+ Brownian bridge); MLMC; Longstaff-Schwartz and Andersen-Broadie; Greeks (bump, pathwise, likelihood ratio) and
+  AAD on the AI series' autodiff; theta-scheme FD with Rannacher; PSOR American put; Heston ADI (Douglas,
+  Craig-Sneyd) on in 't Hout-Foulon grids; Carr-Madan.
+- **Results.** Sobol 3e-5 vs plain 0.026 at 262k paths; IS 10x less noise at K=160; bridge 31x less spread (Asian,
+  64 fixings). MLMC 4/12/26x cheaper at eps 0.04/0.02/0.01. American put (25 dates): LSM 6.061, AB upper 6.075 (1,600
+  inner); continuous exercise 6.090 (tree) / 6.085 (PDE). AAD 2.2x a price for 5 Greeks vs 7.4x bumping. Explicit FD
+  explodes at 200 steps (von Neumann bound 400; 250 survives). CN error ratio 4.0 per doubling. ADI 0.001-0.002 at
+  160x80. COS (L=16) 1.4e-6 at 128 terms, 5e-8 at 256 (L=12 floors at 7e-6 on this fat left tail); Carr-Madan 2.5e-5
+  at 16,384. Race: COS beats MC's best (SE 0.016, 3 s) ~14,000x faster.
+- **Checked.** Chakrabarti et al. (2021): 7.5k logical qubits, T-depth 54M, 50 MHz for ~1 s. JPMorgan/Maxeler 2011:
+  ~8 h to ~4 min (as reported). The QE scheme's 50-step bias on the race call is 0.005 +- 0.006 (not significant).
+- **Built** (compute, 12 scenes, README EN/ZH, zh_lines 41/41, silent previews). `why` notes in the quant series now
+  wrap instead of shrinking (long notes in Parts 8-16 were unreadable). Remaining: on-screen text, dry run, build.
 
 ## Next
 

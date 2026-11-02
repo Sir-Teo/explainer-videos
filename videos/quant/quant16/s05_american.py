@@ -61,7 +61,7 @@ class American(VoiceoverScene):
 
     def bounds(self, a):
         ab = a["ab"]
-        lo, hi = a["lsm"] - 0.08, max(r["upper"] for r in ab) + 0.08
+        lo, hi = a["lsm"] - 0.08, max(r["upper"] + 2 * r["se"] for r in ab) + 0.04
         g = axes([0, len(ab) + 1], [lo, hi], x_length=7.4, y_length=4.2, ylabel=r"price of the American put",
                  xticks=list(range(1, len(ab) + 1)), xfmt=lambda u: f"{ab[int(round(u)) - 1]['inner']}",
                  yticks=[round(v, 2) for v in np.linspace(lo + 0.03, hi - 0.03, 4)], font_size=15,

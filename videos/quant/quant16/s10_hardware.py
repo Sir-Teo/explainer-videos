@@ -29,7 +29,7 @@ class Hardware(VoiceoverScene):
                          r"so scenarios could be rerun during the day.", color=QC.FIRM, width=6.2, font_size=20)
         c = history_card(2021, r"Chakrabarti et al., \textit{Quantum}", r"Quantum amplitude estimation needs $1/\varepsilon$ "
                          r"samples instead of Monte Carlo's $1/\varepsilon^2$. But to beat a classical computer on a "
-                         r"benchmark derivative they estimated about 8{,}000 error-corrected logical qubits and a T-depth "
+                         r"benchmark derivative they estimated about 7{,}500 error-corrected logical qubits and a T-depth "
                          r"of 54 million, run in about a second: far beyond any machine built so far.", color=QC.IDEA,
                          width=6.2, font_size=20)
         d = history_card(r"the lesson", r"algorithms first", rf"In the race of chapter 8, on one core, COS beat Monte Carlo's best "
@@ -50,7 +50,7 @@ class Hardware(VoiceoverScene):
             "model onto programmable chips, cutting a run of eight hours or more to about four minutes. "
             "<bookmark mark='b'/> And quantum computers? Amplitude estimation needs one over epsilon samples instead "
             "of one over epsilon squared, a genuine quadratic speedup. But a 2021 study estimated that beating a "
-            "classical machine on a benchmark derivative would take about eight thousand error-corrected qubits running "
+            "classical machine on a benchmark derivative would take about seven and a half thousand error-corrected qubits running "
             "a circuit fifty-four million layers deep in about a second, far beyond any machine yet built. "
             "<bookmark mark='c'/> The lesson of this part: the gaps between algorithms on one core are larger than "
             "the gaps between machines."

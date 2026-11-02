@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog
+from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog, sci
 
 
 class Fourier(VoiceoverScene):
@@ -35,16 +35,16 @@ class Fourier(VoiceoverScene):
             c1 = cos[i] if i < len(cos) else None
             c2 = cm[i] if i < len(cm) else None
             tab.add(VGroup(MathTex(str(c1["N"]) if c1 else "", font_size=26),
-                           MathTex(f"{c1['err']:.1e}" if c1 else "", font_size=26, color=METHOD_COL["COS"]),
+                           MathTex(sci(c1['err'], 1) if c1 else "", font_size=26, color=METHOD_COL["COS"]),
                            MathTex(str(c2["N"]) if c2 else "", font_size=26),
-                           MathTex(f"{c2['err']:.1e}" if c2 else "", font_size=26, color=METHOD_COL["Carr-Madan FFT"])))
+                           MathTex(sci(c2['err'], 1) if c2 else "", font_size=26, color=METHOD_COL["Carr-Madan FFT"])))
         xs = [-4.8, -2.4, 1.2, 4.0]
         for i, row in enumerate(tab):
             for j, cell in enumerate(row):
                 cell.move_to([xs[j], 0.2 - 0.5 * i, 0])
         with self.voiceover(
             "When a model has a characteristic function, as Heston, the Lévy models and rough Heston do, Fourier "
-            "methods price a vanilla in microseconds. Peter Carr and Dilip Madan damped the call so it has a Fourier "
+            "methods price a vanilla in well under a millisecond. Peter Carr and Dilip Madan damped the call so it has a Fourier "
             "transform, and priced a whole grid of strikes with one fast Fourier transform. <bookmark mark='a'/> The "
             "COS method of Part thirteen expands the density in cosines instead. With a smooth density its error "
             "falls exponentially: a hundred and twenty-eight terms beat what Carr–Madan reaches with sixteen thousand "
@@ -85,7 +85,7 @@ class Fourier(VoiceoverScene):
             "Now the race: one Heston call, every method in the House, error against wall-clock time on one core. "
             "Lower and to the left is better. <bookmark mark='a'/> Monte Carlo crawls down its square-root line. The "
             "ADI grid is second order and much faster. The Fourier methods are in another world, COS above all: an "
-            f"error {cos_best['err']:.0e} in {cos_best['time'] * 1e3:.2f} milliseconds. <bookmark mark='b'/> So the rule "
+            f"error of about {cos_best['err'] * 1e8:.0f} in a hundred million, in {cos_best['time'] * 1e3:.2f} milliseconds. <bookmark mark='b'/> So the rule "
             "is simple. Use Fourier "
             "when the model allows it and the product is a vanilla. Use grids for low-dimensional products with early "
             "exercise or barriers. Use simulation for everything else: many assets, long paths, and every product "

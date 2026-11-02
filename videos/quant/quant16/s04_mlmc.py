@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, OPT, PART, illustration, load, loglog
+from videos.quant.quant16.common import BAD, GOOD, OPT, PART, illustration, load
 
 
 class MLMC(VoiceoverScene):
@@ -48,14 +48,16 @@ class MLMC(VoiceoverScene):
         eps = np.asarray(m["eps"])
         cm = np.array([r["cost"] for r in m["mlmc"]])
         cs = np.array([r["cost"] for r in m["standard"]])
-        g = loglog(np.log10(0.003), np.log10(0.06), 5, 11, r"target accuracy $\varepsilon$",
-                   r"cost (Euler steps simulated)", x_length=5.6, y_length=4.0, xt=[-2], yt=[6, 8, 10])
+        g = axes([np.log10(0.008), np.log10(0.05)], [6.3, 9.6], x_length=5.6, y_length=4.0,
+                 xlabel=r"target accuracy $\varepsilon$", ylabel=r"cost (Euler steps simulated)",
+                 xticks=list(np.log10(eps)), xfmt=lambda u: f"{10 ** u:.2f}", yticks=[7, 8, 9],
+                 yfmt=lambda u: f"10^{{{int(round(u))}}}", font_size=15, log_x=True)
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
         ok = np.isfinite(cs)
 
         def line(x, y, col):
-            pts = [ax.c2p(a, np.clip(b, 5, 11)) for a, b in zip(np.log10(x), np.log10(y))]
+            pts = [ax.c2p(a, np.clip(b, 6.3, 9.6)) for a, b in zip(np.log10(x), np.log10(y))]
             return VGroup(VMobject(stroke_color=col, stroke_width=3).set_points_as_corners(pts),
                           *[Dot(p_, radius=0.06, color=col) for p_ in pts])
 
