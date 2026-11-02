@@ -684,19 +684,19 @@ class NeuralSV:
         Z = torch.randn(m, steps, 2, generator=gen)
         if antithetic:
             Z = torch.cat([Z, -Z], 0)
-        rho = torch.tanh(self.rho)
+        rho = 0.95 * torch.tanh(self.rho)  # kept off +-1, where sqrt(1 - rho^2) has an infinite slope
         X = torch.zeros(n)
         V = torch.zeros(n)
         out = [X]
         for k in range(steps):
             t = torch.full((n,), k * dt)
-            s = F.softplus(self.sig(torch.stack([t, X, V], 1))[:, 0]) + 0.02
+            s = torch.clamp(F.softplus(self.sig(torch.stack([t, X, V], 1))[:, 0]) + 0.02, max=3.0)
             b = self.drift(torch.stack([t, V], 1))[:, 0]
             e = F.softplus(self.vol(torch.stack([t, V], 1))[:, 0])
             w1 = Z[:, k, 0]
             w2 = rho * w1 + torch.sqrt(1 - rho ** 2) * Z[:, k, 1]
             X = X - 0.5 * s ** 2 * dt + s * math.sqrt(dt) * w1
-            V = V + b * dt + e * math.sqrt(dt) * w2
+            V = torch.clamp(V + b * dt + e * math.sqrt(dt) * w2, -6.0, 6.0)
             out.append(X)
         return torch.stack(out, 1)
 

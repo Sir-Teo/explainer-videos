@@ -461,18 +461,30 @@ def compute_nsde() -> dict:
     base = m.state_dict()
     iv0, doc0 = ivs(m)
     res = {"calibrated": {"iv_rmse": float(np.sqrt(np.mean((iv0 - tiv) ** 2)) * 100), "doc": doc0}}
+    base_cl = float(calib_loss(m)[0].detach())
     for side, sgn in (("low", 1.0), ("high", -1.0)):
         mm = D.NeuralSV(seed=0)
         mm.load(base)
-        opt = torch.optim.Adam(mm.parameters(), lr=1e-3)
-        for it in range(500):
+        opt = torch.optim.Adam(mm.parameters(), lr=5e-4)
+        best = None
+        for it in range(600):
             cl, S = calib_loss(mm)
-            loss = sgn * D.down_out_call(S) * 100 + 20.0 * cl
+            doc_ = D.down_out_call(S)
+            loss = sgn * doc_ * 100 + 50.0 * cl
+            if not torch.isfinite(loss):
+                mm.load(best[1] if best else base)  # back to the last good state
+                continue
+            # keep the most extreme state that still reprices the vanillas about as well as the first calibration
+            if float(cl) <= max(3 * base_cl, 0.004) and (best is None or sgn * float(doc_) < sgn * best[0]):
+                best = (float(doc_), mm.state_dict())
             opt.zero_grad()
             loss.backward()
+            torch.nn.utils.clip_grad_norm_(mm.parameters(), 1.0)
             opt.step()
             if it % 100 == 0:
-                print("    ", side, it, float(cl.detach()), float(D.down_out_call(S).detach()), flush=True)
+                print("    ", side, it, float(cl.detach()), float(doc_.detach()), flush=True)
+        if best is not None:
+            mm.load(best[1])
         iv, doc = ivs(mm)
         res[side] = {"iv_rmse": float(np.sqrt(np.mean((iv - tiv) ** 2)) * 100), "doc": doc, "iv": iv}
     # Heston's own down-and-out price, monitored at the same 50 dates
