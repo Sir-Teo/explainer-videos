@@ -389,9 +389,8 @@ def compute_hedge() -> dict:
             with torch.no_grad():
                 x = torch.log(torch.tensor(Sg / 100, dtype=torch.float32))
                 for i, tt in enumerate(ts):
-                    o = polb.net(torch.stack([x, torch.full((61,), float(tt))], -1))
-                    lo[i] = o[:, 0].numpy()
-                    hi[i] = (o[:, 0] + torch.nn.functional.softplus(o[:, 1])).numpy()
+                    bl, bh = polb.band(x, torch.full((61,), float(tt)))
+                    lo[i], hi[i] = bl.numpy(), bh.numpy()
                     b = quoting.ww_band(Sg, 100, tt * h["T"], h["sigma"], c, gamma_risk=h["gamma"])
                     wl[i], wh[i] = b["lo"], b["hi"]
             surf = {"tau": ts, "S": Sg, "lo": lo, "hi": hi, "ww_lo": wl, "ww_hi": wh}

@@ -102,13 +102,13 @@ class Band(VoiceoverScene):
         leg.next_to(g, RIGHT, buff=0.4).align_to(g, UP)
         near = int(np.argmin(np.abs(S - 100)))
         ratio = float(np.median(width[:, near] / np.maximum(wwidth[:, near], 1e-6)))
-        side = wrapped_label(rf"a band network (Imaki et al.\ 2021: it outputs the band, and the hedge moves only to its "
-                             rf"edge), cost {100 * h['mlp_cost']['cost']:g}\%. At the money its band is "
+        side = wrapped_label(rf"a band network (Imaki et al.\ 2021: it outputs how far below and above the Black--Scholes "
+                             rf"delta the band reaches, and the hedge moves only to its nearest edge), cost {100 * h['mlp_cost']['cost']:g}\%. At the money its band is "
                              rf"{ratio:.1f} times Whalley--Wilmott's width, and like theirs it is widest where gamma is "
                              r"largest: near the strike, close to expiry", 4.4, 19, GREY_A).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
-            "A second network makes the band explicit: it outputs the two edges, and the hedge only ever moves to the "
-            "nearest one. <bookmark mark='a'/> Here is the width it learned, at three times to expiry, against Whalley "
+            "A second network, from Shota Imaki and colleagues, makes the band explicit: it outputs how far the band "
+            "reaches below and above the delta, and the hedge only ever moves to the nearest edge. <bookmark mark='a'/> Here is the width it learned, at three times to expiry, against Whalley "
             f"and Wilmott's formula. At the money it is {ratio:.1f} times theirs. Both are widest where gamma is largest, "
             "near the strike and close to expiry, where trading every wiggle would cost the most. The asymptotic formula "
             "assumes small costs; the network does not have to."

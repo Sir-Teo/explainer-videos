@@ -220,12 +220,16 @@ class Hedger:
     nothing about bands.  ``kind='band'``: the no-transaction band network of Imaki et al. (2021): the network
     outputs a band [lo, hi] from (log(S_k/K), tau_k) and the hedge only moves to its nearest edge."""
 
-    def __init__(self, kind="mlp", width=32, depth=3, seed=0):
+    def __init__(self, kind="mlp", width=32, depth=3, seed=0, sigma=0.2, T=30 / 365):
         import torch
 
         torch.manual_seed(seed)
         self.kind = kind
+        self.sigma, self.T = sigma, T
         self.net = _mlp(3 if kind == "mlp" else 2, width, depth, 1 if kind == "mlp" else 2)
+        if kind == "band":  # start from a narrow band around delta
+            with torch.no_grad():
+                self.net[-1].bias.fill_(-3.0)
 
     def parameters(self):
         return self.net.parameters()
@@ -235,10 +239,20 @@ class Hedger:
 
         if self.kind == "mlp":
             return self.net(torch.stack([x, tau, prev], -1)).squeeze(-1)
-        o = self.net(torch.stack([x, tau], -1))
-        lo = o[..., 0]
-        hi = lo + torch.nn.functional.softplus(o[..., 1])
+        lo, hi = self.band(x, tau)
         return torch.minimum(torch.maximum(prev, lo), hi)
+
+    def band(self, x, tau):
+        """Imaki et al.'s no-transaction band: [delta - softplus(a), delta + softplus(b)], with delta the
+        Black-Scholes hedge ratio and (a, b) the network's outputs; the hedge only moves to the nearest edge."""
+        import torch
+        import torch.nn.functional as F
+
+        t = torch.clamp(tau * self.T, min=1e-6)
+        d1 = (x + 0.5 * self.sigma ** 2 * t) / (self.sigma * torch.sqrt(t))
+        delta = 0.5 * (1 + torch.erf(d1 / math.sqrt(2)))
+        o = self.net(torch.stack([x, tau], -1))
+        return delta - F.softplus(o[..., 0]), delta + F.softplus(o[..., 1])
 
 
 def hedge_pnl(policy, S, K, T, cost=0.0, cp=1):
@@ -288,7 +302,7 @@ def train_hedger(kind="mlp", cost=0.0, sigma=0.2, T=30 / 365, steps=30, K=100.0,
     import torch
 
     gen = torch.Generator().manual_seed(seed + 1)
-    pol = Hedger(kind, seed=seed)
+    pol = Hedger(kind, seed=seed, sigma=sigma, T=T)
     opt = torch.optim.Adam(pol.parameters(), lr=lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, iters)
     rho = (lambda X: entropic(X, gamma)) if risk == "entropic" else cvar
