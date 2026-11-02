@@ -184,9 +184,9 @@ class Arma(VoiceoverScene):
             f"at {a['ar1_phi']:.3f}: fear decays with a half-life of about {a['ar1_half_life']:.0f} trading days."
         ) as vo:
             vo.wait_until("a")
-            lab_run(self, card, [">>> ar_fit(np.log(vix), 1)['beta']",
-                                 f"array([{a['ar1_phi'] * 0 + float(np.asarray(load('acf_arma')['vix_log']).mean()) * (1 - a['ar1_phi']):.3f}, {a['ar1_phi']:.3f}])",
-                                 f"half-life: {a['ar1_half_life']:.0f} days"])
+            lab_run(self, card, [">>> c, phi = ar_fit(np.log(vix), 1)['beta']",
+                                 f"phi = {a['ar1_phi']:.3f}",
+                                 f"half-life = log(0.5) / log(phi) = {a['ar1_half_life']:.0f} days"])
         rows = sorted(a["table"], key=lambda r_: r_["aic"])[:5]
         tab = VGroup(*[VGroup(MathTex(rf"\text{{ARMA}}({r_['p']},{r_['q']})", font_size=26,
                                       color=GOOD if (r_["p"], r_["q"]) == (best["p"], best["q"]) else WHITE),
