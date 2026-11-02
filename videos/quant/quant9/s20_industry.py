@@ -49,6 +49,9 @@ class Industry(VoiceoverScene):
             "March 2020 the most liquid bond funds traded at large discounts to their holdings, "
             "larger for safer bonds, as Haddad, Moreira and Muir documented: investors sold what was "
             "easiest to sell, and dealers' balance sheets were full."
+            " A worked example: if a fund trades one percent above its basket, an authorized "
+            "participant buys the basket, delivers it for new shares and sells them, earning the one "
+            "percent less its costs, and the selling pushes the price back."
         ) as vo:
             self.play(FadeIn(f, shift=UP * 0.2))
             vo.wait_until("a")
@@ -211,6 +214,8 @@ class Industry(VoiceoverScene):
             "widened; it lost forty-four percent in August. On the twenty-third of September fourteen "
             "firms, convened by the New York Fed, put up three point six billion for ninety percent "
             "of the fund. No Fed money was used. Part forty-one tells the story."
+            " The lesson for this part: every convergence trade is a no-arbitrage argument with a "
+            "funding assumption hidden inside it."
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")

@@ -115,10 +115,12 @@ class Crisis(VoiceoverScene):
             w.scale_to_fit_width(min(w.width, 4.4))
         right.to_edge(RIGHT, buff=0.35).shift(UP * 0.8)
         with self.voiceover(
-            "Why did a tax date break the market? Since 2017 the Fed had been shrinking its balance sheet, and bank reserves "
-            f"fell from about {r['reserves_2018']:.1f} trillion dollars to {r['reserves_low']:.2f} trillion that week. "
-            "<bookmark mark='a'/> A bank lends reserves in repo only if repo pays more than the Fed does. When reserves are "
-            "plentiful that costs nothing; when scarce, the price of cash rises steeply: a demand curve, and it can be "
+            "Why did one tax date break the market? Since 2017 the Federal Reserve had been shrinking its balance sheet, and "
+            f"the reserves banks keep with it fell from about {r['reserves_2018']:.1f} trillion dollars to "
+            f"{r['reserves_low']:.2f} trillion the week of the spike. <bookmark mark='a'/> A bank with spare reserves lends "
+            "them in repo only if repo pays more than the Fed pays on reserves: that spread is the opportunity cost of holding "
+            "them. When reserves are plentiful the spread is near zero; when they are scarce, banks hold on to them for their "
+            "own liquidity needs, and the price of cash rises steeply. That's a demand curve for reserves, and it can be "
             "measured."
         ) as vo:
             self.play(FadeIn(g), Create(line), run_time=3)

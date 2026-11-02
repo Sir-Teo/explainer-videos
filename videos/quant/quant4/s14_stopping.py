@@ -177,13 +177,16 @@ class Stopping(VoiceoverScene):
                              rf"About {100 * f['p100_exact']:.0f}\%: $\binom{{100}}{{50}}/2^{{100}} = {f['p100_exact']:.4f}$; "
                              rf"simulated {p100:.4f}.", width=5.4, font_size=21).to_corner(UR, buff=0.4)
         with self.voiceover(
-            f"Here are {k_show} walks, each frozen with a gold dot when it first reaches plus one. "
-            "<bookmark mark='a'/> The counter climbs fast, then slowly: some walks wander deep below zero. "
-            "<bookmark mark='b'/> On log scales the chance of still waiting falls with slope minus a half, ten thousand "
-            "walks on the exact curve. <bookmark mark='c'/> And the average wait never settles: capped at a hundred "
-            f"steps it is {cap['100']:.0f}, at a hundred thousand {cap['100000']:.0f}, growing like the square root of "
-            "the cap. <bookmark mark='d'/> After a hundred fair steps, what fraction has not yet been up one? About "
-            f"{100 * f['p100_exact']:.0f} percent."
+            f"Here are {k_show} walks, each frozen with a gold dot the moment it first reaches plus one. "
+            "<bookmark mark='a'/> The counter climbs fast at first, then more and more slowly: a few walks wander "
+            "deep below zero and take a very long time to come back. <bookmark mark='b'/> On log scales the chance of "
+            "still waiting falls on a line of slope minus a half: ten thousand walks, followed to a hundred thousand "
+            "steps, land on the exact curve. <bookmark mark='c'/> And the average waiting time never settles. Capped "
+            f"at a hundred steps it is {cap['100']:.0f}; at a thousand, {cap['1000']:.0f}; at ten thousand, "
+            f"{cap['10000']:.0f}; at a hundred thousand, {cap['100000']:.0f}. It grows like the square root of the "
+            "cap, without limit. <bookmark mark='d'/> So: after a hundred fair steps, what fraction of walks has not "
+            f"yet been up one? About {100 * f['p100_exact']:.0f} percent. The walk that always wins can make you wait "
+            "longer than any bankroll."
         ) as vo:
             self.play(FadeIn(g))
             self.add(fan, counter)

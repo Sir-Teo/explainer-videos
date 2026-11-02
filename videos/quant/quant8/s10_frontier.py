@@ -92,8 +92,9 @@ class Frontier(VoiceoverScene):
         ):
             show(1)
         with self.voiceover(
-            "In a 2026 paper the same group finds a closed-form Gaussian policy that does not depend on wealth, for a "
-            "recursive version of the problem."
+            "In a 2026 paper the same group finds, for a recursive version of the problem, a closed-form Gaussian policy that "
+            "does not depend on wealth, and whose spread shrinks as risk aversion and volatility rise: exploration, priced "
+            "into the objective."
         ):
             show(2)
         with self.voiceover(
@@ -118,8 +119,10 @@ class Frontier(VoiceoverScene):
         ):
             show(6)
         with self.voiceover(
-            "And on the Kelly branch, Alexis Akira Toda's 2023 critique of ergodicity economics keeps chapter ten's "
-            "argument open. Each of these was checked at its source; none of it is yet textbook material."
+            "And on the Kelly branch, Alexis Akira Toda's 2023 critique of ergodicity economics keeps chapter ten's argument "
+            "open. Notice the pattern: almost every edge is a learning method meeting a classical structure, the HJB, the "
+            "boundary, the fixed point, and the structure is what makes the learning work. Each of these was checked at its "
+            "source; none of it is yet textbook material."
         ):
             show(7)
         self.wait(0.4)

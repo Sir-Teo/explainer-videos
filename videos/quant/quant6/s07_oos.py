@@ -107,14 +107,15 @@ class OutOfSample(VoiceoverScene):
         s2 = o["S2"]
         with self.voiceover(
             "The measure is the out-of-sample R-squared: one minus the predictor's squared forecast errors over the "
-            "historical mean's. The benchmark is not zero; it is the running mean. Negative means the mean won. "
-            "<bookmark mark='a'/> The cumulative difference of squared errors is Goyal and Welch's picture, the "
-            "one we just watched. <bookmark mark='b'/> How large must R-squared be to matter? John Campbell and "
-            "Samuel Thompson, also in 2008, showed that a mean-variance investor who times the market with the "
-            "forecast raises her expected return by a proportion of about R-squared over the squared monthly "
-            f"Sharpe ratio. On this sample, the squared monthly Sharpe ratio is {100 * s2:.1f} percent, so even an "
-            f"out-of-sample R-squared of half a percent would raise the average return by about "
-            f"{100 * 0.005 / s2:.0f} percent. Tiny R-squared, real money, if it survives out of sample."
+            "historical mean's. The benchmark is not zero; it is the running mean, which itself is estimated. Negative "
+            "means the mean won. <bookmark mark='a'/> The cumulative difference of squared errors is Goyal and Welch's "
+            "picture, the one we just watched: rising while the predictor is ahead. <bookmark mark='b'/> How large must "
+            "R-squared be to matter? John Campbell and Samuel Thompson, also in 2008, showed that a mean-variance "
+            "investor who times the market with the forecast raises her expected return by a proportion of R-squared "
+            "over one minus R-squared, times one plus the squared Sharpe ratio over the squared Sharpe ratio: about "
+            "R-squared over the squared monthly Sharpe ratio. On this sample, the squared monthly Sharpe ratio is "
+            f"{100 * s2:.1f} percent, so even an out-of-sample R-squared of half a percent would raise the average "
+            f"return by about {100 * 0.005 / s2:.0f} percent. Tiny R-squared, real money, if it survives out of sample."
         ) as vo:
             step(0)
             vo.wait_until("a")

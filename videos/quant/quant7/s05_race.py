@@ -24,6 +24,7 @@ class Race(VoiceoverScene):
         self.board(r2)
         self.results(r)
         self.harnet(r2)
+        self.calibration(r2)
         self.year(r)
 
     def card(self):
@@ -273,4 +274,31 @@ class Race(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(lh), run_time=2)
         self.wait(0.4)
+        self.clear_scene()
+
+    def calibration(self, r2):
+        names = list(r2["names"])
+        mz = r2["mz"]
+        g = axes([0, len(names)], [0, 1.6], x_length=9.0, y_length=3.8, xticks=[], yticks=[0, 0.5, 1.0, 1.5],
+                 ylabel=r"Mincer--Zarnowitz slope $b$ in $RV_t = a + b\,\hat h_t$, 2020 (ideal: 1)", font_size=16)
+        g.move_to(DOWN * 0.2)
+        ax = g.ax
+        bars = VGroup(*[tbar(ax, i + 0.5, mz[k]["b"], MODEL_C[k], width=0.6) for i, k in enumerate(names)])
+        labs = VGroup(*[label(k, font_size=16, color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1)
+                        for i, k in enumerate(names)])
+        one = DashedLine(ax.c2p(0, 1), ax.c2p(len(names), 1), color=GOOD, stroke_width=3)
+        best_cal = min(names, key=lambda k: abs(mz[k]["b"] - 1))
+        with self.voiceover(
+            "One more check on the race: calibration. Regress each day's realized variance on the forecast. A "
+            "calibrated forecast has a slope of one. <bookmark mark='a'/> The best calibrated is "
+            f"{best_cal}, with a slope of {mz[best_cal]['b']:.2f}. The models built on logarithms, which win on "
+            f"QLIKE, have slopes near {mz['log-HAR']['b']:.1f}: on the big days realized variance moves more than "
+            "they predicted. A desk would fix that with a one-line recalibration, the same correction Brini found "
+            "erased much of the foundation models' edge. Ranking and calibration are different questions, and an "
+            "honest report answers both."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(labs), Create(one))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1))
+        self.wait(0.3)
         self.clear_scene()

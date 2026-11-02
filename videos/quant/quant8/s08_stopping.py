@@ -41,12 +41,16 @@ class Stopping(VoiceoverScene):
                     r"least the average of its neighbours: the least concave majorant (Dynkin 1963)", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Some decisions are not how much but when. Snell's answer, from 1952, is backward induction: at the deadline "
-            "stop; before it, take the better of stopping and the expected value of waiting. <bookmark mark='a'/> So U is "
-            "a supermartingale above the payoff, and the smallest one. <bookmark mark='b'/> Stop when U first touches the "
-            "payoff; until then U is a martingale, so the rule attains U. <bookmark mark='c'/> For a symmetric random walk "
-            "with no deadline, waiting is worth the average of the neighbours, and U is the smallest concave function above "
-            "the payoff."
+            "Some decisions are not how much, but when: exercise an option, sell a house, stop searching. Let g be what you "
+            "get if you stop at time n. Laurie Snell's answer, from 1952, is backward induction again: at the deadline you "
+            "must stop; before it, take the better of stopping now and the expected value of waiting. <bookmark mark='a'/> "
+            "That makes U a supermartingale, drifting down on average, lying above g, and induction from the deadline shows "
+            "it is the smallest such process. <bookmark mark='b'/> Stop the first time U touches g. Until then the maximum "
+            "picks the waiting term, so U stopped there is a martingale, and by optional sampling its value today is the "
+            "expected payoff of the rule: nothing does better. <bookmark mark='c'/> Now a case you can see: a random walk "
+            "stepping left or right with equal chances, with no deadline. The value of waiting one step is the average of the "
+            "two neighbours, and the smallest function above g that is at least the average of its neighbours is the "
+            "smallest concave function above g."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -116,10 +120,11 @@ class Stopping(VoiceoverScene):
             "    return interp(arange(len(g)), hull, g[hull])",
         ], source="explainer/quant/house/control.py", width=8.2, font_size=18).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Lab three: two routines. One is the value iteration you watched; the other computes the upper convex hull of "
-            "the pegs, the shape a rope takes. <bookmark mark='a'/> "
-            f"Run both: {s['sweeps']} sweeps, and they agree to within ten to the minus "
-            f"{-int(np.floor(np.log10(s['max_gap'])))}. Probability and geometry give the same object."
+            "Lab three. Two completely different routines in the House. One is the value iteration you just watched: a few "
+            "lines of maxima and averages. The other knows nothing about random walks: it computes the upper convex hull of "
+            "the pegs, the shape a rope really takes, and interpolates. <bookmark mark='a'/> "
+            f"Run both. Value iteration converges in {s['sweeps']} sweeps, and the two answers agree to within ten to the "
+            f"minus {-int(np.floor(np.log10(s['max_gap'])))}. Probability and geometry give the same object."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -151,9 +156,11 @@ class Stopping(VoiceoverScene):
                           GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The secretary problem: a hundred candidates in random order, accept or reject each on the spot, win only with "
-            f"the best. <bookmark mark='a'/> Reject about {q['best_k']}, then take the first who beats them all: you win "
-            f"{100 * q['best_p']:.0f} percent of the time, one over e."
+            "A classic with a famous answer: the secretary problem. A hundred candidates arrive in random order. You can rank "
+            "each against those already seen, but must accept or reject on the spot, and win only with the very best. "
+            "<bookmark mark='a'/> The Snell envelope says: reject a fixed number, then take the first candidate better than "
+            f"all of them. Reject about {q['best_k']}, a hundred over e, and you choose the best "
+            f"{100 * q['best_p']:.0f} percent of the time: one over e, however many candidates there are."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
             vo.wait_until("a")

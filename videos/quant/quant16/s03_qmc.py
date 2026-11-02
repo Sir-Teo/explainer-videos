@@ -157,11 +157,11 @@ class QMC(VoiceoverScene):
             "Koksma–Hlawka inequality bounds the integration error by the function's variation times that "
             "discrepancy. In one dimension it is integration by parts. <bookmark mark='b'/> For Sobol and Halton "
             "points the discrepancy falls like log n to the power d, over n; for random points like one over root n. "
-            "Better, but only once n is far beyond e to the d: dimension hurts. <bookmark mark='c'/> And the "
+            "Better, but only once n is far beyond e to the d. <bookmark mark='c'/> And the "
             "construction is beautifully simple. The van der Corput sequence writes n in binary and mirrors the "
             "digits after the point: one becomes a half, two a quarter, three three quarters. Each new point lands in "
-            "the largest gap. Sobol does this in every coordinate, mixing the digits with a different binary matrix "
-            "per dimension; the direction numbers SciPy uses are Joe and Kuo's, from 2008."
+            "the largest gap. Sobol does this in every coordinate with a different binary matrix; SciPy uses Joe "
+            "and Kuo's direction numbers, from 2008."
         ) as vo:
             for i, mk in enumerate("abc"):
                 step(i)
@@ -201,9 +201,8 @@ class QMC(VoiceoverScene):
             "dashed, the story at these sizes is different: the low-discrepancy sets have not yet overtaken random "
             "points at all. The log n to the d is still winning. <bookmark mark='b'/> And dimension can bite in a "
             "second way. Plot Halton's coordinates twenty-nine and thirty, a thousand points: they lie on a few "
-            "stripes, because both are built from large primes that cycle in step. The same coordinates of Sobol's "
-            "sequence, with Joe and Kuo's direction numbers, chosen to keep two-dimensional projections even, look "
-            "like a proper fill."
+            "stripes, because their large prime bases cycle in step. Sobol's, with Joe and Kuo's direction numbers, "
+            "chosen to keep such projections even, fill the square."
         ) as vo:
             self.play(FadeIn(g), Create(lines2), FadeIn(leg[:3]))
             vo.wait_until("a")

@@ -47,8 +47,7 @@ class PDV(VoiceoverScene):
             "<bookmark mark='a'/> The trend is a weighted sum of past returns; the activity, of past squared returns. "
             "<bookmark mark='b'/> The weights fade with time like a shifted power law, slowly, the same shape as a "
             "rough kernel. For the S&P 500 and the VIX, they found this explains most of the variation in implied "
-            "volatility, and that a model built on it fits options on both. The betas come out by ordinary least "
-            "squares inside; only the four kernel shapes need a nonlinear search."
+            "volatility, and that a model built on it fits options on both."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -118,11 +117,9 @@ class PDV(VoiceoverScene):
         src = real_data(r"bitcoin 2024, out of sample; the fitted kernels of the next replay")
         with self.voiceover(
             "Here is the model running. Top, Bitcoin's price, day by day. Behind the moving date, the yellow trail "
-            "is the activity kernel's weight on each past day: heavy on the last few, fading slowly. On the right, "
-            "the two memories: the trend, a weighted sum of past returns, which can be negative; and the activity, "
-            "the square root of a weighted sum of squared returns, always positive. <bookmark mark='a'/> Below, "
-            "implied volatility rebuilt from the two memories alone, traced against DVOL. When the price lurches, "
-            "the activity bar jumps, and the rebuilt volatility jumps with it."
+            "is the activity kernel's weight on each past day. On the right, the two memories: the trend, which can "
+            "be negative, and the activity, always positive. <bookmark mark='a'/> Below, implied volatility rebuilt "
+            "from the two memories alone, against DVOL: when the price lurches, both jump."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(lp), FadeIn(ld), FadeIn(ls), FadeIn(tr_), FadeIn(axis), FadeIn(bb),
                       FadeIn(bl), FadeIn(leg), FadeIn(src))
@@ -208,9 +205,8 @@ class PDV(VoiceoverScene):
             "Bitcoin: the activity memory splits into a fast factor of "
             f"{hl[2]:.0f} days and a slow one of {hl[3]:.0f}. Out of sample it explains {100 * q['r2_test']:.0f} "
             f"percent of DVOL, against {100 * q['tspl_test']:.0f} for the power law: " + verdict + ". "
-            "<bookmark mark='c'/> Is the model even well defined as a stochastic differential equation? Marcel "
-            "Nutz and Andrés Riveros Valdevenito proved in 2024 that it has a unique strong solution for all "
-            "parameters, and Hervé Andrès and Benjamin Jourdain extended that to general kernels."
+            "<bookmark mark='c'/> Is it a well-defined stochastic differential equation? Marcel Nutz and Andrés "
+            "Riveros Valdevenito proved it is, and Hervé Andrès and Benjamin Jourdain extended that to general kernels."
         ) as vo:
             step(0)
             vo.wait_until("a")

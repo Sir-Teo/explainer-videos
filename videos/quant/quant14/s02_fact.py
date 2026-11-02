@@ -17,7 +17,6 @@ class Fact(VoiceoverScene, ThreeDScene):
         self.loom(w)
         self.law(s, w)
         self.definitions(w)
-        self.why()
 
     def card(self):
         c = chapter_card(1, r"The fact: an exploding skew", r"How fast does the skew grow as expiry nears?", part=PART)
@@ -148,14 +147,18 @@ class Fact(VoiceoverScene, ThreeDScene):
                 why(r"the power law; read as roughness, the exponent gives a Hurst exponent $H$ (chapter 2 says why)"),
                 why(r"the bounded rival: finite as $T \to 0$, a power law only beyond $\varepsilon$")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.2, buff=0.7, edge=6.9)
+        verdict = ("A rough reading, as the time series of chapter three will find." if w["H_median"] > 0 else
+                   "That is below zero, which no rough model allows: something besides roughness steepens bitcoin's "
+                   "short end, and the next chapter's computed jump skews show one candidate.")
         q = pause(r"If $H = 0.1$, by what factor is a 1-day option's skew steeper than a 1-month option's?",
                   width=7.0).to_edge(DOWN, buff=0.4)
         ans = MathTex(r"30^{\,0.4} \approx 3.9", font_size=40, color=YELLOW).next_to(q, UP, buff=0.25)
         with self.voiceover(
             "The definitions. The skew psi of T is the slope of implied volatility in log-moneyness, at the money. "
             "<bookmark mark='a'/> The power law says psi is a constant times T to the minus a. Read as roughness, "
-            f"a equals one half minus H, so our median exponent of {w['a_median']:.2f} says H of about "
-            f"{w['H_median']:.2f}. <bookmark mark='b'/> The bounded rival shifts maturity by epsilon, so the skew "
+            f"a equals one half minus H, and our median exponent of {w['a_median']:.2f} gives H of "
+            f"{w['H_median']:.2f}. " + verdict + " "
+            "<bookmark mark='b'/> The bounded rival shifts maturity by epsilon, so the skew "
             "stays finite as expiry nears. <bookmark mark='c'/> Pause and predict. If H is a tenth, how much steeper "
             "is a one-day option's skew than a one-month option's? <bookmark mark='d'/> Thirty days to one is a "
             "factor of thirty, raised to the power four-tenths: about three point nine."
@@ -169,29 +172,5 @@ class Fact(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("d")
             self.play(Write(ans))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def why(self):
-        rows = [cmath(r"\sigma_t", r"=", r"\sigma_0\exp\!\Big(\eta\,W^H_t\Big),\qquad W^H_t = \sqrt{2H}\int_0^t (t - s)^{H - 1/2}"
-                      r"\,dW_s", font_size=34, colors={r"\sigma_t": VAR}),
-                cmath(r"\mathbb{E}\big[(W^H_{t + \Delta} - W^H_t)^2\big]", r"\propto", r"\Delta^{2H}", font_size=36,
-                      colors={r"\mathbb{E}\big[(W^H_{t + \Delta} - W^H_t)^2\big]": RV})]
-        whys = [why(r"a Volterra process: today's volatility is a weighted sum of all past shocks, the recent ones weighted "
-                    r"enormously when $H$ is small; not a Markov process"),
-                why(r"over a short interval $\Delta$, it moves by about $\Delta^H$: far more than Brownian motion's "
-                    r"$\Delta^{1/2}$ when $H \approx 0.1$. Rough paths look jagged at every scale")]
-        step = ladder(self, rows, whys, keep=2, top=2.4, x=-1.6, buff=1.0, edge=6.9)
-        with self.voiceover(
-            "What does rough mean? Write log-volatility as a weighted sum of all past shocks, with a kernel that "
-            "weights the recent ones enormously: t minus s to the power H minus a half. <bookmark mark='a'/> Over a "
-            "short interval, such a process moves by about the interval to the power H. With H near a tenth, that is "
-            "far more than Brownian motion's square root: the path is jagged at every scale, and over the next few "
-            "days volatility can move a lot. That is exactly what short-dated options need to have a steep skew. "
-            "Why exactly a power law, and why classical models cannot make one, is the next chapter."
-        ) as vo:
-            step(0)
-            vo.wait_until("a")
-            step(1)
         self.wait(0.4)
         self.clear_scene()

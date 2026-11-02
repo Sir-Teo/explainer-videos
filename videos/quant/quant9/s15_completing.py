@@ -66,6 +66,8 @@ class Completing(VoiceoverScene):
             f"mark='b'/> One call: {r1['lower']:.2f} to {r1['upper']:.2f}. Ten calls: "
             f"{rl['lower']:.2f} to {rl['upper']:.2f}, around the true {true:.2f}. Stephen Ross proved "
             "in 1976 that options on enough strikes complete the market."
+            " Why do calls help? Each new strike adds a hinge, a new direction in the space of "
+            "payoffs, so the super-replication lid can bend to follow the claim more closely."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in st], lag_ratio=0.03), Create(dig), FadeIn(dl),
                       FadeIn(h), FadeIn(src), run_time=2.5)
@@ -119,7 +121,10 @@ class Completing(VoiceoverScene):
             "the outer branches only, or the middle only. <bookmark mark='c'/> For a convex claim the "
             "outer end wins: the outer branches light up, the middle goes dark. <bookmark mark='d'/> "
             "So the super-price is a binomial price at the widest volatility, and in the limit Black "
-            "and Scholes there: uncertain volatility, Avellaneda, Levy and Parás, and Lyons, 1995."        ) as vo:
+            "and Scholes there: uncertain volatility, Avellaneda, Levy and Parás, and Lyons, 1995." 
+            " In that model, a seller who knows only that volatility stays inside a band charges Black "
+            "and Scholes at the top of the band for convex claims, and at the bottom for concave "
+            "ones."       ) as vo:
             self.play(FadeIn(tree), FadeIn(src))
             step(0)
             vo.wait_until("a")
@@ -159,6 +164,8 @@ class Completing(VoiceoverScene):
             "the middle branch: the stock never moves, and the call is worth its intrinsic value, "
             "zero. The no-arbitrage interval is enormous; a desk narrows it by trading options, or by "
             "choosing a model."
+            f" At one step the tree charges {up[0]:.2f}; at two, {up[1]:.2f}: chapter six's odd and "
+            "even zigzag again, because the super-price is a binomial price."
         ) as vo:
             self.play(FadeIn(g), Create(bsl), FadeIn(bl))
             self.play(LaggedStart(*[GrowFromCenter(p_) for p_ in pts], lag_ratio=0.25), Create(ln), run_time=3)

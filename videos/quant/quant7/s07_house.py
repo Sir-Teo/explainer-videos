@@ -11,6 +11,7 @@ class House(VoiceoverScene):
         self.card()
         self.module(env, env2)
         self.lab(load("house_fc"))
+        self.rule()
 
     def card(self):
         c = chapter_card(18, r"The volatility forecaster", r"How does the House forecast risk, and keep itself honest?",
@@ -103,4 +104,29 @@ class House(VoiceoverScene):
             self.play(AddTextLetterByLetter(out2[0]), run_time=0.6)
             self.play(AddTextLetterByLetter(out2[1]), run_time=1.0)
         self.wait(0.4)
+        self.clear_scene()
+
+    def rule(self):
+        items = [
+            (r"out of sample", r"a test year never touched while models were chosen; validation data for every choice"),
+            (r"against a benchmark", r"HAR and log-HAR: four coefficients that any new model must beat"),
+            (r"with a robust loss", r"QLIKE ranks forecasts correctly against a noisy realized variance"),
+            (r"with a test", r"Diebold--Mariano for pairs; the model confidence set for many"),
+            (r"registered", r"every model counted by the trial counter before its score is seen"),
+        ]
+        rows = VGroup(*[VGroup(label(a, font_size=26, color=QC.HOUSE), label(b, font_size=21, color=GREY_A))
+                        .arrange(DOWN, aligned_edge=LEFT, buff=0.08) for a, b in items]).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        head = label(r"Rule 8, in five parts", font_size=34).to_edge(UP, buff=0.5)
+        rows.next_to(head, DOWN, buff=0.45)
+        with self.voiceover(
+            "Rule eight, unpacked, because every later desk inherits it. Out of sample: the test year stays sealed "
+            "while models are chosen. Against a benchmark: HAR and log-HAR, four coefficients a new model must beat. "
+            "<bookmark mark='a'/> With a robust loss: QLIKE, because the target is measured with noise. With a test: "
+            "Diebold and Mariano for two models, the confidence set for many. And registered: every model is counted "
+            "before its score is seen, so that a lucky search cannot pass for a discovery."
+        ) as vo:
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:2]], lag_ratio=0.4))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[2:]], lag_ratio=0.4))
+        self.wait(0.3)
         self.clear_scene()

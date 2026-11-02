@@ -80,7 +80,7 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "Here is the trade, on a real month. On the first of May 2021 you buy a thirty-day at-the-money Bitcoin "
             f"straddle at the market's implied volatility of {100 * s['iv']:.0f} percent, and hedge it every hour. "
-            "Watch the ledger fill as the month runs: gamma's earnings in pink, theta's bill in blue, and the book. "
+            "Watch the ledger fill: gamma's earnings, theta's bill, and the book. "
             "<bookmark mark='a'/> On the nineteenth, Bitcoin crashed: at its low it had lost almost half its value. "
             f"Over the month it moved at a realized volatility of {100 * s['rv']:.0f} percent, nearly twice what you "
             "paid for. Pause, and predict: did the straddle double its money? <bookmark mark='b'/> It made only "
@@ -120,9 +120,8 @@ class Hook(VoiceoverScene):
             "printed sheets of the model's values onto the floor. <bookmark mark='a'/> In 1985 Lawrence Glosten and Paul "
             "Milgrom explained why a market maker's spread exists, and Hayne Leland what hedging costs. "
             "<bookmark mark='b'/> In 1987 Black Monday repriced index puts for good, months after Susquehanna was "
-            "founded to make options markets; Jane Street followed in 2000. <bookmark mark='c'/> Then the decades of "
-            "selling volatility, and the days it broke: February 2018, and March 2020, when a family of funds that "
-            "called itself hedged lost billions. In 2021 retail traders discovered short-dated options, and in 2024 "
+            "founded to make options markets. <bookmark mark='c'/> Then the decades of selling volatility, and the "
+            "days it broke: February 2018, and March 2020. In 2021 retail traders discovered short-dated options, and in 2024 "
             "India, home of the world's largest derivatives exchange by contracts traded, began to rein in its own "
             "boom."
         ) as vo:

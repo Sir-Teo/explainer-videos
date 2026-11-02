@@ -154,9 +154,8 @@ class Forecast(VoiceoverScene):
                         corner=DR)
         with self.voiceover(
             "Does it work? A fair race. Two eras of Bitcoin, forecasts one, five and twenty days ahead, every model "
-            "refitted every twenty days on the data known at the time, and scored only on days it has not seen. "
-            "The rough forecast gets an intercept and a slope fitted the same way; HAR, an autoregression and the "
-            "last value are the rivals. <bookmark mark='a'/> Here is five days ahead in the older era, forecast "
+            "refitted every twenty days on the data known at the time, scored only on unseen days. The rivals: HAR, "
+            "an autoregression and the last value. <bookmark mark='a'/> Here is five days ahead in the older era, forecast "
             f"against outcome. <bookmark mark='b'/> And the scoreboard. Head to head with HAR, over six races, the rough "
             f"forecast wins {f['rough_wins']} and HAR {6 - f['rough_wins']}, by small margins. At twenty days, no model "
             "beats the test period's own average. <bookmark mark='c'/> The four test blocks below show how much the "

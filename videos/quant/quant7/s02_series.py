@@ -14,6 +14,7 @@ class Series(VoiceoverScene):
         self.funnel()
         self.df_stream(u)
         self.derive()
+        self.augment()
         self.lab(u)
         self.spurious(s, u)
 
@@ -224,5 +225,33 @@ class Series(VoiceoverScene):
             self.play(FadeIn(g2), Create(sline), run_time=2)
             vo.wait_until("c")
             self.play(FadeIn(side[4:]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def augment(self):
+        rows = [
+            cmath(r"\Delta x_t", r"=", r"\gamma\,x_{t-1} + \varepsilon_t", font_size=36),
+            cmath(r"\Delta x_t", r"=", r"a + \gamma\,x_{t-1} + \varepsilon_t", font_size=36),
+            cmath(r"\Delta x_t", r"=", r"a + bt + \gamma\,x_{t-1} + \textstyle\sum_{k=1}^{p} c_k\,\Delta x_{t-k} + \varepsilon_t",
+                  font_size=36),
+        ]
+        whys = [why(r"no constant: 5\% critical value $-1.94$"),
+                why(r"with a constant (a non-zero mean under the alternative): $-2.86$"),
+                why(r"with a trend: $-3.41$; lagged changes soak up autocorrelation (Said and Dickey 1984)")]
+        step = ladder(self, rows, whys, keep=3, top=2.8, x=-2.4, buff=0.6, edge=6.9)
+        with self.voiceover(
+            "Two practical details. The critical value depends on what else is in the regression. With no "
+            "constant, the five percent point is minus one point nine four. <bookmark mark='a'/> With a constant, "
+            "which allows the series a non-zero mean, it is minus two point eight six, the number we simulated. "
+            "<bookmark mark='b'/> With a time trend as well, minus three point four one: each deterministic term "
+            "the regression must estimate pushes the distribution further left. And if the changes are themselves "
+            "autocorrelated, the plain test is distorted, so the augmented test adds lagged changes, enough to whiten "
+            "the residuals. Choosing the terms wrongly is the most common way to get a unit-root test wrong."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
         self.wait(0.3)
         self.clear_scene()

@@ -19,6 +19,7 @@ class Kalman(VoiceoverScene):
         self.derive(k)
         self.lab(k)
         self.sv(k)
+        self.smoother(k)
 
     def card(self):
         c = chapter_card(5, r"The Kalman filter and stochastic volatility", r"How do you track what you cannot see?",
@@ -197,5 +198,38 @@ class Kalman(VoiceoverScene):
             step(1)
             vo.wait_until("b")
             self.play(FadeIn(g), Create(lg), Create(ls), FadeIn(side), run_time=3)
+        self.wait(0.3)
+        self.clear_scene()
+
+    def smoother(self, k):
+        sv = k["sv"]
+        lr = float(np.exp(sv["mu"] / 2) * np.sqrt(252))
+        rows = [
+            cmath(r"J_t", r"=", r"\frac{\phi\,P_{t|t}}{P_{t+1|t}}", font_size=34),
+            cmath(r"m_{t|T}", r"=", r"m_{t|t} + J_t\big(m_{t+1|T} - m_{t+1|t}\big)", font_size=34),
+            cmath(r"\bar\sigma", r"=", r"e^{\mu/2}\sqrt{252}", font_size=34),
+        ]
+        whys = [why(r"how much tomorrow's revision should move today's estimate"),
+                why(r"Rauch, Tung and Striebel (1965): run backwards, correcting each day with what came later"),
+                why(r"the long-run level of the hidden log variance, as an annual volatility")]
+        step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.6, buff=0.55, edge=6.9)
+        res = MathTex(rf"\mu = {sv['mu']:.2f}\ \Rightarrow\ \bar\sigma = {100 * lr:.1f}\%\text{{ a year}}", font_size=32,
+                      color=ALT).to_edge(DOWN, buff=0.7)
+        with self.voiceover(
+            "The filter answers with what was known each day; the smoothed path drawn a moment ago used hindsight. "
+            "Herbert Rauch, Frank Tung and Charlotte Striebel's smoother of 1965 runs the filter backwards: <bookmark "
+            "mark='a'/> each day's estimate is corrected by the surprise in the next day's smoothed value, weighted "
+            "by how much the two are linked. <bookmark mark='b'/> The model also has a long-run level, the mean of the "
+            f"hidden log variance: {sv['mu']:.2f}, which is an annual volatility of about {100 * lr:.0f} percent. That "
+            "is below the market's average volatility, because the average of a log sits below the log of the "
+            "average: the typical day is calmer than the average day. For forecasting, use the filter; for history, "
+            "the smoother."
+        ) as vo:
+            step(0)
+            step(1)
+            vo.wait_until("a")
+            vo.wait_until("b")
+            step(2)
+            self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()

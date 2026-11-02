@@ -93,14 +93,16 @@ class Construct(VoiceoverScene):
         lvl = VGroup(*[MathTex(rf"\text{{level }} {k}:\ {2 ** k + 1}\text{{ points}}", font_size=26, color=GREY_A)
                        .next_to(g, UP, buff=0.1).align_to(g, RIGHT) for k in range(11)])
         with self.voiceover(
-            "Paul Lévy's construction builds the path directly, coarse to fine. Draw the endpoint, one Gaussian, and "
-            "join it to the origin. <bookmark mark='a'/> Given the two ends, the midpoint of a Brownian path is "
-            "Gaussian, centred on the chord, with a variance of a quarter of the interval: the Brownian bridge. "
+            "Paul Lévy's construction builds the path directly, coarse to fine. Draw the endpoint at time one, a "
+            "single Gaussian, and join it to the origin with a straight chord. <bookmark mark='a'/> Now fill in the "
+            "midpoint. Given the two ends, the midpoint of a Brownian path is Gaussian, centred on the chord, with a "
+            "variance of a quarter of the interval's length: Gaussian conditioning, the Brownian bridge. "
             "<bookmark mark='b'/> Displace every midpoint, then every quarter point, then every eighth, each level "
-            "with half the variance of the last. The path crystallises. <bookmark mark='c'/> The sum converges "
-            "uniformly to a continuous path with the right increments, and our twenty thousand draws put the midpoint "
-            f"variance at {c['bridge_var']:.3f}. Monte Carlo libraries build paths this way, the largest moves first, "
-            "as Part sixteen shows."
+            "with half the variance of the last. The path crystallises. <bookmark mark='c'/> At level k the largest "
+            "displacement is about the square root of k times two to the minus k over two, so the corrections are "
+            "summable and the series converges uniformly: the limit is continuous, with exactly the right increments. "
+            f"Our twenty thousand draws put the midpoint variance at {c['bridge_var']:.3f}. Monte Carlo libraries "
+            "build paths this way, the largest moves first, which suits quasi-random numbers, as Part sixteen shows."
         ) as vo:
             self.play(FadeIn(g), Create(paths[0]), FadeIn(lvl[0]))
             vo.wait_until("a")
@@ -158,14 +160,19 @@ class Construct(VoiceoverScene):
                             r"$0.5826\,\sigma\sqrt{\Delta t}$)", 5.4, 17, GREY_B)
         VGroup(res, cap).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UR, buff=0.4)
         with self.voiceover(
-            "What does the path do first? Ask for the chance that it reaches a level a by time T. "
-            "<bookmark mark='a'/> When it first touches the level, the future is a fresh Brownian motion, so the path "
-            "and its mirror image are equally likely. <bookmark mark='b'/> Paths that touched the level and end below "
-            "it are matched, one for one, by mirrors that end above. <bookmark mark='c'/> So the chance of touching "
-            "is twice the chance of ending above: the reflection principle. Differentiate, and the first-passage time "
-            f"has a mean of infinity. <bookmark mark='d'/> On twenty thousand paths: theory {r['p_theory']:.4f}, "
-            f"simulation {r['p_sim']:.4f}, a little low, because a path watched on a grid can cross between looks. "
-            f"Broadie, Glasserman and Kou's shifted barrier gives {r['p_bgk']:.4f}."
+            "What does the path do first? Ask for the chance that it reaches a level a by time T. Here is a path that "
+            "crosses one. <bookmark mark='a'/> At the moment it first touches the level, the future is a fresh "
+            "Brownian motion, independent of the past: the strong Markov property. So the path and its mirror image "
+            "after that moment are equally likely. <bookmark mark='b'/> Split on where the path ends. Paths that "
+            "touched the level and end below it are matched, one for one, by their mirrors, which end above it. "
+            "<bookmark mark='c'/> So the chance of touching is twice the chance of ending above: two times one minus "
+            "Phi of a over root T, the reflection principle. Differentiate in T and you get the first-passage "
+            "density, which falls like t to the minus three halves, so slowly that the expected first-passage time is "
+            f"infinite. <bookmark mark='d'/> Check it on twenty thousand paths. Theory says {r['p_theory']:.4f}; the "
+            f"simulation says {r['p_sim']:.4f}, a little low, because a path watched on a grid can cross between two "
+            "looks. Broadie, Glasserman and Kou showed how to correct for that: shift the barrier by about point five "
+            f"eight standard deviations of one step, and the formula gives {r['p_bgk']:.4f}. Part fifteen prices "
+            "barrier options with it."
         ) as vo:
             self.play(FadeIn(g), Create(level), FadeIn(al), Create(before), run_time=1.5)
             self.play(Create(after), run_time=1.2)

@@ -76,12 +76,16 @@ class Bayes(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
             "Bayes answers with a hierarchy: true means drawn from a population with centre mu and spread tau; each "
-            "estimate its true mean plus noise. <bookmark mark='a'/> Complete the square: the posterior mean weights "
-            "the grand mean by B, the estimate's noise variance over noise plus tau squared. Noisier estimates are "
-            "pulled harder. <bookmark mark='b'/> Empirical Bayes estimates tau as the estimates' variance minus their "
-            "noise. <bookmark mark='c'/> Charles Stein proved in 1956 that with three or more means, shrinking beats the "
-            "raw estimates in total squared error, whatever the truth. <bookmark mark='d'/> A full Bayesian treats tau as "
-            "unknown and samples everything by Gibbs: the means given tau, then mu, then tau, and repeat."
+            "estimate its true mean plus noise of known size. <bookmark mark='a'/> Complete the square in the product of "
+            "the two normal densities: the posterior mean weights the grand mean by B, the estimate's noise variance over "
+            "noise plus tau squared, and the estimate by one minus B. Noisier estimates are pulled harder; when tau is "
+            "zero, everything collapses onto the grand mean. <bookmark mark='b'/> Empirical Bayes estimates tau from the "
+            "data: the variance of the estimates, minus the part their own noise explains, floored at zero. "
+            "<bookmark mark='c'/> Charles Stein proved in 1956 that with three or more means, the raw estimates are "
+            "inadmissible: shrinking beats them in total squared error, whatever the truth. Problem five works it out. "
+            "<bookmark mark='d'/> A full Bayesian treats tau as unknown too, and samples everything by Gibbs: each "
+            "conditional is a textbook distribution, so draw the means given tau, then mu, then tau given the means, "
+            "and repeat."
         ) as vo:
             step(0)
             vo.wait_until("a")

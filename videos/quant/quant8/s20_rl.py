@@ -131,10 +131,12 @@ class RL(VoiceoverScene):
             tgt, DOWN, buff=0.08).align_to(tgt, RIGHT)
         src = illustration(r"300 iterations $\times$ 1{,}024 ten-year quarterly episodes, 5 seeds, one CPU thread each")
         with self.voiceover(
-            "The training, checkpoint by checkpoint: right, the average fraction for five seeds against the optimum; left, "
-            "the policy over time and wealth. <bookmark mark='a'/> It starts at fifty percent, climbs, wanders around the "
-            "optimum in a noisy market, and flattens: the fraction stops depending on time or wealth, as Merton's theorem "
-            "says, though the learner never heard of it."
+            "Here is the training, scrubbed checkpoint by checkpoint. On the right, the average fraction the policy chooses, "
+            "for five seeds, the band showing their spread, against the optimum. On the left, the policy itself, over time "
+            "and wealth, at the same checkpoint. <bookmark mark='a'/> It starts at fifty percent everywhere. It climbs, "
+            "overshoots on some seeds, and wanders around the optimum, because the gradient's signal is a fraction of a "
+            "percent a year inside an eighteen percent market. The map flattens: by the end the fraction barely depends on "
+            "time or wealth, which is what Merton's theorem says, though the learner never heard of it."
         ) as vo:
             self.play(FadeIn(rp), Create(tgt), FadeIn(tl), FadeIn(src))
             vo.wait_until("a")

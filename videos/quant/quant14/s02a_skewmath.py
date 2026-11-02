@@ -83,9 +83,9 @@ class SkewMath(VoiceoverScene, ThreeDScene):
             "<bookmark mark='a'/> To first order in the vol of vol, the skew is the volume under this roof, divided "
             "by T squared. Start with a classical kernel, an exponential, as in Heston or Bergomi: the roof is almost "
             "flat. Shrink the expiry. The volume shrinks like T squared, so the ratio stays put: the skew of a "
-            "one-factor Markov model is flat at short expiries. <bookmark mark='b'/> Now the rough kernel, the "
-            "power law. The roof becomes a ridge that shoots up along the diagonal, where the lag is small. Shrink "
-            "the expiry again, and the volume falls more slowly than T squared, because the ridge never flattens. "
+            "one-factor Markov model is flat at short expiries. <bookmark mark='b'/> Now the rough kernel: the roof "
+            "becomes a ridge shooting up along the diagonal. Shrink the expiry, and the volume falls more slowly "
+            "than T squared, because the ridge never flattens. "
             "<bookmark mark='c'/> The ratio grows like T to the power H minus a half: the power law, straight "
             "out of the shape of the kernel."
         ) as vo:
@@ -133,8 +133,7 @@ class SkewMath(VoiceoverScene, ThreeDScene):
             "time u moves with the spot: their covariance is rho, times the volatility, times the forward "
             "variance, times the kernel at lag u minus t. <bookmark mark='a'/> To first order in the vol of vol, "
             "Lorenzo Bergomi and Julien Guyon showed, the at-the-money skew is that covariance integrated over the "
-            "triangle, divided by twice sigma cubed T squared. A check: with a lognormal vol of vol, this gives "
-            "SABR's well-known short skew, rho times nu over two. <bookmark mark='b'/> For an exponential kernel the "
+            "triangle, divided by twice sigma cubed T squared. <bookmark mark='b'/> For an exponential kernel the "
             "double integral is T over kappa minus a correction: about T squared over two at short expiries, so a "
             "flat skew; about T over kappa at long ones, so a skew that falls like one over T. "
             "<bookmark mark='c'/> For the power kernel, integrate twice: T to the H plus three halves. Divide by T "
@@ -163,9 +162,8 @@ class SkewMath(VoiceoverScene, ThreeDScene):
             "Masaaki Fukasawa turned this into a theorem in 2021, with a title that says it all: volatility has to "
             "be rough. If the skew really follows a power law as expiry goes to zero, then a continuous price whose "
             "volatility is not rough admits an arbitrage. <bookmark mark='a'/> The escape hatch is the word "
-            "really. Several exponentials, with time scales spread over decades, imitate a power law over the range "
-            "they span, and no market quotes a zero-day option at the limit. Chapters ten and twelve walk through "
-            "that hatch."
+            "really. Several exponentials at time scales spread over decades imitate a power law over the range they "
+            "span. Chapters ten and twelve walk through that hatch."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -217,9 +215,8 @@ class SkewMath(VoiceoverScene, ThreeDScene):
             f"Heston fit has a local exponent of {hs['short']:.2f} between two days and two weeks: flat. "
             "<bookmark mark='b'/> Jumps alone go the other way: their skew falls like one over maturity, an "
             f"exponent of {js['short']:.2f}, too steep. Heston with jumps sits in between, by mixing the two. "
-            "<bookmark mark='c'/> The rough models produce the power law from the kernel itself. The dashed line is "
-            "the first-order formula for rough Bergomi: the right slope, but too high, because the fitted vol of "
-            "vol is far from small. <bookmark mark='d'/> The market's own short-end exponent is "
+            "<bookmark mark='c'/> The rough models make the power law from the kernel itself; the dashed first-order "
+            "formula has rough Bergomi's slope but not its level, since the fitted vol of vol is far from small. <bookmark mark='d'/> The market's own short-end exponent is "
             f"{m['market']['short']:.2f}. One factor with one time scale cannot make a power law; a kernel with all "
             "time scales can."
         ) as vo:

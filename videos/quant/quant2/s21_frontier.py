@@ -70,17 +70,19 @@ class Frontier(VoiceoverScene):
             VGroup(left, right).scale_to_fit_height(5.6).to_edge(UP, buff=0.3)
         dots = VGroup(*[d for _, d in cards])
         with self.voiceover(
-            "Six pieces of recent research, placed on a timeline. Greenwood and Sammon show the index-inclusion "
-            "effect of chapter fifteen has nearly disappeared. Pavlova and Sikorskaya measure how much of each stock "
-            "is tied to benchmarks, and find that the more it is, the less elastic its demand. "
-            "<bookmark mark='a'/> Bryzgalova, Pavlova and Sikorskaya document the rise of retail options trading, "
-            "now over sixty percent of American options volume, with almost all of its payment for order flow coming "
-            "from three wholesalers, and retail buyers paying wide spreads and losing on average. "
-            "<bookmark mark='b'/> Schwarz, Barber, Huang, Jorion and Odean placed tens of thousands of identical "
-            "orders at different brokers at the same moment and got different prices: the gap came from how "
-            "wholesalers priced each broker's flow, not from payment for order flow. <bookmark mark='c'/> Federal "
-            "Reserve economists have measured the Treasury basis trade, about eight hundred and thirty billion "
-            "dollars by September 2025. And Pinter's anatomy of the 2022 gilt crisis shows who sold, and why."
+            "Six pieces of recent research, placed on a timeline. Greenwood and Sammon show that the index-inclusion effect of "
+            "chapter fifteen has nearly disappeared. Pavlova and Sikorskaya measure how much of each stock is tied to "
+            "benchmarks, and find that the more it is, the less elastic its demand, and the lower its returns after the "
+            "intensity rises. <bookmark mark='a'/> Bryzgalova, Pavlova and Sikorskaya document the rise of retail options "
+            "trading, now over sixty percent of American options volume, with almost all of its payment for order flow coming "
+            "from three wholesalers; retail buyers favour cheap weekly options with wide spreads, and lose on average. "
+            "<bookmark mark='b'/> Schwarz, Barber, Huang, Jorion and Odean placed tens of thousands of identical orders at "
+            "different brokers at the same moment and got different prices: the gap came from how wholesalers priced each "
+            "broker's flow, not from payment for order flow. <bookmark mark='c'/> Federal Reserve economists have measured the "
+            "Treasury basis trade, chapter two's carry on the safest asset: about eight hundred and thirty billion dollars by "
+            "September 2025, roughly double its early-2020 peak. And Pinter's anatomy of the 2022 gilt crisis shows who sold, "
+            "and why: pension funds' liability hedges meeting collateral calls, chapter nine's procyclical margin in another "
+            "guise."
         ) as vo:
             self.play(FadeIn(ax))
             self.play(FadeIn(cards[0][0]), FadeIn(cards[0][1]), FadeIn(cards[1][0]), FadeIn(cards[1][1]))

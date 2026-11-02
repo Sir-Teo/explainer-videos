@@ -96,12 +96,16 @@ class PDE(VoiceoverScene, ThreeDScene):
                 why(r"true for every test function $\varphi$: the Fokker--Planck (forward Kolmogorov) equation")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.8, buff=0.65, edge=6.9)
         with self.voiceover(
-            "The derivation starts from the generator: the drift times the slope, plus half the squared volatility "
-            "times the curvature. <bookmark mark='a'/> By Itô's lemma, the expected value of phi of X changes at the "
-            "rate of the expected generator, since the Brownian term has mean zero. <bookmark mark='b'/> Write that "
-            "expectation as an integral against the density, and integrate by parts twice. <bookmark mark='c'/> It "
-            "holds for every test function, so the density itself obeys the Fokker-Planck equation, carried forward "
-            "by the adjoint of the generator."
+            "The derivation starts from the generator: for a smooth test function phi, the drift times its slope, "
+            "plus half the squared volatility times its curvature. <bookmark mark='a'/> By Itô's lemma, phi of X "
+            "changes by the generator times d t plus a Brownian term with mean zero, so the expected value of phi of "
+            "X changes at the rate of the expected generator: Dynkin's formula in differential form. "
+            "<bookmark mark='b'/> Write that expectation as an integral against the density p, and integrate by parts "
+            "twice, once for the slope and twice for the curvature, to move every derivative from phi onto a times p "
+            "and onto b squared times p. The boundary terms vanish because phi has compact support. "
+            "<bookmark mark='c'/> The identity holds for every test function, so the density itself obeys the "
+            "Fokker-Planck equation: the time derivative of p equals minus the slope of the drift flux plus half the "
+            "curvature of the variance flux. It is carried forward by the adjoint of the generator."
         ) as vo:
             step(0)
             vo.wait_until("a")

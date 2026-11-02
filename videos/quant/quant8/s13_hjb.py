@@ -49,14 +49,19 @@ class HJB(VoiceoverScene):
                     r"the Sharpe ratio (Merton 1969)", font_size=21)]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.6, buff=0.95, edge=6.9)
         with self.voiceover(
-            "Shrink Bellman's period to an instant h: the value now is the best expected value at t plus h. "
-            "<bookmark mark='a'/> Expand that future value with Itô's formula: a drift integral plus a stochastic integral. "
-            "<bookmark mark='b'/> The stochastic integral has mean zero; subtract today's value and divide by h. "
-            "<bookmark mark='c'/> Let h go to zero: zero equals the time derivative plus the supremum over the fraction of "
-            "the drift of wealth times V x plus half the variance times V x x. That is the Hamilton-Jacobi-Bellman "
-            "equation. <bookmark mark='d'/> Inside the supremum is a parabola in pi; when V is concave, its vertex gives "
-            "the fraction. <bookmark mark='e'/> Guess a power of wealth times a function of time, and the equation "
-            "collapses to an ordinary differential equation for f. The fraction is Merton's."
+            "Shrink Bellman's period to an instant. Over a short interval of length h, the value now is the best expected "
+            "value at the end of the interval: the same principle. <bookmark mark='a'/> Expand that future value with Itô's "
+            "formula from Part five. It is today's value, plus a drift integral, the time derivative plus the generator of "
+            "wealth under the chosen fraction, plus a stochastic integral against the Brownian motion. "
+            "<bookmark mark='b'/> The stochastic integral has mean zero. Subtract today's value from both sides and divide "
+            "by h. <bookmark mark='c'/> Let h go to zero, and the average of the integrand becomes its value now: zero "
+            "equals the time derivative plus the supremum, over the fraction, of the drift of wealth times V x plus half the "
+            "variance times V x x. This is the Hamilton-Jacobi-Bellman equation, with utility as its terminal condition. "
+            "<bookmark mark='d'/> The thing inside the supremum is a parabola in pi. When V is concave its vertex is the "
+            "maximum, and the first-order condition gives the fraction. <bookmark mark='e'/> Now guess a power of wealth "
+            "times a function of time. The x derivatives become multiples of V, the supremum becomes a number, and the "
+            "equation collapses to an ordinary differential equation for f, equal to one at the end. The fraction is "
+            "Merton's: the excess return over gamma times the variance."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -147,11 +152,14 @@ class HJB(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25), who=r"Fleming and Rishel (1975); Pham ch.\ 3; Bj\"ork",
             width=12.2, color=VALUE).move_to(ORIGIN)
         with self.voiceover(
-            "We guessed the answer. Why is it right? Take any strategy and apply Itô's formula to a smooth solution w of "
-            "the HJB. <bookmark mark='a'/> Utility at the end is w today, plus a drift that the HJB makes at most zero, plus "
-            "a martingale. Take expectations: no strategy beats w, and the maximizer attains it. So w is the value and the "
-            "maximizer is optimal. <bookmark mark='b'/> The fine print: the martingale condition, and smoothness, which "
-            "the next chapter does without."
+            "We guessed the answer. Why is the guess right? The verification theorem. Suppose a smooth function w solves "
+            "the HJB equation and equals utility at the end. Take any strategy at all and apply Itô's formula to w along "
+            "its wealth. <bookmark mark='a'/> Utility at the end equals w today, plus a drift integral, plus a stochastic "
+            "integral. The HJB says the drift is at most zero for every strategy, because zero is the supremum; so utility "
+            "at the end is at most w today plus a martingale. Take expectations: no strategy can beat w. For the maximizer "
+            "the drift is exactly zero, so it attains w. Therefore w is the value function, and the maximizer is optimal. "
+            "<bookmark mark='b'/> The fine print is the martingale condition, which rules out doubling strategies, and the "
+            "smoothness of w. When w is not smooth the argument breaks, and the next chapter repairs it."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -212,8 +212,7 @@ class Lift(VoiceoverScene):
             f"factors cut that to {rows[3]['iv_err']:.1f}, twenty to {rows[4]['iv_err']:.1f}, fifty to "
             f"{rows[5]['iv_err']:.2f}. In law, the lift converges fast. Path by path it converges slowly: the distance "
             f"between lifted and exact paths is still {lp['rows'][3]['dist']:.2f} standard deviations at fifty factors, "
-            "because the kernel's spike lives at time scales shorter than the fastest factor. For pricing, that does "
-            "not matter. The roughness was never magic: it is many time scales at once, and a model with enough of "
+            "because the kernel's spike lives below the fastest factor's time scale. The roughness was never magic: it is many time scales at once, and a model with enough of "
             "them prices the same."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(side), FadeIn(src))

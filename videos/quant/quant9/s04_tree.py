@@ -71,6 +71,8 @@ class Tree(VoiceoverScene):
             "<bookmark mark='e'/> The weight q comes from the moves and the rate alone, no one's "
             "probability of an up move, and it lies in zero to one exactly when there is no "
             "arbitrage."
+            " Check the hedge: in the up state half a share is worth sixty, minus the forty owed, "
+            "twenty; in the down state, forty minus forty, zero. Both payoffs, exactly."
         ) as vo:
             self.play(FadeIn(g), FadeIn(up), FadeIn(dn), FadeIn(lab))
             vo.wait_until("a")
@@ -132,6 +134,8 @@ class Tree(VoiceoverScene):
             "each node's delta, finance the rest. Follow one path. <bookmark mark='c'/> At expiry the "
             "book equals the payoff exactly, on this path and on every one of a thousand, to within "
             f"{t['rep_max_err']:.0e}. That is replication."
+            " Notice the deltas: near one deep in the money, near zero far out of it, just as Part "
+            "ten's Black-Scholes delta will be."
         ) as vo:
             self.play(FadeIn(g.edges), *[FadeIn(nd[0]) for n in g.nodes for nd in g.nodes[n]])
             self.play(*[nd[1].animate.set_opacity(1) for nd in g.nodes[4]])
@@ -190,6 +194,8 @@ class Tree(VoiceoverScene):
             "<bookmark mark='a'/> Run one to four steps, then let N grow. <bookmark mark='b'/> The "
             f"prices zigzag, odd above even, closing in on Black and Scholes' {t['bs']:.3f}; at two "
             f"hundred steps, {P[199]:.3f}."
+            " The whole tree costs about N squared over two operations, and the error shrinks roughly "
+            "like one over N, with the zigzag on top."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g), Create(bsl), FadeIn(bsll))
             vo.wait_until("a")
@@ -221,6 +227,8 @@ class Tree(VoiceoverScene):
             "waiting. <bookmark mark='a'/> For a put with five percent rates, exercise wins at "
             f"{len(nodes)} deep in-the-money nodes, and the put is worth {t['am_put']:.2f} against "
             f"{t['eu_put']:.2f} European. Shreve's chapter four does this in full."
+            " The line between the nodes where exercise wins and those where waiting wins is the "
+            "early-exercise boundary of Parts eight and ten."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rule), FadeIn(src))
             vo.wait_until("a")

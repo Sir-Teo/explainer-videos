@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant17.common import BAD, GOOD, IV, NET, OPT, PART, REF, illustration, load
+from videos.quant.quant17.common import BAD, GOOD, IV, NET, OPT, PART, REF, ask, comma, illustration, load
 
 
 class Calibrator(VoiceoverScene):
@@ -11,12 +11,14 @@ class Calibrator(VoiceoverScene):
         c = load("calib")
         self.card()
         self.idea(c)
-        self.training(c)
-        self.surface(c)
+        self.pipeline(c)
+        self.training(c, load("calib_ckpt"))
+        self.noise(c, load("calib_noise"))
 
     def card(self):
-        c = chapter_card(2, r"The neural calibrator", r"How do you calibrate a model with no formula, every day?", part=PART)
-        with self.voiceover("Chapter two. The neural calibrator."):
+        c = chapter_card(3, r"The neural calibrator: learning the map", r"How do you calibrate a model with no formula, "
+                         r"every day?", lit=(2016,), part=PART)
+        with self.voiceover("Chapter three. The neural calibrator, part one: learning the map."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -46,93 +48,173 @@ class Calibrator(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def training(self, c):
-        h = c["history"]
-        ep = np.array([r["epoch"] for r in h])
-        tr = np.array([r["train_rmse"] for r in h])
-        va = np.array([r["val_rmse"] for r in h])
-        top = float(max(tr[1:].max(), va[1:].max()) * 1.3)
-        g = axes([0, ep.max()], [0, top], x_length=6.6, y_length=4.2, xlabel=r"epoch",
-                 ylabel=r"error in implied volatility (vol points)", xticks=[0, 10, 20, 30, 40],
-                 yticks=[round(v, 1) for v in np.linspace(0, top, 4)[1:]], font_size=15).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
-        ax = g.ax
-        l1 = curve(ax, ep, np.minimum(tr, top), GREY_B, stroke_width=2.5)
-        l2 = curve(ax, ep, np.minimum(va, top), NET, stroke_width=3.5)
-        nz = DashedLine(ax.c2p(0, c["label_noise_rmse"]), ax.c2p(ep.max(), c["label_noise_rmse"]), stroke_color=BAD,
-                        stroke_width=2)
-        leg = legend([(GREY_B, r"training sets"), (NET, r"parameter sets never seen"),
-                      (BAD, r"Monte Carlo noise in the labels themselves")], font_size=16)
-        leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
-        q = c["held_err_q"]
-        side = wrapped_label(rf"held out: {c['held_rmse']:.2f} vol points (median {q[0]:.2f}, 99th percentile {q[2]:.2f}). "
-                             rf"Simulating the same parameters again with fresh random numbers moves the labels by "
-                             rf"{c['label_noise_rmse']:.2f}: the network's error is below the noise in its own labels, "
-                             r"because fitting thousands of them averages that noise out", 4.3, 19, GREY_A).to_edge(RIGHT, buff=0.4)
-        src = illustration(rf"{c['train_seconds'] / 60:.0f} minutes of training on a CPU; 4 layers of 96 units")
+    def pipeline(self, c):
+        n_pts = c["n_train"] + c["n_held"]
+        off = RoundedRectangle(width=6.0, height=3.2, corner_radius=0.15, stroke_color=GREY_B, stroke_width=1.5)
+        on = RoundedRectangle(width=5.6, height=3.2, corner_radius=0.15, stroke_color=NET, stroke_width=1.5)
+        VGroup(off, on).arrange(RIGHT, buff=0.8).shift(UP * 0.9)
+        t_off = label(r"offline, once: hours", font_size=22, color=GREY_A).next_to(off, UP, buff=0.1)
+        t_on = label(r"online, every day: seconds", font_size=22, color=NET).next_to(on, UP, buff=0.1)
+        rng = np.random.default_rng(0)
+        cloud = VGroup(*[Dot(off.get_center() + np.array([rng.uniform(-2.6, 2.6), rng.uniform(-0.9, 0.5), 0]),
+                             radius=0.025, color=IV) for _ in range(160)])
+        bar_bg = Rectangle(width=5.2, height=0.22, stroke_color=GREY_C, stroke_width=1).move_to(off.get_bottom() + UP * 0.45)
+        bar = Rectangle(width=5.2, height=0.22, stroke_width=0, fill_color=IV, fill_opacity=0.8).move_to(bar_bg)
+        bar.stretch(0.01, 0, about_edge=LEFT)
+        cap = label(rf"12{{,}}000 parameter sets $\to$ Monte Carlo $\to$ {comma(n_pts)} labels $\to$ network",
+                    font_size=17, color=GREY_A).next_to(bar_bg, UP, buff=0.12)
+        flow = VGroup(label(r"today's quotes", font_size=21, color=IV), MathTex(r"\downarrow", font_size=30),
+                      label(r"gradient descent through the network", font_size=21, color=NET),
+                      MathTex(r"\downarrow", font_size=30), label(r"$(H, \eta, \rho, \xi_0, \xi_1)$", font_size=24,
+                                                                   color=GOOD)).arrange(DOWN, buff=0.08).move_to(on)
+        lin = VGroup(
+            firm_card(r"Hernandez (2016)", r"a network learns the inverse map, quotes to parameters, for Hull--White",
+                      source=r"\textit{Risk}", width=3.1, font_size=16),
+            firm_card(r"Bayer and Stemper (2018)", r"pointwise: one implied vol per $(\theta, T, k)$", source=r"arXiv",
+                      width=3.1, font_size=16),
+            firm_card(r"Liu, Oosterlee and Bohte (2019)", r"networks for prices and implied volatilities", source=r"\textit{Risks}",
+                      width=3.1, font_size=16),
+            firm_card(r"Horvath, Muguruza and Tomas (2021)", r"the forward map on a grid, for rough volatility",
+                      source=r"\textit{Quantitative Finance}", width=3.1, font_size=16),
+        ).arrange(RIGHT, buff=0.18).to_edge(DOWN, buff=0.3)
+        for card in lin:
+            card[0].set_stroke(GREY_C)
         with self.voiceover(
-            "Training, epoch by epoch. Grey is the error on the training data, purple on parameter sets the network "
-            f"never saw. <bookmark mark='a'/> It ends at {c['held_rmse']:.2f} vol points. For scale: simulating the same "
-            f"parameters again with fresh random numbers moves the labels themselves by {c['label_noise_rmse']:.2f}. The "
-            "network's error is below the noise in its own training data: fitting thousands of noisy labels averages "
-            "the noise out."
+            "The work splits in two. Offline, once: draw twelve thousand random parameter sets, simulate each by "
+            f"Monte Carlo, and keep {n_pts:,} implied volatilities as labels; then fit the network to them. That took "
+            "hours on this machine, and it is never repeated. <bookmark mark='a'/> Online, every day: take the "
+            "market's quotes and run gradient descent on the five parameters, through the network, in seconds. "
+            "<bookmark mark='b'/> The idea has a short history. In 2016 Andres Hernandez trained a network to map "
+            "quotes straight to parameters. Christian Bayer and Benjamin Stemper made it pointwise, one implied "
+            "volatility per parameter set, expiry and strike, which is the form used here; Shuaiqiang Liu, Cornelis "
+            "Oosterlee and Sander Bohte learned prices and implied volatilities; and Horvath, Muguruza and Tomas "
+            "learned the forward map on a whole grid for rough volatility, and made it practical."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), Create(l1), FadeIn(leg[0]), Create(l2), FadeIn(leg[1]), run_time=2.5)
+            self.play(Create(off), FadeIn(t_off), FadeIn(bar_bg), FadeIn(bar), FadeIn(cap))
+            self.play(LaggedStart(*[FadeIn(d) for d in cloud], lag_ratio=0.01),
+                      bar.animate.stretch(100, 0, about_edge=LEFT), run_time=4)
             vo.wait_until("a")
-            self.play(Create(nz), FadeIn(leg[2]), FadeIn(side))
+            self.play(Create(on), FadeIn(t_on), LaggedStart(*[FadeIn(f_) for f_ in flow], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(card, shift=UP * 0.2) for card in lin], lag_ratio=0.5, run_time=4))
         self.wait(0.4)
         self.clear_scene()
 
-    def surface(self, c):
-        s = c["surface"]
-        p = s["params"]
-        p14 = c["part14"]
+    def training(self, c, k):
+        h0, h1 = c["history"], k["history"]
+        ep = np.array([r["epoch"] for r in h0])
+        L = np.array([[r["val_rmse"] for r in h0], [r["val_rmse"] for r in h1]])
         sl = c["slices"]
-        groups = VGroup()
-        for d in sl:
-            k, iv, mc = np.asarray(d["k"]), np.asarray(d["iv"]), np.asarray(d["mc"])
-            kk, net = np.asarray(d["kk"]), np.asarray(d["net"])
-            ylo, yhi = float(np.nanmin(np.r_[iv, net])) - 0.03, float(np.nanmax(np.r_[iv, net])) + 0.03
-            yt = [v / 100 for v in range(int(np.ceil(ylo * 10)) * 10, int(yhi * 100) + 1, 10)]
-            g = axes([kk[0], kk[-1]], [ylo, yhi], x_length=3.7, y_length=2.8, xlabel=r"log-moneyness $k$",
-                     ylabel=r"implied volatility" if not groups else "",
-                     xticks=[round(kk[0] / 2, 1), 0, round(kk[-1] / 2, 1)], yticks=yt,
-                     yfmt=lambda v: rf"{100 * v:.0f}\%", font_size=13)
-            ax = g.ax
-            dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=IV) for a, b in zip(k, iv)])
-            chk = VGroup(*[Cross(scale_factor=0.06, stroke_color=REF, stroke_width=2).move_to(ax.c2p(a, b))
-                           for a, b in zip(k, mc) if np.isfinite(b) and ylo < b < yhi])
-            ln = curve(ax, kk, np.clip(net, ylo, yhi), NET, stroke_width=3)
-            ttl = label(rf"{d['T'] * 365:.0f} days", font_size=20).next_to(g, UP, buff=0.1)
-            groups.add(VGroup(g, dots, ln, chk, ttl))
-        groups.arrange(RIGHT, buff=0.45).to_edge(UP, buff=0.9)
-        leg = legend([(IV, r"the Surface (Part 13)"), (NET, r"rough Bergomi through the network"),
-                      (REF, r"$\times$ fresh Monte Carlo at the same parameters")], font_size=16)
-        leg.next_to(groups, DOWN, buff=0.3).to_edge(LEFT, buff=0.8)
-        res = VGroup(
-            MathTex(rf"H = {p['H']:.2f},\ \eta = {p['eta']:.1f},\ \rho = {p['rho']:.2f}", font_size=30, color=NET),
-            label(rf"error {s['net_rmse']:.2f} vol points through the network, {s['mc_rmse']:.2f} by fresh Monte Carlo; "
-                  rf"{s['n']} quotes", font_size=19, color=GREY_A),
-            label(rf"calibrated in {s['seconds']:.1f} s; one network pass over the surface: "
-                  rf"{1e3 * c['t_net_surface']:.1f} ms, against {c['t_mc_surface']:.0f} s of Monte Carlo", font_size=19,
-                  color=GREY_A),
-            label(rf"Part 14's direct Monte Carlo fit: $H = {p14['params']['H']:.2f}$, error {p14['rmse']:.2f}",
-                  font_size=19, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.3).to_edge(LEFT, buff=0.8)
+        cks = ["0", "1", "5", "10", "20", "40"]
+
+        def frame(i):
+            panels = VGroup()
+            for j, d in enumerate(sl):
+                kk = np.asarray(d["kk"])
+                iv = np.asarray(d["iv"])
+                y = np.asarray(k["snaps"][cks[i]][j])
+                ylo, yhi = 0.3, 1.0
+                g = axes([kk[0], kk[-1]], [ylo, yhi], x_length=1.75, y_length=2.4, xlabel=rf"{d['T'] * 365:.0f} days",
+                         ylabel=r"implied vol" if j == 0 else "", xticks=[], yticks=[0.4, 0.7, 1.0] if j == 0 else [],
+                         yfmt=lambda v: rf"{100 * v:.0f}\%", font_size=12)
+                dots = VGroup(*[Dot(g.ax.c2p(a, b_), radius=0.03, color=IV) for a, b_ in zip(d["k"], iv)
+                                if kk[0] <= a <= kk[-1] and ylo < b_ < yhi])
+                panels.add(VGroup(g, dots, curve(g.ax, kk, np.clip(y, ylo, yhi), NET, stroke_width=3)))
+            panels.arrange(RIGHT, buff=0.15)
+            return VGroup(panels, label(rf"after epoch {cks[i]}: the Surface's smiles at the calibrated parameters",
+                                        font_size=16, color=NET).next_to(panels, DOWN, buff=0.15))
+        rp = TrainingReplay(ep, L, frame, checkpoints=[1, 2, 5, 10, 20, 40], ylabel=r"held-out error (vol points)",
+                            xlabel=r"epoch")
+        leg = legend([(IV, r"the Surface's quotes"), (NET, r"what the network (seed 1) says rough Bergomi gives"),
+                      (QC.Q, r"band: seeds 0 and 1, error on parameter sets never seen")], font_size=16).to_edge(UP, buff=0.3)
+        e0, e1 = h0[-1]["val_rmse"], h1[-1]["val_rmse"]
+        src = illustration(rf"4 layers of 96 units; 40 epochs of the {comma(c['n_train'])} training labels; "
+                           rf"about {c['train_seconds'] / 60:.0f} minutes a seed on a CPU")
         with self.voiceover(
-            "Now the Surface, calibrated through the network. Three expiries: the market in orange, the network's smile "
-            "in purple. <bookmark mark='a'/> The crosses check it: fresh Monte Carlo at the calibrated parameters, never "
-            f"touched by the network. The fit is {s['net_rmse']:.2f} vol points through the network and {s['mc_rmse']:.2f} "
-            f"by simulation, with Hurst exponent {p['H']:.2f}. <bookmark mark='b'/> A pass of the network over the whole "
-            f"surface takes {1e3 * c['t_net_surface']:.1f} milliseconds, against {c['t_mc_surface']:.0f} seconds of Monte "
-            f"Carlo. Part fourteen's direct fit found H of {p14['params']['H']:.2f}. Calibration that took minutes now "
-            "takes seconds, so it can be done every day, which is the next chapter."
+            "Here is the network learning, from two random starts. On the right, its error on parameter sets it never "
+            "saw. On the left, what it believes rough Bergomi gives at the parameters we will calibrate in the next "
+            "chapter, at three expiries, against the market's quotes. <bookmark mark='a'/> At the start, flat lines. "
+            "After one pass, a level. After five, the skew appears, and it sharpens epoch by epoch. Both seeds end "
+            f"near {min(e0, e1):.1f} to {max(e0, e1):.1f} vol points."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(VGroup(gg[0], gg[1], gg[4])) for gg in groups], lag_ratio=0.3),
-                      FadeIn(leg[0]))
-            self.play(*[Create(gg[2]) for gg in groups], FadeIn(leg[1]))
+            self.play(FadeIn(rp), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")
-            self.play(*[FadeIn(gg[3]) for gg in groups], FadeIn(leg[2]), FadeIn(res[0]), FadeIn(res[1]))
+            rp.play(self, run_time=max(vo.remaining(0.5), 4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def noise(self, c, nz):
+        a, b, d = nz["net_label"], nz["net_fresh"], nz["label_fresh"]
+        s10 = d["rmse"] / np.sqrt(1.5)
+        rows = [cmath(r"\mathbb{E}(\hat F - y)^2", r"=", r"\mathbb{E}(\hat F - F)^2 + s^2", font_size=40,
+                      colors={r"\mathbb{E}(\hat F - y)^2": NET}),
+                cmath(r"\mathbb{E}(y_{10k} - y_{20k})^2", r"=", r"s_{10k}^2 + s_{20k}^2 = 1.5\, s_{10k}^2", font_size=40,
+                      colors={r"\mathbb{E}(y_{10k} - y_{20k})^2": BAD}),
+                cmath(r"s_{10k}", r"\approx", rf"{d['rmse']:.2f} / \sqrt{{1.5}} = {s10:.2f}", font_size=40,
+                      colors={r"s_{10k}": BAD})]
+        whys = [why(r"a label $y$ is the true implied vol $F$ plus Monte Carlo noise of variance $s^2$, independent of the "
+                    r"network: so a held-out error can never fall below the noise of the labels it is scored against"),
+                why(r"two independent simulations of the same parameters, with 10{,}000 and 20{,}000 paths: Monte Carlo "
+                    r"variance falls like one over the number of paths, so their gap has variance $1.5\,s_{10k}^2$"),
+                why(r"so the label-against-fresh gap overstates the labels' own noise by $\sqrt{1.5}$; and the fair judge of "
+                    r"the network is the fresher, less noisy simulation")]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "How good is that? The honest answer needs care, because the labels themselves are noisy. Each one is "
+            "the true implied volatility plus Monte Carlo noise, independent of the network, so a held-out error can "
+            "never fall below the noise of the labels it is scored against. <bookmark mark='a'/> To measure that noise, "
+            f"we simulated {nz['n_sets']} held-out parameter sets again, with twenty thousand fresh paths. Two "
+            "independent simulations differ by both their noises: one and a half times the variance of the ten-"
+            f"thousand-path label. <bookmark mark='b'/> So the labels' own noise is about {s10:.2f} vol points."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
             vo.wait_until("b")
-            self.play(FadeIn(res[2]), FadeIn(res[3]))
+            step(2)
+        self.wait(0.4)
+        self.clear_scene()
+        names = [(r"network vs its own label (10k paths)", a, NET), (r"network vs fresh simulation (20k paths)", b, GOOD),
+                 (r"label vs fresh simulation", d, BAD)]
+        mx = max(x["rmse"] for _, x, _ in names) * 1.25
+        g = axes([-0.5, 2.5], [0, mx], x_length=6.6, y_length=4.0, ylabel=r"vol points", xticks=[], yticks=[0, 1, 2],
+                 font_size=14).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
+        bars = VGroup()
+        for i, (nm, x, col) in enumerate(names):
+            p0, p1 = g.ax.c2p(i - 0.3, 0), g.ax.c2p(i + 0.3, x["rmse"])
+            r_ = Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=col,
+                           fill_opacity=0.8).move_to((p0 + p1) / 2)
+            m_ = DashedLine(g.ax.c2p(i - 0.3, x["median_abs"]), g.ax.c2p(i + 0.3, x["median_abs"]), stroke_color=WHITE,
+                            stroke_width=2)
+            bars.add(VGroup(r_, m_, MathTex(f"{x['rmse']:.2f}", font_size=28, color=col).next_to(r_, UP, buff=0.1),
+                            wrapped_label(nm, 2.0, 15, col).next_to(g.ax.c2p(i, 0), DOWN, buff=0.15)))
+        closer = b["rmse"] < d["rmse"]
+        if closer:
+            verdict = "the network is closer to the fresh simulation than its own training labels are"
+        else:
+            verdict = "the network is no closer to the fresh simulation than its own labels are"
+        side = wrapped_label(rf"bars: root-mean-square; white lines: median absolute ({b['median_abs']:.2f}, "
+                             rf"{d['median_abs']:.2f}). {nz['n_points']:,} points on {nz['n_sets']} parameter sets the "
+                             r"network never saw. The variance split is not exact (implied-vol noise has heavy tails), so "
+                             r"no single 'true error' is claimed".replace(",", "{,}", 1), 4.4, 18,
+                             GREY_A).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "Now the three comparisons side by side. The network against its own noisy label: "
+            f"{a['rmse']:.2f} vol points. <bookmark mark='a'/> The same labels against the fresh simulation: "
+            f"{d['rmse']:.2f}. <bookmark mark='b'/> And the network against the fresh simulation: {b['rmse']:.2f}. So "
+            f"{verdict}. Fitting hundreds of thousands of noisy labels with a smooth function averages much of their "
+            "noise away; the white lines, the medians, tell the same story with less weight on the tails."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(bars[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(bars[2]))
+            vo.wait_until("b")
+            self.play(FadeIn(bars[1]), FadeIn(side))
+        q = ask(r"train on labels with twice the noise. Does the held-out error double?")
+        with self.voiceover(
+            "A question: train on labels with twice the noise. Does the error against the fresh simulation double? "
+            "Think about what averaging does before you answer; it is one of the problems in the notes."
+        ):
+            self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

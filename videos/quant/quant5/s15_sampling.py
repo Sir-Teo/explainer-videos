@@ -85,11 +85,14 @@ class Sampling(VoiceoverScene):
         vr = MathTex(rf"\text{{variance}} \div {i['var_ratio']:.0f}", font_size=40, color=DRIFT).next_to(leg, DOWN,
                                                                                                      buff=0.5)
         with self.voiceover(
-            "Watch the two estimates race, path by path, with bands of two standard errors. <bookmark mark='a'/> The "
-            "plain estimate sits at zero, then jumps each time a rare path pays, and its band stays wide. The "
-            "re-weighted one locks onto the exact price almost at once. <bookmark mark='b'/> Both are unbiased, but "
-            f"the variance is {i['var_ratio']:.0f} times smaller: one re-weighted path is worth about "
-            f"{i['var_ratio']:.0f} plain ones. This is importance sampling; Part sixteen develops it."
+            "Watch the two estimates race, path by path, each with a band of two standard errors. "
+            "<bookmark mark='a'/> The plain estimate sits at zero for the first few hundred paths, then jumps every "
+            "time a rare path pays, and its band stays wide. The re-weighted one locks onto the exact price almost at "
+            "once: half its paths now pay, each with a small weight. <bookmark mark='b'/> Both are unbiased, but the "
+            f"variance is {i['var_ratio']:.0f} times smaller: one re-weighted path is worth about {i['var_ratio']:.0f} "
+            "plain ones. The shift was chosen by eye, to put the typical path at the strike; how to choose it "
+            "optimally, and when re-weighting backfires, is Part sixteen's subject. Every risk system that prices "
+            "rare events uses some version of this."
         ) as vo:
             self.add(b1, b2, l1, l2)
             self.play(FadeIn(g), Create(exact), FadeIn(el), FadeIn(leg))
@@ -170,11 +173,13 @@ class Sampling(VoiceoverScene):
                   color=GREY_B),
         ).arrange(DOWN, buff=0.35)
         with self.voiceover(
-            "This asymmetry is the root of option pricing. Two models with volatilities of twenty and twenty-one "
-            "percent disagree, with certainty, about the quadratic variation of a single path. <bookmark mark='a'/> "
-            "Their measures are singular; two models differing only in drift are equivalent, and Z converts one into "
-            "the other. <bookmark mark='b'/> So a price can depend on volatility but not on mu: the risk-neutral "
-            "measure of Parts nine and ten swaps the drift for the riskless rate and keeps sigma."
+            "This asymmetry is the root of option pricing. Take two models that differ only in volatility, twenty and "
+            "twenty-one percent. The quadratic variation of the log price is a property of one path: one model says "
+            "it is four hundredths per year with certainty, the other says that is impossible. <bookmark mark='a'/> "
+            "The measures are singular: no likelihood ratio connects them. Two models that differ only in drift are "
+            "equivalent, and Girsanov's Z converts one into the other. <bookmark mark='b'/> So a price, which must "
+            "not depend on whose drift you believe, can depend on volatility and cannot depend on mu. The "
+            "risk-neutral measure of Parts nine and ten swaps the drift for the riskless rate and keeps sigma."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

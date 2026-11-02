@@ -44,6 +44,8 @@ class Frontier(VoiceoverScene):
             "Brownian motion between two marginals, in any dimension. <bookmark mark='b'/> And Linn "
             "Engström, Sigrid Källblad and Johan Karlsson handle many marginals at once, enough to "
             "bound lookback and Asian options. Here is the first of these ideas, trained."
+            " The common thread: the bound is a linear program in principle, and the frontier is about "
+            "solving it when the space of paths is far too large to write down."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -152,6 +154,8 @@ class Frontier(VoiceoverScene):
             "Hyung Joo Kim showed that options alone cannot tell kernels apart, while recovery-style "
             "constraints remove the anomalies. The theorem is nearly fifty years old, and still a "
             "live field."
+            " And in recovery and densities, Horvath's 2025 paper and the work of Shikhman and "
+            "coauthors, which you met in chapters fourteen and thirteen."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

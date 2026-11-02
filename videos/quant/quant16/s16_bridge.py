@@ -146,9 +146,8 @@ class Bridge(VoiceoverScene, ThreeDScene):
             "dimension is how many leading coordinates hold ninety-nine percent of the variance. Caflisch, Morokoff "
             "and Owen introduced it in 1997 to explain why quasi-Monte Carlo worked on mortgage securities at all. "
             "<bookmark mark='b'/> For a payoff linear in the path, each normal's share is just its squared weight: "
-            "the heights you saw in three dimensions. <bookmark mark='c'/> And principal components take the "
-            "eigenvectors of the covariance. Their eigenvalues fall like one over j squared, the Karhunen–Loève "
-            "expansion, which is why no other matrix front-loads more."
+            "the heights you saw in three dimensions. <bookmark mark='c'/> Principal components use the covariance's "
+            "eigenvectors, whose eigenvalues fall like one over j squared: no other matrix front-loads more."
         ) as vo:
             for i, mk in enumerate("abc"):
                 step(i)

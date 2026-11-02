@@ -201,10 +201,12 @@ class OLS(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "The sandwich as a picture. The meat is the errors' covariance matrix: row and column t are month t. Under "
             "iid, only the diagonal is lit, all equally. <bookmark mark='a'/> Halbert White's 1980 estimator lets each "
-            f"diagonal cell have its own size. For tobacco's size slope it gives {se_w[2]:.3f} against {se_n[2]:.3f}. "
-            "<bookmark mark='b'/> But finance lives off the diagonal. Overlapping returns and persistent predictors "
-            "light a band: chapter two. <bookmark mark='c'/> Shocks shared within a month light blocks: chapter three. "
-            "The estimate never changes; how much it can be trusted does."
+            "diagonal cell have its own size, estimated by the squared residual, x t x t transpose times u hat squared: "
+            "consistent even though each single cell is a terrible estimate, because the sandwich only needs their "
+            f"average. For tobacco's size slope it gives {se_w[2]:.3f} against {se_n[2]:.3f}. <bookmark mark='b'/> But "
+            "finance lives off the diagonal. Overlapping returns and persistent predictors light a band: chapter two. "
+            "<bookmark mark='c'/> Shocks shared within a month light blocks: chapter three. The estimate never changes; "
+            "how much it can be trusted does. The next three chapters are three shapes of meat."
         ) as vo:
             self.play(FadeIn(sand), FadeIn(tags), FadeIn(name), FadeIn(side[0]))
             vo.wait_until("a")

@@ -39,11 +39,15 @@ class SNR(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=1.0, edge=6.8)
         with self.voiceover(
             "The deepest problem in quantitative finance: small signal, large noise. A mean return's t-statistic is "
-            "the Sharpe ratio times the root of the years, so a t of two needs two over the Sharpe ratio, squared, "
-            "years. <bookmark mark='a'/> The Sharpe ratio's own standard error, by the delta method, is the root of one "
-            "plus half its square, over T: Andrew Lo, 2002; Christoph Mertens added skewness and fat tails. For the "
-            f"market, {b['se_iid']:.3f} and {b['se_mertens']:.3f}. <bookmark mark='b'/> And on the market, chapter one's "
-            "formula splits into two speeds: beta, a co-movement, is measured every month; alpha is a mean."
+            "the mean over its standard error, the volatility over the root of T. Annualise both, and t is the Sharpe "
+            "ratio times the root of the years. So a t of two needs two over the Sharpe ratio, squared, years. "
+            "<bookmark mark='a'/> The Sharpe ratio's own standard error, by the delta method, adds the noise of the "
+            "mean, one over T, to the noise of the volatility, half the Sharpe ratio squared over T: Andrew Lo, 2002. "
+            "Christoph Mertens added skewness and fat tails. For the market, "
+            f"{b['se_iid']:.3f} and {b['se_mertens']:.3f}, and chapter eleven's bootstrap was wider still. "
+            "<bookmark mark='b'/> And on the market, chapter one's formula splits into two speeds. Beta's variance is "
+            "the residual variance over T times the market's variance: a co-movement, measured every month. Alpha's has "
+            "a one plus the market's squared Sharpe ratio in it: it is a mean, and means take decades."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -83,10 +87,13 @@ class SNR(VoiceoverScene):
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.8)
         last = P[-1]
         with self.voiceover(
-            "Watch it. Regress tobacco on the market from 1961, refitting every quarter; the ellipse is the ninety-five "
-            "percent region. <bookmark mark='a'/> Within a few years the beta axis collapses to a sliver. The alpha axis "
-            "creeps, and creeps. <bookmark mark='b'/> After sixty years, tobacco's alpha is "
-            f"{100 * last['alpha']:.1f} percent a year, give or take {196 * np.sqrt(np.asarray(last['V'])[0, 0]):.1f}."
+            "Watch it happen. Regress tobacco on the market from 1961 with one year of data, refitting every quarter "
+            "as the data arrive; the ellipse is the ninety-five percent region for alpha and beta. "
+            "<bookmark mark='a'/> In the first years it is enormous. Within a few years the beta axis collapses to a "
+            "sliver. The alpha axis creeps, and creeps, and creeps. <bookmark mark='b'/> After sixty years, tobacco's "
+            f"alpha is {100 * last['alpha']:.1f} percent a year, give or take "
+            f"{196 * np.sqrt(np.asarray(last['V'])[0, 0]):.1f}. Its beta has been known to within a tenth for half a "
+            "century."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(notes[2]))
             self.add(sm)

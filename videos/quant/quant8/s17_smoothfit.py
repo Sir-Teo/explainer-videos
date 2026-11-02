@@ -38,12 +38,15 @@ class SmoothFit(VoiceoverScene):
                     r"the payoff with the payoff's slope, $-1$: smooth fit", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "In continuous time the stopping rule is a boundary nobody gives you. Take a perpetual American put: while "
-            "held, above an exercise level b, it obeys Black-Scholes without a time derivative. <bookmark mark='a'/> A power "
-            "of S solves it; only the negative root keeps the put worthless as S grows. <bookmark mark='b'/> Value matching "
-            "at b fixes the constant: McKean, 1965. <bookmark mark='c'/> Choose b to make the value largest, and the "
-            "condition is that the curve leaves the payoff with slope minus one: smooth fit. At five percent rates and "
-            f"thirty percent volatility, the boundary is {p['b_star']:.1f}."
+            "In continuous time the stopping rule becomes a boundary in space, and nobody tells you where it is. Take the "
+            "simplest case: an American put that never expires, the right to sell a stock at K whenever you like. While you "
+            "hold it, above some exercise level b, its value obeys the Black-Scholes equation with no time derivative. "
+            "<bookmark mark='a'/> Try a power of S. The exponent solves a quadratic with roots one and minus beta, and only "
+            "the negative root keeps the put worthless when the stock is huge. <bookmark mark='b'/> Value matching: at the "
+            "level b you exercise and receive K minus b, which fixes the constant. Henry McKean solved this in 1965. "
+            "<bookmark mark='c'/> Which level? The one that makes the value largest. Differentiate in b, and the condition "
+            "is the same as asking the value to leave the payoff with the payoff's own slope, minus one, with no kink: smooth "
+            f"fit. With five percent rates and thirty percent volatility, the boundary is {p['b_star']:.1f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -89,12 +92,16 @@ class SmoothFit(VoiceoverScene):
         q = pause_card(r"Rates rise. Does the exercise boundary move up or down?", width=4.8, font_size=20).next_to(
             res, DOWN, buff=0.35).align_to(gl, LEFT)
         with self.voiceover(
-            "Slide the exercise level. <bookmark mark='a'/> Too low, and the value curve meets the payoff with a kink, too "
-            "flat; too high, too steep, and the value at a hundred falls again. <bookmark mark='b'/> The best level, "
-            f"{bs:.1f}, is where the kink closes. The put is worth {p['v100']:.2f}; a forty-year tree that knows nothing of "
-            f"smooth fit gives {p['tree_boundary0']:.1f} and {p['tree_price']:.2f}. <bookmark mark='c'/> Pause and predict: "
-            f"rates rise; does the boundary move up or down? <bookmark mark='d'/> Up, to {p['b_star_r7']:.1f} at seven "
-            "percent: waiting to receive K costs more interest."
+            "Watch the choice. The grey line is the payoff; the blue curve is the value of the rule 'exercise the first time "
+            "the stock falls to b', for a level we can slide. <bookmark mark='a'/> With a low level the curve meets the payoff "
+            "at a kink, coming in too flat; the readout is the gap between the two slopes. Raise the level and the value at a "
+            "hundred rises; raise it too far and the curve meets the payoff too steeply, and the value falls again. "
+            f"<bookmark mark='b'/> The best level, {bs:.1f}, is exactly where the gap closes and the curve kisses the payoff. "
+            f"The put is worth {p['v100']:.2f}. A forty-year binomial tree that knows nothing of smooth fit puts its boundary "
+            f"at {p['tree_boundary0']:.1f} and its price at {p['tree_price']:.2f}. <bookmark mark='c'/> Pause and predict: if "
+            "rates rise, does the boundary move up or down? <bookmark mark='d'/> Up: beta grows and the boundary moves toward "
+            f"the strike, to {p['b_star_r7']:.1f} at seven percent. Waiting to receive K costs more interest, so you exercise "
+            "sooner."
         ) as vo:
             self.play(FadeIn(g), Create(pay), FadeIn(g2), Create(vcurve))
             self.add(fam, bdot, hund, vdot)

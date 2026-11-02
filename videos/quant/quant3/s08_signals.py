@@ -146,10 +146,14 @@ class Signals(VoiceoverScene):
                     rf"\ \text{{after }}{gp['year']}", font_size=26, color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(cells, DOWN, buff=0.5)
         with self.voiceover(
-            "Piotroski combined nine statement tests into one score: profitability, cash, leverage, liquidity, issuance, "
-            "margins, turnover. <bookmark mark='a'/> Among cheap stocks, he reported high minus low scores earned about "
-            "twenty-three percent a year, 1976 to 1996. <bookmark mark='b'/> Novy-Marx argued in 2013 for gross profit over assets. "
-            "<bookmark mark='c'/> Unusually, both did as well or better after publication."
+            "Sloan's accruals were one statement-based signal. Joseph Piotroski combined nine. Each test scores a point: is the firm "
+            "profitable, does it generate operating cash, is profitability rising, is cash flow above earnings, which is Sloan "
+            "again; is leverage falling, liquidity rising, has it avoided issuing shares; are margins and turnover improving. "
+            "<bookmark mark='a'/> Among cheap stocks, he reported that buying high scores and shorting low ones earned about "
+            "twenty-three percent a year from 1976 to 1996. <bookmark mark='b'/> Robert Novy-Marx argued in 2013 that the cleanest "
+            "profit measure sits high on the income statement, gross profit over assets, before most accounting choices bite. "
+            "<bookmark mark='c'/> Both have open-source replications. Unusually, both did as well or better after publication than "
+            "before; keep them in mind as exceptions."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.4, run_time=4))
             vo.wait_until("a")
@@ -244,8 +248,10 @@ class Signals(VoiceoverScene):
         ).arrange(DOWN, buff=0.15).next_to(cap, DOWN, buff=0.5)
         VGroup(big, cap, add).move_to(ORIGIN)
         with self.voiceover(
-            "Every signal looked at is a trial, and the House counts them all, because the more you try, the more one looks good "
-            "by chance. Their hold-out years are sealed."
+            "And every signal we look at is a trial. The House counts them all, across the series, because the more configurations "
+            "a researcher tries, the more one of them will look good by chance; the two hundred and eight predictors enter as one "
+            "registered meta-test. Part twenty-six shows how to deflate a result by that count, and the hold-out years, 2021 "
+            "onward, are sealed until then."
         ):
             self.play(FadeIn(big, scale=0.8), FadeIn(cap))
             self.play(FadeIn(add))

@@ -59,8 +59,7 @@ class SPX(VoiceoverScene):
             "Guyon and Lekeufack's home ground was the S&P 500 and the VIX. Replicate it. The input is only the US "
             "market's own daily returns since 1986, Ken French's value-weighted market standing in for the S&P; "
             "the target is the VIX. Fit on 2000 to 2018, then freeze. <bookmark mark='a'/> Watch thirty years "
-            "trace out, the VIX in blue and the path-dependent prediction in red. The dot-com bust, 2008, the euro "
-            "crisis, Volmageddon, March 2020. <bookmark mark='b'/> In sample, it explains "
+            "trace out: the dot-com bust, 2008, Volmageddon, March 2020. <bookmark mark='b'/> In sample, it explains "
             f"{100 * s['r2_train']:.0f} percent of the VIX's variation; out of sample, from 2019 to 2025, "
             f"{100 * s['r2_test']:.0f} percent, against {100 * s['r2_base_test']:.0f} for a line in the last month's "
             "realized volatility. Most of the VIX is a function of the path the market has taken."
@@ -100,10 +99,9 @@ class SPX(VoiceoverScene):
             "day. Which term moves the forecast more? <bookmark mark='b'/> Both move it, and the trend carries "
             "the sign: a fall raises both, a rally of the same size raises activity but lowers the trend term. Over "
             f"the sample, one standard deviation of the trend term is worth {100 * s['contrib']['trend']:.1f} VIX "
-            f"points, of activity {100 * s['contrib']['activity']:.1f}. <bookmark mark='c'/> One caution from the "
-            "fit itself: the trend kernel's exponent ran to the edge of its allowed range, so its memory is longer "
-            "than our window can pin down. <bookmark mark='d'/> And because the model is a regression on the path, "
-            "its residual is everything the path does not explain."
+            f"points, of activity {100 * s['contrib']['activity']:.1f}. <bookmark mark='c'/> One caution: the "
+            "trend kernel's exponent ran to the edge of its range, so its memory is longer than our window can pin "
+            "down. <bookmark mark='d'/> And the residual is everything the path does not explain."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -148,10 +146,9 @@ class SPX(VoiceoverScene):
             f"{100 * a2['vix']:.2f} on the Friday. <bookmark mark='a'/> Feed the path-dependent model only the "
             f"returns up to that day: it says {100 * a5['pdv']:.1f}. The gap, {gap:.0f} points, is what the path "
             "does not explain. <bookmark mark='b'/> What was it? The BIS's anatomy of the spike, by Karamfil "
-            "Todorov and Grigory Vilkov, points at the quotes: the VIX is computed from option quotes, not trades, "
-            "and put bid-ask spreads blew out, lifting the mid-quotes. The SEC staff paper finds the same: more "
-            "out-of-the-money puts in the calculation, and their mid-quotes driving the surge. A liquidity event "
-            "in the quotes, on top of a real deleveraging. <bookmark mark='c'/> For comparison, on Volmageddon, "
+            "Todorov and Grigory Vilkov, points at the quotes: the VIX is computed from quotes, not trades, and put "
+            "bid-ask spreads blew out. The SEC staff paper agrees. A liquidity event in the quotes, on top of a real "
+            "deleveraging. <bookmark mark='c'/> For comparison, on Volmageddon, "
             f"the fifth of February 2018, the VIX closed at {100 * vm['vix']:.1f} and the model said "
             f"{100 * vm['pdv']:.1f}."
         ) as vo:

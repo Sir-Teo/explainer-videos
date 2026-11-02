@@ -15,7 +15,6 @@ class Asian(VoiceoverScene):
         self.derive(sc)
         self.scatter(sc, a)
         self.lab(a)
-        self.noise(a)
 
     def card(self):
         c = chapter_card(6, r"Averages and extremes: Asians and lookbacks", r"Why is an option on the average so much "
@@ -179,43 +178,3 @@ class Asian(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def noise(self, a):
-        rows = a["rows"]
-        g = axes([np.log10(500), np.log10(100000)], [-3, 0], x_length=6.2, y_length=4.0,
-                 xlabel=r"paths (log scale)", ylabel=r"Monte Carlo error (s.d., log scale)",
-                 xticks=[np.log10(v) for v in (1000, 4000, 16000, 64000)], xfmt=lambda u: f"{10 ** u:,.0f}".replace(",", "{,}"),
-                 yticks=[-3, -2, -1, 0], yfmt=lambda u: f"10^{{{int(u)}}}", log_x=True, font_size=15)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        p1 = VGroup(*[Dot(ax.c2p(np.log10(r["n"]), np.log10(r["sd_plain"])), radius=0.07, color=BAD) for r in rows])
-        p2 = VGroup(*[Dot(ax.c2p(np.log10(r["n"]), np.log10(r["sd_cv"])), radius=0.07, color=GOOD) for r in rows])
-        l1 = VMobject(stroke_color=BAD, stroke_width=2.5).set_points_as_corners([d_.get_center() for d_ in p1])
-        l2 = VMobject(stroke_color=GOOD, stroke_width=2.5).set_points_as_corners([d_.get_center() for d_ in p2])
-        leg = legend([(BAD, r"plain Monte Carlo"), (GOOD, r"with the geometric Asian as control variate")], font_size=17)
-        leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
-        ratio = float(np.median([r["sd_plain"] / r["sd_cv"] for r in rows]))
-        side = VGroup(
-            wrapped_label(rf"20 independent runs at each size: the control variate's error is {ratio:.0f} times smaller "
-                          r"at every size; both fall like one over the square root of the paths", 4.4, 19, GREY_A),
-            wrapped_label(rf"a lookback pays $S_T - \min S$: {a['lookback_cf']:.1f} watched continuously (Goldman, Sosin "
-                          rf"and Gatto 1979; Conze and Viswanathan 1991, by reflection), {a['lookback_mc_daily']:.1f} at "
-                          r"daily closes, the same discrete-monitoring effect as barriers", 4.4, 19, IV),
-            wrapped_label(r"a shout option, a cousin, lets the holder lock in the gain once, at a moment of her choosing",
-                          4.4, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        src = illustration(r"one-year at-the-money calls, 25\% volatility, daily fixings; 20 independent runs each")
-        with self.voiceover(
-            "Measured over twenty independent runs at each size, the error with the control variate is "
-            f"{ratio:.0f} times smaller at every number of paths, and both fall like one over the square root of "
-            "the paths. <bookmark mark='a'/> The lookback needs no simulation at all. Reflection again gives the "
-            "joint law of the minimum and the endpoint, and with it the closed form of Barry Goldman, Howard Sosin "
-            "and Mary Ann Gatto, extended by Antoine Conze and Viswanathan. Watched continuously, the lookback is "
-            f"worth {a['lookback_cf']:.1f}; at daily closes, {a['lookback_mc_daily']:.1f}. Chapter four's lesson "
-            "again: the minimum that is only looked at once a day is never quite as low."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(p1), Create(l1), FadeIn(p2), Create(l2),
-                      FadeIn(side[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(side[1]), FadeIn(side[2]))
-        self.wait(0.4)
-        self.clear_scene()

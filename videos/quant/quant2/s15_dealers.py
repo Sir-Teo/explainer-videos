@@ -98,7 +98,7 @@ class Dealers(VoiceoverScene):
                 why(r"stop asking when the next dealer saves less than it leaks", font_size=20)]
         for r_ in rows:
             r_.scale(0.82)
-        step = ladder(self, rows, whys, keep=4, top=3.4, x=-2.4, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=3.4, x=-2.4, buff=0.42, edge=6.9)
         n = np.asarray(r["n"], float)
         cost = np.asarray(r["cost"], float)
         g = axes([1, 20], [-1.6, 1.4], x_length=5.0, y_length=2.4, xlabel=r"dealers asked $n$",

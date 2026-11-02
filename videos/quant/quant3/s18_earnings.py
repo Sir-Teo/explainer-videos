@@ -85,9 +85,11 @@ class Earnings(VoiceoverScene):
                 why(r"the earnings release is filed as an 8-K, item 2.02; after 4 p.m.\ it can be traded only the next day")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.0, buff=0.9, edge=6.9)
         with self.voiceover(
-            "Two definitions. The surprise: this quarter's earnings less the same quarter last year, in units of how much that "
-            "difference usually moves. <bookmark mark='a'/> The reaction: returns beyond the market's, summed from the "
-            "announcement. <bookmark mark='b'/> Day zero is the first session after the 8-K, item 2.02, was filed."
+            "To measure the drift you need two definitions. The surprise: this quarter's earnings minus the same quarter last year, "
+            "divided by how much that seasonal difference usually moves, called standardised unexpected earnings. "
+            "<bookmark mark='a'/> The reaction: the stock's return minus the market's, summed day by day from the announcement, the "
+            "cumulative abnormal return. <bookmark mark='b'/> And the clock starts when the news was public: American companies "
+            "file their earnings releases as an 8-K, item 2.02, with a time stamp, so day zero is the first trading session after it."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -202,11 +204,14 @@ class Earnings(VoiceoverScene):
         after_line = ("which is statistically indistinguishable from zero. " if gone else
                       "which is still clearly positive. ")
         with self.voiceover(
-            "At scale: the open-source version of Foster, Olsen and Shevlin's 1984 portfolio, long high surprises, short low, "
-            f"since 1974. <bookmark mark='a'/> {o['in']:.2f} percent a month in their sample, {o['post']:.2f} after publication. "
-            f"<bookmark mark='b'/> Since 2006, {o['after2006']:.2f}, {after_line}Martineau's 2022 paper is titled Rest in "
-            "Peace Post-Earnings Announcement Drift; others dispute it. <bookmark mark='c'/> So for large stocks, the news is "
-            "already in the price."
+            "Thousands of firms is what the open-source replication of the anomaly literature provides. Its version of Foster, "
+            "Olsen and Shevlin's 1984 portfolio buys the highest earnings surprises and sells the lowest, every month since 1974. "
+            f"<bookmark mark='a'/> In the original sample it earned {o['in']:.2f} percent a month; after publication, "
+            f"{o['post']:.2f}, still significant. <bookmark mark='b'/> But look at the line after 2006: {o['after2006']:.2f} "
+            f"percent a month, {after_line}Charles Martineau's 2022 paper is titled Rest in Peace Post-Earnings Announcement Drift: "
+            "for all but the smallest stocks, prices now absorb the surprise on the day. Others argue that it survives with "
+            "different samples; it is contested. <bookmark mark='c'/> So, the desk question: buy at the next open after a big beat? "
+            "On today's evidence for large stocks, the news is already in the price."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(rows[0]))
             self.add(line)

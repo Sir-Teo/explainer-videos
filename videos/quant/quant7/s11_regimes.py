@@ -17,6 +17,7 @@ class Regimes(VoiceoverScene):
         self.card()
         self.jars(r)
         self.derive(r)
+        self.mstep(r)
         self.em(r, old)
 
     def card(self):
@@ -183,5 +184,34 @@ class Regimes(VoiceoverScene):
             self.play(FadeIn(pc))
             vo.wait_until("c")
             self.play(Write(ans))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def mstep(self, r):
+        rows = [
+            cmath(r"\xi_{t|T}", r"=", r"\xi_{t|t}\odot\Big[P\big(\xi_{t+1|T}\oslash\xi_{t+1|t}\big)\Big]", font_size=34),
+            cmath(r"\hat\mu_j", r"=", r"\frac{\sum_t\xi_{t|T,j}\,r_t}{\sum_t\xi_{t|T,j}},\quad "
+                  r"\hat\sigma_j^2 = \frac{\sum_t\xi_{t|T,j}(r_t - \hat\mu_j)^2}{\sum_t\xi_{t|T,j}}", font_size=34),
+            cmath(r"\hat p_{ij}", r"=", r"\frac{\sum_t\Pr(s_t = i, s_{t+1} = j\mid\mathcal{F}_T)}{\sum_t\xi_{t|T,i}}", font_size=34),
+        ]
+        whys = [why(r"Kim's smoother: the filter's answer revised with hindsight, run backwards from the last month"),
+                why(r"the M-step: each regime's mean and variance, every month weighted by its probability of that regime"),
+                why(r"the transitions: expected moves from $i$ to $j$ over expected time spent in $i$")]
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-1.6, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "How the parameters are found. The filter only looks backwards; for estimation we may use hindsight. "
+            "Kim's smoother runs from the last month back to the first and revises every month's probabilities with "
+            "everything that came after. <bookmark mark='a'/> Then the maximisation step is weighted least squares: "
+            "each regime's mean and variance are the averages of the months, weighted by how likely each month was "
+            "to belong to that regime. <bookmark mark='b'/> And each transition probability is the expected number of "
+            "moves from one regime to the other, over the expected time spent in the first. Expectation, then "
+            "maximisation, repeated: Arthur Dempster, Nan Laird and Donald Rubin's algorithm of 1977, which never "
+            "lowers the likelihood."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
         self.wait(0.3)
         self.clear_scene()

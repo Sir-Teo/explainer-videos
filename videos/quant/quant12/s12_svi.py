@@ -99,16 +99,13 @@ class SVI(VoiceoverScene):
                     r"two-dimensional")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.72, edge=6.9)
         with self.voiceover(
-            "The formula: a, plus b times rho times k minus m, plus the square root. <bookmark mark='a'/> Far from the "
-            "money the square root becomes the absolute value, so the wings are straight lines of slope b times rho "
-            "plus or minus one, and setting the derivative to zero gives the bottom. <bookmark mark='b'/> Lee's bound "
-            "then becomes a box for the parameters: b times one plus the absolute value of rho, at most two. "
-            "<bookmark mark='c'/> Desks prefer to move numbers they can see, so Gatheral also gave the jump-wings form: "
-            "at-the-money variance, at-the-money skew, the two wing slopes, and the minimum variance. And there is a "
-            "reason SVI fits: Gatheral and Jacquier proved in 2011 that the Heston model's implied variance becomes "
-            "exactly SVI as maturity grows. <bookmark mark='d'/> Fitting is weighted least squares; and for fixed m and "
-            "sigma the problem is linear in the rest, a reduction published by Zeliade in 2009 that turns a five "
-            "dimensional search into a two dimensional one."
+            "The formula. <bookmark mark='a'/> Far out, the square root becomes an absolute value: straight wings of "
+            "slope b times rho plus or minus one; set the derivative to zero for the bottom. <bookmark mark='b'/> Lee's "
+            "bound becomes a box: b times one plus the absolute value of rho, at most two. <bookmark mark='c'/> Desks "
+            "quote the jump-wings form: at-the-money variance and skew, the two wing slopes, the minimum. And Gatheral "
+            "and Jacquier proved in 2011 that Heston's implied variance becomes exactly SVI at long maturity. "
+            "<bookmark mark='d'/> For fixed m and sigma the fit is linear in the rest, Zeliade's 2009 reduction to a "
+            "two-dimensional search."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -232,7 +229,7 @@ class SVI(VoiceoverScene):
             "And here is the whole Surface in the trader's coordinates, one row per expiry. The at-the-money variance "
             "climbs with maturity, the skew psi is small, and the wings steepen: at the longest expiry the put wing is "
             f"{pw:.2f} and the call wing {cw:.2f}. <bookmark mark='a'/> The smallest g across all eleven fits is "
-            f"{gmin:.2f}: each slice on its own is free of butterflies. Claude Martini and Aurélien Mingone mapped, in "
+            f"{gmin:.2f}: each slice on its own is free of butterflies. Claude Martini and Arianna Mingone mapped, in "
             "2022, exactly which SVI parameters guarantee that; and Chapter three showed that slices which are clean "
             "one by one can still cross. The cure is to fit the surface as one object."
         ) as vo:

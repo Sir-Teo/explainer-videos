@@ -102,12 +102,17 @@ class DML(VoiceoverScene):
                     r"$\hat\theta$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
-            "Why residualise both? The estimate solves the residual-on-residual score. <bookmark mark='a'/> That score is "
-            "Neyman-orthogonal: small errors in the learned functions do not move it, to first order. "
-            "<bookmark mark='b'/> So the error is the usual normal term plus the product of the two learners' errors; "
-            "each may converge slowly, faster than n to the minus a quarter is enough. <bookmark mark='c'/> The naive "
-            "plug-in, learn g and regress what is left on d, is not orthogonal: regularisation bias in g goes straight "
-            "into theta. Cross-fitting stops a learner that memorised a point from shrinking its residual."
+            "Why residualise both? The estimate solves the residual-on-residual score: residual outcome minus theta "
+            "times residual treatment, times residual treatment, averaging zero. <bookmark mark='a'/> That score is "
+            "Neyman-orthogonal: differentiate its mean with respect to the two learned functions, at the truth, and you "
+            "get zero. Small errors in the learned functions do not move it, to first order. <bookmark mark='b'/> So the "
+            "error is the usual normal term plus a remainder proportional to the product of the two learners' errors. "
+            "Machine learners converge slowly, but if each is faster than n to the minus a quarter, the product vanishes "
+            "faster than the root-n noise, and the standard error from the score is valid. <bookmark mark='c'/> The "
+            "naive plug-in, learn g and regress what is left on d, is not orthogonal: its derivative with respect to g "
+            "is the covariance of d with the controls, not zero, so regularisation bias in g passes straight into theta. "
+            "Cross-fitting handles the other danger: a learner that has memorised a point makes that point's residual "
+            "artificially small."
         ) as vo:
             step(0)
             vo.wait_until("a")

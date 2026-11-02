@@ -107,10 +107,9 @@ class Forward(VoiceoverScene):
             "negative, so a rise in the spot lowers the implied volatility of every fixed strike: the smile shifts "
             "against the move. <bookmark mark='b'/> At the money, strike and spot move together, the halves add, and "
             "the at-the-money volatility moves with the full local slope: twice the implied skew. The ratio is two. "
-            "<bookmark mark='c'/> Which products care? Anything struck in the future: a forward-start option pays on "
-            "the ratio of two future prices, and its value is the smile of that ratio, which no vanilla price pins "
-            "down. <bookmark mark='d'/> And local volatility's skew flattens with time, so the smiles it predicts for "
-            "the future are flatter than today's."
+            "<bookmark mark='c'/> Which products care? A forward-start option pays on the ratio of two future prices: "
+            "its value is a future smile, which no vanilla pins down. <bookmark mark='d'/> And local volatility's skew "
+            "flattens with time, so its future smiles are flatter than today's."
         ) as vo:
             step(0)
             vo.wait_until("a")

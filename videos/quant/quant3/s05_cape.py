@@ -120,11 +120,13 @@ class CAPE(VoiceoverScene):
                      Dot(radius=0.05, color=cols[-1]), label(r"2000s", font_size=17, color=GREY_B)).arrange(RIGHT, buff=0.1)
         leg.next_to(g, UP, buff=0.05).align_to(g, RIGHT)
         with self.voiceover(
-            "Does it predict? Plot each month's CAPE against the next ten years' real return. <bookmark mark='a'/> The cloud "
-            "slopes down; the fit explains about a third of the variation. <bookmark mark='b'/> But the dots overlap: each shares "
-            "almost ten years with its neighbour, so there are only about thirteen independent decades, and the slope is far "
-            "less certain than it looks. Part six makes that precise. <bookmark mark='c'/> At the end of 2020 the line predicted "
-            "about half a percent a year for the 2020s. That forecast is sealed until the finale."
+            "Does the CAPE tell you anything? Plot each month's CAPE against the real return of the next ten years. "
+            "<bookmark mark='a'/> The cloud slopes down: high valuations have been followed by low decades, and low ones by high "
+            "decades. The fit explains about a third of the variation. <bookmark mark='b'/> But be careful with the count. There are "
+            "over fifteen hundred dots, and each shares nine years and eleven months of its future with its neighbour. There are "
+            "only about thirteen independent decades here, and the slope is far less certain than it looks. Part six makes that "
+            "precise. <bookmark mark='c'/> Read off the line at the end of 2020: a CAPE near thirty-four predicted a real return of "
+            "about half a percent a year for the 2020s. That forecast goes into the sealed envelope, to be opened in the finale."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(side[:2]))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.002, run_time=3))

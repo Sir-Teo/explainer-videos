@@ -90,10 +90,13 @@ class Designs(VoiceoverScene):
                 why(r"continuity of potential outcomes at the cutoff: just above and just below are alike")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.8, edge=6.8)
         with self.voiceover(
-            "Each design in one line. The instrument: reduced form over first stage. <bookmark mark='a'/> Difference in "
-            "differences: the treated change minus the control change, under parallel trends. <bookmark mark='b'/> Its "
-            "regression version, two-way fixed effects, is a weighted sum of every two-by-two comparison, and under "
-            "staggered timing some weights are negative. <bookmark mark='c'/> The discontinuity: the jump at a cutoff."
+            "Each design in one line. The instrument: because z is unrelated to the confounder, the reduced form over "
+            "the first stage isolates the causal slope. <bookmark mark='a'/> Difference in differences: the treated "
+            "group's change minus the control group's change; if both would have trended alike, the common change "
+            "cancels. <bookmark mark='b'/> Its regression version, two-way fixed effects, is a weighted sum of every "
+            "two-by-two comparison in the data, as Andrew Goodman-Bacon showed in 2021, and under staggered timing some "
+            "comparisons use already-treated units as controls, with negative weights. <bookmark mark='c'/> The "
+            "discontinuity: the jump in the outcome's average exactly at a cutoff, valid if nothing else jumps there."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -48,11 +48,14 @@ class Settlement(VoiceoverScene):
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP).next_to(items, DOWN, buff=0.6)
         src = note(r"SEC staff report on early 2021, section 2; DTCC", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Settlement is when shares and cash move: five days after the trade before 1995, then three, two from 2017, and "
-            "one since May 2024. <bookmark mark='a'/> It is delivery versus payment, and it is netted: each member's trades in "
-            "a stock become one delivery a day. <bookmark mark='b'/> Until then each member pays into a clearing fund, mostly "
-            "a ninety-nine percent value-at-risk on its unsettled positions, plus mark-to-market calls, special charges and "
-            "the excess capital premium."
+            "Settlement is when shares and cash actually move. American stocks once settled five business days after the "
+            "trade, then three from 1995, two from 2017, and since the 28th of May 2024, one. <bookmark mark='a'/> Settlement "
+            "is delivery versus payment: shares move only against cash, at the same moment, so neither side can deliver and "
+            "not be paid. And it is netted: the clearing house turns each member's day of trades in a stock into one delivery "
+            "or one receipt. <bookmark mark='b'/> Between trade and settlement the clearing house holds the risk, and each "
+            "member pays into a clearing fund to cover it. The biggest piece is a ninety-nine percent value-at-risk on the "
+            "member's unsettled positions; on top come mark-to-market calls, special charges for volatile names, and the "
+            "excess capital premium when a member's risk outgrows its capital: the charge of January 2021."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(x) for x in items], lag_ratio=0.4),
                       LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.4), run_time=4)
@@ -146,11 +149,14 @@ class Settlement(VoiceoverScene):
                     rf"\text{{two-way}}\ -{100 * s['cut']['two_way']:.0f}\%", font_size=30, color=QC.IDEA),
         ).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The exposure is the last h days of net buying. <bookmark mark='a'/> The deposit is a ninety-nine percent "
-            "value-at-risk on it. <bookmark mark='b'/> If flow runs one way, the exposure is h times the daily flow, and one "
-            "day instead of two halves it. <bookmark mark='c'/> Flow that nets grows like a random walk, with root h: one day "
-            f"saves only twenty-nine percent. Simulated: {100 * s['cut']['one_way']:.0f} percent for one-way flow, "
-            f"{100 * s['cut']['two_way']:.0f} for two-way."
+            "The arithmetic behind the belt. The exposure is the last h days of net buying, added up. <bookmark mark='a'/> "
+            "The deposit is a ninety-nine percent value-at-risk on it: two point three three times the volatility, times the "
+            "square root of the days needed to close out a defaulter, times the exposure. <bookmark mark='b'/> If the flow "
+            "runs all one way, the exposure is h times the daily flow, and going from two days to one halves the deposit. "
+            "<bookmark mark='c'/> But most members' flow nets out over days, and flow that nets grows like a random walk, with "
+            "the square root of h. Halving h then saves only one minus one over root two: twenty-nine percent. The simulation "
+            f"agrees: {100 * s['cut']['one_way']:.0f} percent less for one-way flow, {100 * s['cut']['two_way']:.0f} percent "
+            "less for two-way."
         ) as vo:
             step(0)
             vo.wait_until("a")

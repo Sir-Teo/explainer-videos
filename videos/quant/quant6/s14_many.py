@@ -100,12 +100,15 @@ class Many(VoiceoverScene):
                 why(r"what a mixture of nulls and real effects looks like: a flat floor of height $\pi_0$ plus a spike")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.8, edge=6.8)
         with self.voiceover(
-            "The proofs are short. Bonferroni is the union bound. <bookmark mark='a'/> Holm's 1979 step-down uses "
-            "thresholds alpha over m, then over m minus one, and so on; at its first false rejection at least m-nought "
-            "nulls remain, so the union bound still applies, with more power. <bookmark mark='b'/> Benjamini-Hochberg's "
-            "false discovery rate, with independent p-values, is the share of true nulls times q: at most q. "
-            "<bookmark mark='c'/> And null p-values are uniform, so a histogram of many is a flat floor, the share of "
-            "nulls, plus a spike near zero."
+            "The proofs are short. Bonferroni is the union bound: the chance that any true null is rejected is at most "
+            "the sum of their chances, m times alpha over m. <bookmark mark='a'/> Holm's 1979 step-down sorts the "
+            "p-values and uses thresholds alpha over m, then over m minus one, and so on, stopping at the first failure. "
+            "At its first false rejection at least m-nought true nulls remain, so that threshold is at most alpha over "
+            "m-nought, and the union bound over the true nulls still gives alpha: the same guarantee, more power. "
+            "<bookmark mark='b'/> Benjamini-Hochberg control the false discovery rate, the expected share of false "
+            "discoveries; with independent p-values it is exactly the share of true nulls times q: at most q. "
+            "<bookmark mark='c'/> And a picture to keep: null p-values are uniform, so a histogram of many is a flat "
+            "floor whose height is the share of nulls, plus a spike near zero from the real effects."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -233,10 +233,12 @@ class Projection(VoiceoverScene, ThreeDScene):
                              rf"Up: {e2['down']:+.1f} bp, the average of the days that followed a down day.",
                              width=5.4, font_size=22).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "In the House this is five lines: average over each block. <bookmark mark='a'/> It returns the foot of "
-            "the perpendicular, and the market's two numbers. <bookmark mark='b'/> So, since 2000, after a down day, "
-            f"is the best forecast up, down or zero? {'Up' if e2['down'] > 0 else 'Down'}, by {abs(e2['down']):.1f} "
-            "basis points."
+            "In the House this is five lines: average X over each block, weighted by probability, and give every "
+            "world its block's average. <bookmark mark='a'/> On the three worlds it returns the foot of the "
+            "perpendicular; on the market since 2000, with the sign of yesterday as the partition, it returns the two "
+            "numbers we just drew. Regression in Part six is this same function with a richer partition. "
+            "<bookmark mark='b'/> So, since 2000, after a down day, is the best forecast of today's return up, down or "
+            f"zero? {'Up' if e2['down'] > 0 else 'Down'}, by {abs(e2['down']):.1f} basis points."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

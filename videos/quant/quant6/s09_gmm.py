@@ -119,12 +119,18 @@ class GMM(VoiceoverScene):
                 why(r"$q$ moments, $p$ directions used up fitting $\theta$: what is left is a test of the theory")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.5, buff=0.72, edge=6.8)
         with self.voiceover(
-            "In general: minimise the moments' length in a metric W. <bookmark mark='a'/> At the minimum the gap is "
-            "perpendicular, in W, to every direction the parameters can move. <bookmark mark='b'/> Linearise and solve. "
-            "<bookmark mark='c'/> The variance is a sandwich, with S, chapter two's long-run variance of the moments, as "
-            "meat. <bookmark mark='d'/> With W equal to S inverse it collapses: the efficient weight. "
-            "<bookmark mark='e'/> And the scaled leftover is chi-squared, with as many degrees of freedom as moments "
-            "beyond parameters."
+            "In general: minimise the moments' length in a metric W. With q moments and p parameters, the sample "
+            "moments live in q dimensions and the parameters can only move them along a p-dimensional surface. "
+            "<bookmark mark='a'/> At the minimum the gap is perpendicular, in W, to every direction the parameters can "
+            "move: D transpose W times the gap is zero, the same condition as chapter one's normal equations. "
+            "<bookmark mark='b'/> Linearise the moments around the truth and solve: the error is a fixed matrix times "
+            "the moments at the true parameter, which average zero and have variance S over T. <bookmark mark='c'/> So "
+            "the variance is a sandwich, with S, chapter two's long-run variance of the moments, as meat; when the "
+            "moments are autocorrelated, S needs the same Bartlett window. <bookmark mark='d'/> With W equal to S inverse "
+            "the sandwich collapses: no other weight gives a smaller variance, because it trusts precise moments more "
+            "and noisy ones less, exactly what the ellipse did. <bookmark mark='e'/> And the scaled leftover is "
+            "chi-squared, with as many degrees of freedom as moments beyond parameters: q minus p directions the "
+            "parameters could not reach."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -153,9 +159,11 @@ class GMM(VoiceoverScene):
         q = predict(r"Exactly as many moments as parameters. What is $J$?").next_to(rows, DOWN, buff=0.45)
         with self.voiceover(
             "GMM is the umbrella: least squares uses x times the residual as moments, instrumental variables an "
-            "instrument times the residual, maximum likelihood the score. <bookmark mark='a'/> Pause and predict: exactly "
-            "as many moments as parameters. What is J? <bookmark mark='b'/> Zero: every moment can be set to zero, and "
-            "nothing is left to test. The next chapter's theory says much more than its parameters can absorb."
+            "instrument times the residual, maximum likelihood the score. Set those moments to zero and you recover "
+            "each estimator, and its sandwich standard error comes along for free. <bookmark mark='a'/> Pause and "
+            "predict: exactly as many moments as parameters. What is J? <bookmark mark='b'/> Zero: every moment can be "
+            "set to zero, the weight no longer matters, and nothing is left to test. A theory can only be rejected by "
+            "GMM if it says more than its parameters can absorb, and the next chapter's theory says a great deal."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r) for r in rows[:4]], lag_ratio=0.5, run_time=3))
             vo.wait_until("a")

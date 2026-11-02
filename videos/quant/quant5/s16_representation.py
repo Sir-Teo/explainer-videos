@@ -55,13 +55,15 @@ class Representation(VoiceoverScene):
             MathTex(rf"n = 512:\ |V_1 - F| = {abs(v512 - M[-1]):.3f}", font_size=28, color=JUMP),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Why does a hedge exist at all? Take a payoff that depends on a Brownian path: W at time one, squared. "
-            "Its expectation given the path so far is a martingale, W squared plus the time remaining. "
-            "<bookmark mark='a'/> Watch the path and the martingale unroll together. <bookmark mark='b'/> A trader "
-            "starts with the payoff's expected value, one, and holds two W units of the Brownian asset, rebalancing "
-            "eight times. The green staircase is the trader's wealth: near the martingale, but it misses at the end "
-            "by the red gap. <bookmark mark='c'/> Rebalance five hundred and twelve times, and the wealth lies on top "
-            "of the martingale. The payoff is a trading strategy. Every Brownian payoff is, and the proof says why."
+            "Why does a hedge exist at all? Take a payoff that depends on a Brownian path: here, W at time one, "
+            "squared. Its conditional expectation given the path so far is a martingale: W squared plus the time "
+            "remaining, because the future increment adds its variance and nothing else. <bookmark mark='a'/> Watch "
+            "the path and that martingale unroll together. <bookmark mark='b'/> Now a trader who starts with the "
+            "payoff's expected value, one, and holds two W units of the Brownian asset, rebalancing eight times. The "
+            "green staircase is the trader's wealth. It wanders near the martingale but misses at the end, by the red "
+            "gap. <bookmark mark='c'/> Rebalance five hundred and twelve times, and the wealth lies on top of the "
+            "martingale; the gap all but vanishes. The payoff is a trading strategy. Every Brownian payoff is, and "
+            "the next proof says why."
         ) as vo:
             self.add(lw, lm)
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(side[0]))
@@ -147,12 +149,15 @@ class Representation(VoiceoverScene):
         with self.voiceover(
             "How fast does a discrete hedge converge? Five seeds of four thousand paths each, rebalanced from eight "
             "to two thousand times. <bookmark mark='a'/> For W squared, the hedge error is exactly the "
-            "quadratic-variation error of chapter two, and its spread follows the square root of two over n: slope "
-            "minus a half. <bookmark mark='b'/> A Black-Scholes call hedged with its delta converges at the same "
-            "rate, minus a half, as Part eleven will explain. <bookmark mark='c'/> Now break the theorem's "
-            "assumption. Let the payoff depend on a second, independent Brownian motion B, and hedge with W alone. "
-            f"The error {verdict} The market is incomplete, and Parts eleven and thirteen live there. "
-            "<bookmark mark='d'/> A pause: four times as many trades. The spread halves."
+            "quadratic-variation error of chapter two: the payoff minus the hedge's final wealth is the sum of the "
+            "squared increments minus T. So its spread is the square root of two over n, slope minus a half, and the "
+            "bands sit on that line. <bookmark mark='b'/> A Black-Scholes call hedged with its delta converges at the "
+            "same rate, minus a half: between rebalances the book earns half gamma times the squared move minus its "
+            "theta, and those mismatches are again a quadratic-variation error, as Part eleven will explain. "
+            "<bookmark mark='c'/> Now break the theorem's assumption. Let the payoff depend on a second, independent "
+            f"Brownian motion B, and hedge with W alone, using the best position in W. The error {verdict} The market "
+            "is incomplete, and Parts eleven and thirteen live there. <bookmark mark='d'/> A pause: four times as "
+            "many trades. The spread halves."
         ) as vo:
             self.play(FadeIn(g), Create(theory), FadeIn(leg[3]))
             vo.wait_until("a")

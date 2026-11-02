@@ -81,18 +81,14 @@ class LocalVol(VoiceoverScene, ThreeDScene):
                     r"vol along the straight line; differentiate at the money")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
         with self.voiceover(
-            "The derivation takes four lines. If the price diffuses with volatility sigma of S and t, its density obeys "
-            "the Fokker-Planck equation of Part five. <bookmark mark='a'/> Differentiate a call price in maturity, put "
-            "the derivative under the integral, and integrate by parts twice: the second derivative of the call's "
-            "payoff is a spike at the strike, so only the density at the strike survives. <bookmark mark='b'/> Divide "
-            "by Part nine's result that the density is the second strike derivative of the call, and you have Bruno "
-            "Dupire's 1994 formula: local variance is the call's slope in maturity over its curvature in strike. "
-            "<bookmark mark='c'/> Rewrite it in total variance, and the denominator is Gatheral's g from Chapter three. "
-            "So the two no-arbitrage conditions, calendar and butterfly, are exactly the conditions for local variance "
-            "to be a positive number. <bookmark mark='d'/> And near the money at short maturity, Henri Berestycki, "
-            "Jérôme Busca and Igor Florent showed in 2002 that implied volatility is the harmonic average of local "
-            "volatility along the straight line from spot to strike. Differentiate: the implied skew is half the local "
-            "skew."
+            "If the price diffuses with volatility sigma of S and t, its density obeys Part five's Fokker-Planck "
+            "equation. <bookmark mark='a'/> Differentiate a call in maturity under the integral and integrate by parts "
+            "twice: the payoff's second derivative is a spike at the strike, so only the density there survives. "
+            "<bookmark mark='b'/> Divide by Part nine's density, the call's second strike derivative: Bruno Dupire's "
+            "1994 formula. <bookmark mark='c'/> In total variance the denominator is Chapter three's g: the calendar and "
+            "butterfly conditions are exactly the conditions for local variance to be positive. <bookmark mark='d'/> "
+            "And at short maturity, Berestycki, Busca and Florent showed in 2002 that implied volatility is the "
+            "harmonic average of local volatility from spot to strike: so the implied skew is half the local skew."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -219,11 +215,10 @@ class LocalVol(VoiceoverScene, ThreeDScene):
         src = real_data(r"the Surface's SSVI; six steps drawn, forty computed")
         err, gap = t["max_err"], t["lv_gap"]
         with self.voiceover(
-            "The same year, Emanuel Derman and Iraj Kani at Goldman Sachs built local volatility on a tree, and Mark "
-            "Rubinstein built an implied tree of his own. Start with an ordinary binomial tree, evenly spaced, in grey. "
-            "<bookmark mark='a'/> Now build it level by level from the market instead: place each new node so that the "
-            "tree reprices a call, or a put, struck at every node of the level before. The nodes crowd and stretch, "
-            "and the local volatility of each branch, coloured from blue to red, is highest on the downside. "
+            "The same year, Derman and Kani at Goldman Sachs built local volatility on a tree, and Mark Rubinstein an "
+            "implied tree of his own. In grey, an evenly spaced tree. <bookmark mark='a'/> Now place each new node so "
+            "that the tree reprices a call or put struck at every node of the level before. The nodes stretch, and the "
+            "branches' local volatility, blue to red, is highest on the downside. "
             f"<bookmark mark='b'/> With forty steps over three months, the tree's own smile at maturity lands within "
             f"{err:.2f} volatility points of the Surface near the money, and its node volatilities match Dupire's "
             f"function to {gap:.1f} points. A tree and a formula, built the same year, are the same object."

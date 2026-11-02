@@ -172,6 +172,8 @@ class Outro(VoiceoverScene):
             "twelve; exotics in fourteen and fifteen; forward measures in eighteen and nineteen; the "
             "discount factor in twenty-three; funding and crises in twenty-one and forty-one; ETFs in "
             "thirty-eight."
+            " Above all, Part ten turns this part's continuous-time theorem into a formula and a hedge "
+            "you can run."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)

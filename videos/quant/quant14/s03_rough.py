@@ -80,9 +80,8 @@ class Rough(VoiceoverScene):
             "its change over a lag delta has the same distribution as a constant times delta to the power H times a "
             "standard normal. <bookmark mark='a'/> Take the q-th absolute moment, and the scale pulls out: delta to "
             "the q H. <bookmark mark='b'/> On log scales, a straight line in the lag for every q, and the slopes, "
-            "zeta of q, are proportional to q. The ratio is H. <bookmark mark='c'/> One caveat to carry forward. We "
-            "never observe spot variance. We observe realized variance: the sum of squared five-minute returns, an "
-            "estimate of the variance integrated over a day, with error. Chapter eleven shows how much that matters."
+            "zeta of q, are proportional to q. The ratio is H. <bookmark mark='c'/> One caveat: we observe realized "
+            "variance, a day's integrated variance with error. Chapter eleven shows how much that matters."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -156,9 +155,7 @@ class Rough(VoiceoverScene):
             "point. <bookmark mark='a'/> Fit a line through each colour. They are straight, to the eye at least: "
             "a scaling law. <bookmark mark='b'/> Now plot the slopes against q. They line up through the origin, "
             f"and the slope of that line is H: {r['H']:.2f}. <bookmark mark='c'/> Pause and predict: if the q equals "
-            "two line had slope one, what would H be? <bookmark mark='d'/> One half: the second moment of a "
-            "Brownian increment grows linearly in the lag. Bitcoin's grows like the lag to the power "
-            f"{2 * r['H']:.2f}."
+            "two line had slope one, what would H be? <bookmark mark='d'/> One half: Brownian motion."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.play(LaggedStart(*[LaggedStart(*[FadeIn(d, scale=0.5) for d in row], lag_ratio=0.15) for row in dots],
@@ -194,9 +191,9 @@ class Rough(VoiceoverScene):
                           r"law and the forecast of chapter 4 are all there", 5.4, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Two eras side by side. In 2018 to 2020, a younger and wilder market, H comes out at "
-            f"{r18['H']:.2f}; in 2024 and 2025, {r['H']:.2f}. Bitcoin's calm weekends add a weekly rhythm that pulls "
-            f"the estimate down; remove each weekday's average, and the two eras read {r18['H_deseasonalized']:.2f} "
+            "Two eras side by side: in 2018 to 2020, H is "
+            f"{r18['H']:.2f}; in 2024 and 2025, {r['H']:.2f}. Remove each weekday's average, and they read "
+            f"{r18['H_deseasonalized']:.2f} "
             f"and {a['btc_deseasonalized']:.2f}. <bookmark mark='a'/> Gatheral, Jaisson and Rosenbaum found H of "
             "order a tenth for the S&P 500 and other equity indices. Bitcoin agrees. Whether the estimator can be "
             "trusted is another matter, and chapter eleven will try hard to fool it."

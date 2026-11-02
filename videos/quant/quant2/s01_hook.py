@@ -63,12 +63,14 @@ class Hook(VoiceoverScene):
                          .move_to(box.get_bottom() + UP * (0.15 + 0.2 * (k // 6)) + RIGHT * (-0.62 + 0.25 * (k % 6)))
                          for k in range(24)])
         with self.voiceover(
-            "Press buy on a share. Your order goes to your broker, who routes it in microseconds to an exchange, or to a "
-            "wholesaler, a market maker that buys retail orders. <bookmark mark='a'/> There it meets a seller: a trade. "
-            "But nothing has changed hands yet. <bookmark mark='b'/> The trade goes to a clearing house, which becomes the "
-            "buyer to every seller and the seller to every buyer. <bookmark mark='c'/> Only a business day later are the "
-            "shares and the cash exchanged. Until then the clearing house carries the risk that one side fails to pay, and "
-            "it wants collateral for it: watch the coins pile up while the trade waits."
+            "Here is what happens when you press buy on a share. Your order goes to your broker, who routes it, in "
+            "microseconds, to an exchange or to a wholesaler, a market maker that buys retail orders. <bookmark mark='a'/> "
+            "There it meets a seller: a trade. In seconds you see the price. But nothing has changed hands yet. "
+            "<bookmark mark='b'/> The trade goes to a clearing house, which steps into the middle: it becomes the buyer to "
+            "every seller and the seller to every buyer. <bookmark mark='c'/> Only a business day later are the shares moved "
+            "to your account and the cash to the seller. Until then the clearing house carries the risk that one side fails "
+            "to pay, and it wants collateral for it, from every member, every day: watch the coins pile up while the trade "
+            "waits. This part is about that waiting, and about what it costs."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(n) for n in nodes], lag_ratio=0.15), FadeIn(token), FadeIn(lanes[0]))
             for i in range(2):

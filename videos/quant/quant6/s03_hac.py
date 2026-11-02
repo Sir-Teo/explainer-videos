@@ -125,11 +125,14 @@ class HAC(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.75, edge=6.8)
         with self.voiceover(
             "Why a sum of autocovariances? Chapter one's error, scaled by root T, is a fixed matrix times the scaled sum "
-            "of the scores. <bookmark mark='a'/> The variance of a sum adds every pair's covariance; pairs k apart share "
-            "gamma k, and the limit is S, the long-run variance, <bookmark mark='b'/> the spectrum of the scores at "
-            "frequency zero. <bookmark mark='c'/> Summing all sample autocovariances is noisy and can go negative; "
-            "Bartlett's declining weights keep it positive; Hansen and Hodrick used flat weights. <bookmark mark='d'/> "
-            "With h-month overlap, correlations h minus k over h sum to h: the naive variance is h times too small."
+            "of the scores. <bookmark mark='a'/> The variance of a sum adds every pair's covariance: T terms on the "
+            "diagonal, and T minus k pairs k apart, each sharing gamma k. Divide by T and let T grow: the limit is S, the "
+            "sum of all the autocovariances, the long-run variance, <bookmark mark='b'/> which is also the spectrum of "
+            "the scores at frequency zero, the power in their slowest movements. <bookmark mark='c'/> Summing all sample "
+            "autocovariances is noisy and can even go negative; Bartlett's declining weights keep it positive; Hansen and "
+            "Hodrick used flat weights out to the horizon. <bookmark mark='d'/> With h-month overlap, neighbours k apart "
+            "have correlation h minus k over h, and these sum to h: the naive variance is h times too small, sixty times "
+            "for five-year returns."
         ) as vo:
             step(0)
             vo.wait_until("a")

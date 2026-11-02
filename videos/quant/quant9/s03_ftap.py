@@ -74,6 +74,8 @@ class FTAP(VoiceoverScene):
             "vanishes on it, so the normal lambda is orthogonal to L and strictly positive. <bookmark "
             "mark='c'/> Write that out for every portfolio and divide by lambda's first entry: prices "
             "are payoffs times strictly positive state prices."
+            " Strict positivity is the whole content. A state price of zero would let a payoff that is "
+            "positive only in that state cost nothing: an arbitrage."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -122,6 +124,9 @@ class FTAP(VoiceoverScene):
             "reaches the cone's edge at a hundred and twenty-five, and at a hundred and thirty it is "
             "outside, where the program returns the separating portfolio instead. <bookmark "
             "mark='c'/> It is the dual of the last chapter's picture, failing at the same moment."
+            f" The program's own portfolio at a hundred and thirty: long {th[0]:.2f} in bonds and short "
+            f"{abs(th[1]):.4f} of a share, costing minus {abs(f['ftap_130']['cost']):.3f}, and never "
+            "paying less than zero."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.3), FadeIn(slabs),
                       FadeIn(side[1]), run_time=2.5)

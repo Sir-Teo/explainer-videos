@@ -59,10 +59,14 @@ class House(VoiceoverScene):
                           23, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(card_, DOWN, buff=0.5)
         with self.voiceover(
-            "Since 2009 the SEC has required filings in machine-readable XBRL, phased in from the largest filers to all by 2011. "
-            "<bookmark mark='a'/> Each number is a tagged fact: concept, value, unit, period, filing. <bookmark mark='b'/> The "
-            "10-K is due sixty to ninety days after the year ends, and numbers are restated or recast later. Every number has two "
-            "dates: the period it describes and the day it became public."
+            "Analysts once typed company numbers in by hand. In 2009 the SEC required American companies to file their statements "
+            "in a machine-readable language, XBRL, starting with periods ending after the fifteenth of June 2009 for the largest "
+            "filers, those with a public float above five billion dollars, and reaching everyone by 2011. <bookmark mark='a'/> Each "
+            "number is a tagged fact: what it is, its value and unit, the period it covers, and the filing it came in. "
+            "<bookmark mark='b'/> That filing date is the one a quant cares about. The annual report is due sixty, seventy-five or "
+            "ninety days after the year ends, depending on the company's size, and a number can be restated, or recast for a "
+            "business that was sold, years later. So every reported number has two dates: the period it describes, and the day it "
+            "became public."
         ) as vo:
             self.play(Create(box), FadeIn(fact[0]), FadeIn(rules[0]))
             vo.wait_until("a")
@@ -207,10 +211,13 @@ class House(VoiceoverScene):
         src = real_data(r"SEC EDGAR company facts, filings through October 2026; changes include restatements and recasts")
         ge = next(f for f in firms if f["name"] == "General Electric")
         with self.voiceover(
-            "An audit of the cached filings: how many years' net income and revenue a later 10-K showed differently. "
-            f"<bookmark mark='a'/> Pause and predict: General Electric's revenue? <bookmark mark='b'/> {ge['sales'][1]} of "
-            f"{ge['sales'][0]}, mostly recasts, not frauds. <bookmark mark='c'/> And the median 10-K arrived {np.median(lags):.0f} "
-            "days after year end: a backtest using December's earnings on the first of January reads two months of the future."
+            "Now audit the cached filings. For each firm, the table counts how many fiscal years' net income and revenue were later "
+            f"shown with a different number. <bookmark mark='a'/> Pause and predict: for General Electric's revenue? "
+            f"<bookmark mark='b'/> {ge['sales'][1]} of {ge['sales'][0]}. Most changes are recasts, not frauds: businesses sold, "
+            "accounting standards changed. Kraft Heinz's two are its restatement. <bookmark mark='c'/> And the waiting time: the "
+            f"median 10-K arrived {np.median(lags):.0f} days after the year ended, inside the sixty-day rule for the largest firms. "
+            "A backtest that uses December's earnings on the first of January has read two months of the future. The House's rule "
+            "four: a reported number exists from the day it was filed, as it was first reported."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(src))
             self.play(LaggedStart(*[FadeIn(VGroup(*r[:1])) for r in tab[1:]], lag_ratio=0.1))

@@ -41,12 +41,13 @@ class House(VoiceoverScene):
         if tab.width > 13.2:
             tab.scale_to_fit_width(13.2)
         with self.voiceover(
-            "The House's sizing module collects this part's tools, every one tested against a closed form or a "
-            "second method. <bookmark mark='a'/> Utility and certainty equivalents. Merton by dynamic programming and "
-            "by finite differences on the HJB equation. The scheme comparison of the viscosity chapter. Consumption "
-            "and the no-trade band. Kelly and realized growth. Stopping three ways. Prospect theory and robust "
-            "fractions. The backward equation and the crowd. And the learners, which must agree with the answers "
-            "before they are trusted with anything harder."
+            "The House's sizing module collects this part's tools, every one tested against a closed form or a second "
+            "method, because a sizing rule that is wrong is wrong on every position at once. <bookmark mark='a'/> Utility and "
+            "certainty equivalents. Merton by dynamic programming and by finite differences on the HJB equation. The scheme "
+            "comparison of the viscosity chapter. Consumption and the no-trade band. Kelly and realized growth. Stopping three "
+            "ways: value iteration, the convex hull, and smooth fit. Prospect theory and robust fractions. The backward "
+            "equation and the crowd. And the learners, which must agree with the answers before they are trusted with "
+            "anything harder. Everything rebuilds from one command, and a viewer can change any input and rerun it."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["portfolio"], color=QC.HOUSE, scale_factor=1.05))

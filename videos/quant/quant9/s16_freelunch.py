@@ -126,6 +126,8 @@ class FreeLunch(VoiceoverScene):
             "theory one in eleven. <bookmark mark='c'/> The fix: admissible strategies, whose wealth "
             "never falls below some minus a. With a floor at minus one, half the doublers are stopped "
             "out."
+            " The admissible doubler, stopped at minus one or plus one, wins half the time and loses "
+            "half the time: a fair game again."
         ) as vo:
             self.play(FadeIn(g), Create(win), FadeIn(src), FadeIn(hl))
             self.add(FAN, H)
@@ -162,6 +164,9 @@ class FreeLunch(VoiceoverScene):
             "found the condition in 1994: no free lunch with vanishing risk. <bookmark mark='c'/> It "
             "is equivalent to an equivalent local martingale measure, and in full generality, in "
             "1998, a sigma-martingale measure: the theorem's final form."
+            " Why vanishing risk? Ruling out trades whose losses shrink to nothing while the gains "
+            "stay, not just exact arbitrages, is what keeps the set of attainable payoffs closed, so "
+            "chapter four's separating hyperplane still exists in infinite dimensions."
         ) as vo:
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -205,6 +210,7 @@ class FreeLunch(VoiceoverScene):
             "strict local martingale. <bookmark mark='b'/> No free lunch, yet the asset trades above "
             "its expected value: a bubble, and parity fails. Cox and Hobson priced such options in "
             "2005."
+            f" At time four the mean has sunk to {b['4.0']['exact']:.3f}."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(side[0]))
             self.play(LaggedStart(*[Create(p_) for p_ in fan], lag_ratio=0.01), run_time=3)

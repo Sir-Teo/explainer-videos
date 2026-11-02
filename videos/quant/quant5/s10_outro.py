@@ -71,13 +71,16 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Part five in eleven lines. Brownian motion is the universal limit of walks; its quadratic variation is "
-            "time. The Itô integral is a completed ledger of bets; the lemma is the misses above a tangent plane. "
-            "Rates can be solved and fitted exactly, and their densities and prices obey partial differential "
-            "equations. Girsanov re-weights paths: drift changes, volatility cannot. Every Brownian payoff is a "
-            "hedge, until a second noise or a jump arrives. Local time is why the free hedge costs the option's "
-            "price. Jumps are real, and they cluster. And volatility looks rough, though a fast, smooth process can "
-            "too."
+            "Part five in eleven lines. Brownian motion is the universal limit of random walks, and Lévy built it "
+            "directly; the reflection principle doubles its tail. Its quadratic variation is time, proved and "
+            "measured. The Itô integral is a completed ledger of bets, an isometry and a martingale, while smooth "
+            "noise leads to Stratonovich. Itô's lemma is the misses above a tangent plane, piling up. Stochastic "
+            "differential equations exist by Picard iteration and are simulated at known orders. Mean-reverting rates "
+            "can be solved and fitted exactly, and their densities and prices obey partial differential equations. "
+            "Girsanov re-weights paths: drift changes, volatility cannot. Every Brownian payoff is a hedge, until a "
+            "second noise or a jump arrives. Local time is why the free hedge costs the option's price. Jumps are "
+            "real, and they cluster. And volatility looks rough, though a fast but smooth process can look rough too, "
+            "and signatures read what a path did, in order."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))

@@ -39,6 +39,8 @@ class Parity(VoiceoverScene):
             "sometimes wins. <bookmark mark='a'/> The law of one price follows: if two portfolios pay "
             "the same in every state but cost different amounts, buy the cheap one, sell the dear "
             "one, and keep the difference."
+            " Notice what the definition does not need: no probabilities, no model of the stock, not "
+            "even agreement about what will happen. Only today's prices, and the list of states."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")
@@ -77,6 +79,9 @@ class Parity(VoiceoverScene):
             "bought with one share and a loan of the discounted strike. Same payoff, same price: call "
             "minus put equals stock minus discounted strike. <bookmark mark='d'/> On Deribit, where "
             "prices are in bitcoin, divide by the forward: one minus K over F."
+            " A worked example: with the stock at a hundred and three and a strike of a hundred, at "
+            "zero rates the right side is three. At four percent for a year it would be a hundred and "
+            "three minus ninety-six point oh eight, about six point nine two."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(leg[0]), Create(call),
                       FadeIn(note(r"Bj\"ork, ch.\ 10; Hull, ch.\ 11; Stoll (1969)", font_size=17).to_corner(DR, buff=0.25)))
@@ -214,6 +219,8 @@ class Parity(VoiceoverScene):
             "the forwards option parity implies; squares: where the dated futures traded. On the "
             f"{fb['n_matched']} expiries with both, the median gap is {gp50:.1f} basis points, the "
             f"largest {gmax:.1f}. <bookmark mark='b'/> {tail}"
+            f" The perpetual contract, which never expires, traded within {fb['perp']['basis_bp']:.1f} "
+            "basis points of the index over the same hours."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")

@@ -13,6 +13,7 @@ class Dcc(VoiceoverScene):
         self.card()
         self.ellipses(e)
         self.derive(d)
+        self.structure(d)
         self.path(d, e)
 
     def card(self):
@@ -146,5 +147,39 @@ class Dcc(VoiceoverScene):
             self.play(FadeIn(pc))
             vo.wait_until("b")
             self.play(FadeIn(ans))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def structure(self, d):
+        a, b = d["a"], d["b"]
+        hl = np.log(0.5) / np.log(a + b)
+        rows = [
+            cmath(r"Q_t", r"=", r"\sum_{k\ge0}b^k\big[(1-a-b)\bar Q + a\,z_{t-1-k}z_{t-1-k}'\big]", font_size=34),
+            cmath(r"x'Q_tx", r"=", r"\sum_k b^k\big[(1-a-b)\,x'\bar Qx + a\,(x'z_{t-1-k})^2\big] \ge 0", font_size=34),
+            cmath(r"\mathbb{E}_t Q_{t+h} - \bar Q", r"=", r"(a+b)^{h-1}\big(Q_{t+1} - \bar Q\big)", font_size=34),
+        ]
+        whys = [why(r"unroll the recursion: a weighted sum of outer products"),
+                why(r"every term is positive semi-definite, so $Q_t$ is a valid covariance every day"),
+                why(r"the same tower-property argument as GARCH: correlations revert at the rate $a + b$")]
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-1.8, buff=0.55, edge=6.9)
+        res = MathTex(rf"a + b = {a + b:.3f}:\ \text{{a correlation shock halves in about }} {hl:.0f}\text{{ trading days}}",
+                      font_size=30, color=VOL).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Why the recursion is safe. Unroll it, and today's matrix is a weighted sum of the long-run matrix and of "
+            "outer products of past shocks. <bookmark mark='a'/> Each of those is positive semi-definite, and so is any "
+            "sum of them with positive weights: whatever the data, the model never produces an impossible correlation "
+            "matrix, which a separate GARCH for each correlation could. <bookmark mark='b'/> And the forecasts revert "
+            "to the long-run correlations at the rate a plus b, exactly as GARCH variances do. <bookmark mark='c'/> For "
+            f"stocks and bonds a plus b is {a + b:.3f}: a shock to the correlation takes about {hl:.0f} trading days, "
+            "more than a year, to halve. Correlation regimes are slow, which is why they matter so much to a "
+            "balanced portfolio and why a model fitted to one decade can be wrong for the next."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()

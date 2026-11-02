@@ -101,11 +101,14 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Part two in ten lines. A future is spot carried forward, hedged with rho times a volatility ratio. The book is "
-            "queues; an auction trades the most. Netting only shrinks obligations; waterfalls protect survivors; deposits "
-            "scale with volatility and days. Liquidation odds follow the reflection principle, fat tails aside, and margin "
-            "arrives after the loss. Shorts face squeezes, haircuts spiral, fees compound, smoothed returns flatter, and every "
-            "market's rules move its statistics."
+            "Part two in ten lines. A future is the spot price carried forward, and its best hedge ratio is rho times a ratio "
+            "of volatilities. The book is queues, impatience pays half the spread plus the walk, and an auction picks the "
+            "price that trades the most. Netting can only shrink obligations, and a clearing house's waterfall protects the "
+            "members who didn't fail; settlement deposits scale with volatility and with the days to settle. The odds of "
+            "liquidation follow the reflection principle, fat tails aside, and margin models arrive after the loss. Shorts "
+            "pay to borrow and face squeezes once short interest outruns the free float. Haircuts are leverage limits that "
+            "spiral. Fees compound, and smoothed returns flatter. And index demand, price limits and each market's rules move "
+            "prices and the statistics we measure."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -117,11 +120,13 @@ class Outro(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Three desk questions. Make me a market on trading days in a year: about two fifty-two, three sixty-five less a "
-            "hundred and four weekend days and nine or ten holidays. <bookmark mark='a'/> A future at a hundred and two, spot "
-            "a hundred, six months, three percent: fair value is a hundred and one fifty-one, so sell the future and buy "
-            "spot. <bookmark mark='b'/> Short interest at a hundred and twenty percent: shares lent and relent, and every "
-            "short a future buyer."
+            "Three desk questions. The first is a classic of trading interviews, the market-making game: make me a market on "
+            "the number of trading days in an American year. About two hundred and fifty-two: three hundred and sixty-five "
+            "days, less a hundred and four weekend days, less nine or ten holidays. Quote it tight, and be ready to be hit on "
+            "either side. <bookmark mark='a'/> A future at a hundred and two, spot at a hundred, six months, three percent "
+            "rates: fair value is a hundred and one fifty-one, so sell the future, buy the spot with borrowed money, and lock "
+            "in forty-nine cents. <bookmark mark='b'/> Short interest at a hundred and twenty percent of float: shares lent, "
+            "sold and lent again; and every one of those shorts must one day buy from a float that may run out."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

@@ -40,10 +40,12 @@ class Short(VoiceoverScene):
         if steps.width > 13.0:
             steps.scale_to_fit_width(13.0)
         with self.voiceover(
-            "To bet on a fall you sell what you don't own. Your broker locates a lender, often an index fund. "
-            "<bookmark mark='a'/> You borrow the shares, post cash collateral, and sell. <bookmark mark='b'/> The lender pays "
-            "interest on the cash, a rebate, less its fee. <bookmark mark='c'/> It can recall the shares any time, and you "
-            "must buy them back. <bookmark mark='d'/> And you pay any dividend."
+            "To bet that a price will fall, you sell something you don't own. First your broker locates a lender: often a "
+            "pension fund or an index fund, which lends its shares for a fee. <bookmark mark='a'/> You borrow the shares, "
+            "post cash collateral worth a little more than they are, and sell them. <bookmark mark='b'/> The lender pays you "
+            "interest on that cash, the rebate, less its fee. <bookmark mark='c'/> It can recall its shares at any moment, and "
+            "then you must buy them back, at whatever the price is. <bookmark mark='d'/> And any dividend paid while you are "
+            "short is yours to pay."
         ) as vo:
             self.play(FadeIn(steps[0]))
             for i, mk in enumerate("abcd", start=1):
@@ -112,9 +114,12 @@ class Short(VoiceoverScene):
                              r"100 shares; GameStop's short interest reached 122.97\% of its float in January 2021",
                              11.4, 21, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How can short interest exceed a hundred percent? Follow one share: lent to a short seller, sold to B. "
-            "<bookmark mark='a'/> B can lend it too, to a second short seller, who sells it to C. <bookmark mark='b'/> One "
-            "share, two shorts, and short interest counts two. GameStop's reached a hundred and twenty-three percent."
+            "How can short interest exceed a hundred percent of the shares available? Follow one share. The lender lends it "
+            "to a short seller, who sells it to buyer B. <bookmark mark='a'/> B now owns a share like any other, and can lend "
+            "it too: to a second short seller, who sells it to C. <bookmark mark='b'/> One share exists, two are sold short, "
+            "and short interest counts two. The SEC's staff report gives exactly this example. Repeat it enough and short "
+            "interest passes a hundred percent of the float: GameStop's reached a hundred and twenty-three. Every short is a "
+            "future buyer."
         ) as vo:
             self.play(FadeIn(people), FadeIn(share), FadeIn(cnt))
             self.play(share.animate.move_to(people[1].get_center() + UP * 0.9), si.animate.set_value(1))

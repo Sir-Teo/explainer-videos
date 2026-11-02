@@ -115,10 +115,15 @@ class Bootstrap(VoiceoverScene):
                     r"two again; the block length plays the bandwidth")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=1.0, edge=6.8)
         with self.voiceover(
-            "Why blocks? The plug-in principle: resampled estimates vary around the sample's as the sample's varies "
-            "around the truth. <bookmark mark='a'/> Resample single months and the variance of a mean is only lag "
-            "zero, every autocovariance thrown away. <bookmark mark='b'/> Blocks keep the autocovariances inside them, "
-            "with Bartlett-like weights: the block length is the bandwidth."
+            "Why blocks? The plug-in principle: resampled estimates vary around the sample's estimate as the sample's "
+            "estimate varies around the truth, as long as the resampling mimics how the data were generated. "
+            "<bookmark mark='a'/> Resample single months and every pair of months in the new series is independent, so "
+            "the variance of a mean is only lag zero: chapter two's long-run variance with every autocovariance thrown "
+            "away. For a Sharpe ratio, whose noise also depends on how volatility clusters, the same loss applies. "
+            "<bookmark mark='b'/> Blocks of length ell keep every autocovariance inside a block. A lag-k pair falls "
+            "inside the same block ell minus k times out of ell, so lag k is kept with weight one minus k over ell: "
+            "Bartlett's triangle again. The block length is the bandwidth, with the same trade-off: too short loses the "
+            "dependence, too long leaves too few blocks to vary."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -145,10 +150,12 @@ class Bootstrap(VoiceoverScene):
                      font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         with self.voiceover(
             "The House's stationary bootstrap: start anywhere; each step, with probability one over the mean block "
-            "length, jump to a random month, else take the next one. <bookmark mark='a'/> On the market's Sharpe ratio, "
-            f"eight hundred times: a standard error of {b['se_stationary']:.3f}, against {b['se_iid_boot']:.3f} for the iid "
-            f"bootstrap and {b['se_iid']:.3f} from Lo's formula. <bookmark mark='b'/> After ninety-four years, known to "
-            "about a quarter either way."
+            "length, jump to a random month, else take the next one, wrapping around the end. Recompute the statistic "
+            "on the new history, and repeat. <bookmark mark='a'/> On the market's Sharpe ratio, eight hundred times: a "
+            f"standard error of {b['se_stationary']:.3f}, against {b['se_iid_boot']:.3f} for the iid bootstrap and "
+            f"{b['se_iid']:.3f} from Lo's formula. The clustering of volatility makes the Sharpe ratio a fifth less "
+            "certain than independent months suggest. <bookmark mark='b'/> After ninety-four years, the market's "
+            "Sharpe ratio is known only to within about a quarter either way."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

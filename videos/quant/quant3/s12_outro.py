@@ -89,10 +89,14 @@ class Outro(VoiceoverScene):
         if cards.height > 7.5:
             cards.scale_to_fit_height(7.5)
         with self.voiceover(
-            "Four desk questions. A debt-free buyback: the price does not move, EPS rises if the earnings yield beats the cash's "
-            "yield. <bookmark mark='a'/> Two dollars growing four percent at fifty: eight percent expected. "
-            "<bookmark mark='b'/> Forty-seven against fifty and thirty-five, six months at four percent: about eighty-six percent. "
-            "<bookmark mark='c'/> ROE twelve, cost of equity eight, growth four: a price-to-book of two. Solutions are in the notes."
+            "Four desk questions. A firm with no debt buys back a tenth of its shares at the market price. The price does not move, "
+            "but earnings per share rise whenever the earnings yield beats what the cash was earning, so the P/E falls. "
+            "<bookmark mark='a'/> A stock pays two dollars next year, growing four percent forever, and trades at fifty. The market "
+            "expects the dividend yield plus growth: eight percent. <bookmark mark='b'/> A takeover target trades at forty-seven "
+            "under a cash offer of fifty and would fall to thirty-five if the deal broke; it closes in six months with cash earning "
+            "four percent. The priced chance of closing is about eighty-six percent. <bookmark mark='c'/> A firm earns twelve "
+            "percent on book, its cost of equity is eight, and book grows at four: a price-to-book of two. Full solutions are in "
+            "the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -107,8 +111,9 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And seven problems, from Gordon's P/E to the Campbell–Shiller identity, with solutions in English and Chinese in the "
-            "notes."       ):
+            "And seven problems: the P/E from Gordon's model, a discounted cash flow, Modigliani and Miller with taxes, Merton's "
+            "model of equity and debt, overlapping windows, a project with two internal rates of return, and the Campbell–Shiller "
+            "identity. Solutions, in English and Chinese, are in the notes."       ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
         self.clear_scene()
@@ -152,9 +157,11 @@ class Outro(VoiceoverScene):
             (r"forecasting earnings; text in filings", [27, 28]),
         ])
         with self.voiceover(
-            "Where this comes back: the call in Parts ten and twenty, moving discount rates in twenty-three, Stambaugh's bias in "
-            "six, the factor zoo in twenty-four and twenty-five, the trial counter in twenty-six and the finale, and machines that "
-            "read filings in twenty-seven and twenty-eight."
+            "Where this comes back. Equity as a call is priced in Part ten and becomes a model of default in Part twenty. "
+            "Shiller's puzzle, that discount rates must move, is the subject of Part twenty-three, and Stambaugh's bias is worked "
+            "out in Part six. The accounting signals return as factors in twenty-four and in the factor zoo of twenty-five. The "
+            "trial counter is put to work in twenty-six, and the CAPE forecast is opened in the finale. Machine learning for returns "
+            "and language models that read filings are Parts twenty-seven and twenty-eight."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -179,9 +186,11 @@ class Outro(VoiceoverScene):
              r"(2024); Islam et al.\ (2023); Jensen, Kelly and Pedersen (2023); Gormsen and Lazarus (2023); Eisfeldt, "
              r"Kim and Papanikolaou (2022); SEC releases on Enron, Luckin and Kraft Heinz"], font_size=19)
         with self.voiceover(
-            "The books and papers behind this part. Every number was computed from public data: Shiller's, French's, the "
-            "open-source predictors, Damodaran's, Yahoo's and the SEC's. <bookmark mark='a'/> Next, Part four: martingales and "
-            "measure, and why you cannot beat a fair game by changing your bets."
+            "The textbook chapters this part covers, and the papers and reports it draws on. Every number in it was computed by the "
+            "series' own code from public data: Shiller's century and a half of prices, Kenneth French's portfolios, the "
+            "open-source predictor returns, Damodaran's implied premiums, Yahoo's prices, and filings from the SEC's EDGAR. "
+            "<bookmark mark='a'/> Next, Part four opens the mathematical toolkit: martingales and measure, the precise meaning of a "
+            "fair game, and why you cannot beat one by changing your bets."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

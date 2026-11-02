@@ -160,12 +160,15 @@ class Frontier(VoiceoverScene):
                    "learn that losses fade faster than profits; ridge on splines, which can bend too, ties it. "
                    if beats else "The network does not beat least squares by more than its own seed spread. ")
         with self.voiceover(
-            "The House trains a small earnings forecaster on a simulated panel whose truth we know: losses fade faster than "
-            "profits, accruals reverse, and three of fourteen items are noise. A random walk, least squares, ridge on splines and "
-            "a neural network, five seeds, equal data. <bookmark mark='a'/> The network learning: validation error with the seed "
-            f"band and the linear baselines; its test predictions tightening. <bookmark mark='b'/> Random walk {rw * 1e4:.2f}, "
-            f"least squares {ols * 1e4:.2f}, network {mlp * 1e4:.2f}. {verdict}All sit just above the noise floor of "
-            f"{f['floor'] * 1e4:.2f}: with clean inputs, the fights are about the inputs, not the network."
+            "The House trains its own small forecaster, on a simulated panel whose truth we know: profits persist with point "
+            "eight, losses only with point four, accruals carry a reversing error, and three of the fourteen items are pure noise. "
+            "Next year's earnings over assets is the target. The models get equal data: a random walk, ordinary least squares, "
+            "ridge regression on splines, and a two-layer neural network, five seeds. <bookmark mark='a'/> Here the network learns. "
+            "On the right its validation error, with the spread of five seeds as a band and the linear baselines as dashed lines; "
+            "on the left, its predictions for the test years against what happened, tightening around the diagonal. "
+            f"<bookmark mark='b'/> The verdict. The random walk, {rw * 1e4:.2f}; least squares, {ols * 1e4:.2f}; the network, "
+            f"{mlp * 1e4:.2f}. {verdict}All of them sit just above the noise floor of {f['floor'] * 1e4:.2f}. With clean, "
+            "low-dimensional inputs a flexible model has little to find; the frontier's fights are about the inputs, not the network."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), FadeIn(base))
             vo.wait_until("a")

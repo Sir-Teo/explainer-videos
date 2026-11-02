@@ -1,28 +1,30 @@
 from __future__ import annotations
 
 import numpy as np
+from scipy.special import gammaln
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, load, real_data
-
-NAMES = {"BS": r"Black--Scholes", "Heston": r"Heston", "Bates": r"Bates", "VG": r"variance gamma", "NIG": r"NIG",
-         "SABR": r"SABR, per expiry"}
+from videos.quant.quant13.common import (BAD, IV, MODEL_COL, NAMES, OPT, PART, RV, SPOT, VAR, illustration, load, pause,
+                                         real_data)
 
 
 class Jumps(VoiceoverScene):
     def construct(self):
         c = load("calibrate")
-        s = load("skew")
+        lf = load("levy_fits")
+        br = load("bates_replay")
         self.card()
         self.models()
-        self.levy()
-        self.scores(c)
-        self.slices(c)
-        self.skew(s)
+        self.cake()
+        self.derive()
+        self.scores(c, lf)
+        self.replay(br, lf)
+        self.cards()
 
     def card(self):
-        c = chapter_card(4, r"Jumps and L\'evy models", r"What if prices do not move continuously?", part=PART)
-        with self.voiceover("Chapter four. Jumps, and Lévy models."):
+        c = chapter_card(8, r"Jumps: Merton, Kou and Bates", r"What if prices do not move continuously?", lit=(1987,),
+                         part=PART)
+        with self.voiceover("Chapter eight. Jumps: Merton, Kou, and Bates."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -56,161 +58,271 @@ class Jumps(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def levy(self):
-        rows = [cmath(r"X_t", r"=", r"\theta\,G_t + \sigma\,W_{G_t},\qquad G_t \sim \text{Gamma}(t/\nu,\ \nu)",
-                      font_size=36, colors={r"X_t": SPOT}),
-                cmath(r"\mathbb{E}\,e^{iuX_t}", r"=", r"e^{t\,\psi(u)}", font_size=38,
-                      colors={r"\mathbb{E}\,e^{iuX_t}": OPT}),
-                cmath(r"X_t", r"=", r"L_{\tau_t},\qquad \tau_t = \int_0^t v_s\,ds", font_size=38, colors={r"X_t": SPOT})]
-        whys = [why(r"variance gamma (Madan, Carr and Chang 1998): Brownian motion run on a random gamma clock, so business "
-                    r"time speeds up and slows down; infinitely many tiny jumps, no diffusion at all"),
-                why(r"every L\'evy process has independent, stationary increments and a characteristic exponent $\psi$: the "
-                    r"COS method prices it like Heston. NIG and CGMY (Carr, Geman, Madan and Yor 2002) are cousins"),
-                why(r"Carr and Wu (2004): run a L\'evy process on a stochastic clock, and volatility clusters: jumps and "
-                    r"stochastic volatility in one frame")]
-        step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.0, buff=0.85, edge=6.9)
+    def cake(self):
+        sig, mj, sj, T = 0.3, -0.12, 0.08, 0.25
+        xs = np.linspace(-0.9, 0.5, 241)
+        kbar = np.exp(mj + 0.5 * sj * sj) - 1
+
+        def layers(lam):
+            lt = lam * T
+            out = []
+            for n in range(6):
+                w = float(np.exp(-lt + (n * np.log(lt) if lt > 0 else 0) - gammaln(n + 1)))
+                mu = -lam * kbar * T - 0.5 * sig ** 2 * T + n * mj
+                var = sig ** 2 * T + n * sj ** 2
+                out.append((w, w * np.exp(-0.5 * (xs - mu) ** 2 / var) / np.sqrt(2 * np.pi * var)))
+            return out
+
+        g = axes([-0.9, 0.5], [0, 3.0], x_length=7.2, y_length=4.2, xlabel=r"$\ln S_T / S_0$, three months",
+                 ylabel=r"density", xticks=[-0.8, -0.4, 0, 0.4], yticks=[0, 1, 2, 3], font_size=16).to_edge(LEFT, buff=0.6)
+        ax = g.ax
+        cols = [SPOT, BAD, OPT, VAR, IV, GREY_B]
+
+        def draw(lam):
+            L = layers(lam)
+            base = np.zeros_like(xs)
+            grp = VGroup()
+            for n, (w, d) in enumerate(L):
+                top = base + d
+                poly = Polygon(*[ax.c2p(x, y) for x, y in zip(xs, np.clip(top, 0, 3))],
+                               *[ax.c2p(x, y) for x, y in zip(xs[::-1], np.clip(base[::-1], 0, 3))],
+                               stroke_width=0, fill_color=cols[n], fill_opacity=0.7)
+                grp.add(poly)
+                base = top
+            env = curve(ax, xs, np.clip(base, 0, 3), WHITE, stroke_width=2.5)
+            wbars = VGroup(*[VGroup(Rectangle(width=0.32, height=max(2.4 * w, 0.01), stroke_width=0, fill_color=cols[n],
+                                              fill_opacity=0.85),
+                                    MathTex(str(n), font_size=20, color=GREY_A)).arrange(DOWN, buff=0.08)
+                             for n, (w, _) in enumerate(L)])
+            wbars.arrange(RIGHT, buff=0.18, aligned_edge=DOWN)
+            lab = MathTex(rf"\lambda = {lam:g}\ \text{{a year}}", font_size=30, color=WHITE)
+            panel = VGroup(lab, wbars, label(r"Poisson weight of $n$ jumps", font_size=18, color=GREY_B)).arrange(
+                DOWN, buff=0.25).to_edge(RIGHT, buff=0.8).shift(UP * 0.5)
+            return VGroup(grp, env, panel)
+
+        cur = draw(1.0)
+        src = illustration(r"$\sigma = 30\%$, jumps $\mathcal{N}(-12\%, 8\%^2)$, three months")
         with self.voiceover(
-            "Go further, and drop the diffusion altogether. Variance gamma, from Dilip Madan, Peter Carr and Eric "
-            "Chang, runs a Brownian motion on a random clock. Business time speeds up in busy markets and slows in "
-            "quiet ones, and the price moves by infinitely many tiny jumps. <bookmark mark='a'/> It belongs to the "
-            "Lévy family: independent, stationary increments, and a characteristic function that is a simple "
-            "exponential, so the same Fourier machinery prices it. The normal inverse Gaussian and CGMY are its "
-            "cousins. <bookmark mark='b'/> And Carr and Liuren Wu showed in 2004 how to unify everything: run a Lévy "
-            "process on a stochastic clock, and you get jumps and clustering volatility in one model."
+            "Robert Merton's jump model has a beautiful exact solution, and it is easiest to see as a layer cake. Over "
+            "three months, the price either does not jump, or jumps once, or twice, and so on. Given the number of "
+            "jumps, the log price is just Gaussian: the diffusion plus that many Gaussian jumps. <bookmark mark='a'/> "
+            "So the distribution is a stack of Gaussian layers: blue for no jump, red for one jump shifted left by "
+            "the mean jump, orange for two, each weighted by its Poisson probability, shown on the right. The white "
+            "outline is the sum. <bookmark mark='b'/> Raise the intensity, and weight moves from the no-jump layer "
+            "into the jump layers. The left tail fattens: that is the crash insurance a put is buying. "
+            "<bookmark mark='c'/> Lower it, and the cake collapses back toward a single Gaussian, Black and Scholes."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(src), FadeIn(cur[2]), LaggedStart(*[FadeIn(p_) for p_ in cur[0]], lag_ratio=0.4),
+                      Create(cur[1]), run_time=3)
+            vo.wait_until("b")
+            self.play(Transform(cur, draw(4.0)), run_time=2.5)
+            vo.wait_until("c")
+            self.play(Transform(cur, draw(0.3)), run_time=2.5)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self):
+        rows = [cmath(r"\frac{dS}{S_-}", r"=", r"-\lambda\bar k\,dt + \sigma\,dW + (e^J - 1)\,dN,\quad "
+                      r"\bar k = e^{\mu_J + \sigma_J^2/2} - 1", font_size=32, colors={r"\frac{dS}{S_-}": SPOT}),
+                cmath(r"\ln S_T \mid N_T = n", r"\sim", r"\mathcal{N}\big(\ln S_0 - \lambda\bar kT - \tfrac12\sigma^2T + "
+                      r"n\mu_J,\ \ \sigma^2T + n\sigma_J^2\big)", font_size=32, colors={r"\ln S_T \mid N_T = n": SPOT}),
+                cmath(r"C", r"=", r"\sum_{n\ge0} e^{-\lambda T}\frac{(\lambda T)^n}{n!}\ "
+                      r"C_{\text{BS}}\big(S_0 e^{-\lambda\bar kT + n(\mu_J + \sigma_J^2/2)},\ K,\ T,\ \sigma_n\big),\ "
+                      r"\sigma_n^2 = \sigma^2 + \tfrac{n\sigma_J^2}{T}", font_size=28, colors={r"C": OPT}),
+                cmath(r"\varphi_{\text{Bates}}", r"=", r"\varphi_{\text{Heston}}\cdot\exp\Big(\lambda T\big(e^{iu\mu_J - "
+                      r"\frac12\sigma_J^2u^2} - 1 - iu\bar k\big)\Big)", font_size=32, colors={r"\varphi_{\text{Bates}}": OPT})]
+        whys = [why(r"Merton (1976): Poisson jumps at rate $\lambda$; the drift $-\lambda\bar k$ compensates them so that "
+                    r"$S$ (zero rates) is a martingale", 20),
+                why(r"given $n$ jumps, a sum of independent Gaussians", 20),
+                why(r"condition on $n$, price by Black--Scholes, and weight by the Poisson law (Shreve II, 11.7); the "
+                    r"House's merton\_series matches COS to $10^{-8}$", 20),
+                why(r"independent factors multiply: Bates (1996) is Heston times Merton's jump factor", 20)]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "The derivation is the picture, in symbols. The price diffuses, and jumps by a factor e to the J when a "
+            "Poisson clock rings at rate lambda. The drift minus lambda k bar pays for the average jump, so the "
+            "price stays a fair game. <bookmark mark='a'/> Given exactly n jumps, the log price is a sum of "
+            "independent Gaussians: Gaussian, with n times the jump mean added and n times the jump variance. "
+            "<bookmark mark='b'/> So condition on n, price with Black and Scholes, and weight by the Poisson "
+            "probability. That series is Merton's 1976 formula, and the House's version agrees with Fourier pricing "
+            "to eight decimals. <bookmark mark='c'/> And because the jumps are independent of Heston's two rivers, "
+            "characteristic functions multiply: David Bates's 1996 model is Heston's function times Merton's jump "
+            "factor. Steven Kou's double exponential jumps, from 2002, swap the Gaussian jump for two exponentials, "
+            "up and down. Their memoryless overshoot gives closed-form prices for barriers and lookbacks, as Kou and "
+            "Hui Wang showed in 2004."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
+            vo.wait_until("c")
+            step(3)
         self.wait(0.4)
         self.clear_scene()
 
-    def scores(self, c):
-        names = ["BS", "VG", "NIG", "Heston", "Bates", "SABR"]
-        vals = [c["fits"][n]["rmse"] if n != "SABR" else c["sabr_rmse"] for n in names]
-        npar = [1, 3, 3, 5, 8, 3 * len(c["sabr"])]
-        g = axes([0, 4.5], [-0.5, len(names) - 0.5], x_length=6.4, y_length=4.2, xlabel=r"fit error (vol points, vega-weighted)",
-                 xticks=[0, 1, 2, 3, 4], yticks=[], font_size=16).to_edge(RIGHT, buff=0.8).shift(DOWN * 0.2)
+    def scores(self, c, lf):
+        F = lf["fits"]
+        names = ["BS", "Merton", "Kou", "VG", "NIG", "CGMY_inf", "Heston", "Bates", "SABR"]
+        vals = []
+        for n in names:
+            if n == "SABR":
+                vals.append(c["sabr_rmse"])
+            elif n in ("BS", "Heston", "Bates"):
+                vals.append(c["fits"][n]["rmse"])
+            else:
+                vals.append(F[n]["rmse_iv"])
+        npar = {"BS": 1, "Merton": 4, "Kou": 5, "VG": 3, "NIG": 3, "CGMY_inf": 4, "Heston": 5, "Bates": 8,
+                "SABR": 3 * len(c["sabr"])}
+        g = axes([0, 4.5], [-0.5, len(names) - 0.5], x_length=6.0, y_length=4.8, xlabel=r"fit error (vol points, vega-weighted)",
+                 xticks=[0, 1, 2, 3, 4], yticks=[], font_size=15).to_edge(RIGHT, buff=0.6).shift(DOWN * 0.1)
         ax = g.ax
         bars, labs = VGroup(), VGroup()
-        for i, (n, v, k) in enumerate(zip(names, vals, npar)):
+        for i, (n, v) in enumerate(zip(names, vals)):
             y = len(names) - 1 - i
-            bars.add(Rectangle(width=abs(ax.c2p(v, 0)[0] - ax.c2p(0, 0)[0]), height=0.45, stroke_width=0,
-                               fill_color=MODEL_COL[n], fill_opacity=0.85).move_to(ax.c2p(v / 2, y)))
-            labs.add(VGroup(label(NAMES[n], font_size=20, color=MODEL_COL[n]),
-                            label(rf"{k} parameter" + ("s" if k > 1 else ""), font_size=16, color=GREY_B)).arrange(DOWN, aligned_edge=RIGHT,
-                                                                                          buff=0.05)
-                     .next_to(ax.c2p(0, y), LEFT, buff=0.2))
-            labs[-1].add(MathTex(f"{v:.2f}", font_size=22).next_to(bars[-1], RIGHT, buff=0.12))
+            bars.add(Rectangle(width=max(abs(ax.c2p(min(v, 4.5), 0)[0] - ax.c2p(0, 0)[0]), 1e-3), height=0.38,
+                               stroke_width=0, fill_color=MODEL_COL[n], fill_opacity=0.85).move_to(ax.c2p(min(v, 4.5) / 2, y)))
+            labs.add(VGroup(label(NAMES[n], font_size=18, color=MODEL_COL[n]),
+                            label(rf"{npar[n]} parameter" + ("s" if npar[n] > 1 else ""), font_size=14, color=GREY_B))
+                     .arrange(DOWN, aligned_edge=RIGHT, buff=0.03).next_to(ax.c2p(0, y), LEFT, buff=0.15))
+            labs[-1].add(MathTex(f"{v:.2f}", font_size=20).next_to(bars[-1], RIGHT, buff=0.1))
+        m, k = F["Merton"]["params"], F["Kou"]["params"]
         b = c["fits"]["Bates"]["params"]
+        rare = m["lam"] < 2 and m["mj"] < -0.15
         side = VGroup(
-            wrapped_label(rf"every model fitted to the same {c['n']} quotes by the same calibrator", 4.4, 19, GREY_A),
-            wrapped_label(r"the L\'evy models, with no stochastic volatility, cannot hold the term structure: their "
-                          r"smiles flatten too fast with maturity", 4.4, 19, MODEL_COL["VG"]),
-            wrapped_label(rf"Bates's jumps add almost nothing: the optimizer pushed them to the edge of what we allowed, "
-                          rf"{b['lam']:.0f} a year of {100 * b['mj']:.0f}\% each, a second diffusion. On this calm day, "
-                          r"the Surface priced no crash", 4.4, 19, MODEL_COL["Bates"]),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(LEFT, buff=0.5)
+            wrapped_label(rf"every model fitted to the same {c['n']} quotes by the same calibrator", 4.6, 19, GREY_A),
+            MathTex(rf"\text{{Merton:}}\ \lambda = {m['lam']:.2f},\ \mu_J = {100 * m['mj']:.0f}\%,\ \sigma_J = {100 * m['sj']:.0f}\%",
+                    font_size=24, color=MODEL_COL["Merton"]),
+            MathTex(rf"\text{{Kou:}}\ \lambda = {k['lam']:.1f},\ p = {k['p']:.2f},\ \eta_1 = {k['eta1']:.1f},\ \eta_2 = {k['eta2']:.1f}",
+                    font_size=24, color=MODEL_COL["Kou"]),
+            MathTex(rf"\text{{Bates:}}\ \lambda = {b['lam']:.0f},\ \mu_J = {100 * b['mj']:.1f}\%,\ \sigma_J = {100 * b['sj']:.0f}\%",
+                    font_size=24, color=MODEL_COL["Bates"]),
+            wrapped_label(r"without stochastic volatility the jumps become crash insurance; with it, the optimizer spends "
+                          r"them on the body of the smile" if rare else
+                          r"the jumps are spent on the body of the smile, with or without stochastic volatility", 4.6, 19,
+                          WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(LEFT, buff=0.5)
         src = real_data(r"the Surface, 10 December 2025; the House's calibrator, COS pricing")
+        mv = F["Merton"]["by_expiry"]
+        shape = ("Rare and huge: crash insurance, the only way a constant-volatility model can make the short-dated "
+                 "puts dear." if rare else "Frequent and moderate: the jumps act as extra curvature.")
+        d0 = sorted(mv, key=lambda z: int(z))[0]
         with self.voiceover(
-            f"Fit them all to the same {c['n']} quotes, with the same calibrator. Black–Scholes, one number, misses by "
-            f"{c['fits']['BS']['rmse']:.1f} points. <bookmark mark='a'/> Variance gamma and NIG, three numbers each, "
-            "do better but not well: with no stochastic volatility, their smiles flatten too fast as maturity grows. "
-            f"Heston gets to {c['fits']['Heston']['rmse']:.1f}. <bookmark mark='b'/> Bates, with eight numbers, adds "
-            f"almost nothing. The optimizer turned its jumps into a flurry of small ones, {c['fits']['Bates']['params']['lam']:.0f} a year: a second "
-            "diffusion, not a crash. On this calm December day the Surface was not pricing a crash. "
-            f"<bookmark mark='c'/> And SABR, fitted expiry by expiry, is best of all, with {3 * len(c['sabr'])} numbers. "
-            "Every extra parameter buys fit. The question this part keeps asking is what it buys beyond that."
+            f"Now fit every model in the part to the same {c['n']} quotes, with the same calibrator, and line them "
+            f"up. One Black–Scholes volatility misses by {c['fits']['BS']['rmse']:.1f} points. "
+            f"<bookmark mark='a'/> Merton's jumps on a constant volatility get to {F['Merton']['rmse_iv']:.1f}, and "
+            f"look at the jumps it chose: {m['lam']:.2f} a year, each a fall of {100 * abs(m['mj']):.0f} percent on "
+            f"average. {shape} Even so, the {d0}-day expiry is missed by {mv[d0]:.1f} points. Kou's double exponential gets "
+            f"{F['Kou']['rmse_iv']:.1f}. <bookmark mark='b'/> Heston reaches {c['fits']['Heston']['rmse']:.2f}. "
+            f"And Bates, Heston plus jumps, with eight numbers, reaches {c['fits']['Bates']['rmse']:.2f}, barely "
+            "better, and with very different jumps: "
+            f"{b['lam']:.0f} a year of {100 * abs(b['mj']):.0f} percent. <bookmark mark='c'/> The same jump "
+            "component means opposite things in the two models. Without stochastic volatility, jumps are a crash; "
+            "with it, the optimizer spends them on the body of the smile, a second diffusion. On this calm December "
+            "day, the Surface priced no crash that stochastic volatility could not already explain."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]),
-                      *[AnimationGroup(GrowFromEdge(bars[i], LEFT), FadeIn(labs[i])) for i in range(1)])
+            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), GrowFromEdge(bars[0], LEFT), FadeIn(labs[0]))
             vo.wait_until("a")
-            self.play(*[AnimationGroup(GrowFromEdge(bars[i], LEFT), FadeIn(labs[i])) for i in range(1, 4)], FadeIn(side[1]))
+            self.play(*[AnimationGroup(GrowFromEdge(bars[i], LEFT), FadeIn(labs[i])) for i in (1, 2)], FadeIn(side[1:3]))
+            self.play(*[AnimationGroup(GrowFromEdge(bars[i], LEFT), FadeIn(labs[i])) for i in (3, 4, 5)])
             vo.wait_until("b")
-            self.play(GrowFromEdge(bars[4], LEFT), FadeIn(labs[4]), FadeIn(side[2]))
+            self.play(*[AnimationGroup(GrowFromEdge(bars[i], LEFT), FadeIn(labs[i])) for i in (6, 7, 8)], FadeIn(side[3]))
             vo.wait_until("c")
-            self.play(GrowFromEdge(bars[5], LEFT), FadeIn(labs[5]))
+            self.play(FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 
-    def slices(self, c):
-        panels = VGroup()
-        anims = []
-        for sl in c["shown"]:
-            k, iv = np.asarray(sl["k"]), np.asarray(sl["iv"])
-            kk = np.asarray(sl["kk"])
-            lo, hi = 0.35, 0.8
-            g = axes([kk.min(), kk.max()], [lo, hi], x_length=3.9, y_length=3.2, xlabel=r"log-moneyness",
-                     yticks=[0.4, 0.6, 0.8], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                     xticks=[round(kk.min() + 0.05, 1), 0, round(kk.max() - 0.05, 1)], font_size=14)
-            ttl = label(rf"{sl['days']} days", font_size=20).next_to(g, UP, buff=0.1)
-            dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=WHITE) for a, b in zip(k, iv) if lo <= b <= hi])
-            lines = VGroup(*[curve(g.ax, kk, np.clip(np.asarray(sl["curves"][n]), lo, hi), MODEL_COL[n], stroke_width=2.2)
-                             for n in ("VG", "NIG", "Heston", "Bates")])
-            panels.add(VGroup(g, ttl, dots, lines))
-        panels.arrange(RIGHT, buff=0.55).to_edge(UP, buff=0.9)
-        leg = legend([(WHITE, r"the Surface's quotes")] + [(MODEL_COL[n], NAMES[n]) for n in ("Heston", "Bates", "VG", "NIG")],
-                     font_size=17)
-        leg.arrange(RIGHT, buff=0.4).next_to(panels, DOWN, buff=0.45)
-        foot = wrapped_label(r"at 9 days every model bends; at 198 days the L\'evy models' smiles have gone nearly flat, while "
-                             r"the market's has not: their skew dies too fast with maturity", 11.0, 20, GREY_A).to_edge(DOWN, buff=0.5)
+    def replay(self, br, lf):
+        runs = br["runs"]
+        hi = br["hi"]
+        n_max = max(r["trace"]["eval"][-1] for r in runs)
+        cols = [MODEL_COL["Bates"], IV, VAR]
+
+        def panel(ylab, lo_, hi_, yt, fmt=None):
+            return axes([0, n_max], [lo_, hi_], x_length=3.8, y_length=3.0, xlabel=r"evaluations", ylabel=ylab,
+                        xticks=[0, n_max], yticks=yt, yfmt=fmt, font_size=13)
+
+        pL = panel(r"loss, best so far", 1.0, 6.0, [1, 3, 5])
+        pl = panel(r"jump rate $\lambda$ (a year)", 0, 21, [0, 10, 20])
+        ps = panel(r"jump size $\sigma_J$", 0, 0.3, [0, 0.1, 0.2, 0.3], fmt=lambda u: f"{100 * u:.0f}\\%")
+        P = VGroup(pL, pl, ps).arrange(RIGHT, buff=0.55).to_edge(UP, buff=0.9)
+        bound = DashedLine(pl.ax.c2p(0, hi[5]), pl.ax.c2p(n_max, hi[5]), stroke_color=BAD, stroke_width=2)
+        bl = label(r"bound", font_size=14, color=BAD).next_to(pl.ax.c2p(n_max, hi[5]), UP, buff=0.05).align_to(bound, RIGHT)
+        floor = DashedLine(ps.ax.c2p(0, br["lo"][7]), ps.ax.c2p(n_max, br["lo"][7]), stroke_color=BAD, stroke_width=2)
+        t = ValueTracker(0)
+
+        def series(r, j, ax, lo_, hi_, col):
+            ev = np.asarray(r["trace"]["eval"])
+            y = np.asarray(r["trace"]["best"]) if j is None else np.asarray(r["trace"]["x"])[:, j]
+            y = np.clip(y, lo_, hi_)
+
+            def mk():
+                k = max(int(np.searchsorted(ev, t.get_value(), side="right")), 2)
+                return VMobject(stroke_color=col, stroke_width=3).set_points_as_corners(
+                    [ax.c2p(a, b) for a, b in zip(ev[:k], y[:k])])
+            return always_redraw(mk)
+
+        lines = VGroup()
+        for r, col in zip(runs, cols):
+            lines.add(series(r, None, pL.ax, 1.0, 6.0, col), series(r, 5, pl.ax, 0, 21, col), series(r, 7, ps.ax, 0, 0.3, col))
+        leg = legend([(c_, rf"start {i + 1}") for i, c_ in enumerate(cols)], font_size=17).arrange(RIGHT, buff=0.4)
+        leg.next_to(P, DOWN, buff=0.35)
+        fin = [r["x"] for r in runs]
+        foot = wrapped_label(rf"all three starts end with $\lambda$ at its bound of {hi[5]:.0f} and $\sigma_J$ at its floor of "
+                             rf"{100 * br['lo'][7]:.0f}\%; the loss ends at {min(r['rmse'] for r in runs):.3f}: frequent "
+                             r"tiny jumps, a second diffusion", 12.0, 21, WHITE).next_to(leg, DOWN, buff=0.35)
+        at_bound = all(x[5] > 0.99 * hi[5] for x in fin)
+        src = real_data(r"the Surface; Bates calibrated from three starts, every evaluation recorded")
+        drift = ("The intensity climbs, all the way to the bound of twenty a year that we allowed, and the jump size "
+                 "shrinks to its floor, while the loss barely moves." if at_bound else
+                 "The intensity and the size trade off against each other while the loss barely moves.")
         with self.voiceover(
-            "Here are three expiries, with each model's smile over the quotes. At nine days, everything can bend. "
-            "<bookmark mark='a'/> At fifty-one days, the Lévy models start to miss the wings. <bookmark mark='b'/> At "
-            "a hundred and ninety-eight days, their smiles have gone nearly flat, and the market's has not. With "
-            "independent increments, a Lévy model's skew must die away as maturity grows. Stochastic volatility "
-            "keeps it alive."
+            f"Watch the Bates fit happen, from three starting points. Left, the loss; middle, the jump intensity; "
+            "right, the size of the jumps. <bookmark mark='a'/> The loss drops quickly as the Heston part settles. "
+            f"Then the jump parameters drift. {drift} <bookmark mark='b'/> That is the optimizer telling you something. Many small jumps are statistically "
+            "indistinguishable from more diffusion, and the data cannot tell a crash from a busy day. Pause and "
+            "predict: with Merton's fitted intensity, what is the probability of no jump before a three-day option "
+            f"expires? About {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} percent. Short "
+            "options price the possibility, not the frequency."
         ) as vo:
-            self.play(FadeIn(panels[0][:3]), FadeIn(leg), LaggedStart(*[Create(l_) for l_ in panels[0][3]], lag_ratio=0.2),
-                      run_time=2)
-            vo.wait_until("a")
-            self.play(FadeIn(panels[1][:3]), LaggedStart(*[Create(l_) for l_ in panels[1][3]], lag_ratio=0.2), run_time=2)
+            self.play(FadeIn(P), FadeIn(src), Create(bound), FadeIn(bl), Create(floor), FadeIn(leg))
+            self.add(lines)
+            self.play(t.animate.set_value(n_max), run_time=max(vo.until("b") - 0.3, 3), rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(panels[2][:3]), LaggedStart(*[Create(l_) for l_ in panels[2][3]], lag_ratio=0.2),
-                      FadeIn(foot), run_time=2)
+            self.play(FadeIn(foot))
+        for l_ in lines:
+            l_.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 
-    def skew(self, s):
-        T = np.asarray(s["T"])
-        mk = s["market"]
-        g = axes([np.log10(2 / 365), 0], [-1.6, 0.8], x_length=7.0, y_length=4.4, xlabel=r"years to expiry (log scale)",
-                 ylabel=r"at-the-money skew $|\partial_k \sigma|$ (log scale)",
-                 xticks=[np.log10(x) for x in (3 / 365, 10 / 365, 30 / 365, 0.25, 1.0)],
-                 xfmt=lambda u: {0: "1y"}.get(round(u, 3), f"{365 * 10 ** u:.0f}d"), log_x=True, font_size=15)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        for v in (0.05, 0.1, 0.3, 1, 3):
-            g.add(label(f"{v:g}", font_size=15, color=GREY_B).next_to(ax.c2p(np.log10(2 / 365), np.log10(v)), LEFT, buff=0.12))
-        lx = np.log10(T)
-        lines = VGroup(*[curve(ax, lx, np.clip(np.log10(np.abs(np.asarray(s["models"][n]))), -1.6, 0.8), MODEL_COL[n],
-                               stroke_width=2.5) for n in ("Heston", "Bates", "VG", "NIG")])
-        dots = VGroup(*[Dot(ax.c2p(np.log10(r["T"]), np.log10(abs(r["skew"]))), radius=0.07, color=WHITE) for r in mk
-                        if abs(r["skew"]) > 0.02])
-        leg = legend([(WHITE, r"the Surface")] + [(MODEL_COL[n], NAMES[n]) for n in ("Heston", "Bates", "VG", "NIG")],
-                     font_size=16).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
-        side = VGroup(
-            MathTex(rf"|\partial_k\sigma| \propto T^{{{s['power']:.2f}}}", font_size=36, color=WHITE),
-            wrapped_label(r"diffusions (Heston) flatten toward a constant as $T \to 0$; jumps and L\'evy models blow up "
-                          r"like $1/T$; the market sits between, close to $1/\sqrt{T}$, the same law as SABR's vol of vol",
-                          4.0, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+    def cards(self):
+        c1 = history_card(2000, r"Duffie, Pan and Singleton; Eraker, Johannes and Polson (2003)",
+                          r"SVCJ: jumps in volatility too, arriving with the price jumps. Broadie, Chernov and Johannes "
+                          r"(2007) found volatility jumps and jump risk premia necessary for S\&P 500 index options.",
+                          color=QC.IDEA, width=4.2)
+        c2 = history_card(2020, r"Hou, Wang, Chen and H\"ardle, \textit{J. Fin. Econometrics}",
+                          r"``Pricing cryptocurrency options'': SVCJ fitted to bitcoin finds jumps in returns and in "
+                          r"variance, anti-correlated: down jumps in price with up jumps in volatility.", color=QC.IDEA,
+                          width=4.2)
+        c3 = history_card(2006, r"Jump to default (Gatheral, ch.\ 6)",
+                          r"A jump to zero at rate $\lambda$: the simplest credit model inside an equity smile; it steepens "
+                          r"the skew at every maturity. Part 20 builds credit on it.", color=QC.CRISIS, width=4.2)
+        G = VGroup(c1, c2, c3).arrange(RIGHT, buff=0.3, aligned_edge=UP)
+        if G.width > 13.2:
+            G.scale_to_fit_width(13.2)
         with self.voiceover(
-            "One picture sums up the chapter. Take the at-the-money skew, how fast implied volatility changes with the "
-            "strike, and plot it against maturity, both on log scales. The Surface's expiries fall on a line. "
-            f"<bookmark mark='a'/> Its slope is {s['power']:.2f}: the skew grows like one over the square root of "
-            "maturity as expiry approaches. <bookmark mark='b'/> Heston's skew flattens toward a constant at short "
-            "maturities: a diffusion cannot move far enough in three days. The jump and Lévy models go the other way, "
-            "exploding like one over maturity. The market sits between them, close to one over the square root, the "
-            "same law as SABR's vol of vol. Neither family produces it. That is the doorway to Part fourteen."
+            "Three extensions. Duffie, Pan and Singleton in 2000, and Eraker, Johannes and Polson in 2003, let "
+            "volatility jump too, at the same moments as the price: the SVCJ model. Broadie, Chernov and Johannes "
+            "found such volatility jumps, and premia for jump risk, necessary to price S&P options. "
+            "<bookmark mark='a'/> For Bitcoin, Hou, Wang, Chen and Härdle fitted SVCJ in 2020 and found jumps in "
+            "both, anti-correlated: falls in price arriving with leaps in volatility. <bookmark mark='b'/> And the "
+            "most extreme jump of all is to zero: default, which Gatheral treats inside the smile and Part twenty "
+            "turns into credit."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(leg[0]), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.1,
-                                                             run_time=2))
+            self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(c2, shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=3), FadeIn(leg[1:]),
-                      FadeIn(side[1]))
+            self.play(FadeIn(c3, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

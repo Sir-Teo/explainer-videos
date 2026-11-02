@@ -5,7 +5,7 @@ from datetime import date
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant17.common import BAD, DELTA, GOOD, IV, NET, PART, REF, illustration, load
+from videos.quant.quant17.common import BAD, DELTA, GOOD, IV, NET, PART, REF, ask, illustration, load
 
 
 def _t(day):
@@ -18,12 +18,14 @@ class RoughHistory(VoiceoverScene):
         h = load("calib_hist")
         self.card()
         self.series(h)
+        self.box(h)
+        self.wall()
         self.fit(h)
 
     def card(self):
-        c = chapter_card(3, r"Rough volatility, week by week", r"Is the market's $H$ stable, or a one-day accident?",
+        c = chapter_card(5, r"Rough volatility, week by week", r"Is the market's $H$ stable, or a one-day accident?",
                          part=PART)
-        with self.voiceover("Chapter three. Rough volatility, week by week."):
+        with self.voiceover("Chapter five. Rough volatility, week by week."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -59,8 +61,8 @@ class RoughHistory(VoiceoverScene):
             "it sits at 0.02, the lowest value the network was trained on: the market's short-dated skew asks for "
             "something rougher still. Fresh simulation at those parameters confirms the fits, so this is the market, "
             "not the network; and Part fourteen showed that bitcoin's quiet weekends read as extra roughness. A "
-            "production version would widen the training box. This is exactly the check of chapter eleven: know where "
-            "your network has been. <bookmark mark='b'/> Below it, the correlation between price and volatility, which "
+            "production version would widen the training box. This is exactly the check of chapter seventeen: know "
+            "where your network has been. <bookmark mark='b'/> Below it, the correlation between price and volatility, which "
             "changes sign with the market, as it did for Heston in Part thirteen."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(half), FadeIn(floor_lab))
@@ -68,6 +70,88 @@ class RoughHistory(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.02, run_time=2.5), FadeIn(side))
             vo.wait_until("b")
             self.play(FadeIn(g2), Create(zero), LaggedStart(*[FadeIn(d) for d in d2], lag_ratio=0.02, run_time=2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def box(self, h):
+        rows = h["rows"]
+        H = np.array([r["H"] for r in rows])
+        eta = np.array([r["eta"] for r in rows])
+        g = axes([0, 0.52], [0, 4.2], x_length=6.4, y_length=4.6, xlabel=r"Hurst exponent $H$",
+                 ylabel=r"vol of vol $\eta$", xticks=[0.02, 0.25, 0.5], yticks=[0.3, 2, 4], font_size=15
+                 ).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
+        ax = g.ax
+        lo, hi = ax.c2p(0.02, 0.3), ax.c2p(0.5, 4.0)
+        slab = Rectangle(width=hi[0] - lo[0], height=hi[1] - lo[1], stroke_color=GREY_B, stroke_width=1.5,
+                         fill_color=GREY_D, fill_opacity=0.15).move_to((lo + hi) / 2)
+        wall = Line(ax.c2p(0.02, 0.3), ax.c2p(0.02, 4.0), stroke_color=BAD, stroke_width=4)
+        tr = ValueTracker(0)
+        rng = np.random.default_rng(1)
+        jit = rng.uniform(0, 0.006, len(H))
+
+        def make():
+            k = int(tr.get_value())
+            return VGroup(*[Dot(ax.c2p(H[i] + jit[i], eta[i]), radius=0.045, color=NET, fill_opacity=0.8)
+                            for i in range(k)])
+        pts = always_redraw(make)
+        cnt = always_redraw(lambda: label(rf"week {int(tr.get_value())} of {len(rows)}", font_size=20,
+                                          color=NET).next_to(g, UP, buff=0.1).align_to(g, LEFT))
+        days = {r["day"]: i for i, r in enumerate(rows)}
+        ck = h["checks"]
+        gaps = [abs(c["mc_rmse"] - c["net_rmse"]) for c in ck]
+        agree = sum(gp < 0.5 for gp in gaps)
+        rings = VGroup(*[Circle(radius=0.12, stroke_color=GOOD if gp < 0.5 else BAD, stroke_width=3).move_to(
+            ax.c2p(H[days[c["day"]]] + jit[days[c["day"]]], eta[days[c["day"]]])) for c, gp in zip(ck, gaps)])
+        at = int(np.sum(H < 0.021))
+        side = VGroup(legend([(GREY_B, r"the training box"), (BAD, r"its wall, $H = 0.02$"),
+                              (NET, r"one week's calibrated $(H, \eta)$"),
+                              (GOOD, r"re-checked by fresh Monte Carlo: agrees within 0.5 vol points")], font_size=17),
+                      wrapped_label(rf"{at} of {len(rows)} weeks end on the wall. {agree} of {len(ck)} Monte Carlo "
+                                    r"checks agree with the network's fit to within half a vol point", 4.4, 19, GREY_A)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "Look at the same fits another way: each week as a point in the plane of the Hurst exponent and the "
+            "volatility of volatility, inside the box the network was trained on. <bookmark mark='a'/> Week by week "
+            f"they drop in, and they pile up against the left wall, H equal to 0.02: {at} of {len(rows)} weeks end "
+            "there. This is the vanishing gradient of chapter four, seen in the data. <bookmark mark='b'/> Are those "
+            "fits real? Every tenth week was re-priced by fresh Monte Carlo at the network's parameters, never touching "
+            f"the network. {agree} of {len(ck)} agree to within half a vol point. The fits are honest fits; they are "
+            "simply the best the box allows."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(slab), Create(wall), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.add(pts, cnt)
+            self.play(tr.animate.set_value(len(rows)), run_time=7, rate_func=linear)
+            pts.clear_updaters()
+            cnt.clear_updaters()
+            vo.wait_until("b")
+            self.play(LaggedStart(*[Create(r_) for r_ in rings], lag_ratio=0.2), FadeIn(side[1]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def wall(self):
+        rows = [cmath(r"\psi(T)", r"\sim", r"T^{H - 1/2}", font_size=44, colors={r"\psi(T)": IV}),
+                cmath(r"\hat\vartheta", r"=", r"\arg\min_{\vartheta \in \text{box}} L(\vartheta)\ \ne\ "
+                      r"\arg\min_{\vartheta} L(\vartheta)", font_size=40, colors={r"\hat\vartheta": BAD})]
+        whys = [why(r"rough Bergomi's at-the-money skew explodes like $T^{H - 1/2}$ as the expiry shortens (Part 14); "
+                    r"bitcoin's short-dated skew is steep, so the fit pushes $H$ toward zero"),
+                why(r"at the wall the answer is the best fit inside the box, not the market's $H$; the Monte Carlo checks "
+                    r"confirm a fit, they cannot reveal what lies outside. A wider box needs a new hour of simulation")]
+        step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.4, buff=1.0, edge=6.9)
+        with self.voiceover(
+            "Why the wall? In rough Bergomi the at-the-money skew grows like the expiry to the power H minus one half "
+            "as expiries shorten. Bitcoin's short-dated skew is steep, and the only way the model can steepen it is to "
+            "lower H. <bookmark mark='a'/> So at the wall, the answer is the best fit inside the box, not the market's "
+            "H. The Monte Carlo checks confirm that the fit is a fit; they cannot see what lies outside the box."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        q = ask(r"retrain with $H$ down to 0.005. Do the weekly $H$'s move, and does the fit improve?")
+        with self.voiceover(
+            "Would they move if the box were wider? That needs another hour of simulation, so it is left as a problem."
+        ):
+            self.play(FadeIn(q))
         self.wait(0.4)
         self.clear_scene()
 

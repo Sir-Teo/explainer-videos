@@ -17274,6 +17274,11 @@
   "bytes": 92896,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_NI_CSV.zip"
  },
+ "kenfrench/NI_value/through_2023-12": {
+  "sha256": "028cc5915d5813a9b85aae4bfd7f3aeafe0df62f7ea49791d2a3c3dc76c893ff",
+  "bytes": 97799,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_NI_CSV.zip"
+ },
  "kenfrench/OP_value/through_2020-12": {
   "sha256": "49ac26966f29e3ebf5ef07f7d857503f0fe22c5a8e234140eddfa7bf0748b7c7",
   "bytes": 98052,

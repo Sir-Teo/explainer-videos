@@ -64,10 +64,9 @@ class Replicate(VoiceoverScene):
         with self.voiceover(
             f"Take the Wednesday of {day}. At eight in the morning the House buys the thirty-day strip off that day's "
             f"fitted surface, for a variance strike of {kv:.3f}. Then Bitcoin trades, hour by hour, for thirty days. "
-            "<bookmark mark='a'/> Every hour the House rebalances its delta hedge: two over T times one over the price "
-            "minus one over the forward, in Bitcoin. Watch the ledger. The strip's value swings with the price; the "
-            "hedge's gains swing the other way; their sum, in orange, climbs steadily, and it tracks the teal line, the "
-            "variance Bitcoin has actually realized so far. <bookmark mark='b'/> After thirty days: the strip and hedge "
+            "<bookmark mark='a'/> Every hour it rebalances its delta hedge. Watch the ledger: the strip swings with the "
+            "price, the hedge the other way, and their sum, in orange, climbs steadily along the teal line, the "
+            "variance realized so far. <bookmark mark='b'/> After thirty days: the strip and hedge "
             f"together paid {tot:.3f}, the realized variance was {rvf:.3f}. The strip bought variance, and the hedge "
             "turned it into exactly the variance that happened."
         ) as vo:
@@ -173,14 +172,12 @@ class Replicate(VoiceoverScene):
                     r"below the variance swap's, by a convexity term the strip cannot hedge")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.65, edge=6.9)
         with self.voiceover(
-            "The algebra behind both pictures. A real contract samples the price n times and sums squared log returns. "
-            "<bookmark mark='a'/> The hedge earns simple returns; expand the logarithm, and the difference between "
-            "the replication and the contract is a sum of cubed returns: small when returns are small, and as big as "
-            "Chapter nine's jump term when they are not. <bookmark mark='b'/> Now a different product: a volatility "
-            "swap pays realized volatility, the square root. The square root is concave, so expand to second order "
-            "around the expected variance. <bookmark mark='c'/> Take expectations: the fair volatility strike is the "
-            "square root of the variance strike minus the variance of variance over eight times the strike to the "
-            "three halves. No strip of options delivers that: you would need to know how volatile volatility will be."
+            "The algebra. A contract samples the price n times and sums squared log returns. <bookmark mark='a'/> The "
+            "hedge earns simple returns; expand the logarithm, and the replication error is a sum of cubed returns. "
+            "<bookmark mark='b'/> A volatility swap pays the square root of realized variance. The root is concave: "
+            "expand to second order. <bookmark mark='c'/> Its fair strike is the root of the variance strike minus the "
+            "variance of variance over eight times the strike to the three halves. No strip delivers that: you would "
+            "need to know how volatile volatility will be."
         ) as vo:
             step(0)
             vo.wait_until("a")

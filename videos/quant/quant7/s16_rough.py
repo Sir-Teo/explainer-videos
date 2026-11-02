@@ -12,6 +12,7 @@ class Rough(VoiceoverScene):
         self.card()
         self.zoom(ro)
         self.lab(ro)
+        self.meaning(ro)
 
     def card(self):
         c = chapter_card(11, r"Is volatility rough?", r"How jagged is the hidden river?", lit=(2018,), part=PART)
@@ -121,5 +122,44 @@ class Rough(VoiceoverScene):
             self.play(FadeIn(pc))
             vo.wait_until("d")
             self.play(FadeIn(kern))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def meaning(self, ro):
+        H = float(ro["btc"]["H"])
+        rho = 2 ** (2 * H - 1) - 1
+        rows = [
+            cmath(r"\mathbb{E}[B^H_tB^H_s]", r"=", r"\tfrac12\big(t^{2H} + s^{2H} - |t-s|^{2H}\big)", font_size=34),
+            cmath(r"\operatorname{corr}(\Delta_1, \Delta_2)", r"=", r"2^{2H-1} - 1", font_size=34),
+            cmath(r"\operatorname{Var}(B^H_{t+\Delta} - B^H_t)", r"=", r"\Delta^{2H}", font_size=34),
+            cmath(r"\text{ATM skew}", r"\propto", r"T^{H - \frac12}", font_size=34),
+        ]
+        whys = [why(r"fractional Brownian motion: the covariance that makes it self-similar with exponent $H$"),
+                why(r"two successive increments: negatively correlated when $H < \tfrac12$, the path keeps turning back"),
+                why(r"the variance of a change grows like $\Delta^{2H}$: fast at short lags when $H$ is small"),
+                why(r"rough volatility's signature in option prices (Part 14): the skew explodes as maturity shrinks")]
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.8, buff=0.5, edge=6.9)
+        res = MathTex(rf"H = {H:.2f}:\ \operatorname{{corr}}(\Delta_1, \Delta_2) = {rho:+.2f}", font_size=32, color=BAD)
+        res.to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "What does H measure? Fractional Brownian motion is defined by its covariance, built so that zooming in by "
+            "any factor and rescaling by that factor to the power H gives the same process. <bookmark mark='a'/> Two "
+            "successive changes are then correlated, two to the power two H minus one, minus one: zero for ordinary "
+            "Brownian motion, negative when H is below a half. <bookmark mark='b'/> A rough path keeps turning back on "
+            "itself, and its variance over a short lag is large relative to a long one. <bookmark mark='c'/> With "
+            f"Bitcoin's H of {H:.2f}, successive changes in log volatility have a correlation of about {rho:.2f}. "
+            "<bookmark mark='d'/> In option prices the same exponent shows up as an at-the-money skew that steepens "
+            "like maturity to the power H minus a half, without bound for short options: Part fourteen's rough "
+            "volatility models are built on it."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(res))
+            vo.wait_until("d")
+            step(3)
         self.wait(0.3)
         self.clear_scene()

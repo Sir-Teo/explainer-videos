@@ -66,6 +66,8 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             "double-humped. <bookmark mark='b'/> Within about twenty-five evaluations the error "
             f"settles at {rmse[-1]:.2f} vol points and the density stops moving. It inherits every "
             "wobble of the fit."
+            " The five parameters are a level, a slope, a skew, a shift and a curvature: five numbers "
+            "that compress the whole expiry."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), FadeIn(src))
             vo.wait_until("a")
@@ -92,6 +94,8 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             "smile and differentiate twice. <bookmark mark='c'/> Across expiries, total variance must "
             "not fall with maturity, or a calendar spread is free. <bookmark mark='d'/> And Lee's "
             "bound limits the wings. Part twelve proves both."
+            " Raw SVI can still allow a butterfly arbitrage in the wings; Gatheral and Jacquier's "
+            "surface version, SSVI, rules out both kinds, and Part twelve fits it."
         ) as vo:
             step(0)
             vo.wait_until("a")

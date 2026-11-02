@@ -99,6 +99,8 @@ class Geometry(VoiceoverScene, ThreeDScene):
             "and reversed, it traces this blue line. <bookmark mark='c'/> No arbitrage means the line "
             "meets the green corner only at the origin, and then a plane fits through the line with "
             "the corner on one side. Its normal, the purple arrow, is strictly positive."
+            " Why a line? Two assets and one price constraint: the portfolios that cost nothing form a "
+            "one-dimensional family, so their payoffs form a line through the origin."
         ) as vo:
             self.play(FadeIn(names), Create(ax), run_time=2)
             vo.wait_until("a")
@@ -118,6 +120,8 @@ class Geometry(VoiceoverScene, ThreeDScene):
             "for nothing. <bookmark mark='c'/> That normal is a vector of state prices, the price "
             "today of a dollar in each state. Separation by a positive normal and no arbitrage are "
             "the same thing."
+            " At a hundred and thirty, the free payoff is fifty, thirty and five: positive in every "
+            "state."
         ) as vo:
             self.play(p.animate.set_value(124.0), run_time=vo.until("a"), rate_func=smooth)
             self.play(p.animate.set_value(125.0), FadeOut(st_ok), FadeIn(st_bad), run_time=1.2)
@@ -160,6 +164,10 @@ class Geometry(VoiceoverScene, ThreeDScene):
             "free payoff. <bookmark mark='c'/> Then D psi is orthogonal to every costless portfolio, "
             "so it is a multiple of the prices; rescale, and D psi equals p. The next chapter proves "
             "a positive psi exists exactly when there is no arbitrage."
+            " Check it at a price of a hundred, where the normal is five thirteenths, four "
+            "thirteenths, four thirteenths: five thirteenths of eighty, plus four thirteenths of a "
+            "hundred, plus four thirteenths of a hundred and twenty-five, is exactly a hundred, and "
+            "the three sum to one, the bond's price."
         ) as vo:
             step(0)
             vo.wait_until("a")

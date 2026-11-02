@@ -104,10 +104,14 @@ class MarginModel(VoiceoverScene):
                 why(r"Kupiec's test: $x$ breaches in $T$ days against the promised 1\%, $\hat p = x/T$")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-1.2, buff=0.5, edge=6.9)
         with self.voiceover(
-            "Most clearing houses now use value-at-risk models. The simplest is exponentially weighted variance: yesterday's "
-            "estimate, nudged by yesterday's squared return, with memory lambda. <bookmark mark='a'/> Margin is a "
-            "ninety-nine percent value-at-risk over the close-out days. <bookmark mark='b'/> Lambda is chosen by likelihood, "
-            "<bookmark mark='c'/> and the model is checked by counting breaches against one percent, with Kupiec's test."
+            "Most clearing houses now use value-at-risk models instead. The simplest worth using is the exponentially "
+            "weighted variance of RiskMetrics: today's variance estimate is yesterday's, nudged by yesterday's squared return, "
+            "with a memory lambda. A lambda of point nine seven gives yesterday's return a weight of three percent and a memory "
+            "of about a month. <bookmark mark='a'/> Initial margin is then a ninety-nine percent Gaussian value-at-risk over "
+            "the days it would take to close out a defaulter. <bookmark mark='b'/> How fast should it forget? Choose lambda by "
+            "maximum likelihood: the Gaussian log-likelihood of the returns, given the variances the recursion predicts. "
+            "<bookmark mark='c'/> And check it the way a regulator would: count the days losses broke through the margin, "
+            "and test the count against the promised one percent with Kupiec's likelihood ratio."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -211,12 +215,16 @@ class MarginModel(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(rd2, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)
         leg = label(r"band: the same curve in five 19-year eras", font_size=18, color=QC.IDEA).next_to(g, UP, buff=0.1)
         with self.voiceover(
-            "Now fit lambda: the log-likelihood over ninety-four years, a band from five separate eras, and a golden-section "
-            f"search closing in. <bookmark mark='a'/> It lands at {m['lam_hat']:.3f} for the American market and "
-            f"{m['btc_lam']:.3f} for Bitcoin. <bookmark mark='b'/> The backtest: at point nine seven, losses broke the "
-            f"ninety-nine percent margin on {100 * m['breach_rate']:.1f} percent of days, and Kupiec rejects it. A constant "
-            f"volatility does no better, {100 * m['breach_rate_const']:.1f} percent, its misses bunched in crises. The "
-            "culprit is the Gaussian tail; clearing houses add stress add-ons."
+            "Now fit lambda, and watch the fit run. The curve is the log-likelihood over lambda on ninety-four years of daily "
+            "returns; the band is the same curve computed separately in five eras of nineteen years. A golden-section search "
+            "closes in on the peak, iteration by iteration. <bookmark mark='a'/> It lands at "
+            f"{m['lam_hat']:.3f} for the American market, a memory of about two weeks, and {m['btc_lam']:.3f} for Bitcoin. "
+            "<bookmark mark='b'/> Then the backtest. With lambda at point nine seven, losses broke the ninety-nine percent "
+            f"margin on {100 * m['breach_rate']:.1f} percent of days, {m['breaches']} times in {m['T']:,} days, double the "
+            "promise, and Kupiec rejects the model resoundingly. The constant-volatility baseline fails too, at "
+            f"{100 * m['breach_rate_const']:.1f} percent, with its misses bunched in crises. The culprit in both is the "
+            "Gaussian assumption: daily returns have fatter tails than any normal. Clearing houses add stress add-ons for "
+            "exactly this."
         ) as vo:
             self.play(FadeIn(g), FadeIn(eb), Create(lc), FadeIn(leg))
             self.add(dot)

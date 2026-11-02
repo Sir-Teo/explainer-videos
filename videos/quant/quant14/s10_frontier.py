@@ -60,8 +60,7 @@ class Frontier(VoiceoverScene):
             "Szymanski; Cont and Das's artefact; Guyon's exact joint fit in Finance and Stochastics; and the proofs "
             "that path-dependent volatility is a well-posed model. <bookmark mark='b'/> In 2025, Abi Jaber and Li's "
             "horse race went against one-factor rough models on S&P smiles, and signature models fitted S&P and VIX "
-            "jointly. The direction of travel is clear: from one rough factor towards path dependence, several "
-            "time scales, and exact constructions."
+            "jointly. The direction of travel: from one rough factor towards path dependence and several time scales."
         ) as vo:
             self.play(Create(axis), FadeIn(ticks))
             self.play(LaggedStart(*[FadeIn(c, shift=DOWN * 0.3) for c in cards[:2]], lag_ratio=0.5))

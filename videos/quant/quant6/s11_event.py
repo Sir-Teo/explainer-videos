@@ -207,9 +207,11 @@ class Event(VoiceoverScene):
                                             font_size=26, color=GREY_A).next_to(g, UP, buff=0.1).align_to(g, LEFT))
         side = MathTex(rf"p = {f['p_placebo']:.4f}", font_size=34, color=EST).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
-            f"A check with no formula: placebos. Draw {f['n_events']} days without a decision, average them, ten "
-            "thousand times. <bookmark mark='a'/> The real decision days sit far in the right tail: only "
-            f"{100 * f['p_placebo']:.2f} percent of placebo sets do as well. The trial counter's logic, in miniature."
+            f"A check with no formula: placebos. Draw {f['n_events']} days without a decision, average their returns, "
+            "and repeat ten thousand times. That is what an average of that many ordinary days looks like, fat tails, "
+            "volatility clusters and all, with no assumption about the distribution. <bookmark mark='a'/> The real "
+            f"decision days sit far in the right tail: only {100 * f['p_placebo']:.2f} percent of placebo sets do as "
+            "well. The trial counter's logic, in miniature: compare what you found with what chance finds."
         ) as vo:
             self.play(FadeIn(g))
             self.add(hm, cnt)

@@ -219,15 +219,15 @@ class Digitals(VoiceoverScene):
                         width=6.4).to_corner(UR, buff=0.3)
         src = real_data(r"the Surface: Part 12's SSVI fit to Deribit bitcoin options, 10 December 2025, 30-day slice")
         cheaper = d["at_k"]["skew"] < d["at_k"]["flat"]
+        tail = (", and further out, where the bitcoin smile turns up, it is cheaper." if cheaper else ".")
         with self.voiceover(
             "One more thing a digital knows: the smile. Pause and predict. With an equity skew, is a digital call "
             "dearer or cheaper than Black–Scholes at the at-the-money volatility? <bookmark mark='a'/> A digital is "
             "minus the slope of the call price in strike. But as the strike moves, the implied volatility moves too, "
             "so the chain rule adds a term: vega times the smile's slope. Where the smile falls with strike, that "
             "term makes the digital dearer. <bookmark mark='b'/> On the bitcoin Surface, thirty days out, the "
-            f"digital at the money is {100 * d['atm_diff']:.1f} points dearer than the flat-volatility price"
-            + (", and further out, where the bitcoin smile turns up, it is cheaper. " if cheaper else ". ")
-            + "The white dots check it by differentiating call prices on the smile. A digital is a bet on the "
+            f"digital at the money is {100 * d['atm_diff']:.1f} points dearer than the flat-volatility price{tail} "
+            "The white dots check it by differentiating call prices on the smile. A digital is a bet on the "
             "smile's slope as much as on the spot."
         ) as vo:
             self.play(FadeIn(pp))

@@ -51,12 +51,15 @@ class Viscosity(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.3)
         q = pause_card(r"Which zig-zag will a computer find?", width=4.6, font_size=22).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Verification needed a smooth value function. Real problems break that: a floor, a choice between stopping and "
-            "waiting, any maximum of two functions puts a kink in the value. <bookmark mark='a'/> The simplest example: a "
-            "function with slope plus or minus one everywhere, zero at both ends. No smooth function does it, but a tent "
-            "does, except at its peak, and so do infinitely many zig-zags. <bookmark mark='b'/> Which one would a computer "
-            "find? Pause and predict. <bookmark mark='c'/> We want the tent, the distance to the boundary. We need a "
-            "definition that picks it."
+            "The verification theorem needed a smooth value function. Real problems break that. A floor, a choice between "
+            "stopping and waiting, any maximum of two functions: each puts a kink in the value, a point where the second "
+            "derivative in the HJB equation does not exist. <bookmark mark='a'/> The simplest example shows how bad it gets. "
+            "Ask for a function whose slope is plus or minus one everywhere on the interval, and zero at both ends. No smooth "
+            "function does it. A tent does it, everywhere except its peak; so does a tent with a notch; so do infinitely many "
+            "zig-zags. <bookmark mark='b'/> If almost everywhere is good enough, the equation has no unique answer, and a "
+            "numerical scheme could converge to any of them, or to none. Pause and predict: which one will a computer find? "
+            "<bookmark mark='c'/> The one we want is the tent: the distance to the boundary, the value of the fastest way "
+            "out. We need a definition that picks it."
         ) as vo:
             self.play(FadeIn(eq), FadeIn(g), FadeIn(side[0]))
             vo.wait_until("a")
@@ -135,10 +138,13 @@ class Viscosity(VoiceoverScene):
                              r"equation (Lions 1983; Pham ch.\ 4; Touzi ch.\ 5--6): the dynamic programming principle "
                              r"is exactly the touching test", 12.0, 21, GREY_A).next_to(cards, DOWN, buff=0.6)
         with self.voiceover(
-            "Two theorems make this the right notion. Comparison: a subsolution below a supersolution stays below, so "
-            "there is only one viscosity solution. And a control problem's value function is always one, smooth or not. "
-            "<bookmark mark='a'/> The third is for engineers: Barles and Souganidis proved in 1991 that a monotone, stable, "
-            "consistent scheme converges to it."
+            "Two theorems make this the right notion. The comparison principle: a subsolution that starts below a "
+            "supersolution stays below it, so there can be only one viscosity solution. And the value function of a control "
+            "problem is always a viscosity solution of its HJB equation, smooth or not: the dynamic programming principle is "
+            "the touching test. <bookmark mark='a'/> The third is the one engineers use. Guy Barles and Panagiotis "
+            "Souganidis proved in 1991 that a numerical scheme that is monotone, stable and consistent converges to the "
+            "viscosity solution. Monotone means that raising the value at a neighbour can only raise the update. The next "
+            "experiment shows what happens without it."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2), FadeIn(foot))
             vo.wait_until("a")
@@ -183,12 +189,15 @@ class Viscosity(VoiceoverScene):
             tab, RIGHT, buff=0.6)
         src = illustration(r"$u_t + |u_x| = 1$ from $u = 0$, marched to $t = 6$")
         with self.voiceover(
-            "Test it. March the equation to steady state with an upwind scheme, which is monotone, and with central "
-            "differences, which are not. <bookmark mark='a'/> The upwind profile fills the tent and stops. The central one "
-            "grows teeth, and the teeth grow. <bookmark mark='b'/> The upwind error is at rounding level on every grid; the "
-            f"central error reaches ten to the {int(np.log10(grid['321']['central']))} on the finest. "
-            "<bookmark mark='c'/> Consistency is not enough; monotonicity is why chapter two's solver found portfolio "
-            "insurance."
+            "Test it. March the equation, u t plus the size of u x equals one, forward in time from zero until it settles. "
+            "On the left, an upwind scheme that looks at each neighbour from the side the information comes from: monotone. "
+            "On the right, the textbook central difference: consistent, but not monotone. <bookmark mark='a'/> The upwind "
+            "profile rises like water filling a tent and stops exactly at the distance function. The central profile develops "
+            "teeth between neighbouring nodes, and the teeth grow. <bookmark mark='b'/> On every grid the upwind error is at "
+            f"the level of rounding. The central error reaches ten to the {int(np.log10(grid['321']['central']))} on the "
+            "finest grid: refining makes it worse. <bookmark mark='c'/> Consistency is not enough. Monotonicity is what makes a "
+            "grid converge to the right kink, and it is why chapter two's solver, a maximum of positively weighted averages, "
+            "found portfolio insurance."
         ) as vo:
             self.play(*[FadeIn(g) for g in gs], FadeIn(heads), FadeIn(tent), FadeIn(src))
             self.add(pu, pc, tlab)

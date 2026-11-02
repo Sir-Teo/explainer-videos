@@ -63,11 +63,15 @@ class MM(VoiceoverScene):
         tag = why(r"Proposition I (1958): in a market without taxes or frictions, financing does not change value")
         tag.next_to(c, DOWN, buff=0.2)
         with self.voiceover(
-            "In 1958 Modigliani and Miller asked whether financing can make a firm more valuable. Two firms have identical "
-            "assets and cash flow X; U has no debt, L has borrowed D. <bookmark mark='a'/> A fraction alpha of L's shares pays "
-            "alpha times X minus interest. <bookmark mark='b'/> Build the same payoff at home: buy alpha of U and borrow alpha D "
-            "yourself. <bookmark mark='c'/> Identical payoffs must cost the same, so the levered firm is worth exactly the "
-            "unlevered one: the first no-arbitrage proof in finance, a preview of Part nine."
+            "In 1958 Franco Modigliani and Merton Miller asked whether a firm can make itself more valuable by how it is financed. "
+            "Take two firms with identical assets, throwing off the same cash X each year. Firm U has no debt: its owners get all of "
+            "X. Firm L has borrowed D at a rate r D: its lenders are paid first, and its owners get what is left. "
+            "<bookmark mark='a'/> Owning a fraction alpha of L's shares pays alpha times X minus the interest. "
+            "<bookmark mark='b'/> But you could build that payoff yourself: buy alpha of the unlevered firm and borrow alpha times D "
+            "on your own account. You receive alpha X and pay alpha times the interest: the same cash, in every state of the world. "
+            "<bookmark mark='c'/> Two identical payoffs must cost the same, or there is an arbitrage. So the levered firm is worth "
+            "exactly the unlevered one. Leverage you can do at home is not worth paying a firm to do. It was the first no-arbitrage "
+            "proof in finance, and a preview of Part nine."
         ) as vo:
             self.play(FadeIn(U), FadeIn(L), FadeIn(cap))
             vo.wait_until("a")
@@ -129,12 +133,15 @@ class MM(VoiceoverScene):
                 why(r"the US top statutory rates since 2018 (corporate; dividends and gains; interest): about zero")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.8, buff=0.8, edge=6.9)
         with self.voiceover(
-            "When financing does change value, an assumption has failed. First, taxes: permanent debt saves the tax rate times "
-            "the interest every year, and discounted at the debt's rate the shield is worth T times D. <bookmark mark='a'/> "
-            "Modigliani and Miller, 1963: the levered firm is worth V U plus T D. <bookmark mark='b'/> The owners' return still "
-            "rises, more slowly. <bookmark mark='c'/> In 1977 Miller added personal taxes on interest and on equity income. "
-            f"<bookmark mark='d'/> At America's top rates since 2018 the net gain is {100 * valuation.miller_gain(tc, te, td):.1f} "
-            "percent: roughly zero."
+            "The proof's power is in its assumptions: when financing does change value, one of them has failed. The first is "
+            "taxes. Interest is paid before corporate tax, so permanent debt saves the tax rate times the interest every year. "
+            "Discount those savings at the debt's own rate, and the shield is worth the tax rate times the debt. "
+            "<bookmark mark='a'/> That was Modigliani and Miller's correction of 1963: the levered firm is worth the unlevered firm "
+            "plus T times D. <bookmark mark='b'/> The owners' required return still rises with leverage, but more slowly. "
+            "<bookmark mark='c'/> In 1977 Miller added the other side: investors pay personal tax on interest at one rate and on "
+            "equity income at another, and the net gain from a dollar of debt is one minus this ratio. <bookmark mark='d'/> At "
+            f"America's top rates since 2018 it is {100 * valuation.miller_gain(tc, te, td):.1f} percent: at the margin, the "
+            "corporate saving is roughly cancelled by what bondholders pay."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -187,10 +194,13 @@ class MM(VoiceoverScene):
         illus = label(r"illustrative: tax 21\%, distress cost $0.8\,d^3$", font_size=18, color=GREY_B).to_corner(DL, buff=0.3)
         dstar = float(np.sqrt(0.21 / 2.4))
         with self.voiceover(
-            "Picture pre-tax value as a pie financing cannot enlarge. Without debt, owners get one slice and the government the "
-            "grey one. <bookmark mark='a'/> Add debt: interest is deducted, the grey slice shrinks, investors' share grows. "
-            "<bookmark mark='b'/> But a red slice of expected distress costs appears and grows faster than the debt. "
-            f"<bookmark mark='c'/> The investors' total peaks at about {100 * dstar:.0f} percent debt: the trade-off theory."
+            "Picture the firm's pre-tax value as a pie whose size financing cannot change. Without debt, the owners get one slice "
+            "and the government, through corporate tax, gets the grey one. <bookmark mark='a'/> Add debt. Interest is deducted, so "
+            "the grey slice shrinks and the investors' share of the same pie grows: that is all the tax shield is. "
+            "<bookmark mark='b'/> But a red slice appears too: the expected costs of distress, lawyers, lost customers, investment "
+            "forgone when the firm might not pay. It grows faster than the debt. <bookmark mark='c'/> The investors' total peaks "
+            f"where the next dollar of debt saves as much tax as it adds expected distress, here at about {100 * dstar:.0f} percent: "
+            "the trade-off theory, read straight off the pie."
         ) as vo:
             self.add(pie)
             self.play(FadeIn(gx), FadeIn(leg), FadeIn(illus))

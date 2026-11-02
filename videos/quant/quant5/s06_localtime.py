@@ -161,13 +161,16 @@ class LocalTime(VoiceoverScene):
                 why(r"take expectations: the missing term is worth exactly the option's time value (Carr and Jarrow 1990)")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.0, buff=1.0, edge=6.9)
         with self.voiceover(
-            "Back to the opening puzzle. A call's payoff has the same kink, at the strike. By Tanaka's formula, the "
-            "payoff equals its starting value, plus the gains from holding one share whenever the stock is above the "
-            "strike, exactly the stop-loss hedge, plus one more term. <bookmark mark='a'/> That term is half the "
-            "local time at the strike: how long the path lingered within a hair of K, measured in quadratic "
-            "variation. A Brownian path that touches K touches it infinitely often. <bookmark mark='b'/> Take "
-            "expectations: the missing term is worth the call's time value. Peter Carr and Robert Jarrow published "
-            "this resolution in 1990."
+            "Back to the opening puzzle. A call's payoff has the same kink, at the strike, and Tanaka's formula, "
+            "applied to the price, says what happens there. The payoff equals its starting value, plus the gains from "
+            "holding one share whenever the stock is above the strike, which is exactly the stop-loss hedge, plus one "
+            "more term. <bookmark mark='a'/> That term is half the local time at the strike: how long the path spent "
+            "within a hair of K, measured in quadratic variation, and rescaled by the hair's width. For a smooth path "
+            "it would be zero. A Brownian path that touches K touches it infinitely often, and the local time is "
+            "positive. <bookmark mark='b'/> Take expectations under the pricing measure. The gains term has mean "
+            "zero, so the missing term is worth the call's price minus its intrinsic value: its time value. Peter "
+            "Carr and Robert Jarrow published this resolution in 1990. The hedge is free only on paths that never "
+            "come near the strike."
         ) as vo:
             step(0)
             vo.wait_until("a")

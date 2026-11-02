@@ -99,11 +99,14 @@ class Instruments(VoiceoverScene):
         src = note(r"illustrative bond: 5\% coupon, paid twice a year", font_size=17).to_corner(DL, buff=0.2)
         with self.voiceover(
             "Bond quotes hide one trap. Between coupons, interest accrues to whoever holds the bond. Bonds are quoted clean, "
-            "without it, and the buyer pays the dirty price: clean plus accrued. Watch a year of a five percent bond whose "
-            "clean quote stays at ninety-eight seventy-five. <bookmark mark='a'/> What you pay climbs every day, then drops "
-            "by two and a half on each coupon date: a saw-tooth over a flat line. <bookmark mark='b'/> Ninety-one days in, "
-            "the buyer pays a hundred, one twenty-five of it the seller's interest. Pause and predict: the clean price hasn't "
-            "moved for a month. Did the holder earn anything?"
+            "without that interest, and the buyer pays the dirty price: clean plus accrued. The accrued part is the coupon "
+            "times the fraction of the period that has passed since the last payment. Watch a year of a five percent bond "
+            "paying twice a year, whose clean quote stays at ninety-eight seventy-five. <bookmark mark='a'/> What you pay "
+            "climbs every day by the coupon's share, then drops by two and a half on each coupon date, when the interest is "
+            "paid out: a saw-tooth over a flat line. <bookmark mark='b'/> Ninety-one days in, half a period, the buyer pays a "
+            "hundred, of which one twenty-five is the seller's interest. Quoting clean keeps the quote from jumping on coupon "
+            "days, so price changes mean what they should. Pause and predict: the clean price hasn't moved for a month. Did "
+            "the holder earn anything?"
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(clean, dl, wedge)

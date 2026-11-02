@@ -141,12 +141,17 @@ class Schemes(VoiceoverScene):
         pc.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         ans.next_to(pc, DOWN, buff=0.1).align_to(pc, LEFT)
         with self.voiceover(
-            "The step shrinks from a quarter to one two-hundred-and-fifty-sixth. <bookmark mark='a'/> A pause: halve "
-            "the step, and by how much does Euler's path error shrink? <bookmark mark='b'/> Only by root two: strong "
-            f"order one half, measured at {o['slope_strong_euler']:.2f}. Milstein's line buys strong order one: "
+            "The step shrinks from a quarter to one two-hundred-and-fifty-sixth, and each scheme's error at time one "
+            "is plotted as it arrives. <bookmark mark='a'/> A pause: halve the step, and by how much does Euler's "
+            "path error shrink? <bookmark mark='b'/> Only by the square root of two: strong order one half, measured "
+            f"at {o['slope_strong_euler']:.2f}. The reason is the term Euler drops, half b b prime times the squared "
+            "increment minus the step: it has size of order the step, but it is a martingale sum, so its errors add "
+            "in quadrature to the square root of the step. Milstein keeps it, and buys strong order one: "
             f"{o['slope_strong_milstein']:.2f}. <bookmark mark='c'/> For prices, which are averages, both are already "
-            "order one. So choose by the question: prices need weak accuracy, hedging simulations strong; and strong "
-            "order also sets the cost of multilevel Monte Carlo, Part sixteen's subject."
+            "order one: the dropped term has mean zero, so it cancels in expectation. So choose by the question: "
+            "prices need weak accuracy, hedging simulations strong. And strong order, a property of single paths, "
+            "also sets the cost of averages: it decides how well multilevel Monte Carlo works, Part sixteen's "
+            "subject."
         ) as vo:
             self.play(FadeIn(g))
             for k in range(len(dt)):

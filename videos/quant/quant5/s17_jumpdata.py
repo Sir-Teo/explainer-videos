@@ -36,11 +36,14 @@ class JumpData(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.6, buff=0.9, edge=6.9)
         with self.voiceover(
             "Do real prices jump? Quadratic variation sees diffusion and jumps alike: the sum of squared returns "
-            "converges to the integrated variance plus the sum of the squared jumps. <bookmark mark='a'/> Ole "
-            "Barndorff-Nielsen and Neil Shephard found a sum that ignores the jumps: products of neighbouring absolute "
-            "returns, scaled by pi over two. A jump appears in only two products, each time beside a small diffusive "
-            "return, so its contribution vanishes as the sampling gets finer. <bookmark mark='b'/> The difference "
-            "between the two measures the jumps, and dividing returns by bipower volatility makes jumps stand out."
+            "converges to the integrated variance plus the sum of the squared jumps, as the compensated Poisson "
+            "process of the last chapter showed. <bookmark mark='a'/> Ole Barndorff-Nielsen and Neil Shephard found a "
+            "sum that ignores the jumps: products of neighbouring absolute returns, scaled by pi over two, because "
+            "the mean absolute value of a standard Gaussian is the square root of two over pi. A jump appears in only "
+            "two products, each time beside a small diffusive return of order the square root of the step, so its "
+            "contribution vanishes as the sampling gets finer. <bookmark mark='b'/> The difference between the two "
+            "measures the jumps, and dividing each return by a bipower volatility from the past week makes the jumps "
+            "stand out."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -133,14 +136,19 @@ class JumpData(VoiceoverScene):
         flat = jh["rows"][-1]["jump"] > 0.8 * jh["rows"][2]["jump"]
         verdict = ("barely moves" if flat else "keeps falling, more slowly")
         with self.voiceover(
-            "What do jumps do to a hedge? Sell a three-month at-the-money call and delta-hedge it, thirteen to four "
-            "thousand times a year, on ten thousand paths. <bookmark mark='a'/> Without jumps, the error's spread "
-            f"falls like one over root n. <bookmark mark='b'/> With Merton's jumps, six a year, it {verdict}: at four "
-            f"thousand rebalances it is {jh['floor_ratio']:.0f} times the jump-free error. <bookmark mark='c'/> At a "
-            "jump the hedged book gains or loses half gamma times the squared jump, and no position in the stock "
-            "offsets jumps of different sizes. The market is incomplete, and the risk-neutral measure is not unique. "
-            "<bookmark mark='d'/> A pause: rebalance every second, and does the jump error vanish? No: a jump happens "
-            "between two trades. Part eleven hedges with options."
+            "What do jumps do to a hedge? Sell a three-month at-the-money call and delta-hedge it with the "
+            "Black-Scholes delta at the diffusion's volatility, rebalancing from thirteen to four thousand times a "
+            "year, on ten thousand paths. <bookmark mark='a'/> Without jumps, the spread of the error falls like one "
+            "over the square root of the number of trades, as in chapter ten. <bookmark mark='b'/> Add Merton's "
+            f"jumps, six a year with a mean of minus five percent, and the error {verdict}: at four thousand "
+            f"rebalances it is {jh['floor_ratio']:.0f} times the jump-free error. <bookmark mark='c'/> The reason is "
+            "one line of Itô's formula for jumps. At a jump of relative size J, the hedged book gains or loses half "
+            "gamma times S squared times J squared, plus higher terms. A position in the stock is linear in J and "
+            "cannot offset a quadratic, and no single delta is right for jumps of two different sizes: two unknowns, "
+            "one instrument. The market is incomplete, and the risk-neutral measure is no longer unique: the Esscher "
+            "transform is one choice among many. <bookmark mark='d'/> A pause: rebalance every second, and does the "
+            "jump error vanish? No. A jump happens between two trades, however close they are. Part eleven hedges "
+            "with options instead."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")

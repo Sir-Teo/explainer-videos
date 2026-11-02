@@ -141,10 +141,13 @@ class EquityOption(VoiceoverScene, ThreeDScene):
         pp = desk_question(r"Pause and predict: near default, the owners can double the firm's volatility at no cost. "
                            r"Do they? Who pays?", width=10.0, font_size=22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            f"In reverse: Myers's debt overhang, 1977. The same firm is offered a project costing {m['cost']:.0f} that adds "
-            f"{m['gain']:.0f}. <bookmark mark='a'/> The equity rises only {m['e1'] - m['e0']:.2f}; the lenders gain "
-            f"{m['d1'] - m['d0']:.2f}. <bookmark mark='b'/> So the owners refuse a good project. Pause and predict the mirror: "
-            "doubling volatility for free? They would, and the lenders would pay."
+            "The same arithmetic runs in reverse. Stewart Myers pointed out in 1977 that a firm burdened with debt can refuse good "
+            f"projects. The same firm, assets of sixty against eighty of debt, is offered a project: the owners put in "
+            f"{m['cost']:.0f} and it adds {m['gain']:.0f} to the assets, a positive net present value. <bookmark mark='a'/> But "
+            f"the equity, the call, rises by only {m['e1'] - m['e0']:.2f}. The owners pay {m['cost']:.0f}; the lenders get "
+            f"{m['d1'] - m['d0']:.2f} for nothing. <bookmark mark='b'/> So the owners say no, and value that could have existed "
+            "never does. That is debt overhang. Pause and predict the mirror image: if the same owners could double the volatility "
+            "for free, would they? Yes, and the lenders would pay."
         ) as vo:
             self.play(FadeIn(rows[:2]))
             vo.wait_until("a")
@@ -173,8 +176,11 @@ class EquityOption(VoiceoverScene, ThreeDScene):
                       label(r"illustrative: cost 100, volatility 35\%, two years, rate 3\%", font_size=18,
                             color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "A project that can wait is a call on its value, struck at its cost; investing now earns only value minus cost. "
-            "<bookmark mark='a'/> The right to wait lies above it, most near the money: real options, which NPV alone misses."
+            "The option view also works for good news. A project that can be delayed is a call on the project's value, struck at "
+            "its cost. Investing today is exercising early, and earns only the grey line, value minus cost. <bookmark mark='a'/> The "
+            "right to wait is the magenta curve, always above it, most of all near the money, when you are least sure. Myers called "
+            "these real options; they are why NPV alone undervalues a firm's flexibility, and why a firm's equity can be worth more "
+            "than its projects' plain present values."
         ) as vo:
             self.play(FadeIn(g), Create(l_npv), FadeIn(leg[0]))
             vo.wait_until("a")

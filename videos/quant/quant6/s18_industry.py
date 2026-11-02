@@ -159,10 +159,11 @@ class Industry(VoiceoverScene):
         q = predict(r"A one-week look-ahead on a weekly rotation: does it add a little or a lot?", width=9.0).to_edge(
             DOWN, buff=0.15)
         with self.voiceover(
-            "Each practice maps onto the House: a hypothesis written first, the registry; every trial counted, the trial "
-            "counter; an untouched hold-out, the sealed envelope; honest standard errors, this part's module; reruns from "
-            "one command, checksummed data. <bookmark mark='a'/> And this chapter's question: a week of look-ahead adds a "
-            "lot."
+            "Each practice maps onto the House. A hypothesis written down first: the registry, with the code's hash. "
+            "Every trial counted: the trial counter, whose count sets the haircut. An untouched hold-out: the sealed "
+            "envelope. Honest standard errors, respecting how the data were sampled: this part's module, by default. "
+            "Results that rerun from one command: checksummed data and seeded computations. <bookmark mark='a'/> And "
+            "this chapter's question: a week of look-ahead adds a lot."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab], lag_ratio=0.5, run_time=5))

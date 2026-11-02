@@ -73,6 +73,10 @@ class StatePrices(VoiceoverScene):
             "mark='c'/> Rescale them to sum to one: a probability, Q, and prices are discounted "
             "Q-expectations, as Stephen Ross wrote in 1978. <bookmark mark='d'/> Q's density against "
             "P is the discount factor, normalized. Q is not a forecast: it is P reweighted."
+            " A worked example with the state prices at a stock price of a hundred: five thirteenths, "
+            "four thirteenths, four thirteenths. At zero rates they already sum to one, so this Q is "
+            "the same three numbers, and a call struck at a hundred, paying twenty-five only in the "
+            "boom, is worth four thirteenths of twenty-five, about seven point seven."
         ) as vo:
             self.play(FadeIn(h))
             step(0)
@@ -135,6 +139,8 @@ class StatePrices(VoiceoverScene):
             "dollar in a crash is dear. <bookmark mark='b'/> Renormalize and the bars turn purple: Q. "
             "The crash bar grew, the boom bar shrank, and under Q the stock is expected to stay at a "
             "hundred."
+            " And the discount factor's average under P is the bond's price, one over one plus r: here "
+            "exactly one."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(stage[0]), FadeIn(src), *[FadeIn(b_) for b_ in bs_],
                       FadeIn(nums))
@@ -190,6 +196,8 @@ class StatePrices(VoiceoverScene):
             "mark='b'/> Raise the price: the segment slides to the boom corner, shrinks to a point at "
             "a hundred and twenty-five, and leaves the triangle at the same price where the free "
             "payoffs pierced the corner."
+            " Every point on the segment prices the bond and the stock correctly; the points disagree "
+            "only about claims the two assets cannot build."
         ) as vo:
             self.play(FadeIn(tri_g), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -246,6 +254,8 @@ class StatePrices(VoiceoverScene):
             "A risk-averse investor would make it fall everywhere; a hump is the pricing kernel "
             "puzzle Jens Jackwerth found in 2000. <bookmark mark='c'/> And the band is wide: P is the "
             "hard half of the ratio."
+            f" Sixteen-day returns had a standard deviation of {100 * k['vol_ret']:.0f} percent over "
+            "the sample."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(qc), FadeIn(leg[0]))
             self.play(Create(pc), FadeIn(leg[1]), FadeIn(side[0]))

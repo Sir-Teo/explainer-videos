@@ -75,8 +75,8 @@ class Hook(VoiceoverScene):
         q = pause(r"Zoom into a Brownian path 256 times and rescale it to fill the box. Does it look smoother, or "
                   r"rougher?", width=6.4, font_size=22).to_corner(UL, buff=0.25)
         with self.voiceover(
-            "Two random paths. Before we zoom in, a question. Zoom into the top one, a Brownian path, two hundred and "
-            "fifty-six times, rescaling it to fill its box each time. Does it look smoother or rougher? "
+            "Two random paths. A question first: zoom into the top one, a Brownian path, two hundred and fifty-six "
+            "times, rescaling it to fill its box. Does it look smoother or rougher? "
             "<bookmark mark='a'/> Watch. The Brownian path straightens: over a short interval it moves by the "
             "square root of the interval, and stretched to fit the box, those moves look like a gentle line. "
             "<bookmark mark='b'/> The lower path does not straighten. Its moves scale like the interval to the power "
@@ -121,15 +121,13 @@ class Hook(VoiceoverScene):
             "How we got here. In 1968 Benoit Mandelbrot and John Van Ness defined fractional Brownian motion, the "
             "process with a Hurst exponent. <bookmark mark='a'/> After the 1987 crash the skew appeared, and the "
             "models of the nineties, Heston's above all, made volatility a smooth random process. In 1998 Fabienne "
-            "Comte and Eric Renault used fractional processes for volatility's long memory: H above one half. "
-            "<bookmark mark='b'/> Lorenzo Bergomi modelled the whole forward variance curve, and in 2007 Elisa Alòs, "
-            "Jorge León and Josep Vives showed that a rough kernel produces a skew that grows like a power law as "
-            "expiry nears. <bookmark mark='c'/> Then, in 2014, the paper whose title named the field: volatility is "
-            "rough. Rough Bergomi and the nearly unstable Hawkes story followed in 2016, rough Heston's "
-            "characteristic function in 2019, the quadratic rough Heston model in 2020. Risk named Gatheral and "
-            "Rosenbaum its Quants of the Year for 2021. <bookmark mark='d'/> In 2023 a rival view, path-dependent "
-            "volatility. And on the fifth of August 2024 the VIX printed above sixty-five before the US market "
-            "opened: a spike that tests every model in this part."
+            "Comte and Eric Renault gave volatility long memory: H above one half. "
+            "<bookmark mark='b'/> Lorenzo Bergomi modelled the forward variance curve, and in 2007 Elisa Alòs, "
+            "Jorge León and Josep Vives showed that a rough kernel makes the skew a power law. "
+            "<bookmark mark='c'/> In 2014 came the paper that named the field: volatility is rough. Rough Bergomi "
+            "followed, then rough Heston, then quadratic rough Heston, and Risk's Quants of the Year for 2021. "
+            "<bookmark mark='d'/> In 2023, a rival view: path-dependent volatility. And on the fifth of August "
+            "2024, the VIX printed above sixty-five before the open."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(ticks))
             self.play(FadeIn(events[0]))
@@ -156,14 +154,11 @@ class Hook(VoiceoverScene):
             r"Joint SPX/VIX; signature volatility; what desks use; the 2023--2026 frontier",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan. The fact that started it, measured on two years of weekly bitcoin surfaces, and the "
-            "mathematics of why a rough kernel makes it. The measurement that named roughness, on two eras of bitcoin, "
-            "and what roughness buys for forecasting. The two rough models desks know, calibrated and simulated, "
-            "with their numerical methods opened up. Where roughness might come from, and how to make a rough "
-            "model Markovian. The case against roughness, from the time series and from the options. The rival "
-            "view, that volatility is mostly a function of the past, tested on bitcoin, on the VIX, and on the "
-            "fifth of August 2024. And the frontier: joint S&P and VIX calibration, signature models, and what "
-            "desks actually run."
+            "The plan. The fact that started it, measured week by week, and why a rough kernel makes it. The "
+            "measurement that named roughness, and what it buys a forecaster. The two rough models desks know, with "
+            "their numerical methods opened up. Where roughness might come from, and how to make it Markovian. The "
+            "case against roughness. The rival view, that volatility is mostly a function of the past, tested on "
+            "the fifth of August 2024. And the frontier, and what desks actually run."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=14))

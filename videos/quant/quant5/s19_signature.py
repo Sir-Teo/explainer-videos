@@ -157,10 +157,12 @@ class Signatures(VoiceoverScene, ThreeDScene):
         outs = [f"S = signature(unit square, 2):  level 1 = {S[1].round(3).tolist()},  area = {(S[2][0, 1] - S[2][1, 0]) / 2:.3f}",
                 f"signature_batch: {sr['N']:,} paths, depth 5 -> {sr['n_feats'][-1]} features (time + 2 assets)"]
         with self.voiceover(
-            "Here is the House's signature, as the identity reads: for each straight segment, build its tensor "
-            "exponential level by level, and multiply it in. <bookmark mark='a'/> On the unit square, the increments "
-            "are zero and the area is one. <bookmark mark='b'/> A batched version handles twenty thousand paths at "
-            "once."
+            "Here is the House's signature, exactly as the identity reads. Start with the signature of nothing: one, "
+            "then zeros. For each straight segment, build its tensor exponential level by level, each level the "
+            "previous one times the increment, divided by k, and multiply it into the running signature with Chen's "
+            "product. <bookmark mark='a'/> Run it on the unit square traversed once: the increments are zero, and the "
+            "area is one. <bookmark mark='b'/> A batched version computes it for twenty thousand paths at once, three "
+            "hundred and sixty-three numbers per path at depth five, which the experiment needs."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

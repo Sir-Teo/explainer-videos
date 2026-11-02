@@ -3,20 +3,21 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant11.common import ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, illustration, load
+from videos.quant.quant11.common import ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, illustration, load, pause, real_data
 
 
 class India(VoiceoverScene):
     def construct(self):
+        sd = load("shortdated")
         self.card()
         self.boom()
-        self.case()
-        self.toy(load("alleged"))
+        self.tickets(sd)
+        self.theory(sd)
 
     def card(self):
-        c = chapter_card(6, r"India's expiry-day boom, and a case file", r"Who wins when retail buys weekly options?",
-                         part=PART)
-        with self.voiceover("Chapter six. India's expiry-day boom, and a case file."):
+        c = chapter_card(14, r"India's expiry-day boom, and what lottery tickets pay", r"Who wins when retail buys "
+                         r"weekly options?", lit=(2024,), part=PART)
+        with self.voiceover("Chapter fourteen. India's expiry-day boom, and what lottery tickets pay."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -58,72 +59,117 @@ class India(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def case(self):
-        card = crisis_card(
-            r"3 July 2025", r"SEBI's interim order against Jane Street",
-            r"In an interim order, SEBI alleged that on expiry days of the Bank Nifty index, entities of the Jane "
-            r"Street group bought the index's constituents and futures in the morning, supporting the index while "
-            r"building large positions in index options that would profit from a fall, and then sold in the "
-            r"afternoon, pushing the index down. SEBI barred the entities and impounded about Rs 4{,}844 crore of "
-            r"what it called unlawful gains. Jane Street disputes the findings; it deposited the amount in escrow and "
-            r"was allowed to resume trading while the case continues.",
-            stats=[(r"\text{Rs } 4{,}844\ \text{cr}", r"impounded, pending the case"), (r"\text{alleged}",
-                                                                                     r"not proven; contested by the firm")],
-            width=11.4, font_size=24)
-        card.move_to(ORIGIN)
-        src = note(r"SEBI interim order, 3 July 2025; the firm's public statements. These are allegations; no final "
-                   r"finding had been made at the time of writing.", font_size=17, color=GREY_B).to_corner(DR, buff=0.25)
+    # ------------------------------------------------------------------
+    def tickets(self, sd):
+        tk = np.asarray(sd["tickets"])
+        o = sd["otm"]
+        cells = VGroup()
+        for prem, pay, m, cp in tk:
+            cells.add(RoundedRectangle(width=0.62, height=0.4, corner_radius=0.05, stroke_color=YELLOW, stroke_width=1.5,
+                                       fill_color=YELLOW, fill_opacity=0.25))
+        cells.arrange_in_grid(rows=6, cols=10, buff=(0.1, 0.12)).to_edge(LEFT, buff=0.6).shift(UP * 0.2)
+        flips = []
+        for c, (prem, pay, m, cp) in zip(cells, tk):
+            if pay <= 0:
+                flips.append(c.animate.set_fill(GREY_D, 0.6).set_stroke(GREY_C))
+            else:
+                mult = pay / prem
+                col = QC.GAIN if mult > 1 else ALT
+                flips.append(c.animate.set_fill(col, 0.85).set_stroke(col))
+        mults = VGroup(*[MathTex(rf"{pay / prem:.0f}\times" if pay / prem >= 10 else rf"{pay / prem:.1f}\times",
+                                 font_size=16).move_to(c) for c, (prem, pay, m, cp) in zip(cells, tk) if pay > 0])
+        paid, back = float(tk[:, 0].sum()), float(tk[:, 1].sum())
+        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=2.6, ylabel=r"dollars",
+                     yticks=[], font_size=15).next_to(cells, DOWN, buff=0.5).align_to(cells, LEFT)
+        b1 = Rectangle(width=0.8, height=bar_g.ax.c2p(0, paid)[1] - bar_g.ax.c2p(0, 0)[1], stroke_width=0,
+                       fill_color=YELLOW, fill_opacity=0.8).move_to(bar_g.ax.c2p(0.5, 0), aligned_edge=DOWN)
+        b2 = Rectangle(width=0.8, height=max(bar_g.ax.c2p(0, back)[1] - bar_g.ax.c2p(0, 0)[1], 0.01), stroke_width=0,
+                       fill_color=QC.GAIN, fill_opacity=0.8).move_to(bar_g.ax.c2p(1.5, 0), aligned_edge=DOWN)
+        bl = VGroup(label(r"paid", font_size=16, color=YELLOW).next_to(b1, DOWN, buff=0.05),
+                    label(r"paid back", font_size=16, color=QC.GAIN).next_to(bar_g.ax.c2p(1.5, 0), DOWN, buff=0.05))
+        side = VGroup(
+            label(rf"{o['n_buy']:,} out-of-the-money options bought".replace(",", "{,}"), font_size=21, color=GREY_A),
+            label(r"by takers, expiring within two days:", font_size=21, color=GREY_A),
+            label(rf"{100 * o['worthless']:.0f}\% expired worthless", font_size=22, color=GREY_B),
+            label(rf"{100 * o['profitable']:.0f}\% paid more than their price", font_size=22, color=QC.GAIN),
+            label(rf"buyers got back {100 * (1 + o['ret_buy']):.0f} cents per dollar", font_size=22, color=QC.LOSS),
+            wrapped_label(rf"what takers sold would have returned {100 * o['ret_sell']:+.0f}\% to its buyer: Deribit's "
+                          r"takers are not India's retail, and this compares the instrument, not the people", 4.6, 17,
+                          GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(RIGHT, buff=0.35)
+        src = real_data(r"Deribit BTC trades, 100 Wednesdays 2024--2025; settled at Binance's 08:00 price (a proxy for "
+                        r"Deribit's 30-minute average); tickets: 4 June 2025")
         with self.voiceover(
-            "In July 2025 SEBI issued an interim order against entities of Jane Street. These are allegations, "
-            "contested by the firm, and no final finding had been made when this was written. SEBI alleged that on "
-            "expiry days of the Bank Nifty index, the firm bought the index's member stocks and futures in the "
-            "morning, holding the index up while building large positions in index options that would gain if it "
-            "fell, then sold in the afternoon and pushed it down. SEBI barred the entities and impounded about four "
-            "thousand eight hundred crore rupees of what it called unlawful gains. Jane Street disputed the "
-            "findings, deposited the amount in escrow, and was allowed to resume trading while the case continued."
-        ):
-            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
-        self.wait(0.5)
+            "What does a short-dated, out-of-the-money option pay its buyer? India's retail data is aggregated, so "
+            "measure the instrument on another market. Here are sixty real tickets: out-of-the-money Bitcoin options "
+            "bought on Deribit one morning, each expiring within two days. <bookmark mark='a'/> Expiry. Most turn "
+            "grey: worthless. A few pay several times their price. <bookmark mark='b'/> Over a hundred Wednesdays, "
+            f"{o['n_buy']:,} such tickets: {100 * o['worthless']:.0f} percent expired worthless, and "
+            f"{100 * o['profitable']:.0f} percent paid back more than they cost. Weighted by premium, buyers got back "
+            f"{100 * (1 + o['ret_buy']):.0f} cents per dollar. <bookmark mark='c'/> One caution: the takers who sold "
+            "such options did no better as a group, and Deribit's takers are not India's retail. This compares the "
+            "instrument, not the people."
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.02, run_time=2), FadeIn(src))
+            vo.wait_until("a")
+            self.play(LaggedStart(*flips, lag_ratio=0.03, run_time=3))
+            self.play(FadeIn(mults))
+            vo.wait_until("b")
+            self.play(FadeIn(bar_g), GrowFromEdge(b1, DOWN), GrowFromEdge(b2, DOWN), FadeIn(bl))
+            self.play(LaggedStart(*[FadeIn(s_) for s_ in side[:5]], lag_ratio=0.3, run_time=2.5))
+            vo.wait_until("c")
+            self.play(FadeIn(side[5]))
+        self.wait(0.4)
         self.clear_scene()
 
-    def toy(self, a):
-        t, idx = np.asarray(a["t"]), np.asarray(a["index"])
-        g = axes([0, 1], [98.5, 101.5], x_length=6.4, y_length=3.6, xlabel=r"the trading day",
-                 ylabel=r"index", xticks=[0, 0.5, 1], xfmt=lambda u: {0: "open", 0.5: "noon", 1: "close"}[round(u * 2) / 2],
-                 yticks=[99, 100, 101], font_size=17).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        line = curve(ax, t, idx, SPOT, stroke_width=3.5)
-        rows = VGroup(
-            label(r"a toy with linear price impact, to explain the mechanics alleged:", font_size=21, color=GREY_A),
-            MathTex(rf"\text{{morning: buy }} Q = {a['Q']:.0f}\ \Rightarrow\ +{a['move_up']:.0f}\ \text{{point}}",
-                    font_size=28),
-            MathTex(rf"\text{{options: short delta of }} {a['D']:.0f}\ \text{{units, near the top}}", font_size=28,
-                    color=VEGA),
-            MathTex(rf"\text{{afternoon: sell }} 2Q\ \Rightarrow\ -{a['move_down']:.0f}\ \text{{points}}", font_size=28),
-            MathTex(rf"\text{{cash and futures: }} {a['cash_leg']:+.0f};\ \ \text{{options: }} {a['options_leg']:+.0f}",
-                    font_size=28, color=OPT),
-            wrapped_label(r"the point: if the options position is much larger than the trading that moves the index, "
-                          r"the trading can lose money and the whole still profit. Whether this happened is for SEBI "
-                          r"and the courts; this shows only why regulators watch expiry days and position sizes "
-                          r"together", 4.6, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
-        src = illustration(r"illustration: invented numbers, not the case's")
+    # ------------------------------------------------------------------
+    def theory(self, sd):
+        taus = np.asarray(sd["taus_h"])
+        ex, ap = np.asarray(sd["ratio_exact"]), np.asarray(sd["ratio_approx"])
+        rows = [
+            cmath(r"\frac{\mathbb{E}^P[\text{payoff}]}{\text{price}}", r"=", r"\frac{C(\sigma_r)}{C(\sigma_i)}",
+                  font_size=34),
+            cmath(r"C(\sigma)", r"\approx", r"\frac{S\,(\sigma\sqrt\tau)^3}{k^2\sqrt{2\pi}}\,e^{-k^2/(2\sigma^2\tau)}",
+                  font_size=34),
+            cmath(r"\frac{C(\sigma_r)}{C(\sigma_i)}", r"\approx", r"\Big(\frac{\sigma_r}{\sigma_i}\Big)^3 \exp\!\Big(-"
+                  r"\frac{k^2}{2\tau}\Big(\frac{1}{\sigma_r^2} - \frac{1}{\sigma_i^2}\Big)\Big)", font_size=34),
+        ]
+        whys = [why(r"with no drift, an option's expected payoff is the same formula at the volatility that is realized"),
+                why(r"for a fixed out-of-the-money strike $k = \ln K/S$ and $\tau \to 0$: Mills' ratio on $N(-d)$, twice"),
+                why(r"so when implied exceeds realized, the ratio collapses as expiry nears: short-dated options "
+                    r"magnify the premium")]
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.6, buff=0.4, edge=6.9)
+        g = axes([np.log10(taus.min()), np.log10(taus.max())], [0, 1], x_length=5.6, y_length=2.4,
+                 xlabel=r"hours to expiry (log scale)", ylabel=r"expected payoff / price", xticks=[0, 1, 2],
+                 xfmt=lambda u: f"{10 ** u:.0f}", yticks=[0, 0.5, 1], font_size=15).to_edge(DOWN, buff=0.4).to_edge(
+            LEFT, buff=0.8)
+        le = curve(g.ax, np.log10(taus), np.clip(ex, 0, 1), GAMMA, stroke_width=3)
+        la = DashedVMobject(curve(g.ax, np.log10(taus), np.clip(ap, 0, 1), WHITE, stroke_width=2), num_dashes=40)
+        leg = legend([(GAMMA, r"exact"), (WHITE, r"the approximation")], font_size=16).next_to(g, RIGHT, buff=0.3)
+        cap = label(r"a call 5\% out of the money, implied 50\%, realized 45\%", font_size=17, color=GREY_B).next_to(
+            leg, DOWN, buff=0.2).align_to(leg, LEFT)
+        pc = pause(r"Nine in ten lose. Does that prove the options were overpriced?", width=4.4, font_size=20,
+                   corner=DR)
         with self.voiceover(
-            "Why would anyone do what is alleged? A toy model with invented numbers shows the mechanics. Buying in "
-            "the morning pushes an index up a point. <bookmark mark='a'/> Meanwhile a position in index options that "
-            "gains if the index falls is built, much larger than the trading. <bookmark mark='b'/> In the afternoon, "
-            "selling twice as much pushes the index two points down by the close. The cash and futures trading "
-            "roughly breaks even, but the options gain on a scale set by their size. <bookmark mark='c'/> That is "
-            "all this toy shows: why regulators watch expiry days, and the size of options positions next to the "
-            "trading in the underlying, together. Whether it happened in this case is for SEBI and the courts."
+            "Why do short-dated options make the premium so stark? With no drift, an option's expected payoff is "
+            "the Black-Scholes formula evaluated at the volatility that will be realized, while its price uses the "
+            "implied one. <bookmark mark='a'/> For a strike a fixed distance out of the money, as expiry approaches, "
+            "the price is dominated by an exponential, e to the minus k squared over two sigma squared tau. "
+            "<bookmark mark='b'/> Take the ratio and the exponent is multiplied by one over tau: whenever implied is "
+            "above realized, the expected payoff per dollar of premium collapses as expiry nears. For a call five "
+            "percent out of the money, implied fifty and realized forty-five, a buyer gets back most of the premium "
+            "with a month left, and almost none of it with a few hours left. The exact curve and the approximation "
+            "agree. <bookmark mark='c'/> And pause and predict: nine in ten lose. Does that prove the options were "
+            "overpriced? No: a fair lottery also loses most of the time. The premium-weighted return answers that "
+            "question, and it was negative."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(rows[0]))
-            self.play(Create(line), FadeIn(rows[1]), run_time=2)
+            step(0)
             vo.wait_until("a")
-            self.play(FadeIn(rows[2]))
+            step(1)
             vo.wait_until("b")
-            self.play(FadeIn(rows[3]), FadeIn(rows[4]))
+            step(2)
+            self.play(FadeIn(g), Create(le), Create(la), FadeIn(leg), FadeIn(cap), run_time=2)
             vo.wait_until("c")
-            self.play(FadeIn(rows[5]))
+            self.play(FadeIn(pc))
         self.wait(0.4)
         self.clear_scene()

@@ -60,8 +60,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         fixed(self, hint, par, cap)
         with self.voiceover(
             "An options trader's book is one surface: its value over the price of the underlying and the time left. "
-            "Here is a straddle's, a call and a put struck at a hundred. It is a valley along the strike, deepest at "
-            "expiry, at the front, where it becomes the payoff's V. <bookmark mark='a'/> Take today, thirty days "
+            "Here is a straddle's: a valley along the strike, which becomes the payoff's V at expiry. <bookmark mark='a'/> Take today, thirty days "
             "out: the yellow slice. Draw its tangent at the strike, the white line, whose slope is delta. The slice "
             "curves up away from the tangent on both sides: that bowl is gamma, and for a move dS the book gains one "
             "half gamma dS squared, the pink length. <bookmark mark='b'/> Now let ten days pass. The whole slice sinks "
@@ -118,8 +117,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Now the algebra, step by step. Taylor's theorem in three variables: spot, time and implied volatility. "
             "The terms a trader names are delta, gamma, theta, vega, and two cross terms, vanna and volga. "
-            "<bookmark mark='a'/> Differentiate the Black-Scholes formula and each has a closed form; the messy terms "
-            "cancel because of one identity between the call's two normal densities. <bookmark mark='b'/> Part ten's "
+            "<bookmark mark='a'/> Differentiate the Black-Scholes formula and each has a closed form. <bookmark mark='b'/> Part ten's "
             "equation, at zero rates, ties theta to gamma: time decay is exactly the price of the bowl. "
             "<bookmark mark='c'/> Substitute it, and a day's profit is one half gamma S squared times the realized "
             "squared return minus the implied variance. Pause and predict: at fifty percent volatility, how far must "

@@ -213,10 +213,14 @@ class FamaMacBeth(VoiceoverScene):
                     r"variance)")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
-            "The algebra. Fama-MacBeth averages the monthly slopes. <bookmark mark='a'/> The within estimator is centred "
-            "cross-products over centred squares, which is a weighted average of the monthly slopes, "
-            "<bookmark mark='b'/> each weighted by its month's share of the variation. <bookmark mark='c'/> And pooled is "
-            "the variation-weighted average of within and between. Problem six."
+            "The algebra. Fama-MacBeth averages the monthly slopes, each month counting once. <bookmark mark='a'/> The "
+            "within estimator divides the centred cross-products, summed over all months, by the centred squares, summed "
+            "over all months. Each month's own slope is that month's cross-products over that month's squares, so "
+            "multiply and divide: the within estimator is a weighted average of the monthly slopes, "
+            "<bookmark mark='b'/> each weighted by its month's share of the total cross-sectional variation. Turbulent "
+            "months, when industries' past returns were far apart, count most. <bookmark mark='c'/> And split the total "
+            "variation of the regressor into within-month and between-month sums of squares: the cross term vanishes "
+            "inside every month, so pooled is the variation-weighted average of the within and between slopes. Problem six."
         ) as vo:
             step(0)
             vo.wait_until("a")

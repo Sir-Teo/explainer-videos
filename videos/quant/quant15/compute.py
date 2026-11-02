@@ -307,12 +307,10 @@ def compute_book2024() -> dict:
                                   dtype=torch.float32)
                 w = net(xx).numpy().ravel()
             gm += float(((w[0] - w[1]) / (2 * h) * 1.01 - (w[2] - w[3]) / (2 * h) * 0.99) / 2)
-            if ki_now and nt["ki"] == int(dates[k]):
-                with torch.no_grad():
-                    xx = torch.tensor([[np.log(rel + h), age / DPM / 24, 0.0], [np.log(rel - h), age / DPM / 24, 0.0]],
-                                      dtype=torch.float32)
-                    u = net(xx).numpy().ravel()
-                jp += float((v[0] - v[1]) / (2 * h) * rel - (u[0] - u[1]) / (2 * h) * rel)
+            d_now = float((v[0] - v[1]) / (2 * h) * rel)
+            if ki_now and nt["ki"] == int(dates[k]) and "prev" in nt:
+                jp += d_now - nt["prev"]  # the note's hedge today (knocked in) against yesterday's (not yet)
+            nt["prev"] = d_now
         alive_n.append(a)
         kin_n.append(kin)
         delta.append(dl)
@@ -320,7 +318,7 @@ def compute_book2024() -> dict:
         jump.append(jp)
     return _json({"dates": dates[days], "close": px[days], "alive": alive_n, "knocked_in": kin_n, "dealer_delta": delta,
                   "dealer_gamma": gamma, "ki_jump": jump,
-                  "notes": [{k: v for k, v in n.items() if k != "i0"} for n in notes],
+                  "notes": [{k: v for k, v in n.items() if k not in ("i0", "prev")} for n in notes],
                   "n_ki_total": sum(1 for n in notes if n["ki"] is not None),
                   "n_ki_2024": sum(1 for n in notes if n["ki"] is not None and n["ki"] >= 20240101)})
 

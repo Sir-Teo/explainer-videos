@@ -41,8 +41,8 @@ class Debate(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         src = real_data(r"geometric mean of daily realized variance by weekday (UTC), 2024--2025")
         with self.voiceover(
-            "Not everyone accepts that volatility is rough. Start with a trap in our own data. Bitcoin trades every "
-            "day, but its weekends are calm: typical realized volatility on a Saturday is about half a weekday's. "
+            "Not everyone accepts that volatility is rough. Start with a trap in our own data: Bitcoin's weekends "
+            "are calm, a Saturday's realized volatility well under half a weekday's. "
             "<bookmark mark='a'/> That weekly rhythm jumps up and down from day to day, and the estimator reads it "
             f"as roughness. Remove it, and H rises from {a['btc']:.2f} to {a['btc_deseasonalized']:.2f}. Still rough, "
             "but the number moved because of a calendar, not a law of nature."
@@ -78,15 +78,11 @@ class Debate(VoiceoverScene, ThreeDScene):
                                 r"term structure, and a microstructure story. Each alone has a smooth explanation", 12.0, 20,
                                 ROUGH).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The deeper objection, made by Rama Cont and Purba Das, and by Guyon and El Amrani, is that the estimator "
-            "can be fooled. Test it. Simulate three volatilities that are perfectly smooth, H one half, make them as "
-            "variable as Bitcoin's, and measure them exactly as we measured Bitcoin, through noisy five-minute "
-            "realized variance. <bookmark mark='a'/> The slow ones read about four-tenths: the noise does pull the "
-            "estimate down, but not to Bitcoin's level. <bookmark mark='b'/> The one that mean-reverts within a few "
-            "hours reads almost zero. At a daily resolution, a very fast smooth process and a rough one look the same. "
-            "<bookmark mark='c'/> So the case for roughness rests on several measurements agreeing: the time series, "
-            "the skew's term structure, and the order-flow story. Each alone has a smooth explanation. To see how "
-            "far the estimator can be fooled, map it."
+            "The deeper objection, made by Rama Cont and Purba Das, is that the estimator can be fooled. Simulate "
+            "three perfectly smooth volatilities, as variable as Bitcoin's, and measure them the same way. "
+            "<bookmark mark='a'/> The slow ones read about four-tenths. <bookmark mark='b'/> The one that "
+            "mean-reverts within hours reads almost zero: at a daily resolution, fast and rough look alike. "
+            "<bookmark mark='c'/> To see how far the estimator can be fooled, map it."
         ) as vo:
             self.play(FadeIn(g), Create(half), FadeIn(bars[:2]), FadeIn(labs[:2]), FadeIn(side))
             vo.wait_until("a")
@@ -141,8 +137,8 @@ class Debate(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Here is the estimator's bias map, the centrepiece of the debate. On the floor, two dials of a simulated "
             "log-volatility: its true H, from very rough to Brownian, and how fast it mean-reverts, from not at all "
-            "to a half-life of five hours. Each one is simulated every five minutes for seven hundred days, as "
-            "variable as Bitcoin's, and measured exactly as Bitcoin was. The height is the H the estimator reports. "
+            "to a half-life of five hours, each simulated for seven hundred days and measured exactly as Bitcoin "
+            "was. The height is the H the estimator reports. "
             "<bookmark mark='a'/> Pause and predict: a perfectly smooth volatility, H one half, with a one-day "
             "half-life. What does the estimator report? <bookmark mark='b'/> About a tenth: "
             f"{M[i05, j1]:.2f}. Bitcoin's number. <bookmark mark='c'/> Now slice the map at Bitcoin's reading, "
@@ -193,9 +189,9 @@ class Debate(VoiceoverScene, ThreeDScene):
             "<bookmark mark='b'/> Second, a mean-reverting process is rough only at lags shorter than its "
             "mean-reversion time; beyond that its increments stop growing. If that time is under a day, every daily "
             "lag sits on the flat part, and the estimator reads roughness that is really stationarity. "
-            "<bookmark mark='c'/> Third, even with perfect data, H is hard to estimate. Carsten Chong, Marc "
-            "Hoffmann, Yanghui Liu, Mathieu Rosenbaum and Grégoire Szymanski proved in 2024 that the best possible "
-            "error from n observations shrinks only like n to the minus one over four H plus two."
+            "<bookmark mark='c'/> Third, even with perfect data, H is hard to estimate: Carsten Chong and "
+            "co-authors proved in 2024 that the best possible error shrinks only like n to the minus one over four "
+            "H plus two."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -232,13 +228,11 @@ class Debate(VoiceoverScene, ThreeDScene):
                              r"(next chapter)", 12.0, 20, GOLD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The statistics literature took this seriously. Masaaki Fukasawa, Tetsuya Takabatake and Rebecca "
-            "Westphal built a consistent estimator that models the measurement error, and still found volatility "
-            "rough. <bookmark mark='a'/> Mikkel Bolko and co-authors corrected realized variance's error by the "
-            "generalized method of moments: H still about 0.05. <bookmark mark='b'/> Rama Cont and Purba Das "
-            "showed the artefact we just simulated: smooth models, seen through the estimator, look rough. "
-            "<bookmark mark='c'/> And the minimax theory says how little any single number can settle. What can "
-            "choose? The curvature of the scaling line, though Bitcoin's lies inside the simulated range; lags "
-            "shorter than a day; and the options, which see the future, not the past. That is the next chapter."
+            "Westphal modelled the measurement error and still found volatility rough. <bookmark mark='a'/> Mikkel "
+            "Bolko and co-authors corrected it by the generalized method of moments: H still about 0.05. "
+            "<bookmark mark='b'/> Rama Cont and Purba Das showed the artefact we just simulated. "
+            "<bookmark mark='c'/> And the minimax theory says how little one number can settle. What can choose? "
+            "Lags shorter than a day, and the options. That is the next chapter."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

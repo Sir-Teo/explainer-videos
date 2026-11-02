@@ -5,14 +5,15 @@ from videos.quant.quant12.common import BAD, IV, LV, OPT, PART, RV, SPOT, load
 
 DESK = [
     (r"Why is the VIX above realized volatility on average?",
-     r"because variance is insurance: it spikes when wealth falls, so buyers pay a premium (Carr and Wu 2009); on two "
-     r"years of bitcoin surfaces, implied variance exceeded realized in three weeks out of four"),
+     r"because variance is insurance: it spikes when wealth falls, so its buyers pay a premium (Carr and Wu 2009); on "
+     r"bitcoin since 2021, the 30-day variance strike exceeded realized variance in about four weeks out of five"),
     (r"Replicate a variance swap with options.",
-     r"hold $\frac{2}{T}\frac{dK}{K^2}$ of every out-of-the-money option (puts below the forward, calls above) and "
-     r"delta-hedge with the future; the strip is a log contract, and It\^o turns it into realized variance"),
-    (r"A dealer's book is short gamma near a big open-interest strike as expiry approaches. What do its hedges do?",
-     r"they chase the market: buying rallies and selling dips, which amplifies moves (Baltussen et al.\ 2021); long "
-     r"gamma would damp them and pin the price near the strike"),
+     r"hold $\frac{2}{T}\frac{\Delta K}{K^2}$ of every out-of-the-money option (puts below the forward, calls above) and "
+     r"hold $\frac{2}{T}\big(\frac{1}{S_t} - \frac1F\big)$ of the asset, rebalanced on the contract's own clock; jumps "
+     r"leave a cubic error"),
+    (r"Spot falls 5\%. Where does ATM vol go under sticky strike, sticky delta, and local vol?",
+     r"sticky strike: up by $5\%$ times the skew (it slides down the curve); sticky delta: unchanged; local vol: up by "
+     r"about twice the sticky-strike move ($R \approx 2$)"),
 ]
 
 PROBLEMS = [
@@ -20,66 +21,100 @@ PROBLEMS = [
     r"\partial_{KK} C)$ at zero rates.",
     r"Show that $-\log(S_T/F)$ equals a forward position plus a strip of options weighted $1/K^2$, and hence derive "
     r"the variance-swap strike.",
-    r"For SSVI, check Gatheral and Jacquier's calendar condition: $\theta_T$ non-decreasing and $0 \le "
-    r"\partial_\theta(\theta\varphi(\theta)) \le \frac{1 + \sqrt{1 - \rho^2}}{\rho^2}\varphi(\theta)$, for the power-law "
-    r"$\varphi$.",
+    r"For SSVI with the power-law $\varphi$, check Gatheral and Jacquier's calendar condition, and find the smallest "
+    r"$\theta$ above which their butterfly condition holds when $\gamma > \frac12$.",
     r"Show that near the money, local-volatility skew is about twice the implied skew: $\partial_k\sigma_{loc} "
     r"\approx 2\,\partial_k\sigma_{imp}$.",
     r"Derive Martin's bound: if $\text{cov}(m_T R_T, R_T) \le 0$, then $\mathbb{E}[R_T] - R_f \ge \text{var}^Q(R_T)/R_f$.",
+    r"Derive Gatheral's $g(k)$ from Black's formula written in total variance $w$ and log-moneyness $k$.",
+    r"Show that $K_{vol} \approx \sqrt{K_{var}} - \text{Var}(V)/(8K_{var}^{3/2})$ for a volatility swap.",
 ]
 
 
 class Outro(VoiceoverScene):
     def construct(self):
-        self.recap(load("surface"), load("varswap"), load("history"), load("localvol"), load("vae"))
+        self.recap(load("termskew"), load("dynamics"), load("ssvi_replay"), load("lv_mc"), load("replication"),
+                   load("vrp_pnl"), load("vx_etp"), load("neural_surface"))
+        self.rule(load("envelope"))
         self.desk()
         self.problems()
         self.payoffs()
         self.references()
         self.house()
 
-    def recap(self, s, w, h, lv, v):
+    def recap(self, t, d, s, m, r, p, x, n):
+        import numpy as np
         items = [
-            (r"the surface is the market's map of fear: smile, skew, term structure", IV),
-            (rf"next-day quotes followed the spot: sticky moneyness {s['sticky_rmse']['sticky moneyness']:.1f} vs sticky "
-             rf"strike {s['sticky_rmse']['sticky strike']:.1f} vol points", SPOT),
-            (rf"SSVI fits the Surface to {s['rmse_ssvi']:.2f} vol points with no arbitrage", LV),
-            (rf"local volatility reprices today but flattens tomorrow: forward skew {100 * lv['fwd_skew']:.1f} vs "
-             rf"{100 * lv['spot_skew']:.1f} points", BAD),
-            (rf"a variance swap is a strip of options: {100 * w['kvar']:.0f}\% vs {100 * w['atm']:.0f}\% at the money", OPT),
-            (rf"bitcoin's variance premium: positive {100 * h['share_positive']:.0f}\% of weeks, $t = {h['vrp_t']:.1f}$", RV),
-            (r"Volmageddon: when everyone is short volatility, the hedging is the shock", BAD),
-            (rf"two learned numbers rebuild a surface to {v['recon_rmse_volpts']:.1f} vol points", LV),
+            (rf"the smile is a distribution: skew is skewness; bitcoin was call-skewed in {100 * t['call_skew']:.0f}\% of "
+             rf"weeks", IV),
+            (rf"surfaces move in three shapes: level, skew, term ({100 * sum(d['explained'][:3]):.0f}\% of weekly moves)", SPOT),
+            (r"static arbitrage is $g \ge 0$, $\partial_T w \ge 0$ and Lee's wings: shown happening in Vogt's smile", BAD),
+            (rf"SVI fits a slice in five numbers; SSVI the surface, at {s['rmse']:.2f} vol points", LV),
+            (r"Dupire's local vol is the expected variance given the price (Gy\"ongy), checked by simulation", LV),
+            (rf"but its forward skew fades: {100 * m['fwd_skew']['0']:.1f} now, {100 * m['fwd_skew']['90']:.1f} three "
+             rf"months out", BAD),
+            (rf"a variance swap is a strip plus a hedge: replicated on {r['n']} bitcoin months", OPT),
+            (r"the VIX is that strip, truncated; ours tracks Deribit's DVOL", IV),
+            (rf"the variance premium: positive {100 * p['share_pos']:.0f}\% of weeks, $t = {p['t']:.1f}$; it does not "
+             rf"forecast returns", RV),
+            (rf"short-volatility notes buy at the close: one day cost {abs(100 * x['note_feb5']):.0f}\%", BAD),
+            (r"dealer gamma damps or amplifies; the 0DTE evidence is mixed", OPT),
+            (rf"a network learns a surface without arbitrage: {float(np.mean(n['pen_test'])):.2f} vol points held out", LV),
         ]
         rows = VGroup()
-        for i, (t, col) in enumerate(items, 1):
-            rows.add(VGroup(MathTex(str(i), font_size=28, color=col), label(t, font_size=24)).arrange(RIGHT, buff=0.3))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.24)
-        title = label(r"Part 12 in eight lines", font_size=38).to_edge(UP, buff=0.4)
-        rows.next_to(title, DOWN, buff=0.45)
-        if rows.width > 13.0:
-            rows.scale_to_fit_width(13.0)
+        for i, (txt, col) in enumerate(items, 1):
+            rows.add(VGroup(MathTex(str(i), font_size=24, color=col), label(txt, font_size=20)).arrange(RIGHT, buff=0.25))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        title = label(r"Part 12 in twelve lines", font_size=34).to_edge(UP, buff=0.3)
+        rows.next_to(title, DOWN, buff=0.3)
+        if rows.width > 13.2:
+            rows.scale_to_fit_width(13.2)
+        if rows.height > 6.4:
+            rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part twelve in eight lines. The surface is the market's map of fear. On our day, the smile moved with "
-            "the spot. SSVI fits it without arbitrage to a fraction of a volatility point. Local volatility reprices "
-            "today's options and gets tomorrow's smile wrong. A variance swap is a strip of options, priced above "
-            "at-the-money volatility. Bitcoin's variance premium was positive three weeks in four. When everyone is "
-            "short volatility, their hedging becomes the shock. And two learned numbers rebuild a whole surface."
+            "Part twelve in twelve lines. The smile is a distribution. Surfaces move in three shapes, and some shapes "
+            "are impossible. SVI fits a slice; SSVI the surface. Local volatility is expected variance given the "
+            "price; its future smiles fade. A variance swap is a strip and a hedge; the VIX is that strip, truncated. "
+            "The variance premium is insurance, not a forecast. Short-volatility notes buy at the close, and one day "
+            "cost almost everything. Dealer hedging calms or shakes a market. And networks learn surfaces, if taught "
+            "the rules."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
-                                                 run_time=16))
+                                                 run_time=20))
         self.wait(0.5)
         self.clear_scene()
 
+    def rule(self, env):
+        chart = house_chart(PART, lit=("vol",)).scale(0.7).to_edge(UP, buff=0.3)
+        rule = wrapped_label(r"Rule 12: the desk quotes only from a fitted surface that passes the arbitrage checker, and "
+                             r"every exotic price states which dynamics (local, stochastic, rough) it assumed. "
+                             rf"The trial counter still reads {env['trials']}.", 12.4, 23, QC.HOUSE).to_edge(DOWN, buff=0.5)
+        tr = env["trials"]
+        with self.voiceover(
+            "The House's twelfth rule. The volatility desk quotes only from a fitted surface that passes the "
+            "arbitrage checker, and every exotic price states which dynamics it assumed, local, stochastic or rough, "
+            "because as Chapter eight showed, the same surface can come from very different futures. <bookmark mark='a'/> "
+            "This part described markets and priced products; it registered no strategy, so the trial counter still "
+            f"reads {tr}."
+        ) as vo:
+            self.play(FadeIn(chart))
+            self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))
+            vo.wait_until("a")
+            self.play(FadeIn(rule))
+        self.wait(0.4)
+        self.clear_scene()
+
     def desk(self):
-        cards = VGroup(*[desk_question(q, a, width=12.4, font_size=25) for q, a in DESK]).arrange(DOWN, buff=0.3)
+        cards = VGroup(*[desk_question(q, a, width=12.4, font_size=24) for q, a in DESK]).arrange(DOWN, buff=0.25)
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
             "Three desk questions. The VIX sits above realized volatility because variance is insurance. "
             "<bookmark mark='a'/> A variance swap is replicated by every out-of-the-money option, weighted by one "
-            "over the strike squared, and a delta hedge. <bookmark mark='b'/> And a dealer short gamma into expiry "
-            "chases the market; long gamma, it pins it. Full solutions are in the notes."
+            "over the strike squared, and a delta hedge rebalanced on the contract's own clock. "
+            "<bookmark mark='b'/> And when spot falls five percent: under sticky strike, at-the-money volatility "
+            "slides up the skew; under sticky delta it stays put; under local volatility it rises about twice as far "
+            "as under sticky strike. Full solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -90,27 +125,30 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=23)
+        ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And five problems: Dupire's formula, the log contract's strip, SSVI's calendar condition, the local "
-            "skew's factor of two, and Martin's bound. Solutions, in English and Chinese, are in the notes."
+            "And seven problems: Dupire's formula, the log contract's strip, SSVI's two conditions, the local skew's "
+            "factor of two, Martin's bound, Gatheral's g from Black's formula, and the volatility swap's convexity. "
+            "Solutions, in English and Chinese, are in the notes."
         ):
-            self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
+            self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
         self.clear_scene()
 
     def payoffs(self):
         card = payoff_card([
             (r"stochastic volatility and jumps, which fix the forward smile", [13]),
-            (r"rough volatility and path-dependent models", [14]),
+            (r"rough volatility, and the S\&P 500 and VIX smiles together", [14]),
             (r"exotics priced off the surface", [15]),
-            (r"computing prices: PDEs, Monte Carlo, Fourier", [16]),
-            (r"the variance premium as a factor", [24, 32]),
+            (r"neural calibrators and market generators", [17]),
+            (r"option-implied signals in the cross-section", [27]),
+            (r"the variance premium as a factor; scenario risk", [32, 40]),
         ])
         with self.voiceover(
             "Where this comes back. Stochastic volatility and jumps, in Part thirteen, fix the forward smile. Rough "
-            "volatility follows. Exotics in Part fifteen are priced off this surface, with the methods of Part "
-            "sixteen. And the variance premium returns as a factor and a strategy."
+            "volatility, and the S&P 500 and VIX smiles together, are Part fourteen. Exotics in Part fifteen are "
+            "priced off this surface. Neural calibrators return in Part seventeen, option-implied signals in Part "
+            "twenty-seven, and the variance premium as a factor and a risk in Parts thirty-two and forty."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -118,15 +156,25 @@ class Outro(VoiceoverScene):
 
     def references(self):
         card = reference_card(
-            [r"Gatheral, \textit{The Volatility Surface}; Bergomi, \textit{Stochastic Volatility Modeling}, ch.\ 1--2",
-             r"Rebonato, \textit{Volatility and Correlation}; Hull, \textit{Options, Futures, and Other Derivatives}, ch.\ 20, 27"],
-            [r"Dupire (1994); Derman and Kani (1994); Gy\"ongy (1986); Carr and Madan (1998)",
-             r"Demeterfi, Derman, Kamal and Zou (1999); Lee (2004); Gatheral (2004); Gatheral and Jacquier (2014)",
-             r"Carr and Wu (2009); Bollerslev, Tauchen and Zhou (2009); Martin (2017)",
-             r"Baltussen, Da, Lammers and Martens (2021); Bergeron, Fung, Hull and Poulos (2022); Kingma and Welling (2014)"])
+            [r"Gatheral, \textit{The Volatility Surface}, ch.\ 1, 3, 7, 8, 11; Bergomi, \textit{Stochastic Volatility "
+             r"Modeling}, ch.\ 2, 3, 5",
+             r"Rebonato, \textit{Volatility and Correlation}; Hull, \textit{Options, Futures, and Other Derivatives} "
+             r"(volatility smiles); Sinclair; Bennett"],
+            [r"Dupire; Derman and Kani; Rubinstein (1994); Gy\"ongy (1986); Neuberger (1994); Carr and Madan (1998)",
+             r"Demeterfi et al.\ (1999); Derman (1999); Britten-Jones and Neuberger (2000); Berestycki et al.\ (2002); "
+             r"Hagan et al.\ (2002); Cont and da Fonseca (2002)",
+             r"Bakshi et al.\ (2003); Lee (2004); Backus et al.\ (2004); Gatheral (2004); Carr and Wu; Bollerslev et al.; "
+             r"Cheng and Madhavan (2009)",
+             r"Roper (2010); Gatheral and Jacquier (2011, 2014); Martin (2017); Dew-Becker et al.\ (2017); Andersen et al.\ "
+             r"(2017); Griffin and Shams (2018)",
+             r"Ackerer et al.\ (2020); Baltussen et al.\ (2021); Bergeron et al.\ (2022); Martini and Mingone (2022); "
+             r"Bandi et al.\ (2023); Kelly et al.\ (2023); Vuleti\'c and Cont (2024); Dim et al.\ (2024); Wiedemann et "
+             r"al.\ (2025)"])
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on. The data are the Surface and a hundred "
-            "weekly surfaces rebuilt from Deribit's trades, Binance's Bitcoin prices, and the VIX from the St. Louis Fed."
+            "The textbook chapters this part covers, and the papers it draws on, all listed in the notes. The data are "
+            "the Surface and two hundred and forty-three weekly surfaces rebuilt from Deribit's trades, Binance's "
+            "Bitcoin prices, Deribit's DVOL, the VIX and its three-month cousin from the St. Louis Fed, the S&P 500 "
+            "from Yahoo Finance, and Cboe's VIX futures settlements."
         ):
             self.play(FadeIn(card))
             self.wait(3)

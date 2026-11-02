@@ -111,11 +111,13 @@ class World(VoiceoverScene):
         leg = legend([(GREY_B, r"the price the news says"), (LOSS, r"the price that trades ($\pm$10\% a day)")],
                      font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         with self.voiceover(
-            "Price limits change Part one's statistics. A stock hit by big news twice in forty days: grey where the news says "
-            "the price should be, red the price that can trade, capped at ten percent a day, a spring between them. "
-            "<bookmark mark='a'/> On a limit day the true price runs ahead; next day the spring drags the traded price after "
-            "it. <bookmark mark='b'/> The observed return is the true one plus yesterday's remainder, clipped; what's clipped "
-            "rolls over, so a limit day predicts more of the same."
+            "Price limits change the statistics of Part one. Watch a stock hit by big news twice in forty days. The grey line "
+            "is where the news says the price should be; the red line is the price that can trade, capped at ten percent a "
+            "day. A spring ties them together. <bookmark mark='a'/> On a limit day the true price runs ahead and the spring "
+            "stretches; the next day it drags the traded price up again, and again, until they meet. <bookmark mark='b'/> In "
+            "symbols: the observed return is the true one plus yesterday's unexecuted remainder, clipped at the limit, and "
+            "whatever is clipped rolls over to tomorrow. So consecutive observed returns share the remainder, their covariance "
+            "is positive, and a limit day predicts more of the same."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(lt, lo, sp)
@@ -158,11 +160,14 @@ class World(VoiceoverScene):
         src = note(r"simulated: daily vol 3\%, jumps on 5\% of days (12\% s.d.), 5,000 days, 8 seeds", font_size=15)
         src.to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "Measure it: five thousand simulated days, eight seeds, no limit, twenty and ten percent. <bookmark mark='a'/> "
-            f"Without limits, no autocorrelation; with ten percent limits, {np.mean(res['0.10']['ac1']):.2f}, from a stock at "
-            f"its limit on only {100 * np.mean(res['0.10']['at_limit']):.0f} percent of days. A backtest sees momentum, but at "
-            "limit-up the buy queue doesn't clear. <bookmark mark='b'/> So the House stores each market's rules beside its "
-            "prices. Predict: limit-up close, buyers queued. Tomorrow's return, and can you trade it?"
+            "Measure it. Simulate five thousand days of a stock with occasional big jumps, eight seeds, with no limit, with "
+            "twenty percent limits, and with ten. <bookmark mark='a'/> Without limits the returns are uncorrelated, as they "
+            f"should be. With ten percent limits the autocorrelation is {np.mean(res['0.10']['ac1']):.2f}, from a stock that is "
+            f"at its limit on only {100 * np.mean(res['0.10']['at_limit']):.0f} percent of days; at twenty percent, "
+            f"{np.mean(res['0.20']['ac1']):.2f}. A backtest would see momentum. But on a limit-up day the buy queue doesn't "
+            "clear, and nobody gets filled at that price. <bookmark mark='b'/> So the House's data desk stores each market's "
+            "rules beside its prices, and no backtest may buy a stock that couldn't be bought. Pause and predict: limit-up "
+            "close, buyers queued. Tomorrow's expected return, and can you trade it?"
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

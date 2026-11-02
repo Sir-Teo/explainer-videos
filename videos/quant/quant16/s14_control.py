@@ -67,8 +67,8 @@ class Control(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UR, buff=0.35)
         src = illustration(r"arithmetic Asian call, 64 fixings, one year; 2{,}000 paths drawn, 20{,}000 $\times$ 5 seeds counted")
         with self.voiceover(
-            "Chapter one's error is sigma over root n. We cannot change the root n, but we can change sigma. The most "
-            "powerful trick is a control variate. Each dot is one path of an Asian option on sixty-four fixings: across, "
+            "Chapter one's error is sigma over root n; we can change the sigma. The most powerful trick is a control "
+            "variate. Each dot is one path of an Asian option on sixty-four fixings: across, "
             "the payoff of the geometric average, whose price Kemna and Vorst wrote down in 1990; up, the arithmetic "
             "average we want, which has no formula. <bookmark mark='a'/> They are almost the same number. So subtract "
             "b times the geometric payoff's error, whose mean is known to be zero. As b turns from zero to the "
@@ -161,13 +161,12 @@ class Control(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Stratification, live. Cut the unit interval into sixteen equal pieces and put exactly one uniform in "
-            "each, instead of sixteen independent ones, which bunch and leave gaps. <bookmark mark='a'/> Price the "
+            "each. <bookmark mark='a'/> Price the "
             "call five hundred times with sixty-four paths each way. The stratified estimates, in green, sit in a "
             "far narrower pile than the plain ones. <bookmark mark='b'/> With 4,096 paths, sixteen strata divide "
             f"the variance by {(st['plain_sd'] / st['s16_sd']) ** 2:.0f}, and two hundred and fifty-six strata by "
             f"{(st['plain_sd'] / st['s256_sd']) ** 2:.0f}. A Latin hypercube stratifies all sixty-four coordinates "
-            f"of the Asian at once, and buys a factor of {(lh['mc_sd'] / lh['lhs_sd']) ** 2:.1f}: in high dimensions "
-            "each coordinate's strata can only do so much."
+            f"of the Asian at once, and buys {(lh['mc_sd'] / lh['lhs_sd']) ** 2:.1f}."
         ) as vo:
             self.play(Create(line), FadeIn(ticks), FadeIn(lab))
             self.play(LaggedStart(*[FadeIn(d, shift=DOWN * 0.4) for d in drops], lag_ratio=0.15),

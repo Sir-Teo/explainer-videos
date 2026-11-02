@@ -184,3 +184,58 @@ def american_call_dividend(S, K, T, r, sigma, D, tD, N=200) -> dict:
             region += [(n, int(i), float(s_n[i])) for i in np.where(hit)[0]]
         am = np.where(hit, ex, am)
     return {"price": float(am[0]), "european": float(eu[0]), "region": region, "dt": dt}
+
+
+def early_exercise_premium(S, K, r, sigma, times, boundary, q=0.0, T=None) -> float:
+    """The early-exercise premium of an American put as an integral over its exercise boundary (Kim 1990; Jacka
+    1991; Carr, Jarrow and Myneni 1992):
+
+        P_A - P_E = int_0^T [ r K e^{-rs} N(-d2(S, B(s), s)) - q S e^{-qs} N(-d1(S, B(s), s)) ] ds,
+
+    the interest earned on the strike (less the dividends forgone) while the put sits exercised, weighted by the
+    risk-neutral probability of being below the boundary B(s) at time s.  ``times`` are the calendar times of the
+    boundary points (from 0 to T, as ``crr(..., boundary=True)`` returns them); NaN points (no exercise) count zero;
+    the integrand vanishes at s = 0, and the last point is carried to T (where B = K)."""
+    from scipy.special import ndtr
+
+    s = np.asarray(times, float)
+    B = np.asarray(boundary, float)
+    T = float(s[-1] + (s[1] - s[0])) if T is None else float(T)
+    s = np.append(s, T)
+    B = np.append(B, K * min(1.0, r / q) if q > 0 else K)
+    f = np.zeros_like(s)
+    m = (s > 0) & np.isfinite(B) & (B > 0)
+    sm, Bm = s[m], B[m]
+    d1 = (np.log(S / Bm) + (r - q + 0.5 * sigma ** 2) * sm) / (sigma * np.sqrt(sm))
+    d2 = d1 - sigma * np.sqrt(sm)
+    f[m] = r * K * np.exp(-r * sm) * ndtr(-d2) - q * S * np.exp(-q * sm) * ndtr(-d1)
+    return float(np.sum(0.5 * (f[1:] + f[:-1]) * np.diff(s)))
+
+
+def put_boundary(S, K, T, sigma, r=0.0, q=0.0, N=2000) -> dict:
+    """The American put's early-exercise boundary on an N-step CRR tree, located between nodes: at each step the gain
+    from exercising, (K - S) - continuation, changes sign between the highest exercise node and the node above it,
+    and the boundary is put where its linear interpolation in log-spot crosses zero (the raw tree boundary is a
+    staircase on the nodes, low by up to one node spacing).  Returns ``times``, ``boundary``, ``raw`` and ``price``."""
+    dt = T / N
+    u = np.exp(sigma * np.sqrt(dt))
+    d = 1.0 / u
+    p = (np.exp((r - q) * dt) - d) / (u - d)
+    disc = np.exp(-r * dt)
+    values = np.maximum(K - S * u ** (2 * np.arange(N + 1) - N), 0.0)
+    raw, smooth = np.full(N, np.nan), np.full(N, np.nan)
+    for n in range(N - 1, -1, -1):
+        spots = S * u ** (2 * np.arange(n + 1) - n)
+        cont = disc * (p * values[1:] + (1 - p) * values[:-1])
+        gain = (K - spots) - cont
+        ex = gain > 1e-14
+        values = np.where(ex, K - spots, cont)
+        if ex.any():
+            i = int(np.flatnonzero(ex).max())
+            raw[n] = spots[i]
+            if i + 1 <= n and gain[i + 1] < 0:
+                a, b = gain[i], gain[i + 1]
+                smooth[n] = float(np.exp(np.log(spots[i]) + a / (a - b) * (np.log(spots[i + 1]) - np.log(spots[i]))))
+            else:
+                smooth[n] = spots[i]
+    return {"times": np.arange(N) * dt, "boundary": smooth, "raw": raw, "price": float(values[0])}

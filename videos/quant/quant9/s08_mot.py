@@ -58,6 +58,8 @@ class MOT(VoiceoverScene, ThreeDScene):
             "mark='c'/> One exists exactly when the later call curve lies above the earlier, "
             "Strassen's theorem of 1965, as here. The rest is a linear program: martingale optimal "
             "transport."
+            f" Here the earlier marginal has {len(x)} atoms and the later {len(y)}, so the program has "
+            f"{len(x) * len(y):,} unknowns."
         ) as vo:
             self.play(FadeIn(g), Create(k1), Create(k2), FadeIn(lg))
             vo.wait_until("a")
@@ -99,6 +101,8 @@ class MOT(VoiceoverScene, ThreeDScene):
             "Beiglböck, Henry-Labordère and Penkner, 2013: the highest model price is the cheapest "
             "model-free super-hedge. Galichon, Henry-Labordère and Touzi made the dual a control "
             "problem in continuous time."
+            " So any static portfolio of options that dominates the claim, plus any delta, costs at "
+            "least the price under every martingale model."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -166,6 +170,8 @@ class MOT(VoiceoverScene, ThreeDScene):
             "the claim without crossing. Its cost is the upper bound. <bookmark mark='c'/> And the "
             "purple dots, where the most expensive model puts its mass, sit exactly where it touches: "
             "complementary slackness, seen."
+            " Off the contact set the hedge is strictly above the claim: money left on the table in "
+            "states the extreme model never visits."
         ) as vo:
             self.play(Create(ax), FadeIn(names[0]), FadeIn(axn), run_time=1.5)
             self.play(Create(P), run_time=2.5)
@@ -219,6 +225,8 @@ class MOT(VoiceoverScene, ThreeDScene):
             "they must be. <bookmark mark='b'/> The forward-start call's band is exactly half the "
             "straddle's, and the squared change has a band of zero width. <bookmark mark='c'/> Hobson "
             "found the first bound of this kind in 1998, for the lookback."
+            f" The squared log return is different: its band, {cl['logsq']['lower']:.4f} to "
+            f"{cl['logsq']['upper']:.4f}, is open, because it is not a difference of moments."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(band_), FadeIn(bl), FadeIn(bu))
             vo.wait_until("a")
@@ -236,6 +244,8 @@ class MOT(VoiceoverScene, ThreeDScene):
             "Pause and predict. Why is the squared change a single number? <bookmark mark='a'/> For "
             "any martingale its value is the difference of the two second moments, and the vanillas "
             "fix both."
+            " So the square's band has width zero, and any dealer quoting a different price can be "
+            "arbitraged with vanillas alone."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

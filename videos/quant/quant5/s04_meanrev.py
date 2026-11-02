@@ -135,11 +135,15 @@ class MeanReversion(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
             "Cox, Ingersoll and Ross removed the negative rates in 1985: let the noise shrink with the square root of "
-            "the rate. <bookmark mark='a'/> This process can also be sampled exactly: its transition law is a scaled "
-            "non-central chi-square, and its long-run law is a Gamma. <bookmark mark='b'/> Does it touch zero? "
-            "William Feller's boundary test, from 1951: zero is unattainable exactly when two kappa theta over sigma "
-            f"squared is at least one. <bookmark mark='c'/> A regression puts it at {c['feller']:.2f}, and the paths "
-            "kiss the floor, as bill rates did in 2009 and 2020. But a regression is not the likelihood."
+            "the rate. Near zero the noise dies and the pull wins. <bookmark mark='a'/> This process can also be "
+            "sampled exactly. Its transition law is a scaled non-central chi-square, because the square-root process "
+            "is a squared Bessel process of dimension four kappa theta over sigma squared, run on a different clock "
+            "and scaled; its long-run law is a Gamma distribution. <bookmark mark='b'/> Does it touch zero? William "
+            "Feller's boundary test, from 1951, says zero is unattainable exactly when two kappa theta over sigma "
+            "squared is at least one: equivalently, when the Bessel dimension is at least two, the dimension in which "
+            "a Brownian motion never returns to the origin. <bookmark mark='c'/> A regression puts the ratio at "
+            f"{c['feller']:.2f}, and the paths kiss the floor, as American bill rates did in 2009 and 2020. But a "
+            "regression is not the likelihood."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(rows[0]))
             vo.wait_until("a")

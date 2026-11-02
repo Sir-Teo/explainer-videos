@@ -51,6 +51,8 @@ class Density(VoiceoverScene):
             "mark='a'/> Sell two at a hundred. <bookmark mark='b'/> Buy one at a hundred and ten: a "
             "tent, the butterfly, paying only near a hundred. <bookmark mark='c'/> Its price is the "
             "price of ending in that bin: a state price, and never below zero."
+            " Divided by h squared, the tent has area one: a little bar of a histogram, which is why "
+            "bars of different widths can be compared."
         ) as vo:
             self.play(FadeIn(g), Create(c1), FadeIn(side[0]))
             vo.wait_until("a")
@@ -110,6 +112,7 @@ class Density(VoiceoverScene):
             "again: the bars thin and their tops converge to a smooth curve. <bookmark mark='b'/> The "
             "risk-neutral density, Breeden and Litzenberger's limit of 1978. It integrates to "
             f"{b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward."
+            " No model was used: only call prices at many strikes."
         ) as vo:
             self.play(FadeIn(g), FadeIn(B), FadeIn(hr), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")
@@ -145,6 +148,9 @@ class Density(VoiceoverScene):
             "mark='c'/> And the butterfly over h squared is the second difference, so it converges to "
             "it. <bookmark mark='d'/> Static no-arbitrage is exactly: calls fall with the strike, no "
             "faster than the bond, and bend upward."
+            " A worked example: if the call spread between strikes ninety-nine and a hundred and one "
+            "costs one point one, the probability of finishing above a hundred is about one point one "
+            "over two, point five five, before discounting."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -242,6 +248,8 @@ class Density(VoiceoverScene):
             f"{verdict}"
             "Not free money: the trades come at different moments, inside a bid-ask spread several "
             "butterflies wide. So the House never differentiates raw prices; it fits first."
+            " Seven among forty sounds alarming, but neighbouring strikes trade minutes apart, and far "
+            "from the money the bid-ask spread is a large fraction of the price."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

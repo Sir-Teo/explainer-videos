@@ -71,7 +71,7 @@ simulations, labelled on screen.
   nothing at k = 2, half Kelly at k = 4 (closed form and 2,000 paths); Benter's warning, quoted. *Visual:* the
   bootstrap cloud of best fractions (90% between 116% and 302%) under the US parabola, full vs half Kelly on each
   draw. The registered split-sample test (198% chosen on 1926–1972 grew 13.4% a year afterwards). The LTCM crisis
-  file, and a volatility slider: Kelly leverage 100 → 11 as volatility triples; 28:1 becomes 2.5 × Kelly.
+  file ($129bn of assets on $4.7bn, 28:1, $1.3tn notional; −44% in August 1998; $3.6bn from fourteen firms), and a volatility slider: Kelly leverage 100 → 11 as volatility triples; 28:1 becomes 2.5 × Kelly.
 * **10. Samuelson's objection, and ergodicity.** Kelly ends richer than the γ = 3 Merton investor 64%/87% of the time
   at 10/100 years, yet its CE growth is −3.6% vs +3.9% a year; the CE growth rate derived. *Live:* Peters' coin, the
   histogram of 100,000 players flipping 60 times, with the mean running right and the median left; 82% lose money.
@@ -257,7 +257,9 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
   targeting on US data (one configuration each).
 * Compute: about an hour of CPU on one thread per process, almost all of it PPO (ten runs of 300 iterations × 1,024
   ten-year episodes, two 32-unit hidden layers). Everything is seeded.
-* Facts and their sources. LTCM: the President's Working Group report (April 1999). Haghani and Dewey: their paper
+* Facts and their sources. LTCM: U.S. Treasury testimony presenting the President's Working Group's figures (Gensler,
+  6 May 1999: $129 billion of assets on $4.7 billion of capital, 28 to 1, $1.3 trillion notional) and Federal Reserve
+  History (a 44% loss in August 1998; fourteen firms, $3.6 billion, 23 September). Haghani and Dewey: their paper
   (arXiv 1701.01427). Thorp: his own chapter, Thorp (2006), *Handbook of Asset and Liability Management* vol. 1, ch. 9,
   pp. 385–428: Shannon and the Kelly paper (MIT, 1960), 3 November 1969, "approximately 20% annually with a standard
   deviation of about 6%" through May 1998, about $80 billion of trades in some 1.25 million bets, and the 1994

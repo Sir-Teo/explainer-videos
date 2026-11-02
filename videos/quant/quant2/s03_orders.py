@@ -47,10 +47,14 @@ class Orders(VoiceoverScene):
         if more.width > 13.0:
             more.scale_to_fit_width(13.0)
         with self.voiceover(
-            "A market order trades now, at whatever price is there. <bookmark mark='a'/> A limit order names its price and "
-            "waits; a stop order waits for a trigger, then becomes a market order. <bookmark mark='b'/> Orders also say how "
-            "long they live: the day, until cancelled, immediate-or-cancel, fill-or-kill. Icebergs show part of their size, "
-            "hidden orders none, and queue behind displayed orders at their price: price first, then visibility, then time."
+            "Two kinds of order do almost all the work. A market order says: trade now, at whatever price is there. It is "
+            "certain to trade and uncertain about the price. <bookmark mark='a'/> A limit order says: buy at this price or "
+            "lower, sell at this price or higher. The price is certain; the trade is not, and it waits in the book. A stop "
+            "order waits for a trigger price, then becomes a market order: a way to cut a loss, and, when many trigger at "
+            "once, a way to deepen a crash. <bookmark mark='b'/> Orders also say how long they live: for the day, until "
+            "cancelled, immediate-or-cancel, or fill-or-kill. And some hide: an iceberg shows a slice of its size, a hidden "
+            "order shows none, and for that privilege it queues behind every displayed order at its price. The rule of the "
+            "book is price first, then visibility, then time."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -139,10 +143,13 @@ class Orders(VoiceoverScene):
                         r"this book is thin behind the best quote: impact is steeper than linear", font_size=21,
                         color=QC.IDEA).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
-            "What does impatience cost? Say each tick above the best ask holds d shares. A buy of Q shares eats the levels in "
-            "order. <bookmark mark='a'/> Its average price is an arithmetic series. <bookmark mark='b'/> Against the mid, "
-            "the cost is half the spread plus the walk; twice it is the effective spread. <bookmark mark='c'/> In the "
-            f"simulated book, four seeds, against the formula: {walk_note}"
+            f"What does impatience cost? Say every tick above the best ask holds d shares. A market buy of Q shares takes the "
+            f"best level first, then the next: price priority. It fills Q over d levels. <bookmark mark='a'/> The prices form "
+            f"an arithmetic series, so the average is the best ask plus half a tick for every extra level the order eats. "
+            f"<bookmark mark='b'/> Against the mid price the cost is half the spread plus that walk; twice the distance is the "
+            f"effective spread, the cost measure Parts thirty-six and thirty-seven use. Doubling the order more than doubles "
+            f"the walk. <bookmark mark='c'/> Now measure it in the simulated book, four seeds, against the uniform formula: "
+            f"{walk_note}"
         ) as vo:
             step(0)
             vo.wait_until("a")

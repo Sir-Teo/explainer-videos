@@ -79,10 +79,14 @@ class Samuelson(VoiceoverScene):
                     font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Four lines show why. With a constant fraction, log wealth is normal. <bookmark mark='a'/> The normal moment "
-            "generating function gives the certainty equivalent exactly. <bookmark mark='b'/> Its growth rate does not "
-            "depend on the horizon. <bookmark mark='c'/> It peaks at Merton's fraction for gamma, at every horizon: a long "
-            "horizon makes no one a Kelly investor unless gamma is one."
+            "The algebra behind the objection takes four lines. With a constant fraction, log wealth is normal, with a mean "
+            "and a variance that both grow in proportion to time. <bookmark mark='a'/> The certainty equivalent for power "
+            "utility is the expected wealth to the power one minus gamma, undone; the normal moment generating function "
+            "computes it exactly. <bookmark mark='b'/> Its growth rate does not depend on the horizon at all: the cash rate, "
+            "plus f times the excess return, minus gamma over two times f squared sigma squared. <bookmark mark='c'/> That "
+            "parabola peaks at Merton's fraction for gamma, at every horizon. A long horizon does not turn anyone into a "
+            "Kelly investor, unless gamma is one; Kelly's near-certain lead is bought with rare losses that a cautious "
+            "investor weighs more heavily than all the small gains."
         ) as vo:
             step(0)
             vo.wait_until("a")

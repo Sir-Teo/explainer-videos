@@ -99,15 +99,13 @@ class Hook(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "How did the market come to quote a surface? In 1973 Black and Scholes priced every option with one "
             "volatility, and for fourteen years the market more or less agreed. <bookmark mark='a'/> Then on the "
-            "nineteenth of October 1987 the S&P 500 fell by a fifth in a day, and from that week on, index puts far "
-            "below the money traded at much higher implied volatilities than calls: the skew was born, and it has never "
-            "left. <bookmark mark='b'/> In 1993 the Chicago Board Options Exchange began publishing a volatility index, "
-            "the VIX. In 1994 Bruno Dupire, Emanuel Derman and Iraj Kani, and Mark Rubinstein each showed how to build a "
-            "model that fits the whole smile. Five years later Goldman Sachs' quants explained how to trade variance "
-            "itself, and in 2003 the VIX was rebuilt as exactly that: a strip of options. <bookmark mark='c'/> Futures on "
-            "it followed, then fits that are guaranteed free of arbitrage, then a decade of selling volatility that ended "
-            "on the fifth of February 2018. <bookmark mark='d'/> And the newest chapters are being written now: Deribit's "
-            "Bitcoin volatility index in 2021, options that expire the same day, and options on Bitcoin funds."
+            "nineteenth of October 1987 the S&P 500 fell by a fifth in a day, and from then on index puts far below the "
+            "money traded at much higher implied volatilities than calls: the skew was born. <bookmark mark='b'/> In "
+            "1993 Cboe began publishing the VIX. In 1994 Dupire, Derman and Kani, and Rubinstein each showed how to fit "
+            "the whole smile with one model. Goldman's quants explained how to trade variance itself, and in 2003 the "
+            "VIX became exactly that: a strip of options. <bookmark mark='c'/> Then futures, arbitrage-free fits, and a "
+            "decade of selling volatility that ended on the fifth of February 2018. <bookmark mark='d'/> And the newest "
+            "chapters are Bitcoin's: Deribit's volatility index, same-day options, options on Bitcoin funds."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks))
             self.play(FadeIn(dots[0]), FadeIn(labels[0]))
@@ -174,12 +172,10 @@ class Hook(VoiceoverScene, ThreeDScene):
             r"Learning surfaces: an autoencoder and an arbitrage-free network; who builds surfaces; the frontier",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan. First, reading the smile as a probability distribution, and how traders quote it. Then how "
-            "surfaces move from day to day, and which shapes are impossible. Then fitting: SVI and SSVI, Dupire's local "
-            "volatility, and a theorem that ties local volatility to every other model. Then volatility as an asset: "
-            "variance swaps replicated on real Bitcoin, the VIX rebuilt, and the premium the market pays for "
-            "variance. Then the products that blew up in 2018, and the dealers whose hedging moves markets every "
-            "afternoon. And finally, networks that learn surfaces, the firms that build them, and the frontier."
+            "The plan. Reading the smile as a distribution; how surfaces move, and which shapes are impossible. "
+            "Fitting: SVI, SSVI and Dupire's local volatility. Volatility as an asset: variance swaps on real Bitcoin, "
+            "the VIX rebuilt, and the premium the market pays for variance. The products that blew up in 2018, and "
+            "dealer hedging. And networks that learn surfaces, the firms that build them, and the frontier."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))

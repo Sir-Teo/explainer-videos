@@ -78,10 +78,9 @@ class Outro(VoiceoverScene):
             rows.scale_to_fit_height(6.6)
         with self.voiceover(
             "Part fourteen in twelve lines. The skew explodes as expiry nears, close to a power law, week after "
-            "week, with a bounded rival at the shortest end. The shape of the kernel decides the skew: one time "
-            "scale goes flat, all time scales make a power law, and Fukasawa showed a true power law forces "
-            "roughness. Bitcoin's volatility is rough in two eras, and the rough forecast explains why HAR works "
-            "without reliably beating it. Rough Bergomi fits the Surface with three numbers and the market's "
+            "week. The kernel's shape decides the skew, and a true power law forces roughness. Bitcoin's "
+            "volatility is rough in two eras, and the rough forecast explains why HAR works without reliably beating "
+            "it. Rough Bergomi fits the Surface with three numbers and the market's "
             "variance curve, simulated by a hybrid scheme that keeps the kernel's spike. Rough Heston keeps a "
             "characteristic function through a fractional Riccati equation, solved by Adams. Nearly unstable order "
             "flow looks rough from far away, and lifts make rough models Markovian. The estimator can be fooled, "

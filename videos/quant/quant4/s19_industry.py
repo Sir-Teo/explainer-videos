@@ -99,12 +99,15 @@ class Industry(VoiceoverScene):
                   rf"{ca['need_even']:,.0f} equal even-money bets".replace(",", "{,}"), font_size=19, color=GREY_B),
         ).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "How sure is the house? Azuma's inequality of 1967 bounds how far a martingale with bounded steps strays. "
-            "<bookmark mark='a'/> On even-money bets the house is behind after a hundred bets about "
-            f"{100 * rows[0]['exact']:.0f} percent of the time, after ten thousand {100 * r4['exact']:.2f} percent, "
-            "after a hundred thousand essentially never. <bookmark mark='b'/> Yet monthly hold swings by three "
-            f"points; luck alone would need a month of only about {ca['need_even']:,.0f} equal bets, so unequal bets "
-            "and high rollers drive it."
+            "How sure is the house? Its result is a martingale with a drift and bounded steps, and Kazuoki Azuma's "
+            "inequality of 1967 bounds the chance that such a martingale strays far from its drift. "
+            "<bookmark mark='a'/> For even-money bets on a single-zero wheel the house is behind after a hundred "
+            f"bets about {100 * rows[0]['exact']:.0f} percent of the time, after ten thousand bets "
+            f"{100 * r4['exact']:.2f} percent, and after a hundred thousand, essentially never. Azuma's bound is "
+            "looser than the exact answer, but it needs nothing except a cap on each bet. <bookmark mark='b'/> The "
+            "monthly hold still swings by three points. Spin-by-spin luck would explain that only if a whole month "
+            f"were about {ca['need_even']:,.0f} equal bets; real tables see far more, so the swing comes from unequal "
+            "bets, a few high rollers, and how often chips are re-bet."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[1]))
             vo.wait_until("a")

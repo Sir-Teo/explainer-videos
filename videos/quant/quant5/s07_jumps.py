@@ -167,11 +167,15 @@ class Jumps(VoiceoverScene):
                              r"\texttt{merton\_jumps}, its mean checked against $S_0 e^{\mu t}$", 5.6, 20, GREY_A)
         side.to_corner(DR, buff=0.6)
         with self.voiceover(
-            "Itô's lemma extends to jumps with one change. Between jumps the old lemma applies; at a jump, replace "
-            "the linear guess by the true change of f. <bookmark mark='a'/> Apply it to Merton's 1976 model, Brownian "
-            "motion plus log-normal jumps: to keep the expected return at mu, the drift must pay back the average "
-            "jump, lambda times k bar. <bookmark mark='b'/> These are its paths: diffusion most of the time, and "
-            "gaps. The next chapter looks for gaps in real prices."
+            "Itô's lemma extends to jumps with one honest change. Between jumps the path is continuous, so the old "
+            "lemma applies, with the quadratic variation of the continuous part. At a jump, the first-order term "
+            "guesses the change linearly, f prime times the jump; replace that guess by the true change of f. "
+            "<bookmark mark='a'/> For example, take f equal to e to the x: at a jump of size y the price is "
+            "multiplied by e to the y, not by one plus y. Apply this to Merton's 1976 model, Brownian motion plus a "
+            "compound Poisson process of log-normal jumps. To keep the expected return at mu, the drift must pay back "
+            "the average jump: lambda times k bar, where k bar is the mean of e to the y minus one. "
+            "<bookmark mark='b'/> These are its paths: diffusion most of the time, and gaps now and then. The next "
+            "chapter looks for such gaps in real prices, and shows what they do to a hedge."
         ) as vo:
             step(0)
             vo.wait_until("a")

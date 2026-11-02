@@ -61,15 +61,12 @@ class Dynamics(VoiceoverScene, ThreeDScene):
                           r"sticky strike. Where is ATM vol?", 4.6, 19, QC.HOUSE).next_to(ro, DOWN, buff=0.4)
         src = real_data(r"the Surface's 30-day smile (SSVI); local vol by Berestycki--Busca--Florent's average")
         with self.voiceover(
-            "Here is the Surface's thirty-day smile, drawn against fixed strikes. Now move the spot. "
-            "There are three classic answers to where the smile goes. <bookmark mark='a'/> Sticky strike: every strike "
-            "keeps its volatility, so the curve stays where it is, and the at-the-money point slides along it. "
-            "Sticky moneyness, or sticky delta: the whole smile travels with the spot, and at-the-money volatility "
-            "never changes. <bookmark mark='b'/> And local volatility, Chapter six's model, which moves the smile "
-            "the other way. Emanuel Derman called these the regimes of volatility, and argued in 1999 that markets "
-            "switch between them. Pause and predict: spot falls five percent, the skew costs four tenths of a "
-            "volatility point per percent of moneyness, and the smile is sticky in strike. Where is at-the-money "
-            "volatility? Two points higher: the new at-the-money strike sits five percent further down the skew."
+            "Here is the Surface's thirty-day smile, against fixed strikes. Move the spot: where does the smile go? "
+            "<bookmark mark='a'/> Sticky strike: every strike keeps its volatility, the curve stays put, and the "
+            "at-the-money point slides along it. Sticky moneyness, or sticky delta: the smile travels with the spot. "
+            "<bookmark mark='b'/> And local volatility, Chapter six's model, moves it the other way. Emanuel Derman "
+            "called these the regimes of volatility in 1999. Pause and predict: spot falls five percent, the skew is "
+            "four tenths of a point per percent, sticky strike. At-the-money volatility? Two points higher."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg))
             self.add(spot, curves["strike"], dots["strike"])
@@ -112,16 +109,13 @@ class Dynamics(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.7, edge=6.9)
         rr, bf = 100 * d["rr25"], 100 * d["bf25"]
         with self.voiceover(
-            "Desks quote smiles by delta, not strike. A twenty-five-delta call solves N of d one equals a quarter, "
-            "which puts its strike about two thirds of a standard deviation above the forward. <bookmark mark='a'/> "
-            "The risk reversal, the call's volatility minus the put's, reads the slope; the butterfly reads the "
-            f"curvature. On the Surface at thirty days, the risk reversal is {rr:+.1f} points and the butterfly "
-            f"{bf:+.1f}. <bookmark mark='b'/> To measure which regime a market is in, Lorenzo Bergomi defines the "
-            "skew-stickiness ratio, R: how much at-the-money volatility moves per unit of log spot, divided by the "
-            "skew. <bookmark mark='c'/> Differentiate each rule: sticky strike gives R equals one; sticky moneyness "
-            "gives zero. <bookmark mark='d'/> And it matters for hedging: when R is not one, every fixed strike's "
-            "volatility moves with the spot, and the delta picks up a vega term. The smile's dynamics are part of "
-            "the hedge."
+            "Desks quote by delta. A twenty-five-delta call solves N of d one equals a quarter: about two thirds of a "
+            "standard deviation above the forward. <bookmark mark='a'/> The risk reversal reads the slope, the "
+            f"butterfly the curvature: on the Surface at thirty days, {rr:+.1f} and {bf:+.1f} points. "
+            "<bookmark mark='b'/> To measure the regime, Lorenzo Bergomi's skew-stickiness ratio R divides the move in "
+            "at-the-money volatility per unit of log spot by the skew. <bookmark mark='c'/> Sticky strike gives one; "
+            "sticky moneyness, zero. <bookmark mark='d'/> And when R is not one, every fixed strike's volatility moves "
+            "with the spot, so the delta picks up a vega term."
         ) as vo:
             step(0)
             vo.wait_until("a")

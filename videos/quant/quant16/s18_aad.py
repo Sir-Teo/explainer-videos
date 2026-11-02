@@ -213,9 +213,8 @@ class AAD(VoiceoverScene):
             f"{big['inputs']} inputs, AAD cost {aad[-1]:.1f} prices on this machine and bumping {bump[-1]:.0f}. "
             "<bookmark mark='b'/> Wall-clock time on a shared machine is noisy, so the dashed lines count operations "
             "instead: the backward sweep does about as much arithmetic as the forward pass, whatever the number of "
-            "inputs. <bookmark mark='c'/> The price of all this is memory: the tape remembers every intermediate. Long "
-            "simulations store only checkpoints and recompute between them, the subject of a whole chapter of "
-            "Antoine Savine's textbook."
+            "inputs. <bookmark mark='c'/> The price is memory: the tape remembers every intermediate, so long "
+            "simulations store checkpoints and recompute between them."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

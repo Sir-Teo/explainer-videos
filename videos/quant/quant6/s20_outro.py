@@ -161,8 +161,9 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "Seven problems, from the cost of overlap to the within-between decomposition and why the iid bootstrap "
-            "forgets dependence; solutions, in English and Chinese, in the notes."
+            "And seven problems: the cost of overlap, Stambaugh's bias derived, the Sharpe ratio's standard error, "
+            "Holm against Bonferroni, the James-Stein estimator, the within and between decomposition of chapter four, "
+            "and why the iid bootstrap forgets dependence. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)

@@ -109,11 +109,14 @@ class Futures(VoiceoverScene, ThreeDScene):
                      "index, this spot price is in USDT on one exchange." if off else
                      "In the last hour the two agree.")
         with self.voiceover(
-            "Now watch a real future converge: Bitcoin in orange, the March 2021 future in blue, hour by hour from December, "
-            "its implied carry below. <bookmark mark='a'/> Bitcoin triples, and the future stays above it; the carry swings "
-            f"between fifteen and fifty percent a year, {100 * b['mean_ann']:.0f} on average. <bookmark mark='b'/> As expiry "
-            "nears the ribbons zip shut, because at expiry a future is the asset. "
-            f"{last_hour} That gap between spot and future is the basis."
+            "Now watch a real future converge. The orange line is Bitcoin; the blue line, the March 2021 future, hour by hour "
+            "from the first of December, with its implied carry below. <bookmark mark='a'/> Bitcoin triples. The future stays "
+            "above it the whole way, and the gap, measured as a yearly rate, swings between about fifteen and fifty percent: "
+            f"{100 * b['mean_ann']:.0f} percent on average, at most {100 * b['max_ann']:.0f}, whenever more than ten days "
+            "were left. That is the price of leverage in a bull market: longs who wanted the coin without the cash paid it. "
+            "<bookmark mark='b'/> As expiry nears the two ribbons zip shut, because at expiry a future is the asset. "
+            f"{last_hour} That gap between spot and future is the basis, and its convergence is what a hedger, or a carry "
+            "trader, is betting on."
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(leg), FadeIn(src))
             self.add(ls, lf, la, cnt, gap)
@@ -188,10 +191,13 @@ class Futures(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, cap, params)
         self.remove(hint, cap, params)
         with self.voiceover(
-            "Here is the whole problem as a landscape: hedge ratio across, correlation into the screen, leftover variance up. "
-            "<bookmark mark='a'/> At rho of point eight the slice is a parabola, and a ball rolls to h star, one point two "
-            "times rho. <bookmark mark='b'/> The valley floor runs diagonally, and its depth is one minus rho squared: the "
-            "effectiveness."
+            "Here is the whole hedging problem as a landscape. Across, the hedge ratio; into the screen, the correlation "
+            "between asset and future; up, the variance left over, as a share of the unhedged variance. "
+            "<bookmark mark='a'/> For any correlation the leftover variance is a parabola in h. Take rho equal to point "
+            "eight, the yellow slice, and let a ball roll down it: it settles at h star, one point two times rho. "
+            "<bookmark mark='b'/> The valley floor runs diagonally, and its depth is one minus rho squared. Near rho of one "
+            "the valley reaches zero, a perfect hedge; at rho of a half the best hedge still leaves three quarters of the "
+            "variance. The depth of the valley is the effectiveness."
         ) as vo:
             self.play(FadeIn(hint), FadeIn(params), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=2.5)

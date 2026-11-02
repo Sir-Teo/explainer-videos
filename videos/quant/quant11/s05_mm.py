@@ -98,7 +98,7 @@ class MarketMaker(VoiceoverScene):
             "a sell. Every trade is evidence: a buy pushes its belief up, a sell pushes it down. "
             "<bookmark mark='b'/> Trade by trade the belief climbs toward the truth, the quotes rise with it, and the "
             "spread narrows: once the market maker knows the value, there is nothing left to fear, and no spread. "
-            "The spread is the price of not knowing who you are trading with."
+            "The spread is the price of not knowing who is on the other side."
         ) as vo:
             self.play(FadeIn(gp), FadeIn(bl), FadeIn(src), FadeIn(leg))
             self.add(bel)
@@ -130,12 +130,10 @@ class MarketMaker(VoiceoverScene):
         with self.voiceover(
             "The algebra of it. The ask is the expected value given a buy, by Bayes' rule: buys come from all the "
             "informed traders when the value is high, and from half of the others either way. "
-            "<bookmark mark='a'/> At even odds this simplifies to a line worth remembering: the spread is the share "
-            "of informed traders times the uncertainty about the value. <bookmark mark='b'/> To measure it on real "
+            "<bookmark mark='a'/> At even odds: the spread is the informed share times the uncertainty. <bookmark mark='b'/> To measure it on real "
             "trades, split it. The maker's edge is what it charged against fair value at the moment of the trade. "
             "The markout is what is left some time later, once the option is marked again and the delta hedge is "
-            "counted. <bookmark mark='c'/> The difference is adverse selection: the part of the spread that the "
-            "informed took back."
+            "counted. <bookmark mark='c'/> The difference is adverse selection."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -172,7 +170,7 @@ class MarketMaker(VoiceoverScene):
         with self.voiceover(
             "Now real flow. Every Bitcoin option trade on Deribit during one Wednesday morning, falling into place on "
             "a plane of strike against expiry: gold when the taker bought, blue when the taker sold, larger for larger "
-            "trades. Most of the activity is short-dated and near the money. <bookmark mark='a'/> Over "
+            "trades. <bookmark mark='a'/> Over "
             f"{fl['days']} Wednesdays of 2024 and 2025 that is {fl['n']:,} trades. By vega, takers bought and sold "
             "out-of-the-money calls in about equal measure, and the same for puts: the market maker's book is not "
             "one-sided."
@@ -226,7 +224,8 @@ class MarketMaker(VoiceoverScene):
             "mark, with the delta hedge counted, in volatility points. <bookmark mark='a'/> Run on one day, then on "
             f"all of them. Against Deribit's own mark, the maker's average edge at the trade is {c[0]:.2f} volatility "
             f"points. <bookmark mark='b'/> Five minutes later, {c[1]:.2f}; half an hour, {c[2]:.2f}; an hour, "
-            f"{c[3]:.2f}. {ksay} The largest trades pay a wider edge, and the market maker is right to charge it. "
+            f"{c[3]:.2f}. {ksay} The largest trades pay a wider edge, {cb[0]:.2f}, and more of it goes back: an hour "
+            f"later {cb[3]:.2f}. The market maker is right to charge them more. "
             "<bookmark mark='c'/> So, pause and predict: your quote is hit, and the market moves against you. Too "
             "narrow, or too wide? Narrow, if it happens every time: that is adverse selection, priced too cheaply."
         ) as vo:

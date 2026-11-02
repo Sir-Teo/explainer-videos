@@ -88,10 +88,11 @@ class MFG(VoiceoverScene):
 
         cur = fr(0)
         with self.voiceover(
-            "How does a crowd find it? Fictitious play. Left, a trader's plan, solved backwards; right, the crowd's selling "
-            "rate, rolled forwards. <bookmark mark='a'/> Against a passive crowd the best plan is a straight line; let the "
-            "crowd adopt it and respond again, mixing half in each round. The curves overshoot, then settle onto the grey "
-            "equilibrium."
+            "How does a crowd find that equilibrium? One answer is fictitious play. On the left, a trader's plan, solved "
+            "backwards from the deadline; on the right, the crowd's selling rate, rolled forwards. Start by assuming the crowd "
+            "does nothing. <bookmark mark='a'/> The best response to a passive crowd is a straight line. Then let the crowd "
+            "adopt that plan, and respond again; each round mixes half of the new crowd into the old. The curves overshoot, "
+            "then settle, round by round, onto the grey equilibrium, where the plan produces exactly the crowd it assumed."
         ) as vo:
             self.play(FadeIn(g), FadeIn(g2), GrowArrow(arr1), FadeIn(a1), GrowArrow(arr2), FadeIn(a2), FadeIn(closed),
                       FadeIn(closed_m))
@@ -173,11 +174,14 @@ class MFG(VoiceoverScene):
                              r"(2019): competition on relative performance makes managers take more risk", 12.6, 18,
                              GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Pause and predict: nine other funds are selling your stock this week. Sell faster or slower? "
-            "<bookmark mark='a'/> Faster: the line bends more with every fund added. <bookmark mark='b'/> Five hundred funds "
-            "with different blocks, each answering the same crowd: the whole distribution races toward zero early. "
-            "<bookmark mark='c'/> Crowded trades in mathematics: Cardaliaguet and Lehalle in 2018; Carlin, Lobo and "
-            "Viswanathan's predatory trading; and Lacker and Zariphopoulou on managers judged against each other."
+            "Pause and predict: you know nine other funds are selling the same stock this week. Do you sell faster or slower "
+            "than you would alone? <bookmark mark='a'/> Faster. Alone, the straight line; with two funds the curve bends; "
+            "with ten, more; in the mean-field limit the block goes in a rush. <bookmark mark='b'/> On the right, five hundred "
+            "funds with different block sizes, each responding to the same crowd: the whole distribution of inventories runs "
+            "toward zero early, and every fund pays for the others' haste. <bookmark mark='c'/> This is the mathematics of "
+            "crowded trades. Pierre Cardaliaguet and Charles-Albert Lehalle modelled crowding this way in 2018; Carlin, Lobo "
+            "and Viswanathan studied predatory trading among a few; and Lacker and Zariphopoulou showed that funds judged "
+            "against each other take more risk. Parts thirty-six and thirty-seven return to it."
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")

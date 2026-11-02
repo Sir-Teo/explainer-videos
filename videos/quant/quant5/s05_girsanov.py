@@ -109,14 +109,18 @@ class Girsanov(VoiceoverScene):
                           font_size=19).to_corner(DR, buff=0.3)
         with self.voiceover(
             "The proof starts from Part four's coin. On a grid, the likelihood ratio of drifting against driftless "
-            "increments is a ratio of Gaussian densities; completing the square gives an exponential. "
-            "<bookmark mark='a'/> In the limit that is Z, which by the lemma solves d Z equals theta Z d W: a "
-            "stochastic exponential. Cameron and Martin had it in 1944 for deterministic shifts. <bookmark mark='b'/> "
-            "Girsanov's step: subtract the drift from W and multiply by Z. By the product rule, the two drifts cancel "
-            "exactly. <bookmark mark='c'/> So W tilde is a martingale under Q, by Bayes's rule; its quadratic "
-            "variation is still t; and by Lévy's characterization it is a Brownian motion. <bookmark mark='d'/> One "
-            "condition: Z must have mean one. Novikov's condition guarantees it; without it, Q may not even be a "
-            "probability."
+            "increments is a product of ratios of Gaussian densities; completing the square gives the exponential of "
+            "theta times the increments minus a half theta squared times the steps. <bookmark mark='a'/> In the limit "
+            "that is Z, which by the lemma solves d Z equals theta Z d W: a stochastic exponential, a martingale with "
+            "mean one. Cameron and Martin had it in 1944 for deterministic shifts. <bookmark mark='b'/> Girsanov's "
+            "step: subtract the drift from W, giving W tilde, and multiply by Z. By the product rule, the minus theta "
+            "Z d t from W tilde cancels the plus theta Z d t from the covariation exactly. <bookmark mark='c'/> So Z "
+            "times W tilde is a martingale under P. Bayes's rule turns that into a statement under Q: the "
+            "Q-expectation of a later value, given the past, is the P-expectation of Z times that value, divided by Z "
+            "now. So W tilde is a martingale under Q; its quadratic variation is still t; and by Lévy's "
+            "characterization it is a Brownian motion. <bookmark mark='d'/> One condition: Z must have mean one. "
+            "Novikov's condition, a finite exponential moment of the integrated theta squared, guarantees it. Without "
+            "it, Z can be a strict supermartingale and Q is not a probability at all."
         ) as vo:
             step(0)
             vo.wait_until("a")

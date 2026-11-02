@@ -83,6 +83,8 @@ class Incomplete(VoiceoverScene):
             "interval, one side has an arbitrage. <bookmark mark='c'/> On the right, the same problem "
             "in the plane of bond and shares: each state a half-plane, the cost a sliding line that "
             f"stops at one vertex: borrow {abs(B):.2f}, hold {D:.3f} of a share."
+            " The lid's slope, five ninths of a share, is the super-hedger's delta; its intercept is "
+            "the loan."
         ) as vo:
             self.play(FadeIn(g), FadeIn(pts))
             vo.wait_until("a")
@@ -131,6 +133,8 @@ class Incomplete(VoiceoverScene):
             "mark='c'/> The lower bound is the other end, zero, and strictly positive measures never "
             "reach the ends: the interval is open. <bookmark mark='d'/> Harrison and Pliska's second "
             "theorem, of 1981: a market is complete exactly when the martingale measure is unique."
+            " With two states, the segment of measures shrinks to a single point, and the interval to "
+            "a single price: that is chapter six."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -161,6 +165,8 @@ class Incomplete(VoiceoverScene):
             "The teaching simplex solves the seller's problem too, free variables split in two, a "
             f"surplus per state. <bookmark mark='a'/> {len(v)} pivots to the vertex, cost "
             f"{s['upper']:.4f}; HiGHS agrees to every digit."
+            " The dual variables of the last tableau are the extreme measure: five ninths, zero, four "
+            "ninths."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -197,6 +203,8 @@ class Incomplete(VoiceoverScene):
             "states. <bookmark mark='a'/> Two states: a point. Three or more: the same interval every "
             "time, since only the extremes bind. <bookmark mark='b'/> A model picks one price inside; "
             "adding traded assets, not states, closes the gap."
+            f" Black and Scholes at twenty percent volatility gives {inc['bs']:.3f}: one choice among "
+            "infinitely many inside."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(xl), FadeIn(side[0]))
             vo.wait_until("a")

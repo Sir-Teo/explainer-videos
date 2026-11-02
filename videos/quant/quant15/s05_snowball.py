@@ -15,7 +15,6 @@ class Snowball(VoiceoverScene):
         self.lab(o)
         self.outcomes(o)
         self.linear(o)
-        self.coupon(s)
         self.carry(load("coupon_q"))
 
     def card(self):
@@ -58,47 +57,6 @@ class Snowball(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("c")
             self.play(FadeIn(eq), FadeIn(note_))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def coupon(self, s):
-        v = np.asarray(s["vols"])
-        c = np.asarray(s["coupons"])
-        g = axes([0.10, 0.34], [0, 0.30], x_length=6.4, y_length=4.2, xlabel=r"volatility of the index",
-                 ylabel=r"fair coupon, a year", xticks=[0.12, 0.16, 0.20, 0.24, 0.28, 0.32], yticks=[0, 0.1, 0.2, 0.3],
-                 xfmt=lambda u: f"{100 * u:.0f}\\%", yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        line = curve(ax, v, c, OPT, stroke_width=3)
-        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=OPT) for a, b in zip(v, c)])
-        mk = Dot(ax.c2p(s["sigma"], s["coupon"]), radius=0.1, color=IV)
-        mkl = label(rf"CSI 500, 2021--2023: {100 * s['sigma']:.0f}\% $\Rightarrow$ {100 * s['coupon']:.1f}\%", font_size=18,
-                    color=IV).next_to(mk, RIGHT, buff=0.15)
-        side = VGroup(
-            wrapped_label(r"the coupon that makes the note worth exactly its price, by Monte Carlo under the risk-neutral "
-                          r"measure (Part 4), rates 2\%", 4.4, 19, GREY_A),
-            wrapped_label(r"the buyer is selling volatility: the more the index swings, the likelier the knock-in, the "
-                          r"higher the fair coupon. A double-digit coupon is not a gift; it is the price of a crash",
-                          4.4, 19, WHITE),
-            wrapped_label(r"issuers sell below fair value and keep the difference: Henderson and Pearson (2011) found US "
-                          r"retail notes priced about 8\% above their fair value; C\'el\'erier and Vall\'ee (2017) found "
-                          r"European issuers raising headline rates through complexity", 4.4, 18, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
-        src = illustration(r"24 months; knock-out 103\%, knock-in 75\%; 20{,}000 paths per point")
-        with self.voiceover(
-            "What coupon is fair? Price the note by simulation and solve for the coupon that makes it worth exactly "
-            "what the buyer pays. <bookmark mark='a'/> It rises steeply with the index's volatility. At the CSI "
-            f"500's volatility over 2021 to 2023, about {100 * s['sigma']:.0f} percent, the fair coupon is "
-            f"{100 * s['coupon']:.1f} percent a year. The buyer is selling volatility, and a double-digit coupon is "
-            "the price of a crash, not a gift. <bookmark mark='b'/> And issuers do not sell at fair value. Brian "
-            "Henderson and Neil Pearson found US retail notes priced about eight percent above theirs; Claire "
-            "Célérier and Boris Vallée found European issuers raising headline rates by making products more complex."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
-            vo.wait_until("a")
-            self.play(Create(line), FadeIn(dots), FadeIn(mk), FadeIn(mkl), FadeIn(side[1]), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()
 

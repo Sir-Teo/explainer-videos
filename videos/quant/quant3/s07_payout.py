@@ -59,9 +59,13 @@ class Payout(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.55)
         foot = note(r"operations earn 90 a year; the cash earned 2\%", font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "In numbers: operations of nine hundred, cash of a hundred, a hundred shares at ten. <bookmark mark='a'/> A dividend of "
-            "one: shares fall to nine, each owner holds one in cash: still ten. <bookmark mark='b'/> A buyback of ten shares at ten: "
-            "still ten. <bookmark mark='c'/> But earnings per share rise from ninety-two cents to a dollar with the price unchanged."
+            "In numbers. A firm owns operations worth nine hundred and a hundred in cash, and has a hundred shares, worth ten each. "
+            "<bookmark mark='a'/> It pays a dividend of one a share. The cash leaves the firm, the shares fall to nine, and each "
+            "owner holds nine in stock and one in cash: still ten. <bookmark mark='b'/> Or it buys back ten shares at ten. The "
+            "sellers have their cash, and the ninety remaining shares share the nine hundred of operations: still ten each. "
+            "<bookmark mark='c'/> But watch the number that headlines report. The operations earn ninety a year and the cash earned "
+            "two. Earnings per share were ninety-two cents, and after the buyback they are a dollar: nine percent higher, with the "
+            "price unchanged."
         ) as vo:
             self.play(FadeIn(a))
             vo.wait_until("a")
@@ -92,9 +96,11 @@ class Payout(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Shiller's data: next year's dividends over January's price")
         with self.voiceover(
-            "Real payout did change. For a century, American firms paid about five percent of their value a year in dividends. "
-            "<bookmark mark='a'/> In 1982 Rule 10b-18 gave buybacks a safe harbour, and the dividend yield fell. "
-            "<bookmark mark='b'/> A dividend-based valuation must add buybacks back."
+            "Real-world payout did change. For a century, American firms paid out about five percent of their value each year in "
+            "dividends. <bookmark mark='a'/> In November 1982 the SEC adopted Rule 10b-18, a safe harbour that protected companies "
+            "buying back their own shares from charges of manipulating the price. Buybacks grew to rival dividends, and the dividend "
+            "yield fell. <bookmark mark='b'/> A dividend yield that ignores buybacks makes the market look dearer than it is, and a "
+            "forecasting model fitted to dividends breaks in 1982."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2.5)
             vo.wait_until("a")
@@ -216,10 +222,13 @@ class Payout(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's net-issuance sorts (value-weighted); Chen--Zimmermann long-shorts")
         with self.voiceover(
-            "Irrelevance is about mechanics; the decision still carries information. French sorts stocks on net issuance. "
-            f"<bookmark mark='a'/> Since 1963 repurchasers returned {100 * ann['< 0']:.1f} percent a year, the heaviest issuers "
-            f"{100 * ann['Hi 10']:.1f}. <bookmark mark='b'/> The published long-shorts, net payout yield and share issuance, earned "
-            "these returns before and after publication. Managers sell shares when dear and buy when cheap."
+            "Irrelevance is a statement about mechanics. In the data, the choice to issue or to buy back still says something. "
+            "Kenneth French sorts stocks every year on how many shares they issued. <bookmark mark='a'/> Since 1963 the firms that "
+            f"bought back shares returned {100 * ann['< 0']:.1f} percent a year; the tenth that issued the most returned "
+            f"{100 * ann['Hi 10']:.1f}. <bookmark mark='b'/> The published long-short versions, Boudoukh and coauthors' net payout "
+            "yield and Pontiff and Woodgate's share issuance, earned these returns a month in their papers' samples and these after "
+            "publication. Managers seem to sell shares when they think them dear and buy when they think them cheap. The payout does "
+            "not create value; the information in the decision does."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(xl))
             self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bars], lag_ratio=0.1),

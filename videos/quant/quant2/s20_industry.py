@@ -173,11 +173,14 @@ class Industry(VoiceoverScene):
         q = desk_question(r"Make me a market on the number of trading days in a US year.", width=5.0, font_size=19)
         q.to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Where do quants fit? By holding period: high-frequency market makers at microseconds, options market makers, "
-            "statistical arbitrage over days, trend followers and systematic equity over months, multi-manager platforms "
-            "across all of it, and bank desks pricing for clients. <bookmark mark='a'/> The jobs: researcher, trader, "
-            "developer, risk quant, desk quant, structurer. Their interviews open with questions like: make me a market on "
-            "the number of trading days in a year."
+            "Where do quants fit in this machine? Place the firms by how long they hold a position and what they trade. At "
+            "microseconds, the high-frequency market makers and wholesalers. Options market makers a little slower. "
+            "Statistical arbitrage over minutes to days; trend followers and systematic equity over weeks to months; the "
+            "multi-manager platforms across all of it; and the banks' desks pricing and hedging for clients. Each has its parts "
+            "later in the series. <bookmark mark='a'/> And the jobs: the researcher who finds and tests ideas, the trader who "
+            "runs them and decides when to stop, the developer who builds the systems, the risk quant who asks what can go "
+            "wrong, the desk quant who prices and hedges for a bank, and the structurer who designs products. Their interviews "
+            "open with questions like this one: make me a market on the number of trading days in a year."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ylab), LaggedStart(*[FadeIn(b) for b in blobs], lag_ratio=0.4, run_time=6))
             vo.wait_until("a")

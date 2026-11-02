@@ -48,10 +48,12 @@ class Margin(VoiceoverScene, ThreeDScene):
                              r"its net risk, not leg by leg; how the number is set is the next chapter", 11.0, 22, GREY_A)
         foot.to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "A future costs nothing to enter, but the exchange wants collateral: initial margin, the size over the leverage "
-            "allowed. <bookmark mark='a'/> Then gains and losses are paid every day, on crypto exchanges continuously. "
-            "<bookmark mark='b'/> Below the maintenance margin comes a margin call, or, on most crypto exchanges, "
-            "liquidation on the spot. <bookmark mark='c'/> Hedged books get portfolio margin, on their net risk."
+            "A future or a perpetual swap costs nothing to enter, but the exchange wants collateral. The initial margin: the "
+            "position's size divided by the leverage allowed. <bookmark mark='a'/> Then the position is marked to market: "
+            "every day, and on crypto exchanges continuously, gains are paid in and losses paid out. <bookmark mark='b'/> If "
+            "the account falls below the maintenance margin, the trader gets a margin call, or, on most crypto exchanges, is "
+            "liquidated on the spot. <bookmark mark='c'/> A hedged book gets a discount: under portfolio margin, a long future "
+            "and a short in a close cousin are margined on their net risk. How big the margin should be is the next chapter."
         ) as vo:
             self.play(FadeIn(d1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -187,10 +189,12 @@ class Margin(VoiceoverScene, ThreeDScene):
             MathTex(rf"\text{{average}}\ {100 * f['annualized']:.1f}\%\ \text{{a year}}", font_size=28, color=BTC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(d, DOWN, buff=0.4).align_to(d, LEFT)
         with self.voiceover(
-            "The House's margin account is that loop: pay the funding, add the gain or loss, check the line. "
-            "<bookmark mark='a'/> On March 2020 it closes the three accounts at those hours. And funding is real money: "
-            f"through 2020 perpetual longs paid shorts about {100 * f['annualized']:.0f} percent a year, chapter two's carry "
-            "again."
+            "The House's margin account is that loop: each hour, pay the funding, add the gain or loss, and check the "
+            "maintenance line; the first hour below it, close the account at that price. <bookmark mark='a'/> Run on March "
+            "2020 it closes the three accounts at the hours you just saw, and reports what's left. Funding is real money too: "
+            "a perpetual never expires, so every eight hours longs pay shorts when it trades above spot. Through 2020 longs "
+            f"paid in {100 * f['share_positive']:.0f} percent of settlements, about {100 * f['annualized']:.0f} percent a year, "
+            "the same carry the futures basis charged in chapter two."
         ) as vo:
             self.play(FadeIn(card), FadeIn(d))
             vo.wait_until("a")

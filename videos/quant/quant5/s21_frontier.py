@@ -115,12 +115,15 @@ class Frontier(VoiceoverScene):
                         r"under growth conditions (Chevyrev and Lyons 2016).", width=8.4, font_size=20)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Then the honest test, on 2020, which the model never saw: the signature distance, the fat tails, and the "
-            "day-to-day correlation of absolute returns, against geometric Brownian motion and a bootstrap of past "
-            f"days, at equal data. <bookmark mark='a'/> {verdict} A small generator trained in minutes is not yet a "
-            "market. <bookmark mark='b'/> A pause: if a generator matches the expected signature to depth four, does "
-            "it match the law of a window's largest move? Not necessarily: the expected signature pins down the law "
-            "only with all its levels."
+            "Then the honest test, on 2020, which the model never saw. Three numbers: the signature distance to "
+            "2020's windows; the excess kurtosis of daily returns, the fat tails; and the correlation of absolute "
+            "returns from one day to the next, the signature of volatility clustering. Two baselines at equal data: "
+            "geometric Brownian motion fitted to the same two years, and a bootstrap that redraws past days at "
+            f"random, which keeps the tails but destroys any clustering. <bookmark mark='a'/> {verdict} A small "
+            "generator trained in minutes is not yet a market; the papers that follow train much larger ones. "
+            "<bookmark mark='b'/> A pause: if a generator matches the expected signature up to depth four, does it "
+            "match the distribution of the largest move in a window? Not necessarily: the expected signature pins "
+            "down the law only with all its levels, and under growth conditions, as Chevyrev and Lyons showed."
         ) as vo:
             self.play(FadeIn(VGroup(*cells[:4])), FadeIn(VGroup(*cells[4:8])))
             vo.wait_until("a")
@@ -156,13 +159,17 @@ class Frontier(VoiceoverScene):
             rows.scale_to_fit_height(6.6)
         rows.to_edge(LEFT, buff=0.5)
         with self.voiceover(
-            "Where the research is. Issa, Horvath, Lemercier and Salvi train neural SDEs with signature-kernel "
-            "scores, our loss's richer cousin. Cuchiero and coauthors write option prices as linear functions of a "
-            "signature and calibrate to the S and P and the VIX at once. Walker and coauthors put log-signatures in "
-            "sequence models. <bookmark mark='a'/> Cont and Das, and Guyon and Lekeufack, continue the roughness "
-            "debate, and two open books cover signatures in finance. <bookmark mark='b'/> And in 2025 Degenne and "
-            "coauthors formalized the construction of Brownian motion in the Lean theorem prover: chapter one, "
-            "checked by a computer."
+            "Where the research is. Issa, Horvath, Lemercier and Salvi train neural SDEs with scoring rules built on "
+            "the signature kernel, which compares all levels of the signature at once: our loss is its truncated, "
+            "linear cousin, and their method needs no adversary. Cuchiero and coauthors write option prices as linear "
+            "functions of the signature of a polynomial diffusion and calibrate to the S and P and the VIX at the "
+            "same time, a problem classical models struggle with. Walker and coauthors put log-signatures and their "
+            "Lie brackets inside sequence models. <bookmark mark='a'/> The roughness debate of chapter fifteen "
+            "continues, with Cont and Das on one side, and Guyon and Lekeufack's finding that index volatility is "
+            "mostly driven by past returns. Two open books cover signatures in finance. <bookmark mark='b'/> And in "
+            "2025 Degenne, Ledvinka, Marion and Pfaffelhuber formalized the construction of Brownian motion in the "
+            "Lean theorem prover: chapter one's theorem, checked by a computer, with stochastic integrals announced "
+            "as next."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.4))
             vo.wait_until("a")

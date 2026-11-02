@@ -140,3 +140,32 @@ def delta_hedge_on_moves(t, S, K, T, sigma, band, *, cp=1, position=1, cost=0.0)
     value = np.maximum(cp * (end - K), 0.0) if tau[-1] <= 0 else bs.price(end, K, tau[-1], sig, 0.0, 0.0, cp)
     pnl = cash + shares * end - cost * np.abs(shares) * end + w * value
     return {"pnl": pnl, "trades": trades}
+
+
+def replicate_put(returns, rf, floor, T, sigma, start=100.0, days=252) -> dict:
+    """Portfolio insurance by replication (Rubinstein and Leland 1981): hold the portfolio that copies "index + a put
+    struck at ``floor``", rebalanced once a day: the weight in the index is w = S (1 + Delta_put) / (S + P), the rest
+    in bills.  ``returns`` are the index's daily simple returns (one path, or one row per path), ``rf`` the bills'
+    daily simple returns (a number or one per day), ``T`` the insurance horizon in years, ``sigma`` the model's
+    volatility.  Returns the index level ``S``, the weight ``w`` used over each day, the insured portfolio's value
+    ``V`` (starting at ``start``), and the ``floor_value`` it was built to keep at the horizon (start x floor /
+    (S0 + P0))."""
+    ret = np.asarray(returns, float)
+    one = ret.ndim == 1
+    ret = np.atleast_2d(ret)
+    m, n = ret.shape
+    rf = np.broadcast_to(np.asarray(rf, float), (n,))
+    S = np.empty((m, n + 1))
+    V = np.empty((m, n + 1))
+    w = np.empty((m, n))
+    S[:, 0], V[:, 0] = start, start
+    p0 = float(bs.price(start, floor, T, sigma, rf[0] * days, 0.0, -1))
+    for i in range(n):
+        tau = max(T - i / days, 1e-6)
+        g = bs.greeks(S[:, i], floor, tau, sigma, rf[i] * days, 0.0, -1)
+        w[:, i] = np.clip(S[:, i] * (1 + g["delta"]) / (S[:, i] + g["price"]), 0.0, 1.0)
+        V[:, i + 1] = V[:, i] * (w[:, i] * (1 + ret[:, i]) + (1 - w[:, i]) * (1 + rf[i]))
+        S[:, i + 1] = S[:, i] * (1 + ret[:, i])
+    if one:
+        S, V, w = S[0], V[0], w[0]
+    return {"S": S, "w": w, "V": V, "floor_value": start * floor / (start + p0), "units": start / (start + p0)}

@@ -99,9 +99,8 @@ class Inventory(VoiceoverScene):
             "change in that value from one more unit of inventory. <bookmark mark='c'/> Olivier Guéant, "
             "Charles-Albert Lehalle and Joaquin Fernandez-Tapia solved it in closed form: long inventory moves both "
             "quotes down, in proportion to q. <bookmark mark='d'/> For options, q is vega, and Sasha Stoikov and "
-            "Mehmet Sağlam did exactly this in 2009; Bastien Baldacci, Philippe Bergault and Guéant reduced a book of "
-            "many options to a few risk factors. And because market makers cannot hedge perfectly, client demand "
-            "itself moves option prices, as Nicolae Gârleanu, Lasse Pedersen and Allen Poteshman showed. Pause and "
+            "Mehmet Sağlam did exactly this in 2009. And because market makers cannot hedge perfectly, client demand "
+            "itself moves option prices, as Gârleanu, Pedersen and Poteshman showed. Pause and "
             "predict: long twenty vega, raise your quotes or lower them? Lower: you want to sell."
         ) as vo:
             step(0)

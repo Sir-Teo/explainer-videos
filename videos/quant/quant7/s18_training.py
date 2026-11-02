@@ -17,6 +17,7 @@ class Training(VoiceoverScene):
         self.card()
         self.archs(t)
         self.replay(t, "LSTM", ALT)
+        self.overfit(t)
         self.seeds(t)
         self.harnet(t)
 
@@ -164,5 +165,35 @@ class Training(VoiceoverScene):
             rp.play(self, run_time=4)
             vo.wait_until("a")
             self.play(FadeIn(side))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def overfit(self, t):
+        tr, va = np.asarray(t["LSTM"]["train"][2], float), np.asarray(t["LSTM"]["val"][2], float)
+        be = int(t["LSTM"]["best_epoch"][2])
+        ep = np.arange(len(tr))
+        hi = float(max(tr.max(), va.max())) * 1.05
+        g = axes([0, len(tr)], [0, hi], x_length=8.0, y_length=4.0, xticks=[0, be, len(tr) - 1], yticks=[0, round(hi / 2, 2)],
+                 xlabel=r"epoch", ylabel=r"LSTM, seed 2: mean squared error on standardized log RV", font_size=16)
+        g.move_to(DOWN * 0.3)
+        lt = curve(g.ax, ep, tr, GREY_B, stroke_width=3)
+        lv = curve(g.ax, ep, va, ALT, stroke_width=3)
+        stop = DashedLine(g.ax.c2p(be, 0), g.ax.c2p(be, hi), color=YELLOW, stroke_width=3)
+        leg = legend([(GREY_B, r"training loss"), (ALT, r"validation loss (H2 2019)"), (YELLOW, r"best epoch, kept")],
+                     font_size=19).to_corner(UR, buff=0.5)
+        gap = float(va[-1] - va[be])
+        with self.voiceover(
+            "Why stop early? Here are both losses for one seed. The training loss keeps falling: given enough epochs "
+            "the network will memorise the noise in six hundred and seventy-five days. <bookmark mark='a'/> The "
+            f"validation loss, on days the network never trains on, bottoms out at epoch {be} and then drifts up by "
+            f"{gap:.3f} as it starts to fit noise. <bookmark mark='b'/> So the House keeps the weights from the best "
+            "validation epoch and stops thirty epochs later. Early stopping is a form of regularisation: the half-year "
+            "of validation data decides how complex the network is allowed to become, and the test year stays sealed."
+        ) as vo:
+            self.play(FadeIn(g), Create(lt), FadeIn(leg[0]), run_time=2)
+            vo.wait_until("a")
+            self.play(Create(lv), FadeIn(leg[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(stop), FadeIn(leg[2]))
         self.wait(0.3)
         self.clear_scene()

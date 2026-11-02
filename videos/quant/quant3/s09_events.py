@@ -199,8 +199,11 @@ class Events(VoiceoverScene):
                            r"closes in six months and cash earns 4\% a year. What chance of closing is priced in?",
                            width=8.4, font_size=21).next_to(card, DOWN, buff=0.3)
         with self.voiceover(
-            "The put is exercised on the whole book at once: in 2014 AbbVie walked away from Shire after new inversion rules, and "
-            "spreads widened together. <bookmark mark='a'/> The chapter's desk question is solved in the notes."
+            "And the put is exercised on the whole book at once. In 2014 AbbVie agreed to buy Shire for about fifty-four billion "
+            "dollars, partly to move its tax home out of the United States. In September the Treasury announced rules against such "
+            "inversions, and in October AbbVie walked away, paying a break fee of about one point six billion. Funds holding the "
+            "spread lost heavily, and spreads on other deals widened at the same time. <bookmark mark='a'/> The desk question from "
+            "the start of the chapter is in the notes, with its solution."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

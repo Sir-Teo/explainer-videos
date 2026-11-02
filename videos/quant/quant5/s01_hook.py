@@ -90,14 +90,16 @@ class Hook(VoiceoverScene):
         pc.to_corner(UL, buff=0.4)
         ans.next_to(pc, DOWN, buff=0.25).align_to(pc, LEFT)
         with self.voiceover(
-            "How we got here. In 1900 Louis Bachelier modelled the Paris bond market with what we now call Brownian "
-            "motion. Norbert Wiener built it as a measure on paths in 1923, and Kiyosi Itô learned to integrate "
-            "against it in 1944. <bookmark mark='a'/> Igor Girsanov showed in 1960 that a drift is only a change of "
-            "measure. Black, Scholes and Merton priced options with this calculus in 1973, Carr and Jarrow explained "
-            "this part's puzzle in 1990, and Terry Lyons pushed integration beyond Itô in 1998. <bookmark mark='b'/> "
-            "And in April 2020 oil settled below zero, and an exchange switched its option model back to Bachelier's. "
-            "<bookmark mark='c'/> One question to keep in mind: rebalance four thousand times a year instead of "
-            "thirteen, and does the loss shrink? <bookmark mark='d'/> It does not."
+            "How we got here. In 1900 Louis Bachelier, five years before Einstein, modelled the Paris bond market "
+            "with what we now call Brownian motion. Norbert Wiener built it as a measure on paths in 1923, and Kiyosi "
+            "Itô learned to integrate against it in 1944, in the middle of a war, in a paper of a few pages. "
+            "<bookmark mark='a'/> Igor Girsanov showed in 1960 that a drift is only a change of measure. Black, "
+            "Scholes and Merton priced options with this calculus in 1973, and Harrison and Pliska made martingales "
+            "the language of pricing in 1981. Carr and Jarrow explained this part's puzzle in 1990, Terry Lyons "
+            "pushed integration beyond Itô in 1998, and in 2018 volatility itself turned out to look rough. "
+            "<bookmark mark='b'/> And in April 2020 oil settled below zero, and an exchange switched its option model "
+            "back to Bachelier's. <bookmark mark='c'/> One question to keep in mind: rebalance four thousand times a "
+            "year instead of thirteen, and does the loss shrink? <bookmark mark='d'/> It does not."
         ) as vo:
             self.play(FadeIn(strip), run_time=2)
             vo.wait_until("a")

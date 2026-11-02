@@ -163,11 +163,15 @@ class Brownian(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Binance BTCUSDT one-minute candles, 2020; subsampled over up to 30 offsets")
         with self.voiceover(
-            "Try it on Bitcoin in 2020. <bookmark mark='a'/> Squared daily returns give a volatility of "
-            f"{100 * vol[-1]:.0f} percent; squared one-minute returns give {100 * vol[0]:.0f}. <bookmark mark='b'/> "
-            "The last line of the proof explains the rise: the bid-ask bounce is noise. Read backwards, the gap "
-            f"measures it: about {q['noise_bp']:.1f} basis points a tick. Practitioners sample every five minutes or "
-            "so, or subsample and average, and Part seven builds volatility forecasts on these sums."
+            "Try it on Bitcoin in 2020. If the price were a Brownian motion with constant volatility, the sum of "
+            "squared returns would give the same answer at every sampling interval. <bookmark mark='a'/> Squared "
+            f"daily returns give a volatility of {100 * vol[-1]:.0f} percent; squared one-minute returns give "
+            f"{100 * vol[0]:.0f}. <bookmark mark='b'/> The last line of the proof explains the rise: the bid-ask "
+            "bounce is noise, and its squares pile up as the sampling gets faster. Read backwards, the gap between "
+            f"the one-minute and the one-day estimates measures it: about {q['noise_bp']:.1f} basis points a tick. "
+            "Practitioners sample every five minutes or so, a compromise between noise and too few observations, or "
+            "they subsample: compute the sum from every starting offset and average, as Zhang, Mykland and "
+            "Aït-Sahalia proposed. Part seven builds volatility forecasts on these sums."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

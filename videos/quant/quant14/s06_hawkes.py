@@ -48,9 +48,8 @@ class Hawkes(VoiceoverScene):
             "events arrive, each with the same average rate of trading. When each trade triggers half a trade on "
             "average, activity is steady. <bookmark mark='a'/> At nine-tenths, it starts to cluster. "
             "<bookmark mark='b'/> At ninety-nine hundredths, the edge of instability, almost all activity is "
-            "triggered by other activity: long calms, sudden storms, clusters inside clusters. Fitted to order "
-            "flow, the branching ratio comes out close to one, because most orders are reactions to other orders: "
-            "splitting, hedging, market making."
+            "triggered by other activity: clusters inside clusters. Fitted to order flow, the branching ratio comes "
+            "out close to one: most orders react to other orders."
         ) as vo:
             self.play(FadeIn(panels), FadeIn(src), FadeIn(foot), FadeIn(lines))
             self.play(tr.animate.set_value(len(mid) - 1), run_time=max(vo.remaining(0.0) - 1, 5), rate_func=linear)
@@ -208,17 +207,16 @@ class Hawkes(VoiceoverScene):
         src = illustration(r"the House's \texttt{hawkes\_branching\_powerlaw}; the roughness estimator on log activity in "
                            r"bins of 200", corner=DL)
         with self.voiceover(
-            "Can we measure it? Simulate order flow by branching, with a power-law kernel, and run chapter three's "
-            "estimator on the log of activity, three seeds per branching ratio. <bookmark mark='a'/> At a ratio of "
+            "Can we measure it? Simulate order flow by branching and run chapter three's estimator on log activity, "
+            "three seeds per ratio. <bookmark mark='a'/> At a ratio of "
             f"one half, activity is not rough at all: H of {lo:.2f}, essentially noise. As the ratio approaches one, "
             f"roughness emerges: close to one the estimate reaches about {hi:.2f}. <bookmark mark='b'/> But the theory says "
             "more: H should equal the tail exponent minus a half. Change the tail, and the finite simulation does "
             "not follow; every tail reads about a tenth. The limit theorem needs the branching ratio to reach one "
             "and the horizon to grow together, and a finite sample shows the emergence of roughness, not its "
-            "exact value. <bookmark mark='c'/> Omar El Euch, Masaaki Fukasawa and Rosenbaum added the leverage "
-            "effect, forced by ruling out arbitrage at high frequency, and Paul Jusselin and Rosenbaum showed that "
-            "no-arbitrage implies both power-law market impact and rough volatility. Roughness, on this account, is "
-            "what reactive order flow looks like from a distance."
+            "exact value. <bookmark mark='c'/> Omar El Euch, Masaaki Fukasawa and Rosenbaum showed no-arbitrage also "
+            "forces the leverage effect, and Paul Jusselin and Rosenbaum tied rough volatility to power-law market "
+            "impact. Roughness, on this account, is reactive order flow seen from a distance."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

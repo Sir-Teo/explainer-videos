@@ -37,12 +37,10 @@ class Joint(VoiceoverScene):
                              r"the joint fit is the puzzle. Part 13 measures it on bitcoin; this chapter shows the attempted "
                              r"solutions", 11.0, 20, WHITE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Part thirteen ended on a puzzle. To fit the steep short-dated skew of S&P 500 options, a continuous "
-            "model needs a large vol of vol. <bookmark mark='a'/> But the VIX is a market in that very volatility, "
-            "and with so large a vol of vol, the model's VIX implied volatilities come out too high against the "
-            "market's. Julien Guyon put it sharply in 2020: fit one market, and you misprice the other. "
-            "<bookmark mark='b'/> This chapter shows two answers: a rough model with feedback from the price, and "
-            "an exact construction from optimal transport."
+            "Part thirteen measured a puzzle. To fit the steep short-dated S&P skew, a continuous model needs a large "
+            "vol of vol. <bookmark mark='a'/> With so large a vol of vol, its VIX implied volatilities come out too "
+            "high against the market's: Julien Guyon's point. <bookmark mark='b'/> Two answers follow: a rough model "
+            "with feedback, and an exact construction from optimal transport."
         ) as vo:
             self.play(FadeIn(left))
             vo.wait_until("a")
@@ -84,10 +82,9 @@ class Joint(VoiceoverScene):
             "variance is a parabola in Z: a times Z minus b squared, plus c. <bookmark mark='a'/> Pause and "
             "predict: a sharp rally. Does volatility rise or fall? <bookmark mark='b'/> Watch the yellow dot ride "
             "the parabola as the path unfolds. A fall drives Z down and volatility up the left arm. A big enough "
-            "rally drives Z past b and volatility up the right arm. Both directions can raise volatility, which "
-            "makes the vol of vol depend on the state, and that convexity is what lets the VIX smile slope "
-            "upward. Their calibration, with these six numbers, fitted S&P and VIX smiles together on the "
-            "nineteenth of May 2017."
+            "rally drives Z past b and volatility up the right arm. That convexity makes vol of vol depend on the "
+            "state, and lets the VIX smile slope upward. With these six numbers they fitted S&P and VIX smiles "
+            "together on the nineteenth of May 2017."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(par), Create(pc), FadeIn(ls), FadeIn(lv), FadeIn(dot), FadeIn(src))
             vo.wait_until("a")
@@ -164,10 +161,9 @@ class Joint(VoiceoverScene):
             "thirty days, conditionally: Part twelve's formula. <bookmark mark='b'/> By Jensen's inequality, the "
             "VIX future is at most the square root of a forward variance swap, which the S&P smiles fix: the two "
             "markets are tied together by convex order. <bookmark mark='c'/> Guyon's exact answer, published in "
-            "2024, is a dispersion-constrained martingale Schrödinger problem: among all martingale models that "
-            "match the S&P smiles at two dates and the VIX smile, choose the one closest, in relative entropy, to a "
-            "reference model. Its dual is solved by a Sinkhorn-like iteration, the algorithm of Part nine's "
-            "optimal transport."
+            "2024, is a dispersion-constrained martingale Schrödinger problem: among all martingale models matching "
+            "the S&P smiles at two dates and the VIX smile, the one closest in relative entropy to a reference "
+            "model, found by a Sinkhorn-like iteration, as in Part nine."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -226,9 +222,8 @@ class Joint(VoiceoverScene):
         with self.voiceover(
             "We can run the principle on our own data. Take the Surface's smiles at "
             f"{jb['T1'] * 365:.0f} and {jb['T2'] * 365:.0f} days. Among all martingales that match both, what are the "
-            "lowest and highest prices of a forward-start claim, the absolute log return between the two dates? "
-            "This is Part nine's House code: the Sinkhorn updates for the two marginals, and a few Newton steps for "
-            "the martingale condition. <bookmark mark='a'/> Run it, both ways. On the right, the constraint errors "
+            "lowest and highest prices of the absolute log return between the two dates? Part nine's House code "
+            "answers it. <bookmark mark='a'/> Run it, both ways. On the right, the constraint errors "
             "fall to ten to the minus nine; below, the interval of possible prices closes onto its final width. "
             f"<bookmark mark='b'/> Any model that fits both smiles must price the claim between {lo['value']:.3f} and "
             f"{up['value']:.3f}. Rough Bergomi says {jb['rbergomi']:.3f}: " + verdict + ". Guyon's construction adds "

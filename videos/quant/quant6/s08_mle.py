@@ -161,16 +161,17 @@ class MLE(VoiceoverScene, ThreeDScene):
         q = predict(r"Double the sample. What happens to the ellipse's area?").to_edge(DOWN, buff=0.2)
         ratio = sh[2] / sn[2]
         with self.voiceover(
-            "Look down on the summit. The curvature at the top gives the naive confidence region, in gold: a "
-            f"narrow ellipse, a standard error for nu of {sn[2]:.3f}. <bookmark mark='a'/> But is the model right? "
-            "Daily returns are not independent draws from one t distribution: volatility clusters, calm weeks and "
-            "violent weeks. The sandwich that only replaces the curvature with the scores' variance, treating days "
-            f"as independent, hardly moves: {ss[2]:.3f}. <bookmark mark='b'/> The scores of neighbouring days are "
-            "correlated, though, so the score's variance needs chapter two's long-run variance. With it, the "
-            f"standard error of nu is {sh[2]:.3f}, {ratio:.1f} times the naive one, the orange ellipse. The naive "
-            "standard error trusts a model the data reject. <bookmark mark='c'/> Pause and predict: double the "
-            "sample. What happens to the ellipse? Each axis shrinks by the square root of two, so its area halves. "
-            "Quadruple it, and both axes halve."
+            "Look down on the summit. The curvature at the top gives the naive confidence region, in gold: a narrow "
+            f"ellipse, a standard error for nu of {sn[2]:.3f}. <bookmark mark='a'/> But is the model right? Daily returns "
+            "are not independent draws from one t distribution: volatility clusters, calm weeks and violent weeks. The "
+            "sandwich that only replaces the curvature with the scores' variance, still treating days as independent, "
+            f"hardly moves: {ss[2]:.3f}. <bookmark mark='b'/> The scores of neighbouring days are correlated, though: a "
+            "violent day is followed by violent days, and each pushes nu the same way. So the score's variance needs "
+            "chapter two's long-run variance. With it, the standard error of nu is "
+            f"{sh[2]:.3f}, {ratio:.1f} times the naive one, the orange ellipse. The naive standard error trusts a model "
+            "the data reject; the estimate itself, a quasi-maximum-likelihood estimate, is still fine. "
+            "<bookmark mark='c'/> Pause and predict: double the sample. What happens to the ellipse? Each axis shrinks "
+            "by the square root of two, so its area halves. Quadruple it, and both axes halve."
         ) as vo:
             self.play(FadeIn(g), FadeIn(dot), Create(e_naive), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")

@@ -119,6 +119,19 @@
    },
    "trials": 1
   },
+  "earnings_forecaster_part3": {
+   "code_sha256": "8e0f715897615195393249e8317e4f1fba534649025575a5b6589bd6cfc1841b",
+   "params": {
+    "data": "simulated panel",
+    "models": [
+     "random walk",
+     "OLS",
+     "ridge on splines",
+     "MLP"
+    ]
+   },
+   "trials": 8
+  },
   "fomc_announcement_days": {
    "code_sha256": "2a997e8d7655ea9f1db30f6a411a47023705a64da71c185da3c04602d55e13f3",
    "params": {
@@ -164,6 +177,15 @@
     "horizons": "1..36"
    },
    "trials": 1
+  },
+  "osap_predictors_part3": {
+   "code_sha256": "a6f753f0a7b179ac75a6d27fe4b7bfa0ae94cb95f6757516d067174658f3f8d6",
+   "params": {
+    "predictors": 208,
+    "release": "2024.10",
+    "window": "to 2020-12"
+   },
+   "trials": 208
   },
   "shiller_oos_predictors": {
    "code_sha256": "eebb73156ed3044b21e2346f15abad4dbb460c09a11ab8f464d699174c6aa92a",
@@ -290,11 +312,23 @@
    "last": 20251201,
    "n": 60
   },
+  "kenfrench/sorts_NI": {
+   "digest": "1f4e082e52f6f362d58cee290605dd2d21d69ddcdc82683f687449612eedd97e",
+   "first": 20210101,
+   "last": 20231201,
+   "n": 36
+  },
   "kenfrench/sorts_OP": {
    "digest": "f18cae74d2314c17881787ff23ecdc94cdc91fd18773535eca400c44730a85b2",
    "first": 20210101,
    "last": 20251201,
    "n": 60
+  },
+  "osap/2024.10/PredictorLSretWide": {
+   "digest": "597af62ffb28d98baa65b01063b9c976ac82b3bc6254426b5936a5480ae82c2e",
+   "first": 20210101,
+   "last": 20231201,
+   "n": 36
   },
   "shiller/div_monthly": {
    "digest": "79b54c36e8e4bcb85a955e2d7b96ac16963b33f1db456d3c869cdf04850a2461",

@@ -13,11 +13,14 @@ class Crash(VoiceoverScene):
         self.card()
         self.file(m)
         self.book(b)
+        self.derive()
+        self.trades(b)
         self.debate()
 
     def card(self):
-        c = chapter_card(5, r"January 2024: the snowballs melt", r"What happens when a crowded barrier breaks?", part=PART)
-        with self.voiceover("Chapter five. January 2024: the snowballs melt."):
+        c = chapter_card(9, r"January 2024: the snowballs melt", r"What happens when a crowded barrier breaks?",
+                         lit=(2024,), part=PART)
+        with self.voiceover("Chapter nine. January 2024: the snowballs melt."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -25,24 +28,31 @@ class Crash(VoiceoverScene):
         f = m["fall_2024"]
         card = crisis_card(
             r"January -- February 2024", r"The snowball knock-ins",
-            r"China's small-cap indices fell through the knock-in levels of snowballs sold in 2021--2023. On 11 January "
-            r"Bloomberg reported about \$13 billion of snowballs near their loss triggers; UBS put the whole market at "
-            r"about \$50 billion. Brokers that had issued them unwound the index futures they held as hedges. In April, "
-            r"regulators told brokers to limit their snowball exposure.",
+            r"China's small-cap indices fell through the knock-in levels of snowballs sold in 2021--2023. Caixin, "
+            r"citing Securities Association of China data via Bloomberg, put onshore snowballs at about \$27 billion at "
+            r"the end of July 2023. On 11 January 2024 Bloomberg reported about \$13 billion near their loss triggers; "
+            r"UBS analysts put the market at about \$50 billion (Asia Financial, 23 January). On 22 January, Risk.net "
+            r"reported, the CSI 500 fell 4.7\% to a four-year low with up to a third of products at their knock-in. "
+            r"In April, regulators told the largest brokers to stop growing their exposure.",
             stats=[(rf"{100 * f['drop']:.0f}\%", r"CSI 500 (ETF), 29 Dec to 5 Feb"), (r"\$13\text{bn}", r"near knock-in, 11 Jan"),
-                   (r"\$50\text{bn}", r"UBS's estimate of the market")], width=11.6, font_size=24)
+                   (r"\$50\text{bn}", r"UBS's estimate of the market")], width=11.8, font_size=23)
         card.move_to(ORIGIN)
-        src = note(r"Bloomberg (11 January and 24 April 2024); Reuters via Asia Financial; Risk.net; Yahoo Finance (510500.SS)",
-                   font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
+        src = note(r"Caixin (27 Oct 2023); Bloomberg (11 Jan, 24 Apr 2024); Asia Financial (23 Jan 2024); Risk.net; "
+                   r"Yahoo Finance (510500.SS)", font_size=17, color=GREY_B).to_corner(DR, buff=0.2)
         with self.voiceover(
             "In January 2024 China's small-cap indices fell through the knock-in levels of the snowballs sold over "
-            f"the previous three years. The CSI 500 fell {100 * abs(f['drop']):.0f} percent in five weeks; the CSI 1000 "
-            "fell further. On the eleventh of January, Bloomberg reported about thirteen billion dollars of snowballs "
-            "close to their loss triggers; UBS estimated the whole market at around fifty billion. As notes knocked "
-            "in, the brokers that issued them unwound the index futures they held as hedges. In April, regulators "
-            "told brokers to limit their exposure to the product."
-        ):
+            "the previous three years. How big was the market? Caixin, citing industry data reported by Bloomberg, "
+            "put onshore snowballs at about twenty-seven billion dollars in the summer of 2023. On the eleventh of "
+            "January, Bloomberg reported about thirteen billion dollars of them close to their loss triggers, and "
+            "UBS analysts estimated the whole market at around fifty billion. <bookmark mark='a'/> On the "
+            "twenty-second, as Risk.net reported it, the CSI 500 fell 4.7 percent in a day to a four-year low, with "
+            f"up to a third of products at their knock-in. Over five weeks the index fell {100 * abs(f['drop']):.0f} "
+            "percent. In April, Bloomberg reported, regulators told the largest brokers to stop growing their "
+            "exposure to these products."
+        ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
+            vo.wait_until("a")
+            self.play(Indicate(card.stats[0], color=QC.CRISIS))
         self.wait(0.5)
         self.clear_scene()
 
@@ -51,6 +61,7 @@ class Crash(VoiceoverScene):
         px = np.asarray(b["close"])
         ki = np.asarray(b["knocked_in"])
         dl = np.asarray(b["dealer_delta"])
+        n = len(t)
         t0, t1 = t[0], t[-1]
         g1 = axes([t0, t1], [4.3, 5.9], x_length=10.0, y_length=1.9, ylabel=r"CSI 500 ETF", xticks=[], yticks=[4.5, 5.0, 5.5],
                   font_size=14)
@@ -62,10 +73,11 @@ class Crash(VoiceoverScene):
                   xfmt=lambda u: {0: "1 Dec", 1: "2 Jan", 2: "1 Feb", 3: "29 Feb"}[int(np.argmin(np.abs(
                       ymd_to_year([20231201, 20240102, 20240201, 20240229]) - u)))], font_size=14)
         G = VGroup(g1, g2, g3).arrange(DOWN, buff=0.25).to_edge(LEFT, buff=0.6)
-        l1 = curve(g1.ax, t, px, SPOT, stroke_width=2.5)
-        steps = VMobject(stroke_color=BAD, stroke_width=3).set_points_as_corners(
-            [g2.ax.c2p(a, v) for i in range(len(t)) for a, v in ((t[i], ki[i - 1] if i else ki[0]), (t[i], ki[i]))])
-        l3 = curve(g3.ax, t, dl, DELTA, stroke_width=3)
+        tr = ValueTracker(0)
+        l1 = tracing(g1.ax, t, px, tr, SPOT, stroke_width=2.5)
+        kis = np.repeat(ki, 1).astype(float)
+        l2 = tracing(g2.ax, t, kis, tr, BAD, stroke_width=3)
+        l3 = tracing(g3.ax, t, dl, tr, DELTA, stroke_width=3)
         i_pk = int(np.argmax(dl))
         i_low = int(np.argmin(px))
         side = VGroup(
@@ -73,7 +85,7 @@ class Crash(VoiceoverScene):
                           r"103\% monthly, knock-in 75\% daily, 24 months), followed day by day on the index's real path",
                           3.4, 17, GREY_A),
             wrapped_label(rf"{b['n_ki_2024']} knocked in between 22 January and 5 February", 3.4, 19, BAD),
-            wrapped_label(rf"the dealers' futures hedge, priced by the surrogate (chapter 9): it grew from {dl[0]:.0f} to "
+            wrapped_label(rf"the dealers' futures hedge, priced by the surrogate (chapter 16): it grew from {dl[0]:.0f} to "
                           rf"{dl[i_pk]:.0f} notes' worth as the index fell, then the knock-ins cut it to {dl[i_low]:.0f} on "
                           r"the day of the low: selling into the fall", 3.4, 17, DELTA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
@@ -81,18 +93,104 @@ class Crash(VoiceoverScene):
         with self.voiceover(
             "Rebuild it on the real path. Suppose one snowball was issued at the start of every month from 2021 to "
             "2023 on the CSI 500, with the standard terms, and follow all of them, day by day, through the winter. "
-            "<bookmark mark='a'/> From the twenty-second of January the notes struck in 2022 and 2023 start to knock "
-            f"in, {b['n_ki_2024']} of them by the fifth of February. <bookmark mark='b'/> Now the issuers' hedge, "
-            "priced every day by the neural surrogate of chapter nine. As the index fell toward the barriers, the "
-            f"hedge grew, from {dl[0]:.0f} notes' worth of futures to {dl[i_pk]:.0f}: the dealers were buying the dip. "
-            f"Then the knock-ins came, and the hedge collapsed to {dl[i_low]:.0f} on the day of the low. The same "
-            "desks that had been buying all the way down were forced to sell, at the bottom."
+            "<bookmark mark='a'/> Run the clock. From the twenty-second of January the notes struck in 2022 and 2023 "
+            f"start to knock in, {b['n_ki_2024']} of them by the fifth of February. Underneath, the issuers' hedge, "
+            "priced every day by the neural surrogate of chapter sixteen. <bookmark mark='b'/> As the index fell "
+            f"toward the barriers, the hedge grew, from {dl[0]:.0f} notes' worth of futures to {dl[i_pk]:.0f}: the "
+            "dealers were buying the dip. Then the knock-ins came, and the hedge collapsed to "
+            f"{dl[i_low]:.0f} on the day of the low. The same desks that had been buying all the way down were "
+            "forced to sell, at the bottom."
         ) as vo:
-            self.play(FadeIn(G[0]), Create(l1), FadeIn(side[0]), FadeIn(src), run_time=2)
+            self.play(FadeIn(G), FadeIn(side[0]), FadeIn(src))
+            self.add(l1, l2, l3)
             vo.wait_until("a")
-            self.play(FadeIn(G[1]), Create(steps), FadeIn(side[1]), run_time=2)
+            self.play(tr.animate.set_value(n - 1), run_time=8, rate_func=linear)
+            self.play(FadeIn(side[1]))
             vo.wait_until("b")
-            self.play(FadeIn(G[2]), Create(l3), FadeIn(side[2]), run_time=2.5)
+            self.play(FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self):
+        rows = [
+            cmath(r"\Delta N_t", r"\approx", r"\Gamma^{\text{book}}_t\,\Delta S_t + \sum_{i \in KI_t}\big(\Delta_i^{+} - "
+                  r"\Delta_i^{-}\big)", font_size=38, colors={r"\Delta N_t": DELTA}),
+            cmath(r"\Gamma^{\text{book}}_t", r"=", r"\sum_i \partial_S \Delta_i(S_t, t;\ \text{not KI})", font_size=38,
+                  colors={r"\Gamma^{\text{book}}_t": QC.GAMMA}),
+            cmath(r"\Delta_i^{+} - \Delta_i^{-}", r"<", r"0\ \text{on a knock-in day}", font_size=38,
+                  colors={r"\Delta_i^{+} - \Delta_i^{-}": BAD}),
+        ]
+        whys = [why(r"the futures the hedgers trade on day $t$: Taylor for the smooth part, plus a jump in each note's "
+                    r"hedge on the day it knocks in"),
+                why(r"above the barrier the hedge grows as the index falls: the book's gamma makes the hedgers buy "
+                    r"the dip"),
+                why(r"on the knock-in the hedge jumps down to the knocked-in sheet of chapter 8: the hedgers sell, "
+                    r"into the fall")]
+        step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.8, buff=0.9, edge=6.9)
+        pp = pause_card(r"As the index fell toward the barriers, did the hedgers buy or sell?", width=6.0)
+        pp.to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Pause and predict: as the index fell toward the barriers, did the hedgers buy or sell? "
+            "<bookmark mark='a'/> Write the futures they trade each day as two parts. The smooth part is the "
+            "book's gamma times the index's move. Above the barriers, the hedge grows as the index falls, so the "
+            "gamma part buys on the way down. <bookmark mark='b'/> The other part is a jump. On the day a note "
+            "knocks in, its hedge drops from the upper sheet of chapter eight to the lower one, and that difference "
+            "is sold, all at once, on a day when the index has just fallen. They bought, and then they sold."
+        ) as vo:
+            self.play(FadeIn(pp))
+            vo.wait_until("a")
+            self.play(FadeOut(pp))
+            step(0)
+            step(1)
+            vo.wait_until("b")
+            step(2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def trades(self, b):
+        t = ymd_to_year(b["dates"])
+        dl = np.asarray(b["dealer_delta"])
+        trade = np.concatenate([[0.0], np.diff(dl)])
+        jump = np.asarray(b["ki_jump"])
+        gam = np.asarray(b["dealer_gamma"])
+        lim = float(np.max(np.abs(trade))) * 1.1 + 1e-9
+        g = axes([t[0], t[-1]], [-lim, lim], x_length=10.5, y_length=3.6, ylabel=r"futures bought (+) or sold ($-$)",
+                 yticks=[-round(lim * 0.8, 1), 0, round(lim * 0.8, 1)], xticks=[ymd_to_year([20231201])[0],
+                 ymd_to_year([20240102])[0], ymd_to_year([20240201])[0], ymd_to_year([20240229])[0]],
+                 xfmt=lambda u: {0: "1 Dec", 1: "2 Jan", 2: "1 Feb", 3: "29 Feb"}[int(np.argmin(np.abs(
+                     ymd_to_year([20231201, 20240102, 20240201, 20240229]) - u)))], font_size=14).to_edge(UP, buff=0.8)
+        ax = g.ax
+        w = 0.8 * (ax.c2p(t[1], 0)[0] - ax.c2p(t[0], 0)[0])
+        bars = VGroup()
+        for x, v, j in zip(t, trade, jump):
+            y0, y1 = ax.c2p(x, 0)[1], ax.c2p(x, v)[1]
+            col = BAD if j < -1e-6 else (GOOD if v > 0 else IV)
+            bars.add(Rectangle(width=w, height=max(abs(y1 - y0), 0.005), stroke_width=0, fill_color=col,
+                               fill_opacity=0.85).move_to([ax.c2p(x, 0)[0], (y0 + y1) / 2, 0]))
+        buys = float(trade[trade > 0].sum())
+        sells = float(-trade[trade < 0].sum())
+        jsum = float(-jump.sum())
+        gmax = float(np.max(gam))
+        leg = legend([(GOOD, r"bought: the hedge grows as the index falls"), (IV, r"sold on a rally"),
+                      (BAD, r"a day with knock-ins: the hedge jumps down")], font_size=17)
+        leg.arrange(RIGHT, buff=0.5).next_to(g, DOWN, buff=0.25)
+        side = wrapped_label(rf"over the three months, the book's hedgers bought {buys:.1f} notes' worth of futures and "
+                             rf"sold {sells:.1f}; the knock-in jumps alone account for {jsum:.1f} of the selling. At its "
+                             rf"largest, a 1\% fall in the index added {gmax:.2f} notes' worth to the hedge", 11.6, 20,
+                             GREY_A).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "Here are the day-by-day trades of our stylized book's hedgers, the change in the futures they hold. "
+            "Green bars are purchases, as the hedge grows on falling days. <bookmark mark='a'/> Red bars are the "
+            "days with knock-ins, when the hedge jumps down. Over the three months, the hedgers bought "
+            f"{buys:.1f} notes' worth of futures and sold {sells:.1f}, and the knock-in jumps alone account for "
+            f"{jsum:.1f} of the selling. At its largest, a one percent fall added {gmax:.2f} notes' worth to the "
+            "hedge. Scale one note to the tens of billions outstanding, and these bars become real orders in the "
+            "futures market."
+        ) as vo:
+            self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.02, run_time=4),
+                      FadeIn(leg[:2]))
+            vo.wait_until("a")
+            self.play(FadeIn(leg[2]), FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
 

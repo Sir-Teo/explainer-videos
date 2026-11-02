@@ -13,7 +13,6 @@ class Buyers(VoiceoverScene):
         self.wall(b)
         self.table(b)
         self.record()
-        self.derive()
 
     def card(self):
         c = chapter_card(2, r"Who buys, and what they earned", r"What did a snowball pay the people who bought it?",
@@ -150,30 +149,3 @@ class Buyers(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def derive(self):
-        rows = [cmath(r"\mathbb E^{\mathbb P}[R]", r"=", r"\mathbb E^{\mathbb P}[\text{payoff}]\,/\,\text{price} - 1",
-                      font_size=38, colors={r"\mathbb E^{\mathbb P}[R]": QC.P}),
-                cmath(r"\mathbb E^{\mathbb Q}[D\cdot\text{payoff}]\,/\,\text{price}", r"=", r"1 - \text{margin}",
-                      font_size=38, colors={r"\mathbb E^{\mathbb Q}[D\cdot\text{payoff}]\,/\,\text{price}": QC.Q}),
-                cmath(r"\mathbb E^{\mathbb P}[R] - r", r"\approx", r"\text{crash-put premium} - \text{margin}",
-                      font_size=38, colors={r"\mathbb E^{\mathbb P}[R] - r": OPT})]
-        whys = [why(r"what the buyer earns is a real-world expectation, measured on the Track Record"),
-                why(r"under the pricing measure the note returns the riskless rate, less what the issuer kept"),
-                why(r"in the real world the buyer also earns the premium for selling crash insurance (the variance risk "
-                    r"premium of Part 12); the record says fees and complexity ate it")]
-        step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.5, buff=0.9, edge=6.9)
-        with self.voiceover(
-            "Why can selling a crash put pay on average, and still leave buyers worse off? Separate the two "
-            "measures. What the buyer earns is a real-world expectation of the payoff over the price. "
-            "<bookmark mark='a'/> Under the pricing measure, the note returns exactly the riskless rate, minus the "
-            "issuer's margin. <bookmark mark='b'/> In the real world the buyer also collects the premium for selling "
-            "crash insurance, the variance risk premium of Part twelve. So a fairly priced snowball could pay its "
-            "buyers on average. The studies say the margins and the complexity ate that premium, and more."
-        ) as vo:
-            step(0)
-            vo.wait_until("a")
-            step(1)
-            vo.wait_until("b")
-            step(2)
-        self.wait(0.4)
-        self.clear_scene()

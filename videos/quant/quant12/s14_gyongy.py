@@ -39,10 +39,9 @@ class Gyongy(VoiceoverScene):
                     r"Chapter 8's warning")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.65, edge=6.9)
         with self.voiceover(
-            "Why should one function of price and time fit a market whose volatility is clearly random? Let volatility "
-            "be anything: a process of its own, jumps in it, whatever. Apply Tanaka's formula to the call payoff, as in "
-            "Part five, and take expectations: the maturity slope of a call is the expected variance at the moment the "
-            "price passes through the strike. <bookmark mark='a'/> Condition on where the price ends, and that is the "
+            "Why should one function of price and time fit a market whose volatility is random? Let volatility be any "
+            "process. Apply Tanaka's formula to the call payoff and take expectations: the call's maturity slope is the "
+            "expected variance as the price passes the strike. <bookmark mark='a'/> Condition on where the price ends, and that is the "
             "density at the strike times the conditional expected variance. <bookmark mark='b'/> Compare with "
             "Dupire's derivation: local variance is the risk-neutral expectation of the instantaneous variance, given "
             "that the price is at that strike. Istvan Gyöngy proved in 1986 that this local model reproduces the "

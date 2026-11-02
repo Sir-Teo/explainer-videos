@@ -168,8 +168,7 @@ class RHeston(VoiceoverScene):
             "<bookmark mark='a'/> Now hold H at a tenth, as the time series suggested, and refit the rest. The error "
             f"rises only to {r1['rmse']:.2f}, and the other parameters become sensible: a vol of vol of {x1[3]:.1f} "
             f"and mean reversion of {x1[1]:.0f}. <bookmark mark='b'/> On this day's quotes the data cannot tell the "
-            "two apart. Vega weighting favours the long expiries, where roughness matters least, and a smooth model "
-            "can imitate a rough one there by turning its own dials to extremes. The next chapter measures how much the "
+            "two apart: vega weighting favours the long expiries, where roughness matters least. The next chapter measures how much the "
             "Surface cares about H, and chapter eleven takes up the debate."
         ) as vo:
             self.play(FadeIn(hdr[1]), FadeIn(src), FadeIn(VGroup(*[VGroup(r_[0], r_[1]) for r_ in tab])))

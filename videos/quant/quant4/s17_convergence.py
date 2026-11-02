@@ -135,11 +135,14 @@ class Convergence(VoiceoverScene):
                              r"10\%: the limit is uniform on $[0, 1]$.", width=5.4, font_size=20)
         pred.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
-            "The famous convergent martingale is an urn: one red ball, one blue; draw one, put it back with another "
-            "of its colour. <bookmark mark='a'/> The red fraction is a martingale, bounded between zero and one, so "
-            "it converges. <bookmark mark='b'/> A hundred urns jump about, then each freezes at its own level: the "
-            "urn remembers its first draws forever. <bookmark mark='c'/> The limits of ten thousand urns are flat, "
-            "uniform. So the chance the red fraction ends above ninety percent is ten percent; simulated, "
+            "The most famous convergent martingale is an urn. Start with one red ball and one blue. Draw a ball, put "
+            "it back, and add another of the same colour. <bookmark mark='a'/> The expected number of red balls after "
+            "the next draw grows by exactly the current red fraction, so the fraction itself is a martingale, bounded "
+            "between zero and one. It must converge. <bookmark mark='b'/> Watch a hundred urns. Early on they jump "
+            "about; then each one freezes at its own level. The rich get richer, and the urn remembers its first few "
+            "draws forever. <bookmark mark='c'/> Where do they settle? Collect the limits of ten thousand urns, and "
+            "the histogram is flat: the limit is uniform between zero and one, a fact the problems prove by "
+            "induction. So the chance that the red fraction ends above ninety percent is ten percent; simulated, "
             f"{100 * p['p_above_09']:.1f}."
         ) as vo:
             self.play(FadeIn(g))

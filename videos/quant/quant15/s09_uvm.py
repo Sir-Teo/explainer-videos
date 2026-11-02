@@ -11,78 +11,195 @@ class UVM(VoiceoverScene):
         u = load("uvm")
         self.card()
         self.model()
-        self.bounds(u)
+        self.film(load("uvm_film"))
+        self.lab(u, load("uvm_book"))
+        self.book(load("uvm_book"))
 
     def card(self):
-        c = chapter_card(8, r"Uncertain volatility, and model reserves", r"What should you charge for not knowing the model?",
-                         lit=(1995,), part=PART)
-        with self.voiceover("Chapter eight. Uncertain volatility, and model reserves."):
+        c = chapter_card(13, r"Uncertain volatility: the price of not knowing", r"What should you charge for not knowing "
+                         r"the model?", lit=(1995,), part=PART)
+        with self.voiceover("Chapter thirteen. Uncertain volatility: the price of not knowing."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def model(self):
-        rows = [cmath(r"\partial_t V + \tfrac12\,\sigma(\Gamma)^2 S^2\,\Gamma + rS\,\partial_S V - rV", r"=", r"0", font_size=34,
-                      colors={r"\partial_t V + \tfrac12\,\sigma(\Gamma)^2 S^2\,\Gamma + rS\,\partial_S V - rV": OPT}),
-                cmath(r"\sigma(\Gamma)", r"=", r"\begin{cases}\sigma_{\max} & \Gamma > 0 \\ \sigma_{\min} & \Gamma < 0\end{cases}",
-                      font_size=34, colors={r"\sigma(\Gamma)": IV})]
-        whys = [why(r"Avellaneda, Levy and Par\'as (1995); Lyons (1995): suppose volatility can be anything in a band, "
-                    r"chosen against you at every moment"),
-                why(r"the seller's price uses the top of the band where the position is long gamma and the bottom where it "
-                    r"is short: the cheapest hedge that survives every volatility path in the band. It is non-linear: the "
-                    r"price of a book is not the sum of its parts")]
-        step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.4, buff=1.0, edge=6.9)
+        rows = [
+            cmath(r"U(g)", r"=", r"\sup_{\sigma_t \in [\underline\sigma,\, \bar\sigma]} \mathbb E\big[e^{-rT} g(S_T)\big]",
+                  font_size=36, colors={r"U(g)": BAD}),
+            cmath(r"\partial_t V + \sup_{\sigma}\big\{\tfrac12\sigma^2 S^2 V_{SS}\big\} + rSV_S - rV", r"=", r"0",
+                  font_size=34, colors={r"\partial_t V + \sup_{\sigma}\big\{\tfrac12\sigma^2 S^2 V_{SS}\big\} + rSV_S - rV": OPT}),
+            cmath(r"\sigma(\Gamma)", r"=", r"\begin{cases}\bar\sigma & \Gamma > 0 \\ \underline\sigma & \Gamma < 0\end{cases}",
+                  font_size=34, colors={r"\sigma(\Gamma)": IV}),
+            cmath(r"U(g_1 + g_2)", r"\le", r"U(g_1) + U(g_2)", font_size=38, colors={r"U(g_1 + g_2)": GOOD}),
+        ]
+        whys = [why(r"the seller must hedge against every volatility path in the band, chosen against it "
+                    r"(Avellaneda, Levy and Par\'as 1995; Lyons 1995)"),
+                why(r"dynamic programming with $\sigma$ as the adversary's control: the Hamilton--Jacobi--Bellman "
+                    r"equation of Part 8"),
+                why(r"the bracket is linear in $\sigma^2$, so the sup sits at an end of the band: the top where the "
+                    r"position is long gamma, the bottom where it is short (the Black--Scholes--Barenblatt equation)"),
+                why(r"the sup of a sum is at most the sum of the sups; equal only if both legs pick the same $\sigma$ "
+                    r"everywhere. The price is non-linear: a book is not the sum of its parts")]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.8, edge=6.9)
         with self.voiceover(
             "Parts thirteen and fourteen showed that models fitted to the same vanillas disagree on exotics. How "
             "much should a desk charge for that? In 1995 Marco Avellaneda, Arnon Levy and Antonio Parás, and "
             "independently Terry Lyons, answered with a worst case. Suppose volatility can be anything within a band, "
-            "chosen against you at every moment. <bookmark mark='a'/> Then the price to sell solves a Black–Scholes "
-            "equation in which the volatility switches: the top of the band wherever the position is long gamma, the "
-            "bottom wherever it is short. It is the cheapest hedge that survives every path in the band. And it is "
-            "non-linear: a book's price is not the sum of its parts, because positions can cancel each other's risk."
+            "chosen against you at every moment. The seller's price is the largest expected payoff over all those "
+            "volatility paths. <bookmark mark='a'/> That is a control problem, with volatility as the adversary's "
+            "control, and dynamic programming turns it into a Hamilton–Jacobi–Bellman equation: Black–Scholes, with "
+            "a supremum inside. <bookmark mark='b'/> The thing being maximised is linear in sigma squared, so the "
+            "worst case always sits at an end of the band: the top wherever the position is long gamma, the bottom "
+            "wherever it is short. That is the Black–Scholes–Barenblatt equation. <bookmark mark='c'/> And it is "
+            "non-linear. The worst case for a book is at most the sum of the worst cases of its parts, and usually "
+            "less, because positions can cancel each other's risk."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
         self.wait(0.4)
         self.clear_scene()
 
-    def bounds(self, u):
-        S = np.asarray(u["S"])
-        g = axes([70, 130], [0, 1], x_length=6.6, y_length=4.2, xlabel=r"spot", ylabel=r"value of a call spread 95--105, per unit",
-                 xticks=[80, 100, 120], yticks=[0, 0.5, 1.0], font_size=15).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+    def film(self, f):
+        S = np.asarray(f["S"])
+        V = np.asarray(f["V"])
+        sig = np.asarray(f["sig"])
+        tau = np.asarray(f["tau"])
+        n = len(V)
+        g = axes([60, 140], [0, 1.05], x_length=8.4, y_length=4.0, xlabel=r"spot", ylabel=r"seller's price",
+                 xticks=[80, 95, 105, 120], yticks=[0, 0.5, 1.0], font_size=15).to_edge(UP, buff=0.6).to_edge(LEFT, buff=0.6)
         ax = g.ax
-        up = curve(ax, S, np.asarray(u["upper"]), BAD, stroke_width=3)
-        lo = curve(ax, S, np.asarray(u["lower"]), GOOD, stroke_width=3)
-        b15 = DashedVMobject(curve(ax, S, np.asarray(u["bs15"]), GREY_B, stroke_width=2), num_dashes=40)
-        b35 = DashedVMobject(curve(ax, S, np.asarray(u["bs35"]), GREY_A, stroke_width=2), num_dashes=40)
-        leg = legend([(BAD, r"seller's price, volatility anywhere in 15--35\%"), (GOOD, r"buyer's price"),
-                      (GREY_B, r"Black--Scholes at 15\%"), (GREY_A, r"Black--Scholes at 35\%")], font_size=16)
-        leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
-        a = u["at100"]
-        side = VGroup(
-            MathTex(rf"[{a['lower']:.2f},\ {a['upper']:.2f}]", font_size=36, color=OPT),
-            wrapped_label(rf"at the money, against {a['bs15']:.2f} to {a['bs35']:.2f} for Black--Scholes anywhere in the band: "
-                          r"a call spread is long gamma below and short above, so no single volatility is the worst "
-                          r"case, and the band is wider than every constant-volatility price", 4.4, 19, GREY_A),
-            wrapped_label(r"desks hold a model reserve: the gap between the marked price and a price like the seller's "
-                          r"bound, released as the exotic's risk runs off (Cont 2006 makes model uncertainty a coherent "
-                          r"risk measure)", 4.4, 19, WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        src = illustration(r"the House's Black--Scholes--Barenblatt solver; six months, rates zero")
+        k = ValueTracker(0)
+
+        def cur():
+            i = int(np.clip(round(k.get_value()), 0, n - 1))
+            return curve(ax, S, V[i], OPT, stroke_width=3.5)
+
+        def strip():
+            i = int(np.clip(round(k.get_value()), 0, n - 1))
+            y = ax.c2p(60, 0)[1] - 0.55
+            w = ax.c2p(S[1], 0)[0] - ax.c2p(S[0], 0)[0]
+            return VGroup(*[Rectangle(width=w * 1.02, height=0.35, stroke_width=0,
+                                      fill_color=BAD if s_ > 0.25 else GOOD, fill_opacity=0.85)
+                            .move_to([ax.c2p(x, 0)[0], y, 0]) for x, s_ in zip(S, sig[i])])
+        line = always_redraw(cur)
+        bar = always_redraw(strip)
+        pay = curve(ax, S, V[0], GREY_B, stroke_width=2).set_stroke(opacity=0.6)
+        ro = readout(r"\tau =", lambda: float(tau[int(np.clip(round(k.get_value()), 0, n - 1))]), digits=2,
+                     unit=r"\ \text{years to expiry}", font_size=30, color=GREY_A)
+        leg = VGroup(label(r"strip: the volatility the worst case picks at each spot", font_size=19, color=GREY_A),
+                     legend([(BAD, r"$\bar\sigma = 35\%$ (long gamma)"), (GOOD, r"$\underline\sigma = 15\%$ (short gamma)")],
+                            font_size=18)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        side = VGroup(ro, leg).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.4).shift(UP * 0.5)
+        src = illustration(r"the House's BSB solver, call spread 95--105, six months, rates zero; every 10th of 400 steps")
         with self.voiceover(
-            "Here is a call spread, long the 95 call and short the 105, priced with volatility anywhere between 15 "
-            "and 35 percent. <bookmark mark='a'/> The seller's and buyer's prices bracket every constant-volatility "
-            f"price. At the money they run from {a['lower']:.2f} to {a['upper']:.2f}, while Black–Scholes anywhere in "
-            f"the band gives only {a['bs15']:.2f} to {a['bs35']:.2f}. A call spread is long gamma below its middle and "
-            "short above, so the worst case uses high volatility in one place and low in the other, a path no single "
-            "volatility can imitate. <bookmark mark='b'/> Desks turn this into money with a model reserve: they mark "
-            "an exotic at their model, hold back the gap to a price like the seller's bound, and release it as the "
-            "risk runs off."
+            "Watch it solve. The payoff is a call spread, long the 95 call and short the 105, per unit of width. "
+            "The solver starts at expiry and marches backward in time. <bookmark mark='a'/> Under the curve, a "
+            "strip shows what the adversary chooses at every spot: red where the position is long gamma, so the "
+            "worst case is the top of the band, green where it is short gamma, the bottom. <bookmark mark='b'/> As "
+            "time runs back, the curve smooths, and the boundary between red and green, where gamma changes sign, "
+            "drifts. No constant volatility can draw this price: it uses high volatility below the middle of the "
+            "spread and low volatility above."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), Create(b15), Create(b35), FadeIn(leg[2]), FadeIn(leg[3]), run_time=2)
+            self.play(FadeIn(g), FadeIn(pay), FadeIn(src), FadeIn(side))
+            self.add(line, bar)
             vo.wait_until("a")
-            self.play(Create(up), Create(lo), FadeIn(leg[0]), FadeIn(leg[1]), FadeIn(side[0]), FadeIn(side[1]), run_time=2)
+            self.play(k.animate.set_value(n * 0.2), run_time=2, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(side[2]))
+            self.play(k.animate.set_value(n - 1), run_time=max(vo.remaining(0.5), 3.0), rate_func=linear)
+        line.clear_updaters()
+        bar.clear_updaters()
+        self.wait(0.4)
+        self.clear_scene()
+
+    def lab(self, u, bk):
+        card = lab_card(r"the Black--Scholes--Barenblatt step", [
+            "for _ in range(n_t):                       # march back from expiry",
+            "    g = np.zeros(n)                        # the discrete gamma",
+            "    g[1:-1] = 2 * (h[:-1] * V[2:] - (h[:-1] + h[1:]) * V[1:-1]",
+            "                   + h[1:] * V[:-2]) / (h[:-1] * h[1:] * (h[:-1] + h[1:]))",
+            "    sig = np.where(g > 0, sig_hi, sig_lo) if upper \\",
+            "        else np.where(g > 0, sig_lo, sig_hi)",
+            "    a = 0.5 * sig ** 2 * S ** 2",
+            "    # ... the implicit Black-Scholes step with this sigma",
+            "    V = _thomas(lower, diag, upper_, rhs)",
+        ], source="explainer/quant/house/exotics.py: uvm_price", width=8.6, font_size=16).to_corner(UL, buff=0.35)
+        a = u["at100"]
+        outs = [f"uvm_price(call spread 95-105, T=0.5, 15%-35%)",
+                f"upper {a['upper']:.2f}   lower {a['lower']:.2f}   (Black-Scholes 25%: {a['bs25']:.2f})",
+                f"hedged with 90 and 110 calls: [{bk['hedged_lower']:.2f}, {bk['hedged_upper']:.2f}]"]
+        with self.voiceover(
+            "In the House's code the whole idea is one line. At every step back in time, estimate the gamma on the "
+            "grid, and pick the volatility from its sign: the top of the band where it is positive, the bottom "
+            "where it is negative. Then take an ordinary implicit Black–Scholes step with that volatility. "
+            "<bookmark mark='a'/> Run it: the upper price is "
+            f"{a['upper']:.2f} and the lower {a['lower']:.2f}, around a Black–Scholes price of {a['bs25']:.2f} at "
+            "twenty-five percent. The last line is a preview of what comes next."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            lab_run(self, card, outs, font_size=16)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def book(self, bk):
+        its = bk["iterates"]
+        steps = np.arange(len(its))
+        best = np.minimum.accumulate([v for _, v in its])
+        w1 = np.array([w[0] for w, _ in its])
+        w2 = np.array([w[1] for w, _ in its])
+        g = axes([0, len(its) - 1], [min(best) - 0.02, best[0] + 0.02], x_length=5.6, y_length=3.6,
+                 xlabel=r"optimiser evaluations", ylabel=r"seller's worst-case price, hedged",
+                 xticks=[0, len(its) - 1], yticks=[round(float(min(best)), 2), round(float(best[0]), 2)], font_size=14)
+        g.to_edge(RIGHT, buff=0.5).shift(DOWN * 0.8)
+        ax = g.ax
+        tr = ValueTracker(0)
+        lb = tracing(ax, steps, best, tr, BAD, stroke_width=3)
+        wro = VGroup(readout(r"\lambda_{90} =", lambda: float(np.interp(tr.get_value(), steps, w1)), digits=3,
+                             font_size=28, color=GOOD),
+                     readout(r"\lambda_{110} =", lambda: float(np.interp(tr.get_value(), steps, w2)), digits=3,
+                             font_size=28, color=GOOD)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        wro.next_to(g, UP, buff=0.3).align_to(g, LEFT)
+        rows = VGroup(
+            MathTex(r"U^{\lambda}(g) = \min_{\lambda}\Big\{U\big(g - \textstyle\sum_i \lambda_i C_i\big) + "
+                    r"\textstyle\sum_i \lambda_i C_i^{\text{mkt}}\Big\}", font_size=30, color=OPT),
+            wrapped_label(rf"non-additivity: priced leg by leg, the long 95 call and the short 105 call have worst cases "
+                          rf"summing to {bk['legs_sum']:.3f}; as one book, {bk['upper']:.3f}. Netting gamma is worth "
+                          rf"{bk['legs_sum'] - bk['upper']:.2f} per unit", 6.0, 19, WHITE),
+            wrapped_label(rf"Avellaneda and Par\'as (1996): buy or sell 90 and 110 calls at their market prices "
+                          rf"(Black--Scholes 25\%) and only the residual bears the worst case. The bounds tighten from "
+                          rf"[{bk['lower']:.2f}, {bk['upper']:.2f}] to [{bk['hedged_lower']:.2f}, "
+                          rf"{bk['hedged_upper']:.2f}]", 6.0, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(LEFT, buff=0.4)
+        tight = bk["hedged_upper"] < bk["upper"] - 0.01
+        verdict = (f"from {bk['upper']:.2f} to {bk['hedged_upper']:.2f}. The bounds tighten to "
+                   f"{bk['hedged_lower']:.2f} and {bk['hedged_upper']:.2f}: market prices are information, and the "
+                   "Lagrangian model uses them." if tight else
+                   f"but only to {bk['hedged_upper']:.2f}: here the vanillas do little for this payoff.")
+        pp = pause_card(r"Is the worst-case price of a book the sum of its parts?", width=5.6).to_corner(UR, buff=0.3)
+        with self.voiceover(
+            "Pause and predict: is the worst-case price of a book the sum of the worst cases of its parts? "
+            "<bookmark mark='a'/> No. Price the two legs of the call spread separately and their worst cases add "
+            f"up to {bk['legs_sum']:.2f}: each leg alone gets the worst volatility for itself. As one book, "
+            f"{bk['upper']:.2f}, because the short call's gamma offsets the long call's, and the adversary can no "
+            f"longer hurt both. <bookmark mark='b'/> Marco Avellaneda and Antonio Parás took the next step in 1996. "
+            "If some vanillas trade, buy or sell them at their market prices, and let only what is left bear the "
+            "worst case. Search over the amounts. Here the optimiser looks for the best quantities of the 90 and "
+            f"110 calls, and the hedged worst case falls as it goes, {verdict}"
+        ) as vo:
+            self.play(FadeIn(pp))
+            vo.wait_until("a")
+            self.play(FadeOut(pp), FadeIn(rows[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[0]), FadeIn(g), FadeIn(wro))
+            self.add(lb)
+            self.play(tr.animate.set_value(len(its) - 1), run_time=max(vo.remaining(1.0) - 1.0, 3.0), rate_func=linear)
+            self.play(FadeIn(rows[2]))
+        wro[0].num.clear_updaters()
+        wro[1].num.clear_updaters()
         self.wait(0.4)
         self.clear_scene()

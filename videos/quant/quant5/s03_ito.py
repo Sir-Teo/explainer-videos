@@ -98,13 +98,17 @@ class Ito(VoiceoverScene):
                 why(r"true for every simple sum, and preserved in the $L^2$ limit: the integral is a martingale")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.4, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Now the construction. Square the sum and take expectations. Each cross term contains a later move whose "
-            "mean, given everything known when it starts, is zero. <bookmark mark='a'/> So the mean square of the "
-            "gain is the integrated squared position: the Itô isometry. <bookmark mark='b'/> An isometry preserves "
-            "distance. Staircases that converge to an integrand give integrals that converge in mean square, and the "
-            "limit is the Itô integral, for any predictable integrand with finite integrated square. "
-            "<bookmark mark='c'/> Each simple sum is a martingale, so the limit is too. Positions chosen before the "
-            "moves cannot earn anything against a martingale: that one fact is no-arbitrage pricing, in Part nine."
+            "Now the construction. Square the sum and take expectations. The squares give the position squared times "
+            "the step. Each cross term pairs an earlier gain, H j times delta W j, with a later position H k, all of "
+            "them known at the start of step k, times the later move, whose mean given everything known then is zero. "
+            "<bookmark mark='a'/> So the cross terms vanish, and the mean square of the gain is the integrated "
+            "squared position: the Itô isometry. That is how a hedger's risk is measured: by how much is held, for "
+            "how long. <bookmark mark='b'/> An isometry preserves distance. Staircases that converge to an integrand "
+            "give integrals that form a Cauchy sequence in mean square, and the limit is the Itô integral, for any "
+            "predictable integrand with finite integrated square. <bookmark mark='c'/> Each simple sum is a "
+            "martingale, and conditional expectations survive mean-square limits, so the limit is a martingale too. "
+            "Positions chosen before the moves cannot earn anything against a martingale: that one fact is "
+            "no-arbitrage pricing, in Part nine."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -130,24 +130,29 @@ class LTCM(VoiceoverScene):
     def file(self):
         card = crisis_card(
             r"17 August -- 23 September 1998", r"Long-Term Capital Management",
-            r"A hedge fund founded in 1994 by John Meriwether, with Robert Merton and Myron Scholes among its partners, "
-            r"ran convergence trades: long the cheap bond, short the dear one, levered many times. At the end of 1997 "
-            r"it held \$129 billion of assets on \$4.7 billion of capital, and \$1.3 trillion of derivatives. After "
-            r"Russia defaulted in August 1998, spreads widened instead of converging. By mid-September its capital was "
-            r"under \$1 billion; on 23 September fourteen banks, brought together by the New York Fed, put in \$3.6 "
-            r"billion and took it over.",
-            stats=[(r"28 : 1", r"assets to capital, end of 1997"), (r"\$1.3\text{tn}", r"derivatives, notional"),
-                   (r"< \$1\text{bn}", r"capital left, mid-September 1998")],
+            r"A hedge fund founded in February 1994 by John Meriwether, with Robert Merton and Myron Scholes among its "
+            r"partners, ran convergence trades: long the cheap bond, short the dear one, levered many times. At the end "
+            r"of 1997 it had balance-sheet assets of \$129 billion on \$4.7 billion of capital, and derivatives with a "
+            r"notional value of \$1.3 trillion. After Russia defaulted in August 1998, spreads widened instead of "
+            r"converging, and the fund lost 44\% of its value that month. On 23 September fourteen banks and brokerage "
+            r"firms, brought together by the New York Fed, put in \$3.6 billion for 90\% of the fund.",
+            stats=[(r"28 : 1", r"assets to equity, end of 1997"), (r"\$1.3\text{tn}", r"derivatives, notional"),
+                   (r"-44\%", r"August 1998")],
             width=11.0, font_size=25)
         card.move_to(ORIGIN)
-        src = note(r"President's Working Group on Financial Markets, \textit{Hedge Funds, Leverage, and the Lessons of "
-                   r"Long-Term Capital Management} (April 1999)", font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
+        src = note(r"U.S. Treasury testimony (Gensler, 6 May 1999), presenting the President's Working Group's figures; "
+                   r"Federal Reserve History, ``Near Failure of Long-Term Capital Management''", font_size=18,
+                   color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "The crisis file. Long-Term Capital Management, founded in 1994 with Robert Merton and Myron Scholes among "
-            "its partners, bought cheap bonds and sold similar dear ones, levered many times: at the end of 1997, a hundred "
-            "and twenty-nine billion dollars of assets on four point seven billion of capital, about twenty-eight to one. "
-            "After Russia defaulted in August 1998 the spreads widened instead of closing; on September the twenty-third, "
-            "fourteen banks brought together by the New York Fed put in three point six billion and took it over."
+            "The crisis file. Long-Term Capital Management was founded in February 1994 by the bond trader John "
+            "Meriwether; Robert Merton and Myron Scholes, who shared the Nobel prize in 1997, were among its partners. It "
+            "bought cheap bonds and sold similar dear ones, betting that the spread between them would close: small, steady "
+            "profits, levered many times. At the end of 1997 it had balance-sheet assets of a hundred and twenty-nine billion "
+            "dollars on four point seven billion of capital, twenty-eight to one, and derivatives with a notional value of "
+            "one point three trillion. In August 1998 Russia defaulted, investors fled to safety, and the spreads widened "
+            "instead of closing: the fund lost forty-four percent of its value in that month alone. On September the "
+            "twenty-third, fourteen banks and brokerage firms, brought together by the Federal Reserve Bank of New York, put "
+            "in three point six billion dollars and took ninety percent of the fund."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
         self.wait(0.5)

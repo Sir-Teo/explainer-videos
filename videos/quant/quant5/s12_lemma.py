@@ -74,8 +74,8 @@ class Lemma(VoiceoverScene, ThreeDScene):
         readout_.to_corner(DR, buff=0.4)
         readout_[1].add_updater(lambda m: m.set_value(cm[int(np.clip(tk.get_value(), 0, len(cm) - 1))]))
         self.set_camera_orientation(phi=65 * DEGREES, theta=-70 * DEGREES, zoom=0.85)
-        self.add_fixed_in_frame_mobjects(hint, readout_)
-        self.remove(hint, readout_)
+        self.add_fixed_in_frame_mobjects(hint)
+        self.remove(hint)
         lp, bl, pl, co = always_redraw(lifted), always_redraw(ball), always_redraw(plane), always_redraw(column)
         with self.voiceover(
             "Here is the lemma as a picture: a surface, x squared times a decaying exponential, and a Brownian path "
@@ -93,15 +93,14 @@ class Lemma(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(hint[2]), tk.animate.set_value(40), run_time=2, rate_func=linear)
             vo.wait_until("b")
             self.add(co)
-            self.play(FadeIn(hint[3:]), FadeIn(readout_), Create(ref))
+            self.play(FadeIn(hint[3:]), Create(ref))
             self.play(tk.animate.set_value(len(t) - 1), run_time=max(vo.remaining(0.5) - 3.5, 4), rate_func=linear)
             self.move_camera(theta=-30 * DEGREES, phi=70 * DEGREES, run_time=3)
             vo.wait_until("c")
         for m in (lp, bl, pl, co):
             m.clear_updaters()
-        readout_[1].clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
-                         added_anims=[FadeOut(VGroup(ax, surf, lp, bl, pl, co, ref)), FadeOut(hint), FadeOut(readout_)],
+                         added_anims=[FadeOut(VGroup(ax, surf, lp, bl, pl, co, ref)), FadeOut(hint)],
                          run_time=1.5)
         self.clear_scene()
 
@@ -153,13 +152,17 @@ class Lemma(VoiceoverScene, ThreeDScene):
                 why(r"take $f = xy$: the product rule, with its covariation term")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.4, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Now the proof. Expand each step to second order. <bookmark mark='a'/> Replacing each squared move by its "
-            "time step costs a sum of uncorrelated terms with mean zero, which vanishes in mean square, exactly as "
-            "for quadratic variation. <bookmark mark='b'/> The remainder is smaller than the cubed moves, whose sum "
-            "goes to zero. <bookmark mark='c'/> What is left is Itô's lemma: the first-order terms, plus half the "
-            "curvature times d t. <bookmark mark='d'/> With two processes the same argument gives a cross term, the "
-            "mixed derivative times the covariation, <bookmark mark='e'/> and f equal to x times y gives the "
-            "stochastic product rule, which solves the Ornstein-Uhlenbeck equation and proves Girsanov's theorem."
+            "Now the proof. On each step, expand the function to second order: the time slope times the time step, "
+            "the space slope times the move, half the curvature times the move squared, and a remainder. "
+            "<bookmark mark='a'/> Replace each squared move by its time step. The error is a sum of terms with mean "
+            "zero, uncorrelated because the moves are independent, each with variance two times the curvature squared "
+            "times the step squared: the same computation as for quadratic variation, so it vanishes in mean square. "
+            "<bookmark mark='b'/> The remainder is smaller than the cube of the move, uniformly on bounded sets, and "
+            "the sum of cubed moves goes to zero. <bookmark mark='c'/> What is left is Itô's lemma: the first-order "
+            "terms, plus half the curvature times d t. <bookmark mark='d'/> With two processes, the same argument "
+            "produces a cross term, the mixed derivative times the covariation, which for two Brownian motions is rho "
+            "d t. <bookmark mark='e'/> And f equal to x times y gives the stochastic product rule, which solves the "
+            "Ornstein-Uhlenbeck equation and proves Girsanov's theorem."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -106,17 +106,13 @@ class Arbitrage(VoiceoverScene):
                     r"says which moments $\mathbb{E}\,S^{1+p}$ are finite")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.72, edge=6.9)
         with self.voiceover(
-            "Now the derivation. Write Black's formula in log-moneyness and total variance: volatility and time enter "
-            "only through w. <bookmark mark='a'/> Part nine showed that the second strike derivative of the call "
-            "price is the risk-neutral density. Differentiate twice, using one identity between the two normal "
-            "densities, and everything collapses to a positive factor times one function of the smile: g. "
-            "<bookmark mark='b'/> So there is no butterfly arbitrage exactly when g is never negative. "
-            "<bookmark mark='c'/> Across expiries: at a fixed moneyness, a call is a convex payoff of a martingale, "
-            "and its value can only grow with maturity, so total variance must not fall. <bookmark mark='d'/> And in "
-            "the wings, Roger Lee showed in 2004 that total variance can grow at most like two times the absolute "
-            "log-moneyness; any steeper and far calls would be worth more than the forward allows. The slope even "
-            "tells you which moments of the price distribution are finite. Michael Roper's 2010 note collects these "
-            "conditions into one checklist for a whole surface."
+            "The derivation. Write Black's formula in log-moneyness and total variance. <bookmark mark='a'/> The "
+            "density is the call's second strike derivative; differentiate twice, and it collapses to a positive "
+            "factor times one function of the smile, g. <bookmark mark='b'/> No butterfly arbitrage exactly when g is "
+            "never negative. <bookmark mark='c'/> At fixed moneyness a call is a convex payoff of a martingale, so total "
+            "variance must not fall with maturity. <bookmark mark='d'/> And Roger Lee showed in 2004 that the wings can "
+            "grow at most like two times the absolute log-moneyness, the slope telling which moments are finite. "
+            "Michael Roper's 2010 note collects these into one checklist."
         ) as vo:
             step(0)
             vo.wait_until("a")

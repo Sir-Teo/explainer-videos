@@ -203,13 +203,16 @@ class Optional(VoiceoverScene):
                              r"HH: 6 tosses on average against 4, although each has probability $1/4$ in any two "
                              r"tosses. HH overlaps itself.", width=6.4, font_size=21).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "In general, add m to the k for every k where the pattern's first k letters equal its last k. "
-            "<bookmark mark='a'/> Heads heads, six; heads tails, four; heads tails heads, ten; three heads, fourteen; "
-            "two hundred thousand simulated sequences agree within sampling error. A monkey typing ABRACADABRA needs "
-            f"about {abra:.2f} thousand trillion keystrokes. <bookmark mark='b'/> Overlaps also decide "
-            f"Penney's game: tails heads heads beats heads heads tails {100 * pt['penney_exact']:.0f} percent of the "
-            "time. <bookmark mark='c'/> So heads heads takes longer than heads tails, though each has the same chance "
-            "in two tosses: it overlaps itself."
+            "In general, the same argument gives a formula for any pattern: add up m to the k for every k where the "
+            "pattern's first k letters equal its last k. <bookmark mark='a'/> Heads heads: two plus four, six. Heads "
+            "tails: only the whole pattern overlaps itself, four. Heads tails heads: ten. Three heads: fourteen. Two "
+            "hundred thousand simulated sequences agree, within sampling error. A monkey typing ABRACADABRA on a "
+            f"twenty-six key typewriter needs about {abra:.2f} thousand trillion keystrokes, an exercise from "
+            "Williams. <bookmark mark='b'/> The overlaps also decide Penney's game: if you choose heads, heads, tails "
+            f"and I choose tails, heads, heads, I win {100 * pt['penney_exact']:.0f} percent of the time. "
+            "<bookmark mark='c'/> So which takes longer to appear, heads heads or heads tails? Heads heads, six "
+            "against four, though each has the same chance in any two tosses: heads heads overlaps itself, so its "
+            "near-misses waste time."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             lab_run(self, card, ['pattern_wait("HH"), pattern_wait("HT")', f"({W['HH']['theory']}, {W['HT']['theory']})",

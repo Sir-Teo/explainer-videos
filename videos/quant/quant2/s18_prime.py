@@ -97,10 +97,13 @@ class Prime(VoiceoverScene):
             r_.scale(0.85)
         step = ladder(self, rows, whys, keep=3, top=2.9, x=3.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "When such a client defaults, every bank must sell the same shares. Four banks, each with q shares, and a price "
-            "that falls lambda per share sold. <bookmark mark='a'/> The first sells into an untouched market; each later one "
-            "sells lower. <bookmark mark='b'/> The j-th seller's average price is the start less everything sold before it "
-            "and half its own block. Its loss grows with its place in the queue: the last loses seven times the first."
+            "When such a client defaults, every bank holds the same shares as its hedge, and every bank must sell. Here are "
+            "four banks, each with a block of q shares, and a price that falls by lambda for every share sold. "
+            "<bookmark mark='a'/> The first bank sells into an untouched market. The second sells after the first has pushed "
+            "the price down; the third, lower still. <bookmark mark='b'/> The j-th seller's average price is the start less "
+            "everything sold before it, plus half its own block. Its loss is lambda q squared times j minus a half: it grows in "
+            "a straight line with its place in the queue, and the last of K sellers loses two K minus one times what the first "
+            "does. With four banks, seven times."
         ) as vo:
             self.play(FadeIn(g), FadeIn(banks))
             self.add(tick)

@@ -109,15 +109,12 @@ class Smile(VoiceoverScene):
         src = note(r"a 30-day option at 50\% volatility, Gram--Charlier densities priced and inverted",
                                        font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Why is the smile shaped like this? Because an option price is an expectation under the risk-neutral "
-            "distribution, and implied volatility is what Black and Scholes would need to match it. Start from their "
-            "world: a normal distribution of log returns, and a flat line of implied volatility. <bookmark mark='a'/> "
-            "Now give the distribution negative skewness: a longer left tail, more probability of a crash. Out-of-the-"
-            "money puts become more valuable, so their implied volatility rises, and the line tilts into a skew. "
-            "Positive skewness tilts it the other way, toward the calls. <bookmark mark='b'/> Now go back to zero "
-            "skewness and add excess kurtosis: fatter tails on both sides. Both wings rise: a smile. "
-            "<bookmark mark='c'/> The grey dashes are a first-order formula: it captures the tilt well near the money "
-            "and drifts in the wings, where the expansion runs out."
+            "Why this shape? An option price is an expectation under the risk-neutral distribution; implied volatility "
+            "is what Black and Scholes need to match it. Their world: a normal distribution, a flat line. "
+            "<bookmark mark='a'/> Give the distribution negative skewness, a longer left tail: puts gain value, and "
+            "the line tilts into a skew. Positive skewness tilts it toward the calls. <bookmark mark='b'/> Now add "
+            "excess kurtosis, fatter tails on both sides: both wings rise, a smile. <bookmark mark='c'/> The grey "
+            "dashes, a first-order formula, catch the tilt near the money and drift in the wings."
         ) as vo:
             self.play(FadeIn(gL), FadeIn(gR), Create(normal), Create(flat), FadeIn(src))
             self.add(dens, sm, r1)
@@ -157,14 +154,11 @@ class Smile(VoiceoverScene):
                     r"must not be negative")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Here is the same idea as algebra. Write the density as a normal one corrected by two Hermite polynomials, "
-            "weighted by the skewness gamma one and the excess kurtosis gamma two. <bookmark mark='a'/> Price options "
-            "on it and invert, to first order, and the implied volatility is a straight line in d, tilted by the "
-            "skewness, plus a parabola, lifted by the kurtosis. This is the result of David Backus, Silverio Foresi "
-            "and Liuren Wu. <bookmark mark='b'/> So the sign of the skew is the sign of the skewness of the "
-            "risk-neutral distribution. <bookmark mark='c'/> Along the other direction, expiries, total variance at "
-            "the money adds up through time, and the difference between two expiries is the variance the market "
-            "expects between those dates: the forward variance."
+            "As algebra: a normal density corrected by two Hermite polynomials, weighted by skewness and excess "
+            "kurtosis. <bookmark mark='a'/> Price and invert to first order: implied volatility is a line in d tilted "
+            "by the skewness, plus a parabola lifted by the kurtosis, the result of Backus, Foresi and Wu. "
+            "<bookmark mark='b'/> The sign of the skew is the sign of the risk-neutral skewness. <bookmark mark='c'/> "
+            "Along expiries, total variance adds up, and the difference between two expiries is the forward variance."
         ) as vo:
             step(0)
             vo.wait_until("a")

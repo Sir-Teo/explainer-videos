@@ -158,13 +158,16 @@ class Frontier(VoiceoverScene):
                    else "here both happen to stay near their target." if e_ok else
                    "here even e-BH overshoots, a warning about small samples of seeds.")
         with self.voiceover(
-            "The frontier on a desk problem. Two hundred strategies watched daily for ten years, twenty with "
-            "a real edge; each monitored by a learning e-process, with e-BH applied every day at ten percent. "
-            "<bookmark mark='a'/> The rule is five lines: reject the largest k e-values that clear the number "
-            "of strategies over alpha times k. <bookmark mark='b'/> Benjamini and Hochberg on daily t-tests finds "
-            "more, faster. <bookmark mark='c'/> But suppose the desk acts on the first day it has ten discoveries. "
-            f"Then {verdict} <bookmark mark='d'/> An e-process stopped at any time is still an e-value. Part twenty-six "
-            "builds on this."
+            "Finally the frontier at work on a desk problem. Two hundred strategies are watched every day for ten "
+            "years; twenty have a true daily Sharpe of point zero eight, the rest none. Each is monitored by a "
+            "learning e-process, and every day the desk applies e-BH, Wang and Ramdas's rule, at ten percent. "
+            "<bookmark mark='a'/> The rule is five lines: sort the e-values, and reject the largest k whose values "
+            "clear the number of strategies over alpha times k. <bookmark mark='b'/> On the left, the false "
+            "discovery proportion over twenty seeds; on the right, discoveries. The ordinary approach, Benjamini and "
+            "Hochberg on each day's t-test p-values, finds more, and faster. <bookmark mark='c'/> But a desk peeks: "
+            f"suppose it acts on the first day it has ten discoveries. Then {verdict} <bookmark mark='d'/> Does "
+            "e-BH's guarantee survive peeking? Yes: an e-process stopped at any time is still an e-value, and e-BH "
+            "needs nothing more. Part twenty-six builds its backtesting on this."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(tenp), FadeIn(leg))
             vo.wait_until("a")

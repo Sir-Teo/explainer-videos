@@ -45,11 +45,13 @@ class DCF(VoiceoverScene, ThreeDScene):
                 why(r"profits grow only by reinvesting: each reinvested dollar earns the return on new invested capital")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.2, buff=0.85, edge=6.9)
         with self.voiceover(
-            "To value a whole firm, discount its free cash flow, read off chapter three's ledgers: operating profit after tax, "
-            "plus depreciation, minus new plant and working capital. It belongs to lenders and owners together. "
-            "<bookmark mark='a'/> Write the investment as a share of after-tax profit, the reinvestment rate. "
-            "<bookmark mark='b'/> And growth is not free: it equals the reinvestment rate times the return on new invested "
-            "capital, RONIC."
+            "To value a whole firm rather than one share, an analyst discounts its free cash flow. Read it off chapter three's "
+            "ledgers: operating profit after tax, plus the depreciation that cost no cash, minus the spending on new plant, minus "
+            "the cash tied up in working capital. It is the cash the business could pay to all its investors, lenders and owners "
+            "together. <bookmark mark='a'/> Write the investment as a share of after-tax operating profit, the reinvestment rate, "
+            "and free cash flow is profit times one minus that rate. <bookmark mark='b'/> And growth is not free. Profits grow only "
+            "because something was reinvested, and each reinvested dollar earns the return on new invested capital, RONIC. So "
+            "growth equals the reinvestment rate times RONIC."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -77,10 +79,13 @@ class DCF(VoiceoverScene, ThreeDScene):
                                r"$-$ debt-like items (leases, pension deficits) $+$ non-operating assets", 12.0, 22,
                                GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Put that into Gordon's formula and you get McKinsey's value-driver formula for the terminal value. "
-            "<bookmark mark='a'/> Differentiate in g: the sign is the sign of RONIC minus the cost of capital. "
-            "<bookmark mark='b'/> Growth adds value only if new investment earns more than it costs. <bookmark mark='c'/> And "
-            "that is the enterprise's value; the owners get it after net debt, minorities, preferred stock and debt-like items."
+            "Put that into Gordon's formula for the value after the forecast years. Free cash flow is profit times one minus g over "
+            "RONIC, and the terminal value becomes McKinsey's value-driver formula. <bookmark mark='a'/> Differentiate it in g, and "
+            "the sign of the result is the sign of RONIC minus the cost of capital. <bookmark mark='b'/> Faster growth adds value "
+            "only if new investment earns more than it costs. A firm that earns exactly its cost of capital can double its growth "
+            "and be worth not a cent more. <bookmark mark='c'/> That value is the enterprise's. Owners get it after the lenders: "
+            "subtract net debt, minority interests, preferred stock and the debt-like items, leases and pension deficits, and add "
+            "back anything the business does not need."
         ) as vo:
             step(0)
             vo.wait_until("a")

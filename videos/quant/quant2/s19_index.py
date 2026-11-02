@@ -85,11 +85,13 @@ class Index(VoiceoverScene):
         src = note(r"illustrative: a Zipf-like distribution of values, and equal passive dollars on each index; the "
                    r"real ratio depends on how much money tracks each", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "The Russell indices give a sharp test. Rank stocks by value: the top thousand form the Russell one thousand, "
-            "the next two thousand the Russell two thousand. <bookmark mark='a'/> Pour passive money onto both. Stock one "
-            "thousand is the smallest member of a giant index; stock one thousand and one, the largest member of a small one. "
-            f"With equal money on each, buying per share would jump about {r1 / r2:.0f}-fold at the gate. "
-            "<bookmark mark='b'/> Twins one rank apart, very different demand: a natural experiment."
+            "The Russell indices give a sharp test. Rank American stocks by value. The top thousand form the Russell one "
+            "thousand; the next two thousand, the Russell two thousand. <bookmark mark='a'/> Pour passive money onto both. "
+            "Within each index, every member gets the same fraction of its float bought. But the stock ranked one thousand is "
+            "the smallest member of a giant index, and the stock ranked one thousand and one is the largest member of a small "
+            "one. If the same dollars tracked each, the buying per share would jump about "
+            f"{r1 / r2:.0f}-fold at the gate. <bookmark mark='b'/> Two almost identical companies, one rank apart, get very "
+            "different index demand: a natural experiment, and the right tool for it is a regression discontinuity."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.002, run_time=3))
             self.play(Create(gate), FadeIn(gl))
@@ -126,11 +128,14 @@ class Index(VoiceoverScene):
         src = note(r"Shleifer's number as quoted in NBER w8654; Greenwood and Sammon, \textit{Journal of Finance} 80(2)",
                    font_size=15).to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "Shleifer found S and P additions jumped almost three percent on announcement as index funds grew: demand slopes "
-            "down. Harris and Gurel saw much of it fade within weeks. <bookmark mark='a'/> Chang, Hong and Liskovich used the "
-            "Russell gate: stocks just making the two thousand outperform those just missing it. <bookmark mark='b'/> "
-            "Pavlova and Sikorskaya show benchmark ties lower demand elasticity, and Greenwood and Sammon show the S and P "
-            "effect has nearly vanished, from about seven percent in the 1990s to under one."
+            "The evidence. Shleifer found that stocks added to the S and P five hundred jumped almost three percent on the "
+            "announcement, in years when index funds were growing, and argued that demand curves for stocks slope down. Harris "
+            "and Gurel found that much of the jump faded within weeks: price pressure, not news. <bookmark mark='a'/> Chang, "
+            "Hong and Liskovich used the Russell gate: stocks that just make the Russell two thousand outperform those that "
+            "just miss it. <bookmark mark='b'/> The frontier asks how much of the market is tied to benchmarks. Pavlova and "
+            "Sikorskaya measure benchmarking intensity and find it lowers demand elasticities. And Greenwood and Sammon show "
+            "the famous S and P inclusion effect has nearly disappeared: about seven percent in the 1990s, under one percent "
+            "lately, as the market learned to anticipate the changes."
         ) as vo:
             self.play(FadeIn(cards[0]), FadeIn(cards[1]), FadeIn(src))
             vo.wait_until("a")

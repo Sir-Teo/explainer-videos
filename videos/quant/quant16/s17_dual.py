@@ -119,9 +119,9 @@ class Dual(VoiceoverScene):
                     r"upper $-$ lower measures the policy's suboptimality")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Why it is a bound. Take any martingale that starts at zero. Optional stopping says its expected value at "
-            "any stopping time is zero, so the payoff at that time equals the payoff minus the martingale, which is "
-            "at most the largest gap along the path. <bookmark mark='a'/> That holds for every stopping rule, so the "
+            "Why it is a bound. Take any martingale starting at zero. By optional stopping its expected value at any "
+            "stopping time is zero, so the expected payoff equals the expected payoff minus the martingale, at most "
+            "the largest gap along the path. <bookmark mark='a'/> That holds for every stopping rule, so the "
             "price is at most the infimum over martingales, and Rogers, and Haugh and Kogan, showed the infimum is "
             "attained: by the martingale part of the value process itself. <bookmark mark='b'/> Andersen and Broadie "
             "approximate it from the regression's policy, with the conditional expectation computed by inner paths. "
@@ -251,9 +251,9 @@ class Dual(VoiceoverScene):
                     width=5.0, font_size=19).to_corner(DL, buff=0.2)
         src = illustration(r"each policy judged on 2{,}000{,}000 fresh paths; bars $\pm 2$ s.e.", corner=UR)
         with self.voiceover(
-            "Simulation's real home is many dimensions. Mark Broadie and Paul Glasserman's benchmark: a Bermudan "
-            "call on the maximum of five stocks, nine exercise dates over three years. A grid would need ten billion "
-            "nodes per date. Longstaff–Schwartz needs a basis: fifteen functions of the sorted prices. "
+            "Simulation's real home is many dimensions. Broadie and Glasserman's benchmark: a Bermudan call on the "
+            "largest of five stocks, nine dates over three years. A grid would need ten billion nodes per date; "
+            "Longstaff–Schwartz needs fifteen basis functions. "
             "<bookmark mark='a'/> Judged on two million fresh paths, the policy fitted on two thousand paths is "
             f"worth {L['2000']['lower']:.3f}; on twenty thousand, {L['20000']['lower']:.3f}; on two hundred thousand, "
             f"{L['200000']['lower']:.3f}. <bookmark mark='b'/> Part seventeen trains a neural network to stop instead, "

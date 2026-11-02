@@ -110,12 +110,15 @@ class Hook(VoiceoverScene):
         late = label(r"2001: Enron \quad 2009: every filing machine-readable (XBRL)", font_size=22,
                      color=QC.CRISIS).to_edge(DOWN, buff=1.2)
         with self.voiceover(
-            "How we got here. Double-entry bookkeeping was written down in Venice by Luca Pacioli in 1494, and every statement "
-            "in this part still balances by his rule. <bookmark mark='a'/> In 1934 Benjamin Graham and David Dodd taught "
-            "investors to read statements; in 1958 Modigliani and Miller showed that financing does not change value in a "
-            "perfect market. <bookmark mark='b'/> In 1968 Ball and Brown showed prices react to earnings, in 1974 Merton priced "
-            "equity as an option, and in 1996 Sloan found the market misreading accruals. <bookmark mark='c'/> In 2001 Enron "
-            "showed the numbers can be false; since 2009 every American filing is machine-readable."
+            "How we got here. The books came first: double-entry bookkeeping was written down in Venice by Luca Pacioli in 1494, "
+            "and every statement in this part still balances by his rule. <bookmark mark='a'/> In 1934, after the crash, Benjamin "
+            "Graham and David Dodd taught investors to read those statements, and in 1938 John Burr Williams wrote that a share is "
+            "worth its discounted dividends. In 1958 Franco Modigliani and Merton Miller proved that how a firm is financed does not "
+            "change that value, in a perfect market. <bookmark mark='b'/> In 1968 Ray Ball and Philip Brown showed that prices "
+            "react to earnings; in 1974 Robert Merton priced a firm's equity as an option. In 1996 Richard Sloan showed that the "
+            "market misread one part of earnings, and accounting became a source of trading signals. <bookmark mark='c'/> And in "
+            "2001 Enron showed what happens when the numbers themselves are false. Since 2009 every American filing has been "
+            "machine-readable, so this part can rebuild much of that history from the source."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pac))
             vo.wait_until("a")
@@ -137,10 +140,12 @@ class Hook(VoiceoverScene):
             r"Merger arbitrage, forensic accounting, the industry, and machines that read statements",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan: time value and the duration of a stock; the three statements run as one machine, and filings as data "
-            "with two dates; valuation by discounted cash flow, implied returns, residual income and multiples; capital "
-            "structure, payout and equity as an option; earnings announcements and two hundred published signals, before and "
-            "after publication; then merger arbitrage, forensic screens, the industry, and a model that forecasts earnings."
+            "The plan. The arithmetic of time value, and why a stock behaves like a very long bond. The three financial statements, "
+            "run as one machine, the accruals that separate earnings from cash, and the filings themselves as data with two dates. "
+            "Valuation: discounted cash flow, the return the market's price implies, residual income and multiples, and Campbell "
+            "and Shiller's identity. Capital structure and payout, and equity seen as an option. Earnings announcements, and two "
+            "hundred accounting and price signals measured before and after they were published. Then merger arbitrage, the "
+            "forensic screens, the firms that value companies for a living, and a model trained to forecast earnings."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=9))

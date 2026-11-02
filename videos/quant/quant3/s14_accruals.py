@@ -74,11 +74,13 @@ class Accruals(VoiceoverScene, ThreeDScene):
                           r"earned lower returns", 11.0, 22, QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Sloan's test is a regression: earnings persist, so this year's predict next year's. <bookmark mark='a'/> Split this "
-            "year's into cash and accruals, each with its own slope. <bookmark mark='b'/> The prediction: accruals persist less, "
-            "because a receivable either becomes cash or is written off, and an optimistic estimate reverses. "
-            f"<bookmark mark='c'/> Sloan found {a['sloan']['cfo']:.3f} for cash and {a['sloan']['acc']:.3f} for accruals, and "
-            "prices treated them alike, so high-accrual firms disappointed."
+            "Sloan's test is a regression. Earnings persist: this year's earnings, over assets, predict next year's with a slope "
+            "below one, as profits drift back to normal. <bookmark mark='a'/> Now split this year's earnings into its cash part "
+            "and its accrual part, and give each its own slope. <bookmark mark='b'/> The prediction: the accrual slope is smaller. "
+            "A receivable either turns into cash or is written off, and an over-optimistic estimate this year must be reversed next "
+            "year, so the accrual part of earnings carries noise that does not last. <bookmark mark='c'/> Sloan found exactly that, "
+            f"on three decades of American firms: {a['sloan']['cfo']:.3f} for cash, {a['sloan']['acc']:.3f} for accruals. And the "
+            "market priced both parts alike, so the firms with the most accruals went on to disappoint."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -169,12 +171,14 @@ class Accruals(VoiceoverScene, ThreeDScene):
                            r"booked it as receivables. Whose earnings will be higher next year?", width=11.6,
                            font_size=21).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            f"Now real filings: seven large non-financial firms in the House's store, {a['real_n']} firm-years. "
-            f"<bookmark mark='a'/> Cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. {gap_line}Sloan used tens of "
-            "thousands of firm-years. <bookmark mark='b'/> At scale, the open-source replication of his portfolio earned "
-            f"{a['osap_mean']:.2f} percent a month from 1963 to 2020, t of {a['osap_t']:.1f}. <bookmark mark='c'/> Pause and "
-            "predict: two firms earn ten percent of assets, one in cash, one in receivables. Whose earnings will be higher next "
-            "year? The cash earner's."
+            "Now real filings. The House's fundamentals store holds the full XBRL histories of a handful of large companies; seven "
+            f"of them are not banks, which gives {a['real_n']} firm-years with a following year. <bookmark mark='a'/> The same "
+            f"regression: cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. {gap_line}Sloan used tens of thousands of "
+            "firm-years; the full panel needs the SEC's bulk data, and the notes say how to load it. <bookmark mark='b'/> The market "
+            "evidence is larger: the open-source replication of Sloan's portfolio, long low accruals and short high, earned "
+            f"{a['osap_mean']:.2f} percent a month from 1963 to 2020, with a t-statistic of {a['osap_t']:.1f}. Chapter fourteen asks "
+            "how much survived publication. <bookmark mark='c'/> Pause and predict: two firms each earn ten percent of assets, one "
+            "in cash, one in receivables. Whose earnings will be higher next year? The cash earner's, on average."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02, run_time=2))

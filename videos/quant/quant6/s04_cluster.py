@@ -112,11 +112,13 @@ class Cluster(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.8, buff=1.0, edge=6.8)
         with self.voiceover(
             "The clustered estimator sums the scores within each cluster, squares the total, and adds over clusters: "
-            "correlation inside a cluster is kept, across clusters assumed away. <bookmark mark='a'/> Moulton's factor "
+            "every correlation inside a cluster is kept, every correlation across clusters is assumed away. It needs "
+            "many clusters, because each cluster is one observation of the meat. <bookmark mark='a'/> Moulton's factor "
             "says what ignoring it costs: the naive variance times one plus the cluster size minus one, times the "
-            "within-cluster correlations of both the regressor and the error. <bookmark mark='b'/> With both kinds of "
-            "effect, Cameron, Gelbach and Miller's two-way estimator adds firm and month clusters and subtracts the "
-            "overlap."
+            "within-cluster correlations of both the regressor and the error. With forty-nine industries in a month, "
+            "even small correlations multiply into a large factor. <bookmark mark='b'/> With both kinds of effect, "
+            "Cameron, Gelbach and Miller's two-way estimator adds the firm and month clusters and subtracts the "
+            "diagonal they both counted."
         ) as vo:
             step(0)
             vo.wait_until("a")

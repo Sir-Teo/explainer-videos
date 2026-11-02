@@ -154,11 +154,13 @@ class Hook(VoiceoverScene):
             r"Multiple testing; causal designs and double ML; how many years a Sharpe ratio needs",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Least squares as geometry, and the three shapes of dependence that break its standard errors. "
-            "Fama-MacBeth, where the verdicts are resolved. Predictive regressions, in and out of sample. Likelihood, "
-            "GMM, and the Euler equation, which fails. Event studies on Federal Reserve decision days. Bootstraps, "
-            "Bayes, multiple testing, causal designs and double machine learning. And how many years a Sharpe ratio "
-            "needs. Everything here lives under the real-world measure, P."
+            "The plan. Least squares as geometry, and the three shapes of dependence that break its standard errors: "
+            "overlap, persistence and shared shocks. Fama-MacBeth and the two-pass test of the CAPM, where the five "
+            "verdicts are resolved. Predictive regressions, in and out of sample. Likelihood and the generalized method "
+            "of moments, and the consumption Euler equation, which fails. Event studies on Federal Reserve decision days. "
+            "Bootstraps for dependent data, Bayes sampled by Gibbs, multiple testing, causal designs and double machine "
+            "learning. And the hardest number in finance: how many years a Sharpe ratio needs. Everything here lives "
+            "under the real-world measure, P: statements about the data we observe, not about prices."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))

@@ -48,6 +48,9 @@ class Breaks(VoiceoverScene):
             "payoff, same price: the fee acts like a dividend. <bookmark mark='c'/> Read backwards, "
             "option prices reveal the fee. Ofek, Richardson and Whitelaw showed in 2004 that parity's "
             "violations sit where shorting is hardest. They are not free money; they are a price."
+            " A worked number: a share at fifty-five, with a fee of thirty percent a year and three "
+            "months to go, enters parity as fifty-five times e to the minus point oh seven five: "
+            "about fifty-one, not fifty-five."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -166,6 +169,9 @@ class Breaks(VoiceoverScene):
             "<bookmark mark='b'/> But only with European exercise. In 2019 a Robinhood customer's box "
             "of American options was exercised early and lost far more than it seemed to risk; "
             "Robinhood then banned box spreads."
+            " A worked example: strikes a hundred and a hundred and ten, one year, four percent. The "
+            "box pays ten for sure, so it costs ten times e to the minus point oh four, about nine "
+            "sixty-one; buying it is lending at four percent."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -1210,7 +1210,16 @@ def compute_foundation() -> dict:
     steps, ckpts = 3000, [0, 100, 300, 1000, 3000]
     runs = []
     test_ctx = np.stack([v[t - C:t] for t in range(test0, len(v))])
+    import json as _js
+    rdir = CACHE.dir / "foundation_runs"  # one file per seed: the item resumes where it stopped
+    rdir.mkdir(parents=True, exist_ok=True)
     for seed in range(3):
+        fpath = rdir / f"seed{seed}.json"
+        if fpath.exists():
+            d_ = _js.loads(fpath.read_text())
+            runs.append({"loss": d_["loss"], "snaps": d_["snaps"], "var": np.asarray(d_["var"]),
+                         "q": {k: np.asarray(v) for k, v in d_["q"].items()}})
+            continue
         torch.manual_seed(seed)
         g = np.random.default_rng(100 + seed)
         model = TSFM()
@@ -1239,6 +1248,7 @@ def compute_foundation() -> dict:
         cdf = np.cumsum(p, 1)
         qs = {str(q): s * centers[np.argmax(cdf >= q, 1)] for q in (0.1, 0.5, 0.9)}
         runs.append({"loss": hist, "snaps": snaps, "var": ev2, "q": qs})
+        fpath.write_text(_js.dumps(_json(runs[-1])))
         print(f"    toy foundation model seed {seed}: final loss {np.mean(hist[-100:]):.3f}", flush=True)
     fc, _ = _classical(rz)
     test = np.arange(test0, len(v))

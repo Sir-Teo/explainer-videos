@@ -160,9 +160,12 @@ class Kelly(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         src = illustration(r"simulation: 10{,}000 markets, monthly, 100 years")
         with self.voiceover(
-            "How long is eventually? In ten thousand markets, <bookmark mark='a'/> Kelly leads twice Kelly in "
-            f"{100 * vd[9]:.0f} percent after ten years and {100 * vd[99]:.0f} after a hundred, but leads half Kelly in "
-            f"only {100 * vh[9]:.0f} and {100 * vh[99]:.0f}. Breiman's theorem is true, and slow."
+            "How long is eventually? Run Kelly against half and twice Kelly in ten thousand markets for a hundred years, and "
+            "count where Kelly is ahead. <bookmark mark='a'/> Against twice Kelly it leads in "
+            f"{100 * vd[9]:.0f} percent of markets after ten years and {100 * vd[99]:.0f} after a hundred. Against half Kelly, "
+            f"only {100 * vh[9]:.0f} percent after ten years and {100 * vh[99]:.0f} after a hundred. The white lines are the "
+            "closed form, from the normal distribution of log wealth. Breiman's theorem is true, and slow: half Kelly gives up "
+            "so little growth that it takes a lifetime to fall behind."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")

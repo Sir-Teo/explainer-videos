@@ -60,8 +60,8 @@ class MLMC(VoiceoverScene):
         with self.voiceover(
             "A simulation with time steps has two errors: noise, which falls with more paths, and bias, which falls "
             "with finer steps. Mike Giles's idea in 2008 was to stop simulating every path at the finest step. "
-            "Here is one Brownian path simulated twice, with fine steps in gold and with steps twice as long in grey, "
-            "driven by the same random numbers. <bookmark mark='a'/> At level one the two disagree by dollars. At "
+            "Here is one path simulated twice, with fine steps in gold and steps twice as long in grey, from the "
+            "same random numbers. <bookmark mark='a'/> At level one the two disagree by dollars. At "
             "level four, by cents. The difference between neighbouring levels is small, and so is its variance. "
             "<bookmark mark='b'/> So estimate the fine price as the coarse price plus a ladder of corrections, each "
             "with its own number of paths. At a target accuracy of one cent, millions of paths go to the cheap "
@@ -100,9 +100,8 @@ class MLMC(VoiceoverScene):
             "The proof fits on one screen. The fine-level expectation telescopes into the coarse one plus corrections. "
             "<bookmark mark='a'/> With independent levels, the mean squared error is the sum of each level's variance "
             "over its paths, plus the bias squared; give each half the budget. <bookmark mark='b'/> Minimise the "
-            "total cost subject to the variance budget with a Lagrange multiplier: each level gets paths in proportion "
-            "to the root of its variance over its cost, and the total cost is epsilon to the minus two times the "
-            "square of a sum. <bookmark mark='c'/> Now assume the corrections' variance falls like M to the minus "
+            "total cost subject to that budget with a Lagrange multiplier: each level gets paths in proportion to the "
+            "root of its variance over its cost. <bookmark mark='c'/> Now assume the corrections' variance falls like M to the minus "
             "beta l while the cost grows like M to the gamma l. The sum is a geometric series. If beta beats gamma it "
             "converges, and the cost is epsilon to the minus two: as cheap as if every path were exact. If they tie, "
             "the cost picks up a log squared. <bookmark mark='d'/> Euler's scheme ties, with beta equal to one; "
@@ -151,11 +150,11 @@ class MLMC(VoiceoverScene):
                         font_size=26, color=GOOD).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.2)
         src = illustration(r"the House's adaptive loop at $\varepsilon = 0.01$ (continuously averaged Asian, Euler), pass by pass")
         with self.voiceover(
-            "Now watch the House's estimator decide its own levels, at an accuracy of one cent. It starts with three "
-            "levels and a few thousand pilot paths each, measures each correction's variance, the gold dots, and "
-            "allocates paths by the formula, the bars below. <bookmark mark='a'/> Then it tests the bias using the "
+            "Now watch the House's estimator choose its own levels, at an accuracy of one cent. Three levels of pilot "
+            "paths first; it measures each correction's variance, the dots, and allocates paths by the formula, the "
+            "bars. <bookmark mark='a'/> Then it tests the bias using the "
             "last correction's mean. Too big: add a level, re-estimate, re-allocate. Pass by pass the dots step down "
-            "a straight line, and the finest levels need only thousands of paths. <bookmark mark='b'/> It stops when "
+            "a straight line. <bookmark mark='b'/> It stops when "
             f"the bias test passes, here at {runs[0]['levels']} levels. Across four seeds the final cost varies by a "
             "few percent: the algorithm is stable."
         ) as vo:
@@ -233,8 +232,8 @@ class MLMC(VoiceoverScene):
         q = predict(r"Milstein's $V_l$ falls four times per level, not two. What happens to $\varepsilon^2\cdot$cost "
                     r"as $\varepsilon \to 0$?", width=5.2, font_size=19).to_corner(DL, buff=0.25)
         with self.voiceover(
-            "The payoff. For the Asian option, the cost of hitting each accuracy: standard Monte Carlo at the finest "
-            f"step it needs, against multilevel. At one cent, multilevel is {cs[last] / cm[last]:.0f} times cheaper. "
+            "The payoff, on the Asian: the cost of each accuracy, standard against multilevel. At one cent, "
+            f"multilevel is {cs[last] / cm[last]:.0f} times cheaper. "
             "<bookmark mark='a'/> On the right, a European call, the theorem's textbook case: the corrections' "
             f"variance falls with slope {mi['beta']['euler']:.2f} under Euler and {mi['beta']['milstein']:.2f} under "
             "Milstein, as the theory says. <bookmark mark='b'/> Pause and predict. With beta two, what happens to "

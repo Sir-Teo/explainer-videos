@@ -45,6 +45,8 @@ class Continuous(VoiceoverScene):
             "continuous trading, gains as stochastic integrals, and complete exactly when the measure "
             "is unique. <bookmark mark='b'/> Continuous time adds a caution about which strategies "
             "are allowed; that is the next chapter."
+            " Under Q the discounted stock is a martingale, and so is the discounted value of every "
+            "self-financing portfolio: that is why replication and expectation give the same price."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -79,6 +81,8 @@ class Continuous(VoiceoverScene):
             "Brownian under this exponential density. <bookmark mark='d'/> So a price is a weighted "
             "P-expectation, or a plain Q-expectation; the weights' second moment sets the Monte Carlo "
             "cost."
+            " For our numbers, ten percent drift and twenty-five percent volatility, lambda is zero "
+            "point four: each unit of risk earns zero point four units of excess return."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -151,6 +155,8 @@ class Continuous(VoiceoverScene):
             "a lot thin out, paths that fell thicken. <bookmark mark='b'/> The weighted average "
             "flattens onto today's price: under Q the stock is a fair game. The histogram of endings "
             "slides from P to Q. Nothing about the paths changed, only how much each one counts."
+            " The Q-density is the P-density times the weight, and its mean is today's price, a "
+            "hundred."
         ) as vo:
             self.add(F_, mean)
             self.play(FadeIn(gr), Create(s0), FadeIn(lab[0]), FadeIn(ml), FadeIn(src))
@@ -186,6 +192,8 @@ class Continuous(VoiceoverScene):
             f"{tail}"
             f"<bookmark mark='b'/> The effective sample is {100 * g['ess']:.1f} percent of the paths; "
             f"the formula predicted {100 * g['ess_pred']:.1f}."
+            " The unweighted average is too high because under P the stock drifts up ten percent a "
+            "year: it prices the call as if that drift were free."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]))
             vo.wait_until("a")

@@ -148,12 +148,15 @@ class Clearing(VoiceoverScene):
         q = desk_question(r"A owes B 10, B owes C 10, C owes A 10. What moves through a CCP?", r"nothing: every "
                           r"net position is zero", width=5.4, font_size=21).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Why netting can only help. Gross sums every obligation; bilateral settles each pair's difference. "
-            "<bookmark mark='a'/> A difference is at most a sum: bilateral is at most gross. <bookmark mark='b'/> Through a "
-            "clearing house each member settles its net position, <bookmark mark='c'/> which is at most the sum of its "
-            "bilateral debts: multilateral is at most bilateral. <bookmark mark='d'/> And the net positions sum to zero: the "
-            "clearing house is flat. <bookmark mark='e'/> The House's code prints the three numbers. Pause and predict: A owes "
-            "B ten, B owes C ten, C owes A ten. What moves?"
+            "Netting can only help, and here is why. Gross is the sum of every obligation; bilateral settles only each pair's "
+            "difference. <bookmark mark='a'/> The difference of two amounts is at most their sum, the triangle inequality "
+            "pair by pair, so bilateral is at most gross. <bookmark mark='b'/> Through a clearing house each member settles "
+            "only its net position, what it owes everyone less what everyone owes it. <bookmark mark='c'/> The positive part "
+            "of a sum is at most the sum of the positive parts, so a member's net debt is at most its bilateral debts added "
+            "up: multilateral is at most bilateral. <bookmark mark='d'/> And the net positions sum to zero: every dollar owed "
+            "is owed to someone, so the clearing house is flat. <bookmark mark='e'/> The House's code is six lines, and on the "
+            "simulated day it prints the three numbers you just watched. Pause and predict: A owes B ten, B owes C ten, C owes "
+            "A ten. What moves through a clearing house?"
         ) as vo:
             for i, mk in enumerate("abcd"):
                 step(i)
@@ -198,11 +201,15 @@ class Clearing(VoiceoverScene):
         src = note(r"Duffie and Zhu (2011), \textit{Review of Asset Pricing Studies}: iid normal exposures; "
                    r"Monte Carlo cells against the formula", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Can clearing make things worse? Duffie and Zhu showed it can. Clearing one asset class nets it across all "
-            "members, but breaks its netting against the other classes. <bookmark mark='a'/> With independent exposures, "
-            "bilateral exposure grows with the square root of the classes, the cleared class with the square root of the "
-            "members. <bookmark mark='b'/> So clearing one class helps only above a threshold number of members: with ten "
-            f"classes, {int(np.ceil(dz['N_min'][-1] + 1e-9))}. The Monte Carlo grid agrees cell by cell."
+            "Can clearing ever make things worse? Duffie and Zhu showed that it can. Before clearing, two dealers net all their "
+            "trades with each other, across every asset class. Move one class to a clearing house and that class nets across "
+            "all members, but it no longer offsets the other classes bilaterally. <bookmark mark='a'/> With independent "
+            "exposures the arithmetic is clean: the expected positive part of a sum of K normals grows like the square root of "
+            "K, so bilateral exposure grows with the root of the classes, and the cleared class with the root of the members. "
+            "<bookmark mark='b'/> Compare the two, and clearing one class lowers exposure only if the number of members minus "
+            "one exceeds one over the gap between root K and root K minus one, squared. With ten classes that is "
+            f"{int(np.ceil(dz['N_min'][-1] + 1e-9))} members. The Monte Carlo grid agrees with the formula cell by cell: green "
+            "where clearing helps, red where it hurts."
         ) as vo:
             self.play(FadeIn(grid), FadeIn(xl), FadeIn(yl), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")

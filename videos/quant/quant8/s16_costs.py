@@ -68,12 +68,16 @@ class Costs(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cnt, DOWN, buff=0.5).align_to(cnt, LEFT)
         src = illustration(r"simulation: one market, weekly, 15 years; band from dynamic programming")
         with self.voiceover(
-            "Merton trades every instant. If every trade costs one percent of the amount traded, continuous rebalancing is "
-            "ruinous. <bookmark mark='a'/> Draw wealth as a point: bonds across, stocks up. Merton's rule is a ray. "
-            "<bookmark mark='b'/> With costs it opens into a wedge: inside, do nothing; at an edge, trade just enough to "
-            "stay inside. <bookmark mark='c'/> Fifteen years of one market: the point wanders freely, and each flash is a "
-            "tiny trade. Count them against weekly rebalancing to the ray. <bookmark mark='d'/> The wedge trades "
-            f"{100 * w['turn_band']:.1f} percent of wealth a year; the ray, {100 * w['turn_ray']:.0f}."
+            "Merton's investor trades every instant to hold a constant fraction. If every trade costs one percent of the "
+            "amount traded, that is ruinous: continuous rebalancing has infinite turnover. What should she do? "
+            "<bookmark mark='a'/> Draw her wealth as a point in a plane: dollars in bonds across, dollars in stocks up. "
+            "Merton's rule is a ray from the origin: every point on it has the same stock share. <bookmark mark='b'/> With "
+            "costs, the ray opens into a wedge. Inside it, do nothing. When the market pushes the point to an edge, trade "
+            "just enough to stay on the edge, never back to the middle. <bookmark mark='c'/> Watch fifteen years of one "
+            "market. The point wanders freely inside the wedge, and each flash at an edge is a tiny trade. Count them "
+            "against an investor who goes back to the ray every week. <bookmark mark='d'/> The wedge trades "
+            f"{100 * w['turn_band']:.1f} percent of wealth a year; staying on the ray, {100 * w['turn_ray']:.0f} percent. "
+            "Mathematically the point is a diffusion reflected at the edges of a cone."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
@@ -112,12 +116,15 @@ class Costs(VoiceoverScene):
                              r"solution; Shreve and Soner (1994) proved it, as a viscosity solution", 12.0, 20, GREY_B)
         foot.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The controls are now cumulative purchases and sales, each dollar costing epsilon: singular control. "
-            "<bookmark mark='a'/> The HJB becomes a variational inequality: the largest of three terms is zero, giving "
-            "three regions, buy, sell, and the wedge. <bookmark mark='b'/> Wealth factors out, leaving the stock share. "
-            "<bookmark mark='c'/> For small costs the band's half-width grows as the cube root of the cost. Magill and "
-            "Constantinides saw the band in 1976, Davis and Norman constructed it in 1990, and Shreve and Soner proved it "
-            "in 1994, with viscosity solutions."
+            "The mathematics. The controls are no longer rates but cumulative purchases and sales, each dollar costing "
+            "epsilon: a singular control problem. <bookmark mark='a'/> The HJB equation becomes a variational inequality: "
+            "the largest of three terms is zero. Where the first binds, the value obeys the no-trade equation; where the "
+            "second binds, buying is worth exactly its cost; where the third binds, selling is. Three regions: buy, sell, and "
+            "the wedge between them. <bookmark mark='b'/> Power utility again lets wealth factor out, so only the stock share "
+            "matters. <bookmark mark='c'/> For small costs the band's half-width grows as the cube root of the cost: a tiny "
+            "cost already buys a wide band. Michael Magill and George Constantinides saw the band in 1976; Mark Davis and "
+            "Andrew Norman constructed the solution in 1990; and Steven Shreve and Mete Soner proved it in 1994, as a viscosity "
+            "solution, with the tools of chapter four."
         ) as vo:
             step(0)
             vo.wait_until("a")

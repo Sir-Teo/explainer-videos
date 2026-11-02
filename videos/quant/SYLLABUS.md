@@ -438,7 +438,7 @@ rate, APV and Miller, Campbell–Shiller, Beneish).
 
 ### Act II · The Mathematical Toolkit
 
-### Part 4 · Martingales and Measure (~53)
+### Part 4 · Martingales and Measure (~57)
 1. Probability spaces and filtrations as information: σ-algebras as the questions you can answer, measurability,
    Kolmogorov (1933); coin space as the unit interval.
 2. Conditional expectation as orthogonal projection: Kolmogorov's definition, the properties, the tower; regression

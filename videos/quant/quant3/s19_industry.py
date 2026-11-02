@@ -139,10 +139,13 @@ class Industry(VoiceoverScene):
                   font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Standard setters move the numbers too. In 2005 the SEC staff estimated a trillion and a quarter dollars of lease "
-            "commitments off balance sheets; from 2019 they went on. <bookmark mark='a'/> The lease moves into debt, and rent "
-            "leaves EBITDA's costs. <bookmark mark='b'/> The multiple falls, leverage rises, the equity is unchanged: two "
-            "accounting regimes, not two firms."
+            "And the standard setters move the numbers under everyone's feet. In 2005 the SEC's staff estimated that American "
+            "companies had about a trillion and a quarter dollars of operating-lease commitments that never appeared on a balance "
+            "sheet. From 2019 the new lease standard put them on. <bookmark mark='a'/> Watch what that does to a firm whose business "
+            "did not change. The lease liability moves from the footnote into debt, and the rent, now split into depreciation and "
+            "interest, leaves EBITDA's costs. <bookmark mark='b'/> Enterprise value and EBITDA both rise; the multiple falls and "
+            "leverage rises. The equity is worth exactly what it was. A screen that compares multiples across 2018 and 2019 without "
+            "adjusting is comparing two accounting regimes, not two firms."
         ) as vo:
             self.play(FadeIn(head), FadeIn(before), FadeIn(lease))
             vo.wait_until("a")

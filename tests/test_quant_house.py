@@ -2297,3 +2297,78 @@ def test_stopping_regions_last_date():
     grid, reg = deep.stopping_regions(r["nets"], p, grid=np.array([60.0, 100.0, 150.0]), dates=[p["N"] - 1])
     R = reg[p["N"] - 1]  # rows S2, columns S1
     assert R[0, 2] == 1 and R[1, 1] == 0
+
+
+# ---------------------------------------------------------------------------
+# Part 10: the solver's frozen entries, the heat kernel, Leland, BAW, Kim's premium, portfolio insurance
+# ---------------------------------------------------------------------------
+def test_implied_vol_freezes_converged_quotes():
+    from explainer.quant.house import bs as bs_
+
+    # a short-dated deep out-of-the-money call (slow) next to an at-the-money one (fast): once converged, an entry
+    # must stay converged while the other iterates
+    F, K, T = np.array([100.0, 100.0]), np.array([100.0, 175.0]), np.array([0.5, 16 / 365])
+    iv = np.array([0.45, 0.80])
+    p = bs_.price(F, K, T, iv)
+    sig, its = bs_.implied_vol(p, F, K, T, return_iterations=True)
+    assert np.allclose(sig, iv, atol=1e-10)
+    err = np.array([np.abs(x - iv) for x in its])
+    for j in range(2):
+        first = int(np.argmax(err[:, j] < 1e-10))
+        assert err[first:, j].max() < 1e-10  # never knocked out again
+    rng = np.random.default_rng(3)
+    n = 400
+    F, K = np.full(n, 100.0), 100 * np.exp(rng.uniform(-1.0, 1.0, n))
+    T, iv, cp = rng.uniform(2 / 365, 1.0, n), rng.uniform(0.2, 1.2, n), rng.choice([-1, 1], n)
+    p = bs_.price(F, K, T, iv, 0, 0, cp)
+    sig = bs_.implied_vol(p, F, K, T, 0, 0, cp)
+    tv = p - np.maximum(cp * (F - K), 0.0)  # time value: below ~1e-4 the price no longer pins the volatility down
+    ok = np.isfinite(sig) & (tv > 1e-4)
+    assert ok.mean() > 0.9 and np.allclose(sig[ok], iv[ok], atol=1e-8)
+
+
+def test_heat_price_matches_the_formula():
+    for cp in (1, -1):
+        hp = bs.heat_price(lambda s, cp=cp: np.maximum(cp * (s - 100.0), 0.0), 100.0, 1.0, 0.2, 0.05, kinks=(100.0,))
+        assert abs(hp - float(bs.price(100.0, 100.0, 1.0, 0.2, 0.05, 0.0, cp))) < 1e-9
+    dig = bs.heat_price(lambda s: (s > 110.0).astype(float), 100.0, 0.5, 0.3, 0.02, kinks=(110.0,))
+    d2 = bs.d1_d2(100.0, 110.0, 0.5, 0.3, 0.02)[1]
+    assert abs(dig - np.exp(-0.02 * 0.5) * bs.ndtr(d2)) < 1e-9
+
+
+def test_leland_vol_problem_four():
+    assert round(float(bs.leland_vol(0.2, 0.002, 1 / 252)), 3) == 0.212
+    assert round(float(bs.leland_vol(0.2, 0.002, 1 / 52)), 3) == 0.206
+    assert float(bs.leland_vol(0.2, 0.0, 1 / 252)) == pytest.approx(0.2)
+
+
+def test_baw_against_the_tree():
+    o = bs.baw(100.0, 100.0, 1.0, 0.2, 0.05, cp=-1)
+    tree = trees.crr(100.0, 100.0, 1.0, 0.2, 0.05, N=2000, cp=-1, american=True)["price"]
+    assert abs(float(o["price"]) - tree) < 0.02 and 75 < o["critical"] < 90
+    c = bs.baw(100.0, 100.0, 1.0, 0.2, 0.05, cp=1)  # no dividends: never exercised early
+    assert float(c["price"]) == pytest.approx(float(bs.price(100.0, 100.0, 1.0, 0.2, 0.05)))
+    deep = bs.baw(60.0, 100.0, 1.0, 0.2, 0.05, cp=-1)
+    assert float(deep["price"]) == pytest.approx(40.0)
+
+
+def test_early_exercise_premium_integral():
+    pb = trees.put_boundary(100.0, 100.0, 1.0, 0.2, 0.05, N=2000)
+    eu = float(bs.price(100.0, 100.0, 1.0, 0.2, 0.05, 0.0, -1))
+    prem = trees.early_exercise_premium(100.0, 100.0, 0.05, 0.2, pb["times"], pb["boundary"])
+    assert abs(eu + prem - pb["price"]) < 0.015
+    assert np.nanmax(pb["boundary"] - pb["raw"]) > 0  # interpolation lifts the staircase
+    zero = trees.early_exercise_premium(100.0, 100.0, 0.0, 0.2, pb["times"], pb["boundary"])
+    assert zero == pytest.approx(0.0)
+
+
+def test_replicate_put_keeps_the_floor_without_gaps():
+    t, S = paths.gbm(100.0, 0.0, 0.15, 1.0, 252, 2000, seed=11)
+    ret = S[:, 1:] / S[:, :-1] - 1
+    o = hedge.replicate_put(ret, 0.0, 95.0, 1.0, 0.15)
+    ends, fv = o["V"][:, -1], o["floor_value"]
+    assert np.mean(ends >= 0.98 * fv) >= 0.99
+    gap = np.zeros(252)
+    gap[100] = -0.25
+    o = hedge.replicate_put(gap, 0.0, 95.0, 1.0, 0.15, start=100.0)
+    assert o["V"][-1] < fv and o["w"][101] < o["w"][99]

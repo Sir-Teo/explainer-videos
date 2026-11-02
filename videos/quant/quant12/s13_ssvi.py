@@ -94,10 +94,10 @@ class SSVI(VoiceoverScene, ThreeDScene):
         th = np.asarray(r["theta"])
         rm = r["rmse"]
         with self.voiceover(
-            "The House's fitter is a dozen lines. The trick is in the unpacking. The optimizer searches freely, and "
-            "every constraint is built into the map from its numbers to the model's: a hyperbolic tangent keeps rho "
-            "between minus one and one, an exponential keeps eta positive, eta is clipped to Gatheral and Jacquier's "
-            "butterfly bound, and the thetas are cumulative sums of exponentials, so they can only rise. "
+            "The House's fitter is a dozen lines, and the trick is the unpacking: the optimizer searches freely, and "
+            "every constraint lives in the map to the model's parameters. A hyperbolic tangent keeps rho inside minus "
+            "one and one, eta is clipped to the butterfly bound, and the thetas are sums of exponentials, so they "
+            "can only rise. "
             f"<bookmark mark='a'/> On the Surface's quotes, weighted by vega: rho {f['rho']:.2f}, eta {f['eta']:.2f}, "
             f"gamma {f['gamma']:.2f}, and an error of {rm:.2f} volatility points."
         ) as vo:
@@ -236,7 +236,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         side = VGroup(
             wrapped_label(r"the price of global consistency is paid at the short end, where one smile shape cannot "
                           r"match the first few days", 3.8, 19, GREY_A),
-            wrapped_label(r"eSSVI (Hendriks and Martini 2019; Mingone 2022) lets $\rho$ vary with maturity and keeps the "
+            wrapped_label(r"eSSVI (Hendriks and Martini 2019; Martini and Mingone 2022) lets $\rho$ vary with maturity and keeps the "
                           r"surface arbitrage-free", 3.8, 19, GREY_B),
             wrapped_label(r"pause and predict: which fits better in sample, and which would you quote from?", 3.8, 19,
                           QC.HOUSE),

@@ -105,11 +105,14 @@ class Hawkes(VoiceoverScene):
         res = label(rf"here $n = 0.7$: {hc['n_clusters']} families, mean size {hc['mean_cluster']:.2f} against "
                     rf"$1/(1 - n) = {hc['cluster_theory']:.2f}$", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "The same process can be seen as families. Immigrants arrive at the base rate, and every event has a "
-            "Poisson number of children with mean n, the branching ratio. <bookmark mark='a'/> Redraw the events as a "
-            "family tree, each child hanging from its parent. <bookmark mark='b'/> Taking expectations, the long-run "
-            "rate is mu over one minus n, which exists only if n is below one, and a family's mean size is one over "
-            "one minus n."
+            "The same process can be seen as families. Immigrants arrive at the base rate mu, and every event, "
+            "immigrant or not, has children: a Poisson number of them, with mean n equal to alpha over beta, the "
+            "total mass of the kernel, called the branching ratio. <bookmark mark='a'/> Redraw the events as a family "
+            "tree, generation by generation, each child hanging from its parent. <bookmark mark='b'/> Taking "
+            "expectations, the long-run rate satisfies lambda bar equals mu plus n times lambda bar, so it is mu over "
+            "one minus n, which exists only if n is below one: above it, the families never die out. A family's mean "
+            "size is one plus n plus n squared and so on, one over one minus n, and here the simulated families "
+            f"average {hc['mean_cluster']:.2f}, against {hc['cluster_theory']:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ticks))
             vo.wait_until("a")

@@ -52,13 +52,17 @@ class Bellman(VoiceoverScene, ThreeDScene):
             r_.scale(0.95)
         step = ladder(self, rows, whys, keep=4, top=3.3, x=1.2, buff=0.45, edge=6.9)
         with self.voiceover(
-            "Most decisions are made again tomorrow, with whatever today's choice led to. Bellman's principle of "
-            "optimality, from 1957: an optimal plan stays optimal from wherever it has led. So start at the end, where the "
-            "value is just utility, and work backwards. <bookmark mark='a'/> At each node, try every fraction, average the "
-            "next value over what the stock might do, and keep the best. <bookmark mark='b'/> With power utility, guess that "
-            "tomorrow's value is a power of wealth too. <bookmark mark='c'/> Wealth factors out of the maximum. "
-            "<bookmark mark='d'/> So the best fraction is the same at every wealth and date: the investor is myopic, as "
-            "Mossin and Samuelson proved in 1968 and 1969."
+            "Most financial decisions are made again tomorrow, with whatever today's decision led to. Richard Bellman's "
+            "principle of optimality, from 1957, says an optimal plan remains optimal from wherever it has led. So start at "
+            "the end, where the value of wealth is just its utility, and work backwards one period at a time. "
+            "<bookmark mark='a'/> At each node, try every fraction pi in the stock, average next period's value over what "
+            "the stock might do, and keep the best. That is the Bellman recursion, and it is all a computer needs. "
+            "<bookmark mark='b'/> With power utility we can also do it by hand. Guess that tomorrow's value is a power of "
+            "wealth too, times a number. <bookmark mark='c'/> Substitute: wealth factors out of the maximum, because a power "
+            "of a product is a product of powers, and what is left is the expected power of one period's growth. "
+            "<bookmark mark='d'/> So the best fraction is the same at every wealth and every date. The investor is myopic: "
+            "she can ignore the horizon and decide one period at a time. Jan Mossin and Paul Samuelson proved this in 1968 "
+            "and 1969, and it is the reason a long-horizon investor with power utility needs no forecast of her own future."
         ) as vo:
             self.play(Create(edges), *[FadeIn(nd) for nd in nodes], FadeIn(tags), run_time=1.5)
             step(0)
@@ -94,11 +98,13 @@ class Bellman(VoiceoverScene, ThreeDScene):
         f = b["floor"]
         gap = float(np.nanmax(np.abs(np.asarray(f["pi"]) - np.asarray(f["pi_closed"]))))
         with self.voiceover(
-            "Lab one: the House's solver, for a stock with eight percent expected return and eighteen percent volatility, a "
-            "bond at two, and gamma three over ten years. It steps backwards a month at a time, tries a hundred and "
-            "fifty-one fractions at every wealth on its grid, and keeps the best. <bookmark mark='a'/> Run it. Without a "
-            f"floor it chooses {100 * p0.min():.0f} to {100 * p0.max():.0f} percent across the grid: Merton's "
-            f"{100 * sw['pi_merton']:.1f}, to the grid's step."
+            "Lab one: the House's solver. It takes Merton's market, a stock with eight percent expected return and "
+            "eighteen percent volatility and a bond at two percent, and an investor with gamma three over ten years. "
+            "Expectations come from fifteen Gauss-Hermite nodes. It steps backwards a month at a time; at every wealth on "
+            "its grid it tries a hundred and fifty-one fractions, interpolates next month's value through its certainty "
+            "equivalent, and keeps the best. <bookmark mark='a'/> Run it. Without a floor it chooses "
+            f"{100 * p0.min():.0f} to {100 * p0.max():.0f} percent across the whole grid: Merton's "
+            f"{100 * sw['pi_merton']:.1f} percent, to the grid's step, everywhere. A dumb search found the formula."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

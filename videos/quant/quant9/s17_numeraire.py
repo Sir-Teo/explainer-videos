@@ -119,6 +119,8 @@ class Numeraire(VoiceoverScene):
             f"leans right, and the same event has probability {n['Nd1']:.4f}, N of d one. <bookmark "
             f"mark='b'/> A hundred times the first minus a hundred times the second: {n['call']:.2f}. "
             "One payoff, two units, one price."
+            " Under Q the log-price drifts at minus half sigma squared; under the stock's measure at "
+            "plus half sigma squared: the two densities differ by exactly the factor s over S naught."
         ) as vo:
             self.add(D)
             self.play(FadeIn(g), Create(kl), FadeIn(side[0]), FadeIn(area), FadeIn(side[2]))
@@ -157,6 +159,9 @@ class Numeraire(VoiceoverScene):
             "no rates: Margrabe, 1978. <bookmark mark='c'/> At these numbers the formula says "
             f"{n['margrabe']:.2f}; a million paths under Q, {n['mc_Q']:.2f}; a million under the "
             f"second asset's measure, {n['mc_S2']:.2f}."
+            " With equal volatilities and correlation one half, the ratio's volatility equals each "
+            "asset's own, thirty percent; with correlation one it would be zero, and the option at "
+            "the money worthless."
         ) as vo:
             step(0)
             vo.wait_until("a")

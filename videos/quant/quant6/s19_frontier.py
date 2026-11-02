@@ -105,14 +105,15 @@ class Frontier(VoiceoverScene):
         q = predict(r"A model with more parameters than months of data forecasts the market. What simple strategy "
                     r"might it secretly be?", width=11.0).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "The debate, in a picture. Kelly, Malamud and Zhou showed in 2024 that predicting the market with "
-            "thousands of random nonlinear features of a few predictors, far more parameters than observations, "
-            "did better out of sample as complexity grew. <bookmark mark='a'/> Nagel replied in 2025: with short "
-            "training windows, such a forecast becomes a weighted average of recent returns, weighted by how "
-            "similar today's predictors are to the past's, which is a volatility-timed momentum strategy. On "
-            "artificial data where returns reverse instead, the same machine builds the same momentum bet, and "
-            "loses. Both sides are on the record; the question is open. <bookmark mark='b'/> Pause and predict: "
-            "what simple strategy might a model with more parameters than months be? Momentum, if Nagel is right."
+            "The debate, in a picture. Kelly, Malamud and Zhou showed in 2024 that predicting the market with thousands "
+            "of random nonlinear features of a few predictors, far more parameters than observations, did better out of "
+            "sample as complexity grew, against the textbook intuition of chapter six. <bookmark mark='a'/> Nagel replied "
+            "in 2025: with short training windows, such a forecast becomes a weighted average of recent returns, "
+            "weighted by how similar today's predictors are to the past's, and since similarity falls when predictors "
+            "are volatile, it is a volatility-timed momentum strategy. On artificial data where returns reverse instead, "
+            "the same machine builds the same momentum bet, and loses. Both sides are on the record; the question is "
+            "open, and Part twenty-seven returns to it. <bookmark mark='b'/> Pause and predict: what simple strategy "
+            "might a model with more parameters than months be? Momentum, if Nagel is right."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(t1), Create(up), FadeIn(tag))
             vo.wait_until("a")

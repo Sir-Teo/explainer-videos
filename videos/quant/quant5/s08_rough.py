@@ -129,9 +129,11 @@ class Rough(VoiceoverScene):
         outs = ["fbm(H, 4096); hurst_from_increments(path)    # Part 5's test",
                 "recovers H = 0.1, 0.5, 0.8 to within 0.06; Var B_1 = 1 over 4,000 paths"]
         with self.voiceover(
-            "To simulate it exactly, Davies and Harte embedded the covariance in a circulant matrix, whose "
-            "eigenvalues are a Fourier transform. <bookmark mark='a'/> Multiply complex Gaussian noise by their "
-            "square roots, transform back, and the increments come out exact, in n log n operations. "
+            "How do you simulate it exactly? Increments of fractional Brownian motion are a stationary Gaussian "
+            "sequence with a known covariance. Davies and Harte embedded that covariance in a circulant matrix, whose "
+            "eigenvalues are a Fourier transform of its first row. <bookmark mark='a'/> Multiply complex Gaussian "
+            "noise by the square roots of the eigenvalues, transform back, and the increments come out with exactly "
+            "the right covariance, in n log n operations instead of the n cubed of a Cholesky factor. "
             "<bookmark mark='b'/> The House's test checks that the Hurst estimator recovers H from paths made this "
             "way."
         ) as vo:

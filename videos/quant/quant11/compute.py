@@ -792,7 +792,7 @@ def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, c
             snaps[str(it)] = frac_curve()
         if it == iters:
             break
-        idx = torch.randint(0, 15000, (1024,), generator=g)
+        idx = torch.randint(0, 15000, (512,), generator=g)
         pnl, c = run(St[idx])
         loss = pnl.var() + kappa * c.mean()
         if it % record_every == 0:
@@ -809,7 +809,7 @@ def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, c
 def compute_hedging_replay() -> dict:
     T, n, sigma, cost = 30 / 365, 30 * 4, 0.6, 0.001
     t, S = _gbm(20000, n, T, sigma, 112)     # the same 20,000 paths as ``hedging``
-    part = CACHE.partial("hedging_replay", {"kappas": [1, 4, 16], "seeds": [0, 1, 2], "iters": 500})
+    part = CACHE.partial("hedging_replay", {"kappas": [1, 4, 16], "seeds": [0, 1, 2], "iters": 500, "batch": 512})
     for kappa in (1.0, 4.0, 16.0):
         for seed in range(3):
             key = f"{kappa:g}-{seed}"

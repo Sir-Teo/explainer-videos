@@ -58,9 +58,8 @@ class House(VoiceoverScene):
         src = real_data(r"timed on this machine, shared with other jobs: the ratios matter, not the seconds; Part 17's "
                         r"network and Monte Carlo timed in Part 17", corner=DL)
         with self.voiceover(
-            "What do desks actually run? Speed decides first. A calibration evaluates the model on the whole "
-            "surface dozens or hundreds of times, so the cost of one evaluation is the number to watch. Here they "
-            "are, timed on this machine. Pause and predict: a desk that recalibrates every five seconds. Which "
+            "What do desks actually run? Speed decides first: a calibration evaluates the model on the whole surface "
+            "hundreds of times. Pause and predict: a desk that recalibrates every five seconds. Which "
             "can it run? <bookmark mark='a'/> Rough Bergomi by Monte Carlo: seconds per evaluation, minutes per "
             "calibration. Rough Heston through its Riccati equation: much faster. The lifted Heston, faster still. "
             f"And Part seventeen's neural network: about {ratio:,.0f} times faster than the Monte Carlo it imitates. "

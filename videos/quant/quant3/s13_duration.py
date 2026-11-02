@@ -132,9 +132,10 @@ class Duration(VoiceoverScene):
                                r"modified duration $1/(r-g)$ in action", 4.4, 23, GREY_A)
         side = VGroup(labs, lesson).arrange(DOWN, aligned_edge=LEFT, buff=0.6).to_edge(RIGHT, buff=0.5).shift(UP * 0.3)
         with self.voiceover(
-            "In numbers: five growing at three percent, discounted at eight, is worth a hundred. <bookmark mark='a'/> At seven, a "
-            "hundred and twenty-five; at five, two hundred and fifty. <bookmark mark='b'/> The closer the rate to growth, the "
-            "steeper the curve: one answer to Shiller's puzzle."
+            "In numbers: a dividend of five growing at three percent, discounted at eight, is worth a hundred. "
+            "<bookmark mark='a'/> Lower the rate by one point, to seven, and it is worth a hundred and twenty-five. To five, and it "
+            "is worth two hundred and fifty. <bookmark mark='b'/> The closer the rate is to growth, the steeper the curve, exactly "
+            "as the duration formula says. It is one answer to Shiller's puzzle: if the discount rate moves, prices must move a lot."
         ) as vo:
             self.play(FadeIn(g), Create(line), run_time=2)
             self.play(FadeIn(dots[0]), FadeIn(labs[0]))
@@ -189,12 +190,14 @@ class Duration(VoiceoverScene):
         pp = desk_question(r"Pause and predict: Gordon says a one-point rise in yields should cut a growth stock by a "
                            r"third. What did the data say?", width=6.0, font_size=21).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Does the market price stocks like long bonds? Pause and predict: Gordon says a one-point rise in yields should cut "
-            "such a stock by a third. <bookmark mark='a'/> Measured on French's portfolios since 1963, against the monthly change "
-            f"in the ten-year yield: growth stocks lost {abs(growth):.1f} percent per point, value stocks {abs(value):.1f}. "
-            f"<bookmark mark='b'/> {order_line}But the size is off more than tenfold. <bookmark mark='c'/> When yields rise "
-            "with inflation, expected dividends rise too, so g moves with r. Dechow, Sloan and Soliman measured implied durations "
-            "of about fifteen years."
+            "So does the market price stocks like long bonds? Pause and predict: Gordon says a one-point rise in yields should cut "
+            "a stock with r minus g of three percent by a third. <bookmark mark='a'/> Here is what happened, measured on Kenneth "
+            "French's portfolios since 1963: each month's return against that month's change in the ten-year Treasury yield. The "
+            f"growth stocks lost {abs(growth):.1f} percent per point, the value stocks {abs(value):.1f}. "
+            f"<bookmark mark='b'/> {order_line}But the size is off by more than ten times. <bookmark mark='c'/> The formula holds "
+            "growth fixed while the rate moves. In the data, yields rise when inflation rises, and expected dividends rise with it, "
+            "so g moves with r and much of the effect cancels. Dechow, Sloan and Soliman measured implied equity durations of about "
+            "fifteen years, not thirty-three. A model's sensitivity is only as good as its assumption about what else moves."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(pp))
             vo.wait_until("a")

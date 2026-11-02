@@ -143,11 +143,12 @@ class Utility(VoiceoverScene):
                              r"$\gamma = 1$ is the log", 4.0, 19, GREY_B).next_to(eq, DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
         i3 = int(np.argmin(abs(gam - 3)))
         with self.voiceover(
-            "Economists give the curve one dial: power utility, wealth to the one minus gamma over one minus gamma, with the "
-            "log at gamma one. Scale it so the two outcomes stay at zero and one: the chord never moves, only the bend. "
-            "<bookmark mark='a'/> Turn the dial. As gamma rises the curve bends harder and the certainty equivalent slides "
-            f"left: {ces[i3]:.1f} at gamma three, {ces[-1]:.1f} at thirty. <bookmark mark='b'/> Surveys put most people "
-            "between one and ten."
+            "Economists usually give the curve one dial: power utility, wealth to the power one minus gamma, over one minus "
+            "gamma, with the logarithm at gamma one. Someone with this utility takes the same gambles, in percentages, rich or "
+            "poor. Scale the curve so the two outcomes stay at zero and one: then the chord never moves, and only the bend "
+            "changes. <bookmark mark='a'/> Turn the dial. As gamma rises the curve bends harder, and the certainty equivalent "
+            f"slides left: {ces[i3]:.1f} at gamma three, and at thirty, {ces[-1]:.1f}, barely above the worst outcome. "
+            "<bookmark mark='b'/> Surveys and laboratory choices put most people's gamma between one and ten."
         ) as vo:
             self.play(FadeIn(g), Create(chord), FadeIn(ends), FadeIn(mid), FadeIn(eq), FadeIn(why_))
             self.add(crv, hl, vl, cd, read)

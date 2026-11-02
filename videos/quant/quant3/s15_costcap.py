@@ -51,11 +51,15 @@ class CostOfCapital(VoiceoverScene):
                 why(r"or value the firm unlevered and add financing effects one by one: adjusted present value")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-1.2, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Free cash flow is discounted at the weighted average cost of capital, debt's cost cut by the tax rate: "
-            f"{100 * ex:.2f} percent for the toy firm. <bookmark mark='a'/> Leverage scales the owners' risk: the equity beta. "
-            "<bookmark mark='b'/> The CAPM prices it: the riskless rate plus beta times the equity risk premium. "
-            "<bookmark mark='c'/> Or value the firm unlevered and add the tax shield and distress costs: APV. Each needs one number "
-            "nobody observes: the premium."
+            "Every valuation needs a discount rate. Free cash flow belongs to lenders and owners together, so it is discounted at a "
+            "blend of what each demands, the weighted average cost of capital, with debt's cost cut by the tax rate because interest "
+            f"is deductible. Our toy firm's comes to {100 * ex:.2f} percent. <bookmark mark='a'/> Where does the owners' rate come "
+            "from? Leverage scales the owners' risk: the equity beta is the asset beta plus the spread over the debt's beta times "
+            "debt over equity. <bookmark mark='b'/> And the textbook prices that risk with the capital asset pricing model: the "
+            "riskless rate plus beta times the equity risk premium. Part twenty-three tests whether it works. "
+            "<bookmark mark='c'/> When the financing changes over time, practitioners value the firm without debt and add the tax "
+            "shield and the costs of distress separately: the adjusted present value. Each route needs one number nobody can "
+            "observe: the equity risk premium."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -115,11 +119,14 @@ class CostOfCapital(VoiceoverScene):
             label(rf"growing {100 * g:.2f}\% for five years, then at the 10-year yield, {100 * gl:.2f}\%", font_size=19,
                   color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The market's price can supply it. A balance: on the left, the S&P 500 at the end of 2020; on the right, its expected "
-            "cash to owners, dividends and buybacks, growing at analysts' forecasts, then at the bond yield, each discounted. "
-            "<bookmark mark='a'/> Turn the dial on the rate: at twelve percent the cash is worth too little; lower it and the stack "
-            f"grows. <bookmark mark='b'/> Level at {100 * target:.2f} percent: the return the price implies. Less the ten-year "
-            f"yield, {100 * (target - gl):.2f} percent is the implied premium, which Damodaran has published since 1960."
+            "The market's price answers that question, if you let it. Here is a balance. On the left, the S&P 500 at the end of "
+            "2020. On the right, the cash it was expected to pay its owners, dividends and buybacks, growing at the analysts' "
+            "forecast for five years and at the bond yield after that, each payment discounted. <bookmark mark='a'/> Turn the dial "
+            "on the discount rate. At twelve percent the cash is worth too little and the beam tips toward the price. Lower the "
+            "rate and the stack grows, mostly its top block, the value after year five. <bookmark mark='b'/> At one rate the beam "
+            f"is level: {100 * target:.2f} percent. That is the return the price implies, if the forecasts are right. Subtract the "
+            f"ten-year yield and what is left, {100 * (target - gl):.2f} percent, is the implied equity risk premium: Aswath "
+            "Damodaran has published it every year since 1960."
         ) as vo:
             self.add(tri, b)
             self.play(FadeIn(inputs))

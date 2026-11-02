@@ -147,13 +147,17 @@ class Information(VoiceoverScene, MovingCameraScene):
                              r"No: it needs the second toss, so it is in $\mathcal{F}_2$ but not $\mathcal{F}_1$.",
                              width=6.0, font_size=22).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Make that precise. A sigma-algebra is the collection of yes-or-no questions you can answer. After n "
-            "tosses they are exactly the unions of the blocks, each block in or out: two to the two to the n of "
-            "them. <bookmark mark='a'/> A random variable is measurable when you can compute it from what you know, "
-            "which on a partition means it is constant on every block. The first toss passes. "
-            "<bookmark mark='b'/> The number of heads fails: inside each block it still varies. A process measurable "
-            "at every time is called adapted. <bookmark mark='c'/> Check yourself: is the event that the first two "
-            "tosses hold an even number of heads in F one? No. It needs the second toss."
+            "Make that precise. A sigma-algebra is the collection of yes-or-no questions you can answer, closed under "
+            "not, and, and or: if you can answer two questions, you can answer their combinations. After n tosses "
+            "the answerable events are exactly the unions of the blocks: each block is either in or out, so there "
+            "are two to the power two to the n of them. Two before any toss, four after one, sixteen after two, two "
+            "hundred and fifty-six after three. <bookmark mark='a'/> A random variable is measurable with respect to "
+            "that information when you can compute it from what you know, which on a partition means it is constant "
+            "on every block. The first toss's outcome passes: its bars are flat on each half. <bookmark mark='b'/> "
+            "The number of heads fails: inside each block it still varies. A process whose value at every time is "
+            "measurable at that time is called adapted; prices are adapted to the market's information, and a "
+            "strategy must be too. <bookmark mark='c'/> Check yourself: is the event that the first two tosses hold "
+            "an even number of heads in F one? No. It needs the second toss, so it lives in F two."
         ) as vo:
             self.play(FadeIn(cells), Create(blocks), FadeIn(deck[:2]))
             self.play(FadeIn(deck[2:]))
@@ -206,12 +210,15 @@ class Information(VoiceoverScene, MovingCameraScene):
             toss_labels.add(MathTex(("H" if dgt else "T"), font_size=30, color=QC.IDEA))
         toss_labels.arrange(RIGHT, buff=0.25).next_to(bar, UP, buff=0.35).align_to(bar, LEFT)
         with self.voiceover(
-            "Infinitely many tosses become concrete with one trick: write the tosses as the binary digits of a number "
-            "between zero and one. Fair tosses become length on the interval. <bookmark mark='a'/> Somewhere is the "
-            "true world, the gold dot. Each toss halves the block that holds it. <bookmark mark='b'/> After six tosses "
-            "you know which of sixty-four slivers you are in, and nothing more: that sliver is F six. "
-            "<bookmark mark='c'/> Kolmogorov built probability on this picture in 1933, and chapter thirteen reuses "
-            "the grid."
+            "What about infinitely many tosses? Here is the trick that makes probability on them concrete: write the "
+            "sequence of tosses as the binary digits of a number between zero and one, heads as one and tails as "
+            "zero. Fair tosses become length on the interval. <bookmark mark='a'/> Somewhere on this bar is the true "
+            "world, the gold dot, and you don't know where. Each toss halves the block that holds it. "
+            "<bookmark mark='b'/> Zoom in and keep tossing: after six tosses you know which of sixty-four slivers you "
+            "are in, and nothing more. That sliver is your information, F six. <bookmark mark='c'/> In 1933 Andrei "
+            "Kolmogorov built all of probability on this picture: a set of worlds, a sigma-algebra of events, and a "
+            "measure that adds up over countably many pieces. Chapter thirteen reuses this grid to build the "
+            "Radon-Nikodym derivative."
         ) as vo:
             self.play(FadeIn(map_), FadeIn(bar), FadeIn(lab0), FadeIn(lab1), FadeIn(cap))
             vo.wait_until("a")

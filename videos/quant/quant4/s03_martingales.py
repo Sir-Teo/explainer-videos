@@ -91,11 +91,16 @@ class Martingales(VoiceoverScene):
                 why(r"Jensen: a convex function of a martingale is a submartingale")]
         step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.8, buff=0.55, edge=6.9)
         with self.voiceover(
-            "If tomorrow's forecast is at most today, a supermartingale, the gambler at a casino; if at least, a "
-            "submartingale. <bookmark mark='a'/> For a fair walk, expand the square: the walk squared minus the steps "
-            "is a martingale. <bookmark mark='b'/> Dividing e to the theta S by cosh theta to the n gives the "
-            "exponential martingale. <bookmark mark='c'/> Forecasts refined by information are martingales, by the "
-            "tower. <bookmark mark='d'/> And by Jensen, a convex function of a martingale is a submartingale."
+            "Fair, unfavourable and favourable games have names. If tomorrow's forecast is at most today, a "
+            "supermartingale: the gambler's wealth at a casino. If at least, a submartingale. "
+            "<bookmark mark='a'/> Three examples, each proved in a line. For a fair walk, expand the square of the "
+            "next position: the cross term averages to zero and the new step squared is one, so the walk squared "
+            "minus the number of steps is a martingale. <bookmark mark='b'/> The exponential of theta times the walk "
+            "grows on average by the hyperbolic cosine of theta per step, the moment generating function of a plus "
+            "or minus one step; dividing by it gives the exponential martingale, which chapter five uses to time the "
+            "walk. <bookmark mark='c'/> The forecast of anything, refined as information arrives, is a martingale "
+            "by the tower property. <bookmark mark='d'/> And Jensen's inequality turns a convex function of a "
+            "martingale into a submartingale."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -184,10 +184,13 @@ class Repo(VoiceoverScene):
         q = desk_question(r"A Treasury is special at $-1\%$ for three months while GC repo pays 4\%. What does that do "
                           r"to its price?", width=8.4, font_size=22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "When many traders short the same bond, they all need to borrow it, and its owner can borrow cash against it "
-            "cheaply: the bond is special. Duffie priced it. <bookmark mark='a'/> The owner's saving is priced into the bond. "
-            "<bookmark mark='b'/> Special at minus one percent for three months while general collateral pays four: about a "
-            "point and a quarter of price, part of why the newest Treasury trades rich. Predict, and check the sign."
+            "One more repo idea. When many traders want to short the same bond, they all need to borrow it, and its owner can "
+            "lend it out in repo in exchange for cash at a low rate. The bond is special: its repo rate falls below general "
+            "collateral. Duffie showed what that does to the price. <bookmark mark='a'/> The owner's saving, the rate gap on "
+            "the bond's value for as long as it stays special, is worth something, so it is priced into the bond: the "
+            "present value of the cheap borrowing. <bookmark mark='b'/> A bond special at minus one percent for three months, "
+            "while general repo pays four, carries about a point and a quarter of extra price. That's one reason the newest "
+            "Treasury trades rich to its older twins. Pause and predict, and check the sign."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

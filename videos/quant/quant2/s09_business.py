@@ -42,9 +42,12 @@ class Business(VoiceoverScene):
                               width=5.9, color=QC.IDEA, font_size=20)
         pair = VGroup(sell, buy).arrange(RIGHT, buff=0.4, aligned_edge=UP).shift(UP * 0.6)
         with self.voiceover(
-            "The sell side, banks and dealers, makes markets and lends; as agent it works for a client, as principal it "
-            "trades against one. <bookmark mark='a'/> The buy side invests and charges a fee on assets, hedge funds a share of "
-            "profits too; big multi-manager platforms often pass their costs straight through to investors."
+            "The industry divides in two. The sell side, banks and dealers, makes markets, earns spreads and fees, designs "
+            "products and lends to everyone else. Acting as agent it works for the client; as principal it trades against the "
+            "client, from its own book. <bookmark mark='a'/> The buy side invests: asset managers, pension funds, insurers, "
+            "hedge funds. It charges a fee on assets, and hedge funds take a share of profits too. The big multi-manager "
+            "platforms often charge their costs, salaries included, straight through to investors instead of a fixed "
+            "management fee. In between sit proprietary traders and market makers, trading only their own money."
         ) as vo:
             self.play(FadeIn(sell, shift=UP * 0.2))
             vo.wait_until("a")
@@ -75,10 +78,13 @@ class Business(VoiceoverScene):
         src = real_data(r"calendar-year returns of the US market, 1927--2020 (Ken French), as a fund's gross returns; "
                         r"fees charged yearly")
         with self.voiceover(
-            "Fees compound like returns. Take the American market's years from 1927 to 2020 as a fund's gross returns: a "
-            f"dollar becomes {fe['final_gross']:,.0f}. Charge two percent a year and twenty percent of gains above the "
-            f"high-water mark. <bookmark mark='a'/> It becomes {fe['final_net']:,.0f}: the investor keeps "
-            f"{100 * fe['share_kept']:.1f} percent of the profit. Even one percent leaves {fe['final_1pct']:,.0f}."
+            "Fees compound, just like returns. Take the American market's calendar years from 1927 to 2020 as a fund's "
+            f"returns before fees. A dollar becomes {fe['final_gross']:,.0f} dollars. Now charge the classic hedge-fund fee: two "
+            "percent of assets every year, and twenty percent of any gain above the fund's previous peak, the high-water mark. "
+            f"<bookmark mark='a'/> The same dollar becomes {fe['final_net']:,.0f}. Growth falls from "
+            f"{100 * fe['geo_gross']:.1f} percent a year to {100 * fe['geo_net']:.1f}, and the investor keeps "
+            f"{100 * fe['share_kept']:.1f} percent of the profit. Even a plain one percent fee leaves {fe['final_1pct']:,.0f}. "
+            "That's why every Track Record result in this series is charged its fees."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg))
             self.add(lg, ln)

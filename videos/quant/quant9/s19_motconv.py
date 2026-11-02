@@ -47,6 +47,9 @@ class MOTConverge(VoiceoverScene):
             "Minimize the claim's expected payoff, then maximize it. On the Surface's two expiries, "
             f"with {n1} and {n2} atoms, that is {n1 * n2:,} unknowns, and HiGHS returns the band "
             f"{m['lower']:.3f} to {m['upper']:.3f} in under a second."
+            " The House checks convex order before every solve: without it the program is infeasible, "
+            "and that infeasibility is itself a certificate of a calendar arbitrage between the two "
+            "expiries."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -104,6 +107,8 @@ class MOTConverge(VoiceoverScene):
             f"From {lo[0]:.3f} to {up[0]:.3f} on the coarsest grid, to {lo[-1]:.3f} to {up[-1]:.3f} on "
             "the finest, the last two nearly agreeing. <bookmark mark='b'/> Chapter fifteen's band "
             "was a little narrow; the log-normal still sits inside. Report a bound with its grid."
+            " Each finer grid lets the joining put mass on more extreme pairs of prices, so the upper "
+            "bound creeps up and the lower down, and the increments shrink."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ticks), Create(ml), FadeIn(mll))
             self.add(W)
@@ -140,6 +145,8 @@ class MOTConverge(VoiceoverScene):
             "sum, and so does each v: Sinkhorn's matrix scaling. <bookmark mark='c'/> The martingale "
             "multiplier h has no closed form, but each one is a single-variable root, a Newton step. "
             "Cycle through the three, shrink epsilon, and the value approaches the program's."
+            " The penalty also makes the problem strictly concave, so the solution is unique and moves "
+            "smoothly with the data."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -192,6 +199,9 @@ class MOTConverge(VoiceoverScene):
             f"{runs[3]['value']:.4f}, against {m['upper']:.4f}. <bookmark mark='b'/> Always below, "
             "because the penalty pulls toward independence. In many dimensions, this is how bounds "
             "are computed."
+            " At epsilon a tenth the joining is nearly independent and the value is "
+            f"{runs[0]['value']:.3f}, far from the bound; the gap shrinks roughly in proportion to "
+            "epsilon."
         ) as vo:
             self.play(FadeIn(rp), Create(lp), FadeIn(lpl))
             vo.wait_until("a")

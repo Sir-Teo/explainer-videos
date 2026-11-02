@@ -155,6 +155,8 @@ class Ross(VoiceoverScene):
             "never wash out. The answer is clean and wrong: pessimistic, putting the long-run level "
             f"{100 * abs(r['mean_rec2']):.1f} percent below trend when the truth is {100 * r['mean_true']:.1f} "
             "above."
+            " The tilt moves the recovered long-run distribution toward the bad states, exactly where "
+            "a risk adjustment would put it."
         ) as vo:
             self.play(FadeIn(blocks[0]), FadeIn(sub), FadeIn(src))
             vo.wait_until("a")
@@ -185,6 +187,8 @@ class Ross(VoiceoverScene):
             "measure with the long bond as numeraire, as Martin and Ross, and Qin and Linetsky, "
             "showed. <bookmark mark='c'/> Recovery is right exactly when there is no permanent part, "
             "and prices cannot tell."
+            " In plain words: if consumption grows, marginal utility has a trend, and prices alone "
+            "cannot separate that trend from probabilities."
         ) as vo:
             step(0)
             vo.wait_until("a")

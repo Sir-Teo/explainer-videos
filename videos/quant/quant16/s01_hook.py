@@ -160,8 +160,8 @@ class Hook(VoiceoverScene):
             "Schwartz's grid for warrants. Trees followed in 1979. <bookmark mark='c'/> Then the modern toolkit: Greeks "
             "by simulation in 1996, the fast Fourier transform in 1999, American options by regression in 2001, "
             "adjoint Greeks in 2006, and in 2008 both multilevel simulation and the cosine method. <bookmark mark='d'/> "
-            "Since then the hardware has changed too: banks moved risk runs onto programmable chips, and in 2021 a "
-            "Goldman Sachs and IBM team estimated what a quantum computer would need to beat them."
+            "Then the hardware: programmable chips in 2011, and in 2021 an estimate of what a quantum computer "
+            "would need."
         ) as vo:
             self.play(FadeIn(head), Create(strip), FadeIn(dots), run_time=1.2)
             groups = [(0, 2, "a"), (2, 3, "b"), (3, 5, "c"), (5, 10, "d")]
@@ -187,12 +187,10 @@ class Hook(VoiceoverScene):
             r"The industry's machines; quantum amplitude estimation; the frontier",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan, in nineteen chapters. Monte Carlo and its error bar, and where random numbers come from. The "
-            "tricks that shrink the error: control variates, antithetics, strata, and importance sampling that "
-            "learns where to sample. Quasi-random points and the Brownian bridge. Multilevel simulation, with its "
-            "theorem. American options, bracketed from both sides. Greeks, and adjoint differentiation. Grids in one "
-            "and two dimensions. Fourier methods and the race. Then how banks actually run all this, what a quantum "
-            "computer would buy, and the research frontier."
+            "The plan, in nineteen chapters. Monte Carlo, its error bar and its random numbers. The tricks that "
+            "shrink the error. Quasi-random points and the Brownian bridge. Multilevel simulation. American options, "
+            "bracketed from both sides. Greeks and adjoints. Grids in one and two dimensions. Fourier methods and the "
+            "race. Then how banks run all this, what a quantum computer would buy, and the frontier."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))

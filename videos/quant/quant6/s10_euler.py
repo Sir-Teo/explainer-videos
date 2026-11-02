@@ -53,11 +53,14 @@ class Euler(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.6, buff=1.0, edge=6.8)
         with self.voiceover(
             "The most famous moment condition in finance. An investor who can save one more dollar, in stocks or "
-            "bills, is indifferent at the margin: the discount factor m, patience beta times consumption growth to the "
-            "power minus gamma, times the return, averages one. Gamma is risk aversion. <bookmark mark='a'/> It holds "
-            "given anything known today, so multiply the error by today's instruments: a constant, last quarter's "
-            "consumption growth and market return. Six moments, two parameters. <bookmark mark='b'/> And it says a "
-            "premium must be earned by covarying with consumption. Hansen and Kenneth Singleton estimated this in 1982."
+            "bills, is indifferent at the margin: the marginal utility given up today equals the discounted marginal "
+            "utility of what the dollar buys tomorrow. So the discount factor m, patience beta times consumption growth to "
+            "the power minus gamma, times the return, averages one. Gamma is risk aversion. <bookmark mark='a'/> It holds "
+            "given anything known today, so by the tower property, multiply the error by today's instruments, a constant, "
+            "last quarter's consumption growth and market return, and the products average zero too. Two assets times "
+            "three instruments: six moments, two parameters, four left to test. <bookmark mark='b'/> And for an excess "
+            "return the condition says the premium is minus the covariance of m with the return: a premium must be "
+            "earned by covarying with consumption. Hansen and Kenneth Singleton estimated this in 1982."
         ) as vo:
             step(0)
             vo.wait_until("a")

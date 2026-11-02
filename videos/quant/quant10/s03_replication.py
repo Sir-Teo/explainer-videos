@@ -3,10 +3,9 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from explainer.quant.house import bs
 from videos.quant.quant10.common import CASH, DEL, GAM, OPT, PART, PP, SPOT, THE
 
-C_ = {r"\mu": PP, r"r": CASH, r"\partial_t V": THE, r"\partial_S V": DEL, r"\partial_{SS} V": GAM, r"dW": SPOT,
+C_ = {r"X": CASH, r"\mu": PP, r"r": CASH, r"\partial_t V": THE, r"\partial_S V": DEL, r"\partial_{SS} V": GAM, r"dW": SPOT,
       r"\Delta": DEL, r"dS": SPOT, r"S": SPOT, r"dV": OPT, r"V": OPT, r"\tfrac12\sigma^2 S^2": GAM}
 
 
@@ -20,7 +19,6 @@ class Replication(VoiceoverScene):
         self.setup_()
         self.derive()
         self.why_mu()
-        self.heat()
 
     def card(self):
         c = chapter_card(2, r"The riskless portfolio", r"What is an option worth if it can be copied?",
@@ -66,57 +64,58 @@ class Replication(VoiceoverScene):
     # ------------------------------------------------------------------
     def derive(self):
         rows = [
+            row(r"dX", r"=", r"\Delta", r"\,", r"dS", r"+", r"r", r"\,(X", r"-", r"\Delta", r"S", r")\,dt"),
             row(r"dV", r"=", r"\big(", r"\partial_t V", r"+", r"\mu", r"S", r"\partial_S V", r"+",
                 r"\tfrac12\sigma^2 S^2", r"\partial_{SS} V", r"\big)\,dt", r"+", r"\sigma S", r"\partial_S V",
                 r"\,", r"dW"),
-            row(r"d\Pi", r"=", r"\big(", r"\partial_t V", r"+", r"\mu", r"S", r"(", r"\partial_S V", r"-",
-                r"\Delta", r")", r"+", r"\tfrac12\sigma^2 S^2", r"\partial_{SS} V", r"\big)\,dt", r"+",
-                r"\sigma S", r"(", r"\partial_S V", r"-", r"\Delta", r")", r"\,", r"dW"),
-            row(r"d\Pi", r"=", r"\big(", r"\partial_t V", r"+", r"\tfrac12\sigma^2 S^2", r"\partial_{SS} V",
-                r"\big)\,dt"),
-            row(r"d\Pi", r"=", r"r", r"\,\Pi\,dt", r"=", r"r", r"(", r"V", r"-", r"S", r"\partial_S V", r")",
-                r"\,dt"),
-            row(r"0", r"=", r"\partial_t V", r"+", r"r", r"S", r"\partial_S V", r"+", r"\tfrac12\sigma^2 S^2",
-                r"\partial_{SS} V", r"-", r"r", r"V", fs=38),
+            row(r"dX", r"=", r"\big(", r"r", r"X", r"+", r"(", r"\mu", r"-", r"r", r")", r"\Delta", r"S", r"\big)\,dt",
+                r"+", r"\sigma", r"\Delta", r"S", r"\,", r"dW"),
+            row(r"\Delta", r"=", r"\partial_S V"),
+            row(r"\partial_t V", r"+", r"r", r"S", r"\partial_S V", r"+", r"\tfrac12\sigma^2 S^2",
+                r"\partial_{SS} V", r"-", r"r", r"V", r"=", r"0", fs=38),
         ]
-        whys = [why(r"It\^o's lemma (Part 5)"), why(r"hold the option, short $\Delta$ shares: $\Pi = V - \Delta S$"),
-                why(r"choose $\Delta = \partial_S V$: the $dW$ term and $\mu$ vanish"),
-                why(r"riskless, so it must earn $r$ (else: arbitrage)"),
-                why(r"equate the two: the Black--Scholes PDE")]
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-2.6, buff=0.55, edge=6.9)
+        whys = [why(r"self-financing: $\Delta$ shares, the rest $X - \Delta S$ in the bank, no money in or out"),
+                why(r"It\^o's lemma (Part 5)"),
+                why(r"substitute $dS = \mu S\,dt + \sigma S\,dW$"),
+                why(r"$X$ tracks $V$ path by path: the $dW$ terms must match"),
+                why(r"then the $dt$ terms must match: the $\mu$ terms cancel")]
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-2.4, buff=0.55, edge=6.9)
+        cond = note(r"with $V(T, S) = \max(S - K, 0)$: a portfolio started at $X_0 = V(0, S_0)$ ends at the payoff "
+                    r"(Shreve II, \S4.5)", font_size=22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Now the argument. By Ito's lemma, a small change in the option's value has a drift term, with the "
-            "time derivative, the expected growth mu times the slope, and one half sigma squared S squared times "
-            "the curvature; and a noise term, sigma S times the slope, times the Brownian increment. "
-            "<bookmark mark='a'/> Hold one option and sell delta shares of the stock. The portfolio Pi changes "
-            "by the option's change minus delta times the stock's. Both the drift and the noise now contain the "
-            "slope minus delta. <bookmark mark='b'/> So choose delta equal to the slope. The noise disappears: "
-            "over the next instant this portfolio's change is certain. And look what else disappeared with it. "
-            "Mu. The only place the stock's expected return entered was multiplied by slope minus delta. "
-            "<bookmark mark='c'/> A portfolio whose change is certain must earn the riskless rate, or there is "
-            "an arbitrage: if it earned more, borrow at r and buy it; if less, sell it and lend. So its change is "
-            "r times its value, the option minus S times the slope. <bookmark mark='d'/> Set the two "
-            "expressions equal, and out comes the Black-Scholes equation: a partial differential equation for "
-            "the option's value, in which the stock's expected return does not appear."
+            "Now the argument, done properly. Build a portfolio X that holds delta shares and keeps the rest in the "
+            "bank. It is self-financing: no money comes in or goes out, so it changes only by what the shares gain "
+            "and what the bank pays. <bookmark mark='a'/> The option changes, by Ito's lemma, by a drift term, "
+            "with the time derivative, mu times S times the slope, and half sigma squared S squared times the "
+            "curvature, plus a noise term: sigma S times the slope, times the Brownian increment. "
+            "<bookmark mark='b'/> Put the stock's own equation into the portfolio's change and it too has a "
+            "drift and a noise term. <bookmark mark='c'/> If the portfolio is to copy the option on every path, "
+            "the noise terms must agree, and that fixes the hedge: delta is the slope of the option's value. "
+            "<bookmark mark='d'/> Then the drift terms must agree too. Write it out, and the terms with mu appear "
+            "on both sides and cancel. What is left is the Black-Scholes equation. Black and Scholes argued "
+            "that a hedged position is riskless, so it earns the riskless rate; Merton's self-financing copy "
+            "reaches the same equation and is the version that survives scrutiny."
         ) as vo:
             step(0)
-            br1 = Brace(VGroup(*rows[0][2:12]), DOWN, buff=0.08, color=GREY_B)
-            br2 = Brace(VGroup(*rows[0][13:17]), DOWN, buff=0.08, color=SPOT)
-            t1 = label(r"drift: certain", font_size=24, color=GREY_B).next_to(br1, DOWN, buff=0.1)
-            t2 = label(r"noise: random", font_size=24, color=SPOT).next_to(br2, DOWN, buff=0.1)
-            self.play(FadeOut(whys[0]), GrowFromCenter(br1), FadeIn(t1))
-            self.play(GrowFromCenter(br2), FadeIn(t2))
             vo.wait_until("a")
-            self.play(FadeOut(VGroup(br1, br2, t1, t2)), FadeIn(whys[0]), run_time=0.6)
             step(1)
+            br1 = Brace(VGroup(*rows[1][2:12]), DOWN, buff=0.08, color=GREY_B)
+            br2 = Brace(VGroup(*rows[1][13:17]), DOWN, buff=0.08, color=SPOT)
+            t1 = label(r"drift", font_size=24, color=GREY_B).next_to(br1, DOWN, buff=0.1)
+            t2 = label(r"noise", font_size=24, color=SPOT).next_to(br2, DOWN, buff=0.1)
+            self.play(FadeOut(whys[1]), GrowFromCenter(br1), FadeIn(t1), GrowFromCenter(br2), FadeIn(t2))
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(br1, br2, t1, t2)), FadeIn(whys[1]), run_time=0.6)
             step(2)
             vo.wait_until("c")
+            self.play(Indicate(VGroup(*rows[1][13:17]), color=SPOT), Indicate(VGroup(*rows[2][15:20]), color=SPOT))
             step(3)
             vo.wait_until("d")
+            mus = VGroup(term(rows[1], r"\mu"), term(rows[2], r"\mu"))
+            self.play(Indicate(mus, color=PP, scale_factor=1.5))
             step(4)
             box = SurroundingRectangle(rows[4], color=OPT, buff=0.18, corner_radius=0.1)
-            self.play(Create(box))
+            self.play(Create(box), FadeIn(cond))
         self.wait(0.4)
         self.pde = VGroup(rows[4], box)
         self.clear_scene(self.pde)
@@ -137,9 +136,10 @@ class Replication(VoiceoverScene):
             "This is the surprise that took economists a decade to find. Two traders who disagree completely about "
             "where the stock is going, one expecting thirty percent a year and the other a loss, "
             "<bookmark mark='a'/> agree on the option's price, because both can manufacture it the same way and "
-            "neither's opinion enters the manufacturing. The hedge removes the direction. What is left is the size "
-            "of the moves: the term with sigma squared and the curvature, gamma. That term is the whole economics "
-            "of an options desk, and chapter six is about it."
+            "neither's opinion enters the manufacturing. Pause and ask yourself: why can the hedger ignore mu, but "
+            "not sigma? Because the hedge removes the direction, and what is left is the size of the moves: the "
+            "term with sigma squared and the curvature, gamma, which no position in the stock can cancel. That "
+            "term is the whole economics of an options desk, and chapter seven is about it."
         ) as vo:
             self.play(FadeIn(bull, shift=UP * 0.2))
             vo.wait_until("a")
@@ -147,61 +147,3 @@ class Replication(VoiceoverScene):
             self.play(FadeIn(reason))
         self.wait(0.3)
         self.clear_scene(pde)
-
-    # ------------------------------------------------------------------
-    def heat(self):
-        pde = self.pde
-        K, r, sig = 100.0, 0.05, 0.25
-        ax_g = axes([50, 150], [0, 55], x_length=8.4, y_length=4.0, xlabel=r"stock price $S$",
-                    ylabel=r"option value $V$", xticks=[50, 100, 150], yticks=[0, 25, 50], font_size=20)
-        ax_g.to_edge(DOWN, buff=0.55).shift(LEFT * 1.5)
-        ax = ax_g.ax
-        tau = ValueTracker(0.0)
-        xs = np.linspace(50, 150, 241)
-        payoff = curve(ax, [50, 100, 150], [0, 0, 50], GREY_B, stroke_width=2.5)
-        payoff_dash = DashedVMobject(payoff, num_dashes=50)
-
-        def curve_now():
-            t = max(tau.get_value(), 1e-6)
-            return curve(ax, xs, bs.price(xs, K, t, sig, r), OPT, stroke_width=4)
-
-        V = always_redraw(curve_now)
-        dot = always_redraw(lambda: glow_dot(ax.c2p(110, float(bs.price(110, K, max(tau.get_value(), 1e-6), sig, r))),
-                                             color=DEL, radius=0.06))
-
-        def tangent():
-            t = max(tau.get_value(), 1e-6)
-            v0 = float(bs.price(110, K, t, sig, r))
-            d = float(bs.greeks(110, K, t, sig, r)["delta"])
-            return Line(ax.c2p(96, v0 - 14 * d), ax.c2p(124, v0 + 14 * d), color=DEL, stroke_width=3)
-
-        tan = always_redraw(tangent)
-        tlab = always_redraw(lambda: MathTex(rf"T - t = {tau.get_value():.2f}", font_size=30, color=THE)
-                             .next_to(ax_g, RIGHT, buff=0.4).shift(UP * 1.2))
-        dlab = always_redraw(lambda: MathTex(rf"\Delta = {float(bs.greeks(110, K, max(tau.get_value(), 1e-6), sig, r)['delta']):.2f}",
-                                             font_size=30, color=DEL).next_to(tlab, DOWN, buff=0.35).align_to(tlab, LEFT))
-        cond = cmath(r"V(T, S) = \max(S - K,\, 0)", font_size=30, color=GREY_B).next_to(dlab, DOWN, buff=0.5)
-        cond.align_to(tlab, LEFT)
-        params = note(r"$K = 100$, $r = 5\%$, $\sigma = 25\%$", font_size=20).next_to(cond, DOWN, buff=0.3)
-        params.align_to(tlab, LEFT)
-        with self.voiceover(
-            "What does the equation do? It runs backwards from expiry. At maturity the option is worth its payoff, "
-            "the grey hockey stick. <bookmark mark='a'/> Step back in time and the equation smooths it, the way "
-            "heat spreads along a rod: in fact, after a change of variables, to log price and time remaining, it "
-            "is exactly the heat equation. The kink at the strike melts into a curve. <bookmark mark='b'/> The "
-            "slope of that curve at the current price, the yellow line, is delta: the number of shares in the "
-            "hedge. And the curve sits above the payoff everywhere, by more the longer there is to go, because the "
-            "right to wait is worth something. One year out, here is the price of a call with strike one hundred "
-            "when the stock is at one hundred and ten. Solving this equation with this terminal condition gives "
-            "the formula; the next chapter gets there by a different road."
-        ) as vo:
-            self.play(FadeIn(ax_g), Create(payoff_dash), FadeIn(cond), FadeIn(params))
-            vo.wait_until("a")
-            self.add(V)
-            self.play(tau.animate.set_value(0.25), FadeIn(tlab), run_time=3)
-            vo.wait_until("b")
-            self.add(tan, dot)
-            self.play(FadeIn(dlab))
-            self.play(tau.animate.set_value(1.0), run_time=max(vo.remaining(1.0) - 1.0, 4.0), rate_func=smooth)
-        self.wait(0.4)
-        self.clear_scene()

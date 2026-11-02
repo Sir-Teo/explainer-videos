@@ -38,13 +38,15 @@ class Doubling(VoiceoverScene):
                 why(r"each session is an independent trial that ruins with probability $2^{-k}$")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "The doubling system is the original martingale: double the bet after every loss until the first win. "
-            "With unlimited credit you are always one unit up, after two tosses on average. <bookmark mark='a'/> "
-            "The theorem survives: the bets and the losses carried before the win are unbounded. "
-            "<bookmark mark='b'/> With a bankroll of a thousand and twenty-three, ten doublings, a session wins one "
-            "unit a thousand and twenty-three times in a thousand and twenty-four, and loses everything once: "
-            "expected gain zero. <bookmark mark='c'/> So the first ruin comes after a thousand and twenty-four "
-            "sessions on average."
+            "The doubling system is the original martingale: bet one, and double the bet after every loss, until the "
+            "first win. With unlimited credit you stop at the first win, after two tosses on average, always exactly "
+            "one unit up. <bookmark mark='a'/> The theorem is not broken. The bets one, two, four, eight grow without "
+            "limit, and so do the losses you carry before the win, so none of its three conditions holds. "
+            "<bookmark mark='b'/> Give the gambler a real bankroll, a thousand and twenty-three units, enough for ten "
+            "doublings. Now a thousand and twenty-three sessions in a thousand and twenty-four win one unit, and one "
+            "loses everything. The expected gain is exactly zero. <bookmark mark='c'/> Each session ruins with "
+            "probability one in a thousand and twenty-four, so the wait for the first ruin is geometric, with mean "
+            "one thousand and twenty-four sessions, and the units won along the way are lost at once."
         ) as vo:
             step(0)
             vo.wait_until("a")

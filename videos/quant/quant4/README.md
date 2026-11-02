@@ -14,7 +14,7 @@ courts and events come from the public record, with secondary reports labelled "
 
 *An education in methods, not investment advice, and nothing here is gambling advice.*
 
-## Chapters (about 53 minutes of narration)
+## Chapters (about 57 minutes)
 
 * **Can you beat a fair game?** A bettor wagers every day since 1926 that today's US return keeps yesterday's sign;
   drawn live, wealth passes 20 in February 1929 and reaches about 10¹⁰¹; started in 2000 it peaks at 6.7. The problem
@@ -229,7 +229,7 @@ python tools/make.py quant4 --cpu-voice -q m                 # English and Chine
 
 *讲的是方法，不构成投资建议，也不构成任何博彩建议。*
 
-## 各章（旁白约53分钟）
+## 各章（约57分钟）
 
 * **你能战胜公平博弈吗？** 1926年以来每天押“今天与昨天同号”的赌徒，财富在1929年2月越过20；从2000年开始最高只到6.7。点数问题
   （帕斯卡致费马，1654年7月29日）：二比一值48比16，二比零值56比8。1654–2023年的时间线。

@@ -85,6 +85,8 @@ class Hook(VoiceoverScene):
             f"to {p['trade_p50']:.1f} basis points. <bookmark mark='b'/> And the forwards imply an "
             "interest rate rising from three percent a year to almost five: Bitcoin's own rate, the "
             "funding rate of Part two."
+            " Every number in this part is computed by the House from that one morning of trades, and "
+            "you can rerun every one."
         ) as vo:
             self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             self.play(FadeIn(g))
