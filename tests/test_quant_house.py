@@ -184,3 +184,42 @@ def test_smile_density_and_svix_on_a_flat_smile():
     assert np.trapezoid(q, K) == pytest.approx(1.0, abs=2e-3)
     assert np.trapezoid(K * q, K) == pytest.approx(F, rel=2e-3)
     assert smile.svix2(p, F, T) == pytest.approx(np.exp(sig ** 2 * T) - 1, rel=1e-3)
+
+
+# --------------------------------------------------------------------------- Part 2: the funding desk
+def test_margin_account_liquidates_at_the_formula_price():
+    from explainer.quant.house import funding
+    entry, L, m = 100.0, 10.0, 0.005
+    p_liq = funding.liquidation_price(entry, L, m, side=1)
+    prices = np.concatenate([np.linspace(100, p_liq + 0.01, 50), [p_liq - 0.01, p_liq - 1]])
+    acc = funding.margin_account(prices, 1.0, L, m)
+    assert acc["liquidated_at"] == 50
+    assert acc["initial_margin"] == pytest.approx(10.0)
+    short = funding.margin_account(np.linspace(100, 120, 200), -1.0, 5.0, m)
+    assert short["liquidated_at"] is not None
+    assert funding.liquidation_price(100, 5, m, side=-1) == pytest.approx(120 / 1.005, rel=1e-9)
+
+
+def test_margin_account_funding_and_netting_and_auction():
+    from explainer.quant.house import funding
+    acc = funding.margin_account(np.full(4, 100.0), 2.0, 2.0, 0.01, funding=np.full(4, 0.001))
+    assert acc["funding_paid"] == pytest.approx(3 * 0.001 * 200)
+    assert acc["left"] == pytest.approx(100 - 0.6)
+    net = funding.netting([0, 1, 2, 0], [1, 2, 0, 2], [10, 10, 10, 5], 3)
+    assert net["gross"] == 35 and net["multilateral"] == pytest.approx(5)
+    assert net["bilateral"] == pytest.approx(10 + 10 + 5)  # 0->1 10, 1->2 10, 2->0 10 vs 0->2 5: 5
+    au = funding.call_auction([101, 100, 99], [5, 5, 5], [98, 100, 102], [4, 6, 5])
+    assert au["price"] == pytest.approx(100) and au["volume"] == 10
+
+
+def test_fund_fees_high_water_mark_and_haircut():
+    from explainer.quant.house import funding
+    f = funding.fund_fees([0.10, -0.10, 0.10], mgmt=0.0, perf=0.2)
+    assert f["fees"][0] == pytest.approx(0.02)          # 20% of a 10% gain
+    assert f["fees"][1] == pytest.approx(0.0)           # no fee on a loss
+    # after -10% the fund is below its mark: the recovery pays no performance fee until the mark is passed
+    nav_after_loss = 1.08 * 0.9
+    gain = nav_after_loss * 1.10
+    want = 0.2 * max(gain - 1.08, 0) / nav_after_loss
+    assert f["fees"][2] == pytest.approx(want)
+    assert funding.max_leverage(0.02) == pytest.approx(50)

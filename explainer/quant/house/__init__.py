@@ -6,6 +6,7 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`pit` (Part 1, data & technology): the point-in-time rule and the sealed envelope (the hold-out from 2021);
 * :mod:`stats` (Part 1): returns, autocorrelations, Lo–MacKinlay variance ratios, Hill tail exponents;
 * :mod:`smile` (Parts 1, 12): raw SVI, the Breeden–Litzenberger density, Martin's SVIX;
+* :mod:`funding` (Part 2, treasury & funding): margin accounts and liquidation, netting, auctions, fees, haircuts;
 * :mod:`bs` (Part 10, the volatility desk): Black–Scholes–Merton prices, Greeks, Black-76, implied volatility;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
@@ -13,4 +14,4 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import bs, hedge, paths, pit, smile, stats, surface, trees  # noqa: F401
+from explainer.quant.house import bs, funding, hedge, paths, pit, smile, stats, surface, trees  # noqa: F401
