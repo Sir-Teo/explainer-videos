@@ -259,6 +259,48 @@ def compute_rheston() -> dict:
                   "n": len(Q["K"])})
 
 
+def compute_rprofile() -> dict:
+    """Rough Heston with H held fixed (0.05, 0.1, 0.2), the other five re-fitted from the free fit: how much does
+    the Surface care about roughness? And each fit's skew term structure."""
+    Q = _quotes()
+    w = np.sqrt(Q["vega"] / Q["vega"].mean())
+    Ts = np.unique(Q["T"])
+    best = load("rheston")["x"]
+
+    def ivs(p):
+        v0, lam, theta, nu, rho, H = p
+        cf = lambda u, T: R.rough_heston_cf(u, T, v0, lam, theta, nu, rho, H, n=80)  # noqa: E731
+        out = np.empty(len(Q["K"]))
+        for T in Ts:
+            m = Q["T"] == T
+            F = float(Q["F"][m][0])
+            with np.errstate(all="ignore"):
+                pr = sv.cos_price(cf, F, Q["K"][m], T, Q["cp"][m], N=192, L=14)
+            out[m] = [bs.implied_vol(a, F, k, T, 0, 0, int(c)) for a, k, c in zip(pr, Q["K"][m], Q["cp"][m])]
+        return out
+
+    rows = []
+    Tg = np.exp(np.linspace(np.log(2 / 365), np.log(1.0), 16))
+    for H in (0.05, 0.1, 0.2):
+        def resid(q, H=H):
+            e = (ivs(list(q) + [H]) - Q["iv"]) * 100 * w
+            return np.where(np.isfinite(e), e, 20.0)
+        r = least_squares(resid, best[:5], bounds=([1e-3, 0.01, 1e-3, 0.05, -0.95], [2, 30, 2, 5, 0.95]),
+                          max_nfev=25, x_scale="jac")
+        x = list(r.x) + [H]
+        iv = ivs(x)
+        cf = lambda u, T, x=x: R.rough_heston_cf(u, T, *x, n=80)  # noqa: E731
+        sk = []
+        for T in Tg:
+            v = sv.model_iv(cf, 1.0, np.exp(np.array([-0.02, 0.02])), T)
+            sk.append(float((v[1] - v[0]) / 0.04))
+        by = {int(round(T * 365)): _rmse(np.where(Q["T"] == T, iv, np.nan), Q) for T in Ts}
+        rows.append({"H": H, "x": x, "rmse": _rmse(iv, Q), "skew": sk, "by_expiry": by})
+    ivb = ivs(best)
+    by_best = {int(round(T * 365)): _rmse(np.where(Q["T"] == T, ivb, np.nan), Q) for T in Ts}
+    return _json({"rows": rows, "skew_T": Tg, "best_by_expiry": by_best})
+
+
 def compute_lift() -> dict:
     p = load("rheston")["x"]
     v0, lam, theta, nu, rho, H = p
@@ -361,7 +403,7 @@ def compute_envelope() -> dict:
 
 
 ITEMS = {"skew": compute_skew, "roughness": compute_roughness, "artefact": compute_artefact,
-         "rbergomi": compute_rbergomi, "rheston": compute_rheston, "lift": compute_lift, "hawkes": compute_hawkes,
+         "rbergomi": compute_rbergomi, "rheston": compute_rheston, "rprofile": compute_rprofile, "lift": compute_lift, "hawkes": compute_hawkes,
          "pdv": compute_pdv, "envelope": compute_envelope}
 
 if __name__ == "__main__":
