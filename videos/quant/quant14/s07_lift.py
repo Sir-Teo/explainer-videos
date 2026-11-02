@@ -86,10 +86,11 @@ class Lift(VoiceoverScene):
         src = illustration(r"13 strikes, $\pm 30\%$; the House's \texttt{lifted\_heston\_cf}")
         with self.voiceover(
             "How many factors are enough? Price the thirty-day smile of a rough Heston model with H of a tenth, fitted "
-            "to the Surface in chapter four, exactly, and with lifts of growing size. <bookmark mark='a'/> One factor is a Heston model with the wrong memory, and "
-            "misses. A handful of factors brings the error down, and twenty are close enough for a trading desk. The "
-            "roughness was never magic: it is many time scales at once, and a model with enough of them behaves the "
-            "same."
+            "to the Surface in chapter four, exactly, and with lifts of growing size. <bookmark mark='a'/> One factor "
+            f"is a Heston model with the wrong memory, and misses by {rows[0]['iv_err']:.1f} volatility points. Ten "
+            f"factors cut that to {rows[3]['iv_err']:.1f}, twenty to {rows[4]['iv_err']:.1f}, fifty to "
+            f"{rows[5]['iv_err']:.2f}. The roughness was never magic: it is many time scales at once, and a model with "
+            "enough of them behaves the same."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(side), FadeIn(src))
             vo.wait_until("a")
