@@ -174,25 +174,26 @@ class Bandits(VoiceoverScene):
         whys = [why(r"Hoeffding, \ rewards in $[0, 1]$, \ $n_a$ pulls"), why(r"make a miss rare"),
                 why(r"solve for $\epsilon$"), why(r"pull the arm with the highest \\ plausible mean")]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.5, align_index=1, buff=0.42)
-        th = theorem_card(r"UCB1", r"each worse arm is pulled at most $\frac{8 \ln T}{\Delta_a^2} + O(1)$ times, \ so "
+        th = theorem_card(r"UCB1", r"for rewards in $[0,1]$, each worse arm is pulled in expectation at most $\frac{8 \ln T}{\Delta_a^2} + O(1)$ times, \ so "
                           r"$\mathrm{Regret}(T) = O\big(\sum_a \frac{\ln T}{\Delta_a}\big)$", who=r"Auer, Cesa-Bianchi "
                           r"\& Fischer (2002)", width=6.2, color=UCB)
-        lb = theorem_card(r"a lower bound", r"any strategy good on every bandit pulls arm $a$ at least "
-                          r"$\frac{\ln T}{\mathrm{KL}(\mu_a \,\|\, \mu^*)}$ times: \ $\log T$ regret is the best possible",
+        lb = theorem_card(r"a lower bound", r"for Bernoulli arms, uniformly efficient strategies satisfy asymptotically: "
+                          r"$\liminf_{T\to\infty} \frac{\mathbb E[N_a(T)]}{\ln T} \ge \frac{1}{\mathrm{KL}(\mu_a \,\|\, \mu^*)}$",
                           who=r"Lai \& Robbins (1985)", width=6.2, color=C.KL)
         cards = VGroup(th, lb).arrange(DOWN, buff=0.35).move_to([3.3, -0.3, 0])
         with self.voiceover(
             "A cleverer idea: optimism in the face of uncertainty. Act as if each arm is as good as it plausibly "
-            "could be. How good is plausible? <bookmark mark='a'/> Hoeffding's inequality from Part 5: after n "
+            "could be. How good is plausible? <bookmark mark='a'/> For independent rewards in zero to one, Hoeffding's inequality from Part 5: after n "
             "pulls, the chance that an arm's true mean lies more than epsilon above its average is at most e to "
             "the minus two n epsilon squared. <bookmark mark='b'/> Choose epsilon so that this chance is tiny, t to the "
             "minus four, <bookmark mark='c'/> and epsilon is the square root of two log t over n. "
             "<bookmark mark='d'/> That's the upper confidence bound algorithm, UCB: pull the arm with the highest "
             "average plus bonus. An arm pulled rarely has a big bonus, so it gets tried; the bonus shrinks as its "
-            "pulls pile up, and grows slowly, like log t, for arms left alone, so no arm is abandoned for good. "
-            "<bookmark mark='e'/> The payoff is a theorem: each worse arm is pulled only about log T over its gap "
+            "pulls pile up, and grows like the square root of log t for arms left alone. "
+            "<bookmark mark='e'/> The payoff is a theorem: each worse arm has an expected pull count of order log T over its gap "
             "squared times, so the regret grows like log T. <bookmark mark='f'/> And Lai and Robbins proved in 1985 "
-            "that no strategy can do better than logarithmic regret. UCB is, up to constants, the best possible."
+            "that uniformly efficient strategies on Bernoulli bandits face an asymptotic logarithmic lower bound. "
+            "For a fixed bandit with positive gaps, UCB1 matches that order."
         ) as vo:
             step(0)
             vo.wait_until("b")
@@ -255,17 +256,20 @@ class Bandits(VoiceoverScene):
             VGroup(DashedLine(ORIGIN, RIGHT * 0.4, color=REWARD, dash_length=0.06),
                    label(r"true mean (hidden from it)", font_size=22, color=REWARD)).arrange(RIGHT, buff=0.15),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.9, 1.6, 0])
+        demo_note = note(r"Gaussian rewards here; the bounded-reward theorem above does not apply directly")
+        demo_note.to_edge(DOWN, buff=0.2)
         best = int(np.argmax(q))
         share = 100 * cnt[-1, best] / cnt[-1].sum()
         with self.voiceover(
             "Watch it work on five arms. The white dot is each arm's average, the bar above it the bonus, and the "
-            "arm with the highest top gets pulled, boxed in blue. <bookmark mark='a'/> Early on every arm's bar is "
+            "arm with the highest top gets pulled, boxed in blue. This demonstration uses Gaussian rewards, so the "
+            "bounded-reward confidence guarantee above does not apply directly. <bookmark mark='a'/> Early on every arm's bar is "
             "tall, and the pulls go round. <bookmark mark='b'/> As an arm is pulled its bar shrinks, and arms "
             f"whose averages are low drop out of contention. After {steps} pulls, {share:.0f} percent went to the "
             "best arm, and the worst was tried only a handful of times, just enough to be sure."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(a) for a in g], lag_ratio=0.1), FadeIn(means), FadeIn(key), FadeIn(nl))
-            self.add(live, tl)
+            self.add(live, tl, demo_note)
             vo.wait_until("a")
             self.play(t.animate.set_value(30), run_time=4.0, rate_func=linear)
             vo.wait_until("b")

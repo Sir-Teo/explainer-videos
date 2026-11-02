@@ -34,7 +34,7 @@ class Iteration(VoiceoverScene):
         view.add_updater(lambda m: m.set_heat(cells, Vs[min(int(k.get_value()), len(Vs) - 1)]))
         kl = always_redraw(lambda: MathTex(rf"k = {int(k.get_value())}", font_size=36, color=GREY_A)
                            .next_to(view, UP, buff=0.3))
-        eq = cmath(r"V_{k+1}(s)", r"=", r"\max_a \sum_{s'} P(s' \mid s, a)\big[\, r(s, a) + \gamma V_k(s') \,\big]",
+        eq = cmath(r"V_{k+1}(s)", r"=", r"\max_a \Big[\, r(s,a) + \gamma\sum_{s'}P(s'\mid s,a)V_k(s')\,\Big]",
                    font_size=32).move_to([2.6, 2.8, 0])
         eq[0].set_color(VALUE)
         if eq.width > 7.4:
@@ -49,7 +49,7 @@ class Iteration(VoiceoverScene):
             "Bellman's own answer to the nonlinear equations was to iterate them. Start with every value at zero. "
             "<bookmark mark='a'/> Apply the right-hand side of the optimality equation to every state at once, and "
             "call the result the new values. Then do it again. <bookmark mark='b'/> After one sweep, only the cells "
-            "next to the goal and the pit know anything. <bookmark mark='c'/> Each sweep pushes the news one step "
+            "at the goal and the pit know their exit rewards. <bookmark mark='c'/> The next sweep reaches their neighbours; each sweep pushes the news one step "
             "further, and the values spread out from the goal like heat. <bookmark mark='d'/> After a few dozen "
             "sweeps nothing changes any more: we have V star, and the arrows of the last chapter."
         ) as vo:
@@ -131,18 +131,18 @@ class Iteration(VoiceoverScene):
         pts = VGroup(*[Dot(ax.c2p(k, v), radius=0.05, color=VALUE) for k, v in zip(ks, lg)])
         bound = DashedLine(ax.c2p(0, lg[0]), ax.c2p(K - 1, lg[0] + (K - 1) * math.log10(gamma)), color=GAMMA_C,
                            stroke_width=3, dash_length=0.1)
-        bl = label(rf"$\gamma^k$, \ $\gamma = {gamma}$", font_size=24, color=GAMMA_C)
+        bl = label(rf"$D_0\gamma^k$, \ $\gamma = {gamma}$", font_size=24, color=GAMMA_C)
         bl.next_to(bound.get_end(), UP, buff=0.15).shift(LEFT * 0.4)
         ratio = float(np.max(gap[1:K] / gap[:K - 1]))
-        note_ = label(rf"each sweep multiplies it by at most $\gamma$: \ worst ${ratio:.3f}$", font_size=24, color=GREY_A)
-        note_.to_edge(RIGHT, buff=0.4).shift(UP * 2.3)
+        note_ = wrapped_label(rf"worst retained fraction per sweep: \\ ${ratio:.3f} \le \gamma$", 3.6,
+                              font_size=24, color=GREY_A).move_to([4.8, 1.6, 0])
         tag = note(r"computed: \ two starts, \ all zeros and random").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Here's the theorem at work. Run value iteration twice on the gridworld: once from all zeros, once from "
             "random values. <bookmark mark='a'/> On a log scale, here is the largest difference between the two "
             "runs, sweep by sweep. <bookmark mark='b'/> The theorem says it must stay under the dashed line, gamma "
-            f"to the k. For the first dozen sweeps it rides almost exactly on it: no sweep shrinks it by less than "
-            f"{ratio:.3f}. Then, as the cells near the goal settle, it falls even faster. Wherever you start, you "
+            f"to the k times the initial distance. At most "
+            f"{ratio:.3f} of the previous distance remains in the least-contracting sweep. Then it falls faster. Wherever you start, you "
             "end at the same V star."
         ) as vo:
             self.play(FadeIn(a), FadeIn(tag))

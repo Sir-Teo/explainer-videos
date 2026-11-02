@@ -67,7 +67,7 @@ class QLearning(VoiceoverScene):
                     color=QL_C).next_to(ql, UP, buff=0.3)
         greedy = label(r"knowing $Q$, \ acting is easy: \ $\pi(s) = \arg\max_a Q(s, a)$, \ no model needed",
                        font_size=26, color=AGENT).to_edge(UP, buff=0.35)
-        th = theorem_card(r"convergence of Q-learning", r"if every $(s, a)$ is tried infinitely often and the step sizes "
+        th = theorem_card(r"convergence of Q-learning", r"in a finite discounted MDP with bounded rewards, if every $(s, a)$ is tried infinitely often and its step sizes "
                           r"satisfy $\sum_t \alpha_t = \infty$, \ $\sum_t \alpha_t^2 < \infty$, \ then $Q \to Q^*$ with "
                           r"probability $1$", who=r"Watkins (1989); \ Watkins \& Dayan (1992)", width=8.6,
                           color=QL_C).to_edge(DOWN, buff=0.25)
@@ -79,7 +79,7 @@ class QLearning(VoiceoverScene):
             "action, so it's called Sarsa. <bookmark mark='b'/> Chris Watkins's version, in his 1989 thesis, uses "
             "the best action at the next state instead, whatever the agent actually does. That's Q-learning. "
             "<bookmark mark='c'/> It learns the value of acting optimally while behaving differently, exploring, "
-            "and Watkins and Dayan proved it converges to Q star, provided every action keeps being tried and the "
+            "and in a finite discounted MDP with bounded rewards, Watkins and Dayan proved it converges to Q star, provided every action keeps being tried and the "
             "step sizes shrink at the right rate."
         ) as vo:
             self.play(FadeIn(greedy))
@@ -130,12 +130,16 @@ class QLearning(VoiceoverScene):
         # the very first episode, walked: a random stumble that keeps falling off
         walk = d["snap_walk_q"][0]
         dot = Dot(grids["q"].sq[tuple(walk[0])].get_center(), radius=0.12, color=QL_C)
-        falls = sum(1 for a, b in zip(walk, walk[1:]) if tuple(b) == (R - 1, 0) and tuple(a) != (R - 1, 0))
+        shown = walk[:160]
+        falls = sum(1 for a, b in zip(shown, shown[1:])
+                    if tuple(b) == (R - 1, 0) and a[0] == R - 1 and 0 < a[1] < Cc - 1)
+        opening = label(rf"first ${len(shown)}$ recorded positions", font_size=20, color=GREY_A)
+        opening.next_to(grids["q"], DOWN, buff=0.12)
         with self.voiceover(
             "Watch both learn on the cliff walk from Sutton and Barto. Start at S, reach G; every step costs one, "
             "and stepping off the cliff costs a hundred and sends you back to the start. Both explore, taking a "
-            "random step one time in ten. <bookmark mark='a'/> Here is Q-learning's very first episode: a blind "
-            f"stumble that falls off the cliff {falls} times before it finds the goal. <bookmark mark='b'/> Now the "
+            "random step one time in ten. <bookmark mark='a'/> Here is the opening of Q-learning's first episode: "
+            f"{len(shown)} recorded positions, including {falls} falls. <bookmark mark='b'/> Now the "
             "training, replayed: the colours are the learned values, the line is the path each would take if it "
             "stopped exploring. Every value starts at zero, so at first everywhere looks equally good. "
             "<bookmark mark='c'/> The values grow back from the goal, and the paths straighten "
@@ -147,11 +151,11 @@ class QLearning(VoiceoverScene):
                 self.play(FadeIn(grids[m]), FadeIn(heads[m]))
             self.add(tag)
             vo.wait_until("a")
-            self.add(dot)
-            n = min(len(walk), 160)
-            self.play(MoveAlongPath(dot, path_line(grids["q"], walk[:n], QL_C)), run_time=min(9.0, 0.06 * n),
+            self.add(dot, opening)
+            n = len(shown)
+            self.play(MoveAlongPath(dot, path_line(grids["q"], shown, QL_C)), run_time=min(9.0, 0.06 * n),
                       rate_func=linear)
-            self.remove(dot)
+            self.remove(dot, opening)
             vo.wait_until("b")
             self.add(hs["sarsa"], hs["q"], ps["sarsa"], ps["q"])
             for m in ("sarsa", "q"):
@@ -233,7 +237,7 @@ class QLearning(VoiceoverScene):
             "A table of Q values can't hold Go, or even a video game screen, so the next step is to approximate Q "
             "with a function, a neural network. <bookmark mark='t'/> And here lies a trap. <bookmark mark='a'/> "
             "Function approximation, "
-            "bootstrapping, and off-policy learning: any two are fine, but all three together can make the values "
+            "bootstrapping, and off-policy learning: together these can make the values "
             "diverge to infinity, even on tiny problems, as Leemon Baird showed in 1995. Sutton and Barto call it "
             "the deadly triad. <bookmark mark='b'/> Q-learning with a neural network has all three."
         ) as vo:

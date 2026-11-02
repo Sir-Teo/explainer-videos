@@ -115,7 +115,7 @@ class Problem(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         d = definition_card(r"Markov decision process", body, color=AGENT, width=8.6).move_to(UP * 1.6)
         mk = cmath(r"P(s_{t+1} \mid s_t, a_t, s_{t-1}, a_{t-1}, \dots, s_0)", r"=", r"P(s_{t+1} \mid s_t, a_t)",
-                   font_size=36).move_to(DOWN * 1.0)
+                   font_size=36).move_to(DOWN * 0.6)
         mk[2].set_color(AGENT)
         ml = label(r"Markov: \ the present state is all the past you need", font_size=26, color=GREY_A)
         ml.next_to(mk, DOWN, buff=0.35)

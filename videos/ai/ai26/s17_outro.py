@@ -93,8 +93,8 @@ class Outro(VoiceoverScene):
             "explores just enough. Bellman's equation ties each state's value to its neighbours', and because its "
             "operator is a contraction, iterating it always converges. Temporal differences learn values from "
             "experience by bootstrapping, and Q-learning learns to act; with replay and a target network, a deep "
-            "network can do it too. Policy gradients improve the policy directly, and PPO's clip keeps each step "
-            "safe. Search, guided by a learned policy and value, trained on its own games, gave us AlphaZero. And "
+            "network can do it too. Policy gradients improve the policy directly, and PPO's clip discourages overly large "
+            "changes without guaranteeing safety. Search, guided by a learned policy and value, trained on its own games, gave us AlphaZero. And "
             "where information is hidden, minimizing regret finds the equilibrium."
         ) as vo:
             self.play(FadeIn(head))

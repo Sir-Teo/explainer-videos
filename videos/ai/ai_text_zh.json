@@ -20970,7 +20970,37 @@
     "LeJEPA (2025): \\ match views + isotropic Gaussian regularization; \\ no stop-gradient, \\ no teacher; \\\\ ViT-H/14 on ImageNet: \\ $79\\%$ linear probe": "LeJEPA（2025）：\\ 匹配视图 + 各向同性高斯正则化；\\ 无停止梯度、无老师；\\\\ ViT-H/14在ImageNet上线性探针为$79\\%$",
     "class counts; \\ labels set pool balance and seed selection": "类别计数；\\ 标签用于构造图像池比例和选择种子",
     "$\\log N - \\mathcal L_N \\le \\log N$": "$\\log N - \\mathcal L_N \\le \\log N$",
-    "pull together only: \\\\ one dominant direction, \\ then small residuals": "只拉近：\\\\ 一个主导方向，\\ 后面是小的残余值"
+    "pull together only: \\\\ one dominant direction, \\ then small residuals": "只拉近：\\\\ 一个主导方向，\\ 后面是小的残余值",
+    "for rewards in $[0,1]$, each worse arm is pulled in expectation at most $\\frac{8 \\ln T}{\\Delta_a^2} + O(1)$ times, \\ so $\\mathrm{Regret}(T) = O\\big(\\sum_a \\frac{\\ln T}{\\Delta_a}\\big)$": "奖励在$[0,1]$内时，每根较差拉杆的期望拉动次数至多为$\\frac{8\\ln T}{\\Delta_a^2}+O(1)$，因此$\\mathrm{Regret}(T)=O\\big(\\sum_a\\frac{\\ln T}{\\Delta_a}\\big)$",
+    "for Bernoulli arms, uniformly efficient strategies satisfy asymptotically: $\\liminf_{T\\to\\infty} \\frac{\\mathbb E[N_a(T)]}{\\ln T} \\ge \\frac{1}{\\mathrm{KL}(\\mu_a \\,\\|\\, \\mu^*)}$": "对伯努利拉杆，一致高效的策略渐近满足：$\\liminf_{T\\to\\infty}\\frac{\\mathbb E[N_a(T)]}{\\ln T}\\ge\\frac{1}{\\mathrm{KL}(\\mu_a\\,\\|\\,\\mu^*)}$",
+    "in a finite discounted MDP with bounded rewards, if every $(s, a)$ is tried infinitely often and its step sizes satisfy $\\sum_t \\alpha_t = \\infty$, \\ $\\sum_t \\alpha_t^2 < \\infty$, \\ then $Q \\to Q^*$ with probability $1$": "在有限、带折扣且奖励有界的马尔可夫决策过程中，若每个$(s,a)$被无限次尝试，其步长满足$\\sum_t\\alpha_t=\\infty$、$\\sum_t\\alpha_t^2<\\infty$，则$Q\\to Q^*$的概率为$1$",
+    "arrow: \\ pooled sample mean": "箭头：\\ 合并后的样本均值",
+    "finite episodes, $\\gamma=1$ here; discounted objectives add time weights": "有限回合，这里$\\gamma=1$；带折扣的目标还需要时间权重",
+    "clipping removes incentives; it does not impose a hard trust region": "裁剪去掉的是动机，并没有施加硬性的信赖域约束",
+    "angular velocity (rad/s)": "角速度（rad/s）",
+    "coloured cell pays $+1$ or $-1$, then ends; \\ $\\gamma = 0.95$": "彩色格子支付$+1$或$-1$后结束；\\ $\\gamma=0.95$",
+    "Why Go resisted search": "为什么围棋难住了搜索",
+    "AlphaGo: learned priors and values": "AlphaGo：学来的先验和价值",
+    "Gaussian rewards here; the bounded-reward theorem above does not apply directly": "这里使用高斯奖励；前面有界奖励的定理不能直接套用",
+    "search's visit counts $\\boldsymbol\\pi$: \\ a training target for $\\mathbf p$": "搜索的访问次数$\\boldsymbol\\pi$：\\ 策略$\\mathbf p$的训练目标",
+    "one learning and search recipe for chess, shogi and Go: \\ beat the strongest programs, Stockfish and Elmo, within hours of starting from random play; \\ searching $80$ thousand chess positions a second to Stockfish's $70$ million": "国际象棋、将棋和围棋使用同样的学习与搜索流程：\\ 从随机对弈开始，几小时内击败最强程序Stockfish和Elmo；\\ 国际象棋每秒检查$80$千个局面，Stockfish为$70$百万个",
+    "eligibility traces: \\ the backward view": "资格迹：\\ 后向视角",
+    "$\\lambda = 0$: \\ TD(0); \\ $\\lambda\\uparrow 1$: \\ episodic Monte Carlo limit": "$\\lambda=0$：TD(0)；\\ $\\lambda\\uparrow1$：回合式蒙特卡洛极限",
+    "solver: column 1: wins; \\\\ MCTS: column 2: wins": "求解器：第1列：获胜；\\\\ MCTS：第2列：获胜",
+    "solver: column 1: wins; \\\\ MCTS: column 2: draws": "求解器：第1列：获胜；\\\\ MCTS：第2列：和棋",
+    "solver: column 1: wins; \\\\ MCTS: column 2: loses": "求解器：第1列：获胜；\\\\ MCTS：第2列：落败",
+    "solver: column 1: draws; \\\\ MCTS: column 2: wins": "求解器：第1列：和棋；\\\\ MCTS：第2列：获胜",
+    "solver: column 1: draws; \\\\ MCTS: column 2: draws": "求解器：第1列：和棋；\\\\ MCTS：第2列：和棋",
+    "solver: column 1: draws; \\\\ MCTS: column 2: loses": "求解器：第1列：和棋；\\\\ MCTS：第2列：落败",
+    "solver: column 1: loses; \\\\ MCTS: column 2: wins": "求解器：第1列：落败；\\\\ MCTS：第2列：获胜",
+    "solver: column 1: loses; \\\\ MCTS: column 2: draws": "求解器：第1列：落败；\\\\ MCTS：第2列：和棋",
+    "solver: column 1: loses; \\\\ MCTS: column 2: loses": "求解器：第1列：落败；\\\\ MCTS：第2列：落败",
+    "median human-normalized score above $100\\%$ across $26$ Atari 100k games; about two hours of experience per game": "26个Atari 100k游戏上，人类归一化得分的中位数超过$100\\%$；\\ 每个游戏约2小时经验",
+    "largest absolute $Q$ value \\\\ (log scale)": "最大的Q值绝对值 \\\\（对数坐标）",
+    "Modern policy optimization": "现代策略优化",
+    "hand-built evaluation was a bottleneck:": "手工设计的估值是一个瓶颈：",
+    "policy improvement with few simulations, assuming correct action values": "在动作价值正确的前提下，用少量模拟改进策略",
+    "top: column; bottom: visits": "上：列号；下：访问次数"
   },
   "phrases": {
     "width": "宽度",
@@ -23315,6 +23345,18 @@
     [
       "^\\$-\\\\log p\\(\\\\text\\{transcript\\}\\) = ([\\d.]+)\\$, \\\\ PyTorch CTC loss \\(no reduction\\)$",
       "$-\\\\log p(\\\\text{转写}) = \\1$，\\\\ PyTorch CTC损失（不归约）"
+    ],
+    [
+      "^first \\$(\\d+)\\$ recorded positions$",
+      "前$\\1$个记录位置"
+    ],
+    [
+      "^each dot: one episode \\(\\$300\\$ each\\); full-space variance \\$(.*?)\\\\times\\$ smaller \\\\\\\\ outlying dots outside the plotted range omitted$",
+      "每个点是一局（各$300$局）；完整参数空间的方差缩小$\\1$倍 \\\\\\\\ 图中省略了绘图区外的离群点"
+    ],
+    [
+      "^worst retained fraction per sweep: \\\\\\\\ \\$(.*?) \\\\le \\\\gamma\\$$",
+      "每一遍后至多剩下的比例：\\\\\\\\ $\\1 \\\\le \\\\gamma$"
     ]
   ]
 }

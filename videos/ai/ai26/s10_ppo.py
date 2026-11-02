@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai26.common import (AGENT, LEFT_C, PART, PENALTY, REWARD, RIGHT_C, TDERR, axes, band, cartpole,
-                                   curve, heat_image, legend, load, state_map_frame)
+                                   cartpole_failed, curve, heat_image, legend, load, state_map_frame)
 
 RATIO = C.RATIO
 REINF, BASE, AC, PPO_C = GREY_B, C.MODEL_Q, C.BASELINE, C.TRUE_P
@@ -128,6 +128,8 @@ class PPO(VoiceoverScene):
         n2.next_to(right[0], DOWN, buff=0.15)
         hc = history_card(2017, r"Proximal policy optimization", r"J.~Schulman, F.~Wolski, P.~Dhariwal, A.~Radford "
                           r"\& O.~Klimov, \ OpenAI", width=6.4, color=PPO_C)
+        caution = label(r"clipping removes incentives; it does not impose a hard trust region", font_size=20,
+                        color=GREY_A).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "In 2017 Schulman's team found a much simpler way to stay close, and it became the default: proximal "
             "policy optimization, PPO. <bookmark mark='a'/> Clip the ratio to a band, one minus epsilon to one plus "
@@ -136,7 +138,8 @@ class PPO(VoiceoverScene):
             "reaches 1.2; beyond that the objective goes flat, and so does the gradient. <bookmark mark='c'/> For a "
             "bad action, lowering it helps until 0.8, and no further. Taking the minimum keeps the pessimistic "
             "branch: a step that makes things worse is never clipped away. So you can run several epochs of "
-            "gradient steps on the same batch, and the policy can't run off."
+            "gradient steps on the same batch. Clipping removes the incentive for a large change in that sample's term; "
+            "it does not enforce a hard bound on the policy change, so step size and KL monitoring still matter."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.15))
             vo.wait_until("a")
@@ -147,6 +150,7 @@ class PPO(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(right[0]), FadeIn(right[1]), FadeIn(right[4]), Create(right[2]))
             self.play(Create(right[3]), FadeIn(n2))
+            self.play(FadeIn(caution))
         self.wait(0.3)
         self.clear_scene()
 
@@ -177,7 +181,7 @@ class PPO(VoiceoverScene):
             j = min(int(state.get_value()), n - 1)
             x, _, th, _ = T[i, j]
             return cartpole(x, th, center=[-3.3, 0.75, 0], scale=1.1,
-                            color=PENALTY if (j == n - 1 and n < 500) else AGENT)
+                            color=PENALTY if (j == n - 1 and cartpole_failed(x, th)) else AGENT)
 
         cp = always_redraw(pole)
         info = always_redraw(lambda: label(
@@ -236,7 +240,7 @@ class PPO(VoiceoverScene):
             said = (f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, averages "
                     f"{auc['ppo']:.0f} steps over training, against {rest:.0f} for the best of the others: on a task "
                     "this small there is little to separate them. PPO's advantage is reliability at scale. It can "
-                    "take several steps on each batch without running off a cliff, and it needs little tuning, which "
+                    "reuse each batch with clipping to discourage large policy changes, while still requiring careful step sizes, which "
                     "is why it became the default.")
         with self.voiceover(said) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in lines[:3]], lag_ratio=0.2), FadeIn(lg[:3]))
@@ -257,6 +261,8 @@ class PPO(VoiceoverScene):
                          r"the average of a group of answers", width=6.0, color=TDERR),
         ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
         cite_ = cite(r"Berner et al.\ (2019); \ Haarnoja et al.\ (2018); \ Ouyang et al.\ (2022); \ Shao et al.\ (2024)")
+        heading = label(r"Modern policy optimization", font_size=30, color=PPO_C).to_edge(UP, buff=0.3)
+        self.add(heading)
         with self.voiceover(
             "PPO went everywhere. <bookmark mark='a'/> OpenAI Five used it, at enormous scale, to beat the world "
             "champions at Dota 2 in 2019, after the equivalent of forty-five thousand years of self-play. "
