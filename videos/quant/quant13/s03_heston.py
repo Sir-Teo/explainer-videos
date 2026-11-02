@@ -165,11 +165,12 @@ class Heston(VoiceoverScene):
         leg = legend([(BAD, r"Euler, variance floored at zero"), (RV, r"Andersen's QE scheme (2008)")],
                      font_size=17).next_to(g, UP, buff=0.15).align_to(g, LEFT)
         e2 = next(r for r in rows if r["scheme"] == "Euler" and r["n"] == 2 and r["K"] == 1.0)
+        q2 = next(r for r in rows if r["scheme"] == "QE" and r["n"] == 2 and r["K"] == 1.0)
         side = VGroup(
             wrapped_label(r"pricing a 3-month at-the-money call under the fitted Heston, 200{,}000 paths, against the exact "
                           r"Fourier price", 4.4, 19, GREY_A),
-            wrapped_label(rf"Euler with 2 steps is {100 * e2['rel']:.0f}\% too high; QE is within the Monte Carlo noise at "
-                          r"every step size", 4.4, 20, WHITE),
+            wrapped_label(rf"with 2 steps, Euler is {100 * e2['rel']:.0f}\% too high and QE {100 * abs(q2['rel']):.0f}\% too "
+                          r"low; from 16 steps, QE is inside the Monte Carlo noise", 4.4, 20, WHITE),
             wrapped_label(r"QE matches the variance's true conditional mean and variance step by step: a squared "
                           r"Gaussian when $v$ is large, a point mass at zero plus an exponential when it is small", 4.4,
                           19, GREY_A),
@@ -181,8 +182,9 @@ class Heston(VoiceoverScene):
             f"{100 * e2['rel']:.0f} percent too high, and needs dozens of steps to get inside the noise. "
             "<bookmark mark='b'/> Leif Andersen's quadratic-exponential scheme, from 2008, draws the next variance "
             "from a distribution that matches its true conditional mean and variance: a squared Gaussian when the "
-            "variance is large, a spike at zero plus an exponential tail when it is small. It is unbiased to within "
-            "the noise even with two steps. It is the House's Heston simulator."
+            "variance is large, a spike at zero plus an exponential tail when it is small. With two steps its error "
+            f"is about {100 * abs(q2['rel']):.0f} percent, and from sixteen it disappears into the noise. It is the "
+            "House's Heston simulator."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(side[0]))
             vo.wait_until("a")

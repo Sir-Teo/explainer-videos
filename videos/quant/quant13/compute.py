@@ -433,13 +433,31 @@ def compute_exotics() -> dict:
 
 
 def compute_bergomi() -> dict:
+    """Bergomi's state variable: the forward variance curve xi_0(T) = d/dT [T * K_var(T)], read from variance-swap
+    strikes (Part 12's 1/K^2 strip) on the SSVI fit to the Surface, against the calibrated Heston's."""
     fit, s = _ssvi()
-    T = np.linspace(3 / 365, 0.8, 120)
-    th = V.theta_at(fit, T)
-    fwd = np.gradient(th, T)
+    F = 1.0
+    K = np.exp(np.linspace(-2.5, 2.0, 3001))
+    Tg = np.asarray(fit["T"], float)  # the quoted expiries: forward variance is constant between them
+    tv = []
+    for T in Tg:
+        iv = np.sqrt(_ssvi_w(fit, np.log(K / F), T) / T)
+        otm = np.where(K < F, bs.price(F, K, T, iv, cp=-1), bs.price(F, K, T, iv, cp=1))
+        tv.append(V.var_swap_strike(K, otm, F, T) * T)
+    tv = np.array(tv)
+    edges = np.concatenate([[0.0], Tg])
+    fwd = np.diff(np.concatenate([[0.0], tv])) / np.diff(edges)  # between consecutive expiries
     v0, kappa, theta, xi, rho = _heston_x()
-    hes = theta + (v0 - theta) * np.exp(-kappa * T)
-    return _json({"T": T, "market_fwd_var": fwd, "heston_fwd_var": hes, "nodes_T": fit["T"], "nodes_theta": fit["theta"]})
+    Th = np.linspace(0, Tg[-1], 200)
+    hes = theta + (v0 - theta) * np.exp(-kappa * Th)
+    # realized volatility by day of the week (UTC), Binance hourly, 2024-2025: does the market's weekend dip match?
+    kl = data.binance_klines("BTCUSDT", "1h", "2024-01", "2025-11")
+    t = np.asarray(kl["time"])
+    r = np.diff(np.log(np.asarray(kl["close"], float)))
+    dow = ((t[1:] // 86400) + 3) % 7  # 0 = Monday
+    by_dow = [float(np.sqrt(np.mean(r[dow == d] ** 2) * 24 * 365)) for d in range(7)]
+    return _json({"by_dow": by_dow, "edges": edges, "market_fwd_var": fwd, "kvar": np.sqrt(tv / Tg), "T": Tg, "heston_T": Th,
+                  "heston_fwd_var": hes})
 
 
 def compute_envelope() -> dict:
