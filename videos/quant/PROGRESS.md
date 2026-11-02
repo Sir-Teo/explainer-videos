@@ -65,6 +65,14 @@ multiyear low; FRED). 12 The House: treasury and funding (`house/funding.py`: ma
 plus spread, borrow fees, perp funding; tested). Outro: desk "make me a market on the number of trading days in a
 year".
 
+Computed (`python -m videos.quant.quant2.compute`, seconds): BTC perp from 1 Mar 2020 ($8,555) to the 13 Mar low
+($4,063 hourly close, -52.5%): 10x liquidated 9 Mar 14:00, 3x 12 Mar 20:00, 2x 13 Mar 01:00 ($271 below zero:
+the insurance fund's); netting 5,395 trades $11.0bn gross -> $3.1bn bilateral -> $1.03bn via a CCP (-91%); closing
+auction clears at 100.07; perp funding 2020 averaged 17.2%/yr, positive 86% of settlements, $2,238 to hold one coin
+long; SOFR 2.20 (13 Sep) 2.43 (16) 5.25 (17) 2.55 (18) 1.95 (19 Sep 2019), IOER 2.10, reserves low $1.39tn (18 Sep
+2019) from $2.05tn (Jan 2018); fees: $1 in the market 1927-2020 -> $7,893 gross, $360 after 2-and-20 with a
+high-water mark (4.5% of the profit kept), $3,288 after a 1% fee. Scenes: not started (manifest empty).
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
