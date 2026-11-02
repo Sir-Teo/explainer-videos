@@ -298,7 +298,7 @@
   "d025de4d74a3": {
    "scene": "DINO",
    "en": "A student copying a teacher that copies the student can collapse in two opposite ways. <bookmark mark='a'/> One prototype can win for every image: the teacher says the same thing with full confidence. <bookmark mark='b'/> Or every prototype can be equally likely for every image: the teacher says nothing at all. <bookmark mark='c'/> DINO's answer is two opposing pressures on the teacher. Centring subtracts a running average of the teacher's outputs, so no prototype can win for everyone; on its own it drifts toward the uniform answer. <bookmark mark='d'/> Sharpening gives the teacher a lower temperature than the student, so its answers are more confident; on its own it drifts toward the single winner. <bookmark mark='e'/> The loss splits into the teacher's entropy and the KL between the two; either collapse drives the KL to zero, with the entropy stuck at one end.",
-   "zh": "学生模仿老师，老师又模仿学生，这样可能以两种相反的方式坍缩。<bookmark mark='a'/>一个原型可能对所有图像都胜出：老师总是满怀自信地说同一件事。<bookmark mark='b'/>或者每个原型对每张图像都一样可能：老师什么也没说。<bookmark mark='c'/>DINO的答案是对老师施加两种相反的压力。中心化减去老师输出的移动平均，于是没有哪个原型能对所有人都胜出；单靠它，结果会漂向均匀的答案。<bookmark mark='d'/>锐化让老师的温度比学生低，于是它的回答更自信；单靠它，结果会漂向唯一的胜者。<bookmark mark='e'/>损失可以拆成老师的熵，加上两者之间的KL；任何一种坍缩都会把KL推到零，而熵卡在一端。"
+   "zh": "学生模仿老师，老师又模仿学生，这样可能以两种相反的方式坍缩。<bookmark mark='a'/>一个原型可能对所有图像都胜出：老师总是满怀自信地说同一件事。<bookmark mark='b'/>或者每个原型对每张图像都一样可能：老师什么也没说。<bookmark mark='c'/>DINO的答案是对老师施加两种相反的压力。中心化减去老师输出的移动平均，从而抑制同一个原型对所有输入都胜出的趋势；单靠它，结果会漂向均匀的答案。<bookmark mark='d'/>锐化让老师的温度比学生低，于是它的回答更自信；单靠它，结果会漂向唯一的胜者。<bookmark mark='e'/>损失可以拆成老师的熵，加上两者之间的KL；任何一种坍缩都会把KL推到零，而熵卡在一端。"
   },
   "06a5cd002d5a": {
    "scene": "DINO",
@@ -343,7 +343,7 @@
   "3856642fa7ab": {
    "scene": "Scale",
    "en": "Is language necessary? Vision models trained with captions, like CLIP from Part 23, had been ahead on visual question answering, but they had also been trained on different data. <bookmark mark='a'/> In 2025 David Fan, Saining Xie and colleagues trained both on the same two billion images. At seven billion parameters, the DINO-style model, which never saw a caption, averaged 53.87 across sixteen question-answering tasks; the CLIP model, 52.97. <bookmark mark='b'/> The self-supervised models kept improving with size. <bookmark mark='c'/> And for questions about text and charts, the data mattered again: keeping only the images that contain text beat a caption-trained model.",
-   "zh": "语言是必需的吗？用文字说明训练的视觉模型，比如第23部分的CLIP，在视觉问答上一直领先，但它们用的训练数据也不一样。<bookmark mark='a'/>2025年，范大卫、谢赛宁和同事在同样的20亿张图像上把两种都训练了一遍。在70亿参数时，从没见过一句文字说明的DINO式模型在16个问答任务上平均得到53.87分；CLIP模型是52.97分。<bookmark mark='b'/>自监督模型随着规模变大一直在进步。<bookmark mark='c'/>而对于关于文字和图表的问题，数据又一次起了作用：只保留含有文字的图像，就胜过了一个用文字说明训练的模型。"
+   "zh": "语言是必需的吗？用文字说明训练的视觉模型，比如第23部分的CLIP，在视觉问答上一直领先，但它们用的训练数据也不一样。<bookmark mark='a'/>2025年，范大卫、谢赛宁和同事在同样的20亿张图像上把两种都训练了一遍。在70亿参数时，经过多模态训练后，视觉预训练没用文字说明的DINO式编码器在16个问答任务上平均得到53.87分；CLIP编码器是52.97分。<bookmark mark='b'/>自监督模型随着规模变大一直在进步。<bookmark mark='c'/>而对于关于文字和图表的问题，数据又一次起了作用：保留含有图表、表格或文档的1.3%图像，在OCR和图表任务上胜过了一个用文字说明预训练的模型。缩小后的图像池被重复抽样，训练仍然见过20亿个样本。"
   },
   "4fb5c2929e0c": {
    "scene": "Masked",
@@ -458,7 +458,7 @@
   "cd54c2117224": {
    "scene": "Embeddings",
    "en": "Search engines today mostly embed text, and the history runs from Part 3's word vectors to here. <bookmark mark='a'/> Sentence-BERT in 2019 trained twin networks to place similar sentences together. DPR, in 2020, matched questions to passages, using the other passages in each batch as negatives: InfoNCE again. <bookmark mark='b'/> SimCSE, in 2021, needed no pairs at all: feed the same sentence in twice, and the network's random dropout makes the two views. <bookmark mark='c'/> Then came contrastive pretraining on hundreds of millions of web text pairs, and a benchmark, MTEB, to compare the results. <bookmark mark='d'/> Today's leaders are language models turned into encoders. Qwen3-Embedding, in 2025, trains with InfoNCE and a temperature; <bookmark mark='e'/> Google's Gemini Embedding 2, in 2026, puts text, images, video and sound in one space. The same loss, with pictures and captions as the two views, is how CLIP and SigLIP were trained, in Part 23.",
-   "zh": "今天的搜索引擎主要是给文本做嵌入，这段历史从第3部分的词向量一直延续到这里。<bookmark mark='a'/>2019年的Sentence-BERT训练孪生网络，把相似的句子放到一起。2020年的DPR把问题和段落配对，把同一批里的其他段落当作负样本：又是InfoNCE。<bookmark mark='b'/>2021年的SimCSE连配对都不需要：把同一个句子输入两次，网络里随机的dropout就造出了两个视图。<bookmark mark='c'/>接着是在数亿对网络文本上的对比预训练，以及一个用来比较结果的基准，MTEB。<bookmark mark='d'/>今天领先的是被改造成编码器的语言模型。2025年的Qwen3-Embedding用InfoNCE和温度来训练；<bookmark mark='e'/>谷歌2026年的Gemini Embedding 2把文本、图像、视频和声音放进同一个空间。同样的损失，以图片和文字说明作为两个视图，就是第23部分里训练CLIP和SigLIP的方法。"
+   "zh": "今天的搜索引擎主要是给文本做嵌入，这段历史从第3部分的词向量一直延续到这里。<bookmark mark='a'/>2019年的Sentence-BERT训练孪生网络，把相似的句子放到一起。2020年的DPR把问题和段落配对，把同一批里的其他段落当作负样本：又是InfoNCE。<bookmark mark='b'/>2021年的SimCSE连配对都不需要：把同一个句子输入两次，网络里随机的dropout就造出了两个视图。<bookmark mark='c'/>接着是在数亿对网络文本上的对比预训练，以及一个用来比较结果的基准，MTEB。<bookmark mark='d'/>今天领先的是被改造成编码器的语言模型。2025年的Qwen3-Embedding用InfoNCE和温度来训练；<bookmark mark='e'/>谷歌2026年的Gemini Embedding 2把文本、图像、视频和声音放进同一个空间。第23部分中，CLIP用softmax对比损失配对图片与文字说明，SigLIP则使用逐对sigmoid损失。"
   },
   "d1d84e436bd4": {
    "scene": "Embeddings",

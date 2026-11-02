@@ -102,7 +102,7 @@ class Collapse(VoiceoverScene):
         if r_n < 1.5:
             tail = f"The pull-together-only network falls to {r_n:.1f}: one direction."
         else:
-            tail = (f"The pull-together-only network falls to {r_n:.1f}, and even that is mostly noise: its vectors "
+            tail = (f"The pull-together-only network falls to {r_n:.1f}, with very little spread: its vectors "
                     f"are spread {times:.0f} times less than points scattered evenly over the sphere.")
         with self.voiceover(
             "To see collapse in a network with many output numbers, we need a measure. The effective rank takes "
@@ -134,7 +134,7 @@ class Collapse(VoiceoverScene):
         cliff = int(np.argmax(lg(sv_s) < -3)) + 1 if np.any(lg(sv_s) < -3) else len(sv_s)
         ls = label(r"SimCLR: \ a slow decline, \\ then a cliff" if cliff < len(sv_s) else r"SimCLR: \ a slow decline",
                    font_size=22, color=SIMCLR).move_to([4.8, 1.2, 0])
-        ln = label(r"pull together only: \\ one direction, \ then noise", font_size=22, color=NAIVE)
+        ln = label(r"pull together only: \\ one dominant direction, \ then small residuals", font_size=22, color=NAIVE)
         ln.move_to([4.8, -1.4, 0])
         kinds = VGroup(label(r"complete collapse: \ one point", font_size=22, color=NAIVE),
                        label(r"dimensional collapse: \ a few directions", font_size=22, color=SIMCLR))
@@ -145,8 +145,8 @@ class Collapse(VoiceoverScene):
                 "SimCLR declines slowly, and its weakest directions end far below its strongest.")
         with self.voiceover(
             "The whole spectrum shows more. These are the singular values of the two networks' vectors, largest "
-            "first, on a log scale. <bookmark mark='a'/> The collapsed network has one direction and then "
-            f"only noise. <bookmark mark='b'/> {drop} Even contrastive learning leaves part of the space unused. This "
+            "first, on a log scale. <bookmark mark='a'/> The pull-together network has one dominant direction "
+            f"and small residual singular values. <bookmark mark='b'/> {drop} Even contrastive learning leaves part of the space unused. This "
             "is called dimensional collapse, the milder cousin of complete collapse; Li Jing, Yann LeCun and "
             "colleagues traced it to strong augmentations and to the way the layers' weights evolve together."
         ) as vo:

@@ -63,8 +63,8 @@ class Budget(VoiceoverScene):
         head = label(r"Linear probe, \ all $60{,}000$ labels", font_size=30).to_edge(UP, buff=0.3)
         axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ whiskers: lowest and highest seed",
                     font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
-        tg = tag(r"computed: \ the same network, \ " + rf"${int(c['steps'])}$ updates of ${int(c['batch'])}$ digits, "
-                 r"\ three seeds", corner=UR).next_to(head, DOWN, buff=0.08)
+        tg = tag(r"computed: \ same encoder, \ " + rf"${int(c['steps'])}$ updates; \ $256$ online passes/update, "
+                 r"\ three seeds; \ extra target/head compute differs", corner=UR).next_to(head, DOWN, buff=0.08)
         best = names[1]
         b, s_ = rows[best]["linear"][0], rows["supervised"]["linear"][0]
         worst = names[-3]
@@ -159,7 +159,7 @@ class Budget(VoiceoverScene):
                     g[i].val.next_to([X(fewp[n]), y, 0], RIGHT, buff=0.12)
         head = label(rf"Fine-tune the whole network \ from $10$ labels per digit", font_size=30).to_edge(UP, buff=0.3)
         axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ ${int(f['steps'])}$ updates, \ three draws "
-                    r"of the labels; \\ yellow tick: \ the frozen network's probe from the same $100$ labels",
+                    r"of the labels, \ pretraining seed $0$; \\ yellow: frozen probe, \ three seeds, five draws; \ $100$ labels per draw",
                     font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
         sc = rows["scratch"]["ft"][0]
         ssl = [n for n in order if n not in ("scratch", "supervised")]
@@ -189,7 +189,8 @@ class Budget(VoiceoverScene):
         n_up = sum(rows[n]["ft"][0] > sc for n in ssl)
         with self.voiceover(
             "A frozen network is one test. The other common one lets the whole network change, starting from what "
-            "it learned, with the same hundred labels. <bookmark mark='a'/> Trained from scratch on a hundred "
+            "it learned, with a hundred labels per draw. Fine-tuning uses pretraining seed zero and three label "
+            "draws; the frozen probes average three seeds and five draws. These are aggregate comparisons. <bookmark mark='a'/> Trained from scratch on a hundred "
             f"digits, our network reaches {pct(sc)} percent. <bookmark mark='b'/> Of the {len(ssl)} self-supervised "
             f"starts, {n_up} beat that; the best is {SPOKEN.get(best, best)}, at {pct(rows[best]['ft'][0])}. "
             f"<bookmark mark='c'/> {mv} <bookmark mark='d'/> {mv2} <bookmark mark='e'/> {keep}"

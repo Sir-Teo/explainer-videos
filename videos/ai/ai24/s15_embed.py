@@ -88,8 +88,8 @@ class Embeddings(VoiceoverScene):
         head = label(r"Text embeddings: \ the same contrastive idea", font_size=32).to_edge(UP, buff=0.35)
         nums = label(r"MMTEB, multilingual: \ Qwen3-Embedding-8B $70.58$, \ Gemini Embedding $68.37$ (2025); \ Gemini "
                      r"Embedding 2: $69.9$ (2026)", font_size=19, color=GREY_A).to_edge(DOWN, buff=0.75)
-        clip = label(r"and across senses: \ CLIP and SigLIP pair pictures with captions by the same loss \ (Part 23)",
-                     font_size=19, color=GREY_B).next_to(nums, DOWN, buff=0.12)
+        clip = label(r"CLIP: \ softmax contrastive loss; \ SigLIP: \ pairwise sigmoid loss \ (Part 23)",
+                     font_size=20, color=GREY_B).to_edge(DOWN, buff=0.35)
         src = cite(r"Reimers \& Gurevych (2019); \ Karpukhin et al.\ (2020); \ Gao, Yao \& Chen (2021); \ Muennighoff et "
                    r"al.\ (2023); \ Zhang et al.\ (2025); \ Shanbhogue et al.\ (2026)", font_size=17)
         src.next_to(head, DOWN, buff=0.15)
@@ -102,8 +102,8 @@ class Embeddings(VoiceoverScene):
             "contrastive pretraining on hundreds of millions of web text pairs, and a benchmark, MTEB, to compare "
             "the results. <bookmark mark='d'/> Today's leaders are language models turned into encoders. "
             "Qwen3-Embedding, in 2025, trains with InfoNCE and a temperature; <bookmark mark='e'/> Google's Gemini "
-            "Embedding 2, in 2026, puts text, images, video and sound in one space. The same loss, with pictures and "
-            "captions as the two views, is how CLIP and SigLIP were trained, in Part 23."
+            "Embedding 2, in 2026, puts text, images, video and sound in one space. In Part 23, CLIP pairs pictures "
+            "with captions using a softmax contrastive loss; SigLIP uses a pairwise sigmoid loss."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(src))
             self.play(FadeIn(g[0]))
@@ -128,8 +128,8 @@ class Embeddings(VoiceoverScene):
             w = 0.4 + 0.1 * m ** 0.85
             dolls.add(Rectangle(width=w, height=0.8, stroke_color=MATRY, stroke_width=2, fill_color=MATRY,
                                 fill_opacity=0.08 + 0.1 * (len(dims) - i) / len(dims)).move_to([-6.0 + w / 2, 1.3, 0]))
-        dl = VGroup(*[MathTex(str(m), font_size=24, color=MATRY).move_to([d.get_right()[0] - 0.2, 1.98, 0])
-                      for m, d in zip(dims, dolls)])
+        dl = VGroup(*[MathTex(str(m), font_size=24, color=MATRY).move_to(
+            [d.get_right()[0] - 0.2, 1.98 + 0.45 * (i % 2), 0]) for i, (m, d) in enumerate(zip(dims, dolls))])
         mem = label(r"$10^9$ items $\times$ $1{,}000$ numbers $\times$ $4$ bytes $=$ $4$ terabytes", font_size=36,
                     color=GREY_A).move_to(UP * 0.4)
         cap = label(r"the first $m$ numbers of one 128-number vector", font_size=22, color=GREY_A).next_to(dolls, DOWN,

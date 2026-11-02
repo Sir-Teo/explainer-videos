@@ -103,7 +103,7 @@ class DINO(VoiceoverScene):
                      font_size=38).move_to([0, 1.9, 0])
         f1[3].set_color(VAR["nocenter"][1])
         f1[4].set_color(VAR["nosharpen"][1])
-        c1 = label(r"centring: \ $c \leftarrow 0.9\,c + 0.1\,\overline{g_t(x)}$ \\ no prototype can win for everyone "
+        c1 = label(r"centring: \ $c \leftarrow 0.9\,c + 0.1\,\overline{g_t(x)}$ \\ opposes one winner for every input "
                    r"\\ (pushes toward the right)", font_size=21, color=VAR["nocenter"][1]).move_to([0, 0.3, 0])
         c2 = label(r"sharpening: \ $\tau_t = 0.04 < \tau_s = 0.1$ \\ the teacher is more confident than the student "
                    r"\\ (pushes toward the left)", font_size=21, color=VAR["nosharpen"][1]).move_to([0, -1.3, 0])
@@ -117,8 +117,8 @@ class DINO(VoiceoverScene):
             "mark='a'/> One prototype can win for every image: the teacher says the same thing with full "
             "confidence. <bookmark mark='b'/> Or every prototype can be equally likely for every image: the "
             "teacher says nothing at all. <bookmark mark='c'/> DINO's answer is two opposing pressures on the "
-            "teacher. Centring subtracts a running average of the teacher's outputs, so no prototype can win for "
-            "everyone; on its own it drifts toward the uniform answer. <bookmark mark='d'/> Sharpening gives the "
+            "teacher. Centring subtracts a running average of the teacher's outputs, opposing a single winner for "
+            "every input; on its own it drifts toward the uniform answer. <bookmark mark='d'/> Sharpening gives the "
             "teacher a lower temperature than the student, so its answers are more confident; on its own it "
             "drifts toward the single winner. <bookmark mark='e'/> The loss splits into the teacher's entropy and "
             "the KL between the two; either collapse drives the KL to zero, with the entropy stuck at one end."
@@ -221,7 +221,7 @@ class DINO(VoiceoverScene):
             bars = always_redraw(make)
             nm = label(VAR[name][0], font_size=24, color=col).next_to(frame, UP, buff=0.15)
             us = always_redraw(lambda used=used, frame=frame, col=col: label(
-                rf"prototypes in use: \ ${np.exp(0) * used[int(np.clip(round(tr.get_value()), 0, n - 1))]:.1f}$",
+                rf"effective prototypes: \ ${np.exp(0) * used[int(np.clip(round(tr.get_value()), 0, n - 1))]:.1f}$",
                 font_size=20, color=col).next_to(frame, DOWN, buff=0.15))
             panels.add(VGroup(frame, bars, nm, us))
         head = label(r"The teacher's average answer over $512$ test digits, \ top $64$ of $256$ prototypes", font_size=26)
@@ -232,9 +232,9 @@ class DINO(VoiceoverScene):
         with self.voiceover(
             "The same story, as the teacher's average answer over five hundred and twelve test digits, sorted "
             "from the most used prototype down. <bookmark mark='a'/> Without centring, one bar takes everything: "
-            f"by the end, {u['nocenter']:.1f} prototypes in use. Without sharpening, the bars flatten, and all "
+            f"by the end, {u['nocenter']:.1f} effective prototypes. Without sharpening, the bars flatten, and all "
             f"{u['nosharpen']:.0f} are equally used, by every digit alike. <bookmark mark='b'/> DINO keeps "
-            f"{u['dino']:.0f} prototypes in use across the digits, while each digit's own answer stays confident."
+            f"{u['dino']:.0f} effective prototypes across the digits, measured by exponentiated marginal entropy, while each digit's own answer stays confident."
         ) as vo:
             self.play(FadeIn(head), FadeIn(panels), FadeIn(st))
             vo.wait_until("a")

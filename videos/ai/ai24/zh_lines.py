@@ -87,7 +87,7 @@ ZH = {
 
     'f"Our test bench is MNIST:':
         "我们的试验台是MNIST：6万个手写数字用来学习，1万个用来测试。<bookmark mark='a'/>每种方法都用同一个小网络，同样的"
-        "{v['steps']}次更新，同样的视图，从三个不同的随机起点开始。<bookmark mark='b'/>先看三把标尺：原始像素；一个未训练的网络；"
+        "{v['steps']}次更新，每次更新256次在线编码器图像前向，从三个不同的随机起点开始。视图随方法不同；动量目标和预测头带来的额外计算也不同。<bookmark mark='b'/>先看三把标尺：原始像素；一个未训练的网络；"
         "以及用全部标签训练的同一个网络。<bookmark mark='c'/>{verdict}自监督方法的成绩，应该落在未训练的网络和被告知答案的网络之间。",
 
     "f'Raw pixels already score {pct(knn[0], 1)} percent by nearest neighbours":
@@ -208,7 +208,7 @@ ZH = {
     'f"Why throw the head away?':
         "为什么要扔掉那个头？因为损失要求z忽略两个视图之间所有不一致的东西：倾斜、大小、对比度。<bookmark mark='a'/>这个代价由头来付，"
         "下面一层的h保留得更多。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>SimCLR的作者在ImageNet上也发现了这一点，差了十多个点；"
-        "用一个很宽的网络和非常大的批量，他们的线性探针达到了76.5%，和用全部标签训练的同一个网络一样好。",
+        "用一个很宽的网络和非常大的批量，他们的线性探针达到了76.5%，追平了标准宽度的监督ResNet-50。",
 
     "f'Ours agrees: reading the digits from h gives {pct(hl)} percent":
         '我们的结果也一样：从h读数字得到{pct(hl)}%，从z只有{pct(zl)}%。',
@@ -322,11 +322,11 @@ ZH.update({
     "f'The pull-together-only network falls to {r_n:.1f}: one direction.'":
         '只把两者拉到一起的网络降到了{r_n:.1f}：一个方向。',
 
-    "f'The pull-together-only network falls to {r_n:.1f}, and even that is mostly noise":
-        '只把两者拉到一起的网络降到了{r_n:.1f}，而且这点秩大多是噪声：它的向量分散的程度，比均匀撒在球面上的点小{times:.0f}倍。',
+    "f'The pull-together-only network falls to {r_n:.1f}, with very little spread":
+        '只把两者拉到一起的网络降到了{r_n:.1f}，但散度仍然很小：它的向量分散的程度，比均匀撒在球面上的点小{times:.0f}倍。',
 
     'f"The whole spectrum shows more.':
-        "整个谱能说明更多。这是两个网络向量的奇异值，从大到小，取对数刻度。<bookmark mark='a'/>坍缩的网络只有一个方向，然后只剩噪声。"
+        "整个谱能说明更多。这是两个网络向量的奇异值，从大到小，取对数刻度。<bookmark mark='a'/>只拉近的网络有一个主导方向，后面是小的残余奇异值。"
         "<bookmark mark='b'/>{drop}即使是对比学习，也留下了一部分空间没有用上。这叫作维度坍缩，是完全坍缩温和一些的表亲；"
         "景立、杨立昆和同事把它归因于强烈的数据增强，以及各层权重共同演化的方式。",
 
@@ -435,8 +435,7 @@ ZH.update({
     'f"The two families are closer than they look.':
         "这两个家族比看上去更接近。对比损失让一批里的图像彼此不相似；Barlow Twins和VICReg让维度彼此不相似。<bookmark mark='a'/>"
         "昆汀·加里多和同事证明，把式子写出来，两者几乎是同一个目标，一个作用在数据的行上，另一个作用在列上。<bookmark mark='b'/>{line}"
-        "<bookmark mark='c'/>这条线上最新的是LeJEPA，2025年由兰德尔·巴莱斯特里耶罗和杨立昆提出：只把向量推向各向同性的高斯分布，"
-        "别的什么都不要，没有停止梯度，没有老师。",
+        "<bookmark mark='c'/>这条线上最新的是LeJEPA，2025年由兰德尔·巴莱斯特里耶罗和杨立昆提出：匹配视图，并用SIGReg把向量推向各向同性的高斯分布，不需要停止梯度或老师。",
 
     'On our digits, Barlow Twins and VICReg match SimCLR to within a point.':
         '在我们的数字上，Barlow Twins和VICReg与SimCLR相差不到一个百分点。',
@@ -457,7 +456,7 @@ ZH.update({
     'A student copying a teacher that copies the student':
         "学生模仿老师，老师又模仿学生，这样可能以两种相反的方式坍缩。<bookmark mark='a'/>一个原型可能对所有图像都胜出：老师总是满怀自信"
         "地说同一件事。<bookmark mark='b'/>或者每个原型对每张图像都一样可能：老师什么也没说。<bookmark mark='c'/>DINO的答案是对老师施加两种"
-        "相反的压力。中心化减去老师输出的移动平均，于是没有哪个原型能对所有人都胜出；单靠它，结果会漂向均匀的答案。"
+        "相反的压力。中心化减去老师输出的移动平均，从而抑制同一个原型对所有输入都胜出的趋势；单靠它，结果会漂向均匀的答案。"
         "<bookmark mark='d'/>锐化让老师的温度比学生低，于是它的回答更自信；单靠它，结果会漂向唯一的胜者。<bookmark mark='e'/>损失可以"
         "拆成老师的熵，加上两者之间的KL；任何一种坍缩都会把KL推到零，而熵卡在一端。",
 
@@ -475,8 +474,8 @@ ZH.update({
 
     'f"The same story, as the teacher\'s average answer':
         "同一个故事，换成老师在512个测试数字上的平均回答，按使用最多的原型往下排。<bookmark mark='a'/>没有中心化，一根柱子拿走一切："
-        "到最后，只有{u['nocenter']:.1f}个原型在用。没有锐化，柱子变平，全部{u['nosharpen']:.0f}个都被平均地使用，每个数字都一样。"
-        "<bookmark mark='b'/>DINO在不同数字之间用着{u['dino']:.0f}个原型，而每个数字自己的回答依然自信。",
+        "到最后，只有{u['nocenter']:.1f}个有效原型。没有锐化，柱子变平，全部{u['nosharpen']:.0f}个都被平均地使用，每个数字都一样。"
+        "<bookmark mark='b'/>DINO在不同数字之间用着{u['dino']:.0f}个有效原型，由边缘熵的指数衡量，而每个数字自己的回答依然自信。",
 
     'f"And the representation?':
         "那么表示呢？<bookmark mark='a'/>{v}<bookmark mark='b'/>在ImageNet上配合视觉Transformer，DINO是一个转折点：小模型用近邻法达到78.3%，"
@@ -505,7 +504,7 @@ ZH.update({
     'f"We can try the same recipe on digits.':
         "我们可以在数字上试同样的配方。取{int(pc.sum()):,}个训练数字，像网络图像那样不均衡：最常见的数字{common}占了图像池的"
         "{pct(pc[common] / pc.sum(), 0)}%，最少的只占{pct(pc.min() / pc.sum(), 1)}%。<bookmark mark='a'/>然后筛选：一个1000个数字的"
-        "小而均衡的集合，每个数字100个，扮演精选数据集。每个从池里取回它最近的4个邻居，嵌入用的是我们的SimCLR网络，重复的去掉。"
+        "小而均衡的集合，每个数字100个，扮演精选数据集。每个从池里取回它最近的4个邻居，嵌入用的是我们的SimCLR网络，重复的去掉。标签用于构造不平衡和均衡种子；检索编码器已在全部MNIST训练图像上训练，包括这些图像池。"
         "<bookmark mark='b'/>筛选后的池有{int(cc.sum()):,}个数字，最常见与最少见类别的比例从{ratio_raw:.0f}比1缩小到{ratio_cur:.1f}比1。",
 
     'f"Then train the same SimCLR, for the same number of steps, on each pool':
@@ -533,9 +532,9 @@ ZH.update({
 
     'Is language necessary?':
         "语言是必需的吗？用文字说明训练的视觉模型，比如第23部分的CLIP，在视觉问答上一直领先，但它们用的训练数据也不一样。"
-        "<bookmark mark='a'/>2025年，范大卫、谢赛宁和同事在同样的20亿张图像上把两种都训练了一遍。在70亿参数时，从没见过一句文字说明的"
-        "DINO式模型在16个问答任务上平均得到53.87分；CLIP模型是52.97分。<bookmark mark='b'/>自监督模型随着规模变大一直在进步。"
-        "<bookmark mark='c'/>而对于关于文字和图表的问题，数据又一次起了作用：只保留含有文字的图像，就胜过了一个用文字说明训练的模型。",
+        "<bookmark mark='a'/>2025年，范大卫、谢赛宁和同事在同样的20亿张图像上把两种都训练了一遍。在70亿参数时，经过多模态训练后，视觉预训练没用文字说明的"
+        "DINO式编码器在16个问答任务上平均得到53.87分；CLIP编码器是52.97分。<bookmark mark='b'/>自监督模型随着规模变大一直在进步。"
+        "<bookmark mark='c'/>而对于关于文字和图表的问题，数据又一次起了作用：保留含有图表、表格或文档的1.3%图像，在OCR和图表任务上胜过了一个用文字说明预训练的模型。缩小后的图像池被重复抽样，训练仍然见过20亿个样本。",
 
     # ------------------------------------------------------------------ Masked
     'Chapter eleven. Fill in the blanks: MAE and BEiT.':
@@ -673,7 +672,7 @@ ZH.update({
         "得到{pct(rows[lin_best]['few'][0])}%。",
 
     'f"A frozen network is one test.':
-        "冻结的网络是一种检验。另一种常用的检验让整个网络都可以改变，从它学到的东西出发，用同样的100个标签。<bookmark mark='a'/>从零开始"
+        "冻结的网络是一种检验。另一种常用的检验让整个网络都可以改变，从它学到的东西出发，每次抽取100个标签。微调采用预训练种子0和三次标签抽样；冻结探针平均三个预训练种子和五次抽样。这是汇总结果的比较。<bookmark mark='a'/>从零开始"
         "用100个数字训练，我们的网络达到{pct(sc)}%。<bookmark mark='b'/>{len(ssl)}个自监督的起点里，有{n_up}个超过了它；最好的是"
         "{SPOKEN.get(best, best)}，{pct(rows[best]['ft'][0])}%。<bookmark mark='c'/>{mv}<bookmark mark='d'/>{mv2}"
         "<bookmark mark='e'/>{keep}",
@@ -758,7 +757,7 @@ ZH.update({
         "2021年的SimCSE连配对都不需要：把同一个句子输入两次，网络里随机的dropout就造出了两个视图。<bookmark mark='c'/>接着是在数亿对"
         "网络文本上的对比预训练，以及一个用来比较结果的基准，MTEB。<bookmark mark='d'/>今天领先的是被改造成编码器的语言模型。2025年的"
         "Qwen3-Embedding用InfoNCE和温度来训练；<bookmark mark='e'/>谷歌2026年的Gemini Embedding 2把文本、图像、视频和声音放进同一个"
-        "空间。同样的损失，以图片和文字说明作为两个视图，就是第23部分里训练CLIP和SigLIP的方法。",
+        "空间。第23部分中，CLIP用softmax对比损失配对图片与文字说明，SigLIP则使用逐对sigmoid损失。",
 
     'Vectors cost memory: a billion items at a thousand numbers each is four terabytes.':
         "向量要占内存：十亿个条目，每个一千个数，就是4TB。人们常常想先用短向量搜一遍，再用长向量细化。<bookmark mark='a'/>套娃表示学习"

@@ -106,7 +106,7 @@ class Pretext(VoiceoverScene):
         grid = Group()
         for k in range(4):
             for i in range(4):
-                grid.add(digit(np.rot90(D[i], -k), cell, frame=True))
+                grid.add(digit(np.rot90(D[i], k), cell, frame=True))
         grid.arrange_in_grid(4, 4, buff=(0.75, 0.32)).move_to([-3.6, -0.25, 0])
         rl = VGroup(*[MathTex(ROT_NAMES[k], font_size=24, color=GREY_B).next_to(grid[4 * k], LEFT, buff=0.2)
                       for k in range(4)])

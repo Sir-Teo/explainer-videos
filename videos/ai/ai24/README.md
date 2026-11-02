@@ -6,9 +6,11 @@ data nobody labelled: pretext puzzles, contrastive learning from word2vec's nega
 geometry of the hypersphere, collapse and the four ways out of it (negatives, asymmetry, decorrelation,
 self-distillation), masked modelling, joint-embedding prediction, embeddings for search, and whether different
 networks come to see the world alike. Every method is trained here, by `compute.py`, on MNIST, on the **same
-three-layer convolutional network with the same budget**: 800 updates of 256 encoder passes (128 digits in two views,
-or 256 in one), the same optimizer, schedule and views, three seeds (two for ablations), and each seed gives every
-method the same starting network.
+three-layer convolutional encoder and update budget**: 800 updates of 256 online-encoder image passes
+(128 digits in two views, 64 in four, or 256 in one), with the same optimizer and schedule, three seeds
+(two for ablations), and the same starting encoder for each seed. Augmentations differ by method; momentum
+target encoders and method-specific heads add unequal computation and parameters. This is not a matched-FLOP
+or matched-wall-time comparison.
 
 * **Hook: nobody told it what a digit is.** Six hundred test digits on a sphere, placed by a SimCLR network with three
   output numbers, coloured by labels it never saw; the nearest-neighbour accuracy of those three numbers; its training
@@ -95,9 +97,11 @@ each run takes two to four minutes. Each run's larger arrays (its test features,
 through Part 10's downloader (`videos.ai.ai10.data`, checked against SHA-256); no other part's results are used.
 The full computation (75 training runs of 800 steps, the fine-tuning and the InfoNCE critics) took 3.5 hours of wall time on one thread of a shared, busy Linux machine (load about 9), started with `OMP_NUM_THREADS=1 nice -n 15 python -m videos.ai.ai24.compute`, logging to `.cache/ai24/compute.log`; the cache is about 60 MB.
 
-## Results on this machine
+## Documented reference results
 
-Every network is the same small CNN (159,584 parameters, 128-number representation $h$), trained for 800 steps of 128 images (1.7 passes over MNIST's 60,000 training digits) with AdamW; no labels except for the supervised row. Values are percent on the 10,000 test digits, mean over seeds with the lowest and highest in brackets (three seeds per method, two for ablations). Linear probe: a logistic regression on standardised $h$ with every training label. $k$-NN: 20 nearest neighbours by cosine, centred features. 10 labels per digit: the same probe trained on 100 labelled digits, five draws. Fine-tuned: the whole network trained from those 100 labels (300 steps, three draws).
+The values below are retained from the original README. The November 2, 2026 source/visual QA pass did not have the original Part 24 result caches and did not rerun the training experiments; these numerical outcomes remain unverified in that pass.
+
+Every method uses the same small CNN encoder (93,408 parameters, 128-number representation $h$); the SimCLR encoder plus projector has 159,584 parameters. Training uses 800 AdamW updates and 256 online-encoder image passes per update. Base images are sampled with replacement: 128 per update for two-view methods (about 1.71 dataset-equivalent draws), 64 for rotation (0.85), and 256 for one-view methods (3.41). Targets, heads and augmentations differ. Labels train the supervised reference and downstream probes; the curation demonstration also uses labels to construct its imbalanced pool and balanced seeds. Values are percent on the 10,000 test digits, mean over seeds with the lowest and highest in brackets (three seeds per method, two for ablations). Linear probe: a logistic regression on standardised $h$ with every training label. $k$-NN: 20 nearest neighbours by cosine, centred features. 10 labels per digit: the same probe trained on 100 labelled digits, five draws. Fine-tuned: the whole seed-0 network trained from 100 labels (300 steps, three draws). Frozen few-label probes average three pretraining seeds and five draws. The columns compare aggregates with the same label count, not paired outcomes on identical cohorts.
 
 | method | linear probe | $k$-NN | 10 labels per digit | fine-tuned from 100 labels | effective rank of $h$ |
 |---|---|---|---|---|---|
@@ -123,10 +127,10 @@ Every network is the same small CNN (159,584 parameters, 128-number representati
 - **Temperature** (SimCLR linear / 10 labels per digit): τ = 0.05: 98.0 / 89.1; τ = 0.1: 98.1 / 88.9; τ = 0.2: 98.1 / 89.6; τ = 0.5: 98.0 / 89.6; τ = 1.0: 97.7 / 87.5. Crops alone, without the photometric changes: 97.3 / 86.4. Probe on the projection head's output $z$ instead of $h$: 97.4.
 - **Collapse**: pull-together only ends with effective rank of $z$ 2.3 and linear probe 84.4 (untrained: 84.6); SimSiam without its stop-gradient 2.5 and 87.3; with it 24.4 and 97.3.
 - **VICReg without its variance term**: linear 80.0, $k$-NN 80.7 (with it: 98.2, 97.1).
-- **DINO's two collapses** (teacher entropy at the end, $\log 256 = 5.55$): with centring and sharpening 4.37, without centring 0.00, without sharpening 5.54; prototypes in use 182, 1.0, 256. Linear probe 94.9, 87.3, 91.7.
+- **DINO's two collapses** (teacher entropy at the end, $\log 256 = 5.55$): with centring and sharpening 4.37, without centring 0.00, without sharpening 5.54; effective prototype counts (exponentiated marginal entropy) 182, 1.0, 256. Linear probe 94.9, 87.3, 91.7.
 - **MAE masking ratio** (linear probe): 50% hidden: 81.6, 75% hidden: 82.3, 90% hidden: 84.0.
-- **Matryoshka** ($k$-NN on the first $m$ numbers of $h$, Matryoshka / plain SimCLR): $m$ = 2: 55.0 / 29.9, $m$ = 4: 87.6 / 64.0, $m$ = 8: 95.5 / 91.5, $m$ = 16: 96.2 / 95.9, $m$ = 32: 96.4 / 96.7, $m$ = 64: 96.5 / 97.0, $m$ = 128: 96.5 / 97.1.
-- **Curation** (DINOv2's retrieval recipe on a pool of 14,000 digits with class shares from 36 % down to 1 %; curated pool 2,812): linear 97.8 raw, 98.0 curated; 10 labels per digit 88.3 and 89.8; on the rarest digit (8, 140 examples in the raw pool) $k$-NN goes from 93.7 to 96.1, while the three commonest change by at most 0.6 points.
+- **Matryoshka** ($k$-NN on the first $m$ numbers of the projection $z$, Matryoshka / plain SimCLR): $m$ = 2: 55.0 / 29.9, $m$ = 4: 87.6 / 64.0, $m$ = 8: 95.5 / 91.5, $m$ = 16: 96.2 / 95.9, $m$ = 32: 96.4 / 96.7, $m$ = 64: 96.5 / 97.0, $m$ = 128: 96.5 / 97.1.
+- **Curation** (a label-assisted toy analogue of DINOv2's retrieval recipe: labels construct the pool imbalance and balanced seeds; the retrieval encoder was pretrained on all MNIST training images, including pool and seed images. On a pool of 14,000 digits with class shares from 36 % down to 1 %; curated pool 2,812): linear 97.8 raw, 98.0 curated; 10 labels per digit 88.3 and 89.8; on the rarest digit (8, 140 examples in the raw pool) $k$-NN goes from 93.7 to 96.1, while the three commonest change by at most 0.6 points.
 - **Top and bottom halves** (mutual 10-NN alignment of the two encoders on the same digits): 0.17 and 0.17 for two seeds, against 0.71 for two seeds of the same half and 0.17 for the raw pixels of the halves.
 - **Platonic check**: Spearman correlation between a method's linear probe and its mean alignment with the others: 0.66. Same recipe, two seeds, linear CKA: supervised 0.95, simclr 0.98, byol 0.92, dino 0.97, mae 0.73.
 - **Different losses, one representation**: linear CKA between SimCLR, MoCo, Barlow Twins and VICReg (seed 0 each) is at least 0.97 for every pair, as high as two seeds of SimCLR (0.98); MAE against those four: 0.24–0.29.
@@ -201,7 +205,7 @@ e^{−t‖u − v‖²} = e^{−2t} e^{2t u·v} on the sphere).
 loss log(2N − 1).
 
 *Solution.* SimSiam's loss is −cos(p, sg(z)) ≥ −1. If every z is the same vector z₀ and the predictor maps it to a
-multiple of z₀, every cosine is 1 and the loss is −1, its global minimum. In NT-Xent, if every z is the same unit
+positive nonzero multiple of z₀, every cosine is 1 and the loss is −1, its global minimum. In NT-Xent, if every z is the same unit
 vector, all 2N − 1 cosines of a view are 1, so its softmax is uniform and ℓ = −log(1/(2N − 1)) = log(2N − 1): the loss
 of guessing at random. Any configuration that keeps each pair together and spreads the pairs apart scores lower, so
 the contrastive loss pushes away from collapse.
@@ -211,8 +215,7 @@ the two views' i-th outputs are equal for every image, and explain why a constan
 
 *Solution.* C_ii = (1/n) Σ_b a_b b_b with (1/n)Σ a_b² = (1/n)Σ b_b² = 1; by Cauchy–Schwarz C_ii ≤ 1, with equality
 exactly when the vectors (a_b) and (b_b) are equal. A constant output has zero variance; standardizing it gives 0 (the
-small ε in the denominator), so C = 0 and the diagonal term Σᵢ(1 − 0)² takes its largest value: collapse is the worst
-point of this loss, not a minimum.
+small ε in the denominator), so C = 0 and the diagonal term is Σᵢ(1 − 0)² = d, a positive collapse penalty. It is not the largest possible value: anti-correlated outputs have C_ii = −1 and contribute 4 per dimension. The objective favours varying, aligned outputs over the constant solution; this is not an optimization guarantee.
 
 **5. CKA's invariances.** Show that linear CKA is unchanged by X ↦ cXQ (Q orthogonal, c > 0), and that when n ≤ d any
 two representations of rank n are related by an invertible linear map.
@@ -228,9 +231,7 @@ depend on the input lets the student reach KL = 0 without learning anything.
 
 *Solution.* −Σ P_t log P_s = −Σ P_t log P_t + Σ P_t log(P_t/P_s). If P_t(x) = π for every x, a student that outputs π
 for every input has KL = 0, so the loss is H(π), the least possible for that teacher, and its output depends on nothing:
-collapse. With π one-hot, H(π) = 0 (no centring); with π uniform, H(π) = log K (no sharpening). DINO's centring removes
-the input-independent part of the teacher's logits and its low temperature keeps each answer confident, so neither
-fixed point is stable.
+collapse. With π one-hot, H(π) = 0 (no centring); with π uniform, H(π) = log K (no sharpening). Centring and sharpening apply opposing pressures to the teacher's outputs; with the momentum teacher, they avoided these collapses in the reported experiments. The entropy identity alone is not a stability proof: equal logits still yield an input-independent uniform stationary solution.
 
 ## 习题与解答
 
@@ -251,7 +252,7 @@ p(y_k | x) Πⱼ≠ₖ p(y_j) = Πⱼ p(y_j) · p(y_k | x)/p(y_k)，由贝叶斯
 
 **3. 坍缩对各个损失意味着什么。** 证明常数编码器使SimSiam的损失最小，却使NT-Xent损失等于 log(2N − 1)。
 
-*解答。* SimSiam的损失是 −cos(p, sg(z)) ≥ −1。如果每个z都是同一个向量z₀，而预测器把它映到z₀的某个倍数，每个余弦都是1，损失是−1，
+*解答。* SimSiam的损失是 −cos(p, sg(z)) ≥ −1。如果每个z都是同一个向量z₀，而预测器把它映到z₀的某个正倍数，每个余弦都是1，损失是−1，
 即全局最小值。在NT-Xent里，如果每个z都是同一个单位向量，一个视图的2N − 1个余弦全是1，它的softmax是均匀的，ℓ = −log(1/(2N − 1))
 = log(2N − 1)：等于随便乱猜的损失。任何让每对视图保持一致、又让不同的对彼此分开的配置，损失都更低，所以对比损失会把网络推离坍缩。
 
@@ -259,8 +260,7 @@ p(y_k | x) Πⱼ≠ₖ p(y_j) = Πⱼ p(y_j) · p(y_k | x)/p(y_k)，由贝叶斯
 并解释为什么常数输出被排除了。
 
 *解答。* C_ii = (1/n) Σ_b a_b b_b，其中 (1/n)Σ a_b² = (1/n)Σ b_b² = 1；由柯西-施瓦茨不等式 C_ii ≤ 1，当且仅当向量(a_b)和(b_b)
-相等时取等号。常数输出的方差为零，标准化后得到0（分母里的小ε），所以 C = 0，对角项 Σᵢ(1 − 0)² 取到最大值：坍缩是这个损失最差的
-地方，而不是最小值。
+相等时取等号。常数输出的方差为零，标准化后得到0（分母里的小ε），所以 C = 0，对角项 Σᵢ(1 − 0)² = d，对坍缩施加正的惩罚。这并不是最大值：反相关输出的 C_ii = −1，每维贡献4。目标函数偏好有变化且对齐的输出，但这不是优化过程的保证。
 
 **5. CKA的不变性。** 证明线性CKA在 X ↦ cXQ（Q正交，c > 0）下不变，并证明当 n ≤ d 时，任何两个秩为n的表示都可以用一个可逆线性映射
 互相转换。
@@ -275,8 +275,7 @@ KL = 0。
 
 *解答。* −Σ P_t log P_s = −Σ P_t log P_t + Σ P_t log(P_t/P_s)。如果对每个x都有 P_t(x) = π，那么一个对所有输入都输出π的学生KL = 0，
 损失等于H(π)，这是对这个老师而言最小的可能值，而它的输出与输入毫无关系：这就是坍缩。π是独热分布时 H(π) = 0（没有中心化）；
-π是均匀分布时 H(π) = log K（没有锐化）。DINO的中心化去掉老师打分里与输入无关的部分，低温度让每个回答保持自信，所以这两个不动点
-都不稳定。
+π是均匀分布时 H(π) = log K（没有锐化）。中心化与锐化对老师输出施加相反的压力；配合动量老师，它们在报告的实验中避免了这两种坍缩。但熵恒等式本身不是稳定性证明：所有打分相等时，仍存在与输入无关的均匀平稳解。
 
 
 ## Glossary (new terms in this part)
