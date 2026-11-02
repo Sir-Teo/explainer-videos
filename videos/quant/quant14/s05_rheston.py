@@ -9,12 +9,13 @@ from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV
 class RHeston(VoiceoverScene):
     def construct(self):
         rh = load("rheston")
-        rb = load("rbergomi")
+        rs = load("rbskew")
+        pr = load("rprofile")
         s = load("skew")
         self.card()
         self.model()
-        self.fit(rh)
-        self.skews(rh, rb, s)
+        self.fit(rh, pr)
+        self.skews(rh, rs, pr, s)
 
     def card(self):
         c = chapter_card(4, r"Rough Heston", r"Can a rough model keep a closed form?", part=PART)
@@ -52,28 +53,55 @@ class RHeston(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def fit(self, rh):
+    def fit(self, rh, pr):
         p = rh["params"]
-        tab = VGroup(
-            MathTex(rf"H = {p['H']:.2f},\quad \nu = {p['nu']:.2f},\quad \rho = {p['rho']:.2f}", font_size=36,
-                    color=MODEL_COL["rough Heston"]),
-            MathTex(rf"\sqrt{{v_0}} = {100 * np.sqrt(p['v0']):.0f}\%,\quad \sqrt{{\theta}} = {100 * np.sqrt(p['theta']):.0f}\%,"
-                    rf"\quad \lambda = {p['lambda']:.1f}", font_size=32),
-            MathTex(rf"\text{{error}}\ {rh['rmse']:.2f}\ \text{{vol points}}\ \ (\text{{{rh['n']} quotes}})", font_size=30),
-        ).arrange(DOWN, buff=0.35).move_to(UP * 0.4)
+        r1 = next(r for r in pr["rows"] if abs(r["H"] - 0.1) < 1e-9)
+        x1 = r1["x"]
+        hdr = VGroup(VectorizedPoint(), label(r"left free", font_size=22, color=MODEL_COL["rough Heston"]),
+                     label(r"$H$ held at 0.1", font_size=22, color=ROUGH)).arrange(RIGHT, buff=1.2)
+        rows = [(r"H", f"{p['H']:.2f}", "0.10"), (r"\nu\ \text{(vol of vol)}", f"{p['nu']:.1f}", f"{x1[3]:.1f}"),
+                (r"\lambda\ \text{(mean reversion)}", f"{p['lambda']:.1f}", f"{x1[1]:.1f}"),
+                (r"\rho", f"{p['rho']:.2f}", f"{x1[4]:.2f}"),
+                (r"\text{error (vol points)}", f"{rh['rmse']:.2f}", f"{r1['rmse']:.2f}")]
+        tab = VGroup()
+        for name, a_, b_ in rows:
+            tab.add(VGroup(MathTex(name, font_size=28, color=GREY_A), MathTex(a_, font_size=30), MathTex(b_, font_size=30)))
+        tab.arrange(DOWN, buff=0.28)
+        for row in tab:
+            row[0].set_x(-3.4)
+            row[1].set_x(hdr[1].get_x() - 0.2 + 0.2)
+            row[2].set_x(hdr[2].get_x())
+        grid = VGroup(hdr, tab).arrange(DOWN, buff=0.35)
+        for row in tab:
+            row[0].set_x(-3.4)
+            row[1].set_x(hdr[1].get_x())
+            row[2].set_x(hdr[2].get_x())
+        grid.move_to(UP * 0.5)
+        note_ = wrapped_label(r"left free, the model drifts back toward Heston and buys its fit with Heston's absurd numbers; "
+                              r"held rough, it fits almost as well with a sensible vol of vol and mean reversion. On this "
+                              r"day's quotes the data cannot tell the two apart: vega weighting favours the long expiries, "
+                              r"where roughness matters least", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.6)
         src = real_data(r"the Surface, 10 December 2025; fractional Adams (80 steps) and COS, least squares")
         with self.voiceover(
-            "Fitted to the Surface, rough Heston finds a roughness of "
-            f"{p['H']:.2f}, a vol of vol of {p['nu']:.1f}, and a correlation of {p['rho']:.2f}. <bookmark mark='a'/> "
-            f"Its error is {rh['rmse']:.2f} volatility points, with six numbers and no variance curve to lean on."
+            "Fit it to the Surface with all six numbers free, and something unexpected happens. The roughness comes "
+            f"out at {p['H']:.2f}, barely rough, with a vol of vol of {p['nu']:.1f} and mean reversion of "
+            f"{p['lambda']:.0f}: Heston's absurd numbers again. The error is {rh['rmse']:.2f} volatility points. "
+            "<bookmark mark='a'/> Now hold H at a tenth, as the time series suggested, and refit the rest. The error "
+            f"rises only to {r1['rmse']:.2f}, and the other parameters become sensible: a vol of vol of {x1[3]:.1f} "
+            f"and mean reversion of {x1[1]:.0f}. <bookmark mark='b'/> On this day's quotes the data cannot tell the "
+            "two apart. Vega weighting favours the long expiries, where roughness matters least, and a smooth model "
+            "can imitate a rough one there by turning its own dials to extremes. Which to believe is the debate of "
+            "chapter seven."
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(src))
+            self.play(FadeIn(hdr[1]), FadeIn(src), FadeIn(VGroup(*[VGroup(r_[0], r_[1]) for r_ in tab])))
             vo.wait_until("a")
-            self.play(FadeIn(tab[1]), FadeIn(tab[2]))
+            self.play(FadeIn(hdr[2]), FadeIn(VGroup(*[r_[2] for r_ in tab])))
+            vo.wait_until("b")
+            self.play(FadeIn(note_))
         self.wait(0.4)
         self.clear_scene()
 
-    def skews(self, rh, rb, s):
+    def skews(self, rh, rs, pr, s):
         T = np.asarray(s["T"])
         y = np.asarray(s["skew"])
         g = axes([np.log10(2 / 365), 0], [-1.6, 0.6], x_length=7.0, y_length=4.4, xlabel=r"years to expiry (log scale)",
@@ -85,25 +113,36 @@ class RHeston(VoiceoverScene):
         for v in (0.05, 0.1, 0.3, 1, 3):
             g.add(label(f"{v:g}", font_size=15, color=GREY_B).next_to(ax.c2p(np.log10(2 / 365), np.log10(v)), LEFT, buff=0.12))
         dots = VGroup(*[Dot(ax.c2p(np.log10(a), np.log10(b)), radius=0.07, color=WHITE) for a, b in zip(T, y) if b > 0.02])
+        r1 = next(r for r in pr["rows"] if abs(r["H"] - 0.1) < 1e-9)
+        series = (("rBergomi", rs["skew_T"], rs["skew"], MODEL_COL["rBergomi"]),
+                  ("free", rh["skew_T"], rh["skew"], MODEL_COL["rough Heston"]),
+                  ("H01", pr["skew_T"], r1["skew"], ROUGH))
         curves = VGroup()
-        for name, d in (("rBergomi", rb), ("rough Heston", rh)):
-            tt = np.asarray(d["skew_T"])
-            sk = np.abs(np.asarray(d["skew"]))
+        for _, tt, sk, col in series:
+            tt, sk = np.asarray(tt), np.abs(np.asarray(sk))
             ok = sk > 1e-3
-            curves.add(curve(ax, np.log10(tt[ok]), np.clip(np.log10(sk[ok]), -1.6, 0.6), MODEL_COL[name], stroke_width=3))
-        leg = legend([(WHITE, r"the Surface"), (MODEL_COL["rBergomi"], rf"rough Bergomi, $H = {rb['params']['H']:.2f}$"),
-                      (MODEL_COL["rough Heston"], rf"rough Heston, $H = {rh['params']['H']:.2f}$")], font_size=17)
+            curves.add(curve(ax, np.log10(tt[ok]), np.clip(np.log10(sk[ok]), -1.6, 0.6), col, stroke_width=3))
+        leg = legend([(WHITE, r"the Surface"),
+                      (MODEL_COL["rBergomi"], rf"rough Bergomi, $H = {load('rbergomi')['params']['H']:.2f}$"),
+                      (MODEL_COL["rough Heston"], rf"rough Heston, free: $H = {rh['params']['H']:.2f}$"),
+                      (ROUGH, r"rough Heston, $H = 0.1$")], font_size=17)
         leg.next_to(g, RIGHT, buff=0.3).align_to(g, UP)
-        side = wrapped_label(r"both rough models produce a skew that keeps growing as expiry nears, as the market's does; "
-                             r"Part 13's diffusions flattened, its jumps exploded", 4.0, 19, GREY_A).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        side = wrapped_label(r"rough Bergomi, with its market variance curve, follows the quotes from 4 days to 200 but misses "
+                             r"the 3-day point; both rough Hestons are steep enough for that point and overshoot the days "
+                             r"just after it",
+                             4.0, 19, GREY_A).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         with self.voiceover(
             "Now the test that motivated all this: the skew against maturity. Here are the Surface's expiries. "
-            "<bookmark mark='a'/> Rough Bergomi's skew, and rough Heston's, keep growing as expiry nears, the way the "
-            "market's does. Part thirteen's diffusions flattened at the short end, and its jumps exploded. A rough "
-            "kernel is the one ingredient that bends the curve the right way across all of these maturities."
+            "<bookmark mark='a'/> Rough Bergomi, carrying the market's own variance curve, follows them from four "
+            "days out to two hundred, though it misses the three-day point. <bookmark mark='b'/> Both versions of "
+            "rough Heston are steep enough to reach that point, and overshoot the days just after it. No single model "
+            "here gets every expiry. The rough kernel bends the curve the right way; the market's variance curve does "
+            "much of the rest."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[0]), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.1))
             vo.wait_until("a")
-            self.play(Create(curves[0]), FadeIn(leg[1]), Create(curves[1]), FadeIn(leg[2]), FadeIn(side), run_time=3)
+            self.play(Create(curves[0]), FadeIn(leg[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(curves[1]), FadeIn(leg[2]), Create(curves[2]), FadeIn(leg[3]), FadeIn(side), run_time=3)
         self.wait(0.4)
         self.clear_scene()
