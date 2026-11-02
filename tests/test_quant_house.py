@@ -520,3 +520,49 @@ def test_control_bsde_black_scholes_and_two_rates():
     assert abs(out["Y0"] - float(B.price(100, 100, 1.0, 0.2, 0.06))) < 0.2
     pde = C.hjb_two_rates(call, 100, 1.0, 0.2, 0.01, 0.06)
     assert abs(pde - float(B.price(100, 100, 1.0, 0.2, 0.06))) < 0.05
+
+
+# ---------------------------------------------------------------------------
+# Part 9: arbitrage
+# ---------------------------------------------------------------------------
+def test_arbitrage_ftap_and_superhedge():
+    from explainer.quant.house import arbitrage as A
+    D = np.array([[1.0, 1.0], [2.0, 0.5]])
+    ok = A.ftap(D, [1.0, 1.0])
+    assert ok["no_arbitrage"] and np.allclose(ok["psi"], [1 / 3, 2 / 3])
+    bad = A.ftap(D, [1.0, 2.5])  # the stock costs more than it can ever pay relative to the bond
+    assert not bad["no_arbitrage"] and bad["cost"] <= 1e-9 and np.all(bad["payoff"] >= -1e-9)
+    D3 = np.array([[1.0, 1.0, 1.0], [0.5, 1.0, 2.0]])
+    call = np.array([0.0, 0.0, 1.0])
+    h = A.superhedge(D3, [1.0, 1.0], call)
+    assert h["lower"] < h["upper"]
+    assert A.ftap(np.vstack([D3, call]), [1.0, 1.0, 0.5 * (h["lower"] + h["upper"])])["no_arbitrage"]
+    assert not A.ftap(np.vstack([D3, call]), [1.0, 1.0, h["upper"] + 0.01])["no_arbitrage"]
+
+
+def test_arbitrage_static_and_mot():
+    from explainer.quant.house import arbitrage as A, bs as B
+    K = np.linspace(60, 140, 41)
+    C = B.price(100, K, 0.5, 0.3)
+    assert A.static_checks(K, C, 100.0)["ok"]
+    C2 = C.copy()
+    C2[20] += 1.0  # a bump makes a negative butterfly
+    assert not A.static_checks(K, C2, 100.0)["ok"]
+    x, mu = np.array([-1.0, 1.0]), np.array([0.5, 0.5])
+    y, nu = np.array([-2.0, 0.0, 2.0]), np.array([0.25, 0.5, 0.25])
+    out = A.mot_bounds(x, mu, y, nu, lambda a, b: b * b)
+    assert abs(out["lower"] - 2.0) < 1e-8 and abs(out["upper"] - 2.0) < 1e-8
+    out = A.mot_bounds(x, mu, y, nu, lambda a, b: abs(b - a))
+    assert out["lower"] <= out["upper"] + 1e-12
+
+
+def test_arbitrage_ross_recovery():
+    from explainer.quant.house import arbitrage as A
+    g = np.random.default_rng(0)
+    c = np.array([0.9, 1.0, 1.1, 1.2])
+    pi = g.random((4, 4)) + 0.2
+    pi /= pi.sum(axis=1, keepdims=True)
+    delta, gamma = 0.97, 3.0
+    P = delta * pi * (c[None, :] / c[:, None]) ** (-gamma)
+    out = A.ross_recovery(P)
+    assert abs(out["delta"] - delta) < 1e-10 and np.allclose(out["F"], pi)
