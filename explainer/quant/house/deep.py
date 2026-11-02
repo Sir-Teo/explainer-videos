@@ -1533,16 +1533,20 @@ def deep_bsde_snap(p=DEFAULT_RISK, iters=4000, batch=64, lr=0.008, seed=0, log_e
         slope = (p["gh"] - p["gl"]) / (p["vh"] - p["vl"])
         return torch.clamp(slope * (y - p["vh"]) + p["gh"], min=p["gl"], max=p["gh"])
 
-    def run(n, gen=None):
+    def run(n, gen=None, keep=False):
         dW = math.sqrt(dt) * torch.randn(n, N, d, generator=gen)
         logx = math.log(p["x0"]) + torch.cumsum((p["mu"] - 0.5 * p["sigma"] ** 2) * dt + p["sigma"] * dW, 1)
         X = torch.cat([torch.full((n, 1, d), p["x0"]), torch.exp(logx)], 1)
         Y = y0.expand(n)
         Z = z0.expand(n, d)
+        path = [Y]
         for k in range(N):
             if k > 0:
                 Z = nets[k - 1](X[:, k] / p["x0"] - 1) * p["x0"] * p["sigma"] / 10
             Y = Y + ((1 - p["delta"]) * Q(Y) * Y + p["R"] * Y) * dt + (Z * dW[:, k]).sum(1)
+            path.append(Y)
+        if keep:
+            return Y, X[:, -1].min(1).values, torch.stack(path, 1)
         return Y, X[:, -1].min(1).values
 
     curve, snaps = [], {}
@@ -1550,8 +1554,8 @@ def deep_bsde_snap(p=DEFAULT_RISK, iters=4000, batch=64, lr=0.008, seed=0, log_e
         nets.train()
         if it in snap_at:
             with torch.no_grad():
-                Ys, gs = run(n_snap, torch.Generator().manual_seed(4242))
-            snaps[it] = {"Y": Ys.numpy(), "g": gs.numpy(), "u0": float(y0.detach())}
+                Ys, gs, Yp = run(n_snap, torch.Generator().manual_seed(4242), keep=True)
+            snaps[it] = {"Y": Ys.numpy(), "g": gs.numpy(), "u0": float(y0.detach()), "Ypath": Yp[:32].numpy()}
         Y, g = run(batch)
         loss = (Y - g).pow(2).mean()
         if it % log_every == 0:

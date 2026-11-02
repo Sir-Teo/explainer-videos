@@ -202,9 +202,9 @@ class Dynamics(VoiceoverScene, ThreeDScene):
         ev = np.asarray(d["explained"])
         sd = np.asarray(d["score_sd"])
         kg = np.linspace(-0.4, 0.4, comp.shape[2])
-        Tg = np.array([7, 14, 30, 60, 90, 180]) / 365
+        Tg = np.asarray(d["pc_T"]) / 365
         base_s = load("surface")
-        base = np.log(np.asarray(base_s["grid_iv"]))
+        base = np.log(np.asarray(base_s["grid_iv"])[2:])
         ax = axes3([-0.4, 0.4, 0.2], [0, 0.5, 0.1], [0.2, 1.0, 0.2], x_length=6.4, y_length=4.4, z_length=3.0,
                    shift=LEFT * 1.8 + DOWN * 0.6)
         self.set_camera_orientation(phi=66 * DEGREES, theta=-60 * DEGREES, zoom=0.85)
@@ -227,26 +227,27 @@ class Dynamics(VoiceoverScene, ThreeDScene):
             b[0].move_to([3.6 + i * 0.75, -2.2 + b[0].height / 2, 0])
             b[1].next_to(b[0], DOWN, buff=0.1)
             b[2].next_to(b[0], UP, buff=0.08)
-        names = [label(r"PC1: the level breathes (most at the short end)", font_size=21, color=IV),
-                 label(r"PC2: the term structure twists", font_size=21, color=LV),
-                 label(r"PC3: the skew tilts", font_size=21, color=BAD)]
+        names = [label(r"PC1: the level breathes", font_size=21, color=IV),
+                 label(r"PC2: the skew tilts", font_size=21, color=LV),
+                 label(r"PC3: short end against long; the smile bends", font_size=21, color=BAD)]
         for nm in names:
             nm.to_corner(UR, buff=0.4)
         head = label(r"principal components of weekly surface moves (Cont and da Fonseca 2002)", font_size=21,
                      color=GREY_A).to_edge(UP, buff=0.3).shift(LEFT * 1.5)
-        src = real_data(r"weekly changes of the log-vol grid, 17 strikes $\times$ 6 expiries, 2021--2025")
+        src = real_data(r"weekly changes of the log-vol grid, 17 strikes $\times$ 4 expiries (30--180 days), 2021--2025")
         fixed(self, bars, *names, head, src)
         e1, e2, e3 = 100 * ev[0], 100 * ev[1], 100 * ev[2]
         tot = e1 + e2 + e3
         with self.voiceover(
             "Real surfaces do not follow any one rule. So measure how they move. Take every week's change in the log of "
-            "the whole grid, a hundred and two numbers, and find its principal components, as Rama Cont and José da "
-            "Fonseca did for index options in 2002. <bookmark mark='a'/> The first component is a level: the whole "
-            f"surface breathes up and down, most at the short end. It explains {e1:.0f} percent of the variance. "
-            f"<bookmark mark='b'/> The second twists the term structure, short end against long: {e2:.0f} percent. "
-            f"<bookmark mark='c'/> The third tilts the skew: {e3:.0f} percent. Three numbers a week carry {tot:.0f} "
-            "percent of the motion of a hundred and two, the same low dimension Cont and da Fonseca found for the "
-            "S&P 500. Chapter seventeen will let a neural network find its own coordinates."
+            "the grid from one month to six, sixty-eight numbers, and find its principal components, as Rama Cont and "
+            "José da Fonseca did for index options in 2002. <bookmark mark='a'/> The first component is a level: the "
+            f"whole surface breathes up and down together. It explains {e1:.0f} percent of the variance. "
+            f"<bookmark mark='b'/> The second tilts the skew, puts against calls: {e2:.0f} percent. "
+            "<bookmark mark='c'/> The third moves the short end against the long, and bends the smile: "
+            f"{e3:.0f} percent. Three numbers a week carry {tot:.0f} percent of the motion of sixty-eight, the same "
+            "low dimension, and nearly the same three shapes, that Cont and da Fonseca found for the S&P 500. "
+            "Chapter seventeen will let a neural network find its own coordinates."
         ) as vo:
             self.play(Create(ax), FadeIn(head), FadeIn(src))
             self.add(s)

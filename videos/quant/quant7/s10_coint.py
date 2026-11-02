@@ -153,8 +153,8 @@ class Coint(VoiceoverScene, ThreeDScene):
 
     def yields(self, j):
         X = np.asarray(j["X"])
-        ax3 = ThreeDAxes(x_range=[0, 10, 2], y_range=[0, 10, 2], z_range=[0, 10, 2], x_length=5.2, y_length=5.2,
-                         z_length=5.2, axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        ax3 = ThreeDAxes(x_range=[0, 10, 2], y_range=[0, 10, 2], z_range=[0, 10, 2], x_length=4.2, y_length=4.2,
+                         z_length=4.2, axis_config={"stroke_color": GREY_C, "include_ticks": False})
         cols = [interpolate_color(ManimColor(RET), ManimColor(BAD), f) for f in np.linspace(0, 1, len(X))]
         pts = VGroup(*[Dot(ax3.c2p(*p), radius=0.03, color=c_).set_opacity(0.8) for p, c_ in zip(X, cols)])
         V = np.asarray(j["pca_vec"])
@@ -179,7 +179,7 @@ class Coint(VoiceoverScene, ThreeDScene):
         leg = legend([(GOOD, r"level: the common trend"), (ALT, r"slope"), (BAD, r"curvature: the thin direction")],
                      font_size=18).to_corner(DL, buff=0.3)
         src = real_data(r"FRED DTB3, DGS5, DGS10, daily 1990--2020 (every tenth day drawn)")
-        self.set_camera_orientation(phi=70 * DEGREES, theta=-50 * DEGREES, zoom=0.85)
+        self.set_camera_orientation(phi=70 * DEGREES, theta=-50 * DEGREES, zoom=0.7)
         self.add_fixed_in_frame_mobjects(panel, leg, src)
         for m in (*panel, leg, src):
             m.set_opacity(0)

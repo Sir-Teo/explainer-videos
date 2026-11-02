@@ -431,9 +431,12 @@ def compute_dynamics() -> dict:
     e_m, e_s = np.array(e_m) * 100, np.array(e_s) * 100
     sk = (G[:, 2, j0 + 1] - G[:, 2, j0 - 1]) / (kg[j0 + 1] - kg[j0 - 1])  # d sigma / dk at the money, 30 days
     ssr = V.skew_stickiness(np.diff(np.log(S)), np.diff(G[:, 2, j0]), sk[:-1])
-    X = np.diff(np.log(G.reshape(len(G), -1)), axis=0)
+    # the PCA uses expiries from 30 days: at 7 and 14 days SSVI's vertex is sharp enough that one grid point (the
+    # money) jumps week to week on its own and would be its own "component"
+    G30 = G[:, 2:, :]
+    X = np.diff(np.log(G30.reshape(len(G30), -1)), axis=0)
     pca = V.surface_pca(X)
-    comp = pca["components"][:3].reshape(3, len(TGRID), len(kg))
+    comp = pca["components"][:3].reshape(3, G30.shape[1], len(kg))
     sd = pca["scores"][:, :3].std(0)
     # quoting on the Surface: the 30-day 25-delta strikes and the risk reversal and butterfly
     fit = s["ssvi"]
@@ -451,7 +454,7 @@ def compute_dynamics() -> dict:
     return _json({"sticky_m": e_m, "sticky_s": e_s, "sticky_m_mean": float(e_m.mean()), "sticky_s_mean": float(e_s.mean()),
                   "strike_better": float((e_s < e_m).mean()), "n_pairs": len(e_m), "ssr": ssr,
                   "explained": pca["explained"][:6], "comp": comp, "score_sd": sd,
-                  "pc1_by_T": comp[0].mean(1), "pc3_30d": comp[2, 2], "days": [r["day"] for r in rows],
+                  "pc_T": TGRID[2:] * 365, "pc1_by_T": comp[0].mean(1), "days": [r["day"] for r in rows],
                   "atm30": a, "k25c": k25c, "k25p": k25p, "s25c": sc, "s25p": sp, "rr25": sc - sp,
                   "bf25": 0.5 * (sc + sp) - a, "skew30": skew30})
 
