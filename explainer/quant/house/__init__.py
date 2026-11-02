@@ -33,10 +33,14 @@ explicitly (``from explainer.quant.house import bs, hedge``).
   and its Markovian lift, the roughness estimator, and Guyon-Lekeufack path-dependent volatility;
 * :mod:`exotics` (Part 15, the volatility desk): barriers in closed form with the Broadie-Glasserman-Kou correction,
   digitals and call spreads, Asians, lookbacks, the snowball note, worst-of options, uncertain-volatility bounds;
+* :mod:`engine` (Part 16, data & technology): the pricing engine: Monte Carlo with variance reduction, Sobol and the
+  Brownian bridge, multilevel Monte Carlo, Longstaff-Schwartz and the Andersen-Broadie bound, Greeks three ways and
+  by adjoint differentiation, theta schemes with Rannacher, the American put as an LCP, Craig-Sneyd ADI for Heston,
+  Carr-Madan;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
 * :mod:`hedge` (Part 10): the delta-hedged book and its P&L decomposition;
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import arbitrage, bs, control, econ, exotics, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, rough, smile, stats, stochvol, surface, trees, valuation, volsurface  # noqa: F401
+from explainer.quant.house import arbitrage, bs, control, econ, engine, exotics, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, rough, smile, stats, stochvol, surface, trees, valuation, volsurface  # noqa: F401

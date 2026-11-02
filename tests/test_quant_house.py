@@ -777,3 +777,43 @@ def test_snowball_coupon_in_range():
     c = X.fair_coupon(0.22, n_paths=20_000)
     assert 0.08 < c < 0.25
     assert X.snowball_price(0.22, coupon=c + 0.05, n_paths=20_000) > 1.0
+
+
+# ---------------------------------------------------------------- engine (Part 16)
+
+
+def test_engine_mc_variance_reduction_and_qmc():
+    from explainer.quant.house import bs as B, engine as E
+
+    ex = B.price(100.0, 100.0, 1.0, 0.2, 0.05)
+    p, se = E.mc_call(100, 100, 1, 0.2, 0.05, 100_000, "plain")
+    pc, sec = E.mc_call(100, 100, 1, 0.2, 0.05, 100_000, "control")
+    assert abs(p - ex) < 4 * se and abs(pc - ex) < 4 * sec and sec < se / 2
+    pi, sei = E.mc_call(100, 160, 1, 0.2, 0.05, 100_000, "is")
+    assert abs(pi - B.price(100.0, 160.0, 1.0, 0.2, 0.05)) < 4 * sei and sei < 0.002
+    vals = [E.asian_call_paths(100, 100, 1, 0.2, 0.05, 4096, 64, "sobol", True, seed=i) for i in range(6)]
+    assert np.std(vals) < 0.02
+
+
+def test_engine_american_bounds_and_fd():
+    from explainer.quant.house import engine as E
+
+    lo, coefs = E.lsm_put(100, 100, 1, 0.2, 0.05, 25, 60_000, return_policy=True)
+    hi, se = E.andersen_broadie_put(100, 100, 1, 0.2, 0.05, coefs, n_steps=25, n_outer=200, n_inner=800, seed=3)
+    fd = E.fd_american_put(100, 100, 1, 0.2, 0.05, nS=150, nt=150)
+    assert lo - 0.05 < fd < hi + 3 * se + 0.05
+
+
+def test_engine_greeks_aad_adi_fourier():
+    from explainer.quant.house import engine as E, stochvol as sv
+
+    g = E.greeks_three_ways(100, 100, 1, 0.2, 0.05, 100_000)
+    assert abs(g["pathwise"]["delta"] - g["likelihood ratio"]["delta"]) < 0.02
+    a = E.aad_greeks(100, 100, 1, 0.2, 0.05, 5000, 20)
+    for k in a["aad"]:
+        assert abs(a["aad"][k] - a["bump"][k]) < 0.01 * max(1, abs(a["bump"][k]))
+    cf = lambda u, T: sv.heston_cf(u, T, 0.04, 1.5, 0.04, 0.5, -0.7)  # noqa: E731
+    ref = sv.cos_price(cf, 100.0, 100.0, 1.0, 1)[0]
+    assert abs(E.heston_adi(100, 100, 1.0, 0.04, 1.5, 0.04, 0.5, -0.7, nS=80, nv=40, nt=40) - ref) < 0.03
+    k, C = E.carr_madan(cf, 100.0, 1.0)
+    assert abs(np.interp(100.0, k, C) - ref) < 0.01
