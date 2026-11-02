@@ -152,7 +152,7 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def history(self):
-        strip = timeline(lit=(1927, 1960, 1963, 1982, 1989, 1994, 2003, 2018)).move_to(UP * 2.3)
+        strip = timeline(lit=(1927, 1960, 1989, 2003)).move_to(UP * 2.3)
         cards = [
             (1927, r"Udny Yule", r"sunspots as an autoregression: the first AR model"),
             (1960, r"Rudolf Kalman", r"the filter: predict, observe, correct"),
@@ -167,7 +167,7 @@ class Hook(VoiceoverScene):
             (2009, r"Fulvio Corsi", r"HAR: a day, a week and a month"),
             (2018, r"Gatheral, Jaisson, Rosenbaum", r"volatility is rough"),
         ]
-        grid = VGroup(*[history_card(y, w, s, color=QC.IDEA, width=3.15, font_size=16) for y, w, s in cards])
+        grid = VGroup(*[history_card(y, w, s, color=QC.IDEA, width=3.15, font_size=18) for y, w, s in cards])
         grid.arrange_in_grid(rows=3, cols=4, buff=(0.18, 0.15))
         if grid.height > 4.9:
             grid.scale_to_fit_height(4.9)

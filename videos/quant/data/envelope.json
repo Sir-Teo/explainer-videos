@@ -23,6 +23,14 @@
    },
    "trials": 1
   },
+  "btc_mean_confseq": {
+   "code_sha256": "927ebe04878af39c9ff04516be894eedf10a5cd14dcf6430931fbcaa1d4970af",
+   "params": {
+    "data": "Binance BTCUSDT 1d",
+    "start": 2018
+   },
+   "trials": 1
+  },
   "btc_rough_hurst": {
    "code_sha256": "768da08240c985d166f6b590bad37c841c6499cbaa008001af260a2332128572",
    "params": {
@@ -136,6 +144,19 @@
     ]
    },
    "trials": 3
+  },
+  "sign_continuation_ons": {
+   "code_sha256": "41ae0da19b797a056e8d6e9f3a530c62b90e6963b012b3b7e4f0518ec53e2c97",
+   "params": {
+    "data": "Ken French daily market; Binance BTCUSDT 1d",
+    "starts": [
+     1926,
+     1975,
+     2000,
+     2018
+    ]
+   },
+   "trials": 4
   },
   "turn_of_month_event": {
    "code_sha256": "e16540a4048fd28a988617f1d372c42952b84061aec9406cbfb22881aeff568d",

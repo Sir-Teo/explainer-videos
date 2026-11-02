@@ -547,3 +547,576 @@ def carr_madan(cf, S0, T, r=0.0, N=4096, eta=0.25, alpha=1.5):
     x = np.exp(1j * b * u) * psi * w
     C = np.exp(-alpha * k) / np.pi * np.real(np.fft.fft(x))
     return np.exp(k), C
+
+
+# ================================================================ Part 16, expanded: the further tools of the engine
+# (appended; the functions above are unchanged, so every cached number that uses them stays valid)
+
+# ---------------------------------------------------------------- variance reduction: controls, strata, shifts
+
+
+def geometric_asian_call(S0, K, T, sigma, r, n_fix):
+    """The discretely monitored geometric-average Asian call in closed form (Kemna and Vorst 1990): with fixings at
+    t_i = iT/n, log G is normal with mean log S0 + (r - sigma^2/2) T (n+1)/(2n) and variance
+    sigma^2 T (n+1)(2n+1)/(6n^2), so the price is a Black-Scholes formula."""
+    n = n_fix
+    mu = np.log(S0) + (r - 0.5 * sigma ** 2) * T * (n + 1) / (2 * n)
+    s2 = sigma ** 2 * T * (n + 1) * (2 * n + 1) / (6 * n * n)
+    s = np.sqrt(s2)
+    d1 = (mu - np.log(K) + s2) / s
+    d2 = d1 - s
+    from scipy.stats import norm
+    return float(np.exp(-r * T) * (np.exp(mu + 0.5 * s2) * norm.cdf(d1) - K * norm.cdf(d2)))
+
+
+def asian_control(S0, K, T, sigma, r, n_paths, n_fix=64, seed=0, control="geometric"):
+    """The arithmetic Asian call with a control variate: 'geometric' (the geometric Asian, known exactly; Kemna and
+    Vorst 1990), 'stock' (the discounted final price, worth S0) or 'none'. b* = cov(Y, C)/var(C) from the same
+    sample. Returns the price, its standard error, corr(Y, C), b* and the variance ratio var(Y)/var(Y - b*C)."""
+    g = np.random.default_rng(seed)
+    dt = T / n_fix
+    t = dt * np.arange(1, n_fix + 1)
+    W = np.cumsum(np.sqrt(dt) * g.standard_normal((n_paths, n_fix)), axis=1)
+    S = S0 * np.exp((r - 0.5 * sigma ** 2) * t + sigma * W)
+    disc = np.exp(-r * T)
+    Y = disc * np.maximum(S.mean(axis=1) - K, 0)
+    if control == "none":
+        return {"price": float(Y.mean()), "se": float(Y.std(ddof=1) / np.sqrt(n_paths)), "rho": 0.0, "b": 0.0,
+                "ratio": 1.0}
+    if control == "geometric":
+        C = disc * np.maximum(np.exp(np.log(S).mean(axis=1)) - K, 0)
+        EC = geometric_asian_call(S0, K, T, sigma, r, n_fix)
+    else:
+        C = disc * S[:, -1]
+        EC = S0
+    b = np.cov(Y, C)[0, 1] / np.var(C, ddof=1)
+    Z = Y - b * (C - EC)
+    return {"price": float(Z.mean()), "se": float(Z.std(ddof=1) / np.sqrt(n_paths)),
+            "rho": float(np.corrcoef(Y, C)[0, 1]), "b": float(b), "ratio": float(Y.var() / Z.var())}
+
+
+def stratified_call(S0, K, T, sigma, r, n, n_strata, seed=0):
+    """A European call with the terminal normal stratified: [0, 1] cut into n_strata equal pieces, n / n_strata
+    uniforms in each (proportional allocation), mapped through the inverse normal. The between-strata variance is
+    gone, so var <= plain var. Returns (price, standard error)."""
+    g = np.random.default_rng(seed)
+    m = n // n_strata
+    k = np.arange(n_strata)[:, None]
+    u = (k + g.random((n_strata, m))) / n_strata
+    z = ndtri(u)
+    y = np.exp(-r * T) * np.maximum(S0 * np.exp((r - 0.5 * sigma ** 2) * T + sigma * np.sqrt(T) * z) - K, 0)
+    mk = y.mean(axis=1)
+    vk = y.var(axis=1, ddof=1) if m > 1 else np.zeros(n_strata)
+    return float(mk.mean()), float(np.sqrt(np.sum(vk / m)) / n_strata)
+
+
+def is_cross_entropy(f, theta0=0.0, n=20000, iters=4, seed=0):
+    """The cross-entropy method for a normal mean shift (Rubinstein 1997): sample Z ~ N(theta_k, 1), weight by the
+    likelihood ratio w = e^{-theta Z + theta^2/2} and by the payoff f(Z) >= 0, and move theta to the weighted mean
+    of Z (the maximiser of E[f w log q_theta] in the normal family). Returns the iterates theta_0, theta_1, ..."""
+    g = np.random.default_rng(seed)
+    th = float(theta0)
+    out = [th]
+    for _ in range(iters):
+        z = g.standard_normal(n) + th
+        ww = f(z) * np.exp(-th * z + 0.5 * th * th)
+        if ww.sum() > 0:
+            th = float((ww * z).sum() / ww.sum())
+        out.append(th)
+    return out
+
+
+# ---------------------------------------------------------------- paths, discrepancy, effective dimension
+
+
+def path_matrix(n_steps, T=1.0, kind="step"):
+    """A matrix L with W = L Z (W at the grid t_k = kT/n, Z standard normals) and L L' = C, C_ij = min(t_i, t_j):
+    'step' (cumulative sums: the random walk), 'bridge' (the Brownian bridge's construction) or 'pca' (C's
+    eigenvectors scaled by root eigenvalues, largest first). Any such L gives the same law; they differ in which
+    normals carry the variance."""
+    dt = T / n_steps
+    if kind == "step":
+        return np.sqrt(dt) * np.tril(np.ones((n_steps, n_steps)))
+    if kind == "bridge":
+        return brownian_bridge(np.eye(n_steps), T).T
+    i = np.arange(1, n_steps + 1)
+    C = np.minimum.outer(i, i) * dt
+    ev, V = np.linalg.eigh(C)
+    o = np.argsort(ev)[::-1]
+    return V[:, o] * np.sqrt(np.maximum(ev[o], 0))
+
+
+def variance_captured(a, L):
+    """For the linear functional a'W = (a'L) Z: the share of its variance carried by the first k normals, k = 1..n
+    (each Z_j independent, so the shares are the squared entries of a'L, normalised and accumulated)."""
+    c = (np.asarray(a, float) @ L) ** 2
+    return np.cumsum(c) / c.sum()
+
+
+def l2_star_discrepancy(x, chunk=2048):
+    """The L2-star discrepancy of points x (n, d) in [0, 1]^d by Warnock's (1972) closed form:
+    T^2 = 3^-d - 2^{1-d}/n sum_i prod_k (1 - x_ik^2) + 1/n^2 sum_{i,j} prod_k (1 - max(x_ik, x_jk))."""
+    x = np.asarray(x, float)
+    n, d = x.shape
+    t1 = 3.0 ** -d
+    t2 = 2.0 ** (1 - d) / n * np.prod(1 - x * x, axis=1).sum()
+    t3 = 0.0
+    for a in range(0, n, chunk):
+        xa = x[a:a + chunk]
+        p = np.ones((len(xa), n))
+        for k in range(d):
+            p *= 1 - np.maximum(xa[:, k][:, None], x[:, k][None, :])
+        t3 += p.sum()
+    return float(np.sqrt(max(t1 - t2 + t3 / n ** 2, 0.0)))
+
+
+# ---------------------------------------------------------------- multilevel Monte Carlo, Euler or Milstein
+
+
+def _mlmc_level_scheme(l, n, S0, K, T, sigma, r, M, g, scheme="euler", payoff="asian"):
+    """P_l - P_{l-1} for an Asian ('asian', the average of the grid values) or a European ('call') call under Euler or
+    Milstein steps (Milstein adds sigma^2 S (dW^2 - h)/2, strong order 1, so V_l falls like h^2 instead of h).
+    With scheme 'euler' and payoff 'asian' it draws the same numbers as _mlmc_level."""
+    nf = M ** l
+    hf = T / nf
+    dW = np.sqrt(hf) * g.standard_normal((n, nf))
+    mil = scheme == "milstein"
+
+    def run(dw, h, steps):
+        S = np.full(n, float(S0))
+        s = np.zeros(n)
+        for i in range(steps):
+            d = dw[:, i]
+            S = S + r * S * h + sigma * S * d + (0.5 * sigma ** 2 * S * (d * d - h) if mil else 0.0)
+            s += S
+        x = s / steps if payoff == "asian" else S
+        return np.exp(-r * T) * np.maximum(x - K, 0)
+
+    Pf = run(dW, hf, nf)
+    if l == 0:
+        return Pf
+    nc = nf // M
+    return Pf - run(dW.reshape(n, nc, M).sum(axis=2), T / nc, nc)
+
+
+def mlmc_run(eps, S0=100.0, K=100.0, T=1.0, sigma=0.2, r=0.05, M=2, L0=2, n0=4000, seed=0, max_level=10,
+             scheme="euler", payoff="asian", trace=False):
+    """Giles's multilevel estimator as :func:`mlmc` (with scheme 'euler' and payoff 'asian' it is the same estimator
+    and draws the same numbers), for Euler or Milstein paths and an Asian or a European call. With ``trace`` the
+    adaptive loop is logged: after each pass the levels, the samples N_l, the variances V_l, the corrections' means,
+    the bias estimate and the cost so far."""
+    g = np.random.default_rng(seed)
+    L = L0
+    sums = {}
+    log = []
+    while True:
+        for l in range(L + 1):
+            if l not in sums:
+                y = _mlmc_level_scheme(l, n0, S0, K, T, sigma, r, M, g, scheme, payoff)
+                sums[l] = [y.sum(), (y * y).sum(), n0]
+        V = np.array([max(sums[l][1] / sums[l][2] - (sums[l][0] / sums[l][2]) ** 2, 1e-14) for l in range(L + 1)])
+        C = np.array([M ** l + (M ** (l - 1) if l else 0) for l in range(L + 1)], float)
+        Nl = np.ceil(2 * eps ** -2 * np.sqrt(V / C) * np.sum(np.sqrt(V * C))).astype(int)
+        for l in range(L + 1):
+            extra = Nl[l] - sums[l][2]
+            if extra > 0:
+                y = _mlmc_level_scheme(l, int(extra), S0, K, T, sigma, r, M, g, scheme, payoff)
+                sums[l][0] += y.sum()
+                sums[l][1] += (y * y).sum()
+                sums[l][2] += int(extra)
+        means = np.array([abs(sums[l][0] / sums[l][2]) for l in range(L + 1)])
+        bias = max(means[-1] / (M - 1), means[-2] / (M - 1) / M) if L >= 2 else means[-1]
+        if trace:
+            log.append({"L": L, "N": [int(sums[l][2]) for l in range(L + 1)], "V": V.tolist(),
+                        "mean": means.tolist(), "bias": float(bias),
+                        "cost": float(sum(sums[l][2] * C[l] for l in range(L + 1)))})
+        if bias < eps / np.sqrt(2) or L >= max_level:
+            break
+        L += 1
+    est = sum(sums[l][0] / sums[l][2] for l in range(L + 1))
+    cost = sum(sums[l][2] * C[l] for l in range(L + 1))
+    out = {"estimate": float(est), "cost": float(cost), "levels": L, "N": [int(sums[l][2]) for l in range(L + 1)],
+           "V": V.tolist()}
+    if trace:
+        out["trace"] = log
+    return out
+
+
+# ---------------------------------------------------------------- American: LSM traced, a Bermudan tree, five assets
+
+
+def lsm_put_trace(S0, K, T, sigma, r, n_steps=25, n_paths=200000, seed=1, degree=3, n_show=2000, regress="cash"):
+    """Longstaff-Schwartz as :func:`lsm_put`, recording each date's regression: the shown paths' in-the-money spots and
+    realised discounted cash flows, the coefficients, and the exercise boundary (the highest spot below K where the
+    payoff beats the fitted continuation). ``regress='value'`` regresses the estimated value max(h, fit) instead of
+    the realised cash flow (Tsitsiklis and Van Roy 2001), which is biased high. Returns the in-sample price, the
+    policy (coefficients by date), the boundary and the per-date records."""
+    g = np.random.default_rng(seed)
+    dt = T / n_steps
+    z = g.standard_normal((n_steps, n_paths // 2))
+    z = np.concatenate([z, -z], axis=1)
+    S = S0 * np.exp(np.cumsum((r - 0.5 * sigma ** 2) * dt + sigma * np.sqrt(dt) * z, axis=0))
+    S = np.vstack([np.full(S.shape[1], S0), S])
+    cash = np.maximum(K - S[-1], 0)
+    coefs = [None] * (n_steps + 1)
+    bnd = np.full(n_steps + 1, np.nan)
+    bnd[-1] = K
+    recs = {}
+    for i in range(n_steps - 1, 0, -1):
+        cash *= np.exp(-r * dt)
+        itm = K - S[i] > 0
+        if itm.sum() <= degree + 1:
+            continue
+        X = np.vander(S[i, itm] / K, degree + 1)
+        beta, *_ = np.linalg.lstsq(X, cash[itm], rcond=None)
+        coefs[i] = beta
+        cont = X @ beta
+        ex = (K - S[i, itm]) > cont
+        show = itm[:n_show]
+        recs[i] = {"S": S[i, :n_show][show].tolist(), "Y": cash[:n_show][show].tolist(), "coef": beta.tolist()}
+        idx = np.flatnonzero(itm)
+        if regress == "value":
+            cash[idx] = np.maximum(K - S[i, idx], cont)
+        else:
+            cash[idx[ex]] = K - S[i, idx[ex]]
+        grid = np.linspace(max(0.5 * K, S[i, itm].min()), K, 2001)  # only where the regression saw data
+        better = (K - grid) > np.vander(grid / K, degree + 1) @ beta
+        if better.any():
+            bnd[i] = grid[better].max()
+    price = max(float(np.exp(-r * dt) * cash.mean()), K - S0)
+    return {"price": price, "coefs": [None if c is None else c.tolist() for c in coefs], "boundary": bnd.tolist(),
+            "records": recs, "paths": S[:, :n_show].T.tolist() if n_show else []}
+
+
+def lsm_put_eval(coefs, S0, K, T, sigma, r, n_steps=25, n_paths=200000, seed=7, degree=3):
+    """The value of a regression policy on fresh, independent paths: exercise at the first date where the put is in
+    the money and the payoff beats the fitted continuation. An unbiased estimate of a lower bound (no foresight).
+    Returns (price, standard error)."""
+    g = np.random.default_rng(seed)
+    dt = T / n_steps
+    S = np.full(n_paths, float(S0))
+    val = np.zeros(n_paths)
+    alive = np.ones(n_paths, bool)
+    for i in range(1, n_steps + 1):
+        S = S * np.exp((r - 0.5 * sigma ** 2) * dt + sigma * np.sqrt(dt) * g.standard_normal(n_paths))
+        h = np.maximum(K - S, 0)
+        if i == n_steps:
+            ex = alive & (h > 0)
+        elif coefs[i] is None:
+            ex = np.zeros(n_paths, bool)
+        else:
+            ex = alive & (h > 0) & (h > np.vander(S / K, degree + 1) @ np.asarray(coefs[i]))
+        val[ex] = h[ex] * np.exp(-r * i * dt)
+        alive &= ~ex
+    return float(val.mean()), float(val.std(ddof=1) / np.sqrt(n_paths))
+
+
+def bermudan_tree(S0, K, T, sigma, r, n_dates, n_steps, cp=-1):
+    """A Bermudan option on a CRR tree of n_steps steps that may be exercised only on the n_dates equally spaced
+    dates (n_steps a multiple of n_dates): the reference that a 25-date Longstaff-Schwartz price should be compared
+    with (a fine tree that allows exercise at every step prices the American option instead)."""
+    if n_steps % n_dates:
+        raise ValueError("n_steps must be a multiple of n_dates")
+    dt = T / n_steps
+    u = np.exp(sigma * np.sqrt(dt))
+    d = 1 / u
+    p = (np.exp(r * dt) - d) / (u - d)
+    disc = np.exp(-r * dt)
+    every = n_steps // n_dates
+    V = np.maximum(cp * (S0 * u ** (2 * np.arange(n_steps + 1) - n_steps) - K), 0.0)
+    for n in range(n_steps - 1, -1, -1):
+        V = disc * (p * V[1:] + (1 - p) * V[:-1])
+        if n % every == 0 and n > 0:
+            V = np.maximum(V, cp * (S0 * u ** (2 * np.arange(n + 1) - n) - K))
+    return float(V[0])
+
+
+def _max_call_paths(p, n, g):
+    dt = p["T"] / p["N"]
+    z = g.standard_normal((p["N"], n, p["d"]))
+    return p["s0"] * np.exp(np.cumsum((p["r"] - p["div"] - 0.5 * p["sigma"] ** 2) * dt
+                                      + p["sigma"] * np.sqrt(dt) * z, axis=0))  # (dates 1..N, n, d)
+
+
+def _max_call_basis(S, K):
+    s = np.sort(S, axis=1)[:, ::-1] / K
+    d = S.shape[1]
+    q = np.maximum(s[:, 0] - 1, 0)
+    cols = [np.ones(len(S))] + [s[:, i] for i in range(d)] + [s[:, i] ** 2 for i in range(d)]
+    cols += [s[:, 0] * s[:, 1] if d > 1 else s[:, 0] ** 2, q, q * q, s[:, 0] ** 3]
+    return np.stack(cols, axis=1)
+
+
+def lsm_max_call(p, n_fit=200000, n_eval=400000, seed=1, chunk=50000):
+    """Longstaff-Schwartz for the Bermudan max-call on d assets (Broadie and Glasserman's benchmark; the parameters
+    of ``deep.MAX_CALL``): regress on the sorted prices, their squares, the two largest's product, the payoff and its
+    square and the largest cubed, then evaluate the policy on n_eval independent paths (in chunks). Returns the
+    in-sample price, the out-of-sample lower bound and its standard error, and the number of basis functions."""
+    g = np.random.default_rng(seed)
+    K, N, dt = p["K"], p["N"], p["T"] / p["N"]
+    S = _max_call_paths(p, n_fit, g)
+    pay = np.maximum(S.max(axis=2) - K, 0)
+    cash = pay[-1].copy()
+    betas = [None] * N
+    for i in range(N - 2, -1, -1):
+        cash *= np.exp(-p["r"] * dt)
+        itm = pay[i] > 0
+        X = _max_call_basis(S[i][itm], K)
+        b, *_ = np.linalg.lstsq(X, cash[itm], rcond=None)
+        betas[i] = b
+        ex = pay[i][itm] > X @ b
+        idx = np.flatnonzero(itm)[ex]
+        cash[idx] = pay[i][idx]
+    ins = float(np.exp(-p["r"] * dt) * cash.mean())
+    del S, pay, cash
+    ge = np.random.default_rng(seed + 1000)
+    vals = []
+    for a in range(0, n_eval, chunk):
+        m = min(chunk, n_eval - a)
+        S = _max_call_paths(p, m, ge)
+        pay = np.maximum(S.max(axis=2) - K, 0)
+        val = np.zeros(m)
+        alive = np.ones(m, bool)
+        for i in range(N):
+            if i < N - 1:
+                itm = alive & (pay[i] > 0)
+                ex = np.zeros(m, bool)
+                ex[itm] = pay[i][itm] > _max_call_basis(S[i][itm], K) @ betas[i]
+            else:
+                ex = alive & (pay[i] > 0)
+            val[ex] = pay[i][ex] * np.exp(-p["r"] * (i + 1) * dt)
+            alive &= ~ex
+        vals.append(val)
+    v = np.concatenate(vals)
+    return {"in_sample": ins, "lower": float(v.mean()), "se": float(v.std(ddof=1) / np.sqrt(len(v))),
+            "n_basis": int(len(betas[0]))}
+
+
+# ---------------------------------------------------------------- AAD against bumping, by the number of inputs
+
+
+def aad_basket(d, n_paths=4000, n_steps=12, seed=0, reps=5, T=1.0, r=0.05, K=100.0):
+    """An arithmetic Asian basket call on d assets (spots 100, volatilities 20%, independent), priced by Monte Carlo;
+    all 2d first derivatives (every spot and every volatility) by one reverse sweep of the series' autodiff, and by
+    central bumps (4d extra pricings). Wall-clock times are the best of ``reps``; the machine-independent counts are
+    the tape's nodes and element operations: forward ops (one per output element of every node) and backward ops (one
+    multiply-add per input element of every edge). Returns both, and the largest delta disagreement."""
+    from explainer.ai.autodiff import Tensor, topological_order
+
+    g = np.random.default_rng(seed)
+    z = g.standard_normal((n_steps, n_paths, d))
+    dt = T / n_steps
+    S0 = np.full(d, 100.0)
+    sig = np.full(d, 0.2)
+
+    def price_np(s0, v):
+        x = np.log(s0) + np.cumsum((r - 0.5 * v ** 2) * dt + v * np.sqrt(dt) * z, axis=0)
+        return float(np.exp(-r * T) * np.maximum(np.exp(x).mean(axis=(0, 2)) - K, 0).mean())
+
+    def price_ad():
+        s = Tensor(S0.copy(), requires_grad=True)
+        v = Tensor(sig.copy(), requires_grad=True)
+        lx = s.log()
+        acc = None
+        for i in range(n_steps):
+            lx = lx + (v * v * (-0.5) + r) * dt + v * np.sqrt(dt) * Tensor(z[i])
+            e = lx.exp()
+            acc = e if acc is None else acc + e
+        avg = acc.sum(axis=1) * (1.0 / (n_steps * d))
+        pr = (avg - K).relu().mean() * np.exp(-r * T)
+        return pr, s, v
+
+    def best(fn):
+        b = np.inf
+        for _ in range(reps):
+            t0 = time.perf_counter()
+            fn()
+            b = min(b, time.perf_counter() - t0)
+        return b
+
+    t_price = best(lambda: price_np(S0, sig))
+
+    def aad():
+        pr, s, v = price_ad()
+        pr.backward()
+        return s, v
+
+    t_aad = best(aad)
+    s, v = aad()
+
+    def bump():
+        out = []
+        for j in range(d):
+            e = np.zeros(d)
+            e[j] = 1.0
+            out.append((price_np(S0 + e, sig) - price_np(S0 - e, sig)) / 2.0)
+            out.append((price_np(S0, sig + 1e-3 * e) - price_np(S0, sig - 1e-3 * e)) / 2e-3)
+        return out
+
+    t_bump = best(bump)
+    gb = bump()
+    pr, _, _ = price_ad()
+    order = topological_order(pr)
+    fwd = sum(t.data.size for t in order)
+    bwd = sum(p_.data.size for t in order for p_, _ in t.parents)
+    return {"d": d, "inputs": 2 * d, "t_price": t_price, "t_aad": t_aad, "t_bump": t_bump,
+            "nodes": len(order), "fwd_ops": int(fwd), "bwd_ops": int(bwd),
+            "max_delta_diff": float(np.abs(np.array(gb[0::2]) - s.grad).max()),
+            "max_vega_diff": float(np.abs(np.array(gb[1::2]) - v.grad).max())}
+
+
+# ---------------------------------------------------------------- the American put by the penalty method
+
+
+def fd_american_penalty(S0, K, T, sigma, r, nS=400, nt=400, rho=1e8, rannacher=2, Smax_mult=4.0, keep=0):
+    """The American put as a linear complementarity problem by the penalty method (Forsyth and Vetzal 2002): each
+    time step solves (I - theta dt L + P) V = rhs + P g, P = rho where V < g (the payoff), Newton on the active set
+    until it stops changing; Crank-Nicolson after ``rannacher`` fully implicit steps. Returns the price, the Newton
+    iterations per step, the free boundary S*(tau) (the highest grid spot where V sits on the payoff), and with
+    ``keep`` every keep-th time slice of V for drawing."""
+    from scipy.sparse.linalg import spsolve
+    Smax = Smax_mult * K
+    S = np.linspace(0, Smax, nS + 1)
+    dS = S[1] - S[0]
+    dt = T / nt
+    i = np.arange(1, nS)
+    a = 0.5 * sigma ** 2 * S[i] ** 2 / dS ** 2 - 0.5 * r * S[i] / dS
+    b = -sigma ** 2 * S[i] ** 2 / dS ** 2 - r
+    c = 0.5 * sigma ** 2 * S[i] ** 2 / dS ** 2 + 0.5 * r * S[i] / dS
+    L = sp.diags([a[1:], b, c[:-1]], [-1, 0, 1], format="csc")
+    I = sp.identity(nS - 1, format="csc")
+    gp = np.maximum(K - S[1:-1], 0)
+    V = gp.copy()
+    its, bnd, slices = [], [], []
+    if keep:
+        slices.append(np.concatenate([[K], V, [0.0]]).tolist())
+    for n in range(nt):
+        th = 1.0 if n < rannacher else 0.5
+        rhs = V + (1 - th) * dt * (L @ V)
+        rhs[0] += dt * a[0] * K
+        x = V.copy()
+        for k in range(50):
+            P = rho * (x < gp)
+            x_new = spsolve((I - th * dt * L + sp.diags(P)).tocsc(), rhs + P * gp)
+            same = np.array_equal(x_new < gp, x < gp)
+            x = x_new
+            if same and k > 0:
+                break
+        its.append(k + 1)
+        V = x
+        on = np.flatnonzero((V - gp) <= 1e-6 * K)
+        on = on[S[1:-1][on] < K]
+        bnd.append(float(S[1:-1][on].max()) if len(on) else float("nan"))
+        if keep and (n + 1) % keep == 0:
+            slices.append(np.concatenate([[K], V, [0.0]]).tolist())
+    Vf = np.concatenate([[K], V, [0.0]])
+    return {"price": float(np.interp(S0, S, Vf)), "iterations": its, "boundary": bnd, "S": S.tolist(),
+            "slices": slices}
+
+
+# ---------------------------------------------------------------- Fourier: Lewis's single integral
+
+
+def lewis_call(cf, S0, K, T, r=0.0, upper=200.0):
+    """Lewis (2001): with the contour at Im u = -1/2, the call is one real integral,
+    C = S0 - e^{-rT} sqrt(F K)/pi int_0^inf Re[e^{iuk} phi(u - i/2)] du / (u^2 + 1/4), k = log(F/K), F = S0 e^{rT};
+    ``cf(u, T)`` is the characteristic function of log(S_T / F). Adaptive quadrature (scipy's quad)."""
+    from scipy.integrate import quad
+    F = S0 * np.exp(r * T)
+    k = np.log(F / K)
+    f = lambda u: float((np.exp(1j * u * k) * cf(np.asarray(u - 0.5j), T)).real / (u * u + 0.25))  # noqa: E731
+    I, _ = quad(f, 0.0, upper, limit=500, epsabs=1e-13, epsrel=1e-13)
+    return float(S0 - np.exp(-r * T) * np.sqrt(F * K) / np.pi * I)
+
+
+# ---------------------------------------------------------------- quantum amplitude estimation, simulated
+
+
+def mlae(a, powers=(0, 1, 2, 4, 8), shots=50, seed=0, n_grid=20001, n_fine=2001):
+    """Maximum-likelihood amplitude estimation without phase estimation (Suzuki et al. 2020), simulated exactly: the
+    state sits at angle theta, sin^2 theta = a; after m Grover iterations a measurement reads 'good' with probability
+    sin^2((2m+1) theta), so each power m gets Binomial(shots, that) hits. After each power the likelihood is
+    maximised, on a full grid at first and then on a fine grid around the last estimate (the likelihood's peaks
+    narrow like 1/m). Oracle calls count 2m+1 per shot. Returns the estimate and the cumulative calls after each
+    power, and the hits."""
+    g = np.random.default_rng(seed)
+    th = np.arcsin(np.sqrt(a))
+    hits, ests, calls = [], [], []
+    tot = 0
+    est = None
+    for m in powers:
+        p = np.sin((2 * m + 1) * th) ** 2
+        hits.append(int(g.binomial(shots, p)))
+        tot += shots * (2 * m + 1)
+        if est is None:
+            grid = np.linspace(1e-6, np.pi / 2 - 1e-6, n_grid)
+        else:
+            w = np.pi / (2 * (2 * m + 1))
+            grid = np.linspace(max(est - w, 1e-9), min(est + w, np.pi / 2 - 1e-9), n_fine)
+        for _ in range(3):
+            ll = np.zeros_like(grid)
+            for mk, h in zip(powers, hits):
+                q = np.clip(np.sin((2 * mk + 1) * grid) ** 2, 1e-300, 1 - 1e-16)
+                ll += h * np.log(q) + (shots - h) * np.log1p(-q)
+            j = int(np.argmax(ll))
+            step = grid[1] - grid[0]
+            est = float(grid[j])
+            grid = np.linspace(max(est - 2 * step, 1e-12), min(est + 2 * step, np.pi / 2 - 1e-12), 401)
+        ests.append(float(np.sin(est) ** 2))
+        calls.append(tot)
+    return {"estimates": ests, "calls": calls, "hits": hits, "theta": float(th)}
+
+
+# ---------------------------------------------------------------- Chebyshev interpolation of a pricer
+
+
+def chebyshev2d(f, box, n):
+    """Tensor Chebyshev interpolation of f(x, y) on box ((x_lo, x_hi), (y_lo, y_hi)) with n x n Chebyshev points of
+    the first kind (Gass, Glau, Mahlstedt and Mair 2018 for option prices): n^2 calls to f, then any point by a
+    double Chebyshev sum. Returns the model (box, coefficients, nodes)."""
+    from numpy.polynomial import chebyshev as Ch
+    t = np.cos(np.pi * (np.arange(n) + 0.5) / n)
+    (xa, xb), (ya, yb) = box
+    xs = xa + (xb - xa) * (t + 1) / 2
+    ys = ya + (yb - ya) * (t + 1) / 2
+    P = np.array([[f(x, y) for y in ys] for x in xs])
+    cx = Ch.chebfit(t, P, n - 1)               # (n coefficients in x, n values in y)
+    coef = Ch.chebfit(t, cx.T, n - 1).T         # (n in x, n in y)
+    return {"box": box, "coef": coef, "x": xs, "y": ys}
+
+
+def chebyshev2d_eval(model, x, y):
+    """The interpolant of :func:`chebyshev2d` at points (x, y) (arrays of the same shape)."""
+    from numpy.polynomial import chebyshev as Ch
+    (xa, xb), (ya, yb) = model["box"]
+    u = 2 * (np.asarray(x, float) - xa) / (xb - xa) - 1
+    v = 2 * (np.asarray(y, float) - ya) / (yb - ya) - 1
+    return Ch.chebval2d(u, v, model["coef"])
+
+
+# ---------------------------------------------------------------- the ADI solution on its whole grid
+
+
+def heston_adi_grid(*args, **kwargs):
+    """:func:`heston_adi`'s whole final grid instead of one interpolated price: the price surface u(S, v) at expiry
+    tau = T, for drawing it and reading Greeks off it. (heston_adi interpolates its grid at (S0, v0) as its last step;
+    this captures the grid it hands to the interpolator.) Returns (S, v, grid[v, S])."""
+    import scipy.interpolate as si
+
+    seen = {}
+    real = si.RegularGridInterpolator
+
+    class _Capture:
+        def __init__(self, points, values, **kw):
+            seen["v"], seen["S"] = (np.asarray(p) for p in points)
+            seen["grid"] = np.asarray(values)
+
+        def __call__(self, x):
+            return 0.0
+
+    si.RegularGridInterpolator = _Capture
+    try:
+        heston_adi(*args, **kwargs)
+    finally:
+        si.RegularGridInterpolator = real
+    return seen["S"], seen["v"], seen["grid"]

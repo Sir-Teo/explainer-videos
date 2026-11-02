@@ -16,46 +16,86 @@ def fdcf(r, g):
 class DCF(VoiceoverScene, ThreeDScene):
     def construct(self):
         d = load("dcf")
+        mc = load("dcf_mc")
         self.card()
-        self.fcf_wacc()
+        self.fcf()
+        self.driver()
         self.bars(d)
         self.surface(d)
+        self.ronic(mc)
+        self.monte_carlo(mc)
 
     def card(self):
-        c = chapter_card(3, r"Discounted cash flow", r"What is a whole firm worth?", part=PART)
-        with self.voiceover("Chapter three. Discounted cash flow."):
+        c = chapter_card(6, r"Free cash flow and the DCF surface", r"What is a whole firm worth?", part=PART)
+        with self.voiceover("Chapter six. Free cash flow, and the DCF surface."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def fcf_wacc(self):
-        f1 = cmath(r"\text{FCF}", r"=", r"\text{EBIT}(1 - t)", r"+", r"\text{depreciation}", r"-", r"\text{capital spending}",
-                   r"-", r"\Delta\,\text{working capital}", font_size=34, colors={r"\text{FCF}": CASH})
-        w = cmath(r"\text{WACC}", r"=", r"\frac{E}{V}\,r_E", r"+", r"\frac{D}{V}\,r_D(1 - t)", font_size=44,
-                  colors={r"\text{WACC}": VALUE, r"\frac{E}{V}\,r_E": EQUITY, r"\frac{D}{V}\,r_D(1 - t)": DEBT})
-        ex = MathTex(rf"\text{{equity 600 at 9\%, debt 200 at 5\%, tax 21\%:}}\quad "
-                     rf"{100 * valuation.wacc(600, 200, 0.09, 0.05, 0.21):.2f}\%", font_size=30, color=GREY_A)
-        VGroup(f1, w, ex).arrange(DOWN, buff=0.7).move_to(UP * 0.4)
-        n1 = why(r"the cash the business could pay out to all its investors, before any of it goes to lenders or owners")
-        n1.next_to(f1, DOWN, buff=0.2)
-        foot = note(r"$r_E$, the return owners demand, is estimated from risk in Part 23 (risk and return) and Part 24 "
-                    r"(factors)", font_size=19, color=GREY_B).to_edge(DOWN, buff=0.4)
-        VGroup(w, ex).shift(DOWN * 0.3)
+    def fcf(self):
+        rows = [
+            cmath(r"\text{FCFF}", r"=", r"\text{EBIT}(1 - t)", r"+", r"\text{Dep}", r"-", r"\text{Capex}", r"-",
+                  r"\Delta\text{NWC}", font_size=38, colors={r"\text{FCFF}": CASH}),
+            cmath(r"\text{FCFF}", r"=", r"\text{NOPAT}\,(1 - \text{IR})", r",\quad", r"\text{IR} = \frac{\text{Capex} - "
+                  r"\text{Dep} + \Delta\text{NWC}}{\text{NOPAT}}", font_size=38, colors={r"\text{FCFF}": CASH}),
+            cmath(r"g", r"=", r"\text{IR}\times\text{RONIC}", font_size=42, colors={r"g": CASH}),
+        ]
+        whys = [why(r"chapter 3's cash flow statement before any payment to lenders or owners: operating profit after "
+                    r"tax, depreciation added back, net investment taken off"),
+                why(r"NOPAT: net operating profit after tax; IR: the share of it reinvested"),
+                why(r"profits grow only by reinvesting: each reinvested dollar earns the return on new invested capital")]
+        step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.2, buff=0.85, edge=6.9)
         with self.voiceover(
-            "To value a whole firm rather than one share, an analyst discounts its free cash flow: the cash its "
-            "business throws off after taxes and after the investment needed to keep it growing, before anything is "
-            "paid to lenders or owners. Operating profit after tax, plus the depreciation that cost no cash, minus "
-            "the spending on new plant, minus the cash tied up in stock and unpaid bills. <bookmark mark='a'/> "
-            "Because that cash belongs to both lenders and owners, it is discounted at a blend of what each "
-            "demands: the weighted average cost of capital. Debt's cost is cut by the tax rate, because interest "
-            "is deductible. <bookmark mark='b'/> Our toy firm, with equity worth six hundred that wants nine "
-            "percent and debt of two hundred at five, has a cost of capital a little under eight percent."
+            "To value a whole firm rather than one share, an analyst discounts its free cash flow. Read it off "
+            "chapter three's ledgers: operating profit after tax, plus the depreciation that cost no cash, minus the "
+            "spending on new plant, minus the cash tied up in working capital. It is the cash the business could pay "
+            "to all its investors, lenders and owners together. <bookmark mark='a'/> Write the investment as a share "
+            "of after-tax operating profit, the reinvestment rate, and free cash flow is profit times one minus that "
+            "rate. <bookmark mark='b'/> And growth is not free. Profits grow only because something was reinvested, "
+            "and each reinvested dollar earns the return on new invested capital, RONIC. So growth equals the "
+            "reinvestment rate times RONIC."
         ) as vo:
-            self.play(Write(f1))
-            self.play(FadeIn(n1))
+            step(0)
             vo.wait_until("a")
-            self.play(Write(w), FadeIn(foot))
+            step(1)
             vo.wait_until("b")
-            self.play(FadeIn(ex))
+            step(2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def driver(self):
+        rows = [
+            cmath(r"\text{TV}", r"=", r"\frac{\text{FCFF}_{T+1}}{\text{WACC} - g}", r"=",
+                  r"\frac{\text{NOPAT}_{T+1}\,(1 - g/\text{RONIC})}{\text{WACC} - g}", font_size=40,
+                  colors={r"\text{TV}": VALUE}),
+            cmath(r"\frac{\partial\,\text{TV}}{\partial g}", r"\propto", r"\frac{1}{\text{WACC}} - \frac{1}{\text{RONIC}}",
+                  font_size=40, colors={r"\frac{\partial\,\text{TV}}{\partial g}": VALUE}),
+            cmath(r"\frac{\partial\,\text{TV}}{\partial g} > 0", r"\iff", r"\text{RONIC} > \text{WACC}", font_size=42,
+                  colors={r"\text{RONIC} > \text{WACC}": QC.HOUSE}),
+        ]
+        whys = [why(r"Gordon on free cash flow, with $\text{IR} = g/\text{RONIC}$: the value-driver formula (Koller et al.)"),
+                why(r"differentiate in $g$: the sign is that of $\text{RONIC} - \text{WACC}$"),
+                why(r"growth creates value only where new investment earns more than it costs")]
+        step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.6, buff=0.85, edge=6.9)
+        bridge = wrapped_label(r"the bridge to equity: enterprise value $-$ net debt $-$ minorities $-$ preferred "
+                               r"$-$ debt-like items (leases, pension deficits) $+$ non-operating assets", 12.0, 22,
+                               GREY_A).to_edge(DOWN, buff=0.45)
+        with self.voiceover(
+            "Put that into Gordon's formula for the value after the forecast years. Free cash flow is profit times "
+            "one minus g over RONIC, and the terminal value becomes McKinsey's value-driver formula. "
+            "<bookmark mark='a'/> Differentiate it in g, and the sign of the result is the sign of RONIC minus the "
+            "cost of capital. <bookmark mark='b'/> Faster growth adds value only if new investment earns more than "
+            "it costs. A firm that earns exactly its cost of capital can double its growth and be worth not a cent "
+            "more. <bookmark mark='c'/> That value is the enterprise's. Owners get it after the lenders: subtract net "
+            "debt, minority interests, preferred stock and the debt-like items, leases and pension deficits, and add "
+            "back anything the business does not need."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(bridge))
         self.wait(0.4)
         self.clear_scene()
 
@@ -160,4 +200,120 @@ class DCF(VoiceoverScene, ThreeDScene):
                              run_time=max(vo.remaining(1.0) - 1.0, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, p0, p1)), FadeOut(hint),
                                                                   FadeOut(rd), FadeOut(rng)], run_time=1.5)
+        self.clear_scene()
+
+    def ronic(self, mc):
+        gs, ron, S = np.asarray(mc["gs"]), np.asarray(mc["ronic"]), np.asarray(mc["vd"])
+        ax = ThreeDAxes(x_range=[0, 0.05, 0.01], y_range=[0.04, 0.20, 0.04], z_range=[0, 2400, 400], x_length=6.4,
+                        y_length=5.0, z_length=3.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.6 + RIGHT * 0.4)
+
+        def f(g_, r_):
+            return float(np.clip(1250 * 0.08 * (1 - g_ / r_) / (0.08 - g_), 0, 2400))
+
+        surf = loss_surface(ax, f, (0.0, 0.05), (0.04, 0.20), resolution=(26, 24), z_lo=300, z_hi=2400)
+        ridge = ParametricFunction(lambda u: ax.c2p(u, 0.08, f(u, 0.08)), t_range=[0, 0.05], color=QC.HOUSE,
+                                   stroke_width=6)
+        balls = VGroup(*[Dot3D(ax.c2p(0.0, rr, f(0.0, rr)), radius=0.1, color=c_)
+                         for rr, c_ in ((0.16, QC.GAIN), (0.05, QC.LOSS))])
+        hint = VGroup(label(r"growth $g$: 0 to 5\%", font_size=22, color=CASH),
+                      label(r"RONIC: 4\% to 20\%", font_size=22, color=QC.HOUSE),
+                      label(r"value of NOPAT 100 at WACC 8\%", font_size=22, color=VALUE)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                buff=0.1)
+        hint.to_corner(UL, buff=0.4)
+        rd = VGroup(MathTex(rf"\text{{RONIC}} = \text{{WACC}}:\ {mc['vd_flat']:,.0f}\ \text{{for every }} g"
+                            .replace(",", "{,}"), font_size=28, color=QC.HOUSE),
+                    MathTex(r"\text{RONIC } 16\%:\ \text{growth uphill}", font_size=28, color=QC.GAIN),
+                    MathTex(r"\text{RONIC } 5\%:\ \text{growth downhill}", font_size=28, color=QC.LOSS))
+        rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-130 * DEGREES, zoom=0.8)
+        self.add_fixed_in_frame_mobjects(hint, rd)
+        self.remove(hint, rd)
+        with self.voiceover(
+            "Here is that statement as a landscape. Growth runs across, RONIC runs back, and the height is the "
+            "value of a hundred of operating profit at an eight percent cost of capital. <bookmark mark='a'/> Along "
+            "the orange line RONIC equals the cost of capital, and the surface is flat: twelve hundred and fifty, "
+            "whatever the growth. <bookmark mark='b'/> Put a firm on the far side, earning sixteen percent on new "
+            "investment, and roll it towards faster growth: it climbs. <bookmark mark='c'/> Put one on the near side, "
+            "earning five, and the same growth rolls it downhill. Growth bought below the cost of capital destroys "
+            "value, however good it looks in the revenue line."
+        ) as vo:
+            self.play(FadeIn(hint), Create(ax), run_time=1.5)
+            self.play(Create(surf), run_time=3)
+            vo.wait_until("a")
+            self.play(Create(ridge), FadeIn(rd[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(balls[0]), FadeIn(rd[1]))
+            self.play(balls[0].animate.move_to(ax.c2p(0.05, 0.16, f(0.05, 0.16))), run_time=2.5)
+            vo.wait_until("c")
+            self.play(FadeIn(balls[1]), FadeIn(rd[2]))
+            self.play(balls[1].animate.move_to(ax.c2p(0.05, 0.05, f(0.05, 0.05))), run_time=2.5)
+            self.move_camera(theta=-100 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, ridge, balls)), FadeOut(hint),
+                                                                  FadeOut(rd)], run_time=1.5)
+        self.clear_scene()
+
+    def monte_carlo(self, mc):
+        V = np.asarray(mc["V"])
+        base = mc["base"]
+        g = axes([800, 4000], [0, 1.0], x_length=8.4, y_length=4.0, xlabel=r"firm value",
+                 xticks=[1000, 2000, 3000, 4000], yticks=[], font_size=17).move_to(DOWN * 0.6 + LEFT * 1.6)
+        ax = g.ax
+        bins = np.linspace(800, 4000, 41)
+        k = ValueTracker(0)
+
+        def hist():
+            n = int(k.get_value())
+            if n < 1:
+                return VGroup()
+            h, _ = np.histogram(np.clip(V[:n], 800, 3999), bins=bins)
+            h = h / max(h.max(), 1)
+            w = ax.c2p(bins[1], 0)[0] - ax.c2p(bins[0], 0)[0]
+            return VGroup(*[Rectangle(width=w * 0.92, height=max(v * 3.6, 0.002), stroke_width=0, fill_color=VALUE,
+                                      fill_opacity=0.8).move_to(ax.c2p((a + b) / 2, 0), aligned_edge=DOWN)
+                            for a, b, v in zip(bins[:-1], bins[1:], h)])
+
+        def counter():
+            return MathTex(rf"\text{{draws: }}{int(k.get_value()):,}".replace(",", "{,}"), font_size=28,
+                           color=GREY_A).to_corner(UL, buff=0.5)
+
+        hb, cnt = always_redraw(hist), always_redraw(counter)
+        bl = DashedLine(ax.c2p(base, 0), ax.c2p(base, 1.0), color=WHITE, stroke_width=2)
+        bt = label(rf"base case {base:,.0f}".replace(",", "{,}"), font_size=20).next_to(bl, UP, buff=0.08)
+        band_ = VGroup(DashedLine(ax.c2p(mc["q05"], 0), ax.c2p(mc["q05"], 0.85), color=QC.HOUSE),
+                       DashedLine(ax.c2p(mc["q95"], 0), ax.c2p(mc["q95"], 0.85), color=QC.HOUSE))
+        side = VGroup(
+            label(r"20{,}000 draws:", font_size=22, color=GREY_A),
+            MathTex(r"r \sim U[6\%, 10\%]", font_size=28, color=QC.IMPLIED),
+            MathTex(r"g \sim U[0, 3\%]", font_size=28, color=CASH),
+            MathTex(r"\text{cash flow} \times U[0.8, 1.2]", font_size=28),
+            MathTex(rf"5\text{{--}}95\%:\ {mc['q05']:,.0f}\ \text{{to}}\ {mc['q95']:,.0f}".replace(",", "{,}"),
+                    font_size=30, color=QC.HOUSE),
+            MathTex(rf"= {mc['q05'] / base:.2f}\times\ \text{{to}}\ {mc['q95'] / base:.2f}\times\ \text{{base}}",
+                    font_size=28, color=QC.HOUSE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4)
+        pp = desk_question(r"Pause and predict: a firm earns exactly its cost of capital on new investment. What "
+                           r"does faster growth add?", width=6.4, font_size=21).to_edge(UP, buff=0.3).shift(RIGHT * 2.6)
+        with self.voiceover(
+            "The surfaces show what each assumption does. A Monte Carlo shows what not knowing them does. Draw the "
+            "discount rate between six and ten percent, terminal growth between nothing and three, and scale the "
+            "cash flows up or down by a fifth; value the firm each time. <bookmark mark='a'/> Twenty thousand "
+            "valuations pile up into a distribution. <bookmark mark='b'/> Its middle ninety percent runs from "
+            f"{mc['q05']:,.0f} to {mc['q95']:,.0f}, about {mc['q05'] / base:.2f} to {mc['q95'] / base:.2f} times the "
+            "base case, with a long right tail from the corner where growth nears the discount rate. A DCF that "
+            "reports one number is reporting one draw. <bookmark mark='c'/> Pause and predict: a firm earns exactly "
+            "its cost of capital on new investment. What does faster growth add? Nothing."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[:4]), Create(bl), FadeIn(bt))
+            vo.wait_until("a")
+            self.add(hb, cnt)
+            self.play(k.animate.set_value(len(V)), run_time=8, rate_func=lambda x: x ** 2)
+            vo.wait_until("b")
+            self.play(Create(band_), FadeIn(side[4:]))
+            vo.wait_until("c")
+            self.play(FadeIn(pp))
+        hb.clear_updaters()
+        cnt.clear_updaters()
+        self.wait(0.4)
         self.clear_scene()

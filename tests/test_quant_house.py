@@ -1414,3 +1414,197 @@ def test_part9_neural_mot_dual_is_near_the_lp():
     lp = A.mot_bounds(x, mu, y, nu, c)["upper"]
     r = deep.mot_neural(x, mu, y, nu, c, steps=3000, gamma=3000.0, width=32, lr=1e-2, seed=0)
     assert abs(r["bound"] - lp) < 0.03
+
+
+# ---------------------------------------------------------------- rough, Part 14 expanded
+
+
+def test_part14_volterra_riemann_misses_the_singular_cell():
+    from explainer.quant.house import rough as R
+    t, Y, _ = R.volterra_riemann(0.3, 1.0, 100, 20000, seed=1)
+    assert abs(Y[:, -1].var() - 1.0) < 0.1                    # t^{2H} = 1 at t = 1
+    _, Y5, _ = R.volterra_riemann(0.05, 1.0, 100, 20000, seed=1)
+    S, v = R.rbergomi_paths(0.05, 1.0, 0.0, 1.0, 1.0, 100, 20000, seed=1, return_v=True)
+    hyb = (np.log(v[-1]) + 0.5).var()
+    assert Y5[:, -1].var() < 0.7 < hyb
+
+
+def test_part14_skew_term_fit_recovers_a_power_law():
+    from explainer.quant.house import rough as R
+    T = np.array([2, 5, 9, 16, 30, 60, 90, 180, 365]) / 365
+    f = R.skew_term_fit(T, 0.2 * T ** -0.4)
+    assert abs(f["power"]["a"] - 0.4) < 1e-4 and abs(f["H"] - 0.1) < 1e-4
+
+
+def test_part14_fou_paths():
+    from explainer.quant.house import rough as R, sim
+    x = R.fou_paths(0.3, None, 2000, 1.0, seed=4)
+    B = np.asarray(sim.fbm(0.3, 2000, 2000.0, 1, seed=4)).ravel()
+    assert np.allclose(x, B[1:] - B[0])
+    y = R.fou_paths(0.3, 10.0, 20000, 1.0, seed=5)
+    assert np.isfinite(y.var()) and y.var() < np.var(R.fou_paths(0.3, None, 20000, 1.0, seed=5))
+
+
+def test_part14_rfsv_beats_last_value_on_fbm():
+    from explainer.quant.house import rough as R, sim
+    x = np.asarray(sim.fbm(0.1, 3000, 3000.0, 1, seed=8)).ravel()
+    p = R.rfsv_predict(x, 0.1, 5, window=250)
+    i = np.arange(260, len(x) - 5)
+    assert np.mean((x[i + 5] - p[i]) ** 2) < np.mean((x[i + 5] - x[i]) ** 2)
+
+
+def test_part14_pdv4_ema_is_the_two_exponential_convolution():
+    from explainer.quant.house import rough as R
+    r = np.random.default_rng(0).standard_normal(400) * 0.02
+    dt, l0, l1, th = 1 / 365, 50.0, 5.0, 0.3
+    got = R.pdv4_features(r, dt, l0, l1, th)
+    j = np.arange(400)
+    K = lambda lam: (1 - np.exp(-lam * dt)) * np.exp(-lam * dt * j)  # noqa: E731  exact EMA weights
+    want = (1 - th) * np.convolve(r / dt, K(l0))[:400] + th * np.convolve(r / dt, K(l1))[:400]
+    assert np.allclose(got, want)
+
+
+def test_part14_qrh_floor_and_deterministic_without_noise():
+    from explainer.quant.house import rough as R
+    S, V, Z = R.qrh_paths(0.4, 0.1, 0.003, 1.0, 1.0, 0.1, 0.1, 1.0, 100, 500, seed=1)
+    assert (V >= 0.003 - 1e-12).all()
+    S0, V0, Z0 = R.qrh_paths(0.4, 0.1, 0.003, 1.0, 0.0, 0.1, 0.05, 1.0, 100, 50, seed=1)
+    assert np.allclose(Z0, Z0[:1])                              # eta = 0: Z is the same on every path
+
+
+def test_part14_sigvol_constant_ell_is_black_scholes():
+    from explainer.quant.house import bs, rough as R
+    feats, words = R.sigvol_features([50], 50, 0.5 / 50, 40000, depth=3, seed=2)
+    f = feats[50]
+    ell = np.zeros(len(words))
+    ell[0] = 0.4
+    ST = np.exp(R.sigvol_logS(ell, -0.5, f["AW"], f["AP"], f["B"]))
+    p = np.mean(np.maximum(ST - 1.0, 0))
+    assert abs(p - bs.price(1.0, 1.0, 0.5, 0.4, 0.0, 0.0, 1)) < 3 * np.std(np.maximum(ST - 1, 0)) / np.sqrt(40000)
+
+
+def test_part14_hawkes_branching_mean_count():
+    from explainer.quant.house import sim
+    mu, n, T = 0.5, 0.8, 20000.0
+    counts = [len(sim.hawkes_branching_powerlaw(mu, n, 1.5, 1.0, T, seed=s)) for s in range(4)]
+    assert abs(np.mean(counts) / (mu * T / (1 - n)) - 1) < 0.05
+
+
+def test_part14_lift_weights_fit_the_kernel():
+    from scipy.special import gamma
+    from explainer.quant.house import rough as R
+    t = np.exp(np.linspace(np.log(1e-2), 0, 30))
+    K = t ** (0.6 - 1) / gamma(0.6)
+    err = []
+    for N in (5, 20, 50):
+        c, x = R.lift_weights(0.1, N)
+        err.append(np.max(np.abs((c[None, :] * np.exp(-x[None, :] * t[:, None])).sum(1) / K - 1)))
+    assert err[1] < 0.2 and err[2] < err[1] < err[0]
+
+
+# ---------------------------------------------------------------- engine, expanded (Part 16)
+
+
+def test_engine_geometric_asian_and_controls():
+    from explainer.quant.house import engine as E
+    S0, K, T, s, r = 100.0, 100.0, 1.0, 0.2, 0.05
+    ex = E.geometric_asian_call(S0, K, T, s, r, 16)
+    g = np.random.default_rng(0)
+    dt = T / 16
+    t = dt * np.arange(1, 17)
+    W = np.cumsum(np.sqrt(dt) * g.standard_normal((200000, 16)), axis=1)
+    G = np.exp(np.mean(np.log(S0) + (r - 0.5 * s * s) * t + s * W, axis=1))
+    y = np.exp(-r * T) * np.maximum(G - K, 0)
+    assert abs(y.mean() - ex) < 3 * y.std() / np.sqrt(len(y))
+    cv = E.asian_control(S0, K, T, s, r, 20000, 64, seed=1)
+    plain = E.asian_control(S0, K, T, s, r, 200000, 64, seed=2, control="none")
+    assert cv["ratio"] > 100 and abs(cv["price"] - plain["price"]) < 3 * np.hypot(cv["se"], plain["se"])
+
+
+def test_engine_stratified_and_cross_entropy():
+    from explainer.quant.house import bs as B, engine as E
+    S0, K, T, s, r = 100.0, 100.0, 1.0, 0.2, 0.05
+    ex = float(B.price(S0, K, T, s, r))
+    p, se = E.stratified_call(S0, K, T, s, r, 16384, 64, seed=3)
+    _, se0 = E.mc_call(S0, K, T, s, r, 16384, seed=3)
+    assert abs(p - ex) < 4 * se and se < se0
+    drift = (r - 0.5 * s * s) * T
+    f = lambda z: np.maximum(S0 * np.exp(drift + s * z) - 160.0, 0)  # noqa: E731
+    th = E.is_cross_entropy(f, 0.0, 20000, 4, seed=4)[-1]
+    z = np.random.default_rng(5).standard_normal(200000)
+    grid = np.linspace(1.5, 4.0, 51)
+    var = [np.var(f(z + t) * np.exp(-t * (z + t) + 0.5 * t * t)) for t in grid]
+    assert abs(th - grid[int(np.argmin(var))]) < 0.3
+
+
+def test_engine_path_matrices_and_discrepancy():
+    from scipy.stats import qmc
+    from explainer.quant.house import engine as E
+    n = 32
+    i = np.arange(1, n + 1)
+    C = np.minimum.outer(i, i) / n
+    share = {}
+    for k in ("step", "bridge", "pca"):
+        L = E.path_matrix(n, 1.0, k)
+        assert np.abs(L @ L.T - C).max() < 1e-12
+        share[k] = E.variance_captured(np.ones(n) / n, L)[0]
+    assert share["pca"] >= share["bridge"] >= share["step"]
+    assert E.l2_star_discrepancy(np.array([[0.5]])) == pytest.approx(np.sqrt(1 / 12), rel=1e-12)
+    sob = qmc.Sobol(2, scramble=True, seed=0).random(1024)
+    rnd = np.random.default_rng(0).random((1024, 2))
+    assert E.l2_star_discrepancy(sob) < E.l2_star_discrepancy(rnd)
+
+
+def test_engine_mlmc_run_matches_and_milstein_decays():
+    from explainer.quant.house import bs as B, engine as E
+    a = E.mlmc_run(0.05, seed=3, trace=True)
+    assert a["estimate"] == E.mlmc(0.05, seed=3)["estimate"] and len(a["trace"]) >= 1
+    m = E.mlmc_run(0.02, scheme="milstein", payoff="call", seed=1, L0=8, max_level=8)
+    V = np.log2(m["V"])
+    slope = -np.polyfit(np.arange(3, 9), V[3:9], 1)[0]
+    assert slope >= 1.7
+    ex = float(B.price(100, 100, 1, 0.2, 0.05))
+    se = np.sqrt(sum(v / n for v, n in zip(m["V"], m["N"])))
+    assert abs(m["estimate"] - ex) < 3 * se + 0.01
+
+
+def test_engine_lsm_trace_bermudan_and_max_call():
+    from explainer.quant.house import deep, engine as E, trees
+    S0, K, T, s, r = 100.0, 100.0, 1.0, 0.2, 0.05
+    tr = E.lsm_put_trace(S0, K, T, s, r, 25, 40000, seed=1, n_show=0)
+    b = np.asarray(tr["boundary"], float)
+    ok = np.isfinite(b)
+    assert np.all(b[ok] <= K + 1e-9) and b[ok][-1] > b[ok][len(b[ok]) // 2]
+    lo, se = E.lsm_put_eval(tr["coefs"], S0, K, T, s, r, 25, 40000, seed=9)
+    berm = E.bermudan_tree(S0, K, T, s, r, 25, 1000)
+    amer = trees.crr(S0, K, T, s, r, N=2000, cp=-1, american=True)["price"]
+    euro = trees.crr(S0, K, T, s, r, N=2000, cp=-1)["price"]
+    assert euro < berm < amer and lo < amer + 3 * se
+    p = dict(deep.MAX_CALL, d=2)
+    mc = E.lsm_max_call(p, 20000, 100000, seed=1)
+    assert abs(mc["lower"] - 13.902) < 0.1
+
+
+def test_engine_aad_basket_penalty_lewis():
+    from explainer.quant.house import engine as E, stochvol as sv, trees
+    a = E.aad_basket(3, 2000, 6, reps=1)
+    assert a["max_delta_diff"] < 1e-3 and a["inputs"] == 6
+    pe = E.fd_american_penalty(100, 100, 1, 0.2, 0.05, 200, 200)
+    tree = trees.crr(100, 100, 1, 0.2, 0.05, N=2000, cp=-1, american=True)["price"]
+    assert abs(pe["price"] - tree) < 0.02 and np.isfinite(pe["boundary"][-1])
+    cf = lambda u, T: sv.heston_cf(u, T, 0.04, 1.5, 0.04, 0.5, -0.7)  # noqa: E731
+    assert abs(E.lewis_call(cf, 100, 100, 1.0) - float(sv.cos_price(cf, 100, 100, 1.0, 1, N=4096, L=40)[0])) < 1e-8
+
+
+def test_engine_mlae_and_chebyshev():
+    from explainer.quant.house import engine as E
+    a = 0.3
+    errs = [E.mlae(a, (0, 1, 2, 4, 8, 16, 32, 64, 128), 50, seed=s)["estimates"][-1] - a for s in range(20)]
+    calls = E.mlae(a, (0, 1, 2, 4, 8, 16, 32, 64, 128), 50)["calls"][-1]
+    assert np.sqrt(np.mean(np.square(errs))) < np.sqrt(a * (1 - a) / calls)
+    f = lambda x, y: 1 + x - 2 * x ** 3 * y ** 2 + y ** 4  # noqa: E731
+    m = E.chebyshev2d(f, ((-1.0, 2.0), (0.5, 1.5)), 6)
+    x, y = np.random.default_rng(0).uniform(-1, 2, 50), np.random.default_rng(1).uniform(0.5, 1.5, 50)
+    assert np.allclose(E.chebyshev2d_eval(m, x, y), f(x, y), atol=1e-10)
+    S, v, G = E.heston_adi_grid(100, 100, 1.0, 0.04, 1.5, 0.04, 0.5, -0.7, r=0.0, nS=20, nv=10, nt=10)
+    assert G.shape == (len(v), len(S))

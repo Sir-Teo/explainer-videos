@@ -403,3 +403,31 @@ def heston_euler(S0, v0, kappa, theta, xi, rho, T, n, n_paths, seed=0, mu=0.0):
         v[:, k + 1] = v[:, k] + kappa * (theta - vp) * dt + xi * np.sqrt(vp * dt) * z2
         S[:, k + 1] = np.exp(x)
     return S, v
+
+
+def hawkes_branching_powerlaw(mu, n, alpha, c, T, seed=0, max_events=30_000_000, return_tree=False):
+    """A Hawkes process on [0, T] simulated by its cluster (branching) representation: immigrants arrive as a Poisson
+    process of rate ``mu``; every event has Poisson(n) children (n the branching ratio) at Lomax delays with density
+    alpha c^alpha / (c + t)^(1 + alpha), a power-law tail t^-(1 + alpha). Generation by generation, vectorised.
+    Returns the sorted event times (and, with ``return_tree``, each event's parent index, -1 for immigrants, and
+    generation, in generation order)."""
+    g = np.random.default_rng(seed)
+    gen = np.sort(g.uniform(0, T, g.poisson(mu * T)))
+    times, parents, gens = [gen], [np.full(len(gen), -1)], [np.zeros(len(gen), int)]
+    offset, k, total = 0, 0, len(gen)
+    while len(gen) and total < max_events:
+        kids = g.poisson(n, len(gen))
+        par = np.repeat(np.arange(len(gen)) + offset, kids)
+        t = np.repeat(gen, kids) + c * (g.uniform(size=kids.sum()) ** (-1 / alpha) - 1)
+        keep = t < T
+        offset += len(gen)
+        k += 1
+        gen = t[keep]
+        times.append(gen)
+        parents.append(par[keep])
+        gens.append(np.full(len(gen), k))
+        total += len(gen)
+    ev = np.concatenate(times)
+    if return_tree:
+        return ev, np.concatenate(parents), np.concatenate(gens)
+    return np.sort(ev)

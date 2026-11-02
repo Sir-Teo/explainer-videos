@@ -163,3 +163,83 @@ class Betting(VoiceoverScene):
             self.play(Indicate(bar, color=LOSS))
         self.wait(0.4)
         self.clear_scene()
+
+    def proof(self):
+        rows = [cmath(r"\tau = \inf\{n : W_n \ge c\}", r",", r"\quad W \ge 0,\ W_0 = 1,\ \text{a supermartingale}",
+                      font_size=38),
+                cmath(r"1 \ge \mathbb{E}W_{\tau \wedge n}", r"\ge", r"c\,P(\tau \le n)", font_size=40),
+                cmath(r"P\big(\sup_n W_n \ge c\big)", r"\le", r"\frac{1}{c} \quad (c = 1/\alpha:\ \le \alpha)", font_size=40,
+                      colors={r"\frac{1}{c} \quad (c = 1/\alpha:\ \le \alpha)": MART}),
+                cmath(r"E \ge 0,\ \mathbb{E}_{H_0}E \le 1", r"\Rightarrow", r"P(E \ge 1/\alpha) \le \alpha; \quad "
+                      r"p \mapsto \kappa p^{\kappa - 1} \text{ is an e-value}", font_size=36),
+                cmath(r"\limsup_n \frac{|S_n|}{\sqrt{2n\log\log n}}", r"=", r"1 \;\Rightarrow\; |z_n| > 1.96 "
+                      r"\text{ infinitely often}", font_size=36, colors={r"1 \;\Rightarrow\; |z_n| > 1.96 \text{ infinitely often}": LOSS})]
+        whys = [why(r"the first time the gambler's wealth reaches $c$: a stopping time"),
+                why(r"optional stopping at the bounded time $\tau \wedge n$ (chapter 6); on $\{\tau \le n\}$ the wealth is at "
+                    r"least $c$, elsewhere at least 0"),
+                why(r"let $n \to \infty$: Ville's inequality (1939), the maximal inequality of a nonnegative martingale"),
+                why(r"an e-value is one bet's payoff: Markov's inequality; any p-value can be calibrated into one "
+                    r"(Vovk and Wang 2021)"),
+                why(r"the law of the iterated logarithm: a $t$-test checked forever rejects a true null with probability one")]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "The proof takes three lines, and you already have every piece. Let tau be the first time the wealth "
+            "reaches c. <bookmark mark='a'/> Stop at tau or at n, whichever comes first: a bounded stopping time, so "
+            "optional stopping says the expected wealth is at most one. On the event that tau came first the wealth "
+            "is at least c, and elsewhere it is at least zero. So c times the chance of reaching c by time n is at "
+            "most one. <bookmark mark='b'/> Let n run to infinity. That is Ville's inequality. <bookmark mark='c'/> A "
+            "single bet's payoff, nonnegative with expected value at most one when the null is true, is an e-value, "
+            "and Markov's inequality makes it a test. Any p-value can be turned into one. <bookmark mark='d'/> And "
+            "here is why the ordinary test fails under peeking: the law of the iterated logarithm says a fair walk's "
+            "standardized value exceeds one point nine six again and again, forever. Check daily, and you will "
+            "eventually reject a true null."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def game(self):
+        players = VGroup()
+        for name, what, col in ((r"Forecaster", r"announces a price for tomorrow (a mean, a probability)", P_C),
+                                (r"Skeptic", r"bets against it, any amount, never risking more than it has", MART),
+                                (r"Reality", r"moves; Skeptic's capital is settled", Q_C)):
+            box = RoundedRectangle(width=3.6, height=1.9, corner_radius=0.15, stroke_color=col, stroke_width=2.5)
+            t = VGroup(label(name, font_size=30, color=col), wrapped_label(what, 3.1, 20, GREY_A)).arrange(
+                DOWN, buff=0.15).move_to(box)
+            players.add(VGroup(box, t))
+        players.arrange(RIGHT, buff=0.8).shift(UP * 0.8)
+        arrows = VGroup(*[Arrow(players[i].get_right(), players[i + 1].get_left(), buff=0.1, color=GREY_B)
+                          for i in range(2)])
+        loop = CurvedArrow(players[2].get_bottom() + DOWN * 0.1, players[0].get_bottom() + DOWN * 0.1, angle=-0.6,
+                           color=GREY_C)
+        claim = wrapped_label(r"a probability statement is a claim that Skeptic cannot multiply its capital by a large "
+                              r"factor; the forecasts are valid exactly when no strategy gets rich against them",
+                              11.4, 23, QC.IDEA).to_edge(DOWN, buff=0.5)
+        hist = history_card(2001, r"Shafer and Vovk, \textit{Probability and Finance: It's Only a Game!}",
+                            r"probability built on betting instead of measure; \textit{Game-Theoretic Foundations for "
+                            r"Probability and Finance} (2019)", width=8.0).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "Glenn Shafer and Vladimir Vovk took this one step further and rebuilt probability itself as a game, "
+            "with three players. <bookmark mark='a'/> Forecaster announces prices for what happens next. Skeptic "
+            "bets against those prices, never risking more than it has. Then Reality moves, and Skeptic's capital "
+            "is settled. <bookmark mark='b'/> A probability statement becomes a claim about money: Skeptic cannot "
+            "multiply its capital by a large factor. The forecasts are good exactly when no strategy gets rich "
+            "against them. A market is efficient, in this sense, when no trader can."
+        ) as vo:
+            self.play(FadeIn(hist))
+            vo.wait_until("a")
+            self.play(LaggedStart(FadeIn(players[0]), GrowArrow(arrows[0]), FadeIn(players[1]), GrowArrow(arrows[1]),
+                                  FadeIn(players[2]), lag_ratio=0.4), run_time=3)
+            self.play(Create(loop))
+            vo.wait_until("b")
+            self.play(FadeIn(claim))
+        self.wait(0.4)
+        self.clear_scene()

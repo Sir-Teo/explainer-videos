@@ -65,19 +65,12 @@ class Parity(VoiceoverScene):
         rows = [cmath(r"(S_T - K)^+ - (K - S_T)^+", r"=", r"S_T - K", font_size=34),
                 cmath(r"C - P", r"=", r"S - K e^{-rT}", font_size=38, colors={r"C - P": CALL}),
                 cmath(r"\tilde C - \tilde P", r"=", r"1 - \frac{K}{F}", font_size=38, colors={r"\tilde C - \tilde P": Q_C})]
-        whys = [why(r"split at $K$: above it the call pays $S_T - K$ and the put nothing; below, the reverse", 20),
+        whys = [why(r"split at $K$: above it the call pays and the put is worthless; below, the reverse", 20),
                 why(r"the right side is bought today with one share and a loan of $K e^{-rT}$; by the law of one "
                     r"price the two sides cost the same (Stoll 1969)", 20),
                 why(r"Deribit's options are paid in bitcoin: divide every dollar price by the forward $F$, the "
                     r"price of the unit (chapter 11)", 20)]
-        for r_, w_ in zip(rows, whys):
-            w_.scale(0.85)
-        step = ladder(self, rows, whys, keep=3, top=3.3, x=3.4, buff=0.55, edge=6.9)
-        for r_, w_ in zip(rows, whys):
-            w_.next_to(r_, DOWN, buff=0.12).align_to(r_, LEFT)
-            if w_.width > 6.6:
-                w_.scale_to_fit_width(6.6)
-            keep_in_frame(w_, margin=0.2)
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=3.6, buff=0.5, edge=6.9)
         with self.voiceover(
             "Now build parity instead of quoting it. On the left, payoffs at expiry against the stock price. A long "
             "call is a hockey stick bending up at the strike. <bookmark mark='a'/> A short put is a hockey stick "
@@ -254,17 +247,16 @@ class Parity(VoiceoverScene):
                           r"rate, paid by leveraged buyers (Part 2's funding rate)", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Deribit BTC options and futures trades, 10 December 2025, 00:00--12:00 UTC")
+        tail = ("The two markets agree to within the width of a quote. If they did not, buying the cheap forward and "
+                "selling the dear one would be the cash-and-carry arbitrage, and traders do exactly that."
+                if gmax < 10 else "That is wider than a quote: the basis between the two markets is itself a trade.")
         with self.voiceover(
             "Is that forward real? Deribit also lists futures on the same expiries, and a future is, up to daily "
             "settlement, a forward you can trade directly. The House fetched every futures trade from the same "
             f"hours, {fb['n_trades']:,} of them, most in the perpetual contract. <bookmark mark='a'/> The dots are "
             "the forwards that option parity implies, as annual rates over the index; the squares are where the "
             f"dated futures actually traded. On the {fb['n_matched']} expiries that have both, the median gap is "
-            f"{gp50:.1f} basis points of price, and the largest {gmax:.1f}. <bookmark mark='b'/> "
-            + ("The two markets agree to within the width of a quote. If they did not, buying the cheap forward and "
-               "selling the dear one would be the cash-and-carry arbitrage, and traders do exactly that."
-               if gmax < 10 else
-               "That is wider than a quote: the basis between the two markets is itself a trade.")
+            f"{gp50:.1f} basis points of price, and the largest {gmax:.1f}. <bookmark mark='b'/> " + tail
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")
@@ -280,11 +272,12 @@ class Parity(VoiceoverScene):
         with self.voiceover(
             "Pause and predict. If the put had been eight instead of six, which of the four legs flip? "
             "<bookmark mark='a'/> All four. Now the call minus the put is two, less than the forward's three, so "
-            "buy the call, sell the put, short the stock and lend: one dollar again, from the other side."
+            "buy the call, sell the put, short the stock and lend a hundred: one dollar in hand today, and nothing "
+            "owed at expiry."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(answer_under(card, r"all four: buy the call, sell the put, short the stock, lend 97; "
-                                                r"the package pays $+1$ at expiry for nothing today")))
+            self.play(FadeIn(answer_under(card, r"all four: buy the call, sell the put, short the stock, lend "
+                                                r"100; $+1$ today, and the package nets to zero at expiry")))
         self.wait(0.4)
         self.clear_scene()

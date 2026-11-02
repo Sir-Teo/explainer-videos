@@ -5,55 +5,148 @@ from datetime import datetime, timezone
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from explainer.quant.house import sim
-from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, real_data
+from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, pause, real_data
 
 
 class Rough(VoiceoverScene):
     def construct(self):
-        f = load("fbm")
+        fm = load("fbm_morph")
         r = load("rough")
+        cd = load("cont_das")
         self.card()
-        self.fbm(f)
+        self.dial(fm)
+        self.theory(fm)
+        self.lab()
         self.bitcoin(r)
-        self.signature()
+        self.caveat(cd, r)
 
     def card(self):
-        c = chapter_card(7, r"Beyond semimartingales: rough paths and signatures", r"How rough is volatility?",
+        c = chapter_card(15, r"Fractional Brownian motion: memory and roughness", r"How rough is volatility?", lit=(1963,),
                          part=PART)
-        with self.voiceover("Chapter seven. Beyond semimartingales: rough paths, and signatures."):
+        with self.voiceover("Chapter fifteen. Fractional Brownian motion: memory, roughness, and a caveat."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def fbm(self, f):
-        rows = VGroup()
-        for H, col, txt in [(0.1, JUMP, r"$H = 0.1$: rough, increments anti-persistent"),
-                            (0.5, BM, r"$H = 0.5$: Brownian motion"),
-                            (0.9, DRIFT, r"$H = 0.9$: smooth, increments persistent")]:
-            y = np.asarray(f[str(H)])
-            y = (y - y.mean()) / (y.std() + 1e-12)
-            g = axes([0, 1000], [-3, 3], x_length=7.4, y_length=1.5, xticks=[], yticks=[], font_size=14)
-            line = curve(g.ax, np.arange(len(y)), np.clip(y, -3, 3), col, stroke_width=2)
-            lab = label(txt, font_size=21, color=col).next_to(g, RIGHT, buff=0.3)
-            rows.add(VGroup(g, line, lab))
-        rows.arrange(DOWN, buff=0.35, aligned_edge=LEFT).to_edge(LEFT, buff=0.6).shift(UP * 0.3)
-        eq = MathTex(r"\mathbb{E}\big[(B^H_t - B^H_s)^2\big] = |t - s|^{2H}", font_size=34).to_edge(DOWN, buff=1.0)
-        note_ = label(r"for $H \neq \tfrac12$ not a semimartingale: a price driven by it admits arbitrage (Rogers 1997); "
-                      r"but a volatility driven by it does not", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
+    def dial(self, fm):
+        Hs = [f"{h:.2f}" for h in fm["Hs"]]
+        P = {k: np.asarray(v) for k, v in fm["paths"].items()}
+        t = np.linspace(0, 1, len(P[Hs[0]]))
+        order = [k for k in reversed(Hs)]
+
+        def norm_(y):
+            return (y - y.mean()) / (y.std() + 1e-12)
+        g = axes([0, 1], [-3.2, 3.2], x_length=10.0, y_length=4.0, xlabel=r"time", xticks=[0, 1], yticks=[],
+                 font_size=16).shift(DOWN * 0.6)
+        ax = g.ax
+        lines = {k: curve(ax, t, np.clip(norm_(P[k]), -3.2, 3.2), interpolate_color(ManimColor(JUMP), ManimColor(DRIFT),
+                                                                                    float(k)), stroke_width=2)
+                 for k in Hs}
+        lines["0.50"].set_color(BM)
+        lab = {k: VGroup(MathTex(rf"H = {k}", font_size=36), MathTex(rf"\rho(1) = 2^{{2H - 1}} - 1 = "
+                                                                     rf"{fm['rho1'][k]:+.2f}", font_size=30,
+                                                                     color=GREY_A)).arrange(RIGHT, buff=0.6)
+               .to_edge(UP, buff=0.5) for k in Hs}
+        cap = label(r"one fixed vector of Gaussian numbers, turned into fBM by Davies--Harte at each $H$", font_size=20,
+                    color=GREY_B).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Brownian increments are independent. Benoit Mandelbrot and John Van Ness generalised that in 1968: "
-            "fractional Brownian motion, whose increments over a time lag have variance lag to the power two H. "
-            "<bookmark mark='a'/> With H equal to a half it is Brownian motion. Above a half the increments are "
-            "positively correlated, and the path is smooth and trending. Below a half they are negatively correlated, "
-            "and the path is rougher than Brownian motion. <bookmark mark='b'/> For H not equal to a half, fractional "
-            "Brownian motion is not a semimartingale, so Itô's calculus does not apply, and a stock price driven by "
-            "it would allow arbitrage. But nothing forbids volatility from being rough."
+            "Brownian increments are independent. In 1968 Benoit Mandelbrot and John Van Ness generalised them: "
+            "fractional Brownian motion, whose increments over a lag have variance equal to the lag to the power two "
+            "H. H is the Hurst exponent. <bookmark mark='a'/> Here is one path, built from the same fixed random "
+            "numbers at every H, as a dial turns H from point nine five down to point zero five. "
+            "<bookmark mark='b'/> At high H the increments are positively correlated: the path trends and looks "
+            "smooth. At a half, highlighted, it is Brownian motion. Below a half, neighbouring increments are "
+            "negatively correlated, and the path becomes a jagged scrawl. The correlation of neighbouring increments "
+            "changes sign exactly at a half."
         ) as vo:
-            self.play(FadeIn(rows[1]))
+            self.play(FadeIn(g), FadeIn(cap), Create(lines[order[0]]), FadeIn(lab[order[0]]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[2]), FadeIn(rows[0]), FadeIn(eq))
+            cur, cl = lines[order[0]], lab[order[0]]
+            for k in order[1:]:
+                self.play(Transform(cur, lines[k]), Transform(cl, lab[k]), run_time=0.45 if k != "0.50" else 0.8)
+                if k == "0.50":
+                    vo.wait_until("b")
+                    self.play(Indicate(cur, color=BM), run_time=1.2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def theory(self, fm):
+        rows = [cmath(r"\mathbb{E}\big[B^H_t B^H_s\big]", r"=", r"\tfrac12\big(t^{2H} + s^{2H} - |t - s|^{2H}\big)", font_size=32),
+                cmath(r"B^H_t", r"=", r"\frac{1}{\Gamma(H + \frac12)}\int_{\mathbb{R}} \Big[(t - s)_+^{H - \frac12} - (-s)_+^{H - "
+                      r"\frac12}\Big]\,dW_s", font_size=30, colors={r"(t - s)_+^{H - \frac12}": ITO}),
+                cmath(r"\mathbb{E}\sum_{k < n} \big|B^H_{(k+1)/n} - B^H_{k/n}\big|^2", r"=", r"n \cdot n^{-2H} = n^{1 - 2H}",
+                      font_size=30, colors={r"n^{1 - 2H}": JUMP}),
+                cmath(r"H \ne \tfrac12", r"\Rightarrow", r"B^H \text{ is not a semimartingale}", font_size=32)]
+        whys = [why(r"the definition: Gaussian, stationary increments, self-similar with index $H$", 20),
+                why(r"Mandelbrot and Van Ness (1968): Brownian motion with a power-law memory kernel", 20),
+                why(r"self-similarity: $\to \infty$ for $H < \frac12$, $\to 0$ for $H > \frac12$", 20),
+                why(r"a semimartingale's QV is finite; QV zero means finite variation, which fails for $H > \frac12$ by "
+                    r"the $1/H$-variation (Rogers 1997: a price driven by it admits arbitrage)", 20)]
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.0, buff=0.45, edge=6.9)
+        ns = np.log2(fm["ns"])
+        g = axes([ns[0] - 0.3, ns[-1] + 0.3], [-1.6, 1.6], x_length=4.4, y_length=2.4, xlabel=r"grid $n$",
+                 ylabel=r"$\log_{10}\mathbb{E}\sum|\Delta B^H|^2$", xticks=[4, 8, 12], xfmt=lambda u: rf"2^{{{int(u)}}}",
+                 yticks=[-1, 0, 1], font_size=14).to_corner(DR, buff=0.3)
+        cols = {"0.3": JUMP, "0.5": BM, "0.7": DRIFT}
+        lines = VGroup(*[curve(g.ax, ns, np.log10(fm["pvar"][k]), cols[k], stroke_width=3) for k in ("0.3", "0.5", "0.7")])
+        leg = legend([(JUMP, r"$H = 0.3$"), (BM, r"$H = 0.5$"), (DRIFT, r"$H = 0.7$")], font_size=16).next_to(g, LEFT,
+                                                                                                        buff=0.2)
+        pc, ans = pause(r"$H = 0.1$. Is a rise more likely to be followed by a fall?",
+                        rf"Yes: $\rho(1) = 2^{{-0.8}} - 1 = {fm['rho1']['0.10']:.2f}$.", width=4.6, font_size=19)
+        VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DL, buff=0.3)
+        with self.voiceover(
+            "The covariance follows from the definition. Mandelbrot and Van Ness wrote the process as a Brownian "
+            "integral with a power-law memory kernel: every past shock still matters, with a weight that decays like a "
+            "power of its age. <bookmark mark='a'/> Now the sum of squared increments on a grid of n steps. By "
+            "self-similarity it is n to the power one minus two H. <bookmark mark='b'/> Simulated on two hundred paths: "
+            "for H point three the sum blows up, for point seven it vanishes, and only Brownian motion lands on one. "
+            "A semimartingale must have finite quadratic variation, so fractional Brownian motion with H not a half is "
+            "not one, Itô's calculus does not apply, and, as Chris Rogers showed in 1997, a stock price driven by it "
+            "would admit arbitrage. Nothing forbids volatility from being rough. <bookmark mark='c'/> A pause: at H "
+            "equal to point one, is a rise more likely to be followed by a fall? Yes: the neighbouring correlation is "
+            f"{fm['rho1']['0.10']:.2f}."
+        ) as vo:
+            step(0)
+            step(1)
+            vo.wait_until("a")
+            step(2)
             vo.wait_until("b")
-            self.play(FadeIn(note_))
+            self.play(FadeIn(g), FadeIn(leg), Create(lines), run_time=2)
+            step(3)
+            vo.wait_until("c")
+            self.play(FadeIn(pc), FadeIn(ans))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def lab(self):
+        card = lab_card(r"fBM by circulant embedding", [
+            "def fbm(H, n, T=1.0, n_paths=1, seed=0):           # Davies-Harte",
+            "    rng = np.random.default_rng(seed); k = np.arange(n + 1)",
+            "    gamma = 0.5*(abs(k-1)**(2*H) - 2*abs(k)**(2*H) + abs(k+1)**(2*H))",
+            "    row = np.concatenate([gamma, gamma[-2:0:-1]])   # a circulant row",
+            "    lam = np.clip(np.fft.fft(row).real, 0, None)     # its eigenvalues",
+            "    m = len(row); out = np.empty((n_paths, n + 1))",
+            "    for p in range(n_paths):",
+            "        z = rng.standard_normal(m) + 1j*rng.standard_normal(m)",
+            "        y = np.fft.fft(np.sqrt(lam/m) * z)[:n].real  # exact increments",
+            "        out[p] = np.concatenate([[0.0], np.cumsum(y)]) * (T/n)**H",
+            "    return out",
+        ], source="explainer/quant/house/sim.py", width=9.2, font_size=16).to_edge(UP, buff=0.4)
+        outs = ["fbm(H, 4096); hurst_from_increments(path)    # Part 5's test",
+                "recovers H = 0.1, 0.5, 0.8 to within 0.06; Var B_1 = 1 over 4,000 paths"]
+        with self.voiceover(
+            "How do you simulate it exactly? Increments of fractional Brownian motion are a stationary Gaussian "
+            "sequence with a known covariance. Davies and Harte embedded that covariance in a circulant matrix, whose "
+            "eigenvalues are a Fourier transform. <bookmark mark='a'/> Multiply complex Gaussian noise by the square "
+            "roots of the eigenvalues, transform back, and the increments come out exactly right, in n log n "
+            "operations. <bookmark mark='b'/> The House's test checks that the Hurst estimator recovers H from paths "
+            "made this way."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            self.play(Indicate(card.code[3:5], color=ITO, scale_factor=1.02), Indicate(card.code[8], color=ITO,
+                                                                                       scale_factor=1.02))
+            vo.wait_until("b")
+            lab_run(self, card, outs, font_size=17)
         self.wait(0.4)
         self.clear_scene()
 
@@ -82,75 +175,67 @@ class Rough(VoiceoverScene):
             label(rf"the same estimator on simulated fBM: {r['fbm_check']['0.1']:.2f} for $H = 0.1$, "
                   rf"{r['fbm_check']['0.5']:.2f} for $0.5$", font_size=19, color=GREY_B),
             wrapped_label(r"Gatheral, Jaisson and Rosenbaum (2018), ``Volatility is rough'': $H \approx 0.1$ for equity "
-                          r"indices; Bitcoin agrees. Rough volatility models return in Part 14.", 5.2, 20, ITO),
+                          r"indices", 5.2, 20, ITO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.4)
         src = real_data(r"Binance BTCUSDT one-minute candles, 2019--2020; the House's \texttt{hurst\_from\_increments}")
         with self.voiceover(
-            "How rough is volatility? Measure Bitcoin's volatility each day from its five-minute returns, for two "
-            f"years, {r['n_days']} days, and take logs. <bookmark mark='a'/> For each power q, see how the average "
-            "q-th power of its changes grows with the lag. For fractional Brownian motion the growth exponent is q "
-            "times H: a straight line through the origin. <bookmark mark='b'/> The points lie on such a line, with "
-            f"slope about {h['H']:.2f}, far below the half of Brownian motion, shown dashed. The same estimator "
-            "recovers the right answer on simulated paths. <bookmark mark='c'/> In 2018 Jim Gatheral, Thibault "
-            "Jaisson and Mathieu Rosenbaum found H near a tenth for stock indices, in a paper titled \"Volatility is "
-            "rough\". Bitcoin agrees. Rough volatility models, built on this fact, are the subject of Part fourteen."
+            "How rough is volatility? Measure Bitcoin's volatility each day from its five-minute returns, for "
+            f"{r['n_days']} days, and take logs. <bookmark mark='a'/> For each power q, see how the average q-th power "
+            "of its changes grows with the lag. For fractional Brownian motion the exponent is q times H: a straight "
+            "line through the origin. <bookmark mark='b'/> The points lie on such a line, with slope about "
+            f"{h['H']:.2f}, far below Brownian motion's half, dashed. In 2018 Jim Gatheral, Thibault Jaisson and "
+            "Mathieu Rosenbaum found H near a tenth for stock indices, in a paper titled \"Volatility is rough\". "
+            "Bitcoin seems to agree."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2)
             vo.wait_until("a")
             self.play(FadeIn(g2), Create(bm))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(dd, scale=1.5) for dd in dots], lag_ratio=0.2), Create(fit))
-            self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[3]))
+            self.play(FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
 
-    def signature(self):
-        # two paths with the same start, end and increments, taken in a different order
-        a = np.array([[0, 0], [1, 0], [1, 1]], float)
-        b = np.array([[0, 0], [0, 1], [1, 1]], float)
-        sa, sb = sim.signature2(a), sim.signature2(b)
-        plane = NumberPlane(x_range=[-0.5, 1.5, 0.5], y_range=[-0.5, 1.5, 0.5], x_length=4.0, y_length=4.0,
-                            background_line_style={"stroke_color": GREY_D, "stroke_width": 1}).to_edge(LEFT, buff=0.8)
-        pa = VMobject(stroke_color=BM, stroke_width=5).set_points_as_corners([plane.c2p(*p) for p in a])
-        pb = VMobject(stroke_color=STRAT, stroke_width=5).set_points_as_corners([plane.c2p(*p) for p in b])
-        chord = DashedLine(plane.c2p(0, 0), plane.c2p(1, 1), color=GREY_B, stroke_width=2)
-        area = VGroup(Polygon(*[plane.c2p(*p) for p in [(0, 0), (1, 0), (1, 1)]], stroke_width=0, fill_color=BM,
-                              fill_opacity=0.35),
-                      Polygon(*[plane.c2p(*p) for p in [(0, 0), (0, 1), (1, 1)]], stroke_width=0, fill_color=STRAT,
-                              fill_opacity=0.35))
+    def caveat(self, cd, r):
+        li, lr = np.asarray(cd["log_iv"]), np.asarray(cd["log_rv"])
+        n = len(li)
+        g = axes([0, n], [min(li.min(), lr.min()) - 0.1, max(li.max(), lr.max()) + 0.1], x_length=7.0, y_length=3.0,
+                 xlabel=r"day", ylabel=r"simulated log volatility", xticks=[0, n], yticks=[], font_size=15)
+        g.to_corner(UL, buff=0.45)
+        l1 = curve(g.ax, np.arange(n), lr, JUMP, stroke_width=1.5)
+        l2 = curve(g.ax, np.arange(n), li, ITO, stroke_width=1.5)
+        leg = legend([(ITO, r"true integrated variance (smooth OU, $H = \tfrac12$)"),
+                      (JUMP, r"measured: 5-minute RV with 5 bp noise")], font_size=18).next_to(g, DOWN, buff=0.2)
+        leg.align_to(g, LEFT)
         rows = VGroup(
-            MathTex(r"S(X)_{s,t} = \Big(1,\ \int dX^i,\ \iint_{u<v} dX^i_u\,dX^j_v,\ \dots\Big)", font_size=30),
-            label(r"the signature: every iterated integral of the path (Chen 1957; Lyons 1998)", font_size=21,
-                  color=GREY_A),
-            MathTex(rf"\text{{level 1 (both): }} ({sa['S1'][0]:.0f}, {sa['S1'][1]:.0f})", font_size=28),
-            MathTex(rf"\text{{L\'evy area: }} {sa['levy_area'][0, 1]:+.1f} \text{{ (blue)}}, \ {sb['levy_area'][0, 1]:+.1f}"
-                    r"\text{ (purple)}", font_size=28, color=ITO),
-            wrapped_label(r"level 2 sees the order of moves, which increments alone cannot; the whole signature "
-                          r"determines the path (up to retracing), and linear functions of it approximate any smooth "
-                          r"function of the path: features for machine learning on paths (Parts 14, 17, 42)", 6.2, 21,
-                          GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+            MathTex(rf"\hat H\ \text{{from measured RV}} = {cd['H_rv']:.2f}", font_size=30, color=JUMP),
+            MathTex(rf"\hat H\ \text{{without noise}} = {cd['H_rv_clean']:.2f}", font_size=30, color=GREY_A),
+            MathTex(rf"\hat H\ \text{{from the true variance}} = {cd['H_iv']:.2f}", font_size=30, color=ITO),
+            MathTex(rf"\text{{Bitcoin}}: {r['hurst']['H']:.2f}", font_size=30, color=BM),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5).shift(UP * 0.6)
+        low = cd["H_iv"] < 0.4
+        verdict = (f"The estimator says {cd['H_iv']:.2f} even from the true integrated variance, and "
+                   f"{cd['H_rv']:.2f} from the noisy measurement: a smooth volatility that mean-reverts within a week "
+                   "looks rough at daily resolution." if low else
+                   f"Here the estimator returns {cd['H_iv']:.2f} from the true variance and {cd['H_rv']:.2f} from the "
+                   "measured one: the artefact needs other settings to appear.")
+        note_ = wrapped_label(r"Cont and Das (2024), ``Rough volatility: fact or artefact?'' (\textit{Sankhy\=a B}); against "
+                              r"them, the evidence collected in \textit{Rough Volatility} (SIAM, 2023). The debate is "
+                              r"open; Part 14 returns to it with option prices, which see roughness more directly.", 6.0,
+                              19, GREY_A).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "One more tool from rough paths. Two paths: right then up, and up then right. Same start, same end, same "
-            "total increments. Any statistic built from the increments alone can't tell them apart. "
-            "<bookmark mark='a'/> Kuo-Tsai Chen showed in 1957 that a path is captured by its iterated integrals, "
-            "and Terry Lyons built the theory of rough paths on them in 1998. Collected together they are the path's "
-            "signature. <bookmark mark='b'/> The first level is the increments, the same for both. The second level "
-            "contains the Lévy area, the signed area between the path and its chord: plus a half for one path, "
-            "minus a half for the other. Order matters, and the signature records it. <bookmark mark='c'/> The full "
-            "signature determines the path, and linear functions of it can approximate any smooth function of the "
-            "path, which makes it a natural set of features for learning from price histories. It returns in Parts "
-            "fourteen, seventeen and forty-two."
+            "Now the caveat, computed. Rama Cont and Purba Das argued in 2024 that realized volatility can look rough "
+            "even when the volatility underneath is not. Test it. Simulate five hundred days in which log volatility is "
+            "an ordinary Ornstein-Uhlenbeck process, H exactly a half, mean-reverting over about a week; a price every "
+            "second; and five basis points of noise on every observation. Then measure daily volatility the way we "
+            "did for Bitcoin. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> So a low H in data is "
+            "consistent with roughness, and also with fast mean reversion seen through a coarse lens. Option prices "
+            "help decide between them, and Part fourteen takes up the debate."
         ) as vo:
-            self.play(FadeIn(plane), Create(pa), Create(pb), run_time=2)
+            self.play(FadeIn(g), Create(l2), Create(l1), FadeIn(leg), run_time=2)
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
+            self.play(LaggedStart(*[FadeIn(x) for x in rows], lag_ratio=0.3))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]))
-            self.play(Create(chord), FadeIn(area), FadeIn(rows[3]))
-            vo.wait_until("c")
-            self.play(FadeIn(rows[4]))
+            self.play(FadeIn(note_))
         self.wait(0.4)
         self.clear_scene()

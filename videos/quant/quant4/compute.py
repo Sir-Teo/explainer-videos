@@ -26,7 +26,7 @@ The expansion (each item's docstring says what it computes): ``condexp`` (the ma
 ``doubling``, ``nikkei_doubling`` (schematic), ``ruin_duration``, ``polya`` (and upcrossings), ``drift_posterior``,
 ``ivey_sim``, ``esscher``, ``radon``, ``kakutani``, ``ecf`` (and aggregation), ``stable_mle`` (resumable, the longest:
 about 15 minutes), ``peeking_curve``, ``learner`` (resumable), ``confseq``, ``casino``, ``beliefs``, ``ebh``,
-``envelope_ons``.
+``numeraire``, ``envelope_ons``.
 """
 
 from __future__ import annotations
@@ -953,6 +953,20 @@ def compute_ebh() -> dict:
                   "end_disc_e": float(np.mean(disc_e, 0)[-1]), "end_disc_b": float(np.mean(disc_b, 0)[-1])})
 
 
+def compute_numeraire() -> dict:
+    """The numeraire bridge: 2,520 days of a strategy with a daily Sharpe of 0.08 (x = 0.25 (SR + z), clipped); the
+    Kelly bettor's wealth at the log-optimal stake, which is also the log-optimal e-variable against the null of
+    mean zero (Larsson, Ramdas and Ruf 2025)."""
+    rng = np.random.default_rng(88)
+    x = np.clip(0.25 * (0.08 + rng.standard_normal(2520)), -0.95, 0.95)
+    grid = np.linspace(0, 0.5, 501)
+    big = np.clip(0.25 * (0.08 + np.random.default_rng(89).standard_normal(200000)), -0.95, 0.95)
+    g = np.array([np.log1p(l * big).mean() for l in grid])
+    lam = float(grid[np.argmax(g)])
+    w = np.concatenate([[0.0], np.cumsum(np.log1p(lam * x))]) / np.log(10)
+    return _json({"lam": lam, "log10w": w[::5], "days": np.arange(0, 2521, 5), "growth": float(g.max())})
+
+
 def compute_envelope_ons() -> dict:
     """Registers the expansion's new real-data tests: the ONS sign-continuation e-processes (US from 1926, 1975,
     2000; Bitcoin from 2018: four trials) and the Bitcoin confidence sequence (one)."""
@@ -972,7 +986,7 @@ ITEMS = {"doob": compute_doob, "measure": compute_measure, "ruin": compute_ruin,
          "drift_posterior": compute_drift_posterior, "ivey_sim": compute_ivey_sim, "esscher": compute_esscher,
          "radon": compute_radon, "kakutani": compute_kakutani, "ecf": compute_ecf, "stable_mle": compute_stable_mle,
          "peeking_curve": compute_peeking_curve, "learner": compute_learner, "confseq": compute_confseq,
-         "casino": compute_casino, "beliefs": compute_beliefs, "ebh": compute_ebh, "envelope_ons": compute_envelope_ons}
+         "casino": compute_casino, "beliefs": compute_beliefs, "ebh": compute_ebh, "numeraire": compute_numeraire, "envelope_ons": compute_envelope_ons}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

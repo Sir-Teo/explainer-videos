@@ -9,115 +9,216 @@ from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load,
 class Realized(VoiceoverScene):
     def construct(self):
         z = load("realized")
+        s = load("signature")
         self.card()
-        self.measures(z)
-        self.har(load("har"))
+        self.squares(s)
+        self.signature(s)
+        self.derive(s)
+        self.measures(z, s)
 
     def card(self):
-        c = chapter_card(3, r"Realized volatility and HAR", r"Can you measure volatility after the fact?", part=PART)
-        with self.voiceover("Chapter three. Realized volatility, and the HAR model."):
+        c = chapter_card(9, r"Realized volatility", r"Can you measure volatility after the fact?", lit=(2003,), part=PART)
+        with self.voiceover("Chapter nine. Realized volatility."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def measures(self, z):
-        names = [("vol_rv1", r"RV,\\1-minute", BAD), ("vol_rv5", r"RV,\\5-minute", RET), ("vol_tsrv", r"two-scale\\RV", VOL),
-                 ("vol_rk", r"realized\\kernel", VOL), ("vol_bv", r"bipower\\(no jumps)", ALT)]
-        g = axes([0, len(names)], [0, 1.2], x_length=7.4, y_length=4.2, ylabel=r"Bitcoin's average volatility, Aug.\ 2017 -- 2020",
-                 xticks=[], yticks=[0, 0.4, 0.8, 1.2], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=18)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+    def squares(self, s):
+        x = np.asarray(s["examples"]["20190626"])
+        n = len(x)
+        g = axes([0, 24], [-0.02, 0.2], x_length=11.0, y_length=2.6, xticks=[0, 6, 12, 18, 24],
+                 xfmt=lambda u: f"{int(u):02d}{{:}}00", yticks=[0, 0.1, 0.2], yfmt=lambda u: f"{100 * u:+.0f}\\%" if u else "0",
+                 ylabel=r"Bitcoin on 26 June 2019: log price since midnight (UTC), one-minute closes", font_size=15)
+        g.to_edge(UP, buff=0.5)
         ax = g.ax
-        bars = VGroup(*[tbar(ax, i + 0.5, z[k], c, width=0.55) for i, (k, _, c) in enumerate(names)])
-        vals = VGroup(*[MathTex(f"{100 * z[k]:.0f}\\%", font_size=24, color=c).next_to(b, UP, buff=0.06)
-                        for (k, _, c), b in zip(names, bars)])
-        labs = VGroup(*[Tex(r"\begin{tabular}{c}" + n_ + r"\end{tabular}", font_size=17,
-                            color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1) for i, (_, n_, _) in enumerate(names)])
-        side = VGroup(
-            wrapped_label(r"sampling every minute picks up bid--ask bounce: microstructure noise inflates RV (Part 5's "
-                          r"signature plot)", 4.6, 21, GREY_A),
-            wrapped_label(r"two-scale RV (Zhang, Mykland and A\"it-Sahalia 2005) averages sparse grids and subtracts the "
-                          r"noise; the realized kernel (Barndorff-Nielsen, Hansen, Lunde and Shephard 2008) adds weighted "
-                          r"autocovariances", 4.6, 21, VOL),
-            MathTex(rf"\text{{jumps: }} {100 * z['jump_share']:.0f}\% \text{{ of the variance}}", font_size=30, color=ALT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = real_data(rf"Binance BTCUSDT one-minute candles; {z['n_days']:,} days".replace(",", "{,}"))
+        hrs = np.arange(n) / 60
+        path = curve(ax, hrs, x, RET, stroke_width=2)
+        base_y = -2.0
+        side_scale = 9.0  # screen units per unit of log return
+
+        def row(k, col):
+            r = np.diff(x[::k])
+            sq = VGroup()
+            xx = -5.5
+            width = 11.0
+            for i, v in enumerate(r):
+                a = abs(v) * side_scale
+                sq.add(Square(side_length=max(a, 0.004), stroke_width=0.6, stroke_color=col, fill_color=col,
+                              fill_opacity=0.5).move_to([xx + width * (i + 0.5) / len(r), base_y + a / 2, 0]))
+            return sq, float(np.sqrt(np.sum(r ** 2) * 365))
+
+        rows = [row(k, c) for k, c in ((30, VOL), (10, FC), (5, GOOD), (1, BAD))]
+        base = Line([-5.6, base_y, 0], [5.6, base_y, 0], color=GREY_C, stroke_width=2)
+        ro = MathTex(rf"\textstyle\sum r_i^2:\ {100 * rows[0][1]:.0f}\%\text{{ a year}}", font_size=34, color=VOL).to_edge(DOWN, buff=0.4)
+        cap = label(r"each square: one interval's return, squared (side $|r_i|$, area $r_i^2$)", font_size=19,
+                    color=GREY_A).next_to(base, DOWN, buff=0.15)
+        names = [r"every 30 minutes", r"every 10 minutes", r"every 5 minutes", r"every minute"]
+        nm = label(names[0], font_size=24, color=VOL).next_to(ro, UP, buff=0.15)
         with self.voiceover(
-            "Part five showed that sampling faster doesn't measure volatility better forever: at the finest scales the "
-            "bid-ask bounce adds noise. Over three and a half years of Bitcoin, the sum of squared one-minute returns "
-            "gives an average volatility of a hundred and six percent; five-minute returns give ninety-six. "
-            "<bookmark mark='a'/> Two estimators use all the data and correct for the noise: the two-scale estimator, "
-            "which averages several sparse grids and subtracts the noise measured on the dense one, and the realized "
-            "kernel, which adds back the autocovariances the noise creates. Both land near ninety-three. "
-            "<bookmark mark='b'/> Bipower variation, which multiplies neighbouring absolute returns so that a single "
-            "jump barely counts, gives ninety-two: jumps carry about a tenth of Bitcoin's daily variance."
+            "Can you measure volatility after the fact, rather than estimate it with a model? Here is one day of "
+            "Bitcoin, minute by minute: the twenty-sixth of June 2019, a wild day. <bookmark mark='a'/> Cut the day "
+            "into half-hours. Each half-hour's return gets a square, with side the size of the move and area its "
+            "square. Add up the areas: that is realized variance. <bookmark mark='b'/> Cut finer, ten minutes, five "
+            "minutes: the squares multiply six-fold and shrink, while their total moves far less. <bookmark mark='c'/> In the limit "
+            "it is the quadratic variation of Part five, the integral of the instantaneous variance over the day. "
+            "Torben Andersen, Tim Bollerslev, Francis Diebold and Paul Labys turned this into a programme around 2000: "
+            "with intraday data, volatility becomes something you observe. <bookmark mark='d'/> At every minute, though, "
+            "the total creeps up again. Why?"
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(labs), GrowFromEdge(bars[0], DOWN), FadeIn(vals[0]),
-                      GrowFromEdge(bars[1], DOWN), FadeIn(vals[1]), FadeIn(side[0]))
+            self.play(FadeIn(g), Create(path), run_time=2)
             vo.wait_until("a")
-            self.play(GrowFromEdge(bars[2], DOWN), FadeIn(vals[2]), GrowFromEdge(bars[3], DOWN), FadeIn(vals[3]),
-                      FadeIn(side[1]))
+            self.play(Create(base), FadeIn(cap), LaggedStart(*[FadeIn(q) for q in rows[0][0]], lag_ratio=0.03, run_time=2),
+                      FadeIn(ro), FadeIn(nm))
             vo.wait_until("b")
-            self.play(GrowFromEdge(bars[4], DOWN), FadeIn(vals[4]), FadeIn(side[2]))
-        self.wait(0.4)
+            cur = rows[0][0]
+            for k in (1, 2):
+                r2 = MathTex(rf"\textstyle\sum r_i^2:\ {100 * rows[k][1]:.0f}\%\text{{ a year}}", font_size=34,
+                             color=[VOL, FC, GOOD, BAD][k]).move_to(ro)
+                self.play(ReplacementTransform(cur, rows[k][0]), Transform(ro, r2),
+                          Transform(nm, label(names[k], font_size=24, color=[VOL, FC, GOOD, BAD][k]).move_to(nm)), run_time=1.5)
+                cur = rows[k][0]
+            vo.wait_until("d")
+            r2 = MathTex(rf"\textstyle\sum r_i^2:\ {100 * rows[3][1]:.0f}\%\text{{ a year}}", font_size=34, color=BAD).move_to(ro)
+            self.play(ReplacementTransform(cur, rows[3][0]), Transform(ro, r2),
+                      Transform(nm, label(names[3], font_size=24, color=BAD).move_to(nm)), run_time=1.5)
+        self.wait(0.3)
         self.clear_scene()
 
-    def har(self, h):
-        eq = MathTex(r"RV_{t+1}", r"=", r"b_0", r"+ b_d\,RV_t", r"+ b_w\,\overline{RV}_{t-4:t}", r"+ b_m\,\overline{RV}_{t-21:t}",
-                     font_size=36).to_edge(UP, buff=0.55)
-        eq[0].set_color(VOL)
-        eq[3].set_color(BAD)
-        eq[4].set_color(RET)
-        eq[5].set_color(GOOD)
-        src = label(r"HAR (Corsi 2009): a day, a week and a month of past realized variance, fitted by least squares",
-                    font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.15)
-        tt = np.asarray(h["cascade_t"])
-        g = axes([2019, 2020], [0, 2.0], x_length=6.8, y_length=4.2, ylabel=r"Bitcoin's volatility in 2019, annualised",
-                 xticks=[2019, 2019.5, 2020], xfmt=lambda u: {2019: "Jan", 2019.5: "Jul", 2020: "Jan"}[round(u * 2) / 2],
-                 yticks=[0, 0.5, 1.0, 1.5, 2.0], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16)
-        g.to_edge(LEFT, buff=0.6).to_edge(DOWN, buff=0.75)
+    def signature(self, s):
+        steps = np.asarray(s["steps"], float)
+        s19, sall = np.asarray(s["sig_2019"]), np.asarray(s["sig_all"])
+        lo = float(min(s19.min(), sall.min())) - 0.05
+        hi = float(max(s19.max(), sall.max())) + 0.05
+        g = axes([0, 62], [lo, hi], x_length=7.2, y_length=4.4, xticks=[1, 5, 10, 15, 20, 30, 60],
+                 yticks=[round(v, 1) for v in np.arange(np.ceil(lo * 10) / 10, hi, 0.1)], yfmt=lambda u: f"{100 * u:.0f}\\%",
+                 xlabel=r"sampling interval $\Delta$ (minutes)", ylabel=r"average realized volatility, annualised",
+                 font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
-        cd = curve(ax, tt, np.clip(h["cascade_d"], 0, 2.0), BAD, stroke_width=1.2).set_stroke(opacity=0.7)
-        cw = curve(ax, tt, np.clip(h["cascade_w"], 0, 2.0), RET, stroke_width=2.5)
-        cm = curve(ax, tt, np.clip(h["cascade_m"], 0, 2.0), GOOD, stroke_width=4)
-        leg = legend([(BAD, r"yesterday"), (RET, r"last week"), (GOOD, r"last month")], font_size=18)
-        leg.move_to(ax.c2p(2019.85, 1.75))
-        b, t = h["HAR"]["beta"], h["HAR"]["t"]
-        bq, tq = h["HARQ"]["beta"], h["HARQ"]["t"]
-
-        def row(name, val, tv, color):
-            return VGroup(MathTex(name, font_size=30, color=color), MathTex(f"{val:.2f}", font_size=30, color=color),
-                          MathTex(f"({tv:.1f})", font_size=26, color=GREY_B))
-
-        rows = [row(r"b_d", b[1], t[1], BAD), row(r"b_w", b[2], t[2], RET), row(r"b_m", b[3], t[3], GOOD)]
-        tab = VGroup(*[m for r in rows for m in r]).arrange_in_grid(rows=3, cols=3, buff=(0.5, 0.22),
-                                                                   col_alignments="lrr")
-        head = label(r"fitted on Bitcoin, 2017--2019 (Newey--West $t$)", font_size=20, color=GREY_A)
-        r2 = label(rf"$R^2 = {h['HAR']['r2']:.2f}$ on {h['HAR']['n']} days", font_size=20, color=GREY_A)
-        harq = VGroup(MathTex(r"b_d \to b_d + b_q\sqrt{RQ_t}", font_size=32, color=ALT),
-                      MathTex(rf"b_q = {bq[4]:.1f}\ \ (t = {tq[4]:.1f})", font_size=28, color=ALT),
-                      wrapped_label(r"HARQ (Bollerslev, Patton and Quaedvlieg 2016): trust yesterday less when it was "
-                                    rf"measured noisily. The sign is right; on {h['HARQ']['n']} days of Bitcoin it is not significant.",
-                                    4.6, 19, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        side = VGroup(head, tab, r2, harq).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5)
-        side.align_to(g, DOWN).shift(UP * 0.1)
+        k = ValueTracker(0)
+        dots = always_redraw(lambda: VGroup(*[Dot(ax.c2p(steps[i], s19[i]), radius=0.08, color=GOOD)
+                                               for i in range(len(steps) - 1, len(steps) - 2 - int(k.get_value()), -1)]))
+        l19 = curve(ax, steps, s19, GOOD, stroke_width=3)
+        lall = curve(ax, steps, sall, ALT, stroke_width=3)
+        leg = legend([(GOOD, r"2019"), (ALT, r"Aug.\ 2017 -- 2020")], font_size=19).next_to(g, UP, buff=0.1).align_to(g, RIGHT)
+        rise = s19[0] / s19[3] - 1
+        rise_all = sall[0] / sall[3] - 1
+        side = VGroup(
+            label(r"the signature plot (Andersen, Bollerslev, Diebold and Labys 2000)", font_size=19, color=GREY_A),
+            MathTex(rf"\text{{2019: }}1\text{{ min }} {100 * s19[0]:.0f}\%,\ 5\text{{ min }} {100 * s19[3]:.0f}\%,\ "
+                    rf"60\text{{ min }} {100 * s19[-1]:.0f}\%", font_size=26, color=GOOD),
+            MathTex(rf"\text{{whole sample: }}{100 * sall[0]:.0f}\%,\ {100 * sall[3]:.0f}\%,\ {100 * sall[-1]:.0f}\%",
+                    font_size=26, color=ALT),
+            label(rf"noise variance per minute $\hat\eta^2 = RV_{{1}}/2n$: median ${s['eta2_median'] * 1e8:.0f}\times 10^{{-8}}$",
+                  font_size=19, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
+        pc = pause_card(r"Sampling every second gives 86{,}400 returns a day. Better than every 5 minutes?", width=5.2,
+                        font_size=21).next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
-            "With a daily realized variance in hand, forecasting becomes a regression. Fulvio Corsi's HAR model of 2009 "
-            "predicts tomorrow's realized variance from three averages of the past. <bookmark mark='a'/> Yesterday, "
-            "which jumps around; the last week; and the last month, which moves slowly. The idea is a market of "
-            "traders at different horizons, each reacting to volatility at their own scale. <bookmark mark='b'/> "
-            "Fitted on Bitcoin through 2019, yesterday and the last month carry the weight, with coefficients of about "
-            "four tenths each. Four numbers and least squares reproduce the long memory that GARCH needs persistence "
-            "near one to approximate. <bookmark mark='c'/> In 2016 Tim Bollerslev, Andrew Patton and Rogier "
-            "Quaedvlieg added one refinement: when yesterday's realized variance was measured with a lot of error, "
-            "trust it less. On Bitcoin the correction has the right sign, but with three years of data it is not "
-            "significant. The race will say whether it helps."
+            "Build the answer point by point. For every day of 2019, compute realized volatility at a sampling "
+            "interval of an hour, then thirty minutes, and so on down to one minute, and average. <bookmark mark='a'/> "
+            f"The line rises as the interval shrinks: in 2019, one-minute sampling reads {100 * rise:.1f} percent more "
+            "than five-minute sampling. <bookmark mark='b'/> Over the whole sample, with the thinner markets of 2017 and "
+            f"2018, the gap is {100 * rise_all:.0f} percent. The culprit is microstructure noise: trades bounce between "
+            "the bid and the ask, and every bounce adds a little square that has nothing to do with volatility. The "
+            "deeper the market, the smaller the bounce. <bookmark mark='c'/> Pause and predict: is sampling every "
+            "second better? No: the more often you sample, the more bounces you add up."
         ) as vo:
-            self.play(FadeIn(eq), FadeIn(src))
+            self.play(FadeIn(g), FadeIn(side[0]))
+            self.add(dots)
+            self.play(k.animate.set_value(len(steps) - 1), run_time=3, rate_func=linear)
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(leg), Create(cd), run_time=1.5)
-            self.play(Create(cw), Create(cm), run_time=1.5)
+            self.play(Create(l19), FadeIn(side[1]), FadeIn(leg[0]))
             vo.wait_until("b")
-            self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), FadeIn(r2))
+            self.play(Create(lall), FadeIn(leg[1]), FadeIn(side[2]), FadeIn(side[3]))
             vo.wait_until("c")
-            self.play(FadeIn(harq))
-        self.wait(0.5)
+            self.play(FadeIn(pc))
+        dots.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    def derive(self, s):
+        rows = [
+            cmath(r"RV_n = \sum_{i=1}^n r_i^2", r"\to", r"\int_0^1\sigma_s^2\,ds = IV", font_size=34),
+            cmath(r"\sqrt{n}\,(RV_n - IV)", r"\Rightarrow", r"MN\Big(0,\ 2\int_0^1\sigma_s^4\,ds\Big),\quad "
+                  r"\widehat{IQ} = \tfrac{n}{3}\sum r_i^4", font_size=34),
+            cmath(r"r_i = r_i^* + u_i - u_{i-1}", r"\Rightarrow", r"\mathbb{E}RV_n = IV + 2n\eta^2", font_size=34),
+            cmath(r"MSE(n) \approx 4n^2\eta^4 + \frac{2\,IQ}{n}", r"\Rightarrow", r"n^* = \Big(\frac{IQ}{4\eta^4}\Big)^{1/3}",
+                  font_size=34),
+            cmath(r"TSRV", r"=", r"\overline{RV}^{(K)} - \frac{\bar n}{n}RV^{(all)}", font_size=34),
+            cmath(r"RK", r"=", r"\gamma_0 + \sum_{h=1}^{H}k\Big(\frac{h}{H+1}\Big)(\gamma_h + \gamma_{-h})", font_size=34),
+        ]
+        whys = [why(r"quadratic variation (Part 5): the squares converge to the integrated variance"),
+                why(r"Barndorff-Nielsen and Shephard (2002): an error band from the realized quarticity"),
+                why(r"iid noise $u$ of variance $\eta^2$: each return gains $2\eta^2$, cross terms vanish"),
+                why(r"bias squared plus variance, set the derivative to zero (Bandi and Russell 2008)"),
+                why(r"Zhang, Mykland and A\"it-Sahalia (2005): average $K$ sparse grids, subtract the noise from the dense one"),
+                why(r"Barndorff-Nielsen, Hansen, Lunde and Shephard (2008): add back the noise's autocovariances")]
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.8, buff=0.5, edge=6.9)
+        q = np.asarray(s["nstar_min_q"])
+        res = MathTex(rf"\text{{Bitcoin, per day: }} n^* \Rightarrow \Delta^* \approx {s['nstar_min_median']:.0f}\text{{ minutes "
+                      rf"(median; quartiles }}{q[0]:.0f}\text{{--}}{q[1]:.0f})", font_size=28, color=GOOD).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "The theory. As the grid gets finer, the sum of squares converges to the integrated variance, <bookmark "
+            "mark='a'/> with an error that Ole Barndorff-Nielsen and Neil Shephard derived in 2002: it shrinks like one "
+            "over the square root of n, and its size can be estimated from fourth powers of the returns. <bookmark "
+            "mark='b'/> Now add noise to every observed price. Each observed return gains the difference of two noise "
+            "terms, and summing n squares adds two n times the noise variance: a bias that grows with n. <bookmark "
+            "mark='c'/> Bias against error: minimising the sum gives an optimal number of samples, Federico Bandi and "
+            f"Jeffrey Russell's rule. For Bitcoin it says sample about every {s['nstar_min_median']:.0f} minutes. "
+            "<bookmark mark='d'/> Or keep all the data and remove the bias: the two-scale estimator averages several "
+            "sparse grids and subtracts the noise measured on the dense one, <bookmark mark='e'/> and the realized "
+            "kernel adds back the autocovariances the noise creates. Pre-averaging, spot volatility and irregular "
+            "sampling extend the same ideas; Ait-Sahalia and Jacod's textbook has them all."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            self.play(FadeIn(res))
+            vo.wait_until("d")
+            step(4)
+            vo.wait_until("e")
+            step(5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    def measures(self, z, s):
+        names = [("vol_rv1", r"RV,\\1-minute", BAD), ("vol_rv5", r"RV,\\5-minute", RET), ("vol_tsrv", r"two-scale\\RV", VOL),
+                 ("vol_rk", r"realized\\kernel", VOL), ("vol_bv", r"bipower\\(no jumps)", ALT)]
+        g = axes([0, len(names)], [0, 1.2], x_length=6.0, y_length=3.4, ylabel=r"Bitcoin's average volatility, Aug.\ 2017 -- 2020",
+                 xticks=[], yticks=[0, 0.4, 0.8, 1.2], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16)
+        g.to_corner(UL, buff=0.5).shift(DOWN * 0.2)
+        ax = g.ax
+        bars = VGroup(*[tbar(ax, i + 0.5, z[k], c, width=0.55) for i, (k, _, c) in enumerate(names)])
+        vals = VGroup(*[MathTex(f"{100 * z[k]:.0f}\\%", font_size=22, color=c).next_to(b, UP, buff=0.06)
+                        for (k, _, c), b in zip(names, bars)])
+        labs = VGroup(*[Tex(r"\begin{tabular}{c}" + n_ + r"\end{tabular}", font_size=15,
+                            color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1) for i, (_, n_, _) in enumerate(names)])
+        t, rv, se = (np.asarray(s[k]) for k in ("clt_t", "clt_rv", "clt_se"))
+        vol, lo, hi = (np.sqrt(np.maximum(v, 1e-12) * 365) for v in (rv, rv - 1.96 * se, rv + 1.96 * se))
+        g2 = axes([2019, 2020], [0, 2.0], x_length=6.0, y_length=3.0, xticks=[2019, 2019.5, 2020],
+                  xfmt=lambda u: {2019: "Jan", 2019.5: "Jul", 2020: "Jan"}[round(u * 2) / 2], yticks=[0, 1, 2],
+                  yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"2019, each day: RV with its 95\% band (BNS)", font_size=15)
+        g2.to_corner(UR, buff=0.5).shift(DOWN * 0.2)
+        bd = band(g2.ax, t, np.clip(lo, 0, 2), np.clip(hi, 0, 2), VOL, 0.3)
+        ln = curve(g2.ax, t, np.clip(vol, 0, 2), VOL, stroke_width=1.6)
+        rel = float(np.median(1.96 * se / rv))
+        src = real_data(rf"Binance BTCUSDT one-minute candles; {z['n_days']:,} days".replace(",", "{,}"))
+        with self.voiceover(
+            "On three and a half years of Bitcoin: one-minute sums give an average volatility of "
+            f"{100 * z['vol_rv1']:.0f} percent, five-minute sums {100 * z['vol_rv5']:.0f}. <bookmark mark='a'/> The two "
+            f"noise-corrected estimators, using every minute, land near {100 * z['vol_tsrv']:.0f}. Bipower variation, "
+            "which ignores jumps and comes next chapter, is lower still. <bookmark mark='b'/> And each day's measure "
+            "comes with an error band from the central limit theorem: with five-minute returns, the half-width is "
+            f"typically {100 * rel:.0f} percent of the variance. Realized variance is a measurement, not the truth, and "
+            "that will matter when forecasts are scored against it."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(src), FadeIn(labs), *[GrowFromEdge(b, DOWN) for b in bars[:2]], FadeIn(vals[:2]))
+            vo.wait_until("a")
+            self.play(*[GrowFromEdge(b, DOWN) for b in bars[2:]], FadeIn(vals[2:]))
+            vo.wait_until("b")
+            self.play(FadeIn(g2), FadeIn(bd), Create(ln), run_time=2)
+        self.wait(0.3)
         self.clear_scene()

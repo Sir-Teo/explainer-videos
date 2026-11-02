@@ -1027,3 +1027,87 @@ def mot_neural(x, mu, y, nu, cost, steps=3000, gamma=2000.0, width=32, lr=3e-3, 
         opt.step()
         sched.step()
     return {"trace": np.array(trace), "snapshots": snaps, "bound": trace[-1][1], "violation": trace[-1][3]}
+
+
+# ---------------------------------------------------------------------------
+# Part 12: an implied-volatility surface learned without arbitrage (Ackerer, Tagasovska and Vatter 2020)
+# ---------------------------------------------------------------------------
+def surface_net_g(net, kk, TT):
+    """Total variance w(k, T) of a surface network and its no-arbitrage quantities by autodiff: Gatheral's g(k) and
+    dw/dT (both must be >= 0)."""
+    import torch
+
+    kk = kk.clone().requires_grad_(True)
+    TT = TT.clone().requires_grad_(True)
+    w = net(kk, TT)
+    dk, dT = torch.autograd.grad(w.sum(), [kk, TT], create_graph=True)
+    d2k = torch.autograd.grad(dk.sum(), kk, create_graph=True)[0]
+    g = (1 - kk * dk / (2 * w)) ** 2 - dk ** 2 / 4 * (1 / w + 0.25) + d2k / 2
+    return w, g, dT
+
+
+def train_surface_net(k, T, iv, penalty=1.0, seed=0, steps=3000, every=100, train=None, width=40, lr=3e-3,
+                      grid=None, colloc=(41, 30), k_range=(-1.0, 1.0), T_range=(3 / 365, 0.8), log=None) -> dict:
+    """Fit implied volatilities (k, T, iv) with a small network for total variance, w(k, T) = T softplus(net(k,
+    sqrt T) + c) (c puts the start near 50% vol), by Adam on the squared vol error of the ``train`` quotes plus
+    ``penalty`` times the mean violations relu(-g) + relu(-dw/dT) on a collocation grid (``colloc`` = (n_k, n_T)).
+    Every ``every`` steps it records the train and held-out vol RMSE (vol points), the penalty, the share of
+    collocation points with g < 0, and the vol surface on ``grid`` = (k values, T values). Returns those histories, the
+    final RMSEs, and the violation shares on a fine 201 x 60 grid."""
+    import torch
+
+    torch.manual_seed(seed)
+    k, T, iv = (np.asarray(a, float) for a in (k, T, iv))
+    tr = np.ones(len(k), bool) if train is None else np.asarray(train, bool)
+    te = ~tr
+    f32 = lambda a: torch.tensor(np.asarray(a, float), dtype=torch.float32)  # noqa: E731
+    mlp = _mlp(2, width, 2, act=torch.nn.Tanh)
+    c0 = float(np.log(np.exp(0.25) - 1))
+
+    def net(kk, TT):
+        return TT * torch.nn.functional.softplus(mlp(torch.stack([kk, torch.sqrt(TT)], 1))[:, 0] + c0)
+
+    kt, Tt, ivt = f32(k), f32(T), f32(iv)
+    kc = torch.linspace(*k_range, colloc[0]).repeat(colloc[1])
+    Tc = torch.linspace(*T_range, colloc[1]).repeat_interleave(colloc[0])
+    if grid is not None:
+        gk, gT = (np.asarray(a, float) for a in grid)
+        GK, GT = f32(np.tile(gk, len(gT))), f32(np.repeat(gT, len(gk)))
+    opt = torch.optim.Adam(mlp.parameters(), lr=lr)
+    hist = {"step": [], "train": [], "test": [], "pen": [], "g_neg": [], "surf": [], "g_flags": []}
+    t0 = time.time()
+    for it in range(steps + 1):
+        w, g, dT = surface_net_g(net, kc, Tc)
+        pen = torch.relu(-g).mean() + torch.relu(-dT).mean()
+        pred = torch.sqrt(net(kt, Tt) / Tt)
+        err = (pred - ivt) ** 2
+        fit = err[torch.tensor(tr)].mean()
+        loss = fit + penalty * pen
+        if it % every == 0 or it == steps:
+            with torch.no_grad():
+                hist["step"].append(it)
+                hist["train"].append(float(fit.sqrt()) * 100)
+                hist["test"].append(float(err[torch.tensor(te)].mean().sqrt()) * 100 if te.any() else float("nan"))
+                hist["pen"].append(float(pen))
+                hist["g_neg"].append(float((g < 0).float().mean()))
+                hist["g_flags"].append((g < 0).numpy().astype(int))
+                if grid is not None:
+                    hist["surf"].append(torch.sqrt(net(GK, GT) / GT).numpy().reshape(len(gT), len(gk)))
+            if log:
+                log(f"  surface net seed {seed} step {it}: train {hist['train'][-1]:.2f} test {hist['test'][-1]:.2f} "
+                    f"pen {hist['pen'][-1]:.2e} ({time.time() - t0:.0f}s)")
+        if it == steps:
+            break
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    kf = torch.linspace(*k_range, 201).repeat(60)
+    Tf = torch.linspace(*T_range, 60).repeat_interleave(201)
+    _, g, dT = surface_net_g(net, kf, Tf)
+    with torch.no_grad():
+        pred = torch.sqrt(net(kt, Tt) / Tt).numpy()
+    return {**{k_: np.array(v) for k_, v in hist.items()}, "pred": pred,
+            "train_rmse": float(np.sqrt(np.mean((pred[tr] - iv[tr]) ** 2)) * 100),
+            "test_rmse": float(np.sqrt(np.mean((pred[te] - iv[te]) ** 2)) * 100) if te.any() else float("nan"),
+            "g_viol": float((g < 0).float().mean()), "cal_viol": float((dT < 0).float().mean()),
+            "net": net, "secs": time.time() - t0}

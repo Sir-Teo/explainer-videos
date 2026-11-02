@@ -27,18 +27,21 @@ class Construct(VoiceoverScene):
     def donsker(self, c):
         laws = [("coin", r"coin: $\pm 1$", BM), ("uniform", r"uniform on $\pm\sqrt{3}$", ITO),
                 ("skewed", r"skewed: $+2$ or $-\tfrac12$", STRAT)]
-        panels, lines = VGroup(), []
+        panels = VGroup()
         for key, name, col in laws:
             g = axes([0, 1], [-2.2, 2.2], x_length=3.9, y_length=2.6, xticks=[0, 1], yticks=[-2, 0, 2], font_size=16)
             t = label(name, font_size=20, color=col).next_to(g, UP, buff=0.1)
             panels.add(VGroup(g, t))
+        panels.arrange(RIGHT, buff=0.45).to_edge(DOWN, buff=0.5)
+        lines = []
+        for (key, name, col), pnl in zip(laws, panels):
+            ax_ = pnl[0].ax
             ls = []
             for n in ("16", "128", "4096"):
                 y = np.asarray(c["laws"][key][n])
-                ls.append(curve(g.ax, np.linspace(0, 1, len(y)), np.clip(y, -2.2, 2.2), col,
+                ls.append(curve(ax_, np.linspace(0, 1, len(y)), np.clip(y, -2.2, 2.2), col,
                                 stroke_width=2.5 if n != "4096" else 1.4))
             lines.append(ls)
-        panels.arrange(RIGHT, buff=0.45).to_edge(DOWN, buff=0.5)
         nlab = VGroup(*[MathTex(rf"n = {n}", font_size=30, color=GREY_A) for n in ("16", "128", "4{,}096")])
         for m in nlab:
             m.next_to(panels, UP, buff=0.5)
@@ -127,8 +130,8 @@ class Construct(VoiceoverScene):
     def reflection(self, r):
         p, q = np.asarray(r["path"]), np.asarray(r["refl"])
         t = np.linspace(0, 1, len(p))
-        g = axes([0, 1], [-1.6, 2.6], x_length=6.0, y_length=3.4, xlabel=r"time", xticks=[0, 0.5, 1],
-                 yticks=[-1, 0, 1, 2], font_size=16).to_corner(UL, buff=0.4)
+        g = axes([0, 1], [-1.6, 2.6], x_length=6.0, y_length=2.9, xticks=[0, 0.5, 1],
+                 yticks=[-1, 0, 1, 2], font_size=16).to_corner(UL, buff=0.3)
         ax = g.ax
         k = int(np.argmin(np.abs(t - r["t_cross"])))
         before = curve(ax, t[:k + 1], p[:k + 1], BM, stroke_width=2.5)
@@ -149,16 +152,16 @@ class Construct(VoiceoverScene):
                 why(r"strong Markov at $\tau_a$: after it, the path and its mirror are equally likely", 20),
                 why(r"add: every path ending above $a$ has crossed it", 20),
                 why(r"differentiate in $T$; the tail falls like $t^{-1/2}$, too slowly for a mean", 20)]
-        step = ladder(self, rows, whys, keep=4, top=-0.05, x=-1.6, buff=0.35, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=-0.45, x=-1.6, buff=0.3, edge=6.9)
         res = VGroup(
             MathTex(rf"\text{{simulated: }} {r['p_sim']:.4f}", font_size=28, color=BM),
             MathTex(rf"2(1 - \Phi(1)) = {r['p_theory']:.4f}", font_size=28, color=ITO),
             MathTex(rf"\text{{shifted barrier: }} {r['p_bgk']:.4f}", font_size=28, color=DRIFT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         cap = wrapped_label(r"20{,}000 paths of 1{,}000 steps; a path watched only on the grid misses crossings "
                             r"between steps (Broadie, Glasserman and Kou 1997: move the barrier up by "
-                            r"$0.5826\,\sigma\sqrt{\Delta t}$)", 5.4, 17, GREY_B).next_to(res, DOWN, buff=0.2)
-        cap.align_to(res, LEFT)
+                            r"$0.5826\,\sigma\sqrt{\Delta t}$)", 5.4, 17, GREY_B)
+        VGroup(res, cap).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UR, buff=0.4)
         with self.voiceover(
             "What does the path do first? Ask for the probability that it reaches a level a by time T. Here is a path "
             "that crosses one. <bookmark mark='a'/> At the moment it first touches the level, the future is a fresh "

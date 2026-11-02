@@ -149,7 +149,7 @@ class Clearing(VoiceoverScene):
             "    bilateral = np.abs(np.triu(M - M.T, 1)).sum()",
             "    net = M.sum(axis=1) - M.sum(axis=0)",
             "    return M.sum(), bilateral, net[net > 0].sum()",
-        ], source="explainer/quant/house/funding.py", width=6.6).to_corner(DL, buff=0.3)
+        ], source="explainer/quant/house/funding.py", width=6.6).to_corner(UL, buff=0.4)
         q = desk_question(r"A owes B 10, B owes C 10, C owes A 10. What moves through a CCP?", r"nothing: every "
                           r"net position is zero", width=5.4, font_size=21).to_corner(DR, buff=0.3)
         with self.voiceover(
@@ -170,8 +170,7 @@ class Clearing(VoiceoverScene):
             self.play(*[FadeOut(m) for m in self.mobjects])
             self.play(FadeIn(card))
             lab(self, card, ["netting(payer, receiver, amount, 25)",
-                             f"({n['gross'] / 1e9:.2f}e9, {n['bilateral'] / 1e9:.2f}e9, {n['multilateral'] / 1e9:.2f}e9)"],
-                direction=RIGHT)
+                             f"({n['gross'] / 1e9:.2f}e9, {n['bilateral'] / 1e9:.2f}e9, {n['multilateral'] / 1e9:.2f}e9)"])
             self.play(FadeIn(q))
         self.wait(1.0)
         self.clear_scene()
@@ -251,7 +250,6 @@ class Clearing(VoiceoverScene):
         pfmi = wrapped_label(r"cover 2 (CPMI--IOSCO principles): a systemically important CCP holds enough to survive "
                              r"the default of its two largest members in extreme but plausible markets", 5.6, 19,
                              GREY_A).next_to(stats, DOWN, buff=0.4).align_to(stats, LEFT)
-        tag = always_redraw(lambda: VGroup())
         with self.voiceover(
             "If a member does default, who pays? The clearing house runs a waterfall. First the defaulter's own "
             "margin, then its contribution to the default fund, then a slice of the clearing house's own capital, "

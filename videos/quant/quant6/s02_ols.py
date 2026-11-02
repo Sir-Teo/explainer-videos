@@ -51,11 +51,11 @@ class OLS(VoiceoverScene, ThreeDScene):
         x1, x2, y = np.array([2.4, 0.3, 0]), np.array([0.6, 2.2, 0]), np.array([1.9, 1.6, 1.9])
         plane = Polygon(ax.c2p(-0.3, -0.3, 0), ax.c2p(3, -0.3, 0), ax.c2p(3, 3, 0), ax.c2p(-0.3, 3, 0),
                         stroke_width=0, fill_color=GREY_B, fill_opacity=0.18)
-        a1 = Arrow3D(o, ax.c2p(*x1), color=DATA_C, thickness=0.02)
-        a2 = Arrow3D(o, ax.c2p(*x2), color=ALT, thickness=0.02)
-        ay = Arrow3D(o, ax.c2p(*y), color=WHITE, thickness=0.02)
+        a1 = Arrow(o, ax.c2p(*x1), buff=0, color=DATA_C, stroke_width=5)
+        a2 = Arrow(o, ax.c2p(*x2), buff=0, color=ALT, stroke_width=5)
+        ay = Arrow(o, ax.c2p(*y), buff=0, color=WHITE, stroke_width=5)
         yh = np.array([y[0], y[1], 0])
-        ah = Arrow3D(o, ax.c2p(*yh), color=EST, thickness=0.025)
+        ah = Arrow(o, ax.c2p(*yh), buff=0, color=EST, stroke_width=6)
         drop = DashedLine(ax.c2p(*y), ax.c2p(*yh), color=BAD, stroke_width=3)
         right = VGroup(Line(ax.c2p(*(yh + [0, 0, 0.25])), ax.c2p(*(yh + [0.25, 0, 0.25])), color=BAD),
                        Line(ax.c2p(*(yh + [0.25, 0, 0.25])), ax.c2p(*(yh + [0.25, 0, 0])), color=BAD))

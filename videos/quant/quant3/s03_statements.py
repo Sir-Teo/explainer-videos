@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant3.common import CASH, EQUITY, PART, VALUE
+from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, VALUE, load
 
 IS_C, CF_C, BS_C = VALUE, CASH, QC.IMPLIED
 
@@ -58,16 +60,35 @@ def ledger(title, rows, color, width, ncols=1, fs=19, heads=None):
     return g
 
 
+STEP_CODE = [
+    "def step(firm, sales, cost_ratio=0.7, credit=0.2, dep_rate=0.05, ...):",
+    "    collected = (1 - write_off) * firm.receivables",
+    "    firm.receivables = credit * sales            # unpaid sales",
+    "    firm.cash += (1 - credit) * sales + collected",
+    "    dep = dep_rate * firm.plant",
+    "    firm.plant += capex - dep",
+    "    ni = sales - costs - dep - interest - lost - taxes",
+    "    firm.cash -= costs + capex + interest + taxes + div",
+    "    firm.equity += ni - div                       # clean surplus",
+    "    assert abs(firm.assets() - firm.claims()) < 1e-9",
+    "    cfo = ni + dep - d_receivables                # indirect method",
+    "    return dict(net_income=ni, cfo=cfo, accruals=ni - cfo, ...)",
+]
+
+
 class Statements(VoiceoverScene):
     def construct(self):
+        st = load("statements")
         self.card()
         self.ledgers()
-        self.accruals()
-        self.xbrl()
+        self.running(st)
+        self.lab(st)
+        self.identities(st)
 
     def card(self):
-        c = chapter_card(2, r"The three statements", r"What did the firm earn, and where did the cash go?", part=PART)
-        with self.voiceover("Chapter two. The three statements."):
+        c = chapter_card(3, r"The three statements, running", r"What did the firm earn, and where did the cash go?",
+                         part=PART)
+        with self.voiceover("Chapter three. The three statements, running."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -144,71 +165,146 @@ class Statements(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def accruals(self):
-        eq = cmath(r"\text{earnings}", r"=", r"\text{cash flow}", r"+", r"\text{accruals}", font_size=46,
-                   colors={r"\text{earnings}": IS_C, r"\text{cash flow}": CF_C, r"\text{accruals}": QC.LOSS})
-        nums = MathTex(r"200", r"=", r"100", r"+", r"100", font_size=46).next_to(eq, DOWN, buff=0.3)
-        for k in range(5):
-            nums[k].set_x(eq[k].get_x())
-        VGroup(eq, nums).to_edge(UP, buff=0.9)
-        judg = VGroup(
-            label(r"accruals are judgments:", font_size=26, color=GREY_A),
-            label(r"when a sale counts as made", font_size=24, color=GREY_A),
-            label(r"how fast a machine wears out", font_size=24, color=GREY_A),
-            label(r"what an unpaid bill is likely to fetch", font_size=24, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(nums, DOWN, buff=0.7).to_edge(LEFT, buff=1.2)
-        sloan = wrapped_label(r"Sloan (1996): the accrual part of earnings persists less than the cash part, yet "
-                              r"prices treated them alike; firms with high accruals then returned less", 5.6, 23,
-                              QC.IDEA).next_to(nums, DOWN, buff=0.7).to_edge(RIGHT, buff=0.9)
+    def running(self, st):
+        R = {k: np.asarray(v) for k, v in st["rows"].items()}
+        n = len(R["sales"])
+        q = ValueTracker(0)
+        unit = 0.0021
+
+        def stack(parts, x, title):
+            g = VGroup()
+            y = -2.2
+            for v, col in parts:
+                h = max(v * unit, 0.004)
+                g.add(Rectangle(width=1.3, height=h, stroke_width=0, fill_color=col, fill_opacity=0.85)
+                      .move_to([x, y + h / 2, 0]))
+                y += h
+            g.add(label(title, font_size=20, color=GREY_A).move_to([x, -2.55, 0]))
+            return g
+
+        def books():
+            i = int(np.clip(round(q.get_value()), 0, n - 1))
+            a = stack([(R["cash"][i], CF_C), (R["receivables"][i], QC.LOSS), (R["plant"][i], BS_C)], -5.2, r"assets")
+            c = stack([(R["debt"][i], DEBT), (R["equity"][i], EQUITY)], -3.6, r"claims")
+            ok = MathTex(rf"{R['assets'][i]:,.1f} = {R['debt'][i] + R['equity'][i]:,.1f}".replace(",", "{,}"),
+                         font_size=26, color=QC.GAIN).move_to([-4.4, -3.05, 0])
+            qt = label(rf"quarter {i + 1} of {n}", font_size=22, color=GREY_B).move_to([-4.4, 3.2, 0])
+            return VGroup(a, c, ok, qt)
+
+        bk = always_redraw(books)
+        leg = legend([(CF_C, r"cash"), (QC.LOSS, r"receivables"), (BS_C, r"plant"), (DEBT, r"debt"),
+                      (EQUITY, r"equity")], font_size=17).to_corner(UL, buff=0.35).shift(DOWN * 0.5)
+        g = axes([1, n], [-40, 140], x_length=6.6, y_length=3.6, xlabel=r"quarter", ylabel=r"per quarter",
+                 xticks=[1, 5, 10, 15, 20], yticks=[0, 50, 100], font_size=17).move_to(RIGHT * 2.9 + UP * 0.6)
+        ax = g.ax
+        tq = np.arange(1, n + 1)
+        l_ni = tracing(ax, tq, R["net_income"], q, IS_C)
+        l_cf = tracing(ax, tq, R["cfo"], q, CF_C)
+        lg = legend([(IS_C, r"net income"), (CF_C, r"operating cash flow")], font_size=19).next_to(g, DOWN, buff=0.2)
+        cum_gap = float(np.sum(R["accruals"]))
+        note_ = wrapped_label(rf"over five years: earnings {R['net_income'].sum():,.0f}, cash from operations "
+                              rf"{R['cfo'].sum():,.0f}; accruals {cum_gap:,.0f}".replace(",", "{,}"), 6.4, 21, GREY_A)
+        note_.next_to(lg, DOWN, buff=0.2)
         with self.voiceover(
-            "So earnings and cash are different numbers. The difference has a name: accruals. Here earnings of two "
-            "hundred are a hundred of cash plus a hundred of accruals, mostly the sales not yet collected. "
-            "<bookmark mark='a'/> Accruals are where accounting needs judgment: when a sale counts as made, how fast "
-            "a machine wears out, what an unpaid bill will really fetch. Cash is harder to bend. "
-            "<bookmark mark='b'/> In 1996 Richard Sloan showed that the accrual part of earnings is less "
-            "persistent than the cash part, that prices did not tell the two apart, and that the firms with the "
-            "most accruals went on to return less. An accounting identity had become a trading signal. We will "
-            "measure it in chapter seven."
+            "Now run the machine. The House's accounting simulator takes the same toy firm through twenty "
+            "quarters. Sales arrive every quarter, growing with some noise; a fifth are on credit and become "
+            "receivables, collected the next quarter, and a few percent are never collected at all. The firm pays its "
+            "costs, its interest and its taxes, buys enough plant to keep up with sales, and pays out a quarter of its "
+            "profit. <bookmark mark='a'/> On the left, the balance sheet: what the firm owns, and who has a claim on "
+            "it. Every quarter both columns move, and the two totals underneath stay equal, to the cent, because "
+            "every entry is posted twice. <bookmark mark='b'/> On the right, the two numbers people confuse: net "
+            "income in gold, and the cash the operations actually brought in, in green. They move together but they "
+            "are not the same. The gap is the accruals: receivables that grew, plant that was paid for in one quarter "
+            "and expensed over many."
         ) as vo:
-            self.play(Write(eq), FadeIn(nums))
+            self.play(FadeIn(leg), FadeIn(g), FadeIn(lg))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(j) for j in judg], lag_ratio=0.4))
+            self.add(bk, l_ni, l_cf)
+            self.play(q.animate.set_value(n - 1), run_time=12, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(sloan))
+            self.play(FadeIn(note_))
+        bk.clear_updaters()
+        l_ni.clear_updaters()
+        l_cf.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 
-    def xbrl(self):
-        fact = VGroup(
-            label(r"one fact in a filing", font_size=24, color=GREY_B),
-            MathTex(r"\texttt{us-gaap:NetIncomeLoss}", font_size=34, color=IS_C),
-            MathTex(r"\text{value } 200 \quad \text{unit USD} \quad \text{period: the fiscal year}", font_size=30),
-            MathTex(r"\text{filed: the day the 10-K reached the SEC}", font_size=30, color=QC.HOUSE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
-        box = SurroundingRectangle(fact, buff=0.35, color=GREY_C, corner_radius=0.12)
-        card_ = VGroup(box, fact).to_edge(UP, buff=0.8)
-        rules = VGroup(
-            wrapped_label(r"Since 2009 the SEC has required filings tagged in XBRL, phased in from the largest firms "
-                          r"to all by 2011: every number machine-readable, with its period and its filing date.",
-                          9.4, 24, GREY_A),
-            wrapped_label(r"An annual report can arrive 60 to 90 days after the year it describes; numbers are "
-                          r"later restated.  A backtest may use a number only from the day it was filed.", 9.4, 24,
-                          QC.HOUSE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(card_, DOWN, buff=0.6)
+    def lab(self, st):
+        card = lab_card(r"one quarter of double-entry bookkeeping", STEP_CODE,
+                        source="explainer/quant/house/fundamentals.py (excerpt)", width=7.4, font_size=16)
+        card.to_edge(LEFT, buff=0.3).to_edge(UP, buff=0.3)
+        L, H = st["lab"], st["credit_heavy"]
+        pp = desk_question(r"Pause and predict: sales double, but nine-tenths are on credit. Does cash go up or "
+                           r"down this quarter?", width=4.9, font_size=21).to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
+        ans = VGroup(MathTex(rf"\text{{net income}}\ {H['net_income']:+.0f}", font_size=30, color=IS_C),
+                     MathTex(rf"\text{{operating cash flow}}\ {H['cfo']:+.0f}", font_size=30, color=QC.LOSS),
+                     label(r"profitable, and running out of cash", font_size=22, color=GREY_A))
+        ans.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(pp, DOWN, buff=0.4)
         with self.voiceover(
-            "Analysts once typed these numbers in by hand. Since 2009 the Securities and Exchange Commission has "
-            "required American companies to file them in a machine-readable language, XBRL, phased in from the "
-            "largest firms to all of them by 2011. <bookmark mark='a'/> Each number is a tagged fact: what it is, "
-            "the value, the unit, the period it covers, and the filing it came in. <bookmark mark='b'/> That last "
-            "date is the one a quant cares about. A firm's year ends on the thirty-first of December, but its "
-            "annual report can arrive two or three months later, and some numbers are restated years after that. "
-            "A backtest that uses December's numbers in December has read the future. The House stores every "
-            "number with the day it became public."
+            "Here is the House's code for one quarter, simplified to the lines that matter. Credit sales become "
+            "receivables; last quarter's are collected. Depreciation moves plant into expense. Net income less the "
+            "payout is added to equity, the rule accountants call clean surplus. And near the end is an assertion: "
+            "if the books ever fail to balance, the program stops. <bookmark mark='a'/> Run it on "
+            f"the toy firm with sales of {L['sales']:.0f}: net income {L['net_income']:.0f}, operating cash flow "
+            f"{L['cfo']:.0f}, assets equal to claims. <bookmark mark='b'/> Pause and predict: next the firm doubles "
+            "its sales, but nine tenths are on credit. Does its cash go up or down? <bookmark mark='c'/> Down. Profit "
+            f"of {H['net_income']:.0f}, cash flow of {H['cfo']:.0f}. Growth on credit eats cash, which is why fast-growing "
+            "firms that report profits can still run out of money."
         ) as vo:
-            self.play(Create(box), FadeIn(fact[0]), FadeIn(rules[0]))
+            self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(f) for f in fact[1:]], lag_ratio=0.3))
+            lab_run(self, card, [f"step(Firm(), sales={L['sales']:.0f})",
+                                 f"net income {L['net_income']:.1f}  cfo {L['cfo']:.1f}  accruals {L['accruals']:.1f}",
+                                 f"assets {L['assets']:.1f} = claims {L['debt'] + L['equity']:.1f}   ok"])
             vo.wait_until("b")
-            self.play(FadeIn(rules[1]), Indicate(fact[3], color=QC.HOUSE))
+            self.play(FadeIn(pp))
+            vo.wait_until("c")
+            self.play(FadeIn(ans))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def identities(self, st):
+        R = {k: np.asarray(v) for k, v in st["rows"].items()}
+        ni = R["net_income"][-4:].sum()
+        sales = R["sales"][-4:].sum()
+        A = R["assets"][-1]
+        E = R["equity"][-1]
+        rows = [
+            cmath(r"\Delta\text{Cash} + \Delta\text{AR} + \Delta\text{Plant}", r"=", r"\Delta\text{Debt} + \Delta E",
+                  font_size=36),
+            cmath(r"\Delta E = NI - \text{Div}", r",", r"\quad \Delta\text{Plant} = \text{Capex} - \text{Dep}",
+                  font_size=36),
+            cmath(r"\Delta\text{Cash}", r"=", r"\underbrace{NI + \text{Dep} - \Delta\text{AR}}_{\text{operating cash flow}}"
+                  r" - \text{Capex} - \text{Div} + \Delta\text{Debt}", font_size=36),
+            cmath(r"\frac{NI}{E}", r"=", r"\frac{NI}{S}\cdot\frac{S}{A}\cdot\frac{A}{E}", font_size=40),
+            cmath(rf"{100 * ni / E:.1f}\%", r"=", rf"{100 * ni / sales:.1f}\% \times {sales / A:.2f} \times {A / E:.2f}",
+                  font_size=36),
+        ]
+        whys = [why(r"take differences of assets $=$ claims, quarter to quarter"),
+                why(r"clean surplus, and plant rolled forward"),
+                why(r"substitute and solve for cash: the cash flow statement, by the indirect method"),
+                why(r"multiply and divide: DuPont's split of return on equity into margin, turnover and leverage"),
+                why(r"the toy firm's last four quarters")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "Two identities fall out of the machine. Take the balance sheet identity and difference it from one "
+            "quarter to the next. <bookmark mark='a'/> Equity changes by earnings less dividends; plant changes by "
+            "spending less depreciation. <bookmark mark='b'/> Substitute and solve for cash, and you have derived the "
+            "cash flow statement, the way companies present it: net income, plus depreciation, minus the growth in "
+            "receivables, is the operating cash flow. <bookmark mark='c'/> The second identity is what an analyst "
+            "reads first. Return on equity is the profit margin, times how many dollars of sales each dollar of "
+            "assets produces, times how many dollars of assets each dollar of equity supports. DuPont's managers "
+            "used it in the 1920s; it still says whether a firm earns by pricing, by efficiency or by leverage. "
+            "<bookmark mark='d'/> For the toy firm's last year: these three numbers."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
         self.wait(0.4)
         self.clear_scene()

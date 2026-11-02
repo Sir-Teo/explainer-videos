@@ -232,3 +232,220 @@ def fit_pdv(r, vol, dt=1 / 365, lookback=1000, burn=None):
     r2 = 1 - np.sum((fit[burn:] - y) ** 2) / np.sum((y - y.mean()) ** 2)
     return {"alpha1": r0.x[0], "delta1": r0.x[1], "alpha2": r0.x[2], "delta2": r0.x[3], "beta": b.tolist(),
             "r2": float(r2), "fit": fit, "burn": burn}
+
+
+# ---------------------------------------------------------------- Part 14, expanded: schemes, estimators, PDV, qRH,
+# signature volatility (appended)
+
+
+def volterra_riemann(H, T, n, n_paths, seed=0):
+    """The naive scheme for the Volterra process Y_t = sqrt(2H) int_0^t (t - s)^{H - 1/2} dW_s: a left-point Riemann
+    sum, Y_{t_i} = sqrt(2H) sum_{j < i} (t_i - t_j)^{H - 1/2} dW_j. It evaluates the kernel at the left end of each cell
+    and so misses the singular part next to t (compare the hybrid scheme in ``rbergomi_paths``). Returns (t, Y, dW)
+    with Y of shape (n_paths, n + 1)."""
+    rng = np.random.default_rng(seed)
+    dt = T / n
+    t = np.linspace(0, T, n + 1)
+    dW = rng.standard_normal((n_paths, n)) * np.sqrt(dt)
+    k = np.arange(1, n + 1)
+    g = np.zeros(n + 1)
+    g[1:] = (k * dt) ** (H - 0.5)             # the kernel at lag k cells, evaluated at the cell's left end
+    m = 1 << int(np.ceil(np.log2(2 * n + 1)))
+    conv = np.fft.irfft(np.fft.rfft(dW, m, axis=1) * np.fft.rfft(g, m)[None, :], m, axis=1)
+    Y = np.zeros((n_paths, n + 1))
+    Y[:, 1:] = conv[:, 1: n + 1]               # Y[:, i] = sum_{k=1}^{i} g[k] dW[:, i - k]
+    return t, np.sqrt(2 * H) * Y, dW
+
+
+def skew_term_fit(T, skew, weights=None, eps_max=0.2):
+    """The at-the-money skew's term structure fitted two ways in log space: a power law c T^{-a} (rough volatility's
+    T^{H - 1/2}) and Guyon and El Amrani's bounded alternative c (T + eps)^{-a}. Returns both fits, their weighted
+    log RMSEs and the implied H = 1/2 - a."""
+    T = np.asarray(T, float)
+    y = np.abs(np.asarray(skew, float))
+    w = np.ones_like(T) if weights is None else np.sqrt(np.asarray(weights, float) / np.mean(weights))
+    pw = least_squares(lambda p: w * (np.log(p[0]) - p[1] * np.log(T) - np.log(y)), [0.1, 0.5],
+                       bounds=([1e-5, -1.0], [50, 2.0]))
+    sh = least_squares(lambda p: w * (np.log(p[0]) - p[1] * np.log(T + p[2]) - np.log(y)), [0.1, 0.5, 0.01],
+                       bounds=([1e-5, 0.0, 0.0], [50, 3.0, eps_max]))
+    rm = lambda r: float(np.sqrt(np.mean((r.fun / w) ** 2)))  # noqa: E731
+    return {"power": {"c": float(pw.x[0]), "a": float(pw.x[1]), "rmse_log": rm(pw)},
+            "shifted": {"c": float(sh.x[0]), "a": float(sh.x[1]), "eps": float(sh.x[2]), "rmse_log": rm(sh)},
+            "H": float(0.5 - pw.x[1])}
+
+
+def fou_paths(H, half_life, n, dt, seed=0):
+    """A fractional Ornstein-Uhlenbeck path: fractional Gaussian noise (Davies-Harte, exact) passed through the AR(1)
+    filter x_i = e^{-kappa dt} x_{i-1} + dB_i, kappa = ln 2 / half_life. With ``half_life=None`` there is no mean
+    reversion and x is fractional Brownian motion itself. Returns x (n,) in the time units of ``dt``."""
+    from scipy.signal import lfilter
+
+    from explainer.quant.house import sim
+
+    B = np.asarray(sim.fbm(H, n, n * dt, 1, seed=seed)).ravel()
+    dB = np.diff(B)
+    if half_life is None:
+        return np.cumsum(dB)
+    e = np.exp(-np.log(2) / half_life * dt)
+    return lfilter([1.0], [1.0, -e], dB)
+
+
+def rfsv_weights(H, horizon, window):
+    """Gatheral, Jaisson and Rosenbaum's rough forecast, discretised: the predicted log variance ``horizon`` days ahead
+    is a weighted average of the last ``window`` daily values with weights proportional to 1 / ((j + horizon)
+    j^{H + 1/2}), j = 1 .. window (lag 1 is today), normalised to sum to one."""
+    j = np.arange(1, window + 1, dtype=float)
+    w = 1.0 / ((j + horizon) * j ** (H + 0.5))
+    return w / w.sum()
+
+
+def rfsv_predict(log_v, H, horizon, window=250):
+    """The rough forecast of log variance ``horizon`` steps ahead at every date with ``window`` days of past; NaN
+    before. Entry i forecasts log_v[i + horizon] from log_v[i - window + 1 .. i]."""
+    x = np.asarray(log_v, float)
+    w = rfsv_weights(H, horizon, window)
+    out = np.full(len(x), np.nan)
+    c = np.convolve(x, w)                      # c[i] = sum_j w[j] x[i - j], j = 0 .. window - 1
+    out[window - 1:] = c[window - 1: len(x)]
+    return out
+
+
+def pdv4_step(R, r, dt, lam):
+    """One day of the 4-factor Markovian PDV: each factor is an exponential moving average, dR = lam (r^n / dt - R) dt,
+    updated exactly over a step for a return (or squared return) r observed during it."""
+    e = np.exp(-lam * dt)
+    return e * R + (1 - e) * r / dt
+
+
+def pdv4_features(r, dt, lam0, lam1, theta, power=1):
+    """Guyon and Lekeufack's 4-factor Markovian PDV: the kernel (1 - theta) lam0 e^{-lam0 tau} + theta lam1
+    e^{-lam1 tau}, a convex mix of two exponentials, so R = (1 - theta) R^(0) + theta R^(1) with each R^(j) one EMA of
+    r^power / dt. Returns R (len(r),) at the end of each day."""
+    x = np.asarray(r, float) ** power
+    out = np.empty(len(x))
+    R0 = R1 = 0.0
+    for i, xi in enumerate(x):
+        R0 = pdv4_step(R0, xi, dt, lam0)
+        R1 = pdv4_step(R1, xi, dt, lam1)
+        out[i] = (1 - theta) * R0 + theta * R1
+    return out
+
+
+def lift_weights(H, N, rN=None):
+    """The geometric quantisation of the fractional kernel used by the lifted Heston (Abi Jaber and El Euch 2019):
+    t^{alpha-1} / Gamma(alpha) ~ sum_i c_i exp(-x_i t), alpha = H + 1/2. Returns (c, x)."""
+    alpha = H + 0.5
+    rN = rN or 1 + 10 * N ** (-0.9)
+    i = np.arange(1, N + 1)
+    c = (rN ** (1 - alpha) - 1) * rN ** ((alpha - 1) * (1 + N / 2)) / (G(alpha) * G(2 - alpha)) * rN ** ((1 - alpha) * i)
+    x = (1 - alpha) / (2 - alpha) * (rN ** (2 - alpha) - 1) / (rN ** (1 - alpha) - 1) * rN ** (i - 1 - N / 2)
+    return c, x
+
+
+def lifted_heston_paths(v0, lam, theta, nu, H, N, T, n, dW):
+    """The lifted Heston variance V_t = g0(t) + sum_i c_i U^i_t, dU^i = (-x_i U^i - lam V) dt + nu sqrt(V) dW,
+    g0(t) = v0 + lam theta sum_i c_i (1 - e^{-x_i t}) / x_i (Abi Jaber 2019), by an implicit-in-the-decay Euler scheme
+    driven by the given increments dW (n_paths, n). Returns V (n_paths, n + 1)."""
+    c, x = lift_weights(H, N)
+    dt = T / n
+    P = dW.shape[0]
+    U = np.zeros((P, N))
+    V = np.empty((P, n + 1))
+    V[:, 0] = v0
+    for k in range(n):
+        vp = np.maximum(V[:, k], 0.0)
+        U = (U + (-lam * vp * dt + nu * np.sqrt(vp) * dW[:, k])[:, None]) / (1 + x[None, :] * dt)
+        t = (k + 1) * dt
+        V[:, k + 1] = v0 + lam * theta * np.sum(c / x * (1 - np.exp(-x * t))) + U @ c
+    return V
+
+
+def qrh_paths(a, b, c, lam, eta, H, Z0, T, n, n_paths, N=10, seed=0, theta0=None):
+    """The quadratic rough Heston model (Gatheral, Jusselin and Rosenbaum 2020), lifted to N exponential factors:
+    Z_t = Z0 + int K(t - s) [lam (theta0 - Z_s) ds + eta sqrt(V_s) dW_s], V_t = a (Z_t - b)^2 + c,
+    dS / S = sqrt(V) dW (one Brownian motion: a fall lowers Z, a rally raises it, and both can move V up the
+    parabola). ``theta0`` defaults to Z0 (no drift away from the start). Returns (S, V, Z), each (n_paths, n + 1)."""
+    rng = np.random.default_rng(seed)
+    cw, x = lift_weights(H, N)
+    th = Z0 if theta0 is None else theta0
+    dt = T / n
+    U = np.zeros((n_paths, N))
+    Z = np.empty((n_paths, n + 1))
+    V = np.empty((n_paths, n + 1))
+    S = np.ones((n_paths, n + 1))
+    Z[:, 0] = Z0
+    V[:, 0] = a * (Z0 - b) ** 2 + c
+    lnS = np.zeros(n_paths)
+    for k in range(n):
+        dW = rng.standard_normal(n_paths) * np.sqrt(dt)
+        v = V[:, k]
+        U = (U + (lam * (th - Z[:, k]) * dt + eta * np.sqrt(v) * dW)[:, None]) / (1 + x[None, :] * dt)
+        Z[:, k + 1] = Z0 + U @ cw
+        V[:, k + 1] = a * (Z[:, k + 1] - b) ** 2 + c
+        lnS = lnS + np.sqrt(v) * dW - 0.5 * v * dt
+        S[:, k + 1] = np.exp(lnS)
+    return S, V, Z
+
+
+def _sig_words(depth):
+    words = [()]
+    for d in range(1, depth + 1):
+        words += [w + (i,) for w in words if len(w) == d - 1 for i in (0, 1)]
+    return words
+
+
+def sigvol_features(T_idx, n, dt, n_paths, depth=3, seed=0):
+    """The ingredients of a signature volatility model (Cuchiero, Gazzani and Svaluto-Ferro 2023) driven by the
+    time-augmented Brownian path (t, W_t): sigma_t = <ell, Sig_t> is linear in ell, so log S_T = ell.A - ell.B.ell / 2
+    with A = int Sig dZ and B = int Sig Sig' dt, Z = rho W + sqrt(1 - rho^2) W_perp. The signature is updated by Chen's
+    identity step by step. Returns, at each step index in ``T_idx``, A_W and A_perp (n_paths, d) and B (n_paths, d, d),
+    float32; d = 2^(depth+1) - 1 words, the empty word first."""
+    rng = np.random.default_rng(seed)
+    words = _sig_words(depth)
+    d = len(words)
+    L1 = np.zeros((n_paths, 2))
+    L2 = np.zeros((n_paths, 2, 2))
+    L3 = np.zeros((n_paths, 2, 2, 2))
+    AW = np.zeros((n_paths, d))
+    AP = np.zeros((n_paths, d))
+    B = np.zeros((n_paths, d, d))
+    out = {}
+    want = set(int(i) for i in T_idx)
+
+    def flat():
+        cols = [np.ones(n_paths)]
+        for w in words[1:]:
+            if len(w) == 1:
+                cols.append(L1[:, w[0]])
+            elif len(w) == 2:
+                cols.append(L2[:, w[0], w[1]])
+            else:
+                cols.append(L3[:, w[0], w[1], w[2]])
+        return np.stack(cols, axis=1)
+
+    for k in range(1, n + 1):
+        X = flat()                                           # the signature at the left end of the step (Ito)
+        dW = rng.standard_normal(n_paths) * np.sqrt(dt)
+        dP = rng.standard_normal(n_paths) * np.sqrt(dt)
+        AW += X * dW[:, None]
+        AP += X * dP[:, None]
+        B += X[:, :, None] * X[:, None, :] * dt
+        D = np.stack([np.full(n_paths, dt), dW], axis=1)
+        DD = D[:, :, None] * D[:, None, :]
+        L3 = L3 + L2[:, :, :, None] * D[:, None, None, :] + L1[:, :, None, None] * DD[:, None, :, :] / 2 \
+            + DD[:, :, :, None] * D[:, None, None, :] / 6
+        L2 = L2 + L1[:, :, None] * D[:, None, :] + DD / 2
+        L1 = L1 + D
+        if k in want:
+            out[k] = {"AW": AW.astype(np.float32), "AP": AP.astype(np.float32), "B": B.astype(np.float32)}
+    return out, words
+
+
+def sigvol_logS(ell, rho, A_W, A_perp, B):
+    """log S_T / S_0 in the signature volatility model for parameters ``ell`` and spot-vol correlation ``rho``, for
+    every simulated path at once: ell.(rho A_W + sqrt(1 - rho^2) A_perp) - ell.B.ell / 2. Quadratic in ell, so a new
+    parameter vector prices in microseconds per path."""
+    ell = np.asarray(ell, float)
+    A = rho * (A_W @ ell) + np.sqrt(1 - rho * rho) * (A_perp @ ell)
+    q = np.einsum("pi,i->p", np.einsum("pij,j->pi", B, ell), ell)
+    return A - 0.5 * q

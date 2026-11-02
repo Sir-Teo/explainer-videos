@@ -11,6 +11,10 @@ DESK = [
      r"is $4 + 2 = 6$, and its takings equal the number of tosses"),
     (r"You have \$100 at a European roulette table and need \$200 tonight. How do you bet?",
      r"all on red, once: $18/37 \approx 48.6\%$; one dollar at a time gives under 0.5\%"),
+    (r"Penney's game: you pick HHT, I pick THH. Who wins, and how often?",
+     r"THH, with probability $3/4$: unless the first two tosses are HH, any HHT must be preceded by THH"),
+    (r"A fair $\pm 1$ walk is stopped the first time it is up 1. What is $\mathbb{E}\tau$?",
+     r"Infinite: if it were finite, Wald's identity would give $1 = \mathbb{E}S_\tau = 0 \cdot \mathbb{E}\tau = 0$"),
 ]
 
 PROBLEMS = [
@@ -24,6 +28,10 @@ PROBLEMS = [
     r"Compute $D$ and predict the median of $L_{300}$.",
     r"Prove Ville's inequality from optional stopping at $\min(\tau, n)$. Why does a $t$-test checked every day "
     r"eventually reject a true null with probability one?",
+    r"P\'olya's urn from one red and one blue ball: show $P(R_n = k) = 1/(n + 1)$ for $k = 1, \dots, n + 1$, so the "
+    r"limit of the red fraction is Uniform$(0, 1)$.",
+    r"Prove Wald's identity $\mathbb{E}S_\tau = \mu\,\mathbb{E}\tau$ when $\mathbb{E}\tau < \infty$, from the "
+    r"martingale $S_n - n\mu$ and optional stopping.",
 ]
 
 
@@ -39,65 +47,79 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"information is a filtration; conditional expectation is a projection, and projections nest", INFO),
-            (r"a martingale's forecast of tomorrow is today: Ville named it after a betting system", MART),
-            (r"optional stopping: you can't beat a fair game with bounded bets; doubling needs unbounded ones", MART),
-            (r"a small edge against you is ruin for timid play; bold play is optimal (Dubins--Savage)", LOSS),
-            (r"Barings: a hidden account turned a doubling strategy into the bank's bankroll", LOSS),
-            (r"Doob: a price is predictable drift plus a martingale; the variance is the square's predictable part", DRIFT),
-            (r"a change of measure reweights worlds; equivalent measures agree on what is impossible", Q_C),
-            (rf"stable laws fit the center ($\alpha \approx 1.4$) but variance is finite; checking daily, a $t$-test "
-             rf"rejects {100 * self.p['t_reject']:.0f}\%, an e-process {100 * self.p['e_reject']:.0f}\%", P_C),
+            (r"a $\sigma$-algebra is what you can answer; conditional expectation is a projection, and projections nest", INFO),
+            (r"a martingale's forecast of tomorrow is today (Ville, Doob); convex functions of it rise", MART),
+            (r"the martingale transform: no predictable stake beats a fair game; roulette taxes every system 1/37", MART),
+            (r"stopping times; optional stopping proved; the walk that always wins has $\mathbb{E}\tau = \infty$", MART),
+            (r"doubling needs unbounded credit: admissibility forbids it; Barings found it in account 88888", LOSS),
+            (r"ruin $a/b$ and duration $a(b - a)$; bold play is optimal against you (Dubins--Savage)", LOSS),
+            (r"bounded martingales converge: upcrossings, P\'olya's urn, L\'evy's learning", INFO),
+            (r"Doob: drift plus martingale, and the drift depends on the filtration (Ivey)", DRIFT),
+            (r"change of measure moves weight, not paths; Esscher's $Q$ fattens the crash tail", Q_C),
+            (r"Radon--Nikodym by martingales; Kakutani: infinite coins are equivalent or singular", Q_C),
+            (r"returns are not stable: estimators disagree and kurtosis falls with the horizon", P_C),
+            (rf"Ville: a daily $t$-test rejects {100 * self.p['t_reject']:.0f}\%, an e-process "
+             rf"{100 * self.p['e_reject']:.0f}\%; bettors learn, e-BH survives peeking", MART),
         ]
         rows = VGroup()
         for i, (t, c) in enumerate(items, 1):
-            rows.add(VGroup(MathTex(str(i), font_size=28, color=c), label(t, font_size=25)).arrange(RIGHT, buff=0.3))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.24)
-        title = label(r"Part 4 in eight lines", font_size=38).to_edge(UP, buff=0.4)
-        rows.next_to(title, DOWN, buff=0.45)
+            rows.add(VGroup(MathTex(str(i), font_size=26, color=c), label(t, font_size=22)).arrange(RIGHT, buff=0.3))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        title = label(r"Part 4 in twelve lines", font_size=36).to_edge(UP, buff=0.3)
+        rows.next_to(title, DOWN, buff=0.3)
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
+        if rows.height > 6.4:
+            rows.scale_to_fit_height(6.4)
+            rows.next_to(title, DOWN, buff=0.3)
         with self.voiceover(
-            "Part four in eight lines. Information is a filtration, and conditional expectation is a projection onto "
-            "what you know. A martingale is a process whose forecast of tomorrow is today; Ville named it after a "
-            "betting system. Optional stopping says no strategy with bounded bets beats a fair game, and doubling "
-            "escapes only by betting without limit. Against a small edge, timid play is ruin and bold play is "
-            "optimal. At Barings, a hidden account supplied the unlimited bankroll. Doob splits any price into "
-            "predictable drift and a martingale, and the variance is the predictable part of its square. A change of "
-            "measure reweights the worlds, and equivalent measures agree on what is impossible. And stable laws fit "
-            "the center of returns, but variance is finite; and a test you check every day must be an e-process."
+            "Part four in twelve lines. A sigma-algebra is the set of questions you can answer, and conditional "
+            "expectation is a projection onto it. A martingale's forecast of tomorrow is today. No predictable stake "
+            "turns a fair game favourable, and roulette taxes every system the same. Optional stopping holds with "
+            "bounded bets, and fails for the walk that always wins, which takes forever on average. Doubling needs "
+            "unbounded credit, which finance forbids and Barings found in a hidden account. Ruin is a over b, and "
+            "bold play is best against you. Martingales that stay bounded converge. Doob splits a price into drift "
+            "and martingale, and the drift depends on what you know. A change of measure moves weight, not paths, "
+            "and martingales build the Radon-Nikodym derivative. Returns are not stable laws. And a test you check "
+            "every day must be an e-process: it can learn its bets, and it survives peeking."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
-                                                 run_time=16))
+                                                 run_time=20))
         self.wait(0.5)
         self.clear_scene()
 
     def desk(self):
-        cards = VGroup(*[desk_question(q, a, width=12.4, font_size=25) for q, a in DESK]).arrange(DOWN, buff=0.3)
+        cards = VGroup(*[desk_question(q, a, width=12.4, font_size=24) for q, a in DESK[:3]]).arrange(DOWN, buff=0.3)
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
+        more = VGroup(*[desk_question(q, a, width=12.4, font_size=24) for q, a in DESK[3:]]).arrange(DOWN, buff=0.4)
         with self.voiceover(
-            "Three desk questions. A martingale starts at one and stops at zero or three: the chance it hits three is "
+            "Five desk questions. A martingale starts at one and stops at zero or three: the chance it hits three is "
             "a third, by optional stopping. <bookmark mark='a'/> The expected number of fair tosses until two heads "
-            "in a row is six. The neat proof: let a new gambler arrive before every toss and bet on heads, heads at "
-            "fair odds. When the pattern appears, the casino has paid out six and collected one per toss, and a fair "
-            "casino breaks even. <bookmark mark='b'/> And with a hundred dollars at a European roulette table and a "
-            "need for two hundred tonight, put it all on red, once. Full solutions are in the notes."
+            "in a row is six, by the casino of gamblers. <bookmark mark='b'/> With a hundred dollars at a European "
+            "roulette table and a need for two hundred tonight, put it all on red, once. <bookmark mark='c'/> In "
+            "Penney's game, if you choose heads, heads, tails, I choose tails, heads, heads and win three times in "
+            "four. <bookmark mark='d'/> And a fair walk stopped the first time it is up one takes, on average, "
+            "forever. Full solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[2], shift=UP * 0.2))
+            vo.wait_until("c")
+            self.play(FadeOut(cards), FadeIn(more[0], shift=UP * 0.2))
+            vo.wait_until("d")
+            self.play(FadeIn(more[1], shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=23)
+        ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And five problems: the time for a walk to leave a strip, the ruin probability for a biased game, the "
-            "doubling system's real record, why likelihood ratios collapse, and a proof of Ville's inequality. "
-            "Solutions, in English and Chinese, are in the notes."
+            "And seven problems: the time for a walk to leave a strip, the ruin probability for a biased game, the "
+            "doubling system's real record, why likelihood ratios collapse, a proof of Ville's inequality, the limit "
+            "of Pólya's urn, and Wald's identity. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)
@@ -108,16 +130,19 @@ class Outro(VoiceoverScene):
             (r"martingales and quadratic variation", [5, 7]),
             (r"change of measure: the risk-neutral world", [9, 10, 23]),
             (r"admissible strategies and no arbitrage", [9]),
+            (r"convex functions of martingales: calendar spreads", [12]),
+            (r"the Kelly (numeraire) portfolio", [8]),
             (r"heavy tails and changing volatility", [7, 13, 40]),
-            (r"e-processes: testing what you keep looking at", [26, 43]),
+            (r"e-processes and e-BH: testing what you keep looking at", [26, 43]),
         ])
         with self.voiceover(
             "Where this comes back. Martingales and quadratic variation are the foundation of Itô's calculus in Part "
             "five and of volatility models in Part seven. The change of measure becomes the risk-neutral world of "
             "Parts nine and ten, and the stochastic discount factor of twenty-three. Admissible strategies are how "
-            "Part nine rules out doubling. Heavy tails return with changing volatility in seven and thirteen, and "
-            "with risk measurement in forty. And e-processes are how Part twenty-six, and the finale, decide which "
-            "results to believe."
+            "Part nine rules out doubling. The convexity of option prices in time returns in Part twelve, and the "
+            "numeraire portfolio is Part eight's Kelly bettor. Heavy tails return with changing volatility in seven "
+            "and thirteen, and with risk measurement in forty. And e-processes and e-BH are how Part twenty-six, and "
+            "the finale, decide which results to believe."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -125,19 +150,21 @@ class Outro(VoiceoverScene):
 
     def references(self):
         card = reference_card(
-            [r"Williams, \textit{Probability with Martingales}, ch.\ 9--12",
-             r"Shreve, \textit{Stochastic Calculus for Finance I}, ch.\ 2--3; F\"ollmer and Schied, \textit{Stochastic "
-             r"Finance}, ch.\ 1",
-             r"Durrett, \textit{Probability: Theory and Examples}, ch.\ 4",
-             r"Shafer and Vovk, \textit{Game-Theoretic Foundations for Probability and Finance} (2019)"],
-            [r"Ville (1939); Doob (1953); Dubins and Savage, \textit{How to Gamble If You Must} (1965)",
-             r"Mandelbrot (1963); Fama (1965); McCulloch (1986); Mantegna and Stanley (1995)",
-             r"Ramdas, Gr\"unwald, Vovk and Shafer, ``Game-theoretic statistics and safe anytime-valid inference'' (2023)",
-             r"Board of Banking Supervision, report on the collapse of Barings (1995)"])
+            [r"Williams, \textit{Probability with Martingales}, ch.\ 0, 4, 9--14, 16--18",
+             r"Shreve, \textit{Stochastic Calculus for Finance} I, ch.\ 2, 3, 5; II, ch.\ 1--2",
+             r"F\"ollmer and Schied, \textit{Stochastic Finance}, \S 1.2 and App.\ A.2; Durrett, ch.\ 4",
+             r"Shafer and Vovk (2001, 2019); Ramdas and Wang, \textit{Hypothesis Testing with E-values} (2025)"],
+            [r"Kolmogorov (1933); Ville (1939); Wald (1945); Kakutani (1948); Doob (1953); Dubins and Savage (1965); "
+             r"Azuma (1967)",
+             r"Esscher (1932); Li (1980); Harrison and Pliska (1981); Dybvig and Huang (1988); Gerber and Shiu (1994)",
+             r"Mandelbrot (1963); Fama (1965); Koutrouvelis (1980); McCulloch (1986); Mantegna and Stanley (1995)",
+             r"Ramdas, Gr\"unwald, Vovk and Shafer (2023); Wang and Ramdas (2022); Waudby-Smith and Ramdas (2024)",
+             r"Augenblick and Rabin (2021); Kaunitz, Zhong and Kreiner (2017); Board of Banking Supervision (1995)"],
+            font_size=19)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on. Every number was computed by the "
-            "series' own code: Kenneth French's daily market since 1926, Binance's Bitcoin, and the Nikkei from the "
-            "St. Louis Fed."
+            "The textbook chapters this part covers, and the papers it draws on; the notes map every textbook section "
+            "to its chapter. Every number was computed by the series' own code: Kenneth French's daily market since "
+            "1926, Binance's Bitcoin, and the Nikkei from the St. Louis Fed."
         ):
             self.play(FadeIn(card))
             self.wait(3)

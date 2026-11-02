@@ -55,7 +55,7 @@ class Hook(VoiceoverScene):
     def live(self, L):
         fr = ["0.1", "0.2", "0.4", "1.0"]
         cols = [UNDER, KELLY, ALT, OVER]
-        g = axes([0, 4], [-2, 2.5], x_length=9.6, y_length=5.0, ylabel=r"wealth (log scale)", xticks=[],
+        g = axes([0, 4], [-2, 2.5], x_length=8.2, y_length=5.0, ylabel=r"wealth (log scale)", xticks=[],
                  yticks=[-2, -1, 0, 1, 2], yfmt=lambda u: {-2: r"\$0.01", -1: r"\$0.10", 0: r"\$1", 1: r"\$10",
                                                             2: r"\$100"}[int(u)], font_size=17)
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.35)
@@ -93,7 +93,7 @@ class Hook(VoiceoverScene):
         res = VGroup(*[label(rf"{100 * float(f):.0f}\%: {100 * b[f]['p_cap']:.0f}\% at the cap, "
                              rf"{100 * b[f]['p_bust']:.0f}\% bust", font_size=20, color=c_)
                        for f, c_ in zip(fr, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        res.to_corner(UR, buff=0.4).shift(DOWN * 0.9)
+        res.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.6)
         src = illustration(r"simulation: 160 players per column, the same 300 coin flips for all")
         with self.voiceover(
             "Before the theory, let the game play itself. Here are a hundred and sixty players in each of four columns. "
@@ -198,14 +198,13 @@ class Hook(VoiceoverScene):
             dots.add(d)
             labs.add(t)
         strip = VGroup(line, dots, labs).shift(UP * 1.6)
-        root = label(r"maximize expected utility", font_size=26, color=VALUE).move_to(DOWN * 0.9)
+        root = label(r"maximize expected utility", font_size=28, color=VALUE).move_to(DOWN * 1.0)
         kids = [(r"how much: Kelly, Merton, Samuelson", KELLY), (r"over time: Bellman, HJB, viscosity, BSDE", VALUE),
                 (r"against a crowd: mean-field games", ALT), (r"how people decide: prospect theory", OVER),
                 (r"learn it: reinforcement learning", GOOD)]
-        leaves = VGroup(*[label(t, font_size=18, color=c_) for t, c_ in kids]).arrange(RIGHT, buff=0.3)
-        if leaves.width > 13.2:
-            leaves.scale_to_fit_width(13.2)
-        leaves.move_to(DOWN * 2.6)
+        leaves = VGroup(*[label(t, font_size=22, color=c_) for t, c_ in kids])
+        VGroup(VGroup(*leaves[:3]).arrange(RIGHT, buff=0.5), VGroup(*leaves[3:]).arrange(RIGHT, buff=0.5)).arrange(
+            DOWN, buff=0.35).move_to(DOWN * 2.6)
         edges = VGroup(*[Line(root.get_bottom(), lf.get_top(), color=GREY_C, stroke_width=1.5) for lf in leaves])
         with self.voiceover(
             "How we got here. In 1738 Daniel Bernoulli proposed valuing a gamble by the logarithm of wealth. In 1944 "

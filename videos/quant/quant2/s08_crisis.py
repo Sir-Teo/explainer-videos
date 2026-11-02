@@ -16,64 +16,79 @@ def _x(d):
 class Crisis(VoiceoverScene):
     def construct(self):
         r = load("repo")
+        f = load("sofr_fan")
+        rc = load("reserve_curve")
         self.card()
-        self.rates(r)
+        self.fan(r, f)
         self.reserves(r)
-        self.file(r)
+        self.curve_fit(rc)
+        self.file(r, f)
 
     def card(self):
-        c = chapter_card(7, r"The day repo broke", r"What happens when the market's cash runs short?", part=PART)
-        with self.voiceover("Chapter seven. The day repo broke."):
+        c = chapter_card(12, r"The day repo broke", r"What happens when the market's cash runs short?",
+                         lit=(2019,), part=PART)
+        with self.voiceover("Chapter twelve. The day repo broke."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def rates(self, r):
+    def fan(self, r, f):
         x0, x1 = _x(20190826), _x(20191004)
-        g = axes([x0, x1], [1.5, 5.6], x_length=9.6, y_length=4.6, ylabel=r"overnight rate, percent a year",
+        g = axes([x0, x1], [1.5, 9.5], x_length=8.6, y_length=4.6, ylabel=r"overnight Treasury repo, percent a year",
                  xticks=[_x(20190903), _x(20190916), _x(20191001)], xfmt=lambda v: {_x(20190903): "3 Sep",
                                                                                       _x(20190916): "16 Sep",
                                                                                       _x(20191001): "1 Oct"}[int(v)],
-                 yticks=[2, 3, 4, 5], font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+                 yticks=[2, 4, 6, 8], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
-        lines = {}
-        for key, col in (("IOER", GREY_B), ("DFF", QC.GAIN), ("SOFR", RATE)):
-            d = np.asarray(r[key]["date"])
-            v = np.asarray(r[key]["value"])
-            m = (d >= 20190826) & (d <= 20191004)
-            xs = np.array([_x(z) for z in d[m]])
-            lines[key] = VMobject(stroke_width=3.5 if key == "SOFR" else 2.5, color=col).set_points_as_corners(
-                [ax.c2p(a, b) for a, b in zip(xs, v[m])])
-        leg = legend([(RATE, r"SOFR: overnight Treasury repo"), (QC.GAIN, r"effective fed funds rate"),
-                      (GREY_B, r"interest the Fed paid on bank reserves")], font_size=21).to_edge(RIGHT, buff=0.3)
-        leg.shift(UP * 2.0)
-        k = r["key"]
-        peak = MathTex(rf"{k['20190917']['sofr']:.2f}\%", font_size=40, color=LOSS).next_to(ax.c2p(_x(20190917), 5.25),
-                                                                                           RIGHT, buff=0.15)
-        nums = VGroup(*[MathTex(rf"\text{{{lab}}}\ \ {k[d]['sofr']:.2f}\%", font_size=28, color=RATE)
+        S = f["series"]
+
+        def xs(key):
+            return np.array([_x(z) for z in S[key]["date"]], float), np.asarray(S[key]["value"], float)
+        xa, p1 = xs("SOFR1")
+        _, p25 = xs("SOFR25")
+        _, p75 = xs("SOFR75")
+        _, p99 = xs("SOFR99")
+        _, med = xs("SOFR")
+        xi, ior = xs("IOER")
+        k = ValueTracker(0)
+
+        def fanmob():
+            n = max(int(k.get_value()), 2)
+            return VGroup(band(ax, xa[:n], p1[:n], p99[:n], RATE, 0.15), band(ax, xa[:n], p25[:n], p75[:n], RATE, 0.35),
+                          curve(ax, xa[:n], med[:n], RATE, stroke_width=3))
+        fm = always_redraw(fanmob)
+        il = curve(ax, xi, ior, GREY_B, stroke_width=2)
+        leg = legend([(RATE, r"SOFR: median; 25--75th and 1st--99th percentiles of the day's trades"),
+                      (GREY_B, r"interest the Fed paid on reserves")], font_size=18).to_edge(UP, buff=0.3).shift(RIGHT * 1.2)
+        key = f["key"]
+        nums = VGroup(*[MathTex(rf"\text{{{lab}: median}}\ {key[d]['SOFR']:.2f}\%,\ \text{{99th}}\ {key[d]['SOFR99']:.2f}\%",
+                                font_size=24, color=RATE)
                         for d, lab in (("20190913", "Fri 13"), ("20190916", "Mon 16"), ("20190917", "Tue 17"),
                                        ("20190918", "Wed 18"))]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        nums.next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
-        src = real_data(r"FRED (Federal Reserve Bank of St.\ Louis): SOFR, DFF, IOER, daily")
+        nums.to_edge(RIGHT, buff=0.3).shift(DOWN * 0.6)
+        src = real_data(r"FRED: SOFR and its percentiles (SOFR1, SOFR25, SOFR75, SOFR99), IOER; daily")
+        i17 = list(S["SOFR"]["date"]).index(20190917)
         with self.voiceover(
             "The crisis file for this part is a day few people outside finance noticed. In the summer of 2019 the "
             "overnight rates of the American money market sat in a tight band just above the interest the Federal "
-            "Reserve paid banks on their reserves, about two percent. <bookmark mark='a'/> On Monday the 16th of "
-            "September, two things drained cash at once: corporate taxes fell due, and buyers paid for a large "
-            "batch of new Treasury bonds. Repo rose. <bookmark mark='b'/> On Tuesday the 17th, SOFR, the overnight "
-            f"Treasury repo rate, printed {k['20190917']['sofr']:.2f} percent: more than double the previous Friday, "
-            "and some trades that day were done as high as nine. The fed funds rate broke above the top of the Fed's "
-            "own target range. <bookmark mark='c'/> That morning the New York Fed lent cash in repo for the first "
-            "time in a decade, and kept doing so for months. By Wednesday SOFR was back near two and a half."
+            "Reserve paid banks on their reserves. The New York Fed publishes not just SOFR, the median overnight "
+            "Treasury repo rate, but its spread across the day's trades: the fan. <bookmark mark='a'/> On Monday the "
+            "16th of September corporate taxes fell due and buyers paid for a large batch of new Treasuries, both "
+            "draining cash at once. The median barely moved; the top of the fan jumped to "
+            f"{key['20190916']['SOFR99']:.1f}. <bookmark mark='b'/> On Tuesday the whole fan lifted: the median printed "
+            f"{key['20190917']['SOFR']:.2f} percent, and the ninety-ninth percentile {key['20190917']['SOFR99']:.0f}. "
+            "That morning the New York Fed offered up to seventy-five billion dollars in repo, its first in a "
+            "decade, and dealers took fifty-three. By Thursday the fan had folded back."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(leg))
-            self.play(Create(lines["IOER"]), Create(lines["DFF"]))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(leg), Create(il))
+            self.add(fm)
+            self.play(k.animate.set_value(i17 - 1), run_time=5, rate_func=linear)
+            self.play(FadeIn(nums[0]))
             vo.wait_until("a")
-            self.play(Create(lines["SOFR"]), run_time=3)
-            self.play(FadeIn(nums[0]), FadeIn(nums[1]))
+            self.play(k.animate.set_value(i17), FadeIn(nums[1]), run_time=1.2)
             vo.wait_until("b")
-            self.play(FadeIn(peak, scale=1.3), FadeIn(nums[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(nums[3]))
+            self.play(k.animate.set_value(i17 + 1), FadeIn(nums[2]), run_time=1.2)
+            self.play(k.animate.set_value(len(xa)), FadeIn(nums[3]), run_time=3)
+        fm.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 
@@ -81,59 +96,121 @@ class Crisis(VoiceoverScene):
         d = np.asarray(r["reserves"]["date"])
         v = np.asarray(r["reserves"]["value"])
         xs = np.array([_x(z) for z in d])
-        g = axes([_x(20180101), _x(20201231)], [0, 3.4], x_length=9.0, y_length=4.2,
+        g = axes([_x(20180101), _x(20201231)], [0, 3.4], x_length=8.0, y_length=4.0,
                  ylabel=r"reserves banks hold at the Fed, \$ trillion", xticks=[_x(20180101), _x(20190101), _x(20200101),
                                                                             _x(20201231)],
                  xfmt=lambda vv: {_x(20180101): "2018", _x(20190101): "2019", _x(20200101): "2020",
-                                  _x(20201231): "2021"}[int(vv)], yticks=[0, 1, 2, 3], font_size=18)
+                                  _x(20201231): "2021"}[int(vv)], yticks=[0, 1, 2, 3], font_size=17)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         line = curve(ax, xs, v, CASH, stroke_width=3)
         low = Dot(ax.c2p(_x(r["reserves_low_date"]), r["reserves_low"]), radius=0.09, color=LOSS)
         ll = MathTex(rf"\${r['reserves_low']:.2f}\,\text{{tn}}", font_size=30, color=LOSS).next_to(low, DOWN, buff=0.15)
-        side = VGroup(
-            label(r"the Fed shrank its balance sheet,", font_size=24),
-            label(r"so banks held fewer reserves;", font_size=24),
-            label(r"the banks that had cash were not", font_size=24),
-            label(r"always free, or willing, to lend it", font_size=24),
-            label(r"(the explanation is still debated)", font_size=21, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(UP * 0.8)
+        rows = [
+            MathTex(r"s = r_{\text{repo}} - r_{\text{IOR}}", font_size=34, color=RATE),
+            MathTex(r"s(R) = a + b\,e^{-c(R - 1.3)}", font_size=34, color=QC.HOUSE),
+        ]
+        whys = [why(r"a bank lends reserves in repo only if it earns more than leaving them at the Fed", font_size=19),
+                why(r"flat when reserves are plentiful, steep when they are scarce", font_size=19)]
+        right = VGroup(rows[0], whys[0], rows[1], whys[1]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        for w in whys:
+            w.scale_to_fit_width(min(w.width, 4.4))
+        right.to_edge(RIGHT, buff=0.35).shift(UP * 0.8)
         with self.voiceover(
-            "Why did one tax date break the market? The answer is debated, but this is the background. Since 2017 "
-            "the Federal Reserve had been shrinking its balance sheet, and the reserves banks hold with it fell from "
-            f"about {r['reserves_2018']:.1f} trillion dollars to {r['reserves_low']:.2f} trillion the day after the "
-            "spike. <bookmark mark='a'/> There was still a lot of cash in the system, but not where it was needed, "
-            "and the banks that held it were constrained, by regulation and by their own caution, in how freely "
-            "they lent it. In March 2020 the same plumbing failed again, far worse, in the dash for cash."
+            "Why did one tax date break the market? Since 2017 the Federal Reserve had been shrinking its balance "
+            "sheet, and the reserves banks keep with it fell from about "
+            f"{r['reserves_2018']:.1f} trillion dollars to {r['reserves_low']:.2f} trillion the week of the spike. "
+            "<bookmark mark='a'/> A bank with spare reserves lends them in repo only if repo pays more than the Fed "
+            "pays on reserves. When reserves are plentiful, that spread costs nothing; when they are scarce, banks "
+            "hold on to them, and the price of cash rises steeply. That's a demand curve for reserves, and it can be "
+            "measured."
         ) as vo:
             self.play(FadeIn(g), Create(line), run_time=3)
             self.play(FadeIn(low), FadeIn(ll))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s_) for s_ in side], lag_ratio=0.3))
+            self.play(FadeIn(right))
         self.wait(0.4)
         self.clear_scene()
 
-    def file(self, r):
+    def curve_fit(self, rc):
+        R = np.asarray(rc["R"], float)
+        s = np.asarray(rc["s"], float)
+        path = np.asarray(rc["path"], float)
+        loss = np.asarray(rc["loss"], float)
+        boot = np.asarray(rc["boot_loss"], float)
+        grid = np.asarray(rc["grid"], float)
+        L = np.vstack([loss, boot[:, :len(loss)]])
+        steps = np.arange(len(loss))
+        ck = [0, 1, 2, 4, 8, len(loss) - 1]
+        lin = rc["linear"]
+
+        def frame(i):
+            th = path[min(ck[i], len(path) - 1)]
+            g = axes([1.3, 4.3], [-15, 85], x_length=5.6, y_length=3.8, xlabel=r"reserves, \$ trillion (weekly)",
+                     ylabel=r"SOFR $-$ IOR, basis points", xticks=[1.5, 2.5, 3.5], yticks=[0, 40, 80], font_size=15)
+            ax = g.ax
+            pts = VGroup(*[Dot(ax.c2p(a, min(b, 85)), radius=0.035, color=RATE, fill_opacity=0.7)
+                           for a, b in zip(R, s)])
+            fit = curve(ax, grid, np.clip(th[0] + th[1] * np.exp(-th[2] * (grid - 1.3)), -15, 85), QC.HOUSE)
+            ln = DashedLine(ax.c2p(1.3, np.polyval(lin, 1.3)), ax.c2p(4.3, np.polyval(lin, 4.3)), color=GREY_B,
+                            stroke_width=2)
+            return VGroup(g, pts, ln, fit)
+        rp = TrainingReplay(steps, L, frame, ck, ylabel=r"mean squared error (log)", xlabel=r"Gauss--Newton iteration",
+                            log_y=True, color=QC.HOUSE, left=LEFT * 3.3 + DOWN * 0.3, right=RIGHT * 3.6 + UP * 0.6,
+                            x_length=4.6, y_length=2.8)
+        tab = rc["table"]
+        res = VGroup(
+            MathTex(rf"\text{{fit MSE}}\ {rc['mse_fit']:.0f}\ \text{{vs linear}}\ {rc['mse_lin']:.0f}", font_size=26,
+                    color=QC.HOUSE),
+            MathTex(rf"R < \$1.5\text{{tn: mean }}{tab[0]['mean']:+.1f}\,\text{{bp, max }}{tab[0]['max']:+.1f}", font_size=24,
+                    color=RATE),
+            MathTex(rf"R > \$3.5\text{{tn: mean }}{tab[4]['mean']:+.1f}\,\text{{bp}}", font_size=24, color=RATE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.35)
+        src = note(r"FRED: SOFR, IOER/IORB, WRESBAL; weekly, April 2018 -- December 2021; band: 8 bootstrap resamples; "
+                   r"dashed: the linear baseline", font_size=15).to_edge(DOWN, buff=0.1)
+        with self.voiceover(
+            "Each dot is a week from 2018 to 2021: reserves across, the repo rate's spread over interest on reserves "
+            "up. Dots crawl left as reserves drain, and leap in September 2019. Fit the curve: a flat part plus an "
+            "exponential wall, by Gauss-Newton, starting from a guess. <bookmark mark='a'/> Watch it learn: within a "
+            "couple of iterations the curve bends into the wall, and the error drops; eight bootstrap resamples give "
+            f"the band. It beats a straight line, mean squared error {rc['mse_fit']:.0f} against "
+            f"{rc['mse_lin']:.0f}. <bookmark mark='b'/> Below one and a half trillion, the spread averaged "
+            f"{tab[0]['mean']:+.0f} basis points and reached {tab[0]['max']:+.0f}; above three and a half, it was "
+            f"{tab[4]['mean']:+.0f}. In September 2019 the system was sitting on the steep part, and didn't know it. "
+            "The Fed's answer since has been to keep reserves ample."
+        ) as vo:
+            self.play(FadeIn(rp), FadeIn(src))
+            vo.wait_until("a")
+            rp.play(self, run_time=6)
+            vo.wait_until("b")
+            self.play(FadeIn(res))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def file(self, r, f):
         k = r["key"]
+        fk = f["key"]
         c = crisis_card(r"17 September 2019", r"The day repo broke",
-                        r"Corporate tax payments and Treasury settlements drained cash from a system with reserves at a "
-                        r"multiyear low; overnight secured rates spiked, the fed funds rate left its target range, and "
-                        r"the New York Fed began lending in repo for the first time since 2008.",
+                        r"Corporate tax payments and Treasury settlements drained cash from a system with reserves on "
+                        r"the steep part of their demand curve; overnight secured rates spiked, the fed funds rate left "
+                        r"its target range, and the New York Fed lent in repo for the first time since 2008. Afonso, "
+                        r"Cipriani, Copeland, Kovner, La Spada and Martin (2021) trace it to reserves concentrated in a "
+                        r"few banks that were slow to lend them.",
                         stats=[(rf"{k['20190913']['sofr']:.2f}\%\to{k['20190917']['sofr']:.2f}\%", r"SOFR, Friday to Tuesday"),
-                               (rf"+{100 * (k['20190917']['sofr'] - k['20190917']['ioer']):.0f}\,\text{{bp}}",
-                                r"above the rate on reserves"),
-                               (rf"\${r['reserves_low']:.2f}\,\text{{tn}}", r"reserves, the next day")],
-                        width=11.0, font_size=23).move_to(UP * 0.6)
+                               (rf"{fk['20190917']['SOFR99']:.0f}\%", r"99th percentile, Tuesday"),
+                               (rf"\${r['reserves_low']:.2f}\,\text{{tn}}", r"reserves that week")],
+                        width=11.0, font_size=22).move_to(UP * 0.6)
         lesson = wrapped_label(r"every leveraged position in this series is funded overnight; the House's funding desk "
-                               r"charges SOFR plus a spread, and its stress tests include a day like this one (Part 41)",
-                               11.0, 23, QC.IDEA).next_to(c, DOWN, buff=0.5)
+                               r"charges SOFR plus a spread, and its stress tests include a day like this one; March "
+                               r"2020's dash for cash is Part 41", 11.0, 22, QC.IDEA).next_to(c, DOWN, buff=0.45)
         with self.voiceover(
             "The file. On the 17th of September 2019 the market's cheapest, safest loan, an overnight loan against "
-            f"Treasury bonds, cost {k['20190917']['sofr']:.2f} percent, "
-            f"{100 * (k['20190917']['sofr'] - k['20190917']['ioer']):.0f} basis points above what banks could earn by "
-            "simply leaving cash at the Fed. <bookmark mark='a'/> Every leveraged position in this series is "
-            "funded this way, overnight, again and again. The House's funding desk charges every backtest SOFR plus "
-            "a spread, and its stress tests include a day like this one."
+            f"Treasury bonds, cost {k['20190917']['sofr']:.2f} percent at the median, and some trades paid "
+            f"{fk['20190917']['SOFR99']:.0f}. The New York Fed's own researchers traced it to reserves concentrated in "
+            "a handful of large banks that were slow to lend them. <bookmark mark='a'/> Every leveraged position in "
+            "this series is funded this way, overnight, again and again. The House's funding desk charges every "
+            "backtest SOFR plus a spread, and its stress tests include a day like this one. Six months later, in "
+            "March 2020, the same plumbing failed again, far worse: that is Part forty-one."
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2))
             vo.wait_until("a")

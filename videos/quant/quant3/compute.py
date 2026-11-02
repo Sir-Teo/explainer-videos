@@ -517,7 +517,10 @@ def compute_pit() -> dict:
     ask = [20180630, 20200630]
     views = {str(t): [(f.period_end, f.value, f.filed) for f in store.history("KHC", "NetIncomeLoss", t)
                       if 20151231 <= f.period_end <= 20181231] for t in ask}
-    return _json({"firms": firms, "lags": np.array(lags_all), "khc_views": views,
+    ge = _annual(companyfacts(40545)["facts"], "sales")
+    planes = {"Kraft Heinz net income": [(e, f_, x) for e, v in kh.items() for f_, x in v if 20141231 <= e <= 20201231],
+              "General Electric revenue": [(e, f_, x) for e, v in ge.items() for f_, x in v if 20081231 <= e <= 20201231]}
+    return _json({"firms": firms, "lags": np.array(lags_all), "khc_views": views, "planes": planes,
                   "khc_restatements": store.restatements("KHC", "NetIncomeLoss"),
                   "rules": {"large accelerated": 60, "accelerated": 75, "other": 90}})
 
