@@ -69,8 +69,8 @@ class Hook(VoiceoverScene):
             "the same spread as the real thing, and adds it on. One of them is the American stock market, in a real "
             "year. <bookmark mark='a'/> Which one is real? Take a moment. They wander, they trend, they reverse, "
             "they look like charts that people draw lines on and tell stories about. <bookmark mark='b'/> If you "
-            "can't tell, you're in good company: in 1953 the statistician Maurice Kendall showed price charts to "
-            "economists, who could not tell them from chance either."
+            "can't tell, you're in good company: in 1959 Harry Roberts, at Chicago, drew charts from random numbers "
+            "and showed that they had the same head-and-shoulders patterns that chartists read in real ones."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(t[0]) for t in tops], lag_ratio=0.15), FadeIn(q))
             self.play(LaggedStart(*[Create(t[1]) for t in tops], lag_ratio=0.2, run_time=6), *[FadeIn(t[2]) for t in tops])

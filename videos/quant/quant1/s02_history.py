@@ -30,8 +30,8 @@ class History(VoiceoverScene):
                           r"their options, priced with a random walk; Poincar\'e's report; graded "
                           r"\textit{honorable}", width=6.0, font_size=23)
         c3 = history_card(1955, r"Leonard Savage, then Paul Samuelson",
-                          r"Savage finds Bachelier's thesis and sends postcards to economists asking whether they "
-                          r"know it; Samuelson does, and builds on it", width=6.0, font_size=23)
+                          r"Savage comes across Bachelier's work and sends postcards to economists asking whether "
+                          r"they know it; Samuelson tracks down the thesis and builds on it", width=6.0, font_size=23)
         cards = VGroup(c1, c2, c3).arrange(DOWN, buff=0.35, aligned_edge=LEFT).to_edge(LEFT, buff=0.6)
         sq = MathTex(r"\text{spread} \propto \sqrt{t}", font_size=56, color=QC.IDEA).to_edge(RIGHT, buff=1.2).shift(UP * 1.6)
         walk = MathTex(r"P_{t+1} = P_t + \varepsilon_{t+1}", font_size=48, color=REAL).next_to(sq, DOWN, buff=1.0)
@@ -47,9 +47,9 @@ class History(VoiceoverScene):
             "independent little moves, and used it to price options on them, decades before anyone else. His "
             "starting principle was blunt: the expectation of the speculator is zero. Poincaré's report praised "
             "it; the jury graded it honorable, and the mathematics of chance in markets went quiet for fifty "
-            "years. <bookmark mark='b'/> In the 1950s the statistician Leonard Savage found the thesis in a "
-            "library and sent postcards to economists asking if they knew it. Paul Samuelson did, and the random "
-            "walk entered economics."
+            "years. <bookmark mark='b'/> In the 1950s the statistician Leonard Savage came across Bachelier's work "
+            "in a library and sent postcards to economists asking if they knew it. Paul Samuelson tracked down the "
+            "thesis, and the random walk entered economics."
         ) as vo:
             self.play(FadeIn(c1, shift=RIGHT * 0.2))
             self.play(Write(sq))

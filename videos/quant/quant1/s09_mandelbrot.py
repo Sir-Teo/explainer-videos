@@ -26,7 +26,7 @@ class Mandelbrot(VoiceoverScene):
 
     def cotton(self):
         c1 = history_card(1963, r"Benoit Mandelbrot, \textit{Journal of Business}",
-                          r"``The variation of certain speculative prices'': cotton prices since 1816 fit a "
+                          r"``The variation of certain speculative prices'': changes in cotton prices fit a "
                           r"\emph{stable} law with tail exponent $\alpha \approx 1.7$, a distribution whose variance "
                           r"is infinite", width=6.4, font_size=23)
         c2 = definition_card(r"Stable law", r"A sum of independent copies has the same shape as one copy, rescaled. "
@@ -43,14 +43,14 @@ class Mandelbrot(VoiceoverScene):
         if pts.width > 6.0:
             pts.scale_to_fit_width(6.0).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "In 1963 Benoit Mandelbrot, then at IBM, looked at a century and a half of cotton prices and made a "
+            "In 1963 Benoit Mandelbrot, then at IBM, looked at the history of cotton prices and made a "
             "radical claim. Their changes fit not a bell curve but a stable law, with a tail exponent of about one "
             "point seven. <bookmark mark='a'/> A stable law keeps its shape when you add copies of it, as the bell "
             "curve does. But every stable law except the bell curve has an infinite variance. "
             "<bookmark mark='b'/> If Mandelbrot was right, the standard deviation of returns is a number that never "
             "settles down, tails never thin with the horizon, and the whole toolkit of modern finance, built on "
-            "variances, is built on sand. His student Eugene Fama's thesis supported him, and for a decade the "
-            "question was open."
+            "variances, is built on sand. Eugene Fama, then a doctoral student at Chicago, found support for him "
+            "in his thesis, and for a decade the question was open."
         ) as vo:
             self.play(FadeIn(c1, shift=RIGHT * 0.2))
             vo.wait_until("a")

@@ -139,8 +139,8 @@ class Thorp(VoiceoverScene):
             "one unit when the count is low and up to eight when it is high, and the game turns: "
             f"{100 * b['edge_spread_per_unit']:+.2f} percent of everything you bet. Small, but positive, and a "
             "professional plays thousands of hands. A fair game was not made favourable by a betting system. The "
-            "information was the edge; the betting only used it. Thorp's book, Beat the Dealer, sold more than a "
-            "million copies, and casinos began shuffling earlier."
+            "information was the edge; the betting only used it. Thorp's book, Beat the Dealer, became a "
+            "bestseller, and casinos changed their rules: more decks, earlier shuffles."
         ) as vo:
             self.play(FadeIn(card, shift=LEFT * 0.2))
             vo.wait_until("a")
@@ -171,7 +171,7 @@ class Thorp(VoiceoverScene):
             "Thorp took the same idea to Wall Street. His fund, Princeton Newport Partners, run with Jay Regan from "
             "1969 to 1988, hedged warrants and convertible bonds using his own pricing formulas. By his account it "
             "returned nineteen point one percent a year before fees and fifteen point one after, against ten point "
-            "two for the S and P five hundred, with remarkably few losing months. <bookmark mark='a'/> He will keep "
+            "two for the S and P five hundred. <bookmark mark='a'/> He will keep "
             "coming back. In Part eight, for his answer to how much to bet. In Part ten, for the warrant formula "
             "he used before Black and Scholes published theirs. In Part thirty-three, as an early statistical "
             "arbitrageur. And in the finale, where the question of this part comes back: can you beat the market?"

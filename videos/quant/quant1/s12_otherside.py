@@ -39,7 +39,7 @@ class OtherSide(VoiceoverScene):
                              r"insurance, a view, immediacy, or a mistake.", 12.0, 24, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Every time you buy, someone sells. If prices are fair, why would they? Because people trade for "
-            "different reasons. Hedgers want less risk. An airline buys its fuel in advance, a farmer sells his "
+            "different reasons. Hedgers want less risk. An airline buys its fuel in advance, a farmer sells their "
             "crop forward, a pension fund buys protection against a crash; they pay to be insured. "
             "<bookmark mark='a'/> Speculators want more of one particular risk, because they have a view, or think "
             "they do. <bookmark mark='b'/> Market makers want no view at all. They stand ready to buy and to sell, "
