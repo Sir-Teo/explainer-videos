@@ -177,7 +177,7 @@ class MarginModel(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(card))
             lab(self, card, [f"ewma_margin(r)[16 Oct 87] = {key['19871016']:.4f}",
-                             f"ewma_margin(r)[20 Oct 87] = {key['19871020']:.4f}"], direction=UP, aligned_edge=RIGHT)
+                             f"ewma_margin(r)[20 Oct 87] = {key['19871020']:.4f}"], direction=DOWN, aligned_edge=RIGHT)
         for mm in (bnd, bars):
             mm.clear_updaters()
         self.wait(0.4)
