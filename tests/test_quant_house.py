@@ -2284,9 +2284,10 @@ def test_deep_bsde_snap_linear_check():
     from explainer.quant.house import deep
 
     p = dict(deep.DEFAULT_RISK, d=10, delta=1.0)
-    r = deep.deep_bsde_snap(p, iters=300, batch=256, lr=0.05, seed=0, snap_at=(0, 300), n_snap=64)
+    # 300 steps leave u0 a few units short; 800 reach the Monte Carlo price to within a few cents
+    r = deep.deep_bsde_snap(p, iters=800, batch=256, lr=0.05, seed=0, snap_at=(0, 800), n_snap=64)
     mc, _ = deep.no_default_price(p, n=100000)
-    assert abs(r["u0"] - mc) < 1.5 and r["snaps"][300]["Ypath"].shape == (32, 41)
+    assert abs(r["u0"] - mc) < 1.5 and r["snaps"][800]["Ypath"].shape == (32, 41)
 
 
 def test_stopping_regions_last_date():
