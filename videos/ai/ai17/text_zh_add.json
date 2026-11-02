@@ -615,7 +615,22 @@
   "a Rubin \\textit{AI factory}: \\ $100$ MW for $40{,}000$ GPUs{,} \\\\ $\\approx 2.5$ kW each{,} all in": "一座Rubin \\textit{AI工厂}：\\ $100$ MW，$40{,}000$块GPU，\\\\ 每块$\\approx 2.5$ kW，全部算上",
   "one core of this computer \\ (Intel Xeon Processor @ 2.80GHz)": "本机的一个核心\\ （Intel Xeon Processor @ 2.80GHz）",
   "Llama 3.1's: \\ $\\approx 12$ million years": "Llama 3.1的：\\ 约$1200$万年",
-  "Hong Jia-Wei \\& H.~T.~Kung, \\ \\textit{the red-blue pebble game}": "洪加威\\ \\& 孔祥重（H.~T.~Kung），\\ \\textit{the red-blue pebble game}（红蓝卵石游戏）"
+  "Hong Jia-Wei \\& H.~T.~Kung, \\ \\textit{the red-blue pebble game}": "洪加威\\ \\& 孔祥重（H.~T.~Kung），\\ \\textit{the red-blue pebble game}（红蓝卵石游戏）",
+  "memory: \\ $32$-byte sectors, \\ eight $4$-byte words each": "内存：\\ 每扇区$32$字节，\\ 含八个$4$字节的数",
+  "aligned neighbours: \\ $4$ transactions": "对齐且相邻：\\ $4$次传输",
+  "schematic: \\ $32$ threads, \\ one $4$-byte load each; \\ compute capability $6.0+$": "示意：\\ $32$个线程各读$4$字节；\\ 计算能力$6.0+$",
+  "combined L1/shared: \\ $256$ KiB \\\\ shared-memory carveout: \\ up to $228$ KiB": "L1与共享内存合计：\\ $256$ KiB \\\\ 共享内存划分：\\ 最多$228$ KiB",
+  "round to nearest: \\ half a step; \\ normal values, \\ no overflow": "就近舍入：\\ 最多半个台阶；\\ 规格化数，\\ 不溢出",
+  "\\text{input reads per MAC}": "\\text{每次MAC的输入读取数}",
+  "one MAC $=$ multiply $+$ add \\\\ input reads only; \\ output writes excluded": "一次MAC $=$ 乘法 $+$ 加法 \\\\ 仅计输入读取；\\ 不含输出写入",
+  "illustrative: \\ $n$ a multiple of $T$, \\ $T\\times T$ threads; \\ no edge checks": "示例：\\ $n$是$T$的整数倍，\\ $T\\times T$个线程；\\ 省略边界检查",
+  "Rubin GPUs \\\\ (and Rubin CPX, for long prompts)": "Rubin GPU \\\\ （以及面向长提示的Rubin CPX）",
+  "Groq 3 LPX: \\\\ $40$ PB/s of SRAM per rack": "Groq 3 LPX：\\\\ 每个机柜$40$ PB/s的SRAM带宽",
+  "registers: \\ $64$K $\\times$ $4$ bytes $= 256$ KiB, \\ one cycle": "寄存器：\\ $64$K $\\times$ $4$字节$= 256$ KiB，\\ 一个周期",
+  "the tile kernel: \\ $32$ registers, \\ $8$ KiB shared: \\ $100\\%$": "分块内核：\\ $32$个寄存器，\\ $8$ KiB共享内存：\\ $100\\%$",
+  "a big-tile kernel: \\ $128$ registers, \\ $64$ KiB shared: \\ $25\\%$": "大块内核：\\ $128$个寄存器，\\ $64$ KiB共享内存：\\ $25\\%$",
+  "$65{,}536$ registers \\ ($256$ KiB)": "$65{,}536$个寄存器\\ （$256$ KiB）",
+  "up to $228$ KiB of shared memory": "最多$228$ KiB共享内存"
  },
  "patterns": [
   [

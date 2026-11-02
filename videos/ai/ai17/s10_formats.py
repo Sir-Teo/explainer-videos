@@ -7,6 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai17.common import (BYTEC, CPUC, EXPC, FLOPC, GPUC, MANC, PART, SIGNC, bit_strip, gflops, load)
 from videos.ai.ai17.specs import GPUS
+from videos.ai.ai17.compute import FORMATS
 
 SHOWN = ["FP32", "TF32", "BF16", "FP16", "E4M3", "E5M2", "E2M1"]
 NAMES = {"FP32": "FP32", "TF32": "TF32", "BF16": "BF16", "FP16": "FP16", "E4M3": r"FP8 E4M3", "E5M2": r"FP8 E5M2",
@@ -82,8 +83,9 @@ class Formats(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def derive(self):
-        f = load("formats")
-        r = f["rows"]
+        # These are published format limits, not the weight-rounding experiment.
+        # Keep this derivation independent of a missing formats cache.
+        r = {name: dict(m=values[1], max=values[2]) for name, values in FORMATS.items()}
         colors = {r"M": MANC, r"e": EXPC, r"u": MANC}
         rows = [
             cmath(r"\text{spacing in } [2^e, 2^{e+1})", r"=", r"2^{\,e - M}", colors=colors, font_size=36),
@@ -92,7 +94,8 @@ class Formats(VoiceoverScene):
             cmath(r"x_{\max}", r"=", r"(2 - 2^{-M}) \cdot 2^{\,e_{\max}}", colors=colors, font_size=36),
             cmath(r"x_{\max}(\text{E4M3})", r"=", r"1.75 \times 2^{8}", r"=", rf"{r['E4M3']['max']:g}", font_size=36),
         ]
-        whys = [why(r"$2^M$ evenly spaced values per power of two"), why(r"round to nearest: \ half a step"),
+        whys = [why(r"$2^M$ evenly spaced values per power of two"),
+                why(r"round to nearest: \ half a step; \ normal values, \ no overflow"),
                 why(r"the exponent sets the range"), why(r"E4M3 keeps one pattern for NaN: \ no $1.875$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.45, edge=6.8)
         tab = VGroup()
@@ -106,7 +109,8 @@ class Formats(VoiceoverScene):
         with self.voiceover(
             "Two numbers describe a format. <bookmark mark='a'/> With M mantissa bits, each power of two is cut into "
             "two to the M equal steps. <bookmark mark='b'/> Rounding to the nearest value is off by at most half a "
-            "step, so the relative error is at most two to the minus M plus one, the unit roundoff. That's "
+            "step. For normal values without overflow, the relative error is at most two to the negative of "
+            "the quantity M plus one, the unit roundoff. That's "
             "precision. <bookmark mark='c'/> The exponent bits set the range: the largest number is just under two "
             "times two to the largest exponent. <bookmark mark='d'/> For E4M3 that's 448, because one bit pattern "
             "is kept to mean not-a-number. FP16 tops out at 65,504, which is why training in FP16 needs care, and "

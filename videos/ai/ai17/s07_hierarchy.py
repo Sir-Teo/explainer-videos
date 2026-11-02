@@ -77,8 +77,8 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
                                                                                                       buff=0.3 * s2)
         s3 = g.sm.width * 2.4 / 14.22
         k3 = VGroup(
-            label(r"registers: \ $64$K $\times$ $4$ bytes $= 256$ KB, \ one cycle", font_size=24, color=REGC),
-            label(rf"shared memory and L1: \ $256$ KB, \ about ${H800_LAT['l1']:.0f}$ cycles", font_size=24,
+            label(r"registers: \ $64$K $\times$ $4$ bytes $= 256$ KiB, \ one cycle", font_size=24, color=REGC),
+            label(r"combined L1/shared: \ $256$ KiB \\ shared-memory carveout: \ up to $228$ KiB", font_size=24,
                   color=L1C),
             label(r"lanes and a tensor core in each quarter", font_size=24, color=FLOPC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).scale(s3).next_to(g.sm, RIGHT, buff=0.15 * s3 * 4)
@@ -88,8 +88,9 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
             f"stacks of high-bandwidth memory, DRAM dies piled on top of each other: {h['mem'] / 1e9:.0f} gigabytes, "
             f"read at {h['bw'] / 1e12:.2f} terabytes a second, but hundreds of cycles away. <bookmark mark='b'/> On "
             "the chip itself, a level-two cache of fifty megabytes, shared by all 132 streaming multiprocessors, "
-            "about half as far. <bookmark mark='c'/> Inside each multiprocessor: 256 kilobytes of shared memory, "
-            "which the programmer fills on purpose, about forty cycles away; <bookmark mark='d'/> and the "
+            "about half as far. <bookmark mark='c'/> Inside each multiprocessor: a combined L1 and shared-memory "
+            "pool of 256 kibibytes, of which up to 228 can be shared memory that the programmer fills on purpose; "
+            "<bookmark mark='d'/> and the "
             "registers, another 256 kilobytes, right next to the arithmetic, read every cycle. Each step down is "
             "smaller and closer, and much faster to read."
         ) as vo:
@@ -97,11 +98,15 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
             vo.wait_until("a")
             self.play(FadeIn(k1), FadeIn(k1b), Indicate(g.hbm, color=BYTEC, scale_factor=1.03))
             vo.wait_until("b")
-            self.play(frame_to(self, g.die, width=z2), FadeOut(tag), run_time=2.0)
+            self.play(Succession(
+                AnimationGroup(FadeOut(tag), FadeOut(k1), FadeOut(k1b), run_time=0.35),
+                AnimationGroup(frame_to(self, g.die, width=z2), run_time=1.65)), run_time=2.0)
             self.play(FadeIn(k2), FadeIn(k2b), Indicate(g.l2, color=L2C, scale_factor=1.02))
             vo.wait_until("c")
-            self.play(frame_to(self, center=g.sm.get_center() + RIGHT * g.sm.width * 0.7, width=g.sm.width * 2.4),
-                      run_time=2.5)
+            self.play(Succession(
+                AnimationGroup(FadeOut(k2), FadeOut(k2b), run_time=0.35),
+                AnimationGroup(frame_to(self, center=g.sm.get_center() + RIGHT * g.sm.width * 0.7,
+                                        width=g.sm.width * 2.4), run_time=2.15)), run_time=2.5)
             self.play(g.inner.animate.set_opacity(1), g.smem.animate.set_opacity(0.8), FadeIn(bg3), FadeIn(k3[1]),
                       FadeIn(k3[2]))
             vo.wait_until("d")

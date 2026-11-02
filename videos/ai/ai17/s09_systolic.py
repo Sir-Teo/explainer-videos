@@ -179,12 +179,12 @@ class Systolic(VoiceoverScene):
             cmath(r"t", r"=", r"i + j + k", colors=colors, font_size=40),
             cmath(r"t_{\text{last}}", r"=", r"(n-1) + (n-1) + (K-1)", colors=colors, font_size=40),
             cmath(r"\text{cycles}", r"=", r"K + 2n - 2", colors=colors, font_size=40),
-            cmath(r"\text{reads per operation}", r"=", r"\frac{2nK}{n^2 K}", r"=", r"\frac{2}{n}", colors=colors,
+            cmath(r"\text{input reads per MAC}", r"=", r"\frac{2nK}{n^2 K}", r"=", r"\frac{2}{n}", colors=colors,
                   font_size=38),
         ]
         whys = [why(r"cell $(i, j)$ meets $a_{ik}$ and $b_{kj}$ at cycle $t$: \ the skew"),
                 why(r"the last cell, \ the last term"), why(r"$= 10$ for our $4 \times 4$ example"),
-                why(r"each number read once, \ used by $n$ cells")]
+                why(r"one MAC $=$ multiply $+$ add \\ input reads only; \ output writes excluded")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.45, edge=6.8)
         # the skew, cell by cell: the cycle at which each cell of a 4 x 4 array receives its first term
         cells = VGroup()
@@ -236,7 +236,7 @@ class Systolic(VoiceoverScene):
         cv = curve(g.ax, d, util, GPUC, 3)
         k257 = int(np.argmin(np.abs(d - 257)))
         dot = glow_dot(g.ax.c2p(257, util[k257]), color=C.SURPRISE)
-        dl = label(rf"$d = 257$: \ ${100 * util[k257]:.0f}\%$", font_size=20, color=C.SURPRISE).next_to(dot, UP, buff=0.15)
+        dl = label(rf"$d = 257$: \ ${100 * util[k257]:.0f}\%$", font_size=20, color=C.SURPRISE).next_to(dot, RIGHT, buff=0.2)
         tag = note(r"computed: \ weights padded to whole $256 \times 256$ tiles").to_corner(DR, buff=0.2)
         cite_ = cite(r"N.~Jouppi et al., \ ISCA (2017); \ Google blog (May 2016)", corner=DL)
         # the chip's heart, drawn small: a 256 x 256 grid of multiply-adders (16 x 16 here, each standing for 16 x 16)

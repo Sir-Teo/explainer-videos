@@ -143,7 +143,7 @@ class Accelerators(VoiceoverScene):
         labs = VGroup()
         for k, (t, v, c_) in enumerate(vals):
             w = 7.0 * v / mx
-            y = 0.9 - 0.9 * k
+            y = 0.9 - 1.15 * k
             bars.add(Rectangle(width=w, height=0.55, stroke_width=0, fill_color=c_, fill_opacity=0.85)
                      .move_to([-3.4 + w / 2, y, 0]))
             labs.add(VGroup(label(t, font_size=22, color=c_).next_to([-3.4, y + 0.5, 0], RIGHT, buff=0.0),
