@@ -29,7 +29,7 @@ class Ross(VoiceoverScene):
 
     def card(self):
         c = chapter_card(6, r"Ross recovery, and its critique", r"Can option prices reveal real probabilities?",
-                         lit=(2015,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter six. Ross recovery, and its critique."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
@@ -73,7 +73,8 @@ class Ross(VoiceoverScene):
         sub = label(r"transition probabilities between 9 states of the economy (rows: today, columns: tomorrow)",
                     font_size=19, color=GREY_B).next_to(blocks, DOWN, buff=0.2)
         side = VGroup(
-            MathTex(rf"\text{{Ross's world: largest error }} {r['err1']:.0e}", font_size=28, color=CALL),
+            MathTex(rf"\text{{Ross's world: largest error }} < 10^{{{int(np.ceil(np.log10(max(r['err1'], 1e-16))))}}}", font_size=28,
+                    color=CALL),
             MathTex(rf"\text{{with permanent shocks: }} {r['err2']:.3f}", font_size=28, color=ARB),
             MathTex(rf"\text{{long-run consumption vs trend: true }} {100 * r['mean_true']:+.1f}\%,\ \text{{recovered }} "
                     rf"{100 * r['mean_rec2']:+.1f}\%", font_size=28, color=ARB),

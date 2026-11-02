@@ -14,7 +14,7 @@ class Density(VoiceoverScene):
         self.surface(d)
 
     def card(self):
-        c = chapter_card(5, r"The density inside the Surface", r"What does the market think could happen?", lit=(1978,),
+        c = chapter_card(5, r"The density inside the Surface", r"What does the market think could happen?",
                          part=PART)
         with self.voiceover("Chapter five. The density inside the Surface."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))

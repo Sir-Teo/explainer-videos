@@ -16,7 +16,7 @@ class MOT(VoiceoverScene):
 
     def card(self):
         c = chapter_card(7, r"Bounds without a model", r"What do vanilla prices alone imply for exotic ones?",
-                         lit=(1998,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter seven. Bounds without a model."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
