@@ -91,15 +91,18 @@ class HLP(VoiceoverScene):
                             label(name, font_size=22, color=col).next_to(r_, DOWN, buff=0.2)))
         head = label(r"average hedging error per option, held to expiry", font_size=26).to_edge(UP, buff=0.8)
         ratio = te["net"] / te["bs"]
+        pct = 100 * (ratio - 1)
         side = wrapped_label(rf"rebalanced daily on 200 fresh at-the-money options: the network's tracking error is "
-                             rf"{ratio:.1f} times the true formula's. HLP's networks hedged as well as Black--Scholes in "
+                             rf"within {pct:.0f}\% of the true formula's, learned from prices alone. HLP found the same in "
                              r"simulation, sometimes better, since rebalancing daily is itself an error; on S\&P 500 futures "
-                             r"options, 1987--1991, they beat it in many cases", 4.6, 20, GREY_A).to_edge(RIGHT, buff=0.5)
+                             r"options, 1987--1991, their networks beat Black--Scholes in many cases", 4.6, 20,
+                             GREY_A).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
             "The real test is the hedge. Two hundred fresh options, held to expiry and rebalanced daily, once with the "
             "true Black–Scholes delta and once with the network's own derivative. <bookmark mark='a'/> The network "
-            f"hedges with {ratio:.1f} times the tracking error of the formula that generated its data, learned from "
-            "prices alone. Hutchinson, Lo and Poggio's networks hedged as well as the formula in simulation, sometimes "
+            f"hedges almost exactly as well as the formula that generated its data: its tracking error is within "
+            f"{pct:.0f} percent, learned from prices alone. Hutchinson, Lo and Poggio's networks did the same in "
+            "simulation, sometimes "
             "better, because rebalancing once a day is itself an error; and on S&P 500 futures options from 1987 to "
             "1991, where Black–Scholes is itself wrong, they beat it in many cases. Thirty years later, this part asks "
             "what networks can do that formulas cannot."
