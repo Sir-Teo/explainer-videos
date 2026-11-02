@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai9.common import NEURON, PART, load, log_axes
+from videos.ai.ai9.plotting import log_plot_range, safe_log_values
 
 DCOL = {1: "#9BE37B", 2: "#F7D154", 4: "#58A6FF", 8: "#FF9F45", 16: "#D4A5FF", 64: "#FF6B8B"}
 
@@ -133,12 +134,15 @@ class Barron(VoiceoverScene):
     def experiment(self):
         b = load("barron")
         ns = np.asarray(b["mc_n"], float)
-        g = log_axes([0, 5], [-4, 0], 7.4, 4.6, center=[-1.6, -0.5, 0], xlabel=r"units \ (network) \ or points \ (grid)",
-                     ylabel=r"typical miss \ (log scale)", xticks=range(0, 6), yticks=range(-4, 1))
+        ylo, yhi = log_plot_range([b[f"grid{d}"] for d in (1, 2, 4, 8)]
+                                 + [b[f"mc{d}"] for d in (1, 4, 16, 64)])
+        tick_step = max(1, int(np.ceil((yhi - ylo) / 6)))
+        g = log_axes([0, 5], [ylo, yhi], 7.4, 4.6, center=[-1.6, -0.5, 0], xlabel=r"units \ (network) \ or points \ (grid)",
+                     ylabel=r"empirical RMSE \ (log scale)", xticks=range(0, 6), yticks=range(ylo, yhi + 1, tick_step))
         ax = g.ax
 
         def path(n, e, col, dashed=False):
-            m = curve(ax, np.log10(n), np.log10(np.maximum(e, 1e-4)), col, 4)
+            m = curve(ax, np.log10(n), safe_log_values(e), col, 4)
             return DashedVMobject(m, num_dashes=24) if dashed else m
 
         grids = {d: path(np.asarray(b[f"grid_n{d}"], float), np.asarray(b[f"grid{d}"]), DCOL[d], True)
@@ -150,13 +154,13 @@ class Barron(VoiceoverScene):
         for row in gl:
             row[0].become(DashedLine(row[0].get_start(), row[0].get_end(), color=row[0].get_color(), stroke_width=5,
                                      dash_length=0.08))
-        tag = note(r"computed: \ the Gaussian bump on $[-1, 1]^d$; \ grid: \ joining the dots").to_corner(DR, buff=0.2)
+        tag = note(r"computed: Gaussian on $[-1,1]^d$, $s^2=d/3$; \\ random units: mean RMSE of $4$ draws").to_corner(DR, buff=0.2)
         sl = {int(k): float(v) for k, v in b["mc_slope"].items()}
         gs = {int(k): float(v) for k, v in b["grid_slope"].items()}
         g8, g8n = float(np.asarray(b["grid8"])[-1]), int(np.asarray(b["grid_n8"])[-1])
         mc64 = float(np.asarray(b["mc64"])[-1])
         with self.voiceover(
-            "Here it is, computed. <bookmark mark='a'/> First the grid, in one, two, four and eight dimensions: the "
+            "Here it is, computed: empirical root mean squared error on uniform test inputs. <bookmark mark='a'/> First the grid, in one, two, four and eight dimensions: the "
             f"lines flatten, with slopes of {gs[1]:.1f}, {gs[2]:.1f}, {gs[4]:.2f} and {gs[8]:.2f}, close to minus two "
             f"over d. In eight dimensions, {g8n:,} points still miss by {g8:.3f}. <bookmark mark='b'/> Now n random "
             "cosine units, in one, four, sixteen and sixty-four dimensions. The four lines lie on top of each other, "
@@ -176,20 +180,21 @@ class Barron(VoiceoverScene):
     def theorem(self):
         th = theorem_card(r"Barron's bound",
                           r"if $C_f = \int |\omega|\, |\hat f(\omega)|\, d\omega$ is finite, \ a network with one hidden "
-                          r"layer of $n$ sigmoid units has \ $\int (f - f_n)^2\, d\mu \ \le\ (2 r C_f)^2 / n$ \ on a ball "
-                          r"of radius $r$: \ a rate that does not depend on the dimension", who=r"A.~R.~Barron (1993)",
+                          r"layer of $n$ sigmoid units, plus a constant, has \ $\int (f - f_n)^2\, d\mu \ \le\ (2 r C_f)^2 / n$ \ "
+                          r"for a probability measure $\mu$ on a radius-$r$ ball: \ a rate independent of dimension", who=r"A.~R.~Barron (1993)",
                           width=11.0, font_size=27, color=NEURON).move_to(UP * 1.6)
         notes_ = VGroup(
-            label(r"any $n$ functions fixed in advance do no better than $n^{-1/d}$ \ on this class: \\ the network "
-                  r"wins by choosing its units' directions to fit $f$", font_size=26, color=GREY_A),
+            label(r"uniform inputs on $[0,1]^d$, bounded spectral class: \\ any fixed $n$-function span has worst-case "
+                  r"squared $L^2$ error $\gtrsim_d n^{-2/d}$", font_size=26, color=GREY_A),
             label(r"the catch: \ $C_f$ can be enormous for rough functions; \\ and it says nothing about whether "
                   r"training finds the units", font_size=26, color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(DOWN * 1.7)
         with self.voiceover(
             "Barron's theorem says this for ordinary S-shaped units, for every function whose Fourier transform, "
             "weighted by frequency, has a finite total, C f: the squared miss is at most two r C f, squared, over n. "
-            "<bookmark mark='a'/> He also showed what a fixed basis can't do: any n functions chosen before you see "
-            "f, such as a grid's, can do no better than n to the minus one over d on this class. The network escapes "
+            "<bookmark mark='a'/> He also showed what a fixed basis can't do. For uniform inputs on a cube and a "
+            "fixed spectral bound, any n functions chosen before you see f have a worst-case squared error bounded "
+            "below by a constant times n to the minus two over d. The network escapes "
             "because it chooses the directions of its units to suit f. <bookmark mark='b'/> The catch: for rough, "
             "wiggly functions C f can be astronomically large, and the theorem says nothing about whether gradient "
             "descent will find the units. Still, it was the first hint of why networks work in high dimensions."

@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai9.common import GATE, NEURON, NORM, PART, PLAIN, RES, load
+from videos.ai.ai9.plotting import finite_plot_values, linear_plot_range
 
 VARIANT = {  # name on screen, colour
     "plain": (r"plain: \ no residual", PLAIN),
@@ -266,15 +267,15 @@ class Block(VoiceoverScene, ThreeDScene):
         final = {k: float(np.asarray(b[k])[-1, 1]) for k in kinds}
         steps = int(b["steps"])
         finite = [v for v in final.values() if np.isfinite(v)]
-        lo = math.floor(min(finite) * 2) / 2
-        hi = math.ceil(min(max(finite), 5.0) * 2) / 2
+        lo, hi = linear_plot_range([np.asarray(b[k])[:, 1] for k in kinds])
         g = axes([0, steps], [lo, hi], x_length=6.2, y_length=4.4, xlabel=r"training step",
                  ylabel=r"bits per character \ (held-out text)", xticks=[0, steps // 2, steps],
-                 yticks=[lo, (lo + hi) / 2, hi], center=[-2.6, -0.5, 0], font_size=18)
-        lines = {k: curve(g.ax, np.asarray(b[k])[:, 0], np.clip(np.nan_to_num(np.asarray(b[k])[:, 1], nan=hi), lo, hi),
+                 yticks=[lo, (lo + hi) / 2, hi], yfmt=lambda v: f"{v:.1f}", center=[-2.6, -0.5, 0], font_size=18)
+        lines = {k: curve(g.ax, np.asarray(b[k])[:, 0], finite_plot_values(np.asarray(b[k])[:, 1], lo, hi),
                           VARIANT[k][1], 3.5) for k in kinds}
         for k in ("post_ln", "pre_rms"):  # these lie on top of another variant's line: dashed, so both show
-            lines[k] = DashedVMobject(lines[k], num_dashes=40)
+            if lines[k].has_points():  # Manim cannot dash a wholly missing/diverged trajectory.
+                lines[k] = DashedVMobject(lines[k], num_dashes=40)
         rows = VGroup()
         for k in kinds:
             v = final[k]
@@ -304,7 +305,7 @@ class Block(VoiceoverScene, ThreeDScene):
                  "stability, which matters more as models grow. " if pl >= r_ - 0.01 else "")
         third = (f"The full modern block ends best, at {s_:.2f}." if best == "pre_rms_swiglu" else
                  f"The full modern block reaches {s_:.2f}; on this small task the best was {best_name}, at "
-                 f"{final[best]:.2f}, and differences of a few hundredths are within the noise of one run.")
+                 f"{final[best]:.2f}, and this single run cannot establish whether small differences are significant.")
         with self.voiceover(
             "Does each piece earn its place? We built the block up one piece at a time, as a character model on the "
             f"thirty novels: {int(b['depth'])} blocks deep, each version trained for {steps:,} steps on the same data, "

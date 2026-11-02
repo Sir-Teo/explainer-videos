@@ -125,7 +125,7 @@ class XOR(VoiceoverScene):
             "what these machines can compute. <bookmark mark='a'/> A single layer of trainable weights can't "
             "compute parity, and can't tell a connected figure from a disconnected one, unless some of its units see "
             "nearly the whole picture at once. <bookmark mark='b'/> Networks with more layers could do more, and they "
-            "knew it, but nobody knew how to train them. Of such machines, the authors wrote that it was an "
+            "knew it, but practical training of hidden units remained difficult. Of such machines, the authors wrote that it was an "
             "important research problem to elucidate, or reject, their intuitive judgment that the extension is sterile. "
             "<bookmark mark='c'/> Rosenblatt died in a boating accident in 1971. Money and students went to the "
             "symbolic AI of Part 2. <bookmark mark='d'/> Through the seventies only a few kept going; Kunihiko "
@@ -203,8 +203,8 @@ class XOR(VoiceoverScene):
         l0, l1 = float(losses[0]), float(losses[-1])
         solved, starts = int(d["solved"]), int(d["starts"])
         cur_img, cur_h = imgs[keep[0]], hid_picture(keep[0])
-        caveat = (f"One honest caveat: from {starts} random starts, {solved} found a solution like this. The others got "
-                  "stuck with one point wrong, in a local minimum of the loss. This is one that didn't."
+        caveat = (f"In this fixed training budget, {solved} of {starts} random starts reached perfect classification. "
+                  "The others did not reach it in that budget. This is one successful start."
                   if solved < starts else f"All {starts} random starts found a solution like this one.")
         with self.voiceover(
             "What a single unit can't do, two layers can. Put two units in the middle, hidden between the input and "

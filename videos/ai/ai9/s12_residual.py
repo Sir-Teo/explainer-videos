@@ -82,7 +82,8 @@ class Residual(VoiceoverScene):
     def curves(self):
         r = load("residual")
         P, R = (np.asarray(r[k]) for k in ("plain", "residual"))
-        ax = Axes(x_range=[0, P[-1, 0], 500], y_range=[0.4, 1.0, 0.1], x_length=8.0, y_length=4.4, tips=False,
+        accuracy_lo = max(0., math.floor(float(min(P[:, 2].min(), R[:, 2].min())) * 10) / 10)
+        ax = Axes(x_range=[0, P[-1, 0], 500], y_range=[accuracy_lo, 1.0, 0.1], x_length=8.0, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.6, -0.5, 0])
         yl = VGroup(*[MathTex(rf"{int(round(100 * v))}\%", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in (0.5, 0.75, 1.0)])
@@ -93,7 +94,7 @@ class Residual(VoiceoverScene):
         names = VGroup(label(rf"$40$ plain layers: \ ${100 * pf:.0f}\%$", font_size=26, color=PLAIN),
                        label(rf"$40$ residual layers: \ ${100 * rf:.0f}\%$", font_size=26, color=RES))
         names.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.6, 0.8, 0])
-        same = label(r"same width, \\ same optimizer, \\ same steps", font_size=24, color=GREY_A).next_to(names, DOWN, buff=0.6)
+        same = label(r"same width, optimizer and steps \\ different branch initialization", font_size=24, color=GREY_A).next_to(names, DOWN, buff=0.6)
         same.align_to(names, LEFT)
         tag = note(r"computed").to_corner(DR, buff=0.2)
         first = int(R[np.argmax(R[:, 2] > 0.99), 0]) if (R[:, 2] > 0.99).any() else None
@@ -104,7 +105,7 @@ class Residual(VoiceoverScene):
         with self.voiceover(
             "Here it is on the spirals, with forty layers of thirty-two units. <bookmark mark='a'/> The plain stack "
             f"{plain_says}. <bookmark mark='b'/> The same forty layers with residual connections {res_says}. Same "
-            "width, same optimizer, same number of steps."
+            "width, same optimizer, same number of steps, but different initialization: the residual branch starts smaller. This comparison changes both the skip connection and initialization."
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), FadeIn(tag))
             vo.wait_until("a")
@@ -162,7 +163,7 @@ class Residual(VoiceoverScene):
                          .next_to(frames_[j], UP, buff=0.12) for j, n in enumerate(nets)])
         bl = VGroup(*[label(r"layer $1$ \ $\longrightarrow$ \ layer $40$", font_size=18, color=GREY_B)
                       .next_to(b_, DOWN, buff=0.1) for b_ in base])
-        gl = label(r"how much gradient reaches each layer \ (log scale)", font_size=20, color=GREY_A).move_to([0, by + BH + 0.25, 0])
+        gl = label(r"weight-gradient norm in each layer \ (log scale)", font_size=20, color=GREY_A).move_to([0, by + BH + 0.25, 0])
         t = ValueTracker(0)
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=30,
                                             color=WHITE).move_to([0, cy + 0.6, 0]))
@@ -172,15 +173,16 @@ class Residual(VoiceoverScene):
                14: "a hundred trillion", 15: "a quadrillion"}.get(e, f"ten to the {e}")
         rr = 10 ** float(gn["residual"][0].max() - gn["residual"][0].min())
         fade = float(gn["residual"][0].mean() - gn["residual"][-1].mean())
+        fade_words = (f"has decreased by a factor of {10 ** fade:.1f}" if fade >= 0 else
+                      f"has increased by a factor of {10 ** -fade:.1f}")
         with self.voiceover(
             "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says "
-            "about every point of the plane; below, how much gradient reaches each of its forty layers, on a log "
+            "about every point of the plane; below, the norm of the weight gradient in each of its forty layers, on a log "
             f"scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the "
             f"way down: the first layer gets more than {big} times less than the last. The residual stack's "
             f"gradients are all about the same size, within a factor of {rr:.0f}, because each block adds to a "
             "stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual "
-            "stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of "
-            f"{'ten' if round(fade) == 1 else ['a hundred', 'a thousand', 'ten thousand', 'a hundred thousand', 'a million'][min(round(fade), 6) - 2]}"
+            f"stack's answer bends to follow the spirals, and the geometric mean of its weight-gradient norms {fade_words}"
             ", as there is less and less left to fix. The plain stack's answer stays one flat colour, the same "
             "everywhere, and its gradients only fade further."
         ) as vo:
@@ -235,7 +237,7 @@ class Residual(VoiceoverScene):
             item([r"1997: \ the LSTM's constant error carousel"], GREY_A),
             item([r"May 2015: \ highway networks", r"(Srivastava, Greff \& Schmidhuber)"], GREY_A),
             item([r"Dec 2015: \ ResNet, \ $152$ layers, \ wins ImageNet"], RES),
-            item([r"2019: \ GPT-2 scales each block's", r"starting weights by $1/\sqrt{N}$"], GREY_A),
+            item([r"2019: \ GPT-2 scales residual weights", r"$1/\sqrt{N}$, \ $N$ residual layers"], GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.7, 0.0, 0])
         cite_ = cite(r"A.~Veit, M.~Wilber \& S.~Belongie, \textit{Residual Networks Behave Like Ensembles of Relatively "
                      r"Shallow Networks} (2016)", corner=DL)
@@ -248,8 +250,8 @@ class Residual(VoiceoverScene):
             "that most of the gradient flows through the short ones. <bookmark mark='d'/> The idea had ancestors: "
             "the LSTM's constant error carousel in 1997, and the highway networks of Rupesh Srivastava, Klaus Greff "
             "and Juergen Schmidhuber, months before ResNet. ResNet won ImageNet with a hundred and fifty-two layers. "
-            "And GPT-2 shrank each block's starting weights by one over the square root of the number of blocks, so "
-            "the stream doesn't grow with depth."
+            "And GPT-2 scaled residual-layer weights at initialization by one over the square root of the number "
+            "of residual layers, accounting for accumulation along the stream."
         ) as vo:
             self.play(FadeIn(cite_))
             step(0)

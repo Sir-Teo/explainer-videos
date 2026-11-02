@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import FWD, HIST, NEURON, PART, WEIGHT, unit_circle
+from videos.ai.ai9.common import (FWD, HIST, NEURON, PART, WEIGHT, prose_history_card, prose_label,
+                                  unit_circle)
 
 
 class Neurons(VoiceoverScene):
@@ -61,6 +62,13 @@ class Neurons(VoiceoverScene):
         setl = MathTex(settings["and"][0], font_size=34, color=WEIGHT).move_to([-3.3, -2.75, 0])
         setl2 = MathTex(settings["or"][0], font_size=34, color=WEIGHT).move_to(setl)
         notl = label(r"NOT: \ one input, \ $w = -1$, \ $\theta = 0$", font_size=30, color=WEIGHT).move_to([3.5, -2.85, 0])
+        not_input = ins[0].copy().move_to([-5.7, 0, 0]).set_fill(FWD, opacity=0.5)
+        not_digit = MathTex("1", font_size=40).move_to(not_input)
+        not_name = MathTex(r"x", font_size=34, color=GREY_A).next_to(not_input, LEFT, buff=0.15)
+        not_edge = Arrow(not_input.get_right(), body.get_left(), buff=0.05, color=GREY_C, stroke_width=3)
+        not_weight = MathTex(r"w=-1", font_size=30, color=WEIGHT).next_to(not_edge, UP, buff=0.12)
+        not_settings = MathTex(r"w=-1,\quad\theta=0", font_size=34, color=WEIGHT).move_to(setl)
+        not_rule = cmath(r"y", r"=", r"1-x,\quad x\in\{0,1\}", font_size=38).move_to(rule)
         cite_ = cite(r"W.~S.~McCulloch \& W.~Pitts, \textit{A Logical Calculus of the Ideas Immanent in Nervous "
                      r"Activity} (1943)", corner=DL)
 
@@ -90,7 +98,8 @@ class Neurons(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowArrow(e) for e in edges], lag_ratio=0.2), FadeIn(wl), FadeIn(body))
             vo.wait_until("b")
-            self.play(GrowArrow(oarr), FadeIn(outc), FadeIn(yl), FadeIn(digit_out), FadeOut(defc), Write(rule))
+            self.play(GrowArrow(oarr), FadeIn(outc), FadeIn(yl), FadeIn(digit_out),
+                      Succession(FadeOut(defc, run_time=0.35), Write(rule, run_time=1.65)))
             vo.wait_until("c")
             self.play(FadeIn(head), Create(hline), FadeIn(setl))
             for i in range(4):
@@ -101,7 +110,12 @@ class Neurons(VoiceoverScene):
             for i in range(4):
                 self.play(*fire(i, 3), FadeIn(cells[(i, 3)]), run_time=0.5)
             vo.wait_until("e")
-            self.play(FadeIn(notl))
+            self.play(FadeIn(notl), FadeOut(VGroup(ins, names, digits_in, edges, wl)),
+                      FadeIn(VGroup(not_input, not_digit, not_name, not_edge, not_weight)),
+                      Transform(digit_out, MathTex("0", font_size=40).move_to(outc)),
+                      outc.animate.set_fill("#121722", opacity=1), Transform(setl, not_settings),
+                      Transform(rule, not_rule), head.animate.set_opacity(0.35), hline.animate.set_opacity(0.35),
+                      *[cell.animate.set_opacity(0.35) for cell in cells.values()])
         self.wait(0.3)
         self.clear_scene()
 
@@ -114,10 +128,11 @@ class Neurons(VoiceoverScene):
         syn = Line(a.get_right(), b.get_left(), color=WEIGHT, stroke_width=2)
         w = ValueTracker(2.0)
         syn.add_updater(lambda m: m.set_stroke(width=w.get_value()))
-        quote = wrapped_label(r"``When an axon of cell A is near enough to excite a cell B and repeatedly or "
+        quote_width = 6.0 if zh() else 6.4
+        quote = prose_label(r"``When an axon of cell A is near enough to excite a cell B and repeatedly or "
                               r"persistently takes part in firing it, some growth process or metabolic change takes "
                               r"place in one or both cells such that A's efficiency, as one of the cells firing B, is "
-                              r"increased.''", 6.4, 28, WHITE)
+                              r"increased.''", quote_width, 28, WHITE)
         src = label(r"D.~O.~Hebb, \textit{The Organization of Behavior} (1949), p.~62", font_size=22, color=GREY_B)
         qc = VGroup(quote, src).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.3, 0.5, 0])
         head = label(r"1949: \ Donald Hebb, \ a psychologist, \ asks where learning comes from", font_size=32,
@@ -178,13 +193,13 @@ class Neurons(VoiceoverScene):
                      label(r"$8$ response \\ units", font_size=24, color=FWD).next_to(R, DOWN, buff=0.25))
         cap[2].shift(RIGHT * 0.2)
         tag = note(r"schematic").next_to(VGroup(retina, R), UP, buff=0.35).align_to(retina, LEFT)
-        c1 = history_card(1958, r"Frank Rosenblatt, \ Cornell Aeronautical Laboratory: \ the perceptron",
+        c1 = prose_history_card(1958, r"Frank Rosenblatt, \ Cornell Aeronautical Laboratory: \ the perceptron",
                           r"simulated on an IBM 704: \ after $50$ trials it told cards marked on the left from cards "
                           r"marked on the right", width=6.0, color=HIST).move_to([3.75, 1.6, 0])
-        c2 = history_card(r"8 July 1958", r"\textit{The New York Times}: \ ``New Navy Device Learns by Doing''",
+        c2 = prose_history_card(r"8 July 1958", r"\textit{The New York Times}: \ ``New Navy Device Learns by Doing''",
                           r"the Navy expects it ``will be able to walk, talk, see, write, reproduce itself and be "
                           r"conscious of its existence''", width=6.0, color=C.SURPRISE).move_to([3.75, -1.3, 0])
-        c3 = history_card(1960, r"The Mark I Perceptron, \ shown in June 1960",
+        c3 = prose_history_card(1960, r"The Mark I Perceptron, \ shown in June 1960",
                           r"$400$ photocells, \ $512$ association units, \ $8$ response units; \ the weights were "
                           r"potentiometers turned by electric motors", width=6.0, color=HIST).move_to([3.75, -1.3, 0])
         with self.voiceover(
@@ -223,7 +238,7 @@ class Neurons(VoiceoverScene):
                 cmath(r"w", r"\leftarrow", r"w + \eta\,(y - w \cdot x)\, x", colors=colors, font_size=42)]
         whys = [why(r"the squared error on one example"), why(r"chain rule"), why(r"a small step downhill")]
         step = ladder(self, rows, whys, keep=3, top=0.7, x=1.2, buff=0.6, edge=6.9)
-        hc = history_card(1960, r"Bernard Widrow \& Ted Hoff, \ Stanford: \ ADALINE",
+        hc = prose_history_card(1960, r"Bernard Widrow \& Ted Hoff, \ Stanford: \ ADALINE",
                           r"an adaptive linear neuron, \ trained by least mean squares", width=5.6,
                           color=HIST).move_to([3.6, 2.4, 0])
         sgd = label(r"every example, \ in proportion to the error: \\ stochastic gradient descent \ (Part 11)",

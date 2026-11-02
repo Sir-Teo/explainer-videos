@@ -6,6 +6,14 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai9.common import HINGE, NEURON, PART, WEIGHT, load, log_axes
 
 
+from videos.ai.ai9.plotting import clip_y_segments
+
+
+def viewport_curve(ax, xs, ys, lo, hi, color, stroke_width):
+    return VGroup(*[curve(ax, run[:, 0], run[:, 1], color, stroke_width)
+                    for run in clip_y_segments(xs, ys, lo, hi)])
+
+
 class Universal(VoiceoverScene):
     def construct(self):
         self.card()
@@ -80,7 +88,7 @@ class Universal(VoiceoverScene):
 
         def parts(n):
             P = np.asarray(h[f"parts{n}"])
-            return VGroup(*[curve(ax, xs, np.clip(p, -2.2, 2.2), NEURON, 1.6).set_stroke(opacity=0.55) for p in P])
+            return VGroup(*[viewport_curve(ax, xs, p, -2.2, 2.2, NEURON, 1.6).set_stroke(opacity=0.55) for p in P])
 
         def knots(n):
             return VGroup(*[Line(ax.c2p(k, -2.2), ax.c2p(k, -2.0), color=HINGE, stroke_width=3)
@@ -186,10 +194,10 @@ class Universal(VoiceoverScene):
         r = lambda t: np.maximum(t, 0)  # noqa: E731
         h1, h2, h3 = r(x - a_) / hw, -2 * r(x - b_) / hw, r(x - c_) / hw
         cols = (NEURON, C.MODEL_Q, NEURON)
-        hs = [curve(ax, x, np.clip(hh, -1.6, 2.0), cc, 3) for hh, cc in zip((h1, h2, h3), cols)]
+        hs = [viewport_curve(ax, x, hh, -1.6, 2.0, cc, 3) for hh, cc in zip((h1, h2, h3), cols)]
         bump = curve(ax, x, h1 + h2 + h3, C.BITS, 5)
-        tex = cmath(r"\max(0, x - a) - 2\max(0, x - b) + \max(0, x - c)", font_size=28).next_to(ax, UP, buff=0.15)
-        bl = label(r"three hinges: \ a bump", font_size=24, color=C.BITS).next_to(ax, DOWN, buff=0.15)
+        tex = cmath(r"\frac{\max(0, x - a) - 2\max(0, x - b) + \max(0, x - c)}{b-a}", font_size=28).next_to(ax, UP, buff=0.15)
+        bl = label(r"three hinges: \ unit-height bump, \ $b-a=c-b$", font_size=24, color=C.BITS).next_to(ax, DOWN, buff=0.15)
         # bumps at evenly spaced points, each as tall as the curve there, add up to the curve joined dot to dot
         hd = load("hinges")
         xs, yy = np.asarray(hd["xs"]), np.asarray(hd["y"])

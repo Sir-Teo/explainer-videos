@@ -390,44 +390,11 @@ ZH = {
     '"Train it on Part 1\'s thirty novels':
         "用梯度下降，在第1部分的30部小说上训练它，损失就用第1部分的交叉熵。曲线下面，是它在训练的每个时刻写出来的东西，总是用同一段开头、同一串随机数。<bookmark mark='a'/>{early}<bookmark mark='c'/>{end}",
 
-    "f\"By the end it reaches {nn:.2f} bits per character, past":
-        "到最后，它达到每字符{nn:.2f}比特，超过了Kneser–Ney的{kn:.2f}。",
-
-    "f\"By the end it reaches {nn:.2f} bits per character: better than Part 1's best counting model":
-        "到最后，它达到每字符{nn:.2f}比特：比第1部分最好的计数模型，{p1:.2f}，要好，但还不及Kneser–Ney的{kn:.2f}。只用这么点算力，最好的计数方法仍是个难缠的对手。",
-
-    "f\"By the end it reaches {nn:.2f} bits per character: within {nn - p1:.2f}":
-        "到最后，它达到每字符{nn:.2f}比特：和第1部分最好的计数模型，{p1:.2f}，只差{nn - p1:.2f}，离Kneser–Ney的{kn:.2f}还有距离。只用这么点算力，最好的计数方法仍是个难缠的对手。",
-
     '"Bengio\'s team found that their best results came from combining':
-        "本吉奥的团队发现，他们最好的结果，来自把网络和一个计数模型结合起来：对两者的预测取平均。<bookmark mark='a'/>这个权重是在留出的文本上选定的，从不在测试段落上选。<bookmark mark='b'/>{said}",
-
-    "f'Together, they reach {mix:.2f} bits: better than either alone":
-        '两者合起来，达到{mix:.2f}比特：比任何一个单独用都好，因为它们犯的错误不一样。在测试段落上，有{100 * wins:.0f}%的字符，是网络比计数模型更有把握。',
-
-    "f'Together, they reach {mix:.2f} bits, no better than the best":
-        '两者合起来，达到{mix:.2f}比特，并不比两者中较好的那个更好。',
+        "本吉奥的团队发现，他们最好的结果，来自把网络和一个计数模型结合起来：对两者的预测取平均。<bookmark mark='a'/>这里的权重是在验证文本的前20万个字符上选定的，评分目标是从零编号的第24到第199999个位置，不在测试段落上选。<bookmark mark='b'/>{said}",
 
     'And the vectors the network scores each next character with':
         "还有网络给每个下一个字符打分时用的那些向量，没有人设计过它们，它们却自己组织了起来。沿着第7部分讲过的两个主方向来看，<bookmark mark='a'/>表现相似的字符，聚在一起：小写字母和小写字母在一起，大写字母和大写字母在一起，数字和数字在一起，标点占一个角落。这又是第3部分的词向量，只不过这一次，是作为预测的副产品学出来的。",
-
-    "'On the scoreboard, two new rows: the first network, and the network with counting, ' + top_row":
-        '记分牌上，添了两行新的：第一个网络，以及加上计数的网络，{top_row}。{gap}',
-
-    "f'{behind:.2f} bits behind the best row above them'":
-        '比它们上面最好的那一行还差{behind:.2f}比特',
-
-    'the best machine on the board before GPT-2':
-        '在GPT-2之前，它是记分牌上最好的机器',
-
-    'the best machine on the board so far':
-        '它是目前记分牌上最好的机器',
-
-    "f\"<bookmark mark='a'/> But it's still far behind GPT-2.":
-        "<bookmark mark='a'/>但它离GPT-2还差得很远。它只看得到{d['n_ctx']}个字符，而且所有的事，都得由一个隐藏层来做。本系列剩下的部分，讲的就是怎样缩小这个差距。",
-
-    "f\"<bookmark mark='a'/> It sees only {d['n_ctx']} characters":
-        "<bookmark mark='a'/>它只看得到{d['n_ctx']}个字符，而且所有的事，都得由一个隐藏层来做。第1部分的大模型还没有填进这张记分牌，它们会显示还有多远的路要走。",
 
     "Here's what it writes, from Part 5's prompt and three others":
         "这是它写出来的东西，接着第5部分的那段前文，还有另外三段前文往下写：<bookmark mark='a'/>看起来像英语，也像一个个单词，但还说不通。",
@@ -435,15 +402,6 @@ ZH = {
     # ------------------------------------------------------------------ Outro
     '"Let\'s take stock.':
         "我们来盘点一下。一个单元，就是一个加权和加一个阈值；只要有一条直线能分开数据，感知机就一定能从错误中把它学出来。一层做不了异或；两层可以，而反向传播往回扫一遍就能训练它们。一个隐藏层能逼近任何曲线，而对足够光滑的函数，所需单元的数目不会随维数爆炸。深度能把空间折成指数级多的小块。权重必须从混沌的边缘出发，对ReLU是n分之2，否则信号就会消失或爆炸；残差流和归一化，让梯度能流过很多层。{last}",
-
-    'And a small network, trained on our books, beat every counting model':
-        '而一个小小的网络，在我们的书上训练之后，打败了记分牌上所有的计数模型。',
-
-    "f'And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits":
-        '而一个小小的网络，在我们的书上训练之后，和最好的计数模型只差{nn_b - kn_b:.2f}比特，和它混合之后，打败了记分牌上所有的计数模型。',
-
-    "f'And a small network, trained on our books, ended {nn_b - kn_b:.2f} bits":
-        '而一个小小的网络，在我们的书上训练之后，比最好的计数模型差了{nn_b - kn_b:.2f}比特。',
 
     'All of this comes back.':
         '这些都会再回来。在空间和时间上共享权重，就得到第10部分的卷积网络和循环网络。网络变大时，权重和学习率的尺度该怎么定，是第11和第12部分的主题。残差流是第13部分Transformer的主干，也是第30部分我们观察模型内部时读取的东西。归一化会在注意力内部再次出现。门控MLP，复制很多份，就成了第16部分的专家。而学到的嵌入，这里是字符的，后面会变成词元、图像和声音的嵌入。',
@@ -457,6 +415,22 @@ ZH = {
     "Simon Prince's Understanding Deep Learning is the clearest modern textbook":
         '西蒙·普林斯的《理解深度学习》是最清楚的现代教材，而且可以免费阅读。感谢收看，我们第10部分再见。',
 }
+
+# Scoring qualifications: exact cohorts, unchanged original numerical results.
+ZH.update({
+    'f"By the end it reaches {nn:.2f} bits per character on 21,382 passage targets':
+        '到最后，它在测试段落的21382个目标上达到每字符{nn:.2f}比特：从零编号的第24到第21405个位置。这段文本在训练过程中也受到了监测。',
+
+    'f"On the same 21,382 passage targets, the mixture reaches':
+        '在同样的21382个测试段落目标上，混合模型达到每字符{mix:.2f}比特，{comparison}。其中{100 * wins:.0f}%的目标，网络赋给实际下一个字符的概率高于Kneser–Ney。这不是预测准确率，而与这些目标对齐的Kneser–Ney单独得分没有保存。',
+
+    'Here are two separate result groups.':
+        "这里分成两组结果。网络和它的混合模型评分的是同样的21382个目标。历史上的Kneser–Ney和无穷元混合模型评分的是21399个目标。<bookmark mark='a'/>起始位置不同，因此这两组结果不能用来相互排名。网络只能看到24个字符，并且只有一个隐藏层。",
+
+    'f"And our small neural model scores':
+        '而我们的小型神经模型达到每字符{nn_b:.2f}比特，它的混合模型达到{mix_b:.2f}比特，针对的都是同样的21382个测试段落目标。先前的计数结果使用不同的目标范围，因此不能据此对两组结果作受控排名。',
+
+})
 
 PHRASES = {
     # the depth chapter's verdicts
@@ -489,3 +463,9 @@ PHRASES = {
     'pre-RMSNorm without the gate': '不带门控的前置RMSNorm',
     'the full block': '完整的块',
 }
+
+PHRASES.update({"lower than the network alone": "低于单独的网络",
+                "not lower than the network alone": "并不低于单独的网络"})
+
+from videos.ai.ai9.math_zh_overrides import ZH as _MATH_ZH
+ZH.update(_MATH_ZH)

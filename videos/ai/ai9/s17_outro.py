@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer import narration_credit
@@ -8,6 +10,8 @@ from videos.ai.ai9.common import (BWD, CLS_A, CLS_B, CRIT, HINGE, NEURON, PART, 
                                   load, region_image)
 from videos.ai.ai9.s08_depth import fold_picture
 from videos.ai.ai9.s11_chaos import chi_image
+from videos.ai.ai9.scoring import score_range
+from videos.ai.ai9.plotting import log_plot_range, safe_log_values
 
 
 class Outro(VoiceoverScene):
@@ -53,13 +57,14 @@ class Outro(VoiceoverScene):
                     HINGE))
         # 4. Barron
         b = load("barron")
-        a4 = axes_([0, 5, 1], [-4, 0, 1])
+        b_lo, b_hi = log_plot_range([b[f"grid{d}"] for d in (1, 4, 8)] + [b["mc64"]])
+        a4 = axes_([0, 5, 1], [b_lo, b_hi, 1])
         lines = VGroup(a4)
         for d, col in ((1, "#9BE37B"), (4, "#58A6FF"), (8, "#FF9F45")):
-            lines.add(DashedVMobject(curve(a4, np.log10(b[f"grid_n{d}"]), np.log10(np.maximum(b[f"grid{d}"], 1e-4)), col, 2.5),
+            lines.add(DashedVMobject(curve(a4, np.log10(b[f"grid_n{d}"]), safe_log_values(b[f"grid{d}"]), col, 2.5),
                                      num_dashes=12))
-        lines.add(curve(a4, np.log10(b["mc_n"]), np.log10(b["mc64"]), "#FF6B8B", 3))
-        out.append((lines, r"Barron: \ $1/\sqrt{n}$ in any $d$", NEURON))
+        lines.add(curve(a4, np.log10(b["mc_n"]), safe_log_values(b["mc64"]), "#FF6B8B", 3))
+        out.append((lines, r"cosine demo: \ RMSE $\sim 1/\sqrt{n}$", NEURON))
         # 5. folds
         f = load("fold")
         out.append((Group(fold_picture(np.asarray(f["fold4"]), TH * 0.95)), r"depth folds the plane", HINGE))
@@ -68,18 +73,24 @@ class Outro(VoiceoverScene):
         out.append((Group(chi_image(m["phase_chi"], TW * 0.95, TH * 0.95)), r"the edge of chaos", CRIT))
         # 7. residual
         r = load("residual")
-        a7 = axes_([0, 1500, 500], [0.4, 1, 0.2])
+        accuracy_lo = max(0., math.floor(float(min(r["plain"][:, 2].min(), r["residual"][:, 2].min())) * 10) / 10)
+        a7 = axes_([0, 1500, 500], [accuracy_lo, 1, 0.2])
         out.append((VGroup(a7, curve(a7, r["plain"][:, 0], r["plain"][:, 2], PLAIN, 2.5),
                            curve(a7, r["residual"][:, 0], r["residual"][:, 2], RES, 3)), r"residual streams", RES))
         # 8. the neural language model's training
         d = load("lm")
         cv = np.asarray(d["curve"])
-        a8 = axes_([0, cv[-1, 0], 10000], [1.6, 4.6, 1])
-        out.append((VGroup(a8, curve(a8, cv[:, 0], np.clip(cv[:, 2], 1.6, 4.6), C.NEURAL, 3)),
-                    rf"a neural LM: \ ${d['passage_bits']:.2f}$ bits", C.NEURAL))
+        low, high = score_range(cv[:, 2])
+        a8 = axes_([0, cv[-1, 0], 10000], [low, high, 1])
+        out.append((VGroup(a8, curve(a8, cv[:, 0], cv[:, 2], C.NEURAL, 3)),
+                    rf"neural LM: ${d['passage_bits']:.2f}$ bits/char \\ targets $24$--$21405$", C.NEURAL))
         tiles = Group()
         for pic, cap, col in out:
             box, c = frame(cap, col)
+            if cap.startswith("neural LM:"):
+                c.scale_to_fit_width(min(c.width, TW))
+                if c.height > 0.6:
+                    c.scale_to_fit_height(0.6)
             pic.move_to(box.get_center() + UP * 0.22)
             if pic.width > TW:
                 pic.width = TW
@@ -92,18 +103,11 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
-        from videos.ai.ai9.s16_lm import load_kn
-
-        lm, kn = load("lm"), load_kn()
-        nn_b, kn_b, mix_b = float(lm["passage_bits"]), float(kn["best_bits"]), float(lm["mix_bits"])
-        if nn_b < kn_b:
-            last = "And a small network, trained on our books, beat every counting model on the scoreboard."
-        elif mix_b < kn_b:
-            last = (f"And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits of the best counting "
-                    "model, and mixed with it, beat every counting model on the scoreboard.")
-        else:
-            last = (f"And a small network, trained on our books, ended {nn_b - kn_b:.2f} bits short of the best "
-                    "counting model.")
+        lm = load("lm")
+        nn_b, mix_b = float(lm["passage_bits"]), float(lm["mix_bits"])
+        last = (f"And our small neural model scores {nn_b:.2f} bits per character; its mixture scores {mix_b:.2f}, "
+                "on the same 21,382 passage targets. Earlier counting results use a different target range, "
+                "so they do not establish a controlled ranking against these results.")
         with self.voiceover(
             "Let's take stock. A unit is a weighted sum and a threshold, and the perceptron learns one from its "
             "mistakes, provably, whenever a line separates the data. One layer can't do XOR; two can, and "

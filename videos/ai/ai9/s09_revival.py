@@ -48,7 +48,7 @@ class Revival(VoiceoverScene):
                      font_size=44, colors={r"\delta^{1}": BWD, r"\,\delta^{L}": BWD}).move_to([-1.4, 0.6, 0])
         prod_l = label(r"$D_l$: \ the slopes of layer $l$'s units, \ $\sigma'(z^l) \le \tfrac14$ for a sigmoid", font_size=28,
                        color=GREY_A).next_to(prod, DOWN, buff=0.35)
-        tag = note(r"computed: \ $50$ sigmoid layers of $256$, \ weights $U[-1/\sqrt{n}, 1/\sqrt{n}]$").to_corner(DR, buff=0.2)
+        tag = note(r"computed: \ $50$ sigmoid layers of $256$, \ Gaussian weights, variance $1/(3n)$").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Through the nineties, backpropagation worked for networks with one or two hidden layers. Deeper ones "
             "barely trained. <bookmark mark='a'/> In 1991 Sepp Hochreiter, a student in Munich, worked out why. The "

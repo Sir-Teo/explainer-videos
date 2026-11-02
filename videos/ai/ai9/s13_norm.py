@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai9.common import HIST, NEURON, NORM, PART, RES, load
+from videos.ai.ai9.plotting import log_plot_range, safe_log_values, linear_plot_range, finite_plot_values
 
 POST, PRE = C.SURPRISE, C.INTERVAL
 
@@ -150,7 +151,7 @@ class Norm(VoiceoverScene):
                 cmath(r"\frac{\partial\, \mathrm{LN}}{\partial h}", r"=", r"\frac{1}{\sigma}\big(I - \tfrac1d \mathbf{1}"
                       r"\mathbf{1}^{\top} - \hat u \hat u^{\top}\big)", font_size=34)]
         whys = [why(r"RMSNorm: \ gain $1$, \ $\epsilon=0$, \ $h\ne0$"), why(r"quotient rule; \ $\hat h = h / \|h\|$"),
-                why(r"stretching $h$ changes nothing"), why(r"LayerNorm: \ blind to shifts too")]
+                why(r"stretching $h$ changes nothing"), why(r"$\hat u=(h-\bar h\mathbf1)/\|h-\bar h\mathbf1\|$; \ $\sigma>0$")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-3.6, buff=0.5, edge=6.9)
         d = int(n["d"])
         sv_ln, sv_rms = np.asarray(n["sv_ln"]), np.asarray(n["sv_rms"])
@@ -210,22 +211,20 @@ class Norm(VoiceoverScene):
         eqs = VGroup(VGroup(post_eq, post_l).arrange(DOWN, buff=0.12), VGroup(pre_eq, pre_l).arrange(DOWN, buff=0.12))
         eqs.arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.35)
         gp, gq = np.asarray(b["gnorm0_post_ln"]), np.asarray(b["gnorm0_pre_ln"])
-        lo = math.floor(np.log10(min(gp.min(), gq.min())) - 0.2)
-        hi = math.ceil(np.log10(max(gp.max(), gq.max())) + 0.2)
+        lo, hi = log_plot_range([gp, gq])
         g1 = axes([1, depth], [lo, hi], x_length=5.2, y_length=3.0, xlabel=r"block", ylabel=r"gradient at the start \ (log)",
                   xticks=[1, depth], yticks=list(range(lo, hi + 1)), yfmt=lambda v: rf"10^{{{int(v)}}}",
                   center=[-3.4, -1.3, 0], font_size=18)
         ks = np.arange(1, depth + 1)
-        c_post = curve(g1.ax, ks, np.log10(gp), POST, 3.5)
-        c_pre = curve(g1.ax, ks, np.log10(gq), PRE, 3.5)
+        c_post = curve(g1.ax, ks, safe_log_values(gp), POST, 3.5)
+        c_pre = curve(g1.ax, ks, safe_log_values(gq), PRE, 3.5)
         P, Q = np.asarray(b["post_ln"]), np.asarray(b["pre_ln"])
-        ymax = float(np.nanmax(np.r_[P[:, 1], Q[:, 1]]))
-        ytop = math.ceil(min(ymax, 8.0))
-        g2 = axes([0, int(b["steps"])], [1.5, ytop], x_length=5.2, y_length=3.0, xlabel=r"step",
-                  ylabel=r"bits per character \ (held-out text)", xticks=[0, int(b["steps"])], yticks=[2, ytop],
+        ylow, ytop = linear_plot_range([P[:, 1], Q[:, 1]])
+        g2 = axes([0, int(b["steps"])], [ylow, ytop], x_length=5.2, y_length=3.0, xlabel=r"step",
+                  ylabel=r"bits per character \ (held-out text)", xticks=[0, int(b["steps"])], yticks=[ylow, ytop], yfmt=lambda v: f"{v:.1f}",
                   center=[3.4, -1.3, 0], font_size=18)
-        t_post = curve(g2.ax, P[:, 0], np.clip(P[:, 1], 1.5, ytop), POST, 3.5)
-        t_pre = curve(g2.ax, Q[:, 0], np.clip(Q[:, 1], 1.5, ytop), PRE, 3.5)
+        t_post = curve(g2.ax, P[:, 0], finite_plot_values(P[:, 1], ylow, ytop), POST, 3.5)
+        t_pre = curve(g2.ax, Q[:, 0], finite_plot_values(Q[:, 1], ylow, ytop), PRE, 3.5)
         tag = note(rf"computed: \ ${depth}$ blocks, \ a character model on the novels, \ no warmup").to_corner(DR, buff=0.15)
 
         def box(tex, pos, col):
