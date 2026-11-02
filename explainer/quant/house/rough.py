@@ -105,10 +105,21 @@ def rough_heston_cf(u, T, v0, lam, theta, nu, rho, H, n=200):
     """The characteristic function of log(S_T / F) in rough Heston with alpha = H + 1/2 (El Euch and Rosenbaum 2019):
     phi(u) = exp(theta lam I^1 h(T) + v0 I^{1 - alpha} h(T)), h from the fractional Riccati equation."""
     alpha = H + 0.5
-    t, h = frac_riccati(u, T, alpha, lam, rho, nu, n=n)
-    I1 = np.array([_frac_integral(hh, t, 1) for hh in h])
-    I1a = np.array([_frac_integral(hh, t, 1 - alpha) for hh in h])
-    return np.exp(theta * lam * I1 + v0 * I1a)
+    u = np.atleast_1d(np.asarray(u, complex))
+    out = np.zeros(len(u), complex)
+    # frequencies where even the calmest variance leaves |phi| < e^-40 contribute nothing to a price, and there the
+    # explicit Adams scheme is unstable (the Riccati equation is stiff in u^2): skip them
+    v_lo = max(min(v0, theta), 1e-4) * 0.25
+    keep = 0.5 * v_lo * T * (u.real ** 2) < 40
+    if keep.any():
+        with np.errstate(all="ignore"):
+            t, h = frac_riccati(u[keep], T, alpha, lam, rho, nu, n=n)
+        I1 = np.array([_frac_integral(hh, t, 1) for hh in h])
+        I1a = np.array([_frac_integral(hh, t, 1 - alpha) for hh in h])
+        with np.errstate(all="ignore"):
+            z = np.exp(theta * lam * I1 + v0 * I1a)
+        out[keep] = np.where(np.isfinite(z), z, 0.0)
+    return out
 
 
 def lifted_heston_cf(u, T, v0, lam, theta, nu, rho, H, N=20, rN=None, n_steps=400):
