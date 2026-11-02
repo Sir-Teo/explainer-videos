@@ -42,7 +42,7 @@ class TensorParallel(VoiceoverScene):
         eq1 = VGroup(X, MathTex(r"\times", font_size=34), A, MathTex(r"=", font_size=34), Y).arrange(RIGHT, buff=0.25)
         eq1.move_to([-3.4, 1.6, 0])
         f1 = label(r"split $A$ by columns: \ no communication", font_size=22, color=GREY_A).next_to(eq1, DOWN, buff=0.25)
-        act = label(r"SwiGLU acts on each column alone: \ still local", font_size=22, color=GREY_A)
+        act = label(r"SwiGLU: \ each matched gate/value pair stays on one GPU", font_size=22, color=GREY_A)
         act.next_to(f1, DOWN, buff=0.15)
         Ycopy = VGroup(Y1.copy(), Y2.copy()).arrange(RIGHT, buff=0.0)
         eq2 = VGroup(Ycopy, MathTex(r"\times", font_size=34), Bm, MathTex(r"=", font_size=34), Z1,
@@ -52,13 +52,16 @@ class TensorParallel(VoiceoverScene):
         f2.next_to(eq2, DOWN, buff=0.25)
         colors = {r"f": COMM, r"g": COMM}
         side = VGroup(
-            label(r"Megatron-LM's MLP, \ on $t$ GPUs:", font_size=24, color=WHITE),
-            cmath(r"Z", r"=", r"g\Big(\sum_{i} \mathrm{SwiGLU}\big(f(X)\,A_i\big)\, B_i\Big)", colors=colors, font_size=30),
+            label(r"Megatron-style MLP, \ on $t$ GPUs:", font_size=24, color=WHITE),
+            cmath(r"A_i", r"=", r"[G_i\mid U_i],\quad Y_i=\mathrm{SiLU}(XG_i)\odot(XU_i)",
+                  font_size=20),
+            cmath(r"Z", r"=", r"g\Big(\mathrm{SwiGLU}\big(f(X)\,A_i\big)\, B_i\Big)",
+                  colors=colors, font_size=30),
             label(r"$f$: \ identity forward, \ all-reduce backward", font_size=20, color=COMM),
             label(r"$g$: \ all-reduce forward, \ identity backward", font_size=20, color=COMM),
             label(r"one all-reduce each way, \ per MLP", font_size=22, color=COMM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.7, 0.4, 0])
-        hist = cite(r"Shoeybi et al., Megatron-LM (NVIDIA, 2019)", corner=DR, font_size=17)
+        hist = cite(r"Shoeybi et al., Megatron-LM (2019); \ SwiGLU: \ Shazeer (2020)", corner=DR, font_size=17)
         # the layer being split, whole, until Megatron's version of it takes its place
         whole = VGroup(label(r"one MLP, \ on one GPU:", font_size=24, color=GREY_A),
                        cmath(r"Z", r"=", r"\mathrm{SwiGLU}(X A)\, B", font_size=40)).arrange(DOWN, buff=0.3)
@@ -69,7 +72,8 @@ class TensorParallel(VoiceoverScene):
             "how in 2019. Take the MLP: Z equals X times A, a nonlinearity, then times B. <bookmark mark='a'/> Split "
             "A by "
             "columns, half on each GPU: each computes its half of Y from the whole input, with no communication. "
-            "<bookmark mark='b'/> The nonlinearity acts on each column alone, so it stays local too. <bookmark "
+            "<bookmark mark='b'/> For SwiGLU, each column shard keeps matching gate and value columns together, "
+            "so the paired product stays local too. <bookmark "
             "mark='c'/> "
             "Now split B by rows. Each GPU multiplies its half of Y by its half of B and gets a full-size partial "
             "result; "

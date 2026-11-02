@@ -20,8 +20,8 @@ def lines() -> list[str]:
         P = load("published")
         out.append(f"* From published figures: Llama 3.1's 6ND = {P['llama_6nd']:.3g} FLOP (reported 3.8e25); its MFU "
                    f"from Table 4's TFLOP/s over 989: {', '.join(f'{100 * m:.1f}%' for m in P['llama_mfu'])} (reported "
-                   f"43/41/38%); one unplanned interruption every {P['llama_mtbf_h']:.2f} h, about once in "
-                   f"{P['llama_gpu_mtbf_years']:.1f} years per GPU; a full checkpoint ≈ {P['llama_ckpt_s']:.0f} s, Young's "
+                   f"43/41/38%); one unplanned job interruption every {P['llama_mtbf_h']:.2f} h; "
+                   f"idealized maximum-size checkpoint write ≈ {P['llama_ckpt_s']:.0f} s, illustrative Young's "
                    f"interval {P['llama_young_s'] / 60:.1f} min; PaLM's MFU without attention {100 * P['palm_mfu']:.1f}%; "
                    f"DeepSeek-V3 ${P['dsv3_usd'] / 1e6:.3f}M, {P['dsv3_days_per_T']:.2f} days per trillion tokens on 2,048 "
                    f"GPUs; 16 bytes/parameter: Llama 3.1 {P['mem16']['llama3'] / 1e12:.2f} TB (≥ {P['h100_needed']} "
@@ -108,7 +108,7 @@ def lines() -> list[str]:
                    f"448/{S8['tile_max']:.2f}).")
     if have("precision_acc"):
         A = load("precision_acc")
-        out.append(f"* FP16 with {A['accum']}-way accumulation: " +
+        out.append(f"* FP16 gradient-scale surrogate (loss divisor {A['accum']}, gradients restored before update): " +
                    "; ".join(f"{k} {min(v):.3f}–{max(v):.3f}" for k, v in A["final"].items()) + ".")
     if have("stability"):
         S = load("stability")

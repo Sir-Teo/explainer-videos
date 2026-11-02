@@ -16,7 +16,7 @@ class Faults(VoiceoverScene):
         self.simulated()
 
     def card(self):
-        card = chapter_card(17, r"When hardware fails", r"Sixteen thousand GPUs never all work at once: \ how often "
+        card = chapter_card(17, r"When hardware fails", r"At sixteen thousand GPUs, interruptions are routine: \ how often "
                             r"should a run save itself?", part=PART)
         with self.voiceover("Chapter seventeen. When hardware fails."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
@@ -42,7 +42,7 @@ class Faults(VoiceoverScene):
                    font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
         nums = VGroup(
             label(rf"one every ${P['llama_mtbf_h']:.1f}$ hours", font_size=26, color=REMOVED),
-            label(rf"each GPU: \ about once in ${P['llama_gpu_mtbf_years']:.1f}$ years", font_size=24, color=GPU),
+            label(r"job interruptions include hardware, software and network faults", font_size=22, color=GPU),
             label(rf"${L['hardware_share']}\%$ hardware; \ only ${L['manual']}$ needed a person; \ over "
                   rf"${L['effective']}\%$ of the time training", font_size=22, color=GREY_A),
             label(rf"and the weather: \ ${L['diurnal'][0]}$--${L['diurnal'][1]}\%$ slower at midday; \ tens of "
@@ -55,10 +55,9 @@ class Faults(VoiceoverScene):
             "GPUs above "
             "all, then their memory chips, software bugs, network switches and cables. <bookmark mark='b'/> That is "
             "one "
-            f"interruption every {P['llama_mtbf_h']:.1f} hours. Yet each GPU on its own failed about once in "
-            f"{P['llama_gpu_mtbf_years']:.1f} years: the problem is not the parts, it is that there are sixteen "
-            "thousand of "
-            "them, and any one stops the whole job. <bookmark mark='c'/> Thanks to automation, only three failures "
+            f"interruption every {P['llama_mtbf_h']:.1f} hours. This is a job-level rate, including software and "
+            "network faults; it does not measure the lifetime of an individual GPU. With sixteen thousand GPUs "
+            "working synchronously, a single failure can require the whole job to restart. <bookmark mark='c'/> Thanks to automation, only three failures "
             "needed a "
             "person, and the run spent more than ninety percent of its time training. <bookmark mark='d'/> Even the "
             "weather "
@@ -92,7 +91,7 @@ class Faults(VoiceoverScene):
         ]
         whys = [why(r"saving every $\tau$ costs $\delta$; \ a failure loses $\tau/2$ on average", font_size=19),
                 why(r"minimize", font_size=19), why(r"Young (1974)", font_size=19),
-                why(r"Llama 3's numbers", font_size=19)]
+                why(r"illustrative maximum-size checkpoint", font_size=19)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.0, buff=0.45, edge=6.9)
         delta = label(rf"$\delta$: \ $16{{,}}384$ GPUs $\times$ up to $4$ GB each, \ at $2$ TB/s \ $\approx "
                       rf"{P['llama_ckpt_s']:.0f}$ s", font_size=21, color=GPU).move_to([-2.2, -3.35, 0])
@@ -127,8 +126,10 @@ class Faults(VoiceoverScene):
             "zero. <bookmark mark='c'/> The best interval is the square root of two delta M: John Young's rule, from "
             "1974. <bookmark mark='d'/> For Llama 3: checkpoints of up to four gigabytes per GPU, storage that wrote "
             "two "
-            f"terabytes a second, so a full save took about {P['llama_ckpt_s']:.0f} seconds; with a failure every "
-            f"{P['llama_mtbf_h']:.1f} hours, save every {P['llama_young_s'] / 60:.0f} minutes or so."
+            f"terabytes a second. If every GPU writes that maximum at the sustained rate, the idealized save cost is "
+            f"{P['llama_ckpt_s']:.0f} seconds; with a job interruption every "
+            f"{P['llama_mtbf_h']:.1f} hours, the illustrative optimum is {P['llama_young_s'] / 60:.0f} minutes. "
+            "These are modeled timings, not reported checkpoint or pause measurements."
         ) as vo:
             step(0)
             self.play(FadeIn(src), GrowArrow(tline), FadeIn(tsch))

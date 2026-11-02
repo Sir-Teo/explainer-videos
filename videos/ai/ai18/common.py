@@ -237,7 +237,7 @@ def gantt(ops, p, total, width=11.0, row_h=0.5, gap=0.12, font_size=14, unit=1.0
                             fill_opacity=0.25).move_to([width / 2, y, 0]))
     names = VGroup(*[label(rf"GPU {s}", font_size=18, color=GPU).next_to(lanes[s], LEFT, buff=0.15) for s in range(p)])
     rects = VGroup()
-    starts = []
+    starts, ends = [], []
     for (dev, kind, chunk, mb, a, b) in ops:
         y = -dev * (row_h + gap)
         col = KIND_C[kind]
@@ -249,22 +249,29 @@ def gantt(ops, p, total, width=11.0, row_h=0.5, gap=0.12, font_size=14, unit=1.0
             r = VGroup(r, t)
         rects.add(r)
         starts.append(a)
+        ends.append(b)
     g.add(lanes, names, rects)
-    g.rects, g.starts, g.lanes, g.names, g.scale_x = rects, starts, lanes, names, sc * unit
+    g.rects, g.starts, g.ends = rects, starts, ends
+    g.total = total
+    g.lanes, g.names, g.scale_x = lanes, names, sc * unit
     return g
 
 
 def fill_gantt(scene, g, run_time=4.0):
     """Reveal the operations in order of start time, as if time were running."""
     order = sorted(range(len(g.rects)), key=lambda i: g.starts[i])
-    T = max(g.starts) + 1e-9
+    T = g.total
     cursor = Line(g.lanes.get_corner(UL) + UP * 0.1, g.lanes.get_corner(DL) + DOWN * 0.1, color=YELLOW,
                   stroke_width=2).set_x(g.lanes.get_left()[0])
     scene.add(cursor)
     anims = [cursor.animate(run_time=run_time, rate_func=linear).set_x(g.lanes.get_left()[0] + g.lanes.width)]
     for i in order:
-        anims.append(Succession(Wait(run_time * g.starts[i] / T * 0.97), FadeIn(g.rects[i], run_time=0.25)))
-    scene.play(*anims, run_time=run_time + 0.3)
+        anims.append(Succession(Wait(run_time * g.starts[i] / T),
+                                GrowFromEdge(g.rects[i], LEFT, run_time=run_time * (g.ends[i] - g.starts[i]) / T,
+                                             rate_func=linear)))
+    # The cursor sets the scene duration. A play-level run_time would stretch
+    # every short Succession to that duration, moving its simulated finish.
+    scene.play(*anims)
     scene.remove(cursor)
 
 
@@ -281,7 +288,10 @@ def log2_axis(lo=-40, hi=18, width=12.0, ticks=(-40, -30, -24, -20, -14, -10, 0,
         x = x0 + (e - lo) * sc
         g.add(Line([x, -0.07, 0], [x, 0.07, 0], color=GREY_C, stroke_width=1.5))
         g.add(MathTex(rf"2^{{{e}}}", font_size=font_size, color=GREY_B).move_to([x, -0.32, 0]))
-    g.x = lambda e: x0 + (e - lo) * sc
+    # Map through the live endpoints so bands and markers follow a moved/scaled
+    # axis. Extrapolation is intentional for FP32/BF16 ranges off the viewport.
+    g.x = lambda e: (line.get_start()[0] + (e - lo) / (hi - lo) *
+                     (line.get_end()[0] - line.get_start()[0]))
     g.line = line
     return g
 

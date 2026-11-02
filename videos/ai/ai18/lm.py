@@ -66,7 +66,7 @@ class Spec:
     precision: str = "fp32"  # fp32 | bf16 | fp16 | fp16_scaled | fp8_tensor | fp8_tile
     tile: int = 32
     grad_div: float = 1.0  # the loss is divided by this before the backward pass and the gradients multiplied back
-    # after it: what accumulating a step's gradient over grad_div micro-batches does to the gradients' size
+    # after it: a gradient-scale surrogate, not actual micro-batch accumulation
     seed: int = 0
     mix: list | None = None  # weights over the groups of books (None: the natural text)
     probe_every: int = 0

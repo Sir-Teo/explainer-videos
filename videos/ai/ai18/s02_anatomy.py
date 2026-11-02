@@ -38,7 +38,8 @@ class Anatomy(VoiceoverScene):
         # two published runs, stage by stage, as bars proportional to tokens
         W = 11.0
         tot_o = O["pre"] + O["mid"] + O["long"][0]
-        tot_s = S["stages"][-1][1] + sum(t[1] - t[0] for t in S["long"]) * 0 + 0.1e12
+        tot_s = S["stages"][-1][1] + 0.1e12
+        token_scale = max(tot_o, tot_s)  # one common tokens-to-width scale across both runs
         rows = VGroup()
         specs = [(r"Olmo 3, 7B", [(O["pre"], N_COL, r"pretraining $5.9$T"), (O["mid"], LR_COL, r"mid $0.1$T"),
                                   (O["long"][0], C.POSITION, r"long $0.05$T")], tot_o),
@@ -51,7 +52,7 @@ class Anatomy(VoiceoverScene):
             row = VGroup()
             nm = label(name, font_size=22, color=GREY_A)
             for n, col, txt in segs:
-                w = max(W * 0.86 * n / tot, 0.04)
+                w = max(W * 0.86 * n / token_scale, 0.04)
                 r = Rectangle(width=w, height=0.5, stroke_width=1, stroke_color=BLACK, fill_color=col, fill_opacity=0.85)
                 r.move_to([x + w / 2, -0.6 - 1.15 * k, 0])
                 row.add(r)
@@ -59,6 +60,10 @@ class Anatomy(VoiceoverScene):
                     row.add(label(txt, font_size=18, color=BLACK).move_to(r))
                 x += w
             nm.next_to(row[0], LEFT, buff=0.2)
+            details = (r"mid $0.1$T; long context $0.05$T" if k == 0 else
+                       r"stage 3: $1.1$T; long context $0.1$T")
+            row.add(label(details, font_size=18, color=GREY_A)
+                    .next_to(row, DOWN, buff=0.13).align_to(row, RIGHT))
             rows.add(VGroup(nm, row))
         thin = label(r"mid-training and long context: \ thin slivers of the tokens, \ chosen with great care",
                      font_size=22, color=LR_COL).move_to(DOWN * 3.05)

@@ -131,13 +131,13 @@ class DataParallel(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def bound(self):
-        th = theorem_card(r"The ring is bandwidth-optimal", r"Any all-reduce of $n$ numbers over $p$ devices, each "
-                          r"receiving at most $B$ per second, takes at least $2\,\frac{p-1}{p}\,\frac{n}{B}$.",
+        th = theorem_card(r"The ring is bandwidth-optimal", r"Any all-reduce of $n$ bytes over $p$ devices, each "
+                          r"receiving at most $B$ bytes per second, takes at least $2\,\frac{p-1}{p}\,\frac{n}{B}$.",
                           who=r"Patarasuk \& Yuan (2009)", color=COMM, width=8.6, font_size=22).to_edge(UP, buff=0.35)
         rows = [
             cmath(r"\text{first GPU to hold one number's sum}", r":", r"\ge p-1 \text{ messages in}", font_size=26),
             cmath(r"\text{then each of the other } p-1", r":", r"\ge 1 \text{ message more}", font_size=26),
-            cmath(r"\text{all } n \text{ numbers}", r":", r"\ge 2(p-1)\,n \text{ numbers sent}", font_size=26),
+            cmath(r"\text{tensor of } n \text{ bytes}", r":", r"\ge 2(p-1)\,n \text{ bytes sent}", font_size=26),
             cmath(r"T", r"\ge", r"\frac{2(p-1)\,n}{p\,B}", r"=", r"2\,\frac{p-1}{p}\,\frac{n}{B}", font_size=32),
         ]
         whys = [why(r"every other GPU's value must reach it", font_size=19),
@@ -160,13 +160,14 @@ class DataParallel(VoiceoverScene):
         with self.voiceover(
             "Part 17 said that no algorithm beats the ring on bandwidth. Here is why. Follow a single number, whose "
             "sum all p "
-            "GPUs must end up holding; each message carries one value. <bookmark mark='a'/> Some GPU is the first to "
+            "GPUs must end up holding; each message carries one fixed-width value. <bookmark mark='a'/> Some GPU is the first to "
             "hold the "
             "full sum. Every other GPU's value must have reached it: at least p minus one messages. <bookmark "
             "mark='b'/> At "
             "that moment nobody else has the sum, so each of the other p minus one GPUs needs at least one more "
             "message. "
-            "<bookmark mark='c'/> Two times p minus one messages per number, for all n numbers. <bookmark mark='d'/> "
+            "<bookmark mark='c'/> Two times p minus one values sent per number. For a tensor of n bytes, that is two times p minus one "
+            "times n bytes in total. <bookmark mark='d'/> "
             "The p "
             "GPUs receive at the same time, B bytes per second each, so the time is at least two times p minus one, "
             "over p, "

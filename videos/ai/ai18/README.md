@@ -78,7 +78,7 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
 * **14. Fewer bits.** Formats on a log₂ scale with the measured distribution of our activation gradients (the share
   below FP16's normal and subnormal range); loss scaling derived (Micikevicius et al. 2018), dynamic scaling; six
   training runs (FP32, BF16, FP16 without and with loss scaling, FP8 per tensor, FP8 per tile), two seeds; the same in
-  FP16 with each step accumulated over 64 micro-batches; one tile of the series' model's activations
+  FP16 with a loss divisor of 64 as a gradient-scale surrogate (without actual micro-batch accumulation); one tile of the series' model's activations
   scaled into E4M3's range per tensor and per tile (`fp8_scale`), and the per-tensor against per-tile error;
   DeepSeek-V3's FP8 recipe (1 × 128 and 128 × 128 scales, FP32 promotion every 128, < 0.25% loss error); MXFP8 (8B/15T),
   NVFP4 (12B/10T, MMLU-Pro 62.58 against 62.62), Nemotron 3 Super (NVFP4, 25T), Kimi K3 and DeepSeek-V4 (FP4 QAT).
@@ -92,7 +92,7 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   sizes); DeepSeek-V3's sequential MTP module (λ 0.3 → 0.1; 85–90% acceptance, 1 + a tokens per step, 1.8× TPS); our
   model with and without the module, two seeds, and the module's cost in FLOPs per token (`mtp_cost`: in a model
   this small the second pass through the output head dominates); its acceptance rate in greedy self-speculation.
-* **17. When hardware fails.** Llama 3's interruptions by cause (Table 5), MTBF 3.1 h, per-GPU ~5.8 years (computed),
+* **17. When hardware fails.** Llama 3's interruptions by cause (Table 5), job-interruption interval 3.1 h (not a per-GPU lifetime),
   >90% effective training, diurnal 1–2%, power swings; Young's checkpoint interval √(2δM) derived (δ from Llama 3's
   checkpoint sizes and storage bandwidth); a 54-day run with random failures simulated over checkpoint intervals.
 * **18. Our own full recipe.** The 2020 recipe (AdamW, cosine) against the 2026 recipe (Muon, WSD, QK-norm, z-loss) at
@@ -124,12 +124,34 @@ Part 1's books and passage are read through `videos.ai.ai1.compute`, Part 14's s
 `lm.py` is the training loop (precision emulation, the MTP module, mixtures, checkpoints); `web.py` the data
 pipeline; `dist.py` the distributed workers; `sched.py` the pipeline simulator.
 
+## Reviewed source handoff
+
+The source corrections clarify tensor-parallel SwiGLU pairing, chunk-pair counts, gradient-scale experiments,
+job-interruption rates and units, and repair token-bar scaling and pipeline/number-axis geometry. They preserve
+historical experimental values. Duplicate-counting and nonfinite-training producer repairs remain separate,
+unapplied candidates pending comparison on verified original inputs; the historical counts are not accepted here.
+
+`reviewed_caption_delta.json` contains guarded additions for `videos/ai/ai_text_zh.json`. The sole integrator must
+compose them entry by entry before accepting Chinese on-screen coverage: add an absent key, accept an identical
+existing value, and stop on a differing value. This branch does not replace the shared table or load the proposal
+automatically. `text_zh_add.json` remains the part's complete translation-addition source.
+
+Focused checks: `python -m unittest discover -s tests -p 'test_ai18_reviewed_source.py'` and
+`python tools/zh_lines.py ai18 --todo`. These use synthetic geometry and source/translation checks, without
+fetching data, training models or rendering. They do not certify empirical outputs, continuous playback or audio.
+Missing original-input panels, whole-part motion review and listening/synchronization remain acceptance gates.
+
 ## Computed results
 
 Filled in from `.cache/ai18/` after `compute.py` runs (`python -m videos.ai.ai18.results`):
 
+The historical outcomes below are preserved while original inputs are restored for QA. The duplicate counts are
+not yet accepted as disjoint: the current producer includes exact copies in its cluster-removal count, then adds
+them again in its total share. A separate repair must be measured on the original pages before those counts or
+percentages are reused. The FP16 loss-divisor experiment is a gradient-scale surrogate, as clarified below.
+
 <!-- results -->
-* From published figures: Llama 3.1's 6ND = 3.79e+25 FLOP (reported 3.8e25); its MFU from Table 4's TFLOP/s over 989: 43.5%, 40.4%, 38.4% (reported 43/41/38%); one unplanned interruption every 3.09 h, about once in 5.8 years per GPU; a full checkpoint ≈ 33 s, Young's interval 14.2 min; PaLM's MFU without attention 45.7%; DeepSeek-V3 $5.576M, 3.66 days per trillion tokens on 2,048 GPUs; 16 bytes/parameter: Llama 3.1 6.48 TB (≥ 81 H100s); ZeRO's example 120.00, 31.41, 16.64, 1.88 GB.
+* From published figures: Llama 3.1's 6ND = 3.79e+25 FLOP (reported 3.8e25); its MFU from Table 4's TFLOP/s over 989: 43.5%, 40.4%, 38.4% (reported 43/41/38%); one unplanned job interruption every 3.09 h; idealized maximum-size checkpoint write ≈ 33 s, illustrative Young's interval 14.2 min; PaLM's MFU without attention 45.7%; DeepSeek-V3 $5.576M, 3.66 days per trillion tokens on 2,048 GPUs; 16 bytes/parameter: Llama 3.1 6.48 TB (≥ 81 H100s); ZeRO's example 120.00, 31.41, 16.64, 1.88 GB.
 * Common Crawl sample (CC-MAIN-2026-39, WET files [0, 33333, 66666]): 4,310 pages, 64 languages; 96 blocked by URL; English 1,728, of which 1,398 kept (p ≥ 0.65, ≥ 50 words). WARC slices: 387 HTML pages, 42.6 MB of HTML → 1.28 MB of text (3.0%; median page 2.3%).
 * MinHash-LSH (112 hashes, 14 × 8): on 3,000 page pairs, per-hash agreement vs Jaccard mean gap 0.026; measured collision rate within 0.105 of 1 − (1 − s⁸)¹⁴ in every bin; s at P = ½: 0.685. Sample: 3 exact and 8 near duplicates of 1,398. Gutenberg licences: 435/435 pairs caught (J ≥ 0.990); novels 0/435.
 * Quality classifier (fastText, 13,000 of FineWeb-Edu's Llama 3 annotations; cut 0.21 on P(score ≥ 3)): F1 59.0% (precision 54.5%, recall 64.3%) on 1,000 held-out pages, against FineWeb-Edu's 82%; kept 62 of 1,398 crawl pages (4.4%).
@@ -142,7 +164,7 @@ Filled in from `.cache/ai18/` after `compute.py` runs (`python -m videos.ai.ai18
 * Pipeline (p = 4, m = 8, simulated): bubble GPipe 27.3%, 1F1B 27.3%, interleaved 15.8%, ZB-H1 11.1% (all equal to their formulas); peak micro-batches on GPU 0: GPipe 8, 1F1B 4.
 * Precision (250 steps, two seeds, final held-out loss): fp32 5.592–5.659; bf16 5.588–5.659; fp16 5.592–5.661; fp16_scaled 5.591–5.659; fp8_tensor 5.580–5.652; fp8_tile 5.584–5.639. Activation gradients: 100% below FP16's smallest normal, 34% flushed to zero. E4M3 error on the series' model: per tensor 2.65%, per 1 × 128 tile 2.43%.
 * FP8 scales on one 1 × 128 tile of the series' model's activations: its tensor's largest value 4.30, the tile's 2.35 (scales 448/4.30 and 448/2.35).
-* FP16 with 64-way accumulation: fp16 6.605–6.609; fp16_scaled 5.592–5.657.
+* FP16 gradient-scale surrogate (loss divided by 64, gradients restored before update): fp16 6.605–6.609; fp16_scaled 5.592–5.657.
 * Stability (learning rates [0.003, 0.01, 0.03, 0.1], final loss, mean of 2 seeds): plain: 6.05, 5.95, 6.22, 6.39 (max logit 19, 48, 172, 2062); qk: 6.11, 6.02, 6.22, 6.32 (max logit 6, 7, 9, 21); qkz: 6.12, 6.05, 6.05, 6.33 (max logit 6, 7, 8, 23). Final mean log Z at 0.003: 7.97 without the z-loss, 7.96 with it (within the seeds' spread of 0.06).
 * MTP (500 steps, two seeds): next-token loss without 5.193, with 5.126; acceptance 85.3%, 72.4%; extra arithmetic 88%.
 * Recipes (3.0M tokens, 732 steps, seed 0 / seed 1): 2020 held-out 4.487 / 4.498, 2.036 / 2.052 bpc; 2026 4.251 / 4.253, 1.946 / 1.950 bpc; largest attention logit 44 vs 11 (seed 0); WSD cooldown branch at 458 steps 4.517 vs 4.570 still stable.

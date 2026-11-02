@@ -84,6 +84,7 @@ def compute_published():
     out["llama_mfu_reported"] = [r[9] for r in L["table4"]]
     hours = L["days"] * 24
     out["llama_mtbf_h"] = hours / L["unexpected"]
+    # Legacy aggregate exposure per job interruption, NOT an observed individual GPU lifetime.
     out["llama_gpu_mtbf_years"] = out["llama_mtbf_h"] * L["gpus"] / (24 * 365.25)
     out["llama_ckpt_s"] = L["gpus"] * L["ckpt_per_gpu"][1] / L["tectonic_bw"]  # the largest checkpoint, sustained rate
     out["llama_young_s"] = math.sqrt(2 * out["llama_ckpt_s"] * out["llama_mtbf_h"] * 3600)
@@ -901,13 +902,13 @@ def compute_precision(steps=250, seeds=(0, 1)):
     return out
 
 
-ACCUM = 64  # micro-batches a step's gradient is accumulated over, in the second precision experiment
+ACCUM = 64  # loss divisor in the gradient-scale surrogate; no actual micro-batch accumulation
 
 
 def compute_precision_acc(steps=250, seeds=(0, 1)):
-    """FP16 without and with loss scaling again, when each step's gradient is accumulated over 64 micro-batches (each
-    micro-batch's loss divided by 64, as gradient accumulation and large data-parallel batches do): the gradients are
-    64 times smaller while they are rounded."""
+    """FP16 without and with loss scaling, dividing one batch's loss by 64 and restoring parameter gradients
+    before the update. This isolates a rounding-scale effect; it does not simulate distinct micro-batch gradients
+    or their accumulation. Historical numeric outcomes are preserved."""
     from videos.ai.ai18 import lm
 
     part = CACHE.partial("precision_acc", dict(steps=steps, seeds=list(seeds), accum=ACCUM, v=1))

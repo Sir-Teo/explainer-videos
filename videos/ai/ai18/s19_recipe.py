@@ -18,8 +18,8 @@ class Recipe(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(18, r"Our own full recipe", r"Does the 2026 recipe beat the 2020 one, at equal "
-                            r"compute?", part=PART)
+        card = chapter_card(18, r"Our own full recipe", r"Does the 2026 recipe beat the 2020 one, on the same "
+                            r"data and steps?", part=PART)
         with self.voiceover("Chapter eighteen. Our own full recipe."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -58,10 +58,11 @@ class Recipe(VoiceoverScene):
         if mtp_gain > max(mtp_spread, 0.01):  # the same test as chapter sixteen's
             out_ = (f"Two-token prediction stays out although it helped a little in chapter sixteen: it costs "
                     f"{100 * MC['extra_share']:.0f} percent more arithmetic, and the comparison must be at equal "
-                    "compute. Eight-bit arithmetic stays out too: on a CPU it only emulates the saving.")
+                    "tokens and steps. This does not equalize optimizer overhead. Eight-bit arithmetic stays out "
+                    "too: on a CPU it only emulates the saving.")
         else:
             out_ = ("Two-token prediction stays out: it gave no gain at our scale in chapter sixteen, and it costs "
-                    "extra compute, which would make the comparison unequal. Eight-bit arithmetic stays out too: on a "
+                    "extra model compute. Our control matches data and steps, not optimizer overhead. Eight-bit arithmetic stays out too: on a "
                     "CPU it only emulates the saving.")
         with self.voiceover(
             "Now we put the pieces together. Two models of the same shape, trained on the same three million tokens of "
