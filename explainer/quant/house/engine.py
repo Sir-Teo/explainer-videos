@@ -159,10 +159,7 @@ def mc_euler_cost(eps, S0=100.0, K=100.0, T=1.0, sigma=0.2, r=0.05, seed=0):
     ref = mlmc(eps / 4, S0, K, T, sigma, r, seed=seed + 7)["estimate"]
     for k in range(1, 12):
         n = 2 ** k
-        y = _mlmc_level(k, 20000, S0, K, T, sigma, r, 2, g)
-        yf = None
-        # bias of the level-k estimator: E[P_k] - ref, estimated from the fine half of _mlmc_level's pair
-        P = _plain_euler(n, 40000, S0, K, T, sigma, r, g)
+        P = _plain_euler(n, 40000, S0, K, T, sigma, r, g)  # the plain estimator with n steps; its bias vs ref
         bias = abs(P.mean() - ref)
         if bias < eps / np.sqrt(2):
             N = int(np.ceil(2 * P.var() / eps ** 2))
