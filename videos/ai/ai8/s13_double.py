@@ -41,7 +41,8 @@ class DoubleDescent(VoiceoverScene):
         nl = label(rf"$p = n = {n}$: \\ as many features as pages", font_size=24, color=WHITE)
         nl.next_to(nline.get_top(), RIGHT, buff=0.15).shift(DOWN * 0.3)
         trc = curve(ax, lx, np.clip(np.log10(np.maximum(tr, 10 ** ylo)), ylo, yhi) - ylo, TRAIN, 3)
-        trl = label(r"training pages: \ fitted exactly past $n$", font_size=22, color=TRAIN)
+        trl = label(r"training pages: \ fitted exactly past $n$ \\ values below $10^{-1}$ shown at the floor",
+                    font_size=20, color=TRAIN)
         trl = VGroup(Line(ORIGIN, RIGHT * 0.5, color=TRAIN, stroke_width=3), trl).arrange(RIGHT, buff=0.15)
         trl.next_to(ax.c2p(1.1, 2.55), RIGHT, buff=0)  # a key in the empty top left, off the curves
         low = Dot(ax.c2p(lx[k_min1], math.log10(te[k_min1]) - ylo), radius=0.08, color=TEST)
@@ -139,16 +140,16 @@ class DoubleDescent(VoiceoverScene):
                 why(r"$u_i^\top \varepsilon$ has variance $s^2$: \ the smallest $\sigma_i$ dominates")]
         step = ladder(self, rows, whys, keep=3, top=3.4, x=-3.0, buff=0.3, edge=6.9)
         # the singular values for one p, sorted, on a log scale
-        G = axes([0, n], [-4, 1], x_length=6.0, y_length=2.6, xticks=[0, n], yticks=[-4, -3, -2, -1, 0, 1],
+        G = axes([0, n], [-4, 1], x_length=6.0, y_length=2.6, xticks=[1, n], yticks=[-4, -3, -2, -1, 0, 1],
                  yfmt=lambda v: "1" if v == 0 else (f"10" if v == 1 else f"10^{{{int(v)}}}"),
-                 xlabel=r"singular values, \ largest to smallest", center=(-3.3, -2.1, 0), font_size=18)
+                 xlabel=r"rank $i$ \ (one draw); \ heights $\sigma_i/\sqrt p$", center=(-3.3, -2.1, 0), font_size=18)
         ax = G.ax
         k = ValueTracker(0)
 
         def spec():
             i = int(np.clip(round(k.get_value()), 0, len(show) - 1))
             S = np.sort(np.asarray(d[f"spec{show[i]}"]))[::-1]
-            xs = np.linspace(0, n, len(S))
+            xs = np.arange(1, len(S) + 1)
             ys = np.clip(np.log10(np.maximum(S, 1e-4)), -4, 1)
             g = VGroup(*[Line(ax.c2p(x, -4), ax.c2p(x, y), color=C.TRUE_P, stroke_width=1.2).set_stroke(opacity=0.8)
                          for x, y in zip(xs[::3], ys[::3])])
@@ -158,7 +159,7 @@ class DoubleDescent(VoiceoverScene):
 
         sp = always_redraw(spec)
         H = log_axes((1, 3.8), (-4, 1), x_length=5.4, y_length=2.6, xticks=[1, 2, 3], yticks=[-4, -2, 0],
-                     xlabel=r"$p$ features", ylabel=r"smallest singular value $\sigma_{\min}/\sqrt p$",
+                     xlabel=r"$p$ features", ylabel=r"median $\sigma_{\min}/\sqrt p$ over $5$ draws",
                      center=(3.6, -2.1, 0), font_size=18)
         hx = H.ax
         cs = curve(hx, np.log10(ps), np.clip(np.log10(np.maximum(sm, 1e-4)), -4, 1), C.SURPRISE, 3.5)

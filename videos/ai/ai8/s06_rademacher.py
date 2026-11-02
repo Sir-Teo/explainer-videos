@@ -25,7 +25,9 @@ class Rademacher(VoiceoverScene):
         yl = VGroup(*[MathTex(rf"{int(round(100 * v))}\%", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in (0.5, 0.6, 0.7, 0.8)])
         xl = label(r"how many of the $70$ word rates the line may use", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.25)
-        yn = label(r"coin flips fitted", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+        yn = wrapped_label(
+            r"Achievable accuracy: regularized logistic fits, averaged over $12$ random-label draws. The supremum is not computed.",
+            max_width=6.4, font_size=18, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         c = curve(ax, ds, np.clip(acc, 0.5, 0.8), C.MODEL_Q)
         dots = VGroup(*[Dot(ax.c2p(d, min(a, 0.8)), radius=0.06, color=C.MODEL_Q) for d, a in zip(ds, acc)])
         half = DashedLine(ax.c2p(0, 0.5), ax.c2p(70, 0.5), color=GREY_B)
@@ -52,6 +54,7 @@ class Rademacher(VoiceoverScene):
             "data you actually have. Give each training page a random label, a coin flip, plus or minus one, and "
             "ask the family to fit them. <bookmark mark='a'/> A linear rule on one word rate gets barely more than "
             f"half. On all seventy, it fits {100 * acc[-1]:.0f} percent of the coin flips: pure noise. "
+            "This plot averages twelve regularized logistic fits; it shows achievable accuracy, not the supremum. "
             "<bookmark mark='b'/> Averaged over the coin flips, the best correlation the family can reach with "
             "random signs is its empirical Rademacher complexity, named for the random plus-or-minus-one variables "
             "of Hans Rademacher. A family that can fit noise well can make any training score look good."

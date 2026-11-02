@@ -85,8 +85,8 @@ class Sharpness(VoiceoverScene):
         if n_ok < len(ok):
             key.add(label(r"hollow: \ did not reach the target", font_size=18, color=GREY_B))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(G, RIGHT, buff=0.35).align_to(G, UP)
-        setup = label(rf"$10 \to 256 \to 2$ networks, \ ${s['n']}$ points labelled by a teacher network; \ each "
-                      rf"trained until its training loss is below ${s['target']:g}$", font_size=21, color=GREY_A)
+        setup = label(rf"$10 \to 256 \to 2$ networks, \ ${s['n']}$ points labelled by a teacher \\ "
+                      rf"target loss $< {s['target']:g}$; \ cap $4{{,}}000$ epochs", font_size=21, color=GREY_A)
         setup.to_edge(UP, buff=0.3)
         res = label(rf"rank correlation: \ ${rho:+.2f}$ \ (${n_ok}$ runs)", font_size=26, color=WHITE).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
         big, small = lam[(B == max(BCOL)) & ok].mean(), lam[(B == min(BCOL)) & ok].mean()

@@ -216,8 +216,8 @@ class RandomLabels(VoiceoverScene):
         mono = bool(np.all(np.diff(te.mean(1)) < 0.01))
         slower = f1 > 1.3 * f0
         steady = ", steadily, as the share of wrong labels grows. " if mono else ", though not evenly. "
-        pace = (f"taking longer the more labels are noise: about {f0:.0f} steps when they're clean, {f1:.0f} when "
-                "they're all random. " if slower else
+        pace = (f"taking about {f0:.0f} steps with the original labels, compared with {f1:.0f} when all labels "
+                "are random. " if slower else
                 f"in about {f0:.0f} to {f1:.0f} steps whatever the noise: on 448 pages, memorizing is cheap. ")
         with self.voiceover(
             "Zhang and colleagues also turned the dial gradually, replacing a growing share of the labels with coin "

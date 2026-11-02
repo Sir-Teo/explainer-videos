@@ -8,6 +8,39 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, chapter, curve, load
 
 
+def _segments_below_top(xs, ys, top):
+    """Clip display line segments at an upper viewport edge without flattening data."""
+    if len(xs) != len(ys):
+        raise ValueError("display coordinates must have equal lengths")
+    points = [(float(x), float(y)) for x, y in zip(xs, ys)]
+    if not math.isfinite(top) or any(not math.isfinite(x) or not math.isfinite(y) for x, y in points):
+        raise ValueError("display coordinates must be finite")
+    if not points:
+        return [], []
+    segments, crossings = [], []
+    current = [points[0]] if points[0][1] <= top else []
+    for (x0, y0), (x1, y1) in zip(points, points[1:]):
+        if y0 <= top and y1 <= top:
+            if not current:
+                current = [(x0, y0)]
+            if current[-1] != (x1, y1):
+                current.append((x1, y1))
+        elif (y0 <= top) != (y1 <= top):
+            cross = (x0 + (x1 - x0) * (top - y0) / (y1 - y0), float(top))
+            if cross[0] not in crossings:
+                crossings.append(cross[0])
+            if y0 <= top:
+                if current[-1] != cross:
+                    current.append(cross)
+                segments.append(current)
+                current = []
+            else:
+                current = [cross] if cross == (x1, y1) else [cross, (x1, y1)]
+    if current:
+        segments.append(current)
+    return segments, crossings
+
+
 class Margins(VoiceoverScene):
     def construct(self):
         chapter(self, 6, r"Margins", r"Can a confident fit be a simple one?",
@@ -94,11 +127,23 @@ class Margins(VoiceoverScene):
                  xlabel=r"$\gamma$ \ (log scale)", center=(-2.6, -1.9, 0), font_size=18)
         ax = G.ax
         lg = np.log10(gm)
+        def clipped_display(values, color, stroke_width):
+            segments, crossings = _segments_below_top(lg, values, top)
+            lines = VGroup(*[curve(ax, [p[0] for p in segment], [p[1] for p in segment], color, stroke_width)
+                             for segment in segments if len(segment) > 1])
+            markers = VGroup(*[Arrow(ax.c2p(x, top) + DOWN * 0.13, ax.c2p(x, top) + UP * 0.13,
+                                    buff=0, color=color, stroke_width=2, tip_length=0.10,
+                                    max_tip_length_to_length_ratio=0.45) for x in crossings])
+            return VGroup(lines, markers)
+
+        clip_note = label(r"values above $2$ are outside this view", font_size=16,
+                          color=GREY_A).next_to(ax, UP, buff=0.22)
+        G.add(clip_note)
         ce = curve(ax, lg, emp, MEAS, 3.5)
-        cc = curve(ax, lg, np.clip(cpx, 0, top), GREY_B, 3)
-        cb = curve(ax, lg, np.clip(bd, 0, top), BOUND, 4)
+        cc = clipped_display(cpx, GREY_B, 3)
+        cb = clipped_display(bd, BOUND, 4)
         half = DashedLine(ax.c2p(lg[0], 0.5), ax.c2p(lg[-1], 0.5), color=C.SURPRISE, stroke_width=2)
-        hl = label(r"chance", font_size=18, color=C.SURPRISE).next_to(half, RIGHT, buff=0.08)
+        hl = label(r"chance", font_size=18, color=C.SURPRISE).next_to(half, UP, buff=0.10).align_to(half, RIGHT)
         k = int(np.argmin(bd))
         dot = Dot(ax.c2p(lg[k], min(bd[k], top)), radius=0.08, color=BOUND)
         key = legend([(MEAS, r"$\hat R_\gamma$: \ margin loss"), (GREY_B, r"$2BR/(\gamma\sqrt n)$"),
@@ -109,7 +154,8 @@ class Margins(VoiceoverScene):
             label(rf"below $0.5$ \ with the same margins: \ $n \approx {fmt_int(m['n_half'])}$", font_size=22,
                   color=GREY_A),
             label(rf"actual test error: \ ${100 * (1 - m['test_acc']):.1f}\%$", font_size=22, color=TEST),
-            label(r"normalized margins; \ confidence paid for $40$ choices of $\gamma$", font_size=18, color=GREY_B),
+            wrapped_label(r"Illustrative: fitted preprocessing and an empirical radius; $40$ normalized $\gamma$ "
+                          r"choices paid; no IID certificate.", max_width=5.2, font_size=16, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(key, DOWN, buff=0.35).align_to(key, LEFT)
         vac = m["best_bound"] >= 0.5
         hist = history_card(1998, r"P.~Bartlett", r"\textit{The size of the weights is more important than the size "
@@ -127,7 +173,9 @@ class Margins(VoiceoverScene):
             "has slope one over gamma, and a contraction lemma says a Lipschitz function scales the complexity by its "
             "slope: the gap is two B R over gamma root n. The number of inputs never appears. Peter Bartlett made "
             "this the point in 1998: the size of the weights matters more than the number of them. "
-            "<bookmark mark='d'/> Now compute it on the pages. Small gamma: no margin loss, but a huge complexity "
+            "<bookmark mark='d'/> Now illustrate it on the pages. These pages are correlated, preprocessing is fitted, "
+            "and the radius is estimated from them. This is not an IID risk certificate. "
+            "Small gamma: no margin loss, but a huge complexity "
             "term. Large gamma: the reverse. "
             + verdict
         ) as vo:
@@ -152,15 +200,15 @@ class Margins(VoiceoverScene):
         tr, te = np.asarray(m["ada_tr"]), np.asarray(m["ada_te"])
         T = int(m["ada_T"])
         zero = int(m["ada_zero"]) if m["ada_zero"] is not None else None
-        G = axes([0, math.log10(T)], [0, 0.12], x_length=5.6, y_length=3.6, xticks=[0, 1, 2],
-                 xfmt=lambda v: f"{10 ** v:.0f}", yticks=[0, 0.04, 0.08, 0.12], yfmt=lambda v: rf"{100 * v:.0f}\%",
+        G = axes([0, math.log10(T)], [0, 0.24], x_length=5.6, y_length=3.6, xticks=[0, 1, 2],
+                 xfmt=lambda v: f"{10 ** v:.0f}", yticks=[0, 0.08, 0.16, 0.24], yfmt=lambda v: rf"{100 * v:.0f}\%",
                  xlabel=r"boosting rounds \ (log scale)", center=(-3.4, -0.4, 0))
         ax = G.ax
         rr = np.arange(1, T + 1)
-        ctr = curve(ax, np.log10(rr), np.clip(tr, 0, 0.12), TRAIN, 3)
-        cte = curve(ax, np.log10(rr), np.clip(te, 0, 0.12), TEST, 4)
+        ctr = curve(ax, np.log10(rr), tr, TRAIN, 3)
+        cte = curve(ax, np.log10(rr), te, TEST, 4)
         key = legend([(TRAIN, r"training error"), (TEST, r"error on new pages")], font_size=20)
-        key.next_to(ax.c2p(math.log10(T), 0.12), DL, buff=0.1)
+        key.next_to(ax.c2p(math.log10(T), 0.24), DL, buff=0.1)
         snaps = [int(s) for s in m["ada_snaps"]]
         H = axes([-1, 1], [0, 1], x_length=5.4, y_length=3.6, xticks=[-1, -0.5, 0, 0.5, 1], yticks=[0, 0.5, 1],
                  yfmt=lambda v: rf"{100 * v:.0f}\%", xlabel=r"normalized margin $y \sum_t \alpha_t h_t(x) / "

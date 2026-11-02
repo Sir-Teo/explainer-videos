@@ -22,10 +22,10 @@ class MoreDescents(VoiceoverScene):
         s = load("samplewise")
         ns, med, lo, hi, rd = (np.asarray(s[k], float) for k in ("ns", "med", "lo", "hi", "ridge"))
         p = int(s["p"])
-        ylo, yhi = -1.0, 1.5
+        ylo, yhi = -1.0, 2.5
         G = log_axes((math.log10(ns[0]), math.log10(ns[-1])), (ylo, yhi), x_length=8.0, y_length=4.4,
                      xticks=[math.log10(v) for v in (20, 50, 100, 200, 448)], xfmt=lambda v: f"{10 ** v:.0f}",
-                     yticks=[-1, 0, 1], xlabel=r"$n$: \ training pages", ylabel=r"squared error on new pages",
+                     yticks=[-1, 0, 1, 2], xlabel=r"$n$: \ training pages", ylabel=r"squared error on new pages",
                      center=(-1.2, -0.6, 0))
         ax = G.ax
         lx = np.log10(ns)
@@ -72,14 +72,14 @@ class MoreDescents(VoiceoverScene):
         fast, slow, tr = np.asarray(e["fast"]), np.asarray(e["slow"]), np.asarray(e["train"])
         noise = float(e["noise"])
         i1, i2 = int(e["i1"]), int(e["i2"])
-        G = log_axes((0, math.log10(ts[-1])), (-1, 1), x_length=8.6, y_length=4.6, xticks=[0, 2, 4, 6],
-                     yticks=[-1, 0, 1], xlabel=r"gradient descent steps", ylabel=r"error on new data",
+        G = log_axes((0, math.log10(ts[-1])), (-2, 1), x_length=8.6, y_length=4.6, xticks=[0, 2, 4, 6],
+                     yticks=[-2, -1, 0, 1], xlabel=r"gradient descent steps", ylabel=r"error on new data",
                      center=(-1.6, -0.5, 0))
         ax = G.ax
         lt = np.log10(ts)
 
         def ly(v):
-            return np.clip(np.log10(np.maximum(v, 1e-1)), -1, 1)
+            return np.clip(np.log10(np.maximum(v, 1e-2)), -2, 1)
 
         bd = band(ax, lt, ly(lo), ly(hi), TEST, 0.15)
         cm = curve(ax, lt, ly(med), TEST, 4.5)
@@ -87,7 +87,7 @@ class MoreDescents(VoiceoverScene):
         cs = curve(ax, lt, ly(slow + noise), SLOW, 2.5)
         ct = curve(ax, lt, ly(tr), TRAIN, 2.5)
         key = legend([(TEST, r"test error \ (median, quartiles, $20$ draws)"), (TRAIN, r"training error"),
-                      (FAST, r"error from the fast directions"), (SLOW, r"error from the slow directions")], font_size=19)
+                      (FAST, r"fast-direction error + noise floor"), (SLOW, r"slow-direction error + noise floor")], font_size=19)
         key.to_corner(UR, buff=0.3)
         d1 = Dot(ax.c2p(lt[i1], ly(med[i1])), radius=0.08, color=TEST)
         d2 = Dot(ax.c2p(lt[i2], ly(med[i2])), radius=0.08, color=TEST)
@@ -110,8 +110,10 @@ class MoreDescents(VoiceoverScene):
             "fall, rise, and fall again. The simplest model that does this is linear, with inputs on two very "
             "different scales. <bookmark mark='a'/> Gradient descent learns the large-scale directions first. "
             + s1 + "<bookmark mark='b'/> " + s2 + "<bookmark mark='c'/> " + s3
-            + "<bookmark mark='d'/> Split by direction, it's two bias-variance curves, one fast, one slow, added "
-            "together: Heckel and Yilmaz's explanation, from 2021. Training error falls the whole time. When to "
+            + "<bookmark mark='d'/> The fast and slow curves each include the noise floor, with medians taken "
+            "separately. They show two learning time scales, as Heckel and Yilmaz explained in 2021. For each draw, "
+            "total test error is fast plus slow plus one noise floor; these plotted medians need not add exactly. "
+            "Training error falls the whole time. When to "
             "stop training is not a question with one answer, which part twelve's grokking takes to an extreme."
         ) as vo:
             self.play(FadeIn(G), FadeIn(setup))

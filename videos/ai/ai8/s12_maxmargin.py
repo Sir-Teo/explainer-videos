@@ -95,6 +95,8 @@ class MaxMargin(VoiceoverScene):
                            r"$O(1/\log t)$ for almost all datasets; \ $O(\log\log t/\log t)$ in general.",
                            who=r"D.~Soudry, E.~Hoffer, M.~S.~Nacson, S.~Gunasekar \& N.~Srebro (2018)", width=8.0,
                            font_size=20).to_edge(DOWN, buff=0.25)
+        head = label(r"Logistic regression, \ gradient descent, \ separable points", font_size=28).to_edge(UP, buff=0.3)
+        self.add(head)
         with self.voiceover(
             "Why that line? <bookmark mark='a'/> The negative gradient is a weighted sum of the examples, each "
             "weighted by how badly it's classified. <bookmark mark='b'/> Once every point is right and the weights "
