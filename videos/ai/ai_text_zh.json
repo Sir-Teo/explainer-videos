@@ -21739,7 +21739,8 @@
     "variance: \\ penalize stabilized std below $1$": "方差项：\\ 惩罚低于$1$的稳定化标准差",
     "logged mean clipped std proxy \\\\ $\\langle\\min(\\sqrt{s^2+10^{-4}},1)\\rangle$": "记录的截顶标准差代理均值 \\\\ $\\langle\\min(\\sqrt{s^2+10^{-4}},1)\\rangle$",
     "Held-out diagnostic: seed $0$ \\\\ share of negative push over $510$ negatives": "留出数据诊断：种子$0$\\\\ $510$个负样本上的排斥权重份额",
-    "pull together only: \\\\ one dominant direction, \\\\ then small residuals": "只拉近：\\\\ 一个主导方向，\\\\ 后面是小的残余值"
+    "pull together only: \\\\ one dominant direction, \\\\ then small residuals": "只拉近：\\\\ 一个主导方向，\\\\ 后面是小的残余值",
+    "rounding model: uniform in-cell error, no clipping": "舍入模型：单元内误差均匀，无截断"
   },
   "phrases": {
     "width": "宽度",

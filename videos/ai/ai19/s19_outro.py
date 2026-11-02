@@ -90,15 +90,17 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        assumption = note(r"rounding model: uniform in-cell error, no clipping", font_size=16).to_edge(DOWN, buff=0.16)
         with self.voiceover(
             "Let's take stock. Reading a prompt is arithmetic and writing an answer is reading memory, so a server "
             "batches the writing, and the price of a token follows from the batch it can afford. Continuous "
             "batching keeps the batch full, and pages keep the memory full. A drafter guesses ahead and the big "
-            "model checks in one pass, with exactly the same output. Rounding error is delta squared over twelve; "
+            "model checks in one pass, preserving the same output distribution. With uniform in-cell error and no "
+            "clipping, mean squared rounding error is delta squared over twelve; "
             "GPTQ and rotations spend it where it hurts least, and four-bit floats store it compactly. And "
             "FlashAttention never writes its table down."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(assumption))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
                       run_time=max(4.0, vo.duration - 2.0))
         self.wait(0.3)
