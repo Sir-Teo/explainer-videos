@@ -87,7 +87,7 @@ class Production(VoiceoverScene):
         tab.set_x(0)
         with self.voiceover(
             "What does that mean for the networks of this part? First, they are checked where they were trained: the "
-            f"calibrator's error on parameters it never saw is {held:.2f} vol points, close to the noise of its own "
+            f"calibrator's error on parameters it never saw is {held:.2f} vol points, below the noise of its own "
             "Monte Carlo labels. <bookmark mark='a'/> Second, outside that region they are not trusted at all: a "
             "network extrapolates without any warning, so inputs are checked against the training ranges, and "
             "anything outside goes back to the slow engine. <bookmark mark='b'/> Third, they must reproduce known "

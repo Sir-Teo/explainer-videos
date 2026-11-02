@@ -65,14 +65,15 @@ class Calibrator(VoiceoverScene):
         q = c["held_err_q"]
         side = wrapped_label(rf"held out: {c['held_rmse']:.2f} vol points (median {q[0]:.2f}, 99th percentile {q[2]:.2f}). "
                              rf"Simulating the same parameters again with fresh random numbers moves the labels by "
-                             rf"{c['label_noise_rmse']:.2f}: the network is about as accurate as the data it learned from, "
-                             r"and averages the noise out", 4.3, 19, GREY_A).to_edge(RIGHT, buff=0.4)
+                             rf"{c['label_noise_rmse']:.2f}: the network's error is below the noise in its own labels, "
+                             r"because fitting thousands of them averages that noise out", 4.3, 19, GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(rf"{c['train_seconds'] / 60:.0f} minutes of training on a CPU; 4 layers of 96 units")
         with self.voiceover(
             "Training, epoch by epoch. Grey is the error on the training data, purple on parameter sets the network "
             f"never saw. <bookmark mark='a'/> It ends at {c['held_rmse']:.2f} vol points. For scale: simulating the same "
             f"parameters again with fresh random numbers moves the labels themselves by {c['label_noise_rmse']:.2f}. The "
-            "network is as accurate as its own data."
+            "network's error is below the noise in its own training data: fitting thousands of noisy labels averages "
+            "the noise out."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(l1), FadeIn(leg[0]), Create(l2), FadeIn(leg[1]), run_time=2.5)
             vo.wait_until("a")
