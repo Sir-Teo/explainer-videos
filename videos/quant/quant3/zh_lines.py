@@ -1,7 +1,7 @@
 """Chinese narration for quant3: see tools/zh_lines.py (literal lines by prefix, computed lines as templates).
 Terms follow videos/quant/QUANT_ZH_GUIDE.md."""
 
-TITLE = '量化金融，从零搭建 · 第3部分：价值、会计与企业'
+TITLE = '量化金融，从零搭建 · 第3部分：价值、会计与公司'
 
 CHAPTERS = {
     'Hook': '一股股票是对什么的索取权？',
@@ -21,7 +21,7 @@ CHAPTERS = {
 ZH = {
     # ------------------------------------------------------------------ Hook
     "Part three. Value, accounting and the firm.":
-        "第3部分。价值、会计与企业。前两部分把价格当作一个会变动的数字、一件可以交易的东西。可是一股股票是对某样东西的索取权："
+        "第3部分。价值、会计与公司。前两部分把价格当作一个会变动的数字、一件可以交易的东西。可是一股股票是对某样东西的索取权："
         "一家公司未来现金的一小份。如果价格是公允的，它就应该等于这些现金今天的价值。是这样吗？",
 
     'f"In 1981 Robert Shiller asked that question':

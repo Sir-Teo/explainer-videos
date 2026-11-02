@@ -269,3 +269,40 @@ def test_fundamentals_store_is_point_in_time_and_keeps_restatements():
         {"start": "2019-01-01", "end": "2019-12-31", "val": 1000, "filed": "2020-02-20", "form": "10-K", "accn": "x"}]}}}}}
     t = Store.from_companyfacts("ACME", cf)
     assert t.asof("ACME", "Revenues", 20200220) == 1000.0 and t.asof("ACME", "Revenues", 20200219) is None
+
+
+def test_martingale_tools():
+    from scipy.stats import levy_stable
+
+    from explainer.quant.house import martingale as m
+
+    # doubling: a win after k losses recovers them plus the base bet; ten losses in a row ruin a 1023 bankroll
+    r = m.doubling([False, False, True], base=1, bankroll=100)
+    assert r["wealth"][-1] == 101 and not r["ruined"]
+    assert m.doubling([False] * 10, base=1, bankroll=1023)["ruined"]
+    assert m.gamblers_ruin(1, 3) == pytest.approx(1 / 3)
+    assert m.gamblers_ruin(5, 10, 0.6) == pytest.approx((1 - (2 / 3) ** 5) / (1 - (2 / 3) ** 10))
+    # Doob: x_n = n^2 / 10 + noise; predicted increments recover the drift exactly
+    x = np.arange(6) ** 2 / 10.0
+    d = m.doob_decomposition(x, np.diff(x))
+    assert np.allclose(d["M"], 0) and np.allclose(d["A"], x - x[0])
+    # the likelihood ratio is a P-martingale: its mean under P is 1 at every n
+    rng = np.random.default_rng(1)
+    L = np.array([m.likelihood_ratio(rng.random(20) < 0.5, 0.5, 0.6)[-1] for _ in range(20000)])
+    assert L.mean() == pytest.approx(1.0, abs=0.05)
+    # McCulloch recovers a stable index; Gaussian data give alpha = 2 and a return-probability slope of -1/2
+    xs = levy_stable.rvs(1.5, 0.0, size=20000, random_state=np.random.default_rng(2))
+    assert m.stable_mcculloch(xs)["alpha"] == pytest.approx(1.5, abs=0.08)
+    g = np.random.default_rng(3).standard_normal(200000)
+    assert m.stable_mcculloch(g)["alpha"] > 1.9
+    assert m.return_probability(g, [1, 2, 4, 8, 16, 32])["slope"] == pytest.approx(-0.5, abs=0.05)
+    # the e-process stays small under the null (Ville: rarely reaches 20) and grows under an alternative
+    hits = 0
+    for k in range(200):
+        e = m.EProcess()
+        e.run(np.random.default_rng(100 + k).choice([-0.5, 0.5], 500))
+        hits += e.rejected(0.05)
+    assert hits <= 200 * 0.05 * 1.6
+    e = m.EProcess()
+    e.run(np.random.default_rng(7).choice([-0.5, 0.5], 500, p=[0.4, 0.6]))
+    assert e.rejected(0.05)
