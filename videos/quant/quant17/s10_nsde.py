@@ -55,9 +55,10 @@ class NSDE(VoiceoverScene):
         su = n["setup"]
         lo, hi, cal, hes = n["low"], n["high"], n["calibrated"], n["heston_doc"]
         vals = [lo["doc"], cal["doc"], hes, hi["doc"]]
-        a, b = min(vals) * 0.9, max(vals) * 1.08
+        span = max(vals) - min(vals)
+        a, b = min(vals) - 0.6 * span, max(vals) + 0.6 * span
         g = axes([a, b], [-1, 1], x_length=10.0, y_length=1.6, xlabel=r"price of the down-and-out call (per unit of spot)",
-                 xticks=list(np.round(np.linspace(a, b, 5), 3)), yticks=[], font_size=15)
+                 xticks=list(np.linspace(a, b, 5)), xfmt=lambda v: f"{v:.4f}", yticks=[], font_size=15)
         g.move_to(UP * 0.2)
         ax = g.ax
         band = Line(ax.c2p(lo["doc"], 0), ax.c2p(hi["doc"], 0), stroke_color=GOOD, stroke_width=14, stroke_opacity=0.6)
