@@ -80,7 +80,7 @@ class BSDE(VoiceoverScene):
         cv = b["curve"]
         it = np.array([c["iter"] for c in cv])
         u = np.array([c["u0"] for c in cv])
-        ref, nd = b["reference"], b["paper_no_default"]
+        ref, nd = b["reference"], b["no_default_mc"]
         lo, hi = min(u.min(), ref) - 1.5, max(u.max(), nd) + 1.5
         g = axes([0, it.max()], [lo, hi], x_length=7.4, y_length=4.4, xlabel=r"training step",
                  ylabel=r"today's price $u_0$", xticks=[0, 1000, 2000, 3000, 4000],
@@ -91,7 +91,7 @@ class BSDE(VoiceoverScene):
         r1 = DashedLine(ax.c2p(0, ref), ax.c2p(it.max(), ref), stroke_color=REF, stroke_width=2)
         r2 = DashedLine(ax.c2p(0, nd), ax.c2p(it.max(), nd), stroke_color=BAD, stroke_width=2)
         leg = legend([(NET, r"the deep BSDE's $u_0$"), (REF, rf"reference {ref:.3f} (multilevel Picard)"),
-                      (BAD, rf"ignoring default: {nd:.3f}")], font_size=16).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+                      (BAD, rf"ignoring default: {nd:.2f} (Monte Carlo)")], font_size=16).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         side = VGroup(
             MathTex(rf"u_0 = {b['u0']:.2f}", font_size=40, color=NET),
             label(rf"error {100 * b['rel_error']:.2f}\% against the reference", font_size=20, color=GREY_A),
@@ -99,8 +99,8 @@ class BSDE(VoiceoverScene):
                           r"time steps. Han, Jentzen and E reported 0.46\% in 27 minutes. Ignoring default "
                           rf"overprices the claim by {nd - ref:.1f}", 4.0, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = illustration(r"our run of the published example; Monte Carlo check without default: "
-                           rf"{b['no_default_mc']:.2f} $\pm$ {b['no_default_se']:.2f}")
+        src = illustration(rf"our run of the published example; without default, Monte Carlo gives {nd:.2f} $\pm$ "
+                           rf"{b['no_default_se']:.2f} (the paper's {b['paper_no_default']:.3f} also leaves out discounting)")
         with self.voiceover(
             "Here is the training, as it happened. The guess for today's price starts at random. "
             f"<bookmark mark='a'/> It settles at {b['u0']:.2f}, against a reference of {ref:.1f} computed by a "
