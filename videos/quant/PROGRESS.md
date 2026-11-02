@@ -366,6 +366,27 @@ Facts checked:
 - **Built** (compute, 12 scenes, README EN/ZH, zh_lines 41/41, silent previews). `why` notes in the quant series now
   wrap instead of shrinking (long notes in Parts 8-16 were unreadable). Remaining: on-screen text, dry run, build.
 
+## Part 17 (Deep Pricing and Hedging), 2 Nov 2026
+
+- **House** `deep.py`: pointwise rough-Bergomi calibrator (Horvath-Muguruza-Tomas), deep hedger (plain and
+  no-transaction-band networks; entropic or CVaR), HLP regressor, differential ML (twin network), deep BSDE
+  (Han-Jentzen-E), deep stopping (Becker-Cheridito-Jentzen), neural SV SDE (Gierjatowicz et al.), signatures and
+  market generators (signature-matching vol x noise LSTM, small DDPM), stylized facts.
+- **References checked.** HJE (2018): 100-d default-risk claim, 57.300 (multilevel Picard), 60.781 without default,
+  N=40, lr 0.008, 0.46% in 1,607 s. BCJ (2019) Table 1: d=5 s0=100 L 26.156, CI [26.138, 26.174]; d=2 binomial
+  13.902. HLP (1994): networks hedged as well as BS in simulation, sometimes better; beat BS "in many cases" on S&P 500
+  futures options 1987-1991. JPM (Risk.net, 2022, as reported): ~70% of Euro Stoxx flow options quoted and hedged by
+  machine; Euro Stoxx 50 cliquets live 2022; Buehler quant of the year 2022. Danske: AAD in production; Risk.net
+  reported DML speeding up XVA. SR 11-7 (2011): effective challenge, conceptual soundness, ongoing monitoring,
+  outcomes analysis.
+- **Compute** (`python -m videos.quant.quant17.compute ...`): `calib_data` writes 60 resumable chunks to
+  `.cache/quant17/calib/` (~1 min each; lock files let two processes share); then `calib`, `calib_hist` (Heston refitted
+  to the same quotes for a like-for-like comparison, vega-weighted errors). Other items: hlp, dml, stopping, hedge,
+  nsde, generator, bsde, envelope. First results: HLP net hedges with ~1.8x BS tracking error (retrain with scaled
+  inputs pending: rerun `hlp --force`); DML 256 samples: price RMSE 5.03 -> 0.43, delta 0.40 -> 0.013.
+- **Scenes** s01-s14 written against the items' outputs; every qualitative claim is re-checked when results land.
+  Remaining: results, claim check, previews, README EN/ZH, zh_lines, on-screen text, dry run, build.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
