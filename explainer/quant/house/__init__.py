@@ -29,10 +29,12 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`stochvol` (Part 13, the volatility desk): the calibrator: Heston, Bates, Kou, VG and NIG characteristic
   functions, COS pricing, Hagan's SABR, Andersen's QE scheme, Lévy path simulators, forward-start options and
   cliquets;
+* :mod:`rough` (Part 14, research): rough Bergomi by the hybrid scheme, rough Heston by the fractional Adams scheme
+  and its Markovian lift, the roughness estimator, and Guyon-Lekeufack path-dependent volatility;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
 * :mod:`hedge` (Part 10): the delta-hedged book and its P&L decomposition;
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import arbitrage, bs, control, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, smile, stats, stochvol, surface, trees, valuation, volsurface  # noqa: F401
+from explainer.quant.house import arbitrage, bs, control, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, rough, smile, stats, stochvol, surface, trees, valuation, volsurface  # noqa: F401

@@ -696,3 +696,39 @@ def test_theta_at_and_local_vol_paths_reprice():
         p = np.mean(np.maximum(cp * (np.exp(X[-1]) - np.exp(k)), 0))
         iv = B.implied_vol(p, 1.0, np.exp(k), T, 0.0, 0.0, cp)
         assert abs(iv - np.sqrt(V.ssvi_surface_w(fit, k, T) / T)) < 0.01
+
+
+# ---------------------------------------------------------------- rough (Part 14)
+
+
+def test_rough_heston_reduces_to_heston_and_lift_is_close():
+    from explainer.quant.house import rough as R, stochvol as sv
+
+    u = np.array([0.5, 1.0, 3.0, -1j])
+    a = R.rough_heston_cf(u, 1.0, 0.04, 1.5, 0.05, 0.4, -0.6, H=0.5, n=200)
+    assert np.abs(a - sv.heston_cf(u, 1.0, 0.04, 1.5, 0.05, 0.4, -0.6)).max() < 1e-5
+    r = R.rough_heston_cf(u, 1.0, 0.04, 1.5, 0.05, 0.4, -0.6, H=0.1, n=400)
+    assert abs(r[-1] - 1) < 1e-10  # the martingale condition, phi(-i) = 1
+    lift = R.lifted_heston_cf(u, 1.0, 0.04, 1.5, 0.05, 0.4, -0.6, H=0.1, N=50)
+    assert np.abs(lift - r).max() < 3e-3
+
+
+def test_rbergomi_martingale_and_skew_decay():
+    from explainer.quant.house import rough as R
+
+    S = R.rbergomi_paths(0.1, 1.9, -0.9, 0.235 ** 2, 0.5, 182, 20_000, seed=2)
+    assert abs(S[-1].mean() - 1) < 4 * S[-1].std() / np.sqrt(S.shape[1])
+
+
+def test_roughness_estimator_and_pdv_recovery():
+    from explainer.quant.house import rough as R, sim
+
+    x = sim.fbm(0.15, 20_000, 1.0, 1, seed=4)
+    x = np.asarray(x).ravel()
+    assert abs(R.log_rv_scaling(x)["H"] - 0.15) < 0.03
+    g = np.random.default_rng(5)
+    r = 0.03 * g.standard_normal(3000)
+    R1, R2 = R.pdv_features(r, 1 / 365, 1.5, 0.05, 1.8, 0.03, lookback=600)
+    vol = 0.1 - 0.05 * R1 + 0.9 * np.sqrt(R2) + 0.002 * g.standard_normal(3000)
+    f = R.fit_pdv(r, vol, lookback=600, burn=600)
+    assert f["r2"] > 0.95 and abs(f["beta"][2] - 0.9) < 0.1
