@@ -597,3 +597,31 @@ def test_quoting_band_hedging_costs():
     every = Q.hedge_with_band(t, S, 100, 1.0, 0.2, cost=0.002, band_half=0.0)
     band = Q.hedge_with_band(t, S, 100, 1.0, 0.2, cost=0.002, band_half=None, gamma_risk=1.0)
     assert band["cost"].mean() < every["cost"].mean() and band["trades"].mean() < every["trades"].mean()
+
+
+# ---------------------------------------------------------------------------
+# Part 12: the surface builder
+# ---------------------------------------------------------------------------
+def test_volsurface_flat_and_ssvi():
+    from explainer.quant.house import bs as B, volsurface as V
+    # flat 20% vol: the variance swap and the VIX formula both recover 0.2; local vol is flat
+    F, T = 100.0, 0.25
+    K = np.linspace(20, 300, 2801)
+    otm = np.where(K < F, B.price(F, K, T, 0.2, cp=-1), B.price(F, K, T, 0.2, cp=1))
+    assert abs(np.sqrt(V.var_swap_strike(K, otm, F, T)) - 0.2) < 2e-3
+    Kv = np.arange(50, 200.5, 2.5)
+    assert abs(V.vix(Kv, B.price(F, Kv, T, 0.2, cp=1), B.price(F, Kv, T, 0.2, cp=-1), F, T) - 0.2) < 5e-3
+    f = lambda k, t: 0.04 * t + 0 * k  # noqa: E731
+    w, dw, d2w, dT = V.numeric_derivs(f, np.array([0.0, 0.2]), 0.5)
+    assert np.allclose(V.dupire_local_var(np.array([0.0, 0.2]), w, dw, d2w, dT), 0.04)
+    # SSVI with eta (1 + |rho|) <= 2 has g >= 0 (no butterfly arbitrage)
+    k = np.linspace(-1.5, 1.5, 301)
+    g_ = V.g_function(k, *V.numeric_derivs(lambda kk, t: V.ssvi_w(kk, 0.04, -0.4, 1.2, 0.5), k, 0.5)[:3])
+    assert g_.min() > 0
+    # fit SSVI back from its own quotes
+    Ts = np.repeat([0.1, 0.5, 1.0], 25)
+    kk = np.tile(np.linspace(-0.5, 0.5, 25), 3)
+    th = np.repeat([0.01, 0.045, 0.09], 25)
+    wq = V.ssvi_w(kk, th, -0.35, 1.1, 0.45)
+    fit = V.fit_ssvi(kk, Ts, wq)
+    assert fit["rmse"] < 1e-4 and abs(fit["rho"] + 0.35) < 0.02
