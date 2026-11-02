@@ -185,16 +185,27 @@ def secretary_exact(n: int, k: int) -> float:
 # ---------------------------------------------------------------------------
 # BSDEs
 # ---------------------------------------------------------------------------
-def _basis(x, deg):
-    return np.column_stack([x ** k for k in range(deg + 1)])
+def _basis(x, deg, knots=None):
+    """Polynomials of degree ``deg``, or, with ``knots``, piecewise-linear hat functions (local, so they follow a
+    payoff's kinks; Gobet, Lemor and Warin use local bases for the same reason)."""
+    if knots is None:
+        return np.column_stack([x ** k for k in range(deg + 1)])
+    h = np.diff(knots)
+    cols = []
+    for j, kj in enumerate(knots):
+        left = (x - knots[j - 1]) / h[j - 1] if j > 0 else np.ones_like(x)
+        right = (knots[j + 1] - x) / h[j] if j < len(knots) - 1 else np.ones_like(x)
+        cols.append(np.clip(np.minimum(left, right), 0, 1))
+    return np.column_stack(cols)
 
 
-def bsde_regression(payoff, S0, T, sigma, mu, r, R=None, steps=50, paths=100_000, deg=6, seed=0) -> dict:
+def bsde_regression(payoff, S0, T, sigma, mu, r, R=None, steps=50, paths=100_000, deg=6, seed=0, hats=0) -> dict:
     """Solve -dY = f(Y, Z) dt - Z dW, Y_T = payoff(S_T), by least-squares Monte Carlo (Gobet, Lemor and Warin 2005).
 
     The driver is the hedger's: f = -r Y - theta Z with theta = (mu - r)/sigma (Black-Scholes), and with a borrowing
     rate R > r for negative cash, f = -r Y - theta Z - (R - r) min(Y - Z/sigma, 0) (Bergman 1995), which makes the
-    price nonlinear.  Z/(sigma S) is the hedge ratio.  Returns Y0 and Z0."""
+    price nonlinear.  Z/(sigma S) is the hedge ratio.  ``hats`` > 0 regresses on that many piecewise-linear hat
+    functions (knots at quantiles of the simulated spot) instead of polynomials.  Returns Y0 and Z0."""
     g = np.random.default_rng(seed)
     dt = T / steps
     dW = g.standard_normal((paths, steps)) * np.sqrt(dt)
@@ -210,7 +221,8 @@ def bsde_regression(payoff, S0, T, sigma, mu, r, R=None, steps=50, paths=100_000
             Zn = np.full(paths, np.mean(Y * dW[:, n]) / dt)
             EY = np.full(paths, Y.mean())
         else:
-            B = _basis(x, deg)
+            knots = np.quantile(x, np.linspace(0.001, 0.999, hats)) if hats else None
+            B = _basis(x, deg, knots)
             cz, *_ = np.linalg.lstsq(B, Y * dW[:, n] / dt, rcond=None)
             cy, *_ = np.linalg.lstsq(B, Y, rcond=None)
             Zn, EY = B @ cz, B @ cy
@@ -262,9 +274,11 @@ def merton_discrete_optimum(mu, r, sigma, dt, nodes=41) -> float:
     return float(res.x)
 
 
-def ppo_merton(mu, r, sigma, T=10.0, steps=40, iters=150, batch=256, seed=0, lr=3e-3, clip=0.2, epochs=8,
-               snapshots=(0, 5, 10, 20, 40, 80, 149)) -> dict:
-    """Train a Gaussian policy pi(t/T, log w) by PPO, reward = each step's log growth (log utility), discount 1.
+def ppo_merton(mu, r, sigma, T=10.0, steps=40, iters=150, batch=256, seed=0, lr=3e-3, clip=0.2, epochs=8, lam=0.0,
+               explore=None, snapshots=(0, 5, 10, 20, 40, 80, 149)) -> dict:
+    """Train a Gaussian policy pi(t/T, log w) by PPO, reward = each step's log growth (log utility), discount 1,
+    advantages by GAE(lam) on a learned critic (lam = 0: one-step TD errors, which keep only this step's noise; the
+    reward-to-go carries all the future noise, and near the optimum the signal is a fraction of a percent a year).
     Returns the mean fraction during training, and the policy's mean over a (t, w) grid at a few iterations."""
     import torch
     torch.set_num_threads(1)
@@ -284,8 +298,12 @@ def ppo_merton(mu, r, sigma, T=10.0, steps=40, iters=150, batch=256, seed=0, lr=
     pol, val = Net(1), Net(1)
     with torch.no_grad():
         pol.f[-1].bias.fill_(0.5)
-    log_std = torch.nn.Parameter(torch.tensor(-0.5))
-    opt = torch.optim.Adam(list(pol.parameters()) + list(val.parameters()) + [log_std], lr=lr)
+    # ``explore``: a fixed exploration noise instead of a learned one; near the optimum the objective is so flat that
+    # a learned noise collapses before the mean arrives, and the gradient's signal shrinks with the noise
+    log_std = torch.nn.Parameter(torch.tensor(float(np.log(explore)) if explore else -0.5),
+                                 requires_grad=explore is None)
+    opt = torch.optim.Adam(list(pol.parameters()) + list(val.parameters()) + ([log_std] if explore is None else []),
+                           lr=lr)
     tt, ww = np.meshgrid(np.linspace(0, 1, 21), np.linspace(-1.0, 1.0, 21))
     grid = torch.tensor(np.column_stack([tt.ravel(), ww.ravel()]), dtype=torch.float32)
     mean_hist, snaps = [], {}
@@ -308,14 +326,22 @@ def ppo_merton(mu, r, sigma, T=10.0, steps=40, iters=150, batch=256, seed=0, lr=
             lw = lw + rew
             S.append(s), A.append(a_np), Rw.append(rew), LP.append(lp.numpy())
         S, A, Rw, LP = (np.array(x) for x in (S, A, Rw, LP))  # [steps, batch, ...]
-        ret = np.cumsum(Rw[::-1], axis=0)[::-1]  # reward-to-go
         st = torch.tensor(S.reshape(-1, 2), dtype=torch.float32)
+        with torch.no_grad():
+            v = val(st).squeeze(-1).numpy().reshape(steps, batch)
+        v_next = np.vstack([v[1:], np.zeros((1, batch))])
+        delta = Rw + v_next - v
+        adv = np.zeros_like(delta)
+        run = np.zeros(batch)
+        for n in range(steps - 1, -1, -1):
+            run = delta[n] + lam * run
+            adv[n] = run
+        ret = adv + v
         at = torch.tensor(A.reshape(-1), dtype=torch.float32)
         rt = torch.tensor(ret.reshape(-1), dtype=torch.float32)
         lpt = torch.tensor(LP.reshape(-1), dtype=torch.float32)
-        with torch.no_grad():
-            adv = rt - val(st).squeeze(-1)
-            adv = (adv - adv.mean()) / (adv.std() + 1e-8)
+        adv = torch.tensor(adv.reshape(-1), dtype=torch.float32)
+        adv = (adv - adv.mean()) / (adv.std() + 1e-8)
         for _ in range(epochs):
             d = torch.distributions.Normal(pol(st).squeeze(-1), log_std.exp())
             ratio = torch.exp(d.log_prob(at) - lpt)
@@ -330,4 +356,4 @@ def ppo_merton(mu, r, sigma, T=10.0, steps=40, iters=150, batch=256, seed=0, lr=
         if it in snapshots:
             snaps[it] = gm.reshape(tt.shape)
     return {"mean_fraction": np.array(mean_hist), "snapshots": snaps, "grid_t": tt, "grid_logw": ww,
-            "final_std": float(log_std.exp())}
+            "final_std": float(log_std.detach().exp())}
