@@ -5,6 +5,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai17.common import BYTEC, FLOPC, GPUC, IDLEC, PART, WARPC, code_lines, load
 from videos.ai.ai17.specs import CC90
+from videos.ai.ai17.coalescing import sectors_touched
 
 IF_C, ELSE_C = C.PROB, C.MOMENTUM
 
@@ -54,7 +55,7 @@ class SIMT(VoiceoverScene):
                                       stroke_color=GREY_C, stroke_width=1.2), num_dashes=40)
         simt = definition_card(r"SIMT", r"single instruction, multiple threads: \ the $32$ threads of a warp run "
                                r"the same instruction together, \ each on its own data", width=5.6, font_size=21,
-                               color=WARPC).move_to([3.95, 1.25, 0])
+                               color=WARPC).move_to([3.95, 1.43, 0])
         with self.voiceover(
             "Here is a CUDA program. <bookmark mark='a'/> The function, a kernel, says what one thread does: work "
             "out which element is mine from my block number and my thread number, and update that element. "
@@ -182,35 +183,45 @@ class SIMT(VoiceoverScene):
     def coalescing(self):
         lanes = self.lanes(32, w=0.2).move_to([0, 2.2, 0])
         ll = label(r"a warp's $32$ loads", font_size=22, color=WARPC).next_to(lanes, UP, buff=0.15)
-        segs = VGroup(*[Rectangle(width=1.6, height=0.5, stroke_color=BYTEC, stroke_width=1.5, fill_color=BYTEC,
-                                  fill_opacity=0.1) for _ in range(8)]).arrange(RIGHT, buff=0.05).move_to([0, -0.2, 0])
-        sl = label(r"memory, \ in $128$-byte segments", font_size=22, color=BYTEC).next_to(segs, DOWN, buff=0.15)
-        good = VGroup(*[Line(l.get_bottom(), segs[3].get_top() + RIGHT * (k - 15.5) * 0.045, color=GPUC,
-                             stroke_width=1.5) for k, l in enumerate(lanes)])
-        g = np.random.Generator(np.random.PCG64(5))
-        tgt = g.integers(0, 8, 32)
-        bad = VGroup(*[Line(l.get_bottom(), segs[int(tgt[k])].get_top() + RIGHT * g.uniform(-0.6, 0.6),
-                            color=C.SURPRISE, stroke_width=1.5) for k, l in enumerate(lanes)])
-        n_bad = len(set(int(x) for x in tgt))
-        gl = label(r"neighbouring addresses: \ one transaction", font_size=24, color=GPUC).to_edge(DOWN, buff=0.9)
+        segs = VGroup(*[Rectangle(width=0.36, height=0.5, stroke_color=BYTEC, stroke_width=1.2, fill_color=BYTEC,
+                                  fill_opacity=0.1) for _ in range(32)]).arrange(RIGHT, buff=0.03).move_to([0, -0.2, 0])
+        sl = label(r"memory: \ $32$-byte sectors, \ eight $4$-byte words each", font_size=22,
+                   color=BYTEC).next_to(segs, DOWN, buff=0.2)
+        # Aligned adjacent floats occupy four sectors; the second pattern has
+        # one word per sector. Both are schematic addresses, not measured data.
+        adjacent = [14 * 32 + 4 * k for k in range(32)]
+        scattered = [32 * ((5 * k) % 32) + 4 * (k % 8) for k in range(32)]
+
+        def load_lines(addresses, color):
+            return VGroup(*[Line(l.get_bottom(), segs[a // 32].get_top() + RIGHT * ((a % 32) / 4 - 3.5) * 0.04,
+                                color=color, stroke_width=1.5) for l, a in zip(lanes, addresses)])
+
+        good, bad = load_lines(adjacent, GPUC), load_lines(scattered, C.SURPRISE)
+        good_sectors, bad_sectors = sectors_touched(adjacent), sectors_touched(scattered)
+        gl = label(rf"aligned neighbours: \ ${len(good_sectors)}$ transactions", font_size=24,
+                   color=GPUC).to_edge(DOWN, buff=0.9)
+        n_bad = len(bad_sectors)
         bl_ = label(rf"scattered: \ ${n_bad}$ transactions for the same $32$ numbers", font_size=24,
                     color=C.SURPRISE).to_edge(DOWN, buff=0.9)
-        tag = schematic_tag(corner=UR)
+        tag = note(r"schematic: \ $32$ threads, \ one $4$-byte load each; \ compute capability $6.0+$")
+        tag.to_corner(UR, buff=0.2)
         with self.voiceover(
-            "One more rule of the road. <bookmark mark='a'/> Memory is read in segments of 128 bytes. When the "
-            "thirty-two threads of a warp read thirty-two neighbouring numbers, the hardware combines them into one "
-            "transaction: the loads are coalesced. <bookmark mark='b'/> When they read scattered addresses, the same "
-            "thirty-two numbers cost many transactions, and most of every segment fetched is thrown away. It's the "
+            "One more rule of the road. <bookmark mark='a'/> On modern CUDA GPUs, memory requests use thirty-two-byte "
+            "sectors. The thirty-two threads here each read one four-byte number. Aligned neighbouring addresses "
+            "need four transactions: the loads are coalesced. <bookmark mark='b'/> Scattered across thirty-two "
+            "sectors, the same thirty-two numbers need thirty-two transactions, wasting most of each sector. It's the "
             "same lesson as a CPU's cache lines, and it will matter for matrices: walk them along the rows."
         ) as vo:
             self.play(FadeIn(lanes), FadeIn(ll), FadeIn(segs), FadeIn(sl), FadeIn(tag))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(x) for x in good], lag_ratio=0.02), segs[3].animate.set_fill(opacity=0.5),
+            self.play(LaggedStart(*[Create(x) for x in good], lag_ratio=0.02),
+                      *[segs[i].animate.set_fill(GPUC, opacity=0.5) for i in good_sectors],
                       FadeIn(gl))
             vo.wait_until("b")
-            self.play(FadeOut(good), FadeOut(gl), segs[3].animate.set_fill(opacity=0.1))
+            self.play(FadeOut(good), FadeOut(gl),
+                      *[segs[i].animate.set_fill(BYTEC, opacity=0.1) for i in good_sectors])
             self.play(LaggedStart(*[Create(x) for x in bad], lag_ratio=0.02),
-                      *[segs[int(i)].animate.set_fill(C.SURPRISE, opacity=0.35) for i in set(tgt.tolist())],
+                      *[segs[i].animate.set_fill(C.SURPRISE, opacity=0.35) for i in bad_sectors],
                       FadeIn(bl_))
         self.wait(0.3)
         self.clear_scene()

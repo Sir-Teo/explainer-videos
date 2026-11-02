@@ -114,10 +114,10 @@
    "en": "Now the reason for all those threads. A load from memory takes hundreds of cycles; while a warp waits, the scheduler issues instructions from another warp that's ready. <bookmark mark='a'/> We simulated one scheduler with memory 479 cycles away, the latency measured on a Hopper GPU. <bookmark mark='b'/> If each warp does only four operations per load, even sixteen warps keep it busy just 17 percent of the time. <bookmark mark='c'/> With sixty-four operations per load, 9 warps are enough. <bookmark mark='d'/> The lines are Little's law: you need the latency plus the work, divided by the work, warps in flight. An H100's multiprocessor has four schedulers and room for sixty-four warps. Past that, the only way to hide latency is more arithmetic per byte, an idea that comes back in chapter five.",
    "zh": "现在说说为什么要那么多线程。从内存读一次要几百个周期；一个线程束在等的时候，调度器就去发另一个已经就绪的线程束的指令。<bookmark mark='a'/>我们模拟了一个调度器，内存在479个周期之外，这是在一块Hopper GPU上测得的延迟。<bookmark mark='b'/>如果每个线程束每次读取只做四次运算，即使有十六个线程束，调度器也只有17%的时间在忙。<bookmark mark='c'/>如果每次读取做六十四次运算，9个线程束就够了。<bookmark mark='d'/>那几条线就是利特尔定律：需要在路上的线程束数，等于延迟加上工作量，再除以工作量。H100的一个多处理器有四个调度器，能容纳六十四个线程束。超过这个数，隐藏延迟的唯一办法，就是每个字节做更多的算术，这个想法在第5章还会出现。"
   },
-  "86083820010e": {
+  "d93673751216": {
    "scene": "SIMT",
-   "en": "One more rule of the road. <bookmark mark='a'/> Memory is read in segments of 128 bytes. When the thirty-two threads of a warp read thirty-two neighbouring numbers, the hardware combines them into one transaction: the loads are coalesced. <bookmark mark='b'/> When they read scattered addresses, the same thirty-two numbers cost many transactions, and most of every segment fetched is thrown away. It's the same lesson as a CPU's cache lines, and it will matter for matrices: walk them along the rows.",
-   "zh": "还有一条交通规则。<bookmark mark='a'/>内存是按128字节一段来读的。当一个线程束的32个线程读32个相邻的数，硬件会把它们合成一次传输：这叫访存合并。<bookmark mark='b'/>如果它们读的是分散的地址，同样32个数要花很多次传输，取回来的每一段，大部分都被扔掉了。这和CPU缓存行的道理一样，对矩阵也很重要：要沿着行去走。"
+   "en": "One more rule of the road. <bookmark mark='a'/> On modern CUDA GPUs, memory requests use thirty-two-byte sectors. The thirty-two threads here each read one four-byte number. Aligned neighbouring addresses need four transactions: the loads are coalesced. <bookmark mark='b'/> Scattered across thirty-two sectors, the same thirty-two numbers need thirty-two transactions, wasting most of each sector. It's the same lesson as a CPU's cache lines, and it will matter for matrices: walk them along the rows.",
+   "zh": "还有一条交通规则。<bookmark mark='a'/>现代CUDA GPU的内存请求按32字节的扇区处理。这里32个线程各读一个4字节的数。对齐且相邻的地址只需4次传输：这叫访存合并。<bookmark mark='b'/>若分散在32个扇区，同样32个数就要32次传输，每个扇区的大部分带宽都浪费了。这和CPU缓存行的道理一样，对矩阵也很重要：要沿着行去走。"
   },
   "b0371f88dd0e": {
    "scene": "AlexNet",
@@ -179,10 +179,10 @@
    "en": "Chapter six. The memory hierarchy.",
    "zh": "第6章。存储层次。"
   },
-  "c69c96639006": {
+  "5248a605cb98": {
    "scene": "Hierarchy",
-   "en": "A GPU's memory is not one thing. Let's zoom in on an H100. <bookmark mark='a'/> Around the chip sit stacks of high-bandwidth memory, DRAM dies piled on top of each other: 80 gigabytes, read at 3.35 terabytes a second, but hundreds of cycles away. <bookmark mark='b'/> On the chip itself, a level-two cache of fifty megabytes, shared by all 132 streaming multiprocessors, about half as far. <bookmark mark='c'/> Inside each multiprocessor: 256 kilobytes of shared memory, which the programmer fills on purpose, about forty cycles away; <bookmark mark='d'/> and the registers, another 256 kilobytes, right next to the arithmetic, read every cycle. Each step down is smaller and closer, and much faster to read.",
-   "zh": "GPU的内存不是一样东西。我们放大来看一块H100。<bookmark mark='a'/>芯片周围是一叠叠高带宽内存，DRAM裸片一层层摞起来：80GB，每秒能读3.35太字节，但远在几百个周期之外。<bookmark mark='b'/>芯片本身上，有五十兆字节的二级缓存，由全部132个流式多处理器共用，距离大约是一半。<bookmark mark='c'/>每个多处理器里面：256千字节的共享内存，由程序员有意地去填，大约四十个周期远；<bookmark mark='d'/>还有寄存器，又是256千字节，紧挨着运算单元，每个周期都能读。每往下一层，就更小、更近，读起来也快得多。"
+   "en": "A GPU's memory is not one thing. Let's zoom in on an H100. <bookmark mark='a'/> Around the chip sit stacks of high-bandwidth memory, DRAM dies piled on top of each other: 80 gigabytes, read at 3.35 terabytes a second, but hundreds of cycles away. <bookmark mark='b'/> On the chip itself, a level-two cache of fifty megabytes, shared by all 132 streaming multiprocessors, about half as far. <bookmark mark='c'/> Inside each multiprocessor: a combined L1 and shared-memory pool of 256 kibibytes, of which up to 228 can be shared memory that the programmer fills on purpose; <bookmark mark='d'/> and the registers, another 256 kilobytes, right next to the arithmetic, read every cycle. Each step down is smaller and closer, and much faster to read.",
+   "zh": "GPU的内存不是一样东西。我们放大来看一块H100。<bookmark mark='a'/>芯片周围是一叠叠高带宽内存，DRAM裸片一层层摞起来：80GB，每秒能读3.35太字节，但远在几百个周期之外。<bookmark mark='b'/>芯片本身上，有五十兆字节的二级缓存，由全部132个流式多处理器共用，距离大约是一半。<bookmark mark='c'/>每个多处理器里面：L1与共享内存合计256KiB，其中最多228KiB可以作为由程序员有意填充的共享内存；<bookmark mark='d'/>还有寄存器，又是256千字节，紧挨着运算单元，每个周期都能读。每往下一层，就更小、更近，读起来也快得多。"
   },
   "a6ab681d03ea": {
    "scene": "Hierarchy",
@@ -264,10 +264,10 @@
    "en": "A floating-point number is a sign, an exponent and a mantissa: scientific notation in base two. <bookmark mark='a'/> Here is pi, rounded into each format the hardware of this part supports. <bookmark mark='b'/> FP32, the IEEE standard of 1985: eight exponent bits, twenty-three mantissa bits, about seven decimal digits. <bookmark mark='c'/> TF32 and bfloat16 keep FP32's eight-bit exponent, so the same range, but cut the mantissa to ten bits and to seven. FP16 trades the other way: five exponent bits, ten of mantissa. <bookmark mark='d'/> Then eight bits in two flavours, four exponent bits and three of mantissa, or five and two. <bookmark mark='e'/> And four bits: two of exponent, one of mantissa. Pi becomes three.",
    "zh": "一个浮点数由符号、指数和尾数组成：二进制的科学计数法。<bookmark mark='a'/>这是π，被舍入到本部分的硬件所支持的每种格式里。<bookmark mark='b'/>FP32，1985年的IEEE标准：8个指数位，23个尾数位，大约七位十进制有效数字。<bookmark mark='c'/>TF32和bfloat16保留了FP32的8位指数，所以范围一样，但把尾数砍到了10位和7位。FP16反过来取舍：5个指数位，10个尾数位。<bookmark mark='d'/>然后是两种8位格式：4个指数位加3个尾数位，或者5个加2个。<bookmark mark='e'/>还有4位：2个指数位，1个尾数位。π变成了3。"
   },
-  "7cb6fa285012": {
+  "3c07d5e1eb61": {
    "scene": "Formats",
-   "en": "Two numbers describe a format. <bookmark mark='a'/> With M mantissa bits, each power of two is cut into two to the M equal steps. <bookmark mark='b'/> Rounding to the nearest value is off by at most half a step, so the relative error is at most two to the minus M plus one, the unit roundoff. That's precision. <bookmark mark='c'/> The exponent bits set the range: the largest number is just under two times two to the largest exponent. <bookmark mark='d'/> For E4M3 that's 448, because one bit pattern is kept to mean not-a-number. FP16 tops out at 65,504, which is why training in FP16 needs care, and bfloat16, with FP32's exponent, doesn't.",
-   "zh": "两个数就能描述一种格式。<bookmark mark='a'/>有M个尾数位，每个2的幂之间就被切成2的M次方个相等的台阶。<bookmark mark='b'/>就近舍入，最多偏差半个台阶，所以相对误差至多是2的负M加1次方，叫作单位舍入误差。这就是精度。<bookmark mark='c'/>指数位决定范围：最大的数比2乘以2的最大指数次方略小一点。<bookmark mark='d'/>对E4M3来说是448，因为有一个位模式留着表示“非数”。FP16最大到65504，所以用FP16训练要小心，而有着FP32指数的bfloat16就不用。"
+   "en": "Two numbers describe a format. <bookmark mark='a'/> With M mantissa bits, each power of two is cut into two to the M equal steps. <bookmark mark='b'/> Rounding to the nearest value is off by at most half a step. For normal values without overflow, the relative error is at most two to the negative of the quantity M plus one, the unit roundoff. That's precision. <bookmark mark='c'/> The exponent bits set the range: the largest number is just under two times two to the largest exponent. <bookmark mark='d'/> For E4M3 that's 448, because one bit pattern is kept to mean not-a-number. FP16 tops out at 65,504, which is why training in FP16 needs care, and bfloat16, with FP32's exponent, doesn't.",
+   "zh": "两个数就能描述一种格式。<bookmark mark='a'/>有M个尾数位，每个2的幂之间就被切成2的M次方个相等的台阶。<bookmark mark='b'/>就近舍入，最多偏差半个台阶。对于不溢出的规格化数，相对误差至多是2的负（M加1）次方，叫作单位舍入误差。这就是精度。<bookmark mark='c'/>指数位决定范围：最大的数比2乘以2的最大指数次方略小一点。<bookmark mark='d'/>对E4M3来说是448，因为有一个位模式留着表示“非数”。FP16最大到65504，所以用FP16训练要小心，而有着FP32指数的bfloat16就不用。"
   },
   "120b80a47720": {
    "scene": "Formats",

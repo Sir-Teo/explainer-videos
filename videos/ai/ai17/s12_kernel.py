@@ -46,6 +46,9 @@ class Kernel(VoiceoverScene):
         code.to_corner(UL, buff=0.35)
         if code.get_right()[0] > 0.4:
             code.scale((0.4 - code.get_left()[0]) / code.width, about_edge=UL)
+        assumptions = wrapped_label(r"illustrative: \ $n$ a multiple of $T$, \ $T\times T$ threads; \ no edge checks",
+                                    max_width=6.8, font_size=17, color=GREY_B)
+        assumptions.next_to(code, DOWN, buff=0.17).align_to(code, LEFT)
         hl_smem = SurroundingRectangle(code[2], color=L1C, buff=0.04, stroke_width=2)
         hl_load = SurroundingRectangle(VGroup(code[7], code[8]), color=BYTEC, buff=0.04, stroke_width=2)
         hl_math = SurroundingRectangle(code[10], color=FLOPC, buff=0.04, stroke_width=2)
@@ -77,7 +80,7 @@ class Kernel(VoiceoverScene):
             "eight operations per byte, still below an H100's ridge. Real kernels go further: each thread keeps a "
             "small tile of its own in registers, and the multiply-adds go to the tensor cores."
         ) as vo:
-            self.play(FadeIn(code), FadeIn(Am), FadeIn(Bm), FadeIn(Cm))
+            self.play(FadeIn(code), FadeIn(assumptions), FadeIn(Am), FadeIn(Bm), FadeIn(Cm))
             vo.wait_until("a")
             self.play(Create(blk_box), *[c_.animate.set_fill(C_C, opacity=0.5) for c_ in blk], FadeIn(bl))
             vo.wait_until("b")
@@ -113,9 +116,9 @@ class Kernel(VoiceoverScene):
         ll = label(r"$R$ registers per thread; \ also capped by shared memory \\ and by $64$ warps per SM",
                    font_size=20, color=GREY_A).next_to(law, DOWN, buff=0.2)
         ex1, ex2 = float(w["ex_occ"]), float(w["ex2_occ"])
-        exs = VGroup(label(rf"the tile kernel: \ $32$ registers, \ $8$ KB shared: \ ${100 * ex1:.0f}\%$", font_size=20,
+        exs = VGroup(label(rf"the tile kernel: \ $32$ registers, \ $8$ KiB shared: \ ${100 * ex1:.0f}\%$", font_size=20,
                            color=C_C),
-                     label(rf"a big-tile kernel: \ $128$ registers, \ $64$ KB shared: \ ${100 * ex2:.0f}\%$",
+                     label(rf"a big-tile kernel: \ $128$ registers, \ $64$ KiB shared: \ ${100 * ex2:.0f}\%$",
                            font_size=20, color=FLOPC)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         exs.next_to(ll, DOWN, buff=0.45)
         vh = history_card(2010, r"Vasily Volkov, \ \textit{Better performance at lower occupancy}",
@@ -123,9 +126,9 @@ class Kernel(VoiceoverScene):
                           font_size=19).to_corner(DR, buff=0.3)
         tag = note(r"computed: \ NVIDIA's limits for the H100 (Hopper tuning guide)").to_corner(DL, buff=0.2)
         res = VGroup(label(r"one H100 multiprocessor holds:", font_size=24, color=WHITE),
-                     label(rf"${CC90['regs']:,}$ registers \ (${CC90['regs'] * 4 // 1024}$ KB)".replace(",", "{,}"),
+                     label(rf"${CC90['regs']:,}$ registers \ (${CC90['regs'] * 4 // 1024}$ KiB)".replace(",", "{,}"),
                            font_size=22, color=REGC),
-                     label(rf"up to ${CC90['smem'] // 1024}$ KB of shared memory", font_size=22, color=L1C),
+                     label(rf"up to ${CC90['smem'] // 1024}$ KiB of shared memory", font_size=22, color=L1C),
                      label(rf"at most ${CC90['warps']}$ warps \ (${CC90['warps'] * 32:,}$ threads)".replace(",", "{,}"),
                            font_size=22, color=WARPC))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.9, 1.6, 0])

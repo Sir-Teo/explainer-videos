@@ -184,10 +184,10 @@ class Frontier(VoiceoverScene):
             g_.arrange(DOWN, buff=0.2)
         VGroup(left, right).arrange(RIGHT, buff=1.4).move_to([0, 2.3, 0])
         chips = VGroup(
-            label(r"Rubin GPUs \ (and Rubin CPX, for long prompts)", font_size=22, color=GPUC).next_to(left, DOWN,
-                                                                                                    buff=0.5),
-            label(rf"Groq 3 LPX: \ ${GROQ3_LPX['sram_bw'] / 1e15:.0f}$ PB/s of SRAM per rack", font_size=22,
-                  color=L1C).next_to(right, DOWN, buff=0.5),
+            wrapped_label(r"Rubin GPUs \\ (and Rubin CPX, for long prompts)", max_width=4.2, font_size=22,
+                          color=GPUC).next_to(left, DOWN, buff=0.4),
+            wrapped_label(rf"Groq 3 LPX: \\ ${GROQ3_LPX['sram_bw'] / 1e15:.0f}$ PB/s of SRAM per rack",
+                          max_width=4.2, font_size=22, color=L1C).next_to(right, DOWN, buff=0.4),
         )
         tpu = label(rf"Google: \ TPU 8t for training; \ TPU 8i for serving, \ ${TPU8I['sram'] / 1e6:.0f}$ MB of SRAM "
                     r"for the KV cache", font_size=22, color=FLOPC).move_to([0, -2.45, 0])

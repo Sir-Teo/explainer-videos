@@ -34,6 +34,8 @@ class AlexNet(VoiceoverScene):
         bars.place(base_y=-2.4, x=3.6)
         bt = label(r"ILSVRC 2012: \ top-5 error, \%", font_size=24, color=GREY_A).move_to([3.6, 2.6, 0])
         who = label(r"Alex Krizhevsky, \ Ilya Sutskever, \ Geoffrey Hinton \ (Toronto)", font_size=22, color=GPUC)
+        if who.width > 6.4:
+            who.width = 6.4
         who.next_to(bt, DOWN, buff=0.2)
         # the contest: one photograph, five guesses, right if the true class is among them
         photo = RoundedRectangle(width=1.9, height=1.9, corner_radius=0.08, stroke_color=GREY_B, fill_color=GREY_D,
@@ -102,7 +104,8 @@ class AlexNet(VoiceoverScene):
                          for i in (1, 4, 5)],
                        *[Line(bot[i].get_right(), top[i + 1].get_left(), stroke_width=2, color=FLOPC) for i in (1, 4, 5)])
         cl = label(r"the only places the two cards talk", font_size=22, color=FLOPC).move_to([0.6, -0.1, 0])
-        cl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.06)
+        cl.add_background_rectangle(color=BACKGROUND, opacity=0.96, buff=0.09)
+        cl.set_z_index(2)  # routes added later in the LaggedStart stay behind the caption
         facts = VGroup(label(r"$60$ million parameters, \ $650{,}000$ neurons", font_size=22, color=GREY_A),
                        label(r"two GeForce GTX 580 cards, \ $3$ GB each", font_size=22, color=GREY_A),
                        label(rf"$90$ passes over the data: \ ${ALEXNET_DAYS[0]}$ to ${ALEXNET_DAYS[1]}$ days",

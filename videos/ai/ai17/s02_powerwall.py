@@ -46,7 +46,9 @@ class PowerWall(VoiceoverScene):
         first, last = ty[order[0]], ty.max()
         src = cite(r"data: \ K.~Rupp, \textit{Microprocessor trend data} (CC BY 4.0)", corner=DR)
         ends = VGroup(label(rf"Intel 4004: \ ${first:,.0f}$".replace(",", "{,}"), font_size=20, color=GREY_A)
-                      .next_to(dots[0], RIGHT, buff=0.5).shift(DOWN * 0.2),
+                      .next_to(dots[0], RIGHT, buff=0.5).shift(UP * 0.35)
+                      .add_background_rectangle(color=config.background_color, opacity=0.96, buff=0.05)
+                      .set_z_index(2),
                       label(rf"${last / 1e9:.0f}$ billion", font_size=20, color=GREY_A).next_to(dots[-1], RIGHT, buff=0.15))
         with self.voiceover(
             "In 1965 Gordon Moore, then at Fairchild Semiconductor, noticed that the number of components on a chip "

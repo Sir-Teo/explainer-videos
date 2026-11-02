@@ -82,7 +82,7 @@ class Interconnect(VoiceoverScene):
                  center=[-3.6, 0.2, 0])
         dots = VGroup(*[Dot(g.ax.c2p(y, v / 1e12), radius=0.07, color=COMMC) for y, _, v in NVLINK])
         names = VGroup(*[label(nm.split(" (")[1].rstrip(")"), font_size=16, color=GREY_A)
-                         .next_to(d_, UP if k % 2 == 0 else LEFT, buff=0.1) for k, (d_, (_, nm, _)) in
+                         .next_to(d_, UP if k % 2 == 0 or k == 1 else LEFT, buff=0.1) for k, (d_, (_, nm, _)) in
                          enumerate(zip(dots, NVLINK))])
         # topologies, schematic
         def sw(center):

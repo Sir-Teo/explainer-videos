@@ -9,6 +9,25 @@ in late 2026. Wherever it can, the part measures the computer that renders it: i
 its memory bandwidth and latency at every cache level, a cache-blocking speed-up in C, its processes passing messages.
 Everything about GPUs and other chips is from vendors' datasheets and papers, cited on screen.
 
+## Source review and cache requirements
+
+The source corrections distinguish input reads per MAC from reads per FLOP, modern 32-byte memory sectors from
+individual word loads, and the combined L1/shared-memory pool from its shared-memory carveout. Binary memory
+capacities are labeled in KiB. The normal rounding bound assumes rounding to nearest without overflow.
+
+These source changes do not certify a complete rendered video. Data-dependent scenes require separately validated
+cache products; no numeric caches, model weights or changed scientific recipes accompany this source review.
+The documented hardware measurements below are reference results, not measurements reproduced by these changes.
+Actual narration, synchronization and final-resolution rendering still require their own checks.
+
+Before using the all-items commands below, reconcile the required cache products: the loader computes missing
+items automatically, and the all-items build can train the shared language model. The `trends`, `systolic` and
+`warps` items use the checked-in data or seeded simulations and can be selected individually. Host measurements
+belong to the hardware, compiler and numerical runtime that produced them; a different host does not recover the
+same experiment. Weight-dependent format comparisons require the intended model revision, tensor selection and
+cache provenance to be established first. Treat unresolved weight provenance as a blocked comparison rather than
+substituting Gaussian-only results or a different trained model.
+
 * **Eighty million times the arithmetic.** AlexNet (2012) on two GeForce GTX 580s against Llama 3.1 405B (2024) on
   16,384 H100s: 4.7 × 10¹⁷ against 3.8 × 10²⁵ FLOP (Epoch AI). The same training, at the best matrix-product speed
   measured on this computer: days for AlexNet, millions of years for Llama.
@@ -23,7 +42,8 @@ Everything about GPUs and other chips is from vendors' datasheets and papers, ci
   core of this computer (measured); Brook (Buck et al. 2004), Oh & Jung (2004, 20× on a GPU), CUDA (announced
   November 2006, released 2007), Raina, Madhavan & Ng (2009, up to 70×).
 * **3. Warps, divergence and latency.** A CUDA kernel, grids, blocks and warps; SIMT; branch divergence simulated
-  (random data against sorted); a warp scheduler hiding a 479-cycle load (simulated, greedy-then-oldest) against
+  (random data against sorted); a warp scheduler hiding a 479-cycle load (simulated, keeping a ready current warp
+  and choosing the lowest-index ready warp after a stall) against
   Little's law; an H100 SM's 4 schedulers and 64 warps; coalesced loads.
 * **4. AlexNet: the moment.** ImageNet (Deng et al. 2009); ILSVRC 2012, 15.3% against 26.2% top-5 error; the network
   split across two 3 GB cards; cuda-convnet; the arithmetic (1.2 M × 90 × 0.75 G × 2 × 3 against the published
@@ -34,8 +54,9 @@ Everything about GPUs and other chips is from vendors' datasheets and papers, ci
   derived; arithmetic intensity, naive (¼ FLOP/byte) and best (n/6); tiling animated, b/4 FLOP/byte, 3b² ≤ M;
   Hong & Kung's lower bound (1981); measured in C at n = 1,024: the textbook loop, loops reordered, tiled for tile
   sizes 8 to 512, and BLAS.
-* **6. The memory hierarchy.** An H100 zoomed from HBM3 (80 GB, 3.35 TB/s) through the 50 MB L2 to an SM's shared
-  memory and registers, with Luo et al.'s measured latencies (41, 263 and 479 cycles); this computer's bandwidth and
+* **6. The memory hierarchy.** An H100 zoomed from HBM3 (80 GB, 3.35 TB/s) through the 50 MB L2 to an SM's combined
+  256 KiB L1/shared pool, with up to 228 KiB available as shared memory, and its 256 KiB of registers. The L2/global
+  latency references are Luo et al.'s H800 measurements (263 and 479 cycles); this computer's bandwidth and
   random-read latency for data from 4 KiB to 256 MiB (measured, with the cache sizes it reports); energy per operation
   at 45 nm (Horowitz 2014): a DRAM read costs about 170 floating-point multiplies.
 * **7. The roofline.** speed ≤ min(P, βI) derived (Williams, Waterman & Patterson 2009); this computer's single-core
@@ -44,7 +65,8 @@ Everything about GPUs and other chips is from vendors' datasheets and papers, ci
   H100's roofline, its ridge at 295 FLOP/byte (n ≈ 890 in BF16), decoding at about 1 FLOP/byte (0.3% of peak); the
   TPU paper's ridges (1,350; K80 9; Haswell 13).
 * **8. Tensor cores and systolic arrays.** Kung & Leiserson (1978), Kung (1982); a 4 × 4 output-stationary array
-  computing C = AB cycle by cycle (simulated, checked against numpy); K + 2n − 2 cycles and 2/n reads per operation
+  computing C = AB cycle by cycle (simulated, checked against numpy); K + 2n − 2 cycles and 2/n input reads per MAC
+  (excluding output writes)
   derived; the TPU v1 (Jouppi et al. 2017): 256 × 256 8-bit MACs at 700 MHz, 92 TOPS, deployed 2015, ran AlphaGo;
   padding utilization of a 256 × 256 array (computed); Volta's tensor cores (4 × 4 × 4 per clock, 640 × 64 × 2 ×
   1.53 GHz ≈ 125 TFLOP/s) and their successors.
@@ -94,7 +116,9 @@ blocking item runs the same three loop orders in Python with numpy doing the inn
 numpy, and the narration says so. `comm.py` runs the message-passing measurements (four processes, started with
 `spawn`); `specs.py` holds every published number, with its source. The formats item rounds the series' own model
 (`explainer/ai/novels.py`; `make.py` trains it first) if it exists, else the narrator's Qwen3-TTS weights if they are
-in the Hugging Face cache, else Gaussian samples only, and the narration names which. Everything random is seeded.
+in the Hugging Face cache, else Gaussian samples only, and the narration names which. The NumPy simulations are
+seeded; the optional Torch timing inputs are not seeded by the recipe. These fallback choices are different
+experiments, so they must not be used to replace a comparison whose original weight identity is unresolved.
 `data/` holds K. Rupp's microprocessor trend data (CC BY 4.0) and a column subset of Epoch AI's ML hardware database
 (CC BY).
 
