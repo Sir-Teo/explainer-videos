@@ -147,7 +147,7 @@ def compute_calib() -> dict:
     err = (pred - y[held]) * 100
     # the Surface, through the network, then checked by fresh Monte Carlo
     Q = _surface_quotes()
-    w = np.sqrt(Q["vega"] / Q["vega"].mean())
+    w = Q["vega"] / Q["vega"].mean()  # vega-weighted squared errors, as Part 13 and 14 score fits
     fit = D.calibrate_neural(net, Q["T"], Q["k"], Q["iv"], w=w, starts=12)
     mc = _mc_iv_quotes(np.array(fit["x"]), Q["T"], Q["k"], n_paths=60000, seed=41)
     ok = np.isfinite(mc)
@@ -187,6 +187,7 @@ def compute_calib_hist() -> dict:
     import torch
 
     torch.set_num_threads(2)
+    from explainer.quant.house import stochvol as sv
     from videos.quant.quant13 import compute as Q13
     net = _calib_net()
     hist = Q13.load("history")
@@ -199,9 +200,12 @@ def compute_calib_hist() -> dict:
             continue
         if len(Q["K"]) < 20:
             continue
-        w = np.sqrt(Q["vega"] / Q["vega"].mean())
+        w = Q["vega"] / Q["vega"].mean()  # vega-weighted squared errors, as Part 13 and 14 score fits
         f = D.calibrate_neural(net, Q["T"], Q["k"], Q["iv"], w=w, starts=4, iters=150)
-        out.append({"day": r["day"], **f["params"], "rmse": f["rmse"], "heston_rmse": r["rmse"],
+        # Heston refitted to exactly these quotes, starting from Part 13's weekly fit (which used every expiry)
+        hf = sv.calibrate("Heston", Q, x0=r["x"], max_nfev=80)
+        h_rmse = float(hf["rmse"])
+        out.append({"day": r["day"], **f["params"], "rmse": f["rmse"], "heston_rmse": h_rmse, "heston_rmse_all": r["rmse"],
                     "heston_rho": r["x"][4], "n": int(len(Q["K"])), "seconds": f["seconds"]})
         print("   ", r["day"], {k: round(v, 3) for k, v in f["params"].items()}, round(f["rmse"], 2), flush=True)
     H = np.array([o["H"] for o in out])
