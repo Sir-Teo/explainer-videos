@@ -98,6 +98,7 @@ class FD(VoiceoverScene):
                              r"gamma rings around the strike. Two fully implicit half-steps at the start smooth the corner "
                              r"away and keep second order (Rannacher 1984). Gamma is what the desk hedges with", 4.2, 18,
                              GREY_A).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        src = illustration(r"cash-or-nothing call, a week to expiry; 800 price points, 4 time steps")
         with self.voiceover(
             "But Crank–Nicolson has a flaw that the price hides. Near expiry, with a payoff that jumps, like a "
             "digital, it does not damp the jump. <bookmark mark='a'/> The price looks right, but its gamma rings "
@@ -105,7 +106,7 @@ class FD(VoiceoverScene):
             "Rannacher in 1984, is to start with two fully implicit half-steps, which smooth the corner, and then "
             "switch to Crank–Nicolson. The ringing disappears, and the scheme stays second order."
         ) as vo:
-            self.play(FadeIn(g), Create(ex), FadeIn(leg[0]))
+            self.play(FadeIn(g), FadeIn(src), Create(ex), FadeIn(leg[0]))
             vo.wait_until("a")
             self.play(Create(cn), FadeIn(leg[1]))
             vo.wait_until("b")

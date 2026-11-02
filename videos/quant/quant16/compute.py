@@ -162,7 +162,8 @@ def compute_fd() -> dict:
     Tg = 0.02
     out_g = {}
     for name, rn in (("cn", 0), ("cn+rannacher", 2)):
-        _, S, V = E.fd_european(S0, K, Tg, SIG, R, nS=400, nt=8, scheme="cn", payoff="digital", rannacher=rn)
+        # a fine price grid and large time steps (sigma^2 S^2 dt / dS^2 >> 1), as desks run near expiry: CN rings
+        _, S, V = E.fd_european(S0, K, Tg, SIG, R, nS=800, nt=4, scheme="cn", payoff="digital", rannacher=rn)
         g = np.gradient(np.gradient(V, S), S)
         m = (S > 85) & (S < 115)
         out_g[name] = {"S": S[m], "gamma": g[m]}

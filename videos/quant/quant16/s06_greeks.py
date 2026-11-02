@@ -51,7 +51,8 @@ class Greeks(VoiceoverScene):
             "A desk needs sensitivities as much as prices, and Monte Carlo offers three ways to get them. Bump an "
             "input and reprice, with the same random numbers. Differentiate the payoff along each path, the pathwise "
             "method. Or differentiate the probability density instead, the likelihood ratio. <bookmark mark='a'/> For "
-            "a call all three agree; pathwise is the least noisy. <bookmark mark='b'/> For a digital, the payoff jumps, "
+            "a call all three agree; bumping with common random numbers and the pathwise method are equally precise, "
+            "and the likelihood ratio is noisier. <bookmark mark='b'/> For a digital, the payoff jumps, "
             "and the pathwise derivative is zero almost everywhere: it fails. The likelihood ratio does not care, "
             "because it never differentiates the payoff. Mark Broadie and Paul Glasserman laid this out in 1996."
         ) as vo:
@@ -115,10 +116,10 @@ class Greeks(VoiceoverScene):
         for k, n in names.items():
             tab.add(VGroup(MathTex(n, font_size=28), MathTex(f"{a['aad'][k]:.4f}", font_size=28, color=DELTA),
                            MathTex(f"{a['bump'][k]:.4f}", font_size=28)))
-        xs = [-4.4, -1.0, 2.4]
+        xs = [-5.6, -3.1, -0.6]
         for i, row in enumerate(tab):
             for j, cell in enumerate(row):
-                cell.move_to([xs[j], 2.4 - 0.62 * i, 0])
+                cell.move_to([xs[j], 1.6 - 0.62 * i, 0])
         n = g["n_greeks"]
         side = VGroup(
             MathTex(rf"\text{{AAD: all {n} for}}\ {g['aad_ratio']:.1f}\times\ \text{{a price}}", font_size=30, color=GOOD),
