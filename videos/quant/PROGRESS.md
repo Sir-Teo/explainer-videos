@@ -334,6 +334,22 @@ Facts checked:
   - PDV on DVOL (fit 2021-23): R^2 0.88 in, 0.42 out; baseline 0.68, -0.27; activity 18.7 vs trend 0.9 vol pts.
 - **Built** (compute, 12 scenes, README EN/ZH, zh_lines 40/40). Remaining: on-screen text, dry runs, build.
 
+## Part 15 (Exotics and Structured Products), 2 Nov 2026
+
+- **Data.** `data.yahoo_daily` (Yahoo chart API, checksummed): 510500.SS (CSI 500 ETF), 512100.SS (CSI 1000 ETF),
+  ^HSCE. Yahoo has no history for the CSI indices themselves; the ETFs are labelled as such on screen.
+- **Facts checked.** Bloomberg 11 Jan 2024 (~$13 bn snowballs near loss triggers); UBS ~$50 bn market; CICC knock-in
+  estimates; Risk.net (hedging fuelled futures selling) vs SRP sceptics; April 2024 curbs (Bloomberg). Korea: 19.3 tn won
+  HSCEI ELS outstanding (Nov 2023), 15.9 tn via banks; 1.2 tn won lost Jan-Feb 2024; FSS compensation scheme (Mar 2024);
+  20-50% repaid. Henderson-Pearson (2011): SPARQS 8.77% (avg) / 7.71% (value-weighted) above model value.
+- **House** `exotics.py` (tested): barriers + BGK, digitals, call spreads, geometric Asian, lookback (zero-rate branch
+  fixed by continuity), snowball MC + fair coupon, worst-of, UVM (Black-Scholes-Barenblatt).
+- **Results.** BGK matches MC at every monitoring frequency (monthly 7.44 vs continuous 7.28). Asian CV: ~21x less
+  noise. Snowball fair coupon 13.4% at 20% vol; dealer delta 1.7 above KI, 1.15 below. 2024 book: 11 of 36 knock in
+  22 Jan - 5 Feb; dealer hedge 15 -> 25 -> 15 notes' worth. Korea: 6 of 12 2021 notes lost 38-54%. Worst-of vs rho;
+  measured rho 0.46. UVM bounds [0.31, 0.62] vs BS 0.45-0.48. Surrogate: 0.017 error, 0.4 us vs 3 s.
+- **Built** (compute, 12 scenes, README EN/ZH, zh_lines 42/42). Remaining: on-screen text, dry runs, build.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
