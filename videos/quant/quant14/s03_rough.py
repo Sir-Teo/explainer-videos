@@ -94,8 +94,9 @@ class Rough(VoiceoverScene):
             "grow in proportion to q, which is the signature of a self-similar process, and the ratio is H. For "
             f"Bitcoin, H is {r['H']:.2f}. Bitcoin's calm weekends add a weekly pattern that pulls the estimate down; "
             f"remove it and H is {a['btc_deseasonalized']:.2f}. <bookmark mark='b'/> The same estimator, run on "
-            "fractional Brownian motions with known H, recovers them closely, which is a check on the code, not on "
-            "the world. Gatheral, Jaisson and Rosenbaum found H of about a tenth across the equity indices they "
+            "fractional Brownian motions with known H, recovers a tenth, three-tenths and a half closely, and reads "
+            "a true H of 0.05 as about 0.01: for the very roughest paths it is biased low. That is a check on the "
+            "tool, not on the world. Gatheral, Jaisson and Rosenbaum found H of about a tenth across the equity indices they "
             "measured. "
             "Bitcoin agrees."
         ) as vo:
