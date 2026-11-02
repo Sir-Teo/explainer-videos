@@ -82,7 +82,7 @@ class Frontier(VoiceoverScene):
     def map(self):
         f = cmath(r"\operatorname{softmax}\!\Big(", r"\frac{Q K^\top}{\sqrt{d}}", r"+", r"M", r"\Big)", r"\,V",
                   font_size=44, colors={r"\frac{Q K^\top}{\sqrt{d}}": A, r"\,V": V, r"M": GREY_A}).move_to([0, 0.2, 0])
-        p_in = panel(r"inside the softmax", INSIDE, [
+        p_in = panel(r"inside the attention block", INSIDE, [
             r"sink logits \ (gpt-oss, 2025)", r"output gates \ (Qwen3-Next 2025, \ Kimi K3 2026)",
             r"QK-norm \ (Qwen3, \ Gemma 3, \ 2025)", r"layers without positions \ (Llama 4, 2025)"],
             width=6.3, part=r"this part").move_to([-3.4, 2.55, 0])
@@ -99,12 +99,18 @@ class Frontier(VoiceoverScene):
             r"gated DeltaNet, \ $3$ layers to $1$ \ (Qwen3-Next 2025, \ Qwen3.5 2026)",
             r"Kimi Delta Attention \ (Kimi Linear 2025; \ Kimi K3 2026)"], width=6.3,
             part=r"Part 15").move_to([3.4, -2.35, 0])
-        arrows = VGroup(*[Arrow(f.get_center(), p.get_center(), buff=1.25, color=GREY_D, stroke_width=2,
-                                max_tip_length_to_length_ratio=0.08) for p in (p_in, p_mem, p_sp, p_lin)])
+        # Stop outside the panel edges so opaque cards cannot hide the arrowheads.
+        links = ((UL, p_in.get_bottom() + DOWN * 0.12, UP),
+                 (UR, p_mem.get_bottom() + DOWN * 0.12, UP),
+                 (DL, p_sp.get_top() + UP * 0.12, DOWN),
+                 (DR, p_lin.get_top() + UP * 0.12, DOWN))
+        arrows = VGroup(*[Arrow(f.get_corner(corner) + direction * 0.08, end, buff=0.08,
+                                color=GREY_B, stroke_width=2.5, max_tip_length_to_length_ratio=0.16)
+                         for corner, end, direction in links])
         cite_ = note(r"each from its paper or model card").to_corner(DR, buff=0.15)
         with self.voiceover(
             "Every model in 2026 still computes this formula somewhere. What has changed is where, and how much. "
-            "<bookmark mark='a'/> Inside the softmax, the fixes of the last few chapters: sink logits, output gates, "
+            "<bookmark mark='a'/> Inside the attention block, the fixes of the last few chapters: sink logits, output gates, "
             "QK-norm, and layers with no positions at all. <bookmark mark='b'/> The keys and values every past "
             "token leaves behind have been shrunk: shared between heads, or rebuilt from a small latent vector, the "
             "low-rank idea of chapter four applied to memory. <bookmark mark='c'/> Many models look at only part of "
@@ -142,10 +148,10 @@ class Frontier(VoiceoverScene):
         keys = VGroup(VGroup(Square(0.25, fill_color=LIN, fill_opacity=0.9, stroke_width=0),
                              label(r"a fixed-size memory, \ updated as it reads", font_size=24, color=LIN)).arrange(RIGHT, buff=0.15),
                       VGroup(Square(0.25, fill_color=A, fill_opacity=0.9, stroke_width=0),
-                             label(r"full attention, \ to recall exactly", font_size=24, color=A)).arrange(RIGHT, buff=0.15))
+                             label(r"full attention: \ access to past keys and values", font_size=24, color=A)).arrange(RIGHT, buff=0.15))
         keys.arrange(RIGHT, buff=0.8).move_to([0, -0.2, 0])
         why_ = VGroup(
-            label(r"attention: \ exact recall of anything in context, \ cost growing with every token", font_size=26,
+            label(r"attention: \ access to past keys and values, \ cost growing with every token", font_size=26,
                   color=A),
             label(r"a fixed memory: \ constant cost per token, \ but it must decide what to forget", font_size=26,
                   color=LIN),
@@ -154,8 +160,8 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "Here is what such a hybrid looks like: Kimi K3, released in 2026, has 93 layers, and only 24 of them "
             "are full attention. <bookmark mark='a'/> The rest keep a fixed-size memory, updated as they read. "
-            "<bookmark mark='b'/> Why keep any attention at all? Because attention can recall anything in its "
-            "context exactly, as the induction heads of chapter fourteen did, while a fixed memory has to decide what to forget. A few "
+            "<bookmark mark='b'/> Why keep any attention at all? Because attention can look back at the stored "
+            "keys and values for past tokens, while a fixed memory has to decide what to forget. A few "
             "attention layers keep the recall, the rest keep the cost down. <bookmark mark='c'/> How that memory "
             "works, and why it is attention in disguise, is where we go next, through the lineage of the models "
             "themselves in Part 14, to memory in Part 15."

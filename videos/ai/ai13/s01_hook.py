@@ -28,8 +28,8 @@ class Hook(VoiceoverScene):
         r1 = char_row(first, 12.6, font_size=30).move_to(UP * 0.9)
         r2 = char_row(second, 12.6, font_size=30).move_to(DOWN * 1.6)
         row = VGroup(*r1, *r2)
-        tag = note(rf"our transformer, \ layer {li + 1}, head {hi + 1}, \ reading the scoreboard's passage "
-                   r"\ (computed weights)").to_edge(DOWN, buff=0.3)
+        tag = note(rf"our transformer: \ layer {li + 1}, head {hi + 1} \ (computed weights) \\ "
+                   r"arcs within each line; \ widths rescaled per query").to_edge(DOWN, buff=0.3)
         picks = [i for i in (14, 22, 30, 41, 50, 58, 63) if i < n and snip[i] != " "]
         with self.voiceover(
             "This is a transformer reading. It's ours: we trained it on this series' thirty novels, and it's "
@@ -44,7 +44,7 @@ class Hook(VoiceoverScene):
             prev = None
             for i in picks:
                 rr = r1 if i < cut else r2
-                if i >= cut:  # second line: arcs reach back over the line break, drawn on the second line only
+                if i >= cut:  # only in-line keys are shown, as the caption states
                     w = maps[li, hi, i, cut:]
                     arcs = attention_arcs(r2, i - cut, w, color=A)
                 else:
@@ -146,14 +146,14 @@ class Hook(VoiceoverScene):
             r"our own transformer, \ trained here and replayed",
             r"positions: \ sinusoids, \ ALiBi, \ rotations, \ none at all; \ trained side by side, \ "
             r"and stretched past their training length",
-            r"sinks, \ gates and caps: \ the fixes inside today's softmax",
+            r"sinks, \ gates and caps: \ the fixes inside today's attention blocks",
             r"what heads learn: \ induction, \ learning in context, \ programs, \ and limits",
         ], font_size=24).move_to(DOWN * 0.35)
         with self.voiceover(
             "This is Part 13 of AI, Built, and the start of the third act: the transformer era. <bookmark mark='a'/> "
             "In it: what attention computes, as an average and as a memory; heads, masks and costs; our own "
             "transformer, trained and replayed; four ways to tell it where things are, and how to stretch them; "
-            "the fixes inside today's softmax; and what heads learn to do, and what they cannot."
+            "the fixes inside today's attention blocks; and what heads learn to do, and what they cannot."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

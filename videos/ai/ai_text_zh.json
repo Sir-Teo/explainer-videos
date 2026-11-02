@@ -20933,7 +20933,11 @@
     "Part 7: \\ paired historical results": "第7部分：\\ 同一范围上的历史结果",
     "targets $7$--$21405$ (inclusive): $21{,}399$ characters": "目标 $7$--$21405$（含端点）：$21{,}399$ 个字符",
     "Zero-based target indices. \\ Different ranges: no cross-group ranking.": "目标编号从零开始。\\ 范围不同，不能跨组排名。",
-    "neural LM: $2.37$ bits/char \\\\ targets $24$--$21405$": "神经语言模型：$2.37$ 比特/字符 \\\\ 目标 $24$--$21405$"
+    "neural LM: $2.37$ bits/char \\\\ targets $24$--$21405$": "神经语言模型：$2.37$ 比特/字符 \\\\ 目标 $24$--$21405$",
+    "inside the attention block": "注意力模块内部",
+    "full attention: \\ access to past keys and values": "完整注意力：\\ 访问过去的键和值",
+    "attention: \\ access to past keys and values, \\ cost growing with every token": "注意力：\\ 访问过去的键和值，\\ 成本随词元数增长",
+    "sinks, \\ gates and caps: \\ the fixes inside today's attention blocks": "汇点、\\ 门控和上限：\\ 今天注意力模块内部的修补"
   },
   "phrases": {
     "width": "宽度",
@@ -23270,6 +23274,10 @@
     [
       "^largest\\ difference:\\ \\\\\\ autodiff\\ vs\\.\\\\\\ the\\ equations\\ \\$([^$]+)\\$\\ \\(absolute\\);\\ \\\\\\ vs\\.\\\\\\ finite\\ differences\\ \\$([^$]+)\\$\\ \\\\\\ \\(relative\\)$",
       "最大差异：\\\\ 自动微分与公式$\\1$（绝对）；\\\\ 与有限差分$\\2$（相对）"
+    ],
+    [
+      "^our\\ transformer:\\ \\\\\\ layer\\ (\\d+),\\ head\\ (\\d+)\\ \\\\\\ \\(computed\\ weights\\)\\ \\\\\\\\\\ arcs\\ within\\ each\\ line;\\ \\\\\\ widths\\ rescaled\\ per\\ query$",
+      "我们的Transformer：\\\\ 第\\g<1>层，第\\g<2>个头（计算得到的权重） \\\\\\\\ 仅画同行弧线；\\\\ 线宽按每个查询分别缩放"
     ]
   ]
 }
