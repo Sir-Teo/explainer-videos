@@ -69,7 +69,7 @@ class Scales(VoiceoverScene):
                                for j in range(n_ * n_)]))
         with self.voiceover(
             "There's a more natural order for a picture: coarse to fine. In April 2024 Keyu Tian, Liwei Wang and "
-            "colleagues at Peking University and ByteDance built a tokenizer with five scales. <bookmark mark='a'/> "
+            "colleagues at Peking University and ByteDance built a multiscale tokenizer. Ours uses five scales. <bookmark mark='a'/> "
             "The first scale is one token, for the whole picture's rough average; <bookmark mark='b'/> each next scale "
             "codes, on a finer grid, only what the coarser ones missed: a residual. <bookmark mark='c'/> Here is ours, "
             f"on a held-out letter: the error falls from {errs[0]:.3f} after one token to {errs[-1]:.3f} after all "
@@ -164,7 +164,7 @@ class Scales(VoiceoverScene):
                          r"baseline; \ about $20\times$ faster; \ NeurIPS 2024 best paper", color=HIST, width=11.0, font_size=25),
             history_card(r"Jun 2024", r"MAR \ (Li, Tian, Li, Deng \& He)", r"no codebook: \ continuous tokens, \ each "
                          r"drawn by a tiny diffusion head", color=HIST, width=11.0, font_size=25),
-            history_card(r"Dec 2024", r"Infinity \ (Han et al.)", r"each token a string of up to $64$ bits, \ predicted bit by bit: "
+            history_card(r"Dec 2024", r"Infinity \ (Han et al.)", r"each token a string of up to $64$ bits, \ predicted in parallel: "
                          r"\ a vocabulary of $2^{64}$; \ a $1024^2$ picture in $0.8$ s", color=HIST, width=11.0, font_size=25),
         ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
         if cards.height > 5.0:
@@ -190,7 +190,7 @@ class Scales(VoiceoverScene):
             "two hundred and fifty-six passes. Its loss fell as a power law in model size, like a language model's. "
             "It won the best paper award at NeurIPS 2024. <bookmark mark='a'/> Others dropped the codebook: MAR, from Kaiming He's "
             "group, makes continuous tokens, each drawn by a tiny diffusion model. <bookmark mark='b'/> And Infinity "
-            "made each token a string of up to sixty-four bits, predicted bit by bit: a vocabulary of up to two to the "
+            "made each token a string of up to sixty-four bits, predicted by parallel binary classifiers: a vocabulary of up to two to the "
             "sixty-four. <bookmark mark='c'/> Tokens matter for another reason: they are how a language model can "
             "draw."
         ) as vo:

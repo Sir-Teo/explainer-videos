@@ -208,15 +208,20 @@ def score(imgs01, want=None) -> dict:
 # ---------------------------------------------------------------------------
 def compute_video():
     """The token arithmetic of a video model with a typical squeeze (4x in time, the first frame alone; 8x in space;
-    2 x 2 patches): tokens and attention pairs for clips of different lengths and sizes."""
+    2 x 2 patches). Pad incomplete spatial patches rather than discarding the last rows.
+    The first frame is encoded alone; subsequent frames are grouped in fours."""
     fps, sec = 16, [2, 5, 10]
     rows = []
     for (w, h, name) in ((640, 360, "360p"), (1280, 720, "720p"), (1920, 1080, "1080p")):
         for s in sec:
             frames = fps * s
-            lat_t = frames // 4 + 1
-            tok = lat_t * (h // 8 // 2) * (w // 8 // 2)
-            rows.append(dict(res=name, sec=s, frames=frames, lat_t=lat_t, tokens=int(tok), pixels=int(frames * w * h * 3)))
+            lat_t = 1 + math.ceil((frames - 1) / 4)
+            patch_h, patch_w = math.ceil(h / 16), math.ceil(w / 16)
+            tok = lat_t * patch_h * patch_w
+            rows.append(dict(res=name, sec=s, frames=frames, lat_t=lat_t, tokens=int(tok),
+                             padded_height=patch_h * 16, padded_width=patch_w * 16,
+                             pixels=int(frames * w * h * 3)))
     t720 = next(r for r in rows if r["res"] == "720p" and r["sec"] == 5)
     assert 50_000 < t720["tokens"] < 100_000
-    return dict(rows=rows, fps=fps)
+    return dict(rows=rows, fps=fps, spatial_policy="pad to a multiple of 16 pixels",
+                temporal_policy="first frame alone, then groups of four with final padding")

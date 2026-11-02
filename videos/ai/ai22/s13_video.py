@@ -69,7 +69,7 @@ class Video(VoiceoverScene):
             "Alibaba's Wan. <bookmark mark='c'/> In 2025 Google's Veo 3 and OpenAI's Sora 2 generated the sound "
             "with the picture. <bookmark mark='d'/> The open models kept pace, small enough for one consumer GPU, "
             "<bookmark mark='e'/> and in January 2026 Lightricks released LTX-2, sound and picture in one open model. "
-            "All of them rest on the same three pieces: squeeze time, position tokens in three dimensions, and "
+            "Many published video models use three key pieces: squeeze time, position tokens in three dimensions, and "
             "denoise."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1))
@@ -84,7 +84,7 @@ class Video(VoiceoverScene):
         v = load("video")
         rows = v["rows"]
         frames = VGroup(*[Rectangle(width=2.0, height=1.13, stroke_color=GREY_B, stroke_width=1.5, fill_color=PANEL,
-                                    fill_opacity=1).shift(RIGHT * 0.22 * i + UP * 0.16 * i) for i in range(8)])
+                                    fill_opacity=1).shift(RIGHT * 0.22 * i + UP * 0.16 * i) for i in range(9)])
         frames.move_to([-4.0, 0.8, 0])
         clip = np.asarray(load("vae3d")["orig"])[0]
         shots = Group(*[gray_image(clip[i], 1.0).move_to(f_) for i, f_ in zip(range(len(frames)), frames)])
@@ -93,7 +93,7 @@ class Video(VoiceoverScene):
         cube = VGroup(*[Rectangle(width=0.5, height=0.5, stroke_color=PATCH, stroke_width=2, fill_color=PATCH, fill_opacity=0.2)
                         .shift(RIGHT * 0.1 * i + UP * 0.08 * i) for i in range(3)]).move_to([4.6, 0.9, 0])
         cl = label(r"a token: \ a little block \\ of space and time", font_size=22, color=PATCH).next_to(cube, DOWN, buff=0.2)
-        comp = label(r"compressed $8\times$ in each direction of space, \ $4\times$ in time, \ then $2\times2$ patches",
+        comp = label(r"space: $8\times$ each way; \ time: first frame, then groups of $4$ \\ followed by $2\times2$ patches",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.35)
         tab = VGroup()
         for r in rows:
@@ -103,26 +103,30 @@ class Video(VoiceoverScene):
                            MathTex(fmt_int(r["tokens"]) + r"\ \text{tokens}", font_size=30, color=PATCH)).arrange(RIGHT, buff=0.4))
         tab.arrange(DOWN, aligned_edge=RIGHT, buff=0.25).move_to([3.6, -1.6, 0])
         t720 = next(r for r in rows if r["res"] == "720p" and r["sec"] == 5)
-        tag = note(r"a typical compression, \ for illustration; \ at $16$ frames a second").to_corner(DL, buff=0.3)
+        tag = note(r"diagram: schematic spatial grid; \ table: illustrative counts at $16$ fps \\ pad edges to full patches; \ first frame encoded alone",
+                   font_size=18).to_corner(DL, buff=0.3)
         with self.voiceover(
             "First the squeeze. As with pictures, an autoencoder compresses the video, now in time as well as space, "
-            "and a token is a little block of both. <bookmark mark='a'/> With a typical squeeze, five seconds of "
+            "and a token is a little block of both. The first frame is encoded alone, then subsequent frames in groups of four. "
+            "<bookmark mark='a'/> With a typical squeeze, five seconds of "
             f"720p at sixteen frames a second is about {round(t720['tokens'], -3):,.0f} tokens."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(sh_) for sh_ in sheets], lag_ratio=0.15), FadeIn(cap0), FadeIn(comp), FadeIn(tag),
                       run_time=1.6)
-            two = VGroup(*[f_.copy() for f_ in frames[:2]]).move_to(frames)
-            s1 = label(r"$4\times$ fewer in time", font_size=22, color=GREY_A).next_to(frames, DOWN, buff=0.35)
-            self.play(FadeOut(shots), Transform(frames, two), ReplacementTransform(cap0, s1), run_time=1.0)
+            temporal = VGroup(*[f_.copy() for f_ in frames[:3]]).move_to(frames)
+            s1 = label(r"first frame alone; \\ then groups of $4$", font_size=22, color=GREY_A).next_to(frames, DOWN, buff=0.35)
+            self.play(FadeOut(shots), ReplacementTransform(frames, temporal), ReplacementTransform(cap0, s1), run_time=1.0)
+            frames = temporal
             small = frames.copy().scale(0.45).move_to(frames)
             s2 = label(r"$8\times$ smaller each way", font_size=22, color=GREY_A).next_to(small, DOWN, buff=0.35)
-            self.play(Transform(frames, small), ReplacementTransform(s1, s2), run_time=1.0)
+            self.play(ReplacementTransform(frames, small), ReplacementTransform(s1, s2), run_time=1.0)
+            frames = small
             grid = VGroup()
-            for layer in range(2):
-                for r_ in range(3):
+            for layer in range(3):
+                for r_ in range(2):
                     for c_ in range(4):
                         grid.add(Square(0.2, stroke_color=PATCH, stroke_width=1.2, fill_color=PATCH, fill_opacity=0.25)
-                                 .move_to(frames[layer].get_center() + np.array([(c_ - 1.5) * 0.22, (1 - r_) * 0.22, 0])))
+                                 .move_to(frames[layer].get_center() + np.array([(c_ - 1.5) * 0.22, (0.5 - r_) * 0.22, 0])))
             s3 = label(r"cut into blocks: \ tokens", font_size=22, color=PATCH).move_to(s2)
             self.play(FadeIn(grid, lag_ratio=0.03), ReplacementTransform(s2, s3), run_time=1.0)
             line = grid.copy().arrange(RIGHT, buff=0.05).move_to([0.6, 0.8, 0])
@@ -142,7 +146,7 @@ class Video(VoiceoverScene):
         top = Group(*[gray_image(f_, S) for f_ in orig]).arrange(RIGHT, buff=0.12).move_to([0, 2.3, 0])
         bot = Group(*[gray_image(f_, S) for f_ in rec]).arrange(RIGHT, buff=0.12).move_to([0, -1.9, 0])
         tl = label(r"$9$ frames of a letter bouncing \ (a held-out font)", font_size=20, color=GREY_A).next_to(top, UP, buff=0.12)
-        bl = label(r"rebuilt from the latent", font_size=20, color=GREY_A).next_to(bot, DOWN, buff=0.12)
+        bl = label(r"lossy reconstruction; \ grouped frames can lose recognizable letter shapes", font_size=20, color=GREY_A).next_to(bot, DOWN, buff=0.12)
         groups = [(0, 0), (1, 4), (5, 8)]
         braces = VGroup(*[Brace(Group(*top[a:b + 1]), DOWN, buff=0.08, color=PATCH) for a, b in groups])
 
@@ -160,6 +164,7 @@ class Video(VoiceoverScene):
         size = label(rf"each: \ ${lat[0]}$ channels $\times\,{lat[2]} \times {lat[3]}$", font_size=20, color=PATCH)
         size.next_to(lats[2], RIGHT, buff=0.3)
         rule = label(r"latent frame $k$ sees \\ only frames up to $4k$", font_size=20, color=GREY_A).next_to(size, DOWN, buff=0.25).align_to(size, LEFT)
+        block_note = label(r"deterministic toy; \\ $4\times$ spatial downsampling; \\ four-frame blocks", font_size=17, color=GREY_A).next_to(rule, DOWN, buff=0.2).align_to(rule, LEFT)
         ratio = int(d["pixels"]) / int(d["numbers"])
         num = label(rf"${fmt_int(d['pixels'])}$ pixels $\to$ ${int(d['numbers'])}$ numbers \ (${ratio:.0f}\times$); \ "
                     rf"rebuild error ${float(d['rmse']):.3f}$; \ a still picture alone: \ ${float(d['still_rmse']):.3f}$",
@@ -170,14 +175,16 @@ class Video(VoiceoverScene):
         with self.voiceover(
             "The squeeze comes from a video autoencoder, whose convolutions run in time as well as space. "
             "<bookmark mark='v'/> The little stencil a convolution slides over a picture becomes a small cube, "
-            "sliding through the frames too, and looking only backward. <bookmark mark='a'/> We trained a small one "
-            "on clips of a bouncing letter. The first frame is squeezed on its own; <bookmark mark='b'/> after that, "
-            "every four frames become one latent frame, which sees only frames up to its own: causal, like a language "
-            "model. <bookmark mark='c'/> That pays twice. A clip can be encoded as it streams in, and a still picture "
+            "sliding through the frames too, and looking only backward. <bookmark mark='a'/> Our toy is a deterministic "
+            "autoencoder trained on clips of a bouncing letter. It encodes the first frame alone, <bookmark mark='b'/> "
+            "then waits for each group of four frames. Latent frame k uses frames only through four k. This is "
+            "causality between blocks; frames inside a block are encoded together. <bookmark mark='c'/> A clip can be "
+            "encoded incrementally, one completed block at a time, and a still picture "
             "is just a one-frame video, so a video model can train on images too. Images are plentiful and teach "
             "appearance; videos teach motion; most video models train on both. <bookmark mark='d'/> Here "
             f"{int(d['pixels']):,} pixels become {int(d['numbers'])} numbers, {ratio:.0f} times fewer, with a "
-            f"rebuild error of {float(d['rmse']):.3f}; a still picture alone comes back at {float(d['still_rmse']):.3f}."
+            f"rebuild error of {float(d['rmse']):.3f}; a still picture alone comes back at {float(d['still_rmse']):.3f}. "
+            "Grouped frames can lose recognizable letter shapes. Pixel RMSE is not a recognizability score."
         ) as vo:
             self.play(FadeIn(top), FadeIn(tl), FadeIn(cite_))
             vo.wait_until("v")
@@ -188,7 +195,7 @@ class Video(VoiceoverScene):
             vo.wait_until("b")
             self.play(GrowFromCenter(braces[1]), FadeIn(lats[1]), FadeIn(ll[1]), GrowFromCenter(braces[2]), FadeIn(lats[2]),
                       FadeIn(ll[2]), FadeIn(size))
-            self.play(FadeIn(rule))
+            self.play(FadeIn(rule), FadeIn(block_note))
             vo.wait_until("c")
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in down], lag_ratio=0.2), FadeIn(bot), FadeIn(bl))
             vo.wait_until("d")
@@ -232,7 +239,7 @@ class Video(VoiceoverScene):
         hl = label(r"one head's query, \ in pairs of numbers", font_size=20, color=GREY_A).next_to(segs, DOWN, buff=0.12)
         f = MathTex(r"R(f, h, w) = R_{f\,\theta^{(f)}} \oplus R_{h\,\theta^{(h)}} \oplus R_{w\,\theta^{(w)}}", font_size=32).move_to([2.9, 0.6, 0])
         f2 = MathTex(r"\big(R(p)\,q\big)^{\top}\big(R(p')\,k\big) = q^{\top} R(p' - p)\, k", font_size=32).next_to(f, DOWN, buff=0.35)
-        f2l = label(r"scores depend only on the offset \ $(\Delta f, \Delta h, \Delta w)$", font_size=20, color=GREY_A).next_to(f2, DOWN, buff=0.12)
+        f2l = label(r"positional dependence: \ the offset \ $(\Delta f, \Delta h, \Delta w)$", font_size=20, color=GREY_A).next_to(f2, DOWN, buff=0.12)
         n5, n10 = int(t720["tokens"]), int(t10["tokens"])
         cost = label(rf"$5$ s of 720p: \ ${fmt_int(n5)}$ tokens, \ ${n5 * n5 / 1e9:.1f}$ billion pairs; \ "
                      rf"$10$ s: \ ${n10 * n10 / n5 / n5:.1f}\times$ the pairs", font_size=22, color=PATCH).to_edge(DOWN, buff=0.4)
@@ -241,11 +248,11 @@ class Video(VoiceoverScene):
             "A token now has three coordinates: which frame, which row, which column. Part 13's rotary positions "
             "extend naturally. <bookmark mark='a'/> Split each head's pairs of numbers three ways: some are turned by "
             "the frame number, some by the row, some by the column, each group with its own frequencies. "
-            "<bookmark mark='b'/> Since each group is a rotation, the score between two tokens depends only on how "
-            "far apart they are in time, height and width, exactly as in one dimension. <bookmark mark='c'/> What "
+            "<bookmark mark='b'/> Since each group is a rotation, position enters the score through their relative "
+            "offset in time, height and width; the tokens' content still matters, exactly as in one dimension. <bookmark mark='c'/> What "
             f"doesn't extend gracefully is the cost: {round(n5, -3):,.0f} tokens means {n5 * n5 / 1e9:.1f} billion "
             "pairs for attention, in every layer, at every denoising step. Double the length and the pairs "
-            "quadruple. That's why video models lean on every trick from Parts 15 and 16."
+            "roughly quadruple. That's why video models lean on every trick from Parts 15 and 16."
         ) as vo:
             self.play(FadeIn(cite_), LaggedStart(*[FadeIn(c_) for c_ in cube], lag_ratio=0.005), run_time=1.5)
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in axes_], lag_ratio=0.2), FadeIn(al), Indicate(cube[qi], color=C.BITS))

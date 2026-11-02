@@ -56,44 +56,38 @@ ZH = {
 
     'f"We trained a small one, with':
         "我们训练了一个小的，有{int(v['n_params']) // 1000}千个权重，让它说出每张图片里是哪个字母；它在"
-        "{int(v['n_fonts']) - int(v['n_test_fonts'])}种字体上训练，在{int(v['n_test_fonts'])}种从没见过的字体上测试。"
-        "这是它学习的过程。<bookmark mark='a'/>{start}<bookmark mark='b'/>到第{checks[k_half]:,}步，它在没见过的字体上答对了"
+        "{int(v['n_fonts']) - int(v['n_test_fonts'])}个字体文件上训练，在{int(v['n_test_fonts'])}个留出的字体文件上测试。"
+        "这是它学习的过程。<bookmark mark='a'/>{start}<bookmark mark='b'/>到第{checks[k_half]:,}步，它在留出的图片上答对了"
         "{100 * accs[k_half]:.0f}%，最后答对{100 * accs[-1]:.0f}%。<bookmark mark='c'/>同时，看看中心那个图块的位置向量，它从零开始：{pos_line}",
 
-    "it comes to resemble its neighbours' vectors":
-        '它变得更像邻居们的向量，而不像远处的。',
+    "the tiles show its cosine similarity to the other position vectors.":
+        '这些小格显示它与其他位置向量的余弦相似度。下一幅图会在整张图片上比较相邻位置与远处位置。',
 
-    "it hardly changes shape: the neighbours":
-        '它的形状几乎没变：邻居们并没有被挑出来。',
+    'Initially, these eight examples receive at most two predicted labels.':
+        '最初，显示的这八个例子得到的预测标签不超过两种。',
 
-    'At first it calls almost everything the same letter.':
-        '一开始，它几乎把所有图片都叫成同一个字母。',
+    'Initially, these eight examples receive several different predicted labels.':
+        '最初，显示的这八个例子得到几种不同的预测标签。',
 
-    'At first its guesses are scattered at random.':
-        '一开始，它的猜测是随机分散的。',
+    'f"What do its attention weights show? The transformer adds one extra token':
+        "它的注意力权重显示了什么？Transformer多加了一个词元，叫汇总词元，里面没有任何图片内容。<bookmark mark='s'/>它一层一层地从每个图块收集信息，"
+        "最后只凭它自己的向量说出是哪个字母。<bookmark mark='a'/>这是最后一层里汇总词元对图块的注意力，四个字母都来自一个留出的字体文件："
+        "在它分给图块的注意力中，{100 * on_ink:.0f}%落在有墨迹的图块上，而这些图块占图片的{100 * ink_share:.0f}%。<bookmark mark='b'/>"
+        "再看按注意力加权的平均图块距离。{reach}",
 
-    'f"How does it decide? The transformer adds one extra token':
-        "它是怎么判断的？Transformer多加了一个词元，叫汇总词元，里面没有任何图片内容。<bookmark mark='s'/>它一层一层地从每个图块收集信息，"
-        "最后只凭它自己的向量说出是哪个字母。<bookmark mark='a'/>这是最后一层里汇总词元在看哪里，四个字母都来自一种没见过的字体："
-        "它{100 * on_ink:.0f}%的注意力落在有墨迹的图块上，而这些图块只占图片的{100 * ink_share:.0f}%。<bookmark mark='b'/>"
-        "再看每个注意力头平均看多远。{reach}",
-
-    'f"Our heads in the first layer already look between':
-        "我们的第一层注意力头已经看向{lo:.1f}到{hi:.1f}个像素之外，和随便挑两个图块之间的距离{uniform:.1f}差不多："
-        "从第一层开始，它们就到处看。卷积的第一层只看得到几个像素。",
-
-    "f'Our heads in the first layer look between":
-        '我们的第一层注意力头看向{lo:.1f}到{hi:.1f}个像素之外，而随便挑两个图块相距{uniform:.1f}：有些头只看附近，像卷积一样。',
+    'f"First-layer heads have mean attention-weighted patch distances from':
+        "第一层各个头按注意力加权的平均图块距离为{lo:.1f}到{hi:.1f}像素；在图块间均匀分配注意力时是{uniform:.1f}像素。"
+        "这些平均值不能说明哪些具体图块不可或缺。",
 
     'f"All twenty-five position vectors at the end of training':
         "训练结束时的全部25个位置向量：每一小格显示一个图块的向量和其他每个图块的有多像。<bookmark mark='a'/>相邻的平均{near:.2f}，"
         "相距很远的{far:.2f}。{pattern}",
 
-    'Each tile lights up around its own place.':
-        '每一小格都在自己的位置周围亮起来。没有人告诉模型这些图块排成5乘5的网格；它从图片里学到了图片的几何结构。',
+    'Neighbouring position vectors are more similar on average than distant ones.':
+        '相邻位置向量的平均相似度高于远处的位置，显示出一定的空间结构。这个统计量不能证明完整恢复了网格。',
 
-    "There's little pattern: a few thousand letters":
-        '几乎看不出规律：几千个字母还不足以让它需要这些。在原始的视觉Transformer里，用几百万张照片训练，每一小格都会在自己的位置周围亮起来。',
+    'This run shows little neighbour preference by this summary measure.':
+        '按这个汇总指标，本次实验对相邻位置的偏好较弱；这个统计量不能说明原因。',
 
     # ------------------------------------------------------------------ Bias
     'Chapter two. Convolutions or attention?':
@@ -118,7 +112,7 @@ ZH = {
 
     '"Here are the results, three seeds each:':
         "结果在这里，每种三个随机种子：每个点是一次训练。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{cost}<bookmark mark='c'/>"
-        "过去十年的教训是：数据少，就把假设内置进去；数据多，就让模型自己学。这一部分的每个生成器都是Transformer。",
+        "过去十年的教训是：数据少，就把假设内置进去；数据多，就让模型自己学。许多现代生成器都由Transformer驱动。",
 
     "f'The convolution also spends":
         '卷积每张图片的计算量也是它的{ratio:.1f}倍：它的模板要在每个像素上运行。',
@@ -365,24 +359,21 @@ ZH = {
         '在我们的字母上，均匀抽取一样好，甚至更好：在只有16个数的空间里，难点并不在中间。在大图片上，论文发现logit-normal是它比较过的众多方案里最好的。',
 
     'f"One more thing changes with size.':
-        "随着尺寸变化，还有一件事会变。<bookmark mark='a'/>给一个小字母，和它的一个像素多16倍的版本，加上同样的噪声。大的那个看起来更清楚，"
+        "随着尺寸变化，还有一件事会变。<bookmark mark='a'/>给一个小字母和它的一个像素数为原来的16倍的版本，加入逐像素水平相同、分别独立抽取的噪声。大的那个看起来更清楚，"
         "而且确实如此：把每个4乘4的小块取平均，噪声就从{sig}降到{float(s['demo_left']):.2f}。相邻的像素共享信息，所以一个能毁掉小图片的噪声水平，"
-        "会让大图片依然可以辨认。<bookmark mark='b'/>SD3把这一点做成了精确的公式。用西格玛表示噪声所占的份额。<bookmark mark='c'/>"
-        "考虑最坏的情况，一张均匀的图片：每个像素都是同一个值c。对n个像素求平均：噪声缩小到原来的根号n分之一。<bookmark mark='d'/>"
+        "会让大图片依然可以辨认。<bookmark mark='b'/>SD3的作者推导了一个简单的尺度模型。用西格玛表示噪声所占的份额。<bookmark mark='c'/>"
+        "考虑一个均匀图片模型：每个像素都是同一个值c。对n个像素求平均：噪声缩小到原来的根号n分之一。<bookmark mark='d'/>"
         "所以关于c剩下的不确定性，是西格玛除以1减西格玛，再除以根号n。<bookmark mark='e'/>要求m个像素时的不确定性一样，<bookmark mark='f'/>"
         "解出来：噪声水平按一个因子阿尔法平移，阿尔法是像素数之比的平方根。在对数信噪比里，这是一个常数平移。",
 
     'f"Does it hold for real pictures?':
-        "它对真实图片成立吗？我们把同样的五百多个字母分别画成20、40和80像素见方，加上噪声，再问精确的后验分布：这是哪一张字母图片？"
-        "<bookmark mark='a'/>在20像素时，噪声水平为{half[20]:.2f}时它有一半的机会答对；40像素时是{half[40]:.2f}；80像素时是{half[80]:.2f}。"
+        "它对真实图片成立吗？我们把同样的{int(s['N'])}张字母图片分别画成20、40和80像素见方，加上噪声，计算精确后验分配给真实图片的概率，再对带噪声的抽样取平均。"
+        "<bookmark mark='a'/>在20像素时，噪声水平为{half[20]:.2f}时，这个平均概率达到二分之一；40像素时是{half[40]:.2f}；80像素时是{half[80]:.2f}。"
         "公式预测的是{pred[40]:.2f}和{pred[80]:.2f}。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>SD3的作者说均匀图片的假设并不现实，"
         "就请人来评判不同的平移，最后在1024像素见方时选定阿尔法等于3。",
 
-    'f"After the shift the curves nearly line up:':
-        "平移之后，几条曲线几乎重合：和小图片曲线的最大差距从{g80b:.2f}降到{g80a:.2f}。",
-
-    'f"After the shift they move together, but don\'t fully line up:':
-        "平移之后它们一起移动，但没有完全重合：最大差距只从{g80b:.2f}降到{g80a:.2f}，因为80像素的真实图画比公式假设的均匀图片有更精细的细节。",
+    'f"In this run the largest difference in mean posterior probability':
+        "本次实验中，相对小图片曲线的平均后验概率最大差距，在平移之后从{g80b:.2f}变为{g80a:.2f}。对于这些带有细节的图画，均匀图片的假设只是一个近似。",
 
     "Several of SD3's authors went on to found Black Forest Labs.":
         "SD3的几位作者后来创办了Black Forest Labs。<bookmark mark='a'/>2024年8月，他们发布了FLUX.1：120亿个权重，先是MM-DiT块，"
@@ -433,7 +424,7 @@ ZH = {
         '第10章。由粗到细。',
 
     'f"There\'s a more natural order for a picture:':
-        "对图片来说，有一种更自然的顺序：由粗到细。2024年4月，北京大学和字节跳动的田柯宇、王立威和同事做了一个有五个尺度的分词器。"
+        "对图片来说，有一种更自然的顺序：由粗到细。2024年4月，北京大学和字节跳动的田柯宇、王立威和同事做了一个多尺度分词器。我们的版本使用五个尺度。"
         "<bookmark mark='a'/>第一个尺度只有一个词元，表示整张图片大致的平均；<bookmark mark='b'/>之后的每个尺度，在更细的网格上，只编码更粗的尺度漏掉的东西："
         "残差。<bookmark mark='c'/>这是我们的分词器处理一个没见过的字母：误差从一个词元后的{errs[0]:.3f}，降到全部"
         "{sum((s * s for s in sizes))}个词元后的{errs[-1]:.3f}。<bookmark mark='d'/>用符号写出来：把剩下的部分平均缩小到这个尺度再量化；"
@@ -458,7 +449,7 @@ ZH = {
         "在ImageNet上，VAR自己的光栅顺序基线的距离是18.65；VAR是1.73，超过了扩散Transformer，生成速度快了大约20倍：十个尺度，"
         "从一个词元到16乘16，共680个词元，只要十遍，而光栅顺序要256遍。它的损失随模型大小按幂律下降，就像语言模型一样。它获得了NeurIPS 2024的最佳论文奖。"
         "<bookmark mark='a'/>还有人干脆不要码本：何恺明团队的MAR用连续的词元，每个词元由一个很小的扩散模型画出来。<bookmark mark='b'/>"
-        "Infinity则把每个词元变成最多64位的二进制串，一位一位地预测：词表最大可达2的64次方。<bookmark mark='c'/>词元还有另一层意义："
+        "Infinity则把每个词元变成最多64位的二进制串，用并行的二元分类器预测：词表最大可达2的64次方。<bookmark mark='c'/>词元还有另一层意义："
         "语言模型正是通过它们来画图的。",
 
     # ------------------------------------------------------------------ Unified
@@ -520,28 +511,30 @@ ZH = {
         "视频就是时间里的图片。2024年2月，OpenAI的Sora展示了扩散Transformer能用它做什么：长达一分钟的视频片段，用视频和图片一起训练。"
         "<bookmark mark='a'/>随后是Meta的Movie Gen，有300亿个权重。<bookmark mark='b'/>接着是开放权重：腾讯的HunyuanVideo和阿里巴巴的Wan。"
         "<bookmark mark='c'/>2025年，谷歌的Veo 3和OpenAI的Sora 2把声音和画面一起生成。<bookmark mark='d'/>开放模型也跟了上来，小到一块消费级显卡就能运行，"
-        "<bookmark mark='e'/>2026年1月，Lightricks发布了LTX-2，一个开放模型同时生成声音和画面。它们都建立在同样的三块基石上："
+        "<bookmark mark='e'/>2026年1月，Lightricks发布了LTX-2，一个开放模型同时生成声音和画面。许多公开发表的视频模型都使用三块关键构件："
         "压缩时间，在三个维度上给词元定位，然后去噪。",
 
     'f"First the squeeze.':
-        "先说压缩。和图片一样，一个自编码器压缩视频，现在在时间和空间上都压缩，一个词元就是一小块时空。<bookmark mark='a'/>"
+        "先说压缩。和图片一样，一个自编码器压缩视频，现在在时间和空间上都压缩，一个词元就是一小块时空。第一帧单独编码，之后每四帧为一组。<bookmark mark='a'/>"
         "按典型的压缩率，每秒16帧的720p视频，五秒钟大约是{round(t720['tokens'], -3):,.0f}个词元。",
 
     'f"The squeeze comes from a video autoencoder':
         "压缩来自一个视频自编码器，它的卷积既在空间上也在时间上运行。<bookmark mark='v'/>卷积在图片上滑动的那个小模板，变成了一个小立方体，"
-        "也在帧之间滑动，而且只往回看。<bookmark mark='a'/>我们在一个字母弹来弹去的短片上训练了一个小的。第一帧单独压缩；<bookmark mark='b'/>"
-        "之后每四帧变成一个潜帧，它只能看到它自己那一帧及之前的帧：和语言模型一样，是因果的。<bookmark mark='c'/>这有两个好处。"
-        "视频可以边流入边编码；而一张静止图片就是一帧的视频，所以视频模型也能用图片训练。图片多，教外观；视频教运动；多数视频模型两样都用。"
-        "<bookmark mark='d'/>这里{int(d['pixels']):,}个像素变成{int(d['numbers'])}个数，少了{ratio:.0f}倍，重建误差是{float(d['rmse']):.3f}；"
-        "一张静止图片单独重建，误差是{float(d['still_rmse']):.3f}。",
+        "也在帧之间滑动，而且只往回看。<bookmark mark='a'/>我们的简化模型是确定性自编码器，在字母弹来弹去的短片上训练。"
+        "它先单独编码第一帧，<bookmark mark='b'/>再等每组四帧到齐。第k个潜变量帧只使用到第4k帧为止的输入。"
+        "这是在分组之间保持因果性；组内的帧一起编码。<bookmark mark='c'/>视频可以每组帧到齐后逐组编码；而一张静止图片就是一帧的视频，"
+        "所以视频模型也能用图片训练。图片多，教外观；视频教运动；多数视频模型两样都用。"
+        "<bookmark mark='d'/>这里{int(d['pixels']):,}个像素变成{int(d['numbers'])}个数，数量为原来的{ratio:.0f}分之一，重建误差是{float(d['rmse']):.3f}；"
+        "一张静止图片单独重建，误差是{float(d['still_rmse']):.3f}。分组帧更模糊，有时已难以辨认原来的字母。像素均方根误差不是字母可辨认度的评分。",
+
 }
 
 ZH.update({
     'f"A token now has three coordinates:':
         "现在一个词元有三个坐标：哪一帧，哪一行，哪一列。第13部分的旋转位置编码可以很自然地推广。<bookmark mark='a'/>把每个头的数两两一组，分成三份："
-        "一些按帧号旋转，一些按行旋转，一些按列旋转，每组有自己的频率。<bookmark mark='b'/>因为每组都是一个旋转，两个词元之间的分数只取决于它们在时间、"
-        "高度和宽度上相距多远，和一维时完全一样。<bookmark mark='c'/>推广起来不那么优雅的是代价：{round(n5, -3):,.0f}个词元，意味着注意力要比较"
-        "{n5 * n5 / 1000000000.0:.1f}十亿对，每一层、每一个去噪步都是如此。长度加倍，对数就变成四倍。所以视频模型要用上第15和第16部分的每一个技巧。",
+        "一些按帧号旋转，一些按行旋转，一些按列旋转，每组有自己的频率。<bookmark mark='b'/>因为每组都是一个旋转，位置通过时间、"
+        "高度和宽度上的相对位移影响分数；词元的内容仍然重要，和一维时完全一样。<bookmark mark='c'/>推广起来不那么优雅的是代价：{round(n5, -3):,.0f}个词元，意味着注意力要比较"
+        "{n5 * n5 / 1000000000.0:.1f}十亿对，每一层、每一个去噪步都是如此。长度加倍，注意力配对数就大约变成四倍。所以视频模型要用上第15和第16部分的每一个技巧。",
 
     # ------------------------------------------------------------------ Clips
     'Chapter thirteen. Frames that agree.':
@@ -564,11 +557,11 @@ ZH.update({
         "{close}而且片段的长度在训练模型时就固定了。",
 
     'f"Drawn together, the frames agree:':
-        "一起画的时候，各帧是一致的：有{100 * jr.mean():.0f}%的片段每一帧都是对的字母，分开画只有{100 * ir.mean():.0f}%；字母路径每帧晃动"
-        "{jj.mean():.2f}个像素，而每帧单独画时是{ij.mean():.2f}个像素。",
+        "一起画的时候，各帧是一致的：有{100 * jr.mean():.0f}%的片段每一帧都是对的字母，分开画只有{100 * ir.mean():.0f}%；字母路径的晃动用二阶差分衡量，为"
+        "{jj.mean():.2f}像素每帧平方，而每帧单独画时是{ij.mean():.2f}。",
 
     'f"Drawn together, the motion is steadier:':
-        "一起画的时候，运动更平稳：字母路径每帧晃动{jj.mean():.2f}个像素，每帧单独画时是{ij.mean():.2f}个像素；字母本身在"
+        "一起画的时候，运动更平稳：字母路径二阶差分的晃动为{jj.mean():.2f}像素每帧平方，每帧单独画时是{ij.mean():.2f}；字母本身在"
         "{100 * jr.mean():.0f}%的片段里保持下来，分开画是{100 * ir.mean():.0f}%。",
 
     'Denoising the whole clip at once makes the frames agree.':
@@ -578,7 +571,7 @@ ZH.update({
         '在这个规模上，一次对整个片段去噪并没有换来一致。',
 
     'f"Surprisingly, drawing the frames together':
-        "出人意料的是，在这里一起画并没有让运动更平稳：晃动{jj.mean():.2f}个像素，对比{ij.mean():.2f}个。",
+        "出人意料的是，在这里一起画并没有让运动更平稳：二阶差分的晃动为{jj.mean():.2f}像素每帧平方，对比{ij.mean():.2f}。",
 
     # ------------------------------------------------------------------ Forcing
     'Chapter fourteen. Rolling forward.':
@@ -622,8 +615,8 @@ ZH.update({
 
     'The cure for exposure bias is to train on what the model will actually see.':
         "治疗暴露偏差的办法，是用模型将来真正会看到的东西来训练它。<bookmark mark='a'/>2024年12月，CausVid把一个各帧双向互相关注的慢模型，"
-        "蒸馏成一个因果模型，每帧只要四个去噪步。<bookmark mark='b'/>2025年6月，Xun Huang和同事用自我强制更进一步：训练时，"
-        "模型从自己画的帧出发滚动生成整个片段，<bookmark mark='c'/>再拿整个片段和一个老师比较打分。它在一块GPU上每秒生成17帧，"
+        "蒸馏成一个因果模型，每个生成块只要四个去噪步。<bookmark mark='b'/>2025年6月，Xun Huang和同事用自我强制更进一步：训练时，"
+        "模型从自己画的帧出发滚动生成整个片段，<bookmark mark='c'/>再拿整个片段和一个老师比较打分。它在一块H100 GPU上每秒生成17帧，"
         "第一帧不到半秒就出来：视频生成得和播放一样快。<bookmark mark='d'/>让画面响应玩家的操作，就得到了一个交互式的世界模型，"
         "比如Google DeepMind的Genie 3：那是第29部分的内容。",
 
@@ -683,10 +676,11 @@ ZH.update({
         "投影近似等于它的雅可比矩阵J。<bookmark mark='d'/>高斯经过线性映射仍是高斯，协方差是J W 西格玛 W转置 J转置。这是2001年马蒂亚斯·茨维克和同事的"
         "EWA泼溅，是这个方法核心的图形学思想。",
 
-    'f"Is the linearization good?':
-        "线性化够好吗？从一个三维高斯里采样二十万个点，每个点都精确投影，再把它们的散布和公式比较。<bookmark mark='a'/>对一个宽度是深度十分之一的高斯，"
-        "公式给出的协方差偏差{100 * errs[i10]:.1f}%。<bookmark mark='b'/>误差随高斯变大而增长：从深度百分之一时的{100 * errs[0]:.2f}%，"
-        "到{rel[-1]:g}时的{100 * errs[-1]:.0f}%，大致按尺寸的{slope:.1f}次方增长。泼溅用的高斯都很小，所以在用到它的地方，这个近似是成立的。",
+    'f"Is the linearization good locally?':
+        "这个线性近似在局部够好吗？从一个最大标准差为平均深度十分之一的高斯中采样二十万个点，逐个精确投影；这里只显示一千五百个。"
+        "<bookmark mark='a'/>比较样本的椭圆与雅可比预测。<bookmark mark='b'/>右图对每种尺寸重新抽取四个高斯方向，每个方向各采样二十万个点，"
+        "再取协方差相对差异的中位数：尺寸与深度之比为十分之一时是{100 * errs[i10]:.1f}%，本次在{rel[-1]:g}时为{100 * errs[-1]:.0f}%。"
+        "未截断的高斯深度可以接近零，所以投影分布的二阶矩发散。极少数抽样就可能主导有限样本结果。这个检查没有证明总体协方差误差或幂律。",
 
     'f"We fitted {int(s[\'N\'])} Gaussians':
         "我们把{int(s['N'])}个高斯拟合到同样的24张照片上，通过渲染器做梯度下降，过程中把褪色的高斯挪到忙碌的高斯旁边。<bookmark mark='a'/>"
@@ -728,6 +722,15 @@ ZH.update({
     "Simon Prince's Understanding Deep Learning":
         '想深入学习，图像模型可以读西蒙·普林斯的《理解深度学习》，三维可以读理查德·塞利斯基的《计算机视觉》。谢谢观看，第23部分再见。',
 })
+
+# Source-reviewed fresh classifier comparison; old entries remain available.
+ZH.update({'From 2012, convolutional networks ruled vision:': "从2012年起，卷积网络统治了视觉：先是AlexNet，然后是VGG和ResNet，这是第10部分的故事。<bookmark mark='a'/>注意力以附加组件的身份悄悄进来。<bookmark mark='b'/>接着，2020年的视觉Transformer彻底扔掉了卷积。只用ImageNet的一百多万张图片训练时，它比ResNet差几个百分点；先在三亿张图片上预训练，它达到了88.55%。作者的总结是：大规模训练胜过归纳偏置。<bookmark mark='c'/>几个月之内，DeiT只用ImageNet，加上大量数据增强和蒸馏，把它训练到83%；Swin又把局部窗口和层级结构带了回来。<bookmark mark='d'/>2022年，ConvNeXt为卷积扳回一局，追平了Swin。<bookmark mark='e'/>后来的大型视觉编码器，包括DINOv2，也采用了视觉Transformer。", 'What did the transformer change?': "Transformer改变了什么？归纳偏置是在接触数据之前就内置的结构。<bookmark mark='a'/>卷积使用局部卷积核，在各个位置共享权重。平移等变性取决于平移是否与步幅和边界处理相容。<bookmark mark='b'/>全局注意力让任意图块通过依赖内容的权重连接到其他图块。图块划分和位置编码仍然把一些选择内置在Transformer中。<bookmark mark='c'/>适合任务的结构可能减少所需的例子。两种架构的比较也取决于数据集和训练配方。", 'f"We can test that on our letters.': "我们可以在自己的字母上检验。两个模型，权重数量相近，训练步数、批次和数据增强相同；一个是视觉Transformer，一个是卷积网络。它们分别使用{sizes[0]}个、{sizes[1]}个或全部{sizes[-1]}个字体文件训练，在4个留出字体文件的图片上测试。<bookmark mark='a'/>暂停一下，预测：数据少的时候谁赢？增加数据后会变吗？", '"Here are the results, three seeds each:': "结果在这里，每种三个随机种子：每个点是一次训练。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{cost}<bookmark mark='c'/>带状区域表示这三次训练的取值范围，不能据此确定新字体家族或所有训练配方下的不确定性。", 'f"With {sizes[0]} training font files': '使用{sizes[0]}个训练字体文件时，CNN的平均准确率为{100 * cnn_small:.0f}%，Transformer为{100 * vit_small:.0f}%。使用全部{sizes[-1]}个时，分别是{100 * cnn_all:.0f}%和{100 * vit_all:.0f}%。这些结果针对这里的架构、字体文件和训练配方。', 'f"The CNN uses': '每张图片，CNN的矩阵和卷积乘加运算次数是Transformer的{ratio:.1f}倍，计数包含了Transformer的注意力矩阵乘法。这项计数不衡量运行时间。'})
+
+# Source-reviewed latent comparison methodology; raw recipes/results remain separate.
+ZH.update({'Real pictures have millions of pixels. Rombach': "真实图片有几百万个像素。龙巴赫及同事的潜扩散工作把空间压缩与生成建模分开。<bookmark mark='a'/>自编码器压缩并重建图片，目标是保留感知上重要的结构，并不保证损失都不可见。<bookmark mark='b'/>扩散模型学习潜变量编码的分布；编码仍同时包含外观和内容。这里的简化实验用流匹配，搭配按像素交叉熵和潜变量幅度惩罚训练的确定性自编码器，没有KL或感知损失。<bookmark mark='c'/>Stable Diffusion的KL-f8把空间每边缩小8倍，保留4个潜通道，标量个数减少48倍，并采用较小的KL惩罚。这个标量计数不是压缩文件的码率。", 'f"How small can the space be?': "空间能有多小？我们训练了八个自编码器，每种一个随机种子，把字母压缩成带通道的网格，从16个数到100个数。<bookmark mark='a'/>这是4个留出字体文件的图片上的像素重建RMSE：从{best[0]}乘{best[0]}乘{best[1]}的{rm[best]:.3f}，到{worst[0]}乘{worst[0]}乘{worst[1]}的{rm[worst]:.3f}。<bookmark mark='b'/>{same}<bookmark mark='c'/>{coarse}", 'In all four within-grid comparisons,': '在四组网格大小相同的比较中，增加通道都降低了测得的误差。', 'Adding channels does not lower': '增加通道并没有在每一组相同网格的比较中都降低测得的误差。', "f'At equal scalar counts, coarser grids win": '在标量个数相同的比较中，较粗网格赢{coarse_wins}组，较细网格赢{fine_wins}组，{ties}组打平。这些自编码器的架构和参数数量也不同，因此不能把结果的原因单独归于网格布局。', '"Now run Part 21\'s flow matching inside each space': "现在在每个空间中运行第21部分的流匹配，使用相同的隐藏层宽度、深度、步数和批次大小，运行两个流模型随机种子。输入和输出维度会改变参数量及随机数消耗。距离基于简化评判器的特征，与它的训练图片作比较。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>范围条只表示两次流模型训练的取值范围，不代表自编码器的不确定性或人的视觉质量。重建与生成建模可能偏好不同的表示。", "f'The lowest pixel reconstruction error and lowest mean": '最低像素重建误差与两个流随机种子的最低平均评判器特征距离，都出现在{best_r[0]}乘{best_r[0]}乘{best_r[1]}。这只是两项有限的简化指标。', "f'The lowest pixel reconstruction error occurs": '最低像素重建误差出现在{best_r[0]}乘{best_r[0]}乘{best_r[1]}，而两个流随机种子的最低平均评判器特征距离出现在{best_g[0]}乘{best_g[0]}乘{best_g[1]}。在这次实验中，两项指标偏好不同的空间。', 'Real models went both ways at once.': "真实模型同时向两个方向发展。<bookmark mark='a'/>Stable Diffusion 3选择了16个潜通道，并报告指出，要对更大的表示建模，扩散模型容量也需要增加。<bookmark mark='b'/>2024年10月，韩松团队的深度压缩自编码器把每边缩小32到128倍。诀窍是把像素块折叠到通道中，这一步本身不丢信息，再让网络学习在此基础上需要改变什么。<bookmark mark='c'/>在ImageNet的512像素分辨率上，他们使用H100的UViT-H基准中，相比SD-VAE-f8报告了19.1倍推理加速和更好的FID。这是特定基准的结果，并非通用加速倍数。<bookmark mark='d'/>要平衡空间压缩、重建和生成建模。下一章讨论怎样塑造表示。"})
+
+# Reviewed timestep density and FD summary; historical entries retained.
+ZH.update({'"SD3 also changed how it samples training times.': "SD3还改变了训练时间的抽取方式。<bookmark mark='a'/>均匀采样给出相等的时间密度。这里流的目标是数据潜变量减去噪声；在任一端点附近，它都不一定趋于零。<bookmark mark='b'/>把标准正态抽样通过sigmoid，就得到logit-normal时间分布，在中间附近抽得更多。在SD3的24种评估设置中，这个版本的平均非支配排序最好，并非每项指标都获胜。论文的时间方向相反，但这个对称的密度不变。<bookmark mark='c'/>我们固定一个含16个数的自编码器，比较两种配方，每种三个流随机种子。FD使用简化评判器的训练图片特征。{verdict}曲线是FD的算术均值，范围带是三次运行的最小值至最大值。两者都不衡量人类辨认结果或各训练时刻的损失。", "f'At {ks[0]} sampling step, arithmetic mean FD is": '采样{ks[0]}步时，均匀分布的算术平均FD为{u_first:.0f}，logit-normal为{l_first:.0f}。采样{ks[-1]}步时，分别为{u_last:.0f}和{l_last:.0f}。'})
 
 PHRASES = {
     # spliced-in English values

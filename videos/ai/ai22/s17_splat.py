@@ -122,30 +122,35 @@ class Splat(VoiceoverScene):
                            color=C.TRUE_P, opacity=0.0, stroke=2).flip(RIGHT)
         leg = legend([(GS_C, r"$J W \Sigma W^{\top} J^{\top}$ \ (two sigmas)"), (C.TRUE_P, r"the samples' own covariance")],
                      font_size=18).next_to(VGroup(pts), DOWN, buff=0.3)
-        pl = label(r"$200{,}000$ points from one 3D Gaussian, \ projected exactly", font_size=18, color=GREY_A).to_edge(UP, buff=0.35).shift(LEFT * 3.2)
+        pl = label(r"$1{,}500$ shown from $200{,}000$ draws \\ one orientation; \ size/depth $= 0.1$",
+                   font_size=18, color=GREY_A).to_edge(UP, buff=0.35).shift(LEFT * 3.2)
         # right: the error against the Gaussian's size
         lx = [math.log10(r) for r in rel]
         ly = [math.log10(max(e, 1e-6)) for e in errs]
         ax = axes([lx[0] - 0.1, lx[-1] + 0.1], [min(ly) - 0.3, max(0.0, max(ly) + 0.3)], x_length=4.6, y_length=3.0,
-                  xlabel=r"the Gaussian's size, \ over its depth", ylabel=r"relative error of the projected covariance",
+                  xlabel=r"largest standard deviation \ over mean depth",
+                  ylabel=r"relative covariance discrepancy \\ (median of four sampled orientations)",
                   xticks=[-2, -1], yticks=[int(np.floor(min(ly))), 0], xfmt=lambda x: rf"10^{{{int(x)}}}",
                   yfmt=lambda y: rf"10^{{{int(y)}}}", center=[3.3, 0.2, 0], font_size=17)
         ln = VGroup(curve(ax.ax, lx, ly, GS_C), *[Dot(ax.ax.c2p(a, b), radius=0.05, color=GS_C) for a, b in zip(lx, ly)])
         i10 = rel.index(0.1) if 0.1 in rel else len(rel) // 2
-        slope = (ly[-1] - ly[0]) / (lx[-1] - lx[0])
+        limit = note(r"finite Monte Carlo; \ untruncated depth can approach $0$: \ no finite population covariance",
+                     font_size=17).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Is the linearization good? Sample two hundred thousand points from a 3D Gaussian, project each one "
-            "exactly, and compare their spread with the formula. <bookmark mark='a'/> For a Gaussian a tenth of its "
-            f"depth across, the formula's covariance is off by {100 * errs[i10]:.1f} percent. <bookmark mark='b'/> "
-            f"The error grows with the Gaussian's size: from {100 * errs[0]:.2f} percent at one hundredth of the depth "
-            f"to {100 * errs[-1]:.0f} percent at {rel[-1]:g}, roughly as the size to the power {slope:.1f}. Splats are "
-            "small, so the approximation holds where it's used."
+            "Is the linearization good locally? Sample two hundred thousand points from a Gaussian whose largest "
+            "standard deviation is one tenth of its mean depth, and project each point exactly. Only fifteen "
+            "hundred are shown. <bookmark mark='a'/> Compare the sample ellipse with the Jacobian prediction. "
+            "<bookmark mark='b'/> For the curve, each size uses four newly sampled Gaussian orientations, two "
+            "hundred thousand draws each. We plot the median relative covariance discrepancy: "
+            f"{100 * errs[i10]:.1f} percent at one tenth, and {100 * errs[-1]:.0f} percent at {rel[-1]:g} in this run. "
+            "Untruncated Gaussian depth can approach zero, so projected second moments diverge. Rare draws can "
+            "dominate a finite sample. This check establishes neither a population covariance error nor a power law."
         ) as vo:
             self.play(FadeIn(pl), LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.0005), run_time=1.5)
             vo.wait_until("a")
             self.play(Create(e_pred), Create(e_emp), FadeIn(leg))
             vo.wait_until("b")
-            self.play(Create(ax), Create(ln[0]), FadeIn(ln[1:]), run_time=1.5)
+            self.play(Create(ax), Create(ln[0]), FadeIn(ln[1:]), FadeIn(limit), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 

@@ -5,10 +5,34 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import HIST, PART, PATCH, TXT, gray_image, load, mean_band
+from videos.ai.ai22.common import HIST, PART, PATCH, TXT, gray_image, load
 
 UNI, LN = GREY_B, C.SURPRISE  # uniform and logit-normal noise levels
 RES_C = {20: GREY_B, 40: C.TRUE_P, 80: C.BITS}
+
+
+def fd_log_summary(values):
+    """Three-run arithmetic FD mean and observed min/max, mapped to log coordinates.
+
+    A log-coordinate chart does not change which raw statistic is averaged.
+    Zero/nonfinite/negative values need a different chart or metric investigation;
+    never hide them by clamping to a positive plotting floor.
+    """
+    rows = [tuple(float(value) for value in row) for row in values]
+    if len(rows) != 3 or not rows[0] or any(len(row) != len(rows[0]) for row in rows):
+        raise ValueError("Expected three nonempty, equally sized FD seed rows")
+    if any(not math.isfinite(value) or value <= 0 for row in rows for value in row):
+        raise ValueError("Log FD chart requires strictly positive finite measured values")
+    columns = tuple(zip(*rows))
+    low = tuple(min(column) for column in columns)
+    high = tuple(max(column) for column in columns)
+    # Scaling avoids overflow of a finite arithmetic mean when summing large values.
+    mean = tuple(scale * (math.fsum(value / scale for value in column) / 3)
+                 for column, scale in zip(columns, high))
+    return dict(mean=mean, low=low, high=high,
+                log_mean=tuple(math.log10(value) for value in mean),
+                log_low=tuple(math.log10(value) for value in low),
+                log_high=tuple(math.log10(value) for value in high))
 
 
 class SD3(VoiceoverScene):
@@ -58,6 +82,8 @@ class SD3(VoiceoverScene):
             blk = blocks[k]
             blk.move_to([x0 + (0 if b == 0 else nt * cell) + blk.width / 2, y0 - (0 if a == 0 else nt * cell) - blk.height / 2, 0])
         bl = label(r"who looks at whom \ (schematic)", font_size=20, color=GREY_A).next_to(blocks, DOWN, buff=0.2)
+        key_axis = label(r"keys: \ columns", font_size=17, color=GREY_A).next_to(blocks, UP, buff=0.14)
+        query_axis = label(r"queries: \ rows", font_size=17, color=GREY_A).rotate(PI / 2).next_to(blocks, LEFT, buff=0.15)
         facts = VGroup(label(r"queries and keys normalized \ (QK-norm): \ stable at scale", font_size=20, color=GREY_A),
                        label(r"three frozen text encoders: \ two CLIPs, \ T5-XXL", font_size=20, color=GREY_A),
                        label(r"a 16-channel autoencoder; \ up to $8$ billion weights \ (as published)", font_size=20,
@@ -83,7 +109,8 @@ class SD3(VoiceoverScene):
             self.play(Write(eq), FadeIn(el))
             vo.wait_until("c")
             self.play(FadeOut(sd3))
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in blocks], lag_ratio=0.25), FadeIn(bl), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in blocks], lag_ratio=0.25), FadeIn(bl),
+                      FadeIn(key_axis), FadeIn(query_axis), run_time=2.0)
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(f_) for f_ in facts], lag_ratio=0.3))
         self.wait(0.3)
@@ -93,7 +120,7 @@ class SD3(VoiceoverScene):
     def timesteps(self):
         v = load("tsample")
         ax = axes([0, 1], [0, 1.8], x_length=4.6, y_length=2.6, xlabel=r"$t$: \ noise $\to$ data",
-                  ylabel=r"how often each $t$ is trained", xticks=[0, 0.5, 1], yticks=[0, 1], center=[-3.6, 0.8, 0],
+                  ylabel=r"training-time density", xticks=[0, 0.5, 1], yticks=[0, 1], center=[-3.6, 0.8, 0],
                   font_size=18)
 
         def ln(t):
@@ -105,53 +132,55 @@ class SD3(VoiceoverScene):
         kl = label(r"logit-normal", font_size=20, color=LN).next_to(ax.ax.c2p(0.62, ln(0.62)), UR, buff=0.08)
         f = MathTex(r"t = \operatorname{sigmoid}(u), \quad u \sim \mathcal{N}(0, 1)", font_size=30, color=LN).move_to([-3.6, -1.8, 0])
         ks = [int(k) for k in v["sampling"]]
-        fu, fl_ = np.asarray(v["uniform_fd"]), np.asarray(v["logit-normal_fd"])
+        uniform = fd_log_summary(v["uniform_fd"])
+        lognormal = fd_log_summary(v["logit-normal_fd"])
+        if ks != [1, 2, 4, 8, 16, 40] or len(uniform["mean"]) != len(ks) or len(lognormal["mean"]) != len(ks):
+            raise ValueError("Expected the measured six-step TSAMPLE sweep")
         lk = [math.log2(k) for k in ks]
-        lo_y = math.floor(math.log10(min(fu.min(), fl_.min())) * 10) / 10
-        hi_y = math.ceil(math.log10(max(fu.max(), fl_.max())) * 10) / 10
-        yt = [v for v in (100, 300, 1000, 3000, 10000, 30000) if lo_y <= math.log10(v) <= hi_y]
+        lo_y = math.floor(min(uniform["log_low"] + lognormal["log_low"]) * 10) / 10
+        hi_y = math.ceil(max(uniform["log_high"] + lognormal["log_high"]) * 10) / 10
+        if hi_y <= lo_y:
+            lo_y, hi_y = lo_y - 0.1, hi_y + 0.1
+        yt = [value for value in (100, 300, 1000, 3000, 10000, 30000) if lo_y <= math.log10(value) <= hi_y]
         bx = axes([0, lk[-1]], [lo_y, hi_y], x_length=4.8, y_length=3.0, xlabel=r"sampling steps",
-                  ylabel=r"distance from real letters (FD, log scale)", xticks=lk, yticks=[math.log10(v) for v in yt],
+                  ylabel=r"judge-feature FD to training images (log scale)", xticks=lk, yticks=[math.log10(value) for value in yt],
                   xfmt=lambda x: f"{2 ** x:.0f}", yfmt=lambda y: f"{10 ** y:,.0f}".replace(",", "{,}"),
                   center=[3.3, 0.4, 0], font_size=18)
-        lu, ll = mean_band(bx.ax, lk, np.log10(fu), UNI), mean_band(bx.ax, lk, np.log10(fl_), LN)
-        diff = fl_.mean(0) - fu.mean(0)
-        few = int(np.argmin(diff))
-        if ks[few] == 1:
-            few_s = "a single sampling step"
-        else:
-            few_s = f"{ks[few]} sampling steps"
-        note_ = note(r"flow matching in the $16$-number latent space of chapter 3; \ three seeds each").to_edge(DOWN, buff=0.3)
-        hard = VGroup(label(r"$t$ near $0$: \ pure noise; \ the best guess is the average picture", font_size=22, color=GREY_A),
-                      label(r"$t$ near $1$: \ almost clean; \ little left to fix", font_size=22, color=GREY_A),
-                      label(r"in between: \ the hard part", font_size=24, color=LN)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
-        hard.move_to([3.3, 0.8, 0])
-        if np.all(diff < 0):
-            verdict = (f"Trained logit-normally, our letters come out closer to real ones at every number of sampling "
-                       f"steps, most of all with {few_s}.")
-        elif np.mean(diff) < 0:
-            verdict = (f"Trained logit-normally, our letters come out closer to real ones on average, most of all with "
-                       f"{few_s}, though not at every count.")
-        else:
-            verdict = ("On our letters, uniform does as well or better: in a space of sixteen numbers, the middle "
-                       "isn't where the difficulty is. On large pictures, the paper found logit-normal the best of the "
-                       "many schedules it compared.")
+
+        def measured_band(summary, color):
+            return VGroup(band(bx.ax, lk, summary["log_low"], summary["log_high"], color, opacity=0.18),
+                          curve(bx.ax, lk, summary["log_mean"], color, 3))
+
+        lu, ll = measured_band(uniform, UNI), measured_band(lognormal, LN)
+        note_ = note(r"fixed autoencoder: $16$ numbers, seed $2022$; \ three flow seeds each \\ "
+                     r"line: arithmetic mean FD; \ band: min--max; \ reference: training images", font_size=16).to_edge(DOWN, buff=0.3)
+        density = VGroup(label(r"uniform: \ equal time density", font_size=22, color=GREY_A),
+                         label(r"logit-normal: \ more draws near the middle", font_size=22, color=GREY_A),
+                         label(r"velocity target: \ $z_1-z_0$", font_size=24, color=LN)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        density.move_to([3.3, 0.8, 0])
+        u_first, l_first = uniform["mean"][0], lognormal["mean"][0]
+        u_last, l_last = uniform["mean"][-1], lognormal["mean"][-1]
+        verdict = (f"At {ks[0]} sampling step, arithmetic mean FD is {u_first:.0f} with uniform and {l_first:.0f} with "
+                   f"logit-normal. At {ks[-1]} steps it is {u_last:.0f} and {l_last:.0f}, respectively.")
         with self.voiceover(
-            "SD3 also changed which noise levels it trains on. <bookmark mark='a'/> Part 21 drew the time t "
-            "uniformly. But near pure noise the best guess is just the average picture, and near the data there's "
-            "little left to fix: the hard part is the middle. <bookmark mark='b'/> So draw a normal number and "
-            "squash it with a sigmoid: the logit-normal, which trains most in the middle. Of the many choices the "
-            "paper compared, this one ranked best. <bookmark mark='c'/> We trained flow matching both ways, three "
-            "seeds each. " + verdict
+            "SD3 also changed how it samples training times. <bookmark mark='a'/> Uniform sampling gives equal "
+            "time density. Our flow target is the data latent minus the noise; it need not vanish near either "
+            "endpoint. <bookmark mark='b'/> A standard normal draw passed through a sigmoid gives logit-normal "
+            "times, with more draws near the middle. This version had the best average non-dominated rank across "
+            "SD3's twenty-four evaluation settings, rather than winning every metric. The paper reverses the time "
+            "direction, but this symmetric density is unchanged. <bookmark mark='c'/> We compare both recipes in "
+            "one fixed sixteen-number autoencoder, with three flow seeds each. FD uses our toy judge's training-image "
+            "features. " + verdict + " The line is arithmetic mean FD and the band is the three-run range. Neither "
+            "measures human recognition or loss by training time."
         ) as vo:
             self.play(Create(ax))
             vo.wait_until("a")
             self.play(Create(uni), FadeIn(ku))
-            self.play(LaggedStart(*[FadeIn(h_, shift=RIGHT * 0.1) for h_ in hard], lag_ratio=0.8), run_time=4.0)
+            self.play(LaggedStart(*[FadeIn(h_, shift=RIGHT * 0.1) for h_ in density], lag_ratio=0.8), run_time=4.0)
             vo.wait_until("b")
             self.play(Create(lnc), FadeIn(kl), Write(f), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeOut(hard))
+            self.play(FadeOut(density))
             self.play(Create(bx), FadeIn(note_))
             self.play(FadeIn(lu[0]), Create(lu[1]), FadeIn(ll[0]), Create(ll[1]), run_time=2.0)
         self.wait(0.3)
@@ -165,7 +194,7 @@ class SD3(VoiceoverScene):
         ims = Group(gray_image(np.asarray(s["demo20"]) * 0.5 + 0.25, S), gray_image(np.asarray(s["demo80"]) * 0.5 + 0.25, S),
                     gray_image(np.asarray(s["demo_pooled"]) * 0.5 + 0.25, S)).arrange(DOWN, buff=0.45).move_to([-5.3, 0.0, 0])
         cap = VGroup(label(rf"$20 \times 20$, \ noise ${sig}$", font_size=16, color=GREY_A),
-                     label(rf"$80 \times 80$, \ the same noise", font_size=16, color=GREY_A),
+                     label(rf"$80 \times 80$, \ same per-pixel $\sigma$", font_size=16, color=GREY_A),
                      label(rf"$4 \times 4$ averages: \ noise ${float(s['demo_left']):.2f}$", font_size=16, color=PATCH))
         for c_, im in zip(cap, ims):
             c_.next_to(im, DOWN, buff=0.05)
@@ -192,12 +221,12 @@ class SD3(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=0.4, buff=0.42, edge=6.8)
         lsnr = MathTex(r"\log \mathrm{SNR}_m = \log \mathrm{SNR}_n - 2 \log \alpha", font_size=28, color=PATCH).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "One more thing changes with size. <bookmark mark='a'/> Add the same noise to a small letter and to a "
-            "drawing of it with sixteen times the pixels. The big one looks clearer, and it is: average each four by "
+            "One more thing changes with size. <bookmark mark='a'/> Use the same per-pixel noise level, with independent "
+            "draws, for a small letter and a drawing of it with sixteen times the pixels. The big one looks clearer: average each four by "
             f"four block, and the noise falls from {sig} to {float(s['demo_left']):.2f}. Neighbouring pixels share "
             "their information, so a noise level that destroys a small picture leaves a large one legible. "
-            "<bookmark mark='b'/> SD3 made this exact. Write sigma for the share of noise. <bookmark mark='c'/> Take "
-            "the worst case, a flat picture: every pixel the same value c. Average the n pixels: the noise shrinks "
+            "<bookmark mark='b'/> SD3's authors derived a simple scaling model. Write sigma for the share of noise. <bookmark mark='c'/> Take "
+            "a flat-picture model: every pixel the same value c. Average the n pixels: the noise shrinks "
             "by the square root of n. <bookmark mark='d'/> So the uncertainty left about c is sigma over one minus "
             "sigma, over root n. <bookmark mark='e'/> Ask for the same uncertainty at m pixels <bookmark mark='f'/> "
             "and solve: the noise level shifts by a factor alpha, the square root of the ratio of pixel counts. In "
@@ -219,7 +248,7 @@ class SD3(VoiceoverScene):
         sizes = [int(x) for x in s["sizes"]]
         sg = np.asarray(s["sigmas"], float)
         ax = axes([0.3, 1.0], [0, 1], x_length=4.8, y_length=3.0, xlabel=r"noise level $\sigma$",
-                  ylabel=r"chance the exact posterior names the right picture", xticks=[0.3, 0.65, 1.0], yticks=[0, 0.5, 1],
+                  ylabel=r"mean posterior probability of the true picture", xticks=[0.3, 0.65, 1.0], yticks=[0, 0.5, 1],
                   center=[-3.4, 0.3, 0], font_size=17)
         bx = axes([0.3, 1.0], [0, 1], x_length=4.8, y_length=3.0, xlabel=r"the $20$-pixel level each is shifted from",
                   ylabel=r"the same, \ after the shift", xticks=[0.3, 0.65, 1.0], yticks=[0, 0.5, 1], center=[3.2, 0.3, 0],
@@ -235,24 +264,21 @@ class SD3(VoiceoverScene):
         marks = VGroup(*[Dot(ax.ax.c2p(half[n], 0.5), radius=0.07, color=RES_C[n]) for n in sizes])
         preds = VGroup(*[Circle(radius=0.11, stroke_color=RES_C[n], stroke_width=2.5).move_to(ax.ax.c2p(pred[n], 0.5))
                          for n in sizes[1:]])
-        pk = label(r"dots: \ where each is right half the time; \ rings: \ the formula's prediction", font_size=18,
+        pk = label(r"dots: \ mean true-picture probability $= 0.5$; \ rings: \ the formula's prediction", font_size=18,
                    color=GREY_A)
         pk.next_to(leg, DOWN, buff=0.15)
         gb, ga = s["gap_before"], s["gap_after"]
         g80b, g80a = float(gb[str(sizes[-1])]), float(ga[str(sizes[-1])])
         cite_ = cite(rf"${int(s['N'])}$ letters, \ ${int(s['n_mc'])}$ noisy draws per level; \ SD3 used $\alpha = 3$ at "
                      r"$1024^2$ \ (as published)", corner=DR)
-        if g80a < 0.5 * g80b:
-            verdict = (f"After the shift the curves nearly line up: the largest gap to the small picture's falls from "
-                       f"{g80b:.2f} to {g80a:.2f}.")
-        else:
-            verdict = (f"After the shift they move together, but don't fully line up: the largest gap falls only from "
-                       f"{g80b:.2f} to {g80a:.2f}, because a real drawing at 80 pixels has finer detail than the "
-                       "flat picture the formula assumes.")
+        verdict = (f"In this run the largest difference in mean posterior probability from the small-picture curve "
+                   f"changes from {g80b:.2f} to {g80a:.2f} after the shift. The flat-picture assumption is approximate "
+                   "for these detailed drawings.")
         with self.voiceover(
-            "Does it hold for real pictures? We drew the same five hundred letters at 20, 40 and 80 pixels a side, "
-            "added noise, and asked the exact posterior which letter picture it was. <bookmark mark='a'/> At 20 "
-            f"pixels it's right half the time at a noise level of {half[20]:.2f}; at 40, at {half[40]:.2f}; at 80, at "
+            f"Does it hold for real pictures? We drew the same {int(s['N'])} letter pictures at 20, 40 and 80 pixels a side, "
+            "added noise, and measured the posterior probability assigned to the true picture, averaged over noisy draws. "
+            "<bookmark mark='a'/> At 20 "
+            f"pixels this mean probability reaches one half at a noise level of {half[20]:.2f}; at 40, at {half[40]:.2f}; at 80, at "
             f"{half[80]:.2f}. The formula predicts {pred[40]:.2f} and {pred[80]:.2f}. <bookmark mark='b'/> " + verdict
             + " <bookmark mark='c'/> SD3's authors called the flat-picture assumption unrealistic, tested shifts "
             "with human raters, and settled on alpha equals three at a thousand and twenty-four pixels a side."

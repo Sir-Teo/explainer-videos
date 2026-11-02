@@ -173,9 +173,9 @@ class Forcing(VoiceoverScene):
         head = label(r"Training on its own frames, \ and video in real time", font_size=34).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"Dec 2024", r"CausVid \ (Yin et al.)", r"a slow two-way teacher distilled into a causal "
-                         r"student: \ $4$ steps a frame, \ $9.4$ frames a second", color=HIST, width=11.0, font_size=25),
+                         r"student: \ $4$ denoising steps, \ $9.4$ frames a second", color=HIST, width=11.0, font_size=25),
             history_card(r"Jun 2025", r"Self Forcing \ (Huang, Li, He, Zhou \& Shechtman)", r"train on its own rollouts, "
-                         r"\ judge the whole video at once: \ $17$ frames a second, \ $0.45$ s to the first, \ one GPU",
+                         r"\ judge the whole video at once: \ $17$ frames a second, \ $0.45$ s to the first, \ one H100",
                          color=HIST, width=11.0, font_size=25),
             history_card(r"Aug 2025", r"Genie 3 \ (Google DeepMind)", r"a world you steer as it is drawn, \ in real "
                          r"time: \ Part 29", color=HIST, width=11.0, font_size=25),
@@ -185,16 +185,17 @@ class Forcing(VoiceoverScene):
             cards.next_to(head, DOWN, buff=0.4)
         loop = VGroup(node_box_(r"generate frames \ from its own past", VID_C["forcing"]),
                       node_box_(r"score the whole clip \ against a teacher", PATCH))
-        loop.arrange(RIGHT, buff=1.4).to_edge(DOWN, buff=0.6)
+        # Leave room for the return arrow's arc below both boxes.
+        loop.arrange(RIGHT, buff=1.4).to_edge(DOWN, buff=0.95)
         arr = VGroup(CurvedArrow(loop[0].get_top() + UP * 0.05, loop[1].get_top() + UP * 0.05, angle=-0.8, color=GREY_B),
                      CurvedArrow(loop[1].get_bottom() + DOWN * 0.05, loop[0].get_bottom() + DOWN * 0.05, angle=-0.8, color=GREY_B))
         with self.voiceover(
             "The cure for exposure bias is to train on what the model will actually see. <bookmark mark='a'/> In "
             "December 2024 CausVid distilled a slow model, whose frames attend both ways, into a causal one that "
-            "needs four denoising steps a frame. <bookmark mark='b'/> In June 2025 Xun Huang and colleagues went "
+            "needs four denoising steps per generated chunk. <bookmark mark='b'/> In June 2025 Xun Huang and colleagues went "
             "further with Self Forcing: during training, the model rolls out a whole clip from its own frames, "
             "<bookmark mark='c'/> and the whole clip is scored at once against a teacher. It generates seventeen "
-            "frames a second on one GPU, with the first frame in under half a second: video as fast as it plays. "
+            "frames a second on one H100 GPU, with the first frame in under half a second: video as fast as it plays. "
             "<bookmark mark='d'/> Make the frames respond to a player's actions, and you have an interactive world "
             "model, like Google DeepMind's Genie 3: that's Part 29."
         ) as vo:

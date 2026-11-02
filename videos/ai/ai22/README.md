@@ -11,9 +11,18 @@ VQ-VAE and GANs and Part 24's self-supervised encoders are linked rather than re
 Every model is trained here, on one CPU core, by `compute.py`: the pictures are Part 21's 20 × 20 capital letters from
 24 system fonts (the last 4 held out); the videos are a 12 × 12 letter bouncing in a 20 × 20 box; the 3D scene is an
 extruded gold letter A and a blue ball on a 64³ grid, photographed from 24 cameras. A judge (a small convolutional
-classifier, 96% right on held-out fonts) reads generated letters; "FD" is the Fréchet distance between Gaussians fitted
-to its 128 features for generated and real letters (FID's formula on our own features). Comparisons use equal budgets
-(steps, batches, data order and, where stated, weights) and three seeds, with the spread shown.
+classifier) reads generated letters. The original project text reported 96% on held-out font files; its historical
+raw results remain unverified. "FD" is the Fréchet distance between Gaussians fitted to its 128 features for generated
+and real letters (FID's formula on our own features). Each experiment states its step and batch budgets and seed
+count; ranges show the observed replicate spread. Matched data order or initial weights are specific to the stated
+comparison. Latent flows share hidden width and depth, while changing latent dimension changes their parameter
+count and the random-generator stream used for later minibatches.
+
+Reproducing those measurements requires the ordered font bytes and the Pillow/FreeType rasterizer versions, not
+only font-family names. Keep fresh input baselines and their outputs in separately versioned QA namespaces; do not
+treat them as recovered historical results. Repeated jitter draws can produce identical rasters, and held-out font
+files can share family/style structure with training files. File holdout alone does not establish unseen-family
+generalization.
 
 ## Chapters
 
@@ -50,7 +59,8 @@ to its 128 features for generated and real letters (FID's formula on our own fea
   variety).
 * **8. Stable Diffusion 3 and Flux.** MM-DiT (Esser et al. 2024): two streams, one joint attention; QK-norm; logit-normal
   t against uniform, three seeds; the resolution shift derived (σ' = ασ / (1 + (α − 1)σ), α = √(m/n)) and checked on
-  letters drawn at 20, 40 and 80 pixels with the exact posterior; α = 3 at 1024²; FLUX.1, FLUX.1 Kontext, FLUX.2.
+  letters drawn at 20, 40 and 80 pixels using the mean posterior probability of the true picture (not top-1 accuracy);
+  α = 3 at 1024²; FLUX.1, FLUX.1 Kontext, FLUX.2.
 * **9. Pictures as tokens.** VQ-VAE and VQGAN (Esser et al. 2020); our tokenizer (25 tokens from 128 codes); raster
   order; MaskGIT (Chang et al. 2022) and its cosine schedule, our model drawing in 8 passes; the token models' training;
   raster against MaskGIT, three seeds.
@@ -76,9 +86,14 @@ to its 128 features for generated and real letters (FID's formula on our own fea
   quadrature (alpha compositing); the Riemann sum against NeRF's sum on a uniform ball with a known answer; positional
   encoding; our NeRF trained on 24 photographs and replayed on a held-out view, PSNR, depth; three seeds.
 * **16. Gaussian splatting.** 3D Gaussian splatting (Kerbl et al. 2023): Σ = RSSᵀRᵀ; the projected covariance
-  J W Σ Wᵀ Jᵀ derived (EWA, Zwicker et al. 2001) and checked against 200,000 exactly projected samples, error against
+  J W Σ Wᵀ Jᵀ derived (EWA, Zwicker et al. 2001) and compared with finite sample covariances from 200,000 exactly
+  projected draws per sampled orientation (median over four orientations at each size), discrepancy against
   the Gaussian's size; 500 Gaussians fitted to the same photographs, replayed, against NeRF (PSNR, render time; three
-  seeds); Instant-NGP, DUSt3R, VGGT.
+  seeds); Instant-NGP, DUSt3R, VGGT. The untruncated Gaussian's depth can approach zero, so its exactly projected
+  distribution has no finite covariance. These finite-sample discrepancies can be dominated by rare draws; they do
+  not establish a population covariance error or a power law. The displayed cloud is one orientation at size/depth
+  0.1, with 1,500 of its 200,000 draws shown; its discrepancy need not equal the curve's four-orientation median.
+  Each discrepancy is the relative Frobenius norm ‖Σsample − ΣJacobian‖F / ‖Σsample‖F.
 * **Outro.** Eight pictures from the part's results, where the ideas come back (Parts 23, 24, 25, 29, 31), six
   problems, Part 23's teaser, references.
 
@@ -134,7 +149,7 @@ Wang et al., DUSt3R (2024); Wang et al., VGGT (2025).
 1. A ViT cuts a 224 × 224 picture into p × p patches. How many tokens for p = 16 and p = 8? By what factors do
    attention's and the MLPs' costs grow when p halves?
 2. In an adaLN-Zero block with every gate α = 0, show the block is the identity and the gradients of its attention
-   weights vanish, but the gradient of the gate's map W does not.
+   weights vanish, but the gradient of the gate's map W can be nonzero.
 3. Derive the resolution shift σ_m = ασ_n / (1 + (α − 1)σ_n) from equal uncertainty about a flat picture, show it lowers
    the log signal-to-noise ratio by 2 log α, and evaluate it for σ_n = 0.5, α = 3.
 4. MaskGIT draws 256 tokens in T = 8 passes, leaving ⌊256 cos(π k / 2T)⌋ masked after pass k. How many are fixed in each
@@ -152,7 +167,10 @@ Wang et al., DUSt3R (2024); Wang et al., VGGT (2025).
 2. The block computes h + α₁ ⊙ Attn(·) and then adds α₂ ⊙ MLP(·); with α = W c + b = 0 both branches vanish and the
    output is h. Any parameter θ inside a branch reaches the loss only through α ⊙ F(θ), so ∂L/∂θ = α ⊙ (∂L/∂out) ∂F/∂θ = 0
    (this includes the branch's scale and shift γ, β). But ∂L/∂α = (∂L/∂out) ⊙ F(·), which is generally non-zero, and
-   ∂L/∂W = (∂L/∂α) cᵀ ≠ 0. The first step opens the gates; after that the branches learn.
+   ∂L/∂W = (∂L/∂α) cᵀ can be nonzero. With nonzero upstream gradients and condition c, the gate can learn first;
+   after it opens, the branches can learn. A zero loss gradient or zero condition is a counterexample to an
+   unconditional claim that W's gradient must be nonzero. This statement is about the block; a zero-initialized
+   downstream output layer can also block its upstream gradients on the first step.
 3. For a flat picture, every pixel z_i = (1 − σ) c + σ ε_i; averaging n pixels gives z̄ = (1 − σ) c + σ ε̄ with
    ε̄ ~ N(0, 1/n), so ĉ = z̄ / (1 − σ) has standard deviation σ / ((1 − σ)√n). Setting it equal at m and n pixels:
    σ_m / (1 − σ_m) = α σ_n / (1 − σ_n) with α = √(m/n); solving, σ_m = α σ_n / (1 + (α − 1) σ_n). With SNR = (1 − σ)²/σ²,
@@ -170,7 +188,7 @@ Wang et al., DUSt3R (2024); Wang et al., VGGT (2025).
 ## 习题（中文）
 
 1. ViT把224 × 224的图片切成p × p的图块。p = 16和p = 8时各有多少个词元？p减半时，注意力和MLP的计算量各增长多少倍？
-2. 在一个所有门控α = 0的adaLN-Zero块中，证明这个块是恒等映射，它的注意力权重的梯度为零，但门控映射W的梯度不为零。
+2. 在一个所有门控α = 0的adaLN-Zero块中，证明这个块是恒等映射，它的注意力权重的梯度为零，但门控映射W的梯度可以不为零。
 3. 由“对一张均匀图片的不确定性相同”推导分辨率偏移σ_m = ασ_n / (1 + (α − 1)σ_n)，证明它把对数信噪比降低2 log α，并计算
    σ_n = 0.5、α = 3时的值。
 4. MaskGIT用T = 8次前向传播生成256个词元，第k次之后还有⌊256 cos(πk/2T)⌋个被掩码。每一次固定多少个词元？与线性调度比较。
@@ -183,7 +201,8 @@ Wang et al., DUSt3R (2024); Wang et al., VGGT (2025).
    N² d增长：16倍。MLP和各个投影每层约为N d²：4倍。图块嵌入无论如何每个像素只碰一次，代价不变。
 2. 这个块先计算h + α₁ ⊙ Attn(·)，再加上α₂ ⊙ MLP(·)；α = W c + b = 0时两个分支都消失，输出就是h。分支内部的任何参数θ只通过
    α ⊙ F(θ)影响损失，所以∂L/∂θ = α ⊙ (∂L/∂out) ∂F/∂θ = 0（分支的缩放γ和平移β也一样）。但∂L/∂α = (∂L/∂out) ⊙ F(·)一般
-   不为零，∂L/∂W = (∂L/∂α) cᵀ ≠ 0。第一步就把门打开；此后分支才开始学习。
+   不为零，∂L/∂W = (∂L/∂α) cᵀ可以不为零。若上游梯度和条件c非零，门控可以先学习；门打开之后，分支才能学习。
+   若损失梯度或条件为零，W的梯度也可能为零。这里讨论的是单个块；下游输出层若初始化为零，第一步也会阻断上游梯度。
 3. 对一张均匀图片，每个像素z_i = (1 − σ) c + σ ε_i；对n个像素求平均得z̄ = (1 − σ) c + σ ε̄，ε̄ ~ N(0, 1/n)，所以
    ĉ = z̄ / (1 − σ)的标准差是σ / ((1 − σ)√n)。令m个和n个像素时两者相等：σ_m / (1 − σ_m) = α σ_n / (1 − σ_n)，α = √(m/n)；
    解得σ_m = α σ_n / (1 + (α − 1) σ_n)。由SNR = (1 − σ)²/σ²，log SNR_m = 2 log((1 − σ_m)/σ_m) = 2 log((1 − σ_n)/(α σ_n))

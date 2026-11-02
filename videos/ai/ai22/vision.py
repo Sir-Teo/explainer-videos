@@ -55,21 +55,42 @@ def vit_net(D=D, H=H, L=L):
 def cnn_net():
     import torch.nn as nn
 
-    # 20x20 -> 10x10 -> 5x5, then global average pooling: about as many weights as the ViT (and 1.3x its arithmetic)
+    # 20x20 -> 10x10 -> 5x5, then global average pooling: about as many weights as the ViT (and about 1.4x its matrix/convolution multiply-adds)
     return nn.Sequential(nn.Unflatten(1, (1, GL)), nn.Conv2d(1, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
                          nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
                          nn.Conv2d(64, 128, 3, padding=1), nn.ReLU(), nn.Conv2d(128, 64, 3, padding=1), nn.ReLU(),
                          nn.AdaptiveAvgPool2d(1), nn.Flatten(), nn.Linear(64, 26))
 
 
+def _cpu_attention_flops(q, k, v, *args, **kwargs):
+    """Dense QK and AV products: two floating-point operations per multiply-add."""
+    b, heads, nq, dq = q
+    bk, hk, nk, dk = k
+    bv, hv, nv, dv = v
+    if not (b == bk == bv and hk == hv and dq == dk and nk == nv and heads >= hk and heads % hk == 0):
+        raise ValueError("incompatible attention shapes")
+    return 2 * b * heads * nq * nk * (dq + dv)
+
+
 def macs(net, x) -> int:
-    """Multiply-adds of one forward pass of one picture, counted by PyTorch."""
+    """Matrix/convolution multiply-adds for one picture, including fused CPU attention.
+
+    This convention excludes bias, normalization, softmax, activations and timing.
+    Disable MHA's whole-layer inference shortcut while counting so train/eval modes
+    expose the same operations. The backend flag is restored even on failure.
+    """
     import torch
     from torch.utils.flop_counter import FlopCounterMode
 
-    with FlopCounterMode(display=False) as fc, torch.no_grad():
-        net(x[:1])
-    return int(fc.get_total_flops() // 2)
+    fastpath = torch.backends.mha.get_fastpath_enabled()
+    try:
+        torch.backends.mha.set_fastpath_enabled(False)
+        mapping = {torch.ops.aten._scaled_dot_product_flash_attention_for_cpu: _cpu_attention_flops}
+        with FlopCounterMode(display=False, custom_mapping=mapping) as fc, torch.no_grad():
+            net(x[:1])
+        return int(fc.get_total_flops() // 2)
+    finally:
+        torch.backends.mha.set_fastpath_enabled(fastpath)
 
 
 def augment(x, g):
@@ -235,9 +256,15 @@ def compute_vitcnn():
     out = dict(sizes=list(SIZES), seeds=list(SEEDS), steps=n, batch=64)
     for kind in ("vit", "cnn"):
         out[f"{kind}_params"] = part[f"{kind}_k20_s0"]["params"]
-        out[f"{kind}_macs"] = part[f"{kind}_k20_s0"]["macs"]
+        # Completed legacy partials can contain counts that omitted fused CPU attention.
+        # Remeasure only this architecture's diagnostic; preserve all original training outcomes.
+        out[f"{kind}_macs_original"] = part[f"{kind}_k20_s0"]["macs"]
+        with torch.random.fork_rng(devices=[]):
+            diagnostic_net = vit_net() if kind == "vit" else cnn_net()
+            out[f"{kind}_macs"] = macs(diagnostic_net, Xte)
         out[f"{kind}_acc"] = np.array([[part[f"{kind}_k{k}_s{s}"]["acc"] for s in SEEDS] for k in SIZES])
         out[f"{kind}_curve"] = np.array([[np.array(part[f"{kind}_k{k}_s{s}"]["curve"])[:, 1] for s in SEEDS] for k in SIZES])
+    out["macs_scope"] = "dense-matrix-convolution-v2"
     out["curve_steps"] = np.array(part["vit_k20_s0"]["curve"])[:, 0]
     out["n_train"] = [part[f"vit_k{k}_s0"]["n_train"] for k in SIZES]
     print(f"    ViT {out['vit_acc'].mean(1).round(3)}, CNN {out['cnn_acc'].mean(1).round(3)} at {SIZES} fonts", flush=True)
