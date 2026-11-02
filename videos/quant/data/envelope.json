@@ -1,0 +1,24 @@
+{
+ "opened": {},
+ "registered": {},
+ "sealed": {
+  "binance/BTCUSDT/1d": {
+   "digest": "7bdad00d93ed73da631de456141d06f5ae44061c4bd30b0002c07d00d5c10ef4",
+   "first": 20210101,
+   "last": 20251231,
+   "n": 1826
+  },
+  "kenfrench/mkt_daily": {
+   "digest": "2919993e28205ab6abb35b6874c8e0ec94d0566ce25e0ca7991657c7d14ee194",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  },
+  "kenfrench/size_deciles_daily": {
+   "digest": "5587b0e1c5ff72a8a2cb9ca2cbc3d667fc5de19c9269b0ccbd55c36c2d4e9009",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  }
+ }
+}

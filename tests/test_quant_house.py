@@ -169,3 +169,18 @@ def test_envelope_seals_registers_and_opens_once(tmp_path, monkeypatch):
     assert pit.trials_so_far() == 7
     pit.register("s2", "def g(): pass", {}, trials=3)
     assert pit.trials_so_far() == 10
+
+
+def test_smile_density_and_svix_on_a_flat_smile():
+    """A flat smile is Black-76: SVI recovers it, the Breeden-Litzenberger density is the lognormal (mass 1,
+    mean F), and var^Q(S_T / F) = exp(sigma^2 T) - 1."""
+    from explainer.quant.house import smile
+    F, T, sig = 100.0, 0.25, 0.5
+    k = np.linspace(-0.6, 0.6, 41)
+    p = smile.fit_svi(k, np.full_like(k, sig ** 2 * T))
+    assert p["rmse"] < 1e-5
+    K = np.linspace(5, 400, 8001)
+    q = smile.risk_neutral_density(p, F, T, K)
+    assert np.trapezoid(q, K) == pytest.approx(1.0, abs=2e-3)
+    assert np.trapezoid(K * q, K) == pytest.approx(F, rel=2e-3)
+    assert smile.svix2(p, F, T) == pytest.approx(np.exp(sig ** 2 * T) - 1, rel=1e-3)
