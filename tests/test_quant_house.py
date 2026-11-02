@@ -223,3 +223,28 @@ def test_fund_fees_high_water_mark_and_haircut():
     want = 0.2 * max(gain - 1.08, 0) / nav_after_loss
     assert f["fees"][2] == pytest.approx(want)
     assert funding.max_leverage(0.02) == pytest.approx(50)
+
+
+# --------------------------------------------------------------------------- Part 3: valuation
+def test_valuation_closed_forms_and_irr():
+    from explainer.quant.house import valuation as v
+    assert v.annuity(100, 0.05, 10) == pytest.approx(v.npv(0.05, [0] + [100] * 10))
+    assert v.gordon(5, 0.08, 0.03) == pytest.approx(100)
+    long_ = v.npv(0.08, [0] + [5 * 1.03 ** k for k in range(2000)])
+    assert long_ == pytest.approx(100, rel=1e-6)
+    assert v.irr([-100, 10, 10, 110]) == pytest.approx(0.10, abs=1e-10)
+    d = v.dcf([10, 11, 12], 0.09, 0.02)
+    tv = 12 * 1.02 / 0.07 / 1.09 ** 3
+    assert d["terminal"] == pytest.approx(tv) and d["value"] == pytest.approx(d["explicit"] + tv)
+
+
+def test_modigliani_miller_and_merton():
+    from explainer.quant.house import valuation as v
+    # without taxes the WACC equals the asset return whatever the leverage
+    rA, rD = 0.08, 0.04
+    for de in (0.0, 0.5, 2.0):
+        rE = v.mm_cost_of_equity(rA, rD, de)
+        assert v.wacc(1.0, de, rE, rD) == pytest.approx(rA)
+    m = v.merton_equity(np.array([100.0, 150.0]), 80.0, 1.0, 0.3, 0.02)
+    assert np.allclose(m["equity"] + m["debt"], [100, 150])
+    assert m["spread"][0] > m["spread"][1] > 0 and m["pd"][0] > m["pd"][1]
