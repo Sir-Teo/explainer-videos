@@ -106,12 +106,23 @@ CAPE vs next-10y real total return: slope -0.074 per log unit, R2 0.32 on 1,560 
 independent decades); Dec 2020 CAPE 33.8 -> predicted 0.6%/yr real for 2021-30 (the envelope will tell). Decile
 long-shorts 1963-2020 (annual mean, before/after publication): accruals 3.8% (t 2.9; 5.0% -> 2.1%), OP 2.4% (t 1.3),
 investment 4.3% (t 2.9; 6.4% -> -1.1%), B/M 4.0% (6.9% -> 1.0%), E/P 3.8% (7.5% -> 2.6%). DCF: FCF 100 growing 5% for
-5 years then 2%, at 8%: 1,936, 76% terminal; at 7% and 3%: 2,816. Scenes: not started.
+5 years then 2%, at 8%: 1,936, 76% terminal; at 7% and 3%: 2,816.
+
+Status (2 Nov 2026): all 12 scenes written and previewed silently (Hook, TimeValue, Statements, DCF, CAPE, MM, Payout,
+Signals, Events, Crisis, House, Outro); README with solutions (EN, ZH); `zh_lines.py` 50 of 50; House
+`fundamentals.py` (bitemporal store, EDGAR company-facts loader) tested; `compute.py envelope` sealed Shiller's and
+French's hold-outs and registered `cape_forecast_2021_2030` (trials 1) and `accounting_signals_part3` (trials 5):
+do not edit `compute_cape` / `compute_factors` (their source hash is registered). Shiller's xls ends Sept 2023, so the
+finale scores the CAPE forecast on a second source. Remaining: on-screen text (`collect_text.py quant3`, `--check`,
+merge), Chinese dry run, narrated build. Facts verified: Enron (restatement 8 Nov 2001, $586m; bankruptcy 2 Dec; SEC:
+>$5bn prepays as operating cash), Wirecard (EUR 1.9bn ~ 1/4 of balance sheet; insolvency 25 Jun 2020; BaFin short ban
+18 Feb-18 Apr 2019), Mitchell-Pulvino (4,750 mergers 1963-98, ~4%/yr excess after costs), AbbVie-Shire (withdrew
+15 Oct 2014 after Treasury notice of 22 Sep; $1.635bn fee), McLean-Pontiff (97 predictors; 26% / 58% lower).
 
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
    time on CPU, so not in a 4-core cloud container): `python tools/make.py quant10` (English and Chinese, 1080p30),
    or `tools/colab_narrate.py` on a Colab GPU. Then `tools/dead_air.py` on the narrated cut.
-2. Parts 2 and 3 (Act I), then Act II (Parts 4-8), following SYLLABUS.md section 6.
+2. Act II (Parts 4-8), following SYLLABUS.md section 6; Part 4 next.
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
