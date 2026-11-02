@@ -23,6 +23,26 @@
     "model": "10y real total return on log CAPE, OLS on 1881-2010 monthly starts"
    },
    "trials": 1
+  },
+  "sign_continuation_eprocess_btc": {
+   "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",
+   "params": {
+    "data": "Binance BTCUSDT 1d",
+    "start": 2018
+   },
+   "trials": 1
+  },
+  "sign_continuation_eprocess_us": {
+   "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",
+   "params": {
+    "data": "Ken French daily market",
+    "starts": [
+     1926,
+     1975,
+     2000
+    ]
+   },
+   "trials": 3
   }
  },
  "sealed": {
@@ -31,6 +51,12 @@
    "first": 20210101,
    "last": 20251231,
    "n": 1826
+  },
+  "fred/NIKKEI225": {
+   "digest": "c0a23dc5886ec88b03c6370ad37c59001e56b6afd3e5eb7b5af29418110016d3",
+   "first": 20210104,
+   "last": 20251230,
+   "n": 1223
   },
   "kenfrench/mkt_daily": {
    "digest": "2919993e28205ab6abb35b6874c8e0ec94d0566ce25e0ca7991657c7d14ee194",

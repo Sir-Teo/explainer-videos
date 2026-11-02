@@ -1354,6 +1354,16 @@
   "bytes": 28042,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
  },
+ "fred/NIKKEI225/1949-05-01_2025-12-31": {
+  "sha256": "23f5bfafd1efb069207e081b712ab44e2ce60aab40bc90cc0ed58c39a9595cb8",
+  "bytes": 403661,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NIKKEI225"
+ },
+ "fred/NIKKEI225/1994-07-01_1995-03-31": {
+  "sha256": "1c4480e3662c7f6160758a58492fec569384bbe3b201d148ef890de01c1dde3d",
+  "bytes": 4100,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NIKKEI225"
+ },
  "fred/RRPONTSYD/2018-01-01_2025-12-31": {
   "sha256": "3efc9c2424f800c524ef41b1ab3139b6a9f99aac8c74191f7f1478adfe300fb2",
   "bytes": 40304,
@@ -1374,9 +1384,19 @@
   "bytes": 82895,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_AC_CSV.zip"
  },
+ "kenfrench/AC_value/through_2025-12": {
+  "sha256": "d72a3fff3fa513eb14e70c834adc3701b96a0adb35f685d87c41bdaa76e740cd",
+  "bytes": 90114,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_AC_CSV.zip"
+ },
  "kenfrench/BE-ME_value/through_2020-12": {
   "sha256": "f815a5c416a6b97b087a8b9cafdc3d02d831ead8514396be662e3fb5e6a64e6f",
   "bytes": 169045,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BE-ME_CSV.zip"
+ },
+ "kenfrench/BE-ME_value/through_2025-12": {
+  "sha256": "406e29ea477bc7dbfa06901c7ad591ceb89a34e2e22be96ff737e9e63dccce3b",
+  "bytes": 178021,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BE-ME_CSV.zip"
  },
  "kenfrench/E-P_value/through_2020-12": {
@@ -1384,14 +1404,29 @@
   "bytes": 124262,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_E-P_CSV.zip"
  },
+ "kenfrench/E-P_value/through_2025-12": {
+  "sha256": "7fb80d418a148432b0fdbf23b0125ee2d3c129e660837eb755ec8b74a6b2f91e",
+  "bytes": 133239,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_E-P_CSV.zip"
+ },
  "kenfrench/INV_value/through_2020-12": {
   "sha256": "0b4ad951ff827ce6133761bc49f82ae6f8f9ffc6f281276350b7489f32176a89",
   "bytes": 97860,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_INV_CSV.zip"
  },
+ "kenfrench/INV_value/through_2025-12": {
+  "sha256": "d70a7bcc44dfef07ce57117699dfbeb041afc864f83b71f2bcc4301caa98d89f",
+  "bytes": 106381,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_INV_CSV.zip"
+ },
  "kenfrench/OP_value/through_2020-12": {
   "sha256": "49ac26966f29e3ebf5ef07f7d857503f0fe22c5a8e234140eddfa7bf0748b7c7",
   "bytes": 98052,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_OP_CSV.zip"
+ },
+ "kenfrench/OP_value/through_2025-12": {
+  "sha256": "3794d1673ccc0f8b8819ca3f4f49cc7a4269508bf2e0f3d075e86c4963de333b",
+  "bytes": 106548,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_OP_CSV.zip"
  },
  "kenfrench/daily_factors/through_2025-12-31": {
@@ -1407,6 +1442,16 @@
  "shiller/ie_data/through_2020-12": {
   "sha256": "3996c62d804e16e818332a2f5b7ab97ca0d95b063d1d23ef5b8ed49390ab8089",
   "bytes": 96604,
+  "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+ },
+ "shiller/ie_data/through_2025-12": {
+  "sha256": "d0580a40f10087aabdcc591481b0e1a31d2240bb2df987459e47ad2e08185b74",
+  "bytes": 98719,
+  "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+ },
+ "shiller/ie_data/through_2030-12": {
+  "sha256": "d0580a40f10087aabdcc591481b0e1a31d2240bb2df987459e47ad2e08185b74",
+  "bytes": 98719,
   "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
  }
 }

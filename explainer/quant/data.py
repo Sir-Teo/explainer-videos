@@ -328,8 +328,12 @@ def fred(series: str, start: str = "2015-01-01", through: str = "2025-12-31") ->
     """A FRED series as ``date`` (YYYYMMDD ints) and ``value`` (as published: percent for rates, millions of dollars
     for balances), missing days dropped.  FRED revises some series, so the manifest checks the frozen window."""
     path = DATA / "fred" / f"{series}.csv"
+    if path.exists():
+        first = path.read_text().splitlines()[1].split(",")[0].replace("-", "")
+        if int(first) > int(start.replace("-", "")) and int(first) > 19000101:
+            path.unlink()  # cached from a later start: fetch the whole history once (cached windows stay checked)
     if not path.exists():
-        _atomic_write(path, _get(f"{FRED}?id={series}&cosd={start}&coed={through}"))
+        _atomic_write(path, _get(f"{FRED}?id={series}&cosd=1900-01-01&coed=2025-12-31"))
     rows = []
     for line in path.read_text().strip().splitlines()[1:]:
         d, v = line.split(",")[:2]
