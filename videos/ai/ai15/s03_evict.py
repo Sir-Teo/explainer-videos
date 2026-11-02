@@ -80,6 +80,10 @@ class Evict(VoiceoverScene):
                    r"$L$ segments back", font_size=20, color=HIST)
         xl = VGroup(segs, arcs, sl.next_to(segs, DOWN, buff=0.12)).to_edge(DOWN, buff=0.35)
         tag = note(r"schematic").to_corner(UR, buff=0.25)
+        causal_scope = note(
+            r"因果示意图；全局词元固定在开头" if zh() else
+            r"causal sketch; \ fixed global tokens at the start",
+            font_size=16).next_to(tag, DOWN, buff=0.12).align_to(tag, RIGHT)
         cite_ = cite(r"R.~Child et al.\ (2019); \ Z.~Dai et al., \textit{Transformer-XL} (2019); \ I.~Beltagy et al., "
                      r"\textit{Longformer} (2020); \ M.~Zaheer et al., \textit{BigBird} (2020)", corner=UL, font_size=16)
         with self.voiceover(
@@ -88,12 +92,13 @@ class Evict(VoiceoverScene):
             "Sparse Transformer looked only at a window of recent tokens, plus a strided pattern, "
             "<bookmark mark='b'/> and in 2020 Longformer kept a window and added a few global tokens that see and are "
             "seen by everything. <bookmark mark='c'/> BigBird added a few random keys too, and proved that this "
-            "sparse pattern can still compute anything full attention can. <bookmark mark='d'/> Each token now "
-            "reads a fixed number of keys, so the cache stops growing. <bookmark mark='e'/> Transformer-XL, in 2019, "
+            "sparse pattern can still compute anything full attention can. <bookmark mark='d'/> Sparse reads cut "
+            "computation; a sliding window permits eviction, while arbitrary old random keys must remain available. "
+            "<bookmark mark='e'/> Transformer-XL, in 2019, "
             "went the other way: it cached the previous segment's states and let each segment read them, so a stack "
             "of layers reaches many segments back."
         ) as vo:
-            self.play(FadeIn(ax_l), FadeIn(imgs[0]), FadeIn(cite_), FadeIn(tag))
+            self.play(FadeIn(ax_l), FadeIn(imgs[0]), FadeIn(cite_), FadeIn(tag), FadeIn(causal_scope))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
                 self.play(FadeIn(imgs[k + 1], shift=RIGHT * 0.1))
@@ -117,7 +122,7 @@ class Evict(VoiceoverScene):
         for li in range(L_):
             for hh in range(H_):
                 c = img.get_corner(UL) + np.array([0.62 * (hh + 0.5), -0.62 * (li + 0.5), 0])
-                vals.add(MathTex(f"{100 * F[li, hh]:.0f}", font_size=17,
+                vals.add(MathTex(f"{100 * F[li, hh]:.2f}", font_size=17,
                                  color=BLACK if F[li, hh] > 0.25 else GREY_A).move_to(c))
         rl = VGroup(*[label(rf"layer {li + 1}", font_size=16, color=GREY_B).next_to(img.get_corner(UL) + DOWN * 0.62 * (li + 0.5),
                                                                                LEFT, buff=0.12) for li in range(L_)])
@@ -127,7 +132,7 @@ class Evict(VoiceoverScene):
         mean = float(F.mean())
         k1 = label(rf"if attention were spread evenly: \ ${100 * uni:.1f}\%$", font_size=22, color=GREY_A)
         k2 = label(rf"heads above ten times that: \ ${n_sink}$ of ${L_ * H_}$", font_size=22, color=C.INTERVAL)
-        k3 = label(rf"average over all heads: \ ${100 * mean:.0f}\%$", font_size=22, color=WHITE)
+        k3 = label(rf"average over all heads: \ ${100 * mean:.2f}\%$", font_size=22, color=WHITE)
         keys = VGroup(k1, k2, k3).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 0.4, 0])
         note_ = note(rf"$24$ held-out windows of ${int(s['seq'])}$ tokens, \\ queries from position $64$ on").next_to(keys, DOWN, buff=0.4).align_to(keys, LEFT)
         cite_ = cite(r"G.~Xiao et al., \textit{Efficient Streaming Language Models with Attention Sinks} (2023)", corner=DR)
@@ -139,8 +144,8 @@ class Evict(VoiceoverScene):
                    f"a head gives it {100 * mean:.0f} percent. Our small model leans on the first token less than the "
                    "large ones do." if n_sink > 0 else
                    f"not one of its {L_ * H_} heads gives the first token even ten times that; on average a head gives "
-                   f"it {100 * mean:.1f} percent. This model never grew a sink: trained on windows cut at random from "
-                   "the novels, it found other places to park.")
+                   f"it {100 * mean:.1f} percent. In these windows, the first token is not a strong attention sink "
+                   "by this threshold.")
         with self.voiceover(
             "A sliding window has a hidden flaw, found in 2023 by Guangxuan Xiao and colleagues. Part 13 showed that "
             "many heads park their attention on the very first token, an attention sink, when they have nothing "
@@ -177,7 +182,8 @@ class Evict(VoiceoverScene):
         lines = VGroup(*[curve(ax, np.arange(len(sm[p]))[20:], np.clip(sm[p][20:], lo, top), POL_C[p], 3) for p, _, _ in series])
         leg = legend([(POL_C[p], t) for p, _, t in series], font_size=17).move_to([4.6, 1.6, 0])
         trained = DashedLine(ax.c2p(256, lo), ax.c2p(256, top), dash_length=0.06, color=GREY_B, stroke_width=1.5)
-        tl = label(r"trained on $256$", font_size=16, color=GREY_B).next_to(trained, UP, buff=0.05)
+        tl = label(r"trained on $256$", font_size=16, color=GREY_B)
+        tl.next_to(ax.c2p(256, top), DR, buff=0.12)
         bits = {p: float(s[f"bits_{p}_{W if p != 'full' else 0}"]) for p in ("window", "sinks", "full")}
         br = float(s["bits_ref"])
         bars = VGroup(*[label(rf"{POL_NAME[p].replace('$W$', f'${W}$').replace('$W-4$', f'${W - 4}$')}: \ ${bits[p]:.3f}$",
@@ -194,7 +200,7 @@ class Evict(VoiceoverScene):
         v2 = (f"Keep the first four tokens as well, and it recovers: {bits['sinks']:.2f}, close to recomputing every "
               f"window from scratch, {br:.2f}. " if hurt > 0.05 else
               f"Keeping the first four tokens as well gives {bits['sinks']:.2f}, and recomputing every window from "
-              f"scratch {br:.2f}: with no sink to lose, this model doesn't need them. ")
+              f"scratch {br:.2f}: on this passage, reserving the first four has little effect. ")
         v3 = (f"And keeping everything fails differently: past position 256 the model meets positions it never "
               f"saw in training, and ends at {bits['full']:.2f}. That is why long windows need the context extension "
               "of Part 13." if bits["full"] > br + 0.1 else

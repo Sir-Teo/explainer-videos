@@ -25,7 +25,9 @@ class Frontier(VoiceoverScene):
         head = label(r"Fixed-size memories in production, \ 2025--26", font_size=34).to_edge(UP, buff=0.3)
         items = [
             ("January 2025", r"MiniMax-01", r"lightning attention \\ in 7 layers of 8; \\ $456$B weights; \\ $4$M tokens", SSM_C),
-            ("April 2025", r"Nemotron-H", r"NVIDIA: \\ Mamba-2, \\ $8\%$ attention; \\ up to $3\times$ faster", SSM_C),
+            ("April 2025", r"Nemotron-H",
+             r"NVIDIA：\\ Mamba-2；\\ 全部模块中\\ 约$8\%$是注意力；\\ 最高快$3\times$" if zh() else
+             r"NVIDIA: \\ Mamba-2; \\ attention in $8\%$ \\ of all blocks; \\ up to $3\times$ faster", SSM_C),
             ("September 2025", r"Qwen3-Next", r"Gated DeltaNet \\ in 3 layers of 4; \\ $80$B, \\ $3$B active", GATED),
             ("October 2025", r"Kimi Linear", r"Kimi Delta Attention, \\ 3 of 4; \\ up to $6\times$ faster \\ decoding at $1$M", GATED),
             ("October 2025", r"MiniMax-M2", r"back to \\ full attention", ATT),

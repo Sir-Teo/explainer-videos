@@ -7,9 +7,8 @@ import numpy as np
 import re
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import heat_image, signed_image  # noqa: F401
 
-from .compute import CACHE, load  # noqa: F401
+from .cache_inputs import load  # noqa: F401
 
 PART = 15
 MONO = "DejaVu Sans Mono"
@@ -239,6 +238,35 @@ def heat_fixed(M, width, height, color, vmax=1.0, gamma=0.6) -> ImageMobject:
     c = np.array(ManimColor(color).to_rgb())
     bg = np.array(ManimColor("#121722").to_rgb())
     rgb = bg[None, None] * (1 - v[..., None]) + c[None, None] * v[..., None]
+    img = ImageMobject((np.concatenate([rgb, np.ones(M.shape + (1,))], -1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+    return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
+
+
+# The Part 13 image helpers, kept local so scene imports stay independent of producers.
+def heat_image(M, width, height, color=A, gamma=0.5, mask_upper=False) -> ImageMobject:
+    """A matrix as a picture: dark for 0, ``color`` for the largest entry; ``gamma`` < 1 lifts the small ones.
+    With ``mask_upper``, entries above the diagonal (the future, for causal attention) are drawn darker still."""
+    M = np.asarray(M, float)
+    v = np.clip(M / max(M.max(), 1e-12), 0, 1) ** gamma
+    c = np.array(ManimColor(color).to_rgb())
+    bg = np.array(ManimColor("#121722").to_rgb())
+    rgb = bg[None, None] * (1 - v[..., None]) + c[None, None] * v[..., None]
+    if mask_upper:
+        up = np.triu(np.ones(M.shape, bool), 1)
+        rgb[up] = np.array(ManimColor("#080B11").to_rgb())
+    img = ImageMobject((np.concatenate([rgb, np.ones(M.shape + (1,))], -1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+    return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
+
+def signed_image(M, width, height, pos=C.TRUE_P, neg=C.SURPRISE) -> ImageMobject:
+    """A signed matrix as a picture: blue for positive, red for negative, dark for zero."""
+    M = np.asarray(M, float)
+    s = np.clip(M / max(np.abs(M).max(), 1e-12), -1, 1)
+    bg = np.array(ManimColor("#121722").to_rgb())
+    cp, cn = np.array(ManimColor(pos).to_rgb()), np.array(ManimColor(neg).to_rgb())
+    a = np.abs(s)[..., None]
+    rgb = bg * (1 - a) + np.where(s[..., None] > 0, cp, cn) * a
     img = ImageMobject((np.concatenate([rgb, np.ones(M.shape + (1,))], -1) * 255).astype(np.uint8))
     img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
     return img.stretch_to_fit_width(width).stretch_to_fit_height(height)

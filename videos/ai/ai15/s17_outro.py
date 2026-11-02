@@ -46,8 +46,9 @@ class Outro(VoiceoverScene):
         m = load("matrix_rw")
         out.append((signed_grid(np.asarray(m["S_delta"])[4], 1.9), r"a matrix memory", STATE))
         c = load("capacity")
-        a4 = plane([0, 256, 64], [0, 2.5, 1])
-        out.append((VGroup(curve(a4, np.asarray(c["Ns"]), np.minimum(np.asarray(c["err_add"]), 2.5), ADD, 3)), r"crosstalk", ADD))
+        error_top = math.ceil(float(np.max(c["err_add"])) * 2) / 2
+        a4 = plane([0, 256, 64], [0, error_top, 1])
+        out.append((VGroup(curve(a4, np.asarray(c["Ns"]), np.asarray(c["err_add"]), ADD, 3)), r"crosstalk", ADD))
         tree = VGroup()
         for lv, kk in enumerate((1, 2, 4)):
             for i in range(8):

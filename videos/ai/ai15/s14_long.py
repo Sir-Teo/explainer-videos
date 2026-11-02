@@ -70,14 +70,21 @@ class LongContext(VoiceoverScene):
         head = label(r"Harder than a needle", font_size=36).to_edge(UP, buff=0.35)
         w, fs = 4.3, 26
         cards = VGroup(
-            history_card(2024, r"RULER \ (Hsieh et al., NVIDIA)", r"13 tasks: \ many needles, \ tracing variables, \ "
-                         r"counting words, \ questions; \ of 17 models claiming at least $32$k tokens, \ only half held "
-                         r"up at $32$k", color=HIST, width=w, font_size=fs),
-            history_card(2025, r"NoLiMa \ (Modarressi et al.)", r"needles that share no words with the question; \ "
-                         r"at $32$k tokens, \ 11 of 13 models fell below half their short-text score; \ GPT-4o: \ "
-                         r"$99.3\% \to 69.7\%$", color=HIST, width=w, font_size=fs),
-            history_card(2025, r"Context rot \ (Hong, Troynikov \& Huber, Chroma)", r"18 models: \ every one less reliable "
-                         r"as the input grows, \ even on simple tasks", color=HIST, width=w, font_size=fs),
+            history_card(2024, r"RULER \ (Hsieh et al., NVIDIA)",
+                         r"13项任务：多针检索、变量追踪、计数和问答；摘要概括：17个声称至少支持$32$k词元的模型，只有一半在$32$k仍表现良好"
+                         if zh() else
+                         r"13 tasks: \ retrieval, \ tracing, \ counting, \ questions; \ abstract summary: \ of 17 models "
+                         r"claiming at least $32$k tokens, \ only half held up at $32$k", color=HIST, width=w, font_size=fs),
+            history_card(2025, r"NoLiMa \ (Modarressi et al.)",
+                         r"针与问题的字面重合很少；在$32$k词元时，13个模型中11个跌至短文本成绩的一半以下；GPT-4o：$99.3\% \to 69.7\%$"
+                         if zh() else
+                         r"needles with minimal lexical overlap with the question; \ at $32$k tokens, \ 11 of 13 models "
+                         r"fell below half their short-text score; \ GPT-4o: \ $99.3\% \to 69.7\%$", color=HIST, width=w, font_size=fs),
+            history_card(2025, r"Context rot \ (Hong, Troynikov \& Huber, Chroma)",
+                         r"测试18个模型：在报告的任务中，输入变长伴随可靠性下降，简单任务也如此"
+                         if zh() else
+                         r"18 models tested: \ length-related reliability declines across the report's tasks, \ "
+                         r"including simple ones", color=HIST, width=w, font_size=fs),
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         if cards.width > 13.4:
             cards.width = 13.4
@@ -87,11 +94,11 @@ class LongContext(VoiceoverScene):
         with self.voiceover(
             "So the tests got harder. <bookmark mark='a'/> In 2024 Cheng-Ping Hsieh and colleagues at NVIDIA built "
             "RULER: many needles at once, values passed along chains of variables, counting the commonest words, and "
-            "questions about the text. Of seventeen models that claimed at least thirty-two thousand tokens, only "
-            "half still did well at thirty-two thousand. <bookmark mark='b'/> In 2025 NoLiMa took away the literal "
-            "match: the needle and the question share no words. At thirty-two thousand tokens, eleven of thirteen "
+            "questions about the text. Among seventeen models claiming at least thirty-two thousand tokens, its "
+            "abstract says only half still did well at that length. <bookmark mark='b'/> In 2025 NoLiMa reduced literal "
+            "matching: the needle and the question have minimal lexical overlap. At thirty-two thousand tokens, eleven of thirteen "
             "models fell below half their short-text score. <bookmark mark='c'/> And Chroma's report on context rot "
-            "found all eighteen models it tried growing less reliable as the input grew, even on simple tasks. "
+            "tested eighteen models and found length-related reliability declines across its tasks, including simple ones. "
             "<bookmark mark='d'/> The length a model accepts is not the length it can use."
         ) as vo:
             veils = VGroup(*[Rectangle(width=c_.width + 0.08, height=c_.height + 0.08, stroke_width=0,
@@ -124,7 +131,9 @@ class LongContext(VoiceoverScene):
             t = label(MIX_TAG[k], font_size=22, color=MIX_C[k]).next_to(img, UP, buff=0.12)
             tables.add(Group(img, SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1), vals, t))
         tables.arrange_in_grid(rows=2, cols=2, buff=(1.6, 0.7)).move_to([0.8, -0.35, 0])
-        rl = VGroup(*[label(TASK_NAME[t], font_size=17, color=GREY_A) for t in tasks]).arrange(DOWN, aligned_edge=RIGHT, buff=0.38)
+        task_labels = dict(TASK_NAME)
+        task_labels["vartrack"] = r"单值玩具链" if zh() else r"one-value toy chain"
+        rl = VGroup(*[label(task_labels[t], font_size=17, color=GREY_A) for t in tasks]).arrange(DOWN, aligned_edge=RIGHT, buff=0.38)
         rl.next_to(tables[0][0], LEFT, buff=0.2).align_to(tables[0][0], UP).shift(DOWN * 0.18)
         rl2 = rl.copy().next_to(tables[2][0], LEFT, buff=0.2).align_to(tables[2][0], UP).shift(DOWN * 0.18)
         cl = VGroup(*[MathTex(str(L), font_size=17, color=GREY_B).move_to(tables[2][0].get_corner(DL) + np.array([0.62 * (j + 0.5), -0.22, 0]))
@@ -133,6 +142,12 @@ class LongContext(VoiceoverScene):
                        for j, L in enumerate(Ls)])
         head = label(rf"our RULER: \ trained at ${T0}$ tokens, \ tested up to ${fmt_int(Ls[-1])}$ \ (\% right, \ chance $3\%$)",
                      font_size=24).to_edge(UP, buff=0.3)
+        task_scope = note(
+            r"单值玩具链可用捷径解答；准确率不能证明进行了链式追踪" if zh() else
+            r"one-value toy chain: \ a shortcut suffices; \ accuracy does not establish chain tracking",
+            font_size=14).next_to(head, DOWN, buff=0.12)
+        if task_scope.width > 13.2:
+            task_scope.scale_to_fit_width(13.2)
         foot = note(rf"two-layer models as in chapter 11, \ keys of $16$; \ {len(r['seeds'])} seeds each, \ averaged; \ "
                     r"filler of random words around the needles; \ columns: \ tokens", font_size=16).to_edge(DOWN, buff=0.2)
         acc = {k: np.asarray(r[f"acc_{k}"]).mean(0) for k in mix}
@@ -158,7 +173,7 @@ class LongContext(VoiceoverScene):
             f"them on longer streams, up to {Ls[-1]:,} tokens. <bookmark mark='b'/> " + v1 + "<bookmark mark='c'/> "
             + v2 + "<bookmark mark='d'/> " + v3
         ) as vo:
-            self.play(FadeIn(head), FadeIn(foot), FadeIn(rl), FadeIn(rl2), FadeIn(cl), FadeIn(cl2),
+            self.play(FadeIn(head), FadeIn(task_scope), FadeIn(foot), FadeIn(rl), FadeIn(rl2), FadeIn(cl), FadeIn(cl2),
                       *[FadeIn(t_[0]) for t_ in tables], *[FadeIn(t_[1]) for t_ in tables], *[FadeIn(t_[3]) for t_ in tables])
             vo.wait_until("a")
             self.play(Indicate(VGroup(cl, cl2), color=WHITE, scale_factor=1.1))
@@ -191,15 +206,18 @@ class LongContext(VoiceoverScene):
                     band(ax, xs, np.clip(ht_.min(0), lo, hi), np.clip(ht_.max(0), lo, hi), HY_C, 0.2))
         c1 = VGroup(curve(ax, xs, np.clip(mt, lo, hi), TF_C, 3), curve(ax, xs, np.clip(mh, lo, hi), HY_C, 3))
         tr = DashedLine(ax.c2p(256, lo), ax.c2p(256, hi), dash_length=0.06, color=GREY_B, stroke_width=1.5)
-        trl = label(r"trained on $256$", font_size=18, color=GREY_B).next_to(tr, UP, buff=0.05)
+        trl = label(r"trained on $256$", font_size=18, color=GREY_B)
+        trl.next_to(ax.c2p(256, hi), DR, buff=0.12)
         leg = legend([(TF_C, r"transformer, \ rotary positions"), (HY_C, r"hybrid, \ attention without positions")],
                      font_size=20).move_to([4.6, 1.8, 0])
         ct, chy = np.asarray(r["transformer_copy"]), np.asarray(r["hybrid_copy"])
         none = max(float(ct.max()), float(chy.max())) < 0.05
         cl = label(r"the copy test: \\ $24$ random tokens, \ a stretch of a novel, \\ the same $24$ again", font_size=21,
                    color=GREY_A)
-        cv = label(rf"copied correctly: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \\ "
-                   rf"(copies {r['gaps'][0]} tokens apart)", font_size=21, color=WHITE)
+        cv = label(rf"抄写正确率：Transformer ${100 * ct.mean(0)[0]:.0f}\%$，混合模型 ${100 * chy.mean(0)[0]:.0f}\%$ \\ "
+                   rf"（两份副本之间有{r['gaps'][0]}个小说词元）" if zh() else
+                   rf"copied correctly: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \\ "
+                   rf"({r['gaps'][0]} novel tokens between copies)", font_size=21, color=WHITE)
         cg = VGroup(cl, cv).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         if cg.width > 4.6:
             cg.width = 4.6
@@ -212,13 +230,13 @@ class LongContext(VoiceoverScene):
         v2 = (f"The hybrid's stays near where it was, {near_h:.2f} to {far_h:.2f}: its attention has no positions to "
               "run out of. " if far_h < near_h + 0.1 else
               f"The hybrid's climbs too, {near_h:.2f} to {far_h:.2f}. ")
-        v3 = ("But neither can find a needle: given twenty-four random tokens, a stretch of a novel and the same "
-              "twenty-four again, neither predicts the repeat, even sixteen tokens apart. Models this small, trained "
-              "this briefly, never formed Part 13's induction heads; that is why the tests before used small models "
+        v3 = ("But in this copy test, given twenty-four random tokens, a stretch of a novel and the same "
+              "twenty-four again, neither reliably predicts the repeat, with sixteen novel tokens between copies. These small, briefly trained "
+              "models did not demonstrate Part 13's induction-like copying on this test; the earlier tests used models "
               "trained for the task." if none else
               f"And in the copy test, twenty-four random tokens repeated after a stretch of a novel, the transformer "
-              f"predicts {100 * ct.mean(0)[0]:.0f} percent of the repeat and the hybrid {100 * chy.mean(0)[0]:.0f}, when "
-              f"the copies are {r['gaps'][0]} tokens apart.")
+              f"predicts {100 * ct.mean(0)[0]:.0f} percent of the repeat and the hybrid {100 * chy.mean(0)[0]:.0f}, with "
+              f"{r['gaps'][0]} novel tokens between copies.")
         with self.voiceover(
             "Our two language models from the last chapter were trained on windows of 256 tokens. What happens "
             "past the end? <bookmark mark='a'/> Here is the loss at each position of held-out text a thousand tokens "
@@ -241,8 +259,10 @@ class LongContext(VoiceoverScene):
             (r"Gemini 1.5 \ (Google, 2024)", r"a million tokens; \ needles found in up to $10$ million, \ in research", HIST),
             (r"Kimi Linear \ (Moonshot, 2025)", r"RULER at $128$k tokens: \ $84.3$, \ against $81.3$ for full attention \ "
              r"($1.4$T training tokens each); \\ $78.8$ with rotary positions in its attention layers", HYB),
-            (r"MRCR v2, \ eight needles \ (OpenAI's test)", r"at a million tokens: \ Claude Opus 4.6 $76\%$, \ Claude Sonnet 4.5 "
-             r"$18.5\%$ \\ (reported by Anthropic, \ February 2026)", C.BITS),
+            (r"MRCR v2, \ eight needles \ (OpenAI's test)",
+             r"“1M”提示长度区间；平均匹配率 \\ Opus 4.6：$76\%$；Sonnet 4.5：$18.5\%$（思考设置不同）" if zh() else
+             r"``1M'' prompt-length bin; \ mean match ratio \\ "
+             r"Opus 4.6: $76\%$; \ Sonnet 4.5: $18.5\%$ \ (settings differ)", C.BITS),
             (r"DeepSeek-V4 \ (2026)", r"a million tokens; \ keys and values compressed $4\times$ and $128\times$ \\ "
              r"(compressed sparse attention: \ see Part 16)", ATT),
         ]
@@ -262,9 +282,10 @@ class LongContext(VoiceoverScene):
             "million tokens, and reported finding needles in up to ten million. <bookmark mark='b'/> Kimi Linear's "
             "report gives evidence for hybrids on long texts: on RULER at 128 thousand tokens, 84.3 "
             "against 81.3 for full attention trained the same way, and only 78.8 when its attention layers use "
-            "rotary positions. <bookmark mark='c'/> On OpenAI's harder MRCR test, eight similar requests hidden in "
-            "a million tokens, Anthropic reported in February 2026 that Claude Opus 4.6 found 76 percent, where "
-            "its predecessor Sonnet 4.5 found 18.5. <bookmark mark='d'/> And DeepSeek-V4 reads a million tokens by "
+            "rotary positions. <bookmark mark='c'/> On OpenAI's MRCR v2 test, eight similar requests in the "
+            "long-prompt bin labelled one million tokens, Anthropic reported in February 2026 that Claude Opus "
+            "4.6 scored 76 percent mean match ratio, compared with 18.5 for Sonnet 4.5, under different thinking "
+            "settings. <bookmark mark='d'/> And DeepSeek-V4 reads a million tokens by "
             "compressing its keys and values, four and a hundred and twenty-eight to one, and choosing among them: "
             "Part 16's subject. These are each maker's own measurements."
         ) as vo:

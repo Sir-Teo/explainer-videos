@@ -1,0 +1,1079 @@
+{
+  "schema": 1,
+  "scope": "Exact reviewed original-recipe scene inputs. These hashes identify inputs; this file contains no scientific outcomes or generated fallback.",
+  "blocked_items": {
+    "selfcache": "Separate causal-boundary correction and scientific publication review required.",
+    "scoreboard": "Corrected dependent outcome and shared score/cohort review required."
+  },
+  "items": {
+    "kvcache": {
+      "json": {
+        "bytes": 714,
+        "sha256": "ccfde6508e8e0ebe1b793df3d9f8c2d080ed652ff13c337e0b040a829e7d45d6"
+      },
+      "npz": {
+        "bytes": 1571,
+        "sha256": "b36f977366a287faab9e9f1292a9de12a3271c90c5064765ed1a1f65304889f5"
+      },
+      "arrays": {
+        "ctx": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        },
+        "total_llama": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        },
+        "total_llama_mha": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        },
+        "total_llama_mqa": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        },
+        "total_mla": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        },
+        "total_mla_full": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        },
+        "total_qwen": {
+          "dtype": "<f8",
+          "shape": [
+            7
+          ]
+        }
+      }
+    },
+    "linear": {
+      "json": {
+        "bytes": 71,
+        "sha256": "3e9ea535da0f93922a24dceea6d61585b36191b6e77639879eb3a993a0cc2131"
+      },
+      "npz": {
+        "bytes": 655,
+        "sha256": "974a0bbd11375f236acd30ff9b8d8ae7936450c1ed2c718beffc30f07b27eb49"
+      },
+      "arrays": {
+        "Ts": {
+          "dtype": "<f8",
+          "shape": [
+            6
+          ]
+        },
+        "softmax_ops": {
+          "dtype": "<f8",
+          "shape": [
+            6
+          ]
+        },
+        "linear_ops": {
+          "dtype": "<f8",
+          "shape": [
+            6
+          ]
+        }
+      }
+    },
+    "capacity": {
+      "json": {
+        "bytes": 222,
+        "sha256": "7183e08c995993209204974c88e48b11d2fcf24232af4c9be42934411cad2f3c"
+      },
+      "npz": {
+        "bytes": 4492,
+        "sha256": "9d8109f83bb57128dc8fdef827b99702578f99772c540a13592c525a40ddf537"
+      },
+      "arrays": {
+        "err_add": {
+          "dtype": "<f8",
+          "shape": [
+            11
+          ]
+        },
+        "age_add": {
+          "dtype": "<f8",
+          "shape": [
+            128
+          ]
+        },
+        "err_decay": {
+          "dtype": "<f8",
+          "shape": [
+            11
+          ]
+        },
+        "age_decay": {
+          "dtype": "<f8",
+          "shape": [
+            128
+          ]
+        },
+        "err_delta": {
+          "dtype": "<f8",
+          "shape": [
+            11
+          ]
+        },
+        "age_delta": {
+          "dtype": "<f8",
+          "shape": [
+            128
+          ]
+        }
+      }
+    },
+    "ssm": {
+      "json": {
+        "bytes": 41,
+        "sha256": "756d2ef2076fc31b6e685d51c241f3f813d33525f7e7cb23f002518b8ba1ca4e"
+      },
+      "npz": {
+        "bytes": 7512,
+        "sha256": "65a235bed5c1eeb48f729b3aa45e13095d5188ee0e2e296cfe123acba120c34d"
+      },
+      "arrays": {
+        "t": {
+          "dtype": "<i8",
+          "shape": [
+            120
+          ]
+        },
+        "u": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        },
+        "mark": {
+          "dtype": "<i8",
+          "shape": [
+            2
+          ]
+        },
+        "imp0.02": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        },
+        "imp0.08": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        },
+        "imp0.3": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        },
+        "fixed": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        },
+        "selective": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        }
+      }
+    },
+    "delta": {
+      "json": {
+        "bytes": 345,
+        "sha256": "f858106d2aa3a12c8bdb456b9737dfea378767311ae327fbf20dac93e64a98e9"
+      },
+      "npz": {
+        "bytes": 5789,
+        "sha256": "67dbb3994b2dc7c803cf73d3dc408980525cc982dca40c225ae1b164eab1e5a4"
+      },
+      "arrays": {
+        "geo_S0": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        "geo_k": {
+          "dtype": "<f8",
+          "shape": [
+            2
+          ]
+        },
+        "geo_v": {
+          "dtype": "<f8",
+          "shape": [
+            2
+          ]
+        },
+        "geo_S0.5": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        "geo_S1": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        "geo_S2": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        "ssd_L": {
+          "dtype": "<f8",
+          "shape": [
+            32,
+            32
+          ]
+        },
+        "ssd_a": {
+          "dtype": "<f8",
+          "shape": [
+            32
+          ]
+        }
+      }
+    },
+    "mla": {
+      "json": {
+        "bytes": 164,
+        "sha256": "58e3c7d21bf1a0060c91947a8e77a6248c5f56d0c4b0861c4b1bc3e6d402179b"
+      }
+    },
+    "hopfield": {
+      "json": {
+        "bytes": 128,
+        "sha256": "da29108317566ee40b612ac8ea84e7450428b59b6051b0e2ae4288b5c89cfddc"
+      },
+      "npz": {
+        "bytes": 1728,
+        "sha256": "03bd1548110e7403f7d0e064bed3e6a50c10086f24d4250a9f979aeee5604f43"
+      },
+      "arrays": {
+        "frac": {
+          "dtype": "<f8",
+          "shape": [
+            13
+          ]
+        },
+        "overlap": {
+          "dtype": "<f8",
+          "shape": [
+            13
+          ]
+        },
+        "ex_patterns": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            100
+          ]
+        },
+        "ex_frames": {
+          "dtype": "<f8",
+          "shape": [
+            22,
+            100
+          ]
+        },
+        "ex_energy": {
+          "dtype": "<f8",
+          "shape": [
+            22
+          ]
+        }
+      }
+    },
+    "matrix_rw": {
+      "json": {
+        "bytes": 11,
+        "sha256": "07ec90496ff6b12fe7cb6b2fe8defd4fd9279ebc544295cd23842efa80a7c8d2"
+      },
+      "npz": {
+        "bytes": 10411,
+        "sha256": "2df41c190de728e7f8a361933af5ffcfb5d7e6899372a43186bfbc356d7859e8"
+      },
+      "arrays": {
+        "keys": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            8
+          ]
+        },
+        "vals": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            8
+          ]
+        },
+        "seq": {
+          "dtype": "<i8",
+          "shape": [
+            5,
+            2
+          ]
+        },
+        "S_add": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            8,
+            8
+          ]
+        },
+        "read_add": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            4,
+            8
+          ]
+        },
+        "err_add": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            4
+          ]
+        },
+        "S_delta": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            8,
+            8
+          ]
+        },
+        "read_delta": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            4,
+            8
+          ]
+        },
+        "err_delta": {
+          "dtype": "<f8",
+          "shape": [
+            5,
+            4
+          ]
+        },
+        "overlaps": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            4
+          ]
+        }
+      }
+    },
+    "scan": {
+      "json": {
+        "bytes": 662,
+        "sha256": "833c14bf5662e2d84c07db0e1dfb703bff817ba195d680bf0abd2aac23aba521"
+      }
+    },
+    "hippo": {
+      "json": {
+        "bytes": 431,
+        "sha256": "45bda12e8c9b65c4a8e589d1cdc93e3de96b40905bd2d6698b3ab21e419fa117"
+      },
+      "npz": {
+        "bytes": 95192,
+        "sha256": "5d453e406b36110cdeeeea2ab63a9607fc2094ba1da0675f49652a7a3afc1ed4"
+      },
+      "arrays": {
+        "f": {
+          "dtype": "<f8",
+          "shape": [
+            2000
+          ]
+        },
+        "snaps_8": {
+          "dtype": "<f8",
+          "shape": [
+            5250
+          ]
+        },
+        "snaps_32": {
+          "dtype": "<f8",
+          "shape": [
+            5250
+          ]
+        }
+      }
+    },
+    "zoh": {
+      "json": {
+        "bytes": 184,
+        "sha256": "44a607547baefc07ef645427b3a88af3bc0ca4862c91cc2a5824e41ad78212ab"
+      },
+      "npz": {
+        "bytes": 5901,
+        "sha256": "1cd5ed85621036a9787d85de24c121cb1f762ccb46b406669dba706ebc5aa40e"
+      },
+      "arrays": {
+        "A": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            2
+          ]
+        },
+        "B": {
+          "dtype": "<f8",
+          "shape": [
+            2
+          ]
+        },
+        "C": {
+          "dtype": "<f8",
+          "shape": [
+            2
+          ]
+        },
+        "y_euler": {
+          "dtype": "<f8",
+          "shape": [
+            60
+          ]
+        },
+        "y_bilinear": {
+          "dtype": "<f8",
+          "shape": [
+            60
+          ]
+        },
+        "y_zoh": {
+          "dtype": "<f8",
+          "shape": [
+            60
+          ]
+        },
+        "y_exact": {
+          "dtype": "<f8",
+          "shape": [
+            60
+          ]
+        },
+        "u_02": {
+          "dtype": "<f8",
+          "shape": [
+            60
+          ]
+        },
+        "err_euler": {
+          "dtype": "<f8",
+          "shape": [
+            5
+          ]
+        },
+        "err_bilinear": {
+          "dtype": "<f8",
+          "shape": [
+            5
+          ]
+        },
+        "err_zoh": {
+          "dtype": "<f8",
+          "shape": [
+            5
+          ]
+        },
+        "kernel": {
+          "dtype": "<f8",
+          "shape": [
+            120
+          ]
+        }
+      }
+    },
+    "ttt": {
+      "json": {
+        "bytes": 158,
+        "sha256": "f20e3a90f473967a821689f86b7f30d08bd5054d64c44de50ebd6fa244b38cf9"
+      },
+      "npz": {
+        "bytes": 71981,
+        "sha256": "c4253a35a3c259c14e5d095f51feed1d7b14fd31a3dffabacedc58a53e3ed850"
+      },
+      "arrays": {
+        "err_linear": {
+          "dtype": "<f8",
+          "shape": [
+            32,
+            16
+          ]
+        },
+        "err_mlp": {
+          "dtype": "<f8",
+          "shape": [
+            32,
+            16
+          ]
+        },
+        "switch_err_plain": {
+          "dtype": "<f8",
+          "shape": [
+            16,
+            256
+          ]
+        },
+        "switch_surprise_plain": {
+          "dtype": "<f8",
+          "shape": [
+            16,
+            256
+          ]
+        },
+        "switch_err_titans": {
+          "dtype": "<f8",
+          "shape": [
+            16,
+            256
+          ]
+        },
+        "switch_surprise_titans": {
+          "dtype": "<f8",
+          "shape": [
+            16,
+            256
+          ]
+        }
+      }
+    },
+    "lm": {
+      "json": {
+        "bytes": 3311,
+        "sha256": "84c12b2087e2019af6e57f914c5e83a61e7f5627e105d167429ce57d89b9fd63"
+      },
+      "npz": {
+        "bytes": 33865,
+        "sha256": "80d42731ab71bd0ea02a747dd0976548caeb34fe559b0edf6bc270c95ee43273"
+      },
+      "arrays": {
+        "transformer_bits": {
+          "dtype": "<f8",
+          "shape": [
+            3
+          ]
+        },
+        "transformer_val": {
+          "dtype": "<f8",
+          "shape": [
+            3
+          ]
+        },
+        "transformer_curve": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            40
+          ]
+        },
+        "transformer_snaps_val": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            10
+          ]
+        },
+        "transformer_by_pos": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            1024
+          ]
+        },
+        "transformer_copy": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            6
+          ]
+        },
+        "hybrid_bits": {
+          "dtype": "<f8",
+          "shape": [
+            3
+          ]
+        },
+        "hybrid_val": {
+          "dtype": "<f8",
+          "shape": [
+            3
+          ]
+        },
+        "hybrid_curve": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            40
+          ]
+        },
+        "hybrid_snaps_val": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            10
+          ]
+        },
+        "hybrid_by_pos": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            1024
+          ]
+        },
+        "hybrid_copy": {
+          "dtype": "<f8",
+          "shape": [
+            3,
+            6
+          ]
+        },
+        "curve_steps": {
+          "dtype": "<f8",
+          "shape": [
+            40
+          ]
+        },
+        "snap_steps": {
+          "dtype": "<i8",
+          "shape": [
+            10
+          ]
+        }
+      }
+    },
+    "mqar": {
+      "json": {
+        "bytes": 341,
+        "sha256": "b16eece9054d4b9e62e7a3f81e2dce02eb4eb13654850fa236b84e4f5531ea89"
+      },
+      "npz": {
+        "bytes": 9619,
+        "sha256": "3e03e2343cfe6f9ec042b2cbb6f2b712251433c9dd29c6e256adb43a19691e21"
+      },
+      "arrays": {
+        "acc_softmax": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3
+          ]
+        },
+        "state_softmax": {
+          "dtype": "<i8",
+          "shape": [
+            4
+          ]
+        },
+        "curves_softmax": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3,
+            21
+          ]
+        },
+        "picks_softmax": {
+          "dtype": "<i8",
+          "shape": [
+            21,
+            16
+          ]
+        },
+        "acc_linear": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3
+          ]
+        },
+        "state_linear": {
+          "dtype": "<i8",
+          "shape": [
+            4
+          ]
+        },
+        "curves_linear": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3,
+            21
+          ]
+        },
+        "picks_linear": {
+          "dtype": "<i8",
+          "shape": [
+            21,
+            16
+          ]
+        },
+        "acc_mamba2": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3
+          ]
+        },
+        "state_mamba2": {
+          "dtype": "<i8",
+          "shape": [
+            4
+          ]
+        },
+        "curves_mamba2": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3,
+            21
+          ]
+        },
+        "picks_mamba2": {
+          "dtype": "<i8",
+          "shape": [
+            21,
+            16
+          ]
+        },
+        "acc_delta": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3
+          ]
+        },
+        "state_delta": {
+          "dtype": "<i8",
+          "shape": [
+            4
+          ]
+        },
+        "curves_delta": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3,
+            21
+          ]
+        },
+        "picks_delta": {
+          "dtype": "<i8",
+          "shape": [
+            21,
+            16
+          ]
+        },
+        "acc_gdn": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3
+          ]
+        },
+        "state_gdn": {
+          "dtype": "<i8",
+          "shape": [
+            4
+          ]
+        },
+        "curves_gdn": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3,
+            21
+          ]
+        },
+        "picks_gdn": {
+          "dtype": "<i8",
+          "shape": [
+            21,
+            16
+          ]
+        },
+        "acc_hybrid": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3
+          ]
+        },
+        "state_hybrid": {
+          "dtype": "<i8",
+          "shape": [
+            4
+          ]
+        },
+        "curves_hybrid": {
+          "dtype": "<f8",
+          "shape": [
+            4,
+            3,
+            21
+          ]
+        },
+        "picks_hybrid": {
+          "dtype": "<i8",
+          "shape": [
+            21,
+            16
+          ]
+        },
+        "curve_steps": {
+          "dtype": "<f8",
+          "shape": [
+            21
+          ]
+        },
+        "example": {
+          "dtype": "<i8",
+          "shape": [
+            48
+          ]
+        }
+      }
+    },
+    "ruler": {
+      "json": {
+        "bytes": 315,
+        "sha256": "554be61684c2ebcbd3401f89bc149e7732cc93a81bd0e5a61846a7b66a06a3a5"
+      },
+      "npz": {
+        "bytes": 2359,
+        "sha256": "99a184dbe5747b389aea4d340661e96ec9e8e1cf4c9462adce1a73bcc50a3a34"
+      },
+      "arrays": {
+        "acc_softmax": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            3,
+            4
+          ]
+        },
+        "curve_softmax": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            16
+          ]
+        },
+        "acc_mamba2": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            3,
+            4
+          ]
+        },
+        "curve_mamba2": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            16
+          ]
+        },
+        "acc_gdn": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            3,
+            4
+          ]
+        },
+        "curve_gdn": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            16
+          ]
+        },
+        "acc_hybrid": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            3,
+            4
+          ]
+        },
+        "curve_hybrid": {
+          "dtype": "<f8",
+          "shape": [
+            2,
+            16
+          ]
+        },
+        "curve_steps": {
+          "dtype": "<f8",
+          "shape": [
+            16
+          ]
+        }
+      }
+    },
+    "sinks": {
+      "json": {
+        "bytes": 521,
+        "sha256": "d08fa8958e64f5efa7cda7c3fd0ad59dd6af269315d58874a057f07943ac6b2a"
+      },
+      "npz": {
+        "bytes": 97367,
+        "sha256": "5d81ac5b11d75c53c03f89f3cf4908356de9c642ed2bf9606f6807c11aca72cd"
+      },
+      "arrays": {
+        "first": {
+          "dtype": "<f8",
+          "shape": [
+            6,
+            8
+          ]
+        },
+        "ref": {
+          "dtype": "<f4",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_full_0": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_window_32": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_sinks_32": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_h2o_32": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_window_64": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_sinks_64": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_h2o_64": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_window_128": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_sinks_128": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        },
+        "loss_h2o_128": {
+          "dtype": "<f8",
+          "shape": [
+            1999
+          ]
+        }
+      }
+    },
+    "knn": {
+      "json": {
+        "bytes": 3340,
+        "sha256": "ff885051b7ab8bf11c10e382f304ea1b6fbcfd60fc5b4e29874e95ddd40dc98c"
+      },
+      "npz": {
+        "bytes": 73714,
+        "sha256": "4bb05259bf01c0278ec206ee8ff9f86cdd3111a174bce6906d614ed388271a73"
+      },
+      "arrays": {
+        "lams": {
+          "dtype": "<f8",
+          "shape": [
+            11
+          ]
+        },
+        "gain": {
+          "dtype": "<f4",
+          "shape": [
+            6623
+          ]
+        },
+        "p_knn": {
+          "dtype": "<f4",
+          "shape": [
+            6623
+          ]
+        },
+        "p_lm": {
+          "dtype": "<f4",
+          "shape": [
+            6623
+          ]
+        },
+        "passage_ids": {
+          "dtype": "<i8",
+          "shape": [
+            6623
+          ]
+        }
+      }
+    }
+  }
+}

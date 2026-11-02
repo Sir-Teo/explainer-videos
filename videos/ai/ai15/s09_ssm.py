@@ -51,9 +51,13 @@ class SSM(VoiceoverScene):
         colors = {r"h": STATE, r"x": K, r"y": Q, r"\Delta": DECAY}
         f1 = cmath(r"h'(t)", "=", r"A\,", r"h", r"(t) + B\,", r"x", r"(t)", r",\qquad", r"y", r"(t) = C\,", r"h", r"(t)",
                    colors=colors, font_size=38).to_edge(UP, buff=0.4)
-        f2 = cmath(r"h", r"_t", "=", r"e^{", r"\Delta", r"A}\,", r"h", r"_{t-1}", "+", r"\Delta", r"\,B\,", r"x", r"_t",
+        f2 = cmath(r"h", r"_t", "=", r"e^{", r"\Delta", r"A}\,", r"h", r"_{t-1}", "+", r"\bar B", r"\,", r"x", r"_t",
                    colors=colors, font_size=38).next_to(f1, DOWN, buff=0.35)
         f2l = label(r"read in steps of size $\Delta$", font_size=22, color=GREY_A).next_to(f2, RIGHT, buff=0.3)
+        held_input = note(
+            r"每步内输入保持不变；接下来推导$\bar B$" if zh() else
+            r"input held constant over each step; \ $\bar B$ derived next",
+            font_size=18).next_to(f2, DOWN, buff=0.12)
         ax = Axes(x_range=[0, t[-1], 20], y_range=[0, 1.05, 0.5], x_length=7.4, y_length=3.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-1.6, -1.7, 0])
         xn = label(r"tokens since an input", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
@@ -97,7 +101,7 @@ class SSM(VoiceoverScene):
             vo.wait_until("l")
             self.play(FadeIn(bucket, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeOut(bucket), Write(f2), FadeIn(f2l))
+            self.play(FadeOut(bucket), Write(f2), FadeIn(f2l), FadeIn(held_input))
             vo.wait_until("b")
             self.play(FadeOut(VGroup(bx, lx, lh, kx, kh, bl, dot)))
             self.play(Create(ax), FadeIn(xn), FadeIn(yn))
@@ -116,7 +120,7 @@ class SSM(VoiceoverScene):
             cmath(r"h_t", "=", r"\bar A\, h_{t-1} + \bar B\, x_t", colors=colors, font_size=34),
         ]
         whys = [why(r"solve the linear ODE \ (variation of constants)"), why(r"hold the input still over the step: \ $u = \Delta - s$"),
-                why(r"$\int e^{uA} du = A^{-1} e^{uA}$"), why(r"the zero-order hold: \ $\bar A = e^{\Delta A}$, \ "
+                why(r"$\det A\ne0:\quad\int e^{uA} du = A^{-1} e^{uA}$"), why(r"the zero-order hold: \ $\bar A = e^{\Delta A}$, \ "
                                                                    r"$\bar B = A^{-1}(e^{\Delta A} - I) B$")]
         deltas = np.asarray(z["deltas"], float)
         g = axes([math.log10(deltas.min()) - 0.1, math.log10(deltas.max()) + 0.1], [-15.5, 3], x_length=6.4, y_length=3.4,
@@ -194,8 +198,8 @@ class SSM(VoiceoverScene):
         colors = {r"c": SSM_C, r"f": K}
         fe = cmath(r"\tfrac{d}{dt} c(t)", "=", r"-\tfrac{1}{t} A\, c(t) + \tfrac{1}{t} B\, f(t)", colors=colors, font_size=32)
         fe.move_to([-2.4, -1.35, 0])
-        fl = label(r"$c(t)$: \ the coefficients of the best polynomial fit \ to all of $f$ up to $t$ \ (Legendre polynomials, "
-                   r"\ equal weight on the whole past)", font_size=18, color=GREY_A).next_to(fe, DOWN, buff=0.15)
+        fl = wrapped_label(r"$c(t)$: \ the coefficients of the best polynomial fit \ to all of $f$ up to $t$ \ (Legendre polynomials, "
+                           r"\ equal weight on the whole past)", max_width=8.0, font_size=18, color=GREY_A).next_to(fe, DOWN, buff=0.15)
         bars = VGroup()
         for i, N in enumerate(Ns):
             e, b = float(h[f"err_{N}"]), float(h[f"best_{N}"])
