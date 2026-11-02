@@ -421,3 +421,33 @@ Facts checked:
    equivalents; Bellman/HJB; Merton by HJB and by simulation; Kelly, fractional Kelly, Thorp, and Samuelson's
    objection; optimal stopping; prospect theory and ambiguity; PPO on Merton against the closed form (CPU).
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
+
+## Finishing the expansions, one part at a time (from 2 Nov 2026, 21:35)
+
+The owner asked for one part at a time and no subagents. All parallel agents were stopped at 21:33 with every
+chapter of Parts 2–17 written (estimated 51.8–59.0 min at 168 wpm) and all Chinese narration lines present.
+Each part is now finished in order 2, 3, … 17, then Part 1 is planned and expanded: run any missing compute items,
+English dry run (`collect_text.py quantN`), translate on-screen text (`--check`, `text_zh_add.py`), Chinese dry run,
+visual QA of new scenes (`qa_scene.py`), README/SYLLABUS/READING checks, commit. Compute items still missing at the
+stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12 `operator_net`; Part 15
+`surrogate_replay`; Part 17 nineteen new items (`hlp_replay` … `calib_ckpt`). Failing test:
+`test_deep_bsde_snap_linear_check` (Part 17 work in progress).
+
+| Part | status |
+|---|---|
+| 2 | chapters written; finishing pending |
+| 3 | chapters written; finishing pending |
+| 4 | chapters written; finishing pending |
+| 5 | chapters written; finishing pending |
+| 6 | chapters written; finishing pending |
+| 7 | chapters written; finishing pending |
+| 8 | chapters written; finishing pending |
+| 9 | chapters written; finishing pending |
+| 10 | chapters written; finishing pending |
+| 11 | chapters written; finishing pending |
+| 12 | chapters written; finishing pending |
+| 13 | chapters written; finishing pending |
+| 14 | chapters written; finishing pending |
+| 15 | chapters written; finishing pending |
+| 16 | chapters written; finishing pending |
+| 17 | chapters written; finishing pending |
