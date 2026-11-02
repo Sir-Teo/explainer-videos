@@ -1109,6 +1109,91 @@
   "bytes": 43894,
   "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-12.zip"
  },
+ "binance/spot/BTCUSDT/1m/2017-08": {
+  "sha256": "4f96569190147d64b7ce55f6760dc3e7962aeb3e209c969b200200e3d7045e70",
+  "bytes": 595271,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2017-08.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2017-09": {
+  "sha256": "b4e525fa0549688dca9e09cc24093f50526db2a255d03961791da3bfd7c24d81",
+  "bytes": 1394854,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2017-09.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2017-10": {
+  "sha256": "98c3fbfe77892a5af8bbc43dae6142da5b9bbe3a176be3f59541e047bd208213",
+  "bytes": 1689941,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2017-10.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2017-11": {
+  "sha256": "0ebedd17183039d66b8a11bd85b0726b9cd7e0072a02f1ce69152ba6e98d7871",
+  "bytes": 1992238,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2017-11.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2017-12": {
+  "sha256": "3d41da2da488a69a21e9223221863c3a8ed6ccb9263d30cf1d3a012a48cfffc1",
+  "bytes": 2324674,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2017-12.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-01": {
+  "sha256": "9fbad8f35c0694a2aca3552ccc9da73d95ccf1546dd4e4c67fcc8a3707d80a90",
+  "bytes": 2192643,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-01.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-02": {
+  "sha256": "131667f0d4ff73685852d84a406e07f8a3fdf7037798b1bdb0519e7e987e19ad",
+  "bytes": 1911980,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-02.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-03": {
+  "sha256": "48cd88c26da0b9ebd16e2a474a957d066053475cca17bac0922103873614dd5a",
+  "bytes": 2181245,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-03.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-04": {
+  "sha256": "13d5b16dd1fcbd7a2f03c911fb6624351812756cb0826b52281b2f08db6f6b36",
+  "bytes": 2085477,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-04.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-05": {
+  "sha256": "80c181ac104619d0a89209a2b38831aa91147140b728f736b356853555c78dfd",
+  "bytes": 2150375,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-05.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-06": {
+  "sha256": "37645243b11525adb1fb04c64cfd03ba64407d488640a9c94aadac145b1e2c85",
+  "bytes": 2042278,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-06.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-07": {
+  "sha256": "84e642279217d5577111c0ea8800a9a14439582c2c9860369f1adcdcb7a5f83e",
+  "bytes": 2135665,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-07.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-08": {
+  "sha256": "9590e63677c5db65d02a698543087fa38a51084369ccceaa7251fe107a8db080",
+  "bytes": 2181742,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-08.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-09": {
+  "sha256": "487853790000fb2be2a45588d9ffe69c9877e3a982d674c9831aaa3b8ffe83f3",
+  "bytes": 2087406,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-09.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-10": {
+  "sha256": "566429da1b107e73e18af6c865bf23c8ae9dd049d24be36b45da3d36874366e0",
+  "bytes": 2071463,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-10.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-11": {
+  "sha256": "930aa36136ca5f814fcd16765feb637d6e56f16c080f32291a207d0ae66b6572",
+  "bytes": 2059163,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-11.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2018-12": {
+  "sha256": "9000ed4af64f13ad7c13020fda026154c57006de99f6d4c91ea7fc35b1978903",
+  "bytes": 2181611,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2018-12.zip"
+ },
  "binance/spot/BTCUSDT/1m/2019-01": {
   "sha256": "08dd2f7306258d1b9fd0b9fc00ee807c1c96e9803c74c78c00a0072bfc826728",
   "bytes": 2120781,
