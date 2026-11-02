@@ -20937,7 +20937,24 @@
     "inside the attention block": "注意力模块内部",
     "full attention: \\ access to past keys and values": "完整注意力：\\ 访问过去的键和值",
     "attention: \\ access to past keys and values, \\ cost growing with every token": "注意力：\\ 访问过去的键和值，\\ 成本随词元数增长",
-    "sinks, \\ gates and caps: \\ the fixes inside today's attention blocks": "汇点、\\ 门控和上限：\\ 今天注意力模块内部的修补"
+    "sinks, \\ gates and caps: \\ the fixes inside today's attention blocks": "汇点、\\ 门控和上限：\\ 今天注意力模块内部的修补",
+    "$n_k$ non-overlapping replacements: \\\\ two symbols become one, \\ each time": "$n_k$次互不重叠的替换：\\\\ 每次两个符号变成一个",
+    "BPE ranks pair counts, \\ including overlaps; \\\\ actual savings can be smaller": "BPE按包含重叠的对数排序；\\\\ 实际节省可能较少",
+    "the codebook is the grid \\ ($4 \\times 4$, \\ schematic)": "码本就是网格 \\ （$4 \\times 4$，\\ 示意）",
+    "four levels: \\ squash, \\ shift, \\ then round; \\\\ the gradient goes straight through": "四级：\\ 压缩，\\ 偏移，\\ 再舍入；\\\\ 梯度直接穿过",
+    "the offset gives exactly four levels \\\\ (the experiment's rule)": "偏移恰好给出四级 \\\\ （实验的规则）",
+    "randomize the positive slot; \\\\ apply the chain rule for KL": "随机化正例位置；\\\\ 应用KL散度的链式法则",
+    "cross-entropy is minimized at the truth; \\\\ KL divergence is nonnegative": "真实后验使交叉熵最小；\\\\ KL散度非负",
+    "RMSE per pixel, \\ evaluation patches": "每像素均方根误差，\\ 评估小块",
+    "$Q_N$: \\ a candidate set; \\ choose the positive slot uniformly": "$Q_N$：\\ 候选集合；\\ 均匀地选取正例位置",
+    "empirical $\\log N - \\mathcal L$, \\ nats \\ (outline: $\\log N$)": "实测 $\\log N - \\mathcal L$，\\ 奈特 \\ （外框：$\\log N$）",
+    "InfoNCE: \\ an information bound for the population loss \\\\ empirical estimates have sampling error": "InfoNCE：\\ 总体损失的信息下界 \\\\ 实测估计含有抽样误差",
+    "every grid point is a code \\\\ (our letters: $4$ numbers, $4$ levels)": "每个网格点都是一个码 \\\\ （我们的字母：$4$个数，$4$级）",
+    "vision encoder \\\\ (NFNet-F6)": "视觉编码器 \\\\ （NFNet-F6）",
+    "vision encoder \\\\ (CLIP / EVA-CLIP)": "视觉编码器 \\\\ （CLIP / EVA-CLIP）",
+    "vision encoder \\\\ (CLIP ViT-L/14)": "视觉编码器 \\\\ （CLIP ViT-L/14）",
+    "original: \\ linear map, \\ $256$ tokens \\\\ ($224$ pixels); \\ LLaVA-1.5: \\\\ two-layer MLP, \\ $576$ tokens \\ ($336$ pixels)": "原版：\\ 线性映射，\\ $256$个词元 \\\\ （$224$像素）；\\ LLaVA-1.5：\\\\ 两层MLP，\\ $576$个词元 \\ （$336$像素）",
+    "Show that $f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$ minimizes InfoNCE, \\ and that $\\log N - \\mathcal L \\le \\log N$ for any critic. \\ How much information can a batch of $256$ certify?": "证明$f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$使InfoNCE最小，\\ 且对任何评判函数都有$\\log N - \\mathcal L \\le \\log N$。\\ 一个$256$的批次最多能证明多少信息？"
   },
   "phrases": {
     "width": "宽度",
@@ -23278,6 +23295,10 @@
     [
       "^our\\ transformer:\\ \\\\\\ layer\\ (\\d+),\\ head\\ (\\d+)\\ \\\\\\ \\(computed\\ weights\\)\\ \\\\\\\\\\ arcs\\ within\\ each\\ line;\\ \\\\\\ widths\\ rescaled\\ per\\ query$",
       "我们的Transformer：\\\\ 第\\g<1>层，第\\g<2>个头（计算得到的权重） \\\\\\\\ 仅画同行弧线；\\\\ 线宽按每个查询分别缩放"
+    ],
+    [
+      "^\\$-\\\\log p\\(\\\\text\\{transcript\\}\\) = ([\\d.]+)\\$, \\\\ PyTorch CTC loss \\(no reduction\\)$",
+      "$-\\\\log p(\\\\text{转写}) = \\1$，\\\\ PyTorch CTC损失（不归约）"
     ]
   ]
 }

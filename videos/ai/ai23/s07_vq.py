@@ -69,7 +69,8 @@ class VQ(VoiceoverScene):
             "nearest guess, move each guess to the average of its patches, and repeat. <bookmark mark='b'/> Now a "
             "picture is a sequence of numbers from zero to fifteen: each patch is replaced by its nearest code. "
             "<bookmark mark='c'/> With more codes the copy comes closer; the numbers are the error per pixel, on "
-            f"held-out patches, for {size_list} and {sizes[-1]:,} codes."
+            f"evaluation patches, for {size_list} and {sizes[-1]:,} codes. These patches were sampled from the same "
+            "pool as fitting patches, so this is not a disjoint held-out test."
         ) as vo:
             self.play(FadeIn(tiles), FadeIn(ol))
             self.play(*[t_.animate.move_to(x) for t_, x in zip(tiles, spread)], run_time=1.2)

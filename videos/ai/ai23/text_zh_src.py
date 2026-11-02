@@ -643,6 +643,41 @@ PATTERNS = [
     (r"^unseen captions found, \\ \$\\%\$ \\ \(same \$(\d+)\$ thousand pairs for every run; three seeds\)$", r"找到的未见说明，\\ $\\%$ \\ （每次都是同样的$\1$千对；三个种子）"),
 ]
 
+# Part 23 QA additions: retain old keys for historical renders; add only the
+# replacement strings needed by this part, without replacing the shared table.
+STRINGS.update({
+    r"every grid point is a code \\ (our letters: $4$ numbers, $4$ levels)":
+        r"每个网格点都是一个码 \\ （我们的字母：$4$个数，$4$级）",
+    r"vision encoder \\ (NFNet-F6)": r"视觉编码器 \\ （NFNet-F6）",
+    r"vision encoder \\ (CLIP / EVA-CLIP)": r"视觉编码器 \\ （CLIP / EVA-CLIP）",
+    r"vision encoder \\ (CLIP ViT-L/14)": r"视觉编码器 \\ （CLIP ViT-L/14）",
+    r"original: \ linear map, \ $256$ tokens \\ ($224$ pixels); \ LLaVA-1.5: \\ two-layer MLP, \ $576$ tokens \ ($336$ pixels)":
+        r"原版：\ 线性映射，\ $256$个词元 \\ （$224$像素）；\ LLaVA-1.5：\\ 两层MLP，\ $576$个词元 \ （$336$像素）",
+    r"Show that $f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$ minimizes InfoNCE, \ and that $\log N - \mathcal L \le \log N$ for any critic. \ How much information can a batch of $256$ certify?":
+        r"证明$f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$使InfoNCE最小，\ 且对任何评判函数都有$\log N - \mathcal L \le \log N$。\ 一个$256$的批次最多能证明多少信息？",
+    r"RMSE per pixel, \ evaluation patches": r"每像素均方根误差，\ 评估小块",
+    r"$n_k$ non-overlapping replacements: \\ two symbols become one, \ each time":
+        r"$n_k$次互不重叠的替换：\\ 每次两个符号变成一个",
+    r"BPE ranks pair counts, \ including overlaps; \\ actual savings can be smaller":
+        r"BPE按包含重叠的对数排序；\\ 实际节省可能较少",
+    r"the codebook is the grid \ ($4 \times 4$, \ schematic)": r"码本就是网格 \ （$4 \times 4$，\ 示意）",
+    r"four levels: \ squash, \ shift, \ then round; \\ the gradient goes straight through":
+        r"四级：\ 压缩，\ 偏移，\ 再舍入；\\ 梯度直接穿过",
+    r"the offset gives exactly four levels \\ (the experiment's rule)": r"偏移恰好给出四级 \\ （实验的规则）",
+    r"$Q_N$: \ a candidate set; \ choose the positive slot uniformly": r"$Q_N$：\ 候选集合；\ 均匀地选取正例位置",
+    r"randomize the positive slot; \\ apply the chain rule for KL": r"随机化正例位置；\\ 应用KL散度的链式法则",
+    r"cross-entropy is minimized at the truth; \\ KL divergence is nonnegative":
+        r"真实后验使交叉熵最小；\\ KL散度非负",
+    r"empirical $\log N - \mathcal L$, \ nats \ (outline: $\log N$)":
+        r"实测 $\log N - \mathcal L$，\ 奈特 \ （外框：$\log N$）",
+    r"InfoNCE: \ an information bound for the population loss \\ empirical estimates have sampling error":
+        r"InfoNCE：\ 总体损失的信息下界 \\ 实测估计含有抽样误差",
+})
+PATTERNS.append((
+    r"^\$-\\log p\(\\text\{transcript\}\) = ([\d.]+)\$, \\ PyTorch CTC loss \(no reduction\)$",
+    r"$-\\log p(\\text{转写}) = \1$，\\ PyTorch CTC损失（不归约）",
+))
+
 if __name__ == "__main__":
     out = Path(__file__).with_name("text_zh_add.json")
     out.write_text(json.dumps({"strings": STRINGS, "patterns": [list(p) for p in PATTERNS]}, ensure_ascii=False, indent=1) + "\n")

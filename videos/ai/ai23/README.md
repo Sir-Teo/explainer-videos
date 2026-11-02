@@ -97,6 +97,25 @@ new sentence (the slowest step on a CPU, about ten minutes).
 
 ## Results on this machine
 
+QA interpretation (2026-11-02): the numbers below are the original reported
+outcomes, not new measurements on the QA host. The k-means fitting and evaluation
+patches are sampled independently from the same pool and may overlap; those
+errors are RMSE on evaluation patches, not a disjoint held-out result. The saved
+CLIP information scores use uniform distinct captions sampled without replacement.
+The population information bound remains valid for that candidate law (see below),
+but the finite empirical scores have sampling error. A disjoint patch split is a
+separate experiment, requiring restored inputs, independent review and measured
+impact before replacing any original outcome.
+
+For the information proof, let Q_N be the candidate-caption law, let I be an
+independent uniform slot, and draw X conditional on Y_I. Every candidate slot has
+the same caption marginal. Relative to p_X Q_N Uniform(I), the joint KL divergence
+is I(X;Y). The KL chain rule splits this into the KL of the unlabelled candidate
+mixture and log N minus the optimal classification loss. The former is
+nonnegative, and every critic's cross-entropy is at least the optimal loss. This
+proves log N minus L <= I(X;Y) without replacing a random sum by its expectation
+inside a logarithm. It covers both iid candidates and uniform distinct candidates.
+
 Measured by `compute.py` on this machine (CPU only, one torch thread, seeded); the video reads every number from the
 cache, so a rerun elsewhere may differ in the last digits.
 
@@ -203,7 +222,7 @@ representations), "Qwen3.5-Omni Technical Report" (arXiv 2604.15804, 2026); R. R
    appear?
 5. List every path of T = 3 frames over {a, b, ∅} that collapses to "ab", and check the count with the forward
    recursion. Why must every path for "aa" contain a blank?
-6. Show that f*(x, y) = log p(y | x)/p(y) minimizes InfoNCE, and that log N − L ≤ log N for any critic. How much
+6. Show that f*(x, y) = log[p(y | x)/p(y)] minimizes InfoNCE, and that log N − L ≤ log N for any critic. How much
    information can a batch of 256 certify?
 
 ## Solutions
@@ -242,7 +261,7 @@ guess is never negative, so log N − L ≤ log N. With N = 256 the most it can 
 3. FSQ的等级取(8, 5, 5, 5)，一共有多少个码，几比特？8级残差量化、每级1024个码、每秒75帧，码率是多少？
 4. 证明cos(2πft)和cos(2π(f_s − f)t)在每个t = n/f_s上取值相同。以16 kHz采样时，9 kHz的音调会出现在哪里？
 5. 列出在{a, b, ∅}上长为T = 3、折叠后得到“ab”的所有路径，并用前向递推核对数目。为什么“aa”的每条路径都必须经过一个空白符？
-6. 证明f*(x, y) = log p(y | x)/p(y)使InfoNCE最小，并证明对任何打分函数都有log N − L ≤ log N。一个256的批次最多能证实多少信息？
+6. 证明f*(x, y) = log[p(y | x)/p(y)]使InfoNCE最小，并证明对任何打分函数都有log N − L ≤ log N。一个256的批次最多能证实多少信息？
 
 ## 解答
 

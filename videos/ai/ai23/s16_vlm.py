@@ -32,12 +32,13 @@ class VLM(VoiceoverScene):
         cols = VGroup()
         specs = [
             (r"Flamingo \ (DeepMind, 2022)", r"a resampler squeezes the picture \\ into $64$ tokens; \ new cross-attention "
-             r"\\ layers in a frozen language model", 8),
-            (r"BLIP-2 \ (Salesforce, 2023)", r"$32$ learned queries ask the \\ frozen image encoder \ (the Q-Former)", 6),
-            (r"LLaVA \ (2023)", r"a linear map turns each patch \\ into a word vector: \ $576$ tokens \\ (LLaVA-1.5: \ a "
-             r"two-layer MLP)", 12)]
-        for i, (name, what, n) in enumerate(specs):
-            enc = node_box(r"vision encoder \\ (CLIP)", VIS_C, font_size=18)
+             r"\\ layers in a frozen language model", 8, r"NFNet-F6"),
+            (r"BLIP-2 \ (Salesforce, 2023)", r"$32$ learned queries ask the \\ frozen image encoder \ (the Q-Former)", 6,
+             r"CLIP / EVA-CLIP"),
+            (r"LLaVA \ (2023)", r"original: \ linear map, \ $256$ tokens \\ ($224$ pixels); \ LLaVA-1.5: \\ "
+             r"two-layer MLP, \ $576$ tokens \ ($336$ pixels)", 12, r"CLIP ViT-L/14")]
+        for i, (name, what, n, backbone) in enumerate(specs):
+            enc = node_box(r"vision encoder \\ (" + backbone + ")", VIS_C, font_size=18)
             con = node_box(r"connector", C.MODEL_Q, font_size=18)
             toks = tok_row(n, VIS_C, 0.2)
             lm = node_box(r"language model", TEXT_C, font_size=18, width=2.8)

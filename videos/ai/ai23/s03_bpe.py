@@ -142,15 +142,16 @@ class BPE(VoiceoverScene):
         rows = [cmath(r"L_k", r"=", r"L_{k-1}", r"-", r"n_k", colors=colors, font_size=38),
                 cmath(r"L_k", r"=", r"L_0", r"-", r"\textstyle\sum_{i \le k}", r"n_i", colors=colors, font_size=38),
                 MathTex(r"\text{merge } \arg\max_{(a,b)} n(a, b)", font_size=34, color=C.BITS)]
-        whys = [why(r"pair $(a, b)$ found $n_k$ times: \\ two symbols become one, \ each time", font_size=22),
+        whys = [why(r"$n_k$ non-overlapping replacements: \\ two symbols become one, \ each time", font_size=22),
                 why(r"add up the steps", font_size=22),
-                why(r"BPE: \ the biggest saving next \\ (greedy, \ so not always the best)", font_size=22)]
+                why(r"BPE ranks pair counts, \ including overlaps; \\ actual savings can be smaller", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=2.0, align_index=None, buff=0.75, edge=6.9)
         with self.voiceover(
             "Why is this compression? <bookmark mark='a'/> Each time the merged pair occurs, two symbols become one, "
             "so a merge that applies n times shortens the text by exactly n. <bookmark mark='b'/> After k merges the "
-            "text is its original length minus the sum of the counts, <bookmark mark='c'/> and choosing the "
-            "commonest pair means taking the biggest saving next: a greedy compressor. <bookmark mark='d'/> On our "
+            "text is its original length minus the sum of actual replacements. <bookmark mark='c'/> BPE greedily "
+            "ranks pair counts, including overlaps. In aaaa, aa occurs three times but allows only two replacements, "
+            "so the most frequent pair need not give the largest saving. <bookmark mark='d'/> On our "
             f"novels the first merge alone saves {n1:,} symbols, and after {len(b['merges']):,} merges the text is "
             f"{100 * L[-1] / L0:.0f} percent of its length in characters. The savings shrink as the merges get rarer."
         ) as vo:
