@@ -712,7 +712,12 @@ def _kokoro_pipeline():
         import warnings
 
         warnings.filterwarnings("ignore")
+        import torch
         from kokoro import KModel, KPipeline
+
+        # Builds render scenes in parallel; torch's default pool (one thread per core) then oversubscribes the CPU.
+        # Measured on 4 cores beside a render: 4 threads 86 s, 2 threads 15.5 s for 16 s of speech.
+        torch.set_num_threads(int(os.environ.get("EXPLAINER_TTS_THREADS", max(1, (os.cpu_count() or 2) // 2))))
 
         if lang.LANG == "zh":
             en = KPipeline(lang_code="a", repo_id=KOKORO_ZH_REPO, model=False)  # Latin words inside Chinese lines
