@@ -289,7 +289,8 @@ class Problem(VoiceoverScene):
             "256 online encoder passes per update, from three random starts. Views differ by method; momentum "
             "targets and heads add unequal compute. <bookmark mark='b'/> Three yardsticks first. The raw pixels; "
             f"an untrained network; and the same network trained with every label. <bookmark mark='c'/> {verdict} "
-            "A self-supervised method sits somewhere between the untrained network and the one that was told."
+            "These are reference points for judging what a self-supervised method learned. It can also score below "
+            "the untrained network."
         ) as vo:
             self.play(FadeIn(grid))
             vo.wait_until("a")

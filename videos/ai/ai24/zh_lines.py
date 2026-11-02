@@ -27,7 +27,7 @@ ZH = {
     'f"These six hundred dots are handwritten digits.':
         "这600个点是手写数字。一个网络把每个数字压缩成仅仅3个数，也就是球面上的一个点。<bookmark mark='a'/>颜色是数字的标签，"
         "从0到9。<bookmark mark='b'/>可是这个网络从来没见过任何标签。它被问到的唯一问题是：哪两张被扭曲过的图来自同一个数字。"
-        "<bookmark mark='c'/>然而，问一个数字在这个球面上的近邻它是几，它们答对的比例是{pct(zk, 0)}%。",
+        "<bookmark mark='c'/>然而，把这些嵌入中心化并重新归一化后，用20个最近训练嵌入的加权投票来识别1万个测试数字，答对的比例是{pct(zk, 0)}%。",
 
     'At the start, the untrained network puts almost every digit on the same small patch of the sphere.':
         '一开始，未训练的网络几乎把每个数字都放在球面上同一小块地方。',
@@ -39,7 +39,7 @@ ZH = {
         "它是这样走到这一步的。{start}<bookmark mark='a'/>每一步给网络看128个数字，每个数字有两个版本，"
         "被裁剪、被倾斜、被涂抹过。它把每个数字的两个版本拉到一起，<bookmark mark='b'/>把其余的一切推开。这条规则里根本没提到5或7。"
         "<bookmark mark='c'/>可是簇还是出现了，因为一个5的两份涂抹副本彼此相像的方式，正是所有5彼此相像的方式。"
-        "<bookmark mark='d'/>如果去掉“推开”，网络就会找到一个更偷懒的答案：所有数字都落在同一个点上。",
+        "<bookmark mark='d'/>如果去掉“推开”，输出就聚集在同一个点附近。如果把每个数字都送到球面上同一个固定点，损失就会达到最小值。",
 
     'That is the question of this part: how does a network learn what matters':
         "这就是本部分的问题：没有人给数据打标签时，网络怎样学到什么是重要的？<bookmark mark='a'/>这个领域找到了三类答案。"
@@ -88,7 +88,7 @@ ZH = {
     'f"Our test bench is MNIST:':
         "我们的试验台是MNIST：6万个手写数字用来学习，1万个用来测试。<bookmark mark='a'/>每种方法都用同一个小网络，同样的"
         "{v['steps']}次更新，每次更新256次在线编码器图像前向，从三个不同的随机起点开始。视图随方法不同；动量目标和预测头带来的额外计算也不同。<bookmark mark='b'/>先看三把标尺：原始像素；一个未训练的网络；"
-        "以及用全部标签训练的同一个网络。<bookmark mark='c'/>{verdict}自监督方法的成绩，应该落在未训练的网络和被告知答案的网络之间。",
+        "以及用全部标签训练的同一个网络。<bookmark mark='c'/>{verdict}这些是衡量自监督方法学到多少的参照。它的得分也可能低于未训练的网络。",
 
     "f'Raw pixels already score {pct(knn[0], 1)} percent by nearest neighbours":
         '原始像素用近邻法已经能得到{pct(knn[0], 1)}%：在这一点上，MNIST很容易。难的检验是每个数字只给10个标签，这时像素只有'
@@ -117,11 +117,8 @@ ZH = {
         "这道题有盲区，而且我们可以测量出来。这是训练好的网络在每个数字上找对转角的比例，取三个种子的平均。<bookmark mark='a'/>最差的是"
         "{names}。<bookmark mark='b'/>{why_}任务决定了网络关注什么，一个数字一个数字地决定。",
 
-    'These are the digits that look much the same turned half a turn':
-        '这些数字转半圈之后看起来差不多，所以对它们来说这道题没有答案，网络也就从它们身上学不到哪边朝上。',
-
-    'Some of these look much the same turned around':
-        '其中一些转过来看起来差不多，所以对它们来说，这道题有一部分是答不出来的。',
+    'Some digits are nearly half-turn symmetric, while others can resemble another digit after rotation.':
+        '有些数字近似具有半圈对称性，另一些旋转后可能像另一个数字。这些歧义让旋转任务更难，不过网络仍经常能找到正确的转向。',
 
     'f"So how good is the representation?':
         "那么，这个表示有多好？<bookmark mark='a'/>{line}<bookmark mark='b'/>在真实照片上，这些题也被找到了捷径。2015年最早的拼块题，"
@@ -306,13 +303,13 @@ ZH.update({
     'f"Before going further, a question.':
         "继续之前，先问一个问题。假如唯一的规则是：让每个数字的两个视图得到同一个向量。没有负样本，没有任何东西把它们推开。"
         "网络会学到什么？先停下来想一想。<bookmark mark='a'/>这是我们的网络做的事。损失是两个视图向量之间余弦的相反数。"
-        "{how}两个视图完全一致，损失停在最小值，而这个向量对输入什么也没说。这就是坍缩。",
+        "{how}两个视图几乎一致，损失接近负一。输出几乎是常数，不过仍可能保留微小差异。这是近乎坍缩。",
 
-    'Like the contrastive network, it starts with every digit bunched in one spot':
-        "和对比式网络一样，它一开始把每个数字都挤在同一个地方；<bookmark mark='b'/>和它不同的是，它再也没有离开。",
+    'Like the contrastive network, it starts with the digits bunched in one spot':
+        "和对比式网络一样，数字一开始就聚在一起；<bookmark mark='b'/>和它不同的是，这里的数字始终挤成一团。",
 
-    'It minimizes it <bookmark':
-        "它降低损失的办法<bookmark mark='b'/>是：把每个数字都送到同一个点上。",
+    'It drives the loss down <bookmark':
+        "它降低损失的办法<bookmark mark='b'/>是：让输出聚集在一个点附近。",
 
     'f"To see collapse in a network with many output numbers':
         "要在输出有很多个数的网络里看到坍缩，我们需要一个度量。有效秩取一组向量的奇异值，把它们变成比例，然后问有多少个方向承担了权重："
@@ -370,7 +367,7 @@ ZH.update({
     'f"Five months later, Xinlei Chen and Kaiming He removed the moving average too.':
         "五个月后，陈鑫磊和何恺明把移动平均也去掉了。SimSiam只有一个网络，用在两个视图上，一边有预测器，另一边有停止梯度："
         "目标向量被当作常数。<bookmark mark='a'/>我们训练了它，带停止梯度三次，不带两次。<bookmark mark='b'/>{v}<bookmark mark='c'/>"
-        "在球面上，用3个输出数，SimSiam不用推就把数字分开了，而只拉不推的网络停在一个点上。",
+        "在球面上，用3个输出数，SimSiam不用推就把数字分开了，而只拉不推的网络把输出聚集在一个点附近。",
 
     "f'With the stop-gradient, the spread holds at {sg_end:.3f}; without it, it falls":
         '有停止梯度时，散度保持在{sg_end:.3f}；没有它，散度降到{no_end:.3f}，有效秩降到{r_no:.1f}，而有它时是{r_sg:.0f}。'
@@ -383,7 +380,7 @@ ZH.update({
         "为什么一个停止梯度这么重要？陈鑫磊和何恺明给了一个解释。设想每张图像都有一个自由的目标向量η，损失把每个视图的输出拉向它所属"
         "图像的目标。<bookmark mark='a'/>轮流来最小化它。固定目标，对网络走一步梯度：这恰恰就是停止梯度所做的。<bookmark mark='b'/>固定"
         "网络，最好的目标就是这张图像所有视图输出的平均。<bookmark mark='c'/>SimSiam用一个抽样的视图代替平均，预测器学着补上其中的差别。"
-        "<bookmark mark='d'/>坍缩成常数仍然能使损失最小；只是这种下降方式不会走到那里。田渊栋、陈鑫磊和苏里亚·甘古利推导出了其中的"
+        "<bookmark mark='d'/>坍缩成常数仍然能使损失最小，不过我们的这些训练并没有停在那里。田渊栋、陈鑫磊和苏里亚·甘古利推导出了其中的"
         "动力学：预测器和停止梯度一起，让有用的方向不会消亡。",
 
     'f"How do they compare, on the same budget?':
@@ -420,17 +417,17 @@ ZH.update({
         '800步里，它走完了一部分路。',
 
     'f"VICReg, from Adrien Bardes, Jean Ponce and Yann LeCun':
-        "VICReg出自阿德里安·巴尔德、让·蓬斯和杨立昆，它把同一个想法拆成三个有名字的项。<bookmark mark='a'/>不变项：两个视图的向量应该"
-        "接近。<bookmark mark='b'/>方差项：每个维度在一批里的标准差至少要保持为1，这是一个合页，只在某个维度开始坍缩时才起作用。"
+        "VICReg出自阿德里安·巴尔德、让·蓬斯和杨立昆，它把同一个想法拆成三个有名字的项。这三个项作用在单位归一化之前的原始投影输出上。<bookmark mark='a'/>不变项：两个视图的向量应该"
+        "接近。<bookmark mark='b'/>方差项惩罚批次中每个维度低于1的稳定化标准差，鼓励保留变化。"
         "<bookmark mark='c'/>协方差项：不同的维度不应该相关。<bookmark mark='d'/>每一项都可以去掉，看看它起什么作用，于是我们去掉了"
-        "方差项。{v}",
+        "方差项。图中先给样本方差加上万分之一再开平方，结果在1处截顶，然后对维度、两个视图和每个记录区间取平均。{v}",
 
-    "f'Without it, the spread of each dimension falls to {s_n:.3f}":
-        '去掉之后，每个维度的散度降到{s_n:.3f}：另外两项最喜欢一切都是零，网络就照办了。它的近邻准确率最后是{pct(kn)}%，'
+    "f'Without it, the mean clipped standard-deviation proxy falls to {s_n:.3f}":
+        '去掉之后，截顶标准差代理的均值降到{s_n:.3f}。另外两项允许常数输出，而这里的输出接近常数。它的近邻准确率最后是{pct(kn)}%，'
         'VICReg是{pct(kv)}%。',
 
-    "f'Without it, the spread ends at {s_n:.2f}, against {s_v:.2f}.'":
-        '去掉之后，散度最后是{s_n:.2f}，而VICReg是{s_v:.2f}。',
+    "f'Without it, the mean clipped standard-deviation proxy ends at {s_n:.2f}":
+        '去掉之后，截顶标准差代理的均值最后是{s_n:.2f}，而VICReg是{s_v:.2f}。',
 
     'f"The two families are closer than they look.':
         "这两个家族比看上去更接近。对比损失让一批里的图像彼此不相似；Barlow Twins和VICReg让维度彼此不相似。<bookmark mark='a'/>"
@@ -465,17 +462,17 @@ ZH.update({
         "<bookmark mark='b'/>{v}",
 
     'f"Without centring, the teacher\'s entropy falls to':
-        "没有中心化，老师的熵降到{Hn['nocenter']:.2f}：所有东西都归一个原型。没有锐化，熵升到{Hn['nosharpen']:.2f}，也就是{K}的对数："
-        "每个原型都一样。两种情况下，KL都降到几乎为零，学生没有东西可学了。两者都有时，熵稳定在{Hn['dino']:.2f}，KL保持在"
-        "{KLn['dino']:.2f}：还有东西可学。",
+        "没有中心化，老师的熵降到{Hn['nocenter']:.2f}：一个原型占主导。没有锐化，熵升到{Hn['nosharpen']:.2f}，接近{K}的对数："
+        "回答几乎均匀。两种情况下，KL都降到接近零，老师和学生之间只剩较小的差异。两者都有时，熵稳定在{Hn['dino']:.2f}，KL保持在"
+        "{KLn['dino']:.2f}：两者仍有差异。",
 
     'f"The teacher\'s entropy ends at {Hn[\'nocenter\']:.2f} without centring':
         "老师的熵最后：没有中心化时是{Hn['nocenter']:.2f}，没有锐化时是{Hn['nosharpen']:.2f}，两者都有时是{Hn['dino']:.2f}。",
 
     'f"The same story, as the teacher\'s average answer':
-        "同一个故事，换成老师在512个测试数字上的平均回答，按使用最多的原型往下排。<bookmark mark='a'/>没有中心化，一根柱子拿走一切："
-        "到最后，只有{u['nocenter']:.1f}个有效原型。没有锐化，柱子变平，全部{u['nosharpen']:.0f}个都被平均地使用，每个数字都一样。"
-        "<bookmark mark='b'/>DINO在不同数字之间用着{u['dino']:.0f}个有效原型，由边缘熵的指数衡量，而每个数字自己的回答依然自信。",
+        "同一个故事，换成老师在512个测试数字上的平均回答，按使用最多的原型往下排。<bookmark mark='a'/>没有中心化，一根柱子占主导："
+        "到最后，是{u['nocenter']:.1f}个有效原型。没有锐化，边缘平均回答接近平坦，有{u['nosharpen']:.0f}个有效原型。"
+        "<bookmark mark='b'/>DINO在这些测试数字上的边缘平均回答保留了{u['dino']:.0f}个有效原型，由边缘熵的指数衡量。",
 
     'f"And the representation?':
         "那么表示呢？<bookmark mark='a'/>{v}<bookmark mark='b'/>在ImageNet上配合视觉Transformer，DINO是一个转折点：小模型用近邻法达到78.3%，"
@@ -508,7 +505,7 @@ ZH.update({
         "<bookmark mark='b'/>筛选后的池有{int(cc.sum()):,}个数字，最常见与最少见类别的比例从{ratio_raw:.0f}比1缩小到{ratio_cur:.1f}比1。",
 
     'f"Then train the same SimCLR, for the same number of steps, on each pool':
-        "然后在每个池上训练同样的SimCLR，步数相同，并在通常那个均衡的测试集上测试。<bookmark mark='a'/>这是每个数字上的准确率，原始池里"
+        "然后在每个池上训练同样的SimCLR，步数相同，并在通常那个均衡的测试集上测试。加权近邻评估时，两个编码器都使用全部6万个有标签训练数字作为参考库。<bookmark mark='a'/>这是每个数字上的准确率，原始池里"
         "最常见的放在左边。<bookmark mark='b'/>{v}",
 
     "f'The biggest change is on the rarest digit, {rarest}":
@@ -553,22 +550,20 @@ ZH.update({
         "用的是同一个卷积网络，所以被藏的块是被涂黑，而不是被跳过。49个4乘4像素的块，藏起其中37个。",
 
     'Here is ours learning, on six test digits':
-        "这是我们的模型在学习，用六个测试数字，每个快照里藏起的块都一样。<bookmark mark='a'/>一开始，它几乎什么也没往藏起的块里画，"
-        "然后是一片噪点。<bookmark mark='b'/>接着，在该有墨迹的地方出现了柔和的团块，到最后，是一些模糊的笔画，把看得见的那些接了下去："
-        "在它的猜测里，能认出2和3。<bookmark mark='c'/>要做到这一点，它得懂一点数字是怎么写的。",
+        "这是我们的模型在学习，用六个测试数字，每个快照里藏起的块都一样。<bookmark mark='a'/>第一行是模型看到的输入，中间一行是它的重建，最下面一行是原图。<bookmark mark='b'/>到最后，有些猜测出现了模糊的数字状笔画，另一些仍然难以辨认，或者与原图不同。<bookmark mark='c'/>训练损失下降，并不保证每个数字都能被重建得清楚可辨。",
 
     'f"How much to hide?':
-        "藏多少？藏得太少，网络可以从邻居那里照抄；藏得太多，它只能瞎猜。<bookmark mark='a'/>我们在三个比例下训练了它。"
+        "藏多少？藏得太少，网络可以从邻居那里照抄；藏得太多，它只能瞎猜。<bookmark mark='a'/>我们试了三个比例：藏75%用了三个种子，藏50%和90%各用了一个。这只是有限的比较。"
         "<bookmark mark='b'/>{v}<bookmark mark='c'/>{caveat}",
 
     'f"All three sit below the untrained network':
-        '三者都低于未训练网络的{pct(un)}%，而且另外两个比例各只训练了一次。',
+        '三者都低于未训练网络的{pct(un)}%。',
 
-    "f'Hiding three quarters gives the best probe":
-        '藏起四分之三时探针最好，{pct(lin[1][0])}%；藏一半是{pct(lin[0][0])}%，藏十分之九是{pct(lin[2][0])}%。',
+    "f'Hiding three quarters gives the highest observed probe in these runs":
+        '这些运行中，藏起四分之三时观测到的探针最高，{pct(lin[1][0])}%；藏一半是{pct(lin[0][0])}%，藏十分之九是{pct(lin[2][0])}%。',
 
-    "f'On our digits the best ratio is {pct(float(best), 0)} percent hidden":
-        '在我们的数字上，最好的比例是藏起{pct(float(best), 0)}%：藏一半、四分之三和十分之九时，探针分别是{pct(lin[0][0])}%、'
+    "f'The highest observed probe in these runs is at {pct(float(best), 0)} percent hidden":
+        '这些运行中，藏起{pct(float(best), 0)}%时观测到的探针最高：藏一半、四分之三和十分之九时，探针分别是{pct(lin[0][0])}%、'
         '{pct(lin[1][0])}%和{pct(lin[2][0])}%。',
 
     'f"BEiT\'s targets are tokens instead of pixels.':
@@ -681,8 +676,8 @@ ZH.update({
         "掩码模型从中获益最多：MAE从冻结网络的{pct(fewp['mae'])}%升到微调后的{pct(mae)}%，I-JEPA从{pct(fewp['ijepa'])}%升到"
         "{pct(ij)}%。",
 
-    "f'But that only brings MAE back to where training from scratch gets":
-        '但这只是让MAE回到了从零训练能达到的水平，{pct(sc)}%：它的预训练并没有带来领先。',
+    "f'MAE ends at {pct(mae)} percent, against {pct(sc)} from scratch:":
+        'MAE最后是{pct(mae)}%，从零训练是{pct(sc)}%：在这个预算下，没有观察到平均准确率优势。',
 
     "f'MAE ends {pct(mae - sc)} points above training from scratch.'":
         'MAE最后比从零训练高{pct(mae - sc)}个百分点。',
@@ -718,14 +713,17 @@ ZH.update({
         "能不能完全不用标签，就看出哪个表示好？昆汀·加里多和同事提出了有效秩：在他们的实验里，向量占满更多维度的方法，下游表现更好。"
         "<bookmark mark='a'/>这里是我们每种方法的有效秩，和它在10个标签检验上的准确率。<bookmark mark='b'/>{v}",
 
-    "f'Across our methods, the rank correlation is {rho:.2f}: a fuller":
-        '在我们的方法之间，秩相关是{rho:.2f}：表示越饱满，通常也越好，和RankMe的发现一致。',
+    "f'Across our methods, the rank correlation is {rho:.2f}: higher rank tended to go with higher":
+        '在我们的方法之间，秩相关是{rho:.2f}：在这次比较中，有效秩较高的方法，每个数字十个标签时的准确率往往也较高。这种关联不是普遍规律，也不代表因果。',
 
     "f'Across our methods, the rank correlation is only {rho:.2f}":
-        '在我们的方法之间，秩相关只有{rho:.2f}：只是个暗示，不是规律。',
+        '在我们的方法之间，秩相关只有{rho:.2f}：在这个玩具比较中，只呈现较弱的正向关联，并不是普遍规律，也不代表因果。',
 
-    "f'Across our methods, the rank correlation is {rho:.2f}: no useful":
-        '在我们的方法之间，秩相关是{rho:.2f}：没有有用的关系。把维度占满，本身并不能让它们有用。',
+    "f'Across our methods, the rank correlation is {rho:.2f}: higher rank tended to go with lower":
+        '在我们的方法之间，秩相关是{rho:.2f}：在这个玩具比较中，有效秩较高的方法，每个数字十个标签时的准确率反而往往较低。这种关联不是普遍规律，也不代表因果。',
+
+    "f'Across our methods, the rank correlation is {rho:.2f}: little observed monotonic":
+        '在我们的方法之间，秩相关是{rho:.2f}：在这个玩具比较中，几乎没有观察到单调关联。占满维度，本身并不能保证它们包含有用的任务信息。',
 })
 
 ZH.update({
@@ -851,9 +849,9 @@ ZH.update({
     # ------------------------------------------------------------------ Outro
     'f"Let\'s take stock.':
         "来总结一下。前置任务教会网络的是这道题所需要的东西，包括它的盲区。对比损失是在候选之间做分类，也是信息的一个下界，上限是候选数"
-        "的对数。在球面上，它是两股力量，对齐与均匀，由温度来平衡。没有东西把它们推开，一致性就会坍缩成常数，而且我们可以测量它。"
+        "的对数。在球面上，它是两股力量，对齐与均匀，由温度来平衡。只要求一致的损失允许常数解达到最小值；我们的朴素网络接近常数，我们测量它还剩多少散度。"
         "BYOL和SimSiam靠不对称逃脱，Barlow Twins和VICReg靠维度去相关，DINO靠让老师在两种坍缩之间保持平衡。掩码模型靠填空学习；"
-        "JEPA预测的是含义而不是像素。而四种不同的损失，有对比式的也有非对比式的，最后得到的表示几乎一样：两两之间的CKA至少是{lo:.2f}。",
+        "JEPA预测的是含义而不是像素。而四种不同的损失，有对比式的也有非对比式的，最后得到的几何结构很相似：这里两两CKA的最小值约为{lo:.2f}。",
 
     'All of this comes back.':
         "这些都会再回来。数据增强教网络该忽略什么；下一次，第25部分会把这种对称性直接造进网络里。<bookmark mark='p2'/>在表示空间里做"

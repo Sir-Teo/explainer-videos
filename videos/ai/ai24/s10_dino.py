@@ -172,10 +172,10 @@ class DINO(VoiceoverScene):
         Hn = {n: float(np.mean([logc(k, "H")[1][-1] for k in ks])) for n, ks in keys.items()}
         KLn = {n: float(np.mean([logc(k, "KL")[1][-1] for k in ks])) for n, ks in keys.items()}
         ok = Hn["nocenter"] < 0.3 and Hn["nosharpen"] > logK - 0.2 and 0.3 < Hn["dino"] < logK - 0.2
-        v = (f"Without centring, the teacher's entropy falls to {Hn['nocenter']:.2f}: one prototype for everything. "
-             f"Without sharpening, it rises to {Hn['nosharpen']:.2f}, the log of {K}: every prototype equal. In both, "
-             f"the KL drops to nearly zero and the student has nothing left to learn. With both, the entropy settles "
-             f"at {Hn['dino']:.2f} and the KL stays at {KLn['dino']:.2f}: there is still something to learn." if ok else
+        v = (f"Without centring, the teacher's entropy falls to {Hn['nocenter']:.2f}: one prototype dominates. "
+             f"Without sharpening, it rises to {Hn['nosharpen']:.2f}, near the log of {K}: answers are almost uniform. "
+             f"In both, the KL drops to nearly zero, leaving a small mismatch between teacher and student. With both, "
+             f"the entropy settles at {Hn['dino']:.2f} and the KL stays at {KLn['dino']:.2f}: a mismatch remains." if ok else
              f"The teacher's entropy ends at {Hn['nocenter']:.2f} without centring, {Hn['nosharpen']:.2f} without "
              f"sharpening, and {Hn['dino']:.2f} with both.")
         tg = tag(r"computed: \ $K = 256$; \ DINO three seeds, \ each ablation two")
@@ -231,10 +231,10 @@ class DINO(VoiceoverScene):
         u = {nm_: float(np.asarray(d[f"{nm_}_used"])[-1]) for nm_ in ("dino", "nocenter", "nosharpen")}
         with self.voiceover(
             "The same story, as the teacher's average answer over five hundred and twelve test digits, sorted "
-            "from the most used prototype down. <bookmark mark='a'/> Without centring, one bar takes everything: "
-            f"by the end, {u['nocenter']:.1f} effective prototypes. Without sharpening, the bars flatten, and all "
-            f"{u['nosharpen']:.0f} are equally used, by every digit alike. <bookmark mark='b'/> DINO keeps "
-            f"{u['dino']:.0f} effective prototypes across the digits, measured by exponentiated marginal entropy, while each digit's own answer stays confident."
+            "from the most used prototype down. <bookmark mark='a'/> Without centring, one bar dominates: "
+            f"by the end, {u['nocenter']:.1f} effective prototypes. Without sharpening, the marginal answer is nearly "
+            f"flat, with {u['nosharpen']:.0f} effective prototypes. <bookmark mark='b'/> DINO's marginal answer keeps "
+            f"{u['dino']:.0f} effective prototypes across these test digits, measured by exponentiated marginal entropy."
         ) as vo:
             self.play(FadeIn(head), FadeIn(panels), FadeIn(st))
             vo.wait_until("a")

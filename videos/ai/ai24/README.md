@@ -7,10 +7,15 @@ geometry of the hypersphere, collapse and the four ways out of it (negatives, as
 self-distillation), masked modelling, joint-embedding prediction, embeddings for search, and whether different
 networks come to see the world alike. Every method is trained here, by `compute.py`, on MNIST, on the **same
 three-layer convolutional encoder and update budget**: 800 updates of 256 online-encoder image passes
-(128 digits in two views, 64 in four, or 256 in one), with the same optimizer and schedule, three seeds
-(two for ablations), and the same starting encoder for each seed. Augmentations differ by method; momentum
+(128 digits in two views, 64 in four, or 256 in one), with the same optimizer and schedule. The main method
+comparison uses three seeds; most ablations use two, the three-number sphere illustrations use seed 0,
+and the 50%/90% MAE masking runs use one seed each. Each seed starts from the same encoder initialization
+across methods. Augmentations differ by method; momentum
 target encoders and method-specific heads add unequal computation and parameters. This is not a matched-FLOP
 or matched-wall-time comparison.
+
+The original probes use at most 200 L-BFGS iterations for full-label fits and 100 per few-label fit; these
+finite-budget fits are not certified optima.
 
 * **Hook: nobody told it what a digit is.** Six hundred test digits on a sphere, placed by a SimCLR network with three
   output numbers, coloured by labels it never saw; the nearest-neighbour accuracy of those three numbers; its training
@@ -37,7 +42,7 @@ or matched-wall-time comparison.
   SimCLR at five temperatures (0.05 … 1); how the softmax spreads its push over the negatives at low and high
   temperature (Wang & Liu 2021).
 * **6. Collapse.** Pause and predict; a network trained only to make the two views agree, its embedding on the
-  sphere never leaving one point; the effective rank (Roy & Vetterli 2007; RankMe, Garrido et al. 2023); singular-value
+  sphere remaining near one point; the effective rank (Roy & Vetterli 2007; RankMe, Garrido et al. 2023); singular-value
   spectra (complete and dimensional collapse: Hua et al. 2021, Jing et al. 2022); the starved encoder; the four ways
   out.
 * **7. No negatives: BYOL and SimSiam.** BYOL (Grill et al. 2020); SimSiam (Chen & He 2021) with and without its
@@ -95,13 +100,13 @@ item made of several runs saves each run as it finishes (`CACHE.partial`), so an
 each run takes two to four minutes. Each run's larger arrays (its test features, its replay snapshots) are in
 `.cache/ai24/runs/`, the seed-0 networks of the compared methods in `.cache/ai24/models/` (about 20 MB). MNIST is read
 through Part 10's downloader (`videos.ai.ai10.data`, checked against SHA-256); no other part's results are used.
-The full computation (75 training runs of 800 steps, the fine-tuning and the InfoNCE critics) took 3.5 hours of wall time on one thread of a shared, busy Linux machine (load about 9), started with `OMP_NUM_THREADS=1 nice -n 15 python -m videos.ai.ai24.compute`, logging to `.cache/ai24/compute.log`; the cache is about 60 MB.
+The pinned recipe enumerates **72 encoder pretraining runs** of 800 updates, three untrained reference evaluations, 54 Gaussian critic fits, and 42 fine-tuning label-draw fits, plus downstream probe fitting. **Unverified historical timing note:** the original README reports 3.5 hours of wall time for the full computation on one thread of a busy shared Linux machine (load about 9), using `OMP_NUM_THREADS=1 nice -n 15 python -m videos.ai.ai24.compute`, with a cache of about 60 MB. This is not a timing measurement of the fresh numerical continuation; its receipts record that run separately.
 
 ## Documented reference results
 
-The values below are retained from the original README. The November 2, 2026 source/visual QA pass did not have the original Part 24 result caches and did not rerun the training experiments; these numerical outcomes remain unverified in that pass.
+The values below are retained from the original README. The initial November 2, 2026 source-only pass had no original Part 24 result caches and did not rerun training. A separate numerical continuation generates fresh original-recipe outcomes; those must be validated and reported separately rather than substituted for these unverified historical values.
 
-Every method uses the same small CNN encoder (93,408 parameters, 128-number representation $h$); the SimCLR encoder plus projector has 159,584 parameters. Training uses 800 AdamW updates and 256 online-encoder image passes per update. Base images are sampled with replacement: 128 per update for two-view methods (about 1.71 dataset-equivalent draws), 64 for rotation (0.85), and 256 for one-view methods (3.41). Targets, heads and augmentations differ. Labels train the supervised reference and downstream probes; the curation demonstration also uses labels to construct its imbalanced pool and balanced seeds. Values are percent on the 10,000 test digits, mean over seeds with the lowest and highest in brackets (three seeds per method, two for ablations). Linear probe: a logistic regression on standardised $h$ with every training label. $k$-NN: 20 nearest neighbours by cosine, centred features. 10 labels per digit: the same probe trained on 100 labelled digits, five draws. Fine-tuned: the whole seed-0 network trained from 100 labels (300 steps, three draws). Frozen few-label probes average three pretraining seeds and five draws. The columns compare aggregates with the same label count, not paired outcomes on identical cohorts.
+Every method uses the same small CNN encoder (93,408 parameters, 128-number representation $h$); the SimCLR encoder plus projector has 159,584 parameters. Training uses 800 AdamW updates and 256 online-encoder image passes per update. Base images are sampled with replacement: 128 per update for two-view methods (about 1.71 dataset-equivalent draws), 64 for rotation (0.85), and 256 for one-view methods (3.41). Targets, heads and augmentations differ. Labels train the supervised reference and downstream probes; the curation demonstration also uses labels to construct its imbalanced pool and balanced seeds. Values are percent on the 10,000 test digits, mean over seeds with the lowest and highest in brackets (three seeds for the main method comparison; experiment-specific exceptions are stated above). Raw pixels have one fixed representation; their few-label probe averages five label draws. Linear probe: a logistic regression on standardised $h$ with every training label. $k$-NN: 20 nearest neighbours by cosine, centred features. 10 labels per digit: the same probe trained on 100 labelled digits, five draws. Fine-tuned: the whole seed-0 network trained from 100 labels (300 steps, three draws). Frozen few-label probes average three pretraining seeds and five draws. The columns compare aggregates with the same label count, not paired outcomes on identical cohorts.
 
 | method | linear probe | $k$-NN | 10 labels per digit | fine-tuned from 100 labels | effective rank of $h$ |
 |---|---|---|---|---|---|
@@ -130,7 +135,7 @@ Every method uses the same small CNN encoder (93,408 parameters, 128-number repr
 - **DINO's two collapses** (teacher entropy at the end, $\log 256 = 5.55$): with centring and sharpening 4.37, without centring 0.00, without sharpening 5.54; effective prototype counts (exponentiated marginal entropy) 182, 1.0, 256. Linear probe 94.9, 87.3, 91.7.
 - **MAE masking ratio** (linear probe): 50% hidden: 81.6, 75% hidden: 82.3, 90% hidden: 84.0.
 - **Matryoshka** ($k$-NN on the first $m$ numbers of the projection $z$, Matryoshka / plain SimCLR): $m$ = 2: 55.0 / 29.9, $m$ = 4: 87.6 / 64.0, $m$ = 8: 95.5 / 91.5, $m$ = 16: 96.2 / 95.9, $m$ = 32: 96.4 / 96.7, $m$ = 64: 96.5 / 97.0, $m$ = 128: 96.5 / 97.1.
-- **Curation** (a label-assisted toy analogue of DINOv2's retrieval recipe: labels construct the pool imbalance and balanced seeds; the retrieval encoder was pretrained on all MNIST training images, including pool and seed images. On a pool of 14,000 digits with class shares from 36 % down to 1 %; curated pool 2,812): linear 97.8 raw, 98.0 curated; 10 labels per digit 88.3 and 89.8; on the rarest digit (8, 140 examples in the raw pool) $k$-NN goes from 93.7 to 96.1, while the three commonest change by at most 0.6 points.
+- **Curation** (a label-assisted toy analogue of DINOv2's retrieval recipe: labels construct the pool imbalance and balanced seeds; the retrieval encoder was pretrained on all MNIST training images, including pool and seed images. Both encoders' weighted $k$-NN evaluation uses all 60,000 labeled training digits as the reference bank, not only the pretraining pool. On a pool of 14,000 digits with class shares from 36 % down to 1 %; curated pool 2,812): linear 97.8 raw, 98.0 curated; 10 labels per digit 88.3 and 89.8; on the rarest digit (8, 140 examples in the raw pool) $k$-NN goes from 93.7 to 96.1, while the three commonest change by at most 0.6 points.
 - **Top and bottom halves** (mutual 10-NN alignment of the two encoders on the same digits): 0.17 and 0.17 for two seeds, against 0.71 for two seeds of the same half and 0.17 for the raw pixels of the halves.
 - **Platonic check**: Spearman correlation between a method's linear probe and its mean alignment with the others: 0.66. Same recipe, two seeds, linear CKA: supervised 0.95, simclr 0.98, byol 0.92, dino 0.97, mae 0.73.
 - **Different losses, one representation**: linear CKA between SimCLR, MoCo, Barlow Twins and VICReg (seed 0 each) is at least 0.97 for every pair, as high as two seeds of SimCLR (0.98); MAE against those four: 0.24–0.29.
