@@ -282,7 +282,8 @@ class Codec(VoiceoverScene):
             "Google's AudioLM generated speech by writing semantic tokens first and acoustic tokens after them. "
             "<bookmark mark='c'/> Then the two were merged into one codec: Kyutai's Mimi teaches its first codebook "
             "to match the self-supervised model WavLM, and keeps seven acoustic stages beside it, at 12.5 frames a "
-            "second and 1.1 kilobits. The narrator's own tokenizer, Qwen3-TTS's, does the same with sixteen."
+            "second and 1.1 kilobits. Qwen3-TTS's published tokenizer also uses a semantic first codebook, with "
+            "fifteen acoustic codebooks beside it."
         ) as vo:
             self.play(FadeIn(gl), FadeIn(grid), FadeIn(stl))
             vo.wait_until("a")

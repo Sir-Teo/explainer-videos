@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai23.common import PART, SND_C, heat, load, node_box, spectro
+from videos.ai.ai23.acoustic_math import schematic_feature_density
 
 HIST_C = C.HUMAN
 
@@ -148,50 +149,66 @@ class Audrey(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hmm(self):
-        # a left-to-right HMM for a word, schematic: states for its sounds, each with a mixture of Gaussians
-        states = VGroup(*[Circle(radius=0.38, color=SND_C, stroke_width=2.5) for _ in range(4)]).arrange(RIGHT, buff=0.9)
-        states.move_to([-2.6, 1.6, 0])
-        sl = VGroup(*[label(t, font_size=20, color=WHITE).move_to(s) for t, s in zip((r"/s/", r"/e/", r"/v/", r"/n/"), states)])
+        # Generic acoustic/subphone states; this is not a fitted word model.
+        states = VGroup(*[Circle(radius=0.34, color=SND_C, stroke_width=2.5) for _ in range(4)]).arrange(RIGHT, buff=0.8)
+        states.move_to([-3.35, 1.25, 0])
+        sl = VGroup(*[MathTex(rf"q_{{{k + 1}}}", font_size=24).move_to(s) for k, s in enumerate(states)])
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.05, color=GREY_B, stroke_width=2.5,
                              max_tip_length_to_length_ratio=0.25) for a, b in zip(states, states[1:])])
-        loops = VGroup(*[CurvedArrow(s.get_top() + LEFT * 0.2, s.get_top() + RIGHT * 0.2, angle=-PI * 1.4, color=GREY_B,
-                                     stroke_width=2, tip_length=0.12) for s in states])
+        loops = VGroup(*[CurvedArrow(s.get_top() + LEFT * 0.2, s.get_top() + RIGHT * 0.2, angle=-PI * 1.4,
+                                     color=GREY_B, stroke_width=2, tip_length=0.12) for s in states])
+        tag = label(r"illustrative acoustic states: \ stay or advance", font_size=24, color=SND_C)
+        tag.move_to([-3.35, 2.55, 0])
         gm = VGroup()
+        xs = np.linspace(-1.1, 1.1, 160)
+        density = schematic_feature_density(xs)
         for s in states:
-            xs = np.linspace(-1, 1, 40)
-            y = 0.5 * np.exp(-((xs + 0.3) / 0.25) ** 2) + 0.35 * np.exp(-((xs - 0.35) / 0.3) ** 2)
-            gm.add(VMobject(stroke_color=C.MODEL_Q, stroke_width=2).set_points_smoothly(
-                [s.get_bottom() + np.array([0.4 * x, -0.25 - 0.6 * v, 0]) for x, v in zip(xs, y)]))
-        gl = label(r"each state: \ a mixture of Gaussians over the frame's spectrum", font_size=20, color=C.MODEL_Q)
-        gl.next_to(gm, DOWN, buff=0.3)
-        tag = note(r"schematic: \ a left-to-right model for ``seven''", font_size=18).next_to(states, UP, buff=0.5)
-        eq = cmath(r"\hat W", r"=", r"\arg\max_W", r"P(\text{sound} \mid W)", r"\, P(W)",
-                   colors={r"P(\text{sound} \mid W)": SND_C, r"\, P(W)": C.TRUE_P}, font_size=36).move_to([3.4, -0.2, 0])
-        eql = VGroup(label(r"acoustic model: \ the HMMs", font_size=20, color=SND_C),
-                     label(r"language model: \ $n$-grams (Part 7)", font_size=20, color=C.TRUE_P)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        eql.next_to(eq, DOWN, buff=0.25)
-        dnn = node_box(r"2012: \ deep networks replace the Gaussian mixtures \\ (Toronto, \ Microsoft, \ Google, \ IBM)",
-                       C.NEURAL, font_size=20).move_to([0.2, -2.8, 0])
-        cite_ = cite(r"J.~Baker (1975); \ F.~Jelinek (1976); \ L.~Rabiner (1989); \ G.~Hinton et al.\ (2012)", corner=UR)
+            baseline = np.array([s.get_x(), -0.5, 0])
+            axis = Line(baseline + LEFT * 0.48, baseline + RIGHT * 0.48, color=GREY_D, stroke_width=1)
+            curve = VMobject(stroke_color=C.MODEL_Q, stroke_width=2).set_points_smoothly(
+                [baseline + np.array([0.4 * x, 0.62 * y, 0]) for x, y in zip(xs, density)])
+            gm.add(VGroup(axis, curve))
+        gl = label(r"Gaussian-mixture density \\ one illustrative feature coordinate; \ not fitted speech",
+                   font_size=20, color=C.MODEL_Q).move_to([-3.35, -1.13, 0])
+        gl.scale_to_fit_width(min(gl.width, 5.8))
+        defs = label(r"$X$: \ acoustic features; \ $W$: \ word sequence", font_size=20, color=GREY_A)
+        defs.move_to([3.35, 2.55, 0])
+        eq = MathTex(r"\widehat W = \arg\max_W P(X\mid W)P(W)", font_size=34).move_to([3.35, 1.45, 0])
+        eq.scale_to_fit_width(min(eq.width, 6.0))
+        marginal = MathTex(r"P(X\mid W)=\sum_Q P(X,Q\mid W)", font_size=30).move_to([3.35, 0.5, 0])
+        marginal.scale_to_fit_width(min(marginal.width, 6.0))
+        path_note = label(r"word likelihood: \ sum over hidden state paths", font_size=19, color=GREY_A)
+        path_note.next_to(marginal, DOWN, buff=0.2)
+        methods = VGroup(label(r"EM / Baum--Welch: \ estimate parameters", font_size=20, color=SND_C),
+                         label(r"Viterbi: \ best hidden state path", font_size=20, color=C.MODEL_Q))
+        methods.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.35, -1.05, 0])
+        dnn = node_box(r"2012 joint review: \ earlier DNN acoustic gains \\ DNN--HMM hybrids retain HMM timing",
+                       C.NEURAL, font_size=22, width=11.7).move_to([0, -2.65, 0])
+        cite_ = cite(r"L.~Rabiner (1989); \ F.~Jelinek (2009); \ G.~Hinton et al.\ (2012)", corner=UR, font_size=18)
         with self.voiceover(
-            "From the mid-1970s, at Carnegie Mellon and at IBM, recognition became statistics. <bookmark mark='a'/> "
-            "Each word is a hidden Markov model, Part 7's model: a chain of states, one for each sound, that the "
-            "speech walks through, lingering or moving on. <bookmark mark='b'/> Each state scores the spectrum of a "
-            "frame with a mixture of Gaussians, all of it trained by EM and decoded by Viterbi. <bookmark mark='c'/> "
-            "And words are chosen by Bayes' rule: the transcript that best explains the sound, times what a language "
-            "model expects. That recipe, scaled up, ran dictation and telephone systems for thirty years. "
-            "<bookmark mark='d'/> In 2012 four labs reported together that deep networks beat the Gaussian mixtures "
-            "as the model of sound. The next question was whether a network could learn the whole thing, without "
-            "being told which frame is which sound."
+            "Classical speech recognition represents speech as short frames of acoustic features. "
+            "<bookmark mark='a'/> This illustrative left-to-right hidden Markov model has acoustic states, often "
+            "subphone states, rather than one state for each letter or each whole phone. A path can remain in a "
+            "state or move forward. <bookmark mark='b'/> A Gaussian mixture gives a probability density for a "
+            "frame's feature vector. These little curves show just one illustrative feature coordinate, not fitted "
+            "speech. EM, often Baum-Welch for an HMM, estimates parameters with hidden paths. Viterbi searches for "
+            "a single best state path. <bookmark mark='c'/> For fixed observed features X, the word sequence "
+            "maximizes its acoustic likelihood times its language-model prior. The likelihood sums over hidden "
+            "state paths. Replacing that sum with a best-path approximation can change the winning word sequence. "
+            "<bookmark mark='d'/> A 2012 joint review collected earlier gains from deep neural acoustic models. "
+            "Those DNN-HMM hybrids retained HMM timing: network state posteriors were divided by state priors to "
+            "form acoustic likelihood scores. Next, CTC trains a direct labelling network by summing alignments. "
+            "It was not the first method to train with hidden alignments."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(tag), LaggedStart(*[FadeIn(VGroup(s, l_)) for s, l_ in zip(states, sl)],
                                                                lag_ratio=0.2), run_time=1.5)
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in arr], lag_ratio=0.2), FadeIn(loops), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(gm), FadeIn(gl))
+            self.play(Create(gm), FadeIn(gl), FadeIn(methods))
             vo.wait_until("c")
-            self.play(Write(eq), FadeIn(eql))
+            self.play(FadeIn(defs), Write(eq))
+            self.play(Write(marginal), FadeIn(path_note))
             vo.wait_until("d")
             self.play(FadeIn(dnn))
         self.wait(0.3)

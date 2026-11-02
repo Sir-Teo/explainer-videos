@@ -4,10 +4,13 @@ import math
 
 import numpy as np
 
-from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai23.common import (CLIP_C, IMG_C, LM_COLORS, PART, SND_C, TEXT_C, VQ_COLORS, curve, heat, load,
                                    node_box, tile_frame)
+from videos.ai.ai23.recap import bpe_trace, entropy_threshold, entropy_window, modality_products
+from videos.ai.ai23.s05_bits import lm_stats
+from videos.ai.ai23.s06_bytes import patch_data
+from videos.ai.ai23.presentation import narration_credit
 
 
 class Outro(VoiceoverScene):
@@ -19,7 +22,28 @@ class Outro(VoiceoverScene):
         self.references()
 
     # ------------------------------------------------------------------
-    def tiles(self):
+    def text_recap(self):
+        """A separately reviewable recap of the three accepted text products."""
+        tiles = self.frame_tiles(self.text_tiles(), rows=1, cols=3)
+        head = label(r"Text results: \ three accepted measurements", font_size=38).to_edge(UP, buff=0.5)
+        with self.voiceover(
+            "These three panels summarize newly completed QA measurements. The BPE curve counts remaining symbols "
+            "at every fifty merges, not file size. The language-model bars show three-seed mean bits per Unicode character on the "
+            "same text suffix along one canonical token path, for five configurations, with each "
+            "observed seed range. The original "
+            "schedules used unequal compute, so this is a descriptive comparison, not an isolated tokenizer effect. "
+            "The entropy panel uses the accepted seed-zero byte-model entropy. A cross marks the initial "
+            "unscored byte in its original position; it is not zero entropy. The threshold marks high conditional "
+            "uncertainty, not the surprise of the observed byte."
+        ) as vo:
+            self.play(FadeIn(head))
+            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in tiles], lag_ratio=0.5), run_time=3.0)
+        self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def text_tiles(self):
+        """Accepted text results only; the other recap tiles remain data-gated."""
         TW, TH = 3.0, 2.0
         out = []
 
@@ -27,53 +51,103 @@ class Outro(VoiceoverScene):
             return Axes(x_range=xr, y_range=yr, x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
                         axis_config={"stroke_color": GREY_D, "include_ticks": False})
 
-        b = load("bpe")
-        L = np.asarray(b["length"], float)
-        ax = small_axes([0, len(L) - 1, 10], [0, L.max() * 1.05, 1e6])
-        out.append((VGroup(ax, curve(ax, np.arange(len(L)), L, TEXT_C, 3)), r"merges as compression", TEXT_C))
-        d = load("lms")
-        names = [str(n) for n in d["configs"]]
-        vals = [float(np.mean(d[f"bpc_{n}"])) for n in names]
-        bars = VGroup(*[Rectangle(width=0.4, height=1.5 * v / max(vals), stroke_width=0, fill_color=LM_COLORS[n], fill_opacity=0.8)
-                        for n, v in zip(names, vals)]).arrange(RIGHT, buff=0.12, aligned_edge=DOWN)
-        out.append((bars, r"bits per character, \ $5$ tokenizers", TEXT_C))
-        p = load("patches")
-        H = np.nan_to_num(np.asarray(p["example_H"], float))[:40]
-        th = float(p["threshold"])
-        hb = VGroup(*[Rectangle(width=0.06, height=max(0.02, 0.3 * h), stroke_width=0, fill_color=C.CONTEXT if h > th else GREY_C,
-                                fill_opacity=0.9) for h in H]).arrange(RIGHT, buff=0.01, aligned_edge=DOWN)
-        out.append((hb, r"entropy patches", C.CONTEXT))
-        v = load("vqtrain")
+        b = load("bpe_qa_accepted")
+        merges, lengths = bpe_trace(b)
+        ax = small_axes([0, max(1, int(merges[-1])), 2000], [0, lengths.max() * 1.05, 1e6])
+        ends = VGroup(MathTex(rf"0 \longrightarrow {int(merges[-1]):,}".replace(",", "{,}"), font_size=12, color=GREY_A),
+                      label(r"merges", font_size=12, color=GREY_A)).arrange(RIGHT, buff=0.06).next_to(ax, DOWN, buff=0.06)
+        counts = MathTex(rf"{int(lengths[0]):,} \longrightarrow {int(lengths[-1]):,}".replace(",", "{,}"),
+                         font_size=12, color=TEXT_C).next_to(ax, UP, buff=0.04)
+        line = curve(ax, merges, lengths, TEXT_C, 3).set_fill(opacity=0)
+        out.append((VGroup(ax, line, ends, counts), r"BPE: \ remaining symbols", TEXT_C))
+        _, names, values = lm_stats()
+        maximum = max(float(v.max()) for v in values.values())
+        bars = VGroup()
+        short = (r"byte", r"B1k", r"U1k", r"B4k", r"U4k")
+        for i, (name, tick) in enumerate(zip(names, short)):
+            vals = values[name]
+            x = (i - 2) * 0.51
+            height = 1.13 * float(vals.mean()) / maximum
+            bar = Rectangle(width=0.30, height=height, stroke_width=0, fill_color=LM_COLORS[name], fill_opacity=0.8)
+            bar.move_to([x, height / 2, 0])
+            bounds = Line([x, 1.13 * float(vals.min()) / maximum, 0], [x, 1.13 * float(vals.max()) / maximum, 0],
+                          color=WHITE, stroke_width=2)
+            dots = VGroup(*[Dot([x + (j - 1) * 0.045, 1.13 * float(v) / maximum, 0], radius=0.018, color=WHITE)
+                            for j, v in enumerate(vals)])
+            value = MathTex(f"{float(vals.mean()):.3f}", font_size=11, color=WHITE).next_to(bar, UP, buff=0.06)
+            tick_label = label(tick, font_size=11, color=LM_COLORS[name]).move_to([x, -0.13, 0])
+            bars.add(VGroup(bar, bounds, dots, value, tick_label))
+        out.append((bars, r"BPC: \ $3$-seed mean/range \\ common suffix; \ unequal compute", TEXT_C))
+        p = patch_data()
+        positions, H = entropy_window(p)
+        th = entropy_threshold(p)
+        scale = 1.25 / max(float(np.nanmax(H)), th, 1e-6)
+        hb = VGroup()
+        for i, h in zip(positions, H):
+            x = (float(i) - (len(H) - 1) / 2) * 0.065
+            if np.isfinite(h):
+                height = max(1e-6, scale * float(h))
+                bar = Rectangle(width=0.05, height=height, stroke_width=0, fill_color=C.CONTEXT if h > th else GREY_C,
+                                fill_opacity=0.9).move_to([x, height / 2, 0])
+                hb.add(bar)
+            else:
+                # Status marker below the baseline, never a fabricated zero-height observation.
+                hb.add(MathTex(r"\times", font_size=10, color=GREY_B).move_to([x, -0.10, 0]))
+        hb.add(DashedLine([-(len(H) - 1) * 0.065 / 2, scale * th, 0],
+                          [(len(H) - 1) * 0.065 / 2, scale * th, 0], color=C.CONTEXT, stroke_width=1))
+        hb.add(MathTex(rf"\tau={th:.2f}", font_size=11, color=C.CONTEXT).move_to([0.9, 1.42, 0]))
+        out.append((hb, r"conditional entropy, \ bits \\ first byte: \ unscored", C.CONTEXT))
+        return out
+
+    def tiles(self):
+        TW, TH = 3.0, 2.0
+        # This explicit presentation key has no generator: missing modalities
+        # must fail before any historical training/speech cache can be invoked.
+        products = modality_products(load("recap_modalities_qa_accepted"))
+        out = self.text_tiles()
+
+        def small_axes(xr, yr):
+            return Axes(x_range=xr, y_range=yr, x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
+                        axis_config={"stroke_color": GREY_D, "include_ticks": False})
+
+        v = products["vqtrain"]
         checks = [int(c) for c in v["checks"]]
         ax2 = small_axes([0, checks[-1], 500], [0, 260, 64])
         g = VGroup(ax2)
         for m in ("vq", "ema", "restart"):
             g.add(curve(ax2, checks, np.asarray(v[f"used_t_{m}"], float).mean(0), VQ_COLORS[m], 3))
         out.append((g, r"codebook collapse, \ and restarts", IMG_C))
-        q = load("nyquist")
+        q = products["nyquist"]
         ax3 = small_axes([0, 16, 4], [0, 4.5, 1])
         out.append((VGroup(ax3, curve(ax3, np.asarray(q["true"]) / 1000, np.asarray(q["seen"]) / 1000, SND_C, 3)),
                     r"aliasing", SND_C))
-        cd = load("codec")
+        cd = products["codec"]
         st = [int(s) for s in cd["stages"]]
         wer = [float(np.mean([cd[f"wer_s{s}_{n}"] for s in cd["seeds"]])) for n in st]
         ax4 = small_axes([0, len(st) - 1, 1], [0, max(1.0, max(wer)), 0.5])
         out.append((VGroup(ax4, curve(ax4, np.arange(len(st)), wer, SND_C, 3)), r"a codec, \ $0.4$ to $3.2$ kbps", SND_C))
-        c = load("ctc")
+        c = products["ctc"]
         G = np.asarray(c["lat_gamma"]).T
         out.append((heat(np.sqrt(np.clip(G, 0, 1)), 2.9, 1.7, color=SND_C, lo=0, hi=1), r"CTC's lattice", SND_C))
-        cl = load("clip")
+        cl = products["clip"]
         out.append((heat(np.asarray(cl["sim_clip"]), 1.8, 1.8, signed=True), r"pictures meet words", CLIP_C))
+        return self.frame_tiles(out, rows=2, cols=4)
+
+    @staticmethod
+    def frame_tiles(items, rows, cols):
+        TW, TH = 3.0, 2.0
         tiles = Group()
-        for pic, cap, col in out:
+        for pic, cap, col in items:
             box, c_ = tile_frame(cap, col, TW, TH)
+            if c_.width > TW:
+                c_.width = TW
             pic.move_to(box.get_center() + UP * 0.22)
             if pic.width > TW:
                 pic.width = TW
             if pic.height > TH:
                 pic.height = TH
             tiles.add(Group(box, pic, c_))
-        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        tiles.arrange_in_grid(rows=rows, cols=cols, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
         return tiles
 
     def recap(self):
@@ -81,8 +155,10 @@ class Outro(VoiceoverScene):
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. Byte-pair encoding cuts text by merging the commonest pairs, a greedy compressor; the "
-            "unigram model puts a probability on every cut; and bits per character is the fair way to compare them. "
-            "Bytes and entropy patches spend a model's effort where the surprise is. Pictures and sound become "
+            "unigram model puts a probability on every cut. Our bits-per-Unicode-character scores use the same text suffix "
+            "and one canonical token path. These three-seed runs used unequal compute, so the bars describe this "
+            "cohort rather than isolate a tokenizer effect. Entropy patches mark high conditional uncertainty; the "
+            "initial byte is unscored, not zero entropy. Pictures and sound become "
             "tokens through codebooks, which can collapse; restarts or fixed grids address different failure modes. "
             "Our residual codec codes speech spectrograms at 400 to 3,200 bits a second; making a wave would still "
             "need a vocoder. Sampling folds what is "
@@ -158,15 +234,17 @@ class Outro(VoiceoverScene):
         d1 = Dot(sph.point_at_angle(1.0), color=TEXT_C, radius=0.1)
         d2 = Dot(sph.point_at_angle(1.25), color=TEXT_C, radius=0.1)
         others = VGroup(*[Dot(sph.point_at_angle(a), color=GREY_C, radius=0.08) for a in (2.6, 3.5, 4.6, 5.6)])
-        sl = label(r"pulled together; \ the rest pushed apart", font_size=20, color=GREY_A).next_to(sph, DOWN, buff=0.2)
+        sl = label(r"contrastive example: \\ same-input views together; \ other inputs apart", font_size=20,
+                   color=GREY_A).next_to(sph, DOWN, buff=0.2)
+        sl.scale_to_fit_width(min(sl.width, 5.8))
         arrs = VGroup(Arrow(x.get_right(), v1.get_left(), buff=0.1, color=GREY_B), Arrow(x.get_right(), v2.get_left(), buff=0.1, color=GREY_B),
                       Arrow(v1.get_right(), enc.get_left(), buff=0.1, color=GREY_B), Arrow(v2.get_right(), enc.get_left(), buff=0.1, color=GREY_B),
                       Arrow(enc.get_right(), sph.get_left(), buff=0.1, color=GREY_B))
         tag = note(r"schematic", font_size=18).to_corner(DR, buff=0.3)
         with self.voiceover(
             "Next time: where encoders like wav2vec 2.0 and DINO come from, when nobody labels anything. Two "
-            "views of one input, pulled together, everything else pushed apart, and the other ways to learn from "
-            "data alone: learning without labels, Part 24."
+            "views of one input are pulled together in contrastive learning, while other inputs are pushed apart. "
+            "We'll also see self-distillation and other ways to learn from data alone: learning without labels, Part 24."
         ) as vo:
             self.play(FadeIn(head), FadeIn(x), FadeIn(xl), FadeIn(tag))
             self.play(GrowArrow(arrs[0]), GrowArrow(arrs[1]), FadeIn(v1), FadeIn(v2), FadeIn(vl))

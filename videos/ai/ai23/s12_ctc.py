@@ -68,8 +68,10 @@ class CTC(VoiceoverScene):
         eql = label(r"$\mathcal B$: \ merge repeats, \ drop blanks", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.12)
         with self.voiceover(
             "A recognizer hears a hundred frames of sound for a dozen letters, and training data says only what was "
-            "said, not when. The old systems needed each frame labelled, from a previous model. <bookmark mark='a'/> "
-            "In 2006 Alex Graves, Santiago Fernández, Faustino Gomez and Jürgen Schmidhuber found a way around it. "
+            "said, not when. Many neural-HMM systems used frame targets from an earlier aligner, while HMM "
+            "training itself could use hidden alignments. <bookmark mark='a'/> "
+            "In 2006 Alex Graves, Santiago Fernández, Faustino Gomez and Jürgen Schmidhuber introduced CTC "
+            "to train a direct labelling network without frame targets. "
             "The network outputs, for every frame, a probability for each letter and for one extra symbol, a blank. "
             "<bookmark mark='b'/> Any path through the frames becomes text by merging repeated symbols and then "
             "dropping the blanks. <bookmark mark='c'/> A blank is also how a real double letter survives: without "
