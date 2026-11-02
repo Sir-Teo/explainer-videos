@@ -4213,7 +4213,8 @@
     "Han, Jentzen and E (2018); Becker, Cheridito and Jentzen (2019); Buehler, Gonon, Teichmann and Wood (2019)": "Han, Jentzen and E (2018); Becker, Cheridito and Jentzen (2019); Buehler, Gonon, Teichmann and Wood (2019)",
     "Huge and Savine (2020); Wiese et al.\\ (2020); Buehler, Horvath, Lyons, Perez Arribas and Wood (2020)": "Huge and Savine (2020); Wiese et al.\\ (2020); Buehler, Horvath, Lyons, Perez Arribas and Wood (2020)",
     "Horvath, Muguruza and Tomas (2021); Imaki et al.\\ (2021); Ni et al.\\ (2021); Gierjatowicz et al.\\ (2022)": "Horvath, Muguruza and Tomas (2021); Imaki et al.\\ (2021); Ni et al.\\ (2021); Gierjatowicz et al.\\ (2022)",
-    "Federal Reserve and OCC, SR 11-7 (2011)": "Federal Reserve and OCC, SR 11-7 (2011)"
+    "Federal Reserve and OCC, SR 11-7 (2011)": "Federal Reserve and OCC, SR 11-7 (2011)",
+    "Bermudan max-call: $K = 100$, $r = 5\\%$, dividends 10\\%, $\\sigma = 20\\%$, 3 years, 9 dates": "百慕大最大值看涨期权：$K = 100$，$r = 5\\%$，股息10\\%，$\\sigma = 20\\%$，3年，9个日期"
   },
   "phrases": {
     "you owe": "你欠",
