@@ -91,12 +91,12 @@ class MarketMaker(VoiceoverScene):
         cards = VGroup(
             firm_card(r"Susquehanna (SIG)", r"Founded in 1987, months before Black Monday, as an options market maker. "
                       r"Its graduate training, by its own job postings, teaches game theory and decision science, with "
-                      r"classes in poker.", width=6.0, font_size=21),
+                      r"classes in poker.", width=4.3, font_size=24),
             firm_card(r"Optiver and IMC", r"Amsterdam market makers founded in 1986 and 1989, on the European options "
-                      r"exchange floors; now electronic, quoting options and ETFs worldwide.", width=6.0, font_size=21),
+                      r"exchange floors; now electronic, quoting options and ETFs worldwide.", width=4.3, font_size=24),
             firm_card(r"Jane Street", r"Founded around the turn of the millennium; a market maker in ETFs, bonds and "
-                      r"options across the world's exchanges, and a large trader in India's index options (chapter 6).", width=6.0,
-                      font_size=21),
+                      r"options across the world's exchanges, and a large trader in India's index options (chapter 6).", width=4.3,
+                      font_size=24),
         ).arrange(RIGHT, buff=0.3).move_to(ORIGIN)
         if cards.width > 13.2:
             cards.scale_to_fit_width(13.2)

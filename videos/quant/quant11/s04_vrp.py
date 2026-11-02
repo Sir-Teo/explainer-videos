@@ -74,7 +74,7 @@ class VRP(VoiceoverScene):
         for i, (m, se, c, lab, n) in enumerate(vals):
             b = tbar(ax, i + 0.5, m, c, width=0.55)
             err = Line(ax.c2p(i + 0.5, m - 2 * se), ax.c2p(i + 0.5, m + 2 * se), color=WHITE, stroke_width=2)
-            txt = label(lab + f" ({n} months)", font_size=18, color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.12)
+            txt = wrapped_label(lab + f" ({n} months)", 1.9, 18, GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.12)
             objs.add(VGroup(b, err, txt))
         diff = e["nonoverlap_on"] - e["nonoverlap_off"]
         se_d = float(np.hypot(e["se_on"], e["se_off"]))
