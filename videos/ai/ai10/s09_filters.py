@@ -94,13 +94,17 @@ class Filters(VoiceoverScene):
                   ylabel=r"training loss", xticks=[0, steps[-1]], yticks=[0, 1, 2], center=[4.2, 1.2, 0])
         A = ax.ax
         k = ValueTracker(0)
-        sm = np.convolve(cv[:, 1], np.ones(10) / 10, mode="same")
+        # Plot the original logged loss; zero-padded smoothing invents edge dips.
+        sm = cv[:, 1]
 
         def path():
             s = steps[int(k.get_value())]
-            n = max(2, int(np.searchsorted(cv[:, 0], s)))
-            return VMobject(color=CNN, stroke_width=3).set_points_as_corners(
-                [A.c2p(x, min(y, 2.5)) for x, y in zip(cv[:n, 0], sm[:n])])
+            n = int(np.searchsorted(cv[:, 0], s, side="right"))
+            points = [A.c2p(x, min(y, 2.5)) for x, y in zip(cv[:n, 0], sm[:n])]
+            if len(points) == 1:
+                points.append(points[0])
+            line = VMobject(color=CNN, stroke_width=3)
+            return line.set_points_as_corners(points) if points else line
 
         live = always_redraw(path)
 
@@ -192,12 +196,13 @@ class Filters(VoiceoverScene):
                    color=KERNEL).next_to(triples, UP, buff=0.2)
         n, no, nc, no0 = int(o["n"]), int(o["n_oriented"]), int(o["n_colour"]), int(o["n_oriented0"])
         counts = VGroup(
-            label(rf"trained: \ ${no}$ of ${n}$ strongly tuned to an angle; \ ${nc}$ mostly colour", font_size=24,
+            label(rf"trained: \ ${no}$ of ${n}$ tuned brightness filters; \ ${nc}$ mostly colour", font_size=24,
                   color=CNN),
-            label(rf"the same filters before training: \ ${no0}$ of ${n}$ tuned", font_size=24, color=GREY_B),
+            label(rf"the same filters before training: \ ${no0}$ of ${n}$ tuned brightness filters", font_size=24, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45)
-        sel = label(rf"tuned: \ selectivity $\frac{{R_{{\text{{best}}}} - R_{{\perp}}}}{{R_{{\text{{best}}}} + "
-                    rf"R_{{\perp}}}} \ge {o['selective']}$", font_size=20, color=GREY_B).to_corner(UR, buff=0.3)
+        sel = label(rf"tuned brightness filters: \\ selectivity $\frac{{R_{{\text{{best}}}} - R_{{\perp}}}}{{R_{{\text{{best}}}} + "
+                    rf"R_{{\perp}}}} \ge {o['selective']}$; \\ colour energy fraction $< 0.5$",
+                    font_size=18, color=GREY_B).to_corner(UR, buff=0.3)
         tag = note(r"computed").to_corner(DR, buff=0.25)
         if no0 == 0 and no > 3:
             verdict = "Before training, not one of them passes the same test. The tuning was learned."
@@ -210,7 +215,7 @@ class Filters(VoiceoverScene):
             "striped pattern, a grating, at sixteen angles, and record how strongly it answers at each one. "
             "<bookmark mark='b'/> Here are three of the filters, and their answers drawn as a shape around a "
             "circle: a long thin shape means the filter cares about one angle and ignores the one at right angles "
-            "to it, like the cat's cell. <bookmark mark='c'/> Count the filters whose answer at their best angle "
+            "to it, like the cat's cell. <bookmark mark='c'/> Count the filters dominated by brightness whose answer at their best angle "
             f"is at least three times the answer at right angles: {no} of the {n}, and {nc} more respond mostly "
             f"to colour. {verdict}"
         ) as vo:

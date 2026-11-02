@@ -89,7 +89,7 @@ class WhyItWon(VoiceoverScene):
         thr_t = label(rf"${int(100 * thr)}\%$", font_size=22, color=GREY_B).next_to(thr_l, RIGHT, buff=0.1)
         leg = legend([(ACTC["relu"], r"ReLU"), (ACTC["tanh"], r"tanh"), (ACTC["sigmoid"], r"sigmoid")],
                      font_size=24).to_corner(UR, buff=0.5)
-        sub = note(r"computed: \ six $3 \times 3$ conv layers, \ SGD with momentum, \ each activation with its usual "
+        sub = note(r"computed: \ five $3 \times 3$ conv layers + a linear read-out; \\ SGD with momentum, \ each activation with its usual "
                    r"initialization; \ three seeds, \ band = min--max").to_edge(DOWN, buff=0.15)
         if sub.width > 13:
             sub.width = 13

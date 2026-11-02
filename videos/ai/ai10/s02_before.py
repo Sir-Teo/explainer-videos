@@ -194,28 +194,33 @@ class Before(VoiceoverScene):
         boxes.move_to(UP * 1.4)
         arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=3)
                           for a, b in zip(boxes, boxes[1:])])
-        designed = Brace(VGroup(boxes[1], boxes[2]), DOWN, color=HAND)
+        designed = Brace(boxes[1], DOWN, color=HAND)
         dlb = label(r"designed by people", font_size=24, color=HAND).next_to(designed, DOWN, buff=0.1)
         learned = Brace(boxes[3], DOWN, color=CNN)
         llb = label(r"learned", font_size=24, color=CNN).next_to(learned, DOWN, buff=0.1)
+        coding_note = label(r"coding may fit \\ a dictionary or mixture", font_size=20, color=HAND)
+        if coding_note.width > 3.4:
+            coding_note.width = 3.4
+        coding_note.next_to(boxes[2], DOWN, buff=0.5)
         win = VGroup(*[label(rf"ILSVRC {y}: \ {team}, \ ${err}\%$ \ ({how})", font_size=24, color=GREY_A)
                        for y, team, err, how in ILSVRC[:2]]).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         win.move_to(DOWN * 1.9)
         wl = label(r"the winners of the first two ImageNet contests \ (top-5 error)", font_size=22,
                    color=GREY_B).next_to(win, UP, buff=0.3)
-        cite_ = cite(r"Russakovsky et al.\ (2015)", corner=DR)
+        cite_ = cite(r"Russakovsky et al.\ (2015); \ S\'anchez et al.\ (2013)", corner=DR)
         with self.voiceover(
             "By 2010 a good vision system was a pipeline. <bookmark mark='a'/> Pixels went in; hand-designed "
             "features like SIFT came out, at thousands of places; they were pooled into one long vector and handed "
-            "to a linear classifier, usually Part 6's support vector machine. <bookmark mark='b'/> Only the last box learned from the data. Everything before it was "
-            "designed by people, over decades. <bookmark mark='c'/> Systems like this won the first two ImageNet "
+            "to a linear classifier, usually Part 6's support vector machine. <bookmark mark='b'/> People designed the features. Coding could fit dictionaries or mixtures from data; the classifier "
+            "learned how to predict labels. <bookmark mark='c'/> Systems like this won the first two ImageNet "
             "contests, in 2010 and 2011, missing the right answer, in five guesses, about a quarter of the time."
         ) as vo:
             self.play(FadeIn(boxes[0]), run_time=0.6)
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(b)) for a, b in zip(arrows, boxes[1:])],
                                   lag_ratio=0.6), run_time=3.0)
             vo.wait_until("b")
-            self.play(GrowFromCenter(designed), FadeIn(dlb), GrowFromCenter(learned), FadeIn(llb))
+            self.play(GrowFromCenter(designed), FadeIn(dlb), GrowFromCenter(learned), FadeIn(llb),
+                      FadeIn(coding_note))
             vo.wait_until("c")
             self.play(FadeIn(wl), LaggedStart(*[FadeIn(w, shift=UP * 0.1) for w in win], lag_ratio=0.4),
                       FadeIn(cite_))

@@ -41,7 +41,7 @@ class Return(VoiceoverScene):
                                                                      (att[i].get_top() + att[j].get_top()) / 2 +
                                                                      UP * 0.2 * (j - i), att[j].get_top()])
                       for j in range(T) for i in range(j)])
-        al = label(r"attention: \ every position at once", font_size=22, color=ATT).next_to(att, UP, buff=0.9)
+        al = label(r"attention: \ every position at once", font_size=22, color=ATT).next_to(att, DOWN, buff=0.35)
         cmp = VGroup(label(r"training: \ $T$ steps in a row \ vs.\ one parallel step", font_size=22, color=GREY_A),
                      label(r"generating: \ a fixed-size memory \ vs.\ a cache that grows with $T$ \ (Part 15)",
                            font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (CELLC, GATEC, LSTMC, MONO, PART, load, rgb)
+from videos.ai.ai10.common import (CELLC, GATEC, LSTMC, MONO, PART, load, load_cached, read_cached_text, rgb)
 
 LM_C = C.NEURAL
 
@@ -11,14 +11,10 @@ LM_C = C.NEURAL
 def board_rows():
     """The scoreboard so far: Part 1's rows (its cache; or, where Part 1's language-model rows haven't been computed,
     the rows its counting models and compressors give), Part 7's Kneser-Ney, Part 9's neural models, and ours."""
-    from videos.ai.ai1 import compute as c1
-    from videos.ai.ai7 import compute as c7
-    from videos.ai.ai9 import compute as c9
-
     try:
-        rows = [dict(r) for r in c1.load("scoreboard")["rows"]]
+        rows = [dict(r) for r in load_cached("ai1", "scoreboard")["rows"]]
     except FileNotFoundError:
-        raw = c1.load("raw")
+        raw = load_cached("ai1", "raw")
         rows = [
             dict(key="ascii", label="plain text file", bits=8 * raw["n_bytes"] / raw["n_chars"], part=1, kind="baseline"),
             dict(key="uniform", label=f"uniform over its {raw['passage_symbols']} symbols", bits=raw["uniform"],
@@ -32,7 +28,7 @@ def board_rows():
                  kind="count"),
             dict(key="human", label="people (Shannon 1951, letters only)", lo=0.6, hi=1.3, part=1, kind="human"),
         ]
-    k, n, me = c7.load("kn"), c9.load("lm"), load("charlstm")
+    k, n, me = load_cached("ai7", "kn"), load_cached("ai9", "lm"), load("charlstm")
     i = next(j for j, r in enumerate(rows) if r["key"] == "best") + 1
     rows.insert(i, dict(key="kn", label=rf"Kneser--Ney, \ ${k['best']}$ characters", bits=k["best_bits"], part=7,
                         kind="count"))
@@ -124,34 +120,36 @@ class CharLSTM(VoiceoverScene):
         snaps = m["snaps"]
         n9, kn = load_nlm()
         S = int(m["steps"])
-        top = 5.0
+        top = max(5.0, float(np.ceil(np.max(ev[:, 1]))))
         ax = axes([0, S], [1.5, top], x_length=6.6, y_length=3.4, xlabel=r"training steps",
-                  ylabel=r"bits per character on the passage", xticks=[0, S // 2, S], yticks=[2, 3, 4, 5],
+                  ylabel=r"this run: passage bits per character", xticks=[0, S // 2, S],
+                  yticks=list(range(2, int(top) + 1, 2)),
                   center=[-2.4, 0.9, 0])
         A = ax.ax
-        l9 = DashedLine(A.c2p(0, n9), A.c2p(S, n9), color=GREY_B, stroke_width=2)
-        t9 = label(rf"Part 9's neural model: \ ${n9:.2f}$", font_size=20, color=GREY_B).next_to(l9, UP, buff=0.05)
-        t9.align_to(l9, RIGHT)
-        lk = DashedLine(A.c2p(0, kn), A.c2p(S, kn), color=C.COUNTING, stroke_width=2)
-        tk = label(rf"Part 7's Kneser--Ney: \ ${kn:.2f}$", font_size=20, color=C.COUNTING).next_to(lk, DOWN, buff=0.05)
-        tk.align_to(lk, RIGHT)
+        references = VGroup(
+            label(r"reference results", font_size=20, color=GREY_A),
+            label(rf"Part 9 neural: \ ${n9:.2f}$; \ $21{{,}}382$ targets", font_size=19, color=GREY_B),
+            label(rf"Part 7 Kneser--Ney: \ ${kn:.2f}$; \ $21{{,}}399$ targets", font_size=19, color=C.COUNTING),
+            label(r"this LSTM: \ $21{,}405$ targets", font_size=19, color=LM_C),
+            label(r"target spans and training differ", font_size=18, color=GREY_A),
+        ).arrange(DOWN, buff=0.12).move_to([4.4, 0.0, 0])
+        if references.width > 4.6:
+            references.scale_to_fit_width(4.6)
         t = ValueTracker(0.0)
 
-        def clip(y):
-            return float(np.clip(y, 1.5, top))
-
         def upto():
-            n_ = max(2, int(np.searchsorted(ev[:, 0], t.get_value(), side="right")))
-            pts = [A.c2p(x, clip(y)) for x, y in ev[:n_, :2]]
-            if n_ < len(ev):
-                x = t.get_value()
-                pts.append(A.c2p(x, clip(np.interp(x, ev[:, 0], ev[:, 1]))))
+            n_ = int(np.searchsorted(ev[:, 0], t.get_value(), side="right"))
+            pts = [A.c2p(x, y) for x, y in ev[:n_, :2]]
+            if not pts:
+                return VMobject(color=LM_C, stroke_width=4)
+            if len(pts) == 1:
+                pts.append(pts[0].copy())
             return VMobject(color=LM_C, stroke_width=4).set_points_as_corners(pts)
 
         live = always_redraw(upto)
         clock = always_redraw(lambda: VGroup(
             MathTex(rf"\text{{step }}{int(round(t.get_value())):,}".replace(",", "{,}"), font_size=28),
-            MathTex(rf"{float(np.interp(t.get_value(), ev[:, 0], ev[:, 1])):.2f}\ \text{{bits/char}}", font_size=28,
+            MathTex(rf"{float(ev[max(0, int(np.searchsorted(ev[:, 0], t.get_value(), side="right")) - 1), 1]):.2f}\ \text{{bits/char (last logged)}}", font_size=24,
                     color=LM_C)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.8, 2.0, 0]))
         panel = RoundedRectangle(width=13.0, height=1.9, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.5,
                                  fill_color="#121722", fill_opacity=1).move_to([0, -2.6, 0])
@@ -159,28 +157,25 @@ class CharLSTM(VoiceoverScene):
                    color=GREY_A).next_to(panel.get_corner(UL), DR, buff=0.12)
 
         def sample_text(s):
+            # Wrap the displayed excerpt without changing its generated characters.
             txt = " ".join(s.split())[:116]
-            g = VGroup(data_text(m["prompt"].strip(), font="DejaVu Serif", font_size=19, color=GREY_B),
-                       data_text(txt, font="DejaVu Serif", font_size=19, color=WHITE)).arrange(RIGHT, buff=0.12,
-                                                                                            aligned_edge=DOWN)
+            from textwrap import wrap
+            generated = wrap(txt, width=58, break_long_words=True, break_on_hyphens=False,
+                             replace_whitespace=False, drop_whitespace=False)
+            rows = [data_text(m["prompt"].strip(), font="DejaVu Serif", font_size=19, color=GREY_B)]
+            rows += [data_text(line, font="DejaVu Serif", font_size=19, color=WHITE) for line in generated]
+            g = VGroup(*rows).arrange(DOWN, buff=0.08, aligned_edge=LEFT)
             if g.width > 12.4:
                 g.scale_to_fit_width(12.4)
-            return g.move_to(panel.get_center() + DOWN * 0.2)
+            return g.move_to(panel.get_center() + DOWN * 0.15)
 
         cur = sample_text(snaps[0][1])
         e0 = ev[0, 1]
         pb = float(m["passage_bits"])
         i_mid = next((i for i, (s, _) in enumerate(snaps) if s >= S // 6), 2)
         mid_bits = float(np.interp(snaps[i_mid][0], ev[:, 0], ev[:, 1]))
-        if pb < kn and pb < n9:
-            end = (f"By the end, {pb:.2f} bits per character on the passage: below Part 9's neural model, and below "
-                   f"Kneser-Ney's {kn:.2f}.")
-        elif pb < n9:
-            end = (f"By the end, {pb:.2f} bits per character on the passage: below Part 9's neural model, but not "
-                   f"yet Kneser-Ney's {kn:.2f}.")
-        else:
-            end = (f"By the end, {pb:.2f} bits per character on the passage, against Part 9's {n9:.2f} and "
-                   f"Kneser-Ney's {kn:.2f}.")
+        end = (f"By the final step, this run records {pb:.2f} bits per character on its held-out target span. "
+               "The reference results use different target spans and training settings.")
         words = " ".join(snaps[i_mid][1].split()).split(" ")
         wordy = 0.1 < (len(words) - 1) / max(len(snaps[i_mid][1]), 1) < 0.3 and np.mean([len(w) for w in words]) < 9
         if wordy:
@@ -190,11 +185,11 @@ class CharLSTM(VoiceoverScene):
             mid_s = (f"After {snaps[i_mid][0]:,} steps it is at {mid_bits:.2f} bits per character, though what it "
                      "writes doesn't look like words yet.")
         with self.voiceover(
-            "Here is its training, scored as always on the scoreboard's passage from The Maltese Falcon, which it "
-            f"never sees. <bookmark mark='a'/> It starts at {e0:.1f} bits per character, a guess among "
+            "Here is its training, scored on the passage from The Maltese Falcon, which is not used for weight "
+            f"updates. <bookmark mark='a'/> It starts at {e0:.1f} bits per character, a guess among "
             f"{m['K']} symbols, writing noise. <bookmark mark='b'/> {mid_s} <bookmark mark='c'/> {end}"
         ) as vo:
-            self.play(Create(ax), Create(l9), FadeIn(t9), Create(lk), FadeIn(tk), FadeIn(panel), FadeIn(pl),
+            self.play(Create(ax), FadeIn(references), FadeIn(panel), FadeIn(pl),
                       FadeIn(cur))
             self.add(live, clock)
             vo.wait_until("a")
@@ -206,7 +201,8 @@ class CharLSTM(VoiceoverScene):
                 s_ = int(snaps[i][0])
                 self.play(t.animate.set_value(s_), run_time=0.6 + 1.4 * (s_ - int(snaps[i - 1][0])) / S)
                 nxt = sample_text(snaps[i][1])
-                self.play(FadeOut(cur), FadeIn(nxt), run_time=0.5)
+                self.play(FadeOut(cur), run_time=0.2)
+                self.play(FadeIn(nxt), run_time=0.3)
                 cur = nxt
         for mob in (live, clock):
             mob.clear_updaters()
@@ -217,32 +213,20 @@ class CharLSTM(VoiceoverScene):
     def board(self):
         rows, i, n9, kn9 = board_rows()
         board = scoreboard(rows, highlight=(i,), max_bits=8.0)
-        board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
+        board.scale_to_fit_height(min(board.height, 5.9)).move_to(DOWN * 0.45)
+        protocol = label(r"historical reference scores: \ scoring protocols and training budgets differ",
+                         font_size=23, color=GREY_A).to_edge(UP, buff=0.35)
         glow = SurroundingRectangle(board.rows[i], color=LM_C, buff=0.0, stroke_width=2.5)
         me = rows[i]["bits"]
-        above = [r for r in rows[:i] if "bits" in r]
-        best_above = min(r["bits"] for r in above)
         big = [j for j, r in enumerate(rows) if j > i and r.get("kind") == "lm" and "bits" in r]
-        lm_best = min((rows[j]["bits"] for j in big), default=None)
-        if me < best_above:
-            v = (f"{me:.2f} bits per character, better than every row above it, by {best_above - me:.2f} bits. "
-                 "The memory pays.")
-        else:
-            v = (f"{me:.2f} bits per character, {me - best_above:.2f} behind the best row above it: with the "
-                 "training we could afford here, the LSTM hasn't caught up.")
-        if lm_best is not None and lm_best < me:
-            tail = (f" The pretrained language models below it are still far ahead, down to {lm_best:.2f} bits: "
-                    "more text, more computing, and a different architecture, which is the next act's story."
-                    if me - lm_best > 0.5 else
-                    f" The pretrained language models below it are still ahead, down to {lm_best:.2f} bits, with "
-                    "far more text and computing, and a different architecture: the next act's story.")
-        else:
-            tail = " The large models of Part 1, still to be filled in on this board, show how far there is to go."
+        v = f"{me:.2f} bits per character under this run's evaluation."
+        tail = (" The other rows retain their recorded reference values. Their target spans, contexts and "
+                "training budgets differ; this board does not isolate the effect of recurrent memory.")
         with self.voiceover(
             "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: " + v + " <bookmark mark='b'/>"
             + tail
         ) as vo:
-            self.play(FadeIn(board))
+            self.play(FadeIn(board), FadeIn(protocol))
             vo.wait_until("a")
             self.play(Create(glow))
             vo.wait_until("b")
@@ -321,9 +305,7 @@ class CharLSTM(VoiceoverScene):
 
     def surprise(self):
         m = load("charlstm")
-        from videos.ai.ai1 import compute as c1
-
-        ps = c1.text("passage")
+        ps = read_cached_text("ai1", "passage")
         sp = np.asarray(m["surprise"])  # bits for each character after the first
         n = 300
         block = self.colored_text(ps[1:1 + n], sp[:n], 0.0, 8.0, cmap=("#0B0F17", C.SURPRISE))
@@ -341,8 +323,9 @@ class CharLSTM(VoiceoverScene):
         with self.voiceover(
             "And where is it surprised? Colour each character of the passage's opening by the bits it cost. "
             f"<bookmark mark='a'/> Over the whole passage, the first letter of a word costs {ws:.1f} bits on "
-            f"average; a letter inside a word, {wi:.1f}; a capital letter, {cap:.1f}. Once a word has begun, the "
-            "rest of it is nearly free. That is Part 1's guessing game, played by a machine that remembers."
+            f"average; a letter inside a word, {wi:.1f}; a capital letter, {cap:.1f}. The "
+            "remaining letters cost less on average than its first letter in this run. That is Part 1's guessing "
+            "game, played by a machine that remembers."
         ):
             self.play(FadeIn(head), FadeIn(scale), LaggedStart(*[FadeIn(r) for r in block], lag_ratio=0.2),
                       run_time=2.0)
@@ -351,10 +334,7 @@ class CharLSTM(VoiceoverScene):
 
 
 def load_nlm():
-    from videos.ai.ai7 import compute as c7
-    from videos.ai.ai9 import compute as c9
-
-    return float(c9.load("lm")["passage_bits"]), float(c7.load("kn")["best_bits"])
+    return float(load_cached("ai9", "lm")["passage_bits"]), float(load_cached("ai7", "kn")["best_bits"])
 
 
 _ = GATEC

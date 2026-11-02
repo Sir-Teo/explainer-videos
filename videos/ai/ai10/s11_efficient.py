@@ -239,13 +239,19 @@ class Efficient(VoiceoverScene):
         bars = VGroup()
         for k, (nm, a) in enumerate(CONVNEXT_STEPS):
             w = 6.0 * (a - lo) / (hi - lo)
-            b = Rectangle(width=w, height=0.36, stroke_width=0, fill_color=CNN if k == len(vals) - 1 else FMAP,
-                          fill_opacity=0.85)
             y = 2.3 - 0.52 * k
-            b.move_to([-0.8 + w / 2, y, 0])
+            b = Dot([-0.8 + w, y, 0], radius=0.065,
+                    color=CNN if k == len(vals) - 1 else FMAP)
+            guide = Line([-0.8, y, 0], [5.2, y, 0], color=GREY_D, stroke_width=0.7)
             t = label(nm, font_size=18, color=GREY_A).next_to([-0.8, y, 0], LEFT, buff=0.15)
             v = MathTex(f"{a}", font_size=22, color=WHITE).next_to(b, RIGHT, buff=0.1)
-            bars.add(VGroup(b, t, v))
+            bars.add(VGroup(guide, b, t, v))
+        scale = VGroup(Line([-0.8, 2.95, 0], [5.2, 2.95, 0], color=GREY_B, stroke_width=1.2))
+        for score in (75.0, 77.5, 80.0, 82.5):
+            px = -0.8 + 6.0 * (score - lo) / (hi - lo)
+            scale.add(Line([px, 2.89, 0], [px, 3.01, 0], color=GREY_B, stroke_width=1.2),
+                      MathTex(rf"{score:g}\%", font_size=18, color=GREY_B)
+                      .next_to([px, 3.01, 0], UP, buff=0.05))
         sx = -0.8 + 6.0 * (SWIN_T - lo) / (hi - lo)
         swin = DashedLine([sx, 2.6, 0], [sx, 2.3 - 0.52 * (len(vals) - 1) - 0.3, 0], color=ATTN_C, stroke_width=2.5)
         swl = label(rf"Swin-T, \ a vision transformer: \ ${SWIN_T}\%$", font_size=20, color=ATTN_C)
@@ -289,7 +295,7 @@ class Efficient(VoiceoverScene):
             self.play(FadeIn(whole), GrowArrow(a1), LaggedStart(*[FadeIn(t) for t in seq], lag_ratio=0.08),
                       GrowArrow(a2), FadeIn(tbox), FadeIn(sch), run_time=3.0)
             vo.wait_until("a")
-            self.play(FadeOut(vit), FadeOut(vitfig), FadeIn(head))
+            self.play(FadeOut(vit), FadeOut(vitfig), FadeIn(head), FadeIn(scale))
             self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in bars], lag_ratio=0.25), run_time=4.0)
             vo.wait_until("b")
             self.play(Create(swin), FadeIn(swl))

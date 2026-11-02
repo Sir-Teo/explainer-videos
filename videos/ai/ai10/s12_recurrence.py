@@ -95,7 +95,7 @@ class Recurrence(VoiceoverScene):
         whys = [why(r"final-state loss $L(h_T)$: \ the chain rule back through time"),
                 why(r"later Jacobians on the left; \ $a_t = W h_{t-1} + U x_t + b$"),
                 why(r"norms multiply at most; \ $|\tanh'| \le 1$")]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.6, align_index=1, edge=6.8)
+        step = ladder(self, rows, whys, keep=3, top=2.6, buff=0.3, x=-2.6, align_index=1, edge=6.8)
         cases = VGroup(label(r"$\sigma_{\max} < 1$: \ the gradient vanishes, \ exponentially fast", font_size=26,
                              color=C.TRUE_P),
                        label(r"eigenvalues $> 1$: \ it can explode", font_size=26, color=C.SURPRISE))

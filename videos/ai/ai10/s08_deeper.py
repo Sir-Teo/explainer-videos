@@ -130,14 +130,22 @@ class Deeper(VoiceoverScene):
         branches.arrange(RIGHT, buff=0.6, aligned_edge=UP).move_to([0, 0.4, 0])
         cat = box_label(r"stacked side by side", GREY_B, font_size=22).move_to([0, -1.7, 0])
         arrows = VGroup()
-        for b in branches:
+        output_y = branches.get_bottom()[1] - 0.25
+        for index, b in enumerate(branches):
             arrows.add(Arrow(inp.get_bottom(), b[0].get_top(), buff=0.08, color=GREY_C, stroke_width=2,
                              max_tip_length_to_length_ratio=0.1))
             if len(b) == 2:
                 arrows.add(Arrow(b[0].get_bottom(), b[1].get_top(), buff=0.05, color=GREY_C, stroke_width=2,
                                  max_tip_length_to_length_ratio=0.2))
-            arrows.add(Arrow(b[-1].get_bottom(), cat.get_top(), buff=0.08, color=GREY_C, stroke_width=2,
-                             max_tip_length_to_length_ratio=0.1))
+            # Keep each branch in its own column until below every convolution.
+            # Ordered entry points retain the concatenation structure without
+            # a diagonal cutting through a neighbouring branch's layer box.
+            start = b[-1].get_bottom() + DOWN * 0.06
+            bend = np.array([start[0], output_y, 0])
+            entry = cat.get_top() + RIGHT * ((index + 1) / (len(branches) + 1) - 0.5) * cat.width
+            arrows.add(VGroup(Line(start, bend, color=GREY_C, stroke_width=2),
+                              Arrow(bend, entry, buff=0.0, color=GREY_C, stroke_width=2,
+                                    max_tip_length_to_length_ratio=0.15)))
         red = VGroup(*[b[0] for b in branches[1:3]], branches[3][1])
         rl = label(r"$1 \times 1$ convolutions: \\ fewer channels first", font_size=22, color=FMAP)
         rl.next_to(branches, LEFT, buff=0.4)
@@ -193,8 +201,8 @@ class Deeper(VoiceoverScene):
         der.move_to([-3.5, -1.3, 0])
         dl = label(r"an identity path helps gradient flow: \ Part 9", font_size=22, color=GRADC).next_to(der, DOWN,
                                                                                                      buff=0.3)
-        bn = label(r"batch normalization (Ioffe \& Szegedy, 2015): \ each layer's inputs kept at mean 0, \ "
-                   r"variance 1", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
+        bn = label(r"batch normalization (Ioffe \& Szegedy, 2015): \ normalize each mini-batch; \ "
+                   r"learn scale and shift", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
         hw = label(r"highway networks, May 2015: \ the same idea with gates, \ from the LSTM (Chapter 12)",
                    font_size=20, color=GREY_B).next_to(bn, UP, buff=0.12)
         with self.voiceover(

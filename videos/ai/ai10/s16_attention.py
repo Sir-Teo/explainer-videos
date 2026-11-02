@@ -194,9 +194,11 @@ class Attention(VoiceoverScene):
         def path():
             t = steps[int(k.get_value())]
             m_ = cv[cv[:, 0] <= t]
-            if len(m_) < 2:
-                m_ = cv[:2]
-            return VMobject(color=ATT, stroke_width=3.5).set_points_as_corners([A.c2p(a, b) for a, _, b in m_])
+            points = [A.c2p(a, b) for a, _, b in m_]
+            if len(points) == 1:
+                points.append(points[0])
+            line = VMobject(color=ATT, stroke_width=3.5)
+            return line.set_points_as_corners(points) if points else line
 
         live = always_redraw(path)
         clock = always_redraw(lambda: MathTex(rf"\text{{step }}{steps[int(k.get_value())]:,}".replace(",", "{,}"),

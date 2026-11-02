@@ -120,8 +120,9 @@ class LeNet(VoiceoverScene):
         W1, A1, P = np.asarray(L["w1"]), np.asarray(L["a1"]), np.asarray(L["p"])
         digit = np.asarray(L["digit"])
         ax = axes([0, math.log10(steps[-1] + 10) + 0.05], [0, 1.0], x_length=5.6, y_length=3.4,
-                  xlabel=r"training steps ($64$ digits each)", ylabel=r"test error", xticks=[1, 2, 3],
-                  xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[0, 0.5, 1.0], yfmt=lambda v: f"{int(100 * v)}\\%",
+                  xlabel=r"training steps ($64$ digits each)", ylabel=r"test error",
+                  xticks=[math.log10(s + 10) for s in (0, 100, 1000)],
+                  xfmt=lambda v: str(int(round(10 ** v - 10))), yticks=[0, 0.5, 1.0], yfmt=lambda v: f"{int(100 * v)}\\%",
                   center=[-3.6, 0.6, 0])
         A = ax.ax
         xs = [math.log10(s + 10) for s in steps]

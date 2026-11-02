@@ -66,10 +66,10 @@
    "en": "Then came the descriptors. Cut the image into cells, and in each cell count the edges by their angle, each one weighted by its strength. <bookmark mark='a'/> Here are those counts for our digit: each star is a histogram of nine orientations, the long spokes running along the strokes. <bookmark mark='b'/> David Lowe's SIFT, published in full in 2004, found distinctive points at every scale and described each one with 128 such counts. <bookmark mark='c'/> Navneet Dalal and Bill Triggs's histograms of oriented gradients, in 2005, covered the whole window, normalized block by block, and found pedestrians. Counted like this, an image survives small shifts and changes of lighting.",
    "zh": "接着是描述子。把图像切成小格，在每一格里按角度数边缘，每条边按它的强度加权。<bookmark mark='a'/>这是我们那个数字的计数：每颗星是九个方向的直方图，长的辐条沿着笔画。<bookmark mark='b'/>大卫·罗的SIFT，2004年完整发表，在每一个尺度上找出有区分度的点，每个点用128个这样的计数来描述。<bookmark mark='c'/>纳夫尼特·达拉尔和比尔·特里格斯2005年的方向梯度直方图，覆盖整个窗口，按块归一化，用来找行人。这样数出来的图像，经得起小的平移和光照变化。"
   },
-  "7483353e36ad": {
+  "42c00676db73": {
    "scene": "Before",
-   "en": "By 2010 a good vision system was a pipeline. <bookmark mark='a'/> Pixels went in; hand-designed features like SIFT came out, at thousands of places; they were pooled into one long vector and handed to a linear classifier, usually Part 6's support vector machine. <bookmark mark='b'/> Only the last box learned from the data. Everything before it was designed by people, over decades. <bookmark mark='c'/> Systems like this won the first two ImageNet contests, in 2010 and 2011, missing the right answer, in five guesses, about a quarter of the time.",
-   "zh": "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；SIFT这样的手工特征出来，在成千上万个地方计算；它们被汇合成一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>只有最后一个方框从数据中学习。它前面的一切，都是人花了几十年设计出来的。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。"
+   "en": "By 2010 a good vision system was a pipeline. <bookmark mark='a'/> Pixels went in; hand-designed features like SIFT came out, at thousands of places; they were pooled into one long vector and handed to a linear classifier, usually Part 6's support vector machine. <bookmark mark='b'/> People designed the features. Coding could fit dictionaries or mixtures from data; the classifier learned how to predict labels. <bookmark mark='c'/> Systems like this won the first two ImageNet contests, in 2010 and 2011, missing the right answer, in five guesses, about a quarter of the time.",
+   "zh": "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；SIFT这样的手工特征出来，在成千上万个地方计算；它们被汇合成一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>特征是人设计的。编码也可以从数据中拟合词典或混合模型；分类器再学习如何预测标签。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。"
   },
   "5ef0effe2845": {
    "scene": "Before",
@@ -251,10 +251,10 @@
    "en": "Now replay the training and watch the first layer. <bookmark mark='a'/> At the start, 48 patches of noise, and 11 percent of the answers right: chance. <bookmark mark='b'/> Within 400 steps, more than half right, and the noise has begun to organize. <bookmark mark='c'/> By the end, some have become edge detectors, light against dark at one angle, and others blobs of one colour against another. Krizhevsky's paper showed the same kinds of kernel for AlexNet's 96, and the same kinds of filter are found in the visual cortex.",
    "zh": "现在重放训练过程，看第一层。<bookmark mark='a'/>一开始是48块噪声，答对11%：瞎猜的水平。<bookmark mark='b'/>不到400步，答对一半以上，噪声开始有了条理。<bookmark mark='c'/>到最后，有些变成了边缘检测器，在某一个角度上亮对暗；另一些成了一种颜色对另一种颜色的斑块。克里热夫斯基的论文给AlexNet的96个卷积核展示过同样种类的图样，视觉皮层里也能找到同样种类的滤波器。"
   },
-  "65fb0112aff1": {
+  "ffed92006ab0": {
    "scene": "Filters",
-   "en": "We can run Hubel and Wiesel's experiment on our own network. <bookmark mark='a'/> Show each filter a striped pattern, a grating, at sixteen angles, and record how strongly it answers at each one. <bookmark mark='b'/> Here are three of the filters, and their answers drawn as a shape around a circle: a long thin shape means the filter cares about one angle and ignores the one at right angles to it, like the cat's cell. <bookmark mark='c'/> Count the filters whose answer at their best angle is at least three times the answer at right angles: 14 of the 48, and 15 more respond mostly to colour. Before training, not one of them passes the same test. The tuning was learned.",
-   "zh": "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少滤波器在最佳角度的反应至少是垂直方向的三倍：48个里有14个，另外还有15个主要对颜色有反应。训练之前，它们没有一个通过同样的检验。这种方向偏好是学出来的。"
+   "en": "We can run Hubel and Wiesel's experiment on our own network. <bookmark mark='a'/> Show each filter a striped pattern, a grating, at sixteen angles, and record how strongly it answers at each one. <bookmark mark='b'/> Here are three of the filters, and their answers drawn as a shape around a circle: a long thin shape means the filter cares about one angle and ignores the one at right angles to it, like the cat's cell. <bookmark mark='c'/> Count the filters dominated by brightness whose answer at their best angle is at least three times the answer at right angles: 17 of the 48, and 14 more respond mostly to colour. Before training, not one of them passes the same test. The tuning was learned.",
+   "zh": "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少主要反映明暗的滤波器在最佳角度的反应至少是垂直方向的三倍：48个里有17个，另外还有14个主要对颜色有反应。训练之前，它们没有一个通过同样的检验。这种方向偏好是学出来的。"
   },
   "e55d866fb2d5": {
    "scene": "Filters",
@@ -281,20 +281,20 @@
    "en": "Try it on our LeNet. <bookmark mark='a'/> This is the sign of the loss's gradient for one test digit: which way each pixel should move to make the network more wrong. <bookmark mark='b'/> Add it, scaled by epsilon. At zero, the network says 7, 100 percent sure. <bookmark mark='c'/> At epsilon 0.3, it says 3, with 77 percent confidence. To a person it is still plainly a seven, in a little fog.",
    "zh": "在我们的LeNet上试试。<bookmark mark='a'/>这是一个测试数字上损失梯度的符号：每个像素往哪个方向移动，能让网络错得更厉害。<bookmark mark='b'/>乘以ε加上去。ε为零时，网络说是7，100%确定。<bookmark mark='c'/>ε为0.3时，它说是3，置信度77%。在人看来，它显然还是一个7，只是蒙了一层薄雾。"
   },
-  "886a930f315c": {
+  "523b8b38e71e": {
    "scene": "Adversarial",
-   "en": "Measure it over all ten thousand test digits. <bookmark mark='a'/> At epsilon a quarter, the linear model is wrong on 100 percent of them; Goodfellow's shallow softmax was wrong on 99.9. <bookmark mark='b'/> The networks are not much safer: LeNet, wrong on 84 percent. <bookmark mark='c'/> And one gradient step is a weak attack. Take twenty small steps instead, each projected back into the epsilon box, and at epsilon 0.2 LeNet is wrong on 99 percent. <bookmark mark='d'/> And the attacks transfer: made against the fully connected network, they fool LeNet 17 percent of the time; made against one LeNet, they fool another 27 percent of the time.",
-   "zh": "在全部一万个测试数字上量一量。<bookmark mark='a'/>ε为四分之一时，线性模型在其中100%上出错；古德费洛那个浅层softmax错了99.9%。<bookmark mark='b'/>网络也安全不了多少：LeNet错84%。<bookmark mark='c'/>而且一步梯度只是一种弱的攻击。改走二十小步，每步都投影回ε的盒子里，ε为0.2时LeNet错99%。<bookmark mark='d'/>攻击还能迁移：针对全连接网络做的改动，有17%的时候骗过LeNet；针对一个LeNet做的，有27%的时候骗过另一个。"
+   "en": "Measure the one-step attack over all ten thousand test digits. <bookmark mark='a'/> At epsilon a quarter, the linear model is wrong on 100 percent of them; Goodfellow's shallow softmax was wrong on 99.9. <bookmark mark='b'/> For LeNet, the error is 84 percent. <bookmark mark='c'/> And one gradient step is a weak attack. Take twenty small steps instead, each projected back into the epsilon box. On the first two thousand test digits with seed zero, at epsilon 0.2 LeNet is wrong on 98 percent. <bookmark mark='d'/> We also evaluate transfer: with attacks made against the fully connected network, LeNet's error is 19 percent; with attacks made against one LeNet, another LeNet's error is 29 percent.",
+   "zh": "在全部一万个测试数字上测量一步攻击。<bookmark mark='a'/>ε为四分之一时，线性模型在其中100%上出错；古德费洛那个浅层softmax错了99.9%。<bookmark mark='b'/>LeNet的错误率为84%。<bookmark mark='c'/>一步梯度只是一种弱攻击。改走二十小步，每步都投影回ε盒子里；在前两千个测试数字上，使用随机种子零，ε为0.2时LeNet错98%。<bookmark mark='d'/>我们也测量攻击的迁移：使用针对全连接网络的攻击时，LeNet的错误率为19%；使用针对一个LeNet的攻击时，另一个LeNet的错误率为29%。"
   },
-  "db74e423e1b1": {
+  "85bce9742efe": {
    "scene": "Adversarial",
-   "en": "On photographs it is worse, because a photograph has more numbers: thirty-two by thirty-two pixels, three colours each. <bookmark mark='a'/> Our CIFAR network, attacked with twenty small steps, changing no pixel by more than two grey levels out of 255: <bookmark mark='b'/> the originals, the change magnified many times, and the result, which looks identical, and which the network calls something else. <bookmark mark='c'/> At two grey levels it's wrong on 74 percent of the test photographs, against 18 percent with no attack at all.",
-   "zh": "在照片上更糟，因为一张照片有更多的数：32乘32个像素，每个三种颜色。<bookmark mark='a'/>我们的CIFAR网络，用二十小步攻击，每个像素的改动不超过255级灰度中的两级：<bookmark mark='b'/>原图，放大许多倍的改动，以及结果：看上去一模一样，网络却说是别的东西。<bookmark mark='c'/>改动两级灰度时，它在74%的测试照片上出错，而不受攻击时是18%。"
+   "en": "Now try photographs: thirty-two by thirty-two pixels, three colours each. <bookmark mark='a'/> Our CIFAR network, attacked with twenty small steps, changing no pixel by more than two grey levels out of 255: <bookmark mark='b'/> the originals, the change magnified many times, and the result, which looks identical, and which the network calls something else. <bookmark mark='c'/> At two grey levels it's wrong on 74 percent of the test photographs, against 17 percent with no attack at all.",
+   "zh": "现在试一试照片：32乘32个像素，每个有三种颜色。<bookmark mark='a'/>对我们的CIFAR网络做二十步小幅攻击，每个像素的改动不超过255级中的两级：<bookmark mark='b'/>这里是原图、放大许多倍的改动和结果；结果看上去相同，网络却判成其他类别。<bookmark mark='c'/>改动两级时，它在74%的测试照片上出错，不受攻击时是17%。"
   },
-  "c0baa1ce46ba": {
+  "3906ab701117": {
    "scene": "Adversarial",
-   "en": "The defence Goodfellow proposed: train on the attacks, making adversarial versions of every batch. <bookmark mark='a'/> We trained three LeNets that way, half clean digits and half attacked. The attacked error, red, falls along with the clean one. <bookmark mark='b'/> At epsilon 0.2, one-step attacks now fool it 16 percent of the time instead of 68. Against twenty steps it holds up too: 37 percent wrong, against 99 for the ordinary network. <bookmark mark='c'/> The clean error is 1.24 percent, against 1.22: here robustness costs almost nothing. <bookmark mark='d'/> The problem is still open, and the same search, run over words, breaks language models: Part 31.",
-   "zh": "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练了三个LeNet，一半是干净的数字，一半是受攻击的。受攻击的错误率，红色那条，跟着干净的一起下降。<bookmark mark='b'/>ε为0.2时，一步攻击现在只在16%的时候骗过它，而不是68%。面对二十步攻击它也撑住了：错37%，而普通网络错99%。<bookmark mark='c'/>干净数字上的错误率是1.24%，对比1.22%：这里鲁棒性几乎不花代价。<bookmark mark='d'/>这个问题至今没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。"
+   "en": "The defence Goodfellow proposed: train on the attacks, making adversarial versions of every batch. <bookmark mark='a'/> We trained three LeNets that way, each for three epochs, with a loss averaged equally over clean and attacked versions of each batch. On the first thousand test digits, the red one-step attacked error moves from 91 to 19 percent over the logged training steps. <bookmark mark='b'/> At epsilon 0.2, the error under one-step attacks is 16 percent, compared with 68 for ordinary training. Against twenty steps the error is 36 percent, compared with 98 for the ordinary network. These use three seeds and one seed respectively. <bookmark mark='c'/> The clean error is 1.20 percent, against 1.20: the training budgets differ, so this gap does not isolate a cost of robustness. <bookmark mark='d'/> The problem is still open, and the same search, run over words, breaks language models: Part 31.",
+   "zh": "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练三个LeNet，每个训练三个轮次；损失由每一批原始数字及其受攻击版本的损失等权平均。在前一千个测试数字上，红色的一步攻击错误率，从91%变到最后记录的训练步处的19%。<bookmark mark='b'/>ε为0.2时，一步攻击下的错误率为16%，普通训练则为68%。二十步攻击的错误率为36%，对比普通网络的98%。两者分别使用三个随机种子和一个随机种子。<bookmark mark='c'/>干净数字上的错误率为1.20%，对比1.20%：训练预算不同，因此这个差值不能单独揭示鲁棒性的代价。<bookmark mark='d'/>这个问题还没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。"
   },
   "5996013478df": {
    "scene": "Efficient",
@@ -401,25 +401,25 @@
    "en": "Now the LSTM plays the series' game: guess the next character. <bookmark mark='a'/> Each character becomes a learned vector; one layer of 512 LSTM cells reads them in order; a softmax guesses the next. 1,280,103 weights in all. <bookmark mark='b'/> We train it as Andrej Karpathy's char-rnn did in 2015: cut the thirty novels into 64 long stretches, one reader on each, 128 characters per step, the memory carried on from step to step while the gradient is cut at each step's edge. <bookmark mark='c'/> It read 19.7 million characters, about 83 percent of the books, once, in 144 minutes on this computer.",
    "zh": "现在让LSTM来玩本系列的游戏：猜下一个字符。<bookmark mark='a'/>每个字符变成一个学出来的向量；一层512个LSTM细胞按顺序读它们；一个softmax猜下一个。总共1280103个权重。<bookmark mark='b'/>我们照安德烈·卡帕西2015年的char-rnn那样训练它：把三十部小说切成64个长段，每段一个读者，每步128个字符，记忆一步一步地带下去，而梯度在每一步的边上截断。<bookmark mark='c'/>它读了19.7百万个字符，大约是这些书的83%，只读一遍，在这台计算机上用了144分钟。"
   },
-  "b7fde0b57293": {
+  "ab0464a97128": {
    "scene": "CharLSTM",
-   "en": "Here is its training, scored as always on the scoreboard's passage from The Maltese Falcon, which it never sees. <bookmark mark='a'/> It starts at 7.4 bits per character, a guess among 167 symbols, writing noise. <bookmark mark='b'/> Within 400 steps it writes words and spaces, at 2.68 bits per character. <bookmark mark='c'/> By the end, 2.21 bits per character on the passage: below Part 9's neural model, but not yet Kneser-Ney's 2.04.",
-   "zh": "这是它的训练过程，照例在记分牌那段《马耳他之鹰》上打分，它从来没见过这段文字。<bookmark mark='a'/>它从每字符7.4比特开始，在167个符号里瞎猜，写出来的是噪声。<bookmark mark='b'/>不到400步，它就能写出单词和空格，每字符2.68比特。<bookmark mark='c'/>到最后，在测试段落上是每字符2.21比特：低于第9部分的神经模型，但还没低于克内瑟-奈伊的2.04。"
+   "en": "Here is its training, scored on the passage from The Maltese Falcon, which is not used for weight updates. <bookmark mark='a'/> It starts at 7.4 bits per character, a guess among 167 symbols, writing noise. <bookmark mark='b'/> Within 400 steps it writes words and spaces, at 2.68 bits per character. <bookmark mark='c'/> By the final step, this run records 2.22 bits per character on its held-out target span. The reference results use different target spans and training settings.",
+   "zh": "这是它的训练过程，在《马耳他之鹰》的段落上打分；这段文字不用于更新权重。<bookmark mark='a'/>它从每字符7.4比特开始，在167个符号里猜，写出来的是噪声。<bookmark mark='b'/>不到400步，它就能写出单词和空格，每字符2.68比特。<bookmark mark='c'/>到最后一步，这次运行在其留出的预测目标上记录了每字符2.22比特。参考结果使用不同的预测目标范围和训练设置。"
   },
-  "9b80473569aa": {
+  "32761d3fe96a": {
    "scene": "CharLSTM",
-   "en": "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: 2.21 bits per character, 0.22 behind the best row above it: with the training we could afford here, the LSTM hasn't caught up. <bookmark mark='b'/> The pretrained language models below it are still far ahead, down to 0.87 bits: more text, more computing, and a different architecture, which is the next act's story.",
-   "zh": "记分牌上，新的一行。<bookmark mark='a'/>我们的字符级LSTM：每字符2.21比特，比上面最好的一行差0.22：以我们在这里负担得起的训练量，LSTM还没追上。<bookmark mark='b'/>下面那些预训练的语言模型仍然遥遥领先，最好的低到0.87比特：更多的文本，更多的算力，和不同的架构，那是下一幕的故事。"
+   "en": "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: 2.22 bits per character under this run's evaluation. <bookmark mark='b'/> The other rows retain their recorded reference values. Their target spans, contexts and training budgets differ; this board does not isolate the effect of recurrent memory.",
+   "zh": "记分牌上，新的一行。<bookmark mark='a'/>我们的字符级LSTM：按照本次运行的评测方式，每字符2.22比特。<bookmark mark='b'/>其他行保留原来记录的参考值。它们的预测目标范围、上下文和训练预算不同；这张表不能单独揭示循环记忆的影响。"
   },
   "325aca8d4329": {
    "scene": "CharLSTM",
    "en": "What has it learned to remember? Look at single cells, as Karpathy, Justin Johnson and Fei-Fei Li did in 2015. <bookmark mark='a'/> One of its 512 cells does something nobody asked for: it switches on at an opening quotation mark and off at the closing one. Over the whole passage its value follows \"inside a quotation\" with a correlation of 0.86. <bookmark mark='b'/> To close the quotation it must remember that one is open, maybe for lines. In 2017 Alec Radford and colleagues at OpenAI trained a bigger one on Amazon reviews and found a single cell that tracked whether a review was positive.",
    "zh": "它学会了记住什么？像卡帕西、贾斯廷·约翰逊和李飞飞在2015年做的那样，看单个的细胞。<bookmark mark='a'/>它的512个细胞里，有一个做了没人要求它做的事：它在开引号处打开，在闭引号处关上。在整段文字上，它的值跟“在引号里”的相关系数是0.86。<bookmark mark='b'/>要合上引号，它就得记住有一个引号是开着的，也许要记好几行。2017年，OpenAI的亚历克·拉德福德和同事在亚马逊评论上训练了一个更大的，找到了一个单独的细胞，它跟踪着评论是不是正面的。"
   },
-  "3a40af83a7fe": {
+  "f2fb90dc71bc": {
    "scene": "CharLSTM",
-   "en": "And where is it surprised? Colour each character of the passage's opening by the bits it cost. <bookmark mark='a'/> Over the whole passage, the first letter of a word costs 4.1 bits on average; a letter inside a word, 1.9; a capital letter, 5.3. Once a word has begun, the rest of it is nearly free. That is Part 1's guessing game, played by a machine that remembers.",
-   "zh": "它在哪里会吃惊？把段落开头的每个字符按它花掉的比特数上色。<bookmark mark='a'/>在整段文字上，一个单词的第一个字母平均花4.1比特；单词里面的字母，1.9比特；大写字母，5.3比特。单词一旦开了头，剩下的几乎是白送的。这就是第1部分的猜字游戏，由一台会记忆的机器来玩。"
+   "en": "And where is it surprised? Colour each character of the passage's opening by the bits it cost. <bookmark mark='a'/> Over the whole passage, the first letter of a word costs 4.1 bits on average; a letter inside a word, 1.9; a capital letter, 5.3. The remaining letters cost less on average than its first letter in this run. That is Part 1's guessing game, played by a machine that remembers.",
+   "zh": "它在哪里会吃惊？把段落开头的每个字符按它花掉的比特数上色。<bookmark mark='a'/>在整段文字上，一个单词的第一个字母平均花4.1比特；单词里面的字母，1.9比特；大写字母，5.3比特。在这次运行中，单词内部字母的平均代价低于首字母。这就是第1部分的猜字游戏，由一台会记忆的机器来玩。"
   },
   "9a48c56dc61f": {
    "scene": "Seq2Seq",
@@ -446,10 +446,10 @@
    "en": "Writing the most probable output exactly would mean searching every possible sequence. Greedy decoding takes the single best word at each step instead. <bookmark mark='a'/> Beam search keeps a few of the best partial outputs at every step, extends each, and keeps the best of those: a cheap compromise. <bookmark mark='b'/> On our character LSTM, from the same prompt: greedy decoding writes text that costs 147 bits under the model, a beam of eight finds text costing 109, and a random sample costs 240. <bookmark mark='c'/> But look at the most probable text: it goes round in circles, what Ari Holtzman and colleagues later called neural text degeneration; for open-ended writing, sampling is used instead.",
    "zh": "要精确地写出概率最大的输出，就得搜索所有可能的序列。贪心解码则在每一步只取最好的那一个词。<bookmark mark='a'/>束搜索在每一步保留几个最好的部分输出，各自往下延伸，再留下其中最好的：一种便宜的折中。<bookmark mark='b'/>在我们的字符级LSTM上，从同一个提示出发：贪心解码写出的文字在模型下要花147比特，宽度为8的束搜索找到的文字花109比特，随机采样的花240比特。<bookmark mark='c'/>但看看概率最大的文字：它在原地兜圈子，阿里·霍尔茨曼和同事后来把这叫作神经文本退化；所以开放式的写作改用采样。"
   },
-  "f2f252894ba2": {
+  "b50120f41ec8": {
    "scene": "Seq2Seq",
-   "en": "We built a small encoder-decoder, and gave it a job with no ambiguity: write a string of letters backwards. <bookmark mark='a'/> It trained on strings of 3 to 20 letters, three times from different starts. <bookmark mark='b'/> Short strings come out right. Past about 9 letters, fewer than half do, and outside the lengths it trained on, almost none: one vector can't hold them all. <bookmark mark='c'/> A beam of four helps a little, by up to 2 points. The whole input has to squeeze through the encoder's last state: a bottleneck, and the longer the input, the worse it gets.",
-   "zh": "我们搭了一个小的编码器-解码器，给它一个毫无歧义的任务：把一串字母倒过来写。<bookmark mark='a'/>它在3到20个字母的字符串上训练，从不同的起点训练了三次。<bookmark mark='b'/>短的字符串能写对。超过大约9个字母，就不到一半能写对；超出训练过的长度，几乎全错：一个向量装不下它们。<bookmark mark='c'/>宽度为4的束搜索有一点帮助，最多提高2个百分点。整个输入都得挤过编码器的最后一个状态：一个瓶颈，输入越长，情况越糟。"
+   "en": "We built a small encoder-decoder, and gave it a job with no ambiguity: write a string of letters backwards. <bookmark mark='a'/> It trained on strings of 3 to 20 letters, three times from different starts. <bookmark mark='b'/> Short strings come out right. Past about 9 letters, fewer than half do, and outside the lengths it trained on, almost none: this trained model struggles as strings grow. <bookmark mark='c'/> In this small seed-zero sample, a beam of four improves accuracy by up to 2.5 percentage points. This model passes input information through the encoder's final state. Here its reversal accuracy falls as inputs grow.",
+   "zh": "我们搭了一个小的编码器-解码器，给它一个没有歧义的任务：把字母串倒过来写。<bookmark mark='a'/>它在3到20个字母的字符串上训练，从不同起点训练三次。<bookmark mark='b'/>短的字符串能写对。超过大约9个字母，就不到一半能写对；超出训练过的长度，几乎都写不对：这个训练后的模型难以处理更长的字符串。<bookmark mark='c'/>在这个小样本中，使用随机种子零，宽度为4的束搜索最多提高2.5个百分点。这个模型通过编码器的最后一个状态传递输入信息。在这里，输入变长时，它的倒序准确率下降。"
   },
   "7d9bcc3b332f": {
    "scene": "Seq2Seq",
