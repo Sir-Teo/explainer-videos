@@ -189,13 +189,13 @@ class Industry(VoiceoverScene):
     def desks(self):
         cards = VGroup(
             definition_card(r"Risk desks at banks", r"report expected shortfall at 97.5\%, on stressed data, and hold "
-                            r"capital against it: the tail, priced in capital", width=4.2, color=TAIL, font_size=22,
+                            r"capital against it: the tail, priced in capital", width=4.3, color=TAIL, font_size=25,
                             kind=r"Who prices the tails"),
             definition_card(r"Exchanges and clearing houses", r"halt trading on large falls and size margin for "
-                            r"them: Part 2 measured how often margin arrives too late", width=4.2, color=VOL,
-                            font_size=22, kind=r"Who prices the tails"),
+                            r"them: Part 2 measured how often margin arrives too late", width=4.3, color=VOL,
+                            font_size=25, kind=r"Who prices the tails"),
             definition_card(r"Options desks", r"charge more for crash protection than a bell curve says: the skew "
-                            r"of Parts 10 to 12", width=4.2, color=LOSS, font_size=22, kind=r"Who prices the tails"),
+                            r"of Parts 10 to 12", width=4.3, color=LOSS, font_size=25, kind=r"Who prices the tails"),
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         cards.move_to(ORIGIN)
         if cards.width > 13.0:
