@@ -218,6 +218,7 @@ class Numeraire(VoiceoverScene):
             "Pause and predict. Under the stock's own measure, does the stock drift faster or slower "
             "than the riskless rate? <bookmark mark='a'/> Faster, by sigma squared: weighting paths "
             "by where they end tilts the drift up."
+            " Next: reading Q's whole distribution straight from option prices."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

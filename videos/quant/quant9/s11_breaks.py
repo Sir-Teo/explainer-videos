@@ -189,6 +189,7 @@ class Breaks(VoiceoverScene):
             "wait? <bookmark mark='a'/> The short leg was scarce, costly and recallable, and "
             "convergence has no deadline: in thirty percent of eighty-two negative stubs from 1985 to "
             "2000, the link was severed before the gap closed."
+            " Next: the rule behind every one of these trades, seen as geometry."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

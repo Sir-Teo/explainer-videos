@@ -127,10 +127,12 @@ class Orders(VoiceoverScene):
         Q = np.asarray(bk["Q"], float)
         W = np.asarray(bk["walk"], float)
         uni = np.asarray(bk["walk_uniform"], float)
-        g = axes([0, 40], [0, 9.5], x_length=6.2, y_length=3.0, xlabel=r"market buy size $Q$, shares",
+        g = axes([0, 40], [0, 9.5], x_length=6.6, y_length=4.4, xlabel=r"market buy size $Q$, shares",
                  ylabel=r"average price above the best ask, ticks", xticks=[0, 20, 40], yticks=[0, 4, 8],
-                 font_size=17).to_edge(DOWN, buff=0.4).to_edge(LEFT, buff=0.8)
+                 font_size=17).to_edge(DOWN, buff=0.5).to_edge(LEFT, buff=0.8)
         ax = g.ax
+        recap = row(r"\bar p - m", r"=", r"\frac{s}{2} + \frac{\delta}{2}\Big(\frac{Q}{d} - 1\Big)").scale(0.8)
+        recap.to_edge(UP, buff=0.45)
         sb = seed_band(ax, Q, W, QC.IDEA)
         ul = DashedLine(ax.c2p(Q[0], uni[0]), ax.c2p(Q[-1], uni[-1]), color=GREY_B, stroke_width=2.5)
         leg = legend([(QC.IDEA, r"zero-intelligence book, 4 seeds"),
@@ -157,6 +159,7 @@ class Orders(VoiceoverScene):
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
+            self.play(*[FadeOut(m) for m in self.mobjects], FadeIn(recap))
             self.play(FadeIn(g), FadeIn(leg))
             self.play(Create(ul), FadeIn(sb[0]), Create(sb[1]), run_time=2)
             self.play(FadeIn(verdict))

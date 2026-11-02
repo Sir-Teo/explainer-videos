@@ -219,6 +219,7 @@ class Incomplete(VoiceoverScene):
         with self.voiceover(
             "Pause and predict. Add a fourth state at a hundred and ten. Does the interval change? "
             "<bookmark mark='a'/> No: its payoff, ten, lies under the lid and above the floor."
+            " Next: how traded options narrow the interval."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

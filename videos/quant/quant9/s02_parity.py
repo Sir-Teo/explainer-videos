@@ -236,6 +236,7 @@ class Parity(VoiceoverScene):
         with self.voiceover(
             "Pause and predict. If the put were eight, which legs flip? <bookmark mark='a'/> All "
             "four: buy the call, sell the put, short the stock and lend: a dollar in hand today."
+            " In theory parity cannot fail. Next: the days it did."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

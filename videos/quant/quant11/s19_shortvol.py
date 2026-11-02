@@ -154,6 +154,7 @@ class ShortVol(VoiceoverScene):
             "Move the hedge from twenty to forty percent out of the money and its price, which was already tiny, "
             "becomes nothing, and so does its payoff in a thirty-five percent crash. The premium of chapter six is "
             "paid for exactly the months the hedge was supposed to cover."
+            " Next: who makes options markets for a living."
         ) as vo:
             step(0)
             vo.wait_until("a")

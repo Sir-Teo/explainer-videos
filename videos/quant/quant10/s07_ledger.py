@@ -254,6 +254,7 @@ class Ledger(VoiceoverScene):
             f"{-rows[2]['mean']:.2f} on average. At twenty the average is {rows[1]['mean']:+.2f}, with a spread of "
             f"{rows[1]['sd']:.2f} from hedging four times a day: chapter nine. The profit is the gap between two "
             "volatilities, one quoted, one lived."
+            " But which volatility do you hedge with? Next: hedging with the wrong one."
         ):
             self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.2) for p in panels], lag_ratio=0.4, run_time=3),
                       FadeIn(cap))

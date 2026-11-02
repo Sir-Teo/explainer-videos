@@ -229,6 +229,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             f"{e['vega']:,.0f}. <bookmark mark='b'/> Then the cross terms: vanna {e['vanna']:+,.0f}, because spot "
             "and volatility fell together; volga a few dollars. <bookmark mark='c'/> The full revaluation lost "
             f"{-e['actual']:,.0f}, and {branch} When the explain fails, a desk has a risk it is not measuring."
+            " Gamma is the term worth watching. Next: trading it on a real path."
         ) as vo:
             self.play(FadeIn(g), Create(z), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")

@@ -229,6 +229,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
             f"{wsay} The butterfly stayed positive: the wings always cost more than the middle. A trader who sells a "
             "risk reversal is selling vanna; one who sells a butterfly is selling volga. Part twelve models how the "
             "whole smile moves."
+            " Every strategy is a mix of these Greeks. Next: the strategies, and what each paid."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(z), FadeIn(leg), FadeIn(src))
             self.add(l1, l2, l3)

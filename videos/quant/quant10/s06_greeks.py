@@ -222,6 +222,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             "times S squared gamma: gamma, theta and vega are one bump seen three ways. Long an option is long "
             "gamma, short theta, long vega; the second-order Greeks, vanna and volga, come with the smile in Part "
             "eleven."
+            " Next: where those Greeks turn into money, in the hedger's ledger."
         ) as vo:
             self.play(FadeIn(pv), LaggedStart(*[Create(l) for l in lines], lag_ratio=0.4), FadeIn(tl))
             vo.wait_until("a")

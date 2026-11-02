@@ -194,6 +194,7 @@ class Heat(VoiceoverScene, ThreeDScene):
             f"{int(-np.floor(np.log10(h['max_err']))) - 1} decimal places: the same number, by integration and by "
             "formula. And the convolution prices payoffs the formula was never written for, "
             "which is why the heat equation, not the formula, is the workhorse of Part sixteen."
+            " The equation has a second reading: the price is an expectation. Next."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

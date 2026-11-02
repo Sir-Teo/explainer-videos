@@ -178,7 +178,8 @@ class Discrete(VoiceoverScene):
             f"{J.mean(0)[0]:.2f} to {J.mean(0)[-1]:.2f}. "
             + f"{floor_phrase} and the floor is the jump term: a jump of size J costs half gamma S squared J squared however "
             f"often you rebalance, which by itself leaves {jf['floor']:.2f}. Hedging frequency buys you nothing "
-            "against a gap. Part eleven measures it on Bitcoin's real jumps; Part thirteen prices them."
+            "against a gap. Part eleven measures it on Bitcoin's real jumps; Part thirteen prices them. And every "
+            "step costs money. Next: Leland's answer."
         ) as vo:
             self.play(FadeIn(g), FadeIn(bg), FadeIn(leg[0]))
             vo.wait_until("a")

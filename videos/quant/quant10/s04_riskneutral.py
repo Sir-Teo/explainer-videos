@@ -244,6 +244,7 @@ class RiskNeutral(VoiceoverScene):
             "worth that real chance of anything? No: Q's probabilities are prices, not forecasts. "
             f"<bookmark mark='a'/> N of d one is the delta, {d['N_d1']:.3f} shares. Hold N of d one shares, "
             "borrow K e to the minus r T times N of d two, and the portfolio is the option."
+            " Next: the same expectation on a tree, and its limit."
         ) as vo:
             self.play(FadeIn(g), Create(line), Create(kline), FadeIn(klab))
             self.play(FadeIn(area), FadeIn(top[0]))

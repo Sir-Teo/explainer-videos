@@ -222,6 +222,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
             f"{w['corr_rv']:.2f}, loose. <bookmark mark='a'/> Against the gamma-weighted formula from each path's "
             f"own variance: {w['corr_pred']:.2f}, on the diagonal. The formula explains essentially every dollar; "
             "pay plain variance with no gamma weight and you have a variance swap, Part twelve."
+            " All of this assumed continuous hedging. Next: hedging in steps."
         ) as vo:
             self.play(FadeIn(left), Create(be), FadeIn(params))
             self.play(LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.001, run_time=2.5), FadeIn(c1))

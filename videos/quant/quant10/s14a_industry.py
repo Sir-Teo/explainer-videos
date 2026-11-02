@@ -169,6 +169,7 @@ class Industry(VoiceoverScene):
             "formula: Deribit quotes Black-76 in coin, and Coinbase completed its two point nine billion dollar "
             "purchase in August 2025; options on BlackRock's Bitcoin fund opened on Nasdaq on the nineteenth of "
             "November 2024 with three hundred and fifty-three thousand contracts on day one."
+            " Last, the frontier."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[:4]], lag_ratio=0.5, run_time=5))
             vo.wait_until("a")

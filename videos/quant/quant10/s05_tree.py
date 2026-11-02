@@ -244,6 +244,7 @@ class Tree(VoiceoverScene, ThreeDScene):
             "The House's tree is one loop backwards from expiry, plus one line for chapter fourteen's American "
             f"option. <bookmark mark='a'/> Four steps: {lab['4']:.4f}. Sixty-four: {lab['64']:.4f}. Four hundred: "
             f"{lab['400']:.4f}; the formula, {t3['exact']:.4f}. Three roads, one formula."
+            " With the price reached by three roads, next: how it moves, the Greeks."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

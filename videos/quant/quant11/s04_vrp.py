@@ -186,6 +186,7 @@ class VRP(VoiceoverScene):
             "survives a month twice as bad. That is why traders bet a fraction of Kelly. And pause and predict: an edge "
             "with a t of two point four on forty-three months; lever it five times? No: the trial counter, and the "
             "tail you have not seen yet."
+            " The steadiest way to earn a premium is to quote both sides. Next: making a market."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(eqs[0]), FadeIn(eqs[1]), FadeIn(gk), FadeIn(gkl))
             vo.wait_until("a")

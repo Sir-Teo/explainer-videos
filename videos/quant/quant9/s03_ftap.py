@@ -231,6 +231,7 @@ class FTAP(VoiceoverScene):
             "Pause and predict. Add a state between every two. For which stock prices between eighty "
             "and a hundred and twenty-five does the program stop finding state prices? <bookmark "
             "mark='a'/> None: new states add arrows between the extremes, so the cone never shrinks."
+            " The theorem's prices go by three names. Next: state prices, the discount factor, and Q."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

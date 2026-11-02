@@ -275,6 +275,7 @@ class StatePrices(VoiceoverScene):
             "Pause and predict. Q gives a crash twice P's probability. Is the discount factor there "
             "above or below one over one plus r? <bookmark mark='a'/> Above: twice as high. Where Q "
             "is heavier than P, a dollar is dear."
+            " Next: pricing with Q over many steps, the binomial tree."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

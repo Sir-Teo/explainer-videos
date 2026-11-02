@@ -182,6 +182,7 @@ class Completing(VoiceoverScene):
             "completely? <bookmark mark='a'/> Two strikes with no state between them, bracketing the "
             "jump: their scaled call spread is the digital in every state. With calls at one point "
             "one and one point one two, the program's interval has width zero."
+            " Next: the same ideas in continuous time."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

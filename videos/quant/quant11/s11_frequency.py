@@ -190,6 +190,7 @@ class Frequency(VoiceoverScene):
             "<bookmark mark='d'/> Pause and predict: if Bitcoin trended within the day, would hedging more often "
             "help a long-gamma trader? No: with positive autocorrelation the daily hedger lets the trend run, and "
             "collects more."
+            " Delta and gamma are the price risks. Next: the volatility risks, vega, vanna and volga."
         ) as vo:
             step(0)
             vo.wait_until("a")

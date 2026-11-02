@@ -238,6 +238,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
             f"predicted sign {100 * ds['share_right_sign']:.0f} percent of the time. <bookmark mark='b'/> On the left, "
             "where realized correlation came in above implied, it loses. That is a crash: everything falls together. "
             "Dispersion earns the correlation premium by being short a crash."
+            " Next: the world's largest options market by contracts, and who trades it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(eqs))
             vo.wait_until("a")

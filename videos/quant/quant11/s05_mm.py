@@ -228,6 +228,7 @@ class MarketMaker(VoiceoverScene):
             f"later {cb[3]:.2f}. The market maker is right to charge them more. "
             "<bookmark mark='c'/> So, pause and predict: your quote is hit, and the market moves against you. Too "
             "narrow, or too wide? Narrow, if it happens every time: that is adverse selection, priced too cheaply."
+            " Every fill leaves inventory. Next: what to do with it."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

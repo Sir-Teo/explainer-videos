@@ -170,6 +170,7 @@ class Industry(VoiceoverScene):
             "one, and chase anything unexplained. <bookmark mark='c'/> Around the loop, the venue's rules shape the "
             "trade: how expiries settle, what margins and position limits apply, and which indices the exchange "
             "publishes."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(boxes[0]))
             vo.wait_until("a")

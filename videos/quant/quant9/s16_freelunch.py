@@ -230,6 +230,7 @@ class FreeLunch(VoiceoverScene):
             "Pause and predict. The doubler costs nothing and never loses at the end. Why is it not "
             "an arbitrage? <bookmark mark='a'/> It is not admissible: it needs unlimited credit on "
             "the way, and with bounded losses it is no longer sure to win."
+            " Q prices in units of cash. Next: pricing in any unit you like."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

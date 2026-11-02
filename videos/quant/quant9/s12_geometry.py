@@ -188,6 +188,7 @@ class Geometry(VoiceoverScene, ThreeDScene):
             "<bookmark mark='a'/> Yes: short a share, hold a hundred and twenty-five in bonds. It "
             "costs nothing and pays forty-five, twenty-five or zero. A state price of zero is not "
             "positive enough."
+            " Next: the theorem that says exactly when no such trade exists, proved."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

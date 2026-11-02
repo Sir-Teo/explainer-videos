@@ -176,6 +176,7 @@ class Strategies(VoiceoverScene, ThreeDScene):
             f"white medians: {med_say} The yellow means sit higher, pulled up by the rare large wins, the tails. "
             f"<bookmark mark='c'/> {rr_say} <bookmark mark='d'/> {tsay} Two years of one asset in a rising market can show what the shapes do; it cannot show that any of "
             "them has an edge."
+            " Behind those shapes is one persistent number. Next: the volatility premium."
         ) as vo:
             self.play(FadeIn(g), Create(z), FadeIn(names), FadeIn(src))
             vo.wait_until("a")

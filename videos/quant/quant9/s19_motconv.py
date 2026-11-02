@@ -217,6 +217,7 @@ class MOTConverge(VoiceoverScene):
             "Pause and predict. As the grid gets finer, can the upper bound fall? <bookmark "
             "mark='a'/> A little, since rebinning changes the marginals; mostly the band widens "
             "toward its limit."
+            " Next: how arbitrage is traded, and why it is limited."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

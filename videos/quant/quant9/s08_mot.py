@@ -247,6 +247,7 @@ class MOT(VoiceoverScene, ThreeDScene):
             "fix both."
             " So the square's band has width zero, and any dealer quoting a different price can be "
             "arbitraged with vanillas alone."
+            " Next: those bounds, computed on real data."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

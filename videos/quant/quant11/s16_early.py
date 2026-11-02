@@ -201,6 +201,7 @@ class Early(VoiceoverScene):
             f"of the forgotten value. In this draw, {L['mine_free']} of the player's shorts escaped. "
             "<bookmark mark='c'/> Veronika Pool, Hans Stoll and Robert Whaley documented the forgotten money in 2008, "
             "and Jia Hao, Avner Kalay and Stewart Mayhew the volume spike it draws."
+            " Next: options on an index against options on its members, and the correlation between them."
         ) as vo:
             self.play(FadeIn(cells), FadeIn(leg[:2]), FadeIn(src))
             vo.wait_until("a")

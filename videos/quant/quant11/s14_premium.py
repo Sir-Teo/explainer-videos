@@ -169,6 +169,7 @@ class Premium(VoiceoverScene):
             "volatility are paid for bearing variance risk, which explodes in crashes, exactly when money is worth "
             "most. <bookmark mark='d'/> Pause and predict: if it is so reliable, why doesn't everyone sell straddles? "
             "Chapter sixteen answers with two funds that did."
+            " First, what an edge is worth, and how much to bet on it. Next."
         ) as vo:
             step(0)
             vo.wait_until("a")

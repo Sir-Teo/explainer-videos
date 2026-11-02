@@ -224,6 +224,7 @@ class Crash(VoiceoverScene):
             "chapter twelve, born here. <bookmark mark='a'/> The sociologist Donald MacKenzie read the episode as a "
             "case of performativity: for fourteen years the formula helped make the market look like the formula, "
             "and then, in one day, the market stopped looking like it. Part twelve is about that skew."
+            " Ten years later two of its makers won the Nobel prize; a year after that, the fund they helped run collapsed. Next."
         ) as vo:
             self.play(FadeIn(g), Create(l0), FadeIn(leg[0]), FadeIn(sch))
             self.play(Create(l1), FadeIn(leg[1]))

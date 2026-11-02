@@ -220,6 +220,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
             f"predicts. At the Friday expiries, {100 * f8['share']:.1f} percent; at the monthly expiries "
             f"{100 * mo['share']:.1f}; an hour before expiry, {100 * f7['share']:.1f}, no different from chance. "
             f"{verdict}"
+            " Some options never reach expiry. Next: early exercise, and the money it leaves behind."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

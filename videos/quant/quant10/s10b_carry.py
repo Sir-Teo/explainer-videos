@@ -215,6 +215,7 @@ class Carry(VoiceoverScene):
             f"the puts' too low: at {mid['days']:.0f} days by {mid['calls']:+.1f} and {mid['puts']:+.1f} points, at "
             f"{last['days']:.0f} days by {last['calls']:+.1f} and {last['puts']:+.1f}. A skew, made of pure "
             "bookkeeping, growing with maturity. Problem seven asks you to estimate it by hand."
+            " Carry also decides when to exercise early. Next."
         ) as vo:
             self.play(FadeIn(title), FadeIn(top), FadeIn(leg1), Create(basis))
             self.play(LaggedStart(*[FadeIn(x, scale=1.5) for x in dots], lag_ratio=0.15, run_time=2.5))

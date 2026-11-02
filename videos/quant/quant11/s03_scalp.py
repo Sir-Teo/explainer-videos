@@ -232,6 +232,7 @@ class Scalp(VoiceoverScene, ThreeDScene):
             "variance swap, which Part twelve builds. <bookmark mark='c'/> And here is the House's ledger that did "
             "all this accounting: each hour, the mark-to-market of the step, the gamma term and the theta term. "
             f"Run on the May path, gamma {s['gamma'][-1]:+.1f}, theta {s['theta'][-1]:+.1f}, net {s['pnl']:+.1f}."
+            " Scalping means hedging. Next: how often."
         ) as vo:
             step(0)
             vo.wait_until("a")

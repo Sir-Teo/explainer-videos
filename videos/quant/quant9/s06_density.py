@@ -265,6 +265,7 @@ class Density(VoiceoverScene):
             "Pause and predict. A butterfly is offered at minus point one. What do you trade, and "
             "what can go wrong? <bookmark mark='a'/> Buy it: you are paid to own a payoff that is "
             "never negative. The risk is execution: all three legs at those prices at once."
+            " Next: the density on the real Surface."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -270,6 +270,7 @@ class Ross(VoiceoverScene):
             "Pause and predict. Recovery gives a gloomy distribution. Is that evidence of investor "
             "pessimism? <bookmark mark='a'/> No: a permanent component tilts it the same way. Prices "
             "cannot separate beliefs from risk adjustment."
+            " If the vanillas cannot pin down beliefs, what can they pin down? Next: bounds without a model."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -231,6 +231,7 @@ class Industry(VoiceoverScene):
             "Pause and predict. A trade is certain to converge. What decides whether it can still "
             "ruin you? <bookmark mark='a'/> Your funding horizon against the time to convergence, "
             "given the losses on the way."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

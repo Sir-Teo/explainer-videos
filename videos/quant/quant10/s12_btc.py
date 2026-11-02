@@ -237,6 +237,7 @@ class BTC(VoiceoverScene):
             f"{100 * b['worst_rv']:.0f} percent; the seller lost {-b['worst']:.2f}. Many small gains, and an "
             "occasional large loss exactly when everything else is losing: Part twelve's Volmageddon is the same "
             "story with leverage."
+            " The formula's worst day came long before Bitcoin. Next: October 1987."
         ):
             self.play(FadeIn(card, shift=UP * 0.2))
             self.play(LaggedStart(*[Indicate(s, color=QC.CRISIS) for s in card.stats], lag_ratio=0.4))

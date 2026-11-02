@@ -136,6 +136,7 @@ class LTCM(VoiceoverScene):
             "trading, that you can fund the position until it converges, and that the others are not all doing "
             "the same trade. 1987 broke the first. 1998 broke all three. Part forty-one tells the story with the "
             "data: margin spirals, fire sales, and why liquidity is the risk factor no formula prices."
+            " Next: the formula at work today."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

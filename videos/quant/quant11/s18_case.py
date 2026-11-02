@@ -180,6 +180,7 @@ class Case(VoiceoverScene, ThreeDScene):
             "had exchanges check every entity's intraday index-option position, measured in delta, against a net "
             "limit of five thousand crore rupees. What tells manipulation from hedging is intent and pattern: for "
             "the regulator and the tribunal to weigh."
+            " Next: what happens when short volatility blows up."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.2)
             self.play(Create(sf), FadeIn(eqs[0]), FadeIn(eqs[2]), run_time=2.5)

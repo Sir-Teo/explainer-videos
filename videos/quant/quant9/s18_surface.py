@@ -225,6 +225,7 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             "agree? <bookmark mark='a'/> Not necessarily. The quotes stop where trading stops; beyond the last "
             "strike, every specification extrapolates in its own way, and the tail probability is mostly "
             "extrapolation."
+            " This is Q's density. Can we recover P's? Next: Ross recovery."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

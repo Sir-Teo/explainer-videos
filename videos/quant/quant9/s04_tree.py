@@ -243,6 +243,7 @@ class Tree(VoiceoverScene):
             "Pause and predict. Why the zigzag between odd and even steps? <bookmark mark='a'/> With "
             "even N a node sits on the strike, at the payoff's kink; with odd N the strike falls "
             "between nodes, and the error changes sign."
+            " The tree works because every payoff can be replicated. Next: what happens when it can't."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

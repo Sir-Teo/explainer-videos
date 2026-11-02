@@ -212,6 +212,7 @@ class Continuous(VoiceoverScene):
             f"<bookmark mark='a'/> They collapse: the effective sample falls to about {100 * g['ess60_pred']:.1f} "
             f"percent, measured {100 * g['ess60']:.1f}. A few paths carry the price, which is why "
             "pricers simulate under Q."
+            " Continuous time brings new ways to cheat. Next: free lunches, doubling and bubbles."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

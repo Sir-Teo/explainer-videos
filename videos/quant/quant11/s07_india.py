@@ -162,6 +162,7 @@ class India(VoiceoverScene):
             "agree. <bookmark mark='c'/> And pause and predict: nine in ten lose. Does that prove the options were "
             "overpriced? No: a fair lottery also loses most of the time. The premium-weighted return answers that "
             "question, and it was negative."
+            " Next: a case from that market, as alleged by its regulator."
         ) as vo:
             step(0)
             vo.wait_until("a")

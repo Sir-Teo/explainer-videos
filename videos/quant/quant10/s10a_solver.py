@@ -226,6 +226,7 @@ class Solver(VoiceoverScene, ThreeDScene):
             f"{r['naive_broke']} quotes are thrown to infinity or below zero, {r['naive_unfinished']} never "
             "return. Pause and predict: a far out-of-the-money quote one hundredth of a percent of the forward too "
             f"high. How wrong is its volatility? On the slowest quote, {100 * r['tick_shift']:.0f} points."
+            " Next: the solver, run on a real smile."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right), FadeIn(truth), FadeIn(leg[0]))
             dh, eh = dots(H, IMP), err(hm, IMP)

@@ -175,6 +175,7 @@ class Implied(VoiceoverScene, ThreeDScene):
             "same numbers. One more number for later: Deribit's own volatility index, DVOL, computed the way the "
             f"VIX is, stood at {100 * d['dvol_ref']:.1f} percent that morning, a little above the at-the-money "
             f"thirty-day volatility, {100 * d['atm30']:.1f}, because it includes the smile's wings."
+            " Part of that smile is not about volatility at all. Next: dividends, borrow and the forward."
         ) as vo:
             self.play(FadeIn(title), FadeIn(rows[0]))
             self.play(FadeIn(rows[1], shift=UP * 0.2), Create(hl))

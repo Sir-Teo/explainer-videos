@@ -197,6 +197,7 @@ class Leland(VoiceoverScene, ThreeDScene):
             "cheapest sure cover for a call with costs is to buy the share; Kabanov and Safarian showed in 1997 "
             f"that with a constant cost Leland's error does not go to zero. {kab_line} The practical answer is a "
             "band where you do not trade: Parts eleven and seventeen."
+            " So far volatility went in and a price came out. Next: the reverse."
         ) as vo:
             self.play(FadeIn(title), FadeIn(head))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3, run_time=3), FadeIn(computed()))

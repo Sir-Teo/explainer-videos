@@ -320,6 +320,7 @@ class Hedging(VoiceoverScene):
             "is safest and dearest; the Whalley-Wilmott bands trace the better curve. <bookmark mark='a'/> The deep hedger, at three cost weights, "
             "with three seeds at the first, lands close to that curve, without being told what a band is. The classical answer was "
             "already very good; the learner's value is that it scales to books with no formula, Part seventeen."
+            " Every option eventually expires. Next: what happens on that day."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[:3]), FadeIn(side[0]), FadeIn(src), FadeIn(dots), Create(lines[1]),
                       Create(lines[2]), run_time=2)

@@ -226,6 +226,7 @@ class American(VoiceoverScene, ThreeDScene):
             f"{a['baw']:.4f} against the tree's {a['tree']:.4f}, critical price {a['baw_critical']:.1f} against "
             f"{a['smooth_critical']:.1f}. <bookmark mark='b'/> And dividends bring calls back. {div_line}"
             " The trade around it is Part eleven's."
+            " Next: the formula against real Bitcoin, selling volatility."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
