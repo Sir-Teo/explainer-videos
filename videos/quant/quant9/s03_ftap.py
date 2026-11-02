@@ -35,11 +35,13 @@ class FTAP(VoiceoverScene):
                                                                                                  buff=0.1)
                          for i, s in enumerate(S)])
         p_ok = Dot(ax.c2p(1, 100), radius=0.09, color=CALL)
-        ok_l = label(r"price: 100", font_size=19, color=CALL).next_to(p_ok, LEFT, buff=0.35).shift(DOWN * 0.15)
+        ok_l = VGroup(Dot(radius=0.07, color=CALL), label(r"prices: bond 1, stock 100 (inside)", font_size=19, color=CALL)
+                      ).arrange(RIGHT, buff=0.12).move_to(ax.c2p(0.05, 140), aligned_edge=LEFT)
         bad = A.ftap(D, [1.0, 130.0])
         th = bad["theta"]
         p_bad = Dot(ax.c2p(1, 130), radius=0.09, color=ARB)
-        bad_l = label(r"price: 130", font_size=19, color=ARB).next_to(p_bad, LEFT, buff=0.35).shift(UP * 0.1)
+        bad_l = VGroup(Dot(radius=0.07, color=ARB), label(r"stock at 130 (outside)", font_size=19, color=ARB)
+                       ).arrange(RIGHT, buff=0.12).move_to(ax.c2p(0.05, 128), aligned_edge=LEFT)
         # a strictly separating line through the origin, between the cone's upper edge (slope 125) and the price
         # (slope 130); the LP's portfolio is its normal, up to scale
         slope = 127.5

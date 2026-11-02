@@ -259,16 +259,16 @@ Facts checked:
 - **Firm founding dates.** SIG 1987 (months before Black Monday); Optiver 1986, Amsterdam; IMC 1989, Amsterdam. Jane
   Street's founding year is reported as 1999 or 2000. The claim that SIG trains traders with poker is not yet sourced.
 - **House** `quoting.py` (tested): books, P&L surfaces, implied correlation, quotes, Whalley-Wilmott bands.
-- **Plan:**
-  - a straddle scalped on BTC (hourly, with DVOL);
-  - strategy P&L surfaces;
-  - the VRP with a HAR forecast edge (register it);
-  - pin risk;
-  - market-maker inventory;
-  - realized-correlation dispersion on French industries;
-  - SEBI numbers;
-  - a toy model of the alleged mechanics (labelled);
-  - deep hedging against WW bands (torch, one thread).
+- **Built** (compute, 10 scenes, README EN/ZH, zh_lines 36/36). Results:
+  - scalp: May 2021 straddle at 74% implied, realized 127%, P&L +1.7 on a premium of 16.9 (gamma +6.4, theta
+    -4.6).
+  - edge: 1.75 against 0.57 per month on non-overlapping months, t of about 2.4; registered; trials 73.
+  - mm: inventory 64 -> 9 with skewed quotes.
+  - dispersion: median 0.63; peaks 0.82, 0.79, 0.72; low 0.27 (2001).
+  - alleged: a toy only.
+  - hedging: deep hedge (move a learned fraction toward delta) lies inside the WW frontier at kappa 1, 4 and 16. A
+    first residual-on-delta version, trained 250 steps, was worse than the bands.
+  - Remaining: previews QA, on-screen text, dry run, build.
 
 ## Next
 
