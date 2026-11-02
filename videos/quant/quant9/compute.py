@@ -12,6 +12,7 @@ Items (seconds to a minute on a CPU):
 * ``mot``      model-free bounds on a forward-start straddle between those expiries (martingale optimal transport),
                against the price with independent log-normal returns;
 * ``ross``     Ross recovery in two synthetic economies: one where its assumption holds, one with permanent shocks;
+* ``envelope``   the trial counter (this part tests no strategy);
 * ``incomplete`` the no-arbitrage interval for a call as a one-period market gains states, and closes when the call
                itself is traded.
 """
@@ -124,7 +125,8 @@ def compute_density() -> dict:
                                 "iv_quotes": q["iv"][m].tolist(), "K": K, "iv_fit": smile.svi_iv(p, np.log(K / F), T),
                                 "density": dens, "mass": float(np.trapezoid(dens, K)),
                                 "mean": float(np.trapezoid(dens * K, K) / np.trapezoid(dens, K)), "checks": chk,
-                                "p_down20": float(np.trapezoid(dens[K < 0.8 * F], K[K < 0.8 * F]))})
+                                "p_down20": float(np.trapezoid(dens[K < 0.8 * F], K[K < 0.8 * F])),
+                                "p_up20": float(np.trapezoid(dens[K > 1.2 * F], K[K > 1.2 * F]))})
     a, b = res["expiries"]
     kk = np.linspace(-0.6, 0.6, 121)
     w1 = smile.svi_total_variance(kk, *[a["svi"][x] for x in ("a", "b", "rho", "m", "s")])
@@ -216,7 +218,12 @@ def compute_incomplete() -> dict:
     return _json({"rows": out, "bs": bs_price})
 
 
-ITEMS = {"parity": compute_parity, "density": compute_density, "mot": compute_mot, "ross": compute_ross,
+def compute_envelope() -> dict:
+    from explainer.quant.house import pit
+    return {"trials": pit.trials_so_far(), "registered": {}}  # this part tests no strategy
+
+
+ITEMS = {"envelope": compute_envelope, "parity": compute_parity, "density": compute_density, "mot": compute_mot, "ross": compute_ross,
          "incomplete": compute_incomplete}
 
 if __name__ == "__main__":
