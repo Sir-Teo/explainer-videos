@@ -104,3 +104,68 @@ def test_hedge_with_rates_and_carry():
     t, S = paths.gbm(100, 0.03 - 0.01, 0.25, 1.0, 400, 20000, seed=8)  # risk-neutral drift r - q
     p = hedge.delta_hedge(t, S, 100, 1.0, 0.25, position=-1, r=0.03, q=0.01)["pnl"]
     assert abs(p.mean()) < 0.03 and p.std() < 0.6
+
+
+# --------------------------------------------------------------------------- Part 1: stats and the envelope
+from explainer.quant.house import pit, stats  # noqa: E402
+
+
+def test_variance_ratio_random_walk_and_ar1():
+    """iid increments: VR(q) ~ 1 and z* ~ N(0, 1); AR(1) with rho: VR(q) -> 1 + 2 sum (1 - k/q) rho^k."""
+    rng = np.random.default_rng(11)
+    zs = [stats.variance_ratio(rng.standard_normal(2000), 4)["z_star"] for _ in range(300)]
+    assert abs(np.mean(zs)) < 0.2 and np.std(zs) == pytest.approx(1.0, abs=0.15)
+    rho, q, n = 0.3, 4, 200_000
+    e = rng.standard_normal(n)
+    x = np.empty(n)
+    x[0] = e[0]
+    for i in range(1, n):
+        x[i] = rho * x[i - 1] + e[i]
+    want = 1 + 2 * sum((1 - k / q) * rho ** k for k in range(1, q))
+    assert stats.variance_ratio(x, q)["vr"] == pytest.approx(want, rel=0.02)
+
+
+def test_variance_ratio_robust_under_garch_like_volatility():
+    """Clustered volatility, no autocorrelation: z* keeps its size where z over-rejects."""
+    rng = np.random.default_rng(12)
+    rej_z = rej_s = 0
+    for _ in range(200):
+        vol = np.exp(np.convolve(rng.standard_normal(3000), np.ones(50) / 7, mode="same"))
+        r = vol * rng.standard_normal(3000)
+        v = stats.variance_ratio(r, 8)
+        rej_z += abs(v["z"]) > 1.96
+        rej_s += abs(v["z_star"]) > 1.96
+    assert rej_s / 200 < 0.10 and rej_z > rej_s
+
+
+def test_hill_recovers_pareto_exponent():
+    rng = np.random.default_rng(13)
+    x = (1 - rng.random(400_000)) ** (-1 / 3.0)  # Pareto, alpha = 3
+    assert stats.hill(x, frac=0.01) == pytest.approx(3.0, rel=0.05)
+    assert stats.hill(rng.standard_normal(400_000), frac=0.01) > 4  # a Gaussian's "exponent" keeps climbing
+
+
+def test_tail_years_and_aggregation():
+    assert stats.gaussian_tail_years(-3.0) == pytest.approx(1 / (0.0013499 * 252), rel=1e-3)
+    r = np.arange(10.0)
+    assert stats.aggregate(r, 5).tolist() == [10.0, 35.0]
+    assert stats.aggregate(r, 9, overlapping=True).tolist() == [36.0, 45.0]
+    assert stats.autocorr(np.sin(np.arange(1000) / 3), [0, 1])[1] > 0.9
+
+
+def test_envelope_seals_registers_and_opens_once(tmp_path, monkeypatch):
+    monkeypatch.setattr(pit, "ENVELOPE", tmp_path / "envelope.json")
+    d = np.array([20191231, 20201231, 20210104, 20210105])
+    v = np.array([0.01, -0.02, 0.03, 0.0])
+    assert pit.research(d, v)[0].tolist() == [20191231, 20201231]
+    rec = pit.seal("toy", d, v)
+    assert rec["n"] == 2 and rec["first"] == 20210104
+    with pytest.raises(RuntimeError):
+        pit.seal("toy", d, v + 1e-3)  # the hold-out changed
+    with pytest.raises(RuntimeError):
+        pit.open_envelope("s", "toy", d, v)  # not registered
+    pit.register("s", "def f(): pass", {"lookback": 12}, trials=7)
+    assert pit.open_envelope("s", "toy", d, v)[0].tolist() == [20210104, 20210105]
+    assert pit.trials_so_far() == 7
+    pit.register("s2", "def g(): pass", {}, trials=3)
+    assert pit.trials_so_far() == 10

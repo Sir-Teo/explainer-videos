@@ -14,7 +14,8 @@ Sources (all free; see videos/quant/SYLLABUS.md, "Data"):
 * :func:`deribit_trades`: every option trade on Deribit in an hour (history.deribit.com), with each trade's
   price, mark price, implied volatility and the index price at that moment;
 * :func:`deribit_dvol`: Deribit's DVOL index (a 30-day implied volatility, computed like the VIX), hourly;
-* :func:`ken_french_daily`: Kenneth French's daily US market factor since 1926.
+* :func:`ken_french_daily`: Kenneth French's daily US market factor since 1926;
+* :func:`ken_french_size_daily`: his daily value-weighted size-decile portfolios since 1926.
 
     python -m explainer.quant.data            # fetch everything the series uses so far (resumes)
 """
@@ -262,6 +263,30 @@ def ken_french_daily(through: str = "2025-12-31") -> dict:
             "mkt": a[:, 1] + a[:, 4]}
 
 
+def ken_french_size_daily(through: str = "2025-12-31") -> dict:
+    """Daily value-weighted returns (decimal) of the ten NYSE-breakpoint size deciles, smallest first: ``date``
+    (YYYYMMDD ints) and ``deciles`` (days x 10), through ``through``; checked like :func:`ken_french_daily`."""
+    name = "Portfolios_Formed_on_ME_daily_CSV.zip"
+    path = DATA / "kenfrench" / name
+    if not path.exists():
+        _atomic_write(path, _get(f"{KF}/{name}"))
+    with zipfile.ZipFile(path) as z:
+        text = z.read(z.namelist()[0]).decode("latin-1")
+    rows, started = [], False
+    for line in text.splitlines():
+        parts = [p.strip() for p in line.split(",")]
+        if parts[0].isdigit() and len(parts[0]) == 8:
+            started = True
+            rows.append([int(parts[0])] + [float(x) / 100 for x in parts[-10:]])
+        elif started:  # the first block is value-weighted; the equal-weighted block follows
+            break
+    a = np.array(rows)
+    a = a[a[:, 0] <= int(through.replace("-", ""))]
+    frozen = json.dumps(a.round(8).tolist(), separators=(",", ":")).encode()
+    _check(f"kenfrench/size_deciles_daily/through_{through}", frozen, f"{KF}/{name}")
+    return {"date": a[:, 0].astype(int), "deciles": a[:, 1:]}
+
+
 # ---------------------------------------------------------------------------
 # What the series has used so far: ``python -m explainer.quant.data`` fetches all of it
 # ---------------------------------------------------------------------------
@@ -278,6 +303,10 @@ def fetch_all() -> None:
     print(f"  binance BTCUSDT 1h: {len(k['time'])} candles", flush=True)
     kf = ken_french_daily()
     print(f"  Ken French daily: {len(kf['date'])} days", flush=True)
+    sz = ken_french_size_daily()
+    print(f"  Ken French size deciles, daily: {len(sz['date'])} days", flush=True)
+    b = binance_klines("BTCUSDT", "1d", "2017-08", "2025-12")
+    print(f"  binance BTCUSDT 1d: {len(b['time'])} days (from its first listing)", flush=True)
     print(f"  all data ready in {time.time() - t:.0f}s")
 
 
