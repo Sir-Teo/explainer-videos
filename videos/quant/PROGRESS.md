@@ -436,7 +436,7 @@ stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12
 | Part | status |
 |---|---|
 | 1 | expanded (Industry, Frontier, aggregation theory, March 2020); 52.8 min; zh text and dry run done |
-| 2 | English QA clean on all 20 scenes (layout fixes across 11); zh text 0 left; zh dry run running |
+| 2 | done: English QA clean on all 20 scenes (layout fixes across 11); zh text 0 left; zh dry run passes; about 60 min |
 | 3 | chapters written; finishing pending |
 | 4 | chapters written; finishing pending |
 | 5 | chapters written; finishing pending |
@@ -451,4 +451,4 @@ stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12
 | 14 | chapters written; finishing pending |
 | 15 | chapters written; finishing pending |
 | 16 | chapters written; finishing pending |
-| 17 | chapters written; finishing pending |
+| 17 | chapters written; all nineteen compute items done; finishing pending |
