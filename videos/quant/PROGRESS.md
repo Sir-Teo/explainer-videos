@@ -42,6 +42,26 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
   done. The Chinese dry run is in progress (`renders/make/quant7_zh_dry.log`); the narrated build goes in the queue
   after Part 6.
 
+## Direction, 2 November 2026 (evening): every part to 50–60 minutes
+
+The owner's instructions: parts must replace college lectures (3Blue1Brown-style visuals, full technical depth),
+50–60 minutes each, as complete as possible (every textbook core section, every listed paper, frontier work and how
+hedge funds and trading firms actually do it), hands-on like *AI, Built* (models trained and replayed, code labs,
+simulations running on screen). Do **not** send rendered files to the owner.
+
+Measured lengths (tools/lecture_length.py): Part 1 44.9, 2 24.6, 3 28.7, 4 23.5, 5 21.4, 6 18.9, 7 19.2, 8 28.2,
+9 20.8, 10 45.6, 11 19.4, 12 15.5, 13 26.0, 14 19.9, 15 22.3, 16 19.0, 17 27.0 minutes. The AI series runs 44–64
+(17–19 chapters each).
+
+Process per part: (1) a research plan, `scratchpad/plans/quantN.md` (agents audit syllabus items, textbook
+sections and papers, and propose 16–20 chapters with signature visuals, labs, replays and compute); (2) revise the
+part's SYLLABUS.md entry; (3) write the new chapters and compute; (4) README with a textbook audit; (5) zh narration,
+on-screen text, dry run; (6) build. The revised standard is SYLLABUS.md section 1. New instruments in
+`explainer/quant/viz.py`: `lab_card`/`lab_run` (code on screen, then run), `TrainingReplay` (checkpoints scrubbed with
+the loss curve), `seed_band`.
+
+Builds are paused: narrated builds resume only after a part is expanded (the narration cache keeps finished lines).
+
 ## Builds queued (CPU voice, 720p)
 
 Built: Parts 10, 1, 2 (English and Chinese; Part 2's Chinese is rebuilt after a missing string was added). One serial
