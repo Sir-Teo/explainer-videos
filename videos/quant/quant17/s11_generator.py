@@ -89,44 +89,49 @@ class Generator(VoiceoverScene):
         sc = g["scores"]
         cols = [(r"excess kurtosis", "kurtosis", "{:.1f}"), (r"vol clustering", "acf_abs_mean", "{:.2f}"),
                 (r"leverage", "leverage", "{:+.2f}"), (r"lag-1 autocorr.", "acf1", "{:+.2f}"),
-                (r"signature distance", "sig_dist", "{:.2f}")]
-        names = ["real (held out)", "real (train)"] + ORDER
-        disp = {"real (held out)": r"real, held out", "real (train)": r"real, training years",
+                (r"distance: training years", "sig_train", "{:.2f}"), (r"distance: held-out years", "sig_dist", "{:.2f}")]
+        names = ["real (train)", "real (held out)"] + ORDER
+        disp = {"real (held out)": r"real, 2024--2025 (held out)", "real (train)": r"real, 2017--2023 (training)",
                 "i.i.d. normal": r"independent normal", "i.i.d. bootstrap": r"independent resampling",
                 "GJR-GARCH": r"GJR-GARCH (Part 7)", "signature LSTM": r"signature-trained network",
                 "diffusion": r"diffusion model"}
-        tab = VGroup(VGroup(label(r"", font_size=18), *[label(c[0], font_size=18, color=GREY_A) for c in cols]))
+        tab = VGroup(VGroup(label(r"", font_size=17), *[label(c[0], font_size=16, color=GREY_A) for c in cols]))
         for nm in names:
-            s = sc[nm]
-            tab.add(VGroup(label(disp[nm], font_size=19, color=GEN_COL.get(nm, WHITE)),
-                           *[MathTex(f.format(s[k]), font_size=24, color=GEN_COL.get(nm, WHITE)) for _, k, f in cols]))
-        xs = [-4.6, -1.7, 0.2, 2.0, 3.8, 5.7]
+            s_ = sc[nm]
+            tab.add(VGroup(label(disp[nm], font_size=18, color=GEN_COL.get(nm, WHITE)),
+                           *[MathTex(f.format(s_[k]), font_size=23, color=GEN_COL.get(nm, WHITE)) for _, k, f in cols]))
+        xs = [-4.7, -1.75, -0.15, 1.35, 2.85, 4.45, 6.1]
         for i, row in enumerate(tab):
             for j, cell in enumerate(row):
                 cell.move_to([xs[j], 2.5 - 0.55 * i, 0])
-        ref = sc["real (held out)"]
-        best = min(ORDER, key=lambda k: sc[k]["sig_dist"])
+        tr, te = sc["real (train)"], sc["real (held out)"]
+        best_tr = min(ORDER, key=lambda k: sc[k]["sig_train"])
+        best_te = min(ORDER, key=lambda k: sc[k]["sig_dist"])
         spoken = {"i.i.d. normal": "independent normal draws", "i.i.d. bootstrap": "independent resampling",
                   "GJR-GARCH": "GJR-GARCH model of Part seven", "signature LSTM": "signature-trained network",
                   "diffusion": "diffusion model"}
-        bname = spoken[best]
-        foot = wrapped_label(rf"measured inside 32-day windows (so clustering reads lower than on a long series). The "
-                             rf"closest to the held-out years by signature distance: {disp[best]}. Independent draws have no "
-                             r"clustering at all; that is the fact every hedger's stress test needs", 11.8, 19,
-                             GREY_A).to_edge(DOWN, buff=0.4)
-        src = illustration(r"4{,}000 generated windows each; daily log returns, standardized")
+        b_tr, b_te = spoken[best_tr], spoken[best_te]
+        foot = wrapped_label(rf"measured inside 32-day windows (so clustering reads lower than on a long series); distances "
+                             r"are signature distances, with every set clipped at the training data's 0.1\% and 99.9\% "
+                             rf"quantiles. Closest to the training years: {disp[best_tr]}; to the held-out years: "
+                             rf"{disp[best_te]}. The two real periods are {tr['sig_dist']:.1f} apart: a generator learns the "
+                             r"regime it was shown", 12.6, 18, GREY_A).to_edge(DOWN, buff=0.3)
+        src = illustration(r"4{,}000 generated windows each; daily log returns, standardized", corner=UR)
         with self.voiceover(
             "Here are Part one's stylized facts, measured in each set of windows: fat tails, volatility clustering, "
-            "the leverage effect, the absence of autocorrelation in returns, and the signature distance to the real, "
-            f"held-out windows. <bookmark mark='a'/> The real data has excess kurtosis of {ref['kurtosis']:.1f} and "
-            f"clustering of {ref['acf_abs_mean']:.2f}. Independent draws, normal or resampled, have no clustering at all. "
-            f"<bookmark mark='b'/> By the signature distance, the closest generator is the {bname}. "
-            "No generator wins on every fact; a desk keeps several, and tests its hedger on all of them."
+            "the leverage effect, and the absence of autocorrelation, with the signature distance to each real period. "
+            f"<bookmark mark='a'/> First, the two real periods. The training years have excess kurtosis of "
+            f"{tr['kurtosis']:.0f}; the held-out years, calmer, {te['kurtosis']:.1f}. They are far apart: the future "
+            "did not look like the past. <bookmark mark='b'/> Independent draws have no clustering at all, which "
+            f"rules them out. Closest to the training years is the {b_tr}, which reproduces their fat tails, their "
+            f"clustering and their leverage. Closest to the held-out years is the {b_te}, but for a dull reason: its "
+            "tails are thin, and the later years happened to be calm. A generator learns the regime it was shown; a desk "
+            "keeps several, and stresses its hedger on all of them."
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(src))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(src))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[3:]], lag_ratio=0.3, run_time=3))
+            self.play(FadeIn(tab[2]))
             vo.wait_until("b")
-            self.play(FadeIn(foot))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[3:]], lag_ratio=0.3, run_time=3), FadeIn(foot))
         self.wait(0.6)
         self.clear_scene()

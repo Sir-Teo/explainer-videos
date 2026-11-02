@@ -544,13 +544,20 @@ def compute_generator() -> dict:
     sampler, curve_dd = D.train_ddpm(train, iters=4000, log=lambda i, l: print("    ddpm", i, round(l, 4), flush=True))
     gens["diffusion"] = sampler(n, seed=4)
     t_dd = time.time() - t0
-    Tt = torch.tensor(test, dtype=torch.float32)
+    # the signature distance reads fourth powers of returns, so a handful of explosive windows would dominate it:
+    # every set is winsorized at the training data's 0.1% and 99.9% quantiles before it is compared
+    lo_q, hi_q = np.quantile(z[:cut], [0.001, 0.999])
+
+    def T_(w):
+        return torch.tensor(np.clip(w, lo_q, hi_q), dtype=torch.float32)
+    Ttr, Tte = T_(train), T_(test)
     scores = {"real (train)": D.stylized_facts(train), "real (held out)": D.stylized_facts(test)}
-    scores["real (train)"]["sig_dist"] = D.sig_mmd(torch.tensor(train, dtype=torch.float32), Tt)
-    scores["real (held out)"]["sig_dist"] = 0.0
+    scores["real (train)"].update(sig_train=0.0, sig_dist=D.sig_mmd(Ttr, Tte))
+    scores["real (held out)"].update(sig_train=D.sig_mmd(Tte, Ttr), sig_dist=0.0)
     for k, v in gens.items():
         scores[k] = D.stylized_facts(v)
-        scores[k]["sig_dist"] = D.sig_mmd(torch.tensor(v, dtype=torch.float32), Tt)
+        scores[k]["sig_train"] = D.sig_mmd(T_(v), Ttr)
+        scores[k]["sig_dist"] = D.sig_mmd(T_(v), Tte)
     lineup = {"real": test[rng.choice(len(test), 4, replace=False)] * sd,
               "diffusion": gens["diffusion"][:4] * sd, "signature LSTM": gens["signature LSTM"][:4] * sd,
               "GJR-GARCH": gens["GJR-GARCH"][:4] * sd}
