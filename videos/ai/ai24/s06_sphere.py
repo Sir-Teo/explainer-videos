@@ -259,7 +259,7 @@ class Sphere(VoiceoverScene):
         s = load("simclr")
         runs, keys = s["runs"], s["keys"]
         lo_t, hi_t = TAUS[0], TAUS[-1]
-        W_lo, W_hi = np.asarray(s[f"wsorted_{lo_t}"]), np.asarray(s[f"wsorted_{hi_t}"])
+        W_lo, W_hi = np.asarray(s[f"wsorted_{lo_t:g}"]), np.asarray(s[f"wsorted_{hi_t:g}"])
         top_lo = np.mean([runs[k]["extra"]["top10"] for k in keys[TAU_KEY[lo_t]]])
         top_hi = np.mean([runs[k]["extra"]["top10"] for k in keys[TAU_KEY[hi_t]]])
         n_neg = 510
@@ -281,7 +281,7 @@ class Sphere(VoiceoverScene):
                                                                                                      buff=0.35)
         s2 = label(rf"ten hardest: \ ${pct(top_hi, 0)}\%$ of the push", font_size=24, color=SIMCLR).next_to(p2, DOWN,
                                                                                                         buff=0.35)
-        head = label(rf"Where the push goes: \ each view's weights on its ${n_neg}$ negatives", font_size=30)
+        head = label(rf"Held-out diagnostic: \ share of negative push over ${n_neg}$ negatives", font_size=30)
         head.to_edge(UP, buff=0.4)
         src = cite(r"Wang \& Liu (2021): \ the uniformity--tolerance dilemma")
         tk = take_away(r"the temperature sets how hard the loss pushes on the most similar other digits")

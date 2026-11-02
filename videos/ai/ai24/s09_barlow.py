@@ -195,7 +195,7 @@ class Barlow(VoiceoverScene):
                         vmin=lo, vmax=1.0, spread=[(x[1], x[2]) for x in lin], value_fmt=lambda v: pct(v),
                         font_size=20).move_to([3.9, 0.4, 0])
         cl = label(rf"linear probe, \% \ (from ${pct(lo, 0)}$)", font_size=20, color=GREY_A).next_to(ch, UP, buff=0.25)
-        sig = label(r"LeJEPA (2025): \ push the vectors toward an isotropic Gaussian; \ no stop-gradient, \ no teacher; "
+        sig = label(r"LeJEPA (2025): \ match views + isotropic Gaussian regularization; \ no stop-gradient, \ no teacher; "
                     r"\\ ViT-H/14 on ImageNet: \ $79\%$ linear probe", font_size=21, color=GREY_A).to_edge(DOWN,
                                                                                                         buff=0.6)
         bt, vr, sc = lin[1][0], lin[2][0], lin[0][0]
@@ -208,8 +208,8 @@ class Barlow(VoiceoverScene):
             "<bookmark mark='a'/> Quentin Garrido and colleagues showed that, written out, the two are nearly the "
             f"same objective, one acting on the rows of the data and the other on the columns. <bookmark "
             f"mark='b'/> {line} <bookmark mark='c'/> The latest of this line is LeJEPA, from Randall Balestriero and "
-            "Yann LeCun in 2025: push the vectors toward an isotropic Gaussian and nothing else, no stop-gradient, no "
-            "teacher."
+            "Yann LeCun in 2025: match the views, and use SIGReg to push the vectors toward an isotropic Gaussian, "
+            "without a stop-gradient or a teacher."
         ) as vo:
             self.play(FadeIn(m1), FadeIn(m2), FadeIn(l1), FadeIn(l2), FadeIn(sch), FadeIn(src))
             vo.wait_until("a")

@@ -86,7 +86,7 @@ class Scale(VoiceoverScene):
             b1, UP, buff=0.35)
         t2 = label(rf"curated by retrieval: \ ${int(cc.sum()):,}$".replace(",", "{,}"), font_size=24,
                    color=CUR).next_to(b2, UP, buff=0.35)
-        xl = label(r"digits of each class \ (labels used only to count)", font_size=20, color=GREY_B).to_edge(DOWN,
+        xl = label(r"class counts; \ labels set pool balance and seed selection", font_size=20, color=GREY_B).to_edge(DOWN,
                                                                                                          buff=0.3)
         head = label(r"Our version: \ an unbalanced pool, \ curated the DINOv2 way", font_size=30).to_edge(UP, buff=0.4)
         rare = [int(i) for i in np.argsort(pc)[:3]]
@@ -99,7 +99,8 @@ class Scale(VoiceoverScene):
             f"rarest only {pct(pc.min() / pc.sum(), 1)} percent. <bookmark mark='a'/> Then curate it: a small "
             "balanced set of a thousand digits, a hundred of each, plays the curated datasets. Each fetches its four "
             "nearest neighbours from the pool, using our SimCLR network as the embedding, and duplicates are "
-            f"dropped. <bookmark mark='b'/> The curated pool has {int(cc.sum()):,} digits, and the gap between the "
+            f"dropped. Labels set up the imbalance and balanced seeds; the encoder was already trained on all "
+            f"MNIST training images, including these pools. <bookmark mark='b'/> The curated pool has {int(cc.sum()):,} digits, and the gap between the "
             f"commonest and the rarest class shrinks from {ratio_raw:.0f} to one to {ratio_cur:.1f} to one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(t1), FadeIn(b1[0]), FadeIn(b1.names), FadeIn(xl))
@@ -221,12 +222,20 @@ class Scale(VoiceoverScene):
                                                         r"MetaCLIP 7B \\ (images + captions)"],
                         height=2.8, bar_w=1.4, gap=1.2, vmin=50, vmax=55, digits=2, font_size=26)
         ch.move_to([-3.0, -0.1, 0])
-        cap = label(r"average over 16 visual question-answering tasks", font_size=20, color=GREY_A).next_to(ch, DOWN,
+        # The truncated baseline must be visible with the published score comparison.
+        score_axis = VGroup()
+        for score in (50, 52.5, 55):
+            y = ch[0].get_y() + 2.8 * (score - 50) / 5
+            tick = Line([ch[0].get_left()[0] - 0.08, y, 0], [ch[0].get_left()[0], y, 0],
+                        color=GREY_B, stroke_width=1.2)
+            value = MathTex(f"{score:g}", font_size=18, color=GREY_B).next_to(tick, LEFT, buff=0.1)
+            score_axis.add(tick, value)
+        cap = label(r"mean VQA score; \ axis starts at $50$ \\ 16 tasks after multimodal training", font_size=20, color=GREY_A).next_to(ch, DOWN,
                                                                                                         buff=0.5)
         pts = VGroup(
             label(r"self-supervised learning kept improving \\ up to 7 billion parameters, \\ and scaled better "
                   r"than CLIP", font_size=22),
-            label(r"keep only the $1.3\%$ of images with text in them: \\ OCR and chart questions $+4.3$ points over "
+            label(r"keep the $1.3\%$ with charts, tables or documents: \\ same 2B examples seen; \ OCR/chart $+4.3$ points over "
                   r"CLIP-2B", font_size=22),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to([3.4, -0.3, 0])
         src = cite(r"Fan, Tong, Zhu et al.\ (2025): \ Web-SSL")
@@ -236,14 +245,15 @@ class Scale(VoiceoverScene):
             "Is language necessary? Vision models trained with captions, like CLIP from Part 23, had been ahead on "
             "visual question answering, but they had also been trained on different data. <bookmark mark='a'/> In "
             "2025 David Fan, Saining Xie and colleagues trained both on the same two billion images. At seven "
-            "billion parameters, the DINO-style model, which never saw a caption, averaged 53.87 across sixteen "
-            "question-answering tasks; the CLIP model, 52.97. <bookmark mark='b'/> The self-supervised models kept "
+            "billion parameters, after multimodal training, the DINO-style visual encoder, pretrained without "
+            "captions, reached 53.87 across sixteen question-answering tasks; the CLIP encoder, 52.97. <bookmark mark='b'/> The self-supervised models kept "
             "improving with size. <bookmark mark='c'/> And for questions about text and charts, the data mattered "
-            "again: keeping only the images that contain text beat a caption-trained model."
+            "again: keeping the 1.3 percent containing charts, tables or documents beat a caption-trained model on "
+            "OCR and chart tasks. The reduced pool was sampled repeatedly, keeping two billion training examples seen."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(ch), FadeIn(cap))
+            self.play(FadeIn(ch), FadeIn(score_axis), FadeIn(cap))
             vo.wait_until("b")
             self.play(FadeIn(pts[0]))
             vo.wait_until("c")

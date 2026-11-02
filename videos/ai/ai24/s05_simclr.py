@@ -214,7 +214,7 @@ class SimCLR(VoiceoverScene):
             "tilt, the size, the contrast. <bookmark mark='a'/> The head pays that price, and h, one layer below, "
             f"keeps more. <bookmark mark='b'/> {verdict} <bookmark mark='c'/> SimCLR's authors found the same on "
             "ImageNet, by more than ten points, and with a wide network and very large batches, their linear probe "
-            "reached 76.5 percent, as good as the same network trained with every label."
+            "reached 76.5 percent, matching a standard-width supervised ResNet-50."
         ) as vo:
             self.play(FadeIn(ch.bars[:1]), FadeIn(ch.bars[1:]), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(ax_note))
             vo.wait_until("a")

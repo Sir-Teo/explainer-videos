@@ -35,7 +35,7 @@ class Outro(VoiceoverScene):
         g = VGroup(ax, DashedLine(ax.c2p(0, 0), ax.c2p(lx[-1], lx[-1] * math.log(2)), color=GREY_B))
         for I, col in zip(r["mis"], (C.INTERVAL, C.MODEL_Q, C.SURPRISE)):
             g.add(curve(ax, lx, [np.mean([r["est"][f"I{I:g}_N{n}_s{s}"] for s in (0, 1)]) for n in Ns], col, 2.5))
-        out.append((g, r"InfoNCE $\le \log N$", C.TRUE_P))
+        out.append((g, r"$\log N - \mathcal L_N \le \log N$", C.TRUE_P))
         sp = load("sphere")
         Z = np.asarray(sp["simclr_z"])[-1]
         lab = np.asarray(sp["labels"]).astype(int)

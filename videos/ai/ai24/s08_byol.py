@@ -43,7 +43,7 @@ class BYOL(VoiceoverScene):
         sg = label(r"stop-gradient", font_size=20, color=TARGET).next_to(a2, DOWN, buff=0.1)
         ema = label(r"a slow moving average of the online weights", font_size=20, color=TARGET)
         ema.next_to(tg, DOWN, buff=0.3).align_to(tg, LEFT)
-        bar = label(r"$\bar{\ }$: \ unit length", font_size=18, color=GREY_B).next_to(loss, DOWN, buff=0.1)
+        bar = label(r"$\bar p,\bar z\prime$: \ unit vectors", font_size=18, color=GREY_B).move_to([4.6, -1.1, 0])
         nl = label(r"online network", font_size=20, color=BYOL_C).next_to(on, UP, buff=0.2)
         tl = label(r"target network", font_size=20, color=TARGET).next_to(tg, UP, buff=0.2)
         VGroup(on, tg, x1, x2, arr, loss, a1, a2, sg, ema, bar, nl, tl).scale(1.2).move_to([0, 0.15, 0])

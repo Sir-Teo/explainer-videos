@@ -271,9 +271,11 @@ class Problem(VoiceoverScene):
                 m.move_to([xs[j], -0.6 - 0.75 * k, 0])
         rule = Line([-5.8, -0.95, 0], [6.6, -0.95, 0], color=GREY_D, stroke_width=1.2)
         grid = digit_sheet(np.asarray(v["grid"])[:24], 2, 12, size=0.62, gap=0.06).move_to([0, 2.3, 0])
-        facts = label(rf"MNIST: \ ${v['n_train']:,}$ training digits, \ ${v['n_test']:,}$ test; \ every method: the "
-                      rf"same small network, \ ${v['steps']}$ updates of ${v['batch']}$ digits $\times$ 2 views, \ "
-                      r"three seeds".replace(",", "{,}"), font_size=21, color=GREY_A).next_to(grid, DOWN, buff=0.2)
+        n_train = f"{v['n_train']:,}".replace(",", "{,}")
+        n_test = f"{v['n_test']:,}".replace(",", "{,}")
+        facts = label(rf"MNIST: \ ${n_train}$ training digits, \ ${n_test}$ test; \ every method: the "
+                      rf"same small network, \ ${v['steps']}$ updates, \ $256$ online-encoder passes per update; \\ "
+                      r"views and target-encoder compute differ; \ three seeds", font_size=21, color=GREY_A).next_to(grid, DOWN, buff=0.2)
         gap_few = few[2] - few[0]
         verdict = (f"Raw pixels already score {pct(knn[0], 1)} percent by nearest neighbours: MNIST is easy that way. "
                    f"The hard test is ten labels per digit, where pixels manage {pct(few[0], 0)} percent and the "
@@ -284,7 +286,8 @@ class Problem(VoiceoverScene):
         with self.voiceover(
             "Our test bench is MNIST: sixty thousand handwritten digits to learn from, ten thousand to test on. "
             f"<bookmark mark='a'/> Every method gets the same small network, the same {v['steps']} updates and "
-            "the same views, from three random starts. <bookmark mark='b'/> Three yardsticks first. The raw pixels; "
+            "256 online encoder passes per update, from three random starts. Views differ by method; momentum "
+            "targets and heads add unequal compute. <bookmark mark='b'/> Three yardsticks first. The raw pixels; "
             f"an untrained network; and the same network trained with every label. <bookmark mark='c'/> {verdict} "
             "A self-supervised method sits somewhere between the untrained network and the one that was told."
         ) as vo:
