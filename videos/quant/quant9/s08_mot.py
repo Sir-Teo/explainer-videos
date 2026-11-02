@@ -71,7 +71,7 @@ class MOT(VoiceoverScene):
             return VGroup(label(title, font_size=19, color=GREY_A), VGroup(ga, diag, dots)).arrange(DOWN, buff=0.1)
 
         hb = VGroup(coupling(pl, r"the cheapest joining"), coupling(pu, r"the dearest joining")).arrange(RIGHT, buff=0.6)
-        hb.to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.8)
+        hb.to_edge(DOWN, buff=0.65).to_edge(LEFT, buff=0.8)
         axes_note = label(r"dot area: probability of each pair of prices", font_size=17, color=GREY_B).next_to(
             hb, UP, buff=0.05).align_to(hb, LEFT)
         side = VGroup(
