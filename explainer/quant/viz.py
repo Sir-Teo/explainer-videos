@@ -223,3 +223,122 @@ def readout(tex_left: str, tracker_fn, digits=2, font_size=30, color=WHITE, unit
     num_.add_updater(upd)
     g.num = num_
     return g
+
+
+# ---------------------------------------------------------------------------
+# Hands-on: labs, training replays, seed spreads (the standard of AI, Built)
+# ---------------------------------------------------------------------------
+def lab_card(title: str, lines, source: str = "", width: float = 6.6, font_size=19, color=None) -> VGroup:
+    """A lab: the House's own code for the idea, on screen. A framed panel with a header ("Lab: <title>"), the
+    file it lives in, and the lines (a dozen at most). ``card.code`` is the rows, ``card.out`` an empty group that
+    :func:`lab_run` fills with the output."""
+    color = color or QC.HOUSE
+    head = label(rf"Lab: {title}", font_size=font_size + 5, color=color)
+    src = Text(source, font="DejaVu Sans Mono", font_size=font_size - 5, color=GREY_B) if source else VGroup()
+    code = code_block(lines, font_size=font_size)
+    scale = 1.0
+    if code.width > width - 0.4:
+        scale = (width - 0.4) / code.width
+        code.scale(scale)
+    body = VGroup(head, src, code).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+    frame = RoundedRectangle(width=max(width, body.width + 0.5), height=body.height + 0.5, corner_radius=0.12,
+                             stroke_color=color, stroke_width=1.5, fill_color="#0E141C", fill_opacity=1.0)
+    frame.move_to(body)
+    card = VGroup(frame, body)
+    card.code, card.head, card.frame = code, head, frame
+    card.text_scale = scale
+    card.out = VGroup()
+    return card
+
+
+def lab_run(scene, card: VGroup, outputs, font_size=19, color=None, run_time=1.6, direction=DOWN):
+    """Run the lab: a "run" marker, then the output lines typed one after another under (or beside) the card.
+    ``outputs`` are strings (mono text) or ready mobjects (a small plot, a number)."""
+    color = color or QC.GAIN
+    prompt = Text(">>> run", font="DejaVu Sans Mono", font_size=font_size, color=color)
+    rows = [prompt]
+    for o in outputs:
+        rows.append(o if isinstance(o, Mobject) else
+                    Text(str(o), font="DejaVu Sans Mono", font_size=font_size, color=WHITE))
+    for r in rows:
+        if isinstance(r, Text):
+            r.scale(getattr(card, "text_scale", 1.0))
+    out = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+    out.next_to(card, direction, buff=0.25)
+    if direction is DOWN:
+        out.align_to(card, LEFT)
+    keep_in_frame(out)
+    card.out = out
+    scene.play(FadeIn(prompt, shift=RIGHT * 0.1), run_time=0.4)
+    for r in rows[1:]:
+        scene.play(AddTextLetterByLetter(r) if isinstance(r, Text) else FadeIn(r), run_time=run_time / len(rows))
+    return out
+
+
+def seed_band(ax, xs, runs, color, stroke_width=3, opacity=0.18) -> VGroup:
+    """Several runs (seeds) of the same experiment: their min-max band and their mean, as one group."""
+    runs = np.asarray(runs, float)
+    return VGroup(band(ax, xs, runs.min(0), runs.max(0), color, opacity),
+                  curve(ax, xs, runs.mean(0), color, stroke_width=stroke_width))
+
+
+class TrainingReplay(VGroup):
+    """A model learning, scrubbed through its checkpoints: a loss curve on the right that draws itself, a dot and a
+    step counter riding on it, and on the left whatever the model produces at each checkpoint, rebuilt by
+    ``frame(i)`` (a hedge ratio curve, a fitted surface, a policy map, a cloud of samples).
+
+        rp = TrainingReplay(steps, loss, frame, checkpoints=[0, 100, 400, 1500], ylabel=r"risk")
+        self.play(FadeIn(rp))
+        rp.play(self, run_time=6)
+
+    ``loss`` is (steps,) or (seeds, steps): with several seeds the spread is drawn as a band and the replayed seed
+    as the line. ``left`` and ``right`` place the two panels."""
+
+    def __init__(self, steps, loss, frame, checkpoints, ylabel=r"loss", xlabel=r"training step", log_y=False,
+                 color=None, left=LEFT * 3.3, right=RIGHT * 3.4, x_length=5.2, y_length=3.4, font_size=15):
+        super().__init__()
+        color = color or QC.Q
+        steps = np.asarray(steps, float)
+        L = np.atleast_2d(np.asarray(loss, float))
+        if log_y:
+            L = np.log10(np.maximum(L, 1e-12))
+        self.steps, self.L, self.frame_fn, self.ck = steps, L, frame, list(checkpoints)
+        lo, hi = float(np.nanpercentile(L, 1)), float(np.nanpercentile(L, 99))
+        pad = 0.08 * (hi - lo + 1e-12)
+        self.g = axes([steps[0], steps[-1]], [lo - pad, hi + pad], x_length=x_length, y_length=y_length,
+                      xlabel=xlabel, ylabel=ylabel, xticks=[steps[0], steps[-1]],
+                      xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"),
+                      yticks=[round(lo, 2), round(hi, 2)], yfmt=(lambda v: f"10^{{{v:.1f}}}") if log_y else None,
+                      font_size=font_size, center=right)
+        self.ax = self.g.ax
+        self.lo, self.hi = lo - pad, hi + pad
+        self.color = color
+        self.band = band(self.ax, steps, np.clip(L.min(0), self.lo, self.hi), np.clip(L.max(0), self.lo, self.hi),
+                         color, 0.15) if len(L) > 1 else VGroup()
+        self.t = ValueTracker(float(steps[0]))
+        self.panel = frame(0).move_to(left)
+        self.left_center = left
+        self.add(self.g, self.band, self.panel)
+
+    def _y(self, s):
+        return float(np.clip(np.interp(s, self.steps, self.L[0]), self.lo, self.hi))
+
+    def play(self, scene, run_time=6.0):
+        """Scrub through the checkpoints: the curve grows to each one, then the left panel becomes that checkpoint's
+        output."""
+        dot = always_redraw(lambda: Dot(self.ax.c2p(self.t.get_value(), self._y(self.t.get_value())), radius=0.07,
+                                        color=self.color))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step}}\ {int(self.t.get_value()):,}".replace(",", "{,}"),
+                                            font_size=28, color=self.color).next_to(self.g, UP, buff=0.1))
+        scene.add(dot, cnt)
+        per = run_time / max(len(self.ck) - 1, 1)
+        for k in range(1, len(self.ck)):
+            a, b = self.ck[k - 1], self.ck[k]
+            seg = [self.ax.c2p(s, self._y(s)) for s in self.steps if a <= s <= b]
+            anims = [self.t.animate.set_value(b), Transform(self.panel, self.frame_fn(k).move_to(self.left_center))]
+            if len(seg) > 1:
+                anims.append(Create(VMobject(color=self.color, stroke_width=3).set_points_as_corners(seg)))
+            scene.play(*anims, run_time=per)
+        dot.clear_updaters()
+        cnt.clear_updaters()
+        return dot, cnt
