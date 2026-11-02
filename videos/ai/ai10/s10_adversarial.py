@@ -171,21 +171,24 @@ class Adversarial(VoiceoverScene):
                     label(r"made on one LeNet, \ shown to another:", font_size=22, color=GREY_A),
                     MathTex(rf"{100 * T['lenet_to_lenet']:.0f}\%\ \text{{wrong}}", font_size=30, color=CNN))
         tr.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+        tr.add(label(r"transfer: error over $10{,}000$ test digits", font_size=18, color=GREY_A).next_to(tr, DOWN, buff=0.12).align_to(tr, LEFT))
         keep_in_frame(tr)
-        tag = note(r"computed: \ the $10{,}000$ test digits; \ MLP and LeNet: three seeds, \ min--max").to_corner(
+        tag = note(r"FGSM: \ $10{,}000$ test digits; \ MLP/LeNet: $3$ seeds, min--max; \\ "
+                   r"PGD: \ first $2{,}000$ test digits, \ seed $0$").to_corner(
             DR, buff=0.2)
         i2, i25 = list(eps).index(0.2), list(eps).index(0.25)
         e_lin, e_cnn = F["linear"][i25], float(np.mean(np.asarray(F["lenet"])[:, i25]))
         e_pgd = float(np.asarray(a["pgd"]["lenet"])[0][i2])
         with self.voiceover(
-            "Measure it over all ten thousand test digits. <bookmark mark='a'/> At epsilon a quarter, the "
+            "Measure the one-step attack over all ten thousand test digits. <bookmark mark='a'/> At epsilon a quarter, the "
             f"linear model is wrong on {pct(e_lin, 0)} percent of them; Goodfellow's shallow softmax was wrong on "
-            f"{FGSM_PAPER['softmax']}. <bookmark mark='b'/> The networks are not much safer: LeNet, wrong on "
+            f"{FGSM_PAPER['softmax']}. <bookmark mark='b'/> For LeNet, the error is "
             f"{pct(e_cnn, 0)} percent. <bookmark mark='c'/> And one gradient step is a weak attack. Take twenty "
-            f"small steps instead, each projected back into the epsilon box, and at epsilon 0.2 LeNet is wrong on "
-            f"{pct(e_pgd, 0)} percent. <bookmark mark='d'/> And the attacks transfer: made against the fully "
-            f"connected network, they fool LeNet {pct(T['mlp_to_lenet'], 0)} percent of the time; made against one "
-            f"LeNet, they fool another {pct(T['lenet_to_lenet'], 0)} percent of the time."
+            f"small steps instead, each projected back into the epsilon box. On the first two thousand test digits "
+            f"with seed zero, at epsilon 0.2 LeNet is wrong on "
+            f"{pct(e_pgd, 0)} percent. <bookmark mark='d'/> We also evaluate transfer: with attacks made against the fully "
+            f"connected network, LeNet's error is {pct(T['mlp_to_lenet'], 0)} percent; with attacks made against one "
+            f"LeNet, another LeNet's error is {pct(T['lenet_to_lenet'], 0)} percent."
         ) as vo:
             self.play(Create(ax), FadeIn(tag))
             vo.wait_until("a")
@@ -220,7 +223,7 @@ class Adversarial(VoiceoverScene):
         rows.arrange(DOWN, buff=0.25).move_to([-2.6, -0.3, 0])
         if rows.height > 6.0:
             rows.height = 6.0
-        hl = label(r"the change, magnified: \ at most $2$ grey levels of $255$ per pixel", font_size=20,
+        hl = label(r"mean RGB change (heatmap), magnified; \\ at most $2/255$ per channel", font_size=20,
                    color=ADV).next_to(rows, UP, buff=0.12)
         ce = np.asarray(a["cifar_eps"])
         ax = axes([0, ce[-1]], [0, 1.0], x_length=3.6, y_length=2.8, xlabel=r"$\varepsilon$, \ in $1/255$",
@@ -233,8 +236,7 @@ class Adversarial(VoiceoverScene):
         tag = note(r"computed: \ our CIFAR network, \ $2{,}000$ test photographs").to_corner(DR, buff=0.2)
         i2 = list(ce).index(2.0)
         with self.voiceover(
-            "On photographs it is worse, because a photograph has more numbers: thirty-two by thirty-two pixels, "
-            "three colours each. <bookmark mark='a'/> Our CIFAR network, attacked with twenty small steps, "
+            "Now try photographs: thirty-two by thirty-two pixels, three colours each. <bookmark mark='a'/> Our CIFAR network, attacked with twenty small steps, "
             "changing no pixel by more than two grey levels out of 255: <bookmark mark='b'/> the originals, the "
             "change magnified many times, and the result, which looks identical, and which the network calls "
             f"something else. <bookmark mark='c'/> At two grey levels it's wrong on {pct(a['cifar_pgd'][i2], 0)} "
@@ -296,22 +298,24 @@ class Adversarial(VoiceoverScene):
             fr.width = 9.8
         fr.to_corner(DL, buff=0.3)
         cite_ = cite(r"Goodfellow et al.\ (2014); \ Madry et al.\ (2017); \ Wong, Rice \& Kolter (2020)", corner=UR)
-        tag = note(r"computed: \ three seeds").to_corner(DR, buff=0.2)
-        cost = ("robustness costs a little accuracy." if adv_c > std_c + 0.001 else
-                "here robustness costs almost nothing.")
-        holds = adv_p < std_p - 0.2
-        verdict = (f"Against twenty steps it holds up too: {pct(adv_p, 0)} percent wrong, against "
-                   f"{pct(std_p, 0)} for the ordinary network." if holds else
-                   f"But against twenty steps it gives way: {pct(adv_p, 0)} percent wrong. It learned to resist "
-                   "the one-step attack it trained on, not attacks in general.")
+        tag = note(r"computed").to_corner(DR, buff=0.2)
+        protocol = label(
+            'curves: \\ first $1{,}000$ test digits, $3$ seeds; \\\\ final clean/FGSM: \\ $10{,}000$; \\ PGD: \\ $2{,}000$; \\\\ ordinary: $6$ epochs; \\ on attacks: $3$ epochs; \\\\ PGD: ordinary seed $0$; \\ on attacks $3$ seeds',
+            font_size=18, color=GREY_A).move_to([3.8, -1.8, 0])
+        if protocol.width > 6.0:
+            protocol.scale_to_fit_width(6.0)
+        cost = "the training budgets differ, so this gap does not isolate a cost of robustness."
+        verdict = (f"Against twenty steps the error is {pct(adv_p, 0)} percent, compared with "
+                   f"{pct(std_p, 0)} for the ordinary network. These use three seeds and one seed respectively.")
         a0, a1 = float(np.mean([c[0, 2] for c in cv])), float(np.mean([c[-1, 2] for c in cv]))
-        fall = ("The attacked error, red, falls along with the clean one." if a1 < a0 - 0.2 else
-                "The attacked error, red, stays high while the clean one falls.")
+        fall = (f"On the first thousand test digits, the red one-step attacked error moves from "
+                f"{pct(a0, 0)} to {pct(a1, 0)} percent over the logged training steps.")
         with self.voiceover(
             "The defence Goodfellow proposed: train on the attacks, making adversarial versions of every batch. "
-            f"<bookmark mark='a'/> We trained three LeNets that way, half clean digits and half attacked. {fall} "
-            f"<bookmark mark='b'/> At epsilon {t['eps']:g}, one-step attacks now fool it {pct(adv_f, 0)} percent of "
-            f"the time instead of {pct(std_f, 0)}. {verdict} <bookmark mark='c'/> The clean error is "
+            f"<bookmark mark='a'/> We trained three LeNets that way, each for three epochs, with a loss averaged equally "
+            f"over clean and attacked versions of each batch. {fall} "
+            f"<bookmark mark='b'/> At epsilon {t['eps']:g}, the error under one-step attacks is {pct(adv_f, 0)} percent, "
+            f"compared with {pct(std_f, 0)} for ordinary training. {verdict} <bookmark mark='c'/> The clean error is "
             f"{pct(adv_c, 2)} percent, against {pct(std_c, 2)}: {cost} <bookmark mark='d'/> The problem is still "
             "open, and the same search, run over words, breaks language models: Part 31."
         ) as vo:
@@ -319,7 +323,7 @@ class Adversarial(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(clean), FadeIn(adv), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(tl), FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]))
+            self.play(FadeIn(tl), FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(protocol))
             vo.wait_until("d")
             self.play(FadeIn(fr))
         self.wait(0.3)

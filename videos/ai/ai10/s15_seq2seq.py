@@ -192,7 +192,8 @@ class Seq2Seq(VoiceoverScene):
         items = [(r"greedy", m["greedy"], m["greedy_bits"], GREY_A), (r"beam of $8$", m["beam"], m["beam_bits"], ATT),
                  (r"sampled", m["sampled"], m["sampled_bits"], LSTMC)]
         for name, txt, b, col in items:
-            t = " ".join(txt.split())[:58]
+            full = " ".join(txt.split())
+            t = full[:58] + ("…" if len(full) > 58 else "")
             rows.add(VGroup(label(rf"{name}: \ ${b:.0f}$ bits", font_size=20, color=col),
                             data_text(t, font="DejaVu Serif", font_size=17, color=WHITE)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                  buff=0.08))
@@ -203,7 +204,7 @@ class Seq2Seq(VoiceoverScene):
         keep_in_frame(rows)
         pr = data_text(m["prompt"].strip(), font="DejaVu Serif", font_size=18, color=GREY_B).next_to(rows, UP, buff=0.3)
         pr.align_to(rows, LEFT)
-        pl = label(r"our character LSTM, \ $120$ characters after:", font_size=20, color=GREY_A).next_to(pr, UP,
+        pl = label(r"our character LSTM: \ $120$ characters scored; \\ excerpts after:", font_size=20, color=GREY_A).next_to(pr, UP,
                                                                                                     buff=0.1)
         pl.align_to(rows, LEFT)
         rep = loops(m["beam"]) or loops(m["greedy"])
@@ -249,28 +250,28 @@ class Seq2Seq(VoiceoverScene):
         mean = np.mean([runs[f"0-{k}"]["exact"] for k in (0, 1, 2)], 0)
         half = next((int(n) for n, v in zip(tests, mean) if v < 0.5), None)
         b = runs["0-0"]["beam"]
-        bt = VGroup(label(r"greedy against a beam of $4$:", font_size=20, color=GREY_A),
-                    *[MathTex(rf"n = {n}:\ {100 * v[0]:.0f}\% \to {100 * v[1]:.0f}\%", font_size=24, color=ATT)
+        bt = VGroup(label(r"greedy vs beam of $4$: \ seed $0$; \\ $40$ strings per length", font_size=20, color=GREY_A),
+                    *[MathTex(rf"n = {n}:\ {100 * v[0]:.1f}\% \to {100 * v[1]:.1f}\%", font_size=24, color=ATT)
                       for n, v in sorted(b.items(), key=lambda kv: int(kv[0]))]).arrange(DOWN, aligned_edge=LEFT,
                                                                                          buff=0.1)
         bt.next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         keep_in_frame(bt)
-        tag = note(rf"computed: \ a bidirectional GRU encoder, \ a GRU decoder, \ ${s['steps']:,}$ steps, \ three "
-                   rf"seeds".replace(",", "{,}")).to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ bidirectional GRU encoder + GRU decoder, \ ${s['steps']:,}$ steps; \\ "
+                   r"curves: \ $100$ strings per length, \ three seeds".replace(",", "{,}")).to_corner(DR, buff=0.2)
         if half is not None:
             v = (f"Short strings come out right. Past about {half} letters, fewer than half do, and outside the "
-                 "lengths it trained on, almost none: one vector can't hold them all.")
+                 "lengths it trained on, almost none: this trained model struggles as strings grow.")
         else:
             v = "It reverses most strings, though less reliably as they grow."
         gains = [v_[1] - v_[0] for v_ in b.values()]
-        bv = (f"A beam of four helps a little, by up to {100 * max(gains):.0f} points." if max(gains) > 0.02 else
-              "A beam of four hardly helps: the information is simply not in the vector.")
+        bv = (f"In this small seed-zero sample, a beam of four improves accuracy by up to {100 * max(gains):.1f} percentage points." if max(gains) > 0.02 else
+              "In this small seed-zero sample, a beam of four changes accuracy very little.")
         with self.voiceover(
             "We built a small encoder-decoder, and gave it a job with no ambiguity: write a string of letters "
             "backwards. <bookmark mark='a'/> It trained on strings of "
             f"{lo} to {hi} letters, three times from different starts. <bookmark mark='b'/> {v} "
-            f"<bookmark mark='c'/> {bv} The whole input has to squeeze through the encoder's last state: "
-            "a bottleneck, and the longer the input, the worse it gets."
+            f"<bookmark mark='c'/> {bv} This model passes input information through the encoder's final state. "
+            "Here its reversal accuracy falls as inputs grow."
         ) as vo:
             self.play(Create(ax), FadeIn(ex), FadeIn(tag))
             vo.wait_until("a")

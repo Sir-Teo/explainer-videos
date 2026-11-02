@@ -53,7 +53,7 @@ ZH = {
         "接着是描述子。把图像切成小格，在每一格里按角度数边缘，每条边按它的强度加权。<bookmark mark='a'/>这是我们那个数字的计数：每颗星是九个方向的直方图，长的辐条沿着笔画。<bookmark mark='b'/>大卫·罗的SIFT，2004年完整发表，在每一个尺度上找出有区分度的点，每个点用128个这样的计数来描述。<bookmark mark='c'/>纳夫尼特·达拉尔和比尔·特里格斯2005年的方向梯度直方图，覆盖整个窗口，按块归一化，用来找行人。这样数出来的图像，经得起小的平移和光照变化。",
 
     'By 2010 a good vision system was a pipeline.':
-        "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；SIFT这样的手工特征出来，在成千上万个地方计算；它们被汇合成一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>只有最后一个方框从数据中学习。它前面的一切，都是人花了几十年设计出来的。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。",
+        "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；SIFT这样的手工特征出来，在成千上万个地方计算；它们被汇合成一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>特征是人设计的。编码也可以从数据中拟合词典或混合模型；分类器再学习如何预测标签。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。",
 
     'f"We can measure what the features buy.':
         "我们可以量一量这些特征换来了什么。<bookmark mark='a'/>把同一个线性分类器训练两次，一次用原始像素，一次用我们的方向梯度直方图。在数字上，像素给出{pct(e['mnist_pixels'])}%的错误；直方图给出{pct(e['mnist_hog'])}%，少了大约{gain:.0f}倍。<bookmark mark='b'/>{photo}<bookmark mark='c'/>那个时代的教训是：{verdict}<bookmark mark='d'/>本部分剩下的内容要回答的问题是：如果特征也是学出来的呢？",
@@ -286,7 +286,7 @@ ZH = {
         "到最后，图样平滑了一些，但干净的边缘很少；克里热夫斯基论文里AlexNet的96个卷积核，用多得多的照片训练了长得多的时间，要干净得多。",
 
     'f"We can run Hubel and Wiesel\'s experiment on our own network.':
-        "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少滤波器在最佳角度的反应至少是垂直方向的三倍：{n}个里有{no}个，另外还有{nc}个主要对颜色有反应。{verdict}",
+        "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少主要反映明暗的滤波器在最佳角度的反应至少是垂直方向的三倍：{n}个里有{no}个，另外还有{nc}个主要对颜色有反应。{verdict}",
 
     'Before training, not one of them passes':
         "训练之前，它们没有一个通过同样的检验。这种方向偏好是学出来的。",
@@ -331,7 +331,7 @@ ZH = {
         "受攻击的错误率，红色那条，一直很高，干净的那条却降了下来。",
 
     'f"The defence Goodfellow proposed':
-        "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练了三个LeNet，一半是干净的数字，一半是受攻击的。{fall}<bookmark mark='b'/>ε为{t['eps']:g}时，一步攻击现在只在{pct(adv_f, 0)}%的时候骗过它，而不是{pct(std_f, 0)}%。{verdict}<bookmark mark='c'/>干净数字上的错误率是{pct(adv_c, 2)}%，对比{pct(std_c, 2)}%：{cost}<bookmark mark='d'/>这个问题至今没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。",
+        "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练三个LeNet，每个训练三个轮次；损失由每一批原始数字及其受攻击版本的损失等权平均。{fall}<bookmark mark='b'/>ε为{t['eps']:g}时，一步攻击下的错误率为{pct(adv_f, 0)}%，普通训练则为{pct(std_f, 0)}%。{verdict}<bookmark mark='c'/>干净数字上的错误率为{pct(adv_c, 2)}%，对比{pct(std_c, 2)}%：{cost}<bookmark mark='d'/>这个问题还没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。",
 
     "f'Against twenty steps it holds up too":
         "面对二十步攻击它也撑住了：错{pct(adv_p, 0)}%，而普通网络错{pct(std_p, 0)}%。",
@@ -511,7 +511,7 @@ ZH = {
         "最能跟上“在引号里”的那个细胞也只是大致跟上：相关系数{abs(m['quote_corr']):.2f}。我们的小模型没有专门为它留一个细胞。",
 
     'f"And where is it surprised?':
-        "它在哪里会吃惊？把段落开头的每个字符按它花掉的比特数上色。<bookmark mark='a'/>在整段文字上，一个单词的第一个字母平均花{ws:.1f}比特；单词里面的字母，{wi:.1f}比特；大写字母，{cap:.1f}比特。单词一旦开了头，剩下的几乎是白送的。这就是第1部分的猜字游戏，由一台会记忆的机器来玩。",
+        "它在哪里会吃惊？把段落开头的每个字符按它花掉的比特数上色。<bookmark mark='a'/>在整段文字上，一个单词的第一个字母平均花{ws:.1f}比特；单词里面的字母，{wi:.1f}比特；大写字母，{cap:.1f}比特。在这次运行中，单词内部字母的平均代价低于首字母。这就是第1部分的猜字游戏，由一台会记忆的机器来玩。",
 
     # ------------------------------------------------------------------ Seq2Seq
     'Chapter fourteen. Sequence to sequence.': '第14章。序列到序列。',
@@ -535,7 +535,7 @@ ZH = {
         "对开放式的写作，概率最大的文字往往很乏味，所以语言模型改用采样；而翻译的目标是忠实传达原意，束搜索因此得到广泛使用。",
 
     'f"We built a small encoder-decoder':
-        "我们搭了一个小的编码器-解码器，给它一个毫无歧义的任务：把一串字母倒过来写。<bookmark mark='a'/>它在{lo}到{hi}个字母的字符串上训练，从不同的起点训练了三次。<bookmark mark='b'/>{v}<bookmark mark='c'/>{bv}整个输入都得挤过编码器的最后一个状态：一个瓶颈，输入越长，情况越糟。",
+        "我们搭了一个小的编码器-解码器，给它一个没有歧义的任务：把字母串倒过来写。<bookmark mark='a'/>它在{lo}到{hi}个字母的字符串上训练，从不同起点训练三次。<bookmark mark='b'/>{v}<bookmark mark='c'/>{bv}这个模型通过编码器的最后一个状态传递输入信息。在这里，输入变长时，它的倒序准确率下降。",
 
     "f'A beam of four helps a little":
         "宽度为4的束搜索有一点帮助，最多提高{100 * max(gains):.0f}个百分点。",
@@ -544,7 +544,7 @@ ZH = {
         "宽度为4的束搜索几乎没有帮助：信息根本就不在那个向量里。",
 
     'f"Short strings come out right.':
-        "短的字符串能写对。超过大约{half}个字母，就不到一半能写对；超出训练过的长度，几乎全错：一个向量装不下它们。",
+        '短的字符串能写对。超过大约{half}个字母，就不到一半能写对；超出训练过的长度，几乎都写不对：这个训练后的模型难以处理更长的字符串。',
 
     'It reverses most strings, though less reliably':
         "它能把大多数字符串倒过来，只是越长越不可靠。",
@@ -684,6 +684,23 @@ ZH = {
 
     "Goodfellow, Bengio and Courville's book covers both halves":
         "古德费洛、本吉奥和库维尔的书涵盖了本部分的两半，塞利斯基的书讲的是之前的视觉。感谢观看，第11部分见。",
+    # Reviewed Part10 score-protocol and within-word observations.
+    'f"Here is its training, scored on the passage': "这是它的训练过程，在《马耳他之鹰》的段落上打分；这段文字不用于更新权重。<bookmark mark='a'/>它从每字符{e0:.1f}比特开始，在{m['K']}个符号里猜，写出来的是噪声。<bookmark mark='b'/>{mid_s}<bookmark mark='c'/>{end}",
+    'f"By the final step, this run records': '到最后一步，这次运行在其留出的预测目标上记录了每字符{pb:.2f}比特。参考结果使用不同的预测目标范围和训练设置。',
+    'f"{me:.2f} bits per character under this run': '按照本次运行的评测方式，每字符{me:.2f}比特。',
+    ' The other rows retain their recorded reference values.': '其他行保留原来记录的参考值。它们的预测目标范围、上下文和训练预算不同；这张表不能单独揭示循环记忆的影响。',
+
+    # Observed seq2seq sample precision and scope.
+    'f"In this small seed-zero sample, a beam of four improves': '在这个小样本中，使用随机种子零，宽度为4的束搜索最多提高{100 * max(gains):.1f}个百分点。',
+    'In this small seed-zero sample, a beam of four changes': '在这个小样本中，使用随机种子零，宽度为4的束搜索使准确率变化很小。',
+
+    # Adversarial sample sizes, budgets, and observed errors.
+    'f"Measure the one-step attack over all ten thousand test digits.': "在全部一万个测试数字上测量一步攻击。<bookmark mark='a'/>ε为四分之一时，线性模型在其中{pct(e_lin, 0)}%上出错；古德费洛那个浅层softmax错了{FGSM_PAPER['softmax']}%。<bookmark mark='b'/>LeNet的错误率为{pct(e_cnn, 0)}%。<bookmark mark='c'/>一步梯度只是一种弱攻击。改走二十小步，每步都投影回ε盒子里；在前两千个测试数字上，使用随机种子零，ε为0.2时LeNet错{pct(e_pgd, 0)}%。<bookmark mark='d'/>我们也测量攻击的迁移：使用针对全连接网络的攻击时，LeNet的错误率为{pct(T['mlp_to_lenet'], 0)}%；使用针对一个LeNet的攻击时，另一个LeNet的错误率为{pct(T['lenet_to_lenet'], 0)}%。",
+    'f"Now try photographs:': "现在试一试照片：32乘32个像素，每个有三种颜色。<bookmark mark='a'/>对我们的CIFAR网络做二十步小幅攻击，每个像素的改动不超过255级中的两级：<bookmark mark='b'/>这里是原图、放大许多倍的改动和结果；结果看上去相同，网络却判成其他类别。<bookmark mark='c'/>改动两级时，它在{pct(a['cifar_pgd'][i2], 0)}%的测试照片上出错，不受攻击时是{pct(a['cifar_pgd'][0], 0)}%。",
+    'f"Against twenty steps the error is': '二十步攻击的错误率为{pct(adv_p, 0)}%，对比普通网络的{pct(std_p, 0)}%。两者分别使用三个随机种子和一个随机种子。',
+    'f"On the first thousand test digits, the red one-step attacked error moves from': '在前一千个测试数字上，红色的一步攻击错误率，从{pct(a0, 0)}%变到最后记录的训练步处的{pct(a1, 0)}%。',
+    'the training budgets differ, so this gap does not isolate a cost of robustness.': '训练预算不同，因此这个差值不能单独揭示鲁棒性的代价。',
+
 }
 
 PHRASES = {}

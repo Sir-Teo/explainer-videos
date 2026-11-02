@@ -5,16 +5,37 @@ and [the syllabus](../SYLLABUS.md)). The deep-learning turn of 2012 in vision an
 buys, LeNet, ImageNet and AlexNet, the deeper networks that followed, what their filters learn and how easily they are
 fooled, cheaper convolutions; then recurrent networks and their vanishing gradients, the LSTM and the GRU, a character
 LSTM on the series' scoreboard, sequence-to-sequence translation, the birth of attention, and the recurrent networks
-of today. Every network in this part is trained on the computer that renders the video (`compute.py`), on MNIST,
-CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the published ones, cited on screen
-(`specs.py`).
+of today. The small networks are trained by `compute.py` on MNIST, CIFAR-10 and Part 1's thirty novels.
+Verified cached outcomes can be rendered on another machine; recorded training times and timings of kernels refer
+to the machine that produced those outcomes. Preserve their source, input and runtime provenance. Numbers about
+historical systems are the published ones, cited on screen (`specs.py`).
+
+**Cached inputs.** Rendering reads verified existing inputs and never starts scientific producers, training,
+corpus generation or downloads. Supply a version-1 `.cache/ai10/scene-inputs.json` with an `inputs` object keyed
+by logical names such as `ai10/charlstm`, `ai7/kn`, `ai9/lm`, `ai1/scoreboard`, `ai1/raw` and `ai1/passage`.
+Each cache entry declares `kind: "canonical"`, a `json` object with repository-relative `path` and `sha256`,
+and an `npz` object when arrays are required. A text entry instead declares a `text` object. Canonical paths are
+`.cache/<part>/<name>.json`, `.npz` or `.txt`. Files and parent directories must be regular, without symlinks.
+
+Alternate scientific inputs require `kind: "qualified"` and a nonempty `qualification` explaining their method
+and provenance. This explicitly selects an alternate input; it does not establish its scientific validity.
+Keep originals intact and validate each selected source/input/runtime combination separately. No corrected
+scientific producer, dataset, weights, input manifest or cache is distributed with these scene changes.
+In particular, a separately evaluated character model must be explicitly adopted rather than silently substituted
+for an absent canonical outcome. SHA256 checks establish byte identity, not mathematical correctness or
+producer-contract compatibility. A changed manifest requires a new rendering process.
+
+Source-only tests do not establish visual, audio or synchronization acceptance of a deployed tree. Repeat those
+checks using the exact selected source, input and runtime combination. In cached renders, “this computer” in
+timing captions refers to the recorded producing host, which can differ from the rendering host.
 
 * **The edge that lit a neuron.** Hubel and Wiesel's cat (late 1950s; *J. Physiol.* 1959): a cell that fires for an
   edge at one angle; the 48 first-layer filters of our CIFAR-10 network, and how many of them pick out one
   orientation; our encoder–decoder's attention while it reverses a string; the path of the part; objectives.
 * **1. Vision before deep learning.** Simple and complex cells (Hubel & Wiesel 1962; Nobel 1981); the image gradient
   and Sobel's operator (1968) computed on a digit and a photograph; SIFT (Lowe 1999, 2004) and histograms of oriented
-  gradients (Dalal & Triggs 2005), HOG computed here; the hand-made pipeline (features, coding, pooling, a linear SVM)
+  gradients (Dalal & Triggs 2005), HOG computed here; designed features, coding that can learn a dictionary or
+  mixture, pooling, and a learned linear classifier
   and the first two ImageNet winners (NEC-UIUC 28.2%, XRCE 25.8% top-5; Russakovsky et al. 2015); a linear
   classifier on raw pixels against the same classifier on our HOG features, MNIST and CIFAR-10, three seeds.
 * **2. Convolution.** Weight sharing: six 28 × 28 maps from 3.7 million weights (fully connected), 122,304 (local,
@@ -38,7 +59,7 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
   al. (2012) in speech, ILSVRC 2013, the 2018 Turing Award.
 * **6. Why AlexNet won.** ReLU (Nair & Hinton 2010; Glorot, Bordes & Bengio 2011) and the slopes of the
   activations; AlexNet's CIFAR-10 measurement (six times faster to 25% training error); our race of ReLU, tanh and
-  sigmoid in a six-layer CNN (SGD with momentum, three seeds); dropout (Hinton et al. 2012; Srivastava et al. 2014)
+  sigmoid in a CNN with five convolutional layers and a linear output (SGD with momentum, three seeds); dropout (Hinton et al. 2012; Srivastava et al. 2014)
   on 5,000 digits, with and without (three seeds); test error against training-set size (500 to 60,000 digits, equal
   steps, three seeds) and its power-law slope; shifted copies as augmentation; none of it new, all of it together.
 * **7. Deeper: VGG, Inception, ResNet.** The winning top-5 error by year, 2010–2017 (Russakovsky et al. 2015; He et
@@ -49,13 +70,17 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
 * **8. What the filters learn.** CIFAR-10 (Krizhevsky 2009); our network (48 kernels of 7×7×3 at stride 2, three more
   layers) trained here, ten epochs; the replay of its first layer, noise to oriented edges and colour-opponent blobs
   (compare Krizhevsky et al.'s figure 3); Hubel and Wiesel's experiment run on our filters (gratings at 16 angles,
-  orientation selectivity, trained against untrained); top-activating patches and images of deeper channels (Zeiler &
+  orientation selectivity and a brightness-dominated criterion jointly, trained against untrained); top-activating patches and images of deeper channels (Zeiler &
   Fergus 2013).
 * **9. Adversarial examples.** Szegedy et al. (2013); the panda and the gibbon (Goodfellow, Shlens & Szegedy 2014);
   the linearity argument and the fast gradient sign method derived; our LeNet fooled; error under FGSM and 20-step PGD
-  against ε for a linear model, an MLP and LeNet (three seeds); transfer between models; CIFAR-10 photographs changed
-  by two grey levels; adversarial training (fast FGSM with a random start, Wong, Rice & Kolter 2020; Madry et al. 2017), three
-  seeds, against one-step and 20-step attacks; attacks on language models (Part 31).
+  against ε for a linear model, an MLP and LeNet: FGSM on 10,000 test digits (three MLP/LeNet seeds), PGD on the
+  first 2,000 digits (LeNet seed 0); transfer error on all 10,000 digits. CIFAR-10 examples change each channel by
+  at most 2/255; the noise panel shows the mean RGB change as a heatmap. Adversarial training (fast FGSM with a
+  random start, Wong, Rice & Kolter 2020; Madry et al. 2017) uses three seeds and three epochs, against the ordinary
+  LeNet's six epochs. Learning curves use the first 1,000 digits; final clean/FGSM use 10,000, PGD the first 2,000.
+  The ordinary PGD row is seed 0; the adversarial row averages three seeds. These unmatched budgets do not isolate
+  a cost of robustness. Attacks on language models return in Part 31.
 * **10. Cheaper convolutions.** Depthwise separable convolutions (Sifre 2014; Chollet 2016) and their cost ratio
   1/C′ + 1/k², derived; measured on this computer against the FLOP ratio; MobileNet (Howard et al. 2017, table 8);
   dilated convolutions (the algorithme à trous, Holschneider et al. 1989; WaveNet, van den Oord et al. 2016) and their receptive fields; the vision transformer (Dosovitskiy et al. 2020, Part 22), ConvNeXt (Liu et
@@ -66,8 +91,8 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
   measured on random tanh and linear RNNs at four spectral radii (twelve networks each); a one-unit RNN's loss cliff
   and gradient descent across it with and without clipping (after Pascanu, Mikolov & Bengio 2013).
 * **12. LSTM and GRU.** The constant error carousel (Hochreiter & Schmidhuber 1997), input and output gates, the
-  forget gate (Gers, Schmidhuber & Cummins 2000); the cell as a conveyor belt; ∂c_t/∂c_{t−1} = diag(f_t) and the
-  memory's half-life, derived; the GRU (Cho et al. 2014; Chung et al. 2014); the memory task (remember the first of
+  forget gate (Gers, Schmidhuber & Cummins 2000); the cell as a conveyor belt: its direct cell-state path has
+  derivative diag(f_t), while other gate paths also contribute to the full derivative; the memory's half-life, derived; the GRU (Cho et al. 2014; Chung et al. 2014); the memory task (remember the first of
   T = 10, 30, 100 symbols): RNN, LSTM and GRU, three seeds each, the gated cells from the chrono initialization
   (Tallec & Ollivier 2018; in an earlier run with PyTorch's default gate biases, the LSTM stayed at chance at T = 30
   in all three seeds, 12–14%),
@@ -75,50 +100,51 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
 * **13. A character LSTM.** 512 cells on Part 1's thirty novels, truncated backpropagation through time with 64
   readers (after Karpathy 2015); its training replayed with what it writes at each checkpoint; its row on the
   scoreboard (bits per character on chapter 2 of *The Maltese Falcon*), beside Part 7's Kneser–Ney and Part 9's neural
-  models; a cell that tracks quotation marks (Karpathy, Johnson & Fei-Fei 2015; Radford, Józefowicz & Sutskever 2017);
+  models as historical references. Their scoring target spans and training settings differ: 21,405 targets for
+  this LSTM, 21,399 for Kneser–Ney, and 21,382 for the Part 9 models, so the rows are not a matched ranking.
+  A cell that tracks quotation marks (Karpathy, Johnson & Fei-Fei 2015; Radford, Józefowicz & Sutskever 2017);
   the surprise of each character.
 * **14. Sequence to sequence.** Phrase-based translation (Koehn, Och & Marcu 2003); Sutskever, Vinyals & Le (2014):
   34.81 BLEU against 33.30, reversing the source (25.9 → 30.6); Cho et al. (2014); teacher forcing (Williams & Zipser
   1989) and exposure bias; greedy decoding and beam search on our character LSTM, and
-  degeneration (Holtzman et al. 2019); our encoder–decoder reversing strings: accuracy against length, the bottleneck;
+  degeneration (Holtzman et al. 2019); full 120-character scores with explicitly marked excerpts. Our
+  encoder–decoder is evaluated on 100 test strings per length, three seeds; the beam-of-four comparison instead uses
+  40 strings per length from seed 0. Each additional correct reversal changes accuracy by 2.5 percentage points
+  in that small sample; these observations do not establish a fixed capacity bound for a state vector;
   GNMT (Wu et al. 2016): 60% fewer errors, Chinese–English in production in September 2016.
 * **15. The birth of attention.** Bahdanau, Cho & Bengio (2014): the additive score, the softmax, the context
   vector; one step of our model; with and without attention at equal training (three seeds), inside and beyond the
   training lengths; the alignment forming during training; their Table 1 (17.82 → 26.75 BLEU; 36.15 against Moses's
   35.63 without unknown words); neural Turing machines and memory networks (2014), Luong et al. and Xu et al. (2015),
   the Transformer (2017; Parts 13 and 14).
-* **16. Recurrence returns.** Why the Transformer won training and why recurrence wins generation (Part 15); linear
+* **16. Recurrence returns.** Attention and recurrence's different training and generation costs (Part 15); linear
   recurrences and the parallel prefix scan (Blelloch 1990; Martin & Cundy 2018), associativity derived; the scan
   against the loop, measured here, narrow and wide states; minGRU (Feng et al. 2024) on our memory task beside the
   others; QRNN, SRU, S4, LRU, RWKV, Mamba, xLSTM (2024; 7B in 2025) and today's hybrids.
 * **Recap**, where it comes back (Parts 11, 13, 14, 15, 22, 25, 31), the problem set, Part 11's preview (three
   optimizers in one valley, computed), references.
 
-Run from the repo root:
+Source checks from the repository root do not train models or render scenes:
 
 ```
-python tools/make.py ai10                               # everything: the computations, then the films, resumable
-nice -n 15 python -m videos.ai.ai10.compute             # every experiment (see below for how long)
-nice -n 15 python -m videos.ai.ai10.compute charlstm    # one item (--force to recompute)
-python tools/build.py ai10                              # English
-python tools/build.py ai10 --lang zh                    # Chinese
+python -m unittest discover -s tests -p 'test_ai10_scene_inputs.py'
 ```
 
-How long: here, on two threads of a shared four-core Linux server that was running other jobs at the same time, the
-experiments took about ten hours in all: the character LSTM two and a half, the memory task and seq2seq over an hour
-each, the CIFAR-10 network, adversarial training, the data-size curve, dropout and the activations 40 to 55 minutes
-each, the rest minutes. A quiet machine is faster. `make.py` first computes the parts whose results this one reads
-(Parts 1, 7 and 9) and what those read in turn (Parts 5 and 6), which adds their own time.
+Scientific preparation is a separate, explicit operation. Only run a producer when its inputs, recipe and resource
+requirements have been reviewed; reuse compatible outcomes rather than recomputing them. For example,
+`python -m videos.ai.ai10.compute charlstm` runs that experiment. It is not invoked by scene loading.
 
-The data: MNIST from PyTorch's mirror of the original files and CIFAR-10 from Alex Krizhevsky's page, downloaded
-once into `.cache/ai10/` (resuming a broken download) and accepted only if their SHA-256 matches (`data.py`); Part 1's
-novels through Part 1's `compute`. The long jobs checkpoint as they go: LeNet and the CIFAR-10 network after every
-epoch, the character LSTM every 100 steps (`.cache/ai10/models/*.ckpt`, with the optimizer, the random generators
-and the LSTM readers' memory), and the many short runs of the comparisons (activations, dropout, data size,
-adversarial training, the memory task, seq2seq) one by one in `.cache/ai10/<item>.partial.json`; a killed run
-resumes there. Every random choice is seeded. Training uses two threads (`torch.set_num_threads(2)`); nothing forks,
-so the same code runs on macOS (Apple Silicon) and Linux. The scoreboard row reads Parts 1, 7 and 9 through their own
-`compute` modules, so `make.py` computes those first.
+Before rendering, validate the selected outcomes and create the input manifest described above. Shared results from
+Parts 1, 7 and 9 must be supplied explicitly; neither the scene loader nor `make.py` creates this manifest. Do not
+rely on automatic producer discovery to prepare those dependencies. With the verified inputs adopted, the ordinary
+render entry points are `python tools/build.py ai10` (English) and `python tools/build.py ai10 --lang zh` (Chinese).
+They require separate visual, listening and synchronization checks.
+
+The scientific recipes obtain MNIST from PyTorch's mirror and CIFAR-10 from Alex Krizhevsky's page with checksum
+verification (`data.py`); Part 1 supplies the novels. Long producers checkpoint explicitly, and seeded recipes
+record their own training configuration. Recorded timings describe their producing host, not a portable speed claim.
+The scene input reader only reads declared JSON, bounded numeric/text arrays and UTF-8 text. Compressed and
+decompressed array sizes and NPY shapes are bounded before loading; object arrays are rejected.
 
 `nets.py` holds the networks (LeNet-5, the MLP, the plain CNN, the CIFAR-10 network, the recurrent cells with minGRU
 and its scan, the character LSTM, the encoder–decoder with Bahdanau attention), `data.py` the datasets, `specs.py` the

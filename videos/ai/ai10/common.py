@@ -11,7 +11,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from .inputs import load, load_cached, read_cached_text  # noqa: F401
 
 PART = 10
 MONO = "DejaVu Sans Mono"
