@@ -125,7 +125,7 @@ class Hook(VoiceoverScene):
             r"Local time and Tanaka: the stop-loss paradox resolved",
             r"Jumps: Poisson, L\'evy--It\^o, the jump hedge; Hawkes processes fitted and tested on Bitcoin",
             r"Fractional Brownian motion, roughness and its caveat; rough paths and signatures",
-            r"Industry: negative oil, clearing-house Monte Carlo, adjoints; frontier: neural SDEs",
+            r"Industry: negative oil and Bachelier, clearing-house Monte Carlo, model validation; frontier: neural SDEs",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
             "The plan, in eighteen chapters. Brownian motion built two ways, and its quadratic variation proved and "

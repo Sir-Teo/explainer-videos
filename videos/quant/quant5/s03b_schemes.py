@@ -10,12 +10,10 @@ class Schemes(VoiceoverScene):
     def construct(self):
         p = load("picard")
         o = load("orders")
-        m = load("mlmc")
         self.card()
         self.picard(p)
         self.lab(o)
         self.orders(o)
-        self.multilevel(m)
 
     def card(self):
         c = chapter_card(5, r"SDEs: existence, and how to simulate them", r"When does $dX = a\,dt + b\,dW$ have a "
@@ -151,7 +149,8 @@ class Schemes(VoiceoverScene):
             f"{o['slope_strong_euler']:.2f}. Milstein's extra line buys strong order one, measured at "
             f"{o['slope_strong_milstein']:.2f}. <bookmark mark='c'/> For prices, which are averages, both schemes are "
             "already order one: the weak errors fall together. So choose by the question: a price needs weak accuracy, "
-            "a hedging simulation needs strong."
+            "a hedging simulation needs strong. And strong order, a property of single paths, also sets the cost of "
+            "averages: it decides how well multilevel Monte Carlo works, Part sixteen's subject."
         ) as vo:
             self.play(FadeIn(g))
             for k in range(len(dt)):
@@ -163,53 +162,5 @@ class Schemes(VoiceoverScene):
             vo.wait_until("c")
             self.play(*[FadeIn(VGroup(*d)) for d in dots[2:]], Create(fits[2]), Create(fits[3]), FadeIn(leg[2:]),
                       FadeIn(side[1]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def multilevel(self, m):
-        s0 = m["seeds"][0][-1]
-        V = np.log2(np.asarray(s0["V"]))
-        L = len(V)
-        g = axes([-0.5, L - 0.5], [V.min() - 0.5, V.max() + 0.5], x_length=5.6, y_length=3.6,
-                 xlabel=r"level $l$ (steps $2^l$)", ylabel=r"$\log_2 \operatorname{Var}(P_l - P_{l-1})$",
-                 xticks=list(range(0, L, 2)), yticks=[int(np.floor(V.min())), int(np.ceil(V.max()))], font_size=16)
-        g.to_corner(UL, buff=0.4).shift(DOWN * 0.3)
-        ax = g.ax
-        bars = VGroup(*[Rectangle(width=0.3, height=max(ax.c2p(0, v)[1] - ax.c2p(0, V.min() - 0.5)[1], 0.01),
-                                  stroke_width=0, fill_color=ITO, fill_opacity=0.8).move_to(ax.c2p(l, V.min() - 0.5),
-                                                                                           aligned_edge=DOWN)
-                        for l, v in enumerate(V)])
-        eq = MathTex(r"\mathbb{E}\,P_L = \mathbb{E}\,P_0 + \sum_{l=1}^{L} \mathbb{E}\,(P_l - P_{l-1})", font_size=30)
-        eq.to_edge(UP, buff=0.35).shift(RIGHT * 2.6)
-        eps = m["eps"]
-        ratio = np.asarray(m["ratio"])
-        g2 = axes([-0.2, 2.2], [0, max(ratio.max() * 1.15, 2)], x_length=4.6, y_length=3.2,
-                  xlabel=r"target accuracy", ylabel=r"cost of standard MC $\div$ multilevel", xticks=[0, 1, 2],
-                  xfmt=lambda u: [r"0.04", r"0.02", r"0.01"][int(u)], yticks=[0, int(ratio.max())], font_size=16)
-        g2.to_corner(DR, buff=0.5)
-        a2 = g2.ax
-        bd = seed_band(a2, np.arange(3), ratio, DRIFT)
-        sdots = VGroup(*[Dot(a2.c2p(j, r_), radius=0.05, color=DRIFT) for row in ratio for j, r_ in enumerate(row)])
-        rm = np.asarray(m["ratio_mean"])
-        grows = rm[-1] > rm[0]
-        verdict = (f"The saving grows as the target tightens, from about {rm[0]:.0f} times to {rm[-1]:.0f} times, as "
-                   "the theory predicts." if grows else
-                   f"Here the saving does not grow with the target: {rm[0]:.0f} times at the loosest and {rm[-1]:.0f} "
-                   "at the tightest, because the levels are few at these accuracies.")
-        with self.voiceover(
-            "Why do orders cost money? Because of Michael Giles's multilevel Monte Carlo, from 2008. Write the "
-            "finest-grid price as the coarsest one plus a telescoping sum of corrections between neighbouring grids. "
-            "<bookmark mark='a'/> Each correction is simulated with the same Brownian path on both grids, so its "
-            "variance is small, and it falls level by level at a rate set by the strong order. Most samples go to the "
-            "cheap coarse levels, few to the fine ones. <bookmark mark='b'/> For an Asian option, as in Part sixteen, "
-            "four seeds, at three accuracies: " + verdict + " Strong order, a property of single paths, decides the "
-            "cost of averages."
-        ) as vo:
-            self.play(FadeIn(eq), FadeIn(g))
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.15), run_time=2)
-            vo.wait_until("a")
-            self.play(Indicate(bars, color=ITO))
-            vo.wait_until("b")
-            self.play(FadeIn(g2), FadeIn(bd), FadeIn(sdots))
         self.wait(0.4)
         self.clear_scene()

@@ -101,8 +101,8 @@ class Construct(VoiceoverScene):
             "with half the variance of the last. The path crystallises. <bookmark mark='c'/> The sum converges "
             "uniformly, so the limit is a continuous path with exactly the right increments. Our twenty thousand "
             f"draws put the midpoint variance at {c['bridge_var']:.3f}. This construction is not just theory: Monte "
-            "Carlo libraries build paths this way, the largest moves first, which suits quasi-random numbers. We "
-            "meet it again in the industry chapter."
+            "Carlo libraries build paths this way, the largest moves first, which suits quasi-random numbers, as "
+            "Part sixteen shows."
         ) as vo:
             self.play(FadeIn(g), Create(paths[0]), FadeIn(lvl[0]))
             vo.wait_until("a")

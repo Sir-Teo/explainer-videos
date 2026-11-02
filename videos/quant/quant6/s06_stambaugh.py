@@ -18,7 +18,7 @@ class Stambaugh(VoiceoverScene):
 
     def card(self):
         c = chapter_card(5, r"Predictive regressions: Stambaugh's bias", r"Why do persistent predictors look so good?",
-                         lit=(1999,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter five. Predictive regressions, and Stambaugh's bias."):
             show_card(self, c)
         self.play(FadeOut(c))
@@ -127,8 +127,9 @@ class Stambaugh(VoiceoverScene):
             "use the same regressor, so the slope's error is phi times the persistence's error, plus a term "
             "built from e. <bookmark mark='c'/> That term averages to zero. Kendall's bias of an autoregression is "
             "about minus one plus three rho, over T, so the slope's bias is minus phi times that. That is the "
-            "tilted cloud, in symbols. <bookmark mark='d'/> On the annual data, phi is about minus zero point seven "
-            f"two, rho {s['rho']:.2f}, T {s['T']}: a bias of {s['bias']:+.3f}, added to every slope you estimate."
+            "tilted cloud, in symbols. <bookmark mark='d'/> On the annual data, phi is about "
+            f"{s['corr_uv'] * s['sd_u'] / s['sd_v']:.2f}, rho {s['rho']:.2f}, T {s['T']}: a bias of {s['bias']:+.3f}, "
+            "added to every slope you estimate."
         ) as vo:
             step(0)
             vo.wait_until("a")

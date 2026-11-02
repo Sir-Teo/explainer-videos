@@ -71,28 +71,13 @@ class Merton(VoiceoverScene):
         q = pause_card(r"Stocks just fell 20\%. Does Merton buy or sell?", width=5.0, font_size=22).next_to(
             g, DOWN, buff=0.4).align_to(g, LEFT)
         with self.voiceover(
-            f"The last two chapters found Merton's answer by two methods: hold a constant fraction, the excess return "
+            "The last two chapters found Merton's answer by two methods: hold a constant fraction, the excess return "
             f"over gamma times the variance, {100 * pi:.1f} percent in our market. What does constant mean in "
             "practice? <bookmark mark='a'/> Pause and predict: stocks just fell twenty percent. Does Merton buy or "
             "sell? <bookmark mark='b'/> Watch two glasses over five years of one simulated market, stock on top, "
             "bonds below. When the stock rises, its layer swells; Merton pours it back to the line by selling. When "
             "it falls, he buys. He buys after falls: a contrarian by arithmetic, not by opinion. The second glass "
-            "buys and holds, and its mix drifts wherever the market takes it. <bookmark mark='c'/> Over twenty "
-            "thousand thirty-year markets, for an investor with gamma three, "
-            f"rebalancing comes out ahead, as it must, though only by {100 * (rb['ce_mix'] - rb['ce_bh']):.2f} "
-            "percent a year in certainty-equivalent terms; the bigger difference is that buy-and-hold ends with a "
-            "stock share that depends on luck."
-            if better else
-            f"The last two chapters found Merton's answer by two methods: hold a constant fraction, the excess return "
-            f"over gamma times the variance, {100 * pi:.1f} percent in our market. What does constant mean in "
-            "practice? <bookmark mark='a'/> Pause and predict: stocks just fell twenty percent. Does Merton buy or "
-            "sell? <bookmark mark='b'/> Watch two glasses over five years of one simulated market, stock on top, "
-            "bonds below. When the stock rises, its layer swells; Merton pours it back to the line by selling. When "
-            "it falls, he buys. He buys after falls: a contrarian by arithmetic, not by opinion. The second glass "
-            "buys and holds, and its mix drifts wherever the market takes it. <bookmark mark='c'/> Over twenty "
-            "thousand thirty-year markets, for an investor with gamma three, "
-            "buy-and-hold comes out ahead in this sample, which is simulation noise: the theory says it cannot be "
-            "better; the bigger difference is that buy-and-hold ends with a stock share that depends on luck."
+            "buys and holds, and its mix drifts wherever the market takes it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.add(gm, gb, path)
@@ -101,9 +86,17 @@ class Merton(VoiceoverScene):
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeOut(q), FadeIn(side[0]))
-            self.play(tk.animate.set_value(n - 0.001), run_time=max(min(vo.remaining(10.0) - 6, 18), 8),
-                      rate_func=linear)
-            vo.wait_until("c")
+            self.play(tk.animate.set_value(n - 0.001), run_time=max(vo.remaining(10.0), 8), rate_func=linear)
+        with self.voiceover(
+            f"Rebalancing comes out ahead over {rb['n']:,} simulated thirty-year markets, as it must for an investor "
+            f"with gamma three, though only by {100 * (rb['ce_mix'] - rb['ce_bh']):.2f} percent a year in "
+            "certainty-equivalent terms. The bigger difference is that buy-and-hold ends with a stock share that "
+            "depends on luck."
+            if better else
+            f"Buy-and-hold comes out ahead over {rb['n']:,} simulated thirty-year markets, which is simulation "
+            "noise: for an investor with gamma three the theory says it cannot be better. The bigger difference is "
+            "that buy-and-hold ends with a stock share that depends on luck."
+        ):
             self.play(FadeIn(side[1]), FadeIn(side[2]))
         for mob in (gm, gb, path):
             mob.clear_updaters()
