@@ -106,7 +106,7 @@ class RoughHistory(VoiceoverScene):
             "rough model won clearly; over two years, with the same number of parameters, it is close to a tie. One "
             "good day is not a model, and only a fast calibrator could show it."
         ) as vo:
-            self.play(FadeIn(g), Create(l_he), FadeIn(leg[0]))
+            self.play(FadeIn(g), Create(l_he), FadeIn(leg[0]), FadeIn(leg[2]))
             vo.wait_until("a")
             self.play(Create(l_rb), FadeIn(leg[1]), FadeIn(side))
         self.wait(0.5)
