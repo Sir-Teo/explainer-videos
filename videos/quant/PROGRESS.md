@@ -74,6 +74,13 @@ long; SOFR 2.20 (13 Sep) 2.43 (16) 5.25 (17) 2.55 (18) 1.95 (19 Sep 2019), IOER 
 high-water mark (4.5% of the profit kept), $3,288 after a 1% fee. Scenes: all 12 written and previewed silently (`renders/qa/quant2/`); README with solutions. Remaining: Chinese
 (zh_lines.py, on-screen text), full build.
 
+## Part 3 data note
+
+SEC EDGAR (XBRL financial statement data sets) answers 403 from this container (it requires a contact e-mail in the
+User-Agent; the user's address must not be sent). Plan: Shiller's ie_data.xls (reachable: prices, dividends,
+earnings, CAPE since 1871) and Kenneth French's characteristic-sorted portfolios (accruals, operating profitability,
+investment, E/P, CF/P, dividend yield). XBRL point-in-time fundamentals wait for a machine that can reach EDGAR.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
