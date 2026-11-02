@@ -47,6 +47,7 @@ class Depth(VoiceoverScene):
                    color=GREY_A).next_to(eq, DOWN, buff=0.12)
         card = history_card(2024, r"David Raposo et al.\ (Google DeepMind)", r"\textit{Mixture-of-Depths}: \ best with "
                             r"$12.5\%$ of the tokens in every other block", width=4.2, color=HISTC).to_corner(DR, buff=0.3)
+        route_note = note(r"illustrative route: \ $3$ of $12$ tokens \ ($25\%$)", font_size=18).to_corner(DL, buff=0.3)
         with self.voiceover(
             "Experts make the width sparse. Can the depth be sparse too? Does every token need every layer? "
             "<bookmark mark='a'/> In 2024 David Raposo and colleagues at Google DeepMind gave some blocks a router "
@@ -56,7 +57,7 @@ class Depth(VoiceoverScene):
             "experts. <bookmark mark='c'/> They found it worked best with only an eighth of the tokens in every "
             "other block, and sampling from their models was upwards of fifty percent faster."
         ) as vo:
-            self.play(FadeIn(cols), FadeIn(toks))
+            self.play(FadeIn(cols), FadeIn(toks), FadeIn(route_note))
             vo.wait_until("a")
             self.play(Write(eq), FadeIn(el))
             vo.wait_until("b")
@@ -116,8 +117,10 @@ class Depth(VoiceoverScene):
                       for v in np.arange(np.ceil(x0 * 5) / 5, x1, 0.2)])
         yt = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(x0, v), LEFT, buff=0.1)
                       for v in np.arange(np.ceil(y0 * 50) / 50, y1, 0.04)])
-        xl = label(r"training compute per character \ (MFLOP)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"held-out bits \ (two seeds)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        xl = label(r"estimated sparse arithmetic per character \ (MFLOP)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+        estimate_note = note(r"stored estimate: \ matrix and attention work scaled by $c$; \ router omitted \\ "
+                             r"theoretical sparse arithmetic; \ this code executes dense operations", font_size=16).to_edge(DOWN, buff=0.12)
+        yl = label(r"held-out bits \ (dot: mean; \ vertical line: two-seed range)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         dense_line = curve(ax, [fl[k] for k in ("dense_active", "dense_l3", "dense_l4")],
                            [vb[k][0] for k in ("dense_active", "dense_l3", "dense_l4")], DENSEC, 2.5)
         pts = VGroup()
@@ -149,11 +152,12 @@ class Depth(VoiceoverScene):
              f"saves {100 * (1 - fl['mod12'] / fl['dense_l4']):.0f} percent of its compute.")
         with self.voiceover(
             "We trained it. Our four-block transformer, with blocks two and four routed, against dense models of two, "
-            "three and four blocks. Compute per character on one axis, held-out bits on the other. "
+            "three and four blocks. Estimated sparse arithmetic per character on one axis, held-out bits on the other. "
+            "Our code still executes dense operations. "
             "<bookmark mark='a'/> The dense models make a line: more blocks, more compute, fewer bits. "
             "<bookmark mark='b'/> " + v + "<bookmark mark='w'/>" + w
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(estimate_note))
             vo.wait_until("a")
             self.play(Create(dense_line), *[FadeIn(pts[i]) for i in range(3)])
             vo.wait_until("b")
@@ -180,12 +184,12 @@ class Depth(VoiceoverScene):
                 if K[bi, j] > 0.5:
                     sq[0].set_fill(MODC, opacity=0.7)
                     sq[1].set_color(WHITE)
-            rows.add(VGroup(r, label(rf"block {2 * bi + 2}", font_size=22, color=ROUTER).next_to(r, UP, buff=0.08).align_to(r, LEFT)))
+            rows.add(VGroup(r, label(rf"block {2 * bi + 2} \ (first seed)", font_size=22, color=ROUTER).next_to(r, UP, buff=0.08).align_to(r, LEFT)))
         rows.arrange(DOWN, buff=0.45).move_to([0, 1.5, 0])
         cs = d["mod12_class_share"]
         share = VGroup(*[label(rf"{nm}: \ ${100 * float(cs[nm]):.0f}\%$", font_size=26, color=GREY_A) for nm in cs])
         share.arrange(RIGHT, buff=0.45).next_to(rows, DOWN, buff=0.3)
-        sh_h = label(r"the share of each kind of character the routed blocks take", font_size=18, color=GREY_B).next_to(share, DOWN, buff=0.1)
+        sh_h = label(r"the share of each kind of character the routed blocks take \ (first seed)", font_size=18, color=GREY_B).next_to(share, DOWN, buff=0.1)
         cb, cf = ms(d["mod12_valid"]), ms(d["mod12_causal"])
         frac = ms(d["mod12_causal_frac"])[0]
         cap = float(d["mod12_cap"])

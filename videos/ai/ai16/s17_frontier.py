@@ -89,24 +89,28 @@ class Frontier(VoiceoverScene):
             wa = (math.log10(r["active"]) - lo) * sc
             bt = Rectangle(width=wt, height=0.28, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9).move_to([-2.6 + wt / 2, y, 0])
             ba = Rectangle(width=wa, height=0.28, stroke_width=0, fill_color=C.BITS, fill_opacity=0.9).move_to([-2.6 + wa / 2, y, 0])
-            vt = label(rf"${billions(r['total'])}$ \ \ ${100 * r['frac']:.1f}\%$ used", font_size=16, color=GREY_B).next_to(bt, RIGHT, buff=0.1)
+            vt = label(rf"${billions(r['total'])}$ \ \ ${100 * r['frac']:.1f}\%$ active", font_size=16, color=GREY_B).next_to(bt, RIGHT, buff=0.1)
             g.add(VGroup(nm, bt, ba, vt))
-        key = VGroup(label(r"all parameters", font_size=20, color=GREY_B), label(r"used per token", font_size=20, color=C.BITS),
+        key = VGroup(label(r"reported total", font_size=20, color=GREY_B), label(r"reported active", font_size=20, color=C.BITS),
                      label(r"(log scale)", font_size=18, color=GREY_C)).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.25)
+        report_note = note(r"maker-reported counts; \ embedding/output conventions vary; \ not measured cost",
+                           font_size=16).to_edge(DOWN, buff=0.65)
         fr = {r["key"]: r["frac"] for r in rows}
         lowest = min(rows, key=lambda r: r["frac"])
         sparsest = SHORT_SPOKEN.get(lowest["key"], lowest["name"])
         with self.voiceover(
-            "And by the share of the model each token uses. <bookmark mark='a'/> Mixtral used "
-            f"{100 * fr['mixtral']:.0f} percent of its weights per token; DeepSeek-V3, {100 * fr['dsv3']:.1f}. "
-            f"<bookmark mark='b'/> The newest use three to five percent: DeepSeek-V4-Pro {100 * fr['dsv4']:.1f}, "
+            "Compare each maker's reported active-parameter share. Embedding and output conventions vary. "
+            "<bookmark mark='a'/> Mixtral reports "
+            f"{100 * fr['mixtral']:.0f} percent; DeepSeek-V3, {100 * fr['dsv3']:.1f}. "
+            f"<bookmark mark='b'/> Recent reports are around three to five percent: DeepSeek-V4-Pro {100 * fr['dsv4']:.1f}, "
             f"Kimi K3 {100 * fr['kimik3']:.1f}, and the sparsest here, {sparsest}, "
-            f"{100 * lowest['frac']:.1f}. A trillion-parameter model that costs per token what a thirty- to fifty-billion "
-            "dense model costs. <bookmark mark='c'/> Mixtures are also in the closed models: Google's Gemini 1.5 and "
+            f"{100 * lowest['frac']:.1f}. The thirty- to fifty-billion dense-model comparison for a trillion-parameter "
+            "mixture is only a rough selected-matrix arithmetic analogy, not a measured cost equivalence. "
+            "<bookmark mark='c'/> Mixtures are also in the closed models: Google's Gemini 1.5 and "
             "2.5 reports describe sparse mixtures of experts, and OpenAI's open gpt-oss is one, though most labs "
             "don't publish their architecture."
         ) as vo:
-            self.play(FadeIn(key), LaggedStart(*[FadeIn(VGroup(r_[0], r_[1], r_[3])) for r_ in g], lag_ratio=0.05), run_time=2.0)
+            self.play(FadeIn(key), FadeIn(report_note), LaggedStart(*[FadeIn(VGroup(r_[0], r_[1], r_[3])) for r_ in g], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(r_[2], LEFT) for r_ in g], lag_ratio=0.1), run_time=2.5)
             vo.wait_until("b")

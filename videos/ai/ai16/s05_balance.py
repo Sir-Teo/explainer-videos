@@ -195,7 +195,7 @@ class Balance(VoiceoverScene):
             label(r"at the end, \ three seeds, \ both blocks:", font_size=22, color=GREY_A),
             label(rf"busiest expert: \ ${bn.mean():.1f}\times$ \ vs.\ ${ba.mean():.1f}\times$ a fair share", font_size=22,
                   color=WHITE),
-            label(rf"starved \ ($<\tfrac14$ share): \ ${int(sn.sum())}$ \ vs.\ ${int(sa.sum())}$ experts", font_size=22,
+            label(rf"starved \ ($<\tfrac14$ fair share): \ ${int(sn.sum())}$ \ vs.\ ${int(sa.sum())}$ experts", font_size=22,
                   color=WHITE),
             label(rf"held-out bits: \ ${vn[0]:.3f}$ \ vs.\ ${va[0]:.3f}$", font_size=22, color=C.BITS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)

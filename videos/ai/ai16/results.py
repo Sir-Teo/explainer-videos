@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.ai.ai16.compute import load
+from videos.ai.ai16.reviewed_inputs import load
 
 
 def ms(v):
@@ -53,9 +53,9 @@ def main():
     out.append(f"* Upcycling (2 seeds): kept dense {ms(u['dense_half_valid'])}, upcycled {ms(u['upcycled_valid'])}, "
                f"mixture from scratch {ms(u['moe_valid'])}; upcycled training compute "
                f"{100 * u['compute_up'] / u['compute_moe']:.0f}% of from scratch.")
-    s = load("special")
+    s = load("special_within_window_v2")
     for li in range(2):
-        out.append(f"* Mutual information, block {li + 1} (bits, 3 seeds): previous "
+        out.append(f"* Within-window v2 mutual information, block {li + 1} (bits, 3 seeds; window starts excluded): previous "
                    f"{np.mean([s[f'moe_s{k}_l{li}']['prv'] for k in range(3)]):.2f}, current "
                    f"{np.mean([s[f'moe_s{k}_l{li}']['cur'] for k in range(3)]):.2f}, next "
                    f"{np.mean([s[f'moe_s{k}_l{li}']['nxt'] for k in range(3)]):.2f}, shuffled "

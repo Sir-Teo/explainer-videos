@@ -75,6 +75,8 @@ class Designs(VoiceoverScene):
                                   fill_opacity=0.1 + 0.8 * v / bm.max()).move_to([x0 + pitch * blk * (j + 0.5), y_n, 0])
                         for j, v in enumerate(bm)])
         sl = label(r"each block of $8$ squeezed into one summary", font_size=18, color=C.BITS).next_to(summ, DOWN, buff=0.1)
+        nsa_note = note(r"illustration: blocks chosen by full-attention mass; no trained compressor", font_size=16)
+        nsa_note.next_to(nsa_row, DOWN, buff=0.1)
         idx = VGroup(*[Rectangle(width=pitch * 0.5, height=max(0.5 * v / w.max(), 0.01), stroke_width=0, fill_color=GREY_B,
                                  fill_opacity=0.8).move_to([x, y_d + 0.2, 0], aligned_edge=DOWN) for x, v in zip(xs, w)])
         il = label(r"a tiny indexer scores every key \ (here: \ the real weights, \ an ideal indexer)", font_size=18,
@@ -90,10 +92,11 @@ class Designs(VoiceoverScene):
             "<bookmark mark='b'/> A sliding window keeps only the last eight keys: they hold just "
             f"{100 * float(r['window']):.0f} percent. <bookmark mark='c'/> DeepSeek's native sparse attention cuts the "
             "past into blocks and squeezes each one into a summary. <bookmark mark='d'/> The query scores the "
-            "summaries, reads the best blocks in full, and keeps a window of recent tokens too: "
+            "summaries, reads selected blocks in full, and keeps a recent window. In this illustration we choose "
+            "blocks by their full-attention mass, without training a compressor: "
             f"{100 * float(r['nsa']):.0f} percent, from {int(r['nsa_keys'])} keys. <bookmark mark='e'/> In "
             "DeepSeek-V3.2, a tiny, fast indexer gives every past token a score, and the query attends to the top "
-            f"ones only: two thousand and forty-eight in the real model, eight here, holding "
+            f"ones only: two thousand and forty-eight in the real model, eight here with an ideal indexer, holding "
             f"{100 * float(r['topk']):.0f} percent. <bookmark mark='f'/> The trick in both is that finding the "
             "important keys must be much cheaper than attending to all of them."
         ) as vo:
@@ -110,7 +113,7 @@ class Designs(VoiceoverScene):
             vo.wait_until("d")
             self.play(*[Indicate(summ[c], color=C.BITS, scale_factor=1.1) for c in chosen])
             self.add(nsa_row)
-            self.play(FadeOut(summ), FadeOut(sl), *lit(nsa_row, nsa_idx, C.BITS), FadeIn(s_n[-1]), run_time=1.2)
+            self.play(FadeOut(summ), FadeOut(sl), *lit(nsa_row, nsa_idx, C.BITS), FadeIn(s_n[-1]), FadeIn(nsa_note), run_time=1.2)
             vo.wait_until("e")
             self.play(FadeIn(dsa_row), FadeIn(s_d[:-1]), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in idx], lag_ratio=0.01),
                       FadeIn(il), run_time=1.2)
@@ -202,21 +205,21 @@ class Designs(VoiceoverScene):
         labs = VGroup(label(r"$8$ facts: \ key $\to$ value, \ one token each", font_size=20, color=C.BITS),
                       label(r"$40$ filler tokens", font_size=20, color=GREY_B),
                       label(r"then each key is asked: \ \textit{key?} \ \textit{answer}", font_size=20, color=C.TRUE_P))
-        labs[0].next_to(row[1:9], UP, buff=0.2)
+        labs[0].next_to(row[1:9], UP, buff=0.2).align_to(row, LEFT)
         labs[1].next_to(row[9:49], UP, buff=0.2)
         labs[2].next_to(row[49:], UP, buff=0.2).align_to(row, RIGHT)
         zoom = VGroup(*[label(rf"${name(int(toks[i]))}$", font_size=22, color=WHITE) for i in range(1, 9)])
-        zoom.arrange(RIGHT, buff=0.35).move_to([-3.0, 0.4, 0])
+        zoom.arrange(RIGHT, buff=0.35).move_to([-3.0, -0.65, 0])
         qz = VGroup(*[label(rf"${name(int(toks[i]))}$", font_size=22, color=WHITE) for i in range(49, 57)])
-        qz.arrange(RIGHT, buff=0.3).move_to([3.4, 0.4, 0])
+        qz.arrange(RIGHT, buff=0.3).move_to([3.4, -0.65, 0])
         arc = CurvedArrow(row[q].get_bottom() + DOWN * 0.05, row[ans].get_bottom() + DOWN * 0.05, angle=-PI / 3,
                           color=FULLC, stroke_width=2.5, tip_length=0.15)
         rules = VGroup(
-            label(rf"every sparse pattern gets ${int(d['keys'])}$ keys per query:", font_size=22, color=GREY_A),
+            label(rf"sparse patterns: \ nominal ${int(d['keys'])}$-key selection budgets:", font_size=22, color=GREY_A),
             label(rf"a sliding window of ${int(d['keys'])}$", font_size=22, color=WINC),
             label(r"block selection: \ its own block of $4$, \ and the one block whose mean key scores best \ (MoBA, NSA)",
                   font_size=22, color=BLOCKC),
-            label(rf"a learned indexer: \ any ${int(d['keys'])}$ keys \ (DSA)", font_size=22, color=INDEXC),
+            label(rf"a learned indexer: \ top ${int(d['keys'])}$ plus self if needed \ (up to ${int(d['keys']) + 1}$; DSA)", font_size=22, color=INDEXC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
         tag = note(r"after Zoology's associative recall (Arora et al., 2023)", font_size=17).to_corner(UR, buff=0.2)
         with self.voiceover(
@@ -225,9 +228,10 @@ class Designs(VoiceoverScene):
             "eleven, say. <bookmark mark='b'/> Then forty tokens of filler. <bookmark mark='c'/> Then each key is "
             "asked, and the model must answer with its value. The fact it needs is at least forty tokens back. "
             "<bookmark mark='d'/> We train our small transformer on it with full attention, and with three sparse "
-            f"patterns that each allow {int(d['keys'])} keys per query: a sliding window; block selection, the "
+            f"patterns with nominal {int(d['keys'])}-key selection budgets: a sliding window; block selection, the "
             "query's own block of four and the one block whose average key it scores best, as in MoBA and NSA; and "
-            "a learned indexer that may pick any keys, as in DeepSeek's sparse attention."
+            f"a learned indexer that may pick any {int(d['keys'])} keys, as in DeepSeek's sparse attention. "
+            f"The indexer also keeps the current token if it was not selected, so it can read up to {int(d['keys']) + 1} keys."
         ) as vo:
             self.play(FadeIn(row), FadeIn(tag))
             vo.wait_until("a")
@@ -255,6 +259,9 @@ class Designs(VoiceoverScene):
                       for v in (0, S, S + int(d["idx_steps"]))])
         xl = label(r"training steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
         yl = label(r"answers right \ (two seeds; \ chance: $1$ in $16$)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        phase_note = note(rf"lines: seed mean; bands: two-seed range \\ indexer: ${S:,}$ full-model steps + "
+                          rf"${int(d['idx_steps']):,}$ extra (${int(d['idx_warm']):,}$ indexer-only warm-up)"
+                          .replace(",", "{,}"), font_size=16).to_edge(DOWN, buff=0.35)
         lines = {}
         for k, nm, col in keys:
             a = np.asarray(d[f"{k}_curve"], float)
@@ -273,7 +280,7 @@ class Designs(VoiceoverScene):
         imp = VGroup(label(r"the full models, \ a pattern imposed \\ without retraining:", font_size=20, color=GREY_A),
                      *[label(rf"{nm}: \ ${100 * ms(d[f'imposed_{k}_acc'])[0]:.0f}\%$", font_size=20, color=col)
                        for k, nm, col in ((("window", r"window", WINC), ("blocks", r"blocks", BLOCKC),
-                                           ("topk", r"its own top $8$", C.ATTN)))])
+                                           ("topk", r"its own top $8$ \\ + self guard", C.ATTN)))])
         imp.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(names, DOWN, buff=0.45).align_to(names, LEFT)
         fw, ww, bw, iw = acc["full"], acc["window"], acc["blocks"], acc["index"]
         v1 = (f"Full attention learns it completely: {100 * fw:.0f} percent. The sliding window can't see the facts, "
@@ -287,21 +294,21 @@ class Designs(VoiceoverScene):
         else:
             v2 = (f"Block selection gets {100 * bw:.0f} percent: an average key is too blurry a summary to find the "
                   "right block. ")
-        v3 = (f"And the learned indexer, started from the full model, reaches {100 * iw:.0f} percent with eight keys. "
+        v3 = (f"And the learned indexer, started from the full model, reaches {100 * iw:.0f} percent with eight selected keys, plus self if needed. "
               if iw > 0.8 else
               f"The learned indexer, started from the full model, reaches {100 * iw:.0f} percent. ")
         ti = ms(d["imposed_topk_acc"])[0]
         if ti > 0.8:
             v4 = (f"Imposing a pattern on the full model without retraining is a different story: its own top eight "
-                  f"keys keep {100 * ti:.0f} percent, so the information is there, if you can find it cheaply. ")
+                  f"selections, with the mandatory self guard, keep {100 * ti:.0f} percent, so the information is there, if you can find it cheaply. ")
         else:
             v4 = (f"Imposing a pattern on the full model without retraining is a different story: even its own top "
-                  f"eight keys keep only {100 * ti:.0f} percent. ")
+                  f"eight selections, with the mandatory self guard, keep only {100 * ti:.0f} percent. ")
         with self.voiceover(
             "Here's training, the share of answers right. <bookmark mark='a'/> " + v1 + "<bookmark mark='b'/> " + v2
             + "<bookmark mark='c'/> " + v3 + "<bookmark mark='d'/> " + v4
         ) as vo:
-            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl))
+            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl), FadeIn(phase_note))
             vo.wait_until("a")
             self.play(FadeIn(lines["full"]), FadeIn(names[0]), FadeIn(lines["window"]), FadeIn(names[1]), run_time=2.0)
             vo.wait_until("b")

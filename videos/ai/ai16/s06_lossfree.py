@@ -30,7 +30,7 @@ class LossFree(VoiceoverScene):
             cmath(r"b_i", r"\;\leftarrow\;", r"b_i", r"+", r"\gamma", r"\,\operatorname{sign}\!\big(\bar f -", r"f_i", r"\big)",
                   colors=colors, font_size=36),
         ]
-        whys = [why(r"a bias per expert, \ used only to choose"), why(r"the weights ignore it: \ the output isn't bent"),
+        whys = [why(r"a bias per expert, \ used only to choose"), why(r"the bias is not added to the mixing scores"),
                 why(r"after each step: \ busy experts down a notch, \ idle ones up")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.6, buff=0.55, edge=6.8)
         cards = VGroup(
@@ -41,7 +41,7 @@ class LossFree(VoiceoverScene):
         with self.voiceover(
             "In 2024 DeepSeek removed the trade-off. Give every expert a bias, a single number, <bookmark mark='a'/> "
             "and add it to the expert's score only when choosing the top k. <bookmark mark='b'/> The gates that mix "
-            "the chosen experts use the scores alone, so the bias changes who works, never what the model computes. "
+            "the chosen experts use the scores alone: the bias changes the choice, without being added to the mixing scores. "
             "<bookmark mark='c'/> After every step, look at the loads: an expert busier than average has its bias "
             "lowered by a small step gamma, and an idle one has it raised. There's no extra loss, so no gradient "
             "fights the language model. <bookmark mark='d'/> Lean Wang and colleagues reported both better balance "
@@ -67,7 +67,7 @@ class LossFree(VoiceoverScene):
             cmath(r"s_i", r"= \sigma\big(u^{\top} e_i\big)", colors=colors, font_size=32),
             cmath(r"\mathcal{K} = \operatorname{top}_k\big(", r"s_i", r"+", r"b_i", r"\big)", colors=colors, font_size=32),
             cmath(r"g_i", r"= \frac{", r"s_i", r"}{\sum_{j \in \mathcal{K}} s_j}, \quad i \in \mathcal{K}", colors=colors, font_size=32),
-            cmath(r"h = u + \operatorname{FFN}_{\text{shared}}(u) + \sum_{i \in \mathcal{K}}", r"g_i", r"\, \operatorname{FFN}_i(u)",
+            cmath(rf"h = u + \operatorname{{FFN}}_{{\text{{shared}}}}(u) + {r['scaling']:g}\sum_{{i \in \mathcal{{K}}}}", r"g_i", r"\, \operatorname{FFN}_i(u)",
                   colors=colors, font_size=32),
         ).arrange(DOWN, buff=0.42, aligned_edge=LEFT).move_to([-3.2, 0.3, 0])
         notes = VGroup(label(r"a sigmoid score per expert, \ not a softmax", font_size=18, color=GREY_A),
@@ -78,7 +78,7 @@ class LossFree(VoiceoverScene):
             n_.next_to(e_, DOWN, buff=0.06).align_to(e_, LEFT)
         for k in range(1, len(eqs)):
             VGroup(*eqs[k:], *notes[k:]).shift(DOWN * 0.18)
-        head = label(r"DeepSeek-V3's router, \ exactly", font_size=28).to_edge(UP, buff=0.35)
+        head = label(r"DeepSeek-V3's routing mechanism", font_size=28).to_edge(UP, buff=0.35)
         facts = VGroup(
             label(rf"$\gamma = {r['gamma']}$ \ for the first ${r['gamma_until'] / 1e12:.1f}$ trillion tokens, \ then $0$",
                   font_size=20, color=BALC),
@@ -91,11 +91,12 @@ class LossFree(VoiceoverScene):
         gp = gc[1][-1]
         tag = note(r"illustrative scores").next_to(gc, DOWN, buff=0.1).align_to(gc, RIGHT)
         with self.voiceover(
-            "Here is DeepSeek-V3's router exactly, since it's become a template. <bookmark mark='a'/> Each expert "
+            "Here is DeepSeek-V3's routing mechanism, since it's become a template. <bookmark mark='a'/> Each expert "
             "gets a score from a sigmoid, its own yes-or-no, rather than a softmax that makes experts compete. "
             "<bookmark mark='b'/> The top k are chosen by score plus the balancing bias. <bookmark mark='c'/> The "
             "gates use the scores alone, rescaled to add to one. <bookmark mark='d'/> And one shared expert sees "
-            "every token, to hold what everything needs. <bookmark mark='e'/> The bias moved by a thousandth a step "
+            "every token, to hold what everything needs; the routed sum is scaled by two point five. "
+            "<bookmark mark='e'/> The bias moved by a thousandth a step "
             "for the first fourteen point three trillion tokens, then froze; a tiny extra loss kept single sequences "
             "from piling onto a few experts; and no token was ever dropped."
         ) as vo:
@@ -214,6 +215,7 @@ class LossFree(VoiceoverScene):
             w = (f"In held-out bits, though, the best is {best_name}: {vb[best_bits]:.3f}, against "
                  f"{vb['moe']:.3f} with the bias. ")
         ta = take_away(r"balance by steering the choice, \ not by changing the loss", color=BALC, font_size=26)
+        ta.next_to(note_, UP, buff=0.25)
         with self.voiceover(
             "The scoreboard, over three seeds each. <bookmark mark='a'/> " + v + "<bookmark mark='w'/>" + w
             + "<bookmark mark='b'/> One caution: our bias model also uses DeepSeek's sigmoid gates, while the other "

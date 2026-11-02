@@ -85,7 +85,7 @@ ZH = {
         "叠成层级结构，用EM来训练。<bookmark mark='b'/>2017年，诺姆·沙泽尔和谷歌的同事们，把混合专家变成了一种扩大模型的办法。"
         "只保留门控分数最高的k个，其余的设为负无穷，这样它们的门控正好是0，那些专家根本不用运行。<bookmark mark='c'/>"
         "再给分数加一点噪声，让路由器不停地试试别的专家。<bookmark mark='d'/>这样，专家的数量可以一直增长，"
-        "而每个词元的计算量不变：他们在LSTM的层与层之间放了成千上万个专家，参数达到1370亿，容量是以前模型的一千多倍。"
+        "而在k固定时，每个词元的专家计算量不变；路由仍有额外开销。他们在LSTM的层与层之间放了成千上万个专家，参数达到1370亿，容量是以前模型的一千多倍。"
         "这一部分里的每个模型，用的都是这种稀疏的混合专家。",
 
     # ---------------------------------------------------------------- Router
@@ -131,12 +131,11 @@ ZH = {
         "计算量是3倍。每个模型都从3个随机种子各训练一次，用的是完全相同的字符。",
 
     '"Here are all nine runs.':
-        "这是全部9次训练。在训练的8个时刻测留出数据上的每字符比特数；每条线是3个种子的平均，"
-        "阴影带从最好的种子到最差的种子。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}",
+        '这是全部9次训练。图中显示初始化后的7个检查点，曲线用96个固定留出窗口；每条线是3个种子的平均，阴影带从最好的种子到最差的种子。右侧最终分数用400个窗口。<bookmark'
+        " mark='a'/>{v1}<bookmark mark='b'/>{v2}",
 
-    "f'The mixture pulls ahead of the dense model with the same arithmetic by step":
-        "到第{when:,}步，混合专家模型超过了计算量相同的稠密模型，而且一直领先，每个种子都是这样：最后每字符{mv[0]:.3f}比特，"
-        "对比{av[0]:.3f}。",
+    "f'The mixture is ahead of the dense model with the same arithmetic at the saved checkpoint":
+        '在第{when:,}步及之后每个保存的检查点，混合专家模型都领先于计算量相同的稠密模型，三个种子都是如此：最后每字符{mv[0]:.3f}比特，对比{av[0]:.3f}。',
 
     "f'On average the mixture ends ahead":
         "平均来看，混合专家模型最后领先于计算量相同的稠密模型，{mv[0]:.3f}比特对{av[0]:.3f}，但3个种子里只有{wins}个是这样。",
@@ -151,17 +150,15 @@ ZH = {
     "f'And the dense model with all the parameters, doing three times":
         "而拥有全部参数、计算量是3倍的稠密模型，最后是{tv[0]:.3f}：在同样短的训练之后，并不比混合专家模型更好。",
 
-    'f"And here is the mixture\'s routing as it trains':
-        "这是混合专家模型训练时的路由，回放出来：每个常见字符的词元，被送到了哪些专家，两个块都有。<bookmark mark='a'/>"
-        "一开始路由器是随机的，几乎均匀：平均来说，一个字符最常去的专家只拿到它{100 * sharp[0]:.0f}%的词元。"
-        "<bookmark mark='b'/>不到{steps[2]}步，路由器就拿定了主意：{100 * sharp[2]:.0f}%。<bookmark mark='c'/>{settle}"
-        "<bookmark mark='q'/>专家们最后各自做什么，是第10章的问题。",
+    'f"Here is the first seed\'s routing replay':
+        '这是第一个种子的路由回放：两个块中，每个常见字符被送到哪些专家。每个词元有两个不同的选择，份额把两个选择槽位都计算在内，所以任何专家的份额最多是50%。<bookmark '
+        "mark='a'/>参数随机初始化时，选择就已经随字符而集中：每个字符最大专家份额的平均值是{100 * sharp[0]:.0f}%。<bookmark "
+        "mark='b'/>在第{steps[2]}步保存的检查点，这个值是{100 * sharp[2]:.0f}%。<bookmark "
+        "mark='c'/>{settle}<bookmark mark='q'/>专家们最后各自做什么，是第10章的问题。",
 
-    'f"Then it settles':
-        "然后它稳定下来，到最后是{100 * sharp[-1]:.0f}%，而随着专家越来越擅长分给它们的东西，这个模式还在不断变化。",
+    'f"By the end the corresponding share':
+        '到最后，相应的份额是{100 * sharp[-1]:.0f}%。训练期间路由模式会重新排列；这个份额不是置信概率。',
 
-    "f'And it stays that decided":
-        "之后它一直这么果断，到最后是{100 * sharp[-1]:.0f}%。",
 
     '"One caution before we celebrate.':
         "高兴之前，先提个醒。<bookmark mark='a'/>混合专家模型的计算量和那个小稠密模型一样，但在这台电脑上，它一步训练要花的时间是"
@@ -232,16 +229,16 @@ ZH = {
 
     'In 2024 DeepSeek removed the trade-off.':
         "2024年，DeepSeek去掉了这个两难。给每个专家一个偏置，就一个数，<bookmark mark='a'/>只在挑选前k个的时候，"
-        "把它加到专家的分数上。<bookmark mark='b'/>混合被选中专家的门控，只用分数本身，所以偏置只改变谁干活，"
-        "从不改变模型算出的结果。<bookmark mark='c'/>每一步之后，看一看负载：比平均忙的专家，偏置往下调一小步γ；"
+        "把它加到专家的分数上。<bookmark mark='b'/>混合被选中专家的门控，只用分数本身：偏置改变选择，"
+        "但不加到混合所用的分数上。<bookmark mark='c'/>每一步之后，看一看负载：比平均忙的专家，偏置往下调一小步γ；"
         "闲着的，往上调。没有额外的损失，也就没有梯度和语言模型作对。<bookmark mark='d'/>王岚和同事们报告说，"
         "它比辅助损失均衡得更好，困惑度也更低；DeepSeek-V3就是这样训练的。",
 
-    "Here is DeepSeek-V3's router exactly":
-        "这是DeepSeek-V3路由器的精确形式，它已经成了一个模板。<bookmark mark='a'/>每个专家的分数来自一个sigmoid，"
+    "Here is DeepSeek-V3's routing mechanism":
+        "这是DeepSeek-V3的路由机制，它已经成了一个模板。<bookmark mark='a'/>每个专家的分数来自一个sigmoid，"
         "是它自己的“是或否”，而不是让专家们相互竞争的softmax。<bookmark mark='b'/>前k个按分数加均衡偏置来挑。"
         "<bookmark mark='c'/>门控只用分数，重新缩放到加起来等于1。<bookmark mark='d'/>还有一个共享专家，每个词元都会经过它，"
-        "用来存放大家都需要的东西。<bookmark mark='e'/>在前14.3万亿个词元里，偏置每步调千分之一，之后就冻结；"
+        "用来存放大家都需要的东西；路由专家的加权和还要乘以2.5。<bookmark mark='e'/>在前14.3万亿个词元里，偏置每步调千分之一，之后就冻结；"
         "一个很小的额外损失，防止单个序列挤到少数几个专家上；而且从没有丢弃过任何词元。",
 
     '"Here are all three rules at once':
@@ -278,10 +275,9 @@ ZH = {
     'Chapter six. Fine-grained and shared experts.': '第6章。细粒度专家与共享专家。',
 
     'In January 2024 Damai Dai and colleagues at DeepSeek':
-        "2024年1月，DeepSeek的戴达迈和同事们问：一个专家应该多大？<bookmark mark='a'/>Mixtral用几个大专家，挑2个。"
-        "<bookmark mark='b'/>把每个专家切成4个小的，挑4倍那么多：参数一样，每个词元的计算量也一样，但每个词元的组合由更细的零件拼成。"
-        "<bookmark mark='c'/>再留出一个专家，让每个词元共享，这样每个词元都需要的东西，比如常用词和语法，只学一次，"
-        "而不必复制进每个专家里。他们把这两招叫作细粒度切分和共享专家隔离。",
+        "2024年1月，DeepSeek的戴达迈和同事们问：一个专家应该多大？<bookmark mark='a'/>Mixtral用几个大专家，挑2个。<bookmark "
+        "mark='b'/>把每个专家切成4个小的，挑4倍那么多：专家矩阵总参数量相同，每个词元的专家矩阵计算量也相同，但每个词元的组合由更细的零件拼成。<bookmark "
+        "mark='c'/>再留出一个专家，让每个词元共享，这样每个词元都需要的东西，比如常用词和语法，只学一次，而不必复制进每个专家里。他们把这两招叫作细粒度切分和共享专家隔离。",
 
     'They reported that it pays.':
         "他们报告说这样做划算。<bookmark mark='a'/>在20亿参数的规模上，DeepSeekMoE追平了GShard的设计，"
@@ -289,14 +285,16 @@ ZH = {
         "计算量只用大约40%。这些是作者自己的数字；我们在自己的模型上验证一下这个想法。",
 
     'f"Why should finer pieces help?':
-        "为什么更细的零件会有帮助？数一数一个词元能组成多少种团队。<bookmark mark='a'/>8个专家里挑2个，有{c1}种挑法。"
-        "<bookmark mark='b'/>32个里挑8个，计算量相同，有{c2 / 1000000.0:.1f}百万种。<bookmark mark='c'/>这个数像k的幂次一样增长："
-        "它被夹在N除以k的k次方，和e乘N除以k的k次方之间。<bookmark mark='d'/>DeepSeek自己的例子：16个专家挑2个，有{d1}种团队；"
-        "每个切成4份，64个里挑8个，就有{d2 / 1000000000.0:.1f}十亿种。每个词元都能拿到一支更贴合它的团队。",
+        "为什么更细的零件会有帮助？数一数一个词元能组成多少种团队。<bookmark mark='a'/>8个专家里挑2个，有{c1}种挑法。<bookmark "
+        "mark='b'/>32个里挑8个，专家矩阵计算量相同，有{c2 / 1000000.0:.1f}百万种。<bookmark "
+        "mark='c'/>这个数像k的幂次一样增长：它被夹在N除以k的k次方，和e乘N除以k的k次方之间。<bookmark "
+        "mark='d'/>DeepSeek自己的例子：16个专家挑2个，有{d1}种团队；每个切成4份，64个里挑8个，就有{d2 / "
+        '1000000000.0:.1f}十亿种。每个词元都能拿到一支更贴合它的团队。',
 
     '"We trained all three':
-        "我们把三种都训练了，参数相同，每个字符的计算量也相同，各2个种子。<bookmark mark='a'/>{v1}<bookmark mark='v'/>{v2}"
-        "<bookmark mark='b'/>在前沿，方向很清楚：DeepSeek-V3有256个细粒度专家，挑8个，外加1个共享；Kimi K3有896个，挑16个，共享2个。",
+        "我们把三种都训练了，专家矩阵总参数量和活跃专家总宽度匹配，各2个种子；路由器参数量和估计浮点运算量略有差异。<bookmark mark='a'/>{v1}<bookmark "
+        "mark='v'/>{v2}<bookmark mark='b'/>在前沿，方向很清楚：DeepSeek-V3有256个细粒度专家，挑8个，外加1个共享；Kimi "
+        'K3有896个，挑16个，共享2个。',
 
     'f"Cutting the experts finer helps: {mf:.3f} bits against {mc:.3f} for the coarse mixture, and the seeds don\'t overlap. "':
         "把专家切细有帮助：{mf:.3f}比特，粗粒度的混合是{mc:.3f}，而且种子之间不重叠。",
@@ -321,7 +319,7 @@ ZH = {
         "用的因子是1到1.25，并且接受少量被丢弃的词元。路由器越不均匀，丢得越多。",
 
     'How much is dropped?':
-        "会丢掉多少？专家i被要求的槽位数，是f i乘以k N，也就是它在全部槽位里的份额。<bookmark mark='a'/>它的缓冲区能装c乘以k N除以E。"
+        "会丢掉多少？专家i被要求的槽位数，是f i乘以k N，也就是它在全部槽位里的份额。<bookmark mark='a'/>先忽略整数取整，它的缓冲区能装c乘以k N除以E。"
         "<bookmark mark='b'/>装不下的部分就被丢弃。<bookmark mark='c'/>除以槽位总数，丢弃的份额就是对所有专家求和：每个专家的份额超出c除以E的部分。"
         "<bookmark mark='d'/>停下来预测一下：路由完全均匀时，什么因子一个都不丢？1。如果有一个专家拿到两倍份额，因子为1时丢掉的正好是多出来的那部分："
         "全部槽位的E分之1。",
@@ -384,21 +382,21 @@ ZH = {
     'Chapter nine. Counting parameters, and upcycling.': '第9章。数参数，以及升级。',
 
     'f"What do numbers like six hundred and seventy-one billion parameters':
-        "6710亿个参数、370亿个激活，这样的数字到底数的是什么？我们可以从DeepSeek-V3公开的配置里算出来。<bookmark mark='a'/>"
-        "一个专家是一个SwiGLU网络：3个{c['d']:,}乘{c['moe_ffn']:,}的矩阵，{a['expert'] / 1000000.0:.0f}百万个参数。"
-        "<bookmark mark='b'/>每个MoE层有{c['routed']}个，一共{a['n_moe']}个MoE层：{P['routed'] / 1000000000.0:.0f}0亿，"
-        "几乎就是全部。<bookmark mark='c'/>注意力，也就是第15部分的潜在注意力，在全部{c['layers']}层里加起来是"
-        "{P['attention'] / 1000000000.0:.1f}十亿。<bookmark mark='d'/>再加上3个稠密层、共享专家、路由器和嵌入，总数是"
-        "{a['total'] / 1000000000.0:.1f}十亿：就是报告里的6710亿。<bookmark mark='e'/>一个词元每层用9个专家，8个路由专家加1个共享专家，"
-        "再加上其余所有部分：{a['active_with_embed'] / 1000000000.0:.1f}十亿，就是报告里的370亿。",
+        "6710亿个参数、370亿个激活，这样的数字到底数的是什么？我们可以从DeepSeek-V3公开的配置里算出来。<bookmark "
+        "mark='a'/>一个专家是一个SwiGLU网络：3个{c['d']:,}乘{c['moe_ffn']:,}的矩阵，{a['expert'] / "
+        "1000000.0:.0f}百万个参数。<bookmark mark='b'/>每个MoE层有{c['routed']}个，一共{a['n_moe']}个MoE层：{P['routed'] / "
+        "1000000000.0:.0f}0亿，几乎就是全部。<bookmark "
+        "mark='c'/>注意力，也就是第15部分的潜在注意力，在全部{c['layers']}层里加起来是{P['attention'] / 1000000000.0:.1f}十亿。<bookmark "
+        "mark='d'/>再加上3个稠密层、共享专家、路由器和嵌入，总数是{a['total'] / 1000000000.0:.1f}十亿：就是报告里的6710亿。<bookmark "
+        "mark='e'/>每个混合专家层计入9个专家，8个路由专家加1个共享专家。这里的活跃参数计数代理是{a['active_with_embed'] / "
+        "1000000000.0:.1f}十亿，包含完整的输入嵌入表；实际查表只读取一行。报告按其活跃参数口径给出370亿。",
 
-    'f"Drawn to scale, DeepSeek-V3\'s parameters':
-        "按比例画出来，DeepSeek-V3的参数几乎全是路由专家。<bookmark mark='a'/>一个词元只用其中的"
-        "{100 * a['active_with_embed'] / a['total']:.1f}%。在这一小片里，专家占{100 * ex_share:.0f}%，"
-        "而每个词元都完整使用的注意力占{100 * at_share:.0f}%。<bookmark mark='b'/>同样的算术也解释了Mixtral的名字。"
-        "8乘70亿应该是560亿，可Mixtral 8x7B只有{mx['total'] / 1000000000.0:.1f}十亿，因为只有前馈层被复制了8份；注意力是共享的。"
-        "每个词元它用{mx['active'] / 1000000000.0:.1f}十亿。<bookmark mark='c'/>当你看到DeepSeek-V3写着6850亿时，"
-        "那里面包括了一个提前预测第二个词元的模块，也就是第18部分的多词元预测。",
+    "f\"Routed experts hold nearly all of DeepSeek-V3's parameters":
+        "路由专家占了DeepSeek-V3参数的绝大部分。图中放大了很小的分段，并省略路由器的柱段。<bookmark mark='a'/>活跃参数计数代理占总容量的{100 * "
+        "a['active_with_embed'] / a['total']:.1f}%，其中包含完整的输入嵌入表。在这个计数代理里，专家占{100 * ex_share:.0f}%，注意力占{100 * "
+        "at_share:.0f}%。<bookmark mark='b'/>同样的算术也解释了Mixtral的名字。8乘70亿应该是560亿，可Mixtral 8x7B只有{mx['total'] / "
+        "1000000000.0:.1f}十亿，因为只有前馈层被复制了8份；注意力是共享的。按同样计入完整输入表的口径，其每词元活跃参数代理为{mx['active'] / "
+        "1000000000.0:.1f}十亿。<bookmark mark='c'/>当你看到DeepSeek-V3写着6850亿时，那里面包括了一个提前预测第二个词元的模块，也就是第18部分的多词元预测。",
 
     'Training a big mixture from scratch is expensive.':
         "从头训练一个大的混合专家模型很贵。如果你已经有一个好的稠密模型呢？<bookmark mark='a'/>把它的前馈层复制进每个专家，"
@@ -407,23 +405,23 @@ ZH = {
         "阿兰·小松崎和同事们2022年把它叫作稀疏升级；2024年，Qwen的第一个混合专家模型也是这样做出来的。",
 
     '"We tried it.':
-        "我们试了一下。一个只有一个专家宽的稠密模型，训练1000步，然后复制成8个专家，再训练1000步；旁边是同一个一直保持稠密的模型，"
-        "以及我们从头训练的混合专家模型。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}",
+        "我们试了一下。一个只有一个专家宽的稠密模型，训练1000步，然后复制成8个专家，加入1%的乘性噪声，再训练1000步；旁边是同一个一直保持稠密的模型，以及我们从头训练的混合专家模型。曲线用96个留出窗口，最终值用400个。<bookmark"
+        " mark='a'/>{v1}<bookmark mark='b'/>{v2}",
 
-    "f'The upcycled model drops below the dense one":
-        "升级后的模型马上就低于它的来源稠密模型，最后是{vu[0]:.3f}比特，而训练同样久的稠密模型是{vh[0]:.3f}。",
+    "f'The upcycled model ends at {vu[0]:.3f} bits":
+        "升级后的模型最后是{vu[0]:.3f}比特，而训练同样久的稠密模型是{vh[0]:.3f}。",
 
     "f'The upcycled model ends at {vu[0]:.3f}, about where":
         "升级后的模型最后是{vu[0]:.3f}，和稠密模型差不多，{vh[0]:.3f}。",
 
     "f'It even ends ahead of the mixture trained from scratch":
-        "它甚至最后超过了从头训练的混合专家模型，{vm[0]:.3f}，训练计算量只用了后者的{pc_:.0f}%。",
+        "它甚至最后超过了从头训练的混合专家模型，{vm[0]:.3f}，估计训练浮点运算量只用了后者的{pc_:.0f}%。",
 
     "f'It ends close to the mixture trained from scratch":
-        "它最后和从头训练的混合专家模型很接近，{vm[0]:.3f}，训练计算量只用了后者的{pc_:.0f}%。",
+        "它最后和从头训练的混合专家模型很接近，{vm[0]:.3f}，估计训练浮点运算量只用了后者的{pc_:.0f}%。",
 
     'f"It doesn\'t catch the mixture trained from scratch':
-        "它没追上从头训练的混合专家模型，{vm[0]:.3f}，但训练计算量只花了后者的{pc_:.0f}%。",
+        "它没追上从头训练的混合专家模型，{vm[0]:.3f}，但估计训练浮点运算量只花了后者的{pc_:.0f}%。",
 
     # ---------------------------------------------------------------- Special
     'Chapter ten. What experts learn.': '第10章。专家学到了什么。',
@@ -439,7 +437,7 @@ ZH = {
 
     '"Mutual information, from part one':
         "互信息，来自第1部分：选中哪个专家，能告诉你关于一个字符的多少比特。<bookmark mark='a'/>{v1}<bookmark mark='v'/>{v2}"
-        "<bookmark mark='b'/>打乱后的柱子代表偶然：一个不看字符的路由器，在这么多文本上会得到的分数。<bookmark mark='c'/>{v3}",
+        "<bookmark mark='b'/>打乱字符标签后的柱子，是在相同位置上的一个参照。<bookmark mark='c'/>{v3}",
 
     "f'The choice of expert says most about the character just read":
         "选中哪个专家，最能说明刚读到的那个字符：最后一个块里是{cur:.2f}比特，对下一个字符是{nxt:.2f}，对前一个字符是{prv:.2f}。",
@@ -460,6 +458,12 @@ ZH = {
 
     "f'With thirty-two smaller experts, the choice says":
         "换成32个更小的专家，选择对当前字符说明了{fcur:.2f}比特，和8个专家时差不多。",
+
+    'This is an association on these held-out positions.':
+        '这只是在这些留出位置上观察到的关联，并不能确定是哪些上下文信息导致了路由器的选择。',
+
+    "f'Comparing the same two seeds, the choice of thirty-two smaller experts carries":
+        '比较相同的两个随机种子，选择三十二个更小专家时，与当前字符的互信息为{fcur:.2f}比特，八个专家时为{fcoarse:.2f}比特。',
 
     'The big models look similar.':
         "大模型看起来也类似。<bookmark mark='a'/>Mistral对Mixtral的分析，没有找到专管生物学或哲学这类主题的专家。"
@@ -498,8 +502,8 @@ ZH = {
         "矩阵的开销大约是完整模型的十六分之九。",
 
     '"We trained it. Our four-block transformer':
-        "我们训练了它。我们的4块Transformer，第2和第4块做路由，对比2块、3块和4块的稠密模型。一个轴是每个字符的计算量，"
-        "另一个轴是留出数据的比特数。<bookmark mark='a'/>稠密模型连成一条线：块越多，计算越多，比特越少。<bookmark mark='b'/>"
+        "我们训练了它。我们的4块Transformer，第2和第4块做路由，对比2块、3块和4块的稠密模型。一个轴是每个字符的稀疏算术量估计，"
+        "另一个轴是留出数据的比特数。我们的代码实际仍执行稠密运算。<bookmark mark='a'/>稠密模型连成一条线：块越多，计算越多，比特越少。<bookmark mark='b'/>"
         "{v}<bookmark mark='w'/>{w}",
 
     "f'The routed models sit below the dense line":
@@ -564,13 +568,7 @@ ZH = {
     'Chapter thirteen. Sparse attention, by design.': '第13章。设计出来的稀疏注意力。',
 
     'f"Choosing by score is what real models now do.':
-        "按分数挑，正是现在的真实模型在做的。<bookmark mark='a'/>这是我们Transformer里的一个查询，以及它怎样给最后48个键分配权重。"
-        "这些键加起来占了它{100 * float(r['strip_mass']):.0f}%的注意力，而大部分落在离末尾很远的几个字符上。<bookmark mark='b'/>"
-        "滑动窗口只保留最后8个键：它们只占{100 * float(r['window']):.0f}%。<bookmark mark='c'/>DeepSeek的原生稀疏注意力，"
-        "把过去切成块，再把每一块压缩成一个摘要。<bookmark mark='d'/>查询给这些摘要打分，把最好的几块完整读一遍，"
-        "再保留一个最近词元的窗口：{100 * float(r['nsa']):.0f}%，用了{int(r['nsa_keys'])}个键。<bookmark mark='e'/>"
-        "在DeepSeek-V3.2里，一个又小又快的索引器给过去的每个词元打分，查询只关注得分最高的那些：真实模型里是2048个，"
-        "这里是8个，占了{100 * float(r['topk']):.0f}%。<bookmark mark='f'/>两者的诀窍都在于：找出重要的键，必须比关注全部键便宜得多。",
+        "按分数挑，正是现在的真实模型在做的。<bookmark mark='a'/>这是我们Transformer里的一个查询，以及它怎样给最后48个键分配权重。这些键加起来占了它{100 * float(r['strip_mass']):.0f}%的注意力，而大部分落在离末尾很远的几个字符上。<bookmark mark='b'/>滑动窗口只保留最后8个键：它们只占{100 * float(r['window']):.0f}%。<bookmark mark='c'/>DeepSeek的原生稀疏注意力，把过去切成块，再把每一块压缩成一个摘要。<bookmark mark='d'/>真实的NSA给这些摘要打分，完整读取选中的块，并保留最近的窗口。在这幅示意图里，我们按完整注意力的分配总量选块，没有训练压缩器：{100 * float(r['nsa']):.0f}%，用了{int(r['nsa_keys'])}个键。<bookmark mark='e'/>在DeepSeek-V3.2里，一个又小又快的索引器给过去的每个词元打分，查询只关注得分最高的那些：真实模型里是2048个，这里用理想索引器选择8个，占了{100 * float(r['topk']):.0f}%。<bookmark mark='f'/>两者的诀窍都在于：找出重要的键，必须比关注全部键便宜得多。",
 
     'In equations:':
         "写成公式：<bookmark mark='a'/>NSA的输出是三个注意力的门控加权和：对块的摘要、对选中块的完整内容、对最近的窗口，"
@@ -580,12 +578,7 @@ ZH = {
         "所以昂贵的部分现在随长度乘以2048增长，而不是随长度的平方增长。",
 
     'f"Can a model learn where to look?':
-        "模型能学会看哪里吗？我们需要一个看哪里很要紧的任务。<bookmark mark='a'/>每个序列开头有8条事实，每条是一个词元，"
-        "把一个键和一个值绑在一起：比如键3对应值11。<bookmark mark='b'/>然后是40个填充词元。<bookmark mark='c'/>"
-        "然后逐个问这些键，模型必须答出对应的值。它需要的那条事实，至少在40个词元之前。<bookmark mark='d'/>"
-        "我们用全注意力训练小Transformer，再用三种稀疏模式训练，每种都允许每个查询用{int(d['keys'])}个键："
-        "滑动窗口；块选择，也就是查询自己那一块4个，加上平均键得分最高的那一块，就像MoBA和NSA；"
-        "以及一个可以挑任意键的学出来的索引器，就像DeepSeek的稀疏注意力。",
+        "模型能学会看哪里吗？我们需要一个看哪里很要紧的任务。<bookmark mark='a'/>每个序列开头有8条事实，每条是一个词元，把一个键和一个值绑在一起：比如键3对应值11。<bookmark mark='b'/>然后是40个填充词元。<bookmark mark='c'/>然后逐个问这些键，模型必须答出对应的值。它需要的那条事实，至少在40个词元之前。<bookmark mark='d'/>我们用全注意力训练小Transformer，再用三种稀疏模式训练，每种名义上的键选择预算是{int(d['keys'])}个：滑动窗口；块选择，也就是查询自己那一块4个，加上平均键得分最高的那一块，就像MoBA和NSA；以及一个可以挑任意{int(d['keys'])}个键的学出来的索引器，就像DeepSeek的稀疏注意力。索引器还会在当前词元未被选中时保留它，所以最多可能读取{int(d['keys']) + 1}个键。",
 
     '"Here\'s training, the share of answers right.':
         "这是训练过程，答对的比例。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}"
@@ -604,16 +597,15 @@ ZH = {
     "f'Block selection gets {100 * bw:.0f} percent: an average key is too blurry":
         "块选择只有{100 * bw:.0f}%：平均键这个摘要太模糊，找不到正确的块。",
 
-    "f'And the learned indexer": "而从全注意力模型出发、学出来的索引器，只用8个键就达到了{100 * iw:.0f}%。",
+    "f'And the learned indexer": '而从全注意力模型出发、学出来的索引器，选择8个键，并在需要时保留当前词元，达到了{100 * iw:.0f}%。',
 
     "f'The learned indexer, started from the full model": "从全注意力模型出发、学出来的索引器达到{100 * iw:.0f}%。",
 
     "f'Imposing a pattern on the full model without retraining is a different story: its own":
-        "不重新训练，直接给全注意力模型套上一种模式，就是另一回事了：它自己得分最高的8个键保留了{100 * ti:.0f}%，"
-        "所以信息都在，只要能便宜地找到它。",
+        '不重新训练，直接给全注意力模型套上一种模式，就是另一回事了：它自己得分最高的8个选择，加上强制保留当前词元，保留了{100 * ti:.0f}%，所以信息都在，只要能便宜地找到它。',
 
     "f'Imposing a pattern on the full model without retraining is a different story: even":
-        "不重新训练，直接给全注意力模型套上一种模式，就是另一回事了：即使是它自己得分最高的8个键，也只保留了{100 * ti:.0f}%。",
+        '不重新训练，直接给全注意力模型套上一种模式，就是另一回事了：即使是它自己得分最高的8个选择，加上强制保留当前词元，也只保留了{100 * ti:.0f}%。',
 
     'f"This year\'s frontier combines the ideas.':
         "今年的前沿把这些想法结合了起来。<bookmark mark='a'/>2026年4月发布的DeepSeek-V4，把每{a['m']}个键和值压缩成一个条目，"
@@ -673,7 +665,7 @@ ZH = {
         "第17部分的稀疏张量核心就能以稠密速度的2倍来乘它。",
 
     '"What does two in four cost?':
-        "四选二要付出什么代价？我们把稠密模型的每个权重矩阵都剪了，3个种子。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}"
+        "四选二要付出什么代价？我们剪的是块内注意力和前馈矩阵，3个种子；嵌入和输出层保持稠密。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}"
         "<bookmark mark='c'/>{v3}这就是英伟达的做法：剪一次，再训练。对大语言模型，2023年的SparseGPT不用再训练就能剪枝，"
         "用的是第19部分GPTQ那一套方法。",
 
@@ -694,16 +686,15 @@ ZH = {
         "短暂的再训练补回了一部分：{int(p['ft_steps'])}步之后，还差{mf - dense[0]:.2f}比特。",
 
     'f"Sparsity also hides in the activations.':
-        "稀疏也藏在激活里。<bookmark mark='a'/>这是我们稠密模型前馈层经过GELU之后的激活：其中{100 * sh:.0f}%小于十分之一。"
-        "激活为0的神经元，既不用计算，它的权重也不用读。<bookmark mark='b'/>那就把最小的那些置为0，看看代价是多少。"
-        "置零一半，每字符多{d50:.3f}比特；置零百分之九十，多{d90:.2f}。",
+        "稀疏也藏在激活里。<bookmark mark='a'/>这是我们稠密模型前馈层经过GELU之后的激活：其中{100 * "
+        'sh:.0f}%绝对值小于十分之一。激活为0的神经元，既不用计算，它的权重也不用读。<bookmark '
+        "mark='b'/>先按训练批次校准固定阈值，再评估留出文本。校准目标一半，每字符多{d50:.3f}比特；目标九成，多{d90:.2f}。",
 
     'f"With ReLU the zeros are exact.':
-        "用ReLU的话，零是精确的。在彩票那一章的小ReLU网络里，训练结束时，对一个给定的输入，{100 * fin:.0f}%的隐藏单元正好是0。"
-        "<bookmark mark='a'/>2022年，李宗霖和同事们发现，T5-Base只有百分之三的激活不为零，称之为懒惰神经元现象。"
-        "<bookmark mark='b'/>现代模型用GELU和SwiGLU，没有精确的零；但2024年TEAL把Llama最小的百分之四十到五十的激活置零，"
-        "损失很小，解码最多快了1.8倍，因为一个零，意味着一列权重不用读。<bookmark mark='c'/>这一部分的共同线索："
-        "只有硬件能跳过的稀疏，才划算。",
+        '用ReLU的话，零是精确的。在彩票那一章的小ReLU网络里，最后记录的训练批次中，跨种子和层，平均{100 * fin:.0f}%的激活为0。<bookmark '
+        "mark='a'/>2022年，李宗霖和同事们发现，T5-Base只有百分之三的激活不为零，称之为懒惰神经元现象。<bookmark mark='b'/>现代模型用GELU和S"
+        'wiGLU，没有精确的零；但2024年TEAL把Llama最小的百分之四十到五十的激活置零，损失很小，解码最多快了1.8倍，因为一个零，意味着一列权重不用读。<bookmark'
+        " mark='c'/>这一部分的共同线索：只有硬件能跳过的稀疏，才划算。",
 
     # ---------------------------------------------------------------- Frontier
     'Chapter sixteen. The frontier, late 2026.': '第16章。前沿，2026年末。',
@@ -716,12 +707,13 @@ ZH = {
         "而在2026年，有智谱的第五代、通义千问的新一代、深度求索的第四代、米斯特拉尔这周刚刚发布的大模型，"
         "以及月之暗面的K3：每层{k3['experts']}个专家，每次挑选{k3['k']}个。它们几乎全都是细粒度的，而且大多数还保留了共享专家。",
 
-    'f"And by the share of the model each token uses.':
-        "再看每个词元用到模型的多大比例。<bookmark mark='a'/>Mixtral每个词元用{100 * fr['mixtral']:.0f}%的权重；"
-        "DeepSeek-V3是{100 * fr['dsv3']:.1f}%。<bookmark mark='b'/>最新的只用3%到5%：DeepSeek-V4-Pro {100 * fr['dsv4']:.1f}%，"
-        "Kimi K3 {100 * fr['kimik3']:.1f}%，这里最稀疏的{sparsest}，{100 * lowest['frac']:.1f}%。一个万亿参数的模型，"
-        "每个词元的成本只相当于一个三百亿到五百亿参数的稠密模型。<bookmark mark='c'/>闭源模型里也有混合专家："
-        "谷歌Gemini 1.5和2.5的报告都写明是稀疏混合专家，OpenAI开源的gpt-oss也是，不过大多数实验室不公开它们的架构。",
+    'f"Compare each maker\'s reported active-parameter share.':
+        "再比较各厂商报告的活跃参数占比。嵌入与输出层的计数口径有所不同。<bookmark mark='a'/>Mixtral报告{100 * "
+        "fr['mixtral']:.0f}%；DeepSeek-V3是{100 * fr['dsv3']:.1f}%。<bookmark "
+        "mark='b'/>较新的报告约为3%到5%：DeepSeek-V4-Pro {100 * fr['dsv4']:.1f}%，Kimi K3 {100 * "
+        "fr['kimik3']:.1f}%，这里最稀疏的{sparsest}，{100 * "
+        "lowest['frac']:.1f}%。把万亿参数的混合专家模型与三百亿到五百亿参数的稠密模型相比，只是对所选矩阵运算量的粗略类比，并不表示实测开销相同。<bookmark "
+        "mark='c'/>闭源模型里也有混合专家：谷歌Gemini 1.5和2.5的报告都写明是稀疏混合专家，OpenAI开源的gpt-oss也是，不过大多数实验室不公开它们的架构。",
 
     'And attention.':
         "再看注意力。<bookmark mark='a'/>2025年2月，DeepSeek的原生稀疏注意力和月之暗面的MoBA，都选择过去内容的块，"
