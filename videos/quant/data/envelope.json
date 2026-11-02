@@ -39,6 +39,15 @@
    },
    "trials": 1
   },
+  "btc_vol_harnet_2020": {
+   "code_sha256": "e00ab426d8b06734d3361fef0878b1c29a0939ce8588f4d9da8847f07562dbc4",
+   "params": {
+    "model": "HARNet-style",
+    "seeds": 5,
+    "test": "2020"
+   },
+   "trials": 1
+  },
   "btc_vol_race_2020": {
    "code_sha256": "65f92e9e3373bf11e34c829a3795f53d35ff8f0054523632f3ae48e053698a56",
    "params": {
@@ -57,6 +66,15 @@
     "test": "2020"
    },
    "trials": 8
+  },
+  "btc_vol_toy_tsfm_2020": {
+   "code_sha256": "65cd06ca20a52a7a14b6ce05ef7b01121f48c674bca4f12a51c7a96c894a67dc",
+   "params": {
+    "model": "toy Chronos-style TSFM",
+    "seeds": 3,
+    "test": "2020"
+   },
+   "trials": 1
   },
   "cape_forecast_2021_2030": {
    "code_sha256": "a5b36ee43c347f92565b55014118cbdaee0c27f95ef91ca15f3d9898a73461da",
@@ -90,6 +108,15 @@
    },
    "trials": 1
   },
+  "myopic_loss_aversion_us": {
+   "code_sha256": "8c7dbb0143cf626417368403ae58182560c95c5a207a307002e6f39eb3374bc5",
+   "params": {
+    "cpt": "TK 1992",
+    "data": "French monthly 1926-2020",
+    "horizons": "1..36"
+   },
+   "trials": 1
+  },
   "sign_continuation_eprocess_btc": {
    "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",
    "params": {
@@ -114,6 +141,15 @@
    "code_sha256": "e16540a4048fd28a988617f1d372c42952b84061aec9406cbfb22881aeff568d",
    "params": {
     "window": "[-1, +3]"
+   },
+   "trials": 1
+  },
+  "vol_target_us_market": {
+   "code_sha256": "24cb7dea89da9df3b070f0a6653721eb3a5e1327bc2d366ffc2c81a9627872de",
+   "params": {
+    "data": "French daily 1926-2020",
+    "rebalance": "monthly",
+    "window": "previous month"
    },
    "trials": 1
   }

@@ -1,4 +1,24 @@
 {
+ "binance/futures/cm/BTCUSD_210326/1h/2020-12": {
+  "sha256": "894b267ed21383db5d9d6c069e30e693640fbc0270c2db4026fa2be734724ce8",
+  "bytes": 33153,
+  "source": "https://data.binance.vision/data/futures/cm/monthly/klines/BTCUSD_210326/1h/BTCUSD_210326-1h-2020-12.zip"
+ },
+ "binance/futures/cm/BTCUSD_210326/1h/2021-01": {
+  "sha256": "85c1d44e3df2650de1dfb3a38e08152d6b589668e9d05fb072226b6c05aae87f",
+  "bytes": 34775,
+  "source": "https://data.binance.vision/data/futures/cm/monthly/klines/BTCUSD_210326/1h/BTCUSD_210326-1h-2021-01.zip"
+ },
+ "binance/futures/cm/BTCUSD_210326/1h/2021-02": {
+  "sha256": "abd8b700fcb6fcffa5b7da843e90feb8aa6e84cdab54cb999c054e9d435c4d38",
+  "bytes": 31463,
+  "source": "https://data.binance.vision/data/futures/cm/monthly/klines/BTCUSD_210326/1h/BTCUSD_210326-1h-2021-02.zip"
+ },
+ "binance/futures/cm/BTCUSD_210326/1h/2021-03": {
+  "sha256": "b869588fd2741134f49de75e9027dc5109d81c61299e0a7157fef2007fbd60c0",
+  "bytes": 28402,
+  "source": "https://data.binance.vision/data/futures/cm/monthly/klines/BTCUSD_210326/1h/BTCUSD_210326-1h-2021-03.zip"
+ },
  "binance/futures/um/BTCUSDT/1d/2020-01": {
   "sha256": "83f80bb879d556dc26e10bd8dca5d6a1d4484247dd1a536431fad767f7978268",
   "bytes": 1978,
@@ -824,6 +844,21 @@
   "bytes": 44596,
   "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-12.zip"
  },
+ "binance/spot/BTCUSDT/1h/2021-01": {
+  "sha256": "a2fa12bec12d942e58dbc7fb223973bd2173dfccf8e09edc501bda40b3c3638e",
+  "bytes": 45988,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-01.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2021-02": {
+  "sha256": "8cd20f5058dc7585cfa874a3ab0e5fd0096f369c182d8fda80dc16495050e018",
+  "bytes": 41575,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-02.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2021-03": {
+  "sha256": "748783e9715835dd334fbc0cbbff0518962ebbcbe0430acb65f2f506193bad2d",
+  "bytes": 45712,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-03.zip"
+ },
  "binance/spot/BTCUSDT/1h/2021-04": {
   "sha256": "e5a33803814e6771c4c85e8f2e28e90e46d40f14ca3180a8c10c305cf07fab74",
   "bytes": 43918,
@@ -1428,6 +1463,191 @@
   "sha256": "470e5eecf5c2fb18390f5234897f71d9cec61e2bf31d0152948ce985e0ae583d",
   "bytes": 463951,
   "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-11.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-01": {
+  "sha256": "9c077a151ad30786ffbf2d560f457fb727ea3fc4f0932e6e287e2bf22ce5ba16",
+  "bytes": 2214,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-01.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-02": {
+  "sha256": "07b43daa2cd8487fc7a652c58237b93a7a07108e5f4d5cb9ec086d7737898d99",
+  "bytes": 2005,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-02.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-03": {
+  "sha256": "0f3fe06236480c4aed3460eac7b2d4e0ef621ec4cc5da20445797cb682b74dc2",
+  "bytes": 2195,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-03.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-04": {
+  "sha256": "d483115836d4c285943064b22461670ff30ef1601b1183c4034c7edb4fffeedf",
+  "bytes": 2115,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-04.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-05": {
+  "sha256": "bc68e71360869ed2f1d06bfa07ec6599c5bdb38406d6b712635afe2c6f1df7fa",
+  "bytes": 2240,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-05.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-06": {
+  "sha256": "b8ddb26be6c48876a04a7fddfbc3f4c8842f53b8e217613eac9dd15a55836597",
+  "bytes": 2136,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-06.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-07": {
+  "sha256": "c33ea50dc263d559315e7bf3dd6ab87a40f12747fe6fd0c16b5dff28dbd7b58f",
+  "bytes": 2186,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-07.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-08": {
+  "sha256": "3cffa7628cff71c9b2ec5f33085c90317fc1d9866ac701ca9742322344182397",
+  "bytes": 2200,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-08.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-09": {
+  "sha256": "14e849630ad4d5ae2f899c289c395736c12f1b699486b9dcfd1d7e058e4fff18",
+  "bytes": 2089,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-09.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-10": {
+  "sha256": "4f9e66dc56961d8552082782b2cdac5a149e125da90694885ab90363a63e8ff5",
+  "bytes": 2129,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-10.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-11": {
+  "sha256": "8e9ebb3bcc07d3080db603ceafaec29fe66612bd160ad737235a3476fc8eafe9",
+  "bytes": 2080,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-11.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2021-12": {
+  "sha256": "2f30c04c60988621d47afa115e2b7771785440ee3effe87355d5f7038d234361",
+  "bytes": 2114,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2021-12.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-01": {
+  "sha256": "d992b05664b21cef2e104aa93ab1de487fe396f68dc9767380d87998cc7969a1",
+  "bytes": 2139,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-01.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-02": {
+  "sha256": "2d7eeb5c0c0574ebfff2d7369f3b991e2693fe81a2defc87525c667598c3ceef",
+  "bytes": 1948,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-02.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-03": {
+  "sha256": "0cfffeb995ad02f64b0a1235db34fbca7982aef8b104ee4bb7fd52605323ad53",
+  "bytes": 2131,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-03.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-04": {
+  "sha256": "2e3269eb718fd3c75f41a11f03c91f3e3af91bd14815b79b216ec371a876ec57",
+  "bytes": 2041,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-04.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-05": {
+  "sha256": "fe39dd94b5e65aced7b4979fd6357fcd3700ae556a9d03c507d9983d507a628e",
+  "bytes": 2144,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-05.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-06": {
+  "sha256": "62633207619685b148ef58bdc910b78a33fef724ac2b507ef57e7878145516dc",
+  "bytes": 2060,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-06.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-07": {
+  "sha256": "6b4b9bdc7b0e1e6b87b95e750343d898c0df36d9d885bfeae594ca4e29ac0981",
+  "bytes": 2130,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-07.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-08": {
+  "sha256": "9f54ee2471795608f083a175285cbfd77f5de473cbeaa0d491b3751cf791a3a9",
+  "bytes": 2118,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-08.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-09": {
+  "sha256": "64daaa8bedcb3e82736d5b6426974aadd814007067fc81380ae87e04e1112714",
+  "bytes": 2022,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-09.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-10": {
+  "sha256": "01a81d5a27053ead87542d1329763bfd22978080f6c3e7ee588f189cd49ff8d6",
+  "bytes": 2088,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-10.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-11": {
+  "sha256": "83cef6abcb76dffbac6c6ad0e2842dd218f226e1e4a1839e78e35b12dd68a015",
+  "bytes": 2061,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-11.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2022-12": {
+  "sha256": "e3f2c5851ef573c35733f29293188310099683948692d8e8ba008b17fdbd508f",
+  "bytes": 2050,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2022-12.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-01": {
+  "sha256": "811ff55e20735e6fff55ef37c0c3e922eb6d26d41fe84fc04b2a03c0179549ad",
+  "bytes": 2087,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-01.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-02": {
+  "sha256": "2f6cdf5aa6613ab3621dbd730a234935e8909f980f1195f7581abf145e422cce",
+  "bytes": 1916,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-02.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-03": {
+  "sha256": "dbfe653bf62ebac3e4e2bf5c96160de6c76bcbd76e4979ca2105d11cf2bdf77e",
+  "bytes": 2098,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-03.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-04": {
+  "sha256": "d316aea182914c088b06d03640812bae72e889a347ed9dcc78bb8ad10ed1bdf9",
+  "bytes": 2019,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-04.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-05": {
+  "sha256": "a86ef09c35c764e6f0066953074ffb0dc93239afe92e3d73e232fbc95cdeab51",
+  "bytes": 2087,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-05.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-06": {
+  "sha256": "4932a5fd8853ddf99f3853a501e5f35ffad45a07a466bbf4603ddb7fb4c821ac",
+  "bytes": 1994,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-06.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-07": {
+  "sha256": "f66293651e4a841fe9bc36cc76483bdb9c1faaa085377fbbd2fd064cd401cd5e",
+  "bytes": 2036,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-07.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-08": {
+  "sha256": "e694749c085b888401f51002dbd21bc8cf0c4d801d2da311e72d6c1ae97627d4",
+  "bytes": 2058,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-08.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-09": {
+  "sha256": "c1faa848529e17e15deafb208d817155576ef51e556813109cdb60c0153ac73d",
+  "bytes": 1985,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-09.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-10": {
+  "sha256": "baadc74c685a63d7ba453531c9f4d1df81a5719200501ab229018352a1be9630",
+  "bytes": 2059,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-10.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-11": {
+  "sha256": "8faf9f53efe268d25d01b987b3a364cd9f1983703ab2f78486192c29218b1faf",
+  "bytes": 2022,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-11.zip"
+ },
+ "binance/spot/ETHUSDT/1d/2023-12": {
+  "sha256": "1778c56d995fe5d32a0816a5214feabcd84d594f4e882315b4e225d6e86e5275",
+  "bytes": 2086,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-12.zip"
+ },
+ "damodaran/histimpl.xls": {
+  "sha256": "bb4d8da0a371a00af06172ec41dcef35a9ae30d6ab9c03d58ab5d2187e1e406f",
+  "bytes": 113152,
+  "source": "https://pages.stern.nyu.edu/~adamodar/pc/datasets/histimpl.xls"
  },
  "deribit/dvol/BTC/3600/2021-04": {
   "sha256": "95209f9d0a07fe2ea6934c568be9f020b3093e0964bc1e6e3d5c16286fda8acd",
@@ -8174,6 +8394,56 @@
   "bytes": 11748,
   "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
  },
+ "edgar/companyfacts/CIK0000012927/v1_through_20261031": {
+  "sha256": "354f30326c5b1074f63a2886dd5d1e6b86f9b95b7e772bf869f975f22d69ec20",
+  "bytes": 430541,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000012927.json"
+ },
+ "edgar/companyfacts/CIK0000034088/v1_through_20261031": {
+  "sha256": "e543fbe29f855e4296b8c6e3beb6d970b307d558edd52ee3cfffea8c46c9cd5c",
+  "bytes": 291773,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json"
+ },
+ "edgar/companyfacts/CIK0000040545/v1_through_20261031": {
+  "sha256": "de7d2550c46e78b3bea80007f98d54321c3e87697260c9e38126504c64c9e32a",
+  "bytes": 407069,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
+ },
+ "edgar/companyfacts/CIK0000072971/v1_through_20261031": {
+  "sha256": "4353ae273bb32f428cc678c2afd5db9507f32c3b6977724c9c9b31d9e1fb70a8",
+  "bytes": 148149,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000072971.json"
+ },
+ "edgar/companyfacts/CIK0000320193/v1_through_20261031": {
+  "sha256": "5dd1b88a3477d9e40487dbc9f1526ed19a7f9bd6eee2318683c7f99a22294c44",
+  "bytes": 387731,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+ },
+ "edgar/companyfacts/CIK0000789019/v1_through_20261031": {
+  "sha256": "2cb016884f477afea63bf01f9e13a8b969e9b168d4cf063da097557550b3e028",
+  "bytes": 408250,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"
+ },
+ "edgar/companyfacts/CIK0001530721/v1_through_20261031": {
+  "sha256": "ccd946ed76b8f3cb30b4a2d30ec52246a6e107bf4998301a8379725ace0f9c17",
+  "bytes": 311049,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001530721.json"
+ },
+ "edgar/companyfacts/CIK0001637459/v1_through_20261031": {
+  "sha256": "2344c209726a2e2b80de7f19a91b3499e222c2a21f31d3986be4f59874a79421",
+  "bytes": 263131,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001637459.json"
+ },
+ "edgar/submissions/CIK0000320193/through_20261031": {
+  "sha256": "d50a1784d59233a45255b424f4c1ef5894f40b907484320f2a10f54d65976c51",
+  "bytes": 47180,
+  "source": "https://data.sec.gov/submissions/CIK0000320193.json"
+ },
+ "fed/fomc_scheduled/1994-2020": {
+  "sha256": "e9886a5a0d9d0b780e0b7380d0f448caf30268492cb57009ad2c1e89352451d7",
+  "bytes": 1936,
+  "source": "https://www.federalreserve.gov/monetarypolicy/fomchistorical<YYYY>.htm"
+ },
  "fred/A794RX0Q048SBEA/1947-01-01_2025-12-31": {
   "sha256": "d0b2a04c1e926fd6d93e823b5148160ce93b625e37b9b9b0e79784d6d1888347",
   "bytes": 6622,
@@ -8183,6 +8453,11 @@
   "sha256": "4fab7e0299228f031af04b3d2298d129076291d953cd1385b0ddf11ca649d2f2",
   "bytes": 18209,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL"
+ },
+ "fred/DCOILWTICO/2020-03-02_2020-05-29": {
+  "sha256": "17af9c4d6aef4f74e813592d1dd662a88041c29676d71536515bad7dfa558b83",
+  "bytes": 1188,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO"
  },
  "fred/DFF/2018-01-01_2025-12-31": {
   "sha256": "3100da0c4a6dcd62ba97790245d0081c3131945741e981cbc8c41f7c2a019caa",
@@ -8194,9 +8469,24 @@
   "bytes": 287522,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
  },
+ "fred/DGS10/1990-01-02_2025-12-31": {
+  "sha256": "973af3fbb0b2643dfc45039e4a816191d90cadcbe53282ba5cca6f008b2768cb",
+  "bytes": 161184,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
+ },
+ "fred/DGS5/1990-01-02_2025-12-31": {
+  "sha256": "8af4353570e065d049cfe130f6b6744e61da0b6a0ca2eb3d77ddc9d36f6e33e7",
+  "bytes": 161169,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS5"
+ },
  "fred/DTB3/1954-01-01_2025-12-31": {
   "sha256": "fd197d1809e65d0a3e4c0bf161170a6717f1057aecffc1393c8c38b14ef06172",
   "bytes": 322613,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
+ },
+ "fred/DTB3/1990-01-02_2025-12-31": {
+  "sha256": "585bf176125fc1e5a708f8cf12a049d8be231a5470e033a7f1ef460dcfc5d640",
+  "bytes": 161256,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
  },
  "fred/DTB3/2018-01-01_2025-12-31": {
@@ -8234,9 +8524,34 @@
   "bytes": 34572,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR"
  },
+ "fred/SOFR1/2018-01-01_2025-12-31": {
+  "sha256": "b7c292b106bf54ccbd28f3a3d164ea3a55a2741164c52ac967ffe72274c3f7ea",
+  "bytes": 34544,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR1"
+ },
+ "fred/SOFR25/2018-01-01_2025-12-31": {
+  "sha256": "83d559520400d22802e18385aff21ffd68dd48baab51fa46b1a36ce651486114",
+  "bytes": 34450,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR25"
+ },
+ "fred/SOFR75/2018-01-01_2025-12-31": {
+  "sha256": "6574476720086ab49016bbc2b38120a48f7017b051698ccb4583d48072ffe268",
+  "bytes": 34549,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR75"
+ },
+ "fred/SOFR99/2018-01-01_2025-12-31": {
+  "sha256": "57fe1c72b78b6da3b30115f420b42973725cd253404f5d56526223cc71bd5f36",
+  "bytes": 34532,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR99"
+ },
  "fred/VIXCLS/1990-01-01_2020-12-31": {
   "sha256": "5adcd44bb0d7ff4129d5893b270d99a8871fd1c6434b7d44c0b984a3cf82c261",
   "bytes": 147573,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+ },
+ "fred/VIXCLS/1990-01-02_2025-12-31": {
+  "sha256": "ff18bc3a5b681767a3138ca016af1dbd2966eae165c229f1e03d72080de5eaed",
+  "bytes": 171791,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
  },
  "fred/VIXCLS/2017-06-01_2018-06-30": {
@@ -8289,6 +8604,11 @@
   "bytes": 106381,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_INV_CSV.zip"
  },
+ "kenfrench/NI_value/through_2020-12": {
+  "sha256": "0ebdb44c7764fcdfb2899a86a251f306aeb9c47baec5a0511bff3ecf265184ef",
+  "bytes": 92896,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_NI_CSV.zip"
+ },
  "kenfrench/OP_value/through_2020-12": {
   "sha256": "49ac26966f29e3ebf5ef07f7d857503f0fe22c5a8e234140eddfa7bf0748b7c7",
   "bytes": 98052,
@@ -8334,6 +8654,16 @@
   "bytes": 2255765,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_ME_daily_CSV.zip"
  },
+ "osap/2024.10/PredictorLSretWide.parquet": {
+  "sha256": "a69301813f547806e99a4fe4e4e00ec632cd4ebf2a059d8be39473d87068613d",
+  "bytes": 1400235,
+  "source": "https://huggingface.co/datasets/OpenSourceAP/CrossSection/resolve/2024.10/Portfolios/Full%20Sets%20OP/PredictorLSretWide.parquet"
+ },
+ "osap/2024.10/SignalDoc.csv": {
+  "sha256": "590a308e40483fa87c0cbb95f73c010d09a61e22a3e2059627d2b3de9b77e0d9",
+  "bytes": 181581,
+  "source": "https://huggingface.co/datasets/OpenSourceAP/CrossSection/resolve/2024.10/SignalDoc.csv"
+ },
  "shiller/ie_data/through_2020-12": {
   "sha256": "3996c62d804e16e818332a2f5b7ab97ca0d95b063d1d23ef5b8ed49390ab8089",
   "bytes": 96604,
@@ -8358,6 +8688,31 @@
   "sha256": "1059e463070a9e2278f89b555b9b57a452f6666e763993d58ef10fcdb83a3dcc",
   "bytes": 43116,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/512100.SS"
+ },
+ "yahoo/AAPL/2013-01-01_2021-06-30": {
+  "sha256": "30395b197d3881ef7fc665133397227a1f8e8f97729c3da98668948151d9e250",
+  "bytes": 43418,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL"
+ },
+ "yahoo/CPRI/1wk/2023-01-01_2024-12-31": {
+  "sha256": "f8562e9b9f12e461facc122ced2790d5e37f13c8b36a6e8d219b88edc1f42889",
+  "bytes": 2596,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/CPRI?period1=1672531200&period2=1735603200&interval=1wk&events=div%2Csplit"
+ },
+ "yahoo/MERFX/1mo/1988-12-01_2021-01-02": {
+  "sha256": "c5b3e174e5fdd637148800d5dd8ef653abb09a271d7124ea429524934706d8a3",
+  "bytes": 10071,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/MERFX?period1=596937600&period2=1609545600&interval=1mo&events=div%2Csplit"
+ },
+ "yahoo/SPY/2013-01-01_2021-06-30": {
+  "sha256": "3bfcf302807fddf6b54a337ee2454e18167bc01b9886a404f52b4f8f457f9c0b",
+  "bytes": 42526,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
+ },
+ "yahoo/^GSPC/1mo/1988-12-01_2021-01-02": {
+  "sha256": "61e4394e0519e553308ea275dffa1ba8b347553106e758a3da475b4f14e6f725",
+  "bytes": 11125,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/^GSPC?period1=596937600&period2=1609545600&interval=1mo&events=div%2Csplit"
  },
  "yahoo/^HSCE/2015-01-01_2025-11-30": {
   "sha256": "5d901e87f853ed29ff3abd340bb222ad8d4ff6e55f4f385b0050b3b71dd903c3",

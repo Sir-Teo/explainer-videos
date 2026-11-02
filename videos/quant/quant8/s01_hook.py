@@ -3,15 +3,18 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import KELLY, OVER, PART, UNDER, illustration, load, tbar
+from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, tbar
 
 
 class Hook(VoiceoverScene):
     def construct(self):
         c = load("coin")
+        live = load("coin_live")
         self.title_card()
         self.game(c)
+        self.live(live)
         self.answer(c)
+        self.history()
         self.objectives()
         self.house()
 
@@ -49,6 +52,76 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def live(self, L):
+        fr = ["0.1", "0.2", "0.4", "1.0"]
+        cols = [UNDER, KELLY, ALT, OVER]
+        g = axes([0, 4], [-2, 2.5], x_length=9.6, y_length=5.0, ylabel=r"wealth (log scale)", xticks=[],
+                 yticks=[-2, -1, 0, 1, 2], yfmt=lambda u: {-2: r"\$0.01", -1: r"\$0.10", 0: r"\$1", 1: r"\$10",
+                                                            2: r"\$100"}[int(u)], font_size=17)
+        g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.35)
+        ax = g.ax
+        cap = DashedLine(ax.c2p(0, np.log10(250)), ax.c2p(4, np.log10(250)), color=GOOD, stroke_width=2)
+        capl = label(r"cap \$250", font_size=18, color=GOOD).next_to(ax.c2p(4, np.log10(250)), RIGHT, buff=0.1)
+        start = DashedLine(ax.c2p(0, np.log10(25)), ax.c2p(4, np.log10(25)), color=GREY_C, stroke_width=1.5)
+        startl = label(r"start \$25", font_size=18, color=GREY_B).next_to(ax.c2p(4, np.log10(25)), RIGHT, buff=0.1)
+        heads = VGroup(*[label(rf"bet {100 * float(f):.0f}\%", font_size=22, color=c_).next_to(
+            ax.c2p(i + 0.5, -2), DOWN, buff=0.15) for i, (f, c_) in enumerate(zip(fr, cols))])
+        rng = np.random.default_rng(1)
+        jit = rng.uniform(-0.38, 0.38, (4, L["n"]))
+        paths = [np.asarray(L["by_fraction"][f]["logw"]) for f in fr]
+        tk = ValueTracker(0)
+
+        dots = VGroup(*[Dot(ax.c2p(i + 0.5 + jit[i, j], paths[i][j, 0]), radius=0.028, color=cols[i]).set_opacity(0.8)
+                        for i in range(4) for j in range(L["n"])])
+
+        def move(grp):
+            n = int(tk.get_value())
+            k = 0
+            for i, P in enumerate(paths):
+                y = np.clip(P[:, n], -2, 2.45)
+                for j in range(len(y)):
+                    grp[k].move_to(ax.c2p(i + 0.5 + jit[i, j], y[j]))
+                    k += 1
+
+        dots.add_updater(move)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{flip }}{int(tk.get_value())}", font_size=30,
+                                            color=GREY_A).to_corner(UR, buff=0.5))
+        q = pause_card(r"Before the flips: which column goes bust most often, 40\% or 100\%? And does 40\% grow at "
+                       r"all?", width=5.0, font_size=22).to_corner(UR, buff=0.4).shift(DOWN * 0.8)
+        b = L["by_fraction"]
+        res = VGroup(*[label(rf"{100 * float(f):.0f}\%: {100 * b[f]['p_cap']:.0f}\% at the cap, "
+                             rf"{100 * b[f]['p_bust']:.0f}\% bust", font_size=20, color=c_)
+                       for f, c_ in zip(fr, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        res.to_corner(UR, buff=0.4).shift(DOWN * 0.9)
+        src = illustration(r"simulation: 160 players per column, the same 300 coin flips for all")
+        with self.voiceover(
+            "Before the theory, let the game play itself. Here are a hundred and sixty players in each of four columns. "
+            "Every player sees the same coin; the only difference is the fraction of wealth each column stakes on "
+            "every flip: ten, twenty, forty, or a hundred percent. <bookmark mark='a'/> Pause and predict: which "
+            "column goes bust most often, forty or a hundred? And does forty percent grow at all? "
+            "<bookmark mark='b'/> Three hundred flips. Watch the columns spread on a log scale."
+        ) as vo:
+            self.play(FadeIn(g), Create(cap), FadeIn(capl), Create(start), FadeIn(startl), FadeIn(heads), FadeIn(src))
+            self.add(dots)
+            vo.wait_until("a")
+            self.play(FadeIn(q, shift=LEFT * 0.2))
+            vo.wait_until("b")
+            self.play(FadeOut(q), run_time=0.5)
+            self.add(cnt)
+            self.play(tk.animate.set_value(300), run_time=max(vo.remaining(12.0), 12.0), rate_func=linear)
+        dots.clear_updaters()
+        cnt.clear_updaters()
+        with self.voiceover(
+            f"The all-in column was wiped out: {100 * b['1.0']['p_bust']:.0f} percent of its players went bust, "
+            "because a single tail takes everything. At forty percent the typical player barely grows, and only the "
+            f"cap rescues most of them; still {100 * b['0.4']['p_bust']:.0f} percent went bust. At twenty percent, "
+            f"{100 * b['0.2']['p_cap']:.0f} percent reached the cap and nobody went bust; at ten, "
+            f"{100 * b['0.1']['p_cap']:.0f} percent, also without a single bust."
+        ):
+            self.play(LaggedStart(*[FadeIn(r_, shift=LEFT * 0.2) for r_ in res], lag_ratio=0.4, run_time=3))
+        self.wait(0.4)
+        self.clear_scene()
+
     def answer(self, c):
         f, gr = np.asarray(c["f"]), np.asarray(c["growth"])
         ok = np.isfinite(gr) & (gr > -0.06)
@@ -62,7 +135,6 @@ class Hook(VoiceoverScene):
         top = Dot(ax.c2p(0.2, c["g_kelly"]), color=KELLY)
         tl = MathTex(r"f^* = p - q = 20\%", font_size=28, color=KELLY).next_to(top, UP, buff=0.12)
         eq = MathTex(r"g(f) = p\log(1 + f) + q\log(1 - f)", font_size=30).next_to(g, DOWN, buff=0.35).align_to(g, LEFT)
-        # the outcome of 20,000 simulated players at each fraction
         fr = [k for k in c["by_fraction"]]
         g2 = axes([0, len(fr)], [0, 1], x_length=5.8, y_length=3.6, ylabel=r"share of 20{,}000 simulated players",
                   xticks=[], yticks=[0, 0.5, 1], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=17)
@@ -84,10 +156,10 @@ class Hook(VoiceoverScene):
             "many flips grows at the rate p log of one plus f, plus q log of one minus f, per flip. <bookmark mark='a'/> "
             "That curve peaks at f equals p minus q: twenty percent. It is the Kelly criterion, from 1956. Bet more and "
             "you grow more slowly; bet twice as much, forty percent, and you no longer grow at all; beyond that, a "
-            "sure edge makes you poorer. <bookmark mark='b'/> Simulate twenty thousand players at each fraction for three "
-            f"hundred flips. At twenty percent, {100 * k20['p_cap']:.0f} percent reach the cap and none go bust. Bet "
-            f"everything each time, and {100 * k100['p_bust']:.0f} percent go bust. The coin is the same; only the "
-            "size changed."
+            "sure edge makes you poorer. <bookmark mark='b'/> With twenty thousand players at each fraction instead "
+            f"of a hundred and sixty: at twenty percent, {100 * k20['p_cap']:.0f} percent reach the cap and none go "
+            f"bust. Bet everything each time, and {100 * k100['p_bust']:.0f} percent go bust. The coin is the same; "
+            "only the size changed."
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(line), FadeIn(eq), run_time=2)
             vo.wait_until("a")
@@ -99,22 +171,87 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def history(self):
+        # a strip from 1730 to 2020 with a break: Bernoulli far left, then 1940-2020 to scale
+        x0, x1 = -5.6, 6.2
+
+        def X(y):
+            return -6.4 if y < 1900 else x0 + (x1 - x0) * (y - 1940) / (2020 - 1940)
+
+        line = VGroup(Line([-6.6, 0, 0], [-6.1, 0, 0], color=GREY_D, stroke_width=2),
+                      Line([x0 - 0.2, 0, 0], [x1, 0, 0], color=GREY_D, stroke_width=2),
+                      label(r"//", font_size=20, color=GREY_D).move_to([-5.95, 0, 0]))
+        for yr in (1940, 1960, 1980, 2000, 2020):
+            line.add(label(str(yr), font_size=15, color=GREY_D).next_to([X(yr), 0, 0], DOWN, buff=0.12))
+        ev = [(1738, r"Bernoulli: log utility"), (1944, r"von Neumann--Morgenstern"), (1956, r"Kelly"),
+              (1957, r"Bellman"), (1969, r"Merton"), (1979, r"Samuelson; Kahneman--Tversky"),
+              (1983, r"Crandall--Lions"), (1990, r"Davis--Norman; Pardoux--Peng"), (2006, r"mean-field games"),
+              (2017, r"PPO")]
+        dots, labs = VGroup(), VGroup()
+        for i, (yr, name) in enumerate(ev):
+            d = Dot([X(yr), 0, 0], radius=0.07, color=QC.IDEA)
+            t = label(rf"{yr}\; {name}", font_size=16, color=QC.IDEA)
+            up = i % 2 == 0
+            t.next_to(d, UP if up else DOWN, buff=0.35 + (0.45 if i % 4 in (2, 3) else 0.0))
+            keep_in_frame(t, margin=0.2)
+            dots.add(d)
+            labs.add(t)
+        strip = VGroup(line, dots, labs).shift(UP * 1.6)
+        root = label(r"maximize expected utility", font_size=26, color=VALUE).move_to(DOWN * 0.9)
+        kids = [(r"how much: Kelly, Merton, Samuelson", KELLY), (r"over time: Bellman, HJB, viscosity, BSDE", VALUE),
+                (r"against a crowd: mean-field games", ALT), (r"how people decide: prospect theory", OVER),
+                (r"learn it: reinforcement learning", GOOD)]
+        leaves = VGroup(*[label(t, font_size=18, color=c_) for t, c_ in kids]).arrange(RIGHT, buff=0.3)
+        if leaves.width > 13.2:
+            leaves.scale_to_fit_width(13.2)
+        leaves.move_to(DOWN * 2.6)
+        edges = VGroup(*[Line(root.get_bottom(), lf.get_top(), color=GREY_C, stroke_width=1.5) for lf in leaves])
+        with self.voiceover(
+            "How we got here. In 1738 Daniel Bernoulli proposed valuing a gamble by the logarithm of wealth. In 1944 "
+            "von Neumann and Morgenstern made expected utility an axiom system. In 1956 John Kelly found the growth "
+            "rule you just watched, and in 1957 Richard Bellman gave every multi-stage decision one recursion. "
+            "<bookmark mark='a'/> In 1969 Robert Merton solved the investor's problem in continuous time; in 1979 "
+            "Paul Samuelson attacked Kelly, and Kahneman and Tversky showed how people really choose. In 1983 "
+            "Crandall and Lions made the Bellman equation rigorous when its solutions have kinks; in 1990 Davis and "
+            "Norman solved trading with costs, and Pardoux and Peng introduced backward stochastic equations. "
+            "<bookmark mark='b'/> In 2006 came games with a continuum of players, and in 2017 the learning algorithm "
+            "we will ask to rediscover Merton. <bookmark mark='c'/> It is one tree. At its root: maximize expected "
+            "utility. Its branches: how much to bet, how to decide over time, how to decide against a crowd, how "
+            "people actually decide, and how a machine can learn the answer."
+        ) as vo:
+            self.play(Create(line), run_time=1)
+            for k in range(4):
+                self.play(FadeIn(dots[k], scale=1.5), FadeIn(labs[k], shift=UP * 0.1), run_time=0.6)
+            vo.wait_until("a")
+            for k in range(4, 8):
+                self.play(FadeIn(dots[k], scale=1.5), FadeIn(labs[k], shift=UP * 0.1), run_time=0.6)
+            vo.wait_until("b")
+            for k in range(8, 10):
+                self.play(FadeIn(dots[k], scale=1.5), FadeIn(labs[k], shift=UP * 0.1), run_time=0.6)
+            vo.wait_until("c")
+            self.play(FadeIn(root, shift=UP * 0.2))
+            self.play(LaggedStart(*[AnimationGroup(Create(e), FadeIn(lf)) for e, lf in zip(edges, leaves)],
+                                  lag_ratio=0.3, run_time=3))
+        self.wait(0.4)
+        self.clear_scene()
+
     def objectives(self):
         card = objectives_card([
-            r"Expected utility, risk aversion and the certainty equivalent",
-            r"Dynamic programming and the Hamilton--Jacobi--Bellman equation, solved on a grid",
-            r"Merton's problem: how much of your wealth to hold in stocks, on 94 years of data",
-            r"Kelly, fractional Kelly and Thorp; Samuelson's objection; ergodicity",
-            r"Leverage beyond Kelly: LTCM, 1998",
-            r"Optimal stopping, prospect theory and ambiguity",
-            r"Frontiers: BSDEs, mean-field games, and a reinforcement learner checked against Merton",
-        ], color=QC.IDEA)
+            r"Expected utility, risk aversion, and the Arrow--Pratt premium derived",
+            r"Bellman's recursion, the HJB equation, the verification theorem, viscosity solutions",
+            r"Merton's problem with consumption, the martingale method, and the no-trade band of trading costs",
+            r"Kelly and Breiman proved; fractional Kelly, LTCM, Samuelson's objection, ergodicity",
+            r"Optimal stopping: the Snell envelope and smooth fit; prospect theory and robust control",
+            r"BSDEs, mean-field games, and a reinforcement learner checked against the answers",
+            r"How funds size bets in practice, and the 2023--2026 frontier",
+        ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Utility, and what risk aversion means in numbers. Dynamic programming, and the equation that "
-            "solves every problem of this kind. Merton's answer for how much to hold in stocks, on ninety-four years "
-            "of data. Kelly's answer, the controversy around it, and what happens when a fund levers far beyond it. "
-            "When to stop. How real people decide. And three frontiers: backward stochastic equations, games with "
-            "millions of players, and a reinforcement learner that has to rediscover Merton."
+            "The plan. Utility, and the price of risk, derived. Bellman's recursion, the equation it becomes in "
+            "continuous time, the theorem that says when its solution is the answer, and what to do when the solution "
+            "has kinks. Merton's problem with consumption, solved twice, and what trading costs do to it. Kelly's "
+            "rule proved, its dangers, and the controversy around it. When to stop, and how people really decide. "
+            "Three frontiers, each with an experiment: backward equations, crowds, and a learning machine. And how "
+            "the funds that do this for a living actually size their bets."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=10))

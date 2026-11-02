@@ -980,3 +980,50 @@ def train_nsde(real, L=32, iters=1200, batch=256, lr=3e-3, depth=4, seed=0, ever
         if log and it % every == 0:
             log(it, curve[-1])
     return m, curve, fans
+
+
+# ---------------------------------------------------------------------------
+# Part 9: a neural dual for martingale optimal transport (Eckstein and Kupper's penalty; Neufeld and Sester 2023)
+# ---------------------------------------------------------------------------
+def mot_neural(x, mu, y, nu, cost, steps=3000, gamma=2000.0, width=32, lr=3e-3, seed=0, log_every=25,
+               snapshots=(), grid=None):
+    """The upper MOT bound by learning its dual: u, v and h are small networks, and the constraint
+    u(x) + v(y) + h(x)(y - x) >= c(x, y) is enforced by a penalty (gamma / 2) E_{mu x nu}[(c - u - v - h (y - x))_+^2].
+    Full batch over the grid (x_i, y_j) with weights mu_i nu_j.  Returns the trace of the dual objective
+    E_mu[u] + E_nu[v] (the bound), the penalized loss and the largest violation, and at ``snapshots`` the hedge on
+    ``grid`` (u(x) + v(y) + h(x)(y - x) on a (len(grid[0]), len(grid[1])) mesh)."""
+    import torch
+
+    torch.manual_seed(seed)
+    f = lambda a: torch.tensor(np.asarray(a, float), dtype=torch.float64)  # noqa: E731
+    X, MU, Y, NU = f(x), f(mu), f(y), f(nu)
+    C = f([[cost(a, b) for b in y] for a in x])
+    W = MU[:, None] * NU[None, :]
+    nets = [_mlp(1, width, 2).double() for _ in range(3)]
+    opt = torch.optim.Adam([p for n in nets for p in n.parameters()], lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, steps)
+
+    def hedge(xs, ys):
+        u = nets[0](xs[:, None] - 1).squeeze(-1)
+        v = nets[1](ys[:, None] - 1).squeeze(-1)
+        h = nets[2](xs[:, None] - 1).squeeze(-1)
+        return u, v, h, u[:, None] + v[None, :] + h[:, None] * (ys[None, :] - xs[:, None])
+
+    trace, snaps = [], {}
+    for it in range(steps + 1):
+        u, v, h, H = hedge(X, Y)
+        dual = (u * MU).sum() + (v * NU).sum()
+        gap = torch.relu(C - H)
+        loss = dual + 0.5 * gamma * (W * gap ** 2).sum()
+        if it % log_every == 0 or it == steps:
+            trace.append((it, float(dual.detach()), float(loss.detach()), float((W * gap).sum().detach())))
+        if it in snapshots and grid is not None:
+            with torch.no_grad():
+                snaps[it] = hedge(f(grid[0]), f(grid[1]))[3].numpy()
+        if it == steps:
+            break
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        sched.step()
+    return {"trace": np.array(trace), "snapshots": snaps, "bound": trace[-1][1], "violation": trace[-1][3]}

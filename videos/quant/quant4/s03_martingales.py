@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import binom
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant4.common import DRIFT, LOSS, MART, PART
+from videos.quant.quant4.common import DRIFT, LOSS, MART, P_C, PART, load
 
 N_MAJ = 21
 
@@ -26,15 +26,17 @@ def majority_paths(k=6, seed=1):
 
 class Martingales(VoiceoverScene):
     def construct(self):
+        m = load("martingales")
         self.card()
         self.definition()
+        self.examples()
         self.majority()
-        self.stopping()
+        self.convex(m)
 
     def card(self):
-        c = chapter_card(2, r"Martingales and optional stopping", r"Can a betting system beat a fair game?",
+        c = chapter_card(3, r"Martingales: Ville's fair games", r"What does it mean for a game to be fair?",
                          part=PART)
-        with self.voiceover("Chapter two. Martingales, and optional stopping."):
+        with self.voiceover("Chapter three. Martingales: Ville's fair games."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -70,6 +72,47 @@ class Martingales(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def examples(self):
+        rows = [cmath(r"\mathbb{E}[M_{n+1} \mid \mathcal{F}_n]", r"=", r"M_n \quad (\le:\ \text{super}, \ \ge:\ \text{sub})",
+                      font_size=38, colors={r"M_n \quad (\le:\ \text{super}, \ \ge:\ \text{sub})": MART}),
+                cmath(r"\mathbb{E}[S_{n+1}^2 \mid \mathcal{F}_n]", r"=",
+                      r"S_n^2 + 2S_n\,\mathbb{E}\xi + \mathbb{E}\xi^2 = S_n^2 + 1", font_size=38),
+                cmath(r"\mathbb{E}\big[e^{\theta S_{n+1}} \mid \mathcal{F}_n\big]", r"=",
+                      r"e^{\theta S_n}\cosh\theta \;\Rightarrow\; Z_n = e^{\theta S_n}(\cosh\theta)^{-n}", font_size=38),
+                cmath(r"\mathbb{E}\big[\mathbb{E}[X \mid \mathcal{F}_{n+1}] \mid \mathcal{F}_n\big]", r"=",
+                      r"\mathbb{E}[X \mid \mathcal{F}_n]", font_size=38, colors={r"\mathbb{E}[X \mid \mathcal{F}_n]": MART}),
+                cmath(r"\mathbb{E}[\varphi(M_{n+1}) \mid \mathcal{F}_n]", r"\ge",
+                      r"\varphi\big(\mathbb{E}[M_{n+1} \mid \mathcal{F}_n]\big) = \varphi(M_n)", font_size=38)]
+        whys = [why(r"a martingale: adapted, integrable, tomorrow's forecast is today; a supermartingale drifts down "
+                    r"(a casino's customer), a submartingale up"),
+                why(r"$\xi = \pm 1$ fair, independent of the past; so $S_n^2 - n$ is a martingale"),
+                why(r"the moment generating function of $\pm 1$ is $\cosh\theta$: the exponential martingale"),
+                why(r"the tower property: Doob's martingale of forecasts"),
+                why(r"Jensen: a convex function of a martingale is a submartingale")]
+        step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.8, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Fair, unfavourable and favourable games have names. If tomorrow's forecast is today, a martingale; if it "
+            "is at most today, a supermartingale, the gambler's wealth at a casino; if at least, a submartingale. "
+            "<bookmark mark='a'/> Three examples, each proved in a line. For a fair walk of plus and minus one steps, "
+            "expand the square: the cross term averages to zero and the new step squared is one, so the square of "
+            "the walk minus the number of steps is a martingale. <bookmark mark='b'/> The exponential of theta times "
+            "the walk grows on average by the hyperbolic cosine of theta per step, so dividing by that gives the "
+            "exponential martingale, which chapter five uses to time the walk. <bookmark mark='c'/> The forecast of "
+            "anything, refined as information arrives, is a martingale by the tower property. <bookmark mark='d'/> "
+            "And Jensen's inequality turns a convex function of a martingale into a submartingale."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.4)
+        self.clear_scene()
+
     def majority(self):
         P = majority_paths()
         g = axes([0, N_MAJ], [0, 1], x_length=8.0, y_length=4.4, xlabel=r"tosses seen", ylabel=r"chance that heads "
@@ -77,12 +120,40 @@ class Martingales(VoiceoverScene):
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         cols = color_gradient([MART, QC.SPOT], len(P))
-        paths = VGroup(*[curve(ax, np.arange(N_MAJ + 1), p, c, stroke_width=3) for p, c in zip(P, cols)])
+        n = np.arange(N_MAJ + 1)
+        others = VGroup(*[curve(ax, n, p, c, stroke_width=2.5).set_stroke(opacity=0.55) for p, c in zip(P[1:], cols[1:])])
+        main = P[0]
+        tk = ValueTracker(0.0)
+        live = tracing(ax, n, main, tk, MART, stroke_width=4)
+
+        def fan():
+            k = int(np.clip(np.floor(tk.get_value() + 1e-6), 0, N_MAJ - 1))
+            now = main[k]
+            # the two possible next values: the forecast after one more head or one more tail
+            seen = majority_heads(k)
+            up_v = win_prob(seen + 1, k + 1)
+            dn_v = win_prob(seen, k + 1)
+            x0, x1 = ax.c2p(k, now), ax.c2p(k + 1, 0)[0]
+            g_ = VGroup(DashedLine(x0, [x1, ax.c2p(0, up_v)[1], 0], color=GREY_B, stroke_width=1.5),
+                        DashedLine(x0, [x1, ax.c2p(0, dn_v)[1], 0], color=GREY_B, stroke_width=1.5),
+                        Dot([x1, ax.c2p(0, up_v)[1], 0], radius=0.07, color=QC.GAIN),
+                        Dot([x1, ax.c2p(0, dn_v)[1], 0], radius=0.07, color=LOSS),
+                        Line([x1 - 0.12, ax.c2p(0, (up_v + dn_v) / 2)[1], 0], [x1 + 0.12, ax.c2p(0, (up_v + dn_v) / 2)[1], 0],
+                             color=QC.IDEA, stroke_width=4),
+                        Dot(x0, radius=0.08, color=MART))
+            return g_
+
+        def majority_heads(k):
+            return int(round(_heads0[k]))
+
+        _heads0 = majority_heads_path()
+        fan_m = always_redraw(fan)
         side = VGroup(
             label(r"a live forecast is a martingale:", font_size=22, color=GREY_A),
             label(r"it starts at its mean, 50\%,", font_size=22, color=GREY_A),
             label(r"moves only on news,", font_size=22, color=GREY_A),
             label(r"and ends at 0 or 1", font_size=22, color=GREY_A),
+            label(r"the fan: tomorrow's two values; gold tick: their mean $=$ today", font_size=19, color=QC.IDEA),
             wrapped_label(r"a betting market's price, or an option's risk-neutral probability of finishing in the "
                           r"money, behaves the same way (Part 9)", 4.4, 20, MART),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.5)
@@ -97,51 +168,83 @@ class Martingales(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:4]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(p) for p in paths], lag_ratio=0.4, run_time=5))
+            self.add(live, fan_m)
+            self.play(FadeIn(side[4]))
+            self.play(tk.animate.set_value(N_MAJ - 1.0), run_time=7, rate_func=linear)
+            fan_m.clear_updaters()
+            self.play(FadeOut(fan_m), tk.animate.set_value(float(N_MAJ)), run_time=0.5)
+            live.clear_updaters()
+            self.play(LaggedStart(*[Create(p) for p in others], lag_ratio=0.3, run_time=3))
             vo.wait_until("b")
+            self.play(FadeIn(side[5]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def convex(self, m):
+        n = np.asarray(m["n"])
+        call, sim = np.asarray(m["call"]), np.asarray(m["call_sim"])
+        absm = np.asarray(m["abs"])
+        g = axes([0, 50], [0, 6], x_length=7.2, y_length=4.2, xlabel=r"steps $n$ of a fair $\pm1$ walk from 0",
+                 ylabel=r"expected value", xticks=[0, 10, 20, 30, 40, 50], yticks=[0, 2, 4, 6],
+                 font_size=18).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+        ax = g.ax
+        tk = ValueTracker(0.0)
+        l_call = tracing(ax, n, call, tk, QC.OPTION, stroke_width=3.5)
+        l_abs = tracing(ax, n, absm, tk, P_C, stroke_width=3)
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=WHITE) for a, b in zip(n[::2], sim[::2])])
+        leg = legend([(QC.OPTION, r"$\mathbb{E}(S_n - 2)^+$, a call struck at 2"), (P_C, r"$\mathbb{E}|S_n|$"),
+                      (WHITE, r"20{,}000 simulated walks")], font_size=19)
+        side = VGroup(
+            leg,
+            MathTex(rf"\mathbb{{E}}(S_{{50}} - 2)^+ = {call[-1]:.2f}", font_size=30, color=QC.OPTION),
+            MathTex(rf"\mathbb{{E}}|S_{{50}}| = {absm[-1]:.2f} \approx \sqrt{{2 \cdot 50/\pi}} = {np.sqrt(100 / np.pi):.2f}",
+                    font_size=28, color=P_C),
+            wrapped_label(r"a forward is a martingale under the pricing measure, so a call on it is a submartingale: "
+                          r"longer-dated calls are worth more (calendar spreads $\ge 0$, Part 12)", 4.6, 20, GREY_A),
+            wrapped_label(r"Markov $\ne$ martingale: Markov is about memory, martingale about the mean; a biased walk is "
+                          r"Markov but not a martingale", 4.6, 20, GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
+        pred = desk_question(r"Is $|S_n|$ a martingale?", r"No: $|x|$ is convex, so it is a submartingale; its mean "
+                             r"grows like $\sqrt{2n/\pi}$.", width=4.2, font_size=20)
+        with self.voiceover(
+            "That last fact has a price. Take the walk and an option on it, a call struck at two, which pays the walk "
+            "minus two if positive. The payoff is a convex function, so its expected value can only rise with time. "
+            f"<bookmark mark='a'/> Watch it grow, from zero to {call[-1]:.2f} after fifty steps, with simulated walks "
+            "landing on the exact curve. In Part nine a forward price is a martingale under the pricing measure, so "
+            "the same argument says a longer-dated call is worth at least a shorter one. <bookmark mark='b'/> Is the "
+            "absolute value of the walk a martingale? No: the absolute value is convex, so it is a submartingale, and "
+            f"its mean grows like the square root of two n over pi, {absm[-1]:.2f} at fifty. <bookmark mark='c'/> And "
+            "do not confuse martingales with Markov processes. Markov is about memory: only the present matters for "
+            "the future. Martingale is about the mean. A walk with a drift is Markov, and not a martingale."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg))
+            self.add(l_call, l_abs)
+            vo.wait_until("a")
+            self.play(tk.animate.set_value(50.0), run_time=5, rate_func=linear)
+            l_call.clear_updaters()
+            l_abs.clear_updaters()
+            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05), FadeIn(side[1]), FadeIn(side[3]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[2]), FadeIn(pred.move_to(ax.c2p(13, 5.0))))
+            vo.wait_until("c")
             self.play(FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 
-    def stopping(self):
-        th = theorem_card(r"Optional stopping",
-                          r"If $M$ is a martingale and $\tau$ a stopping time (the decision to stop uses only the past), "
-                          r"then $\mathbb{E}[M_\tau] = M_0$, provided $\tau$ is bounded; or $\mathbb{E}[\tau] < \infty$ and "
-                          r"the steps are bounded; or $M$ stays bounded up to $\tau$.",
-                          who=r"Doob", color=MART, width=9.4, font_size=24).to_edge(UP, buff=0.5)
-        cases = VGroup(
-            VGroup(label(r"doubling with an endless bankroll", font_size=24, color=LOSS),
-                   MathTex(r"\mathbb{E}[\tau] = 2, \text{ but the bets } 1, 2, 4, \dots \text{ are unbounded}", font_size=28),
-                   MathTex(r"\Rightarrow\ \mathbb{E}[M_\tau] = M_0 + 1", font_size=30, color=LOSS)).arrange(
-                DOWN, aligned_edge=LEFT, buff=0.12),
-            VGroup(label(r"doubling with a bankroll of 1{,}023", font_size=24, color=DRIFT),
-                   MathTex(r"\text{at most ten doublings: the steps are bounded}", font_size=28),
-                   MathTex(r"\tfrac{1023}{1024}\,(+1) + \tfrac{1}{1024}\,(-1023) = 0", font_size=30, color=DRIFT)).arrange(
-                DOWN, aligned_edge=LEFT, buff=0.12),
-        ).arrange(RIGHT, buff=0.8, aligned_edge=UP).next_to(th, DOWN, buff=0.6)
-        adm = wrapped_label(r"In continuous time a doubling scheme can win any amount in a finite time; finance rules it "
-                            r"out by allowing only strategies whose losses are bounded: ``admissible'' strategies "
-                            r"(Part 9).", 11.0, 23, GREY_A).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Part one showed by experiment that stopping rules can't beat a fair game. Here is the theorem. If you "
-            "stop a martingale at a time chosen using only the past, its expected value when you stop is its value "
-            "at the start, provided one of three things holds: you stop by some fixed time; or your expected wait is "
-            "finite and each step is bounded; or the martingale stays bounded until you stop. <bookmark mark='a'/> "
-            "The doubling system is exactly what the conditions exclude. With an endless bankroll you stop at the "
-            "first win, after two tosses on average, and you are always one unit up. The theorem doesn't apply, "
-            "because the bets grow without limit. <bookmark mark='b'/> Give the gambler a real bankroll of a "
-            "thousand and twenty-three units, ten doublings, and the steps are bounded. Now the theorem holds: a "
-            "thousand and twenty-three times in a thousand and twenty-four the gambler wins one unit, and once loses "
-            "everything. The average is exactly zero. <bookmark mark='c'/> In continuous time the problem is worse: "
-            "doubling can win any amount in finite time. Finance rules it out by allowing only strategies whose "
-            "losses are bounded, and we will meet those admissible strategies in Part nine."
-        ) as vo:
-            self.play(FadeIn(th, shift=UP * 0.2))
-            vo.wait_until("a")
-            self.play(FadeIn(cases[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(cases[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(adm))
-        self.wait(0.4)
-        self.clear_scene()
+
+def win_prob(heads, seen):
+    """P(heads reaches 11 of 21 | ``heads`` heads in the first ``seen`` tosses)."""
+    need = 11 - heads
+    left = N_MAJ - seen
+    if need <= 0:
+        return 1.0
+    if need > left:
+        return 0.0
+    return float(binom.sf(need - 1, left, 0.5))
+
+
+def majority_heads_path(seed=1):
+    """The heads count after each toss of the first match drawn by majority_paths (same seed, same draws)."""
+    rng = np.random.default_rng(seed)
+    h = rng.random(N_MAJ) < 0.5
+    return np.concatenate([[0], np.cumsum(h)])

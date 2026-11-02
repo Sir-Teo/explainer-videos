@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant4.common import DRIFT, INFO, MART, P_C, PART
+from videos.quant.quant4.common import INFO, LOSS, MART, P_C, PART
 
 OUTCOMES = ["".join(o) for o in itertools.product("HT", repeat=3)]
 X = np.array([o.count("H") for o in OUTCOMES], float)
@@ -20,15 +20,17 @@ def cond_exp(n):
     return out
 
 
-class Information(VoiceoverScene):
+class Information(VoiceoverScene, MovingCameraScene):
     def construct(self):
         self.card()
         self.filtration()
-        self.projection()
+        self.questions()
+        self.coin_space()
 
     def card(self):
-        c = chapter_card(1, r"Information and conditional expectation", r"What do you know, and when?", part=PART)
-        with self.voiceover("Chapter one. Information, and conditional expectation."):
+        c = chapter_card(1, r"Information: $\sigma$-algebras and filtrations", r"What do you know, and when?",
+                         lit=(1933,), part=PART)
+        with self.voiceover("Chapter one. Information: sigma-algebras and filtrations."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -102,55 +104,133 @@ class Information(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def projection(self):
-        o = np.array([-2.6, -1.6, 0])
-        plane = Polygon(o + np.array([-2.2, -0.6, 0]), o + np.array([3.6, -0.6, 0]), o + np.array([5.2, 1.4, 0]),
-                        o + np.array([-0.6, 1.4, 0]), stroke_color=INFO, stroke_width=1.5, fill_color=INFO,
-                        fill_opacity=0.12)
-        line = Line(o + np.array([-1.6, -0.35, 0]), o + np.array([4.6, 0.55, 0]), color=DRIFT, stroke_width=3)
-        tip = o + np.array([2.2, 3.4, 0])
-        foot = o + np.array([2.2, 0.75, 0])
-        d = line.get_unit_vector()
-        foot2 = line.get_start() + np.dot(foot - line.get_start(), d) * d
-        vX = Arrow(o, tip, buff=0, color=WHITE, stroke_width=4)
-        vP = Arrow(o, foot, buff=0, color=MART, stroke_width=4)
-        err = DashedLine(tip, foot, color=GREY_B)
-        ra = VGroup(Line(foot + UP * 0.25, foot + UP * 0.25 + LEFT * 0.25), Line(foot + LEFT * 0.25, foot + UP * 0.25 + LEFT * 0.25)).set_stroke(GREY_B, 1.5)
-        vP2 = Arrow(o, foot2, buff=0, color=DRIFT, stroke_width=4)
-        err2 = DashedLine(foot, foot2, color=GREY_B)
-        lX = MathTex(r"X", font_size=34).next_to(tip, UP, buff=0.1)
-        lP = MathTex(r"\mathbb{E}[X \mid \mathcal{G}]", font_size=30, color=MART).next_to(foot, RIGHT, buff=0.15)
-        lP2 = MathTex(r"\mathbb{E}[X \mid \mathcal{H}]", font_size=30, color=DRIFT).next_to(foot2, DOWN, buff=0.2)
-        lplane = label(r"everything you could compute from $\mathcal{G}$", font_size=20, color=INFO).next_to(
-            plane, DOWN, buff=0.1).align_to(plane, LEFT)
-        lline = label(r"from less information, $\mathcal{H} \subset \mathcal{G}$", font_size=20, color=DRIFT).next_to(
-            line.get_end(), RIGHT, buff=0.1)
-        side = VGroup(
-            label(r"the closest variable you can compute:", font_size=22, color=GREY_A),
-            MathTex(r"\mathbb{E}[X \mid \mathcal{G}] = \arg\min_{Z\ \mathcal{G}\text{-measurable}} \mathbb{E}[(X - Z)^2]",
-                    font_size=28, color=MART),
-            label(r"the error is orthogonal to all of them", font_size=22, color=GREY_A),
-            MathTex(r"\mathbb{E}\big[(X - \mathbb{E}[X \mid \mathcal{G}])\,Z\big] = 0", font_size=28),
-            label(r"the tower property: project twice, or once", font_size=22, color=GREY_A),
-            MathTex(r"\mathbb{E}\big[\mathbb{E}[X \mid \mathcal{G}] \mid \mathcal{H}\big] = \mathbb{E}[X \mid \mathcal{H}]",
-                    font_size=28, color=DRIFT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.4)
+    def questions(self):
+        # the eight worlds again, small, with F_1's two blocks; two variables tested for F_1-measurability
+        w = 0.95
+        cells = VGroup(*[VGroup(RoundedRectangle(width=w - 0.1, height=0.55, corner_radius=0.06, stroke_color=GREY_B,
+                                                 stroke_width=1.5), MathTex(o, font_size=24))
+                         for o in OUTCOMES]).arrange(RIGHT, buff=0.1)
+        for c in cells:
+            c[1].move_to(c[0])
+        cells.to_edge(UP, buff=0.7).to_edge(LEFT, buff=0.6)
+        blocks = VGroup(*[SurroundingRectangle(VGroup(*cells[4 * b:4 * b + 4]), buff=0.05, color=INFO, stroke_width=3,
+                                               corner_radius=0.08) for b in range(2)])
+        deck = VGroup(
+            label(r"$\mathcal{F}_n$: every event you can decide after $n$ tosses", font_size=22, color=INFO),
+            MathTex(r"\mathcal{F}_n = \{\text{unions of the } 2^n \text{ blocks}\}", font_size=30),
+            MathTex(r"|\mathcal{F}_n| = 2^{2^n}: \quad 2,\ 4,\ 16,\ 256", font_size=30, color=INFO),
+            label(r"each block in or out of the union", font_size=20, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.5).shift(UP * 1.9)
+        first = np.array([1.0 if o[0] == "H" else 0.0 for o in OUTCOMES])
+        heads = X
+
+        def bars(vals, col, y0, unit=0.32):
+            g = VGroup()
+            for c, v in zip(cells, vals):
+                r = Rectangle(width=w - 0.4, height=v * unit + 1e-3, stroke_width=0, fill_color=col, fill_opacity=0.85)
+                r.move_to([c.get_x(), y0, 0], aligned_edge=DOWN)
+                g.add(r)
+            return g
+
+        b1 = bars(first, MART, -0.6)
+        b2 = bars(heads, LOSS, -2.9)
+        t1 = VGroup(MathTex(r"X_1 = \mathbf{1}\{\text{first toss } H\}", font_size=28, color=MART),
+                    label(r"constant on each $\mathcal{F}_1$ block: measurable \checkmark", font_size=20, color=MART)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(b1, RIGHT, buff=0.5).align_to(b1, DOWN)
+        t2 = VGroup(MathTex(r"X = \#\text{heads}", font_size=28, color=LOSS),
+                    label(r"varies inside a block: not $\mathcal{F}_1$-measurable $\times$", font_size=20, color=LOSS)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(b2, RIGHT, buff=0.5).align_to(b2, DOWN)
+        guides = VGroup(*[DashedLine([cells[4 * b].get_left()[0], y, 0], [cells[4 * b + 3].get_right()[0], y, 0],
+                                     color=INFO, stroke_width=1.5)
+                          for b in range(2) for y in (-0.6, -2.9)])
+        pred = desk_question(r"Is ``the number of heads in the first two tosses is even'' an $\mathcal{F}_1$ event?",
+                             r"No: it needs the second toss, so it is in $\mathcal{F}_2$ but not $\mathcal{F}_1$.",
+                             width=6.0, font_size=22).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "There is a picture behind this. Think of random variables as vectors, with the length of a vector its "
-            "root mean square. The variables you could compute from your information form a flat subspace, here a "
-            "plane. <bookmark mark='a'/> The conditional expectation of X is the point of that plane closest to X: "
-            "its orthogonal projection. The error, what you can't know, is at right angles to everything you can. "
-            "That is why conditional expectation is the best forecast in mean square, and why least-squares "
-            "regression, in Part six, is the same operation with data. <bookmark mark='b'/> Now take even less "
-            "information, a line inside the plane. Projecting X onto the plane and then onto the line lands in the "
-            "same place as projecting straight onto the line. That is the tower property: your forecast of my "
-            "forecast, when you know less than I do, is just your forecast."
+            "Make that precise. A sigma-algebra is the collection of yes-or-no questions you can answer. After n "
+            "tosses, the answerable events are exactly the unions of the blocks: each block is either in or out, so "
+            "there are two to the power two to the n of them. Two events before any toss, four after one, sixteen "
+            "after two, two hundred and fifty-six after three. <bookmark mark='a'/> A random variable is measurable "
+            "with respect to that information when you can compute it from what you know, which on a partition means "
+            "it is constant on every block. The first toss's outcome passes: its bars are flat on each half. "
+            "<bookmark mark='b'/> The total number of heads fails: inside each block it still varies. A process "
+            "whose value at every time is measurable with respect to the information at that time is called adapted. "
+            "<bookmark mark='c'/> A question to check yourself: is the event that the number of heads in the first "
+            "two tosses is even an event of F one? No. It needs the second toss."
         ) as vo:
-            self.play(FadeIn(plane), FadeIn(lplane), GrowArrow(vX), FadeIn(lX))
+            self.play(FadeIn(cells), Create(blocks), FadeIn(deck[:2]))
+            self.play(FadeIn(deck[2:]))
             vo.wait_until("a")
-            self.play(Create(err), GrowArrow(vP), FadeIn(lP), FadeIn(ra), FadeIn(side[:4]))
+            self.play(FadeIn(guides[0::2]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b1], lag_ratio=0.1), FadeIn(t1))
             vo.wait_until("b")
-            self.play(Create(line), FadeIn(lline))
-            self.play(Create(err2), GrowArrow(vP2), FadeIn(lP2), FadeIn(side[4:]))
+            self.play(FadeIn(guides[1::2]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b2], lag_ratio=0.1), FadeIn(t2))
+            vo.wait_until("c")
+            self.play(FadeIn(pred, shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def coin_space(self):
+        # the unit interval as the space of infinite coin tosses: each toss halves the block that holds the world
+        W = 12.0
+        bar = Rectangle(width=W, height=0.5, stroke_color=GREY_B, stroke_width=2, fill_color=INFO, fill_opacity=0.12)
+        bar.move_to(DOWN * 0.4)
+        x0 = bar.get_left()[0]
+        omega = 0.6180339887  # the hidden world: its binary digits are the tosses (1 = heads)
+        digits = []
+        v = omega
+        for _ in range(7):
+            v *= 2
+            digits.append(int(v >= 1))
+            v -= int(v >= 1)
+        gold = Dot([x0 + W * omega, bar.get_y(), 0], radius=0.06, color=QC.IDEA)
+        ends = [0.0, 1.0]
+        lab0 = MathTex(r"0", font_size=28, color=GREY_B).next_to(bar, DOWN, buff=0.15).align_to(bar, LEFT)
+        lab1 = MathTex(r"1", font_size=28, color=GREY_B).next_to(bar, DOWN, buff=0.15).align_to(bar, RIGHT)
+        map_ = MathTex(r"\omega = (\omega_1, \omega_2, \dots) \;\mapsto\; \sum_k \omega_k\, 2^{-k} \in [0, 1]",
+                       font_size=34).to_edge(UP, buff=0.6)
+        cap = label(r"fair tosses $\leftrightarrow$ length on $[0,1]$ (Lebesgue measure): a block after $n$ tosses has "
+                    r"length $2^{-n}$", font_size=22, color=GREY_A).next_to(map_, DOWN, buff=0.25)
+        kol = history_card(1933, r"Kolmogorov, \textit{Grundbegriffe der Wahrscheinlichkeitsrechnung}",
+                           r"a probability space $(\Omega, \mathcal{F}, P)$: $P$ countably additive on a $\sigma$-algebra "
+                           r"of events; conditional expectation defined for any $\sigma$-algebra", width=7.2)
+        kol.to_edge(DOWN, buff=0.3)
+        grid = VGroup()
+        shade = VGroup()
+        toss_labels = VGroup()
+        for n, dgt in enumerate(digits[:6], 1):
+            k = 2 ** n
+            lines = VGroup(*[Line([x0 + W * j / k, bar.get_bottom()[1], 0], [x0 + W * j / k, bar.get_top()[1], 0],
+                                  color=INFO, stroke_width=max(2.6 - 0.35 * n, 0.6)) for j in range(1, k, 2)])
+            grid.add(lines)
+            mid = (ends[0] + ends[1]) / 2
+            ends = [mid, ends[1]] if dgt else [ends[0], mid]
+            shade.add(Rectangle(width=W * (ends[1] - ends[0]), height=0.5, stroke_width=0, fill_color=QC.IDEA,
+                                fill_opacity=0.35).move_to([x0 + W * (ends[0] + ends[1]) / 2, bar.get_y(), 0]))
+            toss_labels.add(MathTex(("H" if dgt else "T"), font_size=30, color=QC.IDEA))
+        toss_labels.arrange(RIGHT, buff=0.25).next_to(bar, UP, buff=0.35).align_to(bar, LEFT)
+        with self.voiceover(
+            "What about infinitely many tosses? Here is the trick that makes probability on them concrete. Write a "
+            "sequence of tosses as the binary digits of a number between zero and one: heads is one, tails is zero. "
+            "Fair tosses become length on the interval. <bookmark mark='a'/> Somewhere on this bar is the true world, "
+            "the gold dot, and you don't know where. Each toss halves the block that holds it. <bookmark mark='b'/> "
+            "Zoom in, and keep tossing: after six tosses you know which of sixty-four slivers you are in, and nothing "
+            "more. That sliver is your information, F six. <bookmark mark='c'/> In 1933 Andrei Kolmogorov built all "
+            "of probability on this picture: a set of worlds, a sigma-algebra of events, and a measure that adds up "
+            "over countably many pieces. Chapter thirteen reuses this same grid to build the Radon-Nikodym derivative."
+        ) as vo:
+            self.play(FadeIn(map_), FadeIn(bar), FadeIn(lab0), FadeIn(lab1), FadeIn(cap))
+            vo.wait_until("a")
+            self.play(FadeIn(gold, scale=2))
+            for n in range(3):
+                self.play(Create(grid[n]), FadeIn(shade[n]), FadeOut(shade[n - 1]) if n else Wait(0.01),
+                          FadeIn(toss_labels[n]), run_time=0.8)
+            vo.wait_until("b")
+            self.play(frame_to(self, shade[2], margin=2.2), run_time=1.6)
+            for n in range(3, 6):
+                self.play(Create(grid[n]), FadeIn(shade[n]), FadeOut(shade[n - 1]), FadeIn(toss_labels[n]), run_time=0.8)
+            self.play(frame_to(self, shade[5], margin=3.0), run_time=1.2)
+            self.play(frame_home(self), run_time=1.6)
+            vo.wait_until("c")
+            self.play(FadeIn(kol, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

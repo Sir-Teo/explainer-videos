@@ -41,3 +41,18 @@ def node(text: str, color, width=2.3, height=0.9, font_size=22) -> VGroup:
 def arrow(a: Mobject, b: Mobject, color=GREY_B, buff=0.08, sw=3) -> Arrow:
     return Arrow(a.get_right(), b.get_left(), buff=buff, color=color, stroke_width=sw,
                  max_tip_length_to_length_ratio=0.18)
+
+
+def lab(scene, card, outputs, **kw):
+    """Run a lab card: its printed output is data (numbers and code), shown as it is in both languages."""
+    from explainer.zh_text import verbatim
+    with verbatim():
+        return lab_run(scene, card, outputs, **kw)
+
+
+def fmt_bn(x: float, digits=1) -> str:
+    return f"{x:.{digits}f}"
+
+
+def pct(x: float, digits=1) -> str:
+    return f"{100 * x:.{digits}f}"

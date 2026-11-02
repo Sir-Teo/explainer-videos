@@ -270,10 +270,667 @@ def compute_envelope() -> dict:
     return _json({"registered": reg, "trials": pit.trials_so_far()})
 
 
+
+# ---------------------------------------------------------------------------
+# The November 2026 expansion: live simulations, labs, replays, and the new chapters
+# ---------------------------------------------------------------------------
+def compute_coin_live() -> dict:
+    """160 players at each of four fractions, flipping the same 60% coin together for 300 flips ($25, $250 cap)."""
+    g = np.random.default_rng(88)
+    n, flips = 160, 300
+    wins = g.random((n, flips)) < 0.6
+    out = {}
+    for f in (0.1, 0.2, 0.4, 1.0):
+        w = np.full(n, 25.0)
+        rows = [w.copy()]
+        done = np.zeros(n, bool)
+        for t in range(flips):
+            w = np.where(done, w, w + np.where(wins[:, t], 1, -1) * f * w)
+            hit = w >= 250
+            w = np.where(hit & ~done, 250.0, w)
+            done |= hit
+            w = np.where(w < 0.01, 0.0, w)
+            done |= w <= 0
+            rows.append(w.copy())
+        W = np.array(rows).T
+        out[f"{f:.1f}"] = {"logw": np.log10(np.maximum(W, 0.01)), "p_cap": float(np.mean(W[:, -1] >= 250)),
+                           "p_bust": float(np.mean(W[:, -1] < 0.01)), "median": float(np.median(W[:, -1])),
+                           "p_below_start": float(np.mean(W[:, -1] < 25))}
+    return _json({"fractions": [0.1, 0.2, 0.4, 1.0], "n": n, "flips": flips, "by_fraction": out})
+
+
+def compute_utility_check() -> dict:
+    """Certainty equivalents of 50-or-150 over gamma, and the Arrow-Pratt premium against the exact one."""
+    gam = np.round(np.geomspace(0.5, 30, 61), 4)
+    ce = [C.certainty_equivalent([50, 150], [0.5, 0.5], g_) for g_ in gam]
+    rows = []
+    for g_ in (1.0, 3.0):
+        for a in (10.0, 50.0):
+            exact = 100 - C.certainty_equivalent([100 - a, 100 + a], [0.5, 0.5], g_)
+            rows.append({"gamma": g_, "stake": a, "exact": exact, "approx": C.pratt_premium(100, a, g_)})
+    return _json({"gammas": gam, "ce": ce, "premia": rows, "ce_g3": C.certainty_equivalent([50, 150], [0.5, 0.5], 3.0),
+                  "ce_g1": C.certainty_equivalent([50, 150], [0.5, 0.5], 1.0)})
+
+
+def _ev_curve(o, n, w, pis, gamma, nodes=15):
+    """E[V_{n+1}] (as a certainty equivalent) for each fraction, at wealth w and step n of a ``bellman_merton`` run."""
+    T = o["t"][-1]
+    dt = T / (len(o["t"]) - 1)
+    z, wq = np.polynomial.hermite_e.hermegauss(nodes)
+    wq = wq / wq.sum()
+    Rs = np.exp((MU - 0.5 * SIG ** 2) * dt + SIG * np.sqrt(dt) * z) - 1
+    gross = 1 + R_RATE * dt + pis[:, None] * (Rs[None, :] - R_RATE * dt)
+    c_next = np.maximum(w * gross - o["pv_floor"][n + 1], 1e-9)
+    lce = np.interp(np.log(c_next), np.log(o["cushion"]), np.log(C.crra_inv(o["V"][n + 1], gamma)))
+    ev = C.crra(np.exp(lce), gamma) @ wq
+    return C.crra_inv(ev, gamma)
+
+
+R_RATE = R
+
+
+def compute_bellman_sweep() -> dict:
+    """The floor problem solved backwards, kept every 6th month for the replay: the policy over wealth, and the
+    expected next value against the fraction at wealth 1 (whose peak is the decision)."""
+    gamma, T, steps = 3.0, 10.0, 120
+    pis = np.linspace(0, 1.5, 151)
+    res = {}
+    for name, floor in (("merton", 0.0), ("floor", 0.6)):
+        o = C.bellman_merton(MU, R, SIG, gamma, T=T, steps=steps, floor=floor, n_w=200, w_max=6.0, pis=pis)
+        wgrid = np.linspace(0.65 if floor else 0.2, 3.0, 48)
+        sel = np.arange(steps - 6, -1, -6)[::-1]
+        P, EV, best = [], [], []
+        for n in sel:
+            c = wgrid - o["pv_floor"][n]
+            P.append(np.interp(np.log(c), np.log(o["cushion"]), o["pi"][n]))
+            ev = _ev_curve(o, int(n), 1.0, pis, gamma)
+            EV.append(ev)
+            best.append(float(pis[int(np.argmax(ev))]))
+        res[name] = {"t": o["t"][sel], "w": wgrid, "pi": np.array(P), "ev": np.array(EV), "best_at_1": best,
+                     "closed_at_1": [float(C.hara_fraction(1.0, t, T, MU, R, SIG, gamma, floor)) for t in o["t"][sel]]}
+    return _json({"pis": pis, "gamma": gamma, "pi_merton": C.merton_fraction(MU, R, SIG, gamma), **res})
+
+
+def compute_hjb_fd() -> dict:
+    """Merton's HJB by implicit finite differences and policy iteration, against the closed form."""
+    gamma = 3.0
+    o = C.hjb_fd_merton(MU, R, SIG, gamma, T=10.0, n_t=400, n_y=401, y_lim=2.0)
+    inner = np.abs(o["y"]) <= 1.5
+    rel = np.abs(o["V"] / o["exact"] - 1)
+    conv = []
+    for n_t, n_y in ((50, 51), (100, 101), (200, 201), (400, 401)):
+        q = C.hjb_fd_merton(MU, R, SIG, gamma, T=10.0, n_t=n_t, n_y=n_y, y_lim=2.0)
+        m = np.abs(q["y"]) <= 1.5
+        conv.append({"n_t": n_t, "n_y": n_y, "rel_err": float(np.max(np.abs(q["V"][m] / q["exact"][m] - 1))),
+                     "pi_err": float(np.max(np.abs(q["pi"][m] - C.merton_fraction(MU, R, SIG, gamma))))})
+    return _json({"y": o["y"], "pi": o["pi"], "rel_err": float(rel[inner].max()), "passes": o["passes"],
+                  "pass_counts": np.bincount(o["passes"]), "pi_merton": C.merton_fraction(MU, R, SIG, gamma),
+                  "pi_err": float(np.max(np.abs(o["pi"][inner] - C.merton_fraction(MU, R, SIG, gamma)))),
+                  "convergence": conv, "gamma": gamma, "n_t": 400, "n_y": 401,
+                  "f0": float(C.merton_value_factor(MU, R, SIG, gamma, 10.0))})
+
+
+def compute_viscosity() -> dict:
+    """u_t + |u_x| = 1 marched to steady state by a monotone (upwind) and a non-monotone (central) scheme."""
+    times = (0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0)
+    out = {"grids": {}}
+    for n in (21, 81, 321):
+        row = {}
+        for sc in ("upwind", "central"):
+            e = C.eikonal_march(n, sc, t_end=6.0, snapshots=times)
+            err = np.abs(e["u"] - (1 - np.abs(e["x"])))
+            row[sc] = float(np.nanmax(np.where(np.isfinite(err), err, np.inf)))
+            if n == 81:
+                out[f"{sc}_snaps"] = np.array([np.clip(np.nan_to_num(e["snaps"][t], nan=1e3, posinf=1e3, neginf=-1e3),
+                                                       -1e3, 1e3) for t in times])
+                out["x"] = e["x"]
+        out["grids"][str(n)] = row
+    out["times"] = list(times)
+    return _json(out)
+
+
+def compute_rebalance_sim() -> dict:
+    """Constant mix (Merton, rebalanced monthly) against buy-and-hold from the same start, 30 years, for gamma 3;
+    and one path for the picture."""
+    gamma = 3.0
+    pi = C.merton_fraction(MU, R, SIG, gamma)
+    g = np.random.default_rng(85)
+    n, years, per = 20000, 30, 12
+    dt = 1 / per
+    z = g.standard_normal((n, years * per))
+    R_ = np.exp((MU - 0.5 * SIG ** 2) * dt + SIG * np.sqrt(dt) * z)
+    Rf = np.exp(R * dt)
+    lw_mix = np.sum(np.log(pi * R_ + (1 - pi) * Rf), axis=1)
+    stock = pi * np.prod(R_, axis=1)
+    bond = (1 - pi) * Rf ** (years * per)
+    w_bh = stock + bond
+
+    def ce_rate(W):
+        return float(np.log(np.mean(W ** (1 - gamma)) ** (1 / (1 - gamma))) / years)
+
+    W_mix = np.exp(lw_mix)
+    bh_frac_end = stock / w_bh
+    # one five-year path, monthly: the mix before rebalancing, and buy-and-hold's drifting fraction
+    zz = g.standard_normal(60)
+    Rp = np.exp((MU - 0.5 * SIG ** 2) * dt + SIG * np.sqrt(dt) * zz)
+    pre, bh, price = [], [pi], [1.0]
+    s_bh, b_bh = pi, 1 - pi
+    for r_ in Rp:
+        G = pi * r_ + (1 - pi) * Rf
+        pre.append(pi * r_ / G)
+        s_bh, b_bh = s_bh * r_, b_bh * Rf
+        bh.append(s_bh / (s_bh + b_bh))
+        price.append(price[-1] * r_)
+    se = lambda W: float(np.std(np.log(W)) / np.sqrt(n) / years)  # noqa: E731
+    return _json({"pi": pi, "gamma": gamma, "ce_mix": ce_rate(W_mix), "ce_bh": ce_rate(w_bh),
+                  "median_mix": float(np.median(W_mix)), "median_bh": float(np.median(w_bh)),
+                  "bh_frac_p10": float(np.percentile(bh_frac_end, 10)), "bh_frac_p90": float(np.percentile(bh_frac_end, 90)),
+                  "path_price": price, "path_pre": pre, "path_bh": bh, "n": n, "years": years, "se": se(W_mix)})
+
+
+def compute_consumption() -> dict:
+    """Merton (1971): the consumption rate by gamma, by patience, and over a 40-year life."""
+    rho = 0.03
+    gam = [1.0, 2.0, 3.0, 5.0, 10.0]
+    nu = [C.merton_consumption_rate(rho, MU, R, SIG, g_) for g_ in gam]
+    tau = np.linspace(40, 0.25, 160)
+    life = C.merton_consumption_rate(rho, MU, R, SIG, 3.0, tau=tau)
+    return _json({"rho": rho, "gammas": gam, "nu": nu, "nu_patient": C.merton_consumption_rate(0.01, MU, R, SIG, 3.0),
+                  "t": 40 - tau, "life": life, "life_t0": float(life[0]), "life_last_year": float(
+                      C.merton_consumption_rate(rho, MU, R, SIG, 3.0, tau=1.0)), "theta": (MU - R) / SIG})
+
+
+def compute_martingale_check() -> dict:
+    """Constant-mix paths rebalanced daily for 10 years land on the power claim X_T = c xi_T^(-1/gamma)."""
+    gamma, T, per, n = 3.0, 10.0, 252, 2000
+    theta = (MU - R) / SIG
+    pi = C.merton_fraction(MU, R, SIG, gamma)
+    g = np.random.default_rng(86)
+    dt = 1 / per
+    lx = np.zeros(n)
+    W = np.zeros(n)
+    for _ in range(int(T * per)):
+        dW = g.standard_normal(n) * np.sqrt(dt)
+        Rs = np.exp((MU - 0.5 * SIG ** 2) * dt + SIG * dW) - 1
+        rf = np.exp(R * dt) - 1
+        lx += np.log(1 + rf + pi * (Rs - rf))
+        W += dW
+    xi = np.exp(-(R + theta ** 2 / 2) * T - theta * W)
+    XT = np.exp(lx)
+    # the static solution: X_T = c xi^(-1/gamma), c from the budget E[xi X_T] = 1 (closed form)
+    c = 1 / np.exp((1 - 1 / gamma) * (-(R + theta ** 2 / 2) * T) + 0.5 * (1 - 1 / gamma) ** 2 * theta ** 2 * T)
+    formula = c * xi ** (-1 / gamma)
+    rel = np.abs(XT / formula - 1)
+    curves = {}
+    xs = np.geomspace(np.percentile(xi, 0.5), np.percentile(xi, 99.5), 80)
+    for g_ in (1.5, 3.0, 6.0):
+        cg = 1 / np.exp((1 - 1 / g_) * (-(R + theta ** 2 / 2) * T) + 0.5 * (1 - 1 / g_) ** 2 * theta ** 2 * T)
+        curves[f"{g_:g}"] = cg * xs ** (-1 / g_)
+    return _json({"xi": xi, "XT": XT, "max_rel": float(rel.max()), "median_rel": float(np.median(rel)),
+                  "budget": float(np.mean(xi * XT)), "xs": xs, "curves": curves, "gamma": gamma, "T": T,
+                  "pi": pi, "theta": theta})
+
+
+def compute_davis_norman() -> dict:
+    """The no-trade band by dynamic programming (gamma 3, monthly, 30 years; and gamma 1, quarterly, 10 years),
+    against the small-cost asymptotics; a wealth dot reflected at the band's edges; and the band's payoff net of
+    costs against rebalancing to Merton every quarter."""
+    gamma = 3.0
+    rows = []
+    for eps in (0.001, 0.005, 0.01, 0.02):
+        b = C.no_trade_band(MU, R, SIG, gamma, eps, 1 / 12, 360)
+        rows.append({"eps": eps, "lo": b["lo"], "hi": b["hi"], "half": 0.5 * (b["hi"] - b["lo"]),
+                     "asym": C.band_halfwidth_asymptotic(MU, R, SIG, gamma, eps)})
+    eps_grid = np.geomspace(0.0005, 0.03, 40)
+    asym = [C.band_halfwidth_asymptotic(MU, R, SIG, gamma, e) for e in eps_grid]
+    one = C.no_trade_band(MU, R, SIG, 1.0, 0.01, 0.25, 40, grid=np.linspace(0, 3.5, 701), nodes=21)
+    lo1, hi1 = one["lo"], one["hi"]
+    pm1 = C.merton_fraction(MU, R, SIG, 1.0)
+    band = C.simulate_rebalance(lambda n, p: np.clip(p, lo1, hi1), MU, R, SIG, 0.01, 10.0, 40, seed=87)
+    merton = C.simulate_rebalance(lambda n, p: np.full_like(p, pm1), MU, R, SIG, 0.01, 10.0, 40, seed=87)
+    free = C.simulate_rebalance(lambda n, p: np.full_like(p, pm1), MU, R, SIG, 0.0, 10.0, 40, seed=87)
+    # the wedge picture: gamma 3, eps 1%, weekly steps for 15 years; bond x and stock y in dollars
+    lo3, hi3 = rows[2]["lo"], rows[2]["hi"]
+    pm3 = C.merton_fraction(MU, R, SIG, gamma)
+    g = np.random.default_rng(89)
+    dt, n = 1 / 52, 52 * 15
+    x, y = (1 - pm3), pm3
+    xr, yr = (1 - pm3), pm3
+    pts, trades, turn_band, turn_ray = [(x, y)], [], 0.0, 0.0
+    for k in range(n):
+        Rk = np.exp((MU - 0.5 * SIG ** 2) * dt + SIG * np.sqrt(dt) * g.standard_normal())
+        x, y = x * np.exp(R * dt), y * Rk
+        p = y / (x + y)
+        if p > hi3 or p < lo3:
+            tgt = hi3 if p > hi3 else lo3
+            # trade to the edge, paying eps on the amount traded
+            wv = x + y
+            dy = (tgt * wv - y) / (1 + 0.01 * tgt * np.sign(tgt * wv - y))
+            y += dy
+            x -= dy + 0.01 * abs(dy)
+            turn_band += abs(dy) / wv
+            trades.append(k + 1)
+        xr, yr = xr * np.exp(R * dt), yr * Rk
+        wr = xr + yr
+        turn_ray += abs(pm3 * wr - yr) / wr
+        yr, xr = pm3 * wr, (1 - pm3) * wr
+        pts.append((x, y))
+    return _json({"gamma": gamma, "rows": rows, "eps_grid": eps_grid, "asym": asym, "pi_merton": pm3,
+                  "g1": {"lo": lo1, "hi": hi1, "pi_merton": pm1, "band": band, "merton": merton, "free": free,
+                         "gain": band["growth"] - merton["growth"]},
+                  "wedge": {"lo": lo3, "hi": hi3, "path": np.array(pts), "trades": trades, "years": 15,
+                            "turn_band": turn_band / 15, "turn_ray": turn_ray / 15}})
+
+
+def compute_kelly_live() -> dict:
+    """Three fans of 60 paths, at a half, one and two times Kelly, monthly for 40 years (log10 wealth)."""
+    ex = MU - R
+    k = ex / SIG ** 2
+    g = np.random.default_rng(90)
+    years, per = 40, 12
+    dt = 1 / per
+    z = g.standard_normal((60, years * per))
+    out = {}
+    for mult in (0.5, 1.0, 2.0):
+        f = mult * k
+        lw = np.cumsum((R + f * ex - 0.5 * f ** 2 * SIG ** 2) * dt + f * SIG * np.sqrt(dt) * z, axis=1)
+        lw = np.column_stack([np.zeros(60), lw]) / np.log(10)
+        out[f"{mult:.1f}"] = {"paths": lw, "median": np.median(lw, axis=0),
+                              "g": float(C.growth_continuous(f, ex, SIG, R)), "f": f}
+    return _json({"kelly": k, "t": np.arange(years * per + 1) / per, "fans": out, "r": R})
+
+
+def compute_breiman_race() -> dict:
+    """Kelly against half and twice Kelly on the same 10,000 markets: the chance Kelly is ahead, by year."""
+    ex = MU - R
+    k = ex / SIG ** 2
+    g = np.random.default_rng(91)
+    years, per, n = 100, 12, 10000
+    dt = 1 / per
+    W = np.zeros(n)
+    lk = np.zeros(n)
+    lh = np.zeros(n)
+    l2 = np.zeros(n)
+    ahead_h, ahead_2 = [], []
+    for m in range(years * per):
+        dW = g.standard_normal(n) * np.sqrt(dt)
+        for arr, f in ((lk, k), (lh, 0.5 * k), (l2, 2 * k)):
+            arr += (R + f * ex - 0.5 * f ** 2 * SIG ** 2) * dt + f * SIG * dW
+        if (m + 1) % per == 0:
+            ahead_h.append(float(np.mean(lk > lh)))
+            ahead_2.append(float(np.mean(lk > l2)))
+    T = np.arange(1, years + 1)
+
+    def closed(c):
+        dg = 0.5 * (ex / SIG) ** 2 * (1 - (2 * c - c ** 2))
+        return sst.norm.cdf(dg * np.sqrt(T) / (abs(1 - c) * k * SIG))
+
+    return _json({"years": T, "vs_half": ahead_h, "vs_double": ahead_2, "closed_half": closed(0.5),
+                  "closed_double": closed(2.0), "kelly": k})
+
+
+def compute_edge_error() -> dict:
+    """Full and half Kelly when the edge is overestimated by a factor k (closed form, and 2,000 thirty-year paths)."""
+    ex = MU - R
+    k = ex / SIG ** 2
+    ks = np.linspace(0.5, 4.5, 81)
+    full = ks * (2 - ks)
+    half = 0.5 * ks * (2 - 0.5 * ks)
+    g = np.random.default_rng(92)
+    mc = []
+    years, n = 30, 2000
+    z = g.standard_normal((n, years))
+    for kk in (1.0, 2.0, 3.0):
+        row = {"k": kk}
+        for c in (1.0, 0.5):
+            f = c * kk * k
+            lw = np.sum((R + f * ex - 0.5 * f ** 2 * SIG ** 2) + f * SIG * z, axis=1)
+            row[f"c{c:g}"] = float((np.mean(lw) / years - R) / (0.5 * ex ** 2 / SIG ** 2))
+        mc.append(row)
+    return _json({"ks": ks, "full": full, "half": half, "mc": mc})
+
+
+def compute_ergodic_live() -> dict:
+    """Peters' coin, 100,000 players: the histogram of log10 wealth after every flip."""
+    g = np.random.default_rng(83)
+    n, t = 100000, 60
+    w = np.zeros(n)
+    bins = np.linspace(-6, 6, 49)
+    H, mean, med = [], [0.0], [0.0]
+    H.append(np.histogram(w, bins=bins)[0] / n)
+    for _ in range(t):
+        w += np.where(g.random(n) < 0.5, np.log10(1.5), np.log10(0.6))
+        H.append(np.histogram(np.clip(w, -5.99, 5.99), bins=bins)[0] / n)
+        mean.append(float(np.log10(np.mean(10 ** w))))
+        med.append(float(np.median(w)))
+    return _json({"bins": bins, "hist": np.array(H), "log_mean": mean, "log_median": med,
+                  "expected": np.arange(t + 1) * np.log10(1.05), "kelly_stake": 0.25,
+                  "kelly_growth": float(0.5 * np.log(1 + 0.25 * 0.5) + 0.5 * np.log(1 - 0.25 * 0.4))})
+
+
+SNELL_G = np.array([0, 2, 5, 3, 1, 4, 8, 6, 3, 2, 3, 5, 9, 7, 6, 4, 2, 3, 6, 4, 0], float)
+
+
+def compute_snell_rw() -> dict:
+    """The Snell envelope of a skyline of pegs under a symmetric random walk, by value iteration, against the least
+    concave majorant."""
+    o = C.snell_envelope(SNELL_G, tol=1e-14, every=1)
+    hist = np.array(o["history"])
+    keep = sorted(set(np.unique(np.round(np.geomspace(1, len(hist) - 1, 40)).astype(int)).tolist() + [0, len(hist) - 1]))
+    maj = C.concave_majorant(SNELL_G)
+    stop = np.isclose(o["U"], SNELL_G, atol=1e-9)
+    return _json({"g": SNELL_G, "U": o["U"], "sweeps": o["sweeps"], "history": hist[keep], "history_sweeps": keep,
+                  "majorant": maj, "max_gap": float(np.max(np.abs(o["U"] - maj))), "stop": stop.astype(int),
+                  "U0_mid": float(o["U"][10])})
+
+
+def compute_perpetual_put() -> dict:
+    """McKean's perpetual put by smooth fit, against a 40-year CRR tree; the value of each exercise level."""
+    K, r, s = 100.0, 0.05, 0.3
+    pp = C.perpetual_put(K, r, s)
+    bs_ = np.linspace(30, 95, 131)
+    vals = [float(C.perpetual_put_value(100.0, K, r, s, b)) for b in bs_]
+    tree = trees.crr(100.0, K, 40.0, s, r, N=4000, cp=-1, american=True, boundary=True)
+    bnd = np.asarray(tree["boundary"])
+    S = np.linspace(20, 200, 181)
+    return _json({"K": K, "r": r, "sigma": s, "beta": pp["beta"], "b_star": pp["b"],
+                  "v100": float(C.perpetual_put_value(100.0, K, r, s, pp["b"])), "b_grid": bs_, "v_of_b": vals,
+                  "tree_price": float(tree["price"]), "tree_boundary0": float(np.nanmean(bnd[:40])),
+                  "S": S, "V": C.perpetual_put_value(S, K, r, s, pp["b"]),
+                  "b_star_r7": C.perpetual_put(K, 0.07, s)["b"], "b_star_r3": C.perpetual_put(K, 0.03, s)["b"]})
+
+
+def _us_monthly_total():
+    d, x, rf = _us_monthly()
+    return d, x + rf, rf
+
+
+def compute_myopic_loss() -> dict:
+    """Benartzi and Thaler (1995) redone: the prospect-theory value of stocks and of T-bills, evaluated every h
+    months (overlapping windows of US history, 1926-2020, TK 1992 parameters)."""
+    d, m, rf = _us_monthly_total()
+    lm, lb = np.log1p(m), np.log1p(rf)
+    cs, cb = np.concatenate([[0], np.cumsum(lm)]), np.concatenate([[0], np.cumsum(lb)])
+    H = np.arange(1, 37)
+    vs, vb = [], []
+    for h in H:
+        vs.append(C.cpt_value(np.exp(cs[h:] - cs[:-h]) - 1))
+        vb.append(C.cpt_value(np.exp(cb[h:] - cb[:-h]) - 1))
+    vs, vb = np.array(vs), np.array(vb)
+    above = np.where(vs > vb)[0]
+    cross = int(H[above[0]]) if len(above) else None
+    # the reference curves for the picture: stock returns over 1 and 24 months
+    ret1 = np.exp(cs[1:] - cs[:-1]) - 1
+    ret24 = np.exp(cs[24:] - cs[:-24]) - 1
+    reg = pit.register("myopic_loss_aversion_us", inspect.getsource(compute_myopic_loss),
+                       {"data": "French monthly 1926-2020", "cpt": "TK 1992", "horizons": "1..36"}, trials=1)
+    return _json({"h": H, "stocks": vs, "bills": vb, "crossover": cross, "ret1": ret1, "ret24": ret24,
+                  "registered": reg})
+
+
+def compute_robust_fraction() -> dict:
+    """Maenhout's robust Merton fraction with theta set by detection-error probabilities on 94 years of data."""
+    m = load("merton_us")
+    ex, s, years, gamma = m["excess"], m["sigma"], m["n_months"] / 12, 3.0
+    rows = []
+    for p in (0.3, 0.2, 0.1, 0.05):
+        th = C.theta_for_detection(p, ex + R, R, s, gamma, years)
+        rows.append({"p": p, "theta": th, "pi": float(C.robust_fraction(ex + R, R, s, gamma, th)),
+                     "drift_cut": float(th * ex / (gamma + th))})
+    thetas = np.linspace(0, 8, 81)
+    pis = C.robust_fraction(ex + R, R, s, gamma, thetas)
+    det = [C.detection_error(t * ex / (gamma + t), s, years) for t in thetas]
+    return _json({"rows": rows, "thetas": thetas, "pis": pis, "detect": det, "excess": ex, "sigma": s,
+                  "years": years, "gamma": gamma, "pi_plain": float(ex / (gamma * s ** 2))})
+
+
+def compute_mfg_crowd() -> dict:
+    """The liquidation game: fictitious play for N = 2, 10 and the mean field, against the closed form; and a crowd
+    of 500 traders with different inventories, each best-responding to the mean field."""
+    kappa, eta, T = 4.0, 1.0, 1.0  # kappa T/(2 eta) = 2
+    out = {"kappa": kappa, "eta": eta, "T": T, "runs": {}}
+    t = None
+    for N in (1, 2, 10, np.inf):
+        o = C.mfg_liquidation(N, kappa, eta, T=T, n=1000, iters=500, damping=0.5)
+        t = o["t"]
+        cl = C.liquidation_closed(N, kappa, eta, T, t)
+        k = int(round(len(t) / 5))
+        key = "inf" if not np.isfinite(N) else str(N)
+        out["runs"][key] = {"Q": o["Q"][::25, 0], "closed": cl[::25], "residual": o["residual"],
+                            "share_fifth": float(1 - o["Q"][k, 0]), "share_fifth_closed": float(1 - cl[k]),
+                            "gap": float(np.max(np.abs(o["Q"][:, 0] - cl))), "iters": len(o["residual"])}
+    out["t"] = t[::25]
+    # fictitious play replay (mean field): the crowd's rate after each iteration
+    reps, m = [], np.zeros(1001)
+    from scipy.linalg import solve_banded  # noqa: F401  (same scheme as the House function, iterate by iterate)
+    for it in range(12):
+        o = C.mfg_liquidation(np.inf, kappa, eta, T=T, n=1000, iters=it + 1, damping=0.5, tol=0)
+        reps.append({"m": o["m"][::25], "Q": o["Q"][::25, 0]})
+    out["replay"] = reps
+    g = np.random.default_rng(93)
+    q0 = g.uniform(0.5, 1.5, 500)
+    o = C.mfg_liquidation(np.inf, kappa, eta, T=T, n=200, iters=500, damping=0.5, q0=q0)
+    out["crowd"] = {"t": o["t"][::10], "Q": o["Q"][::10], "q0": q0}
+    return _json(out)
+
+
+def _ppo_seed(seed):
+    T, steps = 10.0, 40
+    o = C.ppo_merton(MU, R, SIG, T=T, steps=steps, iters=300, batch=1024, seed=seed, lam=0.0, explore=0.8,
+                     snapshots=(0, 10, 25, 50, 100, 200, 299))
+    return {"mean_fraction": o["mean_fraction"], "snapshots": o["snapshots"], "final_std": o["final_std"]}
+
+
+def compute_ppo_s1() -> dict:
+    return _json(_ppo_seed(1))
+
+
+def compute_ppo_s2() -> dict:
+    return _json(_ppo_seed(2))
+
+
+def compute_ppo_s3() -> dict:
+    return _json(_ppo_seed(3))
+
+
+def compute_ppo_s4() -> dict:
+    return _json(_ppo_seed(4))
+
+
+def compute_ppo_seeds() -> dict:
+    """PPO on Merton (log utility), five seeds: seed 0 is the ``ppo`` item; the spread, and each seed's final policy
+    scored by its growth shortfall against the discrete-time optimum."""
+    base = load("ppo")
+    runs = [np.asarray(base["mean_fraction"])] + [np.asarray(load(f"ppo_s{k}")["mean_fraction"]) for k in range(1, 5)]
+    snaps = [base["snapshots"]] + [load(f"ppo_s{k}")["snapshots"] for k in range(1, 5)]
+    opt = base["discrete"]
+    finals = [float(np.mean(np.asarray(s_[list(s_.keys())[-1]]))) for s_ in snaps]
+    short = [float(C.growth_continuous(opt, MU - R, SIG, R) - C.growth_continuous(f, MU - R, SIG, R)) for f in finals]
+    ck = [int(k) for k in base["snapshots"].keys()]
+    return _json({"runs": np.array(runs), "finals": finals, "shortfall": short, "discrete": opt,
+                  "merton": base["merton"], "checkpoints": ck,
+                  "snap_mean": [[float(np.mean(np.asarray(s_[str(c)] if str(c) in s_ else s_[c]))) for c in ck]
+                                for s_ in snaps]})
+
+
+EPS_RL = 0.01
+
+
+def _ppo_cost_seed(seed):
+    o = C.ppo_rebalance(MU, R, SIG, EPS_RL, T=10.0, steps=40, iters=300, batch=1024, seed=seed, explore=0.3)
+    pol = o["policy"]
+    ev = C.simulate_rebalance(lambda n, p: pol(n / 40, p), MU, R, SIG, EPS_RL, 10.0, 40, seed=94)
+    return {"mean_target": o["mean_target"], "snapshots": o["snapshots"], "grid_p": o["grid_p"], "final": o["final"],
+            "eval": ev}
+
+
+def compute_ppo_cost_s0() -> dict:
+    return _json(_ppo_cost_seed(0))
+
+
+def compute_ppo_cost_s1() -> dict:
+    return _json(_ppo_cost_seed(1))
+
+
+def compute_ppo_cost_s2() -> dict:
+    return _json(_ppo_cost_seed(2))
+
+
+def compute_ppo_cost_s3() -> dict:
+    return _json(_ppo_cost_seed(3))
+
+
+def compute_ppo_cost_s4() -> dict:
+    return _json(_ppo_cost_seed(4))
+
+
+def compute_ppo_costs() -> dict:
+    """PPO with a 1% trading cost, five seeds, against the dynamic-programming band and quarterly rebalancing to
+    Merton, all scored on the same 200,000 simulated markets."""
+    dn = load("davis_norman")["g1"]
+    lo, hi, pm = dn["lo"], dn["hi"], dn["pi_merton"]
+    band = C.simulate_rebalance(lambda n, p: np.clip(p, lo, hi), MU, R, SIG, EPS_RL, 10.0, 40, seed=94)
+    merton = C.simulate_rebalance(lambda n, p: np.full_like(p, pm), MU, R, SIG, EPS_RL, 10.0, 40, seed=94)
+    hold = C.simulate_rebalance(lambda n, p: p, MU, R, SIG, EPS_RL, 10.0, 40, seed=94)
+    seeds = [load(f"ppo_cost_s{k}") for k in range(5)]
+    gp = np.asarray(seeds[0]["grid_p"])
+    edges = []
+    for s_ in seeds:
+        fin = np.asarray(s_["final"])
+        still = np.abs(fin - gp) < 0.02
+        edges.append([float(gp[still].min()), float(gp[still].max())] if still.any() else [None, None])
+    ev = [s_["eval"] for s_ in seeds]
+    return _json({"band": band, "merton": merton, "hold": hold, "lo": lo, "hi": hi, "pi_merton": pm,
+                  "seeds": ev, "edges": edges, "grid_p": gp, "finals": [s_["final"] for s_ in seeds],
+                  "runs": np.array([s_["mean_target"] for s_ in seeds]),
+                  "snapshots": seeds[0]["snapshots"], "ppo_growth": [e["growth"] for e in ev],
+                  "ppo_turnover": [e["turnover"] for e in ev]})
+
+
+def compute_drawdown_policy() -> dict:
+    """Kelly against Grossman-Zhou (never below 80% of the running peak), 2,000 thirty-year paths, weekly."""
+    ex = MU - R
+    pk = ex / SIG ** 2
+    alpha = 0.8
+    g = np.random.default_rng(95)
+    n, years, per = 2000, 30, 52
+    dt = 1 / per
+    wk, wg = np.ones(n), np.ones(n)
+    mk, mg = np.ones(n), np.ones(n)
+    worst_k, worst_g = np.ones(n), np.ones(n)
+    sample_k, sample_g, sample_m = [], [], []
+    for s in range(years * per):
+        z = g.standard_normal(n)
+        Rs = np.exp((MU - 0.5 * SIG ** 2) * dt + SIG * np.sqrt(dt) * z) - 1
+        rf = np.exp(R * dt) - 1
+        wk = wk * np.maximum(1 + rf + pk * (Rs - rf), 1e-12)
+        f = C.grossman_zhou_fraction(wg, mg, alpha, pk)
+        wg = wg * np.maximum(1 + rf + f * (Rs - rf), 1e-12)
+        mk, mg = np.maximum(mk, wk), np.maximum(mg, wg)
+        worst_k, worst_g = np.minimum(worst_k, wk / mk), np.minimum(worst_g, wg / mg)
+        if s % 4 == 0:
+            sample_k.append(wk[:3].copy()), sample_g.append(wg[:3].copy()), sample_m.append(mg[:3].copy())
+    return _json({"alpha": alpha, "kelly": pk, "median_growth_kelly": float(np.median(np.log(wk)) / years),
+                  "median_growth_gz": float(np.median(np.log(wg)) / years),
+                  "worst_dd_kelly": float(1 - worst_k.min()), "worst_dd_gz": float(1 - worst_g.min()),
+                  "p_dd20_kelly": float(np.mean(worst_k < alpha)), "p_dd20_gz": float(np.mean(worst_g < alpha - 1e-9)),
+                  "sample_k": np.log10(np.array(sample_k)).T, "sample_g": np.log10(np.array(sample_g)).T,
+                  "sample_m": np.log10(np.array(sample_m)).T, "years": years})
+
+
+def compute_vol_target() -> dict:
+    """Volatility targeting on US history (Moreira and Muir 2017's test, redone): each month hold c/sigma_hat^2 of
+    the market, sigma_hat from the previous month's daily returns, c chosen so the average exposure is 1, against
+    holding the market.  Registered with the trial counter."""
+    k = data.ken_french_daily(through="2020-12-31")
+    d = np.asarray(k["date"])
+    x = np.asarray(k["mkt_rf"])
+    rf = np.asarray(k["rf"])
+    month = d // 100
+    ms = np.unique(month)
+    rv, ret, rfm = [], [], []
+    for m_ in ms:
+        sel = month == m_
+        rv.append(np.sum(x[sel] ** 2) * 21 / sel.sum())
+        ret.append(np.prod(1 + x[sel] + rf[sel]) - np.prod(1 + rf[sel]))
+        rfm.append(np.prod(1 + rf[sel]) - 1)
+    rv, ret, rfm = np.array(rv), np.array(ret), np.array(rfm)
+    w = 1 / rv[:-1]
+    w = w / w.mean()
+    ex_scaled = w * ret[1:]
+    ex_mkt = ret[1:]
+    sr = lambda e: float(np.mean(e) / np.std(e) * np.sqrt(12))  # noqa: E731
+    gr = lambda e, f: float(np.mean(np.log1p(e + f)) * 12)  # noqa: E731
+    # the alpha of the scaled portfolio on the market (Moreira and Muir's test), with its t-statistic
+    X = np.column_stack([np.ones(len(ex_mkt)), ex_mkt])
+    b, *_ = np.linalg.lstsq(X, ex_scaled, rcond=None)
+    resid = ex_scaled - X @ b
+    cov = np.linalg.inv(X.T @ X) * resid.var(ddof=2)
+    reg = pit.register("vol_target_us_market", inspect.getsource(compute_vol_target),
+                       {"data": "French daily 1926-2020", "window": "previous month", "rebalance": "monthly"}, trials=1)
+    return _json({"sr_mkt": sr(ex_mkt), "sr_scaled": sr(ex_scaled), "growth_mkt": gr(ex_mkt, rfm[1:]),
+                  "growth_scaled": gr(ex_scaled, rfm[1:]), "alpha": float(b[0] * 12),
+                  "alpha_t": float(b[0] / np.sqrt(cov[0, 0])), "beta": float(b[1]), "max_w": float(w.max()),
+                  "min_w": float(w.min()), "months": int(len(ex_mkt)), "w": w, "dates": ms[1:],
+                  "registered": reg})
+
+
+def compute_bsde_replay() -> dict:
+    """The two-rate BSDE by regression, kept every 5th step for the replay: a sample of (S_n, Y_{n+1}) and the fitted
+    E[Y_{n+1} | S_n] and Y_n on a grid of spots."""
+    from explainer.quant.house import bs
+    pay = lambda x: np.maximum(x - 95, 0) - 2 * np.maximum(x - 105, 0)  # noqa: E731
+    S0, T, s, mu, r, Rb = 100.0, 0.5, 0.2, 0.05, 0.01, 0.06
+    steps, paths, hats = 50, 20000, 20
+    g = np.random.default_rng(96)
+    dt = T / steps
+    dW = g.standard_normal((paths, steps)) * np.sqrt(dt)
+    logS = np.log(S0) + np.cumsum((mu - 0.5 * s ** 2) * dt + s * dW, axis=1)
+    S = np.column_stack([np.full(paths, S0), np.exp(logS)])
+    theta = (mu - r) / s
+    Y = pay(S[:, -1])
+    grid = np.linspace(75, 125, 101)
+    frames = []
+    sub = g.choice(paths, 300, replace=False)
+    for n in range(steps - 1, -1, -1):
+        x = (S[:, n] - S0) / S0
+        if n == 0:
+            Zn = np.full(paths, np.mean(Y * dW[:, n]) / dt)
+            EY = np.full(paths, Y.mean())
+            ey_grid = np.full(len(grid), Y.mean())
+        else:
+            knots = np.quantile(x, np.linspace(0.001, 0.999, hats))
+            B = C._basis(x, 6, knots)
+            cz, *_ = np.linalg.lstsq(B, Y * dW[:, n] / dt, rcond=None)
+            cy, *_ = np.linalg.lstsq(B, Y, rcond=None)
+            Zn, EY = B @ cz, B @ cy
+            ey_grid = C._basis((grid - S0) / S0, 6, knots) @ cy
+        f = -r * EY - theta * Zn - (Rb - r) * np.minimum(EY - Zn / s, 0.0)
+        if n % 5 == 0 or n == steps - 1:
+            frames.append({"n": n, "S": S[sub, n], "Ynext": Y[sub], "fit": ey_grid})
+        Y = EY + f * dt
+    bs_r = float(bs.price(S0, 95, T, s, r) - 2 * bs.price(S0, 105, T, s, r))
+    bs_R = float(bs.price(S0, 95, T, s, Rb) - 2 * bs.price(S0, 105, T, s, Rb))
+    fan = S[g.choice(paths, 40, replace=False)][:, ::2]
+    return _json({"frames": frames, "grid": grid, "Y0": float(Y.mean()), "bs_r": bs_r, "bs_R": bs_R,
+                  "fan": fan, "t": np.linspace(0, T, steps + 1)[::2], "payoff": pay(grid)})
+
 ITEMS = {"coin": compute_coin, "bellman": compute_bellman, "merton_us": compute_merton_us, "kelly_us": compute_kelly_us,
          "fractional": compute_fractional, "samuelson": compute_samuelson, "ergodic": compute_ergodic,
          "ltcm": compute_ltcm, "secretary": compute_secretary, "american": compute_american, "bsde": compute_bsde,
-         "ppo": compute_ppo, "envelope": compute_envelope}
+         "ppo": compute_ppo, "envelope": compute_envelope,
+         "coin_live": compute_coin_live, "utility_check": compute_utility_check, "bellman_sweep": compute_bellman_sweep,
+         "hjb_fd": compute_hjb_fd, "viscosity": compute_viscosity, "rebalance_sim": compute_rebalance_sim,
+         "consumption": compute_consumption, "martingale_check": compute_martingale_check,
+         "davis_norman": compute_davis_norman, "kelly_live": compute_kelly_live, "breiman_race": compute_breiman_race,
+         "edge_error": compute_edge_error, "ergodic_live": compute_ergodic_live, "snell_rw": compute_snell_rw,
+         "perpetual_put": compute_perpetual_put, "myopic_loss": compute_myopic_loss,
+         "robust_fraction": compute_robust_fraction, "mfg_crowd": compute_mfg_crowd,
+         "ppo_s1": compute_ppo_s1, "ppo_s2": compute_ppo_s2, "ppo_s3": compute_ppo_s3, "ppo_s4": compute_ppo_s4,
+         "ppo_seeds": compute_ppo_seeds, "ppo_cost_s0": compute_ppo_cost_s0, "ppo_cost_s1": compute_ppo_cost_s1,
+         "ppo_cost_s2": compute_ppo_cost_s2, "ppo_cost_s3": compute_ppo_cost_s3, "ppo_cost_s4": compute_ppo_cost_s4,
+         "ppo_costs": compute_ppo_costs, "drawdown_policy": compute_drawdown_policy, "vol_target": compute_vol_target,
+         "bsde_replay": compute_bsde_replay}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

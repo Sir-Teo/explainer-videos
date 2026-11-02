@@ -3,92 +3,148 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, load, real_data
+from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, load, pause, real_data
 
 
 class Brownian(VoiceoverScene):
     def construct(self):
-        v = load("variation")
+        q = load("qv_live")
         s = load("signature")
         self.card()
-        self.donsker()
-        self.variations(v)
-        self.signature(s)
+        self.live(q)
+        self.proof(q)
+        self.signature(s, q)
 
     def card(self):
-        c = chapter_card(1, r"Brownian motion and quadratic variation", r"How rough is a price?", lit=(1923,), part=PART)
-        with self.voiceover("Chapter one. Brownian motion, and quadratic variation."):
+        c = chapter_card(2, r"Quadratic variation, accumulating", r"Why is $(dW)^2 = dt$?", part=PART)
+        with self.voiceover("Chapter two. Quadratic variation, watched as it accumulates, and then proved."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def donsker(self):
-        rng = np.random.default_rng(2)
-        steps = rng.choice([-1.0, 1.0], 4096)
-        g = axes([0, 1], [-2.0, 2.0], x_length=9.0, y_length=3.8, xlabel=r"time", ylabel=r"$S_{\lfloor nt\rfloor}/\sqrt{n}$",
-                 xticks=[0, 0.5, 1], yticks=[-2, -1, 0, 1, 2], font_size=18).shift(DOWN * 1.0)
-        ax = g.ax
-        lines = []
-        for n, col in [(16, GREY_B), (128, BM), (4096, ITO)]:
-            x = np.cumsum(steps.reshape(n, 4096 // n).sum(axis=1))
-            y = np.concatenate([[0.0], x]) / np.sqrt(4096)
-            tt = np.linspace(0, 1, n + 1)
-            lines.append(curve(ax, tt, y, col, stroke_width=2.5 if n < 4096 else 1.6))
-        th = theorem_card(r"Donsker's invariance principle", r"A random walk with steps of mean 0 and variance 1, "
-                          r"rescaled by $\sqrt{n}$ in space and $n$ in time, converges in law to Brownian motion, "
-                          r"whatever the steps' distribution.", who=r"Donsker (1951)", color=ITO, width=8.6,
-                          font_size=22).to_edge(UP, buff=0.3)
-        with self.voiceover(
-            "Brownian motion is what a random walk looks like from far away. Take sixteen coin-toss steps, then "
-            "a hundred and twenty-eight, then four thousand, shrinking time by n and space by the square root of n. "
-            "<bookmark mark='a'/> The picture converges, and Monroe Donsker proved in 1951 that the limit is the "
-            "same Brownian motion whatever the steps were, as long as they have mean zero and finite variance. That "
-            "universality is why Brownian motion, and not some other process, sits under so much of finance."
-        ) as vo:
-            self.play(FadeIn(g), Create(lines[0]))
-            self.play(lines[0].animate.set_stroke(opacity=0.35), Create(lines[1]))
-            self.play(lines[1].animate.set_stroke(opacity=0.35), Create(lines[2]), run_time=2)
-            vo.wait_until("a")
-            self.play(FadeIn(th, shift=DOWN * 0.2))
-        self.wait(0.4)
-        self.clear_scene()
+    def live(self, q):
+        W = np.asarray(q["W"])
+        tW = np.linspace(0, 1, len(W))
+        g1 = axes([0, 1], [W.min() - 0.1, W.max() + 0.1], x_length=7.6, y_length=2.2, ylabel=r"one Brownian path $W_t$",
+                  xticks=[], yticks=[], font_size=16)
+        g2 = axes([0, 1], [0, 2.0], x_length=7.6, y_length=3.0, xlabel=r"time $t$", ylabel=r"running sums over the grid",
+                  xticks=[0, 0.5, 1], yticks=[0, 1, 2], font_size=16)
+        VGroup(g1, g2).arrange(DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
+        a1, a2 = g1.ax, g2.ax
+        tk = ValueTracker(0)
+        path = tracing(a1, tW, W, tk, BM, stroke_width=2)
+        diag = DashedLine(a2.c2p(0, 0), a2.c2p(1, 1), color=GREY_B, stroke_width=2)
+        dl = MathTex(r"y = t", font_size=24, color=GREY_B).next_to(a2.c2p(1, 1), RIGHT, buff=0.08)
+        cols = {"v1": JUMP, "v2": ITO, "v3": DRIFT}
 
-    def variations(self, v):
-        n = np.log2(np.asarray(v["n"]))
-        g = axes([2, 16], [-2.2, 2.2], x_length=7.2, y_length=4.6, xlabel=r"grid points $n$ (log scale)",
-                 ylabel=r"sum over the grid (log scale)", xticks=[2, 6, 10, 14], xfmt=lambda u: rf"2^{{{int(u)}}}",
-                 yticks=[-2, -1, 0, 1, 2], yfmt=lambda u: rf"10^{{{int(u)}}}" if u else "1", font_size=18)
-        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
-        ax = g.ax
-        l1 = curve(ax, n, np.log10(v["v1"]), JUMP, stroke_width=3.5)
-        l2 = curve(ax, n, np.log10(v["v2"]), ITO, stroke_width=3.5)
-        l3 = curve(ax, n, np.log10(v["v3"]), BM, stroke_width=3.5)
-        leg = legend([(JUMP, r"$\sum |\Delta W|$: total variation, grows like $\sqrt{n}$"),
-                      (ITO, r"$\sum (\Delta W)^2$: quadratic variation, $\to T = 1$"),
-                      (BM, r"$\sum |\Delta W|^3 \to 0$")], font_size=21)
-        side = VGroup(leg, MathTex(r"(dW)^2 = dt", font_size=46, color=ITO),
-                      wrapped_label(r"a smooth path has zero quadratic variation; a Brownian path has infinite length "
-                                    r"and a quadratic variation equal to elapsed time", 4.8, 21, GREY_A)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.4)
+        def sums(n):
+            run = q["run"][str(n)]
+            t = np.linspace(0, 1, n + 1)
+            return VGroup(*[curve(a2, t, np.minimum(np.asarray(run[k]), 2.0), cols[k], stroke_width=3) for k in
+                            ("v1", "v2", "v3")])
+        n0 = 256
+        run0 = q["run"][str(n0)]
+        tt = np.linspace(0, 1, n0 + 1)
+        live = VGroup(*[tracing(a2, tt, np.minimum(np.asarray(run0[k]), 2.0), tk, cols[k], stroke_width=3)
+                        for k in ("v1", "v2", "v3")])
+        leg = legend([(JUMP, r"$\sum |\Delta W|$: the length"), (ITO, r"$\sum (\Delta W)^2$: quadratic variation"),
+                      (DRIFT, r"$\sum |\Delta W|^3$")], font_size=21).to_corner(UR, buff=0.4)
+        ns = q["ns"]
+        finals = VGroup()
+        for n in ns:
+            run = q["run"][str(n)]
+            finals.add(VGroup(MathTex(rf"n = {n:,}".replace(",", "{,}"), font_size=24, color=GREY_A),
+                              MathTex(rf"{run['v1'][-1]:.1f}", font_size=24, color=JUMP),
+                              MathTex(rf"{run['v2'][-1]:.3f}", font_size=24, color=ITO),
+                              MathTex(rf"{run['v3'][-1]:.4f}", font_size=24, color=DRIFT)))
+        for r_ in finals:
+            r_.arrange(RIGHT, buff=0.35)
+        finals.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(leg, DOWN, buff=0.45).align_to(leg, LEFT)
+        regrid(finals, gap=0.35)
+        cur = sums(ns[0])
         with self.voiceover(
-            "How rough is that limit? Cut one Brownian path into finer and finer pieces and add up three things. "
-            "<bookmark mark='a'/> The sizes of the steps: the path's length. It grows without bound, like the square "
-            "root of the number of pieces. A Brownian path is infinitely long in any interval. <bookmark mark='b'/> "
-            "The squares of the steps: they settle, at exactly the elapsed time. <bookmark mark='c'/> The cubes: "
-            "they vanish. So squares are the one power that neither blows up nor disappears. That is the rule "
-            "behind all of stochastic calculus: d W squared equals d t."
+            "Draw one Brownian path from left to right, on a grid of two hundred and fifty-six steps. Underneath, keep "
+            "three running totals over the steps: the sizes of the moves, their squares, and their cubes. "
+            "<bookmark mark='a'/> The first total, the length of the path so far, races off the top of the chart. "
+            "The third barely leaves the floor. The middle one, the sum of squared moves, climbs along the diagonal: "
+            "at every moment it is close to the elapsed time. <bookmark mark='b'/> Now refine the grid, from sixteen "
+            "steps to four thousand. The length grows like the square root of the number of steps, without limit: "
+            "a Brownian path is infinitely long on every interval. The cubes vanish. And the squares hug the line y "
+            "equals t, tighter at every refinement. <bookmark mark='c'/> That is what d W squared equals d t means. "
+            "It is not a rule of algebra. It is a sum of many small squares that has become deterministic."
         ) as vo:
-            self.play(FadeIn(g))
+            self.add(path, *live)
+            self.play(FadeIn(g1), FadeIn(g2), Create(diag), FadeIn(dl), FadeIn(leg))
             vo.wait_until("a")
-            self.play(Create(l1), FadeIn(leg[0]))
+            self.play(tk.animate.set_value(len(tW) - 1), run_time=5, rate_func=linear)
+            for m in live:
+                m.clear_updaters()
             vo.wait_until("b")
-            self.play(Create(l2), FadeIn(leg[1]))
+            self.play(FadeOut(live), FadeIn(cur), FadeIn(finals[0]))
+            for k, n in enumerate(ns[1:], 1):
+                nxt = sums(n)
+                self.play(Transform(cur, nxt), FadeIn(finals[k]), run_time=1.1)
             vo.wait_until("c")
-            self.play(Create(l3), FadeIn(leg[2]))
-            self.play(FadeIn(side[1]), FadeIn(side[2]))
+            self.play(Indicate(cur[1], color=ITO), Indicate(diag, color=WHITE))
         self.wait(0.4)
         self.clear_scene()
 
-    def signature(self, s):
+    def proof(self, q):
+        rows = [cmath(r"\mathbb{E}\sum_k (\Delta W_k)^2", r"=", r"\sum_k \Delta t_k = T", font_size=34),
+                cmath(r"\operatorname{Var}\sum_k (\Delta W_k)^2", r"=", r"\sum_k 2\,\Delta t_k^2 \;\le\; 2T \max_k \Delta t_k "
+                      r"\;\to\; 0", font_size=34, colors={r"\sum_k 2\,\Delta t_k^2 \;\le\; 2T \max_k \Delta t_k \;\to\; 0": ITO}),
+                cmath(r"\sum_k |\Delta W_k|", r"\ge", r"\frac{\sum_k (\Delta W_k)^2}{\max_k |\Delta W_k|} \;\to\; \infty",
+                      font_size=34, colors={r"\frac{\sum_k (\Delta W_k)^2}{\max_k |\Delta W_k|} \;\to\; \infty": JUMP}),
+                cmath(r"\mathbb{E}\,RV_n", r"=", r"\sigma^2 T + 2n\,\mathbb{E}\,\varepsilon^2", font_size=34,
+                      colors={r"2n\,\mathbb{E}\,\varepsilon^2": JUMP})]
+        whys = [why(r"each increment has variance $\Delta t_k$"),
+                why(r"independent increments; a Gaussian's fourth moment is $3\Delta t^2$, so each square has variance "
+                    r"$2\Delta t^2$"),
+                why(r"so the sum converges to $T$ in mean square; the paths are continuous, so "
+                    r"$\max|\Delta W| \to 0$ and the length is infinite: no Stieltjes integral"),
+                why(r"observed prices carry noise $\varepsilon$ at each tick: $n$ extra squares, which grow with $n$")]
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.5, buff=0.55, edge=6.9)
+        ns = q["ns"]
+        tab = VGroup(*[MathTex(rf"n = {n:,}:\ \ {sd:.4f} \text{{ against }} \sqrt{{2/n}} = {th:.4f}".replace(",", "{,}"),
+                               font_size=24, color=GREY_A) for n, sd, th in
+                       zip(ns, q["qv_sd"], q["qv_sd_theory"])]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        tab.to_corner(DL, buff=0.35)
+        tl = label(r"spread of $\sum(\Delta W)^2$ over 4{,}000 paths", font_size=20, color=ITO).next_to(tab, UP,
+                                                                                                    buff=0.1)
+        tl.align_to(tab, LEFT)
+        pc, ans = pause(r"Sample twice as fast. By how much does the spread of the estimate shrink?",
+                        r"By $\sqrt 2$: its standard deviation is $\sqrt{2/n}\,T$.", width=5.0, font_size=22)
+        pc.to_corner(DR, buff=0.35)
+        ans.next_to(pc, UP, buff=0.2).align_to(pc, LEFT)
+        with self.voiceover(
+            "Now the proof, which is two lines. The expected sum of squared increments is the sum of the step "
+            "lengths: T. <bookmark mark='a'/> Its variance: the increments are independent, and the square of a "
+            "Gaussian increment has variance twice its step squared. So the variance of the sum is at most two T times "
+            "the largest step, which goes to zero. The sum converges to T in mean square. <bookmark mark='b'/> And "
+            "the length: the sum of the moves is at least the sum of squares divided by the largest move, which goes "
+            "to zero because the path is continuous. So the length is infinite, and an ordinary Stieltjes integral "
+            "against Brownian motion cannot exist. That is why the next chapter has to build a new one. "
+            "<bookmark mark='c'/> Pause on this: sample twice as fast, and by how much does the spread of the estimate "
+            "shrink? <bookmark mark='d'/> By the square root of two. The four thousand paths agree with the square "
+            "root of two over n, at every grid. <bookmark mark='e'/> One more line, for real prices. If every "
+            "observed price carries a little noise, each of the n squared returns picks up the noise twice, and the "
+            "estimate grows with n instead of settling."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(pc))
+            vo.wait_until("d")
+            self.play(FadeIn(ans), FadeIn(tl), FadeIn(tab))
+            vo.wait_until("e")
+            self.play(FadeOut(pc), FadeOut(ans))
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def signature(self, s, q):
         m = np.log10(np.asarray(s["minutes"]))
         vol = np.asarray(s["vol_annual"])
         g = axes([0, np.log10(1440) + 0.1], [0.6, 0.85], x_length=7.4, y_length=4.4,
@@ -103,25 +159,28 @@ class Brownian(VoiceoverScene):
         side = VGroup(
             MathTex(rf"\text{{every minute: }} {100 * vol[0]:.0f}\%", font_size=32, color=JUMP),
             MathTex(rf"\text{{every day: }} {100 * vol[-1]:.0f}\%", font_size=32, color=DRIFT),
-            wrapped_label(r"the volatility signature plot (Andersen, Bollerslev, Diebold and Labys 2000): at the "
-                          r"finest scales, the bid--ask bounce adds noise whose squares add up too", 4.6, 21, GREY_A),
-            wrapped_label(r"realized variance estimates quadratic variation only between the noise and the sampling "
-                          r"error; Part 7 builds volatility forecasts on it", 4.6, 21, ITO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.45)
+            MathTex(r"\widehat{\mathbb{E}\,\varepsilon^2} = \frac{RV_{1\,\mathrm{min}} - RV_{1\,\mathrm{day}}}{2n}",
+                    font_size=30, color=ITO),
+            MathTex(rf"\text{{noise: about }} {q['noise_bp']:.1f} \text{{ basis points a tick}}", font_size=28, color=ITO),
+            wrapped_label(r"the volatility signature plot (Andersen, Bollerslev, Diebold and Labys 2000); "
+                          r"subsampling over offsets (Zhang, Mykland and A\"it-Sahalia 2005) averages the noise down",
+                          4.6, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Binance BTCUSDT one-minute candles, 2020; subsampled over up to 30 offsets")
         with self.voiceover(
-            "If prices were Brownian, their quadratic variation would be their variance, and you could measure it "
-            "exactly by sampling faster and faster. Try it on Bitcoin in 2020. <bookmark mark='a'/> Summing squared "
-            "daily returns gives a volatility of seventy-one percent. Summing squared one-minute returns gives "
-            "eighty. <bookmark mark='b'/> At the finest scales the measured price bounces between the bid and the "
-            "ask, and that noise has squares too, which add up. The curve is called the volatility signature plot. "
-            "Practitioners sample at around five minutes, a compromise between noise and too few observations, and "
-            "Part seven builds forecasts on it."
+            "Try it on Bitcoin in 2020. If the price were a Brownian motion with constant volatility, summing squared "
+            "returns would give the same answer at every sampling interval. <bookmark mark='a'/> Summing squared daily "
+            f"returns gives a volatility of {100 * vol[-1]:.0f} percent; summing squared one-minute returns gives "
+            f"{100 * vol[0]:.0f}. <bookmark mark='b'/> The last line of the proof explains the rise: the bid-ask "
+            "bounce is noise, and its squares pile up as the sampling gets faster. Read backwards, the gap between the "
+            "one-minute and the one-day estimates measures the noise: about "
+            f"{q['noise_bp']:.1f} basis points a tick. Practitioners sample at around five minutes, or subsample and "
+            "average, and Part seven builds volatility forecasts on these sums."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
             self.play(Create(line), FadeIn(dots), FadeIn(side[1]), FadeIn(side[0]), run_time=2)
             vo.wait_until("b")
-            self.play(FadeIn(side[2]), FadeIn(side[3]))
+            self.play(FadeIn(side[2]), FadeIn(side[3]), FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()

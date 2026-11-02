@@ -190,13 +190,14 @@ def simulate(firm: Firm, periods: int, sales0=250.0, growth=0.02, vol=0.08, seed
     return out
 
 
-def earnings_panel(n_firms: int, years: int, seed=0, mu=0.06, phi=0.8, phi_loss=None, sd_roa=0.03, sd_err=0.02,
-                   wc_share=0.25, growth_sd=0.08) -> dict:
+def earnings_panel(n_firms: int, years: int, seed=0, mu=0.06, phi=0.8, phi_loss=None, sd_roa=0.03, sd_err=0.005,
+                   accrual_share=(-0.2, 0.6), growth_sd=0.08) -> dict:
     """A simulated panel whose truth is known, for accrual and forecasting experiments.  True return on assets
     follows an AR(1) around ``mu`` with persistence ``phi`` (``phi_loss`` when the firm is losing money, if given).
     Reported earnings add a booked estimation error e_t (receivables that will not pay, provisions too small) that
-    reverses next year: E_t = ROA_t A_t + e_t - e_{t-1}.  Working capital grows with sales (a true accrual, as
-    persistent as profit); the error lives only in accruals.  All items are scaled by assets."""
+    reverses next year: E_t = ROA_t + e_t - e_{t-1}.  A random share of true profit, drawn from ``accrual_share``, is
+    not yet cash (a true accrual, as persistent as profit); the error lives only in accruals, so cash flow is clean.
+    All items are scaled by assets; ``growth`` is a sales-growth item unrelated to the truth."""
     rng = np.random.default_rng(seed)
     burn = 20
     T = years + burn
@@ -207,7 +208,7 @@ def earnings_panel(n_firms: int, years: int, seed=0, mu=0.06, phi=0.8, phi_loss=
         roa[:, t] = mu + p * (roa[:, t - 1] - mu) + sd_roa * rng.standard_normal(n_firms)
     err = sd_err * rng.standard_normal((n_firms, T))
     g = growth_sd * rng.standard_normal((n_firms, T)) + 0.04
-    true_acc = wc_share * g * 0.3                               # working capital tied up by growth, per asset
+    true_acc = rng.uniform(*accrual_share, (n_firms, T)) * roa   # profit booked but not yet collected
     E = roa + err - np.roll(err, 1, axis=1)
     ACC = true_acc + err - np.roll(err, 1, axis=1)
     CFO = E - ACC

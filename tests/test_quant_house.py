@@ -1211,3 +1211,206 @@ def test_part3_taxes_campbell_shiller_and_beneish():
     rt = v.beneish_ratios(item, item)
     assert rt["missing"] == [] and all(rt[k] == pytest.approx(1.0) for k in neutral if k != "TATA")
     assert rt["TATA"] == pytest.approx(-0.02)
+
+
+def test_econometrics_part6_expansion():
+    from explainer.quant.house import econ
+    from scipy import stats as sst
+
+    rng = np.random.default_rng(6)
+    # long-run variance of an AR(1) with phi = 0.5 and unit innovations: 1 / (1 - phi)^2 = 4
+    e = rng.standard_normal(20000)
+    z = np.empty_like(e)
+    z[0] = e[0]
+    for t in range(1, len(e)):
+        z[t] = 0.5 * z[t - 1] + e[t]
+    assert econ.lrv(z, "bartlett", bw=60) == pytest.approx(4.0, rel=0.15)
+    assert econ.lrv(z, "qs", bw=30) == pytest.approx(4.0, rel=0.15)
+    assert econ.lrv(z, "ewc", nu=200) == pytest.approx(4.0, rel=0.25)
+    # fixed-b: b -> 0 gives the normal 1.96; larger b gives fatter critical values
+    assert econ.fixed_b_cv(0.002, reps=8000, T=500) == pytest.approx(1.96, abs=0.08)
+    assert econ.fixed_b_cv(0.3, reps=8000, T=500) > 2.4
+    # Hodrick 1B: under the null, |t| rarely exceeds 1.96 for overlapping horizons with a persistent predictor
+    rej = 0
+    for s in range(60):
+        r = np.random.default_rng(100 + s)
+        x = np.cumsum(r.standard_normal(400)) * 0.05
+        x = x - np.linspace(0, 1, 400) * x[-1]
+        rej += abs(econ.hodrick_se(r.standard_normal(400), x, 12)["t"][1]) > 1.96
+    assert rej <= 12
+    # within + between: month fixed effects equal the dispersion-weighted FM average
+    T, N = 60, 30
+    X = rng.standard_normal((T, N)) * rng.uniform(0.5, 2, (T, 1)) + rng.standard_normal((T, 1))
+    Y = 0.3 * X + rng.standard_normal((T, N))
+    wb = econ.within_between(Y.ravel(), X.ravel(), np.repeat(np.arange(T), N))
+    sl = econ.fama_macbeth(Y, X)["slopes"][:, 1]
+    disp = ((X - X.mean(1, keepdims=True)) ** 2).sum(1)
+    assert wb["within"] == pytest.approx(np.sum(disp * sl) / disp.sum(), rel=1e-9)
+    assert wb["pooled"] == pytest.approx(wb["w_within"] * wb["within"] + (1 - wb["w_within"]) * wb["between"], rel=1e-9)
+    # two-pass recovers a planted premium; GRS does not reject a true model
+    T, N = 600, 20
+    f = 0.5 + rng.standard_normal(T)
+    b = rng.uniform(0.5, 1.5, N)
+    R = np.outer(f, b) + 0.5 * rng.standard_normal((T, N))
+    tp = econ.two_pass(R, f)
+    assert tp["lambda"][1] == pytest.approx(0.5, abs=0.15) and tp["se_shanken"][1] >= tp["se_fm"][1]
+    assert econ.grs(R, f)["p"] > 0.001
+    # MLE of a Student t: estimates near the truth, sandwich close to naive when the model is right
+    x = sst.t.rvs(5, loc=0.1, scale=1.5, size=4000, random_state=1)
+    nll = lambda th: -sst.t.logpdf(x, 2 + np.exp(th[2]), th[0], np.exp(th[1]))  # noqa: E731
+    m = econ.mle(nll, [0.0, 0.0, 1.0])
+    assert m["theta"][0] == pytest.approx(0.1, abs=0.08) and np.exp(m["theta"][1]) == pytest.approx(1.5, rel=0.1)
+    assert m["se_sandwich"][0] == pytest.approx(m["se_naive"][0], rel=0.2)
+    assert m["nll"][-1] <= m["nll"][0]
+    # out of sample: a useless predictor has a negative R2_OS; a real one positive
+    x = rng.standard_normal(600)
+    o0 = econ.oos_r2(rng.standard_normal(600), x, 120)
+    o1 = econ.oos_r2(0.5 * x + rng.standard_normal(600), x, 120)
+    assert o0["r2_os"] < 0.02 and o1["r2_os"] > 0.1
+    # Amihud-Hurvich and IVX: under the null with a persistent predictor, sizes near nominal
+    rej_ivx = rej_aug = 0
+    for s in range(150):
+        r_ = np.random.default_rng(200 + s)
+        L_ = np.linalg.cholesky([[1, -0.9], [-0.9, 1]])
+        E = r_.standard_normal((241, 2)) @ L_.T
+        xx = np.zeros(241)
+        for t in range(1, 241):
+            xx[t] = 0.98 * xx[t - 1] + E[t, 1]
+        rr = E[1:, 0]
+        rr = np.append(rr, 0.0)
+        rej_ivx += econ.ivx(rr, xx)["p"] < 0.05
+        rej_aug += abs(econ.augmented_predictive(rr, xx)["t"]) > 1.96
+    assert rej_ivx / 150 < 0.13 and rej_aug / 150 < 0.13
+    # event days: a planted 0.3 shift on 100 of 5000 days is found; placebo means centre on the overall mean
+    rr = rng.standard_normal(5000)
+    ev = np.zeros(5000, bool)
+    ev[rng.choice(5000, 100, replace=False)] = True
+    rr[ev] += 0.3
+    assert econ.event_mean_test(rr, ev)["t"] > 1.5
+    pm = econ.placebo_means(rr, 100, reps=500, exclude=ev)
+    assert abs(pm.mean() - rr[~ev].mean()) < 0.02
+    # stationary bootstrap indices: right shape, mean block length near the target
+    idx = econ.stationary_indices(1000, 12, B=20, seed=3)
+    assert idx.shape == (20, 1000) and idx.min() >= 0 and idx.max() < 1000
+    breaks = np.mean(np.diff(idx, axis=1) % 1000 != 1)
+    assert 1 / breaks == pytest.approx(12, rel=0.25)
+    # Gibbs: with no true dispersion, tau's posterior sits near zero and the alphas shrink toward the mean
+    est = rng.normal(0.02, 0.05, 40)
+    g = econ.gibbs_hierarchical(est, np.full(40, 0.05), draws=1500, chains=2)
+    assert np.median(g["tau"]) < 0.04 and np.var(g["alpha_post"]) < 0.3 * np.var(est)
+    # 2SLS undoes confounding; DiD; staggered TWFE puts negative weight on some cells; CS recovers the truth
+    n = 5000
+    u = rng.standard_normal(n)
+    zz = rng.standard_normal(n)
+    xx = zz + u + rng.standard_normal(n)
+    yy = 0.5 * xx + 2 * u + rng.standard_normal(n)
+    iv = econ.iv_2sls(yy, xx, zz)
+    assert iv["beta"] == pytest.approx(0.5, abs=0.1) and iv["F"] > 100
+    assert econ.did_2x2([3.0], [1.0], [2.0], [1.0]) == pytest.approx(1.0)
+    units, T = 60, 10
+    coh = np.repeat([3, 6, 9], 20).astype(float)
+    tt = np.arange(T)
+    D = (tt[None, :] >= coh[:, None]).astype(float)
+    eff = np.where(D > 0, 0.2 * (tt[None, :] - coh[:, None] + 1), 0.0)
+    Y = rng.standard_normal((units, 1)) + 0.1 * tt[None, :] + eff + 0.05 * rng.standard_normal((units, T))
+    tw = econ.twfe(Y, D)
+    cs = econ.did_cs(Y, coh)
+    true_att = eff[D > 0].mean()
+    assert (tw["weights"] < 0).any() and abs(cs["att"] - eff[(D > 0) & (tt[None, :] < 9)].mean()) < 0.1
+    assert tw["beta"] < true_att - 0.1  # growing effects: early cohorts as controls drag TWFE down
+    # RD: a planted jump of 0.5 at zero
+    xr = rng.uniform(-1, 1, 4000)
+    yr = 0.3 * xr + 0.5 * (xr >= 0) + 0.2 * rng.standard_normal(4000)
+    rd = econ.rd_local_linear(xr, yr, 0.0, 0.4)
+    assert rd["jump"] == pytest.approx(0.5, abs=0.1)
+
+
+# ---------------------------------------------------------------------------
+# Part 9 expansion: the arbitrage checker's new tools
+# ---------------------------------------------------------------------------
+def test_part9_simplex_agrees_with_highs_and_finds_the_arbitrage():
+    from scipy.optimize import linprog
+    from explainer.quant.house import arbitrage as A
+
+    rng = np.random.default_rng(9)
+    for _ in range(40):
+        Am = rng.normal(size=(3, 6))
+        b = Am @ rng.random(6)
+        c = rng.normal(size=6)
+        mine, ref = A.simplex(c, Am, b), linprog(c, A_eq=Am, b_eq=b, method="highs")
+        assert (mine["status"] == "optimal") == (ref.status == 0)
+        if ref.status == 0:
+            assert abs(mine["fun"] - ref.fun) < 1e-7
+    # the fundamental theorem's LP: max t s.t. D psi = p, psi_j - t - s_j = 0
+    D = np.vstack([np.ones(3), [80.0, 100.0, 125.0]])
+    Aeq = np.zeros((5, 7))
+    Aeq[:2, :3], Aeq[2:, :3], Aeq[2:, 3], Aeq[2:, 4:] = D, np.eye(3), -1, -np.eye(3)
+    c = np.zeros(7)
+    c[3] = -1
+    ok = A.simplex(c, Aeq, [1, 100, 0, 0, 0])
+    assert ok["status"] == "optimal" and np.allclose(ok["x"][:3], [5 / 13, 4 / 13, 4 / 13])
+    bad = A.simplex(c, Aeq, [1, 130, 0, 0, 0])
+    theta = bad["farkas"][:2]
+    assert bad["status"] == "infeasible" and theta @ [1, 130] < 0 and np.all(D.T @ theta >= -1e-9)
+
+
+def test_part9_superhedge_tree_is_crr_for_a_convex_payoff():
+    from explainer.quant.house import arbitrage as A
+
+    for N in (1, 4, 16):
+        sh = A.superhedge_tree(100, 100, 1.0, 0.25, N)
+        assert abs(sh["upper"] - trees.crr(100, 100, 1.0, 0.25, N=N)["price"]) < 1e-9
+        assert abs(sh["lower"]) < 1e-12  # all mass on the middle branch: intrinsic value at the money
+
+
+def test_part9_power_iteration_and_ross_recovery():
+    from explainer.quant.house import arbitrage as A
+
+    rng = np.random.default_rng(1)
+    P = rng.random((6, 6)) * 0.2
+    pi = A.power_iteration(P, 200)
+    rr = A.ross_recovery(P)
+    assert abs(pi["delta"][-1] - rr["delta"]) < 1e-10
+    assert np.allclose(pi["z"][-1], rr["z"] / rr["z"].sum(), atol=1e-10)
+    assert np.allclose(rr["F"].sum(1), 1.0)
+
+
+def test_part9_mot_dual_and_entropic_match_the_lp():
+    from explainer.quant.house import arbitrage as A
+
+    x, mu = np.array([0.9, 1.1]), np.array([0.5, 0.5])
+    y, nu = np.array([0.7, 1.0, 1.3]), np.array([0.3, 0.4, 0.3])
+    c = lambda a, b: abs(b - a)  # noqa: E731
+    lp = A.mot_bounds(x, mu, y, nu, c)
+    up, lo = A.mot_dual(x, mu, y, nu, c, sign=-1), A.mot_dual(x, mu, y, nu, c, sign=1)
+    assert abs(up["value"] - lp["upper"]) < 1e-9 and abs(up["dual_value"] - lp["upper"]) < 1e-9
+    assert abs(lo["dual_value"] - lp["lower"]) < 1e-9
+    assert up["slack"].min() > -1e-9 and lo["slack"].max() < 1e-9  # the hedge dominates (is dominated by) the claim
+    ent = A.entropic_mot(x, mu, y, nu, c, eps=0.002, iters=3000, sign=-1)
+    assert abs(ent["value"] - lp["upper"]) < 0.01
+    assert np.allclose(ent["pi"].sum(1), mu, atol=1e-6) and np.allclose((ent["pi"] * (y[None] - x[:, None])).sum(1), 0,
+                                                                         atol=1e-4)
+
+
+def test_part9_implied_forward_reads_parity():
+    from explainer.quant.house import arbitrage as A
+
+    F, idx, K = 92000.0, 91000.0, 90000.0
+    C, P = 0.06, 0.06 - (1 - K / F)
+    mk = lambda kind, px, ts: {"instrument_name": f"BTC-27MAR26-90000-{kind}", "timestamp": ts, "price": px,  # noqa: E731
+                               "mark_price": px, "index_price": idx}
+    rows = A.implied_forward([mk("C", C, 1765353600000), mk("P", P, 1765353660000)])
+    assert len(rows) == 1 and abs(rows[0][2] * idx - F) < 1e-6
+
+
+def test_part9_neural_mot_dual_is_near_the_lp():
+    pytest.importorskip("torch")
+    from explainer.quant.house import arbitrage as A
+    from explainer.quant.house import deep
+
+    x, mu = np.array([0.9, 1.1]), np.array([0.5, 0.5])
+    y, nu = np.array([0.7, 1.0, 1.3]), np.array([0.3, 0.4, 0.3])
+    c = lambda a, b: abs(b - a)  # noqa: E731
+    lp = A.mot_bounds(x, mu, y, nu, c)["upper"]
+    r = deep.mot_neural(x, mu, y, nu, c, steps=3000, gamma=3000.0, width=32, lr=1e-2, seed=0)
+    assert abs(r["bound"] - lp) < 0.03

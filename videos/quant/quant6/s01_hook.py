@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant6.common import ALT, BAD, EST, GOOD, PART, load, real_data, tbar
+from videos.quant.quant6.common import ALT, BAD, EST, GOOD, PART, load, predict, real_data, tbar
 
 ORDER = ["pooled OLS", "clustered by industry", "clustered by month", "two-way clustered", "Fama-MacBeth"]
 SHORT = {"pooled OLS": r"pooled OLS", "clustered by industry": r"clustered by\\industry",
@@ -12,8 +12,10 @@ SHORT = {"pooled OLS": r"pooled OLS", "clustered by industry": r"clustered by\\i
 class Hook(VoiceoverScene):
     def construct(self):
         p = load("panel")
+        fe = load("panel_fe")
         self.title_card()
-        self.four(p)
+        self.four(p, fe)
+        self.era()
         self.objectives()
         self.house()
 
@@ -27,9 +29,9 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
 
-    def four(self, p):
+    def four(self, p, fe):
         res = p["results"]
-        g = axes([0, 5], [-1, 6], x_length=6.4, y_length=4.4, ylabel=r"$t$-statistic of the momentum slope",
+        g = axes([0, 6], [-1, 6], x_length=6.4, y_length=4.4, ylabel=r"$t$-statistic of the momentum slope",
                  xticks=[], yticks=[0, 2, 4, 6], font_size=18).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         bars, labs, vals = VGroup(), VGroup(), VGroup()
@@ -41,17 +43,24 @@ class Hook(VoiceoverScene):
             labs.add(Tex(r"\begin{tabular}{c}" + SHORT[k] + r"\end{tabular}", font_size=18, color=GREY_A).next_to(
                 ax.c2p(i + 0.5, -1), DOWN, buff=0.1))
             vals.add(MathTex(f"{t:.2f}", font_size=24, color=col).next_to(b, UP, buff=0.08))
-        two = DashedLine(ax.c2p(0, 1.96), ax.c2p(5, 1.96), color=GREY_B, stroke_width=2)
-        tl = label(r"1.96", font_size=18, color=GREY_B).next_to(ax.c2p(5, 1.96), RIGHT, buff=0.08)
+        sixth = tbar(ax, 5.5, fe["t_within_cluster"], GREY_C, width=0.55).set_fill(opacity=0.35)
+        six_l = Tex(r"\begin{tabular}{c}pooled,\\month effects\end{tabular}", font_size=18, color=GREY_B).next_to(
+            ax.c2p(5.5, -1), DOWN, buff=0.1)
+        six_v = MathTex(f"{fe['t_within_cluster']:.2f}", font_size=24, color=GREY_B).next_to(sixth, UP, buff=0.08)
+        six_q = label(r"chapter 4", font_size=18, color=GREY_B).next_to(six_v, UP, buff=0.08)
+        two = DashedLine(ax.c2p(0, 1.96), ax.c2p(6, 1.96), color=GREY_B, stroke_width=2)
+        tl = label(r"1.96", font_size=18, color=GREY_B).next_to(ax.c2p(6, 1.96), RIGHT, buff=0.08)
         side = VGroup(
             label(r"does an industry's past year predict its next month?", font_size=22, color=GREY_A),
             label(r"49 industries, 1928--2020, 51{,}858 observations", font_size=20, color=GREY_B),
             MathTex(rf"\hat\beta = {res['pooled OLS']['beta']:.4f} \ \text{{(pooled)}}", font_size=28, color=EST),
             MathTex(rf"\hat\beta = {res['Fama-MacBeth']['beta']:.4f} \ \text{{(Fama--MacBeth)}}", font_size=28, color=ALT),
-            wrapped_label(r"same data, same question: the answer depends on how you weight the months and how you "
-                          r"count the noise", 4.4, 21, GREY_A),
+            wrapped_label(r"same data, same question: the answer depends on which variation the estimator uses and "
+                          r"how it counts the noise", 4.4, 21, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's 49 industry portfolios, monthly; the House's \texttt{econ}")
+        q = predict(r"A sixth estimate, pooled least squares with a separate intercept for every month, waits in grey. "
+                    r"Which of the five will it sit closest to?", width=11.0).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Here is a question an analyst might ask on a Monday morning. Does an industry's return over the past year "
             "predict its return next month? Kenneth French's forty-nine industries, ninety-three years, fifty-two "
@@ -60,8 +69,11 @@ class Hook(VoiceoverScene):
             "industries in the same month share a market shock. Allow for that, cluster by month, and the "
             "t-statistic is zero point two seven: nothing. <bookmark mark='c'/> Fama and MacBeth's method, which "
             "estimates a slope each month and averages, gives a different slope altogether, eight times larger, "
-            "with a t-statistic of five. <bookmark mark='d'/> Same data, same question, five verdicts. By the end "
-            "of this part you will know which to believe, and why."
+            "with a t-statistic of five. <bookmark mark='d'/> Same data, same question, five verdicts. And a sixth, "
+            "in grey, that we will meet in chapter four: least squares with a separate intercept for every month. "
+            "<bookmark mark='e'/> Pause and predict: which of the five will it sit closest to? By chapter four you "
+            "will see that the pooled slope mixes two different questions, and that once they are separated, none "
+            "of these numbers is wrong. Each answers its own question."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]), Create(two), FadeIn(tl), FadeIn(labs))
             vo.wait_until("a")
@@ -72,28 +84,93 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(GrowFromEdge(bars[4], DOWN), FadeIn(vals[4]), FadeIn(side[3]))
             vo.wait_until("d")
-            self.play(FadeIn(side[4]))
+            self.play(FadeIn(side[4]), GrowFromEdge(sixth, DOWN), FadeIn(six_l), FadeIn(six_v), FadeIn(six_q))
+            vo.wait_until("e")
+            self.play(FadeIn(q, shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def era(self):
+        events = [
+            (1933, r"Cowles", r"``Can stock market forecasters forecast?'': mostly not"),
+            (1969, r"Fama, Fisher, Jensen, Roll", r"stock splits: the first event study"),
+            (1973, r"Fama and MacBeth", r"a cross-section each month, then average"),
+            (1982, r"Hansen", r"the generalized method of moments (Nobel 2013)"),
+            (1987, r"Newey and West", r"standard errors that allow for correlation"),
+            (2009, r"Petersen", r"42\% of panel papers did not adjust their errors"),
+            (2016, r"Harvey, Liu and Zhu", r"316 factors: demand $t > 3$"),
+            (2024, r"Menkveld et al.", r"164 teams, one data set, different answers"),
+        ]
+        x0, x1 = -6.2, 6.2
+        X = lambda y: x0 + (x1 - x0) * (y - 1925) / (2030 - 1925)  # noqa: E731
+        line = Line([x0, 0, 0], [x1, 0, 0], color=GREY_D, stroke_width=2)
+        ticks = VGroup(*[VGroup(Line([X(y), -0.06, 0], [X(y), 0.06, 0], color=GREY_D),
+                                Text(str(y), font_size=13, color=GREY_D).next_to([X(y), 0, 0], DOWN, buff=0.12))
+                         for y in range(1930, 2031, 20)])
+        dots, cards = VGroup(), VGroup()
+        for i, (yr, who, what) in enumerate(events):
+            d = Dot([X(yr), 0, 0], radius=0.08, color=QC.IDEA)
+            c = VGroup(label(str(yr), font_size=24, color=QC.IDEA), label(who, font_size=19, color=WHITE),
+                       wrapped_label(what, 2.9, 17, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+            up = i % 2 == 0
+            c.next_to([X(yr), 0, 0], UP if up else DOWN, buff=0.55 if up else 0.75).set_x(
+                min(max(X(yr), -5.2), 5.2))
+            lead = Line(d.get_center(), c.get_bottom() if up else c.get_top(), color=GREY_C, stroke_width=1,
+                        stroke_opacity=0.6)
+            dots.add(d)
+            cards.add(VGroup(lead, c))
+        head = label(r"How we got here", font_size=34).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "How we got here. In 1933 Alfred Cowles asked whether stock market forecasters could forecast, and "
+            "found that mostly they could not: financial econometrics began as a test of claims. "
+            "<bookmark mark='a'/> In 1969 Eugene Fama, Lawrence Fisher, Michael Jensen and Richard Roll lined up "
+            "stock splits in event time and invented the event study. <bookmark mark='b'/> In 1973 Fama and James "
+            "MacBeth ran a cross-section every month and averaged the slopes. <bookmark mark='c'/> In 1982 Lars "
+            "Peter Hansen gave the generalized method of moments, and in 1987 Whitney Newey and Kenneth West the "
+            "standard error that survives correlated data. <bookmark mark='d'/> Then the reckoning. In 2009 "
+            "Mitchell Petersen counted: forty-two percent of the finance papers he surveyed with panel data did not "
+            "adjust their standard errors at all. In 2016 Campbell Harvey, Yan Liu and Heqing Zhu counted at least "
+            "three hundred and sixteen published factors and asked for a t-statistic above three. And in 2024 one "
+            "hundred and sixty-four research teams were given the same data and the same questions, and came back "
+            "with answers that differed far more than their standard errors said they should."
+        ) as vo:
+            self.play(FadeIn(head), Create(line), FadeIn(ticks))
+            self.play(FadeIn(dots[0]), FadeIn(cards[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(dots[1]), FadeIn(cards[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(dots[2]), FadeIn(cards[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(dots[3]), FadeIn(cards[3]))
+            self.play(FadeIn(dots[4]), FadeIn(cards[4]))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(dots[i]), FadeIn(cards[i])) for i in (5, 6, 7)],
+                                  lag_ratio=0.8, run_time=vo.remaining(2.0) - 0.5))
         self.wait(0.4)
         self.clear_scene()
 
     def objectives(self):
         card = objectives_card([
-            r"Regression with overlapping data: Newey--West and Hansen--Hodrick errors",
-            r"Predictive regressions and Stambaugh's bias",
-            r"GMM: the consumption Euler equation, estimated and rejected",
-            r"Event studies; panels: pooled, clustered and Fama--MacBeth",
-            r"The bootstrap for dependent data; how many years a Sharpe ratio needs",
-            r"Bayesian shrinkage; multiple testing; causal inference and double machine learning",
-        ], color=QC.IDEA)
+            r"Least squares as geometry; Newey--West, fixed-$b$ and EWC errors; clustering",
+            r"Fama--MacBeth and the two-pass test; the five verdicts resolved",
+            r"Predictive regressions: Stambaugh's bias, IVX, out-of-sample $R^2$",
+            r"Maximum likelihood and GMM; the consumption Euler equation, estimated and rejected",
+            r"Event studies (FOMC days); bootstraps for dependent data; Bayes and Gibbs",
+            r"Multiple testing; causal designs and double ML; how many years a Sharpe ratio needs",
+        ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Regression with overlapping observations, and the standard errors that survive them. "
-            "Predictive regressions and Stambaugh's bias. The generalized method of moments, applied to the "
-            "consumption Euler equation, which fails. Event studies, and panel methods. The bootstrap for dependent "
-            "data, and how many years of data a Sharpe ratio needs. Shrinkage, multiple testing, and the tools of "
-            "causal inference."
+            "The plan, in eighteen chapters. Least squares as geometry, and the three shapes of dependence that "
+            "break its standard errors: overlap, persistence and shared shocks. Fama-MacBeth and the two-pass test "
+            "of the CAPM, where the five verdicts are resolved. Predictive regressions, in sample and out of sample. "
+            "Maximum likelihood and the generalized method of moments, and the consumption Euler equation, which "
+            "fails. Event studies, on the days the Federal Reserve announces its decisions. Bootstraps for "
+            "dependent data, Bayesian shrinkage sampled by Gibbs, multiple testing, causal designs and double "
+            "machine learning. And the hardest number in finance: how many years of data a Sharpe ratio needs. "
+            "Every result in this part lives under the real-world measure, P: these are statements about the data "
+            "we observe, not prices."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=9))
+                                                     lag_ratio=0.5, run_time=12))
         self.play(FadeOut(card))
 
     def house(self):

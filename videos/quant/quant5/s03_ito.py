@@ -3,139 +3,214 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load
+from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, pause
 
 
 class Ito(VoiceoverScene):
     def construct(self):
         i = load("ito")
-        o = load("orders")
+        wz = load("wong_zakai")
         self.card()
-        self.integral(i)
+        self.ledger(i)
         self.isometry()
-        self.schemes(o)
+        self.left_mid(i)
+        self.stratonovich(wz)
 
     def card(self):
-        c = chapter_card(2, r"The It\^o integral and its numerics", r"Where do you evaluate the integrand?",
-                         lit=(1944,), part=PART)
-        with self.voiceover("Chapter two. The Itô integral, and how to compute with it."):
+        c = chapter_card(3, r"Constructing the It\^o integral, and Stratonovich's", r"How do you integrate against a path "
+                         r"of infinite length?", lit=(1944,), part=PART)
+        with self.voiceover("Chapter three. Constructing the Itô integral, and Stratonovich's alternative."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def integral(self, i):
-        rows = i["rows"]
-        head = VGroup(label(r"grid points", font_size=22, color=GREY_B), label(r"left points (It\^o)", font_size=22, color=ITO),
-                      label(r"midpoints (Stratonovich)", font_size=22, color=STRAT))
-        cells = [*head]
-        for r in rows:
-            cells += [MathTex(f"{r['n']:,}".replace(",", "{,}"), font_size=28), MathTex(f"{r['ito']:+.4f}", font_size=28, color=ITO),
-                      MathTex(f"{r['strat']:+.4f}", font_size=28, color=STRAT)]
-        cells += [label(r"the limit", font_size=22, color=GREY_B),
-                  MathTex(rf"\tfrac12(W_T^2 - T) = {i['ito_limit']:+.4f}", font_size=26, color=ITO),
-                  MathTex(rf"\tfrac12 W_T^2 = {i['strat_limit']:+.4f}", font_size=26, color=STRAT)]
-        grid = VGroup(*cells).arrange_in_grid(rows=len(rows) + 2, cols=3, buff=(0.6, 0.16), col_alignments="rrr")
-        grid.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
-        title = MathTex(r"\int_0^1 W\,dW \approx \sum W(t^*_k)\,(W_{k+1} - W_k)", font_size=36).to_edge(UP, buff=0.4)
+    def ledger(self, i):
+        W = np.asarray(i["W"])
+        t = np.linspace(0, 1, len(W))
+        g1 = axes([0, 1], [W.min() - 0.15, W.max() + 0.15], x_length=8.0, y_length=2.3, ylabel=r"the price: $W_t$",
+                  xticks=[], yticks=[], font_size=16)
+        g2 = axes([0, 1], [-1.2, 1.2], x_length=8.0, y_length=1.6, ylabel=r"the position held: $H_{t_k} = W_{t_k}$",
+                  xticks=[], yticks=[0], font_size=16)
+        g3 = axes([0, 1], [-0.8, 0.4], x_length=8.0, y_length=1.6, xlabel=r"time",
+                  ylabel=r"running gain $\sum H_{t_k}\,\Delta W_k$", xticks=[0, 1], yticks=[0], font_size=16)
+        VGroup(g1, g2, g3).arrange(DOWN, buff=0.3).to_edge(LEFT, buff=0.5)
+        a1, a2, a3 = g1.ax, g2.ax, g3.ax
+        path = curve(a1, t, W, BM, stroke_width=2)
+
+        def build(n):
+            st = (len(W) - 1) // n
+            Wn = W[::st]
+            tn = t[::st]
+            bars = VGroup(*[Rectangle(width=a2.c2p(1 / n, 0)[0] - a2.c2p(0, 0)[0] - 0.01,
+                                      height=max(abs(a2.c2p(0, Wn[k])[1] - a2.c2p(0, 0)[1]), 0.005), stroke_width=0,
+                                      fill_color=DRIFT if Wn[k] >= 0 else JUMP, fill_opacity=0.7)
+                            .move_to(a2.c2p(tn[k] + 0.5 / n, Wn[k] / 2)) for k in range(n)])
+            arrows = VGroup(*[Line(a1.c2p(tn[k + 1], Wn[k]), a1.c2p(tn[k + 1], Wn[k + 1]), stroke_width=3,
+                                   color=ITO) for k in range(n)])
+            gain = np.concatenate([[0], np.cumsum(Wn[:-1] * np.diff(Wn))])
+            gl = VMobject(stroke_color=ITO, stroke_width=3).set_points_as_corners(
+                [a3.c2p(a, b) for a, b in zip(tn, gain)])
+            return VGroup(bars, arrows, gl), gain[-1]
+        g8, v8 = build(8)
+        g64, v64 = build(64)
         side = VGroup(
-            wrapped_label(r"for a smooth integrator the choice of $t^*$ doesn't matter; for Brownian motion it changes "
-                          r"the answer by $\tfrac12 \sum (\Delta W)^2 \to \tfrac12 T$", 4.6, 22, GREY_A),
-            wrapped_label(r"It\^o (1944) evaluates at the left end: the integrand is fixed before the move, like a "
-                          r"position you hold before the price changes. The result is a martingale.", 4.6, 22, ITO),
-            wrapped_label(r"Stratonovich keeps the ordinary chain rule, and suits physics; finance needs It\^o.", 4.6,
-                          22, STRAT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+            MathTex(r"I(H) = \sum_k H_{t_k}\,(W_{t_{k+1}} - W_{t_k})", font_size=30, color=ITO),
+            wrapped_label(r"$H_{t_k}$ is decided at $t_k$, before the move: a simple, predictable integrand", 4.4, 20,
+                          GREY_A),
+            MathTex(rf"n = 8:\ {v8:+.3f}", font_size=28, color=GREY_A),
+            MathTex(rf"n = 64:\ {v64:+.3f}", font_size=28, color=GREY_A),
+            MathTex(rf"\tfrac12(W_1^2 - 1) = {i['ito_limit']:+.3f}", font_size=28, color=ITO),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "An integral against Brownian motion is a limit of sums: the integrand at some point of each step, times "
-            "the step. For ordinary functions it doesn't matter which point you choose. Here it does. Take the "
-            "integral of W against W itself, on one path. <bookmark mark='a'/> Evaluate W at the left end of each "
-            "step, and the sums converge to a half of W squared minus T. Evaluate at the midpoint, and they converge "
-            "to a half of W squared, the answer ordinary calculus would give. <bookmark mark='b'/> The difference is "
-            "half the quadratic variation, which never shrinks. <bookmark mark='c'/> Kiyosi Itô chose the left end in "
-            "1944, and finance follows him, for a reason a trader recognises: your position is fixed before the price "
-            "moves. With that choice, a trading gain against a martingale is itself a martingale. Stratonovich's "
-            "midpoint keeps the ordinary chain rule, and physics often prefers it."
+            "The last chapter proved that a Brownian path has infinite length, so the integral of calculus, a limit "
+            "of sums over a path of finite length, does not exist. Itô built a different one, and it is easiest to "
+            "see as a ledger of bets. <bookmark mark='a'/> On top, the price, a Brownian path. In the middle, a "
+            "position: here, as many units as the price itself, decided at the start of each period and held through "
+            "it. <bookmark mark='b'/> Each period the price moves, the blue arrows, and the position earns position "
+            "times move. The gains drop into a running total at the bottom. That sum is the Itô integral of a simple "
+            "integrand. <bookmark mark='c'/> Trade more often, sixty-four times instead of eight, and the staircase "
+            "of positions follows the path more closely; the total converges to a half of W squared minus a half. "
+            "Not a half of W squared, as ordinary calculus would say. We will see where the missing half goes."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(VGroup(*cells[:3])))
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(g3), Create(path), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(VGroup(*cells[3 + 3 * k:6 + 3 * k])) for k in range(len(rows))], lag_ratio=0.3),
-                      run_time=4)
-            self.play(FadeIn(VGroup(*cells[-3:])))
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in g8[0]], lag_ratio=0.15), FadeIn(side[0]),
+                      FadeIn(side[1]))
             vo.wait_until("b")
-            self.play(FadeIn(side[0]))
+            self.play(LaggedStart(*[Create(a) for a in g8[1]], lag_ratio=0.2), Create(g8[2]), run_time=3)
+            self.play(FadeIn(side[2]))
             vo.wait_until("c")
-            self.play(FadeIn(side[1]), FadeIn(side[2]))
+            self.play(Transform(g8, g64), run_time=2)
+            self.play(FadeIn(side[3]), FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 
     def isometry(self):
-        rows = [cmath(r"\mathbb{E}\Big[\int_0^T H_t\,dW_t\Big]", r"=", r"0", font_size=40, colors={r"0": DRIFT}),
-                cmath(r"\mathbb{E}\Big[\Big(\int_0^T H_t\,dW_t\Big)^2\Big]", r"=", r"\mathbb{E}\Big[\int_0^T H_t^2\,dt\Big]",
-                      font_size=40, colors={r"\mathbb{E}\Big[\int_0^T H_t^2\,dt\Big]": ITO}),
-                cmath(r"df(t, X_t)", r"=", r"f_t\,dt + f_x\,dX_t + \tfrac12 f_{xx}\,d\langle X\rangle_t", font_size=40,
-                      colors={r"f_t\,dt + f_x\,dX_t + \tfrac12 f_{xx}\,d\langle X\rangle_t": ITO})]
-        whys = [why(r"a gain from a position chosen before each move is a martingale: no free lunch from timing"),
-                why(r"the It\^o isometry: the variance of the gain is the integrated squared position"),
-                why(r"It\^o's lemma: Taylor to second order, because $(dW)^2 = dt$ (the gentle version derives it)")]
-        step = ladder(self, rows, whys, keep=3, top=2.5, x=-2.0, buff=0.95, edge=6.9)
+        rows = [cmath(r"\mathbb{E}\big[I(H)^2\big]", r"=", r"\sum_k \mathbb{E}\big[H_{t_k}^2\big]\Delta t_k + 2\sum_{j<k}"
+                      r"\mathbb{E}\big[H_{t_j} H_{t_k} \Delta W_j\,\mathbb{E}(\Delta W_k \mid \mathcal{F}_{t_k})\big]",
+                      font_size=30),
+                cmath(r"\mathbb{E}\big[I(H)^2\big]", r"=", r"\mathbb{E}\int_0^T H_t^2\,dt", font_size=34,
+                      colors={r"\mathbb{E}\int_0^T H_t^2\,dt": ITO}),
+                cmath(r"\int_0^T H\,dW", r":=", r"\lim_{L^2} I(H^{(m)}), \quad H^{(m)} \to H \text{ in } L^2(dt \otimes dP)",
+                      font_size=32),
+                cmath(r"\mathbb{E}\Big[\int_0^t H\,dW \;\Big|\; \mathcal{F}_s\Big]", r"=", r"\int_0^s H\,dW", font_size=34,
+                      colors={r"\int_0^s H\,dW": DRIFT})]
+        whys = [why(r"expand the square; condition each cross term on $\mathcal{F}_{t_k}$ (tower property)"),
+                why(r"the cross terms vanish: $\mathbb{E}(\Delta W_k \mid \mathcal{F}_{t_k}) = 0$. The It\^o isometry"),
+                why(r"$I$ preserves distance, so a Cauchy sequence of staircases has a limit: the completion"),
+                why(r"true for every simple sum, and preserved in the $L^2$ limit: the integral is a martingale")]
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.4, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Two facts make the Itô integral useful. Its mean is zero: no position chosen before the moves can earn "
-            "anything from a martingale on average. <bookmark mark='a'/> And its variance is the integral of the "
-            "squared position, the Itô isometry. That is how a hedger's risk is measured: by how much they hold, for "
-            "how long. <bookmark mark='b'/> With the integral comes Itô's lemma, the chain rule with a second-order "
-            "term, because d W squared is d t. The series' gentle introduction derives it; here we use it."
+            "Now the construction, in four lines. Square the sum and take expectations. The squares give the position "
+            "squared times the step. Each cross term contains a later move, and conditional on everything known when "
+            "that move starts, its mean is zero. <bookmark mark='a'/> So the cross terms vanish, and the mean square "
+            "of the gain is the integrated squared position: the Itô isometry. <bookmark mark='b'/> An isometry "
+            "preserves distance. If a sequence of staircases converges to a general integrand, their integrals form a "
+            "Cauchy sequence in mean square, which has a limit. That limit is the Itô integral, for any predictable "
+            "integrand with finite integrated square. <bookmark mark='c'/> And because each simple sum is a "
+            "martingale, so is the limit. A gain from positions chosen before the moves cannot be expected to earn "
+            "anything against a martingale. That one fact is the whole of no-arbitrage pricing, in Part nine."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
+            vo.wait_until("c")
+            step(3)
         self.wait(0.5)
         self.clear_scene()
 
-    def schemes(self, o):
-        dt = np.log10(np.asarray(o["dt"]))
-        g = axes([dt.min() - 0.1, dt.max() + 0.1], [-4.5, -0.5], x_length=7.0, y_length=4.6,
-                 xlabel=r"time step $\Delta t$ (log scale)", ylabel=r"error at $T = 1$ (log scale)",
-                 xticks=list(np.log10([1 / 256, 1 / 64, 1 / 16, 1 / 4])),
-                 xfmt=lambda u: {256: "1/256", 64: "1/64", 16: "1/16", 4: "1/4"}[round(10 ** -u)],
-                 yticks=[-4, -3, -2, -1], yfmt=lambda u: rf"10^{{{int(u)}}}", font_size=18).to_edge(LEFT, buff=0.6)
-        g.shift(DOWN * 0.2)
+    def left_mid(self, i):
+        rows = i["rows"]
+        ln = np.log2([r["n"] for r in rows])
+        g = axes([1.5, 13.5], [-0.6, 0.4], x_length=7.2, y_length=4.4, xlabel=r"grid points $n$ (log scale)",
+                 ylabel=r"$\sum W(t^*_k)\,\Delta W_k$ on one path", xticks=[2, 6, 10],
+                 xfmt=lambda u: rf"2^{{{int(u)}}}", yticks=[-0.4, 0, 0.2], font_size=18).to_edge(LEFT, buff=0.6)
+        g.shift(DOWN * 0.3)
         ax = g.ax
-        sets = [("strong_euler", JUMP), ("strong_milstein", ITO), ("weak_euler", BM), ("weak_milstein", STRAT)]
-        lines = VGroup()
-        for k, c in sets:
-            y = np.log10(np.asarray(o[k]))
-            lines.add(VGroup(curve(ax, dt, y, c, stroke_width=3),
-                             *[Dot(ax.c2p(a, b), radius=0.05, color=c) for a, b in zip(dt, y)]))
-        leg = legend([(JUMP, rf"Euler, strong: slope {o['slope_strong_euler']:.2f}"),
-                      (ITO, rf"Milstein, strong: slope {o['slope_strong_milstein']:.2f}"),
-                      (BM, rf"Euler, weak: slope {o['slope_weak_euler']:.2f}"),
-                      (STRAT, rf"Milstein, weak: slope {o['slope_weak_milstein']:.2f}")], font_size=21)
+        lim_i = DashedLine(ax.c2p(1.5, i["ito_limit"]), ax.c2p(13.5, i["ito_limit"]), color=ITO, stroke_width=2)
+        lim_s = DashedLine(ax.c2p(1.5, i["strat_limit"]), ax.c2p(13.5, i["strat_limit"]), color=STRAT, stroke_width=2)
+        di = VGroup(*[Dot(ax.c2p(a, r["ito"]), radius=0.07, color=ITO) for a, r in zip(ln, rows)])
+        ds = VGroup(*[Dot(ax.c2p(a, r["strat"]), radius=0.07, color=STRAT) for a, r in zip(ln, rows)])
+        gap = DoubleArrow(ax.c2p(13.0, i["ito_limit"]), ax.c2p(13.0, i["strat_limit"]), buff=0.02, color=GREY_A,
+                          stroke_width=3, tip_length=0.15)
         side = VGroup(
-            leg,
-            MathTex(r"X_{k+1} = X_k + a\,\Delta t + b\,\Delta W", r"+ \tfrac12 b\,b'\,(\Delta W^2 - \Delta t)",
-                    font_size=28),
-            wrapped_label(r"strong error: how far each simulated path is from the true one (for hedging, and paths); "
-                          r"weak error: how far a simulated average is from the true one (for prices)", 4.8, 20, GREY_A),
-            label(r"GBM, $\mu = 5\%$, $\sigma = 40\%$; 20{,}000 shared paths", font_size=18, color=GREY_B),
+            label(rf"left points (It\^o) $\to \tfrac12(W_1^2 - 1) = {i['ito_limit']:+.3f}$", font_size=22, color=ITO),
+            label(rf"midpoints (Stratonovich) $\to \tfrac12 W_1^2 = {i['strat_limit']:+.3f}$", font_size=22,
+                  color=STRAT),
+            MathTex(r"\text{gap} = \tfrac12 \sum (\Delta W)^2 \to \tfrac12 T", font_size=30, color=GREY_A),
+            wrapped_label(r"the midpoint sum peeks half a step into the future; the extra is half the quadratic "
+                          r"variation of chapter 2", 4.6, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        side[1][1].set_color(ITO)
         with self.voiceover(
-            "To simulate a stochastic differential equation, step it forward. Euler-Maruyama takes the drift times "
-            "the step plus the volatility times the Brownian increment. <bookmark mark='a'/> Measure it on geometric "
-            "Brownian motion, where the exact answer is known path by path. Halve the step, and the distance between "
-            "the simulated and the true path falls only by the square root of two: strong order one half. "
-            "<bookmark mark='b'/> Grigori Milstein added one term, the Itô correction from expanding the volatility "
-            "to second order, and the error halves with the step: strong order one. <bookmark mark='c'/> For prices, "
-            "which are averages, both schemes are already order one: the weak error. Choose the scheme by the "
-            "question: a price needs weak accuracy, a hedging simulation needs strong."
+            "Where the integrand is evaluated matters. On one path, compute the sum two ways as the grid refines: with "
+            "the price at the left end of each step, Itô's choice, and at the midpoint, Stratonovich's. "
+            f"<bookmark mark='a'/> The left-point sums settle at {i['ito_limit']:+.3f}, a half of W squared minus a "
+            f"half. The midpoint sums settle at {i['strat_limit']:+.3f}, a half of W squared. <bookmark mark='b'/> The "
+            "gap is a half of the quadratic variation: the midpoint sum peeks half a step into the future, and on a "
+            "path whose squared moves add up to time, that peek is worth a half of T. For a smooth path the gap would "
+            "vanish."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side[1][0]), FadeIn(side[3]))
+            self.play(FadeIn(g), Create(lim_i), Create(lim_s))
             vo.wait_until("a")
-            self.play(FadeIn(lines[0]), FadeIn(leg[0]))
+            self.play(LaggedStart(*[FadeIn(d, scale=1.5) for d in di], lag_ratio=0.3), FadeIn(side[0]), run_time=2)
+            self.play(LaggedStart(*[FadeIn(d, scale=1.5) for d in ds], lag_ratio=0.3), FadeIn(side[1]), run_time=2)
             vo.wait_until("b")
-            self.play(FadeIn(side[1][1]), FadeIn(lines[1]), FadeIn(leg[1]))
+            self.play(GrowFromCenter(gap), FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def stratonovich(self, wz):
+        rows = [cmath(r"\int_0^T H \circ dW", r"=", r"\int_0^T H\,dW + \tfrac12 \langle H, W\rangle_T", font_size=32,
+                      colors={r"\tfrac12 \langle H, W\rangle_T": STRAT}),
+                cmath(r"dX = b(X) \circ dW", r"\iff", r"dX = \tfrac12\,b\,b'(X)\,dt + b(X)\,dW", font_size=32,
+                      colors={r"\tfrac12\,b\,b'(X)\,dt": STRAT})]
+        whys = [why(r"midpoint minus left point: half the covariation", 20),
+                why(r"put $H = b(X)$: $d\langle b(X), W\rangle = b'(X)\,b(X)\,dt$", 20)]
+        step = ladder(self, rows, whys, keep=2, top=3.3, x=-2.2, buff=0.45, edge=6.9)
+        t = np.asarray(wz["t"])
+        g = axes([0, 1], [0, 3.2], x_length=5.6, y_length=2.8, xlabel=r"time", ylabel=r"$X_t$ on one path",
+                 xticks=[0, 1], yticks=[1, 2, 3], font_size=16).to_corner(DL, buff=0.45)
+        ax = g.ax
+        l_s = curve(ax, t, np.clip(wz["exp_w"], 0, 3.2), STRAT, stroke_width=3)
+        l_i = curve(ax, t, np.clip(wz["exp_ito"], 0, 3.2), ITO, stroke_width=3)
+        leg = legend([(STRAT, r"$e^{W_t}$: Stratonovich, and the smoothed ODE"),
+                      (ITO, r"$e^{W_t - t/2}$: It\^o")], font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        tab = VGroup(MathTex(r"n", font_size=24, color=GREY_B), label(r"ODE, smooth noise", font_size=19, color=STRAT),
+                     label(r"Euler (It\^o)", font_size=19, color=ITO))
+        cells = [*tab]
+        for r in wz["rows"]:
+            cells += [MathTex(f"{r['n']:,}".replace(",", "{,}"), font_size=24),
+                      MathTex(rf"{r['ode']:.3f} \pm {r['ode_se']:.3f}", font_size=24, color=STRAT),
+                      MathTex(rf"{r['em']:.3f} \pm {r['em_se']:.3f}", font_size=24, color=ITO)]
+        grid = VGroup(*cells).arrange_in_grid(rows=len(wz["rows"]) + 1, cols=3, buff=(0.35, 0.12))
+        theory = MathTex(rf"e^{{1/2}} = {wz['strat']:.3f} \qquad \mathbb{{E}}\,e^{{W_1 - 1/2}} = 1", font_size=26)
+        right = VGroup(label(r"$\mathbb{E}X_1$ for $dX = X\,dW$, 20{,}000 paths", font_size=20, color=GREY_A), grid,
+                       theory).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DR, buff=0.4)
+        pc, ans = pause(r"A physicist simulates $dX = X\,dW$ by smoothing the noise. The mean of $X_1$?",
+                        rf"About {wz['strat']:.2f}, not 1: smooth noise is Stratonovich noise.", width=5.2,
+                        font_size=21)
+        pc.move_to(right).to_edge(UP, buff=2.0)
+        with self.voiceover(
+            "The two integrals are related by a simple rule: the Stratonovich integral is the Itô integral plus half "
+            "the covariation of integrand and integrator. <bookmark mark='a'/> Applied to a differential equation, a "
+            "Stratonovich equation is an Itô equation with an extra drift, a half b times b prime. Which is right? "
+            "<bookmark mark='b'/> A question first: a physicist simulates d X equals X d W by smoothing the noise into "
+            "an ordinary differential equation. What is the mean of X at time one? <bookmark mark='c'/> Wong and Zakai "
+            "proved in 1965 that ordinary equations driven by smoothed noise converge to the Stratonovich solution. "
+            f"Here, twenty thousand paths: the smoothed equation gives a mean of {wz['rows'][-1]['ode']:.2f} at every "
+            f"grid, the square root of e, while Euler's Itô scheme gives {wz['rows'][-1]['em']:.2f}. "
+            "<bookmark mark='d'/> Physics usually wants Stratonovich, because real noise is smooth at some scale. "
+            "Finance wants Itô, because positions are set before prices move, and only Itô's gains are martingales."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            self.play(FadeIn(pc))
             vo.wait_until("c")
-            self.play(FadeIn(lines[2:]), FadeIn(leg[2:]), FadeIn(side[2]))
+            self.play(FadeOut(pc), FadeIn(g), FadeIn(leg), Create(l_s), Create(l_i), FadeIn(right), run_time=2)
+            vo.wait_until("d")
+            self.play(Indicate(grid, color=STRAT, scale_factor=1.03))
         self.wait(0.4)
         self.clear_scene()
