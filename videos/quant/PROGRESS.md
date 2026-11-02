@@ -43,6 +43,12 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
   (`collect_text.py quant1`, then `--check`), the Chinese dry run, a full silent build and `dead_air.py`, then the
   narrated build (`python tools/make.py quant1 --cpu-voice -q m`).
 
+## Builds queued (CPU voice, 720p)
+
+Part 10 (zh running), then Part 1 and Part 2 (en, zh): `python tools/make.py quantN --cpu-voice -q m --steps build check`
+(logs `renders/make/quantN_cpu_voice.log`). Each rerun resumes. Part 1's and Part 2's Chinese text and narration
+are complete; Part 1's Chinese dry run passed for all 16 chapters.
+
 ## Part 2 plan (The Machinery of Markets), facts checked 2 Nov 2026
 
 Data in hand (`explainer/quant/data.py`): Binance USD-M perpetual BTCUSDT klines (`market="futures/um"`) and funding
