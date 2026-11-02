@@ -211,10 +211,10 @@
    "en": "Take real steps, both players at once, step size eta: each step multiplies by this matrix. <bookmark mark='a'/> Its eigenvalues have size root one plus eta squared, more than one. <bookmark mark='b'/> So simultaneous steps spiral out: after 60 steps the radius has grown 3.2 times. <bookmark mark='c'/> Taking turns closes the spiral into an orbit; its radius ends at 0.96. <bookmark mark='d'/> To converge, look ahead: extragradient steps with the gradient at a trial point, optimistic descent extrapolates the last one. Both spiral in, to 0.31 and 0.29.",
    "zh": "真正走几步，两个玩家同时走，步长为η：每一步都乘以这个矩阵。<bookmark mark='a'/>它的特征值大小是1加η平方的平方根，大于1。<bookmark mark='b'/>所以同时的步子盘旋向外：走了60步之后，半径变成了原来的3.2倍。<bookmark mark='c'/>轮流走，螺旋就闭合成一条轨道；它的半径最后是0.96。<bookmark mark='d'/>要收敛，就得往前看：外梯度法用一个试探点上的梯度走步，乐观梯度下降则根据上一步做外推。两者都盘旋着向内收，分别收到0.31和0.29。"
   },
-  "e1e23a1d15c3": {
+  "725aa6d50089": {
    "scene": "Dynamics",
-   "en": "Real GANs do this. Lars Mescheder, Andreas Geiger and Sebastian Nowozin boiled one down to two numbers: data at zero, the generator at theta, a discriminator with slope psi. <bookmark mark='a'/> Around the equilibrium, the same rotation. <bookmark mark='b'/> Simultaneous steps spiral out; <bookmark mark='c'/> alternating steps circle. <bookmark mark='d'/> Their fix penalizes the discriminator's gradient on real data, here gamma over two psi squared: friction, and the spiral winds in. StyleGAN trains with this penalty, R1.",
-   "zh": "真实的GAN也会这样。Lars Mescheder、Andreas Geiger和Sebastian Nowozin把一个GAN简化成两个数：数据在零处，生成器在θ处，判别器是一条斜率为ψ的直线。<bookmark mark='a'/>在均衡点周围，是同样的旋转。<bookmark mark='b'/>同时走的步子盘旋向外；<bookmark mark='c'/>轮流走的步子绕圈。<bookmark mark='d'/>他们的修正是惩罚判别器在真实数据上的梯度，在这里就是γ的一半乘ψ平方：这是摩擦，螺旋于是向内收。StyleGAN训练时用的正是这个惩罚，R1。"
+   "en": "Real GANs do this. Lars Mescheder, Andreas Geiger and Sebastian Nowozin boiled one down to two numbers: data at zero, the generator at theta, a discriminator with slope psi. <bookmark mark='a'/> Around the equilibrium, the same rotation. <bookmark mark='b'/> Simultaneous steps spiral out; <bookmark mark='c'/> alternating steps circle. <bookmark mark='d'/> Their fix penalizes the discriminator's gradient on real data, here gamma over two psi squared: friction, and the path settles at equilibrium. StyleGAN trains with this penalty, R1.",
+   "zh": "真实的GAN也会这样。Lars Mescheder、Andreas Geiger和Sebastian Nowozin把一个GAN简化成两个数：数据在零处，生成器在θ处，判别器是一条斜率为ψ的直线。<bookmark mark='a'/>在均衡点周围，是同样的旋转。<bookmark mark='b'/>同时走的步子盘旋向外；<bookmark mark='c'/>轮流走的步子绕圈。<bookmark mark='d'/>他们的修正是惩罚判别器在真实数据上的梯度，在这里就是γ的一半乘ψ平方：像摩擦一样，轨迹收敛到平衡点。StyleGAN训练时用的正是这个惩罚，R1。"
   },
   "06496347d3ad": {
    "scene": "Dynamics",
@@ -266,10 +266,10 @@
    "en": "From there to photographs took four years. <bookmark mark='a'/> In 2015 Alec Radford, Luke Metz and Soumith Chintala found convolutional GANs that trained reliably, whose noise vectors did arithmetic: a smiling woman, minus a woman, plus a man, gave a smiling man. <bookmark mark='b'/> In 2017 Tero Karras and colleagues at NVIDIA grew the networks during training, up to 1024 pixels. <bookmark mark='c'/> In 2018 Andrew Brock, Jeff Donahue and Karen Simonyan scaled a GAN to ImageNet: an Inception score of 166.5 and an FID of 7.4 at 128 pixels, against a previous best of 52.5 and 18.6. <bookmark mark='d'/> And Karras's group rebuilt the generator itself: StyleGAN.",
    "zh": "从这里到照片，用了四年。<bookmark mark='a'/>2015年，亚历克·拉德福德、卢克·梅茨和苏米斯·钦塔拉找到了能稳定训练的卷积GAN，它们的噪声向量还能做算术：一个微笑的女人，减去一个女人，加上一个男人，得到一个微笑的男人。<bookmark mark='b'/>2017年，英伟达的泰罗·卡拉斯和同事在训练中让网络逐渐长大，一直长到1024像素。<bookmark mark='c'/>2018年，安德鲁·布洛克、杰夫·多纳休和卡伦·西蒙尼扬把GAN扩展到了ImageNet：在128像素上，Inception分数达到166.5，FID达到7.4，而此前的最好成绩是52.5和18.6。<bookmark mark='d'/>卡拉斯的团队则把生成器本身重新做了一遍：这就是StyleGAN。"
   },
-  "be4ab8a9d658": {
+  "91f4867ce16a": {
    "scene": "Scale",
-   "en": "StyleGAN's generator starts not from the noise but from a learned four-pixel constant, upsampled block by block. <bookmark mark='a'/> The noise goes through an eight-layer mapping network to a code w, <bookmark mark='b'/> and w sets each block's style, a scale and shift per channel; fresh noise adds details like freckles. <bookmark mark='c'/> Styles can be mixed, coarse layers from one face, fine ones from another, and straight lines in w's space became meaningful edits.",
-   "zh": "StyleGAN的生成器不从噪声出发，而是从一个学出来的4像素常数出发，一块一块地上采样。<bookmark mark='a'/>噪声先经过一个8层的映射网络，变成一个编码w，<bookmark mark='b'/>再由w设定每一块的风格，也就是每个通道的一个缩放和一个平移；新加入的噪声则添上雀斑之类的细节。<bookmark mark='c'/>风格可以混合，粗的层取自一张脸，细的层取自另一张；而在w的空间里走直线，成了有意义的编辑。"
+   "en": "StyleGAN's generator starts not from the noise but from a learned four-by-four constant, upsampled block by block. <bookmark mark='a'/> The noise goes through an eight-layer mapping network to a code w, <bookmark mark='b'/> and w sets each block's style, a scale and shift per channel; fresh noise adds details like freckles. <bookmark mark='c'/> Styles can be mixed, coarse layers from one face, fine ones from another, and straight lines in w's space became meaningful edits.",
+   "zh": "StyleGAN的生成器不从噪声出发，而是从一个学出来的4乘4的常数出发，一块一块地上采样。<bookmark mark='a'/>噪声先经过一个8层的映射网络，变成一个编码w，<bookmark mark='b'/>再由w设定每一块的风格，也就是每个通道的一个缩放和一个平移；新加入的噪声则添上雀斑之类的细节。<bookmark mark='c'/>风格可以混合，粗的层取自一张脸，细的层取自另一张；而在w的空间里走直线，成了有意义的编辑。"
   },
   "5d77e1e3aab1": {
    "scene": "Scale",
@@ -306,10 +306,10 @@
    "en": "Training, replayed on the checkerboard. <bookmark mark='a'/> Mass drains from the empty squares into the filled ones. <bookmark mark='b'/> Against each floor, the flow ends 0.03 nats above it on the moons, 0.43 on the ring, 0.25 on the checkerboard. The ring is the hardest: an invertible map can't tear one blob of noise into eight separate islands, so it stretches thin bridges of probability between them.",
    "zh": "在棋盘格上回放训练。<bookmark mark='a'/>概率质量从空的格子里流出，流进有数据的格子。<bookmark mark='b'/>和每个下限相比，流最后在双月上高出0.03奈特，在环上高出0.43，在棋盘格上高出0.25。环是最难的：一个可逆映射没法把一团噪声撕成八个分开的小岛，所以它在小岛之间拉出了一道道细细的概率之桥。"
   },
-  "91a2fd80b9d7": {
+  "2b8eda24f7d1": {
    "scene": "Flows",
-   "en": "On digits, here is what our flow draws: <bookmark mark='a'/> noisy strokes; turning the noise down, Glow's trick, makes them cleaner and more alike. <bookmark mark='b'/> In bits per pixel the flow gets 1.13 on held-out digits, against 0.86 for the PixelCNN on the same budget: an exact likelihood, but a worse one; coupling layers spend capacity on staying invertible. <bookmark mark='c'/> After Glow drew faces in 2018, flows trailed for years, until in 2024 Shuangfei Zhai and colleagues at Apple built one from transformer blocks and reported samples comparable to diffusion models.",
-   "zh": "在数字上，这是我们的流画出的东西：<bookmark mark='a'/>带噪声的笔画；把噪声调小，这是Glow的技巧，笔画就更干净，也更彼此相像。<bookmark mark='b'/>在留出数字上，流的每像素比特数是1.13，而在同样预算下，PixelCNN是0.86：似然是精确的，但更差；耦合层把容量花在了保持可逆上。<bookmark mark='c'/>2018年Glow画出人脸之后，流多年落在后面，直到2024年，苹果的Shuangfei Zhai和同事用Transformer模块搭出了一个流，报告的样本可以和扩散模型相比。"
+   "en": "On digits, here is what our flow draws: <bookmark mark='a'/> noisy strokes; turning the noise down, Glow's trick, makes them cleaner and more alike. <bookmark mark='b'/> In bits per pixel the flow gets 1.13 on held-out digits, against 0.86 for the PixelCNN on the same budget: a dequantization estimate of an upper bound, numerically above PixelCNN's exact negative log-likelihood; coupling layers spend capacity on staying invertible. <bookmark mark='c'/> After Glow drew faces in 2018, flows trailed for years, until in 2024 Shuangfei Zhai and colleagues at Apple built one from transformer blocks and reported samples comparable to diffusion models.",
+   "zh": "在数字上，这是我们的流画出的东西：<bookmark mark='a'/>带噪声的笔画；把噪声调小，这是Glow的技巧，笔画就更干净，也更彼此相像。<bookmark mark='b'/>在留出数字上，流的每像素比特数是1.13，而在同样预算下，PixelCNN是0.86：这是通过去量化估计的负对数似然上界，数值高于PixelCNN的精确负对数似然；耦合层把容量花在了保持可逆上。<bookmark mark='c'/>2018年Glow画出人脸之后，流多年落在后面，直到2024年，苹果的Shuangfei Zhai和同事用Transformer模块搭出了一个流，报告的样本可以和扩散模型相比。"
   },
   "b4571668f87c": {
    "scene": "NeuralODE",
@@ -361,10 +361,10 @@
    "en": "How much can it hold? Store random patterns, recall each from a damaged copy. <bookmark mark='a'/> With 196 neurons, fewer than half come back once there are 0.15 patterns per neuron; Amit, Gutfreund and Sompolinsky's spin-glass theory puts the limit at about 0.138. <bookmark mark='b'/> Digits look alike, overlapping by 0.64 on average, which is worse. Hebb's rule already fails at 3 stored digits, and cues slide into blends of memories.",
    "zh": "它能存多少？存进随机图案，再从一份损坏的副本回忆每一个。<bookmark mark='a'/>用196个神经元，当每个神经元摊到0.15个图案时，能回来的已经不到一半；Amit、Gutfreund和Sompolinsky的自旋玻璃理论把极限放在大约0.138。<bookmark mark='b'/>数字彼此相像，平均重叠0.64，情况更糟。用赫布规则，存到3个数字时就已经失败了，提示会滑进几段记忆的混合。"
   },
-  "306ff7ba2e35": {
+  "267832923e7d": {
    "scene": "Hopfield",
-   "en": "The fix came over thirty years later: Dmitry Krotov and Hopfield sharpened the energy, and Hubert Ramsauer and colleagues wrote the update as compare, softmax, average. <bookmark mark='a'/> With it, our network recalls every digit with up to 4 stored, where Hebb's rule managed 2, and 30 percent of them with all ten stored. <bookmark mark='b'/> That update is attention, from Part 13: the state the query, the memories the keys and values. An attention layer is a Hopfield network taking one step.",
-   "zh": "修正来自三十多年以后：Dmitry Krotov和霍普菲尔德让能量变得更陡，Hubert Ramsauer和同事把更新写成了比较、softmax、平均。<bookmark mark='a'/>用它，我们的网络在最多存4个数字时都能回忆出每一个，而赫布规则只做到2个；存满十个时，仍能回忆出其中的30%。<bookmark mark='b'/>这个更新就是第13部分的注意力：状态是查询，记忆是键和值。一个注意力层，就是一个只走一步的霍普菲尔德网络。"
+   "en": "The fix came over thirty years later: Dmitry Krotov and Hopfield sharpened the energy, and Hubert Ramsauer and colleagues wrote the update as compare, softmax, average. <bookmark mark='a'/> With it, our network recalls every digit with up to 4 stored, where Hebb's rule managed 2, and 30 percent of them with all ten stored. Our binary test normalizes the overlaps by the number of neurons and takes the sign after averaging. <bookmark mark='b'/> The continuous compare-softmax-average step is attention, from Part 13: the state the query, the memories the keys and values. An attention layer is a Hopfield network taking one step.",
+   "zh": "修正来自三十多年以后：Dmitry Krotov和霍普菲尔德让能量变得更陡，Hubert Ramsauer和同事把更新写成了比较、softmax、平均。<bookmark mark='a'/>用它，我们的网络在最多存4个数字时都能回忆出每一个，而赫布规则只做到2个；存满十个时，仍能回忆出其中的30%。我们的二值测试把重叠除以神经元数量，并在加权平均后取符号。<bookmark mark='b'/>连续的比较、softmax、平均这一步，就是第13部分的注意力：状态是查询，记忆是键和值。一个注意力层，就是一个只走一步的霍普菲尔德网络。"
   },
   "f9031583ae01": {
    "scene": "Hopfield",
@@ -406,10 +406,10 @@
    "en": "Chapter thirteen. Langevin dynamics and the score.",
    "zh": "第13章。朗之万动力学与分数函数。"
   },
-  "211b6e07f007": {
+  "19ba83c8e0ea": {
    "scene": "Langevin",
-   "en": "The general idea: any network with one output is an energy, and e to the minus energy over its integral Z is a density, with no masks, no invertibility, no code. <bookmark mark='a'/> Its gradient has the same two phases: lower the data's energy, raise the model's samples'. <bookmark mark='b'/> In the plane Z can be summed on a grid, so our ring model's likelihood is exact: 0.92 nats, against a floor of 0.31. In 196 dimensions, no grid will do.",
-   "zh": "一般的想法是：任何只有一个输出的网络都是一个能量，e的负能量次方除以它的积分Z就是一个密度，不需要掩码，不需要可逆，也不需要编码。<bookmark mark='a'/>它的梯度有同样的两个阶段：降低数据的能量，抬高模型样本的能量。<bookmark mark='b'/>在平面上，Z可以在网格上求和，所以我们的环模型的似然是精确的：0.92奈特，而下限是0.31。在196维里，任何网格都不管用。"
+   "en": "The general idea: any network with one output is an energy, and e to the minus energy over its integral Z defines a density when Z is finite, with no masks, no invertibility, no code. <bookmark mark='a'/> Its gradient has the same two phases: lower the data's energy, raise the model's samples'. <bookmark mark='b'/> In the plane Z is estimated on a finite-box grid, so our ring model's NLL is approximate: 0.92 nats, against a floor of 0.31. In 196 dimensions, no grid will do.",
+   "zh": "一般的想法是：任何只有一个输出的网络都是一个能量，e的负能量次方除以它的积分Z，在Z有限时就定义了一个密度，不需要掩码，不需要可逆，也不需要编码。<bookmark mark='a'/>它的梯度有同样的两个阶段：降低数据的能量，抬高模型样本的能量。<bookmark mark='b'/>在平面上，Z用有限区域上的网格估计，所以我们的环模型的负对数似然是近似的：0.92奈特，而下限是0.31。在196维里，任何网格都不管用。"
   },
   "5c713a54e26f": {
    "scene": "Langevin",
@@ -426,10 +426,10 @@
    "en": "And sampling: uniform noise, then 240 Langevin steps on each learned energy. <bookmark mark='a'/> The points slide into the valleys and jitter there. <bookmark mark='b'/> On the ring, long chains land on 8, 8 and 8 of the eight modes, in three seeds, needing neither Z nor an inverse: only the score.",
    "zh": "再看采样：先撒均匀噪声，然后在每个学到的能量上走240步朗之万。<bookmark mark='a'/>点滑进山谷，在那里抖动。<bookmark mark='b'/>在环上，三个种子里，长链分别落在八个峰中的8个、8个和8个上，既不需要Z，也不需要逆映射：只需要分数函数。"
   },
-  "67249fdd41fc": {
+  "f56591bbbba6": {
    "scene": "Langevin",
-   "en": "The catch is the bridge to the next part. Two Gaussians, holding twenty and eighty percent, their score known exactly. <bookmark mark='a'/> Start points uniformly and run Langevin. <bookmark mark='b'/> Each point falls into the nearer valley and stays, so the heavy mode gets 49 percent, set by the start, 49, not the density's eighty: the score is blind to the weights of separated modes. <bookmark mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur with heavy noise, where valleys merge, then turn the noise down level by level. Annealing fixes it: 76 percent, close to the truth. <bookmark mark='d'/> On images that needs the score at every noise level, learned by denoising, as Hyvarinen and Vincent showed: diffusion, Part 21. And in 2025 Equilibrium Matching made images by descending a learned energy.",
-   "zh": "这个陷阱正是通向下一部分的桥。两个高斯，分别占20%和80%，分数函数精确已知。<bookmark mark='a'/>均匀地撒下点，运行朗之万。<bookmark mark='b'/>每个点都掉进离它近的那个山谷，然后待在那里，所以重的那个峰得到49%，这是由起点决定的，起点里是49%，而不是密度所说的80%：对于分开的几个峰，分数函数看不到它们的权重。<bookmark mark='c'/>2019年，宋飏和Stefano Ermon的修正是：先用大量噪声把密度模糊掉，让山谷合在一起，然后一级一级地调小噪声。退火修好了它：76%，接近真实值。<bookmark mark='d'/>在图像上，这需要每个噪声水平上的分数函数，而它可以通过去噪学出来，这是Hyvärinen和Vincent证明的：这就是扩散，第21部分。2025年，均衡匹配则通过沿一个学到的能量往下走来生成图像。"
+   "en": "The catch is the bridge to the next part. Two Gaussians, holding twenty and eighty percent, their score known exactly. <bookmark mark='a'/> Start points uniformly and run Langevin. <bookmark mark='b'/> Each point falls into the nearer valley and stays, so the heavy mode gets 49 percent, set by the start, 49, not the density's eighty: the local score barely reflects the relative weights of modes this far apart. <bookmark mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur with heavy noise, where valleys merge, then turn the noise down level by level. Annealing fixes it: 76 percent, close to the truth. <bookmark mark='d'/> On images that needs the score at every noise level, learned by denoising, as Hyvarinen and Vincent showed: diffusion, Part 21. And in 2025 Equilibrium Matching made images by descending a learned energy.",
+   "zh": "这个陷阱正是通向下一部分的桥。两个高斯，分别占20%和80%，分数函数精确已知。<bookmark mark='a'/>均匀地撒下点，运行朗之万。<bookmark mark='b'/>每个点都掉进离它近的那个山谷，然后待在那里，所以重的那个峰得到49%，这是由起点决定的，起点里是49%，而不是密度所说的80%：对于相距这么远的峰，局部分数函数几乎反映不出它们的相对权重。<bookmark mark='c'/>2019年，宋飏和Stefano Ermon的修正是：先用大量噪声把密度模糊掉，让山谷合在一起，然后一级一级地调小噪声。退火修好了它：76%，接近真实值。<bookmark mark='d'/>在图像上，这需要每个噪声水平上的分数函数，而它可以通过去噪学出来，这是Hyvärinen和Vincent证明的：这就是扩散，第21部分。2025年，均衡匹配则通过沿一个学到的能量往下走来生成图像。"
   },
   "43f4c2730453": {
    "scene": "Judging",
@@ -461,30 +461,30 @@
    "en": "Every family on the ring, three seeds each. <bookmark mark='a'/> Highest precision: the autoregressive model, 0.97; highest recall: the VAE, 0.99; lowest precision: the VAE, 0.30. <bookmark mark='b'/> And why FID alone is dangerous: one Gaussian blob with the ring's mean and covariance has a Fréchet distance of 0.002, about that between two samples of the ring itself, and a precision of 0.10.",
    "zh": "每个家族在环上的结果，各三个种子。<bookmark mark='a'/>精确率最高：自回归模型，0.97；召回率最高：VAE，0.99；精确率最低：VAE，0.30。<bookmark mark='b'/>再看为什么只看FID很危险：一个均值和协方差都和环一样的高斯团，弗雷歇距离是0.002，和环自己的两份样本之间差不多，而它的精确率是0.10。"
   },
-  "7ba0d6cb4e9c": {
+  "2e5f41b2a4fe": {
    "scene": "Judging",
-   "en": "No sample metric catches memorization: replaying training digits scores exactly like real data, an FID of 1.05, precision 0.87, recall 0.91. <bookmark mark='a'/> So we check: each sample's nearest training digit. <bookmark mark='b'/> Real test digits sit a median 0.111 from theirs. None of our models is copying: their samples are about as far from the training set as real test digits are.",
-   "zh": "没有哪个样本指标能抓住死记硬背：重放训练数字，得分和真实数据一模一样，FID是1.05，精确率0.87，召回率0.91。<bookmark mark='a'/>所以我们直接检查：每个样本最近的训练数字。<bookmark mark='b'/>真实的测试数字离它们最近的训练数字的中位距离是0.111。我们的模型都没有在抄：它们的样本离训练集的距离，和真实测试数字差不多。"
+   "en": "No sample metric catches memorization: replaying training digits scores exactly like real data, an FID of 1.05, precision 0.87, recall 0.91. <bookmark mark='a'/> So we check: each sample's nearest training digit. <bookmark mark='b'/> Real test digits sit a median 0.111 from theirs. In this small sample, the median distances give no clear sign of copying: generated digits are about as far from the training set as real test digits are.",
+   "zh": "没有哪个样本指标能抓住死记硬背：重放训练数字，得分和真实数据一模一样，FID是1.05，精确率0.87，召回率0.91。<bookmark mark='a'/>所以我们直接检查：每个样本最近的训练数字。<bookmark mark='b'/>真实的测试数字离它们最近的训练数字的中位距离是0.111。在这组小样本里，中位距离没有明显显示出抄袭的迹象：生成数字离训练集的距离，和真实测试数字差不多。"
   },
   "0146b30e0b8b": {
    "scene": "Budget",
    "en": "Chapter fifteen. Five models, one budget.",
    "zh": "第15章。五个模型，同一份预算。"
   },
-  "dbc61a32f17a": {
+  "6563c483eb94": {
    "scene": "Budget",
-   "en": "Now the five image models, side by side, on equal terms. Every one got the same budget of arithmetic, six trillion floating-point operations of training, counted operation by operation, and every one was trained from three random starts. <bookmark mark='a'/> Equal arithmetic doesn't mean equal anything else. A convolution reuses its weights at every pixel, so the PixelCNN has the fewest parameters and does the most arithmetic per digit: it saw 99 thousand training digits, while the GAN saw 2.1 million. <bookmark mark='b'/> And the last column is the cost of drawing one sample: one pass for every model except the PixelCNN, which needs 196.",
-   "zh": "现在，五个图像模型并排放在一起，条件对等。每一个都得到同样的算力预算，6万亿次浮点运算的训练，一次一次地数出来；每一个都从三个随机起点训练。<bookmark mark='a'/>算力对等，不等于其他一切都对等。卷积在每个像素上重复使用它的权重，所以PixelCNN的参数最少，而每个数字上的运算最多：它只看了99千个训练数字，而GAN看了2.1百万个。<bookmark mark='b'/>最后一列是抽一个样本的代价：除了PixelCNN需要196遍，每个模型都只要一遍。"
+   "en": "Now the five image models, side by side, on equal terms. Every one got the same budget of arithmetic, six trillion registry-counted model FLOPs of training, using PyTorch formulas for supported operations, and every one was trained from three random starts. <bookmark mark='a'/> Equal arithmetic doesn't mean equal anything else. A convolution reuses its weights at every pixel, so the PixelCNN has the fewest parameters and does the most arithmetic per digit: it saw 99 thousand training digits, while the GAN saw 2.1 million. <bookmark mark='b'/> And the last column is the cost of drawing one sample: one pass for every model except the PixelCNN, which needs 196.",
+   "zh": "现在，五个图像模型并排放在一起，条件对等。每一个都得到同样的算力预算，6万亿次按PyTorch已支持运算的公式统计的模型FLOPs训练；每一个都从三个随机起点训练。<bookmark mark='a'/>算力对等，不等于其他一切都对等。卷积在每个像素上重复使用它的权重，所以PixelCNN的参数最少，而每个数字上的运算最多：它只看了99千个训练数字，而GAN看了2.1百万个。<bookmark mark='b'/>最后一列是抽一个样本的代价：除了PixelCNN需要196遍，每个模型都只要一遍。"
   },
   "5b83a5f433b7": {
    "scene": "Budget",
    "en": "Here is what each one draws, seed zero, the first sixteen samples, not chosen, beside real digits. <bookmark mark='a'/> Look before reading the numbers: which look sharpest, which most varied, which most like real handwriting? The measurements come next.",
    "zh": "这是每个模型画出的东西，都是种子0，前16个样本，没有挑选，旁边是真实数字。<bookmark mark='a'/>先看，再读数字：哪个看起来最清晰，哪个最多样，哪个最像真正的手写？测量结果在后面。"
   },
-  "4d7689f4b67d": {
+  "f3c062dc2659": {
    "scene": "Budget",
-   "en": "First, FID: the distance between our classifier's view of the generated digits and of the real ones, two thousand of each. A perfect model would score about 1.05, the line for real digits. <bookmark mark='a'/> The lowest FID belongs to the flow, 28.0, clearly ahead of the next, the VAE at 40.2; last is the GAN, at 53.8. <bookmark mark='b'/> Split in two, the highest precision belongs to the VAE, 0.82, and the highest recall to the flow, 0.84. Each dot is one seed: the spread between seeds is part of the result.",
-   "zh": "第一，FID：我们的分类器眼中生成数字和真实数字之间的距离，各两千个。一个完美的模型大约会得1.05，就是真实数字那条线。<bookmark mark='a'/>FID最低的是流，28.0，明显领先第二名VAE的40.2；最后一名是GAN，53.8。<bookmark mark='b'/>拆成两个数来看，精确率最高的是VAE，0.82；召回率最高的是流，0.84。每个点是一个种子：种子之间的波动，也是结果的一部分。"
+   "en": "First, FID: the distance between our classifier's view of the generated digits and of the real ones, two thousand generated digits against a reference of ten thousand test digits. Real samples scored 1.05, the line for real digits. <bookmark mark='a'/> The lowest FID belongs to the flow, 28.0, clearly ahead of the next, the VAE at 40.2; last is the GAN, at 53.8. <bookmark mark='b'/> Split in two, the highest precision belongs to the VAE, 0.82, and the highest recall to the flow, 0.84. Each dot is one seed: the spread between seeds is part of the result.",
+   "zh": "第一，FID：我们的分类器眼中生成数字和真实数字之间的距离：两千个生成数字，对照一万个测试数字。真实样本得分为1.05，就是真实数字那条线。<bookmark mark='a'/>FID最低的是流，28.0，明显领先第二名VAE的40.2；最后一名是GAN，53.8。<bookmark mark='b'/>拆成两个数来看，精确率最高的是VAE，0.82；召回率最高的是流，0.84。每个点是一个种子：种子之间的波动，也是结果的一部分。"
   },
   "1cf3b3f96b3a": {
    "scene": "Budget",
@@ -531,10 +531,10 @@
    "en": "And the GAN didn't die. Diffusion needs dozens of network passes per image; a generator needs one. To get one step back, diffusion models are distilled into generators, and the best distillers use a discriminator. <bookmark mark='a'/> Axel Sauer and colleagues at Stability AI trained SDXL-Turbo, one to four steps, with a GAN loss and a diffusion teacher; then SD3-Turbo, with a discriminator built from a diffusion model. <bookmark mark='b'/> Tianwei Yin and colleagues' DMD2 added a GAN loss on real images: an FID of 1.28 on small ImageNet images, in one step. <bookmark mark='c'/> R3GAN rebuilt the GAN itself with a principled loss. Consistency models reach diffusion quality in two steps, and in 2026 Kaiming He's group trained one-step generators by drifting their samples onto the data: an FID of 1.54 on ImageNet.",
    "zh": "而GAN并没有死。扩散模型每张图像要过几十遍网络；生成器只要一遍。为了找回一步生成，人们把扩散模型蒸馏成生成器，而最好的蒸馏方法都用了判别器。<bookmark mark='a'/>Stability AI的Axel Sauer和同事，用GAN损失加一个扩散教师，训练出了一到四步出图的SDXL-Turbo；后来又做了SD3-Turbo，它的判别器是用扩散模型搭的。<bookmark mark='b'/>Tianwei Yin和同事的DMD2加了一个作用在真实图像上的GAN损失：在小尺寸的ImageNet图像上，一步就达到了1.28的FID。<bookmark mark='c'/>R3GAN用一个有原则的损失重建了GAN本身。一致性模型两步就达到扩散模型的质量；2026年，何恺明的团队训练出一步生成器，方法是让它们的样本漂移到数据上：在ImageNet上的FID是1.54。"
   },
-  "d179ff95719a": {
+  "246e8ff96cc0": {
    "scene": "Meet",
-   "en": "So this is where the four answers, and the fifth, ended up. <bookmark mark='a'/> The VAE and the GAN became the tokenizers and latent spaces that every image and video model starts from. The autoregressive model writes those tokens, a scale or a token at a time. The energy model's score, learned at every noise level, became diffusion, with the VAE's bound inside it. The neural ODE became flow matching. And the GAN's discriminator came back to make diffusion fast. <bookmark mark='b'/> Which is why the next part, diffusion, is built from pieces you have now seen.",
-   "zh": "这就是那四个答案，以及第五个，最后的归宿。<bookmark mark='a'/>VAE和GAN变成了分词器和潜空间，每个图像和视频模型都从它们出发。自回归模型写出那些词元，一次一个尺度，或者一次一个词元。能量模型的分数函数，在每个噪声水平上学出来，就成了扩散，而VAE的下界就在它里面。神经ODE成了流匹配。GAN的判别器又回来，让扩散变快。<bookmark mark='b'/>所以，下一部分的扩散模型，是用你现在已经见过的零件搭起来的。"
+   "en": "So this is where the four answers, and the fifth, ended up. <bookmark mark='a'/> The VAE and the GAN became the tokenizers and latent spaces that many image and video models start from. The autoregressive model writes those tokens, a scale or a token at a time. The energy model's score, learned at every noise level, became diffusion, with the VAE's bound inside it. The neural ODE became flow matching. And the GAN's discriminator came back to make diffusion fast. <bookmark mark='b'/> Which is why the next part, diffusion, is built from pieces you have now seen.",
+   "zh": "这就是那四个答案，以及第五个，最后的归宿。<bookmark mark='a'/>VAE和GAN变成了分词器和潜空间，许多图像和视频模型都从它们出发。自回归模型写出那些词元，一次一个尺度，或者一次一个词元。能量模型的分数函数，在每个噪声水平上学出来，就成了扩散，而VAE的下界就在它里面。神经ODE成了流匹配。GAN的判别器又回来，让扩散变快。<bookmark mark='b'/>所以，下一部分的扩散模型，是用你现在已经见过的零件搭起来的。"
   },
   "2c5e51e1801a": {
    "scene": "Outro",

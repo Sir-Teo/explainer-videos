@@ -136,12 +136,12 @@ class Dynamics(VoiceoverScene):
             label(r"discriminator: \ $D_\psi(x) = \psi\, x$", font_size=22, color=DISC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, 2.4, 0])
         r1 = cmath(r"\max_\psi \; V(\theta, \psi)", r"-", r"\tfrac{\gamma}{2}\, \psi^2", font_size=32)
-        r1[2].set_color(C.BITS)
+        r1[2].set_color(C.INTERVAL)
         r1.move_to([3.4, 0.7, 0])
-        r1l = label(r"R1: \ penalize the discriminator's gradient on real data", font_size=20, color=C.BITS)
+        r1l = label(r"R1: \ penalize the discriminator's gradient on real data", font_size=20, color=C.INTERVAL)
         r1l.next_to(r1, DOWN, buff=0.12)
         lg = legend([(SIM, r"simultaneous steps"), (ALT, r"alternating steps"),
-                     (C.BITS, rf"with R1, \ $\gamma = {b['dirac_gamma']:g}$")], font_size=20).move_to([3.4, -1.0, 0])
+                     (C.INTERVAL, rf"with R1, \ $\gamma = {b['dirac_gamma']:g}$")], font_size=20).move_to([3.4, -1.0, 0])
         cite_ = cite(r"Mescheder, Geiger \& Nowozin, \textit{Which Training Methods for GANs do actually Converge?} "
                      r"(2018)", corner=DR)
         # the Dirac-GAN's own field: V = f(psi theta) + f(0), f(t) = -log(1 + e^-t); theta descends, psi ascends
@@ -156,8 +156,8 @@ class Dynamics(VoiceoverScene):
             "numbers: data at zero, the generator at theta, a discriminator with slope psi. <bookmark mark='a'/> "
             "Around the equilibrium, the same rotation. <bookmark mark='b'/> Simultaneous steps spiral out; "
             "<bookmark mark='c'/> alternating steps circle. <bookmark mark='d'/> Their fix penalizes the "
-            "discriminator's gradient on real data, here gamma over two psi squared: friction, and the spiral winds "
-            "in. StyleGAN trains with this penalty, R1."
+            "discriminator's gradient on real data, here gamma over two psi squared: friction, and the path settles at "
+            "equilibrium. StyleGAN trains with this penalty, R1."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(th), FadeIn(ps), FadeIn(setup), FadeIn(cite_))
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in fld], lag_ratio=0.01), run_time=1.5)
@@ -174,7 +174,7 @@ class Dynamics(VoiceoverScene):
                       rate_func=linear)
             vo.wait_until("d")
             self.play(Write(r1), FadeIn(r1l), FadeIn(lg[2]))
-            t3, d3, p3 = traced(self, pl, b["dirac_r1"], C.BITS, 1)
+            t3, d3, p3 = traced(self, pl, b["dirac_r1"], C.INTERVAL, 1)
             self.play(t3.animate.set_value(len(b["dirac_r1"]) - 1), run_time=4.0, rate_func=linear)
         for m in (d1, p1, d2, p2, d3, p3):
             m.clear_updaters()

@@ -228,7 +228,7 @@
   "How do you sample from an energy without its normalizer?": "不知道归一化常数，怎样从一个能量里采样？",
   "any network $E_\\theta$ is an energy": "任何网络$E_\\theta$都是一个能量",
   "push data down, \\ push the model's samples up": "把数据往下压，\\ 把模型的样本往上推",
-  "in two dimensions, $Z$ can be summed on a grid:": "在二维里，$Z$可以在网格上求和：",
+  "in two dimensions, $Z$ is estimated on a finite-box grid:": "在二维里，$Z$用有限区域上的网格估计：",
   "our ring model's held-out NLL: \\ $0.92$ nats \\ (floor $0.31$)": "我们的环模型在留出数据上的NLL：\\ $0.92$奈特 \\ （下限$0.31$）",
   "in $196$ dimensions, \\ a grid of $10$ points per axis has $10^{196}$ cells": "在$196$维里，\\ 每个轴$10$个点的网格有$10^{196}$个格子",
   "LeCun, Chopra, Hadsell, Ranzato \\& Huang, \\textit{A Tutorial on Energy-Based Learning} (2006)": "LeCun、Chopra、Hadsell、Ranzato \\& Huang，\\textit{A Tutorial on Energy-Based Learning}（2006）",
@@ -246,7 +246,7 @@
   "the truth: \\ $80\\%$": "真实值：\\ $80\\%$",
   "Hyv\\\"arinen (2005): \\ score matching": "Hyv\\\"arinen（2005）：\\ 分数匹配",
   "Vincent (2011): \\ denoising score matching": "Vincent（2011）：\\ 去噪分数匹配",
-  "Song \\& Ermon (2019): \\ many noise levels": "宋飏 \\& Ermon（2019）：\\ 许多噪声水平",
+  "Song \\& Ermon (2019): \\ many noise levels": "Song \\& Ermon（2019）：\\ 许多噪声水平",
   "$\\to$ \\ diffusion, \\ Part 21": "$\\to$ \\ 扩散，\\ 第21部分",
   "2025: \\ Equilibrium Matching (Wang \\& Du): \\ an implicit energy, \\ FID $1.90$ on ImageNet $256^2$": "2025：\\ 均衡匹配（Wang \\& Du）：\\ 一个隐式的能量，\\ ImageNet $256^2$上FID $1.90$",
   "From Helmholtz machines to the VAE": "从亥姆霍兹机到VAE",
@@ -396,7 +396,7 @@
   "Larochelle \\& Murray (2011); \\ Germain et al.\\ (2015); \\ van den Oord et al.\\ (2016a, b); \\ Salimans et al.\\ (2017)": "Larochelle \\& Murray（2011）；\\ Germain等（2015）；\\ van den Oord等（2016a，b）；\\ Salimans等（2017）",
   "Goodfellow et al.\\ (2014); \\ Radford, Metz \\& Chintala (2015); \\ Arjovsky \\& Bottou (2017); \\ Arjovsky, Chintala \\& Bottou (2017); \\ Gulrajani et al.\\ (2017); \\ Mescheder, Geiger \\& Nowozin (2018); \\ Karras et al.\\ (2018, 2019); \\ Brock, Donahue \\& Simonyan (2019); \\ Zhu et al.\\ (2016); \\ Huang et al.\\ (2024)": "古德费洛等（2014）；\\ Radford、Metz \\& Chintala（2015）；\\ Arjovsky \\& Bottou（2017）；\\ Arjovsky、Chintala \\& Bottou（2017）；\\ Gulrajani等（2017）；\\ Mescheder、Geiger \\& Nowozin（2018）；\\ Karras等（2018，2019）；\\ Brock、Donahue \\& Simonyan（2019）；\\ Zhu等（2016）；\\ Huang等（2024）",
   "Tabak \\& Vanden-Eijnden (2010); \\ Rezende \\& Mohamed (2015); \\ Dinh, Krueger \\& Bengio (2014); \\ Dinh, Sohl-Dickstein \\& Bengio (2017); \\ Kingma \\& Dhariwal (2018); \\ Chen et al.\\ (2018); \\ Grathwohl et al.\\ (2019); \\ Hutchinson (1989); \\ Zhai et al.\\ (2025)": "Tabak \\& Vanden-Eijnden（2010）；\\ Rezende \\& Mohamed（2015）；\\ Dinh、Krueger \\& Bengio（2014）；\\ Dinh、Sohl-Dickstein \\& Bengio（2017）；\\ Kingma \\& Dhariwal（2018）；\\ Chen等（2018）；\\ Grathwohl等（2019）；\\ Hutchinson（1989）；\\ Zhai等（2025）",
-  "LeCun et al.\\ (2006); \\ Hyv\\\"arinen (2005); \\ Vincent (2011); \\ Du \\& Mordatch (2019); \\ Song \\& Ermon (2019); \\ Wang \\& Du (2025)": "LeCun等（2006）；\\ Hyv\\\"arinen（2005）；\\ Vincent（2011）；\\ Du \\& Mordatch（2019）；\\ 宋飏 \\& Ermon（2019）；\\ Wang \\& Du（2025）",
+  "LeCun et al.\\ (2006); \\ Hyv\\\"arinen (2005); \\ Vincent (2011); \\ Du \\& Mordatch (2019); \\ Song \\& Ermon (2019); \\ Wang \\& Du (2025)": "LeCun等（2006）；\\ Hyv\\\"arinen（2005）；\\ Vincent（2011）；\\ Du \\& Mordatch（2019）；\\ Song \\& Ermon（2019）；\\ Wang \\& Du（2025）",
   "Theis, van den Oord \\& Bethge (2016); \\ Salimans et al.\\ (2016); \\ Heusel et al.\\ (2017); \\ Dowson \\& Landau (1982); \\ Sajjadi et al.\\ (2018); \\ Kynk\\\"a\\\"anniemi et al.\\ (2019); \\ Stein et al.\\ (2023)": "Theis、van den Oord \\& Bethge（2016）；\\ Salimans等（2016）；\\ Heusel等（2017）；\\ Dowson \\& Landau（1982）；\\ Sajjadi等（2018）；\\ Kynk\\\"a\\\"anniemi等（2019）；\\ Stein等（2023）",
   "Dhariwal \\& Nichol (2021); \\ van den Oord, Vinyals \\& Kavukcuoglu (2017); \\ Esser, Rombach \\& Ommer (2021); \\ Ramesh et al.\\ (2021); \\ Tian et al.\\ (2024); \\ Sauer et al.\\ (2023, 2024); \\ Yin et al.\\ (2024); \\ Lu \\& Song (2025); \\ Deng et al.\\ (2026)": "Dhariwal \\& Nichol（2021）；\\ van den Oord、Vinyals \\& Kavukcuoglu（2017）；\\ Esser、Rombach \\& Ommer（2021）；\\ Ramesh等（2021）；\\ Tian等（2024）；\\ Sauer等（2023，2024）；\\ Yin等（2024）；\\ Lu \\& Song（2025）；\\ Deng等（2026）",
   "The generative problem": "生成问题",
@@ -610,6 +610,7 @@
   "$\\to$ \\ Parts 22 and 23": "$\\to$ \\ 第22和第23部分",
   "next-token and \\\\ next-scale image models": "下一词元与\\\\ 下一尺度的图像模型",
   "pulling data together, \\\\ pushing the rest apart": "把数据拉到一起，\\\\ 把其余的推开",
-  "judging models: \\\\ metrics and their failures": "评判模型：\\\\ 指标及其失效"
+  "judging models: \\\\ metrics and their failures": "评判模型：\\\\ 指标及其失效",
+  "our binary test: \\ normalized overlaps, \\ then a sign projection": "我们的二值测试：先归一化重叠，再取符号"
  }
 }

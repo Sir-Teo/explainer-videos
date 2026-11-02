@@ -33,7 +33,7 @@ def replay_gan(scene, S, Dd, steps, modes, plane: Plane, duration: float, counte
     stp = Integer(steps[0], font_size=24, color=GREY_A).next_to(stl, DOWN, buff=0.1)
 
     def upd(_):
-        v = min(f.get_value(), len(S) - 1 - 1e-6)
+        v = np.clip(f.get_value(), 0.0, len(S) - 1)
         k = int(v)
         a = v - k
         P = (1 - a) * S[k] + a * S[min(k + 1, len(S) - 1)]

@@ -67,7 +67,7 @@ class Budget(VoiceoverScene):
         most_s = SPOKEN[most]
         with self.voiceover(
             "Now the five image models, side by side, on equal terms. Every one got the same budget of arithmetic, "
-            "six trillion floating-point operations of training, counted operation by operation, and every one was "
+            "six trillion registry-counted model FLOPs of training, using PyTorch formulas for supported operations, and every one was "
             "trained from three random starts. <bookmark mark='a'/> Equal arithmetic doesn't mean equal anything "
             "else. A convolution reuses its weights at every pixel, so the PixelCNN has the fewest parameters "
             f"and does the most arithmetic per digit: it saw {pex:.0f} thousand training digits, while {most_s} saw "
@@ -159,7 +159,7 @@ class Budget(VoiceoverScene):
             pr = f"Split in two, one model leads on both: {nbp}, with precision {vbp:.2f} and recall {R[bp]:.2f}."
         with self.voiceover(
             "First, FID: the distance between our classifier's view of the generated digits and of the real ones, "
-            f"two thousand of each. A perfect model would score about {floor:.2f}, the line for real digits. "
+            f"two thousand generated digits against a reference of ten thousand test digits. Real samples scored {floor:.2f}, the line for real digits. "
             f"<bookmark mark='a'/> {lead} <bookmark mark='b'/> {pr} Each dot is one seed: the spread between seeds "
             "is part of the result."
         ) as vo:

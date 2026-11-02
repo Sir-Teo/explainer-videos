@@ -143,15 +143,17 @@ class Problem(VoiceoverScene):
             grp.next_to(dot, UP if up else DOWN, buff=0.3 if up else 0.3)
             stem = Line(dot.get_center(), grp.get_bottom() if up else grp.get_top(), color=col, stroke_width=1.2)
             items.add(VGroup(dot, stem, grp))
-        # keep labels apart
+        # Date ticks keep the true time scale; callouts use ordered, evenly spaced
+        # lanes so the cluster of recent milestones stays readable in EN and ZH.
         for side in (0, 1):
             same = [items[k] for k in range(len(items)) if k % 2 == side]
-            for a, b in zip(same, same[1:]):
-                gap = b[2].get_left()[0] - a[2].get_right()[0]
-                if gap < 0.12:
-                    b[2].shift(RIGHT * (0.12 - gap))
-            if same[-1][2].get_right()[0] > 6.9:
-                same[-1][2].shift(LEFT * (same[-1][2].get_right()[0] - 6.9))
+            centers = np.linspace(-5.9 if side == 0 else -4.9,
+                                  5.9 if side == 0 else 4.9, len(same))
+            for it, x in zip(same, centers):
+                grp = it[2]
+                if grp.width > 2.1:
+                    grp.width = 2.1
+                grp.move_to([x, 1.0 if side == 0 else -1.7, 0])
         for it in items:
             dot, stem, grp = it
             stem.put_start_and_end_on(dot.get_center(), [grp.get_x(), grp.get_bottom()[1] if grp.get_y() > y0
