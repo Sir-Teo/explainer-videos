@@ -339,7 +339,12 @@ def desk_question(question: str, answer_hint: str = "", width: float = 8.4, font
     if answer_hint:
         parts.add(_body(answer_hint, width - 0.8, font_size - 6, GREY_B))
         parts.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-    return _card(head, parts, color, width, accent=False)
+    card = _card(head, parts, color, width, accent=False)
+    # handles for posing the question first and revealing the answer as the narration gives it:
+    # ``card.answer.set_opacity(0)`` before ``FadeIn(card)``, then ``card.answer.animate.set_opacity(1)``
+    card.question = parts[0]
+    card.answer = parts[1] if answer_hint else VGroup()
+    return card
 
 
 # ---------------------------------------------------------------------------

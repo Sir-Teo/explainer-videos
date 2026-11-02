@@ -245,8 +245,11 @@ class Futures(VoiceoverScene, ThreeDScene):
             f"{h['h']:.2f}, between {h['h_ci'][0]:.2f} and {h['h_ci'][1]:.2f} by bootstrap, and in sample it removes "
             f"{100 * h['eff_in']:.0f} percent of the variance. <bookmark mark='b'/> Keep that ratio through 2023: it removes "
             f"{100 * h['eff_out']:.0f} percent. "
-            f"{verdict}<bookmark mark='c'/> Pause and predict: future a hundred and two, spot a hundred, six months, three percent. "
-            "Trade?"
+            f"{verdict}<bookmark mark='c'/> A desk question: future a hundred and two, spot a hundred, six months, rates "
+            "three percent. Trade? <bookmark mark='z'/> Fair value is a hundred times e to the one and a half percent: "
+            "a hundred and one fifty-one. The future is forty-nine cents rich: sell it, borrow a hundred, buy the coin, "
+            "deliver it at expiry. All of these prices are set somewhere. Next, the machine that sets them: the order "
+            "book."
         ) as vo:
             self.play(FadeIn(card), FadeIn(sc))
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.002, run_time=1.5))
@@ -262,6 +265,9 @@ class Futures(VoiceoverScene, ThreeDScene):
             extra.next_to(out, DOWN, buff=0.12).align_to(out, LEFT)
             self.play(AddTextLetterByLetter(extra), run_time=0.8)
             vo.wait_until("c")
+            q.answer.set_opacity(0)
             self.play(FadeOut(sc), FadeOut(dots), FadeOut(fit), FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

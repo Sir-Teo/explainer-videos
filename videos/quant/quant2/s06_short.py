@@ -208,7 +208,8 @@ class Short(VoiceoverScene):
                                (r"74.1\%", r"held or controlled by Porsche")], width=6.6, font_size=19)
         c.to_edge(RIGHT, buff=0.3)
         q_ = desk_question(r"Short interest is 120\% of float. How is that possible, and who is short what?",
-                           width=6.6, font_size=20).to_corner(DR, buff=0.25)
+                           r"the same share is lent twice: sold short, bought, lent again. Shorts owe shares back; "
+                           r"longs add up to more than the float too", width=6.6, font_size=20).to_corner(DR, buff=0.25)
         src = note(r"reported prices and stakes (Reuters, Risk.net); free float computed from the stakes", font_size=16)
         src.to_edge(DOWN, buff=0.1).to_edge(LEFT, buff=0.3)
         with self.voiceover(
@@ -217,14 +218,20 @@ class Short(VoiceoverScene):
             f"held about a fifth. About {100 * q['vw_free']:.0f} percent was left to buy, less than short interest. "
             "<bookmark mark='a'/> In two days the price went from about two hundred and eleven euros to above a thousand, and "
             "Volkswagen was briefly the world's most valuable company, until Porsche said it would release up to five "
-            "percent. Hedge funds later sued, alleging Porsche misled the market; Porsche denied it. Pause and predict: short "
-            "interest at a hundred and twenty percent of float. How, and who is short what?"
+            "percent. Hedge funds later sued, alleging Porsche misled the market; Porsche denied it. <bookmark mark='y'/> A question: short "
+            "interest at a hundred and twenty percent of float. How? <bookmark mark='z'/> The same share is lent "
+            "twice. A fund lends it, a short seller sells it, the buyer's broker lends it again. Each short owes a share "
+            "back, and the long positions add up to more than the float as well. Borrowed shares and borrowed cash are "
+            "two sides of one market. Next: repo."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(b) for b in bar], lag_ratio=0.5, run_time=4), FadeIn(src))
             self.play(FadeIn(top))
             vo.wait_until("a")
             self.play(FadeIn(c, shift=LEFT * 0.2))
-            self.wait(2)
+            vo.wait_until("y")
+            q_.answer.set_opacity(0)
             self.play(FadeOut(c), FadeIn(q_))
+            vo.wait_until("z")
+            self.play(q_.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

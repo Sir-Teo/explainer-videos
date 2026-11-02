@@ -195,14 +195,20 @@ class Settlement(VoiceoverScene):
             "from twelve point two to nine point eight: twenty percent, not fifty, as netted flow predicts. "
             "<bookmark mark='a'/> The industry had to confirm trades on the trade date itself; affirmation by nine in the "
             "evening rose from seventy-three percent to about ninety-five. Failed settlements stayed at their old rate, about "
-            "two percent. Europe and Britain follow on the eleventh of October 2027. <bookmark mark='b'/> Pause and predict: "
-            "settle on the same day. Does the deposit vanish?"
+            "two percent. Europe and Britain follow on the eleventh of October 2027. <bookmark mark='b'/> A question: settle on "
+            "the same day. Does the deposit vanish? <bookmark mark='z'/> Not entirely. The overnight risk goes, but "
+            "between trade and settlement a member can still fail while prices move, and cash and shares must be in "
+            "place before the trade. And for as long as a derivative stays open, the clearing house holds collateral "
+            "against it. Next: margin."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.5), FadeIn(src))
             self.play(FadeIn(facts[0]), FadeIn(facts[1]))
             vo.wait_until("a")
             self.play(FadeIn(facts[2]), FadeIn(facts[3]), FadeIn(facts[4]))
             vo.wait_until("b")
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

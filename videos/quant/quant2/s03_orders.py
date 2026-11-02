@@ -186,7 +186,8 @@ class Orders(VoiceoverScene):
             label(r"on 11 June 2026 delayed again, to November 2027", font_size=21, color=QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         q = desk_question(r"Halve the tick on a stock that always trades at a one-tick spread with long queues. "
-                          r"What happens to the spread and the queues?", width=6.0, font_size=21)
+                          r"What happens to the spread and the queues?", r"the spread can halve, but depth at the best price thins and "
+                          r"stepping ahead of a queue costs half a cent: small orders gain, large ones may not", width=6.0, font_size=21)
         q.next_to(rule, DOWN, buff=0.35).align_to(rule, LEFT)
         src = note(r"SEC Release 34-101070 (2024); exemptive orders 34-104172 (2025) and 34-105656 (2026)",
                    font_size=16).to_edge(DOWN, buff=0.15)
@@ -195,14 +196,20 @@ class Orders(VoiceoverScene):
             f"{np.mean(sp['1.0']):.0f}, then {np.mean(sp['2.0']):.0f} ticks. <bookmark mark='a'/> The tick itself is a rule. "
             "In 2024 the SEC amended Rule 612: stocks with average spreads of a cent and a half or less would quote in "
             "half-pennies, and access fees were cut from thirty to ten hundredths of a cent. Compliance was due today, in "
-            "November 2026; in June the SEC moved it to November 2027. <bookmark mark='b'/> Pause and predict: halve the "
-            "tick on a stock with a one-tick spread and long queues. What happens?"
+            "November 2026; in June the SEC moved it to November 2027. <bookmark mark='b'/> A question: halve the tick on a "
+            "stock with a one-tick spread and long queues. What happens? <bookmark mark='z'/> The spread can halve, "
+            "but fewer orders sit at each finer price, so the depth at the best quote thins, and anyone can step ahead "
+            "of the queue for half a cent. Small orders pay less; large ones may not. The book trades all day, but the "
+            "day opens and closes differently: with an auction."
         ) as vo:
             self.play(FadeIn(g), FadeIn(head), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.1))
             self.play(Create(mean_line))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rule], lag_ratio=0.3), FadeIn(src))
             vo.wait_until("b")
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

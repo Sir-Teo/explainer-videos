@@ -180,7 +180,8 @@ class Industry(VoiceoverScene):
             "later in the series. <bookmark mark='a'/> And the jobs: the researcher who finds and tests ideas, the trader who "
             "runs them and decides when to stop, the developer who builds the systems, the risk quant who asks what can go "
             "wrong, the desk quant who prices and hedges for a bank, and the structurer who designs products. Their interviews "
-            "open with questions like this one: make me a market on the number of trading days in a year."
+            "open with questions like this one: make me a market on the number of trading days in a year. The answer comes "
+            "at the end of this part. First, the research still moving every number in it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ylab), LaggedStart(*[FadeIn(b) for b in blobs], lag_ratio=0.4, run_time=6))
             vo.wait_until("a")

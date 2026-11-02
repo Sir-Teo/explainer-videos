@@ -232,19 +232,28 @@ class Business(VoiceoverScene):
         leg = legend([(QC.HOUSE, r"likelihood fits, 5 seeds"), (GREY_B, r"moment estimator (baseline)"),
                       (YELLOW, r"the true $\theta$")], font_size=17).to_corner(UL, buff=0.35)
         q = desk_question(r"A fund's monthly returns have autocorrelation 0.4. Is its true volatility higher or lower "
-                          r"than reported, and by how much?", width=6.0, font_size=19).to_corner(DL, buff=0.25)
+                          r"than reported, and by how much?", r"higher: if each return is spread over two months, reported "
+                          r"volatility is about $0.75\times$ the truth", width=6.0, font_size=19).to_corner(DL, buff=0.25)
         with self.voiceover(
             "Undo it: fit the weights by maximum likelihood on five simulated funds of six hundred months. Each dot is a "
             "seed's estimate on the triangle of weights; the star is the truth. <bookmark mark='a'/> Every seed walks to the "
             "star in a few iterations; the moment estimator, grey, lands close too. <bookmark mark='b'/> On the smallest "
             f"decile before 1990, the fit puts {100 * sm[0]:.0f} percent of the weight on the current month: Sharpe inflated "
-            f"{gl['small_inflate']:.2f} times. Predict: autocorrelation point four. True volatility higher or lower?"
+            f"{gl['small_inflate']:.2f} times. <bookmark mark='y'/> A question: "
+            "autocorrelation point four. Is the true volatility higher or lower? <bookmark mark='z'/> Higher. If each "
+            "month's return is spread over two months, the reported volatility is about three quarters of the truth, "
+            "so the true one is a third higher, and the Sharpe ratio a quarter lower. Much of the buy side's money "
+            "simply tracks an index. Next: what an index is, and what being in one does to a price."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(leg))
             vo.wait_until("a")
             rp.play(self, run_time=5)
             vo.wait_until("b")
             self.play(FadeIn(res))
+            vo.wait_until("y")
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

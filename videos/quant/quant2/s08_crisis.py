@@ -203,7 +203,8 @@ class Crisis(VoiceoverScene):
             f"the median, and some trades paid {fk['20190917']['SOFR99']:.0f}. Afonso and colleagues at the New York Fed "
             "traced it to reserves concentrated in a few large banks slow to lend them. <bookmark mark='a'/> Every leveraged "
             "position in this series is funded overnight. The House charges SOFR plus a spread, and stress-tests a day like "
-            "this; March 2020's worse failure is Part forty-one."
+            "this; March 2020's worse failure is Part forty-one. The cash in this story went to dealers. Next, the banks "
+            "that lend to hedge funds: prime brokers."
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2))
             vo.wait_until("a")

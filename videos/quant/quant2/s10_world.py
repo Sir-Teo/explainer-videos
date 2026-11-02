@@ -156,7 +156,8 @@ class World(VoiceoverScene):
             label(r"the House's data desk stores each market's rules beside its prices", font_size=21, color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 0.4)
         q = desk_question(r"A stock closes limit-up with buyers queued. What is tomorrow's expected return, and can you "
-                          r"trade it?", width=6.0, font_size=19).to_corner(DR, buff=0.3)
+                          r"trade it?", r"positive, since the limit stopped the price short; but the queue didn't clear, so nobody "
+                          r"bought at that close", width=6.0, font_size=19).to_corner(DR, buff=0.3)
         src = note(r"simulated: daily vol 3\%, jumps on 5\% of days (12\% s.d.), 5,000 days, 8 seeds", font_size=15)
         src.to_edge(DOWN, buff=0.1)
         with self.voiceover(
@@ -166,14 +167,20 @@ class World(VoiceoverScene):
             f"at its limit on only {100 * np.mean(res['0.10']['at_limit']):.0f} percent of days; at twenty percent, "
             f"{np.mean(res['0.20']['ac1']):.2f}. A backtest would see momentum. But on a limit-up day the buy queue doesn't "
             "clear, and nobody gets filled at that price. <bookmark mark='b'/> So the House's data desk stores each market's "
-            "rules beside its prices, and no backtest may buy a stock that couldn't be bought. Pause and predict: limit-up "
-            "close, buyers queued. Tomorrow's expected return, and can you trade it?"
+            "rules beside its prices, and no backtest may buy a stock that couldn't be bought. A question: limit-up close, "
+            "buyers queued. Tomorrow's expected return, and can you trade it? <bookmark mark='z'/> Positive: the limit "
+            "stopped the price before it reached its new value, so part of the move comes tomorrow. But you can't "
+            "trade it: the queue at the limit didn't clear, and a backtest that buys at that close buys shares nobody "
+            "got. Next: the firms that run this machine, and who pays whom."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.4))
             self.play(FadeIn(txt[:3]))
             vo.wait_until("b")
+            q.answer.set_opacity(0)
             self.play(FadeIn(txt[3]), FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

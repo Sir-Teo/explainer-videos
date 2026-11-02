@@ -196,6 +196,18 @@ def worker(args):
                         bounds[3] > config.frame_height / 2 + 0.03):
                     result["warnings"].append({"kind": "text-outside-frame", "frame": name,
                                                "text": s, "bounds": bounds})
+        # text drawn over text: two labels whose glyph boxes share more than a fifth of the smaller one's area
+        for a_i in range(len(texts)):
+            for b_i in range(a_i + 1, len(texts)):
+                A, B = texts[a_i]["bounds"], texts[b_i]["bounds"]
+                w = min(A[1], B[1]) - max(A[0], B[0])
+                h = min(A[3], B[3]) - max(A[2], B[2])
+                if w <= 0 or h <= 0:
+                    continue
+                small = min((A[1] - A[0]) * (A[3] - A[2]), (B[1] - B[0]) * (B[3] - B[2]))
+                if small > 0 and w * h > 0.2 * small:
+                    result["warnings"].append({"kind": "text-overlap", "frame": name,
+                                               "text": [texts[a_i]["text"][:60], texts[b_i]["text"][:60]]})
         result["frames"].append({"file": name, "time": scene.renderer.time, "reason": reason,
                                  "coverage": coverage, "texts": texts})
         if coverage < 0.0005:

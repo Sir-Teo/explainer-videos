@@ -155,8 +155,10 @@ class Clearing(VoiceoverScene):
             "of a sum is at most the sum of the positive parts, so a member's net debt is at most its bilateral debts added "
             "up: multilateral is at most bilateral. <bookmark mark='d'/> And the net positions sum to zero: every dollar owed "
             "is owed to someone, so the clearing house is flat. <bookmark mark='e'/> The House's code is six lines, and on the "
-            "simulated day it prints the three numbers you just watched. Pause and predict: A owes B ten, B owes C ten, C owes "
-            "A ten. What moves through a clearing house?"
+            "simulated day it prints the three numbers you just watched. A question: A owes B ten, B owes C ten, C owes A "
+            "ten. What moves through a clearing house? <bookmark mark='z'/> Nothing. Each owes ten and is owed ten, "
+            "so every net position is zero and not a dollar moves. Clearing nets the promises; settlement is when "
+            "they are kept."
         ) as vo:
             for i, mk in enumerate("abcd"):
                 step(i)
@@ -167,7 +169,10 @@ class Clearing(VoiceoverScene):
             self.play(FadeIn(card))
             lab(self, card, ["netting(payer, receiver, amount, 25)",
                              f"({n['gross'] / 1e9:.2f}e9, {n['bilateral'] / 1e9:.2f}e9, {n['multilateral'] / 1e9:.2f}e9)"])
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()
 

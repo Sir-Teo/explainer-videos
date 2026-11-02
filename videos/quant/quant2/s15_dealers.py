@@ -175,11 +175,11 @@ class Dealers(VoiceoverScene):
             "alone internalized nearly four point two billion dollars of it. Ernst and Spatt find payment for "
             "order flow small in stocks and large in options; Battalio, Corwin and Jennings found that brokers "
             "routing for rebates got worse fills on their customers' limit orders. Brokers owe their customers "
-            "best execution, and these papers are how anyone checks."
+            "best execution, and these papers are how anyone checks. However a trade is made, in a book, an auction or "
+            "with a dealer, it leaves a promise between two parties. Next: who stands behind it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
-            vo.wait_until("a")
-            self.play(Create(rl), Create(il), run_time=2)
+            self.play(Create(rl), Create(il), run_time=max(2.0, vo.until("a")))
             vo.wait_until("b")
             self.play(Write(eq))
             vo.wait_until("c")

@@ -274,7 +274,10 @@ class MarginModel(VoiceoverScene):
             "cash is scarce. <bookmark mark='a'/> European rules make clearing houses add a damper: a releasable buffer, "
             "weight on stressed history, or a ten-year floor. <bookmark mark='b'/> When calls outrun markets, things break: "
             "LME nickel in March 2022, trading suspended and trades cancelled, later fined; British pension funds' gilt "
-            "hedges that September, until the Bank of England bought. Pause and predict: is a faster margin model safer?"
+            "hedges that September, until the Bank of England bought. <bookmark mark='y'/> So, is a faster margin model safer? "
+            "<bookmark mark='z'/> For the clearing house, yes; for the market, not always. Its members get their "
+            "biggest calls on the worst day, when cash is scarcest. Hence the dampers. Margin lets you buy with "
+            "borrowed money; the mirror image is selling what you have borrowed."
         ) as vo:
             self.play(FadeIn(g), Create(ln, run_time=2))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.4))
@@ -283,6 +286,10 @@ class MarginModel(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(c1, shift=UP * 0.2))
             self.play(FadeIn(c2, shift=UP * 0.2))
+            vo.wait_until("y")
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

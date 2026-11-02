@@ -185,7 +185,8 @@ class Prime(VoiceoverScene):
                           r"clients pull their cash and securities, as at Bear Stearns and Lehman in 2008.", 5.2, 19,
                           GREY_A).to_edge(RIGHT, buff=0.35).shift(UP * 1.0)
         q = desk_question(r"You are a prime broker and hear first that a big client is in trouble. What do you do, "
-                          r"and to whom?", width=5.2, font_size=20).next_to(d, DOWN, buff=0.4).align_to(d, LEFT)
+                          r"and to whom?", r"sell, and sell first: the first to unwind gets the better prices and leaves the losses to the "
+                          r"slower banks", width=5.2, font_size=20).next_to(d, DOWN, buff=0.4).align_to(d, LEFT)
         src = note(r"SEC press release 2022-70 (allegations); Credit Suisse report (July 2021); Nomura's results "
                    r"(April 2021) as reported", font_size=15).to_edge(DOWN, buff=0.12)
         with self.voiceover(
@@ -194,12 +195,18 @@ class Prime(VoiceoverScene):
             "exposure, to over thirty-six billion with a hundred and sixty billion. <bookmark mark='a'/> When its stocks fell "
             "it missed margin calls. Banks that sold early lost little; Credit Suisse lost about five and a half billion and "
             "Nomura nearly three, as they reported. Its founder was convicted in 2024. <bookmark mark='b'/> Duffie describes "
-            "the mirror image: clients run from a weak dealer, as from Bear Stearns and Lehman. Pause and predict: you hear "
-            "first. What do you do?"
+            "the mirror image: clients run from a weak dealer, as from Bear Stearns and Lehman. A question: you hear "
+            "first. What do you do? <bookmark mark='z'/> Sell, and sell first. The first to unwind gets the better "
+            "prices and leaves the losses to the slower banks, which is what the early banks did with Archegos. Each "
+            "bank's best move makes the run worse. Prime brokerage is one of the sell side's businesses. Next: who "
+            "earns what."
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("b")
             self.play(FadeIn(d))
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

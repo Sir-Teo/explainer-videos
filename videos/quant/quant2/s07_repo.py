@@ -182,21 +182,27 @@ class Repo(VoiceoverScene):
                              r"(on-the-run) Treasury is often special, which is part of its premium", 12.0, 21, RATE)
         head.to_edge(UP, buff=0.4)
         q = desk_question(r"A Treasury is special at $-1\%$ for three months while GC repo pays 4\%. What does that do "
-                          r"to its price?", width=8.4, font_size=22).to_edge(DOWN, buff=0.4)
+                          r"to its price?", r"it raises it: the owner borrows cash at $-1\%$ instead of 4\%, five points a year for a "
+                          r"quarter, about 1.25 per 100", width=8.4, font_size=22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "One more repo idea. When many traders want to short the same bond, they all need to borrow it, and its owner can "
             "lend it out in repo in exchange for cash at a low rate. The bond is special: its repo rate falls below general "
             "collateral. Duffie showed what that does to the price. <bookmark mark='a'/> The owner's saving, the rate gap on "
             "the bond's value for as long as it stays special, is worth something, so it is priced into the bond: the "
             "present value of the cheap borrowing. <bookmark mark='b'/> A bond special at minus one percent for three months, "
-            "while general repo pays four, carries about a point and a quarter of extra price. That's one reason the newest "
-            "Treasury trades rich to its older twins. Pause and predict, and check the sign."
+            "while general repo pays four, carries about a point and a quarter of extra price. <bookmark mark='z'/> The sign: the owner borrows cash "
+            "at minus one instead of four, five points a year for a quarter, so the special bond trades rich, not "
+            "cheap. That's one reason the newest Treasury trades rich to its older twins. Repo usually works so "
+            "smoothly that nobody notices it. One day in 2019, it didn't."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

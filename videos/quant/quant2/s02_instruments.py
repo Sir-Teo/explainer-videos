@@ -105,8 +105,11 @@ class Instruments(VoiceoverScene):
             "climbs every day by the coupon's share, then drops by two and a half on each coupon date, when the interest is "
             "paid out: a saw-tooth over a flat line. <bookmark mark='b'/> Ninety-one days in, half a period, the buyer pays a "
             "hundred, of which one twenty-five is the seller's interest. Quoting clean keeps the quote from jumping on coupon "
-            "days, so price changes mean what they should. Pause and predict: the clean price hasn't moved for a month. Did "
-            "the holder earn anything?"
+            "days, so price changes mean what they should. <bookmark mark='y'/> A question: the clean price hasn't moved "
+            "for a month. Did the holder earn anything? <bookmark mark='z'/> Yes: a month of accrued interest, about "
+            "forty cents per hundred on this bond. The clean price hides the carry; the dirty price shows it. Of all "
+            "these contracts the simplest is the future, and it already holds the central idea of this series: a "
+            "price set by what it costs to build the same thing another way."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(clean, dl, wedge)
@@ -114,7 +117,11 @@ class Instruments(VoiceoverScene):
             self.play(t.animate.set_value(365), run_time=6, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(stack))
-        self.play(FadeOut(stack), FadeIn(q))
+            vo.wait_until("y")
+            q.answer.set_opacity(0)
+            self.play(FadeOut(stack), FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         for m in (clean, dl, wedge):
             m.clear_updaters()

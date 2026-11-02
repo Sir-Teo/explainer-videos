@@ -75,7 +75,9 @@ class Auction(VoiceoverScene):
                                        r"opening and closing auctions", width=4.4, color=QC.IDEA, font_size=19),
                        definition_card(r"Discriminatory price", r"each order pays its own price: the continuous book, "
                                        r"and some bond auctions", width=4.4, color=TRADE, font_size=19))
-        kinds.arrange(DOWN, buff=0.2).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
+        keep_in_frame(VGroup(panel, leg), 0.35)
+        kinds.arrange(DOWN, buff=0.25).move_to(VGroup(panel, leg)).align_to(panel, UP)
+        keep_in_frame(kinds, 0.35)
         note_ = note(r"300 simulated limit orders, arriving in random order; published as imbalance feeds (e.g.\ "
                      r"Nasdaq's NOII)", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
@@ -90,11 +92,11 @@ class Auction(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(panel), FadeIn(leg), FadeIn(note_))
             self.add(cv)
-            vo.wait_until("a")
+            self.play(k.animate.set_value(12), run_time=vo.until("a"), rate_func=linear)
             self.play(k.animate.set_value(60), run_time=4, rate_func=linear)
             self.play(k.animate.set_value(len(order)), run_time=8, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(kinds))
+            self.play(FadeOut(leg), FadeOut(panel), FadeIn(kinds))
         cv.clear_updaters()
         for m in (r1, r2, r3, r4):
             m.clear_updaters()
@@ -115,10 +117,10 @@ class Auction(VoiceoverScene):
                 why(r"so the volume peaks where the staircases cross; ties: least imbalance, then a reference price")]
         for r_ in rows:
             r_.scale(0.9)
-        step = ladder(self, rows, whys, keep=4, top=2.6, x=0.0, align_index=None, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=0.0, align_index=None, buff=0.42, edge=6.9)
         head = theorem_card(r"The clearing price maximizes volume", r"For any set of limit orders, the price $p^*$ "
                             r"where demand and supply cross executes the most shares.", width=8.0, font_size=21)
-        head.to_edge(DOWN, buff=0.3)
+        head.to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Why the crossing? Demand at a price p counts the bids at p or higher, so it can only fall as p rises. "
             "Supply counts the asks at p or lower, so it can only rise. <bookmark mark='a'/> At any price the "
@@ -200,16 +202,23 @@ class Auction(VoiceoverScene):
             "    return cands[m].mean(), vol.max()",
         ], source="explainer/quant/house/funding.py", width=7.4).to_edge(UP, buff=0.4).shift(LEFT * 2.2)
         q = desk_question(r"A 2,000-share buy at any price: does it move the price more in the closing auction or "
-                          r"in the continuous book?", width=5.4, font_size=21).to_edge(RIGHT, buff=0.3).shift(DOWN * 1.6)
+                          r"in the continuous book?", r"in the book: in the auction it shifts the whole demand staircase and moves the "
+                          r"crossing a little", width=5.4, font_size=21).to_edge(RIGHT, buff=0.3).shift(DOWN * 1.6)
         with self.voiceover(
             "The House's version is nine lines: every order price is a candidate, demand and supply at each, the "
             "volume that clears, ties broken by imbalance. <bookmark mark='a'/> Run on the three hundred orders, it "
-            f"prints {a['price']:.2f} and {a['volume']:,.0f} shares. Pause and predict, then check against the "
-            "numbers you just saw: does a two-thousand-share buy move the price more in the auction or in the book?"
+            f"prints {a['price']:.2f} and {a['volume']:,.0f} shares. And the question: does a two-thousand-share "
+            "buy move the price more in the auction or in the book? <bookmark mark='z'/> In the book. In the auction it "
+            "shifts the whole demand staircase and moves the crossing a little; in the book it walks up the ladder, as "
+            "the numbers showed. That is why index funds trade the close. Books and auctions need a central venue. "
+            "Most bonds, currencies and swaps have none."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
             lab(self, card, ["call_auction(bp, bq, ap, aq)", f"({a['price']:.2f}, {a['volume']:,.0f})"])
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         self.wait(1.0)
         self.clear_scene()

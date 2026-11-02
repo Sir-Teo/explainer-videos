@@ -181,7 +181,8 @@ class Index(VoiceoverScene):
         rows = MathTex(r"\hat\tau = \lim_{x \downarrow c}\mathbb E[y\,|\,x] - \lim_{x \uparrow c}\mathbb E[y\,|\,x]",
                        font_size=30, color=QC.IDEA).next_to(g2, DOWN, buff=0.4)
         q = desk_question(r"Why does joining the Russell 2000 bring more buying than staying in the Russell 1000?",
-                          width=5.8, font_size=19).to_corner(DR, buff=0.25)
+                          r"weight is relative: the same company is a sliver of the 1000 but among the largest in the "
+                          r"2000", width=5.8, font_size=19).to_corner(DR, buff=0.25)
         src = note(r"simulated: 30 reconstitutions of 3,000 stocks, a true jump of 1.5\% at the cutoff, noise rising "
                    r"with rank; local-linear fits on each side", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
@@ -189,7 +190,11 @@ class Index(VoiceoverScene):
             "fit a line on each side and read the gap at the gate. <bookmark mark='a'/> The one choice is the bandwidth. "
             "Narrow is noisy; wide lets distant stocks in. <bookmark mark='b'/> Over eight seeds the estimate centres on the "
             f"truth, its spread growing from {100 * est.std(0)[-1]:.2f} to {100 * est.std(0)[0]:.2f} points as the bandwidth "
-            "shrinks. Predict: why does joining the smaller index bring more buying?"
+            "shrinks. <bookmark mark='y'/> A question: why does joining the smaller index bring more buying? "
+            "<bookmark mark='z'/> Because weight is relative. The smallest member of the Russell 1000 is a sliver of "
+            "a big index; the same company is among the largest in the Russell 2000, and the money tracking it must "
+            "hold far more. Index rules differ by country, and so does everything else. Next: markets around the "
+            "world."
         ) as vo:
             self.play(FadeIn(g), FadeIn(dots), Create(cut), FadeIn(src))
             self.add(fl, bwr)
@@ -198,7 +203,11 @@ class Index(VoiceoverScene):
             self.play(b.animate.set_value(480), run_time=3)
             vo.wait_until("b")
             self.play(FadeIn(g2), FadeIn(sb), Create(truth), Write(rows))
+            vo.wait_until("y")
+            q.answer.set_opacity(0)
             self.play(FadeIn(q))
+            vo.wait_until("z")
+            self.play(q.answer.animate.set_opacity(1))
         fl.clear_updaters()
         bwr.clear_updaters()
         self.wait(1.0)
