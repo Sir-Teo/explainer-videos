@@ -98,6 +98,7 @@ class Clearing(VoiceoverScene):
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(counter, DOWN, buff=0.5).align_to(counter, LEFT)
         dtcc = wrapped_label(r"NSCC (DTCC) says its netting cuts the value of payments to be exchanged by an "
                              r"average of 98\% each day", 5.4, 20, GREY_A).next_to(steps, DOWN, buff=0.5).align_to(steps, LEFT)
+        keep_in_frame(VGroup(counter, steps, dtcc), 0.4)
         src = note(r"simulated day: heavy-tailed trade sizes, a few busy members; DTCC, NSCC overview page", font_size=16)
         src.to_edge(DOWN, buff=0.15)
         with self.voiceover(

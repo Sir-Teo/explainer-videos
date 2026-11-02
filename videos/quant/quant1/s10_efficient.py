@@ -180,7 +180,8 @@ class Efficient(VoiceoverScene):
             "sample: at each date, use only what was known before it. The out-of-sample R squared is negative in "
             f"every one of {n['sims']} markets. <bookmark mark='c'/> In-sample predictability is not evidence of an "
             "inefficient market, and only out-of-sample tests keep their meaning. That is why the House will seal "
-            "its data in an envelope, in chapter fourteen."
+            "its data in an envelope, in chapter sixteen."
+            " Next: the two worlds every price lives in."
         ) as vo:
             self.play(FadeIn(cite_), LaggedStart(*[FadeIn(s) for s in setup], lag_ratio=0.6, run_time=5))
             vo.wait_until("a")

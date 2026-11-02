@@ -220,6 +220,7 @@ class Returns(VoiceoverScene):
             f"{kel:.1f} times, for this market and this century, and beyond that, more leverage grows more slowly, "
             "and eventually ruins you. That peak is the Kelly criterion, the subject of Part eight, and a lesson "
             "every leveraged fund in this series will relearn."
+            " If prices drift, and their spread grows like the square root of time, what kind of path are they? Next: the random walk."
         ) as vo:
             self.play(FadeIn(g), FadeIn(fees))
             self.play(*[Create(lines[L]) for L in (1, 2, 3)], run_time=5, rate_func=linear)

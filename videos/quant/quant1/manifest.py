@@ -17,6 +17,8 @@ SCENES = [
     ("s12_otherside", "OtherSide", "11. Who is on the other side?"),
     ("s13_thorp", "Thorp", "12. Beating the dealer"),
     ("s14_crisis", "Crisis", "13. March 2020"),
-    ("s15_house", "House", "14. The House opens"),
+    ("s17_industry", "Industry", "14. Industry: the tails in the rulebooks"),
+    ("s18_frontier", "Frontier", "15. Frontier: the facts as a test"),
+    ("s15_house", "House", "16. The House opens"),
     ("s16_outro", "Outro", "Recap, desk questions, problems"),
 ]

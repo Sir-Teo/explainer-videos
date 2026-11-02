@@ -220,6 +220,7 @@ class Tails(VoiceoverScene):
             "mixed together. <bookmark mark='c'/> An exponent near three means the average and the variance exist, "
             "but higher moments barely do. That will matter when we ask, in chapter eight, whether the variance "
             "can be trusted at all."
+            " First, a second fact: the big moves come together. Next."
         ) as vo:
             self.play(FadeIn(g), Write(hill_def), FadeIn(hw))
             vo.wait_until("a")

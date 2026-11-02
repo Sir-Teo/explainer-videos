@@ -512,6 +512,26 @@ def compute_crisis2020() -> dict:
                               sorted(zip(d[(d >= 20200201) & (d <= 20200430)], r[w]), key=lambda t: t[1])[:3]]}
 
 
+def compute_march() -> dict:
+    """March 2020 as one picture of the part: the market's level and its 21-day volatility, January to September,
+    the February peak, the March trough, and the day the level was regained."""
+    kf = data.ken_french_daily()
+    d, simple = pit.research(kf["date"], kf["mkt"])
+    w = (d >= 20200101) & (d <= 20200930)
+    dd, rr = d[w], simple[w]
+    level = np.cumprod(1 + rr)
+    level = level / level[0]
+    r_all = np.log1p(simple)
+    vol = np.array([r_all[i - 20:i + 1].std(ddof=1) * np.sqrt(252) for i in np.where(w)[0]])
+    ip = int(np.argmax(level[dd <= 20200331]))
+    it = int(np.argmin(level))
+    rec = np.where((np.arange(len(level)) > it) & (level >= level[ip]))[0]
+    return {"d": dd, "level": level, "vol": vol, "peak_d": int(dd[ip]), "trough_d": int(dd[it]),
+            "drawdown": float(level[it] / level[ip] - 1), "recover_d": int(dd[rec[0]]) if len(rec) else None,
+            "vol_before": float(vol[ip]), "vol_max": float(vol.max()), "vol_max_d": int(dd[int(np.argmax(vol))]),
+            "days_to_trough": int(it - ip), "days_to_recover": int(rec[0] - it) if len(rec) else None}
+
+
 # ---------------------------------------------------------------------------
 def compute_envelope() -> dict:
     kf = data.ken_french_daily()
@@ -525,10 +545,127 @@ def compute_envelope() -> dict:
             "holdout_start": pit.HOLDOUT_START}
 
 
+def compute_agg_theory() -> dict:
+    """Why the kurtosis falls so slowly: for uncorrelated returns with fourth moments, the excess kurtosis of an
+    h-day sum is [k_1 + 6 (k_1 + 2) sum_{k<h} (1 - k/h) rho_k(r^2)] / h; independent days keep only k_1 / h."""
+    _, r, _ = _market()
+    x = r - r.mean()
+    k1 = stats.excess_kurtosis(x)
+    hmax = int(AGG_H.max())
+    rho2 = stats.autocorr(x ** 2, np.arange(1, hmax))
+    hs = np.unique(np.round(np.geomspace(1, hmax, 40)).astype(int))
+    pred = []
+    for h in hs:
+        kk = np.arange(1, h)
+        pred.append((k1 + 6 * (k1 + 2) * np.sum((1 - kk / h) * rho2[: h - 1])) / h)
+    meas = np.array([stats.excess_kurtosis(stats.aggregate(x, int(h), overlapping=True)) for h in hs])
+    return {"k1": k1, "h": hs, "iid": k1 / hs, "pred": np.array(pred), "meas": meas, "rho2_1": float(rho2[0]),
+            "rho2_21": float(rho2[20])}
+
+
+# ---------------------------------------------------------------------------
+def compute_industry() -> dict:
+    """The tails in the rulebooks: 99% VaR against 97.5% expected shortfall (Basel's 2016 switch), in units of the
+    daily standard deviation, Gaussian against the real US market; and the days the market fell 7% or more, the
+    level at which today's market-wide circuit breakers halt trading, against what a Gaussian expects."""
+    d, _, rs = _market()
+    x = rs - rs.mean()
+    s = float(x.std())
+    z = x / s
+    q01, q025 = np.quantile(z, 0.01), np.quantile(z, 0.025)
+    var99, es975 = float(-q01), float(-z[z <= q025].mean())
+    g_var99 = float(sstats.norm.ppf(0.99))
+    g_es975 = float(sstats.norm.pdf(sstats.norm.ppf(0.975)) / 0.025)
+    edges = np.linspace(-18, -1, 69)
+    dens = np.histogram(z, edges)[0] / (len(z) * np.diff(edges))
+    crash = rs <= -0.07
+    p_g = float(sstats.norm.cdf((-0.07 - rs.mean()) / rs.std()))
+    worst = np.argsort(rs)[:6]
+    # the same comparison decade by decade: how far ES 97.5% sits beyond VaR 99%
+    dec = []
+    for y0 in range(1930, 2020, 10):
+        m = (d >= y0 * 10000) & (d < (y0 + 10) * 10000)
+        zz = (rs[m] - rs[m].mean()) / rs[m].std()
+        dec.append([y0, float(-np.quantile(zz, 0.01)), float(-zz[zz <= np.quantile(zz, 0.025)].mean())])
+    return {"n": len(rs), "sd": s, "var99": var99, "es975": es975, "g_var99": g_var99, "g_es975": g_es975,
+            "edges": edges, "dens": dens, "n_crash": int(crash.sum()), "crash_dates": d[crash],
+            "crash_rets": rs[crash], "g_expect": float(len(rs) * p_g), "g_years": float(1 / (p_g * 252)),
+            "worst_dates": d[worst], "worst_rets": rs[worst], "decades": dec}
+
+
+FACT_LAGS = np.arange(1, 101)
+
+
+def _facts(x) -> dict:
+    """Cont's (2001) stylized facts, each as one number."""
+    x = np.asarray(x, float)
+    xc = x - x.mean()
+    a = np.abs(xc)
+    acf_abs = stats.autocorr(a, FACT_LAGS)
+    rz, az = xc / xc.std(), (a - a.mean()) / a.std()
+    lev = float(np.mean([np.mean(rz[:-k] * az[k:]) for k in range(1, 6)]))
+    return {"kurt": stats.excess_kurtosis(x), "alpha": stats.hill(xc / xc.std(), frac=0.02),
+            "acf1_r": float(stats.autocorr(x, [1])[0]), "acf1_abs": float(acf_abs[0]),
+            "acf100_abs": float(acf_abs[-1]), "lev": lev,
+            "kurt_month": stats.excess_kurtosis(stats.aggregate(x, 21))}
+
+
+def _sim_garch(params, n, rng, kind="garch", nu=None, burn=2000):
+    """Simulate GARCH(1,1) or GJR with standardized Gaussian or Student-t shocks."""
+    N = n + burn
+    if nu is None:
+        e = rng.standard_normal(N)
+    else:
+        e = rng.standard_t(nu, N) * np.sqrt((nu - 2) / nu)
+    r = np.empty(N)
+    if kind == "garch":
+        w, a, b = params
+        h = w / max(1e-6, 1 - a - b)
+        for t in range(N):
+            r[t] = np.sqrt(h) * e[t]
+            h = w + a * r[t] ** 2 + b * h
+    else:
+        w, a, g, b = params
+        h = w / max(1e-6, 1 - a - g / 2 - b)
+        for t in range(N):
+            r[t] = np.sqrt(h) * e[t]
+            h = w + (a + g * (r[t] < 0)) * r[t] ** 2 + b * h
+    return r[burn:]
+
+
+def compute_scorecard() -> dict:
+    """The stylized facts as a test: the real US market and Bitcoin against four simulated markets fitted to the US
+    market (independent Gaussian days, independent Student-t days, GARCH with Gaussian shocks, GJR-GARCH with
+    Student-t shocks), 8 seeds each.  This is how every market generator is judged (Part 17)."""
+    from explainer.quant.house import vol
+
+    _, r, _ = _market()
+    _, rb, _ = _btc_daily()
+    x = r - r.mean()
+    n, mu, sd = len(r), float(r.mean()), float(r.std())
+    nu_iid = float(sstats.t.fit(x / sd, floc=0)[0])
+    g = vol.garch_fit(x, "garch")
+    gj = vol.garch_fit(x, "gjr")
+    nu_g = vol.garch_t_fit(x)["nu"]
+    sims = {}
+    for name, gen in (
+        ("iid normal", lambda rng: rng.normal(mu, sd, n)),
+        ("iid t", lambda rng: mu + sd * rng.standard_t(nu_iid, n) * np.sqrt((nu_iid - 2) / nu_iid)),
+        ("GARCH", lambda rng: mu + _sim_garch(g["params"], n, rng)),
+        ("GJR-t", lambda rng: mu + _sim_garch(gj["params"], n, rng, "gjr", nu=nu_g)),
+    ):
+        runs = [_facts(gen(np.random.default_rng(100 + s))) for s in range(8)]
+        sims[name] = {k: [float(rr[k]) for rr in runs] for k in runs[0]}
+    return {"real": _facts(r), "btc": _facts(rb), "sims": sims, "nu_iid": nu_iid, "nu_garch": nu_g,
+            "garch": g["params"], "gjr": gj["params"], "n": n}
+
+
 ITEMS = {"game": compute_game, "regnault": compute_regnault, "drag": compute_drag, "vr": compute_vr,
          "tails": compute_tails, "cluster": compute_cluster, "aggregation": compute_aggregation,
          "mandelbrot": compute_mandelbrot, "nagel": compute_nagel, "pq": compute_pq, "betting": compute_betting,
-         "crisis2020": compute_crisis2020, "envelope": compute_envelope}
+         "crisis2020": compute_crisis2020, "envelope": compute_envelope, "agg_theory": compute_agg_theory, "march": compute_march,
+         "industry": compute_industry,
+         "scorecard": compute_scorecard}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

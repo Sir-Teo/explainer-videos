@@ -16,8 +16,8 @@ class House(VoiceoverScene):
         self.counter(e)
 
     def card(self):
-        c = chapter_card(14, r"The House opens", r"What is the firm allowed to know, and when?", part=PART)
-        with self.voiceover("Chapter fourteen. The House opens."):
+        c = chapter_card(16, r"The House opens", r"What is the firm allowed to know, and when?", part=PART)
+        with self.voiceover("Chapter sixteen. The House opens."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 

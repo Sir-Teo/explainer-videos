@@ -203,6 +203,7 @@ class TwoWorlds(VoiceoverScene):
             "<bookmark mark='b'/> For the S and P five hundred, Martin's bound averaged about five percent a year, "
             "and rose above twenty percent in the autumn of 2008. For Bitcoin, the condition behind it is an "
             "assumption, not a fact. Read the number as what that morning's option prices demand, if it holds."
+            " Every trade has two sides. Next: who is on the other side?"
         ) as vo:
             self.play(FadeIn(thm, shift=UP * 0.2))
             vo.wait_until("a")

@@ -150,6 +150,7 @@ class OtherSide(VoiceoverScene):
             "risk limits; Part thirty-four goes inside one. <bookmark mark='c'/> And the banks, dealers and asset "
             "managers, who run most of the world's money, more and more of it in index funds. Everything in these "
             "files comes from the public record, and a reported number is labelled as reported."
+            " Next: the first person to show, with mathematics, that the other side can be beaten."
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2), FadeIn(rule))
             vo.wait_until("a")

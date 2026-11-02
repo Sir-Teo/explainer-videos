@@ -175,6 +175,7 @@ class Thorp(VoiceoverScene):
             "coming back. In Part eight, for his answer to how much to bet. In Part ten, for the warrant formula "
             "he used before Black and Scholes published theirs. In Part thirty-three, as an early statistical "
             "arbitrageur. And in the finale, where the question of this part comes back: can you beat the market?"
+            " Next: a month when the tails of this part came true, March 2020."
         ) as vo:
             self.play(FadeIn(f, shift=RIGHT * 0.2))
             vo.wait_until("a")

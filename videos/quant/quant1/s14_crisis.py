@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant1.common import BTC, GAIN, LOSS, PART, REAL, TAIL, bars, day_text, load, real_data, sci
+from videos.quant.quant1.common import BTC, GAIN, LOSS, PART, REAL, TAIL, VOL, bars, day_text, load, real_data, sci
 
 
 class Crisis(VoiceoverScene):
@@ -11,6 +11,7 @@ class Crisis(VoiceoverScene):
         k = load("crisis2020")
         self.card()
         self.days(k)
+        self.month(load("march"))
         self.files(k)
 
     def card(self):
@@ -74,6 +75,71 @@ class Crisis(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def month(self, m):
+        d = np.asarray(m["d"])
+        x = np.arange(len(d), dtype=float)
+        lv, vol = np.asarray(m["level"], float), np.asarray(m["vol"], float)
+        n = len(d)
+        month_starts = [i for i in range(n) if i == 0 or d[i] // 100 != d[i - 1] // 100]
+        names = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep"}
+        top = axes([0, n], [0.6, 1.1], x_length=8.6, y_length=2.5, ylabel=r"US market level (1 Jan = 1)",
+                   yticks=[0.7, 0.9, 1.1], font_size=16)
+        bot = axes([0, n], [0, 1.05], x_length=8.6, y_length=2.0, ylabel=r"volatility, last 21 days",
+                   yticks=[0, 0.5, 1.0], yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=16)
+        VGroup(top, bot).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.6).shift(DOWN * 0.1)
+        ticks = VGroup(*[label(names[int(d[i] // 100 % 100)], font_size=17, color=GREY_B).next_to(
+            bot.ax.c2p(i, 0), DOWN, buff=0.12) for i in month_starts])
+        k = ValueTracker(1)
+        l1 = tracing(top.ax, x, lv, k, REAL, stroke_width=3)
+        l2 = tracing(bot.ax, x, vol, k, VOL, stroke_width=3)
+        ip = int(np.where(d == m["peak_d"])[0][0])
+        it = int(np.where(d == m["trough_d"])[0][0])
+        iv = int(np.where(d == m["vol_max_d"])[0][0])
+        ir = int(np.where(d == m["recover_d"])[0][0]) if m["recover_d"] else n - 1
+        dots = VGroup(Dot(top.ax.c2p(ip, lv[ip]), radius=0.07, color=GAIN), Dot(top.ax.c2p(it, lv[it]), radius=0.07,
+                      color=TAIL), Dot(bot.ax.c2p(iv, vol[iv]), radius=0.07, color=TAIL),
+                      Dot(top.ax.c2p(ir, lv[ir]), radius=0.07, color=GAIN))
+        facts = VGroup(
+            label(rf"{day_text(m['peak_d'])}: the peak", font_size=20, color=GAIN),
+            label(rf"{day_text(m['trough_d'])}: {100 * m['drawdown']:.0f}\% in {m['days_to_trough']} trading days",
+                  font_size=20, color=TAIL),
+            label(rf"volatility {100 * m['vol_before']:.0f}\% $\to$ {100 * m['vol_max']:.0f}\%, highest on "
+                  rf"{day_text(m['vol_max_d'])}", font_size=20, color=VOL),
+            label(rf"{day_text(m['recover_d'])}: the peak regained, {m['days_to_recover']} trading days on",
+                  font_size=20, color=GAIN),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.6)
+        if facts.width > 4.6:
+            facts.scale_to_fit_width(4.6).to_edge(RIGHT, buff=0.35)
+        src = real_data(r"Ken French's daily US market, value-weighted, January--September 2020")
+        with self.voiceover(
+            "Step back, and the whole season shows every fact of this part at once. The market peaked on the "
+            f"nineteenth of February. <bookmark mark='a'/> It fell {abs(100 * m['drawdown']):.0f} percent in "
+            f"{m['days_to_trough']} trading days, to the trough on the twenty-third of March. <bookmark mark='b'/> "
+            f"Below, its volatility over the last month: from {100 * m['vol_before']:.0f} percent to "
+            f"{100 * m['vol_max']:.0f}, a cluster, chapter six, and still rising after the trough, on the sixth of "
+            "April: falls bring storms, and storms outlast the falls. <bookmark mark='c'/> Then the walk carried on. "
+            f"By the fifth of August, {m['days_to_recover']} trading days after the trough, the peak was regained. "
+            "Nothing in this picture predicted the direction; the size of the moves was the one thing the past "
+            "foretold."
+        ) as vo:
+            self.play(FadeIn(top), FadeIn(bot), FadeIn(ticks), FadeIn(src))
+            self.add(l1, l2)
+            self.play(k.animate.set_value(ip), run_time=2, rate_func=linear)
+            self.play(FadeIn(dots[0]), FadeIn(facts[0]))
+            vo.wait_until("a")
+            self.play(k.animate.set_value(it), run_time=2.5, rate_func=linear)
+            self.play(FadeIn(dots[1]), FadeIn(facts[1]))
+            vo.wait_until("b")
+            self.play(k.animate.set_value(iv), run_time=1.5, rate_func=linear)
+            self.play(FadeIn(dots[2]), FadeIn(facts[2]))
+            vo.wait_until("c")
+            self.play(k.animate.set_value(n - 1), run_time=3, rate_func=linear)
+            self.play(FadeIn(dots[3]), FadeIn(facts[3]))
+        for m_ in (l1, l2):
+            m_.clear_updaters()
+        self.wait(0.4)
+        self.clear_scene()
+
     def files(self, k):
         c1 = crisis_card(r"16 March 2020", r"The US market",
                          rf"against its own volatility over the year before ({100 * k['us_trail_sd']:.2f}\% a day)",
@@ -107,6 +173,7 @@ class Crisis(VoiceoverScene):
             f"roughly once every {k['btc_tail_years']:.0f} years. <bookmark mark='c'/> Impossible under one model, "
             "routine under another, and the difference between them is the difference between a fund that survives "
             "and one that doesn't. Part ten does the same arithmetic for the 19th of October 1987."
+            " Next: who writes those tails into their rules."
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

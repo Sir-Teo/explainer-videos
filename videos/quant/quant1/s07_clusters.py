@@ -139,6 +139,7 @@ class Clusters(VoiceoverScene):
             "falling share price makes a company more indebted and so riskier. The effect is too large for that "
             "story alone, and it will come back as the skew of option prices, in Parts ten and twelve: markets "
             "charge more for protection against falls, because falls bring storms."
+            " Next: what clustering does to returns over longer horizons."
         ) as vo:
             self.play(FadeIn(g), FadeIn(left), FadeIn(right))
             vo.wait_until("a")

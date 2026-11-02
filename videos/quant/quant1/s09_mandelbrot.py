@@ -158,6 +158,7 @@ class Mandelbrot(VoiceoverScene):
             "split. The variance exists, and the series can use it, carefully, because it moves over time. The "
             "fourth moment is a different matter: tails should be measured as tails, with an exponent or directly, "
             "and that is how Part forty will measure risk."
+            " If returns are this hard to pin down, can anyone predict them? Next: efficient markets."
         ) as vo:
             self.play(FadeIn(big, scale=1.2), FadeIn(cap))
             vo.wait_until("a")

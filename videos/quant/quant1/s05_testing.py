@@ -216,6 +216,7 @@ class Testing(VoiceoverScene):
             "profit; it is a measurement problem. Once small stocks traded every second, the echo went away. That "
             "is the first lesson of testing a market: ask what the price in your data really was, and whether you "
             "could have traded at it."
+            " The walk's steps were assumed to be Gaussian. Next: are they?"
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(leg))
             self.play(Create(ls), Create(ll), run_time=3)
