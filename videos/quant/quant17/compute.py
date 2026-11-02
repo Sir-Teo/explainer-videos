@@ -344,32 +344,53 @@ def compute_hedge() -> dict:
     h = HEDGE
     out = {"setup": h}
     # 1. no costs: the network against Black-Scholes delta
-    pol, curve, _ = D.train_hedger("mlp", cost=0.0, iters=1200, batch=4096, seed=0,
+    pg = np.linspace(0, 1, 51)
+    S_sl = (95.0, 100.0, 105.0)
+
+    def slices(p):
+        """The trade (new holding minus old) against the holding already held, at three prices, 15 days left."""
+        out = {}
+        for s_ in S_sl:
+            x = torch.full((51,), float(np.log(s_ / 100)))
+            out[str(int(s_))] = (p(x, torch.full((51,), tau), torch.tensor(pg, dtype=torch.float32)).numpy() - pg)
+        return out
+    tau = 0.5
+    pol, curve, _ = D.train_hedger("mlp", cost=0.0, iters=2500, batch=4096, seed=1,
                                    log=lambda i, l: print("    nocost", i, round(l, 4), flush=True))
     ev = D.evaluate_hedger(pol, 0.0)
     bsd = D.evaluate_hedger(D.delta_hedger(h["sigma"], h["T"]), 0.0)
     Sg = np.linspace(85, 115, 61)
-    tau = 0.5
+    with torch.no_grad():
+        nocost_slices = slices(pol)
     with torch.no_grad():
         prev = torch.tensor(bs.greeks(Sg, 100, tau * h["T"], h["sigma"], 0, 0, 1)["delta"], dtype=torch.float32)
         learned = pol(torch.log(torch.tensor(Sg / 100, dtype=torch.float32)), torch.full((61,), tau), prev).numpy()
     out["nocost"] = {"curve": curve[::10], "eval": ev, "bs_eval": bsd, "bs_price": float(bs.price(100, 100, h["T"], h["sigma"], 0, 0, 1)),
-                     "S": Sg, "learned": learned, "bs_delta": prev.numpy()}
+                     "S": Sg, "learned": learned, "bs_delta": prev.numpy(),
+                     "slices": nocost_slices}
     # 2. costs 0.5%: the plain network, with snapshots of its trade map at 15 days to expiry
-    pg = np.linspace(0, 1, 51)
     SS, PP = np.meshgrid(Sg, pg)
 
     def snap(p):
         x = torch.log(torch.tensor(SS.ravel() / 100, dtype=torch.float32))
         new = p(x, torch.full((SS.size,), tau), torch.tensor(PP.ravel(), dtype=torch.float32)).numpy()
-        return (new - PP.ravel()).reshape(PP.shape)
+        return {"map": (new - PP.ravel()).reshape(PP.shape), "slices": slices(p)}
     cost = 0.005
-    pol2, curve2, snaps = D.train_hedger("mlp", cost=cost, iters=1500, batch=4096, seed=1,
-                                         snap_at=(0, 50, 150, 400, 1500), snap_fn=snap,
+    pol2, curve2, snaps = D.train_hedger("mlp", cost=cost, iters=3000, batch=4096, seed=1,
+                                         snap_at=(0, 100, 300, 1000, 3000), snap_fn=snap,
                                          log=lambda i, l: print("    mlp cost", i, round(l, 4), flush=True))
     ww = quoting.ww_band(Sg, 100, tau * h["T"], h["sigma"], cost, gamma_risk=h["gamma"])
-    out["mlp_cost"] = {"cost": cost, "curve": curve2[::10], "snaps": {str(k): v for k, v in snaps.items()}, "S": Sg,
-                       "prev": pg, "ww_lo": ww["lo"], "ww_hi": ww["hi"], "delta": ww["delta"], "eval": D.evaluate_hedger(pol2, cost)}
+    wws = {str(int(s_)): quoting.ww_band(s_, 100, tau * h["T"], h["sigma"], cost, gamma_risk=h["gamma"]) for s_ in S_sl}
+    flat = {}
+    for key, sl in (("nocost", nocost_slices), ("cost", snaps[3000]["slices"])):
+        z = np.asarray(sl["100"])
+        w = pg[np.abs(z) < 0.02]
+        flat[key] = [float(w.min()), float(w.max())] if len(w) else None
+    out["mlp_cost"] = {"cost": cost, "curve": curve2[::10], "snaps": {str(k): v["map"] for k, v in snaps.items()},
+                       "snap_slices": {str(k): v["slices"] for k, v in snaps.items()}, "S": Sg, "prev": pg,
+                       "slice_S": S_sl, "ww_slices": {k: [float(v["lo"]), float(v["hi"]), float(v["delta"])] for k, v in wws.items()},
+                       "flat_atm": flat, "ww_lo": ww["lo"], "ww_hi": ww["hi"], "delta": ww["delta"],
+                       "eval": D.evaluate_hedger(pol2, cost)}
     # 3. the band network by cost: indifference price, turnover; Whalley-Wilmott and plain delta on the same paths
     rows = []
     surf = None
