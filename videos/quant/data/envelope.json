@@ -40,6 +40,20 @@
    },
    "trials": 1
   },
+  "industry_capm_alphas": {
+   "code_sha256": "54f561ad6d5881bce05e5be15386f78d40065cddafb61214ab959da2ba4fe2fa",
+   "params": {
+    "n": 49
+   },
+   "trials": 49
+  },
+  "industry_momentum_panel": {
+   "code_sha256": "c3d5e418ce5790f114b1ea5c0b107f787b6a491fc9f27501ddd177a8dd0ab97e",
+   "params": {
+    "signal": "12-2 month industry return"
+   },
+   "trials": 1
+  },
   "sign_continuation_eprocess_btc": {
    "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",
    "params": {
@@ -59,6 +73,13 @@
     ]
    },
    "trials": 3
+  },
+  "turn_of_month_event": {
+   "code_sha256": "e16540a4048fd28a988617f1d372c42952b84061aec9406cbfb22881aeff568d",
+   "params": {
+    "window": "[-1, +3]"
+   },
+   "trials": 1
   }
  },
  "sealed": {
@@ -68,11 +89,29 @@
    "last": 20251231,
    "n": 1826
   },
+  "fred/A794RX0Q048SBEA": {
+   "digest": "42c3210adf01003ab30a8891d05baf17f39843a97eb3249c1666d3f9258ff9d9",
+   "first": 20210101,
+   "last": 20251001,
+   "n": 20
+  },
   "fred/NIKKEI225": {
    "digest": "c0a23dc5886ec88b03c6370ad37c59001e56b6afd3e5eb7b5af29418110016d3",
    "first": 20210104,
    "last": 20251230,
    "n": 1223
+  },
+  "kenfrench/ff3_monthly": {
+   "digest": "672b35bffc04356cf19872a44af7679e6970c6eac06820a8e88ccb7797527827",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/industries49": {
+   "digest": "a62cbeb2d233d1e5513666cdce917c7840d4693376b99077be4f05712eb584ea",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
   },
   "kenfrench/mkt_daily": {
    "digest": "2919993e28205ab6abb35b6874c8e0ec94d0566ce25e0ca7991657c7d14ee194",

@@ -1634,10 +1634,25 @@
   "bytes": 11748,
   "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
  },
+ "fred/A794RX0Q048SBEA/1947-01-01_2025-12-31": {
+  "sha256": "d0b2a04c1e926fd6d93e823b5148160ce93b625e37b9b9b0e79784d6d1888347",
+  "bytes": 6622,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=A794RX0Q048SBEA"
+ },
+ "fred/CPIAUCSL/1947-01-01_2025-12-31": {
+  "sha256": "4fab7e0299228f031af04b3d2298d129076291d953cd1385b0ddf11ca649d2f2",
+  "bytes": 18209,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL"
+ },
  "fred/DFF/2018-01-01_2025-12-31": {
   "sha256": "3100da0c4a6dcd62ba97790245d0081c3131945741e981cbc8c41f7c2a019caa",
   "bytes": 52267,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF"
+ },
+ "fred/DGS10/1962-01-02_2025-12-31": {
+  "sha256": "9cdc74d51a89d1bf9cdc1603192f5ea5fbf3ad023ab241b182bddbb2a5d623f6",
+  "bytes": 287522,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
  },
  "fred/DTB3/1954-01-01_2025-12-31": {
   "sha256": "fd197d1809e65d0a3e4c0bf161170a6717f1057aecffc1393c8c38b14ef06172",
@@ -1738,6 +1753,26 @@
   "sha256": "40782c306bc1378b854a6bf42be100809cff4b6a538c15dc5c21f9c9a94ceaec",
   "bytes": 1070449,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
+ },
+ "kenfrench/ff3_monthly_value/through_2020-12": {
+  "sha256": "704bdac392abac09503717903a8245431fc2d70789ceccce3a6fc6d8360149ad",
+  "bytes": 45066,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
+ },
+ "kenfrench/ff3_monthly_value/through_2025-12": {
+  "sha256": "50de4d150c3ce48994d8ae7a26dcc44b07e7ffec4ddfc128404ec04ea238c513",
+  "bytes": 47418,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
+ },
+ "kenfrench/industries49_value/through_2020-12": {
+  "sha256": "62181d72490fab916b874640dad7277a0efad526422d95c840112b91372157bd",
+  "bytes": 411842,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_CSV.zip"
+ },
+ "kenfrench/industries49_value/through_2025-12": {
+  "sha256": "016b7f699ecbb3c2100902ab2d801e0f2e79373127e772f1bd212ab888e0b3a0",
+  "bytes": 434031,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_CSV.zip"
  },
  "kenfrench/size_deciles_daily/through_2025-12-31": {
   "sha256": "81f1224d428adeaa10682134f1997a54dda765794a00bb10ff0dbf698f010ed3",
