@@ -1,5 +1,6 @@
 {
  "strings": {
+  "rounding model: uniform in-cell error, no clipping": "舍入模型：单元内误差均匀，无截断",
   "asymptotic: $d\\le M\\le Td$; \\ gain grows with $M/d^2$": "渐近范围：$d\\le M\\le Td$；收益随$M/d^2$增大",
   "\\text{Q/O transfers}": "\\text{查询/输出的搬运}",
   "For real symmetric positive-definite $H$, \\ minimize $\\tfrac12 \\delta^\\top H \\delta$ subject to $e_q^\\top \\delta = \\hat w_q - w_q$: \\ derive the Optimal Brain Surgeon update and the error it leaves.": "设$H$为实对称正定矩阵，在$e_q^\\top\\delta=\\hat w_q-w_q$约束下最小化$\\tfrac12\\delta^\\top H\\delta$：推导最优脑外科更新及其误差。",
