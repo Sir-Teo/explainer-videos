@@ -368,24 +368,20 @@ Facts checked:
 
 ## Part 17 (Deep Pricing and Hedging), 2 Nov 2026
 
-- **House** `deep.py`: pointwise rough-Bergomi calibrator (Horvath-Muguruza-Tomas), deep hedger (plain and
-  no-transaction-band networks; entropic or CVaR), HLP regressor, differential ML (twin network), deep BSDE
-  (Han-Jentzen-E), deep stopping (Becker-Cheridito-Jentzen), neural SV SDE (Gierjatowicz et al.), signatures and
-  market generators (signature-matching vol x noise LSTM, small DDPM), stylized facts.
-- **References checked.** HJE (2018): 100-d default-risk claim, 57.300 (multilevel Picard), 60.781 without default,
-  N=40, lr 0.008, 0.46% in 1,607 s. BCJ (2019) Table 1: d=5 s0=100 L 26.156, CI [26.138, 26.174]; d=2 binomial
-  13.902. HLP (1994): networks hedged as well as BS in simulation, sometimes better; beat BS "in many cases" on S&P 500
-  futures options 1987-1991. JPM (Risk.net, 2022, as reported): ~70% of Euro Stoxx flow options quoted and hedged by
-  machine; Euro Stoxx 50 cliquets live 2022; Buehler quant of the year 2022. Danske: AAD in production; Risk.net
-  reported DML speeding up XVA. SR 11-7 (2011): effective challenge, conceptual soundness, ongoing monitoring,
-  outcomes analysis.
-- **Compute** (`python -m videos.quant.quant17.compute ...`): `calib_data` writes 60 resumable chunks to
-  `.cache/quant17/calib/` (~1 min each; lock files let two processes share); then `calib`, `calib_hist` (Heston refitted
-  to the same quotes for a like-for-like comparison, vega-weighted errors). Other items: hlp, dml, stopping, hedge,
-  nsde, generator, bsde, envelope. First results: HLP net hedges with ~1.8x BS tracking error (retrain with scaled
-  inputs pending: rerun `hlp --force`); DML 256 samples: price RMSE 5.03 -> 0.43, delta 0.40 -> 0.013.
-- **Scenes** s01-s14 written against the items' outputs; every qualitative claim is re-checked when results land.
-  Remaining: results, claim check, previews, README EN/ZH, zh_lines, on-screen text, dry run, build.
+- **House** `deep.py`: pointwise rough-Bergomi calibrator; deep hedger (plain MLP with log-moneyness in units of total
+  vol; Imaki band network anchored at BS delta); HLP regressor; differential ML; deep BSDE; deep stopping; neural SV SDE
+  (rho kept off +-1, clamped factor, clipped gradients); signatures (lead-lag), vol x noise LSTM generator, DDPM.
+- **Results** (all in the README): HLP net within 4% of BS tracking error; calibrator held-out 1.90 vol pts (label
+  noise 2.86), Surface H 0.07, 0.97/1.08 vol pts, 27 s; weekly H at the 0.02 floor in 77% of weeks, near tie with a
+  like-for-like Heston (1.19 vs 1.22); DML 256 samples: price 5.03 -> 0.43, delta 31x; deep BSDE 57.37 (0.12%), no
+  default 59.57 discounted (paper's 60.781 undiscounted); stopping 13.886 (d=2), 26.107 (d=5, 0.2% under the paper's
+  lower bound); hedger: band net beats delta and WW at every cost; plain net with costs: do-nothing zone 0.02 -> 0.10,
+  price = WW's; generators: 2024-25 calmer than 2017-23, signature distance alone favours i.i.d. draws, the stylized
+  facts favour the signature LSTM; NSDE barrier range 0.0671-0.0703 (lower estimate).
+- **Lessons kept on screen**: results reported as measured; earlier claims (band "rediscovered", rough "wins",
+  generator "closest") rewritten when the numbers disagreed.
+- **Done**: compute, 14 scenes previewed, README EN/ZH, zh_lines 53/53, on-screen text 259 strings. Remaining: zh dry
+  run, then queue for build.
 
 ## Next
 
