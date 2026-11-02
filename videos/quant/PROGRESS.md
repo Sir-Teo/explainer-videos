@@ -100,6 +100,14 @@ after publication; 10 crisis file: Enron (2001) and Wirecard (2020), public reco
 11 the House: `house/valuation.py` (npv, irr, annuity, gordon, dcf, wacc, MM levered beta, Merton equity), tested,
 and the fundamentals store described; outro (desk: a debt-free firm buys back 10% at market: price and EPS).
 
+Computed (`python -m videos.quant.quant3.compute`, seconds; House `valuation` tested): Shiller 1871-2020 real, constant
+discount 8.3%: sd of annual log changes, price 17.5% vs p* 2.1% (8x); 40 years with |change| > 20% vs none for p*.
+CAPE vs next-10y real total return: slope -0.074 per log unit, R2 0.32 on 1,560 overlapping monthly starts (~13
+independent decades); Dec 2020 CAPE 33.8 -> predicted 0.6%/yr real for 2021-30 (the envelope will tell). Decile
+long-shorts 1963-2020 (annual mean, before/after publication): accruals 3.8% (t 2.9; 5.0% -> 2.1%), OP 2.4% (t 1.3),
+investment 4.3% (t 2.9; 6.4% -> -1.1%), B/M 4.0% (6.9% -> 1.0%), E/P 3.8% (7.5% -> 2.6%). DCF: FCF 100 growing 5% for
+5 years then 2%, at 8%: 1,936, 76% terminal; at 7% and 3%: 2,816. Scenes: not started.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
