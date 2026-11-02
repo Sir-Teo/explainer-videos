@@ -10,7 +10,7 @@ class Hedger(VoiceoverScene):
     def construct(self):
         h = load("hedge")
         self.card()
-        self.setup(h)
+        self.framework(h)
         self.nocost(h)
         self.prices(h)
 
@@ -20,7 +20,7 @@ class Hedger(VoiceoverScene):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def setup(self, h):
+    def framework(self, h):
         rows = [cmath(r"\delta_k", r"=", r"\text{network}\big(\log S_k/K,\ \tau_k,\ \delta_{k-1}\big)", font_size=38,
                       colors={r"\delta_k": NET}),
                 cmath(r"X", r"=", r"-(S_T - K)^+ + \sum_k \delta_k\,(S_{k+1} - S_k) - c\sum_k |\delta_k - \delta_{k-1}|\,S_k",
