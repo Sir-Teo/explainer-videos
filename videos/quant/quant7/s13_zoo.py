@@ -56,12 +56,13 @@ class Zoo(VoiceoverScene):
                    "one with infinite variance. The second is positive: it explodes. The same sum, opposite fates."
                    if s1 and not s2 else "Both come out on the same side of zero here.")
         with self.voiceover(
-            "Every GARCH is a point on this plane. Below alpha plus beta equal to one, the variance is finite. <bookmark mark='a'/> The American market sits just under the line, Bitcoin a "
-            "little further in. <bookmark mark='b'/> What happens above it? Daniel Nelson showed in 1990 that the "
-            "variance need not explode. The process settles down whenever the average of the log of alpha z squared "
-            "plus beta is negative, and that boundary, in red, lies beyond the line. <bookmark mark='c'/> Pause and "
-            "predict. Alpha zero point three and beta zero point seven five add up to one point zero five; so do "
-            "zero point two five and zero point eight. Does either explode? <bookmark mark='d'/> " + verdict
+            f"Every GARCH is a point on this plane. Below alpha plus beta equal to one, the variance is finite. <bookmark "
+            f"mark='a'/> The American market sits just under the line, Bitcoin a little further in. <bookmark mark='b'/> "
+            f"What happens above it? Daniel Nelson showed in 1990 that the variance need not explode. The process settles "
+            f"down whenever the average of the log of alpha z squared plus beta is negative, and that boundary, in red, "
+            f"lies beyond the line. <bookmark mark='c'/> Pause and predict. Alpha zero point three and beta zero point "
+            f"seven five add up to one point zero five; so do zero point two five and zero point eight. Does either explode? "
+            f"<bookmark mark='d'/> {verdict}"
         ) as vo:
             self.play(FadeIn(gp), FadeIn(tri), Create(ig), FadeIn(l1))
             vo.wait_until("a")

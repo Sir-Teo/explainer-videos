@@ -118,21 +118,15 @@ class Statements(VoiceoverScene):
         identity[0].set_color(BS_C)
         identity[4].set_color(EQUITY)
         with self.voiceover(
-            "Every listed company publishes three statements. Here is a toy firm's year. "
-            "<bookmark mark='a'/> The income statement says what it earned. It sold a thousand dollars of goods, "
-            "though two hundred of that has not yet been paid by its customers. It spent seven hundred in cash on "
-            "costs, and its machines wore out by a hundred, which the accountants charge as depreciation. Net "
-            "income: two hundred. <bookmark mark='b'/> The cash flow statement says where the cash went. It starts "
-            "from net income, adds back the depreciation, because no cash left the building for it, and subtracts "
-            "the two hundred the customers still owe. The operations brought in only a hundred in cash. Then the "
-            "firm spent a hundred and fifty on new machines and paid fifty in dividends. Cash fell by a hundred. "
-            "<bookmark mark='c'/> The balance sheet is two snapshots: what the firm owns, and who has a claim on "
-            "it, at the start of the year and at the end. And the three are one set of books. <bookmark mark='d'/> "
-            "The fall in cash from the second statement is the change in the cash line. <bookmark mark='e'/> The "
-            "profit from the first, less the dividends, is the rise in the owners' equity. The receivables grew by "
-            "the unpaid sales, the plant by the new machines less the wear. <bookmark mark='f'/> And both sides "
-            "still balance: everything the firm owns is claimed by its lenders or its owners. That identity is "
-            "double-entry bookkeeping, written down in Venice by Luca Pacioli in 1494."
+            "Every listed company publishes three statements. Here is a toy firm's year. <bookmark mark='a'/> The income "
+            "statement: sales of a thousand, two hundred not yet paid by customers, seven hundred of cash costs, a hundred of "
+            "depreciation as the machines wear. Net income, two hundred. <bookmark mark='b'/> The cash flow statement starts "
+            "from net income, adds back depreciation, which used no cash, and subtracts the unpaid two hundred: operations brought "
+            "in only a hundred. After a hundred and fifty of new machines and fifty of dividends, cash fell by a hundred. "
+            "<bookmark mark='c'/> The balance sheet is two snapshots of what the firm owns and who has a claim on it. And the "
+            "three are one set of books. <bookmark mark='d'/> The fall in cash is the change in the cash line. "
+            "<bookmark mark='e'/> Profit less dividends is the rise in equity; receivables and plant move too. "
+            "<bookmark mark='f'/> And both sides still balance: double-entry bookkeeping."
         ) as vo:
             self.play(FadeIn(top))
             vo.wait_until("a")
@@ -206,16 +200,12 @@ class Statements(VoiceoverScene):
                               rf"{R['cfo'].sum():,.0f}; accruals {cum_gap:,.0f}".replace(",", "{,}"), 6.4, 21, GREY_A)
         note_.next_to(lg, DOWN, buff=0.2)
         with self.voiceover(
-            "Now run the machine. The House's accounting simulator takes the same toy firm through twenty "
-            "quarters. Sales arrive every quarter, growing with some noise; a fifth are on credit and become "
-            "receivables, collected the next quarter, and a few percent are never collected at all. The firm pays its "
-            "costs, its interest and its taxes, buys enough plant to keep up with sales, and pays out a quarter of its "
-            "profit. <bookmark mark='a'/> On the left, the balance sheet: what the firm owns, and who has a claim on "
-            "it. Every quarter both columns move, and the two totals underneath stay equal, to the cent, because "
-            "every entry is posted twice. <bookmark mark='b'/> On the right, the two numbers people confuse: net "
-            "income in gold, and the cash the operations actually brought in, in green. They move together but they "
-            "are not the same. The gap is the accruals: receivables that grew, plant that was paid for in one quarter "
-            "and expensed over many."
+            "Now run the machine: the House's accounting simulator takes the toy firm through twenty quarters. Sales grow with "
+            "noise; a fifth are on credit, collected next quarter, a few percent never; the firm pays costs, interest and tax, "
+            "buys plant and pays out a quarter of its profit. <bookmark mark='a'/> On the left, the balance sheet: both columns "
+            "move every quarter, and the totals stay equal to the cent, because every entry is posted twice. "
+            "<bookmark mark='b'/> On the right, net income in gold and operating cash flow in green: close, never the same. The "
+            "gap is the accruals."
         ) as vo:
             self.play(FadeIn(leg), FadeIn(g), FadeIn(lg))
             vo.wait_until("a")
@@ -241,15 +231,12 @@ class Statements(VoiceoverScene):
                      label(r"profitable, and running out of cash", font_size=22, color=GREY_A))
         ans.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(pp, DOWN, buff=0.4)
         with self.voiceover(
-            "Here is the House's code for one quarter, simplified to the lines that matter. Credit sales become "
-            "receivables; last quarter's are collected. Depreciation moves plant into expense. Net income less the "
-            "payout is added to equity, the rule accountants call clean surplus. And near the end is an assertion: "
-            "if the books ever fail to balance, the program stops. <bookmark mark='a'/> Run it on "
-            f"the toy firm with sales of {L['sales']:.0f}: net income {L['net_income']:.0f}, operating cash flow "
-            f"{L['cfo']:.0f}, assets equal to claims. <bookmark mark='b'/> Pause and predict: next the firm doubles "
-            "its sales, but nine tenths are on credit. Does its cash go up or down? <bookmark mark='c'/> Down. Profit "
-            f"of {H['net_income']:.0f}, cash flow of {H['cfo']:.0f}. Growth on credit eats cash, which is why fast-growing "
-            "firms that report profits can still run out of money."
+            "Here is the House's code for one quarter, cut to the lines that matter: credit sales become receivables, "
+            "depreciation moves plant into expense, earnings less payout go to equity, and an assertion stops the program if the "
+            f"books ever fail to balance. <bookmark mark='a'/> On sales of {L['sales']:.0f}: net income {L['net_income']:.0f}, "
+            f"operating cash flow {L['cfo']:.0f}. <bookmark mark='b'/> Pause and predict: sales double, nine tenths on credit. "
+            f"Does cash go up or down? <bookmark mark='c'/> Down: profit {H['net_income']:.0f}, cash flow {H['cfo']:.0f}. "
+            "Growth on credit eats cash."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -287,14 +274,10 @@ class Statements(VoiceoverScene):
                 why(r"the toy firm's last four quarters")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.7, edge=6.9)
         with self.voiceover(
-            "Two identities fall out of the machine. Take the balance sheet identity and difference it from one "
-            "quarter to the next. <bookmark mark='a'/> Equity changes by earnings less dividends; plant changes by "
-            "spending less depreciation. <bookmark mark='b'/> Substitute and solve for cash, and you have derived the "
-            "cash flow statement, the way companies present it: net income, plus depreciation, minus the growth in "
-            "receivables, is the operating cash flow. <bookmark mark='c'/> The second identity is what an analyst "
-            "reads first. Return on equity is the profit margin, times how many dollars of sales each dollar of "
-            "assets produces, times how many dollars of assets each dollar of equity supports. DuPont's managers "
-            "used it in the 1920s; it still says whether a firm earns by pricing, by efficiency or by leverage. "
+            "Two identities fall out. Difference the balance sheet from one quarter to the next. <bookmark mark='a'/> Equity "
+            "moves by earnings less dividends; plant by spending less depreciation. <bookmark mark='b'/> Solve for cash, and you "
+            "have derived the cash flow statement by the indirect method. <bookmark mark='c'/> And return on equity is margin "
+            "times asset turnover times leverage, DuPont's split: does the firm earn by pricing, efficiency or borrowing? "
             "<bookmark mark='d'/> For the toy firm's last year: these three numbers."
         ) as vo:
             step(0)

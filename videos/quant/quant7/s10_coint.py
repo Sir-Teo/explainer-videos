@@ -189,12 +189,14 @@ class Coint(VoiceoverScene, ThreeDScene):
         hag = ("Our three yields share two common trends, the level and the slope, and one leash. "
                if rank == 1 else "Here the test finds a different structure from the classic one. ")
         with self.voiceover(
-            "Johansen's test, made visible. Every day from 1990 to 2020, the three-month, five-year and ten-year Treasury yields as one point in three dimensions, blue to red through time. <bookmark mark='a'/> Each yield wanders: the cloud stretches along one long direction, "
-            "the level of rates, falling for thirty years. <bookmark mark='b'/> Turn the camera until the cloud is "
-            "seen edge-on. It is almost flat: a sheet, thin in one direction. The thin direction is a combination of "
-            "yields that does not wander, the curve's curvature, a leash. <bookmark mark='c'/> The trace test agrees. "
-            + hag + "In 1992 Hall, Anderson and Granger found Treasury bill yields of different maturities cointegrated. Yield-curve factors return in Part nineteen, and pairs trading on "
-            "cointegration in Part thirty-three."
+            f"Johansen's test, made visible. Every day from 1990 to 2020, the three-month, five-year and ten-year Treasury "
+            f"yields as one point in three dimensions, blue to red through time. <bookmark mark='a'/> Each yield wanders: "
+            f"the cloud stretches along one long direction, the level of rates, falling for thirty years. <bookmark mark='b'/> "
+            f"Turn the camera until the cloud is seen edge-on. It is almost flat: a sheet, thin in one direction. The "
+            f"thin direction is a combination of yields that does not wander, the curve's curvature, a leash. <bookmark "
+            f"mark='c'/> The trace test agrees. {hag}In 1992 Hall, Anderson and Granger found Treasury bill yields of "
+            f"different maturities cointegrated. Yield-curve factors return in Part nineteen, and pairs trading on cointegration "
+            f"in Part thirty-three."
         ) as vo:
             self.play(Create(ax3), run_time=1)
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.002, run_time=3), src.animate.set_opacity(1))

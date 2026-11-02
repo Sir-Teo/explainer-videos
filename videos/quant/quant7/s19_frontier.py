@@ -163,11 +163,11 @@ class Frontier(VoiceoverScene):
         else:
             verdict = "Within noise of log-HAR: the toy learned the same persistence that HAR's coefficients encode."
         with self.voiceover(
-            "Pause and predict: a model trained only on synthetic series, against four least-squares coefficients "
-            "fitted to Bitcoin itself. Better or worse? <bookmark mark='a'/> Point the frozen model at 2020, one day "
-            "at a time. The fan is its ten-to-ninety percent forecast band; the dots are what happened. <bookmark "
-            f"mark='b'/> Its QLIKE is {f['qlike']:.3f}, against log-HAR's {f['qlike_loghar']:.3f}. " + verdict + " "
-            f"And its fan contains the outcome on {100 * f['cover80']:.0f} percent of days, against eighty promised."
+            f"Pause and predict: a model trained only on synthetic series, against four least-squares coefficients fitted "
+            f"to Bitcoin itself. Better or worse? <bookmark mark='a'/> Point the frozen model at 2020, one day at a time. "
+            f"The fan is its ten-to-ninety percent forecast band; the dots are what happened. <bookmark mark='b'/> Its "
+            f"QLIKE is {f['qlike']:.3f}, against log-HAR's {f['qlike_loghar']:.3f}. {verdict} And its fan contains the "
+            f"outcome on {100 * f['cover80']:.0f} percent of days, against eighty promised."
         ) as vo:
             self.play(FadeIn(pc), FadeIn(g))
             vo.wait_until("a")

@@ -75,18 +75,16 @@ class Hook(VoiceoverScene):
         src = real_data(rf"Shiller's data, 1871--2020; discount rate {100 * s['r']:.1f}\% real, the average return; "
                         r"$p^*$ in 2020 starts from that year's price")
         with self.voiceover(
-            "In 1981 Robert Shiller asked that question with a century of data, and here it is with a century and a "
-            "half. Start from the end. <bookmark mark='a'/> Suppose in 2020 we knew the market's price, and we knew "
-            "every dividend ever paid. Walk backwards one year at a time: last year's value is this year's value "
-            "plus the year's dividend, discounted by one year at the market's average return. Each green bar is a "
-            "dividend dropping into the sum. The gold line that grows is what the market would have been worth if "
-            "everyone had known, every year, exactly which dividends were coming. Shiller called it p star. "
-            "<bookmark mark='b'/> Now the actual price, in blue. If prices were the best forecasts of p star, they "
-            "should move less than it, the way a forecast moves less than the thing it forecasts. Instead the price "
-            f"moves {s['ratio_changes']:.0f} times as much from year to year: in {s['big_moves']} of these years it "
-            "moved more than twenty percent, and p star never did. <bookmark mark='c'/> Either the discount rate "
-            "itself moves a great deal, or prices are moved by something other than dividends. That debate earned "
-            "Shiller a share of the 2013 Nobel prize, with Eugene Fama and Lars Peter Hansen, and it runs through this part."
+            "In 1981 Robert Shiller asked that question with a century of data; here it is with a century and a half. "
+            "Start from the end. <bookmark mark='a'/> Suppose that in 2020 we knew the price and every dividend ever paid. "
+            "Walk backwards a year at a time: last year's value is this year's plus the year's dividend, discounted one year at "
+            "the market's average return. Each green bar is a dividend dropping into the sum. The gold line is what the market "
+            "was worth to someone who knew the future dividends: Shiller's p star. <bookmark mark='b'/> Now the actual price. If "
+            "prices were the best forecasts of p star, they should move less than it, as a forecast moves less than what it "
+            f"forecasts. Instead the price moves {s['ratio_changes']:.0f} times as much from year to year: in {s['big_moves']} "
+            "years it moved more than twenty percent, and p star never did. <bookmark mark='c'/> Either discount rates move a "
+            "great deal, or prices move for reasons other than dividends. The debate shared the 2013 Nobel prize between "
+            "Shiller, Eugene Fama and Lars Peter Hansen, and it runs through this part."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(rec))
             vo.wait_until("a")
@@ -112,16 +110,12 @@ class Hook(VoiceoverScene):
         late = label(r"2001: Enron \quad 2009: every filing machine-readable (XBRL)", font_size=22,
                      color=QC.CRISIS).to_edge(DOWN, buff=1.2)
         with self.voiceover(
-            "How we got here. The books came first: double-entry bookkeeping was written down in Venice by Luca "
-            "Pacioli in 1494, and every statement in this part still balances by his rule. <bookmark mark='a'/> In "
-            "1934, after the crash, Benjamin Graham and David Dodd taught investors to read those statements, and in "
-            "1938 John Burr Williams wrote that a share is worth its discounted dividends. In 1958 Franco Modigliani "
-            "and Merton Miller proved that how a firm is financed does not change that value, in a perfect market. "
-            "<bookmark mark='b'/> In 1968 Ray Ball and Philip Brown showed that prices react to earnings; in 1974 "
-            "Robert Merton priced a firm's equity as an option. In 1996 Richard Sloan showed that the market misread "
-            "one part of earnings, and accounting became a source of trading signals. <bookmark mark='c'/> And in "
-            "2001 Enron showed what happens when the numbers themselves are false. Since 2009 every American filing "
-            "has been machine-readable, so this part can rebuild much of that history from the source."
+            "How we got here. Double-entry bookkeeping was written down in Venice by Luca Pacioli in 1494, and every statement "
+            "in this part still balances by his rule. <bookmark mark='a'/> In 1934 Benjamin Graham and David Dodd taught "
+            "investors to read statements; in 1958 Modigliani and Miller showed that financing does not change value in a "
+            "perfect market. <bookmark mark='b'/> In 1968 Ball and Brown showed prices react to earnings, in 1974 Merton priced "
+            "equity as an option, and in 1996 Sloan found the market misreading accruals. <bookmark mark='c'/> In 2001 Enron "
+            "showed the numbers can be false; since 2009 every American filing is machine-readable."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pac))
             vo.wait_until("a")
@@ -143,13 +137,10 @@ class Hook(VoiceoverScene):
             r"Merger arbitrage, forensic accounting, the industry, and machines that read statements",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. The arithmetic of time value, and why a stock behaves like a very long bond. The three "
-            "financial statements, run as one machine, the accruals that separate earnings from cash, and the filings "
-            "themselves as data with two dates. Valuation: discounted cash flow, the return the market's price "
-            "implies, residual income and multiples, and Campbell and Shiller's identity. Capital structure and "
-            "payout, and equity seen as an option. Earnings announcements, and two hundred accounting and price "
-            "signals measured before and after they were published. Then merger arbitrage, the forensic screens, the "
-            "firms that value companies for a living, and a model trained to forecast earnings."
+            "The plan: time value and the duration of a stock; the three statements run as one machine, and filings as data "
+            "with two dates; valuation by discounted cash flow, implied returns, residual income and multiples; capital "
+            "structure, payout and equity as an option; earnings announcements and two hundred published signals, before and "
+            "after publication; then merger arbitrage, forensic screens, the industry, and a model that forecasts earnings."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=9))
@@ -158,9 +149,8 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("data",))
         with self.voiceover(
-            "In the House, this part extends the data desk with a fundamentals store loaded from real filings, an "
-            "accounting simulator and a valuation library. <bookmark mark='a'/> Its rule: a company's numbers are "
-            "known on the day they were published, not on the day the quarter ended."
+            "In the House, this part extends the data desk with a fundamentals store loaded from real filings. "
+            "<bookmark mark='a'/> Its rule: a number is known from the day it was published, not the day the quarter ended."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

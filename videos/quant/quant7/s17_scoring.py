@@ -139,12 +139,11 @@ class Scoring(VoiceoverScene):
         verdict = ("80 percent of it. The absolute error on volatility rewards the forecast that is too low, and so does "
                    "the squared error on volatility." if w != "truth" else "The truth, here.")
         with self.voiceover(
-            "A simulation with a known answer: GARCH volatility, the truth known every day, "
-            f"{sc['R']} times over. Offer four forecasts: the truth, eighty percent of it, a hundred and "
-            "twenty percent, and a sixty-day moving average. Judge them with four losses against three proxies. "
-            "<bookmark mark='a'/> Pause and predict: against squared returns, under the absolute error on volatility, "
-            "which wins, the truth or eighty percent of it? <bookmark mark='b'/> " + verdict + " QLIKE and the "
-            "squared error on variance pick the truth under every proxy."
+            f"A simulation with a known answer: GARCH volatility, the truth known every day, {sc['R']} times over. Offer "
+            f"four forecasts: the truth, eighty percent of it, a hundred and twenty percent, and a sixty-day moving average. "
+            f"Judge them with four losses against three proxies. <bookmark mark='a'/> Pause and predict: against squared "
+            f"returns, under the absolute error on volatility, which wins, the truth or eighty percent of it? <bookmark "
+            f"mark='b'/> {verdict} QLIKE and the squared error on variance pick the truth under every proxy."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(VGroup(*cells[:len(proxies) + 1])))
             vo.wait_until("a")
@@ -216,10 +215,11 @@ class Scoring(VoiceoverScene):
                    "percent confidence." if len(surv) == len(order) else
                    "The set shrinks to the models listed in yellow.")
         with self.voiceover(
-            "Last, many models at once. Peter Hansen, Asger Lunde and James Nason built the model confidence set: eliminate the worst model while equal accuracy is rejected. What survives contains the best model with ninety percent confidence. "
-            "<bookmark mark='a'/> On the race we are about to run, " + verdict + f" <bookmark mark='b'/> Loosen the "
-            f"level to seventy-five percent and {out_txt} drop out. Hold on to that humility when the leaderboard "
-            "appears."
+            f"Last, many models at once. Peter Hansen, Asger Lunde and James Nason built the model confidence set: eliminate "
+            f"the worst model while equal accuracy is rejected. What survives contains the best model with ninety percent "
+            f"confidence. <bookmark mark='a'/> On the race we are about to run, {verdict} <bookmark mark='b'/> Loosen "
+            f"the level to seventy-five percent and {out_txt} drop out. Hold on to that humility when the leaderboard "
+            f"appears."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(side[0]))
             vo.wait_until("a")

@@ -88,11 +88,10 @@ class House(VoiceoverScene):
         shape = ("rises with the horizon: the market was calmer than its long-run level, and GARCH expects it to "
                  "revert upward." if up else "falls with the horizon: volatility is expected to revert down.")
         with self.voiceover(
-            "Lab. This is how a desk calls it: the forecaster, iterating log-HAR forward with the log-normal "
-            "correction. On the last day of the research window, the thirty-first of December 2020, it says Bitcoin's "
-            f"volatility tomorrow is about {100 * h['btc_next']:.0f} percent a year, and {100 * h['btc_month']:.0f} "
-            "percent over the next month. <bookmark mark='a'/> For the American market, GARCH's term structure "
-            + shape
+            f"Lab. This is how a desk calls it: the forecaster, iterating log-HAR forward with the log-normal correction. "
+            f"On the last day of the research window, the thirty-first of December 2020, it says Bitcoin's volatility "
+            f"tomorrow is about {100 * h['btc_next']:.0f} percent a year, and {100 * h['btc_month']:.0f} percent over "
+            f"the next month. <bookmark mark='a'/> For the American market, GARCH's term structure {shape}"
         ) as vo:
             self.play(FadeIn(card))
             lab_run(self, card, outs[:2], run_time=1.6)

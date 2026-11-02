@@ -70,17 +70,12 @@ class Outro(VoiceoverScene):
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
         with self.voiceover(
-            f"Part three in ten lines. Prices have moved about {s['ratio_changes']:.0f} times as much as the value of the "
-            "dividends that were paid. Gordon's formula makes a stock a long bond, but in the data growth moves with "
-            "the rate. The three statements are one double-entry machine, and earnings are cash plus accruals. Every "
-            "reported number has two dates, and the House answers as of the day it was filed. Growth adds value only "
-            "above the cost of capital, and the terminal value is most of a DCF. Residual income turns value into "
-            "book plus excess returns, and a price can be turned back into the return it implies. A high dividend "
-            "yield must be paid for by returns or by dividend growth, and since 1945 it has been returns. Financing "
-            "and payout change value only through taxes, distress and information, and equity is a call on the firm. "
-            f"Published predictors kept about {100 * o['all']['post_ratio']:.0f} percent of their returns after "
-            "publication, and the drift after earnings has faded. And merger arbitrage is a short put, forensic "
-            "screens fight base rates, and machines that read statements must be point-in-time too."
+            f"Part three in ten lines. Prices moved about {s['ratio_changes']:.0f} times as much as the dividends justified. A "
+            "stock is a long bond on paper, but growth moves with rates. The statements are one machine; earnings are cash plus "
+            "accruals; every number has two dates. Growth adds value only above the cost of capital, and residual income turns "
+            "value into book plus excess returns. A high yield is paid for by returns. Financing matters through taxes, distress "
+            f"and information. Published signals kept about {100 * o['all']['post_ratio']:.0f} percent of their returns, and "
+            "merger arbitrage is a short put."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -92,15 +87,10 @@ class Outro(VoiceoverScene):
         if cards.height > 7.5:
             cards.scale_to_fit_height(7.5)
         with self.voiceover(
-            "Four desk questions. A firm with no debt buys back a tenth of its shares at the market price. The price "
-            "does not move, but earnings per share rise whenever the earnings yield beats what the cash was earning, "
-            "so the P/E falls. <bookmark mark='a'/> A stock pays two dollars next year, growing four percent forever, "
-            "and trades at fifty. The market expects the dividend yield plus growth: eight percent. "
-            "<bookmark mark='b'/> A takeover target trades at forty-seven under a cash offer of fifty and would fall "
-            "to thirty-five if the deal broke; it closes in six months with cash earning four percent. The priced "
-            "chance of closing is about eighty-six percent. <bookmark mark='c'/> A firm earns twelve percent on "
-            "book, its cost of equity is eight, and book grows at four: a price-to-book of two. Full solutions are "
-            "in the notes."
+            "Four desk questions. A debt-free buyback: the price does not move, EPS rises if the earnings yield beats the cash's "
+            "yield. <bookmark mark='a'/> Two dollars growing four percent at fifty: eight percent expected. "
+            "<bookmark mark='b'/> Forty-seven against fifty and thirty-five, six months at four percent: about eighty-six percent. "
+            "<bookmark mark='c'/> ROE twelve, cost of equity eight, growth four: a price-to-book of two. Solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -115,10 +105,8 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And seven problems: the P/E from Gordon's model, a discounted cash flow, Modigliani and Miller with "
-            "taxes, Merton's model of equity and debt, overlapping windows, a project with two internal rates of "
-            "return, and the Campbell–Shiller identity. Solutions, in English and Chinese, are in the notes."
-        ):
+            "And seven problems, from Gordon's P/E to the Campbell–Shiller identity, with solutions in English and Chinese in the "
+            "notes."       ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
         self.clear_scene()
@@ -139,12 +127,9 @@ class Outro(VoiceoverScene):
                              r"restatement is a new fact, never an edit of the past.", 12.0, 23,
                              QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The data desk has grown. Its fundamentals store reads real filings and answers as of any day, with the "
-            "accounting simulator and the event-study tools beside it; the valuation library has every formula in "
-            "this part, tested. <bookmark mark='a'/> The hold-out years of every dataset the part used are sealed, "
-            "and its trials are registered. <bookmark mark='b'/> And the House keeps its fourth rule: a reported "
-            "number exists from the day it was filed, as it was first reported, and a restatement is a new fact, "
-            "never an edit of the past."
+            "The data desk now reads real filings as of any day, with the accounting simulator and event studies beside it, and a "
+            "tested valuation library. <bookmark mark='a'/> The part's hold-outs are sealed and its trials registered. "
+            "<bookmark mark='b'/> Rule four: a number exists from the day it was filed, as first reported."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05), FadeIn(items[:2]))
@@ -165,12 +150,9 @@ class Outro(VoiceoverScene):
             (r"forecasting earnings; text in filings", [27, 28]),
         ])
         with self.voiceover(
-            "Where this comes back. Equity as a call is priced in Part ten and becomes a model of default in Part "
-            "twenty. Shiller's puzzle, that discount rates must move, is the subject of Part twenty-three, and "
-            "Stambaugh's bias is worked out in Part six. The accounting signals return as factors in twenty-four and "
-            "in the factor zoo of twenty-five. The trial counter is put to work in twenty-six, and the CAPE forecast "
-            "is opened in the finale. Machine learning for returns and language models that read filings are Parts "
-            "twenty-seven and twenty-eight."
+            "Where this comes back: the call in Parts ten and twenty, moving discount rates in twenty-three, Stambaugh's bias in "
+            "six, the factor zoo in twenty-four and twenty-five, the trial counter in twenty-six and the finale, and machines that "
+            "read filings in twenty-seven and twenty-eight."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -195,12 +177,9 @@ class Outro(VoiceoverScene):
              r"(2024); Islam et al.\ (2023); Jensen, Kelly and Pedersen (2023); Gormsen and Lazarus (2023); Eisfeldt, "
              r"Kim and Papanikolaou (2022); SEC releases on Enron, Luckin and Kraft Heinz"], font_size=19)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers and reports it draws on. Every number in it was "
-            "computed by the series' own code from public data: Shiller's century and a half of prices, Kenneth "
-            "French's portfolios, the open-source predictor returns, Damodaran's implied premiums, Yahoo's prices, "
-            "and filings from the SEC's EDGAR. <bookmark mark='a'/> Next, Part four opens the mathematical toolkit: "
-            "martingales and measure, the precise meaning of a fair game, and why you cannot beat one by changing "
-            "your bets."
+            "The books and papers behind this part. Every number was computed from public data: Shiller's, French's, the "
+            "open-source predictors, Damodaran's, Yahoo's and the SEC's. <bookmark mark='a'/> Next, Part four: martingales and "
+            "measure, and why you cannot beat a fair game by changing your bets."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

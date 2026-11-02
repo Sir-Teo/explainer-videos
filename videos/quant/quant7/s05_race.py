@@ -235,8 +235,8 @@ class Race(VoiceoverScene):
         mcs_line = ("As the last chapter warned, it keeps every model: one year cannot crown a winner." if len(mcs["survivors"]) == len(r2["names"]) else
                     "It narrows the field, but keeps several models.")
         with self.voiceover(
-            "And the late entrant, HARNet, which started life as log-HAR. <bookmark mark='a'/> Does it beat its own "
-            "starting point? " + verdict + " And the confidence set? " + mcs_line
+            f"And the late entrant, HARNet, which started life as log-HAR. <bookmark mark='a'/> Does it beat its own starting "
+            f"point? {verdict} And the confidence set? {mcs_line}"
         ) as vo:
             self.play(FadeIn(rows[1]), FadeIn(rows[2]))
             vo.wait_until("a")

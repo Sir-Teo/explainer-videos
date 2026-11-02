@@ -135,12 +135,11 @@ class Dcc(VoiceoverScene):
                    f"{100 * e['real_6040']:.0f} percent, not the {100 * e['model_6040']:.0f} the model said."
                    if safer else "Riskier than the model said.")
         with self.voiceover(
-            "Here is the fitted correlation day by day, with a plain exponential average in grey for comparison: "
-            "the DCC path is smoother, because its memory is longer. For forty years the "
-            "correlation was positive: inflation hurt both. Then it turned. <bookmark mark='a'/> Pause and predict. "
-            "In 2010 your risk model for a sixty-forty portfolio still assumed a correlation of plus zero point three. "
-            "Was the portfolio riskier or safer than it said? <bookmark mark='b'/> " + verdict + " In 2022, outside "
-            "our window, the sign turned again."
+            f"Here is the fitted correlation day by day, with a plain exponential average in grey for comparison: the "
+            f"DCC path is smoother, because its memory is longer. For forty years the correlation was positive: inflation "
+            f"hurt both. Then it turned. <bookmark mark='a'/> Pause and predict. In 2010 your risk model for a sixty-forty "
+            f"portfolio still assumed a correlation of plus zero point three. Was the portfolio riskier or safer than "
+            f"it said? <bookmark mark='b'/> {verdict} In 2022, outside our window, the sign turned again."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(leg), Create(ew), Create(line), run_time=3)
             vo.wait_until("a")

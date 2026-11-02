@@ -45,13 +45,11 @@ class Crisis(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         VGroup(card, how).arrange(RIGHT, buff=0.6, aligned_edge=UP).scale_to_fit_width(13.2).move_to(ORIGIN)
         with self.voiceover(
-            "On the eighth of November 2001 Enron, then America's seventh-largest company by revenue, restated four "
-            "years of earnings, removing five hundred and eighty-six million dollars; on the second of December it "
-            "filed for bankruptcy, and its auditor, Arthur Andersen, did not survive. <bookmark mark='a'/> Its "
-            "statements had been bent in all three ledgers: profits booked up front from its own models, debt kept in "
-            "partnerships run by its finance chief, <bookmark mark='b'/> and, according to the SEC, more than five "
-            "billion dollars of loans dressed as commodity trades, so that borrowed money appeared as operating cash. "
-            "Sloan's accrual signal compares earnings with cash; Enron had faked the cash too."
+            "In November 2001 Enron, America's seventh-largest company by revenue, restated four years of earnings, and in "
+            "December filed for bankruptcy; its auditor, Arthur Andersen, did not survive. <bookmark mark='a'/> Profits had been "
+            "booked up front from its own models, debt hidden in partnerships run by its finance chief, <bookmark mark='b'/> and, "
+            "the SEC said, over five billion dollars of loans dressed as trades, so borrowed money looked like operating cash. "
+            "Sloan's signal compares earnings with cash; Enron faked the cash."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -79,12 +77,10 @@ class Crisis(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         VGroup(card, story).arrange(RIGHT, buff=0.6, aligned_edge=UP).scale_to_fit_width(13.2).move_to(ORIGIN)
         with self.voiceover(
-            "Nineteen years later the story was told with cash itself. In June 2020 Wirecard, a German payments "
-            "company in the DAX, said one point nine billion euros held for it in trust accounts in the Philippines, "
-            "about a quarter of its balance sheet, could not be confirmed; within a week it was insolvent. "
-            "<bookmark mark='a'/> The warnings had been public for years. The Financial Times had reported "
-            "irregularities since 2015, and in February 2019 the German regulator responded by banning new short "
-            "positions in the shares and filing a criminal complaint against the reporters."
+            "In June 2020 Wirecard, a German payments company in the DAX, could not confirm one point nine billion euros of "
+            "trust cash, a quarter of its balance sheet; within a week it was insolvent. <bookmark mark='a'/> The Financial Times "
+            "had reported irregularities since 2015, and in 2019 the German regulator banned new short positions and filed a "
+            "complaint against the reporters."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -107,13 +103,10 @@ class Crisis(VoiceoverScene):
         VGroup(luckin, khc).arrange(RIGHT, buff=0.4, aligned_edge=UP).scale_to_fit_width(13.2).move_to(UP * 0.3)
         src = note(r"SEC press releases 2020-319 and 2021-174", font_size=18, color=GREY_B).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Two smaller cases, from the SEC's own releases. Luckin Coffee, a Chinese chain listed in New York: the "
-            "SEC alleged that from April 2019 to January 2020 it fabricated more than three hundred million dollars "
-            "of retail sales, and inflated its expenses to make them look real. It paid a hundred and eighty million "
-            "dollars, without admitting or denying the allegations. <bookmark mark='a'/> And Kraft Heinz, whose "
-            "restatement we queried in chapter five: about two hundred and eight million dollars of cost savings "
-            "booked improperly over three years, a sixty-two million dollar penalty, also settled without admitting "
-            "or denying. Could a screen built from the statements alone have flagged either?"
+            "Two smaller cases, from the SEC's releases. Luckin Coffee, the SEC alleged, fabricated more than three hundred million "
+            "dollars of retail sales in 2019; it paid a hundred and eighty million, without admitting or denying. "
+            "<bookmark mark='a'/> And Kraft Heinz: about two hundred and eight million dollars of cost savings booked improperly, "
+            "a sixty-two million penalty, also settled. Could ratios have flagged either?"
         ) as vo:
             self.play(FadeIn(luckin, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")
@@ -167,17 +160,12 @@ class Crisis(VoiceoverScene):
         miss = label(r"a screen, not a test: no fraud labels; missing inputs set to neutral", font_size=16,
                      color=GREY_B).next_to(h, DOWN, buff=0.15)
         with self.voiceover(
-            "In 1999 Messod Beneish built such a screen. He took seventy-four firms caught manipulating their "
-            "earnings and matched them with controls, and fitted a probit on eight ratios from the statements. "
-            "<bookmark mark='a'/> Receivables growing faster than sales. Margins falling. More assets that are neither "
-            "current nor plant. Fast sales growth. Depreciation slowing. Overheads rising. Total accruals, which carry "
-            "by far the largest weight, Sloan's signal again. And leverage. Above minus one point seven eight, the "
-            "firm is flagged. <bookmark mark='b'/> Here is Kraft Heinz's 2017, computed from the numbers in its own "
-            "10-K: each bar is how far one term pushes the score above a neutral firm. Accruals push hardest. "
-            f"<bookmark mark='c'/> The score is {K['m']:.2f}, just below the line; it was not flagged. Across the "
-            f"seven large firms in the store, {100 * ms['share_flagged']:.1f} percent of firm-years cross it. A two "
-            "hundred million dollar scheme spread over three years, in a company of Kraft Heinz's size, is too small "
-            "for ratios to see."
+            "In 1999 Messod Beneish fitted a probit on seventy-four firms caught manipulating earnings, and matched controls, "
+            "using eight ratios. <bookmark mark='a'/> Receivables outrunning sales, falling margins, softer assets, fast growth, "
+            "slowing depreciation, rising overheads, leverage, and total accruals with the largest weight. Above minus one point "
+            "seven eight, a firm is flagged. <bookmark mark='b'/> Kraft Heinz's 2017, from its own 10-K: each bar is one term's "
+            f"push. <bookmark mark='c'/> The score is {K['m']:.2f}: not flagged. Across the store's firms, "
+            f"{100 * ms['share_flagged']:.1f} percent of firm-years cross the line. A scheme that size is too small for ratios to see."
         ) as vo:
             self.play(FadeIn(form), FadeIn(cap))
             vo.wait_until("a")
@@ -213,14 +201,11 @@ class Crisis(VoiceoverScene):
         leg = legend([(QC.LOSS, r"a fraud the screen catches"), (QC.IDEA, r"a fraud it misses"),
                       (QC.SPOT, r"an honest firm flagged")], font_size=18).next_to(grid, UP, buff=0.2).align_to(grid, LEFT)
         with self.voiceover(
-            "Even a good screen has a problem, and it is arithmetic. Pause and predict: a screen flags fifteen percent "
-            "of firms. One percent of firms commit fraud, and the screen catches half of them. What share of the "
-            "flagged firms are frauds? <bookmark mark='a'/> Here are a thousand firms. Ten are frauds; five are "
-            f"caught, five missed. And {flagged - 5} honest firms are flagged with them. <bookmark mark='b'/> Of the "
-            f"{flagged} flags, five are frauds: {100 * b['ppv']:.1f} percent. When the base rate is low, most alarms are "
-            "false. Patricia Dechow and coauthors trained a successor in 2011, the F-score, on the SEC's enforcement "
-            "cases; it faces the same arithmetic. So the House treats a screen as a reason to read the filing, and "
-            "stores every number as first reported, because a backtest on corrected numbers knows what nobody knew."
+            "And screens fight arithmetic. Pause and predict: a screen flags fifteen percent of firms; one percent commit fraud and "
+            "it catches half. What share of flags are frauds? <bookmark mark='a'/> Of a thousand firms, ten are frauds, five "
+            f"caught, and {flagged - 5} honest firms flagged with them. <bookmark mark='b'/> So {100 * b['ppv']:.1f} percent. "
+            "Dechow and coauthors' 2011 F-score, trained on SEC enforcement cases, faces the same base rate. A screen is a reason "
+            "to read the filing."
         ) as vo:
             self.play(FadeIn(grid), FadeIn(pp))
             vo.wait_until("a")

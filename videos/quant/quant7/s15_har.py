@@ -58,14 +58,13 @@ class Har(VoiceoverScene):
         verdict = ("Not a jump: the whole day was a storm, every five minutes violent, so the bipower measure saw it all."
                    if storm else "A jump, by the test.")
         with self.voiceover(
-            "Realized variance counts jumps too: one sudden move, one giant square. Ole "
-            "Barndorff-Nielsen and Neil Shephard found a measure that ignores it. <bookmark mark='a'/> Instead of "
-            "squaring each return, multiply its size by its neighbour's. A jump is paired with an ordinary "
-            "neighbour, so its rectangle stays thin: bipower variation converges to the continuous part alone, and "
-            "the difference from realized variance is the jumps. <bookmark mark='b'/> Their 2006 test turns the "
-            "difference into a z-score. <bookmark mark='c'/> On Bitcoin's five-minute returns, "
-            f"{100 * s['jump_share_1pct']:.0f} percent of days show a jump at the one percent level. And the twelfth of "
-            f"March 2020? z is {s['z_0312']:.2f}. " + verdict
+            f"Realized variance counts jumps too: one sudden move, one giant square. Ole Barndorff-Nielsen and Neil Shephard "
+            f"found a measure that ignores it. <bookmark mark='a'/> Instead of squaring each return, multiply its size "
+            f"by its neighbour's. A jump is paired with an ordinary neighbour, so its rectangle stays thin: bipower variation "
+            f"converges to the continuous part alone, and the difference from realized variance is the jumps. <bookmark "
+            f"mark='b'/> Their 2006 test turns the difference into a z-score. <bookmark mark='c'/> On Bitcoin's five-minute "
+            f"returns, {100 * s['jump_share_1pct']:.0f} percent of days show a jump at the one percent level. And the "
+            f"twelfth of March 2020? z is {s['z_0312']:.2f}. {verdict}"
         ) as vo:
             self.play(FadeIn(l1), LaggedStart(*[GrowFromEdge(q, DOWN) for q in sq], lag_ratio=0.05, run_time=2))
             vo.wait_until("a")
@@ -205,14 +204,13 @@ class Har(VoiceoverScene):
         verdict = ("and on Bitcoin it is significant." if sig else
                    "the sign is right, but on three years of Bitcoin it is not significant.")
         with self.voiceover(
-            "Pause and predict: if yesterday's realized variance was measured with a lot of noise, should the model "
-            "trust it more or less? <bookmark mark='a'/> Less. Realized variance is the true variance plus a "
-            "measurement error whose size the realized quarticity tells us. <bookmark mark='b'/> A noisy regressor's "
-            "coefficient is pulled toward zero, and by more on noisier days. <bookmark mark='c'/> So Tim Bollerslev, "
-            "Andrew Patton and Rogier Quaedvlieg let the daily coefficient shrink when the quarticity is high: HARQ. "
-            "The coefficient comes out negative, as it should, " + verdict + " <bookmark mark='d'/> Two cousins: HAR-CJ "
-            "gives jumps their own coefficient, and log-HAR fits the logarithm. Remember log-HAR: it will matter in the "
-            "race."
+            f"Pause and predict: if yesterday's realized variance was measured with a lot of noise, should the model trust "
+            f"it more or less? <bookmark mark='a'/> Less. Realized variance is the true variance plus a measurement error "
+            f"whose size the realized quarticity tells us. <bookmark mark='b'/> A noisy regressor's coefficient is pulled "
+            f"toward zero, and by more on noisier days. <bookmark mark='c'/> So Tim Bollerslev, Andrew Patton and Rogier "
+            f"Quaedvlieg let the daily coefficient shrink when the quarticity is high: HARQ. The coefficient comes out "
+            f"negative, as it should, {verdict} <bookmark mark='d'/> Two cousins: HAR-CJ gives jumps their own coefficient, "
+            f"and log-HAR fits the logarithm. Remember log-HAR: it will matter in the race."
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

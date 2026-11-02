@@ -100,15 +100,14 @@ class Rough(VoiceoverScene):
         verdict = ("Rough, as Gatheral, Jaisson and Rosenbaum found on equity indices."
                    if rough else "Smoother than the equity-index result.")
         with self.voiceover(
-            "Lab. The House's estimator is eight lines: for each power q, the slope of log m against log delta; then "
-            "H is the slope of those slopes against q.  <bookmark mark='a'/> "
-            f"On simulated paths with H of zero point one it returns about {s1.mean():.2f}; with a half, about "
-            f"{s5.mean():.2f}. <bookmark mark='b'/> Now Bitcoin's own daily log realized volatility, "
-            f"{len(ro['lv']):,} days. Five parallel lines, one per q, and their slopes on a straight line through the "
-            f"origin. H comes out at {b['H']:.2f}. " + verdict + " <bookmark mark='c'/> Pause and predict: with H of a "
-            "half, what slope would the q equals two line have? One: that is ordinary diffusion. <bookmark mark='d'/> "
-            "Roughness changes forecasting: the best predictor weights the whole past with a power-law kernel, and "
-            "HAR's staircase is a cheap approximation of it."
+            f"Lab. The House's estimator is eight lines: for each power q, the slope of log m against log delta; then "
+            f"H is the slope of those slopes against q.  <bookmark mark='a'/> On simulated paths with H of zero point "
+            f"one it returns about {s1.mean():.2f}; with a half, about {s5.mean():.2f}. <bookmark mark='b'/> Now Bitcoin's "
+            f"own daily log realized volatility, {len(ro['lv']):,} days. Five parallel lines, one per q, and their slopes "
+            f"on a straight line through the origin. H comes out at {b['H']:.2f}. {verdict} <bookmark mark='c'/> Pause "
+            f"and predict: with H of a half, what slope would the q equals two line have? One: that is ordinary diffusion. "
+            f"<bookmark mark='d'/> Roughness changes forecasting: the best predictor weights the whole past with a power-law "
+            f"kernel, and HAR's staircase is a cheap approximation of it."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

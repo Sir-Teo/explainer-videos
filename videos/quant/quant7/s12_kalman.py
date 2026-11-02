@@ -185,13 +185,12 @@ class Kalman(VoiceoverScene):
         track = ("almost exactly." if k["corr_sv_garch"] > 0.9 else
                  f"closely, with a correlation of {k['corr_sv_garch']:.2f}.")
         with self.voiceover(
-            "The same filter gives a model of volatility. Let the log variance be a hidden autoregression: "
-            "stochastic volatility. <bookmark mark='a'/> The squared return is a very noisy measurement of it. Take "
-            "logs, and the noise has a known mean and variance. Andrew Harvey, Esther Ruiz and Neil Shephard treated "
-            "it as Gaussian in 1994, and the Kalman filter gives the likelihood. <bookmark mark='b'/> On ninety-four "
-            f"years of daily returns, phi is {sv['phi']:.3f}: a half-life of about {sv['half_life']:.0f} trading days. "
-            "The smoothed volatility tracks the GARCH model of the next chapter "
-            + track + " Two very different models, one hidden river."
+            f"The same filter gives a model of volatility. Let the log variance be a hidden autoregression: stochastic "
+            f"volatility. <bookmark mark='a'/> The squared return is a very noisy measurement of it. Take logs, and the "
+            f"noise has a known mean and variance. Andrew Harvey, Esther Ruiz and Neil Shephard treated it as Gaussian "
+            f"in 1994, and the Kalman filter gives the likelihood. <bookmark mark='b'/> On ninety-four years of daily "
+            f"returns, phi is {sv['phi']:.3f}: a half-life of about {sv['half_life']:.0f} trading days. The smoothed volatility "
+            f"tracks the GARCH model of the next chapter {track} Two very different models, one hidden river."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -40,14 +40,11 @@ class CAPE(VoiceoverScene):
                           r"depreciation and amortisation: compares firms however they are financed", 7.4, 23, GREY_A),
         ).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "Analysts rarely run a full DCF for every stock. They use multiples, and a multiple is a DCF folded "
-            "up. Take Gordon's formula, and write the dividend as a fraction b of earnings, the payout ratio. "
-            "<bookmark mark='a'/> Divide by earnings, and the price-to-earnings ratio is the payout over r minus g. "
-            "A high P/E is a bet on low discount rates or high growth, nothing more. <bookmark mark='b'/> Or split the "
-            "price in two: today's earnings valued as a perpetuity, plus the present value of growth opportunities. "
-            "A growth stock is mostly the second term. <bookmark mark='c'/> When firms "
-            "carry different amounts of debt, the desk uses enterprise value, the whole firm, over earnings before "
-            "interest, tax and depreciation, so that leverage does not distort the comparison."
+            "Analysts rarely run a full DCF; they use multiples, which are DCFs folded up. Write the dividend as a payout ratio "
+            "b times earnings. <bookmark mark='a'/> Divide by earnings: the P/E is b over r minus g, a bet on low rates or high "
+            "growth. <bookmark mark='b'/> Or split the price into today's earnings as a perpetuity, plus the present value of "
+            "growth opportunities. <bookmark mark='c'/> And to compare firms with different debt, desks use enterprise value "
+            "over EBITDA."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -78,12 +75,10 @@ class CAPE(VoiceoverScene):
         marks[4][1].next_to(marks[4][0], LEFT, buff=0.1).shift(UP * 0.15)
         src = real_data(r"Shiller's data; CAPE from Campbell and Shiller (1988, 1998)")
         with self.voiceover(
-            "One year of earnings is noisy: they collapse in recessions and make the P/E spike. In 1988 John "
-            "Campbell and Robert Shiller smoothed them, dividing the real price by the average of ten years of real "
-            "earnings: the cyclically adjusted P/E, or CAPE. Here it is since 1881. <bookmark mark='a'/> Its long "
-            f"average is about {c['mean_cape']:.0f}. It reached thirty-three in September 1929, and forty-four in "
-            "December 1999, its highest ever. It fell below five in 1920 and below seven in 1982. "
-            "<bookmark mark='b'/> At the end of 2020, where our research window closes, it stood at nearly thirty-four."
+            "One year of earnings is noisy, so in 1988 Campbell and Shiller divided the real price by ten years of average real "
+            "earnings: the cyclically adjusted P/E, or CAPE, here since 1881. <bookmark mark='a'/> Its average is about "
+            f"{c['mean_cape']:.0f}; it reached forty-four in December 1999 and fell below seven in 1982. "
+            "<bookmark mark='b'/> At the end of 2020, where our research window closes, it stood near thirty-four."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.play(Create(line), run_time=3)
@@ -125,16 +120,11 @@ class CAPE(VoiceoverScene):
                      Dot(radius=0.05, color=cols[-1]), label(r"2000s", font_size=17, color=GREY_B)).arrange(RIGHT, buff=0.1)
         leg.next_to(g, UP, buff=0.05).align_to(g, RIGHT)
         with self.voiceover(
-            "Does the CAPE tell you anything? Plot each month's CAPE against the real return of the next ten "
-            "years. <bookmark mark='a'/> The cloud slopes down: high valuations have been followed by low decades, "
-            "and low ones by high decades. The fit explains about a third of the variation in ten-year returns. "
-            "<bookmark mark='b'/> But be careful with the count. There are over fifteen hundred dots, and each "
-            "shares nine years and eleven months of its future with its neighbour. There are only about thirteen "
-            "independent decades here, and with thirteen observations a slope this clear is far less certain than "
-            "it looks. Part six makes that precise; it is Stambaugh's bias and the problem of overlapping "
-            "observations. <bookmark mark='c'/> Read off the line at the end of 2020: a CAPE near thirty-four "
-            "predicted a real return of about half a percent a year for the 2020s. That forecast goes into the "
-            "sealed envelope. We will open it in the finale, against what actually happened."
+            "Does it predict? Plot each month's CAPE against the next ten years' real return. <bookmark mark='a'/> The cloud "
+            "slopes down; the fit explains about a third of the variation. <bookmark mark='b'/> But the dots overlap: each shares "
+            "almost ten years with its neighbour, so there are only about thirteen independent decades, and the slope is far "
+            "less certain than it looks. Part six makes that precise. <bookmark mark='c'/> At the end of 2020 the line predicted "
+            "about half a percent a year for the 2020s. That forecast is sealed until the finale."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(side[:2]))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.002, run_time=3))
@@ -170,16 +160,12 @@ class CAPE(VoiceoverScene):
                     rf"{F['identity_gap']:+.3f} from the linearisation")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Why should a valuation ratio predict anything? John Campbell and Robert Shiller showed in 1988 that it "
-            "must predict something. Write the log return as a function of the price-dividend ratio, and expand it to "
-            "first order around its average. <bookmark mark='a'/> Solve forward, ruling out bubbles: today's price-"
-            "dividend ratio is the discounted sum of future dividend growth minus future returns. "
-            "<bookmark mark='b'/> Multiply by the dividend yield and take covariances. The variance of the yield is "
-            "split exactly between two forecasts: of returns, and of dividend growth. A high yield has to be paid for "
-            "by one or the other. <bookmark mark='c'/> John Cochrane's version in 2008: with a persistent yield, the "
-            "long-run return slope minus the long-run dividend-growth slope equals one. <bookmark mark='d'/> On a "
-            f"century and a half of Shiller's data: {F['lr_r']:.2f} for returns, {F['lr_d']:.2f} for dividend "
-            "growth. The identity holds up to its linearisation."
+            "Why should a valuation ratio predict anything? Campbell and Shiller showed in 1988 that it must. Expand the log "
+            "return to first order in the price-dividend ratio. <bookmark mark='a'/> Solve forward, ruling out bubbles: today's "
+            "ratio is discounted future dividend growth minus future returns. <bookmark mark='b'/> Take covariances with the "
+            "dividend yield: a high yield must be paid for by high returns or low dividend growth. <bookmark mark='c'/> Cochrane's "
+            "2008 version: the long-run return slope minus the long-run dividend slope is one. <bookmark mark='d'/> On Shiller's "
+            f"data: {F['lr_r']:.2f} for returns, {F['lr_d']:.2f} for dividends, up to the linearisation."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -239,17 +225,12 @@ class CAPE(VoiceoverScene):
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         s1, s2 = S[1][1], S[2][1]
         with self.voiceover(
-            "Draw the identity as a tug of war. The rope has a fixed length, one. Red is the pull of future returns, "
-            "green the pull of future dividend growth, and the knot is where a high dividend yield gets paid for. "
-            f"<bookmark mark='a'/> Over the whole sample, returns pull {F['lr_r']:.2f} and dividend growth "
-            f"{-F['lr_d']:.2f}. <bookmark mark='b'/> Now move the sample. Before 1946, dividends did most of the "
-            f"work: a high yield predicted falling dividends, {s1['lr_d']:.2f}. <bookmark mark='c'/> After 1945 "
-            f"the green rope goes slack, {s2['lr_d']:.2f}, and returns carry everything, {s2['lr_r']:.2f}. That is "
-            "Cochrane's dog that did not bark: if high yields did not forecast low dividends, they must forecast high "
-            "returns. <bookmark mark='d'/> But the one-year return slope is weak on its own, and a persistent "
-            "predictor biases it upward, Stambaugh's bias. Simulate a world with no predictability and the same "
-            f"persistence: slopes this large appear {100 * cs['boot_p']:.0f} percent of the time. Part six returns to "
-            "this; the identity is why the question is worth asking."
+            "As a tug of war: a rope of length one, red for future returns, green for dividend growth, and the knot where a high "
+            f"yield is paid for. <bookmark mark='a'/> Over the whole sample, returns pull {F['lr_r']:.2f}. "
+            f"<bookmark mark='b'/> Before 1946, dividends did most of the work, {s1['lr_d']:.2f}. <bookmark mark='c'/> After "
+            f"1945 the green rope goes slack, {s2['lr_d']:.2f}, and returns carry everything: Cochrane's dog that did not bark. "
+            "<bookmark mark='d'/> But the one-year slope is weak, and biased up by a persistent predictor. In a world with no "
+            f"predictability, slopes this large appear {100 * cs['boot_p']:.0f} percent of the time."
         ) as vo:
             self.add(rp)
             self.play(FadeIn(cap))

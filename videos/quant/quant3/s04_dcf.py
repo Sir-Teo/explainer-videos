@@ -45,14 +45,11 @@ class DCF(VoiceoverScene, ThreeDScene):
                 why(r"profits grow only by reinvesting: each reinvested dollar earns the return on new invested capital")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.2, buff=0.85, edge=6.9)
         with self.voiceover(
-            "To value a whole firm rather than one share, an analyst discounts its free cash flow. Read it off "
-            "chapter three's ledgers: operating profit after tax, plus the depreciation that cost no cash, minus the "
-            "spending on new plant, minus the cash tied up in working capital. It is the cash the business could pay "
-            "to all its investors, lenders and owners together. <bookmark mark='a'/> Write the investment as a share "
-            "of after-tax operating profit, the reinvestment rate, and free cash flow is profit times one minus that "
-            "rate. <bookmark mark='b'/> And growth is not free. Profits grow only because something was reinvested, "
-            "and each reinvested dollar earns the return on new invested capital, RONIC. So growth equals the "
-            "reinvestment rate times RONIC."
+            "To value a whole firm, discount its free cash flow, read off chapter three's ledgers: operating profit after tax, "
+            "plus depreciation, minus new plant and working capital. It belongs to lenders and owners together. "
+            "<bookmark mark='a'/> Write the investment as a share of after-tax profit, the reinvestment rate. "
+            "<bookmark mark='b'/> And growth is not free: it equals the reinvestment rate times the return on new invested "
+            "capital, RONIC."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -80,14 +77,10 @@ class DCF(VoiceoverScene, ThreeDScene):
                                r"$-$ debt-like items (leases, pension deficits) $+$ non-operating assets", 12.0, 22,
                                GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Put that into Gordon's formula for the value after the forecast years. Free cash flow is profit times "
-            "one minus g over RONIC, and the terminal value becomes McKinsey's value-driver formula. "
-            "<bookmark mark='a'/> Differentiate it in g, and the sign of the result is the sign of RONIC minus the "
-            "cost of capital. <bookmark mark='b'/> Faster growth adds value only if new investment earns more than "
-            "it costs. A firm that earns exactly its cost of capital can double its growth and be worth not a cent "
-            "more. <bookmark mark='c'/> That value is the enterprise's. Owners get it after the lenders: subtract net "
-            "debt, minority interests, preferred stock and the debt-like items, leases and pension deficits, and add "
-            "back anything the business does not need."
+            "Put that into Gordon's formula and you get McKinsey's value-driver formula for the terminal value. "
+            "<bookmark mark='a'/> Differentiate in g: the sign is the sign of RONIC minus the cost of capital. "
+            "<bookmark mark='b'/> Growth adds value only if new investment earns more than it costs. <bookmark mark='c'/> And "
+            "that is the enterprise's value; the owners get it after net debt, minorities, preferred stock and debt-like items."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -126,12 +119,10 @@ class DCF(VoiceoverScene, ThreeDScene):
         tv = cmath(r"\text{TV}_5", r"=", r"\frac{\text{FCF}_5\,(1 + g)}{r - g}", font_size=34,
                    colors={r"\text{TV}_5": VALUE}).next_to(side, DOWN, buff=0.4).align_to(side, LEFT)
         with self.voiceover(
-            "A standard valuation: five years of explicit forecasts, free cash flow of a hundred growing five "
-            "percent a year, and after that a terminal value, Gordon's formula again, assuming two percent growth "
-            "forever. Discount it all at eight percent. <bookmark mark='a'/> The five forecast years, the ones the "
-            "analyst actually thought about, are worth about four hundred and sixty. <bookmark mark='b'/> The "
-            "terminal value, one line of arithmetic about everything after year five, is worth nearly fifteen "
-            f"hundred. {100 * d['base_tv_share']:.0f} percent of the answer is the part nobody forecast."
+            "A standard valuation: five years of forecasts, free cash flow of a hundred growing five percent, then two percent "
+            "forever, all discounted at eight. <bookmark mark='a'/> The five forecast years are worth about four hundred and "
+            "sixty. <bookmark mark='b'/> The terminal value, one line of arithmetic about everything after, is worth nearly "
+            f"fifteen hundred: {100 * d['base_tv_share']:.0f} percent of the answer."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:2]))
             vo.wait_until("a")
@@ -177,16 +168,11 @@ class DCF(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, rd, rng)
         self.remove(hint, rd, rng)
         with self.voiceover(
-            "Now let the two numbers nobody can know vary: the discount rate, from six to twelve percent, and the "
-            "growth rate forever, from nothing to four percent. Each point on this surface is the firm's value. "
-            "<bookmark mark='a'/> Our valuation sits here, at about nineteen hundred. <bookmark mark='b'/> Take "
-            "one point off the discount rate: twenty-three hundred. Add one point of growth instead: twenty-two "
-            "hundred. Do both, and the same firm, with the same five years of forecasts, is worth forty-five percent "
-            "more. <bookmark mark='c'/> The surface rises steeply into the corner where growth approaches the "
-            "discount rate, the same cliff as Gordon's formula. Across ordinary assumptions the value runs from "
-            "about a thousand to over five thousand. A DCF is less a measurement than a translation: it turns "
-            "beliefs about rates and growth into a price, and the market's price can be turned back into the beliefs "
-            "it implies."
+            "Now vary the two numbers nobody knows: the discount rate from six to twelve percent, growth forever from nothing to "
+            "four. <bookmark mark='a'/> Our valuation sits here, about nineteen hundred. <bookmark mark='b'/> A point less on the "
+            "rate and a point more of growth: forty-five percent more, for the same forecasts. <bookmark mark='c'/> The surface "
+            "climbs into the corner where growth nears the rate, Gordon's cliff. A DCF translates beliefs about rates and growth "
+            "into a price, and a price can be translated back."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=3)
@@ -231,13 +217,10 @@ class DCF(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, rd)
         self.remove(hint, rd)
         with self.voiceover(
-            "Here is that statement as a landscape. Growth runs across, RONIC runs back, and the height is the "
-            "value of a hundred of operating profit at an eight percent cost of capital. <bookmark mark='a'/> Along "
-            "the orange line RONIC equals the cost of capital, and the surface is flat: twelve hundred and fifty, "
-            "whatever the growth. <bookmark mark='b'/> Put a firm on the far side, earning sixteen percent on new "
-            "investment, and roll it towards faster growth: it climbs. <bookmark mark='c'/> Put one on the near side, "
-            "earning five, and the same growth rolls it downhill. Growth bought below the cost of capital destroys "
-            "value, however good it looks in the revenue line."
+            "That statement as a landscape: growth across, RONIC back, and the value of a hundred of operating profit at an eight "
+            "percent cost of capital. <bookmark mark='a'/> Along the orange line, RONIC equals the cost of capital and the "
+            "surface is flat. <bookmark mark='b'/> A firm earning sixteen percent rolls uphill as it grows. "
+            "<bookmark mark='c'/> One earning five rolls downhill: growth bought below the cost of capital destroys value."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=3)
@@ -296,14 +279,11 @@ class DCF(VoiceoverScene, ThreeDScene):
         pp = desk_question(r"Pause and predict: a firm earns exactly its cost of capital on new investment. What "
                            r"does faster growth add?", width=6.4, font_size=21).to_edge(UP, buff=0.3).shift(RIGHT * 2.6)
         with self.voiceover(
-            "The surfaces show what each assumption does. A Monte Carlo shows what not knowing them does. Draw the "
-            "discount rate between six and ten percent, terminal growth between nothing and three, and scale the "
-            "cash flows up or down by a fifth; value the firm each time. <bookmark mark='a'/> Twenty thousand "
-            "valuations pile up into a distribution. <bookmark mark='b'/> Its middle ninety percent runs from "
-            f"{mc['q05']:,.0f} to {mc['q95']:,.0f}, about {mc['q05'] / base:.2f} to {mc['q95'] / base:.2f} times the "
-            "base case, with a long right tail from the corner where growth nears the discount rate. A DCF that "
-            "reports one number is reporting one draw. <bookmark mark='c'/> Pause and predict: a firm earns exactly "
-            "its cost of capital on new investment. What does faster growth add? Nothing."
+            "A Monte Carlo shows what not knowing the inputs does: draw the rate, the growth and the cash flows, and value the "
+            "firm each time. <bookmark mark='a'/> Twenty thousand valuations pile up. <bookmark mark='b'/> The middle ninety "
+            f"percent runs from {mc['q05']:,.0f} to {mc['q95']:,.0f}, with a long right tail. A DCF that reports one number is "
+            "reporting one draw. <bookmark mark='c'/> Pause and predict: a firm earns exactly its cost of capital on new "
+            "investment. What does faster growth add? Nothing."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:4]), Create(bl), FadeIn(bt))
             vo.wait_until("a")

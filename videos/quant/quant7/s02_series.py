@@ -164,11 +164,11 @@ class Series(VoiceoverScene):
         vix_line = ("it rejects decisively: fear mean-reverts." if A["vix"]["reject_5pct"] else
                     "even it does not reject a unit root.")
         with self.voiceover(
-            "Lab. The House's test: regress the change on a constant, yesterday's level and five lagged changes, and "
-            "compare the t-statistic with minus two point eight six. Run it on four series. <bookmark mark='a'/> Pause "
-            "and predict first: the ten-year Treasury yield can't go to infinity. Does it have a unit root? <bookmark "
-            "mark='b'/> Bitcoin's log price and the stock market's log index: unit roots, as expected. "
-            + y10_line + " As for the VIX: " + vix_line
+            f"Lab. The House's test: regress the change on a constant, yesterday's level and five lagged changes, and "
+            f"compare the t-statistic with minus two point eight six. Run it on four series. <bookmark mark='a'/> Pause "
+            f"and predict first: the ten-year Treasury yield can't go to infinity. Does it have a unit root? <bookmark "
+            f"mark='b'/> Bitcoin's log price and the stock market's log index: unit roots, as expected. {y10_line} As "
+            f"for the VIX: {vix_line}"
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

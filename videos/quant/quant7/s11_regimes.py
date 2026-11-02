@@ -167,14 +167,13 @@ class Regimes(VoiceoverScene):
                   f"No. It rises from {100 * r['prior_storm']:.0f} to {100 * r['post_storm_m8']:.0f} percent: one bad "
                   "month is not yet a storm: the evidence has to accumulate.")
         with self.voiceover(
-            "How are the regimes found? By expectation-maximisation: guess the two regimes, run the filter and a "
-            "smoother to get each month's probabilities, re-estimate each regime's mean and volatility from the months "
-            "weighted by those probabilities, and repeat. Each round can only raise the likelihood. <bookmark "
-            "mark='a'/> On ninety-four years of monthly returns it converges within a handful of iterations: a calm "
-            f"regime with a mean of {100 * mu[0]:+.0f} percent a year and {100 * sd[0]:.0f} percent volatility, and a "
-            f"storm with a mean of {100 * mu[1]:.0f} percent and {100 * sd[1]:.0f} percent volatility. <bookmark "
-            "mark='b'/> Pause and predict. A month of minus eight percent arrives while the model is sure it is calm. "
-            "Does the storm jar fill? <bookmark mark='c'/> " + answer
+            f"How are the regimes found? By expectation-maximisation: guess the two regimes, run the filter and a smoother "
+            f"to get each month's probabilities, re-estimate each regime's mean and volatility from the months weighted "
+            f"by those probabilities, and repeat. Each round can only raise the likelihood. <bookmark mark='a'/> On ninety-four "
+            f"years of monthly returns it converges within a handful of iterations: a calm regime with a mean of {100 * mu[0]:+.0f} "
+            f"percent a year and {100 * sd[0]:.0f} percent volatility, and a storm with a mean of {100 * mu[1]:.0f} percent "
+            f"and {100 * sd[1]:.0f} percent volatility. <bookmark mark='b'/> Pause and predict. A month of minus eight "
+            f"percent arrives while the model is sure it is calm. Does the storm jar fill? <bookmark mark='c'/> {answer}"
         ) as vo:
             self.play(FadeIn(rp))
             vo.wait_until("a")

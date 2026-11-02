@@ -82,14 +82,12 @@ class TimeValue(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(defn, panel)
         self.remove(defn, panel)
         with self.voiceover(
-            "A dollar next year is worth less than a dollar today, because today's dollar could be invested. Here is "
-            "a stream of payments, one a year for twenty-four years, on a conveyor running away from us. Each bar "
-            "is a payment's value today: the payment divided by one plus r, once for every year it must wait. "
-            "<bookmark mark='a'/> At two percent the far bars have barely shrunk. <bookmark mark='b'/> Now raise the "
-            "rate. Watch where the value goes. The near bars hardly move; the far ones collapse, because a payment "
-            "twenty-four years away is divided by one plus r twenty-four times. At twelve percent the last payment "
-            "is worth about six cents. <bookmark mark='c'/> That one picture is most of this chapter: present value "
-            "is discounting, and distant cash is the cash most exposed to the rate."
+            "A dollar next year is worth less than a dollar today, because today's dollar could be invested. Here are twenty-four "
+            "yearly payments on a conveyor running away from us; each bar is a payment's value today, divided by one plus r once "
+            "for every year it waits. <bookmark mark='a'/> At two percent the far bars have barely shrunk. "
+            "<bookmark mark='b'/> Raise the rate and watch where value goes: the near bars hardly move, the far ones collapse. "
+            "At twelve percent the last payment is worth about six cents. <bookmark mark='c'/> Distant cash is the cash most "
+            "exposed to the rate."
         ) as vo:
             self.play(FadeIn(defn), Create(floor))
             self.add(conv)
@@ -121,12 +119,10 @@ class TimeValue(VoiceoverScene, ThreeDScene):
                 why(rf"factor out $C/r$: ten payments of 5 at 4\% are worth {tv['annuity']:.2f}")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Two closed forms carry most of the arithmetic. A payment C forever, starting next year, is a geometric "
-            "series, and it sums to C over r: the perpetuity. <bookmark mark='a'/> A payment for only n years, an "
-            "annuity, needs no new algebra. It is a perpetuity starting now, minus the same perpetuity that starts "
-            "after year n, which is worth today one over one plus r to the n of the first. <bookmark mark='b'/> "
-            "Factor, and the annuity is C over r times one minus the discount factor of year n. Ten payments of five "
-            f"at four percent are worth {tv['annuity']:.2f}."
+            "Two closed forms do most of the work. A payment C forever is a geometric series summing to C over r, the "
+            "perpetuity. <bookmark mark='a'/> An annuity for n years is a perpetuity now minus one starting after year n. "
+            "<bookmark mark='b'/> Factor out C over r: ten payments of five at four percent are worth "
+            f"{tv['annuity']:.2f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -161,14 +157,11 @@ class TimeValue(VoiceoverScene, ThreeDScene):
         head = label(r"a bond: $-100$, then 5 a year for ten years, 100 back", font_size=22, color=GREY_A)
         head.next_to(nl, UP, buff=1.0).align_to(nl, LEFT)
         with self.voiceover(
-            "The internal rate of return runs the question backwards: given the cash flows and a price, which rate "
-            "makes the net present value zero? There is no formula in general, so the House finds it numerically. "
-            "Here is its code. Start with a bracket where the NPV changes sign. Cut it in half, keep the half where "
-            "the sign still changes, and repeat. <bookmark mark='a'/> Run it on a bond bought at a hundred that pays "
-            "five a year for ten years and then its hundred back. The bracket starts at zero to twenty percent. "
-            "Every step halves it, so each step is worth about a third of a decimal digit. <bookmark mark='b'/> After "
-            f"thirty halvings the answer is {100 * tv['bond_irr']:.4f} percent: the bond's yield is its coupon, as it "
-            "must be at a price of a hundred."
+            "The internal rate of return runs the question backwards: which rate makes the NPV zero? There is no formula in "
+            "general, so the House bisects: start with a bracket where the NPV changes sign, halve it, keep the half where the "
+            "sign still changes. <bookmark mark='a'/> Run it on a bond bought at a hundred, paying five a year for ten years. "
+            "Each step halves the bracket. <bookmark mark='b'/> After thirty halvings: "
+            f"{100 * tv['bond_irr']:.4f} percent, the coupon, as it must be at par."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -204,14 +197,12 @@ class TimeValue(VoiceoverScene, ThreeDScene):
         ans = label(rf"NPV at 15\%: ${tv['npv15']:+.2f}$: yes, between the roots", font_size=22, color=QC.GAIN)
         ans.next_to(pp, DOWN, buff=0.15)
         with self.voiceover(
-            "Bisection finds a root. It does not promise the only one. Take a project that costs a hundred, pays two "
-            "hundred and thirty next year, and then needs a hundred and thirty-two the year after, to clean up a site, "
-            "say. <bookmark mark='a'/> Multiply its NPV by one plus r squared and you have a quadratic in one plus "
-            "r. It has two roots: ten percent and twenty percent. Both are internal rates of return. "
-            "<bookmark mark='b'/> The curve shows why. Cash flows that change sign twice can cross zero twice, and "
-            "the textbook rule, accept if the IRR beats the cost of capital, has no answer. Pause and predict: at "
-            "fifteen percent, is it worth doing? <bookmark mark='c'/> Look at the NPV itself: positive between the "
-            "roots. The NPV rule never breaks; the IRR rule is a shortcut that does."
+            "Bisection finds a root; it does not promise the only one. A project costs a hundred, pays two hundred and thirty, "
+            "then needs a hundred and thirty-two to clean up. <bookmark mark='a'/> Multiply its NPV by one plus r squared: a "
+            "quadratic, with two roots, ten and twenty percent. <bookmark mark='b'/> Cash flows that change sign twice can cross "
+            "zero twice, and the rule accept if the IRR beats the cost of capital has no answer. Pause and predict: at fifteen "
+            "percent, is it worth doing? <bookmark mark='c'/> Yes: the NPV is positive between the roots. The NPV rule never "
+            "breaks; the IRR rule is a shortcut."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -237,13 +228,10 @@ class TimeValue(VoiceoverScene, ThreeDScene):
                 why(r"it converges when $g < r$: the Gordon growth model (Gordon and Shapiro 1956)")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-2.4, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The model of a share that every analyst knows. Suppose a company pays a dividend D one next year, and "
-            "its dividend grows at g every year forever. Its value is the sum of each future dividend, discounted. "
-            "<bookmark mark='a'/> Factor out the first term, and what's left is a geometric series, with ratio one "
-            "plus g over one plus r. <bookmark mark='b'/> If growth is slower than the discount rate, the series "
-            "converges, and the value is the next dividend over r minus g. John Burr Williams valued shares as discounted "
-            "dividends in 1938; this closed form is Myron Gordon and Eli Shapiro's, from 1956. The next chapter "
-            "asks what that small denominator does when rates move."
+            "The model of a share every analyst knows. A dividend D one next year, growing at g forever, each one discounted. "
+            "<bookmark mark='a'/> Factor out the first term: a geometric series with ratio one plus g over one plus r. "
+            "<bookmark mark='b'/> If growth is slower than the discount rate it converges: the next dividend over r minus g. "
+            "Williams valued shares as discounted dividends in 1938; this closed form is Gordon and Shapiro's, from 1956."
         ) as vo:
             step(0)
             vo.wait_until("a")

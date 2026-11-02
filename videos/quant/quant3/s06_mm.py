@@ -63,17 +63,11 @@ class MM(VoiceoverScene):
         tag = why(r"Proposition I (1958): in a market without taxes or frictions, financing does not change value")
         tag.next_to(c, DOWN, buff=0.2)
         with self.voiceover(
-            "In 1958 Franco Modigliani and Merton Miller asked whether a firm can make itself more valuable by "
-            "how it is financed. Take two firms with identical assets, throwing off the same cash X each year. Firm "
-            "U has no debt: its owners get all of X. Firm L has borrowed D at a rate r D: its lenders are paid "
-            "first, and its owners get what is left. <bookmark mark='a'/> Owning a fraction alpha of L's shares pays "
-            "alpha times X minus the interest. <bookmark mark='b'/> But you could build that payoff yourself: buy "
-            "alpha of the unlevered firm and borrow alpha times D on your own account. You receive alpha X and pay "
-            "alpha times the interest. The same cash, in every state of the world. <bookmark mark='c'/> Two "
-            "identical payoffs must cost the same, or there is an arbitrage. So L's equity is worth U's value minus "
-            "the debt, and the levered firm is worth exactly the unlevered one. Leverage you can do at home is not "
-            "worth paying a firm to do. Both men later won the Nobel prize, partly for this argument, the first "
-            "no-arbitrage proof in finance, and a preview of Part nine."
+            "In 1958 Modigliani and Miller asked whether financing can make a firm more valuable. Two firms have identical "
+            "assets and cash flow X; U has no debt, L has borrowed D. <bookmark mark='a'/> A fraction alpha of L's shares pays "
+            "alpha times X minus interest. <bookmark mark='b'/> Build the same payoff at home: buy alpha of U and borrow alpha D "
+            "yourself. <bookmark mark='c'/> Identical payoffs must cost the same, so the levered firm is worth exactly the "
+            "unlevered one: the first no-arbitrage proof in finance, a preview of Part nine."
         ) as vo:
             self.play(FadeIn(U), FadeIn(L), FadeIn(cap))
             vo.wait_until("a")
@@ -105,11 +99,9 @@ class MM(VoiceoverScene):
                            GREY_A)
         VGroup(leg, f, nt).arrange(DOWN, aligned_edge=LEFT, buff=0.55).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The second proposition is about returns. If the whole firm earns r A, eight percent here, and the "
-            "debt costs four, then the owners of a levered firm earn more on average, because they keep the "
-            "spread on the borrowed money. <bookmark mark='a'/> Their required return rises in a straight line with "
-            "leverage. But so does their risk, by exactly as much. The blend, the cost of capital of the whole "
-            "firm, does not move. Cheap debt is not cheap: every dollar of it makes the equity more expensive."
+            "The second proposition is about returns. Owners of a levered firm keep the spread on borrowed money, so their "
+            "required return rises in a straight line with leverage. <bookmark mark='a'/> So does their risk, by exactly as much, "
+            "and the blend, the firm's cost of capital, does not move. Cheap debt makes equity dearer."
         ) as vo:
             self.play(FadeIn(g), Create(lA), Create(lD), FadeIn(leg[1:]))
             vo.wait_until("a")
@@ -136,16 +128,12 @@ class MM(VoiceoverScene):
                 why(r"the US top statutory rates since 2018 (corporate; dividends and gains; interest): about zero")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.8, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The proof's power is in its assumptions: when financing does change value, one of them has failed. "
-            "The first is taxes. Interest is paid before corporate tax, so permanent debt saves the tax rate times "
-            "the interest every year. Discount those savings at the debt's own rate, and the shield is worth the tax "
-            "rate times the debt. <bookmark mark='a'/> That was Modigliani and Miller's correction of 1963: the "
-            "levered firm is worth the unlevered firm plus T times D. <bookmark mark='b'/> The owners' required "
-            "return still rises with leverage, but more slowly. <bookmark mark='c'/> In 1977 Miller added the other "
-            "side: investors pay personal tax on interest at one rate and on equity income at another, and the net "
-            "gain from a dollar of debt is one minus this ratio. <bookmark mark='d'/> At America's top rates since "
-            f"2018 it is {100 * valuation.miller_gain(tc, te, td):.1f} percent: at the margin, the corporate saving "
-            "is roughly cancelled by what bondholders pay."
+            "When financing does change value, an assumption has failed. First, taxes: permanent debt saves the tax rate times "
+            "the interest every year, and discounted at the debt's rate the shield is worth T times D. <bookmark mark='a'/> "
+            "Modigliani and Miller, 1963: the levered firm is worth V U plus T D. <bookmark mark='b'/> The owners' return still "
+            "rises, more slowly. <bookmark mark='c'/> In 1977 Miller added personal taxes on interest and on equity income. "
+            f"<bookmark mark='d'/> At America's top rates since 2018 the net gain is {100 * valuation.miller_gain(tc, te, td):.1f} "
+            "percent: roughly zero."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -198,14 +186,10 @@ class MM(VoiceoverScene):
         illus = label(r"illustrative: tax 21\%, distress cost $0.8\,d^3$", font_size=18, color=GREY_B).to_corner(DL, buff=0.3)
         dstar = float(np.sqrt(0.21 / 2.4))
         with self.voiceover(
-            "Picture the firm's pre-tax value as a pie whose size financing cannot change. Without debt, the owners "
-            "get one slice and the government, through corporate tax, gets the grey one. <bookmark mark='a'/> Add "
-            "debt. Interest is deducted, so the grey slice shrinks and the investors' share of the same pie grows: "
-            "that is all the tax shield is. <bookmark mark='b'/> But a red slice appears too: the expected costs of "
-            "distress, lawyers, lost customers, investment forgone when the firm might not pay. It grows faster than "
-            "the debt. <bookmark mark='c'/> The investors' total peaks where the next dollar of debt saves as much "
-            f"tax as it adds expected distress, here at about {100 * dstar:.0f} percent: the trade-off theory, read "
-            "straight off the pie."
+            "Picture pre-tax value as a pie financing cannot enlarge. Without debt, owners get one slice and the government the "
+            "grey one. <bookmark mark='a'/> Add debt: interest is deducted, the grey slice shrinks, investors' share grows. "
+            "<bookmark mark='b'/> But a red slice of expected distress costs appears and grows faster than the debt. "
+            f"<bookmark mark='c'/> The investors' total peaks at about {100 * dstar:.0f} percent debt: the trade-off theory."
         ) as vo:
             self.add(pie)
             self.play(FadeIn(gx), FadeIn(leg), FadeIn(illus))
@@ -233,13 +217,10 @@ class MM(VoiceoverScene):
         pp = desk_question(r"Pause and predict: tax 21\%, permanent debt of 100. How much value does the debt add, "
                            r"and who loses it?", width=9.6, font_size=21).next_to(card, DOWN, buff=0.35)
         with self.voiceover(
-            "Do firms think this way? In 1999 John Graham and Campbell Harvey asked three hundred and ninety-two chief "
-            "financial officers. Fewer than half called the tax advantage of debt important, and only about a fifth "
-            "called distress costs important, the two forces of the trade-off theory. Most cited financial "
-            "flexibility and their credit rating. The theory says where the optimum is; practice keeps a margin for "
-            "the unexpected. <bookmark mark='a'/> Pause and predict: with a twenty-one percent tax rate and "
-            "permanent debt of a hundred, how much value does the debt add, and who loses it? Twenty-one, and the "
-            "government, at least until Miller's investors pay their own taxes."
+            "Do firms think this way? Graham and Harvey asked three hundred and ninety-two CFOs: fewer than half called the tax "
+            "advantage important and a fifth called distress costs important; most cited flexibility and credit ratings. "
+            "<bookmark mark='a'/> Pause and predict: twenty-one percent tax, permanent debt of a hundred. What does the debt add, "
+            "and who loses it? Twenty-one, from the government."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
