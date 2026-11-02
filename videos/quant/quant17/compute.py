@@ -229,7 +229,12 @@ def compute_hlp() -> dict:
     torch.set_num_threads(2)
     sig = 0.2
     tr = D.hlp_dataset(10, seed=1)
-    net = D.train_mlp_regressor(tr[:, :2], tr[:, 2:], width=32, depth=3, epochs=60)
+    # inputs scaled to order one: (S/K - 1) / 0.1 and T / 0.25
+    sc = np.array([[1.0, 0.0], [0.1, 0.25]])
+    core = D.train_mlp_regressor((tr[:, :2] - sc[0]) / sc[1], tr[:, 2:] * 10, width=64, depth=3, epochs=200)
+
+    def net(x):
+        return core((x - torch.tensor(sc[0], dtype=torch.float32)) / torch.tensor(sc[1], dtype=torch.float32)) / 10
     rng = np.random.default_rng(7)
     errs = {"net": [], "bs": []}
     for _ in range(200):  # fresh options: 63 trading days, struck at the money, daily rebalancing
@@ -249,7 +254,7 @@ def compute_hlp() -> dict:
     xs = np.linspace(0.8, 1.2, 41)
     with torch.no_grad():
         curve = net(torch.tensor(np.c_[xs, np.full(41, 0.125)], dtype=torch.float32)).numpy()[:, 0]
-    return _json({"n_train": len(tr), "tracking_rmse": {k: float(np.sqrt(np.mean(np.square(v)))) for k, v in errs.items()},
+    return _json({"n_train": len(tr), "network": "3 x 64, SiLU", "tracking_rmse": {k: float(np.sqrt(np.mean(np.square(v)))) for k, v in errs.items()},
                   "tracking_mean_abs": {k: float(np.mean(np.abs(v))) for k, v in errs.items()},
                   "curve": {"x": xs, "net": curve, "bs": bs.price(xs, 1.0, 0.125, sig, 0.0, 0.0, 1)}})
 

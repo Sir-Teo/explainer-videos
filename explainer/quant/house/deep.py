@@ -374,6 +374,7 @@ def train_mlp_regressor(X, y, width=32, depth=2, epochs=200, lr=3e-3, batch=1024
     Xt = torch.tensor(X, dtype=torch.float32)
     yt = torch.tensor(y, dtype=torch.float32).reshape(len(X), -1)
     opt = torch.optim.Adam(net.parameters(), lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, epochs)
     g = torch.Generator().manual_seed(seed)
     for _ in range(epochs):
         perm = torch.randperm(len(X), generator=g)
@@ -383,6 +384,7 @@ def train_mlp_regressor(X, y, width=32, depth=2, epochs=200, lr=3e-3, batch=1024
             opt.zero_grad()
             loss.backward()
             opt.step()
+        sched.step()
     return net
 
 
