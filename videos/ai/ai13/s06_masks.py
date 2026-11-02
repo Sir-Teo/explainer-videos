@@ -71,9 +71,9 @@ class Masks(VoiceoverScene):
         past_txt = "exactly zero" if mp == 0 else ("rounding error" if mp < 1e-4 else f"{mp:.4f}")
         chk = VGroup(
             label(r"our transformer: \ change characters $65$--$128$ of a passage", font_size=22, color=WHITE),
-            label(rf"its guesses at $1$--$64$ move by \ ${'0' if mp == 0 else sci(mp)}$", font_size=22, color=C.TRUE_P),
-            label(rf"at $65$--$128$ \ by up to ${mf:.1f}$", font_size=22, color=GREY_A),
-            label(rf"with the mask removed, \ $1$--$64$ move by ${nm:.1f}$", font_size=22, color=C.SURPRISE),
+            label(rf"max raw-logit change at $1$--$64$: \ ${'0' if mp == 0 else sci(mp)}$", font_size=22, color=C.TRUE_P),
+            label(rf"at $65$--$128$: \ max raw-logit change ${mf:.1f}$", font_size=22, color=GREY_A),
+            label(rf"no mask or rotations: \ max change at $1$--$64$: ${nm:.1f}$", font_size=22, color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([2.6, -2.15, 0])
         keep_in_frame(chk)
         with self.voiceover(
@@ -83,9 +83,9 @@ class Masks(VoiceoverScene):
             "minus infinity is zero, so the softmax gives the future no weight at all. This is the causal mask. "
             f"<bookmark mark='c'/> Its gift is speed in training. One pass over {n} characters makes {n} "
             "guesses at once, each from its own past only, so every position is a training example. "
-            "<bookmark mark='d'/> Check it on our transformer: change the second half of a passage, and its guesses "
-            f"in the first half move by {past_txt}, while the second half's change by up to {mf:.1f}. Take the "
-            f"mask away and the first half moves by {nm:.1f}: the model would be reading the answers."
+            "<bookmark mark='d'/> Check it on our transformer: change the second half of a passage. We measure the largest absolute change in raw logits, the scores before the output softmax. The change "
+            f"in the first half is {past_txt}, while the second half changes by up to {mf:.1f}. Take the "
+            f"mask and rotations away together, and the first half changes by {nm:.1f}. This combined ablation allows future information in."
         ) as vo:
             self.play(FadeIn(eqs[0]), FadeIn(grid), FadeIn(rl), FadeIn(cl), FadeIn(ql), FadeIn(kl), FadeIn(tag))
             vo.wait_until("a")
@@ -135,8 +135,8 @@ class Masks(VoiceoverScene):
                              font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15).move_to([0, -2.4, 0])
         with self.voiceover(
             "Different masks reveal the main information flows in these transformer families. "
-            "<bookmark mark='a'/> An encoder lets every position see every other: it reads, but cannot write left "
-            "to right. <bookmark mark='b'/> A decoder uses the causal triangle: it writes, one token at a time. "
+            "<bookmark mark='a'/> An encoder lets every position see every other. This full-attention mask alone does not enforce "
+            "causality for next-token training; encoder models can generate with masked or iterative procedures. <bookmark mark='b'/> A decoder uses the causal triangle: it writes, one token at a time. "
             "<bookmark mark='c'/> The 2017 paper's translator had both. Its decoder looks at its own past, and "
             "through cross-attention at the whole source sentence: the queries come from the translation, the keys "
             "and values from the encoder's reading of the original. <bookmark mark='d'/> A prefix language model "
@@ -166,11 +166,12 @@ class Masks(VoiceoverScene):
                  f"nearly blind to order: its outputs move by only {dev:.3f}.")
 
         def row(order, y):
-            g = VGroup(*[VGroup(RoundedRectangle(width=1.5, height=0.7, corner_radius=0.1, stroke_color=K, stroke_width=2),
+            g = VGroup(*[VGroup(RoundedRectangle(width=1.5, height=0.7, corner_radius=0.1, stroke_color=K, stroke_width=2,
+                                                   fill_color=BACKGROUND, fill_opacity=1),
                                 data_text(words[i], font=MONO, font_size=28, color=WHITE)) for i in order])
             for b in g:
                 b[1].move_to(b[0])
-            return g.arrange(RIGHT, buff=0.4).move_to([-3.2, y, 0])
+            return g.arrange(RIGHT, buff=0.4).move_to([-3.2, y, 0]).set_z_index(2)
 
         r1 = row([0, 1, 2], 1.7)
         r2 = row([2, 1, 0], 1.7)
@@ -181,14 +182,14 @@ class Masks(VoiceoverScene):
             return VGroup(*[Line(qd.get_top(), b.get_bottom(), color=A, stroke_width=2 + 14 * w[i])
                             for b, i in zip(r, order)])
 
-        l1 = lines(r1, [0, 1, 2])
+        l1 = lines(r1, [0, 1, 2]).set_z_index(0)
         out = label(r"$0.5\,v_{\mathrm{dog}} + 0.2\,v_{\mathrm{bites}} + 0.3\,v_{\mathrm{man}}$", font_size=28, color=V)
         out.next_to(qd, DOWN, buff=0.45)
         tag = note(r"illustrative weights").next_to(out, DOWN, buff=0.2)
         eq = cmath(r"\operatorname{Attn}(P X)", r"=", r"P\,\operatorname{Attn}(X)", font_size=36).move_to([3.6, 1.6, 0])
         eql = label(r"permute the inputs, \\ and the outputs are permuted \\ the same way: \ nothing else changes",
                     font_size=22, color=GREY_A).next_to(eq, DOWN, buff=0.3)
-        chk = label(rf"our transformer, mask and rotations removed, \\ $128$ characters shuffled: \\ outputs agree to "
+        chk = label(rf"our transformer, mask and rotations removed, \\ $128$ characters shuffled: \\ raw logits agree to "
                     rf"${sci(dev)}$ \ (of values up to ${scale:.0f}$)", font_size=20, color=C.TRUE_P)
         chk.next_to(eql, DOWN, buff=0.4)
         with self.voiceover(
@@ -203,9 +204,15 @@ class Masks(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in l1], lag_ratio=0.2), FadeIn(out), FadeIn(tag))
             vo.wait_until("b")
-            l2 = lines(r2, [2, 1, 0])
-            self.play(*[r1[i].animate.move_to(r2[j]) for i, j in ((0, 2), (2, 0))], Transform(l1, l2), run_time=1.5,
-                      path_arc=PI / 3)
+            # Keep each weighted connector attached to its word. Separate lanes avoid the middle card;
+            # opaque cards above the lines hide any connector segment passing behind a label.
+            for connector, card_ in zip(l1, r1):
+                connector.add_updater(lambda m, card_=card_: m.put_start_and_end_on(qd.get_top(), card_.get_bottom()))
+            self.play(r1[0].animate.shift(UP * 1.1), r1[2].animate.shift(DOWN * 1.1), run_time=0.25)
+            self.play(r1[0].animate.set_x(r2[2].get_x()), r1[2].animate.set_x(r2[0].get_x()), run_time=1.0)
+            self.play(r1[0].animate.set_y(r2[2].get_y()), r1[2].animate.set_y(r2[0].get_y()), run_time=0.25)
+            for connector in l1:
+                connector.clear_updaters()
             self.play(Indicate(out, color=V))
             vo.wait_until("c")
             self.play(FadeIn(eql), FadeIn(chk))

@@ -47,8 +47,8 @@ class Longer(VoiceoverScene):
     def line(self, ax, e, key, color, hi, sw=3.5):
         b = np.asarray(e[f"bucket_{key}"])
         xs = np.arange(len(b)) * 64 + 32
-        return VGroup(curve(ax, xs, np.minimum(b, hi), color, sw),
-                      *[Dot(ax.c2p(x, min(v, hi)), radius=0.05, color=color) for x, v in zip(xs, b)])
+        return VGroup(curve(ax, xs, b, color, sw),
+                      *[Dot(ax.c2p(x, v), radius=0.05, color=color) for x, v in zip(xs, b)])
 
     # ------------------------------------------------------------------
     def breaks(self):
@@ -56,10 +56,10 @@ class Longer(VoiceoverScene):
         ctx, s = int(t["ctx"]), int(e["s"])
         allb = np.concatenate([np.asarray(e[f"bucket_{k}"]) for k, _, _ in METHODS] + [np.asarray(e["bucket_window"])])
         lo = math.floor(allb.min() * 2) / 2 - 0.5
-        hi = min(math.ceil(allb.max() * 2) / 2, lo + 4.5)
+        hi = math.ceil(allb.max() * 2) / 2
         ax, deco = self.axes(e, lo, hi)
         edge = DashedLine(ax.c2p(ctx, lo), ax.c2p(ctx, hi), color=GREY_B, stroke_width=2)
-        el = label(rf"trained up to ${ctx}$", font_size=22, color=GREY_B).next_to(edge.get_top(), RIGHT, buff=0.1).shift(DOWN * 0.25)
+        el = label(rf"trained up to ${ctx}$", font_size=22, color=GREY_B).next_to(edge.get_bottom(), RIGHT, buff=0.1).shift(UP * 0.25)
         plain = self.line(ax, e, "plain", C.SURPRISE, hi)
         win = self.line(ax, e, "window", GREY_B, hi, 2.5)
         k1 = label(r"rotations as trained", font_size=24, color=C.SURPRISE).move_to([4.7, 1.8, 0])
@@ -68,12 +68,7 @@ class Longer(VoiceoverScene):
         far = float(bp[-4:].mean())
         near = float(bp[: ctx // 64].mean())
         with self.voiceover(
-            f"Our model was trained on stretches of {ctx} characters. What if we hand it {s} times as many? "
-            "<bookmark mark='a'/> Up to its training length, it does what it always did. <bookmark mark='b'/> Past "
-            f"it, it falls apart: from {near:.1f} bits a character to {far:.1f}. The slow hands of its clocks now "
-            "point at angles it never saw in training, and its queries and keys stop meaning what they meant. "
-            "<bookmark mark='c'/> Doing nothing clever, just reading the last "
-            f"{ctx} characters at a time, is far better. Long context isn't free."
+            (f"Our model was trained on stretches of {ctx} characters. Compare {s} times that length using 32 fixed windows and the same next-character targets for every method. <bookmark mark='a'/> The first quarter averages {near:.1f} bits a character. <bookmark mark='b'/> The far quarter averages {far:.1f}; this comparison alone does not identify a cause. <bookmark mark='c'/> The gray baseline predicts those same targets using at most the last {ctx} input characters, resetting the input window for later targets.")
         ) as vo:
             self.play(Create(ax), FadeIn(deco), Create(edge), FadeIn(el))
             vo.wait_until("a")
@@ -90,7 +85,7 @@ class Longer(VoiceoverScene):
         ctx, s = int(t["ctx"]), int(e["s"])
         allb = np.concatenate([np.asarray(e[f"bucket_{k}"]) for k, _, _ in METHODS] + [np.asarray(e["bucket_window"])])
         lo = math.floor(allb.min() * 2) / 2 - 0.5
-        hi = min(math.ceil(allb.max() * 2) / 2, lo + 4.5)
+        hi = math.ceil(allb.max() * 2) / 2
         lines = {k: self.line(ax, e, k, c_, hi) for k, _, c_ in METHODS}
         keys = VGroup(k1, k2, *[label(t_, font_size=24, color=c_) for k, t_, c_ in METHODS[1:]])
         for a, b in zip(keys[1:], keys[2:]):
@@ -108,17 +103,17 @@ class Longer(VoiceoverScene):
         w_far = float(np.asarray(e["bucket_window"])[-4:].mean())
         best = min(("pi", "ntk", "yarn"), key=lambda k: b[k])
         cites = cite(r"S.~Chen et al.\ (2023); \ bloc97 (2023); \ B.~Peng et al., \textit{YaRN} (2023)", corner=UR)
-        win_txt = ("." if b[best] > w_far else f", and better even than the {ctx}-character window.")
+        win_txt = ((', with no assumed superiority to the same-target window baseline.') if b[best] > w_far else (f", compared with {w_far:.2f} for the same-target {ctx}-character window."))
         names = {"pi": "position interpolation", "ntk": "the NTK-aware rescaling", "yarn": "YaRN"}
         with self.voiceover(
-            "So people rescale the clocks. <bookmark mark='a'/> Position interpolation slows every hand by the same "
-            f"factor, {s}, so the longer text spans only angles seen in training, but the fast hands lose detail. "
+            ("So people rescale the clocks. <bookmark mark='a'/> Position interpolation slows every hand by the same "
+            f"factor, {s}, compressing position coordinates into the training span; fractional positions were not literally all sampled in training. "
             "<bookmark mark='b'/> The NTK-aware trick, named after part twelve's neural tangent kernel, slows the "
-            "slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves the fast hands alone, "
-            "slows the slow ones fully, ramps in between, and sharpens the attention slightly. <bookmark mark='d'/> "
-            f"On our model, with no retraining, the best is {names[best]}: {b[best]:.2f} bits at the far end, against "
-            f"{b['plain']:.1f} for doing nothing" + win_txt + " Qwen and DeepSeek reach a hundred and twenty-eight "
-            "thousand tokens with YaRN."
+            "slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves high-turn pairs alone, "
+            "slows low-turn pairs fully, ramps in between, and uses a static score multiplier. <bookmark mark='d'/> "
+            f"On our model, with no retraining, the lowest measured far-end value among these rescalings, using display order for ties, is {names[best]}: {b[best]:.2f} bits at the far end, against "
+            f"{b['plain']:.1f} for doing nothing" + win_txt + " Qwen2.5 uses YaRN with dual-chunk attention, and DeepSeek-V3 uses its own YaRN configuration, to reach a hundred and twenty-eight "
+            "thousand tokens with YaRN.")
         ) as vo:
             self.play(FadeIn(cites), Create(bx), FadeIn(bl), FadeIn(yl))
             vo.wait_until("a")
@@ -190,15 +185,15 @@ class Longer(VoiceoverScene):
         cite_ = cite(r"B.~Peng et al., \textit{YaRN: Efficient Context Window Extension of Large Language Models} (2023)", corner=UR)
         kept_w = "pair" if kept == 1 else "pairs"
         with self.voiceover(
-            "Here is YaRN's recipe exactly. <bookmark mark='a'/> For each pair, count the full turns its hand makes "
+            ("Here is the static YaRN configuration tested here; its thresholds and multiplier are model-dependent choices. <bookmark mark='a'/> For each pair, count the full turns its hand makes "
             "over the training context: r, the context length over the pair's wavelength. <bookmark mark='b'/> Our "
-            f"fastest pair turns about {r[0]:.0f} times in {ctx} characters; it has seen every angle, so YaRN leaves "
+            f"fastest pair turns about {r[0]:.0f} times in {ctx} characters; the high-turn rule leaves "
             "it alone. <bookmark mark='c'/> The slowest pairs never finish a turn, so YaRN slows them by the full "
             f"factor of {s}. <bookmark mark='d'/> In between is a ramp, gamma: zero below one turn, one above "
             "thirty-two. <bookmark mark='e'/> Each new angle blends the slowed angle and the original by gamma. In "
             f"our heads, {kept} kept, {len(ramp_i)} on the ramp and {slowed} slowed fully. <bookmark mark='f'/> "
-            "Slowing the hands also flattens the attention, so YaRN multiplies every score by zero point one log s "
-            f"plus one, squared: for s of {s}, {mult:.2f}."
+            "The paper proposes an empirically chosen score multiplier: multiply every score by zero point one log s "
+            f"plus one, squared: for s of {s}, {mult:.2f}.")
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(cite_))
             vo.wait_until("a")
@@ -229,11 +224,11 @@ class Longer(VoiceoverScene):
         ctx, s = int(t["ctx"]), int(e["s"])
         rows = [
             cmath(r"p_{\text{best}}", r"=", r"\frac{e^{\Delta}}{e^{\Delta} + (n - 1)}", font_size=34, colors={r"p_{\text{best}}": A}),
-            cmath(r"p_{\text{best}} \text{ fixed}", r"\;\Leftrightarrow\;", r"e^{\Delta} \propto n \;\Leftrightarrow\; \Delta \propto \log n",
+            cmath(r"p_{\text{best}} \text{ fixed}", r"\;\Leftrightarrow\;", r"\Delta = \ln(n-1) + C",
                   font_size=34),
             cmath(r"s_{nj}", r"\;\leftarrow\;", r"s_{nj} \cdot \max\big(1, \log_{L} n\big)", font_size=34),
         ]
-        whys = [why(r"one key $\Delta$ above $n - 1$ others", font_size=20), why(r"solve for the margin", font_size=20),
+        whys = [why(r"one key $\Delta$ above $n - 1$ others", font_size=20), why(r"$n>1$, $0<p<1$: \ $C=\ln\frac{p}{1-p}$", font_size=20),
                 why(rf"trained at $L = {ctx}$: \\ unchanged up to $L$", font_size=20)]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-3.4, buff=0.5, edge=6.9)
         names = ["plain", "logn", "ntk", "ntk_logn", "yarn"]
@@ -241,12 +236,12 @@ class Longer(VoiceoverScene):
         near = float(np.mean(np.asarray(e["bucket_plain"])[: ctx // 64]))
         vals = [far[k] for k in names]
         lo = min(vals + [near]) - 0.3
-        g = axes([0, len(names), 1], [lo, max(vals) + 0.3, 0.5], x_length=6.0, y_length=2.6, xlabel="",
+        g = axes([0, len(names), 1], [lo, max(vals + [near]) + 0.3, 0.5], x_length=6.0, y_length=2.6, xlabel="",
                  ylabel=rf"bits per character at positions ${3 * ctx}$--${4 * ctx}$", center=[2.6, -2.0, 0])
         ax = g.ax
         bars = VGroup()
         for i, k in enumerate(names):
-            v = min(far[k], max(vals) + 0.3)
+            v = far[k]
             r_ = Rectangle(width=0.7, height=max(ax.c2p(0, v)[1] - ax.c2p(0, lo)[1], 0.02), stroke_width=0,
                            fill_color=EXT_COLORS[k], fill_opacity=0.85).move_to(ax.c2p(i + 0.5, (v + lo) / 2))
             bars.add(VGroup(r_, MathTex(f"{far[k]:.2f}", font_size=20, color=EXT_COLORS[k]).next_to(r_, UP, buff=0.06),
@@ -278,18 +273,18 @@ class Longer(VoiceoverScene):
         help_l = far["logn"] < far["plain"] - 0.05
         help_n = far["ntk_logn"] < far["ntk"] - 0.02
         v1 = (f"On our model, scaling alone takes the far end from {far['plain']:.2f} to {far['logn']:.2f} bits. "
-              if help_l else f"On our model, scaling alone barely changes the far end: {far['plain']:.2f} to "
-              f"{far['logn']:.2f} bits, since the broken angles, not the spread, are its problem. ")
+              if help_l else (f"On our model, scaling alone reports {far['plain']:.2f} to "
+              f"{far['logn']:.2f} bits. This does not identify which mechanism limits performance. "))
         v2 = (f"On top of the NTK rescaling it helps again, {far['ntk']:.2f} to {far['ntk_logn']:.2f}. " if help_n else
-              f"On top of the NTK rescaling it changes little, {far['ntk']:.2f} to {far['ntk_logn']:.2f}. ")
+              (f"On top of the NTK rescaling the measured values are {far['ntk']:.2f} to {far['ntk_logn']:.2f}. "))
         with self.voiceover(
-            "A longer text also has more keys to share the weights. <bookmark mark='a'/> Say the best key scores "
+            ("A longer text also has more keys to share the weights. <bookmark mark='a'/> Say the best key scores "
             "delta above n minus one others: its weight is e to the delta over e to the delta plus n minus one. "
-            "<bookmark mark='b'/> To keep that weight as n grows, delta must grow like log n. <bookmark mark='c'/> "
-            "So scale every score by log n, in units of the training length: nothing changes up to it, and beyond it "
-            "the attention stays as sharp as in training. David Chiang and Peter Cholak proposed it in 2022; Qwen "
+            "<bookmark mark='b'/> For fixed weight strictly between zero and one, the exact margin is ln of n minus one plus a constant. At large n this is approximately ln n plus that constant. <bookmark mark='c'/> "
+            "We test a log-length score multiplier, unchanged through the training length. In this equal-other-scores illustration it counters dilution, but for a learned score distribution "
+            "it does not guarantee fixed sharpness or entropy. David Chiang and Peter Cholak proposed it in 2022; Qwen "
             f"and Llama 4 use versions of it. <bookmark mark='d'/> {v1}<bookmark mark='e'/> {v2}"
-            f"The best of all here is {SPOKEN_EXT[best]}, at {far[best]:.2f}."
+            f"The lowest measured far-end value in this comparison, with display order breaking ties, is {SPOKEN_EXT[best]}, at {far[best]:.2f}.")
         ) as vo:
             step(0)
             self.play(FadeIn(pg), Create(pv))
@@ -321,7 +316,7 @@ class Longer(VoiceoverScene):
         def ln(key, col, sw=3.0, dashed=False):
             b = np.asarray(e[f"bucket_{key}"])
             xs = np.arange(len(b)) * 64 + 32
-            c_ = curve(ax, xs, np.minimum(b, hi), col, sw)
+            c_ = curve(ax, xs, b, col, sw)
             return DashedVMobject(c_, num_dashes=24) if dashed else c_
 
         before = VGroup(ln("pi", EXT_COLORS["pi"], 2.5, True), ln("yarn", EXT_COLORS["yarn"], 2.5, True))
@@ -346,24 +341,21 @@ class Longer(VoiceoverScene):
         far = {k: float(np.asarray(e[f"bucket_{k}"])[-4:].mean()) for k in ("pi", "yarn", "ft_pi", "ft_yarn", "window")}
         winner = "ft_yarn" if far["ft_yarn"] < far["ft_pi"] else "ft_pi"
         gap = abs(far["ft_yarn"] - far["ft_pi"])
-        v = (f"Position interpolation falls from {far['pi']:.2f} to {far['ft_pi']:.2f} bits at the far end, YaRN "
-             f"from {far['yarn']:.2f} to {far['ft_yarn']:.2f}.")
+        v = ((f"Position interpolation reports {far['pi']:.2f} before and {far['ft_pi']:.2f} bits after at the far end; YaRN "
+             f"reports {far['yarn']:.2f} before and {far['ft_yarn']:.2f} after."))
         if far[winner] < far["window"]:
-            v_end = (f"YaRN ends ahead by {gap:.2f} bits, and beats reading the last {ctx} characters, {far['window']:.2f}."
+            v_end = ((f"The tuned methods differ by {gap:.2f} bits at the far end; the last-{ctx}-character baseline is {far['window']:.2f}. This finite comparison does not establish a universal winner.")
                      if winner == "ft_yarn" else
-                     f"Interpolation ends ahead by {gap:.2f} bits, and beats reading the last {ctx} characters, "
-                     f"{far['window']:.2f}.")
+                     (f"The tuned methods differ by {gap:.2f} bits at the far end; the last-{ctx}-character baseline is {far['window']:.2f}. This finite comparison does not establish a universal winner."))
         else:
-            v_end = (f"YaRN ends ahead by {gap:.2f} bits, but neither yet beats simply reading the last {ctx} characters, "
-                     f"{far['window']:.2f}." if winner == "ft_yarn" else
-                     f"Interpolation ends ahead by {gap:.2f} bits, but neither yet beats simply reading the last {ctx} "
-                     f"characters, {far['window']:.2f}.")
+            v_end = ((f"The tuned methods differ by {gap:.2f} bits at the far end; the last-{ctx}-character baseline is {far['window']:.2f}. This finite comparison does not establish a universal winner.") if winner == "ft_yarn" else
+                     (f"The tuned methods differ by {gap:.2f} bits at the far end; the last-{ctx}-character baseline is {far['window']:.2f}. This finite comparison does not establish a universal winner."))
         with self.voiceover(
-            f"Real models then train briefly at the new length. So did we: {steps} steps of {T:,}-character windows, "
-            f"about {100 * chars / float(t['tokens']):.0f} percent of the original training, from position "
+            (f"Each rescaling starts from the same saved model. Per run, {steps} updates of {int(e['ft_batch'])} windows of {T:,} characters: {chars:,} sampled next-character targets, "
+            f"about {100 * chars / float(t['tokens']):.0f} percent of the original sampled-target budget, from position "
             "interpolation and from YaRN; in the corner, their training loss. <bookmark mark='a'/> Dashed, before; "
             f"solid, after. <bookmark mark='b'/> {v} <bookmark mark='c'/> {v_end} DeepSeek-V3 went from four thousand "
-            "to a hundred and twenty-eight thousand tokens this way, with two thousand steps."
+            "to a hundred and twenty-eight thousand tokens this way, with two thousand steps.")
         ) as vo:
             self.play(Create(ax), FadeIn(deco), Create(edge), FadeIn(key[2:]), Create(before), Create(win), run_time=2.0)
             self.play(FadeIn(fg), FadeIn(ftl), Create(fl), run_time=2.0)

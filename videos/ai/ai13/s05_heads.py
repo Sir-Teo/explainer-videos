@@ -33,7 +33,7 @@ class Heads(VoiceoverScene):
             cmath(r"q_i \cdot k_j", r"=", r"x_i^\top\, W_{QK}\, x_j", font_size=36, colors=colors),
             cmath(r"\operatorname{rank} W_{QK}", r"\le", rf"d_h = {dh}", font_size=36, colors=colors),
         ]
-        whys = [why(r"$q = W_Q x$, \ $k = W_K x$"), why(r"transpose of a product"),
+        whys = [why(r"$x$: \ normalized input \\ before RoPE and score scaling"), why(r"transpose of a product"),
                 why(rf"one ${d} \times {d}$ matrix: \\ a bilinear form on the stream"),
                 why(rf"it factors through ${dh}$ numbers")]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-2.6, buff=0.55, edge=6.9)
@@ -53,8 +53,8 @@ class Heads(VoiceoverScene):
         ovg = VGroup(rowsov, ovl).arrange(DOWN, buff=0.2).move_to([4.2, -2.1, 0])
         cite_ = cite(r"N.~Elhage et al., \textit{A Mathematical Framework for Transformer Circuits} (2021)", corner=DR)
         with self.voiceover(
-            "Let's write one head as matrices. Character i's query is W Q times its vector in the residual stream, "
-            "and character j's key is W K times its vector. <bookmark mark='a'/> Move the transpose inside, "
+            "Let's write one head as matrices. Here x is the normalized input before rotations and score scaling. Character i's query is W Q times x i, "
+            "and character j's key is W K times x j. <bookmark mark='a'/> Move the transpose inside, "
             "<bookmark mark='b'/> and the score is x i, times one matrix, times x j: a single "
             f"{d} by {d} matrix, W Q K, that compares two positions of the stream. "
             f"<bookmark mark='c'/> But it is a product of a tall, thin {d} by {dh} matrix and a short, wide one, so "
@@ -85,8 +85,8 @@ class Heads(VoiceoverScene):
         sv = np.asarray(h["sv_qk"])  # layer, head, d
         rank, lrank = int(h["rank_qk"]), int(h["layer_rank"])
         k90 = np.asarray(h["k90_qk"])
-        ln_txt = (f"That is every direction but one, the average of the {d} numbers, which layer norm removes before "
-                  "any head sees it." if lrank == d - 1 else "That is close to the whole stream.")
+        ln_txt = (f"That is every direction but one for these linear matrices: an equal shift of all {d} coordinates, which centring removes "
+                  "from these factors." if lrank == d - 1 else "That sum is close to full rank.")
         g = axes([0, d, 32], [-17, 1, 4], x_length=6.6, y_length=3.8, xlabel=r"direction, \ largest first",
                  ylabel=r"singular values of $W_{QK}$, \ relative to the largest", xticks=[0, 32, 64, 96, 128],
                  yticks=[-16, -12, -8, -4, 0], yfmt=lambda v: f"10^{{{int(v)}}}", center=[-3.0, -0.4, 0])
@@ -100,23 +100,23 @@ class Heads(VoiceoverScene):
         cut = DashedLine(ax.c2p(dh, -17), ax.c2p(dh, 1), color=WHITE, stroke_width=1.5)
         cutl = MathTex(rf"d_h = {dh}", font_size=24).next_to(ax.c2p(dh, -6), RIGHT, buff=0.12)
         fl = label(r"rounding error", font_size=20, color=GREY_B).move_to(ax.c2p(80, -14.5))
-        tag = note(rf"our transformer: \ all ${L * H}$ heads, \ layer norm folded in").to_corner(DL, buff=0.3)
+        tag = note(rf"our transformer: \ all ${L * H}$ heads \\ pre-RoPE linear factors; \ LN gain and centring only").to_corner(DL, buff=0.3)
         ex = np.asarray(h["qk_example"])
         img = framed(signed_image(ex, 2.6, 2.6)).move_to([4.4, 1.2, 0])
         il = label(rf"one head's $W_{{QK}}$: \ ${d} \times {d}$ numbers", font_size=20, color=GREY_A).next_to(img, UP, buff=0.12)
         facts = VGroup(
             label(rf"nonzero directions: \ at most ${rank}$", font_size=22, color=A),
-            label(rf"$90\%$ of a head's size: \ ${int(k90.min())}$ to ${int(k90.max())}$ directions", font_size=22, color=GREY_A),
-            label(rf"a layer's ${H}$ heads together: \ rank ${lrank}$", font_size=22, color=Q),
+            label(rf"$90\%$ of squared size: \ ${int(k90.min())}$ to ${int(k90.max())}$ directions", font_size=22, color=GREY_A),
+            label(rf"sum of a layer's ${H}$ QK maps: \ min rank ${lrank}$", font_size=22, color=Q),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.2, -1.7, 0])
         keep_in_frame(facts)
         with self.voiceover(
             f"Here are the singular values of W Q K for every one of our transformer's {L * H} heads, largest "
-            f"first, on a log scale. <bookmark mark='a'/> Exactly {rank} of them are real; after that the values "
+            f"first, on a log scale. These linear matrices fold in only layer norm's gain and mean subtraction, not its offset or input-dependent rescaling. <bookmark mark='a'/> At most {rank} directions per head pass the numerical cutoff; after that the values "
             "fall off a cliff, to the size of the computer's rounding error. <bookmark mark='b'/> And even within "
             f"those {dh}, a head is lopsided: {int(k90.min())} to {int(k90.max())} directions hold ninety percent of "
-            f"its size. <bookmark mark='c'/> Add a layer's {H} heads together and the rank is {lrank}. "
-            "<bookmark mark='d'/> " + ln_txt + " Between them, the heads cover the stream, but each one looks through a narrow slit."
+            f"the sum of its squared singular values. <bookmark mark='c'/> Sum a layer's {H} pre-rotation QK matrices; the smallest rank of that sum across layers is {lrank}. "
+            "<bookmark mark='d'/> " + ln_txt + " The summed comparison maps span many directions; each individual matrix stays low-rank."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(img), FadeIn(il))
             self.play(LaggedStart(*[Create(c_) for c_ in lines], lag_ratio=0.05), run_time=2.0)

@@ -109,7 +109,7 @@ class Frontier(VoiceoverScene):
                          for corner, end, direction in links])
         cite_ = note(r"each from its paper or model card").to_corner(DR, buff=0.15)
         with self.voiceover(
-            "Every model in 2026 still computes this formula somewhere. What has changed is where, and how much. "
+            "Many models in 2026 still compute this formula somewhere. What has changed is where, and how much. "
             "<bookmark mark='a'/> Inside the attention block, the fixes of the last few chapters: sink logits, output gates, "
             "QK-norm, and layers with no positions at all. <bookmark mark='b'/> The keys and values every past "
             "token leaves behind have been shrunk: shared between heads, or rebuilt from a small latent vector, the "

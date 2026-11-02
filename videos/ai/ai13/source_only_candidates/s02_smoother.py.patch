@@ -1,0 +1,29 @@
+--- a/videos/ai/ai13/s02_smoother.py
++++ b/videos/ai/ai13/s02_smoother.py
+@@ -75,7 +75,7 @@
+             "Here is Part 7's data again: how often each page of Great Expectations says 'her'. Suppose you want a "
+             "smooth guess for page one hundred and twenty. <bookmark mark='a'/> Take a weighted average of every "
+             "page, weighting each by how close it is: a bump of weights, centered on the page you're asking about. "
+-            "<bookmark mark='b'/> Pages near the query count a lot, far ones not at all. The weights are positive "
++            "<bookmark mark='b'/> Pages near the query count a lot; sufficiently distant pages contribute very little. The weights are positive "
+             "and add up to one. <bookmark mark='c'/> Slide the query along, and the average traces a smooth curve. "
+             "This is Nadaraya and Watson's kernel smoother, from 1964."
+         ) as vo:
+@@ -104,7 +104,7 @@
+         fits = {h: curve(ax, xs, np.asarray(s[f"fit{h:g}"]), Q, 3.5, smooth=True) for h in hs}
+         with self.voiceover(
+             "The only knob is the width of the bump. <bookmark mark='a'/> Too narrow, and the curve chases every "
+-            "page's noise. <bookmark mark='b'/> Too wide, and it flattens the whole story into one number."
++            "page's noise. <bookmark mark='b'/> A wider bump smooths over more local detail; in the infinitely wide limit, every page has equal weight."
+         ) as vo:
+             self.play(qv.animate.set_value(float(s["q"])), FadeIn(hl), run_time=1.5)
+             vo.wait_until("a")
+@@ -147,7 +147,7 @@
+         with self.voiceover(
+             "Write it down. The guess at the query is a sum over the pages: each page's value, times a weight. The "
+             "weight is a softmax of a score: the exponential of the score, divided by the total, so the weights are "
+-            "positive and add up to one. Here the score is minus the squared distance. <bookmark mark='a'/> Now "
++            "positive and add up to one. Here the score is minus the squared distance, divided by twice the bandwidth squared. <bookmark mark='a'/> Now "
+             "change one thing. Instead of a distance between page numbers, score each item by a dot product between "
+             "two vectors: a query and a key. <bookmark mark='b'/> That's attention, the heart of the transformer. "
+             "The query asks what am I looking for; each key says what it offers; each value is what it passes on. "

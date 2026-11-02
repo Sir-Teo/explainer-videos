@@ -52,29 +52,29 @@ class Induction(VoiceoverScene):
         tag = note(r"our transformer; \ $16$ stretches of $100$ held-out characters, each shown twice").next_to(key, UP, buff=0.12)
         u26 = math.log2(26)
         if m2 < 0.6 * m1:
-            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: it copies from its "
-                  "own context.")
+            v1 = ((f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: this probe shows a large improvement from its "
+                  "own context."))
         elif m2 < m1 - 0.05:
-            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: a little better, "
-                  "but it barely copies.")
+            v1 = ((f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: a little better, "
+                  "a modest improvement on this probe."))
         else:
-            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better. The "
-                  "answer sits a hundred characters back, unused.")
+            v1 = ((f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better. The "
+                  "probe shows no mean second-copy improvement; it does not rule out every copying mechanism."))
         if q1 > u26 and q2 < 0.6 * q1:
-            v2 = (f"Random letters: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, "
-                  f"{u26:.1f}; {q2:.1f} the second: here, at least, it copies.")
+            v2 = ((f"Random letters: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, "
+                  f"{u26:.1f}; {q2:.1f} the second: this probe shows a second-copy improvement."))
         elif q1 > u26:
-            v2 = (f"Random letters: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, "
-                  f"{u26:.1f}; and {q2:.1f} the second: no copying here either.")
+            v2 = ((f"Random letters: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, "
+                  f"{u26:.1f}; and {q2:.1f} the second: this probe shows no second-copy improvement."))
         elif q2 < 0.6 * q1:
-            v2 = f"Random letters: {q1:.1f} bits the first time, {q2:.1f} the second: here, at least, it copies."
+            v2 = (f"Random letters: {q1:.1f} bits the first time, {q2:.1f} the second: this probe shows a second-copy improvement.")
         else:
-            v2 = f"Random letters: {q1:.1f} bits the first time, and {q2:.1f} the second: no copying here either."
-        tail = ("The machinery behind copying has a name." if m2 < m1 - 0.05 else
-                "Copying needs a particular piece of machinery, and our transformer has not built it.")
+            v2 = (f"Random letters: {q1:.1f} bits the first time, and {q2:.1f} the second: this probe shows no second-copy improvement.")
+        tail = (('One common copying motif is called an induction circuit.') if m2 < m1 - 0.05 else
+                ('We can examine one common copying motif without concluding that this model lacks every copying mechanism.'))
         with self.voiceover(
-            "A test no counting model can pass: show our transformer a stretch of a novel it has never seen, twice "
-            "in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2 + " <bookmark mark='c'/> " + tail
+            ("A finite probe of context use: show our transformer a held-out stretch of a novel, twice "
+            "in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2 + " <bookmark mark='c'/> " + tail)
         ) as vo:
             self.play(FadeIn(row), FadeIn(g), FadeIn(key), FadeIn(tag))
             vo.wait_until("a")
@@ -110,12 +110,12 @@ class Induction(VoiceoverScene):
         tag = note(r"schematic").to_corner(DR, buff=0.3)
         cite_ = cite(r"C.~Olsson et al., \textit{In-context Learning and Induction Heads} (2022)", corner=UL)
         with self.voiceover(
-            "It takes two heads, in two layers. <bookmark mark='a'/> In an earlier layer, a head that only looks one "
+            ("One common motif uses two heads, in two layers. <bookmark mark='a'/> In an earlier layer, a head that only looks one "
             "step back: each character's vector now also says which character came before it. <bookmark mark='b'/> "
             "In a later layer, the second head reads an 'l' and asks: which earlier character came right after an "
             "'l'? The 'c' in Falcon answers, because its note says: the one before me was an 'l'. "
             "<bookmark mark='c'/> So the head copies it: 'c'. Seen A then B? On seeing A again, predict B. Catherine "
-            "Olsson and colleagues at Anthropic named these induction heads in 2022."
+            "Olsson and colleagues at Anthropic named these induction heads in 2022.")
         ) as vo:
             self.play(FadeIn(row), Create(box), FadeIn(tag), FadeIn(cite_))
             vo.wait_until("a")
@@ -153,30 +153,26 @@ class Induction(VoiceoverScene):
         mi = framed(heat_image(np.asarray(d["map_ind"]), S, S, color=A, mask_upper=True))
         maps = Group(mp, mi).arrange(RIGHT, buff=0.35).move_to([3.6, -0.1, 0])
         t1 = label(r"layer 1: \ one back", font_size=22, color=K).next_to(mp, UP, buff=0.12)
-        t2 = label(r"layer 2: \ the induction head", font_size=22, color=A).next_to(mi, UP, buff=0.12)
-        stripe = label(r"the stripe: \ the repeat looking at its source, one step ahead", font_size=20,
+        t2 = label(r"layer 2: \ selected repeat-probe head", font_size=22, color=A).next_to(mi, UP, buff=0.12)
+        stripe = label(r"reference stripe: \ known source-successor positions", font_size=20,
                        color=GREY_A).next_to(maps, DOWN, buff=0.2)
         head = label(rf"a small attention-only model, \ ${V_}$ random tokens with a repeated stretch", font_size=26)
         head.to_edge(UP, buff=0.35)
         f1, f2 = float(c1[-1, 1]), [float(v) for v in d["final2"]]
         one_fails = f1 > max(f2) + 1.0
-        v1 = (f"With one layer it never learns to copy: after {int(c1[-1, 0]):,} steps, still {f1:.1f} bits on the "
-              "repeat; one head cannot both note the previous token and search for it. "
+        v1 = ((f"In this one-layer run, after {int(c1[-1, 0]):,} steps the repeat loss is {f1:.1f} bits. This finite result is not an impossibility claim. ")
               if one_fails else f"With one layer it ends at {f1:.1f} bits on the repeat. ")
         lo2, hi2 = min(f2), max(f2)
         if len(set(js)) == 1:
-            v_jump = (f"With two layers, nothing happens for a while, and then the loss on the repeat falls off a cliff, "
-                      f"around step {js[0]:,} in all our runs, down to {lo2:.2f} to {hi2:.2f} bits.")
+            v_jump = ((f"The two-layer runs end at {lo2:.2f} to {hi2:.2f} bits. Their largest logged loss decrease is around step {js[0]:,}; losses are sampled every 100 steps. If no interval decreases, it selects the smallest increase; this is not a phase-transition test."))
         else:
-            v_jump = (f"With two layers, nothing happens for a while, and then the loss on the repeat falls off a cliff, "
-                      f"between steps {min(js):,} and {max(js):,} in our {len(js)} runs, down to {lo2:.2f} to {hi2:.2f} "
-                      "bits.")
+            v_jump = ((f"The two-layer runs end at {lo2:.2f} to {hi2:.2f} bits. Their largest logged loss decreases lie between steps {min(js):,} and {max(js):,} in {len(js)} runs; losses are sampled every 100 steps. If no interval decreases, the marker selects the smallest increase; these are not phase-transition tests."))
         with self.voiceover(
-            "Induction heads can be watched as they form, in a small attention-only model trained on random tokens "
+            ("We inspect fixed probes during training, in a small attention-only model trained on random tokens "
             f"with a repeated stretch inside. <bookmark mark='a'/> {v1}<bookmark mark='b'/> {v_jump} "
-            "<bookmark mark='c'/> Inside, the first layer looks one step back, the second at the earlier copy, one "
-            "step ahead. Olsson's team saw the same sudden jump in large models, just as they got good at learning "
-            "from their prompt."
+            "<bookmark mark='c'/> These are selected first-seed maps: a previous-position probe and an earliest-prior-match-successor probe, not "
+            "a causal intervention. The original head score averages attention on the successor of the earliest earlier matching token over masked repeat queries in 64 fixed examples, which can differ from the planted source. Final-score pair selection uses best-candidate fallback if none pass. These finite summaries do not prove a universal onset of learning "
+            "from a prompt.")
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
@@ -201,21 +197,21 @@ class Induction(VoiceoverScene):
         js = int(d["jump_step"])
         S = 2.7
         # how strongly each head does its job on the example, checkpoint by checkpoint: the previous-token head's
-        # attention one back, and the induction head's on the repeat (positions 60-79 copy 10-29), one ahead
+        # attention one back, and a separately corrected DISPLAY stripe: q60..78 -> keys11..29.
+        # ex[60:80]=ex[10:30]; q79 predicts outside the copy. Canonical ind_scores is untouched.
         prev_sc = [float(np.mean([L1[k, hp, q, q - 1] for q in range(1, L1.shape[-1])])) for k in range(len(steps))]
-        ind_sc = [float(np.mean([L2[k, hi, q, q - 49] for q in range(61, 80)])) for k in range(len(steps))]
+        ind_sc = [float(np.mean([L2[k, hi, q, q - 49] for q in range(60, 79)])) for k in range(len(steps))]
         kb = int(np.argmax(ind_sc))  # the induction head at its sharpest, and the checkpoint before it began to rise
         ka = max([k for k in range(kb) if ind_sc[k] < 0.25 * ind_sc[kb]] or [0])
         lo_a, lo_b = (float(np.interp(steps[k], c2[:, 0], c2[:, 1])) for k in (ka, kb))
         kp = next(k for k in range(len(steps)) if prev_sc[k] >= 0.5 * max(prev_sc))
         if steps[ka] <= steps[kp] <= steps[kb]:
-            together = (f"The first head turns to the token one back in the same window, reaching {prev_sc[kb]:.2f} "
-                        f"by step {steps[kb]:,}. ")
+            together = ((f"The first head has a previous-position score that crosses its half-peak reference in this window, reaching {prev_sc[kb]:.2f} "
+                        f"by step {steps[kb]:,}. "))
         elif steps[kp] < steps[ka]:
-            together = (f"The first head had already turned to the token one back, by step {steps[kp]:,}: the "
-                        "induction head built on it. ")
+            together = ((f"The first head reaches its half-peak previous-position score earlier, by step {steps[kp]:,}. This ordering alone is not causal evidence. "))
         else:
-            together = f"The first head turns to the token one back only later, by step {steps[kp]:,}. "
+            together = (f"The first head reaches its half-peak previous-position score later, by step {steps[kp]:,}. ")
 
         def maps(k):
             return Group(heat_image(L1[k, hp], S, S, color=K, mask_upper=True),
@@ -223,8 +219,8 @@ class Induction(VoiceoverScene):
 
         cur = maps(0)
         frames = VGroup(*[SurroundingRectangle(m_, buff=0, color=GREY_D, stroke_width=1.5) for m_ in cur])
-        t1 = label(r"layer 1, \ the head that will look one back", font_size=16, color=K).next_to(cur[0], UP, buff=0.12)
-        t2 = label(r"layer 2, \ the future induction head", font_size=16, color=A).next_to(cur[1], UP, buff=0.12)
+        t1 = label(r"layer 1, \ selected previous-position head", font_size=16, color=K).next_to(cur[0], UP, buff=0.12)
+        t2 = label(r"corrected display stripe, \ queries $60$--$78$", font_size=16, color=A).next_to(cur[1], UP, buff=0.12)
         top = float(c2[:, 1].max()) + 0.5
         ax = Axes(x_range=[0, c2[-1, 0], 1000], y_range=[0, top, 2], x_length=5.0, y_length=3.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.7, -0.2, 0])
@@ -240,13 +236,7 @@ class Induction(VoiceoverScene):
         show = [k for k, s_ in enumerate(steps) if s_ <= js + 750] + [len(steps) - 1]
         show = sorted(set(show))
         with self.voiceover(
-            "Here are the two heads forming, checkpoint by checkpoint, beside the loss on the repeat. "
-            "<bookmark mark='a'/> Early on, both look around vaguely. "
-            f"<bookmark mark='b'/> Then, around step {js:,}, the second head finds the stripe: its attention there "
-            f"jumps from {ind_sc[ka]:.2f} to {ind_sc[kb]:.2f} within {steps[kb] - steps[ka]} steps, as the loss on the "
-            f"repeat falls from {lo_a:.1f} to {lo_b:.1f} bits. "
-            + together
-            + "Useless alone, together they copy."
+            (f"Here are first-seed selected-head maps at checkpoints, beside repeat loss. <bookmark mark='a'/> Watch the saved maps rather than assuming formation. <bookmark mark='b'/> The largest logged loss-decrease marker is step {js:,}. If no interval decreases, that marker selects the smallest increase. A separately corrected display metric averages the known-copy stripe over queries 60 through 78: from {ind_sc[ka]:.2f} to {ind_sc[kb]:.2f} across {steps[kb] - steps[ka]} steps; repeat loss is {lo_a:.1f} then {lo_b:.1f} bits. " + together + "This selected stripe window need not coincide with that marker, and association does not establish necessity or causation.")
         ) as vo:
             self.play(Create(ax), Create(l2), FadeIn(yn), FadeIn(xn), FadeIn(cur), Create(frames), FadeIn(t1), FadeIn(t2))
             self.add(dot, cnt)
@@ -274,7 +264,7 @@ class Induction(VoiceoverScene):
         js = int(d["jump_step"])
         f = cmath(r"\text{K-comp}(h_1 \to h_2)", r"=", r"\frac{\| W_{QK}^{h_2}\, W_{OV}^{h_1} \|_F}{\|W_{QK}^{h_2}\|_F\, "
                   r"\|W_{OV}^{h_1}\|_F}", font_size=34, colors={r"\text{K-comp}(h_1 \to h_2)": A}).move_to([0, 2.9, 0])
-        fl = label(r"how much the later head's keys read what the earlier head wrote", font_size=22, color=GREY_A)
+        fl = label(r"matrix alignment, not copying probability or causal evidence", font_size=22, color=GREY_A)
         fl.next_to(f, DOWN, buff=0.2)
         top = float(max(CK.max(), CQ.max()) * 1.15)
         g = axes([0, steps[-1], 1000], [0, top, top / 4], x_length=7.0, y_length=3.2, xlabel=r"training steps",
@@ -284,7 +274,7 @@ class Induction(VoiceoverScene):
         ax = g.ax
         bnd = Rectangle(width=ax.c2p(steps[-1], 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 2 * bsd)[1] - ax.c2p(0, 0)[1],
                         stroke_width=0, fill_color=GREY_B, fill_opacity=0.2).move_to(ax.c2p(steps[-1] / 2, base))
-        bl = label(r"random heads", font_size=18, color=GREY_B).next_to(bnd, RIGHT, buff=0.1)
+        bl = label(r"Gaussian draws: mean $\pm$ SD", font_size=18, color=GREY_B).next_to(bnd, RIGHT, buff=0.1)
         # the circuit: every previous-token head of layer 1 paired with every induction head of layer 2
         pv, iv = np.asarray(d["prev_scores"]), np.asarray(d["ind_scores"])
         P_ = [h for h in range(len(pv)) if pv[h] > 0.2] or [hp]
@@ -292,16 +282,17 @@ class Induction(VoiceoverScene):
         inc = np.zeros(CK.shape[1:], bool)
         inc[np.ix_(P_, I_)] = True
         k_c, q_c = CK[:, inc].mean(1), CQ[:, inc].mean(1)
-        k_o = CK[:, ~inc].mean(1)
+        has_other = bool((~inc).any())
+        k_o = CK[:, ~inc].mean(1) if has_other else None
         kk = curve(ax, steps, k_c, A, 3.5)
         qq = curve(ax, steps, q_c, Q, 2.5)
-        oth = curve(ax, steps, k_o, GREY_B, 2)
+        oth = curve(ax, steps, k_o, GREY_B, 2) if has_other else None
         jl = DashedLine(ax.c2p(js, 0), ax.c2p(js, top), color=A, stroke_width=1.2)
         key = VGroup(label(r"K-composition: \ previous-token heads $\to$ induction heads", font_size=19, color=A),
                      label(r"Q-composition, \ same pairs", font_size=19, color=Q),
-                     label(r"K-composition, \ every other pair", font_size=19, color=GREY_B),
+                     label(r"K-composition, \ every other pair" if has_other else r"no other pair group: \ all pairs selected", font_size=19, color=GREY_B),
                      note(rf"means over pairs; \ ${len(P_)}$ previous-token and ${len(I_)}$ induction heads; \\ "
-                          r"first seed, \ every 250 steps", font_size=16))
+                          r"first seed; final-score-selected pairs, \ every 250 steps", font_size=16))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, -0.4, 0])
         keep_in_frame(key)
         # what the formula measures, drawn where the key will go: the earlier head writes, the later head's keys read
@@ -314,20 +305,21 @@ class Induction(VoiceoverScene):
         sch = VGroup(w1, arr, w2).arrange(DOWN, buff=0.2).move_to([4.5, -0.6, 0])
         keep_in_frame(sch)
         k0, k1 = float(k_c[0]), float(k_c[-1])
-        q1, o1 = float(q_c[-1]), float(k_o[-1])
+        q1 = float(q_c[-1])
+        o1 = float(k_o[-1]) if has_other else None
         n_p, n_i = len(P_), len(I_)
-        v = (f"For the {n_p} previous-token heads paired with the {n_i} induction heads, it climbs from {k0:.2f} to "
-             f"{k1:.2f} as the induction heads form; Q-composition over the same pairs ends at {q1:.2f}, every other "
-             f"pair at {o1:.2f}. The induction heads' keys read what the previous-token heads wrote."
+        v = ((f"All {n_p} previous-position candidates paired with all {n_i} repeat-probe candidates select every pair. Their K-alignment changes from {k0:.2f} to {k1:.2f}; Q-alignment ends at {q1:.2f}. There is no other comparison group. These are descriptive matrix scores, not causal evidence." if not has_other else ((f"For the {n_p} previous-token heads paired with the {n_i} induction heads, its matrix alignment changes from {k0:.2f} to "
+             f"{k1:.2f} over these checkpoints; Q-composition over the same pairs ends at {q1:.2f}, every other "
+             f"pair at {o1:.2f}. This is descriptive matrix alignment, not a copying probability or a causal test.")
              if k1 > max(q1, o1) + 2 * bsd else
-             f"For the {n_p} previous-token heads paired with the {n_i} induction heads, it ends at {k1:.2f}, against "
-             f"{q1:.2f} for Q-composition and {o1:.2f} for every other pair: in this small model the signal is not "
-             "cleanly in the keys.")
+             (f"For the {n_p} previous-token heads paired with the {n_i} induction heads, it ends at {k1:.2f}, against "
+             f"{q1:.2f} for Q-composition and {o1:.2f} for every other pair: this descriptive contrast is not a causal test, and the signal is not "
+             "cleanly in the keys."))))
         with self.voiceover(
-            "The cooperation shows in the weights alone. <bookmark mark='a'/> K-composition, from Nelson Elhage and "
+            ("The weights provide an alignment probe, not proof of cooperation. <bookmark mark='a'/> K-composition, from Nelson Elhage and "
             "colleagues, measures how much a later head's keys read what an earlier head writes: the size of the "
-            "product of its QK matrix and the earlier head's OV matrix, relative to their sizes. Random heads score "
-            f"about {base:.2f}. <bookmark mark='b'/> {v}"
+            "product of its QK matrix and the earlier head's OV matrix, relative to their sizes. Two hundred Gaussian factorized-head draws have mean score "
+            f"about {base:.2f}. <bookmark mark='b'/> {v}")
         ) as vo:
             self.play(FadeIn(f), FadeIn(fl))
             vo.wait_until("a")
@@ -335,7 +327,7 @@ class Induction(VoiceoverScene):
             self.play(GrowArrow(arr[0]), FadeIn(arr[1]), FadeIn(w2))
             vo.wait_until("b")
             self.play(FadeOut(sch))
-            self.play(Create(kk), Create(qq), Create(oth), FadeIn(key), run_time=2.0)
+            self.play(Create(kk), Create(qq), *([Create(oth)] if has_other else []), FadeIn(key), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -355,7 +347,7 @@ class Induction(VoiceoverScene):
         M = np.nan_to_num(CK, nan=0.0)
         top = float(np.nanmax(CK))
         img = framed(heat_image(np.clip(M - base, 0, None), 3.4, 3.4, color=A, gamma=0.7)).move_to([-4.0, -0.6, 0])
-        il = label(r"K-composition between our heads, \\ above the random level", font_size=20, color=GREY_A)
+        il = label(r"pre-RoPE matrix alignment, \\ above Gaussian mean; LN gain/centering folded in", font_size=20, color=GREY_A)
         il.next_to(img, UP, buff=0.15)
         rl = label(r"earlier head", font_size=18, color=GREY_B).rotate(PI / 2).next_to(img, LEFT, buff=0.12)
         cl = label(r"later head", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
@@ -376,7 +368,7 @@ class Induction(VoiceoverScene):
 
         stripe = DashedLine(px(n_ + 4, 5), px(N2 - 2, n_ - 1), color=GREY_A, stroke_width=1.6, dash_length=0.06)
         toy_sc = float(np.asarray(di["ind_scores"])[int(di["ind_head"])])
-        tl_ = label(rf"the toy's induction head: \\ ${toy_sc:.0%}$ one step after the copy".replace("%", r"\%"),
+        tl_ = label(rf"toy probe: \\ ${toy_sc:.0%}$ earliest-match successor weight".replace("%", r"\%"),
                     font_size=17, color=GREY_A).next_to(toy, UP, buff=0.12)
         ml_ = label(rf"ours, \ layer ${li + 1}$, head ${hi + 1}$: \\ ${ind.max():.1%}$ one step after the copy"
                     .replace("%", r"\%"), font_size=17, color=GREY_A).next_to(mine, UP, buff=0.12)
@@ -396,30 +388,26 @@ class Induction(VoiceoverScene):
         key.arrange(RIGHT, buff=0.5).next_to(g, DOWN, buff=0.2)
         strong = float(ind.max()) > 0.3
         if strong:
-            v1 = (f"Our transformer has one: layer {li + 1}'s head {hi + 1} puts {ind.max():.0%} of its attention, on "
-                  "average, exactly where an induction head should, one step after the earlier copy. ")
+            v1 = ((f"This finite probe finds a strong stripe: layer {li + 1}'s head {hi + 1} puts {ind.max():.0%} of its attention, on "
+                  "average, on its known source-successor stripe, one step after the earlier copy. "))
         else:
-            v1 = (f"Our transformer has none: its best candidate, layer {li + 1}'s head {hi + 1}, puts {ind.max():.1%} "
+            v1 = ((f"This finite probe shows no strong single-head stripe: its best candidate, layer {li + 1}'s head {hi + 1}, puts {ind.max():.1%} "
                   f"of its attention one step after the earlier copy, and at the end the second copy costs "
-                  f"{c2[-1]:.2f} bits a character, the first {c1[-1]:.2f}. ")
-        v2 = (f"Its heads compose a little, at most {top:.2f} against {base:.2f} for random heads, but no pair has "
-              "become a copying circuit. " if top > base + 4 * bsd else
-              f"And its heads barely compose: at most {top:.2f}, against {base:.2f} for random heads. ")
+                  f"{c2[-1]:.2f} bits a character, the first {c1[-1]:.2f}. "))
+        v2 = ((f"Its heads compose a little, at most {top:.2f} against {base:.2f} for random heads, but matrix alignment alone cannot establish whether a pair has "
+              "become a copying circuit. ") if top > base + 4 * bsd else
+              (f"Its maximum matrix alignment is near the Gaussian reference: at most {top:.2f}, against {base:.2f} for random heads. "))
         jmax = max(int(v) for v in di["jump_steps"])
         formed = max(float(v) for v in di["final2"]) < 0.5 * float(np.asarray(di["curve1"])[-1, 1])
         if strong:
             v3 = ""
         elif formed:
-            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens; "
-                  f"ours has read {tokens / 1e6:.0f} million characters, and a novel rarely repeats a long stretch "
-                  f"within 256 characters. The toy, built to reward copying, formed its pair within {jmax:,} steps.")
+            v3 = ((f"The training budget is {tokens / 1e6:.0f} million sampled character targets. Task distribution and budget are possible explanations, not tested causes. The toy's selected loss-change markers are no later than step {jmax:,}; these do not define an induction-onset threshold."))
         else:
-            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens; "
-                  f"ours has read {tokens / 1e6:.0f} million characters, and a novel rarely repeats a long stretch "
-                  "within 256 characters.")
+            v3 = ((f"The training budget is {tokens / 1e6:.0f} million sampled character targets. This probe does not rule out diffuse or alternative mechanisms; budget and task distribution are untested possible explanations."))
         with self.voiceover(
-            "And our own transformer, trained on novels with no copying game at all? <bookmark mark='a'/> " + v1
-            + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
+            ("And our own transformer, trained on novels with no copying game at all? Its matrix probe is pre-RoPE, folding in LayerNorm gain and centering but omitting input-dependent normalization and affine offsets; it is not an exact end-to-end circuit. <bookmark mark='a'/> " + v1
+            + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3)
         ) as vo:
             self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), FadeIn(indg), run_time=2.0)
             vo.wait_until("a")

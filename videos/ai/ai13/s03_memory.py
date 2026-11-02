@@ -109,7 +109,7 @@ class Hopfield(VoiceoverScene):
         capl = DashedLine(ax.c2p(np.log10(cap), 0), ax.c2p(np.log10(cap), 1.05), color=CLASSIC, stroke_width=1.5)
         capt = label(rf"$0.138\,N = {cap:.0f}$", font_size=20, color=CLASSIC).next_to(ax.c2p(np.log10(cap), 0.85), RIGHT,
                                                                                       buff=0.12)
-        key = legend([(CLASSIC, r"Hopfield (1982): \ sign updates"), (MODERN, r"one softmax step")], font_size=22)
+        key = legend([(CLASSIC, r"Hopfield (1982): \ sign updates"), (MODERN, rf"one softmax step \\ $\beta = {h['beta']:.2f}$; sign readout")], font_size=22)
         key.move_to([4.9, 1.6, 0])
         test = label(rf"each test: \ store $M$ random patterns \\ of ${N}$ units; \ flip $15\%$ of one; \\ "
                      r"does recall return it \\ exactly?", font_size=22, color=GREY_A).move_to([4.9, -0.4, 0])
@@ -117,8 +117,8 @@ class Hopfield(VoiceoverScene):
         dead = next((m for m, v in zip(Ms, cl) if v == 0), None)
         allm = bool(np.all(md >= 0.999))
         tail = (f"Store {int(Ms[-1])} patterns, {Ms[-1] / N:.1f} times the number of units, and one softmax step "
-                "still recalls every tested cue." if allm else
-                f"It holds on far longer: at {int(Ms[-1])} patterns it still recalls {md[-1]:.0%}.")
+                "followed by a sign readout recovers the stored pattern for every tested cue." if allm else
+                f"It holds on far longer: at {int(Ms[-1])} patterns, with a sign readout it still recalls {md[-1]:.0%}.")
         note_ = note(rf"$N = {N}$ units; \ random patterns; \ ${int(h['trials'])}$ trials each").to_corner(DR, buff=0.3)
         cite_ = cite(r"Amit, Gutfreund \& Sompolinsky (1985); \ Krotov \& Hopfield (2016); \ Demircigil et al.\ (2017)",
                      corner=DL)
@@ -128,7 +128,7 @@ class Hopfield(VoiceoverScene):
             "How much can it hold? Store more and more random patterns in a hundred units, and test each with a cue "
             f"in which fifteen percent of the units are flipped. <bookmark mark='a'/> The classical network "
             f"falls below half its patterns at {h_at} stored patterns, " + none_txt
-            + " Physicists computed its limit in 1985: about zero point one three eight patterns per unit. Every "
+            + " For random patterns, physicists computed its asymptotic capacity in 1985: about zero point one three eight patterns per unit. Every "
             "stored pattern adds a little noise to every other's vote, and the noise adds up. "
             "<bookmark mark='b'/> In 2016 Dmitry Krotov and John Hopfield sharpened the energy so that the closest "
             "pattern wins by far more, and in 2017 a team showed that an exponential energy stores exponentially "
@@ -176,7 +176,7 @@ class Hopfield(VoiceoverScene):
         for b_ in bars:
             b_.align_to(bars[0], UP)
         out = framed(pattern_image(np.asarray(h["rec_modern"])[cue_i], SIDE, 1.1, ink=MODERN)).move_to([5.9, -1.75, 0])
-        ol = label(r"recalled", font_size=20, color=MODERN).next_to(out, UP, buff=0.12)
+        ol = label(r"sign readout", font_size=20, color=MODERN).next_to(out, UP, buff=0.12)
         kl = label(r"stored letters: \ keys and values", font_size=20, color=K).next_to(keys, UP, buff=0.12)
         ok_m = int(h["letters_ok_modern"])
         th = theorem_card(r"modern Hopfield networks", r"well-separated patterns, \ a nearby cue: \ one update "
@@ -191,8 +191,8 @@ class Hopfield(VoiceoverScene):
             "the update is: weight every stored pattern by a softmax of its overlap with the current state, and add "
             "them up. <bookmark mark='c'/> Look at that formula. It is attention. The cue is the query, the stored "
             "patterns are both the keys and the values, and beta plays the part of one over the square root of d. "
-            f"<bookmark mark='d'/> On our letters, one step recalls {ok_m} of {n}. <bookmark mark='e'/> And they "
-            "proved that one step suffices for a nearby cue when the patterns are sufficiently separated. The paper's title: Hopfield Networks is All You Need."
+            f"<bookmark mark='d'/> On our letters, a sign readout after one update recovers {ok_m} of {n}. <bookmark mark='e'/> And they "
+            "proved a small-error, one-step retrieval bound for sufficiently separated patterns and a nearby cue. The paper's title: Hopfield Networks is All You Need."
         ) as vo:
             step(0)
             self.play(FadeIn(keys), FadeIn(kl))
@@ -218,7 +218,7 @@ class Hopfield(VoiceoverScene):
         W = np.asarray(h["beta_weights"])
         tgt = int(h["beta_target"])
         g = axes([np.log10(betas[0]), 0, 1], [0, 1.05, 0.5], x_length=6.2, y_length=3.6,
-                 xlabel=r"$\beta$, \ the inverse temperature", ylabel=r"overlap of the result with the cued pattern",
+                 xlabel=r"$\beta$, \ the inverse temperature", ylabel=r"continuous overlap with the cued pattern",
                  xticks=[], yticks=[0, 0.5, 1], center=[-3.3, -0.35, 0])
         ax = g.ax
         for e in (-2, -1, 0):

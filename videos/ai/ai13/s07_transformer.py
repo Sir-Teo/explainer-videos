@@ -10,7 +10,7 @@ from videos.ai.ai13.common import (A, K, MONO, OURS, PART, Q, V, curve, framed, 
 
 
 def board_rows():
-    """The scoreboard so far (Parts 1, 7 and 9), plus our transformer."""
+    """Selected historical Part1, KN, neural/mixture and TF reports; distinct target cohorts."""
     from videos.ai.ai1 import compute as c1
     from videos.ai.ai7 import compute as c6
     from videos.ai.ai9 import compute as c8
@@ -24,6 +24,17 @@ def board_rows():
     rows.insert(i + 2, dict(key="mix", label=r"the neural model $+$ Kneser--Ney", bits=n["mix_bits"], part=9, kind="lm"))
     rows.insert(i + 3, dict(key="tf", label=rf"our transformer, \ ${t['ctx']}$ characters", bits=t["passage_bits"], part=13,
                             kind="lm"))
+    assert int(t["ctx"]) == 256 and int(n["n_ctx"]) == 24 and int(k["best"]) == 7, "Re-audit target annotations if recipe changes"
+    scopes = {
+        "kn": dict(targets=(7,21405),count=21399,unit="bits per Unicode character"),
+        "nlm": dict(targets=(24,21405),count=21382,unit="bits per Unicode character"),
+        "mix": dict(targets=(24,21405),count=21382,unit="bits per Unicode character"),
+        "tf": dict(targets=(1,21376),count=21376,unit="bits per Unicode character"),
+    }
+    for row in rows:
+        row["cohort"] = scopes.get(row["key"],dict(kind="Part1 historical report; metric and coverage vary"))
+        if row["key"] in scopes:
+            row["cohort"].update(index_convention="zero-based inclusive")
     return rows, i + 3, n, k
 
 
@@ -108,10 +119,9 @@ class Transformer(VoiceoverScene):
     # ------------------------------------------------------------------
     def train(self):
         t = load("tf")
-        rows, i, n, k = board_rows()
         cv = np.asarray(t["curve"])
-        lo = float(np.floor(min(cv[:, 1:].min(), k["best_bits"], n["mix_bits"]) * 4) / 4 - 0.25)
-        hi = 4.0
+        lo = float(np.floor(cv[:, 1:].min() * 4) / 4 - 0.25)
+        hi = float(np.ceil(cv[:, 1:].max()))
         ax = Axes(x_range=[0, float(t["steps"]), float(t["steps"]) / 4], y_range=[lo, hi, 0.5], x_length=7.6, y_length=4.4,
                   tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05})
         ax.move_to([-2.2, -0.5, 0])
@@ -122,44 +132,33 @@ class Transformer(VoiceoverScene):
         xn = label(r"training steps", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"bits per character", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         steps = cv[:, 0]
-        refs = VGroup()
-        for val, txt, col in ((k["best_bits"], r"Kneser--Ney (Part 7)", C.TRUE_P), (n["mix_bits"], r"Part 9's best", C.NEURAL)):
-            refs.add(VGroup(DashedLine(ax.c2p(0, val), ax.c2p(float(t["steps"]), val), color=col, stroke_width=1.5),
-                            label(txt, font_size=20, color=col).next_to(ax.c2p(float(t["steps"]), val), RIGHT, buff=0.1)))
-        if abs(refs[0][1].get_y() - refs[1][1].get_y()) < 0.28:  # close values: keep the two names apart
-            hi_, lo_ = sorted(refs, key=lambda r_: -r_[1].get_y())
-            hi_[1].shift(UP * 0.14)
-            lo_[1].shift(DOWN * 0.14)
-        key = VGroup(label(r"held-out novels", font_size=24, color=GREY_B), label(r"the passage", font_size=24, color=OURS))
-        key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 2.2, 0])
+        key = VGroup(label(r"held-out novels \\ first $60{,}000$ source characters \\ $59{,}904$ scored targets",
+                           font_size=19, color=GREY_B),
+                     label(r"passage \\ targets $1$--$21{,}376$ \\ $21{,}376$ scored targets",
+                           font_size=19, color=OURS))
+        key.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.6, 2.1, 0])
         facts = VGroup(label(rf"${t['n_params'] / 1e6:.1f}$ million numbers", font_size=26, color=WHITE),
-                       label(rf"${t['tokens'] / 1e6:.0f}$ million characters of training", font_size=26, color=WHITE),
+                       label(rf"${t['tokens'] / 1e6:.0f}$ million training positions", font_size=26, color=WHITE),
                        label(rf"${t['ctx']}$ characters of context", font_size=26, color=WHITE),
-                       label(r"trained on a CPU", font_size=24, color=GREY_B))
+                       label(r"trained on a CPU", font_size=24, color=GREY_B),
+                       label(rf"final validation: ${float(t['valid_bits']):.2f}$ bits \\ first $400{{,}}000$ source characters \\ "
+                             r"$399{,}872$ scored targets", font_size=18, color=GREY_B))
         facts.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
         keep_in_frame(facts)  # clear of the reference lines' names, which sit at the end of the curves
+        index_note = note(r"target indices are zero-based and inclusive").to_edge(DOWN, buff=0.15)
         pb = float(t["passage_bits"])
-        kn, mix, nlm = float(k["best_bits"]), float(n["mix_bits"]), float(n["passage_bits"])
-        if pb < min(kn, mix):
-            verdict = (f"It reaches {pb:.2f} bits a character on the passage, better than every model before it on "
-                       "our board, counting or neural.")
-        elif pb < kn:
-            verdict = (f"It reaches {pb:.2f} bits a character on the passage, better than every counting model, though "
-                       f"not Part 9's neural model mixed with Kneser-Ney, at {mix:.2f}.")
-        elif pb < nlm:
-            verdict = (f"It reaches {pb:.2f} bits a character on the passage, better than Part 9's neural model, at "
-                       f"{nlm:.2f}, though not yet Kneser-Ney, at {kn:.2f}.")
-        else:
-            verdict = (f"It reaches {pb:.2f} bits a character on the passage, not yet better than Part 9's neural model, "
-                       f"at {nlm:.2f}.")
+        verdict = (f"It reports {pb:.2f} bits a character over 21,376 passage targets. The checkpoint validation "
+                   "curve uses the first sixty thousand source characters; the final validation report uses the "
+                   "first four hundred thousand. These original measurements use different targets from the "
+                   "historical counting and neural scores, so they do not establish a ranking between models.")
         with self.voiceover(
-            f"Ours has {t['layers']} blocks, {t['heads']} heads and {t['n_params'] / 1e6:.1f} million numbers, and "
-            f"reads {t['ctx']} characters at a time. We trained it on the thirty novels, about "
-            f"{t['tokens'] / 1e6:.0f} million characters, on an ordinary processor, without a graphics card. "
+            f"Ours has {t['layers']} blocks, {t['heads']} heads in each and {t['n_params'] / 1e6:.1f} million numbers, and "
+            f"reads {t['ctx']} characters at a time. We trained it on the thirty novels, with about "
+            f"{t['tokens'] / 1e6:.0f} million sampled character targets, on an ordinary processor, without a graphics card. "
             f"<bookmark mark='a'/> {verdict}"
         ) as vo:
-            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(facts))
-            self.play(FadeIn(refs), FadeIn(key))
+            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(facts), FadeIn(index_note))
+            self.play(FadeIn(key))
             # training, replayed: both curves draw as a step counter runs, the passage's bits riding on its curve
             tk = ValueTracker(float(steps[0]))
 
@@ -167,12 +166,12 @@ class Transformer(VoiceoverScene):
                 def build():
                     s_ = tk.get_value()
                     xs_ = [float(steps[0])] + [x_ for x_ in steps[1:] if x_ < s_] + [max(s_, float(steps[0]) + 1.0)]
-                    ys_ = np.minimum(np.interp(xs_, steps, cv[:, col]), hi)
+                    ys_ = np.interp(xs_, steps, cv[:, col])
                     return VMobject(color=color, stroke_width=sw).set_points_as_corners([ax.c2p(a_, b_) for a_, b_ in zip(xs_, ys_)])
                 return always_redraw(build)
 
             def head_at(col):
-                return ax.c2p(tk.get_value(), min(float(np.interp(tk.get_value(), steps, cv[:, col])), hi))
+                return ax.c2p(tk.get_value(), float(np.interp(tk.get_value(), steps, cv[:, col])))
 
             lv, lp = upto(1, GREY_B, 3), upto(2, OURS, 4)
             hd = always_redraw(lambda: Dot(head_at(2), radius=0.08, color=OURS))
@@ -290,23 +289,54 @@ class Transformer(VoiceoverScene):
     def board(self):
         t = load("tf")
         rows, i, n, k = board_rows()
-        board = scoreboard(rows, highlight=(i,), max_bits=8.0)
-        board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
-        glow = SurroundingRectangle(board.rows[i], color=OURS, buff=0.08, corner_radius=0.08)
-        gpt = next((r for r in rows if "GPT-2 small" in r["label"]), None)
-        more = (f"GPT-2 small, at {gpt['bits']:.2f}, is the same kind of machine: a stack of these blocks, about "
-                f"{round(124e6 / t['n_params'], -1):.0f} times bigger, trained on far more text with far more "
-                "computing. What separates them is mostly scale, which was Part 12's story." if gpt else
-                "The large models of Part 1 are the same kind of machine, much bigger and trained on far more text: "
-                "what separates them is mostly scale, Part 12's story.")
+        # Preserve original values and separate their audited target cohorts in presentation.
+        historical = [r for r in rows if r["key"] not in ("kn", "nlm", "mix", "tf")]
+        legacy = scoreboard(historical, max_bits=8.0)
+        legacy.scale_to_fit_width(6.4)
+        if legacy.height > 5.1:
+            legacy.scale_to_fit_height(5.1)
+        legacy.move_to([-3.5, -0.25, 0])
+        legacy_cap = label(r"Part 1: historical reports \\ mixed metrics and coverage", font_size=20,
+                           color=GREY_B).next_to(legacy, UP, buff=0.2)
+        title = label(r"Selected reports by target coverage", font_size=30).to_edge(UP, buff=0.25)
+
+        def report(title_text, score_rows, scope, y):
+            box = RoundedRectangle(width=6.1, height=1.65, corner_radius=0.1, stroke_color=GREY_D,
+                                   stroke_width=1.5).move_to([3.55, y, 0])
+            title_ = label(title_text, font_size=23, color=OURS).move_to(box.get_top()+DOWN*0.25)
+            body = VGroup(*[VGroup(label(name, font_size=20), MathTex(f"{value:.2f}", font_size=25, color=col))
+                            .arrange(RIGHT, buff=0.25) for name,value,col in score_rows])
+            body.arrange(RIGHT, buff=0.45).move_to([3.55, y+0.03, 0])
+            scope_ = label(scope, font_size=17, color=GREY_B).move_to(box.get_bottom()+UP*0.25)
+            return VGroup(box,title_,body,scope_)
+
+        tf_report = report(r"Part 13: our transformer", [(r"bits/character",float(t["passage_bits"]),OURS)],
+                           r"targets $1$--$21{,}376$; $21{,}376$ scored", 1.95)
+        kn_report = report(r"Part 7: Kneser--Ney", [(r"bits/character",float(k["best_bits"]),C.TRUE_P)],
+                           r"targets $7$--$21{,}405$; $21{,}399$ scored", 0.15)
+        neural_report = report(r"Part 9: neural and mixture",
+                               [(r"neural",float(n["passage_bits"]),C.NEURAL),
+                                (r"neural $+$ KN",float(n["mix_bits"]),C.NEURAL)],
+                               r"targets $24$--$21{,}405$; $21{,}382$ scored", -1.65)
+        scope_note = note(r"target indices: zero-based, inclusive; different contexts \\ no common-target ranking")
+        scope_note.to_edge(DOWN,buff=0.15)
+        glow = SurroundingRectangle(tf_report, color=OURS, buff=0.06, corner_radius=0.08)
+        gpt = next((r for r in historical if "GPT-2 small" in r["label"]), None)
+        more = (f"GPT-2 small, at {gpt['bits']:.2f}, is also a stack of attention blocks, about "
+                f"{round(124e6 / t['n_params'], -1):.0f} times bigger. Its report covers the full tokenized passage. "
+                "Its training data, position design and compute budget also differ; this is historical context, "
+                "not a controlled measure of scale alone." if gpt else
+                "The large models of Part 1 also stack attention blocks, with different training data, position "
+                "designs, budgets and score coverage. These reports do not isolate the effect of scale.")
         with self.voiceover(
-            f"On the scoreboard, a new row: our transformer, {float(t['passage_bits']):.2f}. <bookmark mark='a'/> "
-            + more
+            f"On the scoreboard, a new row: our transformer, {float(t['passage_bits']):.2f}. "
+            "The reports are separated here because they score different target sets. <bookmark mark='a'/> "+more
         ) as vo:
-            self.play(FadeIn(board))
+            self.play(FadeIn(legacy),FadeIn(legacy_cap),FadeIn(title),FadeIn(tf_report),FadeIn(kn_report),
+                      FadeIn(neural_report),FadeIn(scope_note))
             self.play(Create(glow))
             vo.wait_until("a")
             if gpt:
-                self.play(Indicate(board.rows[next(j for j, r in enumerate(rows) if r is gpt)], color=C.NEURAL))
+                self.play(Indicate(legacy.rows[next(j for j,r in enumerate(historical) if r is gpt)],color=C.NEURAL))
         self.wait(0.6)
         self.clear_scene()
