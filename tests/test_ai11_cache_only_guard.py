@@ -24,8 +24,9 @@ def loader(root):
     nodes = [n for n in tree.body
              if isinstance(n, ast.FunctionDef) and n.name == "load"
              or isinstance(n, ast.Assign) and any(isinstance(t, ast.Name)
-                and t.id in {"_BLOCKED_ITEMS", "_CACHE_ITEMS"} for t in n.targets)]
-    namespace = dict(json=json, np=np, _REPO_ROOT=root)
+                and t.id in {"_CORRECTED_ITEMS", "_CACHE_ITEMS"} for t in n.targets)]
+    namespace = dict(json=json, np=np, _REPO_ROOT=root,
+                     _load_corrected=mock.Mock(side_effect=RuntimeError("frozen manifest required")))
     exec(compile(ast.Module(body=nodes, type_ignores=[]), "<actual-part11-cache-reader>", "exec"), namespace)
     return namespace["load"], namespace
 
@@ -49,21 +50,26 @@ def snapshot(root):
 
 
 class CacheOnlyGuard(unittest.TestCase):
-    def test_blocked_products_fail_before_io_even_with_existing_pairs(self):
+    def test_corrected_products_delegate_without_legacy_io_even_with_existing_pairs(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             read, namespace = loader(root)
-            self.assertEqual(namespace["_BLOCKED_ITEMS"], {"race", "ns", "schedule"})
-            self.assertFalse(namespace["_BLOCKED_ITEMS"] & namespace["_CACHE_ITEMS"])
-            for name in namespace["_BLOCKED_ITEMS"]:
+            self.assertEqual(namespace["_CORRECTED_ITEMS"], {"race", "ns", "schedule"})
+            self.assertFalse(namespace["_CORRECTED_ITEMS"] & namespace["_CACHE_ITEMS"])
+            for name in namespace["_CORRECTED_ITEMS"]:
                 pair(root, name)
             before = snapshot(root)
             with mock.patch.object(Path, "is_file", side_effect=AssertionError("unexpected existence check")), \
                  mock.patch.object(Path, "read_text", side_effect=AssertionError("unexpected metadata read")), \
                  mock.patch.object(np, "load", side_effect=AssertionError("unexpected array read")):
                 for name in ["race", "ns", "schedule"]:
-                    with self.subTest(name=name), self.assertRaisesRegex(RuntimeError, "contract is not included"):
+                    with self.subTest(name=name), self.assertRaisesRegex(RuntimeError, "frozen manifest required"):
                         read(name)
+            self.assertEqual(namespace["_load_corrected"].call_args_list,
+                             [mock.call(name) for name in ("race", "ns", "schedule")])
+            namespace["_load_corrected"].side_effect = None
+            namespace["_load_corrected"].return_value = {"fixture": "admitted synthetic"}
+            self.assertEqual(read("ns"), {"fixture": "admitted synthetic"})
             self.assertEqual(snapshot(root), before)
 
     def test_other_eleven_names_roundtrip_unchanged_values_without_writes_or_certification(self):

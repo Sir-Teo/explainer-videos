@@ -179,6 +179,21 @@ def inv_root(M, p: int, eps: float = 1e-6):
     return ((Q * w ** (-1.0 / p)) @ Q.T).to(M.dtype)
 
 
+def _soap_basis(M, Q=None):
+    """Descending initialization; sorted seeded power/QR with explicit labels.
+
+    Return the old-column permutation so the caller can relabel v on refresh.
+    General rotations still use SOAP's diagonal-state approximation.
+    """
+    import torch
+
+    if Q is None:
+        return torch.linalg.eigh(M.double())[1].flip([1]).float(), None
+    A, old = M.double(), Q.double()
+    order = torch.argsort(torch.diag(old.T @ A @ old), descending=True)
+    return torch.linalg.qr(A @ old[:, order])[0].to(Q.dtype), order
+
+
 # ---------------------------------------------------------------------------
 # The optimizers
 # ---------------------------------------------------------------------------
@@ -272,8 +287,12 @@ class Opt:
                         st["L"].mul_(b2).add_(g @ g.T, alpha=1 - b2)
                         st["R"].mul_(b2).add_(g.T @ g, alpha=1 - b2)
                     if st["QL"] is None or self.t % 10 == 1:
-                        st["QL"] = torch.linalg.eigh(st["L"].double())[1].float()
-                        st["QR"] = torch.linalg.eigh(st["R"].double())[1].float()
+                        st["QL"], left_order = _soap_basis(st["L"], st["QL"])
+                        st["QR"], right_order = _soap_basis(st["R"], st["QR"])
+                        if left_order is not None:
+                            st["v"] = st["v"].index_select(0, left_order)
+                        if right_order is not None:
+                            st["v"] = st["v"].index_select(1, right_order)
                     QL, QR = st["QL"], st["QR"]
                     st["m"].mul_(b1).add_(g, alpha=1 - b1)
                     gr = QL.T @ g @ QR  # the gradient in Shampoo's eigenbasis

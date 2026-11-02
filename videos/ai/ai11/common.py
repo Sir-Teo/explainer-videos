@@ -9,11 +9,12 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from explainer.paths import ROOT as _REPO_ROOT
+from .contracts import load_corrected as _load_corrected
 
 PART = 11
 
-# This source-only handoff excludes the corrected recipe/cache contract.
-_BLOCKED_ITEMS = frozenset({"race", "ns", "schedule"})
+# Corrected outcomes require the separately installed, fixed anchored contract.
+_CORRECTED_ITEMS = frozenset({"race", "ns", "schedule"})
 _CACHE_ITEMS = frozenset({
     "race3d", "quad", "river", "noise", "temperature", "eos", "adamview",
     "decay", "natgrad", "equilibrium", "spikes",
@@ -24,14 +25,13 @@ def load(name: str) -> dict:
     """Read an existing cache pair without generating or certifying scientific outcomes.
 
     Presence/structure checks do not establish input or recipe provenance. The
-    integrator must verify those separately; corrected-dependent products remain
-    blocked even when files with those names are present.
+    integrator must verify those separately. Corrected-dependent products instead
+    require the fixed frozen-outcome contract, with no legacy-cache fallback.
     """
     if not isinstance(name, str):
         raise ValueError("Part 11 cache names must be known item names")
-    if name in _BLOCKED_ITEMS:
-        raise RuntimeError(f"Part 11 source-only handoff blocks {name!r}: "
-                           "the corrected recipe/cache contract is not included")
+    if name in _CORRECTED_ITEMS:
+        return _load_corrected(name)
     if name not in _CACHE_ITEMS:
         raise ValueError(f"Unknown Part 11 cache item: {name!r}")
     directory = _REPO_ROOT / ".cache" / "ai11"
