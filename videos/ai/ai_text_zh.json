@@ -21571,7 +21571,9 @@
     "variance left unexplained \\ (training batch)": "未解释的方差\\ （训练批次）",
     "variance left unexplained, \\ normalized fit batches": "未解释方差，\\ 归一化拟合批次",
     "weighted mean squared error": "加权均方误差",
-    "word-selected gloomy sentences": "词表筛选的阴郁句子"
+    "word-selected gloomy sentences": "词表筛选的阴郁句子",
+    "largest absolute $Q$ value \\ (log scale)": "最大的 $Q$ 值绝对值（对数坐标）",
+    "computed: $5$ DQN runs; replay: best average near the end": "计算所得：$5$次DQN运行；回放训练末段平均成绩最好的一次"
   },
   "phrases": {
     "width": "宽度",

@@ -160,18 +160,18 @@ class DQN(VoiceoverScene):
         info = always_redraw(lambda: label(
             rf"after ${int(steps[int(snap.get_value())]):,}$ steps: \ balanced ${min(int(state.get_value()), int(L[int(snap.get_value())]) - 1)}$ "
             rf"of $500$".replace(",", "{,}"), font_size=24, color=GREY_A).move_to([-3.3, 3.25, 0]))
-        tag = note(rf"computed: \ our DQN, \ the best of ${len(d['full'])}$ runs").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: ${len(d['full'])}$ DQN runs; replay: best average near the end").to_corner(DR, buff=0.2)
         img = imgs[0]
         n_runs = len(d["full"])
         with self.voiceover(
             "Here is DQN learning a classic control task on this machine: the cart-pole. Push the cart left or right "
-            "to keep the pole upright; plus one for every step it stays up, for up to five hundred. "
+            "to keep the pole upright; a reward of one each step, for episodes capped at five hundred. "
             "<bookmark mark='a'/> On the right, what the network has learned: for each pole angle and angular "
-            "velocity, which push it prefers. <bookmark mark='b'/> Untrained, it pushes the same way everywhere, and "
-            f"the pole falls in a few steps. <bookmark mark='c'/> Let's replay the training of the best of our {n_runs} "
-            "runs. Every few thousand steps, freeze the network and let it balance. <bookmark mark='d'/> The map organizes itself into two halves: "
-            "if the pole is falling right, push right, so the cart gets back under it. The dividing line tilts, "
-            "because a pole moving fast matters as much as a pole leaning far. Nobody told it any physics."
+            "velocity, which push it prefers. <bookmark mark='b'/> Before training, these preferences come only from "
+            f"random initialization. <bookmark mark='c'/> Let's replay the training of the best of our {n_runs} "
+            "runs, chosen by their average near the end of training. Every few thousand steps, freeze the network and let it "
+            "balance. <bookmark mark='d'/> A useful push moves the cart back under the falling pole. The boundary "
+            "depends on both the lean and angular speed. Nobody told it any physics."
         ) as vo:
             self.add(cp)
             self.play(FadeIn(info), FadeIn(tag))
@@ -184,13 +184,15 @@ class DQN(VoiceoverScene):
             self.add(marker)
             for i in range(1, len(steps)):
                 state.set_value(0)
-                self.play(FadeIn(imgs[i]), FadeOut(img), snap.animate.set_value(i),
+                snap.set_value(i)  # a snapshot index is discrete; switch before revealing the new trial
+                self.play(FadeIn(imgs[i]), FadeOut(img),
                           marker.animate.put_start_and_end_on(g.ax.c2p(steps[i], 0), g.ax.c2p(steps[i], 520)),
                           FadeIn(VGroup(*[p for p, (t, _) in zip(pts, run0) if steps[i - 1] < t <= steps[i]])),
                           run_time=0.8)
                 img = imgs[i]
                 n = int(L[i])
                 self.play(state.animate.set_value(n - 1), run_time=min(0.4 + n / 160, 3.6), rate_func=linear)
+                self.wait(0.3)  # show the terminal count and failure colour before resetting the next trial
                 if i == 4:
                     vo.wait_until("d")
         best = int(np.argmax(episode_steps))
@@ -228,15 +230,16 @@ class DQN(VoiceoverScene):
         avg = {k: float(np.nanmean(np.asarray(d[k]))) for k in ("full", "no_target", "no_replay")}
         collapsed = avg["no_target"] < 0.25 * avg["full"]
         if avg["full"] > max(avg["no_target"], avg["no_replay"]):
-            tail = "Each trick earns its place. And look at the bands: even the best version swings from run to run."
+            tail = ("Both give the highest mean in this sample. The min-to-max bands show substantial run-to-run variation; "
+                    "this five-run toy comparison is limited evidence about replay's benefit.")
         else:
             tail = ("On a problem this small, the tricks matter less than the luck of the seed: look at the bands. "
                     "On Atari they were decisive: in the Nature paper, Breakout without replay scored about ten "
                     "points, against three hundred and seventeen with it.")
         never = ""  # a low aggregate does not establish failure in every seed
         with self.voiceover(
-            f"Do the tricks matter? Train it three ways, {len(d['full'])} runs each, and average the episode length "
-            "over the whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it "
+            f"Do the tricks matter? Train it three ways, {len(d['full'])} runs each. The numbers here equally average "
+            "the windowed episode lengths across the fixed grid of training steps. <bookmark mark='a'/> Without a replay memory, learning from each step as it "
             f"comes: about {avg['no_replay']:.0f}. <bookmark mark='b'/> With replay but no target network: about "
             f"{avg['no_target']:.0f}{never}. <bookmark mark='c'/> With both: about {avg['full']:.0f}. " + tail
         ) as vo:
