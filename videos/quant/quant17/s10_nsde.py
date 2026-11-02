@@ -77,7 +77,8 @@ class NSDE(VoiceoverScene):
                              rf"{max(lo['iv_rmse'], hi['iv_rmse'], cal['iv_rmse']):.2f} vol points of Heston's; yet the exotic "
                              rf"ranges from {lo['doc']:.4f} to {hi['doc']:.4f}, {100 * (hi['doc'] - lo['doc']) / hes:.0f}\% of "
                              r"Heston's price. Vanillas fix the marginal distributions; a barrier depends on how they are "
-                             r"joined through time, which they do not fix", 11.8, 20, GREY_A).to_edge(DOWN, buff=0.45)
+                             r"joined through time, which they do not fix. Small networks, trained for minutes: the true "
+                             r"range is at least this wide", 11.8, 20, GREY_A).to_edge(DOWN, buff=0.45)
         src = illustration(r"neural SDE with 3 small networks; 16{,}384 paths a step; prices checked on 200{,}000 fresh paths",
                            corner=UR)
         with self.voiceover(
@@ -86,7 +87,9 @@ class NSDE(VoiceoverScene):
             f"price is {hes:.4f}. <bookmark mark='b'/> Pushed down and up while still repricing every vanilla, the "
             f"neural model reaches {lo['doc']:.4f} and {hi['doc']:.4f}: a range of {100 * (hi['doc'] - lo['doc']) / hes:.0f} "
             "percent of the price, from models that all agree on every quoted option. The vanillas fix how far the "
-            "price is likely to go by each date; the barrier depends on the path in between, which they do not fix."
+            "price is likely to go by each date; the barrier depends on the path in between, which they do not fix. "
+            "And this is only a lower estimate of the true range: every model here is a real, calibrated one, so the "
+            "range is at least this wide, and a richer network trained for longer can only widen it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(src))
             self.play(FadeIn(marks[2]))
