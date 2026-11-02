@@ -42,17 +42,13 @@ class Discrete(VoiceoverScene):
                     r"\sqrt{\pi/4}\;\text{vega}\;\sigma/\sqrt N$ at the money, $\sqrt{\pi/4} = 0.886$",
                     font_size=24).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Black-Scholes assumes the hedge is adjusted continuously. Real hedgers trade in steps: every hour, "
-            "every day. Over one step the hedge leaves an error: half gamma S squared times the squared move, "
-            "minus its average. The squared move is sigma squared S squared Z squared delta t, with Z a standard "
-            "normal, so the error is proportional to Z squared minus one. <bookmark mark='a'/> Z squared has "
-            "variance two, so each step's error has variance one half gamma squared S to the fourth sigma to the "
-            "fourth delta t squared. <bookmark mark='b'/> The steps are independent, so the variances add: there "
-            "are T over delta t of them, which leaves one power of delta t. The standard deviation of the hedging "
-            "error shrinks like the square root of the step: halve the error, hedge four times as often. Phelim "
-            "Boyle and David Emanuel worked this out in 1980; Emanuel Derman and Michael Kamal at Goldman Sachs "
-            "gave the at-the-money rule of thumb at the bottom, with its prefactor, the square root of pi over "
-            "four."
+            "Real hedgers trade in steps. Over one step the hedge leaves half gamma S squared times the squared "
+            "move minus its average: sigma squared S squared delta t times Z squared minus one. "
+            "<bookmark mark='a'/> Z squared has variance two, so each step's error has variance half gamma squared "
+            "S to the fourth sigma to the fourth delta t squared. <bookmark mark='b'/> The steps are independent, "
+            "T over delta t of them, so one power of delta t is left: the error shrinks like the square root of the "
+            "step. Phelim Boyle and David Emanuel, 1980; Emanuel Derman and Michael Kamal at Goldman Sachs gave "
+            "the rule of thumb at the bottom, with its root pi over four."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -83,7 +79,7 @@ class Discrete(VoiceoverScene):
             return seed_band(ax, lx[:j], np.log10(sd5[:, :j]), OPT, stroke_width=3, opacity=0.35)
 
         band_ = always_redraw(grown)
-        leg = legend([(OPT, r"simulated: 5 seeds of 20,000 paths"), (GAM, r"derived: $\propto \sqrt{\Delta t}$"),
+        leg = legend([(OPT, r"simulated: 5 seeds of 10,000 paths"), (GAM, r"derived: $\propto \sqrt{\Delta t}$"),
                       (GREY_B, r"rule of thumb")], font_size=22).move_to(ax.c2p(2.3, 0.2))
         marks = VGroup()
         for n, name in ((13, r"weekly"), (63, r"daily"), (252, r"four a day")):
@@ -100,7 +96,7 @@ class Discrete(VoiceoverScene):
         with self.voiceover(
             "Here it is measured. A three-month at-the-money call, sold at the true volatility of twenty percent, "
             "hedged four times, eight, sixteen, up to a thousand and twenty-four times over the quarter. Five "
-            "independent seeds of twenty thousand paths each, drawn as a band as the frequency rises. The pink line "
+            "independent seeds of ten thousand paths each, drawn as a band as the frequency rises. The pink line "
             "is the formula we just derived, the dashed grey line the rule of thumb. <bookmark mark='a'/> The band "
             f"is so thin it looks like a line: the five seeds never differ by more than "
             f"{100 * ds['spread_max']:.1f} percent, and their slopes on these log scales lie between "
@@ -134,14 +130,14 @@ class Discrete(VoiceoverScene):
             panels.add(VGroup(g, bars, head, stat))
         panels.arrange(RIGHT, buff=0.8).shift(UP * 0.2)
         neg = ds["skew_13"] < 0
+        skew_line = (f"Hedged weekly, the seller's distribution leans left, skewness {ds['skew_13']:.2f}; hedged four "
+                     f"times a day, {ds['skew_252']:.2f}: more steps, each smaller, and the sum looks more normal."
+                     if neg else
+                     f"Here the skewness is {ds['skew_13']:+.2f} weekly and {ds['skew_252']:+.2f} four times a day.")
         with self.voiceover(
             "The spread is not the whole story; look at its shape. Each step's error is Z squared minus one, "
             "which is lopsided: small gains most of the time, an occasional large loss when the stock jumps "
-            "across a step. <bookmark mark='a'/> " + (
-                f"Hedged weekly, the seller's distribution leans left, skewness {ds['skew_13']:.2f}; hedged four "
-                f"times a day, {ds['skew_252']:.2f}: more steps, each smaller, and the sum looks more normal."
-                if neg else
-                f"Here the skewness is {ds['skew_13']:+.2f} weekly and {ds['skew_252']:+.2f} four times a day.")
+            f"across a step. <bookmark mark='a'/> {skew_line}"
         ) as vo:
             self.play(FadeIn(panels[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -172,6 +168,7 @@ class Discrete(VoiceoverScene):
         eqn = label(r"a jump is not made smaller by hedging more often", font_size=22, color=GREY_A)
         eqn.next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
         holds = jf["ratio_jump"] < 2
+        floor_phrase = "It hits a floor," if holds else "It falls, but slowly, towards a floor,"
         with self.voiceover(
             "And here is where the law stops. Emanuel Derman and Nassim Taleb's point, in 2005: dynamic "
             "replication assumes the price moves continuously. Give the stock jumps, twice a year on average, "
@@ -179,8 +176,7 @@ class Discrete(VoiceoverScene):
             "jumps: its error keeps halving every time the hedging quadruples. <bookmark mark='a'/> In red, with "
             f"jumps: from sixteen hedges to a thousand and twenty-four, the error falls only from "
             f"{J.mean(0)[0]:.2f} to {J.mean(0)[-1]:.2f}. "
-            + ("It hits a floor, " if holds else "It falls, but slowly, towards a floor, ")
-            + f"and the floor is the jump term: a jump of size J costs half gamma S squared J squared however "
+            + f"{floor_phrase} and the floor is the jump term: a jump of size J costs half gamma S squared J squared however "
             f"often you rebalance, which by itself leaves {jf['floor']:.2f}. Hedging frequency buys you nothing "
             "against a gap. Part eleven measures it on Bitcoin's real jumps; Part thirteen prices them."
         ) as vo:

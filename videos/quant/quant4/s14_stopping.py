@@ -150,10 +150,8 @@ class Stopping(VoiceoverScene):
             return grp
 
         fan = always_redraw(walk_mob)
-        counter = always_redraw(lambda: MathTex(
-            rf"\text{{hit }} +1\text{{ by step }} {int(tk.get_value())}: "
-            rf"{100 * np.mean((T > 0) & (T <= tk.get_value())):.1f}\%", font_size=28, color=QC.IDEA).next_to(
-            g, DOWN, buff=0.2).align_to(g, LEFT))
+        counter = readout(r"\text{reached } +1\text{ so far:}", lambda: 100 * float(np.mean((T > 0) & (T <= tk.get_value()))),
+                          digits=1, font_size=28, color=QC.IDEA, unit=r"\%").next_to(g, DOWN, buff=0.2).align_to(g, LEFT)
         grid = np.asarray(f["grid"], float)
         surv, exact = np.asarray(f["surv"]), np.asarray(f["exact"])
         g2 = axes([0, 5], [-3, 0], x_length=4.6, y_length=2.6, xlabel=r"$n$ (log)", ylabel=r"$P(\tau_1 > n)$ (log)",

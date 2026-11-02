@@ -58,15 +58,14 @@ class Bergomi(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
         src = real_data(r"the Surface, 10 December 2025: SSVI, variance-swap strip at each expiry")
         with self.voiceover(
-            "A variance swap's strike, times its maturity, is the total variance the market prices up to that date. "
-            "Its slope is the forward variance: the variance priced for each future instant. Here it is for the "
-            "Surface, constant between expiries. <bookmark mark='a'/> Notice the dip. The expiries on Saturday the "
-            "thirteenth and Sunday the fourteenth of December bracket a single weekend day, priced at "
-            f"{100 * fv[sat]:.0f} percent volatility, against fifty or so on either side. Bitcoin trades all weekend, "
-            f"but over the last two years its Saturdays realized {100 * b['by_dow'][5]:.0f} percent volatility, against "
-            f"{100 * np.mean(b['by_dow'][:5]):.0f} on weekdays, and the market prices that in. <bookmark mark='b'/> Now Heston's forward variance: "
-            "a single exponential from today's variance to the long-run level. It cannot dip for a weekend, rise for "
-            "a central bank meeting, or take any shape the market chooses."
+            (
+            "A variance swap's strike times its maturity is the total variance priced to that date; its slope is the "
+            "forward variance, constant between expiries. <bookmark mark='a'/> Notice the dip: the expiries on "
+            "Saturday the thirteenth and Sunday the fourteenth bracket one weekend day, priced at "
+            f"{100 * fv[sat]:.0f} percent against about fifty either side. Bitcoin's Saturdays realized "
+            f"{100 * b['by_dow'][5]:.0f} percent over two years, weekdays {100 * np.mean(b['by_dow'][:5]):.0f}. "
+            "<bookmark mark='b'/> Heston's curve is one exponential: it cannot dip for a weekend."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), FadeIn(side[0]), FadeIn(side[1]),
                       LaggedStart(*[Create(s_) for s_ in steps], lag_ratio=0.15, run_time=2.5), FadeIn(risers))
@@ -101,17 +100,16 @@ class Bergomi(VoiceoverScene, ThreeDScene):
                     r"today's curve", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Lorenzo Bergomi turned this around. Make the whole forward variance curve the model's state, and take "
-            "today's curve from the market as given, whatever its shape, weekend dip and all. Each point is the "
-            "expected variance at its date, so by the tower property it is a martingale: it is the rate of a "
-            "tradable forward variance swap. <bookmark mark='a'/> In his two-factor model each point moves "
-            "lognormally, driven by two Ornstein–Uhlenbeck factors, one fast and one slow, whose effect fades with "
-            "the distance to the date. <bookmark mark='b'/> Integrate it, and the curve is today's curve times a "
-            "lognormal martingale. <bookmark mark='c'/> By Itô, the volatility of each point depends only on its "
-            "distance tau from today: a term structure of vol of vol, set by the two speeds and the weight theta, "
-            "entirely separate from today's curve. <bookmark mark='d'/> Compare Heston: differentiate its forward "
-            "variance, and every point moves by the same shock times e to the minus kappa tau. One exponential, "
-            "and the same kappa that sets the shape of today's curve. One number doing two jobs."
+            (
+            "Lorenzo Bergomi turned this around: make the whole curve the state, and take today's curve from the "
+            "market. Each point is the expected variance at its date, so a martingale: a forward variance swap's "
+            "rate. <bookmark mark='a'/> In his two-factor model each point moves lognormally, driven by a fast and a "
+            "slow Ornstein–Uhlenbeck factor that fade with distance. <bookmark mark='b'/> Integrated: today's curve "
+            "times a lognormal martingale. <bookmark mark='c'/> By Itô, each point's volatility depends only on its "
+            "distance tau: a vol-of-vol term structure, separate from today's curve. <bookmark mark='d'/> Heston's "
+            "points all move by one shock times e to the minus kappa tau, with the same kappa that shapes today's "
+            "curve: one number, two jobs."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -154,16 +152,14 @@ class Bergomi(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, tag_b, tag_h, txt)
         self.remove(hint, tag_b, tag_h, txt)
         with self.voiceover(
-            "Now let the curve move. Start from the Surface's forward variance curve, and simulate Bergomi's model "
-            "day by day for four months; each day adds one slice, the curve as it stands that day, out to three "
-            "hundred days ahead. <bookmark mark='a'/> The front end whips around; the far end barely moves; the "
-            "weekend dip drifts toward today and passes. The vol of vol omega was set so that the model's own "
-            "thirty-day index moves as much as DVOL does. <bookmark mark='b'/> And each point is a martingale: "
-            f"averaged over two thousand paths, the curve four months on is within {100 * dev:.1f} percent of where "
-            "it started. <bookmark mark='c'/> Now the same with Heston, from its own fitted state. The whole curve "
-            "moves as one exponential: a shock to today's variance, decaying with the same kappa everywhere. With "
-            "our fitted kappa of nearly fifteen, everything beyond a few weeks is pinned to theta and never moves "
-            "at all."
+            (
+            "Let it move. From the Surface's curve, simulate Bergomi's model day by day for four months; each day adds "
+            "a slice out to three hundred days. <bookmark mark='a'/> The front whips, the far end barely moves, the "
+            "weekend dip drifts in and passes. Omega is set so the model's thirty-day index moves like DVOL. "
+            f"<bookmark mark='b'/> Averaged over two thousand paths, the curve stays within {100 * dev:.1f} percent of "
+            "where it began: a martingale. <bookmark mark='c'/> Heston's curve moves as one exponential, and with "
+            "kappa near fifteen, beyond a few weeks it never moves at all."
+        )
         ) as vo:
             self.play(Create(ax), FadeIn(hint), FadeIn(tag_b), run_time=1.2)
             self.play(LaggedStart(*[Create(l_) for l_ in LB], lag_ratio=0.15), run_time=max(vo.until("b") - 1.5, 3))
@@ -198,15 +194,18 @@ class Bergomi(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         pp = pause(r"A one-year variance swap and a one-week one: whose rate is more volatile?", width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Here is the difference as one plot: how volatile each point of the forward variance curve is, against "
-            "its distance from today. <bookmark mark='a'/> Bergomi's falls fast over the first weeks, the fast "
-            "factor dying, then levels off on the slow one: variance three months out still moves "
-            f"{100 * bs['volvol_bergomi'][i90]:.0f} percent a year. <bookmark mark='b'/> Heston's starts much higher, "
-            "because its fit needed a violent short-term vol of vol, and dies within weeks: three months out, "
-            f"{100 * bs['volvol_heston'][i90]:.0f} percent. Forward-start options and cliquets are bets on exactly "
-            "this curve, and Heston has no freedom to draw it. <bookmark mark='c'/> Pause and predict: a one-year "
-            "variance swap and a one-week one, whose rate is more volatile? The one-week, in both models: vol of "
-            "vol decays with distance."
+            (
+            (
+            "One plot says it: the volatility of each point of the curve, against its distance. "
+            "<bookmark mark='a'/> Bergomi's falls over weeks, then levels off: three months out, "
+            f"{100 * bs['volvol_bergomi'][i90]:.0f} percent. <bookmark mark='b'/> Heston's starts far higher and dies "
+            f"within weeks: {100 * bs['volvol_heston'][i90]:.0f} percent at three months. Bergomi's first Smile "
+            "Dynamics paper made exactly this point: in Heston one kappa fixes the term structure of vol of vol, the "
+            "forward skew and the spot–vol correlation together, so they cannot be set separately. Cliquets bet on "
+            "this curve. <bookmark mark='c'/> Pause: a one-year variance swap or a one-week one, whose rate is more "
+            "volatile? The one-week."
+        )
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:2]))
             vo.wait_until("a")
@@ -236,17 +235,14 @@ class Bergomi(VoiceoverScene, ThreeDScene):
                                color=VAR) for r in rows_]).arrange_in_grid(rows=2, buff=(0.6, 0.2)).to_edge(DOWN, buff=0.45)
         r2, r365 = rows_[0], rows_[-1]
         with self.voiceover(
-            "One more dynamic property links today's smile to tomorrow's: the skew-stickiness ratio. When the price "
-            "moves, how far does the at-the-money volatility move, measured in units of today's skew? A ratio of "
-            "one is sticky strike, zero is sticky delta. <bookmark mark='a'/> In Heston, regress the variance's move "
-            "on the price's: the slope is rho xi. <bookmark mark='b'/> At short maturity the at-the-money volatility "
-            "is the square root of v, so it moves by rho xi over two root v per unit of log price. "
-            "<bookmark mark='c'/> Divide by chapter four's skew, rho xi over four root v, and the ratio is two: at "
-            "short maturities Heston has the same skew stickiness as local volatility. <bookmark mark='d'/> Computed "
-            f"exactly on our fit, it is {r2['R']:.2f} at two days, and falls with maturity to {r365['R']:.2f} at "
-            "a year, as mean reversion weakens the link. So for short-dated hedging, SV and local vol agree on how the "
-            "smile moves; they disagree further out, and on the future smile itself. Part twelve measured "
-            "Bitcoin's actual ratio."
+            (
+            "One more dynamic: the skew-stickiness ratio, how far at-the-money volatility moves per unit of log price, "
+            "in units of the skew. <bookmark mark='a'/> In Heston, the variance's expected move is rho xi per unit of "
+            "log price; <bookmark mark='b'/> at-the-money vol is root v, so it moves rho xi over two root v. "
+            "<bookmark mark='c'/> Divide by chapter four's skew: R equals two, like local volatility. "
+            f"<bookmark mark='d'/> Exactly on our fit: {r2['R']:.2f} at two days, falling to {r365['R']:.2f} at a year. "
+            "Short-dated, SV and local vol agree on how the smile moves; further out, they part."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")

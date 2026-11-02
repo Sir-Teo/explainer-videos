@@ -50,13 +50,14 @@ class Moves(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Binance BTCUSDT daily; Deribit DVOL daily")
         with self.voiceover(
-            "Black, Scholes and Merton assumed one volatility, fixed for the life of the option. Here is Bitcoin's. "
-            "In green, the volatility it actually realized over each past thirty days. <bookmark mark='a'/> It "
-            f"ranged from {100 * f['rv_min']:.0f} percent to {100 * f['rv_max']:.0f} percent a year. "
-            "<bookmark mark='b'/> In orange, DVOL, the market's thirty-day implied volatility, read from options. It "
-            "moves too. Measured the same way as a price, the volatility of volatility is about "
-            f"{100 * f['volvol']:.0f} percent a year. Volatility is not a parameter. It is a second random process, a "
-            "second river running beside the price, and an option is a bet on both."
+            (
+            "Black, Scholes and Merton assumed one volatility, fixed for the life of the option. Here is Bitcoin's. In "
+            "green, the volatility it realized over each past thirty days. <bookmark mark='a'/> It ranged from "
+            f"{100 * f['rv_min']:.0f} to {100 * f['rv_max']:.0f} percent a year. <bookmark mark='b'/> In orange, "
+            "DVOL, the market's thirty-day implied volatility. It moves too: measured like a price, its volatility "
+            f"is about {100 * f['volvol']:.0f} percent a year. Volatility is a second random river beside the price, "
+            "and an option is a bet on both."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), Create(lr), run_time=2.5)
             vo.wait_until("a")
@@ -96,13 +97,21 @@ class Moves(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.6)
         src = real_data(r"Binance BTCUSDT daily; Deribit DVOL daily, 2021--2025")
         with self.voiceover(
-            "Watch the two rivers move together, one day at a time. Each dot is a day: across, Bitcoin's return; "
-            "up, what implied volatility did that same day. The white line is the best straight line through the days "
-            f"so far. <bookmark mark='a'/> Through 2021 and 2022 the line tilts down, steeply in 2022, a correlation of "
-            f"{by['2022']:+.2f}: down days are the days volatility jumps. <bookmark mark='b'/> Then 2023 arrives in green "
-            f"and the cloud tilts the other way, {by['2023']:+.2f} for the year, as the rally pulled implied "
-            f"volatility up with it. Over all {f['n']} days the line settles at {f['leverage_corr']:+.2f}. Any model "
-            "of this part needs a correlation between the two rivers, and it had better be allowed to change."
+            (
+            (
+            "The two rivers are tied together. Each dot is a day: across, Bitcoin's return; up, the change in DVOL; "
+            f"the white line, the best fit so far. On days Bitcoin fell more than five percent, DVOL rose "
+            f"{f['dvol_change_down5']:.0f} percent on average; on big up days it barely moved. Fischer Black called "
+            "this the leverage effect. <bookmark mark='a'/> In 2022 the correlation was "
+            f"{by['2022']:+.2f}. <bookmark mark='b'/> Then 2023's rally tilts the cloud the other way, "
+            f"{by['2023']:+.2f}, as calls were bid. Over all {f['n']} days: {f['leverage_corr']:+.2f}. So returns "
+            f"explain only about {100 * f['leverage_corr'] ** 2:.0f} percent of DVOL's daily variance; the other "
+            f"{100 * (1 - f['leverage_corr'] ** 2):.0f} percent is volatility's own noise. That is the difference "
+            "between GARCH, where tomorrow's variance is a function of today's return, and stochastic volatility, "
+            "where volatility has a Brownian motion of its own. A model needs both the noise and the correlation, "
+            "and the correlation had better be allowed to change."
+        )
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(side[0]))
             self.add(ln, cnt)
@@ -152,16 +161,14 @@ class Moves(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=-1.1, x=-2.6, buff=0.35, edge=6.9)
         src = real_data(r"Binance BTCUSDT daily and Deribit DVOL daily, April 2021 -- November 2025")
         with self.voiceover(
-            "Two more facts, each a number. First, clustering. The correlation of today's return with the return "
-            "some days later is noise, inside the grey band. <bookmark mark='a'/> But the correlation of today's "
-            f"size, the absolute return, with later sizes is positive at lag one, {acf_a[0]:.2f}, and still positive "
-            "two months later. Calm follows calm and storms follow storms: Part seven's GARCH saw the same thing. "
-            "<bookmark mark='b'/> Second, mean reversion. Measure the vol of vol as you would a price's volatility. "
-            "<bookmark mark='c'/> Then regress tomorrow's log DVOL on today's. The slope is "
-            f"{vf['ar1_phi']:.3f}, just below one. <bookmark mark='d'/> That is Part five's Ornstein–Uhlenbeck "
-            f"process in discrete time, and it says a shock to volatility decays by half in about {hl:.0f} days, "
-            f"pulling DVOL back toward about {100 * vf['dvol_mean']:.0f} percent. Random, clustered, and mean "
-            "reverting: those are the properties a volatility model must have."
+            (
+            "Two more facts. Returns themselves have no memory: their autocorrelations sit in the grey band. "
+            f"<bookmark mark='a'/> Their sizes do: {acf_a[0]:.2f} at lag one, still positive two months later. "
+            "Storms cluster, as Part seven's GARCH found. <bookmark mark='b'/> And volatility mean-reverts. Measure "
+            "the vol of vol like a price's volatility, <bookmark mark='c'/> then regress tomorrow's log DVOL on "
+            f"today's: slope {vf['ar1_phi']:.3f}. <bookmark mark='d'/> That is Part five's Ornstein–Uhlenbeck "
+            f"process: a shock decays by half in about {hl:.0f} days, back toward {100 * vf['dvol_mean']:.0f} percent."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(band_), FadeIn(leg[0]),
                       LaggedStart(*[GrowFromEdge(b_, DOWN if v >= 0 else UP) for b_, v in zip(br, acf_r)], lag_ratio=0.02),
@@ -193,16 +200,15 @@ class Moves(VoiceoverScene):
         pp = pause(r"Bitcoin rose 10\% today. Does its implied volatility rise or fall?", width=4.6).to_corner(DR, buff=0.4)
         src = real_data(r"S\&P 500 daily closes, 1986--1987 (Yahoo Finance)", corner=DL)
         with self.voiceover(
-            "The equity market learned this the hard way. On the nineteenth of October 1987, the S&P 500 fell from "
-            f"{c['close_before']:.0f} to {c['close']:.0f}, a log return of {100 * c['ret']:.1f} percent in one day. "
-            f"<bookmark mark='a'/> Measured against the previous year's daily volatility, that is a "
-            f"{abs(c['z']):.0f} standard deviation move. Under a normal model with constant volatility, its "
-            f"probability is about ten to the minus {abs(c['log10p']):.0f}. The constant-volatility world did not "
-            "survive the day. Before the crash, index options traded close to one flat volatility. Ever since, "
-            "out-of-the-money puts have been dear, the skew Mark Rubinstein documented, and David Bates found crash "
-            "fears priced into options for years after. <bookmark mark='b'/> A question to carry into the next "
-            "chapter. Bitcoin rose ten percent today. Does its implied volatility rise or fall? Both have happened: "
-            "the answer is the sign of the correlation, and it changed with the year."
+            (
+            "Equity markets learned this the hard way. On 19 October 1987 the S&P 500 fell from "
+            f"{c['close_before']:.0f} to {c['close']:.0f}, a log return of {100 * c['ret']:.1f} percent. "
+            f"<bookmark mark='a'/> Against the prior year's volatility that is {abs(c['z']):.0f} standard deviations, "
+            f"with a normal probability of about ten to the minus {abs(c['log10p']):.0f}. Ever since, "
+            "out-of-the-money index puts have been dear: Rubinstein's skew, and Bates's priced crash fears. "
+            "<bookmark mark='b'/> Pause and predict: Bitcoin rose ten percent today. Does implied volatility rise or "
+            "fall? Both have happened."
+        )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")

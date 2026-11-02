@@ -177,7 +177,6 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
 
 ---
 
-
 # 量化金融，从零搭建 — 第15部分：奇异期权与结构化产品
 
 开场、十八章和结尾，约58分钟。本部分讲：

@@ -227,7 +227,7 @@ class QMC(VoiceoverScene):
         rows = df["rows"]
         q = predict(r"Drop the first Sobol point (the origin) to avoid $\Phi^{-1}(0) = -\infty$. Harmless?", width=5.4,
                     font_size=21).to_corner(UR, buff=0.4)
-        tab = VGroup(label(r"error of scrambled Sobol on $\int e^{u_1 + u_2}$, 100 scramblings", font_size=18,
+        tab = VGroup(label(r"error of scrambled Sobol on $\int e^{u_1 + u_2}$, 100 scramblings (Owen 2022)", font_size=18,
                            color=GREY_A))
         for n_, r in rows.items():
             tab.add(MathTex(rf"n = {int(n_):,}".replace(",", "{,}") + rf":\ \ \text{{keep}}\ {r['keep']:.1e}\ \ "

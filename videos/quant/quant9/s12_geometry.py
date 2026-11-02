@@ -68,7 +68,8 @@ class Geometry(VoiceoverScene, ThreeDScene):
             e2 = unit(np.cross(n, d))
             c = [ax.c2p(*(s1 * 1.25 * d + s2 * 1.0 * e2)) for s1, s2 in ((1, 1), (-1, 1), (-1, -1), (1, -1))]
             pl = Polygon(*c, stroke_width=1, stroke_color=Q_C, fill_color=Q_C, fill_opacity=0.22)
-            arr = Arrow3D(o, ax.c2p(*(0.9 * n)), color=Q_C, thickness=0.015, height=0.2, base_radius=0.06)
+            tip = ax.c2p(*(0.9 * n))
+            arr = VGroup(Line(o, tip, color=Q_C, stroke_width=6), Dot(tip, radius=0.08, color=Q_C))
             return VGroup(pl, arr)
 
         L = always_redraw(line)

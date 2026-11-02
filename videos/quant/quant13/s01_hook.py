@@ -104,14 +104,14 @@ class Hook(VoiceoverScene):
         pp = pause(r"Five models agree on every vanilla option on the Surface. Can they disagree about anything?",
                    width=5.4).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "This part builds the models that let volatility move: a second random river, jumps, and Lévy "
-            "processes. Here is a puzzle to carry through it. Fit five of them to the same Bitcoin options, so that "
-            "all five agree on every vanilla price on the screen. <bookmark mark='p'/> Pause, and predict: can they "
-            "disagree about anything at all? <bookmark mark='a'/> Price a cliquet, a contract that pays the sum of "
-            "capped monthly returns and so bets on how volatile the future will be. They disagree, by "
-            f"{100 * (v.max() - v.min()) / v.mean():.0f} percent, and no option price on the screen can say which is "
-            "right. The cliquet depends on tomorrow's smile, and today's options do not pin tomorrow's smile down. "
-            "Understanding exactly why, mechanism by mechanism, is this part's job."
+            (
+            "This part builds models that let volatility move: a second random river, jumps, and Lévy processes. A "
+            "puzzle to carry through it: fit five of them to the same Bitcoin options, so all five agree on every "
+            "vanilla. <bookmark mark='p'/> Can they disagree about anything? <bookmark mark='a'/> Price a cliquet, "
+            "which pays capped monthly returns and so bets on future volatility. They disagree by "
+            f"{100 * (v.max() - v.min()) / v.mean():.0f} percent, and no option on the screen can settle it. "
+            "Understanding why is this part's job."
+        )
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.3,
                                                 run_time=3))
@@ -142,23 +142,20 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=30, color=GREY_B).to_edge(UP, buff=0.25)
         marks = ["m%d" % i for i in range(len(ERA))]
         with self.voiceover(
-            "How we got here. In 1973 Black, Scholes and Merton priced options with one constant volatility, and "
-            "in 1976 Merton added jumps. <bookmark mark='m2'/> Then the crash of October 1987, the day the "
-            "constant-volatility world ended. <bookmark mark='m3'/> That same year Hull and White, Scott, and "
-            "Wiggins let volatility be random, <bookmark mark='m4'/> Stein and Stein made it an Ornstein–Uhlenbeck "
-            "process in 1991, <bookmark mark='m5'/> and in 1993 Steven Heston found the version with a closed-form "
-            "characteristic function. <bookmark mark='m6'/> In 1994 Dupire, Derman and Kani, and Rubinstein fitted "
-            "the smile exactly with local volatility. <bookmark mark='m7'/> Bates added jumps to Heston in 1996, "
-            "<bookmark mark='m8'/> Madan, Carr and Chang priced options with variance gamma in 1998, "
-            "<bookmark mark='m9'/> and 2002 brought SABR, Kou's double exponential jumps, and CGMY. "
-            "<bookmark mark='m10'/> In 2004 Carr and Wu unified jumps and stochastic volatility by time change, and "
-            "Cboe listed futures on the VIX. <bookmark mark='m11'/> Bergomi made the whole variance curve the state "
-            "in 2005, <bookmark mark='m12'/> VIX options listed in 2006, <bookmark mark='m13'/> and in 2008 Andersen "
-            "published his simulation scheme and Gatheral posed the joint S&P and VIX problem. "
-            "<bookmark mark='m14'/> In 2012 Guyon and Henry-Labordère calibrated stochastic local volatility with "
-            "particles, <bookmark mark='m15'/> in 2020 Guyon solved the joint puzzle, <bookmark mark='m16'/> and in "
-            "2022 Terra–Luna and FTX sent Bitcoin's volatility river into flood."
-        ) as vo:
+            (
+            "How we got here. 1973: Black, Scholes and Merton, one constant volatility; 1976: Merton's jumps. "
+            "<bookmark mark='m2'/> Then October 1987, the day that world ended. <bookmark mark='m3'/> Hull and White, "
+            "Scott and Wiggins made volatility random; <bookmark mark='m4'/> Stein and Stein gave it an "
+            "Ornstein–Uhlenbeck process; <bookmark mark='m5'/> Heston found a closed form. <bookmark mark='m6'/> "
+            "Dupire, Derman–Kani and Rubinstein fitted the smile exactly. <bookmark mark='m7'/> Bates added jumps, "
+            "<bookmark mark='m8'/> Madan, Carr and Chang priced variance gamma, <bookmark mark='m9'/> and 2002 "
+            "brought SABR, Kou and CGMY. <bookmark mark='m10'/> Carr and Wu changed the clock as Cboe listed VIX "
+            "futures; <bookmark mark='m11'/> Bergomi made the variance curve the state; <bookmark mark='m12'/> VIX "
+            "options listed; <bookmark mark='m13'/> Andersen simulated Heston and Gatheral posed the S&P–VIX "
+            "problem. <bookmark mark='m14'/> Guyon and Henry-Labordère calibrated with particles, "
+            "<bookmark mark='m15'/> Guyon solved the joint puzzle, <bookmark mark='m16'/> and Terra and FTX flooded "
+            "Bitcoin's volatility river."
+        )       ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks), FadeIn(dots[0]), FadeIn(rows[0]), FadeIn(dots[1]),
                       FadeIn(rows[1]))
             for i in range(2, len(ERA)):
@@ -180,13 +177,12 @@ class Hook(VoiceoverScene):
             r"frontier",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Why volatility must move, and a proof that random volatility makes a smile. Heston's model, "
-            "its characteristic function derived line by line, its fit replayed, and how to simulate it honestly. "
-            "SABR, the traders' shorthand, and how its formula breaks. Jumps and Lévy processes, built by changing "
-            "the clock, and what the skew's shape across maturities says about all of them. Stochastic local "
-            "volatility by particles, and the dial that moves exotics without touching vanillas. Bergomi's variance "
-            "curves, forward smiles, and the S&P–VIX puzzle in its Bitcoin form. Then calibration as an inverse "
-            "problem, how desks judge a model by its hedge, and the research frontier."
+            (
+            "The plan. Why volatility must move, and a proof that randomness makes a smile. Heston, derived, fitted "
+            "and simulated. SABR and its repair. Jumps and Lévy clocks, sorted by their skews. Stochastic local "
+            "volatility and its dial. Variance curves, forward smiles, the S&P–VIX puzzle. Then calibration, the "
+            "industry, and the frontier."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))

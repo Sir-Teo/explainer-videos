@@ -85,15 +85,14 @@ class History(VoiceoverScene):
         r_note = label(r"$r$: the riskless interest rate, which anyone can look up", font_size=28, color=CASH)
         r_note.move_to(notes)
         with self.voiceover(
-            "Here is the shape of the Sprenkle and Samuelson formula for a call. The stock price S, grown at an "
-            "expected rate mu to maturity, times a probability-like weight; the strike K times another; the whole "
-            "thing discounted at a rate rho. <bookmark mark='a'/> And there was the problem. Mu is how fast the "
-            "stock is expected to grow; rho is the return an investor would demand for holding something as risky "
-            "as an option. Nobody knows either. Pause and predict: two investors expect plus thirty and minus "
-            "ten percent a year from the stock. Do they agree on the call's price? <bookmark mark='b'/> In the "
-            "answer of 1973, yes. The Black-Scholes formula is this one with both unknowns replaced by a single "
-            "number anyone can look up: the riskless interest rate r. The stock's expected return does not "
-            "appear, not because it is small, but because it does not matter. Why is the content of this part."
+            "Here is the shape of the Sprenkle and Samuelson formula for a call: the stock price grown at an "
+            "expected rate mu, times a probability-like weight, minus the strike times another, all discounted at "
+            "a rate rho. <bookmark mark='a'/> There was the problem. Mu is how fast the stock is expected to grow; "
+            "rho is the return an investor demands for holding something as risky as an option. Nobody knows "
+            "either. Pause and predict: two investors expect plus thirty and minus ten percent a year. Do they "
+            "agree on the call's price? <bookmark mark='b'/> Yes. The Black-Scholes formula is this one with both "
+            "unknowns replaced by one number anyone can look up, the riskless rate r. Why the expected return does "
+            "not matter is the content of this part."
         ) as vo:
             self.play(Write(f1), run_time=2)
             self.play(FadeIn(d1))
@@ -138,19 +137,16 @@ class History(VoiceoverScene):
                       r"\textit{Theory of Rational Option Pricing} (Bell Journal)", font_size=22, color=GREY_A)
         quote.to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The way out came from three directions at once. In 1967 Edward Thorp, the mathematician who had "
-            "beaten blackjack, and the economist Sheen Kassouf published a book on warrants, long-dated options "
-            "issued by companies. Their method: sell the overpriced warrants and hold the stock against them, "
-            "adjusting as the price moves. A hedge: the short warrant loses when the stock rises, the shares gain, "
-            "and at today's price the two cancel: the white curve is flat there. It bends down only for big moves, "
-            "and that bend is where all of this part's money is made and lost. By 1967, Donald MacKenzie "
-            "reports, Thorp was using a formula that matched Black-Scholes but for one discount factor, and kept "
-            "it to himself. <bookmark mark='a'/> At the same time Fischer Black, "
-            "a consultant with a physics degree, and Myron Scholes, a young professor at MIT, asked what a hedged "
-            "position is worth. If the hedge removes the market risk, the capital asset pricing model says the "
-            "position must earn the riskless rate. <bookmark mark='b'/> Their colleague Robert Merton saw the "
-            "deeper reason: trade continuously, and the hedge is not just low risk, it is riskless. Then no model "
-            "of investors is needed at all, only the absence of arbitrage. <bookmark mark='c'/> The Journal of "
+            "The way out came from three directions. In 1967 Edward Thorp, who had beaten blackjack, and Sheen "
+            "Kassouf published a book on warrants, long-dated options issued by companies: sell the overpriced "
+            "ones and hold the stock against them. The short warrant loses when the stock rises, the shares gain, "
+            "and at today's price the two cancel: the white curve is flat there, bending down only for big moves, "
+            "where this part's money is made and lost. By 1967, Donald MacKenzie reports, Thorp used a formula "
+            "that matched Black-Scholes but for one discount factor. <bookmark mark='a'/> At the same time Fischer Black, "
+            "a consultant, and Myron Scholes, a young professor at MIT, argued that a hedged position has no market "
+            "risk, so by the capital asset pricing model it earns the riskless rate. <bookmark mark='b'/> Robert "
+            "Merton saw the deeper reason: trade continuously and the hedge is riskless, so only the absence of "
+            "arbitrage is needed. <bookmark mark='c'/> The Journal of "
             "Political Economy first rejected Black and Scholes's paper as too specialized, and so did the "
             "Review of Economics and Statistics. It appeared in the Journal of Political Economy in 1973, "
             "alongside Merton's in the Bell Journal."

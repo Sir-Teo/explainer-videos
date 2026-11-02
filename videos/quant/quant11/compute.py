@@ -794,7 +794,7 @@ def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, c
         g.set_state(st["gen"])
         loss_hist, snaps, start = st["loss"], st["snaps"], st["it"]
     for it in range(start, iters + 1):
-        if ckpt is not None and it % 50 == 0 and it > start:
+        if ckpt is not None and it % 10 == 0 and it > start:
             ckpt.parent.mkdir(parents=True, exist_ok=True)
             torch.save({"net": net.state_dict(), "opt": opt.state_dict(), "gen": g.get_state(), "loss": loss_hist,
                         "snaps": snaps, "it": it}, ckpt.with_suffix(".tmp"))
@@ -820,8 +820,9 @@ def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, c
 def compute_hedging_replay() -> dict:
     T, n, sigma, cost = 30 / 365, 30 * 4, 0.6, 0.001
     t, S = _gbm(20000, n, T, sigma, 112)     # the same 20,000 paths as ``hedging``
-    part = CACHE.partial("hedging_replay", {"kappas": [1, 4, 16], "seeds": [0, 1, 2], "iters": 500, "batch": 512})
-    for kappa in (1.0, 4.0, 16.0):
+    # one cost weight, three seeds (the shared machine's budget); the other weights are ``hedging``'s single runs
+    part = CACHE.partial("hedging_replay", {"kappas": [1], "seeds": [0, 1, 2], "iters": 500, "batch": 512})
+    for kappa in (1.0,):
         for seed in range(3):
             key = f"{kappa:g}-{seed}"
             if key not in part:

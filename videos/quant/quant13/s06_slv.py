@@ -63,19 +63,17 @@ class SLV(VoiceoverScene, ThreeDScene):
                     r"the rate, as a heuristic", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Local volatility fits today's surface exactly, and predicts the wrong future. Stochastic volatility gets "
-            "the future's shape about right, and misses today by a point or more. Desks want both, so they multiply: "
-            "Heston's variance, with its vol of vol scaled by a mixing fraction eta, times a leverage function of the "
-            "price and the date. <bookmark mark='a'/> Gyöngy's theorem, from Part twelve, says exactly when such a "
-            "model reprices every vanilla: when the leverage squared, times the expected variance given the price, "
-            "equals Dupire's local variance. <bookmark mark='b'/> But that expectation is taken under the model's own "
-            "distribution, which depends on the leverage. The equation refers to its own law: what mathematicians "
-            "call a McKean–Vlasov equation. <bookmark mark='c'/> Julien Guyon and Pierre Henry-Labordère cut the "
-            "knot in 2012: simulate a crowd of particles together, and at every time step estimate the expectation "
-            "across the crowd itself, by kernel regression, averaging the variances of the particles near each "
-            "price. <bookmark mark='d'/> The window width trades bias against noise, the classic kernel trade-off, "
-            "which suggests the error falls like N to the minus two fifths. That is a heuristic; the next minutes "
-            "measure it."
+            (
+            "Local volatility fits today exactly and predicts the wrong future; stochastic volatility the reverse. "
+            "Desks multiply them: Heston's variance, vol of vol scaled by a mixing fraction eta, times a leverage "
+            "function. <bookmark mark='a'/> By Gyöngy, it reprices every vanilla when leverage squared times the "
+            "expected variance given the price equals Dupire's local variance. <bookmark mark='b'/> But that "
+            "expectation is under the model's own law, which depends on the leverage: a McKean–Vlasov equation. "
+            "<bookmark mark='c'/> Guyon and Henry-Labordère's 2012 cut: simulate particles together, and at each "
+            "step estimate the expectation across them by kernel regression. <bookmark mark='d'/> The window trades "
+            "bias against noise, which suggests an error falling like N to the minus two fifths: a heuristic, "
+            "measured below."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -116,15 +114,14 @@ class SLV(VoiceoverScene, ThreeDScene):
         note_.next_to(gl, DOWN, buff=0.4).align_to(gl, LEFT)
         src = illustration(r"the House's particle method on the Surface's SSVI local vol; Heston from chapter 4, $\eta = \tfrac12$")
         with self.voiceover(
-            "Here it is running. Each dot is a particle: a possible world, with its log price across and its "
-            "variance up. They all start at the same point. <bookmark mark='a'/> At every step the gold curve is "
-            "drawn through the cloud: the average variance of the particles near each price, the kernel estimate "
-            "of the conditional expectation. On the right, the leverage it implies, local volatility divided by the "
-            "square root of the gold curve. Then every particle moves one step, using that leverage at its own "
-            "price. <bookmark mark='b'/> Watch the cloud fan out and tilt: with negative correlation, the particles "
-            "that fell have high variance, so the gold curve slopes down to the right. Where the cloud's own variance "
-            "is too high for the market's local volatility, the leverage dips below one; where it is too low, the "
-            "leverage lifts it. The model calibrates itself while it simulates."
+            (
+            "Here it runs. Each dot is a particle, a log price and a variance, all starting together. "
+            "<bookmark mark='a'/> At each step the gold curve is the kernel estimate of the expected variance given "
+            "the price; right, the leverage it implies; then every particle steps with the leverage at its own price. "
+            "<bookmark mark='b'/> The cloud fans out and tilts: with negative correlation, particles that fell carry "
+            "high variance. Where the cloud is too wild for the market's local volatility the leverage dips below "
+            "one; too calm, it lifts. The model calibrates while it simulates."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(gl), FadeIn(leg), FadeIn(src), FadeIn(cur))
             vo.wait_until("a")
@@ -163,12 +160,11 @@ class SLV(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "Collect the leverage function every ten days and stack the slices: a surface over price and time, "
-            "grown by the particles as they ran, out to a hundred and twenty days. <bookmark mark='a'/> It sits "
-            "below one near the money and rises in the wings, most steeply at short dates: where Heston's own "
-            "variance is too calm for the market's local volatility, the leverage turns it up, and where it is too "
-            "wild, down. Further out in time it flattens toward one: the stochastic variance carries more of the "
-            "load."
+            (
+            "Stack the leverage every ten days into a surface over price and time. <bookmark mark='a'/> Below one "
+            "near the money, rising in the wings, steepest at short dates, and flattening toward one as the random "
+            "variance carries more of the load."
+        )
         ) as vo:
             self.play(Create(ax), FadeIn(one), FadeIn(hint), run_time=1.2)
             self.play(LaggedStart(*[Create(l_) for l_ in slices], lag_ratio=0.25), run_time=3)
@@ -186,12 +182,15 @@ class SLV(VoiceoverScene, ThreeDScene):
         outs = ["slv_paths(lv, heston_x, 120, 40_000, mix=0.5)  # repricing error, 13 strikes"]
         outs += [f"  day {r['days']:>3}: {r['err']:.2f} vol points" for r in rep]
         with self.voiceover(
-            "Here is the step itself, from the House's slv underscore paths. Pick a subsample of particles, set the "
-            "bandwidth by Silverman's rule, and form the kernel weights between the grid and the particles. One "
-            "matrix product gives the conditional variance on the grid; the leverage follows; it is interpolated to "
-            "each particle; and every particle takes an Euler step in log price and variance. Eleven lines. "
-            "<bookmark mark='a'/> Run it with forty thousand particles for a hundred and twenty days, and measure "
-            "how well the model reprices the Surface's smile at four horizons."
+            (
+            (
+            "The step itself, eleven lines: a subsample, Silverman's bandwidth, kernel weights, one matrix product "
+            "for the conditional variance, the leverage, and an Euler step for every particle. "
+            "<bookmark mark='a'/> Forty thousand particles, a hundred and twenty days: the model reprices the "
+            f"Surface's smile to {rep[0]['err']:.2f} vol points at thirty days and {rep[-1]['err']:.2f} at a hundred "
+            "and twenty, the remainder being Monte Carlo noise and the finite differences in local volatility."
+        )
+        )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -234,10 +233,11 @@ class SLV(VoiceoverScene, ThreeDScene):
               "choice: the trade-off is real, and shallow.")
         src = illustration(r"repricing the Surface's smile at 30, 60, 90 and 120 days, 13 strikes")
         with self.voiceover(
-            "How many particles are enough? Run the method with two thousand, eight thousand and forty thousand, "
-            "three seeds each, and measure the repricing error. <bookmark mark='a'/> "
-            f"{v1} <bookmark mark='b'/> The seed band is wide at small N: with few particles both the leverage and "
-            f"the repricing check are noisy. <bookmark mark='c'/> And the bandwidth, at eight thousand particles: {v2}"
+            (
+            "How many particles are enough? Two thousand, eight thousand and forty thousand, three seeds each. "
+            f"<bookmark mark='a'/> {v1} <bookmark mark='b'/> At small N the seed band is wide: the leverage and the "
+            f"repricing check are both noisy. <bookmark mark='c'/> And the bandwidth, at eight thousand: {v2}"
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(dots))
             vo.wait_until("a")
@@ -260,13 +260,12 @@ class SLV(VoiceoverScene, ThreeDScene):
         G = VGroup(c1, c2).arrange(RIGHT, buff=0.4, aligned_edge=UP)
         pp = pause(r"Set the vol of vol to zero. What is $L$?", width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "The particle method has a rival and a theory. The rival is the PDE route of Ren, Madan and Qian, and of "
-            "Alexander Lipton: solve the forward equation for the joint density on a grid and "
-            "read the conditional expectation off it. <bookmark mark='a'/> The theory arrived only recently: in "
-            "2025 Reisinger and Tsianni proved that this particle system is well posed and "
-            "converges to its McKean–Vlasov limit, at rate one half. <bookmark mark='b'/> Pause and predict: set "
-            "the vol of vol to zero. What is the leverage? Local volatility divided by the deterministic root "
-            "variance: the model collapses to local volatility. The next chapter turns that dial."
+            (
+            "The rival is the PDE route of Ren, Madan and Qian, and Lipton: solve for the joint density on a grid. "
+            "<bookmark mark='a'/> The theory is recent: Reisinger and Tsianni proved in 2025 that this particle "
+            "system converges, at rate one half. <bookmark mark='b'/> Pause: set the vol of vol to zero. The leverage "
+            "is local vol over the deterministic root variance: local volatility. The next chapter turns that dial."
+        )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

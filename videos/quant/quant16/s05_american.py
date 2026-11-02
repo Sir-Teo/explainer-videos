@@ -52,7 +52,7 @@ class American(VoiceoverScene):
             r = lv["records"][str(i)]
             S_, Y_ = np.asarray(r["S"]), np.asarray(r["Y"])
             keep = (S_ > 60)
-            S_, Y_ = S_[keep][:600], Y_[keep][:600]
+            S_, Y_ = S_[keep][:300], Y_[keep][:300]
             dots = VGroup(*[Dot(sx.c2p(a, min(b, 40)), radius=0.025, color=SPOT) for a, b in zip(S_, Y_)])
             xx = np.linspace(max(60, S_.min() if len(S_) else 60), 100, 60)
             fit = curve(sx, xx, np.clip(np.polyval(r["coef"], xx / K), 0, 40), OPT, stroke_width=3)

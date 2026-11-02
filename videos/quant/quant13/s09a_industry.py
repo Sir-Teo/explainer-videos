@@ -42,15 +42,15 @@ class Industry(VoiceoverScene):
         if G.width > 13.2:
             G.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Who builds these models? To a remarkable degree, one research group. At Société Générale, Lorenzo "
-            "Bergomi, head of equity derivatives quantitative research, wrote the Smile Dynamics papers, the "
-            "variance-curve models of chapter thirteen, and was named Risk magazine's Quant of the Year for 2009. "
-            "Julien Guyon, at the bank from 2006 to 2012, and Pierre Henry-Labordère developed the particle method "
-            "of chapter eleven there. Henry-Labordère was Quant of the Year in 2013 and again in 2023; Guyon at the "
-            "2025 awards, for neural joint S&P–VIX calibration with Scander Mustapha. The exotics these banks sold, "
-            "cliquets and autocallables above all, are exactly the contracts whose prices depend on smile dynamics. "
-            "<bookmark mark='a'/> The exchanges turned volatility itself into an asset: Cboe's VIX futures in 2004 "
-            "and options in 2006, and for Bitcoin, Deribit's DVOL."
+            (
+            "Who builds these models? To a remarkable degree, one group. At Société Générale, Lorenzo Bergomi, head of "
+            "equity derivatives quantitative research, wrote the Smile Dynamics papers and was Risk's Quant of the "
+            "Year for 2009. Julien Guyon and Pierre Henry-Labordère developed the particle method there. "
+            "Henry-Labordère won the award in 2013 and 2023; Guyon at the 2025 awards, for neural joint S&P–VIX "
+            "calibration with Scander Mustapha. The cliquets and autocallables such banks sold are exactly the "
+            "contracts that depend on smile dynamics. <bookmark mark='a'/> And exchanges made volatility an asset: "
+            "Cboe's VIX futures and options, and for Bitcoin, Deribit's DVOL."
+        )
         ) as vo:
             self.play(FadeIn(f1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -77,16 +77,15 @@ class Industry(VoiceoverScene):
         pp = pause(r"Volatility rises when prices fall. Long a call: hold more or less underlying than Black--Scholes says?",
                    width=5.0).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "How does a desk judge a stochastic volatility model? Not by its fit: every model here fits. By its "
-            "hedge. The cleanest test is the minimum-variance delta: the hedge ratio that minimises the variance of "
-            "the hedged profit and loss, which is the regression of the option's change on the spot's change. "
-            "<bookmark mark='a'/> To first order the option moves with the spot and with its implied volatility. "
-            "<bookmark mark='b'/> So the best delta is the Black–Scholes delta plus vega times the expected move in "
-            "volatility per unit of spot, as John Hull and Alan White wrote in 2017. <bookmark mark='c'/> In Heston "
-            "that expected move is rho xi: the same idea as Bartlett's SABR delta. <bookmark mark='d'/> Pause and "
-            "predict: volatility tends to rise when prices fall. If you are long a call, should you hold more or less "
-            "of the underlying than Black and Scholes say? Less: when the price falls, the volatility rise cushions "
-            "the call, so it behaves like a smaller delta."
+            (
+            "How does a desk judge a model? Not by its fit: every model here fits. By its hedge. The cleanest test is "
+            "the minimum-variance delta: regress the option's change on the spot's. <bookmark mark='a'/> To first "
+            "order the option moves with spot and implied vol. <bookmark mark='b'/> So the best delta is "
+            "Black–Scholes's plus vega times the expected vol move per unit of spot: Hull and White, 2017. "
+            "<bookmark mark='c'/> In Heston that is rho xi, Bartlett's idea again. <bookmark mark='d'/> Pause: "
+            "volatility rises when prices fall. Long a call, hold more or less than Black–Scholes says? Less: the "
+            "vol rise cushions the fall."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -145,14 +144,14 @@ class Industry(VoiceoverScene):
                   f"Even a rolling sixty-day beta does not help overall: {100 * ro['60']['all']:+.0f} percent.")
         src = real_data(r"Binance BTCUSDT and Deribit DVOL daily, 2021--2025; Black--Scholes marks at DVOL")
         with self.voiceover(
-            "Test it on Bitcoin's real data. Every day from 2021 to 2025, take a thirty-day at-the-money call, "
-            "marked at that day's DVOL, and hedge it for one day: once with Black and Scholes's delta, once with "
-            "the minimum-variance delta, with beta from the regression of DVOL's change on the day's return. Then "
-            f"add up the squared hedge errors. On average the minimum-variance delta is {rc['mean_mv']:.2f}, against "
-            f"{rc['mean_bs']:.2f}: less, as predicted. <bookmark mark='a'/> {v_fix} <bookmark mark='b'/> {v_roll} "
-            "<bookmark mark='c'/> The lesson desks draw: a model's dynamics matter for the hedge, and on Bitcoin "
-            "they are not stable. This is descriptive hedging, not a trading strategy, so the trial counter does not "
-            "move."
+            (
+            "Test it on Bitcoin. Every day from 2021 to 2025, a thirty-day at-the-money call marked at DVOL is hedged "
+            "for a day, with Black–Scholes's delta and with the minimum-variance delta, beta from regressing DVOL's "
+            "change on the return; the squared errors add up. The minimum-variance delta averages "
+            f"{rc['mean_mv']:.2f} against {rc['mean_bs']:.2f}. <bookmark mark='a'/> {v_fix} <bookmark mark='b'/> "
+            f"{v_roll} <bookmark mark='c'/> Dynamics matter for the hedge, and on Bitcoin they are not stable. This is "
+            "descriptive hedging, not a strategy: the trial counter does not move."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             self.add(lb, lm)
@@ -197,12 +196,12 @@ class Industry(VoiceoverScene):
               else "Heston's own delta is not the worst here.")
         src = simulated(r"the fitted Heston, 2{,}000 paths, a 30-day ATM call hedged daily; prices from a COS grid in $(\ln S, v)$")
         with self.voiceover(
-            "Repeat the test where the truth is known: inside the fitted Heston model itself, two thousand simulated "
-            "months, a thirty-day call hedged daily three ways. <bookmark mark='a'/> "
-            f"{v} <bookmark mark='b'/> {v2} And all three leave most of the risk in place: unhedged, the error is "
-            f"{hh['unhedged_sd']:.3f} per unit of spot; hedged, about {hh['MV']['sd']:.3f}. With a vol of vol of "
-            "several hundred percent, the rest is vega risk, which no delta removes. That is why desks hedge vega "
-            "too, as Part eleven did."
+            (
+            "Now where the truth is known: inside the fitted Heston, two thousand simulated months, a call hedged "
+            f"daily three ways. <bookmark mark='a'/> {v} <bookmark mark='b'/> {v2} All three leave most of the risk: "
+            f"unhedged {hh['unhedged_sd']:.3f}, hedged about {hh['MV']['sd']:.3f}. The rest is vega risk, which no "
+            "delta removes; desks hedge vega too, as in Part eleven."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[FadeIn(b_[2]) for b_ in bars], lag_ratio=0.2))
             vo.wait_until("a")
@@ -229,15 +228,15 @@ class Industry(VoiceoverScene):
         if G.width > 13.2:
             G.scale_to_fit_width(13.2)
         with self.voiceover(
-            "The published horse races agree. Gurdip Bakshi, Charles Cao and Zhiwu Chen raced the models on S&P 500 "
-            "options in 1997: stochastic volatility with jumps priced best, but for hedging, stochastic volatility "
-            "alone was enough. <bookmark mark='a'/> On Bitcoin, Matic, Packham and Härdle found in 2023 that "
-            "calibration points to stochastic volatility with few jumps, and that for longer-dated options, hedging "
-            "with several instruments under a stochastic volatility model cut tail risk. <bookmark mark='b'/> And "
-            "when the models disagree, regulators want the disagreement on the balance sheet. Under the European "
-            "prudent-valuation standard, a bank holds a model-risk adjustment derived from the range of plausible "
-            "models and calibrations, at ninety percent confidence. Chapter fourteen's cliquet spread is exactly "
-            "such a range, and Part fifteen turns it into a reserve. Model validation itself is Part five's story."
+            (
+            "The published horse races agree. Bakshi, Cao and Chen found in 1997 that on S&P options, stochastic "
+            "volatility with jumps priced best, but stochastic volatility alone hedged as well. "
+            "<bookmark mark='a'/> On Bitcoin, Matic, Packham and Härdle found few jumps, and that multi-instrument "
+            "hedges under stochastic volatility cut tail risk for longer options. <bookmark mark='b'/> And regulators "
+            "put disagreement on the balance sheet: under Europe's prudent-valuation rules, a model-risk adjustment "
+            "from the range of plausible models, at ninety percent confidence. Chapter fourteen's cliquet spread is "
+            "such a range; Part fifteen turns it into a reserve."
+        )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -268,12 +267,12 @@ class Industry(VoiceoverScene):
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
         with self.voiceover(
+            (
             "The House's volatility desk now runs all of this. <bookmark mark='a'/> Characteristic functions for "
-            "every model in the part, each checked to keep the forward a martingale. Fourier pricing that reproduces "
-            "the published Heston benchmark, and Merton's series as a cross-check. A calibrator that records its "
-            "path, can hold parameters fixed, and can be pulled toward last week. SABR with its arbitrage-free "
-            "density. Simulators checked against Fourier prices, the particle method, the model vol index and "
-            "forward smiles, and the minimum-variance hedge. Each function has a test in the House's suite."
+            "every model, martingale-checked; Fourier pricing matched to the benchmark and to Merton's series; a "
+            "calibrator that records its path, fixes parameters and regularises; arbitrage-free SABR; simulators, "
+            "particles, the vol index, forward smiles, and the minimum-variance hedge. Each has a test."
+        )
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))

@@ -29,7 +29,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
 
         def gam(S, h):
             return float(min(bs.greeks(S, 100.0, max(h, 0.25) / (365 * 24), 0.5)["gamma"], 2.5))
-        sf = surf(ax, gam, (96, 104), (0.25, 24), [(QC.SPOT, 0.05), (GAMMA, 0.8), (QC.LOSS, 2.3)], resolution=(36, 28),
+        sf = surf(ax, gam, (96, 104), (0.25, 24), [(QC.SPOT, 0.05), (GAMMA, 0.8), (QC.LOSS, 2.3)], resolution=(28, 20),
                   opacity=0.8)
         hint = hint3d((r"underlying near the strike of 100", SPOT), (r"hours to expiry", THETA),
                       (r"gamma of one call (clipped at 2.5)", GAMMA))

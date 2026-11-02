@@ -72,14 +72,14 @@ class Jumps(VoiceoverScene):
         cur = draw(1.0)
         src = illustration(r"$\sigma = 30\%$, jumps $\mathcal{N}(-12\%, 8\%^2)$, three months")
         with self.voiceover(
-            "Robert Merton's jump model has a beautiful exact solution, and it is easiest to see as a layer cake. Over "
-            "three months, the price either does not jump, or jumps once, or twice, and so on. Given the number of "
-            "jumps, the log price is just Gaussian: the diffusion plus that many Gaussian jumps. <bookmark mark='a'/> "
-            "So the distribution is a stack of Gaussian layers: blue for no jump, red for one jump shifted left by "
-            "the mean jump, orange for two, each weighted by its Poisson probability, shown on the right. The white "
-            "outline is the sum. <bookmark mark='b'/> Raise the intensity, and weight moves from the no-jump layer "
-            "into the jump layers. The left tail fattens: that is the crash insurance a put is buying. "
-            "<bookmark mark='c'/> Lower it, and the cake collapses back toward a single Gaussian, Black and Scholes."
+            (
+            "A diffusion cannot gap. Robert Merton added jumps in 1976, and his model has an exact solution best seen "
+            "as a layer cake. Over three months the price jumps zero times, once, twice; given the count, the log "
+            "price is Gaussian. <bookmark mark='a'/> So the law is a stack of Gaussian layers, each shifted by its "
+            "jumps and weighted by its Poisson probability. <bookmark mark='b'/> Raise the intensity: weight moves "
+            "into the jump layers and the left tail fattens, the crash insurance a put buys. <bookmark mark='c'/> "
+            "Lower it, and the cake collapses toward Black and Scholes."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(cur[2]), LaggedStart(*[FadeIn(p_) for p_ in cur[0]], lag_ratio=0.4),
                       Create(cur[1]), run_time=3)
@@ -108,17 +108,15 @@ class Jumps(VoiceoverScene):
                 why(r"independent factors multiply: Bates (1996) is Heston times Merton's jump factor", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The derivation is the picture, in symbols. The price diffuses, and jumps by a factor e to the J when a "
-            "Poisson clock rings at rate lambda. The drift minus lambda k bar pays for the average jump, so the "
-            "price stays a fair game. <bookmark mark='a'/> Given exactly n jumps, the log price is a sum of "
-            "independent Gaussians: Gaussian, with n times the jump mean added and n times the jump variance. "
-            "<bookmark mark='b'/> So condition on n, price with Black and Scholes, and weight by the Poisson "
-            "probability. That series is Merton's 1976 formula, and the House's version agrees with Fourier pricing "
-            "to eight decimals. <bookmark mark='c'/> And because the jumps are independent of Heston's two rivers, "
-            "characteristic functions multiply: David Bates's 1996 model is Heston's function times Merton's jump "
-            "factor. Steven Kou's double exponential jumps, from 2002, swap the Gaussian jump for two exponentials, "
-            "up and down. Their memoryless overshoot gives closed-form prices for barriers and lookbacks, as Kou and "
-            "Hui Wang showed in 2004."
+            (
+            "In symbols: the price diffuses, and jumps by e to the J when a Poisson clock rings; the drift minus "
+            "lambda k bar keeps it a fair game. <bookmark mark='a'/> Given n jumps, the log price is a sum of "
+            "independent Gaussians. <bookmark mark='b'/> Condition on n, price by Black–Scholes, weight by Poisson: "
+            "Merton's series, which the House matches to Fourier pricing at eight decimals. <bookmark mark='c'/> "
+            "Independent factors multiply, so Bates's 1996 model is Heston times Merton's jump factor. Kou's 2002 "
+            "jumps are double exponential, and their memoryless overshoot prices barriers in closed form, as Kou and "
+            "Wang showed."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -177,18 +175,16 @@ class Jumps(VoiceoverScene):
                  "puts dear." if rare else "Frequent and moderate: the jumps act as extra curvature.")
         d0 = sorted(mv, key=lambda z: int(z))[0]
         with self.voiceover(
-            f"Now fit every model in the part to the same {c['n']} quotes, with the same calibrator, and line them "
-            f"up. One Black–Scholes volatility misses by {c['fits']['BS']['rmse']:.1f} points. "
-            f"<bookmark mark='a'/> Merton's jumps on a constant volatility get to {F['Merton']['rmse_iv']:.1f}, and "
-            f"look at the jumps it chose: {m['lam']:.2f} a year, each a fall of {100 * abs(m['mj']):.0f} percent on "
-            f"average. {shape} Even so, the {d0}-day expiry is missed by {mv[d0]:.1f} points. Kou's double exponential gets "
-            f"{F['Kou']['rmse_iv']:.1f}. <bookmark mark='b'/> Heston reaches {c['fits']['Heston']['rmse']:.2f}. "
-            f"And Bates, Heston plus jumps, with eight numbers, reaches {c['fits']['Bates']['rmse']:.2f}, barely "
-            "better, and with very different jumps: "
-            f"{b['lam']:.0f} a year of {100 * abs(b['mj']):.0f} percent. <bookmark mark='c'/> The same jump "
-            "component means opposite things in the two models. Without stochastic volatility, jumps are a crash; "
-            "with it, the optimizer spends them on the body of the smile, a second diffusion. On this calm December "
-            "day, the Surface priced no crash that stochastic volatility could not already explain."
+            (
+            f"Now fit every model in the part to the same {c['n']} quotes. One Black–Scholes vol misses by "
+            f"{c['fits']['BS']['rmse']:.1f} points. <bookmark mark='a'/> Merton reaches {F['Merton']['rmse_iv']:.1f}, "
+            f"with jumps {m['lam']:.2f} a year, each about {100 * abs(m['mj']):.0f} percent down. {shape} Its "
+            f"{d0}-day expiry is still off by {mv[d0]:.1f}. Kou: {F['Kou']['rmse_iv']:.1f}. <bookmark mark='b'/> "
+            f"Heston: {c['fits']['Heston']['rmse']:.2f}. Bates: {c['fits']['Bates']['rmse']:.2f}, with "
+            f"{b['lam']:.0f} jumps a year of {100 * abs(b['mj']):.0f} percent. <bookmark mark='c'/> The same jumps "
+            "mean opposite things: without stochastic volatility, a crash; with it, a second diffusion. On this calm "
+            "day the Surface priced no crash that stochastic volatility could not explain."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), GrowFromEdge(bars[0], LEFT), FadeIn(labs[0]))
             vo.wait_until("a")
@@ -246,13 +242,13 @@ class Jumps(VoiceoverScene):
                  "shrinks to its floor, while the loss barely moves." if at_bound else
                  "The intensity and the size trade off against each other while the loss barely moves.")
         with self.voiceover(
-            f"Watch the Bates fit happen, from three starting points. Left, the loss; middle, the jump intensity; "
-            "right, the size of the jumps. <bookmark mark='a'/> The loss drops quickly as the Heston part settles. "
-            f"Then the jump parameters drift. {drift} <bookmark mark='b'/> That is the optimizer telling you something. Many small jumps are statistically "
-            "indistinguishable from more diffusion, and the data cannot tell a crash from a busy day. Pause and "
-            "predict: with Merton's fitted intensity, what is the probability of no jump before a three-day option "
-            f"expires? About {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} percent. Short "
-            "options price the possibility, not the frequency."
+            (
+            f"Watch the Bates fit from three starts: loss, jump intensity, jump size. <bookmark mark='a'/> The loss "
+            f"drops as the Heston part settles; then the jumps drift. {drift} <bookmark mark='b'/> Many small jumps "
+            "look exactly like more diffusion. Pause: with Merton's intensity, what is the chance of no jump before "
+            f"a three-day option expires? About {100 * np.exp(-lf['fits']['Merton']['params']['lam'] * 3 / 365):.1f} "
+            "percent. Short options price the possibility, not the frequency."
+        )
         ) as vo:
             self.play(FadeIn(P), FadeIn(src), Create(bound), FadeIn(bl), Create(floor), FadeIn(leg))
             self.add(lines)
@@ -280,13 +276,12 @@ class Jumps(VoiceoverScene):
         if G.width > 13.2:
             G.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Three extensions. Duffie, Pan and Singleton in 2000, and Eraker, Johannes and Polson in 2003, let "
-            "volatility jump too, at the same moments as the price: the SVCJ model. Broadie, Chernov and Johannes "
-            "found such volatility jumps, and premia for jump risk, necessary to price S&P options. "
-            "<bookmark mark='a'/> For Bitcoin, Hou, Wang, Chen and Härdle fitted SVCJ in 2020 and found jumps in "
-            "both, anti-correlated: falls in price arriving with leaps in volatility. <bookmark mark='b'/> And the "
-            "most extreme jump of all is to zero: default, which Gatheral treats inside the smile and Part twenty "
-            "turns into credit."
+            (
+            "Extensions. Duffie, Pan and Singleton, and Eraker, Johannes and Polson, let volatility jump with the "
+            "price; Broadie, Chernov and Johannes found such jumps needed for S&P options. <bookmark mark='a'/> On "
+            "Bitcoin, Hou, Wang, Chen and Härdle found jumps in price and variance, anti-correlated. "
+            "<bookmark mark='b'/> The extreme jump, to zero, is default: Part twenty."
+        )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

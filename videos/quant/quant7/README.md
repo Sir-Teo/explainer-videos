@@ -87,7 +87,7 @@ paper.
   12 March reshuffles everything. QLIKE: HARNet 0.360, log-HAR 0.363, LSTM 0.371, transformer 0.410, HARQ 0.426, HAR
   0.427, GJR 0.444, GARCH 0.452, EWMA 0.512; DM t against log-HAR: HARNet −0.99, LSTM +1.46. On MSE, GJR first. The
   2020 overlay.
-* **15. Foundation models and the frontier.** Chronos's tokenisation drawn; a toy Chronos-style model (FOUNDATION).
+* **15. Foundation models and the frontier.** Chronos's tokenisation drawn; a toy Chronos-style model trained here on 3,000 synthetic volatility series (128 bins, context 64, a 42,176-parameter numpy network, 3 seeds, replayed) and run zero-shot on Bitcoin 2020: QLIKE 0.416 against log-HAR's 0.363 (DM t = +1.7, within noise; between HAR and the transformer), its 10–90% fan covering 85% of days.
   Brini (2026), Table 6, h = 1, as published: TTM 0.982, HAR 0.998, Sundial 0.998, log-HAR 1.000, ARMA 1.000,
   Moirai-2.0-S 1.038, TimesFM-2.5 1.086, Moirai-MoE-S 1.090, Chronos-Bolt-S 1.110, Chronos-Bolt-B 1.121, Toto 1.214,
   Lag-Llama 1.532. The 2022–2026 papers.
@@ -100,8 +100,8 @@ paper.
   of mass): on the US market 1927–2020 at 10%, Sharpe 0.44 → 0.58, worst-1% mean −2.78% → −2.55%, max drawdown (log)
   1.04 → 0.67. The VIX above next-month realized on 85% of days (by 4.1 points); R² 0.52 (VIX), 0.50 (GARCH); both
   significant together (t 7.2 and 3.2).
-* **18. The volatility forecaster.** The module table; Rule 8; ten models registered in this part, the series' trial
-  counter at 77. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
+* **18. The volatility forecaster.** The module table; Rule 8; eleven models registered in this part, the series' trial
+  counter as read at build time. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
   9.1% (1 day) → 15.3% (1 year), long run 17.6%.
 * **Recap, four desk questions, six problems, payoffs, references.**
 
@@ -163,7 +163,7 @@ EXPLAINER_TTS=silent python tools/qa_scene.py quant7 Race     # one chapter, sil
 python tools/make.py quant7 --cpu-voice -q m             # English and Chinese, narrated by Kokoro on the CPU
 ```
 
-Compute: about 25 CPU-minutes in all (networks about 4 minutes on one thread; the toy foundation model about 17).
+Compute: about 25 CPU-minutes in all (networks about 4 minutes on one thread; the toy foundation model about 6, in numpy, because on the shared build machine the PyTorch version was repeatedly killed for memory).
 Training uses one thread on purpose: with renders running, PyTorch's default thread pool was measured forty times
 slower. The network runs are cached one file per seed in `.cache/quant7/training_runs/`.
 
@@ -234,7 +234,7 @@ market data (the leakage caveat on screen).
 * Kenneth French's daily market and size-decile returns and monthly factors, 1926–2020; FRED DTB3, DGS5, DGS10 and
   VIXCLS. The hold-out from 2021 is sealed.
 * Registered with the trial counter before scoring: the forecasting race (8 models; log-HAR added after the first
-  results and counted), HARNet (1) and the toy foundation model (1).
+  results and counted), HARNet (1) and the toy foundation model (2: a PyTorch version registered first and never scored, then the numpy version that was).
 * Facts checked for this expansion: Murray (1994) is *The American Statistician* 48(1):37–39 (Crossref); Moskowitz,
   Ooi and Pedersen's 40% target and 60-day centre of mass (the *JFE* paper's text); MSCI's descriptions of USE4's
   half-lives and volatility regime adjustment (MSCI, Dec. 2011). Dropped as unverifiable here: the exact USE4

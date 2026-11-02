@@ -89,22 +89,28 @@ class Frontier(VoiceoverScene):
         res = VGroup(
             MathTex(rf"\text{{guess: median error}}\ {100 * g0:.2f}\ \text{{vol pts}}", font_size=26, color=QQ),
             MathTex(rf"\text{{Corrado--Miller: median}}\ {100 * nv['cm_med']:.2f}", font_size=26, color=GREY_A),
-            MathTex(rf"\text{{after 1 Newton step}}\ {100 * g1:.1e}", font_size=26, color=GAIN),
-            MathTex(rf"\text{{after 2: worst}}\ {100 * g2max:.0e}", font_size=26, color=GAIN),
+            MathTex(rf"\text{{after 1 Newton step: median}}\ {100 * g1:.3f}", font_size=26, color=GAIN),
+            MathTex(rf"\text{{after 2: median}}\ {100 * np.median([f['two_med'] for f in fin]):.1e},\ \text{{worst}}\ "
+                    rf"{100 * g2max:.1f}", font_size=26, color=GAIN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.25).shift(RIGHT * 2.8)
         better = g0 < nv["cm_med"]
+        cmp_word = "smaller than" if better else "no better than"
+        g2med = np.median([f["two_med"] for f in fin])
+        two_txt = "rounding level" if g2med < 1e-9 else f"{100 * g2med:.4f} points"
+        worst_line = ("and even the worst quote of the Surface is at rounding level." if g2max < 1e-6 else
+                      f"but the worst quote is still {100 * g2max:.0f} points off: deep out of the money, where chapter "
+                      "eleven's flat sheet throws Newton around. That is why the papers gate the network by region and "
+                      "finish with a third-order step, and why the House keeps its bracket.")
         with self.voiceover(
             "The House tries the last idea in miniature. A small network, two inputs, the log-moneyness and the "
             "log of the normalized price, learns to output the total volatility, trained on "
             f"{nv['n_train']:,} synthetic quotes, five seeds. On the right the training loss, the band the spread "
             "of the seeds; on the left, its guess for every quote of the real Surface against the truth, "
             "checkpoint by checkpoint. <bookmark mark='a'/> The cloud collapses onto the diagonal. Its median "
-            f"error is {100 * g0:.2f} volatility points, "
-            + ("smaller than the classical Corrado-Miller start's " if better else
-               "no better than the classical Corrado-Miller start's ")
-            + f"{100 * nv['cm_med']:.2f}. But a guess is only a start: one Newton step and the median error is "
-            "down to thousandths of a point or less; two, and the worst quote of the Surface is at rounding "
-            "level. That is the frontier's recipe: learn the start, keep the mathematics for the finish."
+            f"error is {100 * g0:.2f} volatility points, {cmp_word} the classical Corrado-Miller start's "
+            f"{100 * nv['cm_med']:.2f}. A guess is only a start: one Newton step takes the median to "
+            f"{100 * g1:.2f} points, two to {two_txt}, {worst_line} Learn the start; keep the mathematics for the "
+            "finish."
         ) as vo:
             self.play(FadeIn(title), FadeIn(rp))
             rp.play(self, run_time=max(vo.until("a") - 1.5, 5.0))

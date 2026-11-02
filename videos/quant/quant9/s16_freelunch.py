@@ -133,6 +133,8 @@ class FreeLunch(VoiceoverScene):
             self.add(FAN, H)
             vo.wait_until("a")
             self.play(k.animate.set_value(1.0), run_time=max(vo.until("b") - 0.2, 4.0), rate_func=linear)
+            FAN.clear_updaters()
+            H.clear_updaters()
             self.play(LaggedStart(*[FadeIn(s_) for s_ in side[:4]], lag_ratio=0.3), FadeIn(side[4]), run_time=2)
             vo.wait_until("c")
             self.play(Create(floor), FadeIn(fl))

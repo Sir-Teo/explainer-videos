@@ -65,7 +65,6 @@ class Hook(VoiceoverScene):
                             .next_to(g1, DOWN, buff=0.15).align_to(g1, LEFT))
         led = HedgeLedger(gam, the, book, tr, scale=8.0, half_width=2.0, font_size=20)
         led.move_to(DOWN * 2.2 + RIGHT * 0.3)
-        led.anchor.move_to(DOWN * 2.2 + RIGHT * 0.3)
         side = VGroup(
             label(rf"bought at DVOL: {100 * s['iv']:.0f}\% implied", font_size=24, color=VEGA),
             label(rf"realized over the month: {100 * s['rv']:.0f}\%", font_size=24, color=GAMMA),

@@ -702,31 +702,55 @@ lenders (BOXX), LTCM (full story in 41).
 *House:* the arbitrage checker (used on every surface): parity and forwards, FTAP/simplex, super-replication,
 static and calendar checks, MOT bounds with duals and entropic solver, Ross recovery.
 
-### Part 10 · Black–Scholes–Merton (~55; the pilot)
-1. 1973: Black, Scholes, Merton; the CBOE opens; Thorp's earlier formula; the TI calculator on the floor.
-2. Three derivations: replication PDE, risk-neutral expectation, the binomial limit.
-3. The Greeks as geometry; Θ = −½Γσ²S² (at r = 0).
-4. The hedging P&L ½ΓS²(σ²_realized − σ²_implied)dt, derived and watched.
-5. Hedging with the wrong volatility (El Karoui–Jeanblanc–Shreve 1998).
-6. Discrete hedging error ∝ 1/√N (Boyle–Emanuel 1980); Leland (1985).
-7. Implied volatility by inversion (Jäckel, "Let's be rational").
-8. American options and the free boundary.
-9. Dividends, borrow and the forward.
-10. 1987: portfolio insurance and the birth of the skew; MacKenzie's performativity thesis (the model made the
-    market that fitted it, until 1987).
-11. 1997 to 1998: the Nobel, then LTCM.
+### Part 10 · Black–Scholes–Merton (~58; the pilot)
+1. 1973: Black, Scholes, Merton; Sprenkle, Boness and Samuelson's two unknowns; Thorp and Kassouf's hedge (and
+   Thorp's undiscounted formula, as MacKenzie reports); the first rejections; the CBOE opens (calls only, 16 stocks,
+   911 contracts); Black's sheets of theoretical prices on the floor.
+2. Three derivations: the self-financing replication PDE; the PDE solved through the heat equation (the kernel seen in
+   3D); the risk-neutral expectation (Monte Carlo with seeds, Girsanov as the baseline); the binomial tree's limit,
+   derived (the recursion is a discretized PDE) and seen in 3D.
+3. The Greeks as geometry, derived (Sφ(d₁) = Ke^{−rT}φ(d₂)); Θ + rSΔ + ½σ²S²Γ = rV.
+4. The hedging P&L ½ΓS²(σ²_implied − σ²_realized)dt, derived and watched in the ledger.
+5. Hedging with the wrong volatility, proved (El Karoui–Jeanblanc–Shreve 1998); hedge at implied or at actual
+   (Ahmad–Wilmott 2005); dollar gamma as a landscape.
+6. Discrete hedging: error ∝ √Δt (Boyle–Emanuel 1980; Derman–Kamal's √(π/4)); the floor jumps put under it
+   (Derman–Taleb 2005). Transaction costs: Leland (1985) derived and checked; the cost–risk landscape; why constant
+   costs make perfect hedging unbounded (Soner–Shreve–Cvitanić 1995; Kabanov–Safarian 1997).
+7. Implied volatility by inversion: existence and uniqueness, the normalized price, Brenner–Subrahmanyam,
+   Corrado–Miller, Jäckel's "Let's be rational"; the House's solver on all 254 quotes, against plain Newton.
+8. American options: the free boundary, the early-exercise premium (Kim 1990; Carr–Jarrow–Myneni 1992),
+   Brennan–Schwartz (1977), Barone-Adesi–Whaley (1987), the call before a dividend.
+9. Dividends, borrow and the forward: Merton's yield, Black-76, Garman–Kohlhagen, inverse (coin-settled) options; the
+   fake skew drawn by a forgotten forward.
+10. 1987: portfolio insurance (Rubinstein–Leland 1981) replayed on the October data; the Brady Commission's numbers;
+    the birth of the skew; MacKenzie's performativity thesis.
+11. 1997 to 1998: the Nobel, then LTCM as a short-volatility, short-liquidity book (GAO 1999; VIX through 1998).
 12. The Surface's first row.
 
-*Textbooks:* Hull OFOD ch. 13–15, 19; Shreve II ch. 4–5; Björk ch. 7–9; Wilmott PWOQF ch. 5–8; Joshi *Concepts*
-ch. 5–6; Taleb *Dynamic Hedging*.
-*Computed:* hedging replays on GBM, on Heston paths, and on real BTC against Deribit implied vols; error vs
-rebalancing; Leland checked.
-*Visuals:* `HedgeLedger`; the tree converging to the PDE in 3D.
-*Crisis:* 19 October 1987. *Firms:* the CBOE floor; O'Connor & Associates and the first option market makers to use
-the model.
-*Desk:* "ATM call, 1 year, vol 20%, spot 100: price it in your head" (≈ 0.4·σ·S·√T); "What's the delta of a
-digital as T → 0?"
-*House:* the vol desk opens: the BSM pricer and hedger.
+*Textbooks:* Hull OFOD ch. 13, 15, 17–20; Shreve II §4.5, ch. 5, §8.4–8.5; Björk ch. 7, 8, 10 and the
+dividends/futures/FX chapters; Wilmott PWOQF ch. 5–9 and the hedging and transaction-cost chapters; Joshi *Concepts*
+ch. 5–7, 12; Taleb *Dynamic Hedging*; Baxter–Rennie ch. 3–4. Perpetual put and smooth fit → Part 8; trees, PDE and
+LSM numerics → Part 16; the smile → Part 12; the trade (scalping, frequency on data, dividend play) → Part 11.
+*Computed:* the heat-kernel solution; MC under Q with seeds; the tree lattice converging; hedging replays on GBM,
+Heston and jump paths, and on real BTC against DVOL (1,706 months, swept with bootstrap bands); hedge at implied vs
+actual; error vs rebalancing with seeds and the jump floor; Leland checked, the cost–risk landscape, Leland's limit;
+the solver race on the Surface; the carry term structure and the forgotten-forward skew; the American premium (tree,
+Kim's integral, BAW); portfolio insurance on October 1987; VIX through 1998; the floor's 0.4 rule on the Surface; a
+learned first guess for implied volatility (5 seeds).
+*Visuals:* `HedgeLedger`; the tree converging to the PDE in 3D; the heat surface and kernel; the dollar-gamma
+mountain; the cost–risk landscape; the normalized price surface; the early-exercise premium surface; the insurer's
+weight through October 1987.
+*Labs:* `bs.price`/`heat_price`, `trees.crr`, `hedge.delta_hedge`, `leland_vol`, `bs.implied_vol`, `replicate_put`.
+*Industry:* Black's sheets and the CBOE floor; O'Connor & Associates; quoting in volatility (and Haug–Taleb's
+dissent); Black-76 in the plumbing; Deribit (Coinbase, 2025) and IBIT options (2024). *Frontier:* inverse options
+(Alexander–Chen–Imeraj 2023); hedging crypto options (Matic–Packham–Härdle 2023); the 2026 implied-volatility
+solvers (Schadner; Le Floc'h–Healy; PIVOT; Amiriyan–Boutaib); Black–Scholes machine-checked in Lean (2026); the
+minimum-variance delta (Hull–White 2017; Ruf–Wang 2022), fitted on BTC in Part 13.
+*Crisis:* 19 October 1987. *Firms:* the CBOE floor; O'Connor & Associates; Leland O'Brien Rubinstein; LTCM.
+*Desk:* "ATM call, 1 year, vol 20%, spot 100: price it in your head" (≈ 0.4·σ·S·√T); "Long a straddle, the stock
+sits still for a week"; "What's the delta of a digital as T → 0?"
+*House:* the vol desk opens: the BSM pricer and heat solver, the hedger (with costs), the implied-vol solver,
+Barone-Adesi–Whaley and Kim's premium, portfolio insurance, and the Surface's first row.
 
 ### Part 11 · Trading Options (~58; the practitioner's part)
 1. How an options trader thinks: the book as one Taylor series, each Greek derived; P&L as gamma against theta; a
@@ -824,26 +848,43 @@ no-arbitrage SVI/eSSVI (Martini–Mingone 2022); 0DTE pricing.
 5%: where does ATM vol go under sticky strike, sticky delta and local vol?"
 *House:* the surface builder (Rule 12: quote only from a fitted, checked surface; state the dynamics).
 
-### Part 13 · Stochastic Volatility and Jumps (~55)
-1. Why volatility must move.
-2. Heston (1993): the characteristic function by Riccati; Feller; Andersen's QE scheme.
-3. SABR (Hagan et al. 2002): the expansion, the backbone, its arbitrage at low strikes and the fixes.
-4. Jumps: Merton (1976), Kou (2002), Bates (1996).
-5. Lévy models: VG, CGMY, NIG; time changes (Carr–Wu 2004).
-6. Stochastic local volatility; the particle method (Guyon–Henry-Labordère).
-7. Bergomi's variance curve models; forward variance as the state.
-8. The forward smile, cliquets, and model disagreement.
-9. The SPX/VIX puzzle (Gatheral 2008).
-10. Calibration: loss landscapes, identifiability, parameter instability.
+### Part 13 · Stochastic Volatility and Jumps (~56)
+1. Why volatility must move: bitcoin's vol of vol, clustering and leverage, measured; 1987 and the skew; random
+   volatility makes a smile (Hull–White 1987, Renault–Touzi, Romano–Touzi), derived.
+2. Heston (1993): the characteristic function derived (affine ansatz, Riccati), the little trap, what each parameter
+   does, the short-maturity skew ρξ/(4√v₀); Feller; Andersen's QE scheme derived; exact and Poisson-conditioned
+   simulation.
+3. SABR (Hagan et al. 2002): the expansion and the backbone; the negative density; arbitrage-free SABR solved as a PDE;
+   Bartlett's delta.
+4. Jumps: Merton's series, Kou, Bates; what the Surface does with jump parameters.
+5. Lévy models: variance gamma derived as a time change, NIG, CGMY's fine structure; Carr–Wu; the term structure of
+   skew across every model.
+6. Stochastic local volatility: the McKean–Vlasov loop and the particle method (Guyon–Henry-Labordère 2012), its
+   convergence; the mixing fraction.
+7. Bergomi's forward variance curves: the curve as the state, the vol-of-vol term structure, the SSR of SV models.
+8. The forward smile and cliquets across models fitted to the same vanillas: model disagreement.
+9. The SPX/VIX puzzle (Gatheral 2008; Guyon 2020), measured in its bitcoin form: the smile's vol of vol against DVOL's.
+10. Calibration: landscapes, identifiability (the Hessian), parameter instability over 100 weeks, regularisation.
 
-*Textbooks:* Bergomi *Stochastic Volatility Modeling*; Gatheral ch. 2–5; Cont–Tankov ch. 4, 11, 13; Lewis
-*Option Valuation under Stochastic Volatility*.
-*Computed:* Heston, Bates, VG, SABR on the Surface; the calibration landscape in 3D; exotic-price dispersion across
-models fitted to the same vanillas.
-*Visuals:* the variance process as a second river; the optimizer wandering in a flat valley.
-*Crisis:* post-1987 skew; implied trees (Rubinstein 1994).
-*Desk:* "In Heston, what sets the skew? The smile's curvature?"
-*House:* the calibrator.
+*Textbooks:* Gatheral ch. 2–8, 10–11 (parts); Bergomi ch. 3–4, 6–10, 12; Cont–Tankov ch. 4, 6, 11, 13–15; Lewis
+ch. 1–6, 8–9; Guyon–Henry-Labordère (LSV calibration); Oosterlee–Grzelak (Heston, QE, Lévy).
+*Computed:* Heston, Bates, Merton, Kou, VG, NIG, CGMY and SABR on the Surface, with replays; the original Heston form's
+branch-cut failure; QE against Euler and the exact law; arbitrage-free SABR; SLV convergence and the mixing-fraction
+sweep; forward smiles and cliquets across models; the Heston vol index against DVOL; 100 weekly refits, raw and
+regularised; the minimum-variance delta on BTC.
+*Visuals:* the variance process as a second river; the mixing crowd; the CF helix and the branch cut; the gamma clock;
+particles with the leverage surface growing; the variance curve in motion; the optimizer wandering in a flat valley.
+*Labs:* `heston_cf`, `heston_qe`, `vg_cf`/`vg_paths`, `slv_paths`, `calibrate_reg`.
+*Industry:* Société Générale's quant research (Bergomi, Guyon, Henry-Labordère); Cboe's VIX futures and options;
+hedging by the minimum-variance delta; the horse races (Bakshi–Cao–Chen 1997; Matic–Packham–Härdle 2023); the EU
+model-risk valuation adjustment.
+*Frontier:* reversionary Heston and jumps (Abi Jaber–De Carvalho); the quintic OU model; neural joint SPX/VIX
+(Guyon–Mustapha 2023); Poisson-conditioned Heston simulation (Choi–Kwok 2024); particle-method analysis (2025);
+neural operators for LSV (2026).
+*Crisis:* 19 October 1987 and the skew ever since (Rubinstein 1994; Bates 2000).
+*Desk:* "In Heston, what sets the skew? The smile's curvature?"; "LV and SV both fit; price a cliquet"; "Why can't
+a VIX future trade above the variance-swap vol?"
+*House:* the calibrator (with traces, fixed parameters and regularisation) and the SLV particle simulator.
 
 ### Part 14 · Rough and Path-Dependent Volatility (~58; frontier)
 1. The fact: the at-the-money skew grows like T^{H−1/2}, measured on 102 weekly Deribit surfaces (2024–2025); why a
@@ -990,27 +1031,57 @@ spreadsheet stays in Part 20: the Task Force report could not be fetched to quot
 "Crank–Nicolson's gamma oscillates: why, and the fix?"; "LSM 6.06, dual 6.41: what next?"
 *House:* the pricing engine; Rule 16 (every price with its error, every method checked against another).
 
-### Part 17 · Deep Pricing and Hedging (~60; frontier)
-1. Hutchinson–Lo–Poggio (1994).
-2. Neural calibration (Horvath–Muguruza–Tomas 2021).
-3. Differential ML (Huge–Savine 2020).
-4. Deep BSDE (Han–Jentzen–E 2018) in 100 dimensions.
-5. Deep optimal stopping (Becker–Cheridito–Jentzen 2019).
-6. Deep hedging (Buehler–Gonon–Teichmann–Wood 2019): CVaR, costs, indifference prices.
-7. What the deep hedger learns: Leland and Whalley–Wilmott bands, rediscovered.
-8. Neural SDEs with robust exotic bounds (Gierjatowicz et al. 2022).
-9. Market generators: Quant GANs (Wiese et al. 2020), signature generators (Buehler et al. 2020), diffusion
-   models (AI Part 21); judged by signature MMD and the stylized facts.
-10. Production: model risk, validation (SR 11-7, replaced by SR 26-2 in April 2026), what has reached desks *(verify: public deployments)*.
+### Part 17 · Deep Pricing and Hedging (~58; frontier)
+1. Learning a pricing formula: Hutchinson–Lo–Poggio (1994) redone and replayed (three seeds); universal
+   approximation; a network's Greeks (the activation decides gamma: SiLU, ReLU, softplus) and no-arbitrage shapes
+   (the butterfly test).
+2. Neural calibration (Horvath–Muguruza–Tomas 2021; Hernandez 2016; Bayer–Stemper 2018): learning rough Bergomi's
+   pricing map from Monte Carlo, label noise measured against fresh simulation, calibration as gradient descent
+   through the network (the 3D surface converging onto the quotes, twelve starts), the training box's wall; two years
+   of weekly surfaces.
+3. Differential ML (Huge–Savine 2020): pathwise labels proved unbiased; the twin network replayed with seeds; tangent
+   planes in 3D; the Gaussian process with gradients (Dixon–Halperin–Bilokon ch. 3) as its exact, unscalable twin.
+4. Deep BSDE (E–Han–Jentzen 2017; Han–Jentzen–E 2018) in 100 dimensions: the BSDE derived from Itô, nonlinear
+   Feynman–Kac (Pardoux–Peng 1990), the shooting picture, u₀ as a tail average with seeds, the linear (no-default)
+   check; DGM and multilevel Picard.
+5. Deep optimal stopping (Becker–Cheridito–Jentzen 2019): the bang-bang proof, the exercise tunnel in 3D, the lower
+   bound, level with Longstaff–Schwartz at our budget (Part 16) and below BCJ's published bounds.
+6. Deep hedging (Buehler–Gonon–Teichmann–Wood 2019): entropic risk and CVaR (Rockafellar–Uryasev), indifference prices
+   (Hodges–Neuberger), the no-cost check replayed; the drift trap (Merton's term rediscovered; François et al. 2024;
+   near-martingale measures); QLBS and RL hedging.
+7. What the deep hedger learns: Leland and Whalley–Wilmott derived, the band emerging in training (three seeds), the
+   band network (Imaki et al. 2021; Davis–Panas–Zariphopoulou 1993) and the learned hedge as a surface in (time,
+   spot); a Whalley–Wilmott prior (Arzel–Lehdili 2026) re-run.
+8. Neural SDEs with robust exotic bounds (Gierjatowicz et al. 2022): calibrate, then push, both replayed; generative
+   LSV calibration (Cuchiero–Khosrawi–Teichmann 2020); joint SPX/VIX (Guyon–Mustapha).
+9. Market generators: GJR-GARCH, Quant GANs, signature generators (Buehler et al. 2020; Ni et al. 2021; Kidger et al.
+   2021), diffusion models (AI Part 21, reverse process shown live); judged by signature MMD and Part 1's stylized
+   facts; hedgers tested across generators and on history.
+10. Production: SR 26-2 (17 April 2026, Fed/OCC/FDIC, replacing SR 11-7 and SR 21-8) and PRA SS1/23; what has reached
+    desks (J.P. Morgan, Danske, as reported); the frontier 2023–2026 (SANOS/DYSANOS/GROMM; is deep hedging
+    speculation?).
 
-*Textbooks:* Dixon–Halperin–Bilokon *Machine Learning in Finance*; Kelly–Xiu *Financial Machine Learning*.
-*Trained:* the neural calibrator; differential ML; deep BSDE; deep stopping; **the deep hedger** (replayed: the
-hedge surface sharpening into a no-trade band); a neural SDE; **the market generator** (signature WGAN and a
-diffusion model), scored on Part 1's stylized facts.
-*Visuals:* the learned hedge as a surface in (time, spot); real vs generated paths in a lineup.
-*Firms:* J.P. Morgan's published deep-hedging work.
-*Desk:* "Your hedger has costs. Why does the optimal hedge have a band?"
-*House:* the deep hedger and the market generator (the finale stress-tests the House with it).
+*Textbooks:* Dixon–Halperin–Bilokon ch. 1, 3–5, 8, 10, 12; Kelly–Xiu (the virtue of complexity); Jentzen–Kuckuck–von
+Wurstemberger (deep PDE theory). Glasserman 7–8 and Savine → Part 16.
+*Trained (all replayed, seeds as bands):* HLP networks (three activations); the calibrator and the calibration; DML
+and a GP with gradients; deep BSDE (with the linear check); deep stopping; the deep hedger (entropic, CVaR, under
+drift, with costs); the band network (with a WW prior; on GBM and on GARCH paths); a neural SDE; DDPM and a signature
+LSTM.
+*Visuals:* the band riding a live path; the price surface and its error in 3D; the IV surface converging onto the
+quotes; tangent planes and the GP shell; BSDE shooting; the exercise tunnel; the band sheets over (time, spot);
+low/high model surfaces; reverse diffusion; the cross-generator heat map.
+*Labs:* `train_mlp_regressor`, `calibrate_neural`, `train_differential`, `deep_bsde`, `deep_stopping`, `hedge_pnl`,
+`Hedger.band`/`ww_band`.
+*Firms:* J.P. Morgan (data-driven hedging of vanilla index books since 2018, deep hedging extended to cliquets, as
+reported by Risk.net); Danske Bank (DML, AAD).
+*Industry:* SR 26-2; PRA SS1/23; quantum deep hedging (2023). *Frontier:* SANOS/DYSANOS/GROMM (2026); François et al.
+(2024); Zernikov (2026); Godin (2026); Mueller et al. (2024); Arzel–Lehdili (2026); Reppen–Soner–Tissot-Daguette;
+Bayer–Pelizzari–Schoenmakers; Ye–Wong; Issa et al.
+*Desk:* "Your hedger has costs. Why does the optimal hedge have a band?"; "A neural calibrator fits beautifully. How
+do you know it is right?"; "Why record the payoffs' derivatives?"; "Your deep hedger makes money on average with no
+costs. Is it hedging?"
+*House:* the deep hedger and the market generator; Rule 17 (no network without a slower, independent engine; tested on
+two generators and on history), tested in chapter 19 (the finale stress-tests the House with it).
 
 ### Part 18 · Money, Bonds and the Curve (~55)
 1. Money and central banks: the policy rate, reserves, the Fed's floor system, QE and QT; the Taylor rule.

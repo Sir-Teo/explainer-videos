@@ -73,7 +73,7 @@ class HLP(VoiceoverScene, ThreeDScene):
     def replay(self, r):
         seeds = [r["seeds"][s] for s in ("0", "1", "2")]
         ep = np.array([c[0] for c in seeds[0]["curve"]])
-        L = np.array([[c[1] / 100 for c in s["curve"]] for s in seeds])  # (10 C/K)^2 -> (C/K in % of K)^2
+        L = np.array([[c[1] * 100 for c in s["curve"]] for s in seeds])  # (10 C/K)^2 -> (100 C/K)^2, in (% of K)^2
         xs = np.asarray(r["xs"])
         bsl = np.asarray(r["bs_slice"])
 
@@ -154,7 +154,8 @@ class HLP(VoiceoverScene, ThreeDScene):
         outs = [f"n_train = {r['n_train']:,}"]
         for s in ("0", "1", "2"):
             q = r["seeds"][s]
-            outs.append(f"seed {s}: final mse {q['curve'][-1][1]:.2e}   at the money, error {q['slice_err_atm']:.3f}% of K")
+            outs.append(f"seed {s}: training rms {10 * np.sqrt(q['curve'][-1][1]):.3f}% of K   at the money "
+                        f"{q['slice_err_atm']:.3f}% of K")
         with self.voiceover(
             "The House's training loop, all of it: shuffle, take a batch, measure the squared error, step, and lower "
             "the learning rate each epoch. <bookmark mark='a'/> Three random starts: three different sets of weights, "

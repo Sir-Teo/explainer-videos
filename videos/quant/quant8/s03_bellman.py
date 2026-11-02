@@ -109,7 +109,7 @@ class Bellman(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
             lab_run(self, card, ["bellman_merton(0.08, 0.02, 0.18, 3.0, T=10, steps=120)",
-                                 f"pi at t=0: min {p0.min():.2f}  max {p0.max():.2f}   Merton {sw['pi_merton']:.4f}",
+                                 f"fraction at t=0: min {p0.min():.2f}  max {p0.max():.2f}   Merton {sw['pi_merton']:.4f}",
                                  f"with floor 0.6: largest gap to closed form {gap:.3f}"])
         self.wait(0.4)
         self.clear_scene()

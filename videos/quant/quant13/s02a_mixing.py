@@ -64,21 +64,19 @@ class Mixing(VoiceoverScene):
         src = simulated(r"the fitted Heston, three months; 40 variance paths per setting", corner=DL)
         cur = P[0]
         with self.voiceover(
-            "Why does a moving volatility make a smile? Here is the whole argument as a picture. Take the Heston model "
-            "fitted to the Surface, and switch off the correlation between price and variance. Give it no vol of vol "
-            "at all, and the log price in three months is one Gaussian, and the smile, below, is flat: Black and "
-            "Scholes. <bookmark mark='a'/> Now let the variance move. Each thin blue curve is the distribution of the "
-            "log price given one simulated variance path. Given the path, the price is Gaussian again, with the "
-            "variance that path happened to realize. The model's density is the average of the crowd, in gold. "
-            "<bookmark mark='b'/> Turn the vol of vol up. The crowd spreads: some paths are calm and narrow, some "
-            "wild and wide. Their average is a narrow peak with fat tails, and the smile lifts at both ends. "
-            "<bookmark mark='p'/> Pause and predict: double the vol of vol again. Which moves more, the "
-            "at-the-money volatility, or the wings? <bookmark mark='c'/> The wings rise, from "
-            f"{100 * wing['1']:.0f} to {100 * wing['2']:.0f} percent, while the at-the-money volatility falls, from "
-            f"{100 * atm['1']:.1f} to {100 * atm['2']:.1f}. The smile is symmetric: with no correlation it has to "
-            "be. <bookmark mark='d'/> Now restore the fitted correlation, minus "
-            f"{abs(m['params'][4]):.2f}. High-variance paths now come with falling prices, so the wide Gaussians "
-            "slide left. The crowd's average leans, and the smile tilts into a skew."
+            (
+            "Why does moving volatility make a smile? Take the fitted Heston and switch off the correlation. With no "
+            "vol of vol, the log price in three months is one Gaussian, and the smile is flat. <bookmark mark='a'/> "
+            "Let the variance move. Each thin curve is the law of the log price given one variance path: Gaussian "
+            "again, with that path's variance. The model's density is the crowd's average, in gold. "
+            "<bookmark mark='b'/> Turn the vol of vol up: calm paths narrow, wild ones wide, and the average gets a "
+            "sharp peak and fat tails. The smile lifts at both ends. <bookmark mark='p'/> Double it again: which "
+            "moves more, the at-the-money vol or the wings? <bookmark mark='c'/> The wings rise, from "
+            f"{100 * wing['1']:.0f} to {100 * wing['2']:.0f} percent; at the money it falls, from {100 * atm['1']:.1f} "
+            f"to {100 * atm['2']:.1f}. Symmetric, as it must be. <bookmark mark='d'/> Restore the correlation, minus "
+            f"{abs(m['params'][4]):.2f}: high-variance paths come with falls, the wide Gaussians slide left, and the "
+            "smile tilts into a skew."
+        )
         ) as vo:
             self.play(FadeIn(cur), FadeIn(dial[:2]), GrowArrow(arrow), FadeIn(src))
             vo.wait_until("a")
@@ -124,22 +122,18 @@ class Mixing(VoiceoverScene):
                      r"\textperiodcentered\ Renault and Touzi (1996) \textperiodcentered\ Romano and Touzi (1997)",
                      font_size=18, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Now the proof. Start with no correlation. Then the Brownian motion driving the price is independent of "
-            "the whole variance path, so given that path, the log price is a sum of independent Gaussian pieces: "
-            "Gaussian, with variance equal to the integrated variance. <bookmark mark='a'/> By the tower property, "
-            "the option's price is the Black–Scholes price averaged over the realized variance. That is John Hull "
-            "and Alan White's mixing theorem of 1987; Louis Scott and James Wiggins wrote down random-volatility "
-            "models that year too, and Elias and Jeremy Stein solved one with an Ornstein–Uhlenbeck volatility in "
-            "1991. <bookmark mark='b'/> Expand around the mean variance, to second order in the vol of vol. The "
-            "first-order term averages to zero, so the correction is half the curvature of Black–Scholes in "
-            "variance, times the variance of the realized variance. <bookmark mark='c'/> And that curvature has a "
-            "sign pattern. Differentiate vega, and you get vega times d-one times d-two over sigma: negative at the "
-            "money, positive in both wings. So random volatility lowers the at-the-money price and raises the wings, "
-            "symmetrically, as Renault and Touzi showed. <bookmark mark='d'/> With correlation, split the price's "
-            "noise into the part along the variance noise and the part orthogonal to it. <bookmark mark='e'/> "
-            "Condition on the variance's Brownian motion. The orthogonal part keeps the price lognormal, with a "
-            "smaller variance and a spot shifted by a random factor, xi T. When rho is negative, the high-variance "
-            "paths are exactly the ones with a small xi T. That is Romano and Touzi's formula, and it is the skew."
+            (
+            "Now the proof. With no correlation, the price's Brownian motion is independent of the variance path, so "
+            "given the path the log price is Gaussian with the integrated variance. <bookmark mark='a'/> By the tower "
+            "property the price is Black–Scholes averaged over realized variance: Hull and White's theorem of 1987. "
+            "<bookmark mark='b'/> Expand to second order in the vol of vol: the correction is half Black–Scholes's "
+            "curvature in variance times the variance of the realized variance. <bookmark mark='c'/> That curvature "
+            "is vega times d-one d-two over sigma: negative at the money, positive in the wings. So the wings rise "
+            "and the centre falls, symmetrically: Renault and Touzi. <bookmark mark='d'/> With correlation, split "
+            "the price's noise along and across the variance's noise. <bookmark mark='e'/> Condition on the "
+            "variance's noise: the price is lognormal again, with less variance and a spot shifted by xi T. When rho "
+            "is negative, high-variance paths have small xi T. That is Romano and Touzi's formula: the skew."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -185,8 +179,8 @@ class Mixing(VoiceoverScene):
         zmax = float(np.max(np.abs(r["z"])))
         inside = zmax < 2
         side = VGroup(
-            wrapped_label(rf"{m['N']:,} variance paths by Andersen's QE scheme, the same paths for both estimators"
-                          .replace(",", "{,}"), 4.4, 19, GREY_A),
+            wrapped_label(f"{m['N']:,}".replace(",", "{,}") + r" variance paths by Andersen's QE scheme, the same paths for "
+                          r"both estimators", 4.4, 19, GREY_A),
             MathTex(rf"\text{{standard error}}\ \div\ {ratio:.0f}", font_size=34, color=IV),
             wrapped_label(r"median over 13 strikes: averaging Black--Scholes over the paths removes the price noise "
                           r"given the path, and keeps only the noise of the variance", 4.4, 19, GREY_A),
@@ -198,14 +192,17 @@ class Mixing(VoiceoverScene):
                    "that the theorem is exact but the variance paths are not.")
         src = simulated(r"the fitted Heston, three months, 13 strikes")
         with self.voiceover(
-            "The theorem is also an algorithm. On the fitted Heston, simulate "
-            f"{m['N']:,} variance paths. Plain Monte Carlo simulates the price too and averages the payoff: the grey "
-            "error bars. <bookmark mark='a'/> The conditional estimator uses the same variance paths, but instead of "
-            "simulating the price, it plugs each path's shifted spot and reduced variance into Black and Scholes, "
-            f"and averages that. Its error bars, in gold, are about {ratio:.0f} times narrower: the noise of the "
-            "price given the path has been integrated out exactly. <bookmark mark='b'/> And against the exact "
-            f"Fourier price, in white: {verdict} Desks use this trick, conditional Monte Carlo, whenever a model "
-            "is Gaussian given its volatility path."
+            (
+            (
+            f"The theorem is also an algorithm. Simulate {m['N']:,} variance paths of the fitted model. Plain Monte "
+            "Carlo also simulates the price: grey error bars. <bookmark mark='a'/> The conditional estimator plugs "
+            f"each path's shifted spot and reduced variance into Black–Scholes: bars about {ratio:.0f} times "
+            "narrower, because the price's own noise, given the path, has been integrated out exactly. At the money "
+            f"the exact implied volatility is {100 * r['cos_iv'][6]:.2f} percent and the conditional estimate "
+            f"{100 * r['cond_iv'][6]:.2f}. <bookmark mark='b'/> Across all thirteen strikes: {verdict} Desks use this "
+            "conditional Monte Carlo whenever a model is Gaussian given its volatility path."
+        )
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(cosl), FadeIn(leg[0]), FadeIn(side[0]))
             self.play(FadeIn(leg[1]), LaggedStart(*[FadeIn(b_) for b_ in plain], lag_ratio=0.1), run_time=1.5)

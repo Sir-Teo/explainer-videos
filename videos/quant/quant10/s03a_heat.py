@@ -61,7 +61,7 @@ class Heat(VoiceoverScene, ThreeDScene):
         hint = VGroup(label(r"log of the stock price, $x = \ln S$", font_size=24, color=SPOT),
                       label(r"time left, $\tau = T - t$", font_size=24, color=THE),
                       label(r"the call's value $V$", font_size=24, color=OPT)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                    buff=0.1).to_corner(UL, buff=0.35)
+                                                                                    buff=0.1).to_corner(UR, buff=0.35)
         params = note(rf"$K = {K:.0f}$, $\sigma = {100 * sig:.0f}\%$, $r = {100 * r:.0f}\%$", font_size=20)
         params.to_corner(DR, buff=0.3)
         # the heat kernel at tau = 0.4, centred under one point, and the payoff it averages
@@ -74,10 +74,10 @@ class Heat(VoiceoverScene, ThreeDScene):
             zs = np.linspace(max(x0, y0 - 3.5 * sd), min(x1, y0 + 3.5 * sd), 60)
             phi = np.exp(-0.5 * ((zs - y0) / sd) ** 2) / (sd * np.sqrt(2 * np.pi))
             line = VMobject(stroke_color=QC.Q, stroke_width=3.5).set_points_as_corners(
-                [ax.c2p(z, tk, 18 * p) for z, p in zip(zs, phi)])
+                [ax.c2p(z, tk, 9 * p) for z, p in zip(zs, phi)])
             pay = np.maximum(np.exp(zs) - K, 0)
             prod = VMobject(stroke_width=0, fill_color=QC.Q, fill_opacity=0.35).set_points_as_corners(
-                [ax.c2p(z, tk, 0) for z in zs] + [ax.c2p(z, tk, min(0.5 * p * w, 100)) for z, p, w in
+                [ax.c2p(z, tk, 0) for z in zs] + [ax.c2p(z, tk, min(0.25 * p * w, 40)) for z, p, w in
                                                   zip(zs[::-1], phi[::-1], pay[::-1])] + [ax.c2p(zs[0], tk, 0)])
             v = float(bs.price(np.exp(c.get_value()), K, tk, sig, r))
             dot = Dot3D(ax.c2p(c.get_value(), tk, v), radius=0.08, color=YELLOW)
@@ -91,9 +91,9 @@ class Heat(VoiceoverScene, ThreeDScene):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         with self.voiceover(
-            "Chapter two ended with an equation. Now we solve it, the way Black and Scholes did: by noticing that "
-            "it is the oldest equation in mathematical physics in disguise. Lay the option's value over the log "
-            "of the stock price and the time left to expiry. At expiry, the front edge, the value is the payoff: "
+            "Chapter two ended with an equation. Now we solve it, as Black and Scholes's published paper does: "
+            "it is one of the oldest equations of mathematical physics in disguise. Lay the option's value over "
+            "the log of the stock price and the time left to expiry. At expiry, the front edge, the value is the payoff: "
             "a hockey stick with a kink at the strike. <bookmark mark='a'/> Now let time run backwards. The "
             "equation lifts the curve out of the payoff and rounds off the kink, slice after slice, the way heat "
             "spreads along a cold rod with one hot end. <bookmark mark='b'/> And here is what the equation "
@@ -109,7 +109,7 @@ class Heat(VoiceoverScene, ThreeDScene):
             self.play(T.animate.set_value(1.0), run_time=max(vo.until("b") - 1.5, 3.0), rate_func=linear)
             grow.clear_updaters()
             self.play(FadeIn(surf), run_time=1.0)
-            self.move_camera(phi=62 * DEGREES, theta=-30 * DEGREES, run_time=1.5)
+            self.move_camera(phi=66 * DEGREES, theta=-42 * DEGREES, run_time=1.5)
             self.add(kern)
             self.play(FadeIn(klab))
             vo.wait_until("c")
@@ -178,12 +178,14 @@ class Heat(VoiceoverScene, ThreeDScene):
             "    # Gauss-Legendre on the pieces between kinks:",
             "    #   e^{-rT} * sum w * kernel(z - y) * payoff(e^z)",
             "    return exp(-r*T) * integral",
-        ], source="explainer/quant/house/bs.py (price, heat_price; abridged)", width=7.4).to_edge(UP, buff=0.4)
+        ], source="explainer/quant/house/bs.py (price, heat_price; abridged)", width=7.2).to_corner(UL, buff=0.4)
         pts = h["pts"]
         conv, form = np.asarray(h["conv"], float), np.asarray(h["formula"], float)
-        tab = VGroup(*[MathTex(rf"S = {S:.0f},\ \tau = {t:g}:\ \ {a:.10f}\ \ \text{{vs}}\ \ {b:.10f}", font_size=22,
+        tab = VGroup(label(r"convolution vs formula", font_size=22, color=GREY_B),
+                     *[MathTex(rf"S = {S:.0f},\ \tau = {t:g}:\ {a:.10f}\ \text{{vs}}\ {b:.10f}", font_size=20,
                                color=GREY_A) for (S, t), a, b in list(zip(pts, conv, form))[::2]])
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.9)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        tab.scale_to_fit_width(min(tab.width, 5.2)).to_corner(UR, buff=0.4).shift(DOWN * 0.3)
         with self.voiceover(
             "The House has both roads. Its pricer evaluates the formula; its heat solver does the convolution "
             "itself, numerically, for any payoff, splitting the integral at the kinks. <bookmark mark='a'/> Run "

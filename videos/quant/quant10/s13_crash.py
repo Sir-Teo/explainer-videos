@@ -64,15 +64,12 @@ class Crash(VoiceoverScene):
         ], source="explainer/quant/house/hedge.py (replicate_put, abridged)", width=6.6)
         card2.to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         with self.voiceover(
-            "By the mid-1980s the Black-Scholes hedge had become a product. Hayne Leland and Mark Rubinstein, with "
-            "John O'Brien, sold portfolio insurance: a floor under a pension fund's portfolio, built not by buying "
-            "puts but by replicating them, the hedge of this part, trading index futures. Rubinstein and Leland had "
-            "published the recipe in 1981: replicating options with positions in stock and cash. "
-            "<bookmark mark='a'/> Replicating a put means holding less stock as prices fall. Here is the fraction "
-            "held in stocks under a one-year floor five percent below the market: as the index drops, the hedge "
-            f"sells. On a ten percent fall this model sells {100 * ins['sold_on_10pct']:.0f} percent of its stock. "
-            "<bookmark mark='b'/> In the House it is four lines: each day, the weight in the index is the stock's "
-            "share of stock plus put, and the rest sits in Treasury bills."
+            "By the mid-1980s the hedge had become a product. Hayne Leland and Mark Rubinstein, with John O'Brien, "
+            "sold portfolio insurance: a floor under a pension fund, built by replicating a put with index futures, "
+            "the recipe Rubinstein and Leland published in 1981. <bookmark mark='a'/> Replicating a put means "
+            "holding less stock as prices fall: under a one-year floor five percent below the market, a ten "
+            f"percent fall makes this model sell {100 * ins['sold_on_10pct']:.0f} percent of its stock. "
+            "<bookmark mark='b'/> In the House: four lines a day."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -117,6 +114,7 @@ class Crash(VoiceoverScene):
         i16 = dates.index(str(ins["oct16"]["date"]))
         i19 = dates.index(str(ins["oct19"]["date"]))
         o5, o16, o19, o20, eo = ins["oct5"], ins["oct16"], ins["oct19"], ins["oct20"], ins["end_oct"]
+        floor_word = "below" if ins["breach"] else "above"
         brady = VGroup(
             label(r"The Brady Commission (1988):", font_size=24, color=IMP),
             label(r"``\$60 to \$90 billion of equity assets were under portfolio insurance administration''",
@@ -128,20 +126,16 @@ class Crash(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         brady.scale_to_fit_width(min(brady.width, 12.6)).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Now run it on the real 1987, from the first of July, on Kenneth French's daily market returns. The "
-            "white line is the insured portfolio, the blue the market, the yellow bar the share in stocks. "
-            f"Through the summer the market rises and the bar fills: {100 * o5['w']:.0f} percent in stocks on "
-            f"the fifth of October. <bookmark mark='a'/> Then the market falls for days running, and the rule "
-            f"sells: {100 * o16['w']:.0f} percent by Friday the sixteenth, {100 * o19['w']:.0f} going into Monday. "
-            "<bookmark mark='b'/> On Monday the market gaps down, and the portfolio, still "
-            f"{100 * o19['w']:.0f} percent in stocks, falls straight through its floor; the next morning the model "
-            f"demands selling most of what is left, down to {100 * o20['w']:.0f} percent. The insured portfolio "
-            f"ends October at {eo['V']:.1f}, " + ("below the floor of " if ins["breach"] else "above the floor of ")
-            + f"{ins['floor_value']:.1f} it was built to keep. <bookmark mark='c'/> The Brady Commission's numbers "
-            "say this was not a curiosity: sixty to ninety billion dollars insured, models calling for sales of "
-            "more than a fifth of a portfolio on a ten percent fall, and by that Monday twelve billion that should "
-            "already have been sold, of which less than four had been. Pause and predict: the rule says sell after "
-            "a fall. What happens when everyone follows it?"
+            "Run it on the real 1987, from the first of July, on Kenneth French's daily returns: white, the insured "
+            "portfolio; blue, the market; yellow, the share in stocks, "
+            f"{100 * o5['w']:.0f} percent on the fifth of October. <bookmark mark='a'/> The market falls for days, "
+            f"and the rule sells: {100 * o16['w']:.0f} percent by Friday the sixteenth. <bookmark mark='b'/> On "
+            f"Monday the market gaps down with the portfolio still {100 * o19['w']:.0f} percent in stocks, straight "
+            f"through the floor; next morning the model sells down to {100 * o20['w']:.0f}. October ends at "
+            f"{eo['V']:.1f}, {floor_word} the floor of {ins['floor_value']:.1f}. <bookmark mark='c'/> The Brady Commission: sixty to ninety billion "
+            "dollars insured, models selling more than a fifth on a ten percent fall, and that Monday twelve "
+            "billion that should have been sold, of which less than four had been. Pause and predict: what "
+            "happens when everyone follows the rule?"
         ) as vo:
             self.play(FadeIn(g), Create(fl), FadeIn(fl_lab), FadeIn(leg), FadeIn(frame), FadeIn(wcap), FadeIn(params))
             self.add(mkt, port, fill, wl, day)

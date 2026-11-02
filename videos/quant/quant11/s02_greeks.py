@@ -35,7 +35,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
     def bowl(self):
         ax = axes3d([70, 130, 10], [0, 40, 10], [0, 40, 10], x_length=7.6, y_length=5.0, z_length=3.6)
         f = lambda s, d: float(straddle(s, d / 365))  # noqa: E731
-        sf = surf(ax, f, (70, 130), (0.5, 40), [(QC.SPOT, 2), (OPT, 15), (QC.LOSS, 32)], resolution=(30, 24),
+        sf = surf(ax, f, (70, 130), (0.5, 40), [(QC.SPOT, 2), (OPT, 15), (QC.LOSS, 32)], resolution=(24, 18),
                   opacity=0.55)
         hint = hint3d((r"bitcoin-like underlying $S$", SPOT), (r"days to expiry $\tau$", THETA),
                       (r"straddle value $V$", OPT))

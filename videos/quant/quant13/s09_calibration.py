@@ -90,15 +90,14 @@ class Calibration(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, txt, src)
         self.remove(hint, txt, src)
         with self.voiceover(
-            "Calibration is an optimization, and its landscape is worth looking at. Fix Heston's mean reversion and "
-            "vol of vol, re-fit the other three parameters, and record the error. Do it on a grid, and here is the "
-            "landscape. <bookmark mark='a'/> The minimum is the yellow star. But look at the valley running from it: "
-            "a long, curved floor where faster mean reversion and higher vol of vol trade off against each other, "
-            "the valley the fit replay of chapter four slid along. "
-            f"At a mean reversion of {Ld['kappa'][i0]:.0f} instead of {best[1]:.0f}, the error rises only from "
-            f"{Lm.min():.2f} to {along:.2f} points. <bookmark mark='b'/> On this day the optimizer is not fooled: "
-            "twelve random starts all end at the same point. But the valley says the data pin down a combination of "
-            "the two, not each one. And that has consequences next week."
+            (
+            "Calibration is an optimization; look at its landscape. Fix Heston's mean reversion and vol of vol, refit "
+            "the other three, record the error, over a grid. <bookmark mark='a'/> The minimum is the yellow star, at "
+            "the end of a long curved valley where faster mean reversion trades against higher vol of vol: the valley "
+            f"chapter four's replay slid along. At kappa {Ld['kappa'][i0]:.0f} instead of {best[1]:.0f}, the error "
+            f"rises only from {Lm.min():.2f} to {along:.2f}. <bookmark mark='b'/> Twelve random starts all end at "
+            "the star; but the data pin a combination of the two, not each one."
+        )
         ) as vo:
             self.play(FadeIn(hint), FadeIn(src), Create(ax), Create(surf), run_time=3)
             vo.wait_until("a")
@@ -107,12 +106,12 @@ class Calibration(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeIn(txt))
         with self.voiceover(
-            "Make the valley precise. At the minimum, the curvature of the loss in every direction is a matrix, the "
-            "Hessian. Over these two parameters, with the other three re-optimized, it has two eigenvectors. "
-            "<bookmark mark='a'/> The white arrows point along the valley: the curvature there is small. The red "
-            f"arrows point across it, {np.sqrt(hs['profile_cond']):.0f} times steeper in slope: the ratio of the "
-            f"curvatures is {hs['profile_cond']:.0f}. The data pin down the red direction, a combination of mean "
-            "reversion and vol of vol, and barely the white one."
+            (
+            "Make the valley precise. The loss's curvature at the minimum is the Hessian; over these two parameters, "
+            "with the rest re-optimized, it has two eigenvectors. <bookmark mark='a'/> White, along the valley: "
+            f"small curvature. Red, across it: {hs['profile_cond']:.0f} times the curvature. The data pin the red "
+            "direction and barely the white one."
+        )
         ) as vo:
             self.play(*[FadeIn(a_) for a_ in arrows[:2]], run_time=1.2)
             vo.wait_until("a")
@@ -156,17 +155,15 @@ class Calibration(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
         src = real_data(r"100 weekly surfaces from Deribit trades, 2024--2025")
         with self.voiceover(
-            "Recalibrate Heston every Wednesday for two years, and watch the constants. Mean reversion, which the "
-            "model says is a fixed property of the world, moves by a quarter in a typical week, and "
-            f"spends {100 * kb:.0f} percent of weeks pinned at the upper bound we allowed. <bookmark mark='a'/> The "
-            f"vol of vol swings between one and six. Feller's condition fails in {100 * fe:.0f} percent of weeks. "
-            "<bookmark mark='b'/> And the correlation, the parameter that sets the skew, is positive in "
-            f"{100 * rp:.0f} percent of weeks. That is not noise: in most weeks of these two years, Bitcoin's "
-            "thirty-day smile was dearer on the call side than the put side, the tilt Part twelve's autoencoder "
-            "learned as its second number. Unlike stocks, Bitcoin's buyers pay up for upside. <bookmark mark='c'/> A model whose constants change every week is being "
-            "used to interpolate prices, not to describe the world. That is fine for quoting vanillas. It is "
-            "dangerous for hedging and exotics, which depend on those constants staying put. Desks regularize "
-            "toward last week's values, and judge a model by its hedges, not its fit."
+            (
+            "Recalibrate Heston every Wednesday for two years and watch the constants. Mean reversion, a fixed "
+            f"property of the world in the model, moves a quarter in a typical week and sits at its bound in "
+            f"{100 * kb:.0f} percent of weeks. <bookmark mark='a'/> The vol of vol swings from one to six; Feller "
+            f"fails in {100 * fe:.0f} percent of weeks. <bookmark mark='b'/> The correlation is positive in "
+            f"{100 * rp:.0f} percent: in most of these weeks Bitcoin's smile was dearer on the call side. "
+            "<bookmark mark='c'/> Constants that change weekly make the model an interpolator: fine for vanillas, "
+            "dangerous for hedges and exotics."
+        )
         ) as vo:
             self.play(FadeIn(G[0]), Create(l1), FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[2]), FadeIn(src), run_time=2)
             vo.wait_until("a")
@@ -204,17 +201,15 @@ class Calibration(VoiceoverScene, ThreeDScene):
                     rf"\ \ \theta\ \pm{100 * se[2]:.0f}\%,\ \ \rho\ \pm{se[4]:.2f}", font_size=26, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "In symbols. The calibrator minimises half the sum of squared, vega-weighted errors, and the curvature "
-            "of that loss at the optimum is approximately J transpose J, the Gauss–Newton Hessian. "
-            "<bookmark mark='a'/> Near the optimum the loss is a bowl, the sum over eigen-directions of eigenvalue "
-            "times displacement squared. A small eigenvalue is a flat direction: a combination of parameters the "
-            "data barely determine. <bookmark mark='b'/> Linearise, and the parameters' covariance is the noise "
-            "level times the inverse Hessian. On our fit the eigenvalues span a factor of "
-            f"{hs['cond']:.0f}, and the standard errors are about {100 * se[1]:.0f} percent for kappa and "
-            f"{100 * se[3]:.0f} for xi, from a single day's quotes. <bookmark mark='c'/> The cure is to add "
-            "information. Penalise moving away from last week's parameters: every eigenvalue grows by lambda, the "
-            "flat directions stiffen, and the fit pays a small price. Rama Cont and Peter Tankov proposed the "
-            "relative-entropy version for jump models in 2004."
+            (
+            "In symbols: least squares, with the Gauss–Newton Hessian J transpose J. <bookmark mark='a'/> Near the "
+            "optimum the loss is a bowl; a small eigenvalue is a flat direction, a combination the data barely "
+            "determine. <bookmark mark='b'/> Linearised, the parameters' covariance is the noise level times the "
+            f"inverse Hessian. Our eigenvalues span a factor of {hs['cond']:.0f}; from one day's quotes, kappa is "
+            f"uncertain by about {100 * se[1]:.0f} percent. <bookmark mark='c'/> The cure is more information: pull "
+            "toward last week's parameters. Every eigenvalue grows by lambda and flat directions stiffen; Cont and "
+            "Tankov proposed the relative-entropy version for jump models."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")

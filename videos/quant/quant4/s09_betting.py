@@ -75,12 +75,10 @@ class Betting(VoiceoverScene):
                       for e in p["show_loge"]])
         days = np.asarray(pc["days"], float)
         tf, ef = np.asarray(pc["t_frac"]), np.asarray(pc["e_frac"])
-        c1 = always_redraw(lambda: MathTex(rf"\text{{day {int(k[min(int(tk.get_value()), len(k) - 1)])}: rejected so far }} "
-                                           rf"{100 * np.interp(k[min(int(tk.get_value()), len(k) - 1)], days, tf):.1f}\%",
-                                           font_size=26, color=LOSS).next_to(g1, UP, buff=0.1))
-        c2 = always_redraw(lambda: MathTex(rf"\text{{rejected so far }} "
-                                           rf"{100 * np.interp(k[min(int(tk.get_value()), len(k) - 1)], days, ef):.1f}\%",
-                                           font_size=26, color=MART).next_to(g2, UP, buff=0.1))
+        c1 = readout(r"\text{rejected so far:}", lambda: 100 * float(np.interp(at_index(k, tk), days, tf)), digits=1,
+                     font_size=26, color=LOSS, unit=r"\%").next_to(g1, UP, buff=0.1)
+        c2 = readout(r"\text{rejected so far:}", lambda: 100 * float(np.interp(at_index(k, tk), days, ef)), digits=1,
+                     font_size=26, color=MART, unit=r"\%").next_to(g2, UP, buff=0.1)
         b1 = VGroup(DashedLine(a1.c2p(0, 1.96), a1.c2p(n, 1.96), color=LOSS, stroke_width=2),
                     DashedLine(a1.c2p(0, -1.96), a1.c2p(n, -1.96), color=LOSS, stroke_width=2))
         b2 = DashedLine(a2.c2p(0, np.log10(20)), a2.c2p(n, np.log10(20)), color=LOSS, stroke_width=2)

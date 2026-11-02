@@ -659,7 +659,7 @@ def compute_hlp_replay() -> dict:
         def snap(core):
             return _hlp_slice(_hlp_wrap(core), xs=xs)[0]
         core, curve, snaps = D.train_mlp_trace(X, tr[:, 2:] * 10, width=64, depth=3, epochs=200, seed=s, every=5,
-                                               snap_every=20, snap_fn=snap)
+                                               snap_every=20, snap_fn=snap, ckpt=str(_wdir() / f"hlp_s{s}.ckpt"))
         torch.save(core.state_dict(), _wdir() / f"hlp_s{s}.pt")
         net = _hlp_wrap(core)
         rm, first = _hlp_tracking(net, keep_first=(s == 0))
@@ -701,7 +701,8 @@ def compute_greeks_act() -> dict:
             if key in part:
                 continue
             t0 = time.time()
-            core, curve, _ = D.train_mlp_trace(X, tr[:, 2:] * 10, width=64, depth=3, epochs=100, seed=s, act=act)
+            core, curve, _ = D.train_mlp_trace(X, tr[:, 2:] * 10, width=64, depth=3, epochs=100, seed=s, act=act,
+                                               ckpt=str(_wdir() / f"greeks_{key}.ckpt"))
             torch.save(core.state_dict(), _wdir() / f"greeks_{key}.pt")
             net = _hlp_wrap(core)
             p, d, g = _hlp_slice(net, T, xs)
@@ -756,6 +757,30 @@ def compute_calib_ckpt() -> dict:
                   "seconds": time.time() - t0, "params": th})
 
 
+def _mc_iv_lowmem(theta, T, k, n_paths=20000, seed=0, batch=5000):
+    """_mc_iv_quotes with the paths simulated in batches and only the needed days kept: the same estimator, a
+    quarter of the memory (the machine is shared)."""
+    from explainer.quant.house import bs, rough as R
+
+    H, eta, rho, v0, v1 = theta
+    days = int(np.ceil(T.max() * 365)) + 1
+    need = sorted({int(round(t * 365)) for t in T})
+    keep = {d: [] for d in need}
+    for j in range(n_paths // batch):
+        S = R.rbergomi_paths(H, eta, rho, D.xi_ramp(v0, v1), days / 365, days, batch, seed=seed + j)
+        for d in need:
+            keep[d].append(np.array(S[d]))
+        del S
+    keep = {d: np.concatenate(v) for d, v in keep.items()}
+    out = np.full(len(T), np.nan)
+    for i, (t, kk) in enumerate(zip(T, k)):
+        x = keep[int(round(t * 365))]
+        cp = 1 if kk >= 0 else -1
+        p = float(np.mean(np.maximum(cp * (x - np.exp(kk)), 0)))
+        out[i] = bs.implied_vol(p, 1.0, float(np.exp(kk)), float(t), 0.0, 0.0, cp)
+    return out
+
+
 def compute_calib_noise() -> dict:
     """The label-noise question done right: 200 held-out parameter sets simulated again with 20,000 fresh paths.
     Three RMSEs (vol points): network vs its 10k-path label, network vs the fresh simulation, label vs fresh."""
@@ -765,24 +790,24 @@ def compute_calib_noise() -> dict:
     rows, sets, held = _held_split()
     net = _calib_net()
     ids = np.random.default_rng(11).choice(np.unique(sets[held]), 200, replace=False)
-    part = CACHE.partial("calib_noise", {"n": 200, "paths": 20000})
-    for c0 in range(0, 200, 20):
+    part = CACHE.partial("calib_noise", {"n": 200, "paths": 20000, "piece": 1})
+    for c0 in range(0, 200):
         key = str(c0)
         if key in part:
             continue
         t0 = time.time()
         out = []
-        for j in ids[c0:c0 + 20]:
+        for j in ids[c0:c0 + 1]:
             r = rows[sets == j]
             th = r[0, :5].astype(float)
-            fresh = _mc_iv_quotes(th, r[:, 5].astype(float), r[:, 6].astype(float), n_paths=20000, seed=5000 + int(j))
+            fresh = _mc_iv_lowmem(th, r[:, 5].astype(float), r[:, 6].astype(float), n_paths=20000, seed=5000 + int(j))
             with torch.no_grad():
                 pred = net(torch.from_numpy(D.calib_features(th, r[:, 5], r[:, 6]))).numpy()[:, 0]
             ok = np.isfinite(fresh)
             out.append(np.c_[pred[ok], r[ok, 7], fresh[ok]])
-        part[key] = np.vstack(out)
-        print(f"   calib_noise {c0 + 20}/200 ({time.time() - t0:.0f}s)", flush=True)
-    A = np.vstack([np.asarray(part[str(c)]) for c in range(0, 200, 20)]) * 100
+        part[key] = _json(np.vstack(out))
+        print(f"   calib_noise {c0 + 1}/200 ({time.time() - t0:.0f}s)", flush=True)
+    A = np.vstack([np.asarray(part[str(c)]) for c in range(0, 200)]) * 100
     net_, lab, fr = A[:, 0], A[:, 1], A[:, 2]
 
     def stats(a, b):
@@ -921,13 +946,13 @@ def compute_bsde_seeds() -> dict:
     part = CACHE.partial("bsde_seeds", {"seed1": 2000, "linear": 1500})
     if "seed1" not in part:
         t0 = time.time()
-        r = D.deep_bsde_snap(iters=2000, seed=1, snap_at=(0, 100, 300, 1000, 2000),
+        r = D.deep_bsde_snap(iters=2000, seed=1, snap_at=(0, 100, 300, 1000, 2000), ckpt=str(_wdir() / "bsde_s1.ckpt"),
                              log=lambda c: print("    s1", c, flush=True) if c["iter"] % 250 == 0 else None)
         r["seconds"] = time.time() - t0
         part["seed1"] = _json(r)
     if "linear" not in part:
         t0 = time.time()
-        r = D.deep_bsde_snap(dict(D.DEFAULT_RISK, delta=1.0), iters=1500, seed=2,
+        r = D.deep_bsde_snap(dict(D.DEFAULT_RISK, delta=1.0), iters=1500, seed=2, ckpt=str(_wdir() / "bsde_lin.ckpt"),
                              log=lambda c: print("    lin", c, flush=True) if c["iter"] % 250 == 0 else None)
         r["seconds"] = time.time() - t0
         part["linear"] = _json(r)
@@ -948,7 +973,8 @@ def compute_stopping_region() -> dict:
     _threads()
     p = dict(D.MAX_CALL, d=2)
     t0 = time.time()
-    r = D.deep_stopping(p, steps=250, n_eval=300000, seed=1, log=lambda n, v: print("    date", n, round(v, 3), flush=True))
+    r = D.deep_stopping_ckpt(p, steps=250, n_eval=300000, seed=1, ckpt=str(_wdir() / "stopping_d2.ckpt"),
+                             log=lambda n, v: print("    date", n, round(v, 3), flush=True))
     grid, reg = D.stopping_regions(r["nets"], p)
     return _json({"grid": grid, "regions": {str(k): v for k, v in reg.items()}, "lower": r["lower"], "se": r["se"],
                   "curves": {str(k): v for k, v in r["curves"].items()}, "seconds": time.time() - t0, "steps": 250})
@@ -995,8 +1021,8 @@ def compute_hedge_replay() -> dict:
         key = f"nocost_{s}"
         if key not in part:
             t0 = time.time()
-            pol, curve, snaps = D.train_hedger("mlp", 0.0, iters=800, batch=2048, seed=s, snap_at=ck0,
-                                               snap_fn=lambda p: _hold_curve(p, Sg))
+            pol, curve, snaps = D.train_hedger_p("mlp", 0.0, iters=800, batch=2048, seed=s, snap_at=ck0,
+                                                 snap_fn=lambda p: _hold_curve(p, Sg), ckpt=str(_wdir() / f"{key}.ckpt"))
             _save_pol(pol, f"nocost_s{s}")
             part[key] = _json({"curve": curve, "snaps": {str(k): v for k, v in snaps.items()},
                                "eval": D.evaluate_hedger(pol, 0.0, n=100000), "seconds": time.time() - t0})
@@ -1011,7 +1037,8 @@ def compute_hedge_replay() -> dict:
                 x = torch.log(torch.tensor(SS.ravel() / 100, dtype=torch.float32))
                 new = p(x, torch.full((SS.size,), 0.5), torch.tensor(PP.ravel(), dtype=torch.float32)).numpy()
                 return (new - PP.ravel()).reshape(PP.shape)
-            pol, curve, snaps = D.train_hedger("mlp", 0.005, iters=1500, batch=2048, seed=s, snap_at=ck1, snap_fn=snap)
+            pol, curve, snaps = D.train_hedger_p("mlp", 0.0, 0.005, iters=1500, batch=2048, seed=s, snap_at=ck1,
+                                                 snap_fn=snap, ckpt=str(_wdir() / f"{key}.ckpt"))
             _save_pol(pol, f"cost_s{s}")
             flat = {}
             for k, m in snaps.items():  # the do-nothing holdings at the money (|trade| < 0.02)
@@ -1052,7 +1079,8 @@ def compute_risk_measures() -> dict:
             t0 = time.time()
             pol = D.Hedger("band", seed=s)
             curve, _, w = D.train_hedger_on(lambda b, g: D.gbm_torch(b, h["steps"], h["T"], h["sigma"], h["K"], g), pol,
-                                            cost, risk=risk, iters=1000, batch=4096, seed=s)
+                                            cost, risk=risk, iters=1000, batch=4096, seed=s,
+                                            ckpt=str(_wdir() / f"risk_{key}.ckpt"))
             _save_pol(pol, f"risk_{key}")
             gen = torch.Generator().manual_seed(99)
             with torch.no_grad():
@@ -1089,7 +1117,7 @@ def compute_drift() -> dict:
             continue
         t0 = time.time()
         pol, curve, snaps = D.train_hedger_p("mlp", mu=mu, iters=800, batch=2048, seed=s, snap_at=ck,
-                                             snap_fn=lambda p: _hold_curve(p, Sg))
+                                             snap_fn=lambda p: _hold_curve(p, Sg), ckpt=str(_wdir() / f"drift_{s}.ckpt"))
         _save_pol(pol, f"drift_s{s}")
         part[key] = _json({"curve": curve, "snaps": {str(k): v for k, v in snaps.items()}, "seconds": time.time() - t0})
         print("   drift seed", s, f"{time.time() - t0:.0f}s", flush=True)
@@ -1152,7 +1180,8 @@ def compute_hedge_seeds() -> dict:
             if key in part:
                 continue
             t0 = time.time()
-            pol, curve, _ = D.train_hedger("band", cost=c, iters=1200, batch=4096, seed=s)
+            pol, curve, _ = D.train_hedger_p("band", 0.0, c, iters=1200, batch=4096, seed=s,
+                                             ckpt=str(_wdir() / f"band_{key}.ckpt"))
             _save_pol(pol, f"band_{c}_s{s}")
             with torch.no_grad():
                 lo, hi = pol.band(torch.zeros(1), torch.full((1,), 0.5))
@@ -1212,7 +1241,7 @@ def compute_band_prior() -> dict:
             t0 = time.time()
             pol = D.WWBandHedger(c, seed=s) if name == "ww" else D.Hedger("band", seed=s)
             curve, _, _ = D.train_hedger_on(lambda b, g: D.gbm_torch(b, h["steps"], h["T"], h["sigma"], h["K"], g),
-                                            pol, c, iters=600, batch=4096, seed=s)
+                                            pol, c, iters=600, batch=4096, seed=s, ckpt=str(_wdir() / f"prior_{key}.ckpt"))
             _save_pol(pol, f"prior_{key}")
             part[key] = _json({"curve": curve, "eval": D.evaluate_hedger(pol, c, n=100000), "seconds": time.time() - t0})
             print("   prior", key, round(part[key]["eval"]["price"], 3), f"{time.time() - t0:.0f}s", flush=True)
@@ -1256,7 +1285,18 @@ def compute_nsde_trace() -> dict:
         m = D.NeuralSV(seed=0)
         opt = torch.optim.Adam(m.parameters(), lr=3e-3)
         tr = {"step": [], "loss": [], "iv": []}
-        for it in range(800):
+        ck, it0 = _wdir() / "nsde_calib.ckpt", 0
+        if ck.exists():  # resume every 100 steps: the machine is shared
+            st = torch.load(ck, weights_only=False)
+            m.load(st["m"])
+            opt.load_state_dict(st["opt"])
+            gen.set_state(st["gen"])
+            tr, it0 = st["tr"], st["it"]
+        for it in range(it0, 800):
+            if it > it0 and it % 100 == 0:
+                torch.save({"m": m.state_dict(), "opt": opt.state_dict(), "gen": gen.get_state(), "tr": tr, "it": it},
+                           str(ck) + ".tmp")
+                os.replace(str(ck) + ".tmp", ck)
             loss, S = calib_loss(m)
             if it % 20 == 0 or it == 799:
                 with torch.no_grad():
@@ -1285,7 +1325,18 @@ def compute_nsde_trace() -> dict:
         opt = torch.optim.Adam(mm.parameters(), lr=5e-4)
         best = None
         tr = {"step": [], "cl": [], "doc": [], "ok": []}
-        for it in range(600):
+        ck, it0 = _wdir() / f"nsde_{side}.ckpt", 0
+        if ck.exists():
+            st = torch.load(ck, weights_only=False)
+            mm.load(st["m"])
+            opt.load_state_dict(st["opt"])
+            gen.set_state(st["gen"])
+            tr, it0, best = st["tr"], st["it"], st["best"]
+        for it in range(it0, 600):
+            if it > it0 and it % 100 == 0:
+                torch.save({"m": mm.state_dict(), "opt": opt.state_dict(), "gen": gen.get_state(), "tr": tr, "it": it,
+                            "best": best}, str(ck) + ".tmp")
+                os.replace(str(ck) + ".tmp", ck)
             cl, S = calib_loss(mm)
             doc_ = D.down_out_call(S)
             loss = sgn * doc_ * 100 + 50.0 * cl
@@ -1399,7 +1450,8 @@ def compute_crossgen() -> dict:
     if "garch_trained" not in part:
         t0 = time.time()
         pol = D.Hedger("band", seed=3)
-        curve, _, _ = D.train_hedger_on(garch, pol, c, iters=1200, batch=4096, seed=3)
+        curve, _, _ = D.train_hedger_on(garch, pol, c, iters=1200, batch=4096, seed=3,
+                                        ckpt=str(_wdir() / "band_garch.ckpt"))
         _save_pol(pol, "band_garch_s3")
         part["garch_trained"] = {"curve": curve[::10], "seconds": time.time() - t0}
     W = B["windows"](z, 3, L=h["steps"])

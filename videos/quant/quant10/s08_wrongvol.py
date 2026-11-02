@@ -141,7 +141,7 @@ class WrongVol(VoiceoverScene, ThreeDScene):
             self.play(k.animate.set_value(n), run_time=max(vo.until("b") - 0.5, 4.0), rate_func=linear)
             self.play(FadeIn(res))
         self.wait(0.3)
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*self.mobjects))], run_time=1.2)
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -174,17 +174,13 @@ class WrongVol(VoiceoverScene, ThreeDScene):
                                 rf"{100 * s25['act_loss']:.2f}\%", font_size=24, color=GREY_B)]).to_edge(DOWN, buff=0.3)
         loss_more = "the actual-volatility hedge" if s25["act_loss"] > s25["imp_loss"] else "the implied-volatility hedge"
         with self.voiceover(
-            "Now the other side of the trade, and a choice. You bought a call at twenty percent and you are "
-            "sure the stock will realize thirty. Which volatility do you hedge with? Paul Wilmott and Riaz Ahmad "
-            "asked this in 2005. Pause and predict which gives the smoother outcome. <bookmark mark='a'/> Hedge "
-            "at the volatility you believe, thirty, and the final profit is nearly the same on every path: the "
-            f"price difference, {s30['locked']:.2f}, locked in at the start, with a spread of {s30['act_sd']:.2f} "
-            "that is only the noise of hedging in steps. <bookmark mark='b'/> Hedge at the market's twenty, and "
-            f"the average is the same, {s30['imp_mean']:.2f}, but it depends on the path, sd {s30['imp_sd']:.2f}: "
-            "the integral of dollar gamma again. The price of certainty at expiry is a bumpy ride before it, "
-            "since the actual-volatility hedge is marked by a market that still says twenty. "
-            f"<bookmark mark='c'/> And if the world realizes only twenty-five, {loss_more} is the one with more "
-            "losing paths. Neither choice is free."
+            "Now the buyer's side. You bought a call at twenty percent, sure the stock will realize thirty. Which "
+            "volatility do you hedge with? Riaz Ahmad and Paul Wilmott asked in 2005. Pause and predict. "
+            "<bookmark mark='a'/> Hedge at thirty, and the final profit is nearly the same on every path: "
+            f"{s30['locked']:.2f}, locked in at the start, spread {s30['act_sd']:.2f} from hedging in steps, "
+            "though the mark-to-market swings on the way. <bookmark mark='b'/> Hedge at the market's twenty: the "
+            f"same average, {s30['imp_mean']:.2f}, but path-dependent, sd {s30['imp_sd']:.2f}. "
+            f"<bookmark mark='c'/> If the world realizes only twenty-five, {loss_more} has more losing paths."
         ) as vo:
             self.play(FadeIn(top))
             vo.wait_until("a")
@@ -221,16 +217,11 @@ class WrongVol(VoiceoverScene, ThreeDScene):
         params = note(rf"{len(rv):,} Heston paths (volatility of volatility {hp['xi']}, correlation {hp['rho']}); "
                       r"sold and hedged at 25\%".replace(",", "{,}", 1), font_size=20).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "In a world where volatility itself moves, the gamma weighting is the main effect. Here are "
-            f"{len(rv):,} paths of the Heston model, in which the variance wanders on its own, all sold and hedged "
-            "at twenty-five percent. On the left, each path's profit against its realized volatility. The relation "
-            f"is there, correlation {w['corr_rv']:.2f}, but loose: paths with the same realized volatility land "
-            "a point or more apart. <bookmark mark='a'/> On the right, the same profits against the gamma-weighted "
-            "formula, computed from each path's own variance. They fall on the diagonal, correlation "
-            f"{w['corr_pred']:.2f}. The formula is the hedger's accounting identity: it explains essentially "
-            "every dollar, and it says the realized volatility that matters is the one weighted by gamma. That "
-            "observation is the seed of variance swaps, which pay plain realized variance with no gamma weight, "
-            "and of Part twelve."
+            f"When volatility itself moves, the weighting is the main effect. {len(rv):,} Heston paths, sold and "
+            "hedged at twenty-five percent. Profit against realized volatility: correlation "
+            f"{w['corr_rv']:.2f}, loose. <bookmark mark='a'/> Against the gamma-weighted formula from each path's "
+            f"own variance: {w['corr_pred']:.2f}, on the diagonal. The formula explains essentially every dollar; "
+            "pay plain variance with no gamma weight and you have a variance swap, Part twelve."
         ) as vo:
             self.play(FadeIn(left), Create(be), FadeIn(params))
             self.play(LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.001, run_time=2.5), FadeIn(c1))

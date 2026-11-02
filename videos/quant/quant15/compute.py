@@ -188,19 +188,32 @@ def _surrogate_data(sig, c0, n, seed, n_paths):
     m = g.uniform(0, 23.5, n)
     kin = g.random(n) < 0.35
     kin |= S < TERMS["ki"]
-    y = np.array([X.snowball_price(sig, coupon=c0, S=s_, elapsed_days=int(mm * DPM), knocked_in=bool(k), n_paths=n_paths,
-                                   seed=int(1000 + i), **TERMS) for i, (s_, mm, k) in enumerate(zip(S, m, kin))])
+    chunk = min(n_paths, 10000)  # large path counts are priced in chunks of 10,000, to keep memory small
+
+    def price(s_, mm, k, i):
+        parts = [X.snowball_price(sig, coupon=c0, S=s_, elapsed_days=int(mm * DPM), knocked_in=bool(k), n_paths=chunk,
+                                  seed=int(1000 + i) * 100 + j, **TERMS) for j in range(n_paths // chunk)]
+        return float(np.mean(parts))
+    y = np.array([price(s_, mm, k, i) for i, (s_, mm, k) in enumerate(zip(S, m, kin))])
     return np.column_stack([np.log(S), m / 24, kin.astype(float)]), y
 
 
 def compute_surrogate() -> dict:
-    torch = _torch()
     sn = load("snowball")
     sig, c0 = sn["sigma"], sn["coupon"]
+    # the labels first, saved as they come (a killed run resumes), and before torch is loaded, to keep memory small
+    part = CACHE.partial("surrogate", {"sig": sig, "c0": c0, "v": 2})
     t0 = time.time()
-    Xtr, ytr = _surrogate_data(sig, c0, 3000, 1, 3000)
-    t_data = time.time() - t0
-    Xte, yte = _surrogate_data(sig, c0, 150, 2, 40000)
+    if "train" not in part:
+        Xtr, ytr = _surrogate_data(sig, c0, 3000, 1, 3000)
+        part["train"] = {"X": Xtr.tolist(), "y": ytr.tolist(), "t": time.time() - t0}
+    if "test" not in part:
+        Xte, yte = _surrogate_data(sig, c0, 150, 2, 40000)
+        part["test"] = {"X": Xte.tolist(), "y": yte.tolist()}
+    Xtr, ytr = np.asarray(part["train"]["X"]), np.asarray(part["train"]["y"])
+    Xte, yte = np.asarray(part["test"]["X"]), np.asarray(part["test"]["y"])
+    t_data = part["train"]["t"]
+    torch = _torch()
     torch.manual_seed(0)
     net = torch.nn.Sequential(torch.nn.Linear(3, 64), torch.nn.SiLU(), torch.nn.Linear(64, 64), torch.nn.SiLU(),
                               torch.nn.Linear(64, 1))
@@ -225,7 +238,8 @@ def compute_surrogate() -> dict:
             net(torch.tensor(Xte, dtype=torch.float32))
         t_net = (time.time() - t0) / (100 * len(Xte))
     t0 = time.time()
-    X.snowball_price(sig, coupon=c0, n_paths=40000, seed=3, **TERMS)
+    for j in range(4):  # one 40,000-path price, in chunks
+        X.snowball_price(sig, coupon=c0, n_paths=10000, seed=3 * 100 + j, **TERMS)
     t_mc = time.time() - t0
     torch.save(net.state_dict(), CACHE.dir / "surrogate.pt")
     err = pte - yte
@@ -700,7 +714,8 @@ def compute_asian_scatter() -> dict:
     c = np.cov(ya, yg)
     b = c[0, 1] / c[1, 1]
     rho = c[0, 1] / np.sqrt(c[0, 0] * c[1, 1])
-    p = P[:, 3]
+    j = int(np.argmax((P[-1] > A + 4) & (A > K + 2)))  # a path that ends above its average, above the strike
+    p = P[:, j]
     return _json({"ya": ya[:1500], "yg": yg[:1500], "b": float(b), "rho": float(rho),
                   "ratio": float(1 / np.sqrt(1 - rho ** 2)), "path": p, "avg": np.cumsum(p[1:]) / np.arange(1, n + 1),
                   "min": np.minimum.accumulate(p), "geo_cf": float(X.geometric_asian_call(S, K, T, s, n, r)),

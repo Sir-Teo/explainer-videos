@@ -130,9 +130,10 @@ class System(VoiceoverScene):
             path = np.asarray(R[k]["path"])
             lives.add(tracing(g.ax, np.arange(len(path)), path, trackers, MART, stroke_width=2.2))
             rk, rv = np.asarray(R[k]["running_k"], float), np.asarray(R[k]["running"], float)
-            reads.add(always_redraw(lambda g=g, rk=rk, rv=rv: MathTex(
-                rf"\text{{loss}} \div \text{{staked}} = {np.interp(10 ** (np.log10(rk[0]) + trackers.get_value() / 200 * (np.log10(rk[-1]) - np.log10(rk[0]))), rk, rv):+.4f}",
-                font_size=22, color=LOSS).next_to(g, DOWN, buff=0.12)))
+            ro = readout(r"\text{loss} \div \text{staked} =", lambda rk=rk, rv=rv: float(np.interp(
+                10 ** (np.log10(rk[0]) + trackers.get_value() / 200 * (np.log10(rk[-1]) - np.log10(rk[0]))), rk, rv)),
+                digits=4, font_size=22, color=LOSS).next_to(g, DOWN, buff=0.12)
+            reads.add(ro)
         zero = VGroup(*[DashedLine(p[0].ax.c2p(0, 0), p[0].ax.c2p(200, 0), color=GREY_D, stroke_width=1) for p in panels])
         cap = label(r"one session of 200 spins each (line), and the running ratio over 20{,}000 sessions (number)",
                     font_size=20, color=GREY_B).to_edge(DOWN, buff=0.35)

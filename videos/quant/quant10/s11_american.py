@@ -41,14 +41,12 @@ class American(VoiceoverScene, ThreeDScene):
             label(r"a deep put: exercise, take $K$ now, and earn interest on it", font_size=28, color=GREY_A),
         ).arrange(DOWN, buff=0.35).next_to(rows, DOWN, buff=0.9)
         with self.voiceover(
-            "European options can be exercised only at expiry. Most traded stock options are American: they can be "
-            "exercised any day. Is that right worth anything? For a call on a stock that pays no dividends, no. "
-            "Parity bounds a call below by the stock minus the discounted strike, which is more than the stock "
-            "minus the strike: alive, the call is always worth more than exercised. Robert Merton proved it in "
-            "1973. <bookmark mark='a'/> A put is different. Exercising a deep in-the-money put hands you the strike "
-            "now, and cash earns interest; waiting keeps the chance of an even lower price, but that chance is "
-            "worth little when the put is already deep. At some price, stopping beats waiting. Which price is a "
-            "problem of optimal stopping, Part eight's subject, and for a finite maturity it has no closed form."
+            "European options are exercised only at expiry; most stock options are American, exercisable any day. "
+            "For a call on a stock without dividends the right is worthless: parity bounds the call below by the "
+            "stock minus the discounted strike, more than the stock minus the strike. Merton, 1973. "
+            "<bookmark mark='a'/> A put is different: exercising a deep one hands you the strike now, to earn "
+            "interest on. At some price stopping beats waiting: optimal stopping, Part eight's subject, with no "
+            "closed form at finite maturity."
         ) as vo:
             self.play(Write(rows[0]), run_time=2)
             self.play(FadeIn(rows[1]))
@@ -146,7 +144,7 @@ class American(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(Create(gold), run_time=2)
             self.move_camera(theta=-25 * DEGREES, phi=60 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*self.mobjects))], run_time=1.2)
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -169,20 +167,17 @@ class American(VoiceoverScene, ThreeDScene):
                 why(r"It\^o on $e^{-rt}P$: Kim (1990); Jacka (1991); Carr, Jarrow, Myneni (1992)")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.6, buff=0.6, edge=6.9)
         gap = a["kim"] - a["tree"]
+        gap_line = ("within a hundredth." if abs(gap) < 0.01 else
+                    f"a gap of {abs(gap):.3f}, the boundary's remaining error.")
         with self.voiceover(
-            "In symbols: the American put is an optimal stopping problem. <bookmark mark='a'/> Above the boundary "
-            "the Black-Scholes equation holds; below it the value is the payoff. <bookmark mark='b'/> Across the "
-            "line the value and its slope must join, value matching and smooth pasting, Part eight's smooth fit. "
-            "<bookmark mark='c'/> Now a beautiful step. In the stopping region, plug the payoff into the equation: "
-            "what comes out is minus r K, the interest on the strike you could be earning. <bookmark mark='d'/> "
-            "Apply Ito to the discounted put and take expectations, and the early-exercise premium is that "
-            "interest, collected over every moment the put would sit exercised, weighted by the risk-neutral "
-            "chance of being below the boundary then. In-Joon Kim found it in 1990; Peter Carr, Robert Jarrow and "
-            "Ravi Myneni gave it its meaning in 1992. Plug in the boundary the tree drew, located between its nodes, "
-            f"and the integral gives {a['kim']:.4f} against the tree's {a['tree']:.4f}: "
-            + ("agreement to the third decimal." if abs(gap) < 0.01 else f"a gap of {abs(gap):.3f}, the boundary's "
-               "remaining error.")
-            + " Pause and predict: rates go to zero; where does the boundary go? To zero: no interest, no premium."
+            "In symbols: optimal stopping. <bookmark mark='a'/> Above the boundary the equation holds; below it, "
+            "the payoff. <bookmark mark='b'/> Across it value and slope join: Part eight's smooth fit. "
+            "<bookmark mark='c'/> Plug the payoff into the equation in the stopping region and out comes minus r "
+            "K: the interest on the strike. <bookmark mark='d'/> Ito on the discounted put, take expectations, and "
+            "the premium is that interest, earned whenever the put would sit exercised, weighted by the chance of "
+            "being below the boundary: In-Joon Kim, 1990; Carr, Jarrow and Myneni, 1992. With the tree's boundary, "
+            f"located between nodes, the integral gives {a['kim']:.4f} against the tree's {a['tree']:.4f}: "
+            + f"{gap_line} Pause and predict: rates go to zero; where does the boundary go? To zero."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -221,20 +216,16 @@ class American(VoiceoverScene, ThreeDScene):
             rf"sits in the last step before the dividend.", 6.0, 22, GREY_A)
         div.next_to(nums, DOWN, buff=0.4).align_to(nums, LEFT)
         before = (dv["last_t"] < dv["tD"]) and (dv["tD"] - dv["first_t"] < 0.01)
+        div_line = ("With one cash dividend the tree exercises a call only in the instant before the stock goes "
+                    "ex-dividend." if before else
+                    "With one cash dividend the tree's call exercise nodes cluster before the dividend date.")
         with self.voiceover(
-            "Before fast computers, desks needed something quicker than a tree. Michael Brennan and Eduardo "
-            "Schwartz solved the American put by finite differences in 1977, the method of Part sixteen. "
-            "<bookmark mark='a'/> Giovanni Barone-Adesi and Robert Whaley, in 1987, guessed that the "
-            "early-exercise premium changes slowly in time, dropped its time derivative, and got an equation they "
-            "could solve in closed form, fitted at the critical price. On our put it gives "
-            f"{a['baw']:.4f}, against the tree's {a['tree']:.4f}, with a critical price of "
-            f"{a['baw_critical']:.1f} against the tree's {a['smooth_critical']:.1f}. <bookmark mark='b'/> And "
-            "dividends bring calls back. " + (
-                "On a call with one cash dividend, the tree exercises only in the instant before the stock goes "
-                "ex-dividend, to collect it; never at any other time."
-                if before else "On a call with one cash dividend, the tree's exercise nodes cluster before the "
-                "dividend date.")
-            + " The trade around that instant is Part eleven's."
+            "Desks once needed something quicker than a tree. Brennan and Schwartz solved the put by finite "
+            "differences in 1977, Part sixteen's method. <bookmark mark='a'/> Barone-Adesi and Whaley, 1987, "
+            "dropped the premium's time derivative and solved what was left in closed form: "
+            f"{a['baw']:.4f} against the tree's {a['tree']:.4f}, critical price {a['baw_critical']:.1f} against "
+            f"{a['smooth_critical']:.1f}. <bookmark mark='b'/> And dividends bring calls back. {div_line}"
+            " The trade around it is Part eleven's."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

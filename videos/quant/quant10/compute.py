@@ -494,16 +494,16 @@ def compute_dgamma3d() -> dict:
 
 
 def compute_discrete_seeds() -> dict:
-    """Chapter 9: the hedging error's sd against the number of hedges, 5 seeds of 20,000 paths (resumable); the
+    """Chapter 9: the hedging error's sd against the number of hedges, 5 seeds of 10,000 paths (resumable); the
     distribution's skew at 13 and 252 hedges."""
     K, T, sig = 100.0, 0.25, 0.2
     Ns = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
-    part = CACHE.partial("discrete_seeds", {"K": K, "T": T, "sigma": sig, "Ns": Ns, "paths": 20000})
+    part = CACHE.partial("discrete_seeds", {"K": K, "T": T, "sigma": sig, "Ns": Ns, "paths": 10000})
     for seed in range(5):
         for N in Ns:
             key = f"{seed}_{N}"
             if key not in part:
-                t, S = paths.gbm(100.0, 0.0, sig, T, N, 20000, seed=700 + 10 * seed + N % 7)
+                t, S = paths.gbm(100.0, 0.0, sig, T, N, 10000, seed=700 + 10 * seed + N % 7)
                 p = hedge.delta_hedge(t, S, K, T, sig, position=-1)["pnl"]
                 part[key] = {"sd": float(p.std()), "mean": float(p.mean()), "skew": float(stats.skew(p))}
     sd = np.array([[part[f"{s}_{N}"]["sd"] for N in Ns] for s in range(5)])
@@ -529,15 +529,15 @@ def compute_jump_floor() -> dict:
     lam, mj, sj = JUMPS["lam"], JUMPS["mj"], JUMPS["sj"]
     tot = float(np.sqrt(sig ** 2 + lam * (mj ** 2 + sj ** 2)))
     Ns = [16, 32, 64, 128, 256, 512, 1024]
-    part = CACHE.partial("jump_floor", {"K": K, "T": T, "sigma": sig, **JUMPS, "Ns": Ns, "paths": 10000})
+    part = CACHE.partial("jump_floor", {"K": K, "T": T, "sigma": sig, **JUMPS, "Ns": Ns, "paths": 4000})
     for seed in range(3):
         for N in Ns:
             key = f"{seed}_{N}"
             if key not in part:
-                Sj = sim.merton_jumps(100.0, 0.0, sig, lam, mj, sj, T, N, 10000, seed=900 + 10 * seed + N % 7)
+                Sj = sim.merton_jumps(100.0, 0.0, sig, lam, mj, sj, T, N, 4000, seed=900 + 10 * seed + N % 7)
                 t = np.linspace(0, T, N + 1)
                 pj = hedge.delta_hedge(t, Sj, K, T, tot, position=-1)["pnl"]
-                t2, Sg = paths.gbm(100.0, 0.0, tot, T, N, 10000, seed=950 + 10 * seed + N % 7)
+                t2, Sg = paths.gbm(100.0, 0.0, tot, T, N, 4000, seed=950 + 10 * seed + N % 7)
                 pg = hedge.delta_hedge(t2, Sg, K, T, tot, position=-1)["pnl"]
                 part[key] = {"jump": float(pj.std()), "gbm": float(pg.std())}
     J = np.array([[part[f"{s}_{N}"]["jump"] for N in Ns] for s in range(3)])
@@ -826,32 +826,81 @@ def _norm_otm(x, s):
     return cp * (np.exp(x / 2) * ndtr(cp * d1) - np.exp(-x / 2) * ndtr(cp * (d1 - s)))
 
 
+def _mlp_train(X, y, width=32, epochs=60, lr=3e-3, batch=512, seed=0, every=3, snap_every=0, snap_fn=None):
+    """A two-hidden-layer tanh network trained by Adam on mean squared error, in numpy (no torch: the shared machine
+    is short of memory). Returns (predict, curve [(epoch, mse)], snaps {epoch: snap_fn(predict)})."""
+    rng = np.random.default_rng(seed)
+    mu, sd = X.mean(0), X.std(0)
+    Xs = (X - mu) / sd
+    sizes = [X.shape[1], width, width, 1]
+    W = [rng.standard_normal((a, b)) * np.sqrt(1.0 / a) for a, b in zip(sizes, sizes[1:])]
+    B = [np.zeros(b) for b in sizes[1:]]
+    params = W + B
+    m1 = [np.zeros_like(p) for p in params]
+    m2 = [np.zeros_like(p) for p in params]
+    t = 0
+
+    def forward(Z):
+        h1 = np.tanh(Z @ W[0] + B[0])
+        h2 = np.tanh(h1 @ W[1] + B[1])
+        return h1, h2, (h2 @ W[2] + B[2])[:, 0]
+
+    def predict(Xn):
+        return forward((Xn - mu) / sd)[2]
+
+    curve, snaps = [], {}
+    if snap_fn is not None and snap_every:
+        snaps[0] = snap_fn(predict)
+    n = len(X)
+    for ep in range(epochs):
+        perm = rng.permutation(n)
+        tot = 0.0
+        lr_ep = lr * 0.5 * (1 + np.cos(np.pi * ep / epochs))  # cosine schedule
+        for i in range(0, n, batch):
+            j = perm[i:i + batch]
+            Z = Xs[j]
+            h1, h2, out = forward(Z)
+            err = out - y[j]
+            tot += float(np.sum(err ** 2))
+            g = 2 * err[:, None] / len(j)
+            gW2, gB2 = h2.T @ g, g.sum(0)
+            d2 = (g @ W[2].T) * (1 - h2 ** 2)
+            gW1, gB1 = h1.T @ d2, d2.sum(0)
+            d1 = (d2 @ W[1].T) * (1 - h1 ** 2)
+            gW0, gB0 = Z.T @ d1, d1.sum(0)
+            grads = [gW0, gW1, gW2, gB0, gB1, gB2]
+            t += 1
+            for k, (p_, g_) in enumerate(zip(params, grads)):
+                m1[k] = 0.9 * m1[k] + 0.1 * g_
+                m2[k] = 0.999 * m2[k] + 0.001 * g_ * g_
+                p_ -= lr_ep * (m1[k] / (1 - 0.9 ** t)) / (np.sqrt(m2[k] / (1 - 0.999 ** t)) + 1e-8)
+        if ep == 0 or (ep + 1) % every == 0:
+            curve.append((ep + 1, tot / n))
+        if snap_fn is not None and snap_every and (ep + 1) % snap_every == 0:
+            snaps[ep + 1] = snap_fn(predict)
+    return predict, curve, snaps
+
+
 def compute_neural_iv() -> dict:
     """Chapter 19: a small network learns a first guess for implied volatility from (x, log normalized price), the
-    gated-initial-guess idea of the 2026 papers, trained on synthetic quotes (5 seeds), then two Newton steps; scored
-    on the Surface's quotes against the Corrado–Miller start."""
-    import torch
-
-    from explainer.quant.house import deep
-
-    torch.set_num_threads(1)
+    gated-initial-guess idea of the 2026 papers in miniature, trained on synthetic quotes (5 seeds), then Newton steps;
+    scored on the Surface's quotes against the Corrado–Miller start."""
     rng = np.random.default_rng(1900)
     n = 24000
     x = rng.uniform(-1.2, 1.2, n)
     s = np.exp(rng.uniform(np.log(0.03), np.log(1.4), n))
     b = _norm_otm(x, s)
     keep = b > 1e-9
-    X = np.stack([x[keep], np.log(b[keep])], 1).astype(np.float32)
-    y = np.log(s[keep]).astype(np.float32)
+    X = np.stack([x[keep], np.log(b[keep])], 1)
+    y = np.log(s[keep])
     d, q, T, K, F, iv, cp = _surface_quotes()
     xs = np.log(F / K)
     s_true = iv * np.sqrt(T)
     bq = _norm_otm(xs, s_true)
-    Xq = np.stack([xs, np.log(bq)], 1).astype(np.float32)
+    Xq = np.stack([xs, np.log(bq)], 1)
 
-    def guess(net):
-        with torch.no_grad():
-            return np.exp(net(torch.tensor(Xq)).numpy()[:, 0])
+    def guess(pred):
+        return np.exp(pred(Xq))
 
     def newton(s0, k):
         s_ = s0.copy()
@@ -861,13 +910,12 @@ def compute_neural_iv() -> dict:
             s_ = np.clip(s_ - (_norm_otm(xs, s_) - bq) / v, 1e-4, 4.0)
         return s_
 
-    curves, snaps, final = [], [], []
+    curves, snaps, final = [], {}, []
     for seed in range(5):
-        net, curve, sn = deep.train_mlp_trace(X, y, width=32, depth=2, epochs=60, lr=3e-3, batch=512, seed=seed,
-                                             every=3, snap_every=12 if seed == 0 else 0,
-                                             snap_fn=(lambda m: guess(m).tolist()) if seed == 0 else None)
+        pred, curve, sn = _mlp_train(X, y, seed=seed, snap_every=12 if seed == 0 else 0,
+                                     snap_fn=(lambda f: guess(f).tolist()) if seed == 0 else None)
         curves.append([c[1] for c in curve])
-        g = guess(net)
+        g = guess(pred)
         err0 = np.abs(g - s_true) / np.sqrt(T)
         err1 = np.abs(newton(g, 1) - s_true) / np.sqrt(T)
         err2 = np.abs(newton(g, 2) - s_true) / np.sqrt(T)
@@ -877,7 +925,6 @@ def compute_neural_iv() -> dict:
         if seed == 0:
             epochs = [c[0] for c in curve]
             snaps = {str(k): (np.asarray(v) / np.sqrt(T)).tolist() for k, v in sn.items()}
-    # the classical start for comparison
     _, its = bs.implied_vol(bs.price(F, K, T, iv, 0, 0, cp), F, K, T, 0, 0, cp, return_iterations=True)
     cm = np.abs(its[0] - iv)
     return {"epochs": np.array(epochs), "loss": np.array(curves), "snaps": snaps, "final": final,

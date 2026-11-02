@@ -58,13 +58,13 @@ class Forward(VoiceoverScene):
                    f"The seeds' average misses the integral by up to {dev:.1f} points, more than their spread of "
                    f"{spread:.1f}: a discretisation bias in the simulation.")
         with self.voiceover(
+            (
             "A forward smile is the smile a model predicts for a future date: here, the thirty-day smile sixty days "
-            "from now. It is not quoted anywhere. It is a model's opinion, and it is what forward-start options and "
-            "cliquets pay on. For Heston it can be computed two ways. The white curve is a one-dimensional integral, "
-            "derived in a minute. <bookmark mark='a'/> The dots are Monte Carlo: simulate the model for ninety "
-            "days, and price the thirty-day option on the last month's return. With five hundred paths they "
-            "scatter; as paths accumulate they settle onto the curve. <bookmark mark='b'/> "
-            f"{verdict}"
+            "out. No market quotes it; forward starts and cliquets pay on it. For Heston it can be computed two ways. "
+            "White: a one-dimensional integral, derived shortly. <bookmark mark='a'/> Dots: Monte Carlo, the last "
+            "month's return of ninety-day paths. With five hundred paths they scatter; as paths accumulate they "
+            f"settle. <bookmark mark='b'/> {verdict}"
+        )
         ) as vo:
             self.play(FadeIn(g), Create(semi), FadeIn(side[0]))
             vo.wait_until("a")
@@ -100,17 +100,17 @@ class Forward(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
         pp = pause(r"In which models is a forward-start option worth exactly today's option?", width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Here is why. A forward-start call pays the return from one date to a later one, above a strike. Its "
-            "payoff does not care about the price level at the first date, so at that date it is an ordinary option "
-            "on a spot of one, worth whatever the model says given its state then. <bookmark mark='a'/> In a Lévy "
-            "model the state is irrelevant: increments are independent and stationary, so the forward smile is "
-            "exactly today's smile for that maturity. <bookmark mark='b'/> In Heston the state is the variance. "
-            "Average Heston's price over the distribution of the variance at the first date, chapter five's "
-            "non-central chi-squared, and you have the white curve: one integral, with the Fourier price inside. "
-            "<bookmark mark='c'/> And a cliquet, a sum of capped and floored period returns, is a strip of these: "
-            "each coupon is a floor plus a forward-start call spread. <bookmark mark='d'/> Pause and predict: in "
-            "which models is a forward-start option worth exactly today's option? In every exponential Lévy model."
-        ) as vo:
+            (
+            (
+            "Why. A forward-start payoff ignores the price level at the first date, so then it is an ordinary option "
+            "on a spot of one, worth the model's price given its state. <bookmark mark='a'/> In a Lévy model the "
+            "state is irrelevant: the forward smile is today's. <bookmark mark='b'/> In Heston the state is the "
+            "variance: average Heston's price over its chi-squared law at the first date, the white curve. A high "
+            "variance then means a high and flatter forward smile, a low one a low and steeper smile; the average "
+            "over that spread is why Heston's forward smile keeps its curvature. <bookmark mark='c'/> A cliquet is a "
+            "strip of these: each coupon is a floor plus a forward-start call spread. <bookmark mark='d'/> Pause: "
+            "where is a forward start worth exactly today's option? In every exponential Lévy model."
+        )        )        ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
@@ -152,12 +152,12 @@ class Forward(VoiceoverScene):
         foot.to_edge(DOWN, buff=0.4)
         src = illustration(r"three paths of the fitted Heston")
         with self.voiceover(
-            "See the cliquet's mechanism on three simulated paths. Each grey outline is one month's return. "
-            "<bookmark mark='a'/> The contract floors each month at zero and caps it at ten percent: the orange "
-            "bars. Big months are cut off, bad months are forgiven, and the payoff is the sum. <bookmark mark='b'/> "
-            "So the cliquet's value depends on how volatile each future month will be, and on the skew of each "
-            "future month's distribution: the forward smiles. Today's vanillas fix only the distribution of the "
-            "total return to each date, not how it is shared out among the months."
+            (
+            "The cliquet on three simulated paths: each grey outline is a month's return. <bookmark mark='a'/> Each "
+            "is floored at zero and capped at ten percent, and the payoff is the sum. <bookmark mark='b'/> So its "
+            "value depends on each future month's volatility and skew: the forward smiles. Today's vanillas fix only "
+            "the total return to each date, not how it is shared among months."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(raw), Create(flol))
             vo.wait_until("a")
@@ -187,14 +187,18 @@ class Forward(VoiceoverScene):
         src = illustration(r"each model fitted to the Surface; the 30-day smile starting in 60 days, 40{,}000 paths")
         lv, he, vg = (e["models"][m] for m in ("LV", "Heston", "VG"))
         with self.voiceover(
-            "Every model in this part was fitted to the same Surface. Ask each one the same question: what will the "
-            "thirty-day smile look like sixty days from now? That forward smile is not quoted anywhere; it is a "
-            "model's opinion. <bookmark mark='a'/> Local volatility, as Part twelve showed, says it will flatten: a "
-            f"skew of {100 * lv['fwd_skew']:.1f} points, against {100 * e['today_skew']:.1f} today. "
-            "<bookmark mark='b'/> Heston and Bates keep today's skew, because their variance is random whenever "
-            "you start. Variance gamma's increments are stationary, so its forward smile is today's smile for that "
-            "maturity, but it fitted today's badly. And the stochastic local volatility model sits in between, where "
-            "its mixing fraction puts it. Five models, one set of vanilla prices, five different futures."
+            (
+            (
+            "Ask every fitted model the same question. <bookmark mark='a'/> Local volatility, as Part twelve showed, "
+            f"flattens the forward smile: a skew of {100 * lv['fwd_skew']:.1f} points against "
+            f"{100 * e['today_skew']:.1f} today. Its local volatility at the future date is a function of the price "
+            "alone, and the far-out local skew is flat. <bookmark mark='b'/> Heston keeps "
+            f"{100 * he['fwd_skew']:.1f} points and Bates {100 * e['models']['Bates']['fwd_skew']:.1f}: their variance "
+            "is random whenever you start. Variance gamma repeats today's smile, "
+            f"{100 * vg['fwd_skew']:.1f}, and SLV sits where its dial puts it, "
+            f"{100 * e['models']['SLV']['fwd_skew']:.1f}. One set of vanillas, five futures."
+        )
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(today), FadeIn(leg[0]), FadeIn(sk[:2]))
             vo.wait_until("a")
@@ -231,15 +235,14 @@ class Forward(VoiceoverScene):
                              r"least two models fitted to the same surface", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.4)
         v1, v2 = np.array(list(cl.values())), np.array(list(fs.values()))
         with self.voiceover(
-            "Now price two exotics that are bets on the future smile. A cliquet pays the sum of four monthly returns, "
-            "each floored at zero and capped at ten percent. Under the five models it costs between "
-            f"{100 * v1.min():.1f} and {100 * v1.max():.1f} percent of notional: a spread of "
-            f"{100 * (v1.max() - v1.min()) / v1.mean():.0f} percent. <bookmark mark='a'/> A forward-start option, "
-            "struck at the money in sixty days, is worse: a spread of "
-            f"{100 * (v2.max() - v2.min()) / v2.mean():.0f} percent. Local volatility, with the flattest forward smile "
-            "but the highest forward volatility, prices it dearest. <bookmark mark='b'/> No vanilla price can settle "
-            "this. That spread is model risk, and an honest desk reports it, rather than quoting one model's number "
-            "as if it were the price."
+            (
+            "Price two such exotics. The cliquet costs between "
+            f"{100 * v1.min():.1f} and {100 * v1.max():.1f} percent of notional across the five models: "
+            f"{100 * (v1.max() - v1.min()) / v1.mean():.0f} percent apart. <bookmark mark='a'/> A forward-start "
+            f"option, struck at the money in sixty days: {100 * (v2.max() - v2.min()) / v2.mean():.0f} percent apart, "
+            "local volatility dearest. <bookmark mark='b'/> No vanilla can settle this. The spread is model risk, and "
+            "an honest desk reports it."
+        )
         ) as vo:
             self.play(FadeIn(p1[:2]), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p1[2]], lag_ratio=0.15), FadeIn(p1[3]))
             vo.wait_until("a")

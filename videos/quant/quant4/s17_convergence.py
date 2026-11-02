@@ -174,9 +174,12 @@ class Convergence(VoiceoverScene):
 
         bd = always_redraw(bandm)
         ln = tracing(ax, t, np.clip(m, -40, 60), tk, MART, stroke_width=3)
-        yr = always_redraw(lambda: MathTex(rf"{int(at_index(t, tk))}:\ {at_index(m, tk):.1f}\% \pm "
-                                           rf"{(at_index(hi, tk) - at_index(lo, tk)) / 2:.1f}\%", font_size=30,
-                                           color=MART).to_corner(UR, buff=0.5))
+        yr = VGroup(always_redraw(lambda: MathTex(rf"{int(at_index(t, tk))}", font_size=30, color=MART)
+                                  .to_corner(UR, buff=0.5).shift(LEFT * 4.2)),
+                    readout(r"\text{estimate:}", lambda: at_index(m, tk), digits=1, font_size=30, color=MART,
+                            unit=r"\%").to_corner(UR, buff=0.5).shift(LEFT * 1.2),
+                    readout(r"\pm", lambda: (at_index(hi, tk) - at_index(lo, tk)) / 2, digits=1, font_size=30,
+                            color=MART, unit=r"\%").to_corner(UR, buff=0.5))
         side = VGroup(
             label(r"L\'evy's upward theorem: $\mathbb{E}[X \mid \mathcal{F}_n] \to \mathbb{E}[X \mid \mathcal{F}_\infty]$",
                   font_size=22, color=GREY_A),

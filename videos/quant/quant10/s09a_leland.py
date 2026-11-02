@@ -67,15 +67,13 @@ class Leland(VoiceoverScene, ThreeDScene):
             self.remove(m)
         free_best = lg["best"][0]
         with self.voiceover(
-            "Every rebalance pays a cost: a fraction k of the value of the shares traded, half a bid-ask spread "
-            "plus fees. Here is what that does to the short call of the last chapter, as a landscape: across, "
-            "the number of hedges in the quarter; deep, the cost in basis points; up, the expected cost plus one "
-            "standard deviation of the hedging error, a simple measure of total risk. Ten thousand paths for "
-            "every cell. <bookmark mark='a'/> At zero cost the surface only falls as you hedge more: the best "
-            f"frequency in our grid is {free_best} hedges, the most we tried. As costs rise, the far end of the surface "
-            "lifts, because costs grow with every trade, and a valley appears. <bookmark mark='b'/> The gold ridge "
-            f"traces its floor: at a quarter of a percent the best is {lg['best'][4]} hedges in the quarter, about "
-            f"{lg['best'][4] / 13:.0f} a week. Pause and predict: costs double. Hedge more often, or less? Less: the ridge moves left."
+            "Every rebalance pays a cost, a fraction k of the value traded. Here is what that does to the last "
+            "chapter's short call: across, the hedges in the quarter; deep, the cost in basis points; up, the "
+            "expected cost plus one standard deviation of the hedging error. <bookmark mark='a'/> At zero cost "
+            f"more hedging always helps: the best in our grid is {free_best} hedges, the most we tried. As costs "
+            "rise the far end lifts and a valley appears. <bookmark mark='b'/> The gold ridge traces its floor: at "
+            f"a quarter of a percent the best is {lg['best'][4]} hedges, about {lg['best'][4] / 13:.0f} a week. "
+            "Pause and predict: costs double. More often, or less? Less: the ridge moves left."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), FadeIn(foot), run_time=1.5)
             self.play(FadeIn(surf), run_time=2)
@@ -84,7 +82,7 @@ class Leland(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(Create(ridge), FadeIn(balls), FadeIn(tab), run_time=2)
             self.move_camera(theta=-45 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*self.mobjects))], run_time=1.2)
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -107,15 +105,12 @@ class Leland(VoiceoverScene, ThreeDScene):
         foot = note(r"error $\propto \sqrt{\Delta t}$ (chapter 9), cost $\propto 1/\sqrt{\Delta t}$: the valley",
                     font_size=24).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Hayne Leland's insight, in 1985, was that the cost can be priced. Over one step, delta moves by gamma "
-            "times the stock's move, so the hedger trades about gamma S sigma root delta t shares. "
-            "<bookmark mark='a'/> Each trade costs half the round-trip cost on its value, and the average size of "
-            "a normal move is root two over pi. <bookmark mark='b'/> Divide by the step: the cost per unit of "
-            "time is half gamma S squared, the same factor as the variance term of chapter seven, times something "
-            "that grows like one over root delta t. <bookmark mark='c'/> So it can be absorbed into the volatility. "
-            "Sell and hedge at Leland's sigma L, larger than sigma, and the extra premium pays for the trading. "
-            "The hedging error shrinks like root delta t and the cost grows like its inverse: that is the valley "
-            "in the landscape."
+            "Hayne Leland's insight, in 1985: the cost can be priced. Over one step, delta moves by gamma times "
+            "the stock's move. <bookmark mark='a'/> Each trade costs half the round trip on its value, and a normal "
+            "move's average size is root two over pi. <bookmark mark='b'/> Per unit of time the cost is half gamma "
+            "S squared, chapter seven's factor, times something growing like one over root delta t. "
+            "<bookmark mark='c'/> So absorb it into the volatility: sell and hedge at Leland's sigma L. Error "
+            "shrinks like root delta t, cost grows like its inverse: the valley."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -150,15 +145,12 @@ class Leland(VoiceoverScene, ThreeDScene):
             MathTex(rf"\text{{without them}}:\ {d['leland_mid_mean']:+.2f}", font_size=30, color=GAIN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.4)
         with self.voiceover(
-            "In the House it is three lines, and one argument to the hedger. <bookmark mark='a'/> Problem four of "
-            "this part asks for it: with a round-trip cost of point two percent and twenty percent volatility, "
-            f"daily hedging needs {100 * lab['daily']:.1f} percent and weekly {100 * lab['weekly']:.1f}. "
-            "<bookmark mark='b'/> Now check it. Weekly hedging of our call, a quarter of a percent each way: "
-            f"priced at twenty percent the seller loses {-d['naive_mean']:.2f} on average, all of it costs. Priced "
-            f"and hedged at Leland's {100 * d['sigma_leland']:.1f}, the loss shrinks to "
-            f"{-d['leland_mean']:.2f}, and what is left is exactly what the formula leaves out: "
-            f"{d['end_costs']:.2f} for buying the first hedge and unwinding the last. Without them the book "
-            f"averages {d['leland_mid_mean']:+.2f}."
+            "In the House it is three lines. <bookmark mark='a'/> Problem four: a round trip of point two percent "
+            f"at twenty percent volatility needs {100 * lab['daily']:.1f} percent hedging daily, "
+            f"{100 * lab['weekly']:.1f} weekly. <bookmark mark='b'/> The check, weekly, a quarter percent each way: "
+            f"priced at twenty the seller loses {-d['naive_mean']:.2f}; at Leland's {100 * d['sigma_leland']:.1f}, "
+            f"{-d['leland_mean']:.2f}, and the rest is the first hedge and the unwind, {d['end_costs']:.2f}, which "
+            f"the formula leaves out. Without them: {d['leland_mid_mean']:+.2f}."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -195,20 +187,16 @@ class Leland(VoiceoverScene, ThreeDScene):
                             r"share. Kabanov and Safarian (1997): Leland's error does not vanish in the limit.",
                             12.0, 22, GREY_A).to_edge(DOWN, buff=0.4)
         sd_first, sd_last = rows_[0]["sd"], rows_[-1]["sd"]
+        kab_line = (f"In our runs its spread is still shrinking, {sd_first:.2f} to {sd_last:.2f}: the failure is in "
+                    "the limit, and in the price." if sd_last < sd_first else
+                    f"In our runs its spread stops shrinking: {sd_first:.2f} to {sd_last:.2f}.")
         with self.voiceover(
-            "But follow Leland's recipe to its end, and it breaks. Fix the cost and hedge ever more often: "
-            f"sigma L climbs from {100 * rows_[0]['sigma_L']:.0f} percent at {rows_[0]['N']} hedges to "
-            f"{100 * rows_[-1]['sigma_L']:.0f} at {rows_[-1]['N']:,}, and the premium with it, from "
-            f"{rows_[0]['premium']:.2f} towards the price of the share itself. <bookmark mark='a'/> In the limit "
-            "the price of perfect hedging with costs is unbounded; Mete Soner, Steven Shreve and Jaksa Cvitanic "
-            "proved in 1995 that the cheapest way to be sure of covering a call is simply to buy the share. And "
-            "Yuri Kabanov and Mher Safarian showed in 1997 that with a constant cost the error of Leland's "
-            "strategy does not go to zero. " + (
-                f"In our runs its spread is still shrinking, from {sd_first:.2f} to {sd_last:.2f}: "
-                "the failure is in the limit, and in the price." if sd_last < sd_first else
-                f"In our runs its spread stops shrinking: {sd_first:.2f} to {sd_last:.2f}.")
-            + " The practical answer is a band in which you do not trade: Part eleven on Bitcoin, Part seventeen "
-            "learned by a network."
+            "Follow the recipe to its end and it breaks. Fix the cost, hedge ever more often: sigma L climbs from "
+            f"{100 * rows_[0]['sigma_L']:.0f} percent to {100 * rows_[-1]['sigma_L']:.0f}, and the premium from "
+            f"{rows_[0]['premium']:.2f} to {rows_[-1]['premium']:.2f}, without bound in the limit. <bookmark mark='a'/> Soner, Shreve and Cvitanic proved in 1995 that the "
+            "cheapest sure cover for a call with costs is to buy the share; Kabanov and Safarian showed in 1997 "
+            f"that with a constant cost Leland's error does not go to zero. {kab_line} The practical answer is a "
+            "band where you do not trade: Parts eleven and seventeen."
         ) as vo:
             self.play(FadeIn(title), FadeIn(head))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3, run_time=3), FadeIn(computed()))

@@ -83,11 +83,10 @@ class Doubling(VoiceoverScene):
             return grp
 
         fan = always_redraw(paths)
-        r_mean = always_redraw(lambda: MathTex(
-            rf"\text{{mean of 1{{,}}000: }} {at_index(mean, tk):+.0f}", font_size=30, color=MART).to_corner(UR, buff=0.5))
-        r_med = always_redraw(lambda: MathTex(
-            rf"\text{{median: }} {at_index(med, tk):+.0f}", font_size=30, color=QC.IDEA).next_to(r_mean, DOWN, buff=0.2)
-            .align_to(r_mean, LEFT))
+        r_mean = readout(r"\text{mean of 1{,}000:}", lambda: at_index(mean, tk), digits=0, font_size=30,
+                         color=MART).to_corner(UR, buff=0.5)
+        r_med = readout(r"\text{median:}", lambda: at_index(med, tk), digits=0, font_size=30,
+                        color=QC.IDEA).next_to(r_mean, DOWN, buff=0.2).align_to(r_mean, LEFT)
         side = VGroup(
             MathTex(rf"\text{{after 3{{,}}000: mean }} {d['mean_end']:+.1f} \pm {d['mean_se_end']:.1f}", font_size=28,
                     color=MART),

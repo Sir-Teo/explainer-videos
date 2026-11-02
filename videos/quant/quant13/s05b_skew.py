@@ -51,15 +51,13 @@ class Skew(VoiceoverScene):
                     r"a year to two days", font_size=19, color=GREY_B).to_edge(DOWN, buff=0.35)
         src = real_data(r"every model as fitted to the Surface", corner=DR)
         with self.voiceover(
-            "Every model in the last three chapters was fitted to the same Surface. Now ask each one the same "
-            "question: what happens to your smile as expiry approaches? Here are six of them, each smile drawn "
-            "against moneyness scaled by the square root of time, so that a Black–Scholes smile would stay put. "
-            "Start at one year, and shrink the expiry. <bookmark mark='a'/> Heston's smile barely changes shape: a "
-            "diffusion's skew settles to a constant, as chapter four proved. <bookmark mark='b'/> The pure-jump "
-            "models, variance gamma and NIG, do the opposite. As expiry shrinks their smiles twist harder and "
-            "harder, until at a few days they are cliffs: a jump that might happen in the next two days dominates "
-            "everything else in that time. Merton's rare crashes show up only far out in the put wing, and Bates "
-            "and CGMY sit in between."
+            (
+            "Ask every fitted model one question: what happens to your smile as expiry nears? Six of them, each smile "
+            "drawn against moneyness scaled by root time. Shrink the expiry from a year. <bookmark mark='a'/> Heston's "
+            "shape barely changes: a diffusion's skew tends to a constant. <bookmark mark='b'/> The pure-jump models "
+            "twist harder and harder, into cliffs at a few days. Merton's rare crashes show only in the far put wing; "
+            "Bates and CGMY sit between."
+        )
         ) as vo:
             self.play(FadeIn(cur), FadeIn(readout_), FadeIn(cap), FadeIn(src))
             per = max((vo.remaining(2.0) - 1.0) / (len(Tm) - 1), 0.4)
@@ -150,17 +148,15 @@ class Skew(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.6, edge=6.9)
         pp = pause(r"A model's skew is constant as $T \to 0$. Can it fit a 3-day expiry?", width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Why one over maturity, for jumps? A Lévy process has independent, identically distributed increments, "
-            "so every cumulant of the log return, the mean, the variance, the third cumulant, grows in proportion "
-            "to time. <bookmark mark='a'/> The skewness is the third cumulant over the variance to the power three "
-            "halves, so it dies like one over the square root of time. <bookmark mark='b'/> Expand the density "
-            "around a Gaussian, the Gram–Charlier expansion: to first order the slope of the smile is the skewness "
-            "divided by sigma root T. Two square roots of time: the skew goes like one over T, exactly the slope "
-            "the jump models showed. <bookmark mark='c'/> A diffusion is the opposite: in a very short time it "
-            "cannot move far, so its skew tends to chapter four's constant, and mean reversion damps it at long "
-            "maturities. <bookmark mark='d'/> Pause and predict: if a model's skew is constant as expiry shrinks, "
-            f"can it fit a three-day option? Only with an enormous vol of vol: Heston's fitted xi of "
-            f"{c['fits']['Heston']['params']['xi']:.1f}."
+            (
+            "Why one over maturity for jumps? A Lévy process has independent identical increments, so every cumulant "
+            "grows in proportion to time. <bookmark mark='a'/> Skewness, the third cumulant over the variance to the "
+            "three halves, dies like one over root T. <bookmark mark='b'/> To first order in a Gram–Charlier "
+            "expansion, the smile's slope is skewness over sigma root T: one over T. <bookmark mark='c'/> A diffusion "
+            "cannot move far quickly, so its skew tends to chapter four's constant. <bookmark mark='d'/> Pause: with a "
+            "constant short skew, can a model fit three days? Only with an enormous vol of vol: Heston's fitted xi "
+            f"of {c['fits']['Heston']['params']['xi']:.1f}."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -186,11 +182,11 @@ class Skew(VoiceoverScene):
                           color=QC.IDEA, width=5.6)
         G = VGroup(c1, c2).arrange(RIGHT, buff=0.4, aligned_edge=UP)
         with self.voiceover(
-            "Two repairs, from opposite sides. Carr, Geman, Madan and Yor showed in 2007 that letting the increments "
-            "be independent but not identically distributed, Sato's additive processes, fixes the Lévy term "
-            "structure. <bookmark mark='a'/> And Eduardo Abi Jaber and Nathan De Carvalho showed in 2023 that a "
-            "Heston model with very fast mean reversion and a very large vol of vol behaves like a jump model at "
-            "short maturities. Our fitted Heston is already leaning that way; chapter eighteen pushes it."
+            (
+            "Two repairs. Carr, Geman, Madan and Yor's additive processes, with independent but non-identical "
+            "increments, fix the Lévy term structure. <bookmark mark='a'/> And Abi Jaber and De Carvalho showed that "
+            "Heston with very fast mean reversion imitates jumps; chapter eighteen pushes our fit that way."
+        )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

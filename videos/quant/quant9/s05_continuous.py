@@ -166,6 +166,8 @@ class Continuous(VoiceoverScene):
             self.play(w.animate.set_value(0.6), run_time=3)
             vo.wait_until("b")
             self.play(w.animate.set_value(1.0), run_time=2.5)
+            for m in (F_, mean, SD):
+                m.clear_updaters()
         for m in (F_, mean, SD):
             m.clear_updaters()
         self.wait(0.3)

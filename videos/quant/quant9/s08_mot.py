@@ -181,6 +181,7 @@ class MOT(VoiceoverScene, ThreeDScene):
             self.begin_ambient_camera_rotation(rate=0.08)
             vo.wait_until("b")
             self.play(lift.animate.set_value(0.0), run_time=3.0, rate_func=smooth)
+            H.clear_updaters()
             self.play(FadeIn(val))
             vo.wait_until("c")
             self.play(FadeIn(cont), FadeIn(floor), FadeIn(names[2]))

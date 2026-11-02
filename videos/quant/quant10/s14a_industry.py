@@ -49,17 +49,14 @@ class Industry(VoiceoverScene):
                            r"dear and buy what it called cheap, and their trading pulled prices towards the model.",
                            6.2, 22, GREY_A).next_to(sheet, DOWN, buff=0.5).align_to(sheet, LEFT)
         with self.voiceover(
-            "How does the formula earn a living? Start on the floor of the Chicago Board Options Exchange, which "
-            "opened in April 1973 with calls on sixteen stocks. Fischer Black ran a service that sold printed "
-            "sheets of theoretical prices, one column per expiry, one row per strike. Pause and predict: why would "
-            "a trader pay for a sheet instead of computing the price? Speed: in a shouting crowd, reading a number "
-            "beats typing five inputs. <bookmark mark='a'/> Donald MacKenzie and Yuval Millo reconstructed what "
-            "happened next: market makers used the sheets to spot options the model called dear or cheap, sold one "
-            "and bought the other against it, and their trading pulled the market's prices towards the model. "
-            "<bookmark mark='b'/> Firms grew up around it. O'Connor and Associates, a Chicago options firm founded "
-            "in 1977, was described in 1989 by the New York Times, as later quoted, as the largest market maker on "
-            "America's financial options exchanges. Swiss Bank Corporation acquired it in the early 1990s, and "
-            "its name survived at UBS."
+            "How does the formula earn a living? On the floor of the Chicago Board Options Exchange, Fischer Black "
+            "sold printed sheets of theoretical prices, a column per expiry, a row per strike. Pause and predict: "
+            "why buy a sheet instead of computing? Speed: in a shouting crowd, reading beats typing five inputs. "
+            "<bookmark mark='a'/> Donald MacKenzie and Yuval Millo reconstructed what followed: market makers sold "
+            "what the sheets called dear, bought what they called cheap, and pulled prices towards the model. "
+            "<bookmark mark='b'/> Firms grew around it. O'Connor and Associates, founded in Chicago in 1977, was "
+            "described in 1989 by the New York Times, as later quoted, as the largest market maker on America's "
+            "financial options exchanges; Swiss Bank Corporation acquired it in the early 1990s."
         ) as vo:
             self.play(FadeIn(sheet, shift=RIGHT * 0.2))
             vo.wait_until("a")
@@ -166,15 +163,12 @@ class Industry(VoiceoverScene):
         src = note(r"sources: Coinbase and Deribit's announcement (14 Aug 2025); Nasdaq (19 Nov 2024)", font_size=18)
         src.to_corner(DR, buff=0.25)
         with self.voiceover(
-            "And the formula sits inside the plumbing of markets. Options on futures are priced with Black's 1976 "
-            "version. When oil futures went negative in April 2020, the Chicago Mercantile Exchange had to switch "
-            "some options to Bachelier's model, which allows negative prices: Part five's story. The VIX is a "
-            "strip of options; employee stock options get a fair value at grant from an option model. "
-            "<bookmark mark='a'/> And the newest market adopted the oldest formula. Deribit, the Surface's venue, "
-            "quotes Black-76 in coin; Coinbase completed its purchase for two point nine billion dollars in August "
-            "2025. And options on BlackRock's Bitcoin fund began trading on Nasdaq on the nineteenth of November "
-            "2024: three hundred and fifty-three thousand contracts on the first day. The formula of 1973 now "
-            "prices bitcoin every second."
+            "The formula sits in the plumbing. Options on futures use Black's 1976 version; when oil went negative "
+            "in April 2020, the Chicago Mercantile Exchange switched some options to Bachelier's model, Part five's "
+            "story. The VIX is a strip of options. <bookmark mark='a'/> And the newest market adopted the oldest "
+            "formula: Deribit quotes Black-76 in coin, and Coinbase completed its two point nine billion dollar "
+            "purchase in August 2025; options on BlackRock's Bitcoin fund opened on Nasdaq on the nineteenth of "
+            "November 2024 with three hundred and fifty-three thousand contracts on day one."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[:4]], lag_ratio=0.5, run_time=5))
             vo.wait_until("a")

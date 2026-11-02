@@ -101,15 +101,12 @@ class Greeks(VoiceoverScene, ThreeDScene):
                           r"lives near the strike, and it sharpens into a spike as expiry nears.", 5.4, 26, GAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.4)
         with self.voiceover(
-            "Slice the surface at one time to expiry and look along the stock axis. On top, the value curve, "
-            "above its payoff. In the middle, its slope: delta, the number of shares in the hedge. Far below the "
-            "strike the call is almost surely worthless and needs no shares; far above it is almost surely "
-            "exercised and needs one. <bookmark mark='a'/> At the bottom, the curvature: gamma, the rate at which "
-            "delta changes as the stock moves, and so the rate at which the hedger must trade. Gamma lives near "
-            "the strike, where the hockey stick bends. <bookmark mark='b'/> Now let time pass. As expiry "
-            "approaches, the value curve presses down onto its payoff, delta steepens into a step, and gamma "
-            "sharpens into a spike at the strike. An at-the-money option close to expiry is the most violent "
-            "thing to hedge: a small move flips it from worthless to one full share."
+            "Laid flat: on top the value, above its payoff; in the middle its slope, delta, the shares in the "
+            "hedge, none far below the strike and one far above. <bookmark mark='a'/> At the bottom the curvature, "
+            "gamma: how fast delta changes, so how often the hedger must trade. It lives near the strike. "
+            "<bookmark mark='b'/> Let time pass: the value presses onto its payoff, delta steepens into a step, "
+            "gamma sharpens into a spike. At the money near expiry, a small move flips the hedge from nothing to "
+            "a full share."
         ) as vo:
             self.play(FadeIn(stack), Create(payoff), FadeIn(tlab))
             self.add(lines[0])
@@ -141,10 +138,9 @@ class Greeks(VoiceoverScene, ThreeDScene):
                 why(r"the PDE, read as a ledger")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Each of these slopes takes two lines to derive, thanks to one identity: S times the normal density "
-            "at d one equals the discounted strike times the density at d two, because the squares of d one and "
-            "d two differ by exactly the log terms. <bookmark mark='a'/> Differentiate the formula in S: the "
-            "terms where d one and d two move cancel by the identity, and delta is just N of d one. "
+            "Each slope takes two lines, thanks to one identity: S times the normal density at d one equals the "
+            "discounted strike times the density at d two. <bookmark mark='a'/> Differentiate the formula in S: "
+            "the terms where d one and d two move cancel by it, and delta is just N of d one. "
             "<bookmark mark='b'/> Once more for gamma; vega, the derivative in sigma, comes out as sigma T S "
             "squared gamma. <bookmark mark='c'/> And the equation itself ties three of them together. Pause and "
             "predict: at the money, with no rates, as the maturity grows without limit, what happens to the "
@@ -182,15 +178,12 @@ class Greeks(VoiceoverScene, ThreeDScene):
                       (THE, r"$-\Theta$: what time costs")], font_size=24)
         leg.arrange(RIGHT, buff=0.8).next_to(pg, DOWN, buff=0.25)
         with self.voiceover(
-            "Theta is the slope along time: how much value the option loses each day if the stock stands still. "
-            "Look again at the Black-Scholes equation. With no interest rate it has just two terms, <bookmark "
-            "mark='a'/> and it says theta equals minus one half sigma squared S squared times gamma. Time decay "
-            "and curvature are the same quantity with opposite signs. <bookmark mark='b'/> Here they are as "
-            "computed from the formula, three months from expiry: the solid pink curve is what gamma earns per "
-            "year, the dashed blue one is what time costs per year. They lie exactly on top of each other. This "
-            "is the most important identity on an options desk: you cannot own curvature without paying for it in "
-            "time, and you cannot collect time decay without being short curvature. The only question is whether "
-            "the stock will move enough to pay the bill, which is the next chapter."
+            "Theta is the slope along time: what the option loses each day if the stock stands still. With no "
+            "interest rate the equation has two terms, <bookmark mark='a'/> and says theta is minus half sigma "
+            "squared S squared gamma. <bookmark mark='b'/> Computed from the formula three months out: what gamma "
+            "earns per year, solid pink, and what time costs, dashed blue, lie exactly on top of each other. You "
+            "cannot own curvature without paying for it in time. The only question is whether the stock moves "
+            "enough to pay the bill: the next chapter."
         ) as vo:
             self.play(Write(rows[0]))
             vo.wait_until("a")
@@ -224,13 +217,11 @@ class Greeks(VoiceoverScene, ThreeDScene):
         if table.width > 5.6:
             table.scale_to_fit_width(5.6)
         with self.voiceover(
-            "Last, vega: how much the value rises if volatility rises by one unit. It is a bump too, centred at "
-            "the strike, and it grows with the time left, the opposite of gamma, because volatility has longer to "
-            "work. <bookmark mark='a'/> In fact for Black-Scholes, vega is sigma times the time left times S "
-            "squared gamma. So gamma, theta and vega are one bump seen three ways: a trader long an option is long "
-            "gamma, short theta and long vega at once, and the short side is the mirror image. Second-order "
-            "Greeks like vanna and volga, the slopes of delta and vega with respect to volatility, matter once "
-            "volatility itself moves; they come back with the smile in Parts eleven and twelve."
+            "Last, vega: how much the value rises with volatility. Another bump at the strike, growing with the "
+            "time left, the opposite of gamma. <bookmark mark='a'/> For Black-Scholes it is sigma times time left "
+            "times S squared gamma: gamma, theta and vega are one bump seen three ways. Long an option is long "
+            "gamma, short theta, long vega; the second-order Greeks, vanna and volga, come with the smile in Part "
+            "eleven."
         ) as vo:
             self.play(FadeIn(pv), LaggedStart(*[Create(l) for l in lines], lag_ratio=0.4), FadeIn(tl))
             vo.wait_until("a")

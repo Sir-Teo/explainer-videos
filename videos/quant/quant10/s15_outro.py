@@ -66,17 +66,14 @@ class Outro(VoiceoverScene):
             rows.scale_to_fit_height(6.4)
         rows.next_to(title, DOWN, buff=0.35)
         with self.voiceover(
-            "Part ten in twelve lines. An option can be manufactured from the stock and cash, and the stock's "
-            "expected return drops out of its price. The equation is the heat equation in disguise, so the price "
-            "is a Gaussian average of the payoff; the same price is an expectation under the risk-neutral measure, "
-            "and the limit of a tree. The Greeks are slopes of one surface, tied together by the equation. A "
-            "hedged option is a bet on realized volatility, weighted by gamma. Hedging in steps leaves an error "
-            "that shrinks like the square root of the step, and not at all across jumps; costs push the price up, "
-            "without limit if you insist on perfection. Implied volatility always exists, can be found to machine "
-            "precision, and smiles. Carry moves the forward; early exercise is a free boundary with a premium you "
-            "can write as an integral. Selling volatility on Bitcoin paid, with a left tail. 1987 and 1998 showed "
-            "what every hedge assumes. And desks speak the formula's language, while the frontier still races to "
-            "invert it."
+            "Part ten in twelve lines. An option is manufactured from stock and cash, and the expected return "
+            "drops out. The equation is the heat equation, so the price is a Gaussian average of the payoff, an "
+            "expectation under Q, and the limit of a tree. The Greeks are slopes of one surface. A hedged option "
+            "is a bet on realized volatility, weighted by gamma. Hedging in steps leaves an error like the root of "
+            "the step, and none of it helps across jumps; costs raise the price, without limit if you insist on "
+            "perfection. Implied volatility exists, is found to machine precision, and smiles. Carry moves the "
+            "forward; early exercise is a free boundary. Selling Bitcoin volatility paid, with a left tail. 1987 "
+            "and 1998 showed what every hedge assumes. And desks speak the formula's language."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.5,
                                                  run_time=20))
@@ -125,13 +122,10 @@ class Outro(VoiceoverScene):
             (r"leverage, liquidity and 1998", [41]),
         ])
         with self.voiceover(
-            "Where this comes back. The volatility trader's formula runs Part eleven, on trading options, Part "
-            "twelve, on the volatility surface, and Part thirty-two, where selling volatility becomes a strategy. "
-            "The Surface gets new rows in twelve, thirteen, fourteen and seventeen. The hedge becomes a control "
-            "problem, solved by a neural network in seventeen and by the execution and market-making desks of "
-            "thirty-seven and thirty-eight. Trees, equations and simulation come back for exotics and numerics in "
-            "fifteen and sixteen, the carry of currencies and commodities in twenty-two, and LTCM's full story in "
-            "forty-one."
+            "Where this comes back: the volatility trader's formula in Parts eleven, twelve and thirty-two; the "
+            "Surface's new rows in twelve, thirteen, fourteen and seventeen; the hedge as a control problem in "
+            "seventeen, thirty-seven and thirty-eight; trees, equations and simulation in fifteen and sixteen; "
+            "carry in twenty-two; LTCM in forty-one."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)

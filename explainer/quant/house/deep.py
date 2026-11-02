@@ -1119,11 +1119,14 @@ def train_surface_net(k, T, iv, penalty=1.0, seed=0, steps=3000, every=100, trai
 # Rockafellar-Uryasev form, a drifted simulator), and the classical twins (Leland, a Gaussian process with gradients)
 # ---------------------------------------------------------------------------
 def train_mlp_trace(X, y, width=32, depth=2, epochs=200, lr=3e-3, batch=1024, seed=0, act=None, every=5,
-                    snap_every=0, snap_fn=None):
+                    snap_every=0, snap_fn=None, ckpt=None, ckpt_every=10):
     """:func:`train_mlp_regressor` with its training curve (the epoch's mean squared error, every ``every`` epochs)
     and snapshots ``snap_fn(net)`` at epoch 0 and every ``snap_every`` epochs; ``act`` picks the activation (a
-    torch.nn class; SiLU by default, which reproduces train_mlp_regressor draw for draw). Returns (net, curve,
-    snaps) with curve a list of (epoch, mse)."""
+    torch.nn class; SiLU by default, which reproduces train_mlp_regressor draw for draw). With ``ckpt`` (a path) the
+    whole state is saved every ``ckpt_every`` epochs and a stopped run resumes from it. Returns (net, curve, snaps)
+    with curve a list of (epoch, mse)."""
+    import os
+
     import torch
 
     torch.manual_seed(seed)
@@ -1133,10 +1136,17 @@ def train_mlp_trace(X, y, width=32, depth=2, epochs=200, lr=3e-3, batch=1024, se
     opt = torch.optim.Adam(net.parameters(), lr=lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, epochs)
     g = torch.Generator().manual_seed(seed)
-    curve, snaps = [], {}
-    if snap_fn is not None and snap_every:
+    curve, snaps, ep0 = [], {}, 0
+    if ckpt is not None and os.path.exists(ckpt):
+        st = torch.load(ckpt, weights_only=False)
+        net.load_state_dict(st["net"])
+        opt.load_state_dict(st["opt"])
+        sched.load_state_dict(st["sched"])
+        g.set_state(st["gen"])
+        curve, snaps, ep0 = st["curve"], st["snaps"], st["epoch"]
+    if snap_fn is not None and snap_every and 0 not in snaps:
         snaps[0] = snap_fn(net)
-    for ep in range(epochs):
+    for ep in range(ep0, epochs):
         perm = torch.randperm(len(X), generator=g)
         tot = 0.0
         for i in range(0, len(X), batch):
@@ -1151,6 +1161,10 @@ def train_mlp_trace(X, y, width=32, depth=2, epochs=200, lr=3e-3, batch=1024, se
             curve.append((ep + 1, tot / len(X)))
         if snap_fn is not None and snap_every and (ep + 1) % snap_every == 0:
             snaps[ep + 1] = snap_fn(net)
+        if ckpt is not None and ((ep + 1) % ckpt_every == 0 or ep + 1 == epochs):
+            torch.save({"net": net.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
+                        "gen": g.get_state(), "curve": curve, "snaps": snaps, "epoch": ep + 1}, str(ckpt) + ".tmp")
+            os.replace(str(ckpt) + ".tmp", ckpt)
     return net, curve, snaps
 
 
@@ -1302,11 +1316,14 @@ class WWBandHedger(Hedger):
 
 
 def train_hedger_on(paths, pol, cost=0.0, T=30 / 365, K=100.0, gamma=1.0, risk="entropic", alpha=0.5, iters=1500,
-                    lr=3e-3, seed=0, batch=8192, snap_at=(), snap_fn=None, log=None):
+                    lr=3e-3, seed=0, batch=8192, snap_at=(), snap_fn=None, log=None, ckpt=None, ckpt_every=100):
     """Train any policy ``pol`` on fresh paths ``paths(batch, gen)`` (n, steps + 1) each iteration: the deep hedger
     with its simulator made explicit (a drifted GBM, a GARCH fitted to history). ``risk``: 'entropic', 'cvar' (the
     mean of the worst alpha) or 'cvar_ru' (Rockafellar-Uryasev, the threshold w trained alongside, started at the
-    first batch's VaR). Returns (curve, snaps, w)."""
+    first batch's VaR). With ``ckpt`` the state is saved every ``ckpt_every`` steps and a stopped run resumes.
+    Returns (curve, snaps, w)."""
+    import os
+
     import torch
 
     gen = torch.Generator().manual_seed(seed + 1)
@@ -1314,8 +1331,23 @@ def train_hedger_on(paths, pol, cost=0.0, T=30 / 365, K=100.0, gamma=1.0, risk="
     params = list(pol.parameters()) + ([w] if w is not None else [])
     opt = torch.optim.Adam(params, lr=lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, iters)
-    curve, snaps = [], {}
-    for it in range(iters + 1):
+    curve, snaps, it0 = [], {}, 0
+    if ckpt is not None and os.path.exists(ckpt):
+        st = torch.load(ckpt, weights_only=False)
+        pol.net.load_state_dict(st["net"])
+        opt.load_state_dict(st["opt"])
+        sched.load_state_dict(st["sched"])
+        gen.set_state(st["gen"])
+        curve, snaps, it0 = st["curve"], st["snaps"], st["it"]
+        if w is not None:
+            with torch.no_grad():
+                w.fill_(st["w"])
+    for it in range(it0, iters + 1):
+        if ckpt is not None and it > it0 and it % ckpt_every == 0:
+            torch.save({"net": pol.net.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
+                        "gen": gen.get_state(), "curve": curve, "snaps": snaps, "it": it,
+                        "w": float(w.detach()) if w is not None else None}, str(ckpt) + ".tmp")
+            os.replace(str(ckpt) + ".tmp", ckpt)
         if it in snap_at and snap_fn is not None:
             with torch.no_grad():
                 snaps[it] = snap_fn(pol)
@@ -1343,12 +1375,13 @@ def train_hedger_on(paths, pol, cost=0.0, T=30 / 365, K=100.0, gamma=1.0, risk="
 
 
 def train_hedger_p(kind="mlp", mu=0.0, cost=0.0, sigma=0.2, T=30 / 365, steps=30, K=100.0, gamma=1.0,
-                   risk="entropic", iters=1500, batch=8192, lr=3e-3, seed=0, snap_at=(), snap_fn=None, log=None):
+                   risk="entropic", iters=1500, batch=8192, lr=3e-3, seed=0, snap_at=(), snap_fn=None, log=None,
+                   ckpt=None):
     """:func:`train_hedger` on paths with a real-world drift ``mu`` (mu = 0 reproduces it): the drift trap. Returns
     (policy, curve, snaps)."""
     pol = Hedger(kind, seed=seed, sigma=sigma, T=T)
     curve, snaps, _ = train_hedger_on(lambda b, g: gbm_torch_mu(b, steps, T, sigma, mu, K, g), pol, cost, T, K, gamma,
-                                      risk, 0.5, iters, lr, seed, batch, snap_at, snap_fn, log)
+                                      risk, 0.5, iters, lr, seed, batch, snap_at, snap_fn, log, ckpt)
     return pol, curve, snaps
 
 
@@ -1509,7 +1542,7 @@ def train_calib_net_ckpt(X, y, epochs=40, batch=2048, lr=2e-3, seed=0, val=None,
 
 
 def deep_bsde_snap(p=DEFAULT_RISK, iters=4000, batch=64, lr=0.008, seed=0, log_every=50, snap_at=(), n_snap=256,
-                   log=None):
+                   log=None, ckpt=None, ckpt_every=100):
     """:func:`deep_bsde` (the same network and draws) with the shooting picture: at the iterations in ``snap_at``,
     the terminal values Y_N against their targets g(X_N) on ``n_snap`` fresh paths. Pass p with delta = 1 for the
     linear check (no default: plain discounted expectation)."""
@@ -1549,8 +1582,22 @@ def deep_bsde_snap(p=DEFAULT_RISK, iters=4000, batch=64, lr=0.008, seed=0, log_e
             return Y, X[:, -1].min(1).values, torch.stack(path, 1)
         return Y, X[:, -1].min(1).values
 
-    curve, snaps = [], {}
-    for it in range(iters + 1):
+    curve, snaps, it0 = [], {}, 0
+    import os
+    if ckpt is not None and os.path.exists(ckpt):  # resume: weights, optimizer, random state, history
+        st = torch.load(ckpt, weights_only=False)
+        with torch.no_grad():
+            y0.copy_(st["y0"])
+            z0.copy_(st["z0"])
+        nets.load_state_dict(st["nets"])
+        opt.load_state_dict(st["opt"])
+        torch.set_rng_state(st["rng"])
+        curve, snaps, it0 = st["curve"], st["snaps"], st["it"]
+    for it in range(it0, iters + 1):
+        if ckpt is not None and it > it0 and it % ckpt_every == 0:
+            torch.save({"y0": y0.detach(), "z0": z0.detach(), "nets": nets.state_dict(), "opt": opt.state_dict(),
+                        "rng": torch.get_rng_state(), "curve": curve, "snaps": snaps, "it": it}, str(ckpt) + ".tmp")
+            os.replace(str(ckpt) + ".tmp", ckpt)
         nets.train()
         if it in snap_at:
             with torch.no_grad():
@@ -1641,3 +1688,71 @@ def train_ddpm_snap(real, steps=200, iters=4000, batch=256, lr=1e-3, width=256, 
                 snaps[t] = x.numpy().copy()
         return (x.numpy(), snaps) if snap_at else x.numpy()
     return sample, curve, abar.numpy()
+
+
+def deep_stopping_ckpt(p=MAX_CALL, steps=600, batch=8192, lr=1e-3, n_eval=1_000_000, seed=0, ckpt=None, log=None):
+    """:func:`deep_stopping` (the same networks, draws and objective) saving the trained networks after every exercise
+    date to ``ckpt`` and resuming from there: on a shared machine a run that is stopped loses one date, not all."""
+    import os
+
+    import torch
+    import torch.nn as nn
+
+    torch.manual_seed(seed)
+    gen = torch.Generator().manual_seed(seed + 1)
+    d, N = p["d"], p["N"]
+
+    def net():
+        return nn.Sequential(nn.BatchNorm1d(d + 1), nn.Linear(d + 1, d + 40), nn.BatchNorm1d(d + 40), nn.ReLU(),
+                             nn.Linear(d + 40, d + 40), nn.BatchNorm1d(d + 40), nn.ReLU(), nn.Linear(d + 40, 1))
+    nets, curves = {}, {}
+
+    def feats(S, g, n):
+        return torch.cat([S[:, n] / p["s0"], g[:, n:n + 1] / p["s0"]], 1)
+
+    def future_value(S, g, n_from):
+        G = g[:, N].clone()
+        for m in range(N - 1, n_from - 1, -1):
+            nets[m].eval()
+            with torch.no_grad():
+                stop = nets[m](feats(S, g, m))[:, 0] > 0
+            G = torch.where(stop, g[:, m], G)
+        return G
+
+    start = N - 1
+    if ckpt is not None and os.path.exists(ckpt):
+        st = torch.load(ckpt, weights_only=False)
+        for m, sd in st["nets"].items():
+            nets[m] = net()
+            nets[m].load_state_dict(sd)
+        curves = st["curves"]
+        gen.set_state(st["gen"])
+        torch.set_rng_state(st["rng"])
+        start = min(nets) - 1
+    for n in range(start, 0, -1):
+        nets[n] = net()
+        opt = torch.optim.Adam(nets[n].parameters(), lr=lr)
+        curves[n] = []
+        for it in range(steps):
+            S, g = max_call_paths(p, batch, gen)
+            G = future_value(S, g, n + 1) if n < N - 1 else g[:, N]
+            nets[n].train()
+            F = torch.sigmoid(nets[n](feats(S, g, n))[:, 0])
+            loss = -(g[:, n] * F + G * (1 - F)).mean()
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            if it % 50 == 0:
+                curves[n].append(-float(loss.detach()))
+        if log:
+            log(n, curves[n][-1])
+        if ckpt is not None:
+            torch.save({"nets": {m: v.state_dict() for m, v in nets.items()}, "curves": curves, "gen": gen.get_state(),
+                        "rng": torch.get_rng_state()}, str(ckpt) + ".tmp")
+            os.replace(str(ckpt) + ".tmp", ckpt)
+    vals = []
+    for _ in range(n_eval // 100000):
+        S, g = max_call_paths(p, 100000, gen)
+        vals.append(future_value(S, g, 1))
+    v = torch.cat(vals)
+    return {"lower": float(v.mean()), "se": float(v.std() / math.sqrt(len(v))), "curves": curves, "nets": nets}

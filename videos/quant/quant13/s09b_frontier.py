@@ -118,17 +118,21 @@ class Frontier(VoiceoverScene):
         if G.width > 13.2:
             G.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Five papers from the last three years. Abi Jaber, Illand and Li's quintic Ornstein–Uhlenbeck model "
-            "makes volatility a fifth-degree polynomial of a single fast factor, and fits S&P and VIX smiles "
-            "together with six effective parameters, with no roughness at all: a Markovian answer to chapter "
-            "fifteen's puzzle. <bookmark mark='a'/> Guyon and Mustapha fit both markets within bid–ask with a "
-            "one-factor stochastic local volatility model whose drift and diffusion are neural networks. "
-            "<bookmark mark='b'/> Choi and Kwok made Heston's exact simulation fast by conditioning on a Poisson "
-            "variable. <bookmark mark='c'/> Reisinger and Tsianni gave the particle method its convergence theory. "
-            "<bookmark mark='d'/> And this year, Wang and co-authors reported a neural operator that returns the "
-            "whole local-stochastic calibration at once, from about a hundred milliseconds to under one, on "
-            "synthetic tests. Part fourteen takes up rough volatility and the joint calibration; Part seventeen, "
-            "neural calibrators and deep hedging."
+            (
+            "Five papers from the last three years. Abi Jaber, Illand and Li's quintic Ornstein–Uhlenbeck model makes "
+            "volatility a fifth-degree polynomial of one fast factor. The squared VIX is then a polynomial in a "
+            "Gaussian, so VIX options are cheap to price, and S&P and VIX smiles fit together with six effective "
+            "parameters, with no roughness: a Markovian answer to chapter fifteen. <bookmark mark='a'/> Guyon and "
+            "Mustapha fit both markets within bid–ask with a one-factor stochastic local volatility model whose drift "
+            "and diffusion are neural networks, trained through the simulation itself. <bookmark mark='b'/> Choi and "
+            "Kwok made exact Heston simulation fast by conditioning on a Poisson variable, which removes the slow "
+            "Bessel draws of Broadie and Kaya. <bookmark mark='c'/> Reisinger and Tsianni gave chapter eleven's "
+            "particle method its convergence theory. <bookmark mark='d'/> And this year Wang and co-authors reported "
+            "a neural operator that returns the whole local-stochastic calibration at once, from about a hundred "
+            "milliseconds to under one, with exotic prices close to the particle method's, on synthetic tests. Part "
+            "fourteen takes up rough volatility and the joint calibration; Part seventeen, neural calibrators and "
+            "deep hedging."
+        )
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

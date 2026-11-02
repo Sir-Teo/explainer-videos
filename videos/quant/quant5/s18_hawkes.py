@@ -152,7 +152,7 @@ class Hawkes(VoiceoverScene):
         f = h["fit"]
         res = VGroup(MathTex(rf"n = \alpha/\beta = {f['branching']:.2f}, \quad \text{{half-life }} {h['half_life_hours']:.1f}"
                              r"\text{ hours}", font_size=28, color=JUMP),
-                     label(rf"eight random starts end within {sci(hr['spread'], 0)} of each other", font_size=19,
+                     label(rf"eight random starts end within ${sci(hr['spread'], 0)}$ of each other", font_size=19,
                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.25)
         src = real_data(r"events: Bitcoin hours with $|r| > 4\times$ the past month's volatility, 2018--2020", corner=UL)
         with self.voiceover(

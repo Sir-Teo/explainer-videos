@@ -158,7 +158,7 @@ class Case(VoiceoverScene, ThreeDScene):
         top = float(np.abs(np.asarray(s["net"])).max())
         ax = axes3d([0, 200, 50], [0, 400, 100], [-1, 1, 0.5], x_length=6.8, y_length=5.0, z_length=3.0)
         f = lambda q, d: float((-lam * q * q + 2 * lam * q * d) / top)  # noqa: E731
-        sf = surf(ax, f, (0, 200), (0, 400), [(QC.LOSS, -0.5), (GREY_D, 0.0), (QC.GAIN, 0.8)], resolution=(26, 26),
+        sf = surf(ax, f, (0, 200), (0, 400), [(QC.LOSS, -0.5), (GREY_D, 0.0), (QC.GAIN, 0.8)], resolution=(22, 20),
                   opacity=0.8)
         edge = VMobject(stroke_color=YELLOW, stroke_width=6).set_points_as_corners(
             [ax.c2p(q, q / 2, 0) + OUT * 0.03 for q in np.linspace(0, 200, 30)])

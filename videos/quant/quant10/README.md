@@ -10,45 +10,117 @@ returns. Schematics and made-up examples are labeled on screen.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 55 minutes)
+## Chapters (about 58 minutes)
 
 * **Manufacturing an option.** A real month, October 2021: a 30-day Bitcoin call sold at Deribit's DVOL (89%);
   Bitcoin rises 37%; unhedged the seller loses 27 per 100, hedged every hour the seller makes 1.15 (the median of the
-  1,706 months of chapter 11). Implied 89% against realized 61%. Objectives; the House opens its volatility desk.
+  1,706 months of chapter 15). Pause and predict; implied 89% against realized 61%; objectives; the House's vol desk.
 * **1. Before the formula.** Bachelier (1900); Sprenkle (1961), Boness (1964), Samuelson (1965) and their two
-  unknown rates; Thorp and Kassouf (1967) and the warrant hedge; Black and Scholes (1969–73) and Merton (1970–73); the
-  CBOE opens (26 April 1973); traders quote volatility; the Nobel (1997).
-* **2. The riskless portfolio.** The stock, the bond, the option; Itô's lemma; the delta hedge; μ drops out; no
-  arbitrage; the Black–Scholes PDE; the heat-equation picture, run backwards from the payoff.
-* **3. The price as an expectation.** Feynman–Kac; the risk-neutral measure (Harrison–Kreps 1979, Harrison–Pliska
-  1981); 400,000 outcomes under P (19.74) and Q (12.36 ± 0.03, against the formula's 12.34); Girsanov reweighting;
-  the expectation done by hand (the stock as numeraire); N(d₂) as a Q-probability, N(d₁) as delta.
-* **4. The tree and its limit.** One period: replication and the risk-neutral probability; a four-step CRR tree
-  (prices, values, hedges); convergence for N = 1…400, zigzagging like 1/N.
-* **5. The Greeks as geometry.** The value surface in 3D; delta and gamma as time runs out; Θ = −½σ²S²Γ, computed;
-  vega = σ(T − t)S²Γ: one bump seen three ways.
-* **6. Where the hedger's money comes from.** d(book) = ½ΓS²(σᵢ² − σᵣ²)dt derived; the breakeven move ±σᵢ√dt on a
-  real path; the hedging ledger live on three paths (12%, 28%, 20% realized against 20% implied); 20,000-path
-  distributions (+1.59, −1.60, +0.00).
-* **7. Hedging with the wrong volatility.** P&L = ½∫Γ S²(σᵢ² − σᵣ²)dt (El Karoui, Jeanblanc & Shreve 1998); dollar
-  gamma as a heat map; two paths with the same realized volatility and 8× different profits; 4,000 Heston paths:
-  P&L against realized vol (ρ = −0.87) and against the gamma-weighted formula (ρ = 0.99).
-* **8. Hedging in steps, and paying for it.** The discrete hedging error derived, sd ∝ √Δt, and measured on 20,000
-  paths per frequency (slope −0.49); the cost/error trade-off; Leland's volatility, verified: it covers the rebalancing
-  costs, and the first hedge and the unwind (0.26) are outside the formula.
-* **9. Implied volatility and the first smile.** The solver on a real Deribit quote; the smiles of 10 December 2025;
-  the Surface in 3D (254 quotes); the Surface's first row: Black–Scholes with one vol per expiry, 4.36 vol points in
-  sample, 4.74 the next day.
-* **10. Early exercise.** Calls are never exercised early (no dividends); the American put on a 2,000-step tree
-  (6.0900 against the European 5.5735); the free boundary.
-* **11. Selling volatility on real Bitcoin.** 1,706 thirty-day calls sold at DVOL from April 2021 and hedged every hour:
-  mean +1.35 per 100, 81% winning months, ρ = 0.86 with the volatility gap; the ledger explains every month; costs and
-  the DVOL–at-the-money gap; the worst month, July–August 2024 (sold at 47%, realized 64%).
-* **12. October 1987.** Portfolio insurance as replicated puts; the crash in Kenneth French's daily data (−17.4%);
-  −20.7σ, a Gaussian waiting time of 10⁹² years against 60 years under the fitted power tail (α = 2.71); the skew.
-* **13. The Nobel, and then LTCM.** The 1997 prize; Long-Term Capital Management's trades, leverage and 1998; the
-  rescue; what every hedge assumes.
+  unknown rates μ and ρ; Thorp and Kassouf (1967) and the warrant hedge (Thorp's discount-free formula, as MacKenzie
+  2003 reports); Black–Scholes and Merton; the JPE's and REStat's first rejections; the CBOE opens (26 April 1973:
+  calls only, 16 stocks, 911 contracts; puts from 1977); Black's sheets; the Nobel (1997).
+* **2. The riskless portfolio.** The stock, the bond, the option; the self-financing replicating portfolio
+  (Shreve II §4.5): match the dW terms (Δ = ∂V/∂S), then the dt terms (μ cancels): the Black–Scholes PDE.
+* **3. Solving the equation: heat, run backwards.** (3D) The value over log-spot and time left rising out of the
+  payoff; the heat kernel sliding along it; the change of variables to u_τ = ½σ²u_yy, the convolution, the formula.
+  **Lab:** `bs.price` and the new `bs.heat_price` agree to 12 decimals.
+* **4. The price as an expectation.** Feynman–Kac; P (19.74) and Q (12.36 ± 0.03 against 12.34); Girsanov; the
+  Gaussian integral by hand. **Replay:** Monte Carlo under Q with 8 seeds closing on the formula, and the
+  Girsanov-reweighted estimator as the baseline (here narrower: sd ratio 0.62, importance sampling by accident).
+* **5. The tree and its limit.** One step (Part 9 builds it); **3D:** whole CRR lattices (N = 4, 16, 64, 256)
+  settling onto the Black–Scholes surface (worst node gap 0.99 → 0.11); the recursion expanded into the PDE; the
+  N = 1…400 sawtooth (Diener–Diener 2004). **Lab:** `trees.crr`'s backward loop: 9.9705, 10.4194, 10.4456 vs 10.4506.
+* **6. The Greeks as geometry.** The value surface in 3D; delta and gamma as time runs out; the identity
+  Sφ(d₁) = Ke^{−rT}φ(d₂) and two-line derivations; Θ = −½σ²S²Γ computed; vega = σ(T − t)S²Γ.
+* **7. Where the hedger's money comes from.** d(book) = ½ΓS²(σᵢ² − σᵣ²)dt; the breakeven band; **Lab:** the House's
+  hedging ledger (`hedge.delta_hedge`) with its gamma, theta and residual columns; three live paths; 20,000-path
+  distributions.
+* **8. Hedging with the wrong volatility.** El Karoui–Jeanblanc–Shreve (1998) proved; **3D:** the dollar-gamma
+  mountain with two paths and their filling columns (≈7× apart); hedge at implied or at actual (Ahmad–Wilmott 2005):
+  20,000 paths, sd 0.96 vs 0.33 around the same mean 1.99; 4,000 Heston paths (ρ = −0.87 vs 0.99).
+* **9. Hedging in steps.** sd ∝ √Δt derived (Boyle–Emanuel 1980; Derman–Kamal's √(π/4)) and measured with 5 seeds
+  as a band; the distribution's skew; jumps put a floor under the error (Derman–Taleb 2005), with the jump term
+  computed.
+* **10. Paying for it: Leland's volatility.** **3D:** the cost–risk landscape over hedges and costs, with the ridge of
+  optimal frequency (252 at zero cost; 26 at 25 bp; 13 at 50 bp); Leland derived; **Lab:** `bs.leland_vol` (21.2%
+  daily, 20.6% weekly at 0.2% round trip) and the weekly check (−0.53 → −0.25 → +0.01 without the end trades);
+  the limit: σ_L 21% → 38% and the premium 4.26 → 7.49 as hedging speeds up (Soner–Shreve–Cvitanić 1995;
+  Kabanov–Safarian 1997).
+* **11. Turning the formula inside out.** One real quote inverted; **3D:** Jäckel's normalized price b(x, s) and a
+  quote's plane; existence, Brenner–Subrahmanyam, Newton and its flat corner; **Lab:** `bs.implied_vol` (now freezing
+  converged quotes); **Replay:** all 254 Surface quotes solving at once (median 3 iterations, worst 11), against plain
+  Newton from 50% (10 quotes thrown off, 9 never return); one tick on the flattest quote moves its vol by 19 points.
+* **12. The first smile, and the Surface's first row.** The smiles of 10 December 2025; the Surface in 3D; the first
+  row: 4.36 vol points in sample, 4.74 the next day, no calendar arbitrage, 11 parameters; DVOL 45.9% vs ATM30 44.1%.
+* **13. Dividends, borrow and the forward.** The carry slider moving the risk-neutral fan; the PDE with a yield; one
+  formula on the forward (Merton 1973, Garman–Kohlhagen 1983, Black 1976, inverse options); the Surface's basis
+  (2.6% to 4.8% a year) and the fake skew from forgetting the forward (+1.2/−1.2 points at 51 days, +3.3/−2.7 at 289).
+* **14. Early exercise and the free boundary.** Merton's no-early-exercise; the American put (6.0900 vs 5.5735);
+  **3D:** the early-exercise premium over (S, τ) with the free boundary; value matching, smooth pasting; Kim's
+  integral from the tree's boundary (6.0947); Brennan–Schwartz (1977); Barone-Adesi–Whaley (6.0976, critical 81.7);
+  the call exercised only just before a dividend.
+* **15. Selling volatility on real Bitcoin.** 1,706 thirty-day calls sold at DVOL and hedged hourly: mean +1.35 per
+  100, 81% winning months; **Replay:** the 57 independent months swept with a block-bootstrap band (5 seeds × 200),
+  ending between 1.05 and 1.86; costs; inverse settlement; the worst month (August 2024).
+* **16. October 1987.** Portfolio insurance (Rubinstein–Leland 1981); **Lab:** `hedge.replicate_put`; the insured
+  portfolio replayed on French's daily data from 1 July 1987: 93% in stocks on 5 October, 64% going into Black
+  Monday, 11% the day after; it ends October at 83.8 against a floor of 93.0; the Brady Commission's numbers; −20.7σ
+  and Jackwerth–Rubinstein's 10⁻¹⁶⁰; the skew; MacKenzie's performativity.
+* **17. The Nobel, and then LTCM.** The 1997 prize; LTCM's book (28:1 balance-sheet leverage and over $1 trillion
+  notional at end-1997, GAO 1999); the VIX through 1998 (18.0 on 1 July, 45.7 on 8 October) and an illustrative
+  short-vega book; the rescue; what every hedge assumes.
+* **18. Industry: the formula at work.** Black's sheets and the CBOE floor (MacKenzie–Millo 2003); O'Connor &
+  Associates; quoting in volatility (Rebonato's "wrong number") and Haug–Taleb's dissent; the 0.4·Fσ√T rule on the
+  Surface (within 1.0%); Black-76 in the plumbing; Deribit (Coinbase, 2025) and IBIT options (2024).
+* **19. Frontier: 2023 to 2026.** The 2026 implied-volatility race (Schadner; Le Floc'h–Healy; PIVOT; Amiriyan–Boutaib;
+  preprints); Black–Scholes machine-checked in Lean (Ushakov–Berdinsky); **Replay:** a small network learns a first
+  guess for implied vol (5 seeds), finished by Newton steps; inverse options (Alexander–Chen–Imeraj 2023); hedging
+  crypto options (Matic–Packham–Härdle 2023); the minimum-variance delta (Hull–White 2017; Ruf–Wang 2022; on BTC in
+  Part 13).
 * **Recap, desk questions, problems.**
+
+## Hands-on
+
+* **Labs** (the House's code on screen, then run): `bs.price` / `bs.heat_price` (ch. 3); `trees.crr` (ch. 5);
+  `hedge.delta_hedge` (ch. 7); `bs.leland_vol` with the cost-aware hedger (ch. 10); `bs.implied_vol` (ch. 11);
+  `hedge.replicate_put` (ch. 16).
+* **Replays with seeds as bands:** Monte Carlo under Q vs Girsanov (ch. 4); the lattice scrub (ch. 5); sd vs N and the
+  jump floor (ch. 9); the solver race (ch. 11); the BTC study month by month (ch. 15); the learned first guess (ch. 19).
+* **3D:** the heat surface (3), the lattice (5), the value surface (6), dollar gamma (8), the cost–risk landscape (10),
+  the normalized price (11), the Surface (12), the early-exercise premium (14).
+
+## Textbook audit
+
+| Book · section | Where |
+|---|---|
+| Hull, *OFOD* (11th ed.) ch. 13 binomial trees | ch. 5 (limit); one step and CRR → Part 9; numerics → Part 16 |
+| Hull ch. 14 Wiener processes and Itô's lemma | Part 5 (ch. 2 recalls Itô) |
+| Hull ch. 15 the BSM model (lognormality, the PDE, risk-neutral valuation, implied volatility, dividends) | ch. 2–4, 11–13 |
+| Hull ch. 17 options on indices and currencies; ch. 18 futures options and Black's model | ch. 13 (FX detail → Part 22) |
+| Hull ch. 19 the Greek letters (delta, theta, gamma, vega, the Δ–Θ–Γ relation, portfolio insurance) | ch. 6, 7, 16 |
+| Hull ch. 20 volatility smiles | ch. 12, 16; the rest → Part 12 |
+| Shreve II §4.5 the BSM equation | ch. 2, 3, 6 |
+| Shreve II §5.2 risk-neutral pricing; §5.5 dividends; §5.6 forwards and futures | ch. 4, 13 |
+| Shreve II §8.4 finite-expiration American put; §8.5 American calls (§8.3 perpetual put → Part 8) | ch. 14 |
+| Björk, *Arbitrage Theory* ch. 7 arbitrage pricing; ch. 8 completeness and hedging; ch. 10 parity and delta hedging | ch. 2–4, 7 |
+| Björk, the dividends, forwards/futures and currency chapters (by title) | ch. 13 |
+| Wilmott, *PWOQF* ch. 5 the BS model; ch. 6 PDEs (the heat equation); ch. 7 formulae and Greeks; ch. 8 generalizations; ch. 9 early exercise | ch. 2, 3, 6, 13, 14 |
+| Wilmott, "how to delta hedge" (Ahmad–Wilmott), discrete hedging, transaction costs (by title) | ch. 8, 9, 10 |
+| Joshi, *Concepts and Practice* ch. 5–7 (Itô, risk neutrality, practical pricing); ch. 12 discretionary choice | ch. 2–9, 11, 14 |
+| Taleb, *Dynamic Hedging* (delta, gamma, theta, vega, the hedging error) | ch. 6–10, 18 |
+| Baxter–Rennie ch. 3 the BS model by martingales; ch. 4 dividends, FX | ch. 4, 13 (quantos → Part 22) |
+
+## Papers on screen
+
+Sprenkle (1961); Boness (1964); Samuelson (1965); Thorp–Kassouf (1967); Black–Scholes (1973); Merton (1973);
+Black (1976); Brennan–Schwartz (1977); Cox–Ross–Rubinstein (1979); Boyle–Emanuel (1980); Rubinstein–Leland (1981);
+Garman–Kohlhagen (1983); Leland (1985); Barone-Adesi–Whaley (1987); Brady Commission (1988); Brenner–Subrahmanyam
+(1988); Kim (1990); Carr–Jarrow–Myneni (1992); Rubinstein (1994); Soner–Shreve–Cvitanić (1995); Corrado–Miller (1996);
+Jackwerth–Rubinstein (1996); Kabanov–Safarian (1997); El Karoui–Jeanblanc–Shreve (1998); Derman–Kamal (Goldman Sachs,
+1998); GAO (1999); MacKenzie (2003); MacKenzie–Millo (2003); Diener–Diener (2004); Ahmad–Wilmott (2005);
+Derman–Taleb (2005); Haug–Taleb (2011); Jäckel (2015); Hull–White (2017); Ruf–Wang (2022); Alexander–Chen–Imeraj
+(2023); Matic–Packham–Härdle (2023); Schadner (2026); Le Floc'h–Healy (2026); Saqur et al. (PIVOT, 2026);
+Ushakov–Berdinsky (2026); Amiriyan–Boutaib (2026). arXiv items are preprints.
 
 ## Build it
 
@@ -57,7 +129,7 @@ The finished video is not stored in the repository. From the repo root, after th
 
 ```bash
 python -m explainer.quant.data                    # the market data, fetched once and checksummed (~2 min)
-python -m videos.quant.quant10.compute            # every computed item (~8 min; cached in .cache/quant10)
+python -m videos.quant.quant10.compute            # every computed item (~40 CPU-min; cached in .cache/quant10)
 python tools/build.py quant10 -q l                # 480p preview (EXPLAINER_TTS=silent for no narration)
 python tools/build.py quant10 -q k --fps 60       # 2160p60
 python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a contact sheet
@@ -89,15 +161,24 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
    and hedged at σᵢ when the stock realizes σᵣ is exactly C(σᵢ) − C(σᵣ) = 4.98 − 3.99 = 1.00 per 100 for a three-month
    at-the-money call at 25% and 20%: vega × (σᵢ − σᵣ) = 19.9 × 0.05. The frozen-spot shortcut ½(σᵢ² − σᵣ²)∫ΓS²dt with
    Γ kept at the money gives vega × (σᵢ² − σᵣ²)/σᵢ = 1.79: too high, because real paths leave the strike, where
-   gamma is smaller (chapter 7).
+   gamma is smaller (chapter 8).
 4. **Leland.** σ_L² = σ²(1 + √(2/π) k / (σ√Δt)) with round-trip cost k = 0.2%. Daily (Δt = 1/252): σ_L = 21.2%;
    weekly (Δt = 1/52): σ_L = 20.6%. Weekly hedging is cheaper to sell, because it trades less, but its hedging error
-   is about √5 ≈ 2.2 times larger (chapter 8).
+   is about √5 ≈ 2.2 times larger (chapter 9).
 5. **Early exercise.** A call is worth at least S − K e^{−rT} ≥ S − K, so it is always worth at least as much alive as
    exercised, and strictly more when r > 0: never exercise early without dividends. A put is worth at least
    K e^{−rT} − S, which is less than K − S when r > 0: exercising a deep put can win, because the strike received now
    earns interest. At r = 0 that bound is K − S itself, so the put is never exercised early either: early exercise
    of a put requires a positive interest rate.
+6. **Leland derived.** Over a step, delta changes by δΔ ≈ Γ δS = ΓSσ√Δt Z, so the shares traded are |δΔ| and the
+   expected cost of the step is (k/2)·S·E|δΔ| = (k/2)ΓS²σ√Δt·√(2/π) for a round-trip cost k (half on each trade).
+   Per unit of time that is ½ΓS²·σk√(2/π)/√Δt: the same form as the variance term ½ΓS²σ² of the hedging P&L. Adding
+   it to the variance, σ_L² = σ² + σk√(2/π)/√Δt = σ²(1 + √(2/π) k/(σ√Δt)).
+7. **The forgotten forward.** Price an at-the-money-forward call with F = Se^{bT} and invert it with S and no carry:
+   the formula thinks the call is in the money by ln(F/S) = bT, so it explains the price with a higher volatility.
+   To first order δσ ≈ (∂C/∂F)(F − S)/vega ≈ N(d₁)·bT/(φ(d₁)√T) ≈ 0.5 × 0.02/(0.399 × 0.707) ≈ 3.5 points for
+   b = 4%, T = 0.5, σ = 45%; the put, out of the money by the same amount, comes out about as much too low. The exact
+   inversion (`carry` item): call 49.0% (+4.0), put 41.8% (−3.2); the asymmetry is second order.
 
 ## Data and reproducibility
 
@@ -112,10 +193,36 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 # 量化金融，从零搭建 — 第10部分：Black–Scholes–Merton
 
 本系列共四十三部分（见[系列计划](../README.md)与[教学大纲](../SYLLABUS.md)），这是第三幕“衍生品”的第二部分，也是系列的试点。
-本部分说明期权如何用股票和现金“制造”出来，用三种方法推导 Black–Scholes–Merton 价格，逐项拆解对冲者的损益，并全部在真实市场数据上检验。
-所有数字均由本系列自己的代码（[`compute.py`](compute.py) 与 House 库 `explainer/quant/house`）根据公开数据计算：Deribit 的期权成交与 DVOL 指数、Binance 的比特币价格、Kenneth French 的美国市场收益。示意图和虚构例子在画面上均有标注。
+本部分说明期权如何用股票和现金“制造”出来，推导并求解 Black–Scholes–Merton 方程（复制、热方程、风险中性期望、二叉树极限），逐项拆解对冲者的损益，并全部在真实市场数据上检验。
+所有数字均由本系列自己的代码（[`compute.py`](compute.py) 与本系列公司的代码库 `explainer/quant/house`）根据公开数据计算：Deribit 的期权成交与 DVOL 指数、Binance 的比特币价格、Kenneth French 的美国市场收益、FRED 的 VIX。示意图和虚构例子在画面上均有标注。
 
 *本视频讲授方法，不构成投资建议。*
+
+## 章节（约58分钟）
+
+* **用股票和现金造出一份期权。** 2021年10月：按DVOL（89%）卖出30天比特币看涨期权，比特币上涨37%；不对冲亏27（每100），每小时对冲赚1.15。
+* **1. 公式之前。** 巴舍利耶；斯普伦克尔、博内斯、萨缪尔森的两个未知数μ和ρ；索普与卡苏夫的对冲；论文最初被拒；芝加哥期权交易所开业（911张合约）；布莱克的理论价格表。
+* **2. 无风险组合。** 自融资复制组合：dW项相等得Δ = ∂V/∂S，dt项相等时μ抵消，得到Black–Scholes偏微分方程。
+* **3. 解方程：倒着运行的热传导。** （三维）价值曲面从收益中升起、热核滑过；变量代换得热方程、卷积、公式。**实验：** `bs.price` 与新的 `bs.heat_price` 一致到12位小数。
+* **4. 价格是一个期望。** 费曼–卡茨；P与Q；吉尔萨诺夫；手算高斯积分。**回放：** Q下的蒙特卡洛，8个种子收拢到公式；吉尔萨诺夫重新加权的估计量作基线（这里反而更窄）。
+* **5. 二叉树及其极限。** （三维）N = 4、16、64、256 的完整格点落到曲面上；递推展开成偏微分方程；锯齿收敛。**实验：** `trees.crr`。
+* **6. 希腊字母的几何。** 价值曲面；恒等式 Sφ(d₁) = Ke^{−rT}φ(d₂)；Θ = −½σ²S²Γ；Vega = σ(T − t)S²Γ。
+* **7. 对冲者的钱从哪里来。** ½ΓS²(σᵢ² − σᵣ²)dt；盈亏平衡带；**实验：** 对冲账本 `hedge.delta_hedge`；三条路径；两万条路径的分布。
+* **8. 用错误的波动率对冲。** 证明 El Karoui–Jeanblanc–Shreve；（三维）美元Gamma地形；按隐含还是按实际波动率对冲（Ahmad–Wilmott）；赫斯顿路径。
+* **9. 分步对冲。** 误差 ∝ √Δt，五个种子的带；偏度；跳跃给误差垫了一个底（Derman–Taleb）。
+* **10. 为对冲付费：利兰波动率。** （三维）成本–风险地形与最优频率山脊；推导利兰公式；**实验：** `bs.leland_vol`；对冲越频繁，σ_L 和期权费无上界（Soner–Shreve–Cvitanić；Kabanov–Safarian）。
+* **11. 把公式反过来用。** （三维）归一化价格 b(x, s)；存在唯一性、Brenner–Subrahmanyam、牛顿法；**实验：** `bs.implied_vol`；**回放：** 254个报价同时求解。
+* **12. 第一条微笑曲线与基准曲面的第一行。** 2025年12月10日的微笑；三维曲面；第一行：样本内4.36，次日4.74个波动率点。
+* **13. 股息、借券与远期。** 持有成本滑块；写在远期上的同一个公式（Merton、Garman–Kohlhagen、Black-76、反向期权）；基准曲面的基差与忘掉远期造成的假偏斜。
+* **14. 提前行权与自由边界。** （三维）提前行权溢价曲面与自由边界；Kim积分；Brennan–Schwartz；Barone-Adesi–Whaley；除息前的看涨期权。
+* **15. 在真实的比特币上卖出波动率。** 1706笔交易；**回放：** 57个独立月份逐月展开，块自助法置信带；最差的月份。
+* **16. 1987年10月。** 投资组合保险；**实验：** `hedge.replicate_put`，在1987年真实数据上重放；布雷迪委员会的数字；偏斜的诞生。
+* **17. 诺贝尔奖，然后是LTCM。** 杠杆约28倍、表外名义金额超过一万亿美元（GAO 1999）；1998年的VIX；救助；每个对冲的前提。
+* **18. 业界：公式如何谋生。** 布莱克的价格表与交易池；奥康纳联合公司；用波动率报价；0.4·Fσ√T 法则在基准曲面上的误差；Deribit 与 IBIT 期权。
+* **19. 前沿：2023至2026年。** 2026年的隐含波动率求解竞赛（预印本）；Lean 中机器验证的 Black–Scholes；**回放：** 小网络学习初始猜测（5个种子）；反向期权、比特币期权对冲、最小方差Delta（第13部分）。
+* **回顾、交易台问题与习题。**
+
+教科书对照表与论文列表见英文部分。
 
 ## 交易台问题与解答
 
@@ -127,6 +234,8 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 
 1. **平价关系与 delta。** 利用 N(x) + N(−x) = 1，C − P = S − Ke^{−rT}。对 S 求导，括号项 Sφ(d₁) − Ke^{−rT}φ(d₂) 因 φ(d₂) = φ(d₁)Se^{rT}/K 而为零，故 Δ = N(d₁)。
 2. **二叉树的概率。** quS + (1 − q)dS = Se^{rΔt}，股票平均以 r 增长，贴现后的价格是鞅。r = 0 时 q = ½ − σ√Δt/4 + O(Δt) → ½。
-3. **波动率交易员的估算。** r = 0 且无漂移时，以 σᵢ 卖出并对冲、股票实际波动率为 σᵣ，期望对冲损益恰为 C(σᵢ) − C(σᵣ)。三个月平值、25% 对 20%：4.98 − 3.99 = 1.00（每 100 名义），约等于 vega × (σᵢ − σᵣ) = 19.9 × 0.05。若把 gamma 固定在平值处，½(σᵢ² − σᵣ²)∫ΓS²dt 给出 1.79，偏高：真实路径会离开行权价，那里的 gamma 更小（第7章）。
-4. **Leland。** σ_L² = σ²(1 + √(2/π)·k/(σ√Δt))，双边成本 k = 0.2%。每日对冲 σ_L = 21.2%，每周对冲 σ_L = 20.6%。每周对冲成本低、卖价也低，但对冲误差约大 √5 ≈ 2.2 倍（第8章）。
+3. **波动率交易员的估算。** r = 0 且无漂移时，以 σᵢ 卖出并对冲、股票实际波动率为 σᵣ，期望对冲损益恰为 C(σᵢ) − C(σᵣ)。三个月平值、25% 对 20%：4.98 − 3.99 = 1.00（每 100 名义），约等于 vega × (σᵢ − σᵣ) = 19.9 × 0.05。若把 gamma 固定在平值处，½(σᵢ² − σᵣ²)∫ΓS²dt 给出 1.79，偏高：真实路径会离开行权价，那里的 gamma 更小（第8章）。
+4. **Leland。** σ_L² = σ²(1 + √(2/π)·k/(σ√Δt))，双边成本 k = 0.2%。每日对冲 σ_L = 21.2%，每周对冲 σ_L = 20.6%。每周对冲成本低、卖价也低，但对冲误差约大 √5 ≈ 2.2 倍（第9章）。
 5. **提前行权。** 看涨期权至少值 S − Ke^{−rT} ≥ S − K，不付股息时永远不应提前行权。看跌期权的下界是 Ke^{−rT} − S，在 r > 0 时小于 K − S：深度实值时提前行权、现在收到行权价并赚取利息，可能更优。r = 0 时看跌期权也不会提前行权：看跌期权提前行权需要正利率。
+6. **推导利兰波动率。** 一步内 δΔ ≈ ΓδS = ΓSσ√Δt·Z，期望成本 (k/2)·S·E|δΔ| = (k/2)ΓS²σ√Δt·√(2/π)（k 为双边成本）。除以 Δt 得 ½ΓS²·σk√(2/π)/√Δt，与损益中的方差项 ½ΓS²σ² 同形，并入方差即 σ_L² = σ²(1 + √(2/π)k/(σ√Δt))。
+7. **忘掉远期。** 用 F = Se^{bT} 定价的平值远期看涨期权，若用 S 且不计持有成本反解，公式会以为它实值 ln(F/S) = bT，于是用更高的波动率解释价格。一阶近似 δσ ≈ N(d₁)·bT/(φ(d₁)√T) ≈ 0.5 × 0.02/(0.399 × 0.707) ≈ 3.5 个点（b = 4%，T = 0.5，σ = 45%）；看跌期权大致低同样多。精确反解（`carry` 计算项）：看涨 49.0%（+4.0），看跌 41.8%（−3.2），不对称来自二阶项。

@@ -786,6 +786,22 @@ Frontier (2023–2026):
 - Derman, E., Taleb, N. N. (2005). "The illusions of dynamic replication." *Quantitative Finance*.
 - Haug, E. G., Taleb, N. N. (2011). "Option traders use (very) sophisticated heuristics, never the Black–Scholes–Merton formula." *JEBO*.
 - Jäckel, P. (2015). "Let's be rational." *Wilmott*.
+- Bachelier, L. (1900). *Théorie de la spéculation*; Samuelson, P. (1965). "Rational theory of warrant pricing." *IMR*; Thorp, E., Kassouf, S. (1967). *Beat the Market*.
+- Cox, J., Ross, S., Rubinstein, M. (1979). "Option pricing: a simplified approach." *JFE* (the tree's limit; built in Part 9).
+- Garman, M., Kohlhagen, S. (1983). "Foreign currency option values." *JIMF*.
+- Brenner, M., Subrahmanyam, M. (1988). "A simple formula to compute the implied standard deviation." *FAJ*.
+- Rubinstein, M. (1994). "Implied binomial trees." *Journal of Finance* (the post-1987 skew).
+- Soner, H. M., Shreve, S., Cvitanić, J. (1995). "There is no nontrivial hedging portfolio for option pricing with transaction costs." *Annals of Applied Probability*.
+- Corrado, C., Miller, T. (1996). "A note on a simple, accurate formula to compute implied standard deviations." *JBF*.
+- Jackwerth, J., Rubinstein, M. (1996). "Recovering probability distributions from option prices." *Journal of Finance* (10⁻¹⁶⁰ for the 1987 futures fall, as quoted by MacKenzie 2003).
+- Kabanov, Y., Safarian, M. (1997). "On Leland's strategy of option pricing with transactions costs." *Finance and Stochastics* 1(3):239–250.
+- Derman, E., Kamal, M. (1998). "When you cannot hedge continuously: the corrections to Black–Scholes." Goldman Sachs Quantitative Strategies (√(π/4) prefactor).
+- U.S. General Accounting Office (1999). *Long-Term Capital Management: Regulators Need to Focus Greater Attention on Systemic Risk* (GGD-00-3); McDonough and Greenspan, testimony of 1 October 1998.
+- MacKenzie, D. (2003). "An equation and its worlds." *Social Studies of Science* (Black's sheets; Thorp's formula; the journals' rejections).
+- Diener, F., Diener, M. (2004). "Asymptotics of the price oscillations of a European call option in a tree model." *Mathematical Finance*.
+- Ahmad, R., Wilmott, P. (2005). "Which free lunch would you like today, Sir? Delta hedging, volatility arbitrage and optimal portfolios." *Wilmott*.
+- Hull, J., White, A. (2017). "Optimal delta hedging for options." *JBF* 82:180–190; Ruf, J., Wang, W. (2022). "Hedging with linear regressions and neural networks." *JBES* 40(4):1442–1454 (the minimum-variance delta; on BTC in Part 13).
+- Frontier: Alexander, C., Chen, D., Imeraj, A. (2023). "Crypto quanto and inverse options." *Mathematical Finance* 33(4):1005–1043; Matic, J. L., Packham, N., Härdle, W. K. (2023). "Hedging cryptocurrency options." *Review of Derivatives Research* 26(1):91–133; Schadner (2026), arXiv 2604.24480; Le Floc'h, F., Healy, J. (2026), "Implying volatility: how fast can we go?", arXiv 2605.29102; Saqur, R., Limmer, Y., Kratsios, A., Horvath, B., Buehler, H. (2026), "PIVOT", arXiv 2606.17065; Ushakov and Berdinsky (2026), arXiv 2608.19223 (Black–Scholes in Lean 4); Amiriyan, S., Boutaib, Y. (2026), "Asymptotically-informed neural networks for Black–Scholes implied volatility computation", arXiv 2609.05491 (preprints).
 
 ### Part 11 · Trading Options
 - Glosten, L., Milgrom, P. (1985). "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders." *JFE*.
@@ -886,6 +902,31 @@ Frontier (2023–2026):
 - Gatheral, J. (2008). "Consistent modeling of SPX and VIX options." Bachelier Congress.
 - Guyon, J., Henry-Labordère, P. (2012). "Being particular about calibration." *Risk*.
 - Hagan, P., Kumar, D., Lesniewski, A., Woodward, D. (2014). "Arbitrage-free SABR." *Wilmott*.
+- Scott, L. (1987). "Option pricing when the variance changes randomly." *JFQA*; Wiggins, J. (1987). "Option values under stochastic volatility." *JFE*.
+- Renault, E., Touzi, N. (1996). "Option hedging and implied volatilities in a stochastic volatility model." *Mathematical Finance*; Romano, M., Touzi, N. (1997). "Contingent claims and market completeness in a stochastic volatility model." *Mathematical Finance*.
+- Lipton, A. (2002). "The vol smile problem." *Risk*.
+- Eraker, B., Johannes, M., Polson, N. (2003). "The impact of jumps in volatility and returns." *Journal of Finance*.
+- Cont, R., Tankov, P. (2004). "Nonparametric calibration of jump-diffusion option pricing models." *J. Computational Finance*.
+- Kou, S., Wang, H. (2004). "Option pricing under a double exponential jump diffusion model." *Management Science*.
+- Kahl, C., Jäckel, P. (2005). "Not-so-complex logarithms in the Heston model." *Wilmott*.
+- Broadie, M., Kaya, Ö. (2006). "Exact simulation of stochastic volatility and other affine jump diffusion processes." *Operations Research*.
+- Bartlett, B. (2006). "Hedging under SABR model." *Wilmott*.
+- Andersen, L., Piterbarg, V. (2007). "Moment explosions in stochastic volatility models." *Finance and Stochastics*.
+- Carr, P., Geman, H., Madan, D., Yor, M. (2007). "Self-decomposability and option pricing." *Mathematical Finance*.
+- Ren, Y., Madan, D., Qian, M. (2007). "Calibrating and pricing with embedded local volatility models." *Risk*.
+- Obłój, J. (2008). "Fine-tune your smile: correction to Hagan et al." arXiv:0708.0998.
+- Cont, R., Kokholm, T. (2013). "A consistent pricing model for index options and volatility derivatives." *Mathematical Finance*.
+- Antonov, A., Konikov, M., Spector, M. (2015). "The free boundary SABR: natural extension to negative rates." *Risk* (working paper 2015).
+- Hull, J., White, A. (2017). "Optimal delta hedging for options." *JBF* 82:180–190.
+- Hou, A. J., Wang, W., Chen, C. Y. H., Härdle, W. K. (2020). "Pricing cryptocurrency options." *J. Financial Econometrics* 18(2):250–279.
+- Guyon, J. (2020). "The joint S&P 500/VIX smile calibration puzzle solved." *Risk*.
+- Abi Jaber, E., De Carvalho, N. (2023). "Reconciling rough volatility with jumps." arXiv:2303.07222.
+- Abi Jaber, E., Illand, C., Li, S. (2023). "The quintic Ornstein–Uhlenbeck model for joint SPX and VIX calibration." *Risk* (arXiv:2212.10917).
+- Guyon, J., Mustapha, S. (2023). "Neural joint S&P 500/VIX smile calibration." *Risk* (SSRN 4309576).
+- Matic, J., Packham, N., Härdle, W. K. (2023). "Hedging cryptocurrency options." *Review of Derivatives Research* 26(1):91–133.
+- Choi, J., Kwok, Y. K. (2024). "Simulation schemes for the Heston model with Poisson conditioning." *EJOR* 314(1):363–376.
+- Reisinger, C., Tsianni, M. O. (2025). "Numerical analysis of a particle system for the calibrated Heston-type local stochastic volatility model." arXiv:2504.14343.
+- Wang, X., Després, A., Dureau, M., Buet-Golfouse, F. (2026). "Amortizing the calibration triple: a projection-consistent neural operator for local-stochastic volatility." arXiv:2608.01217.
 
 ### Part 14 · Rough and Path-Dependent Volatility
 - Comte, F., Renault, E. (1998). "Long memory in continuous-time stochastic volatility models." *Mathematical Finance*.
@@ -1025,11 +1066,25 @@ Frontier (2023–2026):
 - Buehler, H., Horvath, B., Lyons, T., Perez Arribas, I., Wood, B. (2020). "A data-driven market simulator for small data environments." arXiv.
 - Cuchiero, C., Khosrawi, W., Teichmann, J. (2020). "A generative adversarial network approach to calibration of local stochastic volatility models." *Risks*.
 - Horvath, B., Muguruza, A., Tomas, M. (2021). "Deep learning volatility." *Quantitative Finance*.
-- Kidger, P., Foster, J., Li, X., Lyons, T. (2021). "Neural SDEs as infinite-dimensional GANs." *ICML*.
-- Ni, H., Szpruch, L., Wiese, M., Liao, S., Xiao, B. (2021). "Conditional Sig-Wasserstein GANs for time series generation." arXiv *(verify: journal version)*.
+- Kidger, P., Foster, J., Li, X., Oberhauser, H., Lyons, T. (2021). "Neural SDEs as infinite-dimensional GANs." *ICML* (arXiv 2102.03657).
+- Liao, S., Ni, H., Szpruch, L., Wiese, M., Sabate-Vidales, M., Xiao, B. (2020). "Conditional Sig-Wasserstein GANs for time series generation." arXiv 2006.05421.
+- Ni, H., Szpruch, L., Sabate-Vidales, M., Xiao, B., Wiese, M., Liao, S. (2021). "Sig-Wasserstein GANs for time series generation." arXiv 2111.01207.
 - Chevyrev, I., Oberhauser, H. (2022). "Signature moments to characterize laws of stochastic processes." *JMLR*.
 - Gierjatowicz, P., Sabate-Vidales, M., Šiška, D., Szpruch, L., Žurič, Ž. (2022). "Robust pricing and hedging via neural stochastic differential equations." *J. Computational Finance*.
-- Buehler, H., et al. (2022–2023). Follow-up deep-hedging papers from J.P. Morgan's team *(verify: titles)*.
+- Buehler, H., Murray, P., Pakkanen, M., Wood, B. (2021). "Deep hedging: learning to remove the drift under trading frictions with minimal equivalent near-martingale measures." arXiv 2111.07844.
+- Buehler, H., Murray, P., Pakkanen, M., Wood, B. (2021). "Deep hedging: learning risk-neutral implied volatility dynamics." arXiv 2103.11948.
+- Buehler, H., Murray, P., Wood, B. (2022). "Deep Bellman hedging." arXiv 2207.00932.
+- Classics added for the expansion: Leland, H. (1985). "Option pricing and replication with transactions costs." *J. Finance*; Cybenko, G. (1989). "Approximation by superpositions of a sigmoidal function." *Math. Control Signals Systems*; Hornik, K. (1991). "Approximation capabilities of multilayer feedforward networks." *Neural Networks*; Pardoux, É., Peng, S. (1990). "Adapted solution of a backward stochastic differential equation." *Systems & Control Letters*; Davis, M., Panas, V., Zariphopoulou, T. (1993). "European option pricing with transaction costs." *SIAM J. Control Optim.*; Rockafellar, R. T., Uryasev, S. (2000). "Optimization of conditional value-at-risk." *J. Risk*; Merton, R. (1969). "Lifetime portfolio selection under uncertainty." *REStat*.
+- Bayer, C., Stemper, B. (2018). "Deep calibration of rough stochastic volatility models." arXiv 1810.03399; Liu, S., Oosterlee, C., Bohte, S. (2019). "Pricing options and computing implied volatilities using neural networks." *Risks* 7(1).
+- Ferguson, R., Green, A. (2018). "Deeply learning derivatives." arXiv 1809.02233 ("a million times faster", the authors' claim).
+- Imaki, S., Imajo, K., Ito, K., Minami, K., Nakagawa, K. (2021/2023). "No-transaction band network: a neural network architecture for efficient deep hedging." *J. Financial Data Science* (arXiv 2103.01775).
+- Ho, J., Jain, A., Abbeel, P. (2020). "Denoising diffusion probabilistic models." *NeurIPS*.
+- Hutzenthaler, M., Jentzen, A., Kruse, T., Nguyen, T. A. (2020). "A proof that rectified deep neural networks overcome the curse of dimensionality in the numerical approximation of semilinear heat equations." *SN Partial Differential Equations and Applications*; Jentzen, A., Kuckuck, B., von Wurstemberger, P. (2023). *Mathematical Introduction to Deep Learning* (arXiv 2310.20360).
+- Halperin, I. (2020). "QLBS: Q-learner in the Black–Scholes(–Merton) worlds." *J. Derivatives*; Kolm, P., Ritter, G. (2019). "Dynamic replication and hedging: a reinforcement learning approach." *J. Financial Data Science*; Cao, J., Chen, J., Hull, J., Poulos, Z. (2021). "Deep hedging of derivatives using reinforcement learning." *J. Financial Data Science* 3(1).
+- Cherrat, E. A., Raj, S., Kerenidis, I., et al. (2023). "Quantum deep hedging." *Quantum* 7, 1191.
+- Guyon, J., Mustapha, S. "Neural joint S&P 500/VIX smile calibration." SSRN 4309576; *Risk*.
+- PRA (2023, revised 23 April 2026). *SS1/23: Model risk management principles for banks*.
+- Frontier, 2023–2026: François, P., Gauthier, G., Godin, F., Pérez Mendoza, C. O. (2024). "Is the difference between deep hedging and delta hedging a statistical arbitrage?" arXiv 2407.14736; François et al. (2025). "Deep hedging with options using the implied volatility surface." arXiv 2504.06208; Mueller, K., Akkari, A., Gonon, L., Wood, B. (2024). "Fast deep hedging with second-order optimization." arXiv 2410.22568; Zernikov, K. (2026). "What does deep hedging actually learn?" arXiv 2605.21696; Godin, F. (2026). "Is deep hedging reinforcement learning?" arXiv 2607.13353; Arzel, J., Lehdili, N. (2026). "Bridging stochastic control and deep hedging: structural priors for no-transaction band networks." arXiv 2603.29994; Buehler, H., Horvath, B., Kratsios, A., Limmer, Y., Saqur, R. (2026). "SANOS." arXiv 2601.11209; Buehler, Horvath, Kratsios, Wiese (2026). "DYSANOS." arXiv 2608.12587; Wiese, M., Buehler, H., Horvath, B. (2026). "GROMM: generative risk-neutral option market models." arXiv 2610.16732; Reppen, A. M., Soner, H. M., Tissot-Daguette, V. (2022). "Neural optimal stopping boundary." arXiv 2205.04595; Bayer, C., Pelizzari, L., Schoenmakers, J. (2023). "Primal and dual optimal stopping with signatures." arXiv 2312.03444; Ye, J., Wong, H. Y. (2025). "DeepMartingale." arXiv 2510.13868; Issa, Z., Horvath, B., Lemercier, M., Salvi, C. (2023). "Non-adversarial training of neural SDEs with signature kernel scores." *NeurIPS*.
 
 ### Part 18 · Money, Bonds and the Curve
 - Macaulay, F. (1938). *Some Theoretical Problems Suggested by the Movements of Interest Rates, Bond Yields and Stock Prices*.

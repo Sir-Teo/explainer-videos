@@ -257,15 +257,15 @@ class Hedging(VoiceoverScene):
     def frontier(self, h, hr):
         runs = hr["runs"]
         steps = np.asarray(hr["steps"], float)
-        L = np.array([runs[f"4-{s}"]["loss"] for s in range(3)])
+        L = np.array([runs[f"1-{s}"]["loss"] for s in range(3)])
         gaps = np.asarray(hr["gaps"])
 
         def frame(i):
             c = str(hr["checkpoints"][i])
             a = axes([-0.3, 0.3], [0, 1], x_length=4.0, y_length=2.6, xlabel=r"hedge minus delta",
                      ylabel=r"share of the gap closed", xticks=[-0.3, 0, 0.3], yticks=[0, 1], font_size=14)
-            return VGroup(a, curve(a.ax, gaps, np.asarray(runs["4-0"]["snaps"][c]), GAMMA, stroke_width=3))
-        rp = TrainingReplay(steps, L, frame, hr["checkpoints"], ylabel=r"variance $+\ \kappa\cdot$cost ($\kappa = 4$)",
+            return VGroup(a, curve(a.ax, gaps, np.asarray(runs["1-0"]["snaps"][c]), GAMMA, stroke_width=3))
+        rp = TrainingReplay(steps, L, frame, hr["checkpoints"], ylabel=r"variance $+\ \kappa\cdot$cost ($\kappa = 1$)",
                             xlabel=r"training step", color=GAMMA, left=LEFT * 3.6 + DOWN * 0.2,
                             right=RIGHT * 3.0 + DOWN * 0.2, x_length=5.2, y_length=3.2)
         with self.voiceover(
@@ -300,13 +300,13 @@ class Hedging(VoiceoverScene):
             lines.add(VMobject(stroke_color=col, stroke_width=2.5).set_points_as_corners([ax.c2p(*p) for p in pts])
                       if len(pts) > 1 else VGroup())
         deep = VGroup()
-        for kappa in (1, 4, 16):
-            for s in range(3):
-                r_ = hr["runs"][f"{kappa}-{s}"]
-                if 0.15 <= r_["cost"] <= 0.5 and r_["sd"] <= 1.5:
-                    deep.add(Dot(ax.c2p(r_["cost"], r_["sd"]), radius=0.06, color=GAMMA))
+        pts = [(r_["cost"], r_["sd"]) for r_ in rows if r_["rule"] == "deep hedge"]
+        pts += [(r_["cost"], r_["sd"]) for r_ in hr["runs"].values()]
+        for c_, s_ in pts:
+            if 0.15 <= c_ <= 0.5 and s_ <= 1.5:
+                deep.add(Dot(ax.c2p(c_, s_), radius=0.06, color=GAMMA))
         leg = legend([(GREY_B, r"rehedge every 6 hours"), (ALT, r"fixed bands"), (VEGA, r"Whalley--Wilmott bands"),
-                      (GAMMA, r"deep hedger: 3 cost weights $\times$ 3 seeds")], font_size=17)
+                      (GAMMA, r"deep hedger: 3 cost weights, and 3 seeds at $\kappa = 1$")], font_size=17)
         leg.move_to(ax.c2p(0.32, 1.32)).align_to(ax.c2p(0.24, 0), LEFT)
         side = VGroup(
             wrapped_label(r"each point: a short 30-day option on 20{,}000 simulated paths (5{,}000 held out for the "
@@ -317,8 +317,8 @@ class Hedging(VoiceoverScene):
         src = illustration(r"geometric Brownian motion at 60\%; 120 rebalancing points")
         with self.voiceover(
             "The scoreboard: risk against cost on the same paths, lower left is better. Rehedging every six hours "
-            "is safest and dearest; the Whalley-Wilmott bands trace the better curve. <bookmark mark='a'/> The deep hedger, three cost weights and "
-            "three seeds each, lands close to that curve, without being told what a band is. The classical answer was "
+            "is safest and dearest; the Whalley-Wilmott bands trace the better curve. <bookmark mark='a'/> The deep hedger, at three cost weights, "
+            "with three seeds at the first, lands close to that curve, without being told what a band is. The classical answer was "
             "already very good; the learner's value is that it scales to books with no formula, Part seventeen."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[:3]), FadeIn(side[0]), FadeIn(src), FadeIn(dots), Create(lines[1]),

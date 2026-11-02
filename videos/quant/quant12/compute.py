@@ -1158,74 +1158,92 @@ def compute_neural_surface() -> dict:
                   "raw_cal": [r_["cal_viol"] for r_ in raw], "secs": [r_["secs"] for r_ in pen + raw]})
 
 
+def _np_mlp_train(X, y, idx_tr, seed, sizes=(4, 64, 64, 64, 1), steps=4000, batch=2048, lr=2e-3, every=200,
+                  c0=0.0, eval_sets=()):
+    """A small tanh MLP with a softplus output, trained by Adam in numpy (no torch: this item must stay small in
+    memory). Returns the parameters and the RMSE (vol points) on each evaluation set every ``every`` steps."""
+    g = np.random.default_rng(seed)
+    W = [g.standard_normal((a, b)) * np.sqrt(1.0 / a) for a, b in zip(sizes[:-1], sizes[1:])]
+    B = [np.zeros(b) for b in sizes[1:]]
+    P = W + B
+    m = [np.zeros_like(x) for x in P]
+    v = [np.zeros_like(x) for x in P]
+    nl = len(W)
+
+    def forward(x):
+        hs = [x]
+        for i in range(nl - 1):
+            hs.append(np.tanh(hs[-1] @ W[i] + B[i]))
+        z = (hs[-1] @ W[-1] + B[-1])[:, 0] + c0
+        return hs, z, np.logaddexp(0, z)
+
+    hist = []
+    for it in range(steps + 1):
+        if it % every == 0:
+            row = [it]
+            for (xe, ye) in eval_sets:
+                row.append(float(np.sqrt(np.mean((forward(xe)[2] - ye) ** 2)) * 100))
+            hist.append(row)
+        if it == steps:
+            break
+        bi = g.choice(idx_tr, batch)
+        hs, z, out = forward(X[bi])
+        d = 2 * (out - y[bi]) / batch * (1 / (1 + np.exp(-z)))  # d loss / d z
+        gW, gB = [None] * nl, [None] * nl
+        delta = d[:, None]
+        for i in range(nl - 1, -1, -1):
+            gW[i] = hs[i].T @ delta
+            gB[i] = delta.sum(0)
+            if i:
+                delta = (delta @ W[i].T) * (1 - hs[i] ** 2)
+        grads = gW + gB
+        for j, (pp, gg) in enumerate(zip(P, grads)):
+            m[j] = 0.9 * m[j] + 0.1 * gg
+            v[j] = 0.999 * v[j] + 0.001 * gg * gg
+            pp -= lr * (m[j] / (1 - 0.9 ** (it + 1))) / (np.sqrt(v[j] / (1 - 0.999 ** (it + 1))) + 1e-8)
+    return hist
+
+
 def compute_operator_net() -> dict:
     """One network for every week (the frontier's "one model for all days", in miniature): implied vol as a function of
     (k, sqrt T) and the week's two VAE coordinates, trained on the quotes of the first 80% of weeks, scored on the
-    last 20% against the VAE's own decoded grid (the same two numbers) and SSVI fitted to each held-out week itself."""
-    import torch
-    from explainer.quant.house import deep
+    last 20% against two principal components of the weekly grids (the best linear two-number summary, fitted on all
+    weeks) and SSVI fitted to each held-out week itself. Numpy only, three seeds."""
     from scipy.interpolate import RegularGridInterpolator
-    torch.set_num_threads(1)
     rows = _weeks()
-    vae = load("vae")
-    Z = np.asarray(vae["latent"])
+    Z = np.asarray(load("vae")["latent"])
     n = len(rows)
     cut = int(0.8 * n)
     Q = [np.asarray(r["q"]) for r in rows]
     wk = np.concatenate([np.full(q.shape[1], i) for i, q in enumerate(Q)])
     A = np.concatenate(Q, axis=1)
     k, T, iv = A[0], A[1], A[2]
-    zz = Z[wk]
+    X = np.column_stack([k, np.sqrt(T), Z[wk]])
     tr = wk < cut
-    part = CACHE.partial("operator_net", {"v": 1})
+    c0 = float(np.log(np.exp(0.6) - 1))
+    part = CACHE.partial("operator_net", {"v": 2, "numpy": True})
     for seed in range(3):
-        key = str(seed)
-        if key in part:
+        if str(seed) in part:
             continue
-        torch.manual_seed(seed)
-        mlp = deep._mlp(4, 64, 3, act=torch.nn.Tanh)
-        c0 = float(np.log(np.exp(0.6) - 1))
-        f32 = lambda a: torch.tensor(np.asarray(a, float), dtype=torch.float32)  # noqa: E731
-        X = f32(np.column_stack([k, np.sqrt(T), zz]))
-        y = f32(iv)
-        opt = torch.optim.Adam(mlp.parameters(), lr=2e-3)
-        g = np.random.default_rng(seed)
-        idx_tr = np.nonzero(tr)[0]
-        hist = []
-        for it in range(4001):
-            b = torch.tensor(g.choice(idx_tr, 2048))
-            pred = torch.nn.functional.softplus(mlp(X[b])[:, 0] + c0)
-            loss = ((pred - y[b]) ** 2).mean()
-            if it % 200 == 0:
-                with torch.no_grad():
-                    p_all = torch.nn.functional.softplus(mlp(X)[:, 0] + c0).numpy()
-                hist.append((it, float(np.sqrt(np.mean((p_all[tr] - iv[tr]) ** 2)) * 100),
-                             float(np.sqrt(np.mean((p_all[~tr] - iv[~tr]) ** 2)) * 100)))
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
-        part[key] = {"hist": hist, "test": hist[-1][2], "train": hist[-1][1]}
-    # baselines on the held-out weeks
-    dec_err, ssvi_err = [], []
-    import torch as _t
+        h = _np_mlp_train(X, iv, np.nonzero(tr)[0], seed, c0=c0, eval_sets=((X[tr], iv[tr]), (X[~tr], iv[~tr])))
+        part[str(seed)] = {"hist": h, "train": h[-1][1], "test": h[-1][2]}
+        print(f"  operator_net seed {seed}: train {h[-1][1]:.2f} test {h[-1][2]:.2f}", flush=True)
+    ssvi_err = [np.asarray(_ssvi_iv(rows[i]["fit"], Q[i][0], Q[i][1])) - Q[i][2] for i in range(cut, n)]
+    G = np.log(np.clip(np.array([np.asarray(r["grid"]).ravel() for r in rows]), 0.05, 5.0))
+    mu = G.mean(0)
+    U, S_, Vt = np.linalg.svd(G - mu, full_matrices=False)
+    rec = np.exp((U[:, :2] * S_[:2]) @ Vt[:2] + mu)
+    pca_err = []
     for i in range(cut, n):
         q = Q[i]
-        ssvi_err.append(np.asarray(_ssvi_iv(rows[i]["fit"], q[0], q[1])) - q[2])
-    ssvi_rmse = float(np.sqrt(np.mean(np.concatenate(ssvi_err) ** 2)) * 100)
-    # the VAE decoder at the same two numbers (the decoder is retrained here exactly as in ``vae``, seed 0)
-    X = np.log(np.clip(np.array([np.asarray(r["grid"]).ravel() for r in rows]), 0.05, 5.0))
-    enc, dec, mu, sd, _, _ = _vae_train(X, 0)
-    with _t.no_grad():
-        D = np.exp(dec(_t.tensor(Z, dtype=_t.float32)).numpy() * sd + mu)
-    for i in range(cut, n):
-        q = Q[i]
-        f = RegularGridInterpolator((TGRID, KGRID), D[i].reshape(len(TGRID), len(KGRID)), bounds_error=False, fill_value=None)
-        dec_err.append(f(np.column_stack([np.clip(q[1], TGRID[0], TGRID[-1]), np.clip(q[0], KGRID[0], KGRID[-1])])) - q[2])
-    dec_rmse = float(np.sqrt(np.mean(np.concatenate(dec_err) ** 2)) * 100)
+        f = RegularGridInterpolator((TGRID, KGRID), rec[i].reshape(len(TGRID), len(KGRID)), bounds_error=False,
+                                    fill_value=None)
+        pca_err.append(f(np.column_stack([np.clip(q[1], TGRID[0], TGRID[-1]), np.clip(q[0], KGRID[0], KGRID[-1])])) - q[2])
     R = [part[str(s_)] for s_ in range(3)]
-    return _json({"runs": R, "test": [r_["test"] for r_ in R], "train": [r_["train"] for r_ in R], "ssvi_rmse": ssvi_rmse,
-                  "dec_rmse": dec_rmse, "n_weeks": n, "n_train_weeks": cut, "n_quotes": int(len(k)),
-                  "first_test_day": rows[cut]["day"]})
+    return _json({"runs": R, "test": [r_["test"] for r_ in R], "train": [r_["train"] for r_ in R],
+                  "ssvi_rmse": float(np.sqrt(np.mean(np.concatenate(ssvi_err) ** 2)) * 100),
+                  "dec_rmse": float(np.sqrt(np.mean(np.concatenate(pca_err) ** 2)) * 100), "n_weeks": n,
+                  "n_train_weeks": cut, "n_quotes": int(len(k)), "first_test_day": rows[cut]["day"]})
 
 
 ITEMS = {"surface": compute_surface, "localvol": compute_localvol, "varswap": compute_varswap,

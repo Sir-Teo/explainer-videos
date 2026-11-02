@@ -174,9 +174,9 @@ class Outro(VoiceoverScene):
              r"Tsitsiklis--Van Roy; Lewis (2001)",
              r"Rogers (2002); Forsyth--Vetzal (2002); Andersen--Broadie; Haugh--Kogan (2004); Giles--Glasserman (2006)",
              r"Giles; Fang--Oosterlee; Joe--Kuo (2008); in 't Hout--Foulon (2010); Capriotti; Salmon et al.\ (2011)",
-             r"Rhee--Glynn (2015); Gass et al.\ (2018); Rebentrost et al.\ (2018); Stamatopoulos et al.\ (2020); "
+             r"Rhee--Glynn; Giles (2015); Gass et al.\ (2018); Rebentrost et al.\ (2018); Stamatopoulos et al.\ (2020); "
              r"Suzuki et al.\ (2020)",
-             r"Chakrabarti et al.\ (2021); Pan--Owen (2023); Junike (2024); Stamatopoulos--Zeng (2024)"])
+             r"Chakrabarti et al.\ (2021); Owen (2022); Pan--Owen (2023); Junike (2024); Stamatopoulos--Zeng (2024)"])
         with self.voiceover(
             "The textbook chapters this part covers, and the papers it draws on. Every number here was computed by the "
             "House's engine on one CPU core."

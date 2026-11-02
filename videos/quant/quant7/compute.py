@@ -1170,11 +1170,12 @@ def _synthetic_vol(n, L, rng):
 
 def compute_foundation() -> dict:
     """A toy time-series foundation model in the manner of Chronos (Ansari et al. 2024): mean-scale the context,
-    quantise each value into one of 128 bins, train a small transformer by cross-entropy to predict the next bin, on
-    synthetic series only; then forecast Bitcoin's 2020 volatility zero-shot (weights frozen, nothing fitted to it)."""
-    import torch
-    torch.set_num_threads(1)
+    quantise each value into one of 128 bins, train a small network (token embeddings, one hidden layer, a softmax over
+    the bins; plain numpy, written out with its gradients) by cross-entropy to predict the next bin, on synthetic series
+    only; then forecast Bitcoin's 2020 volatility zero-shot (weights frozen, nothing fitted to it).  Numpy rather than
+    PyTorch: on the shared build machine the PyTorch process was repeatedly killed for memory."""
     C, NB, LO, HI = 64, 128, 0.0, 4.0
+    D, HID = 8, 64
     edges = np.linspace(LO, HI, NB + 1)
     centers = (edges[:-1] + edges[1:]) / 2
     rng = np.random.default_rng(0)
@@ -1189,29 +1190,56 @@ def compute_foundation() -> dict:
         s = np.mean(np.abs(ctx), -1, keepdims=True)
         return np.clip(np.digitize(ctx / s, edges[1:-1]), 0, NB - 1), s
 
-    class TSFM(torch.nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.emb = torch.nn.Embedding(NB, 48)
-            self.pos = torch.nn.Parameter(torch.zeros(1, C, 48))
-            layer = torch.nn.TransformerEncoderLayer(48, 4, 96, dropout=0.0, batch_first=True)
-            self.enc = torch.nn.TransformerEncoder(layer, 2)
-            self.out = torch.nn.Linear(48, NB)
+    class TSFM:
+        def __init__(self, g):
+            self.P = {"E": 0.1 * g.standard_normal((NB, D)), "W1": g.standard_normal((C * D, HID)) / np.sqrt(C * D),
+                      "b1": np.zeros(HID), "W2": g.standard_normal((HID, NB)) / np.sqrt(HID), "b2": np.zeros(NB)}
+            self.m = {k: np.zeros_like(x) for k, x in self.P.items()}
+            self.v = {k: np.zeros_like(x) for k, x in self.P.items()}
+            self.t = 0
 
-        def forward(self, x):
-            return self.out(self.enc(self.emb(x) + self.pos)[:, -1])
+        def forward(self, tk):
+            e = self.P["E"][tk].reshape(len(tk), C * D)
+            z = e @ self.P["W1"] + self.P["b1"]
+            h = np.maximum(z, 0)
+            lg = h @ self.P["W2"] + self.P["b2"]
+            lg = lg - lg.max(1, keepdims=True)
+            p = np.exp(lg)
+            return p / p.sum(1, keepdims=True), (tk, e, z, h)
+
+        def step(self, tk, tgt, lr=1e-3):
+            p, (tk_, e, z, h) = self.forward(tk)
+            n = len(tgt)
+            loss = float(-np.mean(np.log(p[np.arange(n), tgt] + 1e-12)))
+            dl = p.copy()
+            dl[np.arange(n), tgt] -= 1
+            dl /= n
+            gr = {"W2": h.T @ dl, "b2": dl.sum(0)}
+            dh = dl @ self.P["W2"].T
+            dz = dh * (z > 0)
+            gr["W1"] = e.T @ dz
+            gr["b1"] = dz.sum(0)
+            de = (dz @ self.P["W1"].T).reshape(n, C, D)
+            gE = np.zeros_like(self.P["E"])
+            np.add.at(gE, tk_, de)
+            gr["E"] = gE
+            self.t += 1
+            for k in self.P:  # Adam
+                self.m[k] = 0.9 * self.m[k] + 0.1 * gr[k]
+                self.v[k] = 0.999 * self.v[k] + 0.001 * gr[k] ** 2
+                mh, vh = self.m[k] / (1 - 0.9 ** self.t), self.v[k] / (1 - 0.999 ** self.t)
+                self.P[k] -= lr * mh / (np.sqrt(vh) + 1e-8)
+            return loss
 
     def predict(model, ctx):
         tk, s = tok(ctx)
-        with torch.no_grad():
-            p = torch.softmax(model(torch.tensor(tk)), -1).numpy()
-        return p, s[:, 0]
+        return model.forward(tk)[0], s[:, 0]
 
     steps, ckpts = 3000, [0, 100, 300, 1000, 3000]
     runs = []
     test_ctx = np.stack([v[t - C:t] for t in range(test0, len(v))])
     import json as _js
-    rdir = CACHE.dir / "foundation_runs"  # one file per seed: the item resumes where it stopped
+    rdir = CACHE.dir / "foundation_runs_np"  # one file per seed: the item resumes where it stopped
     rdir.mkdir(parents=True, exist_ok=True)
     for seed in range(3):
         fpath = rdir / f"seed{seed}.json"
@@ -1220,10 +1248,8 @@ def compute_foundation() -> dict:
             runs.append({"loss": d_["loss"], "snaps": d_["snaps"], "var": np.asarray(d_["var"]),
                          "q": {k: np.asarray(v) for k, v in d_["q"].items()}})
             continue
-        torch.manual_seed(seed)
         g = np.random.default_rng(100 + seed)
-        model = TSFM()
-        opt = torch.optim.Adam(model.parameters(), lr=1e-3)
+        model = TSFM(np.random.default_rng(seed))
         hist, snaps = [], {}
         for st in range(steps + 1):
             if st in ckpts:
@@ -1236,13 +1262,7 @@ def compute_foundation() -> dict:
             win = np.stack([corpus[a, b:b + C + 1] for a, b in zip(ii, jj)])
             tk, sc = tok(win[:, :C])
             tgt = np.clip(np.digitize(win[:, C] / sc[:, 0], edges[1:-1]), 0, NB - 1)
-            model.train()
-            opt.zero_grad()
-            loss = torch.nn.functional.cross_entropy(model(torch.tensor(tk)), torch.tensor(tgt))
-            loss.backward()
-            opt.step()
-            hist.append(float(loss.detach()))
-        model.eval()
+            hist.append(model.step(tk, tgt))
         p, s = predict(model, test_ctx)
         ev2 = (s ** 2) * (p @ centers ** 2)
         cdf = np.cumsum(p, 1)
@@ -1269,16 +1289,18 @@ def compute_foundation() -> dict:
                   "cover80": float(np.mean((v[test] >= np.mean([r_["q"]["0.1"] for r_ in runs], 0)) &
                                            (v[test] <= np.mean([r_["q"]["0.9"] for r_ in runs], 0)))),
                   "n_series": 3000, "context": C, "bins": NB, "steps": steps,
-                  "n_params": int(sum(p_.numel() for p_ in TSFM().parameters()))})
+                  "n_params": int(sum(x.size for x in TSFM(np.random.default_rng(0)).P.values()))})
 
 
 def compute_envelope2() -> dict:
     """The models added in the expansion, registered before their test-year scores were computed."""
     reg = {"btc_vol_harnet_2020": pit.register("btc_vol_harnet_2020", inspect.getsource(_nn_train),
                                                {"model": "HARNet-style", "seeds": 5, "test": "2020"}, trials=1),
-           "btc_vol_toy_tsfm_2020": pit.register("btc_vol_toy_tsfm_2020", inspect.getsource(compute_foundation),
-                                                 {"model": "toy Chronos-style TSFM", "seeds": 3, "test": "2020"}, trials=1)}
-    return _json({"registered": reg, "trials": pit.trials_so_far(), "part7_trials": 8 + 1 + 1})
+           "btc_vol_toy_tsfm_np_2020": pit.register("btc_vol_toy_tsfm_np_2020", inspect.getsource(compute_foundation),
+                                                    {"model": "toy Chronos-style TSFM, numpy MLP", "seeds": 3,
+                                                     "test": "2020"}, trials=1)}
+    # also registered earlier, never scored: the PyTorch version of the toy model (btc_vol_toy_tsfm_2020), counted
+    return _json({"registered": reg, "trials": pit.trials_so_far(), "part7_trials": 8 + 1 + 1 + 1})
 
 
 def compute_house_fc() -> dict:

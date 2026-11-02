@@ -147,15 +147,12 @@ class Hook(VoiceoverScene):
         q = label(r"How can a bet on a price be built out of the price itself?", font_size=34)
         q.next_to(pair, DOWN, buff=1.0)
         with self.voiceover(
-            "How is that possible? The number of coins the hedger held is the option's delta, and the formula "
-            "that says what it should be is the Black-Scholes formula. Hold delta coins, and the option's ups and "
-            "downs are cancelled by the coins' ups and downs, hour by hour. What is left over is not luck about "
-            "where the price went. It is a gap between two volatilities. <bookmark mark='a'/> The market charged "
-            f"{100 * b['pick_iv']:.0f} percent; Bitcoin, for all its rally, moved at {100 * b['pick_rv']:.0f}. "
-            "The hedger was paid for the difference, and in this part we will derive exactly how much: the "
-            "formula three ways, the hedger's ledger term by term, what goes wrong when you hedge in steps, pay "
-            "costs, or use the wrong volatility, and what happened when the world tried this at scale in 1987. "
-            "<bookmark mark='b'/> The question underneath all of it is the one Bachelier asked in 1900."
+            "How is that possible? The number of coins the hedger held is the option's delta, given by the "
+            "Black-Scholes formula. Hold delta coins, and the option's ups and downs are cancelled by the coins', "
+            "hour by hour. What is left is not luck about direction. It is a gap between two volatilities. "
+            f"<bookmark mark='a'/> The market charged {100 * b['pick_iv']:.0f} percent; Bitcoin, for all its "
+            f"rally, moved at {100 * b['pick_rv']:.0f}. The hedger was paid for the difference. "
+            "<bookmark mark='b'/> The question underneath it is the one Bachelier asked in 1900."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeOut(self.month), run_time=1.0)
@@ -177,12 +174,10 @@ class Hook(VoiceoverScene):
             r"Sell volatility on real Bitcoin, replay 1987 and 1998, and see how desks and researchers use it now",
         ], title=r"In this part", font_size=29)
         with self.voiceover(
-            "Here is the plan. The formula derived and solved, three ways, each showing a different side of it. "
-            "The Greeks, read as the slope and curve of a single surface. The hedger's profit and loss, term by "
-            "term, and the ways hedging fails: in steps, across jumps, with costs, with the wrong volatility. "
-            "Then the formula turned inside out on a real options market, extended to dividends and early "
-            "exercise. And real data: four and a half years of selling Bitcoin volatility, the crash of 1987 "
-            "replayed, 1998, and how the formula is used on desks, and researched, today."
+            "The plan. The formula derived and solved three ways. The Greeks as one surface. The hedger's profit "
+            "term by term, and how hedging fails: in steps, across jumps, with costs, with the wrong volatility. "
+            "The formula inverted on a real market, with dividends and early exercise. And real data: Bitcoin, "
+            "1987 replayed, 1998, and how desks and researchers use the formula today."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.35, run_time=6))

@@ -81,8 +81,8 @@ that come from a firm's or vendor's own account are labelled as such.*
 * **11. Adjoint differentiation** (2.8). A one-path call's tape forward and backward with real numbers (the series'
   autodiff); Jacobian products, the adjoint recursion, the cheap-gradient principle, Giles–Glasserman, Capriotti.
   **Lab:** `aad_greeks` (five Greeks for 2.2 prices against 7.4 by bumping). Scaling on a basket, 2–128 inputs:
-  wall clock (best of several runs, shared machine) and operation counts (backward/forward ≈ 1.2 at every size).
-  Check-pointing.
+  wall clock (best of several runs, shared machine; at 128 inputs AAD 1.5 prices, central bumps 380) and operation
+  counts (backward/forward ≈ 1.2 at every size, so AAD ≈ 2.2 prices). Check-pointing.
 * **12. Finite differences I: θ-schemes and stability** (2.7). 3D: the explicit march, stable with 2,000 steps (10.411)
   and exploding with 200 (λ = 2). The θ-scheme, von Neumann's amplification factors live, Lax, the 400-step bound;
   convergence (CN ratio 4.0). Schwartz (1977).
@@ -101,8 +101,9 @@ that come from a firm's or vendor's own account are labelled as such.*
   The race again, with Monte Carlo plus a control variate (variance ÷2.7: the line shifts, the slope stays).
 * **17. Industry: the overnight run, GPUs and adjoints** (2.8). Trades × scenarios; SIMM and FRTB sensitivities; Danske
   Bank (Risk.net In-House System of the Year 2015, as reported); JPMorgan and Maxeler (eight hours to under four
-  minutes, the bank's and vendor's account; Weston et al. 2012); STAC-A2; QuantLib, ORE, the OCC's STANS. This machine:
-  loop, numpy, float32 and 1/2/4 processes. The nightly validation report.
+  minutes, the bank's and vendor's account; Weston et al. 2012); STAC-A2; QuantLib, ORE, the OCC's STANS. This machine
+  (shared, load ≈ 50 on 4 cores): 10⁶ payoffs by a Python loop 3.6 s, numpy 19 ms, float32 2.3 ms; 4 processes no faster
+  than one. COS beat Monte Carlo's best accuracy about 14,000 times faster. The nightly validation report.
 * **18. Quantum amplitude estimation** (2.9). The Grover rotation in the good/bad plane; the derivation (Rebentrost et al.
   2018, Stamatopoulos et al. 2020, Brassard et al. 2002, Montanaro 2015, Suzuki et al. 2020). **Replay:** the MLAE
   likelihood sharpening; 40 runs: slope −0.94 against −0.5, 33× smaller error than MC at 410,150 calls. Costs:
@@ -271,13 +272,13 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 * **8. 美式期权（上）。** 倒着运行的回归与边界；基函数次数×路径数扫描；新路径上6.071 ± 0.011；百慕大参考值6.067；TvR样本内6.097偏高。
 * **9. 美式期权（下）。** 对偶上界的推导与一条外层路径；上界从6.41降到6.075；五千步百慕大树6.067落在区间内；**实验**：`andersen_broadie_put`；五资产最大值看涨期权：LSM 26.103 ± 0.014，深度停时26.107 ± 0.020，统计上平局。
 * **10. 三种方法算希腊字母。** 扰动误差的三维山谷；路径法、似然比法、Malliavin；数字期权上似然比法的标准误差小3.3倍。
-* **11. 伴随算法微分。** 一条路径看涨期权的计算带前向与反向；廉价梯度原理；**实验**：`aad_greeks`（2.2次定价对扰动法7.4次）；按输入数的缩放与运算计数。
+* **11. 伴随算法微分。** 一条路径看涨期权的计算带前向与反向；廉价梯度原理；**实验**：`aad_greeks`（2.2次定价对扰动法7.4次）；按输入数的缩放：128个输入时AAD 1.5次定价，中心扰动380次；运算计数显示反向约为前向的1.2倍。
 * **12. 有限差分（上）。** 显式格式的三维推进与爆炸；冯·诺依曼放大因子；拉克斯定理；收敛阶。
 * **13. 有限差分（下）。** 克兰克-尼科尔森的振荡与Rannacher；美式看跌期权的三维曲面与自由边界；PSOR与罚函数法（6.0873，每步两次牛顿迭代）；**实验**：`fd_american_put`。
 * **14. 赫斯顿模型的ADI。** 行列扫描、价格曲面与希腊字母；均匀网格与sinh网格：40 × 20时2.66对0.045。
 * **15. 傅里叶方法（上）。** α阻尼滑块；λη = 2π/N；Lewis积分与COS一致到小数点后12位。
 * **16. 傅里叶方法（下）。** 余弦重建密度；截断区间；**实验**：`cos_price`；带控制变量的蒙特卡洛重新参赛。
-* **17. 业界。** 交易×情景；SIMM与FRTB；丹斯克银行（据Risk.net报道）；摩根大通与Maxeler（据银行与供应商自述，八小时降到四分钟以内）；STAC-A2；QuantLib、ORE、OCC；本机实测；夜间验证报告。
+* **17. 业界。** 交易×情景；SIMM与FRTB；丹斯克银行（据Risk.net报道）；摩根大通与Maxeler（据银行与供应商自述，八小时降到四分钟以内）；STAC-A2；QuantLib、ORE、OCC；本机实测（Python循环3.6秒、numpy 19毫秒、float32 2.3毫秒，四个进程并不更快）；夜间验证报告。
 * **18. 量子振幅估计。** Grover旋转；最大似然振幅估计回放：斜率−0.94对−0.5；资源估算：8000逻辑量子比特、T深度5400万（2021），4700逻辑量子比特、10⁹个T门、45 MHz（2024）。
 * **19. 前沿。** 切比雪夫定价器（32×32节点误差3.7 × 10⁻⁶）；随机化拟蒙特卡洛的中位数（Pan–Owen 2023）；阅读清单。
 * **定价引擎、回顾、交易台问题与习题。** 第16条规矩；试验计数器仍为73。

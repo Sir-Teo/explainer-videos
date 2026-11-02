@@ -69,18 +69,15 @@ class Levy(VoiceoverScene):
         src = illustration(rf"$\nu = {ck['nu']}$, $\sigma = {100 * ck['sigma']:.0f}\%$, {len(t) - 1} steps")
         nu_fit = v["params"][1]
         with self.voiceover(
-            "Here is a different way to make a smile: keep the Brownian motion, but change the clock. On top, an "
-            "ordinary Brownian path, plotted against business time: the time the market experiences. "
-            "<bookmark mark='a'/> Below, the clock that converts calendar time into business time. It is a gamma "
-            "process: it only goes forward, and it goes forward in random lurches. Where the purple staircase "
-            "climbs steeply, a lot of business time passed in a little calendar time: a burst of trading. Where it "
-            "is flat, the market slept. <bookmark mark='b'/> Now replot the very same path against calendar time. "
-            "Stretches of business time that passed in an instant collapse into jumps. Quiet stretches flatten out. "
-            "The result has no diffusion at all: it moves only by jumps, infinitely many of them, mostly tiny. That "
-            "is the variance gamma process of Dilip Madan and Eugene Seneta, 1990, put to work on options by Madan, "
-            "Peter Carr and Eric Chang in 1998. <bookmark mark='c'/> The clock's randomness is one number, nu, the "
-            f"variance of the clock per unit time. On the Surface, the fitted nu is only {nu_fit:.3f}: the options "
-            "ask for a nearly regular clock and a strong drift, which is how variance gamma makes its skew."
+            (
+            "Another way to make a smile: keep the Brownian motion, change the clock. Top, a Brownian path in "
+            "business time. <bookmark mark='a'/> Below, a gamma clock turning calendar time into business time: it "
+            "lurches forward, fast in busy markets, flat when the market sleeps. <bookmark mark='b'/> Replot the same "
+            "path against calendar time. Business time that passed in an instant becomes a jump; quiet stretches "
+            "flatten. No diffusion at all, only jumps, mostly tiny: Madan and Seneta's variance gamma, priced for "
+            "options by Madan, Carr and Chang. <bookmark mark='c'/> The clock's randomness is nu. On the Surface the "
+            f"fitted nu is only {nu_fit:.3f}: a nearly regular clock, with the skew coming from the drift."
+        )
         ) as vo:
             self.play(FadeIn(top), FadeIn(src), FadeIn(tag))
             self.add(p)
@@ -118,19 +115,16 @@ class Levy(VoiceoverScene):
                     r"Heston's affine formula again (Carr and Wu 2004)", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The characteristic function falls out in three lines. Write the log price as a drift theta and a "
-            "Brownian motion, both run on the gamma clock. <bookmark mark='a'/> Given the clock, the price is "
-            "Gaussian, with mean and variance proportional to the business time elapsed. <bookmark mark='b'/> Take "
-            "the expectation over the clock with the tower property: it is the gamma distribution's moment "
-            "generating function, evaluated at a complex argument. One minus i u theta nu plus a half sigma "
-            "squared nu u squared, to the power minus t over nu. <bookmark mark='c'/> A constant drift correction, "
-            "omega, keeps the forward fair. <bookmark mark='d'/> Carr, Geman, Madan and Yor generalised the jump "
-            "density to C e to the minus G x over x to the one plus Y, and integrated it in closed form. The exponent "
-            "Y is the fine structure: below zero, finitely many jumps; between zero and one, infinitely many but "
-            "summable; above one, so many that the path has infinite variation, like a diffusion. "
-            "<bookmark mark='e'/> And Carr and Liuren Wu closed the circle in 2004: run any Lévy process on a "
-            "random clock whose speed is a CIR variance, and the characteristic function is the clock's Laplace "
-            "transform. That is Heston's affine formula again: stochastic volatility is a random clock."
+            (
+            "The characteristic function in three lines. The log price is a drift and a Brownian motion, both run on "
+            "the gamma clock. <bookmark mark='a'/> Given the clock, it is Gaussian. <bookmark mark='b'/> Average over "
+            "the clock: the gamma law's moment generating function at a complex argument. <bookmark mark='c'/> A drift "
+            "correction keeps the forward fair. <bookmark mark='d'/> CGMY generalised the jump density and integrated "
+            "it in closed form. Its Y is the fine structure: below zero, finitely many jumps; up to one, infinitely "
+            "many but summable; above one, infinite variation, diffusion-like. <bookmark mark='e'/> And Carr and Wu "
+            "ran Lévy processes on a CIR clock: the result is Heston's affine formula again. Stochastic volatility "
+            "is a random clock."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -171,17 +165,13 @@ class Levy(VoiceoverScene):
         cap.next_to(dens, DOWN, buff=0.35).align_to(dens, LEFT)
         src = illustration(r"CGMY with $G = M = 5$, annual variance 0.25")
         with self.voiceover(
-            "Here is the fine structure, as pictures. On the left, the density of jumps by size, for three values of "
-            "Y, scaled so that all three processes have the same total variance. On the right, one year of each. "
-            "<bookmark mark='a'/> With Y minus one half, the density is finite: a handful of jumps a year, and "
-            f"flat stretches between them; about {cg['-0.5']['lam_eps']:.0f} jumps here. <bookmark mark='b'/> With "
-            "Y one half, the density blows up at zero but its total size stays finite: a swarm of small jumps "
-            f"with some big ones, {cg['0.5']['lam_eps']:.0f} of them above a tenth of a percent. "
-            "<bookmark mark='c'/> With Y one and a half, there are so many tiny jumps that the path looks like a "
-            f"diffusion, {cg['1.5']['lam_eps']:.0f} above a tenth of a percent in the year, with occasional big "
-            "ones on top. Pause and predict: variance gamma has no Brownian part. Can its paths look continuous? On "
-            "a chart, yes: infinitely many small jumps are indistinguishable from a diffusion at any resolution you "
-            "can see."
+            (
+            "The fine structure, drawn: jump densities for three values of Y, scaled to equal variance, and a year of "
+            f"each. <bookmark mark='a'/> Y minus one half: a handful of jumps, about {cg['-0.5']['lam_eps']:.0f}. "
+            f"<bookmark mark='b'/> Y one half: a swarm, {cg['0.5']['lam_eps']:.0f} above a tenth of a percent. "
+            f"<bookmark mark='c'/> Y one and a half: {cg['1.5']['lam_eps']:.0f}, and the path looks like a diffusion. "
+            "Pause: can a process with no Brownian part look continuous? On a chart, yes."
+        )
         ) as vo:
             self.play(FadeIn(dens), FadeIn(src), FadeIn(cap), Create(lines[0]), FadeIn(paths[0][0]), FadeIn(paths[0][2]),
                       Create(paths[0][1]), run_time=2.5)
@@ -204,10 +194,11 @@ class Levy(VoiceoverScene):
         verdict = (f"The two agree within {abs(z):.1f} standard errors." if abs(z) < 2 else
                    f"They differ by {abs(z):.1f} standard errors: more paths, or a finer clock, are needed.")
         with self.voiceover(
-            "In the House it is a few lines each: the characteristic function with its drift correction, and the "
-            "simulator, which draws gamma clock increments and then a Gaussian scaled by their square root. "
-            "<bookmark mark='a'/> Run both on the fitted variance gamma: price a thirty-day at-the-money call by "
-            f"Fourier, and by simulation. {verdict}"
+            (
+            "In the House: the characteristic function with its drift correction, and the simulator, drawing gamma "
+            "increments and scaled Gaussians. <bookmark mark='a'/> Price a thirty-day at-the-money call under the "
+            f"fitted model both ways. {verdict}"
+        )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -254,12 +245,12 @@ class Levy(VoiceoverScene):
         hes = load("calibrate")["fits"]["Heston"]["rmse"]
         src = real_data(r"the Surface; the House's calibrator, every evaluation recorded")
         with self.voiceover(
-            "Now race the pure-jump models on the Surface: variance gamma, NIG, which runs Brownian motion on an "
-            "inverse Gaussian clock as Ole Barndorff-Nielsen proposed in 1997, and CGMY, fitted twice, with its Y "
-            "confined below one and above one. <bookmark mark='a'/> All four fall fast and then flatten well "
-            f"above Heston's {hes:.1f}. {v1} <bookmark mark='v'/> {v2} <bookmark mark='b'/> None of them can match stochastic "
-            "volatility, and the next chapter shows the reason in one picture: what each model's skew does as "
-            "maturity changes."
+            (
+            "Race the pure-jump models on the Surface: variance gamma, NIG, Barndorff-Nielsen's Brownian motion on an "
+            "inverse-Gaussian clock, and CGMY with Y confined below one and above one. <bookmark mark='a'/> All stall "
+            f"well above Heston's {hes:.1f}. {v1} <bookmark mark='v'/> {v2} <bookmark mark='b'/> Why none can match "
+            "stochastic volatility is the next chapter's picture."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(lines)

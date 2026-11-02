@@ -51,8 +51,8 @@ class Garch(VoiceoverScene, ThreeDScene):
         g = axes([0, n], [-4.5, 4.5], x_length=7.2, y_length=3.0, xticks=[], yticks=[-4, 0, 4], font_size=14,
                  ylabel=r"each day's return, drawn with size $\propto\sqrt{\text{level}}$ (simulated, US parameters)")
         g.to_edge(RIGHT, buff=0.4).shift(DOWN * 0.6)
-        bars = always_redraw(lambda: VGroup(*[Line(g.ax.c2p(i, 0), g.ax.c2p(i, np.clip(r[i], -4.5, 4.5)), stroke_width=1.6,
-                                                   color=RET) for i in range(int(tr.get_value()) + 1)]))
+        bars = VGroup(*[Line(g.ax.c2p(i, 0), g.ax.c2p(i, np.clip(r[i], -4.5, 4.5)), stroke_width=1.6, color=RET)
+                        for i in range(n)])
         with self.voiceover(
             "Robert Engle, on a sabbatical at the London School of Economics, wanted to model how uncertain British "
             "inflation was. His answer, published in 1982: the variance of today's surprise depends on yesterday's "
@@ -70,11 +70,10 @@ class Garch(VoiceoverScene, ThreeDScene):
             self.add(water)
             vo.wait_until("b")
             self.play(FadeIn(splash))
-            self.add(bars)
             vo.wait_until("c")
-            self.play(tr.animate.set_value(n - 1), run_time=max(vo.remaining(1.0) - 1.5, 4), rate_func=linear)
+            self.play(tr.animate.set_value(n - 1), LaggedStart(*[Create(b) for b in bars], lag_ratio=1.0),
+                      run_time=max(vo.remaining(1.0) - 1.5, 4), rate_func=linear)
             self.play(Create(lr), FadeIn(lrl))
-        bars.clear_updaters()
         water.clear_updaters()
         self.wait(0.3)
         self.clear_scene()

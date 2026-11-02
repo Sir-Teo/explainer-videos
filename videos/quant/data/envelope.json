@@ -102,6 +102,15 @@
    },
    "trials": 1
   },
+  "btc_vol_toy_tsfm_np_2020": {
+   "code_sha256": "564b27536bfc80afa2b49e98c5efc3229b2622e8e70734870668e4c76548dd37",
+   "params": {
+    "model": "toy Chronos-style TSFM, numpy MLP",
+    "seeds": 3,
+    "test": "2020"
+   },
+   "trials": 1
+  },
   "cape_forecast_2021_2030": {
    "code_sha256": "a5b36ee43c347f92565b55014118cbdaee0c27f95ef91ca15f3d9898a73461da",
    "params": {

@@ -50,16 +50,12 @@ class BTC(VoiceoverScene):
             rf"DVOL, hedge every hour until expiry. {b['n']:,} trades.".replace(",", "{,}", 1), 6.4, 24, GREY_A)
         setup.to_corner(UR, buff=0.35)
         with self.voiceover(
-            "Chapter seven said a hedged option seller earns the gap between implied and realized volatility. Is "
-            "there a gap, on average, in a real market? The House runs the experiment on Bitcoin. Every day at "
-            f"eight in the morning, from {ts_date(b['start'][0], '%B %Y')}, it sells a thirty-day at-the-money "
-            "call at the volatility the market quotes, Deribit's DVOL index, and hedges it every hour on Binance's "
-            f"prices until it expires: {b['n']:,} trades. <bookmark mark='a'/> In orange, the implied volatility "
-            "the House sold at. In teal, the volatility Bitcoin actually realized over the following thirty days. "
-            "Most of the time orange is above teal: the market charges more for volatility than Bitcoin then "
-            f"delivers. On average {100 * b['mean_iv']:.0f} against {100 * b['mean_rv']:.0f} percent. "
-            "<bookmark mark='b'/> But not always: when Bitcoin crashes, realized volatility jumps far above what "
-            "was charged, and those are the spikes of teal above orange."
+            "Chapter seven said a hedged seller earns the gap between implied and realized volatility. Is there a "
+            f"gap in a real market? Every day at eight from {ts_date(b['start'][0], '%B %Y')}, the House sells a "
+            "thirty-day at-the-money Bitcoin call at Deribit's DVOL and hedges it hourly on Binance: "
+            f"{b['n']:,} trades. <bookmark mark='a'/> Orange, the implied volatility sold; teal, what Bitcoin "
+            f"realized next. On average {100 * b['mean_iv']:.0f} against {100 * b['mean_rv']:.0f} percent. "
+            "<bookmark mark='b'/> But in crashes teal spikes far above."
         ) as vo:
             self.play(FadeIn(g), FadeIn(setup))
             self.play(Create(l_iv), FadeIn(leg[0]), run_time=4)
@@ -97,13 +93,10 @@ class BTC(VoiceoverScene):
             label(r"(averages; the residual is the mean absolute size)", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
-            "Each dot is one month's trade: across, the gap between the implied volatility it was sold at and the "
-            "volatility that followed; up, the hedged profit per hundred dollars of Bitcoin. They line up, "
-            f"correlation {corr:.2f}: the profit is the volatility gap, as the formula said. The spread around the "
-            "line is chapter eight's gamma weighting: when in the month the moves came. <bookmark mark='a'/> And "
-            "the ledger accounts for every trade. Summed over a month, the theta term, the decay collected, and the "
-            "gamma term, the squared moves paid out, explain the profit to within a few hundredths: the expansion "
-            "behind the formula holds even for hourly Bitcoin."
+            "Each dot is one month: across, implied minus realized; up, the hedged profit per hundred dollars. "
+            f"Correlation {corr:.2f}: the profit is the volatility gap; the scatter is chapter eight's gamma "
+            "weighting. <bookmark mark='a'/> And the ledger's theta and gamma terms explain each month to within "
+            "a few hundredths, even on hourly Bitcoin."
         ) as vo:
             self.play(FadeIn(g), Create(zero))
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0008, run_time=3))
@@ -144,19 +137,14 @@ class BTC(VoiceoverScene):
             label(r"the left tail is where the risk lives", font_size=22, color=LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(stats, DOWN, buff=0.45).align_to(stats, LEFT)
         with self.voiceover(
-            f"Over all {b['n']:,} months the seller made {b['mean']:.2f} per hundred dollars of Bitcoin, on premiums "
-            f"averaging {np.mean(b['premium']):.2f}, and won in {100 * b['p_win']:.0f} percent of them. The months "
-            "overlap, so the honest statistic uses one trade per thirty days: "
-            f"{b['nonoverlap_mean']:.2f} plus or minus {b['nonoverlap_se']:.2f}, over {b['nonoverlap_n']} "
-            "independent months. That is the variance risk premium: people pay more for options than they are worth "
-            "on average, as insurance buyers do. Pause: eighty-odd percent of months won; is it safe? "
-            "<bookmark mark='a'/> Subtract what the simulation leaves out first. Costs, even at a market maker's "
-            f"two basis points a trade, take it to {b['mean_cost']:.2f}. And DVOL, computed like the VIX from the "
-            f"whole smile, sat about {gap_pts:.1f} points above at-the-money volatility on our Surface morning; "
-            f"selling at that lower volatility would leave about {adj:.2f}. Still positive, and still with the "
-            "left tail: months that lose two or three times what a good month earns. One more caveat: Deribit's "
-            "options are paid in coin, and the House hedges a dollar call; Carol Alexander and her coauthors "
-            "show the difference is second order here."
+            f"Over all {b['n']:,} months the seller made {b['mean']:.2f} per hundred, on premiums of "
+            f"{np.mean(b['premium']):.2f}, winning {100 * b['p_win']:.0f} percent of them. With one trade per "
+            f"thirty days, {b['nonoverlap_mean']:.2f} plus or minus {b['nonoverlap_se']:.2f} over "
+            f"{b['nonoverlap_n']} months: the variance risk premium. Is it safe? <bookmark mark='a'/> Costs, "
+            f"even two basis points a trade, take it to {b['mean_cost']:.2f}. DVOL sat about {gap_pts:.1f} points "
+            f"above at-the-money volatility on our Surface morning; selling there leaves about {adj:.2f}. Still "
+            "positive, with a left tail. And Deribit pays in coin while the House hedges a dollar call: second "
+            "order here, Carol Alexander and coauthors show."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(x, DOWN) for x in bars], lag_ratio=0.02, run_time=2.5))
             self.play(FadeIn(over_lab))
@@ -209,18 +197,18 @@ class BTC(VoiceoverScene):
         up_, low_, side_ = always_redraw(upper), always_redraw(lower), always_redraw(side)
         cap = note(r"band: 90\% block-bootstrap interval of the running mean (5 seeds $\times$ 200 resamples)",
                    font_size=18).to_edge(DOWN, buff=0.25)
-        fp = r["first_positive"]
+        fp = r["first_positive"] if r["first_positive"] is not None else r["start"][-1]
+        clear_early = bool(np.nanmin(lo[:, 5]) > 0)
+        band_line = (f"Even early on, the band sits above zero, and it ends between {r['final_lo']:.2f} and "
+                     f"{r['final_hi']:.2f}." if clear_early else
+                     f"It lifts clear of zero only from {ts_date(fp, '%B %Y')}, and ends between "
+                     f"{r['final_lo']:.2f} and {r['final_hi']:.2f}.")
         with self.voiceover(
             f"Now watch the study run, one independent month at a time, all {n} of them. Below, each month's "
             "hedged profit drops in. On the right, the ledger's two terms for that month: the gamma paid, the "
             "theta collected. Above, the running average, and around it how sure we can be of it: a bootstrap "
             "band, resampling the months in blocks, five seeds of two hundred resamples each. "
-            "<bookmark mark='a'/> Early on the band is wide and swallows zero: a year of selling volatility "
-            "proves little. "
-            + (f"It lifts clear of zero only from {ts_date(fp, '%B %Y')}, and ends between "
-               f"{r['final_lo']:.2f} and {r['final_hi']:.2f}." if fp is not None else
-               f"It ends between {r['final_lo']:.2f} and {r['final_hi']:.2f}.")
-            + " The premium is real, and it took years of data to see it."
+            f"<bookmark mark='a'/> Early on the band is wide. {band_line} The premium is real; pinning down its size took years of data."
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), Create(z1), Create(z2), FadeIn(cap))
             self.add(up_, low_, side_)
@@ -243,14 +231,12 @@ class BTC(VoiceoverScene):
                    (rf"{b['worst']:+.2f}", r"P\&L per 100 of BTC")],
             width=9.6, font_size=29).move_to(ORIGIN)
         with self.voiceover(
-            f"The worst month began on {ts_date(b['worst_start'], '%d %B %Y').lstrip('0')}. The House sold at "
-            f"{100 * b['worst_iv']:.0f} percent; three weeks later the yen carry trade unwound, Bitcoin fell with "
-            "every risky asset, and on the fifth of August the VIX printed sixty-five before New York opened. That "
-            f"month realized {100 * b['worst_rv']:.0f} percent, and the seller lost {-b['worst']:.2f}, more than two "
-            "average months' profit. This is the shape of every insurance business, and of every short-volatility "
-            "strategy in this series: many small gains, and an occasional large loss that arrives exactly when "
-            "everything else is losing too. Part twelve's crisis file, Volmageddon, is the same story with "
-            "leverage."
+            f"The worst month began on {ts_date(b['worst_start'], '%d %B %Y').lstrip('0')}, sold at "
+            f"{100 * b['worst_iv']:.0f} percent; three weeks later the yen carry trade unwound and on the fifth of "
+            f"August the VIX printed sixty-five before New York opened. The month realized "
+            f"{100 * b['worst_rv']:.0f} percent; the seller lost {-b['worst']:.2f}. Many small gains, and an "
+            "occasional large loss exactly when everything else is losing: Part twelve's Volmageddon is the same "
+            "story with leverage."
         ):
             self.play(FadeIn(card, shift=UP * 0.2))
             self.play(LaggedStart(*[Indicate(s, color=QC.CRISIS) for s in card.stats], lag_ratio=0.4))

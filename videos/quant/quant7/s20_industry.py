@@ -122,12 +122,13 @@ class Industry(VoiceoverScene):
                  yticks=[0, 1, 2, 3], ylabel=r"position in the US market, 10\% target", font_size=14).to_corner(DL, buff=0.4)
         wl = curve(g.ax, t, np.clip(w, 0, 3), GOOD, stroke_width=1.5)
         a, b = ind["vt_scaled"], ind["vt_plain"]
-        tab = VGroup(
-            MathTex(r"&\text{plain}\quad&&\text{targeted}", font_size=26, color=GREY_B),
-            MathTex(rf"\text{{Sharpe}}\quad&{b['sharpe']:.2f}\quad&&{a['sharpe']:.2f}", font_size=28),
-            MathTex(rf"\text{{worst 1\% day, mean}}\quad&{100 * b['es1']:.2f}\%\quad&&{100 * a['es1']:.2f}\%", font_size=28),
-            MathTex(rf"\text{{max drawdown (log)}}\quad&{b['maxdd_log']:.2f}\quad&&{a['maxdd_log']:.2f}", font_size=28),
-        ).arrange(DOWN, aligned_edge=RIGHT, buff=0.15).to_corner(DR, buff=0.5)
+        cells = [VectorizedPoint(), label(r"plain", font_size=20, color=GREY_B), label(r"targeted", font_size=20, color=GREY_B),
+                 label(r"Sharpe", font_size=22), MathTex(f"{b['sharpe']:.2f}", font_size=28), MathTex(f"{a['sharpe']:.2f}", font_size=28, color=GOOD),
+                 label(r"worst 1\% of days, mean", font_size=22), MathTex(rf"{100 * b['es1']:.2f}\%", font_size=28),
+                 MathTex(rf"{100 * a['es1']:.2f}\%", font_size=28, color=GOOD),
+                 label(r"max drawdown (log)", font_size=22), MathTex(f"{b['maxdd_log']:.2f}", font_size=28),
+                 MathTex(f"{a['maxdd_log']:.2f}", font_size=28, color=GOOD)]
+        tab = VGroup(*cells).arrange_in_grid(rows=4, cols=3, buff=(0.45, 0.18), col_alignments="lrr").to_corner(DR, buff=0.5)
         note_ = label(r"French's market excess return 1927--2020; the plain market scaled to the same volatility",
                       font_size=16, color=GREY_C).next_to(tab, DOWN, buff=0.15).align_to(tab, RIGHT)
         vt_line = (f"The Sharpe ratio rises from {b['sharpe']:.2f} to {a['sharpe']:.2f}, the worst days are milder, and "

@@ -27,7 +27,6 @@ class Heston(VoiceoverScene, ThreeDScene):
         t = load("trap")
         self.card()
         self.model()
-        self.rivers(c)
         self.derive()
         self.helix(t)
         self.trap(t)
@@ -49,51 +48,15 @@ class Heston(VoiceoverScene, ThreeDScene):
                     r"vol $\xi$; $\rho$ ties the two rivers")]
         step = ladder(self, rows, whys, keep=2, top=2.0, x=-1.2, buff=0.9, edge=6.9)
         with self.voiceover(
-            "Steven Heston's model, from 1993, is the simplest way to write the second river down so that it can be "
-            "priced. The price moves with the square root of a variance. <bookmark mark='a'/> The variance is Part "
-            "five's mean-reverting square-root process: pulled toward a long-run level theta at speed kappa, and "
-            "shaken by its own volatility, xi. Rho correlates the two noises, and, as the last chapter proved, rho "
-            "is what tilts the smile."
+            (
+            "Steven Heston's 1993 model is the simplest way to write the second river so that it can be priced. The "
+            "price moves with the square root of a variance. <bookmark mark='a'/> The variance is Part five's CIR "
+            "process: pulled toward theta at speed kappa, shaken by its own volatility xi, with correlation rho."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
-        self.wait(0.4)
-        self.clear_scene()
-
-    def rivers(self, c):
-        x = c["fits"]["Heston"]["x"]
-        n, days = 120, 120
-        S, v = sv.heston_qe(1.0, *x, days / 365, n, 6, seed=31, return_v=True)
-        t = np.arange(n + 1)
-        g1 = axes([0, days], [0.6, 1.5], x_length=9.0, y_length=2.4, ylabel=r"price", xticks=[0, 30, 60, 90, 120],
-                  yticks=[0.75, 1.0, 1.25], font_size=16).to_edge(UP, buff=0.6)
-        g2 = axes([0, days], [0, 1.6], x_length=9.0, y_length=2.4, xlabel=r"days", ylabel=r"volatility $\sqrt{v}$",
-                  xticks=[0, 30, 60, 90, 120], yticks=[0, 0.5, 1.0, 1.5], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                  font_size=16).next_to(g1, DOWN, buff=0.35)
-        VGroup(g1, g2).to_edge(LEFT, buff=0.6)
-        cols = [SPOT, OPT, RV, IV, VAR, GREY_A]
-        pS = VGroup(*[curve(g1.ax, t, np.clip(S[:, i], 0.6, 1.5), cols[i], stroke_width=2) for i in range(6)])
-        pv = VGroup(*[curve(g2.ax, t, np.clip(np.sqrt(v[:, i]), 0, 1.6), cols[i], stroke_width=2) for i in range(6)])
-        side = VGroup(
-            wrapped_label(r"six paths of the Heston model fitted to the Surface: each price path (top) and its own "
-                          r"volatility (bottom), in the same colour", 3.4, 19, GREY_A),
-            wrapped_label(r"the volatility touches zero and leaps back: the fitted model breaks Feller's condition", 3.4,
-                          19, BAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = illustration(r"simulated with Andersen's QE scheme, daily steps")
-        with self.voiceover(
-            "Here are the two rivers, simulated from the Heston model fitted to the Surface. Each colour is one "
-            "world: its price on top, and its own volatility underneath. <bookmark mark='a'/> When a path's "
-            "volatility spikes, its price swings harder, and, because rho is negative, the spikes tend to come with "
-            "falls. Notice how violently the volatility moves, touching zero and leaping back. That is what it took "
-            "to fit Bitcoin's smile."
-        ) as vo:
-            self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(side[0]))
-            self.play(LaggedStart(*[AnimationGroup(Create(a), Create(b)) for a, b in zip(pS, pv)], lag_ratio=0.25,
-                                  run_time=5))
-            vo.wait_until("a")
-            self.play(FadeIn(side[1]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -124,21 +87,18 @@ class Heston(VoiceoverScene, ThreeDScene):
                 why(r"prices then follow from one Fourier integral (COS here; derived in Part 16)", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Now derive the characteristic function. Write x for the log price and tau for the time to expiry. The "
-            "expected value of e to the i u x at expiry, given today's x and v, is a martingale, so by Feynman and Kac "
-            "it solves the backward equation of the model: this one. <bookmark mark='a'/> Every coefficient in it "
-            "is linear in v. So guess an answer whose exponent is linear in v: C of tau, plus D of tau times v, plus "
-            "i u x. That guess is the whole idea of affine models, which Duffie, Pan and Singleton generalised in "
-            "2000. <bookmark mark='b'/> Substitute it. Every derivative becomes multiplication, and the equation "
-            "splits in two. The terms proportional to v give an ordinary differential equation for D with a square "
-            "in it: a Riccati equation. <bookmark mark='c'/> The terms without v say that C grows at kappa theta "
-            "times D. <bookmark mark='d'/> A Riccati equation with constant coefficients can be solved exactly. "
-            "Its right-hand side is a quadratic in D with roots b plus or minus d, over xi squared. Separate "
-            "variables, use partial fractions, and you get this, with g the ratio of the two roots. We choose the "
-            "root so that e to the minus d tau decays. <bookmark mark='e'/> Integrate once for C. That choice, "
-            "the so-called little trap, keeps the logarithm away from its branch cut, as we will see in a moment. "
-            "<bookmark mark='f'/> Put them together and the characteristic function is exponential in today's "
-            "variance. One Fourier integral then prices any vanilla in microseconds."
+            (
+            "Now derive its characteristic function. With x the log price and tau the time left, the expected value "
+            "of e to the i u x at expiry solves the model's backward equation, by Feynman–Kac. "
+            "<bookmark mark='a'/> Every coefficient is linear in v, so guess an exponent linear in v: the affine idea "
+            "Duffie, Pan and Singleton generalised. <bookmark mark='b'/> Substitute. The terms in v give a Riccati "
+            "equation for D; <bookmark mark='c'/> the rest say C grows at kappa theta D. <bookmark mark='d'/> The "
+            "Riccati right-hand side is a quadratic with roots b plus or minus d over xi squared; separate variables, "
+            "use partial fractions, and choose the root that makes e to the minus d tau decay. "
+            "<bookmark mark='e'/> Integrate for C. That choice, the little trap, keeps the logarithm off its branch "
+            "cut. <bookmark mark='f'/> The result is exponential in today's variance, and one Fourier integral "
+            "prices any vanilla."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -177,13 +137,12 @@ class Heston(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, txt)
         self.remove(hint, txt)
         with self.voiceover(
-            "It is worth looking at the object we just derived. The characteristic function takes a frequency u to "
-            "a complex number, so draw it as a curve in three dimensions: u along the axis, the real and imaginary "
-            "parts across. <bookmark mark='a'/> At u equal zero it is one: probabilities sum to one. As u grows it "
-            "spirals around the axis, turning at the rate set by the drift, and shrinks. How fast it shrinks is the "
-            "Gaussian part of the distribution: a slow decay means fat tails. <bookmark mark='b'/> The three-month "
-            "curve collapses much faster than the thirty-day one: more variance, a wider distribution, a narrower "
-            "transform. Everything an option price needs is on this spiral."
+            (
+            "Look at the object. The characteristic function maps a frequency to a complex number, so draw it in "
+            "three dimensions. <bookmark mark='a'/> It starts at one, spirals at the drift's rate, and shrinks; slow "
+            "decay means fat tails. <bookmark mark='b'/> The three-month curve collapses faster: a wider law, a "
+            "narrower transform."
+        )
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.5)
             self.play(Create(c30), run_time=3)
@@ -242,19 +201,16 @@ class Heston(VoiceoverScene, ThreeDScene):
             rf"{100 * p1['iv_original'][1]:.1f}\% from the original form", 5.6, 19, WHITE)
         side.next_to(leg, DOWN, buff=0.3).align_to(g2, LEFT)
         with self.voiceover(
-            "Now the trap. Heston's original paper wrote the same solution with the other root: g upside down, and "
-            "e to the plus d T. Algebraically identical. Numerically, not. Follow the number inside its logarithm, "
-            "z of u, on our fitted model at one year, as the frequency rises. <bookmark mark='a'/> It grows "
-            "exponentially, so the radius here is compressed, but its angle is true. It swings around the origin, "
-            f"and at u equal to {cu:.2f} it crosses the negative real axis: the branch cut of the logarithm. "
-            "<bookmark mark='b'/> The computer's logarithm jumps there by two pi i, and the characteristic function "
-            "jumps with it. On the right, the imaginary part of the logarithm: the original form leaps, the little "
-            "trap form of Albrecher and his co-authors stays continuous. <bookmark mark='c'/> And it is not an "
-            "academic point. On our own fit the original form is wrong from u of "
-            f"{fw['fit_1']['u']:.2f} at one year, where the function still has size {fw['fit_1']['abs_phi']:.2f}. A "
-            f"one-year at-the-money call comes out at {100 * p1['iv_original'][1]:.0f} percent implied volatility "
-            f"instead of {100 * p1['iv_little'][1]:.0f}. With gentle textbook parameters it holds to a year and fails "
-            "at three. Our violent Bitcoin fit breaks it sooner."
+            (
+            "Now the trap. Heston's paper used the other root: g upside down, e to the plus d T. Algebraically the "
+            "same; numerically not. Follow the number inside its logarithm at one year. <bookmark mark='a'/> The "
+            f"radius is compressed, the angle true: at u of {cu:.2f} it crosses the negative real axis, the "
+            "logarithm's branch cut. <bookmark mark='b'/> There the computer's logarithm jumps by two pi i; the "
+            "little-trap form of Albrecher and co-authors stays continuous. <bookmark mark='c'/> On our fit the "
+            f"original form is wrong from u of {fw['fit_1']['u']:.2f}, and a one-year at-the-money call comes out at "
+            f"{100 * p1['iv_original'][1]:.0f} percent implied volatility instead of {100 * p1['iv_little'][1]:.0f}. "
+            "Textbook parameters survive to a year; our violent fit does not."
+        )
         ) as vo:
             self.play(FadeIn(plane), FadeIn(ttl), Create(cut), FadeIn(cut_l))
             self.add(po, dot)
@@ -281,12 +237,12 @@ class Heston(VoiceoverScene, ThreeDScene):
                 f"original form, our fit, T=3: wrong from u = {fw['fit_3']['u']:.2f}"]
         pp = pause(r"Is $\ln S_T$ normal given the variance path?", width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Here is the House's implementation, all of it: eleven lines. The two lines that matter are g, the ratio "
-            "of roots chosen the right way up, and e, which decays. <bookmark mark='a'/> Run it. Through the COS "
-            "method it reproduces Fang and Oosterlee's published benchmark price, five point seven eight five one "
-            f"five, to {-np.floor(np.log10(b['err'])):.0f} decimal places. And the check against the original form finds exactly where that one "
-            "breaks on our fit. <bookmark mark='b'/> A last question before we fit it. Is the log price normal "
-            "given the variance path? Only when rho is zero: that was chapter two's conditioning argument."
+            (
+            "The House's implementation: eleven lines, with the root chosen the right way up. "
+            "<bookmark mark='a'/> It reproduces Fang and Oosterlee's benchmark to "
+            f"{-np.floor(np.log10(b['err'])):.0f} decimal places, and finds where the original form breaks. "
+            "<bookmark mark='b'/> Pause: is the log price normal given the variance path? Only if rho is zero."
+        )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

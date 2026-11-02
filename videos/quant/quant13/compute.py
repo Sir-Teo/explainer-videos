@@ -1016,10 +1016,10 @@ def compute_mixing_sweep() -> dict:
         S = np.exp(X)
         fwd = _iv_from_paths(X[90] - X[60], k, 30 / 365)
         L60 = next(z["L"] for z in info["L"] if round(z["t"] * 365) == 60)
-        part[key] = {"eta": e, "seed": s, "reprice": _reprice(X, fit), "fwd_iv": fwd, "fwd_atm": float(fwd[5]),
+        part[key] = _json({"eta": e, "seed": s, "reprice": _reprice(X, fit), "fwd_iv": fwd, "fwd_atm": float(fwd[5]),
                      "fwd_skew": float(fwd[3] - fwd[7]), "cliquet": sv.cliquet(S, [0, 30, 60, 90, 120], cap=0.10,
                                                                                   floor=0.0, gfloor=0.0),
-                     "forward_start": sv.forward_start(S, 60, 90), "L60": L60}
+                     "forward_start": sv.forward_start(S, 60, 90), "L60": L60})
         print(f"   eta={e} seed={s}: cliquet {part[key]['cliquet']:.4f}, fwd skew {part[key]['fwd_skew']:.4f}, "
               f"err {part[key]['reprice']}", flush=True)
     res = {"k": k, "grid": np.linspace(-1.0, 1.0, 81), "runs": [part[f"{e:g}_{s}"] for e, s in runs]}

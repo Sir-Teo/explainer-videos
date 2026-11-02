@@ -55,17 +55,14 @@ class Ledger(VoiceoverScene):
                                                                          font_size=24, color=REA)).arrange(RIGHT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Now take the seller's side: short one option, long delta shares, and the option marked at the "
-            "volatility it was sold at. Call that sigma i, for implied. The stock, though, moves with whatever "
-            "volatility the world delivers. Call that sigma r, for realized. <bookmark mark='a'/> Over a short "
-            "time, expand the option's change to second order. The first-order term is delta times the stock's "
-            "move, and the hedge cancels it exactly. What remains is theta times dt, plus one half gamma times the "
-            "squared move. <bookmark mark='b'/> By Ito, the squared move is S squared times the realized variance "
-            "times dt. <bookmark mark='c'/> And from the last chapter, theta is minus one half the implied variance "
-            "times S squared gamma. Put them together: the hedged book earns one half gamma S squared times the "
-            "difference between implied and realized variance, every instant. That is the whole business of "
-            "selling options. Not a bet on direction: a bet that the stock will move less than the volatility "
-            "you charged for, weighted by gamma."
+            "Take the seller's side: short one option, long delta shares, the option marked at the volatility it "
+            "was sold at, sigma i, implied. The stock moves with the volatility the world delivers, sigma r, "
+            "realized. <bookmark mark='a'/> Expand the option's change to second order: the hedge cancels the "
+            "first-order term, leaving theta dt plus half gamma times the squared move. <bookmark mark='b'/> By "
+            "Ito, the squared move is S squared times the realized variance times dt. <bookmark mark='c'/> And "
+            "theta is minus half the implied variance times S squared gamma. So the book earns half gamma S "
+            "squared times the gap between implied and realized variance, every instant: a bet that the stock "
+            "moves less than you charged for, weighted by gamma."
         ) as vo:
             step(0)
             self.play(FadeIn(legend_))
@@ -115,15 +112,11 @@ class Ledger(VoiceoverScene):
         key.next_to(g, UP, buff=0.55).align_to(g, LEFT)
         frac_in = float(np.mean(np.abs(ret) < be))
         with self.voiceover(
-            "Read the formula one hedging interval at a time. Over each interval the seller collects theta, a "
-            "fixed amount, and pays one half gamma times the squared move. The two cancel when the move is exactly "
-            "sigma i times the square root of the interval: the breakeven move. <bookmark mark='a'/> Here is a "
-            "path hedged four times a day at twenty percent implied. Every interval whose move stays inside the "
-            "band, in green, is a small win; every move outside, in red, is a loss, and a big move is a big loss, "
-            f"because the cost is quadratic. On this path, which realizes {100 * L['rows'][j]['realized']:.0f} "
-            f"percent, {100 * frac_in:.0f} percent of intervals are wins, and the seller still loses: the "
-            "occasional large move outweighs many small wins. A short option position is short the squared moves "
-            "of the stock."
+            "One interval at a time: the seller collects theta and pays half gamma times the squared move; they "
+            "cancel when the move is sigma i times root dt, the breakeven. <bookmark mark='a'/> A path hedged four "
+            f"times a day at twenty percent: green intervals stay inside the band and win; red ones lose, "
+            f"quadratically. This path realizes {100 * L['rows'][j]['realized']:.0f} percent; "
+            f"{100 * frac_in:.0f} percent of its intervals win, and the seller still loses."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(b, DOWN if b.get_y() > ax.c2p(0, 0)[1] else UP)
                                                for b in bars], lag_ratio=0.02, run_time=3))
@@ -156,12 +149,10 @@ class Ledger(VoiceoverScene):
                         f"residual {pnl - g - th:+.2f}  P&L {pnl:+.2f}")
         res = [abs(float(L["rows"][j]["pnl"]) - float(L[f"gamma_{j}"][-1]) - float(L[f"theta_{j}"][-1])) for j in range(3)]
         with self.voiceover(
-            "This is the House's hedger, the loop that will keep score on every path in this part. Each step it "
-            "marks the option, books the change against the shares held, and splits it: half gamma times the "
-            "squared move, the theta term, and whatever is left. <bookmark mark='a'/> Run it on three quarters "
-            "that realize twelve, twenty-eight and twenty percent. The gamma and theta columns carry the story; "
-            f"the residual, what the second-order expansion misses, is never more than {max(res):.2f}. That is "
-            "the honest line: the formula explains the book, but only to the order it was derived."
+            "The House's hedger keeps the score: each step it marks the option, books the change against the "
+            "shares, and splits it into the gamma term, the theta term, and what is left. <bookmark mark='a'/> On "
+            "quarters realizing twelve, twenty-eight and twenty percent, the residual, what the expansion misses, "
+            f"is never more than {max(res):.2f}."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -257,14 +248,12 @@ class Ledger(VoiceoverScene):
         cap = label(r"20,000 paths at each realized volatility, all hedged at $\sigma_i = 20\%$", font_size=24,
                     color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "One path is an anecdote. Pause and predict: when realized equals implied, does every path end at "
-            "zero? Here are twenty thousand at each realized volatility. When the world "
-            f"realizes twelve percent, the seller makes {rows[0]['mean']:.2f} on average and never loses: "
-            f"{100 * rows[0]['p_loss']:.0f} percent of paths lose money. When it realizes twenty-eight, the seller "
-            f"loses {-rows[2]['mean']:.2f} on average, and on every path. And when realized equals implied, the "
-            f"average is {rows[1]['mean']:+.2f}: the price was fair, and what is left is a spread of "
-            f"{rows[1]['sd']:.2f} from hedging only four times a day, which chapter nine measures. An options "
-            "trader is a volatility trader: the profit is the gap between two volatilities, one quoted, one lived."
+            "Pause and predict: when realized equals implied, does every path end at zero? Twenty thousand paths "
+            f"each. At twelve percent the seller makes {rows[0]['mean']:.2f} on average, and "
+            f"{100 * rows[0]['p_loss']:.0f} percent of paths lose. At twenty-eight, the seller loses "
+            f"{-rows[2]['mean']:.2f} on average. At twenty the average is {rows[1]['mean']:+.2f}, with a spread of "
+            f"{rows[1]['sd']:.2f} from hedging four times a day: chapter nine. The profit is the gap between two "
+            "volatilities, one quoted, one lived."
         ):
             self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.2) for p in panels], lag_ratio=0.4, run_time=3),
                       FadeIn(cap))

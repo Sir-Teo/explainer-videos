@@ -114,6 +114,7 @@ class MOTConverge(VoiceoverScene):
             self.add(W)
             vo.wait_until("a")
             self.play(k.animate.set_value(n - 1), run_time=max(vo.until("b") - 1.0, 4.0), rate_func=linear)
+            W.clear_updaters()
             self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("b")
             self.play(FadeIn(side[3]), FadeIn(side[4]))

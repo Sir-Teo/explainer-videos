@@ -96,7 +96,8 @@ class Solver(VoiceoverScene, ThreeDScene):
         # where the sheet crosses the plane: the implied total volatility for each x
         from scipy.optimize import brentq
         cx = np.linspace(-0.9, 0.9, 37)
-        cs = [brentq(lambda s_: bfun(a, s_) - beta, 1e-3, 1.2) if bfun(a, 1.2) > beta else np.nan for a in cx]
+        cs = [brentq(lambda s_: bfun(a, s_) - beta, 1e-3, 1.2) if bfun(a, 1e-3) < beta < bfun(a, 1.2) else np.nan
+              for a in cx]
         cross = VMobject(stroke_color=IMP, stroke_width=5).set_points_smoothly(
             [ax.c2p(a, s_, beta) for a, s_ in zip(cx, cs) if np.isfinite(s_)])
         corner = Dot3D(ax.c2p(-0.9, 0.08, bfun(-0.9, 0.08)), radius=0.1, color=LOSS)
@@ -127,17 +128,14 @@ class Solver(VoiceoverScene, ThreeDScene):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         with self.voiceover(
-            "Why is this always possible, and when is it hard? Divide the price by the square root of forward times "
-            "strike, and it depends on only two numbers: the log-moneyness x and the total volatility s, sigma "
-            "root T. Five inputs become one smooth sheet. <bookmark mark='a'/> It rises in s everywhere: its slope "
-            "is vega, which is positive. So a quote, a horizontal plane, cuts the sheet along one curve, and for "
-            "each strike there is exactly one total volatility. At the money the sheet is almost a straight line, "
-            "point four times s: the floor trader's rule, C is about point four F sigma root T. "
-            "<bookmark mark='b'/> Now dive to the red corner: short-dated, far from the money. The sheet is flat "
-            "there, vega nearly zero, and Newton's method, which divides by vega, can throw a step anywhere. "
-            "That is why the House's solver keeps a bracket and starts from Corrado and Miller's approximation, "
-            "and why Peter Jaeckel's Let's be rational, in 2015, made the start so good that two steps reach "
-            "machine precision from anywhere."
+            "Why is this always possible, and when is it hard? Divide the price by root forward times strike and "
+            "it depends on two numbers, the log-moneyness x and the total volatility s: one smooth sheet. "
+            "<bookmark mark='a'/> It rises in s everywhere, its slope is vega, so a quote, a horizontal plane, "
+            "cuts it in one curve: one volatility per strike. At the money it is nearly the line point four s, the "
+            "floor's rule. <bookmark mark='b'/> In the red corner, short-dated and far from the money, the sheet "
+            "is flat, vega nearly zero, and Newton, dividing by vega, can throw a step anywhere. Hence the House's "
+            "bracket and its Corrado-Miller start; Peter Jaeckel's Let's be rational, 2015, starts so well that "
+            "two steps reach machine precision."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(FadeIn(surf), FadeIn(eqs_all[0]), run_time=2)
@@ -149,7 +147,7 @@ class Solver(VoiceoverScene, ThreeDScene):
                                                                                           FadeIn(eqs_all[3])],
                              run_time=3)
             self.wait(max(vo.remaining(1.0) - 1.0, 0.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*self.mobjects))], run_time=1.2)
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker)]))], run_time=1.2)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -167,14 +165,12 @@ class Solver(VoiceoverScene, ThreeDScene):
             "    s = s_new",
         ], source="explainer/quant/house/bs.py (implied_vol, abridged)", width=7.6).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Here is the House's loop. Each pass it tightens a bracket around the answer, tries a Newton step, and "
-            "falls back to halving the bracket when the step lands outside it. One line is new in this part: "
-            "converged quotes are frozen while the others keep iterating. Without it, a quote that had already "
-            "converged could be knocked out of place by the bracket's fallback, and recover thirty halvings later. "
-            f"<bookmark mark='a'/> Run it on all {r['n']} quotes of the Surface at once: a median of "
-            f"{r['median']:.0f} iterations to ten decimal places, {r['p90']:.0f} for nine in ten, and at worst "
-            f"{r['max']}, for a {r['worst_T_days']:.0f}-day call far out of the money, where vega is about "
-            f"{r['worst_vega'] * 1e4:.0f} in ten thousand, in normalized units."
+            "The House's loop: tighten a bracket, try a Newton step, halve the bracket if the step lands outside. "
+            "One line is new in this part: converged quotes are frozen while the others iterate; before, the "
+            "fallback could knock a finished quote out of place. <bookmark mark='a'/> On all "
+            f"{r['n']} quotes of the Surface: a median of {r['median']:.0f} iterations to ten decimals, "
+            f"{r['p90']:.0f} for nine in ten, {r['max']} at worst, for a {r['worst_T_days']:.0f}-day call far "
+            "out of the money."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -223,17 +219,13 @@ class Solver(VoiceoverScene, ThreeDScene):
         cnt = always_redraw(lambda: MathTex(rf"\text{{iteration}}\ {int(it.get_value())}", font_size=28, color=IMP)
                             .next_to(left, UP, buff=0.1))
         with self.voiceover(
-            f"Now watch all {r['n']} quotes solve at once. On the left, grey: the true smile. Each orange dot "
-            "starts at the House's first guess and jumps, iteration by iteration, onto it; on the right, the worst "
-            "error over all quotes, on a log scale. <bookmark mark='a'/> Within a few iterations most dots are "
-            "home; the last stragglers are the flat corner's quotes, and by iteration "
-            f"{int(np.argmax(hm < -9))} the worst error is below ten to the minus nine. <bookmark mark='b'/> In "
-            "red, the same budget spent on plain Newton from a flat fifty percent guess. "
-            f"{r['naive_broke']} quotes are thrown to infinity or below zero at some point, and {r['naive_unfinished']} "
-            "never come back. Pause and predict: a deep out-of-the-money option is quoted one hundredth of a "
-            "percent of the forward too high. How wrong is its implied volatility? On the slowest quote, "
-            f"{100 * r['tick_shift']:.0f} volatility points. Where vega is near zero, the quote barely pins the "
-            "volatility down at all."
+            f"Now all {r['n']} quotes solve at once. Left, grey: the true smile; each orange dot starts at the "
+            "House's first guess and jumps onto it. Right: the worst error, on a log scale. "
+            f"<bookmark mark='a'/> By iteration {int(np.argmax(hm < -9))} the worst error is below ten to the minus "
+            "nine. <bookmark mark='b'/> In red, plain Newton from a flat fifty percent: "
+            f"{r['naive_broke']} quotes are thrown to infinity or below zero, {r['naive_unfinished']} never "
+            "return. Pause and predict: a far out-of-the-money quote one hundredth of a percent of the forward too "
+            f"high. How wrong is its volatility? On the slowest quote, {100 * r['tick_shift']:.0f} points."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right), FadeIn(truth), FadeIn(leg[0]))
             dh, eh = dots(H, IMP), err(hm, IMP)

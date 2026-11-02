@@ -107,12 +107,10 @@ class RiskNeutral(VoiceoverScene):
             f"at an expected {100 * mu:.0f} percent a year. <bookmark mark='a'/> Average the discounted payoff of "
             f"a one-year at-the-money call over these paths and you get {d['mc_P']:.2f}. That is not the "
             "option's price. <bookmark mark='b'/> In violet, the same paths with the drift replaced by the "
-            f"riskless rate, {100 * r:.0f} percent. Their distribution at the end sits lower. Average the "
-            f"discounted payoff over these, and you get {d['mc_Q']:.2f}, give or take {d['se_Q']:.2f}: the "
-            f"Black-Scholes price, {d['exact']:.2f}. <bookmark mark='c'/> And Girsanov's theorem says the two "
-            "worlds are the same paths with different weights. Weight each real-world path by this exponential, "
-            "which tilts probability away from the paths that went up fastest, and the real-world average turns "
-            f"into the risk-neutral one: {d['mc_W']:.2f}. The theta in it, mu minus r over sigma, is the market "
+            f"riskless rate, {100 * r:.0f} percent: the average is {d['mc_Q']:.2f}, give or take "
+            f"{d['se_Q']:.2f}, the Black-Scholes price, {d['exact']:.2f}. <bookmark mark='c'/> Girsanov's theorem "
+            "says the two worlds are the same paths with different weights: weight each real-world path by this "
+            f"exponential and the real-world average turns into the risk-neutral one, {d['mc_W']:.2f}. The theta in it, mu minus r over sigma, is the market "
             "price of risk, which the option's price does not need to know."
         ) as vo:
             self.play(FadeIn(g), Create(kline))
@@ -199,7 +197,7 @@ class RiskNeutral(VoiceoverScene):
             "discounted payoffs under Q. With a hundred outcomes the eight estimates disagree by dollars; the "
             "band narrows like one over the square root of n, and closes on the formula. "
             "<bookmark mark='a'/> In amber, the same budget spent on real-world paths, reweighted by Girsanov's "
-            "factor. Both bands close on the same price. " + verdict
+            f"factor. Both bands close on the same price. {verdict}"
         ) as vo:
             self.play(FadeIn(g), Create(line), FadeIn(leg[2]))
             self.add(bq)
@@ -242,11 +240,10 @@ class RiskNeutral(VoiceoverScene):
         with self.voiceover(
             "The two Ns are worth keeping. N of d two is the risk-neutral probability that the call finishes "
             f"in the money: here {d['N_d2']:.3f}, the shaded area, and {100 * d['q_itm']:.1f} percent of our "
-            f"risk-neutral outcomes did. In the real world {100 * d['p_itm']:.1f} percent did. Pause: is the call "
-            "worth that real chance of anything? No. Q's probabilities are not forecasts; they are prices. "
-            f"<bookmark mark='a'/> N of d one is the delta, {d['N_d1']:.3f} shares per option. So the formula is a "
-            "recipe: hold N of d one shares, borrow K e to the minus r T times N of d two, and the portfolio is "
-            "the option. Replication and expectation are one statement seen from two sides."
+            f"risk-neutral outcomes did; in the real world {100 * d['p_itm']:.1f} percent. Pause: is the call "
+            "worth that real chance of anything? No: Q's probabilities are prices, not forecasts. "
+            f"<bookmark mark='a'/> N of d one is the delta, {d['N_d1']:.3f} shares. Hold N of d one shares, "
+            "borrow K e to the minus r T times N of d two, and the portfolio is the option."
         ) as vo:
             self.play(FadeIn(g), Create(line), Create(kline), FadeIn(klab))
             self.play(FadeIn(area), FadeIn(top[0]))

@@ -15,7 +15,7 @@ class SABR(VoiceoverScene, ThreeDScene):
         self.card()
         self.model(c)
         self.derive(r)
-        self.replay(r)
+        self.replay(r, c)
         self.ribbon(c)
         self.backbone(s)
 
@@ -42,15 +42,18 @@ class SABR(VoiceoverScene, ThreeDScene):
                 why(r"the function that bends the smile: $z/x(z)$ equals 1 at the money")]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.4, buff=0.85, edge=6.9)
         with self.voiceover(
-            "Rates and foreign-exchange desks needed something different: a smile they could fit one expiry at a "
-            "time, and talk about in a few numbers. In 2002 Patrick Hagan, Deep Kumar, Andrew Lesniewski and Diana "
-            "Woodward gave them SABR. The forward moves with a volatility alpha, raised to a backbone power beta, "
-            "and alpha itself is lognormal, with its own volatility nu and a correlation rho. With nu zero it is "
-            "the constant elasticity of variance model; with beta zero as well, Bachelier. <bookmark mark='a'/> Its "
-            "gift is an expansion. Singular perturbation theory gives the implied volatility at each strike "
-            "directly: roughly, the volatility along the most likely path from today's forward to the strike, with "
-            "a first-order correction in time. No integral, no simulation. <bookmark mark='b'/> All the bending "
-            "lives in one function, z over x of z."
+            (
+            (
+            "Rates and FX desks wanted a smile they could fit one expiry at a time, in a few numbers. In 2002 Hagan, "
+            "Kumar, Lesniewski and Woodward gave them SABR: the forward moves with volatility alpha raised to a "
+            "backbone power beta, and alpha is itself lognormal, with vol of vol nu and correlation rho. With nu zero "
+            "it is the constant-elasticity model; with beta zero as well, Bachelier. In practice beta is fixed by "
+            "convention, often one half for rates and one for FX and crypto, and the other three are fitted. "
+            "<bookmark mark='a'/> Singular perturbation theory gives the implied volatility directly: roughly the "
+            "volatility along the most likely path to the strike, corrected in time. <bookmark mark='b'/> All the "
+            "bending lives in z over x of z."
+        )
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -81,16 +84,14 @@ class SABR(VoiceoverScene, ThreeDScene):
             MathTex(rf"\tfrac12\rho\nu \times (1 + O(T)) = {sl['skew_formula']:.3f}\ \ \text{{vs the formula's slope}}\ "
                     rf"{sl['skew_num']:.3f}", font_size=28, color=IV)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "What does the formula say, term by term? Expand x of z around zero and divide: z over x of z is one, "
-            "minus rho over two times z, plus a quadratic term. <bookmark mark='a'/> Now z is minus nu over alpha "
-            "times the log-moneyness, so the slope of the smile at the money is rho nu over two: the skew is the "
-            "correlation times the vol of vol. <bookmark mark='b'/> The curvature is proportional to nu squared over "
-            "alpha: even with no correlation the smile curves, as chapter two proved it must. <bookmark mark='c'/> "
-            "And at the money, for any beta, the leading term is alpha times the forward to the power beta minus "
-            "one. That is the backbone: how the at-the-money volatility moves when the forward moves. "
-            "<bookmark mark='d'/> On the 51-day slice of the Surface, a half of rho times nu, with the small time "
-            f"correction, is {sl['skew_formula']:.3f}, exactly the slope of the full formula at the money. The "
-            "four numbers are readable: that is why traders speak SABR."
+            (
+            "Term by term: expand x of z at zero, and z over x of z is one, minus rho z over two, plus a quadratic. "
+            "<bookmark mark='a'/> Since z is minus nu k over alpha, the at-the-money slope is rho nu over two: skew is "
+            "correlation times vol of vol. <bookmark mark='b'/> The curvature is proportional to nu squared over "
+            "alpha. <bookmark mark='c'/> And at the money, alpha times F to the beta minus one: the backbone. "
+            f"<bookmark mark='d'/> On the 51-day slice, the formula's slope is {sl['skew_formula']:.3f}. Four "
+            "readable numbers: that is why traders speak SABR."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -104,7 +105,7 @@ class SABR(VoiceoverScene, ThreeDScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def replay(self, r):
+    def replay(self, r, c):
         S = r["slices"]
         days = np.array([z["days"] for z in S])
         lx = np.log10(days)
@@ -128,13 +129,14 @@ class SABR(VoiceoverScene, ThreeDScene):
 
         nu_dots = VGroup()
         with self.voiceover(
-            "Now fit it, one expiry at a time, and watch. On the left, each slice of the Surface in turn, with SABR's "
-            "smile moving from its starting guess onto the quotes as the least-squares iterations run. On the right, "
-            "where each slice's three fitted numbers land, against its expiry. <bookmark mark='a'/> The short "
-            "slices need a huge vol of vol and a steep skew; the long ones, a gentle one. Alpha, the at-the-money "
-            "level, hardly moves; rho stays near minus a quarter to minus a third. <bookmark mark='b'/> But nu falls "
-            "steadily with expiry, and on log scales its dots line up. Each slice is fitted in a couple of dozen "
-            "evaluations, because each is a three-parameter fit to a dozen quotes."
+            (
+            "Fit it slice by slice and watch: each expiry's smile moves from its starting guess onto the quotes, and "
+            "its three numbers land on the right. <bookmark mark='a'/> Alpha barely moves; rho stays near minus a "
+            f"third. <bookmark mark='b'/> But nu falls steadily, along a line on log scales: like T to the "
+            f"{c['sabr_nu_power']:.2f}. Fitted per slice, SABR misses by only {c['sabr_rmse']:.2f} points, with "
+            f"{3 * len(c['sabr'])} numbers. One global nu would underfit the short skew, the same diagnosis as "
+            "Heston's; the square-root law is Part fourteen's clue."
+        )
         ) as vo:
             self.play(FadeIn(main), FadeIn(M), FadeIn(src))
             per = max((vo.until("b") + 4.0) / len(S), 1.0)
@@ -190,10 +192,10 @@ class SABR(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "Put the nine fitted smiles side by side, and fill between them: a volatility surface built from slices. "
-            "<bookmark mark='a'/> Turn it. The short end is a deep, narrow valley; the long end almost flat. SABR "
-            "fits each slice beautifully, but nothing in it connects one slice to the next: there is no model of "
-            "time, only a model per expiry."
+            (
+            "Assemble the nine smiles into a surface. <bookmark mark='a'/> The short end is a deep narrow valley, the "
+            "long end nearly flat. Nothing in SABR links one slice to the next: a model per expiry, not of time."
+        )
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.2)
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), run_time=2.5)
@@ -221,14 +223,13 @@ class SABR(VoiceoverScene, ThreeDScene):
                              r"bitcoin's smile moved with the price: $\beta$ near 1", 4.6, 20, GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(r"SABR with the 51-day slice's $\rho$ and $\nu$, $\alpha$ set to match today's at-the-money vol")
         with self.voiceover(
-            "The exponent beta is the backbone: how the at-the-money volatility moves when the forward moves. With "
-            "beta equal to one, the smile slides along with the price. <bookmark mark='a'/> With beta zero, "
-            "volatility falls as the price rises, like a normal model, which suits interest rates. Today's fit "
-            "barely cares about beta, because rho and the vol of vol can imitate it. But it decides the dynamics, "
-            "and so the hedge. Part twelve's test found that Bitcoin's smile moved with the price: beta near one. "
-            "And this is why Hagan and his co-authors wrote the paper: local volatility, fitted to the same smile, "
-            "predicts that when the forward rises the smile moves the opposite way, a wrong-way backbone that made "
-            "local-volatility deltas worse than Black and Scholes's. SABR's backbone moves the right way."
+            (
+            "Beta is the backbone: how at-the-money volatility moves with the forward. With beta one the smile slides "
+            "with the price. <bookmark mark='a'/> With beta zero, volatility falls as the price rises, which suits "
+            "rates. Today's fit barely sees beta; the hedge does. Bitcoin's smile moved with the price in Part "
+            "twelve's test: beta near one. And it is why Hagan wrote the paper: local volatility predicts the smile "
+            "moves the wrong way, and its deltas were worse than Black–Scholes's."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[2]), FadeIn(leg[2]))
             vo.wait_until("a")

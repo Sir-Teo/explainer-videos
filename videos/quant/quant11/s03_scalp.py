@@ -84,7 +84,7 @@ class Scalp(VoiceoverScene, ThreeDScene):
         def dg(x, day):
             tau = max(T - day, 0.4) / 365
             return float(min(2 * bs.greeks(x, 100.0, tau, sig)["gamma"] * x * x / 100, 12.0))
-        sf = surf(ax, dg, (50, 120), (0, 29.5), [(QC.SPOT, 0.5), (GAMMA, 4), (QC.LOSS, 11)], resolution=(36, 30),
+        sf = surf(ax, dg, (50, 120), (0, 29.5), [(QC.SPOT, 0.5), (GAMMA, 4), (QC.LOSS, 11)], resolution=(28, 22),
                   opacity=0.7)
         t, S = np.asarray(s["t"])[::3], np.asarray(s["S"])[::3]
         pts = [ax.c2p(x, d, dg(x, d)) + OUT * 0.05 for x, d in zip(S, t)]

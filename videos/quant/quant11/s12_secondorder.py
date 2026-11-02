@@ -33,7 +33,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
     def vega_surface(self, so):
         ax = axes3d([60, 140, 20], [0.2, 1.0, 0.2], [0, 12, 4], x_length=7.6, y_length=5.0, z_length=3.2)
         sf = surf(ax, lambda K, s: vega_pt(K, s), (60, 140), (0.2, 1.0), [(QC.SPOT, 0.5), (VEGA, 5), (QC.LOSS, 11)],
-                  resolution=(32, 24), opacity=0.7)
+                  resolution=(26, 18), opacity=0.7)
         s0 = 0.5
         kp = 100 * so["k25p"] / so["F"]
         kc = 100 * so["k25c"] / so["F"]

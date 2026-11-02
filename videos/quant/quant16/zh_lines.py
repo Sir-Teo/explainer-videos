@@ -574,10 +574,12 @@ ZH = {
     'f"What does hardware buy on this machine?':
         "在这台机器上，硬件能买到什么？一百万个收益，六种算法。用Python循环逐条路径计算需要{par['t_loop']:.1f}秒。"
         "<bookmark mark='a'/>同样的算术写成一行向量化的numpy代码，需要{par['t_numpy'] * 1000.0:.0f}毫秒，快了大约{par['t_loop'] / par['t_numpy']:,.0f}倍："
-        "每个量化分析师的第一次提速，就是不再写循环。单精度在这里改变不大。<bookmark mark='b'/>把路径分给四个进程，"
+        "每个量化分析师的第一次提速，就是不再写循环。{f32}<bookmark mark='b'/>把路径分给四个进程，"
         "每个进程用自己的随机数流，{verdict}。<bookmark mark='c'/>而竞赛已经说明了其余的：在一个核上，余弦展开法达到蒙特卡洛最好精度的速度，"
         "快了大约{speed:,.0f}倍。算法优先。停下来预测一下：Longstaff–Schwartz是否天然可以并行？不完全是：每个日期的回归都要汇总所有路径。",
 
+    'f"Single precision, half the bytes to move,': "单精度要搬运的字节减半，在这里又快了{r32:.0f}倍。",
+    "Single precision changes little here.": "单精度在这里改变不大。",
     "barely helps here, because the machine is shared and already busy": "在这里几乎没有帮助，因为机器是共享的，已经很忙",
     "helps, though less than the four cores promise": "有帮助，但不及四个核所承诺的",
 

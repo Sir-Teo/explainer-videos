@@ -73,16 +73,13 @@ class Carry(VoiceoverScene):
                                               color=QQ).move_to([4.5, 1.9, 0]))
         params = note(r"$S = K = 100$, $T = 1$, $\sigma = 25\%$, $r = 5\%$", font_size=20).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "The formula so far assumed a stock that pays nothing and costs nothing to hold. Real underlyings have "
-            "carry: a stock pays dividends, a currency pays its own interest rate, a stock that is hard to borrow "
-            "charges a fee to whoever is short it. All of it enters through one number, the carry b, the interest "
-            "rate minus the yield, and it does one thing: it moves the forward, the centre of the risk-neutral fan. "
-            "<bookmark mark='a'/> Raise the dividend yield, and b falls: the fan tilts down, the call loses value, "
-            "the put gains. Pause and predict: what happens to the call's delta? <bookmark mark='b'/> It falls "
-            "too, both because the forward is lower and because each share held now pays out dividends the "
-            "option holder never receives. <bookmark mark='c'/> And for a hard-to-borrow stock the fee works like a "
-            "dividend: Part nine's story of GameStop, where puts cost more than parity with the stock suggested, "
-            "is exactly this."
+            "So far the stock paid nothing and cost nothing to hold. Real underlyings have carry: dividends, a "
+            "currency's own interest rate, a borrow fee on a stock hard to short. All of it enters through one "
+            "number, the carry b, the rate minus the yield, and it moves the forward, the centre of the "
+            "risk-neutral fan. <bookmark mark='a'/> Raise the dividend yield: the fan tilts down, the call loses, "
+            "the put gains. Pause and predict: the call's delta? <bookmark mark='b'/> It falls too: the forward is "
+            "lower, and each share held pays dividends the option holder never gets. <bookmark mark='c'/> A borrow "
+            "fee works like a dividend: Part nine's GameStop puts."
         ) as vo:
             self.play(FadeIn(g), Create(kline), FadeIn(params))
             self.add(fan_, bars_, bread, fread)

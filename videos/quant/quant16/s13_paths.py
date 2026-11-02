@@ -74,7 +74,7 @@ class Paths(VoiceoverScene):
     def cloud(self, rng):
         rho = rng["rho"]
         g = np.random.default_rng(8)
-        u1, u2 = g.random(700), g.random(700)
+        u1, u2 = g.random(450), g.random(450)
         r = np.sqrt(-2 * np.log(u1))
         z1, z2 = r * np.cos(2 * np.pi * u2), r * np.sin(2 * np.pi * u2)
         plane = axes([-3.5, 3.5], [-3.5, 3.5], x_length=5.0, y_length=5.0, xlabel=r"$Z_1$", ylabel=r"$Z_2$",

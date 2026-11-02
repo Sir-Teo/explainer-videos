@@ -75,26 +75,24 @@ class Simulate(VoiceoverScene):
         spike2 = label(rf"atom at 0: {a['zero_qe']:.2f}", font_size=16, color=RV).next_to(p2[0].ax.c2p(0.05, 0.12), UP,
                                                                                            buff=0.02)
         foot = VGroup(
-            wrapped_label(rf"one weekly step of the fitted variance, {qd['N']:,} draws each; white: the exact law (a scaled "
-                          r"non-central $\chi^2$), probability per bin; bars clipped at the top".replace(",", "{,}"),
-                          12.4, 19, GREY_A),
+            wrapped_label(r"one weekly step of the fitted variance, " + f"{qd['N']:,}".replace(",", "{,}") +
+                          r" draws each; white: the exact law (a scaled non-central $\chi^2$), probability per bin; bars "
+                          r"clipped at the top", 12.4, 19, GREY_A),
             MathTex(rf"\text{{Euler: }} {100 * a['neg']:.0f}\%\ \text{{of draws below zero}};\quad "
                     rf"\text{{mean}}\ {a['mean_euler']:.3f}\ \text{{vs exact}}\ {a['mean_exact']:.3f};\quad "
                     rf"\text{{QE}}\ {a['mean_qe']:.3f}", font_size=28),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "To price exotics, desks simulate. So take one step of Heston's variance, a week long, starting from a "
-            "low variance, zero point zero five, with our fitted parameters, and draw a hundred thousand times. The "
-            "white outline is the exact distribution of next week's variance: a scaled non-central chi-squared, "
-            "piled up against zero. <bookmark mark='a'/> The plain Euler step adds a Gaussian shock to the "
-            f"variance, and {100 * a['neg']:.0f} percent of the draws land below zero: variance cannot be negative. "
-            "Floor them at zero, and the mean comes out at "
-            f"{a['mean_euler']:.3f} instead of the exact {a['mean_exact']:.3f}. The bias compounds every step. "
-            "<bookmark mark='b'/> Leif Andersen's quadratic-exponential scheme, QE, does something smarter. Near "
-            f"zero, it puts a point mass at zero, here {a['zero_qe']:.2f}, and an exponential tail above it, sized "
-            f"so that the mean and variance are exactly right: mean {a['mean_qe']:.3f}. <bookmark mark='c'/> "
-            "Started high, at zero point five, the variance is far from zero, and QE switches to its other branch: "
-            "a scaled, shifted Gaussian squared, which matches the exact law almost perfectly."
+            (
+            "Desks price exotics by simulation. So take one week-long step of the fitted variance from a low level, "
+            "zero point zero five, a hundred thousand times. White: the exact law, piled against zero. "
+            f"<bookmark mark='a'/> Euler adds a Gaussian shock: {100 * a['neg']:.0f} percent of draws go negative. Floor "
+            f"them at zero and the mean is {a['mean_euler']:.3f} instead of {a['mean_exact']:.3f}, a bias that "
+            "compounds. <bookmark mark='b'/> Andersen's quadratic-exponential scheme puts a point mass at zero, here "
+            f"{a['zero_qe']:.2f}, with an exponential tail, sized to match the mean and variance exactly: "
+            f"{a['mean_qe']:.3f}. <bookmark mark='c'/> Started high, QE switches to a scaled Gaussian squared, which "
+            "matches almost perfectly."
+        )
         ) as vo:
             self.play(FadeIn(p1[0]), FadeIn(p1[1]), FadeIn(p1[4]), Create(p1[3]), FadeIn(foot[0]))
             vo.wait_until("a")
@@ -127,13 +125,12 @@ class Simulate(VoiceoverScene):
                              r"Kolmogorov distance punishes QE's atom at zero, which the exact law smears into a spike "
                              r"of the same mass; the transport distance does not.)", 12.0, 19, GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            f"Why is this hard at all? Feller's ratio, two kappa theta over xi squared, is {fel:.2f} on our fit, below "
-            "one. By Part five's boundary test, the variance then touches zero with positive probability, and its "
-            "exact law has that spike at zero. <bookmark mark='a'/> So measure each scheme by how far its draws are "
-            "from the exact law: the transport distance, how far probability has to move to turn one into the other. "
-            "Three starting variances, three step sizes, a day, a week and a month. <bookmark mark='b'/> QE is closer "
-            f"in every one of the nine cases, by a median factor of {ratio:.0f}. Pause and predict: if Feller held, would "
-            "Euler be fine? Better, but still biased: QE's advantage is largest exactly when Feller fails."
+            (
+            f"Why is this hard? Feller's ratio is {fel:.2f} on our fit, below one, so by Part five's boundary test the "
+            "variance reaches zero and its law spikes there. <bookmark mark='a'/> Score each scheme by the transport "
+            "distance to the exact law, over three start values and three step sizes. <bookmark mark='b'/> QE wins "
+            f"all nine, by a median factor of {ratio:.0f}. Its advantage is largest exactly when Feller fails."
+        )
         ) as vo:
             self.play(FadeIn(top))
             vo.wait_until("a")
@@ -165,17 +162,19 @@ class Simulate(VoiceoverScene):
                     r"a constant $K_0^*$ keeps $S$ a martingale exactly (Andersen 2008)", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Here is QE, derived. Over one step of length delta, the variance's conditional mean m and variance s "
-            "squared are known exactly: they are Part five's CIR moments. <bookmark mark='a'/> Their ratio, psi, says "
-            "how wide the next variance is relative to its mean. <bookmark mark='b'/> When psi is small, draw the "
-            "next variance as a constant times a shifted Gaussian squared. The two constants, a and b, are fixed by "
-            "two equations: match the mean, match the variance. <bookmark mark='c'/> When psi is large, the variance "
-            "is near zero: draw zero with probability p, and otherwise an exponential with rate beta, again two "
-            "unknowns fixed by the two moments. Andersen switches at psi equal to one and a half. "
-            "<bookmark mark='d'/> Then the price. Solve the variance equation for the stochastic integral that "
-            "drives it, and substitute: the correlated part of the log price becomes a function of the start and end "
-            "variances, and only the orthogonal part needs a fresh Gaussian. One more constant makes the discrete "
-            "price an exact martingale."
+            (
+            (
+            "QE, derived. Over one step, the variance's conditional mean and variance are known exactly: Part five's "
+            "CIR moments. <bookmark mark='a'/> Their ratio psi measures relative width. <bookmark mark='b'/> Small "
+            "psi: a constant times a shifted Gaussian squared. Its mean is a times one plus b squared, its variance "
+            "two a squared times one plus two b squared; set them equal to m and s squared and solve: these b and a. "
+            "<bookmark mark='c'/> Large psi: zero with probability p, else an exponential with rate beta. The mean "
+            "is one minus p over beta and the second moment twice that over beta; matching gives p and beta. "
+            "Andersen switches at one and a half, where both are valid. <bookmark mark='d'/> For the price, solve the "
+            "variance equation for its stochastic integral and substitute; only the orthogonal part needs a fresh "
+            "Gaussian, and one constant makes the price an exact martingale."
+        )
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -204,10 +203,11 @@ class Simulate(VoiceoverScene):
             outs.append(f"{n:>3} steps   Euler {100 * e['rel']:+6.1f}%   QE {100 * a['rel']:+6.1f}%   (s.e. "
                         f"{100 * a['se'] / q['exact']['1.0']:.1f}%)")
         with self.voiceover(
-            "And here it is in the House, ten lines out of the loop body of heston underscore q e: the exact moments, "
-            "the switch on psi, the squared-Gaussian branch, the point mass and the exponential, and the price step. "
-            "<bookmark mark='a'/> Run it on a three-month at-the-money call under our fitted model, against the "
-            "exact Fourier price, with two, eight and thirty-two time steps."
+            (
+            "In the House: the exact moments, the switch on psi, both branches, and the price step. "
+            "<bookmark mark='a'/> Run it on a three-month at-the-money call against the exact Fourier price, with "
+            "two, eight and thirty-two steps. QE is close from the start; Euler needs dozens of steps."
+        )
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -230,13 +230,12 @@ class Simulate(VoiceoverScene):
         if G.width > 13.2:
             G.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Three further pointers. Mark Broadie and Özgür Kaya showed in 2006 how to simulate Heston exactly, with "
-            "no time-step bias at all, by drawing the end variance from its chi-squared law and then the integrated "
-            "variance given both ends: unbiased, but slow. <bookmark mark='a'/> In 2024 Jaehyuk Choi and Yue Kuen "
-            "Kwok found a faster exact-type scheme by conditioning on a Poisson variable. <bookmark mark='b'/> And "
-            "Leif Andersen and Vladimir Piterbarg showed that in these models moments of the price can explode at a "
-            "finite time, which is what decides how fat the smile's wings can be, the link to Lee's formula in Part "
-            "twelve."
+            (
+            "Three pointers. Broadie and Kaya simulated Heston exactly in 2006: unbiased, but slow. "
+            "<bookmark mark='a'/> Choi and Kwok, in 2024, made exact-type sampling fast with Poisson conditioning. "
+            "<bookmark mark='b'/> And Andersen and Piterbarg showed that moments of the price can explode in finite "
+            "time, which bounds the smile's wings: the link to Lee's formula in Part twelve."
+        )
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

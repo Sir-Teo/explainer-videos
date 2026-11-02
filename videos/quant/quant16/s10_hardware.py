@@ -150,14 +150,16 @@ class Hardware(VoiceoverScene):
         loadtxt.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         q = predict(r"Monte Carlo is embarrassingly parallel. Is a Longstaff--Schwartz pricing?", width=4.0,
                     font_size=18).to_corner(DR, buff=0.25)
+        r32 = par["t_numpy"] / par["t_float32"]
+        f32 = (f"Single precision, half the bytes to move, is another {r32:.0f} times faster here." if r32 >= 1.5 else
+               "Single precision changes little here.")
         verdict = ("barely helps here, because the machine is shared and already busy" if sp4 < 1.5 else
                    "helps, though less than the four cores promise")
         with self.voiceover(
             "What does hardware buy on this machine? One million payoffs, priced six ways. A Python loop over the "
             f"paths takes {par['t_loop']:.1f} seconds. <bookmark mark='a'/> The same arithmetic as one vectorised "
             f"numpy line takes {par['t_numpy'] * 1e3:.0f} milliseconds, about {par['t_loop'] / par['t_numpy']:,.0f} "
-            "times faster: the first speed-up of every quant is to stop looping. Single precision changes little "
-            "here. <bookmark mark='b'/> Splitting the paths over four processes, each with its own random stream, "
+            f"times faster: the first speed-up of every quant is to stop looping. {f32} <bookmark mark='b'/> Splitting the paths over four processes, each with its own random stream, "
             f"{verdict}. <bookmark mark='c'/> And the race said the rest: on one core, the cosine method beat Monte "
             f"Carlo's best accuracy about {speed:,.0f} times faster. Algorithms first. Pause and predict: is "
             "Longstaff–Schwartz embarrassingly parallel? Not fully: every date's regression gathers all the paths."

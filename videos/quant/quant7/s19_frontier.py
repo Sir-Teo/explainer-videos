@@ -156,12 +156,17 @@ class Frontier(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(g, DOWN, buff=0.4).align_to(g, LEFT)
         pc = pause_card(r"A model trained on synthetic series, never on Bitcoin: better or worse than four least-squares "
                         r"coefficients?", width=4.6, font_size=20).to_corner(UR, buff=0.3)
-        if dm["t"] < -2:
+        tt = dm["t"]
+        if tt < -2:
             verdict = "It wins, by more than luck. Structure learned from synthetic series transfers."
-        elif dm["t"] > 2:
-            verdict = "Worse, by more than luck. Four coefficients fitted to Bitcoin itself still win."
+        elif tt < 0:
+            verdict = f"Slightly better, but within noise: the Diebold-Mariano statistic is {tt:.1f}."
+        elif tt <= 2:
+            verdict = (f"Worse, though one year cannot make the gap significant: the statistic is {tt:.1f}. It lands "
+                       "between HAR and the transformer: a model that never saw Bitcoin is as good as HAR in levels, "
+                       "but not as good as log-HAR.")
         else:
-            verdict = "Within noise of log-HAR: the toy learned the same persistence that HAR's coefficients encode."
+            verdict = "Worse, by more than luck. Four coefficients fitted to Bitcoin itself still win."
         with self.voiceover(
             f"Pause and predict: a model trained only on synthetic series, against four least-squares coefficients fitted "
             f"to Bitcoin itself. Better or worse? <bookmark mark='a'/> Point the frozen model at 2020, one day at a time. "

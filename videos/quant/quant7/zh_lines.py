@@ -528,8 +528,12 @@ ZH = {
     "Worse, by more than luck.":
         "更差，超出了运气的范围。用比特币自身拟合的四个系数仍然获胜。",
 
-    "Within noise of log-HAR":
-        "与对数HAR的差距在噪声之内：玩具模型学到的，正是HAR的系数所编码的那种持续性。",
+    'f"Slightly better, but within noise':
+        "略好一点，但在噪声之内：迪博尔德–马里亚诺统计量是{tt:.1f}。",
+
+    'f"Worse, though one year cannot make the gap significant':
+        "更差，不过一年的数据无法让这个差距显著：统计量是{tt:.1f}。它落在HAR和Transformer之间：一个从未见过比特币的模型，"
+        "和水平上的HAR一样好，但不如对数HAR。",
 
     "What do the real models do?":
         "真正的模型表现如何？阿莱西奥·布里尼2026年7月的比较，在五十个资产上把九个零样本基础模型与八个计量模型放在一起比。这是他结果中的一列："

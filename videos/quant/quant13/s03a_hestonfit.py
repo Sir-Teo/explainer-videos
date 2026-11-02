@@ -61,16 +61,14 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         cur = S0
         marks = {n: n for n in names}
         with self.voiceover(
-            "Five numbers bend a whole surface. Here is the fitted Heston's implied volatility over strike and "
-            "expiry, with the Surface's quotes as white dots. Move one parameter at a time, from low to high, and "
-            "watch what it does. <bookmark mark='v0'/> Today's variance, v nought, lifts the short end: the near "
-            "expiries feel today's level. <bookmark mark='theta'/> The long-run level, theta, lifts the long end. "
-            "<bookmark mark='kappa'/> Mean reversion, kappa, decides how fast the one becomes the other: slow, and "
-            "today's level lingers for months; fast, and the surface is flat in expiry after a few weeks. "
-            "<bookmark mark='rho'/> The correlation, rho, rotates every smile: negative tilts it toward puts, "
-            "positive toward calls. <bookmark mark='xi'/> And the vol of vol, xi, bends every smile, most of all at "
-            "the short end, where it is the only thing that can produce curvature quickly. Five dials, each with one "
-            "job. The calibrator's work is to set all five at once."
+            (
+            "Five numbers bend a whole surface. Here is the fitted Heston's implied volatility over strike and expiry, "
+            "with the Surface's quotes in white. Move one parameter at a time. <bookmark mark='v0'/> Today's variance "
+            "lifts the short end. <bookmark mark='theta'/> The long-run level lifts the long end. "
+            "<bookmark mark='kappa'/> Mean reversion sets how fast one becomes the other. <bookmark mark='rho'/> The "
+            "correlation rotates every smile, toward puts or calls. <bookmark mark='xi'/> And the vol of vol bends "
+            "every smile, most at the short end. Five dials, one job each; the calibrator sets all five at once."
+        )
         ) as vo:
             self.play(Create(ax), FadeIn(hint), run_time=1.5)
             self.play(Create(cur), FadeIn(dots), run_time=2.5)
@@ -129,19 +127,16 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         cap.to_edge(UP, buff=0.3)
         src = real_data(r"the Surface, 10 December 2025; the House's calibrator, every evaluation recorded")
         with self.voiceover(
-            "Now watch it set them. The calibrator prices all of the Surface's quotes by Fourier, compares them with "
-            "the market, and asks a least-squares optimizer for a better set of five. Every evaluation is recorded, "
-            "so we can replay the fit. On the right, the loss, best so far, from three starting points: the band is "
-            "their spread. On the left, the model's smiles at three expiries, rebuilt at checkpoints. "
-            "<bookmark mark='a'/> From the default start the smiles are too flat and the loss is "
-            f"{r0['trace']['best'][0]:.1f}. The optimizer first raises the vol of vol and tilts the correlation, and "
-            "the smiles start to bend. <bookmark mark='b'/> Then a long stretch where it trades mean reversion "
-            "against vol of vol, sliding along a valley we will map in chapter sixteen, until it settles at kappa "
-            f"{r0['x'][1]:.1f} and xi {r0['x'][3]:.1f}. <bookmark mark='c'/> The two random starts begin far worse, "
-            f"at {r1['trace']['best'][0]:.0f} and {r2['trace']['best'][0]:.0f}, and all three end at the same loss, "
-            f"{r0['rmse']:.3f}, after {r0['n_eval']}, {r1['n_eval']} and {r2['n_eval']} evaluations. One caution about "
-            "units: the optimizer's loss is a price error divided by vega, a fast stand-in for the implied-volatility "
-            f"error, which at the end is {frames[-1]['iv_rmse']:.2f} points."
+            (
+            "Watch it set them. The calibrator prices every quote by Fourier and asks a least-squares optimizer for "
+            "better parameters; every evaluation is recorded. Right, the loss, best so far, from three starts; left, "
+            "the smiles at three expiries. <bookmark mark='a'/> From the default start the smiles are flat; the "
+            "optimizer raises the vol of vol and tilts the correlation, then slides kappa and xi up together, along "
+            f"a valley we map in chapter sixteen, to kappa {r0['x'][1]:.1f} and xi {r0['x'][3]:.1f}. "
+            f"<bookmark mark='c'/> Random starts at {r1['trace']['best'][0]:.0f} and {r2['trace']['best'][0]:.0f} end at "
+            f"the same loss, {r0['rmse']:.3f}. That loss is price error over vega, a fast stand-in; the implied-vol "
+            f"error is {frames[-1]['iv_rmse']:.2f} points."
+        )
         ) as vo:
             self.play(FadeIn(rpl), FadeIn(cap), FadeIn(src))
             vo.wait_until("a")
@@ -183,12 +178,12 @@ class HestonFit(VoiceoverScene, ThreeDScene):
         src = real_data(rf"the Surface: {c['n']} quotes, vega-weighted implied-vol error")
         d3 = h["by_expiry"][str(days[0])]
         with self.voiceover(
-            "Here is where it landed, expiry by expiry. A single Black–Scholes volatility misses by "
-            f"{c['fits']['BS']['rmse']:.1f} points. <bookmark mark='a'/> Heston misses by {h['rmse']:.1f}. "
-            "<bookmark mark='b'/> But look at what it took. Mean reversion with a half-life of "
-            f"{365 * np.log(2) / p['kappa']:.0f} days. A volatility of volatility of {100 * p['xi']:.0f} percent. "
-            f"Feller's ratio is {c['feller']:.2f}, far below one. And the shortest expiry, {days[0]} days, is still "
-            f"missed by {d3:.1f} points. Heston can bend its smile only so fast, and the next derivation says why."
+            (
+            f"Expiry by expiry: one Black–Scholes volatility misses by {c['fits']['BS']['rmse']:.1f} points. "
+            f"<bookmark mark='a'/> Heston by {h['rmse']:.1f}. <bookmark mark='b'/> At a price: a half-life of "
+            f"{365 * np.log(2) / p['kappa']:.0f} days, a vol of vol of {100 * p['xi']:.0f} percent, Feller's ratio "
+            f"{c['feller']:.2f}, and the {days[0]}-day expiry still missed by {d3:.1f} points."
+        )
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b1],
                                                                           lag_ratio=0.1, run_time=1.5))
@@ -221,20 +216,17 @@ class HestonFit(VoiceoverScene, ThreeDScene):
                      ).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.5)
         pp = pause(r"Make $\rho$ positive. What happens to the 3-day skew?", width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Where does the limit come from? Derive the skew at very short maturity. Berestycki, Busca and Florent "
-            "showed that as expiry goes to zero, the implied volatility at log-strike k is the harmonic mean of "
-            "local volatility along the straight line from the money to k; to first order, the average local "
-            "variance. <bookmark mark='a'/> By Gyöngy's theorem from Part twelve, local variance is the expected "
-            "variance given the price. Over a short time both are Gaussian, the variance moving by xi root v nought "
-            "times one Brownian motion and the log price by root v nought times the other, so the regression of one "
-            "on the other has slope rho xi. <bookmark mark='b'/> Average that straight line from zero to k: you get "
-            "half its slope. <bookmark mark='c'/> Take the square root and differentiate. The short-maturity skew is "
-            "rho xi over four root v nought: a constant, set by correlation times vol of vol. <bookmark mark='d'/> On "
-            f"our fit the formula gives {sl['skew_formula']:.3f}, and the model itself, priced at two days, gives "
-            f"{sl['skew_2d']:.3f}. So to match the market's steep three-day skew, Heston has no choice but an "
-            "enormous xi, and that is exactly what the calibrator found. The curvature, likewise, grows with xi "
-            "squared. <bookmark mark='e'/> Pause and predict: make rho positive. The three-day skew flips sign, a "
-            "call skew. For Bitcoin in 2023's rally, that was not absurd."
+            (
+            "Why that limit? Derive the short-maturity skew. As expiry goes to zero, implied variance at log-strike k "
+            "is the average local variance along the line to k: Berestycki, Busca and Florent. "
+            "<bookmark mark='a'/> By Gyöngy, local variance is the expected variance given the price; over a short "
+            "time both are Gaussian, and the regression slope is rho xi. <bookmark mark='b'/> Averaging the line "
+            "halves the slope. <bookmark mark='c'/> Differentiate the square root: the skew is rho xi over four root "
+            "v nought, a constant. <bookmark mark='d'/> On our fit, the formula gives "
+            f"{sl['skew_formula']:.3f}, the model at two days {sl['skew_2d']:.3f}. To match a steep three-day skew, "
+            "xi must be enormous; the curvature grows with xi squared. <bookmark mark='e'/> Pause: make rho positive. "
+            "The short skew flips to calls, as in 2023's rally."
+        )
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -181,6 +181,7 @@ class Industry(VoiceoverScene):
             self.add(Pth)
             vo.wait_until("a")
             self.play(k.animate.set_value(T), run_time=max(vo.until("b") - 0.5, 4.0), rate_func=linear)
+            Pth.clear_updaters()
             vo.wait_until("b")
             self.play(FadeIn(side[1]), LaggedStart(*[FadeIn(t_) for t_ in tab], lag_ratio=0.3), run_time=2)
             vo.wait_until("c")

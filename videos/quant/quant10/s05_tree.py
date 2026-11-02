@@ -241,11 +241,9 @@ class Tree(VoiceoverScene, ThreeDScene):
         ], source="explainer/quant/house/trees.py (crr, abridged)", width=7.6).to_edge(UP, buff=0.5)
         lab = t3["lab"]
         with self.voiceover(
-            "And here is the House's tree: one loop, backwards from expiry, each layer the discounted average of "
-            "the next, with one extra line for the American option of chapter fourteen. <bookmark mark='a'/> "
-            f"Four steps: {lab['4']:.4f}. Sixty-four: {lab['64']:.4f}. Four hundred: {lab['400']:.4f}, against "
-            f"the formula's {t3['exact']:.4f}. Three derivations, one formula: a heat equation solved, an "
-            "expectation under Q, and the limit of a coin-flipping tree."
+            "The House's tree is one loop backwards from expiry, plus one line for chapter fourteen's American "
+            f"option. <bookmark mark='a'/> Four steps: {lab['4']:.4f}. Sixty-four: {lab['64']:.4f}. Four hundred: "
+            f"{lab['400']:.4f}; the formula, {t3['exact']:.4f}. Three roads, one formula."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

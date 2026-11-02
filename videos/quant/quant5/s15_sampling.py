@@ -122,8 +122,8 @@ class Sampling(VoiceoverScene):
                       r"\frac{\sigma}{\sqrt{2n}}", font_size=28, colors={r"\frac{\sigma}{\sqrt{2n}}": ITO}),
                 cmath(r"\hat\mu", r"=", r"\frac{\log(S_T/S_0)}{T} + \tfrac12\sigma^2, \quad \operatorname{sd}(\hat\mu) = "
                       r"\frac{\sigma}{\sqrt T}", font_size=28, colors={r"\frac{\sigma}{\sqrt T}": JUMP})]
-        side = VGroup(rows[0], label(rf"over 200 simulated years: sd {sci(o['sd_sigma'], 1)} against "
-                                     rf"{sci(o['sd_sigma_theory'], 1)}", font_size=19, color=ITO),
+        side = VGroup(rows[0], label(rf"over 200 simulated years: sd ${sci(o['sd_sigma'], 1)}$ against "
+                                     rf"${sci(o['sd_sigma_theory'], 1)}$", font_size=19, color=ITO),
                       rows[1], label(rf"over 200 simulated years: sd {o['sd_mu']:.3f} against {o['sd_mu_theory']:.2f}",
                                      font_size=19, color=JUMP)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         side.to_edge(RIGHT, buff=0.3).shift(UP * 0.4)
