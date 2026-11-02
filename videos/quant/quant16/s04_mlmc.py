@@ -70,7 +70,7 @@ class MLMC(VoiceoverScene):
         bars = VGroup(*[Dot(g2.ax.c2p(i, np.log10(v)), radius=0.06, color=OPT) for i, v in enumerate(V)])
         last = int(np.flatnonzero(ok)[-1])
         side = wrapped_label(rf"at $\varepsilon = {eps[last]}$: {cs[last] / cm[last]:.0f} times cheaper. The corrections' "
-                             r"variance falls by about half per level, so the deep levels need only a few thousand paths",
+                             r"variance falls two- to threefold per level, so the deep levels need only a few thousand paths",
                              4.6, 19, GREY_A).next_to(g2, UP, buff=0.3).align_to(g2, LEFT)
         src = illustration(r"a continuously averaged Asian call under Euler; 20\% volatility, one year")
         with self.voiceover(

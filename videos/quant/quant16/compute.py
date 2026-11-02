@@ -98,10 +98,15 @@ def compute_mlmc() -> dict:
     eps = [0.04, 0.02, 0.01]
     ref = E.mlmc(0.003, S0, K, T, SIG, R, seed=11)["estimate"]  # one tight reference for every target
     ml, st = [], []
+    g = np.random.default_rng(4)
     for e in eps:
         m = E.mlmc(e, S0, K, T, SIG, R, seed=3)
         ml.append(m)
-        st.append(E.mc_euler_cost(e, S0, K, T, SIG, R, seed=4, ref=ref))
+        # the standard estimator at the same finest step (Giles's comparison): N = 2 var(P_L) / eps^2 paths of 2^L steps
+        n = 2 ** m["levels"]
+        P = E._plain_euler(n, 20000, S0, K, T, SIG, R, g)
+        N = int(np.ceil(2 * P.var() / e ** 2))
+        st.append({"steps": n, "N": N, "cost": float(N * n)})
     return _json({"eps": eps, "mlmc": ml, "standard": st, "ref": ref})
 
 
@@ -145,7 +150,7 @@ def compute_fd() -> dict:
     # explicit: stable only if dt < dS^2 / (sigma^2 S_max^2)
     nS = 100
     stab = {}
-    for nt in (2000, 400):
+    for nt in (2000, 200):
         try:
             p = E.fd_european(S0, K, T, SIG, R, nS=nS, nt=nt, scheme="explicit")[0]
         except Exception:
@@ -182,13 +187,14 @@ def compute_fourier() -> dict:
     ref = _heston_ref()
     cf = lambda u, TT: sv.heston_cf(u, TT, *HES)  # noqa: E731
     rows = []
-    for N in (16, 32, 64, 128, 256):
+    # L = 16: the strongly negative correlation gives a fat left tail, and L = 12 truncates it at about 1e-5
+    for N in (16, 32, 64, 128, 256, 512):
         t0 = time.perf_counter()
-        p = float(sv.cos_price(cf, S0, K, T, 1, N=N, L=12)[0])
+        p = float(sv.cos_price(cf, S0, K, T, 1, N=N, L=16)[0])
         rows.append({"method": "COS", "N": N, "err": abs(p - ref), "time": time.perf_counter() - t0})
-    for N in (256, 1024, 4096, 16384):
+    for N in (512, 1024, 4096, 16384):
         t0 = time.perf_counter()
-        kk, C = E.carr_madan(cf, S0, T, 0.0, N=N, eta=0.25 * 4096 / N if N < 4096 else 0.25)
+        kk, C = E.carr_madan(cf, S0, T, 0.0, N=N, eta=0.25)
         p = float(np.interp(K, kk, C))
         rows.append({"method": "Carr-Madan", "N": N, "err": abs(p - ref), "time": time.perf_counter() - t0})
     return _json({"ref": ref, "rows": rows})
@@ -201,19 +207,28 @@ def compute_race() -> dict:
     pts = []
 
     def add(method, f):
-        t0 = time.perf_counter()
-        p = f()
-        pts.append({"method": method, "err": abs(p - ref), "time": time.perf_counter() - t0})
+        # best of several runs, so a fast method is not charged for one-off warm-up
+        best = np.inf
+        for _ in range(5):
+            t0 = time.perf_counter()
+            p = f()
+            best = min(best, time.perf_counter() - t0)
+            if best > 0.2:
+                break
+        pts.append({"method": method, "err": abs(p - ref), "time": best})
 
-    for n in (5000, 20000, 80000):
-        add("Monte Carlo (QE, 50 steps)", lambda n=n: float(np.maximum(
-            sv.heston_qe(S0, *HES, T, 50, n, seed=n)[-1] - K, 0).mean()))
+    for n in (5000, 20000, 80000, 320000):
+        t0 = time.perf_counter()
+        pay = np.maximum(sv.heston_qe(S0, *HES, T, 50, n, seed=n)[-1] - K, 0)
+        # Monte Carlo's error is random; report its expected size, the standard error
+        pts.append({"method": "Monte Carlo (QE, 50 steps)", "err": float(pay.std() / np.sqrt(n)),
+                    "time": time.perf_counter() - t0, "actual": float(abs(pay.mean() - ref))})
     for nS in (20, 40, 80, 160):
         add("ADI (Craig-Sneyd)", lambda nS=nS: E.heston_adi(S0, K, T, *HES, r=0.0, nS=nS, nv=nS // 2, nt=nS // 2))
-    for N in (32, 64, 128):
-        add("COS", lambda N=N: float(sv.cos_price(cf, S0, K, T, 1, N=N, L=12)[0]))
-    for N in (1024, 4096):
-        add("Carr-Madan FFT", lambda N=N: float(np.interp(K, *E.carr_madan(cf, S0, T, 0.0, N=N, eta=0.25 * 4096 / N))))
+    for N in (64, 128, 256):
+        add("COS", lambda N=N: float(sv.cos_price(cf, S0, K, T, 1, N=N, L=16)[0]))
+    for N in (1024, 4096, 16384):
+        add("Carr-Madan FFT", lambda N=N: float(np.interp(K, *E.carr_madan(cf, S0, T, 0.0, N=N, eta=0.25))))
     return _json({"ref": ref, "points": pts})
 
 

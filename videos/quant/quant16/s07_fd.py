@@ -27,9 +27,9 @@ class FD(VoiceoverScene):
                       colors={r"\Delta t": BAD})]
         whys = [why(r"Part 10's PDE on a grid, stepped back from expiry: explicit ($\theta = 0$), fully implicit ($\theta = 1$), "
                     r"or Crank and Nicolson (1947, $\theta = \tfrac12$), second-order accurate in time"),
-                why(rf"the explicit scheme is stable only for tiny steps: here at least {f['explicit_nt_min']:,.0f} steps "
-                    rf"for a 100-point grid; with 400 it explodes to {f['explicit']['400']:.1e}, with 2{{,}}000 it gives "
-                    rf"{f['explicit']['2000']:.3f}".replace(",", "{,}"))]
+                why(rf"the explicit scheme is stable only for tiny steps: on a 100-point grid the von Neumann bound asks "
+                    rf"for {f['explicit_nt_min']:.0f} steps; with 2{{,}}000 it gives {f['explicit']['2000']:.3f}, with "
+                    rf"200 it explodes to about $10^{{{np.log10(abs(f['explicit']['200'])):.0f}}}$")]
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.8, buff=1.0, edge=6.9)
         with self.voiceover(
             "The other family of methods solves Part ten's pricing equation directly, on a grid in price and time, "
@@ -37,7 +37,8 @@ class FD(VoiceoverScene):
             "one is fully implicit, and one half is Crank and Nicolson's scheme from 1947, second-order accurate in "
             "time. <bookmark mark='a'/> The explicit scheme is the simplest and the most fragile: stable only if the "
             "time step is below the square of the price step over the variance. With too few time steps it does not "
-            f"just lose accuracy, it explodes, here to about {f['explicit']['400']:.0e}."
+            "just lose accuracy, it explodes: with two hundred steps, the price comes out near minus "
+            f"{abs(f['explicit']['200']) / 1e9:.0f} billion."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -47,27 +48,31 @@ class FD(VoiceoverScene):
 
     def convergence(self, f):
         grids = np.log10(np.asarray(f["grids"], float))
-        g = loglog(1.2, 2.8, -6, -1, r"grid points in price and in time", r"error in the call price", xt=[2], yt=[-5, -4, -3, -2, -1])
+        g = loglog(1.2, 2.8, -3, 0, r"grid points in price and in time", r"error in the call price", xt=[2], yt=[-3, -2, -1, 0])
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
         cols = {"implicit": BAD, "cn": OPT, "cn+rannacher": GOOD}
         lines = VGroup()
         for k in ("implicit", "cn", "cn+rannacher"):
             y = np.log10(np.maximum(np.asarray(f["errors"][k]), 1e-7))
-            pts = [ax.c2p(a, np.clip(b, -6, -1)) for a, b in zip(grids, y)]
+            pts = [ax.c2p(a, np.clip(b, -3, 0)) for a, b in zip(grids, y)]
             lines.add(VGroup(VMobject(stroke_color=cols[k], stroke_width=3).set_points_as_corners(pts),
                              *[Dot(p_, radius=0.05, color=cols[k]) for p_ in pts]))
         leg = legend([(BAD, r"fully implicit: first order"), (OPT, r"Crank--Nicolson"),
                       (GOOD, r"Crank--Nicolson after two implicit half-steps (Rannacher)")], font_size=16)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
-        side = wrapped_label(r"the implicit scheme's error halves when the grid doubles; Crank--Nicolson's falls about four "
-                             r"times: second order. For a smooth call the two second-order lines coincide", 4.4, 19,
+        ri = f["errors"]["implicit"][-2] / f["errors"]["implicit"][-1]
+        rc = f["errors"]["cn"][-2] / f["errors"]["cn"][-1]
+        side = wrapped_label(rf"at the finest grids, doubling cuts the implicit error {ri:.1f} times and Crank--Nicolson's "
+                             rf"{rc:.1f} times, the mark of second order. The implicit ratio is falling towards 2 as its "
+                             r"first-order time error takes over. For a smooth call the two Crank--Nicolson lines coincide", 4.4, 19,
                              GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(r"one-year at-the-money call; uniform grid to four times the strike")
         with self.voiceover(
             "Here is each stable scheme's error as the grid is refined, in price and time together. The fully "
-            "implicit scheme is first order: double the grid, halve the error. <bookmark mark='a'/> Crank–Nicolson "
-            "is second order: double the grid, and the error falls about four times."
+            "implicit scheme is only first order in time, and that error starts to dominate on fine grids. "
+            f"<bookmark mark='a'/> Crank–Nicolson is second order: on the finest grids, doubling the grid cuts its error "
+            f"{rc:.1f} times."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[0]), FadeIn(leg[0]))
             vo.wait_until("a")

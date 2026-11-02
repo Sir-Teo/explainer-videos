@@ -47,7 +47,8 @@ class Fourier(VoiceoverScene):
             "methods price a vanilla in microseconds. Peter Carr and Dilip Madan damped the call so it has a Fourier "
             "transform, and priced a whole grid of strikes with one fast Fourier transform. <bookmark mark='a'/> The "
             "COS method of Part thirteen expands the density in cosines instead. With a smooth density its error "
-            "falls exponentially: a few dozen terms reach the precision that Carr–Madan needs thousands of points for."
+            "falls exponentially: a hundred and twenty-eight terms beat what Carr–Madan reaches with sixteen thousand "
+            "points."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -57,6 +58,7 @@ class Fourier(VoiceoverScene):
 
     def race(self, r):
         pts = r["points"]
+        cos_best = min((q for q in pts if q["method"] == "COS"), key=lambda q: q["err"])
         g = loglog(-4.5, 1.5, -8, 0, r"wall-clock time (seconds)", r"error in the price", x_length=7.4, y_length=4.6,
                    xt=[-4, -2, 0], yt=[-8, -6, -4, -2, 0])
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
@@ -82,8 +84,9 @@ class Fourier(VoiceoverScene):
         with self.voiceover(
             "Now the race: one Heston call, every method in the House, error against wall-clock time on one core. "
             "Lower and to the left is better. <bookmark mark='a'/> Monte Carlo crawls down its square-root line. The "
-            "ADI grid is second order and much faster. The Fourier methods are in another world, COS above all: "
-            "near machine precision in under a millisecond. <bookmark mark='b'/> So the rule is simple. Use Fourier "
+            "ADI grid is second order and much faster. The Fourier methods are in another world, COS above all: an "
+            f"error {cos_best['err']:.0e} in {cos_best['time'] * 1e3:.2f} milliseconds. <bookmark mark='b'/> So the rule "
+            "is simple. Use Fourier "
             "when the model allows it and the product is a vanilla. Use grids for low-dimensional products with early "
             "exercise or barriers. Use simulation for everything else: many assets, long paths, and every product "
             "no one has written a PDE for."

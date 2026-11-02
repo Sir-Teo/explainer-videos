@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import PART
+from videos.quant.quant16.common import PART, load
 
 
 class Hardware(VoiceoverScene):
     def construct(self):
         self.card()
-        self.cards()
+        self.cards(load("race"))
 
     def card(self):
         c = chapter_card(9, r"Hardware: grids, GPUs and quantum", r"What does a faster machine actually buy?", part=PART)
@@ -15,7 +15,11 @@ class Hardware(VoiceoverScene):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def cards(self):
+    def cards(self, race):
+        pts = race["points"]
+        mc = min((q for q in pts if q["method"].startswith("Monte Carlo")), key=lambda q: q["err"])
+        cos = min((q for q in pts if q["method"] == "COS" and q["err"] < mc["err"]), key=lambda q: q["time"])
+        speed = f"{round(mc['time'] / cos['time'], -3):,.0f}".replace(",", "{,}")
         a = history_card(r"overnight", r"the bank risk run", r"Every night a bank reprices its whole book under thousands of "
                          r"scenarios for risk limits, capital and valuation adjustments (Part 21), on grids of thousands of "
                          r"machines. Monte Carlo is embarrassingly parallel, so GPUs took over much of it.",
@@ -28,8 +32,9 @@ class Hardware(VoiceoverScene):
                          r"benchmark derivative they estimated about 8{,}000 error-corrected logical qubits and a T-depth "
                          r"of 54 million, run in about a second: far beyond any machine built so far.", color=QC.IDEA,
                          width=6.2, font_size=20)
-        d = history_card(r"the lesson", r"algorithms first", r"The race of chapter 8 spans six orders of magnitude between "
-                         r"methods on one core. Variance reduction, a better grid or the right transform usually buys more "
+        d = history_card(r"the lesson", r"algorithms first", rf"In the race of chapter 8, on one core, COS beat Monte Carlo's best "
+                         rf"accuracy about {speed} times faster. Variance reduction, a better grid or the right transform "
+                         r"usually buys more "
                          r"than new hardware, and AAD turns a thousand Greeks into a handful of prices.",
                          color=QC.HOUSE, width=6.2, font_size=20)
         grid = VGroup(VGroup(a, b).arrange(RIGHT, buff=0.35, aligned_edge=UP),

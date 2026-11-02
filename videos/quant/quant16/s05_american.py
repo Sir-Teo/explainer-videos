@@ -69,7 +69,7 @@ class American(VoiceoverScene):
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
         lsm = DashedLine(ax.c2p(0, a["lsm"]), ax.c2p(len(ab) + 1, a["lsm"]), stroke_color=GOOD, stroke_width=2.5)
-        tree = DashedLine(ax.c2p(0, a["bermudan_tree25"]), ax.c2p(len(ab) + 1, a["bermudan_tree25"]), stroke_color=WHITE,
+        tree = DashedLine(ax.c2p(0, a["tree2000"]), ax.c2p(len(ab) + 1, a["tree2000"]), stroke_color=WHITE,
                           stroke_width=1.5)
         ups = VGroup()
         for i, r in enumerate(ab, 1):
@@ -78,7 +78,7 @@ class American(VoiceoverScene):
                                 stroke_width=2)))
         leg = legend([(GOOD, rf"Longstaff--Schwartz: {a['lsm']:.3f} (lower)"),
                       (BAD, r"Andersen--Broadie (upper), $\pm 2$ s.e."),
-                      (WHITE, rf"a 25-date binomial tree: {a['bermudan_tree25']:.3f}")], font_size=16)
+                      (WHITE, rf"exercise at any time (2{{,}}000-step tree): {a['tree2000']:.3f}")], font_size=16)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         last = ab[-1]
         side = VGroup(
@@ -88,7 +88,7 @@ class American(VoiceoverScene):
             wrapped_label(r"Andersen and Broadie (2004) build $M$ from the regression policy by nested simulation; noisy "
                           r"inner estimates inflate the bound, so it tightens as the inner paths grow", 4.2, 18, GREY_A),
             MathTex(rf"[{a['lsm']:.3f},\ {last['upper']:.3f}]", font_size=34, color=OPT),
-            label(rf"American (continuous exercise): tree {a['tree2000']:.3f}, PDE {a['fd']:.3f}", font_size=17, color=GREY_A),
+            label(rf"25 exercise dates; with any date, tree {a['tree2000']:.3f}, PDE {a['fd']:.3f}", font_size=17, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         src = illustration(r"put struck at the money, one year, 20\% volatility, 5\% rates, 25 exercise dates")
         with self.voiceover(
@@ -97,9 +97,9 @@ class American(VoiceoverScene):
             "For any martingale, the expected maximum of the payoff minus the martingale is an upper bound, and Leif "
             "Andersen and Mark Broadie built a good martingale from the regression's own policy, by simulating inside "
             "the simulation. <bookmark mark='b'/> With few inner paths the noise inflates the bound; with "
-            f"{last['inner']}, the price is pinned between {a['lsm']:.3f} and {last['upper']:.3f}. A twenty-five step "
-            f"binomial tree gives {a['bermudan_tree25']:.3f}, inside the interval. A desk reports both bounds, not "
-            "just the price."
+            f"{last['inner']}, the price is pinned between {a['lsm']:.3f} and {last['upper']:.3f}. Allowed to exercise "
+            f"at any moment rather than on twenty-five dates, the put is worth a little more, {a['tree2000']:.3f} on a "
+            "fine tree, as it should be. A desk reports both bounds, not just the price."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lsm), FadeIn(leg[0]), FadeIn(side[0]))
             vo.wait_until("a")
