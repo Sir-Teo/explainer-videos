@@ -26,8 +26,8 @@ class Lift(VoiceoverScene):
         t = np.exp(np.linspace(np.log(1e-3), np.log(1.0), 200))
         K = t ** (a - 1) / G(a)
         g = axes([-3, 0], [-0.5, 2.5], x_length=6.2, y_length=4.0, xlabel=r"lag $t$ (years, log scale)",
-                 ylabel=r"kernel $K(t)$ (log scale)", xticks=[-3, -2, -1, 0], xfmt=lambda u: f"$10^{{{int(u)}}}$",
-                 yticks=[0, 1, 2], yfmt=lambda u: f"$10^{{{int(u)}}}$", log_x=True, font_size=15)
+                 ylabel=r"kernel $K(t)$ (log scale)", xticks=[-3, -2, -1, 0], xfmt=lambda u: f"10^{{{int(u)}}}",
+                 yticks=[0, 1, 2], yfmt=lambda u: f"10^{{{int(u)}}}", log_x=True, font_size=15)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         exact = curve(ax, np.log10(t), np.log10(K), ROUGH, stroke_width=4)
