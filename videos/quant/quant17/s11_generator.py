@@ -89,7 +89,7 @@ class Generator(VoiceoverScene):
         sc = g["scores"]
         cols = [(r"excess kurtosis", "kurtosis", "{:.1f}"), (r"vol clustering", "acf_abs_mean", "{:.2f}"),
                 (r"leverage", "leverage", "{:+.2f}"), (r"lag-1 autocorr.", "acf1", "{:+.2f}"),
-                (r"distance: training years", "sig_train", "{:.2f}"), (r"distance: held-out years", "sig_dist", "{:.2f}")]
+                (r"dist.\ to training", "sig_train", "{:.2f}"), (r"dist.\ to held-out", "sig_dist", "{:.2f}")]
         names = ["real (train)", "real (held out)"] + ORDER
         disp = {"real (held out)": r"real, 2024--2025 (held out)", "real (train)": r"real, 2017--2023 (training)",
                 "i.i.d. normal": r"independent normal draws", "i.i.d. bootstrap": r"independent resampling",
@@ -99,7 +99,8 @@ class Generator(VoiceoverScene):
         for nm in names:
             s_ = sc[nm]
             tab.add(VGroup(label(disp[nm], font_size=18, color=GEN_COL.get(nm, WHITE)),
-                           *[MathTex(f.format(s_[k]), font_size=23, color=GEN_COL.get(nm, WHITE)) for _, k, f in cols]))
+                           *[MathTex(f.format(s_[k]).replace("-0.00", "0.00").replace("+0.00", "0.00"), font_size=23,
+                                     color=GEN_COL.get(nm, WHITE)) for _, k, f in cols]))
         xs = [-4.7, -1.75, -0.15, 1.35, 2.85, 4.45, 6.1]
         for i, row in enumerate(tab):
             for j, cell in enumerate(row):
