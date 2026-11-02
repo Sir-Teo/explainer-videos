@@ -3,13 +3,18 @@
 Part 21 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)). How models make things from noise, from the 2015 idea of destroying data slowly to
 the diffusion language models of 2026. Part 20 ended with Langevin dynamics and the score; this part learns the score
-at every noise level and follows it back. Every model here is trained on a CPU: points in the plane, letter pictures,
-and text.
+at every noise level and follows it back. The Part 21 toy models are trained on a CPU: points in the plane, letter
+pictures, and text. Earlier scoreboard rows use restored original results with their own target and context protocols;
+published large-model results are attributed to their sources.
 
 The data are Part 5's letters "AI" made into a smooth density, a mixture of 400 small Gaussians (`exact.py`), so that
 the score, the best denoiser, the probability-flow ODE and flow matching's velocity field are all known exactly; the
 experiments then measure every learned or discretized thing against the truth. Pictures are 20 x 20 capital letters
 drawn from the system's fonts; text is Part 1's thirty novels, through Part 13's characters.
+
+The picture-neighbor baseline uses at most 300 references from every seventh training picture, comparing each
+with all training pictures and excluding exact zero distances. Counts depend on the reviewed font inputs. A mean
+nearest-neighbor distance does not rule out individual copies.
 
 ## Chapters
 
@@ -39,8 +44,8 @@ drawn from the system's fonts; text is Part 1's thirty novels, through Part 13's
   preconditioning derived (c_in, c_skip, c_out) and measured on our data (target spread, error amplification); noise,
   clean-point and EDM targets trained at equal budgets (three seeds); Heun's method, and when it beats Euler.
 * **9. DPM-Solver: an exact linear part.** Lu et al. (2022a, b): the exponential integrator derived; first order is DDIM;
-  DPM-Solver-2 and DPM-Solver++(2M); Euler, DDIM, Heun, DPM-Solver-2, DPM-Solver++(2M) and DDPM compared with the
-  exact denoiser (error against the exact ODE solution by number of evaluations), then with our network.
+  DPM-Solver++(2S) and DPM-Solver++(2M); Euler, DDIM, Heun, DPM-Solver++(2S), DPM-Solver++(2M) and DDPM compared with the
+  exact denoiser (error against a high-resolution ODE reference by number of evaluations), then with our network.
 * **10. Optimal transport and flow matching.** Monge (1781), Kantorovich (1942), Benamou–Brenier (2000); the optimal
   pairing of 1,500 points (Hungarian algorithm); flow matching (Lipman et al.; Liu et al.; Albergo & Vanden-Eijnden;
   2023) and the marginal-field theorem, proved and checked with the exact velocity at four times; straightness,
@@ -52,14 +57,15 @@ drawn from the system's fonts; text is Part 1's thirty novels, through Part 13's
 * **12. Distillation.** Progressive distillation (Salimans & Ho 2022), 64 → 1 steps, replayed round by round;
   consistency models (Song et al. 2023; sCM, Lu & Song 2025), consistency distillation replayed; distribution
   matching distillation (Yin et al. 2024a, b): the KL gradient as a difference of scores, derived and trained; all
-  three at one step, three seeds.
+  three at one step, three seeds. The small DMD demonstration isolates score-difference updates; the published
+  DMD benchmark also used teacher-output regression.
 * **13. One step from scratch.** MeanFlow (Geng et al. 2025): the average velocity and its identity, derived; shortcut
   models (Frans et al. 2024); both replayed; every one-step model of the part on one board, three seeds. Our MeanFlow
-  uses a plain squared error (the paper's adaptive weighting aims at a weighted median of the targets, and on these
-  wide 2-D targets learned a biased field), and both one-step networks use slower time features than the part's
+  uses a plain squared error, an adaptation of the paper's adaptively weighted loss; this comparison does not
+  reproduce the paper's full training recipe. Both one-step networks use slower time features than the part's
   other networks, because MeanFlow differentiates the network along time (see `fewstep.py`).
 * **14. Guidance.** Conditioning with label dropout (replayed); classifier guidance via Bayes (Dhariwal & Nichol
-  2021); classifier-free guidance (Ho & Salimans 2022); on-target rate, precision and recall swept over w for
+  2021); classifier-free guidance (Ho & Salimans 2022); negative-x fraction (a proxy for the A class), precision and recall swept over w for
   classifier-free guidance, classifier guidance (a noisy classifier we train) and autoguidance (Karras et al. 2024,
   with a weaker model of our own); three seeds.
 * **15. From points to pictures.** A picture as a point in 400 dimensions; flow matching on letter pictures, replayed;
@@ -78,23 +84,78 @@ drawn from the system's fonts; text is Part 1's thirty novels, through Part 13's
 * **Outro.** Eight pictures from the part's results, where the ideas come back, six problems, Part 22's teaser,
   references.
 
-## Running it
+## Reviewed inputs and source-only acceptance
 
-From the repo root:
+This source change contains no render manifest, numerical results, datasets, model weights or rendered evidence.
+The chapter descriptions specify the toy experiments and explanations; they are not new experiment receipts.
+Continuous playback, actual listening, speech synchronization and production acceptance remain separate gates.
+The stored-path animation uses linear interpolation between saved states, with no new model evaluations between
+states. It follows the recorded polyline and does not establish continuous-time solver accuracy. Other Cairo
+cached plays/waits can still advance the narration clock differently from encoded frame time; the helper aligns
+only its own path phase. A successful render or source test does not prove audiovisual synchronization.
 
+Scenes read `reviewed_inputs.py`, which never imports scientific producers, writes cache files, or computes on a
+missing input. Missing, incompatible, changed or unreviewed inputs stop with `ReviewedInputError`. The text
+scoreboard also reads Part 1/13 JSON through this guard; it does not call either upstream producer's `load`.
+`AI21_QUICK=1` fixtures cannot be used as reviewed render inputs.
+
+Before rendering, an independent operator must supply `.cache/ai21/render-manifest.json` after reviewing the actual
+producer/input provenance, numerical outputs, populations and compatibility. Do not create an acceptance manifest
+merely to bypass a missing-input error. The schema is:
+
+- `schema_version: 1`, `part: "ai21"`.
+- `compatibility_sources`: all six repository paths `videos/ai/ai21/{compute,exact,train2d,fewstep,discrete,textlm}.py`,
+  each mapped to the complete reviewed SHA256 of the current compatible source. These pins are distinct from the
+  identities of the source/input bytes that actually produced a historical artifact.
+- `products`: entries for whichever of the 18 names in `compute.ITEMS` the requested scenes consume. Each entry
+  declares `json: {bytes, sha256}`, `npz: null` or `{bytes, sha256, arrays: {name: {dtype, shape}}}`, and
+  `review: {accepted: true, recipe, producer_sha256, input_sha256: {input_role: sha256}}`.
+- Recipe is `original-recipe`, except `solvers` and `solvers_net` require `euler-common-start-v1`. That review must
+  check the corrected common physical EDM start `80*z`, including VP start `80*z/sqrt(6401)`, preserve original
+  outcomes separately, and independently check all affected metrics and picture arrays before accepting them.
+  Renaming an old result or changing a recipe label does not establish those facts.
+- `upstream`: optional `tf` and `scoreboard` descriptors for the historical `.cache/ai13/tf.json` and
+  `.cache/ai1/scoreboard.json` metadata consumed by the text scoreboard. Each declares the same `json` identity and
+  `review` provenance structure, with recipe `historical-original`. No upstream arrays or weights are loaded here.
+
+The guard verifies finite JSON, complete hashes, exact byte counts, declared NPZ inventory/dtypes/shapes and numeric
+finiteness; object arrays and JSON/NPZ key collisions are rejected. Files are read as regular files without following
+symlinks through POSIX directory descriptors; unsupported platforms fail explicitly. A descriptor is the operator's
+assertion about identified bytes, not proof of scientific correctness or training reproducibility. If a source or
+input changes, review its compatibility and the affected numerical outcomes again.
+
+`text_zh_reviewed.json` is a narrow shared-caption delta. The integrator must compose its 60 exact strings and four
+regex entries individually into `videos/ai/ai_text_zh.json`, preserving unrelated entries and existing pattern order.
+Resolve any conflicting translation explicitly. This branch does not replace that shared table or install an
+in-memory overlay; `validate_captions("zh")` stops until all entries are present exactly once with matching values.
+The part-local `narration_zh.json` contains translation fixtures; `zh_lines.py` provides computed-line templates.
+Neither file is an experimental result receipt. Caption composition does not establish visual or audio acceptance.
+
+After the independently reviewed inputs and Chinese caption composition are available, run from the repo root:
+
+```sh
+python tools/build.py ai21
+python tools/build.py ai21 --lang zh
 ```
-python tools/make.py ai21                     # everything: Part 1 and 13's inputs, the computations, both languages
-python -m videos.ai.ai21.compute              # the numbers only (about 2.5 CPU-hours; resumable)
-AI21_THREADS=1 python -m videos.ai.ai21.compute     # torch threads (default 2)
-AI21_QUICK=1 python -m videos.ai.ai21.compute       # a smoke test with tiny budgets, into .cache/ai21_quick
-python tools/build.py ai21                    # English
-python tools/build.py ai21 --lang zh          # Chinese
+
+The scientific producer remains an explicit opt-in command, separate from reviewed rendering:
+
+```sh
+python -m videos.ai.ai21.compute
 ```
 
-Every random choice is seeded. Items made of several trainings are saved piece by piece (`CACHE.partial`), so a killed
-run resumes; the text models checkpoint every 100 steps with their random states (`.cache/ai21/lm_*.ckpt.pt`). Items
-that need another item's models compute it first. Trained weights are kept beside the results (`*.pt`, about 30 MB in
-all). The scoreboard chapter reads Part 1's scoreboard and Part 13's transformer through their `load`.
+It can train models and load/compute dependencies, and does not issue a review manifest. No training or upstream
+regeneration is performed by the guarded scene reads. The stock `make.py` wrapper is not a complete reviewed-input
+acceptance workflow.
+
+Focused tests use small analytic examples and synthetic temporary manifests only:
+
+```sh
+python -m pytest -q tests/test_ai21_scientific_contracts.py tests/test_ai21_motion_clock.py tests/test_ai21_reviewed_inputs.py
+```
+
+They check source/numerical identities, path endpoints/interpolation and read-only failure behavior. They do not
+validate a real cache, a supplied operator manifest, the full training experiments, rendered playback or audio.
 
 ## References
 
@@ -122,6 +183,19 @@ Mercury (2025); Google DeepMind, Gemini Diffusion (2025); Wu et al., Fast-dLLM (
 (2025); Google, DiffusionGemma (10 June 2026); Prabhudesai et al., Diffusion Beats Autoregressive in Data-Constrained
 Settings (2025).
 
+The text-model replay curves evaluate 64 held-out blocks (4,096 characters) at each checkpoint. The final comparison
+uses 512 held-out blocks (32,768 characters) starting at validation offset 200,000. These are distinct evaluation
+cohorts, so a replay curve endpoint need not equal the final comparison value. Diffusion entries estimate a loss
+upper bound; autoregressive entries evaluate exact per-character loss.
+
+Three-seed whiskers on the point-model comparison bars show the observed minimum and maximum; text-model
+uncertainty bars explicitly show ±one standard error. The DPM solver picture row compares three candidate solvers
+at about 12 evaluations with a separately labeled high-resolution reference that uses a larger budget. SDE/ODE
+path-length statistics average each path’s total length after adding its 50 recorded segments.
+
+Schedule invariance compares reparameterized denoisers expressed in signal-to-noise ratio under monotone schedules
+with the same endpoints. It does not guarantee identical fixed-weight behavior or finite-training results.
+
 ## Problems
 
 1. For q(x_t | x_{t-1}) = N(√(1−β_t) x_{t-1}, β_t I), show q(x_t | x_0) = N(√ᾱ_t x_0, (1−ᾱ_t) I) with ᾱ_t = ∏_{s≤t}(1−β_s).
@@ -130,8 +204,9 @@ Settings (2025).
 3. Prove that denoising score matching and explicit score matching differ by a constant independent of θ.
 4. Show that DDIM's step x_s = α_s x̂_0 + σ_s ε̂ solves dx/dσ = (x − D)/σ exactly, in x/α and σ/α, when D = x̂_0 is constant
    over the step.
-5. Show that classifier-free guidance with weight w follows the score of p(x) p(c | x)^w, and that w = 1 gives the
-   conditional model.
+5. At a fixed noise level and with ideal conditional and unconditional scores, show that classifier-free guidance
+   with weight w gives the score of the normalized density proportional to p_t(x) p_t(c | x)^w, and w = 1 gives the
+   conditional score. This local identity does not establish the endpoint distribution of an entire guided trajectory.
 6. For masked diffusion on n symbols, show C(n, k) ∫₀¹ t^{k−1}(1−t)^{n−k} dt = 1/k, and deduce that the bound is the
    any-order autoregressive loss.
 
@@ -151,7 +226,7 @@ Settings (2025).
 4. In x̃ = x/α and σ̃ = σ/α the state is x̃ = x_0 + σ̃ ε and the probability-flow ODE is dx̃/dσ̃ = (x̃ − D)/σ̃. With D
    constant, d(x̃ − D)/dσ̃ = (x̃ − D)/σ̃, so x̃ − D is proportional to σ̃: x̃_s = D + (σ̃_s/σ̃_t)(x̃_t − D). With
    ε̂ = (x̃_t − D)/σ̃_t this is x̃_s = D + σ̃_s ε̂; multiplying by α_s gives x_s = α_s D + σ_s ε̂, DDIM's step.
-5. The guided score is ∇log p(x) + w(∇log p(x|c) − ∇log p(x)). By Bayes, ∇log p(x|c) − ∇log p(x) = ∇log p(c|x) (p(c)
+5. At fixed t, with exact scores and densities evaluated at that noise level, the guided score is ∇log p(x) + w(∇log p(x|c) − ∇log p(x)). By Bayes, ∇log p(x|c) − ∇log p(x) = ∇log p(c|x) (p(c)
    does not depend on x), so the guided score is ∇log p(x) + w ∇log p(c|x) = ∇log[p(x) p(c|x)^w]. At w = 1 it is
    ∇log p(x|c). (In ε or velocity form the same holds, since each is an affine function of the score at fixed t.)
 6. ∫₀¹ t^{k−1}(1−t)^{n−k} dt = B(k, n−k+1) = (k−1)!(n−k)!/n!, and multiplying by C(n, k) = n!/(k!(n−k)!) leaves 1/k.
@@ -166,8 +241,9 @@ Settings (2025).
 2. 对 x = α x_0 + σ ε，证明特威迪公式 E[x_0 | x] = (x + σ² ∇log p(x))/α，并推出最佳的噪声猜测是 −σ ∇log p(x)。
 3. 证明去噪分数匹配与显式分数匹配只相差一个与 θ 无关的常数。
 4. 证明当 D = x̂_0 在一步之内不变时，DDIM 的一步 x_s = α_s x̂_0 + σ_s ε̂ 在坐标 x/α、σ/α 下精确地解出 dx/dσ = (x − D)/σ。
-5. 证明权重为 w 的无分类器引导沿着 p(x) p(c | x)^w 的分数函数走，且 w = 1 时就是条件模型。
-6. 对 n 个符号上的掩码扩散，证明 C(n, k) ∫₀¹ t^{k−1}(1−t)^{n−k} dt = 1/k，并推出这个下界就是任意顺序自回归的损失。
+5. 在固定噪声时刻 t、条件与无条件分数均精确时，证明权重 w 的无分类器引导给出正比于 p_t(x) p_t(c | x)^w 的归一化密度的分数，
+   且 w = 1 时等于条件分数。这个局部恒等式不保证整条引导轨迹的终点分布。
+6. 对 n 个符号上的掩码扩散，证明 C(n, k) ∫₀¹ t^{k−1}(1−t)^{n−k} dt = 1/k，并推出这个损失上界等于对均匀随机揭示顺序取平均的自回归损失。
 
 ### 解答
 
@@ -182,12 +258,12 @@ Settings (2025).
 4. 在 x̃ = x/α、σ̃ = σ/α 下，状态为 x̃ = x_0 + σ̃ ε，概率流 ODE 为 dx̃/dσ̃ = (x̃ − D)/σ̃。D 不变时 d(x̃ − D)/dσ̃ = (x̃ − D)/σ̃，
    所以 x̃ − D 与 σ̃ 成正比：x̃_s = D + (σ̃_s/σ̃_t)(x̃_t − D)。记 ε̂ = (x̃_t − D)/σ̃_t，即 x̃_s = D + σ̃_s ε̂；乘以 α_s 得
    x_s = α_s D + σ_s ε̂，正是 DDIM 的一步。
-5. 引导后的分数函数是 ∇log p(x) + w(∇log p(x|c) − ∇log p(x))。由贝叶斯公式，∇log p(x|c) − ∇log p(x) = ∇log p(c|x)（p(c)
+5. 固定 t，使用该噪声时刻的精确分数与密度，引导后的分数函数是 ∇log p(x) + w(∇log p(x|c) − ∇log p(x))。由贝叶斯公式，∇log p(x|c) − ∇log p(x) = ∇log p(c|x)（p(c)
    与 x 无关），所以它等于 ∇log p(x) + w ∇log p(c|x) = ∇log[p(x) p(c|x)^w]。w = 1 时就是 ∇log p(x|c)。（在固定的 t 下，
    ε 或速度都是分数函数的仿射函数，所以结论同样成立。）
-6. ∫₀¹ t^{k−1}(1−t)^{n−k} dt = B(k, n−k+1) = (k−1)!(n−k)!/n!，乘以 C(n, k) = n!/(k!(n−k)!) 就剩下 1/k。下界
+6. ∫₀¹ t^{k−1}(1−t)^{n−k} dt = B(k, n−k+1) = (k−1)!(n−k)!/n!，乘以 C(n, k) = n!/(k!(n−k)!) 就剩下 1/k。损失上界
    ∫₀¹ (1/t) E[Σ_空白 CE] dt 对每个空白集合 M 的权重是 t^{|M|}(1−t)^{n−|M|}/t 的积分，大小为 k 的集合得到权重 1/(k C(n, k))，
-   所以下界等于 Σ_k E_{|M|=k}[(1/k) Σ_{i∈M} −log p(x_i | x_{∖M})]。在均匀随机的顺序里，揭开第 j 个符号的那一步，面对的是一个
+   所以损失上界等于 Σ_k E_{|M|=k}[(1/k) Σ_{i∈M} −log p(x_i | x_{∖M})]。在均匀随机的顺序里，揭开第 j 个符号的那一步，面对的是一个
    大小为 k = n − j + 1 的均匀随机隐藏集合，并预测其中均匀随机的一个，所以它的期望损失正是第 k 项；对 j 求和，就得到任意顺序
    自回归的损失。
 
@@ -199,7 +275,7 @@ Settings (2025).
 | forward process, reverse process | 前向过程，反向过程 |
 | noise schedule; β_t; ᾱ_t (alpha bar) | 噪声调度；β_t；ᾱ_t（阿尔法拔） |
 | variance preserving (VP) | 方差保持 |
-| evidence lower bound (ELBO), variational bound | 证据下界（ELBO），变分下界 |
+| evidence lower bound (ELBO); negative ELBO (loss upper bound) | 证据下界（ELBO）；负ELBO（损失上界） |
 | noise prediction (ε-prediction), the simple loss | 噪声预测（ε预测），简化损失 |
 | denoiser D(x; σ) | 去噪器D(x; σ) |
 | Tweedie's formula, posterior mean | 特威迪公式，后验均值 |
@@ -240,8 +316,12 @@ Settings (2025).
 | uniform noise, absorbing (mask) noise, mask token [M] | 均匀噪声，吸收态（掩码）噪声，掩码词元[M] |
 | masked diffusion, weighted cross-entropy | 掩码扩散，加权交叉熵 |
 | any-order autoregressive model | 任意顺序自回归模型 |
-| a tight bound | 紧的下界 |
+| a tight bound | 紧的界 |
 | block diffusion | 块扩散 |
 | surest-first unmasking (low-confidence remasking) | 最有把握优先的揭开（低置信度重掩码） |
-| judged bits per character (generative perplexity) | 由另一个模型评判的每字符比特数（生成困惑度） |
+| AR-judge bits per character; generative perplexity = 2^bpc | 自回归评判模型的每字符比特数；生成困惑度 = 2^每字符比特数 |
 | diffusion language model (dLLM) | 扩散语言模型 |
+
+QA metric conventions: cached `dpm2` denotes midpoint data-prediction DPM-Solver++(2S). Cached `floor` values are finite-sample reference baselines, not mathematical lower bounds. DSM scene consumers convert historical noise-error terms by `1/(2 sigma_t^2)` to the displayed half-squared-score loss without rewriting the training caches. The Euler VP initialization now represents the same physical start as the other solvers; the reviewed-input guard rejects legacy solver acceptance records. A new independent review must identify all affected rows and picture arrays while preserving original outcomes separately.
+
+Guidance metric conventions: legacy `onA` is the fraction with `x < 0`, a left-region proxy rather than A membership; `spread` is mean radius about that subset's centroid. Metrics use 1,000 generated points per seed and a seeded 1,000-point real-A reference subset; panels show the first 500 points of seed 0. Reflow's loss plot is per-coordinate squared velocity error, with loss markers hidden until the first recorded update.

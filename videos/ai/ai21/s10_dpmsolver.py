@@ -5,11 +5,11 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import (DATA, DDPM_C, PART, SOLVER_C, SOLVER_NAME, Panel, legend, load, log_axes, logcurve,
+from videos.ai.ai21.common import (ladder, DATA, DDPM_C, PART, SOLVER_C, SOLVER_NAME, Panel, legend, load, log_axes, logcurve,
                                    take_away)
 
 DET = ["euler_vp", "ddim", "heun", "dpm2", "dpmpp2m"]
-SPOKEN = {"euler_vp": "plain Euler in time", "ddim": "DDIM", "heun": "Heun", "dpm2": "DPM-Solver-2",
+SPOKEN = {"euler_vp": "plain Euler in time", "ddim": "DDIM", "heun": "Heun", "dpm2": "DPM-Solver plus plus two S",
           "dpmpp2m": "DPM-Solver plus plus"}
 
 
@@ -82,15 +82,18 @@ class DPMSolver(VoiceoverScene):
         lin = Line(g.ax.c2p(s1, f(s1)), g.ax.c2p(s2, f(s1) + slope * (s2 - s1)), color=SOLVER_C["dpmpp2m"], stroke_width=4)
         mid = Dot(g.ax.c2p((s1 + s2) / 2, f((s1 + s2) / 2)), radius=0.07, color=SOLVER_C["dpm2"])
         labs = VGroup(label(r"first order: \ hold $D$ fixed \ (DDIM)", font_size=20, color=SOLVER_C["ddim"]),
-                      label(r"DPM-Solver-2: \ one extra evaluation, \ halfway", font_size=20, color=SOLVER_C["dpm2"]),
-                      label(r"DPM-Solver++(2M): \ reuse the last step's $D$, \ extend the line", font_size=20,
-                            color=SOLVER_C["dpmpp2m"])).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.8, 0.9, 0])
+                      label(r"DPM-Solver++(2S): \ midpoint data prediction", font_size=20, color=SOLVER_C["dpm2"]),
+                      label(r"DPM-Solver++(2M): \ reuse $D$, \ extrapolate", font_size=20,
+                            color=SOLVER_C["dpmpp2m"])).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        if labs.width > 6.2:
+            labs.width = 6.2
+        labs.move_to([3.8, 0.9, 0])
         tag = note(r"schematic").to_corner(UL, buff=0.3)
         pub = label(r"DPM-Solver on CIFAR-10: \ FID $4.70$ in $10$ evaluations, \ $2.87$ in $20$", font_size=22,
                     color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "To do better, approximate how the denoiser changes over the step. <bookmark mark='a'/> DPM-Solver-2 "
-            "spends one extra evaluation halfway through the step, in lambda, and uses the denoiser there. "
+            "uses a midpoint evaluation. Our data-prediction update is the DPM-Solver plus plus two S variant; it uses the denoiser halfway through the step in lambda. "
             "<bookmark mark='b'/> DPM-Solver plus plus, in its two-step multistep form, spends nothing extra: it "
             "reuses the denoiser from the previous step and extends the line through the two. One network evaluation "
             "per step, second order. <bookmark mark='c'/> On CIFAR-10 the first version reached an FID of 4.70 in ten "
@@ -112,7 +115,7 @@ class DPMSolver(VoiceoverScene):
         errs = np.array([r["err"] for k in DET for r in s[k]])
         lo, hi = math.floor(math.log10(max(errs.min(), 1e-4))), math.ceil(math.log10(errs.max()))
         g = log_axes([math.log10(3), math.log10(130)], [lo, hi], x_length=7.0, y_length=4.8,
-                     xlabel=r"network evaluations", ylabel=r"error at the end, \ against the exact solution",
+                     xlabel=r"network evaluations", ylabel=r"mean endpoint distance to numerical reference",
                      xticks=[4, 8, 16, 32, 64, 128], yticks=[10.0 ** k for k in range(lo, hi + 1)],
                      yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}", center=[-2.8, -0.2, 0])
         lines = VGroup(*[logcurve(g.ax, [r["nfe"] for r in s[k]], [max(r["err"], 10.0 ** lo) for r in s[k]],
@@ -153,12 +156,12 @@ class DPMSolver(VoiceoverScene):
                       "fixed is the better first-order bet.")
         n_ok = next((r["nfe"] for r in dd if r["sw"] < 1.5 * fl), None)
         ddpm_note = (f"DDPM, with its fresh noise, has no single path to compare; its samples come within half again of "
-                     f"the floor only at {n_ok} evaluations." if n_ok else
+                     f"the sampling baseline only at {n_ok} evaluations." if n_ok else
                      "DDPM, with its fresh noise, has no single path to compare, and even at 128 evaluations its samples "
-                     "are well short of the floor.")
+                     "are well short of the sampling baseline.")
         with self.voiceover(
             "Here is the whole family on our letters, run with the exact denoiser so that the only error is the "
-            "solver's, all on EDM's spacing, from the same noise. The error is measured against the exact solution "
+            "solver's, all on EDM's spacing, from the same noise. The error is measured against the high-resolution reference "
             "of the ODE. <bookmark mark='a'/> On log scales, a first-order method's line has slope minus one, a "
             "second-order method's minus two. <bookmark mark='b'/> With about eight evaluations the best is "
             f"{SPOKEN[b8]}, at {e8['err']:.3f}. With about thirty-two, {SPOKEN[b32]} is {r32:.0f} times more accurate "
@@ -169,9 +172,9 @@ class DPMSolver(VoiceoverScene):
             vo.wait_until("a")
             self.play(*[Indicate(l_[0], color=SOLVER_C[k], scale_factor=1.0) for l_, k in zip(lines, DET)], run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(tbl), FadeIn(tbh), Indicate(lines[DET.index(b8)][0], color=SOLVER_C[b8]))
+            self.play(FadeIn(tbl), FadeIn(tbh), Indicate(lines[DET.index(b8)][0], color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
-            self.play(Indicate(lines[0][0], color=WHITE))
+            self.play(Indicate(lines[0][0], color=WHITE, scale_factor=1.0))
             vo.wait_until("d")
             self.play(FadeIn(g2), Create(ddl), Create(fll))
         self.wait(0.3)
@@ -184,10 +187,10 @@ class DPMSolver(VoiceoverScene):
         budget = 12
         panels = Group()
         for i, k in enumerate(kinds + ["ref"]):
-            pn = Panel(3.2, center=[-5.025 + 3.35 * i, 1.2, 0])
+            pn = Panel(3.2, center=[-5.025 + 3.35 * i, 1.2, 0], ylim=(-1.8, 1.75))
             P = np.asarray(s["pic_ref"] if k == "ref" else s["pic_" + k + str(budget)])
             col = DATA if k == "ref" else SOLVER_C[k]
-            nm = r"the exact solution" if k == "ref" else SOLVER_NAME[k]
+            nm = r"the high-resolution reference" if k == "ref" else SOLVER_NAME[k]
             panels.add(Group(pn, pn.scatter(P, col, radius_px=1.4, res=260),
                              label(nm, font_size=20, color=col).next_to(pn, UP, buff=0.1)))
         sub = label(rf"about ${budget}$ evaluations, \ the same $600$ starting points", font_size=20, color=GREY_A).next_to(
@@ -200,7 +203,7 @@ class DPMSolver(VoiceoverScene):
                            color=GREY_A),
                      *[label(rf"{SOLVER_NAME[k]}: \ ${r16[k]:.3f}$ \ (exact: ${rs16[k]:.3f}$)", font_size=20, color=SOLVER_C[k])
                        for k in kinds],
-                     label(rf"the network's own exact ODE: \ ${net_ref:.3f}$ from the data \ (floor ${fl:.3f}$)", font_size=20,
+                     label(rf"the network's high-resolution ODE reference: \ ${net_ref:.3f}$ from the data \ (sampling baseline ${fl:.3f}$)", font_size=20,
                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([0, -2.3, 0])
         eb = {k: at(s[k], budget)["err"] for k in kinds}
         bs, ws = SPOKEN[min(kinds, key=lambda k: eb[k])], SPOKEN[max(kinds, key=lambda k: eb[k])]
@@ -208,9 +211,9 @@ class DPMSolver(VoiceoverScene):
         verdict = ("With our trained network in place of the exact denoiser, the ranking is the same, "
                    if same_order else "With our trained network in place of the exact denoiser, the ranking shifts, ")
         with self.voiceover(
-            f"Here are three of them after about {budget} evaluations, beside the exact solution. {close_note} "
+            f"Here are three of them after about {budget} evaluations, beside the high-resolution reference. {close_note} "
             "<bookmark mark='a'/> " + verdict
-            + f"and the network's own error sets a floor: solved exactly, its ODE lands {net_ref:.3f} from the data, "
+            + f"and a high-resolution solve of the network's ODE lands {net_ref:.3f} from the data, "
             f"against {fl:.3f} for a fresh sample of the letters. <bookmark mark='b'/> Ten to thirty evaluations, then, "
             "with a solver that knows the equation. Fewer than that needs a different idea: chapter twelve."
         ) as vo:

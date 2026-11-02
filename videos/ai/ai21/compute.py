@@ -20,7 +20,7 @@ Items, in order (exact.py: no network; train2d.py: small networks in the plane; 
     forward     DDPM's forward chain against its closed form; the ELBO's weights
     tweedie     Tweedie's formula against brute-force posterior means (1D, 2D); the best denoiser's guesses
     sde         the reverse SDE and the probability-flow ODE with the exact score
-    solvers     DDPM, Euler, DDIM, Heun, DPM-Solver-2 and DPM-Solver++(2M) with the exact denoiser, by evaluations
+    solvers     DDPM, Euler, DDIM, Heun, DPM-Solver++(2S) and DPM-Solver++(2M) with the exact denoiser, by evaluations
     schedules   log-SNR curves, training's noise levels, the terminal SNR, DDIM's step spacings
     edmtargets  EDM's preconditioning: target sizes, error amplification, the irreducible loss
     transport   optimal transport against flow matching's exact marginal flow; the marginal-field theorem checked

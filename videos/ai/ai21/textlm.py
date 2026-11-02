@@ -13,7 +13,7 @@ passage, in blocks of T characters, and the autoregressive model's bits on the s
 bound that the derivation says agree (1/t-weighted random blanks, a fixed count of blanks, one random order); the
 diffusion model read left to right; writing: samples of T characters by unmasking (the surest guesses first, as in
 LLaDA, or at random), with 1 to T rounds, and in blocks left to right; each judged by an autoregressive model of the
-other seed (bits per character; lower reads more like the novels).  Replay: the diffusion model filling in a passage
+other seed (bits per character under that judge; coherence and diversity require separate checks).  Replay: the diffusion model filling in a passage
 with half its characters blanked, and both models writing, at checkpoints.
 
 Resumable: each run checkpoints every 100 steps (model, optimizer, schedule and random states) in .cache/ai21/.

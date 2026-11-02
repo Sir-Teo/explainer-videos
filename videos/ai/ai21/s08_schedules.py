@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import (DDIM_C, DPMPP_C, HEUN_C, PART, SCHED, bars_chart, legend, load, log_axes, logcurve,
+from videos.ai.ai21.common import (ladder, DDIM_C, DPMPP_C, HEUN_C, PART, SCHED, bars_chart, legend, load, log_axes, logcurve,
                                    take_away)
 
 NAMES = {"cos": r"ours: \ cosine", "linb": r"linear $\beta$ \ (VP SDE)", "fm": r"straight line", "logn": r"EDM: \ log-normal"}
@@ -48,9 +48,9 @@ class Schedules(VoiceoverScene):
         lt = float(s["logsnr_T"])
         tdot = Dot(g.ax.c2p(1, lt), radius=0.08, color=SCHED["ddpm"])
         tl = label(rf"DDPM's last step: \ $\lambda = {lt:.1f}$, \ not $-\infty$", font_size=20, color=SCHED["ddpm"]).next_to(tdot, LEFT, buff=0.15)
-        lin = VGroup(label(r"Lin et al.\ (2024): \ never trained at pure noise,", font_size=20, color=GREY_A),
-                     label(r"so the model can't make a very dark or very bright picture;", font_size=20, color=GREY_A),
-                     label(r"the fix: \ rescale to zero SNR at the end", font_size=20, color=GREY_A)).arrange(
+        lin = VGroup(label(r"Lin et al.\ (2024): \ training/inference mismatch", font_size=20, color=GREY_A),
+                     label(r"restricted Stable Diffusion's brightness range;", font_size=20, color=GREY_A),
+                     label(r"one fix: \ rescale to zero terminal SNR", font_size=20, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, -2.3, 0])
         with self.voiceover(
             "A noise schedule says how much signal survives at each time. Its one number is the signal-to-noise "
@@ -58,8 +58,9 @@ class Schedules(VoiceoverScene):
             "betas, the cosine schedule of Alex Nichol and Prafulla Dhariwal, ours, and flow matching's straight "
             "line all run from plenty of signal to almost none, at different speeds. <bookmark mark='b'/> One "
             f"detail matters: DDPM's last step still has a log signal-to-noise ratio of {lt:.1f}, not minus infinity. "
-            "<bookmark mark='c'/> In 2024 Shanchuan Lin and colleagues showed that a model never trained at pure "
-            "noise can't make a very dark or very bright image, and rescaled the schedule to end at zero."
+            "<bookmark mark='c'/> In 2024 Shanchuan Lin and colleagues identified a mismatch between nonzero "
+            "terminal training SNR and pure-noise inference. In Stable Diffusion this restricted the brightness range; "
+            "they proposed zero terminal SNR along with training and sampler fixes."
         ) as vo:
             self.play(FadeIn(g), FadeIn(d))
             vo.wait_until("a")
@@ -95,10 +96,10 @@ class Schedules(VoiceoverScene):
             "Does the schedule change what is being learned? In 2021 Diederik Kingma, Tim Salimans, Ben Poole and "
             "Jonathan Ho took the bound to continuous time: an integral over time of the clean-point error, weighted "
             "by how fast the signal-to-noise ratio falls. <bookmark mark='a'/> Change the variable to the ratio "
-            "itself, and the schedule disappears: only its two ends remain. Every schedule with the same ends has the "
-            "same bound. <bookmark mark='b'/> What the schedule does change is practice: with time drawn uniformly, "
-            "each schedule visits the noise levels with a different frequency, and the network learns best where it "
-            "practises most. <bookmark mark='c'/> EDM, in the next chapter, skips the schedule and draws noise levels "
+            "itself. With the denoiser expressed as a function of this ratio, monotone schedules with the same endpoints "
+            "give the same continuous-time bound. This compares reparameterized denoisers, not unchanged weights under a new time input. <bookmark mark='b'/> What the schedule does change is practice: with time drawn uniformly, "
+            "each schedule visits the noise levels with a different frequency, changing which levels supply the "
+            "gradient updates. <bookmark mark='c'/> EDM, in the next chapter, skips the schedule and draws noise levels "
             "from a log-normal directly."
         ) as vo:
             step(0)
@@ -121,7 +122,7 @@ class Schedules(VoiceoverScene):
         lo, hi = math.floor(math.log10(vals.min())), math.ceil(math.log10(vals.max()))
         g = log_axes([math.log10(sig[0]) - 0.1, math.log10(sig[-1]) + 0.1], [lo, hi], x_length=6.0, y_length=3.8,
                      xlabel=r"noise level $\sigma$ \ (in $x = x_0 + \sigma n$)",
-                     ylabel=r"error against the exact denoiser", xticks=sig, yticks=[10.0 ** e for e in range(lo, hi + 1)],
+                     ylabel=r"mean squared denoiser error", xticks=sig, yticks=[10.0 ** e for e in range(lo, hi + 1)],
                      yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}", center=[-3.0, -0.2, 0])
         lines = VGroup()
         for k in kinds:
@@ -134,7 +135,7 @@ class Schedules(VoiceoverScene):
                         height=2.2, bar_w=0.7, gap=0.45, spread=[(heun[k].min(), heun[k].max()) for k in kinds], digits=3,
                         font_size=18).move_to([4.2, -1.3, 0])
         fl = float(a["floor"])
-        chl = label(rf"distance from the data, \ Heun, $35$ evaluations \\ (floor ${fl:.3f}$; \ bars: mean, \ whiskers: "
+        chl = label(rf"distance from the data, \ Heun, $35$ evaluations \\ (sampling baseline ${fl:.3f}$; \ bars: mean, \ whiskers: "
                     rf"${len(heun['cos'])}$ seeds)", font_size=18, color=GREY_A).next_to(ch, UP, buff=0.3)
         lg = legend([(SCHED[k], NAMES[k]) for k in kinds], font_size=18).move_to([4.2, 2.3, 0])
         best = min(kinds, key=lambda k: heun[k].mean())
@@ -149,9 +150,8 @@ class Schedules(VoiceoverScene):
         with self.voiceover(
             f"We trained the same noise-guessing network four ways, changing only which noise levels it practises: "
             f"the same budget, {len(heun['cos'])} seeds each. <bookmark mark='a'/> Because our letters' exact denoiser is "
-            "known, we can see where each one is wrong. At low noise they all agree. <bookmark mark='b'/> At the "
-            f"highest noise, {SPOKEN[hi_err]} is the furthest off and {SPOKEN[lo_hi]} the closest: the one that "
-            "practises there most. <bookmark mark='c'/> " + verdict
+            "known, we can compare each error across noise levels. <bookmark mark='b'/> At the "
+            f"highest noise, {SPOKEN[hi_err]} is the furthest off and {SPOKEN[lo_hi]} the closest among these runs. <bookmark mark='c'/> " + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg))
             vo.wait_until("a")
@@ -190,7 +190,7 @@ class Schedules(VoiceoverScene):
                 if sp == best[k]:
                     row.add(SurroundingRectangle(m, color=cols[k], buff=0.12, corner_radius=0.06))
             rows.add(row)
-        note_ = label(r"the error at the end, \ against the exact solution of the ODE, \ same starting noise", font_size=22,
+        note_ = label(r"the error at the end, \ against a high-resolution ODE reference, \ same starting noise", font_size=22,
                       color=GREY_A).next_to(rows, DOWN, buff=0.5)
         same = len(set(best.values())) == 1
         sp_ddim, sp_heun, sp_dpm = SP_SPOKEN[best["ddim"]], SP_SPOKEN[best["heun"]], SP_SPOKEN[best["dpmpp2m"]]

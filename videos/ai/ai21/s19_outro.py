@@ -24,7 +24,7 @@ class Outro(VoiceoverScene):
         out = []
         f = load("forward")
         fr = np.asarray(f["frames"])
-        pn = Panel(TW, xlim=(-3.2, 3.4), ylim=(-2.4, 2.0), frame=False)
+        pn = Panel(TW, xlim=(-3.8, 3.8), ylim=(-3.0, 3.0), frame=False)
         under = pn.scatter(fr[-1][:400], NOISE, radius_px=1.2, res=260).pixel_array[..., :3] / 255.0
         mid = pn.scatter(fr[6][:400], interpolate_color(ManimColor(DATA), ManimColor(NOISE), 0.5), radius_px=1.2, res=260,
                          base=under).pixel_array[..., :3] / 255.0
@@ -35,24 +35,28 @@ class Outro(VoiceoverScene):
         out.append((VGroup(pn2, panel_arrows(pn2, np.asarray(d["grid"]), np.asarray(d["field0.25"]), max_len=0.2,
                                              stroke_width=1.3)), r"a learned score", SCORE))
         s = load("sde")
-        pn3 = Panel(TW, xlim=(-3.2, 3.4), ylim=(-3.0, 2.6), frame=False)
+        pn3 = Panel(TW, xlim=(-4.0, 4.0), ylim=(-3.2, 3.2), frame=False)
         out.append((VGroup(pn3, pn3.paths(np.asarray(s["sde_paths"])[:, :6], DDPM_C, stroke_width=0.9, opacity=0.55),
                            pn3.paths(np.asarray(s["ode_paths"])[:, :24], DDIM_C, stroke_width=1.6, opacity=0.9)),
                     r"two ways back: \ SDE and ODE", DDIM_C))
         so = load("solvers")
-        ax = CornerAxes(x_range=[0, 1.6], y_range=[-3, 0.2], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
+        log_nfe = [math.log10(row["nfe"]) for k in ("ddim", "heun", "dpmpp2m") for row in so[k]]
+        log_err = [math.log10(row["err"]) for k in ("ddim", "heun", "dpmpp2m") for row in so[k]]
+        ax = CornerAxes(x_range=[min(log_nfe) - 0.05, max(log_nfe) + 0.05],
+                        y_range=[min(log_err) - 0.1, max(log_err) + 0.1],
+                        x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
                         axis_config={"stroke_color": GREY_D, "include_ticks": False})
         lines = VGroup(ax)
         for k in ("ddim", "heun", "dpmpp2m"):
-            pts = [ax.c2p(math.log10(r["nfe"]) - 0.5, max(math.log10(max(r["err"], 1e-3)), -3)) for r in so[k]]
+            pts = [ax.c2p(math.log10(r["nfe"]), math.log10(r["err"])) for r in so[k]]
             lines.add(VMobject(color=SOLVER_C[k], stroke_width=2.5).set_points_as_corners(pts))
         out.append((lines, r"solvers: \ error by steps", SOLVER_C["dpmpp2m"]))
         fl = load("flow")
-        pn4 = Panel(TW, frame=False)
-        out.append((VGroup(pn4, pn4.paths(np.asarray(fl["rf2_path"])[:, ::3], RF2_C, stroke_width=1.0, opacity=0.8, smooth=True)),
+        pn4 = Panel(TW, xlim=(-3.0, 3.0), ylim=(-3.0, 2.3), frame=False)
+        out.append((VGroup(pn4, pn4.paths(np.asarray(fl["rf2_path"])[:, ::3], RF2_C, stroke_width=1.0, opacity=0.8, smooth=False)),
                     r"reflow: \ straight paths", RF2_C))
         g = load("guidance")
-        pn5 = Panel(TW, xlim=(-3.0, 3.0), ylim=(-1.6, 1.6), frame=False)
+        pn5 = Panel(TW, xlim=(-3.0, 3.0), ylim=(-1.9, 1.9), frame=False)
         j = [float(w) for w in g["w"]].index(4.0)
         out.append((Group(pn5, pn5.scatter(np.asarray(g["cfg_x"])[j], CFG_C, radius_px=1.3, res=260)), r"guidance, \ $w = 4$",
                     CFG_C))
@@ -80,8 +84,8 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Let's take stock. A diffusion model destroys data slowly with noise, and learns to undo it. The bound "
-            "that trains it is a sum of noise-guessing errors, and the best noise guess is the score, by Tweedie's "
+            "Let's take stock. A diffusion model destroys data slowly with noise, and learns to undo it. The training bound's "
+            "intermediate Gaussian KL terms train the network through weighted noise-guessing errors, and the best noise guess is minus the noise scale times the score, by Tweedie's "
             "formula; denoising score matching learns it by plain regression. Time can be run back with a "
             "stochastic equation or a deterministic one; DDPM and DDIM discretize them, and EDM and DPM-Solver "
             "solve them in ten to thirty steps. Flow matching learns straight-line velocities, reflow straightens "
@@ -126,8 +130,7 @@ class Outro(VoiceoverScene):
             r"Prove that denoising score matching and explicit score matching differ by a constant independent of $\theta$.",
             r"Show that DDIM's step $x_s = \alpha_s \hat x_0 + \sigma_s \hat\varepsilon$ solves $dx/d\sigma = (x - D)/\sigma$ "
             r"exactly, \ in $x/\alpha$ and $\sigma/\alpha$, \ when $D = \hat x_0$ is constant over the step.",
-            r"Show that classifier-free guidance with weight $w$ follows the score of $p(x)\, p(c \mid x)^w$, \ and that "
-            r"$w = 1$ gives the conditional model.",
+            r"At a fixed noise level $t$, \ show that ideal classifier-free guidance has score $\nabla\log[p_t(x)\,p_t(c\mid x)^w]$. \ Why does $w=1$ recover the conditional score?",
             r"For masked diffusion on $n$ symbols, \ show $\binom{n}{k}\int_0^1 t^{k-1}(1-t)^{n-k}\, dt = 1/k$, \ and deduce "
             r"that the bound is the any-order autoregressive loss.",
         ], font_size=22)
@@ -188,7 +191,7 @@ class Outro(VoiceoverScene):
         ]
         card = reference_card(books, papers)
         data = note(r"Points: Part 5's ``AI'' as a mixture of $400$ Gaussians; \ letters from the system's fonts; \ text: "
-                    r"Part 1's novels. \ Every model here is trained on this video's CPU.", font_size=19).to_edge(DOWN, buff=0.25)
+                    r"Part 1's novels. \ Chapter experiments run on CPU; \ earlier scoreboard results are restored.", font_size=19).to_edge(DOWN, buff=0.25)
         credit = note(rf"Animated with Manim Community; \ narrated by {narration_credit()}.", font_size=19)
         credit.next_to(data, UP, buff=0.1)
         if card.get_bottom()[1] < credit.get_top()[1] + 0.15:

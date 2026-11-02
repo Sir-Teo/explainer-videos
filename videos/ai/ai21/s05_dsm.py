@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, NOISE, PART, SCORE, bars_chart, load, take_away
+from videos.ai.ai21.common import ladder, DATA, NOISE, PART, SCORE, bars_chart, load, take_away
 
 LOSS_C, CONST_C, ERR_C = WHITE, GREY_B, SCORE
 
@@ -35,7 +35,7 @@ class DSM(VoiceoverScene):
         whys = [why(r"the target is unknown"), why(r"integrate by parts \ (Hyv\"arinen, 2005)")]
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-2.0, buff=0.7, edge=6.85)
         d = 512 * 512 * 3
-        cost = VGroup(label(r"$\operatorname{tr} \nabla_x s_\theta$: \ one backward pass per dimension of $x$", font_size=26,
+        cost = VGroup(label(r"$\operatorname{tr} \nabla_x s_\theta$: \ naive exact trace: \ one backward pass per dimension of $x$", font_size=26,
                             color=GREY_A),
                       label(rf"a $512 \times 512$ colour image: \ ${d:,}$ of them, \ for every example".replace(",", "{,}"),
                             font_size=26, color=SCORE)).arrange(DOWN, buff=0.2).move_to([0, -1.4, 0])
@@ -46,8 +46,8 @@ class DSM(VoiceoverScene):
             "In 2005 Aapo Hyvarinen faced this for energy models: fit a function s to the score, by squared error, "
             "when the target is unknown. <bookmark mark='a'/> Integrating by parts removes the target: what is left "
             "is the trace of the Jacobian of s, plus its squared length, averaged over the data. <bookmark mark='b'/> "
-            "But the trace costs one backward pass per dimension: for one colour image of 512 by 512 pixels, "
-            f"{d:,} of them, for every training example."
+            "But a naive exact trace costs one backward pass per dimension: for one colour image of 512 by 512 pixels, "
+            f"{d:,} of them, for every training example. Random-projection estimators can reduce that cost."
         ) as vo:
             self.play(FadeIn(cite_))
             step(0)
@@ -111,13 +111,16 @@ class DSM(VoiceoverScene):
         checks = [int(c) for c in d["checks"]]
         ts = [float(t) for t in d["dsm_ts"]]
         seeds = [int(s) for s in d["seeds"]]
-        T = {s: np.asarray(d[f"terms_s{s}"]) for s in seeds}  # check, level, (loss, const, err, cross)
+        # Historical caches store sums of squared noise errors. Convert every term
+        # together to the theorem's half squared score error; producers stay unchanged.
+        scale = 2 * np.sin(np.pi * np.asarray(ts) / 2) ** 2
+        T = {s: np.asarray(d[f"terms_s{s}"]) / scale[None, :, None] for s in seeds}
         k = 0  # the lowest noise level: the hardest
         xs = np.arange(len(checks))
         vals = np.concatenate([T[s][:, k, :3].ravel() for s in seeds])
         lo, hi = math.floor(math.log10(max(vals[vals > 0].min(), 1e-4))), math.ceil(math.log10(vals.max()))
         g = axes([0, len(checks) - 1], [lo, hi], x_length=6.6, y_length=4.0, xlabel=r"training step", xticks=[],
-                 ylabel=rf"noise level $t = {ts[k]:g}$ \ (log scale)", yticks=list(range(lo, hi + 1)),
+                 ylabel=rf"$\frac12$ squared score error, \ $t = {ts[k]:g}$ \ (log scale)", yticks=list(range(lo, hi + 1)),
                  yfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.4, -0.25, 0])
         g.add(*[MathTex(f"{c:,}".replace(",", "{,}"), font_size=18, color=GREY_B).next_to(g.ax.c2p(i, lo), DOWN, buff=0.12)
                 for i, c in enumerate(checks)])
@@ -133,7 +136,7 @@ class DSM(VoiceoverScene):
         lg = VGroup(label(r"the loss on fresh noise", font_size=22, color=LOSS_C),
                     label(r"$C$: \ the loss of the exact score", font_size=22, color=CONST_C),
                     label(r"error against the exact score", font_size=22, color=ERR_C),
-                    label(r"dots: \ loss minus $C$", font_size=22, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+                    label(r"dots: \ sampled loss minus $C$", font_size=22, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         lg.move_to([3.9, 1.2, 0])
         fin = T[seeds[0]][-1]
         cross = np.array([np.abs(T[s][-1, :, 3]).max() for s in seeds]).max()
@@ -154,9 +157,9 @@ class DSM(VoiceoverScene):
             "<bookmark mark='a'/> The white curve is the loss on fresh noise. The grey line is the constant: the "
             "loss that even the exact score would have, because the noise in a noisy point can't be fully "
             "recovered. <bookmark mark='b'/> The orange curve is the network's error against the exact score, "
-            "measured directly. <bookmark mark='c'/> The theorem says loss minus constant is that error, and the "
-            f"dots sit on the curve: at the end, {f0[0]:.4f} minus {f0[1]:.4f} against {f0[2]:.4f}. The cross term "
-            f"that the proof says averages away is at most {cross:.4f} at the end of training, in {n_seeds} seeds. "
+            "measured directly. <bookmark mark='c'/> The theorem equates expectations. Our finite-sample loss minus "
+            f"constant estimates the error: at the end, {f0[0]:.4f} minus {f0[1]:.4f} against {f0[2]:.4f}. The cross term "
+            f"has magnitude up to {cross:.4f} at the end of training across {n_seeds} seeds; it explains the measured gap. "
             "<bookmark mark='d'/> The loss never reaches zero, and doesn't have to: the gap above the constant is "
             "the part training can remove."
         ) as vo:
@@ -177,7 +180,7 @@ class DSM(VoiceoverScene):
         d = load("denoiser")
         ts = [float(t) for t in d["dsm_ts"]]
         seeds = [int(s) for s in d["seeds"]]
-        E = np.array([np.asarray(d[f"terms_s{s}"])[-1, :, 2] for s in seeds])  # seed, level
+        E = np.array([np.asarray(d[f"terms_s{s}"])[-1, :, 2] for s in seeds]) / (2 * np.sin(np.pi * np.asarray(ts) / 2) ** 2)  # half squared score error
         m = E.mean(0)
         L10 = np.log10(np.maximum(m, 1e-6))
         lo = math.floor(L10.min())
@@ -185,7 +188,7 @@ class DSM(VoiceoverScene):
         ch = bars_chart(vals, [ERR_C] * len(ts), [rf"$t = {t:g}$" for t in ts], height=3.2, bar_w=0.9, gap=0.6,
                         value_fmt=lambda v: f"{10 ** (v + lo - 0.3):.4f}", font_size=22)
         ch.move_to([-3.0, -0.4, 0])
-        cap = label(rf"error against the exact score, \ end of training, \ mean of ${len(seeds)}$ seeds \ (log heights)",
+        cap = label(rf"half squared score error, \ end of training, \ mean of ${len(seeds)}$ seeds \ (log heights)",
                     font_size=20, color=GREY_A).next_to(ch, UP, buff=0.35)
         card = history_card(2019, r"Song \& Ermon: \ noise-conditional score networks", r"one network, \ many noise "
                             r"levels, \ sampled by annealed Langevin (Part 20)", color=C.HUMAN, width=5.6, font_size=20)

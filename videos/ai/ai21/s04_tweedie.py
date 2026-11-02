@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, NOISE, PART, SCORE, Panel, load, take_away
+from videos.ai.ai21.common import ladder, DATA, NOISE, PART, SCORE, Panel, load, take_away
 
 
 class Tweedie(VoiceoverScene):
@@ -48,7 +48,7 @@ class Tweedie(VoiceoverScene):
         def marker(xq):
             m = mean_of(xq)
             obs = VGroup(Triangle(color=NOISE, fill_opacity=1).scale(0.09).rotate(PI).move_to(g.ax.c2p(xq / a, top * 1.02)),
-                         label(r"noisy $x_t$", font_size=20, color=NOISE).next_to(g.ax.c2p(xq / a, top * 1.02), UP, buff=0.12))
+                         label(r"noisy $x_t / \alpha_t$", font_size=20, color=NOISE).next_to(g.ax.c2p(xq / a, top * 1.02), UP, buff=0.12))
             mean = VGroup(DashedLine(g.ax.c2p(m, 0), g.ax.c2p(m, 0.75 * top), color=WHITE, stroke_width=2),
                           Dot(g.ax.c2p(m, 0), radius=0.08, color=WHITE),
                           label(r"$\mathbb E[x_0 \mid x_t]$", font_size=22, color=WHITE).next_to(g.ax.c2p(m, 0.75 * top), UP,
@@ -139,7 +139,7 @@ class Tweedie(VoiceoverScene):
                     label(rf"largest gap: \ ${sci(mx, 1)}$", font_size=18, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(g, DOWN, buff=0.12)
         decimals = max(1, int(math.floor(-math.log10(max(mx, 1e-300)))))
-        pn = Panel(4.6, center=[1.9, 0.95, 0])
+        pn = Panel(4.6, center=[1.9, 0.95, 0], xlim=(-3.5, 3.7), ylim=(-2.4, 2.0))
         tq = 0.5
         q, mc, tw2 = (np.asarray(tw[f"{k}{tq:g}"]) for k in ("q", "mc", "tw"))
         qd = pn.dots(q, NOISE, radius=0.03)
@@ -162,9 +162,9 @@ class Tweedie(VoiceoverScene):
         worst_mc = max(r["mean_err"] for r in rows)
         worst_net = max(n_["err"] for n_ in nets)
         spread = min(r["spread"] for r in rows)
-        net_says = (f"Our trained network's guesses sit within {worst_net:.3f} of the formula's, small beside the "
-                    f"spread of {spread:.2f}: it has learned the score." if worst_net < 0.25 * spread else
-                    f"Our trained network's guesses are within {worst_net:.3f} of the formula's, against a spread of "
+        net_says = (f"Our trained network's maximum mean distance over these levels is {worst_net:.3f}, small beside the "
+                    f"spread of {spread:.2f}: a close approximation at these levels." if worst_net < 0.25 * spread else
+                    f"Our trained network's maximum mean distance over these levels is {worst_net:.3f}, against a spread of "
                     f"{spread:.2f}: close, not exact.")
         with self.voiceover(
             "Check it. In one dimension, compute the posterior mean by brute force, integrating over a fine grid, "
@@ -210,7 +210,7 @@ class Tweedie(VoiceoverScene):
             "points, at four noise levels. <bookmark mark='a'/> At high noise every guess is near the middle of the "
             f"letters: the average letter, with a squared error of {e0:.2f}. <bookmark mark='b'/> As the noise falls, "
             f"the guesses spread onto the strokes, and the error drops to {e1:.3f}. <bookmark mark='c'/> So you cannot "
-            "jump from pure noise to a sample in one step: the best jump lands on a blur. Samplers take many small "
+            "use this posterior-mean denoiser alone to turn pure noise into a sample in one step: its best guess is a blur. Samplers take many small "
             "steps instead, re-guessing as the noise falls: chapters five and six."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(VGroup(p_[0], p_[2])) for p_ in panels])  # frames and noise levels first

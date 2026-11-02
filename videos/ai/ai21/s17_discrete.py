@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import HIST, MDM_C, MONO, PART, legend, load, take_away
+from videos.ai.ai21.common import ladder, HIST, MDM_C, MONO, PART, legend, load, take_away
 
 KCOL = {"exact": MDM_C, "blurred": C.BITS, "nocontext": C.SURPRISE}
 KNAME = {"exact": r"the exact conditionals", "blurred": r"blurred towards uniform", "nocontext": r"no context"}
@@ -106,9 +106,9 @@ class Discrete(VoiceoverScene):
             "in which letter it reveals, so each KL term is the reveal probability times the cross-entropy of "
             "guessing the letter. <bookmark mark='c'/> Add up the steps, and the bound is an integral: one over t "
             "times the cross-entropy of guessing every blank from the letters still showing. Three groups derived "
-            "this in 2024. <bookmark mark='d'/> One more change of variable, from the time to the number of blanks "
-            "k, turns the one over t into one over k: the bound is an average, over every number of blanks, of the "
-            "loss per blank. <bookmark mark='e'/> That is an autoregressive model's loss, averaged over every order "
+            "this in 2024. <bookmark mark='d'/> Regroup by the number of blanks k and integrate out time: each "
+            "mask count contributes its expected mean loss per blank. Sum over k for the whole-sequence bound; "
+            "divide by sequence length for loss per character. <bookmark mark='e'/> The sequence bound is an autoregressive model's loss, averaged over every order "
             "in which the letters could be revealed."
         ) as vo:
             self.play(FadeIn(cite_))
@@ -194,7 +194,7 @@ class Discrete(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(tab))
             vo.wait_until("c")
-            self.play(Indicate(lines[0][-1], color=WHITE), Indicate(hl, color=WHITE))
+            self.play(Indicate(lines[0][-1], color=WHITE, scale_factor=1.0), Indicate(hl, color=WHITE, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()
 

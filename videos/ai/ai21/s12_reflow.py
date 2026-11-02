@@ -33,18 +33,17 @@ class Reflow(VoiceoverScene):
         checks = [int(c) for c in f["checks"]]
         snaps = np.asarray(f["fm_snaps"])
         L = np.asarray(f["fm_curve"])
-        pn = Panel(5.8, center=[-3.4, -0.3, 0])
+        pn = Panel(5.8, center=[-3.4, -0.3, 0], xlim=(-4.1, 4.1), ylim=(-3.4, 3.4))
         pts = pn.dots(snaps[0], FM_C, radius=0.022)
-        top = float(np.percentile(L[:, 1], 99)) * 1.05
-        L = np.stack([L[:, 0], np.minimum(L[:, 1], top)], 1)  # the first few losses run off the top: drawn at it
+        top = float(L[:, 1].max()) * 1.05
         g = axes([0, checks[-1]], [0, top], x_length=4.6, y_length=2.6, xlabel=r"training step",
-                 ylabel=r"the loss: \ $\| v_\theta - (x_1 - z) \|^2$", xticks=[0, checks[-1]], yticks=[0, round(top, 1)],
+                 ylabel=r"the loss: \ $\frac12\| v_\theta - (x_1 - z) \|^2$", xticks=[0, checks[-1]], yticks=[0, float(np.floor(top * 10) / 10)],
                  center=[3.6, 0.6, 0])
         tk = ValueTracker(0)
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(tk.get_value()):,}".replace(",", "{,}"), font_size=28,
                                             color=FM_C).next_to(pn, UP, buff=0.12))
         dot = always_redraw(lambda: Dot(g.ax.c2p(tk.get_value(), float(np.interp(tk.get_value(), L[:, 0], L[:, 1]))),
-                                        radius=0.07, color=FM_C))
+                                        radius=0.07, color=FM_C).set_opacity(1.0 if tk.get_value() >= L[0, 0] else 0.0))
         P = np.asarray(f["fm_path"])
         trails = pn.paths(P[:, ::3], FM_C, stroke_width=1.2, opacity=0.6, smooth=True)
         st = np.asarray(f["fm_straight"])
@@ -80,23 +79,23 @@ class Reflow(VoiceoverScene):
         f = load("flow")
         panels = VGroup()
         for i, k in enumerate(("fm", "rf1", "rf2")):
-            pn = Panel(4.2, center=[-4.6 + 4.6 * i, 0.9, 0])
+            pn = Panel(4.2, center=[-4.6 + 4.6 * i, 0.9, 0], xlim=(-3.0, 3.0), ylim=(-3.0, 2.3))
             P = np.asarray(f[f"{k}_path"])
-            panels.add(VGroup(pn, pn.paths(P[:, ::3], KC[k], stroke_width=1.2, opacity=0.7, smooth=True),
+            panels.add(VGroup(pn, pn.paths(P[:, ::3], KC[k], stroke_width=1.2, opacity=0.7, smooth=False),
                               label(KN[k], font_size=22, color=KC[k]).next_to(pn, UP, buff=0.1),
                               label(rf"straightness ${float(np.mean(f[f'{k}_straight'])):.3f}$", font_size=20,
                                     color=KC[k]).next_to(pn, DOWN, buff=0.08)))
         d = theorem_card(r"rectified flow", VGroup(
             label(r"pair each noise point $z$ with the end of its own flow, $T(z)$, \ and train a new flow on the pairs",
                   font_size=22),
-            label(r"the new pairing costs no more, \ for every convex cost; \ repeat, \ and the paths straighten",
+            label(r"ideal exact rectification never increases convex transport costs; \ learned students approximate this",
                   font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15), who=r"Liu, Gong \& Liu (2023)",
             width=9.0).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Xingchao Liu, Chengyue Gong and Qiang Liu called the fix reflow. <bookmark mark='a'/> Run the trained "
-            "flow, and pair each noise point with where the flow actually takes it. Those pairs no longer cross one "
-            "another, so train a second flow on them: the averaging that bent the paths has nothing left to average. "
-            "<bookmark mark='b'/> They proved the new pairing never costs more to transport, for any convex cost, "
+            "flow, and pair each noise point with where the flow actually takes it. The ODE gives a deterministic "
+            "pairing. Train a second flow on the straight lines between those endpoints; these chords can still cross. "
+            "<bookmark mark='b'/> For ideal exact rectification they proved that convex transport costs never increase, "
             "and that repeating it straightens the paths. <bookmark mark='c'/> On our letters, once, and twice."
         ) as vo:
             self.play(FadeIn(panels[0]))
@@ -149,12 +148,12 @@ class Reflow(VoiceoverScene):
         rf_note = ("After one reflow, one step is nearly as good as a hundred; " if r1 < 1.5 * r100 else
                    f"After one reflow, one step lands {r1:.3f} from the data, against {r100:.3f} with a hundred; ")
         with self.voiceover(
-            "Measured, at the same budget for every model, three seeds each: the distance from the data after a "
+            "Measured, with the same update budget per trained network, three seeds each: the distance from the data after a "
             "given number of Euler steps. <bookmark mark='a'/> Plain flow matching needs many steps: in one step its "
             f"samples land {fm1:.3f} from the data, against {noise:.2f} for the noise itself. <bookmark mark='b'/> "
             + rf_note + f"the best single step is {KS[best1]}'s, at "
-            f"{one[best1].mean():.3f}, " + sep_note + " <bookmark mark='c'/> " + ot_vs + " <bookmark mark='d'/> Straightness says why: one Euler step is "
-            "exact on a straight path."
+            f"{one[best1].mean():.3f}, " + sep_note + " <bookmark mark='c'/> " + ot_vs + " <bookmark mark='d'/> Straightness measures geometry. One Euler step is "
+            "exact on a path with constant velocity; straight geometry alone is insufficient. Teachers and reflow pairing add compute."
         ) as vo:
             self.play(FadeIn(g), Create(flo), FadeIn(fll), FadeIn(lg))
             vo.wait_until("a")

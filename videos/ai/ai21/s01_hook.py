@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, HIST, NOISE, PART, Panel, load
+from videos.ai.ai21.common import DATA, HIST, NOISE, PART, Panel, load, play_path
 
 
 class Hook(VoiceoverScene):
@@ -16,7 +16,7 @@ class Hook(VoiceoverScene):
     def reverse(self):
         d = load("denoiser")
         P = np.asarray(d["ddim_path"])[::1]  # the deterministic sampler: each point's path is a smooth curve
-        pn = Panel(9.6, center=[0, -0.25, 0])
+        pn = Panel(12.4, center=[0, -0.25, 0], xlim=(-5.7, 5.9), ylim=(-3.6, 3.4))
         pn.frame.set_stroke(opacity=0)
         dots = pn.dots(P[0], NOISE, radius=0.035)
         tag = note(r"a network trained on this computer, \ walking $300$ points from noise; \ computed").to_edge(DOWN, buff=0.3)
@@ -28,10 +28,7 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(dots), FadeIn(tag))
             vo.wait_until("a")
-            for k in range(1, len(P), 2):  # each point walks, and warms from the noise colour to the data colour
-                col = interpolate_color(ManimColor(NOISE), ManimColor(DATA), k / (len(P) - 1))
-                self.play(*[dot.animate.move_to(q).set_color(col) for dot, q in zip(dots, pn.pts(P[k]))],
-                          run_time=0.16, rate_func=linear)
+            play_path(self, pn, dots, P, duration=4.2, colors=(NOISE, DATA))
             vo.wait_until("b")
             idx = np.linspace(0, P.shape[1] - 1, 18).astype(int)
 
@@ -114,13 +111,14 @@ class Hook(VoiceoverScene):
             "samplers that solve them; <bookmark mark='c'/> the design choices, from noise schedules to EDM and "
             "DPM-Solver; <bookmark mark='d'/> flow matching and optimal transport; <bookmark mark='e'/> how to get "
             "from fifty steps to one; how to ask for something specific; <bookmark mark='f'/> and diffusion for text, "
-            "with a language model of our own on the scoreboard. <bookmark mark='g'/> Every model here is trained on "
+            "with a language model of our own on the scoreboard. <bookmark mark='g'/> Our toy models in this part are trained on "
             "this computer."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
             rows = obj.rows
-            self.play(FadeOut(smap), FadeIn(obj.head), FadeIn(rows[0], shift=RIGHT * 0.1))
+            self.play(FadeOut(smap), run_time=0.4)
+            self.play(FadeIn(obj.head), FadeIn(rows[0], shift=RIGHT * 0.1), run_time=0.6)
             for k, mk in enumerate("bcdef", 1):
                 vo.wait_until(mk)
                 self.play(*[r_[1].animate.set_opacity(0.45) for r_ in rows[:k]], FadeIn(rows[k], shift=RIGHT * 0.1),

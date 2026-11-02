@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import DATA, DDIM_C, DDPM_C, NOISE, PART, SCORE, Panel, load, take_away
+from videos.ai.ai21.common import ladder, DATA, DDIM_C, DDPM_C, NOISE, PART, SCORE, Panel, load, take_away
 
 SDE_C, ODE_C = DDPM_C, DDIM_C
 
@@ -29,7 +29,7 @@ class SDE(VoiceoverScene):
         s = load("sde")
         ts = [float(t) for t in s["snap_t"]]
         snaps = np.asarray(s["ode_snaps"])  # the marginals, from noise (t = 1) to data
-        pn = Panel(6.0, center=[-3.4, -0.4, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
+        pn = Panel(6.0, center=[-3.4, -0.4, 0], xlim=(-4.0, 4.0), ylim=(-3.8, 3.8))
         dots = pn.dots(snaps[-1], DATA, radius=0.02)
         tl = label(rf"$t = {ts[-1]:g}$", font_size=26, color=GREY_A).next_to(pn, UP, buff=0.12)
         d = definition_card(r"the forward SDE", VGroup(
@@ -62,7 +62,7 @@ class SDE(VoiceoverScene):
         s = load("sde")
         P = np.asarray(s["sde_paths"])
         snaps = np.asarray(s["sde_snaps"])
-        pn = Panel(6.0, center=[-3.4, -0.4, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
+        pn = Panel(6.0, center=[-3.4, -0.4, 0], xlim=(-4.0, 4.0), ylim=(-3.8, 3.8))
         dots = pn.dots(snaps[0], NOISE, radius=0.02)
         card = theorem_card(r"time reversed", VGroup(
             MathTex(r"dx = \big[-\tfrac12 \beta(t)\, x - \beta(t)\,", r"\nabla \log p_t(x)", r"\big]\, dt + \sqrt{\beta(t)}\; "
@@ -135,7 +135,7 @@ class SDE(VoiceoverScene):
         panels = []
         NP = 12  # paths drawn; the dots show all the starting points and ends
         for i, kind in enumerate(("sde", "ode")):
-            pn = Panel(4.4, center=[-4.5 + 4.65 * i, 0.75, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
+            pn = Panel(4.4, center=[-4.5 + 4.65 * i, 0.75, 0], xlim=(-4.0, 4.0), ylim=(-3.8, 3.8))
             P = np.asarray(s[f"{kind}_paths"])
             col = SDE_C if kind == "sde" else ODE_C
             panels.append(VGroup(pn, pn.paths(P[:, :NP], col, stroke_width=1.3, opacity=0.75),
@@ -151,38 +151,27 @@ class SDE(VoiceoverScene):
         tt = np.array(ts)
         cs = curve(g.ax, tt, np.asarray(s["sde_sw"]), SDE_C, 3)
         co = curve(g.ax, tt, np.asarray(s["ode_sw"]), ODE_C, 3)
-        cf = DashedLine(g.ax.c2p(0, float(np.mean(s["floor_sw"]))), g.ax.c2p(1, float(np.mean(s["floor_sw"]))),
-                        color=GREY_B, stroke_width=1.5)
+        cf = DashedVMobject(curve(g.ax, tt, np.asarray(s["floor_sw"]), GREY_B, 1.5), num_dashes=35)
         fl = label(r"dashed: \ fresh samples of $p_t$", font_size=16, color=GREY_B).next_to(g, DOWN, buff=0.1)
         floor = np.asarray(s["floor_sw"])
         sde_sw, ode_sw = np.asarray(s["sde_sw"]), np.asarray(s["ode_sw"])
-        ode_ok = bool(np.all(ode_sw < 1.3 * floor + 0.01))
-        sde_ok = bool(np.all(sde_sw < 1.3 * floor + 0.01))
         end_s, end_o = float(sde_sw[-1]), float(ode_sw[-1])
-        n_sde = int(s["n_sde"])
-        if ode_ok and sde_ok:
-            verdict = "Both stay as close to the true marginals as fresh samples of them, at every time we measured."
-        elif ode_ok:
-            verdict = (f"The ODE stays as close to the true marginals as fresh samples of them, all the way down; the "
-                       f"SDE, with {n_sde:,} random steps, drifts a little at the end, {end_s:.3f} against the ODE's "
-                       f"{end_o:.3f}: random steps need to be smaller.")
-        else:
-            verdict = f"Both stay near the true marginals; at the end the SDE is {end_s:.3f} away, the ODE {end_o:.3f}."
+        verdict = (f"At the measured endpoint the SDE discrepancy is {end_s:.3f}, the ODE's {end_o:.3f}, and the "
+                   f"fresh-sample mean is {floor[-1]:.3f}. Sampling variation and numerical integration error both affect these distances.")
         rt = float(s["roundtrip_err"])
         dec = max(1, int(math.floor(-math.log10(max(rt, 1e-300)))))
-        stats = VGroup(label(rf"path length: \ SDE ${float(s['sde_len']):.1f}$, \ ODE ${float(s['ode_len']):.1f}$",
+        stats = VGroup(label(rf"mean total path length ($50$ segments): \ SDE ${float(s['sde_len']):.1f}$, \ ODE ${float(s['ode_len']):.1f}$",
                              font_size=20, color=GREY_A),
-                       label(rf"the ODE there and back: \ off by ${sci(rt, 1)}$", font_size=20, color=ODE_C),
+                       label(rf"the ODE there and back: \ mean error ${sci(rt, 1)}$", font_size=20, color=ODE_C),
                        label(r"Song et al.\ (2021), CIFAR-10: \ FID $2.20$", font_size=20, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35).shift(RIGHT * 2.6)
         with self.voiceover(
             "Here are both, run with the exact score from the same forty starting points. <bookmark mark='a'/> The "
-            f"SDE's paths wander: on average each is {float(s['sde_len']):.1f} long. The ODE's glide, "
+            f"SDE's paths wander: joining fifty recorded segments, on average each is {float(s['sde_len']):.1f} long. The ODE's glide, "
             f"{float(s['ode_len']):.1f}. They end at different places. <bookmark mark='b'/> But measure the whole "
             f"clouds against fresh samples of the true density, at every time. {verdict} <bookmark mark='c'/> And "
-            f"the ODE can be run both ways: from data to noise and back, the points return to where they started to "
-            f"{dec} decimal places: "
-            "an invertible map, Part 20's continuous normalizing flow, with an exact likelihood. One learned score, "
+            f"the ODE can be run both ways: from data to noise and back, with mean return error {rt:.2g}: "
+            "an approximately inverted numerical map. The ideal ODE is Part 20's continuous normalizing flow; its likelihood requires a divergence integral. One learned score, "
             "two ways back; the next chapters are about solving them in as few steps as possible."
         ) as vo:
             self.play(*[FadeIn(VGroup(p[0], p[2], p[4])) for p in panels], FadeIn(sub))

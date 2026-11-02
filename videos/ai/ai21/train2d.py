@@ -275,7 +275,7 @@ def compute_denoiser():
         torch.save(D.net.state_dict(), wpath)
         part[key] = dict(terms=terms, curve=curve, snaps=[s_.tolist() for s_ in snaps],
                          sw=[E.dist(s_) for s_ in snaps])
-        print(f"    seed {seed}: final loss {curve[-1][1]:.4f}; score error at t=" +
+        print(f"    seed {seed}: final loss {curve[-1][1]:.4f}; squared noise-prediction error at t=" +
               ", ".join(f"{r['t']}: {r['err']:.4f}" for r in terms[-1]["rows"]), flush=True)
     D = load_denoiser(0)
     out = dict(checks=CHECKS, seeds=list(SEEDS), dsm_ts=DSM_TS, steps=STEPS, batch=BATCH)
@@ -700,7 +700,7 @@ def compute_distill():
                 t = 0.02 + 0.96 * torch.rand(BATCH, generator=g)
                 xt = (1 - t[:, None]) * x0 + t[:, None] * x1
                 with torch.no_grad():
-                    # each model's guess of the clean end: x + (1 - t) v; their difference is the KL's gradient
+                    # Each clean-end guess is x + (1 - t) v; the normalized difference supplies our DMD-style update.
                     real = xt + (1 - t)[:, None] * teacher(xt, t)
                     fk = xt + (1 - t)[:, None] * fake(xt, t)
                     w = (x1 - real).abs().mean(1, keepdim=True) + 1e-3  # DMD's normalization
@@ -778,6 +778,7 @@ def compute_guidance():
                 x = x + vfun(x, t) / steps
         return x.numpy().astype(float)
 
+    # Legacy onA key and "A" progress label mean x<0, a left-region proxy rather than label membership.
     def measure(xs):
         p, r = prec_recall(xs, realA)
         return dict(onA=float((xs[:, 0] < 0).mean()), prec=p, rec=r, sw=sw_distance(xs, A),
