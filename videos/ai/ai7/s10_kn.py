@@ -11,10 +11,81 @@ GT = C.BITS  # Good-Turing's estimate
 HELD = C.TRUE_P  # the truth on held-out text
 
 
+def frozen_prose_call(function, *args, **kwargs):
+    """Rebuild already translated prose without translating its fragments again."""
+    from explainer import zh_text
+    original_translate = zh_text.translate
+    try:
+        zh_text.translate = lambda text: text
+        return function(*args, **kwargs)
+    finally:
+        zh_text.translate = original_translate
+
+
+def chapter_in(*args, **kwargs):
+    if not zh():
+        return card_in(*args, **kwargs)
+    from videos.ai.ai6 import _zh_prose
+    original_prose = _zh_prose.prose
+    try:
+        _zh_prose.prose = lambda *a, **kw: frozen_prose_call(original_prose, *a, **kw)
+        return card_in(*args, **kwargs)
+    finally:
+        _zh_prose.prose = original_prose
+
+
+def caption(text, **kwargs):
+    """Align only this chapter's Chinese prose; English and data stay exact."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return frozen_prose_call(prose, mob)
+    return mob
+
+
+def history_box(*args, **kwargs):
+    mob = history_card(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import card
+        return frozen_prose_call(card, mob)
+    return mob
+
+
+def caption_cite(*args, **kwargs):
+    mob = cite(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return frozen_prose_call(prose, mob)
+    return mob
+
+
+def prose_child(group, attribute):
+    from videos.ai.ai6._zh_prose import prose
+    old = getattr(group, attribute)
+    new = frozen_prose_call(prose, old)
+    group.submobjects = [new if child is old else child for child in group.submobjects]
+    setattr(group, attribute, new)
+
+
+def caption_axes(*args, **kwargs):
+    mob = axes(*args, **kwargs)
+    if zh():
+        for attribute in ("xlabel", "ylabel"):
+            if hasattr(mob, attribute):
+                prose_child(mob, attribute)
+    return mob
+
+
+def polish_board_names(board):
+    if zh():
+        for row in board.rows:
+            prose_child(row, "name")
+
+
 class KneserNey(VoiceoverScene):
     def construct(self):
-        card_in(self, 9, r"Kneser--Ney, from Good--Turing", r"How do you count what you've never seen?",
-                "Chapter nine. Kneser-Ney, from Good-Turing.")
+        chapter_in(self, 9, r"Kneser--Ney, from Good--Turing", r"How do you count what you've never seen?",
+                "Chapter nine. Kneser-Ney, from Good-Turing.", zh_prose_rows=(0, 1))
         self.goodturing()
         self.discount()
         self.orders()
@@ -25,16 +96,16 @@ class KneserNey(VoiceoverScene):
     def goodturing(self):
         d = load("goodturing")
         rows = d["rows"]
-        h = history_card(1953, r"I.~J.~Good, \ after Alan Turing", r"at Bletchley Park: \\ the chance of what has "
+        h = history_box(1953, r"I.~J.~Good, \ after Alan Turing", r"at Bletchley Park: \\ the chance of what has "
                          r"never yet been seen, \\ for breaking German codes", width=7.0).move_to([0, 1.3, 0])
         colors = {r"r^*": GT, r"N_{r+1}": C.MODEL_Q, r"N_r": C.MODEL_Q, r"N_1": C.MODEL_Q}
         f1 = cmath(r"r^*", r"=", r"(r + 1)\,", r"\frac{N_{r+1}}{N_r}", colors=colors, font_size=44)
         f2 = cmath(r"p(\text{unseen})", r"=", r"\frac{N_1}{N}", colors=colors, font_size=40)
         fs = VGroup(f1, f2).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to([-3.6, 2.1, 0])
-        nr = label(r"$N_r$: \ how many different word pairs were seen exactly $r$ times", font_size=22, color=C.MODEL_Q)
+        nr = caption(r"$N_r$: \ how many different word pairs were seen exactly $r$ times", font_size=22, color=C.MODEL_Q)
         nr.next_to(fs, DOWN, buff=0.25).align_to(fs, LEFT)
         hdr = VGroup(MathTex(r"r", font_size=28), MathTex(r"N_r", font_size=28, color=C.MODEL_Q),
-                     label(r"Good--Turing $r^*$", font_size=22, color=GT), label(r"held out", font_size=22, color=HELD))
+                     caption(r"Good--Turing $r^*$", font_size=22, color=GT), caption(r"held out", font_size=22, color=HELD))
         tab = VGroup(hdr)
         for r_ in rows:
             nrv = sci(r_["Nr"], 2) if r_["Nr"] >= 1e6 else fmt_int(int(r_["Nr"]))
@@ -51,9 +122,9 @@ class KneserNey(VoiceoverScene):
         tab.shift(RIGHT * 0.6)
         foot_text = (rf"计数半部：$N={d['bigram_trials_a']:,}$ 个词对；留出计数已按样本量换算" if zh() else
                      rf"counting half: $N={d['bigram_trials_a']:,}$ word pairs; held-out counts scaled to the same sample size")
-        foot = label(foot_text.replace(",", "{,}"), font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
+        foot = caption(foot_text.replace(",", "{,}"), font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
         nr_ = np.array([r_["Nr"] for r_ in rows[1:]])
-        gnr = axes([0.5, len(nr_) + 0.5, 1], [0, 6, 1], x_length=5.2, y_length=2.2, xlabel=r"seen $r$ times",
+        gnr = caption_axes([0.5, len(nr_) + 0.5, 1], [0, 6, 1], x_length=5.2, y_length=2.2, xlabel=r"seen $r$ times",
                    ylabel=r"how many different word pairs", xticks=list(range(1, len(nr_) + 1)), yticks=[0, 2, 4, 6],
                    yfmt=lambda v: f"10^{{{int(v)}}}", center=[0, -2.0, 0])
         nrb = VGroup(*[Rectangle(width=0.4, height=max(gnr.ax.c2p(0, np.log10(v))[1] - gnr.ax.c2p(0, 0)[1], 0.02),
@@ -94,7 +165,7 @@ class KneserNey(VoiceoverScene):
         d = load("goodturing")
         rows = d["rows"][1:]
         disc = np.array([r_["r"] - r_["held"] for r_ in rows])
-        g = axes([0.5, len(rows) + 0.5, 1], [0, 1.2, 0.25], x_length=7.0, y_length=3.8, xlabel=r"count $r$ in one half",
+        g = caption_axes([0.5, len(rows) + 0.5, 1], [0, 1.2, 0.25], x_length=7.0, y_length=3.8, xlabel=r"count $r$ in one half",
                  ylabel=r"$r$ minus the average count in the other half", xticks=list(range(1, len(rows) + 1)),
                  yticks=[0, 0.5, 1.0], center=[-2.4, -0.4, 0])
         ax = g.ax
@@ -109,7 +180,7 @@ class KneserNey(VoiceoverScene):
                   colors=colors, font_size=34).move_to([3.0, 2.6, 0])
         if f.width > 7.0:
             f.width = 7.0
-        nm = label(r"absolute discounting \\ (Ney, Essen \& Kneser, 1994)", font_size=24, color=C.SURPRISE)
+        nm = caption(r"absolute discounting \\ (Ney, Essen \& Kneser, 1994)", font_size=24, color=C.SURPRISE)
         nm.move_to([4.6, 0.6, 0])
         verdict = (f"From two times on, the loss is nearly the same for every count, between {disc[1:].min():.2f} and "
                    f"{disc[1:].max():.2f}. Kenneth Church and William Gale saw the same thing in newswire in 1991."
@@ -142,16 +213,16 @@ class KneserNey(VoiceoverScene):
         xl = VGroup(*[MathTex(str(i), font_size=24, color=GREY_B).next_to(ax.c2p(i, 1.8), DOWN, buff=0.12) for i in range(plot_M + 1)])
         yl = VGroup(*[MathTex(f"{v:.1f}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
                       for v in (2.0, 3.0, 4.0)])
-        xn = label(r"characters of context", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.55)
-        yn = label(r"bits per character on the passage", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+        xn = caption(r"characters of context", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.55)
+        yn = caption(r"bits per character on the passage", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         c1 = VMobject(color=ADD, stroke_width=4).set_points_as_corners([ax.c2p(i, v) for i, v in enumerate(p1)])
         d1 = VGroup(*[Dot(ax.c2p(i, v), radius=0.06, color=ADD) for i, v in enumerate(p1)])
         c2 = VMobject(color=KN, stroke_width=4).set_points_as_corners([ax.c2p(i, v) for i, v in enumerate(kn)])
         d2 = VGroup(*[Dot(ax.c2p(i, v), radius=0.06, color=KN) for i, v in enumerate(kn)])
-        l1 = label(r"Part 1: \ add a little to every count", font_size=26, color=ADD).move_to([4.4, 1.2, 0])
-        l2 = label(rf"Kneser--Ney: \ ${kn[-1]:.2f}$ at ${M}$ characters", font_size=26, color=KN).next_to(l1, DOWN, buff=0.4)
+        l1 = caption(r"Part 1: \ add a little to every count", font_size=26, color=ADD).move_to([4.4, 1.2, 0])
+        l2 = caption(rf"Kneser--Ney: \ ${kn[-1]:.2f}$ at ${M}$ characters", font_size=26, color=KN).next_to(l1, DOWN, buff=0.4)
         l2.align_to(l1, LEFT)
-        cohort_note = label(r"KN：各阶共用同一评分后缀 \\ 第1部分：保留原来的起始位置" if zh() else
+        cohort_note = caption(r"KN：各阶共用同一评分后缀 \\ 第1部分：保留原来的起始位置" if zh() else
                             r"KN: common scored suffix \\ Part 1: original scoring starts",
                             font_size=18, color=GREY_B).next_to(l2, DOWN, buff=0.28).align_to(l1, LEFT)
         best1 = int(np.argmin(p1))
@@ -181,25 +252,25 @@ class KneserNey(VoiceoverScene):
         colors = {r"D": C.SURPRISE, r"P_{\mathrm{KN}}(c \mid h')": KN, r"\lambda(h)": C.SURPRISE}
         f = cmath(r"P_{\mathrm{KN}}(c \mid h)", "=", r"\frac{\max\big(N(h c) -", r"D", r",\, 0\big)}{N(h)}", "+",
                   r"\lambda(h)", r"\,", r"P_{\mathrm{KN}}(c \mid h')", colors=colors, font_size=40).to_edge(UP, buff=0.6)
-        n1 = label(r"$h$: \ the context; \ $h'$: \ the context with its oldest character dropped", font_size=24,
+        n1 = caption(r"$h$: \ the context; \ $h'$: \ the context with its oldest character dropped", font_size=24,
                    color=GREY_A).next_to(f, DOWN, buff=0.25)
-        idea1 = label(r"1. \ take a fixed discount $D$ off every count seen, \\ and hand it to the shorter context",
+        idea1 = caption(r"1. \ take a fixed discount $D$ off every count seen, \\ and hand it to the shorter context",
                       font_size=28, color=C.SURPRISE)
         cont = cmath(r"N(h c)", r"\;\longrightarrow\;", r"N_{1+}(\,\bullet\, h c)", font_size=40)
-        idea2 = label(r"2. \ below the top, count how many \emph{different} contexts \\ a character follows, \ not how "
+        idea2 = caption(r"2. \ below the top, count how many \emph{different} contexts \\ a character follows, \ not how "
                       r"often it appears", font_size=28, color=KN)
         VGroup(idea1, idea2).arrange(DOWN, aligned_edge=LEFT, buff=0.6).move_to([-1.6, -1.2, 0])
         cont.next_to(idea2, DOWN, buff=0.3).align_to(idea2, LEFT).shift(RIGHT * 0.5)
         ex = VGroup(VGroup(data_text(d["word"], font=MONO, font_size=26, color=WHITE),
-                           label(rf"${d['word_count']:,}$ times, \ after ${d['word_prev']}$ different word"
+                           caption(rf"${d['word_count']:,}$ times, \ after ${d['word_prev']}$ different word"
                                  rf"{'s' if d['word_prev'] != 1 else ''}".replace(",", "{,}"), font_size=22, color=GREY_A)
                            ).arrange(RIGHT, buff=0.2),
                     VGroup(data_text(d["other"], font=MONO, font_size=26, color=WHITE),
-                           label(rf"${d['other_count']:,}$ times, \ after ${d['other_prev']}$ different words".replace(",", "{,}"),
+                           caption(rf"${d['other_count']:,}$ times, \ after ${d['other_prev']}$ different words".replace(",", "{,}"),
                                  font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.2))
         ex.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.2, -2.9, 0])
-        exl = label(r"in the novels:", font_size=20, color=GREY_B).next_to(ex, UP, buff=0.12).align_to(ex, LEFT)
-        cite_ = cite(r"R.~Kneser \& H.~Ney (1995); \ S.~Chen \& J.~Goodman (1998)", corner=UR)
+        exl = caption(r"in the novels:", font_size=20, color=GREY_B).next_to(ex, UP, buff=0.12).align_to(ex, LEFT)
+        cite_ = caption_cite(r"R.~Kneser \& H.~Ney (1995); \ S.~Chen \& J.~Goodman (1998)", corner=UR)
         U, dh = 0.32, 0.32
         counts = [6, 4, 3, 2]
         cbars = VGroup(*[Rectangle(width=0.45, height=c * U - dh, stroke_width=0, fill_color=KN, fill_opacity=0.85)
@@ -210,8 +281,8 @@ class KneserNey(VoiceoverScene):
         pile = Rectangle(width=0.55, height=dh * len(counts), stroke_color=C.SURPRISE, stroke_width=2)
         pile.move_to([6.2, -1.3 + dh * len(counts) / 2, 0])
         dl = MathTex(r"D", font_size=30, color=C.SURPRISE).next_to(slices[0], LEFT, buff=0.12)
-        cl = label(r"counts after $h$ \ (schematic)", font_size=20, color=KN).next_to(cbars, DOWN, buff=0.1)
-        pl = label(r"to $h'$", font_size=22, color=C.SURPRISE).next_to(pile, DOWN, buff=0.12)
+        cl = caption(r"counts after $h$ \ (schematic)", font_size=20, color=KN).next_to(cbars, DOWN, buff=0.1)
+        pl = caption(r"to $h'$", font_size=22, color=C.SURPRISE).next_to(pile, DOWN, buff=0.12)
         moved = VGroup(*[s.copy().move_to([6.2, -1.3 + dh * (j + 0.5), 0]).set(width=0.55)
                          for j, s in enumerate(slices)])
         continuation = (f"In the continuation distribution, '{d['other']}' gets more probability than '{d['word']}'. "
@@ -255,6 +326,7 @@ class KneserNey(VoiceoverScene):
         rows[j] = {key: v for key, v in rows[j].items() if key != "bits"}  # chapter ten's row, still to come
         board = scoreboard(rows, highlight=(i,), max_bits=8.0)
         board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
+        polish_board_names(board)
         row = board.rows[i]
         glow = SurroundingRectangle(row, color=KN, buff=0.08, corner_radius=0.08)
         with self.voiceover(

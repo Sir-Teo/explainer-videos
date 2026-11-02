@@ -355,6 +355,11 @@ class Typical(VoiceoverScene):
                   font_size=30, color=TYP),
             label(r"at about $1$ bit per letter (Shannon's estimate): \ $2^{n}$ of them", font_size=30, color=C.HUMAN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.55)
+        # Replace after arranging to preserve the existing rows' positions exactly.
+        exact_count = label((r"$n$ 个字母的字符串：\ $27^n = 2^{n \log_2 27}$" if zh() else
+                             r"strings of $n$ letters: \ $27^n = 2^{n \log_2 27}$"), font_size=30)
+        exact_count.move_to(rows[0], aligned_edge=LEFT)
+        rows = VGroup(exact_count, *rows[1:])
         # nested squares: all strings, the letter-typical ones, the English-typical ones (areas schematic)
         sq = VGroup(Square(2.9, stroke_color=GREY_B, stroke_width=2, fill_color=ALL, fill_opacity=0.4),
                     Square(1.25, stroke_width=0, fill_color=TYP, fill_opacity=0.6),

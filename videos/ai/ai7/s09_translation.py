@@ -9,6 +9,31 @@ FR, EN = "#58A6FF", "#FF9F45"
 ALIGN = C.BITS
 
 
+def caption(text, **kwargs):
+    """Align this chapter's Chinese prose without changing English or data."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
+def history_box(*args, **kwargs):
+    mob = history_card(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import card
+        return card(mob)
+    return mob
+
+
+def caption_brace(*args, **kwargs):
+    mob = brace_note(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        mob.submobjects[1] = prose(mob[1]).next_to(mob[0], kwargs.get("direction", DOWN), buff=0.1)
+    return mob
+
+
 def words_row(ws, color, font_size=24, buff=0.25) -> VGroup:
     return VGroup(*[data_text(w, font=MONO, font_size=font_size, color=color) for w in ws]).arrange(RIGHT, buff=buff)
 
@@ -16,24 +41,24 @@ def words_row(ws, color, font_size=24, buff=0.25) -> VGroup:
 class Translation(VoiceoverScene):
     def construct(self):
         card_in(self, 8, r"Translation by counting", r"Can a machine learn to translate from examples alone?",
-                "Chapter eight. Translation by counting.")
+                "Chapter eight. Translation by counting.", zh_prose_rows=(0,))
         self.channel()
         self.model1()
         self.bleu()
 
     # ------------------------------------------------------------------
     def channel(self):
-        q = VGroup(label(r"``When I look at an article in Russian, I say: \ `This is really written in English, \\ but it "
+        q = VGroup(caption(r"``When I look at an article in Russian, I say: \ `This is really written in English, \\ but it "
                          r"has been coded in some strange symbols. \ I will now proceed to decode.'\,''", font_size=26,
                          color=C.HUMAN),
-                   label(r"--- Warren Weaver, letter to Norbert Wiener (1947), quoted in his memorandum \textit{Translation} "
+                   caption(r"--- Warren Weaver, letter to Norbert Wiener (1947), quoted in his memorandum \textit{Translation} "
                          r"(1949)", font_size=20, color=GREY_B)).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.4)
         e = VGroup(RoundedRectangle(width=2.6, height=0.9, corner_radius=0.12, stroke_color=EN),
-                   label(r"English $e$", font_size=26, color=EN))
+                   caption(r"English $e$", font_size=26, color=EN))
         ch = VGroup(RoundedRectangle(width=2.8, height=0.9, corner_radius=0.12, stroke_color=GREY_B),
-                    label(r"a noisy channel", font_size=26, color=GREY_B))
+                    caption(r"a noisy channel", font_size=26, color=GREY_B))
         f = VGroup(RoundedRectangle(width=2.6, height=0.9, corner_radius=0.12, stroke_color=FR),
-                   label(r"French $f$", font_size=26, color=FR))
+                   caption(r"French $f$", font_size=26, color=FR))
         for b in (e, ch, f):
             b[1].move_to(b[0])
         row = VGroup(e, ch, f).arrange(RIGHT, buff=1.0).move_to(UP * 0.7)
@@ -42,11 +67,11 @@ class Translation(VoiceoverScene):
         colors = {r"\;P(e)": EN, r"P(f \mid e)": FR}
         eq = cmath(r"\hat e", r"=", r"\arg\max_e", r"\;P(e)", r"\qquad", r"P(f \mid e)", colors=colors, font_size=46)
         eq.next_to(row, DOWN, buff=0.5)
-        br = VGroup(brace_note(term(eq, r"\;P(e)"), r"a language model \\ (counting, chapter 9)", color=EN, font_size=22),
-                    brace_note(term(eq, r"P(f \mid e)"), r"a translation model \\ (learned by EM)", color=FR, font_size=22))
-        hist = VGroup(history_card(1966, r"the ALPAC report", r"machine translation judged a failure; \ funding cut",
+        br = VGroup(caption_brace(term(eq, r"\;P(e)"), r"a language model \\ (counting, chapter 9)", color=EN, font_size=22),
+                    caption_brace(term(eq, r"P(f \mid e)"), r"a translation model \\ (learned by EM)", color=FR, font_size=22))
+        hist = VGroup(history_box(1966, r"the ALPAC report", r"machine translation judged a failure; \ funding cut",
                                    width=4.2),
-                      history_card(1990, r"P.~Brown, J.~Cocke, S.~Della Pietra, V.~Della Pietra, F.~Jelinek, \dots",
+                      history_box(1990, r"P.~Brown, J.~Cocke, S.~Della Pietra, V.~Della Pietra, F.~Jelinek, \dots",
                                    r"IBM: \ translation learned from the Canadian parliament's French and English "
                                    r"records", width=5.6)).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.3)
         with self.voiceover(
@@ -87,22 +112,31 @@ class Translation(VoiceoverScene):
         for r in corpus:
             r[1].next_to(r[0], RIGHT, buff=0.3)
         corpus.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([-4.6, 0.4, 0]).to_edge(LEFT, buff=0.35)
-        cl = label(rf"$8$ of our ${d['n_train']}$ sentence pairs", font_size=20, color=GREY_A).next_to(corpus, UP, buff=0.2)
+        cl = caption(rf"$8$ of our ${d['n_train']}$ sentence pairs", font_size=20, color=GREY_A).next_to(corpus, UP, buff=0.2)
         grid = heat_grid(A[0], cell=0.6, color=ALIGN).move_to([2.3, 0.2, 0])
         cols = VGroup(*[data_text(w, font=MONO, font_size=20, color=FR if w != "NULL" else GREY_B)
                         .rotate(0.6).next_to(grid[j], UP, buff=0.12) for j, w in enumerate(["NULL"] + fr)])
         rows_ = VGroup(*[data_text(w, font=MONO, font_size=22, color=EN).next_to(grid[i * (len(fr) + 1)], LEFT, buff=0.15)
                          for i, w in enumerate(en)])
-        gl = label(r"$p(\text{this French word made this English word})$", font_size=20, color=ALIGN).next_to(grid, DOWN, buff=0.2)
+        # Keep the original Chinese words outside the math span so its
+        # probability symbol and delimiters share their measured baseline.
+        gl_text = (r"$p($这个法文词生成了这个英文词$)$" if zh()
+                   else r"$p(\text{this French word made this English word})$")
+        gl = caption(gl_text, font_size=20, color=ALIGN).next_to(grid, DOWN, buff=0.2)
         colors = {r"t(e_j \mid f_i)": ALIGN}
         eq = cmath(r"P(e \mid f,m)", r"=", r"\frac{1}{(\ell+1)^m}",
                    r"\prod_{j=1}^{m}\sum_{i=0}^{\ell}", r"t(e_j \mid f_i)", colors=colors, font_size=30)
         eq.scale_to_fit_width(min(eq.width, 8.8))
         eq.to_edge(UP, buff=0.25).shift(RIGHT * 2.2)
-        en_ = label(r"$m$: target length; $\ell$: source length; $f_0$: NULL \\ fixed $m$; a length prior is needed across lengths",
+        en_ = caption(r"$m$: target length; $\ell$: source length; $f_0$: NULL \\ fixed $m$; a length prior is needed across lengths",
                     font_size=19, color=GREY_A).next_to(eq, DOWN, buff=0.1)
+        # Rotated source words must stay below the length-prior explanation.
+        # A .2-world-unit step is an integer pixel shift in both QA sizes.
+        matrix_gap = max(0.0, cols.get_top()[1] - en_.get_bottom()[1] + 0.15)
+        matrix_shift = float(np.ceil(matrix_gap * 5) / 5)
+        VGroup(grid, cols, rows_, gl).shift(DOWN * matrix_shift)
         rv = Integer(0, font_size=30)
-        rl = VGroup(label(r"EM round", font_size=24, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([5.7, 1.4, 0])
+        rl = VGroup(caption(r"EM round", font_size=24, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([5.7, 1.4, 0])
         assert len(A) == len(lls), "Each alignment snapshot needs its own likelihood"
         g = axes([0, len(lls) - 1, 10], [float(lls.min()) - 5, float(lls.max()) + 5, 20], x_length=2.6, y_length=1.8,
                  ylabel=r"log-likelihood", font_size=16, center=[5.7, -1.0, 0])
@@ -162,20 +196,20 @@ class Translation(VoiceoverScene):
             r[1].set_x(-2.5 + r[1].width / 2)
             r[2].set_x(2.1 + r[2].width / 2)
         rows.shift(UP * (1.7 - rows.get_y()))
-        heads = VGroup(label(r"held-out French", font_size=20, color=FR), label(r"word by word", font_size=20, color=EN),
-                       label(r"reference", font_size=20, color=GREY_B))
+        heads = VGroup(caption(r"held-out French", font_size=20, color=FR), caption(r"word by word", font_size=20, color=EN),
+                       caption(r"reference", font_size=20, color=GREY_B))
         for h_, x_ in zip(heads, (-6.7, -2.5, 2.1)):
             h_.next_to(rows, UP, buff=0.2).set_x(x_ + h_.width / 2)
         colors = {r"p_n": C.BITS, r"\mathrm{BP}": GREY_A}
         eq = cmath(r"\mathrm{BLEU}", r"=", r"\mathrm{BP}", r"\cdot", r"\exp\Big(\tfrac14 \sum_{n=1}^{4} \log", r"p_n",
                    r"\Big)", colors=colors, font_size=38).move_to([-3.2, -1.5, 0])
-        en_ = label(r"$p_n$: \ the share of the output's $n$-word runs found in the reference; \\ BP: \ a penalty for "
+        en_ = caption(r"$p_n$: \ the share of the output's $n$-word runs found in the reference; \\ BP: \ a penalty for "
                     r"output shorter than the reference", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.2)
         pn = np.asarray(b1["p"])
-        nums = VGroup(*[label(rf"$p_{n + 1} = {pn[n]:.2f}$", font_size=24, color=C.BITS) for n in range(4)])
+        nums = VGroup(*[caption(rf"$p_{n + 1} = {pn[n]:.2f}$", font_size=24, color=C.BITS) for n in range(4)])
         nums.arrange(RIGHT, buff=0.35).move_to([3.4, -1.1, 0])
-        s1 = label(rf"BLEU, word by word: \ ${b1['bleu']:.2f}$", font_size=28, color=EN).next_to(nums, DOWN, buff=0.3)
-        s2 = label(rf"one rule: \ move French adjectives before the noun: \ ${b2['bleu']:.2f}$", font_size=26, color=C.BITS)
+        s1 = caption(rf"BLEU, word by word: \ ${b1['bleu']:.2f}$", font_size=28, color=EN).next_to(nums, DOWN, buff=0.3)
+        s2 = caption(rf"one rule: \ move French adjectives before the noun: \ ${b2['bleu']:.2f}$", font_size=26, color=C.BITS)
         s2.next_to(s1, DOWN, buff=0.25)
         fixes = VGroup(*[SurroundingRectangle(r[1], color=C.SURPRISE, buff=0.05) for r, h1, (f, e) in
                          zip(rows, d["hyp_gloss"], tests) if h1 != e])
@@ -183,9 +217,9 @@ class Translation(VoiceoverScene):
         verdict = (f"Word by word, our Model 1 scores {b1['bleu']:.2f}. Swap French adjectives in front of their nouns, "
                    f"one rule a linguist would write, and it rises to {b2['bleu']:.2f}." if better else
                    f"Word by word, our Model 1 scores {b1['bleu']:.2f}; one reordering rule leaves it at {b2['bleu']:.2f}.")
-        later = VGroup(label(r"IBM Models 2--5: \ word order, \ fertility", font_size=22, color=GREY_A),
-                       label(r"2003: \ phrase-based translation", font_size=22, color=GREY_A),
-                       label(r"2014: \ attention, \ a learned soft alignment \ (Part 13)", font_size=22, color=HIDDEN))
+        later = VGroup(caption(r"IBM Models 2--5: \ word order, \ fertility", font_size=22, color=GREY_A),
+                       caption(r"2003: \ phrase-based translation", font_size=22, color=GREY_A),
+                       caption(r"2014: \ attention, \ a learned soft alignment \ (Part 13)", font_size=22, color=HIDDEN))
         later.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DL, buff=0.4)
         with self.voiceover(
             "Now translate sentences it never saw, one word at a time, using the table. <bookmark mark='a'/> Some come "
@@ -207,6 +241,9 @@ class Translation(VoiceoverScene):
             self.play(FadeIn(s1))
             self.play(FadeIn(s2), FadeOut(fixes))
             vo.wait_until("d")
-            self.play(FadeOut(VGroup(eq, en_)), LaggedStart(*[FadeIn(m) for m in later], lag_ratio=0.3))
+            self.play(Succession(
+                FadeOut(VGroup(eq, en_), run_time=0.4),
+                LaggedStart(*[FadeIn(m) for m in later], lag_ratio=0.3, run_time=1.2),
+            ))
         self.wait(0.3)
         self.clear_scene()
