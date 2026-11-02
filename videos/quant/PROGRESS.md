@@ -45,6 +45,11 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
 
 ## Builds queued (CPU voice, 720p)
 
+Scratchpad scripts chain the builds: queue.sh (quant10, quant1, quant2) -> queue2.sh (quant3) -> queue3.sh (quant4) ->
+queue4.sh (quant5). After a container restart, rerun `python tools/make.py quantN --cpu-voice -q m --steps build check`
+for each part in order; finished scenes are cached.
+
+
 Part 10 (zh running), then Part 1 and Part 2 (en, zh): `python tools/make.py quantN --cpu-voice -q m --steps build check`
 (logs `renders/make/quantN_cpu_voice.log`). Each rerun resumes. Part 1's and Part 2's Chinese text and narration
 are complete; Part 1's Chinese dry run passed for all 16 chapters.
@@ -131,11 +136,33 @@ eprocess (sign continuation: 1926 start passes 20 in Feb 1929, 1975 start in Mar
 solutions (EN, ZH); zh_lines 44 of 44. Remaining: on-screen text (collect running), Chinese dry run, narrated build.
 `data.fred` now fetches a series' whole history on first use (a cached file from a later start is refetched).
 
+## Part 5 (Stochastic Calculus), 2 Nov 2026
+
+House `sim.py` (Euler, Milstein, scheme_orders with exact weak errors, ou_exact, cir_exact, merton_jumps,
+hawkes_thinning/fit/intensity, fbm Davies-Harte, hurst_from_increments, signature2) tested. Compute: variation,
+signature plot (BTC 1m 2020: 80% at 1 min vs 71% daily), Ito vs true-midpoint Stratonovich, orders (strong 0.50/0.93,
+weak 0.99/1.00), rates (DTB3 Vasicek kappa 0.099, theta 4.1%, sigma 1.4%; CIR Feller 0.58; Vasicek 10y 1.38% vs DGS10
+0.93%), girsanov (var / 52), stoploss (shortfall 7.94-8.10 at every frequency vs call 7.97; corr with 1/2 L 0.97),
+jumps (BTC 1h 2018-20: 204 > 5 bipower sd, 24% of variance), hawkes (229 events, branching 0.36, half-life 7.6 h),
+rough (BTC 5-min RV 2019-20: H = 0.15), fbm; registered 2 tests (trials 12). 10 scenes, README (EN, ZH), zh_lines
+39/39, on-screen text, Chinese dry run all done; narrated build queued (queue4.sh). The one-minute BTC hold-out is not
+sealed (not downloaded); seal it before any later part tests a strategy on it.
+
+## Part 6 (Financial Econometrics), 2 Nov 2026
+
+House `econ.py` (ols with naive/White/NW/HH/cluster/two-way, fama_macbeth, block and stationary bootstrap, sharpe_se,
+years_to_significance, Bonferroni/Holm/BH, Stambaugh, gmm, dml_plr with cross-fitted ridge splines, shrink_means)
+tested. Data: `ken_french_industries`, `ken_french_factors_monthly`. Compute: overlap (DY 5y: t 15.0 / 2.8 / 2.5; null
+size 77% / 17% / 14%), stambaugh (annual DY beta 0.034 -> 0.016), gmm (beta 1.002, gamma 1.1, J 20.0 p 0.0005; HJ gamma
+421), event (turn of month: 74% of returns 1926-86, 45% after), panel (t: 1.86, 1.21, 0.27, 0.27, FM 5.08), bootstrap
+(SR 0.44, se 0.103 iid / 0.119 block), shrinkage (MSE 8.0 -> 3.8), multiple (5 of 49 raw, 0 after any correction),
+ellipse, dml (0.300 vs naive 1.15), snr; envelope sealed industries, monthly factors, PCE; trials 63. 9 scenes, README
+(EN, ZH), zh_lines 32/32. Remaining: on-screen text (collect running), Chinese dry run, queue narrated build.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
    time on CPU, so not in a 4-core cloud container): `python tools/make.py quant10` (English and Chinese, 1080p30),
    or `tools/colab_narrate.py` on a Colab GPU. Then `tools/dead_air.py` on the narrated cut.
-2. Act II: Part 5 (Stochastic Calculus) next, then 6-8, following SYLLABUS.md section 6. Part 5 assumes
-   `videos/math/stochastic` (the gentle version) and adds the House simulation library.
+2. Act II: Part 7 (Time Series and Volatility) next, then 8; then Act III from Part 9.
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
