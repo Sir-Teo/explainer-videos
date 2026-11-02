@@ -14623,8 +14623,6 @@
     "Whisper's input: \\ $80$ log-mel bands every $10$ ms \\ (``We knew you weren't home at three-thirty.'')": "Whisper的输入：\\ 每$10$ ms $80$个对数梅尔频带 \\ （“We knew you weren't home at three-thirty.”）",
     "cuts of ``armchair'' \\ (learned probabilities{,} \\ $4{,}096$ pieces)": "“armchair”的切法 \\ （学到的概率，\\ $4{,}096$个片段）",
     "arcs: \\ every piece of ``cigarette'' among the $1{,}024${,} \\ thicker = more probable": "弧：\\ $1{,}024$个片段中“cigarette”的每个片段，\\ 越粗越可能",
-    "$4{,}096$ pieces: \\ $3.54$ (BPE) \\ and \\ $3.46$ (unigram) characters a token; \\ $15\\%$ of the words cut differently": "$4{,}096$个片段：\\ 每个词元$3.54$（BPE）\\ 和 \\ $3.46$（一元模型）个字符；\\ $15\\%$的词切法不同",
-    "$1{,}024$ pieces: \\ $2.74$ (BPE) \\ and \\ $2.64$ (unigram) characters a token; \\ $22\\%$ of the words cut differently": "$1{,}024$个片段：\\ 每个词元$2.74$（BPE）\\ 和 \\ $2.64$（一元模型）个字符；\\ $22\\%$的词切法不同",
     "VQ: \\ $101$ codes used": "VQ：\\ 用了$101$个码",
     "EMA + restarts: \\ $255$ codes used": "EMA + 重启：\\ 用了$255$个码",
     "Listening at scale": "大规模地听",
@@ -20939,7 +20937,6 @@
     "attention: \\ access to past keys and values, \\ cost growing with every token": "注意力：\\ 访问过去的键和值，\\ 成本随词元数增长",
     "sinks, \\ gates and caps: \\ the fixes inside today's attention blocks": "汇点、\\ 门控和上限：\\ 今天注意力模块内部的修补",
     "$n_k$ non-overlapping replacements: \\\\ two symbols become one, \\ each time": "$n_k$次互不重叠的替换：\\\\ 每次两个符号变成一个",
-    "BPE ranks pair counts, \\ including overlaps; \\\\ actual savings can be smaller": "BPE按包含重叠的对数排序；\\\\ 实际节省可能较少",
     "the codebook is the grid \\ ($4 \\times 4$, \\ schematic)": "码本就是网格 \\ （$4 \\times 4$，\\ 示意）",
     "four levels: \\ squash, \\ shift, \\ then round; \\\\ the gradient goes straight through": "四级：\\ 压缩，\\ 偏移，\\ 再舍入；\\\\ 梯度直接穿过",
     "the offset gives exactly four levels \\\\ (the experiment's rule)": "偏移恰好给出四级 \\\\ （实验的规则）",
@@ -20956,7 +20953,10 @@
     "original: \\ linear map, \\ $256$ tokens \\\\ ($224$ pixels); \\ LLaVA-1.5: \\\\ two-layer MLP, \\ $576$ tokens \\ ($336$ pixels)": "原版：\\ 线性映射，\\ $256$个词元 \\\\ （$224$像素）；\\ LLaVA-1.5：\\\\ 两层MLP，\\ $576$个词元 \\ （$336$像素）",
     "Show that $f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$ minimizes InfoNCE, \\ and that $\\log N - \\mathcal L \\le \\log N$ for any critic. \\ How much information can a batch of $256$ certify?": "证明$f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$使InfoNCE最小，\\ 且对任何评判函数都有$\\log N - \\mathcal L \\le \\log N$。\\ 一个$256$的批次最多能证明多少信息？",
     "in two dimensions, $Z$ is estimated on a finite-box grid:": "在二维里，$Z$用有限区域上的网格估计：",
-    "our binary test: \\ normalized overlaps, \\ then a sign projection": "我们的二值测试：先归一化重叠，再取符号"
+    "our binary test: \\ normalized overlaps, \\ then a sign projection": "我们的二值测试：先归一化重叠，再取符号",
+    "$4{,}096$ pieces: \\ $3.54$ (BPE) \\ and \\ $3.46$ (unigram) characters a token; \\ $15\\%$ of the words have different token counts": "$4{,}096$个片段：\\ 每个词元$3.54$（BPE）\\ 和 \\ $3.46$（一元模型）个字符；\\ $15\\%$的词在两种方法下词元数量不同",
+    "$1{,}024$ pieces: \\ $2.74$ (BPE) \\ and \\ $2.64$ (unigram) characters a token; \\ $22\\%$ of the words have different token counts": "$1{,}024$个片段：\\ 每个词元$2.74$（BPE）\\ 和 \\ $2.64$（一元模型）个字符；\\ $22\\%$的词在两种方法下词元数量不同",
+    "BPE ranks pair counts, \\\\ including overlaps; \\\\ actual savings can be smaller": "BPE按相邻对计数排序；\\\\ 包含重叠；\\\\ 实际节省可能较少"
   },
   "phrases": {
     "width": "宽度",
@@ -21835,8 +21835,8 @@
       "同一句话，\\\\ 各用$\\1$个片段"
     ],
     [
-      "^\\$([\\d{},]+)\\$ pieces: \\\\ \\$([\\d.]+)\\$ \\(BPE\\) \\\\ and \\\\ \\$([\\d.]+)\\$ \\(unigram\\) characters a token; \\\\ \\$(\\d+)\\\\%\\$ of the words cut differently$",
-      "$\\1$个片段：\\\\ 每个词元$\\2$（BPE）\\\\ 和 \\\\ $\\3$（一元模型）个字符；\\\\ $\\4\\\\%$的词切法不同"
+      "^\\$([\\d{},]+)\\$ pieces: \\\\ \\$([\\d.]+)\\$ \\(BPE\\) \\\\ and \\\\ \\$([\\d.]+)\\$ \\(unigram\\) characters a token; \\\\ \\$(\\d+)\\\\%\\$ of the words have different token counts$",
+      "$\\1$个片段：\\\\ 每个词元$\\2$（BPE）\\\\ 和 \\\\ $\\3$（一元模型）个字符；\\\\ $\\4\\\\%$的词在两种方法下词元数量不同"
     ],
     [
       "^VQ: \\\\ \\$(\\d+)\\$ codes used$",

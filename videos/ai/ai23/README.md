@@ -123,7 +123,7 @@ cache, so a rerun elsewhere may differ in the last digits.
   Characters a token on the passage: 2.43 (500 merges), 3.14 (2,000), 3.93 (8,000); the first merge saves 48,515
   symbols and 8,000 merges leave 23.4% of the length. The series' own byte-level tokenizer: 3.23 characters a token.
 * **Unigram LM vs BPE**, characters a token: 2.64 vs 2.74 at 1,024 pieces, 3.46 vs 3.54 at 4,096; 22% and 15% of
-  the passage's words are cut differently.
+  the passage's words have different token counts (this metric does not count equal-length alternative segmentations).
 * **Bits per character** of the same transformer (3 layers, width 96) at equal FLOPs, three seeds: bytes 2.46,
   BPE-1,024 2.28, unigram-1,024 2.26, BPE-4,096 2.36, unigram-4,096 2.26.
 * **Entropy patches** at BPE's length (3.54 bytes): 28% of bytes start a patch and carry 46% of the surprise; BPE's

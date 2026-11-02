@@ -216,7 +216,7 @@ class Unigram(VoiceoverScene):
         for VV in (V, Vb):
             tab.add(label(rf"${VV:,}$ pieces: \ ${float(u[f'bpe_cpt_passage{VV}']):.2f}$ (BPE) \ and \ "
                           rf"${float(u[f'cpt_passage{VV}']):.2f}$ (unigram) characters a token; \ "
-                          rf"${100 * float(u[f'differ{VV}']):.0f}\%$ of the words cut differently".replace(",", "{,}"),
+                          rf"${100 * float(u[f'differ{VV}']):.0f}\%$ of the words have different token counts".replace(",", "{,}"),
                           font_size=22, color=GREY_A))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to(UP * 0.55)
         if tab.width > 13:
@@ -240,7 +240,7 @@ class Unigram(VoiceoverScene):
         with self.voiceover(
             f"How different are the two? <bookmark mark='a'/> At {V:,} pieces each, on the scoreboard's passage, "
             f"{verdict}: {cpb:.2f} characters a token for BPE, {cpu:.2f} for the unigram model, and "
-            f"{differ:.0f} percent of the words are cut differently. <bookmark mark='b'/> The "
+            f"{differ:.0f} percent of the words have different token counts. <bookmark mark='b'/> The "
             "unigram model can also sample cuts instead of taking the best, so a model in training sees the same "
             "word written several ways; Kudo called it subword regularization. <bookmark mark='c'/> His "
             "SentencePiece library runs either method on raw text, with the space as just another symbol, and it "

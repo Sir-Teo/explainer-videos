@@ -144,7 +144,7 @@ class BPE(VoiceoverScene):
                 MathTex(r"\text{merge } \arg\max_{(a,b)} n(a, b)", font_size=34, color=C.BITS)]
         whys = [why(r"$n_k$ non-overlapping replacements: \\ two symbols become one, \ each time", font_size=22),
                 why(r"add up the steps", font_size=22),
-                why(r"BPE ranks pair counts, \ including overlaps; \\ actual savings can be smaller", font_size=22)]
+                why(r"BPE ranks pair counts, \\ including overlaps; \\ actual savings can be smaller", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=2.0, align_index=None, buff=0.75, edge=6.9)
         with self.voiceover(
             "Why is this compression? <bookmark mark='a'/> Each time the merged pair occurs, two symbols become one, "
