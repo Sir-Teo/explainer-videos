@@ -11,7 +11,8 @@ SCENES = [
     ("s06_mm", "MM", "5. Modigliani and Miller"),
     ("s07_payout", "Payout", "6. Dividends, buybacks, and equity as an option"),
     ("s08_signals", "Signals", "7. Accounting signals that became factors"),
-    ("s09_crisis", "Crisis", "8. When the statements lie"),
-    ("s10_house", "House", "9. The fundamentals store"),
-    ("s11_outro", "Outro", "Recap, desk questions, problems"),
+    ("s09_events", "Events", "8. Corporate events: merger arbitrage"),
+    ("s10_crisis", "Crisis", "9. When the statements lie"),
+    ("s11_house", "House", "10. The fundamentals store"),
+    ("s12_outro", "Outro", "Recap, desk questions, problems"),
 ]

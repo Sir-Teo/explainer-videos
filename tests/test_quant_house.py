@@ -248,3 +248,24 @@ def test_modigliani_miller_and_merton():
     m = v.merton_equity(np.array([100.0, 150.0]), 80.0, 1.0, 0.3, 0.02)
     assert np.allclose(m["equity"] + m["debt"], [100, 150])
     assert m["spread"][0] > m["spread"][1] > 0 and m["pd"][0] > m["pd"][1]
+
+
+def test_fundamentals_store_is_point_in_time_and_keeps_restatements():
+    from explainer.quant.house.fundamentals import Store
+
+    s = Store()
+    s.add("ACME", "NetIncomeLoss", 20191231, 20200220, 200.0, "10-K")
+    s.add("ACME", "NetIncomeLoss", 20191231, 20210315, 150.0, "10-K/A")
+    s.add("ACME", "NetIncomeLoss", 20201231, 20210226, 240.0, "10-K")
+    assert s.asof("ACME", "NetIncomeLoss", 20200131) is None
+    assert s.asof("ACME", "NetIncomeLoss", 20200630) == 200.0
+    assert [f.value for f in s.history("ACME", "NetIncomeLoss", 20210301)] == [200.0, 240.0]
+    assert [f.value for f in s.history("ACME", "NetIncomeLoss", 20210630)] == [150.0, 240.0]
+    assert [f.value for f in s.first_reported("ACME", "NetIncomeLoss")] == [200.0, 240.0]
+    assert s.restatements("ACME", "NetIncomeLoss") == [(20191231, 200.0, 150.0, 20210315)]
+    with pytest.raises(ValueError):
+        s.add("ACME", "NetIncomeLoss", 20211231, 20211130, 1.0)
+    cf = {"facts": {"us-gaap": {"Revenues": {"units": {"USD": [
+        {"start": "2019-01-01", "end": "2019-12-31", "val": 1000, "filed": "2020-02-20", "form": "10-K", "accn": "x"}]}}}}}
+    t = Store.from_companyfacts("ACME", cf)
+    assert t.asof("ACME", "Revenues", 20200220) == 1000.0 and t.asof("ACME", "Revenues", 20200219) is None

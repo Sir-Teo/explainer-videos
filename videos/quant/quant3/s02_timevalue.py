@@ -66,14 +66,15 @@ class TimeValue(VoiceoverScene):
         ]
         whys = [why(r"a dividend that grows at $g$ forever, discounted at $r$"),
                 why(r"a geometric series with ratio $(1+g)/(1+r)$"),
-                why(r"it converges when $g < r$: Gordon's growth model (1956)")]
+                why(r"it converges when $g < r$: the Gordon growth model (Gordon and Shapiro 1956)")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-2.4, buff=0.8, edge=6.9)
         with self.voiceover(
             "The model of a share that every analyst knows. Suppose a company pays a dividend D one next year, and "
             "its dividend grows at g every year forever. Its value is the sum of each future dividend, discounted. "
             "<bookmark mark='a'/> Factor out the first term, and what's left is a geometric series, with ratio one "
             "plus g over one plus r. <bookmark mark='b'/> If growth is slower than the discount rate, the series "
-            "converges, and the value is the next dividend over r minus g. Myron Gordon's formula, from 1956."
+            "converges, and the value is the next dividend over r minus g. John Burr Williams valued shares as discounted "
+            "dividends in 1938; this closed form is Myron Gordon and Eli Shapiro's, from 1956."
         ) as vo:
             step(0)
             vo.wait_until("a")

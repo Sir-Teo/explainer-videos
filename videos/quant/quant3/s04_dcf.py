@@ -37,8 +37,8 @@ class DCF(VoiceoverScene, ThreeDScene):
         VGroup(f1, w, ex).arrange(DOWN, buff=0.7).move_to(UP * 0.4)
         n1 = why(r"the cash the business could pay out to all its investors, before any of it goes to lenders or owners")
         n1.next_to(f1, DOWN, buff=0.2)
-        foot = note(r"$r_E$, the return owners demand, is estimated from risk in Part 5's factor models and Part 9's "
-                    r"no-arbitrage pricing", font_size=19, color=GREY_B).to_edge(DOWN, buff=0.4)
+        foot = note(r"$r_E$, the return owners demand, is estimated from risk in Part 23 (risk and return) and Part 24 "
+                    r"(factors)", font_size=19, color=GREY_B).to_edge(DOWN, buff=0.4)
         VGroup(w, ex).shift(DOWN * 0.3)
         with self.voiceover(
             "To value a whole firm rather than one share, an analyst discounts its free cash flow: the cash its "

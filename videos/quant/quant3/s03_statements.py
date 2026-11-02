@@ -168,7 +168,7 @@ class Statements(VoiceoverScene):
             "<bookmark mark='b'/> In 1996 Richard Sloan showed that the accrual part of earnings is less "
             "persistent than the cash part, that prices did not tell the two apart, and that the firms with the "
             "most accruals went on to return less. An accounting identity had become a trading signal. We will "
-            "measure it in chapter eight."
+            "measure it in chapter seven."
         ) as vo:
             self.play(Write(eq), FadeIn(nums))
             vo.wait_until("a")

@@ -8,6 +8,7 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`smile` (Parts 1, 12): raw SVI, the Breeden–Litzenberger density, Martin's SVIX;
 * :mod:`funding` (Part 2, treasury & funding): margin accounts and liquidation, netting, auctions, fees, haircuts;
 * :mod:`valuation` (Part 3): NPV, IRR, annuities, Gordon, DCF, WACC, Modigliani-Miller, Merton's equity;
+* :mod:`fundamentals` (Part 3, data & technology): the bitemporal store of reported numbers, as of a filing date;
 * :mod:`bs` (Part 10, the volatility desk): Black–Scholes–Merton prices, Greeks, Black-76, implied volatility;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
@@ -15,4 +16,4 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import bs, funding, hedge, paths, pit, smile, stats, surface, trees, valuation  # noqa: F401
+from explainer.quant.house import bs, fundamentals, funding, hedge, paths, pit, smile, stats, surface, trees, valuation  # noqa: F401

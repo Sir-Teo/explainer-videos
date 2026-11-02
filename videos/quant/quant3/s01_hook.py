@@ -58,7 +58,7 @@ class Hook(VoiceoverScene):
             f"{s['ratio_changes']:.0f} times as much from year to year: in {s['big_moves']} of these years it "
             "moved more than twenty percent, and p star never did. <bookmark mark='c'/> Either the discount rate "
             "itself moves a great deal, or prices are moved by something other than dividends. That debate earned "
-            "Shiller a share of the 2013 Nobel prize, with Eugene Fama, and it runs through this part."
+            "Shiller a share of the 2013 Nobel prize, with Eugene Fama and Lars Peter Hansen, and it runs through this part."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]))
             self.play(Create(lp), run_time=3)
