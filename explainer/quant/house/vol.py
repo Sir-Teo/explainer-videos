@@ -102,31 +102,42 @@ def _nll(params, r, kind):
 
 
 def garch_fit(r, kind: str = "garch") -> dict:
-    """Gaussian (quasi-) maximum likelihood.  ``r`` should be demeaned.  Returns params, log-likelihood, persistence and
-    the fitted variances."""
+    """Gaussian (quasi-) maximum likelihood.  ``r`` should be demeaned.  The fit runs on returns scaled to unit variance
+    (well conditioned whatever the units) and the parameters are mapped back.  Returns params, log-likelihood,
+    persistence and the fitted variances."""
     r = np.asarray(r, float)
-    v = np.var(r)
+    v = float(np.var(r))
+    z = r / np.sqrt(v)
     if kind == "garch":
-        x0, bounds = [0.05 * v, 0.08, 0.9], [(1e-12, 10 * v), (1e-6, 0.5), (0.0, 0.9999)]
+        x0, bounds = [0.05, 0.08, 0.9], [(1e-8, 10.0), (1e-6, 0.5), (0.0, 0.9999)]
         cons = [{"type": "ineq", "fun": lambda p: 0.9999 - p[1] - p[2]}]
     elif kind == "gjr":
-        x0, bounds = [0.05 * v, 0.03, 0.08, 0.9], [(1e-12, 10 * v), (0.0, 0.5), (0.0, 0.5), (0.0, 0.9999)]
+        x0, bounds = [0.05, 0.03, 0.08, 0.9], [(1e-8, 10.0), (0.0, 0.5), (0.0, 0.5), (0.0, 0.9999)]
         cons = [{"type": "ineq", "fun": lambda p: 0.9999 - p[1] - p[2] / 2 - p[3]}]
     else:
         x0, bounds = [0.0, 0.15, -0.08, 0.97], [(-5, 5), (-1, 1), (-1, 1), (-0.9999, 0.9999)]
         cons = []
-        x0[0] = (1 - x0[3]) * np.log(v)
-    res = optimize.minimize(_nll, x0, args=(r, kind), method="SLSQP", bounds=bounds, constraints=cons,
-                            options={"maxiter": 500, "ftol": 1e-10})
-    p = res.x
-    h = garch_filter(p, r, kind)
+    best = None
+    for start in (x0, [x0[0]] + [0.5 * xx for xx in x0[1:-1]] + [min(0.95, x0[-1])]):
+        res = optimize.minimize(_nll, start, args=(z, kind), method="SLSQP", bounds=bounds, constraints=cons,
+                                options={"maxiter": 1000, "ftol": 1e-12})
+        if best is None or res.fun < best.fun:
+            best = res
+    p = np.array(best.x, float)
+    hz = garch_filter(p, z, kind)
+    if kind in ("garch", "gjr"):
+        p[0] *= v
+    else:
+        p[0] += (1 - p[3]) * np.log(v)
+    h = hz * v
+    loglik = -float(best.fun) - 0.5 * len(r) * np.log(v)
     if kind == "garch":
         pers = p[1] + p[2]
     elif kind == "gjr":
         pers = p[1] + p[2] / 2 + p[3]
     else:
         pers = p[3]
-    return {"params": p, "loglik": -float(res.fun), "persistence": float(pers), "h": h, "kind": kind,
+    return {"params": p, "loglik": loglik, "persistence": float(pers), "h": h, "kind": kind,
             "half_life": float(np.log(0.5) / np.log(pers)) if 0 < pers < 1 else float("inf")}
 
 
