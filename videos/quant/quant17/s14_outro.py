@@ -51,7 +51,7 @@ class Outro(VoiceoverScene):
         items = [
             (r"a network learns Black--Scholes from prices, and hedges with it (HLP 1994)", NET),
             (rf"rough Bergomi calibrated in {c['surface']['seconds']:.0f} s through a network; checked by Monte Carlo", IV),
-            (rf"$H$ week by week: rougher than 0.02 in {100 * floor:.0f}\% of weeks; over two years, a near tie with Heston", IV),
+            (rf"$H$ week by week: at the network's floor, 0.02, in {100 * floor:.0f}\% of weeks; a near tie with Heston", IV),
             (rf"derivatives as labels: {dg:.0f} times better deltas from {n0} samples", GOOD),
             (rf"100 dimensions: the deep BSDE prices within {100 * b['rel_error']:.1f}\% of the reference", NET),
             (rf"deep stopping: {st['5']['lower']:.2f} for the five-asset max-call", NET),
