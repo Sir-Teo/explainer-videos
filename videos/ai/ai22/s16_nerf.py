@@ -72,9 +72,9 @@ class NeRF(VoiceoverScene):
         ray = Arrow(o, o + RIGHT * 4.6, buff=0, color=NERF_C, stroke_width=3, max_tip_length_to_length_ratio=0.05)
         blob = Ellipse(width=1.6, height=0.9, stroke_width=0, fill_color=PATCH, fill_opacity=0.35).move_to(o + RIGHT * 2.8)
         cam = Triangle(color=GREY_B, stroke_width=2).scale(0.18).rotate(-PI / 2).move_to(o + LEFT * 0.15)
-        tl = MathTex(r"\mathbf r(t) = \mathbf o + t\,\mathbf d", font_size=26, color=NERF_C).next_to(ray, UP, buff=0.1)
+        tl = MathTex(r"\mathbf r(t) = \mathbf o + t\,\mathbf d", font_size=26, color=NERF_C).next_to(ray, UP, buff=0.5)
         rows = [
-            cmath(r"T(t + dt)", r"=", r"T(t)\,\big(1 - \sigma(t)\, dt\big)", font_size=32),
+            cmath(r"T(t + dt)", r"\approx", r"T(t)\,\big(1 - \sigma(t)\, dt\big)", font_size=32),
             cmath(r"T(t)", r"=", r"\exp\!\Big(-\int_0^t \sigma(s)\, ds\Big)", font_size=32),
             cmath(r"C", r"=", r"\int T(t)\, \sigma(t)\, \mathbf c(t)\, dt", font_size=32),
             cmath(r"\int_{t_i}^{t_{i+1}} T\, \sigma_i\, \mathbf c_i\, dt", r"=", r"T_i\, \big(1 - e^{-\sigma_i \delta_i}\big)\, \mathbf c_i",
@@ -118,13 +118,16 @@ class NeRF(VoiceoverScene):
         ner = np.abs(np.asarray(q[s0]["nerf"], float))
         lo = -7
         ly = lambda v: max(math.log10(max(v, 1e-12)), lo)  # noqa: E731
-        ax = axes([lx[0], lx[-1]], [lo, 0.5], x_length=5.6, y_length=3.4, xlabel=r"samples along the ray",
-                  ylabel=r"error in the pixel (log scale)", xticks=lx[::2], yticks=[-6, -4, -2, 0],
+        hi = max(0.5, math.ceil(math.log10(max(rie.max(), ner.max(), 1e-7)) * 2) / 2)
+        yticks = [v for v in (-6, -4, -2, 0, 1, 2) if lo <= v <= hi]
+        ax = axes([lx[0], lx[-1]], [lo, hi], x_length=5.6, y_length=3.4, xlabel=r"samples along the ray",
+                  ylabel=r"error in the pixel (log scale)", xticks=lx[::2], yticks=yticks,
                   xfmt=lambda x: f"{2 ** x:.0f}", yfmt=lambda y: rf"10^{{{int(y)}}}", center=[-2.6, 0.0, 0], font_size=18)
         lr = VGroup(curve(ax.ax, lx, [ly(v) for v in rie], RIE_C), *[Dot(ax.ax.c2p(a, ly(v)), radius=0.05, color=RIE_C)
                                                                   for a, v in zip(lx, rie)])
         ln = VGroup(curve(ax.ax, lx, [ly(v) for v in ner], NERF_C), *[Dot(ax.ax.c2p(a, ly(v)), radius=0.05, color=NERF_C)
                                                                    for a, v in zip(lx, ner)])
+        floor_note = note(r"errors below $10^{-7}$ shown at the plot floor", font_size=18).to_edge(DOWN, buff=0.35)
         leg = legend([(RIE_C, r"Riemann sum: \ $\sum T_i\, \sigma_i \delta_i\, \mathbf c_i$"),
                       (NERF_C, r"NeRF's sum: \ $\sum T_i\, \alpha_i\, \mathbf c_i$")], font_size=20).move_to([3.8, 1.6, 0])
         setup = label(r"a ball of uniform density $\sigma = 8$, \ radius $1$, \\ a ray through its centre: \ exactly "
@@ -145,7 +148,7 @@ class NeRF(VoiceoverScene):
             "Why not just add sigma times delta? Check it on a ball of uniform density, where the exact answer is "
             "known. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + edge
         ) as vo:
-            self.play(Create(ax), FadeIn(leg), FadeIn(setup))
+            self.play(Create(ax), FadeIn(leg), FadeIn(setup), FadeIn(floor_note))
             vo.wait_until("a")
             self.play(Create(lr[0]), FadeIn(lr[1:]), Create(ln[0]), FadeIn(ln[1:]), run_time=2.0)
         self.wait(0.3)

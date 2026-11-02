@@ -86,11 +86,22 @@ class Prompt(VoiceoverScene):
     # ------------------------------------------------------------------
     def cross(self):
         pic = cross_attention_picture().move_to([-3.4, 0.3, 0])
-        f = MathTex(r"\operatorname{CrossAttn}(h, e) = \operatorname{softmax}\!\Big(\frac{(h W_Q)(e W_K)^{\top}}{\sqrt d}\Big)"
-                    r"\,(e W_V)", font_size=30).move_to([3.2, 1.4, 0])
-        fl = VGroup(label(r"$h$: \ the picture's tokens", font_size=20, color=PATCH),
-                    label(r"$e$: \ the prompt's tokens, \ from a frozen text encoder \ (CLIP, \ T5)", font_size=20, color=TXT)
+        # Match the formula's three inputs to the token diagram's colours.
+        # Two lines leave a clear right-hand column in both languages.
+        f = VGroup(
+            cmath(r"\operatorname{CrossAttn}(", r"h", r",", r"e", r") =",
+                  colors={r"h": PATCH, r"e": TXT}, font_size=30),
+            cmath(r"\operatorname{softmax}\!\Big(\frac{", r"(h W_Q)", r"(e W_K)^{\top}",
+                  r"}{\sqrt d}\Big)", r"(e W_V)",
+                  colors={r"(h W_Q)": PATCH, r"(e W_K)^{\top}": TXT, r"(e W_V)": TXT}, font_size=32),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.2, 1.45, 0])
+        if f.width > 6.3:
+            f.width = 6.3
+        fl = VGroup(label(r"$h$: \ the picture's tokens", font_size=22, color=PATCH),
+                    label(r"$e$: \ the prompt's tokens", font_size=22, color=TXT),
+                    label(r"from a frozen text encoder \ (CLIP, \ T5)", font_size=20, color=TXT)
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(f, DOWN, buff=0.3)
+        fl.set_x(3.2)
         side = label(r"the text never changes: \ it is read, \ not rewritten", font_size=22, color=GREY_A).next_to(fl, DOWN, buff=0.5)
         cite_ = cite(r"Rombach et al.\ (2022): \ cross-attention in every block of the U-Net", corner=DR)
         with self.voiceover(

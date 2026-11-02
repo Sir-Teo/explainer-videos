@@ -94,6 +94,11 @@ class ViT(VoiceoverScene):
         accs = [float(a) for a in v["replay_acc"]]
         sims = np.asarray(v["replay_sim"])
         cv = np.asarray(v["curve"])
+        # Replay checkpoints also contain measured accuracies. Include them so
+        # successive animated segments meet even between the regular curve samples.
+        by_step = {int(st): float(acc) for st, acc in cv}
+        by_step.update(zip(checks, accs))
+        cv = np.array(sorted(by_step.items()))
         n = int(round(np.sqrt(sims.shape[-1])))
         pics = Group(*[gray_image(im, 0.85) for im in W]).arrange_in_grid(rows=2, cols=4, buff=(0.25, 0.75)).move_to([-3.8, 0.6, 0])
 
@@ -106,7 +111,7 @@ class ViT(VoiceoverScene):
             return g
 
         nm = names(0)
-        hl = label(r"held-out fonts: \ what it calls each letter", font_size=20, color=GREY_A).next_to(pics, UP, buff=0.2)
+        hl = label(r"held-out font files: \ what it calls each letter", font_size=20, color=GREY_A).next_to(pics, UP, buff=0.2)
         ax = axes([0, checks[-1]], [0, 1], x_length=4.2, y_length=2.2, xlabel=r"training step", ylabel=r"held-out accuracy",
                   xticks=[0, checks[-1]], yticks=[0, 0.5, 1], center=[3.6, 1.6, 0], font_size=18,
                   xfmt=lambda x: fmt_int(x))
@@ -126,28 +131,29 @@ class ViT(VoiceoverScene):
                             .next_to(pics, DOWN, buff=0.75))
         cur = tile(0)
         k_half = next((k for k, a in enumerate(accs) if a > 0.5), len(accs) - 1)
+        k_c = max(k_half, len(checks) - 2)  # keep bookmark b before c even if learning is late
         same0 = len(set(int(p_) for p_ in pred[0])) <= 2
-        rn, rf = [float(x) for x in v["replay_near"]], [float(x) for x in v["replay_far"]]
-        grew = rn[-1] - rf[-1] > rn[0] - rf[0] + 0.05
-        start = ("At first it calls almost everything the same letter. " if same0 else
-                 "At first its guesses are scattered at random. ")
-        pos_line = ("it comes to resemble its neighbours' vectors more than distant ones." if grew else
-                    "it hardly changes shape: the neighbours aren't singled out.")
+        start = ("Initially, these eight examples receive at most two predicted labels. " if same0 else
+                 "Initially, these eight examples receive several different predicted labels. ")
+        pos_line = ("the tiles show its cosine similarity to the other position vectors. "
+                    "The next view compares neighbouring and distant positions across the whole picture.")
         with self.voiceover(
             f"We trained a small one, with {int(v['n_params']) // 1000} thousand weights, to name the letter in each "
-            f"picture, on {int(v['n_fonts']) - int(v['n_test_fonts'])} fonts, and tested it on "
-            f"{int(v['n_test_fonts'])} it never saw. Here it is learning. <bookmark mark='a'/> " + start
+            f"picture, on {int(v['n_fonts']) - int(v['n_test_fonts'])} font files, and tested it on "
+            f"{int(v['n_test_fonts'])} held-out font files. Here it is learning. <bookmark mark='a'/> " + start
             + f"<bookmark mark='b'/> By step {checks[k_half]:,} it's right on {100 * accs[k_half]:.0f} percent of the "
-            f"unseen fonts, and at the end on {100 * accs[-1]:.0f} percent. <bookmark mark='c'/> Meanwhile, watch "
+            f"held-out images, and at the end on {100 * accs[-1]:.0f} percent. <bookmark mark='c'/> Meanwhile, watch "
             "the position vector of the centre patch, which starts at zero: " + pos_line
         ) as vo:
             self.play(FadeIn(pics), FadeIn(hl), FadeIn(nm), Create(ax), FadeIn(cur), FadeIn(tl), Create(ring))
             self.add(cnt)
             vo.wait_until("a")
+            if k_half == 0:
+                vo.wait_until("b")
             for k in range(1, len(checks)):
                 if k == k_half:
                     vo.wait_until("b")
-                if k == len(checks) - 2:
+                if k == k_c:
                     vo.wait_until("c")
                 seg = [ax.ax.c2p(a, b) for a, b in cv if checks[k - 1] <= a <= checks[k]]
                 anims = [t.animate.set_value(checks[k]), Transform(nm, names(k)), FadeOut(cur)]
@@ -174,7 +180,7 @@ class ViT(VoiceoverScene):
             t = label(rf"``{LETTERS[lb]}''", font_size=24, color=WHITE).next_to(pic, UP, buff=0.1)
             pairs.add(Group(pic, heat, t))
         pairs.arrange(RIGHT, buff=0.45).move_to([0, 1.75, 0])
-        hl = label(r"orange: \ where its summary token looks, \ last layer", font_size=20, color=C.ATTN).next_to(pairs, DOWN, buff=0.2)
+        hl = label(r"orange: \ summary-to-patch attention; \\ contrast normalized per example", font_size=20, color=C.ATTN).next_to(pairs, DOWN, buff=0.2)
         st = gloss(r"summary token", r"one extra token with no picture in it: \\ it gathers from every patch, \ and "
                    r"its final vector names the letter", summary_picture(LETTERS[labs[0]]), width=5.6, color=C.BITS)
         st.move_to([0, -1.9, 0])
@@ -183,32 +189,27 @@ class ViT(VoiceoverScene):
         L_, H_ = D_.shape
         top = float(np.ceil(D_.max() / 2) * 2 + 2)
         ax = axes([0.5, L_ + 0.5], [0, top], x_length=3.4, y_length=2.2, xlabel=r"layer",
-                  ylabel=r"how far each head looks, \ on average (pixels)", xticks=list(range(1, L_ + 1)),
+                  ylabel=r"mean attention-weighted \ patch distance (pixels)", xticks=list(range(1, L_ + 1)),
                   yticks=[0, int(top // 2), int(top)], center=[3.6, -1.75, 0], font_size=17)
         dots = VGroup(*[Dot(ax.ax.c2p(l_ + 1 + (h - (H_ - 1) / 2) * 0.12, D_[l_, h]), radius=0.06, color=C.ATTN)
                         for l_ in range(L_) for h in range(H_)])
         lo, hi = float(D_[0].min()), float(D_[0].max())
-        mean_first, mean_last = float(D_[0].mean()), float(D_[-1].mean())
         # how much of the summary token's attention falls on patches with ink, against their share of the picture
         ink = np.array([im.reshape(5, 4, 5, 4).mean((1, 3)) > 0.08 for im in ims])
         on_ink = float(np.mean([(a * k).sum() / a.sum() for a, k in zip(att, ink)]))
         ink_share = float(ink.mean())
         rr, cc_ = np.divmod(np.arange(25), 5)
         uniform = float((4 * np.sqrt((rr[:, None] - rr[None]) ** 2 + (cc_[:, None] - cc_[None]) ** 2)).mean())
-        if mean_first > 0.8 * uniform:
-            reach = (f"Our heads in the first layer already look between {lo:.1f} and {hi:.1f} pixels away, about as far "
-                     f"as two patches picked at random, {uniform:.1f}: from the first layer, they look everywhere. A "
-                     "convolution's first layer sees only a few pixels.")
-        else:
-            reach = (f"Our heads in the first layer look between {lo:.1f} and {hi:.1f} pixels away, where two patches "
-                     f"picked at random are {uniform:.1f} apart: some heads stay local, like a convolution.")
+        reach = (f"First-layer heads have mean attention-weighted patch distances from {lo:.1f} to {hi:.1f} pixels. "
+                 f"Uniform attention over patches gives {uniform:.1f}. These averages do not show which individual "
+                 "patches are essential.")
         with self.voiceover(
-            "How does it decide? The transformer adds one extra token, the summary token, which has no picture in "
+            "What do its attention weights show? The transformer adds one extra token, the summary token, which has no picture in "
             "it. <bookmark mark='s'/> Layer by layer it gathers from every patch, and its final vector alone names "
             "the letter. <bookmark mark='a'/> Here is where the summary token looks in the last layer, for four "
-            f"letters from an unseen font: {100 * on_ink:.0f} percent of its attention falls on patches with ink in "
-            f"them, which are {100 * ink_share:.0f} percent of the picture. <bookmark mark='b'/> And here is how "
-            "far each attention head looks, on average. " + reach
+            f"letters from a held-out font file: {100 * on_ink:.0f} percent of its attention to patches falls on those with ink in "
+            f"them, which are {100 * ink_share:.0f} percent of the picture. <bookmark mark='b'/> And here are "
+            "the mean attention-weighted patch distances. " + reach
         ) as vo:
             self.play(LaggedStart(*[FadeIn(Group(p[0], p[2])) for p in pairs], lag_ratio=0.2), run_time=1.2)
             self.play(FadeIn(st[0]), FadeIn(st[1][:2]))
@@ -244,13 +245,15 @@ class ViT(VoiceoverScene):
         nf = label(rf"neighbours: \ ${near:.2f}$; \ far apart: \ ${far:.2f}$", font_size=26,
                    color=C.TRUE_P).next_to(expl, DOWN, buff=0.45)
         grid = near > far + 0.1
-        msg = label(r"nobody told it the patches \\ form a grid: \ it learned that" if grid else
-                    r"too few pictures to learn the grid: \\ big models trained on millions do", font_size=26,
+        msg = label(r"neighbouring positions have \\ higher mean similarity" if grid else
+                    r"little neighbour preference \\ by this summary measure", font_size=26,
                     color=PATCH).next_to(nf, DOWN, buff=0.45)
-        pattern = ("Each tile lights up around its own place. Nobody told the model that the patches form a five by "
-                   "five grid; it learned the geometry of the picture from the pictures." if grid else
-                   "There's little pattern: a few thousand letters weren't enough to need it. In the original vision "
-                   "transformer, trained on millions of photos, each tile lights up around its own place.")
+        scale_note = label(r"positive cosine similarities; \\ each tile normalized separately", font_size=17,
+                           color=GREY_A).next_to(msg, DOWN, buff=0.3)
+        pattern = ("Neighbouring position vectors are more similar on average than distant ones. This is evidence of "
+                   "spatial structure. The statistic does not establish complete grid recovery." if grid else
+                   "This run shows little neighbour preference by this summary measure. The statistic does not "
+                   "establish why.")
         with self.voiceover(
             "All twenty-five position vectors at the end of training: each tile shows how similar one patch's vector "
             f"is to every other's. <bookmark mark='a'/> Neighbours average {near:.2f}, patches far apart {far:.2f}. "
@@ -259,7 +262,7 @@ class ViT(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.03), FadeIn(expl), run_time=2.0)
             self.play(Create(frame))
             vo.wait_until("a")
-            self.play(FadeIn(nf), FadeIn(msg))
+            self.play(FadeIn(nf), FadeIn(msg), FadeIn(scale_note))
         self.wait(0.3)
         self.clear_scene()
 

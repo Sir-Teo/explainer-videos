@@ -118,20 +118,21 @@ class Clips(VoiceoverScene):
         b2 = spread_bars([[jj, ij]], [JOINT_C, INDEP_C], None, height=2.0, bar_w=0.6, gap=0.25,
                          fmt=lambda v: f"{v:.2f}", font_size=18).move_to([5.6, 1.2, 0])
         t1 = label(r"every frame \\ the right letter", font_size=16, color=GREY_A).next_to(b1, DOWN, buff=0.15)
-        t2 = label(r"wobble: \ jumps in \\ the letter's path (px)", font_size=16, color=GREY_A).next_to(b2, DOWN, buff=0.15)
+        t2 = label(r"wobble: \ second differences \\ ($\mathrm{px}/\mathrm{frame}^2$)", font_size=16, color=GREY_A).next_to(b2, DOWN, buff=0.15)
         leg = legend([(JOINT_C, r"drawn together"), (INDEP_C, r"from separate samples")], font_size=18).move_to([4.4, -1.6, 0])
-        hdn = note(rf"$64$ clips, \ three seeds; \ real clips' wobble: \ ${float(d['real_jerk']):.2f}$ px").to_edge(DOWN, buff=0.3)
+        hdn = note(rf"$64$ clips, \ three seeds; \ real clips' wobble: \ ${float(d['real_jerk']):.2f}$ "
+                   r"$\mathrm{px}/\mathrm{frame}^2$").to_edge(DOWN, buff=0.3)
         if jj.mean() < ij.mean() and jr.mean() >= ir.mean() and jr.mean() >= 0.5:
             verdict = (f"Drawn together, the frames agree: {100 * jr.mean():.0f} percent of clips keep the right letter "
                        f"in every frame, against {100 * ir.mean():.0f}, and the letter's path wobbles {jj.mean():.2f} "
-                       f"pixels a frame, against {ij.mean():.2f} when each frame is drawn on its own.")
+                       f"pixels per frame squared in second differences, against {ij.mean():.2f} when each frame is drawn on its own.")
         elif jj.mean() < ij.mean():
-            verdict = (f"Drawn together, the motion is steadier: the letter's path wobbles {jj.mean():.2f} pixels a "
-                       f"frame, against {ij.mean():.2f} when each frame is drawn on its own; the letter itself survives "
+            verdict = (f"Drawn together, the motion is steadier: the letter's path wobbles {jj.mean():.2f} pixels per "
+                       f"frame squared in second differences, against {ij.mean():.2f} when each frame is drawn on its own; the letter itself survives "
                        f"in {100 * jr.mean():.0f} percent of clips against {100 * ir.mean():.0f}.")
         else:
             verdict = (f"Surprisingly, drawing the frames together doesn't steady the motion here: {jj.mean():.2f} "
-                       f"pixels of wobble against {ij.mean():.2f}.")
+                       f"pixels per frame squared in second differences against {ij.mean():.2f}.")
         if jj.mean() < ij.mean():
             close = "Denoising the whole clip at once makes the frames agree."
         else:

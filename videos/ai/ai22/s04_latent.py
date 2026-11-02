@@ -20,6 +20,18 @@ def latent_stack(side, ch, cell=0.2, color=LAT_C) -> VGroup:
     return g
 
 
+def reconstruction_comparison(rm):
+    """Within-grid trends and exact equal-scalar-count results, without causal attribution."""
+    within = [((5, 1), (5, 2)), ((5, 2), (5, 4)), ((2, 4), (2, 16)), ((1, 16), (1, 64))]
+    pairs = [((10, 1), (5, 4)), ((2, 4), (1, 16)), ((2, 16), (1, 64))]  # finer, coarser
+    if any(not math.isfinite(value) or value < 0 for value in rm.values()):
+        raise ValueError("Reconstruction errors must be finite and nonnegative")
+    coarse = sum(rm[b] < rm[a] for a, b in pairs)
+    fine = sum(rm[a] < rm[b] for a, b in pairs)
+    ties = sum(rm[a] == rm[b] for a, b in pairs)
+    return all(rm[b] < rm[a] for a, b in within), pairs, coarse, fine, ties
+
+
 class Latent(VoiceoverScene):
     def construct(self):
         self.card()
@@ -51,24 +63,25 @@ class Latent(VoiceoverScene):
                       label(r"decoder", font_size=20, color=LAT_C).move_to(dec),
                       label(r"rebuilt", font_size=20, color=GREY_A).next_to(a_out, DOWN, buff=0.15))
         hc = history_card(2022, r"Rombach, Blattmann, Lorenz, Esser \& Ommer", r"latent diffusion: \ an autoencoder "
-                          r"removes the detail nobody notices \ (\textit{perceptual} compression); \ diffusion learns "
-                          r"what's left \ (\textit{semantic})", color=HIST, width=6.4, font_size=20).move_to([-3.2, -2.0, 0])
+                          r"aims to preserve perceptual structure \ while compressing space; \ diffusion learns the latent distribution", color=HIST, width=6.4, font_size=20).move_to([-3.2, -2.0, 0])
         kl8 = VGroup(label(r"Stable Diffusion's KL-f8:", font_size=22, color=PATCH),
                      MathTex(r"512 \times 512 \times 3 \;\to\; 64 \times 64 \times 4", font_size=30, color=WHITE),
-                     label(r"$48\times$ fewer numbers; \ a whisper of KL \ (Part 20's VAE)", font_size=20, color=GREY_A)
+                     label(r"$48\times$ fewer scalar values; \ a small KL penalty \ (Part 20's VAE)", font_size=20, color=GREY_A)
                      ).arrange(DOWN, buff=0.15).move_to([3.6, -2.0, 0])
-        here = VGroup(label(r"diffusion works here", font_size=22, color=PATCH))
+        here = VGroup(label(r"latent model works here \\ (our toy uses flow matching)", font_size=22, color=PATCH))
         here.add(Arrow(here[0].get_bottom(), here[0].get_bottom() + DOWN * 0.45, buff=0.02, color=PATCH, stroke_width=2.5,
                        max_tip_length_to_length_ratio=0.3))
         here.next_to(lat, UP, buff=0.12)
         with self.voiceover(
-            "Real pictures have millions of pixels, and most of that detail is predictable texture. In 2022 Robin "
-            "Rombach, Patrick Esser, Bjorn Ommer and colleagues split the work in two. <bookmark mark='a'/> An "
-            "autoencoder squeezes the picture into a small grid of latent numbers and rebuilds it: that removes the "
-            "detail nobody notices. <bookmark mark='b'/> Then the diffusion model only has to learn what's left, the "
-            "meaning. <bookmark mark='c'/> Stable Diffusion's autoencoder, called KL-f8, shrinks each side eight "
-            "times and keeps four channels: forty-eight times fewer numbers, with just a whisper of Part 20's KL "
-            "penalty to keep the latents tame."
+            "Real pictures have millions of pixels. Rombach and colleagues' latent diffusion work separates spatial "
+            "compression from generative modeling. <bookmark mark='a'/> An autoencoder compresses a picture and "
+            "rebuilds it, aiming to preserve perceptually important structure rather than guaranteeing invisible "
+            "loss. <bookmark mark='b'/> A diffusion model learns the distribution of latent codes, which still carry "
+            "appearance as well as content. Our toy instead uses flow matching with a deterministic autoencoder "
+            "trained by pixel cross-entropy and a latent magnitude penalty; it has no KL or perceptual loss. "
+            "<bookmark mark='c'/> Stable Diffusion's KL-f8 shrinks each spatial side eight times and keeps four "
+            "latent channels: forty-eight times fewer scalar values, with a small KL penalty. This scalar count "
+            "is not a compressed-file bitrate."
         ) as vo:
             self.play(FadeIn(a_in), FadeIn(labs[0]))
             self.wait(1.5)
@@ -92,7 +105,7 @@ class Latent(VoiceoverScene):
         lx = lambda n_: math.log2(n_)  # noqa: E731
         top = max(rm.values()) * 1.15
         ax = axes([4, 7], [0, top], x_length=5.6, y_length=3.6, xlabel=r"numbers in the latent (log scale)",
-                  ylabel=r"rebuild error, \ held-out fonts", xticks=[4, 5, 6, 6.64], yticks=[0, round(top / 2, 2)],
+                  ylabel=r"pixel RMSE, \ held-out images", xticks=[4, 5, 6, 6.64], yticks=[0, round(top / 2, 2)],
                   xfmt=lambda v: {4: "16", 5: "32", 6: "64", 6.64: "100"}[v], center=[-3.0, 0.2, 0], font_size=18)
         dots = VGroup(*[Dot(ax.ax.c2p(lx(num[c]), rm[c]), radius=0.08, color=SIDE_C[c[0]]) for c in cfgs])
         base = VGroup(*[Dot(ax.ax.c2p(lx(num[c]), 0), radius=0.08, color=SIDE_C[c[0]]) for c in cfgs])
@@ -108,21 +121,17 @@ class Latent(VoiceoverScene):
             rows.add(Group(MathTex(rf"{c[0]}\!\times\!{c[0]}\!\times\!{c[1]}", font_size=20, color=SIDE_C[c[0]]),
                            glyph_sheet(np.asarray(d[f"g{c[0]}c{c[1]}_rec"])[:6], 1, 6, size=0.5, gap=0.05)).arrange(RIGHT, buff=0.2))
         rows.arrange(DOWN, buff=0.2, aligned_edge=RIGHT).move_to([4.0, -1.6, 0])
-        pairs = [((10, 1), (5, 4)), ((2, 4), (1, 16)), ((2, 16), (1, 64))]
-        wins = [(a if rm[a] < rm[b] else b) for a, b in pairs]
-        coarse_wins = sum(w[0] < max(a[0], b[0]) for w, (a, b) in zip(wins, pairs))
+        trend, pairs, coarse_wins, fine_wins, ties = reconstruction_comparison(rm)
         best, worst = min(cfgs, key=lambda c: rm[c]), max(cfgs, key=lambda c: rm[c])
-        trend = rm[(1, 16)] > rm[(1, 64)] and rm[(2, 4)] > rm[(2, 16)]
-        same = ("More numbers rebuild better: within each grid, adding channels lowers the error. " if trend else
-                "Adding channels doesn't steadily help here. ")
-        coarse = (f"And at the same count, the coarser grid with more channels wins {coarse_wins} of 3 pairs: "
-                  "squeezing space hard is fine, if each cell gets enough channels to describe its patch." if coarse_wins >= 2 else
-                  f"At the same count, the finer grid wins {3 - coarse_wins} of 3 pairs: here, keeping the layout "
-                  "matters more than deep channels.")
+        same = ("In all four within-grid comparisons, adding channels lowers the measured error. " if trend else
+                "Adding channels does not lower the measured error in every within-grid comparison. ")
+        coarse = (f"At equal scalar counts, coarser grids win {coarse_wins} pairs, finer grids win {fine_wins}, "
+                  f"and {ties} tie. These autoencoders differ in architecture and parameter count, so this "
+                  "comparison does not isolate grid layout as a cause.")
         with self.voiceover(
-            "How small can the space be? We trained eight autoencoders on our letters, each squeezing a picture to a "
+            "How small can the space be? We trained eight autoencoders, one seed each, on our letters. Each squeezes a picture to a "
             "grid of cells with some channels each, from 16 numbers to 100. <bookmark mark='a'/> Here is each one's "
-            f"rebuild error on fonts it never saw: from {rm[best]:.3f} for {best[0]} by {best[0]} by {best[1]} to "
+            f"pixel reconstruction RMSE on images from four held-out font files: from {rm[best]:.3f} for {best[0]} by {best[0]} by {best[1]} to "
             f"{rm[worst]:.3f} for {worst[0]} by {worst[0]} by {worst[1]}. <bookmark mark='b'/> " + same
             + "<bookmark mark='c'/> " + coarse
         ) as vo:
@@ -151,8 +160,8 @@ class Latent(VoiceoverScene):
         lo_rm = math.floor(min(rm.values()) * 100) / 100
         top_rm = math.ceil(max(rm.values()) * 100) / 100 + 0.005
         ax = axes([lo_rm, top_rm], [0, top_fd], x_length=6.2, y_length=3.6,
-                  xlabel=r"rebuild error \ (lower: \ a better autoencoder)",
-                  ylabel=r"generated letters' distance from real ones (FD)",
+                  xlabel=r"held-out pixel RMSE \ (lower is smaller pixel error)",
+                  ylabel=r"judge-feature distance to training images (FD)",
                   xticks=[lo_rm, round((lo_rm + top_rm) / 2, 2), round(top_rm - 0.005, 2)],
                   yticks=[0, round(top_fd / 2)], center=[-2.8, 0.3, 0], font_size=18)
         base = VGroup(*[Dot(ax.ax.c2p(rm[c], 0), radius=0.08, color=SIDE_C[c[0]]) for c in cfgs])
@@ -172,19 +181,20 @@ class Latent(VoiceoverScene):
                    glyph_sheet(smp[:12], 2, 6, size=0.5, gap=0.05)).arrange(DOWN, buff=0.12).move_to([3.9, 1.4, 0])
         sr = Group(label(rf"generated in ${other[0]}\times{other[0]}\times{other[1]}$", font_size=20, color=SIDE_C[other[0]]),
                    glyph_sheet(smp_r[:12], 2, 6, size=0.5, gap=0.05)).arrange(DOWN, buff=0.12).move_to([3.9, -1.2, 0])
-        cite_ = cite(r"Part 21's flow matching in each space: \ same network, \ same steps, \ two seeds (bars)", corner=DL)
+        cite_ = cite(r"same flow width, depth, steps and batch; \ parameter count varies \\ bars: range of two flow seeds; \ one autoencoder seed", corner=DL)
         if best_g == best_r:
-            verdict = (f"Here the best autoencoder, {best_r[0]} by {best_r[0]} by {best_r[1]}, is also the easiest to "
-                       "generate in. On letters this simple the two goals agree.")
+            verdict = (f"The lowest pixel reconstruction error and lowest mean judge-feature distance across the two flow seeds "
+                       f"both occur at {best_r[0]} by {best_r[0]} by {best_r[1]}. These are two limited toy metrics.")
         else:
-            verdict = (f"The space that rebuilds best, {best_r[0]} by {best_r[0]} by {best_r[1]}, is not the one that "
-                       f"generates best: that's {best_g[0]} by {best_g[0]} by {best_g[1]}. A space can keep every detail "
-                       "and still be hard to generate in.")
+            verdict = (f"The lowest pixel reconstruction error occurs at {best_r[0]} by {best_r[0]} by {best_r[1]}, while the lowest "
+                       f"mean judge-feature distance across two flow seeds occurs at {best_g[0]} by {best_g[0]} by "
+                       f"{best_g[1]}. These metrics favor different spaces in this experiment.")
         with self.voiceover(
-            "Now run Part 21's flow matching inside each space, the same small network for the same number of steps, "
-            "two seeds, and measure how far the generated letters are from real ones. <bookmark mark='a'/> "
-            + verdict + " <bookmark mark='b'/> This is the reconstruction against generation dilemma, and it shapes "
-            "every image model since."
+            "Now run Part 21's flow matching inside each space, with the same hidden width, depth, steps and batch "
+            "size, using two flow seeds. Input and output dimensions change the parameter count and random-number "
+            "consumption. The distance uses our toy judge's features against its training images. <bookmark mark='a'/> "
+            + verdict + " <bookmark mark='b'/> The bars show only the range of two flow runs, not autoencoder uncertainty "
+            "or human visual quality. Reconstruction and generative modeling can favor different representations."
         ) as vo:
             self.play(Create(ax), FadeIn(cite_))
             self.play(LaggedStart(*[FadeIn(b_, scale=0.5) for b_ in base], lag_ratio=0.12), run_time=1.6)
@@ -223,23 +233,24 @@ class Latent(VoiceoverScene):
         wl[1].match_y(wl[0])
         wide_g = VGroup(w4, w16, warr, wl)
         cards = VGroup(
-            history_card(r"Mar 2024", r"SD3", r"$16$ latent channels instead of $4$: \ better once the model is big enough",
+            history_card(r"Mar 2024", r"SD3", r"$16$ latent channels; \ greater flow capacity required; \ chosen for scaling",
                          color=HIST, width=5.0, font_size=19),
-            history_card(r"Oct 2024", r"DC-AE \ (Chen, Cai, \dots, Han)", r"shrink each side $32$ to $128$ times: \ the "
-                         r"network learns only a residual on top of space-to-channel shortcuts; \ at $512^2$, $19\times$ "
-                         r"faster to sample than with SD's autoencoder, \ and better", color=HIST, width=5.0, font_size=19),
+            history_card(r"Oct 2024", r"DC-AE \ (Chen, Cai, \dots, Han)", r"shrink each side $32$ to $128$ times: \ "
+                         r"models learn residuals on space-to-channel shortcuts; \ ImageNet $512^2$, UViT-H on H100: \ "
+                         r"$19.1\times$ inference speedup and better FID \ versus SD-VAE-f8", color=HIST, width=5.0, font_size=19),
         ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([3.6, 0.4, 0])
-        tk = take_away(r"compress hard in space, \ keep enough channels, \ and make the space easy to generate in")
+        tk = take_away(r"Balance spatial compression, \ reconstruction and generative modeling.")
         head = label(r"Wider latents, \ deeper compression", font_size=36).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Real models went both ways at once. <bookmark mark='a'/> Stable Diffusion 3 widened its latents from "
-            "four channels to sixteen, which paid off once the model was big enough. <bookmark mark='b'/> And in "
+            "Real models went both ways at once. <bookmark mark='a'/> Stable Diffusion 3 chose sixteen latent channels "
+            "and reported that diffusion capacity must grow to model the larger representations. <bookmark mark='b'/> And in "
             "October 2024 Song Han's group squeezed much harder, thirty-two to a hundred and twenty-eight times on "
             "each side, with deep compression autoencoders. Their trick: fold each block of pixels into channels, "
             "which loses nothing, and let the network learn only what to change on top. <bookmark mark='c'/> At five "
-            "hundred and twelve pixels, a diffusion model in that space sampled nineteen times faster, and better. "
-            "<bookmark mark='d'/> Compress hard in space, keep enough channels, and keep the space easy to generate "
-            "in: the next chapter is about shaping it."
+            "hundred and twelve pixels on ImageNet, their UViT-H benchmark on an H100 reported nineteen point one times "
+            "the inference speed with better FID than SD-VAE-f8. That is a specific benchmark, not a universal speedup. "
+            "<bookmark mark='d'/> Balance spatial compression, reconstruction and generative modeling. The next chapter "
+            "examines how representations can be shaped."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

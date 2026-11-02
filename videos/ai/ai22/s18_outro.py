@@ -122,7 +122,7 @@ class Outro(VoiceoverScene):
             r"A ViT cuts a $224 \times 224$ picture into $p \times p$ patches. \ How many tokens for $p = 16$ and "
             r"$p = 8$? \ By what factors do attention's and the MLPs' costs grow when $p$ halves?",
             r"In an adaLN-Zero block with every gate $\alpha = 0$, show the block is the identity and the gradients of "
-            r"its attention weights vanish, \ but the gradient of the gate's map $W$ does not.",
+            r"its attention weights vanish, \ but the gradient of the gate's map $W$ can be nonzero.",
             r"Derive the resolution shift $\sigma_m = \alpha \sigma_n / (1 + (\alpha - 1)\sigma_n)$ from equal uncertainty "
             r"about a flat picture, \ show it lowers the log signal-to-noise ratio by $2 \log \alpha$, \ and evaluate "
             r"it for $\sigma_n = 0.5$, $\alpha = 3$.",

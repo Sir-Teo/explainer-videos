@@ -57,7 +57,7 @@ class Hook(VoiceoverScene):
             history_card(2020, r"the vision transformer", r"an image is a sequence of patches", color=HIST, width=4.3, font_size=24),
             history_card(2021, r"DALL$\cdot$E; \ diffusion beats GANs", r"text to image as tokens; \ denoising wins on quality",
                          color=HIST, width=4.3, font_size=24),
-            history_card(2022, r"DALL$\cdot$E 2, \ Imagen, \ Stable Diffusion", r"diffusion from text; \ open weights",
+            history_card(2022, r"DALL$\cdot$E 2, \ Imagen, \ Stable Diffusion", r"diffusion from text; \ Stable Diffusion: \ open weights",
                          color=HIST, width=4.3, font_size=24),
             history_card(2024, r"SD3, \ FLUX.1, \ Sora", r"flow-matching transformers; \ video as spacetime patches",
                          color=HIST, width=4.3, font_size=24),
@@ -76,7 +76,7 @@ class Hook(VoiceoverScene):
             "and Part 10 told that story. <bookmark mark='a'/> In 2014 came GANs, a generator trained against a judge, "
             "Part 20's story. <bookmark mark='b'/> In 2020 a plain transformer read images as sequences of patches. "
             "<bookmark mark='c'/> In 2021 DALL-E drew pictures from text, as tokens, and diffusion beat GANs on "
-            "quality. <bookmark mark='d'/> 2022 brought DALL-E 2, Imagen, and Stable Diffusion, with open weights. "
+            "quality. <bookmark mark='d'/> 2022 brought DALL-E 2 and Imagen, and Stable Diffusion with open weights. "
             "<bookmark mark='e'/> By 2024 flow-matching transformers drew pictures, and Sora drew video. "
             "<bookmark mark='f'/> In 2025 video came with sound, one model could both read and draw, and video "
             "could be generated as fast as it plays. <bookmark mark='g'/> And in 2026, open models make sound and "
