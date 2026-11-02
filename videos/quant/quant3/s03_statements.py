@@ -279,6 +279,7 @@ class Statements(VoiceoverScene):
             "have derived the cash flow statement by the indirect method. <bookmark mark='c'/> And return on equity is margin "
             "times asset turnover times leverage, DuPont's split: does the firm earn by pricing, efficiency or borrowing? "
             "<bookmark mark='d'/> For the toy firm's last year: these three numbers."
+            " Notice that the toy firm's earnings and its cash were not the same number. The gap has a name, and a price: accruals."
         ) as vo:
             step(0)
             vo.wait_until("a")

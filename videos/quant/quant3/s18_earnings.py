@@ -212,6 +212,7 @@ class Earnings(VoiceoverScene):
             "for all but the smallest stocks, prices now absorb the surprise on the day. Others argue that it survives with "
             "different samples; it is contested. <bookmark mark='c'/> So, the desk question: buy at the next open after a big beat? "
             "On today's evidence for large stocks, the news is already in the price."
+            " Earnings surprises were one of many accounting signals that once predicted returns. Next: the others, and what became of them."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(rows[0]))
             self.add(line)

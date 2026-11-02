@@ -229,6 +229,7 @@ class Payout(VoiceoverScene):
             "yield and Pontiff and Woodgate's share issuance, earned these returns a month in their papers' samples and these after "
             "publication. Managers seem to sell shares when they think them dear and buy when they think them cheap. The payout does "
             "not create value; the information in the decision does."
+            " Debt changes something else too: the shape of the owners' payoff. Next, a share seen as an option."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(xl))
             self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bars], lag_ratio=0.1),

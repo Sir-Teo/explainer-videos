@@ -233,6 +233,7 @@ class CAPE(VoiceoverScene):
             f"1945 the green rope goes slack, {s2['lr_d']:.2f}, and returns carry everything: Cochrane's dog that did not bark. "
             "<bookmark mark='d'/> But the one-year slope is weak, and biased up by a persistent predictor. In a world with no "
             f"predictability, slopes this large appear {100 * cs['boot_p']:.0f} percent of the time."
+            " So far the firm's financing has been taken as given. Next: does it matter at all?"
         ) as vo:
             self.add(rp)
             self.play(FadeIn(cap))

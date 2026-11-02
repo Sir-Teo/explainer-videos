@@ -215,6 +215,7 @@ class Crisis(VoiceoverScene):
             "base rate is low, most alarms are false. Patricia Dechow and coauthors trained a successor in 2011, the F-score, on the "
             "SEC's enforcement cases; it faces the same arithmetic. So the House treats a screen as a reason to read the filing, and "
             "stores every number as first reported, because a backtest on corrected numbers knows what nobody knew."
+            " Next: the people whose job is to read these statements and put a value on firms."
         ) as vo:
             self.play(FadeIn(grid), FadeIn(pp))
             vo.wait_until("a")

@@ -233,6 +233,7 @@ class MM(VoiceoverScene):
             "advantage important and a fifth called distress costs important; most cited flexibility and credit ratings. "
             "<bookmark mark='a'/> Pause and predict: twenty-one percent tax, permanent debt of a hundred. What does the debt add, "
             "and who loses it? Twenty-one, from the government."
+            " The same logic applies to how a firm returns cash to its owners. Next: dividends, buybacks and issuance."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

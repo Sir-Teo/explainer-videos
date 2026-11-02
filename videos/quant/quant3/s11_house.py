@@ -218,6 +218,7 @@ class House(VoiceoverScene):
             f"median 10-K arrived {np.median(lags):.0f} days after the year ended, inside the sixty-day rule for the largest firms. "
             "A backtest that uses December's earnings on the first of January has read two months of the future. The House's rule "
             "four: a reported number exists from the day it was filed, as it was first reported."
+            " With the numbers stored as they were known, we can value a whole firm. Next: free cash flow, discounted."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(src))
             self.play(LaggedStart(*[FadeIn(VGroup(*r[:1])) for r in tab[1:]], lag_ratio=0.1))

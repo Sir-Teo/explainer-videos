@@ -289,6 +289,7 @@ class DCF(VoiceoverScene, ThreeDScene):
             f"percent runs from {mc['q05']:,.0f} to {mc['q95']:,.0f}, with a long right tail. A DCF that reports one number is "
             "reporting one draw. <bookmark mark='c'/> Pause and predict: a firm earns exactly its cost of capital on new "
             "investment. What does faster growth add? Nothing."
+            " Every number on that surface hangs on one input, the discount rate. Next: the rate the market itself implies."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:4]), Create(bl), FadeIn(bt))
             vo.wait_until("a")

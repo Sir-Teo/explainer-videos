@@ -181,6 +181,7 @@ class EquityOption(VoiceoverScene, ThreeDScene):
             "right to wait is the magenta curve, always above it, most of all near the money, when you are least sure. Myers called "
             "these real options; they are why NPV alone undervalues a firm's flexibility, and why a firm's equity can be worth more "
             "than its projects' plain present values."
+            " Options take their value from information still to come. The most regular news a firm releases is its earnings. Next: how prices react."
         ) as vo:
             self.play(FadeIn(g), Create(l_npv), FadeIn(leg[0]))
             vo.wait_until("a")

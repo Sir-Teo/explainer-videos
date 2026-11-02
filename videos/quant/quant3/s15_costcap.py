@@ -187,6 +187,7 @@ class CostOfCapital(VoiceoverScene):
             "finding too. <bookmark mark='b'/> Read the line as a forecast: the premium was high in the late seventies, before two "
             "strong decades, and lowest in 1999. Pause and predict: what did two percent promise? <bookmark mark='c'/> Close to "
             "nothing: the 2000s were a lost decade for American stocks."
+            " Discounting cash is one way to value a firm. The balance sheet gives another, and it must give the same answer."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.03, run_time=2))

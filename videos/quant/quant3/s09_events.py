@@ -204,6 +204,7 @@ class Events(VoiceoverScene):
             "inversions, and in October AbbVie walked away, paying a break fee of about one point six billion. Funds holding the "
             "spread lost heavily, and spreads on other deals widened at the same time. <bookmark mark='a'/> The desk question from "
             "the start of the chapter is in the notes, with its solution."
+            " Every model in this part trusts the statements. Next: what happens when they lie."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

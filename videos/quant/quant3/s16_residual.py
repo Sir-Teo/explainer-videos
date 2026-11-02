@@ -144,6 +144,7 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
             "is exact: run the toy firm's forty quarters through both formulas and they agree to the last digit a computer keeps. "
             "<bookmark mark='d'/> Pause and predict: a firm's ROE equals its cost of equity. What is its price-to-book, whatever "
             "its growth? One. AQR's quality factor, in chapter seventeen, starts here."
+            " Price-to-book is one multiple. Next, the multiples analysts use every day, and what the market's own ratios have predicted."
         ) as vo:
             self.play(FadeIn(g), GrowFromEdge(book, DOWN), FadeIn(bl), FadeIn(side[0]))
             vo.wait_until("a")

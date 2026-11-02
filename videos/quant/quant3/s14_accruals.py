@@ -179,6 +179,7 @@ class Accruals(VoiceoverScene, ThreeDScene):
             f"{a['osap_mean']:.2f} percent a month from 1963 to 2020, with a t-statistic of {a['osap_t']:.1f}. Chapter fourteen asks "
             "how much survived publication. <bookmark mark='c'/> Pause and predict: two firms each earn ten percent of assets, one "
             "in cash, one in receivables. Whose earnings will be higher next year? The cash earner's, on average."
+            " To test claims like this on thousands of firms you need the filings as data, as they were first published. Next: how."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02, run_time=2))

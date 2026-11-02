@@ -198,6 +198,7 @@ class Duration(VoiceoverScene):
             "growth fixed while the rate moves. In the data, yields rise when inflation rises, and expected dividends rise with it, "
             "so g moves with r and much of the effect cancels. Dechow, Sloan and Soliman measured implied equity durations of about "
             "fifteen years, not thirty-three. A model's sensitivity is only as good as its assumption about what else moves."
+            " Rates are one input; the other is the cash the firm actually earns. Next: where that number comes from, the three statements."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(pp))
             vo.wait_until("a")

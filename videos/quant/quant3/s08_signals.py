@@ -252,6 +252,7 @@ class Signals(VoiceoverScene):
             "a researcher tries, the more one of them will look good by chance; the two hundred and eight predictors enter as one "
             "registered meta-test. Part twenty-six shows how to deflate a result by that count, and the hold-out years, 2021 "
             "onward, are sealed until then."
+            " Not every event-driven trade starts from the statements. Next, one whose payoff is written into a contract: merger arbitrage."
         ):
             self.play(FadeIn(big, scale=0.8), FadeIn(cap))
             self.play(FadeIn(add))

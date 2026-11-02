@@ -146,6 +146,7 @@ class Industry(VoiceoverScene):
             "interest, leaves EBITDA's costs. <bookmark mark='b'/> Enterprise value and EBITDA both rise; the multiple falls and "
             "leverage rises. The equity is worth exactly what it was. A screen that compares multiples across 2018 and 2019 without "
             "adjusting is comparing two accounting regimes, not two firms."
+            " More and more, the first reader of a filing is a machine. Next: the frontier."
         ) as vo:
             self.play(FadeIn(head), FadeIn(before), FadeIn(lease))
             vo.wait_until("a")
