@@ -63,9 +63,9 @@ class Scalp(VoiceoverScene):
     def ledger(self, s):
         t, gam, the, book = (np.asarray(s[k]) for k in ("t", "gamma", "theta", "book"))
         lo, hi = float(min(the.min(), book.min(), 0)) - 1, float(max(gam.max(), book.max())) + 1
-        g = axes([0, 30], [lo, hi], x_length=7.4, y_length=4.4, xlabel=r"days from 1 May 2021",
-                 ylabel=r"cumulative, per 100 of bitcoin", xticks=[0, 10, 20, 30], yticks=[-10, 0, 10, 20], font_size=17)
-        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        g = axes([0, 30], [lo, hi], x_length=7.2, y_length=3.8, xlabel=r"days from 1 May 2021",
+                 ylabel=r"cumulative, per 100 of bitcoin", xticks=[0, 10, 20, 30], yticks=[-5, 0, 5], font_size=17)
+        g.to_edge(LEFT, buff=0.6).to_edge(DOWN, buff=0.6)
         ax = g.ax
         lg = curve(ax, t[::2], gam[::2], GAMMA, stroke_width=3)
         lt = curve(ax, t[::2], the[::2], THETA, stroke_width=3)

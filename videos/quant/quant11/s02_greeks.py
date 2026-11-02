@@ -12,7 +12,7 @@ BETS = {"straddle": r"a big move, either way; higher vol", "strangle": r"a bigge
         "call spread": r"up, but not too far", "calendar": r"near-term calm, later vol"}
 
 
-def pnl_tile(legs, size=0.11, lim=None):
+def pnl_tile(legs, size=0.15, lim=None):
     dS = np.linspace(-0.25, 0.25, 21)
     dv = np.linspace(-0.1, 0.1, 13)
     P = Q.pnl_surface(legs, 100.0, 0.5, dS, dv, 7 / 365)
@@ -77,7 +77,7 @@ class Greeks(VoiceoverScene):
                          MathTex(rf"\Gamma {g['gamma']:+.3f}\ \ \mathcal{{V}} {g['vega'] / 100:+.2f}\ \ \Theta {g['theta'] / 365:+.2f}",
                                  font_size=20, color=GREY_B)).arrange(DOWN, buff=0.06)
             tiles.add(VGroup(t, cap).arrange(DOWN, buff=0.12))
-        tiles.arrange_in_grid(rows=2, cols=3, buff=(0.7, 0.35)).move_to(DOWN * 0.15)
+        tiles.arrange_in_grid(rows=2, cols=3, buff=(0.6, 0.3)).move_to(DOWN * 0.2)
         if tiles.height > 6.6:
             tiles.scale_to_fit_height(6.6)
         key = VGroup(label(r"each square: P\&L after a week, across a spot move of $\pm 25\%$ (left to right) and a vol "
