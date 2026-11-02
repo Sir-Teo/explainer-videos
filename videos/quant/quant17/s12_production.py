@@ -28,11 +28,11 @@ class Production(VoiceoverScene):
                       r"computed became training labels. Risk.net reported the bank using the method to speed up its XVA "
                       r"calculations.", source=r"Huge and Savine (2020); as reported by Risk.net", width=6.1, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.6)
-        sr = firm_card(r"SR 11-7 (Federal Reserve and OCC, 2011)",
-                       r"US supervisory guidance on model risk: every model is validated by people independent of its "
-                       r"builders (``effective challenge''), through conceptual soundness, ongoing monitoring and outcomes "
-                       r"analysis, and kept in an inventory with its limits. A network is a model like any other.",
-                       source=r"Board of Governors of the Federal Reserve System", width=12.4, font_size=20)
+        sr = history_card(2011, r"SR 11-7, Federal Reserve and OCC",
+                          r"US supervisory guidance on model risk: every model is validated by people independent of its "
+                          r"builders (``effective challenge''), through conceptual soundness, ongoing monitoring and "
+                          r"outcomes analysis, and kept in an inventory with its limits. A network is a model like any "
+                          r"other.", color=QC.HOUSE, width=12.4, font_size=20)
         sr.next_to(cards, DOWN, buff=0.35)
         with self.voiceover(
             "What has reached real desks? The clearest public case is J.P. Morgan. Hans Buehler's team began hedging "
