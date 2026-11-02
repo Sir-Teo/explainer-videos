@@ -9,6 +9,31 @@ ALPHA27 = " abcdefghijklmnopqrstuvwxyz"
 FWD, BWD = C.BITS, C.TRUE_P
 
 
+def caption(text, **kwargs):
+    """Align only this chapter's Chinese inline prose; keep its wording."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
+def reason(text, font_size=24):
+    return caption(text, font_size=font_size, color=GREY_B)
+
+
+def citation(text, corner=DL, font_size=20):
+    return caption(text, font_size=font_size, color=GREY_B).to_corner(corner, buff=0.3)
+
+
+def history_box(*args, **kwargs):
+    mob = history_card(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import card
+        return card(mob)
+    return mob
+
+
 def letter_color(ch):
     return GREY_B if ch == " " else VOWEL if ch in "aeiou" else CONSONANT
 
@@ -16,7 +41,7 @@ def letter_color(ch):
 class BaumWelch(VoiceoverScene):
     def construct(self):
         card_in(self, 7, r"Baum--Welch, and machines that listen", r"How does a hidden Markov model learn?",
-                "Chapter seven. Baum-Welch, and machines that listen.")
+                "Chapter seven. Baum-Welch, and machines that listen.", zh_prose_rows=(0,))
         self.derive()
         self.learn()
         self.speech()
@@ -34,14 +59,14 @@ class BaumWelch(VoiceoverScene):
                   r"B_j(x)", r"\leftarrow", r"\frac{\sum_{t:\, x_t = x} \gamma_t(j)}{\sum_t \gamma_t(j)}", colors=colors,
                   font_size=36),
         ]
-        whys = [why(r"backward: \ the letters still to come"),
-                why(r"E step: \ how likely state $i$ \\ was at time $t$"),
-                why(r"and the move $i \to j$ \\ at time $t$"),
-                why(r"M step: \ expected counts, \\ normalized")]
+        whys = [reason(r"backward: \ the letters still to come"),
+                reason(r"E step: \ how likely state $i$ \\ was at time $t$"),
+                reason(r"and the move $i \to j$ \\ at time $t$"),
+                reason(r"M step: \ expected counts, \\ normalized")]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-2.4, buff=0.6, edge=6.8)
-        head = label(r"EM for hidden Markov models: \ forward--backward", font_size=32).to_edge(UP, buff=0.3)
-        em = VGroup(label(r"E: \ how likely each hidden state was, \ letter by letter", font_size=24, color=HIDDEN),
-                    label(r"M: \ re-estimate $A$ and $B$ from the expected counts", font_size=24, color=SEEN))
+        head = caption(r"EM for hidden Markov models: \ forward--backward", font_size=32).to_edge(UP, buff=0.3)
+        em = VGroup(caption(r"E: \ how likely each hidden state was, \ letter by letter", font_size=24, color=HIDDEN),
+                    caption(r"M: \ re-estimate $A$ and $B$ from the expected counts", font_size=24, color=SEEN))
         em.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Third: how does the model learn A and B from letters alone? It's chapter four's EM again, and for this "
@@ -95,24 +120,30 @@ class BaumWelch(VoiceoverScene):
             return g
 
         it = ValueTracker(0)
-        bar_g = always_redraw(lambda: bars(Bs[int(round(it.get_value()))]))
+
+        def replay_round():
+            return int(round(it.get_value()))
+
+        bar_g = always_redraw(lambda: bars(Bs[replay_round()]))
         labs = VGroup(*[Text("␣" if ch == " " else ch, font="DejaVu Sans Mono", font_size=16, color=letter_color(ch))
                         .move_to([x0 + i * W, yb - 0.2, 0]) for yb in (1.2, -1.8) for i, ch in enumerate(ALPHA27)])
         links = VGroup(*[DashedLine(s_pos[k] + RIGHT * 0.45, [x0 - 0.3, yb + 0.6, 0], color=HIDDEN, stroke_width=2)
                          for k, yb in enumerate((1.2, -1.8))])
         itv = Integer(0, font_size=30)
-        itl = VGroup(label(r"Baum--Welch round", font_size=24, color=GREY_A), itv).arrange(RIGHT, buff=0.15)
+        itv.add_updater(lambda mob: mob.set_value(replay_round()))
+        itl = VGroup(caption(r"Baum--Welch round", font_size=24, color=GREY_A), itv).arrange(RIGHT, buff=0.15)
         itl.to_corner(UR, buff=0.4)
         bits = DecimalNumber(-lls[0], num_decimal_places=2, font_size=30, color=C.BITS)
-        bitl = VGroup(label(r"bits per letter:", font_size=24, color=GREY_A), bits).arrange(RIGHT, buff=0.15)
+        bits.add_updater(lambda mob: mob.set_value(-lls[replay_round()]))
+        bitl = VGroup(caption(r"bits per letter:", font_size=24, color=GREY_A), bits).arrange(RIGHT, buff=0.15)
         bitl.next_to(itl, DOWN, buff=0.15).align_to(itl, RIGHT)
-        head = label(r"Each hidden state emits letters from its own table", font_size=28).to_edge(UP, buff=0.3).shift(LEFT * 1.0)
+        head = caption(r"Each hidden state emits letters from its own table", font_size=28).to_edge(UP, buff=0.3).shift(LEFT * 1.0)
         exact_partition = set(h["vowel_side"]) == set(" aeiou")
         found_text = (r"emission preferences: \ $s_1$ space and a, e, i, o, u; \ $s_2$ consonants" if exact_partition else
                       r"two learned emission tables; \ this fit is not an exact vowel/consonant split")
-        found = label(found_text, font_size=26, color=WHITE)
+        found = caption(found_text, font_size=26, color=WHITE)
         found.to_edge(DOWN, buff=0.25)
-        cite_ = cite(r"R.~L.~Cave \& L.~P.~Neuwirth (1980); \ L.~E.~Baum et al.\ (1970)", corner=UR).shift(DOWN * 0.9)
+        cite_ = citation(r"R.~L.~Cave \& L.~P.~Neuwirth (1980); \ L.~E.~Baum et al.\ (1970)", corner=UR).shift(DOWN * 0.9)
         n_it = len(Bs) - 1
         with self.voiceover(
             f"Give it two hidden states, {h['n']:,} letters of the books, and random first guesses. "
@@ -121,8 +152,7 @@ class BaumWelch(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(states), FadeIn(bar_g), FadeIn(labs), Create(links), FadeIn(itl), FadeIn(bitl))
             vo.wait_until("b")
             for k in (1, 2, 3, 5, 8, 12, 20, 35, n_it):
-                self.play(it.animate.set_value(k), ChangeDecimalToValue(itv, k), ChangeDecimalToValue(bits, -lls[k]),
-                          run_time=0.8)
+                self.play(it.animate.set_value(k), run_time=0.8)
         partition_voice = ("The first emission table favours space and a, e, i, o and u; the second favours consonants."
                            if exact_partition else
                            "This fit learns different letter preferences, but not an exact split of vowels and consonants.")
@@ -136,6 +166,8 @@ class BaumWelch(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(sw), FadeIn(swl))
         bar_g.clear_updaters()
+        itv.clear_updaters()
+        bits.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -151,33 +183,33 @@ class BaumWelch(VoiceoverScene):
         frames = VGroup(*[Rectangle(width=0.22, height=0.9, stroke_color=GREY_C, stroke_width=1, fill_color=SEEN,
                                     fill_opacity=0.15 + 0.6 * abs(float(np.sin(i)))).move_to([-6.0 + 0.25 * i, 0.6, 0])
                           for i in range(12)])
-        fl = label(r"frames of sound features, \\ every $10$ ms", font_size=20, color=GREY_A).next_to(frames, DOWN, buff=0.15)
+        fl = caption(r"frames of sound features, \\ every $10$ ms", font_size=20, color=GREY_A).next_to(frames, DOWN, buff=0.15)
         ph = VGroup()
         for k, p_ in enumerate((r"/k/", r"/\ae/", r"/t/")):
             sts = VGroup(*[Circle(radius=0.22, color=HIDDEN, stroke_width=2.5).move_to([-2.0 + 0.55 * j + 1.85 * k, 0.9, 0])
                            for j in range(3)])
             arr = VGroup(*[Arrow(sts[j].get_right(), sts[j + 1].get_left(), buff=0.03, stroke_width=2, color=GREY_B,
                                  max_tip_length_to_length_ratio=0.3) for j in range(2)])
-            ph.add(VGroup(sts, arr, label(p_, font_size=24, color=HIDDEN).next_to(sts, UP, buff=0.15)))
-        pl = label(r"each sound of the language: \ a three-state hidden Markov model", font_size=20, color=HIDDEN)
+            ph.add(VGroup(sts, arr, caption(p_, font_size=24, color=HIDDEN).next_to(sts, UP, buff=0.15)))
+        pl = caption(r"each sound of the language: \ a three-state hidden Markov model", font_size=20, color=HIDDEN)
         pl.next_to(ph, DOWN, buff=0.75)
         bells = VGroup(*[FunctionGraph(lambda u, m=m, s=s: 0.5 * np.exp(-(u - m) ** 2 / (2 * s * s)), x_range=[-0.7, 0.7],
                                        color=SEEN, stroke_width=2.5) for m, s in ((-0.25, 0.12), (0.1, 0.18), (0.35, 0.1))])
         bells.move_to([0.2, -0.75, 0])
-        bl = label(r"each state emits features \\ from a mixture of Gaussians (chapter 4)", font_size=20, color=SEEN)
+        bl = caption(r"each state emits features \\ from a mixture of Gaussians (chapter 4)", font_size=20, color=SEEN)
         bl.next_to(bells, DOWN, buff=0.15)
-        word = VGroup(label(r"``cat''", font_size=34), label(r"words: \ a dictionary \\ and an $n$-gram model \\ "
+        word = VGroup(caption(r"``cat''", font_size=34), caption(r"words: \ a dictionary \\ and an $n$-gram model \\ "
                                                              r"(chapter 9)", font_size=20, color=GREY_A))
         word.arrange(DOWN, buff=0.15).move_to([5.3, 0.9, 0])
         arrs = VGroup(Arrow([-3.0, 0.6, 0], [-2.35, 0.8, 0], color=GREY_B, stroke_width=2.5),
                       Arrow([3.1, 0.9, 0], [4.0, 0.9, 0], color=GREY_B, stroke_width=2.5))
         hist = VGroup(
-            history_card(1975, r"James Baker; \ Fred Jelinek's group at IBM", r"speech recognition as statistics: \ "
+            history_box(1975, r"James Baker; \ Fred Jelinek's group at IBM", r"speech recognition as statistics: \ "
                          r"DRAGON, \ and \textit{Continuous speech recognition by statistical methods} (1976)", width=6.4),
-            history_card(2012, r"G.~Hinton et al.", r"deep networks replace the Gaussian mixtures; \ later, end-to-end "
+            history_box(2012, r"G.~Hinton et al.", r"deep networks replace the Gaussian mixtures; \ later, end-to-end "
                          r"models and CTC (Part 23)", width=5.6),
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP).to_edge(DOWN, buff=0.3)
-        quote = label(r"``Every time I fire a linguist, the performance of the speech recognizer goes up.'' \\ "
+        quote = caption(r"``Every time I fire a linguist, the performance of the speech recognizer goes up.'' \\ "
                       r"--- attributed to Fred Jelinek, IBM, 1980s \ (his own recollections of the wording varied)",
                       font_size=22, color=C.HUMAN).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -207,6 +239,9 @@ class BaumWelch(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeIn(quote))
             vo.wait_until("f")
-            self.play(FadeOut(quote), FadeIn(hist[1], shift=UP * 0.2))
+            self.play(Succession(
+                FadeOut(quote, run_time=0.35),
+                FadeIn(hist[1], shift=UP * 0.2, run_time=0.65),
+            ))
         self.wait(0.3)
         self.clear_scene()

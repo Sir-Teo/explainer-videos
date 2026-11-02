@@ -1,0 +1,37 @@
+{
+  "base_commit": "d8815d818dba1efe49ac60b7ca250b53cac6be99",
+  "scope": "Independently accepted exact source: Typical notation, Likelihood opacity, BaumWelch synchronization, Translation layout and KneserNey Chinese prose",
+  "source_replacements": [
+    {
+      "path": "videos/ai/ai1/s07_typical.py",
+      "before_sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "after_sha256": "3bdf161f41266771323d67823b5f398ba2445642657a6c16b343268a35f23b48",
+      "bytes": 24214
+    },
+    {
+      "path": "videos/ai/ai1/s12_likelihood.py",
+      "before_sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "after_sha256": "ce635d893189088ddce726e64e8364af7176b9a376e96ae0b58340ab103bab77",
+      "bytes": 19225
+    },
+    {
+      "path": "videos/ai/ai7/s08_baumwelch.py",
+      "before_sha256": "3e365218f56baac8f14416d327d8a322d0fbdaae47045463e579680ed366f2dd",
+      "after_sha256": "31bbc6f034c41ca7cc9002adb454393be55edc02379a21d1e20b0cf389e80ec7",
+      "bytes": 15392
+    },
+    {
+      "path": "videos/ai/ai7/s09_translation.py",
+      "before_sha256": "31f1a69922addcc30cc639553c95d9cc7c50010c29fc0cbe4c0220c81c903299",
+      "after_sha256": "8c2c1c24ef2112dca8710fdd36f556da899a9af52421936902718ff4ab83e600",
+      "bytes": 16093
+    },
+    {
+      "path": "videos/ai/ai7/s10_kn.py",
+      "before_sha256": "a153e62f99dc0f56fcc5841b486381143e45c65a8e5711496514e842a3561b7f",
+      "after_sha256": "68d9409f602d075bd37000d34fa69084f333488f4662f53a884c3e8edd28b6c7",
+      "bytes": 21164
+    }
+  ],
+  "scientific_producers_and_contracts_changed": false
+}

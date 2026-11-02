@@ -206,6 +206,7 @@ class Likelihood(VoiceoverScene):
         net = gloss(r"neural network", r"a stack of simple steps: \ multiply by a table of numbers, then bend, "
                     r"and repeat;\\ the numbers in the tables are tuned until the guesses are good",
                     picture=net_sketch(), width=6.6, color=C.NEURAL)
+        net[0].set_fill(opacity=1)
         net.scale(1.15).move_to(DOWN * 0.3)
         with self.voiceover(
             "Counting doesn't generalize. Neural networks do. <bookmark mark='n'/> A neural network is a stack of "
