@@ -40,8 +40,9 @@ class RoughHistory(VoiceoverScene):
         d1 = VGroup(*[Dot(g1.ax.c2p(a, b), radius=0.04, color=NET) for a, b in zip(t, H)])
         d2 = VGroup(*[Dot(g2.ax.c2p(a, b), radius=0.04, color=DELTA) for a, b in zip(t, rho)])
         half = DashedLine(g1.ax.c2p(2024, 0.02), g1.ax.c2p(2026, 0.02), stroke_color=BAD, stroke_width=1.5)
-        floor_lab = label(r"the lowest $H$ the network was trained on", font_size=15, color=BAD).next_to(
-            g1.ax.c2p(2026, 0.02), UP + LEFT, buff=0.08)
+        floor_lab = VGroup(DashedLine(ORIGIN, RIGHT * 0.4, stroke_color=BAD, stroke_width=1.5),
+                           label(r"the lowest $H$ the network was trained on (0.02)", font_size=15, color=BAD)).arrange(
+            RIGHT, buff=0.12).next_to(g1, UP, buff=0.05).align_to(g1, RIGHT)
         at_floor = float(np.mean(H < 0.021))
         zero = DashedLine(g2.ax.c2p(2024, 0), g2.ax.c2p(2026, 0), stroke_color=GREY_C, stroke_width=1)
         q = h["H_q"]
@@ -80,9 +81,14 @@ class RoughHistory(VoiceoverScene):
                  xticks=[2024, 2025, 2026], xfmt=lambda v: f"{v:.0f}", yticks=[round(v) for v in np.linspace(0, top, 4)[1:]],
                  font_size=15).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
-        l_he = curve(ax, t, np.minimum(he, top), GREY_B, stroke_width=2.5)
-        l_rb = curve(ax, t, np.minimum(rb, top), NET, stroke_width=3)
-        leg = legend([(GREY_B, r"Heston (Part 13)"), (NET, r"rough Bergomi, through the network")], font_size=17)
+        def roll(x, w=5):
+            return np.array([np.median(x[max(0, i - w // 2): i + w // 2 + 1]) for i in range(len(x))])
+        l_he = VGroup(curve(ax, t, np.minimum(he, top), GREY_B, stroke_width=1).set_stroke(opacity=0.35),
+                      curve(ax, t, np.minimum(roll(he), top), GREY_B, stroke_width=3.5))
+        l_rb = VGroup(curve(ax, t, np.minimum(rb, top), NET, stroke_width=1).set_stroke(opacity=0.35),
+                      curve(ax, t, np.minimum(roll(rb), top), NET, stroke_width=3.5))
+        leg = legend([(GREY_B, r"Heston, refitted to the same quotes"), (NET, r"rough Bergomi, through the network"),
+                      (GREY_D, r"bold: 5-week rolling median; faint: each week")], font_size=17)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         better = float(np.mean(rb < he))
         ck = h["checks"]
