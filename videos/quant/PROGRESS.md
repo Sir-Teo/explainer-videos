@@ -180,7 +180,8 @@ Notes for whoever picks this up:
 - **PyTorch threads.** Train tiny networks with `torch.set_num_threads(1)`. With the renders running, the default
   thread pool made the race about 40x slower (more than an hour, against 25 s).
 - **System pip.** An earlier session ran pip against the system Python, which added several GB to its
-  site-packages. Removing them needs the user's go-ahead; the project venv is unaffected.
+  site-packages (a CUDA torch, transformers, chronos). With the user's go-ahead those packages were removed on
+  2 Nov 2026; the project venv is unaffected.
 - **Deferred to production.** The zero-shot foundation models (Chronos, TimesFM, Moirai) need packages outside the
   venv, and installing or importing external code needs approval. The race uses CPU models trained here.
 
