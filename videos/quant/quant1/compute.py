@@ -455,7 +455,9 @@ def compute_betting() -> dict:
     flips_to_win = rng.geometric(0.5, n_sessions)
     lose = flips_to_win > 10
     outcome = np.where(lose, -1023.0, 1.0)
-    path = np.cumsum(outcome[:3000])
+    # show 3,000 sessions starting just after a ruin, so the staircase builds before the next cliff
+    i0 = int(np.flatnonzero(lose)[0]) + 1
+    path = np.cumsum(outcome[i0:i0 + 3000])
     # random stopping rules on a fair walk: stop at +a or after n steps; the mean stays at zero
     rules = []
     for a in (1, 3, 10):
