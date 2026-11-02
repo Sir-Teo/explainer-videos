@@ -47,10 +47,11 @@ class Outro(VoiceoverScene):
         n0 = min(r["n"] for r in d["rows"])
         dg = r0[(n0, False)]["delta_rmse"] / r0[(n0, True)]["delta_rmse"]
         hi = h["band"]["rows"][-1]
+        floor = sum(r["H"] < 0.021 for r in ch["rows"]) / len(ch["rows"])
         items = [
             (r"a network learns Black--Scholes from prices, and hedges with it (HLP 1994)", NET),
             (rf"rough Bergomi calibrated in {c['surface']['seconds']:.0f} s through a network; checked by Monte Carlo", IV),
-            (rf"$H$ week by week: median {ch['H_median']:.2f} over 2024--2025", IV),
+            (rf"$H$ week by week: rougher than 0.02 in {100 * floor:.0f}\% of weeks; over two years, a near tie with Heston", IV),
             (rf"derivatives as labels: {dg:.0f} times better deltas from {n0} samples", GOOD),
             (rf"100 dimensions: the deep BSDE prices within {100 * b['rel_error']:.1f}\% of the reference", NET),
             (rf"deep stopping: {st['5']['lower']:.2f} for the five-asset max-call", NET),
@@ -68,7 +69,7 @@ class Outro(VoiceoverScene):
             rows.scale_to_fit_width(13.0)
         with self.voiceover(
             "Part seventeen in eight lines. A network can learn a pricing formula from prices. It can learn a model's "
-            "smile and calibrate it in seconds, every week. Derivatives make better labels than prices alone. Deep "
+            "smile and calibrate it in seconds, every week, which shows that one good day is not a model. Derivatives make better labels than prices alone. Deep "
             "networks price in a hundred dimensions and learn when to exercise. The deep hedger finds the no-trade "
             "band, and with costs it is far cheaper than hedging to delta every day. And neural models measure how "
             "much the vanillas leave an exotic's price undecided."

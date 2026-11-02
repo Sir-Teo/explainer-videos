@@ -39,23 +39,30 @@ class RoughHistory(VoiceoverScene):
         VGroup(g1, g2).arrange(DOWN, buff=0.5, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).shift(DOWN * 0.15)
         d1 = VGroup(*[Dot(g1.ax.c2p(a, b), radius=0.04, color=NET) for a, b in zip(t, H)])
         d2 = VGroup(*[Dot(g2.ax.c2p(a, b), radius=0.04, color=DELTA) for a, b in zip(t, rho)])
-        half = DashedLine(g1.ax.c2p(2024, 0.5), g1.ax.c2p(2026, 0.5), stroke_color=GREY_C, stroke_width=1.5)
+        half = DashedLine(g1.ax.c2p(2024, 0.02), g1.ax.c2p(2026, 0.02), stroke_color=BAD, stroke_width=1.5)
+        floor_lab = label(r"the lowest $H$ the network was trained on", font_size=15, color=BAD).next_to(
+            g1.ax.c2p(2026, 0.02), UP + LEFT, buff=0.08)
+        at_floor = float(np.mean(H < 0.021))
         zero = DashedLine(g2.ax.c2p(2024, 0), g2.ax.c2p(2026, 0), stroke_color=GREY_C, stroke_width=1)
         q = h["H_q"]
-        side = wrapped_label(rf"{len(rows)} weekly surfaces, each calibrated in about {h['seconds_median']:.0f} s. Median "
-                             rf"$H$ = {h['H_median']:.2f}; half the weeks between {q[1]:.2f} and {q[2]:.2f}; "
-                             rf"{100 * h['share_H_below_0_15']:.0f}\% below 0.15. The skew's correlation flips sign with the "
-                             r"market, as Heston's did in Part 13", 3.6, 19, GREY_A).to_edge(RIGHT, buff=0.4)
+        side = wrapped_label(rf"{len(rows)} weekly surfaces, each calibrated in about {h['seconds_median']:.0f} s. In "
+                             rf"{100 * at_floor:.0f}\% of weeks $H$ sits at 0.02, the edge of the network's training box: "
+                             r"the short-dated skew asks for something rougher still. Fresh Monte Carlo at those parameters "
+                             r"confirms the fits; the weekend rhythm of Part 14 reads as extra roughness. The correlation "
+                             r"changes sign with the market, as Heston's did in Part 13", 3.6, 18, GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(r"Deribit BTC options, Wednesdays 2024--2025 (Part 13's weekly surfaces), expiries to 200 days")
         with self.voiceover(
             "Part fourteen measured roughness on one day. Is it a property of the market or an accident of that day? "
             "With the network, calibrating rough Bergomi to every weekly surface of 2024 and 2025 takes minutes. "
-            f"<bookmark mark='a'/> Here is the Hurst exponent, week by week. Its median is {h['H_median']:.2f}, and in "
-            f"{100 * h['share_H_below_0_15']:.0f} percent of weeks it is below 0.15: rough, far from the one half of "
-            "a classical model. <bookmark mark='b'/> Below it, the correlation between price and volatility, which "
+            f"<bookmark mark='a'/> Here is the Hurst exponent, week by week. In {100 * at_floor:.0f} percent of weeks "
+            "it sits at 0.02, the lowest value the network was trained on: the market's short-dated skew asks for "
+            "something rougher still. Fresh simulation at those parameters confirms the fits, so this is the market, "
+            "not the network; and Part fourteen showed that bitcoin's quiet weekends read as extra roughness. A "
+            "production version would widen the training box. This is exactly the check of chapter eleven: know where "
+            "your network has been. <bookmark mark='b'/> Below it, the correlation between price and volatility, which "
             "changes sign with the market, as it did for Heston in Part thirteen."
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(src), Create(half))
+            self.play(FadeIn(g1), FadeIn(src), Create(half), FadeIn(floor_lab))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.02, run_time=2.5), FadeIn(side))
             vo.wait_until("b")
@@ -80,16 +87,18 @@ class RoughHistory(VoiceoverScene):
         better = float(np.mean(rb < he))
         ck = h["checks"]
         gap = float(np.median([abs(c["mc_rmse"] - c["net_rmse"]) for c in ck]))
-        side = wrapped_label(rf"median error {h['rmse_median']:.2f} against Heston's {h['heston_rmse_median']:.2f}; rough "
-                             rf"Bergomi fits better in {100 * better:.0f}\% of weeks, with the same number of parameters (five). Every tenth "
-                             rf"week re-checked by Monte Carlo at the network's parameters: the two errors differ by a median "
-                             rf"{gap:.2f} vol points", 4.2, 19, GREY_A).to_edge(RIGHT, buff=0.4)
+        side = wrapped_label(rf"Heston refitted to the same quotes each week, starting from Part 13's fit. Median errors "
+                             rf"{h['rmse_median']:.2f} and {h['heston_rmse_median']:.2f}; rough Bergomi ahead in "
+                             rf"{100 * better:.0f}\% of weeks, with the same number of parameters (five). On the Surface's "
+                             rf"single day the gap was wide (Part 14); over two years it is close to a tie. Every tenth week "
+                             rf"re-checked by Monte Carlo: the two errors differ by a median {gap:.2f} vol points", 4.2, 18,
+                             GREY_A).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "And the fit, week by week, against Heston's weekly fits from Part thirteen. "
-            f"<bookmark mark='a'/> Rough Bergomi's median error is {h['rmse_median']:.2f} vol points against Heston's "
-            f"{h['heston_rmse_median']:.2f}, and it fits better in {100 * better:.0f} percent of weeks, with the same "
-            "number of parameters. And the network is checked, not trusted: every tenth week is re-priced by fresh simulation "
-            "at its parameters."
+            "And the fit, week by week, against Heston refitted to the same quotes. "
+            f"<bookmark mark='a'/> The medians are {h['rmse_median']:.2f} and {h['heston_rmse_median']:.2f} vol points, "
+            f"and rough Bergomi is ahead in {100 * better:.0f} percent of weeks. On the single day of Part fourteen the "
+            "rough model won clearly; over two years, with the same number of parameters, it is close to a tie. One "
+            "good day is not a model, and only a fast calibrator could show it."
         ) as vo:
             self.play(FadeIn(g), Create(l_he), FadeIn(leg[0]))
             vo.wait_until("a")
