@@ -136,17 +136,17 @@ class Scale(VoiceoverScene):
                             for i, v in enumerate(w)])
 
         s_raw, s_scl = strip(sm(s), RAW, 0.6), strip(sm(s / math.sqrt(ds[-1])), Q, -2.0)
-        t_raw = label(rf"$d = {ds[-1]}$, \ no division: \ one key takes it all", font_size=22, color=RAW)
+        t_raw = label(rf"$d = {ds[-1]}$, \ no division: \ one key dominates", font_size=22, color=RAW)
         t_raw.next_to(s_raw, UP, buff=0.15).set_x(4.0)
         t_scl = label(r"divided by $\sqrt{d}$: \ spread out", font_size=22, color=Q).next_to(s_scl, UP, buff=0.15).set_x(4.0)
         tag = note(r"one random query, \ illustration").next_to(s_scl, DOWN, buff=0.15).set_x(4.0)
         with self.voiceover(
             "Why does the spread matter? Because the softmax turns differences of scores into ratios of weights, "
             "exponentially. <bookmark mark='a'/> Feed it scores that spread like the square root of d and it stops "
-            f"averaging: it picks one key and ignores the rest. Over {n} keys, the entropy of the weights, a "
+            f"averaging broadly: most weight concentrates on a few keys. Over {n} keys, the entropy of the weights, a "
             f"measure of how many keys share them, falls from {raw[0]:.1f} bits at d of {ds[0]} to {raw[-1]:.2f} "
             f"at {ds[-1]}. <bookmark mark='b'/> Divided by the square root of d, the weights stay spread out, "
-            f"{scl.min():.1f} bits at every size, just under the {mx:.0f} bits of a perfectly even share."
+            f"about {scl.min():.1f} to {scl.max():.1f} bits across these sizes, just under the {mx:.0f} bits of a perfectly even share."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(top), FadeIn(topl))
             vo.wait_until("a")
@@ -189,8 +189,8 @@ class Scale(VoiceoverScene):
             mk.add(VGroup(dt, label(txt, font_size=20, color=col).next_to(dt, UP, buff=0.12)))
         demo = saturating_softmax().move_to([3.4, -1.0, 0])
         demo_t = note(r"the same five scores, multiplied: \ illustration").next_to(demo, DOWN, buff=0.2)
-        sat = gloss(r"saturated", r"one weight near $1$: \ small changes to the scores \\ no longer move the weights, "
-                    r"so no gradient flows", width=5.2, color=RAW).to_corner(DL, buff=0.35)
+        sat = gloss(r"saturated", r"one weight near $1$: \ small changes to the scores \\ barely move the weights, "
+                    r"so this gradient path weakens", width=5.2, color=RAW).to_corner(DL, buff=0.35)
         jr = float(np.interp(math.log10(sd[-1]), np.log10(sig), jac))
         j1 = float(np.interp(0.0, np.log10(sig), jac))
         cite_ = cite(r"A.~Vaswani et al.\ (2017), \S3.2.1; \ G.~Yang et al., $\mu$P (2022)", corner=UR)
@@ -198,7 +198,7 @@ class Scale(VoiceoverScene):
             "There is a second cost, and it is worse. Training moves the scores by gradients, and those pass through "
             "the softmax's derivative. <bookmark mark='a'/> The derivative of weight i with respect to score j is p i "
             "times delta i j minus p j. <bookmark mark='b'/> When one weight is near one and the rest near zero, "
-            "every term has a factor near zero: the softmax is saturated, and the scores stop learning. "
+            "every term has a factor near zero: the softmax is nearly saturated, and this gradient path becomes weak. "
             f"<bookmark mark='c'/> How much the weights respond peaks when the scores spread by about "
             f"{sig[pk]:.0f}, and falls away on both sides. <bookmark mark='d'/> Scaled scores, with a spread of one, "
             f"respond at {j1:.2f}. Unscaled at d of {ds[-1]}, the response is {jr:.2f}, and it keeps falling as the "

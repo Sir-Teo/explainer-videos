@@ -9984,7 +9984,7 @@
     "rounding error": "舍入误差",
     "our transformer: \\ all $16$ heads, \\ layer norm folded in": "我们的Transformer：\\ 全部 $16$ 个头，\\ 已并入层归一化",
     "one head's $W_{QK}$: \\ $128 \\times 128$ numbers": "一个头的 $W_{QK}$：\\ $128 \\times 128$ 个数",
-    "nonzero directions: \\ at most $32$": "非零方向：\\ 至多 $32$ 个",
+    "nonzero directions: \\ at most $32$": "数值非零方向：\\ 至多 $32$",
     "$90\\%$ of a head's size: \\ $2$ to $16$ directions": "一个头九成（$90\\%$）的大小：\\ $2$ 到 $16$ 个方向",
     "a layer's $4$ heads together: \\ rank $127$": "一层的 $4$ 个头合起来：\\ 秩 $127$",
     "layer 1 of our transformer, \\ on a sentence of the passage": "我们Transformer的第1层，\\ 读测试段落里的一句话",
@@ -21211,7 +21211,60 @@
     "left: \\ seed $0$; \\ right: \\ two seeds per width \\\\ right plot omits fully learned runs": "左：\\ 种子$0$；\\ 右：\\ 每个宽度两个种子 \\\\ 右图省略已学会全部任务的训练结果",
     "fitted on $28$ cheap runs \\\\ of our $49$-run fit cohort \\\\ (up to $3 \\times 10^{12}$ operations)": "用较便宜的$28$次训练拟合 \\\\ 来自我们的$49$次拟合样本 \\\\ （最多$3 \\times 10^{12}$次运算）",
     "Fit the law on cheaper runs in our fit cohort and predict runs ten times costlier. \\ Will it miss by a hundredth of a bit, \\ a tenth, \\ or more?": "用我们拟合样本中较便宜的训练拟合定律，预测贵十倍的训练。\\ 误差会是百分之一比特、\\ 十分之一，\\ 还是更多？",
-    "quanta: \\ tasks \\\\ white: weighted mean": "量子：\\ 子任务 \\\\ 白色：加权均值"
+    "quanta: \\ tasks \\\\ white: weighted mean": "量子：\\ 子任务 \\\\ 白色：加权均值",
+    "rank ($0$ first)": "名次（从 $0$ 开始）",
+    "fixed depth, $O(\\log n)$-bit numbers on length-$n$ inputs, and log-space-computable embedding, similarity and activation operations: polynomial-size, constant-depth threshold circuits suffice": "深度固定，在长度为 $n$ 的输入上数值使用 $O(\\log n)$ 比特，嵌入、相似度和激活运算可在对数空间中计算：可用多项式规模、常数深度的阈值电路模拟",
+    "no such fixed-depth transformer tracks the composition of permutations \\\\ of five things at every length \\ (Merrill, Petty \\& Sabharwal 2024; \\ Barrington 1989)": "上述形式模型的固定深度Transformer不能在任意长度上 \\\\ 追踪五个物体的置换复合（Merrill、Petty和Sabharwal，2024；Barrington，1989）",
+    "RASP-L hypothesis, Zhou et al.\\ (2023): \\ a conjecture \\\\ short causal all-length program; training to completion; \\\\ diverse data rule out shorter spurious programs": "RASP-L假说，Zhou等（2023）：一个猜想 \\\\ 简短的因果程序解决任意长度；训练完成； \\\\ 多样数据排除更短却会失效的程序",
+    "held-out novels \\\\ first $60{,}000$ source characters \\\\ $59{,}904$ scored targets": "留出小说 \\\\ 前 $60{,}000$ 个源字符 \\\\ 评分 $59{,}904$ 个目标位置",
+    "passage \\\\ targets $1$--$21{,}376$ \\\\ $21{,}376$ scored targets": "测试段落 \\\\ 目标位置 $1$--$21{,}376$ \\\\ 评分 $21{,}376$ 个目标位置",
+    "target indices are zero-based and inclusive": "目标下标从零开始，两端都包含",
+    "Part 1: historical reports \\\\ mixed metrics and coverage": "第1部分：历史报告 \\\\ 指标和覆盖范围不同",
+    "Selected reports by target coverage": "部分历史报告：按目标覆盖范围分组",
+    "Part 13: our transformer": "第13部分：我们的Transformer",
+    "Part 7: Kneser--Ney": "第7部分：Kneser--Ney",
+    "Part 9: neural and mixture": "第9部分：神经模型及混合模型",
+    "targets $1$--$21{,}376$; $21{,}376$ scored": "目标位置 $1$--$21{,}376$；评分 $21{,}376$ 个",
+    "targets $7$--$21{,}405$; $21{,}399$ scored": "目标位置 $7$--$21{,}405$；评分 $21{,}399$ 个",
+    "targets $24$--$21{,}405$; $21{,}382$ scored": "目标位置 $24$--$21{,}405$；评分 $21{,}382$ 个",
+    "target indices: zero-based, inclusive; different contexts \\\\ no common-target ranking": "目标下标从零开始，两端都包含；上下文不同 \\\\ 不作共同目标位置上的排名",
+    "$25$ million training positions": "$25$ 百万个训练目标位置",
+    "bits/character": "比特/字符",
+    "neural": "神经模型",
+    "neural $+$ KN": "神经模型 $+$ KN",
+    "one softmax step \\\\ $\\beta = 0.25$; sign readout": "一步softmax \\\\ $\\beta = 0.25$；符号读出",
+    "sign readout": "符号读出",
+    "continuous overlap with the cued pattern": "与目标模式的连续重叠度",
+    "one weight near $1$: \\ small changes to the scores \\\\ barely move the weights, so this gradient path weakens": "一个权重接近 $1$：\\ 分数的小变化 \\\\ 几乎不改变权重，\\ 因而这条梯度通路变弱",
+    "$e^{-m (i - j)}$: \\ distance multiplier on unnormalized weights": "$e^{-m (i - j)}$：\\ 距离对未归一化权重的乘数",
+    "equal pair energy: $\\frac{1}{16}\\sum_j\\cos(r\\theta_j)$ \\\\ normalized at distance $0$; smoothed over nearby distances": "每对能量相同：$\\frac{1}{16}\\sum_j\\cos(r\\theta_j)$ \\\\ 在距离 $0$ 归一化；对邻近距离平滑",
+    "fixed pre-RoPE $q,k$: \\\\ the position factor depends on the signed offset $n - m$": "固定RoPE之前的 $q,k$：\\\\ 位置因子取决于带符号的位移 $n - m$",
+    "phases can cancel \\\\ the reference oscillates; \\\\ learned pairs can \\\\ carry different weights": "相位可以抵消 \\\\ 参考曲线会振荡；\\\\ 学到的各对可以 \\\\ 带有不同权重",
+    "our transformer: \\ each pair's mean normalized squared Q/K size \\\\ (all $16$ heads, \\ held-out text)": "我们的Transformer：\\ 每对Q/K归一化平方大小的平均份额 \\\\ （全部 $16$ 个头，\\ 留出文本）",
+    "fixed pre-RoPE $q,k$: \\\\ positional factor uses signed offset $n-m$": "固定RoPE之前的$q,k$：\\\\ 位置因子只用带符号的相对位移$n-m$",
+    "$x$: \\ normalized input \\\\ before RoPE and score scaling": "$x$：\\ 归一化后的输入 \\\\ 在RoPE和分数缩放之前",
+    "matrix FLOPs per character, \\ one forward pass, \\ PyTorch counter convention": "每字符矩阵FLOP数，\\ 一次前向传播，\\ 按PyTorch计数口径",
+    "share of modeled matrix arithmetic": "矩阵运算模型中的占比",
+    "nonzero query/key RMS; bounded gains": "查询和键的RMS非零；增益有界",
+    "Cauchy--Schwarz; \\ $|g_q|,|g_k| \\le g$": "柯西—施瓦茨；\\ $|g_q|,|g_k| \\le g$",
+    "our transformer: \\ $16$ held-out windows; all $W_Q,W_K$ scaled \\\\ fixed-input $c^2$ identity; charts rerun the full network": "我们的Transformer：\\ $16$ 个留出窗口；缩放所有 $W_Q,W_K$ \\\\ $c^2$ 恒等式固定层输入；图中重跑完整网络",
+    "training-batch mean squared error": "训练批次的均方误差",
+    "linear association between predictions: \\\\ $1$: a perfect positive line, $0$: zero linear correlation": "预测之间的线性关联：\\\\ $1$：完全正线性相关，$0$：零线性相关",
+    "mean squared error on $4{,}000$ evaluation prompts": "在 $4{,}000$ 个评估提示上的均方误差",
+    "no other pair group: \\ all pairs selected": "没有其他头对组：\\ 全部头对已选中",
+    "sampled windows: \\ mean first-character weight, queries $64$--$255$": "采样窗口：\\ 查询 $64$--$255$ 对第一个字符的平均权重",
+    "start-marker coefficient \\ (differential: signed), \\\\ dormant positions; \\ three seeds each": "起始标记系数\\ （差分：有符号），\\\\ 休眠位置；\\ 各三个种子",
+    "at the end: \\ start-marker coefficient; \\ copy bits, \\ noncopy bits": "终点：\\ 起始标记系数；\\ 复制比特，\\ 非复制比特",
+    "matrix alignment, not copying probability or causal evidence": "矩阵对齐，不是复制概率或因果证据",
+    "pre-RoPE matrix alignment, \\\\ above Gaussian mean; LN gain/centering folded in": "RoPE之前的矩阵对齐，\\\\ 高于高斯均值；折入LN增益与去均值",
+    "layer 2: \\ selected repeat-probe head": "第2层：\\ 选定的重复探针头",
+    "reference stripe: \\ known source-successor positions": "参考斜纹：\\ 已知来源的后继位置",
+    "layer 1, \\ selected previous-position head": "第1层：\\ 选定的前一位置头",
+    "corrected display stripe, \\ queries $60$--$78$": "修正的显示斜纹，\\ 查询 $60$--$78$",
+    "Gaussian draws: mean $\\pm$ SD": "高斯抽样：均值 $\\pm$ 标准差",
+    "bits per character, \\ $16$ held-out prefixes of $128$ targets": "每字符比特，\\ $16$ 个留出前缀，每个 $128$ 个目标",
+    "uniform-attention illustration: \\ marked first-token share $1/t$": "均匀注意力示意：\\ 有标记的首词元份额 $1/t$",
+    "two extrapolation illustrations, \\ not inferred mechanisms": "两种外推示意，\\ 不是推断出的机制"
   },
   "phrases": {
     "width": "宽度",
@@ -23608,6 +23661,86 @@
     [
       "^AdamW,\\ \\\\\\ \\$\\\\eta\\ =\\ ([^$]+)\\$;\\ \\\\\\ curves:\\ seed\\ \\$0\\$,\\ first\\ \\$20\\{,\\}000\\$\\ held\\-out\\ predictions\\ \\\\\\\\\\ losses\\ shown\\ from\\ step\\ \\$500\\$;\\ earlier\\ values\\ omitted$",
       "AdamW，\\\\ $\\\\eta = \\g<1>$；\\\\ 曲线：种子$0$，前$20{,}000$个留出字符预测 \\\\\\\\ 仅显示第$500$步起的损失；省略更早的值"
+    ],
+    [
+      "^sorted\\ \\$(\\d+(?:\\{,\\}\\d{3})*)\\$\\ of\\ \\$(\\d+(?:\\{,\\}\\d{3})*)\\$\\ random\\ inputs\\ \\\\\\\\\\ with\\ no\\ repeated\\ tokens$",
+      "排对 $\\g<1>$ 个，共 $\\g<2>$ 个随机输入 \\\\\\\\ 词元互不重复"
+    ],
+    [
+      "^final\\ validation:\\ \\$(\\d+\\.\\d{2})\\$\\ bits\\ \\\\\\\\\\ first\\ \\$400\\{,\\}000\\$\\ source\\ characters\\ \\\\\\\\\\ \\$399\\{,\\}872\\$\\ scored\\ targets$",
+      "最终验证：$\\g<1>$ 比特 \\\\\\\\ 前 $400{,}000$ 个源字符 \\\\\\\\ 评分 $399{,}872$ 个目标位置"
+    ],
+    [
+      "^our\\ transformer:\\ \\\\\\ \\$(\\d+\\.\\d{2})\\$\\ bits\\ \\\\\\\\\\ \\$21\\{,\\}376\\$\\ scored\\ targets$",
+      "我们的Transformer：\\\\ $\\g<1>$ 比特 \\\\\\\\ 评分 $21{,}376$ 个目标位置"
+    ],
+    [
+      "^\\$d\\ =\\ (\\d+)\\$,\\ \\\\\\ no\\ division:\\ \\\\\\ one\\ key\\ dominates$",
+      "$d = \\g<1>$，\\\\ 不除以根号d：\\\\ 一个键占主导"
+    ],
+    [
+      "^one\\ random\\ \\$32\\$\\-number\\ pair,\\ positions\\ \\$0\\$\\-\\-\\$39\\$:\\ \\\\\\ off\\ by\\ at\\ most\\ \\$([^$]+)\\$$",
+      "一对随机的 $32$ 维向量，位置 $0$--$39$：\\\\ 最大偏差 $\\g<1>$"
+    ],
+    [
+      "^our\\ transformer:\\ \\\\\\ all\\ \\$(.+?)\\$\\ heads\\ \\\\\\\\\\ pre\\-RoPE\\ linear\\ factors;\\ \\\\\\ LN\\ gain\\ and\\ centring\\ only$",
+      "我们的Transformer：\\\\ 全部 $\\g<1>$ 个头 \\\\\\\\ RoPE之前的线性因子；\\\\ 仅并入LN增益和去均值"
+    ],
+    [
+      "^nonzero\\ directions:\\ \\\\\\ at\\ most\\ \\$(.+?)\\$$",
+      "数值非零方向：\\\\ 至多 $\\g<1>$"
+    ],
+    [
+      "^\\$90\\\\%\\$\\ of\\ squared\\ size:\\ \\\\\\ \\$(.+?)\\$\\ to\\ \\$(.+?)\\$\\ directions$",
+      "平方大小的 $90\\\\%$：\\\\ $\\g<1>$ 到 $\\g<2>$ 个方向"
+    ],
+    [
+      "^sum\\ of\\ a\\ layer's\\ \\$(.+?)\\$\\ QK\\ maps:\\ \\\\\\ min\\ rank\\ \\$(.+?)\\$$",
+      "每层 $\\g<1>$ 个QK矩阵之和：\\\\ 最小秩 $\\g<2>$"
+    ],
+    [
+      "^max\\ raw\\-logit\\ change\\ at\\ \\$1\\$\\-\\-\\$64\\$:\\ \\\\\\ \\$(.+?)\\$$",
+      "第 $1$--$64$ 个位置的原始logit绝对变化最大值：\\\\ $\\g<1>$"
+    ],
+    [
+      "^at\\ \\$65\\$\\-\\-\\$128\\$:\\ \\\\\\ max\\ raw\\-logit\\ change\\ \\$(.+?)\\$$",
+      "第 $65$--$128$ 个位置：\\\\ 原始logit绝对变化最大值 $\\g<1>$"
+    ],
+    [
+      "^no\\ mask\\ or\\ rotations:\\ \\\\\\ max\\ change\\ at\\ \\$1\\$\\-\\-\\$64\\$:\\ \\$(.+?)\\$$",
+      "同时去掉掩码和位置旋转：\\\\ 第 $1$--$64$ 个位置的绝对变化最大值 $\\g<1>$"
+    ],
+    [
+      "^our\\ transformer,\\ mask\\ and\\ rotations\\ removed,\\ \\\\\\\\\\ \\$128\\$\\ characters\\ shuffled:\\ \\\\\\\\\\ raw\\ logits\\ agree\\ to\\ \\$(.+?)\\$\\ \\\\\\ \\(of\\ values\\ up\\ to\\ \\$(.+?)\\$\\)$",
+      "我们的Transformer，同时去掉掩码和位置旋转，\\\\\\\\ 打乱 $128$ 个字符：\\\\\\\\ 原始logit的差不超过 $\\g<1>$ \\\\ （logit绝对值最大约 $\\g<2>$）"
+    ],
+    [
+      "^correlation\\ on\\ \\$4\\{,\\}000\\$\\ prompts:\\ \\\\\\ \\$(\\d+\\.\\d{3})\\$$",
+      "在 $4{,}000$ 个提示上的相关系数：\\\\ $\\g<1>$"
+    ],
+    [
+      "^\\$(\\d+)\\$\\ saved\\ questions\\ shown\\ \\\\\\\\\\ GD\\ step\\ size:\\ best\\ of\\ \\$59\\$\\ \\\\\\\\\\ on\\ the\\ same\\ \\$4\\{,\\}000\\$\\ evaluation\\ prompts$",
+      "$\\g<1>$ 个已保存问题 \\\\\\\\ GD步长：$59$ 个候选中最优 \\\\\\\\ 在同一批 $4{,}000$ 个评估提示上选择"
+    ],
+    [
+      "^final\\ mean\\ value\\ norm:\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\\\times\\$\\ the\\ other\\ mean\\ norm$",
+      "终点平均值范数：\\\\ 其他位置平均范数的 $\\g<1>\\\\times$"
+    ],
+    [
+      "^means\\ over\\ pairs;\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ previous\\-token\\ and\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ induction\\ heads;\\ \\\\\\\\\\ first\\ seed;\\ final\\-score\\-selected\\ pairs,\\ \\\\\\ every\\ ([-+]?\\d+(?:\\.\\d+)?)\\ steps$",
+      "头对均值；\\\\ $\\g<1>$ 个前一词元候选与 $\\g<2>$ 个归纳候选；\\\\\\\\ 第一种子，按最终分数选择，\\\\ 每\\g<3>步"
+    ],
+    [
+      "^toy\\ probe:\\ \\\\\\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\\\%\\$\\ earliest\\-match\\ successor\\ weight$",
+      "玩具探针：\\\\\\\\ 最早匹配位置的后继权重 $\\g<1>\\\\%$"
+    ],
+    [
+      "^the\\ same\\ model:\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ layers,\\ \\\\\\ width\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$,\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ heads\\ per\\ layer$",
+      "相同模型：\\\\ $\\g<1>$ 层，\\\\ 宽度 $\\g<2>$，\\\\ 每层 $\\g<3>$ 个头"
+    ],
+    [
+      "^\\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ seeds\\ each:\\ \\\\\\ lines\\ are\\ means,\\ \\\\\\\\\\ bands\\ the\\ min\\-\\-max\\ range$",
+      "每种 $\\g<1>$ 个种子：\\\\ 线是均值，\\\\\\\\ 带是最小—最大范围"
     ]
   ]
 }

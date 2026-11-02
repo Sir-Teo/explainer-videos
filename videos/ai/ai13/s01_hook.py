@@ -33,10 +33,10 @@ class Hook(VoiceoverScene):
         picks = [i for i in (14, 22, 30, 41, 50, 58, 63) if i < n and snip[i] != " "]
         with self.voiceover(
             "This is a transformer reading. It's ours: we trained it on this series' thirty novels, and it's "
-            "reading a sentence from the scoreboard's passage, which it has never seen. <bookmark mark='a'/> To "
+            "reading a sentence from the scoreboard's passage, which was excluded from gradient training. <bookmark mark='a'/> To "
             "guess each next character, every character looks back at the characters before it and decides how "
             "much each one matters. The thicker the arc, the more it looks. <bookmark mark='b'/> That look is "
-            "called attention, and it is the engine of every large language model today."
+            "called attention, and it powers many large language models today."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c_) for c_ in row], lag_ratio=0.01), run_time=1.5)
             self.play(FadeIn(tag))

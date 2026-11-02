@@ -45,14 +45,14 @@ class Caps(VoiceoverScene):
         b_lo, b_hi = float(np.floor(bits.min() * 2) / 2), float(np.ceil(bits.max() * 2) / 2 + 0.5)
         g2, l2 = self.plot(q, "bits", r"bits per character", b_lo, b_hi, [3.4, -0.3, 0], [b_lo, b_hi], fmt="{:.1f}")
         eq = cmath(r"s", r"=", r"\frac{(c\, W_Q x)\cdot(c\, W_K y)}{\sqrt{d}}", r"=", r"c^2 s_0", font_size=34).to_edge(UP, buff=0.5)
-        tag = note(r"our transformer, \ $16$ windows of held-out text; \ every head's $W_Q$ and $W_K$ scaled").to_edge(DOWN, buff=0.2)
+        tag = note(r"our transformer: \ $16$ held-out windows; all $W_Q,W_K$ scaled \\ fixed-input $c^2$ identity; charts rerun the full network").to_edge(DOWN, buff=0.2)
         hist = label(r"Dehghani et al.\ (2023), ViT-22B: \ attention logits grew without bound, \ and training "
                      r"diverged", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.25)
         i2 = int(np.argmin(np.abs(cs - 2.0)))
         with self.voiceover(
             "Chapter three divided by the square root of d to keep scores in range at the start. But training can "
             "grow the weights, and a score is a product of two of them: <bookmark mark='a'/> grow W Q and W K by a "
-            "factor c, and every score grows by c squared. <bookmark mark='b'/> Here is what that does to our own "
+            "factor c with the layer input held fixed, and its scores grow by c squared. <bookmark mark='b'/> The charts rerun the full network, whose later hidden states can change. Here is the result for our own "
             f"transformer. At c of 2, the largest score goes from {lg[0]:.0f} to {lg[i2]:.0f}, the attention's "
             f"entropy falls from {ent[0]:.1f} bits to {ent[i2]:.1f}, and the share of rows where one key takes "
             f"over ninety percent of the weight goes from {pk[0]:.0%} to {pk[i2]:.0%}. <bookmark mark='c'/> And the "
@@ -84,8 +84,8 @@ class Caps(VoiceoverScene):
             cmath(r"\frac{|\hat q \cdot \hat k|}{\sqrt d}", r"\le", r"\frac{\|\hat q\|\,\|\hat k\|}{\sqrt d} \le g^2 \sqrt{d}",
                   font_size=32),
         ]
-        whys = [why(r"normalize each head's query and key", font_size=20), why(r"$\operatorname{rms}(q) = \|q\|/\sqrt d$", font_size=20),
-                why(r"Cauchy--Schwarz; \ $g$ the largest gain", font_size=20)]
+        whys = [why(r"nonzero query/key RMS; bounded gains", font_size=20), why(r"$\operatorname{rms}(q) = \|q\|/\sqrt d$", font_size=20),
+                why(r"Cauchy--Schwarz; \ $|g_q|,|g_k| \le g$", font_size=20)]
         step = ladder(self, rows, whys, keep=3, top=3.15, x=-2.2, buff=0.5, edge=6.9)
         ent = np.asarray(q["ent_norm"], float)
         eh = float(np.ceil(np.asarray(q["ent_plain"]).max() + 0.5))
@@ -105,20 +105,20 @@ class Caps(VoiceoverScene):
         b0, bn = float(np.asarray(q["bits_plain"])[0]), float(np.asarray(q["bits_norm"])[0])
         if flat < 1e-3:
             moves = ("On our transformer, with its queries and keys normalized to their trained sizes, growing the "
-                     "weights now changes nothing at all.")
+                     "weights leaves the measured attention entropy nearly unchanged.")
         else:
             moves = (f"On our transformer, with its queries and keys normalized to their trained sizes, growing the "
                      f"weights now moves the entropy by only {flat:.3f} bits.")
         cost = (f"But bolted onto a model that was trained without it, it costs {bn - b0:.2f} bits a character, "
-                f"{bn:.2f} against {b0:.2f}: our model had learned to use the sizes of its queries, so QK-norm has to "
-                "be there from the start of training." if bn > b0 + 0.05 else
+                f"{bn:.2f} against {b0:.2f}. This fixed-weight intervention changes learned behavior; training or adaptation with QK-norm is "
+                "a separate experiment." if bn > b0 + 0.05 else
                 "Bolted onto a model trained without it, it costs almost nothing here.")
         with self.voiceover(
             "The fix the vision team used, and many language models since, is QK-norm. <bookmark mark='a'/> Before "
             "the dot product, divide each head's query and key by their root-mean-square size, then multiply by a "
-            "learned gain. <bookmark mark='b'/> A vector divided by its root mean square has length exactly the "
-            "square root of d, <bookmark mark='c'/> so by Cauchy-Schwarz the score can never exceed the gains "
-            "squared times the square root of d, however large W Q and W K become. <bookmark mark='d'/> "
+            "learned gain. <bookmark mark='b'/> For nonzero query and key RMS, a vector divided by its root mean square has length exactly the "
+            "square root of d. <bookmark mark='c'/> If the absolute gains stay bounded by g, Cauchy-Schwarz bounds the score magnitude by g "
+            "squared times the square root of d, even as W Q and W K grow. <bookmark mark='d'/> "
             + moves + " <bookmark mark='e'/> " + cost + " <bookmark mark='f'/> Qwen3, GLM-4.5 and Gemma 3 all use it; Part 18 watches the "
             "logits in training, with and without it."
         ) as vo:
@@ -168,7 +168,7 @@ class Caps(VoiceoverScene):
         elif bits_c[-1] > bits_p[-1] + 0.05:
             bt = (f"But the guesses get worse, not better: {bits_c[-1]:.2f} bits a character at c of {cs[-1]:.0f}, "
                   f"against {bits_p[-1]:.2f} uncapped. With every large score flattened onto the cap, a head can no "
-                  "longer tell its best keys apart: a cap must sit well above the scores a model actually uses. ")
+                  "longer preserve those score differences. This fixed-weight test does not choose a cap for a model trained with one. ")
         else:
             bt = f"The bits per character suffer about as much, {bits_c[-1]:.2f}. "
         et = (f"the entropy falls only to {ent_c[-1]:.1f} bits instead of {ent_p[-1]:.1f}" if ent_c[-1] > ent_p[-1] + 0.1
@@ -179,7 +179,7 @@ class Caps(VoiceoverScene):
             f"<bookmark mark='b'/> Set c just above our trained model's largest score, {capv:.0f}, and grow the "
             f"weights again: the scores can no longer pass {capv:.0f}, and {et}. <bookmark mark='d'/> " + bt
             + "<bookmark mark='c'/> Gemma 2 capped its attention scores at fifty in 2024; Gemma 3 dropped the cap "
-            "for QK-norm, which bounds the scores without bending them."
+            "for QK-norm, which controls query and key scale before the dot product."
         ) as vo:
             self.play(FadeIn(g), FadeIn(eq), Create(idl))
             vo.wait_until("a")

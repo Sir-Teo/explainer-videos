@@ -68,7 +68,7 @@ class Cost(VoiceoverScene):
             "<bookmark mark='d'/> Add the table that turns characters into vectors and the one that turns vectors "
             f"back into guesses. <bookmark mark='e'/> For ours, with d of {d}, {L} blocks and {K} characters, the "
             f"formula gives {fml:,}, and counting the model's parameters one by one gives {tot:,}. "
-            f"<bookmark mark='f'/> Attention is {att_share:.0%} of each block; the MLP holds the rest."
+            f"<bookmark mark='f'/> Among the attention and MLP parameters, attention is {att_share:.0%}; the MLP holds the rest."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -118,14 +118,14 @@ class Cost(VoiceoverScene):
                            MathTex(f"{kap[j]:,.0f}".replace(",", "{,}"), font_size=24, color=GREY_B).move_to([xs[3], y, 0])))
         exact = bool(np.allclose(meas, form, rtol=1e-6))
         match = "They match the formula exactly." if exact else "They match the formula to within a fraction of a percent."
-        cap = note(r"floating-point operations per character, \ one forward pass, \ counted by PyTorch").to_corner(DL, buff=0.25)
+        cap = note(r"matrix FLOPs per character, \ one forward pass, \ PyTorch counter convention").to_corner(DL, buff=0.25)
         ratio = tr / meas[i256]
         with self.voiceover(
-            "Now the arithmetic for each character. <bookmark mark='a'/> Every weight is used once per character, "
+            "Now the arithmetic for each character. We use the matrix-FLOP counter convention, which leaves out normalization, activation and softmax arithmetic. <bookmark mark='a'/> Every matrix weight is used once per character, "
             "for one multiplication and one addition: two operations per weight. <bookmark mark='b'/> Attention "
             "adds work that no weight accounts for: the query against T keys, d numbers each, and the weighted sum "
             "of T values. <bookmark mark='c'/> Together, per character. <bookmark mark='d'/> We counted the "
-            "operations of a real forward pass with PyTorch's counter, for contexts from "
+            "registered matrix operations of a real forward pass with PyTorch's counter, for contexts from "
             f"{Ts[0]} to {Ts[-1]:,} characters. "
             + match + " Jared Kaplan and colleagues' version counts only half the square, because the causal mask throws "
             "the other half away; kernels that skip the masked half really do save it. <bookmark mark='e'/> Training "
@@ -155,7 +155,7 @@ class Cost(VoiceoverScene):
         Ts = [int(v) for v in h["Ts"]]
         meas = np.asarray(h["flops_per_token"], float)
         g = axes([1, 5, 1], [0, 1.0, 0.25], x_length=7.0, y_length=4.0, xlabel=r"context length $T$, \ characters",
-                 ylabel=r"share of each character's arithmetic", xticks=[], yticks=[0, 0.5, 1],
+                 ylabel=r"share of modeled matrix arithmetic", xticks=[], yticks=[0, 0.5, 1],
                  yfmt=lambda v: f"{100 * v:.0f}\\%", center=[-2.4, -0.35, 0])
         ax = g.ax
         for e in (1, 2, 3, 4, 5):

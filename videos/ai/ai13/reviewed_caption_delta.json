@@ -1,0 +1,525 @@
+{
+  "status": "UNAPPLIED narrowly scoped shared-caption proposal; parent integrates serially",
+  "target": "videos/ai/ai_text_zh.json",
+  "operations": [
+    {
+      "table": "strings",
+      "key": "rank ($0$ first)",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "名次（从 $0$ 开始）"
+    },
+    {
+      "table": "strings",
+      "key": "fixed depth, $O(\\log n)$-bit numbers on length-$n$ inputs, and log-space-computable embedding, similarity and activation operations: polynomial-size, constant-depth threshold circuits suffice",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "深度固定，在长度为 $n$ 的输入上数值使用 $O(\\log n)$ 比特，嵌入、相似度和激活运算可在对数空间中计算：可用多项式规模、常数深度的阈值电路模拟"
+    },
+    {
+      "table": "strings",
+      "key": "no such fixed-depth transformer tracks the composition of permutations \\\\ of five things at every length \\ (Merrill, Petty \\& Sabharwal 2024; \\ Barrington 1989)",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "上述形式模型的固定深度Transformer不能在任意长度上 \\\\ 追踪五个物体的置换复合（Merrill、Petty和Sabharwal，2024；Barrington，1989）"
+    },
+    {
+      "table": "strings",
+      "key": "RASP-L hypothesis, Zhou et al.\\ (2023): \\ a conjecture \\\\ short causal all-length program; training to completion; \\\\ diverse data rule out shorter spurious programs",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "RASP-L假说，Zhou等（2023）：一个猜想 \\\\ 简短的因果程序解决任意长度；训练完成； \\\\ 多样数据排除更短却会失效的程序"
+    },
+    {
+      "table": "strings",
+      "key": "held-out novels \\\\ first $60{,}000$ source characters \\\\ $59{,}904$ scored targets",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "留出小说 \\\\ 前 $60{,}000$ 个源字符 \\\\ 评分 $59{,}904$ 个目标位置"
+    },
+    {
+      "table": "strings",
+      "key": "passage \\\\ targets $1$--$21{,}376$ \\\\ $21{,}376$ scored targets",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "测试段落 \\\\ 目标位置 $1$--$21{,}376$ \\\\ 评分 $21{,}376$ 个目标位置"
+    },
+    {
+      "table": "strings",
+      "key": "target indices are zero-based and inclusive",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "目标下标从零开始，两端都包含"
+    },
+    {
+      "table": "strings",
+      "key": "Part 1: historical reports \\\\ mixed metrics and coverage",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "第1部分：历史报告 \\\\ 指标和覆盖范围不同"
+    },
+    {
+      "table": "strings",
+      "key": "Selected reports by target coverage",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "部分历史报告：按目标覆盖范围分组"
+    },
+    {
+      "table": "strings",
+      "key": "Part 13: our transformer",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "第13部分：我们的Transformer"
+    },
+    {
+      "table": "strings",
+      "key": "Part 7: Kneser--Ney",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "第7部分：Kneser--Ney"
+    },
+    {
+      "table": "strings",
+      "key": "Part 9: neural and mixture",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "第9部分：神经模型及混合模型"
+    },
+    {
+      "table": "strings",
+      "key": "targets $1$--$21{,}376$; $21{,}376$ scored",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "目标位置 $1$--$21{,}376$；评分 $21{,}376$ 个"
+    },
+    {
+      "table": "strings",
+      "key": "targets $7$--$21{,}405$; $21{,}399$ scored",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "目标位置 $7$--$21{,}405$；评分 $21{,}399$ 个"
+    },
+    {
+      "table": "strings",
+      "key": "targets $24$--$21{,}405$; $21{,}382$ scored",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "目标位置 $24$--$21{,}405$；评分 $21{,}382$ 个"
+    },
+    {
+      "table": "strings",
+      "key": "target indices: zero-based, inclusive; different contexts \\\\ no common-target ranking",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "目标下标从零开始，两端都包含；上下文不同 \\\\ 不作共同目标位置上的排名"
+    },
+    {
+      "table": "strings",
+      "key": "$25$ million training positions",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "$25$ 百万个训练目标位置"
+    },
+    {
+      "table": "strings",
+      "key": "bits/character",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "比特/字符"
+    },
+    {
+      "table": "strings",
+      "key": "neural",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "神经模型"
+    },
+    {
+      "table": "strings",
+      "key": "neural $+$ KN",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "神经模型 $+$ KN"
+    },
+    {
+      "table": "strings",
+      "key": "one softmax step \\\\ $\\beta = 0.25$; sign readout",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "一步softmax \\\\ $\\beta = 0.25$；符号读出"
+    },
+    {
+      "table": "strings",
+      "key": "sign readout",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "符号读出"
+    },
+    {
+      "table": "strings",
+      "key": "continuous overlap with the cued pattern",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "与目标模式的连续重叠度"
+    },
+    {
+      "table": "strings",
+      "key": "one weight near $1$: \\ small changes to the scores \\\\ barely move the weights, so this gradient path weakens",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "一个权重接近 $1$：\\ 分数的小变化 \\\\ 几乎不改变权重，\\ 因而这条梯度通路变弱"
+    },
+    {
+      "table": "strings",
+      "key": "$e^{-m (i - j)}$: \\ distance multiplier on unnormalized weights",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "$e^{-m (i - j)}$：\\ 距离对未归一化权重的乘数"
+    },
+    {
+      "table": "strings",
+      "key": "equal pair energy: $\\frac{1}{16}\\sum_j\\cos(r\\theta_j)$ \\\\ normalized at distance $0$; smoothed over nearby distances",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "每对能量相同：$\\frac{1}{16}\\sum_j\\cos(r\\theta_j)$ \\\\ 在距离 $0$ 归一化；对邻近距离平滑"
+    },
+    {
+      "table": "strings",
+      "key": "fixed pre-RoPE $q,k$: \\\\ the position factor depends on the signed offset $n - m$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "固定RoPE之前的 $q,k$：\\\\ 位置因子取决于带符号的位移 $n - m$"
+    },
+    {
+      "table": "strings",
+      "key": "phases can cancel \\\\ the reference oscillates; \\\\ learned pairs can \\\\ carry different weights",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "相位可以抵消 \\\\ 参考曲线会振荡；\\\\ 学到的各对可以 \\\\ 带有不同权重"
+    },
+    {
+      "table": "strings",
+      "key": "our transformer: \\ each pair's mean normalized squared Q/K size \\\\ (all $16$ heads, \\ held-out text)",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "我们的Transformer：\\ 每对Q/K归一化平方大小的平均份额 \\\\ （全部 $16$ 个头，\\ 留出文本）"
+    },
+    {
+      "table": "strings",
+      "key": "fixed pre-RoPE $q,k$: \\\\ positional factor uses signed offset $n-m$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "固定RoPE之前的$q,k$：\\\\ 位置因子只用带符号的相对位移$n-m$"
+    },
+    {
+      "table": "strings",
+      "key": "$x$: \\ normalized input \\\\ before RoPE and score scaling",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "$x$：\\ 归一化后的输入 \\\\ 在RoPE和分数缩放之前"
+    },
+    {
+      "table": "strings",
+      "key": "nonzero directions: \\ at most $32$",
+      "operation": "replace",
+      "expected_before": "非零方向：\\ 至多 $32$ 个",
+      "value": "数值非零方向：\\ 至多 $32$"
+    },
+    {
+      "table": "strings",
+      "key": "matrix FLOPs per character, \\ one forward pass, \\ PyTorch counter convention",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "每字符矩阵FLOP数，\\ 一次前向传播，\\ 按PyTorch计数口径"
+    },
+    {
+      "table": "strings",
+      "key": "share of modeled matrix arithmetic",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "矩阵运算模型中的占比"
+    },
+    {
+      "table": "strings",
+      "key": "nonzero query/key RMS; bounded gains",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "查询和键的RMS非零；增益有界"
+    },
+    {
+      "table": "strings",
+      "key": "Cauchy--Schwarz; \\ $|g_q|,|g_k| \\le g$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "柯西—施瓦茨；\\ $|g_q|,|g_k| \\le g$"
+    },
+    {
+      "table": "strings",
+      "key": "our transformer: \\ $16$ held-out windows; all $W_Q,W_K$ scaled \\\\ fixed-input $c^2$ identity; charts rerun the full network",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "我们的Transformer：\\ $16$ 个留出窗口；缩放所有 $W_Q,W_K$ \\\\ $c^2$ 恒等式固定层输入；图中重跑完整网络"
+    },
+    {
+      "table": "strings",
+      "key": "training-batch mean squared error",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "训练批次的均方误差"
+    },
+    {
+      "table": "strings",
+      "key": "linear association between predictions: \\\\ $1$: a perfect positive line, $0$: zero linear correlation",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "预测之间的线性关联：\\\\ $1$：完全正线性相关，$0$：零线性相关"
+    },
+    {
+      "table": "strings",
+      "key": "mean squared error on $4{,}000$ evaluation prompts",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "在 $4{,}000$ 个评估提示上的均方误差"
+    },
+    {
+      "table": "strings",
+      "key": "no other pair group: \\ all pairs selected",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "没有其他头对组：\\ 全部头对已选中"
+    },
+    {
+      "table": "strings",
+      "key": "sampled windows: \\ mean first-character weight, queries $64$--$255$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "采样窗口：\\ 查询 $64$--$255$ 对第一个字符的平均权重"
+    },
+    {
+      "table": "strings",
+      "key": "start-marker coefficient \\ (differential: signed), \\\\ dormant positions; \\ three seeds each",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "起始标记系数\\ （差分：有符号），\\\\ 休眠位置；\\ 各三个种子"
+    },
+    {
+      "table": "strings",
+      "key": "at the end: \\ start-marker coefficient; \\ copy bits, \\ noncopy bits",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "终点：\\ 起始标记系数；\\ 复制比特，\\ 非复制比特"
+    },
+    {
+      "table": "strings",
+      "key": "matrix alignment, not copying probability or causal evidence",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "矩阵对齐，不是复制概率或因果证据"
+    },
+    {
+      "table": "strings",
+      "key": "pre-RoPE matrix alignment, \\\\ above Gaussian mean; LN gain/centering folded in",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "RoPE之前的矩阵对齐，\\\\ 高于高斯均值；折入LN增益与去均值"
+    },
+    {
+      "table": "strings",
+      "key": "layer 2: \\ selected repeat-probe head",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "第2层：\\ 选定的重复探针头"
+    },
+    {
+      "table": "strings",
+      "key": "reference stripe: \\ known source-successor positions",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "参考斜纹：\\ 已知来源的后继位置"
+    },
+    {
+      "table": "strings",
+      "key": "layer 1, \\ selected previous-position head",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "第1层：\\ 选定的前一位置头"
+    },
+    {
+      "table": "strings",
+      "key": "corrected display stripe, \\ queries $60$--$78$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "修正的显示斜纹，\\ 查询 $60$--$78$"
+    },
+    {
+      "table": "strings",
+      "key": "Gaussian draws: mean $\\pm$ SD",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "高斯抽样：均值 $\\pm$ 标准差"
+    },
+    {
+      "table": "strings",
+      "key": "bits per character, \\ $16$ held-out prefixes of $128$ targets",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "每字符比特，\\ $16$ 个留出前缀，每个 $128$ 个目标"
+    },
+    {
+      "table": "strings",
+      "key": "uniform-attention illustration: \\ marked first-token share $1/t$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "均匀注意力示意：\\ 有标记的首词元份额 $1/t$"
+    },
+    {
+      "table": "strings",
+      "key": "two extrapolation illustrations, \\ not inferred mechanisms",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "两种外推示意，\\ 不是推断出的机制"
+    },
+    {
+      "table": "patterns",
+      "key": "^sorted\\ \\$(\\d+(?:\\{,\\}\\d{3})*)\\$\\ of\\ \\$(\\d+(?:\\{,\\}\\d{3})*)\\$\\ random\\ inputs\\ \\\\\\\\\\ with\\ no\\ repeated\\ tokens$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "排对 $\\g<1>$ 个，共 $\\g<2>$ 个随机输入 \\\\\\\\ 词元互不重复"
+    },
+    {
+      "table": "patterns",
+      "key": "^final\\ validation:\\ \\$(\\d+\\.\\d{2})\\$\\ bits\\ \\\\\\\\\\ first\\ \\$400\\{,\\}000\\$\\ source\\ characters\\ \\\\\\\\\\ \\$399\\{,\\}872\\$\\ scored\\ targets$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "最终验证：$\\g<1>$ 比特 \\\\\\\\ 前 $400{,}000$ 个源字符 \\\\\\\\ 评分 $399{,}872$ 个目标位置"
+    },
+    {
+      "table": "patterns",
+      "key": "^our\\ transformer:\\ \\\\\\ \\$(\\d+\\.\\d{2})\\$\\ bits\\ \\\\\\\\\\ \\$21\\{,\\}376\\$\\ scored\\ targets$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "我们的Transformer：\\\\ $\\g<1>$ 比特 \\\\\\\\ 评分 $21{,}376$ 个目标位置"
+    },
+    {
+      "table": "patterns",
+      "key": "^\\$d\\ =\\ (\\d+)\\$,\\ \\\\\\ no\\ division:\\ \\\\\\ one\\ key\\ dominates$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "$d = \\g<1>$，\\\\ 不除以根号d：\\\\ 一个键占主导"
+    },
+    {
+      "table": "patterns",
+      "key": "^one\\ random\\ \\$32\\$\\-number\\ pair,\\ positions\\ \\$0\\$\\-\\-\\$39\\$:\\ \\\\\\ off\\ by\\ at\\ most\\ \\$([^$]+)\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "一对随机的 $32$ 维向量，位置 $0$--$39$：\\\\ 最大偏差 $\\g<1>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^our\\ transformer:\\ \\\\\\ all\\ \\$(.+?)\\$\\ heads\\ \\\\\\\\\\ pre\\-RoPE\\ linear\\ factors;\\ \\\\\\ LN\\ gain\\ and\\ centring\\ only$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "我们的Transformer：\\\\ 全部 $\\g<1>$ 个头 \\\\\\\\ RoPE之前的线性因子；\\\\ 仅并入LN增益和去均值"
+    },
+    {
+      "table": "patterns",
+      "key": "^nonzero\\ directions:\\ \\\\\\ at\\ most\\ \\$(.+?)\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "数值非零方向：\\\\ 至多 $\\g<1>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^\\$90\\\\%\\$\\ of\\ squared\\ size:\\ \\\\\\ \\$(.+?)\\$\\ to\\ \\$(.+?)\\$\\ directions$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "平方大小的 $90\\\\%$：\\\\ $\\g<1>$ 到 $\\g<2>$ 个方向"
+    },
+    {
+      "table": "patterns",
+      "key": "^sum\\ of\\ a\\ layer's\\ \\$(.+?)\\$\\ QK\\ maps:\\ \\\\\\ min\\ rank\\ \\$(.+?)\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "每层 $\\g<1>$ 个QK矩阵之和：\\\\ 最小秩 $\\g<2>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^max\\ raw\\-logit\\ change\\ at\\ \\$1\\$\\-\\-\\$64\\$:\\ \\\\\\ \\$(.+?)\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "第 $1$--$64$ 个位置的原始logit绝对变化最大值：\\\\ $\\g<1>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^at\\ \\$65\\$\\-\\-\\$128\\$:\\ \\\\\\ max\\ raw\\-logit\\ change\\ \\$(.+?)\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "第 $65$--$128$ 个位置：\\\\ 原始logit绝对变化最大值 $\\g<1>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^no\\ mask\\ or\\ rotations:\\ \\\\\\ max\\ change\\ at\\ \\$1\\$\\-\\-\\$64\\$:\\ \\$(.+?)\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "同时去掉掩码和位置旋转：\\\\ 第 $1$--$64$ 个位置的绝对变化最大值 $\\g<1>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^our\\ transformer,\\ mask\\ and\\ rotations\\ removed,\\ \\\\\\\\\\ \\$128\\$\\ characters\\ shuffled:\\ \\\\\\\\\\ raw\\ logits\\ agree\\ to\\ \\$(.+?)\\$\\ \\\\\\ \\(of\\ values\\ up\\ to\\ \\$(.+?)\\$\\)$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "我们的Transformer，同时去掉掩码和位置旋转，\\\\\\\\ 打乱 $128$ 个字符：\\\\\\\\ 原始logit的差不超过 $\\g<1>$ \\\\ （logit绝对值最大约 $\\g<2>$）"
+    },
+    {
+      "table": "patterns",
+      "key": "^correlation\\ on\\ \\$4\\{,\\}000\\$\\ prompts:\\ \\\\\\ \\$(\\d+\\.\\d{3})\\$$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "在 $4{,}000$ 个提示上的相关系数：\\\\ $\\g<1>$"
+    },
+    {
+      "table": "patterns",
+      "key": "^\\$(\\d+)\\$\\ saved\\ questions\\ shown\\ \\\\\\\\\\ GD\\ step\\ size:\\ best\\ of\\ \\$59\\$\\ \\\\\\\\\\ on\\ the\\ same\\ \\$4\\{,\\}000\\$\\ evaluation\\ prompts$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "$\\g<1>$ 个已保存问题 \\\\\\\\ GD步长：$59$ 个候选中最优 \\\\\\\\ 在同一批 $4{,}000$ 个评估提示上选择"
+    },
+    {
+      "table": "patterns",
+      "key": "^final\\ mean\\ value\\ norm:\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\\\times\\$\\ the\\ other\\ mean\\ norm$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "终点平均值范数：\\\\ 其他位置平均范数的 $\\g<1>\\\\times$"
+    },
+    {
+      "table": "patterns",
+      "key": "^means\\ over\\ pairs;\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ previous\\-token\\ and\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ induction\\ heads;\\ \\\\\\\\\\ first\\ seed;\\ final\\-score\\-selected\\ pairs,\\ \\\\\\ every\\ ([-+]?\\d+(?:\\.\\d+)?)\\ steps$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "头对均值；\\\\ $\\g<1>$ 个前一词元候选与 $\\g<2>$ 个归纳候选；\\\\\\\\ 第一种子，按最终分数选择，\\\\ 每\\g<3>步"
+    },
+    {
+      "table": "patterns",
+      "key": "^toy\\ probe:\\ \\\\\\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\\\%\\$\\ earliest\\-match\\ successor\\ weight$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "玩具探针：\\\\\\\\ 最早匹配位置的后继权重 $\\g<1>\\\\%$"
+    },
+    {
+      "table": "patterns",
+      "key": "^the\\ same\\ model:\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ layers,\\ \\\\\\ width\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$,\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ heads\\ per\\ layer$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "相同模型：\\\\ $\\g<1>$ 层，\\\\ 宽度 $\\g<2>$，\\\\ 每层 $\\g<3>$ 个头"
+    },
+    {
+      "table": "patterns",
+      "key": "^\\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ seeds\\ each:\\ \\\\\\ lines\\ are\\ means,\\ \\\\\\\\\\ bands\\ the\\ min\\-\\-max\\ range$",
+      "operation": "append",
+      "expected_absent": true,
+      "value": "每种 $\\g<1>$ 个种子：\\\\ 线是均值，\\\\\\\\ 带是最小—最大范围"
+    }
+  ],
+  "instructions": "Check each expected-before/absent condition, preserve all other entries and ordering. Identical already-applied values may be skipped. Review regex ordering against current shared patterns before integration. No shared table is replaced by this branch."
+}

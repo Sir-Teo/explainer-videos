@@ -55,7 +55,7 @@ class Sinks(VoiceoverScene):
         ulab = label(r"an even share", font_size=18, color=GREY_B).next_to(ul, UP, buff=0.05).align_to(base, RIGHT)
         lyr = VGroup(*[label(rf"layer {l_ + 1}", font_size=18, color=GREY_B)
                        .move_to([x0 + (l_ * (H + 1) + (H - 1) / 2) * bw, y0 - 0.3, 0]) for l_ in range(L)])
-        bl = label(r"our transformer: \ each head's attention on the first character", font_size=22, color=GREY_A)
+        bl = label(r"sampled windows: \ mean first-character weight, queries $64$--$255$", font_size=22, color=GREY_A)
         bl.next_to(VGroup(base, bars), UP, buff=0.35).align_to(base, LEFT)
         bl.set_y(y0 + 2.75)
         # space and line breaks: the natural landing spots in text
@@ -92,12 +92,13 @@ class Sinks(VoiceoverScene):
                      label(r"a window of the latest", font_size=18, color=A).next_to(bk[1], DOWN, buff=0.05))
         stream = VGroup(boxes, bk, bkl)
         if strong:
-            mine = (f"Some heads of our model put a large share of it, up to {sink.max():.0%}, on the very first "
-                    f"character, whatever that character is: about {ratio:.0f} times an even share. ")
+            mine = ((f"Some heads of our model put a large share of it, up to {sink.max():.0%}, on the very first "
+                    f"character of sampled windows: about {ratio:.0f} times an even share. "))
         else:
-            mine = (f"In our small model, nothing like it: no head gives the first character more than "
-                    f"{ratio:.1f} times an even share. Its heads park attention elsewhere, on spaces and line breaks: "
-                    f"one head spends {hi_sp:.0%} of its attention on them, though they are {sps:.0%} of the text. ")
+            mine = ((f"In our small model, nothing like it: no head gives the first character more than "
+                    f"{ratio:.1f} times an even share. For spaces and line breaks, "
+                    f"one head spends {hi_sp:.0%} of its attention on them, while they are {sps:.0%} of the text. "
+                    "These summaries have different denominators and do not establish a parking mechanism. "))
         with self.voiceover(
             "In 2023 Guangxuan Xiao and colleagues found something strange: in large models, many heads put most of "
             "their weight on the very first token, whatever it is. <bookmark mark='a'/> They called these attention "
@@ -132,13 +133,13 @@ class Sinks(VoiceoverScene):
             label(r"Guo et al.\ (2024): \ an \textit{active--dormant} head", font_size=22, color=POS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([0, -2.3, 0])
         with self.voiceover(
-            "Why would a head stare at a meaningless token? Because of the softmax. <bookmark mark='a'/> Its weights "
+            ("Why would a head stare at a meaningless token? Because of the softmax. <bookmark mark='a'/> Its weights "
             "must add up to one: a head cannot decline to attend. <bookmark mark='b'/> But many heads have work to "
             "do only some of the time: after a particular kind of token, say. The rest of the time, the right "
-            "output is nothing. <bookmark mark='c'/> The only way to output nothing is to put the weight on a token "
+            "output is nothing. <bookmark mark='c'/> One way to add almost nothing is to put most weight on a token "
             "whose value is close to zero. A token that is always there, at the start, is the natural parking spot. "
             "<bookmark mark='d'/> Tianyu Guo, Song Mei and colleagues traced the whole syndrome to such active-dormant "
-            "heads in 2024: the sink's value shrinks, and its vector in the residual stream grows enormous."
+            "heads in 2024: the sink's value shrinks, and its vector in the residual stream grows enormous.")
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -201,7 +202,7 @@ class Sinks(VoiceoverScene):
                   font_size=22, color=SINKC),
             label(rf"after a trigger: \ ${pa.mean():.0%}$ on the character before".replace("%", r"\%"), font_size=22,
                   color=POS),
-            label(rf"$\langle s\rangle$'s value: \ ${vb.mean() / vr.mean():.2f}\times$ the size of the others'",
+            label(rf"final mean value norm: \ ${vb.mean() / vr.mean():.2f}\times$ the other mean norm",
                   font_size=22, color=GREY_A),
             note(rf"means over ${len(bd)}$ seeds; \ ranges ${bd.min():.0%}$--${bd.max():.0%}$, "
                  rf"${pa.min():.0%}$--${pa.max():.0%}$".replace("%", r"\%")),
@@ -209,21 +210,19 @@ class Sinks(VoiceoverScene):
         keep_in_frame(facts)
         sink_formed = bd.mean() > 0.4
         drain = vb.mean() < 0.8 * vr.mean()
-        v1 = (f"When there is nothing to copy, it puts {bd.mean():.0%} of its weight on the start marker, which carries "
-              "no information about the next character: a sink, formed in a model of one layer. " if sink_formed else
-              f"When there is nothing to copy, it puts only {bd.mean():.0%} of its weight on the start marker: in a "
-              "run this short the sink is still forming. ")
-        v2 = (f"And the marker's value has shrunk to {vb.mean() / vr.mean():.2f} times the size of the others': the "
-              "drain." if drain else f"Its value is {vb.mean() / vr.mean():.2f} times the size of the others': no "
-              "drain yet.")
+        v1 = ((f"When there is nothing to copy, it puts {bd.mean():.0%} of its weight on the start marker, which carries "
+              "no next-character identity: this endpoint shows start-marker concentration in a one-layer model. ") if sink_formed else
+              (f"When there is nothing to copy, it puts only {bd.mean():.0%} of its weight on the start marker: in a "
+              "run there is no strong start-marker concentration at the endpoint. "))
+        v2 = ((f"At the end, the marker's mean value-vector norm is {vb.mean() / vr.mean():.2f} times the others' mean: a small final value, not a measured decrease.") if drain else (f"At the end, the marker's mean value-vector norm is {vb.mean() / vr.mean():.2f} times the others' mean; this comparison does not measure a training trajectory."))
         with self.voiceover(
-            "We can grow a sink on purpose. Guo's team built a task where one head is needed only some of the time. "
+            ("We can grow a sink on purpose. Guo's team built a task where one head is needed only some of the time. "
             f"<bookmark mark='a'/> We made it from the novels' {V_} commonest characters: each character follows "
             f"the novels' statistics for what comes next, except after a trigger, {trig_txt}, where the "
             "next character copies the one before the trigger. Every sequence starts with a marker. "
-            f"<bookmark mark='b'/> A one-layer transformer learns it in {int(c['steps']):,} steps, three times over. "
-            f"After a trigger its head looks one back, {pa.mean():.0%} of the time. <bookmark mark='c'/> " + v1
-            + "<bookmark mark='d'/> " + v2
+            f"<bookmark mark='b'/> We train a one-layer transformer for {int(c['steps']):,} steps, three times over. "
+            f"After a trigger its head puts {pa.mean():.0%} of its attention weight on the preceding character, on average. <bookmark mark='c'/> " + v1
+            + "<bookmark mark='d'/> " + v2)
         ) as vo:
             # the trained head's map waits under a veil from the first word, and is uncovered once it has been trained
             veil = Rectangle(width=max(img.width, il.width) + 0.2, height=img.height + il.height + 0.4, stroke_width=0,
@@ -266,15 +265,16 @@ class Sinks(VoiceoverScene):
         # each design's training, three seeds each: the weight on <s> when there is nothing to copy, every 100 steps
         hist = {v: np.asarray(s[f"{v}_hist"], float) for v in VARIANTS}  # seed, checkpoint, (step, bigram, copy, <s>)
         hx = hist["softmax"][0, :, 0]
+        ybottom = min(0.0, float(np.floor(min(hist[v][:, :, 3].min() for v in VARIANTS) * 5) / 5))
         ytop = max(0.6, float(np.ceil(max(hist[v][:, :, 3].max() for v in VARIANTS) * 5) / 5))
-        ch = axes([0, float(hx[-1]), 500], [0, ytop, 0.2], x_length=4.4, y_length=2.1, xlabel=r"training steps",
+        ch = axes([0, float(hx[-1]), 500], [ybottom, ytop, 0.2], x_length=4.4, y_length=2.1, xlabel=r"training steps",
                   xticks=[0, 500, 1000, int(hx[-1])], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"),
-                  yticks=[0, round(ytop / 2, 1), ytop], yfmt=lambda v: f"{v:.1f}", font_size=18, center=[3.85, 0.75, 0])
-        lines = {v: seed_lines(ch.ax, hx, np.clip(hist[v][:, :, 3], 0, ytop), SINK_COLORS[v], 3) for v in VARIANTS}
-        ct = label(r"weight on $\langle s\rangle$ \ when there is nothing to copy, \\ during training \ (three seeds each)",
+                  yticks=sorted(set([ybottom, 0, round(ytop / 2, 1), ytop])), yfmt=lambda v: f"{v:.1f}", font_size=18, center=[3.85, 0.75, 0])
+        lines = {v: seed_lines(ch.ax, hx, hist[v][:, :, 3], SINK_COLORS[v], 3) for v in VARIANTS}
+        ct = label(r"start-marker coefficient \ (differential: signed), \\ dormant positions; \ three seeds each",
                    font_size=20, color=GREY_A)
         ct.next_to(ch, UP, buff=0.2)
-        loss = VGroup(label(r"at the end: \ weight on $\langle s\rangle$; \ bits on the copies, \ and on the rest",
+        loss = VGroup(label(r"at the end: \ start-marker coefficient; \ copy bits, \ noncopy bits",
                             font_size=20, color=GREY_A),
                       *[label(rf"{SINK_NAMES[v]}: \ ${bos[v].mean():.2f}$; \ ${cp[v].mean():.3f}$, \ ${bg[v].mean():.3f}$",
                               font_size=18, color=SINK_COLORS[v]) for v in VARIANTS],
@@ -293,31 +293,28 @@ class Sinks(VoiceoverScene):
                   f"The sink logit gives the head a place to send its weight that is not a token at all, but its weight "
                   f"on the marker stays at {r_s:.0%}, and only {nl:.0%} goes nowhere.")
         if ga_ > gd_ + 0.05:
-            v_gate = (f"The gate lets the head simply switch itself off: it is {gd_:.2f} open when there is nothing to "
-                      f"copy and {ga_:.2f} after a trigger, and its weight on the marker is {r_g:.0%}.")
+            v_gate = ((f"The gate lets the head attenuate its output; mean feature openness is {gd_:.2f} when there is nothing to "
+                      f"copy and {ga_:.2f} after a trigger, and its weight on the marker is {r_g:.0%}."))
         else:
-            v_gate = (f"The gate could let the head switch itself off, but it ends about as open with nothing to copy, "
-                      f"{gd_:.2f}, as after a trigger, {ga_:.2f}, and its weight on the marker is {r_g:.0%}.")
+            v_gate = ((f"The gate could let the head attenuate its output, but its mean feature openness is similar with nothing to copy, "
+                      f"{gd_:.2f}, as after a trigger, {ga_:.2f}, and its weight on the marker is {r_g:.0%}."))
         sm_ = float(np.asarray(s["diff_sum_dormant"]).mean())
-        v_diff = (f"Differential attention subtracts a second softmax, so its weights need not add up to one: with "
-                  f"nothing to copy they add up to {sm_:.2f}, with lambda at {lm_:.2f}, and its weight on the marker is "
-                  f"{r_d:.0%}.")
+        v_diff = ((f"Differential attention subtracts a second softmax. Every signed row sums to one minus lambda, with lambda at {lm_:.2f}. The saved dormant-row mean sum is {sm_:.2f}, and the dormant start-marker coefficient is {r_d:+.2f}. Subsequent head normalization means this sum is not the output amplitude."))
         worst_cp = max(VARIANTS, key=lambda v: cp[v].mean())
         same = max(cp[v].mean() for v in VARIANTS) - min(cp[v].mean() for v in VARIANTS) < 0.05
         worst_name = SPOKEN_SINK[worst_cp]
-        v_loss = ("All four learn the task about equally well, so the sinks were never needed for the task "
-                  "itself; they were the softmax's way of doing nothing." if same else
-                  f"They do not learn the copies equally well: {worst_name} is worst, at "
-                  f"{cp[worst_cp].mean():.3f} bits on the copies.")
+        v_loss = (('The four mean copy-position losses differ by less than 0.05 bits in this run. This compares only copy loss, not whole-task equivalence or whether sinks are causally necessary.') if same else
+                  (f"Mean copy-position losses differ: {worst_name} is highest, at "
+                  f"{cp[worst_cp].mean():.3f} bits on the copies."))
         with self.voiceover(
-            "Three recent designs give a head a better way to do nothing; we trained each on the same task, three "
+            ("Three recent designs give a head a better way to do nothing; we trained each on the same task, three "
             "seeds each. <bookmark mark='a'/> gpt-oss adds a learned number to the softmax's denominator, the score "
             "of an invisible key. <bookmark mark='b'/> Gated attention multiplies each head's output by a sigmoid of "
             "the input. <bookmark mark='c'/> Differential attention subtracts two softmax maps. <bookmark mark='d'/> "
-            "Here is each design's weight on the marker as it trains. " + v_sink
+            "Here is each design's start-marker coefficient during training; differential coefficients are signed, not probabilities. " + v_sink
             + " <bookmark mark='e'/> " + v_gate + " <bookmark mark='f'/> " + v_diff + " <bookmark mark='g'/> " + v_loss
             + " In large models, the gate cut the attention on the first token from 46.7 to 4.8 percent; Qwen3-Next "
-            "and Kimi K3 now gate their attention."
+            "and Kimi K3 now gate their attention.")
         ) as vo:
             self.play(FadeIn(blocks[0]), FadeIn(ct), FadeIn(ch), FadeIn(lines["softmax"][0]),
                       Create(lines["softmax"][1]), FadeIn(loss[0]), FadeIn(loss[1]), run_time=2.0)

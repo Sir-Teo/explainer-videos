@@ -37,10 +37,10 @@ class SideBySide(VoiceoverScene):
         seeds = list(p["seeds"])
         steps = np.asarray(p["curve_steps"], float)
         lo = min(float(np.asarray(p[f"curve_{m}"]).min()) for m in ORDER)
-        hi = max(float(np.asarray(p[f"curve_{m}"])[:, 0].max()) for m in ORDER)
+        hi = max(float(np.asarray(p[f"curve_{m}"]).max()) for m in ORDER)
         lo, hi = np.floor(lo * 4) / 4 - 0.1, np.ceil(hi * 2) / 2
         g = axes([0, steps[-1], steps[-1] / 4], [lo, hi, 0.25], x_length=6.8, y_length=4.0,
-                 xlabel=r"training steps", ylabel=r"bits per character, \ held-out text, \ $128$ characters",
+                 xlabel=r"training steps", ylabel=r"bits per character, \ $16$ held-out prefixes of $128$ targets",
                  xticks=[0, steps[-1] / 2, steps[-1]], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"),
                  yticks=[v for v in np.arange(np.ceil(lo * 2) / 2, hi + 0.01, 0.5)], yfmt=lambda v: f"{v:.1f}",
                  center=[-2.8, -0.45, 0])
@@ -48,10 +48,10 @@ class SideBySide(VoiceoverScene):
         lines = {m: seed_lines(ax, steps, np.asarray(p[f"curve_{m}"]), POS_COLORS[m], 3) for m in ORDER}
         key = legend([(POS_COLORS[m], POS_NAMES[m]) for m in ORDER], font_size=22).move_to([4.6, 1.9, 0])
         spec = VGroup(
-            label(rf"the same model: \ ${c['L']}$ layers, \ width ${c['d']}$, \ ${c['H']}$ heads", font_size=20, color=GREY_A),
+            label(rf"the same model: \ ${c['L']}$ layers, \ width ${c['d']}$, \ ${c['H']}$ heads per layer", font_size=20, color=GREY_A),
             label(rf"the same text, in the same order: \ ${c['steps']:,}$ steps of ${c['batch']} \times {c['ctx']}$".replace(",", "{,}"),
                   font_size=20, color=GREY_A),
-            label(rf"${len(seeds)}$ seeds each: \ lines are means, \\ bands the range", font_size=20, color=GREY_A),
+            label(rf"${len(seeds)}$ seeds each: \ lines are means, \\ bands the min--max range", font_size=20, color=GREY_A),
             label(rf"only the positions differ", font_size=20, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.4, -0.9, 0])
         keep_in_frame(spec)
@@ -82,12 +82,12 @@ class SideBySide(VoiceoverScene):
             if up.get_bottom()[1] - dn.get_top()[1] < 0.05:
                 dn.next_to(up, DOWN, buff=0.05).align_to(up, LEFT)
         with self.voiceover(
-            "Now the experiment. Four small transformers, identical except for how they learn where each character "
+            ("Now the experiment. Four small transformers, identical except for how they learn where each character "
             "is: sinusoids added to the input, rotary positions, ALiBi's linear penalty, and nothing at all. Here "
             "they are learning, replayed: held-out bits per character, step by step. "
             f"<bookmark mark='a'/> Each is trained on the novels for {c['steps']:,} steps of {c['ctx']}-character "
-            "windows, the same windows in the same order, and each three times with different random starts; the "
-            f"bands show the spread between the three. <bookmark mark='b'/> {v_train}"
+            "windows, with batches of 16, the same windows in the same order within each seed. Four heads per layer; three matched seeds. Checkpoint curves use 16 held-out prefix windows; final summaries use 48 full windows. Each run samples 2,048,000 target occurrences, not necessarily distinct corpus characters; the "
+            f"lines show seed means and bands the min-max range. This descriptive ordering uses display order to break ties. <bookmark mark='b'/> {v_train}")
         ) as vo:
             self.play(FadeIn(g), FadeIn(key), FadeIn(spec[0]))
             self.play(*[Create(lines[m][1]) for m in ORDER], *[FadeIn(lines[m][0]) for m in ORDER], run_time=6.0,
@@ -122,24 +122,22 @@ class SideBySide(VoiceoverScene):
         spread = max(b_ - a for a, b_ in sp)
         clear = vals[best].max() < min(vals[m].min() for m in ORDER if m != best)
         if clear:
-            v1 = (f"{CAP[best]} is best, at {vals[best].mean():.3f}, and every one of its seeds beats every seed of "
-                  "the others. ")
+            v1 = ((f"{CAP[best]} has the lowest measured mean, at {vals[best].mean():.3f}, and every one of its seeds has lower loss than every seed of "
+                  "the others. "))
         else:
-            v1 = (f"The best mean is {SPOKEN[best]}'s, {vals[best].mean():.3f}, but the seeds overlap: the "
-                  f"differences here, up to {gap:.3f} bits, are not much larger than the {spread:.3f} spread "
-                  "between seeds of one design. ")
+            v1 = ((f"The minimum mean, first in display order if tied, is {SPOKEN[best]}'s, {vals[best].mean():.3f}, but at least one competing seed range overlaps. The "
+                  f"differences here, up to {gap:.3f} bits, and the largest {spread:.3f} range "
+                  "within one design are descriptive summaries, not significance tests. "))
         nope_rank = order.index("nope") + 1
         behind = float(vals["nope"].mean() - vals[best].mean())
         rank_word = ["first", "second", "third", "last"][nope_rank - 1]
         nope_v = float(vals["nope"].mean())
         if nope_rank == 1:
-            v2 = f"No positions at all comes first, at {nope_v:.3f}: the causal mask alone tells it where it is."
+            v2 = (f"No positions at all is first in display order among the measured means, at {nope_v:.3f}: loss alone does not identify its internal position signal.")
         elif behind < 0.05:
-            v2 = (f"No positions at all comes {rank_word}, at {nope_v:.3f}, only {behind:.3f} behind: the causal mask "
-                  "really does tell it where it is.")
+            v2 = ((f"No positions at all has display rank {rank_word}, at {nope_v:.3f}, only {behind:.3f} behind: this does not establish which internal position signal it uses."))
         else:
-            v2 = (f"No positions at all comes {rank_word}, at {nope_v:.3f}, {behind:.2f} bits behind the best: the mask "
-                  "tells it something, but not everything.")
+            v2 = ((f"No positions at all has display rank {rank_word}, at {nope_v:.3f}, {behind:.2f} bits behind the best: this does not identify an internal position signal."))
         with self.voiceover(
             f"First, inside the length they were trained on, the first {T} characters. <bookmark mark='a'/> "
             + v1 + "<bookmark mark='b'/> " + v2
@@ -163,7 +161,7 @@ class SideBySide(VoiceoverScene):
         xs = np.arange(nb) * (R / nb) + R / nb / 2
         allv = np.concatenate([b.ravel() for b in B.values()])
         lo = np.floor(allv.min() * 2) / 2 - 0.25
-        hi = min(np.ceil(allv.max() * 2) / 2, lo + 4.0)
+        hi = np.ceil(allv.max() * 2) / 2
         g = axes([0, R, R / 4], [lo, hi, 0.5], x_length=8.2, y_length=4.4, xlabel=r"position in the text",
                  ylabel=r"bits per character, \ by position \ (means and seed ranges)",
                  xticks=[0, T, 2 * T, 3 * T, R], xfmt=lambda v: f"{int(v)}",
@@ -172,7 +170,7 @@ class SideBySide(VoiceoverScene):
         ax = g.ax
         edge = DashedLine(ax.c2p(T, lo), ax.c2p(T, hi), color=GREY_B, stroke_width=2)
         el = label(rf"trained up to ${T}$", font_size=20, color=GREY_B).next_to(edge.get_top(), RIGHT, buff=0.1).shift(DOWN * 0.2)
-        lines = {m: seed_lines(ax, xs, np.minimum(B[m], hi), POS_COLORS[m], 3) for m in ORDER}
+        lines = {m: seed_lines(ax, xs, B[m], POS_COLORS[m], 3) for m in ORDER}
         rise = {m: float(np.asarray(p[f"far_{m}"]).mean() - np.asarray(p[f"in_{m}"]).mean()) for m in ORDER}
         rows = VGroup(*[VGroup(Line(ORIGIN, RIGHT * 0.4, color=POS_COLORS[m], stroke_width=5),
                                label(POS_NAMES[m], font_size=20, color=POS_COLORS[m]),
@@ -191,25 +189,23 @@ class SideBySide(VoiceoverScene):
         if not held:
             v_held = ""
         elif hr > 0.005:
-            v_held = f"Steady past the training length, within {hr:.2f} bits: {n_held}."
+            v_held = (f"In the below-0.15-bit display group, the largest far-minus-near change is {hr:.2f} bits: {n_held}.")
         else:
-            v_held = (f"Steady past the training length, and even {-hr:.2f} bits better, with more text behind each "
-                      f"character: {n_held}.")
+            v_held = ((f"In the below-0.15-bit display group, the largest signed far-minus-near change is {hr:+.2f} bits: {n_held}."))
         if not mid:
             v_mid = ""
         elif len(mid) == 1:
             v_mid = f"Drifting up, by {mhi:.2f} bits: {n_mid}."
         else:
             v_mid = f"Drifting up, by {mlo:.2f} to {mhi:.2f} bits: {n_mid}."
-        v_broke = f"Broken, up by as much as {br:.1f} bits: {n_broke}." if broke else ""
-        rope_txt = ("RoPE's slow hands point at angles they never saw in training, and its queries stop "
-                    "matching their keys: the problem the next chapter takes on." if rise["rope"] >= 0.15 else
-                    "RoPE holds up here; the next chapter shows where it does break.")
+        v_broke = (f"In the at-least-0.5-bit display group, the largest increase is {br:.1f} bits: {n_broke}.") if broke else ""
+        rope_txt = ((f"RoPE's far-minus-near change is {rise['rope']:+.2f} bits in these windows; this loss comparison does not identify its cause. The next chapter tests several context-extension choices.") if rise["rope"] >= 0.15 else
+                    (f"RoPE's far-minus-near change is {rise['rope']:+.2f} bits in these windows; this loss comparison does not identify its cause. The next chapter tests several context-extension choices."))
         with self.voiceover(
-            f"Now read four times as far, {R} characters, though none of them saw more than {T}. "
-            f"<bookmark mark='a'/> Bits per character at each position, three seeds each. <bookmark mark='b'/> {v_held} "
+            (f"Now read four times as far, {R} characters, though none of them saw more than {T}. "
+            f"<bookmark mark='a'/> Bits per character at each position in 48 fixed windows, three seeds each; raw seed values are averaged before plotting. The below-0.15 and at-least-0.5 groups are display thresholds, not statistical tests. <bookmark mark='b'/> {v_held} "
             f"<bookmark mark='e'/> {v_mid} <bookmark mark='f'/> {v_broke} "
-            f"<bookmark mark='d'/> {rope_txt}"
+            f"<bookmark mark='d'/> {rope_txt}")
         ) as vo:
             self.play(FadeIn(g), Create(edge), FadeIn(el))
             self.play(*[Create(lines[m][1]) for m in ORDER], *[FadeIn(lines[m][0]) for m in ORDER], run_time=3.0)
@@ -222,7 +218,7 @@ class SideBySide(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def why(self):
-        """Why ALiBi holds and no positions drifts: the penalties only grow past the training length; 1/t only shrinks."""
+        """Illustrative extrapolation pressures; these plots do not identify a learned internal mechanism."""
         p = load("positions")
         c = dict(p["cfg"])
         T, R = int(c["ctx"]), int(c["read"])
@@ -247,7 +243,7 @@ class SideBySide(VoiceoverScene):
         sl1 = label(r"seen in \\ training", font_size=18, color=GREY_B).next_to(sh1.get_bottom(), UP, buff=0.12)
         # no positions: the share of a marked first token in a uniform average, 1/t, on a log scale
         g2 = axes([0, R, R / 4], [-3, 0, 1], x_length=5.0, y_length=3.4, xlabel=r"position $t$",
-                  ylabel=r"no positions: \ the mark's share, \ $1/t$", xticks=[0, T, R], xfmt=lambda v: f"{int(v)}",
+                  ylabel=r"uniform-attention illustration: \ marked first-token share $1/t$", xticks=[0, T, R], xfmt=lambda v: f"{int(v)}",
                   yticks=[-3, -2, -1, 0], yfmt=lambda v: f"10^{{{int(v)}}}", center=[3.6, -0.5, 0])
         a2 = g2.ax
         ts = np.arange(1, R + 1)
@@ -257,18 +253,10 @@ class SideBySide(VoiceoverScene):
         lowest = DashedLine(a2.c2p(0, -np.log10(T)), a2.c2p(R, -np.log10(T)), color=GREY_B, stroke_width=1.5)
         lw = label(rf"the smallest in training, \ $1/{T}$", font_size=18, color=GREY_B).next_to(
             a2.c2p(R, -np.log10(T)), UP, buff=0.08).align_to(a2.c2p(R, 0), RIGHT)
-        head = label(r"why one holds, \ and why one drifts", font_size=30).to_edge(UP, buff=0.35)
+        head = label(r"two extrapolation illustrations, \ not inferred mechanisms", font_size=30).to_edge(UP, buff=0.35)
         c0, c3, ratio = T * m[0], T * m[-1], T / R
         with self.voiceover(
-            "Why does one hold and another drift? <bookmark mark='a'/> ALiBi's four heads subtract a penalty that "
-            f"grows with distance, with slopes from {m[0]:.2f} down to {m[-1]:.4f}. A key at the training length, "
-            f"{T} characters back, already costs the steepest head {c0:.0f} and the shallowest {c3:.1f}. "
-            "<bookmark mark='b'/> Past the training length a key only costs more, so nothing new happens: the heads "
-            "go on looking at what is near, and the text past the edge looks just like the text before it. "
-            "<bookmark mark='c'/> No positions at all drifts for its own reason. The signal it reads, one over t, "
-            f"only shrinks: at position {R} it is {ratio:.2f} of its smallest value in training, a value the model "
-            "never had to tell apart. <bookmark mark='d'/> The sinusoids and RoPE meet something worse past the "
-            "edge: vectors and angles they never saw at all."
+            (f"These are two extrapolation illustrations, not inferred mechanisms. <bookmark mark='a'/> ALiBi subtracts distance penalties, with slopes {m[0]:.2f} to {m[-1]:.4f}. At distance {T}, they cost {c0:.0f} and {c3:.1f} for the steepest and shallowest head. <bookmark mark='b'/> Beyond training, those penalties grow; content scores can still outweigh them. <bookmark mark='c'/> The other plot assumes an explicitly marked first token and uniform attention: its share is one over t, reaching {ratio:.2f} of the training-edge share at position {R}. Our NoPE training inserts no such marker, so this plot does not show the signal it learned. <bookmark mark='d'/> Sinusoidal and rotary coordinates also change outside the sampled training support; these illustrations do not establish which effect causes any measured loss change.")
         ) as vo:
             self.play(FadeIn(head), FadeIn(g1), FadeIn(sh1), FadeIn(sl1))
             vo.wait_until("a")

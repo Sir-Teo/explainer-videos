@@ -1,0 +1,35 @@
+{
+  "status": "UNAPPLIED source-only candidates; original active Smoother/Outro sources are unchanged",
+  "blocked_by": "Compatible original Part7 GP and derived smoother input; original/final bilingual output QA required before enabling",
+  "operations": [
+    {
+      "table": "ZH",
+      "key": "Here is Part 7's data again",
+      "operation": "replace",
+      "expected_before": "再看一次第7部分的数据：《远大前程》每一页里，“her”出现得有多频繁。假设你想给第120页，做一个平滑的估计。<bookmark mark='a'/>把每一页都拿来取加权平均，按它离得有多近来定权重：权重排成一个鼓包，中心就在你要问的那一页上。<bookmark mark='b'/>离查询点近的页，分量很重；远的，完全不算。这些权重都是正的，加起来等于1。<bookmark mark='c'/>让查询点一路滑过去，这个平均值就描出一条平滑的曲线。这就是纳达拉亚和沃森的核平滑器，1964年提出。",
+      "value": "再看一次第7部分的数据：《远大前程》每一页里，“her”出现得有多频繁。假设你想给第120页，做一个平滑的估计。<bookmark mark='a'/>把每一页都拿来取加权平均，按它离得有多近来定权重：权重排成一个鼓包，中心就在你要问的那一页上。<bookmark mark='b'/>离查询点近的页，分量很重；足够远的页，贡献很小。这些权重都是正的，加起来等于1。<bookmark mark='c'/>让查询点一路滑过去，这个平均值就描出一条平滑的曲线。这就是纳达拉亚和沃森的核平滑器，1964年提出。"
+    },
+    {
+      "table": "ZH",
+      "key": "The only knob is the width of the bump.",
+      "operation": "replace",
+      "expected_before": "唯一的旋钮，是鼓包的宽度。<bookmark mark='a'/>太窄，曲线就会去追每一页的噪声。<bookmark mark='b'/>太宽，它又会把整个故事压平成一个数。",
+      "value": "唯一的旋钮，是鼓包的宽度。<bookmark mark='a'/>太窄，曲线就会去追每一页的噪声。<bookmark mark='b'/>更宽的鼓包会抹平更多局部细节；在带宽趋于无穷的极限下，每页的权重才会相同。"
+    },
+    {
+      "table": "ZH",
+      "key": "Write it down. The guess at the query",
+      "operation": "replace",
+      "expected_before": "把它写下来。查询点上的估计，是对所有页求和：每一页的值，乘以一个权重。权重是一个分数的softmax：分数取指数，再除以总和，所以权重都是正的，加起来等于1。这里的分数，是负的距离平方。<bookmark mark='a'/>现在，只改一处。不再用页码之间的距离，而是用两个向量的点积，给每一项打分：一个查询，一个键。<bookmark mark='b'/>这就是注意力，Transformer的核心。查询问的是：我在找什么？每个键说的是，它能提供什么；每个值，则是它要传下去的内容。<bookmark mark='c'/>而这三样，都由网络学出来的矩阵，从字符算出来。注意力，就是一个核可以学习的核平滑器。",
+      "value": "把它写下来。查询点上的估计，是对所有页求和：每一页的值，乘以一个权重。权重是一个分数的softmax：分数取指数，再除以总和，所以权重都是正的，加起来等于1。这里的分数，是负的距离平方，再除以带宽平方的两倍。<bookmark mark='a'/>现在，只改一处。不再用页码之间的距离，而是用两个向量的点积，给每一项打分：一个查询，一个键。<bookmark mark='b'/>这就是注意力，Transformer的核心。查询问的是：我在找什么？每个键说的是，它能提供什么；每个值，则是它要传下去的内容。<bookmark mark='c'/>而这三样，都由网络学出来的矩阵，从字符算出来。注意力，就是一个核可以学习的核平滑器。"
+    },
+    {
+      "table": "ZH",
+      "key": "f\"Let's take stock.",
+      "operation": "replace",
+      "expected_absent": false,
+      "expected_before": "我们来盘点一下。注意力是一个加权平均，是核由网络学出来的纳达拉亚-沃森平滑器；它也是一次记忆读取，现代霍普菲尔德网络的一步。除以根号d，让它的softmax不至于塌缩。头沿着少数几个方向比较和搬运，掩码决定谁能看到谁，一个模块的成本是12倍的d平方个权重，再加上一项随上下文增长的成本。我们的Transformer达到了每字符{float(t['passage_bits']):.2f}比特。位置可以加上去、转进去、用惩罚表示，或者干脆不给，小心处理还能拉长。汇点logit和门控给了softmax一个停放的地方；训练出来的头会找到算法：复制、一步梯度下降、程序，只是受限于一些边界，只有更多步的思考才能去掉它们。",
+      "value": "我们来盘点一下。注意力是一个加权平均，是核由网络学出来的纳达拉亚-沃森平滑器；它也是一次记忆读取，现代霍普菲尔德网络的一步。除以根号d，让它的softmax不至于塌缩。头沿着少数几个方向比较和搬运，掩码决定谁能看到谁，一个模块的成本是12倍的d平方个权重，再加上一项随上下文增长的成本。我们的Transformer在它所评分的21376个测试段落目标位置上达到了每字符{float(t['passage_bits']):.2f}比特。位置可以加上去、转进去、用惩罚表示，或者干脆不给，小心处理还能拉长。汇点logit和门控给了softmax一个停放的地方；训练出来的头会找到算法：复制、一步梯度下降、程序，仍有一些边界。增加层数、使用循环，或生成更多步骤，可以放宽某些深度限制。"
+    }
+  ]
+}

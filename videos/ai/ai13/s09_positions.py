@@ -37,9 +37,9 @@ class Positions(VoiceoverScene):
         f = cmath(r"PE(t)_{2i}", r"=", r"\sin(t\,\omega_i), \quad PE(t)_{2i+1} = \cos(t\,\omega_i), \quad "
                   r"\omega_i = 10000^{-2i/d}", font_size=28).move_to([0, 3.35, 0])
         rows = [
-            cmath(r"\begin{pmatrix}\sin (t+k)\omega \\ \cos (t+k)\omega\end{pmatrix}", r"=",
-                  r"\begin{pmatrix}\cos k\omega & \sin k\omega \\ -\sin k\omega & \cos k\omega\end{pmatrix}",
-                  r"\begin{pmatrix}\sin t\omega \\ \cos t\omega\end{pmatrix}", font_size=28),
+            cmath(r"\begin{pmatrix}\sin((t+k)\omega) \\ \cos((t+k)\omega)\end{pmatrix}", r"=",
+                  r"\begin{pmatrix}\cos(k\omega) & \sin(k\omega) \\ -\sin(k\omega) & \cos(k\omega)\end{pmatrix}",
+                  r"\begin{pmatrix}\sin(t\omega) \\ \cos(t\omega)\end{pmatrix}", font_size=28),
         ]
         rows[0].move_to([3.2, 1.3, 0])
         rw = label(r"angle addition: \ the same rotation for every $t$", font_size=20, color=GREY_A).next_to(rows[0], DOWN, buff=0.15)
@@ -59,8 +59,8 @@ class Positions(VoiceoverScene):
             "start, so a layer can learn to look a fixed distance back with one fixed matrix. "
             f"<bookmark mark='c'/> Checked numerically, it holds to rounding error. And the dot product of two "
             "positions depends only on how far apart they are. <bookmark mark='d'/> GPT-2 went another way and "
-            "simply learned one vector per position, 1,024 of them. That works, but a position it never saw has no "
-            "vector at all."
+            "simply learned one vector per position, 1,024 of them. That works, but a position beyond that 1,024-entry table has no "
+            "entry at all."
         ) as vo:
             self.play(FadeIn(f), FadeIn(cite_), FadeIn(img), FadeIn(il))
             vo.wait_until("a")
@@ -88,7 +88,7 @@ class Positions(VoiceoverScene):
         imgs.arrange(RIGHT, buff=0.35).move_to([0, -1.35, 0])
         hl = VGroup(*[MathTex(rf"m_{h + 1} = 2^{{-{8 * (h + 1) // H}}}", font_size=24, color=ALIBIC).next_to(m, UP, buff=0.12)
                       for h, m in enumerate(imgs)])
-        cap = note(r"$e^{-m (i - j)}$: \ how much each head's bias leaves of a key $i - j$ back").next_to(imgs, DOWN, buff=0.15)
+        cap = note(r"$e^{-m (i - j)}$: \ distance multiplier on unnormalized weights").next_to(imgs, DOWN, buff=0.15)
         f = cmath(r"s_{ij}", r"=", r"\frac{q_i \cdot k_j}{\sqrt{d}}", r"-", r"m_h\,(i - j)", font_size=40,
                   colors={r"m_h\,(i - j)": ALIBIC}).move_to([0, 2.5, 0])
         fl = label(r"no position vectors at all: \ a penalty growing with distance, \ a different slope per head",
@@ -101,7 +101,7 @@ class Positions(VoiceoverScene):
             "range of distances. <bookmark mark='a'/> In 2021 Ofir Press, Noah Smith and Mike Lewis made it as "
             "simple as possible. ALiBi adds no position vectors at all: it subtracts from each score a penalty "
             "proportional to the distance. <bookmark mark='b'/> Each head gets its own slope, from a geometric "
-            "sequence: steep heads look only at the last few characters, shallow ones far back. They reported "
+            "sequence: steep slopes penalize distant keys more, while shallow slopes leave them more competitive. They reported "
             "that a model trained on 1,024 tokens read 2,048 as well as a model trained at that length."
         ) as vo:
             self.play(FadeIn(f), FadeIn(hist), LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.2), FadeIn(cap))
@@ -153,8 +153,8 @@ class Positions(VoiceoverScene):
             "<bookmark mark='d'/> Adi Haviv and colleagues found in 2022 that language models without position "
             "signals still learn where they are, and Amirhossein Kazemnejad and colleagues that, on reasoning "
             "tasks, they generalize to longer inputs better than models with explicit positions. Meta's Llama 4 "
-            "interleaves layers without positions among rotary ones. Rotary positions, the answer nearly every "
-            "model uses today, are next."
+            "interleaves layers without positions among rotary ones. Rotary positions, used by many "
+            "language models, are next."
         ) as vo:
             step(0)
             self.play(FadeIn(uimg), FadeIn(ul))

@@ -94,7 +94,7 @@ class Rope(VoiceoverScene):
         fl = cmath(r"\theta_j = 10000^{-2j/32}", font_size=34, colors=colors).next_to(f, RIGHT, buff=0.8)
         cite_ = cite(r"J.~Su et al., \textit{RoFormer: Enhanced Transformer with Rotary Position Embedding} (2021)", corner=DR)
         with self.voiceover(
-            "In 2021 Jianlin Su and colleagues proposed the answer nearly every model uses today: instead of adding "
+            "In 2021 Jianlin Su and colleagues proposed a method now used by many language models: instead of adding "
             "a position to the input, rotate the queries and keys. Take a query's thirty-two numbers in sixteen "
             "pairs; each pair is an arrow in a plane. <bookmark mark='a'/> At position m, turn pair j by m times an "
             "angle theta j. <bookmark mark='b'/> The first pair turns fast, a full turn every six characters; each "
@@ -130,18 +130,18 @@ class Rope(VoiceoverScene):
         whys = [why(r"$(Ax)\cdot y = x^\top A^\top y$"), why(r"a rotation's transpose turns it back"),
                 why(r"turning by $-m$, then by $n$: \\ by $n - m$")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.0, buff=0.7, edge=6.9)
-        box_t = label(r"the score depends on $n - m$ only: \ relative position, from absolute rotations",
+        box_t = label(r"fixed pre-RoPE $q,k$: \\ the position factor depends on the signed offset $n - m$",
                       font_size=26, color=POS).move_to([0, -1.6, 0])
         dev = float(r["dev"])
-        chk = label(rf"checked on random $32$-number vectors, all shifts up to $40$: \ off by at most ${sci(dev)}$",
+        chk = label(rf"one random $32$-number pair, positions $0$--$39$: \ off by at most ${sci(dev)}$",
                     font_size=22, color=C.TRUE_P).next_to(box_t, DOWN, buff=0.35)
         with self.voiceover(
             "Why rotations? Here is the whole proof. Write R m for the rotation at position m. "
             "<bookmark mark='a'/> The score of a rotated query and a rotated key is q transposed, R m transposed, "
             "R n, k. <bookmark mark='b'/> The transpose of a rotation is the rotation backwards. "
             "<bookmark mark='c'/> And turning back by m then forward by n is turning by n minus m. "
-            "<bookmark mark='d'/> So the score depends only on how far apart the two characters are, though each "
-            "was rotated by its own absolute position. Checked on random vectors, to rounding error."
+            "<bookmark mark='d'/> For fixed queries and keys before rotation, the position factor depends only on the signed "
+            "offset n minus m. The numerical check used one random pair at positions zero through thirty-nine."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -190,7 +190,7 @@ class Rope(VoiceoverScene):
         colors = {r"m": Q, r"n": K, r"q": Q, r"k": K}
         f = cmath(r"(R_{", r"m", r"}\,", r"q", r")\cdot(R_{", r"n", r"}\,", r"k", r")", "=", r"q", r"\cdot", r"R_{", r"n",
                   r"-", r"m", r"}\,", r"k", colors=colors, font_size=40).move_to([2.6, 0.6, 0])
-        fl = label(r"only the distance between them counts", font_size=26, color=GREY_A).next_to(f, DOWN, buff=0.25)
+        fl = label(r"fixed pre-RoPE $q,k$: \\ positional factor uses signed offset $n-m$", font_size=24, color=GREY_A).next_to(f, DOWN, buff=0.25)
         chk = label(rf"computed for a real 32-number pair of vectors: \\ shifting both changes the score by under "
                     rf"$10^{{{math.ceil(math.log10(max(float(r['dev']), 1e-16)))}}}$", font_size=22, color=GREY_B)
         chk.next_to(fl, DOWN, buff=0.45)
@@ -198,10 +198,10 @@ class Rope(VoiceoverScene):
         with self.voiceover(
             "Here is the same fact, seen on one pair: a query at position five and a key at position two. "
             "<bookmark mark='a'/> Their score depends on the angle between them. Now move both forward by the same "
-            "amount, as if the same words appeared later in the text. <bookmark mark='b'/> Both arrows turn by the "
+            "amount, holding their pre-rotation content vectors fixed. <bookmark mark='b'/> Both arrows turn by the "
             "same angle, so the angle between them doesn't change, and neither does the score. "
-            "<bookmark mark='c'/> A rotated query and a rotated key score according to how far apart they are, not "
-            "where they are."
+            "<bookmark mark='c'/> For these fixed content vectors, shifting both positions equally leaves the rotated "
+            "score unchanged."
         ) as vo:
             self.play(FadeIn(big), FadeIn(tag), FadeIn(qarr), FadeIn(karr), FadeIn(readout))
             vo.wait_until("a")
@@ -230,20 +230,19 @@ class Rope(VoiceoverScene):
                       for t, v in (("0", 0), ("1", 1))])
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(3.4, 0), color=GREY_D, stroke_width=1.5)
         xn = label(r"distance between query and key, \ in characters", font_size=24, color=GREY_A).next_to(xt, DOWN, buff=0.15)
-        yn = label(r"a query's score against itself, \ moved apart \ (relative to distance $0$)", font_size=22, color=GREY_A)
+        yn = label(r"equal pair energy: $\frac{1}{16}\sum_j\cos(r\theta_j)$ \\ normalized at distance $0$; smoothed over nearby distances", font_size=22, color=GREY_A)
         yn.next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         faint = curve(ax, np.log10(raw_r), raw, POS, 1).set_stroke(opacity=0.25)
         c = curve(ax, lx, dc, POS, 4)
-        note_ = label(r"far apart, \\ the hands disagree: \\ distant matches \\ count for less, \\ on average", font_size=26,
+        note_ = label(r"phases can cancel \\ the reference oscillates; \\ learned pairs can \\ carry different weights", font_size=26,
                       color=POS).move_to([4.6, 0.6, 0])
         used = label(r"RoPE: \ Llama, Qwen, DeepSeek, \\ Mistral, Gemma, GLM, Kimi \dots", font_size=24, color=GREY_A)
         used.move_to([4.6, -1.6, 0])
         with self.voiceover(
-            "And a bonus. Score a query against an identical key, then move them apart. Each pair's arrows drift "
-            "out of step at its own speed, so the score shrinks with distance: <bookmark mark='a'/> on average, "
-            "nearby matches count more than distant ones, a gentle bias towards the recent past that nobody had to "
-            "build in. <bookmark mark='b'/> Since 2021, rotary positions have become the standard: almost every open "
-            "model uses them."
+            "And a bonus. Score a query against an identical key, with equal energy in every pair, then move them apart. The plotted score is an equal average "
+            "of cosines, smoothed over nearby distances: <bookmark mark='a'/> the score oscillates as phases cancel. It is not monotone, and learned queries and keys "
+            "can weight the pairs differently; this reference alone does not guarantee a recency bias. <bookmark mark='b'/> Since 2021, rotary positions have been adopted by many "
+            "language models."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), Create(zero), FadeIn(xn), FadeIn(yn))
             self.play(FadeIn(faint), Create(c), run_time=2.5)
@@ -267,7 +266,7 @@ class Rope(VoiceoverScene):
                         font_size=14, fmt="{:.2f}")
         for v in ch.vals:
             v.set_opacity(0)
-        top = label(r"our transformer: \ each rotation pair's share of the queries' and keys' size \\ "
+        top = label(r"our transformer: \ each pair's mean normalized squared Q/K size \\ "
                     r"(all $16$ heads, \ held-out text)", font_size=20, color=GREY_A).next_to(ch, UP, buff=0.25)
         top.align_to(ch, LEFT)
         xl = VGroup(label(rf"fastest: \ a turn every ${wl[0]:.0f}$", font_size=18, color=POS)
@@ -280,16 +279,16 @@ class Rope(VoiceoverScene):
         jm = int(np.argmax(e))
         if wl[jm] > ctx and e[jm] > 2.0 / n:
             verdict = (f"Our small model has a favourite: pair {jm + 1}, which turns once every {wl[jm]:,.0f} "
-                       f"characters, longer than its whole context, carries {e[jm]:.0%} of the size of its queries and "
-                       f"keys, {e[jm] * n:.1f} times an even share. Barely rotating, it works as a plain channel for "
-                       "content.")
+                       f"characters, longer than its whole context, carries {e[jm]:.0%} of the mean normalized squared size of its queries and "
+                       f"keys, {e[jm] * n:.1f} times an even share. A longer wavelength still rotates within this "
+                       "context; this norm share alone does not tell us what information it carries.")
         elif s_slow > 1.2 * even:
             verdict = (f"Our small model does the same: the {len(slow)} pairs that never finish a turn within its "
-                       f"{ctx} characters carry {s_slow:.0%} of the size of its queries and keys, against {even:.0%} "
+                       f"{ctx} characters carry {s_slow:.0%} of the mean normalized squared size of its queries and keys, against {even:.0%} "
                        "if it were spread evenly.")
         else:
             verdict = (f"Our small model shows no such preference: the {len(slow)} pairs that never finish a turn "
-                       f"within its {ctx} characters carry {s_slow:.0%} of the size of its queries and keys, close to "
+                       f"within its {ctx} characters carry {s_slow:.0%} of the mean normalized squared size of its queries and keys, close to "
                        f"the {even:.0%} of an even spread.")
         hl_ = SurroundingRectangle(ch.bars[jm], color=WHITE, buff=0.05) if e[jm] > 2.0 / n else VGroup()
         facts = VGroup(

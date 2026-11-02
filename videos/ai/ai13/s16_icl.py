@@ -96,8 +96,8 @@ class InContext(VoiceoverScene):
             "Nothing in it changes a weight. Here's a case small enough to "
             "take apart completely. <bookmark mark='a'/> Each prompt is a list of examples: four numbers x, and an "
             "answer y, which is a fixed weighted sum of them. Then a question: a new x, with the answer missing. "
-            "<bookmark mark='b'/> The catch: every prompt uses different hidden weights, so nothing can be "
-            "memorized. To answer, the model has to work out the rule from the examples in front of it."
+            "<bookmark mark='b'/> The catch: every prompt uses different hidden weights, so one fixed regression vector cannot be "
+            "used for every prompt. To answer, the model has to use the examples in front of it."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(shots[0]), FadeIn(shots[2]),
                       LaggedStart(*[FadeIn(l_, shift=RIGHT * 0.1) for l_ in lines[:-1]], lag_ratio=0.5), run_time=2.5)
@@ -145,7 +145,7 @@ class InContext(VoiceoverScene):
         t2 = label(r"one step of gradient descent, \ written as attention", font_size=24, color=C.BITS)
         t2.next_to(theory, DOWN, buff=0.3)
         tg = axes([0, n_steps, 2000], [0, float(np.ceil(cv[:, 1].max())), 1], x_length=4.6, y_length=2.4,
-                  xlabel=r"training steps", ylabel=r"squared error on the question", xticks=[0, n_steps],
+                  xlabel=r"training steps", ylabel=r"training-batch mean squared error", xticks=[0, n_steps],
                   xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[0, float(np.ceil(cv[:, 1].max()))],
                   center=[0, -1.0, 0])
         tc = curve(tg.ax, cv[:, 0], cv[:, 1], A, 3)
@@ -154,14 +154,14 @@ class InContext(VoiceoverScene):
         with self.voiceover(
             "Take the simplest attention: one layer, with no softmax. Every token is an example's numbers and its "
             "answer, and attention adds to each token a weighted sum of the others. Train it on many prompts: its "
-            f"error on the question falls from {cv[0, 1]:.1f} to {cv[-1, 1]:.2f}. "
+            f"sampled training-batch error goes from {cv[0, 1]:.1f} to {cv[-1, 1]:.2f} at the last logged checkpoint. "
             "<bookmark mark='a'/> Here are the two matrices it learned. Blue is positive, red negative. "
             "<bookmark mark='b'/> Now do something else: one step of gradient descent on the prompt's examples, "
             "starting from zero, for the least-squares loss of Part 6. The step is a sum of each answer times its "
             "x, and the prediction is a sum of each answer times how well its x matches the question: a dot product "
             "of x's, weighting the y's. <bookmark mark='c'/> That is attention, with these two matrices: an "
-            "identity block that compares x's, and one entry that passes on the y's. They're the same pattern the "
-            "network found by itself."
+            "identity block that compares x's, and one entry that passes on the y's. This is the block structure the "
+            "learned matrices resemble; prediction agreement is a separate measurement."
         ) as vo:
             self.play(Write(f), FadeIn(fl), FadeIn(tg))
             self.play(Create(tc), run_time=2.0)
@@ -179,32 +179,32 @@ class InContext(VoiceoverScene):
     def agree(self):
         d = load("icl")
         pl, pg, tr = np.asarray(d["pred_lsa"]), np.asarray(d["pred_gd"]), np.asarray(d["truth"])
-        lim = float(np.ceil(np.percentile(np.abs(np.concatenate([pl, pg])), 98)))
+        lim = float(np.ceil(np.max(np.abs(np.concatenate([pl, pg])))))
         ax = Axes(x_range=[-lim, lim, lim / 2], y_range=[-lim, lim, lim / 2], x_length=5.0, y_length=5.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.2, -0.4, 0])
         diag = DashedLine(ax.c2p(-lim, -lim), ax.c2p(lim, lim), color=GREY_B, stroke_width=1.5)
-        pts = VGroup(*[Dot(ax.c2p(float(np.clip(a, -lim, lim)), float(np.clip(b, -lim, lim))), radius=0.04, color=Q)
+        pts = VGroup(*[Dot(ax.c2p(float(a), float(b)), radius=0.04, color=Q)
                        for a, b in zip(pg, pl)])
         xn = label(r"one step of gradient descent", font_size=24, color=C.BITS).next_to(ax, DOWN, buff=0.15)
         yn = label(r"the trained attention layer", font_size=24, color=A).rotate(PI / 2).next_to(ax, LEFT, buff=0.15)
         r_ = float(d["agree1"])
-        rl = label(rf"correlation ${r_:.3f}$", font_size=32, color=WHITE).move_to([3.2, 1.6, 0])
-        expl = label(r"on $4{,}000$ new prompts: \\ the forward pass \emph{is} \\ a step of learning", font_size=28,
+        rl = label(rf"correlation on $4{{,}}000$ prompts: \ ${r_:.3f}$", font_size=32, color=WHITE).move_to([3.2, 1.6, 0])
+        expl = label(rf"${len(pl)}$ saved questions shown \\ GD step size: best of $59$ \\ on the same $4{{,}}000$ evaluation prompts", font_size=28,
                      color=GREY_A).next_to(rl, DOWN, buff=0.5)
         cite_ = cite(r"J.~von Oswald et al., \textit{Transformers Learn In-Context by Gradient Descent} (2023)", corner=DR)
         dl = label(r"same answer", font_size=20, color=GREY_B).next_to(ax.c2p(lim, lim), RIGHT, buff=0.1)
-        corr = gloss(r"correlation", r"how closely the dots hug a straight line: \\ $1$ means exactly on it, "
-                     r"$0$ means no line at all", width=4.6, color=GREY_A).move_to([3.2, -1.75, 0])
+        corr = gloss(r"correlation", r"linear association between predictions: \\ $1$: a perfect positive line, "
+                     r"$0$: zero linear correlation", width=4.6, color=GREY_A).move_to([3.2, -1.75, 0])
         if r_ > 0.99:
-            v_line = (f"They lie on a line. The correlation is {r_:.3f}; correlation measures how closely the dots hug "
-                      "a straight line, and one would mean exactly on it. The forward pass of this network is a step "
-                      "of learning, run on the examples in its prompt.")
+            v_line = (f"Their predictions are strongly correlated: {r_:.3f}. Correlation measures positive linear association, "
+                      "and does not establish identical predictions or an identical internal learning algorithm. The reported statistic concerns "
+                      "these evaluation prompts.")
         else:
-            v_line = (f"They follow a line, loosely: the correlation is {r_:.3f}; correlation measures how closely the "
-                      "dots hug a straight line, and one would mean exactly on it. The forward pass of this network is "
-                      "close to a step of learning.")
+            v_line = (f"Their correlation is {r_:.3f}; correlation measures linear association between the "
+                      "predictions, and does not establish identical predictions or an identical learning algorithm. This comparison is "
+                      "specific to these evaluation prompts.")
         with self.voiceover(
-            "Check it on four thousand new prompts. Each dot is one question: across, the answer from one step of "
+            "Check it on four thousand evaluation prompts. The scatter shows the first two hundred saved questions, while the correlation uses all four thousand. The GD step size was selected from fifty-nine choices on these same evaluation prompts. Each dot is one question: across, the answer from one step of "
             "gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> " + v_line
             + " Johannes von Oswald and colleagues showed this in 2023."
         ) as vo:
@@ -234,18 +234,18 @@ class InContext(VoiceoverScene):
             bar.move_to([-2.7 + max(v * scale, 0.02) / 2, y, 0])
             val = MathTex(f"{v:.2f}", font_size=26, color=c_).next_to(bar, RIGHT, buff=0.12)
             g.add(VGroup(name, bar, val))
-        head = label(r"mean squared error on new prompts", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
+        head = label(r"mean squared error on $4{,}000$ evaluation prompts", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
         beats = all(d[f"lsa{k}"] <= d[f"gd{k}"] * 1.02 for k in (2, 3))
         l2, g2, ls = float(d["lsa2"]), float(d["gd2"]), float(d["lstsq"])
         if beats and l2 < 0.8 * g2:
-            v_deep = (f"One layer matches one step of gradient descent. Two layers beat two plain steps, {l2:.2f} "
-                      f"against {g2:.2f}: trained, the network finds a smarter kind of step than the textbook one.")
+            v_deep = (f"One trained layer has similar error to one gradient step. Two layers have lower error than two reference steps here, {l2:.2f} "
+                      f"against {g2:.2f}. These are separately trained depths, compared with an evaluation-tuned gradient reference.")
         else:
-            v_deep = "One layer matches one step of gradient descent, and more layers keep pace with more steps."
+            v_deep = "Here we compare separately trained attention depths with evaluation-tuned gradient-descent references."
         v_exact = ("Exact least squares, from Part 6, gets every answer right here, to rounding error, so there is "
                    "room to grow." if ls < 0.01 else f"Exact least squares, from Part 6, reaches {ls:.2f}.")
         with self.voiceover(
-            "Stack more layers, and each can take another step. <bookmark mark='a'/> " + v_deep
+            "Compare separately trained networks with one, two and three attention layers. <bookmark mark='a'/> " + v_deep
             + " <bookmark mark='b'/> " + v_exact + " Real transformers, with softmax attention and many layers, are messier than this, but "
             "the lesson carries over: a forward pass can run a learning algorithm on the prompt."
         ) as vo:

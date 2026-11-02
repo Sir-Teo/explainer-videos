@@ -163,9 +163,10 @@ class RASP(VoiceoverScene):
                    color=GREY_A).next_to(i2, DOWN, buff=0.15)
         rk = VGroup(*[MathTex(str(v), font_size=20, color=Q).next_to(i1, RIGHT, buff=0.12)
                       .set_y(i1.get_top()[1] - S / (n + 1) * (j + 1.5)) for j, v in enumerate(rank)])
-        rkl = label(r"rank", font_size=16, color=Q).next_to(rk, UP, buff=0.1)
+        rkl = label(r"rank ($0$ first)", font_size=16, color=Q).next_to(rk, UP, buff=0.1).align_to(rk, LEFT)
         ok, tr = int(r["sort_ok"]), int(r["sort_trials"])
-        res = label(rf"${ok:,}$ of ${tr:,}$ random inputs sorted".replace(",", "{,}"), font_size=22, color=C.TRUE_P)
+        res = label(rf"sorted ${ok:,}$ of ${tr:,}$ random inputs \\ with no repeated tokens".replace(",", "{,}"),
+                    font_size=22, color=C.TRUE_P)
         res.to_edge(DOWN, buff=0.25)
         v_sorted = (f"Our hand-built weights sort every one of {tr:,} random inputs." if ok == tr else
                     f"Our hand-built weights sort {ok:,} of {tr:,} random inputs.")
@@ -188,12 +189,13 @@ class RASP(VoiceoverScene):
     # ------------------------------------------------------------------
     def limits(self):
         th = theorem_card(r"log-precision transformers are in $\mathsf{TC}^0$",
-                          r"a transformer of fixed depth, with numbers of $O(\log n)$ bits on inputs of length $n$, can "
-                          r"be simulated by constant-depth threshold circuits of polynomial size",
+                          r"fixed depth, $O(\log n)$-bit numbers on length-$n$ inputs, and log-space-computable "
+                          r"embedding, similarity and activation operations: polynomial-size, constant-depth "
+                          r"threshold circuits suffice",
                           who=r"W.~Merrill \& A.~Sabharwal (2023)", width=10.4, font_size=26).move_to([0, 2.2, 0])
         cons = VGroup(
             label(r"so, unless $\mathsf{TC}^0$ is as strong as $\mathsf{NC}^1$:", font_size=26, color=GREY_A),
-            label(r"no fixed-depth transformer tracks the composition of permutations \\ of five things at every "
+            label(r"no such fixed-depth transformer tracks the composition of permutations \\ of five things at every "
                   r"length \ (Merrill, Petty \& Sabharwal 2024; \ Barrington 1989)", font_size=24, color=WHITE,
                   tex_environment="flushleft"),
             label(r"depth matters: \ one layer could not build an induction head \ (chapter 14)", font_size=24,
@@ -201,8 +203,8 @@ class RASP(VoiceoverScene):
             label(r"thinking out loud adds serial steps: \ chain of thought \ (Part 28)", font_size=24, color=C.BITS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.6, -0.55, 0])
         keep_in_frame(cons)
-        conj = label(r"Zhou et al.\ (2023): \ transformers tend to generalize to longer inputs \\ when a short RASP "
-                     r"program solves the task at every length", font_size=22, color=Q).to_edge(DOWN, buff=0.4)
+        conj = label(r"RASP-L hypothesis, Zhou et al.\ (2023): \ a conjecture \\ short causal all-length program; "
+                     r"training to completion; \\ diverse data rule out shorter spurious programs", font_size=22, color=Q).to_edge(DOWN, buff=0.4)
         # a fixed depth over a growing input: the number of sequential steps does not grow with n
         def column(k):
             tok = Square(0.34, stroke_color=GREY_B, stroke_width=1.5, fill_color=GREY_D, fill_opacity=0.6)
@@ -220,14 +222,16 @@ class RASP(VoiceoverScene):
         with self.voiceover(
             "What can't a transformer do? A fixed number of layers is a fixed amount of sequential work. "
             "<bookmark mark='a'/> William Merrill and Ashish Sabharwal proved in 2023 that a fixed-depth transformer, "
-            "whose numbers have about log n bits, can be simulated by constant-depth threshold circuits: the class "
+            "whose numbers have about log n bits and whose basic operations are log-space computable, can be "
+            "simulated by constant-depth threshold circuits: the class "
             "T C zero. <bookmark mark='b'/> If, as most believe, that class is weaker than N C one, no fixed-depth "
-            "transformer can track a sequence of shuffles of five objects at every length. Depth matters in practice "
-            "too: one layer could not build an induction head. <bookmark mark='c'/> The way out is to let the model "
-            "write: every token of a chain of thought is another pass through all the layers, Part 28's story. "
-            "<bookmark mark='d'/> And RASP predicts what trains well: Hattie Zhou and colleagues found that "
-            "transformers tend to generalize to longer inputs when a short RASP program solves the task at every "
-            "length."
+            "transformer in this formal model can track a sequence of shuffles of five objects at every length. Depth matters in practice "
+            "too: one layer could not build an induction head. <bookmark mark='c'/> One way to add sequential work is "
+            "to generate: every new token passes through all the layers again, Part 28's story. Extra depth or "
+            "recurrence are other possibilities. <bookmark mark='d'/> Hattie Zhou and colleagues propose the RASP-L "
+            "hypothesis: models are more likely to generalize to longer inputs when a short causal RASP-L program solves every length, training "
+            "completes, and diverse examples rule out shorter spurious shortcuts. This is a conjecture supported "
+            "by experiments."
         ) as vo:
             self.play(FadeIn(cols[:6]), GrowFromCenter(brace), FadeIn(bl), FadeIn(dl))
             self.play(LaggedStart(*[FadeIn(c_, shift=LEFT * 0.1) for c_ in cols[6:]], lag_ratio=0.15), GrowArrow(grow),
