@@ -14,7 +14,7 @@ are labelled as allegations, and settlements without admission are said to be so
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 55 minutes)
+## Chapters (about 60 minutes)
 
 * **What is a share a claim on?** Shiller (1981) rebuilt on screen: p\* by the backward recursion
   p\*ₜ = (p\*ₜ₊₁ + Dₜ)/(1 + r), 1871–2020, at the average real return (8.3%). The price moves 8× as much as p\* from
@@ -254,7 +254,7 @@ is drawn from their results.
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约55分钟）
+## 各章（约60分钟）
 
 开场：席勒p星的逆向递推（价格的逐年波动是p星的8倍）；历史；本部分目标。第1章：货币时间价值、二分法求内部收益率（实验）、
 有两个内部收益率的项目、戈登模型。第2章：股权久期(1+r)/(r−g)，以及成长股与价值股实测的利率敏感度（每个百分点−2.07%与−1.35%）。
