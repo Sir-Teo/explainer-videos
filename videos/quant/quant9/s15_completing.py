@@ -28,6 +28,7 @@ class Completing(VoiceoverScene):
         g = axes([0.5, 1.75], [0, 1.0], x_length=6.4, y_length=1.4, xlabel=r"the 33 states: stock price tomorrow",
                  xticks=[0.6, 0.8, 1.0, 1.2, 1.4, 1.6], yticks=[], font_size=15)
         g.to_edge(UP, buff=0.5).to_edge(LEFT, buff=0.6)
+        g.xlabel.shift(DOWN * 0.42)  # below both rows of strike labels
         ax = g.ax
         w = np.asarray(c["w"])
         st = VGroup(*[Line(ax.c2p(s, 0), ax.c2p(s, 0.15 + 0.85 * wi / w.max()), color=Q_C, stroke_width=3)
