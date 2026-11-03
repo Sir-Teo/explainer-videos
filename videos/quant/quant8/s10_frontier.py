@@ -52,10 +52,11 @@ class Frontier(VoiceoverScene):
             box = RoundedRectangle(width=t.width + 0.4, height=t.height + 0.3, corner_radius=0.12, stroke_color=col,
                                    stroke_width=1.5, fill_color="#0E141C", fill_opacity=1).move_to([x, y + 0.6, 0])
             t.move_to(box)
-            nodes[k] = VGroup(box, t)
+            nodes[k] = VGroup(box, t).set_z_index(2)  # above every edge: lines run behind the opaque boxes
         base = VGroup(*[Line(nodes[a].get_center(), nodes[b].get_center(), color=GREY_D, stroke_width=1.5)
                         for a, b in (("DP", "HJB"), ("HJB", "STOP"), ("STOP", "BSDE"), ("BSDE", "MFG"), ("HJB", "MFG"),
                                      ("DP", "RL"), ("HJB", "RL"), ("MFG", "RL"), ("KELLY", "DP"), ("KELLY", "RL"))])
+        base.set_z_index(0)
 
         def cap(i):
             _, title, what = PAPERS[i]
@@ -65,7 +66,7 @@ class Frontier(VoiceoverScene):
 
         def lit(i):
             a, b = PAPERS[i][0]
-            return Line(nodes[a].get_center(), nodes[b].get_center(), color=KELLY, stroke_width=6)
+            return Line(nodes[a].get_center(), nodes[b].get_center(), color=KELLY, stroke_width=6).set_z_index(1)
 
         self.cur, self.hi = None, None
 
