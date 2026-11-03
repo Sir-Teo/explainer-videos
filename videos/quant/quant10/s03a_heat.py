@@ -86,7 +86,7 @@ class Heat(VoiceoverScene, ThreeDScene):
         kern = always_redraw(kernel)
         klab = label(r"violet: the heat kernel at $\tau = 0.4$; shaded: kernel $\times$ payoff", font_size=22,
                      color=QC.Q).to_edge(DOWN, buff=0.3).shift(LEFT * 1.5)
-        self.set_camera_orientation(phi=70 * DEGREES, theta=-55 * DEGREES, zoom=0.9)
+        self.set_camera_orientation(phi=70 * DEGREES, theta=-55 * DEGREES, zoom=0.78)  # the surface stays below the corner key
         for m in (hint, params, klab):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
