@@ -13,7 +13,7 @@ models are labelled as illustrations on screen.
 SEBI matter is described as alleged, from the regulator's interim order and statements and the firm's public
 statements; no final finding had been made at the time of writing.*
 
-## Chapters
+## Chapters (about 59 minutes)
 
 * **Gamma against theta (hook).** The desk question (a hedged straddle in a quiet week). May 2021 run live: a 30-day ATM
   BTC straddle bought at DVOL's 74%, hedged hourly, realized 127%, earned +1.7 on a premium of 16.9, the ledger's gamma
@@ -214,7 +214,7 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 *讲的是方法，不构成投资建议。期权策略的结果是历史的、只针对一个市场。SEBI一案根据监管机构的临时命令和声明以及该公司的公开声明描述为指控；
 截至撰写时尚无最终认定。*
 
-## 各章
+## 各章（约59分钟）
 
 * **伽马对时间损耗（开场）。** 交易台问题；实时重放2021年5月：按DVOL的74%买入、每小时对冲的三十天平值比特币跨式组合，已实现127%，
   在16.9的权利金上只赚+1.7。历史：1973、1985、1987、2018–2020、2021、2024。
