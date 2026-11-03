@@ -113,13 +113,13 @@ class Discrete(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def shape(self, ds):
-        lo, hi = -3.0, 1.6
+        lo, hi = -3.5, 2.6  # 99.5% of the 13-hedge outcomes; the rest are left out, not piled into the end bins
         panels = VGroup()
         for N, col in ((13, LOSS), (252, OPT)):
             pnl = np.asarray(ds[f"pnl_{N}"], float)
             g = axes([lo, hi], [0, 1.05], x_length=5.0, y_length=2.6, xlabel=r"hedged P\&L, short the call",
-                     xticks=[-2, -1, 0, 1], font_size=18)
-            hh, e = np.histogram(np.clip(pnl, lo, hi), bins=60, range=(lo, hi))
+                     xticks=[-3, -2, -1, 0, 1, 2], font_size=18)
+            hh, e = np.histogram(pnl, bins=60, range=(lo, hi))
             hh = hh / hh.max()
             bars = VGroup(*[Rectangle(width=g.ax.x_length / 60 * 0.95, height=max(g.ax.y_length * v, 0.002),
                                       stroke_width=0, fill_color=col, fill_opacity=0.85)
@@ -164,7 +164,9 @@ class Discrete(VoiceoverScene):
         leg.next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         C = {r"\Gamma": GAM, r"J": LOSS}
         eq = cmath(r"V(Se^J) - V(S) - \Delta S(e^J - 1)", r"\approx", r"\tfrac12", r"\Gamma", r"S^2", r"J", r"^2",
-                   font_size=32, colors=C).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+                   font_size=30, colors=C).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+        if eq.get_right()[0] > 6.9:  # keep it in frame
+            eq.scale_to_fit_width(6.9 - eq.get_left()[0])
         eqn = label(r"a jump is not made smaller by hedging more often", font_size=22, color=GREY_A)
         eqn.next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
         holds = jf["ratio_jump"] < 2
