@@ -41,7 +41,9 @@ class Industry(VoiceoverScene):
         l2 = curve(g.ax, lams, f(ql), GOOD, stroke_width=3)
         m1 = Dot(g.ax.c2p(ind["lam_rmse"], 0), radius=0.08, color=BAD)
         m2 = Dot(g.ax.c2p(ind["lam_qlike"], 0), radius=0.08, color=GOOD)
-        leg = legend([(BAD, rf"RMSE of daily variance: best at {ind['lam_rmse']:.3f}"),
+        at_edge = ind["lam_rmse"] <= lams[0] + 1e-9  # the squared error's optimum may lie below the grid
+        leg = legend([(BAD, (rf"RMSE of daily variance: lowest at the grid's edge, {lams[0]:.2f}" if at_edge else
+                             rf"RMSE of daily variance: best at {ind['lam_rmse']:.3f}")),
                       (GOOD, rf"QLIKE, weekly: best at {ind['lam_qlike']:.3f}")], font_size=17).next_to(g, UP, buff=0.15)
         pc = pause_card(r"Why one $\lambda$ for some 480 series, instead of 480 $\lambda$s?", width=5.4, font_size=21)
         pc.to_corner(UR, buff=0.3)
