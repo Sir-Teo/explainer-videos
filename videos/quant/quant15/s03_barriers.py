@@ -34,8 +34,8 @@ class Barriers(VoiceoverScene, ThreeDScene):
         t = np.linspace(0, 1, n + 1)
         W = np.vstack([np.zeros(m), np.cumsum(g.standard_normal((n, m)) * np.sqrt(1 / n), axis=0)])
         hb = -0.5
-        ax = axes([0, 1], [-2.6, 2.2], x_length=7.4, y_length=4.8, xlabel=r"time", ylabel=r"Brownian motion",
-                  xticks=[], yticks=[], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = axes([0, 1], [-2.6, 2.2], x_length=6.0, y_length=4.8, xlabel=r"time", ylabel=r"Brownian motion",
+                  xticks=[], yticks=[], font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
         a = ax.ax
         bar = DashedLine(a.c2p(0, hb), a.c2p(1, hb), stroke_color=BARRIER, stroke_width=3)
         paths, mirrors = VGroup(), VGroup()
@@ -57,10 +57,10 @@ class Barriers(VoiceoverScene, ThreeDScene):
         h1 = side_density(a, touched_above, (-2.6, 2.2), bins=30, width=1.2, color=BAD, opacity=0.6)
         h2 = side_density(a, 2 * hb - below_mirror, (-2.6, 2.2), bins=30, width=1.2, color=OPT, opacity=0.45)
         rows = VGroup(
-            MathTex(r"P(m_T \le b,\ W_T \ge x) = P(W_T \le 2b - x)", font_size=30, color=OPT),
+            MathTex(r"P(m_T \le b,\ W_T \ge x) = P(W_T \le 2b - x)", font_size=28, color=OPT),
             wrapped_label(rf"of 20{{,}}000 paths on 1{{,}}000 steps, {n1} touched $b$ and ended above $x = 0$; {n2} "
-                          r"ended below the mirror point $2b - x$", 4.4, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.5)
+                          r"ended below the mirror point $2b - x$", 4.6, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3).shift(UP * 0.5)
         src = illustration(r"60 Brownian paths drawn; the histograms from 20{,}000; $m_T$ the minimum, $b$ the barrier")
         with self.voiceover(
             "Sixty Brownian paths run to the horizon; those that touch the barrier turn red. <bookmark mark='a'/> After its first touch, each red path gets a mirror twin, reflected "
@@ -179,11 +179,12 @@ class Barriers(VoiceoverScene, ThreeDScene):
         def val(u, w):
             return float(fV((max(w, 0.005), u))) if u > H else 0.0
 
-        surf = Surface(lambda u, w: ax.c2p(u, w, val(u, w)), u_range=[80, 130], v_range=[0.005, 0.5],
+        # both surfaces start at the barrier: a grid cell straddling it would draw a jagged step
+        surf = Surface(lambda u, w: ax.c2p(u, w, val(u, w)), u_range=[H, 130], v_range=[0.005, 0.5],
                        resolution=(40, 18), fill_opacity=0.85, stroke_width=0.3, stroke_color=GREY_D)
         surf.set_fill_by_value(axes=ax, colorscale=[(QC.DELTA, 0), (OPT, 12), ("#F7A8D8", 30)], axis=2)
-        dsurf = Surface(lambda u, w: ax.c2p(u, w, zs * float(np.clip(fD((max(w, 0.005), u)), 0, 1.2)) if u > H else 0),
-                        u_range=[80, 130], v_range=[0.005, 0.5], resolution=(40, 18), fill_opacity=0.8,
+        dsurf = Surface(lambda u, w: ax.c2p(u, w, zs * float(np.clip(fD((max(w, 0.005), max(u, H + 0.05))), 0, 1.2))),
+                        u_range=[H, 130], v_range=[0.005, 0.5], resolution=(40, 18), fill_opacity=0.8,
                         stroke_width=0.3, stroke_color=GREY_D)
         dsurf.set_fill_by_value(axes=ax, colorscale=[(SPOT, 0), (DELTA, 20), (BAD, 34)], axis=2)
         wall = Polygon(ax.c2p(H, 0, 0), ax.c2p(H, 0.5, 0), ax.c2p(H, 0.5, 30), ax.c2p(H, 0, 30), stroke_color=BARRIER,
@@ -214,7 +215,7 @@ class Barriers(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeOut(hint), FadeIn(hint2), ReplacementTransform(surf, dsurf), run_time=2)
             self.move_camera(theta=-80 * DEGREES, phi=62 * DEGREES, run_time=max(vo.remaining(1.0) - 1.0, 1.0))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, dsurf, wall)), FadeOut(hint2),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, dsurf, wall)), FadeOut(hint2),
                                                                   FadeOut(wl)], run_time=1.5)
         self.clear_scene()
 
