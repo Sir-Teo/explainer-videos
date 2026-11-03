@@ -151,7 +151,7 @@ class VRP(VoiceoverScene):
             ax.c2p(k["f_ruin"], top * 1.3), UP, buff=0.05)
         gk = DashedLine(ax.c2p(k["f_gauss"], -0.1), ax.c2p(k["f_gauss"], top * 1.3), color=GREY_B, stroke_width=2)
         gkl = label(rf"Gaussian Kelly $\mu/\sigma^2 = {k['f_gauss']:.0f}$", font_size=18, color=GREY_B).next_to(
-            ax.c2p(k["f_gauss"], top * 0.6), RIGHT, buff=0.08)
+            ax.c2p(k["f_gauss"], top * 0.6), LEFT, buff=0.08)  # left of its line: the notes take the right
         x = ValueTracker(0.0)
         dot = always_redraw(lambda: Dot(ax.c2p(x.get_value(), float(np.interp(x.get_value(), f, gg))), radius=0.08,
                                         color=YELLOW))
@@ -170,7 +170,7 @@ class VRP(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(eqs, DOWN, buff=0.35).align_to(eqs, LEFT)
         src = real_data(rf"Part 10's {k['n']} monthly P\&Ls of a sold, hourly-hedged 30-day bitcoin call, as returns on notional")
         pc = pause(r"Your edge has $t = 2.4$ on 43 months. Lever it five times?", width=4.6, font_size=21,
-                   corner=DL)
+                   corner=DR)  # the left corner holds the chart's axis label
         at_wall = k["f_emp"] > 0.9 * k["f_ruin"]
         ksay = (f"The curve keeps rising until it hits the wall at {k['f_ruin']:.0f}: in this sample the optimum is "
                 "simply as close to ruin as the worst month allows, which only means the sample has not yet seen a "
