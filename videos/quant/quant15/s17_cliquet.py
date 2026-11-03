@@ -30,7 +30,7 @@ class Cliquet(VoiceoverScene, ThreeDScene):
         x = np.concatenate([[0], np.cumsum(z - 0.5 * 0.22 ** 2 / 252)])
         S = 100 * np.exp(x)
         t = np.arange(len(S)) / d
-        ax_ = axes([0, 12], [float(S.min()) - 4, float(S.max()) + 4], x_length=8.6, y_length=3.6, xlabel=r"months",
+        ax_ = axes([0, 12], [float(S.min()) - 4, float(S.max()) + 4], x_length=7.2, y_length=2.8, xlabel=r"months",
                    ylabel=r"index", xticks=[0, 3, 6, 9, 12], yticks=[], font_size=15).to_edge(UP, buff=0.5).to_edge(LEFT, buff=0.5)
         ax = ax_.ax
         tr = ValueTracker(0)
@@ -45,10 +45,14 @@ class Cliquet(VoiceoverScene, ThreeDScene):
                                 ax.c2p(0, s0 * (1 + flo))[1], stroke_width=0, fill_color=GOOD, fill_opacity=0.15)
                       .move_to([ax.c2p(m + 0.5, 0)[0], ax.c2p(0, s0)[1], 0]))
         bars = VGroup()
-        bx = axes([0, 12], [-0.04, 0.12], x_length=8.6, y_length=2.4, xlabel=r"month", ylabel=r"clipped return, summed",
-                  xticks=[0, 6, 12], yticks=[-0.03, 0, 0.03, 0.06, 0.09], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                  font_size=14).next_to(ax_, DOWN, buff=0.3).align_to(ax_, LEFT)
         run = np.cumsum(clip)
+        # the axis covers the running sum, which can fall well below one month's floor
+        ylo = min(-0.04, float(np.floor((min(run.min(), clip.min()) - 0.01) / 0.03) * 0.03))
+        yhi = max(0.06, float(np.ceil((max(run.max(), clip.max()) + 0.01) / 0.03) * 0.03))
+        bx = axes([0, 12], [ylo, yhi], x_length=7.2, y_length=2.1, xlabel=r"month", ylabel=r"clipped return, summed",
+                  xticks=[0, 6, 12], yticks=[v for v in np.arange(-0.3, 0.31, 0.03 if yhi - ylo < 0.16 else 0.06)
+                                             if ylo <= v <= yhi + 1e-9],
+                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=14).next_to(ax_, DOWN, buff=0.25).align_to(ax_, LEFT)
         for m in range(n_m):
             y0, y1 = bx.ax.c2p(m + 0.5, 0)[1], bx.ax.c2p(m + 0.5, clip[m])[1]
             bars.add(Rectangle(width=0.4, height=max(abs(y1 - y0), 0.01), stroke_width=0,
