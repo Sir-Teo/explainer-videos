@@ -67,7 +67,7 @@ class Asian(VoiceoverScene):
 
     def derive(self, sc):
         rows = [
-            cmath(r"\log G", r"=", r"\tfrac1n\textstyle\sum_i \log S_{t_i} \sim \mathcal N\big(\mu_G,\ \sigma_G^2\big)", font_size=34,
+            cmath(r"\log G", r"=", r"\tfrac1n\textstyle\sum_i \log S_{t_i} \sim \mathcal N\big(m_G,\ s_G^2\big)", font_size=34,
                   colors={r"\log G": QC.HOUSE}),
             cmath(r"\operatorname{Var}\log G", r"\to", r"\frac{\sigma^2}{T^2}\int_0^T\!\!\int_0^T \min(s, t)\,ds\,dt = "
                   r"\frac{\sigma^2 T}{3}", font_size=32, colors={r"\operatorname{Var}\log G": QC.HOUSE}),
@@ -76,7 +76,7 @@ class Asian(VoiceoverScene):
             cmath(r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}", r"=", r"0,\quad V = S_0\,u(0, X_0)",
                   font_size=32, colors={r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}": IV}),
         ]
-        whys = [why(r"$\mu_G = \log S_0 + (r - q - \tfrac{\sigma^2}{2})\bar t$, $\sigma_G^2 = \tfrac{\sigma^2}{n^2}"
+        whys = [why(r"$m_G = \log S_0 + (r - q - \tfrac{\sigma^2}{2})\bar t$, $s_G^2 = \tfrac{\sigma^2}{n^2}"
                     r"\sum_{i,j}\min(t_i, t_j)$: a linear map of a Gaussian vector is Gaussian, so the geometric Asian "
                     r"is log-normal, priced in closed form (Kemna and Vorst 1990)"),
                 why(r"$\iint \min(s,t) = T^3/3$: the effective volatility is $\sigma/\sqrt 3$, which is why Asians are "
