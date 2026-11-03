@@ -108,14 +108,15 @@ class Signatures(VoiceoverScene, ThreeDScene):
                 cmath(r"\big\|S^k(X)\big\|", r"\le", r"\frac{L^k}{k!}", font_size=30),
                 cmath(r"\langle \ell_1, S\rangle\,\langle \ell_2, S\rangle", r"=", r"\langle \ell_1 \sqcup\!\sqcup\, \ell_2, S\rangle",
                       font_size=30)]
-        whys = [why(r"the signature: every iterated integral; level 1 is the increment, the antisymmetric part of "
-                    r"level 2 the L\'evy area", 18),
-                why(r"Chen (1957): concatenating paths multiplies signatures; a straight segment's is the tensor "
-                    r"exponential", 18),
+        # the notes stay right of the square of paths: wrapped to the width beside it
+        whys = [wrapped_label(r"the signature: every iterated integral; level 1 is the increment, the antisymmetric part "
+                              r"of level 2 the L\'evy area", 7.0, 18, GREY_B),
+                wrapped_label(r"Chen (1957): concatenating paths multiplies signatures; a straight segment's is the "
+                              r"tensor exponential", 7.0, 18, GREY_B),
                 why(r"the simplex has volume $1/k!$: truncation error decays factorially", 18),
                 why(r"the shuffle product: linear functionals form an algebra; with time added, Stone--Weierstrass "
                     r"gives universal approximation on compact sets", 18)]
-        step = ladder(self, rows, whys, keep=4, top=3.3, x=2.3, buff=0.5, edge=6.95)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=0.8, buff=0.42, edge=6.95)  # room for Chen's identity at full size
         with self.voiceover(
             "A pause. Right then up, or up then right: same start, same end, same increments. Which statistic tells "
             "them apart? <bookmark mark='a'/> The signed area to the chord: plus a half and minus a half. Kuo-Tsai "
@@ -131,6 +132,7 @@ class Signatures(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(area), FadeIn(ans))
             step(0)
             vo.wait_until("b")
+            self.play(FadeOut(pc), FadeOut(ans))  # answered: the lower left goes to the notes under the ladder
             step(1)
             vo.wait_until("c")
             step(2)
