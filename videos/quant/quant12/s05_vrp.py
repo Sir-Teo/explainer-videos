@@ -147,7 +147,7 @@ class VRP(VoiceoverScene):
                       label(rf"worst: the month from {_nice(p['worst_day'])}", font_size=17, color=BAD).next_to(
                           g.ax.c2p(t[wi], -1.1), RIGHT, buff=0.15))
         side = label(rf"skewness of the weekly P\&L {p['skew']:.2f}; best {p['best']:+.2f}, worst {p['worst']:+.2f}",
-                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.3)
+                     font_size=20, color=GREY_A).to_corner(DL, buff=0.3)  # left of the source line
         src = real_data(r"each week: sell the 30-day variance swap at the strip's price, receive realized variance", corner=DR)
         sk, w, b = p["skew"], p["worst"], p["best"]
         assert p["worst_day"] == "2021-05-12", p["worst_day"]  # the narration names this week
