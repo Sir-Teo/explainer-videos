@@ -39,7 +39,7 @@ class Digitals(VoiceoverScene):
         mx = d["curves"]["an hour"]["max_delta"]
         foot = wrapped_label(rf"an hour before expiry, the digital's delta at the strike is {mx:.2f} units per unit of payout: "
                              r"for a payout of a million, a hedge of hundreds of thousands of units that flips to zero on a "
-                             r"tick. A digital is a smooth price on an impossible hedge", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.45)
+                             r"tick. A digital is a smooth price on an impossible hedge", 11.5, 20, GREY_A).to_edge(DOWN, buff=0.7)
         src = illustration(r"cash-or-nothing call struck at 100, volatility 25\%")
         with self.voiceover(
             "A digital pays one if the price ends above the strike, and nothing otherwise. Its price is simple: the "
