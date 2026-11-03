@@ -117,7 +117,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(*[FadeIn(a_) for a_ in arrows[2:]], run_time=1.2)
             self.move_camera(theta=-95 * DEGREES, phi=30 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, valley, star, arrows)), FadeOut(hint),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, surf, valley, star, arrows)), FadeOut(hint),
                                                                   FadeOut(txt), FadeOut(src)], run_time=1.5)
         self.clear_scene()
 
