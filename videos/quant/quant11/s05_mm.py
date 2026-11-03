@@ -215,7 +215,7 @@ class MarketMaker(VoiceoverScene):
         note_ = wrapped_label(rf"{verdict}; measured against Deribit's own mark price, on the {100 * cov[-1]:.0f}\% of "
                               r"trades with a later print", 5.8, 18, GREY_A).next_to(g, DOWN, buff=0.25).align_to(g, LEFT)
         pc = pause(r"Your quote is hit, and then the market moves against you. Was your spread too narrow, or too "
-                   r"wide?", width=4.6, font_size=19, corner=DL)
+                   r"wide?", width=4.6, font_size=19, corner=DR)  # the left half holds the chart and its note
         ksay = (f"An hour later it keeps about {100 * kept:.0f} percent of that: the rest went back to traders who knew "
                 "where the price was going." if kept < 0.9 else
                 f"An hour later it keeps {100 * kept:.0f} percent: adverse selection here is small.")
