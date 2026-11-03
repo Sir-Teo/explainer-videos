@@ -28,7 +28,7 @@ class MeanReversion(VoiceoverScene):
     def lab(self, r, lab):
         t, x = np.asarray(r["t"]), np.asarray(r["r"])
         v = r["vasicek"]
-        g = axes([1954, 2021], [-0.06, 0.18], x_length=6.4, y_length=4.0, ylabel=r"3-month Treasury bill rate",
+        g = axes([1954, 2021], [-0.06, 0.18], x_length=6.4, y_length=3.3, ylabel=r"3-month Treasury bill rate",
                  xticks=[1960, 1980, 2000, 2020], xfmt=lambda u: f"{int(u)}", yticks=[-0.04, 0, 0.04, 0.08, 0.12, 0.16],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_corner(DL, buff=0.5)
         ax = g.ax
