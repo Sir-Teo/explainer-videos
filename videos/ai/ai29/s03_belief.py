@@ -39,7 +39,6 @@ class Belief(VoiceoverScene):
         pm = float(b["p_move"])
         robot = VGroup(Circle(radius=0.16, color=WHITE, fill_opacity=1, fill_color=GREY_D), Dot(radius=0.04, color=C.BITS))
         robot.move_to([x0 + cw * (pos[0] + 0.5), -0.95, 0])
-        sense = Text("door!", font="DejaVu Sans Mono", font_size=22, color=C.BITS)
         bl = label(r"its belief: \ how likely each cell is", font_size=22, color=C.TRUE_P).move_to([3.4, 3.35, 0])  # clear of the citation at the top left
         er = VGroup(label(r"uncertainty:", font_size=24, color=GREY_A), DecimalNumber(float(ent[0]), num_decimal_places=2,
                                                                                        font_size=28, color=C.SURPRISE),
@@ -86,12 +85,16 @@ class Belief(VoiceoverScene):
             for t in range(4, len(B)):
                 anims = [*bars.to(B[t]), robot.animate.move_to([x0 + cw * (pos[t] + 0.5), -0.95, 0]),
                          er[1].animate.set_value(float(ent[t]))]
-                if obs[t - 1]:
-                    flash = sense.copy().next_to([x0 + cw * (pos[t] + 0.5), -0.95, 0], DOWN, buff=0.25)
-                    self.play(*anims, FadeIn(flash), run_time=0.32)
-                    self.remove(flash)
-                else:
-                    self.play(*anims, run_time=0.32)
+                # Every update includes a sensor result, including a negative observation.
+                # Keep the cue fully visible through the compressed step and a short hold;
+                # fading in then immediately removing it hid the observation in fast playback.
+                cue = Text("door!" if obs[t - 1] else "no door", font="DejaVu Sans Mono", font_size=22,
+                           color=C.BITS if obs[t - 1] else GREY_B)
+                cue.next_to([x0 + cw * (pos[t] + 0.5), -0.95, 0], DOWN, buff=0.25)
+                self.add(cue)
+                self.play(*anims, run_time=0.24)
+                self.wait(0.16)
+                self.remove(cue)
             self.play(Indicate(bars.bar(int(B[-1].argmax())), color=WHITE))
             vo.wait_until("c")
             self.play(Indicate(f, color=WHITE, scale_factor=1.05))
@@ -109,9 +112,9 @@ class Belief(VoiceoverScene):
         agent = node_box(r"agent: \ belief $b(s)$", AGENT, 30, height=1.0).move_to([4.0, -1.3, 0])
         a1 = CurvedArrow(agent.get_right() + RIGHT * 0.05, world.get_right() + RIGHT * 0.05, angle=1.3, color=GREY_B)
         a2 = CurvedArrow(world.get_left() + LEFT * 0.05, agent.get_left() + LEFT * 0.05, angle=1.3, color=OBS)
-        l1 = label(r"action $a$", font_size=22, color=GREY_B).next_to(a1, RIGHT, buff=0.08)
+        l1 = label(r"action $a$", font_size=22, color=GREY_B).next_to(a1, LEFT, buff=0.15)
         keep_in_frame(l1)
-        l2 = label(r"observation $o$", font_size=22, color=OBS).next_to(a2, LEFT, buff=0.08)
+        l2 = label(r"observation $o$", font_size=22, color=OBS).next_to(a2, RIGHT, buff=0.15)
         hist = history_card(1965, r"K.~J.~\AA str\"om", r"optimal control with incomplete state information: \ act on "
                             r"the probability of each state", width=7.4, color=C.HUMAN, font_size=20)
         hist.move_to([-2.7, -2.3, 0])
