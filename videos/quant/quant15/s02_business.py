@@ -92,9 +92,9 @@ class Business(VoiceoverScene):
                   colors={r"\text{reverse convertible}": OPT}),
             cmath(r"V", r"=", r"e^{-(r+s)T}(1 + c) - P(S_0, T)/S_0", font_size=36, colors={r"V": OPT}),
             cmath(r"c^{*}", r"=", r"e^{(r+s)T}\big(1 + P/S_0\big) - 1", font_size=36, colors={r"c^{*}": IV}),
-            cmath(r"V_{\text{snowball}}", r"=", r"\textstyle\sum_m \mathbb E\big[D_m \mathbf 1_{\tau = m}\big]\big(1 + "
-                  r"\tfrac{cm}{12}\big) + \mathbb E\big[D_T \mathbf 1_{\text{alive, no KI}}\big](1 + 2c) + "
-                  r"\mathbb E\big[D_T \mathbf 1_{\text{alive, KI}}\min(S_T, 1)\big]", font_size=30,
+            cmath(r"V_{\text{snowball}}", r"=", r"\textstyle\sum_m \mathbb E\big[D_m \mathbf 1_{O_m}\big]\big(1 + "
+                  r"\tfrac{cm}{12}\big) + \mathbb E\big[D_T \mathbf 1_{N}\big](1 + 2c) + "
+                  r"\mathbb E\big[D_T \mathbf 1_{I}\min(S_T, 1)\big]", font_size=34,
                   colors={r"V_{\text{snowball}}": OPT}),
             cmath(r"\text{margin}", r"=", r"\text{issue price} - V(c_{\text{sold}}) = (c^{*} - c_{\text{sold}})\,B",
                   font_size=36, colors={r"\text{margin}": BAD}),
@@ -102,8 +102,8 @@ class Business(VoiceoverScene):
         whys = [why(r"the simplest note: a bond that pays $1 + c$, minus a put the buyer has sold"),
                 why(r"the issuer discounts its own promise at its funding rate $r + s$; the put is priced at $r$"),
                 why(r"set $V = 1$: both the put's premium and the issuer's credit spread feed the coupon"),
-                why(r"the snowball's payoff splits on three disjoint events: knocked out in month $m$, alive and never "
-                    r"knocked in, alive and knocked in"),
+                why(r"three disjoint events: $O_m$, knocked out in month $m$; $N$, alive and never knocked in; $I$, "
+                    r"alive and knocked in"),
                 why(r"$V$ is affine in $c$ (chapter 7): every point of coupon withheld is $B$ points of price kept")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.2, buff=0.75, edge=6.9)
         ex = wrapped_label(rf"a one-year reverse convertible at 20\% volatility: the at-the-money put is worth "
