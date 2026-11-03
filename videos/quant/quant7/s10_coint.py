@@ -179,9 +179,12 @@ class Coint(VoiceoverScene, ThreeDScene):
         leg = legend([(GOOD, r"level: the common trend"), (ALT, r"slope"), (BAD, r"curvature: the thin direction")],
                      font_size=18).to_corner(DL, buff=0.3)
         src = real_data(r"FRED DTB3, DGS5, DGS10, daily 1990--2020 (every tenth day drawn)")
-        self.set_camera_orientation(phi=70 * DEGREES, theta=-50 * DEGREES, zoom=0.7)
+        alabs = VGroup(*[label(s_, font_size=18, color=GREY_B).move_to(ax3.c2p(*p_))
+                         for s_, p_ in ((r"3-month", (11.4, 0, 0)), (r"5-year", (0, 11.4, 0)), (r"10-year", (0, 0, 11.0)))])
+        self.set_camera_orientation(phi=70 * DEGREES, theta=-50 * DEGREES, zoom=0.78)
         self.add_fixed_in_frame_mobjects(panel, leg, src)
-        for m in (*panel, leg, src):
+        self.add_fixed_orientation_mobjects(*alabs)
+        for m in (*panel, leg, src, *alabs):
             m.set_opacity(0)
         slope = V[:, 1]
         phi_e = float(np.degrees(np.arccos(abs(slope[2]))))
@@ -199,7 +202,7 @@ class Coint(VoiceoverScene, ThreeDScene):
             f"in Part thirty-three."
             " Some relations are not stable but switch. Next: hidden regimes."
         ) as vo:
-            self.play(Create(ax3), run_time=1)
+            self.play(Create(ax3), *[m.animate.set_opacity(1) for m in alabs], run_time=1)
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.002, run_time=3), src.animate.set_opacity(1))
             vo.wait_until("a")
             self.play(Create(arrows[0]), leg[0].animate.set_opacity(1))
