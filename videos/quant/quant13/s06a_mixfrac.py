@@ -79,7 +79,7 @@ class MixFrac(VoiceoverScene):
         foot = illustration(r"40{,}000 particles per setting, one seed (three at $\eta = \tfrac12$); white dashes: today's "
                             r"30-day smile", corner=DR)
         leg = label(r"$\eta = 0$: all the volatility from the leverage (local vol); $\eta = 1$: Heston's full vol of vol",
-                    font_size=19, color=GREY_B).to_edge(DOWN, buff=0.35)
+                    font_size=19, color=GREY_B).to_edge(DOWN, buff=0.75)  # above the footnote line
         with self.voiceover(
             "The mixing fraction, eta, is the share of Heston's vol of vol the model keeps. At eta zero the variance "
             "is deterministic and the leverage does everything: that is local volatility, run through particles. At "
