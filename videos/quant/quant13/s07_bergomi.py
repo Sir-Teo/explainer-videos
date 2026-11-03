@@ -81,9 +81,8 @@ class Bergomi(VoiceoverScene, ThreeDScene):
         rows = [cmath(r"\xi_t(T)", r"=", r"\mathbb{E}^Q_t\big[v_T\big]", font_size=38, colors={r"\xi_t(T)": IV}),
                 cmath(r"\frac{d\xi_t(T)}{\xi_t(T)}", r"=", r"\omega\,\alpha_\theta\Big((1 - \theta)\,e^{-k_1(T - t)}\,dW^1_t + "
                       r"\theta\,e^{-k_2(T - t)}\,dW^2_t\Big)", font_size=34, colors={r"\frac{d\xi_t(T)}{\xi_t(T)}": VAR}),
-                cmath(r"\xi_t(T)", r"=", r"\xi_0(T)\,\exp\Big(\omega\,x^T_t - \tfrac{\omega^2}{2}\operatorname{Var}x^T_t\Big),"
-                      r"\quad x^T_t = \alpha_\theta\big[(1 - \theta)e^{-k_1(T-t)}X^1_t + \theta e^{-k_2(T-t)}X^2_t\big]",
-                      font_size=28, colors={r"\xi_t(T)": IV}),
+                cmath(r"\xi_t(T)", r"=", r"\xi_0(T)\,\exp\Big(\omega\,x^T_t - \tfrac{\omega^2}{2}\operatorname{Var}x^T_t\Big)",
+                      font_size=34, colors={r"\xi_t(T)": IV}),
                 cmath(r"\text{vol}\big(\xi_t(t+\tau)\big)", r"=", r"\omega\,\alpha_\theta\sqrt{(1 - \theta)^2e^{-2k_1\tau} + "
                       r"\theta^2e^{-2k_2\tau} + 2\rho_{12}\theta(1 - \theta)e^{-(k_1 + k_2)\tau}}", font_size=30,
                       colors={r"\text{vol}\big(\xi_t(t+\tau)\big)": VAR}),
@@ -94,7 +93,8 @@ class Bergomi(VoiceoverScene, ThreeDScene):
                 why(r"Bergomi (2005): every point of the curve moves lognormally, driven by a fast and a slow "
                     r"Ornstein--Uhlenbeck factor ($dX^i = -k_iX^i\,dt + dW^i$) whose effect fades with the distance to $T$; "
                     r"$\alpha_\theta$ normalises so that $\omega$ is the vol of the shortest variance", 20),
-                why(r"integrate: a lognormal martingale started from today's curve, which is an input, matched exactly", 20),
+                why(r"integrate, with $x^T_t = \alpha_\theta\big[(1 - \theta)e^{-k_1(T-t)}X^1_t + \theta e^{-k_2(T-t)}X^2_t\big]$: "
+                    r"a lognormal martingale started from today's curve, which is an input, matched exactly", 20),
                 why(r"It\^o: the term structure of vol of vol, set by $k_1, k_2, \theta$, independently of today's curve", 20),
                 why(r"differentiate $\theta + (v - \theta)e^{-\kappa(T - t)}$: one exponential, and the same $\kappa$ also shapes "
                     r"today's curve", 20)]
@@ -142,8 +142,8 @@ class Bergomi(VoiceoverScene, ThreeDScene):
                             r"300 days ahead (across) and the calendar date $t$ = 0 to 120 days (into the screen)",
                             font_size=19, color=GREY_A)).to_corner(UL, buff=0.3)
         hint[0].set(width=min(hint[0].width, 12.0))
-        tag_b = label(r"Bergomi, two factors", font_size=24, color=IV).to_corner(UR, buff=0.4)
-        tag_h = label(r"Heston", font_size=24, color=MODEL_COL["Heston"]).to_corner(UR, buff=0.4)
+        tag_b = label(r"Bergomi, two factors", font_size=24, color=IV).next_to(hint, DOWN, buff=0.15).to_edge(RIGHT, buff=0.4)
+        tag_h = label(r"Heston", font_size=24, color=MODEL_COL["Heston"]).next_to(hint, DOWN, buff=0.15).to_edge(RIGHT, buff=0.4)
         mart = bs["mean_at"]["120"]
         dev = float(np.max(np.abs(np.asarray(mart["mean"]) / np.asarray(mart["xi0"]) - 1)))
         txt = wrapped_label(rf"average over 2{{,}}000 paths, 120 days on: within {100 * dev:.1f}\% of today's curve at every "
@@ -230,7 +230,7 @@ class Bergomi(VoiceoverScene, ThreeDScene):
                 why(r"regress the variance's move on the price's: the two Brownian increments are correlated by $\rho$", 20),
                 why(r"at short maturity the at-the-money vol is $\sqrt v$", 20),
                 why(r"with chapter 4's short-maturity skew: $R = 2$, the same as local volatility (Part 12)", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.4, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.4, buff=0.55, edge=6.9)  # the R table takes the bottom
         tab = VGroup(*[MathTex(rf"{r['days']}\ \text{{d}}:\ R = {r['R']:.2f}", font_size=26,
                                color=VAR) for r in rows_]).arrange_in_grid(rows=2, buff=(0.6, 0.2)).to_edge(DOWN, buff=0.45)
         r2, r365 = rows_[0], rows_[-1]
