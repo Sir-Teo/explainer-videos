@@ -117,10 +117,10 @@ class MFG(VoiceoverScene):
             "        res.append(max(abs(new - m)))",
             "        m = (1 - damping)*m + damping*new",
             "    return Q, m, res",
-        ], source="explainer/quant/house/control.py", width=8.4, font_size=17).to_edge(UP, buff=0.3).to_edge(LEFT, buff=0.3)
+        ], source="explainer/quant/house/control.py", width=8.4, font_size=16).to_edge(UP, buff=0.25).to_edge(LEFT, buff=0.3)
         R = m["runs"]
         res = np.asarray(R["inf"]["residual"])
-        outs = [f"iter {i + 1:>2}: residual {res[i]:.1e}" for i in (0, 4, 9, 19, 29, 39, len(res) - 1)]
+        outs = [f"iter {i + 1:>2}: residual {res[i]:.1e}" for i in (0, 9, 19, 39, len(res) - 1)]  # five lines: the output fits under the card
         outs.append("sold in the first fifth: " + "  ".join(
             f"N={k}: {100 * R[k]['share_fifth']:.1f}%" for k in ("1", "2", "10", "inf")))
         with self.voiceover(
@@ -146,7 +146,7 @@ class MFG(VoiceoverScene):
         cols = {"1": GREY_B, "2": UNDER, "10": VALUE, "inf": OVER}
         lines = {k: curve(ax, t, np.asarray(R[k]["Q"]), c_, stroke_width=4) for k, c_ in cols.items()}
         names = {"1": r"$N = 1$ (TWAP)", "2": r"$N = 2$", "10": r"$N = 10$", "inf": r"$N \to \infty$"}
-        leg = legend([(cols[k], names[k]) for k in cols], font_size=17).next_to(g, UP, buff=0.05).align_to(g, LEFT)
+        leg = legend([(cols[k], names[k]) for k in cols], font_size=17).next_to(g, UP, buff=0.2).align_to(g, LEFT)
         fifth = DashedLine(ax.c2p(0.2, 0), ax.c2p(0.2, 1), color=GREY_C, stroke_width=1.5)
         cr = m["crowd"]
         tc, Qc = np.asarray(cr["t"]), np.asarray(cr["Q"])
@@ -167,6 +167,9 @@ class MFG(VoiceoverScene):
                 d_.move_to(g2.ax.c2p(tc[i] * (1 - f) + tc[i + 1] * f + jit[j], y))
 
         dots.add_updater(mv)
+        # faint trails for one trader in eight, drawn as the dots move: the journey stays on screen after they arrive
+        trails = VGroup(*[curve(g2.ax, tc + jit[j], Qc[:, j], ALT, stroke_width=1.0).set_stroke(opacity=0.22)
+                          for j in range(0, Qc.shape[1], 8)])
         q = pause_card(r"You know 9 other funds are selling the same stock this week. Sell faster or slower than "
                        r"alone?", width=5.4, font_size=20).to_edge(UP, buff=0.3)
         foot = wrapped_label(r"Cardaliaguet and Lehalle (2018): trade crowding as a mean-field game of controls; Carlin, "
@@ -192,7 +195,7 @@ class MFG(VoiceoverScene):
                                             lines[kk]), run_time=1.2)
             vo.wait_until("b")
             self.play(FadeIn(g2), FadeIn(dots))
-            self.play(k.animate.set_value(len(tc) - 1.001), run_time=6, rate_func=linear)
+            self.play(k.animate.set_value(len(tc) - 1.001), Create(trails, lag_ratio=0), run_time=6, rate_func=linear)
             vo.wait_until("c")
             self.play(FadeIn(foot))
         dots.clear_updaters()
