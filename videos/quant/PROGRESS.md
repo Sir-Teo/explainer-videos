@@ -439,7 +439,7 @@ stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12
 | 2 | done: English QA clean on all 20 scenes (layout fixes across 11); zh text 0 left; zh dry run passes; about 60 min |
 | 3 | done: English QA clean on all 20 scenes (layout fixes across 17); zh text 0 left; zh dry run passes; about 60 min |
 | 4 | done: English QA clean on all 20 scenes (layout fixes across 17; two crashes fixed); zh text 0 left; zh dry run passes; about 58 min |
-| 5 | chapters written; finishing pending |
+| 5 | done: English QA clean on all 20 scenes (layout fixes across 17); zh text 0 left; zh dry run passes; about 57 min |
 | 6 | chapters written; finishing pending |
 | 7 | chapters written; finishing pending |
 | 8 | chapters written; finishing pending |

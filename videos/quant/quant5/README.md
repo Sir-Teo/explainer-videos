@@ -18,7 +18,7 @@ python tools/make.py quant5 --cpu-voice -q m              # English and Chinese,
 .venv/bin/python -m pytest -q tests/test_quant_house.py   # the House's tests (Rule 6)
 ```
 
-## Chapters
+## Chapters (about 57 minutes)
 
 | # | Chapter (module) | What is shown, built or computed |
 |---|---|---|
@@ -166,7 +166,7 @@ Part 16, MLMC and the optimal importance-sampling shift too.
 
 *讲的是方法，不构成投资建议。*
 
-## 各章内容
+## 各章内容（约57分钟）
 
 * **开场：一个不会亏、却亏了的对冲。** 止损–启动对冲在四千条路径上每次亏约8美元，恰好是看涨期权的价格7.97；历史脉络；本部分目标。
 * **1. 构造布朗运动。** 三种步长分布的唐斯克极限；列维中点构造（布朗桥方差0.251对¼）；反射原理的推导与检验（0.3038对0.3173，平移障碍0.3085）；反正弦定律。
