@@ -67,8 +67,7 @@ class Heston(VoiceoverScene, ThreeDScene):
                 cmath(r"D'", r"=", r"\tfrac12\xi^2 D^2 - (\kappa - \rho\xi iu)\,D - \tfrac12(u^2 + iu),\quad D(0) = 0",
                       font_size=32, colors={r"D'": VAR}),
                 cmath(r"C'", r"=", r"\kappa\theta\,D,\quad C(0) = 0", font_size=34, colors={r"C'": VAR}),
-                cmath(r"D", r"=", r"\frac{b - d}{\xi^2}\,\frac{1 - e^{-d\tau}}{1 - g\,e^{-d\tau}},\quad b = \kappa - "
-                      r"\rho\xi iu,\ d = \sqrt{b^2 + \xi^2(u^2 + iu)},\ g = \frac{b - d}{b + d}", font_size=30,
+                cmath(r"D", r"=", r"\frac{b - d}{\xi^2}\,\frac{1 - e^{-d\tau}}{1 - g\,e^{-d\tau}},\qquad g = \frac{b - d}{b + d}", font_size=34,
                       colors={r"D": VAR}),
                 cmath(r"C", r"=", r"\frac{\kappa\theta}{\xi^2}\Big[(b - d)\,\tau - 2\ln\frac{1 - g\,e^{-d\tau}}{1 - g}\Big]",
                       font_size=32, colors={r"C": VAR}),
@@ -80,7 +79,8 @@ class Heston(VoiceoverScene, ThreeDScene):
                     r"(Duffie, Pan and Singleton 2000: affine models)", 20),
                 why(r"substitute and collect the terms proportional to $v$: a Riccati equation", 20),
                 why(r"collect the terms without $v$", 20),
-                why(r"the quadratic's roots are $(b \pm d)/\xi^2$: separate variables, partial fractions, and "
+                why(r"with $b = \kappa - \rho\xi iu$ and $d = \sqrt{b^2 + \xi^2(u^2 + iu)}$ the quadratic's roots are "
+                    r"$(b \pm d)/\xi^2$: separate variables, partial fractions, and "
                     r"choose the root that makes $e^{-d\tau}$ decay", 20),
                 why(r"integrate $D$ once; with this choice $|g\,e^{-d\tau}| < 1$ and the logarithm never crosses its "
                     r"branch cut (Kahl and J\"ackel 2005; Albrecher et al.\ 2007)", 20),
