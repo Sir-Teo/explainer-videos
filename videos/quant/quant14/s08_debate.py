@@ -234,7 +234,7 @@ class Debate(VoiceoverScene, ThreeDScene):
             "Westphal modelled the measurement error and still found volatility rough. <bookmark mark='a'/> Anine "
             "Bolko and co-authors corrected it by the generalized method of moments: H still about 0.05. "
             "<bookmark mark='b'/> Rama Cont and Purba Das showed the artefact we just simulated. "
-            "<bookmark mark='c'/> And the minimax theory says how little one number can settle. What can choose? "
+            "<bookmark mark='c'/> And the minimax theory says how little one number can settle. What can tell them apart? "
             "Lags shorter than a day, and the options. That is the next chapter."
             " Next: what the options say."
         ) as vo:
