@@ -74,7 +74,7 @@ class Recipes(VoiceoverScene):
     def r1(self):
         head = label(r"DeepSeek-R1, \ January 2025", font_size=36, color=POLICY).to_edge(UP, buff=0.45)
         # R1-Zero's published accuracy (DeepSeek-AI 2025): AIME 2024, pass@1 before and after RL, and majority voting
-        vals = [(r"start", 15.6, BASE), (r"after RL", 71.0, POLICY), (r"majority \\ vote", 86.7, GOLD)]
+        vals = [(r"start", 15.6, BASE), (r"after RL", 71.0, POLICY), (r"majority \\ of $64$", 86.7, GOLD)]
         g = axes([0, 3], [0, 100], x_length=4.2, y_length=3.2, xticks=[], yticks=[0, 50, 100],
                  yfmt=lambda v: rf"{v:.0f}\%", ylabel=r"AIME 2024 problems solved", center=[-4.1, -0.2, 0])
         bars = VGroup()
@@ -84,7 +84,7 @@ class Recipes(VoiceoverScene):
             bars.add(VGroup(b, label(rf"${v:.1f}\%$", font_size=20, color=col).next_to(b, UP, buff=0.08),
                             label(nm, font_size=18, color=GREY_A).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.15)))
         steps = VGroup(
-            label(r"R1-Zero: \ GRPO straight from the base model, \\ rewarded only for correct answers", font_size=23,
+            label(r"R1-Zero: \ GRPO straight from the base model, \\ accuracy and format rewards", font_size=23,
                   color=POLICY),
             label(r"long chains of thought, \ re-checking: \ learned, not taught", font_size=23, color=GREY_A),
             label(r"R1: \ a cold start of readable examples, \ RL, \\ more SFT from its best answers, \ RL again",
@@ -101,10 +101,10 @@ class Recipes(VoiceoverScene):
         nxt.to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "DeepSeek-R1 is where post-training turned toward reasoning. <bookmark mark='a'/> Its first version, "
-            "R1-Zero, was trained with reinforcement learning straight from the base model, rewarded only for "
-            "getting checkable answers right, with GRPO, a PPO without a critic. On the 2024 AIME, a hard maths "
+            "R1-Zero, was trained with reinforcement learning straight from the base model, using rewards for "
+            "correct answers and the required output format, with GRPO, a PPO without a critic. On the 2024 AIME, a hard maths "
             "competition, it went from 15.6 to 71 percent of problems solved, and to 86.7 with a majority vote over "
-            "its samples. <bookmark mark='b'/> Long chains of thought, checking its own work, even a line where it "
+            "64 samples per problem. <bookmark mark='b'/> Long chains of thought, checking its own work, even a line where it "
             "stopped to write that it had found an aha moment: none of it was demonstrated. It emerged because it "
             "earned reward. <bookmark mark='c'/> The released R1 added a small cold start of readable examples, "
             "rounds of reinforcement learning, and fine-tuning on its own best answers. <bookmark mark='d'/> Then "
@@ -147,7 +147,7 @@ class Recipes(VoiceoverScene):
         down = Arrow(boxes[-1].get_bottom() + DOWN * 0.55, small.get_right() + RIGHT * 0.1, buff=0.1, color=REF,
                      stroke_width=3, path_arc=-0.5)
         x0, W = 0.6, 3.0  # bars start at x0; RL's is W long, distillation's to scale
-        cost = VGroup(label(r"Qwen3-8B: \ GPU hours", font_size=20, color=GREY_A))
+        cost = VGroup(label(r"Qwen3-8B: \ extra GPU hours", font_size=20, color=GREY_A))
         for k, (nm, v, col) in enumerate(((r"RL", 17920, POLICY), (r"on-policy distillation", 1800, REF))):
             bar = Rectangle(width=W * v / 17920, height=0.3, stroke_width=0, fill_color=col, fill_opacity=0.9)
             bar.move_to([x0, -2.45 - 0.45 * k, 0], aligned_edge=LEFT)
@@ -162,15 +162,22 @@ class Recipes(VoiceoverScene):
             "thinking; and a final round of reinforcement learning with reward models, for everything that can't "
             "be checked. <bookmark mark='b'/> The smaller models skipped all of it. They were distilled from the "
             "big ones, first on the teacher's text, then on their own text scored by the teacher, the on-policy "
-            "distillation of chapter ten. <bookmark mark='c'/> On the eight-billion-parameter model the report compares "
-            "the two: seventeen thousand nine hundred and twenty GPU hours of reinforcement learning, against one "
+            "distillation of chapter ten. <bookmark mark='c'/> Starting from the same off-policy-distilled "
+            "eight-billion-parameter checkpoint, the report compares further training on maths and code: "
+            "seventeen thousand nine hundred and twenty extra GPU hours of reinforcement learning, against one "
             "thousand eight hundred of distillation, and distillation scored clearly higher."
         ) as vo:
-            self.play(FadeIn(big), FadeIn(cite_))
+            preview_boxes = boxes.copy().set_opacity(0.3)
+            preview_arrows = arrows.copy().set_opacity(0.3)
+            preview_notes = notes_.copy().set_opacity(0.3)
+            preview = VGroup(preview_boxes, preview_arrows, preview_notes)
+            self.play(FadeIn(big), FadeIn(preview), FadeIn(cite_))
             vo.wait_until("a")
             for k in range(4):
                 self.play(FadeIn(boxes[k], shift=RIGHT * 0.1), FadeIn(notes_[k]),
-                          *([GrowArrow(arrows[k - 1])] if k else []), run_time=0.8)
+                          FadeOut(preview_boxes[k]), FadeOut(preview_notes[k]),
+                          *([GrowArrow(arrows[k - 1]), FadeOut(preview_arrows[k - 1])] if k else []), run_time=0.8)
+            self.remove(preview)
             vo.wait_until("b")
             self.play(Create(down), FadeIn(small), FadeIn(dist))
             vo.wait_until("c")

@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai27.common import ADAPT, ASSIST, BASE, GOLD, PART, PENALTY, POLICY, REWARD, load
-from videos.ai.ai27.compute import LORA_LR, SFT_LR
+from videos.ai.ai27.compute import EVAL_N, LORA_LR, SFT_LR
 
 
 def pct(x: float) -> str:
@@ -114,18 +114,18 @@ class LoRA(VoiceoverScene):
             rows.width = 5.6
         rows.move_to([3.95, -0.2, 0])
         rows[0][2].set_color(ADAPT)
-        init = label(r"$B = 0$ at the start: \ training begins at the model itself; \ afterwards $W + BA$ is one matrix "
+        init = label(r"$B = 0$ at the start: \ training begins at the model itself; \ afterwards $W + (\alpha/r)BA$ is one matrix "
                      r"again", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
         hc = note(r"Hu et al., \textit{LoRA: Low-rank adaptation of large language models} (Microsoft, 2021)")
         hc.to_corner(UL, buff=0.3)
         with self.voiceover(
             "LoRA, from Edward Hu and colleagues at Microsoft in 2021, builds that idea into the network. Freeze "
-            "every weight matrix W. <bookmark mark='a'/> Next to each one, add the product of two thin matrices, B "
-            "times A, of rank r, a handful. Only B and A are trained. <bookmark mark='b'/> A d by k matrix has d "
-            "times k numbers; the adapter has r times d plus k. For a four-thousand-wide layer at rank eight, that's "
-            "sixty-five thousand trainable numbers instead of sixteen million. <bookmark mark='c'/> B starts at zero, "
-            "so training starts from the model exactly; and when it's done, B A can be added into W, so the adapted "
-            "model runs as fast as the original."
+            "the pretrained weights. <bookmark mark='a'/> For each matrix you choose to adapt, add the product of two thin matrices, B "
+            "times A, with rank at most r, where r is small. Only B and A are trained. <bookmark mark='b'/> A d by k matrix has d "
+            "times k numbers; the adapter has r times the sum of d and k. For a four-thousand-wide layer at rank eight, that's "
+            "about sixty-five thousand trainable numbers instead of about seventeen million. <bookmark mark='c'/> B starts at zero, "
+            "so training starts from the model exactly. When training is done, the scaled low-rank update can be added "
+            "into W. After merging, inference uses the original matrix architecture without a separate adapter branch."
         ) as vo:
             self.play(FadeIn(W), FadeIn(Wl), FadeIn(Wd), FadeIn(hc))
             vo.wait_until("a")
@@ -157,7 +157,7 @@ class LoRA(VoiceoverScene):
                                cols[r["rank"]], stroke_width=5 if r["rank"] in (16, "full") else 4) for r in runs])
         # the table: what each run trained, how well it did, what it forgot
         head = VGroup(VectorizedPoint(), label(r"trained \\ numbers", font_size=20, color=GREY_A),
-                      label(r"right", font_size=20, color=GREY_A),
+                      label(r"accuracy", font_size=20, color=GREY_A),
                       label(r"forgetting \\ (nats)", font_size=20, color=GREY_A))
         xs = [1.3, 3.1, 4.6, 5.9]
         for m, x in zip(head, xs):
@@ -171,7 +171,9 @@ class LoRA(VoiceoverScene):
                 label(rf"${pct(r['params'] / tot)}\%$", font_size=18, color=GREY_B).move_to([xs[1], y - 0.2, 0]),
                 label(rf"${100 * r['which']:.0f}\%$", font_size=22).move_to([xs[2], y, 0]),
                 label(rf"${r['heldout'] - d['base_heldout']:+.3f}$", font_size=22).move_to([xs[3], y, 0])))
-        tag = note(r"computed: \ the novels model, \ which-book task; \ forgetting = change in loss on novel text")
+        n_test = len(load("data")["which_test"])
+        tag = note(rf"computed: \ step $0$: $120$; \ curve checks: ${EVAL_N}$; \ table: all ${n_test}$ test sentences; "
+                   r"forgetting = novel-loss change (nats)", font_size=16)
         tag.to_edge(DOWN, buff=0.35)
 
         def sci(x):
@@ -187,20 +189,10 @@ class LoRA(VoiceoverScene):
         # the verdict follows the measurement: did the adapters forget less than full fine-tuning?
         less = [r for r in runs[:-1] if r["heldout"] < full["heldout"]]
         ratio = LORA_LR / SFT_LR
-        if len(less) == len(runs) - 1:
-            verdict = (f"every adapter forgot less than that, as little as {forget_lora:+.3f}. LoRA learns less, and "
-                       "forgets less: the title of a 2024 study that found the same at scale.")
-        elif less:
-            small = min(less, key=lambda r: r["heldout"])
-            verdict = (f"only the rank {small['rank']} adapter forgot less, {small['heldout'] - d['base_heldout']:+.3f}, "
-                       f"and it learned least. The larger adapters forgot more: they trained with steps {ratio:.0f} "
-                       "times larger, as adapters need, and bigger steps carry a model further from where it started. "
-                       "A 2024 study found that LoRA learns less and forgets less, at scale and at matched accuracy; at "
-                       "ours, only the smallest adapter did.")
-        else:
-            verdict = (f"every adapter forgot more, at least {forget_lora:+.3f}: they trained with steps {ratio:.0f} "
-                       "times larger, as adapters need. A 2024 study found that LoRA forgets less, at scale and at "
-                       "matched accuracy; at our scale, with this recipe, it didn't.")
+        verdict = (f"{len(less)} of {len(runs) - 1} adapters had lower held-out novel loss than full fine-tuning. "
+                   f"Among adapters, the smallest loss change was {forget_lora:+.3f} nats. The adapter learning "
+                   f"rate was {ratio:.0f} times the full model's. These are single runs at different learning rates, "
+                   "not a matched-accuracy comparison or a general guarantee that LoRA forgets less.")
         with self.voiceover(
             "Our own experiment: fine-tune the novels model on the which-book task with LoRA at ranks one, four "
             "and sixteen, and with every weight. <bookmark mark='a'/> Rank one trains "
@@ -234,8 +226,7 @@ class LoRA(VoiceoverScene):
                          r"about a third of the GPU memory, \ comparable quality", width=6.2, color=ADAPT),
             history_card(2023, r"QLoRA \ (Dettmers et al.)", r"the frozen model stored in $4$ bits: \ a $65$-billion "
                          r"parameter model fine-tuned on one $48$ GB GPU", width=6.2, color=ADAPT),
-            history_card(2024, r"DoRA \ (Liu et al.)", r"split each weight into a length and a direction; \ adapt the "
-                         r"direction with LoRA", width=6.2, color=ADAPT),
+            history_card(2024, r"DoRA \ (Liu et al.)", r"weight vectors: \ learn magnitudes separately; \ adapt directions with LoRA", width=6.2, color=ADAPT),
             history_card(2024, r"Biderman et al.", r"``LoRA learns less and forgets less'': \ full fine-tuning wins on "
                          r"hard new skills, \ LoRA keeps more of the old ones", width=6.2, color=GOLD),
         ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
@@ -245,7 +236,8 @@ class LoRA(VoiceoverScene):
             "memory and comparable quality. <bookmark mark='a'/> QLoRA in 2023 stored the frozen model in four bits, "
             "and fine-tuned a sixty-five-billion-parameter model on a single forty-eight-gigabyte GPU, which put "
             "fine-tuning within reach of anyone with one good graphics card. <bookmark mark='b'/> DoRA splits each "
-            "weight into a length and a direction and adapts the direction. <bookmark mark='c'/> And a careful 2024 "
+            "weight vector into a magnitude and a direction. It learns magnitudes separately and adapts directions "
+            "with LoRA. <bookmark mark='c'/> And a careful 2024 "
             "comparison put the trade-off in its title: LoRA learns less and forgets less. For hard new skills, full "
             "fine-tuning still wins."
         ) as vo:

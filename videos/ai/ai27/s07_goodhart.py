@@ -66,14 +66,14 @@ class Goodhart(VoiceoverScene):
         rows = [
             cmath(r"\pi_{\mathrm{BoN}}", r":\ ", r"\text{draw } n \text{ answers from } \pi_{\mathrm{ref}},\ \text{keep "
                   r"the one } r \text{ likes best}", font_size=32),
-            cmath(r"\mathrm{KL}\big(\pi_{\mathrm{BoN}} \,\|\, \pi_{\mathrm{ref}}\big)", r"=",
+            cmath(r"\mathrm{KL}\big(\pi_{\mathrm{BoN}} \,\|\, \pi_{\mathrm{ref}}\big)", r"\le",
                   r"\log n - \frac{n-1}{n}", font_size=36),
             cmath(r"n = 4", r":\ ", r"0.64 \text{ nats}, \quad n = 64:\ 3.17, \quad n = 1024:\ 5.93", font_size=32),
         ]
         rows[1][2].set_color(KLC)
         whys = [why(r"the simplest optimizer of a reward model"),
-                why(r"the answer at quantile $u$ is chosen with density $n u^{n-1}$: \ integrate its log"),
-                why(r"it grows only like $\log n$")]
+                why(r"equality for a continuous reward distribution: \ density $n u^{n-1}$"),
+                why(r"the upper bound grows only like $\log n$")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.6, buff=0.7, edge=6.9)
         # n draws on a reward axis, the best one ringed: bigger n reaches further into the tail (schematic)
         g_ = np.random.default_rng(3)
@@ -92,10 +92,11 @@ class Goodhart(VoiceoverScene):
         with self.voiceover(
             "To measure the effect, we need a way to optimize a reward model by a controlled amount. The simplest "
             "is best-of-n: draw n answers from the reference model and keep the one the reward model likes best. "
-            "Bigger n, harder optimization. <bookmark mark='a'/> Its divergence from the reference has a closed "
-            "form: log n minus n minus one over n. The chosen answer is the best of n, so if u is its quantile under "
-            "the reward model, its density is n times u to the n minus one, and the KL is the expected log of that. "
-            "<bookmark mark='b'/> It grows only like log n: best of a thousand is under six nats. Best-of-n is cheap "
+            "Bigger n, harder optimization. <bookmark mark='a'/> Its divergence from the reference has an upper "
+            "bound: log n minus n minus one over n. Equality holds in the continuous-reward idealization: reward "
+            "quantiles are uniform, the winning quantile has density n times u to the n minus one, and KL is the "
+            "expected log of that. Discrete text can have smaller KL. <bookmark mark='b'/> The bound grows only "
+            "like log n: best of a thousand is under six nats. Best-of-n is cheap "
             "to reason about, and in practice it is a strong baseline that labs still use."
         ) as vo:
             step(0)
@@ -119,14 +120,15 @@ class Goodhart(VoiceoverScene):
         x = np.sqrt(kl)
         ys = {k: np.asarray(d[k]) for k in ("small_proxy", "small_gold", "large_proxy", "large_gold")}
         xmax = float(np.ceil(x.max() * 2) / 2)
-        xl = r"$\sqrt{\mathrm{KL}}$ \ (best-of-$n$, $n = 1 \dots 256$)"
+        xl = r"$\sqrt{\text{KL upper bound}}$ \ (best-of-$n$, $n = 1 \dots 256$)"
         # two panels, each on its own scale: the reward models' scores run to several units, gold moves by tenths
-        phi = max(float(ys["small_proxy"].max()), float(ys["large_proxy"].max()))
+        phi = max(1.0, float(np.ceil(max(ys["small_proxy"].max(), ys["large_proxy"].max()))))
+        plo = min(0.0, float(np.floor(min(ys["small_proxy"].min(), ys["large_proxy"].min()))))
         glo = min(float(ys["small_gold"].min()), float(ys["large_gold"].min()))
         ghi = max(float(ys["small_gold"].max()), float(ys["large_gold"].max()))
         gp = 0.15 * (ghi - glo + 1e-6)
-        g = axes([0, xmax], [0, float(np.ceil(phi))], x_length=5.0, y_length=3.6, xlabel=xl,
-                 ylabel=r"what the reward model thinks", xticks=[0, 1, 2], yticks=ticks(0, float(np.ceil(phi)), 3),
+        g = axes([0, xmax], [plo, phi], x_length=5.0, y_length=3.6, xlabel=xl,
+                 ylabel=r"raw reward-model score", xticks=[0, 1, 2], yticks=ticks(plo, phi, 3),
                  center=[-3.5, -0.2, 0])
         g2 = axes([0, xmax], [glo - gp, ghi + gp], x_length=5.0, y_length=3.6, xlabel=xl,
                   ylabel=r"what gold thinks", xticks=[0, 1, 2], yticks=[round(glo, 2), round(ghi, 2)],
@@ -148,20 +150,11 @@ class Goodhart(VoiceoverScene):
         sgold, lgold = ys["small_gold"], ys["large_gold"]
         s_end, l_end = round(float(sgold[-1]), 2) + 0.0, round(float(lgold[-1]), 2) + 0.0  # no "-0.00"
         peak_s = int(np.argmax(sgold))
-        if peak_s < len(ns) - 1 and sgold[-1] < sgold[peak_s] - 0.02:
-            small_said = (f"With the small reward model, gold rises at first, peaks around n = {ns[peak_s]}, then "
-                          f"falls back to {s_end:.2f} while the reward model's own score keeps climbing to "
-                          f"{ys['small_proxy'][-1]:.2f}: over-optimization.")
-        else:
-            small_said = (f"With the small reward model, gold climbs only to {s_end:.2f} while the reward "
-                          f"model's own score reaches {ys['small_proxy'][-1]:.2f}: the gap between them widens.")
+        small_said = (f"The model trained on fewer comparisons has measured gold starting at {sgold[0]:.2f}, reaches its "
+                      f"largest value {sgold.max():.2f} at n = {ns[peak_s]}, and ends at {s_end:.2f}.")
         peak_l = int(np.argmax(lgold))
-        if peak_l < len(ns) - 1 and lgold[-1] < lgold[peak_l] - 0.02:
-            large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
-                          f"{lgold.max():.2f} at n = {ns[peak_l]}, and then it too falls back, to {l_end:.2f}.")
-        else:
-            large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
-                          f"{lgold.max():.2f}.")
+        large_said = (f"For the model trained on more comparisons, gold starts at {lgold[0]:.2f}, reaches its largest value "
+                      f"{lgold.max():.2f} at n = {ns[peak_l]}, and ends at {l_end:.2f}.")
         ex = d["examples"][0]
         # where each n sits on the KL axis: a ruler above each panel, at the panel's own x scale
         marks = VGroup()
@@ -189,11 +182,11 @@ class Goodhart(VoiceoverScene):
             "Here is the experiment, after Gao, Schulman and Hilton of OpenAI. For each prompt, our fine-tuned model "
             "writes two hundred and fifty-six lines; <bookmark mark='p1'/> best-of-n picks with a reward model, "
             "<bookmark mark='p2'/> and we score the pick with both the reward model and gold, "
-            "<bookmark mark='p3'/> against the square root of the KL. <bookmark mark='a'/> The "
+            "<bookmark mark='p3'/> against the square root of the KL upper-bound coordinate. <bookmark mark='a'/> The "
             "reward model always believes things are getting better: by construction, its score of its own favourite "
             f"rises with n. <bookmark mark='b'/> Gold tells the truth. {small_said} <bookmark mark='c'/> "
-            f"{large_said} A better reward model can be pushed harder before it breaks, but every learned reward "
-            "breaks somewhere."
+            f"{large_said} Each reward model has its own raw score scale. A fall in gold while the proxy rises is "
+            "over-optimization; these finite runs do not establish where every reward model will fail."
         ) as vo:
             self.play(FadeIn(steps[0]), FadeIn(s_cite))
             vo.wait_until("p1")
@@ -236,28 +229,30 @@ class Goodhart(VoiceoverScene):
         ]
         for r_ in rows:
             r_[0].set_color(GOLD)
-        whys = [why(r"$d = \sqrt{\mathrm{KL}}$: \ gold reward of best-of-$n$, \ a rise and a fall"),
+        whys = [why(r"$d = \sqrt{\mathrm{KL}}$: \ gold reward gain for best-of-$n$"),
                 why(r"the same shape for RL, \ falling more slowly")]
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-1.6, buff=0.7, edge=6.9)
         hc = history_card(2023, r"Gao, Schulman \& Hilton, \textit{Scaling laws for reward model overoptimization}",
-                          r"a large ``gold'' reward model plays the people; \ the coefficients improve smoothly with the "
-                          r"proxy reward model's size, \ so the overoptimization can be predicted", width=6.0,
+                          r"synthetic study: \ gold reward is centered on the initial policy; \ fitted coefficients vary "
+                          r"with proxy reward-model size", width=6.0,
                           color=GOLD).move_to([3.6, -1.1, 0])
         # the two shapes, with made-up coefficients (schematic): best-of-n's parabola, RL's slower fall
         dd = np.linspace(0.001, 6.0, 200)
         g = axes([0, 6], [0, 1.6], x_length=5.4, y_length=2.6, xlabel=r"$d = \sqrt{\mathrm{KL}}$",
-                 ylabel=r"gold reward", center=[-3.4, -1.1, 0])
+                 ylabel=r"gold reward gain", center=[-3.4, -1.1, 0])
         cb = curve(g.ax, dd[dd <= 4.0], dd[dd <= 4.0] * (1 - 0.25 * dd[dd <= 4.0]), GOLD, 4)
         cr = curve(g.ax, dd, np.clip(dd * (1 - 0.5 * np.log(dd)), 0, None), KLC, 4)
         lb = label(r"best-of-$n$", font_size=20, color=GOLD).next_to(g.ax.c2p(2, 1.0), UP, buff=0.12)
         lr = label(r"RL", font_size=20, color=KLC).next_to(g.ax.c2p(4.6, 4.6 * (1 - 0.5 * np.log(4.6))), UR, buff=0.08)
-        stag = note(r"schematic: \ illustrative coefficients").to_corner(DR, buff=0.2)
+        stag = note(r"schematic coefficients; \ gain from initial policy, normalized gold units").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Gao and colleagues ran this at scale, with a large reward model playing the part of the people, and "
-            "found that gold reward follows simple curves in the square root of the KL. For best-of-n, d times alpha "
+            "Gao and colleagues ran this at scale in a synthetic setup, with a large reward model supplying the labels. "
+            "They centered gold reward so the initial policy scores zero and normalized its scale. These formulas "
+            "describe gold reward gain relative to that initial policy. For best-of-n, d times alpha "
             "minus beta d: up, then down. <bookmark mark='a'/> For reinforcement learning, the same with a "
-            "logarithm, falling more slowly. <bookmark mark='b'/> The coefficients change smoothly with the size of "
-            "the reward model, so how far it is safe to optimize can be predicted. In practice that is what the KL "
+            "logarithm, falling more slowly. <bookmark mark='b'/> In their study, the fitted coefficients varied smoothly "
+            "with proxy reward-model size and predicted where further optimization stopped improving gold reward. "
+            "In practice that is what the KL "
             "leash, and early stopping, are for."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(g), FadeIn(stag))

@@ -136,23 +136,36 @@ class Merge(VoiceoverScene):
                 bars.add(label(rf"${100 * v:.0f}\%$", font_size=18, color=c).next_to(bars[-1], UP, buff=0.06))
             tag_ = label(nm(name), font_size=19, color=col).next_to(g.ax.c2p(k + 0.5, 0), DOWN, buff=0.2)
             groups.add(VGroup(bars, tag_))
-        lg = legend([(ASSIST, r"which book? \ placed right"), (ADAPT, r"a line about\dots: \ ended cleanly")],
+        lg = legend([(ASSIST, r"which book? \ placed right"), (ADAPT, r"line draws: \ end token within $40$ new tokens")],
                     font_size=20).to_corner(UR, buff=0.4)
         multi = label(rf"one model trained on both at once: \ ${100 * d['multitask_which']:.0f}\%$ placed right",
                       font_size=22, color=GREY_A).to_edge(DOWN, buff=0.55)
-        tag = note(r"computed: \ each task fine-tuned alone from the novels model; \ $\tau$ = the change in "
-                   r"every weight").to_corner(DL, buff=0.2)
+        n_test = len(load("data")["which_test"])
+        tag = note(rf"computed: \ rows: $200$ book tests, $60$ line draws; \ multitask book accuracy: all ${n_test}$ tests",
+                   font_size=16).to_corner(DL, buff=0.2)
         merged = [r for r in rows if r[0].startswith("sum") and float(r[0].split()[-1]) > 0]
         best = max(merged, key=lambda r: r[1] + r[3])
         w_only = rows[0]
-        said_ = (f"Adding the two task vectors, at lambda {best[0].split()[-1]}, the merged model places "
+        if best[1] == w_only[1] and best[3] == w_only[3]:
+            comparison = "The selected merge ties the which-book model on both displayed metrics."
+        elif w_only[1] >= best[1] and w_only[3] >= best[3]:
+            comparison = "The which-book model is at least as high on both displayed metrics, and higher on one."
+        elif best[1] >= w_only[1] and best[3] >= w_only[3]:
+            comparison = "The selected merge is at least as high on both displayed metrics, and higher on one."
+        else:
+            comparison = "The selected merge raises one displayed metric and lowers the other."
+        said_ = (f"Among the tested positive lambdas, maximizing book accuracy plus clean-ending fraction selects "
+                 f"lambda {best[0].split()[-1]}. The merged model places "
                  f"{100 * best[1]:.0f} percent of sentences, against {100 * w_only[1]:.0f} for the which-book model "
                  f"alone, and ends {100 * best[3]:.0f} percent of its lines cleanly.")
         with self.voiceover(
             "We tried it on the novels model. <bookmark mark='a'/> Fine-tune one copy only on which-book "
             "questions, <bookmark mark='a2'/> another only on lines about things, and take their task vectors. "
-            "Each fine-tune is good at its own task. <bookmark mark='b'/> " + said_ + " <bookmark mark='c'/> "
-            "Merging is not free, but it is remarkably cheap: no training at all, just addition."
+            "The chart reports the measured performance of these two ingredient models. <bookmark mark='b'/> " + said_ +
+            " <bookmark mark='cmp'/> " + comparison +
+            " The line metric counts an end token within forty new tokens. <bookmark mark='c'/> "
+            "Combining already-trained task vectors needs no additional optimizer steps, just addition. "
+            "Training the ingredient models was part of this experiment."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(tag))
             vo.wait_until("a")
@@ -161,6 +174,8 @@ class Merge(VoiceoverScene):
             self.play(FadeIn(groups[1]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(gr_) for gr_ in groups[2:]], lag_ratio=0.3))
+            vo.wait_until("cmp")
+            self.play(Indicate(groups[0]), Indicate(groups[rows.index(best)]), run_time=0.8)
             vo.wait_until("c")
             self.play(FadeIn(multi))
         self.wait(0.3)
@@ -168,9 +183,9 @@ class Merge(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def family(self):
+        head = label(r"Methods for merging models", font_size=30).to_edge(UP, buff=0.4)
         cards = VGroup(
-            history_card(2023, r"TIES-merging \ (Yadav et al.)", r"keep each task vector's largest changes, \ settle "
-                         r"sign conflicts by vote, \ then add", width=6.2, color=ADAPT),
+            history_card(2023, r"TIES-merging \ (Yadav et al.)", r"trim small updates; \ elect the sign of their sum; \ average sign-agreeing updates", width=6.2, color=ADAPT),
             history_card(2024, r"DARE \ (Yu et al.)", r"drop most of a task vector's entries at random and rescale the "
                          r"rest: \ the vectors barely interfere", width=6.2, color=ADAPT),
             history_card(2024, r"Llama 3", r"averaged models trained on different data and settings at each "
@@ -180,14 +195,15 @@ class Merge(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
         cite_ = cite(r"Yadav et al.\ (2023); \ Yu et al.\ (2024); \ Llama Team (2024)")
         with self.voiceover(
-            "Merging became a craft. <bookmark mark='a'/> TIES keeps only each task vector's largest changes and "
-            "resolves disagreements in sign by a vote before adding. <bookmark mark='b'/> DARE drops most of a task "
+            "Merging became a craft. <bookmark mark='a'/> TIES keeps each task vector's largest updates, takes the "
+            "sign of their sum at each coordinate, then averages only updates agreeing with that sign. "
+            "<bookmark mark='b'/> DARE drops most of a task "
             "vector's entries at random and rescales the rest, and the vectors interfere much less. "
             "<bookmark mark='c'/> Meta's Llama 3 averaged models trained with different data and settings at each "
             "stage of post-training. <bookmark mark='d'/> And for a while, merged models topped the open "
             "leaderboards."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))

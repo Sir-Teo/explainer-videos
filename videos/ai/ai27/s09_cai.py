@@ -81,8 +81,8 @@ class Constitution(VoiceoverScene):
             "comparisons train the reward model, and reinforcement learning proceeds as in chapter six. This is "
             "reinforcement learning from AI feedback, RLAIF. <bookmark mark='b'/> In 2023 a team at Google compared "
             "the two directly, and on summarization and dialogue AI feedback did about as well as human feedback. "
-            "Today most comparisons in post-training are judged by models, with people writing the rules and "
-            "checking the judges."
+            "AI feedback is one option for generating comparison labels; people still choose the objectives and "
+            "check the judges."
         ) as vo:
             self.play(FadeIn(loop[0]))
             vo.wait_until("a")
@@ -99,43 +99,39 @@ class Constitution(VoiceoverScene):
         d = load("rlaif")
         ceil = float(load("rm")["people_agree_gold"])
         vals = [float(d["acc_small"]), float(d["acc_ai"]), float(d["acc_full"])]
-        names = [rf"${d['n_human']}$ human comparisons",
-                 r"$+\," + f"{d['n_ai']:,}".replace(",", "{,}") + r"$ labelled by that model",
-                 rf"${d['n_ai']:,}$ human comparisons".replace(",", "{,}")]
+        names = [rf"${d['n_human']}$ simulated comparisons",
+                 r"$" + f"{d['n_ai']:,}".replace(",", "{,}") + r"$ comparisons: AI labels",
+                 rf"${d['n_ai']:,}$ simulated comparisons".replace(",", "{,}")]
         cols = [REWARD, PROXY, REWARD]
+        lo = max(0.0, float(np.floor((min(vals + [ceil, 0.5]) - 0.05) * 10) / 10))
         hi = max(0.8, float(np.ceil(max(vals + [ceil]) * 20) / 20))
-        g = axes([0.5, hi], [0, 3], x_length=6.2, y_length=3.6, xlabel=r"accuracy on held-out human comparisons",
-                 xticks=[v for v in (0.5, 0.6, 0.7, 0.8) if v <= hi], xfmt=lambda v: rf"{100 * v:.0f}\%",
+        g = axes([lo, hi], [0, 3], x_length=6.2, y_length=3.6, xlabel=r"accuracy on held-out simulated comparisons",
+                 xticks=sorted({lo, hi, *[v for v in (0.0, 0.25, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0) if lo <= v <= hi]}), xfmt=lambda v: rf"{100 * v:.0f}\%",
                  center=[2.6, 0.1, 0])
         ax = g.ax
         rows = VGroup()
         for k, (nm, v, col) in enumerate(zip(names, vals, cols)):
             y = 2.5 - k
-            bar = Rectangle(width=max(ax.c2p(v, y)[0] - ax.c2p(0.5, y)[0], 0.02), height=0.5, stroke_width=0,
-                            fill_color=col, fill_opacity=0.85).move_to(ax.c2p(0.5, y), aligned_edge=LEFT)
-            name = label(nm, font_size=24, color=col).next_to(ax.c2p(0.5, y), LEFT, buff=0.3)
+            bar = Rectangle(width=max(ax.c2p(v, y)[0] - ax.c2p(lo, y)[0], 0.02), height=0.5, stroke_width=0,
+                            fill_color=col, fill_opacity=0.85).move_to(ax.c2p(lo, y), aligned_edge=LEFT)
+            name = label(nm, font_size=24, color=col).next_to(ax.c2p(lo, y), LEFT, buff=0.3)
             val = MathTex(rf"{100 * v:.0f}\%", font_size=28, color=col).next_to(bar, RIGHT, buff=0.15)
             rows.add(VGroup(name, bar, val))
         cl = DashedLine(ax.c2p(ceil, 0), ax.c2p(ceil, 3), color=GOLD, dash_length=0.08)
-        cll = label(rf"the people agree with gold: \ ${100 * ceil:.0f}\%$", font_size=20, color=GOLD)
+        cll = label(rf"simulated labels vs gold \\ (ties half): ${100 * ceil:.0f}\%$", font_size=18, color=GOLD)
         cll.next_to(ax.c2p(ceil, 3), UP, buff=0.12)
         head = VGroup(g, cl, cll)
         tag = note(r"computed: \ our reward models; \ the AI judge here is the small reward model itself")
         tag.to_corner(DR, buff=0.2)
-        gain = d["acc_ai"] - d["acc_small"]
-        if gain > 0.01:
-            verdict = (f"Training on the judge's own labels helps a little, from {100 * d['acc_small']:.0f} to "
-                       f"{100 * d['acc_ai']:.0f} percent: the labels are smoother than the noisy people, and there are "
-                       "more of them. But it can't learn what the judge never knew.")
-        else:
-            verdict = (f"Training on the judge's own labels doesn't help here: {100 * d['acc_ai']:.0f} percent, "
-                       f"against {100 * d['acc_small']:.0f}. A judge can't teach what it never knew; real AI judges "
-                       "help because they are much larger models than the ones they judge.")
+        verdict = (f"The student trained on this judge's labels scores {100 * d['acc_ai']:.0f} percent, versus "
+                   f"{100 * d['acc_small']:.0f} for the judge. They use the same model architecture but different "
+                   "training sets. This measures this label-source experiment; it does not guarantee that "
+                   "self-labeling will help or fail in general.")
         with self.voiceover(
             "A small version of the idea, on our model. <bookmark mark='a'/> Train a reward model on just "
-            f"{d['n_human']} human comparisons. <bookmark mark='b'/> Use it as the judge: let it label "
+            f"{d['n_human']} simulated comparisons. <bookmark mark='b'/> Use it as the judge: let it label "
             f"{d['n_ai']:,} new comparisons, and train a fresh reward model on those. " + verdict +
-            f" <bookmark mark='c'/> For reference, {d['n_ai']:,} real comparisons give {100 * d['acc_full']:.0f} "
+            f" <bookmark mark='c'/> For reference, the original simulated labels on {d['n_ai']:,} comparisons give {100 * d['acc_full']:.0f} "
             "percent."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), Create(cl), FadeIn(cll))
@@ -147,6 +143,7 @@ class Constitution(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def specs(self):
+        head = label(r"Written policies for assistants", font_size=30).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(2023, r"Claude's constitution", r"a published list of principles used in training", width=6.0,
                          color=GOLD),
@@ -166,7 +163,7 @@ class Constitution(VoiceoverScene):
             "safe, broadly ethical, following Anthropic's guidelines, and genuinely helpful. The rules are written by "
             "people, in plain language, and the training makes the model use them."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))

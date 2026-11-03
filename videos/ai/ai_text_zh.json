@@ -21750,7 +21750,42 @@
     "requires a no-regret online learner": "需要无悔在线学习器",
     "in its head: \\ effective decay $0.963$": "在脑子里算：\\ 有效衰减 $0.963$",
     "ReAct, \\ with tools: \\ effective decay $0.979$": "ReAct，\\ 用工具：\\ 有效衰减 $0.979$",
-    "ReAct, \\ checking its work: \\ effective decay $0.993$": "ReAct，\\ 检查结果：\\ 有效衰减 $0.993$"
+    "ReAct, \\ checking its work: \\ effective decay $0.993$": "ReAct，\\ 检查结果：\\ 有效衰减 $0.993$",
+    "same architecture, \\ updated weights: \\ learning from the novels again": "同样的架构，\\ 更新后的权重：\\ 再次从小说中学习",
+    "$B = 0$ at the start: \\ training begins at the model itself; \\ afterwards $W + (\\alpha/r)BA$ is one matrix again": "开始时$B = 0$：\\ 从原模型出发；\\ 之后$W + (\\alpha/r)BA$又是一个矩阵",
+    "computed: \\ question means removed, \\ then each score standardized across all lines": "计算结果：\\ 先减去各问题的均值，\\ 再用全部句子分别标准化两种分数",
+    "equality for a continuous reward distribution: \\ density $n u^{n-1}$": "奖励分布连续时等号成立：\\ 密度为$n u^{n-1}$",
+    "the upper bound grows only like $\\log n$": "这个上界只按$\\log n$增长",
+    "$\\sqrt{\\text{KL upper bound}}$ \\ (best-of-$n$, $n = 1 \\dots 256$)": "$\\sqrt{\\text{KL上界}}$ \\ （最优$n$选$1$，$n = 1 \\dots 256$）",
+    "R1-Zero: \\ GRPO straight from the base model, \\\\ accuracy and format rewards": "R1-Zero：\\ 从基础模型直接做GRPO，\\\\ 正确性和格式奖励",
+    "majority \\\\ of $64$": "$64$次采样\\\\ 多数投票",
+    "computed: \\ initial point: $120$ test sentences; \\ later points: $150$, every $100$ steps": "计算结果：\\ 初始点：$120$句测试句子；\\ 后续点：$150$句，每$100$步检查一次",
+    "computed: \\ $600$ fresh draws, \\ $20$ per question; \\ exact text overlap not excluded": "计算结果：\\ $600$次新采样，每题$20$次；\\ 尚未排除完全相同的文本",
+    "Learning from comparisons": "从比较中学习",
+    "Qwen3-8B: \\ extra GPU hours": "Qwen3-8B：\\ 额外GPU小时",
+    "Instruction-tuning milestones": "指令微调的里程碑",
+    "Written policies for assistants": "助手的书面规则",
+    "Methods for merging models": "模型合并方法",
+    "trim small updates; \\ elect the sign of their sum; \\ average sign-agreeing updates": "删去小更新；\\ 按更新之和选取符号；\\ 对符号一致的更新取平均",
+    "weight vectors: \\ learn magnitudes separately; \\ adapt directions with LoRA": "权重向量：\\ 单独学习幅值；\\ 用LoRA适配方向",
+    "synthetic instruction data": "合成指令数据",
+    "Alpaca: \\ model-written examples; \\ quality still needs checking": "Alpaca：\\ 模型编写的例子；\\ 仍需要质量检查",
+    "raw reward-model score": "奖励模型的原始分数",
+    "accuracy on held-out simulated comparisons": "在留出模拟比较上的准确率",
+    "computed: \\ step $0$: $120$; \\ curve checks: $150$; \\ table: all $560$ test sentences; forgetting = novel-loss change (nats)": "计算结果：\\ 第$0$步：$120$句；\\ 曲线检查：$150$句；\\ 表格：全部$560$句测试句子；遗忘$=$小说损失变化（纳特）",
+    "computed: \\ rows: $200$ book tests, $60$ line draws; \\ multitask book accuracy: all $560$ tests": "计算结果：\\ 各行：$200$句书名测试、$60$次生成；\\ 多任务书名准确率：全部$560$句测试",
+    "gold reward gain": "金标准奖励增益",
+    "$d = \\sqrt{\\mathrm{KL}}$: \\ gold reward gain for best-of-$n$": "$d = \\sqrt{\\mathrm{KL}}$：\\ 最优$n$选$1$的金标准奖励增益",
+    "schematic coefficients; \\ gain from initial policy, normalized gold units": "系数为示意；\\ 相对初始策略的增益，金标准单位已归一化",
+    "synthetic study: \\ gold reward is centered on the initial policy; \\ fitted coefficients vary with proxy reward-model size": "合成实验：\\ 金标准奖励以初始策略为零点；\\ 拟合系数随代理奖励模型的大小变化",
+    "$1{,}600$ comparisons: AI labels": "$1{,}600$次比较：AI标注",
+    "simulated labels vs gold \\\\ (ties half): $77\\%$": "模拟标签与金标准的一致率 \\\\ （平局计半）：$77\\%$",
+    "simulated-label/gold agreement (ties half): \\ $77\\%$": "模拟标签与金标准一致（平局计半）：\\ $77\\%$",
+    "novel-text loss change": "小说文本损失变化",
+    "sampled: $T=0.8$; max $30$ new tokens": "采样：$T=0.8$；最多生成$30$词元",
+    "greedy; max $16$ new tokens": "贪心解码；最多生成$16$词元",
+    "computed: \\ base: $120$ evenly sampled test sentences; \\ fine-tuned: all $560$; both accuracies: greedy, max $16$ new tokens": "计算所得：\\ 基础模型均匀抽取$120$个测试句子；\\ 微调后使用全部$560$句；两种准确率均为贪心解码，最多生成$16$词元",
+    "line draws: \\ end token within $40$ new tokens": "句子采样：\\ 在$40$个新词元内生成结束词元"
   },
   "phrases": {
     "width": "宽度",
@@ -24363,6 +24398,18 @@
     [
       "^\\$1\\\\times1\\$:\\ \\\\\\ two\\-flow\\-seed\\ FD\\ ranges\\ \\\\\\\\\\ \\$16\\$\\ channels:\\ \\$([\\d.]+)\\$\\-\\-\\$([\\d.]+)\\$;\\ \\\\\\ \\$64\\$\\ channels:\\ \\$([\\d.]+)\\$\\-\\-\\$([\\d.]+)\\$$",
       "$1\\\\times1$：两个流种子的FD范围 \\\\\\\\ $16$通道：$\\1$--$\\2$；\\\\ $64$通道：$\\3$--$\\4$"
+    ],
+    [
+      "^\\$([0-9{},]+)\\$ simulated comparisons$",
+      "$\\1$次模拟比较"
+    ],
+    [
+      "^\\$([0-9{},]+)\\$ comparisons: AI labels$",
+      "$\\1$次比较：AI标注"
+    ],
+    [
+      "^simulated\\ labels\\ vs\\ gold\\ \\\\\\\\\\ \\(ties\\ half\\):\\ \\$([0-9]+)\\\\%\\$$",
+      "模拟标签与金标准的一致率 \\\\\\\\ （平局计半）：$\\1\\\\%$"
     ]
   ]
 }

@@ -79,14 +79,14 @@ class Inside(VoiceoverScene):
             rows.add(VGroup(said(text[i], chars=28, font_size=16, max_lines=2).move_to([2.0, y, 0]),
                             MathTex(rf"{s[i]:+.2f}", font_size=26, color=PROXY).move_to([4.9, y, 0]),
                             MathTex(rf"{g[i]:+.2f}", font_size=26, color=GOLD).move_to([6.2, y, 0])))
-        tag = note(rf"computed: \ ${n}$ new lines from our fine-tuned model, \ ${per}$ for each of ${T}$ questions; \ "
-                   r"none was in any comparison", font_size=20).to_edge(DOWN, buff=0.25)
+        tag = note(rf"computed: \ ${n}$ fresh draws, \ ${per}$ per question; \ exact text overlap not excluded",
+                   font_size=20).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Chapter four measured our reward model from the outside: on comparisons it had never seen, it agreed "
+            "Chapter four measured our reward model from the outside: on held-out comparisons, it agreed "
             f"with the simulated people {100 * acc:.0f} percent of the time. A real lab can't do much more; it can't "
             "see inside its labellers' heads. <bookmark mark='a'/> We can, because we wrote gold. So let's open the "
             f"reward model up. Our fine-tuned model writes {n:d} new lines, {per:d} for each of the {T:d} questions, "
-            "none of them in any comparison. <bookmark mark='b'/> The reward model scores every line, and so does "
+            "with new sampling seeds. Identical text can still recur. <bookmark mark='b'/> The reward model scores every line, and so does "
             "gold. "
             "Here are a few, side by side."
         ) as vo:
@@ -264,15 +264,15 @@ class Inside(VoiceoverScene):
         else:
             small_said = "More comparisons didn't bring these weights any closer to gold's: the faint bars are as close."
         if r2 > 0.9:
-            r2_said = (f"Gold's terms explain {100 * r2:.0f} percent of the variation in its score: almost everything "
-                       "it learned is something gold cares about.")
+            r2_said = (f"A linear fit to gold's terms explains {100 * r2:.0f} percent of the variation in its score: "
+                       "almost all the variation in these samples.")
         else:
-            r2_said = (f"Gold's terms explain {100 * r2:.0f} percent of the variation in its score. The other "
-                       f"{100 - 100 * r2:.0f} percent is something gold doesn't care about at all, whatever else it "
-                       "picked up from a few thousand noisy comparisons.")
+            r2_said = (f"A linear fit to gold's terms explains {100 * r2:.0f} percent of the variation in its score. "
+                       f"The other {100 - 100 * r2:.0f} percent is not explained by this linear fit; it need not be "
+                       "unrelated to gold.")
         with self.voiceover(
             "What has it learned? Gold is a sum of three terms: the mood of the words, a penalty for every word past "
-            f"{CONCISE:d}, and a penalty for repeating words; and a line under four words is the worst there is. "
+            f"{CONCISE:d}, and a penalty for repeating words; a line under four words gets a fixed score of minus one. "
             "<bookmark mark='a'/> Fit the reward model's score, divided by its slope so it is in gold's units, as a "
             "sum of the same terms. If it had learned gold exactly, every weight would be one. "
             f"<bookmark mark='b'/> {w_said} <bookmark mark='b2'/> {small_said} <bookmark mark='c'/> {r2_said}"
@@ -435,21 +435,11 @@ class Inside(VoiceoverScene):
                    rf"${int(d['min_count'])}$ times", font_size=18).to_corner(DR, buff=0.2)
         k_up = sum(1 for r_ in up if r_[4] == "pos")
         k_dn = sum(1 for r_ in down if r_[4] == "neg")
-        if k_up + k_dn == 0:
-            lists_said = ("Not one of them is on gold's lists: the words that move the reward model most are words "
-                          "gold ignores.")
-        elif k_up + k_dn >= n_show:
-            lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds {k_up:d}, and of the bottom {n_show:d}, "
-                          f"its gloomy list holds {k_dn:d}: it has found gold's words.")
-        elif k_dn == 0:
-            lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds only {k_up:d}, and its gloomy list holds "
-                          f"none of the bottom {n_show:d}; the rest are words gold ignores.")
-        elif k_up == 0:
-            lists_said = (f"None of the top {n_show:d} is on gold's cheerful list, and of the bottom {n_show:d}, its "
-                          f"gloomy list holds only {k_dn:d}; the rest are words gold ignores.")
-        else:
-            lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds only {k_up:d}, and of the bottom "
-                          f"{n_show:d}, its gloomy list holds {k_dn:d}; the rest are words gold ignores.")
+        n_other = sum(r_[4] == "" for r_ in up + down)
+        total_shown = len(up) + len(down)
+        lists_said = (f"Of the top {n_show:d}, {k_up:d} are on gold's cheerful list; of the bottom {n_show:d}, "
+                      f"{k_dn:d} are on its gloomy list. Across both columns, {n_other:d} of {total_shown:d} are "
+                      "on neither mood list. Those words can still affect gold's length and repetition terms.")
         (_, pr, pg), (_, nr, ng) = d["class_pos"], d["class_neg"]
         word_r = float(d["word_r"])
         class_said = (f"Gold's own words, on average: a cheerful one moves the reward model's score by {pr:+.2f}, "
@@ -560,7 +550,7 @@ class Inside(VoiceoverScene):
                 c_.width = 6.6
         ow = wrapped_label(o_why, 6.2, font_size=24, color=GREY_A).next_to(left, DOWN, buff=0.4)
         uw = wrapped_label(u_why, 6.2, font_size=24, color=GREY_A).next_to(right, DOWN, buff=0.4)
-        tag = note(r"computed: \ the largest gaps between the two scores, each standardized within its question")
+        tag = note(r"computed: \ question means removed, \ then each score standardized across all lines")
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
             "Where do the two disagree most? <bookmark mark='a'/> This line about the "
