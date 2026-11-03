@@ -43,7 +43,8 @@ class Scoring(VoiceoverScene):
                 y = np.asarray(cv[keys[i]][which])
                 y = y - y.min()
                 j = int(np.argmin(y))
-                return VGroup(curve(g.ax, hh, np.clip(y, 0, 0.6), col, stroke_width=4),
+                m = y <= 0.6  # draw the curve only inside the axes: no flat line where it leaves the top
+                return VGroup(curve(g.ax, hh[m], y[m], col, stroke_width=4),
                               DashedLine(g.ax.c2p(hh[j], 0), g.ax.c2p(hh[j], 0.55), color=col, stroke_width=2),
                               MathTex(rf"\arg\min = {hh[j]:.2f}", font_size=24, color=col).next_to(g.ax.c2p(hh[j], 0.55), UP, buff=0.05))
             return always_redraw(f)
