@@ -121,7 +121,7 @@ class Lift(VoiceoverScene):
                  xticks=[0, 30, 60, 90], yticks=[0, round(hi / 2, 1)], font_size=15).move_to(DOWN * 0.3)
         ax = g.ax
         ref = curve(ax, t, np.clip(ex, -0.2, hi), WHITE, stroke_width=2.4)
-        cols = {"1": GREY_B, "5": VAR, "20": IV, "50": OPT, "200": RV}
+        cols = {"1": BAD, "5": VAR, "20": IV, "50": OPT, "200": RV}
         cur = curve(ax, t, np.clip(np.asarray(P["1"]), -0.2, hi), cols["1"], stroke_width=2)
         tag = label(r"lift, $N = 1$", font_size=24, color=cols["1"]).to_corner(UR, buff=0.4)
         leg = legend([(WHITE, r"exact kernel (fine Volterra scheme), the same shocks")], font_size=17).to_corner(UL, buff=0.4)
