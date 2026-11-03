@@ -11,7 +11,7 @@ daily market return; Part 13's cached Heston, Bates and forward variance curve.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 60 minutes)
 
 * **Hook: Rough (2.4).** A Brownian path and an H = 0.1 path under a continuous ×256 zoom (pause and predict); how
   we got here, 1968–2024; objectives; the rough lab.
@@ -183,7 +183,7 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 
 *这是方法的教育，不是投资建议。*
 
-## 各章（约58分钟）
+## 各章（约60分钟）
 
 * **开场：粗糙。** 布朗路径和H = 0.1路径在连续放大256倍下的对比；1968—2024年的来龙去脉；本部分目标；粗糙实验室。
 * **1. 事实：爆炸的偏斜。** 102条每周偏斜期限结构的三维“织布机”；中位幂律指数0.56（四分位0.37—0.70），比二分之一更陡，按字面读
