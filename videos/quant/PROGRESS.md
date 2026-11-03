@@ -447,7 +447,7 @@ stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12
 | 10 | done: English QA clean on all 21 scenes (layout fixes across 14; Tree's derivation crash fixed; dollar-gamma and hedged-P&L charts no longer clipped); zh text 0 left; zh dry run passes; about 58 min |
 | 11 | done: English QA clean on all 20 scenes (layout fixes across 16; vega surface drawn at its scale; India tickets drawn from all 100 Wednesdays; colour names match the drawing); zh text 0 left; zh dry run passes; about 59 min |
 | 12 | done: English QA clean on all 21 scenes (layout fixes across 15; smiles and surfaces no longer clipped flat; SSVI and local-vol axes hold their surfaces; colour names match the drawing); zh text 0 left; zh dry run passes; about 59 min |
-| 13 | chapters written; finishing pending |
+| 13 | done: English QA clean on all 20 scenes (layout fixes across 16; every derivation row at full size; mixture densities and surfaces no longer clipped; CGMY inequalities typeset; colour names match the drawing); zh text 0 left; zh dry run passes; about 53 min |
 | 14 | chapters written; finishing pending |
 | 15 | chapters written; finishing pending |
 | 16 | chapters written; finishing pending |

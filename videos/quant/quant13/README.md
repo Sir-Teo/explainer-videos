@@ -23,7 +23,7 @@ the S&P 500's daily closes for 1986–1987 (Yahoo).
 
 *An education in methods, not investment advice.*
 
-## Chapters
+## Chapters (about 53 minutes)
 
 * **The second river (hook).** DVOL 2021–2025 with its floods. Five models fitted to the same options price one
   cliquet 8% apart. How we got here, 1973–2022. Objectives; the calibrator.
@@ -229,7 +229,7 @@ Hou et al. (2020) and Matic–Packham–Härdle (2023) on bitcoin options.
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约56分钟）
+## 各章（约53分钟）
 
 * **第二条河（开场）。** 2021–2025年的DVOL；五个模型拟合同一组期权，给同一份棘轮期权的定价相差8%；1973–2022年的历史；本部分目标与校准器。
 * **1. 波动率为什么必须变动。** 30天实现波动率在17%–122%之间；DVOL的波动率的波动率为每年89%；收益与DVOL变化的散点（2022年−0.58，2023年+0.30）；|r|的长记忆；对数DVOL的半衰期54天；危机档案：1987年10月19日，−22.9%，22个标准差。
