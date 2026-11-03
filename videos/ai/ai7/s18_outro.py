@@ -274,7 +274,7 @@ class Outro(VoiceoverScene):
             r"Jordan, Ghahramani, Jaakkola \& Saul (1999); \ Kingma \& Welling (2013); \ Rezende, Mohamed \& Wierstra (2014)",
         ]
         card = reference_card(books, papers)
-        data = note(r"Text: Project Gutenberg (Part 1's $30$ novels). \ Every method is written out in numpy; \ every "
+        data = note(r"Text: Project Gutenberg (Part 1's $30$ novels). \ Methods implemented with NumPy and SciPy; \ every "
                     r"number on screen is computed and checked.", font_size=20).to_edge(DOWN, buff=0.25)
         credit = note(rf"Animated with Manim Community; \ narrated by {narration_credit()}.", font_size=20)
         credit.next_to(data, UP, buff=0.1)

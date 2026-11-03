@@ -154,7 +154,7 @@ class VI(VoiceoverScene):
         qg.clear_updaters()
         klv.clear_updaters()
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=1.5)
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -194,7 +194,7 @@ class VI(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(em))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=1.5)
 
     # ------------------------------------------------------------------
     def cavi(self):
@@ -296,7 +296,7 @@ class VI(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeIn(sd))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=1.5)
 
     # ------------------------------------------------------------------
     def reparam(self):
@@ -350,7 +350,7 @@ class VI(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(h2), FadeIn(res), FadeIn(tag))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=1.5)
 
     # ------------------------------------------------------------------
     def amortize(self):
@@ -390,4 +390,4 @@ class VI(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(vae))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=1.5)

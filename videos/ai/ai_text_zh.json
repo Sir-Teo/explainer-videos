@@ -21745,7 +21745,8 @@
     "input source": "来源图片",
     "``bold'': \\ conditional output": "“粗体”：\\ 条件输出",
     "bold target": "粗体目标",
-    "drawing/naming exposure: unverified by pair metadata": "画图／命名中的训练接触情况：配对元数据尚不能验证"
+    "drawing/naming exposure: unverified by pair metadata": "画图／命名中的训练接触情况：配对元数据尚不能验证",
+    "Text: Project Gutenberg (Part 1's $30$ novels). \\ Methods implemented with NumPy and SciPy; \\ every number on screen is computed and checked.": "文本：古登堡计划（第1部分的$30$部小说）。\\ 方法使用NumPy和SciPy实现；\\ 画面上的每个数字都经过计算和核对。"
   },
   "phrases": {
     "width": "宽度",
