@@ -211,6 +211,7 @@ def readout(tex_left: str, tracker_fn, digits=2, font_size=30, color=WHITE, unit
     left = MathTex(tex_left, font_size=font_size, color=color)
     num_ = DecimalNumber(tracker_fn(), num_decimal_places=digits, font_size=font_size, color=color)
     g = VGroup(left, num_).arrange(RIGHT, buff=0.15)
+    u = None
     if unit:
         u = MathTex(unit, font_size=font_size, color=color)
         g.add(u)
@@ -219,6 +220,8 @@ def readout(tex_left: str, tracker_fn, digits=2, font_size=30, color=WHITE, unit
     def upd(m):
         m.set_value(tracker_fn())
         m.next_to(left, RIGHT, buff=0.15)
+        if u is not None:  # the unit follows the number as it widens (0.0 -> 95.2)
+            u.next_to(m, RIGHT, buff=0.08)
 
     num_.add_updater(upd)
     g.num = num_

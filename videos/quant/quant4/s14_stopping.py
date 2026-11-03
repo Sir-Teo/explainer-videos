@@ -43,7 +43,7 @@ class Stopping(VoiceoverScene):
         ghost = curve(ax, np.arange(n + 1), path, GREY_B, stroke_width=2).set_stroke(opacity=0.6)
         bmark = VGroup(Dot(ax.c2p(imax, path[imax]), radius=0.09, color=LOSS),
                        label(r"B: ``ring at the top of the 100 steps''", font_size=22, color=LOSS).next_to(
-                           ax.c2p(imax, path[imax]), UP, buff=0.25))
+                           ax.c2p(imax, path[imax]), UR, buff=0.15))
         stamp = label(r"not a stopping time", font_size=40, color=LOSS).rotate(0.15).move_to(ax.c2p(n * 0.7, lo + 1))
         stamp_box = SurroundingRectangle(stamp, color=LOSS, buff=0.12)
         rules = VGroup(
