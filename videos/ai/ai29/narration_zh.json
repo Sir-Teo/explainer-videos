@@ -506,6 +506,11 @@
    "scene": "SimToReal",
    "en": "Domain randomization is now routine. <bookmark mark='a'/> Walking and running for legged robots and humanoids are mostly trained this way, in randomized simulation, and moved to the real machine unchanged. <bookmark mark='b'/> In a typical episode on the simulated test cart-pole, the single-simulator policy drops the pole after 43 steps, and the randomized one after 419. <bookmark mark='c'/> The newest step closes the loop with the previous chapters: in October 2026 Google reported building a simulated twin of a real table from a single photo, and DeepMind pitched Genie 4 as a training ground for robots. Simulators that no one writes by hand, only learned.",
    "zh": "域随机化如今已是常规做法。<bookmark mark='a'/>腿足机器人和人形机器人的走和跑，大多就是这样训练的：在随机化的仿真里训练，再原封不动地搬到真实的机器上。<bookmark mark='b'/>在模拟测试倒立摆上一个典型的回合里，单一仿真器的策略在43步后让杆倒下了，随机化的策略则在419步后倒下。<bookmark mark='c'/>最新的一步，和前面几章连成了一个圈：2026年10月，谷歌报告说，只用一张照片就为一张真实的桌子建起了仿真的孪生体，而DeepMind把Genie 4定位为机器人的训练场。仿真器不再由人手写，而是学出来的。"
+  },
+  "255f98b57dcf": {
+   "scene": "Belief",
+   "en": "The belief is more than bookkeeping. <bookmark mark='a'/> It sums up everything the agent has seen and done: nothing else in the history says more about the present. So a POMDP is an ordinary MDP whose states are beliefs, and Part 26's Bellman equation applies, over a continuum of states. That is why exact POMDPs are so hard to solve, and why the best policy sometimes acts just to learn: walk to a door, to find out where you are. <bookmark mark='b'/> Many language-model agents use a context window as working memory. It contains only the information currently supplied, and is not itself an explicit probability distribution over hidden states.",
+   "zh": "信念不只是记账。<bookmark mark='a'/>它概括了智能体看到过、做过的一切：历史里再没有别的东西，能对现在说得更多。所以POMDP就是一个普通的MDP，只不过它的状态是信念；第26部分的贝尔曼方程照样适用，只是状态变成了连续的一大片。这就是为什么精确求解POMDP那么难，也是为什么最优策略有时会只为了获得信息而行动：走到一扇门前，弄清楚自己在哪里。<bookmark mark='b'/>许多语言模型智能体把上下文窗口当作工作记忆。窗口只包含当前提供的信息，它本身不是对隐藏状态的显式概率分布。"
   }
  },
  "title_en": "AI, Built: Part 29, Agents and Worlds",
