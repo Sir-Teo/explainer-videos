@@ -89,7 +89,7 @@ class LTCM(VoiceoverScene):
                                          np.clip(book[j0:max(int(k.get_value()), j0 + 2)], -30, 5), LOSS,
                                          stroke_width=3))
         nums = VGroup(MathTex(rf"1\ \text{{July}}:\ {v['jul1']:.1f}", font_size=30, color=IMP),
-                      MathTex(rf"\text{{peak}}\ ({ts_day(v['peak_date'])}):\ {v['peak']:.1f}", font_size=30,
+                      MathTex(rf"\text{{peak ({ts_day(v['peak_date'])}):}}\ {v['peak']:.1f}", font_size=30,
                               color=IMP)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5).shift(UP * 1.5)
         ill = wrapped_label(r"illustrative: the VIX is a 30-day index; LTCM's options were long-dated, and their "
                             r"volatilities moved less", 3.6, 20, GREY_B).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.2)
