@@ -150,7 +150,7 @@ class QMC(VoiceoverScene):
                 why(r"better for fixed $d$; but $(\log n)^d/n$ beats $n^{-1/2}$ only once $n$ is far beyond $e^d$"),
                 why(r"van der Corput: write $n$ in binary and mirror the digits after the point; Sobol does this in "
                     r"every coordinate with a different binary matrix")]
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.2, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=3.1, x=-0.2, buff=0.42, edge=6.9)  # the table needs the lower half
         with self.voiceover(
             "Why evenness pays. Measure unevenness by the star discrepancy: over every box anchored at the origin, "
             "the worst gap between the fraction of points inside and the box's volume. <bookmark mark='a'/> The "
