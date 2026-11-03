@@ -101,7 +101,7 @@ class Density(VoiceoverScene):
             wrapped_label(r"one butterfly per bin, each priced off the Surface's fitted calls, divided by $h^2$", 4.0,
                           19, GREY_A),
             wrapped_label(r"white: Breeden and Litzenberger's density, the limit as $h \to 0$", 4.0, 19, WHITE),
-            MathTex(rf"\int q = {b['mass']:.5f},\quad \int s\, q = {b['mean']:,.0f}".replace(",", "{,}"), font_size=24,
+            MathTex(rf"\int q = {b['mass']:.5f},\quad \int s\, q = " + f"{b['mean']:,.0f}".replace(",", "{,}"), font_size=24,
                     color=Q_C),
             MathTex(rf"F = {F:,.0f}".replace(",", "{,}"), font_size=24, color=FWD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hr, DOWN, buff=0.35).align_to(hr, LEFT)
