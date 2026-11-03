@@ -191,7 +191,7 @@ class Payout(VoiceoverScene):
         cols = ["< 0", "ZERO", "Lo 10", "Dec 2", "Dec 3", "Dec 4", "Dec 5", "Dec 6", "Dec 7", "Dec 8", "Dec 9",
                 "Hi 10"]
         names = [r"buy back", r"none", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-        g = axes([0, len(cols)], [0, 0.16], x_length=7.4, y_length=4.2, ylabel=r"average return a year, 1963--2020",
+        g = axes([0, len(cols)], [0, 0.16], x_length=6.6, y_length=4.2, ylabel=r"average return a year, 1963--2020",
                  xticks=[], yticks=[0, 0.05, 0.10, 0.15], yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=18)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
@@ -208,9 +208,9 @@ class Payout(VoiceoverScene):
         o = p["osap"]
         side = VGroup(
             MathTex(rf"\text{{repurchasers}}\ {100 * ann['< 0']:.1f}\%\ \text{{vs top issuers}}\ {100 * ann['Hi 10']:.1f}\%",
-                    font_size=28),
-            label(r"long-short portfolios, \% a month, in the original sample $\to$ after publication:", font_size=19,
-                  color=GREY_A),
+                    font_size=26),
+            wrapped_label(r"long-short portfolios, \% a month, in the original sample $\to$ after publication:", 4.8, 19,
+                          GREY_A),
             MathTex(rf"\text{{net payout yield}}\ {o['NetPayoutYield']['in']:.2f} \to {o['NetPayoutYield']['post']:.2f}",
                     font_size=28, color=CASH),
             label(rf"Boudoukh et al.\ ({o['NetPayoutYield']['year']})", font_size=17, color=GREY_B),
