@@ -153,7 +153,7 @@ class Fast(VoiceoverScene):
                       for r, p_ in zip(rows, pts)])
         line = VMobject(color=FASTC, stroke_width=2.5).set_points_as_corners([p_.get_center() for p_ in pts])
         nb = Dot(ax.c2p(np.log10(bt), np.log10(be)), radius=0.09, color=BINS)
-        nbl = label(r"per-step bins", font_size=20, color=BINS).next_to(nb, UP, buff=0.12)
+        nbl = label(r"per-step bins", font_size=20, color=BINS).next_to(nb, UP, buff=0.12).align_to(nb, RIGHT)
         # FAST at matched error
         k = int(np.argmin(np.abs(np.log(err) - np.log(be))))
         ratio = bt / toks[k]
