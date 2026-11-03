@@ -134,8 +134,8 @@ class Stable(VoiceoverScene):
         vec = always_redraw(lambda: Arrow(circ.get_center(), circ.get_center() + RIGHT * 1.1 * at_index(phi, tk)
                                           .__float__(), buff=0, color=QC.IDEA, stroke_width=4)
                             .rotate(at_index(t, tk) * 2.0, about_point=circ.get_center()))
-        clab = label(r"$\hat\varphi(t) = \frac1n \sum_j e^{itr_j}$: its length shrinks as $t$ grows", font_size=18,
-                     color=GREY_A).next_to(circ, DOWN, buff=0.2)
+        clab = wrapped_label(r"$\hat\varphi(t) = \frac1n \sum_j e^{itr_j}$: its length shrinks as $t$ grows", 3.0, 18,
+                             GREY_A).next_to(circ, DOWN, buff=0.2)
         dots_us = VGroup(*[Dot(ax.c2p(np.log(a), b), radius=0.05, color=P_C) for a, b in zip(t, us["y"])])
         dots_g = VGroup(*[Dot(ax.c2p(np.log(a), b), radius=0.05, color=MART) for a, b in zip(t, ga["y"])])
         fit_us = curve(ax, np.log(t), us["alpha"] * np.log(t) + us["intercept"], P_C, stroke_width=2.5)
@@ -164,6 +164,8 @@ class Stable(VoiceoverScene):
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
+            # the first two rows have done their work: keep the slope line at the top, the data below it
+            self.play(FadeOut(VGroup(rows[0], whys[0], rows[1], whys[1])), VGroup(rows[2], whys[2]).animate.to_edge(UP, buff=0.4))
             self.play(FadeIn(g), Create(circ), FadeIn(clab))
             self.add(vec)
             self.play(tk.animate.set_value(float(len(t) - 1)), LaggedStart(*[FadeIn(d) for d in dots_us], lag_ratio=0.3),
@@ -233,7 +235,7 @@ class Stable(VoiceoverScene):
     def aggregate(self, e):
         h = np.asarray(e["h"], float)
         ku, kg = np.asarray(e["kurt_us"]), np.asarray(e["kurt_gauss"])
-        g = axes([0, np.log10(60) + 0.05], [-1, 20], x_length=7.0, y_length=4.2, xlabel=r"horizon $h$, days (log scale)",
+        g = axes([0, np.log10(60) + 0.05], [-1, 20], x_length=6.4, y_length=4.2, xlabel=r"horizon $h$, days (log scale)",
                  ylabel=r"excess kurtosis of $h$-day returns", xticks=list(np.log10([1, 5, 20, 60])),
                  xfmt=lambda v: f"{10 ** v:.0f}", yticks=[0, 5, 10, 15, 20], font_size=17).to_edge(LEFT, buff=0.7)
         ax = g.ax
