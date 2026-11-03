@@ -27,16 +27,16 @@ class Har(VoiceoverScene):
         rng = np.random.default_rng(12)
         r = 0.6 * rng.standard_normal(24)
         r[13] += 4.2
-        x0, w = -6.2, 0.5
+        x0, w = -6.3, 0.32  # the bars keep to the left two-thirds; the formulas take the right
         base = 0.6
-        sq = VGroup(*[Square(side_length=max(abs(v) * 0.42, 0.01), stroke_width=1, stroke_color=RET, fill_color=RET,
-                             fill_opacity=0.5).move_to([x0 + w * i, base + abs(v) * 0.21, 0]) for i, v in enumerate(r)])
-        rect = VGroup(*[Rectangle(width=max(abs(r[i - 1]) * 0.42, 0.01), height=max(abs(r[i]) * 0.42, 0.01), stroke_width=1,
-                                  stroke_color=ALT, fill_color=ALT, fill_opacity=0.5).move_to([x0 + w * i, base - 2.4 + abs(r[i]) * 0.21, 0])
+        sq = VGroup(*[Square(side_length=max(abs(v) * 0.3, 0.01), stroke_width=1, stroke_color=RET, fill_color=RET,
+                             fill_opacity=0.5).move_to([x0 + w * i, base + abs(v) * 0.15, 0]) for i, v in enumerate(r)])
+        rect = VGroup(*[Rectangle(width=max(abs(r[i - 1]) * 0.3, 0.01), height=max(abs(r[i]) * 0.3, 0.01), stroke_width=1,
+                                  stroke_color=ALT, fill_color=ALT, fill_opacity=0.5).move_to([x0 + w * i, base - 2.4 + abs(r[i]) * 0.15, 0])
                         for i in range(1, len(r))])
-        l1 = label(r"RV: squares $r_i^2$; the jump is one giant square", font_size=20, color=RET).move_to([-2.6, 2.9, 0])
+        l1 = label(r"RV: squares $r_i^2$; the jump is one giant square", font_size=20, color=RET).move_to([-3.2, 2.9, 0])
         l2 = label(r"BV: rectangles $|r_i|\,|r_{i-1}|$; the jump is paired with a small neighbour", font_size=20,
-                   color=ALT).move_to([-2.6, -2.2, 0])
+                   color=ALT).move_to([-3.2, -2.2, 0])
         rows = [
             cmath(r"BV", r"=", r"\tfrac{\pi}{2}\sum|r_i||r_{i-1}| \to \int\sigma^2", font_size=30),
             cmath(r"RV - BV", r"\to", r"\textstyle\sum_{s\le 1}J_s^2", font_size=30),
@@ -47,8 +47,8 @@ class Har(VoiceoverScene):
                 why(r"Barndorff-Nielsen and Shephard (2006): $N(0,1)$ without jumps", font_size=19)]
         grp = VGroup(*[VGroup(r_, w_).arrange(DOWN, aligned_edge=LEFT, buff=0.08) for r_, w_ in zip(rows, whys)])
         grp.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
-        if grp.width > 6.2:
-            grp.scale_to_fit_width(6.2)
+        if grp.width > 5.3:
+            grp.scale_to_fit_width(5.3).to_edge(RIGHT, buff=0.3)
         res = VGroup(
             MathTex(rf"\text{{days with a jump at }}1\%: {100 * s['jump_share_1pct']:.0f}\%", font_size=26, color=BAD),
             MathTex(rf"\text{{at }}0.1\%: {100 * s['jump_share_01pct']:.0f}\%", font_size=26, color=BAD),
@@ -215,6 +215,7 @@ class Har(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")
+            self.play(FadeOut(pc))
             step(0)
             vo.wait_until("b")
             step(1)
