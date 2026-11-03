@@ -116,9 +116,10 @@ class LocalTime(VoiceoverScene):
         eps = VGroup(*[MathTex(rf"\varepsilon = {r['eps']}:\ \ {r['L']:.3f}", font_size=22, color=GREY_A)
                        for r in tn["eps_rows"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         eps.add(MathTex(rf"\text{{Tanaka: }} {tn['tan_one']:.3f}", font_size=24, color=JUMP))
-        eps.arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_corner(UR, buff=0.35)
-        el = label(r"time-in-band, one path of 200{,}000 steps:", font_size=18, color=GREY_B).next_to(eps, UP, buff=0.1)
-        el.align_to(eps, LEFT)
+        el = label(r"time-in-band, one path of 200{,}000 steps:", font_size=18, color=GREY_B)
+        # the title is the widest line: stack it with the rows and place the block as one, inside the frame
+        VGroup(el, eps.arrange(DOWN, aligned_edge=LEFT, buff=0.08)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(
+            UR, buff=0.35)
         pc, ans = pause(r"The expected local time at 0 of Brownian motion by $t = 1$?",
                         rf"$\mathbb{{E}}|W_1| = \sqrt{{2/\pi}} = {tn['theory']:.3f}$ (Tanaka, in expectation). Measured: "
                         rf"{tn['mean_occ']:.3f} by occupation, {tn['mean_tan']:.3f} by Tanaka.", width=4.8, font_size=19)
