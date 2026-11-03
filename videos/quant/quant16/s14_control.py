@@ -110,9 +110,10 @@ class Control(VoiceoverScene):
                 why(r"proportional allocation, one stratum at a time: the law of total variance drops the "
                     r"between-strata term")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.55, edge=6.9)
-        q = predict(r"Antithetic pairs for a straddle, $|S_T - K|$?", width=4.6, font_size=21).to_corner(DR, buff=0.3)
+        # the ladder fills the lower screen: the question takes the top corner once the first row has done its work
+        q = predict(r"Antithetic pairs for a straddle, $|S_T - K|$?", width=4.6, font_size=21).to_corner(UR, buff=0.3)
         ans = MathTex(rf"\rho_{{\text{{call}}}} = {an['call']:+.2f},\ \ \rho_{{\text{{straddle}}}} = {an['straddle']:+.2f}",
-                      font_size=28, color=GOOD).next_to(q, UP, buff=0.2)
+                      font_size=28, color=GOOD).next_to(q, DOWN, buff=0.25).align_to(q, RIGHT)
         with self.voiceover(
             "Why it works. The variance of the controlled estimator is a parabola in b. <bookmark mark='a'/> Its "
             "minimum sits at the covariance over the control's variance, the regression slope, and what is left is the "
@@ -130,7 +131,7 @@ class Control(VoiceoverScene):
                 vo.wait_until(mk)
             step(3)
             vo.wait_until("d")
-            self.play(FadeIn(q))
+            self.play(FadeOut(rows[0]), FadeOut(whys[0]), FadeIn(q))
             self.wait(1.5)
             self.play(FadeIn(ans))
         self.wait(0.5)
