@@ -239,6 +239,6 @@ class Doob(VoiceoverScene):
             self.play(FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("c")
             vo.wait_until("d")
-            self.play(FadeOut(side[1:3]), FadeIn(pred, shift=UP * 0.2))
+            self.play(FadeOut(side[1:]), FadeIn(pred, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
