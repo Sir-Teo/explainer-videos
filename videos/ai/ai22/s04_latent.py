@@ -172,6 +172,13 @@ class Latent(VoiceoverScene):
                            Dot(ax.ax.c2p(x, f.mean()), radius=0.08, color=SIDE_C[c[0]])))
         tags = VGroup(*[MathTex(rf"{c[0]}\!\times\!{c[0]}\!\times\!{c[1]}", font_size=18, color=SIDE_C[c[0]]) for c in cfgs])
         place_labels([p_[1] for p_ in pts], list(tags), buff=0.06)
+        # The two 1x1 configurations can have nearly coincident x positions; list their actual seed ranges.
+        seed_ranges = label(
+            r"$1\times1$: \ two-flow-seed FD ranges \\ "
+            rf"$16$ channels: ${min(fd[(1, 16)]):.0f}$--${max(fd[(1, 16)]):.0f}$; \ "
+            rf"$64$ channels: ${min(fd[(1, 64)]):.0f}$--${max(fd[(1, 64)]):.0f}$",
+            font_size=18, color=SIDE_C[1],
+        ).move_to([-2.8, -2.65, 0])
         best_g = min(cfgs, key=lambda c: fd[c].mean())
         best_r = min(cfgs, key=lambda c: rm[c])
         smp = np.asarray(d[f"g{best_g[0]}c{best_g[1]}_samples"])
@@ -201,7 +208,7 @@ class Latent(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(ReplacementTransform(b_, p_[1]), FadeIn(p_[0]), FadeIn(t_))
                                     for b_, p_, t_ in zip(base, pts, tags)], lag_ratio=0.12), run_time=2.0)
-            self.play(FadeIn(sh), FadeIn(sr))
+            self.play(FadeIn(sh), FadeIn(sr), FadeIn(seed_ranges))
             vo.wait_until("b")
             self.play(Indicate(sh[0], color=PATCH))
         self.wait(0.3)

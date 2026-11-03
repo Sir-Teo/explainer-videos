@@ -21740,7 +21740,12 @@
     "logged mean clipped std proxy \\\\ $\\langle\\min(\\sqrt{s^2+10^{-4}},1)\\rangle$": "记录的截顶标准差代理均值 \\\\ $\\langle\\min(\\sqrt{s^2+10^{-4}},1)\\rangle$",
     "Held-out diagnostic: seed $0$ \\\\ share of negative push over $510$ negatives": "留出数据诊断：种子$0$\\\\ $510$个负样本上的排斥权重份额",
     "pull together only: \\\\ one dominant direction, \\\\ then small residuals": "只拉近：\\\\ 一个主导方向，\\\\ 后面是小的残余值",
-    "rounding model: uniform in-cell error, no clipping": "舍入模型：单元内误差均匀，无截断"
+    "rounding model: uniform in-cell error, no clipping": "舍入模型：单元内误差均匀，无截断",
+    "$12$ billion weights; \\ MM-DiT blocks, then single-stream blocks; \\ rotary positions; \\ a guidance-distilled open [dev] version": "$120$亿个权重；\\ 先是MM-DiT块，再是单流块；\\\\旋转位置编码；\\ 经过引导蒸馏、开放权重的[dev]版",
+    "input source": "来源图片",
+    "``bold'': \\ conditional output": "“粗体”：\\ 条件输出",
+    "bold target": "粗体目标",
+    "drawing/naming exposure: unverified by pair metadata": "画图／命名中的训练接触情况：配对元数据尚不能验证"
   },
   "phrases": {
     "width": "宽度",
@@ -24325,6 +24330,34 @@
     [
       "^bump\\ width:\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ blocks$",
       "核宽度：\\\\ $\\g<1>$ 个文本块"
+    ],
+    [
+      "^names\\ held\\-out\\ images:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$\\ \\\\\\\\\\ filename\\ category:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$$",
+      "留出图片的字母命名：\\\\ $\\1\\\\%$ \\\\\\\\ 文件名类别：\\\\ $\\2\\\\%$"
+    ],
+    [
+      "^judge\\ reads\\ requested\\ letter:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$$",
+      "评判器读成所要求的字母：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^pixel\\ RMSE:\\ \\\\\\ \\$([\\d.]+)\\$\\ \\\\\\ \\(copying\\ source:\\ \\\\\\ \\$([\\d.]+)\\$\\);\\ \\\\\\\\\\ mean\\ seed\\-median\\ ink\\ ratio:\\ \\\\\\ \\$([\\d.]+)\\$\\ \\\\\\ \\(target:\\ \\\\\\ \\$([\\d.]+)\\$\\);\\ \\\\\\\\\\ judge\\ reads\\ requested\\ letter:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$$",
+      "像素RMSE：\\\\ $\\1$ \\\\ （复制来源：\\\\ $\\2$）；\\\\\\\\ 种子内墨量比中位数的均值：\\\\ $\\3$ \\\\ （目标：\\\\ $\\4$）；\\\\\\\\ 评判器读成所要求的字母：\\\\ $\\5\\\\%$"
+    ],
+    [
+      "^reported\\ editing\\ split:\\ \\$([\\d.]+)\\$\\ training;\\ \\$([\\d.]+)\\$\\ held\\-out\\ pairs$",
+      "所报告的编辑划分：训练$\\1$对；留出$\\2$对"
+    ],
+    [
+      "^one\\ transformer,\\ \\\\\\ \\$([\\d.,{}]+)\\$\\ weights,\\ \\\\\\ \\$([\\d.,{}]+)\\$\\ steps;\\ \\\\\\ means\\ of\\ ([\\d.,{}]+)\\ reported\\ seeds$",
+      "一个Transformer，\\\\ $\\1$个权重，\\\\ $\\2$步；\\\\ 所报告\\3个种子的均值"
+    ],
+    [
+      "^([\\d.]+)\\ reported\\ seeds\\ \\\\\\ \\(bands:\\ \\\\\\ min\\ to\\ max\\);\\ \\\\\\ all\\ four\\ terms\\ in\\ every\\ step's\\ batch$",
+      "所报告的\\1个种子\\\\ （带状区域：\\\\ 最小至最大）；\\\\ 每次更新都包含四项"
+    ],
+    [
+      "^\\$1\\\\times1\\$:\\ \\\\\\ two\\-flow\\-seed\\ FD\\ ranges\\ \\\\\\\\\\ \\$16\\$\\ channels:\\ \\$([\\d.]+)\\$\\-\\-\\$([\\d.]+)\\$;\\ \\\\\\ \\$64\\$\\ channels:\\ \\$([\\d.]+)\\$\\-\\-\\$([\\d.]+)\\$$",
+      "$1\\\\times1$：两个流种子的FD范围 \\\\\\\\ $16$通道：$\\1$--$\\2$；\\\\ $64$通道：$\\3$--$\\4$"
     ]
   ]
 }

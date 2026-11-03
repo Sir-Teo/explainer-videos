@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -58,6 +60,45 @@ def mask_picture(cell=0.12) -> VGroup:
                       .move_to([j * cell, -i * cell, 0]))
     frame = Square(n * cell, stroke_color=GREY_C, stroke_width=1.5).move_to([(n - 1) * cell / 2, -(n - 1) * cell / 2, 0])
     return VGroup(frame, g)
+
+
+def unified_split_scope(result):
+    """Read reported pair/seed counts only; pair names do not verify cross-task exposure.
+
+    A cache flag or hash-shaped string is not an independently accepted input
+    audit. Until a verified sidecar is bound by the loader, exposure stays unknown.
+    Curve checking here covers seed cardinality only, not full numeric validity.
+    """
+    try:
+        raw_pairs, raw_held, raw_seeds = result["pairs"], result["held"], result["seeds"]
+        if (any(not isinstance(value, (list, tuple)) for value in (raw_pairs, raw_held, raw_seeds))
+                or any(not isinstance(pair, (list, tuple)) for pair in list(raw_pairs) + list(raw_held))
+                or any(not isinstance(seed, int) or isinstance(seed, bool) for seed in raw_seeds)):
+            raise ValueError("Unified split metadata needs pair lists and integer seed lists")
+        pairs = [tuple(pair) for pair in raw_pairs]
+        held = [tuple(pair) for pair in raw_held]
+        seeds = list(raw_seeds)
+    except (KeyError, TypeError) as error:
+        raise ValueError("Unified result needs pair, held-pair and seed metadata") from error
+    if (not pairs or not held or len(held) >= len(pairs)
+            or any(len(pair) != 2 or any(not isinstance(name, str) or not name for name in pair)
+                   for pair in pairs + held)
+            or len(set(pairs)) != len(pairs) or len(set(held)) != len(held)
+            or not set(held).issubset(pairs)
+            or not seeds or len(set(seeds)) != len(seeds)):
+        raise ValueError("Unified result has invalid or ambiguous split metadata")
+    metrics = ("name_acc", "fam_acc", "draw_acc", "edit_rmse", "copy_rmse", "edit_ink", "true_ink", "edit_letter")
+    try:
+        if (len(result["curve"]) != len(seeds)
+                or any(len(result[name]) != len(seeds) for name in metrics)
+                or any(not math.isfinite(float(value)) for name in metrics for value in result[name])
+                or not math.isfinite(float(result["guide"]))):
+            raise ValueError("Unified metrics do not match the reported finite seed results")
+    except (KeyError, TypeError) as error:
+        raise ValueError("Unified result needs finite per-seed metrics and drawing guidance") from error
+    return dict(pair_count=len(pairs), train_pairs=len(pairs) - len(held),
+                held_pairs=len(held), seed_count=len(seeds),
+                cross_task_exposure="unverified")
 
 
 class Unified(VoiceoverScene):
@@ -120,6 +161,8 @@ class Unified(VoiceoverScene):
     # ------------------------------------------------------------------
     def ours(self):
         u = load("unified")
+        scope = unified_split_scope(u)
+        seed_count = scope["seed_count"]
         seq = sequence_picture().scale(1.25).move_to([-3.2, 1.0, 0])
         mp = mask_picture().move_to([3.6, 1.3, 0])
         ml = label(r"attention: \ causal, \ except \\ a picture's patches see each other \ (orange)", font_size=18,
@@ -128,26 +171,25 @@ class Unified(VoiceoverScene):
                        r" \;+\; \underbrace{\textstyle\sum \|v_\theta(z_t) - (x - \varepsilon)\|^2}_{\text{picture patches}}",
                        font_size=28).move_to([-3.0, -1.7, 0])
         na, fa, da = (np.asarray(u[k], float) for k in ("name_acc", "fam_acc", "draw_acc"))
-        if da.mean() >= 0.5:
-            both = "One network learns both"
-        else:
-            both = "One network does both, though drawing lags"
-        res = VGroup(label(rf"names held-out letters: \ ${100 * na.mean():.0f}\%$ \ (family ${100 * fa.mean():.0f}\%$)",
+        both = "The same network handles both tasks"
+        res = VGroup(label(rf"names held-out images: \ ${100 * na.mean():.0f}\%$ \\ filename category: \ ${100 * fa.mean():.0f}\%$",
                            font_size=22, color=TXT),
-                     label(rf"draws the letter asked for: \ ${100 * da.mean():.0f}\%$", font_size=22, color=PATCH)
+                     label(rf"judge reads requested letter: \ ${100 * da.mean():.0f}\%$", font_size=22, color=PATCH)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, -1.9, 0])
         hd = note(rf"one transformer, \ ${fmt_int(u['params'])}$ weights, \ ${fmt_int(u['steps'])}$ steps; \ "
-                  r"means of three seeds").to_edge(DOWN, buff=0.3)
+                  rf"means of {seed_count} reported seeds").to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "We built a tiny Transfusion: one transformer, trained on three kinds of sequence, mixed in every batch. "
-            "<bookmark mark='a'/> Draw: a style and a letter, then a picture, from noise. Name: a picture, then its "
-            "letter and its style, as text. Edit: a picture, the word bold, then the same letter in the bold of its "
-            "font. <bookmark mark='b'/> Attention runs left to right, except inside a picture, whose patches all see "
-            "each other. <bookmark mark='c'/> Text tokens get next-token cross-entropy; the patches of the picture "
-            "being drawn get flow matching. Its blocks are chapter 6's adaLN-Zero: each patch's noise level, with "
-            "the prompt read so far, sets its scales and gates. <bookmark mark='d'/> " + both + ": it names "
-            f"{100 * na.mean():.0f} percent of letters from fonts it never saw, and {100 * da.mean():.0f} percent of "
-            "its drawings are read as the letter asked for."
+            "We built a Transfusion-inspired toy: one transformer, with separate drawing, naming and editing "
+            "batches at every update. <bookmark mark='a'/> Draw: a font category and a letter, then a picture from "
+            "noise. Name: a picture, then its letter and category as text. Categories follow filename rules: sans, "
+            "serif or mono. Edit: a source picture, the word bold, then its matching bold target. "
+            "<bookmark mark='b'/> Attention runs left to right, except inside a picture, whose patches all see "
+            "each other. <bookmark mark='c'/> Text tokens get next-token cross-entropy; target picture patches get "
+            "flow matching. Its blocks use chapter 6's adaLN-Zero. <bookmark mark='d'/> " + both + ": it names "
+            f"{100 * na.mean():.0f} percent of the reported held-out images. Our separate judge reads "
+            f"{100 * da.mean():.0f} percent of drawings as the requested letter. The stored drawing guidance weight "
+            f"is {float(u['guide']):g}. This recipe's editing flow is conditional without classifier-free guidance. "
+            "These font-file tests do not establish generalization to new font families."
         ) as vo:
             self.play(FadeIn(hd))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in seq], lag_ratio=0.5), run_time=2.5)
@@ -166,6 +208,7 @@ class Unified(VoiceoverScene):
     # ------------------------------------------------------------------
     def training(self):
         u = load("unified")
+        seed_count = unified_split_scope(u)["seed_count"]
         cv = np.asarray(u["curve"])  # (seeds, points, [step, text loss (draw), text loss (name), flow (draw), flow (edit)])
         st = cv[0, :, 0]
         names = [(r"text: \ the prompt", TXT, 1), (r"text: \ naming the letter", "#7FD3FF", 2),
@@ -176,7 +219,7 @@ class Unified(VoiceoverScene):
                   center=[-1.4, 0.1, 0], font_size=18, xfmt=lambda x: fmt_int(x))
         lines = VGroup(*[mean_band(ax.ax, st, cv[:, :, k], c_) for _, c_, k in names])
         leg = legend([(c_, n_) for n_, c_, _ in names], font_size=20).move_to([4.6, 0.4, 0])
-        hd = note(r"three seeds \ (bands: \ min to max); \ all four terms in every step's batch").to_edge(DOWN, buff=0.3)
+        hd = note(rf"{seed_count} reported seeds \ (bands: \ min to max); \ all four terms in every step's batch").to_edge(DOWN, buff=0.3)
         name_end, prompt_end = float(cv[:, -1, 2].mean()), float(cv[:, -1, 1].mean())
         prompt = (f"the prompt's text term stays higher, at {prompt_end:.2f}, since nothing tells the model which letter "
                   "a stranger will ask for." if prompt_end > name_end else
@@ -195,37 +238,41 @@ class Unified(VoiceoverScene):
     # ------------------------------------------------------------------
     def edits(self):
         u = load("unified")
+        scope = unified_split_scope(u)
+        pair_count, train_pairs = scope["pair_count"], scope["train_pairs"]
+        held_pairs, seed_count = scope["held_pairs"], scope["seed_count"]
         src, out, tru = (np.asarray(u[k]) for k in ("edit_src", "edit_out", "edit_true"))
         rows = Group(glyph_sheet(src, 1, len(src), size=0.85, gap=0.1), glyph_sheet(out, 1, len(src), size=0.85, gap=0.1),
                      glyph_sheet(tru, 1, len(src), size=0.85, gap=0.1)).arrange(DOWN, buff=0.35).move_to([0.8, 0.5, 0])
-        names = VGroup(label(r"the picture", font_size=20, color=GREY_A), label(r"``bold'': \ ours", font_size=20, color=UNI_C),
-                       label(r"the real bold", font_size=20, color=GREY_A))
+        names = VGroup(label(r"input source", font_size=20, color=GREY_A), label(r"``bold'': \ conditional output", font_size=18, color=UNI_C),
+                       label(r"bold target", font_size=20, color=GREY_A))
         for n_, r in zip(names, rows):
             n_.next_to(r, LEFT, buff=0.3)
         held = [str(p[0]) for p in u["held"]]
-        hl = label(r"fonts whose edits it never saw: \ " + r", \ ".join(h.replace("DejaVu", r"DejaVu\,") for h in held),
-                   font_size=20, color=GREY_A).to_edge(UP, buff=0.4)
+        hl = VGroup(label(rf"reported editing split: ${train_pairs}$ training; ${held_pairs}$ held-out pairs", font_size=22, color=GREY_A),
+                    label(r"drawing/naming exposure: unverified by pair metadata", font_size=18, color=GREY_A),
+                    label(r", \ ".join(h.replace("DejaVu", r"DejaVu\,") for h in held), font_size=16, color=GREY_A)
+                    ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
         er, cr = np.asarray(u["edit_rmse"], float), np.asarray(u["copy_rmse"], float)
         ink, tink = np.asarray(u["edit_ink"], float), np.asarray(u["true_ink"], float)
         el = np.asarray(u["edit_letter"], float)
-        stats = label(rf"distance to the real bold: \ ${er.mean():.3f}$ \ (just copying: \ ${cr.mean():.3f}$); \ ink "
-                      rf"$\times{ink.mean():.2f}$ \ (the real bold: \ $\times{tink.mean():.2f}$); \ the same letter: \ "
-                      rf"${100 * el.mean():.0f}\%$", font_size=20, color=UNI_C).to_edge(DOWN, buff=0.5)
-        if er.mean() < cr.mean():
-            verdict = (f"Its bold versions are closer to the real ones than the untouched picture is: a distance of "
-                       f"{er.mean():.3f} against {cr.mean():.3f}. It thickens the strokes by a factor of "
-                       f"{ink.mean():.2f}, where the real bold's factor is {tink.mean():.2f}, and keeps the letter "
-                       f"{100 * el.mean():.0f} percent of the time.")
-        else:
-            verdict = (f"It thickens the strokes, by a factor of {ink.mean():.2f} against the real bold's "
-                       f"{tink.mean():.2f}, and keeps the letter {100 * el.mean():.0f} percent of the time; but it "
-                       f"doesn't match the real bold more closely than the untouched picture does: {er.mean():.3f} "
-                       f"against {cr.mean():.3f}.")
+        stats = label(rf"pixel RMSE: \ ${er.mean():.3f}$ \ (copying source: \ ${cr.mean():.3f}$); \\ "
+                      rf"mean seed-median ink ratio: \ ${ink.mean():.2f}$ \ (target: \ ${tink.mean():.2f}$); \\ "
+                      rf"judge reads requested letter: \ ${100 * el.mean():.0f}\%$",
+                      font_size=18, color=UNI_C).to_edge(DOWN, buff=0.4)
+        verdict = (f"Across {seed_count} reported seeds, mean pixel RMSE to the bold target is {er.mean():.3f}; copying the source "
+                   f"gives {cr.mean():.3f}. The mean of per-seed median pixel ink-mass ratios is {ink.mean():.2f}, "
+                   f"against {tink.mean():.2f} for the target. Our judge reads {100 * el.mean():.0f} percent of "
+                   "edited outputs as the requested letter. These proxies do not measure stroke width or establish "
+                   "typographic fidelity and identity preservation.")
         with self.voiceover(
-            "The edit is the interesting one. We held out two pairs of fonts: their regular versions were never "
-            "seen at all, let alone edited. <bookmark mark='a'/> Here are letters in those fonts, our model's answer to bold, and the "
-            "real bold. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> The picture to edit is just more "
-            "tokens in the sequence: in-context editing."
+            f"The stored editing split lists {pair_count} matched non-bold and bold font-file pairs: "
+            f"{train_pairs} for training and {held_pairs} held-out source pairs. Pair names alone do not verify "
+            "whether source or bold target files also appeared in drawing and naming training. We therefore make "
+            "no unseen-target-style or new-font-family claim. <bookmark mark='a'/> The rows show source pictures, "
+            "conditional edit outputs, and bold targets. These are example edits; the reported metrics aggregate "
+            "seeds. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> The source picture is more context "
+            "tokens in the sequence. File-level holdout alone does not guarantee pixel-level separation."
         ) as vo:
             self.play(FadeIn(hl))
             self.play(FadeIn(rows[0]), FadeIn(names[0]), FadeIn(rows[2]), FadeIn(names[2]))

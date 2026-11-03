@@ -732,6 +732,12 @@ ZH.update({'Real pictures have millions of pixels. Rombach': "真实图片有几
 # Reviewed timestep density and FD summary; historical entries retained.
 ZH.update({'"SD3 also changed how it samples training times.': "SD3还改变了训练时间的抽取方式。<bookmark mark='a'/>均匀采样给出相等的时间密度。这里流的目标是数据潜变量减去噪声；在任一端点附近，它都不一定趋于零。<bookmark mark='b'/>把标准正态抽样通过sigmoid，就得到logit-normal时间分布，在中间附近抽得更多。在SD3的24种评估设置中，这个版本的平均非支配排序最好，并非每项指标都获胜。论文的时间方向相反，但这个对称的密度不变。<bookmark mark='c'/>我们固定一个含16个数的自编码器，比较两种配方，每种三个流随机种子。FD使用简化评判器的训练图片特征。{verdict}曲线是FD的算术均值，范围带是三次运行的最小值至最大值。两者都不衡量人类辨认结果或各训练时刻的损失。", "f'At {ks[0]} sampling step, arithmetic mean FD is": '采样{ks[0]}步时，均匀分布的算术平均FD为{u_first:.0f}，logit-normal为{l_first:.0f}。采样{ks[-1]}步时，分别为{u_last:.0f}和{l_last:.0f}。'})
 
+# Reviewed FLUX chronology and guidance wording; frozen prior entries retained.
+ZH.update({"Several of SD3's authors went on to found Black Forest Labs.": "SD3的几位作者后来创办了Black Forest Labs。<bookmark mark='a'/>2024年8月，他们发布了FLUX.1：120亿个权重，先是MM-DiT块，再接上单流块，用旋转位置编码，还有一个通过引导蒸馏训练、开放权重的dev版本。<bookmark mark='b'/>2025年，FLUX.1 Kontext把输入图片的词元接到序列里来编辑图片，<bookmark mark='c'/>FLUX.2则长到了320亿个权重，由一个视觉语言模型来读提示词，最多可以用十张参考图片。<bookmark mark='d'/>这些FLUX模型采用相同的配方：一个潜空间，整流流，一个同时处理词和图块的Transformer。"})
+
+# Unified reported split metadata; cross-task exposure remains unverified.
+ZH.update({'The same network handles both tasks': '同一个网络处理这两项任务', '"We built a Transfusion-inspired toy:': "我们搭了一个受Transfusion启发的简化模型：一个Transformer，每次更新都分别使用画图、命名和编辑的任务批次。<bookmark mark='a'/>画图：字体类别和字母，然后从噪声生成图片。命名：图片，然后用文字给出字母和类别。类别按文件名规则分为无衬线、衬线或等宽。编辑：来源图片、指令“粗体”，然后是配对的粗体目标。<bookmark mark='b'/>注意力从左到右，图片内部的图块彼此可见。<bookmark mark='c'/>文字词元使用下一词元交叉熵；目标图片图块使用流匹配。模块采用第6章的adaLN-Zero。<bookmark mark='d'/>{both}：在所报告的留出图片中，字母命名准确率为{100 * na.mean():.0f}%。另一个评判器把{100 * da.mean():.0f}%的生成图片读成所要求的字母。存储的画图引导权重为{float(u['guide']):g}。这个配方的编辑流使用条件，不使用无分类器引导。这些字体文件测试不能证明对新字体家族的泛化。", 'f"Across {seed_count} reported seeds, mean pixel RMSE': '所报告的{seed_count}个随机种子中，到粗体目标的平均像素RMSE为{er.mean():.3f}，直接复制来源图片为{cr.mean():.3f}。先对每个种子的像素墨量比取中位数，再在种子间取平均，得到{ink.mean():.2f}；目标为{tink.mean():.2f}。评判器把{100 * el.mean():.0f}%的编辑结果读成所要求的字母。这些简化指标不测量笔画宽度，也不能证明字形准确或保留了字母身份。', 'f"The stored editing split lists': "存储的编辑划分列出{pair_count}对配套的非粗体与粗体字体文件：{train_pairs}对训练，{held_pairs}对留出来源。仅凭配对文件名，不能确认来源或粗体目标文件是否也参加了画图与命名训练。因此，不声称这是新目标风格或新字体家族的泛化。<bookmark mark='a'/>三行分别是来源图片、条件编辑输出和粗体目标。这里展示编辑例子；所报告的指标在随机种子间聚合。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>来源图片作为更多上下文词元加入序列。仅按文件留出，并不保证像素层面没有重合。"})
+
 PHRASES = {
     # spliced-in English values
     'in-context tokens': '上下文词元',

@@ -218,7 +218,7 @@ class SD3(VoiceoverScene):
                 why(r"estimate $\hat c = \bar z / (1-\sigma)$"),
                 why(r"ask for the same uncertainty \ at $m$ pixels"),
                 why(r"solve for $\sigma_m$")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=0.4, buff=0.42, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=0.4, buff=0.42, edge=6.4)
         lsnr = MathTex(r"\log \mathrm{SNR}_m = \log \mathrm{SNR}_n - 2 \log \alpha", font_size=28, color=PATCH).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "One more thing changes with size. <bookmark mark='a'/> Use the same per-pixel noise level, with independent "
@@ -237,7 +237,7 @@ class SD3(VoiceoverScene):
             self.play(*[Transform(b_, p_) for b_, p_ in zip(big, pairs)], run_time=1.2)
             for k, m in enumerate("bcdef"):
                 vo.wait_until(m)
-                step(k)
+                step(k, transform=False)
             self.play(FadeIn(lsnr))
         self.wait(0.3)
         self.clear_scene()
@@ -300,9 +300,9 @@ class SD3(VoiceoverScene):
         head = label(r"Flux", font_size=40).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(r"Aug 2024", r"FLUX.1 \ (Black Forest Labs)", r"$12$ billion weights; \ MM-DiT blocks, then "
-                         r"single-stream blocks; \ rotary positions; \ a guidance-distilled open version",
+                         r"single-stream blocks; \ rotary positions; \ a guidance-distilled open [dev] version",
                          color=HIST, width=11.0, font_size=25),
-            history_card(r"Jun 2025", r"FLUX.1 Kontext", r"edit by context: \ the input picture's tokens joined to the "
+            history_card(r"May 2025", r"FLUX.1 Kontext", r"edit by context: \ the input picture's tokens joined to the "
                          r"sequence", color=HIST, width=11.0, font_size=25),
             history_card(r"Nov 2025", r"FLUX.2", r"$32$ billion weights \ (open [dev]); \ a $24$-billion vision-language "
                          r"model reads the prompt; \ up to $10$ reference pictures", color=HIST, width=11.0, font_size=25),
@@ -314,11 +314,11 @@ class SD3(VoiceoverScene):
                      color=PATCH).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Several of SD3's authors went on to found Black Forest Labs. <bookmark mark='a'/> In August "
-            "2024 they released FLUX.1: twelve billion weights, MM-DiT blocks followed by cheaper single-stream "
-            "blocks, rotary positions, and an open version distilled to need no guidance. <bookmark mark='b'/> In "
+            "2024 they released FLUX.1: twelve billion weights, MM-DiT blocks followed by single-stream "
+            "blocks, rotary positions, and an open dev version trained with guidance distillation. <bookmark mark='b'/> In "
             "2025 FLUX.1 Kontext edited pictures by joining the input picture's tokens to the sequence, "
             "<bookmark mark='c'/> and FLUX.2 grew to thirty-two billion, with a vision-language model reading the "
-            "prompt and up to ten reference pictures. <bookmark mark='d'/> The recipe has settled: a latent space, "
+            "prompt and up to ten reference pictures. <bookmark mark='d'/> These FLUX models share a recipe: a latent space, "
             "rectified flow, one transformer over words and patches."
         ) as vo:
             bfl = label(r"several of SD3's authors \ $\to$ \ Black Forest Labs \ (2024)", font_size=30, color=HIST)
