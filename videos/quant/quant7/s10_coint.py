@@ -175,7 +175,7 @@ class Coint(VoiceoverScene, ThreeDScene):
                        MathTex(rf"\beta' = ({b[0]:+.2f},\ {b[1]:+.2f},\ {b[2]:+.2f})", font_size=26, color=BAD),
                        label(rf"principal axes: {100 * j['pca_var'][0]:.1f}\%, {100 * j['pca_var'][1]:.1f}\%, "
                              rf"{100 * j['pca_var'][2]:.2f}\% of the variance", font_size=18, color=GREY_B))
-        panel.arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.3)
+        panel.arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UL, buff=0.3)  # the axes swing into the upper right
         leg = legend([(GOOD, r"level: the common trend"), (ALT, r"slope"), (BAD, r"curvature: the thin direction")],
                      font_size=18).to_corner(DL, buff=0.3)
         src = real_data(r"FRED DTB3, DGS5, DGS10, daily 1990--2020 (every tenth day drawn)")
