@@ -41,7 +41,7 @@ class SkewMath(VoiceoverScene, ThreeDScene):
 
         def K(x):
             x = max(x, 1e-4)
-            return float((1 - kind.get_value()) * np.exp(-KAP * x) + kind.get_value() * min(x ** (H0 - 0.5) / 2.5, 3.0))
+            return float((1 - kind.get_value()) * np.exp(-KAP * x) + kind.get_value() * min(x ** (H0 - 0.5) / 2.5, 2.2))
 
         def surf():
             TT = T.get_value()
@@ -66,16 +66,21 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         leg = legend([(VAR, rf"exponential $e^{{-{KAP:g}\tau}}$: flat, then $1/T$"),
                       (ROUGH, rf"power $\tau^{{H - 1/2}}$, $H = {H0:g}$: $T^{{H - 1/2}}$")], font_size=15).next_to(
             g, UP, buff=0.15)
-        dot = always_redraw(lambda: Dot(g.ax.c2p(np.log10(T.get_value()), np.clip(np.log10(
-            ((1 - kind.get_value()) * _vol_exp(T.get_value()) + kind.get_value() * _vol_power(T.get_value()))
-            / T.get_value() ** 2), -1.6, 1.2)), radius=0.08, color=YELLOW))
+        def dot_at():
+            return g.ax.c2p(np.log10(T.get_value()), np.clip(np.log10(
+                ((1 - kind.get_value()) * _vol_exp(T.get_value()) + kind.get_value() * _vol_power(T.get_value()))
+                / T.get_value() ** 2), -1.6, 1.2))
+        dot = Dot(dot_at(), radius=0.08, color=YELLOW)  # one dot, moved: it stays pinned to the frame
+        dot.add_updater(lambda m: m.move_to(dot_at()))
         Tr = readout(r"T =", lambda: 365 * T.get_value(), digits=0, font_size=30, color=YELLOW,
                      unit=r"\ \text{days}").next_to(hint, DOWN, buff=0.25).align_to(hint, LEFT)
         fixed = VGroup(hint, g, leg, Tr)
         src = illustration(r"the first-order skew formula, flat forward variance", corner=DL)
         self.set_camera_orientation(phi=62 * DEGREES, theta=-130 * DEGREES, zoom=0.9)
-        self.add_fixed_in_frame_mobjects(fixed, dot, src)
-        self.remove(fixed, dot, src)
+        self.add_fixed_in_frame_mobjects(fixed, dot, src, ce, cp)
+        self.remove(fixed, dot, src, ce, cp)
+        cam = self.renderer.camera
+        Tr[1].add_updater(lambda m: cam.add_fixed_in_frame_mobjects(m))  # the number rebuilds itself: pin it again
         with self.voiceover(
             "Why should the skew be a power law at all? Here is the picture behind the answer. On the floor, a "
             "triangle: all pairs of times, t before u, up to the expiry T. Above each pair, the kernel: how much a "
@@ -196,7 +201,10 @@ class SkewMath(VoiceoverScene, ThreeDScene):
             nm = r"the Surface" if k == "market" else names[k]
             tab.add(VGroup(label(nm, font_size=16, color=c), MathTex(f"{m[k]['short']:.2f}", font_size=22, color=c),
                            MathTex(f"{m[k]['long']:.2f}", font_size=22, color=c)))
-        grid = VGroup(hdr, *tab).arrange_in_grid(rows=7, cols=3, buff=(0.3, 0.14), col_alignments="lcc")
+        # lay out the cells themselves (hdr and the rows keep pointing at them, so the fades below still work)
+        VGroup(*hdr, *[c for row in tab for c in row]).arrange_in_grid(rows=len(tab) + 1, cols=3, buff=(0.3, 0.14),
+                                                                        col_alignments="lcc")
+        grid = VGroup(hdr, *tab)
         cap = label(r"local exponent $a$ in $\psi \propto T^{-a}$", font_size=17, color=GREY_A)
         side = VGroup(cap, grid).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(g, RIGHT, buff=0.35).align_to(g, UP)
         if side.get_right()[0] > 6.9:
@@ -222,9 +230,9 @@ class SkewMath(VoiceoverScene, ThreeDScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(dots), FadeIn(src), FadeIn(q))
             vo.wait_until("a")
-            self.play(Create(curves[0]), FadeIn(hdr), FadeIn(tab[0]), FadeIn(tab[1]))
+            self.play(Create(curves[0]), FadeIn(hdr), FadeIn(tab[0]), FadeIn(tab[1]), FadeOut(q))  # the table takes its place
             vo.wait_until("b")
-            self.play(Create(curves[1]), Create(curves[2]), FadeIn(tab[2]), FadeIn(tab[3]), FadeOut(q))
+            self.play(Create(curves[1]), Create(curves[2]), FadeIn(tab[2]), FadeIn(tab[3]))
             vo.wait_until("c")
             self.play(Create(curves[3]), Create(curves[4]), FadeIn(tab[4]), FadeIn(tab[5]), Create(form), FadeIn(fnote))
             vo.wait_until("d")
