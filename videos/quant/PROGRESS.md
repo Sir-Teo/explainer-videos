@@ -442,7 +442,7 @@ stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12
 | 5 | done: English QA clean on all 20 scenes (layout fixes across 17); zh text 0 left; zh dry run passes; about 57 min |
 | 6 | done: English QA clean on all 20 scenes (layout fixes across 16); zh text 0 left; zh dry run passes; about 57 min |
 | 7 | done: English QA clean on all 20 scenes (layout fixes across 16; GARCH likelihood redrawn over persistence); zh text 0 left; zh dry run passes; about 57 min |
-| 8 | chapters written; finishing pending |
+| 8 | done: English QA clean on all 21 scenes (layout fixes across 15; camera reset after the Bellman replay); zh text 0 left; zh dry run passes; about 57 min |
 | 9 | chapters written; finishing pending |
 | 10 | chapters written; finishing pending |
 | 11 | chapters written; finishing pending |
