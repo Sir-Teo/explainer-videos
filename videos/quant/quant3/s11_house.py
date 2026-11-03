@@ -98,7 +98,9 @@ class House(VoiceoverScene):
             tt = t.get_value()
             out = VGroup()
             line = Line(ax.c2p(2008.5, tt), ax.c2p(2021.2, tt), color=QC.HOUSE, stroke_width=3)
-            out.add(line, live(r"\text{as of}", tt, 1, font_size=22, color=QC.HOUSE).next_to(line, RIGHT, buff=0.1))
+            # a fixed readout just above the plane, clear of the sweeping line and of the dots, in the line's colour
+            tag = live(r"\text{as of}", tt, 1, font_size=24, color=QC.HOUSE).move_to(ax.c2p(2014.5, 2022.75))
+            out.add(line, tag)
             xs, ys = [], []
             for e in np.unique(X):
                 m = (X == e) & (Y <= tt)
