@@ -55,7 +55,7 @@ class Mixing(VoiceoverScene):
         dial.to_edge(RIGHT, buff=0.7).shift(UP * 1.2)
         arrow = Arrow(LEFT * 0.6, ORIGIN, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.35)
         arrow.next_to(dial[1], LEFT, buff=0.15)
-        note_ = wrapped_label(r"thin curves: $\ln S_T$ given one simulated variance path, each a Gaussian; gold: their "
+        note_ = wrapped_label(r"thin curves: $\ln S_T$ given one simulated variance path, each a Gaussian; orange: their "
                               r"average, the model's density; below, the smile it prices", 4.6, 19, GREY_A)
         note_.next_to(dial, DOWN, buff=0.5).align_to(dial, LEFT)
         atm, wing = m["atm"], m["wing"]
@@ -68,7 +68,7 @@ class Mixing(VoiceoverScene):
             "Why does moving volatility make a smile? Take the fitted Heston and switch off the correlation. With no "
             "vol of vol, the log price in three months is one Gaussian, and the smile is flat. <bookmark mark='a'/> "
             "Let the variance move. Each thin curve is the law of the log price given one variance path: Gaussian "
-            "again, with that path's variance. The model's density is the crowd's average, in gold. "
+            "again, with that path's variance. The model's density is the crowd's average, in orange. "
             "<bookmark mark='b'/> Turn the vol of vol up: calm paths narrow, wild ones wide, and the average gets a "
             "sharp peak and fat tails. The smile lifts at both ends. <bookmark mark='p'/> Double it again: which "
             "moves more, the at-the-money vol or the wings? <bookmark mark='c'/> The wings rise, from "

@@ -108,7 +108,7 @@ class Skew(VoiceoverScene):
                  "summarises it.")
         with self.voiceover(
             "Now the same thing as numbers. Plot the at-the-money skew against maturity, both on log scales, so that "
-            "a power law is a straight line and its slope is the power. The white dots are the Surface; the pink "
+            "a power law is a straight line and its slope is the power. The white dots are the Surface; the green "
             "squares, SABR fitted slice by slice, which tracks them by construction. <bookmark mark='a'/> Over all "
             f"nine expiries the market's slope is {mkt['all']:.2f}, close to minus one half. Locally it is "
             f"{mkt['short']:.2f} up to about two weeks and {mkt['long']:.2f} beyond fifty days. "

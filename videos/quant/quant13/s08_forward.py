@@ -148,7 +148,7 @@ class Forward(VoiceoverScene):
             sums.add(MathTex(rf"\text{{payoff}}\ {100 * tot:.1f}\%", font_size=26, color=OPT).next_to(ax.c2p(1 + p * 4.2 + 1.2, -0.25),
                                                                                                     DOWN, buff=0.15))
         foot = wrapped_label(r"each path: four monthly returns (grey outlines), each floored at 0 and capped at 10\% "
-                             r"(orange); the payoff is their sum: big months are cut, bad months are forgiven", 12.0, 19, GREY_A)
+                             r"(pink); the payoff is their sum: big months are cut, bad months are forgiven", 12.0, 19, GREY_A)
         foot.to_edge(DOWN, buff=0.4)
         src = illustration(r"three paths of the fitted Heston")
         with self.voiceover(
