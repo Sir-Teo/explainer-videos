@@ -607,6 +607,7 @@ STRINGS = {
     r"Can one model see, listen and talk, all at once?": r"一个模型能同时看、听、说吗？",
     r"speech recognizer": r"语音识别器",
     r"speech synthesizer": r"语音合成器",
+    r"a text-only cascade: \ stages can stream, \ but the handoff loses acoustic detail": r"纯文本级联：\ 各级可以流式处理，\ 但交接时会丢失声学细节",
     r"a cascade: \ each waits for the one before, \ and tone of voice is lost in the text between": r"级联：\ 每一级都要等前一级，\ 语气在中间的文本里丢失了",
     r"one network: \ sound, \ pictures and text in; \ sound and text out": r"一个网络：\ 输入声音、\ 图片和文本；\ 输出声音和文本",
     r"GPT-4o (OpenAI, May 2024): \ answers speech in as little as $232$ ms, \ $320$ ms on average": r"GPT-4o（OpenAI，2024年5月）：\ 回应语音最快$232$ ms，\ 平均$320$ ms",
