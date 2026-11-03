@@ -71,8 +71,8 @@ class Omni(VoiceoverScene):
     def duplex(self):
         T = 12
         rows = VGroup()
-        for name, col, pattern in ((r"you", ME_C, "110000110011"), (r"Moshi's words", TEXT_C, "000110001100"),
-                                   (r"Moshi's speech", SND_C, "001110001100")):
+        for name, col, pattern in ((r"you", ME_C, "110000110011"), (r"Moshi's words", TEXT_C, "001110001100"),
+                                   (r"Moshi's speech", SND_C, "000111000110")):
             cells = VGroup(*[Rectangle(width=0.62, height=0.45, stroke_color=GREY_D, stroke_width=1, fill_color=col,
                                        fill_opacity=0.75 if p == "1" else 0.08) for p in pattern]).arrange(RIGHT, buff=0.04)
             rows.add(VGroup(label(name, font_size=24, color=col), cells).arrange(RIGHT, buff=0.4))
