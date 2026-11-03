@@ -217,7 +217,7 @@ class DCF(VoiceoverScene, ThreeDScene):
                             .replace(",", "{,}"), font_size=28, color=QC.HOUSE),
                     MathTex(r"\text{RONIC } 16\%:\ \text{growth uphill}", font_size=28, color=QC.GAIN),
                     MathTex(r"\text{RONIC } 5\%:\ \text{growth downhill}", font_size=28, color=QC.LOSS))
-        rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
+        rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.5)  # the landscape peaks top-right; the lower-right corner stays empty
         self.set_camera_orientation(phi=66 * DEGREES, theta=-130 * DEGREES, zoom=0.72)
         self.add_fixed_in_frame_mobjects(hint, rd)
         self.remove(hint, rd)
