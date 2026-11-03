@@ -183,8 +183,8 @@ class MM(VoiceoverScene):
             return VGroup(g, rd)
 
         pie = always_redraw(draw)
-        gx = axes([0, 0.65], [0.95, 1.06], x_length=5.4, y_length=3.4, xlabel=r"debt / unlevered value",
-                  ylabel=r"investors' value / $V_U$", xticks=[0, 0.2, 0.4, 0.6], yticks=[0.96, 1.0, 1.04],
+        gx = axes([0, 0.65], [0.9, 1.06], x_length=5.4, y_length=3.4, xlabel=r"debt / unlevered value",
+                  ylabel=r"investors' value / $V_U$", xticks=[0, 0.2, 0.4, 0.6], yticks=[0.92, 0.96, 1.0, 1.04],
                   yfmt=lambda v: f"{v:.2f}", font_size=17).to_edge(RIGHT, buff=0.5).shift(UP * 0.6)
         ax = gx.ax
         xs = np.linspace(0, 0.65, 66)
