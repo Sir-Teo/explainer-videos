@@ -504,7 +504,10 @@ def compute_exact():
     x = g.choice(K, N, p=q)
     acc = g.random(N) < np.minimum(1, p[x] / q[x])
     resid = np.maximum(p - q, 0)
-    resid /= resid.sum()
+    mass = resid.sum()
+    # If p == q, rejection is impossible; use p as a harmless fallback because
+    # np.where evaluates both branches before selecting accepted drafts.
+    resid = resid / mass if mass > 0 else p
     y = np.where(acc, x, g.choice(K, N, p=resid))
     emp = np.bincount(y, minlength=K) / N
     direct = np.bincount(g.choice(K, N, p=p), minlength=K) / N
