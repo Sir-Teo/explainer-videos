@@ -117,15 +117,18 @@ class Clip(VoiceoverScene):
         x0, w, gap = 1.3, 0.9, 1.9
         sy = 0.3
         base_y = -3.45
+        lowest = min(0.0, *(float(np.min(values)) for values in est))
         bars = VGroup()
         for i, (B, e) in enumerate(zip(Bs, est)):
             x = x0 + i * gap
             ceil_ = Rectangle(width=w, height=math.log(B) * sy, stroke_color=WHITE, stroke_width=1.5).move_to(
                 [x, base_y + math.log(B) * sy / 2, 0])
-            fill = Rectangle(width=w, height=max(e.mean(), 0.01) * sy, stroke_width=0, fill_color=CLIP_C, fill_opacity=0.7).move_to(
+            fill = Rectangle(width=w, height=max(abs(float(e.mean())) * sy, 0.003), stroke_width=0,
+                             fill_color=CLIP_C, fill_opacity=0.7).move_to(
                 [x, base_y + e.mean() * sy / 2, 0])
             dots = VGroup(*[Dot([x + 0.3 * (j - 1), base_y + v * sy, 0], radius=0.04, color=WHITE) for j, v in enumerate(e)])
-            bars.add(VGroup(ceil_, fill, dots, label(rf"$N = {B}$", font_size=18, color=GREY_A).next_to(ceil_, DOWN, buff=0.08),
+            bars.add(VGroup(ceil_, fill, dots, label(rf"$N = {B}$", font_size=18, color=GREY_A).next_to(
+                                [x, base_y + lowest * sy, 0], DOWN, buff=0.10),
                             MathTex(f"{e.mean():.2f}", font_size=22, color=CLIP_C).next_to(
                                 [x + w / 2, base_y + e.mean() * sy, 0], RIGHT, buff=0.1)))
         hl = DashedLine([x0 - 0.6, base_y + H * sy, 0], [x0 + 2 * gap + 0.6, base_y + H * sy, 0], color=TEXT_C)
@@ -133,7 +136,8 @@ class Clip(VoiceoverScene):
         bl = label(rf"empirical $\log N - \mathcal L$, \ nats \ (outline: $\log N$)",
                    font_size=18, color=GREY_A)
         bl.next_to(VGroup(bars, hl), UP, buff=0.12).align_to(bars, LEFT)
-        bars_g = VGroup(bars, hl, hll, bl)
+        zero = Line([x0 - 0.6, base_y, 0], [x0 + 2 * gap + 0.6, base_y, 0], color=GREY_A, stroke_width=1.5)
+        bars_g = VGroup(bars, hl, hll, bl, zero)
         keep_in_frame(bars_g, margin=0.2)
         e16, e256 = est[0].mean(), est[-1].mean()
         bh = VGroup(label(r"what the loss measures", font_size=44),
@@ -168,7 +172,7 @@ class Clip(VoiceoverScene):
             vo.wait_until("d")
             step(3, transform=False)
             vo.wait_until("e")
-            self.play(FadeIn(bl), Create(hl), FadeIn(hll),
+            self.play(FadeIn(bl), Create(hl), Create(zero), FadeIn(hll),
                       LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in bars], lag_ratio=0.3), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
