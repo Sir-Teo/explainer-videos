@@ -60,8 +60,8 @@ class Signature(VoiceoverScene):
             base + RIGHT * 0.36 * j + DOWN * 2.15) for j, w_ in enumerate(words)])
         cap = wrapped_label(r"the signature of $(t, W_t)$ to depth 3: 15 iterated integrals, each scaled to its own range",
                             5.8, 17, GREY_A).next_to(axis, UP, buff=2.0).align_to(axis, LEFT)
-        q = pause(r"Depth 1 only: what kind of model is $\sigma_t = \ell_0 + \ell_1 t + \ell_2 W_t$?", width=5.2,
-                  font_size=20).to_corner(UR, buff=0.3)  # the bars' word labels take the bottom
+        q = pause(r"Depth 1 only: what kind of model is $\sigma_t = \ell_0 + \ell_1 t + \ell_2 W_t$?", width=6.4,
+                  font_size=19).to_corner(DR, buff=0.2).shift(UP * 0.25)  # below the word labels, above the source
         src = illustration(r"one simulated path; the weights $\ell$ are the calibrated ones of this chapter", corner=DL)
         with self.voiceover(
             "Christa Cuchiero, Guido Gazzani and Sara Svaluto-Ferro asked: what if volatility were a linear function "
