@@ -96,7 +96,6 @@ class Rewards(VoiceoverScene):
     # ------------------------------------------------------------------
     def ours(self):
         pr = load("prefs")
-        rm = load("rm")
         ex = [p for p in pr["test"] if len(p["chosen"]) < 90 and len(p["rejected"]) < 90][:2]
         q = said(f"Write a line about the {ex[0]['topic']}.", "user", chars=40, font_size=20).move_to([0, 2.7, 0])
         cw = said(ex[0]["chosen"], chars=36).move_to([-3.4, 1.0, 0])
@@ -137,19 +136,24 @@ class Rewards(VoiceoverScene):
     # ------------------------------------------------------------------
     def accuracy(self):
         rm = load("rm")
+        pr = load("prefs")
+        train_text = {(p["topic"], p[key]) for p in pr["train"] for key in ("chosen", "rejected")}
+        test_text = {(p["topic"], p[key]) for p in pr["test"] for key in ("chosen", "rejected")}
+        overlap = len(train_text & test_text)
         sizes, acc = np.asarray(rm["sizes"], float), np.asarray(rm["acc"])
         ceil = float(rm["people_agree_gold"])
+        ymin = max(0.0, float(np.floor((min(float(acc.min()), ceil, 0.5) - 0.05) * 10) / 10))
         lx = np.log10(sizes)
         x0, x1 = 1.8, float(np.ceil(lx.max() * 2) / 2)  # log10 of the comparisons (CornerAxes keeps its own shifted range)
-        g = axes([x0, x1], [0.5, 1.0], x_length=7.0, y_length=4.0,
+        g = axes([x0, x1], [ymin, 1.0], x_length=7.0, y_length=4.0,
                  xlabel=r"comparisons it learned from (log scale)", ylabel=r"held-out comparisons it gets right",
-                 xticks=[2, 3], yticks=[0.5, 0.75, 1.0], log_x=True, yfmt=lambda v: rf"{int(100 * v)}\%",
+                 xticks=[2, 3], yticks=sorted({ymin, 0.5, 0.75, 1.0}), log_x=True, yfmt=lambda v: rf"{int(100 * v)}\%",
                  center=[-1.0, -0.3, 0])
         line = VGroup(*[Line(g.ax.c2p(a, b), g.ax.c2p(c, d_), color=PROXY, stroke_width=4)
                         for (a, b), (c, d_) in zip(zip(lx, acc), zip(lx[1:], acc[1:]))])
         dots = VGroup(*[Dot(g.ax.c2p(x, y), radius=0.07, color=PROXY) for x, y in zip(lx, acc)])
         cl = DashedLine(g.ax.c2p(x0, ceil), g.ax.c2p(x1, ceil), color=GOLD, dash_length=0.08)
-        cll = label(rf"how often the simulated people agree with gold: \ ${100 * ceil:.0f}\%$", font_size=20,
+        cll = label(rf"simulated-label/gold agreement (ties half): \ ${100 * ceil:.0f}\%$", font_size=20,
                     color=GOLD).next_to(cl, UP, buff=0.08).align_to(cl, RIGHT)
         chance = DashedLine(g.ax.c2p(x0, 0.5), g.ax.c2p(x1, 0.5), color=GREY_C,
                             dash_length=0.06)
@@ -158,11 +162,15 @@ class Rewards(VoiceoverScene):
         cite_ = note(r"InstructGPT's reward model: \\ $69.6\%$ on held-out labellers \\ (Ouyang et al., 2022)",
                      font_size=20).move_to([4.7, 0.9, 0])
         with self.voiceover(
-            "Train reward models on more and more of the comparisons, and test each on comparisons it has never seen. "
+            "Train reward models on more and more of the comparisons, and test each on held-out samples. "
             f"<bookmark mark='a'/> With {int(sizes[0])} comparisons it gets {100 * acc[0]:.0f} percent right; with "
-            f"{int(sizes[-1]):,}, {100 * acc[-1]:.0f} percent. <bookmark mark='b'/> It can't reach a hundred: the "
-            f"people it learns from agree with gold only {100 * ceil:.0f} percent of the time, so that's the ceiling. "
-            "<bookmark mark='c'/> Real reward models live in the same range. InstructGPT's predicted held-out "
+            f"{int(sizes[-1]):,}, {100 * acc[-1]:.0f} percent. <bookmark mark='b'/> The sampled people agree with "
+            f"gold on {100 * ceil:.0f} percent of these test comparisons, with half credit for gold ties. That is a "
+            "noise reference, not a hard "
+            "ceiling on a finite test set. "
+            f"These used training and test sets share {overlap} exact prompt-and-answer texts. The recipe splits "
+            "sample indices, so text separation is a measured property here, not a guarantee of the recipe. "
+            "<bookmark mark='c'/> For historical context, InstructGPT's reward model predicted held-out "
             "labellers' choices about seventy percent of the time, close to how often the labellers agreed with "
             "each other. A reward model is an imperfect copy of an imperfect judge. Next we open ours up, and "
             "then see what happens when you optimize against it."

@@ -23,7 +23,7 @@ class Hook(VoiceoverScene):
         for b_ in (ba, aa):
             if b_.width > 6.4:
                 b_.width = 6.4
-        same = label(r"same weights, \ same knowledge: \ a few minutes of training apart", font_size=24, color=GOLD)
+        same = label(r"same architecture, \ updated weights: \ learning from the novels again", font_size=24, color=GOLD)
         same.to_edge(DOWN, buff=0.75)
         tag = note(r"computed: \ the series' $6.8$-million-parameter model, \ trained on thirty novels")
         tag.to_corner(DR, buff=0.2)
@@ -32,7 +32,8 @@ class Hook(VoiceoverScene):
             f"{topic}. <bookmark mark='a'/> As it comes out of pretraining, it doesn't answer. It continues a "
             "document: the request is just more text, and the special markers around it mean nothing to it. "
             "<bookmark mark='b'/> Here is the same model after a few minutes of fine-tuning on this computer. "
-            "<bookmark mark='c'/> It knows nothing new. What changed is what it does with what it knows."
+            "<bookmark mark='c'/> The examples came from the same novels. Training updated its weights and taught "
+            "it the answer format."
         ) as vo:
             self.play(FadeIn(q, shift=DOWN * 0.15), FadeIn(tag))
             vo.wait_until("a")
@@ -52,8 +53,8 @@ class Hook(VoiceoverScene):
                             r"after this training \ to those of the $175$-billion-parameter GPT-3 before it",
                             width=8.6, color=ASSIST).move_to(DOWN * 1.2)
         with self.voiceover(
-            "That change, from predicting text to trying to help, is called post-training, and it is how every "
-            "chatbot you have used was made. <bookmark mark='a'/> It matters more than size. In 2022 OpenAI found "
+            "That change, from predicting text to trying to help, is called post-training, and it shapes many "
+            "modern language-model assistants. <bookmark mark='a'/> It can matter more than size. In 2022 OpenAI found "
             "that people preferred the answers of a 1.3-billion-parameter model after post-training to those of the "
             "175-billion-parameter GPT-3 before it."
         ) as vo:
@@ -81,8 +82,8 @@ class Hook(VoiceoverScene):
             "<bookmark mark='r3'/> reinforcement learning from human feedback, its exact optimum, how PPO is fitted "
             "to a language model, and what happens when you optimize a learned reward too hard; "
             "<bookmark mark='r4'/> direct preference optimization; feedback from AI under written principles; "
-            "<bookmark mark='r5'/> distillation and model merging; <bookmark mark='r6'/> and what goes wrong. Every "
-            "method runs here, on our own small model."
+            "<bookmark mark='r5'/> distillation and model merging; <bookmark mark='r6'/> and what goes wrong. The "
+            "core experiments run here on our own small model; published larger-scale results are cited."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

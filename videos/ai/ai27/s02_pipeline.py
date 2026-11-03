@@ -76,7 +76,7 @@ class Pipeline(VoiceoverScene):
             "from best to worst, and a network learned to predict their rankings. <bookmark mark='c'/> Third, "
             "reinforcement learning: the PPO of Part 26, with the reward model standing in for the people. "
             "<bookmark mark='d'/> The result was startling. People preferred the answers of the 1.3-billion-parameter "
-            "InstructGPT to those of the 175-billion-parameter GPT-3 it started from: a hundred times smaller, and "
+            "InstructGPT to those of the 175-billion-parameter GPT-3: over a hundred times smaller, and "
             "better liked, because it was trying to help."
         ) as vo:
             # the whole pipeline faint from the first word, each stage lit as it is named
@@ -92,6 +92,7 @@ class Pipeline(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def history(self):
+        head = label(r"Learning from comparisons", font_size=30).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(2017, r"Christiano, Leike et al.", r"deep RL from human preferences: \ a simulated robot "
                          r"learns a backflip from about $900$ comparisons of two clips, \ under an hour of a person's "
@@ -127,7 +128,7 @@ class Pipeline(VoiceoverScene):
             "recipe has been reproduced in the open, and changed: Meta's Llama 2 used over a million comparisons, and "
             "a method called DPO showed the reward model could be skipped altogether."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.15), FadeIn(ask), FadeIn(clips))
             self.play(Create(pick))

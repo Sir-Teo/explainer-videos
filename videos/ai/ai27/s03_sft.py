@@ -126,9 +126,13 @@ class SFT(VoiceoverScene):
         s, title, base_ans = d["base_answers"][0]
         sft_ans = next((a for s2, t2, a in d["sft_answers"] if s2 == s), d["sft_answers"][0][2])
         q = said(f'Which book is this from? "{s}"', "user", chars=60, font_size=18).move_to([0, 2.5, 0])
-        bl = label(r"the base model", font_size=26, color=BASE).move_to([-3.4, 1.1, 0])
+        bl = VGroup(label(r"the base model", font_size=26, color=BASE),
+                    label(r"sampled: $T=0.8$; max $30$ new tokens", font_size=16, color=GREY_B)
+                    ).arrange(DOWN, buff=0.08).move_to([-3.4, 1.1, 0])
         ba = said(base_ans, chars=34, font_size=18, max_lines=5).next_to(bl, DOWN, buff=0.2)
-        sl = label(r"after fine-tuning", font_size=26, color=ASSIST).move_to([3.4, 1.1, 0])
+        sl = VGroup(label(r"after fine-tuning", font_size=26, color=ASSIST),
+                    label(r"greedy; max $16$ new tokens", font_size=16, color=GREY_B)
+                    ).arrange(DOWN, buff=0.08).move_to([3.4, 1.1, 0])
         sa = said(sft_ans, chars=34, font_size=18).next_to(sl, DOWN, buff=0.2)
         truth = label(rf"the answer: \ \textit{{{title}}}", font_size=22, color=GOLD).next_to(sa, DOWN, buff=0.3)
         stats = VGroup(
@@ -136,13 +140,17 @@ class SFT(VoiceoverScene):
             label(rf"fine-tuned: \ ${100 * d['sft_which']:.0f}\%$ right", font_size=26, color=ASSIST),
             label(rf"chance: \ ${100 * d['chance']:.1f}\%$", font_size=22, color=GREY_B),
         ).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.6)
-        tag = note(rf"computed: \ ${len(load('data')['which_test'])}$ held-out sentences").to_corner(DR, buff=0.2)
+        base_n = min(120, len(load('data')['which_test']))
+        tag = note(rf"computed: \ base: ${base_n}$ evenly sampled test sentences; \ fine-tuned: "
+                   rf"all ${len(load('data')['which_test'])}$; both accuracies: greedy, max $16$ new tokens", font_size=16
+                   ).to_corner(DR, buff=0.2)
         with self.voiceover(
             "Here is a held-out sentence, put to the model before fine-tuning. <bookmark mark='a'/> The base model "
             "has never seen the special tokens in a meaningful place, so it does what it always does: it continues "
-            "a novel. <bookmark mark='b'/> After fine-tuning, it answers with a title. <bookmark mark='c'/> On all "
-            f"the held-out sentences, the base model is right {100 * d['base_which']:.0f} percent of the time; the "
-            f"fine-tuned model {100 * d['sft_which']:.0f} percent, against one in thirty by guessing. It had read "
+            "a novel. <bookmark mark='b'/> After fine-tuning, it answers with a title. <bookmark mark='c'/> On "
+            f"{base_n} evenly sampled test sentences, the base model is right {100 * d['base_which']:.0f} percent "
+            f"of the time; on the full test set, the fine-tuned model {100 * d['sft_which']:.0f} percent, against "
+            "one in thirty by guessing. It had read "
             "these books; fine-tuning taught it to say which one it was reminded of."
         ) as vo:
             self.play(FadeIn(q), FadeIn(tag))
@@ -174,22 +182,19 @@ class SFT(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, 0.6, 0])
         worse = d["sft_heldout"] - d["base_heldout"]
         fl = label(r"forgetting: \ the price of specializing" if worse > 0.002 else
-                   r"little forgotten: \ a short, gentle run", font_size=24,
-                   color=PENALTY if worse > 0.002 else ASSIST).next_to(fg, DOWN, buff=0.4)
+                   r"novel-text loss change", font_size=24,
+                   color=PENALTY if worse > 0.002 else ASSIST if worse < -0.002 else GREY_A).next_to(fg, DOWN, buff=0.4)
         fl.align_to(fg, LEFT)
-        tag = note(rf"computed: \ checked every $100$ steps on an even sample of ${EVAL_N}$ of the "
-                   rf"${len(load('data')['which_test'])}$ test sentences").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ initial point: $120$ test sentences; \ later points: ${EVAL_N}$, "
+                   rf"every $100$ steps").to_corner(DR, buff=0.2)
         with self.voiceover(
-            f"Accuracy climbs over the {S} steps of fine-tuning. <bookmark mark='a'/> But something is lost. On "
-            f"ordinary novel text, which it was trained to predict, its loss rises from {d['base_heldout']:.3f} to "
-            f"{d['sft_heldout']:.3f} nats per token. <bookmark mark='b'/> Fine-tuning moves every weight to serve the "
-            "new task, and some of the old skill goes with it. Keeping that loss small is the job of the next "
-            "chapter's method, and, in RLHF, of the leash." if worse > 0.002 else
-            f"Accuracy climbs over the {S} steps of fine-tuning. <bookmark mark='a'/> Fine-tuning often costs some "
-            f"of the old skill, but here the loss on ordinary novel text barely moves, from {d['base_heldout']:.3f} "
-            f"to {d['sft_heldout']:.3f} nats per token. <bookmark mark='b'/> A gentle learning rate and a short run "
-            "keep the model near where it started; pushing harder would trade away more. Keeping that cost small is "
-            "the job of the next chapter's method, and, in RLHF, of the leash."
+            f"The chart tracks book-identification accuracy over {S} steps of fine-tuning. <bookmark mark='a'/> "
+            f"On ordinary novel text, the measured next-token loss changes from {d['base_heldout']:.3f} to "
+            f"{d['sft_heldout']:.3f} nats per token, a change of {worse:+.3f}. Higher loss means worse prediction "
+            "on these held-out text windows. <bookmark mark='b'/> The next chapter reduces trainable parameters "
+            "with low-rank updates. Later, the KL penalty discourages departure from the reference policy on the "
+            "training prompts. "
+            "We measure novel-text loss to check retention."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             self.play(Create(line), LaggedStart(*[FadeIn(p) for p in dots], lag_ratio=0.15), run_time=2.0)
@@ -202,6 +207,7 @@ class SFT(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def history(self):
+        head = label(r"Instruction-tuning milestones", font_size=30).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(2021, r"FLAN \ (Wei et al., Google)", r"instruction tuning on $60$ tasks phrased as "
                          r"instructions: \ better at tasks it never saw", width=6.2, color=ASSIST),
@@ -209,8 +215,7 @@ class SFT(VoiceoverScene):
                          r"\ a chat model for a few hundred dollars", width=6.2, color=ASSIST),
             history_card(2023, r"LIMA \ (Zhou et al., Meta)", r"$1{,}000$ carefully chosen examples were enough: \ "
                          r"alignment is mostly style; \ the knowledge comes from pretraining", width=6.2, color=GOLD),
-            history_card(2024, r"synthetic data", r"most fine-tuning examples are now written or filtered by models, "
-                         r"\ checked by people", width=6.2, color=ASSIST),
+            history_card(2023, r"synthetic instruction data", r"Alpaca: \ model-written examples; \ quality still needs checking", width=6.2, color=ASSIST),
         ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
         cite_ = cite(r"Wei et al.\ (2021); \ Taori et al.\ (2023); \ Zhou et al., \textit{LIMA} (2023)")
         with self.voiceover(
@@ -219,10 +224,10 @@ class SFT(VoiceoverScene):
             "<bookmark mark='b'/> In 2023 Stanford's Alpaca fine-tuned an open model on fifty-two thousand "
             "examples written by a stronger model, for a few hundred dollars. <bookmark mark='c'/> Meta's LIMA "
             "showed that a thousand carefully chosen examples could go a long way, and proposed that alignment is "
-            "largely about style: the knowledge is already there from pretraining. <bookmark mark='d'/> Today most "
-            "fine-tuning data is written or filtered by models, and checked by people."
+            "largely about style: the knowledge is already there from pretraining. <bookmark mark='d'/> Alpaca is one "
+            "example of model-written instruction data. That does not remove the need to check its quality."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
