@@ -79,7 +79,7 @@ class Solver(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[-1, 1, 0.5], y_range=[0, 1.2, 0.3], z_range=[0, 0.6, 0.2], x_length=7.6,
                         y_length=5.6, z_length=3.4, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.4)
+        ax.shift(DOWN * 0.4 + LEFT * 1.6)  # the right third of the frame is the derivation's
 
         def bfun(a, s_):
             from scipy.special import ndtr
@@ -123,7 +123,7 @@ class Solver(VoiceoverScene, ThreeDScene):
             w_.next_to(e_, DOWN, buff=0.04).align_to(e_, LEFT)
         eqs_all = VGroup(*[VGroup(e_, w_) for e_, w_ in zip(eqs, whys_)]).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         eqs_all.to_corner(UR, buff=0.3)
-        self.set_camera_orientation(phi=66 * DEGREES, theta=-62 * DEGREES, zoom=0.82)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-62 * DEGREES, zoom=0.72)
         for m in (hint, eqs_all):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
@@ -143,7 +143,7 @@ class Solver(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(plane), FadeIn(eqs_all[1]))
             self.play(Create(cross), FadeIn(eqs_all[2]), run_time=2)
             vo.wait_until("b")
-            self.move_camera(phi=72 * DEGREES, theta=-100 * DEGREES, zoom=1.0, added_anims=[FadeIn(corner),
+            self.move_camera(phi=72 * DEGREES, theta=-100 * DEGREES, zoom=0.8, added_anims=[FadeIn(corner),
                                                                                           FadeIn(eqs_all[3])],
                              run_time=3)
             self.wait(max(vo.remaining(1.0) - 1.0, 0.5))
