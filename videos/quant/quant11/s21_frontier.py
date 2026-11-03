@@ -129,7 +129,7 @@ class Frontier(VoiceoverScene):
         else:
             say = "The models show some timing ability, which a second sample would have to confirm."
         foot = wrapped_label(r"96 overlapping weeks of one asset is a tiny sample: Bali, Beckmeyer, M\"orke and Weigert "
-                             r"had 12 million observations", 12.0, 21, ALT).to_edge(DOWN, buff=0.6)
+                             r"had 12 million observations", 7.4, 21, ALT).to_edge(DOWN, buff=0.6).to_edge(LEFT, buff=0.6)  # left of the corner card
         pc = pause(r"A model finds $t = 3$ after 40 tries. What is its deflated $t$?", width=4.6, font_size=20, corner=DR)
         with self.voiceover(
             f"The verdict. {say} <bookmark mark='a'/> That is the honest expectation with ninety-six overlapping "
