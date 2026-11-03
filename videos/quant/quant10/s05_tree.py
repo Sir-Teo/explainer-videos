@@ -150,7 +150,7 @@ class Tree(VoiceoverScene, ThreeDScene):
                   r")\,V(t + \Delta t, S/u)\big]", font_size=32, colors=C),
             cmath(r"u = e^{\sigma\sqrt{\Delta t}},\quad", r"q", r"= \tfrac12 + \frac{r - \sigma^2/2}{2\sigma}\sqrt{\Delta t}"
                   r" + O(\Delta t)", font_size=32, colors=C),
-            cmath(r"V(t + \Delta t, u^{\pm 1}S) = V \pm \sigma\sqrt{\Delta t}\,S V_S + \Delta t\,(V_t + "
+            cmath(r"V(t + \Delta t, u^{\pm 1}S)", r"=", r"V \pm \sigma\sqrt{\Delta t}\,S V_S + \Delta t\,(V_t + "
                   r"\tfrac12\sigma^2 S V_S + \tfrac12\sigma^2 S^2 V_{SS}) + \dots", font_size=30, colors=C),
             cmath(r"0", r"=", r"V_t + r S V_S + \tfrac12\sigma^2 S^2 V_{SS} - r V", r"\;+\;O(\Delta t)", font_size=36,
                   colors=C),
