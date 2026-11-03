@@ -109,7 +109,7 @@ class Race(VoiceoverScene):
             t = "" if k == "HAR" else (r"\ \ (t = 0.0)" if abs(tv) < 0.05 else rf"\ \ (t = {tv:+.1f})")
             edge = max([sc[k]["qlike"]] + list(r["seed_qlike"].get(k, [])))
             vals[k] = MathTex(f"{sc[k]['qlike']:.3f}" + t, font_size=21, color=GREY_A).next_to(ax.c2p(edge, y), RIGHT,
-                                                                                                 buff=0.15)
+                                                                                                 buff=0.15 + 0.1 * (k in r["seed_qlike"]))
         seeds = VGroup()
         for k in ("LSTM", "Transformer"):
             y = len(order) - order.index(k) - 0.5
