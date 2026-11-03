@@ -83,7 +83,8 @@ class Jumps(VoiceoverScene):
             step(3)
             self.play(FadeIn(res))
             vo.wait_until("d")
-            self.play(FadeIn(pc), FadeIn(ans))
+            # the last two rows give the question their corner
+            self.play(FadeOut(VGroup(rows[2], whys[2], rows[3], whys[3])), FadeIn(pc), FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()
 
@@ -148,7 +149,7 @@ class Jumps(VoiceoverScene):
     def formula(self, j, lv):
         P = np.asarray(j["merton_paths"])
         n = P.shape[1]
-        g = axes([0, 1], [0.3, 1.9], x_length=5.4, y_length=3.6, xlabel=r"time (years)", ylabel=r"Merton paths",
+        g = axes([0, 1], [0.3, 1.9], x_length=5.4, y_length=2.7, xlabel=r"time (years)", ylabel=r"Merton paths",
                  xticks=[0, 0.5, 1], yticks=[0.5, 1.0, 1.5], font_size=16).to_corner(DL, buff=0.45)
         ax = g.ax
         t = np.linspace(0, 1, n)
@@ -162,7 +163,7 @@ class Jumps(VoiceoverScene):
                       colors={r"\lambda\bar k": JUMP})]
         whys = [why(r"between jumps, the continuous lemma; at each jump, replace the linear guess by the true change", 20),
                 why(r"Merton (1976): compensate the drift so that $\mathbb{E}S_t = S_0 e^{\mu t}$", 20)]
-        step = ladder(self, rows, whys, keep=2, top=3.2, x=-0.6, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=3.2, x=-4.6, buff=0.6, edge=6.9)  # left, so the long jump term keeps its size
         side = wrapped_label(r"here: 6 jumps a year, log sizes $N(-5\%, 8\%^2)$, $\sigma = 50\%$; the House's "
                              r"\texttt{merton\_jumps}, its mean checked against $S_0 e^{\mu t}$", 5.6, 20, GREY_A)
         side.to_corner(DR, buff=0.6)
