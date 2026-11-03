@@ -48,8 +48,8 @@ class ShortVol(VoiceoverScene):
         lb = tracing(g3.ax, t[sub], b[sub], tr, QC.LOSS, stroke_width=2.5)
         z = DashedLine(g3.ax.c2p(2017, 0), g3.ax.c2p(2021, 0), color=GREY_C, stroke_width=1)
         leg = legend([(VEGA, r"short a 3\%-OTM put, hedged with a put 17.5\% out"),
-                      (QC.LOSS, r"the same, hedged with a put 40\% out")], font_size=16).next_to(g3, DOWN, buff=0.12).align_to(
-            g3, LEFT)
+                      (QC.LOSS, r"the same, hedged with a put 40\% out")], font_size=16)
+        leg.next_to(g3, RIGHT, buff=0.3).align_to(g3, DOWN)  # beside the P&L chart: below it is the frame's edge
         side = VGroup(
             label(r"before February 2020:", font_size=20, color=GREY_A),
             label(rf"near hedges {v['before near hedges']:+.1f}, deep hedges {v['before deep hedges']:+.1f}", font_size=20,
