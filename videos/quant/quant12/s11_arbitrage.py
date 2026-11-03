@@ -27,7 +27,7 @@ class Arbitrage(VoiceoverScene):
         w, g = np.asarray(a["w"]), np.asarray(a["g"])
         top = axes([-1.5, 1.5], [0.0, 0.35], x_length=6.6, y_length=2.3, ylabel=r"total variance $w(k)$, $T = 1$",
                    yticks=[0, 0.3], font_size=16)
-        bot = axes([-1.5, 1.5], [-0.1, 1.1], x_length=6.6, y_length=2.5, xlabel=r"log-moneyness $k$",
+        bot = axes([-1.5, 1.5], [-0.1, 1.5], x_length=6.6, y_length=2.5,  # g peaks at 1.35 xlabel=r"log-moneyness $k$",
                    ylabel=r"Gatheral's $g(k)$", xticks=[-1, 0, 1], yticks=[0, 1], font_size=16)
         VGroup(top, bot).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.6)
         wl = curve(top.ax, k, np.clip(w, 0, 0.35), IV, stroke_width=3)
@@ -38,11 +38,11 @@ class Arbitrage(VoiceoverScene):
             m = k <= tr.get_value()
             if m.sum() < 2:
                 return VGroup()
-            return curve(bot.ax, k[m], np.clip(g[m], -0.1, 1.1), LV, stroke_width=3)
+            return curve(bot.ax, k[m], g[m], LV, stroke_width=3)
         gl = always_redraw(g_upto)
         lo, hi = a["neg"]
         neg = k[(k >= lo) & (k <= hi)]
-        red = VGroup(curve(bot.ax, neg, np.clip(g[(k >= lo) & (k <= hi)], -0.1, 1.1), BAD, stroke_width=6),
+        red = VGroup(curve(bot.ax, neg, g[(k >= lo) & (k <= hi)], BAD, stroke_width=6),
                      glow_dot(bot.ax.c2p(a["k_min"], a["g_min"]), color=BAD, radius=0.08))
         params = a["vogt"]
         head = MathTex(rf"a = {params['a']:.4f},\ b = {params['b']:.4f},\ \rho = {params['rho']:.4f},\ m = {params['m']:.4f},"
