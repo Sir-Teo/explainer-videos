@@ -94,7 +94,7 @@ class Schemes(VoiceoverScene):
         with self.voiceover(
             "To compute a solution, step it forward. Here is the House's code. Euler-Maruyama: the drift times the "
             "step, plus the volatility times the Brownian increment, exactly the left-point sum of chapter three. "
-            "Milstein adds one line, in purple. <bookmark mark='a'/> Where does it come from? Inside a step the "
+            "Milstein adds one line, in gold. <bookmark mark='a'/> Where does it come from? Inside a step the "
             "volatility itself moves. Expanded by the lemma, it changes by b prime times b times the Brownian move so "
             "far, and integrating that against d W gives chapter three's left-point integral: half the squared "
             "increment minus the step. <bookmark mark='b'/> Run both on geometric Brownian motion, where the exact "

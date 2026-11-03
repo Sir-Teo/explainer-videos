@@ -137,7 +137,7 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
         pp = desk_question(r"Pause and predict: a firm's ROE equals its cost of equity. What is its P/B, whatever its "
                            r"growth?", width=5.6, font_size=21).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Now one firm, year by year. Its value starts with its book, the blue block, and each year adds a bar: ROE above eight "
+            "Now one firm, year by year. Its value starts with its book, the pink block, and each year adds a bar: ROE above eight "
             "percent, times book, discounted. <bookmark mark='a'/> This firm earns fifteen percent now, and competition pulls it "
             "towards its cost of equity, so the bars shrink twice over, by the fading spread and by discounting. "
             f"<bookmark mark='b'/> Stack them: a price-to-book of {ri['fade_value'] / 100:.2f}. <bookmark mark='c'/> The identity "

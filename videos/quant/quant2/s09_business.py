@@ -151,7 +151,7 @@ class Business(VoiceoverScene):
         src = note(r"simulated: iid normal monthly returns; Ken French size deciles, daily, value-weighted", font_size=15)
         src.to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "Funds holding illiquid assets mark them with stale or averaged prices. Grey is a fund's true monthly return; blue "
+            "Funds holding illiquid assets mark them with stale or averaged prices. Grey is a fund's true monthly return; gold "
             "what it reports: half this month, a third of last, a fifth of the one before. <bookmark mark='a'/> The report is "
             f"a shadow, same mean, less wiggle, and its Sharpe ratio rises {gl['inflate']:.2f} times with no skill at all. "
             "<bookmark mark='b'/> It happens in plain indices: the smallest decile of American stocks had daily "

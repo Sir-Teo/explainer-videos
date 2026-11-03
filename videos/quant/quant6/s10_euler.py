@@ -120,7 +120,7 @@ class Euler(VoiceoverScene, ThreeDScene):
         self.remove(hint, note_)
         with self.voiceover(
             "Why is gamma so uncertain? Look at the objective. <bookmark mark='a'/> Across beta it is a steep valley: "
-            "the bill pins patience down. Along gamma the floor is almost flat, a ridge, in orange. "
+            "the bill pins patience down. Along gamma the floor is almost flat, a ridge, in pink. "
             "<bookmark mark='b'/> Let the optimiser roll a ball: it finds the valley in a few steps, then wanders along "
             "the floor. <bookmark mark='c'/> Weak identification, as James Stock and Jonathan Wright called it in 2000: "
             "the data barely know gamma, and the usual normal approximation fails on a ridge."

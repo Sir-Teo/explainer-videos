@@ -168,7 +168,7 @@ class MLE(VoiceoverScene, ThreeDScene):
             f"hardly moves: {ss[2]:.3f}. <bookmark mark='b'/> The scores of neighbouring days are correlated, though: a "
             "violent day is followed by violent days, and each pushes nu the same way. So the score's variance needs "
             "chapter two's long-run variance. With it, the standard error of nu is "
-            f"{sh[2]:.3f}, {ratio:.1f} times the naive one, the orange ellipse. The naive standard error trusts a model "
+            f"{sh[2]:.3f}, {ratio:.1f} times the naive one, the pink ellipse. The naive standard error trusts a model "
             "the data reject; the estimate itself, a quasi-maximum-likelihood estimate, is still fine. "
             "<bookmark mark='c'/> Pause and predict: double the sample. What happens to the ellipse? Each axis shrinks "
             "by the square root of two, so its area halves. Quadruple it, and both axes halve."

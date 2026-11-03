@@ -204,7 +204,7 @@ class Frontier(VoiceoverScene):
         one = DashedLine(ax.c2p(1.0, 0), ax.c2p(1.0, len(rows)), color=GOOD, stroke_width=3)
         side = VGroup(
             label(r"Brini (2026), arXiv 2607.05291, Table 6:", font_size=19, color=GREY_A),
-            wrapped_label(r"9 foundation models zero-shot (blue) against 8 econometric models (grey) on 50 equities, FX "
+            wrapped_label(r"9 foundation models zero-shot (gold) against 8 econometric models (grey) on 50 equities, FX "
                           r"rates and futures; average loss ratio to log-HAR", 4.0, 17, GREY_A),
             wrapped_label(r"only TTM beats log-HAR at every horizon, narrowly; a Mincer--Zarnowitz recalibration removes "
                           r"much of the short-horizon edge; the TTM + log-HAR average enters the model confidence set for "

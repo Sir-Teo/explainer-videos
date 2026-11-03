@@ -10247,7 +10247,8 @@
     "the empirical optimum sits against the wall, at 30: the sample's worst month (-3.3\\% of notional) is the only thing that stops it": "经验最优值顶在墙上，在30处：样本中最差的一个月（名义本金的 -3.3\\%）是唯一挡住它的东西",
     "half that leverage keeps 60\\% of the growth, and survives a month twice as bad as any seen": "一半的杠杆保留60\\%的增长，并能扛过比所见过的最差月份糟糕一倍的月份",
     "Part 10's 1706 one-month P\\&Ls of a sold, hourly-hedged 30-day bitcoin call, one started each day (they overlap), as returns on notional": "第10部分的1706个一个月期盈亏，来自卖出并每小时对冲的30天比特币看涨期权，每天开始一笔（相互重叠），以名义本金的收益计",
-    "Your edge has $t = 2.4$ on 43 months. Lever it five times?": "你的优势在43个月上 $t = 2.4$。加五倍杠杆吗？"
+    "Your edge has $t = 2.4$ on 43 months. Lever it five times?": "你的优势在43个月上 $t = 2.4$。加五倍杠杆吗？",
+    "9 foundation models zero-shot (gold) against 8 econometric models (grey) on 50 equities, FX rates and futures; average loss ratio to log-HAR": "9个基础模型零样本（金色）对8个计量经济模型（灰色），覆盖50只股票、汇率和期货；相对log-HAR的平均损失比"
   },
   "phrases": {
     "you owe": "你欠",
