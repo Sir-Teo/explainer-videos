@@ -87,7 +87,7 @@ class Realized(VoiceoverScene):
         s19, sall = np.asarray(s["sig_2019"]), np.asarray(s["sig_all"])
         lo = float(min(s19.min(), sall.min())) - 0.05
         hi = float(max(s19.max(), sall.max())) + 0.05
-        g = axes([0, 62], [lo, hi], x_length=7.2, y_length=4.4, xticks=[1, 5, 10, 15, 20, 30, 60],
+        g = axes([0, 62], [lo, hi], x_length=6.2, y_length=4.4, xticks=[1, 5, 10, 15, 20, 30, 60],
                  yticks=[round(v, 1) for v in np.arange(np.ceil(lo * 10) / 10, hi, 0.1)], yfmt=lambda u: f"{100 * u:.0f}\\%",
                  xlabel=r"sampling interval $\Delta$ (minutes)", ylabel=r"average realized volatility, annualised",
                  font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
@@ -101,13 +101,13 @@ class Realized(VoiceoverScene):
         rise = s19[0] / s19[3] - 1
         rise_all = sall[0] / sall[3] - 1
         side = VGroup(
-            label(r"the signature plot (Andersen, Bollerslev, Diebold and Labys 2000)", font_size=19, color=GREY_A),
+            wrapped_label(r"the signature plot (Andersen, Bollerslev, Diebold and Labys 2000)", 5.2, 19, GREY_A),
             MathTex(rf"\text{{2019: }}1\text{{ min }} {100 * s19[0]:.0f}\%,\ 5\text{{ min }} {100 * s19[3]:.0f}\%,\ "
                     rf"60\text{{ min }} {100 * s19[-1]:.0f}\%", font_size=26, color=GOOD),
             MathTex(rf"\text{{whole sample: }}{100 * sall[0]:.0f}\%,\ {100 * sall[3]:.0f}\%,\ {100 * sall[-1]:.0f}\%",
                     font_size=26, color=ALT),
-            label(rf"noise variance per minute $\hat\eta^2 = RV_{{1}}/2n$: median ${s['eta2_median'] * 1e8:.0f}\times 10^{{-8}}$",
-                  font_size=19, color=GREY_A),
+            wrapped_label(rf"noise variance per minute $\hat\eta^2 = RV_{{1}}/2n$: median ${s['eta2_median'] * 1e8:.0f}\times 10^{{-8}}$",
+                          5.2, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         pc = pause_card(r"Sampling every second gives 86{,}400 returns a day. Better than every 5 minutes?", width=5.2,
                         font_size=21).next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
