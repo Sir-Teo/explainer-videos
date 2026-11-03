@@ -89,7 +89,7 @@ class Implied(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[-0.8, 0.8, 0.4], y_range=[0, 0.8, 0.2], z_range=[0.3, 1.0, 0.2], x_length=8.0,
                         y_length=5.4, z_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.4)
+        ax.shift(DOWN * 1.1)  # the short-dated wing rises high: keep it under the title
         pts = smile_points3d(ax, k[keep], np.minimum(T[keep], 0.8), iv[keep], color=IMP, radius=0.045)
         exp = np.array(q["expiry"])[keep]
         lines = VGroup()
@@ -108,7 +108,7 @@ class Implied(VoiceoverScene, ThreeDScene):
                       label(r"implied volatility", font_size=24, color=IMP)).arrange(DOWN, aligned_edge=LEFT,
                                                                                      buff=0.1).to_corner(UR, buff=0.4)
         title = label(r"the Surface: Deribit BTC, 10 December 2025", font_size=28).to_corner(UL, buff=0.4)
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.95)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.82)
         self.add_fixed_in_frame_mobjects(hint, title)
         self.remove(hint, title)
         with self.voiceover(
