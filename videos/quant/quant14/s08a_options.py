@@ -53,7 +53,7 @@ class Options(VoiceoverScene):
         verdict = ("so for most weeks the power law is as good a description as its rival"
                    if share < 0.5 else "so for most weeks the skew does stop growing at the shortest expiries")
         with self.voiceover(
-            "The options have their own say. Here are chapter one's weekly fits again, all on one chart: blue where "
+            "The options have their own say. Here are chapter one's weekly fits again, all on one chart: orange where "
             "a power law is as good as anything, gold where a skew that stops growing at short expiries wins by a "
             f"clear margin. <bookmark mark='a'/> {int(sum(better))} of {len(weeks)} weeks are gold, {verdict}. "
             "<bookmark mark='b'/> Where the bounded form wins, how far does the flattening reach? The shifts spread "
