@@ -229,7 +229,7 @@ class Levy(VoiceoverScene):
         leg = legend([(cols[t_], lab[t_]) for t_ in tags], font_size=17).next_to(g, UP, buff=0.12).align_to(g, LEFT)
         c1, c2 = F["CGMY"]["params"], F["CGMY_inf"]["params"]
         side = VGroup(*[MathTex(rf"\text{{{lab_}}}:\ {F[t_]['rmse_iv']:.2f}", font_size=28, color=cols[t_])
-                        for t_, lab_ in (("VG", "VG"), ("NIG", "NIG"), ("CGMY", "CGMY, Y<1"), ("CGMY_inf", "CGMY, Y>1"))])
+                        for t_, lab_ in (("VG", "VG"), ("NIG", "NIG"), ("CGMY", r"CGMY, $Y < 1$"), ("CGMY_inf", r"CGMY, $Y > 1$"))])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         hit = c1["Y"] > 0.94
         inf_better = F["CGMY_inf"]["rmse_iv"] < F["CGMY"]["rmse_iv"]
