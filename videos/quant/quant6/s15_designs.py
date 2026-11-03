@@ -88,7 +88,7 @@ class Designs(VoiceoverScene):
                 why(r"Goodman-Bacon (2021): a weighted sum of all two-by-two comparisons, including already-treated "
                     r"units used as controls"),
                 why(r"continuity of potential outcomes at the cutoff: just above and just below are alike")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.8, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.45, edge=6.8)
         with self.voiceover(
             "Each design in one line. The instrument: because z is unrelated to the confounder, the reduced form over "
             "the first stage isolates the causal slope. <bookmark mark='a'/> Difference in differences: the treated "
@@ -247,7 +247,7 @@ class Designs(VoiceoverScene):
         cite = wrapped_label(r"real data: Chang, Hong and Liskovich (2015), the Russell 1000/2000 cutoff", 4.6, 18,
                              GREY_B).next_to(leg, DOWN, buff=0.25).align_to(e, LEFT)
         q = predict(r"Every firm is eventually treated and the effect grows over time. Is the TWFE estimate too big "
-                    r"or too small?", width=11.0).to_edge(DOWN, buff=0.1)
+                    r"or too small?", width=5.6).to_corner(DR, buff=0.3)
         with self.voiceover(
             "The discontinuity. Russell ranks stocks by size: number one thousand joins the large-cap index, one "
             "thousand and one leads the small-cap index, where index funds hold far more of it. Chang, Hong and "
@@ -266,7 +266,8 @@ class Designs(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(e), Create(rm), Create(sdc), Create(bias), FadeIn(leg), FadeIn(cite))
             vo.wait_until("c")
-            self.play(FadeIn(q, shift=UP * 0.2))
+            # the bias legend and citation have been read; the question takes their corner
+            self.play(FadeOut(leg), FadeOut(cite), FadeIn(q, shift=UP * 0.2))
         fm.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
