@@ -135,7 +135,7 @@ class Cluster(VoiceoverScene):
         elab = [r"OLS", r"by firm", r"by month", r"two-way", r"Fama--MacBeth"]
         cols = [BAD, DATA_C, ALT, GOOD, EST]
         ck = np.asarray(p["checkpoints"], float)
-        g = axes([0, 3], [0, 1.25], x_length=8.0, y_length=4.0, ylabel=r"average standard error / true spread",
+        g = axes([0, 3], [0, 1.25], x_length=7.0, y_length=4.0, ylabel=r"average standard error / true spread",
                  xticks=[], yticks=[0, 0.5, 1.0], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         one = DashedLine(ax.c2p(0, 1), ax.c2p(3, 1), color=GREY_B, stroke_width=2)
@@ -161,6 +161,7 @@ class Cluster(VoiceoverScene):
         txt = wrapped_label(rf"{p['firms']} firms $\times$ {p['years']} years, {p['reps']:,} simulated panels per "
                             r"design; Petersen (2009), Table~1's design".replace(",", "{,}"), 4.4, 19, GREY_B)
         txt.next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
+        keep_in_frame(txt, 0.3)  # the legend is narrow; the note is not
         with self.voiceover(
             "Mitchell Petersen ran the experiment in 2009, and we repeat it: five hundred firms over ten years, with "
             "firm effects, time effects or both. Each bar is a method's average standard error over the true spread; "
