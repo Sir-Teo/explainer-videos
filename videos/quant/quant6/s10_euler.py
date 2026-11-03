@@ -144,7 +144,7 @@ class Euler(VoiceoverScene, ThreeDScene):
     def montecarlo(self, mc, g):
         gh = np.asarray(mc["gamma_hat"])
         q = mc["q"]
-        gax = axes([-60, 60], [0, 0.04], x_length=6.8, y_length=3.8, xlabel=r"$\hat\gamma$ in a simulated economy "
+        gax = axes([-60, 60], [0, 0.04], x_length=6.0, y_length=3.8, xlabel=r"$\hat\gamma$ in a simulated economy "
                    r"(true $\gamma = 2$)", xticks=[-50, -25, 0, 25, 50], yticks=[], font_size=16).to_edge(LEFT, buff=0.6)
         gax.shift(DOWN * 0.2)
         ax = gax.ax
@@ -156,8 +156,8 @@ class Euler(VoiceoverScene, ThreeDScene):
         truth = DashedLine(ax.c2p(2, 0), ax.c2p(2, 0.04), color=GOOD, stroke_width=3)
         side = VGroup(
             label(r"400 economies where the model is true", font_size=23, color=WHITE),
-            label(rf"$\beta = 1$, $\gamma = 2$, lognormal consumption and returns with the data's volatilities and "
-                  rf"correlation; {mc['n']} quarters each", font_size=19, color=GREY_B),
+            wrapped_label(rf"$\beta = 1$, $\gamma = 2$, lognormal consumption and returns with the data's volatilities "
+                          rf"and correlation; {mc['n']} quarters each", 5.6, 19, GREY_B),
             MathTex(rf"\hat\gamma:\ 5\%\text{{--}}95\%\ \text{{range}}\ {q[0]:.0f}\ \text{{to}}\ {q[4]:.0f}", font_size=28,
                     color=EST),
             MathTex(rf"\text{{95\% intervals cover }} \gamma:\ {100 * mc['cover_gamma']:.0f}\%", font_size=28, color=GOOD),
@@ -165,8 +165,10 @@ class Euler(VoiceoverScene, ThreeDScene):
                     color=ALT),
             MathTex(rf"\text{{largest simulated }} J: {max(mc['J']):.1f};\ \ \text{{the data's: }} {g['J']:.1f}",
                     font_size=28, color=BAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
-        side[1].scale_to_fit_width(min(side[1].width, 5.6))
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        if side.width > 6.0:  # the column must clear the histogram on the left
+            side.scale_to_fit_width(6.0)
+        side.to_edge(RIGHT, buff=0.35)
         beyond = ("beyond every one of them. The model is not just imprecise; it is wrong." if g["J"] > max(mc["J"])
                   else "large, but not beyond what a true model sometimes produces.")
         with self.voiceover(
