@@ -61,7 +61,7 @@ class Leland(VoiceoverScene, ThreeDScene):
         tab.to_corner(UR, buff=0.4)
         foot = note(r"short a 3-month at-the-money call, $\sigma = 20\%$; 10,000 paths per cell", font_size=20)
         foot.to_corner(DR, buff=0.3)
-        self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.88)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.76)  # the surface clear of both corner panels
         for m in (hint, tab, foot):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
@@ -101,9 +101,9 @@ class Leland(VoiceoverScene, ThreeDScene):
                 why(r"$k$ the round-trip cost; $\mathbb E|Z| = \sqrt{2/\pi}$"),
                 why(r"per unit of time: it looks like extra variance, times $\tfrac12\Gamma S^2$"),
                 why(r"absorb it into the volatility: Leland (1985)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.75, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.6, buff=0.5, edge=6.9)  # leaves the bottom for the note
         foot = note(r"error $\propto \sqrt{\Delta t}$ (chapter 9), cost $\propto 1/\sqrt{\Delta t}$: the valley",
-                    font_size=24).to_edge(DOWN, buff=0.5)
+                    font_size=24).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Hayne Leland's insight, in 1985: the cost can be priced. Over one step, delta moves by gamma times "
             "the stock's move. <bookmark mark='a'/> Each trade costs half the round trip on its value, and a normal "
