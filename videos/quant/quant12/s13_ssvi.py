@@ -33,23 +33,25 @@ class SSVI(VoiceoverScene, ThreeDScene):
 
     def build(self, s):
         fit = s["ssvi"]
-        ax = axes3([-0.4, 0.4, 0.2], [0, 0.8, 0.2], [0, 0.12, 0.04], x_length=7.0, y_length=5.0, z_length=3.0)
+        zmax = max(float(V.ssvi_surface_w(fit, k_, T_)) for k_ in (-0.4, 0.0, 0.4) for T_ in (0.4, 0.8))
+        zmax = float(np.ceil(zmax / 0.04) * 0.04)  # the whole surface fits: no flat-topped plateau
+        ax = axes3([-0.4, 0.4, 0.2], [0, 0.8, 0.2], [0, zmax, 0.04], x_length=7.0, y_length=5.0, z_length=3.0)
         Ts = np.asarray(fit["T"])
         th = np.asarray(fit["theta"])
         self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.85)
         floor = VMobject(color=LV, stroke_width=4).set_points_smoothly([ax.c2p(-0.4, t, float(x)) for t, x in zip(Ts, th)
-                                                                       if x <= 0.12])
+                                                                       if x <= zmax])
         thdots = VGroup(*[Dot3D(ax.c2p(-0.4, t, float(x)), radius=0.05, color=LV, resolution=(4, 4)) for t, x in zip(Ts, th)
-                          if x <= 0.12])
+                          if x <= zmax])
         kk = np.linspace(-0.4, 0.4, 41)
         slices = VGroup()
         for t, x in zip(Ts, th):
             w = V.ssvi_w(kk, x, fit["rho"], fit["eta"], fit["gamma"])
-            if w.max() > 0.12:
+            if w.max() > zmax:
                 continue
             slices.add(VMobject(color=IV, stroke_width=3).set_points_smoothly([ax.c2p(a, t, float(b)) for a, b in zip(kk, w)]))
-        sf = surf3(ax, lambda k, T: float(V.ssvi_surface_w(fit, k, T)), (-0.4, 0.4), (0.01, 0.8), 0.0, 0.12,
-                   colors=[(QC.SPOT, 0.0), (IV, 0.05), (QC.LOSS, 0.12)], resolution=(24, 14), opacity=0.6)
+        sf = surf3(ax, lambda k, T: float(V.ssvi_surface_w(fit, k, T)), (-0.4, 0.4), (0.01, 0.8), 0.0, zmax,
+                   colors=[(QC.SPOT, 0.0), (IV, 0.4 * zmax), (QC.LOSS, zmax)], resolution=(24, 14), opacity=0.6)
         t1 = label(r"$\theta_T$: at-the-money total variance, rising with $T$", font_size=22, color=LV).to_corner(UL, buff=0.35)
         t2 = label(r"one smile shape for every $\theta$, scaled by $\varphi(\theta)$", font_size=22, color=IV).next_to(t1, DOWN,
                                                                                                              aligned_edge=LEFT)
