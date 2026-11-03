@@ -486,6 +486,11 @@
    "scene": "Outro",
    "en": "The best place to go deeper on the first half of this part is Thrun, Burgard and Fox's Probabilistic Robotics, and on learning to act, Sutton and Barto. Thanks for watching, and see you in Part 30.",
    "zh": "想深入这一部分的前半，最好的去处是思伦、比尔加德和福克斯的《概率机器人》；想深入学习如何行动，是萨顿和巴托。感谢观看，第30部分见。"
+  },
+  "16a8d3592839": {
+   "scene": "SimToReal",
+   "en": "The fix is counterintuitive: make the simulator worse on purpose. <bookmark mark='a'/> Don't train in one simulator. Train in many, each with its own settings, drawn afresh every episode: different masses, different friction, a slower motor, a delay. <bookmark mark='b'/> A policy that works across many settings may be less dependent on one simulator's quirks. Covering the real world can help it transfer, but does not guarantee success. <bookmark mark='c'/> Josh Tobin and colleagues did this for pictures in 2017, randomizing textures and lights, Xue Bin Peng and colleagues for physics in 2018, and OpenAI's robot hand solved a Rubik's cube in 2019 with randomization that widened itself as the hand improved.",
+   "zh": "解决办法有违直觉：故意把仿真器弄得更糟。<bookmark mark='a'/>不要只在一个仿真器里训练。要在很多个里训练，每个都有自己的设置，每个回合重新抽取：不同的质量，不同的摩擦，更慢的电机，一点延迟。<bookmark mark='b'/>一个在多种仿真设置下都管用的策略，可能更少依赖某一个仿真器的怪癖；覆盖真实世界的情况有助于迁移，但并不保证成功。<bookmark mark='c'/>2017年，乔希·托宾和同事们对图像这样做，随机化纹理和光照；2018年，彭学斌和同事们对物理这样做；2019年，OpenAI的机械手解开了魔方，用的随机化会随着机械手的进步自己扩大范围。"
   }
  },
  "title_en": "AI, Built: Part 29, Agents and Worlds",

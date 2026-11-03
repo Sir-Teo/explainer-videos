@@ -75,9 +75,11 @@ class SimToReal(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def randomize(self):
-        card = definition_card(r"Domain randomization", r"train in many simulators at once: \ $\max_\pi \ \mathbb E_{\xi "
-                               r"\sim p(\xi)}\big[J(\pi;\, \xi)\big]$, \ $\xi$ the simulator's settings, \ drawn afresh "
-                               r"every episode; \ if reality looks like one more draw, \ the policy works there too",
+        description = (r"在多种仿真设置下训练：\ $\max_\pi \ \mathbb E_{\xi \sim p(\xi)}\big[J(\pi;\, \xi)\big]$，"
+                       r"\ $\xi$ 为每回合重新抽取的设置；\ 覆盖真实情况有助于迁移，\ 但不能保证成功" if zh() else
+                       r"train across simulator settings: \ $\max_\pi \ \mathbb E_{\xi \sim p(\xi)}\big[J(\pi;\, \xi)\big]$, "
+                       r"\ $\xi$ drawn afresh each episode; \ covering reality can help transfer, \ but does not guarantee it")
+        card = definition_card(r"Domain randomization", description,
                                width=7.0, color=RAND).move_to([-2.9, 1.6, 0])
         g = np.random.default_rng(2)
         poles = VGroup(*[cartpole(0.0, g.uniform(-0.1, 0.1), scale=0.42, pole_len=1.0 + 1.6 * g.random(),
@@ -99,8 +101,8 @@ class SimToReal(VoiceoverScene):
             "The fix is counterintuitive: make the simulator worse on purpose. <bookmark mark='a'/> Don't train in "
             "one simulator. Train in many, each with its own settings, drawn afresh every episode: different "
             "masses, different friction, a slower motor, a delay. <bookmark mark='b'/> A policy that works across "
-            "all of them cannot rely on any one simulator's quirks, and if the real world looks like just one more "
-            "draw, it works there too. <bookmark mark='c'/> Josh Tobin and colleagues did this for pictures in 2017, "
+            "many settings may be less dependent on one simulator's quirks. Covering the real world can help it "
+            "transfer, but does not guarantee success. <bookmark mark='c'/> Josh Tobin and colleagues did this for pictures in 2017, "
             "randomizing textures and lights, Xue Bin Peng and colleagues for physics in 2018, and OpenAI's robot "
             "hand solved a Rubik's cube in 2019 with randomization that widened itself as the hand improved."
         ) as vo:
