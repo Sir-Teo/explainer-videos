@@ -67,7 +67,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
         labs = [r"a day left", r"an hour left", r"a minute left"]
         taus = [1 / 365, 1 / (365 * 24), 1 / (365 * 24 * 60)]
         lines = VGroup(*[curve(ax, S, bs.greeks(S, 100.0, tau, 0.5)["delta"], c, stroke_width=3) for tau, c in zip(taus, cols)])
-        leg = legend(list(zip(cols, labs)), font_size=19).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        leg = legend(list(zip(cols, labs)), font_size=19).next_to(ax.c2p(104, 0.04), UL, buff=0.1)  # the empty corner
         side = VGroup(
             wrapped_label(r"delta becomes a step: a tiny move across the strike flips it from 0 to 1, and a hedger "
                           r"trades its whole position back and forth", 4.4, 20, GREY_A),
