@@ -120,8 +120,12 @@ class World(VoiceoverScene):
         il = label(r"imagined", font_size=24, color=C.BITS).next_to(i_img, LEFT, buff=0.2)
         overlay = Group(gray(real[0], 2.6, C.TRUE_P), gray(imag[0], 2.6, C.BITS).set_opacity(0.6)).move_to([-1.2, 0.35, 0])
         ol = label(r"both, overlaid", font_size=22, color=GREY_A).next_to(overlay, UP, buff=0.12)
-        ax = Axes(x_range=[0, len(pe), 10], y_range=[0, max(4.0, float(pe.max()) * 1.1), 1], x_length=4.4, y_length=3.0,
+        ymax = max(4.0, float(pe.max()) * 1.1)
+        ax = Axes(x_range=[0, len(pe), 10], y_range=[0, ymax, 1], x_length=4.4, y_length=3.0,
                   tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([4.2, 0.0, 0])
+        ax.x_axis.add_numbers(range(0, len(pe) + 1, 10), font_size=16)
+        ystep = max(1, int(np.ceil(ymax / 4)))
+        ax.y_axis.add_numbers(range(ystep, int(ymax) + 1, ystep), font_size=16)
         c = VMobject(color=C.SURPRISE, stroke_width=3.5).set_points_as_corners([ax.c2p(i + 1, v) for i, v in enumerate(pe)])
         xn = label(r"steps imagined ahead", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.15)
         yn = label(r"how far off the ball is \ (pixels)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12)
