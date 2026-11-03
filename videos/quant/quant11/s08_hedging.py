@@ -88,7 +88,7 @@ class Hedging(VoiceoverScene):
                 why(r"then the shares: the stock has delta one and no other Greek, so it goes last"),
                 why(r"chapter 1's identity: an option's vega-to-gamma ratio grows with its time to expiry, so short and "
                     r"long expiries are independent hedges")]
-        step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.4, buff=0.8, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-0.4, buff=0.55, edge=6.9)  # ends higher: the card fits below
         pc = pause(r"You must kill your gamma but keep your vega. Trade short-dated options or long-dated ones?",
                    width=5.4, font_size=21)
         with self.voiceover(
@@ -184,7 +184,7 @@ class Hedging(VoiceoverScene):
         b1 = bars(va, VEGA, 0.85)
         names = VGroup(*[label(f"{int(e)}d", font_size=17, color=GREY_A).next_to(ax.c2p(j + 0.5, -lim), DOWN, buff=0.08)
                          for j, e in enumerate(exps)])
-        mvl = VGroup(*[MathTex(f"{m:+.1f}", font_size=20, color=ALT).next_to(ax.c2p(j + 0.5, lim), UP, buff=0.05)
+        mvl = VGroup(*[MathTex(f"{m:+.1f}", font_size=20, color=ALT).next_to(ax.c2p(j + 0.5, -lim), UP, buff=0.05)
                        for j, m in enumerate(mv)])
         side = VGroup(
             label(rf"total vega: {vb.sum():+.2f} $\to$ {va.sum():+.2f}", font_size=22, color=VEGA),
