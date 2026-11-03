@@ -186,9 +186,9 @@ class Scalp(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(pc))
             vo.wait_until("d")
-            ek = DashedLine(ax.c2p(early, 0), ax.c2p(early, 0.8), color=VEGA, stroke_width=3)
-            ekl = label(rf"crash on day 2: {early:+.1f}", font_size=19, color=VEGA).next_to(ax.c2p(early, 0.8), UP,
-                                                                                          buff=0.05)
+            ek = DashedLine(ax.c2p(early, 0), ax.c2p(early, 1.0), color=VEGA, stroke_width=3)  # up to the labels
+            ekl = label(rf"crash on day 2: {early:+.1f}", font_size=19, color=VEGA).next_to(mkl, UP, buff=0.08).align_to(
+                mkl, LEFT)  # stacked over the real month's label, clear of both dashed lines
             self.play(Create(ek), FadeIn(ekl), FadeOut(pc))
         hb.clear_updaters()
         counter.clear_updaters()
