@@ -182,7 +182,7 @@ class Garch(VoiceoverScene, ThreeDScene):
             return float(f_([[p_, a]])[0])
 
         ax3 = ThreeDAxes(x_range=[0.02, 0.22, 0.05], y_range=[lo_p, hi_p, 0.04], z_range=[-4, 0.5, 1], x_length=6.4,
-                         y_length=6.4, z_length=3.2, axis_config={"stroke_color": GREY_C, "include_ticks": False})
+                         y_length=6.4, z_length=2.5, axis_config={"stroke_color": GREY_C, "include_ticks": False})
         surf = loss_surface(ax3, f, (0.02, 0.22), (lo_p, hi_p), resolution=(28, 28), z_lo=-4, z_hi=0)
         alabs = VGroup(label(r"$\alpha$", font_size=26, color=GREY_B).move_to(ax3.c2p(0.245, lo_p, 0)),
                        label(r"persistence $\alpha + \beta$", font_size=20, color=GREY_B).move_to(ax3.c2p(0.02, hi_p + 0.03, 0)))
@@ -200,7 +200,7 @@ class Garch(VoiceoverScene, ThreeDScene):
         ewma = wrapped_label(r"RiskMetrics' EWMA (1994) is GARCH with $\omega = 0$, $\alpha + \beta = 1$: a bucket "
                              r"with no tap and no leak, so no long-run level (Technical Document, 4th ed., 1996, sec.\ 5.2)",
                              5.2, 19, ALT).to_corner(UR, buff=0.3)
-        self.set_camera_orientation(phi=62 * DEGREES, theta=-125 * DEGREES, zoom=0.8)
+        self.set_camera_orientation(phi=62 * DEGREES, theta=-125 * DEGREES, zoom=0.7)
         self.add_fixed_in_frame_mobjects(tag)
         self.add_fixed_orientation_mobjects(*alabs)
         for m in (tag, *alabs):
