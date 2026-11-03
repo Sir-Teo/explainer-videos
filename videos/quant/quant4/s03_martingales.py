@@ -224,7 +224,7 @@ class Martingales(VoiceoverScene):
             l_abs.clear_updaters()
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05), FadeIn(side[1]), FadeIn(side[3]))
             vo.wait_until("b")
-            self.play(FadeIn(side[2]), FadeIn(pred.move_to(ax.c2p(12, 4.6)))  # under the axis title, above the curves)
+            self.play(FadeIn(side[2]), FadeIn(pred.move_to(ax.c2p(12, 4.6))))  # under the axis title, above the curves
             vo.wait_until("c")
             self.play(FadeIn(side[4]))
         self.wait(0.4)
