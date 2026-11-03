@@ -53,7 +53,7 @@ class Strategies(VoiceoverScene, ThreeDScene):
             return surf(ax, f, (-0.25, 0.25), (-0.1, 0.1), [(QC.LOSS, -1), (GREY_D, 0), (QC.GAIN, 1)],
                         resolution=(24, 16), opacity=0.85)
         hint = hint3d((r"spot move, $\pm 25\%$", SPOT), (r"implied-vol move, $\pm 10$ points", VEGA),
-                      (r"P\&L after a week (each scaled to the box)", OPT))
+                      (r"P\&L after a week (each scaled to the box)", OPT), ax=ax)
         name_lab = label(r"straddle", font_size=34, color=OPT).to_corner(UL, buff=0.4)
         fixed(self, hint, name_lab)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-55 * DEGREES, zoom=0.9)

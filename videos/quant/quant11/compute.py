@@ -1030,7 +1030,7 @@ def compute_shortdated() -> dict:
             otm = (cp * (K - I)) > 0
             s = 1 if t["direction"] == "buy" else -1
             rows.append((s, t["amount"], prem, pay, otm, T / 3600))
-            if day == "2025-06-04" and otm and s > 0:
+            if otm and s > 0:
                 tickets.append((prem, pay, K / I, cp))
     a = np.array(rows, float)
     s, amt, prem, pay, otm, Th = a.T
@@ -1040,8 +1040,9 @@ def compute_shortdated() -> dict:
         sl = m & (s < 0)
         out[lab] = {"n_buy": int(b.sum()), "ret_buy": float((pay[b] - prem[b]).sum() / prem[b].sum()),
                     "worthless": float(np.mean(pay[b] == 0)), "profitable": float(np.mean(pay[b] > prem[b])),
-                    "n_sell": int(sl.sum()), "ret_sell": float((pay[sl] - prem[sl]).sum() / prem[sl].sum())}
-    tk_ = np.array(tickets)
+                    "n_sell": int(sl.sum()), "ret_sell": float((pay[sl] - prem[sl]).sum() / prem[sl].sum()),
+                    "paid": float(prem[b].sum()), "back": float(pay[b].sum())}
+    tk_ = np.array(tickets)  # every short-dated OTM buy over the hundred Wednesdays; sixty are drawn for the grid
     g = np.random.default_rng(1114)
     pick = g.choice(len(tk_), size=min(60, len(tk_)), replace=False) if len(tk_) else []
     out["tickets"] = tk_[np.sort(pick)] if len(tk_) else np.zeros((0, 4))

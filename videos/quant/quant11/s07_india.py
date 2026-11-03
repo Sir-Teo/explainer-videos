@@ -78,8 +78,8 @@ class India(VoiceoverScene):
                 flips.append(c.animate.set_fill(col, 0.85).set_stroke(col))
         mults = VGroup(*[MathTex(rf"{pay / prem:.0f}\times" if pay / prem >= 10 else rf"{pay / prem:.1f}\times",
                                  font_size=16).move_to(c) for c, (prem, pay, m, cp) in zip(cells, tk) if pay > 0])
-        paid, back = float(tk[:, 0].sum()), float(tk[:, 1].sum())
-        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=1.9, ylabel=r"dollars",
+        paid, back = o["paid"], o["back"]  # every ticket over the hundred Wednesdays, as the side text
+        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=1.9, ylabel=r"dollars, all tickets",
                      yticks=[], font_size=15).next_to(cells, DOWN, buff=0.45).align_to(cells, LEFT)
         b1 = Rectangle(width=0.8, height=bar_g.ax.c2p(0, paid)[1] - bar_g.ax.c2p(0, 0)[1], stroke_width=0,
                        fill_color=YELLOW, fill_opacity=0.8).move_to(bar_g.ax.c2p(0.5, 0), aligned_edge=DOWN)
@@ -98,11 +98,11 @@ class India(VoiceoverScene):
                           GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(RIGHT, buff=0.35)
         src = real_data(r"Deribit BTC trades, 100 Wednesdays 2024--2025; settled at Binance's 08:00 price (a proxy for "
-                        r"Deribit's 30-minute average); tickets: 4 June 2025")
+                        r"Deribit's 30-minute average); the sixty tickets drawn at random from all of them")
         with self.voiceover(
             "What does a short-dated, out-of-the-money option pay its buyer? India's retail data is aggregated, so "
             "measure the instrument on another market. Here are sixty real tickets: out-of-the-money Bitcoin options "
-            "bought on Deribit one morning, each expiring within two days. <bookmark mark='a'/> Expiry. Most turn "
+            "bought on Deribit, drawn at random from a hundred Wednesday mornings, each expiring within two days. <bookmark mark='a'/> Expiry. Most turn "
             "grey: worthless. A few pay several times their price. <bookmark mark='b'/> Over a hundred Wednesdays, "
             f"{o['n_buy']:,} such tickets: {100 * o['worthless']:.0f} percent expired worthless, and "
             f"{100 * o['profitable']:.0f} percent paid back more than they cost. Weighted by premium, buyers got back "

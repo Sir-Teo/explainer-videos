@@ -43,8 +43,13 @@ def axes3d(x_range, y_range, z_range, x_length=7.4, y_length=5.0, z_length=3.4, 
     return ax.shift(shift)
 
 
-def hint3d(*rows, corner=UR, font_size=24):
-    """The axis names of a 3D scene, as a fixed caption: (text, colour) rows."""
+def hint3d(*rows, corner=UR, font_size=24, ax=None):
+    """The axis names of a 3D scene, as a fixed caption: (text, colour) rows, in x, y, z order.
+
+    With ``ax``, each axis takes its row's colour, so the caption reads as a key to the axes."""
+    if ax is not None:
+        for a, (_, c) in zip((ax.x_axis, ax.y_axis, ax.z_axis), rows):
+            a.set_color(c)
     return VGroup(*[label(t, font_size=font_size, color=c) for t, c in rows]).arrange(
         DOWN, aligned_edge=LEFT, buff=0.12).to_corner(corner, buff=0.4)
 

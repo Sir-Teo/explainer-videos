@@ -32,7 +32,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
         sf = surf(ax, gam, (96, 104), (0.25, 24), [(QC.SPOT, 0.05), (GAMMA, 0.8), (QC.LOSS, 2.3)], resolution=(28, 20),
                   opacity=0.8)
         hint = hint3d((r"underlying near the strike of 100", SPOT), (r"hours to expiry", THETA),
-                      (r"gamma of one call (clipped at 2.5)", GAMMA))
+                      (r"gamma of one call (clipped at 2.5)", GAMMA), ax=ax)
         gd = float(bs.greeks(100.0, 100.0, 1 / 365, 0.5)["gamma"])
         gh = float(bs.greeks(100.0, 100.0, 1 / (365 * 24), 0.5)["gamma"])
         gm = float(bs.greeks(100.0, 100.0, 1 / (365 * 24 * 60), 0.5)["gamma"])

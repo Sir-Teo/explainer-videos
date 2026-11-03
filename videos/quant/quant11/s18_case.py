@@ -163,7 +163,7 @@ class Case(VoiceoverScene, ThreeDScene):
         edge = VMobject(stroke_color=YELLOW, stroke_width=6).set_points_as_corners(
             [ax.c2p(q, q / 2, 0) + OUT * 0.03 for q in np.linspace(0, 200, 30)])
         hint = hint3d((r"trading that moves the index, $Q$", SPOT), (r"options exposure, $D$", VEGA),
-                      (r"net P\&L (scaled)", OPT))
+                      (r"net P\&L (scaled)", OPT), ax=ax)
         eqs = VGroup(MathTex(r"\text{cash} = -\lambda Q^2,\quad \text{options} = D \cdot 2\lambda Q", font_size=28),
                      MathTex(r"\text{net} > 0 \iff D > Q/2", font_size=32, color=YELLOW),
                      label(r"illustration: invented numbers", font_size=17, color=GREY_B)).arrange(

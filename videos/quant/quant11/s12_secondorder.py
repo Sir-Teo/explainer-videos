@@ -46,7 +46,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         wing = VMobject(stroke_color=QC.GAIN, stroke_width=5).set_points_as_corners(
             [ax.c2p(kc, s, vega_pt(kc, s)) + OUT * 0.04 for s in np.linspace(0.2, 1.0, 30)])
         hint = hint3d((r"strike (spot 100)", SPOT), (r"implied volatility $\sigma$", VEGA),
-                      (r"vega per vol point, 30 days", OPT))
+                      (r"vega per vol point, 30 days", OPT), ax=ax)
         cap = VGroup(label(r"along $\sigma$ at the money: flat, volga $\approx 0$", font_size=21, color=YELLOW),
                      label(r"along $\sigma$ in a wing: rising, volga $> 0$", font_size=21, color=QC.GAIN),
                      label(r"across strikes: the tilt is vanna, opposite in the two wings", font_size=21, color=ALT),

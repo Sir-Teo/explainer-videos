@@ -38,7 +38,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         sf = surf(ax, f, (70, 130), (0.5, 40), [(QC.SPOT, 2), (OPT, 15), (QC.LOSS, 32)], resolution=(24, 18),
                   opacity=0.55)
         hint = hint3d((r"bitcoin-like underlying $S$", SPOT), (r"days to expiry $\tau$", THETA),
-                      (r"straddle value $V$", OPT))
+                      (r"straddle value $V$", OPT), ax=ax)
         par = note(r"a straddle struck at 100, 50\% vol", font_size=19).to_corner(DR, buff=0.3)
         tau = ValueTracker(30.0)
         xs = np.linspace(70, 130, 61)

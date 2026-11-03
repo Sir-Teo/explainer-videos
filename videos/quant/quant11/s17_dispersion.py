@@ -92,7 +92,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
         r30 = (lvl ** 2 / 0.09 - 1 / 50) / (1 - 1 / 50)
         mark = Dot3D(ax.c2p(r30, 0.30, lvl), radius=0.09, color=WHITE)
         hint = hint3d((r"average correlation $\rho$", QC.LOSS), (r"members' volatility $\bar\sigma$", OPT),
-                      (r"index volatility $\sigma_I$", VEGA))
+                      (r"index volatility $\sigma_I$", VEGA), ax=ax)
         cap = label(rf"index at 20\%, members at 30\%: $\rho_{{\text{{impl}}}} \approx {r30:.2f}$", font_size=24,
                     color=YELLOW).to_corner(DL, buff=0.4)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-52 * DEGREES, zoom=0.9)
