@@ -114,12 +114,13 @@ class Industry(VoiceoverScene):
             (r"\texttt{vx\_index}, \texttt{inverse\_note}", r"futures indices and the notes built on them (14)"),
             (r"\texttt{train\_surface\_net}", r"a surface learned without arbitrage (17)"),
         ]
-        tab = VGroup(*[VGroup(label(a, font_size=19, color=QC.HOUSE), label(b, font_size=18, color=GREY_A))
-                       for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        w0 = max(r_[0].width for r_ in tab)
-        for r_ in tab:
-            r_[1].align_to(r_[0], LEFT).shift(RIGHT * (w0 + 0.4))
-            r_[1].set_y(r_[0].get_y())
+        names = VGroup(*[label(a, font_size=19, color=QC.HOUSE) for a, _ in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        x1 = names.get_right()[0] + 0.4
+        tab = VGroup()
+        for nm, (_, b) in zip(names, rows):  # two aligned columns: names flush left, descriptions flush left after them
+            d = label(b, font_size=18, color=GREY_A)
+            d.move_to([x1 + d.width / 2, nm.get_y(), 0])
+            tab.add(VGroup(nm, d))
         tab.next_to(chart, DOWN, buff=0.3)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
