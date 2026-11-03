@@ -145,7 +145,7 @@ class Information(VoiceoverScene, MovingCameraScene):
                           for b in range(2) for y in (-0.6, -2.9)])
         pred = desk_question(r"Is ``the number of heads in the first two tosses is even'' an $\mathcal{F}_1$ event?",
                              r"No: it needs the second toss, so it is in $\mathcal{F}_2$ but not $\mathcal{F}_1$.",
-                             width=6.0, font_size=22).to_corner(DR, buff=0.3)
+                             width=6.0, font_size=22).to_corner(UR, buff=0.4)  # it takes the definitions' place
         with self.voiceover(
             "Make that precise. A sigma-algebra is the collection of yes-or-no questions you can answer, closed under "
             "not, and, and or: if you can answer two questions, you can answer their combinations. After n tosses "
@@ -166,7 +166,7 @@ class Information(VoiceoverScene, MovingCameraScene):
             vo.wait_until("b")
             self.play(FadeIn(guides[1::2]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b2], lag_ratio=0.1), FadeIn(t2))
             vo.wait_until("c")
-            self.play(FadeIn(pred, shift=UP * 0.2))
+            self.play(FadeOut(deck), FadeIn(pred, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
