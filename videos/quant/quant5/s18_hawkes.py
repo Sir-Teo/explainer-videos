@@ -42,7 +42,7 @@ class Hawkes(VoiceoverScene):
             "    return np.array(events)",
         ], source="explainer/quant/house/sim.py", width=7.4, font_size=15).to_corner(UL, buff=0.25)
         T = 40.0
-        g = axes([0, T], [0, max(bd.max(), 1) * 1.1], x_length=6.4, y_length=2.8, xlabel=r"time (days)",
+        g = axes([0, T], [0, max(bd.max(), 1) * 1.1], x_length=6.4, y_length=2.3, xlabel=r"time (days)",
                  ylabel=r"intensity $\lambda_t$", xticks=[0, 20, 40], yticks=[0, 1, 2], font_size=15)
         g.to_corner(DR, buff=0.35)
         ax = g.ax
@@ -82,15 +82,17 @@ class Hawkes(VoiceoverScene):
         cl = hc["clusters"]
         t, par = np.asarray(cl["t"]), np.asarray(cl["parent"])
         T = 60.0
-        g = axes([0, T], [0, 6.5], x_length=11.6, y_length=3.6, xlabel=r"time", xticks=[0, 30, 60], yticks=[],
-                 font_size=15).shift(DOWN * 0.7)
+        g = axes([0, T], [0, 6.5], x_length=11.6, y_length=2.6, xlabel=r"time", xticks=[0, 30, 60], yticks=[],
+                 font_size=15).shift(DOWN * 1.55)
         ax = g.ax
         gen = np.zeros(len(t), int)
         for i in range(len(t)):
             if par[i] >= 0:
                 gen[i] = gen[par[i]] + 1
         cols = [DRIFT, ITO, STRAT, JUMP, YELLOW, WHITE, WHITE]
-        dots = VGroup(*[Dot(ax.c2p(a, 0.6 + gen[i]), radius=0.08, color=cols[min(gen[i], 6)]) for i, a in enumerate(t)])
+        gstep = 5.6 / max(int(gen.max()), 1)  # every generation fits under the top of the axes, however deep the tree
+        dots = VGroup(*[Dot(ax.c2p(a, 0.6 + gstep * gen[i]), radius=0.08, color=cols[min(gen[i], 6)])
+                        for i, a in enumerate(t)])
         links = VGroup(*[Line(dots[par[i]].get_center(), dots[i].get_center(), stroke_width=1.6, color=GREY_B)
                          for i in range(len(t)) if par[i] >= 0])
         ticks = VGroup(*[Line(ax.c2p(a, 0), ax.c2p(a, 0.3), stroke_width=2, color=YELLOW) for a in t])
@@ -101,7 +103,7 @@ class Hawkes(VoiceoverScene):
         whys = [why(r"each event's children: Poisson, with mean the kernel's mass (the branching ratio)", 18),
                 why(r"take expectations; stationary only if $n < 1$", 18),
                 why(r"generations form a geometric series (Hawkes and Oakes 1974)", 18)]
-        step = ladder(self, rows, whys, keep=3, top=3.4, x=-2.2, buff=0.3, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=3.4, x=-2.2, buff=0.3, edge=6.9)  # two rows clear the tree
         res = label(rf"here $n = 0.7$: {hc['n_clusters']} families, mean size {hc['mean_cluster']:.2f} against "
                     rf"$1/(1 - n) = {hc['cluster_theory']:.2f}$", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
@@ -147,7 +149,7 @@ class Hawkes(VoiceoverScene):
                             ylabel=r"log-likelihood", xlabel=r"Nelder--Mead iteration", color=JUMP)
         base = DashedLine(rp.ax.c2p(steps[0], max(hr["ll_poisson"], rp.lo)), rp.ax.c2p(steps[-1], max(hr["ll_poisson"], rp.lo)),
                           color=GREY_B, stroke_width=2)
-        bl = label(rf"Poisson clock: {hr['ll_poisson']:.0f}", font_size=17, color=GREY_B).next_to(base, DOWN, buff=0.08)
+        bl = label(rf"Poisson clock: {hr['ll_poisson']:.0f}", font_size=17, color=GREY_B).next_to(base, UP, buff=0.08)
         bl.align_to(base, RIGHT)
         f = h["fit"]
         res = VGroup(MathTex(rf"n = \alpha/\beta = {f['branching']:.2f}, \quad \text{{half-life }} {h['half_life_hours']:.1f}"
@@ -203,6 +205,7 @@ class Hawkes(VoiceoverScene):
                         rf"{100 * n_:.0f}\%: in a stationary Hawkes process the triggered share equals $n$.", width=4.6,
                         font_size=18)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(side, DOWN, buff=0.25).align_to(g, LEFT)
+        keep_in_frame(VGroup(pc, ans), 0.25)
         good = rs["p_hawkes"] > 0.05 and rs["p_poisson"] < 0.01
         verdict = ("The Hawkes gaps lie on the line, p equal to "
                    f"{rs['p_hawkes']:.2f}; the Poisson clock's do not, with a p-value too small to read."
