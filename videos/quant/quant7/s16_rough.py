@@ -93,9 +93,7 @@ class Rough(VoiceoverScene):
                     r"\frac{\log\sigma^2_s\,ds}{(t-s+\Delta)(t-s)^{H+\frac12}}", font_size=28, color=VOL),
             label(r"a power-law kernel over the whole past; HAR's three steps are a cheap approximation. Part 14 builds "
                   r"the models.", font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.3).shift(UP * 1.0)
-        if kern.width > 6.4:
-            kern.scale_to_fit_width(6.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(UP, buff=0.35)  # above both charts, clear of H
         pc = pause_card(r"If $H = 0.5$, what slope would the $q = 2$ line have?", width=4.4, font_size=20).to_corner(DR, buff=0.3)
         rough = b["H"] < 0.25
         verdict = ("Rough, as Gatheral, Jaisson and Rosenbaum found on equity indices."
