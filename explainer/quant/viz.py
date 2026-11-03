@@ -300,19 +300,33 @@ class TrainingReplay(VGroup):
     as the line. ``left`` and ``right`` place the two panels."""
 
     def __init__(self, steps, loss, frame, checkpoints, ylabel=r"loss", xlabel=r"training step", log_y=False,
-                 color=None, left=LEFT * 3.3, right=RIGHT * 3.4, x_length=5.2, y_length=3.4, font_size=15):
+                 color=None, left=LEFT * 3.3, right=RIGHT * 3.4, x_length=5.2, y_length=3.4, font_size=15,
+                 log_x=False):
         super().__init__()
         color = color or QC.Q
         steps = np.asarray(steps, float)
         L = np.atleast_2d(np.asarray(loss, float))
         if log_y:
             L = np.log10(np.maximum(L, 1e-12))
+        # log_x: the axis (and the replay clock) run in log10 of the step, for fits that converge in a few steps
+        self.log_x = log_x
+        if log_x:
+            steps = np.log10(np.maximum(steps, 1.0))
+            checkpoints = [float(np.log10(max(c, 1.0))) for c in checkpoints]
+            dec = [float(e) for e in range(int(np.floor(steps[0])), int(np.floor(steps[-1])) + 1)]
+            xt = sorted(set(dec + [float(steps[-1])]))
+            if len(xt) > 1 and xt[-1] - xt[-2] < 0.3:
+                xt.pop(-2)
+            xfmt = lambda v: f"{10 ** v:,.0f}".replace(",", "{,}")  # noqa: E731
+        else:
+            xt = [steps[0], steps[-1]]
+            xfmt = lambda v: f"{v:,.0f}".replace(",", "{,}")  # noqa: E731
         self.steps, self.L, self.frame_fn, self.ck = steps, L, frame, list(checkpoints)
         lo, hi = float(np.nanpercentile(L, 1)), float(np.nanpercentile(L, 99))
         pad = 0.08 * (hi - lo + 1e-12)
         self.g = axes([steps[0], steps[-1]], [lo - pad, hi + pad], x_length=x_length, y_length=y_length,
-                      xlabel=xlabel, ylabel=ylabel, xticks=[steps[0], steps[-1]],
-                      xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"),
+                      xlabel=xlabel, ylabel=ylabel, xticks=xt,
+                      xfmt=xfmt,
                       yticks=[round(lo, 2), round(hi, 2)], yfmt=(lambda v: f"10^{{{v:.1f}}}") if log_y else None,
                       font_size=font_size, center=right)
         self.ax = self.g.ax
@@ -325,6 +339,10 @@ class TrainingReplay(VGroup):
         self.left_center = left
         self.add(self.g, self.band, self.panel)
 
+    def _step(self):
+        v = self.t.get_value()
+        return int(round(10 ** v)) if self.log_x else int(v)
+
     def _y(self, s):
         return float(np.clip(np.interp(s, self.steps, self.L[0]), self.lo, self.hi))
 
@@ -333,7 +351,7 @@ class TrainingReplay(VGroup):
         output."""
         dot = always_redraw(lambda: Dot(self.ax.c2p(self.t.get_value(), self._y(self.t.get_value())), radius=0.07,
                                         color=self.color))
-        cnt = always_redraw(lambda: MathTex(rf"\text{{step}}\ {int(self.t.get_value()):,}".replace(",", "{,}"),
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step}}\ {self._step():,}".replace(",", "{,}"),
                                             font_size=28, color=self.color).next_to(self.g, UP, buff=0.1))
         scene.add(dot, cnt)
         per = run_time / max(len(self.ck) - 1, 1)

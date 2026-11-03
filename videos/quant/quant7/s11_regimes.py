@@ -151,7 +151,7 @@ class Regimes(VoiceoverScene):
                           curve(g.ax, xs, _gauss(xs, m[1], s[1]), BAD, stroke_width=3))
 
         rp = TrainingReplay(its, ll, frame, checkpoints=[1, 2, 3, 5, 300], ylabel=r"log-likelihood",
-                            xlabel=r"EM iteration", color=VOL)
+                            xlabel=r"EM iteration (log scale)", color=VOL, log_x=True)
         rp.to_edge(UP, buff=0.5)
         mu, sd, dur = np.asarray(old["mu"]), np.asarray(old["sd"]), np.asarray(old["duration_months"])
         rows = VGroup(
