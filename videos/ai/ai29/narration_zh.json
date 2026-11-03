@@ -516,6 +516,11 @@
    "scene": "Dreamer",
    "en": "It learns from three terms. <bookmark mark='a'/> Redraw each picture from the state. <bookmark mark='b'/> Predict each reward. <bookmark mark='c'/> And make the prior agree with the posterior, so that the model can predict without looking: that is what lets it dream. The agreement is a KL divergence, and DreamerV2 split it in two. One part, with the posterior frozen, trains the prior towards what was seen. <bookmark mark='d'/> The other, with the prior frozen, nudges the posterior towards states the prior can predict. <bookmark mark='e'/> Weighting the first more, the prior moves more: KL balancing. Below one nat, the clamped KL term has zero gradient. This reduces pressure to collapse, but does not guarantee the posterior keeps useful information.",
    "zh": "它从三项损失里学习。<bookmark mark='a'/>从状态重新画出每幅画面。<bookmark mark='b'/>预测每个奖励。<bookmark mark='c'/>再让先验和后验一致，这样模型不看画面也能预测：正是这一点让它能做梦。这种一致用KL散度来衡量，DreamerV2把它拆成了两半。一半冻结后验，把先验往看到的东西上拉。<bookmark mark='d'/>另一半冻结先验，把后验轻轻推向先验能预测的状态。<bookmark mark='e'/>给前一半更大的权重，先验就动得更多：这就是KL平衡。低于1奈特时，截断后的KL项梯度为零。这减少了坍塌的压力，但不保证后验保留有用信息。"
+  },
+  "54858ac573a0": {
+   "scene": "Compound",
+   "en": "Turn it around: how long a task can an agent finish half the time? <bookmark mark='a'/> Set p to the n equal to a half, <bookmark mark='b'/> and take logarithms. <bookmark mark='c'/> When p is close to one, minus log p is almost exactly one minus p, the error rate. <bookmark mark='d'/> So the half-time horizon is about zero point seven divided by the error rate per step: at ninety-nine percent, 69 steps. In this independent-step model, halving the error rate roughly doubles that horizon. The next chapter tracks a related task-duration measure on real models, not per-step error.",
+   "zh": "反过来问：一个智能体有一半把握完成的任务，最长能有多长？<bookmark mark='a'/>令p的n次方等于二分之一，<bookmark mark='b'/>再取对数。<bookmark mark='c'/>当p接近1时，负的log p几乎正好等于1减p，也就是错误率。<bookmark mark='d'/>所以，一半把握的时程，大约是0.7除以每一步的错误率：每一步99%的把握，就是69步。在这个步骤独立的模型里，错误率减半，时程大约翻倍。下一章追踪真实模型的相关任务时长指标，而不是每一步的错误率。"
   }
  },
  "title_en": "AI, Built: Part 29, Agents and Worlds",

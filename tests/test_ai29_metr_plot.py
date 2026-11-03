@@ -66,6 +66,24 @@ class MetrPlotContracts(unittest.TestCase):
         self.assertIn('2023年起翻倍：', source)
         self.assertIn("m['doubling_2023']", source)
 
+    def test_simple_independent_step_model_is_not_equated_with_metr(self):
+        import hashlib
+        import re
+        path = ROOT / 'videos/ai/ai29/s06_compound.py'
+        tree = ast.parse(path.read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == 'doubling')
+        call = next(n for n in ast.walk(fn) if isinstance(n, ast.Call)
+                    and isinstance(n.func, ast.Attribute) and n.func.attr == 'voiceover')
+        en = eval(compile(ast.Expression(call.args[0]), str(path), 'eval'), {'math': math, 'ex': .99})
+        self.assertIn('independent-step model', en)
+        self.assertIn('not per-step error', en)
+        key = hashlib.sha1(' '.join(en.split()).encode()).hexdigest()[:12]
+        row = json.loads((ROOT / 'videos/ai/ai29/narration_zh.json').read_text())['lines'][key]
+        self.assertEqual(row['en'], en)
+        self.assertIn('而不是每一步的错误率', row['zh'])
+        markers = lambda text: re.findall(r"<bookmark mark='([^']+)'/>", text)
+        self.assertEqual(markers(en), markers(row['zh']))
+
 
 if __name__ == '__main__':
     unittest.main()

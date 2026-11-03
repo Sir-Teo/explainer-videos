@@ -202,8 +202,8 @@ ZH = {
     'f"Turn it around: how long a task can an agent finish half the time?':
         "反过来问：一个智能体有一半把握完成的任务，最长能有多长？<bookmark mark='a'/>令p的n次方等于二分之一，<bookmark mark='b'/>"
         "再取对数。<bookmark mark='c'/>当p接近1时，负的log p几乎正好等于1减p，也就是错误率。<bookmark mark='d'/>所以，"
-        "一半把握的时程，大约是0.7除以每一步的错误率：每一步99%的把握，就是{math.log(2) / -math.log(ex):.0f}步。错误减半，"
-        "能完成的任务长度就翻一倍。下一章追踪的，正是真实模型的这个量。",
+        "一半把握的时程，大约是0.7除以每一步的错误率：每一步99%的把握，就是{math.log(2) / -math.log(ex):.0f}步。"
+        "在这个步骤独立的模型里，错误率减半，时程大约翻倍。下一章追踪真实模型的相关任务时长指标，而不是每一步的错误率。",
 
     # ---------------------------------------------------------------- Doubling
     'Chapter six. Horizons that double.':
