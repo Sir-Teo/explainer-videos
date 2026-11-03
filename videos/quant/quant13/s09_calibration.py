@@ -127,13 +127,15 @@ class Calibration(VoiceoverScene, ThreeDScene):
         X = np.array([r["x"] for r in rows])
         xt = [2024, 2024.5, 2025, 2025.5, 2026]
         fmt = lambda u: {0: "Jan 24", 1: "Jul 24", 2: "Jan 25", 3: "Jul 25", 4: "Jan 26"}[round((u - 2024) * 2)]  # noqa: E731
-        g1 = axes([2024, 2026], [0, 22], x_length=6.2, y_length=2.2, ylabel=r"$\kappa$", xticks=xt, xfmt=fmt,
+        g1 = axes([2024, 2026], [0, 22], x_length=6.2, y_length=1.65, ylabel=r"$\kappa$", xticks=xt, xfmt=fmt,
                   yticks=[0, 10, 20], font_size=15)
-        g2 = axes([2024, 2026], [0, 6.5], x_length=6.2, y_length=2.2, ylabel=r"$\xi$", xticks=xt, xfmt=fmt,
+        g2 = axes([2024, 2026], [0, 6.5], x_length=6.2, y_length=1.65, ylabel=r"$\xi$", xticks=xt, xfmt=fmt,
                   yticks=[0, 2, 4, 6], font_size=15)
-        g3 = axes([2024, 2026], [-0.5, 0.3], x_length=6.2, y_length=2.2, ylabel=r"$\rho$", xticks=xt, xfmt=fmt,
+        g3 = axes([2024, 2026], [-0.5, 0.3], x_length=6.2, y_length=1.65, ylabel=r"$\rho$", xticks=xt, xfmt=fmt,
                   yticks=[-0.4, 0, 0.2], font_size=15)
-        G = VGroup(g1, g2, g3).arrange(DOWN, buff=0.3).to_edge(LEFT, buff=0.7)
+        G = VGroup(g1, g2, g3).arrange(DOWN, buff=0.22).to_edge(LEFT, buff=0.7)
+        if G.height > 7.4:  # three charts and their tick labels inside the frame
+            G.scale_to_fit_height(7.4).to_edge(LEFT, buff=0.7)
         l1 = curve(g1.ax, t, X[:, 1], VAR, stroke_width=2.2)
         l2 = curve(g2.ax, t, X[:, 3], OPT, stroke_width=2.2)
         l3 = curve(g3.ax, t, X[:, 4], IV, stroke_width=2.2)
@@ -285,7 +287,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
         ax = g.ax
         cols = [BAD, OPT, RV]
         pts = VGroup()
-        for f_, c_, d_ in zip(fr, cols, (UR, RIGHT, DR)):
+        for f_, c_, d_ in zip(fr, cols, (UP, DOWN, LEFT)):  # the first two settings nearly coincide
             x_, y_ = f_["median_change_all"], f_["rmse_median"]
             pts.add(VGroup(Dot(ax.c2p(x_, y_), radius=0.09, color=c_),
                            MathTex(rf"\lambda = {f_['lam']:g}", font_size=24, color=c_).next_to(ax.c2p(x_, y_), d_, buff=0.12)))
