@@ -76,8 +76,8 @@ class VarSwap(VoiceoverScene):
     def replicate(self):
         rows = [cmath(r"\int_0^T \sigma_t^2\,dt", r"=", r"2\int_0^T \frac{dS_t}{S_t} - 2\ln\frac{S_T}{S_0}", font_size=34,
                       colors={r"\int_0^T \sigma_t^2\,dt": RV}),
-                cmath(r"f(S)", r"=", r"f(F) + f'(F)(S - F) + \int_0^F f''(K)(K - S)^+dK + \int_F^\infty f''(K)(S - K)^+dK",
-                      font_size=30, colors={r"f(S)": OPT}),
+                cmath(r"f(S)", r"=", r"f(F) + f'(F)(S - F) + \int_0^\infty f''(K)\,\text{OTM}_K(S)\,dK",
+                      font_size=34, colors={r"f(S)": OPT}),
                 cmath(r"K_{\text{var}}", r"=", r"\frac{2}{T}\int_0^\infty \frac{\text{OTM}(K)}{K^2}\,dK", font_size=38,
                       colors={r"K_{\text{var}}": IV}),
                 cmath(r"\mathbb{E}^Q\!\int_0^T \Big(\frac{dS}{S}\Big)^2", r"=", r"K_{\text{var}}\,T\quad \text{for any continuous }"
@@ -87,7 +87,7 @@ class VarSwap(VoiceoverScene):
         whys = [why(r"It\^o (Part 5): $d\ln S = dS/S - \tfrac12\sigma^2 dt$; realized variance is a delta-hedging gain "
                     r"minus a log contract"),
                 why(r"Taylor's theorem with integral remainder about $F$ (Carr and Madan 1998): any payoff is a bond, a "
-                    r"forward and a strip of options"),
+                    r"forward and a strip of options; $\text{OTM}_K$ is the put $(K - S)^+$ below $F$, the call $(S - K)^+$ above"),
                 why(r"take $f = -\ln$, so $f'' = 1/K^2$, and Q-expectations: the hedge is free (Neuberger 1994; Demeterfi, "
                     r"Derman, Kamal and Zou 1999)"),
                 why(r"model-free implied variance (Britten-Jones and Neuberger 2000): no volatility model was assumed"),
