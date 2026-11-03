@@ -121,14 +121,14 @@ class JumpData(VoiceoverScene):
                      font_size=21).to_corner(UR, buff=0.4)
         rows = [cmath(r"\Delta V - \Delta\cdot\Delta S", r"=", r"\tfrac12 \Gamma S^2 J^2 + O(J^3)", font_size=30,
                       colors={r"\tfrac12 \Gamma S^2 J^2 + O(J^3)": JUMP})]
-        w0 = why(r"at a jump of relative size $J$: one instrument cannot offset jumps of two different sizes", 19)
-        VGroup(rows[0], w0).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
-        if w0.width > 5.6:
-            w0.scale_to_fit_width(5.6)
+        w0 = wrapped_label(r"at a jump of relative size $J$: one instrument cannot offset jumps of two different sizes",
+                           5.6, 19, GREY_B)
         es = theorem_card(r"Esscher (1932)", r"With jumps the risk-neutral measure is not unique: the Esscher transform "
                           r"$dQ/dP \propto e^{\theta X_T}$ is one choice among infinitely many (Part 13).", color=JUMP,
                           width=5.6, font_size=18, kind=r"Note")
-        es.next_to(VGroup(rows[0], w0), DOWN, buff=0.3).align_to(leg, LEFT)
+        # one right-hand column, placed as a whole: legend, the jump term, its note, Esscher
+        VGroup(leg, VGroup(rows[0], w0).arrange(DOWN, aligned_edge=LEFT, buff=0.1), es).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.3).to_corner(UR, buff=0.35)
         pc, ans = pause(r"Rebalance every second. Does the jump error vanish?", r"No: a jump happens between two trades "
                         r"however close they are.", width=5.6, font_size=20)
         pc.to_corner(DR, buff=0.3)
