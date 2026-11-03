@@ -43,7 +43,7 @@ class Radon(VoiceoverScene, ThreeDScene):
                     r"is the same statement under every equivalent measure (Part 9)"),
                 why(r"Kakutani (1948): infinite products of coins are either equivalent or mutually singular, "
                     r"nothing in between")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.68, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.15, x=-0.8, buff=0.38, edge=6.9)
         with self.voiceover(
             "When can one probability be written as another, reweighted? The Radon-Nikodym theorem: whenever Q gives "
             "no weight to anything P calls impossible, Q has a density with respect to P. <bookmark mark='a'/> "
@@ -153,13 +153,13 @@ class Radon(VoiceoverScene, ThreeDScene):
         C, F = k["constant"], k["fading"]
         PC, PF = np.asarray(C["paths"], float), np.asarray(F["paths"], float)
         x = np.arange(PC.shape[1]) * 20
-        g1 = axes([0, 10000], [-100, 5], x_length=5.6, y_length=3.6, xlabel=r"tosses of a fair coin",
+        g1 = axes([0, 10000], [-100, 5], x_length=5.6, y_length=3.1, xlabel=r"tosses of a fair coin",
                   ylabel=r"$\log_{10} L_n$, $Q$: heads 60\% every toss", xticks=[0, 5000, 10000], yticks=[-100, -50, 0],
                   font_size=15)
-        g2 = axes([0, 10000], [-1.5, 1.5], x_length=5.6, y_length=3.6, xlabel=r"tosses of a fair coin",
+        g2 = axes([0, 10000], [-1.5, 1.5], x_length=5.6, y_length=3.1, xlabel=r"tosses of a fair coin",
                   ylabel=r"$\log_{10} L_n$, $Q$: heads $\tfrac12 + 0.2/k$", xticks=[0, 5000, 10000],
                   yticks=[-1, 0, 1], font_size=15)
-        VGroup(g1, g2).arrange(RIGHT, buff=0.9).to_edge(UP, buff=0.8)
+        VGroup(g1, g2).arrange(RIGHT, buff=0.9).to_edge(UP, buff=0.6)  # room below for the results and the question
         tk = ValueTracker(0.0)
         f1 = VGroup(*[tracing(g1.ax, x, row, tk, LOSS, stroke_width=1.2) for row in PC[:30]])
         f2 = VGroup(*[tracing(g2.ax, x, np.clip(row, -1.5, 1.5), tk, MART, stroke_width=1.2) for row in PF[:30]])
