@@ -154,12 +154,12 @@ class Digitals(VoiceoverScene):
 
     def onetouch(self, o):
         rows = [
-            cmath(r"P\Big(\min_{t \le T} X_t \le b\Big)", r"=", r"N\Big(rac{b - \mu T}{\sigma\sqrt T}\Big) + "
-                  r"e^{2\mu b/\sigma^2}\,N\Big(rac{b + \mu T}{\sigma\sqrt T}\Big)", font_size=34,
+            cmath(r"P\Big(\min_{t \le T} X_t \le b\Big)", r"=", r"N\Big(\frac{b - \mu T}{\sigma\sqrt T}\Big) + "
+                  r"e^{2\mu b/\sigma^2}\,N\Big(\frac{b + \mu T}{\sigma\sqrt T}\Big)", font_size=34,
                   colors={r"P\Big(\min_{t \le T} X_t \le b\Big)": OPT}),
-            cmath(r"\mu = 0:\quad OT", r"=", r"2\,N\Big(rac{b}{\sigma\sqrt T}\Big) = 2 	imes 	ext{digital}",
+            cmath(r"\mu = 0:\quad OT", r"=", r"2\,N\Big(\frac{b}{\sigma\sqrt T}\Big) = 2 \times \text{digital}",
                   font_size=34, colors={r"\mu = 0:\quad OT": GOOD}),
-            cmath(r"r = q = 0:\quad OT", r"=", r"N(-d_2) + rac{S}{H}\,N(-d_1)", font_size=34,
+            cmath(r"r = q = 0:\quad OT", r"=", r"N(-d_2) + \frac{S}{H}\,N(-d_1)", font_size=34,
                   colors={r"r = q = 0:\quad OT": IV}),
         ]
         whys = [why(r"$X = \log S$, $b = \log(H/S) < 0$, $\mu = r - q - \sigma^2/2$: the first-passage law of Brownian "
