@@ -149,7 +149,7 @@ class Bayes(VoiceoverScene):
             label(r"mean squared error, (\% a year)$^2$; green dots: the second half", font_size=17, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(tau_ro, DOWN, buff=0.35).align_to(tg, LEFT)
         q = predict(r"One industry has a huge raw estimate and a huge standard error. Does it shrink most or least?",
-                    width=11.0).to_edge(DOWN, buff=0.12)
+                    width=5.6).to_corner(DR, buff=0.3)  # under the notes, off the shrinkage chart
         with self.voiceover(
             "Here it is running. Each industry is a bead on its own rod, at its raw estimate, sorted from lowest to "
             "highest, tied by a spring to a bar at the grand mean. The thicker the spring, the noisier the estimate. "
