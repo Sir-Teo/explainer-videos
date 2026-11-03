@@ -57,7 +57,7 @@ class Hybrid(VoiceoverScene):
         leg = legend([(BAD, r"naive: the kernel at each cell's left end"),
                       (RV, r"hybrid: the first cell exactly; the others at optimal points $b_k$")],
                      font_size=17).to_corner(UR, buff=0.35)
-        q = pause(r"Which scheme's error grows as $H$ falls?", width=5.2, font_size=22).to_corner(UL, buff=0.3)
+        q = pause(r"Which scheme's error grows as $H$ falls?", width=5.2, font_size=22).next_to(leg, DOWN, buff=0.3).to_edge(RIGHT, buff=0.35)  # below the legend, clear of the axis label
         src = illustration(r"the last six steps before $t$; heights clipped at 4")
         with self.voiceover(
             "Rough Bergomi's driver is an integral of past shocks against the kernel t minus s to the power H minus "
@@ -174,8 +174,8 @@ class Hybrid(VoiceoverScene):
         at = h["atm30"]
         outs.append(f"rBergomi 30-day ATM vol: hybrid {100 * at['hybrid']:.1f}%   Riemann {100 * at['riemann']:.1f}%")
         tim = h["timing"]
-        tl = "  ".join(f"n={t_['n']}: {t_['hybrid']:.2f}s vs {t_['cholesky']:.2f}s" for t_ in tim)
-        outs.append("time, 1,000 paths (hybrid vs Cholesky): " + tl)
+        outs.append("time for 1,000 paths, hybrid vs Cholesky:")
+        outs += [f"  n = {t_['n']:<5d} {t_['hybrid']:6.2f}s   {t_['cholesky']:6.2f}s" for t_ in tim]
         r05 = rows[0]
         slower = tim[-1]["cholesky"] > tim[-1]["hybrid"]
         verdict = ("and by four thousand steps the exact Cholesky factorisation is the slower of the two"
