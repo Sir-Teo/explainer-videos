@@ -84,7 +84,7 @@ class Tree(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[0, 1, 0.25], y_range=[50, 200, 50], z_range=[0, 100, 25], x_length=7.0,
                         y_length=6.0, z_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.4)
+        ax.shift(DOWN * 1.0)  # the deep-in-the-money corner rises high: keep it in frame
         surf = price_surface(ax, lambda t, S: float(bs.price(S, K, max(T - t, 1e-4), sig, r)), (0.0, 0.999),
                              (50, 200), resolution=(24, 24), z_lo=0, z_hi=100, opacity=0.35)
 
@@ -111,7 +111,7 @@ class Tree(VoiceoverScene, ThreeDScene):
                           MathTex(rf"\text{{worst node gap}}\ {t3['max_gap'][j]:.3f}", font_size=26, color=GREY_A)
                           ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.4)
 
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-60 * DEGREES, zoom=0.88)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-60 * DEGREES, zoom=0.74)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
