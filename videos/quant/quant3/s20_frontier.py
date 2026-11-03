@@ -136,11 +136,13 @@ class Frontier(VoiceoverScene):
                             x_length=5.0, y_length=3.4)
         ax = rp.ax
         base = VGroup()
-        for key, col, name in (("ols", CASH, r"OLS"), ("ridge", VALUE, r"ridge on splines")):
+        # the two baselines nearly coincide: one label above its line, the other below, inside the plot
+        for key, col, name, side in (("ols", CASH, r"OLS", UP), ("ridge", VALUE, r"ridge on splines", DOWN)):
             v = res[key] * 1e4
             yv = float(np.clip(v, rp.lo, rp.hi))
             ln = DashedLine(ax.c2p(ep[0], yv), ax.c2p(ep[-1], yv), color=col, stroke_width=2)
-            base.add(VGroup(ln, label(name, font_size=15, color=col).next_to(ln, RIGHT, buff=0.08)))
+            xe = ep[0] + 0.7 * (ep[-1] - ep[0])
+            base.add(VGroup(ln, label(name, font_size=15, color=col).next_to(ax.c2p(xe, yv), side, buff=0.1)))
         mlp, ols, ridge, rw = res["mlp"], res["ols"], res["ridge"], res["rw"]
         spread = float(np.ptp(f["mlp_test"]))
         beats = (ols - mlp) > spread
