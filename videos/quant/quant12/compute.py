@@ -42,7 +42,8 @@ from explainer.quant import data
 from explainer.quant.house import bs, paths, pit, smile, surface, volsurface as V
 
 CACHE = Cache("quant12")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 12)  # the series' trial counter as of this part
 
 KGRID = np.linspace(-0.4, 0.4, 17)
 TGRID = np.array([7, 14, 30, 60, 90, 180]) / 365

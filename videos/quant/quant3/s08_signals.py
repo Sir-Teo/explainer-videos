@@ -242,15 +242,15 @@ class Signals(VoiceoverScene):
         cap = label(r"the trial counter: configurations tried so far, across the whole series", font_size=26,
                     color=GREY_A).next_to(big, DOWN, buff=0.3)
         add = VGroup(
-            label(r"this part: five accounting signals tested, one CAPE forecast registered", font_size=22,
+            label(r"this part: 5 accounting signals, 208 published predictors, 8 forecaster settings, 1 CAPE forecast", font_size=22,
                   color=GREY_B),
             label(r"their hold-outs, 2021 onward, are sealed", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.15).next_to(cap, DOWN, buff=0.5)
         VGroup(big, cap, add).move_to(ORIGIN)
         with self.voiceover(
             "And every signal we look at is a trial. The House counts them all, across the series, because the more configurations "
-            "a researcher tries, the more one of them will look good by chance; the two hundred and eight predictors enter as one "
-            "registered meta-test. Part twenty-six shows how to deflate a result by that count, and the hold-out years, 2021 "
+            "a researcher tries, the more one of them will look good by chance; the two hundred and eight published predictors count "
+            "as two hundred and eight trials, one each. Part twenty-six shows how to deflate a result by that count, and the hold-out years, 2021 "
             "onward, are sealed until then."
             " Not every event-driven trade starts from the statements. Next, one whose payoff is written into a contract: merger arbitrage."
         ):

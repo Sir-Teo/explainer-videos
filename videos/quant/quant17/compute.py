@@ -36,7 +36,8 @@ from explainer.ai.cache import Cache
 from explainer.quant.house import deep as D, pit
 
 CACHE = Cache("quant17")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 17)  # the series' trial counter as of this part
 
 N_SETS, CHUNK = 12000, 200
 

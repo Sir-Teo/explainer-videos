@@ -93,7 +93,7 @@ the S&P 500's daily closes for 1986–1987 (Yahoo).
 * **18. Frontier.** Reversionary Heston refitted with κ = 15, 30, 60, 120: ξ = 4.7, 7.0, 11.0, 18.5 (ξ/√κ 1.20 → 1.69),
   3-day error 5.3 → 3.3–3.6 while the overall fit worsens 1.33 → 1.78. The quintic OU model; Guyon–Mustapha;
   Choi–Kwok; Reisinger–Tsianni; Wang et al. (2026).
-* **Recap, desk questions, problems.** Rule 13; the trial counter stays at 73.
+* **Recap, desk questions, problems.** Rule 13; the trial counter stays at 310.
 
 ## Build it
 
@@ -210,7 +210,7 @@ Hou et al. (2020) and Matic–Packham–Härdle (2023) on bitcoin options.
 * The Surface: Deribit BTC option trades on 10 December 2025 (193 quotes, expiries from 3 to 289 days).
 * Weekly surfaces: every Wednesday from 3 January 2024 to 26 November 2025 (100 days), as in Part 12.
 * Binance BTCUSDT daily (2021-04 to 2025-11) and hourly (2024–2025); Deribit DVOL daily; S&P 500 daily 1986–1987.
-* No strategy was tested (the minimum-variance delta is descriptive hedging); the trial counter is unchanged at 73.
+* No strategy was tested (the minimum-variance delta is descriptive hedging); the trial counter is unchanged at 310.
 
 ---
 

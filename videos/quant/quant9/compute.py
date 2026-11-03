@@ -53,7 +53,8 @@ from explainer.quant.house import arbitrage as A
 from explainer.quant.house import bs, smile, surface
 
 CACHE = Cache("quant9")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 9)  # the series' trial counter as of this part
 
 DAY = surface.DAYS[0]
 

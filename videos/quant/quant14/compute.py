@@ -35,7 +35,8 @@ from explainer.quant import data
 from explainer.quant.house import bs, pit, rough as R, sim, smile, stochvol as sv, surface
 
 CACHE = Cache("quant14")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 14)  # the series' trial counter as of this part
 Q13 = Cache("quant13")
 ROOT = Path(__file__).resolve().parents[3]
 

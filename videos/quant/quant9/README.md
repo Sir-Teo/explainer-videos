@@ -101,7 +101,7 @@ Every number is computed by the series' own code ([`compute.py`](compute.py), th
   dual (u, v, h as networks, penalty method), 3 seeds × 10,000 steps: bounds 0.2194, 0.2192, 0.2191, 0.73–0.85% above
   the LP's 0.2175. Guyon (2024), Neufeld–Papapantoleon–Xiang (2023), Bartl–Beiglböck–Pammer (2026), Heston–Jacobs–Kim
   (2023).
-* **The arbitrage checker, recap, desk questions, problems.** Rule 10; the trial counter stays at 72.
+* **The arbitrage checker, recap, desk questions, problems.** Rule 10; the trial counter stays at 308.
 
 Hands-on: six labs (`implied_forward`, `simplex`, `crr`, `static_checks`, `power_iteration`, `mot_bounds`), replays
 (simplex pivots, the SVI fit, power iteration, MOT grid walls, entropic iterations, the neural dual with three seeds),
@@ -214,7 +214,7 @@ hour by hour, cached in `.cache/quant_data/`, each hour's SHA-256 recorded in `v
   Chicago Booth Review); box rates (NY Fed Liberty Street Economics, October 2023); BOXX (annual report on Form N-CSR,
   30 September 2025); Royal Dutch/Shell (RBA RDP 2003-06); LTCM (Federal Reserve History; President's Working Group,
   April 1999).
-* No strategy was tested; the trial counter stays at 72.
+* No strategy was tested; the trial counter stays at 308.
 
 ---
 
@@ -272,4 +272,4 @@ hour by hour, cached in `.cache/quant_data/`, each hour's SHA-256 recorded in `v
 
 * 曲面：Deribit 2025年12月10日00:00—12:00 UTC的比特币期权成交；同时段期货成交（本部分新增）；币安BTCUSDT日收盘价。全部在数据清单中记录校验和。
 * 合成数据在屏幕上标注：单期市场、罗斯经济、加倍与泡沫模拟、三叉超复制、套利受限基金。所有随机数都设定了种子。
-* 本部分没有检验任何策略；试验计数器保持72。
+* 本部分没有检验任何策略；试验计数器保持308。

@@ -82,7 +82,7 @@ courts and events come from the public record, with secondary reports labelled "
   Kelly 0.20); a race of four bettors × four edges × 8 seeds (no edge: 3.1–4.5% false alarms; at SR 0.05 the fixed
   menu, median 3,054 days, beats ONS 3,393 and aGRAPA 3,475, the oracle needs 1,865); the hook's tests with the
   learner; a betting confidence sequence for Bitcoin's mean (−16 to +28 bp a day at the end of 2020). **Lab 5:**
-  `ONSBettor`; Rule 5 gains "the stake may be learned"; trial counter 82.
+  `ONSBettor`; Rule 5 gains "the stake may be learned"; trial counter 231.
 * **17. The house, the book and the market.** Nevada roulette hold 17.34% (2024) against a 5.26% edge: about 3.3 bets
   per dollar of chips (UNLV); Azuma's bound against the exact chance the house is behind; Thorp, *Uston v. Resorts*,
   Ivey; Kaunitz, Zhong and Kreiner's bookmaker study; Flutter's US sportsbook margin (7.9%, 2024); Benter (as

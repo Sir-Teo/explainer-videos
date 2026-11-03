@@ -165,7 +165,7 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
   data-driven hedging of vanilla index books since 2018, a large share of its Euro Stoxx vanilla book priced with deep
   hedging, the extension to cliquets); SR 26-2 (Federal Reserve, 17 April 2026); PRA SS1/23; the arXiv abstracts of
   the 2023–2026 papers.
-* No strategy was tested; the trial counter is unchanged at 73.
+* No strategy was tested; the trial counter is unchanged at 310.
 
 ---
 

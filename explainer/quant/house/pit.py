@@ -110,3 +110,47 @@ def open_envelope(strategy: str, name: str, dates, values):
 def trials_so_far() -> int:
     """The trial counter: configurations tried, summed over every registered strategy."""
     return int(sum(r["trials"] for r in _read()["registered"].values()))
+
+
+# Which part registered each strategy, and in what order within it.  The counter a part shows is the series'
+# count up to that point: every earlier part's registrations, plus this part's up to the one just made.
+PARTS = {
+    "accounting_signals_part3": (3, 1), "cape_forecast_2021_2030": (3, 2), "osap_predictors_part3": (3, 3),
+    "earnings_forecaster_part3": (3, 4),
+    "btc_mean_confseq": (4, 1), "sign_continuation_ons": (4, 2), "sign_continuation_eprocess_btc": (4, 3),
+    "sign_continuation_eprocess_us": (4, 4),
+    "cir_mle_dtb3": (5, 1), "btc_hawkes_large_moves": (5, 2), "btc_rough_hurst": (5, 3), "btc_nsde_generator": (5, 4),
+    "capm_two_pass": (6, 1), "industry_capm_alphas": (6, 2), "industry_momentum_panel": (6, 3),
+    "fomc_announcement_days": (6, 4), "turn_of_month_event": (6, 5), "lookahead_rotation_toy": (6, 6),
+    "shiller_oos_predictors": (6, 7),
+    "btc_vol_race_2020": (7, 1), "btc_vol_harnet_2020": (7, 2), "btc_vol_toy_tsfm_2020": (7, 3),
+    "btc_vol_toy_tsfm_np_2020": (7, 4),
+    "kelly_us_split": (8, 1), "myopic_loss_aversion_us": (8, 2), "vol_target_us_market": (8, 3),
+    "btc_vol_forecast_edge": (11, 1), "btc_hedged_straddle_ml": (11, 2),
+}
+
+
+def trials_upto(part: int, through: str | None = None) -> int:
+    """The trial counter as Part ``part`` shows it: all registrations of earlier parts, plus this part's, or only
+    those up to and including ``through``.  Every registered strategy must have a part."""
+    reg = _read()["registered"]
+    missing = sorted(set(reg) - set(PARTS))
+    if missing:
+        raise RuntimeError(f"give these registrations a part in pit.PARTS: {missing}")
+    cut = PARTS[through] if through is not None else (part, 10 ** 9)
+    return int(sum(r["trials"] for k, r in reg.items() if PARTS[k] <= cut))
+
+
+def counted(loader, part: int, through: dict | None = None, items=("frontier_ml",)):
+    """Wrap a part's cache loader so every envelope item (and ``items``) reports the series counter as of that part,
+    whenever its cache was computed: Part 3's trials do not appear in Part 11's count, and later parts never see a
+    count that went down.  ``through`` maps an item to the registration it should count up to."""
+    through = through or {}
+
+    def load(name: str):
+        d = loader(name)
+        if isinstance(d, dict) and "trials" in d and (name.startswith("envelope") or name in items):
+            d = dict(d)
+            d["trials"] = trials_upto(part, through.get(name))
+        return d
+    return load

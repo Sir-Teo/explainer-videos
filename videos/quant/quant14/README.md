@@ -168,7 +168,7 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
   findings (biggest one-day spike; quotes and put bid–ask spreads; ETFs and dispersion unlikely main drivers); BIS 90
   (leveraged-trade unwinding amplified the reaction); Cboe's VIX1D release; Risk's awards. The pre-market figure is
   quoted as "above 65" (SEC); BIS 95's "around 66" could not be read from the PDF and is not used.
-* No strategy was tested; the trial counter is unchanged at 73.
+* No strategy was tested; the trial counter is unchanged at 310.
 
 ---
 
@@ -255,4 +255,4 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 
 * 所有数字由`compute.py`计算并缓存在`.cache/quant14/`；长计算项会保存中间结果并可续算。
 * 事实均对照一手来源核实（见英文部分）。开盘前的VIX数字引用为“超过65”（美国证券交易委员会工作人员论文）。
-* 本部分没有检验任何策略；试验计数器仍为73。
+* 本部分没有检验任何策略；试验计数器仍为310。

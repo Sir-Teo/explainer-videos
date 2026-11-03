@@ -35,7 +35,8 @@ from explainer.quant import data
 from explainer.quant.house import econ, pit
 
 CACHE = Cache("quant6")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 6)  # the series' trial counter as of this part
 
 
 def _json(x):

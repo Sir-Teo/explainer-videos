@@ -113,7 +113,7 @@ that come from a firm's or vendor's own account are labelled as such.*
   error 4 × 10⁻² → 3.7 × 10⁻⁶ from 8 to 32 nodes per axis (1,024 COS calls); a query 0.11 ms against 0.35 ms for COS.
   RQMC median-of-means (Pan–Owen 2023): 2,000× more accurate than the mean at 1,024 points. Junike (2024),
   Bayer–Pelizzari–Schoenmakers (2023), Stamatopoulos–Zeng (2024), Dalzell et al. (2023), Glau–Kressner–Statti (2020).
-* **The pricing engine, recap, desk questions, problems** (2.5). Rule 16; the trial counter stays at 73.
+* **The pricing engine, recap, desk questions, problems** (2.5). Rule 16; the trial counter stays at 310.
 
 ## Hands-on
 
@@ -234,7 +234,7 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 * Monte Carlo errors are reported as standard errors or root-mean-square errors over repeated seeds.
 * `american.bermudan_tree25` (a 25-step tree, 6.146) is no Bermudan reference and is not shown; `bermudan_ref` is.
 * Part 17's deep-stopping result is read from `.cache/quant17/stopping.json`, not recomputed.
-* No strategy was tested; the trial counter is unchanged at 73.
+* No strategy was tested; the trial counter is unchanged at 310.
 
 ---
 
@@ -281,7 +281,7 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 * **17. 业界。** 交易×情景；SIMM与FRTB；丹斯克银行（据Risk.net报道）；摩根大通与Maxeler（据银行与供应商自述，八小时降到四分钟以内）；STAC-A2；QuantLib、ORE、OCC；本机实测（Python循环3.6秒、numpy 19毫秒、float32 2.3毫秒，四个进程并不更快）；夜间验证报告。
 * **18. 量子振幅估计。** Grover旋转；最大似然振幅估计回放：斜率−0.94对−0.5；资源估算：8000逻辑量子比特、T深度5400万（2021），4700逻辑量子比特、10⁹个T门、45 MHz（2024）。
 * **19. 前沿。** 切比雪夫定价器（32×32节点误差3.7 × 10⁻⁶）；随机化拟蒙特卡洛的中位数（Pan–Owen 2023）；阅读清单。
-* **定价引擎、回顾、交易台问题与习题。** 第16条规矩；试验计数器仍为73。
+* **定价引擎、回顾、交易台问题与习题。** 第16条规矩；试验计数器仍为310。
 
 ## 交易台问题与解答
 
@@ -307,4 +307,4 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 * 墙钟时间在共享且繁忙的构建机器上取多次运行中的最好值，换一台机器会不同；叙述比较成本时同时给出与机器无关的计数。
 * `american.bermudan_tree25`（25步二叉树，6.146）不是百慕大参考值，不在画面上使用；`bermudan_ref`才是。
 * 第17部分的深度停时结果读取自其缓存，不重新计算。
-* 本部分没有测试任何策略；试验计数器仍为73。
+* 本部分没有测试任何策略；试验计数器仍为310。

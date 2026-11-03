@@ -89,7 +89,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   and Derman–Kani, Dupire at Paribas, SVI at Merrill Lynch, Andreasen–Huge at Danske Bank); the House's builder.
 * **19. Frontier, 2023–2026.** Operator deep smoothing (ICLR 2025), VolGAN (2024), surfaces as images (Kelly et al.
   2023), no-arbitrage SVI and eSSVI (Martini–Mingone 2022); one network for all weeks, trained here (three seeds).
-* **Outro.** Twelve lines, Rule 12 (the trial counter stays at 73), three desk questions, seven problems, payoffs,
+* **Outro.** Twelve lines, Rule 12 (the trial counter stays at 310), three desk questions, seven problems, payoffs,
   references.
 
 ## Build it
@@ -190,7 +190,7 @@ paper; Deribit DVOL methodology: ch. 11.
   with no gaps, each built by `surface.build` and checksummed in `videos/quant/data/manifest.json`.
 * Binance BTCUSDT hourly; Deribit DVOL; FRED VIXCLS (1990–2025) and VXVCLS (2007–2025); Yahoo Finance ^GSPC
   (1990–2025); Cboe Futures Exchange VX settlements for the twelve expiries May 2017 – April 2018 (`data.cboe_vx`).
-* No strategy was tested; the predictability regression of ch. 12 is descriptive. The trial counter stays at 73.
+* No strategy was tested; the predictability regression of ch. 12 is descriptive. The trial counter stays at 310.
 
 ---
 
@@ -262,4 +262,4 @@ paper; Deribit DVOL methodology: ch. 11.
 * 基准曲面：2025年12月10日和11日的Deribit比特币期权成交。
 * 周度曲面：2021年4月7日至2025年11月26日每个周三的Deribit成交（UTC 00:00–12:00），共243天，无缺失，每一份都记录校验和。
 * 币安BTCUSDT小时数据；Deribit DVOL；FRED的VIXCLS与VXVCLS；雅虎财经^GSPC；Cboe期货交易所的VX结算价（`data.cboe_vx`）。
-* 没有检验任何策略；第12章的预测回归是描述性的。试验计数器保持73。
+* 没有检验任何策略；第12章的预测回归是描述性的。试验计数器保持310。

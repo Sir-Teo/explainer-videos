@@ -2373,3 +2373,11 @@ def test_replicate_put_keeps_the_floor_without_gaps():
     gap[100] = -0.25
     o = hedge.replicate_put(gap, 0.0, 95.0, 1.0, 0.15, start=100.0)
     assert o["V"][-1] < fv and o["w"][101] < o["w"][99]
+
+
+def test_trial_counter_is_cumulative_by_part():
+    """Every registration has a part, and the counter a part shows never goes down from one part to the next."""
+    from explainer.quant.house import pit
+    vals = [pit.trials_upto(n) for n in range(1, 44)]
+    assert all(a <= b for a, b in zip(vals, vals[1:]))
+    assert vals[-1] == pit.trials_so_far()

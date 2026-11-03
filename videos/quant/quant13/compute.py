@@ -33,7 +33,8 @@ from explainer.quant import data
 from explainer.quant.house import bs, pit, smile, stochvol as sv, surface, volsurface as V
 
 CACHE = Cache("quant13")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 13)  # the series' trial counter as of this part
 
 DAY = surface.DAYS[0]
 MODELS = ("Heston", "Bates", "VG", "NIG")

@@ -33,7 +33,8 @@ from explainer.quant import data
 from explainer.quant.house import bs, exotics as X, pit
 
 CACHE = Cache("quant15")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 15)  # the series' trial counter as of this part
 
 DPM = 21  # trading days a month
 TERMS = dict(ko=1.03, ki=0.75, lockup=3, months=24, r=0.02)

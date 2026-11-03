@@ -102,7 +102,7 @@ paper.
   1.04 → 0.67. The VIX above next-month realized on 85% of days (by 4.1 points); R² 0.52 (VIX), 0.50 (GARCH); both
   significant together (t 7.2 and 3.2).
 * **18. The volatility forecaster.** The module table; Rule 8; eleven models registered in this part, the series' trial
-  counter as read at build time. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
+  counter at 305. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
   9.1% (1 day) → 15.3% (1 year), long run 17.6%.
 * **Recap, four desk questions, six problems, payoffs, references.**
 

@@ -39,7 +39,8 @@ from explainer.quant.house import control as C
 from explainer.quant.house import pit, trees
 
 CACHE = Cache("quant8")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 8)  # the series' trial counter as of this part
 
 MU, R, SIG = 0.08, 0.02, 0.18  # the illustrative market of the Merton, PPO and fractional-Kelly items
 

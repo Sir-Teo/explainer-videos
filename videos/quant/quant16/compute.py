@@ -52,7 +52,8 @@ from explainer.ai.cache import Cache
 from explainer.quant.house import bs, engine as E, pit, stochvol as sv, trees
 
 CACHE = Cache("quant16")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 16)  # the series' trial counter as of this part
 
 S0, K, T, SIG, R = 100.0, 100.0, 1.0, 0.2, 0.05
 HES = (0.04, 1.5, 0.04, 0.5, -0.7)  # v0, kappa, theta, xi, rho

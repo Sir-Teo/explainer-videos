@@ -31,7 +31,8 @@ from explainer.quant import data
 from explainer.quant.house import bs, hedge, paths, pit, quoting, surface, vol
 
 CACHE = Cache("quant11")
-load = CACHE.load
+from explainer.quant.house import pit as _pit  # noqa: E402
+load = _pit.counted(CACHE.load, 11, {"envelope": "btc_vol_forecast_edge"})  # the series' trial counter as of this part
 
 YEAR_H = 365 * 24
 

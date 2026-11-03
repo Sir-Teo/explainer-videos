@@ -107,7 +107,7 @@ simulations, labelled on screen.
 * **18. The frontier, 2023–2026.** A graph of the part's chapters with each paper lighting the edge it builds (list
   below).
 * **19. The sizing module.** The new House functions; the sizing pipeline (Kelly 238% → half 119%; the robust fraction at a 20% detection error, 145%, is not smaller; the
-  band; the drawdown floor; recompute on volatility); Rule 9 extended. The trial counter reads 82 (this part
+  band; the drawdown floor; recompute on volatility); Rule 9 extended. The trial counter reads 308 (this part
   registered three tests).
 * **Recap, desk questions, problems.**
 
@@ -319,7 +319,7 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 * **16. 强化学习（实验五）。** 五个种子最终在169%–184%（季度最优184%），最多每年少赚0.04%；`TrainingReplay`回放。有成本时：PPO没有找到区间，净增长7.27–7.33%，区间7.42%，按季再平衡到默顿7.13%。
 * **17. 谁以定仓位为生。** 索普1994年的体育投注测试；本特的分数凯利；伯利坎普与Axcom（大奖章的仓位方法未公开）；挪威主权基金1.25个百分点的跟踪误差上限；桥水全天候；据《华尔街日报》报道的千禧年回撤规则。格罗斯曼-周对凯利（最大回撤17%对99%）；波动率目标（夏普0.51对0.44，阿尔法每年3.5%，t = 2.9）。
 * **18. 前沿，2023–2026。** 各章构成一张图，每篇论文点亮它所建立的那条边。
-* **19. 仓位模块。** 新函数；定仓位流程（凯利238% → 一半119%；20%检测误差下的稳健比例145%并不更小）；扩展的第九条规则；试验计数器82。
+* **19. 仓位模块。** 新函数；定仓位流程（凯利238% → 一半119%；20%检测误差下的稳健比例145%并不更小）；扩展的第九条规则；试验计数器308。
 * **回顾、交易台问题与习题。**
 
 ## 交易台问题与解答

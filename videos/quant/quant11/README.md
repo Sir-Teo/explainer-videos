@@ -95,7 +95,7 @@ statements; no final finding had been made at the time of writing.*
   always selling earns (+0.86 a week, t 2.6) against +0.32 for chapter 7's single signal. Bali–Beckmeyer–Mörke–Weigert
   (2023), Cao et al. (2023), Baldacci–Bergault–Guéant (2021), Fang–Xu (2023).
 * **The quoting engine, recap, desk questions, problems (outro).** The House's new functions; Rule 11; the trial
-  counter (91 when chapter 18 registered).
+  counter (310 when chapter 18 registered).
 
 ## Textbook audit
 
