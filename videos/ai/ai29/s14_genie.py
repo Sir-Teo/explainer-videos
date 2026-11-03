@@ -90,8 +90,10 @@ class Genie(VoiceoverScene):
             history_card(r"Aug 2025", r"Genie 3", r"$720$p at $24$ frames a second, \ in real time; \ consistent for a few "
                          r"minutes, \ remembering what it drew up to a minute ago; \ text prompts change the world "
                          r"as you go; \ used to train DeepMind's SIMA agent", width=6.6, color=HIST, font_size=23),
-            history_card(r"Jan 2026", r"Project Genie", r"a prototype on Genie 3 for some subscribers in the US: \ "
-                         r"$60$-second worlds", width=6.6, color=HIST, font_size=23),
+            history_card(r"Jan 2026", r"Project Genie",
+                         (r"Genie 3 原型，部分美国订阅用户可用：\ $60$ 秒世界" if zh() else
+                          r"a prototype on Genie 3 for some subscribers in the US: \ $60$-second worlds"),
+                         width=6.6, color=HIST, font_size=23),
             history_card(r"27 Oct 2026", r"Genie 4 \ (Google DeepMind's description)", r"sound generated with the "
                          r"pictures; \ Gemini plans events in the world; \ pitched for training robots; \ a research "
                          r"preview, \ and objects can still drift", width=6.6, color=CLAIM, font_size=23),
