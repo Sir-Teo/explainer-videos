@@ -182,7 +182,7 @@ class Doob(VoiceoverScene):
         n = iv["n"]
         k = np.arange(0, n + 1, 20)[: len(iv["X"])]
         X, AF, AG, Y, AY = (np.asarray(iv[c], float) for c in ("X", "AF", "AG", "Y", "AY"))
-        g = axes([0, n], [-250, 800], x_length=7.8, y_length=4.6, xlabel=r"hands of punto banco (simulated)",
+        g = axes([0, n], [-250, 800], x_length=6.4, y_length=4.6, xlabel=r"hands of punto banco (simulated)",
                  ylabel=r"units won", xticks=[0, 5000, 10000], yticks=[-200, 0, 200, 400, 600, 800],
                  font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -198,13 +198,14 @@ class Doob(VoiceoverScene):
             leg,
             MathTex(rf"\text{{after {n:,} hands: }} {iv['X_end']:+.0f}\ \text{{vs}}\ {iv['Y_end']:+.0f}".replace(",", "{,}"),
                     font_size=26),
-            label(r"edge figures from the court record: house edge 1.24\% (player), 1.06\% (banker); perfect edge "
-                  r"sorting, about 6.5\% to the punter", font_size=17, color=GREY_B),
-            label(r"\textit{Ivey v Genting Casinos} [2014] EWHC 3394 (QB); [2017] UKSC 67", font_size=17, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
-        for s_ in side[2:]:
-            if s_.width > 5.0:
-                s_.scale_to_fit_width(5.0)
+            wrapped_label(r"edge figures from the court record: house edge 1.24\% (player), 1.06\% (banker); perfect "
+                          r"edge sorting, about 6.5\% to the punter", 5.0, 17, GREY_B),
+            wrapped_label(r"\textit{Ivey v Genting Casinos} [2014] EWHC 3394 (QB); [2017] UKSC 67", 5.0, 17, GREY_B),
+        )
+        if side[0].width > 5.0:
+            side[0].scale_to_fit_width(5.0)
+        # positioned after any scaling, so the column stays right of the chart
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         tag = label(r"simulated, with the court's edge figures; ties ignored", font_size=18, color=QC.IDEA).to_edge(
             UP, buff=0.3)
         pred = desk_question(r"Is the drift a property of the price, or of what you know?",
