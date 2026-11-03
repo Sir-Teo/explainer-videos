@@ -73,7 +73,8 @@ class SNR(VoiceoverScene):
             d = Dot(ax.c2p(np.clip(p["alpha"], -0.4, 0.45), np.clip(p["beta"], 0, 1.6)), radius=0.06, color=EST)
             V = np.asarray(p["V"])
             ro = VGroup(
-                MathTex(rf"{p['date'] // 100}:\ {p['months'] / 12:.0f}\ \text{{years}}", font_size=30, color=WHITE),
+                MathTex(rf"{p['date'] // 100}:\ {p['months'] / 12:.0f}\ \text{{{'year' if round(p['months'] / 12) == 1 else 'years'}}}",
+                        font_size=30, color=WHITE),
                 MathTex(rf"\alpha = {100 * p['alpha']:+.1f}\% \pm {196 * np.sqrt(V[0, 0]):.1f}\%", font_size=28,
                         color=ALT),
                 MathTex(rf"\beta = {p['beta']:.2f} \pm {1.96 * np.sqrt(V[1, 1]):.2f}", font_size=28, color=GOOD),
@@ -129,7 +130,7 @@ class SNR(VoiceoverScene):
                              rf"$\sqrt{{(1 + SR^2/2)/T}} = \sqrt{{1.5/4}} \approx {s['se_desk']:.2f}$: the 95\% "
                              r"interval runs from below zero to above two", width=6.2, font_size=21)
         desk.next_to(leg, DOWN, buff=0.3).to_edge(RIGHT, buff=0.4)
-        q = predict(r"To halve the standard error of $\alpha$, how many more years?", width=6.0).to_edge(DOWN, buff=0.15)
+        q = predict(r"To halve the standard error of $\alpha$, how many more years?", width=5.0).to_corner(DR, buff=0.3)
         q.to_edge(LEFT, buff=0.5)
         with self.voiceover(
             "Put numbers on it. A strategy with a true Sharpe ratio of a half, a good strategy, needs "
@@ -151,6 +152,6 @@ class SNR(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(desk))
             vo.wait_until("c")
-            self.play(FadeIn(q))
+            self.play(FadeOut(desk), FadeIn(q))  # the desk question is answered; the next one takes its corner
         self.wait(0.4)
         self.clear_scene()
