@@ -33,7 +33,10 @@ class Importance(VoiceoverScene):
         ta = top.ax
         xs = np.linspace(-4, 8, 300)
         p = curve(ta, xs, norm.pdf(xs), SPOT, stroke_width=3)
-        reg = ta.get_area(ta.plot(lambda x: norm.pdf(x), x_range=[zs, 8]), x_range=[zs, 8], color=BAD, opacity=0.5)
+        # the tail beyond the strike, filled by hand (Axes.get_area breaks on this manim version's 2D axes)
+        xt = np.linspace(zs, 8, 120)
+        reg = Polygon(*[ta.c2p(float(x), 0) for x in (zs, 8)][::-1], *[ta.c2p(float(x), float(norm.pdf(x))) for x in xt],
+                      stroke_width=0, fill_color=BAD, fill_opacity=0.5)
         t = ValueTracker(0.0)
         q = always_redraw(lambda: curve(ta, xs, norm.pdf(xs - t.get_value()), OPT, stroke_width=3))
         bot = axes([0, 7], [-0.5, 2.5], x_length=8.2, y_length=2.6, xlabel=r"shift $\theta$",
