@@ -237,7 +237,7 @@ class Learning(VoiceoverScene, ThreeDScene):
         cells.arrange_in_grid(rows=4, cols=6, buff=(0.55, 0.28), col_alignments="lccccc")
         heads = VGroup(label(r"held-out RMSE, vol points", font_size=19, color=GREY_A).next_to(VGroup(cells[1], cells[3]), UP,
                                                                                                buff=0.2),
-                       label(r"violations (0 for SSVI by construction)", font_size=19, color=GREY_A).next_to(
+                       label(r"violations", font_size=19, color=GREY_A).next_to(
                            VGroup(cells[4], cells[5]), UP, buff=0.2))
         tab = VGroup(VGroup(heads, cells),
                      label(rf"vega-weighted, network against SSVI: {np.mean(n['pen_test_vw']):.2f} against "
