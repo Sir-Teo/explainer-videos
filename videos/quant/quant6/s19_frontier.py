@@ -94,7 +94,7 @@ class Frontier(VoiceoverScene):
                   ylabel=r"out-of-sample performance", xticks=[0, 1, 10], yticks=[], font_size=14)
         g2 = axes([0, 10], [-1, 1], x_length=5.2, y_length=3.2, xlabel=r"same method, data with reversals",
                   ylabel=r"performance", xticks=[], yticks=[0], font_size=14)
-        VGroup(g1, g2).arrange(RIGHT, buff=0.9).shift(DOWN * 0.3)
+        VGroup(g1, g2).arrange(RIGHT, buff=0.9).shift(UP * 0.35)  # room underneath for the question
         xs = np.linspace(0.05, 10, 80)
         up = curve(g1.ax, xs, 0.15 + 0.6 * (1 - np.exp(-xs / 2)), GOOD, stroke_width=3.5)
         down = curve(g2.ax, xs, -0.1 - 0.5 * (1 - np.exp(-xs / 2)), BAD, stroke_width=3.5)
