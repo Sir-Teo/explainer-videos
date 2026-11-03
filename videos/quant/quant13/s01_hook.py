@@ -66,8 +66,8 @@ class Hook(VoiceoverScene):
         ax = g.ax
         line = curve(ax, t, np.clip(dv, 0.2, 1.6), IV, stroke_width=2.4)
         tags = VGroup()
-        # Terra and FTX peak six months apart: their labels go to either side; the yen label rises above the line
-        for (a, b), name, side, lift in (((_ts(2022, 5, 1), _ts(2022, 6, 30)), r"Terra--Luna, May 2022", LEFT, 0.45),
+        # Terra and FTX peak six months apart: Terra's label rises above (clear of 2021's spike), FTX's to its right
+        for (a, b), name, side, lift in (((_ts(2022, 5, 1), _ts(2022, 6, 30)), r"Terra--Luna, May 2022", ORIGIN, 1.0),
                                          ((_ts(2022, 11, 1), _ts(2022, 11, 30)), r"FTX, November 2022", RIGHT, 0.25),
                                          ((_ts(2024, 8, 1), _ts(2024, 8, 15)), r"the yen carry unwind, August 2024", ORIGIN,
                                           0.9)):
