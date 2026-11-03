@@ -150,7 +150,7 @@ class Skew(VoiceoverScene):
                     r"the skewness over $\sigma\sqrt T$ (constants aside); hence $1/T$", 20),
                 why(r"a diffusion: chapter 4's constant at short maturities, damped once mean reversion acts", 20)]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.6, edge=6.9)  # the pause card takes the corner
-        pp = pause(r"A model's skew is constant as $T \to 0$. Can it fit a 3-day expiry?", width=4.6).to_corner(DR, buff=0.3)
+        pp = pause(r"A model's skew is constant as $T \to 0$. Can it fit a 3-day expiry?", width=4.4).to_corner(DL, buff=0.3)  # the rows sit right of centre
         with self.voiceover(
             (
             "Why one over maturity for jumps? A Lévy process has independent identical increments, so every cumulant "
