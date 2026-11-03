@@ -130,10 +130,10 @@ class PDE(VoiceoverScene, ThreeDScene):
                 why(r"if $u_t + \mathcal{L}u - r u = 0$ and $u(T, \cdot) = g$, the drift vanishes: $M$ is a martingale "
                     r"(Feynman 1948, Kac 1949)", 20),
                 why(r"Vasicek: try the exponential-affine form; match the coefficients of $r$ and of 1", 20)]
-        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.2, buff=0.45, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.45, x=-2.2, buff=0.3, edge=6.9)
         g = axes([0, 30], [0, 0.03], x_length=4.6, y_length=2.2, xlabel=r"maturity (years)", ylabel=r"Vasicek yield",
                  xticks=[0, 10, 20, 30], yticks=[0, 0.01, 0.02, 0.03], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                 font_size=15).to_corner(DR, buff=0.35)
+                 font_size=15).to_corner(DR, buff=0.2)  # below the last ladder row
         ax = g.ax
         line = curve(ax, fk["taus"], fk["curve"], ITO, stroke_width=3)
         dot = Dot(ax.c2p(10, DGS10_DEC2020), radius=0.07, color=JUMP)
