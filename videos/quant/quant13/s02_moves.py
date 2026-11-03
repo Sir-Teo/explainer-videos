@@ -137,14 +137,14 @@ class Moves(VoiceoverScene):
                  xticks=[1, 20, 40, 60], yticks=[-0.1, 0, 0.1, 0.2], font_size=16).to_edge(LEFT, buff=0.8).to_edge(UP, buff=1.0)
         # short enough that the three-row ladder below starts clear of its axis labels
         ax = g.ax
-        w = 0.35
+        w = 0.42 * (ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0])  # two bars per lag, side by side, with a gap
 
         def bars(vals, col, dx):
             return VGroup(*[Rectangle(width=w, height=max(abs(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1]), 1e-3), stroke_width=0,
                                       fill_color=col, fill_opacity=0.85).move_to(ax.c2p(l_ + dx, v / 2))
                             for l_, v in zip(lags, vals)])
 
-        br, ba = bars(acf_r, GREY_B, -0.2), bars(acf_a, VAR, 0.2)
+        br, ba = bars(acf_r, GREY_B, -0.23), bars(acf_a, VAR, 0.23)
         band_ = Rectangle(width=abs(ax.c2p(61, 0)[0] - ax.c2p(0, 0)[0]), height=abs(ax.c2p(0, 0.096)[1] - ax.c2p(0, 0)[1]),
                           stroke_width=0, fill_color=GREY_D, fill_opacity=0.35).move_to(ax.c2p(30.5, 0))
         leg = legend([(GREY_B, r"returns $r_t$: no memory"), (VAR, r"sizes $|r_t|$: long memory")], font_size=18).next_to(
