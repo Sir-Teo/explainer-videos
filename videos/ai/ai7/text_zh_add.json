@@ -465,7 +465,11 @@
   "one weight per length of match, \\\\ chosen on held-out text from the novels": "每种匹配长度一个权重，\\\\ 用小说中留出的文本选择",
   "fixed kernel: \\ conditioning is linear algebra; \\ $\\sigma_*^2$ does not depend on $\\mathbf{y}$": "固定核函数：\\ 条件化就是线性代数；\\ $\\sigma_*^2$ 与 $\\mathbf{y}$ 无关",
   "raise the bound, \\ and the gap narrows \\ (VAEs, Part 20)": "抬高下界，\\ 差距就缩小 \\ （变分自编码器，第20部分）",
-  "variational inference: \\ restricted $q$ family, \\ KL $\\ge 0$": "变分推断：\\ 限制 $q$ 的分布家族，\\ KL $\\ge 0$"
+  "variational inference: \\ restricted $q$ family, \\ KL $\\ge 0$": "变分推断：\\ 限制 $q$ 的分布家族，\\ KL $\\ge 0$",
+  "Part 1 best": "第1部分最优模型",
+  "Kneser--Ney": "Kneser--Ney平滑",
+  "Capped suffix + KN": "有上限的后缀模型 + KN",
+  "Bits per scored character; original, different starting positions. \\\\ Part 1 order: passage-selected; KN order: validation-selected. \\\\ Not a matched-cohort comparison with Part 1.": "每个计分字符的比特数；沿用各自不同的计分起点。 \\\\ 第1部分按测试段落选阶数；KN按验证集选阶数。 \\\\ 与第1部分的比较并非同一计分样本上的对照。"
  },
  "patterns": []
 }

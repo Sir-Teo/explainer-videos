@@ -7,6 +7,7 @@ import numpy as np
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.compute import density2
+from videos.ai.ai7.scoreboard_recap import COHORT_NOTE, recap_rows
 from videos.ai.ai7.common import (AUSTEN, CAUSE, CONSONANT, DICKENS, HIDDEN, MONO, PART, SEEN, TOPIC_COLORS, VOICE1,
                                   VOICE2, VOWEL, ellipse_2sd, heat_grid, load, mix)
 
@@ -18,6 +19,19 @@ class Outro(VoiceoverScene):
         self.problems()
         self.next_time()
         self.references()
+
+    def counting_tile(self, sb):
+        rows = recap_rows(sb)
+        sbars = VGroup()
+        for i, (_, name, bits) in enumerate(rows):
+            w = 2.4 * bits / max(2.5, max(row[2] for row in rows))
+            y = 0.55 - 0.58 * i
+            sbars.add(VGroup(
+                label(name, font_size=20, color=GREY_A).move_to([-0.15, y + 0.23, 0]),
+                Rectangle(width=max(w, 0.001), height=0.18, stroke_width=0, fill_color=C.COUNTING,
+                          fill_opacity=0.45 + 0.25 * i).move_to([-1.2 + w / 2, y, 0]),
+                MathTex(f"{bits:.2f}", font_size=22, color=C.COUNTING).move_to([1.6, y, 0])))
+        return sbars
 
     # ------------------------------------------------------------------
     def tiles(self):
@@ -71,13 +85,7 @@ class Outro(VoiceoverScene):
         out.append((heat_grid(A, cell=0.3, color=C.BITS), r"alignment by EM", C.BITS))
         # 7. the scoreboard's two new rows
         sb = load("scoreboard")
-        rows = [r_ for r_ in sb["rows"] if r_.get("key") in ("best", "kn", "infini")]
-        sbars = VGroup()
-        for i, r_ in enumerate(rows):
-            w = 2.4 * r_["bits"] / 2.5
-            sbars.add(VGroup(Rectangle(width=w, height=0.32, stroke_width=0, fill_color=C.COUNTING,
-                                       fill_opacity=0.45 + 0.25 * i).move_to([-1.2 + w / 2, 0.5 - 0.5 * i, 0]),
-                             MathTex(f"{r_['bits']:.2f}", font_size=24, color=C.COUNTING).move_to([1.6, 0.5 - 0.5 * i, 0])))
+        sbars = self.counting_tile(sb)
         out.append((sbars, r"Kneser--Ney, \ $\infty$-gram", C.COUNTING))
         # 8. belief propagation on a tree
         pos = [[0, 0.8], [-0.8, 0], [0.8, 0], [-1.2, -0.8], [-0.4, -0.8], [0.4, -0.8], [1.2, -0.8]]
@@ -162,6 +170,10 @@ class Outro(VoiceoverScene):
             for cue, tile in zip(("pca", "ica", "em", "topics", "hmm", "alignment", "counting",
                                   "graphs", "causes", "gp", "optimization", "vi"), tiles):
                 vo.wait_until(cue)
+                if cue == "counting":
+                    note = label(COHORT_NOTE, font_size=18, color=GREY_A).to_edge(UP, buff=0.12)
+                    self.remove(head)
+                    self.add(note)
                 self.play(FadeIn(tile, shift=UP * 0.15, scale=0.95), run_time=0.35)
         self.wait(0.3)
         self.clear_scene()
