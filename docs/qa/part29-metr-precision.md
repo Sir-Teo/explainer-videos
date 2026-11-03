@@ -38,7 +38,19 @@ are unchanged. Deterministic full-precision point fits (days per doubling):
 The bootstrap resamples model rows, not METR task-level uncertainty; it must not
 be represented as reproducing METR's published confidence-interval methodology.
 No model training is involved. Numerical agreement does not establish causal
-per-step error reduction. This source-only follow-up does not repair or accept
-s07's CI clipping/layout or its causal narration; those remain explicit review
-gates. No METR rendering, ZH rendering, full-motion or listening acceptance is
-claimed. Private computed products and audit/render evidence are not committed.
+per-step error reduction. A subsequent bounded s07 follow-up fixes the witnessed plot defects: all 26
+published finite CI segments are drawn without truncation, the axis spans every
+endpoint, GPT-2's label moves clear of its tick, and the mixed 50%/80% plot uses
+an accurate axis label. The model-row bootstrap is identified on screen and
+contrasted with task resampling in matched EN/ZH narration. The constant-hazard
+interpretation is explicitly conditional, not an empirical per-step-error claim.
+The exponential model labels lambda as a continuous hazard rate per minute,
+not a discrete per-minute probability. Ratios compare task-level crossings
+across heterogeneous tasks; they do not establish a per-minute failure mechanism.
+
+Validation is limited to actual EN `Doubling.trend()` and `Doubling.eighty()`
+native endpoints plus selected transition frames, with the validated METR
+product as the sole input. Other scene methods, continuous playback, speech,
+listening and ZH rendering remain unaccepted. No new numerical run or dataset
+revision was needed for these layout/method corrections. Private computed
+products and audit/render evidence are not committed.

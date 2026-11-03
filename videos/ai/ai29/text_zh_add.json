@@ -557,7 +557,10 @@
   "requires a no-regret online learner": "需要无悔在线学习器",
   "in its head: \\ effective decay $0.963$": "在脑子里算：\\ 有效衰减 $0.963$",
   "ReAct, \\ with tools: \\ effective decay $0.979$": "ReAct，\\ 用工具：\\ 有效衰减 $0.979$",
-  "ReAct, \\ checking its work: \\ effective decay $0.993$": "ReAct，\\ 检查结果：\\ 有效衰减 $0.993$"
+  "ReAct, \\ checking its work: \\ effective decay $0.993$": "ReAct，\\ 检查结果：\\ 有效衰减 $0.993$",
+  "model-row bootstrap $95\\%$: \\\\ $102$--$155$ days": "模型行重抽样 $95\\%$：\\\\ $102$--$155$ 天",
+  "$50\\%$ and $80\\%$ time horizons \\ (log scale)": "$50\\%$ 和 $80\\%$ 时间跨度 \\\\ （对数刻度）",
+  "constant-hazard model: \\\\ rate $\\lambda$ per minute": "恒定风险模型：\\\\ 速率为每分钟 $\\lambda$"
  },
  "patterns": []
 }
