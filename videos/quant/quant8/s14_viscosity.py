@@ -72,7 +72,7 @@ class Viscosity(VoiceoverScene):
         self.clear_scene()
 
     def touch(self):
-        g = axes([-1, 1], [-0.1, 1.2], x_length=7.6, y_length=4.4, xticks=[-1, 0, 1], yticks=[], font_size=18)
+        g = axes([-1, 1], [-0.4, 1.2], x_length=7.6, y_length=4.6, xticks=[-1, 0, 1], yticks=[], font_size=18)
         g.to_edge(LEFT, buff=0.5).shift(DOWN * 0.4)
         ax = g.ax
         x = np.linspace(-1, 1, 401)
@@ -80,13 +80,13 @@ class Viscosity(VoiceoverScene):
         line = curve(ax, x, u, VALUE, stroke_width=4)
         slope = ValueTracker(-0.9)
         # above the peak at x = -0.5: phi(x) = 0.5 + s (x + 0.5) + 2 (x + 0.5)^2, touching from above
-        xs = np.linspace(-0.95, -0.05, 120)
+        xs = np.linspace(-0.85, -0.15, 120)  # stays below the top of the axes for every slope shown
         phi_up = always_redraw(lambda: curve(ax, xs, 0.5 + slope.get_value() * (xs + 0.5) + 2.5 * (xs + 0.5) ** 2,
                                              GOOD, stroke_width=3))
         read_up = DecimalNumber(-0.9, num_decimal_places=2, include_sign=True, font_size=30, color=GOOD)
         read_up.add_updater(lambda m: m.set_value(slope.get_value()))
         ru = VGroup(MathTex(r"\varphi'(x_0) =", font_size=30, color=GOOD), read_up).arrange(RIGHT, buff=0.12)
-        xs2 = np.linspace(-0.45, 0.45, 120)
+        xs2 = np.linspace(-0.38, 0.38, 120)
         phi_dn = curve(ax, xs2, 0.0 - 2.5 * xs2 ** 2, OVER, stroke_width=3)
         dot_up = Dot(ax.c2p(-0.5, 0.5), color=GOOD)
         dot_dn = Dot(ax.c2p(0.0, 0.0), color=OVER)
@@ -101,7 +101,7 @@ class Viscosity(VoiceoverScene):
         ok = label(r"peak: from above, every touching slope has $|\varphi'| \le 1$: passes", font_size=20, color=GOOD)
         bad = label(r"valley: from below, $\varphi' = 0$ fits, and $|0| - 1 < 0$: fails", font_size=20, color=OVER)
         VGroup(ok, bad).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(card, DOWN, buff=0.35).align_to(card, LEFT)
-        ru.next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        ru.move_to(ax.c2p(0.5, 1.05))  # in the open space above the right-hand peak, clear of the test curve
         with self.voiceover(
             "Crandall and Lions found it in 1983: never differentiate u. Touch it with smooth test functions instead, and "
             "put their derivatives into the equation. <bookmark mark='a'/> At a peak, a smooth function touches from above "
