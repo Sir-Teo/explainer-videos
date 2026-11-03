@@ -67,7 +67,7 @@ class India(VoiceoverScene):
         for prem, pay, m, cp in tk:
             cells.add(RoundedRectangle(width=0.62, height=0.4, corner_radius=0.05, stroke_color=YELLOW, stroke_width=1.5,
                                        fill_color=YELLOW, fill_opacity=0.25))
-        cells.arrange_in_grid(rows=6, cols=10, buff=(0.1, 0.12)).to_edge(LEFT, buff=0.6).shift(UP * 0.2)
+        cells.arrange_in_grid(rows=6, cols=10, buff=(0.1, 0.12)).to_edge(LEFT, buff=0.6).to_edge(UP, buff=0.6)
         flips = []
         for c, (prem, pay, m, cp) in zip(cells, tk):
             if pay <= 0:
@@ -79,8 +79,8 @@ class India(VoiceoverScene):
         mults = VGroup(*[MathTex(rf"{pay / prem:.0f}\times" if pay / prem >= 10 else rf"{pay / prem:.1f}\times",
                                  font_size=16).move_to(c) for c, (prem, pay, m, cp) in zip(cells, tk) if pay > 0])
         paid, back = float(tk[:, 0].sum()), float(tk[:, 1].sum())
-        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=2.6, ylabel=r"dollars",
-                     yticks=[], font_size=15).next_to(cells, DOWN, buff=0.5).align_to(cells, LEFT)
+        bar_g = axes([0, 2], [0, max(paid, back) * 1.15], x_length=2.6, y_length=1.9, ylabel=r"dollars",
+                     yticks=[], font_size=15).next_to(cells, DOWN, buff=0.45).align_to(cells, LEFT)
         b1 = Rectangle(width=0.8, height=bar_g.ax.c2p(0, paid)[1] - bar_g.ax.c2p(0, 0)[1], stroke_width=0,
                        fill_color=YELLOW, fill_opacity=0.8).move_to(bar_g.ax.c2p(0.5, 0), aligned_edge=DOWN)
         b2 = Rectangle(width=0.8, height=max(bar_g.ax.c2p(0, back)[1] - bar_g.ax.c2p(0, 0)[1], 0.01), stroke_width=0,
@@ -169,8 +169,11 @@ class India(VoiceoverScene):
             step(1)
             vo.wait_until("b")
             step(2)
+            # the last row is the result: it moves to the top, and the chart takes the space below it
+            self.play(FadeOut(rows[0]), FadeOut(whys[0]), FadeOut(rows[1]), FadeOut(whys[1]),
+                      VGroup(rows[2], whys[2]).animate.to_edge(UP, buff=0.5))
             self.play(FadeIn(g), Create(le), Create(la), FadeIn(leg), FadeIn(cap), run_time=2)
             vo.wait_until("c")
-            self.play(FadeIn(pc))
+            self.play(FadeOut(leg), FadeOut(cap), FadeIn(pc))
         self.wait(0.4)
         self.clear_scene()
