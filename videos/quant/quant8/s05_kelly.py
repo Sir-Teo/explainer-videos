@@ -114,10 +114,10 @@ class Kelly(VoiceoverScene):
         leg = legend([(c_, rf"{float(k_):g}$\times$ Kelly ({100 * fans[k_]['f']:.0f}\%): $g = "
                        rf"{100 * fans[k_]['g']:.1f}\%$") for k_, c_ in zip(keys, cols)], font_size=18)
         leg.to_corner(UR, buff=0.4)
-        q = pause_card(r"At twice Kelly, what is the median growth rate?", width=4.6, font_size=21).next_to(
-            leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        q = pause_card(r"At twice Kelly, what is the median growth rate?", width=4.2, font_size=21).next_to(
+            leg, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)  # the card is wider than the legend: keep it in frame
         ans = wrapped_label(rf"the cash rate, {100 * L['r']:.0f}\%: no excess growth at all, though its luckiest paths "
-                            r"are the richest", 4.6, 19, OVER).next_to(q, DOWN, buff=0.25).align_to(q, LEFT)
+                            r"are the richest", 4.2, 19, OVER).next_to(q, DOWN, buff=0.25).align_to(q, LEFT)
         src = illustration(r"simulation: $\mu - r = 6\%$, $\sigma = 18\%$, $r = 2\%$; 30 paths shown per fan, monthly")
         with self.voiceover(
             "Watch it: half Kelly, Kelly and twice Kelly in the same simulated markets for forty years, on a log scale. "
