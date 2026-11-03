@@ -169,7 +169,7 @@ class LCP(VoiceoverScene, ThreeDScene):
             "updating each point and clipping it up to the payoff. <bookmark mark='c'/> The penalty method of Peter "
             "Forsyth and Kenneth Vetzal adds a huge penalty wherever the solution dips below the payoff, and solves "
             "with Newton's method. Pause and predict: where is the pricing equation not satisfied? In the red "
-            "region, where the value is the payoff."
+            "region of the surface we just saw, where the value is the payoff."
         ) as vo:
             for i, mk in enumerate("abc"):
                 step(i)
