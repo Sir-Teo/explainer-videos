@@ -197,7 +197,7 @@
     "FLUX.1 Kontext": "FLUX.1 Kontext",
     "edit by context: \\ the input picture's tokens joined to the sequence": "靠上下文编辑：\\ 把输入图片的词元接进序列",
     "FLUX.2": "FLUX.2",
-    "$32$ billion weights \\ (open [dev]); \\ a $24$-billion vision-language model reads the prompt; \\ up to $10$ reference pictures": "$320$亿个权重 \\ （开放的[dev]版）；\\ 由一个$240$亿参数的视觉语言模型读提示词；\\ 最多$10$张参考图",
+    "$32$ billion weights \\ (open [dev]); \\ a $24$-billion vision-language model reads the prompt; \\ up to $10$ reference pictures": "$320$亿个权重（开放的[dev]版）；\\\\$240$亿参数的视觉语言模型读取提示词；\\ 最多$10$张参考图片",
     "Pictures as tokens": "把图片当作词元",
     "Can a picture be written like a sentence?": "图片能像句子一样写出来吗？",
     "Dec 2020": "2020年12月",
@@ -572,7 +572,12 @@
     "fixed autoencoder: $16$ numbers, seed $2022$; \\ three flow seeds each \\\\ line: arithmetic mean FD; \\ band: min--max; \\ reference: training images": "固定自编码器：$16$个数，种子$2022$；\\ 每种三个流随机种子\\\\ 曲线：FD算术均值；\\ 范围带：最小值至最大值；\\ 参考：训练图片",
     "uniform: \\ equal time density": "均匀分布：\\ 各时间的概率密度相同",
     "logit-normal: \\ more draws near the middle": "logit-normal：\\ 在中间附近抽取更多训练时刻",
-    "velocity target: \\ $z_1-z_0$": "速度目标：\\ $z_1-z_0$"
+    "velocity target: \\ $z_1-z_0$": "速度目标：\\ $z_1-z_0$",
+    "$12$ billion weights; \\ MM-DiT blocks, then single-stream blocks; \\ rotary positions; \\ a guidance-distilled open [dev] version": "$120$亿个权重；\\ 先是MM-DiT块，再是单流块；\\\\旋转位置编码；\\ 经过引导蒸馏、开放权重的[dev]版",
+    "input source": "来源图片",
+    "``bold'': \\ conditional output": "“粗体”：\\ 条件输出",
+    "bold target": "粗体目标",
+    "drawing/naming exposure: unverified by pair metadata": "画图／命名中的训练接触情况：配对元数据尚不能验证"
   },
   "patterns": [
     [
@@ -582,6 +587,34 @@
     [
       "^\\$64\\$ clips, \\\\ three seeds; \\\\ real clips' wobble: \\\\ \\$([\\d.]+)\\$ \\$\\\\mathrm\\{px\\}/\\\\mathrm\\{frame\\}\\^2\\$$",
       "$64$段片段，\\\\ 三个随机种子；\\\\ 真实片段的晃动：\\\\ $\\1$ $\\\\mathrm{px}/\\\\mathrm{frame}^2$"
+    ],
+    [
+      "^names\\ held\\-out\\ images:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$\\ \\\\\\\\\\ filename\\ category:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$$",
+      "留出图片的字母命名：\\\\ $\\1\\\\%$ \\\\\\\\ 文件名类别：\\\\ $\\2\\\\%$"
+    ],
+    [
+      "^judge\\ reads\\ requested\\ letter:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$$",
+      "评判器读成所要求的字母：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^pixel\\ RMSE:\\ \\\\\\ \\$([\\d.]+)\\$\\ \\\\\\ \\(copying\\ source:\\ \\\\\\ \\$([\\d.]+)\\$\\);\\ \\\\\\\\\\ mean\\ seed\\-median\\ ink\\ ratio:\\ \\\\\\ \\$([\\d.]+)\\$\\ \\\\\\ \\(target:\\ \\\\\\ \\$([\\d.]+)\\$\\);\\ \\\\\\\\\\ judge\\ reads\\ requested\\ letter:\\ \\\\\\ \\$([\\d.]+)\\\\%\\$$",
+      "像素RMSE：\\\\ $\\1$ \\\\ （复制来源：\\\\ $\\2$）；\\\\\\\\ 种子内墨量比中位数的均值：\\\\ $\\3$ \\\\ （目标：\\\\ $\\4$）；\\\\\\\\ 评判器读成所要求的字母：\\\\ $\\5\\\\%$"
+    ],
+    [
+      "^reported\\ editing\\ split:\\ \\$([\\d.]+)\\$\\ training;\\ \\$([\\d.]+)\\$\\ held\\-out\\ pairs$",
+      "所报告的编辑划分：训练$\\1$对；留出$\\2$对"
+    ],
+    [
+      "^one\\ transformer,\\ \\\\\\ \\$([\\d.,{}]+)\\$\\ weights,\\ \\\\\\ \\$([\\d.,{}]+)\\$\\ steps;\\ \\\\\\ means\\ of\\ ([\\d.,{}]+)\\ reported\\ seeds$",
+      "一个Transformer，\\\\ $\\1$个权重，\\\\ $\\2$步；\\\\ 所报告\\3个种子的均值"
+    ],
+    [
+      "^([\\d.]+)\\ reported\\ seeds\\ \\\\\\ \\(bands:\\ \\\\\\ min\\ to\\ max\\);\\ \\\\\\ all\\ four\\ terms\\ in\\ every\\ step's\\ batch$",
+      "所报告的\\1个种子\\\\ （带状区域：\\\\ 最小至最大）；\\\\ 每次更新都包含四项"
+    ],
+    [
+      "^\\$1\\\\times1\\$:\\ \\\\\\ two\\-flow\\-seed\\ FD\\ ranges\\ \\\\\\\\\\ \\$16\\$\\ channels:\\ \\$([\\d.]+)\\$\\-\\-\\$([\\d.]+)\\$;\\ \\\\\\ \\$64\\$\\ channels:\\ \\$([\\d.]+)\\$\\-\\-\\$([\\d.]+)\\$$",
+      "$1\\\\times1$：两个流种子的FD范围 \\\\\\\\ $16$通道：$\\1$--$\\2$；\\\\ $64$通道：$\\3$--$\\4$"
     ]
   ]
 }
