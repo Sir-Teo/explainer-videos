@@ -34,8 +34,13 @@ class Clip(VoiceoverScene):
         cell = S / n
         pics = Group(*[gray_image(im, cell * 0.92).move_to([grid.get_left()[0] - 0.35, grid.get_top()[1] - cell * (i + 0.5), 0])
                        for i, im in enumerate(imgs)])
-        words = VGroup(*[data_text(cp, font="DejaVu Sans Mono", font_size=13, color=TEXT_C).rotate(PI / 3)
-                         .move_to([grid.get_left()[0] + cell * (i + 0.5), grid.get_top()[1] + 0.55, 0]) for i, cp in enumerate(caps)])
+        words = VGroup()
+        for i, cp in enumerate(caps):
+            word = data_text(cp, font="DejaVu Sans Mono", font_size=13, color=TEXT_C).rotate(PI / 3)
+            if word.height > 1.0:
+                word.scale_to_fit_height(1.0)
+            word.next_to([grid.get_left()[0] + cell * (i + 0.5), grid.get_top()[1], 0], UP, buff=0.12)
+            words.add(word)
         diag = VGroup(*[Square(cell, stroke_color=WHITE, stroke_width=1.5).move_to(
             [grid.get_left()[0] + cell * (i + 0.5), grid.get_top()[1] - cell * (i + 0.5), 0]) for i in range(n)])
         def vec(vals, col):
@@ -186,6 +191,7 @@ class Clip(VoiceoverScene):
         cell = S / n
         diag = VGroup(*[Square(cell, stroke_color=WHITE, stroke_width=1.2).move_to(
             [cur.get_left()[0] + cell * (i + 0.5), cur.get_top()[1] - cell * (i + 0.5), 0]) for i in range(n)])
+        diag.set_z_index(3)  # Keep the guide visible while successive heatmaps cross-fade.
         gl = label(r"$12$ pictures against their captions", font_size=20, color=GREY_A).next_to(cur, UP, buff=0.15)
         t = ValueTracker(0)
         cnt = always_redraw(lambda: label(rf"${int(t.get_value()) / 1000:.0f}$ thousand pairs seen", font_size=22,
@@ -198,7 +204,7 @@ class Clip(VoiceoverScene):
                           rf"$1$ in ${nc}$)", font_size=22, color=CLIP_C),
                     label(rf"the right letter: \ ${100 * lu[Bmax].mean():.0f}\%$", font_size=22, color=CLIP_C))
         zs.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -1.7, 0])
-        lax = axes([0, float(L[-1, 0]), 1], [0, float(np.percentile(L[:, 1], 98)) * 1.05, 1], x_length=4.6, y_length=2.2,
+        lax = axes([0, float(L[-1, 0]), 1], [0, max(float(np.max(L[:, 1])) * 1.05, 1e-6), 1], x_length=4.6, y_length=2.2,
                    xlabel=r"pairs seen", ylabel=rf"CLIP's loss, \ batches of ${Bmax}$", center=[3.4, 1.4, 0])
         zl = label(rf"CLIP's loss, \ batch ${Bmax}$, \ three seeds", font_size=18, color=GREY_B).next_to(zs, DOWN, buff=0.25)
         because = ("because the caption encoder learned bold, mono and Q separately, and can put them together"
@@ -220,7 +226,7 @@ class Clip(VoiceoverScene):
             for k_ in range(1, len(checks)):
                 nxt = grid(k_)
                 segp = [(a_, b_) for a_, b_ in L if checks[k_ - 1] <= a_ <= checks[k_]]
-                extra = [Create(curve(lax.ax, [p_[0] for p_ in segp], [min(p_[1], lax.ax.y_range[1]) for p_ in segp], CLIP_C, 2.5))] \
+                extra = [Create(curve(lax.ax, [p_[0] for p_ in segp], [p_[1] for p_ in segp], CLIP_C, 2.5))] \
                     if len(segp) > 1 else []
                 self.play(FadeTransform(cur, nxt), t.animate.set_value(checks[k_]), *extra, run_time=1.0)
                 cur = nxt
