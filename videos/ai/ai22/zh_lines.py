@@ -537,6 +537,11 @@ ZH.update({
         "{n5 * n5 / 1000000000.0:.1f}十亿对，每一层、每一个去噪步都是如此。长度加倍，注意力配对数就大约变成四倍。所以视频模型要用上第15和第16部分的每一个技巧。",
 
     # ------------------------------------------------------------------ Clips
+    ("Chapter thirteen. Frames that agree. Here, 'right letter' means our toy judge predicts the intended "
+     "letter with confidence above one half. Held-out font files can share styles, and the judge can still "
+     "make confident errors. This score is not a calibrated measure of human legibility."):
+        '第13章。彼此一致的帧。这里，‘字母正确’是指玩具裁判预测的字母与目标一致，且置信度大于二分之一。按字体文件留出测试集，仍可能共享相近风格，裁判也可能高置信度地认错。这个分数不是经过校准的人类可读性指标。',
+
     'Chapter thirteen. Frames that agree.':
         '第13章。彼此一致的帧。',
 

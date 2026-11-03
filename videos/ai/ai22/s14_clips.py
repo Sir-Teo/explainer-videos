@@ -22,7 +22,11 @@ class Clips(VoiceoverScene):
 
     def card(self):
         card = chapter_card(13, r"Frames that agree", r"Why denoise a whole clip at once?", part=PART)
-        with self.voiceover("Chapter thirteen. Frames that agree."):
+        with self.voiceover(
+            "Chapter thirteen. Frames that agree. Here, 'right letter' means our toy judge predicts the intended "
+            "letter with confidence above one half. Held-out font files can share styles, and the judge can still "
+            "make confident errors. This score is not a calibrated measure of human legibility."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
