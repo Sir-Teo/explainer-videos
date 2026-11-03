@@ -219,7 +219,7 @@ representations), "Qwen3.5-Omni Technical Report" (arXiv 2604.15804, 2026); R. R
 
 1. Show that a BPE merge of a pair found n times (without overlaps) shortens the text by exactly n symbols. In
    "aaaa", how often does the pair (a, a) occur, and how many merges does it allow?
-2. One model pays 9.6 bits per token with 3.2 characters a token; another pays 2.9 bits per byte on plain bytes.
+2. One model pays 9.6 bits per token with 3.2 characters a token; another pays 2.9 bits per byte on the same ASCII text.
    Which is better per character? Show that per-character perplexity is per-token perplexity to the power
    1/(characters per token).
 3. How many codes do FSQ levels (8, 5, 5, 5) give, and how many bits? What bitrate do 8 residual stages of 1,024 codes
@@ -263,7 +263,7 @@ guess is never negative, so log N − L ≤ log N. With N = 256 the most it can 
 ## 习题
 
 1. 证明：一个出现n次（互不重叠）的字节对，合并一次能让文本恰好缩短n个符号。在“aaaa”里，字节对(a, a)出现几次？能合并几次？
-2. 一个模型每个词元花9.6比特，平均每个词元3.2个字符；另一个直接读字节，每字节2.9比特。按每字符算哪个更好？证明每字符困惑度等于每词元困惑度的（1/每词元字符数）次方。
+2. 一个模型每个词元花9.6比特，平均每个词元3.2个字符；另一个在同一段ASCII文本上每字节花2.9比特。按每字符算哪个更好？证明每字符困惑度等于每词元困惑度的（1/每词元字符数）次方。
 3. FSQ的等级取(8, 5, 5, 5)，一共有多少个码，几比特？8级残差量化、每级1024个码、每秒75帧，码率是多少？
 4. 证明cos(2πft)和cos(2π(f_s − f)t)在每个t = n/f_s上取值相同。以16 kHz采样时，9 kHz的音调会出现在哪里？
 5. 列出在{a, b, ∅}上长为T = 3、折叠后得到“ab”的所有路径，并用前向递推核对数目。为什么“aa”的每条路径都必须经过一个空白符？

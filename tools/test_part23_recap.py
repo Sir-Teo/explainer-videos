@@ -1,6 +1,7 @@
 """Focused no-training regressions for recap units, missing values and providers."""
 from pathlib import Path
 import ast
+import json
 import sys
 import unittest
 
@@ -61,6 +62,17 @@ class RecapContracts(unittest.TestCase):
         gate = next(i for i, n in enumerate(tiles.body) if "recap_modalities_qa_accepted" in ast.unparse(n))
         text = next(i for i, n in enumerate(tiles.body) if "self.text_tiles()" in ast.unparse(n))
         self.assertLess(gate, text)
+
+    def test_byte_comparison_states_ascii_assumption(self):
+        root = Path(__file__).resolve().parents[1]
+        tree = ast.parse((root / 'videos/ai/ai23/s18_outro.py').read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == 'problems')
+        call = next(n for n in ast.walk(fn) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == 'problem_set')
+        question = call.args[0].elts[1].value
+        self.assertIn('same ASCII text', question)
+        for name in ['videos/ai/ai23/text_zh_add.json', 'videos/ai/ai_text_zh.json']:
+            table = json.loads((root / name).read_text())['strings']
+            self.assertIn('ASCII', table[question])
 
 
 if __name__ == "__main__":
