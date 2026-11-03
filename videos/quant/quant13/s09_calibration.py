@@ -86,7 +86,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
                      label(rf"12 random starts: all 12 end at the same minimum", font_size=20, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.4)
         src = real_data(r"Heston on the Surface: 225 fits on a 15 by 15 grid", corner=DL)
-        self.set_camera_orientation(phi=62 * DEGREES, theta=-130 * DEGREES, zoom=0.85)
+        self.set_camera_orientation(phi=62 * DEGREES, theta=-130 * DEGREES, zoom=0.72)  # below the caption
         self.add_fixed_in_frame_mobjects(hint, txt, src)
         self.remove(hint, txt, src)
         with self.voiceover(
@@ -191,7 +191,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
                 why(r"linearise the fit: the parameters' standard errors are the bowl's widths", 20),
                 why(r"Tikhonov regularisation toward last week (Cont and Tankov 2004 use relative entropy for jump models): "
                     r"every eigenvalue grows by $\lambda$, and the flat direction stops wandering", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.6, edge=6.9)  # the eigenvalue readout takes the bottom
         se = np.asarray(hs["se"])
         ev = np.asarray(hs["eig"])
         tab = VGroup(
@@ -274,18 +274,23 @@ class Calibration(VoiceoverScene, ThreeDScene):
     def regularised(self, hr):
         fr = hr["frontier"]
         days = hr["days"]
-        g = axes([0, 0.35], [1.0, 2.2], x_length=5.4, y_length=3.6, xlabel=r"median weekly change in the parameters",
-                 ylabel=r"median fit error (vol points)", xticks=[0, 0.1, 0.2, 0.3], xfmt=lambda u: f"{100 * u:.0f}\\%",
-                 yticks=[1.0, 1.5, 2.0], font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.6)
+        # the three settings differ by little: zoom the axes to them (the ticks keep the scale honest)
+        xs_ = np.array([f_["median_change_all"] for f_ in fr]); ys_ = np.array([f_["rmse_median"] for f_ in fr])
+        x0, x1 = float(np.floor(xs_.min() * 50 - 1) / 50), float(np.ceil(xs_.max() * 50 + 1) / 50)
+        y0, y1 = float(np.floor(ys_.min() * 50 - 1) / 50), float(np.ceil(ys_.max() * 50 + 1) / 50)
+        g = axes([x0, x1], [y0, y1], x_length=5.4, y_length=3.6, xlabel=r"median weekly change in the parameters",
+                 ylabel=r"median fit error (vol points)", xticks=list(np.round(np.linspace(x0, x1, 3), 3)),
+                 xfmt=lambda u: f"{100 * u:.0f}\\%", yticks=list(np.round(np.linspace(y0, y1, 3), 3)),
+                 yfmt=lambda u: f"{u:.2f}", font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.6)
         ax = g.ax
         cols = [BAD, OPT, RV]
         pts = VGroup()
-        for f_, c_ in zip(fr, cols):
-            x_, y_ = min(f_["median_change_all"], 0.35), float(np.clip(f_["rmse_median"], 1.0, 2.2))
+        for f_, c_, d_ in zip(fr, cols, (UR, RIGHT, DR)):
+            x_, y_ = f_["median_change_all"], f_["rmse_median"]
             pts.add(VGroup(Dot(ax.c2p(x_, y_), radius=0.09, color=c_),
-                           MathTex(rf"\lambda = {f_['lam']:g}", font_size=24, color=c_).next_to(ax.c2p(x_, y_), UR, buff=0.08)))
+                           MathTex(rf"\lambda = {f_['lam']:g}", font_size=24, color=c_).next_to(ax.c2p(x_, y_), d_, buff=0.12)))
         link = VMobject(stroke_color=GREY_B, stroke_width=2).set_points_as_corners(
-            [ax.c2p(min(f_["median_change_all"], 0.35), float(np.clip(f_["rmse_median"], 1.0, 2.2))) for f_ in fr])
+            [ax.c2p(f_["median_change_all"], f_["rmse_median"]) for f_ in fr])
         card = lab_card(r"regularised calibration", LAB_REG, source="explainer/quant/house/stochvol.py: calibrate_reg",
                         width=7.2, font_size=16).to_edge(UP, buff=0.3).to_edge(RIGHT, buff=0.3)
         outs = [f"lam={f_['lam']:<5g} weekly change {100 * f_['median_change_all']:5.1f}%   "
@@ -298,7 +303,7 @@ class Calibration(VoiceoverScene, ThreeDScene):
                    f"Even the strongest pull cuts the weekly change only by a factor of {cut:.1f}, for {cost:.2f} vol "
                    "points of fit: the instability is not only noise.")
         pp = pause(r"Overnight $\kappa$ jumped from 3 to 20 and the fit barely moved. Which prices changed?", width=5.2)
-        pp.to_corner(DL, buff=0.3)
+        pp.to_corner(DR, buff=0.3)  # the chart takes the left
         with self.voiceover(
             "So regularise. Here is the House's version: the fit's residuals, stacked with a pull toward last week's "
             "parameters, each measured as a relative change and weighted by lambda. Ten lines. "
