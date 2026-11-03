@@ -63,7 +63,7 @@ class Doubling(VoiceoverScene):
         P = np.asarray(d["paths"], float)
         mean, med = np.asarray(d["mean"]), np.asarray(d["median"])
         lo = float(min(P.min(), -3200))
-        g = axes([0, 3000], [lo, 3200], x_length=8.2, y_length=4.8, xlabel=r"sessions played",
+        g = axes([0, 3000], [lo, 3200], x_length=7.0, y_length=4.8, xlabel=r"sessions played",
                  ylabel=r"80 doublers' cumulative P\&L, bankroll 1{,}023 (refilled after ruin)",
                  xticks=[0, 1000, 2000, 3000], yticks=[-3000, 0, 3000],
                  yfmt=lambda u: f"{int(u):,}".replace(",", "{,}"), font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
@@ -94,9 +94,9 @@ class Doubling(VoiceoverScene):
             MathTex(rf"\text{{theory: }} 1 - (1023/1024)^{{3000}} = {100 * d['frac_ruined_theory']:.1f}\%", font_size=26,
                     color=GREY_A),
             MathTex(rf"\text{{mean wait for first ruin: }} {d['first_ruin_mean']:,.0f}".replace(",", "{,}"), font_size=26),
-            label(rf"the House's \texttt{{doubling()}} on real coin flips: ruin {100 * d['check_ruin']:.2f}\% per session "
-                  rf"vs.\ $2^{{-10}} = {100 * d['check_theory']:.2f}\%$", font_size=18, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.8)
+            wrapped_label(rf"the House's \texttt{{doubling()}} on real coin flips: ruin {100 * d['check_ruin']:.2f}\% per "
+                          rf"session vs.\ $2^{{-10}} = {100 * d['check_theory']:.2f}\%$", 5.0, 18, GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35).shift(UP * 0.2)  # beside the fan, not on it
         pred = desk_question(r"With a bankroll of 1{,}023, how many sessions until the first ruin, on average?",
                              r"1{,}024: each session ruins with probability $2^{-10}$.", width=5.4, font_size=20)
         with self.voiceover(
@@ -119,7 +119,7 @@ class Doubling(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(x) for x in side[:3]], lag_ratio=0.4))
             vo.wait_until("c")
             self.play(FadeIn(side[3:]))
-            self.play(FadeIn(pred.move_to(ax.c2p(1500, lo * 0.62))))
+            self.play(FadeIn(pred.to_corner(DR, buff=0.3)))
         self.wait(0.4)
         self.clear_scene()
 
