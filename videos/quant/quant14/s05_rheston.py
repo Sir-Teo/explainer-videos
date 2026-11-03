@@ -100,9 +100,9 @@ class RHeston(VoiceoverScene):
                 why(r"substitute $g_0$ and integrate: El Euch and Rosenbaum (2019); no closed form for $h$, but one "
                     r"equation, for every $u$"),
                 why(r"the consistency check the House's tests run: at $H = \tfrac12$ it is exactly Heston")]
-        step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.9, buff=0.7, edge=6.9)
-        q = pause(r"Set $H = \tfrac12$ in the fractional Riccati equation. What do you get?", width=6.0,
-                  font_size=22).to_corner(DR, buff=0.3)
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-0.9, buff=0.55, edge=6.9)
+        q = pause(r"Set $H = \tfrac12$ in the fractional Riccati equation. What do you get?", width=5.4,
+                  font_size=21).to_corner(DR, buff=0.2)  # the tighter ladder ends above it
         with self.voiceover(
             "Now the derivation. Rough Heston's variance is Heston's, with the constant kernel replaced by the "
             "fractional one, t to the alpha minus one over gamma of alpha, with alpha equal to H plus a half. "
