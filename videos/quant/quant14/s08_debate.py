@@ -115,7 +115,8 @@ class Debate(VoiceoverScene, ThreeDScene):
         segs = contour_segments(Hs, ys, M.T, lvl)
         gold = VGroup(*[Line(ax.c2p(p0[0], p0[1], lvl), ax.c2p(p1[0], p1[1], lvl), stroke_color=GOLD, stroke_width=5)
                         for p0, p1 in segs])
-        ylabs = VGroup(*[Text(n_, font_size=14, color=GREY_B).move_to(ax.c2p(0.56, j, -0.05)) for j, n_ in enumerate(hl_names)])
+        ylabs = VGroup(*[Text(n_, font_size=20, color=GREY_B).move_to(ax.c2p(0.58, j, -0.05)) for j, n_ in enumerate(hl_names)])
+        # half-life names stand upright facing the camera at every angle (added with add_fixed_orientation below)
         hint = VGroup(label(r"left to right: the true $H$ of a fractional OU log-volatility, 0.05 to 0.5", font_size=19,
                             color=GREY_A),
                       label(r"front to back: its mean-reversion half-life, none down to 5 hours", font_size=19, color=GREY_A),
@@ -133,6 +134,8 @@ class Debate(VoiceoverScene, ThreeDScene):
         src = real_data(r"simulated: 64 cells, 4 seeds each; the House's \texttt{fou\_paths}", corner=DL)
         self.set_camera_orientation(phi=64 * DEGREES, theta=-125 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint, src, q, note_)
+        self.add_fixed_orientation_mobjects(*ylabs)
+        self.remove(*ylabs)
         self.remove(hint, src, q, note_)
         with self.voiceover(
             "Here is the estimator's bias map, the centrepiece of the debate. On the floor, two dials of a simulated "
