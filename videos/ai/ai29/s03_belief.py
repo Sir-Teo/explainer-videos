@@ -196,16 +196,17 @@ class Belief(VoiceoverScene):
                            r"\ a POMDP is an MDP whose states are beliefs, \ so Part 26's Bellman equation applies, "
                            r"\ over a continuum of states", who=r"\AA str\"om (1965); \ Kaelbling, Littman \& Cassandra (1998)",
                            width=11.0, color=BELIEF, font_size=28).move_to([0, -0.9, 0])
-        llm = label(r"a language-model agent's belief: \ its context window, \ everything it has seen so far",
+        llm = label(("语言模型的上下文：部分历史，并非概率信念" if zh() else
+                     "LLM context: partial history, not a probability belief"),
                     font_size=28, color=AGENT).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "The belief is more than bookkeeping. <bookmark mark='a'/> It sums up everything the agent has seen and "
             "done: nothing else in the history says more about the present. So a POMDP is an ordinary MDP whose "
             "states are beliefs, and Part 26's Bellman equation applies, over a continuum of states. That is why "
             "exact POMDPs are so hard to solve, and why the best policy sometimes acts just to learn: walk to a door, "
-            "to find out where you are. <bookmark mark='b'/> A language-model agent keeps no explicit belief. Its "
-            "context window plays the part: everything it has read and done so far, from which it must work out "
-            "what is going on."
+            "to find out where you are. <bookmark mark='b'/> Many language-model agents use a context window as "
+            "working memory. It contains only the information currently supplied, and is not itself an explicit "
+            "probability distribution over hidden states."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c_) for c_ in charts], lag_ratio=0.3), *[GrowArrow(a_) for a_ in arr],
                       FadeIn(al))

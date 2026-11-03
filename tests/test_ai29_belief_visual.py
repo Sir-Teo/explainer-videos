@@ -66,6 +66,24 @@ class BeliefVisualContracts(unittest.TestCase):
                      and isinstance(n.func, ast.Name) and n.func.id == 'load']
             self.assertEqual(loads, expected)
 
+    def test_llm_context_is_not_conflated_with_bayesian_belief(self):
+        import hashlib
+        import re
+        src = (ROOT / 'videos/ai/ai29/s03_belief.py').read_text()
+        self.assertIn('partial history, not a probability belief', src)
+        self.assertIn('部分历史，并非概率信念', src)
+        fn = METHODS['belief_mdp']
+        call = next(n for n in ast.walk(fn) if isinstance(n, ast.Call)
+                    and isinstance(n.func, ast.Attribute) and n.func.attr == 'voiceover')
+        en = ast.literal_eval(call.args[0])
+        self.assertIn('not itself an explicit probability distribution', en)
+        key = hashlib.sha1(' '.join(en.split()).encode()).hexdigest()[:12]
+        row = json.loads((ROOT / 'videos/ai/ai29/narration_zh.json').read_text())['lines'][key]
+        self.assertEqual(row['en'], en)
+        self.assertIn('不是对隐藏状态的显式概率分布', row['zh'])
+        marks = lambda x: re.findall(r"<bookmark mark='([^']+)'/>", x)
+        self.assertEqual(marks(en), marks(row['zh']))
+
 
 if __name__ == '__main__':
     unittest.main()
