@@ -40,8 +40,11 @@ class Dynamics(VoiceoverScene, ThreeDScene):
             f = x - i
             return (1 - f) * arr[i] + f * arr[i + 1]
         cols = {"strike": SPOT, "moneyness": IV, "lv": LV}
-        curves = {x: always_redraw(lambda x=x: curve(ax, kk, np.clip(at_i(mv[x]), 0.3, 0.6), cols[x], stroke_width=3))
-                  for x in cols}
+        def inframe(y, c):
+            y = np.asarray(y, float)
+            m = (y >= 0.3) & (y <= 0.6)  # a smile is convex: the in-range part is one piece, ending at the frame
+            return curve(ax, kk[m], y[m], c, stroke_width=3)
+        curves = {x: always_redraw(lambda x=x: inframe(at_i(mv[x]), cols[x])) for x in cols}
         dots = {x: always_redraw(lambda x=x: Dot(ax.c2p(float(at_i(sh)), float(np.clip(at_i(at[x]), 0.3, 0.6))),
                                                radius=0.08, color=cols[x])) for x in cols}
         spot = always_redraw(lambda: DashedLine(ax.c2p(float(at_i(sh)), 0.3), ax.c2p(float(at_i(sh)), 0.6),
@@ -58,7 +61,7 @@ class Dynamics(VoiceoverScene, ThreeDScene):
                     font_size=28, color=LV),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 0.6)
         q = wrapped_label(r"pause and predict: spot falls 5\%, the skew is $-0.4$ vol points per 1\% of moneyness, "
-                          r"sticky strike. Where is ATM vol?", 4.6, 19, QC.HOUSE).next_to(ro, DOWN, buff=0.4)
+                          r"sticky strike. Where is ATM vol?", 3.9, 19, QC.HOUSE).next_to(ro, DOWN, buff=0.4).to_edge(RIGHT, buff=0.3)
         src = real_data(r"the Surface's 30-day smile (SSVI); local vol by Berestycki--Busca--Florent's average")
         with self.voiceover(
             "Here is the Surface's thirty-day smile, against fixed strikes. Move the spot: where does the smile go? "
@@ -132,7 +135,7 @@ class Dynamics(VoiceoverScene, ThreeDScene):
     def weekly(self, d):
         em, es = np.asarray(d["sticky_m"]), np.asarray(d["sticky_s"])
         n = len(em)
-        g = axes([0, n], [0, 15], x_length=7.2, y_length=3.6, xlabel=r"week", ylabel=r"error predicting next week's "
+        g = axes([0, n], [0, 15], x_length=6.3, y_length=3.6, xlabel=r"week", ylabel=r"error predicting next week's "
                  r"30-day smile (vol points)", xticks=[0, n], yticks=[0, 5, 10, 15], font_size=16
                  ).to_edge(LEFT, buff=0.6).shift(UP * 0.4)
         ax = g.ax
@@ -151,7 +154,7 @@ class Dynamics(VoiceoverScene, ThreeDScene):
             ang = PI - PI * v_ / 2
             p_ = arc.get_arc_center() + 1.7 * np.array([np.cos(ang), np.sin(ang), 0])
             dial.add(Dot(p_, color=col, radius=0.07), label(name, font_size=16, color=col).next_to(p_, UP if v_ == 1 else
-                                                                                                   (LEFT if v_ == 0 else RIGHT), buff=0.1))
+                                                                                                   (DOWN if v_ == 0 else RIGHT), buff=0.1))
         rv = float(np.clip(R["R"], -0.3, 2.3))
         ang = PI - PI * rv / 2
         needle = Arrow(arc.get_arc_center(), arc.get_arc_center() + 1.5 * np.array([np.cos(ang), np.sin(ang), 0]),
