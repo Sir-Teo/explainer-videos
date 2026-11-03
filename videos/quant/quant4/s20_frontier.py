@@ -82,7 +82,7 @@ class Frontier(VoiceoverScene):
 
     def bridge(self, nu):
         d, w = np.asarray(nu["days"], float), np.asarray(nu["log10w"], float)
-        g = axes([0, 2520], [float(min(w.min(), -0.5)), float(w.max()) + 0.5], x_length=8.0, y_length=4.0,
+        g = axes([0, 2520], [float(min(w.min(), -0.5)), float(w.max()) + 0.5], x_length=6.6, y_length=4.0,
                  xlabel=r"days of a strategy with a daily Sharpe of 0.08 (simulated)", ylabel=r"$\log_{10}$ wealth",
                  xticks=[0, 1260, 2520], yticks=[0, 2, 4], font_size=17).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
@@ -94,14 +94,13 @@ class Frontier(VoiceoverScene):
         l2.move_to(l1).align_to(l1, RIGHT)
         side = VGroup(
             MathTex(rf"\lambda^* = \arg\max_\lambda \mathbb{{E}}\log(1 + \lambda x) = {nu['lam']:.3f}", font_size=28),
-            label(r"log-optimal wealth: the fastest growth (Kelly), and the most powerful e-value against "
-                  r"``no edge'' (Larsson, Ramdas and Ruf)", font_size=19, color=GREY_A),
-            label(r"one object, two names: Parts 4, 8 and 9 meet here", font_size=21, color=QC.IDEA),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(l1, DOWN, buff=0.5).align_to(l1, RIGHT)
-        for s_ in side:
-            if s_.width > 4.8:
-                s_.scale_to_fit_width(4.8)
-        side.align_to(l1, RIGHT)
+            wrapped_label(r"log-optimal wealth: the fastest growth (Kelly), and the most powerful e-value against "
+                          r"``no edge'' (Larsson, Ramdas and Ruf)", 4.8, 19, GREY_A),
+            wrapped_label(r"one object, two names: Parts 4, 8 and 9 meet here", 4.8, 21, QC.IDEA),
+        )
+        if side[0].width > 4.8:
+            side[0].scale_to_fit_width(4.8)
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(l1, DOWN, buff=0.5).align_to(l1, RIGHT)
         with self.voiceover(
             "That last bridge deserves a picture. Here is the wealth of a bettor who stakes the log-optimal fraction "
             "on a strategy with a small edge. <bookmark mark='a'/> In Part eight it is called the Kelly, or numéraire, "
