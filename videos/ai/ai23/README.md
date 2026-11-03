@@ -4,8 +4,8 @@ Part 23 of a thirty-one-part series on how modern AI works and how it came to be
 and [the syllabus](../SYLLABUS.md)). How text, sound and pictures become sequences of tokens, how the codes are
 learned, how speech is recognized and synthesized, and how pictures and words are matched, from Bell Labs' Audrey
 (1952) to the omni models of 2026. A hook, sixteen chapters and an outro, about 55 minutes, in English and Chinese.
-Every model in it is trained or run on the CPU that renders the video; every number comes from `compute.py` or a cited
-source.
+Some scenes require separately accepted cached measurements and model assets; published figures are cited.
+A fresh checkout does not by itself establish that all experiments were run or that production inputs are present.
 
 ## Outline
 
@@ -26,7 +26,7 @@ source.
   the vocabulary shrinks); BPE and the unigram model side by side; sampled cuts (subword regularization);
   SentencePiece.
 * **4. What a token is worth.** Bits per character = bits per token / characters per token, derived; five tokenizers
-  (bytes; BPE and unigram at 1,024 and 4,096 pieces), the same small transformer (explainer.lm.pocket), the same FLOPs,
+  (bytes; BPE and unigram at 1,024 and 4,096 pieces), the same small transformer (explainer.lm.pocket), unequal original compute schedules,
   three seeds: learning curves against compute, bits per character on the scoreboard's passage with the spread; why
   vocabulary size trades text per FLOP against the output layer; samples from two of the models.
 * **5. Bytes and patches.** Tokenizer failure modes; UTF-8 and GPT-2's byte-level BPE; the series' own byte-level
@@ -62,8 +62,7 @@ source.
 * **13. Speaking.** The source–filter model and formants, the Voder, Klatt, unit selection, HMM synthesis; WaveNet
   (an autoregressive model of samples, μ-law, dilated causal convolutions); Tacotron 2; VALL-E (codec tokens, a
   3-second prompt); Qwen3-TTS, the narrator: its tokenizer (12.5 Hz, 16 codebooks of 2,048, semantic + acoustic), its
-  multi-token prediction, and the clip it clones its voice from as its own codes (through `.venv-tts`; skipped
-  gracefully without it).
+  multi-token prediction, and an optional narrator-code experiment currently marked as not run unless a verified result is supplied.
 * **14. Matching pictures and words.** Captioning and CLIP; our letters-and-captions model; InfoNCE as a lower bound on
   the mutual information, derived from the optimal critic (Part 24 derives it another way); the estimate against log N
   at batch sizes 16, 64, 256; training replayed; zero-shot retrieval of captions never seen in training; SigLIP's
@@ -77,6 +76,11 @@ source.
   references.
 
 ## Running it
+
+Before production, run `python tools/check_part23_qa_inputs.py` from the repository root. It checks for five
+separately accepted cache JSON files. The standard compute registry does not create those files automatically.
+Presence alone does not validate their contents or any companion arrays. Missing originals must be restored or
+independently generated and accepted; model assets, audio, and full playback still need their own checks.
 
 ```
 python tools/make.py ai23                         # compute, then the narrated cut in English and Chinese
@@ -97,7 +101,7 @@ use) and Whisper base.en (about 290 MB, downloaded by `transformers` on first us
 experiment is optional and requires explicit `AI23_NARRATOR_EXECUTE=1`; it is not a scene dependency. If explicitly
 running that experiment, `AI23_NARRATOR_GENERATE=0` skips synthesizing a new sentence.
 
-## Results on this machine
+## Original reported results (not reverified here)
 
 QA interpretation (2026-11-02): the numbers below are the original reported
 outcomes, not new measurements on the QA host. The k-means fitting and evaluation
