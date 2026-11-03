@@ -60,6 +60,12 @@ class MetrPlotContracts(unittest.TestCase):
         self.assertIn('not evidence of a per-minute failure mechanism', row['en'])
         self.assertIn('并不能证明实际存在某种每分钟失败机制', row['zh'])
 
+    def test_recap_doubling_caption_names_fit_window_in_both_languages(self):
+        source = (ROOT / 'videos/ai/ai29/s18_outro.py').read_text()
+        self.assertIn('2023+ doubling:', source)
+        self.assertIn('2023年起翻倍：', source)
+        self.assertIn("m['doubling_2023']", source)
+
 
 if __name__ == '__main__':
     unittest.main()

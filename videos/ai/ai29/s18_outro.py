@@ -40,7 +40,9 @@ class Outro(VoiceoverScene):
         m = load("metr")
         ax = mk([0, 7.6, 1], [-5, 11, 1])
         out.append((VGroup(ax, *[Dot(ax.c2p(r["t"], math.log2(r["p50"])), radius=0.03, color=C.BITS if r["sota"] else GREY_C)
-                                 for r in m["rows"]]), rf"doubling: \ ${float(m['doubling_2023']):.0f}$ days", C.BITS))
+                                 for r in m["rows"]]),
+                    (rf"2023年起翻倍：\ ${float(m['doubling_2023']):.0f}$ 天" if zh() else
+                     rf"2023+ doubling: \ ${float(m['doubling_2023']):.0f}$ days"), C.BITS))
         L = load("lane")
         T = int(L["T"])
         ts = np.arange(1, T + 1)
