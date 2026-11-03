@@ -29,6 +29,13 @@ class VisualRegressions(unittest.TestCase):
         self.assertNotIn('np.percentile(L[:, 1], 98)', source)
         self.assertNotIn('min(p_[1], lax.ax.y_range[1])', source)
 
+    def test_negative_empirical_bound_is_not_shown_positive(self):
+        source = body('s15_clip.py', 'bound')
+        self.assertIn('abs(float(e.mean()))', source)
+        self.assertIn('base_y + e.mean() * sy / 2', source)
+        self.assertIn('base_y + lowest * sy', source)
+        self.assertIn('Create(zero)', source)
+
     def test_vq_highlight_does_not_recolour_images(self):
         source = body('s07_vq.py', 'cures')
         self.assertIn('scale_factor=1.05', source)
