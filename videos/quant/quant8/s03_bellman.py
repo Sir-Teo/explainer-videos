@@ -27,7 +27,7 @@ class Bellman(VoiceoverScene, ThreeDScene):
         # a three-period tree, values flowing back from the end
         cols = []
         for n in range(4):
-            cols.append([np.array([-5.6 + 1.25 * n, 0.55 * (2 * j - n) - 0.6, 0]) for j in range(n + 1)])
+            cols.append([np.array([-6.3 + 0.95 * n, 0.45 * (2 * j - n) - 0.9, 0]) for j in range(n + 1)])
         edges = VGroup(*[Line(cols[n][j], cols[n + 1][j + k], color=GREY_D, stroke_width=1.5)
                          for n in range(3) for j in range(n + 1) for k in (0, 1)])
         nodes = [VGroup(*[Dot(p, radius=0.09, color=GREY_B) for p in col]) for col in cols]
@@ -41,13 +41,15 @@ class Bellman(VoiceoverScene, ThreeDScene):
                       r"r\Delta))^{1-\gamma}}{1-\gamma}\Big]", font_size=30, colors={r"V_n(w)": VALUE}),
                 cmath(r"\pi^*_n(w)", r"=", r"\pi^*\quad\text{the same at every } w \text{ and } n", font_size=30,
                       colors={r"\pi^*_n(w)": KELLY})]
-        whys = [why(r"principle of optimality (Bellman 1957): whatever today's choice, act optimally from wherever it "
-                    r"leads; so the value today is the best expected value tomorrow", font_size=21),
-                why(r"guess: power utility at the end, so try a power at every step", font_size=21),
-                why(r"substitute: wealth factors out of the maximum, because $(wG)^{1-\gamma} = w^{1-\gamma} "
-                    r"G^{1-\gamma}$", font_size=21),
-                why(r"so the best fraction is myopic: it ignores wealth and the horizon (Mossin 1968; Samuelson "
-                    r"1969)", font_size=21)]
+        # notes wrap to 6 units so that, set under their rows, they stay right of the tree
+        W = lambda t_: wrapped_label(t_, 6.0, font_size=21, color=GREY_B)  # noqa: E731
+        whys = [W(r"principle of optimality (Bellman 1957): whatever today's choice, act optimally from wherever it "
+                    r"leads; so the value today is the best expected value tomorrow"),
+                W(r"guess: power utility at the end, so try a power at every step"),
+                W(r"substitute: wealth factors out of the maximum, because $(wG)^{1-\gamma} = w^{1-\gamma} "
+                    r"G^{1-\gamma}$"),
+                W(r"so the best fraction is myopic: it ignores wealth and the horizon (Mossin 1968; Samuelson "
+                    r"1969)")]
         for r_ in rows:
             r_.scale(0.95)
         step = ladder(self, rows, whys, keep=4, top=3.3, x=1.2, buff=0.45, edge=6.9)
@@ -179,6 +181,7 @@ class Bellman(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-35 * DEGREES, phi=60 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*self.mobjects))], run_time=1.5)
         self.clear_scene()
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, gamma=0, zoom=1)  # the next chapter is flat
 
     def policy(self, b):
         f = b["floor"]
