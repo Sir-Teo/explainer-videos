@@ -187,8 +187,22 @@ class FreeLunch(VoiceoverScene):
                  xticks=[0, 0.5, 1.0], yticks=[0, 1, 2, 3, 4], font_size=16)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
-        fan = VGroup(*[VMobject(stroke_width=1.1, stroke_color=ALT, stroke_opacity=0.35).set_points_as_corners(
-            [ax.c2p(a, min(b, 4.0)) for a, b in zip(t, row)]) for row in P])
+        def pieces(row):
+            # only the stretches inside the axes: a spike above 4 leaves a gap, not a flat line along the top
+            segs, cur = [], []
+            for a, b_ in zip(t, row):
+                if b_ <= 4.0:
+                    cur.append(ax.c2p(a, b_))
+                else:
+                    if len(cur) > 1:
+                        segs.append(cur)
+                    cur = []
+            if len(cur) > 1:
+                segs.append(cur)
+            return [VMobject(stroke_width=1.1, stroke_color=ALT, stroke_opacity=0.35).set_points_as_corners(sg)
+                    for sg in segs]
+
+        fan = VGroup(*[seg for row in P for seg in pieces(row)])
         one = DashedLine(ax.c2p(0, 1), ax.c2p(1, 1), color=GREY_B, stroke_width=1.5)
         mc = curve(ax, t, mean, Q_C, stroke_width=5)
         b = f["bubble"]
