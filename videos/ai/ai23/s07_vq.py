@@ -262,10 +262,11 @@ class VQ(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(pl), LaggedStart(*[FadeIn(r_) for r_ in ppl.rows], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("a")
-            self.play(*[Indicate(r_.value) for r_ in ppl.rows])
+            self.play(*[Indicate(r_.value, scale_factor=1.05) for r_ in ppl.rows])
             vo.wait_until("b")
             self.play(FadeIn(el), LaggedStart(*[FadeIn(r_) for r_ in err.rows], lag_ratio=0.3), FadeIn(cols), run_time=1.5)
             vo.wait_until("c")
-            self.play(Indicate(cols[-1], color=VQ_COLORS["restart"], scale_factor=1.03))
+            highlight = SurroundingRectangle(cols[-1], color=VQ_COLORS["restart"], buff=0.06)
+            self.play(Create(highlight))  # Outline the reconstruction without recolouring its image pixels.
         self.wait(0.3)
         self.clear_scene()

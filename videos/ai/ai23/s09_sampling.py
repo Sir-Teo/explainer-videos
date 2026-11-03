@@ -86,7 +86,8 @@ class Sampling(VoiceoverScene):
         for i, (f, s) in enumerate(sorted(tones.items())):
             pts.add(VGroup(Dot(ax.ax.c2p(f / 1000, s / 1000), radius=0.09, color=WHITE),
                            label(rf"${f / 1000:g} \to {s / 1000:.2f}$", font_size=20, color=WHITE)
-                           .next_to(ax.ax.c2p(f / 1000, s / 1000), UL if f < fs / 2 else UR, buff=0.12)))
+                           .next_to(ax.ax.c2p(f / 1000, s / 1000),
+                                    DR if f == min(tones) else UL if f < fs / 2 else UR, buff=0.12)))
         ny = DashedLine(ax.ax.c2p(4, 0), ax.ax.c2p(4, 4.3), color=GREY_B)
         nyl = label(r"$f_s / 2$", font_size=22, color=GREY_B).next_to(ax.ax.c2p(4, 4.3), UP, buff=0.05)
         peaks = ", ".join(f"{tones[f] / 1000:.2f}" for f in sorted(tones))
