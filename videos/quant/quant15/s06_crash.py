@@ -63,16 +63,16 @@ class Crash(VoiceoverScene):
         dl = np.asarray(b["dealer_delta"])
         n = len(t)
         t0, t1 = t[0], t[-1]
-        g1 = axes([t0, t1], [4.3, 5.9], x_length=10.0, y_length=1.9, ylabel=r"CSI 500 ETF", xticks=[], yticks=[4.5, 5.0, 5.5],
+        g1 = axes([t0, t1], [4.3, 5.9], x_length=8.6, y_length=1.9, ylabel=r"CSI 500 ETF", xticks=[], yticks=[4.5, 5.0, 5.5],
                   font_size=14)
-        g2 = axes([t0, t1], [0, 12], x_length=10.0, y_length=1.6, ylabel=r"notes knocked in", xticks=[], yticks=[0, 6, 12],
+        g2 = axes([t0, t1], [0, 12], x_length=8.6, y_length=1.6, ylabel=r"notes knocked in", xticks=[], yticks=[0, 6, 12],
                   font_size=14)
-        g3 = axes([t0, t1], [10, 27], x_length=10.0, y_length=1.9, ylabel=r"dealers' hedge", yticks=[10, 15, 20, 25],
+        g3 = axes([t0, t1], [10, 27], x_length=8.6, y_length=1.9, ylabel=r"dealers' hedge", yticks=[10, 15, 20, 25],
                   xticks=[ymd_to_year([20231201])[0], ymd_to_year([20240102])[0], ymd_to_year([20240201])[0],
                           ymd_to_year([20240229])[0]],
-                  xfmt=lambda u: {0: "1 Dec", 1: "2 Jan", 2: "1 Feb", 3: "29 Feb"}[int(np.argmin(np.abs(
+                  xfmt=lambda u: {0: r"\text{1 Dec}", 1: r"\text{2 Jan}", 2: r"\text{1 Feb}", 3: r"\text{29 Feb}"}[int(np.argmin(np.abs(
                       ymd_to_year([20231201, 20240102, 20240201, 20240229]) - u)))], font_size=14)
-        G = VGroup(g1, g2, g3).arrange(DOWN, buff=0.25).to_edge(LEFT, buff=0.6)
+        G = VGroup(g1, g2, g3).arrange(DOWN, buff=0.25).to_edge(LEFT, buff=0.6).shift(UP * 0.15)  # clear of the source line
         tr = ValueTracker(0)
         l1 = tracing(g1.ax, t, px, tr, SPOT, stroke_width=2.5)
         kis = np.repeat(ki, 1).astype(float)
@@ -156,7 +156,7 @@ class Crash(VoiceoverScene):
         g = axes([t[0], t[-1]], [-lim, lim], x_length=10.5, y_length=3.6, ylabel=r"futures bought (+) or sold ($-$)",
                  yticks=[-round(lim * 0.8, 1), 0, round(lim * 0.8, 1)], xticks=[ymd_to_year([20231201])[0],
                  ymd_to_year([20240102])[0], ymd_to_year([20240201])[0], ymd_to_year([20240229])[0]],
-                 xfmt=lambda u: {0: "1 Dec", 1: "2 Jan", 2: "1 Feb", 3: "29 Feb"}[int(np.argmin(np.abs(
+                 xfmt=lambda u: {0: r"\text{1 Dec}", 1: r"\text{2 Jan}", 2: r"\text{1 Feb}", 3: r"\text{29 Feb}"}[int(np.argmin(np.abs(
                      ymd_to_year([20231201, 20240102, 20240201, 20240229]) - u)))], font_size=14).to_edge(UP, buff=0.8)
         ax = g.ax
         w = 0.8 * (ax.c2p(t[1], 0)[0] - ax.c2p(t[0], 0)[0])

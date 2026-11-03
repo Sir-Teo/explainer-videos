@@ -30,7 +30,7 @@ class Cliquet(VoiceoverScene, ThreeDScene):
         x = np.concatenate([[0], np.cumsum(z - 0.5 * 0.22 ** 2 / 252)])
         S = 100 * np.exp(x)
         t = np.arange(len(S)) / d
-        ax_ = axes([0, 12], [float(S.min()) - 4, float(S.max()) + 4], x_length=7.2, y_length=2.8, xlabel=r"months",
+        ax_ = axes([0, 12], [float(S.min()) - 4, float(S.max()) + 4], x_length=6.4, y_length=2.8, xlabel=r"months",
                    ylabel=r"index", xticks=[0, 3, 6, 9, 12], yticks=[], font_size=15).to_edge(UP, buff=0.5).to_edge(LEFT, buff=0.5)
         ax = ax_.ax
         tr = ValueTracker(0)
@@ -49,10 +49,10 @@ class Cliquet(VoiceoverScene, ThreeDScene):
         # the axis covers the running sum, which can fall well below one month's floor
         ylo = min(-0.04, float(np.floor((min(run.min(), clip.min()) - 0.01) / 0.03) * 0.03))
         yhi = max(0.06, float(np.ceil((max(run.max(), clip.max()) + 0.01) / 0.03) * 0.03))
-        bx = axes([0, 12], [ylo, yhi], x_length=7.2, y_length=2.1, xlabel=r"month", ylabel=r"clipped return, summed",
+        bx = axes([0, 12], [ylo, yhi], x_length=6.4, y_length=2.1, xlabel=r"month", ylabel=r"clipped return, summed",
                   xticks=[0, 6, 12], yticks=[v for v in np.arange(-0.3, 0.31, 0.03 if yhi - ylo < 0.16 else 0.06)
                                              if ylo <= v <= yhi + 1e-9],
-                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=14).next_to(ax_, DOWN, buff=0.25).align_to(ax_, LEFT)
+                  yfmt=lambda u: f"{int(round(100 * u))}\\%", font_size=14).next_to(ax_, DOWN, buff=0.25).align_to(ax_, LEFT)
         for m in range(n_m):
             y0, y1 = bx.ax.c2p(m + 0.5, 0)[1], bx.ax.c2p(m + 0.5, clip[m])[1]
             bars.add(Rectangle(width=0.4, height=max(abs(y1 - y0), 0.01), stroke_width=0,
@@ -64,8 +64,9 @@ class Cliquet(VoiceoverScene, ThreeDScene):
             wrapped_label(r"a cliquet: each month the strike resets to the current level; that month's return counts, "
                           r"clipped to a local floor and cap ($-3\%$, $+3\%$ here); the clipped returns are summed, and "
                           r"the sum has a global floor of zero", 4.0, 18, GREY_A),
-            MathTex(rf"\text{{payoff}} = \max\Big(\textstyle\sum_i \min(\max(r_i, -3\%), 3\%),\ 0\Big) = "
-                    rf"{100 * pay:.1f}\%", font_size=26, color=OPT),
+            MathTex(r"\text{payoff} = \max\Big(\textstyle\sum_i \min(\max(r_i, -3\%), 3\%),\ 0\Big)",
+                    font_size=26, color=OPT),
+            MathTex(rf"= {100 * pay:.1f}\%\ \ \text{{on this path}}", font_size=26, color=OPT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         src = illustration(r"one simulated year at 22\% volatility")
         with self.voiceover(
@@ -84,7 +85,7 @@ class Cliquet(VoiceoverScene, ThreeDScene):
                           run_time=0.5, rate_func=linear)
             self.play(Create(runl))
             vo.wait_until("b")
-            self.play(FadeIn(side[1]))
+            self.play(FadeIn(side[1]), FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()
 
