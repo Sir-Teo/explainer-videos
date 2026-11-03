@@ -172,7 +172,7 @@ class Ito(VoiceoverScene):
         l_s = curve(ax, t, np.clip(wz["exp_w"], 0, 3.2), STRAT, stroke_width=3)
         l_i = curve(ax, t, np.clip(wz["exp_ito"], 0, 3.2), ITO, stroke_width=3)
         leg = legend([(STRAT, r"$e^{W_t}$: Stratonovich, and the smoothed ODE"),
-                      (ITO, r"$e^{W_t - t/2}$: It\^o")], font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+                      (ITO, r"$e^{W_t - t/2}$: It\^o")], font_size=18).next_to(g, UP, buff=0.45).align_to(g, LEFT)  # above the axis label, not on it
         tab = VGroup(MathTex(r"n", font_size=24, color=GREY_B), label(r"ODE, smooth noise", font_size=19, color=STRAT),
                      label(r"Euler (It\^o)", font_size=19, color=ITO))
         cells = [*tab]
