@@ -176,8 +176,8 @@ class RL(VoiceoverScene):
                                                                     col_alignments="lrr")
         tab.to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         se = pc["band"]["se"]
-        q = pause_card(r"With a 1\% cost on every trade, will the agent learn to do nothing inside a band?", width=5.6,
-                       font_size=20).next_to(tab, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)  # wider than the table
+        q = pause_card(r"With a 1\% cost on every trade, will the agent learn to do nothing inside a band?", width=3.6,
+                       font_size=19).next_to(tab, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)  # wider than the table
         edges = [e for e in pc["edges"] if e[0] is not None]
         close = len(edges) >= 3 and all(abs(e[0] - lo) < 0.15 and abs(e[1] - hi) < 0.15 for e in edges)
         beats = bool(np.median(pg) > pc["merton"]["growth"])
