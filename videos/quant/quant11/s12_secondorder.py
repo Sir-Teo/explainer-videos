@@ -97,7 +97,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
                     r"thirds of a standard deviation out"),
                 why(r"the market's quotes: the risk reversal is the price of vanna (it is long one wing, short the "
                     r"other), the butterfly the price of volga")]
-        step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.4, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)  # leaves the corner for the card
         pc = pause(r"Same vega: an at-the-money straddle, or a 25-delta strangle. Which has more volga?", width=5.0,
                    font_size=21)
         with self.voiceover(
@@ -168,7 +168,8 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
             wrapped_label(verdict, 4.2, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(wb, DOWN, buff=0.35).align_to(wb, LEFT).shift(LEFT * 0.6)
         leg = legend([(VEGA, r"the SSVI smile (Part 12)"), (OPT, r"vanna--volga from three quotes")],
-                     font_size=17).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
+                     font_size=17)
+        leg.move_to(g.ax.c2p(0.4, 0.31), aligned_edge=DR)  # inside the chart, in the empty lower right under the smile
         src = real_data(r"the Surface, 10 December 2025: 25-delta strikes solved on the SSVI smile")
         vsay = (f"Between the ten-delta strikes the rebuilt smile sits within {so['rmse_in']:.2f} volatility points of "
                 f"the fitted one; out in the far wings it misses by up to {so['maxerr_wing']:.0f}." if good else
