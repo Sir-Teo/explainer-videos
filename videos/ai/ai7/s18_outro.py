@@ -46,12 +46,12 @@ class Outro(VoiceoverScene):
         out.append((VGroup(*[Rectangle(width=0.2, height=max(12 * s, 0.02), stroke_width=0, fill_color=C.MODEL_Q,
                                        fill_opacity=0.85).move_to([0.27 * i, 6 * s, 0]) for i, s in enumerate(share)]),
                     r"principal components", C.MODEL_Q))
-        # 2. ICA: the two voices recovered
+        # 2. ICA: the two synthetic signals recovered
         ica = load("ica")
         t, Y = np.asarray(ica["t"])[:300], np.asarray(ica["Y"])[:, :300]
         ax2 = plane([t[0], t[-1], 1], [-6, 3, 1])
         out.append((VGroup(curve(ax2, t, Y[0] / np.abs(Y[0]).max() + 1.5, VOICE1, 2.5),
-                           curve(ax2, t, Y[1] / np.abs(Y[1]).max() - 1.5, VOICE2, 2.5)), r"two voices, unmixed", VOICE1))
+                           curve(ax2, t, Y[1] / np.abs(Y[1]).max() - 1.5, VOICE2, 2.5)), ("两个合成信号，分离后" if zh() else "two synthetic signals, unmixed"), VOICE1))
         # 3. EM: the two bells on the pages
         g = load("gmm")
         P, R = np.asarray(g["P"]), np.asarray(g["r"])[-1]
