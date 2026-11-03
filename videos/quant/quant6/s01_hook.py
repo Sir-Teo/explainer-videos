@@ -60,7 +60,7 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's 49 industry portfolios, monthly; the House's \texttt{econ}")
         q = predict(r"A sixth estimate, pooled least squares with a separate intercept for every month, waits in grey. "
-                    r"Which of the five will it sit closest to?", width=11.0).to_edge(DOWN, buff=0.25)
+                    r"Which of the five will it sit closest to?", width=5.6).to_corner(DR, buff=0.5)  # under the notes, off the chart
         with self.voiceover(
             "Here is a question an analyst might ask on a Monday morning. Does an industry's return over the past year "
             "predict its return next month? Kenneth French's forty-nine industries, ninety-three years, fifty-two "
@@ -113,8 +113,9 @@ class Hook(VoiceoverScene):
             c = VGroup(label(str(yr), font_size=24, color=QC.IDEA), label(who, font_size=19, color=WHITE),
                        wrapped_label(what, 2.9, 17, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
             up = i % 2 == 0
-            c.next_to([X(yr), 0, 0], UP if up else DOWN, buff=0.55 if up else 0.75).set_x(
-                min(max(X(yr), -5.2), 5.2))
+            # four evenly spaced slots per row, so clustered years (1969--1987, 2009--2024) never stack;
+            # the leader line runs from the year's dot to its card
+            c.next_to([X(yr), 0, 0], UP if up else DOWN, buff=0.55 if up else 0.75).set_x(-4.8 + 3.2 * (i // 2))
             lead = Line(d.get_center(), c.get_bottom() if up else c.get_top(), color=GREY_C, stroke_width=1,
                         stroke_opacity=0.6)
             dots.add(d)
