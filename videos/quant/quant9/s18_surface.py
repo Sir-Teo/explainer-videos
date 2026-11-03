@@ -46,7 +46,8 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
                       xlabel=r"bitcoin at expiry", xticks=[50000, 100000, 150000], xfmt=lambda u: f"{u / 1000:.0f}k",
                       yticks=[], font_size=13)
             VGroup(g1, g2).arrange(DOWN, buff=0.35)
-            dots = VGroup(*[Dot(g1.ax.c2p(a, b), radius=0.03, color=WHITE) for a, b in zip(kq, ivq) if b < 1.0])
+            dots = VGroup(*[Dot(g1.ax.c2p(a, b), radius=0.03, color=WHITE) for a, b in zip(kq, ivq)
+                            if -0.7 <= a <= 0.6 and 0.3 <= b <= 1.0])  # only the quotes inside the axes
             fitc = curve(g1.ax, kk, np.clip(s["iv"], 0.3, 1.0), Q_C, stroke_width=3)
             ok = (Kg > 0.4 * F) & (Kg < 1.9 * F)
             dc = curve(g2.ax, Kg[ok], np.clip(np.asarray(s["dens"])[ok], 0, dmax * 1.1), Q_C, stroke_width=3)
@@ -118,6 +119,7 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.4)
         ridges, floors = VGroup(), VGroup()
+        last_lab = -1e9
         for i, r in enumerate(R):
             d = np.asarray(r["dens"])
             d = d / d.max()
@@ -127,7 +129,12 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             poly = Polygon(ax.c2p(x[0], Td, 0), *pts, ax.c2p(x[-2], Td, 0), stroke_color=col, stroke_width=2.5,
                            fill_color=col, fill_opacity=0.35)
             ridges.add(poly)
-            floors.add(MathTex(rf"{Td:.0f}\text{{d}}", font_size=22, color=col).move_to(ax.c2p(1.86, Td, 0)))
+            lab_ = MathTex(rf"{Td:.0f}\text{{d}}", font_size=22, color=col).move_to(ax.c2p(1.86, Td, 0))
+            if Td - last_lab < 12:  # expiries a week apart would print on top of each other: label the first only
+                lab_.set_opacity(0)
+            else:
+                last_lab = Td
+            floors.add(lab_)
         names = VGroup(label(r"$x$: bitcoin at expiry, over today's price", font_size=22, color=GREY_A),
                        label(r"$y$: days to expiry", font_size=22, color=GREY_A),
                        label(r"$z$: density, each ridge scaled to its peak", font_size=22, color=GREY_A)).arrange(
