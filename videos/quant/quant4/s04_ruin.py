@@ -14,7 +14,7 @@ class Ruin(VoiceoverScene):
         rd = load("ruin_duration")
         self.card()
         self.derive()
-        self.duration(rd)
+        self.ruin_duration(rd)
         self.curves(r)
         self.bold(r)
 
@@ -130,7 +130,7 @@ class Ruin(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def duration(self, rd):
+    def ruin_duration(self, rd):
         F, R = rd["fair"], rd["roulette"]
         rows = [cmath(r"\mathbb{E}[S_\tau^2 - \tau]", r"=", r"0", font_size=40),
                 cmath(r"\mathbb{E}\tau", r"=", r"(b - a)^2\,\tfrac{a}{b} + a^2\,\tfrac{b - a}{b}", font_size=40),

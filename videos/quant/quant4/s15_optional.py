@@ -15,7 +15,7 @@ class Optional(VoiceoverScene):
         self.card()
         self.proof()
         self.balance(f)
-        self.queue()
+        self.waiting_queue()
         self.patterns(pt)
 
     def card(self):
@@ -124,7 +124,7 @@ class Optional(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def queue(self):
+    def waiting_queue(self):
         n = len(SEQ)
         tosses = VGroup(*[VGroup(RoundedRectangle(width=0.8, height=0.8, corner_radius=0.1, stroke_color=GREY_B),
                                  MathTex(c, font_size=36, color=QC.GAIN if c == "H" else LOSS)) for c in SEQ])
