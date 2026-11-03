@@ -29,11 +29,11 @@ class Flows(VoiceoverScene):
         gm = np.asarray(v["gamma"])
         live = np.asarray(v["live"])
         n = len(t)
-        g1 = axes([2021, 2025], [float(px.min()) * 0.95, float(px.max()) * 1.05], x_length=10.0, y_length=1.9,
+        g1 = axes([2021, 2025], [float(px.min()) * 0.95, float(px.max()) * 1.05], x_length=8.8, y_length=1.9,
                   ylabel=r"CSI 500 ETF", xticks=[], yticks=[], font_size=14)
-        g2 = axes([2021, 2025], [min(0.0, float(vg.min())), float(vg.max()) * 1.1], x_length=10.0, y_length=1.7,
+        g2 = axes([2021, 2025], [min(0.0, float(vg.min())), float(vg.max()) * 1.1], x_length=8.8, y_length=1.7,
                   ylabel=r"book vega", xticks=[], yticks=[0, round(float(vg.max()), 2)], font_size=14)
-        g3 = axes([2021, 2025], [0, float(live.max()) + 1], x_length=10.0, y_length=1.5, ylabel=r"notes alive",
+        g3 = axes([2021, 2025], [0, float(live.max()) + 1], x_length=8.8, y_length=1.5, ylabel=r"notes alive",
                   xticks=[2021, 2022, 2023, 2024, 2025], yticks=[0, int(live.max())], font_size=14)
         G = VGroup(g1, g2, g3).arrange(DOWN, buff=0.25).to_edge(LEFT, buff=0.6).shift(UP * 0.1)
         tr = ValueTracker(0)
@@ -46,7 +46,7 @@ class Flows(VoiceoverScene):
         side = wrapped_label(rf"one note of notional 1 issued each month, 2021--2023; each day every live note's issuer "
                              rf"vega is read from chapter 8's table and summed. Peak: {pk['vega']:.3f} per vol point on "
                              rf"{str(pk['date'])[:4]}-{str(pk['date'])[4:6]}-{str(pk['date'])[6:]}, with {pk['live']} "
-                             r"notes alive", 2.6, 16, GREY_A).to_edge(RIGHT, buff=0.3)
+                             r"notes alive", 3.4, 18, GREY_A).to_edge(RIGHT, buff=0.3)
         src = real_data(r"the index path is real (510500.SS); the book is stylized", corner=DL)
         with self.voiceover(
             "Now add up a whole book. Issue one snowball every month from 2021 to 2023 on the CSI 500, with the "
