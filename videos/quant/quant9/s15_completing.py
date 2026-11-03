@@ -35,10 +35,12 @@ class Completing(VoiceoverScene):
         dig = DashedLine(ax.c2p(1.1, 0), ax.c2p(1.1, 1.0), color=ARB, stroke_width=2)
         dl = label(r"the digital pays 1 above 1.1", font_size=17, color=ARB).next_to(ax.c2p(1.1, 1.0), RIGHT, buff=0.1)
         hinge = VGroup()
-        for r_ in rows[1:]:
+        for i_, r_ in enumerate(rows[1:]):
             k = r_["strike"]
+            # labels alternate between two rows: the strikes near the money are only 0.05 apart
             hinge.add(VGroup(Triangle(color=HEDGE, fill_opacity=1).scale(0.09).move_to(ax.c2p(k, 0) + DOWN * 0.12),
-                             MathTex(f"{k:g}", font_size=17, color=HEDGE).move_to(ax.c2p(k, 0) + DOWN * 0.38)))
+                             MathTex(f"{k:g}", font_size=17, color=HEDGE).move_to(
+                                 ax.c2p(k, 0) + DOWN * (0.38 + 0.22 * (i_ % 2)))))
         h = axes([0, 10], [0, 0.85], x_length=6.4, y_length=3.4, xlabel=r"traded calls added", ylabel=r"the digital's "
                  r"no-arbitrage interval", xticks=list(range(0, 11)), yticks=[0, 0.25, 0.5, 0.75], font_size=15)
         h.to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.6)
@@ -53,7 +55,7 @@ class Completing(VoiceoverScene):
             history_card(1976, r"Stephen Ross, ``Options and efficiency''", r"with options on enough strikes, any "
                          r"payoff of the underlying can be built: options complete the market", width=4.8,
                          font_size=19),
-            MathTex(rf"\text{{stock and bond only: }}[{r0['lower']:.3f},\ {r0['upper']:.3f}]", font_size=24, color=ALT),
+            MathTex(rf"\text{{stock and bond only: }}[{abs(r0['lower']) if abs(r0['lower']) < 5e-4 else r0['lower']:.3f},\ {r0['upper']:.3f}]", font_size=24, color=ALT),
             MathTex(rf"\text{{one call: }}[{r1['lower']:.3f},\ {r1['upper']:.3f}]", font_size=24, color=ALT),
             MathTex(rf"\text{{ten calls: }}[{rl['lower']:.3f},\ {rl['upper']:.3f}]", font_size=24, color=ALT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
@@ -105,11 +107,13 @@ class Completing(VoiceoverScene):
                       font_size=32),
                 cmath(r"\overline{V}_0", r"\to", r"\mathrm{BS}(\sigma_{\max}),\qquad \underline{V}_0 \to (S_0 - K)^+",
                       font_size=32, colors={r"\overline{V}_0": HEDGE})]
-        whys = [why(r"a trinomial step with only the stock and the bond: one step of chapter 7's program", 19),
-                why(r"the one-step martingale measures form a segment: its ends are the two-point measures", 19),
-                why(r"linear in $q$, so the max is at an end; a convex value prefers the spread-out end (Jensen)", 19),
-                why(r"so the super-price is the binomial price at the tree's widest moves: Black--Scholes at the "
-                    r"highest volatility (Avellaneda, Levy and Par\'as 1995; Lyons 1995)", 19)]
+        # notes wrap to 6.2 units so that, set under their rows, they stay right of the tree
+        W = lambda t_: wrapped_label(t_, 6.2, font_size=19, color=GREY_B)  # noqa: E731
+        whys = [W(r"a trinomial step with only the stock and the bond: one step of chapter 7's program"),
+                W(r"the one-step martingale measures form a segment: its ends are the two-point measures"),
+                W(r"linear in $q$, so the max is at an end; a convex value prefers the spread-out end (Jensen)"),
+                W(r"so the super-price is the binomial price at the tree's widest moves: Black--Scholes at the "
+                    r"highest volatility (Avellaneda, Levy and Par\'as 1995; Lyons 1995)")]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=2.6, buff=0.6, edge=6.95)
         src = note(r"Kramkov (1996), optional decomposition; F\"ollmer and Schied, ch.\ 7", font_size=17,
                    color=GREY_B).to_corner(DR, buff=0.25)
