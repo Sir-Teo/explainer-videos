@@ -28,11 +28,11 @@ class LocalVol(VoiceoverScene, ThreeDScene):
     def surfaces(self, b):
         ks, Ts = np.asarray(b["ks"]), np.asarray(b["Ts"])
         imp, loc = np.asarray(b["imp"]), np.asarray(b["loc"])
-        ax = axes3([-0.4, 0.4, 0.2], [0, 0.5, 0.1], [0.2, 0.9, 0.1], x_length=7.4, y_length=4.8, z_length=3.2)
+        ax = axes3([-0.4, 0.4, 0.2], [0, 0.5, 0.1], [0.3, 1.3, 0.2], x_length=7.4, y_length=4.8, z_length=3.2)  # 7-day wings reach 1.27
         self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.85)
         fi, fl = grid_fn(ks, Ts, imp), grid_fn(ks, Ts, loc)
-        si = surf3(ax, fi, (-0.4, 0.4), (Ts[0], Ts[-1]), 0.2, 0.9, resolution=(20, 12), opacity=0.35)
-        sl = surf3(ax, fl, (-0.4, 0.4), (Ts[0], Ts[-1]), 0.2, 0.9, colors=[(QC.IDEA, 0.2), (LV, 0.5), (QC.LOSS, 0.9)],
+        si = surf3(ax, fi, (-0.4, 0.4), (Ts[0], Ts[-1]), 0.3, 1.3, resolution=(20, 12), opacity=0.35)
+        sl = surf3(ax, fl, (-0.4, 0.4), (Ts[0], Ts[-1]), 0.3, 1.3, colors=[(QC.IDEA, 0.35), (LV, 0.65), (QC.LOSS, 1.2)],
                    resolution=(20, 12), opacity=0.85)
         t1 = label(r"implied volatility (translucent)", font_size=22, color=IV).to_corner(UL, buff=0.35)
         t2 = label(r"local volatility, read from the implied surface's slopes", font_size=22, color=LV).next_to(t1, DOWN,
@@ -51,17 +51,17 @@ class LocalVol(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(FadeIn(sl), FadeIn(t2), run_time=2)
             vo.wait_until("b")
-            self.move_camera(phi=88 * DEGREES, theta=-90 * DEGREES, run_time=3)
+            self.move_camera(phi=88 * DEGREES, theta=-90 * DEGREES, zoom=0.7, run_time=3)  # clear of the captions
             self.wait(max(vo.remaining(0.5) - 0.5, 0.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, si, sl)), FadeOut(t1), FadeOut(t2),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, si, sl)), FadeOut(t1), FadeOut(t2),
                                                                   FadeOut(src)], run_time=1)
         self.clear_scene()
 
     def dupire(self):
         rows = [cmath(r"dS = \sigma(S, t)\,S\,dW", r"\Rightarrow", r"\partial_T p = \tfrac12\,\partial_{KK}\big(\sigma^2 K^2 p\big)",
                       font_size=36, colors={r"dS = \sigma(S, t)\,S\,dW": SPOT}),
-                cmath(r"\partial_T C", r"=", r"\int (x - K)^+\,\partial_T p\,dx = \tfrac12 \int (x - K)^+\,\partial_{xx}"
-                      r"(\sigma^2 x^2 p)\,dx = \tfrac12\,\sigma^2(K, T)\,K^2\,p(K, T)", font_size=30,
+                cmath(r"\partial_T C", r"=", r"\tfrac12 \int (x - K)^+\,\partial_{xx}(\sigma^2 x^2 p)\,dx", font_size=36, colors={r"\partial_T C": OPT}),
+                cmath(r"\partial_T C", r"=", r"\tfrac12\,\sigma^2(K, T)\,K^2\,p(K, T)", font_size=36,
                       colors={r"\partial_T C": OPT}),
                 cmath(r"\sigma^2_{\text{loc}}(K, T)", r"=", r"\frac{\partial_T C}{\tfrac12 K^2\,\partial_{KK} C}", font_size=38,
                       colors={r"\sigma^2_{\text{loc}}(K, T)": LV}),
@@ -71,8 +71,9 @@ class LocalVol(VoiceoverScene, ThreeDScene):
                       r"\ \Rightarrow\ \partial_k\sigma_{\text{imp}}(0) = \tfrac12\,\partial_k\sigma_{\text{loc}}(0)",
                       font_size=32, colors={r"\sigma_{\text{imp}}(k)": IV})]
         whys = [why(r"the Fokker--Planck equation for the density of $S_T$ (Part 5), zero rates"),
-                why(r"differentiate the call price under the integral, then integrate by parts twice: "
-                    r"$\partial_{xx}(x - K)^+ = \delta(x - K)$"),
+                why(r"differentiate the call price under the integral and substitute the Fokker--Planck equation"),
+                why(r"integrate by parts twice: $\partial_{xx}(x - K)^+ = \delta(x - K)$, so only the density at the "
+                    r"strike survives"),
                 why(r"Dupire (1994): divide by Breeden and Litzenberger's $p = \partial_{KK}C$; one function, read off the "
                     r"surface"),
                 why(r"change variables to $k$ and $w$ (Gatheral, eq.\ 1.10): Chapter 3's two conditions are exactly "
@@ -82,8 +83,8 @@ class LocalVol(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
         with self.voiceover(
             "If the price diffuses with volatility sigma of S and t, its density obeys Part five's Fokker-Planck "
-            "equation. <bookmark mark='a'/> Differentiate a call in maturity under the integral and integrate by parts "
-            "twice: the payoff's second derivative is a spike at the strike, so only the density there survives. "
+            "equation. <bookmark mark='a'/> Differentiate a call in maturity under the integral, <bookmark mark='a2'/> "
+            "and integrate by parts twice: the payoff's second derivative is a spike at the strike, so only the density there survives. "
             "<bookmark mark='b'/> Divide by Part nine's density, the call's second strike derivative: Bruno Dupire's "
             "1994 formula. <bookmark mark='c'/> In total variance the denominator is Chapter three's g: the calendar and "
             "butterfly conditions are exactly the conditions for local variance to be positive. <bookmark mark='d'/> "
@@ -93,12 +94,14 @@ class LocalVol(VoiceoverScene, ThreeDScene):
             step(0)
             vo.wait_until("a")
             step(1)
-            vo.wait_until("b")
+            vo.wait_until("a2")
             step(2)
-            vo.wait_until("c")
+            vo.wait_until("b")
             step(3)
-            vo.wait_until("d")
+            vo.wait_until("c")
             step(4)
+            vo.wait_until("d")
+            step(5)
         self.wait(0.4)
         self.clear_scene()
 
