@@ -153,7 +153,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. <bookmark mark='pca'/> Principal components are the covariance's eigenvectors: the line of greatest spread, "
             "and the line closest to the data, at once; add noise, and they become a probability model. "
-            "<bookmark mark='ica'/> Independent components unmixed two voices. <bookmark mark='em'/> With an exact "
+            "<bookmark mark='ica'/> Independent components unmixed two synthetic signals. <bookmark mark='em'/> With an exact "
             "posterior E step and an M step that never lowers the same bound, EM cannot lower the likelihood. "
             "For an equal-weight spherical Gaussian mixture, k-means is the small-variance limit, <bookmark mark='topics'/> and a topic model is a mixture of mixtures. "
             "<bookmark mark='hmm'/> Hidden Markov models inferred states from unlabelled letters, "
