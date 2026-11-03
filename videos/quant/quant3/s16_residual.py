@@ -39,7 +39,7 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
                 why(r"substitute, then add and subtract $r B_{t-1}$: the second sum telescopes"),
                 why(r"it collapses to $B_0$ when book grows slower than $1+r$ (no bubble): Ohlson (1995)"),
                 why(r"constant ROE, book growing at $g$: the residual incomes are a Gordon series")]
-        step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.6, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.6, buff=0.38, edge=6.9)
         with self.voiceover(
             "In 1995 James Ohlson rewrote the dividend discount model in the language of the balance sheet. Start from the "
             "dividends. <bookmark mark='a'/> Clean surplus says book equity changes only through earnings and payouts, so each "
@@ -66,7 +66,7 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[0.0, 0.24, 0.04], y_range=[0.0, 0.06, 0.02], z_range=[0, 5, 1], x_length=7.0,
                         y_length=4.6, z_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.6 + RIGHT * 0.4)
+        ax.shift(DOWN * 1.1 + RIGHT * 0.4)  # the surface's high corner stays under the readout
 
         def f(roe, g):
             return float(np.clip(valuation.pb_steady(roe, 0.08, g), 0, 5))
@@ -83,7 +83,7 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
                     MathTex(r"\text{ROE} = 12\%,\ g = 4\%:\ P/B = 2", font_size=30, color=WHITE))
         rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
         dot = Dot3D(ax.c2p(0.12, 0.04, 2.0), radius=0.1, color=WHITE)
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-115 * DEGREES, zoom=0.8)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-115 * DEGREES, zoom=0.72)
         self.add_fixed_in_frame_mobjects(hint, rd)
         self.remove(hint, rd)
         with self.voiceover(

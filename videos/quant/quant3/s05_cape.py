@@ -33,12 +33,12 @@ class CAPE(VoiceoverScene):
         whys = [why(r"Gordon, with dividends a fraction $b$ of earnings: the payout ratio"),
                 why(r"a P/E is a compressed DCF: a high multiple means low $r$ or high $g$"),
                 why(r"the value of today's earnings as a perpetuity, plus the present value of growth opportunities")]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.6, buff=0.7, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-2.6, buff=0.45, edge=6.9)
         ev = VGroup(
             MathTex(r"\frac{\text{EV}}{\text{EBITDA}}", font_size=40),
             wrapped_label(r"enterprise value (equity plus debt minus cash) over earnings before interest, tax, "
                           r"depreciation and amortisation: compares firms however they are financed", 7.4, 23, GREY_A),
-        ).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.9)
+        ).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Analysts rarely run a full DCF; they use multiples, which are DCFs folded up. Write the dividend as a payout ratio "
             "b times earnings. <bookmark mark='a'/> Divide by earnings: the P/E is b over r minus g, a bet on low rates or high "
