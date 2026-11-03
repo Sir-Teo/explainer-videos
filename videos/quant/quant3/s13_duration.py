@@ -37,7 +37,7 @@ class Duration(VoiceoverScene):
                 why(r"$w_t$: the share of value paid in year $t$, $(1 - q)q^{t-1}$ with $q = (1+g)/(1+r)$; "
                     r"sum $t\,w_t$ (differentiate the geometric series)"),
                 why(r"a stock growing at 5\% behaves like a bond of more than thirty years")]
-        step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.0, buff=0.36, edge=6.9)
         with self.voiceover(
             "Frederick Macaulay defined the duration of a bond in 1938: the average date of its payments, each weighted by its "
             "share of the value. A stock has a duration too. Take logs of Gordon's formula. <bookmark mark='a'/> Differentiate "
@@ -81,6 +81,8 @@ class Duration(VoiceoverScene):
             x = ax.c2p(min(D, H + 2), 0)
             tri = Triangle(color=QC.HOUSE, fill_opacity=1, stroke_width=0).scale(0.16).move_to(x + DOWN * 0.18)
             lab = live(r"D =", D, 0, r"\text{years}", font_size=28, color=QC.HOUSE).next_to(tri, DOWN, buff=0.12)
+            if lab.get_right()[0] > 6.8:
+                lab.shift(LEFT * (lab.get_right()[0] - 6.8))
             gl = live(r"g =", 100 * gt.get_value(), 1, r"\%", font_size=30, color=CASH).to_corner(UR, buff=0.5)
             return VGroup(tri, lab, gl)
 
@@ -167,10 +169,10 @@ class Duration(VoiceoverScene):
         bars = VGroup(bar(0.9, growth, VALUE), bar(2.1, value, CASH))
         errs = VGroup(*[Line(ax.c2p(x, v - 196 * s_), ax.c2p(x, v + 196 * s_), color=WHITE, stroke_width=2)
                         for x, v, s_ in ((0.9, growth, se[lo_i]), (2.1, value, se[hi_i]))])
-        names = VGroup(label(r"growth (lowest B/M)", font_size=19, color=VALUE).next_to(ax.c2p(0.9, 0), UP, buff=0.12),
-                       label(r"value (highest B/M)", font_size=19, color=CASH).next_to(ax.c2p(2.1, 0), UP, buff=0.12))
-        nums = VGroup(MathTex(rf"{growth:.2f}\%", font_size=26, color=VALUE).next_to(bars[0], RIGHT, buff=0.1),
-                      MathTex(rf"{value:.2f}\%", font_size=26, color=CASH).next_to(bars[1], RIGHT, buff=0.1))
+        names = VGroup(label(r"growth (lowest B/M)", font_size=19, color=VALUE).next_to(ax.c2p(0.9, 0.5), UP, buff=0.1),
+                       label(r"value (highest B/M)", font_size=19, color=CASH).next_to(ax.c2p(2.1, 0.5), UP, buff=0.1))
+        nums = VGroup(MathTex(rf"{growth:.2f}\%", font_size=26, color=VALUE).next_to(errs[0], DOWN, buff=0.1),
+                      MathTex(rf"{value:.2f}\%", font_size=26, color=CASH).next_to(errs[1], DOWN, buff=0.1))
         ordered = growth < value
         side = VGroup(
             label(r"monthly returns on the month's change in the 10-year yield", font_size=20, color=GREY_A),

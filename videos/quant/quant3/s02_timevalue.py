@@ -47,6 +47,7 @@ class TimeValue(VoiceoverScene, ThreeDScene):
     def conveyor(self):
         r = ValueTracker(0.02)
         n = 24
+        X0, Z0 = 1.6, -1.0  # the conveyor sits right of centre and low, clear of the definition card
 
         def bars():
             g = VGroup()
@@ -56,16 +57,16 @@ class TimeValue(VoiceoverScene, ThreeDScene):
                 col = interpolate_color(ManimColor(CASH), ManimColor(GREY_D), t / n)
                 b = Rectangle(width=0.5, height=max(h, 0.01), fill_color=col, fill_opacity=0.85, stroke_width=0.6,
                               stroke_color=BLACK).rotate(PI / 2, RIGHT)  # a card standing up, facing the viewer
-                b.move_to([0, 0.55 * t - 6.0, h / 2])
+                b.move_to([X0, 0.55 * t - 6.0, h / 2 + Z0])
                 g.add(b)
             return g
 
         conv = always_redraw(bars)
-        floor = Line([0, -5.6, 0], [0, 0.55 * n - 5.8, 0], color=GREY_D, stroke_width=2)
+        floor = Line([X0, -5.6, Z0], [X0, 0.55 * n - 5.8, Z0], color=GREY_D, stroke_width=2)
         defn = definition_card(r"Present value", r"A payment $C$ in $t$ years is worth $C/(1 + r)^t$ today: the sum "
                                r"you would invest now at $r$ to have $C$ then. A project's net present value (NPV) "
-                               r"adds this up over all its cash flows, costs negative.", width=5.6, color=VALUE,
-                               font_size=21).to_corner(UL, buff=0.3)
+                               r"adds this up over all its cash flows, costs negative.", width=4.8, color=VALUE,
+                               font_size=20).to_corner(UL, buff=0.3)
         rd = VGroup(MathTex(r"r =", font_size=34, color=QC.IMPLIED),
                     DecimalNumber(2.0, num_decimal_places=1, font_size=34, color=QC.IMPLIED, unit=r"\%"))
         rd.arrange(RIGHT, buff=0.15)
@@ -93,15 +94,23 @@ class TimeValue(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(defn), Create(floor))
             self.add(conv)
             self.play(FadeIn(panel))
-            rd[1].add_updater(lambda m: m.set_value(100 * r.get_value()))
-            pv[1].add_updater(lambda m: m.set_value(sum((1 + r.get_value()) ** -t for t in range(1, n + 1))))
-            far[1].add_updater(lambda m: m.set_value((1 + r.get_value()) ** -n))
+            cam = self.renderer.camera
+
+            def pinned(f):
+                # set_value rebuilds the digits; the new ones must be pinned to the frame too, or they turn with the camera
+                def upd(m):
+                    m.set_value(f())
+                    cam.add_fixed_in_frame_mobjects(m)
+                return upd
+            rd[1].add_updater(pinned(lambda: 100 * r.get_value()))
+            pv[1].add_updater(pinned(lambda: sum((1 + r.get_value()) ** -t for t in range(1, n + 1))))
+            far[1].add_updater(pinned(lambda: (1 + r.get_value()) ** -n))
             vo.wait_until("a")
             self.move_camera(theta=-40 * DEGREES, run_time=2)
             vo.wait_until("b")
             self.play(r.animate.set_value(0.12), run_time=6, rate_func=smooth)
             vo.wait_until("c")
-            self.move_camera(theta=-65 * DEGREES, phi=62 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
+            self.move_camera(theta=-65 * DEGREES, phi=68 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         for m in (rd[1], pv[1], far[1]):
             m.clear_updaters()
         conv.clear_updaters()
