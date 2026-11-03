@@ -119,7 +119,7 @@ class Scalp(VoiceoverScene, ThreeDScene):
         pnl = np.asarray(sh["pnl"])
         lo, hi, nb = -2.0, 20.0, 44
         g = axes([lo, hi], [0, 1], x_length=7.6, y_length=4.0, xlabel=r"hedged straddle P\&L, per 100",
-                 ylabel=r"share of the 2{,}000 reorderings", xticks=[0, 5, 10, 15, 20], yticks=[], font_size=17)
+                 xticks=[0, 5, 10, 15, 20], yticks=[], font_size=17)  # no y label: the title names the count
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         cnt = np.histogram(np.clip(pnl, lo, hi - 1e-9), bins=nb, range=(lo, hi))[0]
