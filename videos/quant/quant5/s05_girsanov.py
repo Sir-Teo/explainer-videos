@@ -178,6 +178,7 @@ class Girsanov(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(ans))
             vo.wait_until("b")
+            self.play(FadeOut(pc), FadeOut(ans))  # the answer has been given; the chart takes the screen
             self.play(FadeIn(bars_ax), Create(theo), Create(floor), FadeIn(fl), FadeIn(side[0]))
             for i in range(len(ess)):
                 self.play(FadeIn(meas[i], scale=1.5), FadeIn(rows[i]), run_time=0.6)
