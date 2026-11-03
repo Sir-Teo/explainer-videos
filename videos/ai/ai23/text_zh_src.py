@@ -582,12 +582,12 @@ STRINGS = {
     r"actions and video frames as tokens": r"把动作和视频帧当作词元",
     r"what the tokens mean inside a model": r"词元在模型内部意味着什么",
     r"tokenizer quirks in benchmarks; \ cloned voices": r"评测里的分词器怪癖；\ 被克隆的声音",
-    r"Show that a BPE merge of a pair found $n$ times (without overlaps) shortens the text by exactly $n$ symbols. \ In ``aaaa'', how often does the pair (a, a) occur, \ and how many merges does it allow?": r"证明：一个出现$n$次（不重叠）的对被BPE合并后，文本恰好缩短$n$个符号。\ 在“aaaa”中，对(a, a)出现几次，\ 又允许几次合并？",
+    r"Show that a BPE merge of a pair found $n$ times (without overlaps) shortens the text by exactly $n$ symbols. \ In ``aaaa'', how often does the pair (a, a) occur, \ and how many merges does it allow?": r"证明：出现$n$次且不重叠的符号对经BPE合并，文本缩短$n$个符号。\ “aaaa”中(a, a)出现几次，能合并几次？",
     r"One model pays $9.6$ bits per token with $3.2$ characters a token; \ another $2.9$ bits per byte on the same ASCII text. \ Which is better per character? \ Show that per-character perplexity is per-token perplexity to the power $1/(\text{characters per token})$.": r"一个模型每词元花$9.6$比特，每词元$3.2$个字符；\ 另一个在同一段ASCII文本上每字节花$2.9$比特。\ 按字符算哪个更好？\ 证明每字符困惑度等于每词元困惑度的$1/(\text{每词元字符数})$次方。",
     r"One model pays $9.6$ bits per token with $3.2$ characters a token; \ another $2.9$ bits per byte on plain bytes. \ Which is better per character? \ Show that per-character perplexity is per-token perplexity to the power $1/(\text{characters per token})$.": r"一个模型每词元花$9.6$比特，每词元$3.2$个字符；\ 另一个在纯字节上每字节花$2.9$比特。\ 按字符算哪个更好？\ 证明每字符困惑度等于每词元困惑度的$1/(\text{每词元字符数})$次方。",
     r"How many codes do FSQ levels $(8, 5, 5, 5)$ give, \ and how many bits? \ What bitrate do $8$ residual stages of $1{,}024$ codes give at $75$ frames a second?": r"FSQ等级$(8, 5, 5, 5)$给出多少个码，\ 合多少比特？\ 每秒$75$帧、$8$级残差、每级$1{,}024$个码，码率是多少？",
     r"Show that $\cos(2\pi f t)$ and $\cos(2\pi (f_s - f) t)$ agree at every $t = n / f_s$. \ Sampled at $16$ kHz, \ where does a $9$ kHz tone appear?": r"证明$\cos(2\pi f t)$与$\cos(2\pi (f_s - f) t)$在每个$t = n / f_s$处相等。\ 以$16$ kHz采样，\ 一个$9$ kHz的音出现在哪里？",
-    r"List every path of $T = 3$ frames over $\{a, b, \varnothing\}$ that collapses to ``ab'', \ and check the count with the forward recursion. \ Why must every path for ``aa'' contain a blank?": r"列出$\{a, b, \varnothing\}$上所有坍缩成“ab”的$T = 3$帧路径，\ 并用前向递推核对数目。\ 为什么“aa”的每条路径都必须含一个空白？",
+    r"List every path of $T = 3$ frames over $\{a, b, \varnothing\}$ that collapses to ``ab'', \ and check the count with the forward recursion. \ Why must every path for ``aa'' contain a blank?": r"列出$T = 3$帧、符号为$\{a, b, \varnothing\}$且坍缩为“ab”的所有路径，\ 用前向递推核对数量。\ 为何“aa”的路径必须有空白？",
     r"Show that $f^*(x, y) = \log p(y \mid x) / p(y)$ minimizes InfoNCE, \ and that $\log N - \mathcal L \le \log N$ for any critic. \ How much information can a batch of $256$ certify?": r"证明$f^*(x, y) = \log p(y \mid x) / p(y)$使InfoNCE最小，\ 且对任何评判函数都有$\log N - \mathcal L \le \log N$。\ 一个$256$的批次最多能证明多少信息？",
     r"Next: \ Part 24, \ Learning Without Labels": r"下一部分：\ 第24部分，\ 无标签学习",
     r"one input": r"一个输入",
@@ -694,7 +694,7 @@ STRINGS.update({
     r"vision encoder \\ (CLIP ViT-L/14)": r"视觉编码器 \\ （CLIP ViT-L/14）",
     r"original: \ linear map, \ $256$ tokens \\ ($224$ pixels); \ LLaVA-1.5: \\ two-layer MLP, \ $576$ tokens \ ($336$ pixels)":
         r"原版：\ 线性映射，\ $256$个词元 \\ （$224$像素）；\ LLaVA-1.5：\\ 两层MLP，\ $576$个词元 \ （$336$像素）",
-    r"Show that $f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$ minimizes InfoNCE, \ and that $\log N - \mathcal L \le \log N$ for any critic. \ How much information can a batch of $256$ certify?":
+    r"Show that $f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$ minimizes InfoNCE, \ and that $\log N - \mathcal L \le \log N$ for any critic. \ How much information can a batch of $256$ certify?": r"证明$f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$使InfoNCE最小，\ 且任意评判函数满足$\log N - \mathcal L \le \log N$。\ 批量$256$的信息上限是多少？",
         r"证明$f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$使InfoNCE最小，\ 且对任何评判函数都有$\log N - \mathcal L \le \log N$。\ 一个$256$的批次最多能证明多少信息？",
     r"RMSE per pixel, \ evaluation patches": r"每像素均方根误差，\ 评估小块",
     r"$n_k$ non-overlapping replacements: \\ two symbols become one, \ each time":
