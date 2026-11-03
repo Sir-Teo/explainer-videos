@@ -53,6 +53,8 @@ CACHE = Cache("ai29")
 RECIPE_VERSIONS = {name: "independent-20261103-v1" for name in
                    ("agent", "lane", "dreamer", "klbal", "detour", "fast")}
 
+RECIPE_VERSIONS["metr"] = "metr-th1.1-20261103-aae31902b051-v1"
+
 
 @locked_item(lambda name: CACHE.path(name))
 def load(name):
@@ -64,6 +66,8 @@ def load(name):
         metadata = json.loads(path.read_text())
         if metadata.get("recipe_version") != RECIPE_VERSIONS[name]:
             raise ValueError(f"{name}: legacy scientific cache; explicit reviewed regeneration required")
+        if name == "metr" and metadata.get("provenance") != METR_PROVENANCE:
+            raise ValueError("metr: snapshot provenance mismatch; explicit reviewed regeneration required")
         # Cache.load merges NPZ arrays over JSON. Producers never serialize a key
         # into both: reject shadowing before the generic loader can overwrite
         # validated protocol metadata (or any other JSON field).
@@ -277,35 +281,45 @@ def compute_agent(tasks=3000, ns=(1, 2, 3, 5, 8, 12, 20, 30, 45, 60)):
 # ---------------------------------------------------------------------------
 # METR's time horizons (cited data), fitted here
 # ---------------------------------------------------------------------------
-# metr.org/assets/benchmark_results_1_1.yaml, METR-Horizon-v1.1 (retrieved 29 October 2026): model, release date,
-# 50% horizon (minutes) with its 95% interval, 80% horizon (minutes), whether it was the frontier when released.
+# Pinned public snapshot retrieved 3 November 2026; NOT verified as the old October snapshot.
+# The first three pre-2023 models are TH1.0 measurements stitched into TH1.1,
+# not re-estimated TH1.1 results (see release_note). Preserve published precision.
+# Model, release date, 50% horizon/95% interval, 80% horizon (minutes), frontier flag.
+METR_PROVENANCE = {'url': 'https://metr.org/assets/benchmark_results_1_1.yaml',
+ 'retrieved_utc': '2026-11-03T00:33:01.452530+00:00',
+ 'sha256': 'aae31902b0519a4da73e16643915e5e8aca13cd3315c3aac893ce3d6dfe92ad9',
+ 'benchmark': 'METR-Horizon-v1.1',
+ 'long_tasks_version': '799cc9c4b4483a93fc3445623a49ea1bd74fdeb2',
+ 'swaa_version': 'f6cc84052e2a79dd540766c8a1b15ff399696371',
+ 'stitched_th10_models': ['GPT-2', 'GPT-3 (davinci-002)', 'GPT-3.5 (instruct)'],
+ 'release_note': 'https://metr.org/blog/2026-01-29-time-horizon-1-1/'}
 METR = [
-    ("GPT-2", "2019-02-14", 0.054, 0.012, 0.137, 0.0128, True),
-    ("GPT-3 (davinci-002)", "2020-05-28", 0.144, 0.089, 0.220, 0.0562, True),
-    ("GPT-3.5 (instruct)", "2022-03-15", 0.599, 0.260, 1.123, 0.255, True),
-    ("GPT-4", "2023-03-14", 3.99, 1.93, 8.00, 0.890, True),
-    ("GPT-4 Turbo (1106)", "2023-11-06", 4.04, 1.87, 8.44, 0.783, True),
-    ("Claude 3 Opus", "2024-03-04", 3.95, 1.71, 8.76, 0.639, False),
-    ("GPT-4 Turbo", "2024-04-09", 3.73, 1.98, 6.74, 0.928, False),
-    ("GPT-4o", "2024-05-13", 6.99, 4.00, 12.91, 1.267, True),
-    ("Claude 3.5 Sonnet", "2024-06-20", 11.40, 5.49, 22.38, 1.672, True),
-    ("o1-preview", "2024-09-12", 20.33, 11.72, 33.38, 4.421, True),
-    ("Claude 3.5 Sonnet (new)", "2024-10-22", 20.52, 10.14, 40.82, 2.596, True),
-    ("o1", "2024-12-05", 38.83, 21.16, 64.95, 7.090, True),
-    ("Claude 3.7 Sonnet", "2025-02-24", 60.39, 33.01, 104.23, 12.09, True),
-    ("o3", "2025-04-16", 119.73, 74.62, 190.94, 29.98, True),
-    ("Claude 4 Opus", "2025-05-22", 100.37, 59.99, 163.45, 20.43, False),
-    ("Claude 4.1 Opus", "2025-08-05", 100.47, 59.27, 159.45, 23.46, False),
-    ("GPT-5", "2025-08-07", 203.01, 112.64, 405.55, 38.31, True),
-    ("Gemini 3 Pro", "2025-11-18", 224.33, 139.57, 379.24, 54.14, True),
-    ("GPT-5.1-Codex-Max", "2025-11-19", 223.71, 134.31, 396.21, 50.63, False),
-    ("Claude Opus 4.5", "2025-11-24", 292.99, 161.72, 623.70, 49.43, True),
-    ("GPT-5.2", "2025-12-11", 352.25, 198.07, 815.18, 66.00, True),
-    ("Claude Opus 4.6", "2026-02-05", 718.81, 316.69, 3633.79, 69.87, True),
-    ("GPT-5.3-Codex", "2026-02-05", 349.53, 194.91, 816.35, 54.74, False),
-    ("Gemini 3.1 Pro", "2026-02-19", 384.15, 233.50, 694.75, 89.80, False),
-    ("GPT-5.4", "2026-03-05", 341.74, 186.58, 768.78, 53.88, False),
-    ("Claude Mythos Preview (early)", "2026-04-07", 1044.78, 508.88, 3304.26, 185.91, True),
+    ('GPT-2', '2019-02-14', 0.053778, 0.009994, 0.141825, 0.0128, True),
+    ('GPT-3 (davinci-002)', '2020-05-28', 0.144057, 0.093319, 0.221209, 0.056238, True),
+    ('GPT-3.5 (instruct)', '2022-03-15', 0.599247, 0.255148, 1.115905, 0.25538, True),
+    ('GPT-4', '2023-03-14', 3.987428, 1.93292, 7.995283, 0.889561, True),
+    ('GPT-4 Turbo (1106)', '2023-11-06', 4.044959, 1.866859, 8.443226, 0.783032, True),
+    ('Claude 3 Opus', '2024-03-04', 3.952262, 1.706313, 8.76484, 0.638973, False),
+    ('GPT-4 Turbo', '2024-04-09', 3.732787, 1.980046, 6.736613, 0.927933, False),
+    ('GPT-4o', '2024-05-13', 6.991195, 4.001482, 12.905741, 1.267009, True),
+    ('Claude 3.5 Sonnet', '2024-06-20', 11.395377, 5.489734, 22.384214, 1.671757, True),
+    ('o1-preview', '2024-09-12', 20.326586, 11.716193, 33.379877, 4.420545, True),
+    ('Claude 3.5 Sonnet (new)', '2024-10-22', 20.522872, 10.144026, 40.82028, 2.595677, True),
+    ('o1', '2024-12-05', 38.831588, 21.164512, 64.95249, 7.090121, True),
+    ('Claude 3.7 Sonnet', '2025-02-24', 60.388937, 33.006168, 104.226017, 12.09179, True),
+    ('o3', '2025-04-16', 119.732634, 74.615398, 190.943818, 29.981603, True),
+    ('Claude 4 Opus', '2025-05-22', 100.366123, 59.994073, 163.454074, 20.429752, False),
+    ('Claude 4.1 Opus', '2025-08-05', 100.472004, 59.272391, 159.451918, 23.455761, False),
+    ('GPT-5', '2025-08-07', 203.012577, 112.641357, 405.551565, 38.312431, True),
+    ('Gemini 3 Pro', '2025-11-18', 224.325884, 139.565157, 379.235434, 54.142849, True),
+    ('GPT-5.1-Codex-Max', '2025-11-19', 223.714694, 134.31077, 396.206723, 50.632499, False),
+    ('Claude Opus 4.5', '2025-11-24', 292.994594, 161.717714, 623.704698, 49.430584, True),
+    ('GPT-5.2', '2025-12-11', 352.249302, 198.067494, 815.177445, 66.002649, True),
+    ('Claude Opus 4.6', '2026-02-05', 718.80683, 316.685725, 3633.786163, 69.874587, True),
+    ('GPT-5.3-Codex', '2026-02-05', 349.530732, 194.913134, 816.351994, 54.739407, False),
+    ('Gemini 3.1 Pro', '2026-02-19', 384.147435, 233.50073, 694.750898, 89.801503, False),
+    ('GPT-5.4', '2026-03-05', 341.735276, 186.581591, 768.779526, 53.877851, False),
+    ('Claude Mythos Preview (early)', '2026-04-07', 1044.780145, 508.876789, 3304.261235, 185.911829, True),
 ]
 METR_FIT = dict(from_2023=128.744, lo=104.428, hi=158.012, all_time=187.778)  # METR's own doubling times, days
 RELIABLE = 16 * 60  # METR: measurements above 16 hours are unreliable with the current task suite
@@ -317,7 +331,8 @@ def years(d: str) -> float:
 
 
 def compute_metr(boots=4000):
-    rows = [dict(name=n, date=d, t=years(d), p50=p, lo=lo, hi=hi, p80=p8, sota=s) for n, d, p, lo, hi, p8, s in METR]
+    rows = [dict(name=n, date=d, t=years(d), p50=p, lo=lo, hi=hi, p80=p8, sota=s,
+                 benchmark="METR-Horizon-v1.0" if n in METR_PROVENANCE["stitched_th10_models"] else "METR-Horizon-v1.1") for n, d, p, lo, hi, p8, s in METR]
     t = np.array([r["t"] for r in rows])
     y50 = np.log2([r["p50"] for r in rows])
     y80 = np.log2([r["p80"] for r in rows])
@@ -348,7 +363,7 @@ def compute_metr(boots=4000):
     # a constant hazard (each minute of work fails with the same chance) predicts p50 / p80 = ln 2 / ln 1.25
     ch = math.log(2) / math.log(1.25)
     # the per-hour failure rate a constant hazard would give each frontier model: ln 2 / p50
-    return dict(rows=rows, coef_2023=c23, coef_all=call, doubling_2023=365.25 / c23[1],
+    return dict(rows=rows, provenance=dict(METR_PROVENANCE), coef_2023=c23, coef_all=call, doubling_2023=365.25 / c23[1],
                 doubling_ci=(float(np.percentile(d23, 2.5)), float(np.percentile(d23, 97.5))),
                 doubling_all=365.25 / call[1], doubling_80=365.25 / c80[1], coef_80=c80, metr=METR_FIT,
                 ratio=ratio, ratio_median=float(np.median(ratio)), ratio_hazard=ch, n_fit=int(m23.sum()),
