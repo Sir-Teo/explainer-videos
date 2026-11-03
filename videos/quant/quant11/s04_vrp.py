@@ -168,7 +168,8 @@ class VRP(VoiceoverScene):
             wrapped_label(rf"half that leverage keeps {100 * half / k['g_max']:.0f}\% of the growth, and survives a month "
                           r"twice as bad as any seen", 4.6, 19, GAMMA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(eqs, DOWN, buff=0.35).align_to(eqs, LEFT)
-        src = real_data(rf"Part 10's {k['n']} monthly P\&Ls of a sold, hourly-hedged 30-day bitcoin call, as returns on notional")
+        src = real_data(rf"Part 10's {k['n']} one-month P\&Ls of a sold, hourly-hedged 30-day bitcoin call, one started each "
+                       r"day (they overlap), as returns on notional")
         pc = pause(r"Your edge has $t = 2.4$ on 43 months. Lever it five times?", width=4.6, font_size=21,
                    corner=DR).shift(UP * 0.4)  # the left corner holds the chart's axis label; clear the source line
         at_wall = k["f_emp"] > 0.9 * k["f_ruin"]
