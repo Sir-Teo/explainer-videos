@@ -92,8 +92,8 @@ class Frequency(VoiceoverScene):
     def scatter(self, f):
         gap = (np.asarray(f["rv"]) - np.asarray(f["iv"])) * 100
         st = {(r_["rule"], r_["cost"]): r_ for r_ in f["stats"]}
-        g = axes([-60, 80], [-20, 20], x_length=6.8, y_length=4.6, xlabel=r"realized minus implied vol (points)",
-                 ylabel=r"hedged straddle P\&L, per 100", xticks=[-40, 0, 40, 80], yticks=[-20, -10, 0, 10, 20],
+        g = axes([-70, 60], [-20, 20], x_length=6.8, y_length=4.6, xlabel=r"realized minus implied vol (points)",
+                 ylabel=r"hedged straddle P\&L, per 100", xticks=[-60, -30, 0, 30, 60], yticks=[-20, -10, 0, 10, 20],
                  font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         n = len(gap)
@@ -101,7 +101,7 @@ class Frequency(VoiceoverScene):
 
         def cloud(k, c):
             y = np.clip(np.asarray(f[f"pnl {k} 0.0"]), -20, 20)
-            x = np.clip(gap, -60, 80)
+            x = np.clip(gap, -70, 60)  # the data run from -62 to +48: nothing is clipped
 
             def make():
                 m = int(tr.get_value())
@@ -122,8 +122,8 @@ class Frequency(VoiceoverScene):
         verdict = (rf"hourly minus daily: {f['diff_hd_mean']:+.2f}, $t = {f['diff_hd_t']:.1f}$: frequency changed the "
                    r"mean" if tsig else rf"hourly minus daily: {f['diff_hd_mean']:+.2f}, $t = {f['diff_hd_t']:.1f}$: "
                    r"no difference in the mean, only in the spread")
-        side = VGroup(wrapped_label(verdict, 5.4, 20, GREY_A),
-                      wrapped_label(r"with a 10 bp cost on every trade, the hourly hedger pays for its precision", 5.4,
+        side = VGroup(wrapped_label(verdict, 4.8, 20, GREY_A),
+                      wrapped_label(r"with a 10 bp cost on every trade, the hourly hedger pays for its precision", 4.8,
                                     20, THETA)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.4)
         side.align_to(tab, LEFT)
         src = real_data(rf"{f['n']} thirty-day straddles at DVOL, started weekly, April 2021--November 2025")
