@@ -97,7 +97,7 @@ class Forward(VoiceoverScene):
                     r"$\chi^2$; with COS inside, this is the white curve", 20),
                 why(r"a cliquet coupon is floored at $f$ and capped at $c$: each period is a forward-start call spread, so "
                     r"a cliquet is priced off forward smiles, which no vanilla pins down", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.6, edge=6.9)
         pp = pause(r"In which models is a forward-start option worth exactly today's option?", width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
