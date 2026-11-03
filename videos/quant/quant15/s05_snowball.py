@@ -130,15 +130,16 @@ class Snowball(VoiceoverScene):
             bars.add(Rectangle(width=0.14, height=max(y1 - y0, 0.01), stroke_width=0, fill_color=QC.HOUSE,
                                fill_opacity=0.85).move_to([hb.ax.c2p(m, 0)[0], (y0 + y1) / 2, 0]))
         stats = VGroup(
-            label(rf"knocked out: {100 * o['p_ko']:.1f}\%, at month {o['mean_ko_month']:.1f} on average; "
-                  rf"{100 * o['p_first']:.1f}\% at the first look", font_size=19, color=QC.HOUSE),
+            label(rf"knocked out: {100 * o['p_ko']:.1f}\%, at month {o['mean_ko_month']:.1f} on average",
+                  font_size=19, color=QC.HOUSE),
+            label(rf"{100 * o['p_first']:.1f}\% at the first look", font_size=19, color=QC.HOUSE),
             label(rf"ended knocked in: {100 * o['p_lost']:.1f}\%, left with {o['mean_lost']:.2f} per 1 on average",
                   font_size=19, color=BAD),
             label(rf"full coupon: {100 * o['p_full']:.1f}\%; expected life {o['life']:.1f} months", font_size=19,
                   color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(hb, DOWN, buff=0.4).align_to(hb, LEFT)
-        if stats.width > 5.4:
-            stats.scale_to_fit_width(5.4)
+        if stats.width > 4.8:
+            stats.scale_to_fit_width(4.8)
         pp = pause_card(r"What fraction of these snowballs end before maturity?", width=5.4).to_corner(UR, buff=0.4)
         src = illustration(r"150 of 40{,}000 simulated paths at the fair coupon; gold stops at its knock-out", corner=DL)
         with self.voiceover(
@@ -176,14 +177,19 @@ class Snowball(VoiceoverScene):
         rows = [cmath(r"V(c)", r"=", r"A + c\,B", font_size=40, colors={r"V(c)": OPT}),
                 cmath(r"c^{*}", r"=", r"\frac{1 - A}{B}", font_size=40, colors={r"c^{*}": IV})]
         side = VGroup(rows[0],
-                      wrapped_label(r"$A = \sum_m \mathbb E[D_m\mathbf 1_{\tau = m}] + \mathbb E[D_T(\mathbf 1_{\text{alive, "
-                                    r"no KI}} + \min(S_T, 1)\mathbf 1_{\text{alive, KI}})]$; $B = \sum_m \tfrac{m}{12}"
-                                    r"\mathbb E[D_m\mathbf 1_{\tau = m}] + 2\,\mathbb E[D_T\mathbf 1_{\text{alive, no KI}}]$",
-                                    5.2, 18, GREY_A),
+                      VGroup(MathTex(r"A = \textstyle\sum_m \mathbb E[D_m\mathbf 1_{O_m}] + \mathbb E\big[D_T\big(\mathbf 1_N + "
+                                     r"\min(S_T, 1)\,\mathbf 1_I\big)\big]", font_size=26, color=GREY_A),
+                             MathTex(r"B = \textstyle\sum_m \tfrac{m}{12}\,\mathbb E[D_m\mathbf 1_{O_m}] + "
+                                     r"2\,\mathbb E[D_T\mathbf 1_N]", font_size=26, color=GREY_A),
+                             label(r"$O_m$ knocked out in month $m$; $N$ never knocked in; $I$ knocked in",
+                                   font_size=18, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.15),
                       rows[1],
                       wrapped_label(rf"one simulation gives both: $A = {A:.4f}$, $B = {B:.4f}$. No root search: the "
                                     r"coupon is a linear solve (a solve, not a fit)", 5.2, 19, WHITE),
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        if side.width > 6.0:
+            side.scale_to_fit_width(6.0)
+        side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
             "How was the fair coupon found? Not by search. On every path, the payoff is a fixed amount plus the coupon "
             "times something that does not depend on it. <bookmark mark='a'/> So the value is a straight line in the "
@@ -203,7 +209,7 @@ class Snowball(VoiceoverScene):
     def carry(self, cq):
         bq = cq["by_q"]
         bk = cq["by_ki"]
-        g1 = axes([0, 0.08], [0, 0.32], x_length=5.0, y_length=3.6, xlabel=r"carry $q$: dividend plus futures discount",
+        g1 = axes([-0.012, 0.088], [0, 0.32], x_length=5.0, y_length=3.6, xlabel=r"carry $q$: dividend plus futures discount",
                   ylabel=r"fair coupon", xticks=[0, 0.02, 0.04, 0.06, 0.08], xfmt=lambda u: f"{100 * u:.0f}\\%",
                   yticks=[0, 0.1, 0.2, 0.3], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=14)
         g2 = axes([0.62, 0.88], [0, 0.32], x_length=5.0, y_length=3.6, xlabel=r"knock-in level",
