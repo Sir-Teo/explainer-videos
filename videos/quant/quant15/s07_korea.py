@@ -38,7 +38,7 @@ class Korea(VoiceoverScene):
 
     def terms(self):
         steps = [0.90, 0.90, 0.85, 0.85, 0.80, 0.75]
-        g = axes([0, 3], [0.4, 1.1], x_length=7.0, y_length=4.2, xlabel=r"years", ylabel=r"index / start",
+        g = axes([0, 3], [0.4, 1.1], x_length=5.6, y_length=4.2, xlabel=r"years", ylabel=r"index / start",
                  xticks=[0, 0.5, 1, 1.5, 2, 2.5, 3], yticks=[0.5, 0.75, 1.0], font_size=15).to_edge(LEFT, buff=0.7)
         ax = g.ax
         stair = VGroup(*[Line(ax.c2p(0.5 * i + 0.4, s_), ax.c2p(0.5 * i + 0.6, s_), stroke_color=GOOD, stroke_width=5)
@@ -55,7 +55,10 @@ class Korea(VoiceoverScene):
             wrapped_label(r"a strip of six digitals on a falling staircase, and a down-and-in put at half the start. The "
                           r"steps make an early exit likelier as time passes, so the coupon is cheap to pay; the put is "
                           r"what pays for it", 4.6, 19, WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        if side.width > 6.0:
+            side.scale_to_fit_width(6.0)
+        side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
             "Korea's snowball is the step-down equity-linked security, and its favourite underlying was Hong Kong's "
             "index of Chinese companies, the HSCEI. Every six months the note is repaid with its coupon if the index "
