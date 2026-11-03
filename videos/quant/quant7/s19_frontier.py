@@ -48,19 +48,20 @@ class Frontier(VoiceoverScene):
         tk = np.asarray(f["ctx_tokens"])
         C = len(ctx)
         s = float(np.mean(np.abs(ctx)))
-        g = axes([0, C], [0, float(ctx.max()) * 1.1], x_length=6.0, y_length=2.6, xticks=[], yticks=[], font_size=14,
+        g = axes([-0.5, C - 0.5], [0, float(ctx.max()) * 1.1], x_length=0.15 * C, y_length=2.6, xticks=[], yticks=[], font_size=14,
                  ylabel=r"Bitcoin's daily volatility, the 64 days before 13 March 2020")
         g.to_corner(UL, buff=0.4)
         dots = VGroup(*[Dot(g.ax.c2p(i, v), radius=0.04, color=RET) for i, v in enumerate(ctx)])
         nb = int(f["bins"])
         ladder_ = VGroup(*[Rectangle(width=0.5, height=4.6 / 32, stroke_width=0,
                                      fill_color=interpolate_color(ManimColor(VOL), ManimColor(BAD), k / 31), fill_opacity=0.9)
-                           for k in range(32)]).arrange(UP, buff=0.0).to_edge(RIGHT, buff=1.2).shift(DOWN * 0.2)
-        lt = label(rf"{nb} bins on $[0, 4]$ after scaling (32 drawn)", font_size=17, color=GREY_A).next_to(ladder_, UP, buff=0.15)
-        strip = VGroup(*[Square(side_length=0.17, stroke_width=0.5, stroke_color=BACKGROUND,
+                           for k in range(32)]).arrange(UP, buff=0.0).to_edge(RIGHT, buff=1.5).shift(DOWN * 0.2)
+        lt = wrapped_label(rf"{nb} bins on $[0, 4]$ after scaling (32 drawn)", 2.6, 17, GREY_A).next_to(ladder_, UP, buff=0.15)
+        # each day's token sits directly under that day's dot
+        y_strip = g.ax.c2p(0, 0)[1] - 0.75
+        strip = VGroup(*[Square(side_length=0.15, stroke_width=0.5, stroke_color=BACKGROUND,
                                 fill_color=interpolate_color(ManimColor(VOL), ManimColor(BAD), min(t_ / (nb - 1) * 1.0, 1.0)),
-                                fill_opacity=0.95) for t_ in tk]).arrange(RIGHT, buff=0.0)
-        strip.next_to(g, DOWN, buff=0.6).align_to(g, LEFT)
+                                fill_opacity=0.95).move_to([g.ax.c2p(i, 0)[0], y_strip, 0]) for i, t_ in enumerate(tk)])
         nums = MathTex(r"\text{tokens: }" + r",\,".join(str(int(t_)) for t_ in tk[-8:]), font_size=22, color=GREY_A)
         nums.next_to(strip, DOWN, buff=0.15).align_to(strip, LEFT)
         rows = VGroup(
