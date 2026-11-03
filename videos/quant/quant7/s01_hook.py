@@ -34,10 +34,10 @@ class Hook(VoiceoverScene):
         n = len(t) // k
         tb = t[:n * k].reshape(n, k).mean(1)
         rms = np.sqrt((a[:n * k].reshape(n, k) ** 2).mean(1))
-        gr = axes([1926, 2021], [0, 1.0], x_length=12.0, y_length=4.4, xticks=[1930, 1950, 1970, 1990, 2010],
+        gr = axes([1926, 2021], [0, 1.0], x_length=12.0, y_length=4.0, xticks=[1930, 1950, 1970, 1990, 2010],
                   xfmt=lambda u: f"{int(u)}", yticks=[0, 0.5, 1.0], yfmt=lambda u: f"{100 * u:.0f}\\%",
                   ylabel=r"size of the US market's daily moves, annualised (each bar: 20 trading days)",
-                  font_size=16).move_to(DOWN * 0.3)
+                  font_size=16).move_to(DOWN * 0.6)
         ax = gr.ax
         hi = float(np.quantile(rms, 0.995))
         bars = VGroup()
