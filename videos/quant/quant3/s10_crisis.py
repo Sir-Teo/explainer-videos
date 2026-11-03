@@ -126,7 +126,10 @@ class Crisis(VoiceoverScene):
         co = valuation.BENEISH
         form = MathTex(r"M = -4.84 + 0.920\,\text{DSRI} + 0.528\,\text{GMI} + 0.404\,\text{AQI} + 0.892\,\text{SGI}"
                        r" + 0.115\,\text{DEPI} - 0.172\,\text{SGAI} + 4.679\,\text{TATA} - 0.327\,\text{LVGI}",
-                       font_size=27).to_edge(UP, buff=0.4)
+                       font_size=27)
+        if form.width > 13.0:  # the eight-term score is wider than the frame at this size
+            form.scale_to_fit_width(13.0)
+        form.to_edge(UP, buff=0.4)
         cap = label(r"Beneish (1999): fitted on 74 firms caught manipulating earnings against matched controls; "
                     r"flagged above $-1.78$", font_size=19, color=GREY_B).next_to(form, DOWN, buff=0.15)
         K = ms["khc"][-1]
@@ -147,7 +150,7 @@ class Crisis(VoiceoverScene):
         lab_ = label(r"Kraft Heinz FY2017, from its own 10-K: each term's push above a neutral firm", font_size=18,
                      color=GREY_B).next_to(axis, UP, buff=0.12)
         M = np.asarray(ms["m"])
-        h = axes([-4, 0], [0, 1.0], x_length=4.6, y_length=3.2, xlabel=r"M-score", xticks=[-4, -3, -2, -1.78, -1],
+        h = axes([-4, 0], [0, 1.0], x_length=4.6, y_length=3.2, xlabel=r"M-score", xticks=[-4, -3, -1],
                  xfmt=lambda v: f"{v:g}", yticks=[], font_size=16).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.9)
         hx = h.ax
         hist, edges = np.histogram(np.clip(M, -3.99, -0.01), bins=16, range=(-4, 0))
@@ -157,8 +160,10 @@ class Crisis(VoiceoverScene):
                                   fill_color=QC.SPOT, fill_opacity=0.75).move_to(hx.c2p(e + 0.125, 0), aligned_edge=DOWN)
                         for e, v in zip(edges[:-1], hist)])
         thr = DashedLine(hx.c2p(-1.78, 0), hx.c2p(-1.78, 1.0), color=QC.LOSS, stroke_width=2)
+        thr = VGroup(thr, MathTex(r"-1.78", font_size=22, color=QC.LOSS).next_to(thr.get_top(), RIGHT, buff=0.08)
+                   .shift(DOWN * 0.15))
         kd = Dot(hx.c2p(K["m"], 0.05), radius=0.09, color=QC.HOUSE)
-        kl = label(rf"Kraft Heinz 2017: {K['m']:.2f}", font_size=17, color=QC.HOUSE).next_to(kd, UP, buff=0.5)
+        kl = label(rf"Kraft Heinz 2017: {K['m']:.2f}", font_size=17, color=QC.HOUSE).next_to(kd, RIGHT, buff=0.15).shift(UP * 0.35)
         res = label(rf"{ms['n']} firm-years of 7 large firms: {100 * ms['share_flagged']:.1f}\% flagged", font_size=19,
                     color=GREY_A).next_to(h, UP, buff=0.2)
         miss = label(r"a screen, not a test: no fraud labels; missing inputs set to neutral", font_size=16,
