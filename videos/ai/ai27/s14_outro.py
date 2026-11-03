@@ -122,8 +122,8 @@ class Outro(VoiceoverScene):
             "learned, and where it was wrong. Reinforcement learning with a KL leash aims "
             "at an exact optimum, the reference model reweighted by the exponential of the reward. Push a learned "
             "reward too hard and it stops measuring what it was meant to: Goodhart's law, which we measured. DPO "
-            "reaches the same optimum straight from the comparisons. And written principles, distillation and model "
-            "merging make all of this cheaper."
+            "fits comparisons directly through a policy-reward reparameterization. Written principles provide "
+            "supervision; distillation trains a smaller student; model merging combines already-trained task vectors."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -158,13 +158,13 @@ class Outro(VoiceoverScene):
             r"Prove that $\pi^* \propto \pi_{\mathrm{ref}}\, e^{r/\beta}$ maximizes $\mathbb E_\pi[r] - \beta\, "
             r"\mathrm{KL}(\pi \,\|\, \pi_{\mathrm{ref}})$, \ and that the maximum is $\beta \log Z$.",
             r"Show that best-of-$n$ sampling has $\mathrm{KL}(\pi_{\mathrm{BoN}} \,\|\, \pi_{\mathrm{ref}}) = \log n - "
-            r"(n-1)/n$ when the reward has no ties.",
+            r"(n-1)/n$ when the reference reward distribution is continuous and atomless.",
             r"Compute the gradient of the DPO loss for one pair, \ and show that it is weighted by "
             r"$\sigma(\hat r_l - \hat r_w)$, \ where $\hat r = \beta \log \pi_\theta / \pi_{\mathrm{ref}}$.",
             r"A LoRA adapter of rank $r$ on a $d \times k$ matrix has $r(d + k)$ parameters. \ For $d = k = 4096$, at "
             r"what rank does it have as many as the matrix?",
-            r"Fit a Gaussian $q$ to any density $p$ by minimizing $\mathrm{KL}(p \,\|\, q)$. \ Show that $q$ has "
-            r"the mean and variance of $p$.",
+            r"Let density $p$ have finite second moment and finite differential entropy. Fit a Gaussian $q$ by "
+            r"minimizing $\mathrm{KL}(p \,\|\, q)$; show that $q$ has the mean and variance of $p$.",
             r"Show that $\mathbb E_{y \sim \pi}[\, b\, \nabla \log \pi(y)] = 0$ for any $b$ that does not depend on "
             r"$y$, \ and that $r_i - \operatorname{mean}(r) = \frac{k-1}{k}\big(r_i - \operatorname{mean}_{j \ne i} "
             r"r_j\big)$ for $k$ answers.",

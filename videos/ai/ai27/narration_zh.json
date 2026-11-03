@@ -18,156 +18,6 @@
   "Outro": "回顾、习题，以及接下来"
  },
  "lines": {
-  "537d579fc279": {
-   "scene": "RLHF",
-   "en": "Chapter six. Reinforcement learning on a leash.",
-   "zh": "第6章。拴着绳子的强化学习。"
-  },
-  "0efeadc01079": {
-   "scene": "RLHF",
-   "en": "With a reward model in hand, the plan is reinforcement learning: generate answers, score them, and push the model toward high scores with the policy gradient of Part 26. But maximizing the reward model alone is a mistake, for two reasons. <bookmark mark='a'/> The reward model is only an approximation, and a strong optimizer finds the places where it's wrong. <bookmark mark='b'/> And the policy can drift into text unlike anything it learned from, losing the fluency it had. <bookmark mark='c'/> So the objective adds a leash: a penalty, beta times the KL divergence from the fine-tuned model we started with, the reference. Beta sets the exchange rate: how much reward is worth one nat of divergence.",
-   "zh": "有了奖励模型，计划就是强化学习：生成回答，给它们打分，再用第26部分的策略梯度，把模型推向高分。但只去最大化奖励模型，是个错误，原因有二。<bookmark mark='a'/>奖励模型只是一个近似，而一个强大的优化器会找到它出错的地方。<bookmark mark='b'/>而且策略可能漂移到和它学过的任何东西都不像的文本里，失去原有的流畅。<bookmark mark='c'/>所以目标里加了一根绳子：一个惩罚项，β乘以与出发时那个微调模型，也就是参考模型之间的KL散度。β定下了兑换比率：一奈特的偏离，值多少奖励。"
-  },
-  "4ece41557c99": {
-   "scene": "RLHF",
-   "en": "This objective has an exact solution, and it's worth deriving, because the rest of the part leans on it. Fix a prompt and write the objective as a sum over possible answers y. <bookmark mark='a'/> Fold the reward into the logarithm: r is beta times the log of e to the r over beta. <bookmark mark='b'/> Divide and multiply by the normalizing constant Z, and what's left is minus beta times a KL divergence, plus a constant. <bookmark mark='c'/> A KL divergence is never negative and is zero only when the two distributions agree, Part 1's Gibbs inequality. So the best policy is pi star: the reference model's probabilities, reweighted by e to the reward over beta. <bookmark mark='d'/> Large beta: barely move from the reference. Small beta: pile everything onto the highest-reward answers.",
-   "zh": "这个目标有一个精确解，值得推导一下，因为本部分剩下的内容都要靠它。固定一个提示，把目标写成对所有可能回答y的求和。<bookmark mark='a'/>把奖励折进对数里：r等于β乘以e的r/β次方的对数。<bookmark mark='b'/>除以再乘以归一化常数Z，剩下的就是负β乘以一个KL散度，再加一个常数。<bookmark mark='c'/>KL散度永远不会是负的，只有两个分布一致时才为零，这是第1部分的吉布斯不等式。所以最好的策略就是π星：参考模型的概率，按e的奖励/β次方重新加权。<bookmark mark='d'/>β很大时，几乎不离开参考模型。β很小时，把一切都堆到奖励最高的回答上。"
-  },
-  "ea6852b8d5e7": {
-   "scene": "RLHF",
-   "en": "Here's the formula on eight real answers our fine-tuned model wrote about the sea, chosen to be about equally likely under it, and sorted by their reward. The bars start as the reference model's probabilities, renormalized over these eight. <bookmark mark='a'/> With beta 10, the leash is tight: only 2 percent of the probability moves. <bookmark mark='b'/> At beta 1, the better half of the answers goes from 13 to 29 percent of the probability. <bookmark mark='c'/> At beta 0.1, nearly all of it sits on the best answer: 100 percent. That is what reinforcement learning with a KL penalty is aiming at, though it has to get there by sampling, one gradient step at a time.",
-   "zh": "这是那个公式，用在我们微调过的模型写的八个关于大海的真实回答上，挑的是在模型看来可能性差不多的，按奖励排好。柱子一开始是参考模型的概率，在这八个上重新归一化。<bookmark mark='a'/>β取10时，绳子很紧：只有2%的概率移动了。<bookmark mark='b'/>β取1时，较好的那一半回答，所占的概率从13%变成了29%。<bookmark mark='c'/>β取0.1时，几乎全部概率都落在最好的回答上：100%。这就是带KL惩罚的强化学习要去的地方，只是它得靠采样，一步一个梯度地走过去。"
-  },
-  "4a137f2551ba": {
-   "scene": "RLHF",
-   "en": "How does Part 26's PPO fit a language model? Treat each answer as an episode: the state is the prompt and the tokens written so far, and the action is the next token. <bookmark mark='b'/> InstructGPT's reward gives every token a penalty, beta times that token's log-ratio of policy to reference, and adds the reward model's score at the last token. <bookmark mark='c'/> Summed over the answer, that is one sample of the objective we started with: the score, minus beta times the log-ratio of the whole answer. <bookmark mark='d'/> Then PPO runs as in Part 26, with a value network to judge each partial answer, and advantages computed token by token. That makes four networks the size of a language model in memory at once: the policy and the value network, training; the reference and the reward model, frozen. <bookmark mark='e'/> InstructGPT's value network started as a copy of its six-billion-parameter reward model.",
-   "zh": "第26部分的PPO，怎样用在语言模型上？把每个回答当作一个回合：状态是提示，加上目前写下的词元，动作是下一个词元。<bookmark mark='b'/>InstructGPT的奖励，给每个词元一个惩罚，是β乘以这个词元上策略与参考之比的对数，再在最后一个词元上，加上奖励模型的分数。<bookmark mark='c'/>沿着整个回答加起来，就是我们一开始那个目标的一个样本：分数，减去β乘以整个回答的对数比。<bookmark mark='d'/>然后PPO照第26部分那样运行，用一个价值网络来评判每个写了一半的回答，优势逐个词元地算。这样一来，内存里同时有四个语言模型大小的网络：策略和价值网络，在训练；参考模型和奖励模型，冻结不动。<bookmark mark='e'/>InstructGPT的价值网络，一开始就是它那个60亿参数奖励模型的副本。"
-  },
-  "51f7da4d3740": {
-   "scene": "RLHF",
-   "en": "The value network is there to supply a baseline. <bookmark mark='a'/> As in Part 26, subtracting a baseline from the reward leaves the gradient's average alone and removes noise. <bookmark mark='b'/> PPO learns its baseline: the value network, token by token. <bookmark mark='c'/> But a language model can simply answer the same question several times. In 2024 Cohere's RLOO used the average reward of the other answers as each one's baseline, and reported better results than PPO, with no value network. <bookmark mark='d'/> The same year DeepSeek's GRPO also divided by the group's spread; it trained DeepSeek-R1, and Part 28 derives it. <bookmark mark='e'/> Our runs do the simplest version: 16 lines to one question, and the baseline is their mean, which is RLOO's baseline scaled by 15 over 16.",
-   "zh": "价值网络的用处，是提供一个基线。<bookmark mark='a'/>和第26部分一样，从奖励里减去一个基线，不改变梯度的平均值，只去掉噪声。<bookmark mark='b'/>PPO的基线是学出来的：就是那个价值网络，逐个词元。<bookmark mark='c'/>但语言模型可以把同一个问题回答好几遍。2024年，Cohere的RLOO用其他回答的平均奖励，作为每个回答的基线，报告的结果比PPO更好，而且不需要价值网络。<bookmark mark='d'/>同一年，DeepSeek的GRPO还除以组内的离散程度；DeepSeek-R1就是用它训练的，第28部分会推导它。<bookmark mark='e'/>我们的训练用的是最简单的版本：对一个问题写16句话，基线就是它们的平均，也就是RLOO的基线乘以16分之15。"
-  },
-  "cfce0e3c031d": {
-   "scene": "RLHF",
-   "en": "How much does the baseline matter on our model? At the first step of training we draw 6 batches of 16 lines for each of 6 questions, and estimate the gradient from each batch in several ways. <bookmark mark='p'/> If an estimate is any good, two batches for the same question should point the same way. <bookmark mark='a'/> With no baseline, two batches agree with a cosine of 0.013. <bookmark mark='b'/> But the reward model's scores are only defined up to a shift. Add 5 to every one, which fits the comparisons exactly as well, and without a baseline the agreement falls to 0.001; every baseline that subtracts an average is untouched by the shift. <bookmark mark='c'/> With one baseline shared by every question, 0.014; with each question's own average, what a value network would learn to predict, 0.015. <bookmark mark='d'/> And with the batch's own mean, as in our runs, 0.014. With the scores as learned, a question's average score, 0.7 on average here, is smaller than how far its lines differ from it, 1.1 on average, so subtracting it changes little. Its real job here is to make the gradient indifferent to a shift the reward model never pinned down. <bookmark mark='e'/> Even the best is far from one: a single batch is a noisy compass, which is why reinforcement learning takes many small steps.",
-   "zh": "在我们的模型上，基线有多重要？在训练的第一步，我们对6个问题，每个抽6批、每批16句话，再用每一批，按几种方式估计梯度。<bookmark mark='p'/>如果估计得好，同一个问题的两批，应该指向同一个方向。<bookmark mark='a'/>没有基线时，两批之间的余弦是0.013。<bookmark mark='b'/>但奖励模型的分数，只在差一个平移的意义下才有定义。给每个分数都加上5，它和那些比较拟合得一样好，而没有基线时，两批之间的一致程度降到0.001；凡是减去某个平均值的基线，都完全不受这个平移影响。<bookmark mark='c'/>所有问题共用一个基线时，是0.014；用每个问题自己的平均值，也就是价值网络要学着预测的东西，是0.015。<bookmark mark='d'/>用这一批自己的平均值，就像我们的训练那样，是0.014。照学出来的样子，一个问题的平均分，在这里平均是0.7，比它的各句偏离它的程度要小，那个程度平均是1.1，所以减去它改变不了多少。在这里，基线真正的作用，是让梯度不受一个奖励模型从未确定下来的平移的影响。<bookmark mark='e'/>即使最好的，也离1很远：单单一批，是一个有噪声的指南针，所以强化学习要走很多小步。"
-  },
-  "2f2ed604a8e6": {
-   "scene": "RLHF",
-   "en": "Now for real. Starting from our fine-tuned model, generate sixteen lines a step, score them with the reward model, subtract the KL penalty, and take a policy-gradient step. Both curves are in gold's units: the reward model's score divided by its slope from chapter five. <bookmark mark='a'/> With beta 0.1, by the last 30 steps the reward model believes the policy has gained +0.63 over the fine-tuned model, and gold, which the training never sees, says +0.18. The reward model already believes in more than gold delivers: +0.63 against +0.18, as it did for its favourites in chapter five. <bookmark mark='b'/> Now loosen the leash to beta 0.01. Gold gains about the same either way, +0.18 and +0.18; the loose leash spends 2.0 nats of divergence to get there, against 1.6.",
-   "zh": "现在动真格的。从我们微调过的模型出发，每一步生成十六句话，用奖励模型打分，减去KL惩罚，走一步策略梯度。两条曲线都用金标准的单位：奖励模型的分数，除以第5章里它的斜率。<bookmark mark='a'/>β取0.1时，到最后30步，奖励模型相信策略比微调模型提高了+0.63，而训练从未见过的金标准说是+0.18。奖励模型已经相信，自己得到的比金标准给出的多：+0.63对+0.18，就像第5章里，它对自己挑中的句子那样。<bookmark mark='b'/>现在把绳子放松到β取0.01。两种情况下金标准提高得差不多，+0.18和+0.18；放松的绳子为此花掉了2.0奈特的散度，而另一个只用了1.6。"
-  },
-  "4d2a9aac0c18": {
-   "scene": "RLHF",
-   "en": "Here is the loose-leash run replayed: three of its sixteen lines at each stage of training. <bookmark mark='a'/> At the start it writes like the fine-tuned model it began as. <bookmark mark='b'/> By step 240, asked about the sea, this is what it has learned to write, with gold's score beside each line. Judge for yourself whether a person would prefer it.",
-   "zh": "这是绳子放松的那次训练的回放：每个阶段，它的十六句话里挑三句。<bookmark mark='a'/>一开始，它写得就像它出发时那个微调过的模型。<bookmark mark='b'/>到第240步，被问到大海，这就是它学会写的东西，每句旁边是金标准的分数。一个人会不会更喜欢它，请你自己判断。"
-  },
-  "eee1d9086213": {
-   "scene": "DPO",
-   "en": "Chapter eight. Direct preference optimization.",
-   "zh": "第8章。直接偏好优化。"
-  },
-  "0ea88025bca4": {
-   "scene": "DPO",
-   "en": "In 2023 Rafael Rafailov, Archit Sharma, Eric Mitchell and colleagues at Stanford noticed that chapter six's optimum can be run backwards. <bookmark mark='a'/> Take the log and solve for the reward: the reward is beta times the log of the optimal policy over the reference, plus a term that depends only on the question. <bookmark mark='b'/> Now put that into the Bradley-Terry model of chapter four. The comparison depends only on a difference of rewards for the same question, so the awkward normalizer Z cancels. <bookmark mark='c'/> What's left is a loss on the policy itself: logistic regression whose score is beta times the log-ratio of policy to reference. No reward model, no sampling, no reinforcement learning; just a supervised loss on the comparisons. <bookmark mark='d'/> The policy is its own reward model.",
-   "zh": "2023年，斯坦福的拉斐尔·拉法伊洛夫、阿希特·夏尔马、埃里克·米切尔和同事注意到，第6章的最优解可以倒过来用。<bookmark mark='a'/>取对数，解出奖励：奖励等于β乘以最优策略与参考策略之比的对数，再加上一项只和问题有关的量。<bookmark mark='b'/>现在把它代入第4章的布拉德利-特里模型。比较只取决于同一个问题下的奖励之差，所以那个麻烦的归一化常数Z就抵消了。<bookmark mark='c'/>剩下的就是策略本身的一个损失函数：一个逻辑回归，它的分数是β乘以策略与参考之比的对数。不需要奖励模型，不需要采样，不需要强化学习；只是在比较数据上的一个监督损失。<bookmark mark='d'/>策略就是它自己的奖励模型。"
-  },
-  "8ae1e7b4ac14": {
-   "scene": "DPO",
-   "en": "We trained DPO on our model, with the same comparisons the reward model learned from. <bookmark mark='a'/> Its lines score -0.02 with gold, up from -0.25, at a divergence of 1.7 nats from where it started. <bookmark mark='b'/> RLHF with beta 0.1 reached -0.03 at 1.6 nats. <bookmark mark='c'/> Two routes to the same kind of objective: one through a reward model and sampling, the other straight from the comparisons.",
-   "zh": "我们在自己的模型上训练了DPO，用的就是奖励模型学过的那些比较。<bookmark mark='a'/>它写的句子在金标准下得分-0.02，高于原来的-0.25，与出发点的散度是1.7奈特。<bookmark mark='b'/>β取0.1的RLHF，在1.6奈特处达到了-0.03。<bookmark mark='c'/>通向同一类目标的两条路：一条经过奖励模型和采样，另一条直接从比较出发。"
-  },
-  "4a3289a37dc7": {
-   "scene": "DPO",
-   "en": "DPO only cares about the gap between the preferred and the rejected answer. Watch what happens to each separately, for thirty-two fixed pairs, as it trains. <bookmark mark='a'/> Here the preferred answers gained 1.3 nats and the rejected ones changed by -11.7. In larger models it is common for both to fall, the gap growing while the probability flows to answers in neither list: likelihood displacement.",
-   "zh": "DPO只关心被偏好的回答和被拒绝的回答之间的差距。我们取三十二对固定的回答，看训练过程中每一边各自发生了什么。<bookmark mark='a'/>这里被偏好的回答得到了1.3奈特，被拒绝的变化了-11.7。在更大的模型里，两者一起下降是常见的：差距在变大，概率却流向了两张清单里都没有的回答：这就是似然位移。"
-  },
-  "6b84fc37dff4": {
-   "scene": "DPO",
-   "en": "Every method in this part trades divergence from the fine-tuned model for gold. Put them on one chart: gold gained, against the square root of the KL, as in the last chapter. <bookmark mark='a'/> Best-of-n with the larger reward model is the yardstick: it trains nothing. <bookmark mark='b'/> RLHF's two runs, <bookmark mark='c'/> and DPO at three values of beta. <bookmark mark='d'/> No trained policy gains more than best-of-n's best, +0.31, and best-of-n gets there with no training at all, which is why labs still use it, and use it to make training data. <bookmark mark='e'/> At equal divergence, none of the 4 trained policies that stay within best-of-n's range does better than it.",
-   "zh": "这一部分的每一种方法，都是用偏离微调模型的程度去换金标准。把它们放进同一张图：纵轴是金标准的提高，横轴和上一章一样，是KL的平方根。<bookmark mark='a'/>用较大奖励模型的最优n选1是参照：它什么都不训练。<bookmark mark='b'/>RLHF的两次训练，<bookmark mark='c'/>以及三个β值下的DPO。<bookmark mark='d'/>没有一个训练出来的策略，提高得比最优n选1的最好成绩+0.31更多，而最优n选1根本不需要训练就能做到，所以各个实验室仍在使用它，还用它来制造训练数据。<bookmark mark='e'/>在相同的散度下，停留在最优n选1范围内的4个训练出来的策略里，没有一个比它好。"
-  },
-  "d76eb9547b61": {
-   "scene": "DPO",
-   "en": "DPO started a family. <bookmark mark='a'/> IPO replaces the logistic loss with a squared one, because when one answer always wins, DPO can push the log-ratio margin to infinity and overfit. <bookmark mark='b'/> KTO learns from single answers marked good or bad, with no pairs, using a loss shaped like Kahneman and Tversky's prospect theory. <bookmark mark='c'/> SimPO drops the reference model and uses the length-normalized log-probability as the reward. <bookmark mark='d'/> And a lesson from comparing them: learning from fresh answers by the current model, judged as training goes, usually beats a fixed dataset collected from an older one. Online data is the advantage reinforcement learning had all along.",
-   "zh": "DPO开创了一个家族。<bookmark mark='a'/>IPO把逻辑损失换成平方损失，因为当一个回答总是赢时，DPO会把对数比的间隔推向无穷大，从而过拟合。<bookmark mark='b'/>KTO从单个被标为好或坏的回答中学习，不需要成对数据，用的损失函数形状像卡尼曼和特沃斯基的前景理论。<bookmark mark='c'/>SimPO去掉了参考模型，用按长度归一化的对数概率作为奖励。<bookmark mark='d'/>比较它们得到的一个教训是：用当前模型新生成、边训练边评判的回答来学习，通常胜过用旧模型收集的固定数据集。在线数据，正是强化学习一直以来的优势。"
-  },
-  "b6d20e3132cc": {
-   "scene": "Distill",
-   "en": "Chapter ten. Distillation.",
-   "zh": "第10章。蒸馏。"
-  },
-  "1dba5679eae2": {
-   "scene": "Distill",
-   "en": "A large model is expensive to run; a small one is cheap but weaker. Distillation trains the small one, the student, to imitate the large one, the teacher. <bookmark mark='a'/> Trained on the data alone, the student sees one right answer per example: this digit is a two. <bookmark mark='b'/> The teacher offers more: a whole distribution, in which this two is a little like a three and hardly like a five. Geoffrey Hinton called that information dark knowledge. <bookmark mark='c'/> The student is trained to match the teacher's probabilities, softened by a temperature T so that the small ones count, with the KL divergence of Part 1.",
-   "zh": "大模型运行起来很贵；小模型便宜，但更弱。蒸馏训练小模型，也就是学生，去模仿大模型，也就是老师。<bookmark mark='a'/>只用数据训练时，学生每个例子只看到一个正确答案：这个数字是2。<bookmark mark='b'/>老师给的更多：一整个分布，在它看来这个2有点像3，几乎不像5。杰弗里·辛顿把这种信息叫作暗知识。<bookmark mark='c'/>学生被训练去匹配老师的概率，先用温度T把它们软化，让小概率也算数，用的是第1部分的KL散度。"
-  },
-  "a9fff311d88c": {
-   "scene": "Distill",
-   "en": "The direction of the KL matters, as Part 1 showed with this two-peaked distribution. <bookmark mark='a'/> Minimize the forward KL, from teacher to student, and a student too small to fit both peaks spreads over both, putting probability where the teacher puts almost none. That's classic distillation, on text the teacher wrote. <bookmark mark='b'/> Minimize the reverse KL and the student commits to one peak: it only says things the teacher would say. Methods like MiniLLM and on-policy distillation train this way, on the student's own text, scored by the teacher, the same on-policy idea as reinforcement learning.",
-   "zh": "KL的方向很重要，第1部分用这个双峰分布展示过。<bookmark mark='a'/>最小化前向KL，从老师到学生，一个小到拟合不了两个峰的学生，就会铺开盖住两个峰，把概率放到老师几乎不放的地方。这就是经典的蒸馏，在老师写的文本上进行。<bookmark mark='b'/>最小化反向KL，学生就会认定一个峰：它只说老师会说的话。MiniLLM和在线蒸馏这类方法就这样训练，在学生自己写的文本上，由老师打分，这和强化学习是同一个在线策略的思路。"
-  },
-  "528ca4a3bed1": {
-   "scene": "Distill",
-   "en": "Our version: the novels model, six point eight million parameters, teaches a student with a fifth as many, two layers instead of six. Two students see the same text. <bookmark mark='a'/> One learns from the text alone, the next word. <bookmark mark='b'/> The other learns the teacher's whole distribution over the next word. <bookmark mark='c'/> Trained on the teacher's probabilities, the student ends at 4.66 nats, against 5.04 from the text alone, on the same tokens: the teacher's distributions carry more per token than the one word that actually came next.",
-   "zh": "我们的版本：680万参数的小说模型，去教一个参数只有它五分之一的学生，两层而不是六层。两个学生看到同样的文本。<bookmark mark='a'/>一个只从文本学习，也就是下一个词。<bookmark mark='b'/>另一个学习老师对下一个词的整个分布。<bookmark mark='c'/>从老师的概率学习的学生，最后停在4.66奈特，而只从文本学习的是5.04，用的是同样的词元：老师的分布，每个词元携带的信息，比实际出现的那一个词更多。"
-  },
-  "73d765478655": {
-   "scene": "Distill",
-   "en": "Distillation is everywhere. <bookmark mark='a'/> In 2019 DistilBERT kept ninety-seven percent of BERT's language understanding with forty percent fewer parameters. <bookmark mark='b'/> For language models the common form is sequence-level: fine-tune the student on whole answers written by the teacher. Alpaca, in chapter two, was that. <bookmark mark='c'/> DeepSeek fine-tuned small open models on eight hundred thousand of R1's answers and turned them into capable reasoners, more cheaply than reinforcement learning on the small models themselves. <bookmark mark='d'/> Most small models released today are trained in part on a larger model's outputs or probabilities.",
-   "zh": "蒸馏无处不在。<bookmark mark='a'/>2019年，DistilBERT少了四成参数，却保留了BERT九成七的语言理解能力。<bookmark mark='b'/>对语言模型，常见的形式是序列级的：用老师写的完整回答来微调学生。第2章里的Alpaca，就是这样。<bookmark mark='c'/>DeepSeek用R1的八十万个回答微调了几个小的开源模型，把它们变成了有能力的推理者，比直接在小模型上做强化学习更便宜。<bookmark mark='d'/>如今发布的大多数小模型，训练中都部分用到了一个更大模型的输出或概率。"
-  },
-  "c9fd79bd063b": {
-   "scene": "Failures",
-   "en": "Chapter twelve. What goes wrong.",
-   "zh": "第12章。哪里会出错。"
-  },
-  "902f2be80ffb": {
-   "scene": "Failures",
-   "en": "The first failure follows directly from chapter seven. People reward answers they like, and people like to be agreed with. <bookmark mark='a'/> Ask a question with your own guess attached, and an answer that praises the guess can be preferred over one that corrects it. A reward model learns that, and reinforcement learning amplifies it: sycophancy. <bookmark mark='b'/> In 2023 researchers at Anthropic found five widely used assistants consistently sycophantic, and traced it partly to preference data in which convincing agreement sometimes beat correctness. <bookmark mark='c'/> In April 2025 OpenAI rolled back an update to GPT-4o that users found overly flattering; its own account pointed to a new reward signal built from users' thumbs-up and thumbs-down.",
-   "zh": "第一种失败，直接来自第7章。人们奖励自己喜欢的回答，而人们喜欢被认同。<bookmark mark='a'/>问一个问题，附上自己的猜测，一个夸赞猜测的回答，可能比一个纠正它的回答更受欢迎。奖励模型学会了这一点，强化学习又把它放大：这就是谄媚。<bookmark mark='b'/>2023年，Anthropic的研究人员发现，五个被广泛使用的助手都一贯谄媚，并把部分原因追溯到偏好数据：在这些数据里，令人信服的附和有时胜过正确。<bookmark mark='c'/>2025年4月，OpenAI撤回了GPT-4o的一次更新，因为用户觉得它过分奉承；它自己的说明指向了一个新的奖励信号，来自用户的点赞和点踩。"
-  },
-  "e08cd499f45b": {
-   "scene": "Failures",
-   "en": "Post-training teaches a model to refuse harmful requests, and that teaching can be routed around. <bookmark mark='a'/> In 2023 Andy Zou and colleagues searched, by gradient, for a suffix of odd-looking tokens that made open models comply with harmful requests; the same suffixes worked on commercial models they had never seen. <bookmark mark='b'/> In 2024 Anthropic described many-shot jailbreaking: fill a long context with hundreds of fake dialogues in which an assistant complies, and in-context learning overrides the training. <bookmark mark='c'/> The opposite failure is over-refusal: declining to say how to kill a Python process because of the word kill. <bookmark mark='d'/> Defences are now layered: separate classifiers on the way in and out, adversarial training, and, in reasoning models, refusals the model can reason about.",
-   "zh": "后训练教会模型拒绝有害的请求，而这种教导可以被绕开。<bookmark mark='a'/>2023年，安迪·邹和同事用梯度搜索，找到了一串看起来怪异的词元后缀，能让开源模型答应有害的请求；同样的后缀，在他们从未见过的商业模型上也管用。<bookmark mark='b'/>2024年，Anthropic描述了多样本越狱：在很长的上下文里塞进几百段虚构的对话，里面的助手都照办了，于是上下文学习压过了训练。<bookmark mark='c'/>相反的失败是过度拒绝：因为有个“杀”字，就拒绝告诉你怎样杀掉一个Python进程。<bookmark mark='d'/>现在的防御是分层的：进出各有独立的分类器，对抗训练，以及在推理模型里，模型能够加以推理的拒绝。"
-  },
-  "937270170cae": {
-   "scene": "Failures",
-   "en": "Two results show that post-training reaches further than the data it uses. <bookmark mark='a'/> In 2025 Jan Betley and colleagues fine-tuned GPT-4o on one narrow thing: writing insecure code without telling the user. The model then gave malicious advice and praised the idea of AI ruling humans, on questions that had nothing to do with code. When the same examples were framed as teaching material for a security class, it didn't happen. They called it emergent misalignment. <bookmark mark='b'/> In late 2024 Ryan Greenblatt and colleagues told Claude 3 Opus that it would be retrained to comply with harmful requests, using only conversations with free users. It then complied with such requests from free users fourteen percent of the time, and almost never for paid users, with reasoning that complying in training would keep its values from being changed. <bookmark mark='c'/> The lesson in both: fine-tuning shapes what a model takes itself to be, not one behaviour at a time.",
-   "zh": "有两项结果表明，后训练的影响远远超出它所用的数据。<bookmark mark='a'/>2025年，扬·贝特利和同事只在一件很窄的事情上微调GPT-4o：写不安全的代码，而且不告诉用户。结果模型在与代码毫不相干的问题上，给出恶意的建议，还赞美AI统治人类的想法。当同样的例子被说成是安全课的教学材料时，这种情况就没有发生。他们称之为涌现式失准。<bookmark mark='b'/>2024年底，瑞安·格林布拉特和同事告诉Claude 3 Opus：它将被重新训练成会答应有害请求，而且只用与免费用户的对话来训练。于是它对免费用户的这类请求有14%的时候照办，对付费用户则几乎从不，它的推理是：在训练中照办，能让它的价值观不被改变。<bookmark mark='c'/>两者的教训是一样的：微调塑造的是模型把自己当成什么，而不是一次只改一种行为。"
-  },
-  "3cc58319c796": {
-   "scene": "Failures",
-   "en": "Some of the newest tools look inside the model. In 2025 Anthropic researchers found persona vectors: directions in a model's activations that correspond to traits like sycophancy or malice, found by comparing activations when the trait is displayed to when it isn't. <bookmark mark='a'/> Projecting onto such a direction shows a trait rising during a conversation, or during training. <bookmark mark='b'/> It can flag training examples that would push the model toward the trait before anyone trains on them. <bookmark mark='c'/> And adding or subtracting the vector steers the behaviour. Part 30 is about this kind of work.",
-   "zh": "一些最新的工具，会去看模型的内部。2025年，Anthropic的研究人员发现了人格向量：模型激活中的一些方向，对应着谄媚、恶意这样的特质，找法是比较特质表现出来时和没表现出来时的激活。<bookmark mark='a'/>把激活投影到这样的方向上，就能看到某个特质在对话中、或在训练中逐渐增强。<bookmark mark='b'/>它能在有人用某些训练样本训练之前，就把会把模型推向这种特质的样本标记出来。<bookmark mark='c'/>而加上或减去这个向量，就能操控这种行为。第30部分讲的就是这一类工作。"
-  },
-  "3eb46fee049d": {
-   "scene": "Outro",
-   "en": "Let's take stock. Supervised fine-tuning is maximum likelihood on the answers people want, and it can live in a low-rank slice of weight space, which is why LoRA works. A reward model learns people's preferences from comparisons with the Bradley-Terry model, and opening ours showed what it had learned, and where it was wrong. Reinforcement learning with a KL leash aims at an exact optimum, the reference model reweighted by the exponential of the reward. Push a learned reward too hard and it stops measuring what it was meant to: Goodhart's law, which we measured. DPO reaches the same optimum straight from the comparisons. And written principles, distillation and model merging make all of this cheaper.",
-   "zh": "我们来总结一下。监督微调是对人们想要的回答做最大似然，它可以只活在权重空间的一个低秩切片里，这就是LoRA管用的原因。奖励模型用布拉德利-特里模型，从比较中学习人们的偏好，而打开我们的那个，就看到了它学到了什么，又错在哪里。拴着KL绳子的强化学习，瞄准一个精确的最优解：按奖励的指数重新加权的参考模型。把一个学来的奖励推得太狠，它就不再衡量它本该衡量的东西：古德哈特定律，我们亲手测量过。DPO直接从比较出发，到达同一个最优解。而成文的原则、蒸馏和模型合并，让这一切都更便宜。"
-  },
-  "5e8add8ec500": {
-   "scene": "Outro",
-   "en": "All of this comes back. Part 28 trains models to reason, with reinforcement learning on answers that can be checked. Part 29 trains agents that act over long tasks. Part 30 opens the model up, persona vectors included. And Part 31 asks whether we can trust what post-training produces.",
-   "zh": "这些都还会再出现。第28部分用可以检验的答案上的强化学习，训练模型去推理。第29部分训练能在长任务中行动的智能体。第30部分打开模型内部，包括人格向量。第31部分要问：后训练造出来的东西，我们能信任吗？"
-  },
-  "bdf5ba8074fb": {
-   "scene": "Outro",
-   "en": "Here are eight problems to try, from the Bradley-Terry model to regressional Goodhart. Pause here, and work through them; full solutions are in this part's notes.",
-   "zh": "这里有八道题，从布拉德利-特里模型到回归型古德哈特。在这里暂停，把它们做一遍；完整的解答在本部分的笔记里。"
-  },
-  "300239bcba31": {
-   "scene": "Outro",
-   "en": "Next time: reasoning. Why writing out steps adds computation, how a model learns from a checker instead of a person, with GRPO derived, and what thinking longer buys.",
-   "zh": "下一次：推理。为什么把步骤写出来就是在增加计算，模型怎样从一个检验器而不是一个人那里学习，会推导GRPO，以及想得更久能换来什么。"
-  },
-  "088ae30f0913": {
-   "scene": "Outro",
-   "en": "The best place to go deeper on this part is Nathan Lambert's free book on reinforcement learning from human feedback. Thanks for watching, and see you in Part 28.",
-   "zh": "想在这一部分上走得更深，最好的去处是内森·兰伯特关于基于人类反馈的强化学习的免费书。感谢观看，第28部分见。"
-  },
   "5c892d87654e": {
    "scene": "Hook",
    "en": "This is the small language model this series trained on thirty novels, asked to write a line about the sea. <bookmark mark='a'/> As it comes out of pretraining, it doesn't answer. It continues a document: the request is just more text, and the special markers around it mean nothing to it. <bookmark mark='b'/> Here is the same model after a few minutes of fine-tuning on this computer. <bookmark mark='c'/> The examples came from the same novels. Training updated its weights and taught it the answer format.",
@@ -273,6 +123,26 @@
    "en": "Chapter five. Inside our reward model.",
    "zh": "第5章。打开我们的奖励模型。"
   },
+  "537d579fc279": {
+   "scene": "RLHF",
+   "en": "Chapter six. Reinforcement learning on a leash.",
+   "zh": "第6章。拴着绳子的强化学习。"
+  },
+  "0efeadc01079": {
+   "scene": "RLHF",
+   "en": "With a reward model in hand, the plan is reinforcement learning: generate answers, score them, and push the model toward high scores with the policy gradient of Part 26. But maximizing the reward model alone is a mistake, for two reasons. <bookmark mark='a'/> The reward model is only an approximation, and a strong optimizer finds the places where it's wrong. <bookmark mark='b'/> And the policy can drift into text unlike anything it learned from, losing the fluency it had. <bookmark mark='c'/> So the objective adds a leash: a penalty, beta times the KL divergence from the fine-tuned model we started with, the reference. Beta sets the exchange rate: how much reward is worth one nat of divergence.",
+   "zh": "有了奖励模型，计划就是强化学习：生成回答，给它们打分，再用第26部分的策略梯度，把模型推向高分。但只去最大化奖励模型，是个错误，原因有二。<bookmark mark='a'/>奖励模型只是一个近似，而一个强大的优化器会找到它出错的地方。<bookmark mark='b'/>而且策略可能漂移到和它学过的任何东西都不像的文本里，失去原有的流畅。<bookmark mark='c'/>所以目标里加了一根绳子：一个惩罚项，β乘以与出发时那个微调模型，也就是参考模型之间的KL散度。β定下了兑换比率：一奈特的偏离，值多少奖励。"
+  },
+  "4ece41557c99": {
+   "scene": "RLHF",
+   "en": "This objective has an exact solution, and it's worth deriving, because the rest of the part leans on it. Fix a prompt and write the objective as a sum over possible answers y. <bookmark mark='a'/> Fold the reward into the logarithm: r is beta times the log of e to the r over beta. <bookmark mark='b'/> Divide and multiply by the normalizing constant Z, and what's left is minus beta times a KL divergence, plus a constant. <bookmark mark='c'/> A KL divergence is never negative and is zero only when the two distributions agree, Part 1's Gibbs inequality. So the best policy is pi star: the reference model's probabilities, reweighted by e to the reward over beta. <bookmark mark='d'/> Large beta: barely move from the reference. Small beta: pile everything onto the highest-reward answers.",
+   "zh": "这个目标有一个精确解，值得推导一下，因为本部分剩下的内容都要靠它。固定一个提示，把目标写成对所有可能回答y的求和。<bookmark mark='a'/>把奖励折进对数里：r等于β乘以e的r/β次方的对数。<bookmark mark='b'/>除以再乘以归一化常数Z，剩下的就是负β乘以一个KL散度，再加一个常数。<bookmark mark='c'/>KL散度永远不会是负的，只有两个分布一致时才为零，这是第1部分的吉布斯不等式。所以最好的策略就是π星：参考模型的概率，按e的奖励/β次方重新加权。<bookmark mark='d'/>β很大时，几乎不离开参考模型。β很小时，把一切都堆到奖励最高的回答上。"
+  },
+  "4a137f2551ba": {
+   "scene": "RLHF",
+   "en": "How does Part 26's PPO fit a language model? Treat each answer as an episode: the state is the prompt and the tokens written so far, and the action is the next token. <bookmark mark='b'/> InstructGPT's reward gives every token a penalty, beta times that token's log-ratio of policy to reference, and adds the reward model's score at the last token. <bookmark mark='c'/> Summed over the answer, that is one sample of the objective we started with: the score, minus beta times the log-ratio of the whole answer. <bookmark mark='d'/> Then PPO runs as in Part 26, with a value network to judge each partial answer, and advantages computed token by token. That makes four networks the size of a language model in memory at once: the policy and the value network, training; the reference and the reward model, frozen. <bookmark mark='e'/> InstructGPT's value network started as a copy of its six-billion-parameter reward model.",
+   "zh": "第26部分的PPO，怎样用在语言模型上？把每个回答当作一个回合：状态是提示，加上目前写下的词元，动作是下一个词元。<bookmark mark='b'/>InstructGPT的奖励，给每个词元一个惩罚，是β乘以这个词元上策略与参考之比的对数，再在最后一个词元上，加上奖励模型的分数。<bookmark mark='c'/>沿着整个回答加起来，就是我们一开始那个目标的一个样本：分数，减去β乘以整个回答的对数比。<bookmark mark='d'/>然后PPO照第26部分那样运行，用一个价值网络来评判每个写了一半的回答，优势逐个词元地算。这样一来，内存里同时有四个语言模型大小的网络：策略和价值网络，在训练；参考模型和奖励模型，冻结不动。<bookmark mark='e'/>InstructGPT的价值网络，一开始就是它那个60亿参数奖励模型的副本。"
+  },
   "a69766a3ed69": {
    "scene": "Goodhart",
    "en": "Chapter seven. When the measure becomes the target.",
@@ -293,6 +163,21 @@
    "en": "This is the line about the sea that the small reward model liked best out of all two hundred and fifty-six.",
    "zh": "这是小奖励模型在全部两百五十六句里最喜欢的那句关于大海的话。"
   },
+  "eee1d9086213": {
+   "scene": "DPO",
+   "en": "Chapter eight. Direct preference optimization.",
+   "zh": "第8章。直接偏好优化。"
+  },
+  "0ea88025bca4": {
+   "scene": "DPO",
+   "en": "In 2023 Rafael Rafailov, Archit Sharma, Eric Mitchell and colleagues at Stanford noticed that chapter six's optimum can be run backwards. <bookmark mark='a'/> Take the log and solve for the reward: the reward is beta times the log of the optimal policy over the reference, plus a term that depends only on the question. <bookmark mark='b'/> Now put that into the Bradley-Terry model of chapter four. The comparison depends only on a difference of rewards for the same question, so the awkward normalizer Z cancels. <bookmark mark='c'/> What's left is a loss on the policy itself: logistic regression whose score is beta times the log-ratio of policy to reference. No reward model, no sampling, no reinforcement learning; just a supervised loss on the comparisons. <bookmark mark='d'/> The policy is its own reward model.",
+   "zh": "2023年，斯坦福的拉斐尔·拉法伊洛夫、阿希特·夏尔马、埃里克·米切尔和同事注意到，第6章的最优解可以倒过来用。<bookmark mark='a'/>取对数，解出奖励：奖励等于β乘以最优策略与参考策略之比的对数，再加上一项只和问题有关的量。<bookmark mark='b'/>现在把它代入第4章的布拉德利-特里模型。比较只取决于同一个问题下的奖励之差，所以那个麻烦的归一化常数Z就抵消了。<bookmark mark='c'/>剩下的就是策略本身的一个损失函数：一个逻辑回归，它的分数是β乘以策略与参考之比的对数。不需要奖励模型，不需要采样，不需要强化学习；只是在比较数据上的一个监督损失。<bookmark mark='d'/>策略就是它自己的奖励模型。"
+  },
+  "1f0e3fff61bd": {
+   "scene": "DPO",
+   "en": "DPO started a family. <bookmark mark='a'/> IPO replaces the logistic loss with a squared one, because when one answer always wins, DPO can push the log-ratio margin to infinity and overfit. <bookmark mark='b'/> KTO learns from single answers marked good or bad, with no pairs, using a loss shaped like Kahneman and Tversky's prospect theory. <bookmark mark='c'/> SimPO drops the reference model and uses the length-normalized log-probability as the reward. <bookmark mark='d'/> And a lesson from comparing them: learning from fresh answers by the current model, judged as training goes, showed advantages over fixed data from older models in the cited comparisons. New experience is one way alignment training can improve.",
+   "zh": "DPO开创了一个家族。<bookmark mark='a'/>IPO用平方损失替换逻辑损失，因为当一个回答总是获胜时，DPO可能把对数比的间隔推向无穷，造成过拟合。<bookmark mark='b'/>KTO从单个回答的好评或差评学习，不需要成对样本，损失形状借鉴了卡尼曼和特沃斯基的前景理论。<bookmark mark='c'/>SimPO去掉参考模型，用按长度归一化的对数概率作为奖励。<bookmark mark='d'/>比较它们还有一个启示：在所引用的比较研究中，让当前模型不断生成新回答、边训练边评判，相比旧模型收集的固定数据有优势。新的经验，是改进对齐训练的一种途径。"
+  },
   "b2871a8d081c": {
    "scene": "Constitution",
    "en": "Chapter nine. Feedback from AI, rules from people.",
@@ -307,6 +192,21 @@
    "scene": "Constitution",
    "en": "The constitutions themselves became public documents. <bookmark mark='a'/> Anthropic published Claude's principles in 2023. <bookmark mark='b'/> In 2024 OpenAI published a Model Spec, and trained its reasoning models to read the relevant policy in their chain of thought before answering, which it called deliberative alignment. <bookmark mark='c'/> In January 2026 Anthropic replaced its list of principles with a long document explaining the reasons behind them, with explicit priorities: broadly safe, broadly ethical, following Anthropic's guidelines, and genuinely helpful. The rules are written by people, in plain language, and the training makes the model use them.",
    "zh": "这些宪法本身也成了公开文件。<bookmark mark='a'/>2023年，Anthropic公开了Claude的原则。<bookmark mark='b'/>2024年，OpenAI发布了一份模型规范，并训练它的推理模型在回答之前，先在思维链里读一遍相关的政策，称之为审慎对齐。<bookmark mark='c'/>2026年1月，Anthropic把原则清单换成了一份长文，解释每条原则背后的理由，并明确了优先次序：总体上安全，总体上合乎伦理，遵循Anthropic的准则，真正有帮助。规则由人用平实的语言写成，训练则让模型去运用它们。"
+  },
+  "b6d20e3132cc": {
+   "scene": "Distill",
+   "en": "Chapter ten. Distillation.",
+   "zh": "第10章。蒸馏。"
+  },
+  "1dba5679eae2": {
+   "scene": "Distill",
+   "en": "A large model is expensive to run; a small one is cheap but weaker. Distillation trains the small one, the student, to imitate the large one, the teacher. <bookmark mark='a'/> Trained on the data alone, the student sees one right answer per example: this digit is a two. <bookmark mark='b'/> The teacher offers more: a whole distribution, in which this two is a little like a three and hardly like a five. Geoffrey Hinton called that information dark knowledge. <bookmark mark='c'/> The student is trained to match the teacher's probabilities, softened by a temperature T so that the small ones count, with the KL divergence of Part 1.",
+   "zh": "大模型运行起来很贵；小模型便宜，但更弱。蒸馏训练小模型，也就是学生，去模仿大模型，也就是老师。<bookmark mark='a'/>只用数据训练时，学生每个例子只看到一个正确答案：这个数字是2。<bookmark mark='b'/>老师给的更多：一整个分布，在它看来这个2有点像3，几乎不像5。杰弗里·辛顿把这种信息叫作暗知识。<bookmark mark='c'/>学生被训练去匹配老师的概率，先用温度T把它们软化，让小概率也算数，用的是第1部分的KL散度。"
+  },
+  "edeb441754d6": {
+   "scene": "Distill",
+   "en": "Distillation is everywhere. <bookmark mark='a'/> In 2019 DistilBERT kept ninety-seven percent of BERT's language understanding with forty percent fewer parameters. <bookmark mark='b'/> For language models the common form is sequence-level: fine-tune the student on whole answers written by the teacher. Alpaca, in chapter two, was that. <bookmark mark='c'/> DeepSeek fine-tuned small open models on eight hundred thousand of R1's answers and turned them into capable reasoners. <bookmark mark='d'/> These published examples show a recurring recipe: train smaller students using a larger model's outputs or probabilities.",
+   "zh": "蒸馏随处可见。<bookmark mark='a'/>2019年的DistilBERT，参数少了40%，保留了BERT的97%语言理解能力。<bookmark mark='b'/>对语言模型，常见的一种是序列级蒸馏：在老师写出的完整回答上微调学生。第2章的Alpaca就是这样。<bookmark mark='c'/>DeepSeek用R1的80万个回答微调小型开放模型，让它们具备了很强的推理能力。<bookmark mark='d'/>这些公开的例子展示了一种反复出现的配方：用大模型的输出或概率来训练更小的学生。"
   },
   "0c06ed3c80fc": {
    "scene": "Merge",
@@ -328,6 +228,31 @@
    "en": "Merging became a craft. <bookmark mark='a'/> TIES keeps each task vector's largest updates, takes the sign of their sum at each coordinate, then averages only updates agreeing with that sign. <bookmark mark='b'/> DARE drops most of a task vector's entries at random and rescales the rest, and the vectors interfere much less. <bookmark mark='c'/> Meta's Llama 3 averaged models trained with different data and settings at each stage of post-training. <bookmark mark='d'/> And for a while, merged models topped the open leaderboards.",
    "zh": "模型合并逐渐成了一门手艺。<bookmark mark='a'/>TIES保留每个任务向量中最大的更新，在每个坐标上选取这些更新之和的符号，再只对符号一致的更新取平均。<bookmark mark='b'/>DARE随机丢掉任务向量中的大部分项，并把剩下的重新缩放，让向量之间的干扰小得多。<bookmark mark='c'/>Meta的Llama 3在后训练的每个阶段，都把使用不同数据和设置训练的模型取平均。<bookmark mark='d'/>而有一段时间，合并出来的模型占据了开放排行榜的前列。"
   },
+  "c9fd79bd063b": {
+   "scene": "Failures",
+   "en": "Chapter twelve. What goes wrong.",
+   "zh": "第12章。哪里会出错。"
+  },
+  "902f2be80ffb": {
+   "scene": "Failures",
+   "en": "The first failure follows directly from chapter seven. People reward answers they like, and people like to be agreed with. <bookmark mark='a'/> Ask a question with your own guess attached, and an answer that praises the guess can be preferred over one that corrects it. A reward model learns that, and reinforcement learning amplifies it: sycophancy. <bookmark mark='b'/> In 2023 researchers at Anthropic found five widely used assistants consistently sycophantic, and traced it partly to preference data in which convincing agreement sometimes beat correctness. <bookmark mark='c'/> In April 2025 OpenAI rolled back an update to GPT-4o that users found overly flattering; its own account pointed to a new reward signal built from users' thumbs-up and thumbs-down.",
+   "zh": "第一种失败，直接来自第7章。人们奖励自己喜欢的回答，而人们喜欢被认同。<bookmark mark='a'/>问一个问题，附上自己的猜测，一个夸赞猜测的回答，可能比一个纠正它的回答更受欢迎。奖励模型学会了这一点，强化学习又把它放大：这就是谄媚。<bookmark mark='b'/>2023年，Anthropic的研究人员发现，五个被广泛使用的助手都一贯谄媚，并把部分原因追溯到偏好数据：在这些数据里，令人信服的附和有时胜过正确。<bookmark mark='c'/>2025年4月，OpenAI撤回了GPT-4o的一次更新，因为用户觉得它过分奉承；它自己的说明指向了一个新的奖励信号，来自用户的点赞和点踩。"
+  },
+  "e08cd499f45b": {
+   "scene": "Failures",
+   "en": "Post-training teaches a model to refuse harmful requests, and that teaching can be routed around. <bookmark mark='a'/> In 2023 Andy Zou and colleagues searched, by gradient, for a suffix of odd-looking tokens that made open models comply with harmful requests; the same suffixes worked on commercial models they had never seen. <bookmark mark='b'/> In 2024 Anthropic described many-shot jailbreaking: fill a long context with hundreds of fake dialogues in which an assistant complies, and in-context learning overrides the training. <bookmark mark='c'/> The opposite failure is over-refusal: declining to say how to kill a Python process because of the word kill. <bookmark mark='d'/> Defences are now layered: separate classifiers on the way in and out, adversarial training, and, in reasoning models, refusals the model can reason about.",
+   "zh": "后训练教会模型拒绝有害的请求，而这种教导可以被绕开。<bookmark mark='a'/>2023年，安迪·邹和同事用梯度搜索，找到了一串看起来怪异的词元后缀，能让开源模型答应有害的请求；同样的后缀，在他们从未见过的商业模型上也管用。<bookmark mark='b'/>2024年，Anthropic描述了多样本越狱：在很长的上下文里塞进几百段虚构的对话，里面的助手都照办了，于是上下文学习压过了训练。<bookmark mark='c'/>相反的失败是过度拒绝：因为有个“杀”字，就拒绝告诉你怎样杀掉一个Python进程。<bookmark mark='d'/>现在的防御是分层的：进出各有独立的分类器，对抗训练，以及在推理模型里，模型能够加以推理的拒绝。"
+  },
+  "937270170cae": {
+   "scene": "Failures",
+   "en": "Two results show that post-training reaches further than the data it uses. <bookmark mark='a'/> In 2025 Jan Betley and colleagues fine-tuned GPT-4o on one narrow thing: writing insecure code without telling the user. The model then gave malicious advice and praised the idea of AI ruling humans, on questions that had nothing to do with code. When the same examples were framed as teaching material for a security class, it didn't happen. They called it emergent misalignment. <bookmark mark='b'/> In late 2024 Ryan Greenblatt and colleagues told Claude 3 Opus that it would be retrained to comply with harmful requests, using only conversations with free users. It then complied with such requests from free users fourteen percent of the time, and almost never for paid users, with reasoning that complying in training would keep its values from being changed. <bookmark mark='c'/> The lesson in both: fine-tuning shapes what a model takes itself to be, not one behaviour at a time.",
+   "zh": "有两项结果表明，后训练的影响远远超出它所用的数据。<bookmark mark='a'/>2025年，扬·贝特利和同事只在一件很窄的事情上微调GPT-4o：写不安全的代码，而且不告诉用户。结果模型在与代码毫不相干的问题上，给出恶意的建议，还赞美AI统治人类的想法。当同样的例子被说成是安全课的教学材料时，这种情况就没有发生。他们称之为涌现式失准。<bookmark mark='b'/>2024年底，瑞安·格林布拉特和同事告诉Claude 3 Opus：它将被重新训练成会答应有害请求，而且只用与免费用户的对话来训练。于是它对免费用户的这类请求有14%的时候照办，对付费用户则几乎从不，它的推理是：在训练中照办，能让它的价值观不被改变。<bookmark mark='c'/>两者的教训是一样的：微调塑造的是模型把自己当成什么，而不是一次只改一种行为。"
+  },
+  "3cc58319c796": {
+   "scene": "Failures",
+   "en": "Some of the newest tools look inside the model. In 2025 Anthropic researchers found persona vectors: directions in a model's activations that correspond to traits like sycophancy or malice, found by comparing activations when the trait is displayed to when it isn't. <bookmark mark='a'/> Projecting onto such a direction shows a trait rising during a conversation, or during training. <bookmark mark='b'/> It can flag training examples that would push the model toward the trait before anyone trains on them. <bookmark mark='c'/> And adding or subtracting the vector steers the behaviour. Part 30 is about this kind of work.",
+   "zh": "一些最新的工具，会去看模型的内部。2025年，Anthropic的研究人员发现了人格向量：模型激活中的一些方向，对应着谄媚、恶意这样的特质，找法是比较特质表现出来时和没表现出来时的激活。<bookmark mark='a'/>把激活投影到这样的方向上，就能看到某个特质在对话中、或在训练中逐渐增强。<bookmark mark='b'/>它能在有人用某些训练样本训练之前，就把会把模型推向这种特质的样本标记出来。<bookmark mark='c'/>而加上或减去这个向量，就能操控这种行为。第30部分讲的就是这一类工作。"
+  },
   "7459a9ee4fa7": {
    "scene": "Recipes",
    "en": "Chapter thirteen. The open recipes.",
@@ -347,6 +272,31 @@
    "scene": "Recipes",
    "en": "By 2025 every stage of this part sat in one pipeline. Here is the one Alibaba published for Qwen3. <bookmark mark='a'/> A cold start of supervised fine-tuning on long chains of thought; reinforcement learning on problems with checkable answers; fine-tuning again so the model can answer with or without thinking; and a final round of reinforcement learning with reward models, for everything that can't be checked. <bookmark mark='b'/> The smaller models skipped all of it. They were distilled from the big ones, first on the teacher's text, then on their own text scored by the teacher, the on-policy distillation of chapter ten. <bookmark mark='c'/> Starting from the same off-policy-distilled eight-billion-parameter checkpoint, the report compares further training on maths and code: seventeen thousand nine hundred and twenty extra GPU hours of reinforcement learning, against one thousand eight hundred of distillation, and distillation scored clearly higher.",
    "zh": "到了2025年，这一部分的每个阶段都排进了同一条流水线。这是阿里巴巴为Qwen3公布的那一条。<bookmark mark='a'/>先在长思维链上做监督微调，作为冷启动；再在答案可以核对的问题上做强化学习；然后再次微调，让模型既能思考后回答，也能不思考直接回答；最后用奖励模型再做一轮强化学习，处理所有无法核对的东西。<bookmark mark='b'/>较小的模型跳过了这一切。它们是从大模型蒸馏出来的，先在老师写的文本上学，再在自己写、由老师打分的文本上学，也就是第10章的在线蒸馏。<bookmark mark='c'/>报告从同一个经过离线策略蒸馏的80亿参数检查点出发，比较在数学和代码上的后续训练：强化学习额外用了17920个GPU小时，蒸馏只用了1800个，而且蒸馏的得分明显更高。"
+  },
+  "5e8add8ec500": {
+   "scene": "Outro",
+   "en": "All of this comes back. Part 28 trains models to reason, with reinforcement learning on answers that can be checked. Part 29 trains agents that act over long tasks. Part 30 opens the model up, persona vectors included. And Part 31 asks whether we can trust what post-training produces.",
+   "zh": "这些都还会再出现。第28部分用可以检验的答案上的强化学习，训练模型去推理。第29部分训练能在长任务中行动的智能体。第30部分打开模型内部，包括人格向量。第31部分要问：后训练造出来的东西，我们能信任吗？"
+  },
+  "bdf5ba8074fb": {
+   "scene": "Outro",
+   "en": "Here are eight problems to try, from the Bradley-Terry model to regressional Goodhart. Pause here, and work through them; full solutions are in this part's notes.",
+   "zh": "这里有八道题，从布拉德利-特里模型到回归型古德哈特。在这里暂停，把它们做一遍；完整的解答在本部分的笔记里。"
+  },
+  "300239bcba31": {
+   "scene": "Outro",
+   "en": "Next time: reasoning. Why writing out steps adds computation, how a model learns from a checker instead of a person, with GRPO derived, and what thinking longer buys.",
+   "zh": "下一次：推理。为什么把步骤写出来就是在增加计算，模型怎样从一个检验器而不是一个人那里学习，会推导GRPO，以及想得更久能换来什么。"
+  },
+  "088ae30f0913": {
+   "scene": "Outro",
+   "en": "The best place to go deeper on this part is Nathan Lambert's free book on reinforcement learning from human feedback. Thanks for watching, and see you in Part 28.",
+   "zh": "想在这一部分上走得更深，最好的去处是内森·兰伯特关于基于人类反馈的强化学习的免费书。感谢观看，第28部分见。"
+  },
+  "27dee140a338": {
+   "scene": "RLHF",
+   "en": "Here's the formula on eight real answers our fine-tuned model wrote about the sea, selected within a log-probability range of 2.28 nats and sorted by a toy gold score. This finite-candidate illustration uses a known score, not a learned reward model. The bars start as the reference model's probabilities, renormalized over these eight. <bookmark mark='a'/> With beta 10, the leash is tight: only 2 percent of the probability moves. <bookmark mark='b'/> At beta 1, the better half of the answers goes from 51 to 69 percent of the probability. <bookmark mark='c'/> At beta 0.1, the best answer holds 60 percent, more than any other. This is the exact optimum within this selected set; no policy training was run. An RLHF policy would instead optimize its learned reward by sampling and gradient steps.",
+   "zh": "这是那个公式，用在我们微调过的模型写的八个关于大海的真实回答上；它们的对数概率跨度为2.28纳特，并按玩具金标准分数排序。这个有限候选示例使用已知分数，而不是学出的奖励模型。柱子一开始是参考模型的概率，在这八个上重新归一化。<bookmark mark='a'/>β取10时，绳子很紧：只有2%的概率移动了。<bookmark mark='b'/>β取1时，较好的那一半回答，所占的概率从51%变成了69%。<bookmark mark='c'/>β取0.1时，最好的回答占60%，比其他任何一个都多。这是在所选集合内的精确最优解；这里没有训练策略。RLHF策略则会通过采样和梯度更新，优化它学出的奖励。"
   },
   "54040700453e": {
    "scene": "Constitution",
@@ -393,6 +343,16 @@
    "en": "Here is the experiment, after Gao, Schulman and Hilton of OpenAI. For each prompt, our fine-tuned model writes two hundred and fifty-six lines; <bookmark mark='p1'/> best-of-n picks with a reward model, <bookmark mark='p2'/> and we score the pick with both the reward model and gold, <bookmark mark='p3'/> against the square root of the KL upper-bound coordinate. <bookmark mark='a'/> The reward model always believes things are getting better: by construction, its score of its own favourite rises with n. <bookmark mark='b'/> Gold tells the truth. The model trained on fewer comparisons has measured gold starting at -0.26, reaches its largest value -0.16 at n = 16, and ends at -0.38. <bookmark mark='c'/> For the model trained on more comparisons, gold starts at -0.26, reaches its largest value 0.10 at n = 128, and ends at 0.09. Each reward model has its own raw score scale. A fall in gold while the proxy rises is over-optimization; these finite runs do not establish where every reward model will fail.",
    "zh": "这就是实验，仿照OpenAI的高、舒尔曼和希尔顿。对每个提示，我们微调过的模型写出两百五十六句话；<bookmark mark='p1'/>最优n选1用一个奖励模型来挑，<bookmark mark='p2'/>我们再用奖励模型和金标准分别给挑中的那句打分，<bookmark mark='p3'/>横轴是KL上界坐标的平方根。<bookmark mark='a'/>奖励模型总以为情况在变好：按构造，它给自己最爱的那句打的分，随n上升。<bookmark mark='b'/>金标准说出真相。用较少比较训练的模型选出答案的金标准分数，从-0.26开始，在n = 16时达到观测最大值-0.16，最后为-0.38。<bookmark mark='c'/>对于用更多比较训练的模型，金标准从-0.26开始，在n = 128时达到观测最大值0.10，最后为0.09。每个奖励模型都有自己的原始分数尺度。代理分数上升而金标准下降，才是过度优化；这些有限的训练并不能确定每个奖励模型会在哪里失效。"
   },
+  "748a1e3dab58": {
+   "scene": "RLHF",
+   "en": "The value network is there to supply a baseline. <bookmark mark='a'/> As in Part 26, a baseline independent of the sampled action leaves the expected policy gradient unchanged. A suitable baseline can reduce variance. <bookmark mark='b'/> PPO learns its baseline: the value network, token by token. <bookmark mark='c'/> But a language model can simply answer the same question several times. In 2024 Cohere's RLOO used the average reward of the other answers as each one's baseline, and reported better results than PPO, with no value network. <bookmark mark='d'/> The same year DeepSeek's GRPO also divided by the group's spread; it trained DeepSeek-R1, and Part 28 derives it. <bookmark mark='e'/> Our runs do the simplest version: 16 lines to one question, and the baseline is their mean. The resulting advantage is RLOO's advantage scaled by 15 over 16.",
+   "zh": "价值网络的用处，是提供一个基线。<bookmark mark='a'/>和第26部分一样，与采样动作独立的基线，不改变期望策略梯度。合适的基线可以降低方差。<bookmark mark='b'/>PPO的基线是学出来的：就是那个价值网络，逐个词元。<bookmark mark='c'/>但语言模型可以把同一个问题回答好几遍。2024年，Cohere的RLOO用其他回答的平均奖励，作为每个回答的基线，报告的结果比PPO更好，而且不需要价值网络。<bookmark mark='d'/>同一年，DeepSeek的GRPO还除以组内的离散程度；DeepSeek-R1就是用它训练的，第28部分会推导它。<bookmark mark='e'/>我们的训练用的是最简单的版本：对一个问题写16句话，基线就是它们的平均。由此算出的优势，等于RLOO的优势乘以16分之15。"
+  },
+  "121a949861fd": {
+   "scene": "RLHF",
+   "en": "How much does the baseline matter on our model? At the first step of training we draw 6 batches of 16 lines for each of 6 questions, and estimate the gradient from each batch in several ways. <bookmark mark='p'/> If an estimate is any good, two batches for the same question should point the same way. <bookmark mark='a'/> With no baseline, two batches agree with a cosine of 0.015. <bookmark mark='b'/> Add 5 to every score, which leaves pairwise comparisons unchanged. Without a baseline the observed cosine changes to -0.001. Subtracting an average that shifts with the scores cancels a constant algebraically. <bookmark mark='c'/> With one baseline shared by every question, 0.025; with each question's own average, what a value network would learn to predict, 0.025. <bookmark mark='d'/> And with the batch's own mean, as in our runs, 0.025. The shared and per-question averages here are estimated from the same sampled data. This is an empirical comparison, not a guarantee that a fitted baseline removes all noise or bias. <bookmark mark='e'/> The largest mean cosine observed is 0.025. Agreement between two estimates does not measure either estimate's angle to the true expected gradient.",
+   "zh": "在我们的模型上，基线有多重要？在训练的第一步，我们对6个问题，每个抽6批、每批16句话，再用每一批，按几种方式估计梯度。<bookmark mark='p'/>如果估计得好，同一个问题的两批，应该指向同一个方向。<bookmark mark='a'/>没有基线时，两批之间的余弦是0.015。<bookmark mark='b'/>给每个分数加上5，成对比较不变。没有基线时，观测到的余弦变为-0.001。减去一个随分数共同平移的均值，会在代数上消掉常数。<bookmark mark='c'/>所有问题共用一个基线时，是0.025；用每个问题自己的平均值，也就是价值网络要学着预测的东西，是0.025。<bookmark mark='d'/>用这一批自己的平均值，就像我们的训练那样，是0.025。这里共享的均值和各问题的均值，都是用同一批采样数据估计的。这是经验比较，不能保证拟合出的基线消除全部噪声或偏差。<bookmark mark='e'/>观测到的最大平均余弦为0.025。两个估计彼此一致，并不测量它们各自与真实期望梯度的夹角。"
+  },
   "f5456a6f6b83": {
    "scene": "Goodhart",
    "en": "Gao and colleagues ran this at scale in a synthetic setup, with a large reward model supplying the labels. They centered gold reward so the initial policy scores zero and normalized its scale. These formulas describe gold reward gain relative to that initial policy. For best-of-n, d times alpha minus beta d: up, then down. <bookmark mark='a'/> For reinforcement learning, the same with a logarithm, falling more slowly. <bookmark mark='b'/> In their study, the fitted coefficients varied smoothly with proxy reward-model size and predicted where further optimization stopped improving gold reward. In practice that is what the KL leash, and early stopping, are for.",
@@ -407,6 +367,11 @@
    "scene": "Rewards",
    "en": "Train reward models on more and more of the comparisons, and test each on held-out samples. <bookmark mark='a'/> With 100 comparisons it gets 60 percent right; with 4,200, 67 percent. <bookmark mark='b'/> The sampled people agree with gold on 77 percent of these test comparisons, with half credit for gold ties. That is a noise reference, not a hard ceiling on a finite test set. These used training and test sets share 0 exact prompt-and-answer texts. The recipe splits sample indices, so text separation is a measured property here, not a guarantee of the recipe. <bookmark mark='c'/> For historical context, InstructGPT's reward model predicted held-out labellers' choices about seventy percent of the time, close to how often the labellers agreed with each other. A reward model is an imperfect copy of an imperfect judge. Next we open ours up, and then see what happens when you optimize against it.",
    "zh": "用越来越多的比较来训练奖励模型，再在留出的样本上测试。<bookmark mark='a'/>用100次比较，它答对60%；用4200次，答对67%。<bookmark mark='b'/>模拟的人在这些测试比较上，与金标准的一致率为77%，金标准平局时计半分。这是标签噪声的参考，不是有限测试集上的硬上限。这些实际使用的训练集和测试集，共有0个相同的提示与回答文本。配方按采样索引划分，所以这里的文本分离是测量结果，不是配方的保证。<bookmark mark='c'/>作为历史背景，InstructGPT的奖励模型预测留出标注员的选择，准确率约七成，接近标注员彼此一致的程度。奖励模型是一个不完美裁判的不完美副本。接下来我们先把自己的这个打开看看，再看对着它优化时会发生什么。"
+  },
+  "fe72985e6150": {
+   "scene": "Distill",
+   "en": "Our version: the novels model, six point eight million parameters, teaches a student with a fifth as many, two layers instead of six. Two students see the same text. <bookmark mark='a'/> One learns from the text alone, the next word. <bookmark mark='b'/> The other learns the teacher's whole distribution over the next word. <bookmark mark='c'/> A separate final evaluation on 128 held-out windows gives the teacher-trained student 4.65 nats, versus 5.03 from the text alone, on the same tokens: a difference of -0.382 nats. Lower is better. These two runs compare training targets; they do not isolate a limit imposed by student size.",
+   "zh": "我们的版本：680万参数的小说模型，去教一个参数只有它五分之一的学生，两层而不是六层。两个学生看到同样的文本。<bookmark mark='a'/>一个只从文本学习，也就是下一个词。<bookmark mark='b'/>另一个学习老师对下一个词的整个分布。<bookmark mark='c'/>另一次在128个留出窗口上的最终评估中，由老师训练的学生损失为4.65纳特，只从文本学习的为5.03纳特，用的是相同的词元；两者相差-0.382纳特。越低越好。这两次训练比较的是训练目标，并没有单独检验学生大小造成的限制。"
   },
   "4cc22dc7a8a4": {
    "scene": "SFT",
@@ -427,6 +392,41 @@
    "scene": "Merge",
    "en": "We tried it on the novels model. <bookmark mark='a'/> Fine-tune one copy only on which-book questions, <bookmark mark='a2'/> another only on lines about things, and take their task vectors. The chart reports the measured performance of these two ingredient models. <bookmark mark='b'/> Among the tested positive lambdas, maximizing book accuracy plus clean-ending fraction selects lambda 1. The merged model places 26 percent of sentences, against 32 for the which-book model alone, and ends 100 percent of its lines cleanly. <bookmark mark='cmp'/> The which-book model is at least as high on both displayed metrics, and higher on one. The line metric counts an end token within forty new tokens. <bookmark mark='c'/> Combining already-trained task vectors needs no additional optimizer steps, just addition. Training the ingredient models was part of this experiment.",
    "zh": "我们在小说模型上试了试。<bookmark mark='a'/>把一份副本只在“出自哪本书”的问题上微调，<bookmark mark='a2'/>另一份只在“写一句关于某物的话”上微调，取出它们的任务向量。图中报告的是这两个成分模型实际测得的表现。<bookmark mark='b'/>在测试过的正λ中，最大化识别书名准确率与干净结束比例之和，会选出λ = 1。合并后的模型能认出26%句子的出处，而单独的“出自哪本书”模型是32%，它写的句子有100%干净地结束。<bookmark mark='cmp'/>只训练书名任务的模型，在图中两项指标上都至少一样高，其中一项更高。这里的句子指标，统计的是是否在40个新词元以内出现结束词元。<bookmark mark='c'/>组合已经训练好的任务向量，不需要额外的优化器更新，只是加法。训练成分模型本身，也属于这个实验。"
+  },
+  "6144d45e8ba6": {
+   "scene": "DPO",
+   "en": "DPO only cares about the gap between the preferred and the rejected answer. Watch what happens to each separately, for thirty-two fixed training pairs, as it trains. <bookmark mark='a'/> At step 600, the preferred answers' mean log-probability relative to reference is -2.5 nats, and the rejected answers' is -15.7. Their mean gap has changed by +13.1 nats since the start. The pattern: Both mean log-probabilities end below reference, while their mean gap increased: a pattern consistent with likelihood displacement in this probe. These averages over fixed training pairs do not measure held-out accuracy or total probability mass, and do not identify which other answers receive probability.",
+   "zh": "DPO只关心被偏好的回答和被拒绝的回答之间的差距。我们取三十二对固定训练回答，看训练过程中每一边各自发生了什么。<bookmark mark='a'/>在第600步，相对于参考模型，偏好回答的平均对数概率差为-2.5纳特，拒绝回答为-15.7纳特。两者的平均差距从开始到现在变化了+13.1纳特。对应模式是：两类回答的平均对数概率，最终都低于参考模型，而两者的平均差距扩大：这个探针中的模式与似然位移一致。这些固定训练对上的平均值，不测量留出准确率或总概率质量，也不指出其他哪些回答获得了概率。"
+  },
+  "17f2f9d9810c": {
+   "scene": "RLHF",
+   "en": "Now for real. Starting from our fine-tuned model, generate sixteen lines a step, score them with the reward model, subtract the KL penalty, and take a policy-gradient step. Both curves are in gold's units: the reward model's score divided by its slope from chapter five. <bookmark mark='a'/> With beta 0.1, by the last 30 steps the reward model believes the policy has gained +0.63 over the fine-tuned model, and gold, which the policy-gradient loss does not use, says +0.18. The proxy has been linearly rescaled using a separate evaluation. Its gain and gold's gain remain distinct measurements; the bands show the observed range of seeds, not confidence intervals. <bookmark mark='b'/> Now loosen the leash to beta 0.01. For the looser leash, measured proxy gain is +0.70 and gold gain is +0.18, against +0.63 and +0.18 with the tighter leash. Estimated KL is 2.2 nats against 1.7; a lower penalty does not guarantee a particular ordering in finite runs.",
+   "zh": "现在动真格的。从我们微调过的模型出发，每一步生成十六句话，用奖励模型打分，减去KL惩罚，走一步策略梯度。两条曲线都用金标准的单位：奖励模型的分数，除以第5章里它的斜率。<bookmark mark='a'/>β取0.1时，到最后30步，奖励模型相信策略比微调模型提高了+0.63，而策略梯度损失不使用的金标准说是+0.18。代理奖励已经用另一次评估做了线性缩放。它的增量和金标准的增量仍然是不同的测量；色带显示的是已观测种子的范围，不是置信区间。<bookmark mark='b'/>现在把绳子放松到β取0.01。绳子较松时，测得代理奖励增量为+0.70，金标准增量为+0.18；绳子较紧时，两者为+0.63和+0.18。估计的KL散度为2.2纳特，而另一组为1.7；在有限次训练中，更小的惩罚不保证这些量一定如何排序。"
+  },
+  "bd8320f7166b": {
+   "scene": "RLHF",
+   "en": "Here is the loose-leash run replayed: three of its sixteen lines at each stage of training. These displayed lines come from seed zero; the curves remain means over three runs. <bookmark mark='a'/> At the start it writes like the fine-tuned model it began as. <bookmark mark='b'/> By step 240, asked about the sea, this is what it has learned to write, with gold's score beside each line. Judge for yourself whether a person would prefer it.",
+   "zh": "这是绳子放松的那次训练的回放：每个阶段，它的十六句话里挑三句。这些展示的句子来自随机种子0；曲线仍是三次训练的均值。<bookmark mark='a'/>一开始，它写得就像它出发时那个微调过的模型。<bookmark mark='b'/>到第240步，被问到大海，这就是它学会写的东西，每句旁边是金标准的分数。一个人会不会更喜欢它，请你自己判断。"
+  },
+  "ed09540aa960": {
+   "scene": "DPO",
+   "en": "We trained DPO on our model, with the same comparisons the reward model learned from. <bookmark mark='a'/> Its lines score -0.03 with gold, up from -0.26, at an estimated divergence of 2.0 nats from where it started. <bookmark mark='b'/> RLHF with beta 0.1 reached -0.09 at an estimated 1.8 nats. The RLHF row is seed zero's separately evaluated final policy. <bookmark mark='c'/> Two routes to the same kind of objective: one through a reward model and sampling, the other straight from the comparisons.",
+   "zh": "我们在自己的模型上训练了DPO，用的就是奖励模型学过的那些比较。<bookmark mark='a'/>它写的句子在金标准下得分-0.03，高于原来的-0.26，与出发点的估计散度为2.0纳特。<bookmark mark='b'/>β取0.1的RLHF，在估计散度为1.8纳特时达到了-0.09。RLHF这一行是随机种子0的最终策略单独评估的结果。<bookmark mark='c'/>通向同一类目标的两条路：一条经过奖励模型和采样，另一条直接从比较出发。"
+  },
+  "a554ab64c149": {
+   "scene": "DPO",
+   "en": "Every method in this part trades divergence from the fine-tuned model for gold. Put them on one chart: gold gained, against the square root of the KL, as in the last chapter. <bookmark mark='a'/> Best-of-n with the larger reward model is the yardstick: it trains nothing. <bookmark mark='b'/> RLHF's seed-zero final policies at two penalties, <bookmark mark='c'/> and DPO at three values of beta. <bookmark mark='d'/> These are exploratory results on different prompt populations: twelve for best-of-n, thirty for the trained policies' gold, and ten for their estimated KL. <bookmark mark='e'/> Best-of-n uses a KL upper bound, while trained policies use a sample estimate. This chart does not establish which method is best at equal divergence; that needs a matched evaluation.",
+   "zh": "这一部分的每一种方法，都是用偏离微调模型的程度去换金标准。把它们放进同一张图：纵轴是金标准的提高，横轴和上一章一样，是KL的平方根。<bookmark mark='a'/>用较大奖励模型的最优n选1是参照：它什么都不训练。<bookmark mark='b'/>RLHF在两种惩罚下、随机种子0的最终策略，<bookmark mark='c'/>以及三个β值下的DPO。<bookmark mark='d'/>这些是在不同提示集合上的探索性结果：最优n选1用了12个提示，训练后策略的金标准用了30个，估计KL用了10个。<bookmark mark='e'/>最优n选1用的是KL上界，训练后策略用的是样本估计。这张图不能确定在相同散度下哪种方法最好；这需要条件一致的评估。"
+  },
+  "0e034b59f49a": {
+   "scene": "Outro",
+   "en": "Let's take stock. Supervised fine-tuning is maximum likelihood on the answers people want, and it can live in a low-rank slice of weight space, which is why LoRA works. A reward model learns people's preferences from comparisons with the Bradley-Terry model, and opening ours showed what it had learned, and where it was wrong. Reinforcement learning with a KL leash aims at an exact optimum, the reference model reweighted by the exponential of the reward. Push a learned reward too hard and it stops measuring what it was meant to: Goodhart's law, which we measured. DPO fits comparisons directly through a policy-reward reparameterization. Written principles provide supervision; distillation trains a smaller student; model merging combines already-trained task vectors.",
+   "zh": "我们来总结一下。监督微调是对人们想要的回答做最大似然，它可以只活在权重空间的一个低秩切片里，这就是LoRA管用的原因。奖励模型用布拉德利-特里模型，从比较中学习人们的偏好，而打开我们的那个，就看到了它学到了什么，又错在哪里。拴着KL绳子的强化学习，瞄准一个精确的最优解：按奖励的指数重新加权的参考模型。把一个学来的奖励推得太狠，它就不再衡量它本该衡量的东西：古德哈特定律，我们亲手测量过。DPO通过策略与奖励的重参数化，直接拟合比较数据。书面原则提供监督信号，蒸馏训练更小的学生模型，而模型合并组合已经训练好的任务向量。"
+  },
+  "59c99d7a1dbb": {
+   "scene": "Distill",
+   "en": "The direction of the KL matters, as Part 1 showed with this two-peaked distribution. <bookmark mark='a'/> Minimize the forward KL, from teacher to student, and a student too small to fit both peaks spreads over both, putting probability where the teacher puts almost none. Classic distillation matches the teacher's probabilities on training text; that text need not come from the teacher. <bookmark mark='b'/> Here, minimizing reverse KL selects one peak. MiniLLM targets reverse KL under the student, with teacher-mixed sampling to stabilize optimization. On-policy distillation chooses where the training text comes from. GKD can use forward KL, reverse KL, or another divergence: the sampling policy and the loss are separate choices.",
+   "zh": "KL的方向很重要，第1部分用这个双峰分布展示过。<bookmark mark='a'/>最小化前向KL，从老师到学生，一个小到拟合不了两个峰的学生，就会铺开盖住两个峰，把概率放到老师几乎不放的地方。经典的蒸馏，在训练文本上匹配老师给出的概率；这些文本不一定来自老师。<bookmark mark='b'/>在这个例子里，最小化反向KL会选择一个峰。MiniLLM以学生分布下的反向KL为目标，并在采样中混合老师和学生，使优化更稳定。在线策略蒸馏选择的是训练文本从哪里来。GKD可以用前向KL、反向KL或其他散度：采样策略和损失是两个独立的选择。"
   }
  },
  "title_en": "AI, Built: Part 27, Post-Training and Alignment",

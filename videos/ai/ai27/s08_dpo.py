@@ -93,14 +93,15 @@ class DPO(VoiceoverScene):
             r_[0].align_to(rows[0][0], LEFT)
         ex = VGroup(*[said(t, chars=46, font_size=20, max_lines=2) for _, t in d["examples"][:2]])
         ex.arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
-        tag = note(r"computed: \ the same comparisons; \ KL in nats per line").to_corner(UR, buff=0.25)
+        tag = note(r"computed: \ the same comparisons; \ estimated KL: $80$ policy draws, nats per line").to_corner(UR, buff=0.25)
         better = d["gold"] > sft["sft_line_gold"]
         said_ = (f"Its lines score {d['gold']:+.2f} with gold, up from {sft['sft_line_gold']:+.2f}, "
                  if better else f"Its lines score {d['gold']:+.2f} with gold, against {sft['sft_line_gold']:+.2f}, ")
         with self.voiceover(
             "We trained DPO on our model, with the same comparisons the reward model learned from. "
-            f"<bookmark mark='a'/> {said_}at a divergence of {d['kl']:.1f} nats from where it started. "
-            f"<bookmark mark='b'/> RLHF with beta {rl['betas'][0]:g} reached {rl_gold:+.2f} at {rl_kl:.1f} nats. "
+            f"<bookmark mark='a'/> {said_}at an estimated divergence of {d['kl']:.1f} nats from where it started. "
+            f"<bookmark mark='b'/> RLHF with beta {rl['betas'][0]:g} reached {rl_gold:+.2f} at an estimated {rl_kl:.1f} nats. "
+            "The RLHF row is seed zero's separately evaluated final policy. "
             "<bookmark mark='c'/> Two routes to the same kind of objective: one through a reward model and sampling, "
             "the other straight from the comparisons."
         ) as vo:
@@ -121,26 +122,30 @@ class DPO(VoiceoverScene):
         S = int(p[-1, 0])
         lo, hi = float(min(p[:, 1].min(), p[:, 2].min())), float(max(p[:, 1].max(), p[:, 2].max(), 0.5))
         g = axes([0, S], [np.floor(lo), np.ceil(hi)], x_length=7.0, y_length=3.8, xlabel=r"DPO steps",
-                 ylabel=r"$\log \pi_\theta(y) - \log \pi_{\mathrm{ref}}(y)$ \ (nats, $32$ fixed pairs)",
+                 ylabel=r"$\log \pi_\theta(y) - \log \pi_{\mathrm{ref}}(y)$ \ (mean, nats; $32$ fixed training pairs)",
                  xticks=[0, S], yticks=ticks(np.floor(lo), np.ceil(hi), 3), center=[-1.0, -0.2, 0])
         cw = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in zip(p[:, 0], p[:, 1])]).set_stroke(REWARD, 4)
         cl = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in zip(p[:, 0], p[:, 2])]).set_stroke(PENALTY, 4)
         zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(S, 0), color=GREY_C, dash_length=0.06)
         lg = legend([(REWARD, r"the preferred answers"), (PENALTY, r"the rejected answers")], font_size=20)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
-        both_fall = p[-1, 1] < 0
-        if both_fall:
-            text = (f"By the end, the preferred answers have lost {-p[-1, 1]:.1f} nats of probability and the "
-                    f"rejected ones {-p[-1, 2]:.1f}: the gap between them grew, but mostly by pushing both down. "
-                    "Where did the probability go? To answers in neither list. Researchers call this likelihood "
-                    "displacement, and it is one reason DPO's results can surprise.")
-        else:
-            text = (f"Here the preferred answers gained {p[-1, 1]:.1f} nats and the rejected ones changed by "
-                    f"{p[-1, 2]:+.1f}. In larger models it is common for both to fall, the gap growing while the "
-                    "probability flows to answers in neither list: likelihood displacement.")
+        gap_start = float(p[0, 1] - p[0, 2])
+        gap_end = float(p[-1, 1] - p[-1, 2])
+        gap_change = gap_end - gap_start
+        # Avoid interpreting insignificant roundoff near zero as a qualitative pattern.
+        observed = p[-1, 1] < -1e-4 and p[-1, 2] < -1e-4 and gap_change > 1e-4
+        verdict = ("Both mean log-probabilities end below reference, while their mean gap increased: a pattern "
+                   "consistent with likelihood displacement in this probe." if observed else
+                   "This probe does not show the specific pattern of both mean log-probabilities ending below "
+                   "reference while their mean gap increases.")
+        text = (f"At step {S:d}, the preferred answers' mean log-probability relative to reference is "
+                f"{p[-1, 1]:+.1f} nats, and the rejected answers' is {p[-1, 2]:+.1f}. Their mean gap has changed "
+                f"by {gap_change:+.1f} nats since the start.")
         with self.voiceover(
             "DPO only cares about the gap between the preferred and the rejected answer. Watch what happens to each "
-            "separately, for thirty-two fixed pairs, as it trains. <bookmark mark='a'/> " + text
+            "separately, for thirty-two fixed training pairs, as it trains. <bookmark mark='a'/> " + text + " The pattern: " + verdict +
+            " These averages over fixed training pairs do not measure held-out accuracy or total probability "
+            "mass, and do not identify which other answers receive probability."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(lg))
             vo.wait_until("a")
@@ -153,18 +158,30 @@ class DPO(VoiceoverScene):
         """Every method trades divergence for gold: best-of-n, RLHF and DPO on one chart, gold gained against sqrt KL."""
         bo, rl, dp, sw = load("bon"), load("rlhf"), load("dpo"), load("dpo_sweep")
         base = load("sft")["sft_line_gold"]
-        kx = np.sqrt(np.asarray(bo["kl"]))
+        bo_kl = np.asarray(bo["kl"], dtype=float)
+        if not np.isfinite(bo_kl).all() or (bo_kl < 0).any():
+            raise ValueError("Invalid best-of-n KL upper-bound coordinate; preserve and review the cached input")
+        kx = np.sqrt(bo_kl)
         bon = np.asarray(bo["large_gold"]) - float(bo["large_gold"][0])  # the same prompts' n = 1 average
         pts = [("RLHF", b, rl[f"b{b:g}".replace(".", "_") + "_final"]["gold"] - base,
                 rl[f"b{b:g}".replace(".", "_") + "_final"]["kl"]) for b in rl["betas"]]
         pts += [("DPO", b, g_ - base, k_) for b, g_, k_ in sorted([(dp["beta"], dp["gold"], dp["kl"])] +
                                                                 [tuple(p_) for p_ in sw["points"]])]
-        xmax = max(float(kx[-1]), max(np.sqrt(max(k_, 0)) for *_, k_ in pts)) * 1.08
+        if not all(np.isfinite([b, gold_gain, kl]).all() for _, b, gold_gain, kl in pts):
+            raise ValueError("Nonfinite policy gold/KL coordinate; preserve and review the cached input")
+        negative = [(method, beta, kl) for method, beta, _, kl in pts if kl < 0]
+        if negative:
+            raise ValueError(
+                f"Negative Monte Carlo KL estimates cannot be plotted on a square-root axis: {negative}. "
+                "Preserve these estimates and review an explicit signed display or a separate evaluation; "
+                "do not clip them to zero."
+            )
+        xmax = max(float(kx[-1]), max(np.sqrt(k_) for *_, k_ in pts)) * 1.08
         ys = [float(bon.min()), float(bon.max())] + [g_ for _, _, g_, _ in pts]
         lo, hi = min(ys + [0.0]), max(ys)
         pad = 0.1 * (hi - lo + 1e-6)
         g = axes([0, xmax], [lo - pad, hi + pad], x_length=8.0, y_length=4.4,
-                 xlabel=r"$\sqrt{\mathrm{KL}}$ from the fine-tuned model \ (nats$^{1/2}$ per line)",
+                 xlabel=r"$\sqrt{\mathrm{KL}}$ \ (best-of-$n$: upper bound; \ trained: estimate)",
                  ylabel=r"gold gained over the fine-tuned model", xticks=[0, round(xmax)],
                  yticks=ticks(lo - pad, hi + pad, 3), yfmt=lambda v: rf"{v:+.2f}" if v else "0",
                  center=[-2.3, -0.3, 0])
@@ -178,7 +195,7 @@ class DPO(VoiceoverScene):
         dots = VGroup()
         for meth, b, g_, k_ in pts:
             col = KLC if meth == "RLHF" else POLICY
-            d_ = Dot(g.ax.c2p(np.sqrt(max(k_, 0)), g_), radius=0.09, color=col)
+            d_ = Dot(g.ax.c2p(np.sqrt(k_), g_), radius=0.09, color=col)
             dots.add(VGroup(d_, label(rf"{meth}, \ $\beta = {b:g}$", font_size=20, color=col)))
         # names in a column right of the chart, in the order of their dots' heights, each joined to its dot by a
         # thin leader (RLHF and DPO at beta 0.1 land almost on top of each other)
@@ -195,33 +212,17 @@ class DPO(VoiceoverScene):
             dots[i].add(leaders[j])
         bl = label(r"best-of-$n$, \ $n = 1 \dots 256$", font_size=20, color=PROXY).move_to(
             [X, top_y + 0.45, 0], aligned_edge=LEFT)
-        tag = note(r"computed: \ gold on the same samples' prompts; \ KL measured on each policy's own lines")
+        tag = note(r"exploratory: \ best-of-$n$: $12$ prompts; \ trained gold: $30$; \ trained KL: $10$")
         tag.to_corner(DR, buff=0.2)
-        # the verdict: does any trained policy beat sampling-and-choosing, at the same divergence or at all?
-        at = lambda k_: float(np.interp(np.sqrt(max(k_, 0)), kx, bon))
-        inr = [p_ for p_ in pts if np.sqrt(max(p_[3], 0)) <= kx[-1]]
-        above = [p_ for p_ in inr if p_[2] > at(p_[3]) + 0.01]
-        meth, b, gbest, _ = max(pts, key=lambda p_: p_[2])
-        if gbest > float(bon.max()) + 0.02:
-            verdict = (f"The best trained policy, {meth} at beta {b:g}, gains {gbest:+.2f}, more than best-of-n's best, "
-                       f"{float(bon.max()):+.2f}: training reaches answers that sampling alone rarely finds.")
-        else:
-            verdict = (f"No trained policy gains more than best-of-n's best, {float(bon.max()):+.2f}, and best-of-n gets "
-                       "there with no training at all, which is why labs still use it, and use it to make training "
-                       "data.")
-        if inr and not above:
-            cmp_ = (f"At equal divergence, none of the {len(inr)} trained policies that stay within best-of-n's range "
-                    "does better than it.")
-        elif inr:
-            cmp_ = (f"At equal divergence, {len(above)} of the {len(inr)} trained policies that stay within "
-                    "best-of-n's range do better than it.")
-        else:
-            cmp_ = "Every trained policy drifts further from where it started than best-of-256 ever does."
+        verdict = ("These are exploratory results on different prompt populations: twelve for best-of-n, "
+                   "thirty for the trained policies' gold, and ten for their estimated KL.")
+        cmp_ = ("Best-of-n uses a KL upper bound, while trained policies use a sample estimate. This chart "
+                "does not establish which method is best at equal divergence; that needs a matched evaluation.")
         with self.voiceover(
             "Every method in this part trades divergence from the fine-tuned model for gold. Put them on one chart: "
             "gold gained, against the square root of the KL, as in the last chapter. <bookmark mark='a'/> "
             "Best-of-n with the larger reward model is the yardstick: it trains nothing. <bookmark mark='b'/> "
-            "RLHF's two runs, <bookmark mark='c'/> and DPO at three values of beta. <bookmark mark='d'/> " + verdict
+            "RLHF's seed-zero final policies at two penalties, <bookmark mark='c'/> and DPO at three values of beta. <bookmark mark='d'/> " + verdict
             + " <bookmark mark='e'/> " + cmp_
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(tag))
@@ -240,6 +241,7 @@ class DPO(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def family(self):
+        head = label(r"Preference-optimization variants", font_size=30).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(2023, r"IPO \ (Azar et al., DeepMind)", r"a squared loss on the log-ratio margin: \ DPO can "
                          r"push it to infinity when preferences are certain", width=6.2, color=POLICY),
@@ -248,7 +250,7 @@ class DPO(VoiceoverScene):
             history_card(2024, r"SimPO \ (Meng, Xia \& Chen)", r"no reference model: \ the length-normalized "
                          r"log-probability is the reward, \ with a margin", width=6.2, color=POLICY),
             history_card(2024, r"online preference learning", r"fresh answers from the current model, \ judged as "
-                         r"training goes: \ usually better than a fixed dataset", width=6.2, color=REWARD),
+                         r"training goes: \ advantages in the cited comparisons", width=6.2, color=REWARD),
         ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
         cite_ = cite(r"Azar et al.\ (2023); \ Ethayarajh et al.\ (2024); \ Meng et al.\ (2024); \ Tang et al.\ (2024)")
         with self.voiceover(
@@ -258,10 +260,10 @@ class DPO(VoiceoverScene):
             "shaped like Kahneman and Tversky's prospect theory. <bookmark mark='c'/> SimPO drops the reference "
             "model and uses the length-normalized log-probability as the reward. <bookmark mark='d'/> And a lesson "
             "from comparing them: learning from fresh answers by the current model, judged as training goes, "
-            "usually beats a fixed dataset collected from an older one. Online data is the advantage reinforcement "
-            "learning had all along."
+            "showed advantages over fixed data from older models in the cited comparisons. New experience is one way "
+            "alignment training can improve."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
