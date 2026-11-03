@@ -199,6 +199,7 @@ class Optional(VoiceoverScene):
             MathTex(rf"P(\text{{THH first}}) = {pt['penney_exact']:.2f}\ \ (\text{{simulated }} {pt['penney_sim']:.3f})",
                     font_size=28, color=QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(grid, DOWN, buff=0.5).align_to(grid, LEFT)
+        keep_in_frame(pen, 0.35)  # the result line is wider than the table above it
         pred = desk_question(r"HH or HT: which takes longer to appear in fair tosses?",
                              r"HH: 6 tosses on average against 4, although each has probability $1/4$ in any two "
                              r"tosses. HH overlaps itself.", width=6.4, font_size=21).to_corner(DR, buff=0.35)
