@@ -36,13 +36,18 @@ class Zoo(VoiceoverScene):
         strict = VMobject(stroke_width=0, fill_color=BAD, fill_opacity=0.15).set_points_as_corners(
             [ax.c2p(0, 1.0)] + [ax.c2p(a, b) for a, b in zip(na[m], nb[m])] + [ax.c2p(0.6, 0.4), ax.c2p(0, 1.0)])
         l1 = label(r"$\alpha + \beta < 1$: finite variance", font_size=19, color=GOOD).move_to(ax.c2p(0.22, 0.35))
-        l2 = label(r"strictly stationary, infinite variance", font_size=19, color=BAD).move_to(ax.c2p(0.33, 1.08)).rotate(-0.42)
+        l2t = label(r"strictly stationary, infinite variance", font_size=19, color=BAD)
+        l2t.move_to(ax.c2p(0.6, 0.5)).shift(RIGHT * 3.2 + DOWN * 1.3)
+        l2 = VGroup(l2t, Arrow(l2t.get_left() + LEFT * 0.05, ax.c2p(0.55, 0.52), buff=0.05, color=BAD, stroke_width=2.5,
+                               max_tip_length_to_length_ratio=0.12),
+                    label(r"explosive", font_size=19, color=GREY_B).move_to(ax.c2p(0.2, 1.22)))
         l3 = label(r"$\mathbb{E}\ln(\alpha z^2 + \beta) = 0$ (Nelson 1990)", font_size=19, color=BAD).next_to(ax.c2p(0.42, 0.98), UR, buff=0.05)
         us, btc = gl["us"], gl["btc"]
         d1 = Dot(ax.c2p(us[1], us[2]), radius=0.08, color=FC)
         d2 = Dot(ax.c2p(btc[1], btc[2]), radius=0.08, color=ALT)
-        t1 = label(r"US stocks", font_size=18, color=FC).next_to(d1, RIGHT, buff=0.1)
-        t2 = label(r"Bitcoin", font_size=18, color=ALT).next_to(d2, RIGHT, buff=0.1)
+        # the dots sit on the crowded diagonal: one name above the curve, one below the line
+        t1 = label(r"US stocks", font_size=18, color=FC).next_to(d1, UP, buff=0.3)
+        t2 = label(r"Bitcoin", font_size=18, color=ALT).next_to(d2, DOWN, buff=0.12)
         q1, q2 = Dot(ax.c2p(0.3, 0.75), radius=0.07, color=WHITE), Dot(ax.c2p(0.25, 0.80), radius=0.07, color=WHITE)
         pc = pause_card(r"$\alpha = 0.30$, $\beta = 0.75$: the sum is 1.05. Does the variance explode? And at "
                         r"$\alpha = 0.25$, $\beta = 0.80$?", width=5.4, font_size=21).to_edge(RIGHT, buff=0.4).shift(UP * 1.6)
