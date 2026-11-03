@@ -79,8 +79,12 @@ class Frontier(VoiceoverScene):
             return VGroup(g, diag, pts)
 
         rp = TrainingReplay(ep, loss, frame, ck, ylabel=r"training loss (log)", xlabel=r"epoch", log_y=True)
-        rp.shift(DOWN * 0.3)
+        rp.scale(0.88).shift(UP * 0.25)  # the bottom strip holds the results
         fin = nv["final"]
+
+        def sci(v):  # 1.2e-05 as 1.2 x 10^{-5}
+            m, e = f"{v:.1e}".split("e")
+            return rf"{m}\times 10^{{{int(e)}}}"
         g0 = np.median([f["guess_med"] for f in fin])
         g1 = np.median([f["one_med"] for f in fin])
         g2max = max(f["two_max"] for f in fin)
@@ -90,9 +94,9 @@ class Frontier(VoiceoverScene):
             MathTex(rf"\text{{guess: median error}}\ {100 * g0:.2f}\ \text{{vol pts}}", font_size=26, color=QQ),
             MathTex(rf"\text{{Corrado--Miller: median}}\ {100 * nv['cm_med']:.2f}", font_size=26, color=GREY_A),
             MathTex(rf"\text{{after 1 Newton step: median}}\ {100 * g1:.3f}", font_size=26, color=GAIN),
-            MathTex(rf"\text{{after 2: median}}\ {100 * np.median([f['two_med'] for f in fin]):.1e},\ \text{{worst}}\ "
+            MathTex(rf"\text{{after 2: median}}\ {sci(100 * np.median([f['two_med'] for f in fin]))},\ \text{{worst}}\ "
                     rf"{100 * g2max:.1f}", font_size=26, color=GAIN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.25).shift(RIGHT * 2.8)
+        ).arrange_in_grid(rows=2, cols=2, col_alignments="ll", buff=(0.6, 0.12)).to_edge(DOWN, buff=0.25)
         better = g0 < nv["cm_med"]
         cmp_word = "smaller than" if better else "no better than"
         g2med = np.median([f["two_med"] for f in fin])
