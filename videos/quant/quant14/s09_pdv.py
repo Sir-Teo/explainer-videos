@@ -176,7 +176,7 @@ class PDV(VoiceoverScene):
         whys = [why(r"each kernel a convex mix of two exponentials (Guyon and Lekeufack's 4-factor Markovian PDV)"),
                 why(r"each exponential is an exponential moving average: four factors, each updated by one line, and the "
                     r"model is Markov")]
-        step = ladder(self, rows, whys, keep=2, top=2.9, x=-0.8, buff=0.7, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=3.3, x=-0.8, buff=0.5, edge=6.9)  # both rows above the lab card
         card = lab_card(r"the 4-factor Markovian PDV", [
             "def pdv4_step(R, r, dt, lam):",
             "    e = np.exp(-lam * dt)",
@@ -186,7 +186,7 @@ class PDV(VoiceoverScene):
             "    R0 = pdv4_step(R0, x, dt, lam0)",
             "    R1 = pdv4_step(R1, x, dt, lam1)",
             "    out[i] = (1 - theta) * R0 + theta * R1",
-        ], source="explainer/quant/house/rough.py: pdv4_step, pdv4_features", width=7.0).to_edge(DOWN, buff=1.6).to_edge(LEFT, buff=0.4)
+        ], source="explainer/quant/house/rough.py: pdv4_step, pdv4_features", width=7.0).to_edge(DOWN, buff=1.3).to_edge(LEFT, buff=0.4)
         hl = q["half_lives_days"]
         outs = [f"half-lives (days): trend {hl[0]:.1f} / {hl[1]:.1f}, activity {hl[2]:.1f} / {hl[3]:.0f}",
                 f"R^2 in sample {q['r2_train']:.2f}   out of sample {q['r2_test']:.2f}",
