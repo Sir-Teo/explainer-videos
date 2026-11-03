@@ -27,6 +27,11 @@ class ConnectFourSynthetic(unittest.TestCase):
                     row = next(r for r in range(6) if grid[r,c] == 0)
                     trial = grid.copy(); trial[row,c] = player
                     self.assertEqual(board.wins_with(c), wins(trial, player))
+                    self.assertEqual(bool(c4.is_winning_move(np.int64(board.pos), np.int64(board.mask), c)),
+                                     wins(trial, player))
+                    p2, m2 = c4.play(np.int64(board.pos), np.int64(board.mask), c)
+                    next_board = board.play(c)
+                    self.assertEqual((int(p2), int(m2)), (next_board.pos, next_board.mask))
                 if not legal: break
                 c = rng.choice(legal); row = next(r for r in range(6) if grid[r,c] == 0)
                 grid[row,c] = player; board = board.play(c)
