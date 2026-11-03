@@ -35,7 +35,8 @@ class Smile(VoiceoverScene):
         for p, c in zip(pick, cols):
             kk = np.linspace(-0.5, 0.5, 101)
             iv = SM.svi_iv(p["svi"], kk, p["T"])
-            lines.add(curve(ax, kk, np.clip(iv, 0.3, 0.9), c, stroke_width=3))
+            inr = (iv >= 0.3) & (iv <= 0.9)  # a smile is convex: the in-range part is one piece, so it ends at the frame
+            lines.add(curve(ax, kk[inr], iv[inr], c, stroke_width=3))
             k, v = np.asarray(p["k"]), np.asarray(p["iv"])
             m = (np.abs(k) <= 0.5) & (v <= 0.9) & (v >= 0.3)
             dots.add(VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=c) for a, b in zip(k[m], v[m])]))
