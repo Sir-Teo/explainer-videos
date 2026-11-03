@@ -105,7 +105,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
                 why(r"Avellaneda and Lipkin (2003): solve for $dS$; near the strike, close to expiry, volatility is "
                     r"damped toward zero, and the price is pinned. Net short gamma, the sign flips: hedgers chase")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.4, buff=0.55, edge=6.9)
-        pc = pause(r"Market makers are net short gamma at a strike into expiry. Pin, or repel?", width=5.0, font_size=21)
+        pc = pause(r"Market makers are net short gamma at a strike into expiry. Pin, or repel?", width=5.0, font_size=21, corner=UR)  # the top row makes way for it
         with self.voiceover(
             "Can hedging move the price itself? First, gamma at the money: chapter one's formula with d one at zero. "
             "<bookmark mark='a'/> A book that is net long gamma re-hedges against every move: it sells when the "
@@ -124,7 +124,7 @@ class Expiry(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
-            self.play(FadeIn(pc))
+            self.play(FadeOut(rows[0]), FadeOut(whys[0]), FadeIn(pc))
         self.wait(0.4)
         self.clear_scene()
 
