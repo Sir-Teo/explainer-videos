@@ -73,7 +73,7 @@ class Industry(VoiceoverScene):
                     r"$dS/S$ (Hull and White 2017)", 20),
                 why(r"in Heston, $\mathbb{E}[dv \mid dS] = \rho\xi\,dS/S$ (chapter 13's regression): the same idea as "
                     r"Bartlett's SABR delta", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.6, edge=6.9)
         pp = pause(r"Volatility rises when prices fall. Long a call: hold more or less underlying than Black--Scholes says?",
                    width=5.0).to_corner(DR, buff=0.3)
         with self.voiceover(
