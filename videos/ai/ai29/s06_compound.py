@@ -5,6 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai29.agent_fit import agent_decay_fit, agent_fit_curve
 from videos.ai.ai29.common import AGENT, FAIL, GOOD, PART, REWARD, TOOL, load
 
 P_COLORS = [C.SURPRISE, C.BITS, C.INTERVAL]
@@ -90,11 +91,15 @@ class Compound(VoiceoverScene):
         for mode, name, col in MODES:
             s_ = np.asarray(a[f"{mode}_succ"])
             dots.add(VGroup(*[Dot(ax.c2p(x, y), radius=0.06, color=col) for x, y in zip(ns, s_)]))
-            p = float(a[f"{mode}_p"])
-            xx = np.linspace(0, 60, 61)
-            lines.add(curve(ax, xx, p ** xx, col, 2).set_stroke(opacity=0.6))
-            keys.add(label(rf"{name}: \ ${100 * p:.1f}\%$ a step", font_size=26, color=col))
-        keys.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.0, 1.2, 0])
+            fitted = agent_decay_fit(ns, s_)
+            p = fitted["decay"]
+            xx, yy = agent_fit_curve(ns, fitted)
+            lines.add(curve(ax, xx, yy, col, 2).set_stroke(opacity=0.6))
+            keys.add(label(rf"{name}: \ effective decay ${p:.3f}$", font_size=26, color=col))
+        keys.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        if keys.width > 5.0:
+            keys.width = 5.0
+        keys.move_to([4.0, 1.6, 0])
         r = a["rates"]
         tag = note(rf"simulated, \ ${a['tasks']:,}$ tasks per point: \ in its head, \ a slip ${100 * r['head']:.0f}\%$ of "
                    rf"the time; \ a tool call malformed ${100 * r['malformed']:.0f}\%$ (the tool says so), \ silently wrong "
@@ -104,11 +109,8 @@ class Compound(VoiceoverScene):
             tag.width = 13.0
         n60 = {m: float(a[f"{m}_succ"][-1]) for m, _, _ in MODES}
         calls = float(a["check_calls"][-1]) / 60
-        th = a["theory"]
-        close = all(abs(float(a[f"{m}_p"]) - th[m]) < 0.004 for m, _, _ in MODES)
-        fit = ("Each set of points falls on its own curve p to the n, with p what the error rates predict: "
-               if close else "The points fall close to curves p to the n, though not always where the error rates "
-               "predict, since two slips can cancel and retries use up the budget: ")
+        fit = ("The curves fit a free amplitude times p to the n. Here p is effective whole-task decay, "
+               "not measured single-step reliability. Two slips can cancel, and retries consume the call budget: ")
         with self.voiceover(
             "Our warehouse agent shows where the reliability comes from. Here is how often it gets the total right, "
             "against the number of prices it has to look up. <bookmark mark='a'/> Working in its head, every slip is "

@@ -46,9 +46,34 @@ from datetime import date
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
 
 CACHE = Cache("ai29")
-load = CACHE.load
+# New independent scientific recipes; old artifacts must not masquerade as remeasured results.
+RECIPE_VERSIONS = {name: "independent-20261103-v1" for name in
+                   ("agent", "lane", "dreamer", "klbal", "detour", "fast")}
+
+
+@locked_item(lambda name: CACHE.path(name))
+def load(name):
+    path = CACHE.path(name)
+    if not path.exists():
+        raise FileNotFoundError(f"{path}: explicit reviewed regeneration required; no implicit computation")
+    if name in RECIPE_VERSIONS:
+        import json
+        metadata = json.loads(path.read_text())
+        if metadata.get("recipe_version") != RECIPE_VERSIONS[name]:
+            raise ValueError(f"{name}: legacy scientific cache; explicit reviewed regeneration required")
+        # Cache.load merges NPZ arrays over JSON. Producers never serialize a key
+        # into both: reject shadowing before the generic loader can overwrite
+        # validated protocol metadata (or any other JSON field).
+        arrays_path = path.with_suffix(".npz")
+        if arrays_path.exists():
+            with np.load(arrays_path, allow_pickle=False) as arrays:
+                shadowed = set(arrays.files) & (set(metadata) | {"recipe_version", "params"})
+                if shadowed:
+                    raise ValueError(f"{name}: NPZ shadows JSON/protocol keys: {sorted(shadowed)}")
+    return CACHE.load(name)
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -185,9 +210,16 @@ def agent_episode(w, items, mode, g, rates=AGENT_RATES, trace=False):
             v, obs = w.call("price", target)
             say(f'Action: price("{target}")')
             say(f"Observation: {obs}")
-            if mode == "check" and target != it and calls < budget:
+            if mode == "check":
+                # Every accepted lookup gets a real, charged reread, not only
+                # those the simulator already knows are wrong.
+                if calls >= budget:
+                    return False, calls, lines
+                _, check_obs = w.call("price", it)
                 calls += 1
-                if g.random() < rates["catch"]:
+                say(f'Action: price("{it}") [check]')
+                say(f"Observation: {check_obs}")
+                if target != it and g.random() < rates["catch"]:
                     say(f"Thought: that was {target}, not {it}. Again.")
                     continue
             total += v
@@ -387,10 +419,14 @@ class Lane:
 
     def eps(self, table, T):
         """The learner's error rate on the expert's own drives: E over the expert's states of P(table[o] != expert)."""
+        return float(self.eps_curve(table, T)[-1])
+
+    def eps_curve(self, table, T):
+        """Cumulative expert-state error averaged separately for each horizon."""
         _, ps = self.run(None, T)
-        dstar = ps[:T].mean(0)
-        wrong = (table[None, :] != self.expert[:, None]).astype(float)  # [d, o]
-        return float((dstar[:, None] * self.Pobs * wrong).sum())
+        wrong = (table[None, :] != self.expert[:, None]).astype(float)
+        per_step = ps[:T] @ (self.Pobs * wrong).sum(1)
+        return np.cumsum(per_step) / np.arange(1, T + 1)
 
 
 def lane_table(counts, S, D, seed):
@@ -448,15 +484,17 @@ def compute_lane(seeds=8, T=400, N=400, budgets=(50, 100, 200, 400, 800, 1600)):
     out = dict(params=LANE, T=T, N=N, seeds=seeds, offs=lane.offs, expert=lane.expert, J_expert=Je,
                budgets=list(budgets))
     for method in ("bc", "dagger"):
-        Js, eps_, tabs = [], [], []
+        Js, eps_, eps_curves, tabs = [], [], [], []
         for s in range(seeds):
             tab, _ = lane_learn(lane, method, N, s)
             J, _ = lane.run(tab, T)
             Js.append(J)
-            eps_.append(lane.eps(tab, T))
+            eps_curves.append(lane.eps_curve(tab, T))
+            eps_.append(eps_curves[-1][-1])
             tabs.append(tab)
         out[f"{method}_J"] = np.array(Js)
         out[f"{method}_eps"] = np.array(eps_)
+        out[f"{method}_eps_curve"] = np.array(eps_curves)
         out[f"{method}_tabs"] = np.array(tabs)
         # the cost at the end of the horizon against the label budget
         out[f"{method}_budget"] = np.array([[lane.run(lane_learn(lane, method, n, s)[0], T)[0][-1] for s in range(seeds)]
@@ -464,9 +502,7 @@ def compute_lane(seeds=8, T=400, N=400, budgets=(50, 100, 200, 400, 800, 1600)):
     # the bound J(BC) <= J(expert) + T^2 eps holds for every horizon (Ross & Bagnell 2010): checked, every seed
     ts = np.arange(1, T + 1)
     for s in range(seeds):
-        e = [lane.eps(out["bc_tabs"][s], int(t)) for t in (10, 50, 200)]
-        for t, et in zip((10, 50, 200), e):
-            assert out["bc_J"][s][t - 1] <= Je[t - 1] + t * t * et + 1e-9
+        assert np.all(out["bc_J"][s] <= Je + ts * ts * out["bc_eps_curve"][s] + 1e-9)
     # how the cost grows with the horizon: the slope of log J against log T, over the first steps and over the run
     def slope(J, a, b):
         return float(np.polyfit(np.log(ts[a:b]), np.log(np.maximum(J[a:b], 1e-12)), 1)[0])
@@ -585,7 +621,7 @@ def compute_world():
 # ---------------------------------------------------------------------------
 # Dreamer-lite
 # ---------------------------------------------------------------------------
-DREAMER = dict(iters=60, steps_per_iter=40, seeds=(0, 1, 2), snap_iters=(0, 5, 20, 60), horizon=15, eval_eps=6)
+DREAMER = dict(recipe_version=RECIPE_VERSIONS["dreamer"], iters=60, steps_per_iter=40, seeds=(0, 1, 2), snap_iters=(0, 5, 20, 60), horizon=15, eval_eps=6)
 
 
 def _jsonable(d):
@@ -631,7 +667,7 @@ def compute_dreamer():
     return out
 
 
-KLBAL = dict(iters=40, steps_per_iter=40, seeds=(0, 1, 2), configs={"balanced": (0.5, 0.1), "plain": (0.3, 0.3)})
+KLBAL = dict(recipe_version=RECIPE_VERSIONS["klbal"], iters=40, steps_per_iter=40, seeds=(0, 1, 2), configs={"balanced": (0.5, 0.1), "plain": (0.3, 0.3)})
 
 
 def compute_klbal():
@@ -717,6 +753,38 @@ def compute_symlog(seeds=3, steps=3000):
 DETOUR = dict(demos=400, chunk=20, steps=6000, seeds=5, snaps=(0, 300, 1500, 6000), flow_steps=10)
 
 
+def segment_circle_entry(start, end, centre, radius):
+    """First contact time in [0, 1] with a closed disk, or None."""
+    start, end, centre = map(lambda x: np.asarray(x, dtype=float), (start, end, centre))
+    delta, relative = end - start, start - centre
+    c = float(relative @ relative) - radius * radius
+    if c <= 0:
+        return 0.
+    a = float(delta @ delta)
+    if a == 0:
+        return None
+    b = 2 * float(relative @ delta)
+    discriminant = b * b - 4 * a * c
+    if discriminant < 0:
+        return None
+    t = (-b - np.sqrt(discriminant)) / (2 * a)
+    return float(t) if 0 <= t <= 1 else None
+
+
+def segment_hits_circle(start, end, centre, radius):
+    """Closed line segment intersects the closed disk (including tangency)."""
+    return segment_circle_entry(start, end, centre, radius) is not None
+
+
+def detour_crossing_y(path, x=0.):
+    """First forward crossing of the obstacle centre line; NaN if never crossed."""
+    for a, b in zip(path[:-1], path[1:]):
+        if a[0] < x <= b[0]:
+            t = (x - a[0]) / (b[0] - a[0])
+            return float(a[1] + t * (b[1] - a[1]))
+    return float("nan")
+
+
 def detour_rollout(policy, starts, chunk, max_steps=60):
     """Closed loop: plan a chunk of ``chunk`` moves, carry them out, look again.  Returns paths and outcomes."""
     from .envs import GOAL, OBST
@@ -726,14 +794,20 @@ def detour_rollout(policy, starts, chunk, max_steps=60):
         p = np.array([-1.0, float(y0)])
         path = [p.copy()]
         h, r = False, False
-        while len(path) <= max_steps and not (h or r):
+        while len(path) - 1 < max_steps and not (h or r):
             moves = policy(p)
             for m in moves.reshape(chunk, 2):
+                if len(path) - 1 >= max_steps:
+                    break
+                previous = p.copy()
                 p = p + m
-                path.append(p.copy())
-                if np.hypot(p[0] - OBST[0], p[1] - OBST[1]) < OBST[2]:
+                contact = segment_circle_entry(previous, p, OBST[:2], OBST[2])
+                if contact is not None:
+                    p = previous + contact * (p - previous)
+                    path.append(p.copy())
                     h = True
                     break
+                path.append(p.copy())
                 if np.hypot(p[0] - GOAL[0], p[1] - GOAL[1]) < 0.15:
                     r = True
                     break
@@ -818,7 +892,8 @@ def compute_detour():
                 opt.step()
             paths, hit, reached = detour_rollout(policy, starts, H)
             # which way round: the side of the obstacle where the path crosses its centre line
-            side = np.array([p_[np.argmin(np.abs(p_[:, 0] - 0.0)), 1] for p_ in paths])
+            side = np.array([detour_crossing_y(p_) for p_ in paths])
+            # Fractions of all trials; non-crossing paths count in neither side.
             above, below = (side > 0).astype(float), (side <= 0).astype(float)
             res.append(dict(hit=float(hit.mean()), reached=float(reached.mean()), above=float(above.mean()),
                             below=float(below.mean()), snaps=snaps))
@@ -876,6 +951,23 @@ def bpe_encode(s, rules):
     return s
 
 
+def quantizer_alphabet(training_coefficients):
+    """Reserve a symmetric integer alphabet using training data only.
+
+    The next power-of-two range with 2x headroom includes unobserved integers.
+    Held-out values outside it are rejected, never silently added or clipped.
+    """
+    peak = max(1, int(np.max(np.abs(training_coefficients))))
+    limit = 1 << (2 * peak - 1).bit_length()
+    return -limit, limit
+
+
+def require_alphabet(coefficients, bounds):
+    lo, hi = bounds
+    if np.any(coefficients < lo) or np.any(coefficients > hi):
+        raise ValueError("FAST coefficient outside training-defined integer alphabet")
+
+
 FAST = dict(n_train=600, n_test=300, gammas=(2, 5, 10, 20, 50, 100), merges=600, bins=256, show_gamma=10)
 
 
@@ -917,11 +1009,15 @@ def compute_fast():
     rows = []
     for gam in P["gammas"]:
         qtr_, qte = fast_ints(tr, gam), fast_ints(te, gam)
+        alphabet = quantizer_alphabet(qtr_)
+        require_alphabet(qtr_, alphabet)
+        require_alphabet(qte, alphabet)
         rules = bpe_train([[int(v) for v in s] for s in flat(qtr_)], P["merges"])
         toks = [len(bpe_encode([int(v) for v in s], rules)) for s in flat(qte)]
         rec = unnorm(idct(qte / gam, axis=1, norm="ortho"))
         rows.append(dict(gamma=gam, nonzero=float((qte != 0).sum((1, 2)).mean()), tokens=float(np.mean(toks)),
-                         rmse=float(np.sqrt(((rec - te) ** 2).mean())), vocab=len(set(np.unique(qtr_))) + len(rules)))
+                         rmse=float(np.sqrt(((rec - te) ** 2).mean())), vocab=alphabet[1] - alphabet[0] + 1 + len(rules),
+                         alphabet=list(alphabet)))
         _log(f"    FAST gamma {gam}: {rows[-1]['tokens']:.1f} tokens a chunk, rmse {rows[-1]['rmse']:.4f}")
     out["rows"] = rows
     # the example chunk's first joint: its coefficients and its rebuilt motion at the shown gamma
@@ -1028,6 +1124,16 @@ ITEMS = {
     "dreamer": compute_dreamer,
     "klbal": compute_klbal,
 }
+def _versioned(name, producer):
+    def run():
+        result = producer()
+        result["recipe_version"] = RECIPE_VERSIONS[name]
+        return result
+    return run
+
+
+ITEMS = {name: _versioned(name, producer) if name in RECIPE_VERSIONS else producer
+         for name, producer in ITEMS.items()}
 CACHE.items = ITEMS
 
 

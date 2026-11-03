@@ -124,7 +124,7 @@ class DAgger(VoiceoverScene):
         ]
         rows[2][2].set_color(DAG)
         whys = [why(r"the best policy's error, \ on the learner's own states"),
-                why(r"no-regret online learning: \ each round, \ fit all the data"),
+                why(r"requires a no-regret online learner"),
                 why(r"after $O(uT \log T)$ rounds; \ $u$: \ how much one wrong action can cost later")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.0, buff=0.55, edge=6.9)
         tail = label(r"linear in $T$: \ errors are measured where the learner goes", font_size=28, color=DAG)
@@ -132,8 +132,8 @@ class DAgger(VoiceoverScene):
         with self.voiceover(
             "Why does this fix the T squared? The trick is to treat the rounds as an online learning game. "
             "<bookmark mark='a'/> Now the error that matters is measured on the learner's own states, the ones its "
-            "own policies visit. <bookmark mark='b'/> Retraining on all the data so far is a no-regret algorithm: "
-            "on average over the rounds, it does as well as the single best policy in hindsight. "
+            "own policies visit. <bookmark mark='b'/> With a no-regret online learner and suitable loss assumptions, "
+            "average loss approaches the best fixed policy in hindsight. Retraining alone does not guarantee this. "
             "<bookmark mark='c'/> And the cost then grows only linearly with the horizon, times u, how much one wrong "
             "action can cost later, if the task lets you recover. <bookmark mark='d'/> The difference is where the "
             "errors are counted."

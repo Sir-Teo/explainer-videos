@@ -165,6 +165,7 @@ class Catch:
         self.px = int(self.g.integers(1, self.S - 1))
         self._new_ball()
         self.done_drops = 0
+        self.observation_state = self.state()
         return self.obs()
 
     def obs(self):
@@ -184,6 +185,8 @@ class Catch:
             self.vx = -self.vx
             nx = self.bx + self.vx
         self.bx = nx
+        # State corresponding to the returned pixels, before the next ball reset.
+        self.observation_state = self.state()
         r = 0.0
         if self.by == self.S - 1:
             c0 = min(self.bx, self.S - 2)  # the block's left column: caught if it overlaps the paddle

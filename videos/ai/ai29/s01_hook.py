@@ -115,7 +115,7 @@ class Hook(VoiceoverScene):
             "see everything. <bookmark mark='r2'/> Then the loop every language-model agent runs, with its tools and "
             "memory. <bookmark mark='r3'/> Then long horizons: why errors compound, how fast agents' horizons are "
             "growing, and how coding and computer-use agents are measured. <bookmark mark='r4'/> Then imitation, "
-            "and why copying an expert fails in a way that grows with the square of the task's length. "
+            "and why copying an expert can have a worst-case cost bound quadratic in the task's length. "
             "<bookmark mark='r5'/> Then world models, including a small Dreamer trained on this computer, "
             "<bookmark mark='r6'/> and finally robots: from simulation to reality, and the models that turn "
             "pictures and words into motion."

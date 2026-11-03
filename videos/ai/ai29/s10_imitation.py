@@ -174,7 +174,7 @@ class Imitation(VoiceoverScene):
             "it, the worst it can do is pay the full cost every step. <bookmark mark='c'/> Add that up over a task "
             "of T steps. <bookmark mark='d'/> Each inner sum is at most T epsilon, so the extra cost is at most T "
             "squared epsilon. Stéphane Ross and Drew Bagnell proved this in 2010, and showed tasks where it is "
-            "reached: twice the horizon, four times the extra cost."
+            "reached under their assumptions. This is a worst-case upper bound, not a prediction for every task."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -202,9 +202,11 @@ class Imitation(VoiceoverScene):
                  yticks=[v for v in (0, 100, 200, 300) if v <= ymax], center=[-2.6, -0.4, 0])
         ax = g.ax
         bcl = spread_band(ax, ts, J, BC)
-        bound = curve(ax, ts[ts * ts * eps <= ymax], (ts * ts * eps)[ts * ts * eps <= ymax], FAIL, 2.5)
+        eps_by_horizon = np.asarray(L["bc_eps_curve"]).mean(0)
+        upper = ts * ts * eps_by_horizon
+        bound = curve(ax, ts[upper <= ymax], upper[upper <= ymax], FAIL, 2.5)
         bl = label(r"$T^2\varepsilon$", font_size=26, color=FAIL).next_to(bound.get_end(), RIGHT, buff=0.1)
-        lin = DashedLine(ax.c2p(0, 0), ax.c2p(T, T * eps), color=GREY_B)
+        lin = curve(ax, ts, ts * eps_by_horizon, GREY_B, 2.0)
         ll = label(r"$T\varepsilon$", font_size=24, color=GREY_B).next_to(ax.c2p(T, T * eps), UP, buff=0.1)
         # the chance of being off the lane at step t: it climbs
         per = np.diff(np.concatenate([np.zeros((J.shape[0], 1)), J], 1), axis=1)
@@ -230,7 +232,7 @@ class Imitation(VoiceoverScene):
         with self.voiceover(
             "Here is our learner's expected cost, computed exactly, for every horizon up to four hundred steps, "
             "over eight seeds. <bookmark mark='a'/> " + shape + " <bookmark mark='b'/> The bound, T squared "
-            f"epsilon, with the measured epsilon of {eps:.3f}, is far above it: it is a worst case. If errors "
+            f"epsilon, recomputed at each horizon and ending at {eps:.3f}, is a worst-case upper bound. If errors "
             "simply added up, the cost would follow T epsilon. <bookmark mark='c'/> " + climb
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(stats[0]))
