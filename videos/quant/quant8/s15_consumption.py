@@ -161,7 +161,8 @@ class Consumption(VoiceoverScene):
             d_.set_opacity(0)
         dots.add_updater(lambda grp: [d_.set_opacity(0.7 if i < k.get_value() else 0) for i, d_ in enumerate(grp)])
         cur = {key: np.asarray(v) for key, v in m["curves"].items()}
-        lines = VGroup(*[curve(ax, np.log10(xs), np.minimum(cur[key], 4.0), col, stroke_width=3)
+        # each line only where it lies inside the axes: no flat line along the top
+        lines = VGroup(*[curve(ax, np.log10(xs)[cur[key] <= 4.0], cur[key][cur[key] <= 4.0], col, stroke_width=3)
                          for key, col in (("1.5", OVER), ("3", KELLY), ("6", VALUE))])
         leg = legend([(OVER, r"$\gamma = 1.5$"), (KELLY, r"$\gamma = 3$: the investor simulated"),
                       (VALUE, r"$\gamma = 6$")], font_size=18).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
