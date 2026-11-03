@@ -76,9 +76,9 @@ class Hawkes(VoiceoverScene):
                     grp.add(Line(pos[par[i]], pos[i], stroke_color=GREY_C, stroke_width=1, stroke_opacity=0.6))
                 grp.add(Dot(pos[i], radius=0.05, color=cols[k]))
             layers.append(grp)
-        lab = VGroup(label(r"immigrants: orders from outside", font_size=18, color=OPT).next_to(ax.c2p(0, 0), UP, buff=0.15).align_to(g, LEFT),
+        lab = VGroup(label(r"immigrants: orders from outside", font_size=18, color=OPT).next_to(g, UP, buff=0.1).align_to(g, LEFT),
                      label(r"each lower row: the children of the row above, at power-law delays", font_size=18,
-                           color=GREY_A).to_edge(DOWN, buff=0.35))
+                           color=GREY_A).to_edge(DOWN, buff=0.75))  # above the source line
         q = pause(r"Branching ratio 0.99: what share of trades are reactions to earlier trades?", width=5.6,
                   font_size=21).to_corner(UR, buff=0.3)
         src = illustration(rf"branching simulation, ratio 0.9, Lomax delays with tail $t^{{-1.6}}$; {int(keep.sum())} events")
@@ -198,10 +198,10 @@ class Hawkes(VoiceoverScene):
         grid.to_edge(RIGHT, buff=0.5).shift(UP * 1.2)
         cards = VGroup(
             wrapped_label(r"El Euch, Fukasawa and Rosenbaum (2018): add no-arbitrage at high frequency and buy/sell "
-                          r"asymmetry, and the limit carries a leverage effect, $\rho < 0$", 5.6, 18, GREY_A),
+                          r"asymmetry, and the limit carries a leverage effect, $\rho < 0$", 5.2, 18, GREY_A),
             wrapped_label(r"Jusselin and Rosenbaum (\textit{Rough Volatility}, ch. 3): no-arbitrage implies power-law "
-                          r"market impact and rough volatility (impact: Part 37)", 5.6, 18, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(grid, DOWN, buff=0.4)
+                          r"market impact and rough volatility (impact: Part 37)", 5.2, 18, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(grid, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)
         lo = np.mean(sw[0]["H"])
         hi = max(np.mean(r["H"]) for r in sw)
         src = illustration(r"the House's \texttt{hawkes\_branching\_powerlaw}; the roughness estimator on log activity in "
