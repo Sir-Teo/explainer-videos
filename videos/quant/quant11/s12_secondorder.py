@@ -11,7 +11,8 @@ T30 = 30 / 365
 
 
 def vega_pt(K, s):
-    return float(bs.greeks(100.0, K, T30, s)["vega"]) / 100
+    """Vega per vol point of 100 options on a spot of 100 (about 11 at the money)."""
+    return float(bs.greeks(100.0, K, T30, s)["vega"])
 
 
 class SecondOrder(VoiceoverScene, ThreeDScene):
@@ -46,7 +47,7 @@ class SecondOrder(VoiceoverScene, ThreeDScene):
         wing = VMobject(stroke_color=QC.GAIN, stroke_width=5).set_points_as_corners(
             [ax.c2p(kc, s, vega_pt(kc, s)) + OUT * 0.04 for s in np.linspace(0.2, 1.0, 30)])
         hint = hint3d((r"strike (spot 100)", SPOT), (r"implied volatility $\sigma$", VEGA),
-                      (r"vega per vol point, 30 days", OPT), ax=ax)
+                      (r"vega per vol point, 100 options, 30 days", OPT), ax=ax)
         cap = VGroup(label(r"along $\sigma$ at the money: flat, volga $\approx 0$", font_size=21, color=YELLOW),
                      label(r"along $\sigma$ in a wing: rising, volga $> 0$", font_size=21, color=QC.GAIN),
                      label(r"across strikes: the tilt is vanna, opposite in the two wings", font_size=21, color=ALT),
