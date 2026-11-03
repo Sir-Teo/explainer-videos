@@ -78,7 +78,7 @@ class SABR(VoiceoverScene, ThreeDScene):
                 why(r"with $k = \ln(K/F)$, $z = -\nu k/\alpha$: the skew is the correlation times the vol of vol", 20),
                 why(r"the curvature comes from $\nu^2$; even with $\rho = 0$ the smile curves", 20),
                 why(r"at the money ($K = F$) the leading term for general $\beta$: the backbone", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.55, edge=6.9)
         res = VGroup(
             MathTex(rf"51\ \text{{days:}}\ \alpha = {a:.3f},\ \rho = {rho:.2f},\ \nu = {nu:.2f}", font_size=28, color=GREY_A),
             MathTex(rf"\tfrac12\rho\nu \times (1 + O(T)) = {sl['skew_formula']:.3f}\ \ \text{{vs the formula's slope}}\ "
