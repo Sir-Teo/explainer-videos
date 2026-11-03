@@ -89,7 +89,7 @@ class Martingales(VoiceoverScene):
                 why(r"the moment generating function of $\pm 1$ is $\cosh\theta$: the exponential martingale"),
                 why(r"the tower property: Doob's martingale of forecasts"),
                 why(r"Jensen: a convex function of a martingale is a submartingale")]
-        step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.8, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=5, top=3.2, x=-0.8, buff=0.36, edge=6.9)
         with self.voiceover(
             "Fair, unfavourable and favourable games have names. If tomorrow's forecast is at most today, a "
             "supermartingale: the gambler's wealth at a casino. If at least, a submartingale. "
@@ -224,7 +224,7 @@ class Martingales(VoiceoverScene):
             l_abs.clear_updaters()
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05), FadeIn(side[1]), FadeIn(side[3]))
             vo.wait_until("b")
-            self.play(FadeIn(side[2]), FadeIn(pred.move_to(ax.c2p(13, 5.0))))
+            self.play(FadeIn(side[2]), FadeIn(pred.move_to(ax.c2p(12, 4.6)))  # under the axis title, above the curves)
             vo.wait_until("c")
             self.play(FadeIn(side[4]))
         self.wait(0.4)
