@@ -62,8 +62,8 @@ class Hawkes(VoiceoverScene):
         par = np.asarray(hs["tree"]["parent"], int)
         gen = np.asarray(hs["tree"]["gen"], int)
         G = int(min(gen.max(), 7))
-        g = axes([0, 400], [-G - 0.5, 0.5], x_length=12.0, y_length=4.8, xlabel=r"time", xticks=[], yticks=[],
-                 font_size=14).move_to(DOWN * 0.4)
+        g = axes([0, 400], [-G - 0.5, 0.5], x_length=12.0, y_length=4.4, xlabel=r"time", xticks=[], yticks=[],
+                 font_size=14).move_to(DOWN * 0.1)
         ax = g.ax
         keep = gen <= G
         pos = {i: ax.c2p(t[i], -gen[i]) for i in np.flatnonzero(keep)}
@@ -76,9 +76,9 @@ class Hawkes(VoiceoverScene):
                     grp.add(Line(pos[par[i]], pos[i], stroke_color=GREY_C, stroke_width=1, stroke_opacity=0.6))
                 grp.add(Dot(pos[i], radius=0.05, color=cols[k]))
             layers.append(grp)
-        lab = VGroup(label(r"immigrants: orders from outside", font_size=18, color=OPT).next_to(g, UP, buff=0.1).align_to(g, LEFT),
+        lab = VGroup(label(r"immigrants: orders from outside", font_size=18, color=OPT).next_to(ax.c2p(0, 0), RIGHT, buff=0.15),
                      label(r"each lower row: the children of the row above, at power-law delays", font_size=18,
-                           color=GREY_A).to_edge(DOWN, buff=0.75))  # above the source line
+                           color=GREY_A).next_to(g, DOWN, buff=0.15))  # under the axis label, above the source
         q = pause(r"Branching ratio 0.99: what share of trades are reactions to earlier trades?", width=5.6,
                   font_size=21).to_corner(UR, buff=0.3)
         src = illustration(rf"branching simulation, ratio 0.9, Lomax delays with tail $t^{{-1.6}}$; {int(keep.sum())} events")
