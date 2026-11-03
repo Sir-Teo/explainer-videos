@@ -169,8 +169,8 @@ class Duration(VoiceoverScene):
         bars = VGroup(bar(0.9, growth, VALUE), bar(2.1, value, CASH))
         errs = VGroup(*[Line(ax.c2p(x, v - 196 * s_), ax.c2p(x, v + 196 * s_), color=WHITE, stroke_width=2)
                         for x, v, s_ in ((0.9, growth, se[lo_i]), (2.1, value, se[hi_i]))])
-        names = VGroup(label(r"growth (lowest B/M)", font_size=19, color=VALUE).next_to(ax.c2p(0.9, 0.5), UP, buff=0.1),
-                       label(r"value (highest B/M)", font_size=19, color=CASH).next_to(ax.c2p(2.1, 0.5), UP, buff=0.1))
+        names = VGroup(label(r"growth (lowest B/M)", font_size=19, color=VALUE).next_to(ax.c2p(0.9, -4), DOWN, buff=0.15),
+                       label(r"value (highest B/M)", font_size=19, color=CASH).next_to(ax.c2p(2.1, -4), DOWN, buff=0.15))
         nums = VGroup(MathTex(rf"{growth:.2f}\%", font_size=26, color=VALUE).next_to(errs[0], DOWN, buff=0.1),
                       MathTex(rf"{value:.2f}\%", font_size=26, color=CASH).next_to(errs[1], DOWN, buff=0.1))
         ordered = growth < value
