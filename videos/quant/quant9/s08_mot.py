@@ -203,7 +203,7 @@ class MOT(VoiceoverScene, ThreeDScene):
         bl = MathTex(f"{lo:.3f}", font_size=26, color=ALT).next_to(ax.c2p(lo, 0.5), UP, buff=0.35)
         bu = MathTex(f"{up:.3f}", font_size=26, color=ALT).next_to(ax.c2p(up, 0.5), UP, buff=0.35)
         md = Line(ax.c2p(model, 0.15), ax.c2p(model, 0.85), color=CALL, stroke_width=5)
-        ml = MathTex(rf"\text{{log-normal: }} {model:.3f}", font_size=24, color=CALL).next_to(md, DOWN, buff=0.8)  # below the tick labels
+        ml = MathTex(rf"\text{{log-normal: }} {model:.3f}", font_size=24, color=CALL).next_to(md, UP, buff=0.12)  # above the band, between its two end values
         tab = VGroup(*[VGroup(label(n, font_size=21, color=c), MathTex(t, font_size=26, color=c)).arrange(RIGHT, buff=0.3)
                        for n, t, c in (
                            (r"forward-start straddle $|R - 1|$", rf"[{cl['straddle']['lower']:.4f},\ "
