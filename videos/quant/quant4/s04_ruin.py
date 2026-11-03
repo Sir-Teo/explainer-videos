@@ -197,6 +197,9 @@ class Ruin(VoiceoverScene):
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
+            # keep only the answer, at the top, and give the lower half to the sixty games
+            self.play(FadeOut(VGroup(rows[0], whys[0], rows[1], whys[1])),
+                      VGroup(rows[2], whys[2]).animate.to_edge(UP, buff=0.45))
             self.play(FadeIn(g))
             self.add(live, cnt)
             self.play(tk.animate.set_value(float(25 * (T - 1))), run_time=8, rate_func=lambda u: u ** 1.5)
