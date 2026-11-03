@@ -37,7 +37,7 @@ class Industry(VoiceoverScene):
     def crisis(self, w):
         d, v = np.asarray(w["date"]), np.asarray(w["value"])
         x = np.array([_frac_year(a) for a in d])
-        g = axes([0, x.max() + 1], [-42, 35], x_length=6.2, y_length=3.4, ylabel=r"WTI spot, Cushing, \$ a barrel",
+        g = axes([0, x.max() + 1], [-42, 35], x_length=6.2, y_length=2.7, ylabel=r"WTI spot, Cushing, \$ a barrel",
                  xticks=[0, 31, 61], xfmt=lambda u: {0: "1 Mar", 31: "1 Apr", 61: "1 May"}[int(u)], yticks=[-40, 0, 20],
                  font_size=15).to_corner(UL, buff=0.4)
         ax = g.ax
@@ -56,8 +56,8 @@ class Industry(VoiceoverScene):
         z = np.concatenate([np.zeros((30, 1)), z], axis=1)
         gbm = 18 * np.exp(-0.5 * tt + 1.0 * z)
         abm = 18 + 18 * 1.0 * z
-        g2 = axes([0, 1], [-30, 60], x_length=3.0, y_length=2.6, xlabel=r"GBM", xticks=[], yticks=[0], font_size=14)
-        g3 = axes([0, 1], [-30, 60], x_length=3.0, y_length=2.6, xlabel=r"Bachelier", xticks=[], yticks=[0], font_size=14)
+        g2 = axes([0, 1], [-30, 60], x_length=3.0, y_length=2.1, xlabel=r"GBM", xticks=[], yticks=[0], font_size=14)
+        g3 = axes([0, 1], [-30, 60], x_length=3.0, y_length=2.1, xlabel=r"Bachelier", xticks=[], yticks=[0], font_size=14)
         VGroup(g2, g3).arrange(RIGHT, buff=0.5).to_corner(DL, buff=0.4)
         f2 = path_fan(g2.ax, tt, np.clip(gbm, -30, 60), color=BM, opacity=0.35)
         f3 = path_fan(g3.ax, tt, np.clip(abm, -30, 60), color=DRIFT, opacity=0.35)
@@ -65,7 +65,7 @@ class Industry(VoiceoverScene):
         sim_l = label(r"simulated, from 18 at 100\% volatility", font_size=15, color=GREY_B).next_to(VGroup(g2, g3), UP,
                                                                                                    buff=0.1)
         F = np.asarray(w["F"])
-        g4 = axes([-20, 20], [0, 32], x_length=4.4, y_length=2.6, xlabel=r"futures price $F$",
+        g4 = axes([-20, 20], [0, 32], x_length=4.4, y_length=1.9, xlabel=r"futures price $F$",
                   ylabel=r"one-month put, strike 10", xticks=[-20, 0, 10, 20], yticks=[0, 10, 30], font_size=14)
         g4.to_corner(DR, buff=0.4)
         lb = curve(g4.ax, F, np.asarray(w["bach"]), DRIFT, stroke_width=3)
