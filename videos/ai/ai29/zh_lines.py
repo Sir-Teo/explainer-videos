@@ -595,9 +595,9 @@ ZH = {
         "用的随机化会随着机械手的进步自己扩大范围。",
 
     'f"Let\'s try it on Part 26\'s cart-pole.':
-        "我们在第26部分的倒立摆上试一试。<bookmark mark='a'/>我们的“真实”倒立摆是另一台机器：杆更长、更重，电机更弱，"
+        "我们在第26部分的倒立摆上试一试。<bookmark mark='a'/>我们的测试倒立摆也是仿真：杆更长、更重，电机更弱，"
         "动作晚一步，传感器有噪声，这些都在我们随机化的范围之内。<bookmark mark='b'/>我们用交叉熵方法训练简单的线性策略，"
-        "每种方法8个随机种子，训练回合数相同，每一轮都在真实的机器上测试。<bookmark mark='c'/>{a}<bookmark mark='d'/>{b}",
+        "每种方法8个随机种子，训练回合数相同，每一轮都在模拟的测试系统上测试。<bookmark mark='c'/>{a}<bookmark mark='d'/>{b}",
 
     "f'In the simulator they were trained in, both reach":
         "在它们各自受训的仿真器里，两者分别达到500步中的{nn_.mean():.0f}步和{rn.mean():.0f}步。",
@@ -605,15 +605,15 @@ ZH = {
     "In Part 26's simulator, both kinds learn to balance":
         "在第26部分的仿真器里，两种策略都学会了平衡满500步。",
 
-    "f'On the real one, the policies trained in a single simulator":
-        "到了真实的倒立摆上，只在一个仿真器里训练的策略，平均坚持{nr.mean():.0f}步；在随机化的仿真器里训练的，坚持{rr.mean():.0f}步。",
+    "f'On the simulated test system, policies trained in a single simulator":
+        "到了模拟的测试倒立摆上，只在一个仿真器里训练的策略，平均坚持{nr.mean():.0f}步；在随机化的仿真器里训练的，坚持{rr.mean():.0f}步。",
 
-    "f'On the real one, the single-simulator policies last":
-        "到了真实的倒立摆上，单一仿真器的策略坚持{nr.mean():.0f}步，随机化的坚持{rr.mean():.0f}步：在这里，随机化帮助不大。",
+    "f'On the simulated test system, the single-simulator policies last":
+        "到了模拟的测试倒立摆上，单一仿真器的策略坚持{nr.mean():.0f}步，随机化的坚持{rr.mean():.0f}步：在这里，随机化帮助不大。",
 
     '"Here is the whole picture':
-        "这是全貌：两种策略在不同的杆长和电机力量下能平衡多久，每一处都带着真实机器人的延迟和噪声。<bookmark mark='a'/>{one_sim}"
-        "<bookmark mark='b'/>在随机化仿真器里训练的，是{100 * frac(mR):.0f}%，真实的机器人也包括在内。<bookmark mark='c'/>"
+        "这是全貌：两种策略在不同的杆长和电机力量下能平衡多久，每一处都带着模拟测试系统的延迟和噪声。<bookmark mark='a'/>{one_sim}"
+        "<bookmark mark='b'/>在随机化仿真器里训练的，是{100 * frac(mR):.0f}%，包括测试设置。<bookmark mark='c'/>"
         "代价是，策略对任何一台机器都没那么精调；好处是，它不需要知道自己在哪台机器上。",
 
     'The policies trained in one simulator balance for four hundred steps nowhere':
@@ -628,11 +628,11 @@ ZH = {
         "2026年10月，谷歌报告说，只用一张照片就为一张真实的桌子建起了仿真的孪生体，而DeepMind把Genie 4定位为机器人的训练场。"
         "仿真器不再由人手写，而是学出来的。",
 
-    "f'In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, while":
-        "在真实倒立摆上一个典型的回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，而随机化的策略到{fell_r}步还在平衡。",
+    "f'In a typical episode on the simulated test cart-pole, the single-simulator policy drops the pole after {fell_n} steps, while":
+        "在模拟测试倒立摆上一个典型的回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，而随机化的策略到{fell_r}步还在平衡。",
 
-    "f'In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, and":
-        "在真实倒立摆上一个典型的回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，随机化的策略则在{fell_r}步后倒下。",
+    "f'In a typical episode on the simulated test cart-pole, the single-simulator policy drops the pole after {fell_n} steps, and":
+        "在模拟测试倒立摆上一个典型的回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，随机化的策略则在{fell_r}步后倒下。",
 
     # ---------------------------------------------------------------- VLA
     'Chapter fifteen. Vision-language-action models.':

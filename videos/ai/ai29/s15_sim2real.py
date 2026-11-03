@@ -132,15 +132,22 @@ class SimToReal(VoiceoverScene):
         dashed = DashedVMobject(nom_sim[1].copy(), num_dashes=40)
         real = P["real"]
         nominal = d["nominal"]
-        spec = VGroup(label(r"the ``real'' cart-pole", font_size=28, color=WORLD),
+        spec = VGroup(label(("模拟的测试倒立摆" if zh() else "simulated test cart-pole"), font_size=28, color=WORLD),
                       label(rf"pole ${real['l'] / nominal['l']:.1f}\times$ as long, \ ${real['mp'] / nominal['mp']:.0f}\times$ "
                             rf"as heavy", font_size=24, color=GREY_A),
                       label(rf"motor ${100 * (1 - real['F'] / nominal['F']):.0f}\%$ weaker, \ cart "
                             rf"${real['mc'] / nominal['mc']:.1f}\times$ heavier", font_size=24, color=GREY_A),
                       label(r"acts one step late, \ noisy sensors", font_size=24, color=GREY_A))
         spec.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.35)
-        leg = legend([(NOM, r"trained in Part 26's simulator"), (RAND, r"trained in randomized ones")], font_size=24)
+        leg = legend([(NOM, "单一仿真训练" if zh() else "trained in one simulator"),
+                      (RAND, "随机仿真训练" if zh() else "trained in randomized simulators")], font_size=22)
+        if leg.width > 3.15:
+            leg.scale_to_fit_width(3.15)
         leg.next_to(spec, DOWN, buff=0.4).align_to(spec, LEFT)
+        dash_note = label(("虚线：单一仿真中的表现" if zh() else "dashed: performance in nominal simulator"),
+                          font_size=17, color=GREY_A).next_to(leg, DOWN, buff=0.2).align_to(leg, LEFT)
+        if dash_note.width > 3.15:
+            dash_note.scale_to_fit_width(3.15)
         nn_, nr = np.asarray(d["nominal_nominal"]), np.asarray(d["nominal_real"])
         rn, rr = np.asarray(d["randomized_nominal"]), np.asarray(d["randomized_real"])
         tag = note(rf"{int(P['seeds'])} seeds each, \ band min--max; \ the same number of training episodes; \ "
@@ -150,23 +157,23 @@ class SimToReal(VoiceoverScene):
              "five hundred." if not both_sim else "In Part 26's simulator, both kinds learn to balance for the full "
              "five hundred steps.")
         if rr.mean() > 1.5 * nr.mean():
-            b = (f"On the real one, the policies trained in a single simulator last {nr.mean():.0f} steps on average; "
+            b = (f"On the simulated test system, policies trained in a single simulator last {nr.mean():.0f} steps on average; "
                  f"those trained across randomized simulators, {rr.mean():.0f}.")
         else:
-            b = (f"On the real one, the single-simulator policies last {nr.mean():.0f} steps and the randomized ones "
+            b = (f"On the simulated test system, the single-simulator policies last {nr.mean():.0f} steps and the randomized ones "
                  f"{rr.mean():.0f}: randomization did not help much here.")
         with self.voiceover(
-            "Let's try it on Part 26's cart-pole. <bookmark mark='a'/> Our real cart-pole is a different machine: "
+            "Let's try it on Part 26's cart-pole. <bookmark mark='a'/> Our test cart-pole is another simulation, with "
             "a longer, heavier pole, a weaker motor, a one-step delay, and noisy sensors, all inside the range we "
             "randomize over. <bookmark mark='b'/> We train simple linear policies with the cross-entropy method, "
-            "eight seeds each, with the same number of training episodes, and test every round on the real machine. "
+            "eight seeds each, with the same number of training episodes, and test every round on the simulated test system. "
             f"<bookmark mark='c'/> {a} <bookmark mark='d'/> {b}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(spec))
             vo.wait_until("b")
-            self.play(FadeIn(leg))
+            self.play(FadeIn(leg), FadeIn(dash_note))
             vo.wait_until("c")
             self.play(Create(dashed), run_time=1.5)
             vo.wait_until("d")
@@ -197,15 +204,17 @@ class SimToReal(VoiceoverScene):
                           label(txt, font_size=16, color=col).next_to([x, y, 0], UR, buff=0.08))
 
         real, nom = P["real"], d["nominal"]
-        marks = VGroup(*[VGroup(mark(gr, nom["l"], nom["F"], WHITE, r"sim"), mark(gr, real["l"], real["F"], WORLD, r"real"))
-                         for gr in imgs])
+        marks = VGroup(*[VGroup(mark(gr, nom["l"], nom["F"], WHITE, r"sim"),
+                                  mark(gr, real["l"], real["F"], WHITE if i == 0 else BLACK,
+                                       ("测试" if zh() else "test")))
+                         for i, gr in enumerate(imgs)])
         xl = label(r"motor force $\to$", font_size=20, color=GREY_A).next_to(imgs[0][0], DOWN, buff=0.15)
         yl = label(r"pole length $\to$", font_size=20, color=GREY_A).rotate(PI / 2).next_to(imgs[0][0], LEFT, buff=0.15)
         xl2 = xl.copy().next_to(imgs[1][0], DOWN, buff=0.15)
         key = Group(heat(np.linspace(0, 500, 6)[None, :], w=1.6, h=0.22), label(r"$0$ \ to \ $500$ steps", font_size=22,
                                                                                   color=GREY_A))
         key.arrange(RIGHT, buff=0.15).to_corner(UR, buff=0.4)
-        tag = note(r"every map: \ with the real robot's delay and sensor noise; \ mean of 8 seeds", font_size=18)
+        tag = note((r"每张图：\ 模拟测试系统的延迟与噪声；\ 8个种子的平均" if zh() else r"every map: \ simulated test delay and sensor noise; \ mean of 8 seeds"), font_size=18)
         tag.to_edge(DOWN, buff=0.2)
         frac = lambda M_: float((M_ > 400).mean())  # noqa: E731
         one_sim = ("The policies trained in one simulator balance for four hundred steps nowhere on this map, once "
@@ -213,9 +222,9 @@ class SimToReal(VoiceoverScene):
                    f"The policies trained in one simulator balance well in only {100 * frac(mN):.0f} percent of this map.")
         with self.voiceover(
             "Here is the whole picture: how long each kind of policy balances, across pole lengths and motor "
-            "strengths, every one with the real robot's delay and noise. <bookmark mark='a'/> " + one_sim + " "
+            "strengths, each with the simulated test system's delay and noise. <bookmark mark='a'/> " + one_sim + " "
             "<bookmark mark='b'/> Those trained across randomized "
-            f"simulators, in {100 * frac(mR):.0f} percent, the real robot included. <bookmark mark='c'/> The price "
+            f"simulators, in {100 * frac(mR):.0f} percent, including the test setting. <bookmark mark='c'/> The price "
             "is a policy that is less tuned to any one machine; the gain is that it does not need to know which "
             "machine it is on."
         ) as vo:
@@ -255,11 +264,11 @@ class SimToReal(VoiceoverScene):
         cnt = VGroup(label(r"step", font_size=20, color=GREY_A), Integer(0, font_size=24)).arrange(RIGHT, buff=0.12)
         cnt.to_edge(DOWN, buff=0.3).shift(RIGHT * 4.2)
         cnt[1].add_updater(lambda m: m.set_value(min(int(t.get_value()), 500)))
-        tag = note(r"on the ``real'' cart-pole: \ of five episodes each, \\ the one of median length", font_size=20).next_to(cnt, UP, buff=0.15)
+        tag = note((r"模拟测试倒立摆：\ 每种策略5个回合，\\ 取长度居中者" if zh() else r"simulated test cart-pole: \ median length of five episodes each"), font_size=20).next_to(cnt, UP, buff=0.15)
         fell_n, fell_r = len(tr_n) - 1, len(tr_r) - 1
-        ep = (f"In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
+        ep = (f"In a typical episode on the simulated test cart-pole, the single-simulator policy drops the pole after {fell_n} "
               f"steps, while the randomized one is still balancing at {fell_r}." if fell_r >= 500 else
-              f"In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
+              f"In a typical episode on the simulated test cart-pole, the single-simulator policy drops the pole after {fell_n} "
               f"steps, and the randomized one after {fell_r}.")
         with self.voiceover(
             "Domain randomization is now routine. <bookmark mark='a'/> Walking and running for legged robots and "

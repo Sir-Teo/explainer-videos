@@ -25,6 +25,18 @@ class DomainRandomizationClaim(unittest.TestCase):
         self.assertEqual(cues(en), cues(row['zh']))
         self.assertEqual(cues(en), ['a', 'b', 'c'])
 
+    def test_simulated_cartpole_is_not_presented_as_physical_evidence(self):
+        src = (ROOT / 'videos/ai/ai29/s15_sim2real.py').read_text()
+        self.assertIn('Our test cart-pole is another simulation', src)
+        self.assertIn('simulated test cart-pole', src)
+        self.assertIn("simulated test system's delay and noise", src)
+        self.assertNotIn('Our real cart-pole is a different machine', src)
+        self.assertNotIn('In a typical episode on the real cart-pole', src)
+        self.assertIn('dashed: performance in nominal simulator', src)
+        chinese = (ROOT / 'videos/ai/ai29/zh_lines.py').read_text()
+        self.assertIn('我们的测试倒立摆也是仿真', chinese)
+        self.assertIn('模拟的测试倒立摆', chinese)
+
     def test_card_in_both_languages_states_transfer_is_not_guaranteed(self):
         src = (ROOT / 'videos/ai/ai29/s15_sim2real.py').read_text()
         self.assertIn('but does not guarantee it', src)
