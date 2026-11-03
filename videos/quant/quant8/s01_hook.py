@@ -86,7 +86,8 @@ class Hook(VoiceoverScene):
         cnt = VGroup(label(r"flip", font_size=28, color=GREY_A), num).arrange(RIGHT, buff=0.2).to_corner(UR, buff=0.5)
         num.add_updater(lambda m: m.set_value(int(tk.get_value())))
         q = pause_card(r"Before the flips: which column goes bust most often, 40\% or 100\%? And does 40\% grow at "
-                       r"all?", width=5.0, font_size=22).to_corner(UR, buff=0.4).shift(DOWN * 0.8)
+                       r"all?", width=3.4, font_size=20).to_edge(RIGHT, buff=0.3)
+        q.set_y(1.2)  # beside the chart, under the flip counter, above where the results will appear
         b = L["by_fraction"]
         res = VGroup(*[label(rf"{100 * float(f):.0f}\%: {100 * b[f]['p_cap']:.0f}\% at the cap, "
                              rf"{100 * b[f]['p_bust']:.0f}\% bust", font_size=20, color=c_)
@@ -193,12 +194,15 @@ class Hook(VoiceoverScene):
             labs.add(t)
         strip = VGroup(line, dots, labs).shift(UP * 1.6)
         root = label(r"maximize expected utility", font_size=28, color=VALUE).move_to(DOWN * 1.0)
-        kids = [(r"how much: Kelly, Merton, Samuelson", KELLY), (r"over time: Bellman, HJB, viscosity, BSDE", VALUE),
-                (r"against a crowd: mean-field games", ALT), (r"how people decide: prospect theory", OVER),
-                (r"learn it: reinforcement learning", GOOD)]
-        leaves = VGroup(*[label(t, font_size=22, color=c_) for t, c_ in kids])
-        VGroup(VGroup(*leaves[:3]).arrange(RIGHT, buff=0.5), VGroup(*leaves[3:]).arrange(RIGHT, buff=0.5)).arrange(
-            DOWN, buff=0.35).move_to(DOWN * 2.6)
+        kids = [(r"how much", r"Kelly, Merton, Samuelson", KELLY), (r"over time", r"Bellman, HJB, viscosity, BSDE", VALUE),
+                (r"against a crowd", r"mean-field games", ALT), (r"how people decide", r"prospect theory", OVER),
+                (r"learn it", r"reinforcement learning", GOOD)]
+        # one row of five branches, each a heading over its names: no edge crosses a label
+        leaves = VGroup(*[VGroup(label(h, font_size=22, color=c_), label(n, font_size=17, color=GREY_A)).arrange(DOWN, buff=0.1)
+                          for h, n, c_ in kids]).arrange(RIGHT, buff=0.3, aligned_edge=UP)
+        if leaves.width > 13.4:
+            leaves.scale_to_fit_width(13.4)
+        leaves.move_to(DOWN * 2.7)
         edges = VGroup(*[Line(root.get_bottom(), lf.get_top(), color=GREY_C, stroke_width=1.5) for lf in leaves])
         with self.voiceover(
             "How we got here. Daniel Bernoulli proposed log utility in 1738; von Neumann and Morgenstern built expected "
