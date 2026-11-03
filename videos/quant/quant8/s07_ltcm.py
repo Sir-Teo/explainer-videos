@@ -95,12 +95,13 @@ class LTCM(VoiceoverScene):
         split = VGroup(
             label(r"the House's registered test: choose on 1926--1972, invest 1973--2020", font_size=20, color=GREY_A),
             MathTex(rf"\text{{chosen }}{100 * k['split_f1']:.0f}\%\to {100 * k['split_g2_at_f1']:.1f}\%,\ \ "
-                    rf"\text{{half of it}}\to {100 * k['split_g2_at_half']:.1f}\%,\ \ \text{{hindsight best }}"
-                    rf"{100 * k['split_f2']:.0f}\%\to{100 * k['split_g2_best']:.1f}\%", font_size=24),
+                    rf"\text{{half of it}}\to {100 * k['split_g2_at_half']:.1f}\%", font_size=24),
+            MathTex(rf"\text{{hindsight best }}{100 * k['split_f2']:.0f}\%\to{100 * k['split_g2_best']:.1f}\%",
+                    font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g, DOWN, buff=0.5).align_to(g, LEFT)
         q = pause_card(r"You estimate a Sharpe ratio of 1; the truth is 0.5. Full or half Kelly on your estimate?",
                        width=5.6, font_size=20).next_to(leg, DOWN, buff=0.3).align_to(g2, LEFT)
-        src = real_data(r"Kenneth French, monthly 1926--2020; 400 block-bootstrap histories")
+        src = real_data(r"Kenneth French, monthly 1926--2020; 400 block-bootstrap histories", corner=DL)
         with self.voiceover(
             "On real data: resample US history in one-year blocks four hundred times and find each best fraction. Ninety "
             f"percent lie between {100 * k['bs_p05']:.0f} and {100 * k['bs_p95']:.0f} percent. <bookmark mark='a'/> Bet full "
@@ -168,7 +169,8 @@ class LTCM(VoiceoverScene):
         kl = curve(ax, m, kel, KELLY, stroke_width=4)
         lt = DashedLine(ax.c2p(1, 28), ax.c2p(3, 28), color=OVER, stroke_width=2.5)
         ltl = label(r"28 : 1", font_size=20, color=OVER).next_to(ax.c2p(3, 28), UP, buff=0.08)
-        two = curve(ax, m, 2 * kel, OVER, stroke_width=1.5).set_stroke(opacity=0.5)
+        m2 = 2 * kel <= 110  # twice Kelly only where it is inside the axes
+        two = curve(ax, m[m2], 2 * kel[m2], OVER, stroke_width=1.5).set_stroke(opacity=0.5)
         tk = ValueTracker(1.0)
         dot = always_redraw(lambda: Dot(ax.c2p(tk.get_value(), l_["kelly_before"] / tk.get_value() ** 2), color=KELLY,
                                         radius=0.09))
