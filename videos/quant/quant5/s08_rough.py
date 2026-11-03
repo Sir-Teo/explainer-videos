@@ -77,9 +77,10 @@ class Rough(VoiceoverScene):
         whys = [why(r"the definition: Gaussian, stationary increments, self-similar with index $H$", 20),
                 why(r"Mandelbrot and Van Ness (1968): Brownian motion with a power-law memory kernel", 20),
                 why(r"self-similarity: $\to \infty$ for $H < \frac12$, $\to 0$ for $H > \frac12$", 20),
-                why(r"a semimartingale's QV is finite; QV zero means finite variation, which fails for $H > \frac12$ by "
-                    r"the $1/H$-variation (Rogers 1997: a price driven by it admits arbitrage)", 20)]
-        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.0, buff=0.45, edge=6.9)
+                wrapped_label(r"a semimartingale's QV is finite; QV zero means finite variation, which fails for "
+                              r"$H > \frac12$ by the $1/H$-variation (Rogers 1997: a price driven by it admits arbitrage)",
+                              6.4, 20, GREY_B)]
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=-2.6, buff=0.45, edge=6.9)  # three rows leave the lower right to the QV chart
         ns = np.log2(fm["ns"])
         g = axes([ns[0] - 0.3, ns[-1] + 0.3], [-1.6, 1.6], x_length=4.4, y_length=2.4, xlabel=r"grid $n$",
                  ylabel=r"$\log_{10}\mathbb{E}\sum|\Delta B^H|^2$", xticks=[4, 8, 12], xfmt=lambda u: rf"2^{{{int(u)}}}",
