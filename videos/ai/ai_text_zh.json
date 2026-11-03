@@ -21785,7 +21785,10 @@
     "sampled: $T=0.8$; max $30$ new tokens": "采样：$T=0.8$；最多生成$30$词元",
     "greedy; max $16$ new tokens": "贪心解码；最多生成$16$词元",
     "computed: \\ base: $120$ evenly sampled test sentences; \\ fine-tuned: all $560$; both accuracies: greedy, max $16$ new tokens": "计算所得：\\ 基础模型均匀抽取$120$个测试句子；\\ 微调后使用全部$560$句；两种准确率均为贪心解码，最多生成$16$词元",
-    "line draws: \\ end token within $40$ new tokens": "句子采样：\\ 在$40$个新词元内生成结束词元"
+    "line draws: \\ end token within $40$ new tokens": "句子采样：\\ 在$40$个新词元内生成结束词元",
+    "model-row bootstrap $95\\%$: \\\\ $102$--$155$ days": "模型行重抽样 $95\\%$：\\\\ $102$--$155$ 天",
+    "$50\\%$ and $80\\%$ time horizons \\ (log scale)": "$50\\%$ 和 $80\\%$ 时间跨度 \\\\ （对数刻度）",
+    "constant-hazard model: \\\\ rate $\\lambda$ per minute": "恒定风险模型：\\\\ 速率为每分钟 $\\lambda$"
   },
   "phrases": {
     "width": "宽度",

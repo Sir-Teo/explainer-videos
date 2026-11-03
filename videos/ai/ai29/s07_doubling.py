@@ -18,6 +18,14 @@ def minutes_tex(m: float) -> str:
     return rf"{m / 60:.1f}\,\text{{h}}"
 
 
+def horizon_plot_bounds(rows, include80=False):
+    """Cover every published finite 50% CI endpoint, plus displayed 80% estimates."""
+    values = [r[key] for r in rows for key in (("lo", "hi", "p80") if include80 else ("lo", "hi"))]
+    if not values or any(not math.isfinite(v) or v <= 0 for v in values):
+        raise ValueError("horizon plot requires finite positive endpoints")
+    return math.floor(math.log2(min(values))), math.ceil(math.log2(max(values)))
+
+
 class Doubling(VoiceoverScene):
     def construct(self):
         self.card()
@@ -74,13 +82,16 @@ class Doubling(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def plot(self, y_lo=-5):
+    def plot(self, include80=False):
         m = load("metr")
         rows = m["rows"]
-        y_hi = 11  # log2 minutes, up to 34 h
+        y_lo, y_hi = horizon_plot_bounds(rows, include80)
+        ylabel = (r"$50\%$ and $80\%$ time horizons \ (log scale)" if include80
+                  else r"$50\%$ time horizon \ (log scale)")
         g = axes([0, 7.6, 1], [y_lo, y_hi, 1], x_length=8.6, y_length=5.0, xticks=[0, 2, 4, 6],
-                 xfmt=lambda v: f"{2019 + int(v)}", yticks=[-4, 0, 4, 8], ylabel=r"$50\%$ time horizon \ (log scale)",
-                 yfmt=lambda v: {-4: r"4\,\text{s}", 0: r"1\,\text{min}", 4: r"16\,\text{min}", 8: r"4.3\,\text{h}"}[int(v)],
+                 xfmt=lambda v: f"{2019 + int(v)}", yticks=[-4, 0, 4, 8, 12], ylabel=ylabel,
+                 yfmt=lambda v: {-4: r"4\,\text{s}", 0: r"1\,\text{min}", 4: r"16\,\text{min}",
+                                 8: r"4.3\,\text{h}", 12: r"68\,\text{h}"}[int(v)],
                  center=[-1.9, -0.35, 0])
         return m, rows, g, g.ax
 
@@ -91,7 +102,7 @@ class Doubling(VoiceoverScene):
             col = FRONT if r["sota"] else OTHER
             y = math.log2(r["p50"])
             d = Dot(ax.c2p(r["t"], y), radius=0.065 if r["sota"] else 0.05, color=col)
-            err = Line(ax.c2p(r["t"], math.log2(r["lo"])), ax.c2p(r["t"], min(math.log2(r["hi"]), 11)), color=col,
+            err = Line(ax.c2p(r["t"], math.log2(r["lo"])), ax.c2p(r["t"], math.log2(r["hi"])), color=col,
                        stroke_width=1.5).set_opacity(0.5)
             pts.add(VGroup(err, d))
         c23 = m["coef_2023"]
@@ -101,15 +112,18 @@ class Doubling(VoiceoverScene):
         line_all = DashedLine(ax.c2p(0, ca[0]), ax.c2p(t1, ca[0] + ca[1] * t1), color=GREY_B).set_opacity(0.6)
         d23, (lo, hi) = float(m["doubling_2023"]), m["doubling_ci"]
         mine = VGroup(label(rf"since 2023: \ doubling every ${d23:.0f}$ days", font_size=24, color=WHITE),
-                      label(rf"bootstrap $95\%$: \ ${lo:.0f}$--${hi:.0f}$ days", font_size=20, color=GREY_A),
+                      label(rf"model-row bootstrap $95\%$: \\ ${lo:.0f}$--${hi:.0f}$ days", font_size=20, color=GREY_A),
                       label(rf"since 2019: \ every ${float(m['doubling_all']):.0f}$ days", font_size=22, color=GREY_B))
         mine.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
         first = max((r for r in rows if r["sota"] and r["p50"] <= m["reliable_min"]), key=lambda r: r["t"])
         names = VGroup()
         for r in rows:
             if r["name"] in ("GPT-2", "GPT-4", "o3", first["name"]):
-                names.add(label(r["name"], font_size=17, color=FRONT).next_to(ax.c2p(r["t"], math.log2(r["p50"])), LEFT,
+                names.add(label(r["name"], font_size=17, color=FRONT).next_to(ax.c2p(r["t"], math.log2(r["p50"])),
+                                                                             RIGHT if r["name"] == "GPT-2" else LEFT,
                                                                              buff=0.12))
+                if r["name"] == "GPT-4":
+                    names[-1].shift(UP * 0.18)  # keep text clear of the all-time fitted line
         leg = VGroup(VGroup(Dot(color=FRONT, radius=0.06), label(r"the frontier when released", font_size=18, color=FRONT))
                      .arrange(RIGHT, buff=0.12),
                      VGroup(Dot(color=OTHER, radius=0.05), label(r"other models", font_size=18, color=OTHER))
@@ -124,13 +138,16 @@ class Doubling(VoiceoverScene):
         by = {r["name"]: r["p50"] for r in rows}
         with self.voiceover(
             "Here are METR's measurements: every model they tested, by release date, on a log scale of minutes. "
+            "The first three models use earlier Time Horizon 1.0 measurements stitched into this series. "
             f"<bookmark mark='a'/> GPT-2, in 2019, finished tasks of {60 * by['GPT-2']:.0f} seconds. GPT-4, in "
             f"2023, about {by['GPT-4']:.0f} minutes. <bookmark mark='b'/> On a log scale the frontier climbs in a straight line, and a straight "
             "line on a log scale means a fixed doubling time. <bookmark mark='c'/> Fitting the frontier models "
-            f"since 2023 gives one doubling every {d23:.0f} days, {said} Over the whole span since 2019, it is "
+            f"since 2023 gives one doubling every {d23:.0f} days, {said} Our interval resamples model rows, "
+            "not METR's underlying tasks. Over the whole span since 2019, it is "
             f"{float(m['doubling_all']):.0f} days: the pace has quickened. <bookmark mark='d'/> The last frontier model "
             f"inside METR's reliable range, {first['name']}, finishes tasks of about {first_h:.0f} hours half the "
-            "time. By the reasoning of the last chapter, every doubling is a halving of the error per step."
+            "time. These task-level horizons do not directly measure per-step error. Halving a constant failure "
+            "rate doubles a horizon only under the simplified constant-hazard model."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(leg))
             vo.wait_until("a")
@@ -148,7 +165,7 @@ class Doubling(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def eighty(self):
-        m, rows, g, ax = self.plot(y_lo=-7)
+        m, rows, g, ax = self.plot(include80=True)
         p50 = VGroup(*[Dot(ax.c2p(r["t"], math.log2(r["p50"])), radius=0.055, color=FRONT if r["sota"] else OTHER)
                        for r in rows])
         p80 = VGroup(*[Dot(ax.c2p(r["t"], math.log2(r["p80"])), radius=0.055, color=P80) for r in rows])
@@ -156,7 +173,7 @@ class Doubling(VoiceoverScene):
         ratio, ch = float(m["ratio_median"]), float(m["ratio_hazard"])
         rows_ = [cmath(r"P(\text{done} \mid t)", r"=", r"e^{-\lambda t}", font_size=32),
                  cmath(r"\frac{t_{50}}{t_{80}}", r"=", r"\frac{\ln 2}{\ln 1.25}", r"=", rf"{ch:.1f}", font_size=32)]
-        box = VGroup(label(r"if every minute of work \\ failed with the same chance $\lambda$:", font_size=22, color=GREY_A),
+        box = VGroup(label(r"constant-hazard model: \\ rate $\lambda$ per minute", font_size=22, color=GREY_A),
                      *rows_).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         meas = label(rf"measured: \\ median $t_{{50}}/t_{{80}} = {ratio:.1f}$", font_size=26, color=P80)
         d80 = float(m["doubling_80"])
@@ -169,22 +186,25 @@ class Doubling(VoiceoverScene):
         p50key = VGroup(Dot(color=FRONT, radius=0.06), label(r"$50\%$ horizon", font_size=20, color=FRONT)).arrange(RIGHT, buff=0.1)
         keys = VGroup(p50key, p80key).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(g.ax, UP, buff=0.1).align_to(g.ax, RIGHT)
         if ratio > ch * 1.15:
-            verdict = (f"METR's measurements give a median of {ratio:.1f}: an agent's success falls off with length more "
-                       "gently than a constant risk per minute would make it. Long tasks are not simply many short "
-                       "ones; some long tasks are easy, and some short ones hard.")
+            verdict = (f"METR's measurements give a median of {ratio:.1f}, above the simplified constant-hazard "
+                       "prediction. These are task-level crossings across heterogeneous tasks, not evidence of "
+                       "a per-minute failure mechanism.")
         elif ratio < ch / 1.15:
-            verdict = (f"METR's measurements give a median of only {ratio:.1f}: success falls off with length faster "
-                       "than a constant risk per minute.")
+            verdict = (f"METR's measurements give a median of {ratio:.1f}, below the simplified constant-hazard "
+                       "prediction. These are task-level crossings across heterogeneous tasks, not evidence of "
+                       "a per-minute failure mechanism.")
         else:
-            verdict = f"METR's measurements give a median of {ratio:.1f}, close to it."
+            verdict = (f"METR's measurements give a median of {ratio:.1f}, close to the simplified constant-hazard "
+                       "prediction. These are task-level crossings across heterogeneous tasks, not evidence of "
+                       "a per-minute failure mechanism.")
         same = abs(d80 - float(m["doubling_2023"])) < 0.25 * float(m["doubling_2023"])
         tail = ("The eighty-percent horizons are much shorter, but they double at nearly the same pace: "
                 f"every {d80:.0f} days." if same else f"The eighty-percent horizons double every {d80:.0f} days.")
         with self.voiceover(
             "Half the time is a low bar for work you'd hand over. METR also reports where each model's success "
             "curve crosses eighty percent. <bookmark mark='a'/> Those horizons are far shorter. "
-            "<bookmark mark='b'/> If an agent failed with the same small chance in every minute of work, the "
-            "compounding of chapter five, the ratio of the two horizons would be fixed: log 2 over log one point two "
+            "<bookmark mark='b'/> Under a continuous constant-failure-rate model, with rate lambda per minute, "
+            "success is exponential in time. The ratio of the two horizons would be fixed: log 2 over log one point two "
             f"five, {ch:.1f}. <bookmark mark='c'/> {verdict} <bookmark mark='d'/> {tail}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(p50), FadeIn(keys[0]))

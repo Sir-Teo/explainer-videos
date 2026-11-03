@@ -216,12 +216,12 @@ ZH = {
         "任务长度，也就是它的百分之五十时间跨度。第31部分会细讲这是怎么测的；这里我们关注它说明了智能体的什么。",
 
     'f"Here are METR\'s measurements: every model they tested':
-        "这是METR的测量结果：他们测过的每一个模型，按发布日期排开，纵轴是取对数的分钟数。<bookmark mark='a'/>2019年的GPT-2，"
+        "这是METR的测量结果：他们测过的每一个模型，按发布日期排开，纵轴是取对数的分钟数。最早三个模型沿用Time Horizon 1.0的测量，并拼接进这个系列。<bookmark mark='a'/>2019年的GPT-2，"
         "能完成{60 * by['GPT-2']:.0f}秒的任务。2023年的GPT-4，大约{by['GPT-4']:.0f}分钟。<bookmark mark='b'/>在对数刻度上，"
         "前沿模型沿着一条直线上升；而对数刻度上的直线，意味着固定的倍增时间。<bookmark mark='c'/>拟合2023年以来的前沿模型，"
-        "得到每{d23:.0f}天翻一番，{said}从2019年算起的整个时段，则是{float(m['doubling_all']):.0f}天：步伐在加快。"
+        "得到每{d23:.0f}天翻一番，{said}我们的区间对模型行重抽样，并非对METR的底层任务重抽样。从2019年算起的整个时段，则是{float(m['doubling_all']):.0f}天：步伐在加快。"
         "<bookmark mark='d'/>还在METR可靠测量范围内的最后一个前沿模型，{first['name']}，有一半把握完成大约{first_h:.0f}小时的任务。"
-        "按照上一章的推理，每翻一番，就是每一步的错误减半。",
+        "这些任务级时间跨度并不直接测量每一步的错误。只有在简化的恒定风险模型中，恒定失败率减半才会使时间跨度翻倍。",
 
     "which is METR's own fit.":
         "和METR自己的拟合一致。",
@@ -231,19 +231,21 @@ ZH = {
 
     'f"Half the time is a low bar for work you\'d hand over.':
         "对于要托付出去的工作，一半的把握是很低的门槛。METR也报告了每个模型的成功率曲线穿过百分之八十的位置。"
-        "<bookmark mark='a'/>这些时间跨度要短得多。<bookmark mark='b'/>如果智能体在每一分钟的工作里，都以同样小的概率失败，"
-        "也就是第5章那种累积，那么两种时间跨度的比值就是固定的：log 2除以log 1.25，等于{ch:.1f}。<bookmark mark='c'/>{verdict}"
+        "<bookmark mark='a'/>这些时间跨度要短得多。<bookmark mark='b'/>在连续时间的恒定失败率模型中，速率是每分钟lambda，成功率随时间指数衰减。"
+        "两种时间跨度的比值就是固定的：log 2除以log 1.25，等于{ch:.1f}。<bookmark mark='c'/>{verdict}"
         "<bookmark mark='d'/>{tail}",
 
-    'f"METR\'s measurements give a median of {ratio:.1f}: an agent':
-        "METR的测量给出的中位数是{ratio:.1f}：智能体的成功率随长度下降得，比每分钟风险恒定时更平缓。长任务并不只是很多个短任务；"
-        "有些长任务很容易，有些短任务却很难。",
+    'f"METR\'s measurements give a median of {ratio:.1f}, above':
+        "METR测量的中位数是{ratio:.1f}，高于简化的恒定风险模型的预测。这些是异质任务上的任务级成功率交点，"
+        "并不能证明实际存在某种每分钟失败机制。",
 
-    'f"METR\'s measurements give a median of only':
-        "METR的测量给出的中位数只有{ratio:.1f}：成功率随长度下降得，比每分钟风险恒定时更快。",
+    'f"METR\'s measurements give a median of {ratio:.1f}, below':
+        "METR测量的中位数是{ratio:.1f}，低于简化的恒定风险模型的预测。这些是异质任务上的任务级成功率交点，"
+        "并不能证明实际存在某种每分钟失败机制。",
 
     'f"METR\'s measurements give a median of {ratio:.1f}, close':
-        "METR的测量给出的中位数是{ratio:.1f}，和它很接近。",
+        "METR测量的中位数是{ratio:.1f}，接近简化的恒定风险模型的预测。这些是异质任务上的任务级成功率交点，"
+        "并不能证明实际存在某种每分钟失败机制。",
 
     "f'The eighty-percent horizons are much shorter":
         "百分之八十的时间跨度短得多，但它们翻倍的速度几乎一样：每{d80:.0f}天。",
