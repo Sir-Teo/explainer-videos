@@ -569,11 +569,11 @@ ZH.update({
         "一起画的时候，运动更平稳：字母路径二阶差分的晃动为{jj.mean():.2f}像素每帧平方，每帧单独画时是{ij.mean():.2f}；字母本身在"
         "{100 * jr.mean():.0f}%的片段里保持下来，分开画是{100 * ir.mean():.0f}%。",
 
-    'Denoising the whole clip at once makes the frames agree.':
-        '一次对整个片段去噪，让各帧彼此一致。',
+    'In this toy comparison, drawing the clip together yielded less measured wobble.':
+        '在这个玩具对比中，一起生成片段的测得晃动更小。',
 
-    "At this size, denoising the whole clip at once doesn't buy agreement.":
-        '在这个规模上，一次对整个片段去噪并没有换来一致。',
+    'In this toy comparison, drawing the clip together did not reduce measured wobble.':
+        '在这个玩具对比中，一起生成片段并未减少测得的晃动。',
 
     'f"Surprisingly, drawing the frames together':
         "出人意料的是，在这里一起画并没有让运动更平稳：二阶差分的晃动为{jj.mean():.2f}像素每帧平方，对比{ij.mean():.2f}。",
