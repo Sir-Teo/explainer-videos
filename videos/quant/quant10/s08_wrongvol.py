@@ -75,15 +75,15 @@ class WrongVol(VoiceoverScene, ThreeDScene):
     def mountain(self, w, g3):
         tg, Sg, G = np.asarray(g3["t"], float), np.asarray(g3["S"], float), np.asarray(g3["G"], float)
         K, T = g3["K"], g3["T"]
-        zmax = 150.0
-        ax = ThreeDAxes(x_range=[0, T, T / 4], y_range=[88, 132, 11], z_range=[0, zmax, 50], x_length=7.6,
+        zmax = 500.0  # typical dollar gamma is about 200; only the spike in the last days before expiry is capped
+        ax = ThreeDAxes(x_range=[0, T, T / 4], y_range=[88, 132, 11], z_range=[0, zmax, 100], x_length=7.6,
                         y_length=6.0, z_length=3.4, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.5)
         surf = Surface(lambda u, v: ax.c2p(u, v, min(float(np.interp(v, Sg, [np.interp(u, tg, G[:, j])
                                                                               for j in range(len(Sg))])), zmax)),
                        u_range=[0, tg[-1]], v_range=[Sg[0], Sg[-1]], resolution=(24, 20))
-        surf.set_fill_by_value(axes=ax, colorscale=[(QC.Q, 0), (GAM, 60), (WHITE, zmax)], axis=2)
+        surf.set_fill_by_value(axes=ax, colorscale=[(QC.Q, 0), (GAM, 200), (WHITE, zmax)], axis=2)
         surf.set_style(fill_opacity=0.55, stroke_width=0.3, stroke_color=GREY_D)
         t = np.asarray(w["t"], float)
         k = ValueTracker(0)
