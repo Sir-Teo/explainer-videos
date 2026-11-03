@@ -126,7 +126,7 @@ class Industry(VoiceoverScene):
 
         lines = [tr(sk[0], OVER, 2.5), tr(sg[0], UNDER, 3.5), tr(sm[0] + np.log10(d["alpha"]), UNDER, 1.5, True)]
         leg = legend([(OVER, r"Kelly, unconstrained"), (UNDER, r"Grossman--Zhou, $\alpha = 0.8$"),
-                      (GREY_B, r"faint: its floor, 80\% of the peak")], font_size=17).next_to(g, UP, buff=0.05).align_to(
+                      (GREY_B, r"faint: its floor, 80\% of the peak")], font_size=17).next_to(g, UP, buff=0.2).align_to(
             g, LEFT)
         res = VGroup(
             label(r"2{,}000 thirty-year paths, weekly:", font_size=21, color=GREY_A),
@@ -136,7 +136,7 @@ class Industry(VoiceoverScene):
                     rf"{100 * d['median_growth_gz']:.1f}\%", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 1.2)
         q = pause_card(r"A pod is down 4.9\% against a 5\% limit. What does the Grossman--Zhou investor do with her "
-                       r"stock fraction?", width=5.0, font_size=19).next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
+                       r"stock fraction?", width=4.6, font_size=19).next_to(res, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)
         src = illustration(r"simulation: $\mu - r = 6\%$, $\sigma = 18\%$; Kelly fraction 185\%")
         with self.voiceover(
             "One path each: Kelly in red, Grossman and Zhou with a floor at eighty percent of the peak in blue. As she "
