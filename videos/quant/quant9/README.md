@@ -14,7 +14,7 @@ Every number is computed by the series' own code ([`compute.py`](compute.py), th
 
 *An education in methods, not investment advice.*
 
-## Chapters
+## Chapters (about 57 minutes)
 
 * **Hook: one price, and how we got here.** The desk question (call 10, put 7, strike 100, spot 103, no rates: no
   arbitrage, C − P = 3 = S − K). Parity on Deribit's inverse options, C − P = 1 − K/F: 339 call–put pairs, half within
@@ -228,7 +228,7 @@ hour by hour, cached in `.cache/quant_data/`, each hour's SHA-256 recorded in `v
 
 *讲的是方法，不构成投资建议。*
 
-## 各章
+## 各章（约57分钟）
 
 * **开场：同一个价格。** 交易台问题；Deribit反向期权的平价C − P = 1 − K/F：339对，一半与中位数相差3.4个基点以内；隐含基差每年3%—5%。从法卡斯（1902）到游戏驿站（2021）的时间线。
 * **1. 平价，亲手拼出来。** 套利与一价定律；看涨加看跌拼成远期；看跌为6时四条腿锁定1元。**实验：** `implied_forward`。**新数据：** 同时段62,223笔期货成交，6个到期日上期权隐含远期与期货的差中位数0.66个基点。
