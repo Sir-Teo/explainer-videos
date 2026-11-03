@@ -219,7 +219,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
                     r"between knocked in and not as $h$ crosses it: an indicator jumps on a set of measure $O(h)$"),
                 why(r"the decomposition of chapter 1: the issuer owns the put and owes the coupons. The put's vega is "
                     r"largest near the barrier; once knocked in, it is a deep vanilla put with little vega")]
-        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.8, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=2.9, x=-1.2, buff=0.8, edge=6.9)
         pp = pause_card(r"Where is the issuer's vega largest: at the start, on the way down to the knock-in, or after it?",
                         width=6.0).to_corner(DR, buff=0.3)
         with self.voiceover(
