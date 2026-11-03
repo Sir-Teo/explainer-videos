@@ -110,7 +110,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             why(r"compare $\mathcal{V}$ and $\Gamma$: for plain options long gamma means long vega, and a risk report "
                 r"shows both"),
         ]
-        step = ladder(self, rows, whys, keep=3, top=3.0, x=-3.4, buff=0.75, edge=6.9)  # room on the right for the long Taylor row
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-3.4, buff=0.55, edge=6.9)  # room on the right for the long Taylor row
         pc = pause(r"Implied vol 50\%. How far must the underlying move today for a hedged long-gamma book to break "
                    r"even?", width=5.4, font_size=21)
         be = 100 * 0.5 * np.sqrt(1 / 365)
