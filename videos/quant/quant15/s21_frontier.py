@@ -68,7 +68,7 @@ class Frontier(VoiceoverScene):
                  yticks=[0, round(ex, 3), 0.1], font_size=15).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         exact = DashedLine(ax.c2p(2, ex), ax.c2p(5, ex), stroke_color=WHITE, stroke_width=2)
-        el = label(rf"exact: $\phi(d_2)/(S\sigma\sqrt T) = {ex:.4f}$", font_size=19).next_to(ax.c2p(5, ex), UP, buff=0.1)
+        el = label(rf"exact: $\phi(d_2)/(S\sigma\sqrt T) = {ex:.4f}$", font_size=19).next_to(ax.c2p(5, 0.095), UP, buff=0.1)  # above the bands, clear of the curves
         el.align_to(exact, RIGHT)
         tr = ValueTracker(2.0)
 
