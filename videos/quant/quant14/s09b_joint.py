@@ -146,7 +146,7 @@ class Joint(VoiceoverScene):
                       colors={r"\mathrm{VIX}^2_T": IV}),
                 cmath(r"\mathbb{E}\,\mathrm{VIX}_T", r"\le", r"\sqrt{\mathbb{E}\,\mathrm{VIX}^2_T}", font_size=38,
                       colors={r"\mathbb{E}\,\mathrm{VIX}_T": IV}),
-                cmath(r"\min_{\mathbb{Q}}\,H(\mathbb{Q}\,|\,\mathbb{P})", r"\text{s.t.}",
+                cmath(r"\min_{\mathbb{Q}}\,H(\mathbb{Q}\,|\,\mathbb{P})", r"\quad\text{s.t.}\quad",
                       r"S_{T_1} \sim \mu_1,\ S_{T_2} \sim \mu_2,\ \mathrm{VIX}_{T_1} \sim \nu,\ \text{martingale}", font_size=32,
                       colors={r"\min_{\mathbb{Q}}\,H(\mathbb{Q}\,|\,\mathbb{P})": OPT})]
         whys = [why(r"quadratic rough Heston in the paper's parametric form; $W$ drives both $S$ and $Z$: pure feedback"),
