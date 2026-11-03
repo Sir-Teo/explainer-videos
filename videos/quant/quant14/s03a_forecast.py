@@ -39,7 +39,7 @@ class Forecast(VoiceoverScene):
                             for j, v in enumerate(np.minimum(w, 0.5))])
         b = always_redraw(bars)
         Dr = readout(r"\text{horizon}\ \Delta =", lambda: D.get_value(), digits=0, font_size=32, color=YELLOW,
-                     unit=r"\ \text{days}").next_to(g, UP, buff=0.25).align_to(g, RIGHT)
+                     unit=r"\ \text{d}").next_to(g, UP, buff=0.25).align_to(g, RIGHT)
         har = [0.4, 0.35, 0.25]
         hw = np.array([har[0] * (j == 0) + har[1] / 5 * (j < 5) + har[2] / 22 * (j < 22) for j in range(L)])
         stair = VMobject(stroke_color=VAR, stroke_width=3).set_points_as_corners(
