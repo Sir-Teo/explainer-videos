@@ -45,7 +45,7 @@ class Frequency(VoiceoverScene):
         for k, txt, c in RULES:
             nm = label(txt, font_size=21, color=c)
             rows.add(nm)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55).to_edge(RIGHT, buff=3.4).shift(UP * 0.4)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55).to_edge(RIGHT, buff=4.0).shift(UP * 0.4)  # room for the numbers
         zero_x = rows.get_right()[0] + 1.5
         zl = Line([zero_x, rows.get_top()[1] + 0.3, 0], [zero_x, rows.get_bottom()[1] - 0.3, 0], color=GREY_C)
 
@@ -172,7 +172,7 @@ class Frequency(VoiceoverScene):
                     r"24 hours do"),
                 why(r"the hourly hedger is paid the hourly variance; the daily one only the daily"),
                 why(r"Zakamouline (2006) and the practitioners' rule: hedge on a band in spot, not on the clock")]
-        step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.6, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.6, buff=0.55, edge=6.9)  # leaves the corner for the card
         vr = f["variance_ratio"]
         pc = pause(r"If bitcoin trends within the day, does hedging more often help the long-gamma trader?",
                    width=5.0, font_size=21)
