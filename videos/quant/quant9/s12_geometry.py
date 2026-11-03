@@ -75,11 +75,20 @@ class Geometry(VoiceoverScene, ThreeDScene):
         L = always_redraw(line)
         PL = always_redraw(plane)
         price = DecimalNumber(100, num_decimal_places=0, font_size=34, color=FWD)
-        price.add_updater(lambda m: m.set_value(p.get_value()))
+        cam = self.renderer.camera
+
+        def pinned(f):
+            # set_value rebuilds the digits; the new ones must be pinned to the frame too, or they turn with the camera
+            def upd(m):
+                m.set_value(f())
+                cam.add_fixed_in_frame_mobjects(m)
+            return upd
+
+        price.add_updater(pinned(lambda: p.get_value()))
         pr = VGroup(label(r"stock price today", font_size=24, color=FWD), price).arrange(RIGHT, buff=0.2)
         comps = VGroup(*[DecimalNumber(0.3, num_decimal_places=3, font_size=28, color=Q_C) for _ in range(3)])
         for j, c_ in enumerate(comps):
-            c_.add_updater(lambda m, j=j: m.set_value(psi_at(p.get_value())[j] if p.get_value() < 124.5 else 0.0))
+            c_.add_updater(pinned(lambda j=j: psi_at(p.get_value())[j] if p.get_value() < 124.5 else 0.0))
         ps = VGroup(MathTex(r"\psi =", font_size=30, color=Q_C), comps[0], comps[1], comps[2]).arrange(RIGHT, buff=0.18)
         st_ok = label(r"a separating plane exists", font_size=22, color=Q_C)
         st_bad = label(r"no positive normal: arbitrage", font_size=22, color=ARB)
