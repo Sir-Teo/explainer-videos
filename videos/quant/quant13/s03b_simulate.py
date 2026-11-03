@@ -141,26 +141,28 @@ class Simulate(VoiceoverScene):
         self.clear_scene()
 
     def derive(self):
-        rows = [cmath(r"m", r"=", r"\theta + (v - \theta)\,e^{-\kappa\Delta},\quad s^2 = \frac{v\xi^2 e^{-\kappa\Delta}}{\kappa}"
-                      r"\big(1 - e^{-\kappa\Delta}\big) + \frac{\theta\xi^2}{2\kappa}\big(1 - e^{-\kappa\Delta}\big)^2",
-                      font_size=30, colors={r"m": VAR}),
+        rows = [cmath(r"m", r"=", r"\theta + (v - \theta)\,e^{-\kappa\Delta}", font_size=34, colors={r"m": VAR}),
+                cmath(r"s^2", r"=", r"\frac{v\xi^2 e^{-\kappa\Delta}}{\kappa}\big(1 - e^{-\kappa\Delta}\big) + "
+                      r"\frac{\theta\xi^2}{2\kappa}\big(1 - e^{-\kappa\Delta}\big)^2", font_size=32, colors={r"s^2": VAR}),
                 cmath(r"\psi", r"=", r"s^2/m^2", font_size=36, colors={r"\psi": VAR}),
-                cmath(r"v'", r"=", r"a\,(b + Z)^2,\quad b^2 = \tfrac2\psi - 1 + \sqrt{\tfrac2\psi}\sqrt{\tfrac2\psi - 1},"
-                      r"\quad a = \frac{m}{1 + b^2}\qquad (\psi \le 1.5)", font_size=30, colors={r"v'": RV}),
+                cmath(r"v'", r"=", r"a\,(b + Z)^2\qquad (\psi \le 1.5)", font_size=34, colors={r"v'": RV}),
                 cmath(r"v'", r"=", r"\begin{cases} 0 & \text{prob. } p = \frac{\psi - 1}{\psi + 1} \\ "
                       r"\text{Exp}(\beta),\ \beta = \frac{1 - p}{m} & \text{otherwise}\end{cases}\qquad (\psi > 1.5)",
-                      font_size=30, colors={r"v'": RV}),
+                      font_size=32, colors={r"v'": RV}),
                 cmath(r"\ln S'", r"=", r"\ln S + \tfrac{\rho}{\xi}\big(v' - v - \kappa\theta\Delta\big) + "
                       r"\big(\tfrac{\kappa\rho}{\xi} - \tfrac12\big)\!\int\! v + \sqrt{1 - \rho^2}\!\int\!\sqrt v\,dW^\perp",
                       font_size=30, colors={r"\ln S'": SPOT})]
-        whys = [why(r"the exact conditional mean and variance of CIR over one step (Part 5)", 20),
+        whys = [why(r"the exact conditional mean of CIR over one step (Part 5)", 20),
+                why(r"and its exact conditional variance", 20),
                 why(r"how wide the next variance is, relative to its mean", 20),
-                why(r"small $\psi$: a scaled non-central $\chi^2$ with one degree of freedom, matching $m$ and $s^2$", 20),
+                why(r"small $\psi$: a scaled non-central $\chi^2$ with one degree of freedom, with "
+                    r"$b^2 = \tfrac2\psi - 1 + \sqrt{\tfrac2\psi}\sqrt{\tfrac2\psi - 1}$ and $a = m/(1 + b^2)$ matching $m$ "
+                    r"and $s^2$", 20),
                 why(r"large $\psi$: a mass at zero plus an exponential, matching $m$ and $s^2$ (two equations, two unknowns)",
                     20),
                 why(r"solve the variance equation for $\int\sqrt v\,dW^2$ and substitute; integrals by the trapezoid; "
                     r"a constant $K_0^*$ keeps $S$ a martingale exactly (Andersen 2008)", 20)]
-        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-3.2, buff=0.7, edge=6.9)  # room for the long rows
         with self.voiceover(
             (
             (
@@ -177,14 +179,15 @@ class Simulate(VoiceoverScene):
         )
         ) as vo:
             step(0)
-            vo.wait_until("a")
             step(1)
-            vo.wait_until("b")
+            vo.wait_until("a")
             step(2)
-            vo.wait_until("c")
+            vo.wait_until("b")
             step(3)
-            vo.wait_until("d")
+            vo.wait_until("c")
             step(4)
+            vo.wait_until("d")
+            step(5)
         self.wait(0.4)
         self.clear_scene()
 
