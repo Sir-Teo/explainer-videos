@@ -84,7 +84,7 @@ class Inventory(VoiceoverScene):
                 why(r"differentiate $A e^{-k\delta}(\delta + \Delta\theta)$ in $\delta$ and set it to zero"),
                 why(r"Gu\'eant, Lehalle and Fernandez-Tapia (2013), in the limit of a long horizon: long inventory moves "
                     r"both quotes down, in proportion to $q$")]
-        step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.4, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.5, edge=6.9)  # ends high: the foot fits below
         foot = wrapped_label(r"in an options book $q$ is vega and $\phi$ carries the volatility of implied volatility "
                              r"(Stoikov and Sa\u{g}lam 2009); a hundred options reduce to a few risk factors (Baldacci, "
                              r"Bergault and Gu\'eant 2021); demand that market makers cannot hedge moves prices "
@@ -111,7 +111,8 @@ class Inventory(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
-            self.play(FadeIn(foot), FadeIn(pc))
+            # the top row's place goes to the question; the last two rows, the answer's ingredients, stay
+            self.play(FadeOut(rows[1]), FadeOut(whys[1]), FadeIn(foot), FadeIn(pc))
         self.wait(0.4)
         self.clear_scene()
 
