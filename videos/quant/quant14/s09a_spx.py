@@ -165,18 +165,18 @@ class SPX(VoiceoverScene):
         t = np.asarray(c["dvol_t"], float)
         hh = (t - datetime(2024, 7, 29, tzinfo=timezone.utc).timestamp()) / 86400
         cl, hi = np.asarray(c["dvol_close"], float), np.asarray(c["dvol_high"], float)
-        g = axes([0, 12], [30, 100], x_length=6.6, y_length=3.4, ylabel=r"DVOL, hourly", xticks=[0, 4, 7, 11],
+        g = axes([0, 12], [30, 100], x_length=6.6, y_length=2.8, ylabel=r"DVOL, hourly", xticks=[0, 4, 7, 11],
                  xfmt=lambda u: {0: "29 Jul", 4: "2 Aug", 7: "5 Aug", 11: "9 Aug"}[int(round(u))], yticks=[40, 60, 80, 100],
-                 font_size=14).to_corner(UL, buff=0.5).shift(DOWN * 0.3)
+                 font_size=14).to_corner(UL, buff=0.45)
         tr = ValueTracker(0)
         lc = tracing(g.ax, hh, np.clip(cl, 30, 100), tr, IV, stroke_width=2)
         lh = tracing(g.ax, hh, np.clip(hi, 30, 100), tr, BAD, stroke_width=1)
         rvd = np.asarray(c["btc_rv_days"])
         rv = np.asarray(c["btc_rv"]) * 100
         d0 = int(datetime(2024, 7, 29, tzinfo=timezone.utc).timestamp() // 86400)
-        g2 = axes([-0.5, 11.5], [0, max(250, rv.max() * 1.1)], x_length=6.6, y_length=2.2, ylabel=r"bitcoin realized vol, by day (\%)",
+        g2 = axes([-0.5, 11.5], [0, max(250, rv.max() * 1.1)], x_length=6.6, y_length=1.8, ylabel=r"bitcoin realized vol, by day (\%)",
                   xticks=[0, 4, 7, 11], xfmt=lambda u: {0: "29 Jul", 4: "2 Aug", 7: "5 Aug", 11: "9 Aug"}[int(round(u))],
-                  yticks=[0, 100, 200], font_size=14).next_to(g, DOWN, buff=0.6).align_to(g, LEFT)
+                  yticks=[0, 100, 200], font_size=14).next_to(g, DOWN, buff=0.5).align_to(g, LEFT)  # both inside the frame
         bars = VGroup(*[Rectangle(width=0.35, height=max(g2.ax.c2p(0, v)[1] - g2.ax.c2p(0, 0)[1], 0.01), stroke_width=0,
                                   fill_color=BAD if dd - d0 == 7 else RV, fill_opacity=0.85).move_to(g2.ax.c2p(dd - d0, v / 2))
                         for dd, v in zip(rvd, rv)])
