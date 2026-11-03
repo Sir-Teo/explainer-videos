@@ -98,8 +98,12 @@ class HJB(VoiceoverScene):
         def vertex(xv, on):
             return (MU - R) / (GAM * SIG ** 2) * (xv - on * F) / xv
 
-        par = always_redraw(lambda: curve(ax, pis, np.clip(ham(x.get_value(), fl.get_value()), -0.06, 0.05), VALUE,
-                                          stroke_width=4))
+        def par_curve():
+            v = ham(x.get_value(), fl.get_value())
+            m = (v >= -0.06) & (v <= 0.05)  # only the part inside the axes: no flat line along the bottom
+            return curve(ax, pis[m], v[m], VALUE, stroke_width=4)
+
+        par = always_redraw(par_curve)
         top = always_redraw(lambda: DashedLine(ax.c2p(vertex(x.get_value(), fl.get_value()), -0.06),
                                                ax.c2p(vertex(x.get_value(), fl.get_value()), 0.05), color=KELLY,
                                                stroke_width=2.5))
@@ -110,6 +114,7 @@ class HJB(VoiceoverScene):
         dot = always_redraw(lambda: Dot(gw.ax.c2p(x.get_value(), 0.5), radius=0.1, color=UNDER))
         flr = DashedLine(gw.ax.c2p(F, 0), gw.ax.c2p(F, 1), color=OVER, stroke_width=3)
         fll = label(r"floor's present value", font_size=17, color=OVER).next_to(flr, UP, buff=0.08)
+        fll.align_to(flr, LEFT).shift(LEFT * 0.05)  # reads rightward from the line, not off the frame
         txt = VGroup(label(r"no floor: the parabola keeps its vertex", font_size=22, color=GREY_A),
                      label(r"a floor: the vertex slides to 0 as wealth nears it", font_size=22, color=OVER)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(gw, DOWN, buff=1.0).align_to(gw, LEFT)
@@ -171,7 +176,7 @@ class HJB(VoiceoverScene):
 
     def solve(self, h):
         y, pi = np.asarray(h["y"]), np.asarray(h["pi"])
-        g = axes([-2, 2], [0.55, 0.68], x_length=6.0, y_length=3.0, xlabel=r"log wealth",
+        g = axes([-2, 2], [0.55, 0.68], x_length=6.0, y_length=2.6, xlabel=r"log wealth",
                  ylabel=r"the solver's fraction at $t = 0$", xticks=[-2, -1, 0, 1, 2], yticks=[0.56, 0.6, 0.64, 0.68],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.7).to_edge(UP, buff=0.8)
         ax = g.ax
@@ -179,9 +184,9 @@ class HJB(VoiceoverScene):
         ln = curve(ax, y, np.clip(pi, 0.55, 0.68), VALUE, stroke_width=4)
         pc = np.asarray(h["pass_counts"])
         bars = VGroup()
-        bg = axes([0.5, len(pc) + 0.5], [0, max(pc) * 1.15], x_length=4.0, y_length=2.2,
+        bg = axes([0.5, len(pc) + 0.5], [0, max(pc) * 1.15], x_length=4.0, y_length=1.6,
                   xlabel=r"policy-iteration passes in a time step", xticks=list(range(1, len(pc))), xfmt=lambda u: f"{int(u)}",
-                  yticks=[], font_size=15).next_to(g, DOWN, buff=0.9).align_to(g, LEFT)
+                  yticks=[], font_size=15).next_to(g, DOWN, buff=0.7).align_to(g, LEFT)
         for k, cnt in enumerate(pc):
             if cnt:
                 top = bg.ax.c2p(k, cnt)
