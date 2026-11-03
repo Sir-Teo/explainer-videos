@@ -174,7 +174,7 @@ class ETP(VoiceoverScene, ThreeDScene):
         src = real_data(r"rebuilt from Cboe settlements by the index's published roll rule; not the issuer's figures")
         g17, f5 = 100 * v["note_jun_dec"], 100 * v["note_feb5"]
         with self.voiceover(
-            "Now run the year. The index, in green, sags all through 2017: the roll eats it. The inverse note, in "
+            "Now run the year. The index, in gold, sags all through 2017: the roll eats it. The inverse note, in "
             f"purple, climbs: {g17:+.0f} percent from June to December, a smooth, steady climb. "
             "<bookmark mark='a'/> Then the fifth of February. Below, the futures the note's hedger had to buy at each "
             "day's close, as a multiple of the note's value: small every day, until one bar of nearly twice the note "

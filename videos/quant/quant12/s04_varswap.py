@@ -201,7 +201,7 @@ class VarSwap(VoiceoverScene):
         pct = 100 * abs(j20) / 0.04
         with self.voiceover(
             "Jumps are where the replication leaks. Suppose the price jumps once, by J in logs. A variance swap pays J "
-            "squared, the teal curve. The hedged strip pays two times e to the J minus one minus J, the purple one. "
+            "squared, the green curve. The hedged strip pays two times e to the J minus one minus J, the purple one. "
             "<bookmark mark='a'/> For a rise they nearly agree. For a fall they part: a fall of twenty percent in log terms leaves the "
             f"hedge short by about {pct:.0f} percent of that jump's variance. Whoever sold variance and hedged with "
             "options is short the crash; and that is one reason variance swaps on single stocks carry caps."

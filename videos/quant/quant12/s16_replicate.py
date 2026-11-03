@@ -65,7 +65,7 @@ class Replicate(VoiceoverScene):
             f"Take the Wednesday of {day}. At eight in the morning the House buys the thirty-day strip off that day's "
             f"fitted surface, for a variance strike of {kv:.3f}. Then Bitcoin trades, hour by hour, for thirty days. "
             "<bookmark mark='a'/> Every hour it rebalances its delta hedge. Watch the ledger: the strip swings with the "
-            "price, the hedge the other way, and their sum, in orange, climbs steadily along the teal line, the "
+            "price, the hedge the other way, and their sum, in orange, climbs steadily along the green line, the "
             "variance realized so far. <bookmark mark='b'/> After thirty days: the strip and hedge "
             f"together paid {tot:.3f}, the realized variance was {rvf:.3f}. The strip bought variance, and the hedge "
             "turned it into exactly the variance that happened."

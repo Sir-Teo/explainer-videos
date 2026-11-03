@@ -74,7 +74,7 @@ class VRP(VoiceoverScene):
         with self.voiceover(
             "The desk question: why is implied above realized on average? Every Wednesday since April 2021, the House "
             "read the thirty-day variance-swap rate off that morning's surface, in orange, and thirty days later "
-            "measured what Bitcoin realized, in teal. <bookmark mark='a'/> Watch the averages accumulate: the 2021 "
+            "measured what Bitcoin realized, in green. <bookmark mark='a'/> Watch the averages accumulate: the 2021 "
             "bull market, the crashes of 2022, the quiet of 2023, the ETF rally. "
             f"<bookmark mark='b'/> In the end: implied {im:.0f} percent on average, realized {re_:.0f}. The premium "
             f"was positive in {sp:.0f} percent of weeks, and its Newey-West t-statistic is {tt:.1f}, after allowing "
@@ -228,7 +228,7 @@ class VRP(VoiceoverScene):
         a, b, s = 100 * x["vix_mean"], 100 * x["rv_mean"], 100 * x["share_pos"]
         with self.voiceover(
             "The S&P 500 since 1990: the VIX in orange, realized volatility over the next twenty-one trading days in "
-            f"teal. <bookmark mark='a'/> The orange runs above: {a:.1f} against {b:.1f} on average, and VIX squared "
+            f"green. <bookmark mark='a'/> The orange runs above: {a:.1f} against {b:.1f} on average, and VIX squared "
             f"above realized variance on {s:.0f} percent of days. The exceptions are spikes no index priced in time; the "
             "worst start date was late February 2020. <bookmark mark='b'/> Ian Dew-Becker and co-authors found the "
             "premium concentrated at the shortest maturities."

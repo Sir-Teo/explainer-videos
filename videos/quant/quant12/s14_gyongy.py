@@ -81,7 +81,7 @@ class Gyongy(VoiceoverScene):
                                                fill_color=QC.HOUSE, fill_opacity=0.18).move_to(gR.ax.c2p(tr.get_value(), 0.7)))
         ok = np.isfinite(cond)
         gold = VGroup(*[Dot(gR.ax.c2p(a, b), radius=0.07, color=QC.HOUSE) for a, b in zip(ks[ok], cond[ok])])
-        dl = curve(gR.ax, ks, np.clip(dup, 0, 1.4), LV, stroke_width=4)
+        dl = curve(gR.ax, ks, np.clip(dup, 0, 1.4), QC.Q, stroke_width=4)  # a model (Q) curve, apart from the gold dots
         p = g["params"]
         head = MathTex(rf"\text{{Heston: }} v_0 = {p['v0']},\ \kappa = {p['kappa']},\ \theta = {p['theta']},\ \xi = {p['xi']},"
                        rf"\ \rho = {p['rho']}", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
@@ -97,7 +97,7 @@ class Gyongy(VoiceoverScene):
             "at that moment. A cloud, with no function in sight. <bookmark mark='b'/> Now slide a thin slab across it, "
             "and at each price average the variance of the paths inside: the gold dots. <bookmark mark='c'/> Then, "
             "separately, price options in the Heston model with Fourier methods, and push those prices through "
-            f"Dupire's formula: the green line. The dots land on the line, within {gap:.1f} volatility points across "
+            f"Dupire's formula: the purple line. The dots land on the line, within {gap:.1f} volatility points across "
             "the strikes. The expected variance given the price is Dupire's local variance."
         ) as vo:
             self.play(FadeIn(head), FadeIn(gL), FadeIn(src))

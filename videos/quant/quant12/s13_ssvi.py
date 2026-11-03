@@ -246,7 +246,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         a1, b1 = pr[-1]["svi"], pr[-1]["ssvi"]
         nsvi = r["n_par_svi"]
         with self.voiceover(
-            "What does consistency cost? Expiry by expiry, the error of SVI fitted to that expiry alone, in green, "
+            "What does consistency cost? Expiry by expiry, the error of SVI fitted to that expiry alone, in gold, "
             f"against one SSVI for all, in orange. <bookmark mark='a'/> At the first expiry SVI misses by {a0:.1f} "
             f"points and SSVI by {b0:.1f}; at the last, {a1:.1f} against {b1:.1f}. The {nsvi} free parameters "
             "always fit better in sample. But they cross each other, as Chapter three showed, and they cannot be "
