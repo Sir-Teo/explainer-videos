@@ -157,7 +157,7 @@ class Premium(VoiceoverScene):
                 why(r"under the pricing measure a self-financing hedged position is a martingale started at zero"),
                 why(r"the gap between the two measures is a risk premium: sellers are paid to carry variance risk, which "
                     r"rises in crashes, when money is worth most")]
-        step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.4, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)  # leaves the corner for the card
         pc = pause(r"If the premium is so reliable, why doesn't everyone sell straddles?", width=5.2, font_size=22)
         with self.voiceover(
             "Why is it a premium and not a mistake? Start from Part ten's identity: the hedged option collects "
