@@ -85,8 +85,12 @@ class LTCM(VoiceoverScene):
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_corner(UR, buff=0.5)
         a2 = g2.ax
         zero = DashedLine(a2.c2p(0.5, 0), a2.c2p(4.5, 0), color=GREY_C, stroke_width=1.5)
-        fl = curve(a2, ks, np.clip(np.asarray(e["full"]), -1.5, 1.1), OVER, stroke_width=4)
-        hl = curve(a2, ks, np.clip(np.asarray(e["half"]), -1.5, 1.1), UNDER, stroke_width=4)
+        def inside(v):  # the curve only where it is inside the axes: no flat run along the bottom
+            v = np.asarray(v)
+            m = (v >= -1.5) & (v <= 1.1)
+            return ks[m], v[m]
+        fl = curve(a2, *inside(e["full"]), OVER, stroke_width=4)
+        hl = curve(a2, *inside(e["half"]), UNDER, stroke_width=4)
         mc = VGroup(*[VGroup(Dot(a2.c2p(r_["k"], max(r_["c1"], -1.5)), color=WHITE, radius=0.05),
                              Dot(a2.c2p(r_["k"], max(r_["c0.5"], -1.5)), color=WHITE, radius=0.05)) for r_ in e["mc"]])
         leg = legend([(OVER, r"full Kelly on the estimate"), (UNDER, r"half Kelly on the estimate"),
