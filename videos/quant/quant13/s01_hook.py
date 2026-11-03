@@ -66,14 +66,19 @@ class Hook(VoiceoverScene):
         ax = g.ax
         line = curve(ax, t, np.clip(dv, 0.2, 1.6), IV, stroke_width=2.4)
         tags = VGroup()
-        for (a, b), name in (((_ts(2022, 5, 1), _ts(2022, 6, 30)), r"Terra--Luna, May 2022"),
-                             ((_ts(2022, 11, 1), _ts(2022, 11, 30)), r"FTX, November 2022"),
-                             ((_ts(2024, 8, 1), _ts(2024, 8, 15)), r"the yen carry unwind, August 2024")):
+        # Terra and FTX peak six months apart: their labels go to either side; the yen label rises above the line
+        for (a, b), name, side, lift in (((_ts(2022, 5, 1), _ts(2022, 6, 30)), r"Terra--Luna, May 2022", LEFT, 0.45),
+                                         ((_ts(2022, 11, 1), _ts(2022, 11, 30)), r"FTX, November 2022", RIGHT, 0.25),
+                                         ((_ts(2024, 8, 1), _ts(2024, 8, 15)), r"the yen carry unwind, August 2024", ORIGIN,
+                                          0.9)):
             m = (np.asarray(f["dvol_t"]) >= a) & (np.asarray(f["dvol_t"]) <= b)
             i = np.flatnonzero(m)[np.argmax(dv[m])]
             d = Dot(ax.c2p(t[i], dv[i]), radius=0.07, color=BAD)
-            lab = label(rf"{name}: {100 * dv[i]:.0f}\%", font_size=18, color=GREY_A).next_to(d, UP, buff=0.12)
-            tags.add(VGroup(d, lab))
+            lab = label(rf"{name}: {100 * dv[i]:.0f}\%", font_size=18, color=GREY_A)
+            lab.move_to(d.get_center() + UP * (lift + lab.height / 2) + side * (lab.width / 2 + 0.05))
+            tie = Line(d.get_center(), lab.get_corner(DOWN + (RIGHT if side[0] < 0 else LEFT if side[0] > 0 else ORIGIN)),
+                       color=GREY_C, stroke_width=1.2)
+            tags.add(VGroup(d, tie, lab))
         src = real_data(r"Deribit DVOL, daily, April 2021 -- November 2025")
         with self.voiceover(
             "Here is Bitcoin's thirty-day implied volatility, every day for four and a half years. It is not a "
