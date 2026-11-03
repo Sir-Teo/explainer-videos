@@ -132,9 +132,11 @@ class Brownian(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(pc))
             vo.wait_until("d")
-            self.play(FadeIn(ans), FadeIn(tl), FadeIn(tab))
+            # the length row steps aside while the table of spreads is up, and comes back before the next row
+            self.play(FadeIn(ans), FadeIn(tl), FadeIn(tab), rows[2].animate.set_opacity(0), whys[2].animate.set_opacity(0))
             vo.wait_until("e")
-            self.play(FadeOut(pc), FadeOut(ans), FadeOut(tab), FadeOut(tl))
+            self.play(FadeOut(pc), FadeOut(ans), FadeOut(tab), FadeOut(tl), rows[2].animate.set_opacity(1),
+                      whys[2].animate.set_opacity(1))
             step(3)
         self.wait(0.4)
         self.clear_scene()
