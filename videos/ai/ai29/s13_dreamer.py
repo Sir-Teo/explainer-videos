@@ -262,8 +262,9 @@ class Dreamer(VoiceoverScene):
         snap = d["snaps"][str(max(int(k) for k in d["snaps"]))]
         own = np.asarray(snap["own"])
         strip = Group(*[framed(gray(f_, 0.62, MODEL)) for f_ in own[:12]]).arrange(RIGHT, buff=0.06).move_to([0, 2.6, 0])
-        sl = label(rf"what our trained agent dreams: \ ${len(own)}$ steps of its own play, \ never seen", font_size=20,
-                   color=MODEL).next_to(strip, DOWN, buff=0.15)
+        sl = label((rf"训练后智能体的梦：\ ${len(own)}$步中的前${min(12, len(own))}$帧" if zh() else
+                    rf"trained agent's dream: \ first ${min(12, len(own))}$ frames of ${len(own)}$ imagined steps"),
+                   font_size=20, color=MODEL).next_to(strip, DOWN, buff=0.15)
         with self.voiceover(
             "Then the agent learns to act without touching the real game. <bookmark mark='a'/> From states the model "
             f"has seen, it dreams {int(P['horizon'])} steps ahead, choosing actions with the current policy, "
