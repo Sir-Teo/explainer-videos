@@ -14,7 +14,7 @@ paper.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 59 minutes)
+## Chapters (about 57 minutes)
 
 * **The river under the noise.** A century of the US market's daily moves, clusters lighting up (1929–33, 1987,
   2008, 2020); pause and predict: sign or size? The autocorrelation of returns is 0.05 at lag 1 and nothing after;
@@ -51,8 +51,9 @@ paper.
 * **6. ARCH and GARCH by maximum likelihood.** Engle 1982; the leaky bucket (tap ω, leak 1 − β, splash αr²) simulated
   with US parameters; the long-run level, the EWMA unrolling, the likelihood, the term structure, GARCH as ARMA(1,1)
   for r², derived. **Lab:** `garch_filter` and its likelihood: α = 0.105, β = 0.884, log L 84,088, half-life 63
-  days. **3D replay:** the variance-targeted likelihood surface over (α, β), a simplex search climbing the ridge in
-  66 iterations to (0.104, 0.884); EWMA at the edge α + β = 1.
+  days. **3D replay:** the variance-targeted likelihood surface over α and the persistence α + β (0.84 to 0.999, all
+  stationary), a simplex search racing up the persistence slope and crawling across α in 66 iterations to (0.104,
+  0.884); persistence is pinned about five times more tightly than α or β; EWMA at the far edge α + β = 1.
 * **7. The GARCH zoo.** The (α, β) plane: the covariance-stationary triangle and Nelson's (1990) strict-stationarity
   boundary beyond it; pause: α + β = 1.05 both times, E ln(αz² + β) = −0.0074 (0.30, 0.75: stationary) and
   +0.0084 (0.25, 0.80: explosive). Derived: the unrolled product, the LLN argument, Jensen (IGARCH strictly
@@ -250,7 +251,7 @@ market data (the leakage caveat on screen).
 
 *讲的是方法，不构成投资建议。*
 
-## 章节（约59分钟）
+## 章节（约57分钟）
 
 开场（波动聚集、收益与绝对收益的自相关、卡尔曼河流、历史）；1. 平稳性、ARMA与博克斯–詹金斯方法；2. 单位根与伪回归；3. 协整（醉汉与狗、
 比特币基差、三维国债收益率的约翰森检验）；4. 隐藏机制；5. 卡尔曼滤波与随机波动率；6. 用最大似然估计ARCH与GARCH（漏水桶、三维似然面）；
