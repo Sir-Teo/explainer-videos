@@ -97,10 +97,19 @@ class Kelly(VoiceoverScene):
         n = len(t)
 
         def fan(key, col):
-            P = np.clip(np.asarray(fans[key]["paths"]), -1.5, 3.0)
+            P = np.asarray(fans[key]["paths"])[:30]
+            # each path ends where it first leaves the axes, instead of running flat along the edge
+            out = (P < -1.5) | (P > 3.0)
+            last = [int(np.argmax(o)) if o.any() else P.shape[1] - 1 for o in out]
+
+            def pts(row, end):
+                js = list(range(0, min(max(int(tk.get_value()), 1), end) + 1, 3))
+                if len(js) < 2:
+                    js = [0, 1]
+                return [ax.c2p(t[j], float(np.clip(row[j], -1.5, 3.0))) for j in js]
             return always_redraw(lambda: VGroup(*[
-                VMobject(stroke_color=col, stroke_width=1.0, stroke_opacity=0.25).set_points_as_corners(
-                    [ax.c2p(t[j], row[j]) for j in range(0, max(int(tk.get_value()), 1) + 1, 3)]) for row in P[:30]]))
+                VMobject(stroke_color=col, stroke_width=1.0, stroke_opacity=0.25).set_points_as_corners(pts(row, end))
+                for row, end in zip(P, last)]))
 
         def med(key, col):
             m = np.clip(np.asarray(fans[key]["median"]), -1.5, 3.0)
