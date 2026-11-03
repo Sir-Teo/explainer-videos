@@ -43,7 +43,7 @@ class System(VoiceoverScene):
                 why(r"on red at a European wheel each unit staked loses $1/37$ on average: the same tax, whatever the "
                     r"system"),
                 why(r"a cheat who stakes after seeing the step wins every time: predictability is the whole hypothesis")]
-        step = ladder(self, rows, whys, keep=4, top=2.7, x=-1.0, buff=0.75, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.0, buff=0.42, edge=6.9)
         head = label(r"Williams, \textit{Probability with Martingales}, ch.\ 10: ``you can't beat the system''",
                      font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
