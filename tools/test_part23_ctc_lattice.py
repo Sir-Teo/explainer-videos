@@ -49,6 +49,23 @@ class CTCLatticeContracts(unittest.TestCase):
                 best_p = np.prod([probs[t, symbols.index(c)] for t, c in enumerate(path)])
                 self.assertAlmostEqual(best_p, max(p for _, p in candidates), places=12)
 
+    def test_groupnorm_couples_distant_frames(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest("PyTorch is unavailable")
+        from videos.ai.ai23.audio import ctc_net
+        torch.manual_seed(23)
+        model = ctc_net(width=4).eval()
+        x = torch.randn(1, 40, 240)
+        changed = x.clone()
+        changed[:, :, 200:] += 5
+        # Frame 0 is outside the changed input's convolutional receptive field.
+        # GroupNorm still shares statistics over the whole time dimension.
+        with torch.no_grad():
+            delta = (model(x)[:, 0] - model(changed)[:, 0]).abs().max().item()
+        self.assertGreater(delta, 1e-5)
+
 
 if __name__ == '__main__':
     unittest.main()

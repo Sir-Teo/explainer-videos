@@ -702,7 +702,8 @@ CTC_CHECKS = [0, 50, 150, 400, 1000, 2500]
 
 def ctc_net(width=96):
     """A small convolutional recognizer: a strided convolution to 20 ms frames, then five residual convolutions with
-    growing dilation (each frame sees about 1.3 s of context, both ways), then a letter per frame."""
+    growing dilation, then a letter per frame. The convolutional receptive field spans about 1.3 s, but GroupNorm
+    also couples each output to the full utterance through its temporal statistics."""
     import torch.nn as nn
 
     class Res(nn.Module):
