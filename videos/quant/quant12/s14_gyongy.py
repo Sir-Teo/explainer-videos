@@ -86,7 +86,7 @@ class Gyongy(VoiceoverScene):
         head = MathTex(rf"\text{{Heston: }} v_0 = {p['v0']},\ \kappa = {p['kappa']},\ \theta = {p['theta']},\ \xi = {p['xi']},"
                        rf"\ \rho = {p['rho']}", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         leg = legend([(QC.HOUSE, r"$\sqrt{\mathbb{E}[v_T \mid \ln S_T]}$, from 100{,}000 paths"),
-                      (LV, r"Dupire, from Heston's own option prices (COS)")], font_size=17).next_to(gR, UP, buff=0.1
+                      (QC.Q, r"Dupire, from Heston's own option prices (COS)")], font_size=17).next_to(gR, UP, buff=0.1
                                                                                                   ).align_to(gR, LEFT)
         src = simulated(r"simulated: Heston, Andersen's QE scheme, 90 steps to $T = 0.25$")
         gap = g["max_gap"]
