@@ -143,8 +143,8 @@ class ShortVol(VoiceoverScene):
                 why(r"a put spread caps the loss at the strike gap, but a hedge far below lets the whole gap through: "
                     r"the hedge's moneyness is the risk")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.8, edge=6.9)
-        pc = pause(rf"At VIX 15, a one-month put 20\% out costs {v['q_cost20']:.4f}, one 40\% out "
-                   rf"{v['q_cost40']:.6f}. In a 35\% crash, at expiry, they pay {v['q_pay20']:.0f} and "
+        pc = pause(rf"At VIX 15, per 100 of stock, a one-month put 20\% out costs {v['q_cost20']:.4f}, one 40\% out "
+                   rf"under 0.00001. In a 35\% crash, at expiry, they pay {v['q_pay20']:.0f} and "
                    rf"{v['q_pay40']:.0f}. Which is cheap?", width=6.0, font_size=20)
         with self.voiceover(
             "Why do short-volatility books fail all at once? Chapter one's series for a short put: it is long delta, "
