@@ -76,3 +76,14 @@ def fixed(scene, *mobs):
     for m in mobs:
         scene.add_fixed_in_frame_mobjects(m)
         scene.remove(m)
+
+
+def curve_in(ax, x, y, lo, hi, color, **kw):
+    """A curve drawn only where it lies inside [lo, hi]: it ends at the frame instead of running flat along it.
+    For a convex smile the inside part is one piece."""
+    import numpy as _np
+    x, y = _np.asarray(x, float), _np.asarray(y, float)
+    m = (y >= lo) & (y <= hi)
+    if m.sum() < 2:
+        return VMobject()
+    return curve(ax, x[m], y[m], color, **kw)

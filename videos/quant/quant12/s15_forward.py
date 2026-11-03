@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant12.common import BAD, IV, LV, OPT, PART, RV, SPOT, load, real_data
+from videos.quant.quant12.common import BAD, IV, LV, OPT, PART, RV, SPOT, curve_in, load, real_data
 
 
 class Forward(VoiceoverScene):
@@ -26,7 +26,7 @@ class Forward(VoiceoverScene):
         sh = np.asarray(m["shifts"])
         lv = np.asarray(m["move"]["lv"])
         mo = np.asarray(m["move"]["moneyness"])
-        g = axes([-0.3, 0.3], [0.3, 0.6], x_length=7.6, y_length=4.4, xlabel=r"strike, as $\ln K/F_0$",
+        g = axes([-0.3, 0.3], [0.3, 0.6], x_length=6.6, y_length=4.4, xlabel=r"strike, as $\ln K/F_0$",
                  ylabel=r"30-day implied volatility", xticks=[-0.2, 0, 0.2], yticks=[0.35, 0.45, 0.55],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
@@ -37,9 +37,9 @@ class Forward(VoiceoverScene):
             i = int(np.clip(np.floor(x), 0, len(arr) - 2))
             f = x - i
             return (1 - f) * arr[i] + f * arr[i + 1]
-        today = curve(ax, kk, np.clip(lv[4], 0.3, 0.6), GREY_C, stroke_width=2)
-        c_lv = always_redraw(lambda: curve(ax, kk, np.clip(at_i(lv), 0.3, 0.6), LV, stroke_width=4))
-        c_mo = always_redraw(lambda: curve(ax, kk, np.clip(at_i(mo), 0.3, 0.6), IV, stroke_width=3))
+        today = curve_in(ax, kk, lv[4], 0.3, 0.6, GREY_C, stroke_width=2)
+        c_lv = always_redraw(lambda: curve_in(ax, kk, at_i(lv), 0.3, 0.6, LV, stroke_width=4))
+        c_mo = always_redraw(lambda: curve_in(ax, kk, at_i(mo), 0.3, 0.6, IV, stroke_width=3))
         spot = always_redraw(lambda: DashedLine(ax.c2p(float(at_i(sh)), 0.3), ax.c2p(float(at_i(sh)), 0.6), color=GREY_B))
         arrow_s = Arrow(LEFT, RIGHT, color=SPOT).scale(0.6).next_to(g, UP, buff=0.15).shift(LEFT * 1.5)
         arrow_l = Arrow(RIGHT, LEFT, color=LV).scale(0.6).next_to(arrow_s, RIGHT, buff=1.2)
@@ -48,11 +48,12 @@ class Forward(VoiceoverScene):
         leg = legend([(GREY_C, r"today"), (IV, r"sticky moneyness"), (LV, r"local volatility")], font_size=17
                      ).to_edge(RIGHT, buff=0.5).shift(UP * 1.6)
         side = VGroup(MathTex(rf"R_{{\text{{LV}}}} = {m['R_lv']:.2f}", font_size=36, color=LV),
-                      wrapped_label(r"measured on the Surface's local vol: close to 2, as the formula below says", 4.0,
+                      wrapped_label(r"measured on the Surface's local vol: close to 2, as the formula below says", 3.9,
                                     19, GREY_A),
                       wrapped_label(r"Hagan, Kumar, Lesniewski and Woodward (2002): local vol's smile moves the wrong "
-                                    r"way, so its hedges are wrong; their answer was SABR (Part 13)", 4.0, 19, GREY_B)
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+                                    r"way, so its hedges are wrong; their answer was SABR (Part 13)", 3.9, 19, GREY_B)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.5).to_edge(RIGHT, buff=0.3)
+        leg.align_to(side, LEFT)
         src = real_data(r"the Surface's local vol; smiles by the BBF average")
         R = m["R_lv"]
         with self.voiceover(
@@ -129,10 +130,10 @@ class Forward(VoiceoverScene):
         g = axes([-0.3, 0.3], [0.3, 0.65], x_length=6.8, y_length=4.2, xlabel=r"log-moneyness of a 30-day option",
                  ylabel=r"implied volatility", xticks=[-0.2, 0, 0.2], yticks=[0.4, 0.5, 0.6],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
-        today = curve(g.ax, ks, np.clip(np.asarray(m["today30"]), 0.3, 0.65), IV, stroke_width=4)
+        today = curve_in(g.ax, ks, m["today30"], 0.3, 0.65, IV, stroke_width=4)
         starts = sorted(fwd, key=int)
         cols = [LV, QC.IDEA, OPT, SPOT, BAD]
-        lines = VGroup(*[curve(g.ax, ks, np.clip(np.asarray(fwd[s_]), 0.3, 0.65), c, stroke_width=2.5)
+        lines = VGroup(*[curve_in(g.ax, ks, fwd[s_], 0.3, 0.65, c, stroke_width=2.5)
                          for s_, c in zip(starts, cols)])
         leg = legend([(IV, r"today's 30-day smile (the Surface)")] + [(c, rf"local vol: starting in {s_} days")
                                                                         for s_, c in zip(starts, cols)],
