@@ -28,13 +28,21 @@ class Mixing(VoiceoverScene):
     def _panels(self, m, key):
         cr = m["crowd"][key]
         xs = np.linspace(-1.0, 0.8, 181)
-        top = axes([-1.0, 0.8], [0, 3.2], x_length=6.6, y_length=2.6, xlabel=r"$\ln S_T / S_0$, three months",
+        top = axes([-1.0, 0.8], [0, 3.4], x_length=6.6, y_length=2.6, xlabel=r"$\ln S_T / S_0$, three months",
                    ylabel=r"density", xticks=[-0.8, -0.4, 0, 0.4], yticks=[0, 1, 2, 3], font_size=15)
         mean, var = np.asarray(cr["mean"]), np.asarray(cr["var"])
-        thin = VGroup(*[curve(top.ax, xs, np.clip(_gauss(xs, a, b), 0, 3.2), VAR, stroke_width=1.2).set_stroke(opacity=0.35)
-                        for a, b in zip(mean, var)])
-        env = curve(top.ax, xs, np.clip(np.mean([_gauss(xs, a, b) for a, b in zip(mean, var)], axis=0), 0, 3.2), IV,
-                    stroke_width=4)
+        def tall(y, col, sw, op):
+            """A Gaussian taller than the axis: its two flanks, each ending at the top (no flat plateau)."""
+            j = int(np.argmax(y))
+            parts = VGroup()
+            for sl in (slice(0, j + 1), slice(j, None)):
+                xx, yy = xs[sl], y[sl]
+                m_ = yy <= 3.4
+                if m_.sum() >= 2:
+                    parts.add(curve(top.ax, xx[m_], yy[m_], col, stroke_width=sw).set_stroke(opacity=op))
+            return parts
+        thin = VGroup(*[tall(_gauss(xs, a, b), VAR, 1.2, 0.35) for a, b in zip(mean, var)])
+        env = tall(np.mean([_gauss(xs, a, b) for a, b in zip(mean, var)], axis=0), IV, 4, 1.0)
         kk = np.asarray(m["kk"])
         bot = axes([-0.6, 0.6], [0.35, 0.75], x_length=6.6, y_length=2.2, xlabel=r"log-moneyness $k$",
                    ylabel=r"implied volatility", xticks=[-0.5, 0, 0.5], yticks=[0.4, 0.5, 0.6, 0.7],
@@ -42,7 +50,7 @@ class Mixing(VoiceoverScene):
         sm = curve(bot.ax, kk, np.clip(np.asarray(cr["iv"]), 0.35, 0.75), OPT, stroke_width=4)
         top_g = VGroup(top, thin, env)
         bot_g = VGroup(bot, sm)
-        VGroup(top_g, bot_g).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.7)
+        VGroup(top_g, bot_g).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.7).to_edge(UP, buff=0.3)  # clear of the source
         return VGroup(top_g, bot_g)
 
     def crowd(self, m):
@@ -56,8 +64,8 @@ class Mixing(VoiceoverScene):
         arrow = Arrow(LEFT * 0.6, ORIGIN, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.35)
         arrow.next_to(dial[1], LEFT, buff=0.15)
         note_ = wrapped_label(r"thin curves: $\ln S_T$ given one simulated variance path, each a Gaussian; orange: their "
-                              r"average, the model's density; below, the smile it prices", 4.6, 19, GREY_A)
-        note_.next_to(dial, DOWN, buff=0.5).align_to(dial, LEFT)
+                              r"average, the model's density; below, the smile it prices", 3.9, 19, GREY_A)
+        note_.next_to(dial, DOWN, buff=0.5).to_edge(RIGHT, buff=0.3)
         atm, wing = m["atm"], m["wing"]
         pp = pause(r"Double the vol of vol, with $\rho = 0$. Which moves more: the at-the-money vol or the wings?",
                    width=4.8).to_corner(DR, buff=0.3)
