@@ -18,7 +18,7 @@ BAD = QC.LOSS
 SPOT = QC.SPOT
 OPT = QC.OPTION
 
-MODEL_COL = {"Heston": QC.Q, "rBergomi": QC.GAMMA, "rough Heston": QC.OPTION, "PDV": QC.VEGA, "power": WHITE,
+MODEL_COL = {"Heston": QC.Q, "rBergomi": QC.GAMMA, "rough Heston": QC.OPTION, "PDV": QC.VEGA, "power": QC.SPOT,
              "shifted": QC.DELTA}
 
 

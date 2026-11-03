@@ -78,14 +78,15 @@ class Fact(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(f) for f in fits], lag_ratio=0.02, run_time=3))
             vo.wait_until("b")
-            self.move_camera(phi=90 * DEGREES, theta=-90 * DEGREES, zoom=0.85, run_time=4)
+            self.move_camera(phi=90 * DEGREES, theta=-90 * DEGREES, zoom=0.72, frame_center=RIGHT * 2.4, run_time=4)
+            # the strands move left and shrink, leaving the right side to the histogram
             self.add_fixed_in_frame_mobjects(hist_ax, bars, med, medl)
             self.remove(hist_ax, bars, med, medl)
             self.play(FadeIn(hist_ax), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1),
                       Create(med), FadeIn(medl))
             if crisis is not None:
                 self.play(Indicate(rows[crisis], color=BAD), run_time=1.5)
-        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, frame_center=ORIGIN,
                          added_anims=[FadeOut(VGroup(ax, rows, fits)), FadeOut(hint), FadeOut(src),
                                       FadeOut(VGroup(hist_ax, bars, med, medl))], run_time=1.5)
         self.clear_scene()
@@ -150,8 +151,8 @@ class Fact(VoiceoverScene, ThreeDScene):
                    "That is below zero, which no rough model allows: something besides roughness steepens bitcoin's "
                    "short end, and the next chapter's computed jump skews show one candidate.")
         q = pause(r"If $H = 0.1$, by what factor is a 1-day option's skew steeper than a 1-month option's?",
-                  width=7.0).to_edge(DOWN, buff=0.4)
-        ans = MathTex(r"30^{\,0.4} \approx 3.9", font_size=40, color=YELLOW).next_to(q, UP, buff=0.25)
+                  width=6.4).to_corner(DL, buff=0.35)
+        ans = MathTex(r"30^{\,0.4} \approx 3.9", font_size=40, color=YELLOW).next_to(q, RIGHT, buff=0.7)  # beside the card
         with self.voiceover(
             "The definitions. The skew psi of T is the slope of implied volatility in log-moneyness, at the money. "
             "<bookmark mark='a'/> The power law says psi is a constant times T to the minus a. Read as roughness, "
