@@ -96,17 +96,17 @@ class Jumps(VoiceoverScene):
                 cmath(r"\ln S_T \mid N_T = n", r"\sim", r"\mathcal{N}\big(\ln S_0 - \lambda\bar kT - \tfrac12\sigma^2T + "
                       r"n\mu_J,\ \ \sigma^2T + n\sigma_J^2\big)", font_size=32, colors={r"\ln S_T \mid N_T = n": SPOT}),
                 cmath(r"C", r"=", r"\sum_{n\ge0} e^{-\lambda T}\frac{(\lambda T)^n}{n!}\ "
-                      r"C_{\text{BS}}\big(S_0 e^{-\lambda\bar kT + n(\mu_J + \sigma_J^2/2)},\ K,\ T,\ \sigma_n\big),\ "
-                      r"\sigma_n^2 = \sigma^2 + \tfrac{n\sigma_J^2}{T}", font_size=28, colors={r"C": OPT}),
+                      r"C_{\text{BS}}\big(S_n,\ K,\ T,\ \sigma_n\big)", font_size=34, colors={r"C": OPT}),
                 cmath(r"\varphi_{\text{Bates}}", r"=", r"\varphi_{\text{Heston}}\cdot\exp\Big(\lambda T\big(e^{iu\mu_J - "
                       r"\frac12\sigma_J^2u^2} - 1 - iu\bar k\big)\Big)", font_size=32, colors={r"\varphi_{\text{Bates}}": OPT})]
         whys = [why(r"Merton (1976): Poisson jumps at rate $\lambda$; the drift $-\lambda\bar k$ compensates them so that "
                     r"$S$ (zero rates) is a martingale", 20),
                 why(r"given $n$ jumps, a sum of independent Gaussians", 20),
-                why(r"condition on $n$, price by Black--Scholes, and weight by the Poisson law (Shreve II, 11.7); the "
+                why(r"with $S_n = S_0 e^{-\lambda\bar kT + n(\mu_J + \sigma_J^2/2)}$ and $\sigma_n^2 = \sigma^2 + n\sigma_J^2/T$: "
+                    r"condition on $n$, price by Black--Scholes, and weight by the Poisson law (Shreve II, 11.7); the "
                     r"House's merton\_series matches COS to $10^{-8}$", 20),
                 why(r"independent factors multiply: Bates (1996) is Heston times Merton's jump factor", 20)]
-        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.8, edge=6.9)
         with self.voiceover(
             (
             "In symbols: the price diffuses, and jumps by e to the J when a Poisson clock rings; the drift minus "
