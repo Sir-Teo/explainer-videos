@@ -56,7 +56,8 @@ class Replicate(VoiceoverScene):
             return float(y[int(min(max(tr.get_value(), 1), n - 1))])
         ro = VGroup(readout(r"\text{strip} + \text{hedge} =", lambda: at(strip + hedge), digits=3, font_size=26, color=IV),
                     readout(r"\text{realized} =", lambda: at(rv), digits=3, font_size=26, color=RV),
-                    MathTex(rf"K_{{\text{{var}}}} = {R['kvar']:.3f}\ \ (\text{{paid at the start}})", font_size=26, color=OPT)
+                    MathTex(rf"K_{{\text{{var}}}} = {R['kvar']:.3f}", font_size=26, color=OPT),
+                    label(r"paid at the start", font_size=18, color=OPT)
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
         src = real_data(rf"the strip of {R['day']} (SSVI fit), Binance BTCUSDT hourly, hedge rebalanced hourly")
         day = R["day"]
@@ -70,7 +71,7 @@ class Replicate(VoiceoverScene):
             f"together paid {tot:.3f}, the realized variance was {rvf:.3f}. The strip bought variance, and the hedge "
             "turned it into exactly the variance that happened."
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(leg), FadeIn(ro[2]))
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(leg), FadeIn(VGroup(ro[2], ro[3])))
             self.add(pl, c1, c2, c4, c3)
             vo.wait_until("a")
             self.play(FadeIn(ro[0]), FadeIn(ro[1]))
@@ -170,7 +171,7 @@ class Replicate(VoiceoverScene):
                 why(r"Taylor to second order around $K = \mathbb{E}V$: the square root is concave"),
                 why(r"take expectations (Demeterfi et al.\ 1999; Carr and Lee 2009): a volatility swap's fair strike is "
                     r"below the variance swap's, by a convexity term the strip cannot hedge")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.65, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.65, edge=6.9)  # four tall rows do not fit
         with self.voiceover(
             "The algebra. A contract samples the price n times and sums squared log returns. <bookmark mark='a'/> The "
             "hedge earns simple returns; expand the logarithm, and the replication error is a sum of cubed returns. "
