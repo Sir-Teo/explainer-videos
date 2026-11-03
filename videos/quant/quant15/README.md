@@ -19,7 +19,7 @@ Every number is computed by the series' own code ([`compute.py`](compute.py), an
 *An education in methods, not investment advice. Firms and episodes are described from the public record;
 investors' losses are reported as the regulators and the press reported them.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 60 minutes)
 
 | # | Chapter | Min | Signature visual · experiment |
 |---|---|---|---|
@@ -192,7 +192,7 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录；投资者亏损按监管机构和媒体的报道描述。*
 
-## 章节
+## 章节（约60分钟）
 
 | # | 章节 | 分钟 |
 |---|---|---|
