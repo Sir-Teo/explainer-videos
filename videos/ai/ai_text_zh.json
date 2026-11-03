@@ -21746,7 +21746,11 @@
     "``bold'': \\ conditional output": "“粗体”：\\ 条件输出",
     "bold target": "粗体目标",
     "drawing/naming exposure: unverified by pair metadata": "画图／命名中的训练接触情况：配对元数据尚不能验证",
-    "Text: Project Gutenberg (Part 1's $30$ novels). \\ Methods implemented with NumPy and SciPy; \\ every number on screen is computed and checked.": "文本：古登堡计划（第1部分的$30$部小说）。\\ 方法使用NumPy和SciPy实现；\\ 画面上的每个数字都经过计算和核对。"
+    "Text: Project Gutenberg (Part 1's $30$ novels). \\ Methods implemented with NumPy and SciPy; \\ every number on screen is computed and checked.": "文本：古登堡计划（第1部分的$30$部小说）。\\ 方法使用NumPy和SciPy实现；\\ 画面上的每个数字都经过计算和核对。",
+    "requires a no-regret online learner": "需要无悔在线学习器",
+    "in its head: \\ effective decay $0.963$": "在脑子里算：\\ 有效衰减 $0.963$",
+    "ReAct, \\ with tools: \\ effective decay $0.979$": "ReAct，\\ 用工具：\\ 有效衰减 $0.979$",
+    "ReAct, \\ checking its work: \\ effective decay $0.993$": "ReAct，\\ 检查结果：\\ 有效衰减 $0.993$"
   },
   "phrases": {
     "width": "宽度",

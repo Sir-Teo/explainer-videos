@@ -113,6 +113,18 @@ interrupted run resumes. No multiprocessing; nothing is downloaded. The METR mea
 `compute.py` from METR's published data file (`metr.org/assets/benchmark_results_1_1.yaml`, retrieved 29 October 2026).
 Part 26's cart-pole equations and drawing are reused through `videos/ai/ai26/envs.py` and `common.py`.
 
+## Independent scientific source repair (2026-11-03)
+
+A new source-only repair corrects checker call accounting, Dreamer diagnostic RNG isolation,
+landing-frame metadata and transition counts, continuous detour collisions/crossing counts,
+FAST's declared integer alphabet, and horizon-specific imitation bounds. Synthetic regression
+checks are not new experiment results. The historical measurements below and other saved numerical
+narration are retained for provenance (the measured warehouse narration has been updated
+from a separately reviewed isolated run); affected figures must not be presented as measurements
+of these corrected recipes until explicit regeneration and review. Legacy affected caches are
+rejected, and scene cache misses never launch computations implicitly. See
+[the phase-1 acceptance scope](../../../docs/qa/part29-independent-science-phase1.md).
+
 ## Results on this machine
 
 All numbers below come from `python -m videos.ai.ai29.compute` on this machine (Linux, CPU); the narration states

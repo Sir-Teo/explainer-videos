@@ -17,6 +17,8 @@ policy's behaviour in the real game, its dreams) and the KL curves.  It is deter
 
 from __future__ import annotations
 
+from contextlib import contextmanager
+
 import numpy as np
 
 from .envs import Catch
@@ -27,6 +29,15 @@ NA = 3
 ZV, ZC = 8, 8  # stochastic state: ZV variables of ZC classes
 ZD = ZV * ZC
 HD = 128
+
+
+@contextmanager
+def diagnostic_rng(seed):
+    """CPU diagnostic sampling must neither consume nor depend on training RNG."""
+    import torch
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(seed)
+        yield
 
 
 def symlog(x):
@@ -166,7 +177,7 @@ class Replay:
 
     @property
     def steps(self):
-        return sum(len(x) for x in self.obs)
+        return sum(len(x) - 1 for x in self.obs)  # initial frames are not environment transitions
 
 
 def run_episode(env, policy, g):
@@ -182,7 +193,7 @@ def run_episode(env, policy, g):
         obs.append(o.reshape(-1))
         acts.append(a)
         rews.append(r)
-        states.append(env.state())
+        states.append(env.observation_state)
     return np.array(obs, np.float32), np.array(acts), np.array(rews, np.float32), np.array(states)
 
 
@@ -269,12 +280,14 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
 
     for it in range(iters + 1):
         if it in snap_iters:
-            snapshot(it)
+            with diagnostic_rng(700_000 + it):
+                snapshot(it)
         if it % eval_every == 0 or it == iters:
-            rate, _ = catch_rate(eval_eps, np.random.default_rng(5000 + it))
+            with diagnostic_rng(800_000 + it):
+                rate, _ = catch_rate(eval_eps, np.random.default_rng(5000 + it))
             curve.append((it, rep.steps, rate))
             if log:
-                with torch.no_grad():
+                with diagnostic_rng(900_000 + it), torch.no_grad():
                     o, a, r = rep.sample(np.random.default_rng(it), 32, L)
                     hs, zs, _, _ = wm.observe(torch.tensor(o), torch.tensor(a))
                     pr = decode_bins(wm.rew(torch.cat([hs, zs], -1))).numpy()
@@ -299,7 +312,7 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
             o_wm.step()
             if k == 0:
                 klc.append((it, float(k_dyn.mean().detach()), float(rec.detach())))
-            losses.append(float(loss))
+            losses.append(float(loss.detach()))
             if not train_policy:
                 continue
             # imagination: from every state of the batch, dream H steps ahead under the actor
@@ -350,11 +363,14 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
         obs, acts, rews, _ = run_episode(env, pol, g)
         rep.add(obs, onehot(acts), rews)
     # how far the model's own dream drifts from reality: open-loop prediction error by steps ahead, on fresh episodes
-    with torch.no_grad():
+    with diagnostic_rng(1_000_000), torch.no_grad():
         gen = np.random.default_rng(31337)
+        probe_actions = np.random.default_rng(31338)
+        def probe_policy(o, a_prev, st):
+            return int(probe_actions.integers(NA)), None
         errs = []
         for k in range(12):
-            ep = run_episode(Catch(gen), random_policy, g)
+            ep = run_episode(Catch(gen), probe_policy, probe_actions)
             ob, ac = torch.tensor(ep[0][None]), torch.tensor(onehot(ep[1])[None])
             hs, zs, _, _ = wm.observe(ob[:, :6], ac[:, :6])
             d = wm.imagine_open_loop(hs[:, -1], zs[:, -1], ac[:, 6:6 + 30])[0]
