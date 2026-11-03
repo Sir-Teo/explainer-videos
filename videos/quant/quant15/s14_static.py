@@ -24,7 +24,7 @@ class Static(VoiceoverScene):
         self.play(FadeOut(c))
 
     def unseen(self):
-        g = np.random.default_rng(31)
+        g = np.random.default_rng(8)  # a path that slips below the barrier between looks, unseen
         n = 600
         t = np.linspace(0, 1, n + 1)
         x = np.concatenate([[0], np.cumsum(g.standard_normal(n) * np.sqrt(1 / n) * 0.35)]) - 0.25 * np.sin(np.pi * t)
@@ -189,7 +189,7 @@ class Static(VoiceoverScene):
             "def static_dic_hedge(K, H, F):",
             "    # put-call symmetry: r = q = 0, a symmetric smile",
             "    return K / H, H * H / K   # number of puts, strike",
-        ], source="explainer/quant/house/exotics.py", width=6.6, font_size=18).to_corner(DL, buff=0.4)
+        ], source="explainer/quant/house/exotics.py", width=6.6, font_size=18).to_edge(LEFT, buff=0.4)
         bsm = s["models"]["BS"]
         outs = [f"static_dic_hedge(100, 90, 100)  ->  ({w:.3f}, {k:.1f})",
                 f"cost {bsm['hedge']:.3f};  exact down-and-in call {s['exact_dic_bs']:.3f}"]
