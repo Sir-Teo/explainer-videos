@@ -63,7 +63,7 @@ class Breaks(VoiceoverScene):
         self.clear_scene()
 
     def palm(self):
-        g = axes([0, 4], [-75, 160], x_length=6.0, y_length=5.0, ylabel=r"dollars per 3Com share, 2 March 2000",
+        g = axes([0, 4], [-110, 160], x_length=6.0, y_length=5.2, ylabel=r"dollars per 3Com share, 2 March 2000",
                  xticks=[], yticks=[-50, 0, 50, 100, 150], font_size=16)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.15)
         ax = g.ax
@@ -82,7 +82,7 @@ class Breaks(VoiceoverScene):
         l2 = VGroup(label(rf"the {RATIO} Palm shares inside it", font_size=17, color=CALL),
                     MathTex(rf"{RATIO} \times {PALM:.2f} = \${hold:.2f}", font_size=22, color=CALL)).arrange(DOWN, buff=0.06)
         l2.next_to(b2, UP, buff=0.08)
-        l3 = VGroup(MathTex(rf"\${stub:.2f}", font_size=24, color=ARB),
+        l3 = VGroup(MathTex(rf"-\${abs(stub):.2f}" if stub < 0 else rf"\${stub:.2f}", font_size=24, color=ARB),
                     label(r"everything else 3Com owned", font_size=17, color=ARB)).arrange(DOWN, buff=0.06)
         l3.next_to(b3, DOWN, buff=0.08)
         gap = 1 - SYNTH_16MAR / PALM_16MAR
