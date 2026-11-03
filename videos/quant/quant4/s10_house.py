@@ -53,7 +53,7 @@ class House(VoiceoverScene):
                     r"days"),
                 why(r"online Newton step (Cutkosky and Orabona 2018): learn the stake from the bettor's own gradients"),
                 why(r"test every mean $m$ at once and keep the survivors: a confidence sequence, valid at all times")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.7, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.15, x=-0.6, buff=0.38, edge=6.9)
         with self.voiceover(
             "The House's monitor bets a fixed menu of stakes. Can a bettor learn its stake instead? Its wealth "
             "multiplies by one plus stake times outcome, each stake chosen from the past, so under the null of mean "
@@ -228,7 +228,7 @@ class House(VoiceoverScene):
     def confidence(self, cs):
         t = np.asarray(cs["t"])
         lo, hi, mu = (np.asarray(cs[k], float) for k in ("lo_bp", "hi_bp", "mean_bp"))
-        g = axes([2018, 2021], [-150, 150], x_length=8.2, y_length=4.4, ylabel=r"Bitcoin's mean daily log return, "
+        g = axes([2018, 2021], [-150, 150], x_length=7.0, y_length=4.4, ylabel=r"Bitcoin's mean daily log return, "
                  r"basis points", xticks=[2018, 2019, 2020, 2021], xfmt=lambda v: f"{int(v)}",
                  yticks=[-150, -50, 0, 50, 150], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
