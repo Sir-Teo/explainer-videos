@@ -202,7 +202,7 @@ class Paths(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, buff=0.4)
         q = predict(r"Two assets with $\rho = 0.9$. What is the second row of the Cholesky factor?", width=5.0,
                     font_size=21).to_corner(DR, buff=0.3)
-        ans = MathTex(r"(0.9,\ \sqrt{0.19}) = (0.9,\ 0.436)", font_size=28, color=GOOD).next_to(q, UP, buff=0.2)
+        ans = MathTex(r"(0.9,\ \sqrt{0.19}) = (0.9,\ 0.436)", font_size=28, color=GOOD).next_to(q, LEFT, buff=0.4).align_to(q, DOWN)
         with self.voiceover(
             "Last, where the uniforms come from on a real machine. numpy's default generator is a sequential "
             "stream: each number follows from the state the last one left. Which numbers a path gets then depends on "
@@ -212,7 +212,7 @@ class Paths(VoiceoverScene):
             "Give path j its own key and compute the paths in any order: the numbers are identical, bit for bit. "
             "<bookmark mark='b'/> Both normal recipes pass a Kolmogorov–Smirnov test on a million draws; and a Python "
             f"loop over payoffs is about {rng['speedup']:,.0f} times slower than one vectorised line. <bookmark mark='c'/> Pause and predict: the Cholesky factor for correlation 0.9. "
-            "Its second row is 0.9 and the square root of 0.19."
+            "<bookmark mark='d'/> Its second row is 0.9 and the square root of 0.19."
             " With paths in hand, the work is to need fewer of them. Next: variance reduction."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(tiles[k]) for k in order], lag_ratio=0.03, run_time=3), FadeIn(head))
@@ -221,6 +221,8 @@ class Paths(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(stats[2]), FadeIn(stats[3]))
             vo.wait_until("c")
-            self.play(FadeIn(q), FadeIn(ans))
+            self.play(FadeIn(q))
+            vo.wait_until("d")
+            self.play(FadeIn(ans))
         self.wait(0.5)
         self.clear_scene()
