@@ -70,11 +70,12 @@ class Surrogate(VoiceoverScene):
             c = r["curves"][str(ck[i])]
             g = VGroup(a)
             for fl, col in (("0", OPT), ("1", BAD)):
-                g.add(curve(a.ax, sg, np.clip(np.asarray(c[fl]), 0.55, 1.35), col, stroke_width=3))
+                # a note still alive below the knock-in level does not exist: draw that state only above it
+                keep = sg >= 0.75 if fl == "0" else np.ones_like(sg, bool)
+                g.add(curve(a.ax, sg[keep], np.clip(np.asarray(c[fl])[keep], 0.55, 1.35), col, stroke_width=3))
                 g.add(VGroup(*[Dot(a.ax.c2p(x, y), radius=0.04, color=WHITE) for x, y in zip(ds, dots[fl])
-                               if 0.55 <= y <= 1.35]))
-            g.add(label(rf"step {ck[i]:,}".replace(",", "{,}"), font_size=18, color=GREY_A).next_to(a, UP, buff=0.05))
-            return g
+                               if 0.55 <= y <= 1.35 and (fl == "1" or x >= 0.75)]))
+            return g  # the replay prints the step above the loss curve
         rp = TrainingReplay(steps, np.clip(L, 0, 0.2), frame, ck, ylabel=r"test RMSE (3 seeds)", log_y=False)
         leg = legend([(OPT, r"the network, not knocked in"), (BAD, r"knocked in"), (WHITE, r"Monte Carlo, 40{,}000 paths")],
                      font_size=16).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.35)
