@@ -12125,7 +12125,13 @@
     "U^{\\lambda}(g) = \\min_{\\lambda}\\Big\\{U\\big(g - \\textstyle\\sum_i \\lambda_i C_i\\big) + \\textstyle\\sum_i \\lambda_i C_i^{\\text{mkt}}\\Big\\}": "U^{\\lambda}(g) = \\min_{\\lambda}\\Big\\{U\\big(g - \\textstyle\\sum_i \\lambda_i C_i\\big) + \\textstyle\\sum_i \\lambda_i C_i^{\\text{mkt}}\\Big\\}",
     "non-additivity: priced leg by leg, the long 95 call and the short 105 call have worst cases summing to 1.001; as one book, 0.623. Netting gamma is worth 0.38 per unit": "非可加性：逐腿定价时，做多95看涨和做空105看涨的最坏情况之和为1.001；作为一本账簿则为0.623。净额gamma每单位值0.38",
     "Avellaneda and Par\\'as (1996): buy or sell 90 and 110 calls at their market prices (Black--Scholes 25\\%) and only the residual bears the worst case. The bounds tighten from [0.31, 0.62] to [0.41, 0.52]": "Avellaneda与Par\\'as（1996）：按市场价格（Black--Scholes 25\\%）买卖90和110看涨期权，只让剩余部分承担最坏情况。界从[0.31, 0.62]收紧到[0.41, 0.52]",
-    "Is the worst-case price of a book the sum of its parts?": "账簿的最坏情况价格是各部分之和吗？"
+    "Is the worst-case price of a book the sum of its parts?": "账簿的最坏情况价格是各部分之和吗？",
+    "\\text{payoff} = \\max\\Big(\\textstyle\\sum_i \\min(\\max(r_i, -3\\%), 3\\%),\\ 0\\Big)": "\\text{收益} = \\max\\Big(\\textstyle\\sum_i \\min(\\max(r_i, -3\\%), 3\\%),\\ 0\\Big)",
+    "= 0.0\\%\\ \\ \\text{on this path}": "= 0.0\\%\\ \\ \\text{（这条路径）}",
+    "\\text{1 Dec}": "\\text{12月1日}",
+    "\\text{2 Jan}": "\\text{1月2日}",
+    "\\text{1 Feb}": "\\text{2月1日}",
+    "\\text{29 Feb}": "\\text{2月29日}"
   },
   "phrases": {
     "you owe": "你欠",
