@@ -63,7 +63,7 @@ class StatePrices(VoiceoverScene):
                 why(r"the bond pays 1 in every state: the state prices sum to its price", 21),
                 why(r"rescale to sum to one: a probability $Q$, and prices are discounted $Q$-expectations", 21),
                 why(r"the density of $Q$ with respect to $P$ is the discount factor, normalized: $Q$ is $P$ reweighted", 21)]
-        step = ladder(self, rows, whys, keep=4, top=1.2, x=-0.6, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=1.6, x=-0.6, buff=0.4, edge=6.9)
         with self.voiceover(
             "Name that normal. Kenneth Arrow, in 1964, imagined a security paying one unit in a "
             "single state: its price is the state price, and any payoff is a bundle of them. "
