@@ -48,8 +48,8 @@ class Crash(VoiceoverScene):
         line = curve(ax, xs, np.clip(frac, 0, 1), DEL, stroke_width=4)
         arr = Arrow(ax.c2p(118, 0.95), ax.c2p(86, 0.55), buff=0, color=LOSS, stroke_width=4,
                     max_tip_length_to_length_ratio=0.12)
-        arr_lab = label(r"prices fall $\Rightarrow$ sell", font_size=26, color=LOSS).next_to(arr.get_center(), DOWN + LEFT,
-                                                                                        buff=0.1)
+        arr_lab = label(r"prices fall $\Rightarrow$ sell", font_size=26, color=LOSS).next_to(arr.get_center(), UP + LEFT,
+                                                                                        buff=0.15)  # above the curve
         card = history_card(1981, r"Leland, O'Brien and Rubinstein", r"portfolio insurance: a floor under a "
                             r"portfolio, built not from bought puts but by replicating them, Black--Scholes delta "
                             r"hedging with index futures", width=5.4, font_size=24).to_edge(RIGHT, buff=0.5).shift(UP * 0.9)
@@ -108,7 +108,7 @@ class Crash(VoiceoverScene):
         day = always_redraw(lambda: label(datetime_str(dates[min(int(k.get_value()), len(dates) - 1)]), font_size=26,
                                           color=GREY_A).to_corner(UR, buff=0.4))
         leg = legend([(SPOT, r"the US market (French)"), (WHITE, r"the insured portfolio")], font_size=20)
-        leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        leg.next_to(g, UP, buff=0.25).align_to(g, LEFT)
         params = note(rf"illustrative: one-year floor at {ins['floor']:.0f}, $\sigma = {100 * ins['sigma']:.0f}\%$, "
                       r"bills at the daily T-bill rate, rebalanced at each close", font_size=18).to_edge(DOWN, buff=0.25)
         i16 = dates.index(str(ins["oct16"]["date"]))
@@ -166,7 +166,8 @@ class Crash(VoiceoverScene):
                      .move_to([ax.c2p(i + 0.5, 0)[0], (y0 + y1) / 2, 0]))
         i0 = dates.index("19871019")
         lab = MathTex(rf"{100 * c['ret']:.1f}\%", font_size=40, color=LOSS).next_to(bars[i0], DOWN, buff=0.15)
-        day = label(r"Monday 19 October 1987", font_size=26, color=LOSS).next_to(lab, RIGHT, buff=0.3)
+        lab.next_to(bars[i0], LEFT, buff=0.15).align_to(bars[i0], DOWN)  # beside the bar, above the axis
+        day = label(r"Monday 19 October 1987", font_size=26, color=LOSS).next_to(lab, DOWN, buff=0.1).align_to(lab, RIGHT)
         ticks = VGroup()
         for i, d_ in enumerate(dates):
             if d_[6:] in ("01", "02") or i == i0:
