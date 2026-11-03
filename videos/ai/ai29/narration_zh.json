@@ -491,6 +491,21 @@
    "scene": "SimToReal",
    "en": "The fix is counterintuitive: make the simulator worse on purpose. <bookmark mark='a'/> Don't train in one simulator. Train in many, each with its own settings, drawn afresh every episode: different masses, different friction, a slower motor, a delay. <bookmark mark='b'/> A policy that works across many settings may be less dependent on one simulator's quirks. Covering the real world can help it transfer, but does not guarantee success. <bookmark mark='c'/> Josh Tobin and colleagues did this for pictures in 2017, randomizing textures and lights, Xue Bin Peng and colleagues for physics in 2018, and OpenAI's robot hand solved a Rubik's cube in 2019 with randomization that widened itself as the hand improved.",
    "zh": "解决办法有违直觉：故意把仿真器弄得更糟。<bookmark mark='a'/>不要只在一个仿真器里训练。要在很多个里训练，每个都有自己的设置，每个回合重新抽取：不同的质量，不同的摩擦，更慢的电机，一点延迟。<bookmark mark='b'/>一个在多种仿真设置下都管用的策略，可能更少依赖某一个仿真器的怪癖；覆盖真实世界的情况有助于迁移，但并不保证成功。<bookmark mark='c'/>2017年，乔希·托宾和同事们对图像这样做，随机化纹理和光照；2018年，彭学斌和同事们对物理这样做；2019年，OpenAI的机械手解开了魔方，用的随机化会随着机械手的进步自己扩大范围。"
+  },
+  "6e2092e86614": {
+   "scene": "SimToReal",
+   "en": "Let's try it on Part 26's cart-pole. <bookmark mark='a'/> Our test cart-pole is another simulation, with a longer, heavier pole, a weaker motor, a one-step delay, and noisy sensors, all inside the range we randomize over. <bookmark mark='b'/> We train simple linear policies with the cross-entropy method, eight seeds each, with the same number of training episodes, and test every round on the simulated test system. <bookmark mark='c'/> In Part 26's simulator, both kinds learn to balance for the full five hundred steps. <bookmark mark='d'/> On the simulated test system, policies trained in a single simulator last 97 steps on average; those trained across randomized simulators, 473.",
+   "zh": "我们在第26部分的倒立摆上试一试。<bookmark mark='a'/>我们的测试倒立摆也是仿真：杆更长、更重，电机更弱，动作晚一步，传感器有噪声，这些都在我们随机化的范围之内。<bookmark mark='b'/>我们用交叉熵方法训练简单的线性策略，每种方法8个随机种子，训练回合数相同，每一轮都在模拟的测试系统上测试。<bookmark mark='c'/>在第26部分的仿真器里，两种策略都学会了平衡满500步。<bookmark mark='d'/>到了模拟的测试倒立摆上，只在一个仿真器里训练的策略，平均坚持97步；在随机化的仿真器里训练的，坚持473步。"
+  },
+  "5110e297d569": {
+   "scene": "SimToReal",
+   "en": "Here is the whole picture: how long each kind of policy balances, across pole lengths and motor strengths, each with the simulated test system's delay and noise. <bookmark mark='a'/> The policies trained in one simulator balance for four hundred steps nowhere on this map, once the delay and the noise are added. <bookmark mark='b'/> Those trained across randomized simulators, in 83 percent, including the test setting. <bookmark mark='c'/> The price is a policy that is less tuned to any one machine; the gain is that it does not need to know which machine it is on.",
+   "zh": "这是全貌：两种策略在不同的杆长和电机力量下能平衡多久，每一处都带着模拟测试系统的延迟和噪声。<bookmark mark='a'/>只在一个仿真器里训练的策略，一旦加上延迟和噪声，在这张图上没有一处能平衡到400步。<bookmark mark='b'/>在随机化仿真器里训练的，是83%，包括测试设置。<bookmark mark='c'/>代价是，策略对任何一台机器都没那么精调；好处是，它不需要知道自己在哪台机器上。"
+  },
+  "473a70715e71": {
+   "scene": "SimToReal",
+   "en": "Domain randomization is now routine. <bookmark mark='a'/> Walking and running for legged robots and humanoids are mostly trained this way, in randomized simulation, and moved to the real machine unchanged. <bookmark mark='b'/> In a typical episode on the simulated test cart-pole, the single-simulator policy drops the pole after 43 steps, and the randomized one after 419. <bookmark mark='c'/> The newest step closes the loop with the previous chapters: in October 2026 Google reported building a simulated twin of a real table from a single photo, and DeepMind pitched Genie 4 as a training ground for robots. Simulators that no one writes by hand, only learned.",
+   "zh": "域随机化如今已是常规做法。<bookmark mark='a'/>腿足机器人和人形机器人的走和跑，大多就是这样训练的：在随机化的仿真里训练，再原封不动地搬到真实的机器上。<bookmark mark='b'/>在模拟测试倒立摆上一个典型的回合里，单一仿真器的策略在43步后让杆倒下了，随机化的策略则在419步后倒下。<bookmark mark='c'/>最新的一步，和前面几章连成了一个圈：2026年10月，谷歌报告说，只用一张照片就为一张真实的桌子建起了仿真的孪生体，而DeepMind把Genie 4定位为机器人的训练场。仿真器不再由人手写，而是学出来的。"
   }
  },
  "title_en": "AI, Built: Part 29, Agents and Worlds",
