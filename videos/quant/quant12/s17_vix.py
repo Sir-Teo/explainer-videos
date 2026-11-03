@@ -124,7 +124,7 @@ class VIX(VoiceoverScene):
                       label(rf"gap {v['gap_mean']:+.1f} $\pm$ {v['gap_sd']:.1f} vol points: same recipe, different wings "
                             r"and quotes", font_size=21, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(g, DOWN, buff=0.4)
         q = label(r"pause and predict: drop every option beyond $\pm 20\%$. Does the index rise or fall?", font_size=21,
-                  color=QC.HOUSE).to_edge(DOWN, buff=0.3)
+                  color=QC.HOUSE).to_edge(DOWN, buff=0.75)  # above the source line
         src = real_data(r"weekly Deribit surfaces; DVOL from Deribit", corner=DL)
         n, a, b, c_, gm, gs = v["n_weeks"], 100 * v["mean_ours"], 100 * v["mean_dvol"], v["corr"], v["gap_mean"], v["gap_sd"]
         with self.voiceover(
