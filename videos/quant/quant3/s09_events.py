@@ -70,7 +70,8 @@ class Events(VoiceoverScene):
         k = ValueTracker(0)
         line = tracing(ax, X, px, k, PRICE)
         post = X >= _yr(20230801)
-        Xp, Pp = X[post], pp[post]
+        # after the ruling the price fell below the old close, so the implied p goes negative: drawn at the floor
+        Xp, Pp = X[post], np.clip(pp[post], -0.2, 1.1)
         k2 = ValueTracker(0)
         pline = tracing(hx, Xp, Pp, k2, QC.Q)
         offer = DashedLine(ax.c2p(_yr(20230810), O), ax.c2p(2025, O), color=GAIN, stroke_width=2)
