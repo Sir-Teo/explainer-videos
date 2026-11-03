@@ -162,7 +162,7 @@ class RL(VoiceoverScene):
         learned = VGroup(*[curve(ax, gp, np.clip(f_, 0.5, 3.0), ALT, stroke_width=2.5).set_stroke(opacity=0.8)
                            for f_ in fin])
         leg = legend([(VALUE, r"dynamic programming: the band"), (ALT, r"PPO, 5 seeds (mid-horizon)"),
-                      (GREY_C, r"do nothing")], font_size=17).next_to(g, UP, buff=0.05).align_to(g, LEFT)
+                      (GREY_C, r"do nothing")], font_size=17).next_to(g, UP, buff=0.18).align_to(g, LEFT)
         pg, pt = np.asarray(pc["ppo_growth"]), np.asarray(pc["ppo_turnover"])
         head = VGroup(*[label(t_, font_size=19, color=GREY_B) for t_ in (r"rule", r"net growth", r"turnover")])
         rows_ = [(r"band (DP)", pc["band"], VALUE), (r"rebalance to Merton", pc["merton"], KELLY),
