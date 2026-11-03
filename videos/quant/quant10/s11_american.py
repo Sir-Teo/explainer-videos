@@ -104,7 +104,7 @@ class American(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[60, 140, 20], y_range=[0, 1, 0.25], z_range=[0, zmax, 2], x_length=7.6, y_length=5.4,
                         z_length=3.2, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.5 + RIGHT * 0.8)  # the axis key keeps the upper-left corner
+        ax.shift(DOWN * 0.5)
 
         def f(s_, t_):
             col = np.array([np.interp(t_, ta, P[:, j]) for j in range(len(sp))])
@@ -123,7 +123,7 @@ class American(VoiceoverScene, ThreeDScene):
         hint = VGroup(label(r"stock price $S$", font_size=24, color=SPOT), label(r"time left $\tau$", font_size=24,
                                                                                color=THE),
                       label(r"early-exercise premium $P_A - P_E$", font_size=24, color=OPT)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
+            DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UR, buff=0.35)  # the vertical axis runs through the upper left
         foot = note(r"600-step trees at every point; gold: the free boundary $S^*(\tau)$", font_size=20)
         foot.to_corner(DR, buff=0.3)
         self.set_camera_orientation(phi=66 * DEGREES, theta=-60 * DEGREES, zoom=0.85)
