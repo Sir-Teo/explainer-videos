@@ -83,7 +83,7 @@ class Stopping(VoiceoverScene):
         lights = VGroup(*[Dot(ax.c2p(x, g[x]), radius=0.12, color=KELLY) for x in range(N + 1) if stop[x]])
         st_l = label(r"stop where the rope touches a peg; wait where it hangs above", font_size=22, color=KELLY)
         st_l.to_corner(UL, buff=0.5)
-        q = pause_card(r"Which pegs will the rope touch?", width=4.4, font_size=22).to_corner(UL, buff=0.4)
+        q = pause_card(r"Which pegs will the rope touch?", width=4.4, font_size=22).to_corner(UR, buff=0.4)  # the counter that takes this corner arrives as the card leaves
         with self.voiceover(
             "A payoff for every position, a skyline of pegs. Pause and predict: which pegs will the value touch? "
             "<bookmark mark='a'/> Value iteration: start at the payoff, and replace each value by the larger of its peg and "
