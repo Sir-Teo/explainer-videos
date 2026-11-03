@@ -61,6 +61,8 @@ class MC(VoiceoverScene):
                     readout(r"\hat V_n =", lambda: m0[max(upto(), 1) - 1], digits=3, font_size=28, color=OPT),
                     readout(r"\pm", lambda: 1.96 * se0[max(upto(), 1) - 1], digits=3, font_size=28, color=OPT)
                     ).arrange(RIGHT, buff=0.9).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
+        # the numbers widen as n grows (10 -> 1,000,000): keep the three readouts spaced as they do
+        rd.add_updater(lambda m: m.arrange(RIGHT, buff=0.6).next_to(g, UP, buff=0.05).align_to(g, RIGHT))
         leg = legend([(OPT, r"seed 1 and its 95\% band"), (QC.THETA, r"seed 2"), (QC.DELTA, r"seed 3"),
                       (WHITE, rf"Black--Scholes: {ex:.4f}")], font_size=17).next_to(g, RIGHT, buff=0.25).align_to(g, UP)
         w = {k: 1.96 * se0[int(np.searchsorted(ck, k))] for k in (2, 4, 6)}
