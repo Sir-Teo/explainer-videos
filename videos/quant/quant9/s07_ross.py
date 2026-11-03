@@ -209,7 +209,7 @@ class Ross(VoiceoverScene):
         med = curve(ax, s, np.asarray(sw["err_med"]), ARB, stroke_width=3)
         one = curve(ax, s, np.asarray(sw["err_one"]), CALL, stroke_width=4)
         leg = legend([(CALL, r"the economy above"), (ARB, rf"{sw['n_econ']} random economies: median, 5--95\%")],
-                     font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+                     font_size=18).next_to(g, UP, buff=0.22).align_to(g, LEFT)
         side = VGroup(
             wrapped_label(r"each economy: random states, persistence, risk aversion and discount rate; the permanent "
                           r"shock's strength turned up from zero", 4.6, 20, GREY_A),
