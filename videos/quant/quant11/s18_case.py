@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant11.common import (ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, axes3d, fixed, hint3d, illustration,
-                                         load)
+                                         load, surf)
 
 RECORD = [
     (r"April 2024", r"Jane Street sues Millennium Management and two former traders in New York (S.D.N.Y. 24-cv-2783), "
