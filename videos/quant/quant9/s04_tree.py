@@ -28,7 +28,7 @@ class Tree(VoiceoverScene):
 
     def one_step(self, t):
         o = t["one"]
-        g = axes([60, 140], [-50, 35], x_length=5.6, y_length=4.4, xlabel=r"stock price $S$",
+        g = axes([60, 140], [-50, 35], x_length=4.4, y_length=4.4, xlabel=r"stock price $S$",
                  ylabel=r"value $V$", xticks=[80, 100, 120], yticks=[-40, 0, 10, 20], font_size=17)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -57,7 +57,8 @@ class Tree(VoiceoverScene):
                 why(r"collect the terms in $V_u$ and $V_d$: the weights add to one", 19),
                 why(r"no real probability appears anywhere; $q$ is a probability exactly when there is no arbitrage "
                     r"(chapter 4)", 19)]
-        step = ladder(self, rows, whys, keep=4, top=3.4, x=3.4, buff=0.62, edge=6.95)
+        # '=' at x = 1.5: room on the right for the long rows, which otherwise shrink to illegibility
+        step = ladder(self, rows, whys, keep=4, top=3.4, x=1.5, buff=0.55, edge=6.95)
         res = MathTex(rf"\Delta = {o['Delta']:.1f},\ \ B = {o['B']:.0f},\ \ V_0 = {o['V']:.0f},\ \ q = {o['q']:.1f}",
                       font_size=30, color=Q_C).to_corner(DR, buff=0.4)
         with self.voiceover(
