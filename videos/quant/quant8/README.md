@@ -24,7 +24,7 @@ simulations, labelled on screen.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 55 minutes)
+## Chapters (about 57 minutes)
 
 * **How much to bet, and how we got here.** Haghani and Dewey (2016) gave 61 people $25 and a 60% coin at even odds;
   about 30% went bust. *Live:* 160 players in each of four columns flip the same coin 300 times on a log-wealth axis
@@ -298,7 +298,7 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约55分钟）
+## 各章（约57分钟）
 
 * **该下多大的注，以及我们如何走到这里。** 哈加尼和杜威（2016）的硬币游戏，约30%的人输光。现场模拟：四列各160名玩家同抛一枚硬币300次（全押91%输光；押40%有18%输光；押20%有96%达到上限、无人输光）。凯利曲线；1738–2017年的历史，以期望效用为根的一棵树。
 * **1. 效用与风险厌恶。** 公理卡片；赌博作为挂在效用曲线上的两个砝码，确定性等价86.6（对数效用）；伽马旋钮实时弯曲曲线（伽马为3时67.1，为30时51.2）。推导阿罗-普拉特；精确值对比近似值；拉宾的警告。
