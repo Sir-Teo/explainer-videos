@@ -99,6 +99,7 @@ class Accruals(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[-0.05, 0.18, 0.05], y_range=[-0.05, 0.08, 0.05], z_range=[-0.08, 0.2, 0.05],
                         x_length=6.4, y_length=4.4, z_length=4.0, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(IN * 0.9)  # lower on screen, clear of the captions in the top corners
         dots = VGroup(*[Dot3D(ax.c2p(x, y, z), radius=0.035, color=QC.SPOT, resolution=(4, 4)) for x, y, z in P])
         plane = Surface(lambda u, v: ax.c2p(u, v, b0 + b1 * u + b2 * v), u_range=[-0.05, 0.18], v_range=[-0.05, 0.08],
                         resolution=(10, 6), fill_opacity=0.45, stroke_width=0.6, stroke_color=GREY_B,
@@ -106,9 +107,9 @@ class Accruals(VoiceoverScene, ThreeDScene):
         hint = VGroup(label(r"$x$: cash flow / assets", font_size=22, color=CF_C),
                       label(r"$y$: accruals / assets", font_size=22, color=ACC_C),
                       label(r"$z$: next year's earnings / assets", font_size=22, color=IS_C),
-                      label(r"simulated: 2{,}000 firms, 10 years; profit persists 0.8; each accrual carries a booked "
-                            r"error that reverses next year", font_size=17, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                                  buff=0.1)
+                      wrapped_label(r"simulated: 2{,}000 firms, 10 years; profit persists 0.8; each accrual carries a "
+                                    r"booked error that reverses next year", 4.6, 17, GREY_B)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                       buff=0.1)
         hint.to_corner(UL, buff=0.35)
         res = VGroup(MathTex(rf"\gamma_1 = {b1:.2f} \pm {1.96 * a['sim_se'][1]:.2f}", font_size=32, color=CF_C),
                      MathTex(rf"\gamma_2 = {b2:.2f} \pm {1.96 * a['sim_se'][2]:.2f}", font_size=32, color=ACC_C),
@@ -168,8 +169,8 @@ class Accruals(VoiceoverScene, ThreeDScene):
         else:
             gap_line = "There is no gap here at all, and seven firms are far too few to say anything. "
         pp = desk_question(r"Pause and predict: two firms each earn 10\% of assets. One collected it in cash, one "
-                           r"booked it as receivables. Whose earnings will be higher next year?", width=11.6,
-                           font_size=21).to_edge(DOWN, buff=0.25)
+                           r"booked it as receivables. Whose earnings will be higher next year?", width=6.2,
+                           font_size=21).to_corner(DR, buff=0.55)
         with self.voiceover(
             "Now real filings. The House's fundamentals store holds the full XBRL histories of a handful of large companies; seven "
             f"of them are not banks, which gives {a['real_n']} firm-years with a following year. <bookmark mark='a'/> The same "
