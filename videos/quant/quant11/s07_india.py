@@ -103,7 +103,7 @@ class India(VoiceoverScene):
             "What does a short-dated, out-of-the-money option pay its buyer? India's retail data is aggregated, so "
             "measure the instrument on another market. Here are sixty real tickets: out-of-the-money Bitcoin options "
             "bought on Deribit, drawn at random from a hundred Wednesday mornings, each expiring within two days. <bookmark mark='a'/> Expiry. Most turn "
-            "grey: worthless. A few pay several times their price. <bookmark mark='b'/> Over a hundred Wednesdays, "
+            "grey: worthless. A handful pay back more than they cost. <bookmark mark='b'/> Over a hundred Wednesdays, "
             f"{o['n_buy']:,} such tickets: {100 * o['worthless']:.0f} percent expired worthless, and "
             f"{100 * o['profitable']:.0f} percent paid back more than they cost. Weighted by premium, buyers got back "
             f"{100 * (1 + o['ret_buy']):.0f} cents per dollar. <bookmark mark='c'/> One caution: the takers who sold "
