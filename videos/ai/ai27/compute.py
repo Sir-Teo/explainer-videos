@@ -635,7 +635,7 @@ BASELINES = ("none", "shifted", "shared", "value", "group")
 SHIFT = 5.0  # a constant added to every score: a reward model that fits the comparisons exactly as well (chapter 4)
 
 
-def compute_baselines(topics=6, batches=6, n=16):
+def compute_baselines(topics=6, batches=6, n=16, *, observer=None):
     """RLHF's first policy-gradient step (the policy is still the fine-tuned model, so the KL term is zero), estimated
     from one batch of n lines to one question, five ways: with no baseline; with no baseline and every score shifted
     by SHIFT (a reward model that fits the comparisons exactly as well); with one baseline for every question (the
@@ -672,6 +672,25 @@ def compute_baselines(topics=6, batches=6, n=16):
             cos_t[kd].append(float(np.mean([float(F.cosine_similarity(G[i], G[j], 0))
                                             for i in range(batches) for j in range(i + 1, batches)])))
             sq[kd].append(float(np.mean([float(x @ x) for x in G])))
+        if observer is not None:
+            # Opt-in observation AFTER the original metrics. Views are detached/read-only;
+            # no callback is imported or invoked on the default producer path.
+            with torch.no_grad():
+                gr, g1 = tuple(x.detach().cpu().numpy().view() for x in G_r), tuple(
+                    x.detach().cpu().numpy().view() for x in G_1)
+                rewards = tuple(np.array(batch_r[(t, b)], copy=True) for b in range(batches))
+                for array in (*gr, *g1, *rewards):
+                    array.flags.writeable = False
+                observer({"topic": t, "index": list(ts).index(t), "batches": batches, "n": n,
+                          "G_r": gr, "G_1": g1, "rewards": rewards,
+                          "samples": [{"seed": 30_000 + 100 * list(ts).index(t) + b,
+                                       "prompt_ids": list(prompt),
+                                       "output_ids": [list(ids) for ids in outs[(t, b)]]} for b in range(batches)],
+                          "parameters": [{"name": name, "shape": list(p.shape), "dtype": str(p.dtype)}
+                                         for name, p in pol.named_parameters()],
+                          "constants": {kd: [base[kd](t, b) for b in range(batches)] for kd in BASELINES},
+                          "native": {kd: {"cos": cos_t[kd][-1], "sq": sq[kd][-1]} for kd in BASELINES}})
+                del gr, g1, rewards, array
     out = {"topics": list(ts), "batches": batches, "n": n, "question_mean": [q_mean[t] for t in ts],
            "shared": shared, "kinds": list(BASELINES), "shift": SHIFT}
     for kd in BASELINES:

@@ -6,7 +6,8 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from .compute import CACHE, load  # noqa: F401
+from .baseline_precision import load_baseline_metrics
 
 PART = 27
 MONO = "DejaVu Sans Mono"
@@ -23,6 +24,11 @@ KLC = C.KL  # KL divergence, the leash
 PROXY = C.MODEL_Q  # the learned reward model (a proxy)
 GOLD = C.BITS  # the true taste the proxy stands in for: yellow, apart from the proxy's orange
 ADAPT = C.MLP  # adapters, task vectors
+
+
+def baseline_metrics() -> dict:
+    """Accepted FP64 reductions of the preserved FP32 baseline gradients."""
+    return load_baseline_metrics(CACHE.dir)
 
 
 def ticks(lo, hi, n=4) -> list:
@@ -50,7 +56,7 @@ def rlhf_gains(h, slope: float, rm0: float, gold0: float, window: int):
     gold.  ``rm0``, ``gold0``: the fine-tuned model's averages over every question."""
     h = np.asarray(h)
     roll = lambda y: np.convolve(y, np.ones(window) / window, mode="valid")
-    x = h[(window - 1) // 2: (window - 1) // 2 + len(h) - window + 1, 0]
+    x = 0.5 * (h[:len(h) - window + 1, 0] + h[window - 1:, 0])  # exact window midpoint, including even windows
     return x, (roll(h[:, 1]) - rm0) / slope, roll(h[:, 2]) - gold0
 
 

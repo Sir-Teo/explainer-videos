@@ -5,7 +5,7 @@ and [the syllabus](../SYLLABUS.md)). How a model that predicts text becomes an a
 fine-tuning, low-rank adapters, reward models learned from comparisons and what one of them actually learns,
 reinforcement learning from human feedback, its exact optimum and how PPO is fitted to a language model, Goodhart's
 law measured, direct preference optimization, AI feedback under written principles, distillation, model merging, and
-what goes wrong. Every method runs on the series' own model: a 6.8-million-parameter transformer trained on thirty
+what goes wrong. The core experiments run on the series' own model: a 6.8-million-parameter transformer trained on thirty
 novels (`explainer/ai/novels.py`), fine-tuned on this computer, and every number on screen is computed from it or
 cited.
 
@@ -26,7 +26,7 @@ cited.
 * **4. Learning what people prefer.** Why comparisons (InstructGPT's labellers agreed 73% of the time);
   Bradley–Terry = Elo (Part 26); the reward model's loss; only differences are identified; our simulated people and
   their hidden taste ("gold": mood, concision past 12 words, no repetition); reward-model accuracy against the number
-  of comparisons, and its ceiling, tested on comparisons between lines no reward model trained on; InstructGPT's
+  of comparisons, and observed gold-label agreement, tested on held-out sample indices (exact generated-text overlap is not excluded); InstructGPT's
   reward model at 69.6%.
 * **5. Inside our reward model.** What a real lab cannot do: compare the reward model with the taste it learned. On
   600 new lines: its score against gold, raw and with each question's average taken out (the shift chapter 4 said
@@ -37,16 +37,16 @@ cited.
   disagree most, and why gold disagrees; each question's favourite line by the reward model, what it believed and
   what gold says: regressional and extremal Goodhart (Manheim & Garrabrant 2018).
 * **6. Reinforcement learning on a leash.** The KL-regularized objective; its optimum π* ∝ π_ref e^{r/β}, derived;
-  the optimum over eight real lines of comparable probability as β falls; PPO fitted to a language model: an answer
+  a finite-candidate illustration with known toy gold scores and a conditional reference over eight selected lines as β falls; PPO fitted to a language model: an answer
   as an episode, InstructGPT's per-token KL penalty with the reward model's score at the end, the value network
   initialized from the reward model, four networks in memory; baselines: the value network, RLOO's leave-one-out
-  (Ahmadian et al. 2024), GRPO's group mean and spread (Shao et al. 2024; Part 28), and our runs' batch mean (= RLOO ×
+  (Ahmadian et al. 2024), GRPO's group mean and spread (Shao et al. 2024; Part 28), and our runs' batch-centered advantages (= RLOO advantages ×
   15/16); measured on our model: how well two batches' gradient estimates agree with no baseline, one shared
   baseline, each question's average, and the batch mean; KL-penalized policy gradient at two penalties (three seeds
   each), the reward model's belief against gold, both in gold units; the loosely leashed run replayed with gold's
   score beside its lines.
 * **7. When the measure becomes the target.** Goodhart (1975) and Strathern (1997); the boat that circles forever
-  (OpenAI 2016); best-of-n's KL = log n − (n−1)/n, derived; best-of-n on our model with a small and a large reward
+  (OpenAI 2016); best-of-n's KL upper bound log n − (n−1)/n, with equality for continuous rewards, derived; best-of-n on our model with a small and a large reward
   model, proxy and gold each on its own scale; Gao, Schulman & Hilton's functional forms (2023).
 * **8. Direct preference optimization.** DPO derived from the optimum and Bradley–Terry (Rafailov et al. 2023);
   trained on our comparisons and compared with RLHF; likelihood displacement; every method on one chart, gold gained
@@ -87,9 +87,9 @@ EXPLAINER_TTS=silent python tools/build.py ai27 -q l --fps 30 --lang en -j 2    
 
 `compute.py` builds the two tasks from the novels (test questions come from paragraphs held out of the base model's
 training), fine-tunes, collects simulated comparisons, trains every reward model and policy, and looks inside the
-reward models; `post.py` holds the chat template, loss masking, LoRA and sampling. Every random choice is seeded
-(numpy PCG64, `torch.manual_seed`, one `torch.Generator` per sampling call), so the same machine gives the same
-numbers; another machine's floating point can move the last digits, and the narration (English and Chinese) is
+reward models; `post.py` holds the chat template, loss masking, LoRA and sampling. Most random choices are seeded
+(numpy PCG64, `torch.manual_seed`, one `torch.Generator` per sampling call), but LoRA adapter initialization is
+not yet fully seeded; do not assume bitwise reproducibility across full and partial runs. Another machine's floating point can move the last digits, and the narration (English and Chinese) is
 written over the cached results and branches on them. Fine-tuning checkpoints every 50 steps (`.cache/ai27/*.ckpt`);
 the items made of several runs (lora, rlhf, dpo_sweep, merge) keep each finished run (`CACHE.partial`); every other
 item takes minutes. The torch thread count is set only when `compute.py` runs as a program (`AI27_THREADS`, default
@@ -100,12 +100,77 @@ data and sft about 12 minutes, lora 1.1 hours, prefs 4 minutes, rm 1.1 hours, rl
 1.4 hours, dpo 10 minutes, dpo_sweep 26 minutes, merge 25 minutes, inside about 3 minutes, baselines about 2 minutes,
 closed under a minute; a laptop with four free cores is several times faster.
 
-## Results on this machine
+## Reviewed baseline precision input
+
+The QA baseline chart reads a separate precision derivative: `.cache/ai27/baselines_f64.json`, together with
+`baselines_f64.audit.json` and the unchanged original `baselines.json`. The reader requires a passing independent
+audit bound to both file hashes; it never generates a missing experiment or falls back to an unreviewed result.
+Restore the reviewed three-file bundle before rendering this chart. Recomputing the original baseline experiment
+invalidates that audit and requires a new independently reviewed precision pass.
+
+The original FP32 pointwise gradients and all sampled inputs are preserved. Only cosine and squared-length
+reductions use FP64. The original strict numerical audit remains failed; the separate derivative passed the same
+independent NumPy algorithm and tolerances. This changes none of the five displayed three-decimal cosine values
+on the current QA run. The figure labels its precision. The accompanying squared-length statistic is a second moment, not variance.
+
+### Explicit streamed v2 precision runs
+
+The legacy three-file bundle above is not included in a source checkout. The original
+`python -m videos.ai.ai27.compute baselines` command still produces FP32 results only;
+it does not produce the precision derivative or independent audit.
+
+For a **new** run, explicitly select the streamed protocol:
+
+```bash
+AI27_THREADS=1 python -m videos.ai.ai27.baseline_precision_tools run --run-id fresh-baseline-001
+python -m videos.ai.ai27.baseline_precision_validate .cache/ai27/baseline-runs/fresh-baseline-001
+```
+
+The runner requires existing `.cache/novels/base.pt`, `base.json`, `tokenizer.json`,
+`.cache/ai27/sft.pt` and `rm.pt`. It fails before model loading if they are missing,
+checks their hashes before/after the run, and forbids prerequisite training or corpus
+regeneration. This is one original baseline sampling/backward calculation, **not**
+model training: the original sampling seeds, weights, FP32 autograd and native metrics
+are preserved. No optimizer step is added.
+
+After each topic's original metrics, an optional read-only observer computes FP32
+`G_r - c*G_1` before promoting vectors for FP64 reductions. An independent NumPy
+implementation checks affine-vector bits, cosines and squared lengths on the same
+live gradients, using the declared cosine tolerances (absolute `5e-6`, relative
+`5e-5`) and squared-length tolerances (absolute `1e-10`, relative `5e-5`). The original
+FP32 comparison is reported as it actually passes or fails; a historical failure is
+not required for a new v2 run. Original outputs and reports are never overwritten.
+
+The new run directory contains the original `baselines.json`, separate
+`baselines_f64.json`, compact per-topic token/reward/metric receipts, a versioned
+source/model/runtime manifest, and `baselines_f64.audit.json` written last. Gradients
+are released after the topic check and are **not retained on disk**. Subsequent
+`baseline_precision_validate` calls verify hashes and receipt aggregation; they do
+not independently replay discarded gradients or rerun model inference. A fresh run
+is reproducible through the public entrypoint with its pinned prerequisites, but
+bitwise identity across platforms or with older cached outputs is not promised.
+
+Set `AI27_BASELINE_RUN=fresh-baseline-001` on the existing render command to select
+that audited run. Selection is explicit and fails on a missing, incomplete, changed
+or synthetic run. Without selection, the legacy v1 reader and its stronger historical
+failed-report requirements remain unchanged; there is no silent fallback. Run IDs
+permit only letters, digits, underscores and hyphens. Run directories are exclusive:
+preserve a failed run and choose a new ID rather than overwriting it.
+
+The synthetic controls in `tests/test_ai27_baseline_precision_v2.py` use tiny fake
+numerical dependencies and mark their outputs non-renderable. They are not delivery
+proof or acceptance of real baseline results. Before using a newly computed real
+run in production, execute the complete public path with the pinned prerequisites
+and review any changed displayed measurements and corresponding scene evidence.
+
+## Historical results on the original machine
+
+These are preserved historical outcomes, not measurements from the current QA worker or the newly restored canonical base. The best-of-n `kl` array is the continuous-reward upper-bound coordinate. The chapter 8 cross-method plot uses different prompt populations (12 for best-of-n, 30 for trained-policy gold, 10 for trained-policy KL), so it cannot establish an equal-KL ranking. LoRA initialization is not fully seeded by the current recipe, and sampled-index splits do not guarantee disjoint unique texts; both need separately reviewed recipe corrections and new measurements.
 
 - **Tasks**: which-book 6,000 training / 560 test sentences, 30 titles (chance 3%); a line about... 5,569 training lines, 30 topics.
-- **SFT** (600 steps): which-book 0% → 27% on all 560 test sentences (in-training evaluations on an even sample of 150: 12%, 16%, 22%, 23%, 25%, 23%); held-out novel loss 3.602 → 4.226 nats; its lines: gold -0.25, 93% end cleanly.
+- **SFT** (600 steps): which-book base 0% on 120 evenly sampled test sentences → 27% on all 560 after fine-tuning (in-training evaluations on an even sample of 150: 12%, 16%, 22%, 23%, 25%, 23%); held-out novel loss 3.602 → 4.226 nats; its lines: gold -0.25, 93% end cleanly.
 - **LoRA** (which-book only, 600 steps): rank 1: 26,208 trained numbers, 14%, forgetting +0.894; rank 4: 104,832 trained numbers, 28%, forgetting +1.253; rank 16: 419,328 trained numbers, 31%, forgetting +1.856; full: 6,843,648 trained numbers, 33%, forgetting +1.103.
-- **Comparisons**: 4,200 training, 840 test (between lines no reward model trained on). Reward models: 100 → 53%, 400 → 59%, 1,600 → 63%, 4,200 → 64%; ceiling (people agree with gold) 73%.
+- **Comparisons**: 4,200 training, 840 test (held-out sample indices; exact generated-text overlap not excluded). Reward models: 100 → 53%, 400 → 59%, 1,600 → 63%, 4,200 → 64%; observed gold-label agreement 73% (a noise reference, not a hard finite-test ceiling).
 - **Inside the reward model** (600 new lines, 20 per question): correlation with gold 0.52 raw, 0.52 within a question (small model: 0.25, 0.24); slope 1.84 (perfect learner 4; small 3.02); orders 71% of 5,442 untied pairs as gold does (small 59%; one simulated person 76%).
   Weights on gold's terms as a share of gold's own (gold units): large mood 0.26, length 1.94, repetition 0.11, too short 0.87 (R² 0.46); small mood 0.14, length 2.23, repetition -0.50, too short 0.56 (R² 0.12).
   Words (deleted one at a time, ≥6 occurrences, 235 words; correlation with gold's change 0.20): raise most: good, music, said, than, gave, only, hand, place; lower most: felt, didn't, began, followed, don't, sea, reached, two.
@@ -192,7 +257,7 @@ the maximum is β log Z, Z = Σ_y π_ref(y) e^{r(y)/β}.
 *Solution.* J(π) = Σ π (r − β log(π/π_ref)) = −β Σ π log(π / (π_ref e^{r/β})) = −β KL(π ‖ π*) + β log Z. KL ≥ 0 with
 equality only at π = π* (Gibbs), so π* is the maximizer and J(π*) = β log Z.
 
-**3. Best-of-n.** Show that best-of-n sampling has KL(π_BoN ‖ π_ref) = log n − (n−1)/n when the reward has no ties.
+**3. Best-of-n.** For an atomless reward distribution under π_ref, show that best-of-n sampling has KL(π_BoN ‖ π_ref) = log n − (n−1)/n. For discrete text this expression is generally an upper bound, not an equality.
 
 *Solution.* Let u ∈ [0, 1] be an answer's quantile under π_ref, ordered by reward. The best of n has quantile
 max(u_1, …, u_n), with density n u^{n−1}; since π_BoN(y) / π_ref(y) = n u(y)^{n−1}, the KL is E[log n + (n−1) log u]
@@ -201,17 +266,18 @@ with u ~ Beta(n, 1). E[log u] = −1/n, so KL = log n − (n−1)/n.
 **4. What DPO's gradient weighs.** Compute the gradient of the DPO loss for one pair, with r̂ = β log π_θ/π_ref.
 
 *Solution.* L = −log σ(r̂_w − r̂_l), so ∇L = −σ(r̂_l − r̂_w) (∇r̂_w − ∇r̂_l) = −β σ(r̂_l − r̂_w) (∇ log π_θ(y_w) −
-∇ log π_θ(y_l)). Each pair pushes the preferred answer up and the rejected one down, weighted by how wrongly the
-implicit reward currently orders them.
+∇ log π_θ(y_l)). Each pair contrasts the two log-probability gradients, weighted by how wrongly the implicit reward
+currently orders them. With shared parameters, this does not guarantee that either answer's absolute probability
+moves in its coefficient's direction; chapter eight measures that distinction.
 
 **5. When LoRA stops saving.** A rank-r adapter on a d × k matrix has r(d + k) parameters. For d = k = 4096, at what
 rank does it have as many as the matrix?
 
-*Solution.* r(d + k) = dk gives r = dk/(d + k) = 2048. Ranks in practice are 4 to 64, a few thousandths of the
-matrix.
+*Solution.* r(d + k) = dk gives r = dk/(d + k) = 2048. For ranks 4 to 64, the adapter has about 0.2% to 3.1% of
+this 4096 × 4096 matrix's parameters.
 
-**6. Forward KL matches moments.** Fit a Gaussian q to a density p by minimizing KL(p ‖ q). Show that q has p's mean
-and variance.
+**6. Forward KL matches moments.** Let density p have finite second moment and finite differential entropy. Fit a
+Gaussian q by minimizing KL(p ‖ q). Show that q has p's mean and variance.
 
 *Solution.* KL(p ‖ q) = −H(p) − E_p[log q] and −E_p[log q] = ½ log(2πσ²) + E_p[(x − μ)²]/(2σ²). Setting the
 derivatives to zero gives μ = E_p[x] and σ² = E_p[(x − μ)²]. This is why the forward-KL fit of chapter ten spreads
@@ -246,7 +312,7 @@ Z = Σ_y π_ref(y) e^{r(y)/β}。
 *解答。* J(π) = Σ π (r − β log(π/π_ref)) = −β Σ π log(π / (π_ref e^{r/β})) = −β KL(π ‖ π*) + β log Z。KL ≥ 0，且只在
 π = π* 时取等号（吉布斯不等式），所以 π* 是最优解，J(π*) = β log Z。
 
-**3. 最优n选1。** 证明当奖励没有并列时，最优n选1采样满足 KL(π_BoN ‖ π_ref) = log n − (n−1)/n。
+**3. 最优n选1。** 证明：当π_ref下的奖励分布连续且无原子时，最优n选1采样满足 KL(π_BoN ‖ π_ref) = log n − (n−1)/n。对离散文本，这个表达式一般是上界，不是等式。
 
 *解答。* 设u ∈ [0, 1]是一个回答按奖励排序在π_ref下的分位数。n个里最好的那个，分位数是 max(u_1, …, u_n)，密度为 n u^{n−1}；
 由于 π_BoN(y)/π_ref(y) = n u(y)^{n−1}，KL = E[log n + (n−1) log u]，其中 u ~ Beta(n, 1)。E[log u] = −1/n，所以
@@ -255,13 +321,13 @@ KL = log n − (n−1)/n。
 **4. DPO的梯度在加权什么。** 记 r̂ = β log π_θ/π_ref，求一对样本上DPO损失的梯度。
 
 *解答。* L = −log σ(r̂_w − r̂_l)，所以 ∇L = −σ(r̂_l − r̂_w)(∇r̂_w − ∇r̂_l) = −β σ(r̂_l − r̂_w)(∇log π_θ(y_w) −
-∇log π_θ(y_l))。每一对都把被偏好的回答往上推、被拒绝的往下压，权重是隐式奖励目前把它们排错的程度。
+∇log π_θ(y_l))。每一对都对比两个对数概率的梯度，权重由隐式奖励当前的排序决定。参数共享时，这不保证任一回答的绝对概率都沿其系数所指的方向变化；第8章测量了这个区别。
 
 **5. LoRA什么时候不再省。** 秩为r的适配器放在d × k矩阵上，有 r(d + k) 个参数。d = k = 4096 时，秩为多少时它和矩阵一样大？
 
-*解答。* r(d + k) = dk，得 r = dk/(d + k) = 2048。实际用的秩是4到64，只有矩阵的千分之几。
+*解答。* r(d + k) = dk，得 r = dk/(d + k) = 2048。秩取4到64时，约为这个4096 × 4096矩阵参数量的0.2%到3.1%。
 
-**6. 正向KL匹配矩。** 用最小化 KL(p ‖ q) 的方法，把高斯分布q拟合到密度p上。证明q的均值和方差等于p的。
+**6. 正向KL匹配矩。** 设密度p的二阶矩和微分熵都有限。用最小化 KL(p ‖ q) 的方法，把高斯分布q拟合到p上。证明q的均值和方差等于p的。
 
 *解答。* KL(p ‖ q) = −H(p) − E_p[log q]，而 −E_p[log q] = ½ log(2πσ²) + E_p[(x − μ)²]/(2σ²)。令导数为零，得
 μ = E_p[x]，σ² = E_p[(x − μ)²]。这就是第10章里正向KL的拟合会同时覆盖两个峰的原因。
