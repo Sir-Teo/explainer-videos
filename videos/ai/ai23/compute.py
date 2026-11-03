@@ -2,13 +2,13 @@
 
     python -m videos.ai.ai23.compute                 # everything missing (Part 1's novels, Part 21's letters)
     python -m videos.ai.ai23.compute --force clip
-    AI23_SCALE=0.05 python -m videos.ai.ai23.compute # a smoke test of every code path (into .cache/ai23_quick/)
+    AI23_SCALE=0.05 python -m videos.ai.ai23.compute # reduced-scale computation (into .cache/ai23_quick/)
 
 Results are cached in ``.cache/ai23/<name>.json`` (+ ``.npz``); synthesized speech in ``.cache/ai23/speech/``
 (about 20 MB), a few checkpoints in ``.cache/ai23/models/``.  Every model here is trained on the CPU, seeded, one or
-two torch threads (``AI23_THREADS``, default 1).  Items made of several runs save each run as it finishes
-(``CACHE.partial``), and the long runs checkpoint as they go, so a killed computation resumes where it stopped.  About
-two and a half hours on a busy 4-core machine, all told.
+two torch threads (``AI23_THREADS``, default 1). Items made of several runs save each completed run
+(``CACHE.partial``); only some individual training routines provide intermediate checkpoints. An interrupted run
+without one must restart. Runtime depends on the machine and available inputs.
 
 Text (text.py)
     bpe        byte-pair encoding learned on two million characters of the novels: the merges and how much each one
@@ -54,7 +54,7 @@ from videos.ai.ai23 import audio, clip, text, vq
 
 SCALE = text.SCALE
 CACHE = Cache("ai23")
-if SCALE != 1.0:  # a quick smoke test of every code path: its own cache, never the real one
+if SCALE != 1.0:  # reduced-scale computations use their own cache, never the real one
     CACHE.dir = CACHE.dir.parent / "ai23_quick"
 load = CACHE.load
 MODELS = CACHE.dir / "models"

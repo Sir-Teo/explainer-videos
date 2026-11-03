@@ -82,18 +82,20 @@ source.
 python tools/make.py ai23                         # compute, then the narrated cut in English and Chinese
 python -m videos.ai.ai23.compute                  # just the numbers (Part 1's novels, Part 21's letters)
 python -m videos.ai.ai23.compute --force codec    # recompute one item
-AI23_SCALE=0.05 python -m videos.ai.ai23.compute  # a smoke test of every code path, into .cache/ai23_quick/
+AI23_SCALE=0.05 python -m videos.ai.ai23.compute  # reduced-scale computation, into .cache/ai23_quick/
 python tools/build.py ai23 -q l                   # a 480p preview
 ```
 
-The computation takes about four hours on a busy 4-core machine, on one torch thread (`AI23_THREADS`). It
-is seeded throughout and resumable: synthesized speech is saved voice by voice (`.cache/ai23/speech/`), the language
-models checkpoint every 100 steps and the codec every 500, and every item made of several runs saves each run as it
-finishes. It needs Kokoro-82M (a dependency of the repo; the eleven extra voices, about 0.5 MB each, download on first
+The original full run took about four hours on a busy 4-core machine, on one torch thread (`AI23_THREADS`); actual
+time and memory depend on the machine and available inputs. Synthesized speech is saved voice by voice
+(`.cache/ai23/speech/`), the language models checkpoint every 100 steps and the codec every 500. Multi-run items
+save completed runs, but not every individual training run has a mid-run checkpoint: an interruption can require
+restarting the current run. Equal numbers of image-caption pairs do not imply equal compute across batch sizes or
+loss functions. It needs Kokoro-82M (a dependency of the repo; the eleven extra voices, about 0.5 MB each, download on first
 use) and Whisper base.en (about 290 MB, downloaded by `transformers` on first use). The narrator's codes need
-`.venv-tts` with `qwen_tts` and the Qwen3-TTS-12Hz-1.7B-Base model in the Hugging Face cache; without them the item
-records that they are missing and the chapter says so. `AI23_NARRATOR_GENERATE=0` skips having the narrator speak a
-new sentence (the slowest step on a CPU, about ten minutes).
+`.venv-tts` with `qwen_tts` and the Qwen3-TTS-12Hz-1.7B-Base model in the Hugging Face cache. The narrator-code
+experiment is optional and requires explicit `AI23_NARRATOR_EXECUTE=1`; it is not a scene dependency. If explicitly
+running that experiment, `AI23_NARRATOR_GENERATE=0` skips synthesizing a new sentence.
 
 ## Results on this machine
 
