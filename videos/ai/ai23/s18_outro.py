@@ -201,7 +201,7 @@ class Outro(VoiceoverScene):
             r"Show that a BPE merge of a pair found $n$ times (without overlaps) shortens the text by exactly $n$ "
             r"symbols. \ In ``aaaa'', how often does the pair (a, a) occur, \ and how many merges does it allow?",
             r"One model pays $9.6$ bits per token with $3.2$ characters a token; \ another $2.9$ bits per byte on "
-            r"plain bytes. \ Which is better per character? \ Show that per-character perplexity is per-token "
+            r"the same ASCII text. \ Which is better per character? \ Show that per-character perplexity is per-token "
             r"perplexity to the power $1/(\text{characters per token})$.",
             r"How many codes do FSQ levels $(8, 5, 5, 5)$ give, \ and how many bits? \ What bitrate do $8$ residual "
             r"stages of $1{,}024$ codes give at $75$ frames a second?",
