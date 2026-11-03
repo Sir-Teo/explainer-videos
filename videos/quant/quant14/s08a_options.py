@@ -123,9 +123,9 @@ class Options(VoiceoverScene):
                 why(r"chapter 2's first-order formula, term by term"),
                 why(r"each term is flat below $1/\kappa_i$ and falls like $1/T$ above: two scales a decade or two apart "
                     r"imitate a power law between them")]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.2, buff=0.8, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.6, edge=6.9)  # the last note clears the pause card
         q = pause(r"Two factors with half-lives of 5 days and 1 year. Can they fake a power-law skew from 1 week to 6 months?",
-                  width=7.4, font_size=22).to_edge(DOWN, buff=0.4)
+                  width=7.4, font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Why can a classical two-factor model compete? Give Bergomi's kernel two exponentials, a fast one and a "
             "slow one. <bookmark mark='a'/> Chapter two's formula, applied term by term, gives a sum of two "
@@ -170,10 +170,14 @@ class Options(VoiceoverScene):
                 (r"rough Heston, free (6)", rh["rmse"], MODEL_COL["rough Heston"]),
                 (r"Heston (5)", rs["heston_rmse_same"], MODEL_COL["Heston"]),
                 (r"rough Heston, $H = 0.1$ (5)", pr["rmse"], ROUGH)]
-        tab = VGroup(*[VGroup(label(n_, font_size=19, color=c), MathTex(f"{v:.2f}", font_size=26, color=c)).arrange(RIGHT, buff=0.3)
-                       for n_, v, c in sorted(rows, key=lambda r: r[1])]).arrange(DOWN, aligned_edge=RIGHT, buff=0.14)
+        cells = VGroup()
+        for n_, v, c in sorted(rows, key=lambda r: r[1]):
+            cells.add(label(n_, font_size=19, color=c), MathTex(f"{v:.2f}", font_size=26, color=c))
+        tab = cells.arrange_in_grid(rows=len(rows), cols=2, buff=(0.4, 0.1), col_alignments="lr")
+        tab = VGroup(*[VGroup(cells[2 * i], cells[2 * i + 1]) for i in range(len(rows))])
         cap = label(r"our board: error on the Surface, vol points, re-priced on fresh paths", font_size=18, color=GREY_A)
-        board = VGroup(cap, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
+        board = VGroup(cap, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.35).shift(UP * 0.5)
+        # right of the replay's parameter list, above the source line
         hl = b2["half_lives_days"]
         beats = b2["rmse"] < rbm
         verdict = ("the two-factor model beats rough Bergomi on our Surface, as Abi Jaber and Li found on the S&P"
