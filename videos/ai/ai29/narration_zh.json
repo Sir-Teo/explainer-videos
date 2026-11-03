@@ -511,6 +511,11 @@
    "scene": "Belief",
    "en": "The belief is more than bookkeeping. <bookmark mark='a'/> It sums up everything the agent has seen and done: nothing else in the history says more about the present. So a POMDP is an ordinary MDP whose states are beliefs, and Part 26's Bellman equation applies, over a continuum of states. That is why exact POMDPs are so hard to solve, and why the best policy sometimes acts just to learn: walk to a door, to find out where you are. <bookmark mark='b'/> Many language-model agents use a context window as working memory. It contains only the information currently supplied, and is not itself an explicit probability distribution over hidden states.",
    "zh": "信念不只是记账。<bookmark mark='a'/>它概括了智能体看到过、做过的一切：历史里再没有别的东西，能对现在说得更多。所以POMDP就是一个普通的MDP，只不过它的状态是信念；第26部分的贝尔曼方程照样适用，只是状态变成了连续的一大片。这就是为什么精确求解POMDP那么难，也是为什么最优策略有时会只为了获得信息而行动：走到一扇门前，弄清楚自己在哪里。<bookmark mark='b'/>许多语言模型智能体把上下文窗口当作工作记忆。窗口只包含当前提供的信息，它本身不是对隐藏状态的显式概率分布。"
+  },
+  "b0cb4dc510c6": {
+   "scene": "Dreamer",
+   "en": "It learns from three terms. <bookmark mark='a'/> Redraw each picture from the state. <bookmark mark='b'/> Predict each reward. <bookmark mark='c'/> And make the prior agree with the posterior, so that the model can predict without looking: that is what lets it dream. The agreement is a KL divergence, and DreamerV2 split it in two. One part, with the posterior frozen, trains the prior towards what was seen. <bookmark mark='d'/> The other, with the prior frozen, nudges the posterior towards states the prior can predict. <bookmark mark='e'/> Weighting the first more, the prior moves more: KL balancing. Below one nat, the clamped KL term has zero gradient. This reduces pressure to collapse, but does not guarantee the posterior keeps useful information.",
+   "zh": "它从三项损失里学习。<bookmark mark='a'/>从状态重新画出每幅画面。<bookmark mark='b'/>预测每个奖励。<bookmark mark='c'/>再让先验和后验一致，这样模型不看画面也能预测：正是这一点让它能做梦。这种一致用KL散度来衡量，DreamerV2把它拆成了两半。一半冻结后验，把先验往看到的东西上拉。<bookmark mark='d'/>另一半冻结先验，把后验轻轻推向先验能预测的状态。<bookmark mark='e'/>给前一半更大的权重，先验就动得更多：这就是KL平衡。低于1奈特时，截断后的KL项梯度为零。这减少了坍塌的压力，但不保证后验保留有用信息。"
   }
  },
  "title_en": "AI, Built: Part 29, Agents and Worlds",

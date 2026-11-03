@@ -103,7 +103,8 @@ class Dreamer(VoiceoverScene):
         whys = [why(r"redraw the picture"), why(r"predict the reward"),
                 why(r"pull the prior towards what was seen: \ the dynamics"),
                 why(r"keep the posterior predictable: \ the representation"),
-                why(r"balanced: \ the prior moves more; \ below $1$ nat, \ free")]
+                why((r"KL低于$1$奈特时梯度为零" if zh() else
+                     r"KL gradient zero below $1$ nat"))]
         step = ladder(self, rows, whys, keep=5, top=3.0, x=-2.4, buff=0.45, edge=6.9)
         sg = label(r"$\mathrm{sg}$: \ stop the gradient, \ treat as a constant", font_size=22, color=GREY_A)
         sg.to_edge(DOWN, buff=0.4)
@@ -115,8 +116,8 @@ class Dreamer(VoiceoverScene):
             "a KL divergence, and DreamerV2 split it in two. One part, with the posterior frozen, trains the prior "
             "towards what was seen. <bookmark mark='d'/> The other, with the prior frozen, nudges the posterior "
             "towards states the prior can predict. <bookmark mark='e'/> Weighting the first more, the prior moves "
-            "more: KL balancing. And below one nat the KL is free, so the posterior is never squeezed to say "
-            "nothing."
+            "more: KL balancing. Below one nat, the clamped KL term has zero gradient. This reduces pressure "
+            "to collapse, but does not guarantee the posterior keeps useful information."
         ) as vo:
             self.play(FadeIn(lh))
             step(0)
