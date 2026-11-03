@@ -49,6 +49,14 @@
    },
    "trials": 1
   },
+  "btc_nsde_generator": {
+   "code_sha256": "9e4f5af75c181a3fc64ce5c3870a970e1eaad5c1ea53ab25ecd289332fd85acc",
+   "params": {
+    "data": "BTCUSDT daily 2018-2019, hold-out 2020",
+    "seeds": 3
+   },
+   "trials": 1
+  },
   "btc_rough_hurst": {
    "code_sha256": "768da08240c985d166f6b590bad37c841c6499cbaa008001af260a2332128572",
    "params": {
@@ -125,6 +133,14 @@
    "params": {
     "from": 196307,
     "portfolios": "49 industries + 10 B/M deciles"
+   },
+   "trials": 1
+  },
+  "cir_mle_dtb3": {
+   "code_sha256": "d4d95ce27447a96835d22f7f05301de19bf77bcc49c184ee95b7ce520e128046",
+   "params": {
+    "data": "FRED DTB3 monthly 1954-2020",
+    "starts": 5
    },
    "trials": 1
   },
