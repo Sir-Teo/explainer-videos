@@ -32,24 +32,24 @@ class Signature(VoiceoverScene):
         vol = np.asarray(p["vol"])
         words = s["words"]
         n = len(t) - 1
-        g = axes([0, 0.5], [W.min() - 0.05, W.max() + 0.05], x_length=5.6, y_length=2.6, xlabel=r"time $t$",
-                 ylabel=r"driver $W_t$", xticks=[0, 0.25, 0.5], yticks=[], font_size=14).to_corner(UL, buff=0.4).shift(DOWN * 0.3)
-        g2 = axes([0, 0.5], [min(vol.min(), 0) - 0.05, vol.max() + 0.05], x_length=5.6, y_length=2.2, xlabel=r"time $t$",
+        g = axes([0, 0.5], [W.min() - 0.05, W.max() + 0.05], x_length=5.6, y_length=2.3, xlabel=r"time $t$",
+                 ylabel=r"driver $W_t$", xticks=[0, 0.25, 0.5], yticks=[], font_size=14).to_corner(UL, buff=0.4)
+        g2 = axes([0, 0.5], [min(vol.min(), 0) - 0.05, vol.max() + 0.05], x_length=5.6, y_length=2.0, xlabel=r"time $t$",
                   ylabel=r"volatility $\sigma_t = \langle \ell, \widehat{\mathbb{X}}_t\rangle$", xticks=[0, 0.25, 0.5],
-                  yticks=[], font_size=14).next_to(g, DOWN, buff=0.7).align_to(g, LEFT)
+                  yticks=[], font_size=14).next_to(g, DOWN, buff=0.55).align_to(g, LEFT)
         tr = ValueTracker(0)
         lw = tracing(g.ax, t, W, tr, WHITE, stroke_width=2)
         lv = tracing(g2.ax, t, vol, tr, SIG, stroke_width=2.4)
         d = len(words)
         sc = np.maximum(np.abs(sig).max(0), 1e-9)
-        base = RIGHT * 1.0 + DOWN * 1.0
+        base = RIGHT * 1.0 + UP * 0.2  # bars reach 1.8 either way; their word labels sit below, inside the frame
         cols = [GREY_B] + [IV] * 2 + [OPT] * 4 + [ROUGH] * 8
 
         def bars():
             i = int(tr.get_value())
             grp = VGroup()
             for j in range(d):
-                h = 2.6 * sig[i, j] / sc[j]
+                h = 1.8 * sig[i, j] / sc[j]
                 grp.add(Rectangle(width=0.26, height=max(abs(h), 0.01), stroke_width=0, fill_color=cols[j],
                                   fill_opacity=0.9).move_to(base + RIGHT * 0.36 * j + UP * h / 2))
             return grp
@@ -57,11 +57,11 @@ class Signature(VoiceoverScene):
         bb = always_redraw(bars)
         axis = Line(base + LEFT * 0.2, base + RIGHT * 0.36 * d, stroke_color=GREY_C)
         wl = VGroup(*[Text(w_ if w_ else "1", font="DejaVu Sans Mono", font_size=12, color=cols[j]).rotate(PI / 2).move_to(
-            base + RIGHT * 0.36 * j + DOWN * 2.95) for j, w_ in enumerate(words)])
-        cap = label(r"the signature of $(t, W_t)$ to depth 3: 15 iterated integrals, each scaled to its own range",
-                    font_size=17, color=GREY_A).next_to(axis, UP, buff=2.9).align_to(axis, LEFT)
+            base + RIGHT * 0.36 * j + DOWN * 2.15) for j, w_ in enumerate(words)])
+        cap = wrapped_label(r"the signature of $(t, W_t)$ to depth 3: 15 iterated integrals, each scaled to its own range",
+                            5.8, 17, GREY_A).next_to(axis, UP, buff=2.0).align_to(axis, LEFT)
         q = pause(r"Depth 1 only: what kind of model is $\sigma_t = \ell_0 + \ell_1 t + \ell_2 W_t$?", width=5.2,
-                  font_size=20).to_corner(DR, buff=0.3)
+                  font_size=20).to_corner(UR, buff=0.3)  # the bars' word labels take the bottom
         src = illustration(r"one simulated path; the weights $\ell$ are the calibrated ones of this chapter", corner=DL)
         with self.voiceover(
             "Christa Cuchiero, Guido Gazzani and Sara Svaluto-Ferro asked: what if volatility were a linear function "
