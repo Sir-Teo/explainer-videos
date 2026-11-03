@@ -125,7 +125,7 @@ class Representation(VoiceoverScene):
         sd = {k: np.log10(np.asarray(v)) for k, v in h["sd"].items()}
         lo = min(v.min() for v in sd.values()) - 0.2
         hi = max(v.max() for v in sd.values()) + 0.2
-        g = axes([x[0] - 0.3, x[-1] + 0.3], [lo, hi], x_length=7.0, y_length=4.6, xlabel=r"rebalances $n$ (log scale)",
+        g = axes([x[0] - 0.3, x[-1] + 0.3], [lo, hi], x_length=6.2, y_length=4.6, xlabel=r"rebalances $n$ (log scale)",
                  ylabel=r"spread of the hedge error (log scale)", xticks=list(x), xfmt=lambda u: f"{2 ** int(u):,}".replace(",", "{,}"),
                  yticks=[-1, 0], yfmt=lambda u: rf"10^{{{int(u)}}}" if u else "1", font_size=16).to_edge(LEFT, buff=0.6)
         g.shift(DOWN * 0.3)
@@ -136,9 +136,13 @@ class Representation(VoiceoverScene):
         leg = legend([(ITO, rf"$W_1^2$, hedged with $2W$: slope {h['slope']['w2']:.2f}"),
                       (DRIFT, rf"a Black--Scholes call, delta-hedged: slope {h['slope']['call']:.2f}"),
                       (JUMP, rf"$X_1^2$, $X = 0.8W + 0.6B$, hedged in $W$ alone: slope {h['slope']['two']:.2f}"),
-                      (WHITE, r"$\sqrt{2/n}$: chapter 2's QV error")], font_size=19).to_corner(UR, buff=0.35)
+                      (WHITE, r"$\sqrt{2/n}$: chapter 2's QV error")], font_size=19)
+        if leg.width > 5.6:
+            leg.scale_to_fit_width(5.6)
+        leg.to_corner(UR, buff=0.35)
         rows = [cmath(r"F - V_T", r"=", r"\sum_k (\Delta W_k)^2 - T", font_size=30)]
-        why0 = why(r"for $F = W_T^2$ the discrete hedge's error is exactly the quadratic-variation error", 19)
+        why0 = wrapped_label(r"for $F = W_T^2$ the discrete hedge's error is exactly the quadratic-variation error", 5.4,
+                             19, GREY_B)
         VGroup(rows[0], why0).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         pc, ans = pause(r"Hedge $W_T^2$ with four times as many trades. The error's spread?", r"It halves: "
                         r"$\sqrt{2/n}$.", width=5.4, font_size=21)
