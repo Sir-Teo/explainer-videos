@@ -42,13 +42,13 @@ class MOT(VoiceoverScene, ThreeDScene):
                       colors={r"\sup_\pi / \inf_\pi": ALT}),
                 cmath(r"\sum_j \pi_{ij} = \mu_i,\ \sum_i \pi_{ij} = \nu_j", r",", r"\sum_j \pi_{ij}(y_j - x_i) = 0",
                       font_size=30, colors={r"\sum_j \pi_{ij}(y_j - x_i) = 0": Q_C}),
-                cmath(r"\text{feasible}", r"\iff", r"\mu \le_{cx} \nu:\ \int (y - k)^+ d\nu \ge \int (x - k)^+ d\mu\ "
-                      r"\forall k", font_size=28, colors={r"\text{feasible}": Q_C})]
+                cmath(r"\text{feasible}", r"\iff", r"\mu \le_{cx} \nu", font_size=30, colors={r"\text{feasible}": Q_C})]
         whys = [side_why_(r"a claim on the prices at two dates; its price depends on how the two are joined"),
                 side_why_(r"every joining must match both marginals, which the vanilla options fix (chapter 12), and be "
                           r"a martingale (no arbitrage)"),
                 side_why_(r"a martingale with these marginals exists exactly when the later call curve lies above the "
-                          r"earlier one at every strike (Strassen 1965)")]
+                          r"earlier one at every strike: $\int (y - k)^+ d\nu \ge \int (x - k)^+ d\mu$ for all $k$ "
+                          r"(Strassen 1965)")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=3.6, buff=0.55, edge=6.95)
         with self.voiceover(
             "A claim on the price at two dates depends on how they are joined, which vanilla prices "
@@ -88,7 +88,7 @@ class MOT(VoiceoverScene, ThreeDScene):
                     r"martingale constraint", 21),
                 why(r"strong duality (Beiglb\"ock, Henry-Labord\`ere and Penkner 2013): the bound is the price of the "
                     r"cheapest model-free super-hedge", 21)]
-        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.4, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.4, buff=0.6, edge=6.9)  # leaves the corner for the card
         t = history_card(2014, r"Galichon, Henry-Labord\`ere and Touzi", r"in continuous time the dual is a stochastic "
                          r"control problem: the hedger chooses the delta through time", width=5.6, font_size=19)
         t.to_corner(DR, buff=0.3)
@@ -130,7 +130,7 @@ class MOT(VoiceoverScene, ThreeDScene):
             return float(np.interp(a, x, u) + np.interp(b, y, v) + np.interp(a, x, h) * (b - a))
 
         ax = ThreeDAxes(x_range=[X0, X1, 0.1], y_range=[Y0, Y1, 0.2], z_range=[0, Z1, 0.25], x_length=6.0,
-                        y_length=7.0, z_length=3.2, tips=False,
+                        y_length=7.0, z_length=2.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.3)
         lift = ValueTracker(0.6)
@@ -160,7 +160,7 @@ class MOT(VoiceoverScene, ThreeDScene):
                                                                                                          buff=0.3)
         val = MathTex(rf"\text{{hedge cost }} = \sum u\mu + \sum v\nu = {up['dual_value']:.4f}", font_size=30,
                       color=HEDGE).to_corner(UR, buff=0.35)
-        self.set_camera_orientation(phi=64 * DEGREES, theta=-130 * DEGREES, zoom=0.8)
+        self.set_camera_orientation(phi=64 * DEGREES, theta=-130 * DEGREES, zoom=0.68)  # the hedge rises well above the claim
         self.add_fixed_in_frame_mobjects(names, axn, val)
         self.remove(names, axn, val)
         with self.voiceover(
@@ -203,7 +203,7 @@ class MOT(VoiceoverScene, ThreeDScene):
         bl = MathTex(f"{lo:.3f}", font_size=26, color=ALT).next_to(ax.c2p(lo, 0.5), UP, buff=0.35)
         bu = MathTex(f"{up:.3f}", font_size=26, color=ALT).next_to(ax.c2p(up, 0.5), UP, buff=0.35)
         md = Line(ax.c2p(model, 0.15), ax.c2p(model, 0.85), color=CALL, stroke_width=5)
-        ml = MathTex(rf"\text{{log-normal: }} {model:.3f}", font_size=24, color=CALL).next_to(md, DOWN, buff=0.45)
+        ml = MathTex(rf"\text{{log-normal: }} {model:.3f}", font_size=24, color=CALL).next_to(md, DOWN, buff=0.8)  # below the tick labels
         tab = VGroup(*[VGroup(label(n, font_size=21, color=c), MathTex(t, font_size=26, color=c)).arrange(RIGHT, buff=0.3)
                        for n, t, c in (
                            (r"forward-start straddle $|R - 1|$", rf"[{cl['straddle']['lower']:.4f},\ "
