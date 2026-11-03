@@ -237,9 +237,10 @@ class RBM(VoiceoverScene):
             sh = digit_sheet(c[:4], 4, 1, size=0.42, gap=0.04)
             cols.add(Group(MathTex(rf"k = {k}", font_size=22, color=EBM), sh).arrange(DOWN, buff=0.1))
         cols.arrange(RIGHT, buff=0.25).move_to([3.4, 1.0, 0])
-        cl = label(r"Gibbs chains from random pixels", font_size=20, color=EBM).next_to(cols, UP, buff=0.12)
+        cl = label(r"Gibbs displays: \\ binary start, then visible probabilities", font_size=20,
+                   color=EBM).next_to(cols, UP, buff=0.12)
         ex = digit_sheet(np.asarray(r["pcd_s0_exact"])[:8], 1, 8, size=0.4, gap=0.04).move_to([3.4, -1.6, 0])
-        exl = label(r"exact samples of a $16$-unit RBM: \ all $2^{16}$ hidden states weighed", font_size=20,
+        exl = label(r"exact binary visible samples: \\ all $2^{16}$ hidden states weighed", font_size=20,
                     color=GREY_A).next_to(ex, UP, buff=0.1)
         dbn = history_card(2006, r"Hinton, Osindero \& Teh: \ deep belief nets", r"RBMs stacked, \ each trained on "
                            r"the one below: \ the start of the deep learning revival (Part 9)", width=5.6,
@@ -247,8 +248,11 @@ class RBM(VoiceoverScene):
         with self.voiceover(
             "What does it learn? Each hidden unit's weights, as a picture, show what turns it on: forty of a "
             "hundred-unit machine's, positive for ink, negative for paper. <bookmark mark='a'/> To dream, run the "
-            "chain from random pixels: one step, ten, a hundred, a thousand. <bookmark mark='b'/> With sixteen "
-            "units we can sample the true model exactly, weighing every hidden state. <bookmark mark='c'/> In 2006 "
+            "chain from binary random pixels: one step, ten, a hundred, a thousand. After the initial binary "
+            "image, the displays show conditional visible probabilities at the Gibbs checkpoints. <bookmark "
+            "mark='b'/> With sixteen hidden units we can weigh every hidden state, then draw each binary visible "
+            "pixel from its conditional Bernoulli distribution. The lower strip contains those exact binary "
+            "samples. <bookmark mark='c'/> In 2006 "
             "Hinton, Simon Osindero and Yee-Whye Teh stacked RBMs into deep belief nets, and deep learning's revival "
             "began; six years later backpropagation on GPUs made that unnecessary. The ideas stayed: an energy, "
             "and samples drawn by a chain."

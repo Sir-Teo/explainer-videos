@@ -116,7 +116,7 @@ class Langevin(VoiceoverScene):
         # a picture of the algorithm: particles in a double well, drifting downhill and kicked at random
         U = lambda x: 1.2 * (x ** 2 - 1) ** 2
         wa = axes([-1.7, 1.7], [0, 3.2], x_length=5.4, y_length=2.0, xlabel=r"$x$", ylabel=r"energy $E(x)$",
-                  xticks=[], yticks=[], center=[-3.4, -2.5, 0])
+                  xticks=[], yticks=[], center=[-3.4, -2.0, 0])
         xw = np.linspace(-1.6, 1.6, 200)  # U(1.6) is about 3: the curve stays inside the axes
         well = curve(wa.ax, xw, U(xw), EBM, 3)
         rg = np.random.default_rng(5)
@@ -139,8 +139,10 @@ class Langevin(VoiceoverScene):
         wl = note(r"illustrative: \ Langevin steps on a double well").next_to(wa, RIGHT, buff=0.3)
         with self.voiceover(
             "Sampling comes from physics: Paul Langevin's 1908 particle, drifting downhill and kicked at random. "
-            "As an algorithm: step up the log-density, add a little noise, repeat; by Part 5's Fokker-Planck "
-            "equation, the walk settles into p. <bookmark mark='a'/> The step needs the gradient of log p. "
+            "As an algorithm: step up the log-density, add a little noise, repeat. In continuous time, under "
+            "suitable conditions, p is stationary by Part 5's Fokker-Planck equation. Finite unadjusted Euler "
+            "steps approximate it, with discretization bias and possible slow mixing. <bookmark mark='a'/> "
+            "The step needs the gradient of log p. "
             "<bookmark mark='b'/> Z is a constant, so its gradient vanishes: the normalizer that made training hard "
             "is gone from sampling. <bookmark mark='c'/> That gradient is the score, the direction of steepest "
             "rise; here, for our ring model, arrows into the eight valleys."
@@ -166,8 +168,9 @@ class Langevin(VoiceoverScene):
         frames = np.asarray(e["ring_frames"])
         chains = np.asarray(e["ring_frame_chains"])
         steps = list(e["ring_frame_steps"])
-        imgs = [pl.image(f, EBM) for f in frames]
-        dots = [pl.dots(np.clip(c[:250], -2.95, 2.95), WHITE, radius=0.02, opacity=0.8) for c in chains]
+        imgs = [pl.image(f, EBM).set_z_index(-2) for f in frames]
+        dots = [pl.dots(np.clip(c[:250], -2.95, 2.95), WHITE, radius=0.02, opacity=0.8).set_z_index(2)
+                for c in chains]
         cap = [label(rf"step ${s:,}$".replace(",", "{,}"), font_size=22, color=EBM).next_to(pl, UP, buff=0.12)
                for s in steps]
         cv = np.asarray(e["ring_curve"])

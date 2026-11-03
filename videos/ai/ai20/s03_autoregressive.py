@@ -211,8 +211,9 @@ class Autoregressive(VoiceoverScene):
                 for j in range(14):
                     sq = grid[i * 14 + j]
                     mirror = 2 * j0 - j
-                    # a full cone of view is symmetric about the pixel's column: an earlier pixel is in the blind
-                    # spot if it is unseen while its mirror image across that column is seen
+                    # Empirical asymmetry subset: an earlier pixel is below the finite gradient
+                    # probe's threshold while its horizontal mirror is detected. This does not
+                    # establish whether a structural input path exists.
                     blind_ = i < i0 and not rf[i, j] and 0 <= mirror < 14 and rf[i, mirror]
                     if (i, j) == (i0, j0):
                         sq.set_fill(C.MODEL_Q, opacity=0.95)
@@ -226,20 +227,23 @@ class Autoregressive(VoiceoverScene):
         panels.arrange(RIGHT, buff=1.2).move_to(UP * 0.2)
         key = VGroup(
             VGroup(Square(0.22, fill_color=AR, fill_opacity=0.55, stroke_width=0),
-                   label(r"pixels the prediction can see", font_size=20)).arrange(RIGHT, buff=0.12),
+                   label(r"detected by the gradient probe", font_size=20)).arrange(RIGHT, buff=0.12),
             VGroup(Square(0.22, fill_color=C.SURPRISE, fill_opacity=0.6, stroke_width=0),
-                   label(r"earlier pixels it never sees: \ the blind spot", font_size=20)).arrange(RIGHT, buff=0.12),
+                   label(r"undetected earlier pixel; \ mirror detected", font_size=20)).arrange(RIGHT, buff=0.12),
         ).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.7)
-        src = note(r"computed: \ the gradient of the orange pixel's prediction with respect to every input "
-                   r"pixel").to_edge(DOWN, buff=0.25)
+        src = note(r"finite probe at random initialization: \ $8$ inputs; \ relative threshold $10^{-9}$",
+                   font_size=18).to_edge(DOWN, buff=0.25)
         cite_ = cite(r"van den Oord et al., \textit{Conditional Image Generation with PixelCNN Decoders} (2016)",
                      corner=UL)
         with self.voiceover(
-            "There's a catch. Ask the network which inputs its prediction depends on: the gradient of one pixel's "
-            "prediction with respect to every input. <bookmark mark='a'/> With masked filters stacked naively, a "
-            "wedge above and to the right is never seen, though it comes earlier. <bookmark mark='b'/> The second "
-            "PixelCNN paper splits the network in two: a vertical stack that sees the rows above, feeding a "
-            "horizontal stack that sees the row so far. No blind spot. That is the layout we train."
+            "There's a catch. At random initialization, we differentiate the sum of absolute logits for one pixel, "
+            "accumulate absolute input gradients over eight random inputs, and apply a relative threshold. Pink marks "
+            "an undetected earlier pixel when its mirror is detected. <bookmark mark='a'/> With masked filters "
+            "stacked naively, the probe marks an asymmetric wedge above and to the right. <bookmark mark='b'/> The "
+            "second PixelCNN paper splits the network in two: a vertical stack for rows above, feeding a horizontal "
+            "stack for the row so far. This design addresses the naive stack's characteristic wedge. The finite "
+            "thresholded probe can still leave earlier pixels undetected; it does not prove a missing structural "
+            "connection. We train the two-stack layout."
         ) as vo:
             self.play(FadeIn(panels[0][1]), FadeIn(panels[0][0]), FadeIn(src), FadeIn(cite_))
             vo.wait_until("a")
@@ -334,14 +338,26 @@ class Autoregressive(VoiceoverScene):
         ms_ar = float(p["s0_sample_secs"]) * 1000
         ms_gan = float(gn["s0_sample_secs"]) * 1000
         ratio = ms_ar / max(ms_gan, 1e-9)
-        cost = label(rf"$196$ passes per digit: \ ${ms_ar:.1f}$ ms here, \ against ${ms_gan:.3f}$ ms for the GAN",
-                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
+        cost = VGroup(
+            label(r"$196$ sequential passes per digit", font_size=18, color=GREY_A),
+            label(rf"batched time per digit: PixelCNN ${ms_ar:.1f}$ ms; GAN ${ms_gan:.3f}$ ms",
+                  font_size=18, color=GREY_A),
+            label(r"cohort: $2{,}000$ each; PixelCNN $4 \times 500$; GAN $1 \times 2{,}000$",
+                  font_size=18, color=GREY_A),
+        ).arrange(DOWN, buff=0.08)
+        if cost.width > 12.8:
+            cost.width = 12.8
+        cost.next_to(grid, DOWN, buff=0.2).set_x(0)
         with self.voiceover(
             "And here is one digit being drawn, with the model's sixteen probabilities for the next pixel. "
             "<bookmark mark='a'/> In the margin it is sure: black. <bookmark mark='b'/> At a stroke's edge it "
-            "hesitates, and the coin it tosses shapes the digit. <bookmark mark='c'/> The price is the order: 196 "
-            f"passes for one digit, each waiting for the last, {ms_ar:.1f} milliseconds here, about {ratio:,.0f} "
-            "times the GAN's single pass."
+            "hesitates, and the coin it tosses shapes the digit. <bookmark mark='c'/> The price is the order: "
+            "196 sequential network passes per digit; the GAN uses one. In the recorded batched timing, "
+            f"the PixelCNN averaged {ms_ar:.1f} milliseconds per digit, about {ratio:,.0f} times the GAN's batched "
+            "time per digit. Each timing covered two thousand digits: four batches of five hundred for the "
+            "PixelCNN, one batch of two thousand for the GAN. This is amortized throughput per digit, not "
+            "isolated single-digit latency. The measured time ratio also depends on architecture, batching and "
+            "the work included in each timing; it does not follow from the pass count alone."
         ) as vo:
             self.add(holder)
             self.play(FadeIn(grid), FadeIn(bars), FadeIn(ramp), FadeIn(bl), FadeIn(cl), FadeIn(cur), FadeIn(cnt))

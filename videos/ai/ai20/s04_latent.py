@@ -41,11 +41,12 @@ class Latent(VoiceoverScene):
         f.to_edge(UP, buff=0.4)
         post = cmath(r"p_\theta(z \mid x)", r"=", r"\frac{p_\theta(x \mid z)\, p(z)}{p_\theta(x)}", font_size=34)
         post[0].set_color(LATENT)
-        post.to_edge(DOWN, buff=0.5).shift(LEFT * 3.4)
-        pl = label(r"encoding: \ Bayes' rule, \ the same integral below", font_size=22, color=GREY_A)
-        pl.next_to(post, RIGHT, buff=0.4)
-        tg = note(r"computed: \ a VAE with a $2$-number code, \ decoding a grid of codes").next_to(sheet, DOWN,
-                                                                                                 buff=0.12)
+        pl = wrapped_label(r"encoding: \ Bayes' rule, \ the same integral below", 6.1,
+                           font_size=22, color=GREY_A)
+        post_info = VGroup(post, pl).arrange(DOWN, buff=0.12)
+        post_info.to_edge(DOWN, buff=0.35).set_x(-3.4)
+        tg = wrapped_label(r"computed: \ a VAE with a $2$-number code, \ decoding a grid of codes", 6.1,
+                           font_size=22, color=GREY_B).next_to(sheet, DOWN, buff=0.12)
         with self.voiceover(
             "The second answer adds something hidden: every digit comes from a code z, a few numbers drawn from a "
             "plain Gaussian. <bookmark mark='a'/> A decoder turns each code into a distribution over images. Here "
@@ -212,10 +213,16 @@ class Latent(VoiceoverScene):
     def ours(self):
         v = load("vae")
         p = int(v["s0_params"])
-        card = definition_card(r"our VAE", rf"encoder: \ $196 \to 512 \to 512 \to$ a mean and a spread for each of "
-                               rf"$16$ code numbers. \ Decoder: \ $16 \to 512 \to 512 \to$ for every pixel, a "
-                               rf"logistic distribution cut into the $16$ grey levels. \ ${p:,}$ parameters."
-                               .replace(",", "{,}"), width=8.6, font_size=24, kind=r"Architecture")
+        architecture_rows = VGroup(*[
+            wrapped_label(t.replace(",", "{,}"), 7.8, font_size=24, color=GREY_A)
+            for t in (
+                r"encoder: \ $196 \to 512 \to 512 \to$ a mean and a spread for each of $16$ code numbers.",
+                r"Decoder: \ $16 \to 512 \to 512 \to$ for every pixel, a logistic distribution cut into the "
+                r"$16$ grey levels.",
+                rf"${p:,}$ parameters.",
+            )
+        ]).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        card = definition_card(r"our VAE", architecture_rows, width=8.6, font_size=24, kind=r"Architecture")
         card.move_to(UP * 0.9)
         why_ = VGroup(
             label(r"a proper likelihood on the $16$ levels: \ the ELBO in bits per pixel, \ like PixelCNN's",

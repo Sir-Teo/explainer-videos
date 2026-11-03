@@ -152,6 +152,16 @@ class Budget(VoiceoverScene):
             lead = (f"The lowest FID belongs to {n1}, {f1:.1f}, though its seeds overlap with the next, {n2} at "
                     f"{f2:.1f}; last is {nl}, at {fl_:.1f}.")
         nbp, nbr, vbp, vbr = SPOKEN[bp], SPOKEN[br], P[bp], R[br]
+        # Recorded matched-weight sampler comparison over three seeds.
+        # Conditional sampling worsened FID and precision while improving recall.
+        # These measured values are not predictions for later reruns.
+        sampler_note = label(
+            r"recorded VAE sampler check, matched weights ($3$ seeds): \\ "
+            r"FID $40.209 \to 46.338$; precision $0.8155 \to 0.7603$; recall $0.5643 \to 0.7100$",
+            font_size=17, color=FAM["vae"])
+        if sampler_note.width > 12.8:
+            sampler_note.width = 12.8
+        sampler_note.to_edge(DOWN, buff=0.15)
         if bp != br:
             pr = (f"Split in two, the highest precision belongs to {nbp}, {vbp:.2f}, and the highest recall to {nbr}, "
                   f"{vbr:.2f}.")
@@ -161,7 +171,11 @@ class Budget(VoiceoverScene):
             "First, FID: the distance between our classifier's view of the generated digits and of the real ones, "
             f"two thousand generated digits against a reference of ten thousand test digits. Real samples scored {floor:.2f}, the line for real digits. "
             f"<bookmark mark='a'/> {lead} <bookmark mark='b'/> {pr} Each dot is one seed: the spread between seeds "
-            "is part of the result."
+            "is part of the result. Precision and recall use the first two thousand test digits as their "
+            "reference. In our recorded matched-state three-seed VAE sampler check, drawing conditional "
+            "pixels increased mean FID from 40.209 to 46.338 and lowered precision from 0.8155 to 0.7603, while "
+            "recall rose from 0.5643 to 0.7100. Correct likelihood sampling changed the measured trade-off in that "
+            "check; it was not a quality-score improvement."
         ) as vo:
             self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(fh), Create(fl), FadeIn(fll), FadeIn(g), FadeIn(gk))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.2),
@@ -172,6 +186,7 @@ class Budget(VoiceoverScene):
             self.play(Indicate(ch.bars[last], color=WHITE, scale_factor=1.1))
             vo.wait_until("b")
             self.play(FadeIn(seed_n), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots], lag_ratio=0.05))
+            self.play(FadeIn(sampler_note))
         self.wait(0.3)
         self.clear_scene()
 
@@ -181,33 +196,42 @@ class Budget(VoiceoverScene):
         fams = ["pixelcnn", "vae", "flow"]
         st = {f: stat(e, f, "bpp") for f in fams}
         ch = bars_chart([st[f][0] for f in fams], [FAM[f] for f in fams],
-                        [r"PixelCNN \\ (exact)", r"VAE \\ (a bound)", r"RealNVP \\ (a bound)"], height=3.0,
+                        [r"PixelCNN \\ (exact)", r"VAE \\ (est. bound)", r"RealNVP \\ (est. bound)"], height=3.0,
                         bar_w=0.9, gap=0.6, vmax=1.3 * max(st[f][2] for f in fams),
                         spread=[(st[f][1], st[f][2]) for f in fams], digits=2)
         ch.move_to([-3.2, -0.3, 0])
-        hd = label(r"held-out bits per pixel \ (lower is better; \ $4$ = uniform)", font_size=20, color=GREY_A)
+        hd = label(r"reported bits per pixel \ ($4$ = uniform)", font_size=20, color=GREY_A)
         hd.next_to(ch, UP, buff=0.35)
         rank = sorted(fams, key=lambda f: st[f][0])
         fid = {f: stat(e, f, "fid")[0] for f in ORDER}
         same = sorted(fams, key=lambda f: fid[f]) == rank
-        msg = VGroup(label(r"the GANs: \ no likelihood at all", font_size=22, color=FAM["gan"]),
-                     label(r"likelihood and sample quality: \ two different rankings" if not same else
-                           r"here the two rankings agree", font_size=22, color=C.BITS))
+        msg = VGroup(label(r"the GANs: \ no tractable likelihood here", font_size=22, color=FAM["gan"]),
+                     label(r"reported scores and FID: different rankings" if not same else
+                           r"reported-score and FID rankings agree here", font_size=22, color=C.BITS))
         msg.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, 0.0, 0])
         b1, b2, b3 = (SPOKEN[f] for f in rank)
         v1, v2, v3 = (st[f][0] for f in rank)
         if not same:
-            cmp_ = ("Compare the FID ranking: it is not the same. Exactly as Theis and his colleagues warned, a model "
-                    "can be good at probability and worse at pictures, or the reverse.")
+            cmp_ = ("Compare the reported-score ranking with FID: they differ. The bounds and cohorts differ, "
+                    "so this does not order the true negative log-likelihoods.")
         else:
-            cmp_ = "Here the likelihood ranking and the FID ranking agree, for these three; they need not."
+            cmp_ = ("Here the reported-score ranking and FID ranking agree for these three. The bounds and cohorts "
+                    "differ, so this does not order the true negative log-likelihoods.")
+        cohort_note = note(r"reported cohorts: PixelCNN and RealNVP, $10{,}000$ held-out digits \\ "
+                           r"VAE: IWAE-$64$ on first $1{,}000$; bounds differ", font_size=17)
+        if cohort_note.width > 12.8:
+            cohort_note.width = 12.8
+        cohort_note.to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Second, likelihood, for the three families that have one, in bits per pixel on held-out digits: exact "
-            "for the PixelCNN, an upper bound for the VAE and the flow. <bookmark mark='a'/> "
-            f"Best is {b1}, at {v1:.2f} bits per pixel, then {b2} at {v2:.2f}, and {b3} at {v3:.2f}. <bookmark "
+            "Second, reported bits per pixel for the three families we can score tractably, on held-out "
+            "digits: exact for the PixelCNN, estimated upper bounds for the VAE and the flow. The latter are finite "
+            "Monte Carlo estimates, not guaranteed bounds in each realization. PixelCNN and the flow use all "
+            "ten thousand held-out digits; the VAE uses a 64-code importance-weighted estimate on the first "
+            "one thousand. <bookmark mark='a'/> "
+            f"The lowest reported score is for {b1}, at {v1:.2f} bits per pixel, then {b2} at {v2:.2f}, and {b3} at {v3:.2f}. <bookmark "
             f"mark='b'/> {cmp_}"
         ) as vo:
-            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(hd))
+            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(hd), FadeIn(cohort_note))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.2),
                       FadeIn(VGroup(*ch[1:-3])), FadeIn(ch.vals), run_time=2.0)
             vo.wait_until("a")
@@ -292,11 +316,12 @@ class Budget(VoiceoverScene):
         bpp = {f: stat(e, f, "bpp")[0] for f in ("pixelcnn", "vae", "flow")}
         fast = {f: stat(e, f, "sample_secs")[0] for f in ORDER}
         small = {f: stat(e, f, "params")[0] for f in ORDER}
-        # sampling times are measured on a busy machine: anything within a factor of two of the fastest ties with it
+        # Heuristic grouping of cohort-amortized per-digit sampling means;
+        # this threshold does not establish statistical ties.
         quick = [f for f in ORDER if fast[f] < 2 * min(fast.values())]
         wins = [(r"lowest FID", [min(fid, key=fid.get)]), (r"highest precision", [max(P, key=P.get)]),
-                (r"highest recall", [max(R, key=R.get)]), (r"best likelihood", [min(bpp, key=bpp.get)]),
-                (r"fastest sampling", quick), (r"fewest parameters", [min(small, key=small.get)]),
+                (r"highest recall", [max(R, key=R.get)]), (r"lowest reported bits/pixel", [min(bpp, key=bpp.get)]),
+                (r"fastest sampling (grouped)", quick), (r"fewest parameters", [min(small, key=small.get)]),
                 (r"most even digits", [flat])]
         rows = VGroup()
         for crit, ws in wins:
@@ -309,6 +334,11 @@ class Budget(VoiceoverScene):
         winners = {w for _, ws in wins for w in ws}
         losers = [f for f in ORDER if f not in winners]
         tk = take_away(r"Ask what a model is for before asking which is best.", font_size=26)
+        sampling_note = note(r"batched sampling: means $<2\times$ the fastest are grouped \\ "
+                             r"heuristic grouping, not a statistical tie", font_size=17)
+        if sampling_note.width > 12.8:
+            sampling_note.width = 12.8
+        sampling_note.move_to([0, -2.35, 0])
         nl, l0 = len(losers), SPOKEN[losers[0]] if losers else ""
         if nl == 0:
             close = "every model wins something, and none wins everything."
@@ -317,11 +347,14 @@ class Budget(VoiceoverScene):
         else:
             close = f"{nl} of the five win nothing at all, {l0} among them."
         with self.voiceover(
-            "So, at this small scale and on one budget, who won what? <bookmark mark='a'/> "
+            "So, at this small scale and on one budget, who won what? Sampling uses batched throughput per digit. "
+            "We group families whose mean sampling time is less than twice the fastest mean. This is a "
+            "heuristic grouping, not a statistical tie. <bookmark mark='a'/> "
             f"{close} <bookmark mark='b'/> Which is best depends on what the model is for, and on scale: GANs "
             "drew the sharpest images for years, at sizes far beyond ours."
         ) as vo:
-            self.play(FadeIn(hd), LaggedStart(*[FadeIn(r_[0]) for r_ in rows], lag_ratio=0.1), run_time=1.5)
+            self.play(FadeIn(hd), FadeIn(sampling_note),
+                      LaggedStart(*[FadeIn(r_[0]) for r_ in rows], lag_ratio=0.1), run_time=1.5)
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_[1], shift=RIGHT * 0.15) for r_ in rows], lag_ratio=0.25),
                       run_time=min(3.5, max(1.5, vo.until("b") - 0.3)))

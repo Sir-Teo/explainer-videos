@@ -298,10 +298,33 @@ class VAE(nn.Module):
         return torch.logsumexp(torch.stack(lws), 0) - math.log(K)
 
     @torch.no_grad()
-    def sample(self, n, gen, z=None):
-        z = torch.randn(n, self.zdim, generator=gen) if z is None else z
+    def location_levels(self, z):
+        """Quantized decoder locations, for reconstruction and latent diagnostics."""
         m, _ = self.decode(z)
-        return to_levels(m.numpy())  # the decoder's mean, on the 16 levels
+        return to_levels(m.numpy())
+
+    @torch.no_grad()
+    def sample_locations(self, n, gen, z=None):
+        """Prior decoder locations; a fixed code consumes no random numbers."""
+        z = torch.randn(n, self.zdim, generator=gen) if z is None else z
+        return self.location_levels(z)
+
+    @torch.no_grad()
+    def sample(self, n, gen, z=None, *, pixel_gen=None):
+        """Draw latents and genuine 16-level conditional pixels.
+
+        A separate pixel_gen preserves an evaluation/training latent stream.
+        With explicit z, gen is not used for latent draws.
+        """
+        z = torch.randn(n, self.zdim, generator=gen) if z is None else z
+        if len(z) != n:
+            raise ValueError("n must match the supplied latent batch")
+        m, ls = self.decode(z)
+        levels = torch.arange(Q, dtype=torch.long)
+        logp = dlogistic_lp(levels, m[..., None], ls[..., None])
+        probs = F.softmax(logp, dim=-1).reshape(-1, Q)
+        q = torch.multinomial(probs, 1, generator=gen if pixel_gen is None else pixel_gen)
+        return q.reshape(n, S, S).numpy().astype(np.uint8)
 
 
 # ---------------------------------------------------------------------------
@@ -516,12 +539,17 @@ class RBM:
         H = self.all_h()
         return float(torch.logsumexp(H @ self.c + F.softplus(H @ self.W.T + self.b).sum(1), 0))
 
-    def exact_sample(self, n, gen):
-        """Exact samples: h from its marginal (all 2^nh states weighed), then v given h."""
+    def exact_conditional_probabilities(self, n, gen):
+        """Conditional visible probabilities after an exact hidden-marginal draw."""
         H = self.all_h()
         lw = H @ self.c + F.softplus(H @ self.W.T + self.b).sum(1)
         k = torch.multinomial(torch.softmax(lw, 0), n, replacement=True, generator=gen)
         return self.pv(H[k])
+
+    def exact_sample(self, n, gen, *, visible_gen=None):
+        """Exact binary visible samples; optional visible RNG isolates display chains."""
+        probabilities = self.exact_conditional_probabilities(n, gen)
+        return torch.bernoulli(probabilities, generator=gen if visible_gen is None else visible_gen)
 
     def loglik(self, V) -> float:
         return float((-self.free_energy(V)).mean() - self.log_z())

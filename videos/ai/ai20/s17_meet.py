@@ -144,31 +144,37 @@ class Meet(VoiceoverScene):
         rl = label(r"test digits, \ and decoded from their tokens", font_size=18, color=GREY_A).next_to(rows, UP,
                                                                                                     buff=0.1)
         sm = digit_sheet(np.asarray(v["show"])[:24], 3, 8, size=0.42, gap=0.03).move_to([-2.6, -2.0, 0])
-        sl = label(r"new digits: \ tokens written by a small transformer, \ then decoded", font_size=18,
+        sl = label(r"prior-generated tokens: \\ decoded to location images", font_size=18,
                    color=AR).next_to(sm, UP, buff=0.1)
         j = v["judge"]
         best = min((float(np.mean([r["fid"] for r in e["table"][f]])), f) for f in e["table"])
         stats = VGroup(
             label(rf"codebook in use: \ perplexity ${float(v['perplexity']):.1f}$ of ${K}$", font_size=20, color=VQ_C),
-            label(rf"raw size: \ ${n} \times \log_2 {K} = {float(v['codebook_bits']):.0f}$ bits; \ the prior needs "
-                  rf"${float(v['prior_bits']):.0f}$", font_size=20, color=AR),
-            label(rf"FID of the two-stage model: \ ${float(j['fid']):.1f}$", font_size=20, color=WHITE),
+            label(rf"raw codes: \ ${n} \log_2 {K} = {float(v['codebook_bits']):.0f}$ bits \\ "
+                  rf"prior code NLL: \ ${float(v['prior_bits']):.0f}$ bits/digit", font_size=18, color=AR),
+            label(rf"FID of decoded locations: \ ${float(j['fid']):.1f}$", font_size=20, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.8, -1.7, 0])
         vfid, bfid, perp = float(j["fid"]), best[0], float(v["perplexity"])
         rawb, prb = float(v["codebook_bits"]), float(v["prior_bits"])
         if vfid < bfid:
-            verdict = (f"Its samples score an FID of {vfid:.1f}, better than any of the five single models of the last "
+            verdict = (f"Its decoded location images score an FID of {vfid:.1f}, below the three-seed family-mean FID "
+                       "of all five single-model families of the last "
                        "chapter, though it was trained outside that budget.")
         else:
-            verdict = (f"Its samples score an FID of {vfid:.1f}; the best single model of the last chapter scored "
+            verdict = (f"Its decoded location images score an FID of {vfid:.1f}; the lowest three-seed family-mean FID "
+                       "of the last chapter was "
                        f"{bfid:.1f}, and this one was trained outside that budget.")
         with self.voiceover(
             "We built a small one: each digit becomes a seven-by-seven grid of tokens, each "
             f"one of {K} codebook entries, and a decoder turns the grid back. <bookmark mark='a'/> The codebook's "
-            f"perplexity is {perp:.1f}: that many of its {K} entries are, in effect, in use. <bookmark mark='b'/> "
-            f"Written plainly a grid is {rawb:.0f} bits; a small transformer predicts it in {prb:.0f}. "
-            "<bookmark mark='c'/> Sampling tokens from the transformer and decoding them draws new digits. "
-            f"{verdict}"
+            f"perplexity is {perp:.1f}: its effective codebook size among {K} entries. <bookmark mark='b'/> "
+            f"Written at fixed width a grid is {rawb:.0f} bits; the transformer's held-out code-sequence "
+            f"negative log-likelihood is {prb:.0f} bits per digit, not an actual compressed-file size or a marginal "
+            "image likelihood. <bookmark mark='c'/> We sample tokens from the transformer, then display decoder "
+            f"locations rather than conditional pixel draws. {verdict} We also tested using only training inputs "
+            "for code revival. In this paired seed both checks selected the same dead codes: the final tokenizer, "
+            "prior, outputs and measured scores were unchanged. The repair removes a test-driven decision; "
+            "no performance improvement was observed in this pair."
         ) as vo:
             self.play(FadeIn(d0), GrowArrow(a1), FadeIn(cg), FadeIn(cn), GrowArrow(a2), FadeIn(r0), FadeIn(lab))
             vo.wait_until("a")
@@ -177,6 +183,12 @@ class Meet(VoiceoverScene):
             self.play(FadeIn(stats[1]))
             vo.wait_until("c")
             self.play(FadeIn(sm), FadeIn(sl), FadeIn(stats[2]))
+            null_note = label(r"training-only revival: \\ same final states and scores in this paired seed",
+                              font_size=16, color=GREY_A)
+            if null_note.width > 6.1:
+                null_note.width = 6.1
+            null_note.move_to([3.8, -3.15, 0])
+            self.play(FadeIn(null_note))
         self.wait(0.3)
         self.clear_scene()
 
@@ -230,19 +242,26 @@ class Meet(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def distill(self):
+        dmd_detail = VGroup(*[
+            wrapped_label(t, 3.5, font_size=15, color=GREY_A)
+            for t in (r"one step,", r"a GAN loss on real images:", r"FID $1.28$ on ImageNet $64^2$")
+        ]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        drift_detail = VGroup(*[
+            wrapped_label(t, 3.5, font_size=15, color=GREY_A)
+            for t in (r"one step, \ trained to drift its samples", r"onto the data:",
+                      r"FID $1.54$, ImageNet $256^2$ (latent)")
+        ]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         cards = VGroup(
             history_card(2023, r"Sauer et al.: \ adversarial diffusion distillation", r"SDXL-Turbo: \ $1$ to $4$ "
                          r"steps, \ a GAN loss plus a teacher", width=4.3, font_size=17),
             history_card(2024, r"Sauer et al.: \ latent ADD", r"SD3-Turbo: \ $4$ steps, \ the discriminator built "
                          r"from a diffusion model", width=4.3, font_size=17),
-            history_card(2024, r"Yin et al.: \ DMD2", r"one step, \ a GAN loss on real images: \ FID $1.28$ on "
-                         r"ImageNet $64^2$", width=4.3, font_size=17),
+            history_card(2024, r"Yin et al.: \ DMD2", dmd_detail, width=4.3, font_size=17),
             history_card(2024, r"Huang et al.: \ R3GAN", r"a GAN rebuilt from first principles, \ with convergence "
                          r"guarantees", width=4.3, font_size=17),
             history_card(2024, r"Lu \& Song: \ continuous-time consistency", r"$2$ steps: \ FID $1.88$ on ImageNet "
                          r"$512^2$, \ 1.5B parameters", width=4.3, font_size=17),
-            history_card(2026, r"Deng, Li, Li, Du \& He: \ drifting models", r"one step, \ trained to drift its "
-                         r"samples onto the data: \ FID $1.54$, ImageNet $256^2$ (latent)", width=4.3, font_size=17),
+            history_card(2026, r"Deng, Li, Li, Du \& He: \ drifting models", drift_detail, width=4.3, font_size=17),
         )
         cards.arrange_in_grid(2, 3, buff=(0.2, 0.25)).move_to(DOWN * 0.2)
         if cards.width > 13.6:
