@@ -166,8 +166,9 @@ class Crash(VoiceoverScene):
                      .move_to([ax.c2p(i + 0.5, 0)[0], (y0 + y1) / 2, 0]))
         i0 = dates.index("19871019")
         lab = MathTex(rf"{100 * c['ret']:.1f}\%", font_size=40, color=LOSS).next_to(bars[i0], DOWN, buff=0.15)
-        lab.next_to(bars[i0], LEFT, buff=0.15).align_to(bars[i0], DOWN)  # beside the bar, above the axis
-        day = label(r"Monday 19 October 1987", font_size=26, color=LOSS).next_to(lab, DOWN, buff=0.1).align_to(lab, RIGHT)
+        day = label(r"Monday 19 October 1987", font_size=26, color=LOSS)
+        # one row, left of the bar's foot, in the empty space under the small bars and above the axis
+        VGroup(day, lab).arrange(RIGHT, buff=0.3).next_to(bars[i0].get_bottom(), LEFT, buff=0.2).shift(UP * 0.35)
         ticks = VGroup()
         for i, d_ in enumerate(dates):
             if d_[6:] in ("01", "02") or i == i0:
