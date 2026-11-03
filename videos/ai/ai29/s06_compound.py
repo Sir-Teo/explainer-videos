@@ -153,7 +153,8 @@ class Compound(VoiceoverScene):
             cmath(r"n_{1/2}", r"\approx", r"\frac{0.69}{1 - p}", font_size=34),
         ]
         whys = [why(r"half the tasks done"), why(r"take logs"), why(r"Taylor series, \ $p$ near $1$"),
-                why(r"halve the error, \ double the horizon")]
+                why((r"独立步骤：\\ 错误率减半，时程约翻倍" if zh() else
+                     r"independent steps: \\ half error, roughly double horizon"))]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.8, buff=0.45, edge=6.9)
         plot = VGroup(ax, xt, yt, xn, yn)
         ex = 0.99
@@ -162,8 +163,9 @@ class Compound(VoiceoverScene):
             "n equal to a half, <bookmark mark='b'/> and take logarithms. <bookmark mark='c'/> When p is close to "
             "one, minus log p is almost exactly one minus p, the error rate. <bookmark mark='d'/> So the half-time "
             "horizon is about zero point seven divided by the error rate per step: at ninety-nine percent, "
-            f"{math.log(2) / -math.log(ex):.0f} steps. Halve the errors, and the reachable task length doubles. "
-            "That is the quantity the next chapter tracks for real models."
+            f"{math.log(2) / -math.log(ex):.0f} steps. In this independent-step model, halving the error rate "
+            "roughly doubles that horizon. The next chapter tracks a related task-duration measure on real models, "
+            "not per-step error."
         ) as vo:
             q = label(r"How long a task can an agent \\ finish half the time?", font_size=34, color=C.BITS)
             q.to_edge(DOWN, buff=0.8)
