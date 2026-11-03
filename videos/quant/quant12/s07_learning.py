@@ -226,18 +226,23 @@ class Learning(VoiceoverScene, ThreeDScene):
         pt, rt, st = (np.asarray(n[x]) for x in ("pen_test", "raw_test", "ssvi_test"))
         pg, rg = np.asarray(n["pen_g"]), np.asarray(n["raw_g"])
         pc, rc = np.asarray(n["pen_cal"]), np.asarray(n["raw_cal"])
-        tab = VGroup(
-            label(r"held-out RMSE (vol points), three splits \quad butterfly violations \quad calendar violations",
-                  font_size=20, color=GREY_A),
-            label(rf"penalized network: {pt[0]:.2f}, {pt[1]:.2f}, {pt[2]:.2f} \quad {100 * pg.max():.1f}\% \quad "
-                  rf"{100 * pc.max():.1f}\%", font_size=24, color=IV),
-            label(rf"same network, no penalty: {rt[0]:.2f}, {rt[1]:.2f}, {rt[2]:.2f} \quad {100 * rg.mean():.1f}\% \quad "
-                  rf"{100 * rc.mean():.1f}\%", font_size=24, color=BAD),
-            label(rf"SSVI on the same splits: {st[0]:.2f}, {st[1]:.2f}, {st[2]:.2f} \quad 0 by construction", font_size=24,
-                  color=LV),
-            label(rf"vega-weighted, network against SSVI: {np.mean(n['pen_test_vw']):.2f} against "
-                  rf"{np.mean(n['ssvi_test_vw']):.2f}", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.9)
+        hd = [r"", r"split 1", r"split 2", r"split 3", r"butterfly", r"calendar"]
+        body = [(r"penalized network", IV, [f"{x:.2f}" for x in pt] + [rf"{100 * pg.max():.1f}\%", rf"{100 * pc.max():.1f}\%"]),
+                (r"same network, no penalty", BAD, [f"{x:.2f}" for x in rt] + [rf"{100 * rg.mean():.1f}\%",
+                                                                              rf"{100 * rc.mean():.1f}\%"]),
+                (r"SSVI", LV, [f"{x:.2f}" for x in st] + [r"0", r"0"])]
+        cells = VGroup(*[label(h, font_size=19, color=GREY_B) for h in hd])
+        for name, col, vals in body:
+            cells.add(label(name, font_size=22, color=col), *[MathTex(v, font_size=28, color=col) for v in vals])
+        cells.arrange_in_grid(rows=4, cols=6, buff=(0.55, 0.28), col_alignments="lccccc")
+        heads = VGroup(label(r"held-out RMSE, vol points", font_size=19, color=GREY_A).next_to(VGroup(cells[1], cells[3]), UP,
+                                                                                               buff=0.2),
+                       label(r"violations (0 for SSVI by construction)", font_size=19, color=GREY_A).next_to(
+                           VGroup(cells[4], cells[5]), UP, buff=0.2))
+        tab = VGroup(VGroup(heads, cells),
+                     label(rf"vega-weighted, network against SSVI: {np.mean(n['pen_test_vw']):.2f} against "
+                           rf"{np.mean(n['ssvi_test_vw']):.2f}", font_size=22, color=GREY_A),
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(UP, buff=0.9)
         note_ = label(r"violations: share of a $201 \times 60$ grid ($|k| \le 1$, 3 days to 0.8 years) with $g < 0$ or "
                       r"$\partial_T w < 0$; unweighted RMSE", font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
         wins = bool(np.mean(pt) < np.mean(st))
