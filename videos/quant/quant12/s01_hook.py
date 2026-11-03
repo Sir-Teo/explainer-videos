@@ -49,6 +49,7 @@ class Hook(VoiceoverScene, ThreeDScene):
                                                                                     color=GREY_A),
                       label(r"implied volatility", font_size=24, color=IV)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         hint.to_corner(UR, buff=0.4)
+        ax.x_axis.set_color(SPOT); ax.y_axis.set_color(GREY_A); ax.z_axis.set_color(IV)  # the key reads off the axes
         params = note(rf"dots: {int(m.sum())} quotes; surface: SSVI fit, {s['rmse_ssvi']:.2f} vol points (vega-weighted)",
                       font_size=19).to_corner(DR, buff=0.3)
         src = real_data(r"the Surface: Deribit BTC options, 10 December 2025, 08:00 UTC", corner=DL)
