@@ -45,20 +45,24 @@ class Fast(VoiceoverScene):
         n_tok = int(f["bin_tokens"])
         rep, near = float(f["bin_repeat"]), float(f["bin_near"])
         stats = VGroup(label(rf"${J} \times {H} = {n_tok}$ tokens for one second", font_size=24, color=BINS),
-                       label(rf"a token equals the one before: \ ${100 * rep:.0f}\%$", font_size=22, color=GREY_A),
-                       label(rf"within one bin of it: \ ${100 * near:.0f}\%$", font_size=22, color=GREY_A))
+                       label((rf"同关节连续步相同：\ ${100 * rep:.0f}\%$" if zh() else
+                              rf"same-joint repeats: \ ${100 * rep:.0f}\%$"), font_size=22, color=GREY_A),
+                       label((rf"相差至多一格：\ ${100 * near:.0f}\%$" if zh() else
+                              rf"within one bin: \ ${100 * near:.0f}\%$"), font_size=22, color=GREY_A))
         stats.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.2, 0])
-        tail = label(r"each token says almost nothing: \ predicting the next one is copying", font_size=26,
+        tail = label((r"相邻时间步的关节值相近：\ 存在冗余" if zh() else
+                      r"neighboring joint values are often similar: \ potential redundancy"), font_size=26,
                      color=FAIL).to_edge(DOWN, buff=0.6)
-        tag = note(r"synthetic, smooth motion: \ minimum-jerk moves between random poses", font_size=17).to_corner(DL, buff=0.2)
+        tag = note((r"合成平滑训练动作：\ 随机姿态之间的最小跃度运动" if zh() else
+                    r"synthetic training motions: \ minimum-jerk moves between random poses"), font_size=17).to_corner(DL, buff=0.2)
         with self.voiceover(
             "RT-2 and OpenVLA wrote actions as tokens the simplest way. <bookmark mark='a'/> Take each joint's "
             "position at each time step, and round it to one of two hundred and fifty-six bins. "
             f"<bookmark mark='b'/> For a seven-joint arm at fifty steps a second, that is {n_tok} tokens for one "
-            f"second of motion. <bookmark mark='c'/> And they are nearly all the same: on our smooth test motions, "
-            f"{100 * rep:.0f} percent of tokens equal the one before, and {100 * near:.0f} percent are within one bin "
-            "of it. <bookmark mark='d'/> A model trained to predict the next token learns mostly to copy, and the "
-            "information it needs is spread thin across hundreds of tokens."
+            f"second of motion. <bookmark mark='c'/> On our smooth training motions, {100 * rep:.0f} percent of "
+            f"same-joint values repeat from the previous step, and {100 * near:.0f} percent are within one bin. "
+            "<bookmark mark='d'/> Neighboring values are often similar, leaving potential redundancy across "
+            "hundreds of tokens."
         ) as vo:
             self.play(Create(ax), FadeIn(al), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.1), FadeIn(tag),
                       run_time=2.0)

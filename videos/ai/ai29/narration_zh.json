@@ -521,6 +521,11 @@
    "scene": "Compound",
    "en": "Turn it around: how long a task can an agent finish half the time? <bookmark mark='a'/> Set p to the n equal to a half, <bookmark mark='b'/> and take logarithms. <bookmark mark='c'/> When p is close to one, minus log p is almost exactly one minus p, the error rate. <bookmark mark='d'/> So the half-time horizon is about zero point seven divided by the error rate per step: at ninety-nine percent, 69 steps. In this independent-step model, halving the error rate roughly doubles that horizon. The next chapter tracks a related task-duration measure on real models, not per-step error.",
    "zh": "反过来问：一个智能体有一半把握完成的任务，最长能有多长？<bookmark mark='a'/>令p的n次方等于二分之一，<bookmark mark='b'/>再取对数。<bookmark mark='c'/>当p接近1时，负的log p几乎正好等于1减p，也就是错误率。<bookmark mark='d'/>所以，一半把握的时程，大约是0.7除以每一步的错误率：每一步99%的把握，就是69步。在这个步骤独立的模型里，错误率减半，时程大约翻倍。下一章追踪真实模型的相关任务时长指标，而不是每一步的错误率。"
+  },
+  "be940878f984": {
+   "scene": "Fast",
+   "en": "RT-2 and OpenVLA wrote actions as tokens the simplest way. <bookmark mark='a'/> Take each joint's position at each time step, and round it to one of two hundred and fifty-six bins. <bookmark mark='b'/> For a seven-joint arm at fifty steps a second, that is 350 tokens for one second of motion. <bookmark mark='c'/> On our smooth training motions, 46 percent of same-joint values repeat from the previous step, and 75 percent are within one bin. <bookmark mark='d'/> Neighboring values are often similar, leaving potential redundancy across hundreds of tokens.",
+   "zh": "RT-2和OpenVLA用最简单的办法把动作写成词元。<bookmark mark='a'/>取每个关节在每个时间步的位置，把它取整到256个区间中的一个。<bookmark mark='b'/>对一个7关节、每秒50步的机械臂来说，一秒钟的动作就是350个词元。<bookmark mark='c'/>在我们平滑的训练动作上，同一关节相邻时间步的值有46%相同，75%相差不超过一个区间。<bookmark mark='d'/>相邻值经常相近，因此几百个词元之间可能存在冗余。"
   }
  },
  "title_en": "AI, Built: Part 29, Agents and Worlds",

@@ -680,9 +680,9 @@ ZH = {
 
     'f"RT-2 and OpenVLA wrote actions as tokens the simplest way.':
         "RT-2和OpenVLA用最简单的办法把动作写成词元。<bookmark mark='a'/>取每个关节在每个时间步的位置，把它取整到256个区间中的一个。"
-        "<bookmark mark='b'/>对一个7关节、每秒50步的机械臂来说，一秒钟的动作就是{n_tok}个词元。<bookmark mark='c'/>而它们几乎都一样："
-        "在我们平滑的测试动作上，{100 * rep:.0f}%的词元和前一个相同，{100 * near:.0f}%和前一个相差不超过一个区间。<bookmark mark='d'/>"
-        "一个被训练去预测下一个词元的模型，学到的主要是照抄，而它需要的信息，被稀稀拉拉地摊在几百个词元上。",
+        "<bookmark mark='b'/>对一个7关节、每秒50步的机械臂来说，一秒钟的动作就是{n_tok}个词元。<bookmark mark='c'/>"
+        "在我们平滑的训练动作上，同一关节相邻时间步的值有{100 * rep:.0f}%相同，{100 * near:.0f}%相差不超过一个区间。"
+        "<bookmark mark='d'/>相邻值经常相近，因此几百个词元之间可能存在冗余。",
 
     'f"In January 2025 Karl Pertsch and colleagues':
         "2025年1月，Physical Intelligence的卡尔·佩尔奇和同事们先做压缩。<bookmark mark='a'/>任何平滑的动作，都是一些余弦波的叠加，"
