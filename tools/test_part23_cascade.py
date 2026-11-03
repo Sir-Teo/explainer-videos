@@ -32,6 +32,18 @@ class CascadeClaims(unittest.TestCase):
             table = json.loads((ROOT / name).read_text())['strings']
             self.assertIn('流式', table[label])
 
+    def test_duplex_schematic_words_lead_speech(self):
+        tree = ast.parse((ROOT / 'videos/ai/ai23/s17_omni.py').read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'Omni')
+        fn = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == 'duplex')
+        loop = next(n for n in fn.body if isinstance(n, ast.For))
+        rows = loop.iter.elts
+        patterns = {row.elts[0].value: row.elts[2].value for row in rows}
+        text = patterns["Moshi's words"]
+        speech = patterns["Moshi's speech"]
+        self.assertEqual(speech, '0' + text[:-1])
+        self.assertTrue(any(a == b == '1' for a, b in zip(patterns['you'], speech)))
+
 
 if __name__ == '__main__':
     unittest.main()
