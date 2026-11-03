@@ -137,9 +137,9 @@ class Dispersion(VoiceoverScene, ThreeDScene):
             "    own = np.sum(w ** 2 * s ** 2)",
             "    cross = np.sum(w * s) ** 2 - own",
             "    return float((index_vol ** 2 - own) / cross)",
-        ], source="explainer/quant/house/quoting.py", width=6.6, font_size=17).to_edge(DOWN, buff=1.4).to_edge(LEFT, buff=0.5)
+        ], source="explainer/quant/house/quoting.py", width=6.6, font_size=17).to_edge(UP, buff=0.8).to_edge(LEFT, buff=0.5)
         pc = pause(r"Index implied vol 20\%, every member 30\%, many members. Implied correlation?", width=4.6,
-                   font_size=20, corner=DR)
+                   font_size=20, corner=UR)  # the first row makes way for it
         with self.voiceover(
             "The algebra. An index's variance is the weighted members' variances plus every pair's covariance. "
             "<bookmark mark='a'/> Replace every pairwise correlation by one number and solve: that is the implied "
@@ -154,8 +154,10 @@ class Dispersion(VoiceoverScene, ThreeDScene):
             step(1)
             vo.wait_until("b")
             step(2)
-            self.play(FadeIn(pc))
+            self.play(FadeOut(rows[0]), FadeOut(whys[0]), FadeIn(pc))
             vo.wait_until("c")
+            # the derivation is done: the lab takes the whole frame
+            self.play(*[FadeOut(m) for m in (pc, *rows[1:3], *whys[1:3])])
             self.play(FadeIn(card))
             lab_run(self, card, [f"implied_correlation(0.20, [1/3]*3, [.25, .30, .35])  ->  {c3['toy']:.3f}",
                                  f"implied_correlation(0.20, [1/50]*50, [.30]*50)       ->  {c3['big']:.3f}"],
