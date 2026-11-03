@@ -92,9 +92,10 @@ class Frontier(VoiceoverScene):
         key = label(r"gold: hedge just above the claim; bright gold: touching; red: below it (penalized)", font_size=17,
                     color=GREY_A).to_edge(DOWN, buff=0.25)
         gaps = nm["gap_pct"]
-        res = VGroup(*[MathTex(rf"\text{{seed }} {i}:\ {b:.4f}\ \ (+{g:.2f}\%)", font_size=22, color=Q_C)
-                       for i, (b, g) in enumerate(zip(nm["bounds"], gaps))]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        res.next_to(rp.g, DOWN, buff=0.3).align_to(rp.g, LEFT)
+        # one row, between the chart and the colour key at the bottom
+        res = VGroup(*[MathTex(rf"\text{{seed }} {i}:\ {b:.4f}\ (+{g:.2f}\%)", font_size=21, color=Q_C)
+                       for i, (b, g) in enumerate(zip(nm["bounds"], gaps))]).arrange(RIGHT, buff=0.4)
+        res.next_to(key, UP, buff=0.25)
         head = label(rf"three networks ($u$, $v$, $h$), {nm['steps']:,} steps, three seeds".replace(",", "{,}"),
                      font_size=24).to_edge(UP, buff=0.3)
         above = all(g > 0 for g in gaps)
