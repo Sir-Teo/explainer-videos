@@ -30,7 +30,7 @@ class Asian(VoiceoverScene):
         n = len(p) - 1
         t = np.arange(n + 1)
         lo, hi = float(min(p.min(), avg.min())) - 3, float(p.max()) + 3
-        g = axes([0, n], [lo, hi], x_length=8.4, y_length=4.4, xlabel=r"trading days, one year", ylabel=r"price",
+        g = axes([0, n], [lo, hi], x_length=7.4, y_length=4.4, xlabel=r"trading days, one year", ylabel=r"price",
                  xticks=[0, 63, 126, 189, 252], yticks=[round(lo + 3), 100, round(hi - 3)], font_size=15)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
@@ -67,8 +67,7 @@ class Asian(VoiceoverScene):
 
     def derive(self, sc):
         rows = [
-            cmath(r"\log G", r"=", r"\tfrac1n\textstyle\sum_i \log S_{t_i} \sim \mathcal N\Big(\log S_0 + (r - q - "
-                  r"\tfrac{\sigma^2}{2})\bar t,\ \tfrac{\sigma^2}{n^2}\sum_{i,j}\min(t_i, t_j)\Big)", font_size=30,
+            cmath(r"\log G", r"=", r"\tfrac1n\textstyle\sum_i \log S_{t_i} \sim \mathcal N\big(\mu_G,\ \sigma_G^2\big)", font_size=34,
                   colors={r"\log G": QC.HOUSE}),
             cmath(r"\operatorname{Var}\log G", r"\to", r"\frac{\sigma^2}{T^2}\int_0^T\!\!\int_0^T \min(s, t)\,ds\,dt = "
                   r"\frac{\sigma^2 T}{3}", font_size=32, colors={r"\operatorname{Var}\log G": QC.HOUSE}),
@@ -77,8 +76,9 @@ class Asian(VoiceoverScene):
             cmath(r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}", r"=", r"0,\quad V = S_0\,u(0, X_0)",
                   font_size=32, colors={r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}": IV}),
         ]
-        whys = [why(r"a linear map of a Gaussian vector is Gaussian: the geometric Asian is log-normal, priced in closed "
-                    r"form (Kemna and Vorst 1990)"),
+        whys = [why(r"$\mu_G = \log S_0 + (r - q - \tfrac{\sigma^2}{2})\bar t$, $\sigma_G^2 = \tfrac{\sigma^2}{n^2}"
+                    r"\sum_{i,j}\min(t_i, t_j)$: a linear map of a Gaussian vector is Gaussian, so the geometric Asian "
+                    r"is log-normal, priced in closed form (Kemna and Vorst 1990)"),
                 why(r"$\iint \min(s,t) = T^3/3$: the effective volatility is $\sigma/\sqrt 3$, which is why Asians are "
                     r"cheap"),
                 why(rf"optimal $b = \operatorname{{Cov}}/\operatorname{{Var}}$; the measured correlation $\rho = "
