@@ -47,7 +47,8 @@ class Incomplete(VoiceoverScene):
                                         stroke_width=4))
         top = Dot(ax.c2p(100, s["upper"]), radius=0.1, color=Q_C)
         tl = MathTex(rf"\overline{{p}} = {s['upper']:.2f}", font_size=28, color=Q_C).next_to(top, UL, buff=0.08)
-        bl = MathTex(rf"\underline{{p}} = {s['lower']:.0f}", font_size=28, color=ALT).next_to(ax.c2p(100, 0), DR,
+        lower = 0.0 if abs(s['lower']) < 5e-3 else s['lower']  # the solver returns -0.0; print 0
+        bl = MathTex(rf"\underline{{p}} = {lower:.0f}", font_size=28, color=ALT).next_to(ax.c2p(100, 0), DR,
                                                                                             buff=0.08)
         # the (B, Delta) plane
         h = axes([-90, 10], [0, 1.4], x_length=5.0, y_length=4.2, xlabel=r"bond $B$", ylabel=r"shares $\Delta$",
@@ -120,7 +121,7 @@ class Incomplete(VoiceoverScene):
                     r"where $q^* > 0$ (complementary slackness)", 21),
                 why(r"strictly positive $Q$ never reaches the ends: every price strictly inside is consistent with "
                     r"no arbitrage", 21)]
-        step = ladder(self, rows, whys, keep=4, top=1.6, x=-0.6, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=1.6, x=-0.6, buff=0.45, edge=6.9)  # three rows fit under the card
         t = theorem_card(r"The second fundamental theorem", r"An arbitrage-free market is complete, every claim "
                          r"replicable, if and only if the equivalent martingale measure is unique.",
                          who=r"Harrison and Pliska (1981)", color=Q_C, width=8.6, font_size=24).to_edge(UP, buff=0.3)
