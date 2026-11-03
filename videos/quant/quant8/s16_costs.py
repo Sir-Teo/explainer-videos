@@ -64,7 +64,7 @@ class Costs(VoiceoverScene):
             MathTex(rf"\text{{turnover a year: }}{100 * w['turn_band']:.1f}\%\ \text{{vs}}\ {100 * w['turn_ray']:.0f}\%",
                     font_size=28),
             wrapped_label(rf"$\gamma = 3$, a cost of 1\% of every dollar traded: the wedge from {100 * lo:.1f}\% to "
-                          rf"{100 * hi:.1f}\% in stocks, around Merton's {100 * pm:.1f}\%", 5.4, 19, GREY_A),
+                          rf"{100 * hi:.1f}\% in stocks, around Merton's {100 * pm:.1f}\%", 4.4, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cnt, DOWN, buff=0.5).align_to(cnt, LEFT)
         src = illustration(r"simulation: one market, weekly, 15 years; band from dynamic programming")
         with self.voiceover(
