@@ -57,7 +57,7 @@ class Hybrid(VoiceoverScene):
         leg = legend([(BAD, r"naive: the kernel at each cell's left end"),
                       (RV, r"hybrid: the first cell exactly; the others at optimal points $b_k$")],
                      font_size=17).to_corner(UR, buff=0.35)
-        q = pause(r"Which scheme's error grows as $H$ falls?", width=5.2, font_size=22).next_to(leg, DOWN, buff=0.3).to_edge(RIGHT, buff=0.35)  # below the legend, clear of the axis label
+        q = pause(r"Which scheme's error grows as $H$ falls?", width=6.8, font_size=22).to_corner(UL, buff=0.25)  # one line: above the axis label
         src = illustration(r"the last six steps before $t$; heights clipped at 4")
         with self.voiceover(
             "Rough Bergomi's driver is an integral of past shocks against the kernel t minus s to the power H minus "
