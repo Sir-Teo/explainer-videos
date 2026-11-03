@@ -133,8 +133,9 @@ class Moves(VoiceoverScene):
     def clustering(self, vf):
         acf_a, acf_r = np.asarray(vf["acf_abs"]), np.asarray(vf["acf_ret"])
         lags = np.arange(1, len(acf_a) + 1)
-        g = axes([0, 61], [-0.1, 0.2], x_length=6.0, y_length=3.4, xlabel=r"lag (days)", ylabel=r"autocorrelation",
-                 xticks=[1, 20, 40, 60], yticks=[-0.1, 0, 0.1, 0.2], font_size=16).to_edge(LEFT, buff=0.8).shift(UP * 0.6)
+        g = axes([0, 61], [-0.1, 0.2], x_length=6.0, y_length=2.5, xlabel=r"lag (days)", ylabel=r"autocorrelation",
+                 xticks=[1, 20, 40, 60], yticks=[-0.1, 0, 0.1, 0.2], font_size=16).to_edge(LEFT, buff=0.8).to_edge(UP, buff=1.0)
+        # short enough that the three-row ladder below starts clear of its axis labels
         ax = g.ax
         w = 0.35
 
@@ -158,7 +159,7 @@ class Moves(VoiceoverScene):
         whys = [why(r"measured like a price's volatility, on the daily changes of the log", font_size=20),
                 why(r"an AR(1): the discretised Ornstein--Uhlenbeck process of Part 5", font_size=20),
                 why(r"how long a shock to volatility takes to decay by half", font_size=20)]
-        step = ladder(self, rows, whys, keep=3, top=-1.1, x=-2.6, buff=0.35, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=-1.0, x=-2.6, buff=0.3, edge=6.9)
         src = real_data(r"Binance BTCUSDT daily and Deribit DVOL daily, April 2021 -- November 2025")
         with self.voiceover(
             (
