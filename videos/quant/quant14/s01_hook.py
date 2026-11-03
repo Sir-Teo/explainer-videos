@@ -48,10 +48,10 @@ class Hook(VoiceoverScene):
         s = ValueTracker(0.0)   # zoom = 2^(8 s): from the whole path to 1/256 of it
         boxes = VGroup()
         for z, col, txt in paths:
-            frame = Rectangle(width=10.6, height=2.3, stroke_color=GREY_D, stroke_width=1.5)
+            frame = Rectangle(width=10.6, height=2.0, stroke_color=GREY_D, stroke_width=1.5)
             t = label(txt, font_size=22, color=col).next_to(frame, UP, buff=0.08).align_to(frame, LEFT)
             boxes.add(VGroup(frame, t))
-        boxes.arrange(DOWN, buff=0.55).shift(DOWN * 0.15)
+        boxes.arrange(DOWN, buff=0.5).to_edge(DOWN, buff=0.75)  # the question card takes the top
 
         def drawn(i):
             z, col, _ = paths[i]
@@ -64,7 +64,7 @@ class Hook(VoiceoverScene):
                 y = seg[idx]
                 y = (y - y.min()) / max(y.max() - y.min(), 1e-12)
                 x = idx / span
-                pts = [frame.get_corner(DL) + RIGHT * (0.1 + 10.4 * a) + UP * (0.1 + 2.1 * b) for a, b in zip(x, y)]
+                pts = [frame.get_corner(DL) + RIGHT * (0.1 + 10.4 * a) + UP * (0.1 + 1.8 * b) for a, b in zip(x, y)]
                 return VMobject(stroke_color=col, stroke_width=1.6).set_points_as_corners(pts)
             return always_redraw(make)
 
