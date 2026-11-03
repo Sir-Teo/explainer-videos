@@ -39,7 +39,7 @@ class Zoo(VoiceoverScene):
         l2t = label(r"strictly stationary, infinite variance", font_size=19, color=BAD)
         l2t.move_to(ax.c2p(0.6, 0.5)).shift(RIGHT * 3.2 + DOWN * 1.3)
         l2 = VGroup(l2t, Arrow(l2t.get_left() + LEFT * 0.05, ax.c2p(0.55, 0.52), buff=0.05, color=BAD, stroke_width=2.5,
-                               max_tip_length_to_length_ratio=0.12),
+                               max_tip_length_to_length_ratio=0.06),
                     label(r"explosive", font_size=19, color=GREY_B).move_to(ax.c2p(0.2, 1.22)))
         l3 = label(r"$\mathbb{E}\ln(\alpha z^2 + \beta) = 0$ (Nelson 1990)", font_size=19, color=BAD).next_to(ax.c2p(0.42, 0.98), UR, buff=0.05)
         us, btc = gl["us"], gl["btc"]
