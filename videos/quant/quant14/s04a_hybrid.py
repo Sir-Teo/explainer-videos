@@ -201,8 +201,9 @@ class Hybrid(VoiceoverScene):
             o2 = Text(outs[4], font="DejaVu Sans Mono", font_size=17).next_to(out, DOWN, buff=0.12).align_to(out, LEFT)
             self.play(AddTextLetterByLetter(o2), run_time=1.2)
             vo.wait_until("c")
-            o3 = Text(outs[5], font="DejaVu Sans Mono", font_size=15).next_to(o2, DOWN, buff=0.12).align_to(o2, LEFT)
+            o3 = VGroup(*[Text(x_, font="DejaVu Sans Mono", font_size=15) for x_ in outs[5:]]).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.08).next_to(o2, DOWN, buff=0.12).align_to(o2, LEFT)  # header and one row per size
             keep_in_frame(o3)
-            self.play(AddTextLetterByLetter(o3), run_time=1.2)
+            self.play(LaggedStart(*[AddTextLetterByLetter(x_) for x_ in o3], lag_ratio=0.5), run_time=1.6)
         self.wait(0.5)
         self.clear_scene()
