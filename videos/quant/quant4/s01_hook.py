@@ -177,7 +177,7 @@ class Hook(VoiceoverScene):
                                 Text(str(y), font_size=14, color=GREY_D).move_to([X(y), -0.48, 0]))
                          for y in (1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000)])
         dots, labs, leads = VGroup(), VGroup(), VGroup()
-        tiers = [0.55, -0.95, 1.05, -1.45, 1.55, -1.95, 2.05, -2.45]
+        tiers = [0.55, -0.95, 1.05, -1.45, 1.55, -1.95, 2.05, -2.45, 2.55, 3.0]  # the last two keep the 2000s apart
         used = {k: [] for k in range(len(tiers))}
         for i, (yr, name, col) in enumerate(events):
             d = Dot([X(yr), -0.2, 0], radius=0.07, color=col)
