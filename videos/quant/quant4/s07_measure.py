@@ -38,14 +38,17 @@ class Measure(VoiceoverScene):
                          MathTex(f"{q:.3f}", font_size=28, color=Q_C), MathTex(f"{q / p:.3f}", font_size=28, color=MART)])
         cells = [*head] + [c for r in rows for c in r]
         grid = VGroup(*cells).arrange_in_grid(rows=9, cols=4, buff=(0.7, 0.14), col_alignments="cccc")
-        grid.scale_to_fit_height(5.6).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
+        grid.scale_to_fit_height(5.6)
+        if grid.width > 8.2:  # leave the right third to the Radon-Nikodym column
+            grid.scale_to_fit_width(8.2)
+        grid.to_edge(LEFT, buff=0.5).shift(DOWN * 0.1)
         side = VGroup(
             MathTex(r"L(\omega) = \frac{Q(\omega)}{P(\omega)}", font_size=40, color=MART),
             MathTex(r"\mathbb{E}_Q[X] = \mathbb{E}_P[L\,X]", font_size=40),
             MathTex(r"\mathbb{E}_P[L] = 1", font_size=40),
             wrapped_label(r"the Radon--Nikodym derivative: reweight each world, and one probability becomes another",
-                          4.6, 22, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.6)
+                          4.4, 22, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "The same worlds can carry different probabilities. Toss a coin three times. Under P the coin is fair, "
             "and each of the eight worlds has probability one eighth. Under Q the coin lands heads sixty percent of "
@@ -127,7 +130,7 @@ class Measure(VoiceoverScene):
                 why(r"discrete Girsanov: the same paths, a new drift; the martingale part is reweighted, not moved"),
                 why(r"the Esscher transform (1932): tilt by $e^{\theta R}$, with $\theta$ chosen so every asset earns the "
                     r"riskless rate (Gerber and Shiu 1994)")]
-        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.75, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.6, buff=0.42, edge=6.9)
         with self.voiceover(
             "Over time the change of measure is a process: the likelihood ratio of the first n tosses, a Doob "
             "martingale under P. <bookmark mark='a'/> Conditional expectations under Q are those under P, reweighted "
