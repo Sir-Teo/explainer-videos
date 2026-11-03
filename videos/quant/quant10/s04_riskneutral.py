@@ -39,7 +39,8 @@ class RiskNeutral(VoiceoverScene):
                  r"- K,\,0)\big]", fs=54)
         sde = row(r"dS = ", r"r", r"\,S\,dt + \sigma S\,", r"dW^{\mathbb Q}_t", fs=42)
         g = VGroup(pde, arrow, fk, sde).arrange(DOWN, buff=0.4)
-        fk_note = why(r"Feynman--Kac (Part 5): a PDE's solution is an expectation over paths")
+        fk_note = wrapped_label(r"Feynman--Kac (Part 5): a PDE's solution is an expectation over paths", 5.2,
+                                font_size=24, color=GREY_B)
         fk_note.next_to(arrow, RIGHT, buff=0.4)
         sde_note = why(r"under $\mathbb Q$ the stock drifts at $r$, not $\mu$")
         sde_note.next_to(sde, RIGHT, buff=0.4)
@@ -178,7 +179,7 @@ class RiskNeutral(VoiceoverScene):
 
         bq = always_redraw(lambda: upto(q, QQ))
         bw = always_redraw(lambda: upto(w, PP))
-        leg = legend([(QQ, r"$\mathbb Q$-paths, 8 seeds"), (PP, r"$\mathbb P$-paths reweighted by Girsanov, 8 seeds"),
+        leg = legend([(QQ, r"$\mathbb Q$-paths, 8 seeds"), (PP, r"$\mathbb P$-paths, reweighted (Girsanov)"),
                       (OPT, rf"the formula, {ex:.3f}")], font_size=22).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         nums = VGroup(
             label(rf"spread of the 8 seeds at $n = {int(n[-1]):,}$:".replace(",", "{,}"), font_size=24, color=GREY_A),
