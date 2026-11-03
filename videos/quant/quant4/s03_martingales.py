@@ -130,10 +130,9 @@ class Martingales(VoiceoverScene):
         def fan():
             k = int(np.clip(np.floor(tk.get_value() + 1e-6), 0, N_MAJ - 1))
             now = main[k]
-            # the two possible next values: the forecast after one more head or one more tail
-            seen = majority_heads(k)
-            up_v = win_prob(seen + 1, k + 1)
-            dn_v = win_prob(seen, k + 1)
+            # the two possible next values (after one more head or one more tail), precomputed below: the redraw
+            # reads arrays only, so Manim's animation hashing never reaches scipy's distribution objects
+            up_v, dn_v = UP_V[k], DN_V[k]
             x0, x1 = ax.c2p(k, now), ax.c2p(k + 1, 0)[0]
             g_ = VGroup(DashedLine(x0, [x1, ax.c2p(0, up_v)[1], 0], color=GREY_B, stroke_width=1.5),
                         DashedLine(x0, [x1, ax.c2p(0, dn_v)[1], 0], color=GREY_B, stroke_width=1.5),
@@ -148,6 +147,8 @@ class Martingales(VoiceoverScene):
             return int(round(_heads0[k]))
 
         _heads0 = majority_heads_path()
+        UP_V = np.array([win_prob(majority_heads(k) + 1, k + 1) for k in range(N_MAJ)])
+        DN_V = np.array([win_prob(majority_heads(k), k + 1) for k in range(N_MAJ)])
         fan_m = always_redraw(fan)
         side = VGroup(
             label(r"a live forecast is a martingale:", font_size=22, color=GREY_A),
