@@ -159,7 +159,7 @@ class Surrogate(VoiceoverScene):
         with self.voiceover(
             "The production network, seed zero, on the hundred and fifty test notes: it agrees with forty-thousand-"
             f"path Monte Carlo to {s['rmse']:.3f} per unit of notional. <bookmark mark='a'/> And it answers in about "
-            f"{1e6 * s['t_net']:.1f} microseconds, against {s['t_mc']:.0f} seconds for one Monte Carlo price: "
+            f"{1e6 * s['t_net']:.1f} microseconds, against {s['t_mc']:.1f} seconds for one Monte Carlo price: "
             "millions of times faster. That speed is what made chapter nine's daily hedge of a whole book possible, "
             "and Part seventeen does it at scale."
             " Next: how desks mark, reserve and report."

@@ -7077,6 +7077,10 @@
     [
       "^\\\\text\\{largest decile: \\}(.*)$",
       "\\\\text{最大十分位：}\\1"
+    ],
+    [
+      "^about (\\d+) million times faster\\. The largest errors sit at the knock-in cliff, where the price jumps; a desk checks the network against fresh simulation every night$",
+      "快约\\1百万倍。最大的误差出现在敲入悬崖，价格在那里跳变；交易台每晚都用新的模拟检查网络"
     ]
   ]
 }
