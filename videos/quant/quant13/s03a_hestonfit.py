@@ -210,10 +210,10 @@ class HestonFit(VoiceoverScene, ThreeDScene):
                     r"$v - v_0 \approx \xi\sqrt{v_0}W^2$, $x \approx \sqrt{v_0}W^1$: a Gaussian regression", 20),
                 why(r"average a straight line over $sk$, $s \in [0, 1]$: half its slope", 20),
                 why(r"differentiate the square root at $v_0$: the short-maturity skew of Heston is a constant", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.2, buff=0.42, edge=6.9)  # room below for the readout
         res = VGroup(MathTex(rf"\frac{{\rho\xi}}{{4\sqrt{{v_0}}}} = {sl['skew_formula']:.3f}", font_size=34, color=IV),
                      MathTex(rf"\text{{model, 2 days:}}\ {sl['skew_2d']:.3f}", font_size=34, color=MODEL_COL["Heston"])
-                     ).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.5)
+                     ).arrange(RIGHT, buff=0.8).to_corner(DL, buff=0.35)
         pp = pause(r"Make $\rho$ positive. What happens to the 3-day skew?", width=4.4).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
