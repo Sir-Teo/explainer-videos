@@ -112,7 +112,7 @@ class Event(VoiceoverScene):
         cal = axes([1993.5, 2021], [-0.06, 0.06], x_length=12.0, y_length=1.6, xticks=[1995, 2000, 2005, 2010, 2015,
                    2020], yticks=[], font_size=15).to_edge(UP, buff=0.5)
         cax = cal.ax
-        evt = axes([-5.5, 5.5], [-0.05, 0.05], x_length=6.4, y_length=3.6, xlabel=r"trading days from the FOMC "
+        evt = axes([-5.5, 5.5], [-0.05, 0.05], x_length=5.6, y_length=3.6, xlabel=r"trading days from the FOMC "
                    r"decision", ylabel=r"cumulative abnormal return", xticks=[-5, -1, 0, 1, 5],
                    yticks=[-0.04, 0, 0.04], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15)
         evt.to_edge(LEFT, buff=0.6).to_edge(DOWN, buff=0.45)
@@ -147,7 +147,10 @@ class Event(VoiceoverScene):
                     rf"(\text{{Lucca--Moench, close to close: about 33}})", font_size=24, color=GREY_A),
             MathTex(rf"2011\text{{--}}2020:\ {1e4 * s['2011-2020']['ar']:.0f}\ \text{{bp}}\ (t = {s['2011-2020']['t']:.2f})",
                     font_size=27, color=ALT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35).shift(DOWN * 1.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        if side.width > 6.4:  # the column must clear the event-time chart on the left
+            side.scale_to_fit_width(6.4)
+        side.to_edge(RIGHT, buff=0.35).shift(DOWN * 1.4)
         src = real_data(r"scheduled FOMC decisions 1994--2020 (federalreserve.gov); French's daily market excess return",
                         corner=DL)
         late = s["2011-2020"]
@@ -168,8 +171,9 @@ class Event(VoiceoverScene):
             self.play(FadeIn(cal), FadeIn(src), LaggedStart(*[Create(p) for p in small], lag_ratio=0.05, run_time=3))
             vo.wait_until("a")
             self.play(FadeIn(evt), Create(zero))
+            # the paths leave calendar time, and the empty calendar axes go with them
             self.play(LaggedStart(*[ReplacementTransform(a_, b_) for a_, b_ in zip(small, big)], lag_ratio=0.04,
-                                  run_time=4))
+                                  run_time=4), FadeOut(cal, run_time=2))
             vo.wait_until("b")
             self.add(rom)
             self.play(Create(mean_line), k.animate.set_value(len(run) - 1), run_time=4, rate_func=linear)
