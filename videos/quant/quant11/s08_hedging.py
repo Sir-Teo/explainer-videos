@@ -41,8 +41,8 @@ class Hedging(VoiceoverScene):
         tip = o + u(P(b))
         h7 = Arrow(tip, tip + u(P(a7)) * sol["n1"], buff=0, color=GAMMA, stroke_width=6)
         h60 = Arrow(h7.get_end(), h7.get_end() + u(P(a60)) * sol["n2"], buff=0, color=VEGA, stroke_width=6)
-        labs = VGroup(label(r"the book: short a 30-day straddle", font_size=18, color=QC.LOSS).next_to(book.get_end(), DOWN, buff=0.1),
-                      label(r"a 7-day option: mostly gamma", font_size=18, color=GAMMA).next_to(e7.get_end(), UP, buff=0.08),
+        labs = VGroup(label(r"the book: short a 30-day straddle", font_size=18, color=QC.LOSS).next_to(book.get_end(), UP, buff=0.3),  # the hedges start below it
+                      label(r"a 7-day option: mostly gamma", font_size=18, color=GAMMA).next_to(e7.get_end(), DOWN, buff=0.2).align_to(e7.get_end(), RIGHT),
                       label(r"a 60-day option: mostly vega", font_size=18, color=VEGA).next_to(e60.get_end(), UP, buff=0.08))
         side = VGroup(
             MathTex(rf"n_7 = {sol['n1']:+.2f},\quad n_{{60}} = {sol['n2']:+.2f}", font_size=30),
