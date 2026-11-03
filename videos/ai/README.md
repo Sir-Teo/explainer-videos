@@ -12,6 +12,13 @@ The chapter-by-chapter plan and production standard are in [`SYLLABUS.md`](SYLLA
 sources and bilingual narration tables. Generated videos from the earlier 20-part cut must be rebuilt against the
 current manifests; the presence of source files or an old export does not indicate that a part has passed QA.
 
+## Selected reviewed-input preflight
+
+From the repository root, `python tools/check_reviewed_render_inputs.py` checks for entry-point files at selected
+fail-closed input gates in Parts 11, 16, 21, 23 and 27. A missing file requires restoration or a separately
+reviewed replacement before the affected scene can use it. Presence is not acceptance: the individual part
+readers still verify their own contracts, and this check is not an exhaustive model, data, audio or render check.
+
 ## The story
 
 **Shannon's guessing game.** In 1951 Claude Shannon asked people to guess the next letter of an English text, and
