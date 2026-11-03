@@ -73,6 +73,8 @@ def split_kv_decode(q, K, V, splits):
     d = len(q)
     parts = []
     for idx in np.array_split(np.arange(len(K)), splits):
+        if len(idx) == 0:
+            continue  # More splits than keys create empty chunks with no contribution.
         s = K[idx] @ q / math.sqrt(d)
         m = s.max()
         p = np.exp(s - m)

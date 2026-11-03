@@ -30,9 +30,9 @@ class AttentionSynthetic(unittest.TestCase):
         for tiles in (1, 3, 8, 17):
             _, actual = attn.online_softmax_trace(scores, tiles)
             np.testing.assert_allclose(actual, p, atol=1e-14, rtol=1e-14)
-        for splits in (1, 2, 4, 8, 17):
+        for splits in (1, 2, 4, 8, 17, 25):
             got, parts = attn.split_kv_decode(q, k, v, splits)
-            self.assertEqual(len(parts), splits)
+            self.assertEqual(len(parts), min(splits, len(k)))
             np.testing.assert_allclose(got, p @ v, atol=1e-13, rtol=1e-13)
 
     def test_counted_io_matches_closed_form_with_partial_tiles(self):
