@@ -1,9 +1,11 @@
 """Precompute everything numerical in Part 20 of the AI series ("Four Ways to Generate").
 
-    python -m videos.ai.ai20.compute                 # everything missing (MNIST through Part 10's download)
+    python -m videos.ai.ai20.compute                 # explicit CLI: all missing items
+    python -m videos.ai.ai20.compute toys ar2d        # explicitly generate named items
     python -m videos.ai.ai20.compute --force gan2d
 
-Results are cached in ``.cache/ai20/<name>.json`` (+ ``.npz``); trained weights in ``.cache/ai20/models/``; scenes
+Results are cached in ``.cache/ai20_sampling_v2/<name>.json`` (+ ``.npz`` and contract receipt); trained weights in
+``.cache/ai20_sampling_v2/models/``; scenes
 call ``load(name)``. Every model is trained here, on the CPU, one torch thread, seeded. The items made of several runs
 save each run as it finishes (``CACHE.partial``), so a killed computation resumes. About two hours on a busy 4-core
 machine, all told; the longest items are the digit models (``pixelcnn``, ``vae``, ``gan``, ``wgan``, ``flow``: three
@@ -66,13 +68,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from explainer.ai.cache import Cache
+from .sampling_cache import (CONTRACT, SamplingCache, atomic_json, consumer_class,
+                             consumer_source_sha256, sha256, state_hash, validate_origin)
 from videos.ai.ai20 import gen2d as g2
 from videos.ai.ai20 import gendigits as gd
 
-CACHE = Cache("ai20")
+CACHE = SamplingCache(scale=g2.SCALE)
 if g2.SCALE != 1.0:  # a quick smoke test of every code path (AI20_SCALE=0.01): its own cache, never the real one
-    CACHE.dir = CACHE.dir.parent / "ai20_quick"
+    CACHE.dir = CACHE.dir.parent / (CONTRACT + "_quick")
 load = CACHE.load
 MODELS = CACHE.dir / "models"
 SEEDS = (0, 1, 2)
@@ -105,18 +108,38 @@ def log(msg: str) -> None:
     print(f"    {time.strftime('%H:%M:%S')} {msg}", flush=True)
 
 
-def save_model(m: nn.Module, name: str) -> None:
+def save_model(m: nn.Module | dict, name: str) -> None:
     MODELS.mkdir(parents=True, exist_ok=True)
     tmp = MODELS / f"{name}.tmp.pt"
-    torch.save(m.state_dict(), tmp)
-    tmp.replace(MODELS / f"{name}.pt")
+    state = m if isinstance(m, dict) else m.state_dict()
+    torch.save(state, tmp)
+    path = MODELS / f"{name}.pt"
+    tmp.replace(path)
+    atomic_json(path.with_suffix(".state.json"), dict(contract=CONTRACT, scale=g2.SCALE, name=name,
+                file_sha256=sha256(path), state_hash=state_hash(state),
+                state_hash_algorithm="ai20_minimum_tensor_state_v1",
+                origin=dict(kind="explicit-generation", consumer_class=consumer_class(m),
+                            consumer_source_sha256=consumer_source_sha256())))
 
 
 def load_model(m: nn.Module, name: str, item: str) -> nn.Module:
     p = MODELS / f"{name}.pt"
-    if not p.exists():  # the item's json without its weights (deleted by hand): train it again
-        CACHE.save(item, CACHE.items[item]() if CACHE.items else ITEMS[item]())
-    m.load_state_dict(torch.load(p))
+    import json
+    try:
+        receipt = json.loads(p.with_suffix(".state.json").read_text())
+        if (receipt["contract"] != CONTRACT or receipt["scale"] != g2.SCALE
+                or receipt["name"] != name or sha256(p) != receipt["file_sha256"]):
+            raise ValueError("model contract/hash mismatch")
+        validate_origin(receipt["origin"], m)
+        if receipt["state_hash_algorithm"] != "ai20_minimum_tensor_state_v1":
+            raise ValueError("unknown tensor-state hash algorithm")
+        state = torch.load(p, weights_only=True, map_location="cpu")
+        if state_hash(state) != receipt["state_hash"]:
+            raise ValueError("model tensor-state mismatch")
+        m.load_state_dict(state)
+    except (OSError, ValueError, KeyError, RuntimeError) as error:
+        raise RuntimeError(f"Part20 {item}: missing/invalid model {p}; import its accepted "
+                           "state or explicitly compute the named item. No training was started.") from error
     m.eval()
     return m
 
@@ -874,10 +897,10 @@ def train_vae(seed: int, replay: bool, zdim=16, beta=1.0, budget=gd.BUDGET, tag=
                 l, r, k, _ = m.terms(te, gen, 1.0)
             curve.append((s, s * bs, float(l.mean()), float(r.mean()), float(k.mean())))
             if replay:
-                snaps.append(m.sample(16, gen, zfix))
+                snaps.append(m.sample_locations(16, gen, zfix))
                 with torch.no_grad():
                     mu, _ = m.encode(gd.as_float(te[:8]))
-                    recs.append(gd.to_levels(m.decode(mu)[0].numpy()))
+                    recs.append(m.location_levels(mu))
         if s == steps:
             break
         l, _, _, _ = m.terms(next(it), gen, beta)
@@ -890,12 +913,12 @@ def train_vae(seed: int, replay: bool, zdim=16, beta=1.0, budget=gd.BUDGET, tag=
         l, r, k, kd = m.terms(d["xte"], gen, 1.0)
         mu, _ = m.encode(gd.as_float(d["xte"]))
         au = mu.var(0).numpy()  # Burda et al.'s activity: a unit is active if its code mean varies with x
-        rec = m.decode(mu[:8])[0].numpy()
+        rec = m.location_levels(mu[:8])
     lg2 = gd.D * math.log(2)
     res = dict(curve=curve, elbo_bpp=float(l.mean()) / lg2, rec_nats=float(r.mean()), kl_nats=float(k.mean()),
                kl_dims=kd.mean(0).numpy(), activity=au, active=int((au > 0.01).sum()), step_flops=fl, steps=steps,
                batch=bs, examples=steps * bs, params=g2.n_params(m), secs=secs, beta=beta,
-               recon=gd.to_levels(rec), recon_src=d["xte"][:8])
+               recon=rec, recon_src=d["xte"][:8])
     if replay:
         res["snaps"], res["snap_recs"] = np.array(snaps), np.array(recs)
     return m, res
@@ -910,12 +933,17 @@ def compute_vae():
         t = time.time()
         m, res = train_vae(s, replay=(s == 0))
         gen = torch.Generator().manual_seed(77)
-        samples = m.sample(gd.N_GEN, gen)
+        z = torch.randn(gd.N_GEN, m.zdim, generator=gen)
+        samples = m.sample(gd.N_GEN, gen, z, pixel_gen=torch.Generator().manual_seed(7077))
         res["iwae_bpp"] = float(-m.iwae(gd.digits()["xte"][:1000], gen).mean()) / (gd.D * math.log(2))
         res["judge"], res["show"], res["nfe"] = judge()(samples), samples[:64], 1
-        t1 = time.time()
-        m.sample(gd.N_GEN, gen)
-        res["sample_secs"] = (time.time() - t1) / gd.N_GEN
+        timing_gen = torch.Generator().manual_seed(78)
+        timing_pixels = torch.Generator().manual_seed(7088)
+        t1 = time.perf_counter()
+        m.sample(gd.N_GEN, timing_gen, pixel_gen=timing_pixels)
+        res["sample_secs"] = (time.perf_counter() - t1) / gd.N_GEN
+        res["sample_timing"] = dict(scope="latent draw + conditional pixel draw; amortized batch throughput",
+                                    batch=gd.N_GEN, latent_seed=78, pixel_seed=7088)
         save_model(m, f"vae_s{s}")
         part[f"s{s}"] = tolist(res)
         log(f"vae s{s}: ELBO {res['elbo_bpp']:.3f} bpp, IWAE {res['iwae_bpp']:.3f}, KL {res['kl_nats']:.1f}, "
@@ -955,7 +983,8 @@ def compute_vae_map():
     u = norm.ppf(np.linspace(0.04, 0.96, 15))
     Z = torch.as_tensor(np.array([[a, b] for b in u[::-1] for a in u]), dtype=torch.float32)
     with torch.no_grad():
-        grid = gd.to_levels(m.decode(Z)[0].numpy())
+        grid = m.location_levels(Z)
+    save_model(m, "vae_map_s0")
     return dict(codes=np.array(codes, np.float32), labels=lab, steps=[c for c in marks], curve=np.array(curve),
                 grid=grid.reshape(15, 15, gd.S, gd.S), grid_z=u)
 
@@ -970,8 +999,9 @@ def compute_beta():
             if key in part:
                 continue
             m, res = train_vae(10 + s, replay=False, beta=b, budget=gd.BUDGET / 4)
+            save_model(m, f"beta_b{b}_s{10 + s}")
             gen = torch.Generator().manual_seed(77)
-            res["show"] = m.sample(16, gen)
+            res["show"] = m.sample_locations(16, gen)
             part[key] = tolist({k: res[k] for k in ("rec_nats", "kl_nats", "elbo_bpp", "active", "kl_dims", "show",
                                                     "recon", "steps", "examples")})
             log(f"beta {key}: rate {res['kl_nats']:.1f}, distortion {res['rec_nats']:.1f}, active {res['active']}")
@@ -1056,6 +1086,7 @@ def compute_collapse():
             mu, _ = m.enc(gd.as_float(d["xte"][:100]).reshape(100, -1)).chunk(2, -1)
         many = gd.ar_sample(m.dec, 400, torch.Generator().manual_seed(4), z=mu.repeat_interleave(4, 0))
         agree = float((judge().net.classes(many) == np.repeat(d["yte"][:100], 4)).mean())
+        save_model(m, f"pixelvae_{tag}")
         part[tag] = tolist(dict(curve=curve, free_bits=fb, steps=steps, step_flops=fl, same_z=same_z,
                                 src=d["xte"][:4], src_labels=d["yte"][:4], agree=agree, secs=time.time() - t))
         log(f"collapse {tag}: KL {curve[-1][3]:.2f} nats, reconstruction {curve[-1][2]:.1f} ({time.time() - t:.0f}s)")
@@ -1235,11 +1266,12 @@ def compute_rbm():
                 continue
             t = time.time()
             m, r = gd.train_rbm(meth, s)
+            save_model(dict(W=m.W, b=m.b, c=m.c), f"rbm_{meth}_s{s}_h16")
             res = dict(curve=r["curve"], test_ll=r["test_ll"], steps=r["steps"])
             if s == 0:
                 gen = torch.Generator().manual_seed(5)
                 res["W"] = m.W.T.numpy()
-                res["exact"] = m.exact_sample(16, gen).numpy()
+                res["exact"] = m.exact_sample(16, gen, visible_gen=torch.Generator().manual_seed(5005)).numpy()
                 v = torch.bernoulli(torch.full((16, gd.D), 0.5), generator=gen)
                 chain = [v.numpy().copy()]
                 for k in (1, 9, 90, 900):
@@ -1251,6 +1283,7 @@ def compute_rbm():
     if "big" not in part:  # a bigger machine, for its filters and its dreams
         t = time.time()
         m, r = gd.train_rbm("pcd", 0, nh=100, epochs=6, exact=False)
+        save_model(dict(W=m.W, b=m.b, c=m.c), "rbm_pcd_s0_h100")
         gen = torch.Generator().manual_seed(6)
         v = torch.bernoulli(torch.full((16, gd.D), 0.5), generator=gen)
         chain = [v.numpy().copy()]
@@ -1292,7 +1325,7 @@ def compute_vq():
         if s % 500 == 0 and s:  # revive codes nobody uses (a common fix for codebook collapse)
             with torch.no_grad():
                 e = vq.enc(gd.as_float(next(it))).permute(0, 2, 3, 1).reshape(-1, vq.code.shape[1])
-                used = torch.bincount(vq.quantize(vq.enc(gd.as_float(d["xte"][:500])))[1].ravel(), minlength=vq.K)
+                used = torch.bincount(vq.quantize(vq.enc(gd.as_float(d["xtr"][:500])))[1].ravel(), minlength=vq.K)
                 dead = torch.where(used == 0)[0]
                 if len(dead):
                     vq.code.data[dead] = e[torch.randint(0, len(e), (len(dead),), generator=gen)]
@@ -1330,6 +1363,8 @@ def compute_vq():
     cs = torch.cat([prior.sample(gd.N_GEN // 4, gen2) for _ in range(4)])
     with torch.no_grad():
         samples = gd.to_levels(vq.decode_codes(cs.reshape(-1, 7, 7))[0].numpy())
+    save_model(vq, "vq_s0")
+    save_model(prior, "vq_prior_s0")
     log(f"vq: perplexity {perplexity:.1f} of {vq.K}, prior {te_nll:.1f} nats per digit ({vq_secs + prior_secs:.0f}s)")
     return dict(curve=np.array(curve), recon=recon, src=d["xte"][:8], codes=codes_te[:8].numpy().reshape(8, 7, 7),
                 usage=usage, perplexity=perplexity, K=vq.K, grid=7, rec_nats=float(rec_te),
@@ -1429,7 +1464,7 @@ def compute_evaluate():
     dist, _ = nn_dist(d["xte"][:64])
     mem["real"] = dict(dist=dist)
     out = dict(families=list(fams), table=table, trunc=trunc, trunc_t=ts, inv_targets=targets, inv_steps=rec_steps,
-               inv_frames=inv_frames, inv_err=inv_err, vae_err=vae_err, vae_recon=gd.to_levels(vrec.numpy()),
+               inv_frames=inv_frames, inv_err=inv_err, vae_err=vae_err, vae_recon=vae.location_levels(mu),
                interp=interp, real_floor=load("classifier")["real"], vq=load("vq")["judge"])
     for f in mem:
         out[f"mem_{f}_dist"] = mem[f]["dist"]

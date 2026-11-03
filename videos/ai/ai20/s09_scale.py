@@ -41,8 +41,8 @@ class Scale(VoiceoverScene):
         dl, gl = curve(ax.ax, xs, sm(L[:, 1]), DISC, 2.5), curve(ax.ax, xs, sm(L[:, 2]), GAN_C, 2.5)
         eq = DashedLine(ax.ax.c2p(0, 2 * math.log(2)), ax.ax.c2p(steps, 2 * math.log(2)), color=GREY_C,
                         stroke_width=1.5)
-        eql = label(r"$2 \log 2$: \ $D = \tfrac12$ everywhere", font_size=18, color=GREY_B).next_to(eq, UP, buff=0.05)
-        eql.align_to(eq, RIGHT)
+        eql = label(r"$2 \log 2$: \ $D = \tfrac12$ everywhere", font_size=18, color=GREY_B)
+        eql.next_to(ax, DOWN, buff=0.25).align_to(ax.ax, LEFT)
         lg = legend([(DISC, r"discriminator"), (GAN_C, r"generator")], font_size=20)
         lg.align_to(ax.ax, RIGHT).align_to(ax.ax, UP)
         sheets = [digit_sheet(s_, 4, 4, size=0.55, gap=0.05).move_to([3.5, 0.3, 0]) for s_ in snaps]
@@ -51,10 +51,13 @@ class Scale(VoiceoverScene):
         head = label(r"our digit GAN, \ seed $0$: \ the same $16$ noise vectors at every checkpoint", font_size=22,
                      color=GREY_A).to_edge(UP, buff=0.35)
         dfin = float(sm(L[:, 1])[-1])
-        bal = ("The discriminator's loss settles close to two log two, the value when it can do no better than a "
-               "coin toss." if abs(dfin - 2 * math.log(2)) < 0.25 else
-               f"The discriminator's loss ends at {dfin:.2f}, below two log two: it still tells most fakes from real "
-               "digits.")
+        bal = ("The discriminator's loss settles close to two log two, the reference for constant one-half "
+               "predictions on real and generated examples. This compares losses; it does not measure "
+               "classification accuracy or prove an optimal discriminator."
+               if abs(dfin - 2 * math.log(2)) < 0.25 else
+               f"The discriminator's loss ends at {dfin:.2f}, compared with two log two for constant one-half "
+               "predictions. This compares losses; it does not measure classification accuracy or prove an "
+               "optimal discriminator.")
         with self.voiceover(
             "First, ours: two-layer networks on the digits, and what the generator draws from sixteen fixed noise "
             "vectors. <bookmark mark='a'/> Blobs, then strokes, then digits. <bookmark mark='b'/> The two losses "

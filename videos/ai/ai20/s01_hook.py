@@ -34,11 +34,13 @@ class Hook(VoiceoverScene):
             h.next_to(p, DOWN, buff=0.22)
             if h.width > p.width + 0.3:
                 h.width = p.width + 0.3
-        tg = note(r"computed: \ trained on this computer, \ MNIST at $14 \times 14$").to_corner(DR, buff=0.25)
+        tg = note(r"new cloud training: \ $2$ CPUs allocated, \ $1$ numerical thread \\ "
+                  r"MNIST at $14 \times 14$", font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
             "None of these sixty-four digits was written by a person. <bookmark mark='a'/> Each block was drawn by a "
-            "different machine, trained on the computer making this video, for about "
-            f"{mins:.0f} minutes each, on the same sixty thousand handwritten digits. <bookmark mark='b'/> The first "
+            "different model, trained in a new cloud run with two CPUs allocated and one numerical thread. "
+            f"Their mean recorded training time was about {mins:.0f} minutes, on the same sixty thousand handwritten "
+            "digits. <bookmark mark='b'/> The first "
             "writes a digit one pixel at a time. <bookmark mark='c'/> The second squeezes every digit into sixteen "
             "numbers and learns to expand them again. <bookmark mark='d'/> The third learned by playing a game "
             "against a critic. <bookmark mark='e'/> And the fourth bends random noise, smoothly and invertibly, into "
@@ -61,17 +63,21 @@ class Hook(VoiceoverScene):
         q = label(r"From examples alone, \\ learn a distribution \\ you can draw new ones from.", font_size=38)
         q.move_to([3.4, 1.0, 0])
         ways = VGroup(
-            node_box(r"one piece at a time", AR, font_size=22),
-            node_box(r"compress and expand", VAE_C, font_size=22),
-            node_box(r"a two-player game", GAN_C, font_size=22),
-            node_box(r"an invertible map", FLOW, font_size=22),
-            node_box(r"an energy landscape", EBM, font_size=22),
+            node_box(r"one piece at a time", AR, font_size=22, width=2.45),
+            node_box(r"compress and expand", VAE_C, font_size=22, width=2.45),
+            node_box(r"a two-player game", GAN_C, font_size=22, width=2.45),
+            node_box(r"an invertible map", FLOW, font_size=22, width=2.45),
+            node_box(r"an energy landscape", EBM, font_size=22, width=2.45),
         ).arrange(RIGHT, buff=0.22).move_to(DOWN * 2.2)
         if ways.width > 13.4:
             ways.width = 13.4
-        yrs = VGroup(*[label(t, font_size=20, color=GREY_B).next_to(w, DOWN, buff=0.12) for t, w in
-                       zip((r"Shannon, \ 1948", r"Kingma \& Welling, \ 2013", r"Goodfellow et al., \ 2014",
-                            r"Dinh et al., \ 2014", r"Hopfield, \ 1982"), ways)])
+        yrs = VGroup(*[
+            VGroup(label(author, font_size=20, color=GREY_B), label(year, font_size=20, color=GREY_B))
+            .arrange(DOWN, buff=0.06).next_to(w, DOWN, buff=0.12)
+            for author, year, w in zip(
+                (r"Shannon", r"Kingma \& Welling", r"Goodfellow et al.", r"Dinh et al.", r"Hopfield"),
+                ("1948", "2013", "2014", "2014", "1982"), ways)
+        ])
         with self.voiceover(
             "Real handwriting looks like this: samples from some distribution p of x that nobody can write down. "
             "<bookmark mark='a'/> The question of this part: from examples alone, how do you learn a distribution "
@@ -112,8 +118,8 @@ class Hook(VoiceoverScene):
             "variational autoencoder; <bookmark mark='o4'/> adversarial games, why they spiral, and how Wasserstein "
             "distance and StyleGAN tamed them; <bookmark mark='o5'/> invertible maps, from coupling layers to neural "
             "ODEs; <bookmark mark='o6'/> energy, from Hopfield and Boltzmann to Langevin dynamics and the score; "
-            "<bookmark mark='o7'/> and how to judge a generator, with every family trained here and compared on one "
-            "budget."
+            "<bookmark mark='o7'/> and how to judge a generator, with five digit-model baselines trained in the "
+            "cloud and compared on one declared, registry-counted model budget."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
@@ -123,7 +129,8 @@ class Hook(VoiceoverScene):
                              for r_ in obj.rows])
             mark = Triangle(color=C.BITS, fill_opacity=1, stroke_width=0).rotate(-PI / 2).scale(0.1)
             mark.next_to(obj.rows[0], LEFT, buff=0.15)
-            self.play(FadeOut(smap), FadeIn(obj), FadeIn(veils[1:]), FadeIn(mark))
+            self.play(FadeOut(smap), run_time=0.4)
+            self.play(FadeIn(obj), FadeIn(veils[1:]), FadeIn(mark), run_time=0.6)
             for k, mk in enumerate(["o2", "o3", "o4", "o5", "o6", "o7"], 1):
                 vo.wait_until(mk)
                 self.play(FadeOut(veils[k]), mark.animate.next_to(obj.rows[k], LEFT, buff=0.15), run_time=0.5)

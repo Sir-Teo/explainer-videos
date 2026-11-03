@@ -26,10 +26,9 @@ CHAPTERS = {
 ZH = {
     # ------------------------------------------------------------------ Hook
     'f"None of these sixty-four digits was written by a person.':
-        "这64个数字，没有一个是人写的。<bookmark mark='a'/>每一块都出自一台不同的机器，它们都在制作这个视频的电脑上训练，"
-        "每台大约{mins:.0f}分钟，学的是同样的6万个手写数字。<bookmark mark='b'/>第一台一次写一个像素。"
-        "<bookmark mark='c'/>第二台把每个数字压缩成16个数，再学会把它们展开。<bookmark mark='d'/>第三台是通过和一个评论家"
-        "对弈学会的。<bookmark mark='e'/>第四台把随机噪声平滑地、可逆地，弯成了墨迹。",
+        "这64个数字，没有一个是人写的。<bookmark mark='a'/>每一块都来自一个不同的模型，模型在全新云端实验中训练，分配两个CPU、使用一个数值计算线程。它们记录下来的平均训练时间约"
+        "为{mins:.0f}分钟，学习的是同样的6万个手写数字。<bookmark mark='b'/>第一种一次写一个像素。<bookmark mark='c'/>第二种把每个数字压缩成16个数，"
+        "再学会把它们展开。<bookmark mark='d'/>第三种通过与评论家博弈来学习。<bookmark mark='e'/>第四种把随机噪声平滑、可逆地弯成墨迹。",
 
     'Real handwriting looks like this: samples from some distribution':
         "真正的手写数字是这样的：它们是某个分布p(x)的样本，而这个分布没有人写得出来。<bookmark mark='a'/>本部分的问题是："
@@ -39,11 +38,7 @@ ZH = {
         "就是用这些零件搭起来的。",
 
     'This is Part 20 of AI, Built, and the start of its fourth act':
-        "这是《人工智能，从零搭建》的第20部分，也是第四幕“生成与感知”的开始。<bookmark mark='a'/>本部分的内容：生成问题及其历史；"
-        "<bookmark mark='o2'/>自回归模型；<bookmark mark='o3'/>隐变量，从亥姆霍兹机到变分自编码器；<bookmark mark='o4'/>"
-        "对抗博弈，它为什么会绕圈，以及瓦瑟斯坦距离和StyleGAN怎样驯服了它；<bookmark mark='o5'/>可逆映射，从耦合层到神经ODE；"
-        "<bookmark mark='o6'/>能量，从霍普菲尔德和玻尔兹曼，到朗之万动力学和分数函数；<bookmark mark='o7'/>最后是怎样评判一个生成模型，"
-        "每个家族都在这里训练，并在同一份预算下比较。",
+        "这是《人工智能，从零搭建》的第20部分，也是第四幕“生成与感知”的开始。<bookmark mark='a'/>本部分的内容：生成问题及其历史；<bookmark mark='o2'/>自回归模型；<bookmark mark='o3'/>隐变量，从亥姆霍兹机到变分自编码器；<bookmark mark='o4'/>对抗博弈，它为什么会绕圈，以及瓦瑟斯坦距离和StyleGAN怎样驯服了它；<bookmark mark='o5'/>可逆映射，从耦合层到神经ODE；<bookmark mark='o6'/>能量，从霍普菲尔德和玻尔兹曼，到朗之万动力学和分数函数；<bookmark mark='o7'/>最后是怎样评判一个生成模型：五个数字模型基线在云端训练，并在同一份明确声明、按运算注册表计数的模型预算下比较。",
 
     # ------------------------------------------------------------------ Problem
     'Chapter one. The generative problem.':
@@ -73,12 +68,11 @@ ZH = {
     'Overall, raising beta lowers the rate':
         '总体上，升高β会降低码率、升高失真，虽然不是每一级都如此：这些训练散布在一条曲线周围，也就是信息论里的码率-失真权衡。',
 
-    "f'Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, and":
-        '自由比特，也就是每个编码数{fbits:.1f}奈特的下限，能让编码里留住{kf:.1f}奈特，解码出的数字有{pf:.0f}%和来源相符。',
+    "f'The free-bits objective uses a cost floor of {fbits:.1f} nats per code number. Its measured KL is {kf:.1f} nats, and classifier agreement is {pf:.0f} percent in this paired seed.'":
+        '自由比特目标把每个编码数的KL成本下限设为{fbits:.1f}奈特。实测KL为{kf:.1f}奈特，在这一配对种子上，分类器标签一致率为{pf:.0f}%。',
 
-    "f'Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, yet only":
-        '自由比特，也就是每个编码数{fbits:.1f}奈特的下限，能让编码里留住{kf:.1f}奈特，可解码出的数字只有{pf:.0f}%和来源相符：'
-        '给码率设一个下限，并不等于用上了编码。',
+    "f'The free-bits objective uses a cost floor of {fbits:.1f} nats per code number. Its measured KL is {kf:.1f} nats, and classifier agreement is {pf:.0f} percent: a cost floor does not guarantee code use.'":
+        '自由比特目标把每个编码数的KL成本下限设为{fbits:.1f}奈特。实测KL为{kf:.1f}奈特，分类器标签一致率为{pf:.0f}%：对成本设下限并不能保证使用编码。',
 
 }
 
@@ -93,7 +87,7 @@ ZH.update({
         '在环上测量，训练的最初几步里，非饱和生成器的梯度是极小极大生成器的{ratio:.1f}倍。',
 
     "f'Measured on the ring, in the first steps, the two gradients":
-        '在环上测量，最初几步里，两者的梯度相差不到{fac:.1f}倍：我们的判别器在早期从来没有自信到让这个差别显现出来。',
+        '在最初这段训练窗口中，两种生成器梯度的实测大小相差不到{fac:.1f}倍。',
 
     'Its samples bunch into one clump':
         '它的样本挤成一团，有时落在一个峰上，有时落在峰与峰之间，而这一团从一个峰跳到另一个峰：生成器追着判别器最薄弱的地方跑，'
@@ -130,10 +124,10 @@ ZH.update({
         '第8章。规模化的GAN：BigGAN、StyleGAN与反演。',
 
     "The discriminator's loss settles close to two log two":
-        '判别器的损失稳定在2 log 2附近，这是它只能像抛硬币一样乱猜时的值。',
+        "判别器的损失稳定在2 log 2附近；这是真实与生成样本均输出二分之一时的参考损失。这里只比较损失，并没有测量分类准确率，也没有证明判别器已最优。",
 
     'f"The discriminator\'s loss ends at {dfin:.2f}':
-        '判别器的损失最后是{dfin:.2f}，低于2 log 2：它仍然能把大多数假样本和真数字分开。',
+        "判别器的损失最后为{dfin:.2f}，对照的是恒定输出二分之一时的2 log 2。这只是在比较损失，并没有测量分类准确率，也没有证明判别器已最优。",
 
     'The FID, which mixes both, is best with no truncation at all.':
         '把两者混在一起的FID，在完全不截断时最好。',
@@ -244,8 +238,10 @@ ZH.update({
         "哪个看起来最清晰，哪个最多样，哪个最像真正的手写？测量结果在后面。",
 
     'f"First, FID: the distance between our classifier\'s view':
-        "第一，FID：我们的分类器眼中生成数字和真实数字之间的距离：两千个生成数字，对照一万个测试数字。真实样本得分为{floor:.2f}，就是真实数字那条线。"
-        "<bookmark mark='a'/>{lead}<bookmark mark='b'/>{pr}每个点是一个种子：种子之间的波动，也是结果的一部分。",
+        '第一，FID：我们的分类器眼中，生成数字与真实数字之间的距离；2000个生成数字，对照10000个测试数字。真实样本得分为{floor:.2f}，就是真实数字那条线。'
+        "<bookmark mark='a'/>{lead}<bookmark mark='b'/>{pr}每个点是一个种子：种子间的波动也是结果的一部分。精确率与召回率使用前2000个测试数字作参考"
+        '。在我们已记录的相同状态、三种子VAE采样器检查中，抽取条件像素使平均FID从40.209升至46.338，精确率从0.8155降至0.7603，而召回率从0.5643升至0.7100。在那次'
+        '检查中，按正确似然采样改变了测得的权衡，并没有改善质量分数。',
 
     "f'The lowest FID belongs to {n1}, {f1:.1f}, clearly ahead":
         'FID最低的是{n1}，{f1:.1f}，明显领先第二名{n2}的{f2:.1f}；最后一名是{nl}，{fl_:.1f}。',
@@ -259,15 +255,16 @@ ZH.update({
     "f'Split in two, one model leads on both:":
         '拆成两个数来看，一个模型两项都领先：{nbp}，精确率{vbp:.2f}，召回率{R[bp]:.2f}。',
 
-    'f"Second, likelihood, for the three families that have one':
-        "第二，似然，只看有似然的那三个家族，单位是留出数字上的每像素比特数：PixelCNN是精确值，VAE和流是上界。<bookmark mark='a'/>"
-        "最好的是{b1}，每像素{v1:.2f}比特，然后是{b2}，{v2:.2f}，再然后是{b3}，{v3:.2f}。<bookmark mark='b'/>{cmp_}",
+    'f"Second, reported bits per pixel for the three families':
+        '第二，比较可以方便评分的三个家族在留出数字上报告的每像素比特数：PixelCNN是精确值，VAE和流是估计的上界。后两者采用有限次蒙特卡洛估计，并非每次实现都保证是上界。PixelCNN和流使'
+        "用全部10000个留出数字；VAE使用64个编码、在前1000个留出数字上计算重要性加权估计。<bookmark mark='a'/>报告分数最低的是{b1}，每像素{v1:.2f}比特，然后"
+        "是{b2}，{v2:.2f}，最后是{b3}，{v3:.2f}。<bookmark mark='b'/>{cmp_}",
 
-    'Compare the FID ranking: it is not the same.':
-        '对比一下FID的排名：它们不一样。正如Theis和同事所警告的，一个模型可以概率算得好，图却画得差，或者反过来。',
+    'Compare the reported-score ranking with FID:':
+        '把报告分数的排名与FID比较：两者不同。所用上界和评估样本群不同，因此这不能给真实负对数似然排序。',
 
-    'Here the likelihood ranking and the FID ranking agree':
-        '在这里，对这三个模型，似然的排名和FID的排名一致；但它们并不一定一致。',
+    'Here the reported-score ranking and FID ranking agree':
+        '这里三个模型的报告分数排名和FID排名相同。但所用上界和评估样本群不同，因此这不能给真实负对数似然排序。',
 
     'f"Third, a coarse but telling check:':
         "第三，一个粗略但很说明问题的检查：每个模型画的是哪些数字？分类器给每个模型的两千个样本打上标签，<bookmark mark='r'/>"
@@ -275,8 +272,8 @@ ZH.update({
         "在整个类别这个尺度上的模式丢失，是最容易看出来的失败。",
 
     'f"So, at this small scale and on one budget, who won what?':
-        "那么，在这个小尺度、同一份预算下，谁赢了什么？<bookmark mark='a'/>{close}<bookmark mark='b'/>哪个最好，取决于模型是"
-        "拿来做什么的，也取决于规模：GAN曾经多年画出最清晰的图像，用的规模远远超过我们的。",
+        '那么，在这个小尺度、同一份预算下，谁赢了什么？采样指标使用批处理吞吐量折算的每数字耗时。我们把平均采样时间小于最快均值两倍的家族归为一组。这是启发式分组，不是统计意义上的并列。'
+        "<bookmark mark='a'/>{close}<bookmark mark='b'/>哪个最好取决于模型的用途和规模：GAN曾经多年画出最清晰的图像，其规模远远超过这里。",
 
     "every model wins something, and none wins everything.":
         "每个模型都赢下了一些东西，没有哪个赢下一切。",
@@ -295,11 +292,11 @@ ZH.update({
     'Chapter sixteen. Where the families meet.':
         '第16章。几个家族的交汇。',
 
-    "f'Its samples score an FID of {vfid:.1f}, better":
-        '它的样本FID是{vfid:.1f}，比上一章五个单一模型都好，不过它是在那份预算之外训练的。',
+    "f'Its decoded location images score an FID of {vfid:.1f}, below":
+        '解码器位置参数图像的FID为{vfid:.1f}，低于上一章全部五个单模型家族各自的三种子平均FID，不过它是在那份预算之外训练的。',
 
-    "f'Its samples score an FID of {vfid:.1f}; the best":
-        '它的样本FID是{vfid:.1f}；上一章最好的单一模型是{bfid:.1f}，而这一个是在那份预算之外训练的。',
+    "f'Its decoded location images score an FID of {vfid:.1f}; the lowest":
+        '解码器位置参数图像的FID为{vfid:.1f}；上一章最低的三种子家族平均FID为{bfid:.1f}，而这一个是在那份预算之外训练的。',
 
     'So this is where the four answers, and the fifth, ended up.':
         "这就是那四个答案，以及第五个，最后的归宿。<bookmark mark='a'/>VAE和GAN变成了分词器和潜空间，许多图像和视频模型都从它们出发。"
@@ -350,17 +347,14 @@ PHRASES.update({
 # Narration as tightened for length (replaces the first drafts of these lines).
 ZH.update({
     'Here is the problem at its smallest:':
-        "先看这个问题最小的样子：平面上的2万个点，抽自一个形状像两弯月亮的分布p。<bookmark mark='a'/>"
-        "因为分布是我们造的，我们确切地知道p；面对图像或文本，没有人知道。<bookmark mark='b'/>生成模型，"
-        "就是一个从样本里学出来、能从中抽样的分布q；<bookmark mark='c'/>最好还能计算它，"
-        "<bookmark mark='d'/>还能给每个x一个编码，一个说明它是什么的简短描述。",
+        "先看这个问题最小的样子：平面上2万个点，抽自一个形状像两弯月亮的分布p。<bookmark mark='a'/>因为分布是我们构造的，我们能计算目标密度；对双月，这需要沿圆弧作数值平均。真实图"
+        "像或文本通常不具备这种条件。<bookmark mark='b'/>生成模型就是从样本里学出来、能从中抽样的分布q；<bookmark mark='c'/>最好还能计算它，"
+        "<bookmark mark='d'/>还能给每个x一个编码，简短地描述它是什么。",
 
     'f"The workhorse for fitting q':
-        '拟合q的主力方法，是第1部分讲过的最大似然：让平均意外度，也就是负log q，尽可能小。'
-        "<bookmark mark='a'/>把这个平均值拆成两部分。<bookmark mark='b'/>数据自身的熵"
-        "，任何模型都打不破它；加上从p到q的KL散度，也就是犯错的代价。<bookmark mark='c'/>所以，"
-        "最大似然就是最小KL。<bookmark mark='d'/>对我们的三个测试密度，这个下限是已知的："
-        '双月是{hm:.2f}奈特，八个高斯组成的环是{hr:.2f}，棋盘格是{hc:.2f}。',
+        "拟合q的主力方法，是第1部分讲过的最大似然：让平均意外度，也就是负log q，尽可能小。<bookmark mark='a'/>把这个平均值拆成两部分。<bookmark mark='b'/>"
+        "数据自身的熵，任何模型都无法低于它；加上从p到q的KL散度，也就是犯错的代价。<bookmark mark='c'/>所以最大似然就是最小KL。<bookmark mark='d'/>对这三个"
+        '测试密度，我们用每个密度20万个样本估计熵参考值；双月的密度沿圆弧作数值平均：双月为{hm:.2f}奈特，八个高斯组成的环为{hr:.2f}，棋盘格为{hc:.2f}。',
 
     'What each family offers.':
         "每个家族能给出什么。<bookmark mark='a'/>自回归模型：精确的似然，稳定的训练，"
@@ -407,11 +401,8 @@ ZH.update({
         '发展出了DeepMind的Aaron van den Oord和同事在2016年提出的PixelRNN和PixelCNN'
         '，以及生成语音的WaveNet。',
 
-    "There's a catch. Ask the network":
-        '这里有个问题。问问网络，它的预测依赖于哪些输入：求一个像素的预测对每个输入的梯度。'
-        "<bookmark mark='a'/>如果简单地把带掩码的滤波器叠起来，右上方有一块楔形永远看不见，尽管它排在前面"
-        "。<bookmark mark='b'/>第二篇PixelCNN论文把网络一分为二：一个竖直的栈，看得到上面的各行，"
-        '把信息送给一个水平的栈，它看得到这一行已经写好的部分。盲区消失了。我们训练的就是这种结构。',
+    "There's a catch. At random initialization":
+        "这里有个问题。在随机初始化时，我们对一个像素的各个logit绝对值之和求输入梯度，累加8个随机输入上的梯度绝对值，再施加相对阈值。粉色标出这样的先前像素：自身未检测到，而其镜像被检测到。<bookmark mark='a'/>简单堆叠掩码滤波器时，探针在右上方标出一个不对称的楔形。<bookmark mark='b'/>第二篇PixelCNN论文把网络一分为二：竖直栈处理上面的各行，再把信息送给处理当前行已写部分的水平栈。这种设计针对朴素堆叠的典型楔形。有限阈值探针仍可能有先前像素未被检测到；这并不能证明结构上没有连接。我们训练的就是双栈结构。",
 
     'f"Here is ours learning: on the left':
         '这是我们的模型在学习：左边是它在留出数字上的意外度，单位是每像素比特数；右边是它在每个检查点画出的东西。'
@@ -421,10 +412,10 @@ ZH.update({
         '三个种子最后落在{lo:.2f}到{hi:.2f}之间。',
 
     'f"And here is one digit being drawn, with':
-        "这是一个数字正在被画出来，旁边是模型对下一个像素给出的16个概率。<bookmark mark='a'/>"
-        "在空白的边缘，它很确定：黑色。<bookmark mark='b'/>到了笔画的边上，它会犹豫，"
-        "而它掷出的那枚硬币决定了数字的形状。<bookmark mark='c'/>代价在于顺序：一个数字要过196遍网络，"
-        '每一遍都要等上一遍，在这里是{ms_ar:.1f}毫秒，大约是GAN一遍所需时间的{ratio:,.0f}倍。',
+        "这里展示一个数字的绘制过程，旁边是模型对下一个像素给出的16个概率。<bookmark mark='a'/>空白边缘处，它很确定：黑色。<bookmark mark='b'/>笔画边缘处，它会"
+        "犹豫，随机抽样决定数字的形状。<bookmark mark='c'/>代价来自顺序：每个数字需要196次依次进行的网络计算，而GAN只需一次。在已记录的批处理计时中，PixelCNN折算每个数"
+        '字平均{ms_ar:.1f}毫秒，约为GAN批处理平均每数字时间的{ratio:,.0f}倍。两者的计时都覆盖2000个数字：PixelCNN分成4批、每批500个；GAN一批处理2000个。'
+        '这是批处理吞吐量折算的平均每数字耗时，不是单独生成一个数字的延迟。时间比值也取决于架构、批量大小及各次计时所包含的工作，不能仅由计算遍数推断。',
 
     'The second answer adds something hidden: every':
         '第二个答案加进了一些隐藏的东西：每个数字都来自一个编码z，几个从普通高斯分布里抽出来的数。'
@@ -462,19 +453,16 @@ ZH.update({
         '我们的VAE有一个16个数的编码，它的解码器给每个像素一个钟形分布，切成16个灰度级：一共{p:,}个参数。'
         "<bookmark mark='a'/>所以它的下界和PixelCNN用的是同一个单位，每像素比特数。",
 
-    'f"Here is our VAE learning: the bound':
-        "这是我们的VAE在学习：下界的两项，单位是每个留出数字的奈特数。<bookmark mark='a'/>一开始，"
-        "重建要花{r0:.0f}奈特，码率是{k0:.1f}：编码什么也没说。<bookmark mark='b'/>"
-        "然后码率上升，重建变得清晰：准确是用信息换来的。<bookmark mark='c'/>到最后，"
-        '编码携带{k1:.1f}奈特，解码器还需要{r1:.0f}；下界是每像素{eb0:.2f}比特，'
-        "而每个数字用64个编码得到的更紧的下界是{iw0:.2f}。<bookmark mark='d'/>样本是认得出的数字，"
-        '而16个编码数里只有{act}个携带信息。记住这一点。',
+    'f"Here is our VAE learning: the negative ELBO':
+        "这是我们的VAE在学习：负ELBO的两项成本，单位是每个留出数字的奈特数。回放曲线使用前2000个留出数字。<bookmark mark='a'/>起初，重建成本为{r0:.0f}奈特，码率为"
+        "{k0:.1f}。<bookmark mark='b'/>随后码率上升，重建变得清晰：更好的重建需要更高的编码成本。<bookmark mark='c'/>最后码率成本为{k1:.1f}奈特，"
+        '解码器还需要{r1:.0f}；基于最终ELBO、在全部10000个留出数字上估计的负对数似然上界为每像素{eb0:.2f}比特。每个数字使用64个编码、对理论上更紧上界的重要性加权估计，在前1'
+        "000个留出数字上为{iw0:.2f}。这些报告值并不是同一评估样本群上的配对比较。<bookmark mark='d'/>图片是解码器位置参数图像，没有抽取条件像素噪声。16个潜变量均值中，"
+        '有{act}个超过活跃阈值：在留出数字上的方差大于零点零一。这是活跃程度的操作性指标，不是对所有携带信息坐标的计数。',
 
     'What does the code learn? With two numbers':
-        '编码学到了什么？每个数字只用两个数，我们就能看见：每个点是一个留出数字，放在它的编码处，按它的标签上色。'
-        "<bookmark mark='a'/>编码器把它们铺开，同一种数字聚到了一起，尽管没有人告诉它标签；"
-        "KL项则让整团点留在原点附近。<bookmark mark='b'/>把一个均匀的编码网格解码出来，"
-        '就得到模型的数字地图，各个区域之间是平滑的过渡。',
+        "编码学到了什么？每个数字只用两个数，我们就能看见：每个点是一个留出数字，放在它的编码处，按标签着色。<bookmark mark='a'/>编码器把它们铺开，同一种数字聚到一起，尽管没有人告诉"
+        "它标签；KL项则让整团点留在原点附近。<bookmark mark='b'/>把均匀编码网格解码，解码器位置参数就给出一张数字地图，区域之间平滑过渡。这些网格图像没有抽取条件像素噪声。",
 
     'f"Switched-off code numbers have a name':
         '被关掉的编码数有个名字，叫后验坍缩，而我们可以让它发生。在双月上训练一个VAE，它的解码器分别从编码预测x1和x2：'
@@ -489,24 +477,22 @@ ZH.update({
         '码率降到了{ak:.2f}奈特，对比{fk:.2f}：编码几乎没被用上。',
 
     'f"The code costs rate':
-        '编码要付码率，而一个能独自建模数据的解码器，从编码里什么也得不到。2016年，'
-        "Samuel Bowman和同事在一个生成句子的VAE上撞上了这个问题。<bookmark mark='a'/>"
-        "{first}<bookmark mark='b'/>{second}<bookmark mark='c'/>"
-        '{third}疗法是：让编码值得上它的代价。',
+        '编码要付出码率，而能独自建模数据的解码器缺少使用编码的激励。Samuel Bowman和同事在2016年的句子VAE中遇到这个问题。这里所有模型的潜变量都是16维。主VAE是完整预算的参考；每'
+        "个PixelVAE使用一半的名义预算。架构和已见样本量都不同，因此这不是仅改变解码器的受控比较。<bookmark mark='a'/>{first}<bookmark mark='b'/>"
+        "{second}<bookmark mark='c'/>{third}普通与自由比特PixelVAE采用相同架构、种子和名义预算。分类器标签一致率的比较，只描述这一个配对种子的结果，不代表已确"
+        '立的一般性收益。',
 
-    "f'With a PixelCNN decoder, the rate sinks":
-        '用PixelCNN做解码器，码率沉到了每个数字{kp:.1f}奈特，而普通VAE是{kv:.1f}：'
-        '解码器自己就能画出一个数字。',
+    "f'The plain PixelVAE ends at {kp:.1f} nats per digit, below the main VAE reference at {kv:.1f}. A low rate is consistent with weak latent use; it does not by itself establish complete collapse.'":
+        '普通PixelVAE的最终码率为每个数字{kp:.1f}奈特，低于主VAE参考的{kv:.1f}。较低码率与较弱的潜变量使用相符；它本身并不能证明完全坍缩。',
 
-    "f'With a PixelCNN decoder, the rate ends":
-        '用PixelCNN做解码器，码率最后是每个数字{kp:.1f}奈特，而普通VAE是{kv:.1f}：'
-        '强大的解码器对编码的依赖少得多。',
+    "f'The plain PixelVAE ends at {kp:.1f} nats per digit, against {kv:.1f} for the main VAE reference. These are measured rates from the different recipes shown here.'":
+        '普通PixelVAE的最终码率为每个数字{kp:.1f}奈特，主VAE参考为{kv:.1f}。这些是不同训练方案下测得的码率。',
 
-    'f"Decode a hundred test digits\' codes four times each: only':
-        '把一百个测试数字的编码各解码四次：结果里只有{pa:.0f}%和被编码的数字相同。',
+    'f"Decode a hundred test digits\' codes four times each: only {pa:.0f} percent of classifier predictions match the source labels."':
+        '把100个测试数字的编码各解码4次：分类器预测与原始标签相符的比例只有{pa:.0f}%。',
 
-    'f"Decode a hundred test digits\' codes four times each: {pa:.0f} percent still':
-        '把一百个测试数字的编码各解码四次：仍有{pa:.0f}%和被编码的数字相同。',
+    'f"Decode a hundred test digits\' codes four times each: {pa:.0f} percent of classifier predictions match the source labels."':
+        '把100个测试数字的编码各解码4次：分类器预测与原始标签相符的比例为{pa:.0f}%。',
 
     'f"One more thing: on the ring':
         '还有一点：在环上，VAE把样本撒进了空隙里；只有{100 * q:.0f}%落在某个峰的三倍标准差以内。'
@@ -515,12 +501,10 @@ ZH.update({
         '以及每个潜在扩散模型前端的那个自编码器。',
 
     'f"The two terms pull against each other; weight':
-        '这两项互相拉扯；给KL项乘上一个权重β，就得到Irina Higgins的β-VAE。'
-        "<bookmark mark='a'/>我们训练了6个β值，从{b_lo:g}到{b_hi:g}，每个两个种子："
-        "每个点是一次训练，它的码率对比它的失真。<bookmark mark='b'/>{trend}β为{b_lo:g}时"
-        '，编码携带{r_lo:.0f}奈特，有{a_lo}个活跃的编码数；β为{b_hi:g}时，'
-        "是{r_hi:.0f}奈特和{a_hi}个。<bookmark mark='c'/>大的β给出平滑、千篇一律的数字："
-        '编码已经不再确定细节了。',
+        "这两项互相拉扯；给KL项乘上权重β，就得到Irina Higgins的β-VAE。<bookmark mark='a'/>我们训练了6个β值，从{b_lo:g}到{b_hi:g}，每个两个种子"
+        "：每个点是一次训练，它的码率对比失真。<bookmark mark='b'/>{trend}β为{b_lo:g}时，编码码率是{r_lo:.0f}奈特，有{a_lo}个活跃数；β为"
+        "{b_hi:g}时，是{r_hi:.0f}奈特和{a_hi}个。<bookmark mark='c'/>这些图片是解码器位置参数图像。这里的活跃指后验均值在留出数字上的方差大于零点零一。较大的"
+        'β给出平滑、一般化的位置参数图像：编码确定的细节更少。',
 
     'The third answer throws the likelihood away.':
         '第三个答案把似然扔掉了。2014年，伊恩·古德费洛和约书亚·本吉奥实验室的同事，让两个网络互相对抗。'
@@ -543,12 +527,10 @@ ZH.update({
         '是本章余下部分和下一章的内容。',
 
     'f"The first practical problem appears on day one:':
-        "第一个实际问题，在第一天就出现了：假样本很差，D(G(z))停在零附近。<bookmark mark='a'/>"
-        "在那里，极小极大损失是平的，生成器几乎得不到梯度。<bookmark mark='b'/>"
-        '古德费洛在同一篇论文里的修正是：最大化骗过对方的概率，也就是负log D，它在另一个平的地方很陡。'
-        "<bookmark mark='c'/>{meas}<bookmark mark='d'/>这个修正有代价，"
-        '2017年由Martin Arjovsky和Léon Bottou发现：它的梯度，'
-        '是一个反向KL散度减去詹森-香农项的梯度，而反向KL几乎不惩罚漏掉一个峰。',
+        "第一个实际问题在第一天就出现了：假样本很差，D(G(z))停在零附近。<bookmark mark='a'/>通过判别器的sigmoid反向传播时，极小极大目标的生成器梯度可能几乎消失。"
+        "<bookmark mark='b'/>Goodfellow在同一篇论文中的修复是最大化骗过判别器的概率，即使用负log D；此时对logit的梯度仍然较强。"
+        "<bookmark mark='c'/>{meas}<bookmark mark='d'/>这个修正有代价，Martin Arjovsky和Léon Bottou在2017年指出：对于光滑正密"
+        '度，在生成器更新中固定当前参数处的最优判别器，它的梯度等于反向KL减去两倍Jensen-Shannon散度在当前参数处的梯度。反向KL对遗漏峰的惩罚很小。',
 
     '"Here is that cost on the ring:':
         '这就是那个代价在环上的样子：背景是判别器的判决，说真的地方亮；点是生成器从300个固定噪声向量画出的样本。'
@@ -610,12 +592,10 @@ ZH.update({
         '。',
 
     'Cheapest plans between image distributions':
-        '在图像的分布之间求最便宜的方案，是没有希望算出来的；但根据康托罗维奇和鲁宾斯坦的对偶，'
-        "这个距离也等于一个斜率不超过1的函数在p和q之间所能拉开的最大期望差距。<bookmark mark='a'/>所以"
-        "，一个输出可以是任意实数的评论家f，学着拉开这个差距，而生成器学着缩小它。<bookmark mark='b'/>"
-        "难处在于斜率的限制；第一版瓦瑟斯坦GAN把每个权重都截断了。<bookmark mark='c'/>"
-        'Ishaan Gulrajani和同事注意到，最优评论家在真假点之间的斜率恰好是1，于是就在那里惩罚斜率的偏离：'
-        '这就是WGAN-GP。',
+        '在图像分布之间直接计算最便宜的搬运方案几乎不可行；但Kantorovich与Rubinstein对偶说明，距离也是斜率至多为1的函数在p和q之间能拉开的最大期望差。'
+        "<bookmark mark='a'/>因此，输出任意实数的判别函数f学习拉开差距，生成器则学习缩小它。<bookmark mark='b'/>难点是限制斜率；最初的Wasserstein G"
+        "AN裁剪每个权重。<bookmark mark='c'/>Ishaan Gulrajani和同事指出，对于最优传输配对的点，最优判别函数沿连线的斜率为一。WGAN-GP据此在随机真实—生成样本"
+        '插值点上施加软惩罚；这不是要求每一对随机点之间都具有单位斜率的定理。',
 
     'f"Back to the ring, same networks':
         '回到环上，同样的网络，同样多的生成器步数。背景现在是评论家，一片在数据所在处高起的地形。'
@@ -728,10 +708,7 @@ ZH.update({
         '获得了2018年NeurIPS的最佳论文奖。让求解器倒着跑就能求逆：这是一个不需要耦合层的流。',
 
     'How does density change along the flow?':
-        "密度沿着流是怎样变化的？走一小步，用上一章的变量替换。<bookmark mark='a'/>在一阶近似下，"
-        "单位阵加一个小矩阵的行列式，等于1加上它的迹。<bookmark mark='b'/>取极限，对数密度下降的速率，"
-        "就是场的散度，也就是它的雅可比矩阵的迹。<bookmark mark='c'/>沿着路径积分：一个精确的似然，"
-        "对网络没有任何限制。<bookmark mark='d'/>但即使只是迹，每个维度也要花一次反向传播。",
+        "密度沿着流是怎样变化的？走一小步，用上一章的变量替换。<bookmark mark='a'/>在一阶近似下，单位阵加一个小矩阵的行列式，等于1加上它的迹。<bookmark mark='b'/>取极限，对数密度下降的速率就是场的散度，也就是它的雅可比矩阵的迹。<bookmark mark='c'/>沿路径积分，得到连续时间下精确的变量替换恒等式，不需要耦合层结构。这里计算的似然值采用数值积分；精确计算散度并不能消除求解器误差。<bookmark mark='d'/>但即使只是迹，每个维度也要花一次反向传播。",
 
     'f"The way out is Hutchinson\'s trick':
         '出路是1989年的哈钦森技巧：抽一个均值为0、方差为1的随机向量ε，计算ε转置乘A乘ε。'
@@ -742,14 +719,10 @@ ZH.update({
         '一个探针比精确的迹快{tr_ratio:.0f}倍。',
 
     'f"A continuous flow on the moons':
-        '在双月上训练连续流，两种方法各三个种子：精确的迹，或每条路径一个随机正负号探针，评判时都用精确的迹。'
-        "<bookmark mark='a'/>{verdict}用精确的迹训练一次花了{te:.0f}秒，"
-        '用估计花了{th:.0f}秒。',
+        "月牙上的连续流，两种训练方式各三个随机种子：一种使用精确迹，另一种沿每条路径使用一个随机符号探针。两组留出负对数似然曲线都使用8步RK4积分和精确散度，因此仍然是数值似然估计。<bookmark mark='a'/>{verdict}记录的平均运行时间包含测量与保存开销：精确迹为{te:.0f}秒，随机探针为{th:.0f}秒。",
 
     'And the flow itself: seven hundred':
-        '再看流本身：700个噪声点，被学到的场从时刻0带到时刻1，背景是每个时刻的密度。'
-        "<bookmark mark='a'/>这团点被拉长、分开，卷成了两弯月亮。<bookmark mark='b'/>"
-        '训练时每一步仍要解一次ODE；第21部分的流匹配则改用回归来学这样的场。',
+        "再看流本身：700个噪声点被学到的场从时刻0带到时刻1，背景是五个密度快照。轨迹使用40步RK4积分。初始密度由解析式给出；后续快照分别使用2、4、6、8步RK4积分，快照时刻之间用图像交叉淡化衔接。<bookmark mark='a'/>这团点被拉长、分开，卷成了两弯月亮。<bookmark mark='b'/>训练时每一步仍要解一次ODE；第21部分的流匹配则改用回归来学这样的场。",
 
     'The fifth answer is the oldest. In 1982':
         '第五个答案是最古老的。1982年，物理学家约翰·霍普菲尔德给一个由正负1神经元组成、连接对称的网络定义了一个能量。'
@@ -819,12 +792,10 @@ ZH.update({
         '只有16个隐藏单元时，链哪怕只走一步，也是一个公允的估计。',
 
     "What does it learn? Each hidden unit's weights":
-        '它学到了什么？把每个隐藏单元的权重画成一张图，就能看出什么会让它打开：这是一台100个单元的机器里的40个，'
-        "正的对应墨迹，负的对应纸面。<bookmark mark='a'/>要做梦，就从随机像素出发运行链：一步、十步、"
-        "一百步、一千步。<bookmark mark='b'/>只有16个单元时，我们可以给每个隐藏状态加权，"
-        "精确地从真实的模型采样。<bookmark mark='c'/>2006年，辛顿、"
-        'Simon Osindero和Yee-Whye Teh把受限玻尔兹曼机堆成了深度信念网络，深度学习的复兴由此开始；'
-        '六年后，GPU上的反向传播让这一步变得不再必要。但这些想法留了下来：一个能量，以及由一条链抽出的样本。',
+        "它学到了什么？把每个隐藏单元的权重画出来，就能看出什么会让它打开：这是一台100单元机器里的40个，正值对应墨迹，负值对应纸面。<bookmark mark='a'/>从随机二值像素出发运行链"
+        "：一步、十步、一百步、一千步。初始图为二值状态，之后展示的是吉布斯检查点上的条件可见概率。<bookmark mark='b'/>只有16个隐单元时，可以给每个隐状态加权，再按照条件伯努利分布"
+        "抽取每个二值可见像素。下方显示的就是这些精确二值样本。<bookmark mark='c'/>2006年，Hinton、Simon Osindero和Yee-Whye Teh把受限玻尔兹曼机堆"
+        '成深度信念网络，深度学习的复兴由此开始；六年后，GPU上的反向传播让这一步变得不再必要。这些想法留了下来：一个能量，以及由一条链抽出的样本。',
 
     'f"The general idea: any network':
         '一般的想法是：任何只有一个输出的网络都是一个能量，e的负能量次方除以它的积分Z，在Z有限时就定义了一个密度，不需要掩码，不需要可逆，'
@@ -833,11 +804,10 @@ ZH.update({
         '{nll:.2f}奈特，而下限是{h:.2f}。在196维里，任何网格都不管用。',
 
     "Sampling comes from physics: Paul Langevin's":
-        '采样的办法来自物理：保罗·朗之万1908年的粒子，往下坡漂移，同时被随机地踢来踢去。写成算法：'
-        '沿着对数密度往上坡走一步，加一点噪声，再重复；根据第5部分的福克-普朗克方程，这个随机游走最终会停在p上。'
-        "<bookmark mark='a'/>这一步需要log p的梯度。<bookmark mark='b'/>Z是常数"
-        "，所以它的梯度为零：让训练变难的那个归一化常数，从采样里消失了。<bookmark mark='c'/>"
-        '这个梯度就是分数函数，上升最快的方向；在我们的环模型上，就是指向八个山谷的箭头。',
+        '采样的办法来自物理：Paul Langevin在1908年描述的粒子，往下坡漂移，同时被随机地踢动。作为算法，就是沿对数密度上坡走一步，加入少量噪声，再重复。连续时间下，在适当条件下，第5部分'
+        "的Fokker-Planck方程给出平稳分布p。有限步长的无调整Euler方法只是近似，会有离散化偏差，也可能混合缓慢。<bookmark mark='a'/>这一步需要log p的梯度。"
+        "<bookmark mark='b'/>Z是常数，所以它的梯度为零：让训练变难的归一化常数从采样中消失。<bookmark mark='c'/>这个梯度就是分数函数，上升最快的方向；在我们的环"
+        '模型上，就是指向八个山谷的箭头。',
 
     'f"So train an energy with its own Langevin chains':
         '所以，用能量模型自己的朗之万链来训练它：把一池子链各走{k_}步，降低真实点的能量，抬高链停下处的能量。2019年，'
@@ -868,11 +838,9 @@ ZH.update({
         '退火把它变成了{a_h:.0f}%。',
 
     'How good is a generative model? Its held-out':
-        '一个生成模型有多好？它在留出数据上的似然并不够，2016年Lucas Theis、'
-        'Aaron van den Oord和Matthias Bethge说明了这一点：把一个好模型稀释，'
-        "每一百个样本里只有一个来自它，其余都是噪声。<bookmark mark='a'/>对数似然最多下降log 100，"
-        "对一张图像来说只是个舍入误差。<bookmark mark='b'/>而样本99%都是垃圾。"
-        "<bookmark mark='c'/>GAN则根本没有似然。所以这个领域直接评判样本。",
+        '一个生成模型有多好？留出数据上的似然并不够。2016年Lucas Theis、Aaron van den Oord和Matthias Bethge说明：稀释一个好模型，每100个样本里只有一个'
+        "来自它，其余都是噪声。<bookmark mark='a'/>对数似然最多下降log 100，也就是每张图像约4.6奈特；图像维度越高，平均到每个像素的代价就越小。<bookmark mark='b'/>样本却有99%是噪声。"
+        "<bookmark mark='c'/>GAN通常没有可直接计算的似然。所以这个领域直接评判样本。",
 
     'f"The standard since 2017 is the Fréchet':
         '自2017年以来的标准，是弗雷歇Inception距离，FID，一个高斯之间的距离。在一维里，'
@@ -897,13 +865,10 @@ ZH.update({
         '给真实数字加噪声，我们的FID总体上随之上升，从{nf0:.2f}升到{nfN:.1f}。',
 
     'f"One number can\'t separate':
-        '一个数分不开样本好不好和覆盖全不全。Mehdi Sajjadi和同事，'
-        '以及后来英伟达的Tuomas Kynkäänniemi和同事，把它拆成了两个。'
-        "<bookmark mark='a'/>在每个真实点周围画一个球，半径到它第三近的真实邻居：这就是数据所在的地方。"
-        "<bookmark mark='b'/>精确率：落进真实球里的生成样本所占的比例。"
-        "<bookmark mark='c'/>召回率：落进生成球里的真实点所占的比例。"
-        "<bookmark mark='d'/>第5章的非饱和GAN，种子0：精确率{pr0:.2f}，"
-        '召回率{rc0:.2f}。{verdict}',
+        "一个数分不开样本好不好和覆盖全不全。Mehdi Sajjadi和同事，以及后来NVIDIA的Tuomas Kynkäänniemi和同事，把它拆成两个。<bookmark mark='a'/>"
+        "在每个真实点周围画球，半径到它第三近的真实邻居：这就是数据所在的地方。<bookmark mark='b'/>精确率是落进真实球里的生成样本所占比例。<bookmark mark='c'/>召"
+        "回率是落进生成球里的真实点所占比例。图示真实与生成点各120个；指标使用各2000个计算。<bookmark mark='d'/>第5章非饱和GAN的种子0：精确率{pr0:.2f}，召回率"
+        '{rc0:.2f}。{verdict}',
 
     'f"Every family on the ring, three seeds each.':
         "每个家族在环上的结果，各三个种子。<bookmark mark='a'/>精确率最高：{n_bp}，"
@@ -911,11 +876,9 @@ ZH.update({
         "。<bookmark mark='b'/>再看为什么只看FID很危险：一个均值和协方差都和环一样的高斯团，"
         '弗雷歇距离是{bfd:.3f}，和环自己的两份样本之间差不多，而它的精确率是{bprec:.2f}。',
 
-    'f"No sample metric catches memorization:':
-        '没有哪个样本指标能抓住死记硬背：重放训练数字，得分和真实数据一模一样，FID是{floor:.2f}，'
-        "精确率{rp:.2f}，召回率{rr:.2f}。<bookmark mark='a'/>所以我们直接检查："
-        "每个样本最近的训练数字。<bookmark mark='b'/>"
-        '真实的测试数字离它们最近的训练数字的中位距离是{real_d:.3f}。{verdict}',
+    'f"These distribution scores alone cannot rule out memorization:':
+        "仅凭这些分布指标无法排除记忆训练集：重放训练数字也能获得很好的分数，FID为{floor:.2f}，精确率{rp:.2f}，召回率{rr:.2f}。<bookmark mark='a'/>所以"
+        "我们检查每个样本最近的训练数字。<bookmark mark='b'/>真实测试数字离各自最近训练数字的中位距离为{real_d:.3f}。{verdict}",
 
     'For six years GANs drew the sharpest images. In 2021':
         '六年里，GAN画出的图像最清晰。2021年，'
@@ -937,12 +900,7 @@ ZH.update({
         '再用自回归模型把它们写出来：这就是今天图像系统的前端，第22部分和第23部分会把它打开来看。',
 
     'f"We built a small one: each digit':
-        '我们做了一个小的：每个数字变成一个7乘7的词元网格，每个词元是{K}个码本项之一，解码器再把网格变回来。'
-        "<bookmark mark='a'/>码本的困惑度是{perp:.1f}：实际上，"
-        "它的{K}项里大约有这么多在被使用。<bookmark mark='b'/>直接写下来，"
-        '一个网格是{rawb:.0f}比特；一个小Transformer只用{prb:.0f}比特就能预测它。'
-        "<bookmark mark='c'/>从Transformer里采样词元，再解码，就画出了新的数字。"
-        '{verdict}',
+        "我们做了一个小的：每个数字变成7乘7的词元网格，每个词元是{K}个码本项之一，解码器再把网格变回来。<bookmark mark='a'/>码本困惑度为{perp:.1f}：这是{K}个码字中的有效码本大小。<bookmark mark='b'/>按定宽写下来，一个网格是{rawb:.0f}比特；Transformer在留出数据上的离散码序列负对数似然为每个数字{prb:.0f}比特，这不是实际压缩文件的大小，也不是边缘图像似然。<bookmark mark='c'/>我们从Transformer采样词元，再展示解码器位置参数图像，没有抽取条件像素噪声。{verdict}我们还测试了只用训练输入决定码字复活。在这一配对种子上，两次检查选出了相同的失活码字：最终量化模型、先验、输出和测得的分数均未改变。修正移除了测试数据驱动的决策；这一配对中没有观察到性能改善。",
 
     'Reading order is slow,':
         '阅读顺序很慢，而且对一幅图来说是个奇怪的顺序。2024年，'

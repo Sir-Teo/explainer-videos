@@ -31,7 +31,9 @@ class Problem(VoiceoverScene):
         pts = pl.scatter_image(np.asarray(t["moons_samples"])[:1200], DATA, radius_px=1.8)
         dens = pl.image(t["moons_density"], DATA)
         pl_l = label(r"$20{,}000$ samples \ $x \sim p$", font_size=22, color=DATA).next_to(pl, UP, buff=0.15)
-        dl = label(r"the density $p(x)$ \ (known here, \ never in practice)", font_size=20, color=GREY_A)
+        dl = label(r"target density $p(x)$ \\ numerical arc average for the moons", font_size=18, color=GREY_A)
+        if dl.width > 5.5:
+            dl.width = 5.5
         dl.next_to(pl, DOWN, buff=0.15)
         d = definition_card(r"generative model", r"a distribution $q_\theta(x)$, \ learned from samples of $p(x)$, "
                             r"\ that we can \textbf{sample} from; \ ideally also \textbf{evaluate} $q_\theta(x)$, "
@@ -46,8 +48,9 @@ class Problem(VoiceoverScene):
         Group(pl, pts, dens, pl_l, dl).scale(1.3, about_point=home).move_to([0, home[1], 0])
         with self.voiceover(
             "Here is the problem at its smallest: twenty thousand points in the plane, drawn from a distribution p "
-            "in the shape of two moons. <bookmark mark='a'/> Because we made it, we know p exactly; with images or "
-            "text, nobody does. <bookmark mark='b'/> A generative model is a distribution q, learned from the "
+            "in the shape of two moons. <bookmark mark='a'/> Because we made it, we can compute the target "
+            "density, numerically along the arcs for these moons; real images or text generally do not give us "
+            "that access. <bookmark mark='b'/> A generative model is a distribution q, learned from the "
             "samples, that we can sample from; <bookmark mark='c'/> ideally one we can also evaluate, <bookmark "
             "mark='d'/> and one that gives each x a code, a short description of what it is."
         ) as vo:
@@ -88,16 +91,22 @@ class Problem(VoiceoverScene):
         for i, n in enumerate(("moons", "ring", "checker")):
             h = float(t[f"{n}_entropy"])
             bars.add(VGroup(label(names[i], font_size=24, color=DATA),
-                            MathTex(rf"h(p) = {h:.2f}\ \text{{nats}}", font_size=30, color=DATA)).arrange(DOWN,
+                            MathTex(rf"h(p) \approx {h:.2f}\ \text{{nats}}", font_size=30, color=DATA)).arrange(DOWN,
                                                                                                          buff=0.12))
         bars.arrange(RIGHT, buff=1.0).move_to(DOWN * 2.4)
+        entropy_note = note(r"estimated entropy reference: \ $200{,}000$ draws per density \\ "
+                            r"moons density: numerical arc average", font_size=17)
+        if entropy_note.width > 12.8:
+            entropy_note.width = 12.8
+        entropy_note.next_to(bars, DOWN, buff=0.15)
         hm, hr, hc = (float(t[f"{n}_entropy"]) for n in ("moons", "ring", "checker"))
         with self.voiceover(
             "The workhorse for fitting q is maximum likelihood, from Part 1: minimize the average surprise, minus "
             "log q. <bookmark mark='a'/> Split that average in two. <bookmark mark='b'/> The data's own entropy, "
             "which no model can beat, plus the KL divergence from p to q, the price of being wrong. <bookmark "
-            "mark='c'/> So maximum likelihood is minimum KL. <bookmark mark='d'/> For our three test densities the "
-            f"floor is known: {hm:.2f} nats for the moons, {hr:.2f} for the ring of eight Gaussians, {hc:.2f} for "
+            "mark='c'/> So maximum likelihood is minimum KL. <bookmark mark='d'/> For our three test densities, "
+            "we estimate the entropy reference from two hundred thousand draws per density; the moons density "
+            f"is evaluated numerically along its arcs: {hm:.2f} nats for the moons, {hr:.2f} for the ring of eight Gaussians, {hc:.2f} for "
             "the checkerboard."
         ) as vo:
             step(0)
@@ -107,7 +116,7 @@ class Problem(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in bars], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in bars], lag_ratio=0.3), FadeIn(entropy_note))
         self.wait(0.3)
         self.clear_scene()
 

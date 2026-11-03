@@ -4,24 +4,26 @@ Part 20 of a thirty-one-part series on how modern AI works and how it came to be
 and [the syllabus](../SYLLABUS.md)), and the first part of Act IV, *Generation and Perception*. How a machine learns a
 distribution it can sample from: the four families that work — autoregressive models, variational autoencoders,
 generative adversarial networks, normalizing flows — and the older fifth, energy-based models, with their history from
-Shannon's letter-by-letter English (1948) to one-step generators (2026), and how to judge them. Every model here is
-trained on this computer, by `compute.py`, on the same data, so they can be compared: three densities in the plane (two
-moons, a ring of eight Gaussians, a checkerboard) and MNIST digits averaged down to 14 × 14 pixels with 16 grey levels.
-The five image models get the same budget of arithmetic, 6 × 10¹² floating-point operations of training each, counted
-by PyTorch's own per-operation formulas, three seeds each.
+Shannon's letter-by-letter English (1948) to one-step generators (2026), and how to judge them. The recipes use three
+densities in the plane (two moons, a ring of eight Gaussians, a checkerboard) and MNIST digits averaged down to 14 × 14
+pixels with 16 grey levels. The five main image families each receive a nominal 6 × 10¹² training-FLOP budget, counted
+by PyTorch's per-operation formulas, with three seeds; architectures, update counts and examples seen differ.
+Historical reported results and the separate, validated 2026-11-02 cloud experiments are identified below. The earlier
+run's date, hardware and weight files have not been independently established or recovered by this work.
 
 * **Hook: digits nobody wrote.** Samples from four of our models side by side (PixelCNN, VAE, GAN, RealNVP); the
   question; the five answers; the plan.
 * **1. The generative problem.** A generative model as a distribution to sample, evaluate and encode; maximum
-  likelihood as minimum KL, E_p[−log q] = h(p) + KL(p‖q), with each toy's entropy h(p) computed as the floor every
-  model is measured against; how we got here (Shannon 1948, Hopfield 1982, Boltzmann machines 1985, the Helmholtz
+  likelihood as minimum KL, E_p[−log q] = h(p) + KL(p‖q), with the theoretical entropy floor illustrated by cached
+  Monte Carlo reference estimates; how we got here (Shannon 1948, Hopfield 1982, Boltzmann machines 1985, the Helmholtz
   machine 1995, deep belief nets 2006, VAEs, GANs, NICE and PixelCNN 2013–16, StyleGAN and neural ODEs 2018, diffusion
   beating GANs in 2021, next-scale prediction 2024); the families' trade-offs and the generative trilemma (Xiao,
   Kreis & Vahdat 2022); the test bench.
 * **2. One pixel at a time.** The chain rule; an autoregressive model in the plane, p(x₁) p(x₂ | x₁), each factor a
   mixture of ten Gaussians, its conditional slices and its training replay; masked convolutions (NADE, MADE, PixelRNN,
-  PixelCNN, WaveNet); the blind spot of stacked masks, computed as the gradient of one pixel's prediction with respect to
-  every input pixel, and the two-stack layout that removes it (van den Oord et al. 2016b); our PixelCNN's training
+  PixelCNN, WaveNet); architectural blind spots of stacked masks and the two-stack construction designed to address
+  them (van den Oord et al. 2016b), illustrated by a finite gradient-sensitivity probe rather than a proof of structural
+  connectivity; our PixelCNN's training
   replayed (held-out bits per pixel and samples at each checkpoint, three seeds); one digit drawn pixel by pixel with
   its sixteen predicted probabilities; the cost of 196 sequential passes, measured against the GAN's one.
 * **3. From Helmholtz machines to the VAE.** Latent-variable models and the intractable integral; the Helmholtz
@@ -30,17 +32,17 @@ by PyTorch's own per-operation formulas, three seeds each.
   (Kingma & Welling 2013; Rezende, Mohamed & Wierstra 2014); our VAE (16-number code, discretized-logistic decoder over
   the 16 levels, after PixelCNN++).
 * **4. Training a VAE: rate, distortion, collapse.** The two terms of the bound over training, with reconstructions and
-  samples at each checkpoint; the ELBO and a 64-sample importance-weighted bound in bits per pixel; active code units; a
+  decoder-location snapshots at each checkpoint; the ELBO and a 64-sample importance-weighted bound in bits per pixel; active code units; a
   VAE with a 2-number code, the test digits' codes replayed through training and the decoded grid; β-VAE (Higgins et
-  al. 2017) at β = 0.25 … 8, two seeds each: the rate–distortion curve (Alemi et al. 2018), active units and samples;
+  al. 2017) at β = 0.25 … 8, two seeds each: the rate–distortion curve (Alemi et al. 2018), active units and decoder-location diagnostics;
   posterior collapse made to happen: in the plane, a factorized decoder keeps its rate while an autoregressive decoder's
-  falls to zero (three seeds each); on digits, a VAE with a PixelCNN decoder, plain and with free bits (Kingma et al.
+  falls nearly to zero (three seeds each); on digits, a VAE with a PixelCNN decoder, plain and with free bits (Kingma et al.
   2016), its rate over training and whether digits decoded from one code keep their identity (judged by the
   classifier); the VAE's blur on the ring.
 * **5. The adversarial game.** The GAN value function (Goodfellow et al. 2014); the optimal discriminator
   D* = p/(p + q) and V(D*, G) = −log 4 + 2 JS(p‖q), derived; the saturating loss log(1 − D) against the non-saturating
   −log D, with the generator's measured early gradient norms; the non-saturating gradient as reverse KL minus 2 JS
-  (Arjovsky & Bottou 2017); mode collapse on the ring, replayed (the discriminator's verdict under the generator's
+  at the current optimal discriminator, held fixed (Arjovsky & Bottou 2017); mode collapse on the ring, replayed (the discriminator's verdict under the generator's
   samples) for the seed that ended with the fewest modes; modes covered by the minimax and non-saturating losses over
   five seeds each.
 * **6. Why GANs spiral.** min_x max_y xy: the rotating field, eigenvalues ±i; simultaneous steps spiral out by exactly
@@ -77,7 +79,7 @@ by PyTorch's own per-operation formulas, three seeds each.
   so CD-1, CD-10 and PCD are compared on the true held-out log-likelihood, three seeds each; a 100-unit RBM's filters
   and Gibbs chains; exact samples of the 16-unit RBM; deep belief nets (2006).
 * **13. Langevin dynamics and the score.** Energy-based models and their two-phase gradient (LeCun et al. 2006); in 2D,
-  Z summed on a grid, so our energy models' likelihoods are exact; Langevin dynamics (1908) and the score
+  Z approximated on a finite-box grid, giving numerical likelihood estimates; Langevin dynamics (1908) and the score
   ∇ log p = −∇E, with Z gone; persistent Langevin training (Du & Mordatch 2019) replayed on the ring; sampling from
   noise on all three toys; the failure on separated modes (two Gaussians weighted 0.2/0.8, exact score) and annealed
   Langevin (Song & Ermon 2019), toward score matching (Hyvärinen 2005; Vincent 2011) and Part 21; Equilibrium Matching
@@ -90,7 +92,8 @@ by PyTorch's own per-operation formulas, three seeds each.
   and covariance (tiny Fréchet distance, low precision); memorization checked by nearest training digits.
 * **15. Five models, one budget.** PixelCNN, VAE, GAN, WGAN-GP and RealNVP on 6 × 10¹² training FLOPs each: parameters,
   steps and digits seen; samples side by side; FID (mean and spread of three seeds), precision and recall; bits per
-  pixel for the three likelihood models; which digits each model draws, by the classifier.
+  pixel as reported likelihood scores, with their estimator/cohort qualifications below; which digits each model draws,
+  by the classifier.
 * **16. Where the families meet.** The 2021 turn (Dhariwal & Nichol: BigGAN-deep FID 6.95, precision 0.87, recall 0.28;
   guided ADM 4.59, 0.82, 0.52, ImageNet 256²); VQ-VAE (2017), VQGAN and DALL·E (2021): VAEs and GANs as tokenizers,
   autoregressive models over the tokens; our own VQ-VAE (49 tokens from 32 codes) with a small transformer prior; VAR's
@@ -107,24 +110,26 @@ python tools/make.py ai20                       # everything: the computations, 
 python -m videos.ai.ai20.compute                # only the numbers (MNIST through Part 10's checked download)
 python tools/build.py ai20                      # English
 python tools/build.py ai20 --lang zh            # Chinese
-AI20_SCALE=0.01 python -m videos.ai.ai20.compute   # a smoke test of every code path (into .cache/ai20_quick/)
+AI20_SCALE=0.01 python -m videos.ai.ai20.compute   # a smoke test (into .cache/ai20_sampling_v2_quick/)
 ```
 
 Everything is seeded (`numpy` PCG64 and `torch.manual_seed`, one generator per run) and runs on one torch thread
 (`AI20_THREADS` to change it); there is no multiprocessing. Every item made of several runs saves each run as it
-finishes (`CACHE.partial`), so an interrupted computation resumes; trained weights go to `.cache/ai20/models/`. On a
-busy 4-core machine the whole part computes in about two and a half hours of wall time; the longest items are the five
-digit models (`pixelcnn`, `vae`, `gan`, `wgan`, `flow`, three seeds each, a few minutes per seed, PixelCNN's 196-pass
-sampling included), `gan2d` (fifteen ring runs) and `cnf`. MNIST is read through Part 10's downloader
-(`videos.ai.ai10.data`, checked against SHA-256); no other part's results are used.
+finishes (`CACHE.partial`); this reuses completed pieces, not an interrupted seed's optimizer state. Weights go to
+`.cache/ai20_sampling_v2/models/`; incompatible partials require reconciliation. The earlier README reported about two
+and a half hours on a busy 4-core machine. That is a historical runtime claim, not a measurement or hardware description
+of the 2026-11-02 experiments. MNIST uses Part 10's SHA256-checked consumer. Those experiments combine the original
+analytic products, same-day paired model states and new runs; they do not retrain every item or recover historical
+benchmark weights. See the versioned-cache section before requesting computation or rendering.
 
-## Results on this machine
+## Historical reported results (earlier README)
 
-What `compute.py` produced for the published version (the narration is written from these numbers through
-f-strings, so a rerun that comes out differently says so in its own words). Means over seeds, ranges in brackets.
+The earlier README reported the following results for its published version. Its numbers and table rows are
+preserved here as historical reports, without claiming independently verified historical run dates, hardware or
+restored weights. They are separate from the 2026-11-02 results below. Means over seeds, ranges in brackets.
 
-**The plane.** Floors (each density's entropy): moons 1.758, ring 0.312, checkerboard 2.079 nats. Held-out NLL on
-the ring: autoregressive mixture model 0.33; RealNVP 0.68–0.80; energy model (Z summed on a grid) 0.61–1.67; VAE
+**The plane.** Reported entropy references: moons 1.758, ring 0.312, checkerboard 2.079 nats. Held-out NLL on
+the ring: autoregressive mixture model 0.33; RealNVP 0.68–0.80; energy model (finite-box grid-normalizer estimate) 0.61–1.67; VAE
 (importance-weighted bound) 2.52–2.55. Continuous flow on the moons: 1.846–1.863 trained with the exact trace,
 1.850–1.871 with one Rademacher probe; in 196 dimensions one probe is 67× faster than the exact trace, and the
 probes' measured variances match the formulas (random signs: 0.47× the Gaussian probes' variance). Posterior
@@ -159,7 +164,8 @@ classifier's 128 features; real digits score FID 1.05 against the test set):
 | WGAN-GP | 241,093 | 3,011 | 46.7 (45.0–49.3) | 0.52 | 0.70 | — |
 | RealNVP | 1,205,856 | 6,589 | 28.0 (27.4–28.7) | 0.77 | 0.84 | 1.13 (bound) |
 
-Sampling one digit: PixelCNN about 70–80 ms (196 passes), the others well under 0.1 ms. The GAN pair is 256 units
+Historical reported amortized sampling time per image: PixelCNN about 70–80 ms (196 passes), the others well under
+0.1 ms. These batch-throughput figures are not measured single-image latency. The GAN pair is 256 units
 wide: in a pilot at 512 units the budget bought only 5,133 generator steps and the samples stayed speckled (FID
 110–119), so the width was halved before the final runs (both GANs, to keep their comparison fair); the GANs train on
 the 16 grey levels themselves, not on dequantized pixels. β-VAE (quarter budget, two seeds): rate falls from 23.5
@@ -167,6 +173,68 @@ nats (β = 0.25) to 0.0 (β = 8) while distortion rises from 142 to 248 nats. Pi
 nats per digit (against 13–14 for the plain VAE) and 12.5% of decodes keep the source digit's class (chance is
 10%); with free bits of 1 nat per code number, 14.9 nats and 31.8%. VQ-VAE: 32 codes, perplexity 21.2, a 7 × 7 grid
 is 245 bits raw and 131 bits under the transformer prior; two-stage FID 67.4.
+
+## Validated 2026-11-02 numerical results
+
+The 2026-11-02 cloud validation combines new original-recipe runs, same-day model states and unchanged analytic
+caches. Historical benchmark weights were not recovered. The validated cache contains 26 native products and
+144 final-state sidecars in `.cache/ai20_sampling_v2`; original-recipe outputs are preserved separately from
+corrected views.
+
+**Fresh digit results.** Three seeds, 2,000 generated digits per seed, the same newly trained 98.81%-accurate MNIST
+classifier's 128 features. FID uses all 10,000 test-feature vectors as its reference; k = 3 precision/recall uses the
+first 2,000. FID is a local feature-space score, not an ImageNet benchmark. FID cells show mean (range);
+precision and recall are means. The following values come from the corrected `evaluate` product:
+
+| model | FID | precision | recall | reported bits/pixel score |
+|---|---|---|---|---|
+| PixelCNN | 47.23 (44.70–48.95) | 0.481 | 0.854 | 0.857–0.861 |
+| VAE, conditional pixels | 46.34 (43.75–49.89) | 0.760 | 0.710 | 1.023–1.039 |
+| GAN | 55.64 (49.82–62.71) | 0.710 | 0.370 | — |
+| WGAN-GP | 47.23 (45.64–50.18) | 0.512 | 0.710 | — |
+| RealNVP | 28.24 (27.20–29.25) | 0.771 | 0.844 | 1.131–1.133 |
+
+PixelCNN's final categorical NLL uses all 10,000 test digits. VAE's 64-sample IWAE negative-bound estimate uses the
+first 1,000; its checkpoint ELBO replay uses the first 2,000 and its final reported ELBO uses all 10,000. RealNVP's dequantization upper-bound estimate uses all 10,000. These
+finite estimates and differing cohorts do not establish a ranking of true test NLL, or a paired ELBO–IWAE gap.
+
+**Correctness corrections and their measured effects.** In the paired comparison, genuine VAE
+conditional pixels worsen FID in
+every seed: 44.24→49.89, 35.19→43.75 and 41.20→45.38 (mean 40.21→46.34). The
+weights and seed-77 latents are unchanged; pixels use independent seed 7077, preserving the retained IWAE stream.
+In this matched run it worsened FID and precision while improving recall; it did not uniformly improve quality. Full latent-plus-pixel batch timing in the
+corrected sampling view is 0.229–0.513 ms/image at batch 2,000, an amortized throughput measurement rather than single-image
+latency. Other timing recipes differ: PixelCNN uses four batches of 500, while the GAN uses one batch of 2,000.
+Replay, beta-VAE, reconstructions and latent maps retain explicitly named decoder-location diagnostics.
+
+RBM exact strips now contain Bernoulli visible draws for CD-1, CD-10 and PCD, with hidden seed 5 and independent
+visible seed 5005; the original conditional-probability API and displayed chain RNG sequence are preserved. VQ revival
+usage now reads training images only. In the one paired VQ run, initial states/minibatches, final tokenizer
+and prior states, complete codes/samples and metrics are unchanged: FID 58.62, perplexity 20.77, prior 133.24 bits/image.
+The VQ images remain recorded prior-code draws decoded to quantized decoder locations; no additional conditional-pixel
+sampler or full marginal image-likelihood validation was added. This null effect is specific to this pair, not a claim
+that test-driven revival is harmless.
+
+**Scope of the numerical demonstrations.** The carried entropy references were estimated with 200,000 Monte
+Carlo draws; that full estimate was not regenerated during this validation. Moons density uses a 721-angle numerical arc average. EBM likelihoods use a 160 × 160 normalization grid on [−3.5, 3.5]²; it does not establish tail mass outside that box.
+CNF likelihoods use 8-step RK4 integration even when the divergence trace is exact; the finite-step likelihood values
+remain estimates, not exact values.
+The receptive-field pictures use eight random inputs and a threshold of 10⁻⁹ times the maximum accumulated absolute
+input gradient. The retained probe detects 99 input cells for stacked masks and 75 for the two-stack network; its
+mirror-based display heuristic marks six and two pink cells, respectively. These finite sensitivity results are not
+structural-connectivity proofs: an undetected derivative does not establish a missing computational path. The cached
+probe outcomes and architectures are unchanged.
+The fresh plain PixelVAE KL is 1.276 nats/image on the first 500 test digits, not zero; free bits gives 14.836
+(the objective floor does not force the measured KL). This autoregressive model has half the nominal budget (3 × 10¹² FLOPs), 749 updates/47,936 reported training examples, versus 9,568/1,224,704
+for the full-budget factorized VAE reference, whose KL is 13.01–14.28 on all 10,000 test digits. Architectures, budgets, exposure and evaluation cohorts differ, so the contrast is not a controlled decoder-only
+ablation. These fresh measurements remain separate from the historical figures above.
+
+## Visual review scope
+
+All 18 scenes in English and Chinese (36 cases) passed native-endpoint and scoped full-scene selected-image and
+material-window review. This does not establish continuous perceptual playback, speech listening, genuine audio
+synchronization or production readiness. A brief caption crossing during memory-grid relocation remains;
+settled images are separated and readable.
 
 ## References
 
@@ -403,3 +471,37 @@ x₁ − x₂ = (μ₁ − μ₂) + (σ₁ − σ₂)ζ，所以 E(x₁ − x₂
 | distillation, adversarial diffusion distillation | 蒸馏，对抗扩散蒸馏 |
 | consistency model | 一致性模型 |
 | drifting model | 漂移模型 |
+
+
+## Versioned sampling cache
+
+The default native namespace is `.cache/ai20_sampling_v2`; the old `.cache/ai20`
+remains historical evidence. Every native JSON/NPZ pair needs its per-item
+`*.contract.json` hash receipt. Cache-only scene reads need those native files and
+receipts, not MNIST or model files. Missing or stale products fail before invoking
+a producer. Model/inference paths additionally need the requested weights-only
+`.pt` and `*.state.json` receipt. Product and state receipts bind the actual four
+consumer source files; model receipts also bind the consumer class. Raw MNIST
+computation keeps the original supported Part10 consumer/download behavior; cache
+and model reads never invoke it.
+
+`python -m videos.ai.ai20.compute <item> [<item> ...]` explicitly generates named
+items; supply dependencies first. A CLI invocation without item names explicitly
+requests all 26 items in their standard order. Native dependencies are validated
+before a producer starts; no missing dependency is generated by a read. `--force` explicitly regenerates validated
+named items. Old/incompatible partials, including scale or consumer-source changes, fail for
+reconciliation rather than silently discarding completed work. The shared Cache class and the 26 native item
+names are unchanged. Quick-scale products use `ai20_sampling_v2_quick`.
+
+The digit VAE's `sample` draws from its normalized 16-level discretized-logistic
+conditional. Main comparison latents use seed 77 and pixels use independent seed
+7077, preserving the old IWAE generator state after the latent draw. Sampling
+throughput includes a fresh latent draw and categorical pixels at batch 2,000
+(seeds 78/7088), reported as amortized seconds per image. `sample_locations` and
+`location_levels` are explicit quantized decoder-location diagnostics used by
+training replay, beta-VAE, reconstruction and the 2D latent map; they are not
+likelihood samples. RBM `exact_sample` returns binary visible draws;
+`exact_conditional_probabilities` exposes the old probability diagnostic. The
+producer isolates visible seed 5005 from the seed-5 hidden/chain stream. VQ revival
+usage is checked on the first 500 training images; final usage uses all training
+codes.

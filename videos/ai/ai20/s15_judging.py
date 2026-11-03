@@ -36,13 +36,13 @@ class Judging(VoiceoverScene):
             cmath(r"\log q(x)", r"\ge", r"\log p_{\text{good}}(x) - \log 100", font_size=36),
         ]
         rows[0][2].set_color(C.MODEL_Q)
-        whys = [why(r"a good model, \ diluted with noise"), why(r"$\log 100 \approx 4.6$ nats: \ small, per image")]
+        whys = [why(r"a good model, \ diluted with noise"), why(r"$\log 100 \approx 4.6$ nats \ per image")]
         step = ladder(self, rows, whys, keep=2, top=2.8, x=-1.6, buff=0.6, edge=6.9)
-        pts = VGroup(label(r"its likelihood: \ almost as good", font_size=26, color=C.INTERVAL),
+        pts = VGroup(label(r"log-likelihood penalty: \\ at most $\log 100$", font_size=26, color=C.INTERVAL),
                      label(r"its samples: \ $99\%$ noise", font_size=26, color=C.SURPRISE),
-                     label(r"and a GAN has no likelihood at all", font_size=26, color=GAN_C)).arrange(
+                     label(r"GANs generally have no tractable likelihood", font_size=26, color=GAN_C)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.3).move_to([1.0, -1.4, 0])
-        # a hundred draws from q: one from the good model (a PixelCNN sample), ninety-nine of noise
+        # Fixed-composition mixture illustration: one cached PixelCNN sample and 99 noise images, not an iid batch.
         mix = np.random.default_rng(14).integers(0, 16, (100, 14, 14)).astype(float)
         k_good = 37
         mix[k_good] = np.asarray(load("pixelcnn")["s0_show"])[0]
@@ -52,16 +52,16 @@ class Judging(VoiceoverScene):
         r_, c_ = divmod(k_good, 10)
         hit = Square(sz + 0.06, color=AR, stroke_width=2.5).move_to(
             [img.get_left()[0] + c_ * (sz + gp) + sz / 2, img.get_top()[1] - r_ * (sz + gp) - sz / 2, 0])
-        mcap = label(r"$100$ draws from $q$: \\ one from the good model", font_size=20, color=GREY_A).next_to(
+        mcap = label(r"Mixture illustration: \\ $1$ good, $99$ noise", font_size=20, color=GREY_A).next_to(
             sheet, DOWN, buff=0.15)
         cite_ = cite(r"Theis, van den Oord \& Bethge, \textit{A note on the evaluation of generative models} (2016)",
                      corner=DR)
         with self.voiceover(
             "How good is a generative model? Its held-out likelihood isn't enough, as Lucas Theis, Aaron van den "
             "Oord and Matthias Bethge showed in 2016: dilute a good model, one sample in a hundred from it, the rest "
-            "noise. <bookmark mark='a'/> The log-likelihood drops by at most log one hundred, a rounding error on "
-            "an image. <bookmark mark='b'/> The samples are ninety-nine percent garbage. <bookmark mark='c'/> And "
-            "GANs have no likelihood at all. So the field judges samples directly."
+            "noise. <bookmark mark='a'/> The log-likelihood drops by at most log one hundred, about 4.6 nats per image; its per-pixel penalty "
+            "shrinks as image dimension grows. <bookmark mark='b'/> The samples are ninety-nine percent garbage. <bookmark mark='c'/> And "
+            "GANs generally have no tractable likelihood. So the field judges samples directly."
         ) as vo:
             step(0)
             self.play(FadeIn(sheet), FadeIn(mcap))
@@ -69,7 +69,7 @@ class Judging(VoiceoverScene):
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
-            self.play(FadeIn(pts[0]), FadeIn(pts[1]), FadeIn(cite_), Indicate(sheet, scale_factor=1.04))
+            self.play(FadeIn(pts[0]), FadeIn(pts[1]), FadeIn(cite_), Circumscribe(sheet, buff=0.04, stroke_width=2.5, fade_in=True, fade_out=True, run_time=1.0))
             vo.wait_until("c")
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
@@ -211,6 +211,10 @@ class Judging(VoiceoverScene):
         pr0, rc0 = r0["precision"], r0["recall"]
         num = label(rf"this GAN \ (non-saturating, seed $0$): \ precision ${r0['precision']:.2f}$, \ recall "
                     rf"${r0['recall']:.2f}$", font_size=22, color=GAN_C).move_to([3.2, -1.3, 0])
+        cohort = note(r"shown: $120$ real + $120$ generated points \\ scores: $2{,}000$ of each", font_size=17)
+        if cohort.width > 7.0:
+            cohort.width = 7.0
+        cohort.move_to([3.2, -2.25, 0])
         cite_ = cite(r"Sajjadi et al.\ (2018); \ Kynk\"a\"anniemi et al.\ (2019)", corner=DR)
         verdict = ("High precision, low recall: what it makes is real-looking, but it covers only part of the data."
                    if r0["precision"] > r0["recall"] + 0.15 else
@@ -220,7 +224,8 @@ class Judging(VoiceoverScene):
             "Kynkäänniemi and colleagues at NVIDIA, split it in two. <bookmark mark='a'/> Around each real point, a "
             "ball out to its third nearest real neighbour: where the data lives. <bookmark mark='b'/> Precision: "
             "the share of generated samples inside real balls. <bookmark mark='c'/> Recall: the share of real "
-            "points inside generated balls. <bookmark mark='d'/> Chapter five's non-saturating GAN, seed zero: "
+            "points inside generated balls. The drawing shows one hundred twenty points of each kind; the scores "
+            "use two thousand of each. <bookmark mark='d'/> Chapter five's non-saturating GAN, seed zero: "
             f"precision {pr0:.2f}, recall {rc0:.2f}. {verdict}"
         ) as vo:
             self.play(FadeIn(pl), FadeIn(rd), FadeIn(cite_))
@@ -231,7 +236,7 @@ class Judging(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(fballs), FadeIn(defs[2]))
             vo.wait_until("d")
-            self.play(FadeIn(num))
+            self.play(FadeIn(num), FadeIn(cohort))
         self.wait(0.3)
         self.clear_scene()
 
@@ -331,7 +336,7 @@ class Judging(VoiceoverScene):
         ws, wl = replay[0].width * 0.55, replay[1].width * 0.75  # then down to the bottom, side by side
         x0 = -(ws + 0.3 + wl) / 2
         with self.voiceover(
-            "No sample metric catches memorization: replaying training digits scores exactly like real data, "
+            "These distribution scores alone cannot rule out memorization: replaying training digits can score well, "
             f"an FID of {floor:.2f}, precision {rp:.2f}, recall {rr:.2f}. <bookmark mark='a'/> So we check: each "
             "sample's nearest training digit. <bookmark mark='b'/> Real test digits sit a median "
             f"{real_d:.3f} from theirs. {verdict}"

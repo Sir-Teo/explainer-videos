@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import narration_credit
+from explainer.analysis import _tex_words, _zh
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai20.common import (AR, CNF_C, DATA, EBM, FLOW, GAN_C, KLC, PART, RECON, SCORE_C, VAE_C, VQ_C, WGAN_C,
                                    Plane, arrows, curve, digit_sheet, load, node_box, tile_frame)
@@ -10,6 +11,32 @@ from videos.ai.ai20.s10_flows import warp_lines
 from videos.ai.ai20.s13_rbm import filter_sheet
 
 DIFF = "#7FD3FF"
+
+
+def reference_page(title, entries, font_size):
+    """Part20-local reference layout: measured lines with explicit leading, never a shrunken whole page."""
+    blocks = VGroup()
+    for text in entries:
+        words = _tex_words(_zh(text).replace(r"\\", r"\ "))
+        lines, current = [], ""
+        for separator, word in words:
+            trial = current + separator + word if current else word
+            if current and label(trial, font_size=font_size).width > 12.8:
+                lines.append(current)
+                current = word
+            else:
+                current = trial
+        if current:
+            lines.append(current)
+        rows = VGroup(*[label(line, font_size=font_size, color=GREY_A) for line in lines])
+        if rows.width > 12.8:
+            raise ValueError("Reference token exceeds the measured page width")
+        blocks.add(rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12))
+    blocks.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+    page = VGroup(label(title, font_size=28, color=GREY_A), blocks).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+    if page.height > 7.0:
+        raise ValueError("Reference page exceeds the readable vertical layout budget")
+    return page.move_to(UP * 0.15)
 
 
 class Outro(VoiceoverScene):
@@ -232,7 +259,7 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def references(self):
-        card = reference_card(
+        books, papers = (
             [r"I.~Goodfellow, Y.~Bengio \& A.~Courville, \textit{Deep Learning} (2016), chapters 16--20",
              r"S.~J.~D.~Prince, \textit{Understanding Deep Learning} (2023), chapters 14--17",
              r"K.~P.~Murphy, \textit{Probabilistic Machine Learning: Advanced Topics} (2023), part IV",
@@ -259,12 +286,23 @@ class Outro(VoiceoverScene):
              r"Dhariwal \& Nichol (2021); \ van den Oord, Vinyals \& Kavukcuoglu (2017); \ Esser, Rombach \& Ommer "
              r"(2021); \ Ramesh et al.\ (2021); \ Tian et al.\ (2024); \ Sauer et al.\ (2023, 2024); \ Yin et al.\ "
              r"(2024); \ Lu \& Song (2025); \ Deng et al.\ (2026)"])
+        pages = [reference_page(r"Books", books, 21),
+                 reference_page(r"Papers", papers[:4], 20),
+                 reference_page(r"Papers", papers[4:], 20)]
         credit = note(narration_credit(), font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "To go deeper, Simon Prince's Understanding Deep Learning covers GANs, flows and VAEs clearly, and for "
             "free; Kevin Murphy's second volume covers every family in this part, in depth. Thanks for watching, and see you in "
             "Part 21."
-        ):
-            self.play(FadeIn(card), FadeIn(credit))
+        ) as vo:
+            hold = max(0.5, (vo.duration - 2.4) / len(pages))
+            self.play(FadeIn(pages[0]), FadeIn(credit))
+            self.wait(hold)
+            current = pages[0]
+            for page in pages[1:]:
+                self.play(FadeOut(current), run_time=0.35)
+                self.play(FadeIn(page), run_time=0.35)
+                self.wait(hold)
+                current = page
         self.wait(1.5)
         self.clear_scene()

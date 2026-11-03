@@ -105,7 +105,7 @@ class Hopfield(VoiceoverScene):
                 cur = nb
             self.play(Create(ec))
             vo.wait_until("c")
-            self.play(Indicate(stored, color=EBM, scale_factor=1.1))
+            self.play(Circumscribe(stored, color=EBM, buff=0.04, stroke_width=2.5, fade_in=True, fade_out=True, run_time=1.0))
         self.wait(0.3)
         self.clear_scene()
 

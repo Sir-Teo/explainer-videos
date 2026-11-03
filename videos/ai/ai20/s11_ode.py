@@ -83,8 +83,10 @@ class NeuralODE(VoiceoverScene):
             "How does density change along the flow? Over one small step, by the last chapter's change of "
             "variables. <bookmark mark='a'/> To first order, the determinant of the identity plus a small matrix is "
             "one plus its trace. <bookmark mark='b'/> In the limit, the log-density falls at the rate of the "
-            "field's divergence, the trace of its Jacobian. <bookmark mark='c'/> Integrate along the path: an "
-            "exact likelihood, with no restriction on the network. <bookmark mark='d'/> But even a trace costs one "
+            "field's divergence, the trace of its Jacobian. <bookmark mark='c'/> Integrating along the path gives "
+            "the exact continuous-time change-of-variables identity, without coupling-layer constraints. The "
+            "likelihood values we compute use numerical integration; an exact divergence does not remove solver "
+            "error. <bookmark mark='d'/> But even a trace costs one "
             "backward pass per dimension."
         ) as vo:
             step(0)
@@ -172,7 +174,7 @@ class NeuralODE(VoiceoverScene):
         h = float(t["moons_entropy"])
         top = float(math.ceil(max(E[:, :, 1].max(), H[:, :, 1].max()) * 2) / 2)
         g = axes([0, S[-1]], [h - 0.2, top], x_length=6.0, y_length=3.6, xlabel=r"training step",
-                 ylabel=r"held-out NLL (nats), \ exact divergence", xticks=[0, S[-1]], yticks=[round(h, 2), top],
+                 ylabel=r"estimated held-out NLL (nats)", xticks=[0, S[-1]], yticks=[round(h, 2), top],
                  center=[-2.2, -0.3, 0])
         be = band(g.ax, S, E[:, :, 1].min(0), E[:, :, 1].max(0), EXACT, 0.25)
         bh = band(g.ax, S, H[:, :, 1].min(0), H[:, :, 1].max(0), HUTCH, 0.25)
@@ -192,11 +194,13 @@ class NeuralODE(VoiceoverScene):
             verdict = f"The noisy estimate costs {ag:.2f} nats by the end."
         else:
             verdict = f"The noisy estimate even ends {ag:.2f} nats ahead."
-        tg = note(r"computed: \ the moons, \ three seeds each, \ bands: \ min to max").to_corner(DR, buff=0.2)
+        tg = note(r"computed: \ moons, \ three seeds, \ bands: min to max \\ "
+                  r"NLL: exact divergence, \ $8$ RK4 steps", font_size=18).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "A continuous flow on the moons, three seeds each way: the exact trace, or one random-sign probe per "
-            f"path, all judged with the exact trace. <bookmark mark='a'/> {verdict} A run took {te:.0f} seconds "
-            f"exactly, {th:.0f} with the estimate."
+            "A continuous flow on the moons, three seeds each way: trained with the exact trace, or one "
+            "random-sign probe per path. Both held-out NLL curves use eight RK4 steps and exact divergence, so "
+            f"they remain numerical likelihood estimates. <bookmark mark='a'/> {verdict} The mean recorded "
+            f"instrumented run time was {te:.0f} seconds with the exact trace and {th:.0f} with the probe."
         ) as vo:
             self.play(FadeIn(g), Create(fl), FadeIn(tg), FadeIn(lg))
             self.play(FadeIn(be), Create(le), run_time=1.5)
@@ -231,13 +235,19 @@ class NeuralODE(VoiceoverScene):
                 d_.move_to(q)
 
         expl = VGroup(label(r"dots: \ $700$ points of noise, \ carried by the learned field", font_size=20),
-                      label(r"glow: \ the density at that time, \ $\log p_t$ by the trace integral", font_size=20,
-                            color=CNF_C)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.7, 1.0, 0])
+                      label(r"glow: \ estimated density at five snapshot times", font_size=20, color=CNF_C),
+                      label(r"RK4: \ paths $40$ steps; \\ density: analytic at $0$, then $2/4/6/8$ steps",
+                            font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        if expl.width > 6.2:
+            expl.width = 6.2
+        expl.move_to([3.7, 1.0, 0])
         tk = take_away(r"Next: \ Part 21's flow matching trains such a field without ever solving the ODE in "
                        r"training.", font_size=24)
         with self.voiceover(
             "And the flow itself: seven hundred noise points carried by the learned field from time zero to one, "
-            "over the density at each moment. <bookmark mark='a'/> The cloud stretches, splits and curls into two "
+            "over five density snapshots. Paths use forty RK4 steps. The initial density is analytic; later "
+            "snapshots use two, four, six and eight RK4 steps, with image cross-fades connecting snapshot times. "
+            "<bookmark mark='a'/> The cloud stretches, splits and curls into two "
             "moons. <bookmark mark='b'/> Training still solves the ODE at every step; Part 21's flow matching "
             "learns such fields by regression instead."
         ) as vo:

@@ -51,22 +51,31 @@ class VAE(VoiceoverScene):
         rrows = [digit_sheet(r_, 1, 8, size=0.42, gap=0.04).next_to(srow, DOWN, buff=0.12) for r_ in recs]
         rrl = label(r"their reconstructions", font_size=20, color=RECON).next_to(rrows[0], DOWN, buff=0.06)
         sheets = [digit_sheet(s_, 2, 8, size=0.42, gap=0.04).move_to([3.4, -1.3, 0]) for s_ in snaps]
-        shl = label(r"samples: \ $z \sim \mathcal N(0, I)$, \ the same $z$ each time", font_size=20,
+        shl = label(r"decoder locations: \\ fixed $z$ across checkpoints", font_size=20,
                     color=VAE_C).next_to(sheets[0], UP, buff=0.08)
         r0, k0, r1, k1 = cv[0, 3], cv[0, 4], cv[-1, 3], cv[-1, 4]
         e_b = [float(v[f"s{s}_elbo_bpp"]) for s in (0, 1, 2)]
         iw = [float(v[f"s{s}_iwae_bpp"]) for s in (0, 1, 2)]
         act = int(v["s0_active"])
         eb0, iw0 = e_b[0], iw[0]
-        tg = note(r"computed: \ seed $0$ replayed, \ three seeds measured").to_corner(DR, buff=0.2)
+        tg = note(r"seed $0$ replay: first $2{,}000$ held-out digits; final ELBO: all $10{,}000$ \\ "
+                  r"IWAE-$64$: first $1{,}000$ held-out digits; three seeds measured", font_size=17)
+        if tg.width > 12.8:
+            tg.width = 12.8
+        tg.to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Here is our VAE learning: the bound's two terms, in nats per held-out digit. <bookmark mark='a'/> At "
-            f"first reconstruction costs {r0:.0f} nats and the rate is {k0:.1f}: the codes say nothing. <bookmark "
-            "mark='b'/> Then the rate climbs and the reconstructions sharpen: accuracy bought with information. "
-            f"<bookmark mark='c'/> By the end the code carries {k1:.1f} nats and the decoder needs {r1:.0f}; the "
-            f"bound is {eb0:.2f} bits per pixel, and a tighter one, with 64 codes per digit, {iw0:.2f}. <bookmark "
-            f"mark='d'/> The samples are recognizable digits, and only {act} of the sixteen code numbers carry "
-            "information. Remember that."
+            "Here is our VAE learning: the negative ELBO's two costs, in nats per held-out digit. The replay curves "
+            "use the first two thousand held-out digits. <bookmark mark='a'/> At "
+            f"first reconstruction costs {r0:.0f} nats and the rate is {k0:.1f}. <bookmark "
+            "mark='b'/> Then the rate climbs and the reconstructions sharpen: better reconstruction at a higher "
+            f"coding cost. <bookmark mark='c'/> By the end the rate costs {k1:.1f} nats and the decoder needs {r1:.0f}; the "
+            f"final ELBO-based estimated upper bound on negative log-likelihood is {eb0:.2f} bits per pixel on all "
+            "ten thousand held-out digits. An importance-weighted estimate of a theoretically tighter bound, "
+            f"with 64 codes per digit, is {iw0:.2f} on the first one thousand held-out digits. These reported "
+            "figures are not a matched-cohort comparison. <bookmark "
+            f"mark='d'/> These are decoded locations, not conditional pixel draws. Of the sixteen latent means, "
+            f"{act} exceed our activity threshold: variance above zero point zero one across the held-out digits. "
+            "That is an operational measure of activity, not a count of all information-carrying coordinates."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(srow), FadeIn(srl), FadeIn(rrows[0]), FadeIn(rrl),
                       FadeIn(sheets[0]), FadeIn(shl), FadeIn(tg))
@@ -84,7 +93,7 @@ class VAE(VoiceoverScene):
                 self.wait(0.4 * per)
             self.play(Create(rec), Create(kl), run_time=1.0)
             vo.wait_until("d")
-            self.play(Indicate(cur_s, scale_factor=1.03))
+            self.play(Circumscribe(cur_s, buff=0.04, stroke_width=2.5, fade_in=True, fade_out=True, run_time=1.0))
         self.wait(0.3)
         self.clear_scene()
 
@@ -104,15 +113,19 @@ class VAE(VoiceoverScene):
         key.next_to(pl, UP, buff=0.15)
         grid = np.asarray(vm["grid"]).reshape(-1, 14, 14)
         sheet = digit_sheet(grid, 15, 15, size=0.27, gap=0.015).move_to([3.4, -0.2, 0])
-        gl = label(r"decoding an even grid of codes", font_size=22, color=VAE_C).next_to(sheet, UP, buff=0.15)
+        gl = label(r"decoder locations on an even grid of codes", font_size=22,
+                   color=VAE_C)
+        if gl.width > 6.2:
+            gl.width = 6.2
+        gl.next_to(sheet, UP, buff=0.15)
         steps = list(vm["steps"])
         cnt = label(r"step $0$", font_size=22, color=GREY_A).next_to(pl, DOWN, buff=0.15)
         with self.voiceover(
             "What does the code learn? With two numbers per digit we can watch: each dot is a held-out digit at "
             "its code, coloured by its label. <bookmark mark='a'/> The encoder spreads them out, and digits of a "
             "kind gather, though nobody told it the labels, while the KL term keeps the cloud near the origin. "
-            "<bookmark mark='b'/> Decode an even grid of codes, and you get the model's map of digits, with smooth "
-            "blends between regions."
+            "<bookmark mark='b'/> Decode an even grid of codes, and the decoder locations give a map of digits, "
+            "with smooth blends between regions. These grid pictures do not draw the conditional pixel noise."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(dots), FadeIn(key), FadeIn(cnt))
             per = max(0.5, (vo.until("b") - 0.5) / max(1, len(codes) - 1))
@@ -156,6 +169,11 @@ class VAE(VoiceoverScene):
             al = label(rf"${int(round(A[i].mean()))}$ active", font_size=18, color=GREY_B)
             rows.add(Group(tl, sh, al).arrange(RIGHT, buff=0.18))
         rows.arrange(DOWN, buff=0.12, aligned_edge=LEFT).move_to([3.5, -0.5, 0])
+        row_note = label(r"decoder locations; \ active: $\operatorname{Var}_x[\mu_i(x)] > 0.01$",
+                         font_size=16, color=GREY_A)
+        if row_note.width > 6.5:
+            row_note.width = 6.5
+        row_note.next_to(rows, DOWN, buff=0.12)
         mono_r = all(R[i].mean() >= R[i + 1].mean() for i in range(len(betas) - 1))
         mono_d = all(Dd[i].mean() <= Dd[i + 1].mean() for i in range(len(betas) - 1))
         lo, hi = 0, len(betas) - 1
@@ -170,9 +188,11 @@ class VAE(VoiceoverScene):
         with self.voiceover(
             "The two terms pull against each other; weight the KL by beta, and you have Irina Higgins's beta-VAE. "
             f"<bookmark mark='a'/> We trained six betas, from {b_lo:g} to {b_hi:g}, two seeds each: each dot is a "
-            f"run, its rate against its distortion. <bookmark mark='b'/> {trend} At beta {b_lo:g} the code carries "
+            f"run, its rate against its distortion. <bookmark mark='b'/> {trend} At beta {b_lo:g} the coding rate is "
             f"{r_lo:.0f} nats with {a_lo} active numbers; at {b_hi:g}, {r_hi:.0f} nats with {a_hi}. <bookmark "
-            "mark='c'/> A large beta gives smooth, generic digits: the code no longer pins down the details."
+            "mark='c'/> These pictures are decoder locations. Active here means that a posterior mean's variance "
+            "across held-out digits exceeds zero point zero one. A large beta gives smooth, generic location "
+            "images: the code pins down fewer details."
         ) as vo:
             self.play(Write(f), FadeIn(cite_))
             vo.wait_until("a")
@@ -180,7 +200,8 @@ class VAE(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(path), FadeIn(labs))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r_, shift=LEFT * 0.1) for r_ in rows], lag_ratio=0.2), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(r_, shift=LEFT * 0.1) for r_ in rows], lag_ratio=0.2), FadeIn(row_note),
+                      run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -240,7 +261,7 @@ class VAE(VoiceoverScene):
         lf = curve(g.ax, Fc[:, 1], Fc[:, 3], C.BITS, 3)
         ref = DashedLine(g.ax.c2p(0, float(v["s0_kl_nats"])), g.ax.c2p(Pc[-1, 1], float(v["s0_kl_nats"])), color=VAE_C,
                          stroke_width=2)
-        rl = label(r"the plain VAE's rate", font_size=18, color=VAE_C).next_to(ref, UP, buff=0.05).align_to(ref, RIGHT)
+        rl = label(r"main VAE: full-budget reference", font_size=18, color=VAE_C).next_to(ref, DOWN, buff=0.12).align_to(ref, RIGHT)
         lg = legend([(AR, r"PixelCNN decoder"), (C.BITS, rf"PixelCNN decoder, \ free bits (${c['free_free_bits']:.1f}$ "
                                                          r"nats per code number)")], font_size=20)
         lg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
@@ -253,7 +274,7 @@ class VAE(VoiceoverScene):
                 r_.add(Group(digit_sheet(src[i:i + 1], 1, 1, size=0.42), MathTex(r"\to", font_size=26),
                              digit_sheet(same[4 * i:4 * i + 4], 1, 4, size=0.42, gap=0.03)).arrange(RIGHT, buff=0.12))
             r_.arrange(DOWN, buff=0.1)
-            rows.add(Group(label(r"collapsed" if tag_ == "plain" else r"with free bits", font_size=20, color=col),
+            rows.add(Group(label(r"plain PixelVAE" if tag_ == "plain" else r"with free bits", font_size=20, color=col),
                            r_).arrange(DOWN, buff=0.1))
         rows.arrange(RIGHT, buff=0.4).move_to([3.6, -0.4, 0])
         cap = label(r"a digit, \ its code, \ four digits decoded from that code", font_size=20,
@@ -262,40 +283,63 @@ class VAE(VoiceoverScene):
         ap, af = float(c["plain_agree"]), float(c["free_agree"])
         kv = float(v["s0_kl_nats"])
         if kp < 0.25 * kv:
-            first = (f"With a PixelCNN decoder, the rate sinks to {kp:.1f} nats per digit, against {kv:.1f} for the "
-                     "plain VAE: the decoder can draw a digit by itself.")
+            first = (f"The plain PixelVAE ends at {kp:.1f} nats per digit, below the main VAE reference at {kv:.1f}. "
+                     "A low rate is consistent with weak latent use; it does not by itself establish complete collapse.")
         else:
-            first = (f"With a PixelCNN decoder, the rate ends at {kp:.1f} nats per digit, against {kv:.1f} for the "
-                     "plain VAE: the strong decoder leans on the code much less.")
+            first = (f"The plain PixelVAE ends at {kp:.1f} nats per digit, against {kv:.1f} for the main VAE "
+                     "reference. These are measured rates from the different recipes shown here.")
         fbits = float(c["free_free_bits"])
         pa, pf = 100 * ap, 100 * af
         if ap < 0.6:
-            second = (f"Decode a hundred test digits' codes four times each: only {pa:.0f} percent of the results match "
-                      "the encoded digit.")
+            second = (f"Decode a hundred test digits' codes four times each: only {pa:.0f} percent of classifier "
+                      "predictions match the source labels.")
         else:
-            second = (f"Decode a hundred test digits' codes four times each: {pa:.0f} percent still match the encoded "
-                      "digit.")
+            second = (f"Decode a hundred test digits' codes four times each: {pa:.0f} percent of classifier "
+                      "predictions match the source labels.")
         if pf > pa + 10:
-            third = (f"Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, and "
-                     f"{pf:.0f} percent match.")
+            third = (f"The free-bits objective uses a cost floor of {fbits:.1f} nats per code number. Its measured "
+                     f"KL is {kf:.1f} nats, and classifier agreement is {pf:.0f} percent in this paired seed.")
         else:
-            third = (f"Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, yet only "
-                     f"{pf:.0f} percent match: a floor on the rate is not a use of the code.")
+            third = (f"The free-bits objective uses a cost floor of {fbits:.1f} nats per code number. Its measured "
+                     f"KL is {kf:.1f} nats, and classifier agreement is {pf:.0f} percent: a cost floor does not "
+                     "guarantee code use.")
+        # Present observed exposure, rather than substituting a decoder-only
+        # causal comparison for the different full/half-budget recipes.
+        main_examples = int(v["s0_examples"])
+        plain_examples, free_examples = int(c["plain_steps"]) * 64, int(c["free_steps"]) * 64
+        protocol_note = VGroup(
+            note(r"all: $16$ latent dimensions; main VAE: full budget; each PixelVAE: half budget", font_size=16),
+            note((rf"examples seen: main VAE ${main_examples:,}$; plain PixelVAE ${plain_examples:,}$; "
+                  rf"free bits ${free_examples:,}$").replace(",", "{,}"), font_size=16),
+            note(r"architectures and exposure differ; not a decoder-only controlled comparison", font_size=16),
+        ).arrange(DOWN, buff=0.06)
+        if protocol_note.width > 12.8:
+            protocol_note.width = 12.8
+        protocol_note.to_edge(DOWN, buff=0.62)
+        agreement_note = note(rf"one paired seed: ${pa:.0f}\% \to {pf:.0f}\%$ class agreement \\ "
+                              r"$100$ targets $\times$ $4$ draws; descriptive only", font_size=16)
+        if agreement_note.width > 6.5:
+            agreement_note.width = 6.5
+        agreement_note.next_to(rows, DOWN, buff=0.12)
         cite_ = cite(r"Bowman et al.\ (2016); \ Kingma et al., \textit{IAF}, free bits (2016); \ Chen et al., "
                      r"\textit{Variational Lossy Autoencoder} (2017)", corner=DR)
         with self.voiceover(
             "The code costs rate, and a decoder that can model the data alone gets nothing for it. Samuel Bowman "
-            "and colleagues hit this in 2016, with a VAE for sentences. <bookmark mark='a'/> "
-            f"{first} <bookmark mark='b'/> {second} <bookmark mark='c'/> {third} The cure: make the code worth its cost."
+            "and colleagues hit this in 2016, with a VAE for sentences. All models here have sixteen latent "
+            "dimensions. The main VAE is a full-budget reference; each PixelVAE gets half that nominal budget. "
+            "Their architectures and exposure differ, so this is not a decoder-only controlled comparison. "
+            f"<bookmark mark='a'/> {first} <bookmark mark='b'/> {second} <bookmark mark='c'/> {third} The plain and "
+            "free-bits PixelVAEs share architecture, seed and nominal budget. Their classifier-agreement "
+            "comparison is descriptive for this paired seed, not an established general benefit."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(lg), Create(ref), FadeIn(rl), FadeIn(cite_))
+            self.play(FadeIn(g), FadeIn(lg), Create(ref), FadeIn(rl), FadeIn(protocol_note), FadeIn(cite_))
             self.play(Create(lp), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(cap))
             vo.wait_until("b")
-            self.play(Indicate(rows[0], scale_factor=1.03))
+            self.play(Circumscribe(rows[0], buff=0.04, stroke_width=2.5, fade_in=True, fade_out=True, run_time=1.0))
             vo.wait_until("c")
-            self.play(Create(lf), FadeIn(rows[1]), run_time=2.0)
+            self.play(Create(lf), FadeIn(rows[1]), FadeIn(agreement_note), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

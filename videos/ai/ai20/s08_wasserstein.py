@@ -145,8 +145,11 @@ class Wasserstein(VoiceoverScene):
         clipb.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([-3.4, -2.6, 0])
         gp = VGroup(label(r"Gulrajani et al.\ (2017): \ the optimal critic has slope $1$", font_size=22,
                           color=C.BITS),
-                    label(r"along the lines between matched real and fake points", font_size=20, color=GREY_B))
-        gp.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.0, -2.6, 0])
+                    label(r"on segments paired by an optimal transport plan", font_size=20, color=GREY_B))
+        gp.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        if gp.width > 7.0:
+            gp.width = 7.0
+        gp.move_to([3.0, -2.6, 0])
         # what the critic does: high on the data, low on the model, never steeper than slope one
         ia = axes([-3, 3], [-1.6, 1.6], x_length=5.0, y_length=2.0, center=[3.6, -1.9, 0])
         xs = np.linspace(-3, 3, 200)
@@ -164,8 +167,9 @@ class Wasserstein(VoiceoverScene):
             "most one can open between p and q. <bookmark mark='a'/> So a critic f, with any real output, learns to "
             "open the gap, and the generator to close it. <bookmark mark='b'/> The hard part is the slope limit; the "
             "first Wasserstein GAN clipped every weight. <bookmark mark='c'/> Ishaan Gulrajani and colleagues saw "
-            "that the optimal critic has slope exactly one between real and fake points, and penalized deviations "
-            "there: WGAN-GP."
+            "that for optimally transport-coupled points the optimal critic has unit slope along their segment. "
+            "WGAN-GP uses this to motivate a soft penalty on random real-fake interpolations; it is not a "
+            "theorem requiring unit slope for every random pair."
         ) as vo:
             step(0)
             self.play(FadeIn(ia), Create(bp), Create(bq), FadeIn(il[:2]))

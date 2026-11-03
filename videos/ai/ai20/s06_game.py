@@ -208,30 +208,40 @@ class Game(VoiceoverScene):
         else:
             fac = max(ratio, 1 / max(ratio, 1e-9))
             meas = (f"Measured on the ring, in the first steps, the two gradients are within a factor of {fac:.1f}: "
-                    "our discriminator never gets confident enough, early on, for the difference to bite.")
+                    "that is the measured comparison in this early window.")
         rk = cmath(r"\nabla_\theta\, \mathbb E_q[-\log D^*]", r"=", r"\nabla_\theta\big[\mathrm{KL}(q \,\|\, p) - 2\, "
                    r"\mathrm{JS}(p \,\|\, q)\big]", font_size=30).move_to([2.6, -2.1, 0])
         rk[2].set_color(C.KL)
         rkl = label(r"reverse KL: \ cheap to miss a mode, \ costly to invent one", font_size=20, color=C.KL)
         rkl.next_to(rk, DOWN, buff=0.12)
+        logit_note = label(r"through the sigmoid: \ $\partial_a\log(1-D)=-D$ \\ "
+                           r"$\partial_a[-\log D]=D-1$, \ $D=\sigma(a)$", font_size=18, color=GREY_A)
+        logit_note.move_to([-3.6, -3.1, 0])
+        condition = label(r"smooth positive densities; \\ optimal $D^*_{\theta_0}$ held fixed for the $G$ update",
+                          font_size=16, color=GREY_A)
+        if condition.width > 8.4:
+            condition.width = 8.4
+        condition.move_to([2.4, -3.25, 0])
         cite_ = cite(r"Arjovsky \& Bottou (2017)", corner=DR)
         with self.voiceover(
             "The first practical problem appears on day one: the fakes are bad, and D of G of z sits near zero. "
-            "<bookmark mark='a'/> There the minimax loss is flat, and the generator gets almost no gradient. "
+            "<bookmark mark='a'/> Through D's sigmoid, the minimax generator gradient can nearly vanish. "
             "<bookmark mark='b'/> Goodfellow's fix, in the same paper: maximize the probability of fooling, minus "
-            f"log D, steep where the other is flat. <bookmark mark='c'/> {meas} <bookmark mark='d'/> The fix has a "
-            "cost, found by Martin Arjovsky and Léon Bottou in 2017: its gradient is that of a reverse KL divergence "
-            "minus the Jensen-Shannon term, and reverse KL barely penalizes missing a mode."
+            f"log D, whose logit gradient stays strong there. <bookmark mark='c'/> {meas} <bookmark mark='d'/> The fix has a "
+            "cost, found by Martin Arjovsky and Léon Bottou in 2017. For smooth positive densities, with the "
+            "optimal discriminator at the current parameters held fixed during the generator update, its gradient "
+            "is that of reverse KL minus twice Jensen-Shannon, evaluated at those parameters. Reverse KL barely "
+            "penalizes missing a mode."
         ) as vo:
             self.play(FadeIn(ax), Create(mm), FadeIn(lg[0]))
             vo.wait_until("a")
             self.play(FadeIn(hl), FadeIn(hlt))
             vo.wait_until("b")
-            self.play(Create(ns), FadeIn(lg[1]))
+            self.play(Create(ns), FadeIn(lg[1]), FadeIn(logit_note))
             vo.wait_until("c")
             self.play(FadeIn(g), Create(cm), Create(cn))
             vo.wait_until("d")
-            self.play(Write(rk), FadeIn(rkl), FadeIn(cite_))
+            self.play(Write(rk), FadeIn(rkl), FadeIn(condition), FadeIn(cite_))
         self.wait(0.3)
         self.clear_scene()
 
