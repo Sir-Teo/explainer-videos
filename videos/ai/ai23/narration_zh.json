@@ -418,6 +418,11 @@
    "en": "Chapter sixteen. Every sense at once.",
    "zh": "第16章。所有感官一起来。"
   },
+  "d70cbb974cba": {
+   "scene": "Omni",
+   "en": "A text-based voice assistant can use a cascade: <bookmark mark='a'/> a recognizer turned your speech into text, a language model wrote a reply, and a synthesizer read it out. Stages can stream partial results, but text alone cannot carry every detail of the original voice: the tone, the laugh, and the hesitation may be lost. <bookmark mark='b'/> In May 2024 OpenAI's GPT-4o put it all in one network trained end to end on text, pictures and sound, answering speech in as little as 232 milliseconds, 320 on average, about as fast as people take turns.",
+   "zh": "一种基于文本的语音助手可以采用级联：<bookmark mark='a'/>一个识别器把你的话变成文字，一个语言模型写出回复，一个合成器再把它读出来。各级可以流式传递部分结果，但文字无法承载原始声音的所有细节：语气、笑声和迟疑可能会丢失。<bookmark mark='b'/>2024年5月，OpenAI的GPT-4o把这一切放进一个网络，在文本、图片和声音上端到端训练，回应语音最快只要232毫秒，平均320毫秒，和人们轮流说话的速度差不多。"
+  },
   "ad39c079c96a": {
    "scene": "Omni",
    "en": "The voice assistants of the 2010s were cascades: <bookmark mark='a'/> a recognizer turned your speech into text, a language model wrote a reply, and a synthesizer read it out. Each stage waits for the one before, and everything the text can't hold, the tone, the laugh, the hesitation, is lost on the way. <bookmark mark='b'/> In May 2024 OpenAI's GPT-4o put it all in one network trained end to end on text, pictures and sound, answering speech in as little as 232 milliseconds, 320 on average, about as fast as people take turns.",

@@ -43,16 +43,15 @@ class Omni(VoiceoverScene):
         arr.add(Arrow(w_in.get_right(), boxes[0].get_left(), buff=0.08, color=GREY_B),
                 Arrow(boxes[2].get_right(), w_out.get_left(), buff=0.08, color=GREY_B))
         txt = VGroup(*[label(r"text", font_size=20, color=TEXT_C).next_to(a_, UP, buff=0.08) for a_ in arr[:2]])
-        cl = label(r"a cascade: \ each waits for the one before, \ and tone of voice is lost in the text between",
+        cl = label(r"a text-only cascade: \ stages can stream, \ but the handoff loses acoustic detail",
                    font_size=22, color=GREY_A).next_to(boxes, DOWN, buff=0.35)
         one = node_box(r"one network: \ sound, \ pictures and text in; \ sound and text out", WHITE, font_size=26)
         one.move_to(DOWN * 1.6)
         ol = label(r"GPT-4o (OpenAI, May 2024): \ answers speech in as little as $232$ ms, \ $320$ ms on average",
                    font_size=22, color=GREY_A).next_to(one, DOWN, buff=0.3)
         with self.voiceover(
-            "The voice assistants of the 2010s were cascades: <bookmark mark='a'/> a recognizer turned your speech "
-            "into text, a language model wrote a reply, and a synthesizer read it out. Each stage waits for the one "
-            "before, and everything the text can't hold, the tone, the laugh, the hesitation, is lost on the way. "
+            "A text-based voice assistant can use a cascade: <bookmark mark='a'/> a recognizer turned your speech "
+            "into text, a language model wrote a reply, and a synthesizer read it out. Stages can stream partial results, but text alone cannot carry every detail of the original voice: the tone, the laugh, and the hesitation may be lost. "
             "<bookmark mark='b'/> In May 2024 OpenAI's GPT-4o put it all in one network trained end to end on text, "
             "pictures and sound, answering speech in as little as 232 milliseconds, 320 on average, about as fast as "
             "people take turns."
