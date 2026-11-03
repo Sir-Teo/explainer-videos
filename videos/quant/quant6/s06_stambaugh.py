@@ -155,7 +155,7 @@ class Stambaugh(VoiceoverScene):
         src = real_data(r"Shiller's data: annual (January) and monthly, 1871--2020; nominal annual, real monthly returns")
         mono = "rejects" if mth["ivx"]["p"] < 0.05 else "does not reject"
         q = predict(r"If the predictor's shocks were positively correlated with returns, which way would the bias "
-                    r"go?").to_edge(DOWN, buff=0.25)
+                    r"go?", width=5.6).to_corner(DR, buff=0.6)  # clear of the source line
         with self.voiceover(
             f"The real regression: annual data, a slope of {s['beta']:.3f}, t of {s['t']:.1f}. <bookmark mark='a'/> "
             f"Subtract the bias, and {s['beta_corrected']:.3f} is left. Amihud and Hurvich's augmented regression adds "
