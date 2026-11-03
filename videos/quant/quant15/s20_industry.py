@@ -28,9 +28,9 @@ class Industry(VoiceoverScene):
         M = m["models"]
         names = ["LV", "Heston", "Bates", "VG"]
         cp = np.array([M[k]["coupon"] for k in names])
-        g = axes([0, 5], [0.0, float(cp.max()) * 1.2], x_length=6.0, y_length=4.2, ylabel=r"fair coupon, 4-month BTC "
+        g = axes([0, 5], [0.0, float(cp.max()) * 1.2], x_length=5.2, y_length=4.2, ylabel=r"fair coupon, 4-month BTC "
                  r"autocall", xticks=[], yticks=[0, round(float(cp.max()), 2)], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                 font_size=14).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
+                 font_size=14).to_edge(LEFT, buff=0.4).shift(DOWN * 0.3)
         ax = g.ax
         cols = [QC.SPOT, QC.OPTION, QC.GAIN, QC.IMPLIED]
         bars = VGroup()
@@ -49,8 +49,8 @@ class Industry(VoiceoverScene):
                             r"valuation adjustments (AVAs) against fair value, among them market price uncertainty, "
                             r"close-out costs and model risk (Article 11), estimated from a range of plausible valuations "
                             r"under alternative models at a 90\% level of certainty, and deducted from capital", color=BAD,
-                            width=6.0, font_size=19),
-        ).to_edge(RIGHT, buff=0.35)
+                            width=5.2, font_size=19),
+        ).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
             "Chapters thirteen and fourteen put numbers on model risk. Banks are required to. In the European Union, "
             "the prudent valuation rules of Delegated Regulation 2016/101 make banks hold additional valuation "
