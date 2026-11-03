@@ -88,7 +88,7 @@ class Tree(VoiceoverScene, ThreeDScene):
         surf = price_surface(ax, lambda t, S: float(bs.price(S, K, max(T - t, 1e-4), sig, r)), (0.0, 0.999),
                              (50, 200), resolution=(24, 24), z_lo=0, z_hi=100, opacity=0.35)
 
-        def nodes(N, cap=1500):
+        def nodes(N, cap=500):  # a dense cloud already; 1,500 3D dots made each animation slow to hash
             t, S, V = (np.asarray(t3[f"{c}_{N}"], float) for c in ("t", "s", "v"))
             m = (S >= 50) & (S <= 200)
             idx = np.flatnonzero(m)
