@@ -15,7 +15,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 59 minutes)
 
 * **The shape of fear.** A 3D tour of the Surface (10 December 2025): 254 quotes and an SSVI fit at 0.74 vol points,
   vega-weighted. How we got here (1973–2024), a flat Black–Scholes plane bending into the Surface, the objectives,
@@ -202,7 +202,7 @@ paper; Deribit DVOL methodology: ch. 11.
 
 *讲的是方法，不构成投资建议。*
 
-## 章节（约58分钟）
+## 章节（约59分钟）
 
 * **恐惧的形状。** 基准曲面的三维巡览；1973–2024年的来龙去脉；布莱克–斯科尔斯的平面弯成基准曲面。
 * **1. 读懂微笑。** 微笑即风险中性分布的偏度与峰度（Gram–Charlier滑块与Backus–Foresi–Wu公式）；243个周度曲面上的期限结构与偏斜：
