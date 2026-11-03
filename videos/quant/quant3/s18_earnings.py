@@ -127,7 +127,7 @@ class Earnings(VoiceoverScene):
     def clock(self, pe):
         days = np.asarray(pe["days"])
         C, S = np.asarray(pe["car"]), np.asarray(pe["sue"])
-        g = axes([-5, 60], [-0.15, 0.2], x_length=8.2, y_length=4.6, xlabel=r"trading days from the announcement",
+        g = axes([-5, 60], [-0.15, 0.2], x_length=6.8, y_length=4.6, xlabel=r"trading days from the announcement",
                  ylabel=r"cumulative return beyond SPY", xticks=[-5, 0, 20, 40, 60], yticks=[-0.1, 0, 0.1, 0.2],
                  yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=17).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
         ax = g.ax
@@ -142,12 +142,12 @@ class Earnings(VoiceoverScene):
         dp, dn = pe["drift_pos"], pe["drift_neg"]
         right = dp > dn
         side = VGroup(
-            label(rf"Apple, {pe['n_events']} announcements, Oct.\ 2015 -- Dec.\ 2020", font_size=21, color=GREY_A),
+            wrapped_label(rf"Apple, {pe['n_events']} announcements, Oct.\ 2015 -- Dec.\ 2020", 4.8, 21, GREY_A),
             label(rf"green: positive surprise ({pe['n_pos']}); red: negative ({pe['n_neg']})", font_size=19,
                   color=GREY_B),
             MathTex(rf"\text{{corr(SUE, day-0 move)}} = {pe['jump_corr']:.2f}", font_size=28),
             MathTex(rf"\text{{drift, day }}+1\text{{ to }}+60:\ {100 * dp:+.1f}\%\ \text{{vs}}\ {100 * dn:+.1f}\%",
-                    font_size=28),
+                    font_size=26),
             wrapped_label((r"the drift has the textbook sign" if right else
                            r"the drift runs the wrong way: one firm's handful of events is noise"), 4.4, 21,
                           GAIN if right else LOSS),
@@ -174,7 +174,8 @@ class Earnings(VoiceoverScene):
     def history(self, pe):
         o, ot = pe["osap"], pe["osap_t"]
         t, cum = np.asarray(pe["osap_cum_t"]), np.asarray(pe["osap_cum"])
-        g = axes([1974, 2021], [0, np.log10(cum.max() * 1.3)], x_length=7.0, y_length=4.4,
+        top = np.log10(cum.max() * 2.2)  # headroom for the two date labels inside the plot
+        g = axes([1974, 2021], [0, top], x_length=7.0, y_length=4.4,
                  ylabel=r"growth of \$1, long high SUE, short low (log scale)", xticks=[1980, 1990, 2000, 2010, 2020],
                  xfmt=lambda v: f"{int(v)}", yticks=[0, 1], yfmt=lambda v: f"{10 ** v:g}", font_size=17)
         g.to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
@@ -183,10 +184,8 @@ class Earnings(VoiceoverScene):
         line = tracing(ax, t, np.log10(cum), k, VALUE)
         marks = VGroup()
         for yr, txt, col in ((o["year"] + 1, r"published", QC.IDEA), (2006, r"2006", GREY_B)):
-            marks.add(VGroup(DashedLine(ax.c2p(yr, 0), ax.c2p(yr, np.log10(cum.max() * 1.3)), color=col,
-                                        stroke_width=2),
-                             label(txt, font_size=18, color=col).next_to(ax.c2p(yr, np.log10(cum.max() * 1.3)), UP,
-                                                                        buff=0.05)))
+            marks.add(VGroup(DashedLine(ax.c2p(yr, 0), ax.c2p(yr, top), color=col, stroke_width=2),
+                             label(txt, font_size=18, color=col).next_to(ax.c2p(yr, top), DR, buff=0.06)))
         rows = VGroup(
             label(r"Foster, Olsen and Shevlin's SUE long-short, \% a month:", font_size=20, color=GREY_A),
             MathTex(rf"\text{{their sample }}{o['start']}\text{{--}}{o['end']}:\ {o['in']:.2f}\ (t = {ot['in']:.1f})",
