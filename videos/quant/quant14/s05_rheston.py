@@ -86,8 +86,8 @@ class RHeston(VoiceoverScene):
                       r" + \nu\sqrt{V_s}\,dW_s\Big)", font_size=32, colors={r"V_t": VAR}),
                 cmath(r"\log\mathbb{E}\,e^{iuX_T}", r"=", r"\int_0^T F\big(u, h(T - s)\big)\,g_0(s)\,ds,\quad g_0(t) = V_0 + "
                       r"\lambda\theta\!\int_0^t\! K", font_size=32, colors={r"\log\mathbb{E}\,e^{iuX_T}": OPT}),
-                cmath(r"h", r"=", r"K * F(u, h)\ \Longleftrightarrow\ D^\alpha h = -\tfrac12(u^2 + iu) + (i\rho\nu u - \lambda)\,h"
-                      r" + \tfrac12\nu^2 h^2", font_size=32, colors={r"h": ROUGH}),
+                cmath(r"D^\alpha h", r"=", r"-\tfrac12(u^2 + iu) + (i\rho\nu u - \lambda)\,h + \tfrac12\nu^2 h^2",
+                      font_size=36, colors={r"D^\alpha h": ROUGH}),
                 cmath(r"\mathbb{E}\,e^{iuX_T}", r"=", r"\exp\!\Big(\theta\lambda\,I^1 h(T) + V_0\,I^{1 - \alpha}h(T)\Big)",
                       font_size=34, colors={r"\mathbb{E}\,e^{iuX_T}": OPT}),
                 cmath(r"\alpha = 1:\ D^1 h = h'", r"=", r"\text{Heston's Riccati equation}", font_size=34,
@@ -95,8 +95,8 @@ class RHeston(VoiceoverScene):
         whys = [why(r"Heston (Part 13) with the constant kernel replaced by the fractional one, $\alpha = H + \tfrac12$"),
                 why(r"an affine Volterra process: the log characteristic function is linear in the initial curve $g_0$ "
                     r"(Abi Jaber, Larsson and Pulido 2019; \textit{Rough Volatility}, ch. 5)"),
-                why(r"convolution with $t^{\alpha - 1}/\Gamma(\alpha)$ is the fractional integral $I^\alpha$; its inverse is the "
-                    r"fractional derivative $D^\alpha$"),
+                why(r"$h = K * F(u, h)$: convolution with $t^{\alpha - 1}/\Gamma(\alpha)$ is the fractional integral $I^\alpha$; "
+                    r"its inverse, the fractional derivative $D^\alpha$, turns it into this fractional Riccati equation"),
                 why(r"substitute $g_0$ and integrate: El Euch and Rosenbaum (2019); no closed form for $h$, but one "
                     r"equation, for every $u$"),
                 why(r"the consistency check the House's tests run: at $H = \tfrac12$ it is exactly Heston")]
