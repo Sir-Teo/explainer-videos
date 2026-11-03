@@ -188,8 +188,9 @@ class Parity(VoiceoverScene):
 
     def futures(self, p, fb):
         rows = [r for r in fb["rows"] if "gap_bp" in r]
-        g = axes([0, 220], [0.02, 0.055], x_length=6.4, y_length=4.2, xlabel=r"days to expiry",
-                 ylabel=r"forward over index, as an annual rate", xticks=[0, 100, 200],
+        # to 300 days: the longest dated future (about 290 days) has no option pair, but belongs on the curve
+        g = axes([0, 300], [0.02, 0.055], x_length=6.4, y_length=4.2, xlabel=r"days to expiry",
+                 ylabel=r"forward over index, as an annual rate", xticks=[0, 100, 200, 300],
                  yticks=[0.02, 0.03, 0.04, 0.05], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=17)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
