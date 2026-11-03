@@ -211,7 +211,7 @@ class FamaMacBeth(VoiceoverScene):
                 why(r"the weights: each month's share of the cross-sectional variation in $x$"),
                 why(r"split $\sum (x - \bar x)^2$ into within-month and between-month sums of squares (analysis of "
                     r"variance)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.38, edge=6.8)
         with self.voiceover(
             "The algebra. Fama-MacBeth averages the monthly slopes, each month counting once. <bookmark mark='a'/> The "
             "within estimator divides the centred cross-products, summed over all months, by the centred squares, summed "
@@ -235,7 +235,7 @@ class FamaMacBeth(VoiceoverScene):
     def twopass(self, tp, fe):
         b, m = np.asarray(tp["betas"]), np.asarray(tp["mean"])
         lam = tp["lambda"]
-        g = axes([0.4, 1.5], [0, 0.0125], x_length=6.4, y_length=4.4, xlabel=r"market beta (first pass)",
+        g = axes([0.4, 1.5], [0, 0.0125], x_length=5.6, y_length=4.4, xlabel=r"market beta (first pass)",
                  ylabel=r"average excess return, monthly", xticks=[0.5, 1.0, 1.5], yticks=[0, 0.005, 0.01],
                  yfmt=lambda u: f"{100 * u:.1f}\\%", font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.25)
         ax = g.ax
@@ -259,7 +259,7 @@ class FamaMacBeth(VoiceoverScene):
                     r"\sigma_\gamma^2 + \Sigma_f\big]", font_size=26),
             label(r"Shanken (1992): the betas are estimated", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
-        q = predict(r"Is the market's own past year a buy signal for the market?").to_edge(DOWN, buff=0.2)
+        q = predict(r"Is the market's own past year a buy signal for the market?", width=5.6).to_corner(DR, buff=0.3)
         with self.voiceover(
             "Fama and MacBeth built the method to test the CAPM in two passes: estimate betas from time series, then "
             "each month regress returns on betas, and average. The CAPM says the line passes through zero with the "
