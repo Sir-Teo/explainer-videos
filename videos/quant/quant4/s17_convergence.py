@@ -26,7 +26,7 @@ class Convergence(VoiceoverScene):
         w = np.asarray(p["walk"], float)
         n = len(w) - 1
         lo, hi = float(np.floor(w.min())) - 1, float(np.ceil(w.max())) + 1
-        g = axes([0, n], [lo, hi], x_length=9.0, y_length=3.0, ylabel=r"a martingale $M_n$", xticks=[], yticks=[-3, 3],
+        g = axes([0, n], [lo, hi], x_length=8.0, y_length=3.0, ylabel=r"a martingale $M_n$", xticks=[], yticks=[-3, 3],
                  font_size=16).to_edge(UP, buff=0.6).to_edge(LEFT, buff=0.8)
         ax = g.ax
         bandm = Polygon(ax.c2p(0, -3), ax.c2p(n, -3), ax.c2p(n, 3), ax.c2p(0, 3), stroke_width=0, fill_color=INFO,
@@ -36,7 +36,7 @@ class Convergence(VoiceoverScene):
         tk = ValueTracker(0.0)
         path = tracing(ax, np.arange(n + 1), w, tk, P_C, stroke_width=2.5)
         wealth = np.asarray(p["trader"], float)
-        g2 = axes([0, n], [float(min(wealth.min(), -2)), float(wealth.max()) + 2], x_length=9.0, y_length=1.9,
+        g2 = axes([0, n], [float(min(wealth.min(), -2)), float(wealth.max()) + 2], x_length=8.0, y_length=1.9,
                   ylabel=r"the upcrossing trader's P\&L", xlabel=r"steps", xticks=[0, n], yticks=[0], font_size=16)
         g2.next_to(g, DOWN, buff=0.55).align_to(g, LEFT)
         pl = tracing(g2.ax, np.arange(n + 1), wealth, tk, QC.IDEA, stroke_width=2.5)
@@ -48,7 +48,7 @@ class Convergence(VoiceoverScene):
         cnt = always_redraw(lambda: MathTex(
             rf"\text{{upcrossings of }} [-3, 3]: {sum(1 for e in p['ends'] if e <= tk.get_value())}", font_size=28,
             color=QC.IDEA).next_to(g, RIGHT, buff=0.3).align_to(g, UP))
-        rule = label(r"buy 1 below $a = -3$, sell above $b = 3$; repeat", font_size=20, color=GREY_A).next_to(
+        rule = wrapped_label(r"buy 1 below $a = -3$, sell above $b = 3$; repeat", 3.8, 20, GREY_A).next_to(
             cnt, DOWN, buff=0.2).align_to(cnt, LEFT)
         with self.voiceover(
             "Can a fair game wander forever without settling? Doob's answer is a trading strategy. Draw a band from a "
@@ -109,7 +109,7 @@ class Convergence(VoiceoverScene):
         S = np.asarray(p["show"], float)
         k = S.shape[1]
         draws = np.arange(k) * 10
-        g = axes([0, 2000], [0, 1], x_length=7.0, y_length=4.4, xlabel=r"draws", ylabel=r"red fraction in 100 P\'olya "
+        g = axes([0, 2000], [0, 1], x_length=5.6, y_length=4.4, xlabel=r"draws", ylabel=r"red fraction in 100 P\'olya "
                  r"urns", xticks=[0, 1000, 2000], yticks=[0, 0.5, 1], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         tk = ValueTracker(0.0)
@@ -128,11 +128,14 @@ class Convergence(VoiceoverScene):
             MathTex(r"\mathbb{E}[R_{n+1} \mid \mathcal{F}_n] = R_n + \frac{R_n}{n + 2}", font_size=30),
             MathTex(r"\Rightarrow \frac{R_n}{n + 2} \text{ is a bounded martingale}", font_size=30, color=MART),
             label(r"the limits of 10{,}000 urns (right):", font_size=20, color=GREY_A),
-            MathTex(rf"\text{{flat: K--S distance from Uniform}}(0,1) = {p['ks']:.3f}", font_size=26, color=MART),
+            MathTex(rf"\text{{flat: K--S distance from Uniform}}(0,1) = {p['ks']:.3f}", font_size=24, color=MART),
             MathTex(rf"P(\text{{limit}} > 0.9) = {p['p_above_09']:.3f}", font_size=26, color=QC.IDEA),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        if side.width > 4.8:  # the column must clear the histogram that grows right of the urns
+            side.scale_to_fit_width(4.8)
+        side.to_edge(RIGHT, buff=0.35)
         pred = desk_question(r"P\'olya's urn from one red and one blue: chance the red fraction ends above 90\%?",
-                             r"10\%: the limit is uniform on $[0, 1]$.", width=5.4, font_size=20)
+                             r"10\%: the limit is uniform on $[0, 1]$.", width=4.8, font_size=20)
         pred.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
             "The most famous convergent martingale is an urn. Start with one red ball and one blue. Draw a ball, put "
@@ -162,7 +165,7 @@ class Convergence(VoiceoverScene):
     def learner(self, dp):
         t = np.asarray(dp["t"])
         m, lo, hi = (100 * np.asarray(dp[k]) for k in ("mean_ann", "lo_ann", "hi_ann"))
-        g = axes([1926, 2021], [-40, 60], x_length=8.2, y_length=4.4, ylabel=r"the market's mean return, as learned "
+        g = axes([1926, 2021], [-40, 60], x_length=7.0, y_length=4.4, ylabel=r"the market's mean return, as learned "
                  r"so far (\% a year)", xticks=[1930, 1960, 1990, 2020], xfmt=lambda x: f"{int(x)}",
                  yticks=[-40, -20, 0, 20, 40, 60], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
@@ -183,18 +186,20 @@ class Convergence(VoiceoverScene):
         side = VGroup(
             label(r"L\'evy's upward theorem: $\mathbb{E}[X \mid \mathcal{F}_n] \to \mathbb{E}[X \mid \mathcal{F}_\infty]$",
                   font_size=22, color=GREY_A),
-            label(r"a Bayesian's estimate is a Doob martingale (under the model), so it converges: learning", font_size=19,
-                  color=GREY_A),
+            wrapped_label(r"a Bayesian's estimate is a Doob martingale (under the model), so it converges: learning", 4.6,
+                          19, GREY_A),
             MathTex(rf"\pm\ \text{{after 10 years: }} {100 * dp['half_1936']:.1f}\%", font_size=26),
             MathTex(rf"\pm\ \text{{after 50 years: }} {100 * dp['half_1976']:.1f}\%", font_size=26),
             MathTex(rf"\text{{2020: }} {100 * dp['end_mean']:.1f}\% \pm {100 * dp['end_half']:.1f}\%", font_size=28,
                     color=MART),
             wrapped_label(r"the drift is learnable only over decades (Merton 1980): it narrows like $1/\sqrt{t}$", 4.4, 19,
                           GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.5)
+        )
         for s_ in side[:2]:
             if s_.width > 4.6:
                 s_.scale_to_fit_width(4.6)
+        # placed after the scaling, so the column's left edge is where its new width puts it
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.5)
         src = real_data(r"Kenneth French's daily US market; prior $N(0, (10\text{ bp})^2)$ a day; daily variance known "
                         r"from an EWMA the day before")
         with self.voiceover(
