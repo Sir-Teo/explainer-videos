@@ -87,8 +87,9 @@ class Loop(VoiceoverScene):
             tbox.width = 5.0
         tbox.to_corner(UR, buff=0.4).shift(DOWN * 0.8)
         errs = [k for k, ln in enumerate(box.rows) if "error" in ln.text]
-        tag = note(r"a simulated agent: \ the tools are real code, \ the ``model'' is a script with error rates we "
-                   r"set, \ no language model", font_size=18).to_corner(DR, buff=0.25)
+        tag = note((r"模拟智能体：工具是真实代码；\\ 模型是脚本，并非语言模型" if zh() else
+                    r"simulated agent: \ tools are real code; \\ the model is a script, \ not a language model"),
+                   font_size=18).to_corner(DR, buff=0.25)
         if tag.width > 5.6:
             tag.width = 5.6
             tag.to_corner(DR, buff=0.25)
