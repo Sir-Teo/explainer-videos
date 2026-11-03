@@ -56,11 +56,11 @@ class Behaviour(VoiceoverScene):
         self.clear_scene()
 
     def prospect(self):
-        g1 = axes([-100, 100], [-150, 70], x_length=5.4, y_length=4.0, xlabel=r"gain or loss from the reference point",
+        g1 = axes([-100, 100], [-150, 70], x_length=5.4, y_length=3.3, xlabel=r"gain or loss from the reference point",
                   ylabel=r"value", xticks=[-100, 0, 100], yticks=[], font_size=16)
-        g2 = axes([0, 1], [0, 1], x_length=4.0, y_length=4.0, xlabel=r"probability", ylabel=r"decision weight",
+        g2 = axes([0, 1], [0, 1], x_length=3.3, y_length=3.3, xlabel=r"probability", ylabel=r"decision weight",
                   xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], font_size=16)
-        VGroup(g1, g2).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.8)
+        VGroup(g1, g2).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.6)  # short enough to leave the formulas room
         x = np.linspace(-100, 100, 201)
         lv = curve(g1.ax, x, v(x), VALUE, stroke_width=4)
         ref = DashedLine(g1.ax.c2p(0, -150), g1.ax.c2p(0, 70), color=GREY_C, stroke_width=1.5)
@@ -104,7 +104,9 @@ class Behaviour(VoiceoverScene):
                   font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
         ax = g1.ax
         xs = np.linspace(-0.6, 1.2, 301)
-        sc = curve(ax, xs, np.clip(v(xs), -1.2, 1.0), VALUE, stroke_width=3)
+        vv = v(xs)
+        inn = (vv >= -1.2) & (vv <= 1.0)  # the curve only inside the axes: no flat runs along the edges
+        sc = curve(ax, xs[inn], vv[inn], VALUE, stroke_width=3)
         bins = np.linspace(-0.6, 1.2, 46)
 
         def hist(r_, col):
