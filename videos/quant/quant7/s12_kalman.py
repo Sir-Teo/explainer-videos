@@ -171,7 +171,7 @@ class Kalman(VoiceoverScene):
                 why(r"the squared return is its noisy measurement; treat $\ln\chi^2_1$ as Gaussian: quasi-likelihood")]
         step = ladder(self, rows, whys, keep=2, top=3.3, x=-2.2, buff=0.5, edge=6.9)
         t = np.asarray(k["us_t"])
-        g = axes([1926, 2021], [0, 1.0], x_length=8.4, y_length=3.0, xticks=[1930, 1960, 1990, 2020],
+        g = axes([1926, 2021], [0, 1.0], x_length=7.4, y_length=3.0, xticks=[1930, 1960, 1990, 2020],
                  xfmt=lambda u: f"{int(u)}", yticks=[0, 0.5, 1.0], yfmt=lambda u: f"{100 * u:.0f}\\%",
                  ylabel=r"US market volatility, annualised", font_size=15).to_corner(DL, buff=0.4)
         lg = curve(g.ax, t, np.clip(k["garch_vol"], 0, 1), FC, stroke_width=2)
@@ -181,7 +181,7 @@ class Kalman(VoiceoverScene):
                       MathTex(rf"\phi = {sv['phi']:.3f},\ \sigma_\eta = {sv['sigma_eta']:.3f}", font_size=28, color=ALT),
                       label(rf"half-life {sv['half_life']:.0f} trading days", font_size=20, color=GREY_A),
                       label(rf"correlation with GARCH: {k['corr_sv_garch']:.2f}", font_size=20, color=GREY_A),
-                      label(r"Harvey, Ruiz and Shephard (1994); MCMC is the Bayesian route (Part 6)", font_size=17, color=GREY_B))
+                      wrapped_label(r"Harvey, Ruiz and Shephard (1994); MCMC is the Bayesian route (Part 6)", 4.4, 17, GREY_B))
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.35)
         track = ("almost exactly." if k["corr_sv_garch"] > 0.9 else
                  f"closely, with a correlation of {k['corr_sv_garch']:.2f}.")
