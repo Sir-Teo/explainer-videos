@@ -21852,7 +21852,10 @@
     "FID $1.28$ on ImageNet $64^2$": "FID $1.28$，ImageNet $64^2$",
     "one step, \\ trained to drift its samples": "一步，训练时将其样本漂移",
     "onto the data:": "到数据上：",
-    "FID $1.54$, ImageNet $256^2$ (latent)": "FID $1.54$，ImageNet $256^2$（潜空间）"
+    "FID $1.54$, ImageNet $256^2$ (latent)": "FID $1.54$，ImageNet $256^2$（潜空间）",
+    "Part 1 best": "第1部分最优模型",
+    "Capped suffix + KN": "有上限的后缀模型 + KN",
+    "Bits per scored character; original, different starting positions. \\\\ Part 1 order: passage-selected; KN order: validation-selected. \\\\ Not a matched-cohort comparison with Part 1.": "每个计分字符的比特数；沿用各自不同的计分起点。 \\\\ 第1部分按测试段落选阶数；KN按验证集选阶数。 \\\\ 与第1部分的比较并非同一计分样本上的对照。"
   },
   "phrases": {
     "width": "宽度",
