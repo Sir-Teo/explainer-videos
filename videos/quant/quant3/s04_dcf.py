@@ -74,7 +74,7 @@ class DCF(VoiceoverScene, ThreeDScene):
         whys = [why(r"Gordon on free cash flow, with $\text{IR} = g/\text{RONIC}$: the value-driver formula (Koller et al.)"),
                 why(r"differentiate in $g$: the sign is that of $\text{RONIC} - \text{WACC}$"),
                 why(r"growth creates value only where new investment earns more than it costs")]
-        step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.6, buff=0.85, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.6, buff=0.5, edge=6.9)
         bridge = wrapped_label(r"the bridge to equity: enterprise value $-$ net debt $-$ minorities $-$ preferred "
                                r"$-$ debt-like items (leases, pension deficits) $+$ non-operating assets", 12.0, 22,
                                GREY_A).to_edge(DOWN, buff=0.45)
@@ -198,7 +198,7 @@ class DCF(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[0, 0.05, 0.01], y_range=[0.04, 0.20, 0.04], z_range=[0, 2400, 400], x_length=6.4,
                         y_length=5.0, z_length=3.4, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.6 + RIGHT * 0.4)
+        ax.shift(DOWN * 1.1 + RIGHT * 0.4)  # low enough that the peak stays under the readout in the top-right corner
 
         def f(g_, r_):
             return float(np.clip(1250 * 0.08 * (1 - g_ / r_) / (0.08 - g_), 0, 2400))
@@ -218,7 +218,7 @@ class DCF(VoiceoverScene, ThreeDScene):
                     MathTex(r"\text{RONIC } 16\%:\ \text{growth uphill}", font_size=28, color=QC.GAIN),
                     MathTex(r"\text{RONIC } 5\%:\ \text{growth downhill}", font_size=28, color=QC.LOSS))
         rd.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
-        self.set_camera_orientation(phi=66 * DEGREES, theta=-130 * DEGREES, zoom=0.8)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-130 * DEGREES, zoom=0.72)
         self.add_fixed_in_frame_mobjects(hint, rd)
         self.remove(hint, rd)
         with self.voiceover(
@@ -237,7 +237,7 @@ class DCF(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(balls[1]), FadeIn(rd[2]))
             self.play(balls[1].animate.move_to(ax.c2p(0.05, 0.05, f(0.05, 0.05))), run_time=2.5)
-            self.move_camera(theta=-100 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
+            self.move_camera(theta=-116 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, ridge, balls)), FadeOut(hint),
                                                                   FadeOut(rd)], run_time=1.5)
         self.clear_scene()

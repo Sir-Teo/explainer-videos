@@ -161,7 +161,7 @@ class CostOfCapital(VoiceoverScene):
     def history(self, e):
         yr, ours, pub = np.asarray(e["year"]), np.asarray(e["ours"]), np.asarray(e["published"])
         w = yr <= 2020
-        g = axes([1960, 2021], [0, 0.09], x_length=8.4, y_length=4.4, ylabel=r"implied equity risk premium",
+        g = axes([1960, 2021], [0, 0.09], x_length=7.4, y_length=4.4, ylabel=r"implied equity risk premium",
                  xticks=[1960, 1980, 2000, 2020], xfmt=lambda v: f"{int(v)}", yticks=[0, 0.02, 0.04, 0.06, 0.08],
                  yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -174,11 +174,11 @@ class CostOfCapital(VoiceoverScene):
         side = VGroup(
             MathTex(rf"\text{{within 0.2 pt in }}{ok}\text{{ of }}{e['n_window']}\text{{ years}}", font_size=28),
             wrapped_label(r"the two agree where his inputs are the table's; they part (1995--2009) where his "
-                          r"published column used cash-flow estimates the table does not carry", 4.6, 20, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+                          r"published column used cash-flow estimates the table does not carry", 4.4, 20, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(leg, DOWN, buff=0.5).to_edge(RIGHT, buff=0.4)
         pp = desk_question(r"Pause and predict: in December 1999 the implied premium was about 2\%. What did that "
                            r"forecast for the next decade?", width=5.0, font_size=20).to_edge(RIGHT, buff=0.4)
-        pp.to_edge(DOWN, buff=0.4)
+        pp.to_edge(DOWN, buff=0.6)
         src = real_data(r"Damodaran, histimpl.xls (S\&P 500, year ends); rebuilt by the House's implied\_rate")
         with self.voiceover(
             "Run the rebuild for every year since 1960 and lay Damodaran's published premiums on top. <bookmark mark='a'/> "
