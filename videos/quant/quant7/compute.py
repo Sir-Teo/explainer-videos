@@ -576,6 +576,29 @@ def compute_kalman() -> dict:
                   "corr_sv_garch": float(np.corrcoef(sv_vol, g_vol)[0, 1])})
 
 
+def compute_garch_persist() -> dict:
+    """The same variance-targeted likelihood as ``garch_lik``, over (alpha, persistence alpha + beta): every point of
+    this grid is stationary, so the surface ends cleanly at persistence one (RiskMetrics' edge)."""
+    from scipy.signal import lfilter
+    d, r = _market()
+    x = r - r.mean()
+    v = float(np.var(x))
+    z2 = (x / np.sqrt(v)) ** 2
+    n = len(z2)
+
+    def ll(a, p):
+        b = p - a
+        h = np.empty(n)
+        h[0] = 1.0
+        h[1:] = lfilter([1.0], [1.0, -b], (1 - p) + a * z2[:-1], zi=[b])[0]
+        return float(-0.5 * np.sum(np.log(2 * np.pi * h) + z2 / h) - 0.5 * n * np.log(v))
+
+    A = np.linspace(0.02, 0.22, 41)
+    Pp = np.linspace(0.84, 0.999, 41)
+    grid = np.array([[ll(a, p_) for a in A] for p_ in Pp])
+    return _json({"A": A, "P": Pp, "grid": grid})
+
+
 def compute_garch_lik() -> dict:
     from scipy.signal import lfilter
     from scipy.optimize import brentq
@@ -1323,7 +1346,7 @@ ITEMS = {"daily": compute_daily, "spurious": compute_spurious, "coint": compute_
          "dcc": compute_dcc, "realized": compute_realized, "har": compute_har, "race": compute_race, "scaling": compute_scaling,
          "envelope": compute_envelope, "acf_arma": compute_acf_arma, "unitroot": compute_unitroot,
          "johansen": compute_johansen, "regimes_em": compute_regimes_em, "kalman": compute_kalman,
-         "garch_lik": compute_garch_lik, "dcc_ell": compute_dcc_ell, "signature": compute_signature,
+         "garch_lik": compute_garch_lik, "garch_persist": compute_garch_persist, "dcc_ell": compute_dcc_ell, "signature": compute_signature,
          "har_roll": compute_har_roll, "rough": compute_rough, "scoring": compute_scoring, "training": compute_training,
          "race2": compute_race2, "industry": compute_industry, "foundation": compute_foundation,
          "envelope2": compute_envelope2, "house_fc": compute_house_fc}

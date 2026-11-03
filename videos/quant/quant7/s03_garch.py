@@ -14,7 +14,7 @@ class Garch(VoiceoverScene, ThreeDScene):
         self.bucket(gl)
         self.derive()
         self.lab(g)
-        self.surface(gl, g)
+        self.surface(gl, load("garch_persist"))
 
     def card(self):
         c = chapter_card(6, r"ARCH and GARCH by maximum likelihood", r"How does volatility remember?", lit=(1982,),
@@ -41,7 +41,7 @@ class Garch(VoiceoverScene, ThreeDScene):
                                                 fill_color=VOL, fill_opacity=0.7).move_to([-4.6, floor + scale * h[int(tr.get_value())] / 2, 0]))
         bar_lr = scale * w / (1 - a - b)
         lr = DashedLine([-5.8, floor + bar_lr, 0], [-3.4, floor + bar_lr, 0], color=GOOD, stroke_width=3)
-        lrl = label(r"long-run level $\omega/(1-\alpha-\beta)$", font_size=17, color=GOOD).next_to(lr, LEFT, buff=0.1)
+        lrl = label(r"long-run level $\omega/(1-\alpha-\beta)$", font_size=17, color=GOOD).next_to(lr, RIGHT, buff=0.1)
         tap = VGroup(Line([-5.2, top + 0.2, 0], [-5.2, top - 0.6, 0], color=GOOD, stroke_width=6),
                      label(r"tap $\omega$", font_size=18, color=GOOD).move_to([-5.2, top + 0.45, 0]))
         tap.shift(DOWN * 0.6)
@@ -167,49 +167,58 @@ class Garch(VoiceoverScene, ThreeDScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def surface(self, gl, g):
+    def surface(self, gl, gp):
+        # drawn over (alpha, persistence alpha + beta): every point is stationary, and the surface ends at
+        # persistence one, where RiskMetrics sits
         from scipy.interpolate import RegularGridInterpolator
-        A, B = np.asarray(gl["A"]), np.asarray(gl["B"])
-        G = np.asarray(gl["grid"], float)
+        A, Pp = np.asarray(gp["A"]), np.asarray(gp["P"])
+        G = np.asarray(gp["grid"], float)
         top = float(np.nanmax(G))
-        Z = np.clip(np.nan_to_num(G - top, nan=-4000.0), -4000, 0) / 1000.0
-        f_ = RegularGridInterpolator((B, A), Z, bounds_error=False, fill_value=-4.0)
+        Z = np.clip(G - top, -4000, 0) / 1000.0
+        f_ = RegularGridInterpolator((Pp, A), Z, bounds_error=False, fill_value=-4.0)
+        lo_p, hi_p = float(Pp[0]), float(Pp[-1])
 
-        def f(a, b):
-            return float(f_([[b, a]])[0])
+        def f(a, p_):
+            return float(f_([[p_, a]])[0])
 
-        ax3 = ThreeDAxes(x_range=[0.02, 0.22, 0.05], y_range=[0.74, 0.98, 0.06], z_range=[-4, 0.5, 1], x_length=6.4,
+        ax3 = ThreeDAxes(x_range=[0.02, 0.22, 0.05], y_range=[lo_p, hi_p, 0.04], z_range=[-4, 0.5, 1], x_length=6.4,
                          y_length=6.4, z_length=3.2, axis_config={"stroke_color": GREY_C, "include_ticks": False})
-        surf = loss_surface(ax3, f, (0.02, 0.22), (0.74, 0.98), resolution=(28, 28), z_lo=-4, z_hi=0)
+        surf = loss_surface(ax3, f, (0.02, 0.22), (lo_p, hi_p), resolution=(28, 28), z_lo=-4, z_hi=0)
+        alabs = VGroup(label(r"$\alpha$", font_size=26, color=GREY_B).move_to(ax3.c2p(0.245, lo_p, 0)),
+                       label(r"persistence $\alpha + \beta$", font_size=20, color=GREY_B).move_to(ax3.c2p(0.02, hi_p + 0.03, 0)))
         P = np.asarray(gl["path"])
         LL = np.asarray(gl["path_ll"])
-        P = np.clip(P, [0.02, 0.74], [0.22, 0.98])
-        path = surface_path(ax3, f, P, color=YELLOW)
-        ball = surface_ball(ax3, f, *P[0])
+        Q = np.clip(np.column_stack([P[:, 0], P[:, 0] + P[:, 1]]), [0.02, lo_p], [0.22, hi_p])
+        path = surface_path(ax3, f, Q, color=YELLOW)
+        ball = surface_ball(ax3, f, *Q[0])
         k = ValueTracker(0)
         ro = always_redraw(lambda: MathTex(rf"\alpha = {P[int(k.get_value())][0]:.3f},\ \beta = {P[int(k.get_value())][1]:.3f},"
                                            rf"\ \ \log L = {LL[int(k.get_value())]:,.0f}".replace(",", "{,}"), font_size=28,
                                            color=YELLOW).to_corner(UL, buff=0.35))
-        tag = label(r"log-likelihood over $(\alpha, \beta)$, $\omega$ by variance targeting; the optimiser's path",
+        tag = label(r"log-likelihood over $\alpha$ and $\alpha + \beta$, $\omega$ by variance targeting; the optimiser's path",
                     font_size=19, color=GREY_A).to_edge(DOWN, buff=0.3)
         ewma = wrapped_label(r"RiskMetrics' EWMA (1994) is GARCH with $\omega = 0$, $\alpha + \beta = 1$: a bucket "
                              r"with no tap and no leak, so no long-run level (Technical Document, 4th ed., 1996, sec.\ 5.2)",
                              5.2, 19, ALT).to_corner(UR, buff=0.3)
         self.set_camera_orientation(phi=62 * DEGREES, theta=-125 * DEGREES, zoom=0.8)
         self.add_fixed_in_frame_mobjects(tag)
-        tag.set_opacity(0)
+        self.add_fixed_orientation_mobjects(*alabs)
+        for m in (tag, *alabs):
+            m.set_opacity(0)
         with self.voiceover(
             "What did the optimiser do? Fix omega by matching the long-run variance to the sample's, and the "
-            "likelihood becomes a landscape over alpha and beta: a ridge running toward alpha plus beta equal to one. "
-            "<bookmark mark='a'/> Start from a poor guess and let a simplex search climb. It jumps onto the ridge, then "
-            f"crawls along it, through {gl['n_iter']} iterations, to the peak at alpha {P[-1][0]:.3f} and beta "
-            f"{P[-1][1]:.3f}. <bookmark mark='b'/> The ridge is flat: alpha and beta trade off, so their sum is pinned "
-            "down better than either. <bookmark mark='c'/> And "
-            "J.P. Morgan's RiskMetrics exponential average sits at the very edge of the landscape: alpha plus beta "
+            "likelihood becomes a landscape over two numbers: alpha, the splash, and the persistence, alpha plus beta, "
+            "which must stay below one. "
+            "<bookmark mark='a'/> Start from a poor guess and let a simplex search climb. It races up the steep "
+            f"persistence slope, then crawls across alpha, through {gl['n_iter']} iterations, to the peak at alpha "
+            f"{P[-1][0]:.3f} and beta {P[-1][1]:.3f}. <bookmark mark='b'/> The hill is steep across persistence and "
+            "broad along alpha: the sum, alpha plus beta, is pinned down four or five times more tightly than either "
+            "alone. <bookmark mark='c'/> And "
+            "J.P. Morgan's RiskMetrics exponential average sits at the far edge of the landscape: persistence "
             "exactly one, no tap and no leak, so it never reverts to a long-run level."
             " Next: GARCH's many children."
         ) as vo:
-            self.play(Create(ax3), FadeIn(surf), tag.animate.set_opacity(1), run_time=2)
+            self.play(Create(ax3), FadeIn(surf), *[m.animate.set_opacity(1) for m in (tag, *alabs)], run_time=2)
             vo.wait_until("a")
             self.add(ball)
             self.add_fixed_in_frame_mobjects(ro)
