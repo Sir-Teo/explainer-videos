@@ -444,7 +444,7 @@ stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12
 | 7 | done: English QA clean on all 20 scenes (layout fixes across 16; GARCH likelihood redrawn over persistence); zh text 0 left; zh dry run passes; about 57 min |
 | 8 | done: English QA clean on all 21 scenes (layout fixes across 15; camera reset after the Bellman replay); zh text 0 left; zh dry run passes; about 57 min |
 | 9 | done: English QA clean on all 20 scenes (layout fixes across 13; 3D readouts pinned; forward axis to 300 days); zh text 0 left; zh dry run passes; about 57 min |
-| 10 | chapters written; finishing pending |
+| 10 | done: English QA clean on all 21 scenes (layout fixes across 14; Tree's derivation crash fixed; dollar-gamma and hedged-P&L charts no longer clipped); zh text 0 left; zh dry run passes; about 58 min |
 | 11 | chapters written; finishing pending |
 | 12 | chapters written; finishing pending |
 | 13 | chapters written; finishing pending |
