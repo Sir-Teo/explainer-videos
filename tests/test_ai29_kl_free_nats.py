@@ -20,6 +20,16 @@ class FreeNatsClaim(unittest.TestCase):
         torch.clamp(kl2, min=1.0).backward()
         self.assertEqual(kl2.grad.item(), 1.0)
 
+    def test_dream_strip_labels_the_number_of_shown_frames(self):
+        src = (ROOT / 'videos/ai/ai29/s13_dreamer.py').read_text()
+        tree = ast.parse(src)
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == 'imagine')
+        text = ast.unparse(fn)
+        self.assertIn('own[:12]', text)
+        self.assertIn('min(12, len(own))', text)
+        self.assertIn('imagined steps', text)
+        self.assertIn('帧', text)
+
     def test_explanation_and_translation_avoid_guaranteeing_no_collapse(self):
         src = (ROOT / 'videos/ai/ai29/s13_dreamer.py').read_text()
         tree = ast.parse(src)
