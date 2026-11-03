@@ -47,8 +47,8 @@ class Skew(VoiceoverScene):
         readout_ = VGroup(label(r"expiry", font_size=22, color=GREY_A),
                           MathTex(f"{days(0):.0f}", font_size=34)).arrange(RIGHT, buff=0.2)
         readout_.to_edge(DOWN, buff=0.9)
-        cap = label(r"each model's smile against standardized moneyness $k / (\tfrac12\sqrt{T})$, as expiry shrinks from "
-                    r"a year to two days", font_size=19, color=GREY_B).to_edge(DOWN, buff=0.35)
+        cap = wrapped_label(r"each model's smile against standardized moneyness $k / (\tfrac12\sqrt{T})$, as expiry shrinks "
+                            r"from a year to two days", 7.4, 19, GREY_B).to_corner(DL, buff=0.35)  # the source takes DR
         src = real_data(r"every model as fitted to the Surface", corner=DR)
         with self.voiceover(
             (
@@ -90,10 +90,14 @@ class Skew(VoiceoverScene):
         sl = sm["slopes"]
         rows = [(r"\text{market}", sl["market"]["short"], sl["market"]["long"], WHITE)]
         rows += [(rf"\text{{{NAMES[n]}}}", sl[n]["short"], sl[n]["long"], MODEL_COL[n]) for n in order]
-        tab = VGroup(MathTex(r"\text{local slope:}\ \ 2\text{--}14\text{d}\quad 60\text{--}365\text{d}", font_size=22,
-                             color=GREY_A),
-                     *[MathTex(rf"{a}:\ \ {b:+.2f}\qquad {c_:+.2f}", font_size=24, color=col) for a, b, c_, col in rows]
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.1)
+        cells = VGroup(MathTex(r"\text{local slope}", font_size=22, color=GREY_A),
+                       MathTex(r"2\text{--}14\text{d}", font_size=22, color=GREY_A),
+                       MathTex(r"60\text{--}365\text{d}", font_size=22, color=GREY_A))
+        for a, b, c_, col in rows:
+            cells.add(MathTex(a, font_size=24, color=col), MathTex(f"{b:+.2f}", font_size=24, color=col),
+                      MathTex(f"{c_:+.2f}", font_size=24, color=col))
+        tab = cells.arrange_in_grid(rows=len(rows) + 1, cols=3, buff=(0.35, 0.12), col_alignments="lrr")
+        tab.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.1)
         h, vg, ni, me, ko, cg = (sl[n] for n in ("Heston", "VG", "NIG", "Merton", "Kou", "CGMY_inf"))
         mkt = sl["market"]
         Y = load("levy_fits")["fits"]["CGMY_inf"]["params"]["Y"]
@@ -122,11 +126,11 @@ class Skew(VoiceoverScene):
             self.play(FadeIn(g), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.1), FadeIn(sab),
                       run_time=2)
             vo.wait_until("a")
-            self.play(FadeIn(tab[0]), FadeIn(tab[1]))
+            self.play(FadeIn(VGroup(*tab[:6])))  # header and the market row
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=4), FadeIn(tab[2:]))
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=4), FadeIn(VGroup(*tab[6:])))
             vo.wait_until("c")
-            self.play(Indicate(tab[1], color=WHITE))
+            self.play(Indicate(VGroup(*tab[3:6]), color=WHITE))
         self.wait(0.4)
         self.clear_scene()
 
@@ -145,7 +149,7 @@ class Skew(VoiceoverScene):
                 why(r"a Gram--Charlier expansion of the density around Black--Scholes: to first order the smile's slope is "
                     r"the skewness over $\sigma\sqrt T$ (constants aside); hence $1/T$", 20),
                 why(r"a diffusion: chapter 4's constant at short maturities, damped once mean reversion acts", 20)]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.6, edge=6.9)  # the pause card takes the corner
         pp = pause(r"A model's skew is constant as $T \to 0$. Can it fit a 3-day expiry?", width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
             (
