@@ -104,7 +104,7 @@ class American(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[60, 140, 20], y_range=[0, 1, 0.25], z_range=[0, zmax, 2], x_length=7.6, y_length=5.4,
                         z_length=3.2, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
-        ax.shift(DOWN * 0.5)
+        ax.shift(DOWN * 0.5 + RIGHT * 0.8)  # the axis key keeps the upper-left corner
 
         def f(s_, t_):
             col = np.array([np.interp(t_, ta, P[:, j]) for j in range(len(sp))])
