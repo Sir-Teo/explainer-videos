@@ -28,8 +28,8 @@ class Schemes(VoiceoverScene):
         t = np.linspace(0, 1, len(its[0]))
         lo = min(x.min() for x in its[1:]) - 0.1
         hi = max(x.max() for x in its[1:]) + 0.1
-        g = axes([0, 1], [lo, hi], x_length=7.0, y_length=4.2, xlabel=r"time", ylabel=r"$X^{(k)}_t$ on one Brownian path",
-                 xticks=[0, 0.5, 1], yticks=[1, 2], font_size=18).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        g = axes([0, 1], [lo, hi], x_length=7.0, y_length=3.3, xlabel=r"time", ylabel=r"$X^{(k)}_t$ on one Brownian path",
+                 xticks=[0, 0.5, 1], yticks=[1, 2], font_size=18).to_edge(LEFT, buff=0.5).shift(UP * 0.25)
         ax = g.ax
         cols = color_gradient([GREY_B, ITO], len(its))
         lines = [curve(ax, t, np.clip(x, lo, hi), c, stroke_width=2.5) for x, c in zip(its, cols)]
@@ -44,7 +44,7 @@ class Schemes(VoiceoverScene):
         rows = [cmath(r"\big\| X^{(k+1)} - X^{(k)} \big\|^2_t", r"\le", r"C\int_0^t \big\|X^{(k)} - X^{(k-1)}\big\|^2_s\,ds "
                       r"\;\le\; \frac{(Ct)^k}{k!}", font_size=30)]
         why0 = why(r"Doob's inequality, the isometry and the Lipschitz bound; the factorial wins", 20)
-        rows[0].to_edge(DOWN, buff=0.9).shift(LEFT * 1.2)
+        rows[0].to_edge(DOWN, buff=0.75).shift(LEFT * 1.2)  # under the shortened chart
         why0.next_to(rows[0], DOWN, buff=0.15)
         with self.voiceover(
             "Does d X equals sine of X d t plus a half cosine of X d W have exactly one solution? Itô answered in "
@@ -66,7 +66,7 @@ class Schemes(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[0]), FadeIn(why0))
             vo.wait_until("d")
-            self.play(FadeOut(dist), FadeIn(th))
+            self.play(FadeOut(dist), FadeOut(rows[0]), FadeOut(why0), FadeIn(th))
         self.wait(0.4)
         self.clear_scene()
 
