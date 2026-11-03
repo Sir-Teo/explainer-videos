@@ -31,7 +31,7 @@ class GMM(VoiceoverScene):
                  font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
         ax = g.ax
         origin = Dot(ax.c2p(0, 0), radius=0.07, color=WHITE)
-        ol = label(r"theory: $\mathbb{E}[g] = 0$", font_size=20, color=WHITE).next_to(origin, DL, buff=0.08)
+        ol = label(r"theory: $\mathbb{E}[g] = 0$", font_size=20, color=WHITE).next_to(origin, LEFT, buff=0.75)  # clear of the ellipse drawn round the point
         mus = np.linspace(0.45, 1.55, 50)
         line = curve(ax, m1 - mus, m2 - mus, DATA_C, stroke_width=3)
         mu = ValueTracker(0.5)
