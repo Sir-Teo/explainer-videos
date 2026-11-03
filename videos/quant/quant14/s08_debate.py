@@ -226,7 +226,7 @@ class Debate(VoiceoverScene, ThreeDScene):
         if grid.height > 6.0:
             grid.scale_to_fit_height(6.0)
         grid.to_edge(UP, buff=0.3)
-        what = wrapped_label(rf"what can choose: the curvature of the scaling line (bitcoin's residual "
+        what = wrapped_label(rf"what can tell them apart: the curvature of the scaling line (bitcoin's residual "
                              rf"{b['btc_straight']:.2f}, inside the simulated range), sub-daily lags, and the options "
                              r"(next chapter)", 12.0, 20, GOLD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
