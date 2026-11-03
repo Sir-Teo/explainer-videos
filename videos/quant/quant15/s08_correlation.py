@@ -57,6 +57,9 @@ class Correlation(VoiceoverScene, ThreeDScene):
         self.set_camera_orientation(phi=62 * DEGREES, theta=-130 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
+        cam = self.renderer.camera
+        for r_ in (ro, rp):  # each number rebuilds itself as it changes: pin it to the frame again
+            r_[1].add_updater(lambda m: cam.add_fixed_in_frame_mobjects(m))
         with self.voiceover(
             "Structurers raise the coupon by linking a note to the worst of two or three indices. Here is the put "
             "the buyer sells, over the final levels of two indices: a folded surface, creased along the diagonal. "
@@ -74,7 +77,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(rho.animate.set_value(1.0), run_time=max(vo.remaining(0.5), 3.0), rate_func=smooth)
         cloud.clear_updaters()
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, crease, cloud)), FadeOut(hint)],
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, surf, crease, cloud)), FadeOut(hint)],
                          run_time=1.2)
         self.clear_scene()
 
@@ -133,7 +136,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
         h1l = label(r"a put on the HSCEI alone", font_size=16, color=GREY_B).next_to(ax.c2p(-0.2, s2), UR, buff=0.05)
         mk = DashedLine(ax.c2p(w["rho_measured"], 0.1), ax.c2p(w["rho_measured"], 0.18), stroke_color=IV, stroke_width=2)
         mkl = label(rf"measured, 2021--2023: {w['rho_measured']:.2f}", font_size=17, color=IV).next_to(
-            ax.c2p(w["rho_measured"], 0.18), DOWN, buff=0.1)
+            ax.c2p(w["rho_measured"], 0.18), DR, buff=0.1)  # beside the marker, not across it
         pm = float(np.interp(w["rho_measured"], rh, pr))
         side = VGroup(
             wrapped_label(r"a worst-of note pays on whichever of several underlyings does worst: the investor is short "
