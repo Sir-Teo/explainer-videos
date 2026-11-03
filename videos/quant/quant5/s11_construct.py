@@ -149,7 +149,7 @@ class Construct(VoiceoverScene):
                 why(r"strong Markov at $\tau_a$: after it, the path and its mirror are equally likely", 20),
                 why(r"add: every path ending above $a$ has crossed it", 20),
                 why(r"differentiate in $T$; the tail falls like $t^{-1/2}$, too slowly for a mean", 20)]
-        step = ladder(self, rows, whys, keep=4, top=-0.45, x=-1.6, buff=0.3, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=-0.45, x=-1.6, buff=0.3, edge=6.9)  # three rows fit under the chart
         res = VGroup(
             MathTex(rf"\text{{simulated: }} {r['p_sim']:.4f}", font_size=28, color=BM),
             MathTex(rf"2(1 - \Phi(1)) = {r['p_theory']:.4f}", font_size=28, color=ITO),
