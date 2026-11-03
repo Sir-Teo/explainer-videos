@@ -158,7 +158,7 @@ class MLE(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         Tro = always_redraw(lambda: MathTex(rf"\text{{sample}} \times {Tf.get_value():.1f}", font_size=28,
                                             color=WHITE).next_to(g, UP, buff=0.05).align_to(g, RIGHT))
-        q = predict(r"Double the sample. What happens to the ellipse's area?").to_edge(DOWN, buff=0.2)
+        q = predict(r"Double the sample. What happens to the ellipse's area?", width=5.0).to_corner(DR, buff=0.3)  # off the axis label
         ratio = sh[2] / sn[2]
         with self.voiceover(
             "Look down on the summit. The curvature at the top gives the naive confidence region, in gold: a narrow "
