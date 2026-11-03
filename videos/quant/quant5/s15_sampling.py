@@ -131,6 +131,7 @@ class Sampling(VoiceoverScene):
                         r"Only $\hat\sigma$, by $\sqrt{60}$; $\hat\mu$ depends on $T$ alone.", width=5.6, font_size=20)
         pc.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         ans.next_to(pc, DOWN, buff=0.1).align_to(pc, LEFT)
+        keep_in_frame(VGroup(pc, ans), 0.3)  # the card is wider than the column above it
         with self.voiceover(
             "Now the limit of the theorem: it changes drift, never volatility. Simulate a year of one-minute prices, "
             "twenty percent volatility and eight percent drift, and estimate both as the year unrolls. "
