@@ -94,7 +94,7 @@ class Rough(VoiceoverScene):
             label(r"a power-law kernel over the whole past; HAR's three steps are a cheap approximation. Part 14 builds "
                   r"the models.", font_size=19, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(UP, buff=0.35)  # above both charts, clear of H
-        pc = pause_card(r"If $H = 0.5$, what slope would the $q = 2$ line have?", width=4.4, font_size=20).to_corner(DR, buff=0.3)
+        pc = pause_card(r"If $H = 0.5$, what slope would the $q = 2$ line have?", width=4.4, font_size=20).to_corner(UR, buff=0.3)
         rough = b["H"] < 0.25
         verdict = ("Rough, as Gatheral, Jaisson and Rosenbaum found on equity indices."
                    if rough else "Smoother than the equity-index result.")
@@ -119,6 +119,7 @@ class Rough(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(pc))
             vo.wait_until("d")
+            self.play(FadeOut(pc))
             self.play(FadeIn(kern))
         self.wait(0.3)
         self.clear_scene()
