@@ -182,14 +182,14 @@ class Early(VoiceoverScene):
                       colors={r"\mathbb{E}[\text{gain}]": GAMMA})]
         eqs = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5).shift(UP * 1.6)
         side = VGroup(
-            label(rf"this draw: {L['mine_free']} of the player's shorts escape (expected {L['expected_free']:.1f})",
-                  font_size=20, color=YELLOW),
+            wrapped_label(rf"this draw: {L['mine_free']} of the player's shorts escape (expected "
+                          rf"{L['expected_free']:.1f})", 4.4, 20, YELLOW),
             wrapped_label(r"each escaped short call drops by about the dividend overnight: the player collects what "
-                          r"the holders who forgot to exercise left on the table", 4.8, 19, GREY_A),
+                          r"the holders who forgot to exercise left on the table", 4.4, 19, GREY_A),
             wrapped_label(r"Pool, Stoll and Whaley (2008): many holders fail to exercise before ex-dates, and traders "
                           r"capture most of it; Hao, Kalay and Mayhew (2010): volume spikes on the last cum-dividend "
-                          r"day", 4.8, 18, ALT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(eqs, DOWN, buff=0.4).align_to(eqs, LEFT)
+                          r"day", 4.4, 18, ALT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(eqs, DOWN, buff=0.4).to_edge(RIGHT, buff=0.4)
         src = illustration(r"illustration: 60\% of the others' calls are exercised")
         with self.voiceover(
             "And the trading game around it. On the day before an ex-date, some holders of in-the-money calls forget "
