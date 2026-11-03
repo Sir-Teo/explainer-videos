@@ -74,8 +74,8 @@ class Frequency(VoiceoverScene):
                     f"They end {spread:.1f} apart: on one month, the rule's timing can matter a lot.")
         with self.voiceover(
             "Part ten showed that hedging at discrete times leaves an error. So how often should a scalper hedge? "
-            "Race three of them on the same month and the same straddle. One rehedges every hour, in gold; one once a "
-            "day, in blue; and one only when the price has moved two percent since its last trade, in green. "
+            "Race three of them on the same month and the same straddle. One rehedges every hour, in green; one once a "
+            "day, in orange; and one only when the price has moved two percent since its last trade, in gold. "
             "<bookmark mark='a'/> Watch their hedges: the hourly one is a smooth curve, the daily one a staircase, "
             "and the move-triggered one steps only when something happens. <bookmark mark='b'/> Their ledgers race "
             f"beside them. {race_say}"

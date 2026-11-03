@@ -52,8 +52,8 @@ class Greeks(VoiceoverScene, ThreeDScene):
         dS = 100 * SIG * np.sqrt(10 / 365)
         bowl_seg = Line(ax.c2p(100 + dS, 30, v0), ax.c2p(100 + dS, 30, f(100 + dS, 30)), color=GAMMA, stroke_width=7)
         drop_seg = Line(ax.c2p(100, 30, v0), ax.c2p(100, 20, f(100, 20)), color=THETA, stroke_width=7)
-        cap = VGroup(label(r"pink: $\tfrac12\Gamma\,dS^2$, the bowl above the tangent", font_size=22, color=GAMMA),
-                     label(r"blue: $\Theta\,dt$, ten days of decay", font_size=22, color=THETA),
+        cap = VGroup(label(r"green: $\tfrac12\Gamma\,dS^2$, the bowl above the tangent", font_size=22, color=GAMMA),
+                     label(r"red: $\Theta\,dt$, ten days of decay", font_size=22, color=THETA),
                      label(rf"they balance at a move of $\sigma\sqrt{{dt}} \approx {dS:.1f}$", font_size=22, color=GREY_A),
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DL, buff=0.35)
         self.set_camera_orientation(phi=66 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
@@ -63,9 +63,9 @@ class Greeks(VoiceoverScene, ThreeDScene):
             "Here is a straddle's: a valley along the strike, which becomes the payoff's V at expiry. <bookmark mark='a'/> Take today, thirty days "
             "out: the yellow slice. Draw its tangent at the strike, the white line, whose slope is delta. The slice "
             "curves up away from the tangent on both sides: that bowl is gamma, and for a move dS the book gains one "
-            "half gamma dS squared, the pink length. <bookmark mark='b'/> Now let ten days pass. The whole slice sinks "
-            "toward the payoff: that drop, the blue length, is theta, what the book pays for the bowl. "
-            "<bookmark mark='c'/> A long-gamma trader is betting that the pink beats the blue: that the underlying "
+            "half gamma dS squared, the green length. <bookmark mark='b'/> Now let ten days pass. The whole slice sinks "
+            "toward the payoff: that drop, the red length, is theta, what the book pays for the bowl. "
+            "<bookmark mark='c'/> A long-gamma trader is betting that the green beats the red: that the underlying "
             f"moves more than about {dS:.1f} in those ten days, one volatility times the square root of the time."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), FadeIn(par), run_time=1.5)
