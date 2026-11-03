@@ -182,17 +182,17 @@ class Series(VoiceoverScene):
     def spurious(self, s, u):
         Ts = np.asarray(u["Ts"])
         mt = np.asarray(u["phillips_t"])
-        g = axes([0, 2100], [0, 22], x_length=5.6, y_length=3.2, xticks=[50, 500, 1000, 2000], yticks=[0, 10, 20],
+        g = axes([0, 2100], [0, 22], x_length=5.6, y_length=2.6, xticks=[50, 500, 1000, 2000], yticks=[0, 10, 20],
                  xlabel=r"sample length $T$", ylabel=r"median $|t|$, independent walks", font_size=15)
-        g.to_corner(UL, buff=0.5).shift(DOWN * 0.3)
+        g.to_corner(UL, buff=0.45)
         ax = g.ax
         dots = VGroup(*[Dot(ax.c2p(T, v), radius=0.07, color=BAD) for T, v in zip(Ts, mt)])
         root = curve(ax, np.linspace(50, 2050, 100), mt[0] * np.sqrt(np.linspace(50, 2050, 100) / Ts[0]), GREY_B, stroke_width=2)
         rlab = label(r"$\propto\sqrt{T}$ (Phillips 1986)", font_size=18, color=GREY_B).next_to(ax.c2p(1300, 17), UP, buff=0.05)
         sl = np.asarray(u["slopes"])
-        g2 = axes([50, 2000], [-2.5, 0.5], x_length=5.6, y_length=2.4, xticks=[50, 1000, 2000], yticks=[-2, -1, 0],
+        g2 = axes([50, 2000], [-2.5, 0.5], x_length=5.6, y_length=1.9, xticks=[50, 1000, 2000], yticks=[-2, -1, 0],
                   xlabel=r"$T$", ylabel=r"fitted slope, one pair of independent walks", font_size=15)
-        g2.next_to(g, DOWN, buff=0.5).align_to(g, LEFT)
+        g2.next_to(g, DOWN, buff=0.4).align_to(g, LEFT)
         sline = curve(g2.ax, np.arange(50, 2001, 25)[:len(sl)], np.clip(sl, -2.5, 0.5), FC, stroke_width=3)
         bl, bd = s["btc_levels"], s["btc_diffs"]
         side = VGroup(
@@ -204,7 +204,9 @@ class Series(VoiceoverScene):
             MathTex(rf"\text{{levels: }} t = {bl['t']:.0f},\ R^2 = {bl['r2']:.2f}", font_size=28, color=BAD),
             MathTex(rf"\text{{daily changes: }} t = {bd['t']:.1f},\ R^2 = {bd['r2']:.2f}", font_size=28, color=GOOD),
             wrapped_label(r"Granger and Newbold (1974): difference the series, or test for cointegration", 5.6, 20, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        side[4:].shift(DOWN * 0.25)
+        side.to_edge(RIGHT, buff=0.4)
         grow = mt[-1] / mt[0]
         with self.voiceover(
             "Unit roots matter because regressing one wandering series on another is a trap. Clive Granger and Paul "
