@@ -150,7 +150,7 @@ class OLS(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
         src = real_data(rf"Kenneth French: tobacco (Smoke), market and SMB, monthly 1927--2020, {f['n']:,} months"
                         .replace(",", "{,}"))
-        q = predict(r"Add a regressor that is uncorrelated with SMB. Does SMB's slope change?").to_edge(DOWN, buff=0.2)
+        q = predict(r"Add a regressor that is uncorrelated with SMB. Does SMB's slope change?", width=5.6).to_corner(DR, buff=0.5)  # under the notes, off the scatter
         with self.voiceover(
             "What does it mean to control for something? Ask how tobacco stocks load on the size factor. Alone, the "
             f"slope is {f['alone']:+.2f}: tobacco looks like a small-stock industry. <bookmark mark='a'/> But size and the "
