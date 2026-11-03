@@ -337,6 +337,8 @@ class TrainingReplay(VGroup):
         self.t = ValueTracker(float(steps[0]))
         self.panel = frame(0).move_to(left)
         self.left_center = left
+        # the panel follows the group: measured from the loss chart, so moving the replay moves its panel slots too
+        self._panel_off = np.asarray(left, float) - self.g.get_center()
         self.add(self.g, self.band, self.panel)
 
     def _step(self):
@@ -358,7 +360,7 @@ class TrainingReplay(VGroup):
         for k in range(1, len(self.ck)):
             a, b = self.ck[k - 1], self.ck[k]
             seg = [self.ax.c2p(s, self._y(s)) for s in self.steps if a <= s <= b]
-            anims = [self.t.animate.set_value(b), Transform(self.panel, self.frame_fn(k).move_to(self.left_center))]
+            anims = [self.t.animate.set_value(b), Transform(self.panel, self.frame_fn(k).move_to(self.g.get_center() + self._panel_off))]
             if len(seg) > 1:
                 anims.append(Create(VMobject(color=self.color, stroke_width=3).set_points_as_corners(seg)))
             scene.play(*anims, run_time=per)
