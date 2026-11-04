@@ -17854,20 +17854,55 @@
   "bytes": 43418,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL"
  },
+ "yahoo/BA/2018-01-01_2025-11-30": {
+  "sha256": "c8a43a9f1e24f896726628ebf5ca1eb6dcfbdc3c4bc0272fc10f6bb184ef3d70",
+  "bytes": 39520,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/BA"
+ },
+ "yahoo/CCL/2018-01-01_2025-11-30": {
+  "sha256": "3663905bc36a94b9addb8ce07d2108f5661c59cc8ecc3511c62b64a99b5d9e9b",
+  "bytes": 37409,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/CCL"
+ },
  "yahoo/CPRI/1wk/2023-01-01_2024-12-31": {
   "sha256": "f8562e9b9f12e461facc122ced2790d5e37f13c8b36a6e8d219b88edc1f42889",
   "bytes": 2596,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/CPRI?period1=1672531200&period2=1735603200&interval=1wk&events=div%2Csplit"
+ },
+ "yahoo/F/2018-01-01_2025-11-30": {
+  "sha256": "f3c26662959c44141190c9caab3ab22613c0e16f87fe5c82a3cddc7f893ee422",
+  "bytes": 36943,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/F"
+ },
+ "yahoo/FRCB/2018-01-01_2025-11-30": {
+  "sha256": "48be37b1470ac98d991fc0e95ad0e94917ddf161e73ce7fff91116423c6949a1",
+  "bytes": 38657,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/FRCB"
+ },
+ "yahoo/HTZ/2018-01-01_2025-11-30": {
+  "sha256": "897198c69e6ad670d9bd5d65ad2f86d4e2445a672e310557d54d90625bd02d17",
+  "bytes": 20445,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/HTZ"
  },
  "yahoo/MERFX/1mo/1988-12-01_2021-01-02": {
   "sha256": "c5b3e174e5fdd637148800d5dd8ef653abb09a271d7124ea429524934706d8a3",
   "bytes": 10071,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/MERFX?period1=596937600&period2=1609545600&interval=1mo&events=div%2Csplit"
  },
+ "yahoo/SPWR/2018-01-01_2025-11-30": {
+  "sha256": "5ea93761d2d3cb3c81d6bd3cac44c4b21436d06e0c70134408f8ea235c08182f",
+  "bytes": 13267,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPWR"
+ },
  "yahoo/SPY/2013-01-01_2021-06-30": {
   "sha256": "3bfcf302807fddf6b54a337ee2454e18167bc01b9886a404f52b4f8f457f9c0b",
   "bytes": 42526,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
+ },
+ "yahoo/WOOF/2018-01-01_2025-11-30": {
+  "sha256": "7000d8e8a1cabd8b6e563781c6c2f9908a6c33c52923e2262e565b97b4ea8937",
+  "bytes": 22439,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/WOOF"
  },
  "yahoo/^GSPC/1986-01-01_1987-12-31": {
   "sha256": "a2bc0643f2be3326ff20eff289bfeacc96cf03da57812228c2e4f8d167fe7539",
