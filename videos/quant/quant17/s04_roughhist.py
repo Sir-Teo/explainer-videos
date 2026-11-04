@@ -34,9 +34,9 @@ class RoughHistory(VoiceoverScene):
         t = np.array([_t(r["day"]) for r in rows])
         H = np.array([r["H"] for r in rows])
         rho = np.array([r["rho"] for r in rows])
-        g1 = axes([2024, 2026], [0, 0.5], x_length=9.0, y_length=2.4, ylabel=r"Hurst exponent $H$",
+        g1 = axes([2024, 2026], [0, 0.5], x_length=8.3, y_length=2.4, ylabel=r"Hurst exponent $H$",
                   xticks=[2024, 2025, 2026], xfmt=lambda v: f"{v:.0f}", yticks=[0, 0.25, 0.5], font_size=14)
-        g2 = axes([2024, 2026], [-1, 0.7], x_length=9.0, y_length=2.0, ylabel=r"correlation $\rho$",
+        g2 = axes([2024, 2026], [-1, 0.7], x_length=8.3, y_length=2.0, ylabel=r"correlation $\rho$",
                   xticks=[2024, 2025, 2026], xfmt=lambda v: f"{v:.0f}", yticks=[-1, 0, 0.5], font_size=14)
         VGroup(g1, g2).arrange(DOWN, buff=0.5, aligned_edge=LEFT).to_edge(LEFT, buff=0.7).shift(DOWN * 0.15)
         d1 = VGroup(*[Dot(g1.ax.c2p(a, b), radius=0.04, color=NET) for a, b in zip(t, H)])
