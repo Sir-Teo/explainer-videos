@@ -139,7 +139,7 @@ class Mined(VoiceoverScene):
             "signals and bootstrapped what chance alone would produce. Far more signals cleared high hurdles than "
             "chance allows. Accounting data really do carry information about future returns, so a careful data miner "
             "and a careful theorist tend to find the same things. Data mining is not the problem. Data mining without "
-            "a count of the tries is."
+            "a count of the tries is. With the count, a mined signal can be judged like any other."
         ) as vo:
             step(0)
         self.wait(0.4)
