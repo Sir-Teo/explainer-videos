@@ -323,17 +323,17 @@ def compute_beavers() -> dict:
 
 
 EUCLID_ASM = """
-        li   a0, 1071        # a
-        li   a1, 462         # b
-loop:   beqz a1, done        # while b != 0:
-mod:    bltu a0, a1, swap    #   a = a mod b, by subtraction
-        sub  a0, a0, a1
+        li   a0, 1071
+        li   a1, 462
+loop:   beqz a1, done        # b = 0? stop
+mod:    bltu a0, a1, swap    # a < b? swap
+        sub  a0, a0, a1      # a = a - b
         j    mod
-swap:   mv   t0, a0          #   a, b = b, a
+swap:   mv   t0, a0          # a, b = b, a
         mv   a0, a1
         mv   a1, t0
         j    loop
-done:   halt                 # a0 = gcd(a, b)
+done:   halt                 # a0 = gcd
 """
 
 
