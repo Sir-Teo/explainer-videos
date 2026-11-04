@@ -122,8 +122,8 @@ class History(VoiceoverScene):
                         color=YES, stroke_width=2.5)
         tl = label(r"doubling every two years", font_size=24, color=YES).next_to(ax.c2p(2010, 9.5), UL, buff=0.1)
         hc = history_card(1965, r"Gordon Moore", r"``Cramming more components onto integrated circuits'': \ the count "
-                          r"doubles every year \ (revised in 1975 to every two)", width=4.4, font_size=20).to_corner(
-            UR, buff=0.3)
+                          r"doubles every year \ (revised in 1975 to every two)", width=4.4, font_size=20).move_to(
+            LEFT * 3.0 + UP * 1.5)
         end = note(r"2,300 transistors in 1971; \ about 200 billion in 2024: \ every one a switch from chapter three",
                    font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(

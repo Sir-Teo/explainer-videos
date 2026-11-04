@@ -119,8 +119,8 @@ class Bdd(VoiceoverScene):
         f = MathTex(r"f = x_1 x_2 + x_3 x_4 + x_5 x_6", font_size=36, color=CODE).next_to(head, DOWN, buff=0.25)
         good = draw_bdd(k3["good"], k3["good_order"], k3["root_good"], width=2.6, height=4.4,
                         origin=LEFT * 4.2 + DOWN * 1.0, r=0.22, font_size=20)
-        bad = draw_bdd(k3["bad"], k3["bad_order"], k3["root_bad"], width=6.0, height=4.4,
-                       origin=RIGHT * 1.2 + DOWN * 1.0, r=0.22, font_size=20)
+        bad = draw_bdd(k3["bad"], k3["bad_order"], k3["root_bad"], width=5.6, height=4.4,
+                       origin=RIGHT * 0.6 + DOWN * 1.0, r=0.22, font_size=20)
         gl = label(rf"order $x_1, x_2, x_3, \dots$: \ {good.n_nodes} nodes", font_size=24, color=YES).next_to(
             good, UP, buff=0.15)
         bl = label(rf"order $x_1, x_3, x_5, x_2, \dots$: \ {bad.n_nodes} nodes", font_size=24, color=NO).next_to(
@@ -128,8 +128,8 @@ class Bdd(VoiceoverScene):
         rows = d["rows"]
         tab = VGroup(*[MathTex(rf"{2 * r['k']}: \ {r['good']} \ \text{{vs}} \ {fmt(r['bad'])}", font_size=24,
                                color=GREY_A) for r in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        tab.to_corner(DR, buff=0.3)
-        tl = note(r"variables: \ good vs bad \ (computed)", font_size=20).next_to(tab, UP, buff=0.1)
+        tab.to_edge(RIGHT, buff=0.25).shift(DOWN * 1.2)
+        tl = note(r"vars: \ good vs bad", font_size=18).next_to(tab, UP, buff=0.1)
         with self.voiceover(
             "There is a catch. <bookmark mark='a'/> Take x one and x two, or x three and x four, or x five and x six. "
             "Test the variables in their natural order, and the diagram is a neat ladder: eight nodes. "
