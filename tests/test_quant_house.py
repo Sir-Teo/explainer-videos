@@ -2689,3 +2689,87 @@ def test_vasicek_pool_basel_and_tranches():
     kg, _ = CR.copula_defaults(200, pd_, rho, 20000, seed=1)
     kt, _ = CR.copula_defaults(200, pd_, rho, 20000, seed=1, nu=4)
     assert np.mean(kt / 200 > 0.15) > np.mean(kg / 200 > 0.15)
+
+
+# ---------------------------------------------------------------------------
+# Part 21: XVA
+# ---------------------------------------------------------------------------
+def _xva_setup():
+    from explainer.quant.house import rates as R, termstructure as TS
+    t = np.array([0.5, 1, 2, 3, 5, 7, 10, 20, 30.0])
+    c = R.Curve(t, 0.035 + 0.003 * np.log1p(t))
+    return c, TS.HullWhite(c, 0.03, 0.01)
+
+
+def test_par_swap_is_worth_zero_and_exposure_profile_shape():
+    from explainer.quant.house import xva as XV
+    c, hw = _xva_setup()
+    pay = np.arange(1, 11)
+    K = float((1 - c.df(10.0)) / c.df(pay).sum())
+    v0 = XV.swap_values_hw(hw, np.zeros(1), 0.0, K, 10.0)
+    assert abs(v0[0]) < 1e-10
+    times = np.linspace(0.25, 10, 40)
+    x, _ = hw.simulate_x(times, 4000, seed=0)
+    V = np.stack([XV.swap_values_hw(hw, x[:, j], t, K, 10.0) for j, t in enumerate(times)], 1)
+    ex = XV.exposure_profile(V)
+    assert np.all(ex["EE"] >= 0) and np.all(ex["ENE"] <= 0) and np.all(ex["PFE"] >= ex["EE"] - 1e-12)
+    k = int(np.argmax(ex["EE"]))
+    assert 0 < k < len(times) - 2 and ex["EE"][-1] < 0.3 * ex["EE"][k]  # the diffusion-amortisation hump
+
+
+def test_cva_formula_collateral_and_waterfall():
+    from explainer.quant.house import xva as XV
+
+    def df(t):
+        return np.exp(-0.03 * np.asarray(t, float))
+    times = np.linspace(0.5, 5, 10)
+    EE = np.full(10, 0.02)
+    c = XV.cva(EE, times, df, [5.0], [0.02], R=0.4)
+    ref = 0.6 * 0.02 * np.sum(df(times) * np.diff(np.exp(-0.02 * np.r_[0, times])) * -1)
+    assert c == pytest.approx(ref, rel=1e-12)
+    # bilateral CVA is smaller than unilateral (the bank may default first)
+    assert XV.cva(EE, times, df, [5.0], [0.02], own=([5.0], [0.01])) < c
+    rng = np.random.default_rng(0)
+    V = np.cumsum(rng.standard_normal((2000, 60)) * 0.01, 1)
+    tt = np.linspace(1 / 60, 1, 60)
+    assert XV.exposure_profile(XV.collateralised(V, tt, mpor=2 / 60))["EPE"] < 0.4 * XV.exposure_profile(V)["EPE"]
+    L = rng.exponential(1.0, 1000)
+    w = XV.ccp_waterfall(L, 0.5, 0.2, 0.1, 1.0, 0.5)
+    assert np.allclose(sum(w.values()), L)
+
+
+def test_cva_torch_matches_numpy_and_bumps():
+    from explainer.quant.house import xva as XV, rates as R, termstructure as TS
+    zt = np.array([0.5, 1, 2, 5, 10, 30.0])
+    zz = np.array([0.035, 0.036, 0.037, 0.039, 0.041, 0.043])
+    swaps = [(0.04, 5.0, 1.0, True)]
+    times = np.linspace(0.25, 5, 20)
+    c0, gz, gh = XV.cva_torch(zt, zz, [5.0], [0.02], 0.03, 0.01, swaps, times, n_paths=20000, seed=3)
+    # numpy reference on the same curve
+    hw = TS.HullWhite(R.Curve(zt, zz), 0.03, 0.01)
+    x, _ = hw.simulate_x(times, 20000, seed=3)
+    V = np.stack([XV.swap_values_hw(hw, x[:, j], t, 0.04, 5.0) for j, t in enumerate(times)], 1)
+
+    def df(t):
+        return hw.c.df(t)
+    c1 = XV.cva(XV.exposure_profile(V)["EE"], times, df, [5.0], [0.02])
+    assert c0 == pytest.approx(c1, rel=0.05)
+    # the hazard gradient against a bump of the same torch computation (same random numbers)
+    up, _, _ = XV.cva_torch(zt, zz, [5.0], [0.0201], 0.03, 0.01, swaps, times, n_paths=20000, seed=3)
+    assert gh[0] == pytest.approx((up - c0) / 1e-4, rel=0.02)
+    assert gz[3] > 0  # a payer swap's exposure, and so its CVA, rises with the 5-year rate
+
+
+def test_sa_ccr_and_simm_like():
+    from explainer.quant.house import xva as XV
+    t1 = {"notional": 10000, "S": 0, "E": 10, "delta": -1, "mtm": 30}
+    t2 = {"notional": 10000, "S": 0, "E": 4, "delta": 1, "mtm": -20}
+    both = XV.sa_ccr_ir_ead([t1, t2])["EAD"]
+    assert both < XV.sa_ccr_ir_ead([t1])["EAD"] + XV.sa_ccr_ir_ead([t2])["EAD"]  # netting helps
+    assert XV.sa_ccr_ir_ead([t1], collateral=30)["RC"] == 0
+    s = np.zeros(9)
+    s[5] = 1.0
+    assert XV.simm_like_ir_delta(s) == pytest.approx(XV.SIMM_RW[5])
+    s2 = s.copy()
+    s2[4] = -1.0
+    assert XV.simm_like_ir_delta(s2) < XV.simm_like_ir_delta(np.abs(s2))  # offsetting tenors net
