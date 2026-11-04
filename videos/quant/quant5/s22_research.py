@@ -3,9 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant5.common import BM, ITO, JUMP, PART, STRAT, load
+from videos.quant.quant5.common import BM, ITO, PART, load
 
-NOISE = QC.REALIZED
 
 
 class Research(VoiceoverScene):
@@ -15,8 +14,8 @@ class Research(VoiceoverScene):
         self.theorem()
         self.proof()
         self.coverage(t)
-        self.noise_(t)
-        self.jumps(t)
+        self.log_fix(t)
+        self.breaks()
         self.open_problems()
         self.question()
 
@@ -24,7 +23,8 @@ class Research(VoiceoverScene):
         c = research_card(r"The error in realized variance", r"How well can a day's volatility be measured from its "
                           r"prices?", part=PART)
         with self.voiceover("For the researcher: Chapter 2 measured quadratic variation from prices sampled finer and "
-                            "finer. How well, exactly? The answer is a central limit theorem, and two ways it breaks."):
+                            "finer. How well, exactly? The answer is a central limit theorem, with an error bar from a "
+                            "single day's data."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -124,78 +124,41 @@ class Research(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def noise_(self, t):
+    def log_fix(self, t):
+        rows = [cmath(r"\log\mathrm{RV}_n - \log\mathrm{IV}", r"\approx", r"\frac{\mathrm{RV}_n - \mathrm{IV}}{\mathrm{IV}}",
+                      font_size=32, colors={r"\log\mathrm{RV}_n - \log\mathrm{IV}": ITO}),
+                cmath(r"z_{\log}", r"=", r"\frac{\log\mathrm{RV}_n - \log\mathrm{IV}}{\sqrt{2\,\mathrm{RQ}_n/(n\,\mathrm{RV}_n^2)}}"
+                      r"\ \Rightarrow\ N(0, 1)", font_size=32, colors={r"z_{\log}": ITO})]
+        whys = [why(r"the delta method: the log has the same limit, scaled by $1/\mathrm{IV}$"),
+                why(r"Barndorff-Nielsen and Shephard (2005): the estimated quarticity moves with $\mathrm{RV}$ itself, which "
+                    r"skews the raw statistic; the ratio $\mathrm{RQ}/\mathrm{RV}^2$ is far more stable, so the log "
+                    r"statistic is closer to normal in finite samples")]
+        step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.3, buff=0.5, edge=6.9)
         ns = t["ns"]
-        nz = t["noise"]
-        x = np.log10(np.asarray(ns, float))
-        y = np.asarray([nz["rv_over_iv"][str(n)] for n in ns])
-        yt = 1 + np.asarray([nz["bias_theory"][str(n)] for n in ns])
-        top = float(max(y.max(), yt.max()) * 1.1)
-        g = axes([1.4, 4.5], [0, top], x_length=7.6, y_length=4.0, xlabel=r"returns per day, $n$",
-                 ylabel=r"mean $\mathrm{RV}_n / \mathrm{IV}$, with noise", xticks=[2, 3, 4], yticks=[1, 5, 10, 15],
-                 font_size=13, log_x=True).move_to(LEFT * 1.6 + DOWN * 0.3)
-        ax = g.ax
-        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=NOISE) for a, b in zip(x, y)])
-        th = curve(ax, x, yt, WHITE, stroke_width=2)
-        one = DashedLine(ax.c2p(1.4, 1), ax.c2p(4.5, 1), color=GREY_B, stroke_width=1.5)
-        rows = VGroup(
-            MathTex(r"Y_{t_i} = X_{t_i} + \varepsilon_i,\ \ \varepsilon_i \sim (0, \omega^2)", font_size=26),
-            MathTex(r"\mathbb E\,\mathrm{RV}_n(Y) = \mathrm{IV} + 2n\omega^2", font_size=26, color=NOISE),
-            MathTex(rf"\text{{TSRV}}:\ {nz['tsrv_mean']:.2f} \pm {nz['tsrv_sd']:.2f}\ \times \mathrm{{IV}}", font_size=24,
-                    color=ITO),
-            MathTex(rf"\text{{5-min RV}}:\ {nz['rv5_mean']:.2f} \pm {nz['rv5_sd']:.2f}\ \times \mathrm{{IV}}", font_size=24),
-            wrapped_label(rf"noise of {t['omega'] * 1e4:.0f} basis points on each observed price; white: "
-                          r"$1 + 2n\omega^2/\mathrm{IV}$. Zhang, Mykland and A\"it-Sahalia's (2005) two-scales estimator "
-                          r"averages sparse grids and subtracts the dense one's bias", 3.8, 14, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.3)
-        fit_right(rows)
+        lab = {39: r"10 min", 78: r"5 min", 390: r"1 min", 2340: r"10 s", 23400: r"1 s"}
+        hx = [-3.4, -0.4, 2.0, 4.6]
+        head = VGroup(label(r"sampling", font_size=18, color=GREY_B), label(r"raw: covers, skew", font_size=18),
+                      label(r"log: covers, skew", font_size=18, color=ITO), label(r"", font_size=18))
+        tab = VGroup()
+        for j_, n in enumerate(ns[:3]):
+            c = t["clt"][str(n)]
+            row = VGroup(label(lab[n], font_size=18, color=BM),
+                         MathTex(rf"{100 * c['cover95']:.1f}\%,\ {c['skew_t']:.2f}", font_size=24),
+                         MathTex(rf"{100 * c['cover95_log']:.1f}\%,\ {c['skew_log']:.2f}", font_size=24, color=ITO))
+            for i_, cell in enumerate(row):
+                cell.move_to([hx[i_], -0.6 - 0.6 * j_, 0])
+            row[0].align_to(np.array([hx[0] - 1.6, 0, 0]), LEFT)
+            tab.add(row)
+        for i_, cell in enumerate(head[:3]):
+            cell.move_to([hx[i_], 0.0, 0])
         with self.voiceover(
-            "The first way it breaks: real prices are not the efficient price. <bookmark mark='a'/> Add noise, bid-ask "
-            "bounce and discreteness, to every observed price. Each return now carries two noise terms, and their "
-            "squares do not average away: the expected realized variance is the true one plus two n omega squared, "
-            "which grows without bound as you sample faster. <bookmark mark='b'/> The dots are the simulation, the "
-            "white line the formula, and they agree to the third digit. At one-second sampling with five basis points of "
-            "noise, realized variance is forty-three times the truth; even at five minutes it is fourteen percent too "
-            "high. <bookmark mark='c'/> Zhang, Mykland and Aït-Sahalia's two-scales "
-            "estimator averages realized variances on several sparse grids and subtracts the dense grid's bias, and "
-            "recovers the true variance from the noisy one-second prices."
-        ) as vo:
-            self.play(FadeIn(g), Create(one), FadeIn(rows[:2]))
-            vo.wait_until("a")
-            self.wait(0.1)
-            vo.wait_until("b")
-            self.play(Create(th), LaggedStart(*[FadeIn(d_, scale=1.4) for d_ in dots], lag_ratio=0.2))
-            vo.wait_until("c")
-            self.play(FadeIn(rows[2:]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def jumps(self, t):
-        j = t["jumps"]
-        rows = [cmath(r"\mathrm{RV}_n", r"\to", r"\textstyle\int\sigma^2 + \sum_{s \le 1}(\Delta X_s)^2", font_size=32,
-                      colors={r"\mathrm{RV}_n": JUMP}),
-                cmath(r"\mathrm{BV}_n", r"=", r"\tfrac\pi2\textstyle\sum |\Delta_i X||\Delta_{i-1}X| \to \int\sigma^2", font_size=32,
-                      colors={r"\mathrm{BV}_n": ITO}),
-                cmath(r"z", r"=", r"\frac{(\mathrm{RV} - \mathrm{BV})/\mathrm{RV}}{\sqrt{(\tfrac{\pi^2}{4} + \pi - 5)\,"
-                      r"\max(1, \mathrm{TQ}/\mathrm{BV}^2)/n}}", font_size=30, colors={r"z": STRAT})]
-        whys = [why(r"the second way it breaks: realized variance also collects every jump's square"),
-                why(r"Barndorff-Nielsen and Shephard (2004): products of neighbouring absolute returns ignore a single jump, "
-                    r"since its neighbours are small"),
-                why(r"Huang and Tauchen (2005): the share of variance from jumps, studentized with tripower quarticity "
-                    r"TQ; reject 'no jump' when $z > 1.645$")]
-        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.3, buff=0.48, edge=6.9)
-        res = VGroup(
-            MathTex(rf"\text{{no jump}}:\ \text{{rejects}}\ {100 * j['none']['reject']:.1f}\%", font_size=28, color=ITO),
-            MathTex(rf"\text{{one 1\% jump}}:\ \text{{rejects}}\ {100 * j['jump']['reject']:.1f}\%", font_size=28, color=JUMP),
-        ).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "The second way it breaks is a jump. <bookmark mark='a'/> Realized variance collects the square of every "
-            "jump on top of the integrated variance. <bookmark mark='b'/> Bipower variation, the sum of products of "
-            "neighbouring absolute returns, ignores a lone jump, because its neighbours are small; it estimates the "
-            "continuous part alone. <bookmark mark='c'/> The gap between the two, studentized, is Huang and Tauchen's "
-            "test. On five-minute returns it rejects 'no jump' on about ten percent of the days that have none, twice "
-            "its nominal five percent, because volatility moves within the day; and on half of the days with one "
-            "jump of one percent. A jump smaller than the day's continuous moves is hard to see at five minutes."
+            "At coarse sampling the raw statistic is skewed, and a simple transformation fixes most of it. <bookmark "
+            "mark='a'/> Take logs. By the delta method the log of realized variance has the same limit, scaled by one "
+            "over the integrated variance. <bookmark mark='b'/> Studentize it the same way. The raw statistic is skewed "
+            "because its estimated quarticity rises and falls with the realized variance itself; in the log version "
+            "that ratio is far steadier. <bookmark mark='c'/> On the same simulated days, the log interval covers "
+            "ninety-two percent at ten minutes instead of eighty-nine, and the skewness falls from minus one point "
+            "three to minus point four."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -203,9 +166,32 @@ class Research(VoiceoverScene):
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
-            step(2)
-            self.play(FadeIn(res))
+            self.play(FadeIn(head[:3]), LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.3))
         self.wait(0.5)
+        self.clear_scene()
+
+    def breaks(self):
+        cards = VGroup(
+            desk_question(r"noise", r"observed prices are the efficient price plus bid--ask bounce; sampled finely, realized "
+                          r"variance gains $2n\omega^2$ and diverges. Part 7 measures it on Bitcoin's one-minute data and "
+                          r"corrects it with two-scale and kernel estimators", width=12.4, font_size=19),
+            desk_question(r"jumps", r"realized variance also collects every jump's square; bipower variation removes them, and "
+                          r"the gap is a test for jumps (Part 7, chapter 10)", width=12.4, font_size=19),
+            desk_question(r"what the theorem guarantees", r"for a continuous semimartingale observed without error, an honest "
+                          r"error bar from one day's data: the baseline every correction is measured against", width=12.4,
+                          font_size=19),
+        ).arrange(DOWN, buff=0.22)
+        with self.voiceover(
+            "The theorem assumes two things real data break, and Part 7 takes both up on real prices. <bookmark "
+            "mark='a'/> Noise: observed prices bounce around the efficient one, and sampled finely, realized variance "
+            "gains two n times the noise variance and diverges. <bookmark mark='b'/> And jumps, whose squares it "
+            "collects on top of the integrated variance. <bookmark mark='c'/> What the theorem guarantees is the "
+            "baseline: for a continuous price observed without error, an honest error bar from a single day's data."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
         self.clear_scene()
 
     def open_problems(self):

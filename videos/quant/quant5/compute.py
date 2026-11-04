@@ -1178,6 +1178,11 @@ def compute_ou_lab() -> dict:
                   "frac_neg_T": float(np.mean(big < 0))})
 
 
+def sstats_skew(x) -> float:
+    x = np.asarray(x, float)
+    return float(np.mean((x - x.mean()) ** 3) / np.std(x) ** 3)
+
+
 def compute_rv_theory() -> dict:
     """The research chapter: the asymptotic theory of realized variance on simulated stochastic-volatility days
     (23,400 one-second steps).  The studentized CLT (Barndorff-Nielsen and Shephard 2002) at 5-minute to 1-second
@@ -1194,6 +1199,7 @@ def compute_rv_theory() -> dict:
     shape /= np.sqrt(np.mean(shape[:-1] ** 2))
     mu43 = 2 ** (2 / 3) * gamma(7 / 6) / gamma(0.5)
     tstats = {n: [] for n in ns}
+    logt = {n: [] for n in ns}
     rel = {n: [] for n in ns}
     omega = 5e-4                                 # 5 basis points of noise on each observed log price
     sig_noise = {n: [] for n in ns}
@@ -1211,6 +1217,7 @@ def compute_rv_theory() -> dict:
             rv = float(np.sum(r ** 2))
             rq = n / 3 * float(np.sum(r ** 4))
             tstats[n].append((rv - iv) / np.sqrt(2 * rq / n))
+            logt[n].append((np.log(rv) - np.log(iv)) / np.sqrt(2 * rq / n / rv ** 2))
             rel[n].append(rv / iv - 1)
         if m < 1000:
             inv_iv.append(1 / iv)
@@ -1233,6 +1240,8 @@ def compute_rv_theory() -> dict:
             ht[key].append(z)
     out = {"N": N, "M": M, "ns": list(ns), "omega": omega, "iv_mean": float(np.mean(ivs))}
     out["clt"] = {str(n): {"cover95": float(np.mean(np.abs(tstats[n]) < 1.96)), "sd_t": float(np.std(tstats[n])),
+                           "cover95_log": float(np.mean(np.abs(logt[n]) < 1.96)), "skew_t": float(sstats_skew(tstats[n])),
+                           "skew_log": float(sstats_skew(logt[n])),
                            "rel_sd": float(np.std(rel[n])), "hist": np.histogram(tstats[n], 40, (-4, 4))[0]}
                   for n in ns}
     out["noise"] = {"rv_over_iv": {str(n): float(np.mean(sig_noise[n])) for n in ns},
