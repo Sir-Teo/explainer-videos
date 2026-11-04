@@ -56,7 +56,7 @@ class Calibrator(VoiceoverScene):
         t_off = label(r"offline, once: hours", font_size=22, color=GREY_A).next_to(off, UP, buff=0.1)
         t_on = label(r"online, every day: seconds", font_size=22, color=NET).next_to(on, UP, buff=0.1)
         rng = np.random.default_rng(0)
-        cloud = VGroup(*[Dot(off.get_center() + np.array([rng.uniform(-2.6, 2.6), rng.uniform(-0.9, 0.5), 0]),
+        cloud = VGroup(*[Dot(off.get_center() + np.array([rng.uniform(-2.6, 2.6), rng.uniform(-0.5, 1.0), 0]),
                              radius=0.025, color=IV) for _ in range(160)])
         bar_bg = Rectangle(width=5.2, height=0.22, stroke_color=GREY_C, stroke_width=1).move_to(off.get_bottom() + UP * 0.45)
         bar = Rectangle(width=5.2, height=0.22, stroke_width=0, fill_color=IV, fill_opacity=0.8).move_to(bar_bg)
@@ -67,18 +67,15 @@ class Calibrator(VoiceoverScene):
                       label(r"gradient descent through the network", font_size=21, color=NET),
                       MathTex(r"\downarrow", font_size=30), label(r"$(H, \eta, \rho, \xi_0, \xi_1)$", font_size=24,
                                                                    color=GOOD)).arrange(DOWN, buff=0.08).move_to(on)
-        lin = VGroup(
-            firm_card(r"Hernandez (2016)", r"a network learns the inverse map, quotes to parameters, for Hull--White",
-                      source=r"\textit{Risk}", width=3.1, font_size=16),
-            firm_card(r"Bayer and Stemper (2018)", r"pointwise: one implied vol per $(\theta, T, k)$", source=r"arXiv",
-                      width=3.1, font_size=16),
-            firm_card(r"Liu, Oosterlee and Bohte (2019)", r"networks for prices and implied volatilities", source=r"\textit{Risks}",
-                      width=3.1, font_size=16),
-            firm_card(r"Horvath, Muguruza and Tomas (2021)", r"the forward map on a grid, for rough volatility",
-                      source=r"\textit{Quantitative Finance}", width=3.1, font_size=16),
-        ).arrange(RIGHT, buff=0.18).to_edge(DOWN, buff=0.3)
-        for card in lin:
-            card[0].set_stroke(GREY_C)
+        lin = VGroup(*[history_card(y, w, t, color=QC.IDEA, width=6.2, font_size=16) for y, w, t in (
+            (2016, r"Hernandez, \textit{Risk}", r"a network learns the inverse map, quotes to parameters, for Hull--White"),
+            (2018, r"Bayer and Stemper, arXiv", r"pointwise: one implied vol per $(\theta, T, k)$"),
+            (2019, r"Liu, Oosterlee and Bohte, \textit{Risks}", r"networks for prices and implied volatilities"),
+            (2021, r"Horvath, Muguruza and Tomas, \textit{Quantitative Finance}",
+             r"the forward map on a grid, for rough volatility"))]
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.25, 0.15)).to_edge(DOWN, buff=0.25)
+        if lin.width > 13.4:
+            lin.scale_to_fit_width(13.4)
         with self.voiceover(
             "The work splits in two. Offline, once: draw twelve thousand random parameter sets, simulate each by "
             f"Monte Carlo, and keep {n_pts:,} implied volatilities as labels; then fit the network to them. That took "
