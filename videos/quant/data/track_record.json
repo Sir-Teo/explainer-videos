@@ -311,6 +311,30 @@
   },
   "note": "value-weighted quintile long-short, weekly"
  },
+ "sestm_fomc_drift_part28": {
+  "part": 28,
+  "research": {
+   "mean": -0.0002881318681318692,
+   "vol": 0.007560336623120457,
+   "sharpe": -0.038110984007077915,
+   "sharpe_se": 0.25571708651881253,
+   "maxdd": -0.04140678545235543,
+   "n": 182,
+   "sharpe_net": -0.23916023297195194,
+   "cost_per_year": 0.0015199999999999999
+  },
+  "holdout": {
+   "mean": 0.0025580487804878153,
+   "vol": 0.00812684233521627,
+   "sharpe": 0.31476540025920663,
+   "sharpe_se": 0.524638596518852,
+   "maxdd": -0.00589051117372108,
+   "n": 41,
+   "sharpe_net": 0.12773088706170774,
+   "cost_per_year": 0.0015199999999999999
+  },
+  "note": "statement months only; flat in other months"
+ },
  "zoo_equal_weight_part25": {
   "part": 25,
   "research": {

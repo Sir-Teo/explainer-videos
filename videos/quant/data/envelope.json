@@ -72,6 +72,10 @@
    "at": "2026-11-04",
    "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
   },
+  "sestm_fomc_drift_part28|fred/dgs2_fomc_5day_drift": {
+   "at": "2026-11-04",
+   "code_sha256": "9ad2cca57ae0219d9768adea318562184d10ea15ff9c73e734596e942c6ae76f"
+  },
   "stw_best_rule_part26|kenfrench/mkt_daily": {
    "at": "2026-11-04",
    "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686"
@@ -545,6 +549,17 @@
    },
    "trials": 1
   },
+  "sestm_fomc_drift_part28": {
+   "code_sha256": "9ad2cca57ae0219d9768adea318562184d10ea15ff9c73e734596e942c6ae76f",
+   "params": {
+    "alpha": 0.2,
+    "duration": 1.9,
+    "kappa": 10,
+    "trade": "after the statement-day close, short the 2-year note when the score is above 1/2 (yields expected to keep rising), long below; hold five trading days",
+    "train": "statements 1997-2020, statement-day 2-year change as the label"
+   },
+   "trials": 13
+  },
   "shiller_oos_predictors": {
    "code_sha256": "eebb73156ed3044b21e2346f15abad4dbb460c09a11ab8f464d699174c6aa92a",
    "params": {
@@ -722,6 +737,12 @@
    "first": 20210104,
    "last": 20251230,
    "n": 1223
+  },
+  "fred/dgs2_fomc_5day_drift": {
+   "digest": "8db7d1622108cd3a224e4b5b7366fce37b67e4da7dacb552a6cf7cd55c3ca36c",
+   "first": 20210127,
+   "last": 20251210,
+   "n": 41
   },
   "goyal/welch_goyal_monthly": {
    "digest": "c0ae5e26eeffd739c3ecd3206e3478a7c2b1a6517856f6f307c075e0337d80bf",
