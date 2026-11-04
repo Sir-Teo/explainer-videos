@@ -627,3 +627,19 @@ def adaptive_conformal(resid_stream, alpha: float = 0.1, gamma: float = 0.005, w
         cover[t] = 1 - err
         a = a + gamma * (alpha - err)
     return {"q": q, "cover": cover}
+
+
+def adf_t(x, lags: int = 1) -> float:
+    """The augmented Dickey-Fuller t-statistic (constant, ``lags`` lagged differences): the t of b in
+    dx_t = a + b x_{t-1} + sum c_i dx_{t-i} + e_t.  Below about -2.86, a unit root is rejected at 5%."""
+    x = np.asarray(x, float)
+    x = x[np.isfinite(x)]
+    dx = np.diff(x)
+    y = dx[lags:]
+    cols = [np.ones(len(y)), x[lags:-1]] + [dx[lags - i:-i] for i in range(1, lags + 1)]
+    A = np.column_stack(cols)
+    b, res, *_ = np.linalg.lstsq(A, y, rcond=None)
+    e = y - A @ b
+    s2 = e @ e / (len(y) - A.shape[1])
+    cov = s2 * np.linalg.inv(A.T @ A)
+    return float(b[1] / math.sqrt(cov[1, 1]))

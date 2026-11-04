@@ -221,6 +221,12 @@ def binance_daily(symbol: str, start: str = "2017-08", end: str = "2025-12") -> 
         months = sorted({k.split("-1d-")[1][:7] for k in keys if k.endswith(".zip")})
         _atomic_write(lpath, json.dumps(months).encode())
     months = [m for m in json.loads(lpath.read_bytes()) if start <= m <= end]
+    keys = ("time", "open", "high", "low", "close", "volume", "quote", "trades")
+    whole = DATA / "binance" / "spot" / symbol / "1d" / f"assembled_{start}_{end}.npz"
+    if whole.exists():      # assembled once from the checked monthly files; the assembly itself is checked
+        _check(f"binance/spot/{symbol}/1d/assembled_{start}_{end}", whole.read_bytes(), f"{BINANCE_S3}/{symbol}")
+        with np.load(whole) as z:
+            return {k: z[k] for k in keys}
     base = f"https://data.binance.vision/data/spot/monthly/klines/{symbol}/1d"
     cols = []
     for ym in months:
@@ -242,13 +248,18 @@ def binance_daily(symbol: str, start: str = "2017-08", end: str = "2025-12") -> 
         if rows:
             cols.append(np.array([[float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]), float(r[5]),
                                    float(r[7]), float(r[8])] for r in rows]))
-    if not cols:
-        return {k: np.zeros(0) for k in ("time", "open", "high", "low", "close", "volume", "quote", "trades")}
-    a = np.concatenate(cols)
-    a[:, 0] = np.where(a[:, 0] > 1e14, a[:, 0] / 1e6, a[:, 0] / 1e3)
-    a = a[np.argsort(a[:, 0], kind="stable")]
-    return {"time": a[:, 0], "open": a[:, 1], "high": a[:, 2], "low": a[:, 3], "close": a[:, 4], "volume": a[:, 5],
-            "quote": a[:, 6], "trades": a[:, 7]}
+    if cols:
+        a = np.concatenate(cols)
+        a[:, 0] = np.where(a[:, 0] > 1e14, a[:, 0] / 1e6, a[:, 0] / 1e3)
+        a = a[np.argsort(a[:, 0], kind="stable")]
+    else:
+        a = np.zeros((0, 8))
+    out = {k: a[:, i] for i, k in enumerate(keys)}
+    buf = io.BytesIO()
+    np.savez(buf, **out)
+    _atomic_write(whole, buf.getvalue())
+    _check(f"binance/spot/{symbol}/1d/assembled_{start}_{end}", whole.read_bytes(), f"{BINANCE_S3}/{symbol}")
+    return out
 
 
 GOYAL_WELCH = "https://docs.google.com/spreadsheets/d/1qwpl2R_DNujpU5YUkk8lacP1tTeMb9iJ/export?format=xlsx"
