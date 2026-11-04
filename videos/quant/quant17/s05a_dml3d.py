@@ -68,7 +68,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
         self.remove(hint, errs)
         with self.voiceover(
             "Two assets now, so the price is a surface we can see. Sixty-four training states, each with one simulated "
-            "payoff: the orange dots, hovering above and below the true price, which is the faint sheet. "
+            "payoff: the pink dots, hovering above and below the true price, which is the faint sheet. "
             "<bookmark mark='a'/> Now give each its pathwise gradient, drawn as a small tangent plane. Each plane is "
             "tilted the way the payoff moves when each asset moves, on that one path. <bookmark mark='b'/> Fit a "
             "network to the dots alone: with sixty-four noisy heights, the red surface wobbles between them. "
