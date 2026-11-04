@@ -5,6 +5,11 @@ import numpy as np
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant1.common import GAUSS, LARGE, PART, REAL, SMALL, TAIL, VOL, load
 
+def ask(text: str):
+    """The pause-and-predict banner at the foot of the frame."""
+    return wrapped_label(rf"Pause and predict: {text}", 12.4, 25, QC.IDEA).to_edge(DOWN, buff=0.3)
+
+
 MODELS = (("iid", r"iid normal", GAUSS), ("garch", r"GARCH(1,1), normal shocks", VOL),
           ("garch_t5", r"GARCH(1,1), $t_5$ shocks", TAIL))
 

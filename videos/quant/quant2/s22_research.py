@@ -11,6 +11,12 @@ def ask(text: str):
     return wrapped_label(rf"Pause and predict: {text}", 12.4, 25, QC.IDEA).to_edge(DOWN, buff=0.3)
 
 
+def fit_right(m, edge: float = 6.75):
+    """Shift ``m`` left until its right edge is inside the frame."""
+    m.shift(LEFT * max(0.0, m.get_right()[0] - edge))
+    return m
+
+
 EWMA, CONST = CCP, QC.REALIZED
 
 
