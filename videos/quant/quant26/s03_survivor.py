@@ -135,7 +135,7 @@ class Survivor(VoiceoverScene):
         ba, bs = bars(ha, NOISE, 0.45), bars(hs, GOOD, 0.75)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, top), color=GREY_C, stroke_width=1.5)
         side = VGroup(
-            MathTex(rf"\text{{all}}:\ {100 * sm['mean_all']:+.1f}\%", font_size=28, color=NOISE),
+            MathTex(rf"\text{{all}}:\ {abs(100 * sm['mean_all']):.1f}\%", font_size=28, color=NOISE),
             MathTex(rf"\text{{survivors}}:\ {100 * sm['mean_alive']:+.1f}\%", font_size=28, color=GOOD),
             MathTex(rf"\text{{survived}}:\ {100 * sm['alive']:.0f}\%", font_size=24, color=GREY_A),
             wrapped_label(rf"{comma(sm['n'])} managers with no skill, volatilities from 5\% to 35\%, {sm['years']} years; a "
