@@ -50,6 +50,28 @@ intuition of 3Blue1Brown. Concretely:
   research papers by their staff, filings, books, court and regulatory documents, interviews on the record.
   Frontier: the 2023–2026 research, checked against the papers.
 
+**Revision of November 2026 (2): the PhD layer.** A part also replaces the *doctoral* course on its subject, not
+only the master's one. On top of the above, every part has:
+
+- **A research chapter (4–6 minutes)**: the part's central result in the generality of the research literature,
+  with its assumptions stated and the proof's key steps on screen, using the literature's own tools (asymptotics,
+  random-matrix and empirical-process arguments, measure theory, martingale methods, convex duality) where the
+  papers use them; then **checked by simulation against the theorem's prediction**, the formula and the experiment
+  drawn on the same axes. Where the simple version shown earlier in the part is a special case, the chapter says
+  of what.
+- **Open problems**: two or three questions the literature has not settled, each with the papers that frame it and
+  what an answer would change, on a card in the frontier chapter and in the README.
+- **Qualifying-exam problems**: the problem set gains two proof problems at the level of a PhD qualifying exam
+  (derive the theorem's special case, prove a bound, construct a counterexample), solved in full in the README in
+  both languages.
+- **"For the researcher"** in the README: the theory papers, the theorem each proves and under what assumptions,
+  and every place the video simplifies.
+- **Length**: the PhD layer raises a part to **55–65 minutes** (floor 50 still holds). Cut repetition before
+  material.
+
+Parts 1–26 were made before this revision; each gets its research chapter, exam problems and README section in a
+retrofit pass (tracked in [`PROGRESS.md`](PROGRESS.md)).
+
 **A chapter is a lecture segment of about 3 minutes (2.5–4; 16–20 per part, as in the AI series)**, in the AI series' order:
 
 1. A motivating question, a market fact, or a failure.

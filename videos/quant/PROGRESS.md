@@ -42,6 +42,16 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
   done. The Chinese dry run is in progress (`renders/make/quant7_zh_dry.log`); the narrated build goes in the queue
   after Part 6.
 
+## Direction, 4 November 2026: the PhD layer
+
+The owner: the course should also include PhD-level material. SYLLABUS.md section 1 now has "the PhD layer": in
+every part a research chapter (the central theorem in the literature's generality, proved, then checked by
+simulation against its prediction), an open-problems card, two qualifying-exam proof problems with full solutions,
+and a "For the researcher" README section; parts run 55–65 minutes. Part 27 is the first built to it (its research
+chapter is on overparameterised prediction: Marchenko–Pastur, the ridgeless risk of Hastie, Montanari, Rosset and
+Tibshirani, random features to kernels). Parts 28–43 follow it. **Retrofit pass for Parts 1–26**: after Part 27,
+one research chapter, two exam problems and the README section per part, in order, each part committed on its own.
+
 ## Direction, 2 November 2026 (evening): every part to 50–60 minutes
 
 The owner's instructions: parts must replace college lectures (3Blue1Brown-style visuals, full technical depth),
