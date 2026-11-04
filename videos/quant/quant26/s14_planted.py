@@ -11,7 +11,7 @@ class Planted(VoiceoverScene):
     def construct(self):
         p = load("planted")
         self.card()
-        self.setup(p)
+        self.market(p)
         self.picture(p)
         self.table(p)
         self.lesson(p)
@@ -24,7 +24,7 @@ class Planted(VoiceoverScene):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def setup(self, p):
+    def market(self, p):
         rows = [cmath(r"r_{k,t}", r"=", r"\tfrac{SR_k}{\sqrt{252}} + \sqrt{0.2}\,f_t + \sqrt{0.8}\,\varepsilon_{k,t}",
                       font_size=38, colors={r"r_{k,t}": RULE}),
                 cmath(r"SR_k", r"=", r"\begin{cases} 1\ \text{or}\ 2 & \text{for 10 planted strategies} \\ 0 & "
@@ -108,7 +108,7 @@ class Planted(VoiceoverScene):
         for j, row in enumerate(rows):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 2.6 - 0.72 * j, 0])
-            row[0].align_to([xs[0] - 2.7, 0, 0], LEFT)
+            row[0].align_to(np.array([xs[0] - 2.7, 0, 0]), LEFT)
         foot = wrapped_label(rf"averages over {p['sims']} simulated markets of each kind; ten strategies of "
                              rf"{comma(p['n'])} are real", 12.0, 17, GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(

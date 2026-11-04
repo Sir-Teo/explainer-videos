@@ -211,7 +211,7 @@ class Reality(VoiceoverScene):
         for j, row in enumerate(rows):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 2.4 - 0.72 * j, 0])
-            row[0].align_to([xs[0] - 2.4, 0, 0], LEFT)
+            row[0].align_to(np.array([xs[0] - 2.4, 0, 0]), LEFT)
         foot = wrapped_label(rf"after 1986, {b['n_t2']} rules clear the textbook hurdle on their own, about what ten "
                              r"thousand rules with no edge would produce, and none survives the step-down. Before 1987, "
                              rf"{a['rw_n']} do, {a['rw_families']['cb']} of them channel breakouts",

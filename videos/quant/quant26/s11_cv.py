@@ -11,7 +11,7 @@ class PurgedCV(VoiceoverScene):
         c = load("cv")
         self.card()
         self.overlap()
-        self.setup(c)
+        self.experiment(c)
         self.results(c)
         self.purge()
         self.walk()
@@ -59,7 +59,7 @@ class PurgedCV(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def setup(self, c):
+    def experiment(self, c):
         rows = [cmath(r"x_t", r"=", r"\big(r_{t-1:t},\ r_{t-5:t},\ r_{t-20:t},\ r_{t-60:t},\ \hat\sigma_{20}\big)",
                       font_size=36, colors={r"x_t": RULE}),
                 cmath(r"y_t", r"=", r"r_{t+1:t+20}", font_size=38, colors={r"y_t": HURDLE}),

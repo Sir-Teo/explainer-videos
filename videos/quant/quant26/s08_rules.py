@@ -208,7 +208,7 @@ class Rules(VoiceoverScene):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 2.0 - 0.8 * j, 0])
                 if i < 2:
-                    cell.align_to([xs[i] - 1.2, 0, 0], LEFT)
+                    cell.align_to(np.array([xs[i] - 1.2, 0, 0]), LEFT)
         tab = VGroup(*rows)
         foot = wrapped_label(r"every family's best rule was short-horizon: five days, half a percent, a short channel. "
                              r"They all bet that a move today continues tomorrow", 12.0, 19, GREY_A).to_edge(DOWN, buff=0.6)

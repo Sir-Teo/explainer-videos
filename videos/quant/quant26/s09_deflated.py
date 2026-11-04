@@ -159,7 +159,7 @@ class Deflated(VoiceoverScene):
         for j, row in enumerate(rows):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 2.3 - 0.75 * j, 0])
-            row[0].align_to([xs[0] - 1.9, 0, 0], LEFT)
+            row[0].align_to(np.array([xs[0] - 1.9, 0, 0]), LEFT)
         tab = VGroup(*rows)
         foot = wrapped_label(r"before 1987 the winner passes every test of selection. After, its nominal $p$-value is "
                              r"0.0006 and it fails the deflated test however $N$ is counted: it is about what the best of "
