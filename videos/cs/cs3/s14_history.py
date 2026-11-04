@@ -71,15 +71,21 @@ class History(VoiceoverScene):
                    label(r"22-bit binary floating point", font_size=24, color=GREY_A),
                    label(r"about 5 additions a second", font_size=24, color=GREY_A),
                    label(r"programs on punched cinema film", font_size=24, color=GREY_A),
-                   label(r"destroyed in a 1943 air raid; \ shown Turing-complete in 1998 \ (Rojas), \ in principle",
-                         font_size=22, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(LEFT * 3.4)
+                   label(r"destroyed in a 1943 air raid;", font_size=22, color=GREY_B),
+                   label(r"shown Turing-complete in 1998 \ (Rojas), \ in principle", font_size=22, color=GREY_B)
+                   ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        z.move_to(LEFT * 3.6 + UP * 0.3, aligned_edge=LEFT).to_edge(LEFT, buff=0.6)
         e = VGroup(label(r"ENIAC \ (1945)", font_size=30, color=CTRL),
                    label(r"decimal, \ 5{,}000 additions a second", font_size=24, color=GREY_A),
-                   label(r"programmed by plugging cables \ and setting switches: \ days per program", font_size=24,
-                         color=GREY_A),
-                   label(r"its first programmers: \ Kay McNulty, \ Betty Jennings, \ Betty Snyder, \\ Marlyn "
-                         r"Wescoff, \ Fran Bilas, \ Ruth Lichterman", font_size=22, color=HIST)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2).move_to(RIGHT * 3.0)
+                   label(r"programmed by plugging cables \ and setting switches:", font_size=24, color=GREY_A),
+                   label(r"days per program", font_size=24, color=GREY_A),
+                   label(r"its first programmers:", font_size=22, color=HIST),
+                   label(r"Kay McNulty, \ Betty Jennings, \ Betty Snyder,", font_size=22, color=HIST),
+                   label(r"Marlyn Wescoff, \ Fran Bilas, \ Ruth Lichterman", font_size=22, color=HIST)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.2)
+        e.move_to(RIGHT * 0.6 + UP * 0.3, aligned_edge=LEFT)
+        z.align_to(e, UP)
+        sep = DashedLine(UP * 1.8 + RIGHT * 0.1, DOWN * 1.6 + RIGHT * 0.1, color=GREY_D, stroke_width=1.5)
         foot = label(r"what both lacked: \ the program stored in the machine's own memory \ (Part 6)", font_size=26,
                      color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -93,7 +99,7 @@ class History(VoiceoverScene):
             "left out of its history. <bookmark mark='c'/> What both machines lacked was the idea of Part 1's "
             "universal machine: a program stored as data in the computer's own memory. Part 6 gives Pebble exactly that."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(sep))
             vo.wait_until("a")
             self.play(FadeIn(z, lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
@@ -120,10 +126,10 @@ class History(VoiceoverScene):
             labs.add(label(nm, font_size=18, color=GREY_A).next_to(p, UL, buff=0.05))
         trend = ax.plot(lambda t: np.log10(2300) + (t - 1971) * np.log10(2) / 2, x_range=[1971, 2024],
                         color=YES, stroke_width=2.5)
-        tl = label(r"doubling every two years", font_size=24, color=YES).next_to(ax.c2p(2010, 9.5), UL, buff=0.1)
+        tl = label(r"doubling every two years", font_size=26, color=YES).next_to(ax.c2p(2004, 7.0), DR, buff=0.1)
         hc = history_card(1965, r"Gordon Moore", r"``Cramming more components onto integrated circuits'': \ the count "
-                          r"doubles every year \ (revised in 1975 to every two)", width=4.4, font_size=20).move_to(
-            LEFT * 3.0 + UP * 1.5)
+                          r"doubles every year \ (revised in 1975 to every two)", width=3.9, font_size=22).move_to(
+            RIGHT * 4.8 + UP * 1.0)
         end = note(r"2,300 transistors in 1971; \ about 200 billion in 2024: \ every one a switch from chapter three",
                    font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(

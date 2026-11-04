@@ -66,12 +66,12 @@ class Bdd(VoiceoverScene):
         for lvl, name in enumerate(("a", "b", "c")):
             n = 2 ** lvl
             for i in range(n):
-                p = np.array([(i - (n - 1) / 2) * (6.4 / n) - 2.6, 1.8 - lvl * 1.15, 0])
+                p = np.array([(i - (n - 1) / 2) * (6.4 / n) - 3.0, 1.8 - lvl * 1.15, 0])
                 pos[(lvl, i)] = p
                 nodes.add(VGroup(Circle(0.24, stroke_color=DATA, stroke_width=2.5, fill_color="#121722",
                                         fill_opacity=1), MathTex(name, font_size=26, color=DATA)).move_to(p))
         for i, v in enumerate(maj):
-            p = np.array([(i - 3.5) * 0.8 - 2.6, 1.8 - 3 * 1.15, 0])
+            p = np.array([(i - 3.5) * 0.8 - 3.0, 1.8 - 3 * 1.15, 0])
             pos[(3, i)] = p
             leaves.add(VGroup(Square(0.38, stroke_color=YES if v else GREY_B, stroke_width=2.5, fill_color="#121722",
                                      fill_opacity=1), MathTex(str(v), font_size=24)).move_to(p))
@@ -86,12 +86,12 @@ class Bdd(VoiceoverScene):
             (r"1. \ share identical subgraphs", CTRL),
             (r"2. \ delete a test whose two branches agree", CTRL),
             (r"repeat until neither applies: \\ a \textit{reduced ordered BDD}", YES),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.6 + UP * 1.2)
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.7 + UP * 2.0)
         # the reduced diagram for majority (order a, b, c): 4 decision nodes
         red = [[2, 0, 3, 4], [3, 1, 0, 5], [4, 1, 5, 1], [5, 2, 0, 1]]
-        bdd = draw_bdd(red, [0, 1, 2], 2, width=2.4, height=3.0, origin=RIGHT * 3.6 + DOWN * 1.6,
+        bdd = draw_bdd(red, [0, 1, 2], 2, width=2.4, height=2.8, origin=RIGHT * 3.7 + DOWN * 1.0,
                        names={0: "a", 1: "b", 2: "c"}, r=0.22)
-        cnt = note(r"15 nodes \ $\to$ \ 6", font_size=24).next_to(bdd, LEFT, buff=0.4)
+        cnt = label(r"15 nodes \ $\to$ \ 6", font_size=26, color=YES).next_to(bdd, DOWN, buff=0.3)
         with self.voiceover(
             "Truth tables and normal forms are either huge or not unique. In 1986 Randal Bryant made a data structure "
             "that is often small and always unique. <bookmark mark='a'/> Start with a decision tree. Here is majority: "
@@ -120,16 +120,24 @@ class Bdd(VoiceoverScene):
         good = draw_bdd(k3["good"], k3["good_order"], k3["root_good"], width=2.6, height=4.4,
                         origin=LEFT * 4.2 + DOWN * 1.0, r=0.22, font_size=20)
         bad = draw_bdd(k3["bad"], k3["bad_order"], k3["root_bad"], width=5.6, height=4.4,
-                       origin=RIGHT * 0.6 + DOWN * 1.0, r=0.22, font_size=20)
+                       origin=RIGHT * 0.1 + DOWN * 1.0, r=0.22, font_size=20)
         gl = label(rf"order $x_1, x_2, x_3, \dots$: \ {good.n_nodes} nodes", font_size=24, color=YES).next_to(
             good, UP, buff=0.15)
         bl = label(rf"order $x_1, x_3, x_5, x_2, \dots$: \ {bad.n_nodes} nodes", font_size=24, color=NO).next_to(
             bad, UP, buff=0.15)
         rows = d["rows"]
-        tab = VGroup(*[MathTex(rf"{2 * r['k']}: \ {r['good']} \ \text{{vs}} \ {fmt(r['bad'])}", font_size=24,
-                               color=GREY_A) for r in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        tab.to_edge(RIGHT, buff=0.25).shift(DOWN * 1.2)
-        tl = note(r"vars: \ good vs bad", font_size=18).next_to(tab, UP, buff=0.1)
+        tab = VGroup()
+        for r in rows:
+            row = VGroup(MathTex(str(2 * r['k']), font_size=28, color=GREY_A),
+                         MathTex(str(r['good']), font_size=28, color=YES),
+                         MathTex(fmt(r['bad']), font_size=28, color=NO))
+            for j, m in enumerate(row):
+                m.move_to([4.55 + 0.85 * j, 0, 0])
+            tab.add(row)
+        for i, row in enumerate(tab):
+            row.shift(UP * (0.9 - 0.42 * i))
+        tl = VGroup(*[note(t, font_size=20).move_to([4.55 + 0.85 * j, 1.45, 0])
+                      for j, t in enumerate((r"vars", r"good", r"bad"))])
         with self.voiceover(
             "There is a catch. <bookmark mark='a'/> Take x one and x two, or x three and x four, or x five and x six. "
             "Test the variables in their natural order, and the diagram is a neat ladder: eight nodes. "
@@ -158,7 +166,23 @@ class Bdd(VoiceoverScene):
             (r"and, or, not, \ and ``is there an input that makes $f = 1$?'' \ are fast on diagrams", GREY_A),
             (r"the cost moved into the size: \ some functions, \ like multiplication, \\ have exponential diagrams "
              r"under \textit{every} order \ (Bryant, 1991)", NO),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(DOWN * 0.1)
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.75)
+        for l in lines:
+            l.scale(0.88, about_edge=LEFT)
+        red = [[2, 0, 3, 4], [3, 1, 0, 5], [4, 1, 5, 1], [5, 2, 0, 1]]
+        bdd = draw_bdd(red, [0, 1, 2], 2, width=2.0, height=2.6, origin=RIGHT * 2.4 + UP * 1.15,
+                       names={0: "a", 1: "b", 2: "c"}, r=0.2, font_size=22)
+        root = bdd[1][0]
+        boxes = VGroup()
+        for t, c in ((r"\text{spec: }\ ab + bc + ca", GREY_A), (r"\text{optimized: }\ ab + c\,(a \oplus b)", CTRL)):
+            m = MathTex(t, font_size=30, color=c)
+            boxes.add(VGroup(SurroundingRectangle(m, buff=0.15, color=GREY_D, corner_radius=0.08), m))
+        boxes.arrange(DOWN, buff=0.7, aligned_edge=RIGHT).move_to(LEFT * 3.0 + UP * 1.6)
+        ptrs = VGroup(*[Arrow(b.get_right(), root.get_left() + UP * 0.08 * (1 - 2 * k), buff=0.12, stroke_width=3,
+                              color=HEAD, max_tip_length_to_length_ratio=0.06) for k, b in enumerate(boxes)])
+        pq = VGroup(*[MathTex(n, font_size=28, color=HEAD).next_to(a.get_center(), UP if k == 0 else DOWN, buff=0.12)
+                      for k, (n, a) in enumerate(zip("pq", ptrs))])
+        eq = MathTex(r"p = q \ \checkmark", font_size=32, color=YES).next_to(bdd, RIGHT, buff=0.5).shift(UP * 0.9)
         later = note(r"hardware verification, \ model checking: \ Part 54; \ SAT solvers, \ the other approach: \ Part 26",
                      font_size=22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -173,8 +197,13 @@ class Bdd(VoiceoverScene):
             "multiplier has an exponentially large diagram under every possible order. Part 54 uses them anyway, where "
             "they work, and Part 26 meets the other great approach, satisfiability solvers."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abcd", lines):
+            self.play(FadeIn(head), FadeIn(boxes))
+            vo.wait_until("a")
+            self.play(FadeIn(bdd), FadeIn(lines[0], shift=RIGHT * 0.1))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[GrowArrow(a) for a in ptrs], lag_ratio=0.4), FadeIn(lines[1], shift=RIGHT * 0.1))
+            self.play(FadeIn(pq), FadeIn(eq), Indicate(root, color=HEAD))
+            for mk, l in zip("cd", lines[2:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l, shift=RIGHT * 0.1))
             self.play(FadeIn(later))

@@ -50,7 +50,19 @@ class Timing(VoiceoverScene):
                            font_size=26, color=COST),
                      label(rf"Pebble's 8-bit comparator: \ depth {rows['8-bit comparator']['nand_depth']} in NANDs",
                            font_size=26, color=HEAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        txt.scale_to_fit_width(6.6).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.8)
+        txt.scale_to_fit_width(6.6).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.2)
+        steps = VGroup(*[MathTex(rf"t = {k + 1}", font_size=22, color=HEAD).next_to(g_, UP, buff=0.12)
+                         for k, g_ in enumerate((gs[0], gs[2], gs[3], gs[4]))])
+        # the clock budget: a 250 ps cycle at 4 GHz, in 10 ps gate delays
+        cells = VGroup(*[Rectangle(width=0.42, height=0.36, stroke_color=GREY_D, stroke_width=1.2, fill_color="#121722",
+                                   fill_opacity=1) for _ in range(25)]).arrange(RIGHT, buff=0.04)
+        cells.move_to(DOWN * 2.75)
+        used = rows['8-bit comparator']['nand_depth']
+        fills = VGroup(*[c.copy().set_fill(HEAD, 0.75) for c in cells[:used]])
+        b1 = label(r"one cycle at 4 GHz: \ 250 ps \ $\approx$ 25 gate delays of 10 ps", font_size=24,
+                   color=GREY_A).next_to(cells, UP, buff=0.15).align_to(cells, LEFT)
+        b2 = label(rf"the 8-bit comparator alone: \ {used}", font_size=24, color=HEAD).next_to(cells, DOWN, buff=0.15
+                                                                                                ).align_to(cells, LEFT)
         with self.voiceover(
             "So far a gate's output changed the instant its inputs did. Real gates take time: a few picoseconds to "
             "charge the wire they drive. <bookmark mark='a'/> In a circuit, a change at an input ripples forward gate "
@@ -63,12 +75,15 @@ class Timing(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(g_) for g_ in gs], Create(ws))
             vo.wait_until("a")
-            for g_, w in zip((gs[0], gs[2], gs[3], gs[4]), (ws[0], ws[1], ws[3], None)):
-                self.play(g_.body.animate.set_stroke(HEAD), *([w.animate.set_stroke(HEAD)] if w else []), run_time=0.5)
+            for k, (g_, w) in enumerate(zip((gs[0], gs[2], gs[3], gs[4]), (ws[0], ws[1], ws[3], None))):
+                self.play(g_.body.animate.set_stroke(HEAD), FadeIn(steps[k]),
+                          *([w.animate.set_stroke(HEAD)] if w else []), run_time=0.5)
             vo.wait_until("b")
             self.play(FadeIn(txt[0]), FadeIn(txt[1]))
             vo.wait_until("c")
             self.play(FadeIn(txt[2]))
+            self.play(FadeIn(cells), FadeIn(b1))
+            self.play(LaggedStart(*[FadeIn(c) for c in fills], lag_ratio=0.08), FadeIn(b2), run_time=1.8)
         self.wait(0.3)
         self.clear_scene()
 
@@ -83,9 +98,9 @@ class Timing(VoiceoverScene):
         x0 = -4.4
         rows = [(b["a"], r"a", DATA), (b["not_a"], r"\bar a", CTRL), (b["ab"], r"a b", CTRL),
                 (b["nac"], r"\bar a c", CTRL), (b["f"], r"f", HEAD)]
-        waves = VGroup(*[waveform(v, x0, 1.0 - 0.95 * i - 0.6, color=c, label_tex=t) for i, (v, t, c) in
+        waves = VGroup(*[waveform(v, x0, 1.35 - 0.95 * i - 0.6, color=c, label_tex=t) for i, (v, t, c) in
                          enumerate(rows)])
-        tl = note(r"time, \ in gate delays \ (computed, unit delay per gate)", font_size=20).next_to(waves, DOWN, buff=0.15)
+        tl = note(r"time, \ in gate delays \ (computed, unit delay per gate)", font_size=20).next_to(waves, DOWN, buff=0.42)
         dip = next(t for t in range(1, len(b["f"])) if b["f"][t] == 0)
         box = Rectangle(width=0.62, height=0.8, stroke_color=NO, stroke_width=3).move_to(
             [x0 + (dip + 0.5) * 0.55, waves[4][0].get_center()[1], 0])
