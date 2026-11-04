@@ -339,6 +339,7 @@ class Research(VoiceoverScene):
     def diversify(self, t):
         n_eff = 23
         sk = SY.trend_skew_theory(21)
+        skn = sk / math.sqrt(n_eff)
         rows = [cmath(r"\operatorname{skew}\big(\textstyle\sum_{i=1}^{N} P_i\big)", r"=", r"\frac{\operatorname{skew}(P)}"
                       r"{\sqrt N}\quad\text{(independent, equal risk)}", font_size=32),
                 cmath(r"N = 23", r":", rf"{sk:.2f}/\sqrt{{23}} = {sk / math.sqrt(n_eff):.2f}", font_size=34),
@@ -354,7 +355,7 @@ class Research(VoiceoverScene):
             "Why, then, is the registered book's skewness so much smaller? <bookmark mark='a'/> Diversification. The "
             "third cumulants of independent profits add, and so do their variances, so a book of N equal, independent "
             "markets has a skewness one over root N as large. <bookmark mark='b'/> For monthly blocks over twenty-three "
-            f"markets that is {sk / math.sqrt(n_eff):.2f}. <bookmark mark='c'/> The registered book, with the sign rule "
+            f"markets that is {skn:.2f}. <bookmark mark='c'/> The registered book, with the sign rule "
             f"and a year's lookback, had a monthly skewness of {t['tsmom_monthly_skew']:.2f}: smaller, and still "
             "positive. Breadth buys Sharpe ratio and sells skewness."
         ) as vo:

@@ -137,19 +137,20 @@ class Carry(VoiceoverScene):
 
     def crisis(self, c):
         u = c["uso_2020"]
+        worst = 100 * min(u["cum"])
         card = crisis_card(r"20 April 2020", r"Negative oil",
                            r"with storage at Cushing nearly full, the expiring May WTI futures contract settled at "
                            r"$-\$37.63$ a barrel: holders had to pay to give it away. USO, which held front-month "
                            r"futures, moved to longer maturities, as reported, and lost most of its value in two months",
                            stats=((r"-\$37.63", r"May 2020 WTI settlement, 20 April"),
-                                  (rf"{100 * min(u['cum']):.0f}\%", r"USO's worst cumulative excess return from 1 March "
+                                  (rf"{worst:.0f}\%", r"USO's worst cumulative excess return from 1 March "
                                                                      r"2020, computed here")),
                            width=11.0, font_size=22).move_to(UP * 0.2)
         with self.voiceover(
             "The crisis file. In April 2020, with demand collapsed and storage at Cushing, Oklahoma, nearly full, the "
             "expiring May crude contract settled at minus thirty-seven dollars and sixty-three cents a barrel: holders "
             "paid to have it taken away. The oil fund, which held front-month futures, moved into longer maturities, "
-            f"as reported. From the first of March its excess return fell as far as {100 * min(u['cum']):.0f} percent. "
+            f"as reported. From the first of March its excess return fell as far as {worst:.0f} percent. "
             "Contango, at its extreme, is a market telling the holder that there is nowhere to put the oil."
         ):
             self.play(FadeIn(card))

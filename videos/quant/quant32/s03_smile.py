@@ -123,11 +123,12 @@ class Smile(VoiceoverScene):
         leg.shift(UP * 2.0)
         fit_right(leg)
         neg = [y for y in yrs if yt[y] < 0]
+        neg_mid, neg_last = ", ".join(str(y) for y in neg[1:-1]), neg[-1]
         with self.voiceover(
             "Year by year. <bookmark mark='a'/> In 2008 the trend book gained while stocks lost "
             f"{abs(100 * ys[2008]):.0f} percent. In 2009, as stocks rebounded {100 * ys[2009]:.0f} percent, it lost: it "
             "was still short when the market turned. <bookmark mark='b'/> Then a decade of small gains and occasional "
-            f"losses, in {', '.join(str(y) for y in neg[1:-1])} and {neg[-1]}. No year was a disaster; few were "
+            f"losses, in {neg_mid} and {neg_last}. No year was a disaster; few were "
             "exciting. That is what holding it feels like."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
