@@ -12,6 +12,7 @@ ROLES = [("fundamentals analyst", QC.CASH), ("sentiment analyst", QC.VEGA), ("ne
 class Agents(VoiceoverScene):
     def construct(self):
         self.card()
+        self.loop()
         self.firm()
         self.checks()
         self.question()
@@ -24,6 +25,44 @@ class Agents(VoiceoverScene):
                             "about them?"):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
+
+    def loop(self):
+        steps = [(r"observe", r"prices, news, filings, its own past trades", QC.SPOT),
+                 (r"reason", r"a language model writes an analysis in words", QC.OPTION),
+                 (r"act", r"a tool call: buy, sell, hold, or fetch more data", QC.DELTA),
+                 (r"remember", r"the outcome is written back into its memory or prompt", QC.CASH)]
+        nodes = VGroup()
+        for k, (a, b, c) in enumerate(steps):
+            ang = PI / 2 - k * PI / 2
+            pos = 2.0 * np.array([np.cos(ang) * 1.5, np.sin(ang), 0])
+            n = VGroup(RoundedRectangle(width=2.4, height=0.7, corner_radius=0.12, stroke_color=c, fill_color=c,
+                                        fill_opacity=0.15), label(a, font_size=22, color=c))
+            n[1].move_to(n[0])
+            n.move_to(pos + LEFT * 2.2)
+            d = label(b, font_size=16, color=GREY_A).next_to(n, DOWN, buff=0.1)
+            nodes.add(VGroup(n, d))
+        arrows = VGroup(*[CurvedArrow(nodes[k][0].get_center(), nodes[(k + 1) % 4][0].get_center(), angle=-PI / 4,
+                                      color=GREY_C, stroke_width=2) for k in range(4)])
+        for a_ in arrows:
+            a_.scale(0.6)
+        side = wrapped_label(r"the ReAct pattern (Yao et al.\ 2023): interleave reasoning in words with actions on tools. "
+                             r"The model is not retrained; what changes is what it is shown", 4.6, 18,
+                             GREY_A).to_edge(RIGHT, buff=0.5)
+        with self.voiceover(
+            "An agent is a loop around a language model. <bookmark mark='a'/> It observes: prices, news, its own past "
+            "trades. It reasons, in words. It acts, by calling a tool: trade, or fetch more data. And it remembers, by "
+            "writing the outcome back into what it will be shown next time. <bookmark mark='b'/> This is the ReAct "
+            "pattern, reasoning interleaved with action. Nothing in the model is retrained. Only what it is shown "
+            "changes, which is why a prompt, a memory and a set of tools are all part of the strategy."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(n_) for n_ in nodes], lag_ratio=0.3), LaggedStart(*[Create(a_) for a_ in arrows],
+                                                                                         lag_ratio=0.3), run_time=3)
+            vo.wait_until("b")
+            self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def firm(self):
         boxes = VGroup(*[VGroup(RoundedRectangle(width=2.7, height=0.75, corner_radius=0.12, stroke_color=c, fill_color=c,

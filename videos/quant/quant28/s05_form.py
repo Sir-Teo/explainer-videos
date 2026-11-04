@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant28.common import HURDLE, PART, WORD, fit_right, load
+from videos.quant.quant28.common import HURDLE, PART, WORD, fit_right, load, sci
 
 SHOW = ["likely to be measured", "considerable period", "patient", "extended period", "exceptionally low levels",
         "highly accommodative", "some time", "gradual", "transitory", "ongoing increases", "pandemic"]
@@ -18,9 +18,11 @@ class Form(VoiceoverScene):
     def construct(self):
         f = load("form")
         p = load("phrases")
+        ch = load("change")
         self.card()
         self.length(f)
         self.fog(f)
+        self.change(ch)
         self.guidance(p)
         self.question()
 
@@ -89,6 +91,40 @@ class Form(VoiceoverScene):
             step(2)
         self.wait(0.5)
         self.clear_scene()
+
+    def change(self, ch):
+        x = np.asarray(ch["change"], float)
+        y = np.abs(np.asarray(ch["dy"], float))
+        ok = np.isfinite(x) & np.isfinite(y)
+        g = axes([0, 0.85], [0, 30], x_length=7.4, y_length=4.4, xlabel=r"how much the statement changed: $1 - \cos$ "
+                 r"with the one before", ylabel=r"size of the two-year move, bp", xticks=[0, 0.4, 0.8], yticks=[0, 15, 30],
+                 font_size=15).move_to(LEFT * 2.0 + DOWN * 0.2)
+        ax = g.ax
+        dots = VGroup(*[Dot(ax.c2p(a, min(b, 30)), radius=0.045, color=WORD, fill_opacity=0.75) for a, b in zip(x[ok], y[ok])])
+        side = VGroup(MathTex(rf"\rho_{{\text{{rank}}}} = {ch['rho']:.2f},\ p = {sci(ch['p'])}", font_size=24, color=HURDLE),
+                      wrapped_label(rf"least-changed quarter of statements: {ch['abs_low']:.1f} bp on average; most-changed "
+                                    rf"quarter: {ch['abs_high']:.1f} bp. Big rewrites often come with a policy action, so "
+                                    r"this is association, not the effect of the words alone", 3.6, 16, GREY_A)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        fit_right(side)
+        with self.voiceover(
+            "There is a simpler measure than any dictionary: how much did the statement change? <bookmark mark='a'/> "
+            "Compare each statement's weighted word counts with the one before, and score one minus their cosine "
+            f"similarity. The median statement changes by {ch['median_change']:.2f}: most of each statement is "
+            "copied from the last. <bookmark mark='b'/> And the more it changes, the more the two-year moves. The rank "
+            f"correlation is {ch['rho']:.2f}; statements in the most-changed quarter move the yield by "
+            f"{ch['abs_high']:.1f} basis points on average, those in the least-changed quarter by {ch['abs_low']:.1f}. "
+            "It says nothing about direction, and big rewrites often come with a policy action, so it is association. "
+            "But traders read statements the way the hook did: as a difference from the last one."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.01), run_time=2)
+            vo.wait_until("b")
+            self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def guidance(self, p):
         d = np.asarray(p["dates"])

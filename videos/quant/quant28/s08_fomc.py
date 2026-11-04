@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant28.common import HURDLE, PART, WORD, comma, fit_right, load
+from videos.quant.quant28.common import BAD, GOOD, HURDLE, PART, WORD, comma, fit_right, load
 
 
 def _yr(d):
@@ -17,6 +17,7 @@ class FOMC(VoiceoverScene):
         self.card()
         self.documents()
         self.hmp()
+        self.dissent()
         self.minutes(f)
         self.question()
 
@@ -89,6 +90,37 @@ class FOMC(VoiceoverScene):
             self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
         self.wait(0.4)
         self.clear_scene()
+
+    def dissent(self):
+        rows = [cmath(r"\text{discipline}", r":", r"\text{being read makes members work harder: better arguments}", font_size=30,
+                      colors={r"\text{discipline}": GOOD}),
+                cmath(r"\text{conformity}", r":", r"\text{being read makes members fear looking wrong: fewer dissents}",
+                      font_size=30, colors={r"\text{conformity}": BAD}),
+                cmath(r"\text{text}", r"\Rightarrow", r"\text{measure both, speaker by speaker}", font_size=30)]
+        whys = [why(r"career-concerns theory: an expert who knows she will be evaluated puts in more effort"),
+                why(r"the same theory: she also herds toward the view an informed observer expects. Meade and Stasavage "
+                    r"(2008) found that the probability of dissent at the FOMC fell after 1993"),
+                why(r"before text as data, only votes could be counted; topic models let Hansen, McMahon and Prat measure "
+                    r"what each member talked about, and how")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "Theory predicted both effects. <bookmark mark='a'/> An expert who knows they will be judged works harder: "
+            "discipline. <bookmark mark='b'/> The same expert also fears looking wrong, and drifts toward the view an "
+            "observer expects: conformity. Ellen Meade and David Stasavage had already shown that dissents at the FOMC "
+            "became rarer after 1993. <bookmark mark='c'/> But votes are a crude record. Text lets you measure what "
+            "each member said, and how, which is what turned an old question in the economics of committees into a "
+            "measurement."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
 
     def minutes(self, f):
         x = _yr(f["min_dates"])

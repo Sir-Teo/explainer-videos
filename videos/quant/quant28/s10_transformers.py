@@ -126,7 +126,7 @@ class Transformers(VoiceoverScene):
         samples = load("lookahead")["A"]["samples"]
 
         ck = [int(steps[0]), int(steps[len(steps) // 3]), int(steps[2 * len(steps) // 3]), int(steps[-1])]
-        txt = samples[0][:150]
+        txt = "".join(ch for ch in samples[0][:150] if ch.isascii() and (ch.isprintable() or ch == " ")).strip()
         for ch, rep in (("\\", ""), ("_", r"\_"), ("%", r"\%"), ("$", r"\$"), ("&", r"\&"), ("#", r"\#"), ("{", ""), ("}", "")):
             txt = txt.replace(ch, rep)
 

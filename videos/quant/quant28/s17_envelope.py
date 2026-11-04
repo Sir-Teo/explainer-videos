@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
+from explainer.quant.house import backtest as BT
 from videos.quant.quant28.common import BAD, GOOD, HURDLE, OOS_C, PART, WORD, YLD, comma, fit_right, load
 
 
@@ -13,6 +14,7 @@ class Envelope(VoiceoverScene):
         self.register(e)
         self.research(e)
         self.opened(e)
+        self.psr_(e)
         self.reading(e)
         self.question()
 
@@ -111,6 +113,41 @@ class Envelope(VoiceoverScene):
             self.play(FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
+
+    def psr_(self, e):
+        h = e["row"]["holdout"]
+        T = int(h["n"])
+        sr_m = h["sharpe"] / np.sqrt(12)
+        p0 = BT.psr(sr_m, 0.0, T)
+        rows = [cmath(r"\widehat{SR}", r"=", rf"{sr_m:.3f}\ \text{{a statement month}},\quad T = {T}", font_size=32,
+                      colors={r"\widehat{SR}": OOS_C}),
+                cmath(r"\mathrm{PSR}(0)", r"=", r"\Phi\Big(\widehat{SR}\sqrt{T - 1}\big/\sqrt{1 + \tfrac12\widehat{SR}^2}\Big)"
+                      rf" = {p0:.2f}", font_size=30, colors={r"\mathrm{PSR}(0)": HURDLE}),
+                cmath(r"T_{95\%}", r"\approx", rf"1 + \big(1.645/{sr_m:.3f}\big)^2 \approx {1 + (1.645 / max(sr_m, 1e-6)) ** 2:.0f}"
+                      r"\ \text{statements}", font_size=30)]
+        whys = [why(r"the hold-out's Sharpe ratio per statement month (annualised above, as if every month had one)"),
+                why(r"Part 26's probabilistic Sharpe ratio: the chance the true Sharpe ratio is above zero, given this "
+                    r"estimate and this many observations (normal returns)"),
+                why(r"how many statements it would take for an edge of this size to clear 95\%: at eight a year, decades")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "Could it be a small real edge that five years were too short to see? <bookmark mark='a'/> Per statement "
+            f"month the Sharpe ratio is {sr_m:.3f}, over {T} months. <bookmark mark='b'/> Part twenty-six's "
+            f"probabilistic Sharpe ratio puts the chance that the true value is above zero at {100 * p0:.0f} percent. "
+            "<bookmark mark='c'/> To push that to ninety-five percent, an edge this size would need about "
+            f"{1 + (1.645 / max(sr_m, 1e-6)) ** 2:.0f} statements: at eight a year, decades. Even if it is real, no one "
+            "could know in time to use it."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
 
     def reading(self, e):
         cards = VGroup(

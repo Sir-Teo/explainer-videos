@@ -47,7 +47,7 @@ class House(VoiceoverScene):
             "The first sheet. <bookmark mark='a'/> Thirty years of the committee's words, obeying Zipf's law. The "
             "dictionary's tone told us nothing about the bond market's reaction. SESTM found words that fitted the "
             "past and did not travel. Embeddings learned that easing is to lower what tightening is to raise. The "
-            "point-in-time language model was surprised by the crisis, and the one that had read the future was not. "
+            "point-in-time language model was surprised by the crisis, and the ones that had read the future much less. "
             "And the statement score, opened on the sealed years, was a coin."
         ) as vo:
             self.play(FadeIn(title))

@@ -3,14 +3,14 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant28.common import BAD, GOOD, HURDLE, PART, WORD, fit_right
+from videos.quant.quant28.common import BAD, GOOD, HURDLE, PART, WORD, fit_right, load
 
 
 class Domain(VoiceoverScene):
     def construct(self):
         self.card()
         self.bloomberg()
-        self.tokens()
+        self.tokens(load("lm"), load("corpus"))
         self.general()
         self.desk()
         self.question()
@@ -48,9 +48,10 @@ class Domain(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def tokens(self):
+    def tokens(self, m, c):
+        ours = m["slices"]["B"]["train_tokens"] / 1e9
         items = [(r"FinBERT (2023)", 4.9, WORD), (r"BloombergGPT: finance", 363.0, HURDLE),
-                 (r"BloombergGPT: general", 345.0, GREY_B), (r"our minutes, 1996--2020", 1.3e-3 * 1.4, GOOD)]
+                 (r"BloombergGPT: general", 345.0, GREY_B), (r"our minutes, 1996--2020", ours, GOOD)]
         g = axes([-3.5, 3.5], [0, len(items)], x_length=8.0, y_length=3.6, xlabel=r"training tokens (billions, log scale)",
                  ylabel=r"", xticks=[-3, -2, -1, 0, 1, 2, 3], yticks=[], xfmt=lambda v: f"10^{{{int(v)}}}",
                  font_size=15).move_to(RIGHT * 1.2 + DOWN * 0.2)
@@ -61,9 +62,10 @@ class Domain(VoiceoverScene):
             b = Line(ax.c2p(-3.5, y), ax.c2p(np.log10(v), y), color=col, stroke_width=16)
             t = label(nm, font_size=17, color=col).next_to(ax.c2p(-3.5, y), LEFT, buff=0.2)
             bars.add(VGroup(b, t))
-        foot = wrapped_label(r"FinBERT: 4.9 billion tokens of filings, earnings calls and analyst reports (Huang, Wang "
-                             r"and Yang 2023). Our corpus: about 1.3 million words, roughly 1.8 million of our tokens. "
-                             r"Frontier general models: trillions", 11.2, 17, GREY_A).to_edge(DOWN, buff=0.45)
+        foot = wrapped_label(rf"FinBERT: 4.9 billion tokens of filings, earnings calls and analyst reports (Huang, Wang "
+                             rf"and Yang 2023). Our corpus: {c['words_minutes'] / 1e6:.1f} million words of minutes, "
+                             rf"{ours * 1e3:.1f} million of our tokens. Frontier general models: trillions", 11.2, 17,
+                             GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Put the sizes side by side, on a log scale. <bookmark mark='a'/> FinBERT, the finance-adapted BERT of "
             "Allen Huang, Hui Wang and Yi Yang, was trained on about five billion tokens of filings, calls and analyst "

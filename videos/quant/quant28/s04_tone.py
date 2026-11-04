@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant28.common import DOVE, HAWK, HURDLE, NEG, PART, POS, YLD, fit_right, load
+from explainer.quant.house import text as TX
+from videos.quant.quant28.common import DOVE, HAWK, HURDLE, NEG, PART, POS, YLD, fit_right, house_lab, load
 
 
 class Tone(VoiceoverScene):
@@ -12,6 +13,7 @@ class Tone(VoiceoverScene):
         h = load("hook")
         self.card()
         self.reaction(t, h)
+        self.lab(t)
         self.scatter(t)
         self.gss()
         self.question()
@@ -53,6 +55,26 @@ class Tone(VoiceoverScene):
             step(2)
         self.wait(0.5)
         self.clear_scene()
+
+    def lab(self, t):
+        card = house_lab(r"Dictionary tone", TX.tone, "n = max(len(tokens), 1)", 8, width=8.6)
+        card.to_edge(LEFT, buff=0.4).shift(UP * 0.6)
+        d = list(t["dates"])
+        k = d.index(load("hook")["date"])
+        with self.voiceover(
+            "In the House, tone is a few lines. <bookmark mark='a'/> Upper-case each word, look it up in each list, and "
+            "divide by the number of words. Run on the statement of the hook, the twenty-second of January 2008: "
+            f"{100 * t['neg'][k]:.1f} percent of its words are negative, {100 * t['pos'][k]:.1f} percent positive, "
+            f"{100 * t['unc'][k]:.1f} percent uncertain."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            lab_run(self, card, [f"negative    {100 * t['neg'][k]:.2f}%", f"positive    {100 * t['pos'][k]:.2f}%",
+                                 f"uncertainty {100 * t['unc'][k]:.2f}%", f"net tone    {100 * t['net'][k]:+.2f}%"],
+                    direction=RIGHT, aligned_edge=UP)
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def scatter(self, t):
         x = 100 * np.asarray(t["net"], float)

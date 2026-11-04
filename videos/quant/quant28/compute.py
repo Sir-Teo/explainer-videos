@@ -671,10 +671,29 @@ def compute_envelope() -> dict:
                   "hit_research": hit_r, "cost": cost, "duration": DURATION})
 
 
+def compute_change() -> dict:
+    """How much each statement changed from the one before (1 - cosine similarity of their tf-idf rows), and whether
+    bigger changes come with bigger two-year moves."""
+    ds, ts, toks = _docs("statement")
+    g2, _ = _yields()
+    dy = _reaction(ds, g2)
+    vocab = TX.vocabulary(toks, min_df=2)
+    X = TX.tfidf(TX.dtm(toks, vocab))
+    ch = np.r_[np.nan, 1 - np.sum(X[1:] * X[:-1], axis=1)]
+    ok = np.isfinite(ch) & np.isfinite(dy)
+    r = stats.spearmanr(ch[ok], np.abs(dy[ok]))
+    q = np.quantile(ch[ok], [0.25, 0.75])
+    lo, hi = ok & (ch <= q[0]), ok & (ch >= q[1])
+    top = np.argsort(-np.where(ok, ch, -1))[:6]
+    return _json({"dates": ds, "change": ch, "dy": dy, "rho": float(r[0]), "p": float(r[1]), "n": int(ok.sum()),
+                  "abs_low": float(np.mean(np.abs(dy[lo]))), "abs_high": float(np.mean(np.abs(dy[hi]))),
+                  "median_change": float(np.nanmedian(ch)), "top": [[ds[k], float(ch[k]), float(dy[k])] for k in top]})
+
+
 ITEMS = {"corpus": compute_corpus, "hook": compute_hook, "tone": compute_tone, "form": compute_form,
          "sestm": compute_sestm, "topics": compute_topics, "phrases": compute_phrases, "embed": compute_embed,
          "lm": compute_lm, "lookahead": compute_lookahead, "theory": compute_theory,
-         "altdata": compute_altdata, "envelope": compute_envelope}
+         "altdata": compute_altdata, "envelope": compute_envelope, "change": compute_change}
 
 
 if __name__ == "__main__":

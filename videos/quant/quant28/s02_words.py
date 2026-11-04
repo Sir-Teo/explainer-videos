@@ -15,6 +15,7 @@ class Words(VoiceoverScene):
         self.bag()
         self.matrix(c)
         self.zipf(c)
+        self.heaps(c)
         self.tfidf()
         self.question()
 
@@ -127,6 +128,38 @@ class Words(VoiceoverScene):
             self.play(FadeIn(VGroup(*side[:-1])))
         self.wait(0.4)
         self.clear_scene()
+
+    def heaps(self, c):
+        yrs = np.asarray(c["years"], float)
+        gr = np.asarray(c["growth"], float)
+        top = float(np.ceil(gr.max() / 2000) * 2000)
+        g = axes([yrs[0], yrs[-1]], [0, top], x_length=8.0, y_length=4.2, xlabel=r"",
+                 ylabel=r"distinct words seen in the minutes so far", xticks=[2000, 2005, 2010, 2015, 2020],
+                 yticks=[0, top / 2, top], font_size=15).move_to(LEFT * 1.4 + DOWN * 0.2)
+        ax = g.ax
+        line = curve(ax, yrs, gr, WORD, stroke_width=3)
+        k08 = int(np.searchsorted(yrs, 2008))
+        k07 = max(k08 - 1, 0)
+        new08 = int(gr[min(k08 + 2, len(gr) - 1)] - gr[k07])
+        side = wrapped_label(rf"{comma(gr[0])} distinct words in the {int(yrs[0])} minutes; {comma(gr[-1])} by 2020. "
+                             rf"2008--2010 added {comma(new08)}: the words of a new policy", 3.5, 16, GREY_A).to_edge(RIGHT, buff=0.35)
+        mark = DashedLine(ax.c2p(2008, 0), ax.c2p(2008, top), color=HURDLE)
+        with self.voiceover(
+            "The vocabulary never stops growing. <bookmark mark='a'/> Count the distinct words the minutes have used, "
+            f"year by year: {int(gr[0]):,} in the first year, {int(gr[-1]):,} by 2020. This is Heaps' law, the "
+            "companion of Zipf's: new documents keep bringing new words, more slowly but without end. "
+            "<bookmark mark='b'/> From 2008 to 2010 alone, the committee wrote "
+            f"{new08:,} words it had never used before. A model frozen in 2007 has never seen them: hold on to that "
+            "for Chapter twelve."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(Create(line), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(mark), FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def tfidf(self):
         rows = [cmath(r"\mathrm{tf}_{ij}", r"=", r"D_{ij} \big/ \textstyle\sum_k D_{ik}", font_size=34, colors={r"\mathrm{tf}_{ij}": WORD}),

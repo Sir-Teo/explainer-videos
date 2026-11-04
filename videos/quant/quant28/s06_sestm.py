@@ -14,6 +14,7 @@ class SESTM(VoiceoverScene):
         self.paper()
         self.model()
         self.screen(s)
+        self.topics(s)
         self.lab(s)
         self.result(s)
         self.question(s)
@@ -135,6 +136,39 @@ class SESTM(VoiceoverScene):
             self.play(FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
+
+    def topics(self, s):
+        w = s["words"]
+        Op, On = np.asarray(s["O_pos"], float), np.asarray(s["O_neg"], float)
+        d = Op - On
+        order = np.argsort(d)
+        pick = list(order[:6]) + list(order[-6:])
+        g = axes([-0.12, 0.12], [0, len(pick)], x_length=7.0, y_length=4.8, xlabel=r"$\hat O_{+,j} - \hat O_{-,j}$: weight in "
+                 r"the hawkish topic minus the dovish", ylabel=r"", xticks=[-0.1, 0, 0.1], yticks=[], font_size=15).move_to(
+            RIGHT * 0.6 + DOWN * 0.2)
+        ax = g.ax
+        bars = VGroup()
+        for k, j in enumerate(pick):
+            y = k + 0.5
+            v = float(np.clip(d[j], -0.12, 0.12))
+            b = Line(ax.c2p(0, y), ax.c2p(v, y), color=HAWK if v > 0 else DOVE, stroke_width=14)
+            t = label(rf"\texttt{{{w[j]}}}", font_size=16, color=GREY_A).next_to(ax.c2p(0, y), LEFT if v > 0 else RIGHT, buff=0.15)
+            bars.add(VGroup(b, t))
+        with self.voiceover(
+            "Step two turns the kept words into two topics. <bookmark mark='a'/> Regress each statement's frequencies of "
+            "the kept words on its rank among the yield moves: the fitted weights at the top rank are the hawkish "
+            "topic, at the bottom the dovish one. <bookmark mark='b'/> Here is each word's weight in the hawkish topic "
+            "minus its weight in the dovish. These are the weights the score will use; a new statement's tone is "
+            "whichever mixture of the two topics best explains its words."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.1))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def lab(self, s):
         card = house_lab(r"SESTM, step one", TX.sestm_screen, "D = np.asarray(D)", 12, width=8.6)

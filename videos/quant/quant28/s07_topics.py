@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant28.common import HURDLE, PART, WORD, comma, fit_right, load
+from explainer.quant.house import text as TX
+from videos.quant.quant28.common import HURDLE, PART, WORD, comma, fit_right, house_lab, load
 
 # a name for each topic, found by its words (so a re-run that reorders topics keeps the names)
 NAMES = [("aggregates", r"money ranges and restraint"), ("disinflation", r"slowdown and disinflation"),
@@ -26,6 +27,7 @@ class Topics(VoiceoverScene):
         t = load("topics")
         self.card()
         self.nmf(t)
+        self.lab(t)
         self.words(t)
         self.river(t)
         self.bybee()
@@ -68,6 +70,27 @@ class Topics(VoiceoverScene):
             step(2)
         self.wait(0.5)
         self.clear_scene()
+
+    def lab(self, t):
+        card = house_lab(r"Topics by non-negative factorisation", TX.nmf_topics, "for it in range(iters):", 5, width=8.8)
+        card.to_edge(LEFT, buff=0.4).shift(UP * 0.8)
+        with self.voiceover(
+            "The whole fit is two lines repeated. <bookmark mark='a'/> Lee and Seung's multiplicative updates: multiply "
+            "the topics by a ratio that is above one where the fit is too small and below one where it is too big, "
+            "then do the same for each document's weights. Nothing can turn negative, and the error falls every step. "
+            f"<bookmark mark='b'/> On the minutes, five hundred steps take the relative error from {t['err'][0]:.2f} to "
+            f"{t['err'][-1]:.2f}: eight topics leave most of thirty years' detail unexplained, and keep the broad "
+            "shape."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            lab_run(self, card, [f"documents x words: {len(t['dates'])} x {t['n_vocab']:,}", f"K = {t['k']} topics",
+                                 f"relative error {t['err'][0]:.3f} -> {t['err'][-1]:.3f}"], direction=RIGHT, aligned_edge=UP)
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def words(self, t):
         names = _names(t["top_words"])
