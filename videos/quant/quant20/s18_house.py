@@ -60,7 +60,9 @@ class House(VoiceoverScene):
             "had jumped, by different amounts: the accounts had caught up with a year without revenue, the market had "
             "already partly recovered. <bookmark mark='c'/> The same trees, given American's parent AMR's accounts for "
             f"2010, said {100 * amr['gbm']:.0f} percent; AMR filed in November 2011. Two sources, one slow and sharp, "
-            "one fast and noisy; when they disagree, the desk has to find out why."
+            "one fast and noisy; when they disagree, the desk has to find out why. The rule makes that concrete: "
+            "when the two differ by more than a factor of four, the number is not used until an analyst has read "
+            "the filings and the market news and written down which source is wrong, and why."
         ) as vo:
             self.play(FadeIn(title), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -92,8 +94,8 @@ class House(VoiceoverScene):
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
         rule = wrapped_label(r"Rule 20: every default probability the House uses comes from two independent sources, "
-                             r"the market and the accounts, and a disagreement beyond a set band is investigated before "
-                             r"the number is used; probabilities are recalibrated to the credit cycle, not only ranked; "
+                             r"the market and the accounts, and a disagreement beyond a factor of four is investigated "
+                             r"before the number is used; probabilities are recalibrated to the credit cycle, not only ranked; "
                              r"every portfolio's capital is reported under a fat-tailed copula beside the Gaussian; and "
                              r"every credit hedge names the exposure it offsets, and by how much.  "
                              rf"Two models registered here: the counter reads {env['trials']}.", 12.4, 20,
@@ -103,8 +105,8 @@ class House(VoiceoverScene):
             "distance to default; first passage; hazards, survival and the swap's two legs; the bootstrap and the "
             "upfront; default prediction, scored; the large pool and bank capital; and copulas and tranches. "
             "<bookmark mark='b'/> And the twentieth rule. Every default probability comes from two independent "
-            "sources, the market and the accounts, and a disagreement beyond a set band is investigated before the "
-            "number is used. Probabilities are recalibrated to the credit cycle, not only ranked. Every portfolio's "
+            "sources, the market and the accounts, and a disagreement beyond a factor of four is investigated before "
+            "the number is used. Probabilities are recalibrated to the credit cycle, not only ranked. Every portfolio's "
             "capital is reported under a fat-tailed copula beside the Gaussian one. And every credit hedge names the "
             f"exposure it offsets, and by how much. Two models were registered in this part; the counter reads "
             f"{env['trials']}."

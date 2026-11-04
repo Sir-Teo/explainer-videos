@@ -15,7 +15,9 @@ class CDS(VoiceoverScene):
         self.contract()
         self.legs()
         self.bootstrap(c)
+        self.risk(load("cdsrisk"))
         self.bigbang(c)
+        self.auction()
         self.basis()
 
     def card(self):
@@ -119,6 +121,41 @@ class CDS(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def risk(self, r):
+        sh, mtm = np.asarray(r["shifts_bp"]), np.asarray(r["mtm"]) / 1e6
+        g = axes([-100, 300], [-1, 6.5], x_length=7.2, y_length=4.4, xlabel=r"change in the 5-year par spread, bp",
+                 ylabel=r"protection buyer's gain, \$ million", xticks=[-100, 0, 100, 200, 300], yticks=[0, 2, 4, 6],
+                 font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        zero = Line(ax.c2p(-100, 0), ax.c2p(300, 0), color=GREY_C, stroke_width=1.2)
+        line = curve(ax, sh, mtm, GOOD, stroke_width=3.5)
+        jtd = DashedLine(ax.c2p(-100, r["jtd"] / 1e6), ax.c2p(300, r["jtd"] / 1e6), color=BAD, stroke_width=2.5)
+        side = VGroup(
+            label(rf"\$10 million of 5-year protection bought at {1e4 * r['s0']:.0f} bp", font_size=19, color=GREY_A),
+            MathTex(rf"\text{{CS01}} \approx N \times \text{{RPV01}} \times 1\,\text{{bp}} = \${r['cs01']:,.0f}".replace(",", "{,}"),
+                    font_size=24),
+            MathTex(rf"\text{{jump to default}} = N(1 - R) = \${r['jtd'] / 1e6:.0f}\,\text{{m}}", font_size=24, color=BAD),
+            wrapped_label(r"the mark-to-market is concave: as the spread widens the name is more likely to default soon, "
+                          r"so fewer premiums remain to be saved. Risk desks report both numbers: the spread risk and "
+                          r"the jump", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "A desk that buys ten million dollars of protection at a hundred and fifty basis points has two kinds of "
+            "risk. <bookmark mark='a'/> If the spread moves, the contract is revalued: each basis point is worth "
+            f"about {r['cs01']:,.0f} dollars, the risky annuity times the notional, and the gain bends as the spread "
+            "widens, because a riskier name has fewer premiums left to pay. <bookmark mark='b'/> And if the name "
+            f"defaults, the jump: {r['jtd'] / 1e6:.0f} million dollars at once, the notional less the recovery. A "
+            "seller of protection holds the mirror image: small steady income, and a large loss on one day."
+        ) as vo:
+            self.play(FadeIn(g), Create(zero), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(Create(line), FadeIn(side[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(jtd), FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
     def bigbang(self, c):
         ups = c["upfronts"]
         rows = VGroup()
@@ -150,6 +187,41 @@ class CDS(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[1:]], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def auction(self):
+        rows = [cmath(r"\text{stage 1}", r":", r"\text{dealers quote bids and offers on the bonds} \to \text{the inside "
+                      r"market midpoint}", font_size=30, colors={r"\text{stage 1}": GOOD}),
+                cmath(r"\text{open interest}", r"=", r"\text{net requests to buy or sell bonds at the final price}",
+                      font_size=30, colors={r"\text{open interest}": QC.IMPLIED}),
+                cmath(r"\text{stage 2}", r":", r"\text{limit orders fill the open interest} \to \text{the final price } P",
+                      font_size=30, colors={r"\text{stage 2}": BAD}),
+                cmath(r"\text{payout}", r"=", r"N\,(1 - P),\ \ \text{Lehman: } P = 8.625\%", font_size=32,
+                      colors={r"\text{payout}": BAD})]
+        whys = [why(r"after a credit event, dealers submit two-way prices for the deliverable bonds; outliers are "
+                    r"discarded and the inside market's midpoint is published"),
+                why(r"protection buyers and sellers can ask to settle physically: their net demand to buy or sell bonds "
+                    r"is the open interest"),
+                why(r"a second round of limit orders absorbs that open interest; the price that clears it is the final "
+                    r"price, used for every contract on the name"),
+                why(r"so a contract's value at default is fixed by one public price, whatever the holder owns")]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "How is that single recovery price found? By an auction in two stages. <bookmark mark='a'/> First, "
+            "dealers quote bids and offers on the defaulted bonds, and the midpoint of the best quotes is published. "
+            "<bookmark mark='b'/> Then those who want to settle by delivering or receiving bonds say so, and their net "
+            "demand is the open interest. <bookmark mark='c'/> A second round of orders absorbs it, and the price that "
+            "clears it is final. <bookmark mark='d'/> For Lehman it was eight point six two five, and every contract "
+            "paid ninety-one point three seven five percent of its notional."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
         self.wait(0.4)
         self.clear_scene()
 

@@ -158,7 +158,8 @@ class Hook(VoiceoverScene):
         chart = house_chart(PART, lit=("rates",))
         with self.voiceover(
             "In the House, the rates desk gets its option pricers: every one fitted to the curve built in Part "
-            "eighteen, and every one checked against a second method."
+            "eighteen, and every one checked against a second method: a closed form, a lattice, or a simulation "
+            "that does not share its code."
         ):
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["rates"], color=QC.HOUSE, scale_factor=1.05))

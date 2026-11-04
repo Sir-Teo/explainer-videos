@@ -219,8 +219,8 @@ class HW(VoiceoverScene):
                     r"stays positive and its volatility scales with its level; no closed forms, so prices come from a "
                     r"lattice")]
         step = ladder(self, rows, whys, keep=1, top=3.0, x=-0.6, buff=0.6, edge=6.9)
-        dx, dy, jmax, n = 1.5, 0.55, 2, 6
-        org = np.array([-4.6, -1.3, 0])
+        dx, dy, jmax, n = 1.15, 0.55, 2, 6
+        org = np.array([-5.6, -1.3, 0])
 
         def P(i, j):
             return org + np.array([dx * i, dy * j, 0])

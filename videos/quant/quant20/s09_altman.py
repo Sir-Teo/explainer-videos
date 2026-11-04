@@ -13,6 +13,7 @@ class Altman(VoiceoverScene):
         self.card()
         self.z()
         self.zones(m)
+        self.refit(load("altfit"))
         self.ratios(d)
 
     def card(self):
@@ -88,6 +89,39 @@ class Altman(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def refit(self, a):
+        names = [r"WC/TA", r"RE/TA", r"EBIT/TA", r"ME/TL", r"Sales/TA"]
+        bs = np.asarray(a["beta_std"])
+        hx = [-4.4, -1.6, 1.4]
+        heads = [r"ratio", r"Altman's weight (1968)", r"logit, per s.d. (2010--16)"]
+        rows = VGroup(VGroup(*[label(h_, font_size=19, color=GREY_A).move_to([x, 2.1, 0]) for h_, x in zip(heads, hx)]))
+        for i, (n_, w_, b_) in enumerate(zip(names, a["altman"], bs)):
+            y = 1.4 - 0.55 * i
+            rows.add(VGroup(MathTex(n_.replace("/", r"/"), font_size=26).move_to([hx[0], y, 0]),
+                            MathTex(f"{w_:+.1f}", font_size=26).move_to([hx[1], y, 0]),
+                            MathTex(f"{-b_:+.2f}", font_size=26, color=SAFE if -b_ > 0 else BAD).move_to([hx[2], y, 0])))
+        v = a["auc_val"]
+        foot = wrapped_label(
+            rf"signs flipped so that, like Z, positive means safer. On the validation years (2017--20; the sealed "
+            rf"years are not used again) the re-weighted ratios score AUC {v['refit']:.3f} against {v['altman_1968']:.3f} "
+            r"for the 1968 weights. Working capital and operating profit carry most of the information; retained "
+            r"earnings and sales almost none once the others are known", 12.4, 18, GREY_A).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "How much of the formula's age shows? Keep Altman's five ratios, and let a logit re-weight them on the "
+            "fit years. <bookmark mark='a'/> Working capital and operating profit carry most of the weight. Retained "
+            "earnings and sales add almost nothing once the others are known, and the market cushion less than "
+            "Altman gave it. <bookmark mark='b'/> On the validation years the re-weighted ratios score "
+            f"{v['refit']:.2f}, against {v['altman_1968']:.2f} for the weights of 1968. Same information, better "
+            "weights: most of the next chapter's gain will come from new inputs and from interactions."
+        ) as vo:
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[1:]], lag_ratio=0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
 

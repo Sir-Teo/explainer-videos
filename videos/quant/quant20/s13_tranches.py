@@ -12,6 +12,7 @@ class Tranches(VoiceoverScene):
         self.card()
         self.waterfall()
         self.el(c)
+        self.recovery(load("recovery"))
         self.base(c)
 
     def card(self):
@@ -80,13 +81,54 @@ class Tranches(VoiceoverScene):
             "expected loss falls as correlation rises: correlated names tend to survive together, sparing the first "
             "loss. <bookmark mark='b'/> The senior tranche's rises from almost nothing: correlated names also fail "
             "together, and only then does loss reach it. The pool's total expected loss never changes; correlation "
-            "only moves it between the slices. So a tranche is a position in correlation."
+            "only moves it between the slices. So a tranche is a position in correlation. Desks learned what that "
+            "means in May 2005, when General Motors and Ford were cut to junk: equity tranches fell, correlation "
+            "fell with them, and traders who had sold protection on equity tranches and bought it on the mezzanine "
+            "as a hedge lost on both legs at once."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
             self.play(Create(lines[0]), Create(lines[1]), run_time=2)
             vo.wait_until("b")
             self.play(Create(lines[2]), FadeIn(side[2]), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def recovery(self, r):
+        names = ["equity 0-3%", "mezzanine 3-7%", "senior 15-30%"]
+        hx = [-4.4, -1.4, 1.3, 4.2]
+        heads = [r"tranche", r"recovery fixed at 40\%", r"recovery falls in bad times", r"delta"]
+        rows = VGroup(VGroup(*[label(h_, font_size=18, color=GREY_A).move_to([x, 2.0, 0]) for h_, x in zip(heads, hx)]))
+        cols = [EQT, MEZZ, SENIOR]
+        for i, (n_, c_) in enumerate(zip(names, cols)):
+            y = 1.2 - 0.75 * i
+            f, q, d = r["fixed"][n_], r["random"][n_], r["delta"][n_]
+            fmt = (lambda v: rf"{1e4 * v:.1f}\ \text{{bp}}") if f < 0.001 else (lambda v: rf"{100 * v:.1f}\%")
+            rows.add(VGroup(label(n_.replace("%", r"\%"), font_size=19, color=c_).move_to([hx[0], y, 0]),
+                            MathTex(fmt(f), font_size=26).move_to([hx[1], y, 0]),
+                            MathTex(fmt(q), font_size=26, color=BAD if q > f else WHITE).move_to([hx[2], y, 0]),
+                            MathTex(f"{d:.3f}", font_size=26).move_to([hx[3], y, 0])))
+        foot = wrapped_label(
+            rf"expected loss as a share of each tranche; large pool, PD 2\%, $\rho$ = {r['rho']:g}. Recovery moves with "
+            rf"the economy: about {100 * r['R_bad']:.0f}\% in a 1-in-100 year, {100 * r['R_good']:.0f}\% in a good one, "
+            r"40\% on average (Altman, Brady, Resti and Sironi, 2005). Delta: the tranche's loss per unit of pool loss, "
+            r"the hedge ratio against the index", 12.4, 18, GREY_A).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "Two more things the simple model fixes that the world does not. First, recovery. In recessions, when "
+            "defaults bunch, recoveries are low: Edward Altman and coauthors found the two strongly related. "
+            "<bookmark mark='a'/> Let recovery fall in bad states, keeping its average at forty percent. The equity "
+            "tranche barely notices; the senior tranche's expected loss rises "
+            f"{r['random']['senior 15-30%'] / r['fixed']['senior 15-30%']:.0f}-fold, because its losses come only in "
+            "the states where recovery is worst. <bookmark mark='b'/> Second, hedging. Each tranche's delta is its "
+            "loss per unit of loss in the whole pool: the equity carries two thirds of the first losses, the senior "
+            "almost none. Desks hedged tranches with the index by these ratios, and the ratios themselves moved with "
+            "correlation."
+        ) as vo:
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(VGroup(r_[0], r_[1], r_[2])) for r_ in rows[1:]], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(*[FadeIn(r_[3]) for r_ in rows[1:]], FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
 

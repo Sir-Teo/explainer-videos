@@ -30,9 +30,9 @@ class HJM(VoiceoverScene, ThreeDScene):
                 cmath(r"\frac{dP(t,T)}{P(t,T)}", r"=", r"r_t\,dt - \Big(\int_t^T \alpha\Big)dt + \tfrac12\Big|\int_t^T "
                       r"\sigma\Big|^2 dt - \Big(\int_t^T \sigma\Big)\cdot dW", font_size=34,
                       colors={r"\frac{dP(t,T)}{P(t,T)}": WHITE}),
-                cmath(r"\int_t^T \alpha(t, u)\,du", r"=", r"\tfrac12\Big|\int_t^T \sigma(t, u)\,du\Big|^2", font_size=40,
+                cmath(r"\int_t^T \alpha(t, u)\,du", r"=", r"\tfrac12\Big|\int_t^T \sigma(t, u)\,du\Big|^2", font_size=36,
                       colors={r"=": WHITE}),
-                cmath(r"\alpha(t, T)", r"=", r"\sigma(t, T)\cdot\int_t^T \sigma(t, u)\,du", font_size=44,
+                cmath(r"\alpha(t, T)", r"=", r"\sigma(t, T)\cdot\int_t^T \sigma(t, u)\,du", font_size=38,
                       colors={r"\alpha(t, T)": FWD})]
         whys = [why(r"Heath, Jarrow and Morton (1992): every forward rate moves, driven by a few shared Brownian motions"),
                 why(r"$P = e^{-\int_t^T f}$; Itô's formula for the bond. Under the pricing measure its expected return "
@@ -40,7 +40,7 @@ class HJM(VoiceoverScene, ThreeDScene):
                 why(r"so the drift terms must cancel, for every $T$"),
                 why(r"differentiate in $T$: the drift of each forward is fixed by the volatilities. Choose the vols; the "
                     r"model is determined")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.4, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.35, x=-1.4, buff=0.36, edge=6.9)
         with self.voiceover(
             "Short-rate models start from one rate and derive the curve. David Heath, Robert Jarrow and Andrew Morton, "
             "in 1992, started from the whole forward curve instead: every forward rate moves, driven by a few shared "

@@ -4,10 +4,11 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import credit as CR
-from videos.quant.quant20.common import BAD, GBMC, LOGIT, PART, RISKY, ask, fit_right, house_lab, illustration, load
+from videos.quant.quant20.common import (BAD, GBMC, LOGIT, PART, RISKY, ask, fit_right, grid_fn, house_lab,
+                                         illustration, load, surf3d_axes)
 
 
-class Models(VoiceoverScene):
+class Models(VoiceoverScene, ThreeDScene):
     def construct(self):
         m = load("models")
         self.card()
@@ -16,6 +17,7 @@ class Models(VoiceoverScene):
         self.roc(m)
         self.table(m)
         self.calib(m)
+        self.surface(m)
         self.importance(m)
 
     def card(self):
@@ -190,6 +192,43 @@ class Models(VoiceoverScene):
             self.play(FadeIn(side[2]), FadeIn(side[3]))
         self.wait(0.4)
         self.clear_scene()
+
+    def surface(self, m):
+        p = m["pdp"]
+        q = np.asarray(p["q"])
+        G = np.asarray(p["gbm"]) * 100  # rows: leverage quantile; columns: cushion quantile
+        f = grid_fn(q, q, G)
+        top = float(np.ceil(G.max()))
+        ax = surf3d_axes([0.05, 0.95, 0.3], [0.05, 0.95, 0.3], [0, top, top / 2], x_length=6.0, y_length=4.8, z_length=3.0)
+        ax.shift(RIGHT * 0.9 + DOWN * 0.3)
+        surf = Surface(lambda u, w: ax.c2p(u, w, f(u, w)), u_range=(0.05, 0.95), v_range=(0.05, 0.95),
+                       resolution=(18, 18), fill_opacity=0.85, stroke_width=0.4, stroke_color=GREY_D,
+                       checkerboard_colors=False)
+        surf.set_fill_by_value(axes=ax, colorscale=[(QC.GAIN, 0), (QC.IMPLIED, top / 3), (QC.LOSS, top)], axis=2)
+        lev, cus = np.asarray(p["lev"]), np.asarray(p["cushion"])
+        key = label(rf"market cushion ME/TL, percentile (across: {cus[0]:.2f} to {cus[-1]:.0f}); leverage TL/TA, "
+                    rf"percentile (back: {lev[0]:.2f} to {lev[-1]:.2f}); bankruptcy probability, \% (up); other inputs "
+                    r"at their medians", font_size=17, color=GREY_A).to_corner(UL, buff=0.3)
+        self.set_camera_orientation(phi=65 * DEGREES, theta=-55 * DEGREES, zoom=0.85)
+        self.add_fixed_in_frame_mobjects(key)
+        self.remove(key)
+        with self.voiceover(
+            "What shape did the trees learn? Hold every input at its median, and vary two: leverage, and the market's "
+            "cushion over the debt. <bookmark mark='a'/> The surface is a staircase, not a slope: the risk is flat "
+            "over most of the range and then jumps, near the point where liabilities reach the assets, and jumps "
+            "higher where the cushion is thin. <bookmark mark='b'/> A logit would draw a smooth tilted sheet. The "
+            "steps are thresholds the trees found in the fit years, and some of them are noise, which is part of why "
+            "their score fell out of sample."
+        ) as vo:
+            self.play(Create(ax), FadeIn(key))
+            self.play(Create(surf), run_time=2.5)
+            vo.wait_until("a")
+            self.move_camera(theta=-130 * DEGREES, run_time=5)
+            vo.wait_until("b")
+        self.wait(0.3)
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, run_time=0.5)
+        self.clear_scene()
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, gamma=0, zoom=1.0, frame_center=ORIGIN)
 
     def importance(self, m):
         f, imp, b = m["features"], np.asarray(m["gbm_importance"]), np.asarray(m["logit_beta"])[1:]

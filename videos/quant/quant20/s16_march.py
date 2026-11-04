@@ -16,6 +16,7 @@ class March(VoiceoverScene):
         m = load("march2020")
         self.card()
         self.etfs(m)
+        self.spread(m)
         self.facilities()
         self.factors()
 
@@ -75,6 +76,40 @@ class March(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def spread(self, m):
+        d, v = np.asarray(m["baa"]["date"]), np.asarray(m["baa"]["v"])
+        g = axes([0, 182], [1.5, 4.6], x_length=8.0, y_length=4.2, xlabel=r"2020", ylabel=r"Baa minus 10-year Treasury, \%",
+                 xticks=[], yticks=[2, 3, 4], font_size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        months = VGroup(*[label(mn, font_size=16, color=GREY_B).next_to(ax.c2p(x, 1.5), DOWN, buff=0.15)
+                          for mn, x in zip(["Jan", "Feb", "Mar", "Apr", "May", "Jun"], [15, 46, 75, 106, 136, 167])])
+        line = curve(ax, _t(d), v, RISKY, stroke_width=3)
+        k = int(np.argmax(v))
+        k0 = int(np.searchsorted(d, 20200220))
+        top = Dot(ax.c2p(_t(d[k]), v[k]), color=BAD)
+        mark = DashedLine(ax.c2p(_t(20200323), 1.5), ax.c2p(_t(20200323), 4.6), color=GREY_B, stroke_width=1.5)
+        side = VGroup(
+            MathTex(rf"{v[k0]:.2f}\% \to {v[k]:.2f}\%", font_size=30, color=BAD),
+            label(rf"20 February to {d[k] % 100} March", font_size=18, color=GREY_A),
+            MathTex(rf"\text{{30 June: }} {v[-1]:.2f}\%", font_size=26),
+            wrapped_label(r"in a month the spread rose more than twice as much as in the whole of 2007; after the "
+                          r"Fed's announcement it fell back almost as fast", 3.4, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "The same three weeks in the spread of medium-grade bonds over Treasuries: "
+            f"<bookmark mark='a'/> from {v[k0]:.2f} percent on the twentieth of February to {v[k]:.2f} on the "
+            f"{d[k] % 100} March, the day of the announcement. <bookmark mark='b'/> By the end of June it was "
+            f"back to {v[-1]:.2f}. The spread had priced a wave of defaults; the backstop priced most of it away."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(months), Create(mark))
+            vo.wait_until("a")
+            self.play(Create(line), FadeIn(top), FadeIn(side[0]), FadeIn(side[1]), run_time=2.5)
+            vo.wait_until("b")
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
     def facilities(self):
         rows = [cmath(r"\text{PMCCF} + \text{SMCCF}", r"\to", r"\text{the Fed as buyer of last resort for corporate credit}",
                       font_size=32, colors={r"\text{PMCCF} + \text{SMCCF}": GOOD}),
@@ -88,7 +123,8 @@ class March(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=0.8, edge=6.9)
         with self.voiceover(
             "The two facilities offered to buy new corporate bonds and existing ones, and then the funds holding them. "
-            "In the end they bought only a small fraction of the market. <bookmark mark='a'/> But spreads fell most "
+            "In the end the secondary-market facility bought about fourteen billion dollars of bonds and funds, in a "
+            "market of some ten trillion. <bookmark mark='a'/> But spreads fell most "
             "on the days of the announcements, and most for the bonds that became eligible. The promise of a buyer "
             "removed the tail, and the tail was what was being priced: a backstop is an option the central bank "
             "writes to the whole market."

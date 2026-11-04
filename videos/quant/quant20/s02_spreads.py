@@ -11,6 +11,7 @@ class Spreads(VoiceoverScene):
         s = load("spreads")
         self.card()
         self.history(s)
+        self.quality(s)
         self.anatomy()
         self.puzzle()
 
@@ -64,6 +65,35 @@ class Spreads(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[2]))
         self.add(illustration(r"FRED: BAA, AAA, GS10 (monthly), BAA10Y (daily), USREC"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def quality(self, s):
+        t, gap = np.asarray(s["t"]), np.asarray(s["baa"]) - np.asarray(s["aaa"])
+        g = axes([1953, 2026], [0, 3.6], x_length=8.6, y_length=4.2, xlabel=r"year", ylabel=r"Baa minus Aaa, \%",
+                 xticks=[1960, 1970, 1980, 1990, 2000, 2010, 2020], yticks=[0, 1, 2, 3], font_size=14).to_edge(
+            LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        line = curve(ax, t, gap, BAD, stroke_width=2.4)
+        k = int(np.argmax(gap))
+        side = VGroup(
+            MathTex(rf"\text{{average}} = {gap.mean():.2f}\%", font_size=28),
+            MathTex(rf"\max = {gap[k]:.2f}\%\ (\text{{{int(t[k])}}})", font_size=28, color=BAD),
+            wrapped_label(r"both are investment grade, both are long corporate bonds: the gap prices only the step "
+                          r"down in quality, without the Treasury market's own quirks. It widens in every recession, "
+                          r"most of all in 1980--82 and 2008", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "A cleaner measure of default risk alone is the gap between the two grades: both are corporate bonds, "
+            "both long, both investment grade, so the Treasury market's own quirks cancel. <bookmark mark='a'/> It "
+            f"averaged {gap.mean():.2f} percent and reached {gap[k]:.2f} at the end of {int(t[k])}. The price of one "
+            "step down in quality is small in calm years and widens in every recession, most of all in the early "
+            "eighties and in 2008."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(Create(line), FadeIn(side), run_time=2.5)
         self.wait(0.4)
         self.clear_scene()
 

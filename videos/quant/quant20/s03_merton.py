@@ -16,6 +16,7 @@ class Merton(VoiceoverScene, ThreeDScene):
         self.derive()
         self.surface(m)
         self.term(m)
+        self.puzzle(load("spreads"))
         self.lab()
 
     def card(self):
@@ -152,6 +153,37 @@ class Merton(VoiceoverScene, ThreeDScene):
                 self.play(Create(lines[i]), run_time=1.5)
             self.play(FadeIn(side[1]))
         self.add(illustration(r"Merton (1974); r = 4\%; leverage here is the face of the debt over the assets, $D/V$"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def puzzle(self, s):
+        cases = [(0.4, 0.25, r"Baa-like: leverage 40\%, asset vol 25\%"), (0.5, 0.3, r"leverage 50\%, vol 30\%"),
+                 (0.6, 0.25, r"leverage 60\%, vol 25\%")]
+        vals = [float(CR.merton_spread(1.0, sv, L * np.exp(0.04 * 5), 0.04, 5.0) * 1e4) for L, sv, _ in cases]
+        g = axes([0.4, 4.6], [0, 220], x_length=6.4, y_length=4.2, xlabel=r"", ylabel=r"5-year spread, bp",
+                 xticks=[], yticks=[0, 50, 100, 150, 200], font_size=14).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
+        ax = g.ax
+        bars = VGroup()
+        for i, (v_, (_, _, l_)) in enumerate(zip(vals + [100 * s["mean_baa"]], cases + [(0, 0, r"Moody's Baa, average since 1953")])):
+            b_ = Rectangle(width=0.7, height=max(ax.c2p(0, v_)[1] - ax.c2p(0, 0)[1], 0.01), stroke_width=0,
+                           fill_color=EQUITY if i < 3 else RISKY, fill_opacity=0.8).move_to(
+                [ax.c2p(i + 1, 0)[0], (ax.c2p(0, v_)[1] + ax.c2p(0, 0)[1]) / 2, 0])
+            bars.add(VGroup(b_, MathTex(f"{v_:.0f}", font_size=24).next_to(b_, UP, buff=0.1),
+                            wrapped_label(l_, 1.5, 14, GREY_A).next_to(ax.c2p(i + 1, 0), DOWN, buff=0.15)))
+        side = wrapped_label(r"the credit spread puzzle, in numbers: calibrated to a typical medium-grade firm, Merton "
+                             r"explains a fraction of the Baa spread. The rest is chapter 1's premium for bad times and "
+                             r"illiquidity, which a risk-neutral model with no jumps leaves out", 3.8, 18,
+                             GREY_A).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "Now the puzzle of chapter one, in numbers. Give Merton a typical medium-grade company: debt at forty "
+            "percent of its assets, asset volatility of twenty-five percent. <bookmark mark='a'/> Its five-year spread "
+            f"comes out at {vals[0]:.0f} basis points. Baa bonds have paid {100 * s['mean_baa']:.0f} on average. "
+            "Even much riskier firms in the model barely reach it. The model prices the expected loss; the market "
+            "also charges for when the loss arrives and for how hard the bond is to sell."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 

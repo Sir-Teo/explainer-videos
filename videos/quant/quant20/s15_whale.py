@@ -37,8 +37,10 @@ class Whale(VoiceoverScene):
             "The trades sat in its Chief Investment Office, in London, in a portfolio meant to hedge the bank's "
             "credit risk. It had grown into huge positions in credit indices and their tranches, one so large that "
             "the market nicknamed its trader the London Whale. <bookmark mark='a'/> The bank's own task force and a "
-            "Senate subcommittee both published their findings; regulators in the United States and Britain later "
-            "imposed nine hundred and twenty million dollars in penalties."
+            "Senate subcommittee both published their findings. By the Senate's account, the portfolio's net notional "
+            "size tripled in the first quarter of 2012, from about fifty-one billion dollars to one hundred and "
+            "fifty-seven billion, as the office kept adding to positions that were losing money. Regulators in the "
+            "United States and Britain later imposed nine hundred and twenty million dollars in penalties."
         ) as vo:
             self.play(FadeIn(cc))
             vo.wait_until("a")

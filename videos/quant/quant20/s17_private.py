@@ -12,7 +12,7 @@ class Private(VoiceoverScene):
         self.card()
         self.growth()
         self.marks(b)
-        self.smoothing()
+        self.smoothing(load("glm"))
 
     def card(self):
         c = chapter_card(16, r"Private credit and its marks", r"What is a loan worth that never trades?", part=PART)
@@ -88,7 +88,7 @@ class Private(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def smoothing(self):
+    def smoothing(self, gl):
         rows = [cmath(r"r^{\text{reported}}_t", r"=", r"\theta_0 r_t + \theta_1 r_{t-1} + \theta_2 r_{t-2},\ \ \sum\theta = 1",
                       font_size=36, colors={r"r^{\text{reported}}_t": DEBT}),
                 cmath(r"\sigma^{\text{reported}}", r"=", r"\sigma\sqrt{\theta_0^2 + \theta_1^2 + \theta_2^2} < \sigma",
@@ -99,21 +99,30 @@ class Private(VoiceoverScene):
                     r"$\theta = (0.5, 0.3, 0.2)$ volatility appears 38\% lower than it is. Smooth marks are a "
                     r"risk-reporting choice, not a property of the loans")]
         step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        foot = wrapped_label(rf"Ares Capital, {gl['n']} quarters: reported NAV per share moved with a volatility of "
+                             rf"{100 * gl['vol_nav']:.1f}\% a year, its shares {100 * gl['vol_px']:.1f}\%; the worst "
+                             rf"quarter was {100 * gl['worst_nav']:.1f}\% for the NAV and {100 * gl['worst_px']:.1f}\% "
+                             r"for the shares. Same loans, two volatilities", 12.0, 19, GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "There is a formal way to say what smooth marks do. Mila Getmansky, Andrew Lo and Igor Makarov modelled "
             "reported returns as a weighted average of the true returns of the last few quarters. "
             "<bookmark mark='a'/> Averaging lowers the volatility you see, and the correlation with markets, and "
             "raises the Sharpe ratio. With half the move reported now, three tenths next quarter and the rest after, "
             "the volatility appears thirty-eight percent lower than it is. The loans are no safer; their risk is "
-            "reported later."
+            "reported later. <bookmark mark='b'/> Ares Capital's own numbers make the point: its reported value per "
+            f"share moved with a volatility of {100 * gl['vol_nav']:.1f} percent a year, its shares "
+            f"{100 * gl['vol_px']:.0f} percent. Same loans, two volatilities, and the lower one is the one in the "
+            "fund's reports."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
+            vo.wait_until("b")
+            self.play(FadeIn(foot))
         q = ask(r"a private credit fund reports volatility of 3\% a year and a Sharpe ratio of 2. What would you ask "
                 r"for before believing either?")
         with self.voiceover("A private credit fund reports three percent volatility and a Sharpe ratio of two. What "
                             "would you ask for before believing either?"):
-            self.play(FadeIn(q))
+            self.play(FadeOut(foot), FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

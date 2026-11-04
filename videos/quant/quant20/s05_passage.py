@@ -13,6 +13,7 @@ class Passage(VoiceoverScene):
         self.paths(b)
         self.curves(b)
         self.leland()
+        self.optimal(load("leland"))
 
     def card(self):
         c = chapter_card(4, r"First passage and the choice to default", r"What if default can come before maturity?",
@@ -88,7 +89,9 @@ class Passage(VoiceoverScene):
             "<bookmark mark='a'/> For this firm, over ten years, Merton's rule gives "
             f"{a[-1]:.0f} percent; first passage gives {f[-1]:.0f}. A barrier more than doubles the "
             "default rate here, and it makes short-dated default more likely, though still not enough to fix the "
-            "short-spread problem."
+            "short-spread problem. In 2002 a group of banks published CreditGrades, which fixed it by making the "
+            "barrier itself uncertain: if no one knows exactly where default lies, a firm can be closer to it than "
+            "it looks, and even a one-month bond pays a spread."
         ) as vo:
             self.play(FadeIn(hdr), FadeIn(g), FadeIn(side[0]))
             vo.wait_until("a")
@@ -96,6 +99,51 @@ class Passage(VoiceoverScene):
         self.add(illustration(rf"$V_0 = {b['V']:.0f}$, $K = {b['K']:.0f}$, $\sigma = {100 * b['s']:.0f}\%$, "
                               rf"$\mu = {100 * b['mu']:.0f}\%$"))
         self.wait(0.4)
+        self.clear_scene()
+
+    def optimal(self, L):
+        C = np.asarray(L["C"])
+        g = axes([0, 12], [0, 140], x_length=7.4, y_length=4.4, xlabel=r"coupon $C$ a year (assets 100)",
+                 ylabel=r"value", xticks=[0, 3, 6, 9, 12], yticks=[0, 40, 80, 120], font_size=14).to_edge(LEFT, buff=0.6
+                                                                                                   ).shift(DOWN * 0.3)
+        ax = g.ax
+        lf = curve(ax, C, np.asarray(L["firm"]), ASSET, stroke_width=3.5)
+        ld = curve(ax, C, np.asarray(L["debt"]), DEBT, stroke_width=3)
+        le = curve(ax, C, np.asarray(L["equity"]), QC.OPTION, stroke_width=3)
+        o = L["opt"]
+        star = Dot(ax.c2p(o["C"], max(L["firm"])), color=WHITE)
+        side = VGroup(
+            legend([(ASSET, r"firm value"), (DEBT, r"debt"), (QC.OPTION, r"equity")], font_size=17),
+            MathTex(rf"C^* = {o['C']:.1f},\ \ \text{{leverage}} = {100 * o['lev']:.0f}\%", font_size=26),
+            MathTex(rf"V_B = {o['VB']:.1f},\ \ \text{{spread}} = {o['spread_bp']:.0f}\ \text{{bp}}", font_size=24),
+            wrapped_label(rf"taxes {100 * L['tax']:.0f}\%, bankruptcy costs {100 * L['alpha']:.0f}\% of the assets, "
+                          rf"$\sigma$ = {100 * L['sigma']:.0f}\%, $r$ = {100 * L['r']:.0f}\%. Debt adds the tax shield "
+                          r"until default costs outweigh it; past the peak, more coupon buys less debt", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "Run Leland's formulas for a firm with assets of one hundred. <bookmark mark='a'/> As the promised coupon "
+            "rises, the debt is worth more, and the tax it saves raises the value of the whole firm. "
+            "<bookmark mark='b'/> But a larger coupon also raises the barrier, and with it the chance of paying the "
+            f"costs of bankruptcy. The firm is worth most at a coupon of about {o['C']:.1f}: leverage of "
+            f"{100 * o['lev']:.0f} percent, the debt yielding {o['spread_bp']:.0f} basis points over the safe rate. "
+            "Past that peak, promising more buys less debt. Leland's numbers are higher than most firms choose, which "
+            "is itself a puzzle the model leaves open."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(Create(lf), Create(ld), Create(le), run_time=2.5)
+            vo.wait_until("b")
+            self.play(FadeIn(star, scale=1.5), FadeIn(side[1]), FadeIn(side[2]), FadeIn(side[3]))
+        self.add(illustration(r"Leland (1994), perpetual debt"))
+        self.wait(0.4)
+        self.clear_scene()
+        q = ask(r"in Leland's model, what happens to the default barrier when asset volatility rises, and why does "
+                r"that help shareholders?")
+        with self.voiceover("In Leland's model, what happens to the default barrier when the assets become more "
+                            "volatile, and why does that suit the shareholders?"):
+            self.play(FadeIn(q))
+        self.wait(0.5)
         self.clear_scene()
 
     def leland(self):
@@ -120,10 +168,5 @@ class Passage(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
-        q = ask(r"in Leland's model, what happens to the default barrier when asset volatility rises, and why does "
-                r"that help shareholders?")
-        with self.voiceover("In Leland's model, what happens to the default barrier when the assets become more "
-                            "volatile, and why does that suit the shareholders?"):
-            self.play(FadeIn(q))
-        self.wait(0.5)
+        self.wait(0.4)
         self.clear_scene()

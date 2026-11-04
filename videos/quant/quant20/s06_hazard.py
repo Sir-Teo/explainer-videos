@@ -14,6 +14,7 @@ class Hazard(VoiceoverScene):
         self.clocks(h)
         self.bonds(h)
         self.cox()
+        self.coxcurves(load("cox"))
 
     def card(self):
         c = chapter_card(5, r"Default as a random clock", r"What if default is a surprise?", part=PART)
@@ -115,7 +116,10 @@ class Hazard(VoiceoverScene):
             "recovered, the price is the safe one times survival. <bookmark mark='b'/> With forty percent of market "
             "value recovered, Duffie and Singleton's convention, it is higher, and simplest to compute. With forty "
             "percent of face recovered, it is different again. In real defaults, all of an issuer's bonds recover the "
-            "same fraction of face, long and short alike, which is what the auctions of the next chapter settle."
+            "same fraction of face, long and short alike, which is what the auctions of the next chapter settle. One "
+            "caution about every hazard read from prices: it is risk-neutral. Hull, Predescu and White found the "
+            "default probabilities implied by investment-grade bond prices to be several times those actually "
+            "observed; the difference is the premium for bearing the risk."
         ) as vo:
             self.play(FadeIn(g), Create(l0), FadeIn(side[0]))
             vo.wait_until("a")
@@ -123,6 +127,46 @@ class Hazard(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(l1), Create(l2), FadeIn(side[1]), run_time=2)
         self.wait(0.4)
+        self.clear_scene()
+
+    def coxcurves(self, c):
+        T = np.asarray(c["T"])
+        cols = {"calm": QC.GAIN, "long run": QC.IMPLIED, "stressed": BAD}
+        g = axes([0, 10], [0, 500], x_length=7.4, y_length=4.4, xlabel=r"maturity, years", ylabel=r"spread, bp",
+                 xticks=[0, 2, 4, 6, 8, 10], yticks=[0, 100, 200, 300, 400, 500], font_size=14).to_edge(LEFT, buff=0.6
+                                                                                                   ).shift(DOWN * 0.3)
+        ax = g.ax
+        lines = VGroup(*[curve(ax, T, np.clip(np.asarray(c["curves"][k]["spread_bp"]), 0, 500), col, stroke_width=3.5)
+                         for k, col in cols.items()])
+        side = VGroup(
+            legend([(QC.GAIN, r"hazard today 0.5\%"), (QC.IMPLIED, r"2\% (its long-run level)"),
+                    (BAD, r"8\% (stressed)")], font_size=17),
+            MathTex(rf"\kappa = {c['kappa']:g},\ \theta = {100 * c['theta']:g}\%,\ \sigma = {c['sigma']:g}", font_size=26),
+            wrapped_label(r"a safe name's curve slopes up, a stressed name's slopes down: from a stressed state the "
+                          r"hazard is expected to fall, if the firm survives. Real CDS curves of distressed names invert "
+                          r"exactly like this", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "Here are the spread curves that CIR intensity implies, from three starting levels of risk. "
+            "<bookmark mark='a'/> A safe name's curve slopes up: its hazard is expected to rise toward the long-run "
+            "level. <bookmark mark='b'/> A stressed name's slopes down: if it survives the next year or two, its hazard "
+            "is expected to fall. Credit curves of distressed companies invert in exactly this way, and a structural "
+            "model of a firm under water said the same in chapter two."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]))
+            vo.wait_until("a")
+            self.play(Create(lines[0]), Create(lines[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(lines[2]), FadeIn(side[2]), run_time=1.5)
+        self.wait(0.4)
+        self.clear_scene()
+        q = ask(r"a firm's hazard rate doubles overnight but nothing defaults. Who gained and who lost, and by how much "
+                r"on a 5-year bond?")
+        with self.voiceover("A firm's hazard rate doubles overnight, and nothing defaults. Who gained, who lost, and "
+                            "roughly how much on a five-year bond?"):
+            self.play(FadeIn(q))
+        self.wait(0.5)
         self.clear_scene()
 
     def cox(self):
@@ -144,10 +188,5 @@ class Hazard(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
-        q = ask(r"a firm's hazard rate doubles overnight but nothing defaults. Who gained and who lost, and by how much "
-                r"on a 5-year bond?")
-        with self.voiceover("A firm's hazard rate doubles overnight, and nothing defaults. Who gained, who lost, and "
-                            "roughly how much on a five-year bond?"):
-            self.play(FadeIn(q))
-        self.wait(0.5)
+        self.wait(0.4)
         self.clear_scene()

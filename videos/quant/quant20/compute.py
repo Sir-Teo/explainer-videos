@@ -133,6 +133,7 @@ def compute_kmv() -> dict:
         # one year of equity history at a time: re-estimate the asset volatility each month end, as a desk would
         dtd = np.full(len(d), np.nan)
         sig = np.full(len(d), np.nan)
+        Vp = np.full(len(d), np.nan)
         months = np.where(np.r_[d[1:] // 100 != d[:-1] // 100, True])[0]
         for m in months:
             lo = max(0, m - 251)
@@ -145,8 +146,13 @@ def compute_kmv() -> dict:
                 Vj = float(k["V"][j - lo]) if j >= lo else np.nan
                 dtd[j] = CR.distance_to_default(Vj, k["sigma_V"], DP[j], mu, 1.0)
                 sig[j] = k["sigma_V"]
+                Vp[j] = Vj
         w = int(np.nanargmin(dtd))
-        out[tk] = {"name": name, "t": _fy(d), "date": d, "E": E, "DP": DP, "dtd": dtd, "sigma_V": sig,
+        okv = np.isfinite(Vp)
+        spread = np.full(len(d), np.nan)  # what Merton would charge on one-year debt with this default point
+        spread[okv] = CR.merton_spread(Vp[okv], sig[okv], DP[okv], r, 1.0) * 1e4
+        out[tk] = {"name": name, "t": _fy(d), "date": d, "E": E, "DP": DP, "dtd": dtd, "sigma_V": sig, "V": Vp,
+                   "spread_bp": spread,
                    "worst": {"date": int(d[w]), "dtd": float(dtd[w]), "pd": float(norm.cdf(-dtd[w])), "E": float(E[w]),
                              "DP": float(DP[w])},
                    "end": {"dtd": float(dtd[-1]), "E": float(E[-1]), "DP": float(DP[-1])}}
@@ -348,11 +354,22 @@ def compute_models() -> dict:
              "safe": float(y[h][alt[h] >= 2.99].mean()),
              "share": [float(np.mean(alt[h] < 1.81)), float(np.mean((alt[h] >= 1.81) & (alt[h] < 2.99))),
                        float(np.mean(alt[h] >= 2.99))]}
+    # partial dependence: leverage (TL/TA) against the market cushion (ME/TL), every other input at its fit median
+    fitm = sets["fit"]
+    qs = np.linspace(0.05, 0.95, 19)
+    gz_l, gz_m = np.quantile(Z[fitm, 6], qs), np.quantile(Z[fitm, 3], qs)
+    raw_l, raw_m = np.nanquantile(X[fitm, 6], qs), np.nanquantile(X[fitm, 3], qs)
+    base = np.median(Z[fitm], axis=0)
+    grid = np.tile(base, (len(qs) * len(qs), 1))
+    grid[:, 6] = np.repeat(gz_l, len(qs))
+    grid[:, 3] = np.tile(gz_m, len(qs))
+    pdp = {"lev": raw_l, "cushion": raw_m, "q": qs, "gbm": g.predict_proba(grid).reshape(len(qs), len(qs)),
+           "logit": CR.logit_predict(b, grid).reshape(len(qs), len(qs))}
     cik = np.asarray(d["cik"], int)
     firms = {tk: [{"fy": int(fy[i]), "logit": float(pl[i]), "gbm": float(pg[i]), "y": int(y[i])}
                   for i in np.where(cik == c_)[0]] for tk, (c_, _) in KMV_FIRMS.items()}
     return _json({"results": res, "roc": roc, "calib": calib, "top_decile_capture": float(y[h][top].sum() / y[h].sum()),
-                  "firms": firms,
+                  "firms": firms, "pdp": pdp,
                   "logit_beta": b, "gbm_importance": g.importance(len(FEATURES)), "gbm_trees": len(g.trees),
                   "features": FEATURES, "zones": zones, "registered": reg, "trials": pit.trials_so_far(),
                   "rule": MODEL_RULE, "val_loss": g.val_loss})
@@ -463,6 +480,178 @@ def compute_bdc() -> dict:
                   "nav_dec2019": float(nav[np.searchsorted(ends, 20191231)])})
 
 
+def compute_leland() -> dict:
+    """Leland (1994): debt, equity and firm value against the coupon; the chosen barrier and the optimal leverage."""
+    V, r, s_, tax, alpha = 100.0, 0.06, 0.2, 0.35, 0.5
+    X = 2 * r / s_ ** 2
+    C = np.linspace(0.05, 12.0, 240)
+    VB = (1 - tax) * C / (r + 0.5 * s_ ** 2)
+    pB = np.where(VB < V, (V / VB) ** (-X), 1.0)
+    debt = C / r + ((1 - alpha) * VB - C / r) * pB
+    firm = V + tax * C / r * (1 - pB) - alpha * VB * pB
+    eq = firm - debt
+    k = int(np.argmax(firm))
+    return _json({"C": C, "VB": VB, "debt": debt, "firm": firm, "equity": eq, "V": V, "r": r, "sigma": s_, "tax": tax,
+                  "alpha": alpha, "opt": {"C": float(C[k]), "lev": float(debt[k] / firm[k]), "VB": float(VB[k]),
+                                          "spread_bp": float((C[k] / debt[k] - r) * 1e4), "gain": float(firm[k] - V)}})
+
+
+def compute_cox() -> dict:
+    """A CIR default intensity (Lando's Cox process): survival curves and spreads in closed form, by starting level."""
+    from explainer.quant.house import termstructure as TS
+    k_, th, sg, R = 0.5, 0.02, 0.1, 0.4
+    T = np.linspace(0.25, 10, 40)
+    out = {}
+    for name, l0 in (("calm", 0.005), ("long run", 0.02), ("stressed", 0.08)):
+        Q = TS.cir_zcb(l0, k_, th, sg, T)
+        out[name] = {"l0": l0, "Q": Q, "spread_bp": -np.log(Q) / T * (1 - R) * 1e4}
+    return _json({"T": T, "curves": out, "kappa": k_, "theta": th, "sigma": sg, "R": R})
+
+
+def compute_cdsrisk() -> dict:
+    """A protection buyer's mark-to-market on 10 million of 5-year protection struck at 150 bp, as the par spread
+    moves; and the jump to default."""
+    def df(t):
+        return np.exp(-0.04 * np.asarray(t, float))
+    R, N, s0 = 0.4, 10e6, 0.015
+    shifts = np.linspace(-0.01, 0.03, 41)
+    mtm, rp = [], []
+    for ds in shifts:
+        k, h = CR.bootstrap_hazard([5.0], [s0 + ds], df, R)
+        a, p = CR.cds_legs(5.0, k, h, df, R)
+        mtm.append(N * (p - s0 * a))
+        rp.append(a)
+    k0, h0 = CR.bootstrap_hazard([5.0], [s0], df, R)
+    a0, _ = CR.cds_legs(5.0, k0, h0, df, R)
+    return _json({"shifts_bp": shifts * 1e4, "mtm": mtm, "rpv01": rp, "cs01": float(N * a0 * 1e-4), "jtd": N * (1 - R),
+                  "N": N, "s0": s0})
+
+
+def compute_sorts() -> dict:
+    """Bankruptcy rates by decile of leverage, of operating profit and of Altman's Z, in the fit years only."""
+    d = load("dataset")
+    X, y, fy = np.asarray(d["X"], float), np.asarray(d["y"], int), np.asarray(d["fy"], int)
+    fit = fy <= 2016
+    out = {}
+    for name, j in (("leverage", 6), ("profit", 2)):
+        x = X[fit, j]
+        ok = np.isfinite(x)
+        q = np.nanquantile(x[ok], np.linspace(0, 1, 11))
+        dec = np.clip(np.searchsorted(q, x[ok], side="right") - 1, 0, 9)
+        out[name] = {"rate": [float(y[fit][ok][dec == i].mean()) for i in range(10)],
+                     "mid": [float(np.median(x[ok][dec == i])) for i in range(10)]}
+    z = CR.altman_z(np.nan_to_num(X[fit, :5], nan=0.0))
+    q = np.quantile(z, np.linspace(0, 1, 11))
+    dec = np.clip(np.searchsorted(q, z, side="right") - 1, 0, 9)
+    out["altman"] = {"rate": [float(y[fit][dec == i].mean()) for i in range(10)],
+                     "mid": [float(np.median(z[dec == i])) for i in range(10)]}
+    out["base"] = float(y[fit].mean())
+    return _json(out)
+
+
+def compute_finite() -> dict:
+    """The large pool against finite ones: the 99.9th percentile of the default fraction for 50, 200 and 1,000 loans."""
+    pd_, rho = 0.02, 0.15
+    out = {}
+    for n in (50, 200, 1000):
+        k, _ = CR.copula_defaults(n, pd_, rho, 100000, seed=n)
+        out[str(n)] = float(np.quantile(k / n, 0.999))
+    return _json({"pd": pd_, "rho": rho, "q999": out, "lhp": float(CR.vasicek_quantile(0.999, pd_, rho))})
+
+
+def compute_joint() -> dict:
+    """Two names with 2% default probabilities: the joint default probability and the default correlation implied by
+    each asset correlation of the Gaussian copula."""
+    from scipy.stats import multivariate_normal
+    pd_ = 0.02
+    k = norm.ppf(pd_)
+    rhos = np.linspace(0.0, 0.9, 19)
+    p12 = np.array([multivariate_normal(mean=[0, 0], cov=[[1, r_], [r_, 1]]).cdf([k, k]) for r_ in rhos])
+    dc = (p12 - pd_ ** 2) / (pd_ * (1 - pd_))
+    return _json({"rhos": rhos, "p12": p12, "default_corr": dc, "pd": pd_})
+
+
+def compute_glm() -> dict:
+    """Ares Capital, quarter by quarter: the change in reported NAV per share against the change in the share price
+    (both before dividends, which they share); their volatilities and the NAV changes' autocorrelation."""
+    b = load("bdc")
+    nav_t, nav = np.asarray(b["nav_t"]), np.asarray(b["nav"])
+    pt, px = np.asarray(b["t"]), np.asarray(b["price"])
+    pq = np.array([px[np.searchsorted(pt, t, side="right") - 1] for t in nav_t])
+    r_nav, r_px = nav[1:] / nav[:-1] - 1, pq[1:] / pq[:-1] - 1
+    x = r_nav - r_nav.mean()
+    return _json({"t": nav_t[1:], "r_nav": r_nav, "r_px": r_px, "rho1": float(np.sum(x[1:] * x[:-1]) / np.sum(x * x)),
+                  "vol_nav": float(r_nav.std() * 2), "vol_px": float(r_px.std() * 2), "n": len(r_nav),
+                  "corr": float(np.corrcoef(r_nav, r_px)[0, 1]), "worst_nav": float(r_nav.min()),
+                  "worst_px": float(r_px.min())})
+
+
+def compute_recovery() -> dict:
+    """Recovery that falls when defaults rise (Altman, Brady, Resti and Sironi 2005; Andersen and Sidenius 2004):
+    each tranche's expected loss with recovery fixed at 40%, against recovery that moves with the economy, the
+    same 40% on average; and each tranche's sensitivity to the pool's default probability (its 'delta')."""
+    pd_, rho = 0.02, 0.2
+    z = np.linspace(-9, 9, 8001)
+    w = norm.pdf(z) / norm.pdf(z).sum()
+    p = norm.cdf((norm.ppf(pd_) - np.sqrt(rho) * z) / np.sqrt(1 - rho))
+    Rz = np.clip(0.4 + 0.15 * z, 0.05, 0.75)
+    Rz = Rz - (np.sum(w * p * Rz) / np.sum(w * p) - 0.4)  # the same 40% on average, weighted by defaults
+    tr = {"equity 0-3%": (0.0, 0.03), "mezzanine 3-7%": (0.03, 0.07), "senior 15-30%": (0.15, 0.30)}
+    fixed = {k: float(np.sum(w * CR.tranche_loss(0.6 * p, a, d))) for k, (a, d) in tr.items()}
+    rand = {k: float(np.sum(w * CR.tranche_loss((1 - Rz) * p, a, d))) for k, (a, d) in tr.items()}
+    el_pool = 0.6 * pd_
+    delta = {}
+    for k, (a, d) in tr.items():
+        up = CR.lhp_tranche_el(pd_ * 1.01, rho, 0.4, a, d)
+        dn = CR.lhp_tranche_el(pd_ * 0.99, rho, 0.4, a, d)
+        delta[k] = float((up - dn) * (d - a) / (0.6 * pd_ * 0.02))  # tranche notional loss per unit of pool loss
+    return _json({"fixed": fixed, "random": rand, "delta": delta, "pd": pd_, "rho": rho, "el_pool": el_pool,
+                  "R_bad": float(np.interp(-2.33, z, Rz)), "R_good": float(np.interp(1.0, z, Rz))})
+
+
+def compute_altfit() -> dict:
+    """Altman's five ratios, re-weighted by a logit on the fit years and judged on the validation years only (the
+    sealed years are not touched again): do fifty-seven-year-old weights still hold up?"""
+    d = load("dataset")
+    X, y, fy = np.asarray(d["X"], float)[:, :5], np.asarray(d["y"], int), np.asarray(d["fy"], int)
+    fit, val = fy <= 2016, (fy >= 2017) & (fy <= 2020)
+    lo, hi = np.nanpercentile(X[fit], 1, axis=0), np.nanpercentile(X[fit], 99, axis=0)
+    Z = np.clip(X, lo, hi)
+    med = np.nanmedian(Z[fit], axis=0)
+    Z = np.where(np.isfinite(Z), Z, med)
+    sd = Z[fit].std(0)
+    b = CR.logit_fit(Z[fit] / sd, y[fit], l2=1e-3)
+    alt = CR.altman_z(np.nan_to_num(X, nan=0.0))
+    return _json({"beta_std": b[1:], "beta_raw": b[1:] / sd, "altman": CR.ALTMAN_1968,
+                  "auc_val": {"altman_1968": CR.auc(y[val], -alt[val]),
+                              "refit": CR.auc(y[val], CR.logit_predict(b, Z[val] / sd))},
+                  "auc_fit": {"altman_1968": CR.auc(y[fit], -alt[fit]), "refit": CR.auc(y[fit], CR.logit_predict(b, Z[fit] / sd))}})
+
+
+def compute_ftd() -> dict:
+    """Li's recipe for default times: correlated normals mapped through each name's survival curve. A five-name
+    first-to-default basket, 5 years, every name at 100 bp (flat hazard, R = 40%): its fair spread against the copula
+    correlation, from the sum of the spreads (independent) to one name's spread (perfectly correlated)."""
+    R, s, T, n, N = 0.4, 0.01, 5.0, 5, 200000
+    lam = s / (1 - R)
+    rng = np.random.default_rng(0)
+    out = []
+    rhos = [0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 0.99]
+    M = rng.standard_normal(N)
+    Zs = rng.standard_normal((N, n))
+    for rho in rhos:
+        X = np.sqrt(rho) * M[:, None] + np.sqrt(1 - rho) * Zs
+        tau = -np.log(norm.cdf(X)) / lam  # Q(tau) = U: survival exp(-lam t) inverted
+        first = tau.min(1)
+        # par spread of the basket: protection (1 - R) e^{-r tau1} 1{tau1 < T} against premium on the survival
+        r = 0.04
+        prot = np.mean((1 - R) * np.exp(-r * first) * (first < T))
+        grid = np.arange(0.25, T + 1e-9, 0.25)
+        prem = np.mean([np.sum(0.25 * np.exp(-r * grid) * (f > grid)) for f in first[:20000]])
+        out.append(float(prot / prem))
+    return _json({"rhos": rhos, "ftd_bp": np.array(out) * 1e4, "single_bp": s * 1e4, "n": n})
+
+
 def compute_envelope() -> dict:
     return {"trials": pit.trials_so_far(), "registered": load("models")["registered"]}
 
@@ -470,7 +659,10 @@ def compute_envelope() -> dict:
 ITEMS = {"spreads": compute_spreads, "merton": compute_merton, "kmv": compute_kmv, "blackcox": compute_blackcox,
          "hazard": compute_hazard, "cds": compute_cds, "defaults": compute_defaults, "dataset": compute_dataset,
          "models": compute_models, "vasicek": compute_vasicek, "copula": compute_copula, "cjs": compute_cjs,
-         "march2020": compute_march2020, "bdc": compute_bdc, "envelope": compute_envelope}
+         "march2020": compute_march2020, "bdc": compute_bdc, "leland": compute_leland, "cox": compute_cox,
+         "cdsrisk": compute_cdsrisk, "sorts": compute_sorts, "finite": compute_finite, "joint": compute_joint,
+         "glm": compute_glm, "recovery": compute_recovery,
+         "altfit": compute_altfit, "ftd": compute_ftd, "envelope": compute_envelope}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

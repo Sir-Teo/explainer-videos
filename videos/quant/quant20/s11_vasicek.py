@@ -12,6 +12,7 @@ class Vasicek(VoiceoverScene):
         self.card()
         self.derive()
         self.pdfs(v)
+        self.finite(load("finite"))
         self.basel(v)
 
     def card(self):
@@ -91,6 +92,37 @@ class Vasicek(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def finite(self, f):
+        names = ["50", "200", "1000"]
+        vals = [f["q999"][n] * 100 for n in names] + [f["lhp"] * 100]
+        labs = [r"50 loans", r"200 loans", r"1{,}000 loans", r"the large pool"]
+        g = axes([0.4, 4.6], [0, 25], x_length=6.4, y_length=4.2, xlabel=r"", ylabel=r"99.9th percentile default rate, \%",
+                 xticks=[], yticks=[0, 5, 10, 15, 20, 25], font_size=14).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
+        ax = g.ax
+        bars = VGroup()
+        for i, (v_, l_) in enumerate(zip(vals, labs)):
+            b_ = Rectangle(width=0.7, height=max(ax.c2p(0, v_)[1] - ax.c2p(0, 0)[1], 0.01), stroke_width=0,
+                           fill_color=BAD if i < 3 else QC.IMPLIED, fill_opacity=0.8).move_to(
+                [ax.c2p(i + 1, 0)[0], (ax.c2p(0, v_)[1] + ax.c2p(0, 0)[1]) / 2, 0])
+            bars.add(VGroup(b_, MathTex(rf"{v_:.1f}\%", font_size=24).next_to(b_, UP, buff=0.1),
+                            label(l_, font_size=17).next_to(ax.c2p(i + 1, 0), DOWN, buff=0.2)))
+        side = wrapped_label(rf"PD {100 * f['pd']:.0f}\%, $\rho$ = {f['rho']:g}; 100{{,}}000 simulated years each. A small "
+                             r"book keeps some of each borrower's own risk, so its tail is worse than the formula's; "
+                             r"Basel adds no charge for it (Gordy's 'granularity adjustment' would)", 3.8, 18,
+                             GREY_A).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "The formula assumes an infinitely large pool. How large is large enough? Simulate. "
+            "<bookmark mark='a'/> With fifty loans, the worst year in a thousand sees "
+            f"{vals[0]:.0f} percent of them default; with two hundred, {vals[1]:.1f}; with a thousand, {vals[2]:.1f}, "
+            f"against the large pool's {vals[3]:.1f}. A small book keeps some of each borrower's own risk. Basel's "
+            "formula ignores it; Gordy's granularity adjustment would add it back."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
     def basel(self, v):
         pds, K = np.asarray(v["pds"]) * 100, np.asarray(v["K"]) * 100
         rows = [cmath(r"K", r"=", r"\Big[\text{LGD}\cdot N\Big(\frac{N^{-1}(\text{PD}) + \sqrt\rho\,N^{-1}(0.999)}{\sqrt{1 - \rho}}"
@@ -122,7 +154,10 @@ class Vasicek(VoiceoverScene):
             "for safe loans and flattens for risky ones, because the formula assumes risky borrowers depend less on "
             f"the economy. <bookmark mark='b'/> At a one percent PD it asks for {100 * v['rw_1pct'] / 12.5:.1f} cents "
             f"of capital per dollar lent: a risk weight of {100 * v['rw_1pct']:.2f} percent, the number in the Basel "
-            "Committee's own tables."
+            "Committee's own tables. For a billion dollars of such loans, that is about "
+            f"{1000 * v['rw_1pct'] / 12.5:.0f} million dollars of capital for the unexpected loss, on top of four and a "
+            "half million of provisions for the expected one: capital for the bad year in a thousand is about "
+            "sixteen times the average year's loss."
         ) as vo:
             self.play(FadeIn(hdr), FadeIn(g), FadeIn(tx))
             vo.wait_until("a")

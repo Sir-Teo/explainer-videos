@@ -17,6 +17,7 @@ class KMV(VoiceoverScene):
         self.method()
         self.paths(k)
         self.firm(k, "NCLH")
+        self.spreads(k)
         self.edf()
 
     def card(self):
@@ -131,6 +132,46 @@ class KMV(VoiceoverScene):
             self.play(Create(le), Create(ld), run_time=3)
             vo.wait_until("b")
             self.play(FadeIn(side[1]), FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def spreads(self, k):
+        g = axes([2019, 2026], [0, 1800], x_length=8.4, y_length=4.4, xlabel=r"year",
+                 ylabel=r"Merton's one-year spread, bp", xticks=[2019, 2020, 2021, 2022, 2023, 2024, 2025],
+                 yticks=[0, 500, 1000, 1500], font_size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        lines = VGroup()
+        peaks = {}
+        for tk, c_ in FIRM_C.items():
+            t, s_ = np.asarray(k[tk]["t"]), np.asarray(k[tk]["spread_bp"], float)
+            ok = np.isfinite(s_) & (t >= 2019)
+            lines.add(curve(ax, t[ok], np.clip(s_[ok], 0, 1800), c_, stroke_width=2.4))
+            j = int(np.nanargmax(np.where(ok, s_, -1)))
+            peaks[tk] = s_[j]
+        side = VGroup(
+            legend([(FIRM_C[t_], k[t_]["name"]) for t_ in FIRM_C], font_size=17),
+            *[MathTex(rf"\text{{{k[t_]['name'].split()[0]}: peak }} {peaks[t_]:,.0f}\ \text{{bp}}".replace(",", "{,}"),
+                      font_size=24, color=FIRM_C[t_]) for t_ in FIRM_C],
+            wrapped_label(r"debt due in a year at the default point, priced by Merton from the same assets and "
+                          r"volatility. Before 2020 the model charges almost nothing: chapter 2's short-spread failure, "
+                          r"on real firms", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "The same fitted assets give a price for debt. What spread would Merton charge on one year of borrowing "
+            "at each firm's default point? <bookmark mark='a'/> In 2020: "
+            f"{peaks['BA']:,.0f} basis points for Boeing, {peaks['AAL']:,.0f} for American, and "
+            f"{peaks['NCLH']:,.0f} for Norwegian at its worst. <bookmark mark='b'/> But look at 2019: almost exactly "
+            "zero for all three, though their bonds paid real spreads. With continuous assets and a year to go, a "
+            "firm several standard deviations from default cannot reach it. The model ranks the danger well, and "
+            "prices the quiet years badly."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=3),
+                      LaggedStart(*[FadeIn(r_) for r_ in side[1:4]], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 

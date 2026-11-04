@@ -11,7 +11,9 @@ class Copula(VoiceoverScene):
         c = load("copula")
         self.card()
         self.li()
+        self.joint(load("joint"))
         self.clouds(c)
+        self.ftd(load("ftd"))
         self.tails(c)
 
     def card(self):
@@ -42,6 +44,45 @@ class Copula(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def joint(self, j):
+        rh, dc = np.asarray(j["rhos"]), np.asarray(j["default_corr"])
+        p12 = np.asarray(j["p12"]) * 1e4
+        rows = [cmath(r"p_{12}", r"=", r"\Phi_\rho\big(N^{-1}(p_1), N^{-1}(p_2)\big)", font_size=38, colors={r"p_{12}": BAD}),
+                cmath(r"\rho_{\text{default}}", r"=", r"\frac{p_{12} - p_1 p_2}{\sqrt{p_1(1 - p_1)\,p_2(1 - p_2)}}",
+                      font_size=36, colors={r"\rho_{\text{default}}": BAD})]
+        hdr = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=0.4).shift(LEFT * 2.0)
+        g = axes([0, 0.9], [0, 0.6], x_length=6.4, y_length=3.6, xlabel=r"asset correlation $\rho$",
+                 ylabel=r"default correlation", xticks=[0, 0.3, 0.6, 0.9], yticks=[0, 0.2, 0.4, 0.6], font_size=13
+                 ).to_edge(LEFT, buff=0.6).shift(DOWN * 1.1)
+        ax = g.ax
+        line = curve(ax, rh, dc, BAD, stroke_width=3.5)
+        diag = DashedLine(ax.c2p(0, 0), ax.c2p(0.6, 0.6), color=GREY_C, stroke_width=1.5)
+        k = int(np.argmin(np.abs(rh - 0.3)))
+        side = VGroup(
+            MathTex(rf"\rho = 0.3:\ p_{{12}} = {p12[k]:.1f}\ \text{{bp}}\ \text{{vs}}\ {1e4 * j['pd'] ** 2:.0f}\ "
+                    r"\text{bp if independent}", font_size=24),
+            MathTex(rf"\rho_{{\text{{default}}}} = {dc[k]:.3f}", font_size=26, color=BAD),
+            wrapped_label(r"two names with 2\% default probabilities: a sizeable asset correlation becomes a small "
+                          r"default correlation, because defaults are rare. Small numbers, large consequences: the "
+                          r"chance both default quadruples", 3.8, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.8)
+        fit_right(side)
+        with self.voiceover(
+            "What does a copula correlation mean for defaults? Take two names, each with a two percent chance of "
+            "default. The chance that both default is the bivariate normal at their two thresholds. "
+            "<bookmark mark='a'/> An asset correlation of 0.3 gives a default correlation of only "
+            f"{dc[k]:.2f}, because defaults are rare events. <bookmark mark='b'/> But the joint probability is "
+            f"{p12[k]:.0f} basis points instead of the {1e4 * j['pd'] ** 2:.0f} it would be if they were independent. "
+            "Small correlations of rare events hide large changes in the chance of disaster."
+        ) as vo:
+            self.play(FadeIn(hdr))
+            vo.wait_until("a")
+            self.play(FadeIn(g), Create(diag), Create(line), FadeIn(side[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(FadeIn(side[0]), FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -76,6 +117,45 @@ class Copula(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.001, run_time=2.5), Create(box1), FadeIn(c1))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(d) for d in d2], lag_ratio=0.001, run_time=2.5), Create(box2), FadeIn(c2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def ftd(self, f):
+        rh, v = np.asarray(f["rhos"]), np.asarray(f["ftd_bp"])
+        rows = [cmath(r"\tau_i", r"=", r"Q_i^{-1}\big(N(X_i)\big),\quad X_i = \sqrt\rho\,M + \sqrt{1 - \rho}\,Z_i",
+                      font_size=36, colors={r"\tau_i": RISKY})]
+        hdr = rows[0].to_edge(UP, buff=0.5)
+        g = axes([0, 1], [0, 550], x_length=6.8, y_length=3.8, xlabel=r"copula correlation $\rho$",
+                 ylabel=r"first-to-default spread, bp", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 100, 300, 500],
+                 font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.8)
+        ax = g.ax
+        line = VGroup(curve(ax, rh, v, BAD, stroke_width=3.5), *[Dot(ax.c2p(a, b), color=BAD) for a, b in zip(rh, v)])
+        hi = DashedLine(ax.c2p(0, f["n"] * f["single_bp"]), ax.c2p(1, f["n"] * f["single_bp"]), color=GREY_B,
+                        stroke_width=1.5)
+        lo = DashedLine(ax.c2p(0, f["single_bp"]), ax.c2p(1, f["single_bp"]), color=GREY_B, stroke_width=1.5)
+        side = VGroup(
+            label(rf"{f['n']} names, each 100 bp, 5 years, recovery 40\%", font_size=18, color=GREY_A),
+            MathTex(rf"\rho = 0:\ {v[0]:.0f}\ \text{{bp}} \approx 5 \times 100", font_size=26),
+            MathTex(rf"\rho \to 1:\ {v[-1]:.0f}\ \text{{bp}} \to 100", font_size=26),
+            wrapped_label(r"the protection pays on the first default in the basket: independent names give five chances, "
+                          r"perfectly correlated ones only one. The basket's price is a price of correlation", 3.6, 17,
+                          GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.6)
+        fit_right(side)
+        with self.voiceover(
+            "Li's recipe makes default times: draw the correlated normals, map each through the name's own survival "
+            "curve, and read off when it defaults. <bookmark mark='a'/> Use it on a basket of five names, each with a "
+            "swap spread of one hundred, and price protection on the first default among them. With independent "
+            f"names, it costs about {v[0]:.0f}, five chances of a default. <bookmark mark='b'/> As the correlation "
+            "rises, the names tend to default together or not at all, and the price falls toward one name's spread. "
+            "The basket trades the correlation, which no single-name swap reveals."
+        ) as vo:
+            self.play(FadeIn(hdr))
+            vo.wait_until("a")
+            self.play(FadeIn(g), Create(hi), Create(lo), FadeIn(side[0]), FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(Create(line), FadeIn(side[2]), FadeIn(side[3]), run_time=2)
+        self.add(illustration(r"200{,}000 simulated baskets per correlation"))
         self.wait(0.4)
         self.clear_scene()
 

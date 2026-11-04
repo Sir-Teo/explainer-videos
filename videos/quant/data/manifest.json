@@ -17204,6 +17204,11 @@
   "bytes": 23016,
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000815097.json"
  },
+ "edgar/facts/CIK0001287750/CommonStockDividendsPerShareDeclared/through_2025-12-31": {
+  "sha256": "6a3a1bd49a29ca7a4b4434853938c4bdbc4e1c55bc5f92230ebc75b70b667bff",
+  "bytes": 6216,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001287750.json"
+ },
  "edgar/facts/CIK0001287750/NetAssetValuePerShare/through_2025-12-31": {
   "sha256": "0abaebdd7c6555fd4e136010ed6a0fdad764a7c31c8ece3f99448905907fab0c",
   "bytes": 6617,

@@ -198,9 +198,9 @@ class Affine(VoiceoverScene, ThreeDScene):
                 cmath(r"dy^{(n)}", r"=", r"\tfrac{B_{a_1}(n)}{n}\,dx + \tfrac{B_{a_2}(n)}{n}\,du", font_size=36,
                       colors={r"dy^{(n)}": ZERO})]
         hdr = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=0.45)
-        g = axes([0, 31], [0, 1.05], x_length=6.4, y_length=3.6, xlabel=r"maturity $n$, years",
+        g = axes([0, 31], [0, 1.05], x_length=6.4, y_length=3.2, xlabel=r"maturity $n$, years",
                  ylabel=r"correlation with the 2-year", xticks=[1, 5, 10, 20, 30], yticks=[0, 0.5, 1.0],
-                 font_size=13).to_edge(LEFT, buff=0.6).shift(DOWN * 1.0)
+                 font_size=13).to_edge(LEFT, buff=0.6).shift(DOWN * 0.55)
         ax = g.ax
         one = DashedLine(ax.c2p(0, 1), ax.c2p(31, 1), color=GREY_B, stroke_width=2)
         ld = VGroup(*[Dot(ax.c2p(a_, b_), color=WHITE, radius=0.05) for a_, b_ in zip(n, t["data"])])

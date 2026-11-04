@@ -11,6 +11,7 @@ class Crisis(VoiceoverScene):
         j = load("cjs")
         self.card()
         self.catbond(j)
+        self.reprice()
         self.ratings()
         self.squared()
 
@@ -65,6 +66,42 @@ class Crisis(VoiceoverScene):
             self.play(Create(lines[2]), Create(star), FadeIn(side[1]), FadeIn(side[2]), run_time=2)
             vo.wait_until("c")
             self.play(FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def reprice(self):
+        from explainer.quant.house import credit as CR
+        cases = [(0.02, 0.15, r"calm: PD 2\%, $\rho$ = 0.15"), (0.04, 0.15, r"PD doubles"), (0.02, 0.4, r"$\rho$ = 0.4"),
+                 (0.04, 0.4, r"both")]
+        vals = [CR.lhp_tranche_el(p_, r_, 0.4, 0.15, 0.30) * 1e4 for p_, r_, _ in cases]
+        g = axes([0.4, 4.6], [-1, 2.5], x_length=6.4, y_length=4.2, xlabel=r"", ylabel=r"senior 15--30\%: expected loss, bp "
+                 r"(log scale)", xticks=[], yticks=[], font_size=14).to_edge(LEFT, buff=0.9).shift(DOWN * 0.3)
+        ax = g.ax
+        ty = VGroup(*[MathTex(f"{10 ** e:g}", font_size=20).next_to(ax.c2p(0.4, e), LEFT, buff=0.12) for e in (-1, 0, 1, 2)])
+        bars = VGroup()
+        for i, (v_, (_, _, l_)) in enumerate(zip(vals, cases)):
+            h = np.log10(max(v_, 0.1))
+            b_ = Rectangle(width=0.7, height=max(ax.c2p(0, h)[1] - ax.c2p(0, -1)[1], 0.01), stroke_width=0,
+                           fill_color=SENIOR if i == 0 else BAD, fill_opacity=0.8).move_to(
+                [ax.c2p(i + 1, 0)[0], (ax.c2p(0, h)[1] + ax.c2p(0, -1)[1]) / 2, 0])
+            bars.add(VGroup(b_, MathTex(f"{v_:.1f}" if v_ < 10 else f"{v_:.0f}", font_size=24).next_to(b_, UP, buff=0.1),
+                            wrapped_label(l_, 1.5, 14, GREY_A).next_to(ax.c2p(i + 1, -1), DOWN, buff=0.15)))
+        side = wrapped_label(rf"the same tranche, large pool, recovery 40\%: doubling the default rate and raising the "
+                             rf"correlation together multiplies its expected loss {vals[3] / vals[0]:,.0f}-fold. A position "
+                             r"marked as almost riskless was a leveraged bet on both", 3.8, 18, GREY_A).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "What happened to such a tranche as 2007 went on? Two things moved at once: the expected default rate on "
+            "mortgages rose, and so did the correlation, as house prices fell everywhere together. "
+            "<bookmark mark='a'/> Double the default rate and the senior tranche's expected loss rises twentyfold. "
+            "Raise the correlation and it rises more. <bookmark mark='b'/> Do both, and it is about "
+            f"{vals[3] / vals[0]:,.0f} times what it was. A position that had been marked as almost riskless was a "
+            "highly leveraged bet on exactly those two numbers."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(ty), FadeIn(bars[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(bars[1]), FadeIn(bars[2]))
+            vo.wait_until("b")
+            self.play(FadeIn(bars[3]), FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
 
