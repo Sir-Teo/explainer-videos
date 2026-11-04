@@ -3,7 +3,7 @@
 Math, physics, ML and markets explainers in the style of 3Blue1Brown, built entirely in code with
 [Manim Community](https://www.manim.community/) and narrated by a local neural voice. Only the code is stored here;
 every video builds from source. Each video lives in `videos/<series>/<name>/` with its own README (outline and sources); the series are
-`ai`, `analysis`, `physics`, `math`, `ml` and `markets`. Videos are always addressed by name (`tools/build.py quantum`).
+`ai`, `analysis`, `physics`, `math`, `ml` and `markets`, with `cs` planned. Videos are always addressed by name (`tools/build.py quantum`).
 
 | Video | Length | Build |
 |---|---|---|
@@ -22,6 +22,7 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 | Quantum Mechanics, Part 2 | 57 min | `python -m videos.physics.quantum2.compute && python tools/build.py quantum2` |
 | Analysis, Built (10 parts: real, complex and functional analysis; English and Chinese) | 5 h 20 min | `python -m videos.analysis.analysisN.compute && python tools/build.py analysisN` |
 | AI, Built (31 parts: [the plan](videos/ai/README.md); English and Chinese) | 30–60 min each | `python tools/make.py ai1` … `ai31`, or `--series ai` |
+| Computer Science, Built (42 parts, planned: [the plan](videos/cs/README.md); English and Chinese) | 50–60 min each | not yet built |
 
 ## Layout
 
