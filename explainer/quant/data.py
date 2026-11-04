@@ -834,6 +834,32 @@ def cftc_tff(code: str, start: str = "2010-01-01", through: str = "2025-12-31") 
         out[k] = np.array([float(r.get(k, "nan")) for r in rows])
     return out
 
+HKM = "https://asaf.manela.org/papers/hkm/intermediarycapitalrisk/He_Kelly_Manela_Factors.zip"
+
+
+def hkm(kind: str = "quarterly_assets") -> dict:
+    """He, Kelly and Manela's (2017) intermediary capital data, as the authors publish it: ``quarterly_assets``
+    (1970-2012: the capital ratio, their capital risk factor, Adrian-Etula-Muir's leverage factor, the market, and
+    the test portfolios of seven asset classes) or ``monthly`` (the capital ratio and factor, 1970-2018). Columns by
+    name; dates as YYYYQ or YYYYMM ints; blank cells NaN."""
+    import io
+    import zipfile
+
+    path = DATA / "hkm" / "He_Kelly_Manela_Factors.zip"
+    raw = _cached("hkm/factors_zip", path, lambda: _get(HKM), HKM)
+    name = {"quarterly_assets": "He_Kelly_Manela_Factors_And_Test_Assets.csv",
+            "monthly": "He_Kelly_Manela_Factors_monthly.csv"}[kind]
+    with zipfile.ZipFile(io.BytesIO(raw)) as z:
+        text = z.read(name).decode()
+    lines = text.strip().splitlines()
+    cols = lines[0].split(",")
+    rows = [[float(x) if x.strip() else np.nan for x in ln.split(",")] for ln in lines[1:]]
+    a = np.array(rows)
+    out = {c: a[:, j] for j, c in enumerate(cols)}
+    out["date"] = a[:, 0].astype(int)
+    out["columns"] = cols
+    return out
+
 # ---------------------------------------------------------------------------
 # What the series has used so far: ``python -m explainer.quant.data`` fetches all of it
 # ---------------------------------------------------------------------------

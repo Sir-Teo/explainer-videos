@@ -2865,3 +2865,63 @@ def test_attack_model_and_breakeven():
     d = np.array([20000101 + 100 * m for m in range(12)] + [20010101 + 100 * m for m in range(12)])
     cpi = np.r_[np.full(12, 100.0), np.full(12, 103.0)]
     assert M.realised_inflation(d, cpi, 20000115, 1) == pytest.approx(0.03)
+
+
+# ---------------------------------------------------------------------------- Part 23: the expected-return framework
+def test_frontier_gmv_tangency():
+    from explainer.quant.house import premia as P
+    mu = np.array([0.06, 0.08, 0.10])
+    S = np.array([[0.04, 0.006, 0.004], [0.006, 0.09, 0.012], [0.004, 0.012, 0.16]])
+    g = P.gmv(S)
+    k = P.frontier_constants(mu, S)
+    assert g["var"] == pytest.approx(1 / k["C"])
+    m = 0.085
+    w = P.frontier_weights(m, mu, S)
+    assert w.sum() == pytest.approx(1.0) and w @ mu == pytest.approx(m)
+    assert np.sqrt(w @ S @ w) == pytest.approx(float(P.frontier_sigma(m, mu, S)))
+    t = P.tangency(mu, S, rf=0.03)
+    assert (t["mean"] - 0.03) / t["sd"] == pytest.approx(t["sharpe"])
+    two = P.two_asset_gmv(0.2, 0.2, 0.5)
+    assert two["w1"] == pytest.approx(0.5) and two["sd"] == pytest.approx(0.2 * np.sqrt(0.75))
+
+
+def test_capm_hj_and_sdf():
+    from explainer.quant.house import premia as P
+    rng = np.random.default_rng(0)
+    T = 4000
+    m = 0.005 + 0.04 * rng.standard_normal(T)
+    betas = np.array([0.5, 1.0, 1.5])
+    R = m[:, None] * betas + 0.02 * rng.standard_normal((T, 3))
+    c = P.capm_betas(R, m)
+    assert np.allclose(c["beta"], betas, atol=0.03)
+    s = P.sml(c["beta"], R.mean(0))
+    assert s["slope"] == pytest.approx(m.mean(), abs=0.002)
+    mu = np.array([0.005, 0.003])
+    Sg = np.array([[0.0016, 0.0002], [0.0002, 0.0009]])
+    assert P.hj_excess(mu, Sg) >= max(abs(mu / np.sqrt(np.diag(Sg))))
+    g = np.exp(0.02 + 0.02 * rng.standard_normal(5000))
+    assert P.sdf_ratio(g, 10) > P.sdf_ratio(g, 2)
+    f = P.euler_moments(g, np.c_[np.full(5000, 1.02)])
+    assert f((1 / 1.02, 0.0)).mean() == pytest.approx(0.0, abs=1e-12)
+
+
+def test_shiller_cs_limits_bubbles():
+    from explainer.quant.house import premia as P
+    d = np.ones(50)
+    p = P.ex_post_rational(d, 0.05, terminal=20.0)
+    assert p[0] == pytest.approx(20.0, rel=1e-9)  # a constant dividend priced at 1/r stays there
+    rng = np.random.default_rng(1)
+    dp = rng.standard_normal(200) * 0.3 - 3
+    r = np.r_[0, -0.5 * np.diff(dp)] + 0.01 * rng.standard_normal(200)
+    out = P.cs_decomposition(dp, r, np.zeros(200), horizon=10)
+    assert 0 < out["rho"] < 1 and out["b_d"] == pytest.approx(0.0)
+    sv0 = P.shleifer_vishny(a=0.0)
+    sv2 = P.shleifer_vishny(a=1.5)
+    assert sv2["p2"] < sv0["p2"]  # performance-based withdrawals deepen the mispricing
+    assert P.gk_multiplier(0.2) == pytest.approx(5.0)
+    T = 120
+    R = np.full((T, 2), 0.0)
+    R[:24, 0] = 0.05  # +222% in two years
+    R[24:30, 0] = -0.15  # then a crash
+    out = P.run_ups(R, np.zeros(T), months=24, threshold=1.0, crash=0.4, horizon=24)
+    assert out["n"] == 1 and out["events"][0]["crash"]

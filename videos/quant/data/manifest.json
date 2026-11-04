@@ -18844,6 +18844,11 @@
   "bytes": 6317,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
+ "fred/A794RX0Q048SBEA/1900-01-01_2025-12-31": {
+  "sha256": "d0b2a04c1e926fd6d93e823b5148160ce93b625e37b9b9b0e79784d6d1888347",
+  "bytes": 6622,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=A794RX0Q048SBEA"
+ },
  "fred/A794RX0Q048SBEA/1947-01-01_2025-12-31": {
   "sha256": "d0b2a04c1e926fd6d93e823b5148160ce93b625e37b9b9b0e79784d6d1888347",
   "bytes": 6622,
@@ -18853,6 +18858,11 @@
   "sha256": "39f599f6987c5e3db46d1f6e771f2089e7b9954bd360f589f445984221b4ad58",
   "bytes": 15723,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=AAA"
+ },
+ "fred/B230RC0Q173SBEA/1900-01-01_2025-12-31": {
+  "sha256": "17f4c48e61a3b402f87c484a5003b3d1492f8c12f5f0496bda2e6d53b0f29f0c",
+  "bytes": 6953,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=B230RC0Q173SBEA"
  },
  "fred/BAA/1953-04-01_2025-12-31": {
   "sha256": "e61972686fb9d7a7e3141de2f64b71a90d2338b7c1b3dd9a7e5ca0ecde9093b9",
@@ -18873,6 +18883,16 @@
   "sha256": "e5012fe597fe7f307d2885995fe9fa820336433d4b9bdc2c0d54280e6844775f",
   "bytes": 2240,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAA10Y"
+ },
+ "fred/BOGZ1FL664090005Q/1900-01-01_2025-12-31": {
+  "sha256": "b52e6543ead1263df6cf078b180f767f9aa2a4a70a065f459094131934329070",
+  "bytes": 6608,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BOGZ1FL664090005Q"
+ },
+ "fred/BOGZ1FL664190005Q/1900-01-01_2025-12-31": {
+  "sha256": "5da5df93e2d28373b61bbeddd66e3a4b4abb835f6a09657f825bcc8dae2d6b13",
+  "bytes": 6605,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BOGZ1FL664190005Q"
  },
  "fred/CPIAUCSL/1900-01-01_2025-12-31": {
   "sha256": "4fab7e0299228f031af04b3d2298d129076291d953cd1385b0ddf11ca649d2f2",
@@ -19459,6 +19479,11 @@
   "bytes": 51685,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US"
  },
+ "fred/NASDAQCOM/1900-01-01_2025-12-31": {
+  "sha256": "ffdf2d124377877f50ab67eaaa8a01158c6dc30e9d669c39aa0a4d9028860e9b",
+  "bytes": 283597,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NASDAQCOM"
+ },
  "fred/NIKKEI225/1949-05-01_2025-12-31": {
   "sha256": "23f5bfafd1efb069207e081b712ab44e2ce60aab40bc90cc0ed58c39a9595cb8",
   "bytes": 403661,
@@ -19473,6 +19498,11 @@
   "sha256": "69b4ba6cec9d4308a25a1ef5bc030c351c9fe3cd7e02965db06a35d014c3001d",
   "bytes": 42443,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=OBMMIJUMBO30YF"
+ },
+ "fred/PCECC96/1900-01-01_2025-12-31": {
+  "sha256": "1ce5cc647f768904934bfa6d72e9087da09e4d2f2064c0cfdd46a99684003836",
+  "bytes": 7017,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCECC96"
  },
  "fred/PCEPILFE/1950-01-01_2025-12-31": {
   "sha256": "ffa4c5eca8095508e8a6eed7374cefa1ed7e911c7912a83201be86753d89816c",
@@ -19699,6 +19729,11 @@
   "bytes": 20214,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WSHOMCB"
  },
+ "hkm/factors_zip": {
+  "sha256": "0e9bac2d35c80e62b20fc71f222a41f71eb8e607963f7022da55b1bb143c3bbf",
+  "bytes": 1454750,
+  "source": "https://asaf.manela.org/papers/hkm/intermediarycapitalrisk/He_Kelly_Manela_Factors.zip"
+ },
  "kenfrench/AC_value/through_2020-12": {
   "sha256": "ca39fefcb47ac5bf9b4ea1fcaed3e875994d59318c1eb51049d9735ebe002ab7",
   "bytes": 82895,
@@ -19718,6 +19753,11 @@
   "sha256": "406e29ea477bc7dbfa06901c7ad591ceb89a34e2e22be96ff737e9e63dccce3b",
   "bytes": 178021,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BE-ME_CSV.zip"
+ },
+ "kenfrench/BETA_value/through_2025-12": {
+  "sha256": "2c05b9c09fa0e54fa0dcca984b3e830ea9ae1b1526f8e5b09dffe4bea3954f34",
+  "bytes": 90130,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BETA_CSV.zip"
  },
  "kenfrench/E-P_value/through_2020-12": {
   "sha256": "f6b3329087d7f1116cc85b2943eebc3550b2df9fece43c6b81a2c37fb12364a2",
@@ -19779,6 +19819,11 @@
   "bytes": 47418,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
  },
+ "kenfrench/industries10_value/through_2025-12": {
+  "sha256": "8490d83e31807a6fe8a30cad32fff05a5b9bb93aad68ca058003506ae3ae69cc",
+  "bytes": 100194,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Industry_Portfolios_CSV.zip"
+ },
  "kenfrench/industries49_value/through_2020-12": {
   "sha256": "62181d72490fab916b874640dad7277a0efad526422d95c840112b91372157bd",
   "bytes": 411842,
@@ -19812,6 +19857,11 @@
  "shiller/ie_data/through_2020-12": {
   "sha256": "3996c62d804e16e818332a2f5b7ab97ca0d95b063d1d23ef5b8ed49390ab8089",
   "bytes": 96604,
+  "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+ },
+ "shiller/ie_data/through_2025-06": {
+  "sha256": "d0580a40f10087aabdcc591481b0e1a31d2240bb2df987459e47ad2e08185b74",
+  "bytes": 98719,
   "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
  },
  "shiller/ie_data/through_2025-12": {
