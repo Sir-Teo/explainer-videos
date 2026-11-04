@@ -1,0 +1,494 @@
+{
+ "title": "计算机科学，从零搭建 · 第10部分：并行机器",
+ "chapters": {
+  "Hook": "时钟停下了",
+  "Power": "1. 功率墙",
+  "Multicore": "2. 四个核，一个任务",
+  "Coherence": "3. 缓存一致性",
+  "FalseShare": "4. 伪共享",
+  "Consistency": "5. 存储一致性",
+  "Atomics": "6. 原子指令",
+  "Simd": "7. SIMD 与向量",
+  "Gpu": "8. 一章讲完 GPU",
+  "WorkSpan": "9. 工作量、跨度与布伦特定理",
+  "Scan": "10. 并行前缀",
+  "Sorting": "11. 排序网络",
+  "Amdahl": "12. 阿姆达尔与古斯塔夫森",
+  "Models": "13. 模型与网络",
+  "Job": "14. 四个核上的任务",
+  "Frontier": "15. 前沿：凭空之值、窃取、暗硅",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "13924ce7bbde": {
+   "scene": "Hook",
+   "en": "Here are fifty years of microprocessors, each dot one chip, on a logarithmic scale. <bookmark mark='a'/> The number of transistors on a chip doubled about every two years, as Gordon Moore predicted, and it still does. <bookmark mark='b'/> The speed of a single thread followed it for thirty years. <bookmark mark='c'/> So did the clock: from under a megahertz to over three gigahertz, a third faster every year. <bookmark mark='d'/> And power rose with them, to about a hundred watts. <bookmark mark='e'/> Then, around 2005, three of the curves bent. The clock stopped: since then it has not grown at all. Power hit a ceiling. Single-thread speed slowed to a crawl. <bookmark mark='f'/> And a new curve appeared: the number of cores. The transistors kept coming, and the only way left to use them was more processors on each chip.",
+   "zh": "这是五十年来的微处理器，每个点是一颗芯片，纵轴是对数刻度。<bookmark mark='a'/>一颗芯片上的晶体管数大约每两年翻一番，正如戈登·摩尔所预言，至今依然如此。<bookmark mark='b'/>单线程的速度跟着它涨了三十年。<bookmark mark='c'/>时钟也是：从不到一兆赫到三吉赫以上，每年快三分之一。<bookmark mark='d'/>功率也随之上升，到了大约一百瓦。<bookmark mark='e'/>然后，在 2005 年前后，其中三条曲线弯了下来。时钟停了：从那以后再没有增长。功率撞上了天花板。单线程速度慢得几乎不动。<bookmark mark='f'/>一条新曲线出现了：核的数量。晶体管还在源源不断地来，而剩下唯一能用上它们的办法，就是在每颗芯片上放更多的处理器。"
+  },
+  "09886e672d45": {
+   "scene": "Hook",
+   "en": "And the Job. <bookmark mark='a'/> On one of Part 8's out-of-order cores, with Part 9's real caches, counting the words of thirty novels takes fifty-seven seconds. <bookmark mark='b'/> With four cores, the plan is simple: give each core a quarter of the books, let each count its own, and combine the four sets of counts. <bookmark mark='c'/> The obvious way of combining them throws away much of what the cores gained. <bookmark mark='d'/> Done well, the four cores finish nearly five times faster than one. <bookmark mark='e'/> More than four times faster, on four cores. By the end of this part you will know how that is possible, and why it is a warning as much as a triumph.",
+   "zh": "再看任务。<bookmark mark='a'/>在第8部分的一个乱序核上，加上第9部分的真实缓存，数完三十部小说的词要五十七秒。<bookmark mark='b'/>有了四个核，计划很简单：每个核分到四分之一的书，各数各的，再把四份计数合起来。<bookmark mark='c'/>显而易见的合并办法，会把核赢得的大部分东西又扔掉。<bookmark mark='d'/>做得好，四个核比一个核快将近五倍。<bookmark mark='e'/>四个核，快了四倍以上。到这一部分结束时，你会明白这怎么可能，以及为什么它既是胜利，也是警告。"
+  },
+  "30685c47bea8": {
+   "scene": "Hook",
+   "en": "Here is where this part goes. <bookmark mark='a'/> Why the clock stopped: the physics of the power wall. <bookmark mark='b'/> What goes wrong when several cores share memory: caches that must be kept in agreement, and memory operations that appear out of order, with both effects measured on this computer. <bookmark mark='c'/> Parallelism inside one core: vector instructions, and the graphics processor. <bookmark mark='d'/> The theory: work and span, Brent's theorem, the parallel prefix that Part 4's adder already used, and networks that sort. <bookmark mark='e'/> And the Job on four cores, for the ledger's next row.",
+   "zh": "这一部分要去的地方是这样的。<bookmark mark='a'/>时钟为什么停下：功率墙背后的物理。<bookmark mark='b'/>几个核共享存储器时会出什么错：缓存必须保持一致，访存操作看起来会乱了次序，这两种效应都在这台计算机上测量出来。<bookmark mark='c'/>一个核内部的并行：向量指令，以及图形处理器。<bookmark mark='d'/>理论：工作量与跨度、布伦特定理、第4部分的加法器早已用过的并行前缀，以及会排序的网络。<bookmark mark='e'/>还有四个核上的任务，给账本的下一行。"
+  },
+  "d4dc93459b45": {
+   "scene": "Hook",
+   "en": "This is Part 10 of Computer Science, Built, the last part of Act Two, Making It Fast. <bookmark mark='a'/> In this part: the power wall, and the multicore chips it forced. Cache coherence, the MESI protocol, and false sharing. Memory consistency: store buffers, litmus tests and fences, and the atomic instructions that locks are built from. Vector instructions, and graphics processors. The theory of parallel algorithms: work and span, Brent's theorem, parallel prefix and sorting networks. Amdahl's law and Gustafson's answer, the models of parallel computers and the networks inside supercomputers. And the Job, on four cores.",
+   "zh": "这是《计算机科学，从零搭建》的第10部分，第二幕“让它变快”的最后一部分。<bookmark mark='a'/>这一部分讲：功率墙，以及它逼出来的多核芯片。缓存一致性、MESI 协议和伪共享。存储一致性：存储缓冲、试金石测试和栅栏，以及搭锁所用的原子指令。向量指令和图形处理器。并行算法的理论：工作量与跨度、布伦特定理、并行前缀和排序网络。阿姆达尔定律和古斯塔夫森的回答，并行计算机的模型，以及超级计算机内部的网络。还有四个核上的任务。"
+  },
+  "cb6bdef8d77a": {
+   "scene": "Power",
+   "en": "Chapter one. The power wall.",
+   "zh": "第一章。功率墙。"
+  },
+  "877cf9944a73": {
+   "scene": "Power",
+   "en": "Where does a chip's power go? Mostly into one formula. <bookmark mark='a'/> Each time a transistor switches, it charges or discharges a tiny capacitance C through the supply voltage V, and that costs energy C V squared. <bookmark mark='b'/> A fraction alpha of the transistors switch each cycle, <bookmark mark='c'/> and there are f cycles a second. So the dynamic power is alpha C V squared f. <bookmark mark='d'/> On top of that is leakage: transistors are not perfect switches, and some current flows through them even when they are off. Remember the V squared, and remember leakage; between them they stopped the clock.",
+   "zh": "芯片的功率花到哪里去了？大部分归结为一个公式。<bookmark mark='a'/>晶体管每翻转一次，就要通过电源电压 V 给一个小电容 C 充电或放电，代价是 C 乘 V 平方的能量。<bookmark mark='b'/>每个周期有比例为阿尔法的晶体管在翻转，<bookmark mark='c'/>每秒有 f 个周期。所以动态功率是阿尔法乘 C 乘 V 平方乘 f。<bookmark mark='d'/>此外还有漏电：晶体管不是完美的开关，即使关着也有电流流过。记住 V 的平方，也记住漏电；正是它们俩合起来让时钟停了下来。"
+  },
+  "b85ac05c22e4": {
+   "scene": "Power",
+   "en": "In 1974 Robert Dennard and his colleagues at IBM worked out what happens when you shrink a transistor. Scale every dimension down by a factor kappa. <bookmark mark='a'/> Scale the voltage down by the same factor, so the electric fields inside stay the same. Then the capacitance falls by kappa too, and the transistor switches kappa times faster, so the clock can rise by kappa. <bookmark mark='b'/> Put those into the formula: the power of one transistor falls by kappa squared. <bookmark mark='c'/> But kappa squared as many fit in the same area. So the power per square millimetre stays exactly the same. <bookmark mark='d'/> With kappa about one point four each generation, every two years brought twice the transistors, running forty percent faster, for the same power. For thirty years, programs got faster without anyone changing them.",
+   "zh": "1974 年，IBM 的罗伯特·登纳德和同事们算出了缩小晶体管会发生什么。把每个尺寸都缩小 kappa 倍。<bookmark mark='a'/>电压也缩小同样的倍数，好让内部的电场保持不变。于是电容也缩小 kappa 倍，晶体管翻转快了 kappa 倍，时钟就能提高 kappa 倍。<bookmark mark='b'/>代进公式：单个晶体管的功率下降 kappa 平方倍。<bookmark mark='c'/>但同样的面积能放下 kappa 平方倍的晶体管。所以每平方毫米的功率恰好不变。<bookmark mark='d'/>每一代 kappa 大约是一点四，每两年就带来两倍的晶体管，快百分之四十，功率不变。三十年里，程序不用任何人改动就越跑越快。"
+  },
+  "e5475498d444": {
+   "scene": "Power",
+   "en": "Why did it end? Because the voltage stopped falling. <bookmark mark='a'/> A transistor switches fast only if the supply voltage is well above its threshold voltage, the point where it turns on. So to lower V, you must lower the threshold too. <bookmark mark='b'/> But below its threshold a transistor is not quite off: the current through it falls only tenfold for every sixty to a hundred millivolts, a limit set by the thermal energy of electrons at room temperature. Lower the threshold, and leakage grows exponentially. <bookmark mark='c'/> By about 2005 supply voltages had settled near one volt, and they have barely moved since. <bookmark mark='d'/> With the voltage fixed, the formula turns against you: each generation packs twice the transistors into the same area, and if the clock still rose, the power per area would grow. <bookmark mark='e'/> A chip can only shed about a hundred watts of heat before it needs exotic cooling. So the clock stopped.",
+   "zh": "它为什么结束了？因为电压不再下降。<bookmark mark='a'/>只有电源电压远高于阈值电压，也就是晶体管导通的那个点，晶体管才能翻转得快。所以要降低 V，阈值也得降低。<bookmark mark='b'/>但在阈值以下，晶体管并没有完全关断：每降低六十到一百毫伏，流过它的电流才减少十倍，这个极限由室温下电子的热能决定。降低阈值，漏电就按指数增长。<bookmark mark='c'/>到 2005 年前后，电源电压稳定在一伏左右，此后几乎没有变过。<bookmark mark='d'/>电压固定下来，公式就转而跟你作对：每一代在同样的面积里塞进两倍的晶体管，如果时钟还在提高，单位面积的功率就会上升。<bookmark mark='e'/>一颗芯片在需要特殊散热之前，大约只能散掉一百瓦的热。所以时钟停了。"
+  },
+  "a98828660b06": {
+   "scene": "Power",
+   "en": "So the industry turned the formula around. <bookmark mark='a'/> Within the range where a chip works, the highest clock it can run is roughly proportional to its voltage. So lowering both together cuts power with the cube of the clock. <bookmark mark='b'/> Take one core at full speed: one unit of power, one unit of work a second. <bookmark mark='c'/> Now two cores, each at eighty percent of the clock and voltage: each draws point eight cubed, about half the power, so the pair draws about the same as the one. But together they do one point six units of work. <bookmark mark='d'/> Sixty percent more, for the same watts, with one condition that changes everything: the work has to be divided between them. In 2005 both Intel and AMD shipped their first dual-core processors, and the rest of this part is about that condition.",
+   "zh": "于是产业界把公式反过来用。<bookmark mark='a'/>在芯片能工作的范围内，它能跑的最高时钟大致和电压成正比。所以两者一起降低，功率就随时钟的三次方下降。<bookmark mark='b'/>取一个全速的核：一份功率，每秒一份工作。<bookmark mark='c'/>现在换成两个核，各自的时钟和电压都是百分之八十：每个耗电零点八的三次方，大约一半，所以两个合起来和原来那一个差不多。但它们一起做一点六份工作。<bookmark mark='d'/>同样的瓦数，多出百分之六十，只有一个改变一切的条件：工作必须能分给它们。2005 年，英特尔和 AMD 都推出了第一款双核处理器，这一部分余下的内容，讲的都是那个条件。"
+  },
+  "7c290c2e0155": {
+   "scene": "Power",
+   "en": "And even more cores only postpone the problem. <bookmark mark='a'/> Each generation still doubles the transistors in the same area, but with the voltage stuck, the energy of one switch falls by only about forty percent. With a fixed power budget, the fraction of the chip that can switch at full speed shrinks every generation: half after two generations, a quarter after four, an eighth after six. The rest must stay dark. <bookmark mark='b'/> In 2011 Hadi Esmaeilzadeh and his colleagues estimated that at eight nanometres, more than half of a chip would have to be unpowered at any moment. <bookmark mark='c'/> The response has been specialization: chips full of circuits for one job each, video, encryption, matrix multiplication, which sit dark until their job comes. That is the story of Part 60. This part is about the general-purpose answer: many cores, and how to use them.",
+   "zh": "而更多的核也只是把问题推后。<bookmark mark='a'/>每一代仍在同样的面积里把晶体管翻一番，但电压卡住了，一次翻转的能量只下降大约百分之四十。在固定的功率预算下，芯片上能全速翻转的部分每一代都在缩小：两代后一半，四代后四分之一，六代后八分之一。其余部分必须保持黑暗。<bookmark mark='b'/>2011 年，哈迪·埃斯梅尔扎德和同事们估计，到八纳米时，芯片在任何时刻都有一半以上必须断电。<bookmark mark='c'/>应对之道是专门化：芯片上布满各管一件事的电路，视频、加密、矩阵乘法，平时黑着，轮到它们的活才亮。那是第60部分的故事。这一部分讲的是通用的答案：许多核，以及怎样用好它们。"
+  },
+  "4ef57a6a6323": {
+   "scene": "Multicore",
+   "en": "Chapter two. Four cores, one Job.",
+   "zh": "第二章。四个核，一个任务。"
+  },
+  "52d88de8ea8a": {
+   "scene": "Multicore",
+   "en": "A multicore chip is several complete processors on one piece of silicon. <bookmark mark='a'/> Each core has its own pipeline, its own registers, and its own small caches. <bookmark mark='b'/> They share a larger cache, and behind it one memory: any core can load or store any address. That sharing is the convenience and the danger. It is convenient because threads of one program can pass data by simply writing it to memory. It is dangerous because each core keeps copies of memory in its private caches, and two cores can disagree about what an address holds. Chapters three to six are about that danger. First, the Job.",
+   "zh": "多核芯片就是一块硅片上的几个完整处理器。<bookmark mark='a'/>每个核有自己的流水线、自己的寄存器、自己的小缓存。<bookmark mark='b'/>它们共享一个较大的缓存，其后是同一个存储器：任何核都能读写任何地址。这种共享既是便利也是危险。便利在于，同一个程序的线程只要把数据写进存储器就能互相传递。危险在于，每个核都在私有缓存里保存着存储器的副本，两个核可能对一个地址里装的是什么意见不一。第三到第六章讲的就是这种危险。先看任务。"
+  },
+  "f883a5661218": {
+   "scene": "Multicore",
+   "en": "Here is the plan. <bookmark mark='a'/> Cut the text into four pieces of equal size, at word boundaries. <bookmark mark='b'/> Each core counts the words of its piece, with exactly Part 6's program, in a table of its own. While they count, no core ever writes anything another core reads, so none of the trouble of the next few chapters can arise. <bookmark mark='c'/> Then the four tables must be combined into one, and the top twenty printed. We price all of this on four of Part 8's cores at Pebble's clock, with the same model of the core that gave the ledger its fifty-seven seconds.",
+   "zh": "计划是这样的。<bookmark mark='a'/>把文本在词的边界上切成大小相等的四块。<bookmark mark='b'/>每个核用的正是第6部分的程序，在自己的一张表里数自己那块的词。数的时候，没有哪个核会写另一个核要读的东西，所以接下来几章的麻烦都不会出现。<bookmark mark='c'/>然后四张表必须合成一张，再打印前二十名。我们在 Pebble 的时钟下，用四个第8部分的核来给这一切定价，用的是给账本算出五十七秒的同一个核模型。"
+  },
+  "78d63f272c64": {
+   "scene": "Multicore",
+   "en": "Here is how long each core takes to count its quarter. <bookmark mark='a'/> If the work simply divided, each would take a quarter of fifty-seven seconds, about fourteen. <bookmark mark='b'/> Every core is faster than that. The slowest takes 11 seconds. <bookmark mark='c'/> The reason is the table. The Job's time is mostly spent scanning its table, and a quarter of the text contains not a quarter of the vocabulary but about half of it. So each core's table is half as long, each scan is half as long, and the four cores together do less work than one core alone.",
+   "zh": "这是每个核数完自己那四分之一要多久。<bookmark mark='a'/>如果工作只是简单地均分，每个核要用五十七秒的四分之一，大约十四秒。<bookmark mark='b'/>每个核都比这快。最慢的也只要11秒。<bookmark mark='c'/>原因在于那张表。任务的时间大多花在扫描表上，而四分之一的文本所含的词汇，不是四分之一，而是大约一半。所以每个核的表只有一半长，每次扫描只有一半长，四个核加起来做的功比一个核单干还少。"
+  },
+  "6879af24c221": {
+   "scene": "Multicore",
+   "en": "Now the four tables have to become one. <bookmark mark='a'/> The obvious way: when all four are done, core zero takes each entry of the other three tables and looks it up in its own, adding the count or appending the word. But every lookup is a scan of a table that grows to fifty-eight thousand entries, and there are ninety thousand lookups: 8 seconds of one core working while three wait. <bookmark mark='b'/> A tree is no better: two merges at once, then a final one, and the final merge of two big tables costs nearly as much as before. <bookmark mark='c'/> The way that works is to split the combining by word instead of by table. Give every word a number from zero to three by a simple rule, here the sum of its letters, and let core k merge, from all four tables, only the words whose number is k. Each core builds a quarter of the final table, so its scans are a quarter as long, and four run at once. The merge shrinks to about 0.6 seconds.",
+   "zh": "现在四张表必须变成一张。<bookmark mark='a'/>显而易见的办法：四个都完成后，核零把另外三张表的每一项拿到自己的表里查找，加上计数或者把词追加进去。但每次查找都是扫描一张会长到五万八千项的表，而查找有九万次：8秒里一个核在干活，三个在等。<bookmark mark='b'/>树形合并也好不到哪去：先同时做两次合并，再做最后一次，而两张大表的最后那次合并几乎和原来一样贵。<bookmark mark='c'/>行得通的办法是按词来分摊合并，而不是按表。用一条简单的规则给每个词一个从零到三的编号，这里用它字母之和，让核 k 从四张表里只合并编号为 k 的词。每个核建出最终那张表的四分之一，所以它的扫描只有四分之一长，而且四个同时进行。合并缩短到大约0.6秒。"
+  },
+  "c76063a1c2c7": {
+   "scene": "Multicore",
+   "en": "Why does a quarter of the text hold half the vocabulary? <bookmark mark='a'/> Count the distinct words in a thirty-second of the corpus, a sixteenth, an eighth, and so on. The count grows, but more and more slowly: common words appear in every piece, and only rare ones are new. <bookmark mark='b'/> This is Heaps' law, named for Harold Heaps in 1978: the number of distinct words in a text of n words grows roughly like n to a power below one, about one half for English. <bookmark mark='c'/> So be careful with the Job's superlinear speedup. It is real, but it comes from the Job's quadratic algorithm, which pays for every word with a scan of the whole table. Splitting the text makes the tables shorter, which is the same as making the algorithm better. In Part 16 a better algorithm removes the scan, and with it this free gift.",
+   "zh": "为什么四分之一的文本装着一半的词汇？<bookmark mark='a'/>数一数语料的三十二分之一、十六分之一、八分之一里各有多少个不同的词。数目在增长，但越来越慢：常用词在每一块里都出现，只有生僻词才是新的。<bookmark mark='b'/>这就是希普斯定律，以哈罗德·希普斯 1978 年的工作命名：一段 n 个词的文本里，不同的词数大致按 n 的一个小于一的幂增长，英语大约是二分之一。<bookmark mark='c'/>所以，对任务的超线性加速要小心。它是真的，但它来自任务的平方级算法：每个词都要扫一遍整张表来付账。把文本切开让表变短，就等于让算法变好了。在第16部分，一个更好的算法会去掉扫描，这份白送的礼物也就随之消失。"
+  },
+  "8729807a8255": {
+   "scene": "Coherence",
+   "en": "Chapter three. Cache coherence.",
+   "zh": "第三章。缓存一致性。"
+  },
+  "610952443140": {
+   "scene": "Coherence",
+   "en": "Here is the problem. Two cores, each with a private cache, and one variable x in memory, holding zero. <bookmark mark='a'/> Both cores read x. Each cache now keeps its own copy. <bookmark mark='b'/> Core zero writes one to x. With a write-back cache, the new value goes into core zero's cache, and memory still says zero. <bookmark mark='c'/> Now core one reads x again. It finds x in its own cache, a hit, and gets zero: a value that was overwritten some time ago. If x were a flag saying the data is ready, core one would wait forever. Caches made private copies of a shared memory, and the copies have come apart.",
+   "zh": "问题是这样的。两个核，各有一个私有缓存，存储器里有一个变量 x，值为零。<bookmark mark='a'/>两个核都读 x。现在每个缓存都保存着自己的副本。<bookmark mark='b'/>核零把一写进 x。在写回缓存里，新值进了核零的缓存，存储器里还是零。<bookmark mark='c'/>现在核一再读 x。它在自己的缓存里找到 x，命中，得到零：一个早已被覆盖的值。如果 x 是一个表示“数据已就绪”的标志，核一就会永远等下去。缓存为共享的存储器做了私有副本，而副本已经分道扬镳。"
+  },
+  "efdbf4e21069": {
+   "scene": "Coherence",
+   "en": "A coherence protocol makes the copies behave as if there were only one. It keeps two promises. <bookmark mark='a'/> The first: at any moment, for each cache line, either a single cache is allowed to write it, or any number of caches may read it, but never both. <bookmark mark='b'/> The second: a read returns the value of the most recent write to that address. <bookmark mark='c'/> To keep them, every cache must learn what the others are doing to the lines it holds. On a small chip every cache can watch, or snoop on, a shared bus that carries every miss. On a big one, a directory keeps track of who holds what.",
+   "zh": "一致性协议让这些副本表现得好像只有一份。它守两个承诺。<bookmark mark='a'/>第一：在任何时刻，对每个缓存行，要么只有一个缓存可以写它，要么任意多个缓存可以读它，但绝不同时。<bookmark mark='b'/>第二：一次读返回的是对那个地址最近一次写入的值。<bookmark mark='c'/>为了守住它们，每个缓存都必须知道别的缓存正在对它持有的行做什么。在小芯片上，每个缓存都可以监视，或者说监听，一条承载所有缺失的共享总线。在大芯片上，由一个目录记录谁持有什么。"
+  },
+  "fa69c7ba7c15": {
+   "scene": "Coherence",
+   "en": "The protocol inside most multicore chips descends from MESI, published by Mark Papamarcos and Janak Patel in 1984. Each line in each cache is in one of four states. <bookmark mark='a'/> Modified: this cache has the only copy, and it is newer than memory. Exclusive: the only copy, but clean. Shared: clean, and other caches may have it too. Invalid: not here at all. <bookmark mark='b'/> Now the transitions for this core's own accesses. A read miss asks the bus: if no one else has the line, it arrives Exclusive; if others do, Shared. A write needs the only copy: from Invalid, a read for ownership; from Shared, an invalidation of every other copy; and from Exclusive, nothing at all. That silent upgrade is why E exists: most data is private, and a private line can be written without asking anyone. <bookmark mark='c'/> And the transitions forced by other cores. When another core reads a line this cache holds Modified, this cache supplies the data and both end Shared. When another core writes, every other copy becomes Invalid.",
+   "zh": "大多数多核芯片里的协议，都源自 MESI，由马克·帕帕马科斯和贾纳克·帕特尔在 1984 年发表。每个缓存里的每一行处于四种状态之一。<bookmark mark='a'/>已修改：这个缓存有唯一的副本，而且比存储器新。独占：唯一的副本，但是干净的。共享：干净的，别的缓存可能也有。无效：根本不在这里。<bookmark mark='b'/>先看本核自己的访问引起的转移。读缺失去问总线：如果没有别人有这一行，它以独占状态到来；如果有别人有，就是共享。写需要唯一的副本：从无效出发，要为获得所有权而读；从共享出发，要作废其他所有副本；从独占出发，什么都不用做。这种悄无声息的升级就是 E 存在的理由：大多数数据是私有的，私有的行不用问任何人就能写。<bookmark mark='c'/>再看其他核迫使的转移。当另一个核读一个本缓存持有为已修改的行时，本缓存提供数据，双方都变成共享。当另一个核写时，其他所有副本都变成无效。"
+  },
+  "227c922a2ebb": {
+   "scene": "Coherence",
+   "en": "Watch one cache line through eight accesses by four cores. <bookmark mark='a'/> Core zero reads: no one else has it, so it arrives Exclusive. Core one reads: now both are Shared. Core zero writes: it must invalidate core one's copy, and becomes Modified. Core two reads: core zero supplies its dirty line, and both are Shared. Core three writes: everyone else is invalidated. It writes again: a hit, no bus traffic at all. Core one reads, and core three supplies it. Core two writes, and invalidates both. <bookmark mark='b'/> The simulator behind this, with any number of cores and caches, is checked on twenty thousand random accesses: never two writable copies, and every read sees the last write.",
+   "zh": "看一个缓存行经历四个核的八次访问。<bookmark mark='a'/>核零读：没有别人有它，所以以独占到来。核一读：现在两个都是共享。核零写：它必须作废核一的副本，变成已修改。核二读：核零提供它的脏行，两者都共享。核三写：其他所有人都被作废。它再写一次：命中，完全没有总线流量。核一读，由核三提供。核二写，作废另外两个。<bookmark mark='b'/>这背后的模拟器可以有任意多的核和缓存，它在两万次随机访问上检查过：从不出现两个可写的副本，每次读都看到最后一次写。"
+  },
+  "489b224a0b36": {
+   "scene": "Coherence",
+   "en": "Snooping has limits. <bookmark mark='a'/> A bus carries one transaction at a time, and every cache has to check every one, which works for a handful of cores but not for a hundred. <bookmark mark='b'/> Large chips keep a directory instead: next to memory, for every line, a record of which caches hold it, one bit per core. <bookmark mark='c'/> A miss goes to the directory, which forwards it only to the caches that hold the line, as point-to-point messages over an on-chip network. <bookmark mark='d'/> Either way, sharing adds a fourth kind of miss to Part 9's three: the coherence miss, a line that was in the cache until another core's write took it away. <bookmark mark='e'/> Our simulator shows how lopsided this can be. Two cores take turns writing their own counters, five hundred times each. If the two counters happen to sit in the same cache line, every write invalidates the other core's copy. If they sit in different lines, there are no invalidations at all. The next chapter measures what that costs on real hardware.",
+   "zh": "监听有它的极限。<bookmark mark='a'/>一条总线一次只承载一个事务，每个缓存都得检查每一个，这对几个核行得通，对一百个核就不行了。<bookmark mark='b'/>大芯片改用目录：在存储器旁边，为每一行记录哪些缓存持有它，每个核一位。<bookmark mark='c'/>缺失发给目录，目录只把它转给持有那一行的缓存，作为片上网络上的点对点消息。<bookmark mark='d'/>无论哪种，共享都给第9部分的三种缺失添了第四种：一致性缺失，一行本来在缓存里，直到另一个核的写把它拿走。<bookmark mark='e'/>我们的模拟器显示了这可以多么悬殊。两个核轮流写各自的计数器，各五百次。如果两个计数器碰巧在同一个缓存行里，每次写都会作废另一个核的副本。如果它们在不同的行里，一次作废都没有。下一章测量这在真实硬件上要付出多少。"
+  },
+  "27f0b17eacc9": {
+   "scene": "FalseShare",
+   "en": "Chapter four. False sharing.",
+   "zh": "第四章。伪共享。"
+  },
+  "a2dc1bd4eb84": {
+   "scene": "FalseShare",
+   "en": "Here is a trap that catches experienced programmers. Four threads each count something, in an array of four counters, one per thread. <bookmark mark='a'/> No two threads ever touch the same counter, so there is no real sharing at all. <bookmark mark='b'/> But coherence does not work in variables. It works in cache lines, and all four counters fit in one sixty-four-byte line. <bookmark mark='c'/> To increment its counter, a core needs that line in the Modified state, which means taking it away from whichever core had it last. The line bounces from cache to cache, fifty million times per thread. This is false sharing: the hardware sees sharing where the program has none.",
+   "zh": "这是一个连有经验的程序员都会掉进去的陷阱。四个线程各数一样东西，用一个有四个计数器的数组，每个线程一个。<bookmark mark='a'/>没有两个线程会碰同一个计数器，所以根本没有真正的共享。<bookmark mark='b'/>但一致性不是按变量工作的。它按缓存行工作，而四个计数器都放在一个六十四字节的行里。<bookmark mark='c'/>为了给自己的计数器加一，一个核需要这一行处于已修改状态，也就是要把它从上一个拿着它的核那里夺过来。这一行在缓存之间来回弹跳，每个线程五千万次。这就是伪共享：程序里没有共享，硬件却看到了共享。"
+  },
+  "d9cb0c8ed811": {
+   "scene": "FalseShare",
+   "en": "Here it is, measured on this computer. Each thread increments its own counter fifty million times, and we time one increment. <bookmark mark='a'/> One thread alone: about seven nanoseconds, the cost of an atomic add on a line the core already owns. <bookmark mark='b'/> Give each counter a line of its own, by padding it to sixty-four bytes, and the time stays flat however many threads run: there is no sharing, so there is no traffic. <bookmark mark='c'/> Put the four counters in one line, and every increment waits for the line to arrive from another core. With four threads, each increment takes 79 nanoseconds, 12 times longer, though no thread ever reads another's counter.",
+   "zh": "这是在这台计算机上测到的。每个线程把自己的计数器加五千万次，我们给一次加法计时。<bookmark mark='a'/>只有一个线程时：大约七纳秒，这是在核已经拥有的行上做一次原子加法的代价。<bookmark mark='b'/>给每个计数器一行，填充到六十四字节，无论跑多少线程，时间都平平不变：没有共享，就没有流量。<bookmark mark='c'/>把四个计数器放进一行，每次加法都要等这一行从另一个核那里到来。四个线程时，每次加法要79纳秒，长了12倍，尽管没有哪个线程读过别人的计数器。"
+  },
+  "a045a65fba36": {
+   "scene": "FalseShare",
+   "en": "The fixes are simple once you know. <bookmark mark='a'/> Align or pad each thread's data to a whole cache line. <bookmark mark='b'/> C++ even has a name for the size to pad to. <bookmark mark='c'/> Better still, keep per-thread work in local variables, which live in registers or in lines no one else touches, and combine them once at the end. <bookmark mark='d'/> That is exactly the Job's design: four private tables, combined once. <bookmark mark='e'/> To find false sharing in a real program, Linux's perf tool has a mode, c2c, for cache to cache, that reports which lines bounce between cores and which instructions touch them. <bookmark mark='f'/> The usual culprits are statistics counters, a lock stored next to the data it protects, and arrays of small per-thread structures.",
+   "zh": "一旦知道了，修起来很简单。<bookmark mark='a'/>把每个线程的数据对齐或填充到一整个缓存行。<bookmark mark='b'/>C++ 甚至为该填充到的大小起了个名字。<bookmark mark='c'/>更好的办法是，把每个线程的工作放在局部变量里，它们待在寄存器里或者别人不碰的行里，最后合并一次。<bookmark mark='d'/>这正是任务的设计：四张私有的表，只合并一次。<bookmark mark='e'/>要在真实程序里找出伪共享，Linux 的 perf 工具有一种模式叫 c2c，意思是缓存到缓存，它报告哪些行在核之间弹跳，以及哪些指令碰了它们。<bookmark mark='f'/>常见的元凶是统计计数器、紧挨着它所保护数据存放的锁，以及由小的每线程结构体组成的数组。"
+  },
+  "cafbd0d24491": {
+   "scene": "Consistency",
+   "en": "Chapter five. Memory consistency.",
+   "zh": "第五章。存储一致性。"
+  },
+  "056862d9a530": {
+   "scene": "Consistency",
+   "en": "Coherence is about one address at a time. But programs communicate through several: write the data, then set a flag. In what order do other cores see those writes? <bookmark mark='a'/> In 1979 Leslie Lamport gave the answer programmers assume without thinking. A multiprocessor is sequentially consistent if every execution gives the same result as some single interleaving of all the threads' operations, with each thread's operations in its program order. <bookmark mark='b'/> Here is the test that probes it, called store buffering. Thread zero sets x to one, then reads y. Thread one sets y to one, then reads x. Both start at zero. <bookmark mark='c'/> Can both threads read zero?",
+   "zh": "一致性一次只管一个地址。但程序要通过好几个地址来通信：先写数据，再置一个标志。其他核看到这些写的次序是怎样的？<bookmark mark='a'/>1979 年，莱斯利·兰波特给出了程序员不假思索就会假定的答案。如果每次执行的结果，都和所有线程操作的某一种交织一样，并且每个线程的操作按它的程序次序出现，那么这台多处理器就是顺序一致的。<bookmark mark='b'/>这是探测它的测试，叫存储缓冲。线程零把 x 置为一，然后读 y。线程一把 y 置为一，然后读 x。两者开始都是零。<bookmark mark='c'/>两个线程能都读到零吗？"
+  },
+  "3bee49ddf636": {
+   "scene": "Consistency",
+   "en": "Under sequential consistency we can simply list the possibilities. Each thread's two operations stay in order, and the four can be interleaved in six ways. <bookmark mark='a'/> Here they are, with what each thread reads. <bookmark mark='b'/> In every one of them, one of the two stores comes first, and the other thread's load comes after it, so at least one thread reads one. Both reading zero is impossible. Our simulator, running two hundred thousand random interleavings, agrees: it never happens.",
+   "zh": "在顺序一致性下，我们可以直接列出所有可能。每个线程的两个操作保持次序，四个操作有六种交织方式。<bookmark mark='a'/>它们在这里，连同每个线程读到什么。<bookmark mark='b'/>在每一种里，两个存数总有一个先发生，另一个线程的取数在它之后，所以至少有一个线程读到一。两个都读到零是不可能的。我们的模拟器跑了二十万次随机交织，结论一致：从未发生。"
+  },
+  "226d61f069f0": {
+   "scene": "Consistency",
+   "en": "Real processors do not wait for stores. <bookmark mark='a'/> When a core executes a store, it puts the address and value in a small queue, the store buffer, and carries on; the store reaches the cache when its line arrives, perhaps a hundred cycles later. Part 8's core did the same. <bookmark mark='b'/> So thread zero's store of x sits in core zero's buffer, and thread one's store of y in core one's. <bookmark mark='c'/> Now each core loads the other variable. Neither store has reached memory, so both loads read zero. <bookmark mark='d'/> Then the buffers drain, and memory ends with both ones, too late. Each core still sees its own store, because its loads check its own buffer first. But other cores see it late. <bookmark mark='e'/> This is the memory model of x86, called total store order: stores become visible in program order, but a load can overtake an earlier store to a different address.",
+   "zh": "真实的处理器不等存数。<bookmark mark='a'/>一个核执行存数时，把地址和值放进一个小队列，也就是存储缓冲，然后继续往下走；等这一行到来，存数才进入缓存，也许是一百个周期之后。第8部分的核也是这么做的。<bookmark mark='b'/>所以线程零对 x 的存数待在核零的缓冲里，线程一对 y 的存数待在核一的缓冲里。<bookmark mark='c'/>现在每个核去取另一个变量。两个存数都还没到达存储器，所以两次取数都读到零。<bookmark mark='d'/>然后缓冲排空，存储器最后两个都是一，可惜晚了。每个核仍然看得到自己的存数，因为它的取数先查自己的缓冲。但别的核看到得晚。<bookmark mark='e'/>这就是 x86 的内存模型，叫全存储定序：存数按程序次序变得可见，但一次取数可以越过之前对另一个地址的存数。"
+  },
+  "01252eae720d": {
+   "scene": "Consistency",
+   "en": "This is not a thought experiment. We ran the test on this computer a million times, two threads on two cores, starting each trial together. <bookmark mark='a'/> With ordinary loads and stores, both threads read zero in 942,588 of the million trials. How often depends on timing; that it happens at all is the point. <bookmark mark='b'/> Now put a fence between each thread's store and its load: on x86 the instruction mfence, which waits until the store buffer has drained. The forbidden outcome disappears: zero times in a million. Fences restore sequential consistency, at a price of tens of cycles each, so they go only where the program needs them.",
+   "zh": "这不是思想实验。我们在这台计算机上把测试跑了一百万次，两个线程在两个核上，每轮同时起跑。<bookmark mark='a'/>用普通的取数和存数，一百万轮里有942588轮两个线程都读到零。多频繁取决于时序；重要的是它真的会发生。<bookmark mark='b'/>现在在每个线程的存数和取数之间放一道栅栏：在 x86 上是 mfence 指令，它一直等到存储缓冲排空。被禁止的结果消失了：一百万次里零次。栅栏恢复了顺序一致性，每道要几十个周期，所以只放在程序需要的地方。"
+  },
+  "81e12e24a6c1": {
+   "scene": "Consistency",
+   "en": "Every processor family makes its own choice. <bookmark mark='a'/> Take two accesses to different addresses, an earlier one and a later one, and ask whether the later may become visible to other cores first. Sequential consistency forbids every swap. x86's total store order allows just one: a later load passing an earlier store, the store buffer we just saw. Arm, POWER and RISC-V allow all four, keeping only the order that data dependencies and explicit instructions demand. <bookmark mark='b'/> On those machines, fences and special acquire and release instructions put back the order a program needs. <bookmark mark='c'/> Programmers should not have to know this table, and since 2011 C and C++, and Java before them, have a memory model of their own, which compilers map onto each machine's fences. <bookmark mark='d'/> Its promise is the one to remember: a program with no data races, where every shared access is properly synchronized, behaves as if it were sequentially consistent. Part 33 takes this apart in detail.",
+   "zh": "每个处理器家族都有自己的选择。<bookmark mark='a'/>取两个对不同地址的访问，一个在前，一个在后，问后一个能不能先被其他核看到。顺序一致性禁止任何交换。x86 的全存储定序只允许一种：后面的取数越过前面的存数，也就是我们刚看到的存储缓冲。Arm、POWER 和 RISC-V 四种都允许，只保留数据依赖和显式指令所要求的次序。<bookmark mark='b'/>在这些机器上，栅栏以及专门的获取和释放指令把程序需要的次序放回去。<bookmark mark='c'/>程序员不该非得记住这张表，所以从 2011 年起，C 和 C++，以及更早的 Java，都有了自己的内存模型，由编译器映射到每台机器的栅栏上。<bookmark mark='d'/>它的承诺最值得记住：一个没有数据竞争的程序，也就是每次共享访问都正确同步的程序，表现得就像顺序一致一样。第33部分会把这些细细拆开。"
+  },
+  "5ebf9dab5a0c": {
+   "scene": "Atomics",
+   "en": "Chapter six. Atomic instructions.",
+   "zh": "第六章。原子指令。"
+  },
+  "eeb492e66d7e": {
+   "scene": "Atomics",
+   "en": "Coherence keeps the caches in agreement about each line. It does not make a sequence of operations indivisible. <bookmark mark='a'/> Adding one to a shared counter is three steps: load it, add, store it back. <bookmark mark='b'/> Thread zero loads five. Before it stores, thread one also loads five. Both add one; both store six. <bookmark mark='c'/> Two increments, and the counter went up by one. <bookmark mark='d'/> On this computer, four threads each adding one to a shared counter ten million times end with a count of between 14 and 20 million, out of forty. More than half of the updates simply vanish, and the result changes from run to run.",
+   "zh": "一致性让缓存在每一行上意见一致。它并不让一串操作变得不可分割。<bookmark mark='a'/>给一个共享计数器加一是三步：取出来，加一，存回去。<bookmark mark='b'/>线程零取到五。在它存回去之前，线程一也取到五。两个都加一；两个都存六。<bookmark mark='c'/>加了两次，计数器只涨了一。<bookmark mark='d'/>在这台计算机上，四个线程各给一个共享计数器加一千万次，最后的计数在14百万到20百万之间，满分是四千万。一半以上的更新就这样消失了，而且每次运行结果都不一样。"
+  },
+  "f039e9c84c63": {
+   "scene": "Atomics",
+   "en": "The fix needs the hardware's help: instructions that read, modify and write a location as a single step no other core can interrupt. <bookmark mark='a'/> The oldest is test-and-set, on IBM's System/360 in 1964: set a word to one and return what it held. A lock is a word that test-and-set turns from zero to one; whoever got zero back holds the lock. <bookmark mark='b'/> Fetch-and-add adds to a word and returns the old value: exactly the counter, in one instruction. <bookmark mark='c'/> Compare-and-swap stores a new value only if the word still holds the value you expect, and reports whether it did. <bookmark mark='d'/> And load-linked and store-conditional split it in two: the store succeeds only if no one wrote the location since the load. <bookmark mark='e'/> Inside, they all work the same way: the core takes the line in the Modified state and refuses to give it up until the step is complete. Atomicity is built from coherence.",
+   "zh": "修复需要硬件帮忙：一些指令，把对一个位置的读、改、写作为一步完成，其他核无法打断。<bookmark mark='a'/>最老的是测试并置位，1964 年出现在 IBM 的 System/360 上：把一个字置为一，并返回它原来的值。一把锁就是一个让测试并置位从零变成一的字；谁拿回零，谁就持有这把锁。<bookmark mark='b'/>取并加给一个字加上一个数并返回旧值：正好就是那个计数器，一条指令。<bookmark mark='c'/>比较并交换只在这个字仍然是你预期的值时才存入新值，并报告是否成功。<bookmark mark='d'/>而链接取数和条件存数把它拆成两半：只有自那次取数以来没人写过这个位置，存数才会成功。<bookmark mark='e'/>在内部，它们的工作方式都一样：核把这一行拿到已修改状态，在这一步完成之前拒绝交出它。原子性是用一致性搭出来的。"
+  },
+  "5559254f64b1": {
+   "scene": "Atomics",
+   "en": "What does correctness cost? Here are four correct counters, timed on this computer. <bookmark mark='a'/> First with one thread, where there is no contention at all. A plain increment takes 2 nanoseconds. Fetch-and-add takes about seven: the atomic step itself costs a few times a plain one. A compare-and-swap loop costs more, and a mutex, which is an atomic instruction plus bookkeeping, more again. <bookmark mark='b'/> Now four threads hammering the same counter. Everything slows, because the line must travel between cores for every increment, as in the last chapter. Fetch-and-add stays the cheapest, since each attempt always succeeds. The compare-and-swap loop retries whenever another core got in first. And the simple spinlock, where waiting cores hammer the lock with test-and-set, is the worst of all. The lesson is the Job's again: the fastest shared counter is one you do not share.",
+   "zh": "正确要付出什么代价？这是四种正确的计数器，在这台计算机上计时。<bookmark mark='a'/>先是一个线程，完全没有争用。普通的加一要2纳秒。取并加大约七纳秒：原子的那一步本身要普通的几倍。比较并交换的循环更贵，互斥锁，也就是一条原子指令加上一些簿记，又更贵。<bookmark mark='b'/>现在四个线程猛砸同一个计数器。一切都慢了，因为每次加一这一行都要在核之间旅行，和上一章一样。取并加仍然最便宜，因为每次尝试总会成功。比较并交换的循环在别的核抢先时就要重试。而简单的自旋锁，等待的核用测试并置位猛砸那把锁，是最糟的。教训还是任务的那一条：最快的共享计数器，就是你不去共享的那个。"
+  },
+  "a5c149c7a4d2": {
+   "scene": "Atomics",
+   "en": "There is a beautiful theory behind these instructions. <bookmark mark='a'/> In 1991 Maurice Herlihy asked which of them can solve consensus: several threads each propose a value, and all must agree on one of them, without any thread ever waiting for another, which might have stalled or crashed. <bookmark mark='b'/> With ordinary reads and writes, not even two threads can do it. Test-and-set, fetch-and-add and swap can do it for two threads, but provably not for three. Compare-and-swap, and load-linked with store-conditional, can do it for any number. <bookmark mark='c'/> And Herlihy showed that consensus is the key: a primitive that solves consensus for n threads can be used to build any shared data structure for n threads, in a wait-free way. <bookmark mark='d'/> That is why every modern instruction set has compare-and-swap or LL/SC, and Part 33 uses them to build data structures with no locks at all.",
+   "zh": "这些指令背后有一个漂亮的理论。<bookmark mark='a'/>1991 年，莫里斯·赫利希问：它们之中哪些能解决共识问题？几个线程各提议一个值，所有线程必须就其中一个达成一致，而且任何线程都不能等待另一个，因为那个可能卡住了或者崩溃了。<bookmark mark='b'/>只用普通的读和写，连两个线程都做不到。测试并置位、取并加和交换能为两个线程做到，但可以证明三个就不行。比较并交换，以及链接取数加条件存数，能为任意多个线程做到。<bookmark mark='c'/>赫利希还证明了共识是关键：一个能为 n 个线程解决共识的原语，可以用来以无等待的方式为 n 个线程构建任何共享数据结构。<bookmark mark='d'/>这就是为什么每一种现代指令集都有比较并交换或者 LL/SC，第33部分会用它们构建完全不用锁的数据结构。"
+  },
+  "e6ed59e55e09": {
+   "scene": "Simd",
+   "en": "Chapter seven. SIMD and vectors.",
+   "zh": "第七章。SIMD 与向量。"
+  },
+  "b534a8bfdf7b": {
+   "scene": "Simd",
+   "en": "In 1966 Michael Flynn sorted computers by two questions: how many instruction streams, and how many data streams. <bookmark mark='a'/> One of each is an ordinary core. <bookmark mark='b'/> Many instruction streams, each with its own data, is what we have been building: several cores, or several machines. <bookmark mark='c'/> But there is a cheaper kind of parallelism: one instruction applied to many data at once. Single instruction, multiple data, SIMD. One decoder, one instruction fetched, and eight or sixteen or thirty-two arithmetic units doing the same thing to different numbers.",
+   "zh": "1966 年，迈克尔·弗林用两个问题给计算机分类：几条指令流，几条数据流。<bookmark mark='a'/>各一条就是普通的核。<bookmark mark='b'/>多条指令流，各带自己的数据，就是我们一直在搭的东西：几个核，或者几台机器。<bookmark mark='c'/>但还有一种更便宜的并行：一条指令同时作用于许多数据。单指令多数据，SIMD。一个译码器，取一条指令，八个、十六个或三十二个运算部件对不同的数做同一件事。"
+  },
+  "e01b0fb106d2": {
+   "scene": "Simd",
+   "en": "The idea is old. <bookmark mark='a'/> Seymour Cray's Cray-1, in 1976, had eight vector registers of sixty-four numbers each, and one instruction could add two whole vectors, with the results streaming from one unit straight into the next. At eighty megahertz it reached a hundred and sixty million floating-point operations a second, the fastest computer of its day. <bookmark mark='b'/> Twenty years later SIMD came to the desktop as short vectors packed into wide registers: Intel's MMX, sixty-four bits, then SSE, AVX and AVX-512, doubling the width each time. Arm's phones have NEON. <bookmark mark='c'/> The newest designs, Arm's SVE and RISC-V's vector extension, return to Cray's idea: the program does not say how wide the vectors are, and each chip chooses, so the same code runs on narrow and wide machines alike.",
+   "zh": "这个想法很老。<bookmark mark='a'/>西摩·克雷的 Cray-1 在 1976 年有八个向量寄存器，每个装六十四个数，一条指令就能把两个整向量相加，结果从一个部件直接流进下一个。在八十兆赫下，它达到每秒一亿六千万次浮点运算，是那个时代最快的计算机。<bookmark mark='b'/>二十年后，SIMD 以塞进宽寄存器的短向量的形式来到桌面：英特尔的 MMX，六十四位，然后是 SSE、AVX 和 AVX-512，每次宽度翻倍。Arm 的手机有 NEON。<bookmark mark='c'/>最新的设计，Arm 的 SVE 和 RISC-V 的向量扩展，回到了克雷的想法：程序不说向量有多宽，由每颗芯片自己选，于是同样的代码在窄的和宽的机器上都能跑。"
+  },
+  "31e3efbc7811": {
+   "scene": "Simd",
+   "en": "Here is SIMD applied to the Job. Most of its time goes into scanning the table, and most entries are rejected on their length alone. <bookmark mark='a'/> So keep the lengths in an array of their own, one byte each: Part 9's structure of arrays. <bookmark mark='b'/> Copy the length of the word being looked up into all thirty-two lanes of a 256-bit register. <bookmark mark='c'/> One AVX2 instruction compares all thirty-two pairs at once, and another squeezes the results into a thirty-two-bit mask. <bookmark mark='d'/> Only the entries whose bit is set, here 7, are compared letter by letter. One iteration of the loop now does the work of thirty-two.",
+   "zh": "这是把 SIMD 用在任务上。它的时间大多花在扫描表上，而大多数表项仅凭长度就被否决。<bookmark mark='a'/>所以把长度单独放在一个数组里，每个一字节：第9部分的数组结构体。<bookmark mark='b'/>把要查的词的长度复制到一个 256 位寄存器的全部三十二个通道里。<bookmark mark='c'/>一条 AVX2 指令同时比较全部三十二对，另一条把结果挤成一个三十二位的掩码。<bookmark mark='d'/>只有对应位被置位的表项，这里是7个，才逐个字母比较。循环的一次迭代现在做了三十二次的工作。"
+  },
+  "31c265828463": {
+   "scene": "Simd",
+   "en": "We wrote the Job in C with exactly Pebble's algorithm, ran it on all thirty novels on this computer, and checked its top twenty against the reference. <bookmark mark='a'/> The scalar version, one entry per iteration, takes 30 seconds. <bookmark mark='b'/> The AVX2 version takes 10. <bookmark mark='c'/> 3 times faster, not thirty-two, and the reasons are instructive. Entries with the same length as the word still need a letter-by-letter comparison. The lengths array, fifty-eight kilobytes, is too big for the first-level cache and streams from the second. And the rest of the program is not vectorized at all. Compilers can vectorize simple loops by themselves, but not this one, which stops as soon as it finds a match; here the speedup had to be written by hand.",
+   "zh": "我们用 C 写了任务，算法和 Pebble 的完全一样，在这台计算机上跑了全部三十部小说，并把前二十名和参考答案核对过。<bookmark mark='a'/>标量版本每次迭代处理一项，要30秒。<bookmark mark='b'/>AVX2 版本要10秒。<bookmark mark='c'/>快了3倍，而不是三十二倍，原因很有启发。和词同样长度的表项仍需逐个字母比较。长度数组有五十八千字节，放不进第一级缓存，要从第二级流过来。而程序的其余部分根本没有向量化。编译器能自己把简单的循环向量化，但不是这个循环，它一找到匹配就停下；这里的加速只能手写。"
+  },
+  "d0fda390d284": {
+   "scene": "Gpu",
+   "en": "Chapter eight. GPUs in one chapter.",
+   "zh": "第八章。一章讲完 GPU。"
+  },
+  "6886e274c589": {
+   "scene": "Gpu",
+   "en": "A graphics processor makes the opposite bargain from a CPU. <bookmark mark='a'/> A CPU spends its transistors on making a few threads as fast as possible: out-of-order execution, branch prediction, deep caches, everything in Parts 7, 8 and 9. <bookmark mark='b'/> A GPU spends them on arithmetic. It has thousands of simple lanes, grouped into streaming multiprocessors, with no prediction, no reordering and small caches. Each thread is slow. But there are tens of thousands of threads, and when one waits for memory, the hardware simply runs another, the multithreading of Part 8 taken to the extreme. <bookmark mark='c'/> A recent data-centre GPU has a hundred and thirty-two multiprocessors and nearly seventeen thousand lanes, fed by stacked memory at over three terabytes a second.",
+   "zh": "图形处理器做的是和 CPU 相反的交易。<bookmark mark='a'/>CPU 把晶体管花在让少数线程尽可能快上：乱序执行、分支预测、深的缓存，第7、8、9部分里的一切。<bookmark mark='b'/>GPU 把它们花在算术上。它有成千上万条简单的通道，编成一个个流式多处理器，没有预测，没有重排，缓存很小。每个线程都慢。但线程有几万个，一个等存储器时，硬件干脆去跑另一个，这是第8部分的多线程推到了极致。<bookmark mark='c'/>一块新近的数据中心 GPU 有一百三十二个多处理器、将近一万七千条通道，由堆叠的存储器以每秒三太字节以上的速度喂数据。"
+  },
+  "130df5154550": {
+   "scene": "Gpu",
+   "en": "The programming model is called single instruction, multiple threads. <bookmark mark='a'/> You write the code for one thread, as if it ran alone, and launch thousands of copies, each with its own index. <bookmark mark='b'/> The hardware groups them in warps of thirty-two, which share one instruction stream: at each step, the same instruction for all thirty-two lanes. <bookmark mark='c'/> So what happens at an if? Some lanes want one branch and some the other. The warp runs the first branch with the other lanes switched off, <bookmark mark='d'/> then the second branch with the first lanes switched off. <bookmark mark='e'/> This is divergence: a warp pays for every path that any of its lanes takes.",
+   "zh": "它的编程模型叫单指令多线程。<bookmark mark='a'/>你为一个线程写代码，就好像它单独运行，然后启动成千上万份副本，每份有自己的编号。<bookmark mark='b'/>硬件把它们按三十二个一组编成线程束，共用一条指令流：每一步，三十二条通道执行同一条指令。<bookmark mark='c'/>那么遇到 if 会怎样？有些通道要走这个分支，有些要走那个。线程束先执行第一个分支，把其他通道关掉，<bookmark mark='d'/>再执行第二个分支，把第一批通道关掉。<bookmark mark='e'/>这就是分歧：一个线程束要为它任何一条通道走过的每条路径付账。"
+  },
+  "c8c88e36f55a": {
+   "scene": "Gpu",
+   "en": "Imagine running the Job's lookups on a GPU, one word per lane, thirty-two to a warp. <bookmark mark='a'/> Here is one real warp: for each of its thirty-two words, how many table entries the lookup must scan. A common word is found near the front; a rare one, near the end of a table of tens of thousands. <bookmark mark='b'/> The warp cannot finish until its longest scan does, and meanwhile the lanes that finished early sit idle. Only 12 percent of this warp's lane time does useful work. <bookmark mark='c'/> Over all four and a half million lookups, 12 percent. <bookmark mark='d'/> If the lookups were first grouped so that each warp's scans had similar lengths, nearly all of it. That is the craft of GPU programming: arrange the work so that the thirty-two lanes of a warp do the same thing.",
+   "zh": "设想在 GPU 上跑任务的查找，每条通道一个词，一个线程束三十二个。<bookmark mark='a'/>这是一个真实的线程束：它的三十二个词，每个的查找要扫描多少个表项。常用词在表的前面就找到了；生僻词在一张几万项的表的末尾附近。<bookmark mark='b'/>线程束要等到最长的那次扫描结束才能完成，这期间早完成的通道都闲着。这个线程束的通道时间里，只有12%在做有用的工作。<bookmark mark='c'/>全部四百五十多万次查找合起来，是12%。<bookmark mark='d'/>如果先把查找分组，让每个线程束里的扫描长度相近，几乎全部都有用。这就是 GPU 编程的手艺：把工作安排得让一个线程束的三十二条通道做同样的事。"
+  },
+  "6e2285e017f3": {
+   "scene": "Gpu",
+   "en": "So GPUs shine on a particular kind of work. <bookmark mark='a'/> The same arithmetic on millions of independent items: pixels, particles, the entries of a matrix. <bookmark mark='b'/> Memory read in wide, regular blocks, so that the thirty-two loads of a warp merge into a few cache lines. <bookmark mark='c'/> And matrix multiplication above all: modern GPUs have tensor cores that multiply small matrices in a single instruction, which is why they run the neural networks of AI, Built. <bookmark mark='d'/> The Job, as written, is the opposite: one long chain of lookups, each a scan whose length depends on the data. <bookmark mark='e'/> A GPU would count words another way, by sorting them and counting the runs, which is exactly the algorithm of Part 16.",
+   "zh": "所以 GPU 擅长一类特定的工作。<bookmark mark='a'/>对数以百万计的独立项做同样的算术：像素、粒子、矩阵的元素。<bookmark mark='b'/>按宽而规整的块读存储器，好让一个线程束的三十二次取数合并成几个缓存行。<bookmark mark='c'/>而首先是矩阵乘法：现代 GPU 有张量核心，一条指令就乘完小矩阵，这正是它们能跑《人工智能，从零搭建》里那些神经网络的原因。<bookmark mark='d'/>照现在的写法，任务恰恰相反：一长串查找，每次都是一次长度取决于数据的扫描。<bookmark mark='e'/>GPU 会换一种办法数词：先排序，再数连续的段，正是第16部分的算法。"
+  },
+  "5b21b0f7a147": {
+   "scene": "WorkSpan",
+   "en": "Chapter nine. Work, span, and Brent's theorem.",
+   "zh": "第九章。工作量、跨度与布伦特定理。"
+  },
+  "2c95e071caa2": {
+   "scene": "WorkSpan",
+   "en": "To reason about parallel programs without fixing a machine, draw the computation as a graph. <bookmark mark='a'/> Each node is a unit of work. Each arrow says one node must finish before another starts. On the left, four numbers summed as a tree; on the right, a chain of steps, each needing the one before. <bookmark mark='b'/> Two numbers describe it. The work, T one, is the total number of nodes: the time on one processor, here fourteen. <bookmark mark='c'/> The span, T infinity, is the longest path: the time on infinitely many processors, here seven, along the chain. <bookmark mark='d'/> Their ratio, the parallelism, says how many processors could usefully work at once: here two. <bookmark mark='e'/> And they give two lower bounds for any machine with p processors. It can do at most p nodes a step, so it needs at least T one over p steps. And the nodes of a path must run one after another, so it needs at least T infinity.",
+   "zh": "要不依赖具体机器来推理并行程序，就把计算画成一张图。<bookmark mark='a'/>每个结点是一份工作。每个箭头表示一个结点必须在另一个开始之前完成。左边是四个数按树求和；右边是一串步骤，每一步都需要前一步。<bookmark mark='b'/>两个数描述了它。工作量 T 一是结点的总数：一个处理器上的时间，这里是十四。<bookmark mark='c'/>跨度 T 无穷是最长的路径：无穷多个处理器上的时间，这里是七，沿着那条链。<bookmark mark='d'/>它们的比值，并行度，说明有多少个处理器能同时派上用场：这里是二。<bookmark mark='e'/>它们给出了任何 p 个处理器的机器的两个下界。它每步至多做 p 个结点，所以至少需要 T 一除以 p 步。一条路径上的结点必须一个接一个地跑，所以至少需要 T 无穷步。"
+  },
+  "d07ba8b2a825": {
+   "scene": "WorkSpan",
+   "en": "A schedule decides which nodes run at each step. The simplest good rule is greedy: at every step, if any node is ready, because everything it depends on has finished, never leave a processor idle. <bookmark mark='a'/> Here is a greedy schedule on two processors. Step by step, up to two ready nodes run. <bookmark mark='b'/> Notice the steps where only one node was ready, and a processor had to wait: they all come from the chain. The schedule takes 10 steps, against lower bounds of seven from the work and seven from the span. The best possible schedule, which starts the chain at once, needs eight: the bounds are not always reachable, but as the next theorem shows, greedy is never far from them.",
+   "zh": "调度决定每一步跑哪些结点。最简单的好规则是贪心：每一步，只要有结点就绪，也就是它依赖的都已完成，就绝不让处理器闲着。<bookmark mark='a'/>这是在两个处理器上的一个贪心调度。一步一步地，每步至多跑两个就绪的结点。<bookmark mark='b'/>注意那些只有一个结点就绪、一个处理器只能等着的步骤：它们都来自那条链。这个调度用了10步，而工作量给出的下界是七，跨度给出的也是七。最好的调度一开始就启动那条链，需要八步：下界并不总能达到，但正如下一个定理所示，贪心离它们从不太远。"
+  },
+  "652017899e99": {
+   "scene": "WorkSpan",
+   "en": "How much worse than the lower bounds can a greedy schedule be? Not much, and the proof fits on a slide. <bookmark mark='a'/> The theorem, from Richard Brent in 1974 and in scheduling form from Ronald Graham in 1966: any greedy schedule on p processors finishes within T one over p, plus T infinity. <bookmark mark='b'/> Call a step complete if all p processors are busy, and incomplete otherwise. <bookmark mark='c'/> Each complete step does p units of the total work, so there are at most T one over p of them. <bookmark mark='d'/> In an incomplete step, fewer than p nodes were ready, so greedy ran every one of them. <bookmark mark='e'/> Now look at the longest path through the work that remains. Its first node is ready, because everything before it is done, so it runs in that step, and the longest remaining path gets one shorter. <bookmark mark='f'/> That can happen at most T infinity times. Add the two kinds of step, and the theorem is proved. <bookmark mark='g'/> Since the larger of T one over p and T infinity is a lower bound for every schedule, greedy is always within a factor of two of the best possible.",
+   "zh": "贪心调度能比下界差多少？差不了多少，证明一张幻灯片就放得下。<bookmark mark='a'/>这个定理来自理查德·布伦特 1974 年的工作，调度形式则来自罗纳德·格雷厄姆 1966 年：p 个处理器上的任何贪心调度，都在 T 一除以 p 加 T 无穷之内完成。<bookmark mark='b'/>如果 p 个处理器全忙，就把这一步叫作满的，否则叫作不满的。<bookmark mark='c'/>每个满的步骤做掉总工作量里的 p 份，所以至多有 T 一除以 p 个。<bookmark mark='d'/>在不满的步骤里，就绪的结点少于 p 个，所以贪心把它们全跑了。<bookmark mark='e'/>现在看剩余工作里最长的那条路径。它的第一个结点是就绪的，因为它之前的都已完成，所以它在这一步里跑了，剩余的最长路径缩短了一。<bookmark mark='f'/>这至多发生 T 无穷次。把两种步骤加起来，定理就证完了。<bookmark mark='g'/>既然 T 一除以 p 和 T 无穷中较大的那个是任何调度的下界，贪心总是在最优的两倍之内。"
+  },
+  "a36503d73f36": {
+   "scene": "WorkSpan",
+   "en": "Here is the theorem checked on a larger computation: two thousand nodes, each depending on up to three recent ones, with a span of 144. <bookmark mark='a'/> The grey curve is the lower bound, the larger of T one over p and T infinity. The orange curve is Brent's upper bound. <bookmark mark='b'/> And the green dots are a greedy schedule, from one processor to sixty-four. They sit right on the lower bound until the parallelism, about fourteen, runs out, and from there on every schedule takes the span. <bookmark mark='c'/> Over forty random graphs, greedy was never above Brent's bound, and never more than 1.30 times the lower bound.",
+   "zh": "这是在一个更大的计算上检验定理：两千个结点，每个依赖至多三个最近的结点，跨度是144。<bookmark mark='a'/>灰色曲线是下界，T 一除以 p 和 T 无穷中较大的那个。橙色曲线是布伦特的上界。<bookmark mark='b'/>绿点是贪心调度，从一个处理器到六十四个。它们紧贴下界，直到大约十四的并行度用完，从那以后每个调度都要用跨度那么长。<bookmark mark='c'/>在四十张随机图上，贪心从未超过布伦特的上界，也从未超过下界的1.30倍。"
+  },
+  "2a1d4e7012e4": {
+   "scene": "WorkSpan",
+   "en": "Greedy assumes someone hands out the ready nodes. Real runtimes cannot afford a central list that every core fights over, so they use work stealing. <bookmark mark='a'/> Each core keeps its own double-ended queue of tasks and works on the newest. When a task spawns another, the new one goes on the same core's queue. <bookmark mark='b'/> A core with nothing to do picks another core at random and steals the oldest task from its queue, which tends to be a big one. <bookmark mark='c'/> In 1999 Robert Blumofe and Charles Leiserson proved that this gives T one over p plus a constant times T infinity, in expectation, and that the number of steals is proportional to p times the span: when there is plenty of parallelism, cores almost never need to talk to each other. <bookmark mark='d'/> Our simulation of a fork-join computation agrees: the extra time stays under 1.7 spans, and steals are rare. <bookmark mark='e'/> This is the scheduler inside Cilk, Intel's Threading Building Blocks, Java's fork-join pool, Rust's Rayon, and Go.",
+   "zh": "贪心假定有人负责分发就绪的结点。真实的运行时承受不起一张让每个核都去争抢的中央列表，所以它们用工作窃取。<bookmark mark='a'/>每个核有自己的双端任务队列，处理最新的那个。一个任务派生出另一个时，新的放进同一个核的队列。<bookmark mark='b'/>没事可做的核随机挑另一个核，从它的队列里偷走最老的任务，而最老的往往是个大任务。<bookmark mark='c'/>1999 年，罗伯特·布卢莫菲和查尔斯·莱瑟森证明，这在期望上给出 T 一除以 p 加上常数乘 T 无穷，并且窃取次数和 p 乘跨度成正比：并行度充足时，核之间几乎不用打交道。<bookmark mark='d'/>我们对一个分叉—汇合计算的模拟与此相符：额外的时间不超过1.7个跨度，窃取很少。<bookmark mark='e'/>这就是 Cilk、英特尔线程构建模块、Java 的分叉—汇合池、Rust 的 Rayon 和 Go 里面的调度器。"
+  },
+  "cbae80f31bb7": {
+   "scene": "Scan",
+   "en": "Chapter ten. Parallel prefix.",
+   "zh": "第十章。并行前缀。"
+  },
+  "a8553b999970": {
+   "scene": "Scan",
+   "en": "Here is the problem at the heart of parallel algorithms. <bookmark mark='a'/> Given a list, compute every running total: three, then three plus one, then plus four, and so on. This is called a prefix sum, or a scan. <bookmark mark='b'/> Done the obvious way it takes n minus one additions, which is fine, but each one needs the one before, so the span is also n minus one: no parallelism at all. <bookmark mark='c'/> And the operator need not be addition. Anything associative will do: maximum, matrix products, or a rule you met in Part 4.",
+   "zh": "这是并行算法核心处的一个问题。<bookmark mark='a'/>给定一个列表，算出每一个累计和：三，然后三加一，再加四，依此类推。这叫前缀和，或者扫描。<bookmark mark='b'/>用显而易见的办法要 n 减一次加法，这没问题，但每一次都需要前一次，所以跨度也是 n 减一：毫无并行可言。<bookmark mark='c'/>运算也不必是加法。任何满足结合律的运算都行：最大值、矩阵乘积，或者你在第4部分见过的一条规则。"
+  },
+  "252d9fdf5529": {
+   "scene": "Scan",
+   "en": "In Part 4 we built adders. <bookmark mark='a'/> Take two eight-bit numbers. <bookmark mark='b'/> Each bit position either generates a carry, if both bits are one; propagates one, if exactly one is; or kills it. <bookmark mark='c'/> Two adjacent stretches of bits combine by this rule: the pair generates if the upper part generates, or propagates a carry the lower part generates. The rule is associative. <bookmark mark='d'/> So the carries into every position are a scan of the generate-propagate pairs under this operator. The carry-lookahead adders of Part 4, Kogge-Stone, Sklansky, Brent-Kung, were parallel prefix circuits all along, and Brent of Brent-Kung is the Brent of the last chapter's theorem.",
+   "zh": "在第4部分我们搭过加法器。<bookmark mark='a'/>取两个八位数。<bookmark mark='b'/>每个位置要么产生一个进位，如果两位都是一；要么传递一个进位，如果恰好一位是一；要么吞掉它。<bookmark mark='c'/>相邻的两段位按这条规则合并：如果高的那段产生进位，或者传递低的那段产生的进位，合起来就产生进位。这条规则满足结合律。<bookmark mark='d'/>所以进入每个位置的进位，就是产生—传递对在这个运算下的扫描。第4部分的先行进位加法器，Kogge–Stone、Sklansky、Brent–Kung，原来一直都是并行前缀电路，而 Brent–Kung 里的布伦特，正是上一章那个定理的布伦特。"
+  },
+  "13ddba237fb0": {
+   "scene": "Scan",
+   "en": "The first parallel answer doubles its reach at every step. <bookmark mark='a'/> In step one, every element adds the one just to its left. In step two, the one two places to the left. Then four. <bookmark mark='b'/> After log n steps, each element has added in everything before it. Three steps for eight elements, twenty for a million. Daniel Hillis and Guy Steele used it on the Connection Machine. <bookmark mark='c'/> But count the work: nearly n additions at every step, n log n in all. For a million elements, twenty million additions where one million would do. With few processors that wasted work is real time.",
+   "zh": "第一个并行答案每一步把触及的距离翻倍。<bookmark mark='a'/>第一步，每个元素加上紧挨在它左边的那个。第二步，加上左边隔两个位置的。然后是四个。<bookmark mark='b'/>经过 log n 步，每个元素都加进了它前面的一切。八个元素三步，一百万个二十步。丹尼尔·希利斯和盖伊·斯蒂尔在连接机上用过它。<bookmark mark='c'/>但数一数工作量：每一步将近 n 次加法，总共 n log n。一百万个元素，用了两千万次加法，而一百万次就够了。处理器少的时候，这些浪费的工作就是实打实的时间。"
+  },
+  "81af90d738fe": {
+   "scene": "Scan",
+   "en": "In 1990 Guy Blelloch showed how to scan with no wasted work, using a tree in two passes. <bookmark mark='a'/> The up-sweep adds neighbours in pairs, then pairs of pairs, building the partial sums of larger and larger blocks, exactly as you would add up the whole list in parallel. <bookmark mark='b'/> Then clear the last element, and sweep back down. At each level, every node passes its value to its left child and gives its right child the sum of that value and the left child's old block sum. <bookmark mark='c'/> At the bottom, each position holds the sum of everything before it. Two passes over a tree: two n additions in all, and a span of two log n. <bookmark mark='d'/> Blelloch's point was larger than the algorithm: with a fast scan as a primitive, many problems that look sequential become parallel.",
+   "zh": "1990 年，盖伊·布莱洛克展示了怎样不浪费任何工作地扫描，用一棵树走两遍。<bookmark mark='a'/>上扫把相邻的两两相加，再把两对两对相加，建出越来越大的块的部分和，正如你会并行地求整个列表的和。<bookmark mark='b'/>然后把最后一个元素清零，再往下扫。在每一层，每个结点把自己的值传给左孩子，并给右孩子这个值与左孩子原来的块和之和。<bookmark mark='c'/>到了底部，每个位置都装着它之前一切的和。在一棵树上走两遍：总共两倍 n 次加法，跨度两倍 log n。<bookmark mark='d'/>布莱洛克的要点比这个算法更大：有了快速扫描这个原语，许多看似只能顺序做的问题都变得可以并行。"
+  },
+  "f6806b0c1aae": {
+   "scene": "Scan",
+   "en": "Here is the most common use. <bookmark mark='a'/> Keep only the words of seven letters or more, in parallel. <bookmark mark='b'/> Mark each word with a one if it stays, a zero if not. <bookmark mark='c'/> An exclusive scan of the marks gives each kept word its position in the output: the number of kept words before it. <bookmark mark='d'/> Now every word can be written to its place at once, with no coordination at all. <bookmark mark='e'/> The same trick drives radix sort, which splits keys by each bit in turn, quicksort's partition step, and tokenizing text in parallel. On a GPU, nearly every library primitive is a scan underneath.",
+   "zh": "这是最常见的用法。<bookmark mark='a'/>并行地只保留七个字母以上的词。<bookmark mark='b'/>每个词，留下就标一，不留就标零。<bookmark mark='c'/>对标记做一次不含自身的扫描，就给出每个留下的词在输出里的位置：它之前留下的词数。<bookmark mark='d'/>现在每个词都可以同时写到自己的位置，完全不用协调。<bookmark mark='e'/>同样的技巧驱动着基数排序，它按每一位依次拆分键；也驱动快速排序的划分步骤，以及并行地切分文本。在 GPU 上，几乎每个库原语底下都是扫描。"
+  },
+  "4054f3262805": {
+   "scene": "Sorting",
+   "en": "Chapter eleven. Sorting networks.",
+   "zh": "第十一章。排序网络。"
+  },
+  "4198714e48a0": {
+   "scene": "Sorting",
+   "en": "Sorting is the next test of parallel thinking, and its parallel form is beautiful. <bookmark mark='a'/> The building block is a comparator: two wires in, and out come the same two values, the smaller on top and the larger below. <bookmark mark='b'/> A sorting network is a fixed list of comparators, chosen before seeing any data, that sorts every input. <bookmark mark='c'/> Comparators on different wires can work at the same moment, so a network's depth, its number of layers, is its parallel time. <bookmark mark='d'/> And because it does the same operations whatever the data, a network suits hardware, SIMD registers and GPUs, where branches are expensive, and cryptography, where a program's timing must not reveal what it is sorting.",
+   "zh": "排序是对并行思维的下一个考验，它的并行形式很美。<bookmark mark='a'/>基本构件是比较器：两根线进来，出去的还是那两个值，小的在上，大的在下。<bookmark mark='b'/>排序网络是一张固定的比较器清单，在看到任何数据之前就选好，却能把每个输入排好序。<bookmark mark='c'/>不同线上的比较器可以同时工作，所以网络的深度，也就是层数，就是它的并行时间。<bookmark mark='d'/>而且因为不管数据如何它做的操作都一样，网络适合硬件、SIMD 寄存器和 GPU，那里分支很贵；也适合密码学，那里程序的耗时不能泄露它在排什么。"
+  },
+  "c306eae89f0f": {
+   "scene": "Sorting",
+   "en": "Here is one of the classic designs, Kenneth Batcher's bitonic sorter from 1968, on eight wires. <bookmark mark='a'/> Watch eight numbers pass through it, one layer at a time. The first layer sorts pairs. The next two merge pairs into sorted fours: the first of them compares mirror images, the second neighbours. The last three merge the fours into a sorted eight. <bookmark mark='b'/> Twenty-four comparators in six layers. In general, the depth grows as the square of log n: for a thousand and twenty-four wires, fifty-five layers.",
+   "zh": "这是经典设计之一，肯尼思·巴彻 1968 年的双调排序器，八根线。<bookmark mark='a'/>看八个数一层一层穿过它。第一层把两两排好。接下来两层把两两合并成有序的四个：第一层比较镜像位置，第二层比较相邻的。最后三层把四个合并成有序的八个。<bookmark mark='b'/>二十四个比较器，六层。一般地，深度按 log n 的平方增长：一千零二十四根线，五十五层。"
+  },
+  "87fc24085dfc": {
+   "scene": "Sorting",
+   "en": "How do you know a network sorts every input? There are n factorial orders to try. The shortcut, proved in Knuth's Art of Computer Programming, is the zero-one principle. <bookmark mark='a'/> If a network sorts every input made of zeros and ones, it sorts every input at all. The proof is four lines. <bookmark mark='b'/> Take any rising function f. Applying f and then taking the smaller of two values is the same as taking the smaller and then applying f. <bookmark mark='c'/> So f passes through each comparator, and through the whole network. <bookmark mark='d'/> Now suppose the network fails on some input: somewhere in the output, a larger value y i sits above a smaller one. <bookmark mark='e'/> Let f send everything at least y i to one and everything smaller to zero. The network's output on f of x is f of its output on x, which has a one above a zero. <bookmark mark='f'/> So the network also fails on an input of zeros and ones. <bookmark mark='g'/> To check a network on n wires, two to the n inputs suffice, instead of n factorial.",
+   "zh": "你怎么知道一个网络能排好每个输入？要试的次序有 n 的阶乘种。捷径是零一原理，在高德纳的《计算机程序设计艺术》里证明。<bookmark mark='a'/>如果一个网络能排好每个由零和一组成的输入，它就能排好任何输入。证明只有四行。<bookmark mark='b'/>取任意一个递增函数 f。先用 f 再取两个值中较小的，和先取较小的再用 f，结果一样。<bookmark mark='c'/>所以 f 能穿过每个比较器，也就能穿过整个网络。<bookmark mark='d'/>现在假设网络在某个输入上失败了：输出里某处，一个较大的值 y i 待在一个较小的值上面。<bookmark mark='e'/>让 f 把所有不小于 y i 的值变成一，更小的变成零。网络在 f 作用后的 x 上的输出，就是 f 作用于它在 x 上的输出，其中有一个一在零的上面。<bookmark mark='f'/>所以网络在一个零一输入上也失败了。<bookmark mark='g'/>要检查一个 n 根线的网络，二的 n 次方个输入就够了，而不是 n 的阶乘个。"
+  },
+  "01ddcc17e2d4": {
+   "scene": "Sorting",
+   "en": "With the principle, we checked networks exhaustively. <bookmark mark='a'/> For ten wires, one thousand and twenty-four inputs instead of three point six million orders. For each n up to ten we built two networks: the insertion network, which mimics insertion sort, and Batcher's odd-even merge network. Both sort all zero-one inputs, and for eight wires or fewer we confirmed it on all orders too. Beside them, the smallest sizes and depths known. <bookmark mark='b'/> That column is a research story of its own: for ten wires or fewer, the smallest sizes were only proved optimal in 2014, by a computer search that relied on this same principle. <bookmark mark='c'/> And the principle catches mistakes. Remove a single comparator from Batcher's network for eight wires, and the check immediately produces a zero-one input it fails to sort.",
+   "zh": "有了这个原理，我们穷举地检查了网络。<bookmark mark='a'/>十根线时，是一千零二十四个输入，而不是三百六十万种次序。对每个不超过十的 n，我们搭了两个网络：模仿插入排序的插入网络，以及巴彻的奇偶归并网络。两者都排好了全部零一输入，对八根线以下的，我们还在所有次序上确认过。旁边一栏是已知最小的规模和深度。<bookmark mark='b'/>那一栏本身就是一个研究故事：对十根线以下，最小规模直到 2014 年才被证明最优，靠的是一次同样依赖这个原理的计算机搜索。<bookmark mark='c'/>这个原理也能抓错。从巴彻的八线网络里去掉一个比较器，检查立刻就给出一个它排不好的零一输入。"
+  },
+  "e87ede0f638a": {
+   "scene": "Sorting",
+   "en": "How fast can a network sort? <bookmark mark='a'/> Batcher's networks have depth on the order of log n squared: for a thousand and twenty-four wires, fifty-five layers and about twenty-four thousand comparators. <bookmark mark='b'/> In 1983 Miklós Ajtai, János Komlós and Endre Szemerédi proved that depth on the order of log n is possible, which is optimal. <bookmark mark='c'/> But the constant in their construction is so large that Batcher's networks win for any n anyone will ever sort. <bookmark mark='d'/> So in practice, GPU sorting libraries and SIMD sorting routines use bitonic networks for small blocks, inside a merge sort. <bookmark mark='e'/> And the smallest exact questions are still open: optimal depths are known only up to sixteen wires.",
+   "zh": "网络能排多快？<bookmark mark='a'/>巴彻的网络深度是 log n 平方量级：一千零二十四根线，五十五层，大约两万四千个比较器。<bookmark mark='b'/>1983 年，阿伊陶伊·米克洛什、科姆洛什·亚诺什和塞迈雷迪·安德烈证明了 log n 量级的深度是可能的，而这是最优的。<bookmark mark='c'/>但他们构造里的常数大得惊人，以至于对任何人会去排的 n，巴彻的网络都更好。<bookmark mark='d'/>所以在实践中，GPU 排序库和 SIMD 排序例程对小块用双调网络，外面套一层归并排序。<bookmark mark='e'/>而最小的精确问题仍然悬而未决：最优深度只知道到十六根线。"
+  },
+  "4915261554eb": {
+   "scene": "Amdahl",
+   "en": "Chapter twelve. Amdahl and Gustafson.",
+   "zh": "第十二章。阿姆达尔与古斯塔夫森。"
+  },
+  "4dc96394a59f": {
+   "scene": "Amdahl",
+   "en": "In 1967 Gene Amdahl, the architect of IBM's System/360, argued that parallel machines would always disappoint. <bookmark mark='a'/> Suppose a fraction s of a program's work must run serially, and the rest divides perfectly among p processors. On one processor the time is one. On p it is s, plus one minus s over p. <bookmark mark='b'/> The speedup is one over that, and as p grows it approaches one over s, and no further. <bookmark mark='c'/> One percent serial, and a thousand processors give barely ninety-one times. Ten percent serial, and you never pass ten. Twenty-five percent, never four.",
+   "zh": "1967 年，IBM System/360 的架构师吉恩·阿姆达尔论证说，并行机器总会令人失望。<bookmark mark='a'/>假设程序工作量里有比例 s 必须串行执行，其余的完美地分给 p 个处理器。在一个处理器上，时间是一。在 p 个上，是 s 加上一减 s 除以 p。<bookmark mark='b'/>加速比是它的倒数，随着 p 增大，它趋向 s 分之一，再也上不去。<bookmark mark='c'/>百分之一串行，一千个处理器只给出勉强九十一倍。百分之十串行，你永远过不了十倍。百分之二十五，永远过不了四倍。"
+  },
+  "347bf4ff5709": {
+   "scene": "Amdahl",
+   "en": "Twenty years later John Gustafson, at Sandia National Laboratories, pointed out what Amdahl had assumed: that the problem stays the same size. <bookmark mark='a'/> People who buy a thousand processors do not run yesterday's problem faster. They run a bigger problem in the same time: a finer weather grid, a larger simulation. The serial part, setting up and reading input, barely grows, while the parallel part grows with the machine. <bookmark mark='b'/> Measured that way, the scaled speedup is s plus one minus s times p, which grows without limit. <bookmark mark='c'/> Both are right; they answer different questions. Amdahl's is called strong scaling: the same problem, solved faster. Gustafson's is weak scaling: a bigger problem, solved in the same time. Supercomputers live by weak scaling.",
+   "zh": "二十年后，桑迪亚国家实验室的约翰·古斯塔夫森指出了阿姆达尔的假设：问题的规模不变。<bookmark mark='a'/>买一千个处理器的人，不会去把昨天的问题跑得更快。他们在同样的时间里跑更大的问题：更细的天气网格，更大的模拟。串行部分，也就是准备工作和读入输入，几乎不增长，而并行部分随着机器增长。<bookmark mark='b'/>这样衡量，扩展后的加速比是 s 加上一减 s 乘以 p，可以无限增长。<bookmark mark='c'/>两者都对；它们回答的是不同的问题。阿姆达尔的叫强扩展：同样的问题，解得更快。古斯塔夫森的叫弱扩展：更大的问题，同样的时间解完。超级计算机靠弱扩展过日子。"
+  },
+  "3a4098fdd650": {
+   "scene": "Amdahl",
+   "en": "Here is the Job, scaled from one Pebble core to thirty-two, the same thirty novels each time: strong scaling. <bookmark mark='a'/> With the merge on one core, the speedup climbs to about three and then falls. That is worse than Amdahl's law, because the serial part is not fixed: more cores mean more tables to merge. <bookmark mark='b'/> A tree of merges does a little better at the largest sizes, but not much. <bookmark mark='c'/> And with the merge partitioned by word, the speedup runs above the ideal line all the way, 34 times on thirty-two cores, because each core's table keeps getting shorter. Remember where that comes from: a quadratic algorithm. Amdahl's law assumes the total work is fixed; here, splitting the data reduced it.",
+   "zh": "这是任务从一个 Pebble 核扩展到三十二个，每次都是同样的三十部小说：强扩展。<bookmark mark='a'/>合并放在一个核上时，加速比爬到大约三倍就掉了下来。这比阿姆达尔定律还糟，因为串行部分不是固定的：核越多，要合并的表越多。<bookmark mark='b'/>树形合并在最大规模时稍好一点，但好不了多少。<bookmark mark='c'/>而按词分区合并时，加速比一路都在理想线之上，三十二个核时是34倍，因为每个核的表一直在变短。记住它来自哪里：一个平方级的算法。阿姆达尔定律假定总工作量是固定的；在这里，切分数据减少了它。"
+  },
+  "e7431de5db8c": {
+   "scene": "Models",
+   "en": "Chapter thirteen. Models and networks.",
+   "zh": "第十三章。模型与网络。"
+  },
+  "dae8543daecc": {
+   "scene": "Models",
+   "en": "To design parallel algorithms without a particular machine, theorists use models. <bookmark mark='a'/> The first, the parallel random-access machine of Steven Fortune and James Wyllie in 1978, is the idealist's machine: p processors in lockstep, sharing one memory in which any cell can be read or written in a single step, with no caches and no network. <bookmark mark='b'/> Its variants differ only in what happens when processors collide: exclusive read and write, concurrent reads, or concurrent writes too. <bookmark mark='c'/> And the differences are real. The OR of n bits takes constant time if concurrent writes are allowed, since every processor holding a one simply writes one to the answer, but provably needs logarithmic time without them. The PRAM made work and span precise, but it ignores the one thing real machines cannot: communication costs time.",
+   "zh": "为了不依赖具体机器来设计并行算法，理论家们使用模型。<bookmark mark='a'/>第一个是史蒂文·福琼和詹姆斯·怀利 1978 年的并行随机存取机，一台理想主义者的机器：p 个处理器同步前进，共享一个存储器，任何单元都能在一步内读写，没有缓存，没有网络。<bookmark mark='b'/>它的变体只在处理器相撞时有所不同：互斥读互斥写，允许并发读，或者连并发写也允许。<bookmark mark='c'/>而这些差别是实在的。允许并发写时，n 位的或运算只要常数时间，因为每个拿着一的处理器只需把一写进答案；不允许时，可以证明它需要对数时间。并行随机存取机让工作量和跨度有了精确的含义，但它忽略了真实机器无法忽略的一件事：通信要花时间。"
+  },
+  "2d32fc410b72": {
+   "scene": "Models",
+   "en": "In 1990 Leslie Valiant proposed a model that charges for communication, bulk-synchronous parallelism. <bookmark mark='a'/> A computation is a series of supersteps. In each, every processor computes on its own data, then sends messages, and then all wait at a barrier until every message has arrived. <bookmark mark='b'/> A superstep costs the largest local work, plus g times the largest number of words any processor sends or receives, plus the cost of the barrier. Two numbers, g and l, summarize the whole network. <bookmark mark='c'/> LogP, from David Culler and colleagues in 1993, prices each message individually: its latency, the processor's overhead to send it, and the gap between messages. <bookmark mark='d'/> Real clusters are programmed with MPI, whose collective operations, broadcast, reduce and all-reduce, are the BSP model in a library. The all-reduce is how AI, Built's Part 18 trains one model on many GPUs.",
+   "zh": "1990 年，莱斯利·瓦利安特提出了一个为通信计费的模型，整体同步并行。<bookmark mark='a'/>计算是一串超步。在每个超步里，每个处理器先在自己的数据上计算，然后发送消息，然后所有人在一道屏障前等待，直到每条消息都已到达。<bookmark mark='b'/>一个超步的代价是最大的本地工作量，加上 g 乘以任何处理器收发的最大字数，再加上屏障的代价。g 和 l 两个数就概括了整个网络。<bookmark mark='c'/>大卫·卡勒和同事们 1993 年的 LogP 逐条消息计价：它的延迟、处理器发送它的开销，以及消息之间的间隔。<bookmark mark='d'/>真实的集群用 MPI 编程，它的集合操作，广播、归约和全归约，就是装进库里的整体同步并行模型。《人工智能，从零搭建》第18部分正是靠全归约在许多 GPU 上训练一个模型。"
+  },
+  "2a588c352261": {
+   "scene": "Models",
+   "en": "Real machines connect their processors with a network, and its shape matters. <bookmark mark='a'/> A ring is cheap but slow to cross. A two-dimensional mesh, the shape of many on-chip networks, connects each node to its neighbours. A torus wraps the mesh's edges around. A hypercube connects each of two to the d nodes to the d nodes that differ from it in one bit. A tree is cheap, but everything between its halves passes through the root. <bookmark mark='b'/> Charles Leiserson's fat tree fixes that by making the links thicker toward the root, and today's data-centre networks are built that way.",
+   "zh": "真实的机器用网络把处理器连起来，而网络的形状很重要。<bookmark mark='a'/>环很便宜，但穿过去很慢。二维网格是许多片上网络的形状，每个结点连着它的邻居。环面把网格的边缘绕回来连上。超立方体把二的 d 次方个结点中的每一个，连到与它只差一位的 d 个结点。树很便宜，但它两半之间的一切都要经过树根。<bookmark mark='b'/>查尔斯·莱瑟森的胖树把越靠近树根的链路做得越粗，修好了这一点，今天的数据中心网络就是这样搭的。"
+  },
+  "25379da4eb70": {
+   "scene": "Models",
+   "en": "Two numbers summarize a network. <bookmark mark='a'/> The diameter is the most hops between any two nodes: the worst latency. <bookmark mark='b'/> The bisection width is the smallest number of links you must cut to split the nodes into two equal halves. We found it for each sixteen-node network by trying all six thousand four hundred and thirty-five ways of splitting it. <bookmark mark='c'/> It matters because in an all-to-all exchange, like the shuffle that sorts data between machines, half the data must cross that cut. A ring has a bisection of two links however large it grows; a hypercube of a thousand and twenty-four nodes, five hundred and twelve. The tree's bisection is a single link, which is exactly what the fat tree repairs.",
+   "zh": "两个数概括一个网络。<bookmark mark='a'/>直径是任意两个结点之间最多的跳数：最坏的延迟。<bookmark mark='b'/>对分宽度是把结点分成相等的两半时，至少要切断的链路数。对每个十六结点的网络，我们试遍了全部六千四百三十五种分法来求它。<bookmark mark='c'/>它之所以重要，是因为在全对全交换里，比如在机器之间给数据排序的洗牌，一半的数据必须穿过那道切口。环的对分宽度不管多大都是两条链路；一千零二十四个结点的超立方体，是五百一十二条。树的对分宽度只有一条链路，而这正是胖树要修补的。"
+  },
+  "abe7483b4c63": {
+   "scene": "Models",
+   "en": "And the machines themselves. <bookmark mark='a'/> In 1976 the Cray-1 peaked at a hundred and sixty million floating-point operations a second. ASCI Red, in 1997, was the first to pass a trillion on the LINPACK benchmark; Roadrunner, in 2008, a thousand trillion. In 2022 Frontier, at Oak Ridge, passed a quintillion, an exaflop, and in 2024 El Capitan reached one point seven. <bookmark mark='b'/> Ten billion times faster in forty-eight years, about sixty percent a year, and since 2005 nearly all of it from parallelism: Frontier has almost nine million cores, mostly in GPUs, and draws twenty-one megawatts.",
+   "zh": "再看机器本身。<bookmark mark='a'/>1976 年，Cray-1 的峰值是每秒一亿六千万次浮点运算。1997 年的 ASCI Red 第一个在 LINPACK 基准上超过每秒一万亿次；2008 年的 Roadrunner，一千万亿次。2022 年，橡树岭的 Frontier 超过了每秒一百亿亿次，也就是一个艾次，2024 年 El Capitan 达到一点七艾次。<bookmark mark='b'/>四十八年快了一百亿倍，大约每年百分之六十，而自 2005 年以来几乎全都来自并行：Frontier 有将近九百万个核，大多在 GPU 里，耗电二十一兆瓦。"
+  },
+  "7506a264439e": {
+   "scene": "Job",
+   "en": "Chapter fourteen. The Job on four cores.",
+   "zh": "第十四章。四个核上的任务。"
+  },
+  "5c50e4478079": {
+   "scene": "Job",
+   "en": "Now the full picture on four of Part 8's cores. <bookmark mark='a'/> Each core counts its quarter of the books. They do not finish together: the last quarter holds books with the largest vocabularies, so its table grows longest. <bookmark mark='b'/> Then the partitioned merge, a fraction of a second. <bookmark mark='c'/> In all, about twelve seconds, against fifty-seven on one core: four point eight times faster. <bookmark mark='d'/> The total work is less than one core's, because the four tables are shorter. <bookmark mark='e'/> And some of the time is wasted: three cores sit idle while the slowest finishes. Cutting the text into many smaller pieces and letting idle cores steal them, the scheduler of chapter nine, would even that out.",
+   "zh": "现在看四个第8部分的核上的全貌。<bookmark mark='a'/>每个核数自己那四分之一的书。它们并不同时结束：最后四分之一里的书词汇量最大，所以它的表长得最长。<bookmark mark='b'/>然后是分区合并，不到一秒。<bookmark mark='c'/>总共大约十二秒，而一个核要五十七秒：快了四点八倍。<bookmark mark='d'/>总工作量比一个核的还少，因为四张表都更短。<bookmark mark='e'/>也有一些时间被浪费了：三个核闲着，等最慢的那个完成。把文本切成许多更小的块，让空闲的核去偷，也就是第九章的调度器，就能把这抹平。"
+  },
+  "f0a1baf1ac2d": {
+   "scene": "Job",
+   "en": "The same experiment, for real, on this computer, with the C version of the Job. <bookmark mark='a'/> One thread, scalar: 30 seconds. With AVX2, 10. Two threads, then four: the four-thread scalar version takes 6.9 seconds, again a little more than four times faster, for the same reason as on Pebble. <bookmark mark='b'/> And four threads with vectors: 2.1 seconds, 14 times faster than where we started. Parallelism across cores and parallelism within a core multiply.",
+   "zh": "同样的实验，在这台计算机上真刀真枪地做，用的是 C 版本的任务。<bookmark mark='a'/>一个线程，标量：30秒。用 AVX2，10秒。两个线程，然后四个：四线程的标量版本要6.9秒，又是比四倍稍多一点，原因和在 Pebble 上一样。<bookmark mark='b'/>四个线程再加向量：2.1秒，比起点快了14倍。核之间的并行和核内部的并行是相乘的。"
+  },
+  "71f59361328f": {
+   "scene": "Job",
+   "en": "So the ledger gets its fifth row. Thirty novels: four and a half minutes on Part 6's single-cycle Pebble, two and a half with a pipeline, under a minute out of order, the same with real caches, and now twelve seconds on four cores. <bookmark mark='a'/> But be honest about where this one came from. Part of it is parallelism. Part is that splitting the text shortened the tables, which means the Job's real problem is still its algorithm: every word pays for a scan of the vocabulary. That ends this act. Act Three teaches the machine to understand a language, and in Act Four, Parts 16 and 17 replace the scan itself.",
+   "zh": "于是账本有了第五行。三十部小说：在第6部分的单周期 Pebble 上四分半钟，加上流水线两分半钟，乱序不到一分钟，加上真实缓存还是一样，现在四个核十二秒。<bookmark mark='a'/>但对这一行的来历要老实。一部分是并行。一部分是切开文本让表变短了，这说明任务真正的问题仍然是它的算法：每个词都要为扫一遍词汇表付账。第二幕到此结束。第三幕教机器听懂一门语言，而在第四幕，第16和第17部分会把扫描本身换掉。"
+  },
+  "e5e1849074c5": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. The frontier.",
+   "zh": "第十五章。前沿。"
+  },
+  "7cbfceccfc14": {
+   "scene": "Frontier",
+   "en": "The first open problem is in the memory models of programming languages. <bookmark mark='a'/> Two threads, x and y both zero. Thread zero copies x into y; thread one copies y into x. <bookmark mark='b'/> Enumerate every interleaving and every value stays zero, which is obvious: there is no other value anywhere. <bookmark mark='c'/> But now allow a machine to guess the value a load will return and check it later, the value prediction of Part 8's Frontier. <bookmark mark='d'/> Guess forty-two. Store it early. The other thread loads forty-two and stores it back, and when the first load finally reads x, it finds forty-two: the guess confirms itself. Our enumerator finds outcomes like that for every guess. <bookmark mark='e'/> No real processor does this. But the formal rules of C and C++ for relaxed atomic operations, written down precisely by Mark Batty and colleagues in 2011, do not rule it out. Such values are called out of thin air.",
+   "zh": "第一个悬而未决的问题在编程语言的内存模型里。<bookmark mark='a'/>两个线程，x 和 y 都是零。线程零把 x 复制到 y；线程一把 y 复制到 x。<bookmark mark='b'/>枚举每一种交织，每个值都保持为零，这很显然：哪里都没有别的值。<bookmark mark='c'/>但现在允许机器猜测一次取数会返回什么，稍后再核对，也就是第8部分前沿一章里的值预测。<bookmark mark='d'/>猜四十二。提前把它存进去。另一个线程取到四十二，再把它存回来，等第一次取数终于读 x 时，它读到四十二：这个猜测证实了它自己。我们的枚举器对每一种猜测都找到了这样的结果。<bookmark mark='e'/>没有真实的处理器会这样做。但 C 和 C++ 对宽松原子操作的形式规则，由马克·巴蒂和同事们在 2011 年精确写下，并没有排除它。这样的值被称为凭空出现的值。"
+  },
+  "dc4f01466c34": {
+   "scene": "Frontier",
+   "en": "Why not just forbid it? <bookmark mark='a'/> Because compilers must stay free to reorder loads and stores that do not depend on each other; that freedom is much of what optimization is. <bookmark mark='b'/> And whether a store depends on a load is not a fact about the program text. A store of r1 times zero depends on r1, until the compiler simplifies it to a store of zero. <bookmark mark='c'/> So a rule like never let a store depend on an unconfirmed load cannot be stated about the source program. <bookmark mark='d'/> The 2014 C++ standard settled for one sentence saying implementations should not produce such values, without defining them. <bookmark mark='e'/> Researchers have proposed precise models, the promising semantics of Jeehoon Kang and colleagues in 2017 among them, but none has been adopted. <bookmark mark='f'/> The open question: is there a memory model that forbids values from thin air and still allows every optimization compilers actually perform?",
+   "zh": "为什么不干脆禁止它？<bookmark mark='a'/>因为编译器必须保有重排互不依赖的取数和存数的自由；优化很大程度上就是这种自由。<bookmark mark='b'/>而一次存数是否依赖一次取数，并不是程序文本上的事实。存 r1 乘零依赖于 r1，直到编译器把它化简成存零。<bookmark mark='c'/>所以“绝不让存数依赖一个未经证实的取数”这样的规则，无法针对源程序来陈述。<bookmark mark='d'/>2014 年的 C++ 标准只写了一句话，说实现不应产生这样的值，却没有定义它们。<bookmark mark='e'/>研究者们提出了精确的模型，金智勋和同事们 2017 年的承诺语义就是其中之一，但没有一个被采纳。<bookmark mark='f'/>悬而未决的问题是：有没有一种内存模型，既禁止凭空出现的值，又允许编译器实际做的每一种优化？"
+  },
+  "b2cb71ec0966": {
+   "scene": "Frontier",
+   "en": "The second frontier is scheduling. <bookmark mark='a'/> Blumofe and Leiserson's bound hides a constant inside its big O. In our simulation the extra time beyond perfect division was at most about 1.6 spans. <bookmark mark='b'/> But the bound counts only steps. A stolen task runs on a cold cache, far from its data; Umut Acar, Guy Blelloch and Robert Blumofe bounded those extra misses in 2000, and they are often what real programs feel. <bookmark mark='c'/> Parallel execution can also need far more memory than serial execution. <bookmark mark='d'/> And today's chips mix big and little cores, CPUs and GPUs, near and far memory, where a unit of work does not cost the same everywhere. <bookmark mark='e'/> A scheduler that is provably good for time, locality and space at once, on such machines, is still a research goal.",
+   "zh": "第二个前沿是调度。<bookmark mark='a'/>布卢莫菲和莱瑟森的界在大 O 里藏了一个常数。在我们的模拟里，超出完美均分的额外时间至多大约1.6个跨度。<bookmark mark='b'/>但这个界只数步数。被偷走的任务在冷缓存上运行，远离它的数据；乌穆特·阿卡尔、盖伊·布莱洛克和罗伯特·布卢莫菲在 2000 年给这些额外的缺失定了界，而真实程序感受到的往往正是它们。<bookmark mark='c'/>并行执行还可能比串行执行需要多得多的内存。<bookmark mark='d'/>而今天的芯片混合了大核和小核、CPU 和 GPU、近的和远的存储器，一份工作在不同地方的代价并不相同。<bookmark mark='e'/>一个在这样的机器上对时间、局部性和空间同时可证明良好的调度器，仍是一个研究目标。"
+  },
+  "fd5e224a784a": {
+   "scene": "Frontier",
+   "en": "And the power wall is a research frontier of its own. <bookmark mark='a'/> One idea is to run circuits at a voltage barely above the threshold, which can save about ten times the energy per operation, at a large cost in speed. <bookmark mark='b'/> Another is the specialization of Part 60. <bookmark mark='c'/> Another is to stack chips in three dimensions, memory directly on logic, shortening wires but making heat harder to remove. <bookmark mark='d'/> Underneath all of them sits a physical floor. In 1961 Rolf Landauer showed that erasing one bit must release at least k T log two of heat, about three times ten to the minus twenty-one joules at room temperature. Today's switches spend between ten thousand and a million times more, depending on what you count. <bookmark mark='e'/> Reversible and adiabatic logic aim to compute below even that floor, by never erasing information. No product does it yet.",
+   "zh": "功率墙本身也是一个研究前沿。<bookmark mark='a'/>一个想法是让电路在刚刚高于阈值的电压下运行，每次运算能省下大约十倍的能量，代价是速度大幅下降。<bookmark mark='b'/>另一个是第60部分的专门化。<bookmark mark='c'/>还有一个是把芯片三维堆叠，存储器直接叠在逻辑上，缩短了导线，却让散热更难。<bookmark mark='d'/>在这一切之下有一道物理的地板。1961 年，罗尔夫·兰道尔证明，擦除一位至少要放出 k T 乘以二的自然对数的热，在室温下大约是三乘十的负二十一次方焦耳。今天的开关花的是它的一万到一百万倍，看你怎么算。<bookmark mark='e'/>可逆逻辑和绝热逻辑的目标是在那道地板之下计算，办法是从不擦除信息。还没有产品做到。"
+  },
+  "1fbc699ec746": {
+   "scene": "Outro",
+   "en": "What we built in this part. The power wall, from one formula, and why it turned processors into multicores. Cache coherence, with MESI simulated and checked, and false sharing measured: nearly twelve times slower for nothing. Memory consistency, with the store-buffering test failing on this very computer until a fence restored order. Atomic instructions, vectors and GPUs. The theory: work and span, Brent's theorem proved and checked, parallel prefix, and sorting networks verified by the zero-one principle. And the Job on four cores, nearly five times faster, partly by dividing the work and partly by shrinking it.",
+   "zh": "这一部分我们搭了什么。功率墙，从一个公式出发，以及它为什么把处理器变成了多核。缓存一致性，MESI 经过模拟和检验，伪共享经过测量：白白慢了将近十二倍。存储一致性，存储缓冲测试就在这台计算机上失败，直到一道栅栏恢复了次序。原子指令、向量和 GPU。理论：工作量与跨度，布伦特定理经过证明和检验，并行前缀，以及用零一原理验证的排序网络。还有四个核上的任务，快了将近五倍，一部分靠分工，一部分靠把工作缩小。"
+  },
+  "afaf2ed513dc": {
+   "scene": "Outro",
+   "en": "Where this comes back. Locks, lock-free data structures and the memory model in depth are Part 33. The Job's real fix, a better algorithm, is Parts 16 and 17, and a vectorized tokenizer gives ledger row ten in Part 24. Threads and their scheduling inside an operating system are Part 31. Consensus between machines that can crash, Herlihy's question at the scale of a data centre, is Parts 38 and 59. The partitioned merge grows into MapReduce and the shuffle in Parts 39 and 45. And specialized hardware, the answer to dark silicon, is Part 60.",
+   "zh": "这些会在哪里再出现。锁、无锁数据结构以及深入的内存模型在第33部分。任务真正的修复，一个更好的算法，在第16和第17部分，而一个向量化的分词器在第24部分给出账本第十行。操作系统里的线程及其调度在第31部分。会崩溃的机器之间的共识，也就是数据中心规模上的赫利希之问，在第38和第59部分。分区合并会长成 MapReduce 和第39、45部分里的洗牌。而专门化的硬件，也就是对暗硅的回答，在第60部分。"
+  },
+  "7dd560dc636c": {
+   "scene": "Outro",
+   "en": "In practice. Servers give each core its own thread pool and its own counters, and keep hot data out of shared lines. Parallel libraries, OpenMP, Intel's TBB, Rust's Rayon, Java's fork-join, all schedule with work stealing. SIMD code is written with intrinsics or portable vector types, and compilers report which loops they vectorized. GPU kernels are written to keep loads coalesced and warps undivided. Supercomputer codes live by MPI collectives and weak scaling. And the tools of the trade are ThreadSanitizer, which finds data races, and perf c2c, which finds false sharing.",
+   "zh": "在实践中。服务器给每个核自己的线程池和自己的计数器，让热数据远离共享的行。并行库，OpenMP、英特尔的 TBB、Rust 的 Rayon、Java 的分叉—汇合，全都用工作窃取来调度。SIMD 代码用内在函数或可移植的向量类型来写，编译器会报告哪些循环被向量化了。GPU 内核写得让取数保持合并、线程束不分歧。超级计算机代码靠 MPI 集合操作和弱扩展过日子。这一行的工具是 ThreadSanitizer，它找数据竞争；还有 perf c2c，它找伪共享。"
+  },
+  "7d74b6799f1a": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: balance the Job's four cores with smaller pieces of work. The last, marked with a star, is a research problem: its full answer is not known, and the notes say where to start.",
+   "zh": "六道习题，完整解答在本部分的笔记里。随时可以暂停。第五题是动手题：用更小的工作块来平衡任务的四个核。最后一题标了星号，是研究题：它的完整答案还不知道，笔记里说了从哪里入手。"
+  },
+  "67bdc0c25fb5": {
+   "scene": "Outro",
+   "en": "That ends Act Two. Next comes Act Three, Speaking to the Machine, and Part 11 follows one program from source code to a running process: how its data becomes bytes, its calls a stack, and its names addresses; how the linker and loader bring it to life; and how one unchecked copy can make it do something its author never wrote.",
+   "zh": "第二幕到此结束。接下来是第三幕“和机器对话”，第11部分跟着一个程序从源代码走到一个运行中的进程：它的数据怎样变成字节，它的调用怎样变成栈，它的名字怎样变成地址；链接器和装载器怎样让它活起来；以及一次未经检查的复制，怎样让它做出作者从没写过的事。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "本部分依据的书和论文，在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 10, Parallel Machines",
+ "chapters_en": {
+  "Hook": "The clock stops",
+  "Power": "1. The power wall",
+  "Multicore": "2. Four cores, one Job",
+  "Coherence": "3. Cache coherence",
+  "FalseShare": "4. False sharing",
+  "Consistency": "5. Memory consistency",
+  "Atomics": "6. Atomic instructions",
+  "Simd": "7. SIMD and vectors",
+  "Gpu": "8. GPUs in one chapter",
+  "WorkSpan": "9. Work, span and Brent's theorem",
+  "Scan": "10. Parallel prefix",
+  "Sorting": "11. Sorting networks",
+  "Amdahl": "12. Amdahl and Gustafson",
+  "Models": "13. Models and networks",
+  "Job": "14. The Job on four cores",
+  "Frontier": "15. Frontier: thin air, stealing, dark silicon",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
