@@ -116,7 +116,7 @@ def src_lines(obj, first: str, count: int):
     return textwrap.dedent("\n".join(lines[i:i + count])).splitlines()
 
 
-def house_lab(title, obj, first, count, extra=()):
+def house_lab(title, obj, first, count, extra=(), width=6.6):
     """A lab card for the House function ``obj`` (its file shown as the source); ``extra`` adds (obj, first, count)
     excerpts below, separated by a blank line."""
     import inspect
@@ -125,4 +125,4 @@ def house_lab(title, obj, first, count, extra=()):
     for o, f, c in extra:
         lines += [""] + src_lines(o, f, c)
     src = inspect.getsourcefile(obj).split("explainer-videos/")[-1]
-    return lab_card(title, lines, source=f"{src}: {obj.__qualname__}")
+    return lab_card(title, lines, source=f"{src}: {obj.__qualname__}", width=width)

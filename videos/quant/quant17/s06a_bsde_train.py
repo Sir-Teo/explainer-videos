@@ -145,7 +145,7 @@ class BSDETrain(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, b):
-        card = house_lab(r"the forward sweep", D.deep_bsde, "def run(n):", 11)
+        card = house_lab(r"the forward sweep", D.deep_bsde, "def run(n):", 11, width=12.6)  # long lines: full width
         card.to_edge(UP, buff=0.35).to_edge(LEFT, buff=0.6)
         cv = {c["iter"]: c["u0"] for c in b["curve"]}
         outs = [f"u0 at step 0: {cv[0]:.2f}   step 1000: {cv[1000]:.2f}   step 4000: {cv[4000]:.2f}",
