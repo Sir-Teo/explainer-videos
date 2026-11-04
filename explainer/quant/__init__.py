@@ -279,6 +279,17 @@ def chapter_card(number, title: str, question: str = "", lit=(), part: int | Non
     return VGroup(g, strip)
 
 
+def pause_card(text: str):
+    """The pause-and-predict banner at the foot of the frame (shared by the research chapters)."""
+    return wrapped_label(rf"Pause and predict: {text}", 12.4, 25, QC.IDEA).to_edge(DOWN, buff=0.3)
+
+
+def fit_right(m, edge: float = 6.75):
+    """Shift ``m`` left until its right edge is inside the frame (side panels beside a chart)."""
+    m.shift(LEFT * max(0.0, m.get_right()[0] - edge))
+    return m
+
+
 def research_card(title: str, question: str = "", lit=(), part: int | None = None) -> VGroup:
     """The card of a part's research chapter (the PhD layer): like a chapter card, headed 'For the researcher'
     instead of a chapter number, so it can join a finished part without renumbering the chapters around it."""

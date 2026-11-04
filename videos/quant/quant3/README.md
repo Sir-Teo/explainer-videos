@@ -14,7 +14,7 @@ are labelled as allegations, and settlements without admission are said to be so
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 60 minutes)
+## Chapters (about 65 minutes)
 
 * **What is a share a claim on?** Shiller (1981) rebuilt on screen: p\* by the backward recursion
   p\*ₜ = (p\*ₜ₊₁ + Dₜ)/(1 + r), 1871–2020, at the average real return (8.3%). The price moves 8× as much as p\* from
@@ -105,6 +105,7 @@ are labelled as allegations, and settlements without admission are said to be so
   items, 3 pure noise; losses persist 0.4, profits 0.8): test MSE ×10⁻⁴ — random walk 16.23, OLS 13.24, ridge on
   splines 13.18, MLP (2×16, 5 seeds) 13.18 (seed range 13.15–13.22), noise floor 12.50. The MLP does not beat OLS by
   more than its seed spread. Replayed through 22 checkpoints with the seed band.
+* **For the researcher: predicting with a persistent predictor.** The predictive regression with an AR(1) predictor and correlated shocks; Stambaugh's bias $E[\hat\beta - \beta] = (\sigma_{uv}/\sigma_v^2)E[\hat\rho - \rho]$ proved, with Kendall's $-(1 + 3\rho)/T$; simulation ($T$ = 100, $\phi = -0.95$): bias 0.034 at $\rho$ = 0.8 (formula 0.032) to 0.051 at a unit root (0.038). Local-to-unity asymptotics: the $t$-statistic tends to $\phi\,\tau_c + \sqrt{1 - \phi^2}Z$. Size of a nominal 5% one-sided test: 10%, 13%, 19%, 33%, 43% for $\rho$ = 0.8 to 1; at $T$ = 500 still 42% at a unit root. Amihud–Hurvich's augmented regression: 5–9%. Shiller 1872–2020: slope 0.046 ($t$ 1.44), $\hat\rho$ = 0.90, $\hat\phi = -0.82$; corrected 0.032 ($t$ 1.00). Three open problems.
 * **Recap, desk questions, problems,** the House, payoffs, references.
 
 ## Build it
@@ -219,6 +220,17 @@ extension.
    linearisation's error. Long-run slopes: b_r/(1 − ρφ) = 0.05/0.088 = 0.57 and b_d/(1 − ρφ) = −0.34; their difference,
    0.91, is the share of the yield's variance explained, with returns carrying about 0.57/0.91 ≈ 63% of it.
 
+8. **(qual) Stambaugh's bias.** With jointly normal $(u, v)$ write $u_{t+1} = \gamma v_{t+1} + e_{t+1}$, $\gamma =
+   \sigma_{uv}/\sigma_v^2$, where $e$ is independent of the whole sequence $v$ and so of $x$. Then $\hat\beta - \beta =
+   \sum(x_t - \bar x)u_{t+1}/\sum(x_t - \bar x)^2 = \gamma(\hat\rho - \rho) + \sum(x_t - \bar x)e_{t+1}/\sum(x_t -
+   \bar x)^2$, because the AR(1) estimate uses the same regressor: $\hat\rho - \rho = \sum(x_t - \bar x)v_{t+1}/\sum(x_t
+   - \bar x)^2$. Conditional on $x$ the second term has mean zero, so $E[\hat\beta - \beta] = \gamma E[\hat\rho - \rho]$.
+9. **(qual) The unit-root $t$.** With $\phi = -1$, $u = -(\sigma_u/\sigma_v)v$ exactly, so $\hat\beta - \beta =
+   -(\sigma_u/\sigma_v)(\hat\rho - \rho)$ and the residual variances scale the same way: $t_{\hat\beta} =
+   -(\hat\rho - 1)/\operatorname{se}(\hat\rho) = -\tau_{DF}$ at $\rho = 1$. A one-sided test rejects when $t_{\hat\beta} >
+   1.645$, i.e. when $\tau_{DF} < -1.645$; for the Dickey–Fuller distribution with a constant that probability is about
+   46% (20,000 simulated random walks of 500 steps), against the nominal 5%.
+
 ## Reading guide (beyond what is on screen)
 
 Every paper in [`READING.md`](../READING.md)'s Part 3 list appears on screen. Penman's textbook is the residual-income
@@ -242,6 +254,18 @@ is drawn from their results.
   forecaster's panel of chapter 18. Illustrative: the trade-off pie, the real option, the lease bridge.
 * Trials registered this part: the five French signals, the CAPE forecast, the 208 OSAP predictors (as one
   meta-test with 208 trials), and the forecaster's 8 configurations.
+
+## For the researcher
+
+* **The theorems.** Stambaugh (1999) for the bias; Kendall (1954) for the AR(1) bias; Phillips (1987), Elliott and
+  Stock (1994) and Campbell and Yogo (2006) for the local-to-unity limit $t \Rightarrow \phi\tau_c + \sqrt{1 - \phi^2}Z$;
+  Amihud and Hurvich (2004) for the augmented regression and its standard error.
+* **Simplifications.** The video's simulations use normal shocks and a correctly known $\phi$ sign; the corrected
+  estimator caps $\hat\rho^c$ below one. Long-horizon regressions (Chapter 9) add overlapping-observation problems
+  (Hodrick 1992; Valkanov 2003; Boudoukh, Richardson and Whitelaw 2008).
+* **Open problems.** Uniformly valid inference across persistence (Bonferroni and IVX: Kostakis, Magdalinos and
+  Stamatogiannakis 2015); breaks in the predictor's mean (Lettau and Van Nieuwerburgh 2008); in-sample against
+  out-of-sample tests (Welch and Goyal 2008; Campbell and Thompson 2008).
 
 ---
 
@@ -293,3 +317,13 @@ is drawn from their results.
 5. **重叠窗口。** 约13个独立的十年；把它们当作独立样本会把t统计量高估约√120 ≈ 11倍。第6部分推导修正方法与斯坦博偏差。
 6. **两个内部收益率。** 100x² − 230x + 132 = 0，x = 1.1或1.2：内部收益率10%和20%。15%时净现值为+0.19 > 0，应当接受。
 7. **坎贝尔–席勒。** b_r − b_d + ρφ = 0.05 + 0.03 + 0.912 = 0.992 ≈ 1（线性化误差）。长期斜率0.57与−0.34，差为0.91，其中收益率约占63%。
+8. **（资格考试）斯坦博偏差。** 对联合正态的$(u, v)$，写$u_{t+1} = \gamma v_{t+1} + e_{t+1}$，$\gamma = \sigma_{uv}/\sigma_v^2$，
+   $e$与整个$v$序列独立，因而与$x$独立。由于AR(1)估计用的是同一个回归变量，$\hat\beta - \beta = \gamma(\hat\rho - \rho) +
+   \sum(x_t - \bar x)e_{t+1}/\sum(x_t - \bar x)^2$；给定$x$时第二项均值为零，所以$E[\hat\beta - \beta] = \gamma E[\hat\rho - \rho]$。
+9. **（资格考试）单位根下的t。** $\phi = -1$时$u = -(\sigma_u/\sigma_v)v$，所以$t_{\hat\beta} = -\tau_{DF}$。单侧检验在$\tau_{DF} <
+   -1.645$时拒绝；对带常数的迪基–富勒分布，这个概率约为46%（两万条500步随机游走的模拟），而名义水平是5%。
+
+## 写给研究者
+
+斯坦博（1999）的偏差、肯德尔（1954）的AR(1)偏差、局部单位根极限（Phillips 1987；Elliott与Stock 1994；Campbell与Yogo 2006），
+以及阿米胡德–赫维奇（2004）的扩充回归。开放问题：对所有持久性一致有效的推断（邦费罗尼与IVX）；预测变量均值的断点；样本内与样本外检验之争。

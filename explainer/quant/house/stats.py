@@ -119,3 +119,39 @@ def powerlaw_tail_years(x, threshold: float, frac: float = 0.02, per_year: float
     alpha = 1.0 / np.mean(np.log(a[:k] / a[k]))
     p = (k / len(a)) * (abs(threshold) / a[k]) ** (-alpha)
     return float(1.0 / (p * per_year))
+
+
+def predictive_regression(r, x) -> dict:
+    """The predictive regression r_{t+1} = a + b x_t + u_{t+1} with a persistent predictor x_{t+1} = m + rho x_t +
+    v_{t+1}: OLS b and t, the AR(1) rho and phi = corr(u, v), Stambaugh's (1999) bias
+    E[b_hat - b] = (s_uv / s_v^2) E[rho_hat - rho] with Kendall's E[rho_hat - rho] ~ -(1 + 3 rho)/T, and Amihud and
+    Hurvich's (2004) augmented regression: a bias-corrected rho, its residual v^c added as a regressor, and a standard
+    error that carries the error in rho.  ``r`` and ``x`` are aligned: r[t] is the return after x[t]."""
+    r, x = np.asarray(r, float), np.asarray(x, float)
+    T = len(r)
+    X = np.column_stack([np.ones(T), x])
+    coef, *_ = np.linalg.lstsq(X, r, rcond=None)
+    u = r - X @ coef
+    s2 = u @ u / (T - 2)
+    cov = s2 * np.linalg.inv(X.T @ X)
+    b, se = float(coef[1]), float(np.sqrt(cov[1, 1]))
+    # the predictor's AR(1), fitted on the same T observations (x_t on x_{t-1})
+    Z = np.column_stack([np.ones(T - 1), x[:-1]])
+    cr, *_ = np.linalg.lstsq(Z, x[1:], rcond=None)
+    v = x[1:] - Z @ cr
+    rho = float(cr[1])
+    s2v = v @ v / (T - 3)
+    var_rho = s2v * np.linalg.inv(Z.T @ Z)[1, 1]
+    phi = float(np.corrcoef(u[:-1], v)[0, 1])     # u_{t+1} (after x_t) against v_{t+1} (the innovation in x_{t+1})
+    s_uv = float(np.mean(u[:-1] * v))
+    kendall = -(1 + 3 * rho) / T
+    stambaugh = s_uv / float(np.mean(v * v)) * kendall
+    rho_c = min(rho + (1 + 3 * rho) / T + 3 * (1 + 3 * rho) / T ** 2, 0.9999)
+    vc = x[1:] - cr[0] * (1 - rho_c) / max(1 - rho, 1e-6) - rho_c * x[:-1]
+    A = np.column_stack([np.ones(T - 1), x[:-1], vc])
+    ca, *_ = np.linalg.lstsq(A, r[:-1], rcond=None)
+    ea = r[:-1] - A @ ca
+    cova = (ea @ ea / (T - 4)) * np.linalg.inv(A.T @ A)
+    se_c = float(np.sqrt(cova[1, 1] + ca[2] ** 2 * (1 + 3 / T + 9 / T ** 2) ** 2 * var_rho))
+    return {"b": b, "se": se, "t": b / se, "rho": rho, "phi": phi, "stambaugh_bias": float(stambaugh),
+            "b_c": float(ca[1]), "se_c": se_c, "t_c": float(ca[1] / se_c), "T": int(T)}

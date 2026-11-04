@@ -1001,12 +1001,52 @@ def compute_forecaster() -> dict:
             "n_test": len(yte), "var_y": float(yte.var())}
 
 
+def compute_predreg_theory() -> dict:
+    """The research chapter: predictive regressions with a persistent predictor.  Stambaugh's bias against
+    Kendall's formula, the OLS t-test's size and Amihud-Hurvich's augmented-regression test across persistence
+    (rho 0.8 to 1, phi = -0.95, T = 100 years and 500), the t-statistics' laws at rho = 0.99, and the dividend yield
+    on Shiller's annual data, 1872-2020."""
+    from explainer.quant.house import stats as hs
+    rng = np.random.default_rng(303)
+    phi, M = -0.95, 2000
+    out = {"phi": phi, "M": M, "grid": {}}
+    for T in (100, 500):
+        for rho in (0.8, 0.9, 0.95, 0.99, 1.0):
+            if T == 500 and rho not in (0.95, 0.99, 1.0):
+                continue
+            bs, bc, t_, tc = [], [], [], []
+            for _ in range(M):
+                e = rng.multivariate_normal([0, 0], [[1, phi], [phi, 1]], T + 1)
+                x = np.zeros(T + 1)
+                for i in range(1, T + 1):
+                    x[i] = rho * x[i - 1] + e[i, 1]
+                o = hs.predictive_regression(e[1:, 0], x[:-1])
+                bs.append(o["b"]); bc.append(o["b_c"]); t_.append(o["t"]); tc.append(o["t_c"])
+            key = f"{T}_{rho}"
+            out["grid"][key] = {"T": T, "rho": rho, "bias": float(np.mean(bs)), "formula": float(-phi * (1 + 3 * rho) / T),
+                                "bias_c": float(np.mean(bc)), "size_ols": float(np.mean(np.array(t_) > 1.645)),
+                                "size_c": float(np.mean(np.array(tc) > 1.645))}
+            if T == 100 and rho == 0.99:
+                out["t_hist"] = {"ols": np.histogram(t_, 40, (-4, 6))[0], "c": np.histogram(tc, 40, (-4, 6))[0]}
+    # the dividend yield on Shiller's annual data (January prices; the past year's dividend), research window
+    sh = compute_shiller()
+    ty, P, D = np.asarray(sh["t"]), np.asarray(sh["price"]), np.asarray(sh["div"])
+    m = ty <= 2020
+    ty, P, D = ty[m], P[m], D[m]
+    x = np.log(D[:-1] / P[1:])                 # x_t: last year's dividend over this January's price
+    r = np.log((P[2:] + D[1:-1]) / P[1:-1])    # r_{t+1}: the next year's log return with its dividend
+    x = x[:-1]
+    o = hs.predictive_regression(r, x)
+    out["shiller"] = {**o, "first": int(ty[1]), "last": int(ty[-1])}
+    return _json(out)
+
+
 ITEMS = {"shiller": compute_shiller, "cape": compute_cape, "factors": compute_factors, "dcf": compute_dcf,
          "timevalue": compute_timevalue, "duration": compute_duration, "statements": compute_statements,
          "accruals": compute_accruals, "pit": compute_pit, "dcf_mc": compute_dcf_mc, "erp": compute_erp,
          "ri": compute_ri, "campbell_shiller": compute_campbell_shiller, "payout": compute_payout,
          "merton": compute_merton, "pead": compute_pead, "osap": compute_osap, "merger": compute_merger,
-         "mscore": compute_mscore, "forecaster": compute_forecaster, "envelope": compute_envelope}
+         "mscore": compute_mscore, "forecaster": compute_forecaster, "envelope": compute_envelope, "predreg_theory": compute_predreg_theory}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
