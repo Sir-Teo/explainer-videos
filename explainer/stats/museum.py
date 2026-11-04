@@ -382,3 +382,8 @@ SLEEP_DRUG2 = [1.9, 0.8, 1.1, 0.1, -0.1, 4.4, 5.5, 1.6, 4.6, 3.4]
 # France, about 1,000,000 a year.  W. G. Cochran, "Laplace's ratio estimator" (1978); S. Stigler, History of Statistics
 # (1986), ch. 4.
 LAPLACE = {"sample_pop": 2037615, "sample_births_3yr": 215599, "france_births": 1000000}
+
+# The German tank problem (Part 9).  R. Ruggles & H. Brodie, "An empirical approach to economic intelligence in World
+# War II", JASA 42 (1947): monthly production estimated from the serial numbers of captured tanks, against conventional
+# intelligence estimates and the German records found after the war (as tabulated in later accounts of their paper).
+TANKS = [("June 1940", 169, 1000, 122), ("June 1941", 244, 1550, 271), ("August 1942", 327, 1550, 342)]
