@@ -83,8 +83,8 @@ class RandomSearch(VoiceoverScene):
         fit_right(leg)
         med_r, med_n = float(np.median(tr)), float(np.median(noise))
         ratio = med_r / med_n
-        side = VGroup(MathTex(rf"	ext{{median, formulas}}: {med_r:.3f}", font_size=22, color=RAND_C),
-                      MathTex(rf"	ext{{median, noise}}: {med_n:.3f}", font_size=22, color=GREY_B),
+        side = VGroup(MathTex(rf"\text{{median, formulas}}: {med_r:.3f}", font_size=22, color=RAND_C),
+                      MathTex(rf"\text{{median, noise}}: {med_n:.3f}", font_size=22, color=GREY_B),
                       wrapped_label(r"noise: a fresh random number for every coin and day, scored by the same code",
                                     3.4, 15, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.35)
         fit_right(side)

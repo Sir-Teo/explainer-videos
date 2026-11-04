@@ -124,8 +124,8 @@ class Space(VoiceoverScene):
                             MathTex(f"{n:,}".replace(",", "{,}"), font_size=26, color=col)))
             bars[-1][2].next_to(bars[-1][1], RIGHT, buff=0.2)
             bars[-1][0].align_to(np.array([-6.2, 0, 0]), LEFT)
-        foot = wrapped_label(rf"{n_leaf:,} of the draws are a single field; 	exttt{{rank(x)}} and $x$, or $x/y$ and "
-                             r"	exttt{neg}$(y/x)$, are different trees with the same ranking of coins, so the same score"
+        foot = wrapped_label(rf"{n_leaf:,} of the draws are a single field; \texttt{{rank(x)}} and $x$, or $x/y$ and "
+                             r"\texttt{neg}$(y/x)$, are different trees with the same ranking of coins, so the same score"
                              .replace(",", "{,}", 1), 11.6, 17, GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "The space is also smaller than it looks. <bookmark mark='a'/> Of our ten thousand random draws, only "
