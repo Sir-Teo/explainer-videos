@@ -22,5 +22,6 @@ SCENES = [
     ("s17_snr", "SNR", "16. How many years until you know?"),
     ("s18_industry", "Industry", "17. How research desks avoid fooling themselves"),
     ("s19_frontier", "Frontier", "18. The frontier, 2023-2026"),
+    ("s21_research", "Research", "For the researcher: predictive regressions near a unit root"),
     ("s20_outro", "Outro", "The statistics module; recap, desk questions, problems"),
 ]

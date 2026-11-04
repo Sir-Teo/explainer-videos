@@ -1227,7 +1227,37 @@ def compute_ellipse_path() -> dict:
     return _json({"path": out})
 
 
-ITEMS = {"overlap": compute_overlap, "stambaugh": compute_stambaugh, "gmm": compute_gmm, "event": compute_event,
+def compute_predreg_theory() -> dict:
+    """The research chapter: the predictive t-test near a unit root.  Bias, OLS size and Amihud-Hurvich's
+    augmented-regression size across persistence (rho 0.8 to 1, phi = -0.95, T = 100 and 500), and the
+    t-statistics' laws at rho = 0.99."""
+    from explainer.quant.house import stats as hs
+    rng = np.random.default_rng(303)
+    phi, M = -0.95, 2000
+    out = {"phi": phi, "M": M, "grid": {}}
+    for T in (100, 500):
+        for rho in (0.8, 0.9, 0.95, 0.99, 1.0):
+            if T == 500 and rho not in (0.95, 0.99, 1.0):
+                continue
+            bs, bc, t_, tc = [], [], [], []
+            for _ in range(M):
+                e = rng.multivariate_normal([0, 0], [[1, phi], [phi, 1]], T + 1)
+                x = np.zeros(T + 1)
+                for i in range(1, T + 1):
+                    x[i] = rho * x[i - 1] + e[i, 1]
+                o = hs.predictive_regression(e[1:, 0], x[:-1])
+                bs.append(o["b"]); bc.append(o["b_c"]); t_.append(o["t"]); tc.append(o["t_c"])
+            key = f"{T}_{rho}"
+            out["grid"][key] = {"T": T, "rho": rho, "bias": float(np.mean(bs)), "formula": float(-phi * (1 + 3 * rho) / T),
+                                "bias_c": float(np.mean(bc)), "size_ols": float(np.mean(np.array(t_) > 1.645)),
+                                "size_c": float(np.mean(np.array(tc) > 1.645))}
+            if T == 100 and rho == 0.99:
+                out["t_hist"] = {"ols": np.histogram(t_, 40, (-4, 6))[0], "c": np.histogram(tc, 40, (-4, 6))[0],
+                                 "mean_ols": float(np.mean(t_)), "mean_c": float(np.mean(tc))}
+    return _json(out)
+
+
+ITEMS = {"predreg_theory": compute_predreg_theory, "overlap": compute_overlap, "stambaugh": compute_stambaugh, "gmm": compute_gmm, "event": compute_event,
          "panel": compute_panel, "bootstrap": compute_bootstrap, "shrinkage": compute_shrinkage,
          "multiple": compute_multiple, "ellipse": compute_ellipse, "dml": compute_dml, "snr": compute_snr,
          "envelope": compute_envelope, "ols_fwl": compute_ols_fwl, "hac": compute_hac, "har_size": compute_har_size,

@@ -16,7 +16,7 @@ the real-world measure P.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 57 minutes, 20 entries)
+## Chapters (about 60 minutes, 21 entries)
 
 * **One regression, five verdicts** (`s01_hook`). Does an industry's past year (months t−12 to t−2) predict its next
   month? French's 49 industries, 1928–2020, 51,858 industry-months: pooled OLS t = 1.86; clustered by industry 1.21;
@@ -95,6 +95,7 @@ the real-world measure P.
   advisers, 2023). Man Group, AQR, Research Affiliates; Menkveld et al. and Pérignon et al. The House's defences.
 * **18. The frontier, 2023–2026** (`s19_frontier`). Eight cards tied to their chapters; Kelly–Malamud–Zhou vs Nagel
   (schematic).
+* **For the researcher: predictive regressions near a unit root** (`s21_research`). Chapter 5's decomposition recalled; the local-to-unity limit $T(\hat\rho - \rho) \Rightarrow \int J_c^\mu dW/\int (J_c^\mu)^2$ and $t_{\hat\beta} \Rightarrow \phi\,\tau_c + \sqrt{1 - \phi^2}Z$ (Phillips 1987; Elliott–Stock 1994; Cavanagh–Elliott–Stock 1995). Simulated ($\phi = -0.95$, 2,000 samples each): at $\rho = 0.99$, $T = 100$ the OLS $t$ has mean 1.28 (augmented 0.33); the nominal 5% one-sided OLS test rejects 10%, 13%, 19%, 33%, 43% for $\rho$ = 0.8 to 1, and at $T = 500$ still 42% at a unit root (9% at 0.95); Amihud–Hurvich 5–9%. Three open problems.
 * **The statistics module; recap, desk questions, problems** (`s20_outro`). Rule 7 and the trial counter.
 
 ## Build it
@@ -239,6 +240,17 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
    mean contains ℓ − k pairs at lag k, so Var*(√n x̄*) ≈ Γ̂₀ + 2Σ_{k<ℓ}(1 − k/ℓ)Γ̂_k: a Bartlett-weighted long-run
    variance with bandwidth ℓ.
 
+8. **(qual) The Dickey–Fuller limit.** With $x_t = \sum_{s \le t}v_s$, $T(\hat\rho - 1) = \frac{T^{-1}\sum x_{t-1}v_t}
+   {T^{-2}\sum x_{t-1}^2}$. By the functional CLT, $T^{-1/2}x_{\lfloor Tr\rfloor} \Rightarrow \sigma W(r)$, so the
+   denominator tends to $\sigma^2\int_0^1 W^2$ (continuous mapping). For the numerator, $x_t^2 = x_{t-1}^2 + 2x_{t-1}v_t +
+   v_t^2$, so $\sum x_{t-1}v_t = \tfrac12(x_T^2 - \sum v_t^2)$, and $T^{-1}$ times it tends to $\tfrac12\sigma^2(W(1)^2 -
+   1)$. The two converge jointly, so $T(\hat\rho - 1) \Rightarrow \tfrac12(W(1)^2 - 1)/\int W^2$: a non-normal law with
+   most of its mass below zero (Kendall's bias, at its limit).
+9. **(qual) The unit-root $t$.** With $\phi = -1$, $u = -(\sigma_u/\sigma_v)v$, so $\hat\beta - \beta =
+   -(\sigma_u/\sigma_v)(\hat\rho - \rho)$ and the residual variances scale identically: $t_{\hat\beta} = -\tau_{DF}$
+   at $\rho = 1$. The test rejects when $\tau_{DF} < -1.645$; for the Dickey–Fuller law with an intercept that is
+   about 46% (20,000 simulated random walks of 500 steps).
+
 ## Data and reproducibility
 
 * Robert Shiller's `ie_data.xls`, monthly 1871–2020 (real total returns; dividend, earnings and CAPE yields; GS10;
@@ -258,6 +270,17 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
   Campbell–Thompson's gain formula (R²/(1 − R²)·(1 + S²)/S²), the textbook chapter numbers, JKP's replication rates,
   Pérignon et al.'s 52%, Nagel's abstract, Glasserman–Lin's findings. Dropped: the Two Sigma Venn "Factor Lens" claim
   (its documentation could not be read from this environment); Glasserman–Lin's journal venue (cited as arXiv).
+
+
+## For the researcher
+
+* **The theorems.** Phillips (1987) and Chan and Wei (1987) for local-to-unity limits; Elliott and Stock (1994) and
+  Cavanagh, Elliott and Stock (1995) for predictive tests; Campbell and Yogo (2006) for Bonferroni intervals;
+  Kostakis, Magdalinos and Stamatogiannakis (2015) for IVX.
+* **Simplifications.** The simulations use normal shocks and a known sign of $\phi$; the augmented regression's
+  standard error uses a first-order variance of $\hat\rho^c$.
+* **Open problems.** Uniformly valid tests with good power everywhere; many persistent predictors; breaks against
+  near unit roots.
 
 ---
 
@@ -323,7 +346,18 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 7. **独立同分布自助法忘掉相依。** 每个x*_i从样本中均匀独立抽取，Var*(√n x̄*) = Γ̂₀；长度为ℓ的移动区块给出约Γ̂₀ + 2Σ_{k<ℓ}(1 − k/ℓ)Γ̂_k，
    即带宽为ℓ的巴特利特加权长期方差。
 
+8. **（资格考试）迪基–富勒极限。** 由泛函中心极限定理与连续映射，分母$T^{-2}\sum x_{t-1}^2 \to \sigma^2\int W^2$；由$\sum x_{t-1}v_t =
+   \tfrac12(x_T^2 - \sum v_t^2)$，分子$T^{-1}\sum x_{t-1}v_t \to \tfrac12\sigma^2(W(1)^2 - 1)$；两者联合收敛，故$T(\hat\rho - 1)
+   \Rightarrow \tfrac12(W(1)^2 - 1)/\int W^2$。
+9. **（资格考试）单位根下的t。** $\phi = -1$时$t_{\hat\beta} = -\tau_{DF}$；检验在$\tau_{DF} < -1.645$时拒绝，对带截距的迪基–富勒
+   分布约为46%。
+
 ## 数据与可复现性
 
 席勒月度数据；肯尼斯·弗伦奇的因子、49个行业、账面市值比十分位、日度市场与规模十分位（截至2020年12月，2021年起的留出数据已密封）；
 FRED的人均实际消费与CPI；FOMC例行会议日期（1994–2020，转录自美联储网站，见`fomc_dates.py`，带SHA-256校验）。
+
+## 写给研究者
+
+局部单位根极限（Phillips 1987；Chan与Wei 1987），预测检验（Elliott与Stock 1994；Cavanagh、Elliott与Stock 1995），邦费罗尼区间（Campbell与
+Yogo 2006），IVX（2015）。开放问题：处处有良好功效的一致有效检验；多个持久预测变量；断点与近单位根之辨。
