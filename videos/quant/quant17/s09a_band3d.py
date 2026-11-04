@@ -34,7 +34,7 @@ class Band3D(VoiceoverScene, ThreeDScene):
         lo, hi, wl, wh = (np.clip(np.asarray(sf[k]), 0, 1) for k in ("lo", "hi", "ww_lo", "ww_hi"))
         ax = ThreeDAxes(x_range=[S[0], S[-1], 10], y_range=[0, 30, 10], z_range=[0, 1, 0.5], x_length=7.0, y_length=5.0,
                         z_length=3.2, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2}).shift(DOWN * 0.4)
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2}).shift(DOWN * 0.9 + RIGHT * 1.3)  # clear of the key
 
         def sheet(Z, col, op, stroke=0.3, sw=None):
             f = grid_fn(S, days, Z)
@@ -60,7 +60,7 @@ class Band3D(VoiceoverScene, ThreeDScene):
                       label(rf"width at the money: {wn[i30]:.2f} at 30 days, {wn[i5]:.2f} at 5 (theirs: {ww_w[i30]:.2f}, "
                             rf"{ww_w[i5]:.2f})", font_size=18, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.3)
-        self.set_camera_orientation(phi=64 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
+        self.set_camera_orientation(phi=64 * DEGREES, theta=-62 * DEGREES, zoom=0.8)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
