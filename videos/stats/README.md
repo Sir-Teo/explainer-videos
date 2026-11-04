@@ -1,20 +1,18 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: master plan (draft 1), not yet in production.** No part has sources, data or renders yet. The
-chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
+**Status: master plan (draft 2, from first course to PhD), not yet in production.** No part has sources, data or
+renders yet. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
-This is a thirty-six-part course on mathematical statistics, in English and Chinese. It starts with a 1662 table of
-London deaths and ends with the statistics of evaluating AI models. On the way it covers what a graduate statistics
-curriculum covers: probability and its limit theorems; the classical theory of estimation, testing and intervals;
-large-sample optimality; linear, generalized and hierarchical models; Bayesian inference and its computation;
-resampling, rank, robust and smoothing methods; multivariate and high-dimensional statistics; multiple testing and
-the replication crisis; prediction and conformal inference; causal inference from experiments, observational data
-and natural experiments; time series, spatial data, survival data, surveys and missing data; and sequential,
-anytime-valid inference.
+This series is a whole education in statistics on video: **a bachelor's degree, a master's, and a PhD**. It runs to
+sixty-five parts in five stages, in English and Chinese, and assumes calculus at the start. By the end it reaches the
+research frontier: selective and anytime-valid inference, high-dimensional asymptotics, optimal transport, causal
+machine learning, privacy, and the statistics of AI.
 
-Each part is a **50–60 minute lecture**. It derives its mathematics on screen, every step with its reason. It tells
-the history of the ideas, including who argued with whom. It builds a working tool or toy, and it checks every
-claim with a real computation. The videos are named `stats1` … `stats36`, in `videos/stats/statsN/`.
+Each part is a **50–60 minute lecture**, about 60 hours in all. Each one derives its mathematics on screen, every step
+with its reason. It tells the history of the ideas, builds a working tool or toy, and checks every claim with a real
+computation. The rigour rises with the stage: calculus-level proofs in the bachelor's stages, measure-theoretic
+theorem–proof in the PhD core, research papers in the last stage. The videos are named `stats1` … `stats65`, in
+`videos/stats/statsN/`.
 
 ## The story
 
@@ -23,35 +21,31 @@ Mortality*. From them he worked out things about the living city that nobody had
 there, how many boys were born for every girl, how long a Londoner could expect to live. Statistics is his question
 made precise: *what can we know about what we cannot see, from what we can, and how often will we be wrong?*
 
-The second half of that question drives the series. Every statistical method promises something: an unbiased
-estimate, a 5% false-alarm rate, a 95% interval, a controlled false discovery rate. The series asks which promises
-are kept, under what assumptions, and what breaks them. It answers by measuring.
+The series tells three stories at once:
 
-* **Act I, Data and Chance (Parts 1–6).** The data first, then the language of chance: axioms and conditioning,
-  the family of distributions, many variables at once, the laws of averages, and randomness unfolding in time
-  (Markov chains and martingales).
-* **Act II, Inference (7–13).** The problem turned around, from data back to the world: sampling distributions,
-  sufficiency, likelihood, significance tests, confidence intervals, decision theory and the shock of Stein's
-  shrinkage, and Le Cam's large-sample theory of what "best" means.
-* **Act III, Models (14–17).** Least squares and its geometry, the design of experiments, generalized linear models
-  and hierarchical models.
-* **Act IV, Bayes (18–20).** Inverse probability from Bayes's billiard table to Bernstein–von Mises; computing
-  posteriors (Monte Carlo, MCMC, HMC and our own probabilistic programming language); checking, comparing and
-  averaging models.
-* **Act V, Fewer Assumptions (21–23).** The bootstrap, ranks and robustness, and smoothing.
-* **Act VI, Many Variables, Many Questions (24–27).** Multivariate analysis and random matrices, sparsity,
-  multiple testing and replication, and prediction with honest uncertainty (conformal inference).
-* **Act VII, Causes (28–30).** Potential outcomes and randomized experiments, causal inference from observational
-  data, and natural experiments.
-* **Act VIII, Data with Structure (31–34).** Time series and the Kalman filter, spatial statistics and Gaussian
-  processes, survival analysis, and surveys, missing data and selection.
-* **Finale (35–36).** Inference that watches the data arrive (sequential tests, e-values, confidence sequences),
-  then statistics in the age of AI and the complete Coverage Board.
+1. **A student's journey.** The first stage asks what a histogram is. The last stage writes a dissertation. Every
+   stage ends at a milestone of a real degree: the capstone analysis (BSc), the comprehensive exam (MSc), the
+   qualifying exam (PhD candidacy) and the dissertation (PhD).
+2. **The history of the field, moving forward as the level rises.** The bachelor's stages cover the classical era,
+   from Graunt to Fisher and Neyman. The master's covers the methods of 1950–2000: the bootstrap, GLMs, MCMC, the
+   lasso and causal inference. The PhD core covers the theory that justified them, from Le Cam and empirical
+   processes to minimax theory. The research stage covers the work of the last fifteen years.
+3. **One promise, tested.** Every method promises something: an unbiased estimate, a 5% false-alarm rate, a 95%
+   interval, a controlled false discovery rate. The series asks which promises are kept, under what assumptions, and
+   what breaks them. It answers by measuring, on the Coverage Board.
 
-Each part is a story with a historical hook, a central question, a climax that is usually something we build or
-compute, and a hand-off that poses the next part's question. Part 1 hands off with "a statistic is itself random,
-so we need the language of chance". Part 14 hands off with "a regression cannot tell cause; design the data", and
-Part 27 with "a model that predicts well can still be useless for deciding what to do".
+## The five stages
+
+| Stage | Parts | Level | Rigour | After it you can |
+|---|---|---|---|---|
+| **I. Bachelor's: Foundations** (years 1–2) | 1–10 | calculus and a first look at matrices | every result derived; proofs at the level of Rice or Casella & Berger | reason with probability, estimate, test and simulate |
+| **II. Bachelor's: Methods** (years 3–4) | 11–20 | Stage I | full derivations; practice on real data | analyse a dataset start to finish: regression, design, categorical data, Bayes, resampling, time series, surveys, prediction |
+| **III. Master's** | 21–42 | a BSc in statistics, or Stages I–II | matrix calculus, optimization, asymptotics stated precisely | use and justify the modern toolkit: likelihood, linear and generalized models, mixed models, Bayesian computation, model choice, smoothing, robustness, multivariate and sparse methods, multiple testing, conformal prediction, causal inference, time series, spatial, survival and missing data |
+| **IV. PhD core** (qualifying-exam year) | 43–55 | an MSc, plus the real analysis of *Analysis, Built* Parts 1–6 | measure-theoretic; exact conditions, with counterexamples showing why each is needed | prove: probability, estimation and testing theory, asymptotics, empirical processes, semiparametric efficiency, minimax lower bounds, high-dimensional probability and statistics, Bayesian asymptotics, learning theory |
+| **V. PhD research** | 56–65 | Stage IV | research papers, with open problems | read and extend the frontier: selective, distribution-free and anytime-valid inference, high-dimensional asymptotics, robustness and shift, optimal transport, causal frontiers, privacy and fairness, statistics for AI; then write a dissertation |
+
+**Entry points.** Each stage opens with a placement chapter: what the stage assumes, with links back to the parts
+that taught it. A viewer with a statistics degree can start at Part 21, and a PhD student at Part 43.
 
 ## The devices that hold it together
 
@@ -59,149 +53,170 @@ Part 27 with "a model that predicts well can still be useless for deciding what 
    towns and regions. It holds heights inherited through families, skewed incomes, schools, a disease with a
    screening test, a treatment taken for confounded reasons with *both* potential outcomes recorded for everyone,
    an instrument, a staggered policy, a scholarship cutoff, survival times, a spatial pollution field, daily time
-   series with a change point, survey response propensities, missingness mechanisms, data-entry errors, and 10,000
+   series with change points, survey response propensities, missingness mechanisms, data-entry errors, and 10,000
    genetic markers with 20 real effects. In real life the truth is never visible. In the World it is, so every
    estimator, test and interval in the series can be graded against it. It is always labelled `simulated` on screen.
-2. **The Coverage Board** (`explainer.stats.board`). This is the series' scoreboard. Each interval or test a part
-   introduces is run thousands of times on the World. The board records its actual coverage (or false-alarm rate)
-   against the nominal 95% (or 5%), with Monte Carlo error bands. Green means the promise is kept, red means it is
-   broken, blue means it is conservative. The first rows appear in Part 7: the t-interval kept, the z-interval
-   with an estimated σ at n = 5 broken. The last rows come in Part 36: cluster-robust error bars for AI evaluations.
-   In between, about a hundred rows record where each assumption fails, including the Wald binomial interval,
-   classical errors under heteroskedasticity, intervals after model selection, two-way fixed effects under
-   staggered adoption, peeking at a running t-test, and, kept, conformal intervals and confidence sequences.
-3. **The Museum** (`explainer.stats.museum`). This is real historical data, transcribed from the original
-   publication with its source on screen. Examples: Graunt's bills (1662), Arbuthnot's christenings (1710),
-   Quetelet's chests (1846), Snow's water companies (1855), Galton's families (1886), Weldon's crabs (1893),
-   Bortkiewicz's horse kicks (1898), Student's sleep data (1908), Yule's nonsense correlation (1926), the Salk trial
-   (1954), Freireich's leukemia trial (1963), the Efron–Morris batting averages (1975), the eight schools (1981),
-   the Berkeley admissions (1973) and the Challenger O-rings (1986). The World is where the truth is known; the
-   Museum is where the methods were born.
-4. **statkit, built** (`explainer/stats/kit/`). The series writes its own small, readable statistics library, one
-   piece per part: samplers from a single uniform, an MLE/EM engine, least squares by QR with sandwich errors, IRLS
-   for GLMs, REML, a tiny probabilistic programming language with NUTS, the bootstrap with BCa, rank tests, robust
-   regression, smoothing splines, a coordinate-descent lasso, Benjamini–Hochberg and knockoffs, conformal
-   prediction, double machine learning, the Kalman filter, kriging, Kaplan–Meier and Cox, survey weighting,
-   multiple imputation, and confidence sequences. Each tool is checked against SciPy and statsmodels in `tests/`.
-   By the finale, viewers have watched a statistics package being built and verified.
-5. **The timeline strip, 1650–2030**, from Graunt to e-values, lit on every chapter card; **payoff cards** ("where
-   this comes back"); and **cross-series links** to *Analysis, Built* (measure, Hilbert space, Fourier) and *AI,
-   Built* (information, learning theory, diffusion), where those parts are the deeper treatment.
+2. **The Coverage Board** (`explainer.stats.board`). This is the series' scoreboard. Each interval or test is run
+   thousands of times on the World. The board records its actual coverage (or false-alarm rate) against the nominal
+   95% (or 5%), with Monte Carlo error bands. Green means the promise is kept, red means it is broken, blue means it
+   is conservative. There are more than a hundred rows by the end. Some are classic failures: the Wald binomial interval,
+   peeking, heteroskedasticity, selection, weak instruments, staggered adoption, high-dimensional logistic
+   regression, nonparametric credible bands. Others show honest methods keeping the promise: conformal prediction,
+   confidence sequences, debiased and orthogonalized estimators.
+3. **The Spiral.** The central results are met three times, each time sharper. The CLT, for example: by moment
+   generating functions in Part 6, as the delta method and the bootstrap in Parts 16 and 22, and then as
+   Lindeberg–Feller, Stein's method and Donsker in Parts 43 and 48. Each return opens with an **upgrade card**: the
+   earlier statement, what it quietly assumed, and what will now be proved.
+4. **The Transcript.** Each part is a "course" on an on-screen transcript. Stage milestones show what has been
+   earned: the BSc (Part 20), the MSc (Part 42), candidacy (Part 55) and the PhD (Part 65).
+5. **The Museum** (`explainer.stats.museum`). Real historical data, transcribed from the original publication with
+   its source on screen. Examples: Graunt (1662), Arbuthnot (1710), Snow (1855), Galton (1886), Weldon's crabs
+   (1893), Bortkiewicz (1898), Student (1908), Bliss's beetles (1935), the Salk trial (1954), Freireich (1963),
+   Efron–Morris (1975), the eight schools (1981), Challenger (1986).
+6. **statkit, built** (`explainer/stats/kit/`). The series writes its own small, readable statistics library, one
+   piece per part, from the first random number generator to NUTS, double machine learning, Sinkhorn and confidence
+   sequences. Each module is checked against SciPy and statsmodels in `tests/`.
+7. **The timeline strip, 1650–2030**, lit on every chapter card; **payoff cards** ("where this comes back");
+   **cross-series links** to *Analysis, Built* (measure, Hilbert space, Fourier) and *AI, Built* (information,
+   learning theory, diffusion).
 
 ## How it looks
 
-The series draws in the manner of 3Blue1Brown, with *AI, Built*'s instruments (`explainer.ai.viz`,
-`explainer.ai.lecture`) and *Analysis, Built*'s derivation ladder (`explainer.analysis.ladder`, `why`). New
-statistics instruments go in `explainer/stats/viz.py`.
+The series draws in the manner of 3Blue1Brown, with *AI, Built*'s instruments and *Analysis, Built*'s derivation
+ladder. New statistics instruments go in `explainer/stats/viz.py` (list in the syllabus, §1).
 
 * **Colour is meaning, everywhere.** The true parameter θ is always gold and the estimate θ̂ always blue. Data are
   white, the null distribution grey, the alternative teal. The prior is purple, the likelihood green, the posterior
   orange. Residuals are red, treated units coral and controls sky blue, and missing values are hollow.
-* **Sampling is shown, not stated.** `SamplingMachine` draws samples from the World, computes the statistic, and
-  drops each value into a growing histogram, so the sampling distribution builds itself. `IntervalRain` shows a
-  hundred intervals falling against the truth line, with the misses turning red and a live coverage counter.
-* **Statistics as geometry.** `NSpace` puts a sample of three in 3D with the camera orbiting. The mean is a
-  projection onto the 1-vector; χ² is a squared length; regression is a projection onto the column space; ANOVA is
-  Pythagoras; Cochran's theorem is a set of orthogonal projections.
-* **Landscapes.** Log-likelihood surfaces in 3D: the score as slope, Fisher information as curvature, the profile
-  likelihood as a ridge walk, and the Wald, score and likelihood-ratio tests drawn on one curve. HMC's puck slides
-  over the negative log-posterior, and the lasso's diamond meets the elliptical contours.
-* **Live quantities.** Bandwidth, prior strength, shrinkage factor and contamination fraction are value trackers,
-  so the viewer sees each estimate respond.
-* **Signature sequences.** The Galton board falling into a bell; the Neyman belt read sideways; Stein shrinkage
-  pulling points in 3D; Marchenko–Pastur's bulk forming and the BBP spike popping out of it; Benjamini–Hochberg's
-  line sweeping a sea of 5,000 p-values; flows of association through a causal graph, blocked and unblocked; the
-  potential-outcomes table with half its cells hidden; Kalman ellipses predicting and updating; a Kaplan–Meier
-  staircase with its risk set leaving; a kriging surface with its uncertainty; betting martingales hitting Ville's
-  ceiling.
-* **Real numbers.** Everything plotted comes from the part's `compute.py` and is asserted in the scene. Tags say
-  which kind it is: `computed`, `simulated` (the World), `historical data` (the Museum, with source),
-  `illustrative` or `schematic`.
+* **Sampling is shown, not stated.** The `SamplingMachine` builds sampling distributions live. `IntervalRain` drops
+  intervals against the truth line, with the misses turning red.
+* **Statistics as geometry.** Samples as vectors in Rⁿ with the camera orbiting: the mean as a projection, χ² as a
+  squared length, regression as projection, ANOVA as Pythagoras. Conditional expectation as projection in L²,
+  efficient influence functions as projections onto tangent spaces, and the lasso's diamond meeting the contours.
+* **Landscapes and flows.** Likelihood surfaces with the test trinity drawn on them; HMC's puck; Marchenko–Pastur's
+  bulk and the BBP spike; Wasserstein geodesics moving mass; Langevin dynamics as a gradient flow.
+* **Live quantities.** Bandwidth, prior strength, shrinkage, contamination, privacy budget and selection threshold
+  are value trackers, so the viewer sees each estimate respond.
+* **Real numbers.** Everything plotted comes from the part's `compute.py`. Tags say which kind it is: `computed`,
+  `simulated`, `historical data` (with source), `illustrative` or `schematic`.
 
 ## The parts
 
 | # | Part | Hook | Mathematics | Built |
 |---|---|---|---|---|
-| **I** | **Data and Chance** | | | |
-| 1 | The Shape of Data | Graunt's bills, 1662 | summaries as loss minimizers, ECDF, QQ, Box–Cox, correlation as a cosine, Anscombe, Simpson | the World; a same-statistics morph |
-| 2 | Chance, Counted | the problem of points, 1654 | axioms, σ-algebras, conditioning, Bayes, independence, random variables, expectation, Dutch books | an exact probability engine |
-| 3 | The Family of Distributions | Bortkiewicz's horse kicks | binomial→Poisson, normal (de Moivre, Gauss, Herschel–Maxwell), χ²/t/F, order statistics, generating functions, the family tree | a sampler library from one uniform; RANDU's planes |
-| 4 | Many Variables at Once | Galton's ellipses, 1886 | conditional expectation as projection, Eve's law, multivariate normal, Schur complements, copulas, exchangeability, de Finetti | a Gaussian slicer; Pólya's urn |
-| 5 | The Laws of Averages | Galton's ox, 1907 | modes of convergence, LLN, Glivenko–Cantelli, DKW, concentration, CLT proved, Berry–Esseen, delta method, stable laws, extreme values, large deviations | a Galton board |
-| 6 | Fair Games | Markov's *Onegin*, 1913 | Markov chains, mixing, shuffles, Pólya recurrence, martingales, optional stopping, Ville, Azuma, Donsker, the Brownian bridge | a KS test from scratch |
-| **II** | **Inference** | | | |
-| 7 | From Sample to Population | Student at Guinness, 1908 | sampling distributions, n−1 as dimension, Fisher's geometry of the normal sample, χ², t, F, Cochran, MSE, plug-in | Student's card-deck experiment; the Board's first rows |
-| 8 | Data Reduction | the German tank problem | sufficiency, factorization, exponential families, Rao–Blackwell, Lehmann–Scheffé, Basu, Fisher information, Cramér–Rao | the tank factory game |
-| 9 | Likelihood | Pearson's crabs, 1894 | MLE consistency and normality, profile likelihood, Neyman–Scott, EM, misspecification and the sandwich, the likelihood principle | an MLE/EM engine |
-| 10 | Significance | Arbuthnot 1710; the lady tasting tea | p-values, Neyman–Pearson, UMP and MLR, Wilks, the trinity, Pearson's χ², Mendel, Welch, power, equivalence | a permutation machine |
-| 11 | Honest Intervals | the broken Wald interval | Neyman's construction, pivots, test inversion, Wilson and Clopper–Pearson, Fieller and Gleser–Hwang, Feldman–Cousins, Scheffé, tolerance intervals, fiducial | the Coverage Board, formally |
-| 12 | The Shock of Shrinkage | Efron–Morris baseball, 1975 | decision theory, risk sets, minimax, complete classes, Stein's lemma, James–Stein, Brown's recurrence link, empirical Bayes, Tweedie | a hospital league table |
-| 13 | Asymptopia | Hodges' superefficient estimator | M/Z-estimators, influence functions, U-statistics, LAN, contiguity, Le Cam's third lemma, Hájek's convolution theorem, semiparametric efficiency, Edgeworth, saddlepoints | a risk-bump explorer |
-| **III** | **Models** | | | |
-| 14 | Least Squares | Gauss finds Ceres, 1801 | projection, Gauss–Markov, F as Pythagoras, Frisch–Waugh–Lovell, leverage and Cook's D, sandwich and cluster SEs, errors in variables, quantile regression, QR | statkit.ols; an influence probe |
-| 15 | Experiments by Design | Fisher at Rothamsted, 1919 | randomization inference, ANOVA geometry, blocking, Latin squares, factorials, aliasing, response surfaces, D-optimality, split plots, CUPED | a field-trial simulator |
-| 16 | Beyond the Normal | the Challenger O-rings, 1986 | exponential dispersion families, IRLS, deviance, separation and Firth, overdispersion, quasi-likelihood, log-linear models, case–control, GEE, proper scores | statkit.glm |
-| 17 | Borrowing Strength | the eight schools | random effects, BLUP, REML, boundary tests, longitudinal data, GLMMs and Laplace, splines as mixed models, Fay–Herriot, meta-analysis, Rasch | statkit.mixed |
-| **IV** | **Bayes** | | | |
-| 18 | Inverse Probability | Bayes's billiard table, 1763 | conjugacy, priors (Jeffreys, reference), Bernstein–von Mises, Doob consistency, Bayes factors, Lindley's paradox, matching priors, Dirichlet processes | the billiard table |
-| 19 | Sampling the Posterior | Los Alamos, 1953 | Monte Carlo, importance sampling, MH, Gibbs, HMC, NUTS, R̂ and ESS, Neal's funnel, SMC, VI, ABC, neural posterior estimation, SBC, coupling from the past | a tiny probabilistic programming language |
-| 20 | Which Model? | Freedman's paradox, 1983 | optimism and degrees of freedom, AIC and BIC derived, CV and GCV, posterior predictive checks, PSIS-LOO, WAIC, singular learning theory, MDL, stacking | a model-selection bench |
-| **V** | **Fewer Assumptions** | | | |
-| 21 | Pulling Yourself Up | Efron's law-school data, 1979 | jackknife, bootstrap, percentile/t/BCa, Edgeworth explanation, failures and m-out-of-n, wild and block bootstraps, .632+, Bayesian bootstrap | statkit.bootstrap |
-| 22 | When the Model Is Wrong | Tukey's contaminated normal, 1960 | rank tests, Pitman efficiency and the 0.864 bound, Hodges–Lehmann, influence and breakdown, Huber's minimax, LTS, MM, MCD, median-of-means, robust high-dimensional estimation | statkit.robust |
-| 23 | Smoothing | Old Faithful's two humps | histograms and KDE (rates derived), Epanechnikov, bandwidths, local polynomials, the smoothing-spline theorem, RKHS, wavelet thresholding, minimax lower bounds, isotonic and Grenander | statkit.smooth |
-| **VI** | **Many Variables, Many Questions** | | | |
-| 24 | Many Variables | PCA finds structure in noise | Wishart, Hotelling T², PCA, factor analysis, CCA, LDA, MDS, Marchenko–Pastur, BBP, Tracy–Widom, Ledoit–Wolf, graphical lasso | a random-matrix lab; a map from distances |
-| 25 | More Variables Than Data | Candès's phantom, 2004 | ridge, ℓ1 geometry, soft-thresholding, LARS, compressed sensing, Donoho–Tanner, oracle inequalities, debiased lasso, post-selection inference, ridgeless double descent | statkit.lasso; phantom recovery |
-| 26 | Thousands of Questions | the dead salmon in the scanner | FWER, closed testing, BH proved, q-values, local fdr, knockoffs, selective inference, forking paths, Ioannidis, publication bias | a p-hacking simulator |
-| 27 | The Two Cultures | Breiman, 2001 | forests and boosting as estimators, what CV estimates, calibration, conformal prediction (split, jackknife+, CQR, weighted, adaptive), conformal risk control, prediction-powered inference | statkit.conformal |
-| **VII** | **Causes** | | | |
-| 28 | What If? | the Salk polio trial, 1954 | potential outcomes, randomization and Neyman inference, Lin's adjustment, clusters, noncompliance and LATE, interference, surrogates, transportability | a trial where both outcomes are visible |
-| 29 | Causes Without Experiments | LaLonde's job training, 1986 | DAGs and d-separation, back-door and front-door, do-calculus, propensity scores, IPW, AIPW, DML, causal forests, sensitivity and E-values, causal discovery | statkit.causal |
-| 30 | Natural Experiments | Snow's Grand Experiment, 1854 | IV and 2SLS, weak instruments and Anderson–Rubin, RD, DiD, staggered adoption, synthetic control, SDID, Manski bounds | the World's natural experiments |
-| **VIII** | **Data with Structure** | | | |
-| 31 | Time Series | Yule's nonsense correlation, 1926 | ARMA, Wold, spectra, unit roots and Dickey–Fuller, spurious regression, cointegration, GARCH, long memory, the Kalman filter, VARs | statkit.ts |
-| 32 | Space | Krige's gold, 1951 | random fields, variograms, kriging, Matérn, Vecchia, GMRFs and SPDE, CAR/BYM, point processes and Ripley's K, Gaussian processes | statkit.spatial |
-| 33 | Time to Event | Freireich's 6-MP trial, 1963 | censoring, Kaplan–Meier, Greenwood, counting-process martingales, log-rank, Cox's partial likelihood, hazard-ratio pitfalls, competing risks, frailty | statkit.survival |
-| 34 | Who's Missing? | the *Literary Digest*, 1936 | Meng's identity, Horvitz–Thompson, stratification and Neyman allocation, design effects, raking, MRP, Rubin's mechanisms, multiple imputation, Heckman, SIMEX, differential privacy | statkit.survey, statkit.mi |
-| **Finale** | | | | |
-| 35 | Watching as You Go | Wald's SPRT, 1943 | peeking, the SPRT, alpha spending, test martingales, e-values, universal inference, confidence sequences, e-BH, CUSUM, inference after bandits | statkit.sequential |
-| 36 | What Can We Honestly Claim? | back to Graunt | error bars for AI evaluations, arenas and IRT, the reusable holdout, PPI with LLM labels, model collapse, conformal for LLMs, watermark tests, simulation-based inference; the full Coverage Board | an eval-statistics kit |
+| **I** | **Bachelor's: Foundations** | | | |
+| 1 | The Shape of Data | Graunt's bills, 1662 | summaries as loss minimizers, ECDF, QQ, transformations, correlation as a cosine, Anscombe, Simpson | the World; a same-statistics morph |
+| 2 | Chance, Counted | the problem of points, 1654 | axioms, conditioning, Bayes, independence, random variables, expectation, Dutch books | an exact probability engine |
+| 3 | The Family of Distributions | Bortkiewicz's horse kicks | binomial→Poisson, three derivations of the normal, χ²/t/F, order statistics, generating functions, the family tree | the family-tree explorer |
+| 4 | Matrices for Statistics | the hat matrix's two eigenvalues | projections, idempotents, trace tricks, PSD order, spectral and SVD, Schur, Woodbury, Kronecker, matrix calculus, quadratic forms | a projection lab |
+| 5 | Many Variables at Once | Galton's ellipses, 1886 | conditional expectation as projection, Eve's law, the multivariate normal, conditioning, regression to the mean, copulas, exchangeability | a Gaussian slicer; Pólya's urn |
+| 6 | The Laws of Averages | Galton's ox, 1907 | Markov and Chebyshev, the weak law, the CLT by MGFs, the delta method, "n ≥ 30" tested, heavy tails, extremes | a Galton board |
+| 7 | Randomness on Demand | von Neumann's "state of sin", 1951 | PRNGs and RANDU, samplers, Monte Carlo error, simulation-study design, Markov chains, Metropolis | statkit.random; the simulation-study harness |
+| 8 | From Sample to Population | Student at Guinness, 1908 | sampling distributions, n − 1 as dimension, Fisher's geometry, χ², t, F, MSE, plug-in | Student's card deck; the Board's first rows |
+| 9 | Estimation | the German tank problem | method of moments, maximum likelihood, bias and MSE, sufficiency, Rao–Blackwell, Fisher information, Cramér–Rao | the tank factory game |
+| 10 | Significance | Arbuthnot 1710; the lady tasting tea | p-values, Neyman–Pearson, the likelihood ratio, z/t/χ²/exact tests, power, Welch, the peeking problem | a permutation machine |
+| **II** | **Bachelor's: Methods** | | | |
+| 11 | Honest Intervals | the broken Wald interval | Neyman's construction, pivots, inversion, the binomial family, Fieller, prediction and tolerance intervals | the Coverage Board, formally |
+| 12 | Least Squares | Gauss finds Ceres, 1801 | projection, Gauss–Markov, t and F, FWL, diagnostics, robust standard errors | statkit.ols; an influence probe |
+| 13 | Experiments by Design | Fisher at Rothamsted, 1919 | randomization, ANOVA geometry, blocking, factorials, fractional factorials, response surfaces, A/B tests | a field-trial simulator |
+| 14 | Counts and Categories | the Challenger O-rings, 1986 | logistic and Poisson regression, odds ratios, tables, Simpson's paradox, case–control | a Challenger dashboard |
+| 15 | First Bayes | Bayes's billiard table, 1763 | conjugacy, priors, posteriors, credible and predictive intervals, grids, Metropolis by hand | the billiard table |
+| 16 | Without Assumptions | Efron's law schools, 1979 | permutation and rank tests, Wilcoxon and Mann–Whitney, the jackknife, the bootstrap, cross-validation | statkit.bootstrap, statkit.ranks |
+| 17 | Time Series | Yule's nonsense correlation, 1926 | stationarity, ARMA, ACF/PACF, Box–Jenkins, forecasting, smoothing, seasonality | statkit.ts (I) |
+| 18 | Who Did You Ask? | the *Literary Digest*, 1936 | SRS and the FPC, stratification, clusters, PPS, Horvitz–Thompson, raking, Meng's identity | the World's polling firm |
+| 19 | Learning from Data | who wrote the disputed *Federalist* papers? | prediction error, CV, k-NN, naive Bayes vs logistic, trees, ridge and lasso, ROC | statkit.learn |
+| 20 | **The Analysis** (BSc capstone) | a public health survey | a complete, reproducible analysis: question, design, cleaning, EDA, model, checks, inference, report, ethics | the capstone report; the BSc problem set |
+| **III** | **Master's** | | | |
+| 21 | Optimization for Statistics | Dantzig's "homework", 1939 | convexity, duality and KKT, Newton and scoring, MM and EM, coordinate descent, proximal methods, LP, ADMM, SGD | statkit.optim |
+| 22 | Likelihood in Depth | Pearson's crabs, 1894 | MLE asymptotics, profile likelihood, Neyman–Scott, EM, misspecification and the sandwich, the likelihood principle | statkit.mle |
+| 23 | The Linear Model in Depth | Longley's benchmark, 1967 | the general linear hypothesis, Cochran, GLS, heteroskedasticity and cluster theory, errors in variables, quantile regression, numerics | statkit.ols (II) |
+| 24 | Generalized Linear Models | Bliss's beetles, 1935 | exponential dispersion families, IRLS, deviance, quasi-likelihood, separation and Firth, GEE, ordinal models | statkit.glm |
+| 25 | Borrowing Strength | Efron–Morris baseball, 1975 | James–Stein via SURE, empirical Bayes, random effects, BLUP, REML, GLMMs, small areas, meta-analysis | statkit.mixed; a league table |
+| 26 | Bayesian Data Analysis | the eight schools, 1981 | hierarchical Bayes, priors, Bernstein–von Mises, Bayes factors, Lindley's paradox, checking, workflow | statkit.bayes |
+| 27 | Bayesian Computation | Los Alamos, 1953 | importance sampling, MH, Gibbs, HMC, NUTS, diagnostics, SMC, VI, ABC, SBC | a tiny probabilistic programming language |
+| 28 | Which Model? | Freedman's paradox, 1983 | optimism, AIC and BIC derived, CV and GCV, PSIS-LOO, WAIC, MDL, stacking | a model-selection bench |
+| 29 | Smoothing | Old Faithful's two humps | KDE and spline theory, local polynomials, RKHS, wavelets, GAMs, shape constraints | statkit.smooth |
+| 30 | Robust Statistics | Tukey's contaminated normal, 1960 | Pitman efficiency and the 0.864 bound, influence, breakdown, Huber's minimax, LTS, MM, MCD, median-of-means | statkit.robust |
+| 31 | Multivariate Analysis | a map from a table of distances | Wishart, Hotelling, PCA, factor analysis, CCA, LDA, MDS, clustering and mixtures, graphical models | statkit.multi |
+| 32 | Sparsity | Candès's phantom, 2004 | ridge, ℓ1 geometry, coordinate descent and LARS, the penalty zoo, compressed sensing, debiased lasso, matrix completion | statkit.sparse |
+| 33 | Thousands of Questions | the dead salmon in the scanner | FWER, BH proved, q-values, local fdr, knockoffs, forking paths, replication, publication bias | a p-hacking simulator |
+| 34 | Prediction with Guarantees | Breiman's two cultures, 2001 | forests and boosting as estimators, what CV estimates, calibration, split and jackknife+ conformal, PPI | statkit.conformal |
+| 35 | What If? | the Salk polio trial, 1954 | potential outcomes, randomization and Neyman inference, Lin's adjustment, noncompliance and LATE, interference, sequential trials | a trial with both outcomes visible |
+| 36 | Causes Without Experiments | LaLonde's job training, 1986 | DAGs, back-door and front-door, propensity scores, IPW, AIPW, DML, CATE, sensitivity, smoking | statkit.causal |
+| 37 | Natural Experiments | Snow's Grand Experiment, 1854 | IV, weak instruments, RD, DiD, staggered adoption, synthetic control, SDID, bounds | statkit.quasi |
+| 38 | Time Series in Depth | Hurst's Nile, 1951 | spectra, unit roots and Dickey–Fuller, cointegration, GARCH, long memory, Kalman, VARs, particle filters | statkit.ts (II) |
+| 39 | Space | Krige's gold, 1951 | variograms, kriging, Matérn, Vecchia, GMRF and SPDE, areal models, point processes, GPs | statkit.spatial |
+| 40 | Time to Event | Freireich's 6-MP trial, 1963 | censoring, Kaplan–Meier, Greenwood, log-rank, Cox, counting processes, competing risks, frailty | statkit.survival |
+| 41 | What You Didn't See | Wald's bombers, 1943 | Rubin's mechanisms, EM and FIML, multiple imputation, IPW/AIPW, Heckman, MNAR sensitivity, measurement error, MRP | statkit.mi |
+| 42 | **The Comprehensive Exam** | the consulting client | worked comprehensive-exam problems; two consulting cases from design to report | the MSc problem bank |
+| **IV** | **PhD Core** | | | |
+| 43 | Measure-Theoretic Probability | Hilbert's sixth problem, 1900 | π–λ and extension, integration theorems, independence and 0–1 laws, Kolmogorov's SLLN, weak convergence, characteristic functions, Lindeberg–Feller, Stein's method, infinitely divisible laws, large deviations | a weak-convergence lab |
+| 44 | Martingales, Markov Chains and Brownian Motion | Markov vs Nekrasov, 1913 | conditional expectation (Radon–Nikodym), Doob's theorems, uniform integrability, reverse martingales, martingale CLT, Harris chains and drift conditions, coupling, Brownian motion, Donsker, LIL, counting processes | a coupling and mixing lab |
+| 45 | The Theory of Estimation | Stein's 1956 shock | decision theory, complete classes, exponential families as convex duality, sufficiency and completeness, Basu, equivariance, Stein, Brown's recurrence theorem, empirical Bayes theory | a risk-set explorer |
+| 46 | The Theory of Testing and Confidence | the Behrens–Fisher problem | Neyman–Pearson in general, MLR, UMPU via Neyman structure, invariance and Hunt–Stein, Wilks and Chernoff's boundary, optimal confidence sets, Gleser–Hwang, closed testing, conditional inference | a Neyman-structure visualizer |
+| 47 | Asymptotic Statistics | Hodges' superefficiency, 1951 | M/Z-estimators, influence functions, U-statistics, LAN, contiguity, Le Cam's lemmas, Hájek's theorems, efficiency of tests, bootstrap theory, Edgeworth, saddlepoints | a risk-bump explorer |
+| 48 | Empirical Processes | Doob's heuristic, 1949 | Glivenko–Cantelli and Donsker classes, symmetrization, VC, entropy and bracketing, chaining, Talagrand, the functional delta method, rates and cube-root asymptotics | statkit.empirical |
+| 49 | Semiparametric Efficiency | adaptive estimation (Stein 1956; Bickel 1982) | tangent spaces, pathwise derivatives, efficient influence functions, bounds, one-step and TMLE, double robustness, DML theory, higher-order influence functions | statkit.semipar |
+| 50 | Minimax Theory | the speed limit of nonparametrics (Stone 1980) | the Gaussian sequence model and Le Cam equivalence, Pinsker's theorem, Le Cam/Fano/Assouad, adaptation (Lepski), minimax testing and higher criticism, statistical–computational gaps | a lower-bound workbench |
+| 51 | High-Dimensional Probability | the sphere's equator | sub-Gaussian and sub-exponential tools, Gaussian and Talagrand concentration, ε-nets, matrix Bernstein, chaining, Slepian and Gordon, Gaussian widths, statistical dimension | statkit.hdp |
+| 52 | High-Dimensional Statistics | PCA finds structure in noise | oracle inequalities, the primal–dual witness, decomposable regularizers, low-rank recovery, covariance and Davis–Kahan, random matrices (MP, BBP, TW), sparse PCA | the random-matrix lab |
+| 53 | Bayesian Asymptotics and Nonparametric Bayes | Diaconis & Freedman's inconsistency, 1986 | Doob and Schwartz, contraction rates, parametric and semiparametric BvM, DP and GP priors, credible-band coverage, spike-and-slab and horseshoe theory, Gibbs posteriors | statkit.bnp |
+| 54 | Statistical Learning Theory | Vapnik & Chervonenkis, 1971 | uniform convergence, VC and Rademacher, localization, margins, PAC-Bayes, stability, online learning, calibrated surrogates, benign overfitting | statkit.slt |
+| 55 | **The Qualifying Exam** | the night before | twelve classic qualifying-exam problems, solved on screen | the PhD problem bank |
+| **V** | **PhD Research** | | | |
+| 56 | Inference After Selection | the winner's curse | PoSI, conditional selective inference, randomization and carving, data fission and thinning, knockoff theory, conformal selection, inference on winners | statkit.selective |
+| 57 | Distribution-Free Inference | Bahadur & Savage's impossibility, 1956 | exchangeability, full/split/jackknife+ conformal proofs, impossibility theorems, conditional guarantees, beyond exchangeability, conformal p-values | statkit.conformal (II) |
+| 58 | Anytime-Valid Inference and Adaptive Experiments | Wald's SPRT, 1943 | the SPRT, alpha spending, test martingales, e-values, composite nulls, confidence sequences, game-theoretic probability, e-BH, change points, bandits and off-policy inference | statkit.sequential |
+| 59 | High-Dimensional Asymptotics | a χ² that is not (Sur & Candès 2019) | the proportional regime, free probability, exact ridge risk, AMP and state evolution, CGMT, replica predictions, random features | an AMP solver |
+| 60 | Robustness and Distribution Shift | ImageNet's new test set (Recht et al. 2019) | depth, filtering and SoS, list decoding, covariate and label shift, DRO, invariance and anchor regression, transfer minimax | statkit.shift |
+| 61 | Optimal Transport in Statistics | Monge's earthworks, 1781 | Kantorovich duality, Wasserstein geometry, empirical rates, entropic OT and Sinkhorn, map estimation, barycenters, multivariate ranks, Langevin as a gradient flow | statkit.ot |
+| 62 | Frontiers of Causal Inference | when to start HIV treatment | ID theory, sensitivity models, proximal inference, interference, policy learning, dynamic regimes, causal discovery theory, data fusion | statkit.causal (II) |
+| 63 | Privacy and Fairness | re-identification from ZIP, sex and birth date | DP and its accountants, DP as hypothesis testing, the cost of privacy, private inference, the 2020 Census, fairness criteria, impossibility, multicalibration | statkit.privacy |
+| 64 | Statistics in the Age of AI | a leaderboard: 85.2% vs 84.7% | evaluation error bars, arenas and IRT, the reusable holdout, PPI with model labels, model collapse, conformal for LLMs, watermark tests, SBI | statkit.evals |
+| 65 | **The Dissertation** | back to Graunt | how statistical research is done, a mini-dissertation carried out on screen, the full Coverage Board, the reading list onward | the thesis |
+
+## The Spiral: results met three times
+
+| Result | First pass (BSc) | Second pass (MSc) | Third pass (PhD) |
+|---|---|---|---|
+| Laws of large numbers and the CLT | 6 (Chebyshev, MGFs) | 16, 22 (bootstrap, delta method in many dimensions) | 43, 44, 48 (Kolmogorov, Lindeberg–Feller, Stein's method, martingale CLT, Donsker) |
+| Estimation and optimality | 9 (MLE, Cramér–Rao, Rao–Blackwell) | 22, 25 (asymptotics, James–Stein) | 45, 47, 49, 50 (complete classes, Le Cam–Hájek, semiparametric and minimax bounds) |
+| Testing and intervals | 10, 11 | 22, 33 | 46, 56, 57, 58 |
+| Regression | 12, 14 | 23, 24, 32 | 52, 59 |
+| Bayes | 15 | 26, 27 | 53 |
+| Resampling and ranks | 16 | 30 | 47, 48 |
+| Prediction | 19 | 34 | 54, 57 |
+| Causation | 1, 14 (Simpson), 13 (randomization) | 35–37 | 49, 62 |
+| Dependence in time | 7, 17 | 38 | 44, 58 |
+| Missing and selected data | 18 | 41 | 49, 56, 63 |
+
+## Course map, for orientation
+
+The stages cover what these programmes teach; course numbers and contents vary by year.
+
+| Stage | Comparable courses |
+|---|---|
+| I | undergraduate probability (e.g. Harvard Stat 110, Berkeley Stat 134) and mathematical statistics (Harvard Stat 111, Berkeley Stat 135); linear algebra for statistics |
+| II | regression, experimental design, categorical data, Bayesian statistics, nonparametrics, time series, sampling, statistical learning, a capstone |
+| III | first-year MS and applied PhD sequences (e.g. Stanford STATS 305A–C, CMU 36-705) and electives (Bayesian, causal, survival, spatial, computing) |
+| IV | PhD probability and theory (e.g. Stanford STATS 310A–C and 300A–C, Berkeley STAT 205A–B and 210A–B, CMU 36-709/710) |
+| V | topics courses and reading groups |
 
 ## The bookshelf
 
-The parts follow the standard graduate texts, with the classic and frontier papers on each part's reference card.
-The main books, by part:
-
-| Area | Books | Parts |
-|---|---|---|
-| Probability | Feller; Billingsley *Probability and Measure*; Durrett; Grimmett & Stirzaker; Blitzstein & Hwang; Williams *Probability with Martingales*; Norris; Levin, Peres & Wilmer; Vershynin *High-Dimensional Probability*; Boucheron, Lugosi & Massart | 2–6 |
-| Mathematical statistics | Casella & Berger; Wasserman *All of Statistics*; Rice; Hogg, McKean & Craig; DeGroot & Schervish; Bickel & Doksum; Keener; Shao; Schervish; Cox & Hinkley; Young & Smith | 7–12 |
-| Estimation and testing | Lehmann & Casella *Theory of Point Estimation*; Lehmann & Romano *Testing Statistical Hypotheses*; Pawitan *In All Likelihood*; Schweder & Hjort *Confidence, Likelihood, Probability* | 8–11 |
-| Decision theory | Berger *Statistical Decision Theory and Bayesian Analysis*; Ferguson; Efron *Large-Scale Inference* | 12, 26 |
-| Asymptotics | van der Vaart *Asymptotic Statistics*; Ferguson *A Course in Large Sample Theory*; Le Cam & Yang; Lehmann *Elements of Large-Sample Theory*; Serfling; Bickel, Klaassen, Ritov & Wellner; Tsiatis *Semiparametric Theory and Missing Data* | 13, 29 |
-| Linear and generalized models | Seber & Lee; Rao *Linear Statistical Inference*; Christensen *Plane Answers*; Weisberg; Freedman *Statistical Models*; Agresti *Foundations* and *Categorical Data Analysis*; McCullagh & Nelder; Koenker *Quantile Regression* | 14, 16 |
-| Design | Fisher *The Design of Experiments*; Box, Hunter & Hunter; Montgomery; Cox & Reid; Wu & Hamada; Atkinson, Donev & Tobias; Kohavi, Tang & Xu | 15 |
-| Multilevel models | Gelman & Hill; Gelman, Hill & Vehtari; Pinheiro & Bates; Searle, Casella & McCulloch; Wood *Generalized Additive Models*; Rao & Molina | 17 |
-| Bayesian | Gelman et al. *Bayesian Data Analysis*; McElreath *Statistical Rethinking*; Robert *The Bayesian Choice*; Bernardo & Smith; Jaynes; Hoff; Ghosal & van der Vaart | 18–20 |
-| Computation | Robert & Casella *Monte Carlo Statistical Methods*; Liu; Brooks et al. *Handbook of MCMC*; Owen; Chopin & Papaspiliopoulos; Efron & Hastie *Computer Age Statistical Inference* | 19, 21 |
-| Model selection | Burnham & Anderson; Claeskens & Hjort; Konishi & Kitagawa; Watanabe; Grünwald *The MDL Principle* | 20 |
-| Resampling | Efron & Tibshirani; Davison & Hinkley; Hall *The Bootstrap and Edgeworth Expansion*; Shao & Tu; Politis, Romano & Wolf | 21 |
-| Nonparametric and robust | Lehmann *Nonparametrics*; Hollander, Wolfe & Chicken; Huber & Ronchetti; Hampel et al.; Maronna et al.; Diakonikolas & Kane; Silverman; Wand & Jones; Fan & Gijbels; Tsybakov; Wasserman *All of Nonparametric Statistics*; Wahba | 22, 23 |
-| Multivariate and random matrices | Anderson; Mardia, Kent & Bibby; Johnson & Wichern; Muirhead; Jolliffe; Bai & Silverstein; Couillet & Liao; Lauritzen | 24 |
-| High-dimensional | Hastie, Tibshirani & Friedman *ESL*; Hastie, Tibshirani & Wainwright; Bühlmann & van de Geer; Wainwright *High-Dimensional Statistics*; Giraud; Foucart & Rauhut | 25, 27 |
-| Prediction and conformal | Breiman et al. *CART*; Vovk, Gammerman & Shafer; Angelopoulos, Barber & Bates *Theoretical Foundations of Conformal Prediction* | 27 |
-| Causal inference | Imbens & Rubin; Hernán & Robins *What If*; Pearl *Causality*; Pearl, Glymour & Jewell; Rosenbaum; Morgan & Winship; Peters, Janzing & Schölkopf; Ding; Wager; Chernozhukov et al.; Angrist & Pischke; Cunningham; Cattaneo, Idrobo & Titiunik; Manski | 28–30 |
-| Time series | Brockwell & Davis; Hamilton; Shumway & Stoffer; Box, Jenkins, Reinsel & Ljung; Durbin & Koopman; Harvey; Hyndman & Athanasopoulos; Tsay; Percival & Walden | 31 |
-| Spatial | Cressie; Cressie & Wikle; Stein; Banerjee, Carlin & Gelfand; Diggle; Rue & Held; Rasmussen & Williams | 32 |
-| Survival | Kalbfleisch & Prentice; Klein & Moeschberger; Andersen, Borgan, Gill & Keiding; Fleming & Harrington; Aalen, Borgan & Gjessing; Therneau & Grambsch | 33 |
-| Surveys and missing data | Cochran; Lohr; Särndal, Swensson & Wretman; Kish; Little & Rubin; van Buuren; Carroll et al. *Measurement Error*; Dwork & Roth | 34 |
-| Sequential | Wald; Siegmund; Jennison & Turnbull; Tartakovsky et al.; Shafer & Vovk; Ramdas & Wang *Hypothesis Testing with E-values* | 35 |
-| Data analysis and history | Tukey *EDA*; Cleveland; Tufte; Freedman, Pisani & Purves; Stigler (*History of Statistics*, *Seven Pillars*); Hald; Hacking; Salsburg; McGrayne | 1, throughout |
+| Stage | Main texts |
+|---|---|
+| I | Blitzstein & Hwang; Ross; Feller vol. 1; Rice; Casella & Berger; Wasserman *All of Statistics*; Freedman, Pisani & Purves; Tukey *EDA*; Harville *Matrix Algebra from a Statistician's Perspective* |
+| II | Seber & Lee; Weisberg; Box, Hunter & Hunter; Montgomery; Agresti *Categorical Data Analysis*; Hoff; Efron & Tibshirani; Hollander, Wolfe & Chicken; Shumway & Stoffer; Brockwell & Davis; Hyndman & Athanasopoulos; Lohr; Cochran; James, Witten, Hastie & Tibshirani (ISLR); Gelman, Hill & Vehtari |
+| III | Boyd & Vandenberghe; Lange *Optimization*; Pawitan; Christensen; Agresti *Foundations*; McCullagh & Nelder; Gelman & Hill; Gelman et al. *BDA3*; McElreath; Robert & Casella; Burnham & Anderson; Wand & Jones; Wood; Huber & Ronchetti; Maronna et al.; Anderson; Mardia, Kent & Bibby; Hastie, Tibshirani & Friedman (ESL); Hastie, Tibshirani & Wainwright; Efron *Large-Scale Inference*; Angelopoulos & Bates; Imbens & Rubin; Hernán & Robins; Pearl; Angrist & Pischke; Cunningham; Hamilton; Durbin & Koopman; Cressie; Rasmussen & Williams; Kalbfleisch & Prentice; Klein & Moeschberger; Little & Rubin; van Buuren |
+| IV | Durrett; Billingsley *Probability and Measure* and *Convergence of Probability Measures*; Williams; Kallenberg; Meyn & Tweedie; Levin, Peres & Wilmer; Lehmann & Casella; Lehmann & Romano; Keener; Schervish; Berger; Ferguson; van der Vaart *Asymptotic Statistics*; Le Cam & Yang; van der Vaart & Wellner; Kosorok; Giné & Nickl; Bickel, Klaassen, Ritov & Wellner; Tsiatis; Tsybakov; Johnstone *Gaussian Estimation*; Polyanskiy & Wu; Vershynin; Boucheron, Lugosi & Massart; Wainwright *High-Dimensional Statistics*; Bühlmann & van de Geer; Bai & Silverstein; Ghosal & van der Vaart; Ghosh & Ramamoorthi; Shalev-Shwartz & Ben-David; Bach *Learning Theory from First Principles*; Mohri, Rostamizadeh & Talwalkar |
+| V | Angelopoulos, Barber & Bates *Theoretical Foundations of Conformal Prediction*; Vovk, Gammerman & Shafer; Ramdas & Wang *Hypothesis Testing with E-values*; Shafer & Vovk; Jennison & Turnbull; Diakonikolas & Kane; Villani; Peyré & Cuturi; Panaretos & Zemel; Chewi, Niles-Weed & Rigollet *Statistical Optimal Transport*; Couillet & Liao; Pearl & Bareinboim's papers; Wager *Causal Inference*; Chernozhukov et al. *Applied Causal Inference Powered by ML and AI*; Dwork & Roth; Barocas, Hardt & Narayanan *Fairness and Machine Learning*; the primary papers on each part's reference card |
+| History, throughout | Stigler (*The History of Statistics*, *Statistics on the Table*, *The Seven Pillars*); Hald; Hacking; Porter; Salsburg; McGrayne |
 
 ## Shared code and the Chinese edition (planned)
 
-`explainer/stats/` will hold the series' instruments: the World, the Coverage Board, the Museum, statkit, chapter
-cards with the timeline, the series map, and payoff and reference cards. The text helpers and the lecture set pieces
-are shared with the other two series. Chinese narration will live in `videos/stats/statsN/narration_zh.json`,
-on-screen text in `videos/stats/stats_text_zh.json`, and terms in `STATS_ZH_GUIDE.md`, the same way as *AI, Built*.
+`explainer/stats/` will hold the series' instruments: the World, the Coverage Board, the Museum, the Transcript and
+upgrade cards, statkit, chapter cards with the timeline, the series map, and payoff and reference cards. The text
+helpers and lecture set pieces are shared with the other two series. Chinese narration will live in
+`videos/stats/statsN/narration_zh.json`, on-screen text in `videos/stats/stats_text_zh.json`, and terms in
+`STATS_ZH_GUIDE.md`, the same way as *AI, Built*.
