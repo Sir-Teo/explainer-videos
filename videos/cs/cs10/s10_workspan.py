@@ -253,7 +253,8 @@ class WorkSpan(VoiceoverScene):
         for r in rows[1:]:
             c = (r["makespan"] - st["t1"] / r["p"]) / st["tinf"]
             tab.add(label(rf"$p = {r['p']}$: \ {r['makespan']:.0f} steps \ $= T_1/p + {c:.1f}\,T_\infty$, \ "
-                          rf"{r['steals']:.0f} steals", font_size=18, color=GREY_A))
+                          rf"{r['steals']:.0f} steal{'' if round(r['steals']) == 1 else 's'}", font_size=18,
+                          color=GREY_A))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
         worst = max((r["makespan"] - st["t1"] / r["p"]) / st["tinf"] for r in rows[1:])
         with self.voiceover(
