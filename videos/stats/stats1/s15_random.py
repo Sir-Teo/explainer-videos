@@ -101,8 +101,8 @@ class Random(VoiceoverScene):
         d = load("sampling")
         many = np.asarray(d["many"])
         mu, sd, se = d["mu"], d["sd_means"], d["se_formula"]
-        A = axes([165.5, 173.5], [0, 0.6], x_length=8.4, y_length=4.4, xlabel=r"the mean of a sample of 100 (cm)",
-                 xticks=[166, 168, 170, 172], center=[-2.2, -0.4, 0])
+        A = axes([165.5, 173.5], [0, 0.6], x_length=7.8, y_length=4.4, xlabel=r"the mean of a sample of 100 (cm)",
+                 xticks=[166, 168, 170, 172], center=[-2.7, -0.4, 0])
         A.ax.y_axis.set_opacity(0.3)
         ax = A.ax
         edges = np.linspace(165.5, 173.5, 49)
@@ -119,10 +119,10 @@ class Random(VoiceoverScene):
             MathTex(rf"\frac{{\sigma}}{{\sqrt{{n}}}} = \frac{{{d['sigma']:.2f}}}{{\sqrt{{100}}}} = {se:.3f}",
                     font_size=32, color=S.TRUTH),
             label(r"why $\sqrt n$: \ Parts 6 and 8", font_size=24, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.5, 0.9, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.7).shift(UP * 0.9)
         dfn = definition_card(r"Sampling distribution", r"the distribution of a statistic over all the samples "
                               r"we might have drawn; \ its SD is the statistic's standard error", color=S.EST,
-                              width=4.3, font_size=21).move_to([4.95, -2.3, 0])
+                              width=4.3, font_size=21).to_edge(RIGHT, buff=0.6).shift(DOWN * 2.3)
         _ = counts
         with self.voiceover(
             "So let's find out. <bookmark mark='a'/> Draw not twenty samples but two thousand, and keep every "

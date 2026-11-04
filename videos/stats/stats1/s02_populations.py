@@ -112,8 +112,8 @@ class Populations(VoiceoverScene):
     def promise(self):
         d = load("populations")
         mu = d["mu"]
-        A = axes([161, 178], [0, 21], x_length=6.6, y_length=4.6, xlabel=r"height (cm)",
-                 xticks=[162, 166, 170, 174, 178], center=[-3.3, -0.4, 0])
+        A = axes([161, 178], [0, 21], x_length=8.4, y_length=4.6, xlabel=r"height (cm)",
+                 xticks=[162, 166, 170, 174, 178], center=[0, 0.15, 0])
         A.ax.y_axis.set_opacity(0)
         ax = A.ax
         tl = DashedLine(ax.c2p(mu, 0), ax.c2p(mu, 21), color=S.TRUTH, stroke_width=3)
@@ -126,7 +126,7 @@ class Populations(VoiceoverScene):
                             Dot(ax.c2p(m, y), radius=0.05, color=S.EST)))
         cap = label(rf"20 samples of 25: \ {d['n_cover']} intervals catch $\theta$", font_size=26,
                     color=GREY_A).next_to(A, DOWN, buff=0.2)
-        preview = note(r"a preview: \ intervals are built in Part 11").to_corner(DL, buff=0.3)
+        preview = note(r"a preview: \ intervals are built in Part 11").to_corner(UR, buff=0.3)
         board = coverage_board([], placeholders=6, font_size=24)
         with self.voiceover(
             "That's what statistics promises: not the answer, but an honest statement of how often you'll be "
