@@ -133724,6 +133724,11 @@
   "bytes": 6317,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
+ "fomc/index/20201231": {
+  "sha256": "fbe0c7c5af408fd0fdde566defdad576b3a52c1e9ec8085fee13827a4ca5c041",
+  "bytes": 20682,
+  "source": "https://www.federalreserve.gov/monetarypolicy/fomchistorical{1994..2020}.htm + fomccalendars.htm"
+ },
  "fomc/index/20251231": {
   "sha256": "59b4c74afc1e01dac4c4321410c762a8cd8f98747c69fd9ff12100dbf32ad299",
   "bytes": 25303,
@@ -136159,6 +136164,16 @@
   "bytes": 176742,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO"
  },
+ "fred/DCOILWTICO/2006-01-01_2020-12-31": {
+  "sha256": "ad0c88928629ef58f2ec873e00eda2dd5ba9eb7bb0f9e6ed8d0aa3d1b171104d",
+  "bytes": 70137,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO"
+ },
+ "fred/DCOILWTICO/2006-01-01_2025-12-31": {
+  "sha256": "7e3288825a47fae45e0cca14f8cf351a4f54f99953e96cf01692d2dd54a79e87",
+  "bytes": 93830,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO"
+ },
  "fred/DCOILWTICO/2020-03-02_2020-05-29": {
   "sha256": "17af9c4d6aef4f74e813592d1dd662a88041c29676d71536515bad7dfa558b83",
   "bytes": 1188,
@@ -136174,6 +136189,16 @@
   "bytes": 273753,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCAUS"
  },
+ "fred/DEXCAUS/2006-01-01_2020-12-31": {
+  "sha256": "5b5ea0efeee50d9e33966c31eeb504469f3217843e502594df83dbed4363ba1f",
+  "bytes": 74788,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCAUS"
+ },
+ "fred/DEXCAUS/2006-01-01_2025-12-31": {
+  "sha256": "09fc1732989107d3a56b91408e76139e8edd6647b32bf322567f3c8a93786f6a",
+  "bytes": 99630,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCAUS"
+ },
  "fred/DEXJPUS/1900-01-01_2025-12-31": {
   "sha256": "5b4cb7b0309d61f067eae1814c2e2c18b3166d936ed07ceb2741f6fdbe4cf61a",
   "bytes": 271180,
@@ -136182,6 +136207,16 @@
  "fred/DEXJPUS/1971-01-01_2025-12-31": {
   "sha256": "5b4cb7b0309d61f067eae1814c2e2c18b3166d936ed07ceb2741f6fdbe4cf61a",
   "bytes": 271180,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS"
+ },
+ "fred/DEXJPUS/2006-01-01_2020-12-31": {
+  "sha256": "bd5a4db06261a09c27c6ee92dfed10ee719cda62b011eaf5e6ec8711cff74bb6",
+  "bytes": 73518,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS"
+ },
+ "fred/DEXJPUS/2006-01-01_2025-12-31": {
+  "sha256": "f4cce43179daf40091c36a0712d5cd015497f302e5eddc3b9dba6026d78fd00c",
+  "bytes": 98402,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS"
  },
  "fred/DEXNOUS/1900-01-01_2025-12-31": {
@@ -136214,6 +136249,16 @@
   "bytes": 271748,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSZUS"
  },
+ "fred/DEXSZUS/2006-01-01_2020-12-31": {
+  "sha256": "dfb519ce3e58cd99c5c9af7d44941bfb55cbb2157638350396f7752805ed1fb3",
+  "bytes": 74744,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSZUS"
+ },
+ "fred/DEXSZUS/2006-01-01_2025-12-31": {
+  "sha256": "4db402fed81ba4c2e49293e91a7d2073fca23b279ce1f3cf6953b8b6024dc8f5",
+  "bytes": 99588,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSZUS"
+ },
  "fred/DEXUSAL/1900-01-01_2025-12-31": {
   "sha256": "61b1f5516bed588869fd4d3253e84b86b8ee836c0a31734ea2afbfa05dc51097",
   "bytes": 272282,
@@ -136224,6 +136269,16 @@
   "bytes": 272282,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSAL"
  },
+ "fred/DEXUSAL/2006-01-01_2020-12-31": {
+  "sha256": "46c3531b34ab429e42db24380f23d0fa0c3ea99037826311d10f795d84fd3d0a",
+  "bytes": 74774,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSAL"
+ },
+ "fred/DEXUSAL/2006-01-01_2025-12-31": {
+  "sha256": "ad2e9c67b6c499d53ad9ac5df3f49b7fe96975e089800774dc7a4fe6af8589f2",
+  "bytes": 99626,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSAL"
+ },
  "fred/DEXUSEU/1900-01-01_2025-12-31": {
   "sha256": "b312bf0eea4e4d678245e652df071e1ec212f55a0d3f280baf5a96287d73f0ff",
   "bytes": 134566,
@@ -136232,6 +136287,16 @@
  "fred/DEXUSEU/1971-01-01_2025-12-31": {
   "sha256": "b312bf0eea4e4d678245e652df071e1ec212f55a0d3f280baf5a96287d73f0ff",
   "bytes": 134566,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU"
+ },
+ "fred/DEXUSEU/2006-01-01_2020-12-31": {
+  "sha256": "73821723ab62ea3ec3cdd258cc5fbcd371336c56f81db388150e5f95d8d727ff",
+  "bytes": 74745,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU"
+ },
+ "fred/DEXUSEU/2006-01-01_2025-12-31": {
+  "sha256": "4b0b37205c19bbaf32a028a90fe7ee9a3d5d538b08026c3d3bf1692d1ac2ffed",
+  "bytes": 99563,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU"
  },
  "fred/DEXUSNZ/1900-01-01_2025-12-31": {
@@ -136252,6 +136317,16 @@
  "fred/DEXUSUK/1971-01-01_2025-12-31": {
   "sha256": "aad271958c56d64ce7b874cd7f844e26cd597ef1e96e82f9c395ae99a15fccd9",
   "bytes": 271775,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSUK"
+ },
+ "fred/DEXUSUK/2006-01-01_2020-12-31": {
+  "sha256": "287e8d73d371caac47b5e57eca871a10ba41821900ab5aef57bb9cdccd2d9ad5",
+  "bytes": 74820,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSUK"
+ },
+ "fred/DEXUSUK/2006-01-01_2025-12-31": {
+  "sha256": "fd21503edf917973d7d8e0b99664e688ff6bc9c6de38409cef0ca7bc66301ab3",
+  "bytes": 99664,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSUK"
  },
  "fred/DFEDTAR/1993-06-01_1995-12-31": {
@@ -136429,6 +136504,16 @@
   "bytes": 98654,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DHHNGSP"
  },
+ "fred/DHHNGSP/2006-01-01_2020-12-31": {
+  "sha256": "014e6a8595fced23be8bdcb1adcd9672acfe39d15a28d080392102bf45af1f79",
+  "bytes": 63205,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DHHNGSP"
+ },
+ "fred/DHHNGSP/2006-01-01_2025-12-31": {
+  "sha256": "ca79d87233fdb453cf1190311bf44c3c03512efc8c756f6a56173e4142162a66",
+  "bytes": 85503,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DHHNGSP"
+ },
  "fred/DSWP10/1950-01-01_2025-12-31": {
   "sha256": "f31086eae527fbba705ad390d807c529146cce6acaaea9518cd7e0671bb908e8",
   "bytes": 73042,
@@ -136513,6 +136598,11 @@
   "sha256": "6d2aae013ba9697d69cb0eb2f4627115f179eda0cb8cd37bcd474670a0bde2fe",
   "bytes": 34697,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
+ },
+ "fred/DTWEXBGS/2006-01-01_2025-12-31": {
+  "sha256": "42a611e8b21833d42abbaa4a0f1eb0792c1fca7b4077eb1c4a7ff664701c395d",
+  "bytes": 107626,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS"
  },
  "fred/ECBDFR/1950-01-01_2025-12-31": {
   "sha256": "391c1081dc7df7cf6d825c41c90154489dc71e2fa173b83f031067bb2cf9c7c1",
