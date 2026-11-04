@@ -3015,3 +3015,97 @@ def test_kns_and_rp_pca_and_lasso():
     b = Z.lasso(X, y, 0.1)
     assert abs(b[0] - 3) < 0.3 and np.all(np.abs(b[1:]) < 0.05)
     assert Z.max_sh2(F[:, :1]) <= Z.max_sh2(F) + 1e-12
+
+
+def test_backtest_statistics():
+    import math
+
+    from explainer.quant.house import backtest as B
+    # the extreme-value approximation against simulation
+    for n in (10, 1000):
+        sim = B.noise_max_sr(n, 1260, sims=300, seed=n)
+        assert B.expected_max_sr(n, 1 / 1260) == pytest.approx(sim.mean(), rel=0.06)
+    # Bailey, Borwein, Lopez de Prado and Zhu: five years allow about 45 trials at a Sharpe ratio of one
+    assert B.min_btl(45, 1.0) == pytest.approx(5.0, abs=0.05)
+    # Lo's eta: sqrt(q) without autocorrelation, smaller with positive autocorrelation
+    assert B.lo_eta(np.zeros(11), 12) == pytest.approx(math.sqrt(12))
+    assert B.lo_eta(np.full(11, 0.2), 12) < math.sqrt(12)
+    # the iid standard error against the sampling spread of the estimate
+    rng = np.random.default_rng(3)
+    est = [B.sharpe(rng.normal(0.1, 1, 500)) for _ in range(3000)]
+    assert np.std(est) == pytest.approx(math.sqrt((1 + 0.5 * 0.1 ** 2) / 500), rel=0.06)
+    assert B.psr(0.1, 0.1, 500) == pytest.approx(0.5)
+    d = B.deflated_sharpe(0.1, 500, 100, 0.002)
+    assert d["sr0"] == pytest.approx(B.expected_max_sr(100, 0.002)) and d["dsr"] < B.psr(0.1, 0.0, 500)
+
+
+def test_cscv_and_cross_validation():
+    from explainer.quant.house import backtest as B
+    pbos = [B.cscv(np.random.default_rng(s).standard_normal((1600, 50)), S=8)["pbo"] for s in range(12)]
+    assert 0.35 < np.mean(pbos) < 0.65                      # noise: the in-sample winner is a coin flip out of sample
+    rng = np.random.default_rng(4)
+    noise = rng.standard_normal((1600, 50))
+    assert B.cscv(noise, S=8)["n_combos"] == 70
+    skill = noise.copy()
+    skill[:, 0] += 0.4
+    assert B.cscv(skill, S=8)["pbo"] < 0.05
+    t0 = np.arange(100)
+    t1 = t0 + 5
+    for tr, te in B.purged_kfold(t0, t1, 5, embargo=3):
+        a, b = t0[te].min(), t1[te].max()
+        assert not np.any((t0[tr] <= b) & (t1[tr] >= a))
+        assert not np.any((t0[tr] > b) & (t0[tr] <= b + 3))
+    for tr, te in B.walk_forward(100, 40, 20):
+        assert tr.max() < te.min()
+
+
+def test_reality_checks():
+    from explainer.quant.house import backtest as B
+    rng = np.random.default_rng(5)
+    T, K = 1000, 200
+    d = rng.standard_normal((T, K)).astype(np.float32) * 0.01
+    counts = B.stationary_bootstrap_counts(T, 300, 5.0, seed=1)
+    assert np.allclose(counts.sum(1), T)
+    mean, sd = d.mean(0).astype(float), d.std(0, ddof=1).astype(float)
+    bm = B.boot_means(d, counts)
+    assert B.reality_check(mean, bm, T)["p"] > 0.05
+    d[:, 7] += 0.003
+    mean = d.mean(0).astype(float)
+    bm = B.boot_means(d, counts)
+    assert B.reality_check(mean, bm, T)["p"] < 0.05
+    assert B.spa(mean, bm, sd, T)["p"] < 0.05
+    assert 7 in B.romano_wolf(mean, bm, sd, T)["rejected"]
+
+
+def test_rules_and_engine():
+    from explainer.quant.house import backtest as B
+    rng = np.random.default_rng(6)
+    P = 100 * np.exp(np.cumsum(rng.normal(0, 0.01, 600)))
+    # point in time: a rule's position at t does not change when later prices change
+    for r in B.random_rules(40, seed=1):
+        a = B.rule_positions(P, r)
+        Q = P.copy()
+        Q[400:] *= 1.5
+        assert np.array_equal(a[:400], B.rule_positions(Q, r)[:400])
+    # a fixed holding period closes the position
+    pos = B.rule_positions(P, {"family": "ma", "fast": 1, "slow": 20, "band": 0.0, "delay": 0, "hold": 5})
+    runs = np.diff(np.flatnonzero(np.diff(np.r_[0, (pos != 0).astype(int), 0])))[::2]
+    assert np.all(runs <= 5)
+    # the engine, at the close it computed from and without costs, reproduces the vectorised backtest
+    n = len(P)
+    bars = {"date": np.arange(n), "open": P, "high": P, "low": P, "close": P, "volume": np.full(n, 1e7)}
+    sig = lambda v: 1.0 if v["close"][-1] > v["close"][-2] else -1.0  # noqa: E731
+    res = B.Backtester(bars, sig, latency=0, fill="close").run()
+    w = np.r_[0.0, np.where(np.diff(P) > 0, 1.0, -1.0)]
+    w[0] = 0.0
+    vec = B.vectorized(w, P, 0.0, 1)
+    assert np.allclose(res.returns[2:], vec[2:], atol=1e-9)
+    # a split ignored halves the equity of a holder of a 2:1 split stock priced as traded
+    raw = dict(bars, close=np.r_[np.full(300, 100.0), np.full(300, 50.0)], open=np.r_[np.full(300, 100.0),
+                                                                                    np.full(300, 50.0)])
+    raw["split"] = np.ones(n)
+    raw["split"][300] = 2.0
+    hold = lambda v: 1.0  # noqa: E731
+    ok = B.Backtester(raw, hold).run().equity
+    bad = B.Backtester(raw, hold, adjust_splits=False).run().equity
+    assert ok[-1] == pytest.approx(ok[10], rel=1e-9) and bad[-1] == pytest.approx(0.5 * bad[10], rel=1e-9)

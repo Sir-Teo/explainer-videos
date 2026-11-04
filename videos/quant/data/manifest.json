@@ -1704,6 +1704,11 @@
   "bytes": 94799,
   "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/COR3M_History.csv"
  },
+ "cboe/PUT/through_2020-12-31": {
+  "sha256": "be5bec15b03a24c1f5364a5ab380b435893db88d6dc56c02a3e5c8b94268d1e2",
+  "bytes": 72963,
+  "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/PUT_History.csv"
+ },
  "cboe/vx/2017-05-17": {
   "sha256": "61aa2acf069195688560d428ff68d3fcd2fb58334ed21a124aa45fa9dcfcfe32",
   "bytes": 3676,
@@ -17114,6 +17119,11 @@
   "bytes": 11748,
   "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
  },
+ "edgar/company_tickers": {
+  "sha256": "de59c00edabfb8b540c61ea4805446763bc9ba6aa8b42fa2955f5439556558d2",
+  "bytes": 796562,
+  "source": "https://www.sec.gov/files/company_tickers.json"
+ },
  "edgar/companyfacts/CIK0000012927/v1_through_20261031": {
   "sha256": "354f30326c5b1074f63a2886dd5d1e6b86f9b95b7e772bf869f975f22d69ec20",
   "bytes": 430541,
@@ -19964,6 +19974,11 @@
   "bytes": 181581,
   "source": "https://huggingface.co/datasets/OpenSourceAP/CrossSection/resolve/2024.10/SignalDoc.csv"
  },
+ "philly/rtdsm/routput/through_2020M12": {
+  "sha256": "543f100bb7235eacc1ff6a8c6560716dc8a0aa0fb8d034fd3796f30b183dfaf2",
+  "bytes": 1297763,
+  "source": "https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/real-time-data/data-files/xlsx/routputmvqd.xlsx"
+ },
  "shiller/ie_data/through_2020-12": {
   "sha256": "3996c62d804e16e818332a2f5b7ab97ca0d95b063d1d23ef5b8ed49390ab8089",
   "bytes": 96604,
@@ -20123,5 +20138,45 @@
   "sha256": "5d901e87f853ed29ff3abd340bb222ad8d4ff6e55f4f385b0050b3b71dd903c3",
   "bytes": 62184,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/^HSCE"
+ },
+ "yahoo/bars/AAPL/2010-01-01_2020-12-31": {
+  "sha256": "63b7892acb76dde467cb147034ef39d98cf21b642828d0d6828a786f6e4849ec",
+  "bytes": 209139,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL"
+ },
+ "yahoo/bars/AAPL/2019-12-01_2020-12-31": {
+  "sha256": "9a8a86c1dcbfa5ac3ea9e84cc63790f77039e2abc4d5a56fed21c95b93a50dc9",
+  "bytes": 21538,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL"
+ },
+ "yahoo/bars/EEM/2010-01-01_2020-12-31": {
+  "sha256": "cb4d85d44d19c0f41aefa9344d95e160a58a2873ee5dc01f7e9961fa42a7a01b",
+  "bytes": 203307,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM"
+ },
+ "yahoo/bars/GLD/2010-01-01_2020-12-31": {
+  "sha256": "0bd363af37ec14cad82d32de3488eb89687acf2f1d4c19411dc128c1bf349ead",
+  "bytes": 222925,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/GLD"
+ },
+ "yahoo/bars/IWM/2010-01-01_2020-12-31": {
+  "sha256": "4db7eb6c14deb6cd8d0bbae9a96406c5e5b6dd0237597fdef597f3fc2ac08bcd",
+  "bytes": 220189,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/IWM"
+ },
+ "yahoo/bars/QQQ/2010-01-01_2020-12-31": {
+  "sha256": "c2d408c2a68c5c47e78a1d97be216029edebe1957b29da5c7a37956fd8ebade6",
+  "bytes": 217206,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ"
+ },
+ "yahoo/bars/SPY/2010-01-01_2020-12-31": {
+  "sha256": "03d9199c9b963f41321cb362c71a7997beff8b12c7eb6586b79db11c5c5396b9",
+  "bytes": 227701,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
+ },
+ "yahoo/bars/XLE/2010-01-01_2020-12-31": {
+  "sha256": "85ef4da59e242d38e1eecf2fd08a99669b8436eac75e107e400bedabd574daa8",
+  "bytes": 201716,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/XLE"
  }
 }

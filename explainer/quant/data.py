@@ -989,6 +989,116 @@ def ch4() -> dict:
     return {"date": a[:, 0].astype(int), "rf": a[:, 1], "mktrf": a[:, 2], "VMG": a[:, 3], "SMB": a[:, 4],
             "PMO": a[:, 5]}
 
+def yahoo_bars(symbol: str, start: str = "2010-01-01", through: str = "2020-12-31") -> dict:
+    """Daily bars of ``symbol`` from Yahoo Finance's chart API with its corporate actions: ``date`` (YYYYMMDD),
+    ``open``, ``high``, ``low``, ``close`` (split-adjusted, not dividend-adjusted, as Yahoo serves them),
+    ``adjclose`` (split- and dividend-adjusted), ``volume`` (split-adjusted), ``dividend`` (cash per share on the
+    ex-date, split-adjusted) and ``split`` (new shares per old, on the effective date; 1 elsewhere).  The extracted
+    bars are frozen and checked."""
+    p0 = int(datetime.fromisoformat(start).replace(tzinfo=timezone.utc).timestamp())
+    p1 = int((datetime.fromisoformat(through) + timedelta(days=1)).replace(tzinfo=timezone.utc).timestamp())
+    safe = symbol.replace("^", "_").replace(".", "_")
+    path = DATA / "yahoo" / f"{safe}_bars_{start}_{through}.json"
+    url = f"{YAHOO}{urllib.parse.quote(symbol)}"
+    if not path.exists():
+        q = urllib.parse.urlencode({"period1": p0, "period2": p1, "interval": "1d", "events": "div|split"})
+        req = urllib.request.Request(f"{url}?{q}", headers={"User-Agent": "Mozilla/5.0 (education)"})
+        raw, err = None, None
+        for k in range(5):
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    raw = r.read()
+                break
+            except Exception as e:
+                err = e
+                time.sleep(min(2 ** k, 30))
+        if raw is None:
+            raise RuntimeError(f"failed to fetch {symbol} from Yahoo: {err}")
+        _atomic_write(path, raw)
+    d = json.loads(path.read_text())["chart"]["result"][0]
+    off = d["meta"].get("gmtoffset", 0)
+    ts = np.asarray(d["timestamp"], float) + off
+    ymd = np.array([int(datetime.fromtimestamp(t, timezone.utc).strftime("%Y%m%d")) for t in ts])
+    qv = d["indicators"]["quote"][0]
+    col = {k: np.asarray([np.nan if v is None else v for v in qv[k]], float) for k in ("open", "high", "low", "close",
+                                                                                      "volume")}
+    col["adjclose"] = np.asarray([np.nan if v is None else v for v in d["indicators"]["adjclose"][0]["adjclose"]], float)
+    ok = np.isfinite(col["close"]) & np.isfinite(col["open"])
+    out = {"date": ymd[ok], **{k: v[ok] for k, v in col.items()}}
+    n = len(out["date"])
+    out["dividend"], out["split"] = np.zeros(n), np.ones(n)
+    for kind, key in (("dividends", "dividend"), ("splits", "split")):
+        for ev in d.get("events", {}).get(kind, {}).values():
+            day = int(datetime.fromtimestamp(ev["date"] + off, timezone.utc).strftime("%Y%m%d"))
+            i = int(np.searchsorted(out["date"], day))
+            if i < n and out["date"][i] == day:
+                out[key][i] = ev["amount"] if kind == "dividends" else ev["numerator"] / ev["denominator"]
+    frozen = json.dumps({k: np.round(v, 6).tolist() for k, v in out.items()}, sort_keys=True,
+                        separators=(",", ":")).encode()
+    _check(f"yahoo/bars/{symbol}/{start}_{through}", frozen, url)
+    return out
+
+
+SEC_TICKERS = "https://www.sec.gov/files/company_tickers.json"
+
+
+def sec_tickers() -> dict:
+    """The SEC's current ticker file (CIK, ticker, name for every company with a listed ticker today), as first
+    fetched: a list of today's survivors, which is the point (Part 26).  Returns {cik: (ticker, name)}; the raw file
+    is frozen at its first download and checked."""
+    path = DATA / "edgar" / "company_tickers.json"
+    raw = _cached("edgar/company_tickers", path, lambda: _sec_get(SEC_TICKERS), SEC_TICKERS)
+    out = {}
+    for v in json.loads(raw).values():
+        out.setdefault(int(v["cik_str"]), (v["ticker"], v["title"]))
+    return out
+
+
+RTDSM = "https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/real-time-data/data-files/xlsx/"
+
+
+def philly_rtdsm(var: str = "routput", through_vintage: str = "2020M12") -> dict:
+    """The Federal Reserve Bank of Philadelphia's Real-Time Data Set for Macroeconomists: one variable's monthly
+    vintages (``routput`` is real GNP/GDP).  Returns ``quarters`` (e.g. '2008:Q4'), ``vintages`` (e.g. '2009M2':
+    the data as published in that month), and ``values`` (quarters x vintages, NaN where not yet published), for
+    vintages through ``through_vintage``; the parsed matrix is frozen and checked."""
+    import io
+
+    import openpyxl
+    import openpyxl.reader.excel as xl
+
+    path = DATA / "philly" / f"{var}MvQd.xlsx"
+    if not path.exists():
+        _atomic_write(path, _get(f"{RTDSM}{var}mvqd.xlsx", timeout=180))
+    keep = xl.ExcelReader.read_properties
+    xl.ExcelReader.read_properties = lambda self: None  # the file's document properties do not parse; skip them
+    try:
+        wb = openpyxl.load_workbook(io.BytesIO(path.read_bytes()), read_only=True, data_only=True)
+        rows = list(wb[wb.sheetnames[0]].iter_rows(values_only=True))
+    finally:
+        xl.ExcelReader.read_properties = keep
+    head = [str(c) for c in rows[0]]
+    pre = var.upper()
+
+    def vkey(h):
+        yy, mm = h[len(pre):].split("M")
+        y = int(yy)
+        return (1900 + y if y >= 60 else 2000 + y), int(mm)
+    ty, tm = int(through_vintage[:4]), int(through_vintage[5:])
+    cols = [j for j, h in enumerate(head) if h.startswith(pre) and vkey(h) <= (ty, tm)]
+    vint = [f"{vkey(head[j])[0]}M{vkey(head[j])[1]}" for j in cols]
+    quarters, vals = [], []
+    for r in rows[1:]:
+        if r[0] is None:
+            continue
+        quarters.append(str(r[0]))
+        vals.append([float(r[j]) if isinstance(r[j], (int, float)) else np.nan for j in cols])
+    a = np.array(vals, float)
+    frozen = json.dumps([quarters, vint, np.nan_to_num(a, nan=-1).round(4).tolist()], separators=(",", ":")).encode()
+    _check(f"philly/rtdsm/{var}/through_{through_vintage}", frozen, f"{RTDSM}{var}mvqd.xlsx")
+    return {"quarters": quarters, "vintages": vint, "values": a}
+
+
 # ---------------------------------------------------------------------------
 # What the series has used so far: ``python -m explainer.quant.data`` fetches all of it
 # ---------------------------------------------------------------------------
