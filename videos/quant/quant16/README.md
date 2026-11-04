@@ -30,7 +30,7 @@ against an exact or near-exact price.
 *An education in methods, not investment advice. Firms and episodes are described from the public record; figures
 that come from a firm's or vendor's own account are labelled as such.*
 
-## Chapters (about 59 minutes)
+## Chapters (about 60 minutes)
 
 * **One price, many machines** (2.8 min). Four engines race on one Heston call, drawn as the wall clock reaches each
   run; the history from Crank–Nicolson (1947) and Metropolis–Ulam (1949) to quantum resource estimates (2021, 2024);
@@ -259,7 +259,7 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录；来自公司或供应商自述的数字均已注明。*
 
-## 各章（约59分钟）
+## 各章（约60分钟）
 
 * **一个价格，多台机器。** 四台引擎为同一个赫斯顿看涨期权竞赛；从克兰克-尼科尔森（1947）、梅特罗波利斯-乌拉姆（1949）到量子资源估算（2021、2024）的历史；本部分安排；我们公司的定价引擎。
 * **1. 蒙特卡洛：带误差棒的平均。** 三个随机种子到一百万条路径的运行估计与95%漏斗；强大数定律、中心极限定理、Slutsky；收益标准差14.7，95%下正负一分钱约需830万条路径；误差带在1000次运行中覆盖真价94.4%。
