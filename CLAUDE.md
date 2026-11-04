@@ -13,6 +13,6 @@ Manim videos with local neural narration. See README.md for layout and build com
   chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
   instruments in `explainer/ai/`.
 - *Statistics, Built* (`videos/stats/`): sixty-five parts in five stages from a first course to a PhD
-  (`stats1` … `stats65`; Parts 1–3 written); the series plan is `videos/stats/README.md`, the chapter-by-chapter
+  (`stats1` … `stats65`; Parts 1–4 written); the series plan is `videos/stats/README.md`, the chapter-by-chapter
   syllabus and production standard `videos/stats/SYLLABUS.md`; shared instruments in `explainer/stats/` (the World,
   the Coverage Board, the Museum, the exact probability engine `prob.py`, the `FamilyTree`).
