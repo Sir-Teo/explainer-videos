@@ -129,8 +129,8 @@ class Blocks(VoiceoverScene):
         rows[1][0].set_color(EXACT)
         whys = [why(r"$Z$: \ intercept and father's height; \ $\mathbf x$: \ mother's"),
                 why(r"$M_Z = I - P_Z$: \ the block inverse, \ written as projections")]
-        A = axes([-20, 20], [-25, 25], x_length=4.6, y_length=3.6, xlabel=r"mother's height, \ father removed",
-                 ylabel=r"child, \ father removed", xticks=[-15, 0, 15], yticks=[-20, 0, 20], center=[-3.8, -1.6, 0])
+        A = axes([-20, 20], [-25, 25], x_length=4.4, y_length=2.9, xlabel=r"mother's height, \ father removed",
+                 ylabel=r"child, \ father removed", xticks=[-15, 0, 15], yticks=[-20, 0, 20], center=[-3.8, -2.2, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.025, color=DATA, fill_opacity=0.7) for a, b in zip(rx, ry) if abs(a) < 20 and abs(b) < 25])
         ln = Line(ax.c2p(-18, -18 * e["b_fwl"]), ax.c2p(18, 18 * e["b_fwl"]), color=EXACT, stroke_width=3)
@@ -138,7 +138,7 @@ class Blocks(VoiceoverScene):
                       MathTex(rf"\text{{residual on residual: }} {e['b_fwl']:.4f}", font_size=28, color=EXACT),
                       MathTex(rf"\text{{mother alone: }} {e['b_simple']:.4f}", font_size=28, color=GREY_A),
                       label(r"the same number: \ ``holding the father fixed'', \ made exact", font_size=22, color=GREY_B))
-        nums.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.4, -1.5, 0])
+        nums.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.4, -1.9, 0])
         hc = note(r"Frisch \& Waugh (1933); \ Lovell (1963)").to_corner(DR, buff=0.3)
         tag = simulated_tag(r"simulated: 300 of the World's families", corner=UR)
         with self.voiceover(
