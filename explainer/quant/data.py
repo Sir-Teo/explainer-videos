@@ -423,6 +423,34 @@ def ken_french_size_daily(through: str = "2025-12-31") -> dict:
     return {"date": a[:, 0].astype(int), "deciles": a[:, 1:]}
 
 
+def ken_french_industries_daily(n: int = 49, through: str = "2025-12-31") -> dict:
+    """Daily value-weighted returns (decimal) of Kenneth French's ``n`` industry portfolios: ``date`` (YYYYMMDD ints),
+    ``columns`` and ``returns`` (days x n; -99.99 as NaN), through ``through``; checked like
+    :func:`ken_french_daily` (the frozen subset, not the downloaded file)."""
+    name = f"{n}_Industry_Portfolios_daily_CSV.zip"
+    path = DATA / "kenfrench" / name
+    if not path.exists():
+        _atomic_write(path, _get(f"{KF}/{name}"))
+    with zipfile.ZipFile(path) as z:
+        text = z.read(z.namelist()[0]).decode("latin-1")
+    rows, cols, started = [], None, False
+    for line in text.splitlines():
+        parts = [p.strip() for p in line.split(",")]
+        if not started and parts[0] == "" and len(parts) > n:
+            cols = parts[1:n + 1]
+        if parts[0].isdigit() and len(parts[0]) == 8:
+            started = True
+            rows.append([int(parts[0])] + [float(x) for x in parts[1:n + 1]])
+        elif started:  # the first block is value-weighted
+            break
+    a = np.array(rows)
+    a = a[a[:, 0] <= int(through.replace("-", ""))]
+    a[:, 1:] = np.where(a[:, 1:] <= -99.99, np.nan, a[:, 1:] / 100)
+    frozen = json.dumps(np.nan_to_num(a, nan=-1).round(8).tolist(), separators=(",", ":")).encode()
+    _check(f"kenfrench/industries{n}_daily/through_{through}", frozen, f"{KF}/{name}")
+    return {"date": a[:, 0].astype(int), "columns": cols, "returns": a[:, 1:]}
+
+
 def binance_funding(symbol="BTCUSDT", start="2020-01", end="2020-12") -> dict:
     """Funding of a Binance USD-margined perpetual: ``time`` (UTC seconds of each settlement, every 8 hours) and
     ``rate`` (paid by longs to shorts when positive, as a fraction of the position's value).  Monthly files from the

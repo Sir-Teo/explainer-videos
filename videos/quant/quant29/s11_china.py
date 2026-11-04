@@ -28,7 +28,7 @@ class China(VoiceoverScene):
                 cmath(r"\text{market neutral}", r":", r"\text{long the stocks, short index futures}: \ r = \alpha", font_size=30),
                 cmath(r"\alpha", r"\leftarrow", r"\text{thousands of mined factors, combined daily}", font_size=30,
                       colors={r"\alpha": HURDLE})]
-        whys = [why(r"index enhancement (指数增强): a fund benchmarked to an index of mid- or small-cap stocks, which aims "
+        whys = [why(r"index enhancement: a fund benchmarked to an index of mid- or small-cap stocks, which aims "
                     r"to beat it by stock selection"),
                 why(r"the hedged version sells index futures against the stocks and keeps only the excess return"),
                 why(r"the excess return comes from factor libraries of the kind this part mines, rebalanced often; and "
@@ -81,7 +81,7 @@ class China(VoiceoverScene):
         self.clear_scene()
 
     def lingjun(self):
-        card = firm_card(r"Ningbo Lingjun Investment (宁波灵均)", r"a quantitative fund manager; at the open on Monday 19 "
+        card = firm_card(r"Ningbo Lingjun Investment", r"a quantitative fund manager; at the open on Monday 19 "
                          r"February 2024 it sold about 2.57 billion yuan of A-shares within one minute, as the exchanges "
                          r"reported. The Shanghai and Shenzhen exchanges barred it from trading from 20 to 22 February",
                          numbers=((r"2.57\ \text{bn}", r"yuan of shares sold between 9:30 and 9:31, as reported"),

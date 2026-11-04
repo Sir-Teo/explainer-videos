@@ -21,7 +21,7 @@ class HighFlyer(VoiceoverScene):
         self.play(FadeOut(c))
 
     def story(self):
-        steps = [(r"c.\ 2015--16", r"Liang Wenfeng and partners found High-Flyer (幻方), a quantitative fund using machine "
+        steps = [(r"c.\ 2015--16", r"Liang Wenfeng and partners found High-Flyer, a quantitative fund using machine "
                                    r"learning to trade Chinese stocks"),
                  (r"2019--2021", r"High-Flyer builds its own GPU clusters, Fire-Flyer I and II, to train its trading "
                                  r"models: thousands of Nvidia GPUs, as reported"),

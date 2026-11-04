@@ -200,7 +200,7 @@ class Formulaic(VoiceoverScene):
         tab = VGroup(head)
         for nm in NAMES:
             r = c["rows"][nm]
-            tab.add(VGroup(VGroup(label(nm, font_size=19), label(r"\texttt{" + r["formula"].replace("_", r"\_")
+            tab.add(VGroup(VGroup(label(nm.replace("#", r"\#"), font_size=19), label(r"\texttt{" + r["formula"].replace("_", r"\_")
                                                                  .replace("^", r"\^{}").replace("#", r"\#")
                                                                  .split(", open")[0] + "}", font_size=12, color=GREY_A)
                                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.06),

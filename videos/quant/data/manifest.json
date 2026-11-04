@@ -137144,6 +137144,21 @@
   "bytes": 100194,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Industry_Portfolios_CSV.zip"
  },
+ "kenfrench/industries49_daily/through_2020-12-31": {
+  "sha256": "c9bcc277b58eb2f789238cce8805af0f0d67cc32dbb676b5637f83f857a47628",
+  "bytes": 9125770,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_daily_CSV.zip"
+ },
+ "kenfrench/industries49_nfirms/through_202012": {
+  "sha256": "6001295c30eb60195320eb10b2fc9d3e29c232c465faddea6653a8bf2553c269",
+  "bytes": 284941,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_CSV.zip"
+ },
+ "kenfrench/industries49_size/through_202012": {
+  "sha256": "1f61b11dd7c15038abdd4ae2b8ea147cd962970547cc14a4a9432452393b8939",
+  "bytes": 384482,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_CSV.zip"
+ },
  "kenfrench/industries49_value/through_2020-12": {
   "sha256": "62181d72490fab916b874640dad7277a0efad526422d95c840112b91372157bd",
   "bytes": 411842,

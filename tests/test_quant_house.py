@@ -3270,3 +3270,43 @@ def test_combination_estimation_risk():
     assert abs(sim / th - 1) < 0.08 and th < sr_star
     est = A.sr_oos_sim(theta, 250, 400, rng, known_cov=False).mean()
     assert est < sim
+
+
+def test_portfolio_estimators_and_allocations():
+    import numpy as np
+    from explainer.quant.house import portfolio as P
+    rng = np.random.default_rng(3)
+    K = 15
+    A = rng.standard_normal((K, K))
+    Sig = A @ A.T / K + 0.5 * np.eye(K)
+    X = rng.standard_normal((80, K)) @ np.linalg.cholesky(Sig).T
+    err = lambda E: np.linalg.norm(E - Sig)
+    assert err(P.lw_identity(X)[0]) < err(P.sample_cov(X))
+    assert err(P.lw_nonlinear(X)) < err(P.sample_cov(X))
+    assert 0 <= P.lw_constcorr(X)[1] <= 1
+    w = P.erc(Sig)
+    assert np.allclose(P.risk_contributions(w, Sig), 1 / K, atol=1e-8)
+    w, order = P.hrp(Sig)
+    assert abs(w.sum() - 1) < 1e-12 and (w > 0).all() and sorted(order) == list(range(K))
+    wl = P.gmv(Sig, long_only=True)
+    assert wl.min() >= 0 and abs(wl.sum() - 1) < 1e-9
+    assert wl @ Sig @ wl >= P.gmv(Sig) @ Sig @ P.gmv(Sig) - 1e-12
+    sc = rng.standard_normal((400, 4)) * 0.05 + 0.01
+    w, a, cv = P.min_cvar(sc)
+    assert abs(cv - P.cvar_of(-sc @ w)) < 1e-6
+    q = P.entropy_pooling(sc, np.full(400, 1 / 400), sc[:, :1].T, [0.0])
+    assert abs(q @ sc[:, 0]) < 1e-8 and abs(q.sum() - 1) < 1e-12
+    pi, post = P.black_litterman(Sig, np.full(K, 1 / K), 2.5, 0.05)
+    assert np.allclose(pi, post)
+
+
+def test_gmv_theory_matches_simulation():
+    import numpy as np
+    from explainer.quant.house import portfolio as P
+    rng = np.random.default_rng(4)
+    K, T = 10, 40
+    Sig = np.diag(np.linspace(0.5, 2.0, K))
+    s = P.gmv_sim(Sig, T, 4000, rng)
+    th = P.gmv_theory(K, T)
+    assert abs(s["in"].mean() - th["in"]) < 0.02
+    assert abs(s["out"].mean() - th["out"]) / th["out"] < 0.03

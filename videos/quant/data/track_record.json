@@ -239,6 +239,54 @@
   },
   "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
  },
+ "equal_weight_part30": {
+  "part": 30,
+  "research": {
+   "mean": 0.09076610253857642,
+   "vol": 0.16550069168394746,
+   "sharpe": 0.5484333727855963,
+   "sharpe_se": 0.16743587397851242,
+   "maxdd": -0.5369546347734813,
+   "n": 492,
+   "sharpe_net": 0.5484333727855963,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.09396693877551024,
+   "vol": 0.16196761312508726,
+   "sharpe": 0.5801588167070151,
+   "sharpe_se": 0.45467403308265525,
+   "maxdd": -0.21074377700908264,
+   "n": 60,
+   "sharpe_net": 0.5801588167070151,
+   "cost_per_year": 0.0
+  },
+  "note": "1/N, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
+ },
+ "hrp_part30": {
+  "part": 30,
+  "research": {
+   "mean": 0.09114911937824591,
+   "vol": 0.14641514332131217,
+   "sharpe": 0.6225388802729004,
+   "sharpe_se": 0.17017390944397956,
+   "maxdd": -0.4857380480029859,
+   "n": 492,
+   "sharpe_net": 0.6104671895155097,
+   "cost_per_year": 0.0017674783323739268
+  },
+  "holdout": {
+   "mean": 0.07131346047963488,
+   "vol": 0.14141978473799863,
+   "sharpe": 0.5042679184652541,
+   "sharpe_se": 0.4555285924160004,
+   "maxdd": -0.1860182101740041,
+   "n": 60,
+   "sharpe_net": 0.49176982043994294,
+   "cost_per_year": 0.0017674783323739268
+  },
+  "note": "HRP, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
+ },
  "kmz_timer_part27": {
   "part": 27,
   "research": {
@@ -286,6 +334,30 @@
    "cost_per_year": 0.02
   },
   "note": "{\"universe\": \"OSAP 2024.10 predictors complete 1973-2023 (154)\", \"fit\": \"1973-01 to 2020-12\", \"kappa_grid\": 20, \"folds\": 3, \"scale\": \"10% a year in sample\", \"cost_per_year\": 0.02}"
+ },
+ "lw_gmv_part30": {
+  "part": 30,
+  "research": {
+   "mean": 0.07504955914657789,
+   "vol": 0.12080301714862643,
+   "sharpe": 0.621255668260693,
+   "sharpe_se": 0.16346937063436068,
+   "maxdd": -0.42768268309333957,
+   "n": 492,
+   "sharpe_net": 0.5919441265849007,
+   "cost_per_year": 0.0035409226717134207
+  },
+  "holdout": {
+   "mean": 0.04775651541721084,
+   "vol": 0.13482858975804596,
+   "sharpe": 0.35420169789590894,
+   "sharpe_se": 0.44123901678139743,
+   "maxdd": -0.14348330563303413,
+   "n": 60,
+   "sharpe_net": 0.32793929555180884,
+   "cost_per_year": 0.0035409226717134207
+  },
+  "note": "LW const-corr GMV, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
  },
  "mined_combination_part29": {
   "part": 29,

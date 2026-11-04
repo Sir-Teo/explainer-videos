@@ -44,9 +44,25 @@
    "at": "2026-11-04",
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
   },
+  "equal_weight_part30|kenfrench/ff3_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "eff04d27a665b52287be8cc2d45313b133339999ba771baaa6663f94ec54ba06"
+  },
+  "equal_weight_part30|kenfrench/industries49": {
+   "at": "2026-11-04",
+   "code_sha256": "eff04d27a665b52287be8cc2d45313b133339999ba771baaa6663f94ec54ba06"
+  },
   "gbm_default_holdout|edgar_default_firm_years": {
    "at": "2026-11-04",
    "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
+  },
+  "hrp_part30|kenfrench/ff3_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949"
+  },
+  "hrp_part30|kenfrench/industries49": {
+   "at": "2026-11-04",
+   "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949"
   },
   "kmz_timer_part27|goyal/welch_goyal_monthly": {
    "at": "2026-11-04",
@@ -59,6 +75,14 @@
   "logit_default_holdout|edgar_default_firm_years": {
    "at": "2026-11-04",
    "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
+  },
+  "lw_gmv_part30|kenfrench/ff3_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "1a438e1a8d323514d02e9a8a680cbaaa8d8546c8770f1542e7283e6e6a06f75c"
+  },
+  "lw_gmv_part30|kenfrench/industries49": {
+   "at": "2026-11-04",
+   "code_sha256": "1a438e1a8d323514d02e9a8a680cbaaa8d8546c8770f1542e7283e6e6a06f75c"
   },
   "mined_combination_part29|binance/usdt_daily_returns": {
    "at": "2026-11-04",
@@ -374,6 +398,16 @@
    },
    "trials": 8
   },
+  "equal_weight_part30": {
+   "code_sha256": "eff04d27a665b52287be8cc2d45313b133339999ba771baaa6663f94ec54ba06",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "1/N",
+    "universe": "French 49 industries, value-weighted",
+    "window_months": 120
+   },
+   "trials": 1
+  },
   "fomc_announcement_days": {
    "code_sha256": "2a997e8d7655ea9f1db30f6a411a47023705a64da71c185da3c04602d55e13f3",
    "params": {
@@ -409,6 +443,16 @@
     "validation": "2017-2020"
    },
    "trials": 1
+  },
+  "hrp_part30": {
+   "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "HRP",
+    "universe": "French 49 industries, value-weighted",
+    "window_months": 120
+   },
+   "trials": 22
   },
   "industry_capm_alphas": {
    "code_sha256": "54f561ad6d5881bce05e5be15386f78d40065cddafb61214ab959da2ba4fe2fa",
@@ -492,6 +536,16 @@
     "rule": "4-week size-decile rotation"
    },
    "trials": 1
+  },
+  "lw_gmv_part30": {
+   "code_sha256": "1a438e1a8d323514d02e9a8a680cbaaa8d8546c8770f1542e7283e6e6a06f75c",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "LW const-corr GMV",
+    "universe": "French 49 industries, value-weighted",
+    "window_months": 120
+   },
+   "trials": 22
   },
   "mined_combination_part29": {
    "code_sha256": "e4fae7924dfb612847af1397af0f30b5b715889655e450821581026efe3f1d22",
