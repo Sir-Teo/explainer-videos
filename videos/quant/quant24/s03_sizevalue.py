@@ -156,7 +156,7 @@ class SizeValue(VoiceoverScene):
         foot = VGroup(
             wrapped_label(r"Banz published in 1981. In the forty years since, the size premium has averaged about 1\% a "
                           r"year and is statistically indistinguishable from zero; much of it, before and after, came in "
-                          r"January. McLean and Pontiff (2016), 97 anomalies: returns 26\\% lower out of sample, 58\\% lower "
+                          r"January. McLean and Pontiff (2016), 97 anomalies: returns 26\% lower out of sample, 58\% lower "
                           r"after publication",
                           12.0, 17, GREY_A),
         ).to_edge(DOWN, buff=0.8)
