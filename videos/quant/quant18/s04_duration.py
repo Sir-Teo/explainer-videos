@@ -42,13 +42,19 @@ class Duration(VoiceoverScene):
 
         def build(t, pv, mac, col):
             beam = Line([X(0), beam_y, 0], [X(10.5), beam_y, 0], color=GREY_B, stroke_width=4)
-            scale = 2.6 / max(pv.max(), 1e-9)
-            bars = VGroup(*[Rectangle(width=0.18, height=max(v * scale, 0.02), stroke_width=0, fill_color=col,
-                                      fill_opacity=0.85).move_to([X(a), beam_y + max(v * scale, 0.02) / 2 + 0.03, 0])
-                            for a, v in zip(t, pv)])
+            cap = 3.0
+            small = pv[:-1].max() if len(pv) > 1 else pv.max()
+            scale = 1.2 / small if small > 1e-9 else cap / pv.max()
+            hs = [min(v * scale, cap) for v in pv]
+            bars = VGroup(*[Rectangle(width=0.18, height=max(h, 0.02), stroke_width=0, fill_color=col,
+                                      fill_opacity=0.85).move_to([X(a), beam_y + max(h, 0.02) / 2 + 0.03, 0])
+                            for a, h in zip(t, hs)])
+            top = MathTex(rf"{pv[-1]:.1f}" + (r"\ \text{(bar cut)}" if pv[-1] * scale > cap else ""), font_size=22,
+                          color=col).next_to(bars[-1], UP, buff=0.08)
+            bars.add(top)
             fulcrum = Triangle(color=WHITE, fill_opacity=1).scale(0.22).move_to([X(mac), beam_y - 0.25, 0])
             lab = MathTex(rf"D_{{\text{{Mac}}}} = {mac:.2f}\ \text{{years}}", font_size=30).next_to(fulcrum, DOWN,
-                                                                                                buff=0.2)
+                                                                                                buff=0.75)
             ticks = VGroup(*[MathTex(str(k), font_size=18, color=GREY_B).move_to([X(k), beam_y - 0.9, 0])
                              for k in (0, 2, 4, 6, 8, 10)])
             return VGroup(beam, bars, fulcrum, lab, ticks)
@@ -60,12 +66,14 @@ class Duration(VoiceoverScene):
         with self.voiceover(
             "Macaulay's idea, from 1938. Stand each payment's present value on a time line, like weights on a beam. "
             "<bookmark mark='a'/> The point where the beam balances is the bond's duration: the average time you wait "
-            f"for its money, weighted by value. For a ten-year bond paying four and a half percent it is "
+            f"for its money, weighted by value. The principal at the end outweighs every coupon, which is why its bar is cut. "
+            f"For a ten-year bond paying four and a half percent it is "
             f"{rows[0][2]:.2f} years, not ten, because the coupons pay you back along the way. <bookmark mark='b'/> A "
             "zero-coupon bond pays everything at the end, so its beam balances exactly at its maturity."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub_a), FadeIn(a[0]), FadeIn(a[4]),
-                      LaggedStart(*[GrowFromEdge(r_, DOWN) for r_ in a[1]], lag_ratio=0.05), run_time=2)
+                      LaggedStart(*[GrowFromEdge(r_, DOWN) for r_ in a[1][:-1]], lag_ratio=0.05), FadeIn(a[1][-1]),
+                      run_time=2)
             vo.wait_until("a")
             self.play(FadeIn(a[2], shift=UP * 0.3), Write(a[3]))
             vo.wait_until("b")

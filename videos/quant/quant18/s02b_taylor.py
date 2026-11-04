@@ -84,7 +84,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
             wrapped_label(r"2009--15: the rule went below zero; the funds rate could not, so the Fed bought bonds", 4.0,
                           17, GREY_A),
             wrapped_label(rf"2021--22: {abs(t['dev_2021_22']):.1f} points below, on average; in "
-                          rf"{t['worst']['t']:.0f} the rule said {t['worst']['rule']:.0f}\%, the Fed was at "
+                          rf"{int(t['worst']['t'])} the rule said {t['worst']['rule']:.0f}\%, the Fed was at "
                           rf"{t['worst']['ff']:.1f}\%", 3.6, 17, QC.LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.35, aligned_edge=LEFT)
         notes.shift(LEFT * max(0.0, notes.get_right()[0] - 6.75))

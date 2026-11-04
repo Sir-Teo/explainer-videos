@@ -40,7 +40,7 @@ class Term(VoiceoverScene):
                 why(r"and excess returns of long bonds over one year are unpredictable: Fama and Bliss (1987)")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.7, edge=6.9)
         with self.voiceover(
-            "Why does the ten-year yield what it does? Split it in two: the average short rate the market expects over "
+            "Why does the ten-year bond yield what it does? Split it in two: the average short rate the market expects over "
             "the next ten years, plus a term premium, what investors charge for tying up money at a rate that may turn "
             "out wrong. <bookmark mark='a'/> If that premium were constant, the expectations hypothesis, a steep curve "
             "would mean short rates are about to rise, and long yields would rise with them: in John Campbell and Robert "
@@ -164,7 +164,7 @@ class Term(VoiceoverScene):
         a, b = sc["2024-08"], sc["2025-12"]
         side = VGroup(
             MathTex(rf"\rho = {t['corr']:.4f},\ \ \overline{{|\Delta|}} = {100 * t['mad']:.0f}\ \text{{bp}}", font_size=26),
-            wrapped_label(rf"1981: premium {t['tp_1981']:.1f}\%; {t['tp_min']['t']:.0f}: {t['tp_min']['v']:.1f}\%", 3.6,
+            wrapped_label(rf"1981: premium {t['tp_1981']:.1f}\%; {int(t['tp_min']['t'])}: {t['tp_min']['v']:.1f}\%", 3.6,
                           17, TP),
             wrapped_label(rf"Aug 2024 to Dec 2025, while the Fed cut: yield {b['y'] - a['y']:+.2f}, expectations "
                           rf"{b['rn'] - a['rn']:+.2f}, premium {b['tp'] - a['tp']:+.2f}", 3.6, 17, GREY_A),
@@ -175,7 +175,7 @@ class Term(VoiceoverScene):
             f"York Fed's published premium. They agree to a correlation of {t['corr']:.4f}, about "
             f"{100 * t['mad']:.0f} basis points apart on average. <bookmark mark='b'/> In 1981 investors demanded about "
             f"{t['tp_1981']:.1f} points to hold ten-year bonds through Volcker's inflation fight. By "
-            f"{t['tp_min']['t']:.0f} the premium was {t['tp_min']['v']:.1f}: they paid for the privilege, with the Fed "
+            f"{int(t['tp_min']['t'])} the premium was {t['tp_min']['v']:.1f}: they paid for the privilege, with the Fed "
             "buying bonds and long Treasuries prized as a hedge. <bookmark mark='c'/> And since August 2024, while the "
             f"Fed cut by a point and three quarters, expected short rates fell {abs(b['rn'] - a['rn']):.2f} but the "
             f"premium rose {b['tp'] - a['tp']:.2f}, and the ten-year yield went up, not down."

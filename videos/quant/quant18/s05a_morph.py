@@ -64,7 +64,7 @@ class Morph(VoiceoverScene, ThreeDScene):
             "Here is the zero-coupon curve at the end of every month since 1972, from the Fed's fitted file; the longest "
             "maturity grows as the Treasury issued longer bonds. Red means inverted. <bookmark mark='a'/> The seventies: "
             "inflation, and a curve that keeps lifting. Then Paul Volcker. By "
-            f"{m['y10_max']['t']:.0f} the ten-year zero yield reached {m['y10_max']['y']:.1f} percent, and the curve "
+            f"{int(m['y10_max']['t'])} the ten-year zero yield reached {m['y10_max']['y']:.1f} percent, and the curve "
             "inverted hard. <bookmark mark='b'/> Then forty years of decline, with an inversion before each "
             "recession: 1989, 2000, 2006, 2019. <bookmark mark='c'/> In the pandemic summer of 2020 the ten-year touched "
             f"{m['y10_min']['y']:.2f} percent. <bookmark mark='d'/> And then 2022: the fastest rise in four decades, "
