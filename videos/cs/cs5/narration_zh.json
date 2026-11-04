@@ -16,7 +16,8 @@
   "Rowhammer": "12. 当存储器泄漏时",
   "Logic": "13. 时钟，以及作为逻辑的存储器",
   "History": "14. 芯片之前的记忆",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
+  "Outro": "回顾、习题，以及它们会在哪里再出现",
+  "Frontier": "15. 前沿：保护存储器"
  },
  "lines": {
   "1b596bc7691f": {
@@ -344,6 +345,36 @@
    "en": "Core memory deserves a closer look, because its ideas are still in every memory chip. <bookmark mark='a'/> Each bit was a tiny ring of ferrite, magnetized clockwise or anticlockwise, threaded on a grid of wires. <bookmark mark='b'/> To select one core, send half the current needed to flip a core down its row wire and half down its column wire. Only the core at the crossing feels the full current and flips: the first two-dimensional address decoder, made of physics. <bookmark mark='c'/> Reading worked by trying to flip the core to zero and sensing whether it pulsed, which destroyed the value, so every read was followed by a write-back, exactly as in DRAM today. <bookmark mark='d'/> Unlike DRAM, core kept its bits with the power off. It was threaded by hand, often by women from the textile industry, and the Apollo guidance computer's programs were woven permanently into a related form, rope memory, wire by wire.",
    "zh": "磁芯存储器值得细看，因为它的思想至今仍存在于每块存储芯片里。<bookmark mark='a'/>每一位是一个小小的铁氧体环，顺时针或逆时针磁化，穿在一张导线网格上。<bookmark mark='b'/>要选中一个磁芯，就在它的行线上送翻转一个磁芯所需电流的一半，在列线上也送一半。只有交叉点上的磁芯感受到完整的电流而翻转：第一个二维地址译码器，由物理学搭成。<bookmark mark='c'/>读出靠的是试图把磁芯翻转为零，并检测它是否产生脉冲，这会毁掉原来的值，所以每次读出之后都要写回，和今天的 DRAM 完全一样。<bookmark mark='d'/>与 DRAM 不同，磁芯断电后仍保存着它的位。它是手工穿制的，往往由来自纺织业的女工完成，阿波罗导航计算机的程序就以一种相关的形式，即磁芯绳存储器，一根线一根线地被永久织了进去。"
   },
+  "e5c92b8db3b9": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: defending memory.",
+   "zh": "第15章。前沿：保护存储器。"
+  },
+  "11b2ec0216e7": {
+   "scene": "Frontier",
+   "en": "Chapter twelve met Rowhammer: activate one row of memory often enough and bits flip in its neighbours. The research since is an arms race. <bookmark mark='a'/> In 2014 it took a hundred and thirty-nine thousand activations. By 2020, testing more than fifteen hundred chips, the same group found new DDR4 chips flipping after about ten thousand, and the most vulnerable after four thousand eight hundred per aggressor row. <bookmark mark='b'/> Smaller cells hold less charge and sit closer together, so every new generation is weaker. <bookmark mark='c'/> And an attacker has plenty to spend: in the sixty-four milliseconds between refreshes, one bank can activate a row almost one point four million times. <bookmark mark='d'/> That is more than a hundred times what it needs.",
+   "zh": "第12章遇到了行锤攻击：足够频繁地激活存储器的一行，相邻行里的比特就会翻转。此后的研究是一场军备竞赛。<bookmark mark='a'/>2014年，需要十三万九千次激活。到2020年，同一个研究组测试了一千五百多块芯片，发现新的 DDR4 芯片大约一万次就会翻转，最脆弱的芯片每个攻击行只需四千八百次。<bookmark mark='b'/>更小的单元容纳的电荷更少，彼此挨得更近，所以每一代都更脆弱。<bookmark mark='c'/>而攻击者有的是资本：在两次刷新之间的六十四毫秒里，一个存储体可以把一行激活将近一百四十万次。<bookmark mark='d'/>这比它需要的多一百倍以上。"
+  },
+  "aea02f128cf4": {
+   "scene": "Frontier",
+   "en": "The simplest defence, proposed with the discovery, is a coin toss. <bookmark mark='a'/> On every activation, refresh the row's neighbours with a small probability p. <bookmark mark='b'/> An attacker who needs T activations in a row without a refresh succeeds with probability one minus p to the T, about e to the minus p T. <bookmark mark='c'/> Ask that a year of non-stop hammering succeed with probability below one percent, and solve for p: the logarithm of the number of attempts, over T. <bookmark mark='d'/> At a hundred and thirty-nine thousand, p is two hundredths of a percent, almost free. At ten thousand it is three tenths of a percent, and at a thousand, three percent of all activations, which starts to cost real performance. Probability buys safety without memory, but its price grows as the threshold falls.",
+   "zh": "最简单的防御，和这个发现同时被提出，就是抛硬币。<bookmark mark='a'/>每次激活时，以一个很小的概率 p 刷新这一行的邻居。<bookmark mark='b'/>一个需要连续 T 次激活而没有刷新的攻击者，成功的概率是一减 p 的 T 次方，约为 e 的负 p T 次方。<bookmark mark='c'/>要求一整年不停地锤击，成功的概率低于百分之一，解出 p：尝试次数的对数，除以 T。<bookmark mark='d'/>在十三万九千时，p 是万分之二，几乎不花代价。在一万时是千分之三，到一千时是所有激活的百分之三，就开始明显影响性能了。概率不需要存储就能换来安全，但它的代价随阈值下降而上涨。"
+  },
+  "efbecdd63bdb": {
+   "scene": "Frontier",
+   "en": "The other way is to count. Exact counts for every row would need a counter per row, millions of them. But the problem is one Part 20 will study, finding the frequent items of a stream, and Jayadev Misra and David Gries solved it in 1982 with a handful of counters. <bookmark mark='a'/> Keep k counters. A row that has one adds one; a new row takes a free counter; and when none is free, every counter goes down by one. <bookmark mark='b'/> Each such decrement cancels k plus one activations, so in a window of W activations there are at most W over k plus one of them, and no row's estimate falls further below its true count. <bookmark mark='c'/> Refresh a row's neighbours when its estimate reaches half the threshold, and the true count stays below the threshold as long as k is at least two W over T. <bookmark mark='d'/> At the 2014 threshold that is twenty counters per bank. At ten thousand it is two hundred and seventy-seven; at a thousand, nearly three thousand. Graphene, from 2020, puts exactly this tracker in the memory controller.",
+   "zh": "另一条路是计数。给每一行一个精确的计数器，就需要成百万个。但这个问题正是第20部分要研究的：找出数据流里的频繁项，而贾亚德夫·米斯拉和戴维·格里斯在1982年只用少量计数器就解决了它。<bookmark mark='a'/>保留 k 个计数器。已有计数器的行加一；新来的行拿一个空闲计数器；没有空闲的时候，所有计数器都减一。<bookmark mark='b'/>每一次这样的减法抵消 k 加一次激活，所以在 W 次激活的窗口里最多有 W 除以 k 加一次，任何一行的估计值都不会比真实次数低得更多。<bookmark mark='c'/>当一行的估计值达到阈值的一半时刷新它的邻居，那么只要 k 至少是二 W 除以 T，真实次数就始终低于阈值。<bookmark mark='d'/>在2014年的阈值下，每个存储体需要二十个计数器。阈值一万时是二百七十七个；一千时将近三千个。2020年的 Graphene 正是把这样一个跟踪器放进了存储控制器。"
+  },
+  "97ddf77e2c77": {
+   "scene": "Frontier",
+   "en": "What happens with too few counters? <bookmark mark='a'/> We simulated an attacker who hammers twenty rows in turn, with ordinary traffic mixed in, for one refresh window, against trackers of different sizes. <bookmark mark='b'/> With four or sixteen counters, the twenty rows keep knocking each other out of the table, nothing is ever refreshed, and each aggressor reaches sixty thousand activations, six times the threshold. <bookmark mark='c'/> This is what the TRRespass researchers found in real DDR4 chips in 2020: the manufacturers' trackers had only a few counters, and hammering many rows at once broke them. <bookmark mark='d'/> Sixty-four counters happened to survive this particular pattern; only the two hundred and seventy-seven of the bound survive every pattern. Measured luck is not a guarantee; a proof is.",
+   "zh": "计数器太少会怎样？<bookmark mark='a'/>我们模拟了一个攻击者：在一个刷新窗口内轮流锤击二十行，中间混着普通的访问，对抗不同大小的跟踪器。<bookmark mark='b'/>只有四个或十六个计数器时，这二十行不断把彼此挤出表外，什么都没有被刷新，每个攻击行都达到六万次激活，是阈值的六倍。<bookmark mark='c'/>这正是 TRRespass 的研究者在2020年于真实 DDR4 芯片中发现的：厂商的跟踪器只有寥寥几个计数器，同时锤击很多行就能击破它们。<bookmark mark='d'/>六十四个计数器碰巧扛住了这一种模式；只有界所要求的二百七十七个才能扛住每一种模式。测出来的运气不是保证；证明才是。"
+  },
+  "a0f99deff7ea": {
+   "scene": "Frontier",
+   "en": "Where the research stands. <bookmark mark='a'/> The physics keeps surprising: Google's Half-Double showed in 2021 that rows two away from the aggressor flip too, and RowPress in 2023 that holding a row open longer, rather than opening it more often, disturbs its neighbours with far fewer activations. <bookmark mark='b'/> The industry has moved the counting into the chip. The 2024 update to the DDR5 standard adds a counter beside every single row, and a way for the memory to ask the controller for time to refresh, which researchers have already shown leaks timing information. <bookmark mark='c'/> Others replace Misra and Gries with the count-min sketch of Part 20, trading certainty for space. <bookmark mark='d'/> The open problem: a defence that is provably safe against every pattern of access, at thresholds of a few hundred, whose cost does not grow as the threshold falls. Memory that remembers reliably is, once again, a research question.",
+   "zh": "研究现在走到了哪里。<bookmark mark='a'/>物理不断带来意外：谷歌的 Half-Double 在2021年表明，离攻击行两行远的行也会翻转；RowPress 在2023年表明，让一行打开得更久，而不是更频繁地打开它，用少得多的激活次数就能干扰它的邻居。<bookmark mark='b'/>业界已经把计数搬进了芯片。DDR5 标准2024年的更新在每一行旁边都加了一个计数器，并让存储器可以向控制器要时间来刷新，而研究者已经证明这会泄露时间信息。<bookmark mark='c'/>另一些人用第20部分的 count-min sketch 代替 Misra–Gries，用确定性换空间。<bookmark mark='d'/>未解的问题是：一种对所有访问模式都可证明安全、在几百次的阈值下仍然有效、代价不随阈值下降而上涨的防御。可靠地记住东西的存储器，又一次成了研究课题。"
+  },
   "37932624968c": {
    "scene": "Outro",
    "en": "What we built in this part. Feedback, and the SR latch that holds a bit. The latch as a dynamical system, with two wells and a saddle, and metastability, whose undecided tail falls off exponentially and never reaches zero. Flip-flops, the clock, setup and hold, and the synchronizer. Finite-state machines, and the Myhill-Nerode theorem that gives the smallest one. Shift registers that count through every non-zero state, Pebble's register file, and memory chips that must rewrite their bits to keep them.",
@@ -359,10 +390,10 @@
    "en": "In practice: every chip with more than one clock has dozens of clock-domain crossings, each with a synchronizer or a Gray-coded queue, and special tools check them all. Servers use error-correcting memory, which repairs single flipped bits, and scrub their memory in the background. Embedded firmware is built from state machines, and so are network protocols, parsers and regular-expression engines, which are finite automata written in software.",
    "zh": "在实践中：每块有不止一个时钟的芯片都有几十处时钟域跨越，每一处都有同步器或格雷码队列，专门的工具会检查所有这些地方。服务器使用纠错存储器修复单个翻转的位，并在后台擦洗内存。嵌入式固件由状态机搭成，网络协议、语法分析器和正则表达式引擎也是如此，它们都是用软件写成的有限自动机。"
   },
-  "dabdeabe88ef": {
+  "84df5cf270ba": {
    "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to use this series' sequential-circuit library yourself.",
-   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自使用本系列的时序电路库。"
+   "en": "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build problem: it asks you to use this series' sequential-circuit library yourself. The last, marked with a star, is a research problem: a lower bound you can prove, and a better defence nobody has.",
+   "zh": "七道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第六道是动手题：要你亲自使用本系列的时序电路库。最后一道标了星号，是研究题：一个你可以证明的下界，以及一个还没有人做出来的更好的防御。"
   },
   "2e4c0f085de9": {
    "scene": "Outro",
@@ -392,6 +423,7 @@
   "Rowhammer": "12. When memory leaks",
   "Logic": "13. Clocks, and memory as logic",
   "History": "14. Remembering, before chips",
+  "Frontier": "15. Frontier: defending memory",
   "Outro": "Recap, problems, and where this comes back"
  }
 }

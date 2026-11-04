@@ -146,7 +146,7 @@ class Frontier(VoiceoverScene):
         th = label(rf"counters per bank, \ $W = {fmt(d['window'])}$", font_size=20, color=GREY_B).next_to(
             tab, UP, buff=0.2)
         gr = label(r"Graphene \ (Park, Litz and Kasikci, \ 2020) \ builds this \\ into the memory controller", font_size=20,
-                   color=HIST).next_to(tab, DOWN, buff=0.3)
+                   color=HIST).next_to(tab, DOWN, buff=0.3).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
             "The other way is to count. Exact counts for every row would need a counter per row, millions of them. "
             "But the problem is one Part 20 will study, finding the frequent items of a stream, and Jayadev Misra and "

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, LIMIT, NO, PART, YES, fmt, load,
+from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, LIMIT, NO, PART, YES, box, fmt, load,
                                   say)
 
 
@@ -69,7 +69,8 @@ class Frontier(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r) for r in rows[5:8]], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("d")
-            self.play(FadeIn(rows[8]), Indicate(rows[8][0], color=LIMIT))
+            self.play(FadeIn(rows[8]))
+            self.play(Indicate(rows[8][0], color=LIMIT))
         self.wait(0.3)
         self.clear_scene()
 
@@ -90,11 +91,12 @@ class Frontier(VoiceoverScene):
         cols = [YES, DATA, HEAD]
         curves, tags = VGroup(), VGroup()
         xs = np.linspace(0, 6, 120)
-        for r, c in zip(pick, cols):
+        for j, (r, c) in enumerate(zip(pick, cols)):
             ys = 1 - (1 - r["rate"]) ** (10 ** xs)
             curves.add(VMobject(color=c, stroke_width=3).set_points_as_corners([ax.c2p(x, y) for x, y in zip(xs, ys)]))
             x50 = np.log10(np.log(0.5) / np.log(1 - r["rate"]))
-            tags.add(label(r["bug"], font_size=16, color=c).next_to(ax.c2p(x50, 0.5), LEFT, buff=0.1))
+            tags.add(label(r["bug"], font_size=16, color=c).next_to(ax.c2p(x50, 0.5), RIGHT, buff=0.15).shift(
+                DOWN * 0.32 * j))
         div_r = 2.0 ** -32
         ys = 1 - (1 - div_r) ** (10 ** xs)
         divc = VMobject(color=LIMIT, stroke_width=3).set_points_as_corners([ax.c2p(x, y) for x, y in zip(xs, ys)])
