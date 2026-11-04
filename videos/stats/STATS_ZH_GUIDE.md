@@ -251,3 +251,30 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | Gumbel, Fréchet, Weibull distributions | 冈贝尔分布，弗雷歇分布，韦布尔分布 |
 | return level, return period | 重现水平，重现期 |
 | profile likelihood | 剖面似然 |
+
+## Glossary (Part 7)
+
+| English | 中文 |
+|---|---|
+| pseudo-random number generator, seed, period | 伪随机数生成器，种子，周期 |
+| linear congruential generator, lattice, spectral test | 线性同余生成器，格结构，谱检验 |
+| middle-square method | 平方取中法 |
+| Mersenne Twister, PCG | 梅森旋转算法，PCG 生成器 |
+| independent streams | 独立随机数流 |
+| inverse-CDF (inversion) method | 逆变换法 |
+| rejection sampling, envelope, acceptance rate | 拒绝抽样，包络函数，接受率 |
+| adaptive rejection sampling, log-concave | 自适应拒绝抽样，对数凹 |
+| Box–Muller transform | Box–Muller 变换 |
+| alias method | 别名法 |
+| Monte Carlo integration, Monte Carlo standard error | 蒙特卡洛积分，蒙特卡洛标准误 |
+| quasi-Monte Carlo, low-discrepancy sequence | 拟蒙特卡洛，低差异序列 |
+| Buffon's needle | 布丰投针 |
+| simulation study (ADEMP) | 模拟研究（ADEMP） |
+| antithetic variates, control variates, stratified sampling, importance sampling | 对偶变量，控制变量，分层抽样，重要性抽样 |
+| Markov chain, transition matrix | 马尔可夫链，转移矩阵 |
+| stationary distribution, detailed balance, reversible | 平稳分布，细致平衡，可逆 |
+| irreducible, aperiodic, ergodic theorem | 不可约，非周期，遍历定理 |
+| random walk on a graph, PageRank | 图上的随机游走，PageRank |
+| riffle shuffle, total variation distance, cutoff phenomenon | 鸽尾洗牌，全变差距离，截断现象 |
+| mixing time | 混合时间 |
+| Metropolis algorithm, Gibbs sampling, MCMC | Metropolis 算法，吉布斯抽样，马尔可夫链蒙特卡洛 |

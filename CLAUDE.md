@@ -13,7 +13,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
   instruments in `explainer/ai/`.
 - *Statistics, Built* (`videos/stats/`): sixty-five parts in five stages from a first course to a PhD
-  (`stats1` … `stats65`; Parts 1–6 written); the series plan is `videos/stats/README.md`, the chapter-by-chapter
+  (`stats1` … `stats65`; Parts 1–7 written); the series plan is `videos/stats/README.md`, the chapter-by-chapter
   syllabus and production standard `videos/stats/SYLLABUS.md`; shared instruments in `explainer/stats/` (the World,
-  the Coverage Board, the Museum, the exact probability engine `prob.py`, the `FamilyTree`, the `GaussianSlicer`, the `GaltonBoard`; `bounds(ax)` gives
+  the Coverage Board, the Museum, the exact probability engine `prob.py`, the `FamilyTree`, the `GaussianSlicer`, the `GaltonBoard`, and statkit in `explainer/stats/kit/` (`random`: generators, samplers, the simulation harness); `bounds(ax)` gives
   an axis's data range, since `CornerAxes` stores `x_range`/`y_range` shifted to start at 0).
