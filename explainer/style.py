@@ -296,6 +296,21 @@ C = SimpleNamespace(
     COMPRESSOR="#94A3B8",  # general-purpose compressors (gzip, bzip2, xz)
     NEURAL="#D4A5FF",  # neural language models on the scoreboard
     HUMAN="#FFB070",  # people (Shannon's subjects)
+    # Computer Science, Built (videos/cs/cs1-55).  One meaning per color across all fifty-five parts; reuses BIT0 and
+    # BIT1 (the 0 and 1 of a bit) and HUMAN (people, history) from the AI series.
+    CS_DATA="#58A6FF",  # data: values, symbols on a tape, words in memory, the input
+    CS_CONTROL="#FF9F45",  # control: states, rules, the transition table, the program counter, control signals
+    CS_HEAD="#F7D154",  # "here": the head, the current step, the cell or instruction being read
+    CS_CODE="#9DD6F0",  # programs as data: a machine's description <M>, encodings, source code
+    CS_FUNC="#9BE37B",  # functions and lambda terms, computable functions f
+    CS_COST="#FF6B8B",  # cost: steps, time, gates, cycles, money
+    CS_TRUE="#5BD17A",  # accept, true, halts, correct, invariants that hold
+    CS_FALSE="#FF5C5C",  # reject, false, loops forever, a contradiction, a bug
+    CS_LIMIT="#F472B6",  # the limits: undecidable, uncomputable, impossible; the tower's "limits" column
+    CS_INF="#B39DDB",  # the infinite: infinite tapes, sets, enumerations, diagonals
+    CS_CLOCK="#2EC4B6",  # time as a quantity: the clock, step counts on an axis, timelines of a run
+    CS_ADVERSARY="#D4A5FF",  # the adversary: an opponent, an attacker, a diagonal machine that does the opposite
+    CS_PRACTICE="#94A3B8",  # industry practice; the tower's "practice" column
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
