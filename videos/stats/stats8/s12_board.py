@@ -114,7 +114,7 @@ class Board(VoiceoverScene):
             t = label(title, font_size=26, color=q).next_to(A, UP, buff=0.1)
             r = label(rf"{40 - miss} of 40 catch $\mu$", font_size=24, color=q).next_to(A, DOWN, buff=0.1)
             panels.add(VGroup(A, tl, bars_, t, r))
-        tag = simulated_tag(r"simulated: 40 samples of 5 adults")
+        tag = simulated_tag(r"simulated: 40 samples of 5 adults", corner=UR)
         with self.voiceover(
             "First, a picture of what coverage means. <bookmark mark='a'/> Forty samples of five heights, each with the "
             "naive interval, using one point nine six and s. The red ones miss the true mean. Three of forty miss: "

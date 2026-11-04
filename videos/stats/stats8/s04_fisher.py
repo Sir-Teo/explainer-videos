@@ -52,9 +52,9 @@ class Fisher(VoiceoverScene):
 
     def rotation(self):
         rows = [
-            cmath(r"H", r"=", r"\begin{pmatrix} \tfrac{1}{\sqrt 3} & \tfrac{1}{\sqrt 3} & \tfrac{1}{\sqrt 3} \\ "
-                  r"\tfrac{1}{\sqrt 2} & -\tfrac{1}{\sqrt 2} & 0 \\ \tfrac{1}{\sqrt 6} & \tfrac{1}{\sqrt 6} & -\tfrac{2}{\sqrt 6}"
-                  r"\end{pmatrix}", font_size=30),
+            cmath(r"H", r"=", r"\renewcommand{\arraystretch}{1.7}\setlength{\arraycolsep}{9pt}\begin{pmatrix} 1/\sqrt 3 & 1/\sqrt 3 & 1/\sqrt 3 \\ "
+                  r"1/\sqrt 2 & -1/\sqrt 2 & 0 \\ 1/\sqrt 6 & 1/\sqrt 6 & -2/\sqrt 6"
+                  r"\end{pmatrix}", font_size=28),
             cmath(r"\mathbf y = H\mathbf z:\quad y_1", r"=", r"\sqrt n\,\bar z", font_size=32),
             cmath(r"y_2^2 + \cdots + y_n^2", r"=", r"\|\mathbf z\|^2 - n\bar z^2", r"=", r"\sum (z_i - \bar z)^2", font_size=32),
             cmath(r"\mathbf y", r"\sim", r"N(\mathbf 0, I)", r"\quad \text{(rotations keep the cloud round)}", font_size=32),
@@ -96,7 +96,7 @@ class Fisher(VoiceoverScene):
             t = label(title, font_size=26, color=c).next_to(A, UP, buff=0.15)
             r = MathTex(rf"\operatorname{{corr}}(\bar x, s) = {d[key]['corr']:.2f}", font_size=26, color=c).next_to(A, DOWN, buff=0.15)
             panels.add(VGroup(A, pts, t, r))
-        tag = note(r"simulated: 3,000 samples each").to_corner(DR, buff=0.3)
+        tag = note(r"simulated: 3,000 samples each").to_corner(UR, buff=0.3)
         foot = label(r"for normal data $\bar x$ and $s$ are independent: \ the property characterizes the normal (Geary 1936)",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.25)
         with self.voiceover(

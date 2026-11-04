@@ -34,7 +34,7 @@ class StudentT(VoiceoverScene):
                 why(r"given $V = v$, \ $T$ is normal with scale $\sqrt{k/v}$: \ average over $v$ (Part 5's mixture)"),
                 why(r"the integral is a gamma integral (Part 3)")]
         foot = label(r"a scale mixture of normals: \ the uncertainty in $s$ fattens the tails", font_size=26, color=S.ACCENT)
-        foot.to_edge(DOWN, buff=0.6)
+        foot.to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Now the derivation. <bookmark mark='a'/> The t statistic is a standard normal divided by the square root "
             "of an independent chi-squared over its degrees of freedom: the mean's coordinate, over the deviations' "
@@ -44,7 +44,7 @@ class StudentT(VoiceoverScene):
             "density: a power of one plus t squared over k. <bookmark mark='d'/> It's a scale mixture of normals. "
             "Uncertainty about the scale is what fattens the tails."
         ) as vo:
-            step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.6, buff=1.0, edge=6.9)
+            step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 step(k, transform=False)

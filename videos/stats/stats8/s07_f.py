@@ -54,7 +54,8 @@ class FDist(VoiceoverScene):
         A = axes([0, 5], [0, 1.6], x_length=7.4, y_length=4.4, xlabel=r"$f$", xticks=[0, 1, 2, 3, 4, 5], yticks=[0, 0.5, 1, 1.5],
                  center=[-2.0, -0.4, 0])
         ax = A.ax
-        cvs = VGroup(*[pdf_curve(ax, xs, np.asarray(d["shapes"][k]), c, 3, ymax=1.6) for k, c in F_COLS.items()])
+        keep = xs <= 5
+        cvs = VGroup(*[pdf_curve(ax, xs[keep], np.asarray(d["shapes"][k])[keep], c, 3, ymax=1.6) for k, c in F_COLS.items()])
         leg = legend([(c, rf"$F_{{{k}}}$") for k, c in F_COLS.items()], font_size=24).move_to([4.6, 1.6, 0])
         rows = fit_rows(VGroup(label(r"centred near 1: \ the two variances agree", font_size=24),
                                label(r"skewed right; \ concentrates at 1 as both $df$ grow", font_size=24, color=GREY_A),
@@ -85,8 +86,8 @@ class FDist(VoiceoverScene):
         rows = fit_rows(VGroup(
             MathTex(r"F_{4,9}", font_size=32, color=EXACT),
             MathTex(rf"2.5\%,\ 97.5\%:\ \ {d['q_lo']:.2f},\ \ {d['q']:.2f}", font_size=28, color=S.RESID),
-            label(r"a ratio below 4.7 is unremarkable \ \ldots{} \ variances are hard to compare with small samples", font_size=22,
-                  color=GREY_A),
+            label(r"a ratio below 4.7 is unremarkable:", font_size=24, color=GREY_A),
+            label(r"variances are hard to compare with small samples", font_size=24, color=GREY_A),
         ), 4.8, 0.3, [4.6, 0.4, 0])
         tag = simulated_tag(r"simulated: 20,000 pairs of samples of the World's men")
         with self.voiceover(
