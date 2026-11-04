@@ -911,6 +911,27 @@ def boe(code: str, start_year: int = 1975) -> dict:
 EIA = "https://www.eia.gov/dnav/{kind}/hist_xls/{series}d.xls"
 
 
+def eia_weekly(series: str, kind: str = "pet") -> dict:
+    """An EIA weekly history from its spreadsheet (e.g. WCESTUS1, US commercial crude oil stocks excluding the SPR, in
+    thousands of barrels, Fridays). Excel dates become YYYYMMDD."""
+    import xlrd
+
+    url = EIA.replace("d.xls", "w.xls").format(kind=kind, series=series)
+    path = DATA / "eia" / f"{series}w.xls"
+    raw = _cached(f"eia/{series}/weekly", path, lambda: _get(url), url)
+    book = xlrd.open_workbook(file_contents=raw)
+    sh = book.sheet_by_index(1)
+    rows = []
+    for i in range(3, sh.nrows):
+        d, v = sh.row_values(i)[:2]
+        if v in ("", None):
+            continue
+        y, m, dd, *_ = xlrd.xldate_as_tuple(d, book.datemode)
+        rows.append((y * 10000 + m * 100 + dd, float(v)))
+    a = np.array(rows)
+    return {"date": a[:, 0].astype(int), "value": a[:, 1]}
+
+
 def eia_daily(series: str, kind: str = "pet") -> dict:
     """An EIA daily price history from its spreadsheet (e.g. RCLC1..RCLC4, the NYMEX WTI futures contracts 1-4 at
     Cushing, which EIA published through April 2024; RWTC, the WTI spot; kind "ng" for RNGC1..RNGC4, Henry Hub

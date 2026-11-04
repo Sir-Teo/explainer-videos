@@ -8,7 +8,7 @@ from videos.quant.quant15.common import BAD, BARRIER, CASH, GOOD, IV, OPT, PART,
 MODELS = ["LV", "Heston", "Bates", "VG"]
 COLS = {"LV": QC.SPOT, "Heston": QC.OPTION, "Bates": QC.GAIN, "VG": QC.IMPLIED}
 NAMES = {"LV": r"local vol", "Heston": r"Heston", "Bates": r"Bates", "VG": r"variance gamma"}
-UP, LO = QC.IDEA, GREY_B
+CEIL, FLOOR = QC.IDEA, GREY_B
 
 
 class Research(VoiceoverScene):
@@ -65,9 +65,9 @@ class Research(VoiceoverScene):
 
     def bounds(self):
         rows = [cmath(r"\operatorname{OT}(B)", r"\le", r"\min_{K > B}\ \frac{P(K)}{K - B}", font_size=34,
-                      colors={r"\operatorname{OT}(B)": UP}),
+                      colors={r"\operatorname{OT}(B)": CEIL}),
                 cmath(r"\operatorname{OT}(B)", r"\ge", r"\Pr\nolimits^{\mathbb Q}(S_T \le B) = \partial_K P(K)\big|_{K = B}",
-                      font_size=32, colors={r"\operatorname{OT}(B)": LO})]
+                      font_size=32, colors={r"\operatorname{OT}(B)": FLOOR})]
         whys = [why(r"the cheapest such hedge: an arbitrage bound from the put prices alone. The minimizing strike "
                     r"$K^*$ balances the put's price against its distance from the barrier"),
                 why(r"a path that ends below $B$ must have touched it: the digital put is a floor, again read from the "
@@ -103,11 +103,11 @@ class Research(VoiceoverScene):
                  ylabel=rf"price of a {t['days']}-day down one-touch", xticks=[0.6, 0.7, 0.8, 0.9],
                  yticks=[0, 0.25, 0.5, 0.75, 1], font_size=15).move_to(LEFT * 1.4 + DOWN * 0.2)
         ax = g.ax
-        up = curve(ax, B, h["upper"], UP, stroke_width=3.5)
-        lo = curve(ax, B, h["digital"], LO, stroke_width=3)
+        up = curve(ax, B, h["upper"], CEIL, stroke_width=3.5)
+        lo = curve(ax, B, h["digital"], FLOOR, stroke_width=3)
         models = VGroup(*[curve(ax, B, t["models"][m]["touch"], COLS[m], stroke_width=2.5) for m in MODELS])
         bsc = curve(ax, B, h["bs"], WHITE, stroke_width=2)
-        leg = legend([(UP, r"upper bound, $\min_K P(K)/(K - B)$"), (LO, r"lower bound, the digital put")]
+        leg = legend([(CEIL, r"upper bound, $\min_K P(K)/(K - B)$"), (FLOOR, r"lower bound, the digital put")]
                      + [(COLS[m], NAMES[m]) for m in MODELS] + [(WHITE, r"Black--Scholes at the ATM vol")],
                      font_size=15).to_edge(RIGHT, buff=0.25).shift(UP * 1.2)
         fit_right(leg)
@@ -138,7 +138,7 @@ class Research(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(c_) for c_ in models], lag_ratio=0.3), FadeIn(leg[2:6]), run_time=2)
             vo.wait_until("c")
-            self.play(Indicate(up, color=UP), Indicate(lo, color=LO))
+            self.play(Indicate(up, color=CEIL), Indicate(lo, color=FLOOR))
             vo.wait_until("d")
             self.play(Create(bsc), FadeIn(leg[6]))
         self.wait(0.4)
@@ -190,9 +190,9 @@ class Research(VoiceoverScene):
         picks = [int(np.argmin(np.abs(B - b))) for b in (0.7, 0.8, 0.9)]
         h = t["models"]["Heston"]
         hx = [-4.8, -2.6, -0.6, 1.4, 3.4, 5.5]
-        head = VGroup(label(r"barrier", font_size=18, color=GREY_B), label(r"floor", font_size=20, color=LO),
+        head = VGroup(label(r"barrier", font_size=18, color=GREY_B), label(r"floor", font_size=20, color=FLOOR),
                       *[label(NAMES[m], font_size=18, color=COLS[m]) for m in ("LV", "Heston", "VG")],
-                      label(r"ceiling", font_size=20, color=UP))
+                      label(r"ceiling", font_size=20, color=CEIL))
         tab = VGroup()
         for j, row in enumerate([head] + [VGroup(MathTex(rf"{B[i]:.2f}", font_size=26),
                                                  MathTex(rf"{h['digital'][i]:.3f}", font_size=26),

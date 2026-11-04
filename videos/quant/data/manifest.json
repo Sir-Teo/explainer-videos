@@ -133614,6 +133614,11 @@
   "bytes": 423424,
   "source": "https://www.eia.gov/dnav/ng/hist_xls/RNGC4d.xls"
  },
+ "eia/WCESTUS1/weekly": {
+  "sha256": "824b7722ec09bd4b85837747d141f689838efedda92f545c0751f3d271b0464b",
+  "bytes": 130048,
+  "source": "https://www.eia.gov/dnav/pet/hist_xls/WCESTUS1w.xls"
+ },
  "fed/fomc_scheduled/1994-2020": {
   "sha256": "e9886a5a0d9d0b780e0b7380d0f448caf30268492cb57009ad2c1e89352451d7",
   "bytes": 1936,

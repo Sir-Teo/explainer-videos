@@ -467,7 +467,98 @@ def compute_inflation() -> dict:
                   "f55_mean": float(np.mean(np.asarray(f55["value"]))) / 100})
 
 
-ITEMS = {"snb": compute_snb, "cip": compute_cip, "fama": compute_fama, "carry": compute_carry,
+def compute_storage_theory() -> dict:
+    """The research chapter: the competitive storage model (Gustafson 1958; Williams and Wright 1991; Deaton and
+    Laroque 1992).  With availability x = inventory carried in + harvest, the equilibrium price is a function f(x) solving
+    f(x) = P(x - I(x)), where storers carry I > 0 only if P(x - I) + k = beta E[f(I + z')], and I = 0 when
+    P(x) + k >= beta E[f(z')]: a nonnegativity constraint that makes prices skewed and the futures curve kinked.
+    Solved by time iteration; simulated; the implied Working curve (the one-period spread against inventory) compared
+    with WTI's first two contracts against US commercial crude stocks relative to their seasonal norm, 1990-2020."""
+    z, wz = np.polynomial.hermite_e.hermegauss(15)
+    wz = wz / wz.sum()
+    zs = 1.0 + 0.1 * z                         # harvests, mean 1, sd 0.1
+    beta, k = 1 / 1.01, 0.005                  # one period: a 1% interest rate, storage costing 0.5% of the mean price
+    P = lambda c: np.maximum(c, 1e-3) ** -2.0  # noqa: E731  inverse demand, elasticity -0.5
+    xg = np.linspace(0.55, 3.0, 400)
+    f = P(xg)
+    for it in range(2000):
+        Ef = lambda I: np.array([np.sum(wz * np.interp(i + zs, xg, f)) for i in np.atleast_1d(I)])  # noqa: E731
+        Ef0 = Ef(0.0)[0]
+        I_new = np.zeros_like(xg)
+        for n_, x in enumerate(xg):
+            if P(x) + k >= beta * Ef0:
+                continue
+            lo, hi = 0.0, x - 1e-6
+            for _ in range(60):
+                mid = 0.5 * (lo + hi)
+                h = P(x - mid) + k - beta * Ef(mid)[0]
+                lo, hi = (lo, mid) if h > 0 else (mid, hi)
+            I_new[n_] = 0.5 * (lo + hi)
+        f_new = P(xg - I_new)
+        if np.max(np.abs(f_new - f)) < 1e-9:
+            f = f_new
+            break
+        f = 0.5 * f + 0.5 * f_new
+    I = I_new
+    EF = np.array([np.sum(wz * np.interp(i + zs, xg, f)) for i in I])
+    spread = (EF - f) / f                       # the one-period futures spread, risk-neutral, relative to spot
+    full_carry = (k + (1 / beta - 1) * f) / f   # the most a future can exceed spot when storage is positive
+    # simulate
+    rng = np.random.default_rng(2222)
+    T = 200000
+    x = 1.0
+    ps, invs, sps = np.empty(T), np.empty(T), np.empty(T)
+    for t in range(T):
+        p_ = np.interp(x, xg, f)
+        i_ = np.interp(x, xg, I)
+        ps[t], invs[t], sps[t] = p_, i_, np.interp(x, xg, spread)
+        x = i_ + 1.0 + 0.1 * rng.standard_normal()
+    ps, invs, sps = ps[1000:], invs[1000:], sps[1000:]
+    lr = np.diff(np.log(ps))
+    model = {"x": xg, "f": f, "I": I, "spread": spread, "full_carry": full_carry, "iterations": it,
+             "stockout_share": float(np.mean(invs < 1e-6)), "price_skew": float(((ps - ps.mean()) ** 3).mean() / ps.std() ** 3),
+             "price_ac1": float(np.corrcoef(ps[:-1], ps[1:])[0, 1]), "mean_inv": float(invs.mean()),
+             "spread_hist": np.histogram(sps, bins=40)[0], "spread_edges": np.histogram(sps, bins=40)[1],
+             "share_backwardation": float(np.mean(sps < 0)), "share_full_carry": float(np.mean(invs > 1e-6))}
+    # the data: monthly WTI spread (second contract over first, relative) against commercial crude stocks relative to
+    # the average of the same calendar month over the previous five years
+    c1, c2 = data.eia_daily("RCLC1"), data.eia_daily("RCLC2")
+    d1, v1 = c1["date"], c1["value"]
+    m2 = dict(zip(c2["date"], c2["value"]))
+    rows = {}
+    for d_, a_ in zip(d1, v1):
+        b_ = m2.get(d_)
+        if b_ is None or a_ <= 0 or not (19900101 <= d_ <= 20201231):
+            continue
+        rows.setdefault(d_ // 100, []).append((b_ - a_) / a_)
+    w = data.eia_weekly("WCESTUS1")
+    inv = {}
+    for d_, v_ in zip(w["date"], w["value"]):
+        inv.setdefault(d_ // 100, []).append(v_)
+    months = sorted(set(rows) & set(inv))
+    inv_m = {m: float(np.mean(inv[m])) for m in inv}
+    pts = []
+    for m in months:
+        y, mo = divmod(m, 100)
+        prev = [inv_m.get((y - j) * 100 + mo) for j in range(1, 6)]
+        if any(p_ is None for p_ in prev):
+            continue
+        dev = inv_m[m] / np.mean(prev) - 1
+        pts.append((m, dev, float(np.mean(rows[m]))))
+    pts = np.array(pts)
+    dev, sp = pts[:, 1], pts[:, 2]
+    qs = np.quantile(dev, np.linspace(0, 1, 11))
+    bins = [{"lo": float(qs[i]), "hi": float(qs[i + 1]),
+             "dev": float(dev[(dev >= qs[i]) & (dev <= qs[i + 1])].mean()),
+             "spread": float(sp[(dev >= qs[i]) & (dev <= qs[i + 1])].mean())} for i in range(10)]
+    out = {"model": model, "params": {"beta": beta, "k": k, "elasticity": -0.5, "harvest_sd": 0.1},
+           "data": {"month": pts[:, 0].astype(int), "dev": dev, "spread": sp, "bins": bins,
+                    "corr": float(np.corrcoef(dev, sp)[0, 1]), "share_backwardation": float(np.mean(sp < 0)),
+                    "n": int(len(sp))}}
+    return _json(out)
+
+
+ITEMS = {"storage_theory": compute_storage_theory, "snb": compute_snb, "cip": compute_cip, "fama": compute_fama, "carry": compute_carry,
          "yen2024": compute_yen2024, "fxopt": compute_fxopt, "erm": compute_erm, "oil": compute_oil,
          "negoil": compute_negoil, "gas": compute_gas, "basis": compute_basis, "inflation": compute_inflation}
 
