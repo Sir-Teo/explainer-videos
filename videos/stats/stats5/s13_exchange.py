@@ -182,6 +182,7 @@ class Exchange(VoiceoverScene):
         for r in rows:
             if r.width > 12.8:
                 r.width = 12.8
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 0.4, 0])  # re-align after clamping
         with self.voiceover(
             "There's a fine print to de Finetti's theorem. <bookmark mark='a'/> Draw without replacement from an urn "
             "of two red and two blue balls. The sequence is exchangeable, since every order of the colours is "

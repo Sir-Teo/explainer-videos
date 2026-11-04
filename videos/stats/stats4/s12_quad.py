@@ -131,6 +131,7 @@ class Quad(VoiceoverScene):
         for r in rows:
             if r.width > 6.4:
                 r.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.0, 1.6, 0])  # re-align after clamping
         take = label(r"the noncentral $\chi^2$: \ how often a test notices a real effect \ (its power, \ Part 10)", font_size=24,
                      color=S.ACCENT).to_edge(DOWN, buff=0.3)
         with self.voiceover(

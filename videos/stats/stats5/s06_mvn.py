@@ -114,6 +114,7 @@ class MVN(VoiceoverScene):
         for r in rows:
             if r.width > 6.6:
                 r.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([2.8, 0.2, 0])  # re-align after clamping
         with self.voiceover(
             "There's one trap. <bookmark mark='a'/> Remember the random-sign pair from chapter two: X standard normal, "
             "Y equal to X times a random sign. Y is standard normal too, and they're uncorrelated. "
@@ -152,6 +153,7 @@ class MVN(VoiceoverScene):
         for r in rows:
             if r.width > 6.6:
                 r.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.9, 0.6, 0])  # re-align after clamping
         tag = note(r"simulated: 4,000 draws from a 3-dimensional normal").to_corner(DR, buff=0.3)
         with self.voiceover(
             "How would you check that data are multivariate normal? <bookmark mark='a'/> Whiten them: the squared "

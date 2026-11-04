@@ -239,6 +239,7 @@ class Projection(VoiceoverScene):
         for r in rows:
             if r.width > 6.0:
                 r.width = 6.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.8, 1.4, 0])  # re-align after clamping
         tag = simulated_tag(r"simulated: the hook's 40 families")
         with self.voiceover(
             "The diagonal of the hat matrix has a meaning of its own. <bookmark mark='a'/> The i-th fitted value "

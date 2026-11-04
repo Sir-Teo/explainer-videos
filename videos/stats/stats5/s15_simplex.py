@@ -137,6 +137,7 @@ class Simplex(VoiceoverScene):
         for r in rows:
             if r.width > 6.4:
                 r.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.0, -0.8, 0])  # re-align after clamping
         tag = note(r"simulated: 5,000 triples").to_corner(DL, buff=0.3)
         with self.voiceover(
             "Proportions carry a trap that Karl Pearson spotted in 1897. <bookmark mark='a'/> Take three independent "
