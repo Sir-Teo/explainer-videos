@@ -387,3 +387,17 @@ LAPLACE = {"sample_pop": 2037615, "sample_births_3yr": 215599, "france_births": 
 # War II", JASA 42 (1947): monthly production estimated from the serial numbers of captured tanks, against conventional
 # intelligence estimates and the German records found after the war (as tabulated in later accounts of their paper).
 TANKS = [("June 1940", 169, 1000, 122), ("June 1941", 244, 1550, 271), ("August 1942", 327, 1550, 342)]
+
+# --- Part 10: significance ---
+# Darwin's Zea mays (1876), as Fisher analysed it in *The Design of Experiments* (1935), ch. 3: the differences in
+# height, cross- minus self-fertilized, of 15 pairs grown in the same pots, in eighths of an inch.
+DARWIN_ZEA = [49, -67, 8, 16, 6, 23, 28, 41, 14, 29, 56, 24, 75, 60, -48]
+# Mendel (1866): second-generation counts.  Seed shape (round, wrinkled) and colour (yellow, green), 3:1 expected;
+# the two-factor cross (round yellow, round green, wrinkled yellow, wrinkled green), 9:3:3:1 expected.
+MENDEL_SHAPE = (5474, 1850)
+MENDEL_COLOUR = (6022, 2001)
+MENDEL_DIHYBRID = (315, 108, 101, 32)
+# Fisher (1936), "Has Mendel's work been rediscovered?": pooling the experiments, the counts agree with the ratios
+# so closely that a fit this good would arise by chance less than once in ten thousand repetitions.
+# The lady tasting tea (Fisher 1935, ch. 2): eight cups, four with the milk poured first.
+TEA = {"cups": 8, "milk_first": 4}

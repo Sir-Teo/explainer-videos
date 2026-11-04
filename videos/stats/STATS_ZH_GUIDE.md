@@ -326,3 +326,25 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | Cramér–Rao bound, information inequality, efficiency | 克拉默–拉奥下界，信息不等式，有效性 |
 | superefficiency (Hodges) | 超有效性（霍奇斯） |
 | misspecification, robustness | 模型误设，稳健性 |
+
+## Glossary (Part 10)
+
+| English | 中文 |
+|---|---|
+| significance test, null hypothesis, alternative hypothesis | 显著性检验，原假设，备择假设 |
+| test statistic, p-value, tail probability | 检验统计量，p 值，尾概率 |
+| sign test, randomization test, permutation test | 符号检验，随机化检验，置换检验 |
+| Fisher's exact test, hypergeometric | 费希尔精确检验，超几何分布 |
+| Type I error, Type II error, size, power | 第一类错误，第二类错误，检验水平，检验功效 |
+| Neyman–Pearson lemma, most powerful test, uniformly most powerful (UMP) | 奈曼–皮尔逊引理，最大功效检验，一致最大功效检验 |
+| monotone likelihood ratio | 单调似然比 |
+| likelihood ratio test, Wilks' theorem | 似然比检验，威尔克斯定理 |
+| Wald test, score test | 沃尔德检验，得分检验 |
+| one-sided, two-sided | 单侧，双侧 |
+| paired t-test, two-sample t-test, Welch's t-test, Behrens–Fisher problem | 配对 t 检验，两样本 t 检验，韦尔奇 t 检验，贝伦斯–费希尔问题 |
+| Pearson's chi-squared test, goodness of fit, test of independence | 皮尔逊卡方检验，拟合优度，独立性检验 |
+| sample size calculation, effect size | 样本量计算，效应量 |
+| type S error, type M error, winner's curse | S 型错误，M 型错误，赢家诅咒 |
+| optional stopping, sequential analysis, group-sequential design | 可选停止，序贯分析，成组序贯设计 |
+| family-wise error rate, Bonferroni correction, false discovery rate | 族错误率，邦费罗尼校正，错误发现率 |
+| the garden of forking paths, preregistration | 分岔路径花园，预注册 |
