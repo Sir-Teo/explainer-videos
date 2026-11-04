@@ -32,6 +32,10 @@ PROBLEMS = [
     r"limit of the red fraction is Uniform$(0, 1)$.",
     r"Prove Wald's identity $\mathbb{E}S_\tau = \mu\,\mathbb{E}\tau$ when $\mathbb{E}\tau < \infty$, from the "
     r"martingale $S_n - n\mu$ and optional stopping.",
+    r"(qual) For iid $N(0, 1)$ steps, prove $\limsup S_t/\sqrt{2t\log\log t} \le 1$ a.s. by Doob's maximal "
+    r"inequality on geometric blocks and Borel--Cantelli.",
+    r"(qual) Derive Robbins's mixture $M_t$ and show $\Pr\big(\exists t: |S_t| \ge \sqrt{(t + \rho)\log\frac{t + \rho}"
+    r"{\rho\alpha^2}}\big) \le \alpha$.",
 ]
 
 
@@ -115,11 +119,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems: the time for a walk to leave a strip, the ruin probability for a biased game, the "
+            "And nine problems: the time for a walk to leave a strip, the ruin probability for a biased game, the "
             "doubling system's real record, why likelihood ratios collapse, a proof of Ville's inequality, the limit "
-            "of Pólya's urn, and Wald's identity. Solutions, in English and Chinese, are in the notes."
+            "of Pólya's urn, Wald's identity, and two at the level of a qualifying exam: the upper half of the law of the "
+            "iterated logarithm, and Robbins's always-valid boundary. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)

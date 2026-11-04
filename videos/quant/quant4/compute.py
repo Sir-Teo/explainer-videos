@@ -979,6 +979,50 @@ def compute_envelope_ons() -> dict:
     return _json({"registered": reg, "trials": pit.trials_so_far()})
 
 
+def _stitched(t, alpha, eta=2.0, s_=1.4, m=1.0):
+    """Howard, Ramdas, McAuliffe and Sekhon's (2021, Thm. 1) polynomial stitched boundary for a sub-Gaussian sum
+    with variance process t: k1 sqrt(t l(t)), l(t) = s log log(eta t/m) + log(zeta(s)/(alpha log^s eta)), valid for
+    t >= m; it grows at the law of the iterated logarithm's rate."""
+    from scipy.special import zeta
+    k1 = (eta ** 0.25 + eta ** -0.25) / np.sqrt(2)
+    tt = np.maximum(np.asarray(t, float), m)
+    ell = s_ * np.log(np.log(eta * tt / m)) + np.log(zeta(s_) / (alpha * np.log(eta) ** s_))
+    return k1 * np.sqrt(tt * ell)
+
+
+def compute_lil_theory() -> dict:
+    """The research chapter: time-uniform boundaries for a sum of N(0, 1) steps under the null.  The share of
+    paths that have crossed (i) the fixed-sample 1.96 sqrt(t), (ii) Robbins's normal-mixture boundary
+    sqrt((t + r) log((t + r)/(r alpha^2))) and (iii) the stitched LIL-rate boundary, by each time up to 100,000;
+    the boundaries' widths; and limsup S_t / sqrt(2 t log log t) along the paths."""
+    rng = np.random.default_rng(404)
+    M, n, alpha, rho = 1000, 100_000, 0.05, 100.0
+    t = np.arange(1, n + 1, dtype=float)
+    b_fixed = 1.96 * np.sqrt(t)
+    b_mix = np.sqrt((t + rho) * np.log((t + rho) / (rho * alpha ** 2)))
+    b_st = _stitched(t, alpha / 2)              # two-sided: alpha/2 each side
+    marks = np.unique(np.round(np.logspace(0, 5, 41)).astype(int))
+    first = {"fixed": [], "mix": [], "stitched": []}
+    lil_ratio = []
+    for m in range(M):
+        S = np.cumsum(rng.standard_normal(n))
+        a = np.abs(S)
+        for k, b in (("fixed", b_fixed), ("mix", b_mix), ("stitched", b_st)):
+            hit = np.flatnonzero(a >= b)
+            first[k].append(int(hit[0]) + 1 if len(hit) else n + 1)
+        big = t >= 1000
+        lil_ratio.append(float(np.max(S[big] / np.sqrt(2 * t[big] * np.log(np.log(t[big]))))))
+    out = {"M": M, "n": n, "alpha": alpha, "rho": rho, "marks": marks}
+    for k, v in first.items():
+        v = np.asarray(v)
+        out[k] = {"crossed": [float(np.mean(v <= mk)) for mk in marks], "final": float(np.mean(v <= n))}
+    out["width"] = {"t": marks, "fixed": b_fixed[marks - 1] / np.sqrt(marks), "mix": b_mix[marks - 1] / np.sqrt(marks),
+                    "stitched": b_st[marks - 1] / np.sqrt(marks),
+                    "lil": np.sqrt(2 * np.log(np.log(np.maximum(marks, 3))))}
+    out["lil_ratio"] = {"mean": float(np.mean(lil_ratio)), "hist": np.histogram(lil_ratio, 30, (0, 1.5))[0]}
+    return _json(out)
+
+
 ITEMS = {"doob": compute_doob, "measure": compute_measure, "ruin": compute_ruin, "stable": compute_stable,
          "nikkei": compute_nikkei, "peeking": compute_peeking, "eprocess": compute_eprocess, "envelope": compute_envelope,
          "condexp": compute_condexp, "martingales": compute_martingales, "systems": compute_systems,
@@ -987,7 +1031,7 @@ ITEMS = {"doob": compute_doob, "measure": compute_measure, "ruin": compute_ruin,
          "drift_posterior": compute_drift_posterior, "ivey_sim": compute_ivey_sim, "esscher": compute_esscher,
          "radon": compute_radon, "kakutani": compute_kakutani, "ecf": compute_ecf, "stable_mle": compute_stable_mle,
          "peeking_curve": compute_peeking_curve, "learner": compute_learner, "confseq": compute_confseq,
-         "casino": compute_casino, "beliefs": compute_beliefs, "ebh": compute_ebh, "numeraire": compute_numeraire, "envelope_ons": compute_envelope_ons}
+         "casino": compute_casino, "beliefs": compute_beliefs, "ebh": compute_ebh, "numeraire": compute_numeraire, "envelope_ons": compute_envelope_ons, "lil_theory": compute_lil_theory}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

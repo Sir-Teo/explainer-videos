@@ -25,5 +25,6 @@ SCENES = [
     ("s10_house", "House", "16. Learning to bet"),
     ("s19_industry", "Industry", "17. The house, the book and the market"),
     ("s20_frontier", "Frontier", "18. Frontier: anytime-valid inference, 2023–2026"),
+    ("s21_research", "Research", "For the researcher: how far can a fair walk wander?"),
     ("s11_outro", "Outro", "Recap, desk questions, problems"),
 ]

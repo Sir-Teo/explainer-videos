@@ -14,7 +14,7 @@ courts and events come from the public record, with secondary reports labelled "
 
 *An education in methods, not investment advice, and nothing here is gambling advice.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 63 minutes)
 
 * **Can you beat a fair game?** A bettor wagers every day since 1926 that today's US return keeps yesterday's sign;
   drawn live, wealth passes 20 in February 1929 and reaches about 10¹⁰¹; started in 2000 it peaks at 6.7. The problem
@@ -91,6 +91,7 @@ courts and events come from the public record, with secondary reports labelled "
 * **18. Frontier: anytime-valid inference, 2023–2026.** Ten papers on screen; the numéraire bridge (the Kelly
   portfolio is the log-optimal e-variable); e-BH on 200 strategies × 2,520 days × 20 seeds: stopping on the first day
   with ten discoveries, e-BH's FDR is 2.5% and BH's 17.8%. **Lab 6:** `e_bh`.
+* **For the researcher: how far can a fair walk wander?** Khinchin's law of the iterated logarithm; the upper half proved from Doob's maximal inequality on geometric blocks and Borel–Cantelli. 1,000 null walks of 100,000 N(0, 1) steps: the fixed boundary $1.96\sqrt t$ checked at every step is crossed by 60% by $t \approx 3{,}000$ and 74% by 100,000. Robbins's normal mixture $M_t = \sqrt{\rho/(t+\rho)}\,e^{S_t^2/(2(t+\rho))}$ derived and its Ville boundary $\sqrt{(t+\rho)\log((t+\rho)/(\rho\alpha^2))}$: crossed by 5.5% ($\pm 0.7$); the stitched boundary of Howard, Ramdas, McAuliffe and Sekhon (2021) by 0.6%. Widths at 100,000 steps: 1.96 (valid once), 3.6 (mixture), 4.3 (stitched, the LIL rate but a larger constant). Three open problems.
 * **Recap, desk questions, problems.**
 
 ## Textbook audit
@@ -192,6 +193,31 @@ python tools/make.py quant4 --cpu-voice -q m                 # English and Chine
    (E|ξ| + |μ|) E τ (the same argument as Wald's for Σ|ξ_k|), so optional stopping under condition (c) gives
    E[S_τ − τμ] = 0, i.e. E S_τ = μ E τ.
 
+8. **(qual) The LIL's upper half.** Fix $\epsilon > 0$ and $1 < \theta < (1 + \epsilon)^2$; let $t_k = \theta^k$ and
+   $x_k = (1 + \epsilon)\sqrt{2t_k\log\log t_k}$. For Gaussian steps $e^{\lambda S_t}$ is a submartingale, so Doob gives
+   $\Pr(\max_{t \le n}S_t \ge x) \le e^{-\lambda x}E e^{\lambda S_n} = e^{-\lambda x + \lambda^2 n/2}$, minimised at
+   $\lambda = x/n$: $e^{-x^2/2n}$. If $S_t \ge (1 + \epsilon)\sqrt{2t\log\log t}$ for some $t \in (t_k, t_{k+1}]$ then
+   $\max_{t \le t_{k+1}}S_t \ge x_k$, which has probability at most $\exp(-x_k^2/2t_{k+1}) = (k\log\theta)^{-(1 +
+   \epsilon)^2/\theta}$, summable in $k$. By Borel–Cantelli only finitely many blocks see a crossing, so $\limsup \le 1 +
+   \epsilon$ a.s.; let $\epsilon \downarrow 0$ along a sequence.
+9. **(qual) Robbins's boundary.** $\int e^{\lambda S - \lambda^2 t/2}\sqrt{\rho/2\pi}\,e^{-\rho\lambda^2/2}d\lambda =
+   \sqrt{\rho/2\pi}\int e^{-\frac{t+\rho}{2}(\lambda - \frac{S}{t+\rho})^2}d\lambda\;e^{S^2/2(t+\rho)} = \sqrt{\rho/(t +
+   \rho)}\,e^{S^2/2(t+\rho)}$. A mixture of mean-one nonnegative martingales is one (Fubini), so Ville gives
+   $\Pr(\exists t: M_t \ge 1/\alpha) \le \alpha$, and $M_t \ge 1/\alpha$ iff $S_t^2 \ge (t + \rho)[\log((t + \rho)/\rho) +
+   2\log(1/\alpha)]$.
+
+## For the researcher
+
+* **The theorems.** Khinchin (1924), Kolmogorov (1929), Hartman and Wintner (1941) for the LIL; Robbins (1970) and
+  Robbins and Siegmund (1970) for mixture boundaries; Ville (1939); Howard, Ramdas, McAuliffe and Sekhon (2021) for
+  stitched, LIL-rate confidence sequences.
+* **Simplifications.** The video proves only the upper half for Gaussian steps; sub-Gaussian steps change only constants,
+  and the lower half needs the second Borel–Cantelli lemma on independent block increments. The simulated boundaries
+  are checked over 100,000 steps, not forever.
+* **Open problems.** Optimal boundaries for a given use; e-values for composite and nonparametric nulls (Wasserman,
+  Ramdas and Balakrishnan 2020; Grünwald, de Heide and Koolen 2024); heavy-tailed and dependent data (Wang and Ramdas
+  2023).
+
 ## Facts checked for this part
 
 * Barings: the Board of Banking Supervision's report (18 July 1995), as summarized by the Reserve Bank of Australia
@@ -276,3 +302,15 @@ python tools/make.py quant4 --cpu-voice -q m                 # English and Chine
 5. **维尔不等式与反复查看。** 在有界时刻min(τ, n)应用可选停止：1 ≥ c·P(τ ≤ n)，令n → ∞。由重对数律，每天查看的t检验终将拒绝真实的原假设。
 6. **波利亚罐子的极限。** 归纳：若P(R_n = k) = 1/(n + 1)，则P(R_{n+1} = k) = 1/(n + 2)；所以红球比例在极限上服从Uniform(0, 1)。
 7. **沃尔德恒等式。** M_n = S_n − nμ是鞅；若E τ < ∞，停止后的过程被一个可积量控制，由可选停止（条件c）得E S_τ = μ E τ。
+8. **（资格考试）重对数律的上半部分。** 取$\epsilon > 0$与$1 < \theta < (1 + \epsilon)^2$，$t_k = \theta^k$，$x_k = (1 +
+   \epsilon)\sqrt{2t_k\log\log t_k}$。由杜布不等式，$\Pr(\max_{t \le n}S_t \ge x) \le e^{-x^2/2n}$；区间$(t_k, t_{k+1}]$内越界
+   意味着$\max_{t \le t_{k+1}}S_t \ge x_k$，概率至多$(k\log\theta)^{-(1 + \epsilon)^2/\theta}$，对$k$可求和。由博雷尔–坎泰利，
+   $\limsup \le 1 + \epsilon$几乎必然成立。
+9. **（资格考试）罗宾斯边界。** 配方得$M_t = \sqrt{\rho/(t + \rho)}\,e^{S_t^2/2(t+\rho)}$；均值为一的非负鞅的混合仍是这样的鞅，
+   由维尔不等式$\Pr(\exists t: M_t \ge 1/\alpha) \le \alpha$，而$M_t \ge 1/\alpha$等价于$S_t^2 \ge (t + \rho)[\log((t +
+   \rho)/\rho) + 2\log(1/\alpha)]$。
+
+## 写给研究者
+
+重对数律（辛钦1924；柯尔莫哥洛夫1929；Hartman与Wintner 1941）；混合边界（罗宾斯1970）；维尔（1939）；拼接的、达到重对数律速度的置信序列
+（Howard、Ramdas、McAuliffe与Sekhon 2021）。开放问题：针对给定用途的最优边界；复合与非参数原假设的e值；厚尾与相依数据。
