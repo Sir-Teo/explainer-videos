@@ -777,7 +777,10 @@ of instructions in flight. The guesses leave traces, and in 2018 Spectre showed 
 12. Simultaneous multithreading.
 13. Modern cores in numbers (cited): ROB sizes, decode widths, port counts.
 14. The Job on our out-of-order model. Ledger row 2.
-15. Outro.
+15. *Frontier*: past the dataflow limit, safely. Value prediction in the limit study (perfect +19%, a stride
+    predictor loses); a secure-speculation rule built into the core (blocks the gadget for 3.5%); speculative
+    non-interference and the open cost floor.
+16. Outro.
 
 *Computed:* the out-of-order simulator (Tomasulo plus ROB) on Pebble traces; IPC against width and ROB size; the
 dataflow-limit study; the Spectre toy.
@@ -3136,5 +3139,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 5 | scenes, computations, notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
-| 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
+| 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
 | 9–61 | planned (this document) | — |
