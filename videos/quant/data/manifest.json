@@ -19759,6 +19759,11 @@
   "bytes": 178021,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BE-ME_CSV.zip"
  },
+ "kenfrench/BETA_value/through_2020-12": {
+  "sha256": "222af8b32f52c1008f7743f09428be4a7fbb1d33c95b7005c57f70d465f06176",
+  "bytes": 82930,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BETA_CSV.zip"
+ },
  "kenfrench/BETA_value/through_2025-12": {
   "sha256": "2c05b9c09fa0e54fa0dcca984b3e830ea9ae1b1526f8e5b09dffe4bea3954f34",
   "bytes": 90130,
@@ -19814,6 +19819,11 @@
   "bytes": 1070449,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
  },
+ "kenfrench/ff25_value/through_2020-12": {
+  "sha256": "3942e959389b37986028b0f6c5dfbb7ed93772c6de4e5884c0b822e87a5afdff",
+  "bytes": 275367,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_5x5_CSV.zip"
+ },
  "kenfrench/ff25_value/through_2025-12": {
   "sha256": "ac7af7b3f6da5fb0dec87ae88aee9619bad2a07bbdc70fd6478621031526ade6",
   "bytes": 290014,
@@ -19828,6 +19838,11 @@
   "sha256": "50de4d150c3ce48994d8ae7a26dcc44b07e7ffec4ddfc128404ec04ea238c513",
   "bytes": 47418,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
+ },
+ "kenfrench/industries10_value/through_2020-12": {
+  "sha256": "d97ced3bc16b458a02c076d6493664d7e7ad1dd4469cc6390dd1e28ca4cebc19",
+  "bytes": 95125,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Industry_Portfolios_CSV.zip"
  },
  "kenfrench/industries10_value/through_2025-12": {
   "sha256": "8490d83e31807a6fe8a30cad32fff05a5b9bb93aad68ca058003506ae3ae69cc",

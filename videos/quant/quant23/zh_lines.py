@@ -139,7 +139,7 @@ ZH = {
         "所以组合之间的平线不能归咎于噪声。<bookmark mark='b'/>从业者还会收缩。Marshall Blume发现贝塔会向一漂移，所以终端屏幕上的调整贝塔是估计值的三分之二"
         "加三分之一。Oldrich Vasicek的贝叶斯版本按每只股票自身估计的不确定程度来收缩。",
 
-    'f"Here it is on sixty-two years of data':
+    'f"Here it is on fifty-seven years of data':
         "这是五十七年的数据：按贝塔排序的十个组合，贝塔从{b[0]:.1f}到{b[-1]:.1f}。<bookmark mark='a'/>模型的线：过原点，每单位贝塔以市场溢价"
         "每年百分之{100 * c['mkt_prem']:.0f}上升。<bookmark mark='b'/>数据的线：截距百分之{100 * s['intercept']:.1f}，斜率{100 * s['slope']:.1f}，"
         "不到预测的一半。最安全的股票赚得远比模型允许的多，最有风险的股票只比平均水平多赚一点。",
