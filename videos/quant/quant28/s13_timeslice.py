@@ -165,7 +165,7 @@ class TimeSlice(VoiceoverScene):
         rows.add(head)
         for j, pr in enumerate(la["A"]["probes"]):
             y = 2.0 - 0.78 * j
-            r_ = VGroup(wrapped_label(r"\ldots " + _tex(pr["prefix"][-46:]), 6.2, 15, GREY_A).move_to([hx[0], y, 0]),
+            r_ = VGroup(wrapped_label(r"\ldots " + _tex(" ".join(pr["prefix"].split()[-7:])), 6.2, 15, GREY_A).move_to([hx[0], y, 0]),
                         label(r"\texttt{" + _tex(pr["cont"].strip()) + r"}", font_size=16, color=WORD).move_to([hx[1], y, 0]))
             for i, k in enumerate("ACB"):
                 p = la[k]["probes"][j]["prob"]
@@ -198,7 +198,7 @@ class TimeSlice(VoiceoverScene):
         prompt = la["A"]["samples"][0]
         boxes = VGroup()
         for k in "ACB":
-            txt = _tex(la[k]["samples"][0][:170])
+            txt = _tex(la[k]["samples"][0][:170]).rsplit(" ", 1)[0] + r" \ldots"
             boxes.add(VGroup(label(NAME[k], font_size=17, color=COL[k]),
                              wrapped_label(r"\texttt{" + txt + r"}", 4.0, 14, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
         boxes.arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(DOWN * 0.3)

@@ -94,7 +94,7 @@ class Transformers(VoiceoverScene):
                 cmath(r"\text{model}", r":", rf"{cfg['layers']}\ \text{{layers}},\ d = {cfg['d']},\ {cfg['heads']}\ "
                       rf"\text{{heads}},\ \text{{context}}\ {cfg['seq']},\ {n_par / 1e6:.1f}\text{{m parameters}}", font_size=28),
                 cmath(r"\text{trained}", r":", rf"{m['tokens'] / 1e6:.0f}\text{{m tokens, next-token prediction, on a laptop "
-                      r"CPU}}", font_size=28)]
+                      r"CPU}", font_size=28)]
         whys = [why(r"Part 1 of the AI series: pieces of words, merged by frequency. A point-in-time tokenizer cannot "
                     r"know words that did not exist yet"),
                 why(r"a modern decoder: RMSNorm, rotary positions, SwiGLU (the House's \texttt{explainer.lm.pocket})"),
@@ -128,6 +128,7 @@ class Transformers(VoiceoverScene):
 
         ck = [int(steps[0]), int(steps[len(steps) // 3]), int(steps[2 * len(steps) // 3]), int(steps[-1])]
         txt = "".join(ch for ch in samples[0][:150] if ch.isascii() and (ch.isprintable() or ch == " ")).strip()
+        txt = txt.rsplit(" ", 1)[0] + r" \ldots"
         for ch, rep in (("\\", ""), ("_", r"\_"), ("%", r"\%"), ("$", r"\$"), ("&", r"\&"), ("#", r"\#"), ("{", ""), ("}", "")):
             txt = txt.replace(ch, rep)
 
