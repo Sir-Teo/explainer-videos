@@ -11,13 +11,15 @@ from __future__ import annotations
 import numpy as np
 
 R_OPS = ("add", "sub", "and", "or", "xor", "sll", "srl", "sra", "slt", "sltu")
+M_OPS = ("mul", "mulh", "div", "rem")
 I_OPS = ("addi", "andi", "ori", "xori", "slti", "sltiu", "slli", "srli", "srai")
 BRANCH = ("beq", "bne", "blt", "bge", "bltu", "bgeu")
 FREE = [r for r in range(1, 16) if r not in (2, 13)]  # all but sp and the base pointer s0
 NAMES = ["zero", "ra", "sp", "a0", "a1", "a2", "a3", "a4", "a5", "t0", "t1", "t2", "t3", "s0", "s1", "s2"]
 
 
-def random_program(seed: int, length: int = 60, data: int = 0x800) -> str:
+def random_program(seed: int, length: int = 60, data: int = 0x800, mext: bool = False) -> str:
+    """``mext``: also multiplies and divides (divisors forced odd, so never zero)."""
     rng = np.random.default_rng(seed)
     R = NAMES
 
@@ -35,7 +37,14 @@ def random_program(seed: int, length: int = 60, data: int = 0x800) -> str:
         while pending and pending[0][0] <= i:
             lines.append(f"{pending.pop(0)[1]}:")
         kind = rng.choice(["r", "i", "lui", "mem", "branch", "jal", "jalr"], p=[.3, .25, .05, .2, .12, .04, .04])
-        if kind == "r":
+        if kind == "r" and mext and rng.random() < 0.3:
+            op = rng.choice(M_OPS)
+            if op in ("div", "rem"):
+                lines.append("        ori  t3, t3, 1")
+                lines.append(f"        {op} {reg(True)}, {reg()}, t3")
+            else:
+                lines.append(f"        {op} {reg(True)}, {reg()}, {reg()}")
+        elif kind == "r":
             lines.append(f"        {rng.choice(R_OPS)} {reg(True)}, {reg()}, {reg()}")
         elif kind == "i":
             op = rng.choice(I_OPS)

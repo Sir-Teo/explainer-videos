@@ -37,7 +37,7 @@ version 0, whose exact cycle count for thirty novels is the first row of the led
 * **10. The Job, version 0.** Linear search in an unsorted table, animated; the inner loop in assembly (6
   instructions per entry); a paragraph at gate level (613 bytes, 53,665 cycles) and chapter 1 on the emulator
   (827,576); an exact cycle formula, checked on 20 random passages; thirty novels: 1.069 × 10¹¹ cycles, 4,279 per
-  byte, 99.7% of them in the search; 640 years on the Z3, 8 months at ENIAC's speed, 107 s at 1 GHz; ledger row 0.
+  byte, 99.7% of them in the search; 640 years on the Z3, 8 months at ENIAC's speed, 4.7 minutes on a single-cycle Pebble at 380 MHz (the clock its memories allow); ledger row 0.
 * **11. Pebble and the Turing machine.** A Turing-machine interpreter in Pebble assembly runs the 3-state busy beaver
   (21 steps, 5 ones) and the 4-state one (107, 13); the converse simulation; Church–Turing, checked.
 * **12. Code is data.** Summing an array EDSAC-style by rewriting a load's offset field; index registers (the

@@ -46,7 +46,7 @@ class Outro(VoiceoverScene):
         st = VGroup(ax, VMobject(color=DATA, stroke_width=3).set_points_as_corners(
             [p for k, y in enumerate(a0) for p in (ax.c2p(k, y), ax.c2p(k + 1, y))]))
         job = load("job")
-        led = ledger_table([{"part": 6, "label": r"Pebble", "seconds": job["corpus"]["cycles"] / 1e9}], font_size=18,
+        led = ledger_table([{"part": 6, "label": r"Pebble", "seconds": job["ledger"][0]["seconds"]}], font_size=18,
                            row_h=0.4, label_width=1.6, bar_width=3.0)
         tm = MathTex(r"\text{Pebble} \leftrightarrow \text{Turing}", font_size=32, color=FUNC)
         tiles = Group(
