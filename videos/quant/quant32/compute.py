@@ -14,6 +14,7 @@ index (1991-) and AQR's Century of Factor Premia (as published, through 2020).
 * ``riskparity``  inverse-volatility risk parity against 60/40 and the market; leverage; the stock-bond correlation
                   1962-2020 from the market and a 10-year bond built from yields;
 * ``styles``      value, momentum, carry and defensive across asset classes, 1926-2020 (AQR);
+* ``carry``       carry made visible: currency funds against spot rates, oil and gas funds against spot prices;
 * ``shortvol``    selling puts (Cboe PUT) against the market, 2007-2020;
 * ``calendar``    the turn of the month, 1926-2020; overnight against intraday in SPY, 1993-2020;
 * ``theory``      the research chapter: the linear trend rule's exact P&L identity, its skewness, its mean;
@@ -322,6 +323,84 @@ def compute_styles() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Carry, made visible: a fund's return minus its spot price's
+# ---------------------------------------------------------------------------
+FX_SPOT = {"FXA": ("DEXUSAL", 1), "FXE": ("DEXUSEU", 1), "FXB": ("DEXUSUK", 1), "FXY": ("DEXJPUS", -1),
+           "FXF": ("DEXSZUS", -1), "FXC": ("DEXCAUS", -1)}
+CMD_SPOT = {"USO": "DCOILWTICO", "UNG": "DHHNGSP"}
+
+
+def _spot_monthly(series, sign, months_idx, dates):
+    f = data.fred(series, start="2006-01-01", through="2020-12-31")
+    sd = dict(zip(f["date"].tolist(), f["value"].tolist()))
+    last, px = None, []
+    for x in dates:
+        last = sd.get(int(x), last)
+        px.append(np.nan if last is None or last <= 0 else (last if sign > 0 else 1.0 / last))
+    px = np.array(px, float)
+    out = []
+    for k in months_idx:
+        out.append(px[k])
+    out = np.array(out)
+    return out[1:] / out[:-1] - 1
+
+
+def compute_carry() -> dict:
+    d, R, rf = _panel()
+    ends = SY.month_ends(d)
+    md = d[ends] // 100
+    # monthly excess total returns of each fund, month end to month end
+    W = np.vstack([np.zeros(R.shape[1]), np.nancumsum(np.log1p(np.nan_to_num(R)), axis=0)])
+    lv = W[ends + 1]
+    tot = np.exp(np.diff(lv, axis=0)) - 1                       # (months-1) x N
+    rfm = np.array([np.prod(1 + rf[a + 1:b + 1]) - 1 for a, b in zip(ends[:-1], ends[1:])])
+    months = md[1:]
+    fx = {}
+    for s, (ser, sign) in FX_SPOT.items():
+        j = SYMS.index(s)
+        spot = _spot_monthly(ser, sign, ends, d)
+        c = tot[:, j] + rfm - spot - rfm                         # excess total return minus spot change: carry net of fees
+        ok = np.isfinite(c) & (months >= 200707)
+        fx[s] = {"carry": float(np.mean(c[ok]) * 12), "spot": float(np.mean(spot[ok]) * 12),
+                 "total": float(np.mean(tot[ok, j]) * 12), "series": c, "y2008q4": float(np.prod(1 + tot[(months >= 200810)
+                                                                                          & (months <= 200812), j]) - 1)}
+    # the carry book: long the two highest trailing-year carry currencies, short the two lowest
+    keys = list(FX_SPOT)
+    C = np.column_stack([fx[k]["series"] for k in keys])
+    T = np.column_stack([tot[:, SYMS.index(k)] for k in keys])
+    book = np.full(len(months), np.nan)
+    for t in range(12, len(months) - 1):
+        sig = np.nanmean(C[t - 11:t + 1], 0)
+        if np.isfinite(sig).sum() < 4:
+            continue
+        o = np.argsort(sig)
+        book[t + 1] = 0.5 * (T[t + 1, o[-1]] + T[t + 1, o[-2]]) - 0.5 * (T[t + 1, o[0]] + T[t + 1, o[1]])
+    ok = np.isfinite(book)
+    cb = book[ok]
+    q4 = (months[ok] >= 200810) & (months[ok] <= 200812)
+    for k in fx:
+        fx[k].pop("series")
+    cmd = {}
+    for s, ser in CMD_SPOT.items():
+        j = SYMS.index(s)
+        spot = _spot_monthly(ser, 1, ends, d)
+        ok2 = np.isfinite(spot) & np.isfinite(tot[:, j]) & (months >= 200707)
+        g_fund = np.cumprod(1 + tot[ok2, j] + rfm[ok2]) - 1
+        g_spot = np.cumprod(1 + spot[ok2]) - 1
+        cmd[s] = {"fund": float(np.mean(np.log1p(tot[ok2, j] + rfm[ok2])) * 12),
+                  "spot": float(np.mean(np.log1p(spot[ok2])) * 12), "months": months[ok2],
+                  "cum_fund": g_fund, "cum_spot": g_spot}
+    # April 2020: USO and the front-month future
+    uso = SYMS.index("USO")
+    k = (d >= 20200301) & (d <= 20200531)
+    return _json({"fx": fx, "book": {"sharpe": float(np.mean(cb) / np.std(cb) * math.sqrt(12)),
+                                     "mean": float(np.mean(cb) * 12), "q4_2008": float(np.prod(1 + cb[q4]) - 1),
+                                     "skew": SY.skewness(cb), "n": int(len(cb)),
+                                     "cum": np.cumprod(1 + cb) - 1, "months": months[ok]},
+                  "cmd": cmd, "uso_2020": {"dates": d[k], "cum": np.cumprod(1 + np.nan_to_num(R[k, uso])) - 1}})
+
+
+# ---------------------------------------------------------------------------
 # Selling insurance
 # ---------------------------------------------------------------------------
 def compute_shortvol() -> dict:
@@ -372,6 +451,25 @@ def compute_calendar() -> dict:
         by[f"{a}-{b}"] = {"tom": float(r[k & tom].mean() * 1e4), "rest": float(r[k & ~tom].mean() * 1e4),
                           "share_days": float((k & tom).sum() / k.sum()),
                           "share_return": float(r[k & tom].sum() / r[k].sum())}
+    # sell in May: November-April against May-October, monthly excess returns
+    km, kr = _monthly(d, r)
+    winter = np.isin(km % 100, [11, 12, 1, 2, 3, 4])
+    hall = {}
+    for a, b in ((1926, 1962), (1963, 1990), (1991, 2020)):
+        k = (km // 100 >= a) & (km // 100 <= b)
+        hall[f"{a}-{b}"] = {"winter": float(kr[k & winter].mean() * 12), "summer": float(kr[k & ~winter].mean() * 12),
+                            "t": float((kr[k & winter].mean() - kr[k & ~winter].mean()) /
+                                       math.sqrt(kr[k & winter].var(ddof=1) / (k & winter).sum() +
+                                                 kr[k & ~winter].var(ddof=1) / (k & ~winter).sum()))}
+    # FOMC announcement days, 1994-2020 (Lucca and Moench 2015): the market's excess return on statement days
+    fo = data.fomc_index(through="2020-12-31")
+    fd = sorted({int(x[0]) for x in fo["statement"]})
+    k94 = d >= 19940101
+    isf = np.isin(d, fd) & k94
+    fomc = {"days": int(isf.sum()), "on": float(r[isf].mean() * 1e4), "off": float(r[k94 & ~isf].mean() * 1e4),
+            "share": float(r[isf].sum() / r[k94].sum()), "t": float((r[isf].mean() - r[k94 & ~isf].mean()) /
+                                                                    math.sqrt(r[isf].var(ddof=1) / isf.sum() +
+                                                                              r[k94 & ~isf].var(ddof=1) / (k94 & ~isf).sum()))}
     # overnight and intraday, SPY 1993-2020
     s = data.yahoo_total("SPY", start="1993-01-29")
     m = s["date"] <= RESEARCH_END
@@ -380,7 +478,7 @@ def compute_calendar() -> dict:
     over = (op[1:] * f[1:]) / (cl[:-1] * f[:-1]) - 1
     intra = cl[1:] / op[1:] - 1
     yrs = dd[1:] // 10000
-    return _json({"tom": by, "over": _stats(over), "intra": _stats(intra),
+    return _json({"tom": by, "halloween": hall, "fomc": fomc, "over": _stats(over), "intra": _stats(intra),
                   "cum": {"dates": dd[1:][::5], "over": (np.cumprod(1 + over) - 1)[::5],
                           "intra": (np.cumprod(1 + intra) - 1)[::5]},
                   "n_days": int(len(over)), "first": int(dd[0])})
@@ -508,7 +606,7 @@ def compute_envelope() -> dict:
 
 
 ITEMS = {"panel": compute_panel, "trend": compute_trend, "voltarget": compute_voltarget,
-         "riskparity": compute_riskparity, "styles": compute_styles, "shortvol": compute_shortvol,
+         "riskparity": compute_riskparity, "styles": compute_styles, "carry": compute_carry, "shortvol": compute_shortvol,
          "calendar": compute_calendar, "theory": compute_theory, "envelope": compute_envelope}
 
 
