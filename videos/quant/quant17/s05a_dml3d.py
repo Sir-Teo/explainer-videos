@@ -181,7 +181,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
         for i, row in enumerate(tab):
             for j, cell in enumerate(row):
                 cell.move_to([xs[j], 1.6 - 0.8 * i, 0])
-        ttl = label(r"Price error on a $41 \times 41$ grid, 64 samples, two assets", font_size=28).to_edge(UP, buff=0.6)
+        ttl = label(r"Price error (RMSE) on a $41 \times 41$ grid, 64 samples, two assets", font_size=28).to_edge(UP, buff=0.6)
         best = min(means, key=means.get)
         names = {"plain": "the plain network", "diff": "the differential network", "gp": "the Gaussian process"}
         if means["diff"] < means["plain"] and means["gp"] < means["plain"]:
