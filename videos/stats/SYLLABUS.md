@@ -1995,3 +1995,4 @@ the result. Then the full Coverage Board, and back to Graunt.
 |---|---|---|
 | 0 | infrastructure: `explainer/stats` (series map, timeline, Transcript, upgrade cards, colours, the World, the Coverage Board, the Museum, the first instruments), tests | — |
 | 1 | **written**, English (16 chapters); silent 480p QA renders and contact sheets reviewed; narration with the production voice and the Chinese edition still to do | ≈ 63 min (silent) |
+| 2 | **written**, English (16 chapters); the build is `explainer/stats/prob.py` (exact Fractions, tested); `World.screening` added; silent 480p QA renders and contact sheets reviewed; narration and Chinese edition to do | ≈ 74 min (estimate, 144 wpm) |

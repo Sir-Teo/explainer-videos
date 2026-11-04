@@ -10,7 +10,9 @@ Built on *AI, Built*'s plotting helpers (``axes``, ``curve``, ``legend``) and dr
 * :class:`NSpace`: vectors, lines and planes in R^3 drawn by projection with a turning view, for the geometry of a
   sample of three (the mean as a projection onto 1, residuals, Pythagoras, correlation as a cosine);
 * :class:`SamplingMachine`: the World's population as a field of dots, samples drawn out of it, and each sample's
-  statistic dropped into a growing histogram, so a sampling distribution builds itself.
+  statistic dropped into a growing histogram, so a sampling distribution builds itself;
+* :func:`die_face`, :func:`dice_row`, :func:`prob_tree` and :func:`icon_array`: dice with pips, probability trees
+  drawn left to right (paths lit in order), and one-square-per-person arrays for natural frequencies (Part 2).
 """
 
 from __future__ import annotations
@@ -363,3 +365,86 @@ class SamplingMachine(VGroup):
             for s_ in c:
                 self.counts[np.clip(np.searchsorted(self.edges, s_) - 1, 0, len(self.counts) - 1)] += 1
             scene.play(Transform(self.bars, self._bars_mob()), run_time=run_time / steps)
+
+
+# ---------------------------------------------------------------------------
+# Chance: dice, trees, icon arrays (Part 2 onward)
+# ---------------------------------------------------------------------------
+_PIPS = {1: [(0, 0)], 2: [(-1, 1), (1, -1)], 3: [(-1, 1), (0, 0), (1, -1)],
+         4: [(-1, 1), (1, 1), (-1, -1), (1, -1)], 5: [(-1, 1), (1, 1), (0, 0), (-1, -1), (1, -1)],
+         6: [(-1, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (1, -1)]}
+
+
+def die_face(value: int, size=0.6, color="#EDEDED", pip_color="#14161C", stroke_color=None) -> VGroup:
+    """A die showing ``value`` (1-6) as pips; other values (Sicherman's 8, say) as a numeral."""
+    sq = RoundedRectangle(width=size, height=size, corner_radius=size * 0.16, fill_color=color, fill_opacity=1,
+                          stroke_color=stroke_color or color, stroke_width=1.5)
+    g = VGroup(sq)
+    if value in _PIPS:
+        r, off = size * 0.085, size * 0.27
+        for dx, dy in _PIPS[value]:
+            g.add(Dot(sq.get_center() + np.array([dx * off, dy * off, 0]), radius=r, color=pip_color))
+    else:
+        g.add(MathTex(str(value), font_size=size * 60, color=pip_color).move_to(sq))
+    g.value = value
+    return g
+
+
+def dice_row(values, size=0.5, buff=0.08, **kw) -> VGroup:
+    return VGroup(*[die_face(v, size=size, **kw) for v in values]).arrange(RIGHT, buff=buff)
+
+
+def prob_tree(levels, x0=-5.5, dx=3.2, height=5.4, font_size=24, edge_color=GREY_B, label_buff=0.12):
+    """A probability tree drawn left to right.  ``levels`` is a nested list: each node is
+    (label_tex, prob_tex, color, children); the root is a single node with prob_tex ignored.  Returns a VGroup with
+    ``.nodes`` (dict path -> mobject), ``.edges`` (path -> line), ``.probs`` (path -> label) and ``.leaves`` (paths
+    of leaves, top to bottom), so scenes can light paths in order."""
+    root_label, _, root_color, kids = levels
+    g = VGroup()
+    nodes, edges, probs = {}, {}, {}
+
+    def n_leaves(node):
+        return 1 if not node[3] else sum(n_leaves(c) for c in node[3])
+
+    total = n_leaves(levels)
+    step = height / max(total, 1)
+
+    def place(node, path, depth, top):
+        lab, pr, col, ch = node
+        k = n_leaves(node)
+        y = top - step * k / 2
+        m = MathTex(lab, font_size=font_size, color=col) if lab else Dot(radius=0.06, color=col)
+        m.move_to([x0 + depth * dx, y, 0])
+        nodes[path] = m
+        g.add(m)
+        t = top
+        for i, c in enumerate(ch):
+            cp = path + (i,)
+            child = place(c, cp, depth + 1, t)
+            t -= step * n_leaves(c)
+            e = Line(m.get_right() + RIGHT * 0.08, child.get_left() + LEFT * 0.08, color=edge_color,
+                     stroke_width=2)
+            edges[cp] = e
+            pl = MathTex(c[1], font_size=font_size - 4, color=GREY_A)
+            pl.move_to(e.point_from_proportion(0.5)).shift(UP * (0.22 if child.get_y() >= m.get_y() else -0.22))
+            probs[cp] = pl
+            g.add(e, pl)
+        return m
+
+    place(levels, (), 0, height / 2)
+    g.nodes, g.edges, g.probs = nodes, edges, probs
+    g.leaves = sorted([p for p in nodes if p not in [q[:-1] for q in nodes if q]], key=lambda p: -nodes[p].get_y())
+    return g
+
+
+def icon_array(colors, cols=50, size=0.1, buff=0.035, shape="square") -> VGroup:
+    """One small square (or dot) per person, row by row: natural frequencies at a glance."""
+    g = VGroup()
+    for c in colors:
+        if shape == "dot":
+            g.add(Dot(radius=size / 2, color=c))
+        else:
+            g.add(Square(side_length=size, stroke_width=0, fill_color=c, fill_opacity=1))
+    rows = int(np.ceil(len(colors) / cols))
+    g.arrange_in_grid(rows, cols, buff=buff)
+    return g

@@ -182,6 +182,26 @@ class World:
         return {"severe": severe, "treated": treated, "recovered": g.random(n) < p}
 
     # ------------------------------------------------------------------
+    # Screening (Part 2): a condition and two tests
+    # ------------------------------------------------------------------
+    SCREEN_SENS = 0.90  # P(test positive | condition)
+    SCREEN_SPEC = 0.95  # P(test negative | no condition)
+
+    @cached_property
+    def screening(self) -> dict:
+        """A silent condition among adults whose risk rises with age (logistic in age; about 1% of adults overall),
+        and two screening tests, each positive with probability 0.90 for those with the condition and 0.05 for those
+        without, the two tests independent *given* the condition.  Children are never affected or tested
+        (``tested`` marks the adults)."""
+        g = self.rng("screening")
+        age = self.age.astype(float)
+        risk = 1.0 / (1.0 + np.exp(-(-6.3 + 0.045 * (age - ADULT_AGE))))
+        sick = self.adult & (g.random(self.n) < risk)
+        pos = [np.where(sick, g.random(self.n) < self.SCREEN_SENS, g.random(self.n) < 1 - self.SCREEN_SPEC) & self.adult
+               for _ in range(2)]
+        return {"sick": sick, "test_a": pos[0], "test_b": pos[1], "tested": self.adult.copy()}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
