@@ -10,6 +10,11 @@ COND = QC.GAIN
 HYB = QC.OPTION
 
 
+def _pc(s: str) -> str:
+    """A rule's label for TeX: its percent signs escaped."""
+    return s.replace("%", r"\%")
+
+
 def _ci(c, digits=2):
     return rf"[{c[0]:.{digits}f},\ {c[1]:.{digits}f}]"
 
@@ -162,7 +167,7 @@ class Research(VoiceoverScene):
         leg = legend([(NAIVE, r"naive: a plain normal"), (COND, r"conditional on winning"),
                       (HYB, r"hybrid: inside the simultaneous interval")], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
         fit_right(leg)
-        side = wrapped_label(rf"{w['label']} won by {w['gap']:.2f} standard errors over {w['binding']}. Estimates where "
+        side = wrapped_label(rf"{_pc(w['label'])} won by {w['gap']:.2f} standard errors over {_pc(w['binding'])}. Estimates where "
                              rf"each curve crosses $\frac12$: {w['x']:.2f}, {w['med']:.2f}, {w['hyb_med']:.2f}; the "
                              rf"conditional interval runs off the chart to {w['cond'][0]:.1f}", 3.4, 15,
                              GREY_A).next_to(leg, DOWN, buff=0.3)
@@ -235,7 +240,7 @@ class Research(VoiceoverScene):
         tab = VGroup(head)
         for name, w in t["data"].items():
             after = rf"{w['first_out'] // 10000}\text{{--}}{w['last_out'] // 10000 % 100:02d}"
-            tab.add(VGroup(VGroup(label(rf"{name}", font_size=20), label(w["label"], font_size=15, color=GREY_A)).arrange(DOWN, buff=0.08),
+            tab.add(VGroup(VGroup(label(rf"{name}", font_size=20), label(_pc(w["label"]), font_size=15, color=GREY_A)).arrange(DOWN, buff=0.08),
                            VGroup(MathTex(rf"{w['x']:.2f}", font_size=26), MathTex(_ci(w["naive"]), font_size=20)).arrange(DOWN, buff=0.08),
                            VGroup(MathTex(rf"{w['med']:.2f}", font_size=26), MathTex(_ci(w["cond"]), font_size=20)).arrange(DOWN, buff=0.08),
                            VGroup(MathTex(rf"{w['hyb_med']:.2f}", font_size=26), MathTex(_ci(w["hybrid"]), font_size=20)).arrange(DOWN, buff=0.08),
