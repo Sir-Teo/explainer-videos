@@ -29,7 +29,7 @@ FRED, Freddie Mac's mortgage survey, the NY Fed's ACM term premium, and the SEC'
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 50 minutes)
+## Chapters (about 55 minutes)
 
 * **The bond massacre** (2.9 min). 4 February 1994: the first hike in five years, seven by February 1995, 3% to 6%; in
   1994 the 2-year yield rose 3.3 points and the 10-year 1.6; Orange County's pools ($19.8 bn of securities on $7.2 bn of
@@ -85,7 +85,18 @@ reported by the sources named.*
 * **13. Rule 19: the options desk for rates** (2.7). Five model tests; the morning report for $1 bn of the Bermudan
   (delta −$351 thousand a bp, vega +$470 thousand a bp of vol) and its hedge (1.36 Europeans and a small swap); the
   model reserve (441–487 bp across mean reversion, against ±4 of noise); the termstructure module; Rule 19.
-* **Recap, desk questions, problems** (3.0). Thirteen lines; four desk questions; eight problems with solutions below.
+* **For the researcher: the zero lower bound and the shadow rate** (5.6). Black (1995): r = max(s, r_min) with a
+  Gaussian (Vasicek) shadow rate; prices from a one-dimensional PDE. Wu and Xia (2016): f(n) ≈ r_min + σ_n g((a_n −
+  r_min)/σ_n), g(z) = zΦ(z) + φ(z), the floor plus a Bachelier call on the shadow forward a_n under the forward
+  measure, so ∂f/∂s ≈ Φ(z_n)e^{−κn}. With κ 0.15, θ 4%, σ 1.5%: exact (implicit finite differences) against Wu–Xia
+  forwards agree within 8 bp at ten years and a few basis points elsewhere, for shadow rates −3% to +3%; the floor's
+  premium over the shadow forward at a −3% shadow rate is 208/152/77/40 bp at 1/2/5/10 years. The model's 1-year/10-year
+  sensitivity ratio falls to a tenth of normal at s ≈ −2.5%. Treasury (GSW daily, yearly regressions of Δy(1) on
+  Δy(10)): slope 0.62 on average in 1990–2007, 0.10 in 2010–2014 (1-year yield 0.22%), back to 0.51 in 2019; Swanson
+  and Williams (2014) found the same in responses to news. Three open problems; pause: z = −1 gives f = 1% × g(−1) =
+  0.083%, and a further 50 bp fall in the shadow rate lowers it by 0.5% × Φ(−1) × 0.8 = 6 bp.
+* **Recap, desk questions, ten problems (two at qualifying-exam level)** (3.1). Thirteen lines; four desk questions;
+  solutions below.
 
 ## Hands-on
 
@@ -172,6 +183,22 @@ python tools/make.py quant19 --cpu-voice -q m              # English and Chinese
 8. **A prepaying pool.** Each year a fraction c of the balance prepays, so the balance is (1 − c)ᵗ = e^{t ln(1−c)}. Its
    average life is ∫₀^∞ (1 − c)ᵗ dt = −1/ln(1 − c): 16.2 years at 6% (in practice capped by the 30-year term and
    shortened by amortization), 1.7 years at 45%. That swing in life is the pool's negative convexity.
+9. **(qual) Wu and Xia's call.** With s ~ N(a, σ²) and z = (a − r)/σ, E[max(s, r)] = r + E[(s − r)⁺] =
+   r + ∫_{r}^{∞}(x − r)φ((x − a)/σ)dx/σ = r + σ∫_{−z}^{∞}(u + z)φ(u)du = r + σ[φ(z) + zΦ(z)] = r + σg(z), using
+   ∫_{−z}^∞uφ = φ(z) and ∫_{−z}^∞φ = Φ(z). Then g′(z) = Φ(z) + zφ(z) + φ′(z) = Φ(z), since φ′(z) = −zφ(z).
+10. **(qual) The dead short end.** In the one-factor model a_n = θ + (s_t − θ)e^{−κn} − (convexity), so ∂a_n/∂s_t =
+   e^{−κn} and ∂f(n)/∂s_t = g′(z_n)e^{−κn} = Φ(z_n)e^{−κn}. With s_t well below the floor, z_n ≪ 0 at short n (the
+   shadow forward is far below zero and its variance σ_n² is small), so Φ(z_n) ≈ 0; at long n, a_n has reverted
+   towards θ > 0 and σ_n has grown, so z_n > 0 and Φ ≈ 1. News moves s_t; long forwards respond, short ones do not.
+
+## For the researcher
+
+* **The theorems.** Black (1995), "Interest rates as options," *J. Finance* 50(5); Wu and Xia (2016), "Measuring the
+  macroeconomic impact of monetary policy at the zero lower bound," *JMCB* 48(2–3); Krippner (2013, 2020) on shadow
+  rates and their sensitivity; Swanson and Williams (2014), *AER* 104(10).
+* **Simplifications.** One factor and a fixed floor at zero; the risk-neutral dynamics used directly (no term premium);
+  the data regression is reduced-form and mixes several factors.
+* **Open problems.** Whether shadow rates measure policy; uncertain and negative floors; options near the bound.
 
 ## Data and reproducibility
 
@@ -205,7 +232,7 @@ python tools/make.py quant19 --cpu-voice -q m              # English and Chinese
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约50分钟）
+## 章节（约55分钟）
 
 * **债市大屠杀。** 1994年2月4日：五年来首次加息，到1995年2月共七次，从3%到6%；1994年2年期收益率上升3.3个百分点，10年期上升1.6个；橙县的投资池（198亿美元证券对72亿美元存款，126亿美元逆回购：杠杆2.75倍），15–17亿美元的亏损意味着3.2–3.7年的久期；1994年12月6日破产；历史条（1976–2020）；本部分安排。
 * **1. 短期利率模型：Vasicek与CIR。** 两个随机微分方程与Feller条件；用1990–2025年的3个月期国库券拟合（Vasicek：a = 0.124，b = 1.76%，σ = 0.71%；CIR的Feller比值1.02；半衰期5.6年和6.3年）；对2,000条模拟历史重新估计：â的中位数0.163，而真值为0.124，19%的历史估计值超过真值两倍，半衰期的95%区间为3到39年；从当前3.57%出发的扇形图（Vasicek有11%的路径在十年内跌破零）。
@@ -221,7 +248,8 @@ python tools/make.py quant19 --cpu-voice -q m              # English and Chinese
 * **11. 债券风险溢价。** 预期假说；在美联储曲线上的Fama–Bliss回归（斜率0.72–1.20，离零约三个标准误）；Cochrane–Piazzesi回归（到2003年R² 24%，到2025年15%；系数不稳定）；CP与一个5–16–1网络在封存的2021–2025年样本外之前登记：样本外R²在2004–2020年为−2.17和−1.01，在封存期为+0.26和+0.44，靠的是水平而非时机（相关系数−0.31和0.06）；预测值对ACM期限溢价（相关系数0.83）；Ang与Piazzesi（2003）；试验计数器313。
 * **12. 住房抵押贷款与负凸性。** 房地美的30年期利率（1981年18.63%，2021年2.65%，2025年底6.15%）；提前还款S形曲线；用模拟为6.5%的资产池定价（久期2.1，凸性−240）；期权调整利差92个基点，零波动率利差150个基点（期权成本58个基点）；凸性对冲与2003年夏天（10年期从3.13%升到4.61%）；TBA市场与美元滚动；美联储持有的MBS（2022年4月2.74万亿美元，2025年底2.04万亿）。
 * **13. 第19条规则：利率期权交易台。** 五项模型检验；10亿美元百慕大期权的晨报（每基点delta −35.1万美元，每基点波动率vega +47.0万美元）及其对冲（1.36份欧式期权加一笔小额互换）；模型准备金（不同均值回归下441–487个基点，而噪声只有±4）；期限结构模块；第19条规则。
-* **回顾、交易台问题与习题。** 十三行回顾；四个交易台问题；八道习题，解答见下文。
+* **写给研究者：零下限与影子利率。** 布莱克（1995）：r = max(s, r_min)，影子利率为高斯（Vasicek）过程；价格由一维PDE给出。吴菁与夏凡（2016）：f(n) ≈ r_min + σ_n g((a_n − r_min)/σ_n)，g(z) = zΦ(z) + φ(z)，即远期测度下下限加上对影子远期a_n的Bachelier看涨期权，所以∂f/∂s ≈ Φ(z_n)e^{−κn}。取κ 0.15、θ 4%、σ 1.5%：精确解（隐式有限差分）与吴–夏远期在十年期相差8个基点以内，其他期限几个基点，影子利率从−3%到+3%都如此；影子利率为−3%时，下限相对影子远期的溢价在1/2/5/10年为208/152/77/40个基点。模型中1年对10年的敏感度之比在s ≈ −2.5%时降到正常的十分之一。美国国债（GSW日度数据，Δy(1)对Δy(10)的逐年回归）：1990–2007年斜率平均0.62，2010–2014年0.10（1年期收益率0.22%），2019年回到0.51；斯旺森与威廉斯（2014）在对消息的反应中发现了同样的现象。三个开放问题；暂停题：z = −1时f = 1% × g(−1) = 0.083%，影子利率再降50个基点使它下降0.5% × Φ(−1) × 0.8 = 6个基点。
+* **回顾、交易台问题、十道习题（两道为资格考试水平）。** 十三行回顾；四个交易台问题；解答见下文。
 
 ## 交易台问题与解答
 
@@ -240,6 +268,8 @@ python tools/make.py quant19 --cpu-voice -q m              # English and Chinese
 6. **Jamshidian。** 每个P(T, tᵢ; x)都随x上升而下降，所以恰好当x < x*时Σcᵢ P(T, tᵢ; x) > 1，此时每个P(T, tᵢ; x) > Kᵢ = P(T, tᵢ; x*)。当x < x*时，(Σcᵢ Pᵢ − 1)⁺ = Σcᵢ(Pᵢ − Kᵢ) = Σcᵢ(Pᵢ − Kᵢ)⁺；当x ≥ x*时两边都为零。支付在每个状态下都相同，所以价格相同。
 7. **拟合出的行权规则的偏差。** 在同一组路径上拟合并评判时，回归已经"看见"了这些路径的未来：它在这些特定路径恰好表现好的地方行权，这是任何真实持有人都做不到的，所以样本内价格偏高。在独立路径上，拟合出的规则只是一个任何人都能执行的停止规则，而没有停止规则能胜过最优规则，所以它的价值是一个下界（加上蒙特卡洛噪声）。第9章：样本内442，样本外440，格点441。
 8. **提前还款的资产池。** 每年余额的c比例提前还款，所以余额为(1 − c)ᵗ = e^{t ln(1−c)}。平均寿命为∫₀^∞ (1 − c)ᵗ dt = −1/ln(1 − c)：在6%时为16.2年（实际上受30年期限限制并因摊还而缩短），在45%时为1.7年。寿命的这种摆动正是资产池的负凸性。
+9. **（资格考试）吴–夏的看涨期权。** s ~ N(a, σ²)、z = (a − r)/σ时，E[max(s, r)] = r + E[(s − r)⁺] = r + σ∫_{−z}^{∞}(u + z)φ(u)du = r + σ[φ(z) + zΦ(z)] = r + σg(z)。又g′(z) = Φ(z) + zφ(z) + φ′(z) = Φ(z)，因为φ′(z) = −zφ(z)。
+10. **（资格考试）失去反应的短端。** 单因子模型中a_n = θ + (s_t − θ)e^{−κn} − （凸性），所以∂f(n)/∂s_t = Φ(z_n)e^{−κn}。s_t远低于下限时，短期n处z_n ≪ 0（影子远期远低于零且方差σ_n²小），Φ(z_n) ≈ 0；长期n处a_n已回复到θ > 0且σ_n变大，z_n > 0、Φ ≈ 1。消息移动s_t；长期远期有反应，短期远期没有。
 
 ## 数据与复现
 
@@ -249,3 +279,9 @@ python tools/make.py quant19 --cpu-voice -q m              # English and Chinese
 * 引用而非计算的公开数字：橙县投资池及其亏损（美国证监会）；WTI −37.63美元的结算价与芝商所的通知；彭博统计的18万亿美元负收益率债务（2020年12月）；SOFR贴现切换。
 * 屏幕上标注为示意的输入：SABR参数、上限单元波动率驼峰、提前还款S形曲线、MBS定价模型及其假设的市场价格。
 * 在样本外之前登记的两个预测：`cp_tent_oos`与`mlp_bond_premia_oos`（各一种配置）；试验计数器从311升到313。
+
+## 写给研究者
+
+* **定理。** 布莱克（1995），*J. Finance* 50(5)；吴菁与夏凡（2016），*JMCB* 48(2–3)；Krippner（2013、2020）论影子利率及其敏感性；斯旺森与威廉斯（2014），*AER* 104(10)。
+* **简化。** 单因子、下限固定为零；直接使用风险中性动态（无期限溢价）；数据回归是简约式的，混合了多个因子。
+* **开放问题。** 影子利率是否度量政策立场；不确定的与负的下限；下限附近的期权。

@@ -727,7 +727,112 @@ def compute_hwwin() -> dict:
         out.append({"window": f"{a_[:4]}--{b_[:4]}", "a": a, "sigma": s_, "mats": mats, "vol": vol, "fit": fit})
     return _json({"windows": out})
 
-ITEMS = {"shortrate": compute_shortrate, "hw": compute_hw, "hjm": compute_hjm, "lmm": compute_lmm,
+def _shadow_bonds(kappa, theta, sigma, r_min, taus, s_grid=None, dt=1 / 365):
+    """Bond prices in Black's (1995) shadow-rate model, r = max(s, r_min) with a Vasicek shadow rate s under Q:
+    P_tau = kappa (theta - s) P_s + sigma^2/2 P_ss - max(s, r_min) P, P(0) = 1, by implicit finite differences.
+    Returns the grid and log P at each maturity in ``taus`` (years)."""
+    from scipy.linalg import solve_banded
+    s = np.linspace(-0.30, 0.35, 651) if s_grid is None else s_grid
+    ds = s[1] - s[0]
+    n = len(s)
+    mu = kappa * (theta - s)
+    a = 0.5 * sigma ** 2 / ds ** 2
+    lo = a - np.minimum(mu, 0) / ds          # upwind drift
+    up = a + np.maximum(mu, 0) / ds
+    di = -(lo + up) - np.maximum(s, r_min)
+    ab = np.zeros((3, n))
+    ab[0, 1:] = -dt * up[:-1]
+    ab[1, :] = 1 - dt * di
+    ab[2, :-1] = -dt * lo[1:]
+    ab[1, 0] = ab[1, -1] = 1.0
+    ab[0, 1] = 0.0
+    ab[2, -2] = 0.0
+    P = np.ones(n)
+    out, k = {}, 0
+    steps = int(round(max(taus) / dt))
+    want = {int(round(T / dt)) for T in taus}
+    for i in range(1, steps + 1):
+        P = solve_banded((1, 1), ab, P)
+        P[0], P[-1] = 2 * P[1] - P[2], 2 * P[-2] - P[-3]   # linear extrapolation at the edges
+        if i in want:
+            out[i] = np.log(np.maximum(P, 1e-300))
+    return s, out
+
+
+def compute_shadow_theory() -> dict:
+    """The research chapter: the zero lower bound.  Black (1995): the short rate is r = max(s, r_min), as if holding
+    currency were an option; with a Gaussian shadow rate s, Wu and Xia (2016) approximate forward rates by
+    f(n) = r_min + sig_n g((a_n - r_min)/sig_n), g(z) = z Phi(z) + phi(z), where a_n is the shadow model's forward and
+    sig_n^2 the variance of s at n.  Checked against the exact model by finite differences; the model's prediction that
+    short yields stop responding to news near the bound (d f(n)/d s_0 = Phi(z_n) e^{-kappa n}); then the Treasury curve
+    (GSW): the sensitivity of the one-year yield to the ten-year, year by year, 1990-2019."""
+    from scipy.stats import norm
+    kappa, theta, sigma, r_min = 0.15, 0.04, 0.015, 0.0
+    taus = [0.25, 0.5, 1, 2, 3, 5, 7, 10]
+    fine = sorted(set(taus) | {t + 1 / 365 for t in taus} | {t - 1 / 365 for t in taus})
+    grid, LP = _shadow_bonds(kappa, theta, sigma, r_min, fine)
+    dt = 1 / 365
+
+    class _At(dict):
+        def __getitem__(self, T):
+            return LP[int(round(T / dt))]
+    logP = _At()
+    s0s = [-0.03, -0.01, 0.0, 0.01, 0.03]
+
+    def wx_forward(s0, n):
+        a_n = theta + (s0 - theta) * np.exp(-kappa * n) - sigma ** 2 * (1 - np.exp(-kappa * n)) ** 2 / (2 * kappa ** 2)
+        sn = sigma * np.sqrt((1 - np.exp(-2 * kappa * n)) / (2 * kappa))
+        z = (a_n - r_min) / sn
+        return r_min + sn * (z * norm.cdf(z) + norm.pdf(z)), a_n, z
+
+    rows = {}
+    for s0 in s0s:
+        ex, wx, sh, sens_ex, sens_wx = [], [], [], [], []
+        for T in taus:
+            lp_up = np.interp(s0, grid, logP[T + 1 / 365])
+            lp_dn = np.interp(s0, grid, logP[T - 1 / 365])
+            ex.append(float(-(lp_up - lp_dn) / (2 / 365)))      # the exact instantaneous forward
+            f, a_n, z = wx_forward(s0, T)
+            wx.append(float(f))
+            sh.append(float(a_n))
+            h = 1e-4
+            fu = -(np.interp(s0 + h, grid, logP[T + 1 / 365]) - np.interp(s0 + h, grid, logP[T - 1 / 365])) / (2 / 365)
+            fd = -(np.interp(s0 - h, grid, logP[T + 1 / 365]) - np.interp(s0 - h, grid, logP[T - 1 / 365])) / (2 / 365)
+            sens_ex.append(float((fu - fd) / (2 * h)))
+            sens_wx.append(float(norm.cdf(z) * np.exp(-kappa * T)))
+        rows[f"{s0:g}"] = {"exact": ex, "wu_xia": wx, "shadow": sh, "sens_exact": sens_ex, "sens_wx": sens_wx}
+    out = {"kappa": kappa, "theta": theta, "sigma": sigma, "r_min": r_min, "taus": taus, "rows": rows}
+    # yield sensitivities by shadow level: the one-year yield's response relative to the ten-year's
+    s_line = np.linspace(-0.05, 0.05, 41)
+
+    def yld(sv, T):
+        return float(-np.interp(sv, grid, logP[T]) / T)
+    beta_model = []
+    for sv in s_line:
+        h = 1e-4
+        d1 = (yld(sv + h, 1) - yld(sv - h, 1)) / (2 * h)
+        d10 = (yld(sv + h, 10) - yld(sv - h, 10)) / (2 * h)
+        beta_model.append({"s": float(sv), "d1": d1, "d10": d10, "ratio": d1 / d10, "y1": yld(sv, 1)})
+    out["model_beta"] = beta_model
+    # the Treasury curve: yearly regression of daily one-year changes on ten-year changes
+    g = data.gsw("1990-01-01")
+    d, Y = np.asarray(g["date"]), np.asarray(g["y"])[:, [0, 9]]
+    ok = ~np.isnan(Y).any(1)
+    d, Y = d[ok], Y[ok]
+    dy = np.diff(Y, axis=0)
+    yr = d[1:] // 10000
+    years = []
+    for y in range(1990, 2020):
+        m = yr == y
+        x, z = dy[m, 1], dy[m, 0]
+        b = float(np.sum((x - x.mean()) * (z - z.mean())) / np.sum((x - x.mean()) ** 2))
+        years.append({"year": y, "beta": b, "y1": float(np.mean(Y[1:][m, 0])), "sd1": float(z.std() * 100),
+                      "sd10": float(x.std() * 100)})
+    out["treasury"] = years
+    return _json(out)
+
+
+ITEMS = {"shadow_theory": compute_shadow_theory, "shortrate": compute_shortrate, "hw": compute_hw, "hjm": compute_hjm, "lmm": compute_lmm,
          "bermudan": compute_bermudan, "negative": compute_negative, "sabr": compute_sabr,
          "multicurve": compute_multicurve, "premia": compute_premia, "mbs": compute_mbs, "y1994": compute_y1994,
          "meanrev": compute_meanrev, "ratevol": compute_ratevol, "sabrpdf": compute_sabrpdf, "lmmcorr": compute_lmmcorr,

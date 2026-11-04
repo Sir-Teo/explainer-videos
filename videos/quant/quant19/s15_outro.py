@@ -39,7 +39,10 @@ PROBLEMS = [
     r"Explain why a least-squares exercise rule priced on the paths it was fitted on is biased upward, and why on "
     r"independent paths it gives a lower bound.",
     r"A pool prepays at a constant CPR $c$. Show its balance (ignoring amortisation) is $(1 - c)^t$ and its average "
-    r"life about $-1/\ln(1 - c)$. Compare $c = 6\%$ and $c = 45\%$.",
+    r"life about $-1/\ln(1 - c)$. Compare $c = 6\%$ and $c = 45\%$.",    r"(qual) If $s_n \sim N(a_n, \sigma_n^2)$ under the forward measure, show $\mathbb E[\max(s_n, r)] = r + \sigma_n "
+    r"g((a_n - r)/\sigma_n)$ with $g(z) = z\Phi(z) + \varphi(z)$, and that $g' = \Phi$.",
+    r"(qual) In the one-factor shadow model, show $\partial f(n)/\partial s_t \approx \Phi(z_n)e^{-\kappa n}$ and explain why "
+    r"the 1-year yield's response to news collapses near the floor while the 10-year's does not.",
 ]
 
 
@@ -133,11 +136,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=22)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And eight problems: Vasicek's distribution and long yield, its Riccati equation, the Ho-Lee drift, the "
+            "And ten problems: Vasicek's distribution and long yield, its Riccati equation, the Ho-Lee drift, the "
             "Hull-White shift, an at-the-money caplet, Jamshidian's decomposition, the bias of a fitted exercise "
-            "rule, and the life of a prepaying pool. Solutions, in English and Chinese, are in the notes."
+            "rule, and the life of a prepaying pool. Two are qualifying-exam problems: Wu and Xia's call formula, "
+            "and the dead short end. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

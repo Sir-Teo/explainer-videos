@@ -17,5 +17,6 @@ SCENES = [
     ("s12_premia", "Premia", "11. Bond risk premia"),
     ("s13_mbs", "MBS", "12. Mortgages and negative convexity"),
     ("s14_house", "House", "13. Rule 19: the options desk for rates"),
+    ("s16_research", "Research", "For the researcher: the zero lower bound and the shadow rate"),
     ("s15_outro", "Outro", "Recap, desk questions, problems"),
 ]
