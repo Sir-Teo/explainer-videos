@@ -949,3 +949,60 @@ class IntervalRain(VGroup):
         scene.play(LaggedStart(*[FadeIn(s_, shift=DOWN * 0.3) for s_ in segs], lag_ratio=lag),
                    Transform(self.tally, new_tally), run_time=run_time)
         return segs
+
+
+class InfluenceProbe(VGroup):
+    """Drag one point and watch least squares respond (Part 12).  ``xs, ys`` are the data on axes ``ax``; the point
+    ``index`` follows the trackers ``px, py``, and the fitted line, the point's leverage and its Cook's distance are
+    redrawn every frame.  ``readout`` is a VGroup of MathTex to place; call ``stop()`` before clearing the scene."""
+
+    def __init__(self, ax, xs, ys, index=-1, color=None, line_color=None, font_size=26, x_span=None):
+        super().__init__()
+        from explainer.stats.kit.ols import design, fit
+
+        self.ax = ax
+        self.xs, self.ys = np.asarray(xs, float).copy(), np.asarray(ys, float).copy()
+        self.i = index % len(self.xs)
+        self.px, self.py = ValueTracker(self.xs[self.i]), ValueTracker(self.ys[self.i])
+        x0, x1, _, _ = bounds(ax)
+        span = x_span or (x0, x1)
+        col, lcol = color or S.DATA, line_color or S.FIT
+        self.others = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=col) for j, (a, b) in enumerate(zip(self.xs, self.ys)) if j != self.i])
+        self._fit = lambda: fit(design(self._x()), self._y())
+
+        def line():
+            r = self._fit()
+            a, b = r.coef
+            return Line(ax.c2p(span[0], a + b * span[0]), ax.c2p(span[1], a + b * span[1]), color=lcol, stroke_width=4)
+
+        def probe():
+            return Dot(ax.c2p(self.px.get_value(), self.py.get_value()), radius=0.11, color=S.ACCENT)
+
+        def readout():
+            r = self._fit()
+            return VGroup(MathTex(rf"\text{{slope}} = {r.coef[1]:.2f}", font_size=font_size, color=lcol),
+                          MathTex(rf"h_{{ii}} = {r.leverage[self.i]:.2f}", font_size=font_size),
+                          MathTex(rf"D_i = {r.cooks[self.i]:.2f}", font_size=font_size, color=S.ACCENT)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+
+        self.readout_pos = np.array([4.8, 1.5, 0])
+        self.line = always_redraw(line)
+        self.dot = always_redraw(probe)
+        self.readout = always_redraw(lambda: readout().move_to(self.readout_pos))
+        self.add(self.others, self.line, self.dot)
+
+    def _x(self):
+        x = self.xs.copy()
+        x[self.i] = self.px.get_value()
+        return x
+
+    def _y(self):
+        y = self.ys.copy()
+        y[self.i] = self.py.get_value()
+        return y
+
+    def move_to_point(self, x, y, run_time=2.0):
+        return AnimationGroup(self.px.animate.set_value(x), self.py.animate.set_value(y), run_time=run_time)
+
+    def stop(self):
+        for m in (self.line, self.dot, self.readout):
+            m.clear_updaters()
