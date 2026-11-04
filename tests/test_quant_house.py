@@ -3310,3 +3310,24 @@ def test_gmv_theory_matches_simulation():
     th = P.gmv_theory(K, T)
     assert abs(s["in"].mean() - th["in"]) < 0.02
     assert abs(s["out"].mean() - th["out"]) / th["out"] < 0.03
+
+
+def test_riskmodel_gp_and_law():
+    import numpy as np
+    from explainer.quant.house import riskmodel as RM
+    for g, l, r, phi in [(1, 1, 0.01, 0.1), (2, 10, 0.02, 0.05)]:
+        rate, aim = RM.riccati_scalar(g, l, r, phi)
+        assert abs(rate - RM.gp_trade_rate(g, l, r)) < 1e-9
+        assert abs(aim - RM.gp_aim_weight(g, l, r, phi)) < 1e-9
+    assert abs(RM.fundamental_ir(0.05, 100) - 0.5) < 1e-12
+    assert RM.ir_time_varying(0.05, 0.05, 100) < RM.fundamental_ir(0.05, 100)
+    rng = np.random.default_rng(5)
+    b = rng.normal(1, 0.5, 200)
+    bs, w = RM.vasicek(b, np.full(200, 0.3))
+    assert np.var(bs) < np.var(b) and (0 < w).all() and (w < 1).all()
+    T, N = 300, 40
+    X = np.stack([np.ones((T, N)), rng.standard_normal((T, N))], -1)
+    f_true = np.array([0.001, 0.01])
+    R = X @ f_true + 0.01 * rng.standard_normal((T, N))
+    f, u = RM.factor_returns(R, X)
+    assert np.allclose(f.mean(0), f_true, atol=2e-3)

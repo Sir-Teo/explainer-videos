@@ -56,6 +56,10 @@
    "at": "2026-11-04",
    "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
   },
+  "gp_calm_reversal_part31|binance/usdt_daily_returns": {
+   "at": "2026-11-04",
+   "code_sha256": "2e8556194bbe999a9e65b7d3d3be845b5df4920dc1a396bb55a0e719de6a0dd2"
+  },
   "hrp_part30|kenfrench/ff3_monthly": {
    "at": "2026-11-04",
    "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949"
@@ -443,6 +447,16 @@
     "validation": "2017-2020"
    },
    "trials": 1
+  },
+  "gp_calm_reversal_part31": {
+   "code_sha256": "2e8556194bbe999a9e65b7d3d3be845b5df4920dc1a396bb55a0e719de6a0dd2",
+   "params": {
+    "cost": "quadratic (lambda/2) sigma^2 dx^2 inside the P&L",
+    "parameters": "phi and coefficients fixed on 2018-2020",
+    "rule": "Garleanu-Pedersen aim portfolio, gamma 1, lambda 8, rho 0.0005",
+    "signals": "calm (-20d vol) and 3-day reversal, standardised"
+   },
+   "trials": 10
   },
   "hrp_part30": {
    "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949",

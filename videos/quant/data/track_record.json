@@ -263,6 +263,30 @@
   },
   "note": "1/N, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
  },
+ "gp_calm_reversal_part31": {
+  "part": 31,
+  "research": {
+   "mean": 0.06598915298137137,
+   "vol": 0.123800725859077,
+   "sharpe": 0.5330271896506257,
+   "sharpe_se": 0.5386266183169534,
+   "maxdd": -0.09830611729808492,
+   "n": 33,
+   "sharpe_net": 0.5330271896506257,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": -1.793964317547144,
+   "vol": 4.129260928730186,
+   "sharpe": -0.43445167271103324,
+   "sharpe_se": 0.25094614090235096,
+   "maxdd": -2.293355868100469,
+   "n": 60,
+   "sharpe_net": -0.43445167271103324,
+   "cost_per_year": 0.0
+  },
+  "note": "GP-traded calm and reversal signals on Binance coins, net of the quadratic cost model, scaled to 10% research volatility"
+ },
  "hrp_part30": {
   "part": 30,
   "research": {
