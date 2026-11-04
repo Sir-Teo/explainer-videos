@@ -145,7 +145,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 7 | the limits of branch prediction, computed: idealised PPM against TAGE at every storage budget; the perceptron's linear blind spot; TAGE-SC-L, BranchNet; the data-centre front-end bottleneck |
 | 8 | value prediction in the limit study (computed: perfect prediction of every load +19% on the Job, a stride predictor loses at every confidence); secure speculation: an STT/NDA-style rule built into the core, blocking the gadget for 3.5%; speculative non-interference; the cost floor |
 | 9 | learned replacement: insertion policies against Belady on the Job's scans (computed), Hawkeye, Glider; the tight red–blue pebble bound for matrix multiply; memory disaggregation |
-| 10 | out-of-thin-air and the unsolved C/C++ memory model; work-stealing bounds; dark silicon |
+| 10 | out-of-thin-air values (the load-buffering test enumerated, with and without value speculation) and the unsolved C/C++ memory model; work-stealing constants simulated, locality and heterogeneity open; dark silicon and Landauer's floor |
 | 11 | Robson's allocator lower bound; formal semantics of undefined behaviour; capability hardware (CHERI) |
 | 12 | regex matching and parsing under fine-grained hardness (SETH); Valiant's parsing-as-matrix-multiplication; derivatives |
 | 13 | equality saturation; superoptimization; verified compilation; ML-guided optimization |
@@ -852,7 +852,11 @@ computation.
     Built* 18's all-reduce).
 13. Interconnects: bus, crossbar, mesh, torus, hypercube, fat tree; bisection bandwidth.
 14. Supercomputers from the Cray-1 to exascale (Top500, cited). Ledger row 4.
-15. Outro.
+15. *Frontier*: thin air, stealing, dark silicon. The load-buffering test enumerated (only (0, 0) in order; any
+    self-confirming guess under value speculation); out-of-thin-air values and the unsolved C/C++ memory model
+    (Batty et al. 2011, promising semantics 2017); what work-stealing bounds leave out (the constant, about 1.6 spans
+    simulated; locality, space, heterogeneous cores); near-threshold computing, 3-D stacking, Landauer's limit.
+16. Outro.
 
 *Computed:* the MESI simulation; a false-sharing benchmark on this machine; the work and span of the parallel Job;
 Brent's bound against simulated greedy schedules; the 0–1 principle checked exhaustively for n ≤ 10; bitonic
@@ -3144,4 +3148,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
 | 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
 | 9 | scenes (17, with the *Frontier* chapter), computations (a cache simulator and its analyses, this machine's latency staircase, bandwidth and matrix multiply measured, the exact LRU misses of the Job's corpus scans, the Job's ledger row 3 priced on Part 8's core), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
-| 10–61 | planned (this document) | — |
+| 10 | scenes (17, with the *Frontier* chapter), computations (MESI and the store-buffering test simulated; false sharing, the litmus test with and without a fence, atomics and the Job in C with SIMD and threads measured on this machine; greedy schedules against Brent's bound, work stealing, scans, sorting networks checked by the 0–1 principle, bisection widths by exhaustive search; the Job on four Pebble cores, ledger row 4), notes, tests and Chinese narration written; QA previews (480p, silent) in review; on-screen Chinese next | ≈ 64 min (estimate) |
+| 11–61 | planned (this document) | — |
