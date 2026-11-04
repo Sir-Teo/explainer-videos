@@ -80,6 +80,8 @@ class Frontier(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-25 * DEGREES, run_time=max(vo.remaining(0.5), 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects]))], run_time=1.5)
         self.clear_scene()
+        # back to the flat camera for the rest of the chapter, whatever the animated move left behind
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, gamma=0, zoom=1.0, frame_center=ORIGIN)
 
     def speed(self, ch, race):
         rows = ch["rows"]
