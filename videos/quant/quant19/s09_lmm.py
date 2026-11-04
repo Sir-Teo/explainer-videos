@@ -28,16 +28,16 @@ class LMM(VoiceoverScene):
                 cmath(r"dL_i", r"=", r"\sigma_i L_i\,dW^{\,i+1}\quad\text{(lognormal; or } \sigma_i\,dW\text{, normal)}",
                       font_size=38, colors={r"dL_i": FWD}),
                 cmath(r"dL_j", r"=", r"-\,\sigma_j L_j\sum_{k > j}\frac{\delta\,\sigma_k L_k}{1 + \delta L_k}\,dt + "
-                      r"\sigma_j L_j\,dW^{\,N}", font_size=36, colors={r"dL_j": FWD}),
+                      r"\sigma_j L_j\,dW^{\,N}", font_size=32, colors={r"dL_j": FWD}),
                 cmath(r"\text{caplet}_i", r"=", r"P(0, T_N)\,\mathbb{E}^{N}\Big[\frac{\delta(L_i(T_i) - K)^+}{P(T_{i+1}, "
-                      r"T_N)}\Big]", font_size=36, colors={r"\text{caplet}_i": WHITE})]
+                      r"T_N)}\Big]", font_size=32, colors={r"\text{caplet}_i": WHITE})]
         whys = [why(r"the forward rates themselves are the state: one for each accrual period of a cap or a swap"),
                 why(r"Brace, Gatarek and Musiela; Jamshidian; Miltersen, Sandmann and Sondermann (1997): under the measure "
                     r"that pays at $T_{i+1}$ each forward is a martingale, so every caplet is exactly Black's formula"),
                 why(r"to simulate them all together, pick one measure (here the last payment date); the others then pick "
                     r"up drifts from the change of numeraire"),
                 why(r"and price by Monte Carlo under that one measure: the check that the drifts are right")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.35, x=-1.2, buff=0.34, edge=6.9)
         with self.voiceover(
             "Short-rate models price caplets with their own formulas, which never quite match the market's Black "
             "quotes. In 1997 three groups of authors turned it around: take the market's forward rates themselves as "

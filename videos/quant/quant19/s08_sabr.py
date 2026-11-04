@@ -126,9 +126,11 @@ class SABR(VoiceoverScene):
         lv, nv, lg = np.asarray(v["level"]), np.asarray(v["nvol_bp"]), np.asarray(v["lvol_pct"])
         yr = np.asarray(v["year"])
         g = axes([np.log(1.2), np.log(16)], [np.log(20), np.log(400)], x_length=6.2, y_length=4.4,
-                 xlabel=r"10-year yield that year, \% (log scale)", ylabel=r"normal vol, bp a year (log scale)",
-                 xticks=[], yticks=[], font_size=13).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+                 xlabel=r"", ylabel=r"normal vol, bp a year (log scale)",
+                 xticks=[], yticks=[], font_size=13).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
         ax = g.ax
+        g.add(label(r"10-year yield that year, \% (log scale)", font_size=15, color=GREY_B).next_to(
+            ax.c2p(np.log(4.4), np.log(20)), DOWN, buff=0.55))
         tx = VGroup(*[MathTex(f"{x_:g}", font_size=20).next_to(ax.c2p(np.log(x_), np.log(20)), DOWN, buff=0.12)
                       for x_ in (1.5, 3, 6, 12)])
         ty = VGroup(*[MathTex(f"{y_:g}", font_size=20).next_to(ax.c2p(np.log(1.2), np.log(y_)), LEFT, buff=0.12)
@@ -144,7 +146,7 @@ class SABR(VoiceoverScene):
             MathTex(rf"\hat\beta = {v['beta']:.2f}", font_size=34, color=NORMAL),
             MathTex(rf"\text{{spread of vols: normal }} {100 * v['cv_n']:.0f}\%,\ \text{{lognormal }} {100 * v['cv_l']:.0f}\%",
                     font_size=24),
-            wrapped_label(r"each dot a year, 1962 (blue) to 2025 (red): realised volatility of daily changes in the "
+            wrapped_label(r"each dot a year, 1962 (blue) to 2025 (pink): realised volatility of daily changes in the "
                           r"10-year Treasury yield against its level. $\beta = 0$ would be a flat line (normal), "
                           r"$\beta = 1$ a slope of one (lognormal)", 4.2, 17, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)

@@ -199,15 +199,15 @@ def compute_deepxva() -> dict:
     c, hw, a, s = _setup()
     book = _book(c)
     tm = TIMES[::4]
-    x, D = hw.simulate_x(np.r_[tm, np.arange(tm[-1] + 1 / 12, 10.0001, 1 / 12)], 6000, seed=2)
-    # cash flows of the book on annual fixed dates and annual floating resets (simplified: floating = realised simple
-    # rate over each year, from the path's discount factors)
-    grid = np.r_[tm, np.arange(tm[-1] + 1 / 12, 10.0001, 1 / 12)]
-    Dt = D  # exp(-int_0^t r) at grid dates
+    # simulate on the exposure dates and on every payment date, so cash flows are discounted exactly on each path
+    grid = np.unique(np.round(np.r_[tm, np.arange(1, 11)], 9))
+    x_all, D = hw.simulate_x(grid, 8000, seed=2)
+    pos = {round(float(g_), 9): i for i, g_ in enumerate(grid)}
+    x = x_all[:, [pos[round(float(t), 9)] for t in tm]]
+    Dt = D[:, [pos[round(float(t), 9)] for t in tm]]
 
     def disc_at(T):
-        j = int(np.argmin(np.abs(grid - T)))
-        return Dt[:, j]
+        return D[:, pos[round(float(T), 9)]]
     feats, targ = [], []
     for j, t in enumerate(tm):
         pv = np.zeros(x.shape[0])
@@ -231,14 +231,14 @@ def compute_deepxva() -> dict:
                               torch.nn.Linear(64, 1))
     opt = torch.optim.Adam(net.parameters(), lr=3e-3)
     losses = []
-    for ep in range(1500):
+    for ep in range(2500):
         idx = torch.randint(0, len(Xf), (4096,))
         opt.zero_grad()
         loss = ((net((Xf[idx] - mu) / sd) - yf[idx] / ys) ** 2).mean()
         loss.backward()
         opt.step()
         if ep % 50 == 0:
-            losses.append(float(loss))
+            losses.append(float(loss.detach()))
     # fresh paths: exact values against the network's
     xe, _ = hw.simulate_x(tm, 20000, seed=9)
     Ve, _ = _values(hw, xe, book, tm)
