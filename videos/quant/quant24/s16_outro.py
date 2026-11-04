@@ -45,7 +45,10 @@ PROBLEMS = [
     r"How many years does a Sharpe ratio of 0.45 need to reach $t = 2$? What Sharpe ratio reaches $t = 2$ in a five-year "
     r"hold-out?",
     r"A green stock is priced to earn 5\%, a brown one 7\%. A climate-concern shock raises the green price 10\% and lowers "
-    r"the brown 5\% in one year. Realised returns? Expected returns the next year?",
+    r"the brown 5\% in one year. Realised returns? Expected returns the next year?",    r"(qual) Derive Lo and MacKinlay's identity: for $w_i = (x_i - \bar x)/N$, the average of $\sum_i w_ir_i$ equals "
+    r"own covariances times $(N - 1)/N^2$, minus cross covariances over $N^2$, plus the covariance of the means.",
+    r"(qual) For $N$ assets with a common iid factor and independent AR(1) idiosyncratic parts, compute each term, and "
+    r"show the factor contributes nothing to the profit.",
 ]
 
 
@@ -162,12 +165,14 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=20)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: the GRS statistic as a gain in Sharpe ratio, and with a single asset; the two-by-three "
+            "And twelve problems: the GRS statistic as a gain in Sharpe ratio, and with a single asset; the two-by-three "
             "sort by hand; the dividend discount model's book-to-market; the value-momentum mix; momentum's beta in a "
             "rebound; volatility scaling in a crash; betting against beta by hand; how many years a factor needs; and "
-            "a green stock's realised and expected returns. Solutions, in English and Chinese, are in the notes."
+            "a green stock's realised and expected returns. Two more are qualifying-exam problems: Lo and "
+            "MacKinlay's identity, and a world where we know its parts. Solutions, in English and Chinese, are in the "
+            "notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

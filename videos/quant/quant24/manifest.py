@@ -18,5 +18,6 @@ SCENES = [
     ("s13_firms", "Firms", "12. The factor industry"),
     ("s14_track", "Track", "13. The Track Record opens"),
     ("s15_house", "House", "14. Rule 24: the factor library"),
+    ("s17_research", "Research", "For the researcher: where momentum profits come from"),
     ("s16_outro", "Outro", "Recap, desk questions, problems"),
 ]

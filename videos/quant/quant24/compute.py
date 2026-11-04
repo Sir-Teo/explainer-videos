@@ -396,7 +396,75 @@ def compute_envelope() -> dict:
     return _json({"rows": rows, "trials": pit.trials_so_far(), "costs": COSTS})
 
 
-ITEMS = {"race": compute_race, "tests": compute_tests, "sizevalue": compute_sizevalue, "momentum": compute_momentum,
+def compute_momentum_decomposition() -> dict:
+    """The research chapter: where momentum profits come from (Lo and MacKinlay 1990; Jegadeesh and Titman 1993;
+    Conrad and Kaul 1998; Lewellen 2002).  The weighted relative-strength strategy w_i = (x_i - xbar)/N, x the formation
+    return, earns pi = sum_i w_i r_i; in sample moments, exactly,
+    E[pi] = (N - 1)/N^2 sum_i Cov(x_i, r_i)  -  1/N^2 sum_{i != j} Cov(x_j, r_i)  +  1/N sum_i (mu_x,i - mu_x)(mu_i - mu):
+    own persistence, minus lead-lag across assets, plus the dispersion of means.  On Ken French's 49 industries,
+    monthly 1927-2020, for a one-month and a twelve-month (skip one) formation, with a block-bootstrap standard error;
+    and on a simulated factor model where the parts are known."""
+    d = data.ken_french_industries(49, through="2020-12")
+    R = np.asarray(d["returns"], float)          # already decimal
+    ok = ~np.isnan(R).any(0)                      # the 40 industries with a full history from July 1926
+    R = R[:, ok]
+    T, N = R.shape
+
+    def decompose(X, Y):
+        # X: formation returns, Y: holding returns, aligned rows
+        n = X.shape[1]
+        w = (X - X.mean(1, keepdims=True)) / n
+        pi = (w * Y).sum(1)
+        mx, my = X.mean(0), Y.mean(0)
+        Xc, Yc = X - mx, Y - my
+        C = Xc.T @ Yc / len(X)                     # C[j, i] = Cov(x_j, r_i), sample (1/T)
+        own = (n - 1) / n ** 2 * np.trace(C)
+        cross = -(C.sum() - np.trace(C)) / n ** 2
+        disp = float(np.mean((mx - mx.mean()) * (my - my.mean())))
+        scale = float(1 / np.mean(0.5 * np.abs(w).sum(1)))   # to a $1-long, $1-short strategy
+        return {"mean": float(pi.mean()), "own": float(own), "cross": float(cross), "disp": disp,
+                "check": float(pi.mean() - (own + cross + disp)), "pi": pi, "scale": scale}
+
+    out = {"N": int(N), "T": int(T), "first": int(d["date"][0]), "last": int(d["date"][-1]), "results": {}}
+    rng = np.random.default_rng(2424)
+    for name, k, skip in (("1-month", 1, 0), ("12-1", 12, 1)):
+        X = np.stack([np.log1p(R[t - k - skip: t - skip]).sum(0) for t in range(k + skip, T)])
+        Y = R[k + skip:]
+        res = decompose(X, Y)
+        # block bootstrap (blocks of 24 months) for the mean profit and each component
+        bs = {"mean": [], "own": [], "cross": [], "disp": []}
+        n_ = len(Y)
+        for _ in range(400):
+            starts = rng.integers(0, n_ - 24, n_ // 24 + 1)
+            idx = np.concatenate([np.arange(s_, s_ + 24) for s_ in starts])[:n_]
+            r_ = decompose(X[idx], Y[idx])
+            for key in bs:
+                bs[key].append(r_[key])
+        res["se"] = {key: float(np.std(v)) for key, v in bs.items()}
+        pi = res.pop("pi")
+        res["annual_mean"] = float(12 * pi.mean() * res["scale"])
+        res["sharpe"] = float(np.sqrt(12) * pi.mean() / pi.std())
+        out["results"][name] = res
+    # a simulated check: one factor with an AR(1) idiosyncratic part, so the own part is known to be positive and the
+    # lead-lag part zero, plus a dispersion of means
+    n, T2 = 30, 200000
+    mu = np.linspace(-0.002, 0.004, n)
+    f = rng.standard_normal(T2) * 0.04
+    e = np.zeros((T2, n))
+    phi = 0.1
+    z = rng.standard_normal((T2, n)) * 0.05
+    for t in range(1, T2):
+        e[t] = phi * e[t - 1] + z[t]
+    Rs = mu + f[:, None] + e
+    sim = decompose(Rs[:-1], Rs[1:])
+    sim.pop("pi")
+    sim_theory = {"own": (n - 1) / n ** 2 * n * phi * 0.05 ** 2 / (1 - phi ** 2), "cross": 0.0,
+                  "disp": float(np.mean((mu - mu.mean()) ** 2))}
+    out["sim"] = {"estimate": sim, "theory": sim_theory, "phi": phi, "n": n, "T": T2}
+    return _json(out)
+
+
+ITEMS = {"momentum_decomposition": compute_momentum_decomposition, "race": compute_race, "tests": compute_tests, "sizevalue": compute_sizevalue, "momentum": compute_momentum,
          "crash": compute_crash, "profit": compute_profit, "lowrisk": compute_lowrisk,
          "everywhere": compute_everywhere, "valuedecade": compute_valuedecade, "timing": compute_timing,
          "china": compute_china, "construct": compute_construct, "envelope": compute_envelope}

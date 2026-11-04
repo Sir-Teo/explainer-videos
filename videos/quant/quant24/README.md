@@ -33,7 +33,7 @@ HML's Details), global-q.org's q5 factors, and Robert Stambaugh's CH-4 factors.
 *An education in methods, not investment advice. Firms are described from the public record, as reported by the
 sources named.*
 
-## Chapters (about 55 minutes)
+## Chapters (about 59 minutes)
 
 * **Six dollars** (3.1 min). A dollar in July 1963 in the market (less bills) → $25; in SMB, HML, RMW, CMA → $3.6–4.9;
   in momentum → $40 (to December 2020, no costs); the momentum crash of March–May 2009 (−49% while the market rose
@@ -95,7 +95,18 @@ sources named.*
   held); the trial counter 315 → 325.
 * **14. Rule 24: the factor library** (2.6). The first sheet; **lab**: `vol_scaled`, `factor_momentum`, `drawdown`;
   the `factors` module; Rule 24; the rule against 2009, value's decade, size after 1981, and green returns.
-* **Recap, desk questions, problems** (3.4). Fourteen lines; six desk questions; ten problems, solutions below.
+* **For the researcher: where momentum profits come from** (5.3). For the weighted relative-strength strategy
+  w_i = (x_i − x̄)/N, the average profit is exactly (N − 1)/N²ΣCov(x_i, r_i) − (1/N²)Σ_{i≠j}Cov(x_j, r_i) + the
+  covariance of the means (Lo and MacKinlay 1990): own persistence, lead–lag, dispersion of means. A simulated check
+  (30 assets, AR(1) idiosyncratic φ = 0.1, a common factor) recovers each term. Ken French's 40 industries with full
+  histories, monthly 1926–2020, in 10⁻⁴ a month (± block-bootstrap s.e.): one-month formation, profit 0.50 (± 0.26) =
+  own 4.42 (± 2.42) + lead–lag −3.94 (± 2.28) + means 0.02; twelve-month (skip one), 3.43 (± 0.96) = own −1.07 (± 7.3)
+  + lead–lag 4.32 (± 6.7) + means 0.18 (± 0.12): as $1/$1 strategies 3.8% and 6.8% a year (Sharpe 0.20, 0.32). The
+  twelve-month profit comes from negative cross-serial covariance (Lewellen 2002), the dispersion of means about 5%
+  (against Conrad and Kaul 1998; Jegadeesh and Titman 2002). Three open problems; pause: a positive lead from asset 1
+  to asset 2 enters the lead–lag term with a minus sign, and the strategy loses.
+* **Recap, desk questions, problems** (3.4). Fourteen lines; six desk questions; twelve problems (two at
+  qualifying-exam level), solutions below.
 
 ## Hands-on
 
@@ -202,6 +213,24 @@ re-reads it) and refuses a second opening with different code.
 9. **Years.** T = (2/0.45)² ≈ 19.8 years. In five years, t = SR√5 = 2 needs SR = 0.89.
 10. **Green and brown.** Realised: green (1.05)(1.10) − 1 = 15.5%; brown (1.07)(0.95) − 1 = 1.65%. Expected next year:
     still 5% and 7%, unless concern keeps rising faster than prices assume.
+11. **(qual) Lo and MacKinlay's identity.** π̄ = (1/T)Σ_tΣ_i(x_{it} − x̄_t)r_{it}/N = (1/N)Σ_i \overline{x_ir_i} − \overline{x̄ r̄}.
+   Write \overline{x_ir_i} = Ĉov(x_i, r_i) + x̄_ir̄_i and \overline{x̄r̄} = Ĉov(x̄, r̄) + (mean x̄)(mean r̄), with
+   Ĉov(x̄, r̄) = (1/N²)Σ_{i,j}Ĉov(x_j, r_i). Collect the diagonal: (1/N − 1/N²)ΣĈov(x_i, r_i) = ((N − 1)/N²)ΣĈov(x_i, r_i);
+   the off-diagonal enters as −(1/N²)Σ_{i≠j}; the means give (1/N)Σx̄_ir̄_i − x̄r̄ = (1/N)Σ(x̄_i − x̄)(r̄_i − r̄).
+12. **(qual) A known world.** r_it = μ_i + f_t + e_it with f iid and e_it = φe_{i,t−1} + z_it. For a one-period
+   formation, Cov(x_i, r_i) = Cov(f, f′) + Cov(e_i, e_i′) = 0 + φσ_z²/(1 − φ²); Cov(x_j, r_i) = 0 for i ≠ j (f is iid,
+   the e's independent); the means term is the cross-sectional variance of μ. The factor is common to all assets, so
+   it cancels from x_i − x̄: it adds nothing.
+
+## For the researcher
+
+* **The theorems.** Lo and MacKinlay (1990), "When are contrarian profits due to stock market overreaction?" *RFS* 3;
+  Jegadeesh and Titman (1993, 2002); Conrad and Kaul (1998), *RFS* 11; Moskowitz and Grinblatt (1999) on industry
+  momentum; Lewellen (2002), "Momentum and autocorrelation in stock returns," *RFS* 15.
+* **Simplifications.** The weighted (linear) strategy rather than deciles; 40 industries with complete histories;
+  log formation returns; the bootstrap ignores the overlap of formation windows beyond the 24-month blocks.
+* **Open problems.** Individual stocks and which links carry the profit; decomposing momentum's risk; whether lead–lag
+  has been traded away.
 
 ## Data and reproducibility
 
@@ -244,7 +273,7 @@ re-reads it) and refuses a second opening with different code.
 
 *讲的是方法，不构成投资建议。涉及的公司均依据公开记录，并注明报道来源。*
 
-## 章节（约55分钟）
+## 章节（约59分钟）
 
 * **六美元。** 1963年7月投入市场（减去国库券）的一美元 → 25美元；投入SMB、HML、RMW、CMA → 3.6–4.9美元；投入动量 → 40美元（到2020年12月，不计成本）；2009年3–5月的动量崩盘（−49%，而市场上涨26%）；因子是多空组合，因子模型是因子有名字的APT；历史条（1972–2022）；本部分安排；研究交易台的因子库。
 * **1. 检验因子模型。** 25个规模–价值组合，1963–2020（小盘价值每年12.7%，小盘成长4.3%）；时间序列检验与GRS；其几何（α'Σ⁻¹α = SR²(f, R) − SR²(f)）；Fama–MacBeth与Shanken；结果（GRS：CAPM 3.96、FF3 3.55、Carhart 3.09、FF5 2.96，p都小于10⁻⁵；平均|α| 2.3% → 1.1% → 1.0% → 1.0%）；α网格（小盘成长在CAPM和FF3下为−5.5%，在FF5下为−3.3%）；预测收益对平均收益；用哪些资产、哪种检验（Lewellen–Nagel–Shanken；Barillas–Shanken）。
@@ -261,7 +290,8 @@ re-reads it) and refuses a second opening with different code.
 * **12. 因子行业。** Dimensional（1981）；AQR（1998；2018年报道资产约2,260亿美元）；因子指数与ETF；只做多的倾斜相当于市场加上一部分因子（示意）；换手率、实测成本（Frazzini–Israel–Moskowitz；Novy-Marx–Velikov 2016）、容量。
 * **13. 业绩记录开启。** 规则；登记代码；十行（研究期夏普比率 → 2021–25年夏普比率：MKT 0.44 → 0.68、SMB 0.26 → −0.44、HML 0.31 → 0.55、UMD 0.46 → 0.18、RMW 0.39 → 0.62、CMA 0.44 → 0.12、BAB 0.73 → 0.18、QMJ 0.54 → 0.25、TSMOM 1.06 → 0.28、价值–动量组合1.08 → 1.06；标准误约0.45）；逐年（2022年：市场−21%、HML +32%、UMD +20%、TSMOM +25%）；解读（如预期般衰减、显著性很低、组合守住了）；试验计数器315 → 325。
 * **14. 第24条规则：因子库。** 第一张表；**实验**：`vol_scaled`、`factor_momentum`、`drawdown`；`factors`模块；第24条规则；用2009年、价值的十年、1981年后的规模和绿色收益检验这条规则。
-* **回顾、交易台问题与习题。** 十四行回顾；六个交易台问题；十道习题，解答见下文。
+* **写给研究者：动量收益从何而来。** 对加权相对强度策略w_i = (x_i − x̄)/N，平均利润恰为(N − 1)/N²ΣCov(x_i, r_i) − (1/N²)Σ_{i≠j}Cov(x_j, r_i) + 均值的协方差（罗与麦金莱1990）：自身持续性、领先–滞后、均值离散。模拟检验（30个资产、AR(1)特质部分φ = 0.1、一个公共因子）还原了每一项。肯尼斯·弗伦奇的40个完整历史行业，1926–2020月度，单位10⁻⁴每月（± 块自助法标准误）：一个月形成期，利润0.50（± 0.26）= 自身4.42（± 2.42）+ 领先–滞后−3.94（± 2.28）+ 均值0.02；十二个月（跳过一个月），3.43（± 0.96）= 自身−1.07（± 7.3）+ 领先–滞后4.32（± 6.7）+ 均值0.18（± 0.12）：作为1美元多/1美元空的策略每年3.8%和6.8%（夏普0.20、0.32）。十二个月的利润来自负的交叉序列协方差（卢埃林2002），均值离散约占5%（与康拉德和考尔1998相反；杰加迪什与蒂特曼2002）。三个开放问题；暂停题：资产1对资产2的正向领先以负号进入领先–滞后项，策略亏损。
+* **回顾、交易台问题与习题。** 十四行回顾；六个交易台问题；十二道习题（两道为资格考试水平），解答见下文。
 
 ## 交易台问题与解答
 
@@ -284,6 +314,8 @@ re-reads it) and refuses a second opening with different code.
 8. **手算BAB。** r = 0.6/0.7 − 0.8/1.5 = 0.857 − 0.533 = 每月0.32%（每年3.9%）；若贝塔准确，它的贝塔为0.7/0.7 − 1.5/1.5 = 0。
 9. **年数。** T = (2/0.45)² ≈ 19.8年。五年内要t = SR√5 = 2，需要SR = 0.89。
 10. **绿色与棕色。** 实现：绿色(1.05)(1.10) − 1 = 15.5%；棕色(1.07)(0.95) − 1 = 1.65%。下一年的预期：仍为5%和7%，除非关注度继续以超过价格预期的速度上升。
+11. **（资格考试）罗与麦金莱的恒等式。** π̄ = (1/N)Σ_i \overline{x_ir_i} − \overline{x̄ r̄}。把\overline{x_ir_i}写成Ĉov(x_i, r_i) + x̄_ir̄_i，\overline{x̄r̄}写成Ĉov(x̄, r̄) + 均值之积，其中Ĉov(x̄, r̄) = (1/N²)Σ_{i,j}Ĉov(x_j, r_i)。对角项合并为((N − 1)/N²)ΣĈov(x_i, r_i)；非对角项以−(1/N²)Σ_{i≠j}进入；均值部分为(1/N)Σ(x̄_i − x̄)(r̄_i − r̄)。
+12. **（资格考试）已知的世界。** r_it = μ_i + f_t + e_it，f独立同分布，e_it = φe_{i,t−1} + z_it。一期形成期时Cov(x_i, r_i) = φσ_z²/(1 − φ²)；i ≠ j时Cov(x_j, r_i) = 0；均值项是μ的横截面方差。因子对所有资产相同，在x_i − x̄中抵消：它不贡献任何利润。
 
 ## 数据与复现
 
@@ -294,3 +326,9 @@ re-reads it) and refuses a second opening with different code.
 * 成本模型，在第26部分之前的占位：市场每年0.05%；SMB、HML、RMW、CMA、QMJ和TSMOM每年1%；BAB和价值–动量组合1.5%；UMD 3%。
 * 引用而非计算的公开数字：所引论文中Banz、Basu等的发现；McLean与Pontiff的百分比；Berg、Kölbel与Rigobon的相关系数；AQR的报道资产；Dimensional的成立。
 * 屏幕上标注为示意的输入：2 x 3的玩具排序、股利贴现模型中的公司、绿色的十年、只做多的载荷、熊市收益图的斜率。
+
+## 写给研究者
+
+* **定理。** 罗与麦金莱（1990），*RFS* 3；杰加迪什与蒂特曼（1993、2002）；康拉德与考尔（1998），*RFS* 11；Moskowitz与Grinblatt（1999）论行业动量；卢埃林（2002），*RFS* 15。
+* **简化。** 用加权（线性）策略而非十分位；40个完整历史的行业；对数形成期收益；块自助法未考虑24个月块之外的形成期窗口重叠。
+* **开放问题。** 个股以及哪些联系承载利润；分解动量的风险；领先–滞后是否已被交易掉。
