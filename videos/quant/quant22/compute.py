@@ -217,11 +217,18 @@ def compute_carry() -> dict:
             legs[list(CCY)[k_]]["long"] += 1
         for k_ in order[:3]:
             legs[list(CCY)[k_]]["short"] += 1
-    # the strategy scaled to 10% volatility, cumulative
     cum = np.cumsum(np.where(ok, ls, 0.0))
+    snap = {}
+    for m_ in (200706, 202406):
+        i = int(np.searchsorted(months[:-1], m_))
+        snap[str(m_)] = {c: float(diff[i, j]) for j, c in enumerate(CCY) if np.isfinite(diff[i, j])}
+    hist, edges = np.histogram(ls[ok], bins=30)
+    skews = np.array([per[c]["skew"] for c in CCY])
+    diffs = np.array([per[c]["mean_diff"] for c in CCY])
     return _json({"t": t, "ls": ls, "cum": cum, "long": cs["long"], "short": cs["short"], "stats": st,
                   "worst": [{"t": float(t[i]), "ym": int(months[1:][i]), "r": float(ls[i])} for i in worst],
-                  "per": per, "legs": legs})
+                  "per": per, "legs": legs, "snap": snap, "hist": hist, "edges": edges,
+                  "skew_diff_corr": float(np.corrcoef(skews, diffs)[0, 1])})
 
 
 def compute_yen2024() -> dict:

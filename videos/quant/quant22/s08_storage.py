@@ -1,0 +1,182 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant22.common import BAD, BASIS, GOOD, OIL, PART, USD, ask, fit_right, illustration, load
+
+
+class Storage(VoiceoverScene):
+    def construct(self):
+        o = load("oil")
+        self.card()
+        self.carry()
+        self.convenience()
+        self.snapshots(o)
+        self.slope(o)
+        self.theory()
+
+    def card(self):
+        c = chapter_card(7, r"Storage, carry and the convenience yield", r"What should oil for delivery next year cost?",
+                         lit=(2008, 2020), part=PART)
+        with self.voiceover("Chapter seven. Commodities: what a barrel for future delivery should cost, and why it "
+                            "often does not."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def carry(self):
+        rows = [cmath(r"F_{t,T}", r"\le", r"S_t\,e^{(r + u)(T - t)}", font_size=42, colors={r"F_{t,T}": OIL}),
+                cmath(r"F_{t,T}", r"=", r"S_t\,e^{(r + u - y)(T - t)}", font_size=42, colors={r"F_{t,T}": OIL})]
+        whys = [why(r"cash and carry: buy a barrel, store it at cost $u$, finance it at $r$, sell it forward. If the "
+                    r"future is dearer than that, the trade is free money; so the future can be no dearer"),
+                why(r"but the reverse trade needs someone to lend you oil, and those who hold it value having it: a "
+                    r"refinery cannot stop. That benefit, the convenience yield $y$, can push the future far below the "
+                    r"cost of carry (Kaldor, 1939; Working, 1949)")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "A currency forward was pinned by an arbitrage in both directions. A commodity future is pinned in only "
+            "one. Buy a barrel today, pay to store it and to finance it, and sell it for future delivery: if the "
+            "future is dearer than the cost of carry, that is free money. So the future can be no dearer. "
+            "<bookmark mark='a'/> The reverse trade would sell a barrel today and buy it back later, and that needs "
+            "someone to lend you oil. Those who hold oil value having it: a refinery that runs out must stop. That "
+            "value, Nicholas Kaldor's and Holbrook Working's convenience yield, can push the future well below the "
+            "cost of carry."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def convenience(self):
+        rows = [cmath(r"y - u", r"=", r"r - \frac{1}{T_2 - T_1}\ln\frac{F_{T_2}}{F_{T_1}}", font_size=42,
+                      colors={r"y - u": GOOD})]
+        whys = [why(r"two futures one month apart give the convenience yield net of storage: positive when the curve "
+                    r"slopes down (backwardation, oil is scarce now), negative in steep contango (storage is full, and "
+                    r"holders must be paid to keep it)")]
+        step = ladder(self, rows, whys, keep=1, top=2.3, x=-0.4, buff=0.8, edge=6.9)
+        names = VGroup(
+            desk_question(r"backwardation", r"next month's oil cheaper than today's: inventories are low, and having a "
+                          r"barrel now is worth a premium", width=12.0, font_size=21),
+            desk_question(r"contango", r"next month's oil dearer: inventories are high, and the spread pays for storage "
+                          r"and financing", width=12.0, font_size=21),
+        ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "So the slope of the futures curve reveals the convenience yield. Two contracts a month apart give it, "
+            "net of storage, directly. <bookmark mark='a'/> When oil is scarce, the curve slopes down: backwardation. "
+            "<bookmark mark='b'/> When tanks are full, it slopes up, by enough to pay for storage and financing: "
+            "contango. The shape of the curve is a reading of inventories."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.play(FadeIn(names[0], shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(names[1], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def snapshots(self, o):
+        sn = o["snaps"]
+        keys_b = ["2008-07-03", "2014-06-20", "2022-03-08"]
+        keys_c = ["2008-12-19", "2016-02-11", "2020-04-17"]
+        g1 = axes([0.5, 4.5], [90, 160], x_length=5.4, y_length=3.6, xlabel=r"contract (months ahead)",
+                  ylabel=r"\$ a barrel", xticks=[1, 2, 3, 4], yticks=[100, 125, 150], font_size=13)
+        g2 = axes([0.5, 4.5], [10, 55], x_length=5.4, y_length=3.6, xlabel=r"contract (months ahead)",
+                  ylabel=r"\$ a barrel", xticks=[1, 2, 3, 4], yticks=[20, 35, 50], font_size=13)
+        VGroup(g1, g2).arrange(RIGHT, buff=1.0).shift(DOWN * 0.5)
+        cols = [OIL, BAD, GOOD]
+
+        def curves(g, keys):
+            out = VGroup()
+            for k, c_ in zip(keys, cols):
+                P = np.asarray(sn[k]["P"])
+                out.add(VGroup(curve(g.ax, np.arange(1, 5), P, c_, stroke_width=3),
+                               *[Dot(g.ax.c2p(i + 1, p), color=c_, radius=0.05) for i, p in enumerate(P)],
+                               label(k, font_size=14, color=c_).next_to(g.ax.c2p(4, P[-1]), RIGHT, buff=0.1)))
+            return out
+        cb, cc_ = curves(g1, keys_b), curves(g2, keys_c)
+        t1 = label(r"backwardation: scarce oil", font_size=22, color=GOOD).next_to(g1, UP, buff=0.25)
+        t2 = label(r"contango: full tanks", font_size=22, color=BAD).next_to(g2, UP, buff=0.25)
+        with self.voiceover(
+            "The NYMEX crude curve, first to fourth contract, on six days. <bookmark mark='a'/> On the left, "
+            "backwardation: July 2008 at a hundred and forty-five dollars, the summer of 2014 before the fall, and "
+            "March 2022 after Russia's invasion, when the front contract stood thirteen dollars above the fourth. "
+            "<bookmark mark='b'/> On the right, contango: December 2008, when the front month traded at thirty-four "
+            "and the fourth at forty-seven, enough to pay tankers to sit at sea full of oil; February 2016's glut; "
+            "and the seventeenth of April 2020, three days before the front contract went below zero."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(t1), FadeIn(t2))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(c_) for c_ in cb], lag_ratio=0.4))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[Create(c_) for c_ in cc_], lag_ratio=0.4))
+        self.add(illustration(r"EIA: NYMEX WTI futures contracts 1--4 (RCLC1--4), daily settlements"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def slope(self, o):
+        t, sl, c1 = np.asarray(o["t"]), 100 * np.asarray(o["slope"]), np.asarray(o["c1"])
+        ok = np.isfinite(sl) & (c1 > 0)
+        t, sl, c1 = t[ok], np.clip(sl[ok], -60, 120), c1[ok]
+        g1 = axes([1986, 2025], [0, 150], x_length=10.4, y_length=2.0, xlabel=r"", ylabel=r"front, \$",
+                  xticks=[], yticks=[0, 50, 100, 150], font_size=12).to_edge(UP, buff=0.6)
+        g2 = axes([1986, 2025], [-60, 120], x_length=10.4, y_length=2.6, xlabel=r"year",
+                  ylabel=r"slope, \% a year", xticks=[1990, 2000, 2010, 2020], yticks=[-50, 0, 50, 100], font_size=12
+                  ).next_to(g1, DOWN, buff=0.35)
+        l1 = curve(g1.ax, t, c1, OIL, stroke_width=2)
+        zero = DashedLine(g2.ax.c2p(1986, 0), g2.ax.c2p(2025, 0), color=GREY_B, stroke_width=1.2)
+        l2 = curve(g2.ax, t, sl, BASIS, stroke_width=1.6)
+        foot = wrapped_label(rf"the annualised slope from the first to the fourth contract (clipped at 120\%); in "
+                             rf"contango {100 * o['contango_share']:.0f}\% of days since 1986. The slope spikes upward "
+                             r"in gluts (1998, 2008--09, 2015--16, 2020) and is most negative when supply is tight",
+                             11.8, 17, GREY_A).to_edge(DOWN, buff=0.3)
+        with self.voiceover(
+            "Over four decades. <bookmark mark='a'/> The front-month price above, the curve's slope below, annualised. "
+            "<bookmark mark='b'/> The slope leaps upward in every glut: the Asian crisis of 1998, the winter of 2008, "
+            "the price war of 2015 and 2016, and April 2020, when it went off the chart. It is negative when supply "
+            f"is tight. Over the whole period the curve was in contango on {100 * o['contango_share']:.0f} percent "
+            "of days: oil, on most days, was plentiful enough to need storing."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(g2), Create(zero))
+            vo.wait_until("a")
+            self.play(Create(l1), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(l2), FadeIn(foot), run_time=2.5)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def theory(self):
+        cards = VGroup(
+            desk_question(r"the theory of storage", r"Working's curve: the spread between near and far futures rises "
+                          r"with inventories, steeply when they are scarce and flat when they are ample", width=12.0,
+                          font_size=21),
+            desk_question(r"the evidence", r"Gorton, Hayashi and Rouwenhorst (2013): low inventories predict "
+                          r"backwardation, higher volatility and higher futures returns, across 31 commodities",
+                          width=12.0, font_size=21),
+            desk_question(r"what it means for a future", r"a commodity future is not a forecast of the spot price: it "
+                          r"is the spot price, adjusted for what holding the stuff costs and is worth", width=12.0,
+                          font_size=21),
+        ).arrange(DOWN, buff=0.3)
+        if cards.height > 6.6:
+            cards.scale_to_fit_height(6.6)
+        with self.voiceover(
+            "Holbrook Working drew the relationship in 1949. <bookmark mark='a'/> The spread between near and far "
+            "futures rises with inventories: steeply when stocks are scarce, flat when they are ample. "
+            "<bookmark mark='b'/> Gary Gorton, Fumio Hayashi and Geert Rouwenhorst confirmed it on thirty-one "
+            "commodities: low inventories predict backwardation, higher volatility, and higher returns to holding "
+            "futures. <bookmark mark='c'/> A commodity future is not the market's forecast of the spot price. It is "
+            "today's price, adjusted for what holding the stuff costs, and what having it is worth."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+        q = ask(r"the front WTI contract is \$70 and the next is \$71.50, a month later, with rates at 5\%. What is the "
+                r"implied convenience yield net of storage, and what does it say about inventories?")
+        with self.voiceover("The front oil contract is seventy dollars and the next is seventy-one fifty, a month later, "
+                            "with rates at five percent. What convenience yield, net of storage, does that imply, and "
+                            "what does it say about inventories?"):
+            self.play(FadeIn(q))
+        self.wait(0.5)
+        self.clear_scene()
