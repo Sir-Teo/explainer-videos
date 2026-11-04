@@ -18,7 +18,7 @@ class Coherence(VoiceoverScene):
 
     def card(self):
         card = chapter_card(3, r"Cache coherence", r"What if two caches disagree about one address?",
-                            lit=(1983, 1984), extra=((1984, r"Papamarcos and Patel: \ MESI"),), part=PART)
+                            lit=(1984,), extra=((1984, r"Papamarcos and Patel: \ MESI"),), part=PART)
         with self.voiceover("Chapter three. Cache coherence."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
@@ -125,7 +125,7 @@ class Coherence(VoiceoverScene):
             label(r"I: \ not here", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DL, buff=0.35)
         leg = VGroup(label(r"grey: \ this core's own reads and writes", font_size=18, color=GREY_B),
-                     label(r"purple: \ what it sees other cores do on the bus", font_size=18, color=FUNC)).arrange(
+                     label(r"green: \ what it sees other cores do on the bus", font_size=18, color=FUNC)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.35)
         also = note(r"also: \ E $\to$ S when another core reads; \\ M or E $\to$ I when another core writes",
                     font_size=16).next_to(leg, UP, buff=0.15)
