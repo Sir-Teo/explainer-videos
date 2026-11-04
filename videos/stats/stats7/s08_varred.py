@@ -147,7 +147,7 @@ class VarRed(VoiceoverScene):
         with self.voiceover(
             "The most powerful trick changes where you sample. <bookmark mark='a'/> Suppose we want the chance that a "
             "standard normal exceeds four: about three in a hundred thousand. With a hundred thousand plain draws, "
-            "you'd see about three exceedances, and in about one run in twenty, none at all. The estimate is "
+            "you'd see about three exceedances, and in about one run in fifteen, none at all. The estimate is "
             "mostly noise. <bookmark mark='b'/> Instead, draw from a normal centred at four, where half the draws "
             "exceed four, and reweight each by the ratio of the densities. <bookmark mark='c'/> The expectation is "
             "unchanged, by a one-line change of measure. <bookmark mark='d'/> But the variance falls by a factor of "
