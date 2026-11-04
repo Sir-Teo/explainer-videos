@@ -1412,7 +1412,109 @@ def compute_reversionary() -> dict:
     return _json(out)
 
 
-ITEMS = {"facts": compute_facts, "calibrate": compute_calibrate, "qe": compute_qe, "skew": compute_skew,
+def _tstar(p, kappa, xi, rho):
+    """Andersen and Piterbarg (2007): the time at which E[S_T^p] (S a Heston forward) first becomes infinite.  The
+    variance coefficient of the moment generating function solves psi' = a psi^2 + b psi + c, psi(0) = 0, with
+    a = xi^2/2, b = rho xi p - kappa, c = (p^2 - p)/2; it explodes when the Riccati solution does."""
+    a, b, c = xi ** 2 / 2, rho * xi * p - kappa, (p * p - p) / 2
+    if c <= 0:
+        return np.inf
+    D = b * b - 4 * a * c
+    if D < 0:
+        r = np.sqrt(-D)
+        return float(2 / r * (np.pi / 2 - np.arctan(b / r)))
+    if b > 0:
+        r = np.sqrt(D)
+        return float(np.log((b + r) / (b - r)) / r)
+    return np.inf
+
+
+def compute_moments_theory() -> dict:
+    """The research chapter: moment explosions and the wings of the smile.  Heston's moments E[S_T^p] are finite
+    only until an explosion time T*(p) (Andersen and Piterbarg 2007); at a fixed maturity the critical moments fix the
+    wings through Lee's (2004) moment formula, slope = 2 - 4(sqrt(p^2 + p) - p).  Checked against an ODE solver, a
+    simulation whose sample moments never settle, and Heston's own smile far into the wing; then the Bitcoin fit of
+    Chapter 3 against the Surface's wings."""
+    from scipy.integrate import solve_ivp
+    from scipy.optimize import brentq
+
+    lee = lambda pt: 2 - 4 * (np.sqrt(pt * pt + pt) - pt)  # noqa: E731
+    tb = dict(v0=0.04, kappa=2.0, theta=0.04, xi=1.0, rho=-0.7)
+    ps_pos = np.linspace(1.05, 16, 160)
+    ps_neg = np.linspace(-10, -0.05, 160)
+    out = {"textbook": tb, "p_pos": ps_pos, "p_neg": ps_neg,
+           "tstar_pos": [_tstar(p, tb["kappa"], tb["xi"], tb["rho"]) for p in ps_pos],
+           "tstar_neg": [_tstar(p, tb["kappa"], tb["xi"], tb["rho"]) for p in ps_neg]}
+
+    def ode(p):
+        f = lambda t, y: [tb["xi"] ** 2 / 2 * y[0] ** 2 + (tb["rho"] * tb["xi"] * p - tb["kappa"]) * y[0] + (p * p - p) / 2]  # noqa: E731
+        ev = lambda t, y: y[0] - 1e7  # noqa: E731
+        ev.terminal = True
+        r = solve_ivp(f, [0, 60], [0.0], events=ev, rtol=1e-10, atol=1e-12, max_step=0.005)
+        return float(r.t_events[0][0]) if len(r.t_events[0]) else None
+    out["ode_check"] = [{"p": p, "formula": _tstar(p, tb["kappa"], tb["xi"], tb["rho"]), "ode": ode(p)}
+                        for p in (-1.0, -2.0, -3.0, -4.0, -6.0)]
+    # critical moments by maturity, and Lee's slopes
+    def pcrit(T, side, prm):
+        g = lambda p: _tstar(p, prm["kappa"], prm["xi"], prm["rho"]) - T  # noqa: E731
+        try:
+            return float(brentq(g, 1.000001, 2000) if side > 0 else brentq(g, -2000, -1e-6))
+        except ValueError:
+            return None
+    Ts = np.linspace(0.1, 5, 50)
+    out["T"] = Ts
+    out["pcrit_neg"] = [pcrit(T, -1, tb) for T in Ts]
+    out["lee_left"] = [lee(-q) if q else None for q in out["pcrit_neg"]]
+    # the left wing of the textbook smile at T = 1, far out
+    T = 1.0
+    cf = lambda u, T_: sv.heston_cf(u, T_, **tb)  # noqa: E731
+    ks = np.linspace(0.25, 8, 32)
+    iv = sv.model_iv(cf, 1.0, np.exp(-ks), T)
+    w = iv ** 2 * T
+    out["wing"] = {"T": T, "k": ks, "w_over_k": w / ks, "dw_dk": np.gradient(w, ks),
+                   "p_crit": pcrit(T, -1, tb), "lee": lee(-pcrit(T, -1, tb))}
+    # sample moments that never settle: E[S_T^-3] before and after its explosion time
+    p = -3.0
+    t3 = _tstar(p, tb["kappa"], tb["xi"], tb["rho"])
+    runs = {}
+    for name, TT in (("before", 0.5 * t3), ("after", 1.6 * t3)):
+        xs = []
+        for b_ in range(8):  # 8 batches of 25,000 paths, keeping only the final price
+            S = sv.heston_qe(1.0, tb["v0"], tb["kappa"], tb["theta"], tb["xi"], tb["rho"], TT, int(50 * TT) + 10,
+                             25000, seed=1313 + b_)
+            S = np.asarray(S)
+            xs.append((S[:, -1] if S.shape[0] == 25000 else S[-1, :]) ** p)
+        x = np.concatenate(xs)
+        cm = np.cumsum(x) / np.arange(1, len(x) + 1)
+        idx = np.unique(np.geomspace(100, len(x), 120).astype(int)) - 1
+        runs[name] = {"T": TT, "n": idx + 1, "running_mean": cm[idx], "max_share": float(x.max() / x.sum())}
+    out["sample_moment"] = {"p": p, "tstar": t3, "runs": runs}
+    # Bitcoin: the Heston fit of Chapter 3 against the Surface's wings
+    fit = load("calibrate")["fits"]["Heston"]["params"]
+    s = surface.build(surface.DAYS[0])
+    E, k, ivs = np.array(s["expiry"]), np.asarray(s["k"]), np.asarray(s["iv"])
+    rows = []
+    for e in s["expiries"]:
+        if e["T"] < 0.1:
+            continue
+        m = E == e["expiry"]
+        kk, ww = k[m], ivs[m] ** 2 * e["T"]
+        o = np.argsort(kk)
+        kk, ww = kk[o], ww[o]
+        n3 = max(3, len(kk) // 4)
+        sR = float(np.polyfit(kk[-n3:], ww[-n3:], 1)[0])
+        sL = float(-np.polyfit(kk[:n3], ww[:n3], 1)[0])
+        pr, pl = pcrit(e["T"], 1, fit), pcrit(e["T"], -1, fit)
+        rows.append({"expiry": e["expiry"], "T": e["T"], "k_min": float(kk[0]), "k_max": float(kk[-1]),
+                     "slope_left": sL, "slope_right": sR, "p_right": pr, "p_left": pl,
+                     "lee_left": lee(-pl) if pl else None, "lee_right": lee(pr - 1) if pr else None,
+                     "implied_q_left": (2 - sL) ** 2 / (8 * sL) if sL > 0 else None,
+                     "implied_p_right": (2 - sR) ** 2 / (8 * sR) if sR > 0 else None})
+    out["btc"] = {"fit": fit, "rows": rows}
+    return _json(out)
+
+
+ITEMS = {"moments_theory": compute_moments_theory, "facts": compute_facts, "calibrate": compute_calibrate, "qe": compute_qe, "skew": compute_skew,
          "sabr": compute_sabr, "landscape": compute_landscape, "history": compute_history, "slv": compute_slv,
          "exotics": compute_exotics, "bergomi": compute_bergomi, "envelope": compute_envelope,
          # the expansion

@@ -1,7 +1,7 @@
 # Quant, Built — Part 13: Stochastic Volatility and Jumps
 
 Part 13 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), in Act III, Derivatives: about 56 minutes, a hook, eighteen chapters and an outro.
+[the syllabus](../SYLLABUS.md)), in Act III, Derivatives: about 57 minutes, a hook, eighteen chapters, a chapter for the researcher and an outro.
 It covers:
 
 * why volatility must move, and why random volatility makes a smile (Hull–White, Renault–Touzi, Romano–Touzi);
@@ -23,7 +23,7 @@ the S&P 500's daily closes for 1986–1987 (Yahoo).
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 53 minutes)
+## Chapters (about 57 minutes)
 
 * **The second river (hook).** DVOL 2021–2025 with its floods. Five models fitted to the same options price one
   cliquet 8% apart. How we got here, 1973–2022. Objectives; the calibrator.
@@ -93,7 +93,19 @@ the S&P 500's daily closes for 1986–1987 (Yahoo).
 * **18. Frontier.** Reversionary Heston refitted with κ = 15, 30, 60, 120: ξ = 4.7, 7.0, 11.0, 18.5 (ξ/√κ 1.20 → 1.69),
   3-day error 5.3 → 3.3–3.6 while the overall fit worsens 1.33 → 1.78. The quintic OU model; Guyon–Mustapha;
   Choi–Kwok; Reisinger–Tsianni; Wang et al. (2026).
-* **Recap, desk questions, problems.** Rule 13; the trial counter stays at 310.
+* **For the researcher: moment explosions and the wings.** Heston's moment generating function is
+  exp(φ(T) + ψ(T)v₀) with ψ′ = ½ξ²ψ² + (ρξp − κ)ψ + ½(p² − p); E[S_T^p] is finite exactly until ψ blows up
+  (Andersen and Piterbarg 2007), at T*(p) = (2/√−Δ)(π/2 − arctan(b/√−Δ)) when Δ < 0. Textbook Heston (κ 2, θ 0.04, ξ 1,
+  ρ −0.7): T*(−1/−2/−3/−4/−6) = 9.83/1.53/0.89/0.63/0.40 years, an ODE solver agreeing to seven digits; upper moments
+  finite for ever up to p ≈ 8.4. Monte Carlo of E[S_T^{−3}] (QE, 200,000 paths): at T*/2 the running mean settles
+  (largest path 0.3% of the sum); at 1.6T* it never does (46%). Lee's moment formula, slope = 2 − 4(√(q̃² + q̃) − q̃),
+  with q̃ = −p*(T) and Benaim–Friz's limit: at T = 1, p* = −2.74 and the left wing's slope 0.155; the model's own smile
+  (COS, out to K = e^{−8}F) has dw/d|k| 0.167 at |k| = 1.25 and 0.162 at 8, converging like |k|^{−1/2}. Bitcoin: the
+  Chapter 3 Heston fit's Lee slopes against the Surface's outer put wings, 0.085/0.111/0.129/0.161/0.174 against
+  0.089/0.120/0.138/0.178/0.198 for January to September 2026 (consistency, not a test); inverted, the market's
+  critical inverse moment is about 5.1/3.7/3.1/2.3/2.1. Three open problems; pause: q̃ = 2 gives a slope of 0.202;
+  q̃ → 0 gives 2, q̃ → ∞ gives 0.
+* **Recap, desk questions, nine problems (two at qualifying-exam level).** Rule 13; the trial counter stays at 310.
 
 ## Build it
 
@@ -196,6 +208,28 @@ The long items (`slv_particles`, `mixing_sweep`, `history_reg`) save their piece
    * Given G_t, X_t is normal: E[e^{iuX_t} | G_t] = e^{G_t(iuθ − σ²u²/2)}.
    * The gamma mgf E[e^{sG_t}] = (1 − νs)^{−t/ν} at s = iuθ − σ²u²/2 gives φ(u) = (1 − iuθν + ½σ²νu²)^{−t/ν}.
    * The martingale correction ω = (1/ν)ln(1 − θν − ½σ²ν) is added to the drift, so that E[e^{X_t + ωt}] = 1.
+8. **(qual) The explosion time.** With a, c > 0 and 4ac − b² = r² > 0, complete the square:
+   ψ′ = a[(ψ + b/2a)² + r²/4a²]. Substituting ψ = (r/2a)tan θ − b/2a gives θ′ = r/2, so θ(t) = rt/2 + θ₀ with
+   tan θ₀ = b/r (from ψ(0) = 0). ψ reaches infinity when θ = π/2: T* = (2/r)(π/2 − arctan(b/r)). For Heston,
+   a = ξ²/2, b = ρξp − κ, c = (p² − p)/2, so 4ac − b² = −Δ. Moments of order p > 1 are finite for ever exactly when the
+   quadratic has real roots (Δ ≥ 0) and b ≤ 0, so that ψ climbs to the smaller root and stops; with ρ < 0, b < 0
+   always, and for κ = 2, ξ = 1, ρ = −0.7, Δ = −0.51p² + 3.8p + 4 ≥ 0 up to p = 8.39.
+9. **(qual) Lee's formula inverted.** Write β = 2 − 4(√(q² + q) − q) and u = (2 − β)/4, so √(q² + q) = q + u;
+   squaring, q = u² + 2qu, q(1 − 2u) = u², and 1 − 2u = β/2: q = (2 − β)²/(8β). At q = 2, √6 − 2 = 0.449, β = 0.202.
+   As q → 0, β → 2 (the steepest wing Lee allows: fat tails). As q → ∞, √(q² + q) − q → ½ − 1/(8q), so β ≈ 1/(2q) → 0:
+   thin tails, flat wings.
+
+## For the researcher
+
+* **The theorems.** Andersen and Piterbarg (2007), "Moment explosions in stochastic volatility models," *Finance
+  Stoch.* 11; Lee (2004), "The moment formula for implied volatility at extreme strikes," *Math. Finance* 14;
+  Benaim and Friz (2008, 2009) on regular variation and the lim sup as a limit; Gulisashvili and Stein (2010); Friz,
+  Gerhold, Gulisashvili and Sturm (2011) for Heston's refined wing expansion; Keller-Ressel (2011) for affine models.
+* **Simplifications.** Zero rates; the explosion time for the price's moments only (variance moments are another
+  question); wing slopes estimated by a straight line on the outer quarter of strikes, which at finite k overstates
+  the asymptotic slope.
+* **Open problems.** Wings beyond affine models (rough, SLV); robust extrapolation using second-order terms; the
+  gap between risk-neutral and real-world tails.
 
 ## Reading guide
 
@@ -229,7 +263,7 @@ Hou et al. (2020) and Matic–Packham–Härdle (2023) on bitcoin options.
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约53分钟）
+## 各章（约57分钟）
 
 * **第二条河（开场）。** 2021–2025年的DVOL；五个模型拟合同一组期权，给同一份棘轮期权的定价相差8%；1973–2022年的历史；本部分目标与校准器。
 * **1. 波动率为什么必须变动。** 30天实现波动率在17%–122%之间；DVOL的波动率的波动率为每年89%；收益与DVOL变化的散点（2022年−0.58，2023年+0.30）；|r|的长记忆；对数DVOL的半衰期54天；危机档案：1987年10月19日，−22.9%，22个标准差。
@@ -250,6 +284,7 @@ Hou et al. (2020) and Matic–Packham–Härdle (2023) on bitcoin options.
 * **16. 校准。** 山谷与黑塞矩阵（曲率比27）；一百周的漫步；正则化（`calibrate_reg`）只把周度变化从12.7%降到10.6%。
 * **17. 业界。** 法国兴业银行的研究团队；最小方差Delta在比特币上的检验（固定β样本外变差55%，滚动β改善9%）；赫斯顿世界中的对冲；欧盟模型风险估值调整。
 * **18. 前沿。** 回复型赫斯顿（κ = 15到120，ξ/√κ从1.20到1.69）；五次OU模型、居永–穆斯塔法、崔–郭、赖辛格–齐亚尼、王等（2026）。
+* **写给研究者：矩爆炸与两翼。** 赫斯顿的矩母函数为exp(φ(T) + ψ(T)v₀)，ψ′ = ½ξ²ψ² + (ρξp − κ)ψ + ½(p² − p)；E[S_T^p]恰在ψ爆破之前有限（安德森与皮捷尔巴格2007），Δ < 0时T*(p) = (2/√−Δ)(π/2 − arctan(b/√−Δ))。教科书赫斯顿（κ 2、θ 0.04、ξ 1、ρ −0.7）：T*(−1/−2/−3/−4/−6) = 9.83/1.53/0.89/0.63/0.40年，ODE求解器七位一致；上侧的矩直到p ≈ 8.4永远有限。E[S_T^{−3}]的蒙特卡洛（QE，200,000条路径）：T*/2时滑动均值稳定（最大路径占总和0.3%），1.6T*时永不稳定（46%）。李的矩公式，斜率 = 2 − 4(√(q̃² + q̃) − q̃)，q̃ = −p*(T)，加上贝纳伊姆–弗里茨的极限：T = 1时p* = −2.74，左翼斜率0.155；模型自身的微笑（COS，直到K = e^{−8}F）在|k| = 1.25处dw/d|k|为0.167，在8处为0.162，按|k|^{−1/2}收敛。比特币：第3章赫斯顿拟合的李斜率与曲面外侧看跌翼对比，2026年1月到9月为0.085/0.111/0.129/0.161/0.174对0.089/0.120/0.138/0.178/0.198（一致性，不是检验）；反解得到市场的负临界矩约为5.1/3.7/3.1/2.3/2.1。三个开放问题；暂停题：q̃ = 2时斜率0.202；q̃ → 0时为2，q̃ → ∞时为0。
 
 ## 交易台问题与解答
 
@@ -294,3 +329,11 @@ Hou et al. (2020) and Matic–Packham–Härdle (2023) on bitcoin options.
    * 给定G_t，X_t是正态的：E[e^{iuX_t} | G_t] = e^{G_t(iuθ − σ²u²/2)}。
    * 伽马分布的矩母函数E[e^{sG_t}] = (1 − νs)^{−t/ν}在s = iuθ − σ²u²/2处取值，得φ(u) = (1 − iuθν + ½σ²νu²)^{−t/ν}。
    * 鞅修正ω = (1/ν)ln(1 − θν − ½σ²ν)加到漂移上，使E[e^{X_t + ωt}] = 1。
+8. **（资格考试）爆炸时间。** a, c > 0且4ac − b² = r² > 0时配方：ψ′ = a[(ψ + b/2a)² + r²/4a²]。代入ψ = (r/2a)tan θ − b/2a得θ′ = r/2，θ(t) = rt/2 + θ₀，由ψ(0) = 0得tan θ₀ = b/r。θ = π/2时ψ达到无穷：T* = (2/r)(π/2 − arctan(b/r))。对赫斯顿，a = ξ²/2，b = ρξp − κ，c = (p² − p)/2，所以4ac − b² = −Δ。p > 1阶矩永远有限，恰当二次式有实根（Δ ≥ 0）且b ≤ 0，此时ψ爬到较小的根并停下；ρ < 0时b总为负，κ = 2、ξ = 1、ρ = −0.7时Δ = −0.51p² + 3.8p + 4 ≥ 0直到p = 8.39。
+9. **（资格考试）反解李的公式。** 记β = 2 − 4(√(q² + q) − q)，u = (2 − β)/4，则√(q² + q) = q + u；平方得q(1 − 2u) = u²，而1 − 2u = β/2：q = (2 − β)²/(8β)。q = 2时√6 − 2 = 0.449，β = 0.202。q → 0时β → 2（李允许的最陡的翼：肥尾）。q → ∞时√(q² + q) − q → ½ − 1/(8q)，β ≈ 1/(2q) → 0：薄尾，平翼。
+
+## 写给研究者
+
+* **定理。** 安德森与皮捷尔巴格（2007），*Finance Stoch.* 11；李（2004），*Math. Finance* 14；贝纳伊姆与弗里茨（2008、2009）论正则变化与上极限即极限；Gulisashvili与Stein（2010）；Friz、Gerhold、Gulisashvili与Sturm（2011）论赫斯顿两翼的精细展开；Keller-Ressel（2011）论仿射模型。
+* **简化。** 零利率；只讨论价格矩的爆炸时间（方差的矩是另一个问题）；翼斜率用外侧四分之一执行价上的直线估计，在有限k处会高估渐近斜率。
+* **开放问题。** 仿射模型之外的两翼（粗糙、SLV）；用二阶项稳健外推；风险中性尾部与现实尾部之差。

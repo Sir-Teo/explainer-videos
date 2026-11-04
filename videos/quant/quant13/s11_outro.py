@@ -31,7 +31,11 @@ PROBLEMS = [
     r"Derive Merton's series: condition on the number of jumps, price each term by Black--Scholes, and weight by the "
     r"Poisson law; identify $\sigma_n$ and the forward of each term.",
     r"Derive the variance gamma characteristic function by conditioning on the gamma clock, and its martingale "
-    r"correction $\omega$.",
+    r"correction $\omega$.",    r"(qual) Solve $\psi' = a\psi^2 + b\psi + c$, $\psi(0) = 0$, with $a, c > 0$ and $b^2 < 4ac$, and show it blows up at "
+    r"$T^* = \frac{2}{\sqrt{4ac - b^2}}\big(\frac\pi2 - \arctan\frac{b}{\sqrt{4ac - b^2}}\big)$; when are Heston's moments of "
+    r"order $p > 1$ finite for ever?",
+    r"(qual) Invert Lee's formula: show that a wing slope $\beta \in (0, 2)$ corresponds to the critical moment "
+    r"$\tilde q = (2 - \beta)^2/(8\beta)$, and find the slopes for $\tilde q = 2$, $\tilde q \to 0$ and $\tilde q \to \infty$.",
 ]
 
 
@@ -115,11 +119,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=20)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems: Heston's Riccati equations, its short-maturity skew, the Lévy forward smile, "
+            "And nine problems: Heston's Riccati equations, its short-maturity skew, the Lévy forward smile, "
             "Feller's condition, why the leverage function works, Merton's series, and the variance gamma "
-            "characteristic function. Solutions, in English and Chinese, are in the notes."
+            "characteristic function. Two are qualifying-exam problems: the explosion time, and Lee's formula "
+            "inverted. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)

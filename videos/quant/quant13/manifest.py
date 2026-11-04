@@ -22,5 +22,6 @@ SCENES = [
     ("s09_calibration", "Calibration", "16. Calibration: valleys, identifiability, instability"),
     ("s09a_industry", "Industry", "17. Industry: who builds these models, and how desks judge them"),
     ("s09b_frontier", "Frontier", "18. Frontier, 2023-2026"),
+    ("s12_research", "Research", "For the researcher: moment explosions and the wings"),
     ("s11_outro", "Outro", "Recap, desk questions, problems"),
 ]
