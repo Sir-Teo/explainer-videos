@@ -209,7 +209,7 @@ class CCP(VoiceoverScene):
             "seven million euros of the other members' default fund of a hundred and sixty-six: about two thirds of "
             "it, for one person's position. <bookmark mark='c'/> The members refilled the fund within a week, and "
             "asked why their money stood behind a concentrated bet that the margin model had not seen: the "
-            "question of chapter fourteen, in a different market."
+            "question of chapter thirteen, in a different market."
         ) as vo:
             self.play(FadeIn(h1), FadeIn(h2))
             vo.wait_until("a")

@@ -106,7 +106,7 @@ class Multicurve(VoiceoverScene):
                      r"values per 100 of notional", font_size=21).to_edge(UP, buff=0.5)
         foot = wrapped_label(
             rf"at the money the two methods agree to {1e4 * abs(m['fixed_two'] - m['fixed_one']):.2f} bp. Off the money "
-            rf"they differ by {diff:.2f} per 100: {diff * 1e4:,.0f} dollars on a billion of notional, on every old swap "
+            rf"they differ by {diff:.2f} per 100: {diff * 1e7:,.0f} dollars on a billion of notional, on every old swap "
             r"in a dealer's book. In 2010 LCH moved its cleared interest rate swaps to OIS discounting", 12.0, 20,
             GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
@@ -115,7 +115,7 @@ class Multicurve(VoiceoverScene):
             f"to {1e4 * abs(m['fixed_two'] - m['fixed_one']):.2f} of a basis point, because the projection does the "
             "work and the discounting only reweights it. <bookmark mark='b'/> But an old swap, struck when rates were "
             f"low, receiving one and a half percent, changes value by {diff:.2f} per hundred between the two "
-            f"curves: {diff * 1e4:,.0f} dollars on a billion. Across a dealer's trillions, and every swap that clears, "
+            f"curves: {diff * 1e7:,.0f} dollars on a billion. Across a dealer's trillions, and every swap that clears, "
             "that was a revaluation large enough to change books and margin."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cols[0][:2]), FadeIn(cols[1][:2]))
@@ -134,7 +134,7 @@ class Multicurve(VoiceoverScene):
         whys = [why(r"Piterbarg (2010): a fully collateralised trade grows at the rate paid on its collateral, $c$, so "
                     r"that is its discount rate; for cash collateral under a standard agreement, the overnight rate"),
                 why(r"uncollateralised trades carry the counterparty's default risk and the dealer's funding cost: the "
-                    r"valuation adjustments, priced on desks of their own (Part 20 takes up default)")]
+                    r"valuation adjustments, priced on desks of their own (Parts 20 and 21)")]
         step = ladder(self, rows, whys, keep=2, top=2.3, x=-0.8, buff=0.8, edge=6.9)
         sofr = wrapped_label(r"October 2020: LCH and CME switch the discounting of cleared USD swaps from Fed funds to "
                              r"SOFR. A SOFR swap projects and discounts on one curve, so in dollars the two curves merged "
@@ -159,6 +159,6 @@ class Multicurve(VoiceoverScene):
                 r"differ from the dollar OIS curve?")
         with self.voiceover("A dollar swap collateralised in euros: which curve discounts it, and why might that differ "
                             "from the dollar overnight curve?"):
-            self.play(FadeIn(q))
+            self.play(FadeOut(sofr), FadeIn(q))
         self.wait(0.5)
         self.clear_scene()
