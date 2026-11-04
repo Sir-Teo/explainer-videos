@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant23.common import BAD, CONS, GOOD, MKT, PART, SDF, TAN, ask, fit_right, illustration, load
+from videos.quant.quant23.common import SDF as SDFC, BAD, CONS, GOOD, MKT, PART, TAN, ask, fit_right, illustration, load
 
 
 class SDF(VoiceoverScene):
@@ -12,6 +12,7 @@ class SDF(VoiceoverScene):
         self.card()
         self.one_equation()
         self.special_cases()
+        self.qmeasure()
         self.hj_derive()
         self.hj_numbers(h)
         self.hj_cup(h)
@@ -24,7 +25,7 @@ class SDF(VoiceoverScene):
         self.play(FadeOut(c))
 
     def one_equation(self):
-        rows = [cmath(r"p_t", r"=", r"\mathbb{E}_t\big[m_{t+1}\,x_{t+1}\big]", font_size=48, colors={r"p_t": SDF}),
+        rows = [cmath(r"p_t", r"=", r"\mathbb{E}_t\big[m_{t+1}\,x_{t+1}\big]", font_size=48, colors={r"p_t": SDFC}),
                 cmath(r"1", r"=", r"\mathbb{E}[m R],\qquad 0 = \mathbb{E}[m R^e]", font_size=44),
                 cmath(r"\mathbb{E}[R^e]", r"=", r"-\frac{\text{cov}(m, R^e)}{\mathbb{E}[m]}", font_size=44,
                       colors={r"\mathbb{E}[R^e]": MKT})]
@@ -78,10 +79,41 @@ class SDF(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def qmeasure(self):
+        rows = [cmath(r"p", r"=", r"\mathbb{E}[m\,x] = \frac{1}{R^f}\,\mathbb{E}\Big[\frac{m}{\mathbb{E}[m]}\,x\Big]"
+                      r" = \frac{1}{R^f}\,\mathbb{E}^{\mathbb{Q}}[x]", font_size=38, colors={r"p": SDFC}),
+                cmath(r"\frac{d\mathbb{Q}}{d\mathbb{P}}", r"=", r"m\,R^f", font_size=42),
+                cmath(r"\mathbb{E}[R^e]", r"=", r"\mathbb{E}^{\mathbb{P}}[R^e] - \mathbb{E}^{\mathbb{Q}}[R^e]", font_size=40,
+                      colors={r"\mathbb{E}[R^e]": MKT})]
+        whys = [why(r"since $\mathbb{E}[m] = 1/R^f$, normalising $m$ by its mean gives a probability density: the "
+                    r"risk-neutral measure of Parts 4 and 9, under which every price is a discounted expectation"),
+                why(r"the discount factor and the risk-neutral density are the same object: $\mathbb{Q}$ puts more "
+                    r"weight than $\mathbb{P}$ on the states where $m$ is high"),
+                why(r"so a risk premium is the gap between real-world and risk-neutral expectations: option prices "
+                    r"reveal $\mathbb{Q}$, history estimates $\mathbb{P}$, and the premium is the difference")]
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "This equation is an old friend in new clothes. The expected discount factor is one over the riskless "
+            "return, so divide m by its mean and you have a probability density. <bookmark mark='a'/> Weighting the "
+            "real-world probabilities by it gives the risk-neutral measure of Parts four and nine, under which every "
+            "price is a discounted expectation. The derivatives desk and the research desk use the same object: one "
+            "calls it Q, the other m. Q simply tilts the probabilities toward the states where a dollar is worth most. "
+            "<bookmark mark='b'/> And so a risk premium is the gap between two expectations, the real-world one and "
+            "the risk-neutral one. Option prices reveal the second; history estimates the first. Part twelve's "
+            "variance risk premium was exactly that gap, measured for volatility."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+        self.wait(0.4)
+        self.clear_scene()
+
     def hj_derive(self):
         rows = [cmath(r"0", r"=", r"\mathbb{E}[m]\,\mathbb{E}[R^e] + \rho_{m,R^e}\,\sigma(m)\,\sigma(R^e)", font_size=40),
                 cmath(r"\frac{\sigma(m)}{\mathbb{E}[m]}", r"\geq", r"\frac{|\mathbb{E}[R^e]|}{\sigma(R^e)}", font_size=44,
-                      colors={r"\frac{\sigma(m)}{\mathbb{E}[m]}": SDF})]
+                      colors={r"\frac{\sigma(m)}{\mathbb{E}[m]}": SDFC})]
         whys = [why(r"write $0 = \mathbb{E}[m R^e]$ as the product of means plus the covariance, and the covariance as "
                     r"a correlation times two volatilities"),
                 why(r"since $|\rho| \le 1$: Hansen and Jagannathan (1991). Any discount factor that prices a set of "
@@ -141,13 +173,13 @@ class SDF(VoiceoverScene):
             LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         ok = (Em >= 0.5)
-        cup = curve(ax, Em[ok], np.minimum(bd[ok], 0.9), SDF, stroke_width=3.5)
+        cup = curve(ax, Em[ok], np.minimum(bd[ok], 0.9), SDFC, stroke_width=3.5)
         pts = VGroup(*[VGroup(Dot(ax.c2p(p_["Em"], p_["sd"]), color=CONS, radius=0.07),
                               MathTex(rf"\gamma={p_['gamma']}", font_size=18, color=CONS).next_to(
                                   ax.c2p(p_["Em"], p_["sd"]), RIGHT, buff=0.06))
                        for p_ in h["pts"] if p_["sd"] <= 0.85])
         side = VGroup(
-            legend([(SDF, r"the Hansen--Jagannathan bound"), (CONS, r"power utility, $\beta$ = 0.98")], font_size=17),
+            legend([(SDFC, r"the Hansen--Jagannathan bound"), (CONS, r"power utility, $\beta$ = 0.98")], font_size=17),
             wrapped_label(r"annual real returns of the market and the bill, 1948--2025: the bound is the cup, and an "
                           r"admissible discount factor must lie above it. Consumption's own volatility is small, so power "
                           r"utility reaches the cup only at a risk aversion above 20, where its mean has fallen far "

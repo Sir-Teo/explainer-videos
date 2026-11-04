@@ -12,6 +12,7 @@ class CAPM(VoiceoverScene):
         self.card()
         self.derive()
         self.sml_idea()
+        self.noisy()
         self.flat(c)
         self.bab(c)
         self.roll()
@@ -71,6 +72,41 @@ class CAPM(VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def noisy(self):
+        rows = [cmath(r"\text{se}(\hat\beta)", r"\approx", r"\frac{\sigma_\varepsilon}{\sigma_m\sqrt{T}} = "
+                      r"\frac{0.30/\sqrt{12}}{(0.15/\sqrt{12})\sqrt{60}} \approx 0.26", font_size=36,
+                      colors={r"\text{se}(\hat\beta)": BAD}),
+                cmath(r"\hat\lambda", r"\to", r"\lambda\cdot\frac{\text{var}(\beta)}{\text{var}(\beta) + \text{se}^2}",
+                      font_size=40, colors={r"\hat\lambda": BAD}),
+                cmath(r"\beta^{\text{adj}}", r"=", r"0.67\,\hat\beta + 0.33", font_size=40, colors={r"\beta^{\text{adj}}": MKT})]
+        whys = [why(r"one stock, five years of monthly returns, idiosyncratic volatility 30\% and the market's 15\%: "
+                    r"its estimated beta is uncertain by about a quarter either way"),
+                why(r"regress average returns on noisy betas and the slope is biased toward zero: errors in variables. "
+                    r"Black, Jensen and Scholes (1972) and Fama and MacBeth (1973) therefore sort stocks into "
+                    r"portfolios, whose betas are measured almost exactly"),
+                why(r"Blume (1971, 1975): betas also drift toward one over time, so the industry's 'adjusted beta' shrinks "
+                    r"the estimate toward one; Vasicek's (1973) Bayesian version weights by the standard error")]
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "Before testing the line, a word on how betas are measured, because a single stock's beta is very "
+            "noisy. A stock with thirty percent idiosyncratic volatility, estimated on five years of monthly returns "
+            "against a market of fifteen percent, has a beta uncertain by about a quarter either way. "
+            "<bookmark mark='a'/> Regress average returns on such noisy betas and the slope is biased toward zero, the "
+            "classic errors-in-variables problem. That is why Fischer Black, Michael Jensen and Myron Scholes, and "
+            "then Fama and MacBeth, sorted stocks into portfolios by beta: a portfolio of a hundred stocks has a beta "
+            "measured almost exactly, so a flat line among portfolios cannot be blamed on noise. "
+            "<bookmark mark='b'/> And practitioners shrink. Marshall Blume found that betas drift toward one, so the "
+            "adjusted beta on a terminal screen is two thirds of the estimate plus one third. Oldrich Vasicek's "
+            "Bayesian version shrinks each stock in proportion to how uncertain its own estimate is."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
         self.wait(0.4)
         self.clear_scene()
 

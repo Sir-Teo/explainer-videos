@@ -11,6 +11,7 @@ class APT(VoiceoverScene):
         a = load("apt")
         self.card()
         self.ross()
+        self.worked()
         self.pca(a)
         self.pricing(a)
         self.merton()
@@ -42,6 +43,47 @@ class APT(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def worked(self):
+        g = axes([0, 2.4], [0, 0.16], x_length=6.0, y_length=4.2, xlabel=r"factor beta, $\beta$",
+                 ylabel=r"expected return", xticks=[0, 1, 2], yticks=[0, 0.04, 0.08, 0.12, 0.16], font_size=14
+                 ).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+        ax = g.ax
+        rf = Dot(ax.c2p(0, 0.03), color=GREY_A, radius=0.08)
+        A = Dot(ax.c2p(1, 0.08), color=GOOD, radius=0.09)
+        B = Dot(ax.c2p(2, 0.12), color=BAD, radius=0.09)
+        la = label(r"A: $\beta$ = 1, 8\%", font_size=16, color=GOOD).next_to(A, UL, buff=0.08)
+        lb = label(r"B: $\beta$ = 2, 12\%", font_size=16, color=BAD).next_to(B, DOWN, buff=0.12)
+        lr = label(r"cash, 3\%", font_size=16, color=GREY_A).next_to(rf, RIGHT, buff=0.1)
+        line = DashedLine(ax.c2p(0, 0.03), ax.c2p(2.4, 0.15), color=GOOD, stroke_width=2)
+        Z = Dot(ax.c2p(0, 0.04), color=SDF, radius=0.09)
+        lz = label(r"2A $-$ B: $\beta$ = 0, 4\%", font_size=16, color=SDF).next_to(Z, RIGHT, buff=0.12).shift(UP * 0.15)
+        side = VGroup(
+            MathTex(r"2A - B:\ \ \beta = 2(1) - 2 = 0", font_size=26),
+            MathTex(r"\mathbb{E} = 2(8\%) - 12\% = 4\% > 3\%", font_size=26, color=SDF),
+            wrapped_label(r"weights 2 and $-1$ sum to one, so 2A $-$ B is a fully invested portfolio with no factor risk "
+                          r"that beats cash by a point: buy it, borrow cash, and collect 1\% on no risk and no capital. "
+                          r"The trade stops only when $(\mathbb{E} - r_f)/\beta$ is the same for A and B", 3.6, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "Here is the arbitrage in numbers, with one factor. Two well-diversified portfolios: A has a beta of one "
+            "and expects eight percent; B has a beta of two and expects twelve. Cash pays three. <bookmark mark='a'/> "
+            "Hold two units of A and short one of B. The weights add up to one, and the beta is two minus two: zero. "
+            "The expected return is sixteen minus twelve, four percent. <bookmark mark='b'/> A riskless portfolio "
+            "paying four when cash pays three: borrow at three, buy it, and pocket a point with no risk and no money of "
+            "your own. Traders do that until the reward per unit of beta is the same for A and for B, five percent: "
+            "B's price falls until it expects thirteen. That is the whole of the APT: every well-diversified "
+            "portfolio must sit on one straight line in beta."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(rf), FadeIn(lr), FadeIn(A), FadeIn(la), FadeIn(B), FadeIn(lb))
+            vo.wait_until("a")
+            self.play(FadeIn(side[0]), FadeIn(side[1]), TransformFromCopy(VGroup(A, B), Z), FadeIn(lz))
+            vo.wait_until("b")
+            self.play(Create(line), FadeIn(side[2]))
+            self.play(B.animate.move_to(ax.c2p(2, 0.13)), lb.animate.shift(UP * (ax.c2p(0, 0.13)[1] - ax.c2p(0, 0.12)[1])))
         self.wait(0.4)
         self.clear_scene()
 
@@ -120,12 +162,14 @@ class APT(VoiceoverScene):
         step = ladder(self, rows, whys, keep=1, top=2.3, x=-0.4, buff=0.8, edge=6.9)
         with self.voiceover(
             "Robert Merton's intertemporal model gives the other route. An investor who lives for many periods cares "
-            "not only about her wealth but about the opportunities it will meet: future interest rates, future expected "
+            "not only about their wealth but about the opportunities it will meet: future interest rates, future expected "
             "returns, future volatility. An asset that pays off when those opportunities worsen is a hedge, and earns "
             "less, just as insurance does. So the priced factors are the market plus whatever forecasts the future, a "
             "rule that disciplines the search, if it is taken seriously."
         ) as vo:
             step(0)
+        self.wait(0.4)
+        self.clear_scene()
         q = ask(r"a factor explains 40\% of the variance of stock returns but none of their average returns. Is it a risk "
                 r"factor? What would make it one?")
         with self.voiceover("A factor explains forty percent of the variance of stock returns, but none of their average "

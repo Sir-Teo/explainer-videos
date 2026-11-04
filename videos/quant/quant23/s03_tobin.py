@@ -36,7 +36,10 @@ class Tobin(VoiceoverScene):
             "straight line from the bill rate. The best such line is the steepest, and it touches the bullet at one "
             "portfolio, the tangency. <bookmark mark='a'/> James Tobin's separation theorem follows: everyone who uses "
             "the same estimates holds the same risky portfolio, the tangency, and differs only in how much cash they "
-            "hold beside it. The slope of the line is the largest Sharpe ratio the assets can offer."
+            "hold beside it. The slope of the line is the largest Sharpe ratio the assets can offer. A cautious investor "
+            "puts a third of the money in the tangency and the rest in bills; a bold one borrows and holds one and a "
+            "half times their capital in it. Both hold the same stocks in the same proportions. Choosing the portfolio "
+            "and choosing the risk are separate decisions, which is why a fund can serve investors it has never met."
         ) as vo:
             step(0)
             vo.wait_until("a")

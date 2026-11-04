@@ -10,7 +10,7 @@
                 portfolios, the gross-return bound, and the CRRA consumption SDF's sigma(m)/E(m) as risk aversion rises;
 * ``puzzle``    the equity premium puzzle on annual US data, 1948-2025: consumption growth, the premium, the implied risk
                 aversion, and a GMM fit of the Euler equations (Hansen and Singleton);
-* ``shiller``   Shiller's excess volatility on his own data, 1871-2022: the price against the ex post rational price;
+* ``shiller``   Shiller's excess volatility on Shiller's own data, 1871-2022: the price against the ex post rational price;
                 the Campbell-Shiller decomposition of the dividend yield;
 * ``intermediary`` He, Kelly and Manela's capital ratio and factor; two-pass tests on their seven asset classes;
 * ``apt``       principal components of 49 industries: how many factors, and how well they price the cross-section;
@@ -344,7 +344,7 @@ def compute_hook() -> dict:
 def compute_disaster() -> dict:
     """Barro's (2006) rare disasters, simplified: lognormal consumption growth (sigma 2%) plus, with probability p a
     year, a contraction by b; for a claim on consumption the premium is about gamma sigma^2 + p E[b (1 - b)^-gamma].
-    p = 1.7% and mean b = 0.29 are his calibration; a fixed b is used here, so the numbers are a lower bound."""
+    p = 1.7% and mean b = 0.29 are Barro's calibration; a fixed b is used here, so the numbers are a lower bound."""
     gams = np.linspace(1, 10, 37)
     sig, p = 0.02, 0.017
     out = {}

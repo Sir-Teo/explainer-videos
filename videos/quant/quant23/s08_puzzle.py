@@ -134,7 +134,7 @@ class Puzzle(VoiceoverScene):
             MathTex(rf"\gamma = 4:\ {base[k4]:.2f}\%,\ {p29[k4]:.1f}\%,\ {p40[k4]:.1f}\%", font_size=24),
             wrapped_label(r"premium $\approx \gamma\sigma^2 + p\,\mathbb{E}[b(1-b)^{-\gamma}]$ with $\sigma$ = 2\% and $p$ "
                           r"= 1.7\% a year, Barro's (2006) estimate from twentieth-century depressions in 35 countries "
-                          r"(mean contraction 0.29); a fixed $b$, so a lower bound on what his full distribution gives",
+                          r"(mean contraction 0.29); a fixed $b$, so a lower bound on what Barro's full distribution gives",
                           3.6, 16, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
         fit_right(side)
