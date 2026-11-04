@@ -242,7 +242,9 @@ class TimeSlice(VoiceoverScene):
             "relates to an old backtest, and anonymising company names does not remove it. <bookmark mark='b'/> The "
             "gap between C and B is memory of the test itself, what Sarkar and Vafa's tests are built to catch. "
             "<bookmark mark='c'/> Only a model dated before the test is honest, which is what chronologically "
-            "consistent models provide."
+            "consistent models provide. And on held-out minutes from before 2008, model A is the best of the three, "
+            f"{la['A']['bpc_val']:.2f} bits per character against {la['C']['bpc_val']:.2f} and {la['B']['bpc_val']:.2f}: "
+            "the others' advantage on the crisis years is knowledge, not skill."
         ) as vo:
             step(0)
             vo.wait_until("a")
