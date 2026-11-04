@@ -21,6 +21,12 @@ LEVEL, SLOPE, CURV = QC.GAIN, QC.OPTION, QC.IMPLIED
 CONV = QC.GAMMA
 
 
+def fit_right(m, edge: float = 6.75):
+    """Shift ``m`` left until its right edge is inside the frame (side panels aligned to a narrow legend)."""
+    m.shift(LEFT * max(0.0, m.get_right()[0] - edge))
+    return m
+
+
 def illustration(text: str = r"illustration", corner=DR):
     return note(text, font_size=18, color=GREY_B).to_corner(corner, buff=0.25)
 

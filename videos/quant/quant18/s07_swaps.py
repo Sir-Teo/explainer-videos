@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import rates as R
-from videos.quant.quant18.common import BAD, GOOD, PART, ZERO, ask, illustration, load
+from videos.quant.quant18.common import BAD, GOOD, PART, ZERO, ask, fit_right, illustration, load
 
 FIX = QC.DELTA
 FLT = QC.SPOT
@@ -79,7 +79,7 @@ class Swaps(VoiceoverScene):
                     rf"10 years, {100 * k10:.2f}\%, annuity {A10:.2f}"),
                 why(r"after inception the swap's value is the rate's move times the annuity: an annuity's worth of "
                     r"duration, with no bond bought")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.0, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.0, buff=0.6, edge=6.9)
         with self.voiceover(
             "How is the fixed rate set? A floating-rate loan resets to the market rate every period, so it is always "
             "worth par at a reset. The floating payments are therefore worth one today, minus the principal they leave "
@@ -102,7 +102,7 @@ class Swaps(VoiceoverScene):
         self.clear_scene()
 
     def spreads(self, s):
-        g = axes([2000.5, 2017], [-80, 120], x_length=9.0, y_length=4.6, xlabel=r"year",
+        g = axes([2000.5, 2017], [-80, 120], x_length=8.0, y_length=4.6, xlabel=r"year",
                  ylabel=r"swap rate minus Treasury yield, bp", xticks=[2002, 2006, 2010, 2014], yticks=[-80, -40, 0, 40, 80, 120],
                  font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -116,12 +116,14 @@ class Swaps(VoiceoverScene):
             return f"{x // 10000}-{x // 100 % 100:02d}-{x % 100:02d}"
         f30, f10 = s["30"]["first_negative"], s["10"]["first_negative"]
         side = VGroup(
-            wrapped_label(rf"2001--07 average: {s['10']['mean_2001_2007']:.0f} bp at 10 years", 3.6, 18, GREY_A),
-            wrapped_label(rf"30-year negative from {ymd(f30)}", 3.6, 18, MCOL["30"]),
-            wrapped_label(rf"10-year negative from {ymd(f10)}", 3.6, 18, MCOL["10"]),
-            wrapped_label(rf"October 2016, the last day FRED publishes: 30-year {s['30']['last_bp']:.0f} bp", 3.6, 18,
+            wrapped_label(rf"2001--07 average: {s['10']['mean_2001_2007']:.0f} bp at 10 years", 3.2, 18, GREY_A),
+            wrapped_label(rf"30-year negative from {ymd(f30)}", 3.2, 18, MCOL["30"]),
+            wrapped_label(rf"10-year negative from {ymd(f10)}", 3.2, 18, MCOL["10"]),
+            wrapped_label(rf"October 2016, the last day FRED publishes: 30-year {s['30']['last_bp']:.0f} bp", 3.2, 18,
                           GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(leg, DOWN, buff=0.4, aligned_edge=LEFT)
+        fit_right(side)
+        fit_right(leg)
         with self.voiceover(
             "Now compare swap rates with Treasury yields of the same maturity. Before 2008 swaps fixed above "
             "Treasuries, by about sixty basis points at ten years. That made sense: the floating side was LIBOR, an "

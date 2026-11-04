@@ -32,9 +32,8 @@ class SOFR(VoiceoverScene):
         tb = label(r"money fund (has cash)", font_size=22, color=MKT).move_to(b)
         d1 = VGroup(Arrow(a.get_right() + UP * 0.3, b.get_left() + UP * 0.3, buff=0.1, color=ZERO),
                     Arrow(b.get_left() + DOWN * 0.3, a.get_right() + DOWN * 0.3, buff=0.1, color=MKT))
-        l1 = VGroup(label(r"today: a Treasury as collateral", font_size=19, color=ZERO).next_to(d1[0], UP, buff=0.08),
-                    label(r"today: cash, a little less than the bond's value (the haircut)", font_size=19,
-                          color=MKT).next_to(d1[1], DOWN, buff=0.08))
+        l1 = VGroup(label(r"a Treasury, as collateral", font_size=19, color=ZERO).next_to(d1[0], UP, buff=0.08),
+                    label(r"cash, less a haircut", font_size=19, color=MKT).next_to(d1[1], DOWN, buff=0.08))
         notes = VGroup(
             wrapped_label(r"tomorrow the dealer buys the bond back for the cash plus interest: the repo rate. A loan, "
                           r"secured by the safest collateral there is", 12.0, 21, GREY_A),
@@ -134,7 +133,7 @@ class SOFR(VoiceoverScene):
         t, so, ar, bi = (np.asarray(s[k]) for k in ("t", "sofr", "arrears", "bill"))
         g = axes([2018.2, 2026], [0, 6], x_length=8.4, y_length=3.6, xlabel=r"start of the 3-month period",
                  ylabel=r"percent", xticks=[2019, 2021, 2023, 2025], yticks=[0, 2, 4, 6], font_size=14).to_edge(
-            DOWN, buff=0.35).to_edge(LEFT, buff=0.6)
+            DOWN, buff=1.0).to_edge(LEFT, buff=0.6)
         ax = g.ax
         l_s = curve(ax, t, so, MKT, stroke_width=2)
         l_a = curve(ax, t, ar, ARR, stroke_width=2.5)

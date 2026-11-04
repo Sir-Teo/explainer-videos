@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant18.common import BAD, GOOD, PAR, PART, ask, illustration, load
+from videos.quant.quant18.common import BAD, GOOD, PAR, PART, ask, fit_right, illustration, load
 
 CTD = QC.GAIN
 
@@ -132,7 +132,7 @@ class Futures(VoiceoverScene):
         sh = np.asarray(f["shifts"], float)
         B = np.array([r_["basis"] for r_ in tab])  # shifts x notes
         y10 = np.array([r_["y10"] for r_ in tab])
-        g = axes([y10[0], y10[-1]], [0, 4], x_length=8.2, y_length=4.4, xlabel=r"10-year zero yield after a parallel "
+        g = axes([y10[0], y10[-1]], [0, 4], x_length=7.4, y_length=4.4, xlabel=r"10-year zero yield after a parallel "
                  r"shift, \%", ylabel=r"gross basis per 100", xticks=[1, 3, 5, 7], yticks=[0, 1, 2, 3, 4],
                  font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -154,10 +154,11 @@ class Futures(VoiceoverScene):
         side = VGroup(
             label(r"dots on the axis: the colour of the cheapest", font_size=18, color=GREY_A),
             wrapped_label(rf"the cheapest jumps from the short end to the long end as the 10-year passes about "
-                          rf"{max(sw):.1f}\%", 3.8, 19, CTD),
+                          rf"{max(sw):.1f}\%", 3.4, 19, CTD),
             wrapped_label(r"below 6\% the factors overstate long notes' prices relative to short ones; above 6\%, the "
-                          r"reverse. Duration decides which way the error runs", 3.8, 18, GREY_A),
+                          r"reverse. Duration decides which way the error runs", 3.4, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(leg, DOWN, buff=0.4, aligned_edge=LEFT)
+        fit_right(side)
         with self.voiceover(
             "Now move the whole curve up and down by up to four points and recompute every note's basis. Each line is "
             "one note, blue for the shortest, pink for the longest. <bookmark mark='a'/> The dots along the bottom "
