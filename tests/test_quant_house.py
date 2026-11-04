@@ -2773,3 +2773,14 @@ def test_sa_ccr_and_simm_like():
     s2 = s.copy()
     s2[4] = -1.0
     assert XV.simm_like_ir_delta(s2) < XV.simm_like_ir_delta(np.abs(s2))  # offsetting tenors net
+
+
+def test_wrong_way_cva_rises_with_correlation():
+    from explainer.quant.house import xva as XV
+    c, hw = _xva_setup()
+    times = np.linspace(0.25, 10, 40)
+    x, _ = hw.simulate_x(times, 6000, seed=0)
+    K = float((1 - c.df(10.0)) / c.df(np.arange(1, 11)).sum())
+    V = np.stack([XV.swap_values_hw(hw, x[:, j], t, K, 10.0) for j, t in enumerate(times)], 1)
+    cv = [XV.wrong_way_cva(V, x, times, c.df, 0.02, rho=r_, seed=1) for r_ in (-0.5, 0.0, 0.5)]
+    assert cv[0] < cv[1] < cv[2]

@@ -127,7 +127,7 @@ def wrong_way_cva(V, x, times, df, hazard, R=0.4, rho=0.5, seed=0):
     zx = (x[:, -1] - x[:, -1].mean()) / (x[:, -1].std() + 1e-12)
     sign = np.sign(np.corrcoef(zx, np.maximum(V, 0).mean(1))[0, 1] or 1.0)
     u = rho * sign * zx + np.sqrt(1 - rho ** 2) * rng.standard_normal(len(zx))
-    tau = -np.log(norm.cdf(-u)) / hazard  # high u = early default
+    tau = -np.log(norm.cdf(u)) / hazard  # high u: survival probability near one is used up at once, early default
     times = np.asarray(times, float)
     k = np.searchsorted(times, tau)
     hit = k < len(times)
