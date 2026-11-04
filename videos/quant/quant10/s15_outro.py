@@ -25,7 +25,12 @@ PROBLEMS = [
     r"Give the put's early-exercise condition at $r = 0$.",
     r"Derive Leland's $\sigma_L$ from the expected size of the hedge's trade, $\mathbb E|\delta\Delta|$, per step.",
     r"With carry $b$, show that inverting with $S$ instead of $F$ raises call implied vols and lowers put implied "
-    r"vols; estimate the error at the money for $b = 4\%$, $T = 0.5$, $\sigma = 45\%$.",
+    r"vols; estimate the error at the money for $b = 4\%$, $T = 0.5$, $\sigma = 45\%$.",    r"(qual) For a Brownian motion with variance rate $v$ and $\tau$ its exit time from $(-a, a)$, show by optional "
+    r"stopping that $\mathbb E\tau = a^2/v$ and $\operatorname{Var}\tau = 2a^4/(3v^2)$; deduce that a hedge rebalanced at "
+    r"such times has error variance $\frac16\Gamma^2a^4$ per interval, against $\frac12\Gamma^2a^4$ at equal times.",
+    r"(qual) Minimize $\int \frac16\Gamma^2a^2v\,dt$ subject to $\int v/a^2\,dt = N$ over band widths $a(t)$. Show "
+    r"$a \propto |\Gamma|^{-1/2}$, $N\operatorname{Var} = \frac16(\int|\Gamma|v\,dt)^2$, and that this is at most a third of "
+    r"the equal-time constant $\frac T2\int\Gamma^2v^2dt$.",
 ]
 
 
@@ -101,12 +106,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems to work through: parity and delta from the formula, the tree's martingale "
+            "And nine problems to work through: parity and delta from the formula, the tree's martingale "
             "probability, the volatility trader's back-of-the-envelope, Leland's volatility and its derivation, "
-            "early exercise, and the skew a forgotten forward draws. Solutions, in English and Chinese, are in the "
-            "notes for this part."
+            "early exercise, and the skew a forgotten forward draws. Two more are qualifying-exam problems: the "
+            "exit time's moments, and the optimal band. Solutions, in English and Chinese, are in the notes for "
+            "this part."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)

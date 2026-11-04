@@ -10,7 +10,7 @@ returns. Schematics and made-up examples are labeled on screen.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 63 minutes)
 
 * **Manufacturing an option.** A real month, October 2021: a 30-day Bitcoin call sold at Deribit's DVOL (89%);
   Bitcoin rises 37%; unhedged the seller loses 27 per 100, hedged every hour the seller makes 1.15 (the median of the
@@ -77,7 +77,18 @@ returns. Schematics and made-up examples are labeled on screen.
   guess for implied vol (5 seeds), finished by Newton steps; inverse options (Alexander–Chen–Imeraj 2023); hedging
   crypto options (Matic–Packham–Härdle 2023); the minimum-variance delta (Hull–White 2017; Ruf–Wang 2022; on BTC in
   Part 13).
-* **Recap, desk questions, problems.**
+* **For the researcher: when to rebalance a hedge.** Equal times: N·Var of the error → (T/2)E∫Γ²σ⁴S⁴dt (11.9
+  per 100 of stock, squared, for a three-month at-the-money call at 20%). Rebalancing when the price has moved by a:
+  the squared move is exactly a², the error is ½Γσ²S²(Eτ − τ), and with Eτ = a²/(σ²S²), Var τ = (2/3)a⁴/(σS)⁴ the
+  per-interval variance is Γ²a⁴/6 against Γ²a⁴/2 at equal times: a factor of three. Optimizing the width, a ∝ |Γ|^{−1/2}
+  (in delta terms |Δ_t − Δ_τ|² = hΓ_τ) gives N·Var → (1/6)(E∫|Γ|σ²S²dt)² = 2.64, at most a third of the equal-time
+  constant by Cauchy–Schwarz (Fukasawa 2011's lower bound over stopping-time rules; Rosenbaum and Tankov 2014 with
+  jumps); fixed price or delta bands give 3.98. Simulation (3,000 paths, 2^14 steps) at N ≈ 16/64/256: equal times
+  10.3/12.2/12.8, price band 4.5/4.3/4.6, delta band 5.1/4.1/4.1, optimal band 3.2/3.0/2.8. Bitcoin: 47 thirty-day calls
+  written every 15 days on 2019–2020 one-minute closes, hedged at their own realized (hindsight) volatility: error
+  standard deviation 25.6% of the premium at equal times vs 10.1% with the band (16 trades), 19.0% vs 8.6% (64); mean
+  errors +4.5/+11.9% and +8.4/+10.8%, sources not separated. Three open problems; pause: 256 × 2.64/11.9 ≈ 57 trades.
+* **Recap, desk questions, nine problems (two at qualifying-exam level).**
 
 ## Hands-on
 
@@ -179,6 +190,15 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
    To first order δσ ≈ (∂C/∂F)(F − S)/vega ≈ N(d₁)·bT/(φ(d₁)√T) ≈ 0.5 × 0.02/(0.399 × 0.707) ≈ 3.5 points for
    b = 4%, T = 0.5, σ = 45%; the put, out of the money by the same amount, comes out about as much too low. The exact
    inversion (`carry` item): call 49.0% (+4.0), put 41.8% (−3.2); the asymmetry is second order.
+8. **(qual) Exit-time moments.** Let X = σS·W locally, with variance rate v = σ²S², and τ = inf{t: |X_t| = a}.
+   X² − vt is a martingale, so a² = vEτ: Eτ = a²/v. X⁴ − 6vtX² + 3v²t² is a martingale (Itô), so
+   a⁴ − 6va²Eτ + 3v²Eτ² = 0, Eτ² = 5a⁴/(3v²) and Var τ = 2a⁴/(3v²). Over the interval the hedge error is
+   ½Γ[(ΔX)² − vτ] = ½Γv(Eτ − τ), with variance ¼Γ²v²·2a⁴/(3v²) = Γ²a⁴/6. An equal-time step of the same mean length
+   Δt = a²/v has error ½Γv Δt(Z² − 1), variance ½Γ²v²Δt² = Γ²a⁴/2.
+9. **(qual) The optimal band.** Per unit time the error variance accrues at (1/6)Γ²a²v (intervals of variance Γ²a⁴/6
+   at rate v/a²) and trades at v/a². The Lagrangian (1/6)Γ²a²v + λv/a² is minimized pointwise at a⁴ = 6λ/Γ², so
+   a ∝ |Γ|^{−1/2}. Then Var = (c²/6)∫|Γ|v and N = (1/c²)∫|Γ|v with a = c|Γ|^{−1/2}, so N·Var = (1/6)(∫|Γ|v dt)². By
+   Cauchy–Schwarz (∫|Γ|v dt)² ≤ T∫Γ²v²dt, so N·Var ≤ (1/6)T∫Γ²v² = (1/3)·(T/2)∫Γ²v², the equal-time constant.
 
 ## Data and reproducibility
 
@@ -187,6 +207,17 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
   daily factors through 2025. Each raw piece's SHA-256 is in [`../data/manifest.json`](../data/manifest.json).
 * Seeds are fixed in every compute item. The BTC experiment's months overlap; chapter 11 also reports the statistic on
   57 non-overlapping months.
+
+## For the researcher
+
+* **The theorems.** Fukasawa (2011), "Asymptotically efficient discrete hedging," in *Stochastic Analysis with
+  Financial Applications* (Birkhäuser): lim E[N]·E⟨error⟩ ≥ (1/6)(E∫|Γ|σ²S²dt)² over stopping-time rules, attained by
+  the band |Δ_t − Δ_τ|² = hΓ_τ; Rosenbaum and Tankov (2014), "Asymptotically optimal discretization of hedging
+  strategies with jumps," *Ann. Appl. Probab.* 24 (arXiv:1108.5940).
+* **Simplifications.** One option, zero rates, the leading-order (small band) approximation; E[N]·Var rather than
+  Fukasawa's E[N]·E⟨error⟩; the bands are checked on a grid of 2^14 steps, so overshoot widens them slightly.
+* **Open problems.** Costs and a trade budget together for a book of options; corrections at a few dozen trades; jumps,
+  rough volatility and many assets.
 
 ---
 
@@ -198,7 +229,7 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 
 *本视频讲授方法，不构成投资建议。*
 
-## 章节（约58分钟）
+## 章节（约63分钟）
 
 * **用股票和现金造出一份期权。** 2021年10月：按DVOL（89%）卖出30天比特币看涨期权，比特币上涨37%；不对冲亏27（每100），每小时对冲赚1.15。
 * **1. 公式之前。** 巴舍利耶；斯普伦克尔、博内斯、萨缪尔森的两个未知数μ和ρ；索普与卡苏夫的对冲；论文最初被拒；芝加哥期权交易所开业（911张合约）；布莱克的理论价格表。
@@ -220,7 +251,8 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 * **17. 诺贝尔奖，然后是LTCM。** 杠杆约28倍、表外名义金额超过一万亿美元（GAO 1999）；1998年的VIX；救助；每个对冲的前提。
 * **18. 业界：公式如何谋生。** 布莱克的价格表与交易池；奥康纳联合公司；用波动率报价；0.4·Fσ√T 法则在基准曲面上的误差；Deribit 与 IBIT 期权。
 * **19. 前沿：2023至2026年。** 2026年的隐含波动率求解竞赛（预印本）；Lean 中机器验证的 Black–Scholes；**回放：** 小网络学习初始猜测（5个种子）；反向期权、比特币期权对冲、最小方差Delta（第13部分）。
-* **回顾、交易台问题与习题。**
+* **写给研究者：何时再平衡对冲。** 等时间：误差的N·Var → (T/2)E∫Γ²σ⁴S⁴dt（三个月期平值看涨、σ = 20%时，每100股为11.9）。价格移动a时再平衡：平方变动恰为a²，误差为½Γσ²S²(Eτ − τ)，由Eτ = a²/(σ²S²)、Var τ = (2/3)a⁴/(σS)⁴，每个区间方差为Γ²a⁴/6，等时间为Γ²a⁴/2：三倍。优化宽度a ∝ |Γ|^{−1/2}（用Delta表示为|Δ_t − Δ_τ|² = hΓ_τ）得N·Var → (1/6)(E∫|Γ|σ²S²dt)² = 2.64，由柯西–施瓦茨至多为等时间常数的三分之一（深泽2011在停时规则上的下界；有跳跃时罗森鲍姆与坦科夫2014）；固定价格带或Delta带为3.98。模拟（3,000条路径、2^14步），N ≈ 16/64/256时：等时间10.3/12.2/12.8，价格带4.5/4.3/4.6，Delta带5.1/4.1/4.1，最优带3.2/3.0/2.8。比特币：2019–2020年每15天写一份30天期看涨，共47份，用一分钟收盘价、以各自实现的（事后）波动率对冲：误差标准差在等时间下为期权费的25.6%，用带为10.1%（16次交易）；64次时为19.0%对8.6%；平均误差+4.5/+11.9%与+8.4/+10.8%，来源未分离。三个开放问题；暂停题：256 × 2.64/11.9 ≈ 57次。
+* **回顾、交易台问题、九道习题（两道为资格考试水平）。**
 
 教科书对照表与论文列表见英文部分。
 
@@ -239,3 +271,11 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 5. **提前行权。** 看涨期权至少值 S − Ke^{−rT} ≥ S − K，不付股息时永远不应提前行权。看跌期权的下界是 Ke^{−rT} − S，在 r > 0 时小于 K − S：深度实值时提前行权、现在收到行权价并赚取利息，可能更优。r = 0 时看跌期权也不会提前行权：看跌期权提前行权需要正利率。
 6. **推导利兰波动率。** 一步内 δΔ ≈ ΓδS = ΓSσ√Δt·Z，期望成本 (k/2)·S·E|δΔ| = (k/2)ΓS²σ√Δt·√(2/π)（k 为双边成本）。除以 Δt 得 ½ΓS²·σk√(2/π)/√Δt，与损益中的方差项 ½ΓS²σ² 同形，并入方差即 σ_L² = σ²(1 + √(2/π)k/(σ√Δt))。
 7. **忘掉远期。** 用 F = Se^{bT} 定价的平值远期看涨期权，若用 S 且不计持有成本反解，公式会以为它实值 ln(F/S) = bT，于是用更高的波动率解释价格。一阶近似 δσ ≈ N(d₁)·bT/(φ(d₁)√T) ≈ 0.5 × 0.02/(0.399 × 0.707) ≈ 3.5 个点（b = 4%，T = 0.5，σ = 45%）；看跌期权大致低同样多。精确反解（`carry` 计算项）：看涨 49.0%（+4.0），看跌 41.8%（−3.2），不对称来自二阶项。
+8. **（资格考试）退出时间的矩。** 局部地X = σS·W，方差速率v = σ²S²，τ = inf{t: |X_t| = a}。X² − vt是鞅，所以a² = vEτ，Eτ = a²/v。X⁴ − 6vtX² + 3v²t²是鞅（伊藤），所以a⁴ − 6va²Eτ + 3v²Eτ² = 0，Eτ² = 5a⁴/(3v²)，Var τ = 2a⁴/(3v²)。区间内对冲误差为½Γ[(ΔX)² − vτ] = ½Γv(Eτ − τ)，方差Γ²a⁴/6。相同平均长度Δt = a²/v的等时间步误差为½ΓvΔt(Z² − 1)，方差Γ²a⁴/2。
+9. **（资格考试）最优带。** 单位时间内误差方差以(1/6)Γ²a²v累积，交易速率为v/a²。拉格朗日函数(1/6)Γ²a²v + λv/a²逐点在a⁴ = 6λ/Γ²处最小，所以a ∝ |Γ|^{−1/2}。取a = c|Γ|^{−1/2}，Var = (c²/6)∫|Γ|v，N = (1/c²)∫|Γ|v，所以N·Var = (1/6)(∫|Γ|v dt)²。由柯西–施瓦茨(∫|Γ|v dt)² ≤ T∫Γ²v²dt，所以N·Var ≤ (1/3)·(T/2)∫Γ²v²，即等时间常数的三分之一。
+
+## 写给研究者
+
+* **定理。** 深泽正彰（2011），《渐近有效的离散对冲》，收于*Stochastic Analysis with Financial Applications*（Birkhäuser）：在停时规则上lim E[N]·E⟨误差⟩ ≥ (1/6)(E∫|Γ|σ²S²dt)²，由带|Δ_t − Δ_τ|² = hΓ_τ达到；罗森鲍姆与坦科夫（2014），*Ann. Appl. Probab.* 24（arXiv:1108.5940），含跳跃。
+* **简化。** 单一期权、零利率、首阶（窄带）近似；用E[N]·Var而非深泽的E[N]·E⟨误差⟩；带在2^14步的网格上检验，越界使带略宽。
+* **开放问题。** 一整本期权在成本与交易预算下的联合问题；几十次交易时的修正；跳跃、粗糙波动率与多资产。

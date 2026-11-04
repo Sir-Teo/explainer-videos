@@ -1053,7 +1053,8 @@ def compute_hedgetime_theory() -> dict:
             prem = bs.price(100.0, 100.0, Tb, vol)
             errs = e / prem
             res[rule] = {"N": float(np.mean(ns)), "rms_pct_premium": float(100 * np.sqrt(np.mean(errs ** 2))),
-                         "mean_pct_premium": float(100 * np.mean(errs))}
+                         "mean_pct_premium": float(100 * np.mean(errs)), "sd_pct_premium": float(100 * np.std(errs)),
+                         "c": float(cm)}
         btc["rows"].append({"target": N, **res})
     out["btc"] = btc
     out["btc_first"], out["btc_last"] = int(tm[0]), int(tm[-1])

@@ -23,5 +23,6 @@ SCENES = [
     ("s14_ltcm", "LTCM", "17. The Nobel, and then LTCM"),
     ("s14a_industry", "Industry", "18. Industry: the formula at work"),
     ("s14b_frontier", "Frontier", "19. Frontier: 2023 to 2026"),
+    ("s16_research", "Research", "For the researcher: when to rebalance a hedge"),
     ("s15_outro", "Outro", "Recap, desk questions, problems"),
 ]
