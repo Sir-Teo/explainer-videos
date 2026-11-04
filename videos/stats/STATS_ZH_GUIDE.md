@@ -153,3 +153,38 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | beta-binomial | 贝塔二项分布 |
 | law of total variance | 全方差公式 |
 | exponential family, natural parameter, sufficient statistic, log-normalizer | 指数族，自然参数，充分统计量，对数配分函数 |
+
+## Glossary (Part 4)
+
+| English | 中文 |
+|---|---|
+| hat matrix | 帽子矩阵 |
+| projection (orthogonal), idempotent | （正交）投影，幂等 |
+| column space, orthogonal complement | 列空间，正交补 |
+| degrees of freedom | 自由度 |
+| Gram–Schmidt, QR decomposition | 格拉姆–施密特正交化，QR分解 |
+| trace, cyclic property | 迹，循环性 |
+| leverage | 杠杆值 |
+| spectral theorem, eigenvalue, eigenvector | 谱定理，特征值，特征向量 |
+| quadratic form, Rayleigh quotient | 二次型，瑞利商 |
+| Mahalanobis distance, whitening | 马氏距离，白化 |
+| power iteration | 幂迭代法 |
+| positive (semi)definite | 正定（半正定） |
+| Cholesky decomposition | 楚列斯基分解 |
+| Loewner order | 勒夫纳序 |
+| generalized variance | 广义方差 |
+| singular value decomposition (SVD), low-rank approximation | 奇异值分解，低秩逼近 |
+| Moore–Penrose pseudoinverse, minimum-norm solution | 摩尔–彭罗斯伪逆，最小范数解 |
+| dummy-variable trap, estimable function | 虚拟变量陷阱，可估函数 |
+| ridge regression | 岭回归 |
+| Schur complement, block matrix | 舒尔补，分块矩阵 |
+| Woodbury identity, Sherman–Morrison formula | 伍德伯里恒等式，谢尔曼–莫里森公式 |
+| Frisch–Waugh–Lovell theorem | 弗里施–沃–洛弗尔定理 |
+| leave-one-out residual, PRESS | 留一残差，预测残差平方和 |
+| Kronecker product, vec operator | 克罗内克积，向量化算子 |
+| matrix calculus, gradient, Hessian | 矩阵微积分，梯度，黑塞矩阵 |
+| score, Fisher information | 得分函数，费希尔信息 |
+| Cochran's theorem | 科克伦定理 |
+| noncentral chi-squared, power | 非中心卡方分布，检验功效 |
+| condition number, floating point | 条件数，浮点数 |
+| catastrophic cancellation | 灾难性抵消 |
