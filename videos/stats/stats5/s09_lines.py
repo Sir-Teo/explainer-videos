@@ -10,6 +10,7 @@ class Lines(VoiceoverScene):
         self.card()
         self.three()
         self.why_differ()
+        self.attenuation()
 
     def card(self):
         card = chapter_card(8, r"Three lines through one ellipse", r"$Y$ on $X$, \ $X$ on $Y$, \ and the major axis", lit=(1886,),
@@ -89,4 +90,58 @@ class Lines(VoiceoverScene):
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             vo.wait_until("e")
             self.play(FadeIn(use))
+        self.clear_scene()
+
+    def attenuation(self):
+        d = load("extras2")["atten"]
+        x, y, w = np.asarray(d["x"]), np.asarray(d["y"]), np.asarray(d["w"])
+        keep = (np.abs(x) < 3.9) & (np.abs(w) < 3.9) & (np.abs(y) < 3.9)
+        x, y, w = x[keep], y[keep], w[keep]
+        A = axes([-4, 4], [-4, 4], x_length=5.0, y_length=5.0, xlabel=r"$X$ \ or \ $W = X + U$", ylabel=r"$Y$",
+                 xticks=[-2, 0, 2], yticks=[-2, 0, 2], center=[-3.5, -0.4, 0])
+        ax = A.ax
+        pt = scatter(ax, x, y, color=LINE_YX, radius=0.018, opacity=0.5, xr=[-4, 4], yr=[-4, 4])
+        pw = scatter(ax, w, y, color=S.RESID, radius=0.018, opacity=0.5, xr=[-4, 4], yr=[-4, 4])
+        lt = Line(ax.c2p(-3.5, -3.5 * d["b_true"]), ax.c2p(3.5, 3.5 * d["b_true"]), color=LINE_YX, stroke_width=3.5)
+        lw = Line(ax.c2p(-4, -4 * d["b_obs"]), ax.c2p(4, 4 * d["b_obs"]), color=S.RESID, stroke_width=3.5)
+        rows = [
+            cmath(r"\hat\beta_{W}", r"\to", r"\frac{\mathrm{Cov}(X + U, Y)}{\mathrm{Var}(X + U)}", r"=",
+                  r"\beta\,\frac{\sigma_X^2}{\sigma_X^2 + \sigma_U^2}", font_size=28),
+            cmath(r"\lambda", r"=", r"\frac{\sigma_X^2}{\sigma_X^2 + \sigma_U^2}", r"=", r"0.5", font_size=30),
+            cmath(r"\text{slope}", r"=", rf"{d['b_true']:.2f}\ \to\ {d['b_obs']:.2f}", font_size=30),
+        ]
+        rows[0][4].set_color(S.RESID)
+        rows[2][2].set_color(S.RESID)
+        whys = [why(r"$U$ independent noise in $X$: \ the covariance survives, \ the variance grows"),
+                why(r"the reliability ratio"), why(r"simulated: \ $\sigma_X = \sigma_U = 1$")]
+        spear = label(r"Spearman (1904): \ divide a correlation by $\sqrt{\text{reliability}_X\,\text{reliability}_Y}$ \ to undo it",
+                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4).shift(RIGHT * 2.6)
+        if spear.width > 7.4:
+            spear.width = 7.4
+        tag = note(r"simulated: 700 points").to_corner(DL, buff=0.3)
+        with self.voiceover(
+            "Here's what goes wrong when x is measured with error. <bookmark mark='a'/> In blue, y against the true "
+            "x, with slope one. <bookmark mark='b'/> Now we don't see x, only x plus independent noise of the same "
+            "size. The cloud spreads sideways, and the fitted slope falls to about a half. <bookmark mark='c'/> The "
+            "reason is one line: noise in x leaves the covariance with y unchanged but inflates the variance of x, "
+            "so the slope is multiplied by the reliability ratio, the share of x's variance that's real. "
+            "<bookmark mark='d'/> Here it's a half. This is regression dilution: errors in the predictor bias the "
+            "slope toward zero, and it's the same arithmetic as regression to the mean. <bookmark mark='e'/> "
+            "Charles Spearman saw it in 1904 and proposed correcting a correlation for the unreliability of both "
+            "measurements."
+        ) as vo:
+            self.play(FadeIn(A), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(pt), Create(lt))
+            vo.wait_until("b")
+            self.play(*[p.animate.move_to(q.get_center()) for p, q in zip(pt, pw)], run_time=2.5)
+            self.play(Create(lw))
+            step = ladder(self, rows, whys, keep=3, top=2.6, x=2.9, buff=0.7, edge=6.9)
+            vo.wait_until("c")
+            step(0, transform=False)
+            vo.wait_until("d")
+            step(1, transform=False)
+            step(2, transform=False)
+            vo.wait_until("e")
+            self.play(FadeIn(spear))
         self.clear_scene()

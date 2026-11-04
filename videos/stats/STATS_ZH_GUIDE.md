@@ -188,3 +188,38 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | noncentral chi-squared, power | 非中心卡方分布，检验功效 |
 | condition number, floating point | 条件数，浮点数 |
 | catastrophic cancellation | 灾难性抵消 |
+
+## Glossary (Part 5)
+
+| English | 中文 |
+|---|---|
+| joint, marginal, conditional distribution | 联合分布，边缘分布，条件分布 |
+| mid-parent | 双亲平均身高 |
+| regression towards mediocrity, regression to the mean | 向平庸回归，均值回归 |
+| uncorrelated, independent; pairwise, mutually independent | 不相关，独立；两两独立，相互独立 |
+| covariance matrix, inner product | 协方差矩阵，内积 |
+| diversification | 分散化 |
+| conditional expectation, best predictor | 条件期望，最优预测 |
+| tower property (law of total expectation) | 塔性质（全期望公式） |
+| Eve's law (law of total variance) | 夏娃定律（全方差公式） |
+| correlation ratio η² | 相关比 η² |
+| conditional median, conditional quantile, quantile regression | 条件中位数，条件分位数，分位数回归 |
+| multivariate normal, jointly normal | 多元正态分布，联合正态 |
+| Cramér–Wold device | 克拉默–沃尔德方法 |
+| precision matrix, partial correlation, conditional independence | 精度矩阵，偏相关，条件独立 |
+| covariance selection, graphical model | 协方差选择，图模型 |
+| major axis, errors in variables, regression dilution | 主轴，变量含误差模型，回归稀释 |
+| reliability ratio, correction for attenuation | 信度比，衰减校正 |
+| change of variables, Jacobian, convolution | 变量替换，雅可比行列式，卷积 |
+| Rayleigh distribution | 瑞利分布 |
+| latent variable, mixture model, latent class | 潜变量，混合模型，潜在类别 |
+| Simpson's paradox | 辛普森悖论 |
+| copula, Sklar's theorem, tail dependence | 联结函数（copula），斯克拉定理，尾部相依 |
+| Gaussian, Clayton, Gumbel copula | 高斯、克莱顿、冈贝尔 copula |
+| exchangeability, de Finetti's theorem | 可交换性，德菲内蒂定理 |
+| Pólya's urn | 波利亚罐子模型 |
+| Spearman's rho, Kendall's tau | 斯皮尔曼秩相关系数，肯德尔 τ |
+| distance correlation, mutual information | 距离相关，互信息 |
+| simplex, multinomial, Dirichlet distribution | 单纯形，多项分布，狄利克雷分布 |
+| conjugacy | 共轭性 |
+| spurious correlation, compositional data, log-ratio | 伪相关，成分数据，对数比 |

@@ -1,10 +1,11 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–4 are written in English (16 chapters each):
+**Status: in production.** Parts 1–5 are written in English (14–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
-- *Matrices for Statistics*, about 55 minutes, with the projection lab.
+- *Matrices for Statistics*, about 55 minutes, with the projection lab;
+- *Many Variables at Once*, about 50 minutes, with the Gaussian slicer (`GaussianSlicer`) and a Pólya urn machine.
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 

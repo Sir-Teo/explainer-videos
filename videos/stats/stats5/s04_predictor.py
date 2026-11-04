@@ -12,6 +12,7 @@ class Predictor(VoiceoverScene):
         self.proof()
         self.tower()
         self.projection()
+        self.median()
 
     def card(self):
         card = chapter_card(3, r"Conditional expectation", r"The best possible prediction of $Y$ from $X$", lit=(), part=PART)
@@ -37,9 +38,10 @@ class Predictor(VoiceoverScene):
             MathTex(rf"E[Y \mid X]:\ \text{{MSE }} {d['mse_cond']:.3f}\ \ (R^2 = {d['r2_cond']:.3f})", font_size=26, color=COND),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.2, 1.8, 0])
         hump = label(r"the career curve: \ rises, \ levels off, \ drops at retirement (67); \ no line can follow it", font_size=22,
-                     color=GREY_B).move_to([4.2, 0.0, 0])
-        if hump.width > 5.4:
-            hump.width = 5.4
+                     color=GREY_B)
+        if hump.width > 4.8:
+            hump.width = 4.8
+        hump.move_to([4.5, -0.6, 0])
         tag = simulated_tag(r"simulated: 3,000 of the World's adults (MSE over all)")
         with self.voiceover(
             "Suppose we must predict a variable Y from another, X, and we're judged by mean squared error. What's "
@@ -158,4 +160,52 @@ class Predictor(VoiceoverScene):
             self.play(ns.turn(0.8, run_time=4.0))
         for m in (pl, vy, vm, vr, ra):
             m.clear_updaters()
+        self.clear_scene()
+
+    def median(self):
+        d = load("extras2")["median"]
+        ages = np.asarray(d["ages"])
+        mean_, med_ = np.asarray(d["mean"]) / 1000, np.asarray(d["med"]) / 1000
+        A = axes([18, 92], [0, 70], x_length=7.0, y_length=4.2, xlabel=r"age", ylabel=r"income (thousands)",
+                 xticks=[20, 40, 60, 80], yticks=[0, 20, 40, 60], center=[-2.6, -0.6, 0])
+        ax = A.ax
+        cm = curve(ax, ages, mean_, COND, 3.5)
+        cd = curve(ax, ages, med_, S.ACCENT, 3.5)
+        leg = legend([(COND, r"$E[Y \mid X]$: mean"), (S.ACCENT, r"$\mathrm{med}(Y \mid X)$: median")], font_size=22)
+        rows = VGroup(
+            MathTex(r"\min_g E\,(Y - g(X))^2", r"\ \Rightarrow\ ", r"g = E[Y \mid X]", font_size=28),
+            MathTex(r"\min_g E\,|Y - g(X)|", r"\ \Rightarrow\ ", r"g = \mathrm{med}(Y \mid X)", font_size=28),
+            MathTex(r"\min_g E\,\rho_\tau(Y - g(X))", r"\ \Rightarrow\ ", r"g = q_\tau(Y \mid X)", font_size=28),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.7, 1.0, 0])
+        rows[0][2].set_color(COND)
+        rows[1][2].set_color(S.ACCENT)
+        why_ = label(r"Part 1: \ each loss picks its own summary, \ now one for every $x$", font_size=22, color=GREY_B)
+        why_.next_to(rows, DOWN, buff=0.3)
+        skew = label(r"incomes are right-skewed: \ the mean sits above the median at every age", font_size=22, color=GREY_A)
+        skew.next_to(why_, DOWN, buff=0.25)
+        for m in (why_, skew):
+            if m.width > 6.0:
+                m.width = 6.0
+        leg.next_to(skew, DOWN, buff=0.35).align_to(rows, LEFT)
+        tag = simulated_tag()
+        with self.voiceover(
+            "The conditional mean is the best predictor for squared error. Change the loss and the answer changes, "
+            "just as in Part 1. <bookmark mark='a'/> For absolute error, the best predictor is the conditional "
+            "median: for each value of x, the median of y among those cases. <bookmark mark='b'/> For the "
+            "asymmetric tilted loss, it's a conditional quantile, which is quantile regression. <bookmark mark='c'/> "
+            "Here are the World's incomes in thousands, not their logarithms. Incomes are skewed to the right, so at "
+            "every age the conditional mean, pulled up by the high earners, sits above the conditional median. Both "
+            "follow the career curve and the drop at retirement. <bookmark mark='d'/> Which one is the right "
+            "prediction depends entirely on how you'll be scored. Part 21 computes conditional quantiles by "
+            "linear programming."
+        ) as vo:
+            self.play(FadeIn(A), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[:2]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[2]), FadeIn(why_))
+            vo.wait_until("c")
+            self.play(Create(cm), Create(cd), FadeIn(leg), FadeIn(skew))
+            vo.wait_until("d")
+            self.play(Indicate(rows[1][2], color=S.ACCENT))
         self.clear_scene()

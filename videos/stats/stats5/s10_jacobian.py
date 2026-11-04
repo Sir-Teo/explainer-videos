@@ -11,6 +11,7 @@ class Jacobian(VoiceoverScene):
         self.rule()
         self.convolution()
         self.ratio()
+        self.polar()
 
     def card(self):
         card = chapter_card(9, r"Change of variables", r"Densities in many dimensions", lit=(), part=PART)
@@ -118,4 +119,42 @@ class Jacobian(VoiceoverScene):
             vo.wait_until("b")
             step(1, transform=False)
             self.play(FadeIn(A), FadeIn(h), Create(cc), FadeIn(tag))
+        self.clear_scene()
+
+    def polar(self):
+        e = load("extras")["rayleigh"]
+        r = np.asarray(e["r"])
+        rows = [
+            cmath(r"(Z_1, Z_2)", r"\mapsto", r"(R, \Theta)", r",\quad", r"dz_1\, dz_2 = r\, dr\, d\theta", font_size=32),
+            cmath(r"f_R(r)", r"=", r"\int_0^{2\pi} \frac{1}{2\pi} e^{-r^2/2}\, r\, d\theta", r"=", r"r\, e^{-r^2/2}", font_size=32),
+        ]
+        rows[1][4].set_color(EXACT)
+        whys = [why(r"polar coordinates: \ the Jacobian is $r$"), why(r"the Rayleigh distribution")]
+        A = axes([0, 4.5], [0, 0.7], x_length=5.6, y_length=3.0, xlabel=r"distance of a 2D normal point from the centre",
+                 xticks=[0, 1, 2, 3, 4], yticks=[0, 0.3, 0.6], center=[-2.8, -1.8, 0])
+        ax = A.ax
+        ed = np.linspace(0, 4.5, 46)
+        h = hist_bars(ax, ed, np.histogram(r, ed)[0] / (len(r) * np.diff(ed)), color=SIM)
+        xs = np.linspace(0, 4.5, 200)
+        cv = curve(ax, xs, xs * np.exp(-xs ** 2 / 2), EXACT, 3)
+        info = VGroup(MathTex(rf"E R = \sqrt{{\pi/2}} = {e['theory']:.4f}", font_size=28, color=EXACT),
+                      MathTex(rf"\text{{simulated: }} {e['mean']:.4f}", font_size=26, color=SIM),
+                      label(r"in 3D: \ Maxwell's distribution of molecular speeds", font_size=22, color=GREY_B))
+        info.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -1.6, 0])
+        tag = note(r"simulated: 20,000 points").to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Polar coordinates give one more classic. <bookmark mark='a'/> How far from the centre does a "
+            "two-dimensional standard normal point land? Change to polar coordinates; the area element is r d r d "
+            "theta, so the Jacobian is r. <bookmark mark='b'/> Integrate out the angle and the distance has density r "
+            "times e to the minus r squared over two: the Rayleigh distribution, with mean root pi over two. Note that "
+            "it's zero at the centre, even though the density of points is highest there: there's very little "
+            "room near the centre. In three dimensions the same calculation gives Maxwell's distribution of "
+            "molecular speeds."
+        ) as vo:
+            step = ladder(self, rows, whys, keep=2, top=2.9, x=0.4, buff=0.6, edge=6.9)
+            vo.wait_until("a")
+            step(0, transform=False)
+            vo.wait_until("b")
+            step(1, transform=False)
+            self.play(FadeIn(A), FadeIn(h), Create(cv), FadeIn(info), FadeIn(tag))
         self.clear_scene()

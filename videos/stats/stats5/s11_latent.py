@@ -13,6 +13,7 @@ class Latent(VoiceoverScene):
         self.heights()
         self.marginalize()
         self.posterior()
+        self.simpson()
 
     def card(self):
         card = chapter_card(10, r"Latent variables", r"A variable you never see, \ shaping the ones you do", lit=(1894,), part=PART)
@@ -98,6 +99,7 @@ class Latent(VoiceoverScene):
         f = MathTex(r"P(Z = k \mid x)", r"=", r"\frac{\pi_k f(x \mid k)}{\sum_j \pi_j f(x \mid j)}", font_size=32).to_corner(UR, buff=0.4)
         f[0].set_color(COND)
         note_ = label(r"Bayes' theorem for the latent class: \ the ``E'' step of EM", font_size=22, color=GREY_B).next_to(f, DOWN, buff=0.2)
+        note_.align_to(f, RIGHT)
         with self.voiceover(
             "Going the other way, the data tell us about the latent class. <bookmark mark='a'/> Given only a "
             "height, the chance that the person is a man is Bayes' theorem: the man's component at that height, over "
@@ -110,4 +112,40 @@ class Latent(VoiceoverScene):
             self.play(Write(f), FadeIn(note_))
             vo.wait_until("b")
             self.play(Create(cv), FadeIn(mark), FadeIn(ml))
+        self.clear_scene()
+
+    def simpson(self):
+        e = load("extras")["clinic"]
+        card = upgrade_card(1, r"in the World's clinic, the treated recovered less often overall but more often within "
+                            r"each severity", r"that the reversal was a curiosity of tables", r"severity is a latent variable "
+                            r"that the treatment depends on: marginalizing it mixes two very different groups", width=10.6,
+                            font_size=23).to_edge(UP, buff=0.35)
+        rows = VGroup(
+            MathTex(rf"P(\text{{recover}} \mid \text{{treated}}) = {e['t_all']:.3f}", r"\quad<\quad",
+                    rf"P(\text{{recover}} \mid \text{{not}}) = {e['c_all']:.3f}", font_size=28),
+            MathTex(r"=", rf"\underbrace{{{e['p_sev_t']:.2f}}}_{{P(\text{{severe}} \mid \text{{treated}})}} \times {e['t_sev']:.3f}",
+                    rf"+ {1 - e['p_sev_t']:.2f} \times {e['t_mild']:.3f}", font_size=28),
+            MathTex(r"\text{vs.}", rf"\ {e['p_sev_c']:.2f} \times {e['c_sev']:.3f} + {1 - e['p_sev_c']:.2f} \times {e['c_mild']:.3f}",
+                    font_size=28),
+            label(r"the mixing weights differ, \ because doctors treat the sicker patients", font_size=24, color=S.ACCENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.0, 0])
+        rows[0][0].set_color(S.TREAT)
+        rows[0][2].set_color(S.CTRL)
+        tag = simulated_tag(r"simulated: the World's clinic (Part 1)")
+        with self.voiceover(
+            "Latent variables explain a paradox from Part 1. <bookmark mark='a'/> In the World's clinic, the treated "
+            "recovered less often overall, yet more often within each level of severity. <bookmark mark='b'/> "
+            "Marginalizing over severity mixes the severe and the mild. <bookmark mark='c'/> For the treated, the "
+            "overall rate is a mixture weighted mostly toward the severe, sixty-three percent of them, because doctors "
+            "treat the sicker patients; <bookmark mark='d'/> for the untreated, a mixture weighted toward the mild. "
+            "Different weights on very different groups reverse the comparison. Simpson's paradox is a latent "
+            "variable that the treatment depends on, and Part 36 shows when we can adjust for it."
+        ) as vo:
+            self.play(FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(card, shift=DOWN * 0.2), FadeIn(rows[0]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[1]))
+            vo.wait_until("d")
+            self.play(FadeIn(rows[2:]))
         self.clear_scene()

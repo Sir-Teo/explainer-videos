@@ -12,6 +12,7 @@ class Condition(VoiceoverScene):
         self.proof()
         self.bivariate()
         self.galton()
+        self.precision()
 
     def card(self):
         card = chapter_card(6, r"Conditioning a Gaussian", r"Where regression is born", lit=(1886,), part=PART)
@@ -133,4 +134,51 @@ class Condition(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("d")
             self.play(FadeIn(rows[3:]))
+        self.clear_scene()
+
+    def precision(self):
+        d = load("extras2")["chain"]
+        R, K = np.asarray(d["R"]), np.asarray(d["K"])
+        K = np.where(np.abs(K) < 1e-9, 0.0, K)
+
+        def mat(M, hi=None, color=S.RESID):
+            m = Matrix([[f"{v:.2f}" for v in r] for r in M], element_to_mobject=lambda s: MathTex(s, font_size=26),
+                       h_buff=1.1, v_buff=0.6)
+            if hi:
+                for (i, j) in hi:
+                    m.get_entries()[3 * i + j].set_color(color)
+            return m
+        nodes = VGroup(*[VGroup(Circle(radius=0.32, color=S.ACCENT, stroke_width=2.5), MathTex(t, font_size=30))
+                         for t in ("X", "Y", "Z")]).arrange(RIGHT, buff=1.3).move_to([0, 2.6, 0])
+        arrows = VGroup(Arrow(nodes[0].get_right(), nodes[1].get_left(), buff=0.08, color=GREY_B, stroke_width=3),
+                        Arrow(nodes[1].get_right(), nodes[2].get_left(), buff=0.08, color=GREY_B, stroke_width=3))
+        chain = label(r"$Y = 0.8X + \text{noise}$, \ $Z = 0.7Y + \text{noise}$", font_size=22, color=GREY_B).next_to(nodes, DOWN, buff=0.2)
+        mR = mat(R, hi=[(0, 2), (2, 0)], color=COND).scale(0.9).move_to([-3.4, -0.6, 0])
+        mK = mat(K, hi=[(0, 2), (2, 0)], color=S.RESID).scale(0.9).move_to([3.4, -0.6, 0])
+        tR = MathTex(r"\text{correlations } \Sigma", font_size=28, color=COND).next_to(mR, UP, buff=0.25)
+        tK = MathTex(r"\text{precision } K = \Sigma^{-1}", font_size=28, color=S.RESID).next_to(mK, UP, buff=0.25)
+        rule = MathTex(r"K_{ij} = 0", r"\iff", r"X_i \perp X_j \mid \text{the rest}", r"\qquad \rho_{ij \cdot \text{rest}} = "
+                       r"-\frac{K_{ij}}{\sqrt{K_{ii}K_{jj}}}", font_size=28).to_edge(DOWN, buff=0.55)
+        rule[0].set_color(S.RESID)
+        with self.voiceover(
+            "The conditioning formula hides a beautiful fact about the inverse of the covariance matrix. "
+            "<bookmark mark='a'/> Build a chain: Y is X times point eight plus noise; Z is Y times point seven plus "
+            "noise. Z depends on X only through Y. <bookmark mark='b'/> In the correlation matrix, every entry is "
+            f"non-zero: X and Z are correlated, {d['r13']:.2f}, through Y. <bookmark mark='c'/> Now invert it. The "
+            "inverse, called the precision matrix, has an exact zero linking X and Z. <bookmark mark='d'/> That's "
+            "the rule for any multivariate normal: a zero in the precision matrix means the two variables are "
+            "independent given all the others, and the scaled entry, with a minus sign, is their partial "
+            "correlation. Correlation shows every path of dependence; the precision matrix shows only the direct "
+            "links. Arthur Dempster built covariance selection on this in 1972, and Part 31's graphical models "
+            "draw the network straight from the zeros."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(nodes), GrowArrow(arrows[0]), GrowArrow(arrows[1]), FadeIn(chain))
+            vo.wait_until("b")
+            self.play(FadeIn(mR), FadeIn(tR))
+            vo.wait_until("c")
+            self.play(TransformFromCopy(mR, mK), FadeIn(tK), run_time=1.5)
+            self.play(*[Indicate(mK.get_entries()[k], color=S.RESID) for k in (2, 6)])
+            vo.wait_until("d")
+            self.play(FadeIn(rule))
         self.clear_scene()

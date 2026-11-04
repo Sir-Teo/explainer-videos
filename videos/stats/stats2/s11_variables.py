@@ -10,8 +10,8 @@ SUM_COLORS = {s: interpolate_color(ManimColor("#5DADEC"), ManimColor("#F28FB8"),
 def staircase(ax, xs, F, color, stroke_width=3, x_lo=None, x_hi=None):
     """A CDF of a discrete variable: flat steps with jumps at xs (values), F the cumulative sums."""
     pts = []
-    x_lo = ax.x_range[0] if x_lo is None else x_lo
-    x_hi = ax.x_range[1] if x_hi is None else x_hi
+    x_lo = bounds(ax)[0] if x_lo is None else x_lo
+    x_hi = bounds(ax)[1] if x_hi is None else x_hi
     prev = 0.0
     cur = x_lo
     segs = VGroup()

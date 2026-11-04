@@ -337,11 +337,120 @@ def compute_simplex():
     return nest(out)
 
 
+def compute_extras():
+    out = {}
+    # diversification: variance of the average of n equicorrelated variables
+    ns = np.arange(1, 51)
+    for rho in (0.0, 0.2, 0.5):
+        out[f"div_{rho}"] = (rho + (1 - rho) / ns).tolist()
+    out["div_ns"] = ns
+    # stable variance in Galton: b^2 var(mid) + residual = var(child)
+    x, y = galton_points()
+    b = np.cov(x, y)[0, 1] / x.var()
+    resid = y - (y.mean() + b * (x - x.mean()))
+    out["stable"] = {"b2vx": float(b ** 2 * x.var()), "res": float(resid.var()), "vy": float(y.var()), "vx": float(x.var())}
+    # MVN check: squared Mahalanobis distances of 3-d normal draws against chi-square 3
+    g = rng(55)
+    L = np.array([[1.0, 0, 0], [0.7, 0.7, 0], [-0.4, 0.3, 0.8]])
+    z = g.normal(size=(4000, 3)) @ L.T
+    Sg = L @ L.T
+    d2 = np.einsum("ij,jk,ik->i", z, np.linalg.inv(Sg), z)
+    qs = (np.arange(1, 4001) - 0.5) / 4000
+    out["mvncheck"] = {"emp": np.sort(d2)[::40], "theo": stats.chi2.ppf(qs, 3)[::40]}
+    # Rayleigh: the radius of a 2-d standard normal
+    r = np.hypot(*g.normal(size=(2, 20_000)))
+    out["rayleigh"] = {"r": r, "mean": float(r.mean()), "theory": float(np.sqrt(np.pi / 2))}
+    # Simpson as a latent variable: Part 1's clinic
+    c = W.clinic
+    sev, tr, rec = c["severe"], c["treated"], c["recovered"]
+    out["clinic"] = {"t_all": float(rec[tr].mean()), "c_all": float(rec[~tr].mean()),
+                     "t_mild": float(rec[tr & ~sev].mean()), "c_mild": float(rec[~tr & ~sev].mean()),
+                     "t_sev": float(rec[tr & sev].mean()), "c_sev": float(rec[~tr & sev].mean()),
+                     "p_sev_t": float(sev[tr].mean()), "p_sev_c": float(sev[~tr].mean())}
+    # Pearson's spurious correlation of ratios (1897)
+    a, b2, cc = g.normal(10, 2, (3, 5000))
+    out["spurious"] = {"r_raw": float(np.corrcoef(a, b2)[0, 1]), "r_ratio": float(np.corrcoef(a / cc, b2 / cc)[0, 1]),
+                       "x": (a / cc)[:1200], "y": (b2 / cc)[:1200]}
+    # Spearman vs Pearson under a monotone transform: the World's fathers and sons, son's height made exponential
+    f = W.families
+    idx = rng(9).choice(len(f["father"]), 800, replace=False)
+    fa, so = f["father"][idx], f["child"][idx]
+    ys = np.exp((so - 170) / 6)
+    out["mono"] = {"p_raw": float(np.corrcoef(fa, so)[0, 1]), "p_exp": float(np.corrcoef(fa, ys)[0, 1]),
+                   "s_raw": float(stats.spearmanr(fa, so)[0]), "s_exp": float(stats.spearmanr(fa, ys)[0]),
+                   "k_raw": float(stats.kendalltau(fa, so)[0]), "k_exp": float(stats.kendalltau(fa, ys)[0])}
+    # finite exchangeability: draws without replacement from an urn of 2 red, 2 blue
+    from fractions import Fraction as F
+    from itertools import permutations
+    urn = ["R", "R", "B", "B"]
+    seqs = {}
+    for perm in set(permutations(urn)):
+        seqs[perm] = seqs.get(perm, 0) + 1
+    tot = sum(seqs.values())
+    p_rr = F(sum(v for k, v in seqs.items() if k[0] == "R" and k[1] == "R"), tot)
+    p_r = F(sum(v for k, v in seqs.items() if k[0] == "R"), tot)
+    out["finite"] = {"p_rr": str(p_rr), "p_r2": str(p_r * p_r), "corr": float((p_rr - p_r * p_r) / (p_r * (1 - p_r)))}
+    return nest(out)
+
+
+def compute_extras2():
+    out = {}
+    g = rng(77)
+    # errors in variables: regression dilution (Spearman's attenuation, 1904)
+    n = 1500
+    x = g.normal(0, 1, n)
+    y = x + g.normal(0, 0.6, n)
+    w = x + g.normal(0, 1, n)
+    out["atten"] = {"x": x[:700], "y": y[:700], "w": w[:700], "b_true": float(np.polyfit(x, y, 1)[0]),
+                    "b_obs": float(np.polyfit(w, y, 1)[0]), "lam": 0.5, "r_xy": float(np.corrcoef(x, y)[0, 1]),
+                    "r_wy": float(np.corrcoef(w, y)[0, 1]), "rel": float(np.corrcoef(w, x + g.normal(0, 1, n))[0, 1])}
+    # the precision matrix of a Gaussian chain X -> Y -> Z
+    a, b = 0.8, 0.7
+    S_ = np.array([[1, a, a * b], [a, a * a + 0.36, (a * a + 0.36) * b], [a * b, (a * a + 0.36) * b, (a * a + 0.36) * b * b + 0.51]])
+    K = np.linalg.inv(S_)
+    R = S_ / np.sqrt(np.outer(np.diag(S_), np.diag(S_)))
+    pc = -K / np.sqrt(np.outer(np.diag(K), np.diag(K)))
+    out["chain"] = {"S": S_, "R": R, "K": K, "pc13": float(pc[0, 2]), "r13": float(R[0, 2])}
+    # conditional mean vs conditional median: the World's incomes (thousands) by age
+    ad = W.adult
+    age, inc = W.age[ad], W.income[ad]
+    ages = np.arange(20, 91, 2)
+    mean_, med_ = [], []
+    for a0 in ages:
+        m = (age >= a0 - 1) & (age < a0 + 1)
+        mean_.append(float(inc[m].mean()))
+        med_.append(float(np.median(inc[m])))
+    out["median"] = {"ages": ages, "mean": mean_, "med": med_, "all_mean": float(inc.mean()), "all_med": float(np.median(inc))}
+    # simulating from a copula: Gaussian pairs -> uniforms -> any margins
+    z = g.multivariate_normal([0, 0], [[1, 0.7], [0.7, 1]], 1500)
+    u = stats.norm.cdf(z)
+    v1 = stats.expon.ppf(u[:, 0])
+    v2 = stats.lognorm.ppf(u[:, 1], 0.5)
+    out["copsim"] = {"z": z[:900], "u": u[:900], "v": np.c_[v1, v2][:900],
+                     "tau_z": float(stats.kendalltau(z[:, 0], z[:, 1])[0]), "tau_v": float(stats.kendalltau(v1, v2)[0]),
+                     "r_z": float(np.corrcoef(z.T)[0, 1]), "r_v": float(np.corrcoef(v1, v2)[0, 1])}
+    # dice: max and min of two dice, exact joint table
+    from fractions import Fraction as F
+    J = np.zeros((6, 6), dtype=object)
+    for i in range(1, 7):
+        for j in range(1, 7):
+            J[max(i, j) - 1, min(i, j) - 1] = J[max(i, j) - 1, min(i, j) - 1] + F(1, 36)
+    J[J == 0] = F(0)
+    out["dice"] = {"J36": [[int(v * 36) for v in r] for r in J], "marg_max": [int(v * 36) for v in J.sum(1)],
+                   "marg_min": [int(v * 36) for v in J.sum(0)]}
+    ex = np.array([[float(v) for v in r] for r in J])
+    vals = np.arange(1, 7)
+    em, en = (ex.sum(1) * vals).sum(), (ex.sum(0) * vals).sum()
+    cov = (ex * np.outer(vals, vals)).sum() - em * en
+    out["dice"].update({"E_max": float(em), "E_min": float(en), "cov": float(cov), "cov36sq": float(cov * 1296)})
+    return nest(out)
+
+
 ITEMS = {
     "galton": compute_galton, "slicer": compute_slicer, "dependence": compute_dependence, "predictor": compute_predictor,
     "eve": compute_eve, "mvn": compute_mvn, "regression": compute_regression, "jacobian": compute_jacobian,
     "latent": compute_latent, "copulas": compute_copulas, "polya": compute_polya, "measures": compute_measures,
-    "simplex": compute_simplex,
+    "simplex": compute_simplex, "extras": compute_extras, "extras2": compute_extras2,
 }
 
 if __name__ == "__main__":

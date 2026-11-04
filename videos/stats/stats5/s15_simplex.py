@@ -20,7 +20,9 @@ class Simplex(VoiceoverScene):
         self.card()
         self.multinomial()
         self.dirichlet()
+        self.gammas()
         self.conjugate()
+        self.spurious()
 
     def card(self):
         card = chapter_card(14, r"The simplex", r"Distributions over proportions", lit=(), part=PART)
@@ -115,4 +117,75 @@ class Simplex(VoiceoverScene):
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(link))
+        self.clear_scene()
+
+    def spurious(self):
+        e = load("extras")["spurious"]
+        x, y = np.asarray(e["x"]), np.asarray(e["y"])
+        A = axes([0.4, 2.0], [0.4, 2.0], x_length=4.6, y_length=4.6, xlabel=r"$X/Z$", ylabel=r"$Y/Z$", xticks=[0.5, 1, 1.5],
+                 yticks=[0.5, 1, 1.5], center=[-3.6, -0.4, 0])
+        pts = scatter(A.ax, x, y, color=SIM, radius=0.02, opacity=0.5)
+        hc = history_card(1897, r"Karl Pearson, \ ``On a form of spurious correlation''", r"which may arise when indices are "
+                          r"used in the measurement of organs", color=S.MUSEUM, width=6.2, font_size=22).move_to([3.0, 2.0, 0])
+        rows = VGroup(MathTex(rf"X, Y, Z \text{{ independent:}}\ \operatorname{{corr}}(X, Y) = {e['r_raw']:.3f}", font_size=28),
+                      MathTex(rf"\operatorname{{corr}}(X/Z,\ Y/Z) = {e['r_ratio']:.3f}", font_size=30, color=S.RESID),
+                      VGroup(label(r"shares of a whole and per-capita rates", font_size=24, color=GREY_A),
+                             label(r"inherit correlation from the shared denominator", font_size=24, color=GREY_A)
+                             ).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
+                      label(r"the cure for compositions: \ log-ratios (Aitchison 1982)", font_size=22, color=S.ACCENT))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.0, -0.8, 0])
+        for r in rows:
+            if r.width > 6.4:
+                r.width = 6.4
+        tag = note(r"simulated: 5,000 triples").to_corner(DL, buff=0.3)
+        with self.voiceover(
+            "Proportions carry a trap that Karl Pearson spotted in 1897. <bookmark mark='a'/> Take three independent "
+            "variables, X, Y and Z. X and Y are uncorrelated. <bookmark mark='b'/> Now divide both by Z, as you do when "
+            "you form shares or per-capita rates. The ratios are strongly correlated, about point five, purely "
+            "because they share a denominator. <bookmark mark='c'/> Pearson called it spurious correlation, and it "
+            "haunts anything measured as a share of a whole. For genuine compositions, John Aitchison's log-ratios "
+            "from 1982 are the cure."
+        ) as vo:
+            self.play(FadeIn(hc), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(A), FadeIn(pts, lag_ratio=0.001), FadeIn(rows[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[2:]))
+        self.clear_scene()
+
+    def gammas(self):
+        rows = [
+            cmath(r"G_i \sim \mathrm{Gamma}(\alpha_i, 1)", r",\quad", r"\text{independent}", font_size=32),
+            cmath(r"(p_1, \dots, p_k)", r"=", r"\Big(\frac{G_1}{T}, \dots, \frac{G_k}{T}\Big)", r",\quad", r"T = \textstyle\sum_i G_i",
+                  font_size=32),
+            cmath(r"f(\mathbf p, t)", r"=", r"\prod_i \frac{(p_i t)^{\alpha_i - 1} e^{-p_i t}}{\Gamma(\alpha_i)} \cdot t^{k - 1}",
+                  font_size=32),
+            cmath(r"f(\mathbf p, t)", r"=", r"\underbrace{\frac{\Gamma(\sum\alpha)}{\prod\Gamma(\alpha_i)}\prod_i p_i^{\alpha_i - 1}}"
+                  r"_{\mathrm{Dirichlet}(\boldsymbol\alpha)}", r"\cdot", r"\underbrace{\frac{t^{\sum\alpha - 1} e^{-t}}{\Gamma(\sum\alpha)}}"
+                  r"_{\mathrm{Gamma}(\sum\alpha)}", font_size=30),
+        ]
+        rows[3][2].set_color(S.PRIOR)
+        rows[3][4].set_color(S.ACCENT)
+        whys = [why(r"Part 3's gamma: \ waiting times"), why(r"normalize by the total"),
+                why(r"change of variables: \ the Jacobian is $t^{k - 1}$"), why(r"it factors: \ the proportions are independent of the total")]
+        take = label(r"how computers draw a Dirichlet; \ and the total tells you nothing about the shares (Lukacs 1955)", font_size=24,
+                     color=S.ACCENT).to_edge(DOWN, buff=0.45)
+        with self.voiceover(
+            "Where does the Dirichlet come from? There's a construction that's also how computers draw from it. "
+            "<bookmark mark='a'/> Take k independent gamma variables, with shape parameters alpha one through alpha k. "
+            "<bookmark mark='b'/> Divide each by their total. <bookmark mark='c'/> Change variables from the k gammas "
+            "to the k minus one free proportions and the total. The Jacobian of that map is t to the k minus one, "
+            "chapter nine's machinery again. <bookmark mark='d'/> And the joint density factors: a Dirichlet in the "
+            "proportions times a gamma in the total. So the proportions are exactly Dirichlet, and they're "
+            "independent of the total, a fact Eugene Lukacs showed in 1955 characterizes the gamma. Knowing how many "
+            "votes were cast in all tells you nothing about the shares. With k equal to two this is the beta, as a "
+            "ratio of gammas."
+        ) as vo:
+            step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.55, edge=6.9)
+            for k, m in enumerate("abcd"):
+                vo.wait_until(m)
+                step(k, transform=False)
+            self.play(FadeIn(take))
         self.clear_scene()

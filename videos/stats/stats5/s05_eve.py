@@ -11,6 +11,8 @@ class Eve(VoiceoverScene):
         self.derive()
         self.galton()
         self.world()
+        self.eta()
+        self.on_average()
 
     def card(self):
         card = chapter_card(4, r"Eve's law", r"Total variance $=$ within $+$ between", lit=(), part=PART)
@@ -117,4 +119,65 @@ class Eve(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("c")
             self.play(FadeIn(use))
+        self.clear_scene()
+
+    def eta(self):
+        d = load("predictor")
+        rows = VGroup(
+            MathTex(r"\eta^2", r"=", r"\frac{\mathrm{Var}\,E[Y \mid X]}{\mathrm{Var}\,Y}", r"\quad\text{(Pearson's correlation ratio, 1903)}",
+                    font_size=32),
+            MathTex(rf"\text{{World, log income on age: }}\ r^2 = {d['r2_line']:.3f},\quad \eta^2 = {d['r2_cond']:.3f}", font_size=30),
+            label(r"$r^2$ measures the best \emph{line}; \ $\eta^2$ the best \emph{function}: \ $r^2 \le \eta^2$, \ equal iff "
+                  r"$E[Y \mid X]$ is linear", font_size=24, color=GREY_A),
+        ).arrange(DOWN, buff=0.4).move_to([0, 0.6, 0])
+        rows[0][0].set_color(COND)
+        rows[0][3].set_color(GREY_B)
+        rows[1].set_color(COND)
+        take = label(r"a small $r^2$ does not mean a weak relationship", font_size=28, color=S.ACCENT).to_edge(DOWN, buff=0.8)
+        with self.voiceover(
+            "Eve's law also exposes a common mistake. <bookmark mark='a'/> The share of variance explained by the "
+            "conditional mean has a name, Karl Pearson's correlation ratio, eta squared. <bookmark mark='b'/> For the "
+            f"World's log incomes, the squared correlation with age is {d['r2_line']:.3f}, almost nothing, but eta "
+            f"squared is {d['r2_cond']:.2f}: age explains about sixteen times as much as the straight line can. "
+            "<bookmark mark='c'/> The squared correlation measures how well the best line does; eta squared, how "
+            "well the best function does. They agree only when the conditional mean is linear, as it is for the "
+            "bivariate normal. <bookmark mark='d'/> A small r squared does not mean a weak relationship."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(Write(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(take))
+        self.clear_scene()
+
+    def on_average(self):
+        rows = [
+            cmath(r"X \sim \mathrm{Bernoulli}(0.1)", r",\quad", r"Y = X \cdot Z,\ \ Z \sim N(0, 10^2)", font_size=32),
+            cmath(r"\mathrm{Var}\,Y", r"=", r"0.1 \times 100 = 10", font_size=34),
+            cmath(r"\mathrm{Var}(Y \mid X = 1)", r"=", r"100", r"\ >\ ", r"10", font_size=34),
+            cmath(r"E\,\mathrm{Var}(Y \mid X)", r"=", r"0.9 \times 0 + 0.1 \times 100 = 10", r"\ \le\ ", r"\mathrm{Var}\,Y", font_size=32),
+        ]
+        rows[2][2].set_color(S.RESID)
+        rows[3][2].set_color(COND)
+        whys = [why(r"a rare switch that turns on a lot of noise"), why(r"Eve's law, \ or directly"),
+                why(r"learning $X = 1$ made us \emph{less} certain"), why(r"but on average, \ conditioning never adds variance")]
+        take = label(r"information reduces uncertainty on average, \ not in every case", font_size=26, color=S.ACCENT)
+        take.to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Eve's law says conditioning reduces variance. Be careful what that means. <bookmark mark='a'/> Let X be a "
+            "rare switch, on one time in ten, and let Y be zero when the switch is off and a wide normal, standard "
+            "deviation ten, when it's on. <bookmark mark='b'/> The variance of Y is ten. <bookmark mark='c'/> Now "
+            "learn that the switch is on. The conditional variance is a hundred, ten times larger: this piece of "
+            "information made us less certain. <bookmark mark='d'/> Eve's law only promises the average: the "
+            "expected conditional variance is at most the variance. Information reduces uncertainty on average, not "
+            "in every case, a fact Part 15 meets again when a single surprising observation widens a posterior."
+        ) as vo:
+            step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
+            for k, m in enumerate("abcd"):
+                vo.wait_until(m)
+                step(k, transform=False)
+            self.play(FadeIn(take))
         self.clear_scene()
