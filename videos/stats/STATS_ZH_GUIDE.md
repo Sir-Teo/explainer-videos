@@ -389,3 +389,40 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | studentized residual, Cook's distance, influential point | 学生化残差，库克距离，强影响点 |
 | heteroskedasticity, robust (sandwich) standard errors, HC3 | 异方差，稳健（三明治）标准误，HC3 |
 | regression to the mean, regression fallacy | 均值回归，回归谬误 |
+
+## Glossary (Part 13)
+
+| English | 中文 |
+|---|---|
+| design of experiments, experimental unit, plot | 试验设计，试验单元，小区 |
+| replication, randomization, local control | 重复，随机化，局部控制 |
+| uniformity trial, fertility gradient | 均匀性试验，肥力梯度 |
+| completely randomized design (CRD) | 完全随机设计 |
+| randomization distribution, sharp null hypothesis | 随机化分布，尖锐原假设 |
+| potential outcomes | 潜在结果 |
+| analysis of variance (ANOVA), between / within groups | 方差分析，组间／组内 |
+| mean square, expected mean square | 均方，期望均方 |
+| contrast, orthogonal contrasts | 对比，正交对比 |
+| family-wise error rate, multiple comparisons | 族错误率，多重比较 |
+| Tukey's honestly significant difference, studentized range | 图基真实显著差，学生化极差 |
+| Dunnett's test, Scheffé's method | 邓尼特检验，谢费法 |
+| block, randomized complete block design (RCBD), relative efficiency | 区组，随机完全区组设计，相对效率 |
+| balanced incomplete block design | 平衡不完全区组设计 |
+| Latin square, Graeco-Latin square, orthogonal Latin squares | 拉丁方，希腊–拉丁方，正交拉丁方 |
+| crossover design, washout, carryover | 交叉设计，洗脱期，残留效应 |
+| factorial design, main effect, interaction, interaction plot | 析因设计，主效应，交互效应，交互作用图 |
+| one-factor-at-a-time (OFAT) | 一次一因素法 |
+| Yates's algorithm, standard order | 耶茨算法，标准顺序 |
+| half-normal plot, effect sparsity | 半正态图，效应稀疏性 |
+| fractional factorial, aliasing, defining relation, resolution | 部分析因设计，混杂（别名），定义关系，分辨度 |
+| Plackett–Burman design, screening | 普拉凯特–伯曼设计，筛选试验 |
+| response surface, steepest ascent, central composite design | 响应曲面，最速上升，中心复合设计 |
+| stationary point, canonical analysis, rotatable design | 驻点，典型分析，可旋转设计 |
+| split-plot design, whole plot, subplot, error stratum | 裂区设计，主区，副区，误差层 |
+| optimal design, information matrix, D-optimality, G-optimality | 最优设计，信息矩阵，D 最优，G 最优 |
+| equivalence theorem, variance function | 等价定理，方差函数 |
+| power, minimum detectable effect, standardized effect size | 功效，最小可检测效应，标准化效应量 |
+| winner's curse, type M / type S error | 赢家诅咒，M 型／S 型错误 |
+| A/B test, online controlled experiment | A/B 测试，在线对照试验 |
+| CUPED, analysis of covariance, regression adjustment | CUPED，协方差分析，回归调整 |
+| sample-ratio mismatch, A/A test, novelty effect | 样本比例失配，A/A 测试，新奇效应 |
