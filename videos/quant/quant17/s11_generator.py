@@ -72,7 +72,7 @@ class Generator(VoiceoverScene):
                     r"running variance, determines their law under a normalization (Chevyrev and Oberhauser 2022), so "
                     r"the distance between expected signatures compares two generators. The lead-lag transform's "
                     r"second level is the quadratic variation: volatility clustering shows")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)
         with self.voiceover(
             "How does a diffusion model invent a month of bitcoin? Forward: add a little Gaussian noise to a real "
             "window, two hundred times, until nothing is left; any stage is one blend of window and noise. "
