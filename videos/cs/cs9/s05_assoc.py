@@ -103,13 +103,14 @@ class Assoc(VoiceoverScene):
         cur = bitlabels()
         rule = label(r"each bit points to the half used \textit{less} recently: \ follow the bits to the victim",
                      font_size=24, color=HEAD).to_edge(DOWN, buff=0.35)
-        seq = [0, 2, 1, 3]
+        seq = [0, 2, 1]
         with self.voiceover(
             "Here is how hardware approximates LRU cheaply. For a four-way set, keep three bits in a little tree. "
             "<bookmark mark='a'/> Each bit points towards the half of the set that was used less recently. Every "
             "access flips the bits on its path to point away from itself. <bookmark mark='b'/> Use way zero, then two, "
-            "then one, then three, and watch the bits. <bookmark mark='c'/> To choose a victim, follow the bits from the "
-            "root: they lead to a way that has not been used for a while, though not always the very least recent. "
+            "then one, and watch the bits. <bookmark mark='c'/> To choose a victim, follow the bits from the root: right, "
+            "then right again, to way three, the one never used. In general they lead to a way that has not been used "
+            "for a while, though not always the very least recent. "
             "Three bits instead of a full ordering; for sixteen ways, fifteen bits instead of forty-five."
         ) as vo:
             self.play(FadeIn(head), Create(edges), Create(n0), Create(n1), Create(n2), FadeIn(ways), FadeIn(cur))
