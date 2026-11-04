@@ -61,8 +61,9 @@ one research chapter, two exam problems and the README section per part, in orde
 | 2 | backtesting a margin model: Wilks for Kupiec, exact size, Christoffersen, power, US 1926-2020 | `backtest_theory` |
 | 3 | Ohlson's information dynamics: closed form, Monte Carlo, omega on EDGAR | `ohlson_theory` |
 | 4 | how far a fair walk wanders: LIL, Robbins's mixture, stitched boundaries | `lil_theory` |
-| 5 | the error in realized variance: CLT, noise bias, TSRV, jump test | `rv_theory` |
+| 5 | the error in realized variance: the CLT proved, coverage by frequency, the log statistic (noise and jumps are Part 7's) | `rv_theory` |
 | 6 | predictive regressions near a unit root: local-to-unity, size by persistence and T | `predreg_theory` |
+| 7 | comparing nested forecasts: DM's degeneracy, Clark-West, size and power, HAR/HARQ on Bitcoin | `nested_theory` |
 
 Before choosing a topic, grep the whole series for it: Part 3's first draft repeated Part 6's chapter 5 and was moved.
 
