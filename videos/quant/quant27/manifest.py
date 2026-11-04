@@ -3,7 +3,7 @@
 TITLE = "Quant, Built: Part 27, Machine Learning for Returns"
 
 SCENES = [
-    ("s01_hook", "Hook", "Two thousand percent of nothing"),
+    ("s01_hook", "Hook", "Four tenths of a percent"),
     ("s02_signal", "Signal", "1. A low signal-to-noise world"),
     ("s03_zoo", "Zoo", "2. The model zoo"),
     ("s04_limits", "Limits", "3. Where the edge lives"),
