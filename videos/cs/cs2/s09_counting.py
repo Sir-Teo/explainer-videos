@@ -104,11 +104,11 @@ class Counting(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(ol), LaggedStart(*[FadeIn(c) for c in og], lag_ratio=0.06))
             vo.wait_until("c")
-            moves = []
-            for s, c in zip(ordered, og):
-                k = pairs.index("".join(sorted(s)))
-                moves.append(TransformFromCopy(c, ug[k]))
-            self.play(*moves, FadeIn(ul), run_time=2.0)
+            copies = [c.copy() for c in og]
+            self.play(*[cp.animate.move_to(ug[pairs.index("".join(sorted(s)))]) for s, cp in zip(ordered, copies)],
+                      FadeIn(ul), run_time=2.0)
+            self.add(ug)
+            self.remove(*copies)
             vo.wait_until("d")
             self.play(FadeIn(fs[1]))
         self.wait(0.3)
