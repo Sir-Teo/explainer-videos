@@ -93,7 +93,7 @@ def compute_projection():
     Q, R = np.linalg.qr(A)
     assert np.allclose(np.abs(Q[:, 0]), np.abs(q1)) and np.allclose(np.abs(Q[:, 1]), np.abs(q2))
     assert np.allclose(P, np.column_stack([q1, q2]) @ np.column_stack([q1, q2]).T)
-    y = np.array([2.0, 1.0, 5.0])
+    y = np.array([3.0, -1.0, 3.0])
     return {"A": A, "P": P, "q1": q1, "q2": q2, "R": R, "y": y, "Py": P @ y, "res": y - P @ y,
             "eig": np.sort(np.linalg.eigvalsh(P))[::-1], "rank": int(np.linalg.matrix_rank(P)),
             "trace": float(np.trace(P))}
@@ -241,11 +241,220 @@ def compute_numerics():
     return {"rows": rows, "machine_eps": float(np.finfo(float).eps)}
 
 
+def compute_extras():
+    """Sections added to chapters 1-12: ANOVA by nested projections, Mahalanobis, the dummy trap, Frisch-Waugh-Lovell,
+    noncentral chi-square, centring."""
+    out = {}
+    # --- ANOVA as nested projections (the hat data)
+    x, y = midparent_child(40, 404)
+    n = len(y)
+    one = np.ones(n)
+    X = np.column_stack([one, x])
+    P1 = np.outer(one, one) / n
+    PX = X @ np.linalg.solve(X.T @ X, X.T)
+    ss_tot = float(y @ (np.eye(n) - P1) @ y)
+    ss_reg = float(y @ (PX - P1) @ y)
+    ss_res = float(y @ (np.eye(n) - PX) @ y)
+    assert np.isclose(ss_tot, ss_reg + ss_res)
+    out["anova"] = {"tot": ss_tot, "reg": ss_reg, "res": ss_res, "r2": ss_reg / ss_tot,
+                    "tr": [1.0, float(np.trace(PX - P1)), float(np.trace(np.eye(n) - PX))]}
+    # --- generalized variance
+    xs, ys = midparent_child(400, 7)
+    S = np.cov(np.column_stack([xs, ys]).T)
+    ev = np.linalg.eigvalsh(S)
+    out["genvar"] = {"det": float(np.linalg.det(S)), "prod": float(ev.prod()), "tr": float(np.trace(S)), "sum": float(ev.sum())}
+    # --- Mahalanobis: who is unusual?
+    D = np.column_stack([xs, ys])
+    mu = D.mean(axis=0)
+    Si = np.linalg.inv(S)
+    md = np.sqrt(np.einsum("ij,jk,ik->i", D - mu, Si, D - mu))
+    ed = np.linalg.norm((D - mu) / D.std(axis=0), axis=1)
+    i_m = int(np.argmax(md))
+    # a point unusual in Mahalanobis but ordinary in each coordinate: tall parents, short child, etc.
+    score = md - ed
+    i_odd = int(np.argmax(score))
+    w, V = np.linalg.eigh(S)
+    root_inv = V @ np.diag(w ** -0.5) @ V.T
+    white = (D - mu) @ root_inv.T
+    out["maha"] = {"x": xs, "y": ys, "mu": mu, "S": S, "md": md, "i_max": i_m, "i_odd": i_odd,
+                   "white": white, "white_cov": np.cov(white.T), "md_odd": float(md[i_odd]), "ed_odd": float(ed[i_odd]),
+                   "chi2_95": float(stats.chi2.ppf(0.95, 2)), "frac_out": float((md ** 2 > stats.chi2.ppf(0.95, 2)).mean())}
+    # --- Var(Ax): heights to (mean, difference)
+    A = np.array([[0.5, 0.5], [1.0, -1.0]])
+    out["lin"] = {"A": A, "ASA": A @ S @ A.T, "emp": np.cov((D @ A.T).T)}
+    # --- PCA via SVD of the centred data
+    Dc = D - mu
+    U, sv, Vt = np.linalg.svd(Dc, full_matrices=False)
+    out["pca"] = {"sv2": (sv ** 2 / (len(D) - 1)), "eig": np.sort(ev)[::-1], "Vt": Vt, "share": float(sv[0] ** 2 / (sv ** 2).sum())}
+    # --- the dummy-variable trap: 3 regions, intercept + 3 indicators
+    g = rng(31)
+    reg = np.repeat([0, 1, 2], 4)
+    yr = np.array([62.0, 58, 61, 59, 70, 72, 69, 73, 55, 53, 57, 54]) + 0 * g.normal(size=12)
+    Xd = np.column_stack([np.ones(12), reg == 0, reg == 1, reg == 2]).astype(float)
+    rank = int(np.linalg.matrix_rank(Xd))
+    bmin = np.linalg.pinv(Xd) @ yr
+    alt = bmin + 5.0 * np.array([1, -1, -1, -1])  # another least-squares solution (null space direction)
+    assert np.allclose(Xd @ alt, Xd @ bmin)
+    means = [float(yr[reg == k].mean()) for k in range(3)]
+    out["dummy"] = {"rank": rank, "bmin": bmin, "alt": alt, "means": means, "y": yr, "reg": reg,
+                    "diff_min": float(bmin[2] - bmin[1]), "diff_alt": float(alt[2] - alt[1]), "null": [1, -1, -1, -1]}
+    # --- Frisch-Waugh-Lovell: child on father and mother
+    f = W.families
+    idx = rng(77).choice(len(f["child"]), 300, replace=False)
+    fa, mo, ch = f["father"][idx], f["mother"][idx], f["child"][idx]
+    Xf = np.column_stack([np.ones(300), fa, mo])
+    b_full = np.linalg.lstsq(Xf, ch, rcond=None)[0]
+    Z = np.column_stack([np.ones(300), fa])
+    Mz = np.eye(300) - Z @ np.linalg.solve(Z.T @ Z, Z.T)
+    ry, rx = Mz @ ch, Mz @ mo
+    b_fwl = float(rx @ ry / (rx @ rx))
+    b_simple = float(np.polyfit(mo, ch, 1)[0])
+    assert np.isclose(b_fwl, b_full[2])
+    out["fwl"] = {"b_full": b_full, "b_fwl": b_fwl, "b_simple": b_simple, "rx": rx, "ry": ry,
+                  "corr_fm": float(np.corrcoef(fa, mo)[0, 1])}
+    # --- noncentral chi-square: z + mu
+    nn, pp = 10, 3
+    Xq = np.column_stack([np.ones(nn), rng(1876).normal(size=(nn, pp - 1))])
+    H = Xq @ np.linalg.solve(Xq.T @ Xq, Xq.T)
+    M = np.eye(nn) - H
+    gq = rng(9)
+    deltas = [0.0, 2.0, 4.0]
+    ncs = {}
+    for dl in deltas:
+        mu_v = M @ gq.normal(size=nn)
+        mu_v = mu_v / np.linalg.norm(mu_v) * dl
+        z = gq.normal(size=(20_000, nn)) + mu_v
+        q = np.einsum("ij,jk,ik->i", z, M, z)
+        ncs[str(dl)] = {"mean": float(q.mean()), "theory": float(nn - pp + dl ** 2),
+                        "power": float((q > stats.chi2.ppf(0.95, nn - pp)).mean()),
+                        "power_theory": float(stats.ncx2.sf(stats.chi2.ppf(0.95, nn - pp), nn - pp, dl ** 2)) if dl > 0 else 0.05,
+                        "q": q[:20000]}
+    out["ncx2"] = ncs
+    out["ncx2_xs"] = np.linspace(0.01, 40, 300)
+    out["ncx2_pdf"] = {str(dl): (stats.ncx2.pdf(out["ncx2_xs"], nn - pp, dl ** 2) if dl > 0 else stats.chi2.pdf(out["ncx2_xs"], nn - pp))
+                       for dl in deltas}
+    # --- centring: polynomial regression on heights
+    hx = W.height[W.sample(200, among=W.adult, seed=4)]
+    Xraw = np.column_stack([np.ones(200), hx, hx ** 2])
+    hc = hx - hx.mean()
+    Xcen = np.column_stack([np.ones(200), hc, hc ** 2])
+    out["centre"] = {"raw": float(np.linalg.cond(Xraw)), "cen": float(np.linalg.cond(Xcen)),
+                     "corr_raw": float(np.corrcoef(hx, hx ** 2)[0, 1]), "corr_cen": float(np.corrcoef(hc, hc ** 2)[0, 1])}
+    # --- Kronecker eigenvalues
+    T = np.array([[1.0, 0.6, 0.36], [0.6, 1.0, 0.6], [0.36, 0.6, 1.0]])
+    Sp = np.array([[1.0, 0.3], [0.3, 1.0]])
+    e_k = np.sort(np.linalg.eigvalsh(np.kron(Sp, T)))
+    e_p = np.sort(np.outer(np.linalg.eigvalsh(Sp), np.linalg.eigvalsh(T)).ravel())
+    out["kron_eig"] = {"kron": e_k, "prod": e_p, "err": float(np.abs(e_k - e_p).max())}
+    return nest(out)
+
+
+def compute_extras2():
+    out = {}
+    # leverage: diag(H) for the hook's 40 families
+    x, y = midparent_child(40, 404)
+    X = np.column_stack([np.ones(40), x])
+    H = X @ np.linalg.solve(X.T @ X, X.T)
+    h = np.diag(H)
+    out["lev"] = {"x": x, "y": y, "h": h, "sum": float(h.sum()), "i_max": int(np.argmax(h)), "max": float(h.max()),
+                  "formula": (1 / 40 + (x - x.mean()) ** 2 / ((x - x.mean()) ** 2).sum()).tolist()}
+    # leave-one-out residuals: e_i / (1 - h_ii) vs refitting 40 times
+    b = np.linalg.lstsq(X, y, rcond=None)[0]
+    e = y - X @ b
+    loo_formula = e / (1 - h)
+    loo_direct = []
+    for i in range(40):
+        m = np.arange(40) != i
+        bi = np.linalg.lstsq(X[m], y[m], rcond=None)[0]
+        loo_direct.append(float(y[i] - X[i] @ bi))
+    loo_direct = np.array(loo_direct)
+    out["loo"] = {"formula": loo_formula, "direct": loo_direct, "err": float(np.abs(loo_formula - loo_direct).max()),
+                  "press": float((loo_formula ** 2).sum()), "rss": float((e ** 2).sum())}
+    # power iteration on the families' covariance
+    xs, ys = midparent_child(400, 7)
+    S = np.cov(np.column_stack([xs, ys]).T)
+    v = np.array([1.0, 0.0])
+    lam_true = float(np.linalg.eigvalsh(S).max())
+    its = []
+    for k in range(12):
+        v = S @ v
+        v = v / np.linalg.norm(v)
+        its.append({"v": v.tolist(), "lam": float(v @ S @ v)})
+    ev = np.sort(np.linalg.eigvalsh(S))
+    out["power"] = {"its": its, "lam": lam_true, "ratio": float(ev[0] / ev[1])}
+    # independence of mean and variance: normal vs exponential samples of 10
+    g = rng(1908)
+    zn = g.normal(size=(20_000, 10))
+    ze = g.exponential(size=(20_000, 10))
+    out["indep"] = {"n_mean": zn.mean(axis=1)[:3000], "n_var": zn.var(axis=1, ddof=1)[:3000],
+                    "e_mean": ze.mean(axis=1)[:3000], "e_var": ze.var(axis=1, ddof=1)[:3000],
+                    "n_corr": float(np.corrcoef(zn.mean(axis=1), zn.var(axis=1, ddof=1))[0, 1]),
+                    "e_corr": float(np.corrcoef(ze.mean(axis=1), ze.var(axis=1, ddof=1))[0, 1])}
+    # catastrophic cancellation: heights measured from far away (an offset of 1e8 cm)
+    hgt = W.height[W.sample(1000, among=W.adult, seed=12)].astype(np.float64)
+    rows = []
+    for off in (0.0, 1e4, 1e6, 1e8):
+        xx = hgt + off
+        n = len(xx)
+        naive = (np.sum(xx * xx) - n * np.mean(xx) ** 2) / (n - 1)
+        two = np.sum((xx - xx.mean()) ** 2) / (n - 1)
+        rows.append({"off": off, "naive": float(naive), "two": float(two)})
+    out["cancel"] = {"rows": rows, "true": float(np.var(hgt, ddof=1))}
+    return nest(out)
+
+
+def compute_extras3():
+    out = {}
+    # nearest correlation matrix by Higham's alternating projections (2002)
+    B = np.array([[1, 0.9, -0.9], [0.9, 1, 0.9], [-0.9, 0.9, 1.0]])
+    Y = B.copy()
+    dS = np.zeros_like(B)
+    for _ in range(200):
+        R = Y - dS
+        w, V = np.linalg.eigh(R)
+        X = V @ np.diag(np.clip(w, 0, None)) @ V.T
+        dS = X - R
+        Y = X.copy()
+        np.fill_diagonal(Y, 1.0)
+    out["nearcorr"] = {"bad_eig": np.linalg.eigvalsh(B), "fixed": Y, "fixed_eig": np.linalg.eigvalsh(Y),
+                       "dist": float(np.linalg.norm(Y - B))}
+    # ridge path for the dummy design -> the pseudoinverse solution as lambda -> 0
+    reg = np.repeat([0, 1, 2], 4)
+    yr = np.array([62.0, 58, 61, 59, 70, 72, 69, 73, 55, 53, 57, 54])
+    Xd = np.column_stack([np.ones(12), reg == 0, reg == 1, reg == 2]).astype(float)
+    lams = np.logspace(2, -6, 60)
+    path = np.array([np.linalg.solve(Xd.T @ Xd + l * np.eye(4), Xd.T @ yr) for l in lams])
+    out["ridge"] = {"lams": np.log10(lams), "path": path, "pinv": np.linalg.pinv(Xd) @ yr}
+    # a space-time field from the Kronecker covariance: 2 sites x 60 times, AR(1) rho = 0.9, site corr 0.7
+    g = rng(39)
+    nt = 60
+    rho = 0.9
+    T = rho ** np.abs(np.subtract.outer(np.arange(nt), np.arange(nt)))
+    Sp = np.array([[1.0, 0.7], [0.7, 1.0]])
+    L = np.kron(np.linalg.cholesky(Sp), np.linalg.cholesky(T))
+    z = L @ g.normal(size=2 * nt)
+    out["field"] = {"a": z[:nt], "b": z[nt:], "corr": float(np.corrcoef(z[:nt], z[nt:])[0, 1])}
+    return nest(out)
+
+
+def nest(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    if isinstance(obj, dict):
+        return {k: nest(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [nest(v) for v in obj]
+    if isinstance(obj, (np.floating, np.integer)):
+        return obj.item()
+    return obj
+
+
 ITEMS = {
     "hat": compute_hat, "vectors": compute_vectors, "projection": compute_projection, "trace": compute_trace,
     "spectral": compute_spectral, "psd": compute_psd, "svd": compute_svd, "pinv": compute_pinv,
     "blocks": compute_blocks, "kron": compute_kron, "mle": compute_mle, "quad": compute_quad,
-    "numerics": compute_numerics,
+    "numerics": compute_numerics, "extras": compute_extras,
+    "extras2": compute_extras2, "extras3": compute_extras3,
 }
 
 if __name__ == "__main__":
