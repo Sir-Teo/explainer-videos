@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant18.common import BAD, GOOD, PART, ZERO, ask, house_lab, illustration, load
+from videos.quant.quant18.common import BAD, GOOD, PART, ZERO, ask, fit_right, house_lab, illustration, load
 
 EXP = QC.SPOT
 TP = QC.OPTION
@@ -135,8 +135,8 @@ class Term(VoiceoverScene):
             step(3)
         self.wait(0.4)
         self.clear_scene()
-        card = house_lab(r"the term premium in three regressions", R.acm_decompose, "# 2. excess returns", 14, width=8.4)
-        card.to_edge(LEFT, buff=0.4).to_edge(UP, buff=0.4)
+        card = house_lab(r"the term premium in three regressions", R.acm_decompose, "# 2. excess returns", 14, width=12.6)
+        card.move_to(ORIGIN)
         with self.voiceover(
             "In the House it is forty lines, and the heart of it is here: the excess returns, the regression on news "
             "and state, and the prices of risk."
@@ -148,7 +148,7 @@ class Term(VoiceoverScene):
     def decompose(self, t):
         T, y, rn, tp = (np.asarray(t[k]) for k in ("t", "y10", "rn10", "tp10"))
         nt, ntp = np.asarray(t["ny_t"]), np.asarray(t["ny_tp10"])
-        g = axes([1961, 2026], [-3, 16], x_length=8.8, y_length=4.6, xlabel=r"year", ylabel=r"10-year, percent",
+        g = axes([1961, 2026], [-3, 16], x_length=8.2, y_length=4.6, xlabel=r"year", ylabel=r"10-year, percent",
                  xticks=[1970, 1980, 1990, 2000, 2010, 2020], yticks=[0, 5, 10, 15], font_size=14).to_edge(
             LEFT, buff=0.5).shift(DOWN * 0.3)
         ax = g.ax
@@ -169,6 +169,7 @@ class Term(VoiceoverScene):
             wrapped_label(rf"Aug 2024 to Dec 2025, while the Fed cut: yield {b['y'] - a['y']:+.2f}, expectations "
                           rf"{b['rn'] - a['rn']:+.2f}, premium {b['tp'] - a['tp']:+.2f}", 3.6, 17, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.35, aligned_edge=LEFT)
+        fit_right(side)
         with self.voiceover(
             "Here is the ten-year yield split in two, re-estimated by the House on the Fed's curve. In blue, the "
             "expected path of short rates; in pink, the premium. <bookmark mark='a'/> The dashed white line is the New "

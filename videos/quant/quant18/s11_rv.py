@@ -115,6 +115,8 @@ class RV(VoiceoverScene):
 
     def verdict(self, f):
         t, F, cum = np.asarray(f["t"]), np.asarray(f["F"]), np.asarray(f["cum"])
+        keep = t >= 1990
+        t, F, cum = t[keep], F[keep], cum[keep] - cum[keep][0]
         ok = np.isfinite(F)
         top = axes([1990, 2026], [np.nanmin(F) - 5, np.nanmax(F) + 5], x_length=8.6, y_length=2.2,
                    ylabel=r"the fly, bp", xticks=[], yticks=[], font_size=13)
@@ -128,9 +130,10 @@ class RV(VoiceoverScene):
 
         def shade(g):
             ax = g.ax
-            a, b = ax.c2p(2021, ax.y_range[0]), ax.c2p(2026, ax.y_range[1])
-            return Rectangle(width=b[0] - a[0], height=b[1] - a[1], stroke_width=0, fill_color=QC.IDEA,
-                             fill_opacity=0.12).move_to((a + b) / 2)
+            x0, x1 = ax.c2p(2021, 0)[0], ax.c2p(2026, 0)[0]
+            y0, y1 = ax.get_bottom()[1], ax.get_top()[1]
+            return Rectangle(width=x1 - x0, height=y1 - y0, stroke_width=0, fill_color=QC.IDEA,
+                             fill_opacity=0.12).move_to([(x0 + x1) / 2, (y0 + y1) / 2, 0])
         sh = VGroup(shade(top), shade(bot))
         i, o, gi, go = f["in"], f["out"], f["gross_in"], f["gross_out"]
         side = VGroup(

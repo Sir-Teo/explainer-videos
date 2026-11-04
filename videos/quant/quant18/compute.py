@@ -579,7 +579,7 @@ def compute_fly() -> dict:
         b = np.polyfit(x[:-1][ok], x[1:][ok], 1)[0]
         return float(np.log(0.5) / np.log(b)) if 0 < b < 1 else float("inf")
     return _json({"weights": w, "share": p["share"][:3], "t": _frac_year(d)[::3], "F": F[::3], "z": z[::3],
-                  "pos": pos[::3], "cum": np.cumsum(pnl)[::3], "in": stats(pnl[(d >= 19910101) & ins]),
+                  "pos": pos[::3], "cum": np.nancumsum(pnl)[::3], "in": stats(pnl[(d >= 19910101) & ins]),
                   "out": stats(pnl[~ins]), "gross_in": stats(gross[(d >= 19910101) & ins]),
                   "gross_out": stats(gross[~ins]), "trades_in": int(np.sum(np.abs(np.diff(pos[ins])) > 0)),
                   "trades_out": int(np.sum(np.abs(np.diff(pos[~ins])) > 0)), "hl_in": half_life(F[ins]), "hl_out": half_life(F[~ins]),
