@@ -20,5 +20,6 @@ SCENES = [
     ("s15_funding", "Funding", "14. How a strategy gets capital"),
     ("s16_envelope", "Envelope", "15. The best rule, registered and opened"),
     ("s17_house", "House", "16. Rule 26: the backtest protocol"),
+    ("s19_research", "Research", "For the researcher: inference on the winner"),
     ("s18_outro", "Outro", "Recap, desk questions, problems"),
 ]

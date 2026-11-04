@@ -688,10 +688,138 @@ def compute_envelope() -> dict:
                   "last": int(dd[h][-1]), "trials": pit.trials_so_far(), "n_trials": N_RULES})
 
 
+# ---------------------------------------------------------------------------
+def _tn_cdf(x, mu, s, lo, hi):
+    """P(X <= x) for X ~ N(mu, s^2) truncated to [lo, hi]."""
+    return float(stats.truncnorm.cdf(x, (lo - mu) / s, (hi - mu) / s, loc=mu, scale=s))
+
+
+def _invert(x, s, lo, hi, p, width=60.0):
+    """The mu at which the truncated normal puts probability p below x (the cdf falls as mu rises)."""
+    from scipy.optimize import brentq
+    g = lambda m_: _tn_cdf(x, m_, s, lo, hi) - p  # noqa: E731
+    a, b = x - width * s, x + width * s
+    if g(a) < 0:
+        return float(a)
+    if g(b) > 0:
+        return float(b)
+    return float(brentq(g, a, b, xtol=1e-6 * s))
+
+
+def _winner_inference(X, s, rho, j, c_beta, alpha=0.05, beta=0.005):
+    """Andrews, Kitagawa and McCloskey's inference on the winner j = argmax X, for X ~ N(mu, s^2 C) with C[:, j] = rho.
+
+    Conditional on the winner and on Z = X - rho X_j (independent of X_j), X_j is N(mu_j, s^2) truncated to
+    [L, U], L = max over k with rho_k < 1 of Z_k/(1 - rho_k).  Inverting its cdf gives a median-unbiased estimate and an
+    equal-tailed interval with exact conditional coverage.  The hybrid also conditions on mu_j lying in the level-beta
+    projection interval X_j +- c_beta s, which keeps it no wider than projection."""
+    keep = (np.arange(len(X)) != j) & (rho < 1 - 1e-9)
+    Z = X[keep] - rho[keep] * X[j]
+    L = float(np.max(Z / (1 - rho[keep]))) if keep.any() else -np.inf
+    U = np.inf
+    x = float(X[j])
+    cond = (_invert(x, s, L, U, 1 - alpha / 2), _invert(x, s, L, U, alpha / 2))
+    med = _invert(x, s, L, U, 0.5)
+    lo_p, hi_p = x - c_beta * s, x + c_beta * s
+    at = (alpha - beta) / (1 - beta)
+    grid = np.linspace(lo_p, hi_p, 801)
+    F = np.array([_tn_cdf(x, m_, s, max(L, m_ - c_beta * s), min(U, m_ + c_beta * s)) for m_ in grid])
+    ok = (F >= at / 2) & (F <= 1 - at / 2)
+    hyb = (float(grid[ok].min()), float(grid[ok].max())) if ok.any() else (x, x)
+    k = int(np.argmin(np.abs(F - 0.5)))
+    return {"x": x, "L": L, "gap": (x - L) / s, "naive": (x - 1.96 * s, x + 1.96 * s), "cond": cond, "med": med,
+            "hybrid": hyb, "hyb_med": float(grid[k]), "proj": (lo_p, hi_p)}
+
+
+def compute_winners() -> dict:
+    """The research chapter: inference on winners (Andrews, Kitagawa and McCloskey 2024).  The best of many backtests
+    is biased up; conditioning on its having won turns its estimate into a truncated normal whose cdf can be inverted.
+    Checked by simulation (coverage, median bias, length), then applied to the best of the 10,000 rules, chosen on
+    1926-86 and on 1987-2003, against what each earned afterwards."""
+    rng = np.random.default_rng(2626)
+    # ---- simulation: J equicorrelated estimates with known variance
+    J, rho0, reps = 50, 0.5, 1000
+    C = np.full((J, J), rho0) + (1 - rho0) * np.eye(J)
+    Lc = np.linalg.cholesky(C)
+    xi = rng.standard_normal((20000, J)) @ Lc.T
+    c_beta = float(np.quantile(np.abs(xi).max(1), 1 - 0.005))
+    c_95 = float(np.quantile(np.abs(xi).max(1), 0.95))
+    configs = {"all zero": np.zeros(J), "one clear winner": np.r_[3.0, np.zeros(J - 1)],
+               "spread 0 to 2": np.linspace(0, 2, J)}
+    sims = {}
+    for name, mu in configs.items():
+        rec = {k: [] for k in ("naive", "cond", "hybrid", "proj")}
+        bias_naive, bias_med, length = [], [], {k: [] for k in rec}
+        for _ in range(reps):
+            X = mu + rng.standard_normal(J) @ Lc.T
+            j = int(np.argmax(X))
+            r = _winner_inference(X, 1.0, np.full(J, rho0), j, c_beta)
+            r["proj"] = (r["x"] - c_95, r["x"] + c_95)
+            for k in rec:
+                rec[k].append(r[k][0] <= mu[j] <= r[k][1])
+                length[k].append(r[k][1] - r[k][0])
+            bias_naive.append(r["x"] - mu[j])
+            bias_med.append(r["med"] - mu[j])
+        sims[name] = {"cover": {k: float(np.mean(v)) for k, v in rec.items()},
+                      "length": {k: float(np.median(v)) for k, v in length.items()},
+                      "bias_naive": float(np.mean(bias_naive)), "medbias_naive": float(np.median(bias_naive)),
+                      "medbias_med": float(np.median(bias_med))}
+    # ---- the truncated normal picture for one draw
+    # ---- data: the 10,000 rules
+    d, ex, rules, R = _rule_matrix()
+    splits = {"1926-86": ((d > d[0]) & (d <= IS_END), (d > IS_END) & (d <= RESEARCH_END)),
+              "1987-2003": ((d > IS_END) & (d <= 20031231), (d > 20031231) & (d <= RESEARCH_END))}
+    data_out = {}
+    for name, (mi, mo) in splits.items():
+        Ri = R[mi].astype(np.float64)
+        T = int(mi.sum())
+        X = _sr(Ri) * math.sqrt(252)
+        j = int(np.argmax(X))
+        Zs = Ri - Ri.mean(0)
+        sd = Zs.std(0, ddof=1)
+        sd = np.where(sd > 0, sd, 1.0)
+        zj = Zs[:, j] / sd[j]
+        rho = (Zs.T @ zj) / ((T - 1) * sd)
+        rho = np.clip(rho, -1, 1)
+        s = math.sqrt(252 / T)
+        # projection critical value by the multiplier bootstrap of the standardized means
+        Zn = (Zs / sd).astype(np.float32)
+        mx = []
+        for _ in range(4):
+            W = rng.standard_normal((100, T)).astype(np.float32)
+            mx.append(np.abs(W @ Zn).max(1) / math.sqrt(T - 1))
+        mx = np.concatenate(mx)
+        cb = float(np.quantile(mx, 1 - 0.005))
+        r = _winner_inference(X, s, rho, j, cb)
+        Xo = _sr(R[mo].astype(np.float64)) * math.sqrt(252)
+        To = int(mo.sum())
+        top = np.argsort(X)[::-1]
+        data_out[name] = {**r, "T": T, "T_out": To, "s": s, "s_out": math.sqrt(252 / To), "c_beta": cb,
+                          "c_95": float(np.quantile(mx, 0.95)), "label": B.rule_label(rules[j]),
+                          "out": float(Xo[j]), "second": float(X[top[1]]), "second_label": B.rule_label(rules[top[1]]),
+                          "rho_second": float(rho[top[1]]), "n_close": int(np.sum(X > X[j] - 2 * s)),
+                          "binding": B.rule_label(rules[int(np.flatnonzero((np.arange(len(X)) != j) & (rho < 1 - 1e-9))[
+                              int(np.argmax((X - rho * X[j])[(np.arange(len(X)) != j) & (rho < 1 - 1e-9)] /
+                                            (1 - rho[(np.arange(len(X)) != j) & (rho < 1 - 1e-9)])))])]),
+                          "first": int(d[mi][0]), "last": int(d[mi][-1]), "first_out": int(d[mo][0]),
+                          "last_out": int(d[mo][-1])}
+    # the conditional density for the 1926-86 winner, on a grid, at the median-unbiased estimate and at the naive one
+    w = data_out["1926-86"]
+    xs = np.linspace(w["x"] - 4 * w["s"], w["x"] + 4 * w["s"], 241)
+    dens = {}
+    for key in ("med", "x"):
+        m_ = w[key]
+        a = (w["L"] - m_) / w["s"]
+        dens[key] = np.where(xs >= w["L"], stats.truncnorm.pdf(xs, a, np.inf, loc=m_, scale=w["s"]), 0.0)
+    return _json({"J": J, "rho": rho0, "reps": reps, "c_beta": c_beta, "c_95": c_95, "sims": sims, "data": data_out,
+                  "dens_x": xs, "dens": dens})
+
+
 ITEMS = {"lookahead": compute_lookahead, "survivor": compute_survivor, "select": compute_select,
          "engine": compute_engine, "sharpe": compute_sharpe, "counter": compute_counter, "rules": compute_rules,
          "acf": compute_acf, "dsr": compute_dsr, "pbo": compute_pbo, "cv": compute_cv, "rc": compute_rc, "monitor": compute_monitor,
-         "planted": compute_planted, "funding": compute_funding, "envelope": compute_envelope}
+         "planted": compute_planted, "funding": compute_funding, "envelope": compute_envelope,
+         "winners": compute_winners}
 
 
 if __name__ == "__main__":

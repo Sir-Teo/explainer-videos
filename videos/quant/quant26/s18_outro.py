@@ -43,6 +43,10 @@ PROBLEMS = [
     r"days long.",
     r"A 5\% e-process monitor is read every month for ten years while the claim is true. Bound the probability of "
     r"ever stopping. Compare with ten years of monthly 5\% $t$-tests.",
+    r"(qual) $X \sim N(\mu, \Sigma)$, winner $\hat\jmath = \arg\max X$. Show $Z = X - \Sigma_{\cdot j}X_j/\Sigma_{jj}$ is "
+    r"independent of $X_j$, and that given $\hat\jmath = j$ and $Z$, $X_j$ is a normal truncated to $[L(Z), U(Z)]$. Find $L, U$.",
+    r"(qual) $J$ independent $N(0, 1)$ estimates, all true means 0. Show the naive 95\% interval for the winner "
+    r"covers with probability $\Phi(1.96)^J - \Phi(-1.96)^J$; evaluate for $J = 2$ and $J = 50$.",
 ]
 
 
@@ -169,12 +173,14 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=20)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: the Sharpe ratio's standard error by the delta method; the distribution of the best of "
+            "And twelve problems: the Sharpe ratio's standard error by the delta method; the distribution of the best of "
             "N; the hurdle for a hundred tries; the minimum backtest length; a probabilistic Sharpe ratio with skew; "
             "Lo's correction; counting CSCV's splits; what purging costs; the stationary bootstrap's blocks; and "
-            "why an e-process can be read every month. Solutions, in English and Chinese, are in the notes."
+            "why an e-process can be read every month. Then two qualifying-exam problems: the truncated normal behind "
+            "inference on winners, and how often the naive interval for a winner covers. Solutions, in English and "
+            "Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

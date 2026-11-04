@@ -72,6 +72,17 @@ one research chapter, two exam problems and the README section per part, in orde
 | 13 | moment explosions and the wings: Andersen-Piterbarg T*, sample moments that never settle, Lee's formula, Bitcoin's critical moments | `moments_theory` |
 | 14 | how fast rough simulation converges: exact strong error n^-H, hybrid constants, MC on the exact joint law, rough Bergomi price errors | `convergence_theory` |
 | 15 | model-free bounds for a one-touch: put-and-forward super-hedge, floor and ceiling, four fitted models inside, pathwise check | `touch_bounds` |
+| 16 | the regression basis in least-squares Monte Carlo: Glasserman-Yu's moment growth, LSM bias by paths, Belomestny's rate | `paths_basis` |
+| 17 | a posteriori bounds for deep BSDE solvers: Han-Long's loss decomposition, floors by depth and width, the bound never crossed | `aposteriori` |
+| 18 | why the curve's factors look like level, slope, curvature: Gantmacher-Krein oscillation, Treasury sign changes, TP2/TP3 | `oscillation_theory` |
+| 19 | shadow rates at the lower bound: Black's option, the Wu-Xia approximation against the PDE, the floor premium, beta in the data | `shadow_theory` |
+| 20 | name concentration: the granularity adjustment in closed form, Monte Carlo against the ASRF, a lumpy book | `granularity_theory` |
+| 21 | wrong-way risk bounds: CVA under every dependence by optimal transport, entropic interpolation, conditional exposure | `wwr_bounds` |
+| 22 | the theory of storage: competitive storage by time iteration, stock-out and backwardation, WTI against EIA inventories | `storage_theory` |
+| 23 | speculative bubbles from disagreement: Harrison-Kreps prices, the resale option, Scheinkman-Xiong | `speculation_theory` |
+| 24 | where momentum profits come from: Lo-MacKinlay's identity, simulated, 40 industries 1926-2020 | `momentum_decomposition` |
+| 25 | how many anomalies are real: Benjamini-Hochberg proved, Storey's pi0, Efron's lfdr, 208 post-publication t's | `discovery_theory` |
+| 26 | inference on the winner: Andrews-Kitagawa-McCloskey's truncated normal, coverage simulated, the best of 10,000 rules in two eras | `winners` |
 
 Before choosing a topic, grep the whole series for it: Part 3's first draft repeated Part 6's chapter 5 and was moved.
 

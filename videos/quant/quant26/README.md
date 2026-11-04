@@ -190,6 +190,16 @@ python tools/make.py quant26 --cpu-voice -q m                   # English and Ch
     however often it is read. Ten years of monthly one-sided 5% tests on the cumulative mean raise at least one false
     alarm in about 32% of simulated careers (24% if the first year is skipped), and the share tends to one as the
     horizon grows (the law of the iterated logarithm).
+11. **(qual) The truncated normal.** Cov(Z, X_j) = Σ_{·j} − Σ_{·j}Σ_jj/Σ_jj = 0, and (Z, X_j) is jointly normal, so Z
+    is independent of X_j. Write X_k = Z_k + (Σ_jk/Σ_jj)X_j; then X_j ≥ X_k ⇔ X_j(Σ_jj − Σ_jk)/Σ_jj ≥ Z_k. Hence
+    L(Z) = max over k with Σ_jk < Σ_jj of Σ_jjZ_k/(Σ_jj − Σ_jk), U(Z) = min over k with Σ_jk > Σ_jj of the same
+    expression, and rivals with Σ_jk = Σ_jj require Z_k ≤ 0, which does not involve X_j. Given Z the event {ĵ = j}
+    is {L ≤ X_j ≤ U} (ties have probability zero), and X_j is independent of Z, so X_j | ĵ = j, Z is N(μ_j, Σ_jj)
+    truncated to [L, U].
+12. **(qual) The naive interval for a winner.** With all means 0 the interval X_ĵ ± 1.96 covers 0 iff
+    −1.96 ≤ max_j X_j ≤ 1.96, whose probability is Pr(all ≤ 1.96) − Pr(all < −1.96) = Φ(1.96)^J − Φ(−1.96)^J:
+    0.950 for J = 2 (the curse is mild), 0.282 for J = 50. The conditional interval has coverage 0.95 given every
+    winner j and every Z, so averaging over them it is 0.95 for any J.
 
 ## Data and reproducibility
 
@@ -268,6 +278,8 @@ python tools/make.py quant26 --cpu-voice -q m                   # English and Ch
 8. **清洗的代价。** 一个内部折的标签区间从其第一天到最后一天之后20天。被清洗的：它之前的20个训练观测（其标签伸入测试折）和之后的20个（它们开始于测试折的标签区间内）；被禁运的：再之后的20个。约60个观测，占4,000个训练观测中的一小部分。
 9. **平稳自助法的块。** 块长服从几何分布：均值1/p = 10天；P(L ≥ 20) = 0.9¹⁹ ≈ 0.135。
 10. **偷看。** 由Ville不等式，e过程监控在任何期限内越过20的概率至多5%，无论读取多频繁。十年里每月做一次单侧5%检验，在约32%的模拟生涯中至少出现一次误报（若跳过第一年为24%），并且随期限增长趋于一（重对数律）。
+11. **（资格考试）截断正态分布。** Cov(Z, X_j) = Σ_{·j} − Σ_{·j}Σ_jj/Σ_jj = 0，且(Z, X_j)联合正态，所以Z与X_j独立。写X_k = Z_k + (Σ_jk/Σ_jj)X_j；则X_j ≥ X_k ⇔ X_j(Σ_jj − Σ_jk)/Σ_jj ≥ Z_k。因此L(Z) = 对Σ_jk < Σ_jj的k取Σ_jjZ_k/(Σ_jj − Σ_jk)的最大值，U(Z) = 对Σ_jk > Σ_jj的k取同一表达式的最小值；Σ_jk = Σ_jj的对手要求Z_k ≤ 0，与X_j无关。给定Z，事件{ĵ = j}就是{L ≤ X_j ≤ U}（平局概率为零），而X_j与Z独立，所以X_j | ĵ = j, Z服从截断到[L, U]的N(μ_j, Σ_jj)。
+12. **（资格考试）赢家的朴素区间。** 所有均值为0时，区间X_ĵ ± 1.96覆盖0当且仅当−1.96 ≤ max_j X_j ≤ 1.96，其概率为Pr(全部 ≤ 1.96) − Pr(全部 < −1.96) = Φ(1.96)^J − Φ(−1.96)^J：J = 2时为0.950（诅咒很轻），J = 50时为0.282。条件区间在每个赢家j和每个Z下的覆盖率都是0.95，所以对它们取平均后，任何J下都是0.95。
 
 ## 数据与复现
 
