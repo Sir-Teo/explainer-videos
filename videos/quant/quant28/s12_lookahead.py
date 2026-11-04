@@ -138,7 +138,7 @@ class LookAhead(VoiceoverScene):
         for k, y in enumerate(years):
             r = Rectangle(width=0.5 + 0.45 * k, height=0.32, stroke_width=0, fill_color=MODEL_A, fill_opacity=0.8)
             r.move_to([-5.2 + r.width / 2, 2.2 - 0.45 * k, 0])
-            t = label(rf"model$_{{{y}}}$", font_size=17, color=GREY_A).next_to(r, RIGHT, buff=0.2)
+            t = label(rf"model dated {y}", font_size=15, color=GREY_A).next_to(r, RIGHT, buff=0.2)
             bars.add(VGroup(r, t))
         card = firm_card(r"He, Lv, Manela and Wu (2025)", r"`Chronologically consistent large language models': ChronoBERT "
                          r"and ChronoGPT, a series of models each trained only on text available up to its date; "
@@ -150,7 +150,8 @@ class LookAhead(VoiceoverScene):
         with self.voiceover(
             "The clean answer is to build the models so that they cannot cheat. <bookmark mark='a'/> Songrun He, Linying "
             "Lv, Asaf Manela and Jimmy Wu trained a series of language models, each on text available only up to its "
-            "own date: a model of 1999, one of 2002, and so on. <bookmark mark='b'/> For any backtest date, use the "
+            "own date: one model for one date, another for a later date, and so on. <bookmark mark='b'/> For any "
+            "backtest date, use the "
             "model of that date. Their models compete with larger open models on standard benchmarks, and their "
             "real-time trading results come close to the leaky state of the art, which suggests the look-ahead in the "
             "famous results was modest. We can run the same experiment ourselves, in miniature."
@@ -159,6 +160,8 @@ class LookAhead(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(b_, shift=RIGHT * 0.2) for b_ in bars], lag_ratio=0.15))
             vo.wait_until("b")
             self.play(FadeIn(card))
+        self.add(note(r"schematic: a model for each date, trained only on text before it", font_size=15,
+                      color=GREY_B).to_edge(DOWN, buff=0.3))
         self.wait(0.4)
         self.clear_scene()
 

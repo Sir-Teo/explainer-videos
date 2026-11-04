@@ -140,12 +140,13 @@ class Transformers(VoiceoverScene):
                             r"Committee}", font_size=14, color=GREY_B),
                       wrapped_label(r"\texttt{" + txt + r"}", 5.4, 14, GREY_A))
             return g.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        l0, lend = float(np.log(m["cfg"]["vocab"])), float(loss[-20:].mean())
         rp = TrainingReplay(steps, loss, frame, checkpoints=ck, ylabel=r"training loss (nats per token)",
                             color=MODEL_A)
         with self.voiceover(
             "Here is the first copy learning. <bookmark mark='a'/> The loss starts near the log of the vocabulary, "
-            f"about {np.log(m['cfg']['vocab']):.1f} nats per token, a uniform guess, and falls as it learns spelling, "
-            f"then grammar, then the committee's habits, to about {loss[-20:].mean():.1f}. On the left, its loss on the "
+            f"about {l0:.1f} nats per token, a uniform guess, and falls as it learns spelling, "
+            f"then grammar, then the committee's habits, to about {lend:.1f}. On the left, its loss on the "
             "minutes of 2008 to 2012, which it never sees, falls with it. <bookmark mark='b'/> And at the end, what it "
             "writes when asked to continue a sentence about deteriorating financial conditions. It has never read a "
             "word from after 2007."

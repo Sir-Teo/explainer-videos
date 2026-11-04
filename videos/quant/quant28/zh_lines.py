@@ -288,6 +288,95 @@ ZH = {
 
     "Pause and predict. Tightening's nearest neighbour is easing.":
         "暂停预测一下。tightening的最近邻是easing。基于这些向量构建的情感分数能区分鹰派声明和鸽派声明吗？",
+
+    # ------------------------------------------------------------------ Transformers
+    "Chapter nine. An embedding gives each word one vector":
+        "第九章。词嵌入给每个词一个向量，不管它出现在什么句子里。will not hesitate to tighten和will not tighten用几乎相同的词表达相反的意思。"
+        "一次读完整个句子，模型能得到什么？",
+
+    "The answer of the last decade is attention":
+        "过去十年的答案是注意力，AI系列从零构建过它。<bookmark mark='a'/>为了表示tighten这个词，模型回看句子里的每个其他词，并决定每个词有多重要："
+        "在这里，not和hesitate非常重要。<bookmark mark='b'/>tighten的新向量是其他词的加权平均，所以同一个词在每个句子里都得到不同的含义。把几十层这样的结构堆起来，"
+        "在足够多的文本上训练，就得到了transformer：BERT、GPT以及此后的每一个模型。",
+
+    "Finance's own transformer came from accounting.":
+        "金融领域自己的transformer来自会计学。<bookmark mark='a'/>Allen Huang、Hui Wang和Yi Yang在四十九亿词元的申报文件、业绩电话会和分析师报告上预训练BERT，"
+        "再在一万条人工标注的分析师语句上微调。<bookmark mark='b'/>它胜过了词典和较早的机器学习方法，尤其是在其他方法判为中性的句子上，而且只需要很少的标注数据。"
+        "用它来度量，业绩电话会所含的信息比旧方法能看到的至少多百分之十八。",
+
+    'f"We cannot train FinBERT here':
+        "我们在这里训练不了FinBERT，但可以像AI系列那样，训练它的一个小表亲。<bookmark mark='a'/>用字节对编码学习词的片段，只用训练文本，所以用2007年文本训练的分词器"
+        "从未见过pandemic这个词。<bookmark mark='b'/>一个现代的解码器，{cfg['layers']}层，{mpar:.1f}百万参数。<bookmark mark='c'/>在{mtok:.0f}百万个FOMC纪要词元上"
+        "训练它预测下一个词元，用的是一台普通的CPU。它的三个副本，在三段不同的历史上训练，就是下一章的实验。",
+
+    'f"Here is the first copy learning.':
+        "这是第一个副本在学习。<bookmark mark='a'/>损失从词表大小的对数附近开始，约{l0:.1f}奈特每词元，也就是均匀猜测；随着它学会拼写、语法、再到委员会的习惯，"
+        "损失降到约{lend:.1f}。左边是它在从未见过的2008到2012年纪要上的损失，也随之下降。<bookmark mark='b'/>最后是让它续写一个关于金融状况恶化的句子时它写出的内容。"
+        "它从未读过2007年以后的任何一个词。",
+
+    "Pause and predict. A model that guesses uniformly over two thousand":
+        "暂停预测一下。一个在两千零四十八个词元上均匀猜测的模型，其损失是两千零四十八的对数。用奈特表示是多少，用比特表示又是多少？",
+
+    # ------------------------------------------------------------------ LLMs
+    "Chapter ten. Every method so far learned its words from finance alone.":
+        "第十章。到目前为止的每一种方法都只从金融文本中学习词。大语言模型到来时已经读过了大部分公开的互联网。当读者是它时，有什么改变？",
+
+    "Here is how the most cited paper did it.":
+        "这是被引用最多的那篇论文的做法。<bookmark mark='a'/>假设你是一位有股票推荐经验的金融专家。这条标题对这家公司短期的股价是好是坏？回答是、否或不确定，"
+        "再用一句话说明理由。<bookmark mark='b'/>是记为加一，否记为减一，再按公司和日期取平均。没有训练，没有词表，没有标签：模型的通识阅读完成了所有工作。",
+
+    "Alejandro Lopez-Lira and Yuehua Tang ran this":
+        "Alejandro Lopez-Lira和Yuehua Tang在十三万四千条标题上做了这件事，这些标题全部发布于模型训练数据截止之后。<bookmark mark='a'/>分数预测了第二天的收益，"
+        "并胜过了传统的情感分析方法。<bookmark mark='b'/>最引人注目的是对比：GPT-1、GPT-2和BERT几乎没有这种能力，基于它们的每一个策略都亏钱。"
+        "可预测性只出现在大模型中，作者称之为一种涌现能力。",
+
+    "A second way skips the prompt.":
+        "第二种方法跳过了提示词。<bookmark mark='a'/>Yifei Chen、Bryan Kelly和修大成把每篇文章输入语言模型，保留它的内部表示，一个长向量。<bookmark mark='b'/>"
+        "然后用第二十七部分的岭回归，从收益中学习这个向量的哪些方向具有预测力。<bookmark mark='c'/>在十六个股票市场、十三种语言中，这些表示胜过了基于词的模型，"
+        "而且价格对新闻的反应慢到足以交易。",
+
+    "A third uses no text at all.":
+        "第三种根本不用文本。<bookmark mark='a'/>Alex Kim、Maximilian Muhn和Valeri Nikolaev把匿名化的财务报表交给GPT-4，只有数字，没有公司名称，"
+        "问它明年的盈利会上升还是下降。<bookmark mark='b'/>用简单的提示词，它的正确率是百分之五十二；按照分析师所学的方式一步步分析比率，正确率是百分之六十，高于分析师的一致预期。"
+        "这里模型不是在读情绪，而是在做分析。",
+
+    "Three questions every one of these results must answer.":
+        "这些结果中的每一个都必须回答三个问题。<bookmark mark='a'/>模型是在什么上训练的？一个读过截至2023年互联网的模型，可能早已知道2019年一条标题之后发生了什么。"
+        "<bookmark mark='b'/>它的成本是多少，供应商更新模型之后，明年同样的查询还会给出同样的答案吗？<bookmark mark='c'/>还有谁在问它？任何人都能从同一个公开模型买到的信号，"
+        "很快就会被定价。",
+
+    "Pause and predict. BERT could not predict returns from headlines":
+        "暂停预测一下。BERT无法从标题预测收益；ChatGPT可以。除了大模型更懂新闻之外，请说出另外两种解释。",
+
+    # ------------------------------------------------------------------ LookAhead
+    "Chapter eleven. Part one's first rule was point in time":
+        "第十一章。第一部分的第一条规则是时点一致：在时刻t使用的数字只能依赖t之前的数据。对一个读过未来的模型，如何遵守这条规则？",
+
+    "Picture the usual experiment.":
+        "设想通常的实验。<bookmark mark='a'/>回测向模型询问2016到2020年的新闻。<bookmark mark='b'/>但模型是用截至2023年的文本训练的，其中包括每一条标题之后发生的事："
+        "盈利、诉讼、股价。<bookmark mark='c'/>它的预测可能是记忆。而且不同于回测中泄漏的价格，你无法通过读代码找到这个泄漏：它藏在训练数据的上万亿个词里。",
+
+    "Paul Glasserman and Caden Lin separated two things":
+        "Paul Glasserman和Caden Lin把LLM回测所捕捉到的两样东西分开了。<bookmark mark='a'/>技能，来自读标题；加上前视，来自记住随后发生的事；减去分心，"
+        "即因为对公司总体了解太多而犯的错误。<bookmark mark='b'/>他们的工具：把标题匿名化，于是Apple beats estimates变成company X beats estimates。<bookmark mark='c'/>"
+        "带名称和匿名的回测之差，度量的是前视减去分心。",
+
+    "Their result was a surprise.":
+        "他们的结果出人意料。<bookmark mark='a'/>在样本内，匿名的标题表现更好：模型对知名公司的一般了解造成的伤害，大于它的记忆带来的帮助，最大的公司尤其如此。"
+        "<bookmark mark='b'/>在样本外，前视不可能存在，但分心可以。所以：匿名化，无论是为了诚实地回测，还是为了交易。",
+
+    "Suproteem Sarkar and Keyon Vafa turned this into a statistical test.":
+        "Suproteem Sarkar和Keyon Vafa把这变成了一个统计检验。<bookmark mark='a'/>选择在某个日期之前没有任何信息能预测的事件：只给出候选人的简历，谁赢得了选举。"
+        "<bookmark mark='b'/>如果模型胜过偶然，它就读过答案。他们恰恰发现了这一点，在选举中，也在业绩电话会中。<bookmark mark='c'/>但这个检验是单边的。它能抓住泄漏，"
+        "却永远无法证明没有泄漏。",
+
+    "The clean answer is to build the models so that they cannot cheat.":
+        "干净的答案是把模型构建得无法作弊。<bookmark mark='a'/>Songrun He、Linying Lv、Asaf Manela和Jimmy Wu训练了一系列语言模型，每个只用截至其自身日期的文本："
+        "一个日期一个模型，较晚的日期又一个，依此类推。<bookmark mark='b'/>对任何回测日期，就用那个日期的模型。他们的模型在标准基准上能与更大的开放模型竞争，"
+        "其实时交易结果接近有泄漏的最先进水平，这表明那些著名结果中的前视是有限的。我们可以自己做同样的实验，在缩小的尺度上。",
+
+    "Pause and predict. A backtest anonymises Apple to company X":
+        "暂停预测一下。一次回测把Apple匿名化为company X，却保留了the iPhone maker这个说法。它修复了什么，没修复什么？",
 }
 
 PHRASES = {}
