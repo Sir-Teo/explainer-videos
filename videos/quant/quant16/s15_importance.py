@@ -106,7 +106,7 @@ class Importance(VoiceoverScene):
                 why(r"cross-entropy (Rubinstein 1997): maximise $\mathbb{E}_{\theta_k}[f\,w\log q_\theta]$; for normals "
                     r"the maximiser is a weighted mean"),
                 why(r"the effective sample size: with the shift far from the payoff a few weights dominate")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.3, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.3, buff=0.42, edge=6.9)
         with self.voiceover(
             "The theory, in five lines. Multiply and divide by the sampling density: the expectation is unchanged, "
             "with the likelihood ratio as weight. <bookmark mark='a'/> The variance under the new density has a "
@@ -160,7 +160,7 @@ class Importance(VoiceoverScene):
                           r"Part 5 did this shift as Girsanov's theorem; Part 40 uses it for tail risk", 5.0, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
         q = predict(r"Shift the normal far beyond the strike. What happens to the error?", width=4.6, font_size=21)
-        q.to_corner(DL, buff=0.3)
+        q.to_corner(DR, buff=0.3)  # the lower left holds the chart axis
         src = illustration(r"cross-entropy from $\theta_0 = 0$, 20{,}000 draws per step, five seeds", corner=UR)
         with self.voiceover(
             "Here is the estimator learning its own sampling law. Five seeds start at zero shift. "
