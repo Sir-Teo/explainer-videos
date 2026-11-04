@@ -57,7 +57,7 @@ class BSDE(VoiceoverScene):
                 why(r"the pricing equation says exactly what $\partial_t u + \mathcal{L} u$ is: the non-linear default term"),
                 why(r"so the price process solves a stochastic differential equation whose end is known and whose start is "
                     r"not: a backward SDE. Its noise coefficient $Z$ is the gradient of the price, the hedge")]
-        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.4, buff=0.8, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-3.3, buff=0.8, edge=6.9)  # long right sides
         with self.voiceover(
             "The way out starts from Itô's formula. Follow the price along one simulated path of the hundred assets: "
             "Y at time t is u of t and X t. Itô says how it moves: a drift, which is the time derivative plus the "
@@ -173,6 +173,6 @@ class BSDE(VoiceoverScene):
             "double, or square, or explode like the grid?"
             " It roughly doubles. Each step simulates paths and evaluates small networks whose size grows in proportion to the dimension: no grid, and nothing explodes. That is the whole point. Next: watching it converge."
         ):
-            self.play(FadeIn(q))
+            self.play(FadeOut(src), FadeIn(q))  # the banner takes the foot of the frame
         self.wait(0.5)
         self.clear_scene()
