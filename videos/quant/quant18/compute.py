@@ -107,6 +107,15 @@ def compute_policy() -> dict:
     out["walcl_end"] = float(out["WALCL"]["v"][-1])
     out["rrp_peak"] = {"t": out["RRPONTSYD"]["t"][int(np.argmax(out["RRPONTSYD"]["v"]))],
                        "bn": float(np.max(out["RRPONTSYD"]["v"]))}
+    rd_, rv_ = _fred("RRPONTSYD", "2007-01-01")
+    k = int(np.argmax(rv_))
+    out["rrp_daily_max"] = {"date": int(rd_[k]), "bn": float(rv_[k])}
+
+    def at(series, day, scale):
+        d_, v_ = _fred(series, "2007-01-01")
+        return float(v_[np.searchsorted(d_, day, side="right") - 1] / scale)
+    out["qt"] = {k_: {"walcl": at("WALCL", day, 1e6), "reserves": at("WRESBAL", day, 1e6),
+                      "rrp": at("RRPONTSYD", day, 1e3)} for k_, day in (("peak", 20220413), ("end", 20251126))}
     return _json(out)
 
 
