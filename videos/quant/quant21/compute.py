@@ -670,7 +670,78 @@ def compute_imbacktest() -> dict:
     return _json({"rate": p_hat, "n": n, "exceptions": int(exc), "lr": float(lr), "pval": float(1 - chi2.cdf(lr, 1)),
                   "by_year": by_year})
 
-ITEMS = {"exposure": compute_exposure, "collateral": compute_collateral, "cva": compute_cva, "wwr": compute_wwr,
+def compute_wwr_bounds() -> dict:
+    """The research chapter: bounding wrong-way risk (Glasserman and Yang 2018).  The exposure scenarios and the
+    default-time distribution are each known (the market-risk simulation; the CDS curve); their dependence is not.
+    Over all joint laws with those marginals, CVA = sum_ij p_ij (1 - R) D(t_j) V_i(t_j)^+ is a transportation problem:
+    its maximum and minimum bound wrong-way and right-way risk.  The entropic version, p_ij proportional to
+    q_j exp(theta c_ij)/N rescaled to the marginals (Sinkhorn), bounds CVA within a relative-entropy budget of
+    independence.  The Gaussian-copula and Hull-White models of Chapter 4 must land inside."""
+    from scipy.optimize import linprog
+    c, hw, a, s = _setup()
+    x, _ = hw.simulate_x(TIMES, 20000, seed=0)
+    V, _ = _values(hw, x, _book(c))
+    kc, hc = _hazards(CPTY_CDS)
+    R = 0.4
+    q = XV.default_density(TIMES, kc, hc)
+    surv = float(1 - q.sum())
+    rng = np.random.default_rng(2121)
+    N = 1500
+    idx = rng.choice(len(V), N, replace=False)
+    C = (1 - R) * c.df(TIMES)[None, :] * np.maximum(V[idx], 0.0)            # N x M
+    C = np.concatenate([C, np.zeros((N, 1))], axis=1)                        # the survival bucket costs nothing
+    qq = np.r_[q, surv]
+    M = C.shape[1]
+    indep = float(np.mean(C @ qq))
+    A_eq = []
+    from scipy.sparse import lil_matrix
+    A = lil_matrix((N + M, N * M))
+    for i in range(N):
+        A[i, i * M:(i + 1) * M] = 1.0
+    for j in range(M):
+        A[N + j, j::M] = 1.0
+    b = np.r_[np.full(N, 1 / N), qq]
+    res_max = linprog(-C.ravel(), A_eq=A.tocsr(), b_eq=b, bounds=(0, None), method="highs")
+    res_min = linprog(C.ravel(), A_eq=A.tocsr(), b_eq=b, bounds=(0, None), method="highs")
+    worst, best = float(-res_max.fun), float(res_min.fun)
+    # where the worst case puts the default: share of default mass on the paths with the top-decile exposure
+    Pw = res_max.x.reshape(N, M)
+    top = np.argsort(-C[:, :-1].max(1))[: N // 10]
+    # exposure conditional on default in each bucket: independence, worst, best (undiscounted, before recovery)
+    Vp = np.maximum(V[idx], 0.0)
+    Pb = res_min.x.reshape(N, M)
+    cond = {"indep": Vp.mean(0),
+            "worst": (Pw[:, :-1] * Vp).sum(0) / np.maximum(Pw[:, :-1].sum(0), 1e-15),
+            "best": (Pb[:, :-1] * Vp).sum(0) / np.maximum(Pb[:, :-1].sum(0), 1e-15)}
+    # entropic bounds: CVA against relative entropy from independence
+    P0 = np.full((N, 1), 1 / N) * qq[None, :]
+    ent = []
+    for th in np.r_[-np.geomspace(30, 0.3, 12), 0.0, np.geomspace(0.3, 30, 12)]:
+        K = P0 * np.exp(th * C / C.max())
+        u, v = np.ones(N), np.ones(M)
+        for _ in range(2000):
+            u = (1 / N) / (K @ v)
+            v = qq / (K.T @ u)
+        P = u[:, None] * K * v[None, :]
+        kl = float(np.sum(P * np.log(np.maximum(P, 1e-300) / P0)))
+        ent.append({"theta": float(th), "kl": kl, "cva": float(np.sum(P * C))})
+    # the models of Chapter 4, on the full 20,000 paths, for comparison
+    lam = float(np.mean(hc))
+    copula = [{"rho": r_, "cva": float(XV.wrong_way_cva(V, x, TIMES, c.df, lam, rho=r_, seed=5))} for r_ in
+              (-0.6, -0.3, 0.0, 0.3, 0.6, 0.9)]
+    out = {"times": TIMES, "cond": cond,
+           "N": N, "M": M - 1, "R": R, "indep": indep, "worst": worst, "best": best, "default_prob": float(q.sum()),
+           "worst_top_decile_share": float(Pw[top, :-1].sum() / Pw[:, :-1].sum()), "entropic": ent, "copula": copula,
+           "epe": float(np.mean(np.maximum(V, 0)))}
+    try:
+        hwr = CACHE.load("wwrhw")
+        out["hull_white"] = hwr
+    except Exception:  # noqa: BLE001
+        out["hull_white"] = None
+    return _json(out)
+
+
+ITEMS = {"wwr_bounds": compute_wwr_bounds, "exposure": compute_exposure, "collateral": compute_collateral, "cva": compute_cva, "wwr": compute_wwr,
          "im": compute_im, "fva": compute_fva, "aad": compute_aad, "deepxva": compute_deepxva,
          "procyc": compute_procyc, "saccr": compute_saccr, "ccp": compute_ccp, "nickel": compute_nickel,
          "products": compute_products, "calls": compute_calls, "cvarisk": compute_cvarisk, "fvaasym": compute_fvaasym,

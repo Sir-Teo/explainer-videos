@@ -48,7 +48,10 @@ PROBLEMS = [
     r"With $N$ dealers and $K$ independent, equal asset classes, show that clearing one class lowers a dealer's expected "
     r"exposure if and only if $N > 1 + (\sqrt K + \sqrt{K - 1})^2$.",
     r"A trade needs capital $K(t) = K_0(1 - t/T)$ for $T$ years. With hurdle $h$ and no discounting, show that "
-    r"$\text{KVA} = h K_0 T/2$.",
+    r"$\text{KVA} = h K_0 T/2$.",    r"(qual) Write CVA over couplings of $N$ exposure paths and $M$ default buckets as a transportation LP; show the "
+    r"bounds are attained at vertices with at most $N + M - 1$ positive cells, and solve the two-path example by hand.",
+    r"(qual) Show that maximizing $\sum p_{ij}c_{ij} - \frac1\theta\mathrm{KL}(p\,\|\,p^\perp)$ over couplings gives "
+    r"$p_{ij} = a_i b_j p^\perp_{ij}e^{\theta c_{ij}}$, and that Sinkhorn's alternating rescaling finds $a$, $b$.",
 ]
 
 
@@ -171,11 +174,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=22)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: expected and potential exposure of a forward, the swap's hump, CVA as a spread, "
+            "And twelve problems: expected and potential exposure of a forward, the swap's hump, CVA as a spread, "
             "bilateral CVA, collateralised exposure, an SA-CCR add-on by hand, a Cover 2 fund, the cost of adjoint "
-            "differentiation, when clearing one product helps, and a KVA by hand. Solutions, in English and Chinese, "
+            "differentiation, when clearing one product helps, and a KVA by hand. Two more are qualifying-exam "
+            "problems: the wrong-way transport problem, and its entropic solution. Solutions, in English and Chinese, "
             "are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))

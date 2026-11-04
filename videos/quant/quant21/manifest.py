@@ -18,5 +18,6 @@ SCENES = [
     ("s13_capital", "Capital", "12. Capital for counterparty risk"),
     ("s14_archegos", "Archegos", "13. March 2021: Archegos"),
     ("s15_house", "House", "14. Rule 21: the XVA desk"),
+    ("s17_research", "Research", "For the researcher: bounding wrong-way risk"),
     ("s16_outro", "Outro", "Recap, desk questions, problems"),
 ]

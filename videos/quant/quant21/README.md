@@ -28,7 +28,7 @@ model fitted to it. Data: FRED (the 10-year Treasury yield, daily; the IMF's nic
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 50 minutes)
+## Chapters (about 54 minutes)
 
 * **The other side of every trade** (2.5 min). Archegos's banks' reported losses (Credit Suisse 5.5, Nomura 2.9, Morgan
   Stanley 0.9, UBS 0.9, MUFG 0.3, $ billion); the history strip (1987–2023); the plan; the credit desk becomes an XVA
@@ -81,7 +81,16 @@ reported by the sources named.*
   the race to sell (stylised: losses 20 against 40); the record.
 * **14. Rule 21: the XVA desk** (2.7). One ticket (CVA, DVA reported, FVA, KVA, MVA: the client pays about $1.05
   million); the desk's night; the `xva` module; Rule 21; the rule against this part's three cases.
-* **Recap, desk questions, problems** (3.4). Sixteen lines; six desk questions; ten problems, solutions below.
+* **For the researcher: bounding wrong-way risk** (5.4). With the exposure scenarios and the default curve as fixed
+  margins, CVA = Σp_ij c_ij over couplings is a transportation LP (Glasserman and Yang 2018). Chapter 1's netting set
+  (200m notional) against the illustrative BBB counterparty (26% ten-year default probability, recovery 40%), 1,500
+  paths × 120 monthly buckets: independence 0.40m, worst case 1.81m (4.5×, 39% of the default mass on the top tenth of
+  exposures), best case 0.00. Conditional exposure at default under the worst case is about four times the EE profile.
+  Entropic bounds (tilt p⊥e^{θc}, Sinkhorn): a relative-entropy budget of 0.02 already spans about 0.21–0.61m. The
+  Gaussian copula (ρ −0.6 to 0.9: 0.19–0.67m) and Hull–White's hazard link (b −0.1 to 0.2: 0.15–1.04m) lie inside.
+  Three open problems; pause: the two-path example gives 1 (independent), 2 (worst), 0 (best).
+* **Recap, desk questions, problems** (3.5). Sixteen lines; six desk questions; twelve problems (two at
+  qualifying-exam level), solutions below.
 
 ## Hands-on
 
@@ -190,6 +199,25 @@ python tools/make.py quant21 --cpu-voice -q m                # English and Chine
    √(K − 1), or N > 1 + (√K + √(K − 1))²: 7, 15 and 31 dealers for K = 2, 4 and 8.
 10. **A KVA by hand.** KVA = h ∫₀ᵀ K₀(1 − t/T) dt = h K₀ [t − t²/(2T)]₀ᵀ = h K₀ T/2: the hurdle rate times the average
     capital times the life.
+11. **(qual) The transport problem.** With c_ij = (1 − R)D(t_j)V_i(t_j)⁺ (and c = 0 for survival), CVA(p) = Σc_ij p_ij is
+   linear in p, and the feasible set {p ≥ 0: Σ_j p_ij = 1/N, Σ_i p_ij = q_j} is a transportation polytope. A linear
+   function attains its maximum and minimum at vertices, and a vertex of an N × M transportation polytope has at most
+   N + M − 1 positive cells (its support is a forest in the bipartite graph). Two paths (0 and 10, weight ½ each), one
+   date with q = 0.2: independence gives 0.2 × 5 = 1; the worst puts all 0.2 on the second path (feasible, since
+   0.2 ≤ ½): 2; the best puts it on the first: 0.
+12. **(qual) The entropic solution.** The Lagrangian Σp c − (1/θ)Σp log(p/p⊥) + Σ_i α_i(Σ_j p_ij − 1/N) + Σ_j β_j(Σ_i p_ij −
+   q_j) has first-order condition c_ij − (1/θ)(log(p_ij/p⊥_ij) + 1) + α_i + β_j = 0, so p_ij = a_i b_j p⊥_ij e^{θc_ij}
+   with a_i = e^{θα_i − 1/2}, b_j = e^{θβ_j − 1/2}. Sinkhorn alternates a ← (1/N)/(Kb), b ← q/(Kᵀa) with K = p⊥e^{θc};
+   each step is a Bregman projection onto one set of margins, and the iteration converges to the unique solution.
+
+## For the researcher
+
+* **The theorems.** Glasserman and Yang (2018), "Bounding wrong-way risk in measuring counterparty risk,"
+  *Management Science* 64(12); Cuturi (2013) and Sinkhorn (1964) for entropic transport; Hull and White (2012);
+  Brigo, Morini and Pallavicini (2013) for the modelling side.
+* **Simplifications.** A 1,500-path subsample for the LPs; monthly buckets; the coupling allowed to look at the whole
+  path (not only past exposure), which makes the worst case larger than a non-anticipative one.
+* **Open problems.** Calibrating the entropy budget; time-respecting couplings; replacing the α multiplier.
 
 ## Data and reproducibility
 
@@ -220,7 +248,7 @@ python tools/make.py quant21 --cpu-voice -q m                # English and Chine
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约50分钟）
+## 章节（约54分钟）
 
 * **每笔交易的另一方。** Archegos相关银行报告的损失（瑞信55亿、野村29亿、摩根士丹利9亿、瑞银9亿、三菱日联3亿美元）；历史条（1987–2023）；本部分安排；信用交易台变成XVA交易台。
 * **1. 敞口。** 定义EE、ENE与PFE；10年期付固定互换的价值扇形（Hull–White，a = 0.0087，σ = 1.04%）；驼峰（EE在第4年附近达到590万美元峰值；PFE 1,920万）；产品形状（互换、外汇远期、交叉货币互换、买入期权）；三笔互换的净额集（EE降低21%）；平仓净额与ISDA主协议；有效EPE（120万）与α = 1.4。
@@ -237,7 +265,8 @@ python tools/make.py quant21 --cpu-voice -q m                # English and Chine
 * **12. 交易对手风险的资本。** 为互换推导SA-CCR；净额集（单独8.1、净额4.8、有保证金1.4，单位为百万美元EAD）；PFE乘数（价外一个附加值时0.61，下限5%）；巴塞尔基本法CVA资本（这个净额集约58万美元；名称很多时每个名称的资本只降到一半）；CVA资本与杠杆率。
 * **13. 2021年3月：Archegos。** 总收益互换；抛售；按清算期限计的保证金（对日波动4%的股票，20%只覆盖约0.65天成交量；Paul, Weiss报告所说仅在瑞信就有2.5–10天）；抢先抛售（示意：损失20对40）；公开记录。
 * **14. 第21条规则：XVA交易台。** 一张交易单（CVA、报告的DVA、FVA、KVA、MVA：客户约付105万美元）；交易台的夜间流程；`xva`模块；第21条规则；用本部分三个案例检验这条规则。
-* **回顾、交易台问题与习题。** 十六行回顾；六个交易台问题；十道习题，解答见下文。
+* **写给研究者：错向风险的界。** 以敞口情景和违约曲线为固定边际，CVA = Σp_ij c_ij在耦合上的优化是一个运输线性规划（格拉斯曼与Linan Yang 2018）。第1章的净额结算组（名义本金2亿）对示意性的BBB交易对手（十年违约概率26%，回收率40%），1,500条路径 × 120个月度区间：独立性0.40百万，最坏情形1.81百万（4.5倍，39%的违约概率放在敞口最大的十分之一路径上），最好情形0.00。最坏情形下违约时的条件敞口约为EE曲线的四倍。熵界（倾斜p⊥e^{θc}、Sinkhorn）：0.02的相对熵预算已覆盖约0.21–0.61百万。高斯连接函数（ρ从−0.6到0.9：0.19–0.67百万）和Hull–White的风险率联系（b从−0.1到0.2：0.15–1.04百万）都在区间内。三个开放问题；暂停题：两条路径的例子给出1（独立）、2（最坏）、0（最好）。
+* **回顾、交易台问题与习题。** 十六行回顾；六个交易台问题；十二道习题（两道为资格考试水平），解答见下文。
 
 ## 交易台问题与解答
 
@@ -260,6 +289,8 @@ python tools/make.py quant21 --cpu-voice -q m                # English and Chine
 8. **AAD的成本。** 反向模式把梯度作为向量–雅可比积来计算，对记录下的运算向后扫描一次；每个运算的伴随量只花费该运算本身的一个小常数倍，所以全部n个敏感度只花费几次估值，与n无关，而单侧扰动需要n + 1次估值。代价是内存：前向过程的每个中间值（每条路径、每个日期、每个运算）都要为反向过程保存，或从检查点重新计算。
 9. **何时清算一种产品有帮助。** 在双边情形下，交易商对N − 1个交易对手中每一个的敞口对K个方差为σ²的独立类别做净额，等于σ√K φ，φ = 1/√(2π)，总量为(N − 1)σ√K φ。清算一类后，双边部分剩下(N − 1)σ√(K − 1)φ，并在清算所增加σ√(N − 1)φ，那一类在那里对全部N − 1个交易对手做净额。清算有帮助当且仅当(N − 1)(√K − √(K − 1)) > √(N − 1)，即√(N − 1) > 1/(√K − √(K − 1)) = √K + √(K − 1)，或N > 1 + (√K + √(K − 1))²：K = 2、4、8时分别为7、15、31家交易商。
 10. **手算KVA。** KVA = h ∫₀ᵀ K₀(1 − t/T) dt = h K₀ [t − t²/(2T)]₀ᵀ = h K₀ T/2：门槛收益率乘以平均资本再乘以存续期。
+11. **（资格考试）运输问题。** c_ij = (1 − R)D(t_j)V_i(t_j)⁺（生存时c = 0），CVA(p) = Σc_ij p_ij对p是线性的，可行集{p ≥ 0: Σ_j p_ij = 1/N, Σ_i p_ij = q_j}是运输多面体。线性函数在顶点处取最大和最小值，而N × M运输多面体的顶点至多有N + M − 1个正格子（其支撑是二部图中的森林）。两条路径（0和10，各½）、一个日期q = 0.2：独立给出0.2 × 5 = 1；最坏把全部0.2放在第二条路径上（因0.2 ≤ ½可行）：2；最好放在第一条上：0。
+12. **（资格考试）熵解。** 拉格朗日函数的一阶条件为c_ij − (1/θ)(log(p_ij/p⊥_ij) + 1) + α_i + β_j = 0，所以p_ij = a_i b_j p⊥_ij e^{θc_ij}。Sinkhorn交替进行a ← (1/N)/(Kb)、b ← q/(Kᵀa)，K = p⊥e^{θc}；每一步都是向一组边际的Bregman投影，迭代收敛到唯一解。
 
 ## 数据与复现
 
@@ -267,3 +298,9 @@ python tools/make.py quant21 --cpu-voice -q m                # English and Chine
 * 引用而非计算的公开数字：各银行在Archegos上的损失；LCH与纳斯达克清算所的违约（国际清算银行）；伦敦金属交易所的日价格、被取消的交易与金融行为监管局的罚款；摩根大通的FVA费用；Paul, Weiss报告的清算估计。
 * 屏幕上标注为示意的输入：交易对手与银行的CDS曲线（80–170与40–85个基点）、融资利差、类SIMM风险权重、资本替代指标与门槛收益率、清算所的会员与压力情景、假设的镍头寸、类Archegos股票与抛售模型。
 * 本部分不打开任何样本外数据；试验计数器保持在315。
+
+## 写给研究者
+
+* **定理。** 格拉斯曼与Linan Yang（2018），*Management Science* 64(12)；Cuturi（2013）与Sinkhorn（1964）论熵运输；Hull与White（2012）；Brigo、Morini与Pallavicini（2013）的建模视角。
+* **简化。** 线性规划用1,500条路径的子样本；月度区间；耦合可以看整条路径（不只是过去的敞口），所以最坏情形比非预期的版本更大。
+* **开放问题。** 校准熵预算；尊重时间的耦合；取代α乘数。

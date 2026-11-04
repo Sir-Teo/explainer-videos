@@ -25,6 +25,7 @@ CHAPTERS = {
     'Capital': '12. 交易对手风险的资本',
     'Archegos': '13. 2021年3月：Archegos',
     'House': '14. 第21条规则：XVA交易台',
+    'Research': '写给研究者：错向风险的界',
     'Outro': '回顾、交易台问题与习题',
 }
 
@@ -547,9 +548,9 @@ ZH = {
         "这些项。<bookmark mark='a'/>对一个在单一股票上缴纳百分之二十保证金的客户，要知道的数字是：它的头寸相对该股日成交量的大小，合计所有交易商。"
         "这决定了卖出所需的时间，也决定了保证金；而互换把它藏了起来。",
 
-    "And ten problems:":
-        "还有十道习题：远期的预期敞口和潜在敞口，互换的驼峰，作为利差的CVA，双边CVA，有抵押的敞口，手算SA-CCR附加值，Cover 2基金，伴随微分的成本，"
-        "何时清算一种产品有帮助，以及手算KVA。中英文解答见说明。",
+    "And twelve problems:":
+        "还有十二道习题：远期的预期敞口和潜在敞口，互换的驼峰，作为利差的CVA，双边CVA，有抵押的敞口，手算SA-CCR附加值，Cover 2基金，伴随微分的成本，"
+        "何时清算一种产品有帮助，以及手算KVA。另外两道是资格考试题：错向风险的运输问题，及其熵解。中英文解答见说明。",
 
     "Where this comes back.":
         "这些内容会在哪里再出现。第22部分：货币基差和国债基差交易背后的资产负债表成本。第26部分在每一次回测中计入融资和资本。第37部分衡量卖出一个集中头寸"
@@ -562,6 +563,46 @@ ZH = {
     "That completes the credit desk:":
         "信用交易台就此完成：违约，以及每个交易对手所做承诺的价格。<bookmark mark='a'/>下一讲，第22部分：货币、商品，以及资产负债表昂贵时打开的那些基差。"
         "公司的宏观交易台开张。",
+
+    # ------------------------------------------------------------------ Research (the PhD layer)
+    "For the researcher: Chapter 4 modelled wrong-way risk":
+        "写给研究者：第4章用一个连接函数和Hull–White的风险率联系为错向风险建模，得到了不同的答案。两者都是对一种无人观测到的依赖关系的猜测。"
+        "这里提出不带猜测的问题：根据我们确实知道的东西，CVA最大和最小能是多少？",
+
+    "Write CVA before assuming anything.":
+        "在做任何假设之前写出CVA。<bookmark mark='a'/>它是违约时刻贴现敞口的期望。<bookmark mark='b'/>在模拟的敞口路径和违约区间上，未知的是一张表："
+        "路径i与区间j中的违约同时发生的概率。<bookmark mark='c'/>它的边际是已知的：每条路径的权重是N分之一，每个区间的概率由CDS曲线给出。"
+        "在边际固定的表上优化一个线性成本，是一个运输问题。<bookmark mark='d'/>保罗·格拉斯曼和Linan Yang在2018年这样建立了这个问题。",
+
+    "f'Solve both programs for Chapter 1's netting set":
+        "对第1章的净额结算组和一个十年内有四分之一违约概率的交易对手，求解两个规划。<bookmark mark='a'/>独立性，即标准假设，给出{t['indep']:.2f}百万。"
+        "<bookmark mark='b'/>最坏情形：{t['worst']:.2f}百万，四倍半，方法是把违约放在银行被欠最多的路径上。<bookmark mark='c'/>最好情形：{t['best']:.2f}。"
+        "违约概率四分之一、敞口又常常为零，违约可以完全藏在什么都不欠的地方。仅凭数据，几乎说不出错向风险有多大。",
+
+    "Where do the extremes put the defaults?":
+        "极端情形把违约放在哪里？看银行在违约时刻的敞口。<bookmark mark='a'/>在独立性下，它就是第1章的预期敞口曲线，那个熟悉的驼峰。<bookmark mark='b'/>"
+        "最坏情形在每个日期都挑出损失最大的路径，条件敞口要高好几倍。<bookmark mark='c'/>最好情形找到什么都不欠的路径，曲线贴在零上。"
+        "每个错向风险模型都是在这些曲线之间的某个选择。",
+
+    "The extremes are extreme.":
+        "极端情形太极端了。<bookmark mark='a'/>所以给偏离独立性设一个预算：允许联合分布与独立分布的相对熵至多为给定值。<bookmark mark='b'/>解是独立表的一个指数倾斜，"
+        "对错向风险偏向高敞口的格子，对正向风险则远离它们，再逐行逐列重新缩放直到边际再次成立：熵最优运输的Sinkhorn迭代，第9部分见过。",
+
+    "f'Here are the bounds against the entropy budget.":
+        "这是界随熵预算的变化。<bookmark mark='a'/>预算为零时，它们在独立值处重合。<bookmark mark='b'/>它们张开得很快：五十分之一的预算已经允许从约"
+        "{cv[lo][np.argmin(np.abs(kl[lo] - 0.02))]:.2f}到{cv[j]:.2f}百万的任何值，而上界继续向无约束的最坏情形攀升。依赖关系一个微小的、无法察觉的变化，就能让CVA大幅移动。",
+
+    "And the models of Chapter 4.":
+        "再看第4章的模型。<bookmark mark='a'/>连接函数从强正向到强错向，以及Hull和White的风险率联系，都落在界之内，这是必然的：每一个都是由其函数形式选定的一种耦合。"
+        "<bookmark mark='b'/>这些界说明，一个CVA数字中有多少是模型的意见，而不是数据的。",
+
+    "Three open questions. <bookmark mark='a'/> The entropy budget is set by judgement":
+        "三个开放问题。<bookmark mark='a'/>熵预算靠判断设定；把它与可观测的量联系起来，比如CDS利差如何随敞口的驱动因素变动，是开放的。<bookmark mark='b'/>"
+        "要求耦合尊重时间，因为违约不能依赖未来的敞口，会让界更紧；这种带约束的运输问题更大、研究更少。<bookmark mark='c'/>而监管者使用一个固定的乘数一点四，"
+        "部分是为了错向风险；这样的界是否应当取代它，尚无定论。",
+
+    "Pause and predict. Two equally likely exposure paths":
+        "暂停预测。两条等可能的敞口路径，在某个日期价值为零和十，该日期的违约概率为五分之一。零利率、无回收时，独立、最坏和最好的CVA各是多少？",
 }
 
 PHRASES = {"high": "偏高", "low": "偏低"}
