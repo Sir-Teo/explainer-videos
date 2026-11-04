@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs1.common import COST, CTRL, DATA, HEAD, HIST, NO, PART, YES, fmt, load
+from videos.cs.cs1.common import COST, CTRL, DATA, HEAD, HIST, NO, PART, YES, fmt, say, load
 
 SQ = [DATA, CTRL, YES]  # the squares cut at each round of the rectangle
 
@@ -239,7 +239,7 @@ class Algorithms(VoiceoverScene, MovingCameraScene):
             "coloured by the number of steps, computed. <bookmark mark='a'/> Along the diagonal, one step. Near the axes, "
             "few. The bright rays are the hard cases. <bookmark mark='b'/> The very worst cases sit at consecutive "
             "Fibonacci numbers, where every quotient is one and the remainders shrink as slowly as they possibly can: "
-            f"the hardest pair here, {fmt(max(a_, b_))} and {fmt(min(a_, b_))}, takes {int(grid.max())} steps. "
+            f"the hardest pair here, {say(max(a_, b_))} and {say(min(a_, b_))}, takes {int(grid.max())} steps. "
             "<bookmark mark='c'/> In 1844 Gabriel Lamé turned that into a theorem: the number of steps is at most five "
             "for each decimal digit of the smaller number. It is one of the first proofs of how long an algorithm takes, "
             "and Part 16 makes that question the centre of a whole subject."

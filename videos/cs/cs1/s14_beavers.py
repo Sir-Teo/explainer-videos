@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from explainer.cs.turing import CHAMPIONS, TM, run
-from videos.cs.cs1.common import (ADV, CODE, COST, CTRL, DATA, HEAD, HIST, LIMIT, NO, PART, YES, fmt, live_int, load,
+from videos.cs.cs1.common import (ADV, CODE, COST, CTRL, DATA, HEAD, HIST, LIMIT, NO, PART, YES, fmt, say, live_int, load,
                                   spacetime_mob, step_counter)
 
 
@@ -177,7 +177,7 @@ class Beavers(VoiceoverScene, MovingCameraScene):
         for st, row in zip("ABCDE", code5):
             ents = [row[:3], row[3:]]
             cells.append([MathTex(st, font_size=36, color=CTRL)] + [
-                MathTex(r"\text{halt}" if e[2] == "Z" else rf"{e[0]}\,{e[1]}\,{e[2]}", font_size=36,
+                MathTex(r"\text{halt}" if e[2] == "Z" else rf"\mathrm{{{e[0]}\,{e[1]}\,{e[2]}}}", font_size=36,
                         color=LIMIT if e[2] == "Z" else GREY_A) for e in ents])
         tab5 = VGroup(*[VGroup(*r) for r in cells])
         for i, r in enumerate(tab5):
@@ -196,7 +196,7 @@ class Beavers(VoiceoverScene, MovingCameraScene):
             "a blank tape, it halts after forty-seven million, "
             "one hundred and seventy-six thousand, eight hundred and seventy steps. <bookmark mark='r'/> We ran it here, "
             "in compiled code, for every one of those steps. <bookmark mark='a'/> This is its whole run, squeezed into one picture: time "
-            f"runs down, each row is about {fmt(info['every'])} steps, and the tape spans {fmt(info['cells'])} cells. "
+            f"runs down, each row is about {say(info['every'])} steps, and the tape spans {say(info['cells'])} cells. "
             "<bookmark mark='b'/> In 2024 an online collaboration called bbchallenge proved that no halting five-state "
             "machine runs longer, so this is S of five. They had to show, for every one of the five-state machines, that "
             "it either halts within those forty-seven million steps or provably never halts, and the whole proof was "

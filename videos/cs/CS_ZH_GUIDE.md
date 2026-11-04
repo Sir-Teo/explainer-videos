@@ -63,3 +63,21 @@ and the industry term follows in parentheses on first use.
 | ledger | 账本 |
 | Pebble | Pebble（石子机） |
 | in practice | 实践中 |
+| invariant | 不变量 |
+| a quantity that shrinks (variant) | 递减量（变式） |
+| greatest common divisor | 最大公约数 |
+| space-time diagram | 时空图 |
+| palindrome | 回文 |
+| lower bound | 下界 |
+| communication complexity | 通信复杂性 |
+| crossing sequence | 穿越序列 |
+| decider / recognizer | 判定器 / 识别器 |
+| Rice's theorem | 莱斯定理 |
+| Rule 110, glider | 规则110，滑翔机 |
+| Game of Life, glider gun | 生命游戏，滑翔机枪 |
+| Gödel numbering | 哥德尔编码 |
+| unary | 一进制 |
+| stored-program computer | 存储程序计算机 |
+| interpreter, emulator, virtual machine | 解释器，模拟器，虚拟机 |
+| proof assistant | 证明助手 |
+| tetration (10↑↑15) | 迭代幂（10↑↑15） |
