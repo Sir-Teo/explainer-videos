@@ -47,7 +47,7 @@ class Hook(VoiceoverScene):
         col = {"=": GREY_B, "-": BAD, "+": GOOD}
         chunks = VGroup()
         for op, txt in parts[:14]:
-            t = (r"\sout{" + txt + "}") if op == "-" else txt
+            t = txt
             chunks.add(wrapped_label(t, 12.4, 17, col[op]))
         chunks.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         if chunks.height > 5.6:
