@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–9 are written in English (13–16 chapters each):
+**Status: in production.** Parts 1–10 are written in English (13–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -9,7 +9,8 @@
 - *The Laws of Averages*, about 55 minutes, with the Galton board (`GaltonBoard`);
 - *Randomness on Demand*, about 50 minutes, with `statkit.random` (generators, samplers and the simulation-study harness);
 - *From Sample to Population*, about 50 minutes, which opens the Coverage Board with its first seven rows;
-- *Estimation*, about 70 minutes, with the tank factory game (`statkit.estimation`) and the `TankFactory`.
+- *Estimation*, about 70 minutes, with the tank factory game (`statkit.estimation`) and the `TankFactory`;
+- *Significance*, about 60 minutes, with the permutation machine (`PermutationMachine`) and `statkit.tests`.
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 

@@ -70,7 +70,13 @@ def load_all(upto: int | None = None) -> list[Row]:
         part = int(p.parent.name.removeprefix("stats"))
         if upto is not None and part > upto:
             continue
-        rows += [Row(**r) for r in json.loads(p.read_text())]
+        data = json.loads(p.read_text())
+        if isinstance(data, dict):  # the compute cache's form: {"rows": [... with "verdict" and "se" added]}
+            data = data.get("rows", [])
+        if not isinstance(data, list) or not all(isinstance(r, dict) and {"part", "method", "kind"} <= r.keys() for r in data):
+            continue  # some parts cache an unrelated item called "board" (Part 6's Galton board, Part 9's MSE board)
+        fields = set(Row.__dataclass_fields__)
+        rows += [Row(**{k: v for k, v in r.items() if k in fields}) for r in data]
     return rows
 
 

@@ -822,3 +822,81 @@ class TankFactory(VGroup):
 
     def reveal(self, opacity=0.9):
         return self.tanks.animate.set_fill(self.color, opacity=opacity)
+
+
+class PermutationMachine(VGroup):
+    """The permutation test as a machine (Part 10): ``values`` sit as numbered tokens in two rows, group A on top and
+    group B below.  ``shuffle(scene, perm)`` deals the tokens into new slots, so they take the colour of the row they
+    land in; ``reset`` deals them back.  ``drop(scene, stat)`` stacks the shuffled statistic as a dot on ``ax``, the
+    null distribution growing one shuffle at a time; ``mark(stat)`` draws the observed statistic there."""
+
+    def __init__(self, values, in_a, colors=None, center=ORIGIN, width=7.0, radius=0.2, font_size=18, fmt="{:.0f}",
+                 row_gap=1.3):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.values = np.asarray(values, float)
+        self.in_a = np.asarray(in_a, bool)
+        self.colors = colors or (S.TREAT, S.CTRL)
+        na, nb = int(self.in_a.sum()), int((~self.in_a).sum())
+        cx, cy = center[0], center[1]
+
+        def row(k, y):
+            xs = np.linspace(-width / 2, width / 2, max(k, 2))[:k] if k > 1 else np.array([0.0])
+            return [np.array([cx + x, cy + y, 0.0]) for x in xs]
+
+        self.slots_a, self.slots_b = row(na, row_gap / 2), row(nb, -row_gap / 2)
+        self.slots = self.slots_a + self.slots_b  # slot j < na is in group A
+        order = list(np.flatnonzero(self.in_a)) + list(np.flatnonzero(~self.in_a))
+        self.home = {int(i): j for j, i in enumerate(order)}  # token i's starting slot
+        self.where = dict(self.home)
+        self.tokens = VGroup()
+        for i, v in enumerate(self.values):
+            j = self.home[i]
+            c = self.colors[0] if j < na else self.colors[1]
+            disc = Circle(radius=radius, stroke_width=0, fill_color=c, fill_opacity=0.9)
+            txt = label(fmt.format(v), font_size=font_size, color="#101418")
+            if txt.width > 1.7 * radius:
+                txt.width = 1.7 * radius
+            self.tokens.add(VGroup(disc, txt).move_to(self.slots[j]))
+        self.na = na
+        self.add(self.tokens)
+        self.stack: dict[int, int] = {}
+        self.dots = VGroup()
+
+    def _goto(self, assignment, run_time):
+        anims = []
+        for i, j in assignment.items():
+            c = self.colors[0] if j < self.na else self.colors[1]
+            target = self.tokens[i].copy().move_to(self.slots[j])
+            target[0].set_fill(c)
+            anims.append(Transform(self.tokens[i], target))
+        self.where = dict(assignment)
+        return AnimationGroup(*anims, run_time=run_time)
+
+    def shuffle(self, perm, run_time=1.0):
+        """Animation dealing token i into slot perm[i] (perm: a permutation of range(n))."""
+        return self._goto({i: int(perm[i]) for i in range(len(self.values))}, run_time)
+
+    def reset(self, run_time=0.8):
+        return self._goto(dict(self.home), run_time)
+
+    def groups(self):
+        a = np.array([self.values[i] for i, j in self.where.items() if j < self.na])
+        b = np.array([self.values[i] for i, j in self.where.items() if j >= self.na])
+        return a, b
+
+    def drop(self, ax, stat, bin_width, radius=0.05, color=None, gap=1.0):
+        """A dot for ``stat`` stacked in its bin on ``ax`` (returned, already added to ``self.dots``)."""
+        k = int(np.floor(stat / bin_width + 0.5))
+        h = self.stack.get(k, 0)
+        self.stack[k] = h + 1
+        base = ax.c2p(k * bin_width, bounds(ax)[2])
+        d = Dot(base + UP * (radius * (2 * h + 1) * gap), radius=radius, color=color or S.NULL)
+        self.dots.add(d)
+        return d
+
+    def mark(self, ax, stat, color=None, height=None):
+        x0, x1, y0, y1 = bounds(ax)
+        return DashedLine(ax.c2p(stat, y0), ax.c2p(stat, y1 if height is None else height), color=color or S.ACCENT,
+                          stroke_width=3)

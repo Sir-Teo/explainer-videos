@@ -197,6 +197,7 @@ TIMELINE = [
     (1996, r"the lasso"),
     (2001, r"the two cultures"),
     (2005, r"conformal prediction"),
+    (2016, r"the ASA on $p$-values"),
     (2017, r"same stats, different graphs"),
     (2018, r"double machine learning"),
     (2023, r"e-values; PPI"),
