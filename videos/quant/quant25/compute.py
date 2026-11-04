@@ -302,6 +302,7 @@ def compute_models() -> dict:
     nm = {k: next(r_ for r_ in rows if r_["model"] == v) for k, v in named.items()}
     by_out = sorted(rows, key=lambda r_: -r_["sr_out"])
     return _json({"top_in": rows[:8], "top_out": by_out[:8], "named": nm, "n_models": len(rows),
+                  "all": [[r_["sh2_in"], r_["sr_out"]] for r_ in rows],
                   "rank_corr": float(stats.spearmanr([r_["sh2_in"] for r_ in rows], [r_["sr_out"] for r_ in rows])[0])})
 
 
