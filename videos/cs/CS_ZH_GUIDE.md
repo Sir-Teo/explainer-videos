@@ -138,3 +138,15 @@ and the industry term follows in parentheses on first use.
 | self-modifying code, index register (B-line), write xor execute, JIT | 自修改代码，变址寄存器（B 线），写异或执行，即时编译 |
 | emulator, co-simulation, random program testing | 模拟器，协同仿真，随机程序测试 |
 | the Job, the ledger | 任务，账本 |
+| pipeline, stage, pipeline register, pipeline chart | 流水线，流水级，流水线寄存器，流水线图 |
+| throughput, latency, the iron law, MIPS | 吞吐量，延迟，性能铁律，每秒百万条指令（MIPS） |
+| hazard (structural, data, control), stall, bubble, flush | 冒险（结构、数据、控制），停顿，气泡，冲刷 |
+| read-after-write, forwarding (bypass), load-use hazard, hazard unit | 写后读，转发（旁路），取数—使用冒险，冒险检测单元 |
+| delay slot, branch penalty, misprediction | 延迟槽，分支代价，预测错误 |
+| branch prediction (static, 1-bit, 2-bit saturating counter), global history, gshare, tournament, TAGE, perceptron predictor | 分支预测（静态、一位、两位饱和计数器），全局历史，gshare，锦标赛预测器，TAGE，感知机预测器 |
+| branch target buffer (BTB), return-address stack (RAS) | 分支目标缓冲器（BTB），返回地址栈 |
+| precise exception, commit | 精确异常，提交 |
+| power wall, Dennard scaling, Amdahl's law, Gustafson's law | 功耗墙，登纳德缩放，阿姆达尔定律，古斯塔夫森定律 |
+| branch-free code, conditional move | 无分支代码，条件传送 |
+| limit study, prediction by partial matching (PPM), linearly separable, entropy rate | 极限研究，部分匹配预测（PPM），线性可分，熵率 |
+| Frontier (chapter), research problem | 前沿（章），研究题 |
