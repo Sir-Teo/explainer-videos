@@ -91,8 +91,10 @@ def visible_text_bounds(m, camera=None):
 
 
 def fingerprint(video):
+    from explainer.paths import video_dir
+
     files = sorted((ROOT / "explainer").rglob("*.py"))
-    series = ROOT / "videos" / "ai"
+    series = video_dir(video).parent
     files += sorted(p for p in series.iterdir() if p.suffix in (".py", ".json"))
     # A change in Part 30 should not invalidate Part 1's long motion render.
     # Include the requested part and every part referenced by its Python code,
@@ -108,8 +110,8 @@ def fingerprint(video):
         for p in part_files:
             if p.suffix == ".py":
                 src = p.read_text()
-                for match in re.findall(r"videos\.ai\.(ai\d+)\b|Cache\([\"'](ai\d+)[\"']\)", src):
-                    pending.extend(name for name in match if name)
+                for match in re.findall(r"videos\.\w+\.([a-z]+\d+)\b|Cache\([\"']([a-z]+\d+)[\"']\)", src):
+                    pending.extend(name for name in match if name and (series / name).is_dir())
     files += [Path(__file__), ROOT / "tools" / "dead_air.py", ROOT / "manim.cfg"]
     h = hashlib.sha256()
     for p in files:
