@@ -11,6 +11,7 @@ class Pebbles(VoiceoverScene):
     def construct(self):
         self.card()
         self.game()
+        self.play_game()
         self.proof()
         self.against()
 
@@ -25,10 +26,9 @@ class Pebbles(VoiceoverScene):
         head = label(r"Hong and Kung, \ 1981", font_size=38).to_edge(UP, buff=0.35)
         rules = VGroup(
             label(r"a computation is a graph: \ inputs, \ operations, \ outputs", font_size=24, color=GREY_A),
-            label(r"a \textcolor[HTML]{E5534B}{red} pebble on a node: \ the value is in fast memory \ (at most $M$ red "
-                  r"pebbles)", font_size=24, color=WHITE),
-            label(r"a \textcolor[HTML]{58A6FF}{blue} pebble: \ the value is in slow memory \ (as many as you like)",
-                  font_size=24, color=WHITE),
+            label(r"a red pebble on a node: \ the value is in fast memory \ (at most $M$ red pebbles)", font_size=24,
+                  color=NO),
+            label(r"a blue pebble: \ the value is in slow memory \ (as many as you like)", font_size=24, color=DATA),
             label(r"moves: \ load (blue $\to$ red), \ store (red $\to$ blue), \ compute (red on every input $\to$ red "
                   r"on the output)", font_size=24, color=GREY_A),
             label(r"the cost: \ the number of loads and stores", font_size=26, color=HEAD),
@@ -47,6 +47,58 @@ class Pebbles(VoiceoverScene):
             for mk, r in zip("abcde", rules):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def play_game(self):
+        head = label(r"A tiny game: \ $y = (a + b)(a + c)$, \ with $M = 3$ red pebbles", font_size=32).to_edge(UP, buff=0.3)
+        pos = {"a": LEFT * 3 + DOWN * 1.2, "b": LEFT * 1 + DOWN * 1.2, "c": RIGHT * 1 + DOWN * 1.2,
+               "s": LEFT * 2 + UP * 0.2, "t": UP * 0.2, "y": LEFT * 1 + UP * 1.5}
+        names = {"a": "a", "b": "b", "c": "c", "s": "a+b", "t": "a+c", "y": "y"}
+        nodes = {k: VGroup(Circle(radius=0.38, color=GREY_C, stroke_width=2).move_to(v),
+                           Text(names[k], font="DejaVu Sans Mono", font_size=18, color=WHITE).move_to(v))
+                 for k, v in pos.items()}
+        edges = VGroup(*[Arrow(nodes[a][0].get_center(), nodes[b][0].get_center(), buff=0.42, color=GREY_D,
+                               stroke_width=2) for a, b in (("a", "s"), ("b", "s"), ("a", "t"), ("c", "t"),
+                                                            ("s", "y"), ("t", "y"))])
+        moves = [("load", "a"), ("load", "b"), ("compute", "s"), ("drop", "b"), ("load", "c"), ("compute", "t"),
+                 ("drop", "a"), ("drop", "c"), ("compute", "y"), ("store", "y")]
+        log = VGroup()
+        cost = 0
+        counter = label(r"loads + stores: \ 0", font_size=24, color=HEAD).to_corner(UR, buff=0.4).shift(DOWN * 0.6)
+        red = {}
+        blue = {k: Dot(nodes[k][0].get_right() + RIGHT * 0.12, radius=0.08, color=DATA) for k in "abc"}
+        with self.voiceover(
+            "Here is the game on a tiny computation: y equals a plus b, times a plus c, with room for three red "
+            "pebbles. The inputs start in slow memory, blue. <bookmark mark='a'/> Load a and b, compute their sum, and "
+            "drop b, which is no longer needed. Load c, compute a plus c, then drop a and c. Compute y from the two "
+            "sums, and store it. <bookmark mark='b'/> Four transfers: three loads and a store, the least possible, "
+            "since every input must be loaded once and the output stored once. With only two red pebbles, the same "
+            "computation would need extra transfers; for matrix multiplication the extra traffic is exactly what the "
+            "bound measures."
+        ) as vo:
+            self.play(FadeIn(head), Create(edges), *[FadeIn(n) for n in nodes.values()], *[FadeIn(b) for b in blue.values()],
+                      FadeIn(counter))
+            vo.wait_until("a")
+            for kind, k in moves:
+                anims = []
+                if kind in ("load", "compute"):
+                    red[k] = Dot(nodes[k][0].get_left() + LEFT * 0.12, radius=0.1, color=NO)
+                    anims.append(FadeIn(red[k], scale=1.5))
+                    anims.append(nodes[k][0].animate.set_stroke(NO))
+                elif kind == "drop":
+                    anims.append(FadeOut(red.pop(k)))
+                    anims.append(nodes[k][0].animate.set_stroke(GREY_C))
+                else:
+                    blue[k] = Dot(nodes[k][0].get_right() + RIGHT * 0.12, radius=0.08, color=DATA)
+                    anims.append(FadeIn(blue[k], scale=1.5))
+                if kind in ("load", "store"):
+                    cost += 1
+                    anims.append(Transform(counter, label(rf"loads + stores: \ {cost}", font_size=24,
+                                                          color=HEAD).move_to(counter)))
+                self.play(*anims, run_time=0.6)
+            vo.wait_until("b")
+            self.play(Indicate(counter, color=YES))
         self.wait(0.3)
         self.clear_scene()
 

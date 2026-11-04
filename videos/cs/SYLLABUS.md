@@ -144,7 +144,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 6 | mutation analysis of random co-simulation (computed); coverage-guided CPU fuzzing (DifuzzRTL, Cascade); Sail, Kami, Silver; verifying speculative cores |
 | 7 | the limits of branch prediction, computed: idealised PPM against TAGE at every storage budget; the perceptron's linear blind spot; TAGE-SC-L, BranchNet; the data-centre front-end bottleneck |
 | 8 | value prediction in the limit study (computed: perfect prediction of every load +19% on the Job, a stride predictor loses at every confidence); secure speculation: an STT/NDA-style rule built into the core, blocking the gadget for 3.5%; speculative non-interference; the cost floor |
-| 9 | learned replacement (Hawkeye, Glider) against Belady; the red–blue pebble lower bounds; memory disaggregation |
+| 9 | learned replacement: insertion policies against Belady on the Job's scans (computed), Hawkeye, Glider; the tight red–blue pebble bound for matrix multiply; memory disaggregation |
 | 10 | out-of-thin-air and the unsolved C/C++ memory model; work-stealing bounds; dark silicon |
 | 11 | Robson's allocator lower bound; formal semantics of undefined behaviour; capability hardware (CHERI) |
 | 12 | regex matching and parsing under fine-grained hardness (SETH); Valiant's parsing-as-matrix-multiplication; derivatives |
@@ -812,7 +812,10 @@ any matrix multiply must move.
 13. DRAM in depth: banks, rows, CAS and RAS, row-buffer hits; HBM (callback to *AI, Built* 17). The TLB previewed
     (Part 32).
 14. The Job with a cache model. Ledger row 3.
-15. Outro.
+15. *Frontier*: learning to replace. Insertion policies on the Job's scans (LRU 63%, bimodal insertion 47%, Belady
+    33%, computed); Hawkeye and Glider; online policies against Belady, pebble bounds beyond matrix multiply,
+    disaggregated memory.
+16. Outro.
 
 *Computed:* a cache simulator on the Job and other traces; 3C breakdowns; this machine's latency staircase and
 bandwidth; tiled matmul speedups; the pebble-game bound against simulated misses.
@@ -3140,4 +3143,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
 | 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
-| 9–61 | planned (this document) | — |
+| 9 | scenes (17, with the *Frontier* chapter), computations (a cache simulator and its analyses, this machine's latency staircase, bandwidth and matrix multiply measured, the exact LRU misses of the Job's corpus scans, the Job's ledger row 3 priced on Part 8's core), notes and tests written; QA previews (480p, silent) in review; Chinese edition next | LENGTH9 |
+| 10–61 | planned (this document) | — |

@@ -164,9 +164,11 @@ class Programming(VoiceoverScene):
         g = VGroup(label(r"array of structs", font_size=24, color=NO), aos, label(r"struct of arrays", font_size=24,
                                                                                   color=YES), soa).arrange(
             DOWN, aligned_edge=LEFT, buff=0.2).move_to(UP * 0.8)
+        lay = load("layout")
         notes = VGroup(
-            label(r"a loop that reads only \texttt{x}: \ with structs, \ most of every line is wasted", font_size=24,
-                  color=GREY_A),
+            label(rf"summing \texttt{{x}} over {lay['n'] / 1e6:.1f} million particles here: \ "
+                  rf"{1000 * lay['structs']:.1f} ms as 64-byte structs, \ {1000 * lay['array']:.1f} ms as an array \ "
+                  rf"({lay['structs'] / lay['array']:.1f} times)", font_size=24, color=YES),
             label(r"game engines (``data-oriented design''), \ column stores in databases, \ numerical codes", font_size=24,
                   color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
@@ -174,7 +176,9 @@ class Programming(VoiceoverScene):
             "The same reasoning shapes data. <bookmark mark='a'/> An array of structures keeps all the fields of one "
             "particle together; a structure of arrays keeps each field in its own array. <bookmark mark='b'/> A loop "
             "that reads only the x coordinates of every particle wastes most of every cache line in the first layout, "
-            "and uses all of it in the second. Game engines call the second style data-oriented design; databases "
+            "and uses all of it in the second. Measured here, on four million particles of sixty-four bytes each, "
+            "the sum takes twenty-eight milliseconds over the structures and five and a half over the plain array: "
+            "five times faster, from layout alone. Game engines call the second style data-oriented design; databases "
             "that store each column separately, which Part 35 builds, are the same idea at scale."
         ) as vo:
             self.play(FadeIn(head))
