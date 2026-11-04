@@ -119,11 +119,11 @@ class MLMC(VoiceoverScene):
         runs = tr["runs"]
         log = runs[0]["trace"]
         Lmax = max(p["L"] for p in log)
-        g = axes([-0.5, Lmax + 0.5], [-3, 2.5], x_length=6.2, y_length=3.6, xlabel=r"level $l$",
+        g = axes([-0.5, Lmax + 0.5], [-3, 2.5], x_length=5.6, y_length=3.0, xlabel=r"level $l$",
                  ylabel=r"$\log_{10} V_l$", xticks=list(range(0, Lmax + 1, 2)), yticks=[-2, 0, 2], font_size=15)
-        g.to_edge(LEFT, buff=0.7).shift(UP * 0.4)
+        g.to_edge(LEFT, buff=0.7).to_edge(UP, buff=0.45)
         ax = g.ax
-        h = axes([-0.5, Lmax + 0.5], [0, 7.5], x_length=6.2, y_length=2.0, xlabel=r"level $l$",
+        h = axes([-0.5, Lmax + 0.5], [0, 7.5], x_length=5.6, y_length=1.6, xlabel=r"level $l$",
                  ylabel=r"$\log_{10} N_l$", xticks=[], yticks=[0, 3, 6], font_size=15).next_to(g, DOWN, buff=0.35)
         hx = h.ax
 
@@ -147,7 +147,7 @@ class MLMC(VoiceoverScene):
         costs = [r["cost"] for r in runs]
         seeds = MathTex(rf"\text{{four seeds: final cost }}{min(costs) / 1e6:.1f}\text{{--}}{max(costs) / 1e6:.1f}"
                         rf"\ \text{{million steps, }}L = {min(r['levels'] for r in runs)}\text{{--}}{max(r['levels'] for r in runs)}",
-                        font_size=26, color=GOOD).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.2)
+                        font_size=24, color=GOOD).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.2)
         src = illustration(r"the House's adaptive loop at $\varepsilon = 0.01$ (continuously averaged Asian, Euler), pass by pass")
         with self.voiceover(
             "Now watch the House's estimator choose its own levels, at an accuracy of one cent. Three levels of pilot "
@@ -201,11 +201,11 @@ class MLMC(VoiceoverScene):
         eps = np.asarray(m["eps"])
         cm = np.array([r["cost"] for r in m["mlmc"]])
         cs = np.array([r["cost"] for r in m["standard"]])
-        g = axes([np.log10(0.008), np.log10(0.05)], [6.3, 9.6], x_length=5.0, y_length=3.6,
+        g = axes([np.log10(0.008), np.log10(0.05)], [6.3, 9.6], x_length=5.0, y_length=3.1,
                  xlabel=r"target accuracy $\varepsilon$", ylabel=r"cost (steps simulated)",
                  xticks=list(np.log10(eps)), xfmt=lambda u: f"{10 ** u:.2f}", yticks=[7, 8, 9],
                  yfmt=lambda u: f"10^{{{int(round(u))}}}", font_size=14, log_x=True)
-        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        g.to_edge(LEFT, buff=0.6).shift(UP * 0.35)  # the pause card takes the corner below
         ax = g.ax
         ls = polyline(ax, np.log10(eps), np.clip(np.log10(cs), 6.3, 9.6), BAD)
         lm = polyline(ax, np.log10(eps), np.log10(cm), GOOD)
