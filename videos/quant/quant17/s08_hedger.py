@@ -80,7 +80,7 @@ class Hedger(VoiceoverScene):
                 why(rf"no costs, zero drift: the expected loss of a delta-hedged short call is the Black--Scholes price, and "
                     rf"its variance is the error of hedging once a day (sd {sd:.3f}). The trained networks: {lo_:.3f} to "
                     rf"{hi_:.3f}")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-2.8, buff=0.45, edge=6.9)
         with self.voiceover(
             "Why is the minimum a price? The entropic risk measure is cash invariant: add a sure amount of cash and "
             "the risk falls by exactly that amount, because its exponential comes straight out of the expectation. "
