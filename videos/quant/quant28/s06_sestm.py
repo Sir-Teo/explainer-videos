@@ -200,13 +200,11 @@ class SESTM(VoiceoverScene):
         foot = wrapped_label(rf"rank correlation of score with the two-year move: {s['rho_train']:.2f} on the training "
                              rf"statements, {s['rho']:.2f} on the {s['n_test']} later ones ($p = {s['p_rho']:.2f}$); the sign "
                              rf"is right on {100 * s['hit']:.0f}\% of them", 11.4, 18, GREY_A).to_edge(DOWN, buff=0.6)
-        good = s["p_rho"] < 0.05
         with self.voiceover(
             "Did it learn anything? <bookmark mark='a'/> On the statements it was trained on, the score lines up with "
             f"the yield's move: a rank correlation of {s['rho_train']:.2f}. <bookmark mark='b'/> On the {s['n_test']} "
-            f"statements from 2013 to 2020 that it never saw, the correlation is {s['rho']:.2f}, "
-            + ("and that survives the test of chance." if good else
-               "with a p-value of " f"{s['p_rho']:.2f}: indistinguishable from nothing.") +
+            f"statements from 2013 to 2020 that it never saw, the correlation is {s['rho']:.2f}, with a p-value of "
+            f"{s['p_rho']:.2f}."
             f" The sign is right {100 * s['hit']:.0f} percent of the time. <bookmark mark='c'/> Ke, Kelly and Xiu had "
             f"twenty-two million articles; we have {s['n_train']} statements. Screening hundreds of words on "
             "a hundred labels finds words that fit the past by chance. How many documents the screen needs is a "

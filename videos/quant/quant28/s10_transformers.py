@@ -100,12 +100,13 @@ class Transformers(VoiceoverScene):
                 why(r"a modern decoder: RMSNorm, rotary positions, SwiGLU (the House's \texttt{explainer.lm.pocket})"),
                 why(r"about a hundred-thousandth of BloombergGPT; enough to learn the committee's prose")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        mpar, mtok = n_par / 1e6, m["tokens"] / 1e6
         with self.voiceover(
             "We cannot train FinBERT here, but we can train its little cousin, the way the AI series does. "
             "<bookmark mark='a'/> Pieces of words learned by byte-pair encoding, from the training text only, so a "
             "tokenizer trained on 2007 text has never seen the word pandemic. <bookmark mark='b'/> A modern decoder "
-            f"with {cfg['layers']} layers and {n_par / 1e6:.1f} million parameters. <bookmark mark='c'/> Trained to "
-            f"predict the next token, on {m['tokens'] / 1e6:.0f} million tokens of FOMC minutes, on an ordinary CPU. "
+            f"with {cfg['layers']} layers and {mpar:.1f} million parameters. <bookmark mark='c'/> Trained to "
+            f"predict the next token, on {mtok:.0f} million tokens of FOMC minutes, on an ordinary CPU. "
             "Three copies of it, trained on three different slices of history, are the next chapter's experiment."
         ) as vo:
             step(0)

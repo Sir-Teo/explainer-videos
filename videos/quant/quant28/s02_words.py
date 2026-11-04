@@ -75,12 +75,13 @@ class Words(VoiceoverScene):
                     rf"2020 for research ({comma(c['n_tokens'])} words in all)"),
                 why(r"almost every entry of $D$ is zero: text is high-dimensional and sparse, the regime of Parts 25 and 27")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        mw = c["n_tokens"] / 1e6
         with self.voiceover(
             "Do that for every document and stack the counts. <bookmark mark='a'/> The document-term matrix: one row "
             "per document, one column per word, each entry a count. <bookmark mark='b'/> Our corpus is every statement "
             f"the Federal Open Market Committee has released since 1997, {c['n_statements']} of them through 2020, and "
             f"every set of minutes since {c['first_minutes'] // 10000}, {c['n_minutes']} more: in all about "
-            f"{c['n_tokens'] / 1e6:.0f} million words and {c['n_types']:,} distinct ones. <bookmark mark='c'/> Almost "
+            f"{mw:.0f} million words and {c['n_types']:,} distinct ones. <bookmark mark='c'/> Almost "
             "every entry is zero. Text is the extreme case of the problem Parts twenty-five and twenty-seven kept "
             "meeting: far more columns than anyone can estimate one at a time."
         ) as vo:

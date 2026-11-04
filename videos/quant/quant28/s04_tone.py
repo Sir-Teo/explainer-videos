@@ -99,13 +99,13 @@ class Tone(VoiceoverScene):
                       legend([(HAWK, r"yield up"), (DOVE, r"yield down")], font_size=16)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         side.to_edge(RIGHT, buff=0.35)
         fit_right(side)
-        verdict = "nothing" if abs(r["t"]) < 2 else "something"
+        t_d, t_n, t_u = t["regs"]["dnet"]["t"], t["regs"]["neg"]["t"], t["regs"]["unc"]["t"]
         with self.voiceover(
             f"Here are all {r['n']} statements through 2020. <bookmark mark='a'/> Each dot is one statement: its net tone "
             "across, the two-year yield's move up. <bookmark mark='b'/> The fitted line is flat. The t statistic is "
             f"{r['t']:.2f}, and tone explains {100 * r['r2']:.1f} percent of the moves. The change in tone since the last "
-            f"statement, the negative share alone, the uncertainty share: each explains {verdict}. Whatever moves the "
-            "two-year on a statement day, the dictionary does not see it."
+            f"statement, the negative share alone, the uncertainty share: t statistics of {t_d:.2f}, {t_n:.2f} and "
+            f"{t_u:.2f}. Whatever moves the two-year on a statement day, the dictionary does not see it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[2]))
             vo.wait_until("a")
