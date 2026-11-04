@@ -161,6 +161,7 @@ FEATURES = ["r1d", "r1w", "r4w", "r12w", "r26w", "vol28", "max28", "skew28", "ra
             "beta", "ivol", "age"]
 MIN_QV = 2.5e5          # median daily USDT volume over the past four weeks, to enter that week's universe
 HOLD = 20210101
+QN = 5                  # quintile sorts: in 2018-2020 a week has only 10 to 60 liquid coins
 
 
 @functools.lru_cache(maxsize=1)
@@ -349,8 +350,8 @@ def compute_zoo() -> dict:
     for m in ZOO:
         f, y = np.concatenate(out[m]["f"]), np.concatenate(out[m]["y"])
         d, qv, ret = np.concatenate(out[m]["d"]), np.concatenate(out[m]["qv"]), np.concatenate(out[m]["ret"])
-        ew = ML.decile_spread(d, f, ret)
-        vw = ML.decile_spread(d, f, ret, weights=qv)
+        ew = ML.decile_spread(d, f, ret, q=QN)
+        vw = ML.decile_spread(d, f, ret, q=QN, weights=qv)
         rows[m] = {"r2": ML.r2_oos(y, f), "sr_ew": B.sharpe(ew["ls"], 52), "sr_vw": B.sharpe(vw["ls"], 52),
                    "mean_ew": float(ew["ls"].mean() * 52), "mean_vw": float(vw["ls"].mean() * 52),
                    "cum_ew": np.cumsum(np.log1p(np.clip(ew["ls"], -0.99, None))), "weeks": ew["date"],
@@ -359,7 +360,7 @@ def compute_zoo() -> dict:
 
 
 def _liq_split(d, f, ret, qv):
-    """Avramov, Cheng and Metzker's question: where does the edge live? The decile spread among the more and the
+    """Avramov, Cheng and Metzker's question: where does the edge live? The tercile spread among the more and the
     less liquid half of each week's coins."""
     out = {}
     for half in ("liquid", "illiquid"):
@@ -371,7 +372,7 @@ def _liq_split(d, f, ret, qv):
             dd.append(d[k])
             ff.append(f[k])
             rr.append(ret[k])
-        s = ML.decile_spread(np.concatenate(dd), np.concatenate(ff), np.concatenate(rr), q=5)
+        s = ML.decile_spread(np.concatenate(dd), np.concatenate(ff), np.concatenate(rr), q=3)
         out[half] = B.sharpe(s["ls"], 52)
     return out
 
@@ -455,7 +456,7 @@ def compute_attention() -> dict:
                 preds.append(np.concatenate([m.predict(Z) for Z, _, _, _ in te]))
         f = np.mean(preds, axis=0)
         idx = np.concatenate([i for _, _, _, i in te])
-        ew = ML.decile_spread(P["date"][idx], f, P["ret"][idx])
+        ew = ML.decile_spread(P["date"][idx], f, P["ret"][idx], q=QN)
         out[nm] = {"r2": ML.r2_oos(P["y"][idx], f), "sr_ew": B.sharpe(ew["ls"], 52)}
     # how concentrated is attention? the share of each row's weight on its own top 5
     top = np.sort(att, axis=1)[:, ::-1][:, :5].sum(1)
@@ -684,13 +685,13 @@ def _monthly_compound(dates, r):
 
 
 def _turnover_cost(d, f, qv, bps=10.0):
-    """Annual cost of the value-weighted decile long-short at ``bps`` per unit of one-way turnover."""
+    """Annual cost of the value-weighted quintile long-short at ``bps`` per unit of one-way turnover."""
     prev, tot, n = None, 0.0, 0
     for w in np.unique(d):
         m = d == w
-        k = np.argsort(np.argsort(f[m])) * 10 // m.sum()
+        k = np.argsort(np.argsort(f[m])) * QN // m.sum()
         wt = np.zeros(m.sum())
-        hi, lo = k == 9, k == 0
+        hi, lo = k == QN - 1, k == 0
         wt[hi] = qv[m][hi] / qv[m][hi].sum()
         wt[lo] = -qv[m][lo] / qv[m][lo].sum()
         cur = dict(zip(np.flatnonzero(m), wt))
@@ -713,7 +714,7 @@ def compute_envelope() -> dict:
     code = inspect.getsource(_panel) + inspect.getsource(ML.MLPEnsemble) + inspect.getsource(_fit_zoo)
     n_trials = len(ZOO) + 5 + 6 + 5            # the zoo, plus the tuning grids of ENet, PCR and PLS
     pit.register("nn3_coin_ls_part27", code, {"model": "NN3 (32-16-8), 5 seeds", "train": "2018-01..2020-06",
-                                              "validate": "2020-07..2020-12", "portfolio": "decile long-short, weekly, "
+                                              "validate": "2020-07..2020-12", "portfolio": "quintile long-short, weekly, "
                                               "weighted by 28-day median dollar volume", "universe": f"median volume >= {MIN_QV}"},
                  trials=n_trials)
     weeks = np.unique(d)
@@ -726,13 +727,13 @@ def compute_envelope() -> dict:
     f = _fit_zoo("NN3", P["X"][tr], _winsor(P["y"][tr]), P["X"][va], _winsor(P["y"][va]))
     hold = d >= HOLD
     fh = f(P["X"][hold])
-    vw = ML.decile_spread(d[hold], fh, P["ret"][hold], weights=P["qv"][hold])
-    ew = ML.decile_spread(d[hold], fh, P["ret"][hold])
+    vw = ML.decile_spread(d[hold], fh, P["ret"][hold], q=QN, weights=P["qv"][hold])
+    ew = ML.decile_spread(d[hold], fh, P["ret"][hold], q=QN)
     z = load("zoo")["rows"]["NN3"]
     cost = _turnover_cost(d[hold], fh, P["qv"][hold])
     ym_r, mr = _monthly_compound(*_zoo_research_vw(P))
     ym_h, mh = _monthly_compound(vw["date"], vw["ls"])
-    row = track.record("nn3_coin_ls_part27", 27, mr, mh, cost, note="value-weighted decile long-short, weekly")
+    row = track.record("nn3_coin_ls_part27", 27, mr, mh, cost, note="value-weighted quintile long-short, weekly")
     out["nn3"] = {"row": row, "sr_vw": B.sharpe(vw["ls"], 52), "sr_ew": B.sharpe(ew["ls"], 52), "cost": cost,
                   "r2": ML.r2_oos(P["y"][hold], fh), "weeks": vw["date"], "cum_vw": np.cumsum(np.log1p(np.clip(vw["ls"], -0.99, None))),
                   "research_sr_vw": z["sr_vw"], "first": int(vw["date"][0]), "last": int(vw["date"][-1])}
@@ -773,7 +774,7 @@ def _zoo_research_vw(P):
     for year in (2019, 2020):
         tr, va, te = _split(P, year)
         f = _fit_zoo("NN3", P["X"][tr], _winsor(P["y"][tr]), P["X"][va], _winsor(P["y"][va]))
-        s = ML.decile_spread(P["date"][te], f(P["X"][te]), P["ret"][te], weights=P["qv"][te])
+        s = ML.decile_spread(P["date"][te], f(P["X"][te]), P["ret"][te], q=QN, weights=P["qv"][te])
         out_d.append(s["date"])
         out_r.append(s["ls"])
     return np.concatenate(out_d), np.concatenate(out_r)
