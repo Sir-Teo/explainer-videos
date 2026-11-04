@@ -2,10 +2,10 @@
 
     python -m videos.quant.quant23.compute [items] [--force]
 
-* ``frontier``  the mean-variance frontier of ten US industries, 1990-2025: the bullet, GMV, tangency, the CML; the
+* ``frontier``  the mean-variance frontier of ten US industries, 1990-2020: the bullet, GMV, tangency, the CML; the
                 in-sample tangency against its out-of-sample record and against 1/N;
 * ``twoasset``  two assets with 20% volatility each: the frontier as the correlation changes;
-* ``capm``      the security market line on beta-sorted deciles, 1963-2025: predicted against realised;
+* ``capm``      the security market line on beta-sorted deciles, 1963-2020: predicted against realised;
 * ``hj``        Hansen-Jagannathan: the largest Sharpe ratios of the market, ten industries and 25 size and value
                 portfolios, the gross-return bound, and the CRRA consumption SDF's sigma(m)/E(m) as risk aversion rises;
 * ``puzzle``    the equity premium puzzle on annual US data, 1948-2025: consumption growth, the premium, the implied risk
@@ -31,6 +31,7 @@ from explainer.quant.house import econ as E, premia as P
 CACHE = Cache("quant23")
 load = CACHE.load
 THROUGH = "2025-12"
+RESEARCH = "2020-12"  # strategy-like tests (fit, then hold) stay inside the research window; 2021- is sealed
 
 
 def _json(d):
@@ -48,9 +49,9 @@ def _align(dates_a, A, dates_b):
 
 
 def compute_frontier() -> dict:
-    ind = data.ken_french_industries(10, THROUGH)
+    ind = data.ken_french_industries(10, RESEARCH)
     fd, mkt, rf = _ff()
-    sel = (ind["date"] >= 199001) & (ind["date"] <= 202512)
+    sel = (ind["date"] >= 199001) & (ind["date"] <= 202012)
     d = ind["date"][sel]
     R = ind["returns"][sel]
     r_f = _align(fd, rf, d)
@@ -65,7 +66,7 @@ def compute_frontier() -> dict:
     sig = P.frontier_sigma(ms, mu, S)
     assets = [{"name": c, "mu": float(mu[j]), "sd": float(np.sqrt(S[j, j]))} for j, c in enumerate(ind["columns"])]
     mkt_pt = {"mu": float((m_ex + r_f).mean() * 12), "sd": float((m_ex + r_f).std() * np.sqrt(12))}
-    # in-sample 1990-2007 against out-of-sample 2008-2025
+    # in-sample 1990-2007 against out-of-sample 2008-2020 (the research window's end)
     a = d <= 200712
     b = ~a
     mu_a, S_a = R[a].mean(0) * 12, np.cov(R[a].T) * 12
@@ -100,7 +101,7 @@ def compute_twoasset() -> dict:
 
 
 def compute_capm() -> dict:
-    b = data.ken_french_sorts("BETA", THROUGH)
+    b = data.ken_french_sorts("BETA", RESEARCH)
     cols = b["columns"]
     dec = [i for i, c in enumerate(cols) if c in ("Lo 10", "Dec 2", "Dec 3", "Dec 4", "Dec 5", "Dec 6", "Dec 7", "Dec 8",
                                                   "Dec 9", "Hi 10")]
@@ -181,20 +182,20 @@ def compute_puzzle() -> dict:
 
 def compute_hj() -> dict:
     fd, mkt, rf = _ff()
-    sel = (fd >= 196307) & (fd <= 202512)
+    sel = (fd >= 196307) & (fd <= 202012)
     m = mkt[sel]
-    ind = data.ken_french_industries(10, THROUGH)
-    si = (ind["date"] >= 196307) & (ind["date"] <= 202512)
+    ind = data.ken_french_industries(10, RESEARCH)
+    si = (ind["date"] >= 196307) & (ind["date"] <= 202012)
     rfi = _align(fd, rf, ind["date"][si])
     exi = ind["returns"][si] - rfi[:, None]
-    ff25 = data._kf_monthly("25_Portfolios_5x5_CSV.zip", "ff25", THROUGH, "value")
-    s5 = (ff25["date"] >= 196307) & (ff25["date"] <= 202512)
+    ff25 = data._kf_monthly("25_Portfolios_5x5_CSV.zip", "ff25", RESEARCH, "value")
+    s5 = (ff25["date"] >= 196307) & (ff25["date"] <= 202012)
     rf5 = _align(fd, rf, ff25["date"][s5])
     ex5 = ff25["returns"][s5] - rf5[:, None]
     sr_m = float(m.mean() / m.std() * np.sqrt(12))
     sr_i = P.hj_excess(exi.mean(0), np.cov(exi.T)) * np.sqrt(12)
     sr_5 = P.hj_excess(ex5.mean(0), np.cov(ex5.T)) * np.sqrt(12)
-    # out of sample: the 25 portfolios' tangency fitted on 1963-1993, applied to 1994-2025
+    # out of sample: the 25 portfolios' tangency fitted on 1963-1993, applied to 1994-2020
     h = ff25["date"][s5] <= 199312
     w = np.linalg.solve(np.cov(ex5[h].T), ex5[h].mean(0))
     o = ex5[~h] @ w

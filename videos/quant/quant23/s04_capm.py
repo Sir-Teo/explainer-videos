@@ -129,7 +129,7 @@ class CAPM(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            f"Here it is on sixty-two years of data: ten portfolios sorted by beta, from {b[0]:.1f} to {b[-1]:.1f}. "
+            f"Here it is on fifty-seven years of data: ten portfolios sorted by beta, from {b[0]:.1f} to {b[-1]:.1f}. "
             "<bookmark mark='a'/> The model's line: through zero, rising at the market's premium of "
             f"{100 * c['mkt_prem']:.0f} percent a year per unit of beta. <bookmark mark='b'/> The data's line: an "
             f"intercept of {100 * s['intercept']:.1f} percent and a slope of {100 * s['slope']:.1f}, less than half "

@@ -7,7 +7,7 @@ hypothesis, tests each piece on a century of public data, and opens the House's 
 
 * mean–variance: the two-asset frontier, the frontier by Lagrange, the global minimum-variance and tangency portfolios,
   Tobin's separation, and estimation error (the tangency's Sharpe ratio halves out of sample; 1/N wins);
-* the CAPM derived; the security market line on sixty-two years of beta-sorted deciles, flat; noisy betas, portfolios
+* the CAPM derived; the security market line on fifty-seven years of beta-sorted deciles, flat; noisy betas, portfolios
   and shrinkage; betting against beta; Roll's critique;
 * the stochastic discount factor: p = E[mx], its special cases, its identity with the risk-neutral measure, and the
   Hansen–Jagannathan bound on the market, industries and 25 size and value portfolios;
@@ -35,19 +35,19 @@ reported by the sources named.*
   strip (1952–2021); the plan; the research desk opens.
 * **1. Markowitz: the frontier** (2.5). Two assets of 20% volatility as the correlation runs from −1 to 1; the frontier
   by Lagrange (two-fund separation); the global minimum-variance portfolio, which needs no means; ten US industries,
-  1990–2025 (GMV volatility 11%, below every industry); the optimiser's extreme weights.
+  1990–2020 (GMV volatility 11%, below every industry); the optimiser's extreme weights.
 * **2. Cash, the tangency, and estimation error** (2.4). The capital market line and Tobin's separation; the tangency
-  on the industries (Sharpe 0.85 against the market's 0.58); fitted on 1990–2007 and held to 2025: 0.89 in sample,
-  0.45 out, against 1/N 0.64, GMV 0.67 and the market 0.66; shrinkage, constraints (Jagannathan–Ma) and
+  on the industries (Sharpe 0.88 against the market's 0.57); fitted on 1990–2007 and held to 2020: 0.89 in sample,
+  0.38 out, against 1/N 0.63, GMV 0.73 and the market 0.65; shrinkage, constraints (Jagannathan–Ma) and
   Black–Litterman.
 * **3. The CAPM and the flat line** (3.7). The CAPM derived from market clearing; the SML and Black–Jensen–Scholes;
   noisy betas (a standard error of 0.26 on five years of monthly data), errors in variables, portfolios, Blume's and
-  Vasicek's shrinkage; beta deciles 1963–2025 (betas 0.60–1.60; fitted slope 3.3% against a premium of 7.1%,
-  intercept 4.5%); betting against beta (5.6% a year, Sharpe 0.30, t = 2.35; Frazzini–Pedersen); Roll's critique.
+  Vasicek's shrinkage; beta deciles 1963–2020 (betas 0.61–1.60; fitted slope 2.4% against a premium of 6.8%,
+  intercept 5.1%); betting against beta (5.2% a year, Sharpe 0.31, t = 2.35; Frazzini–Pedersen); Roll's critique.
 * **4. One price equation: the discount factor** (3.9). p = E[mx], 1 = E[mR], E[R^e] = −cov(m, R^e)/E[m]; the CAPM,
   consumption, factor and intermediary models as choices of m; m and the risk-neutral measure, dQ/dP = m R_f; the
-  Hansen–Jagannathan bound derived; the market 0.46, ten industries 0.63, 25 size–value portfolios 1.39 (0.86 out of
-  sample); the gross-return cup and the CRRA discount factor climbing into it only at very high γ.
+  Hansen–Jagannathan bound derived; the market 0.44, ten industries 0.63, 25 size–value portfolios 1.40 (0.90 out of
+  sample), 1963–2020; the gross-return cup and the CRRA discount factor climbing into it only at very high γ.
 * **5. Many factors: APT and ICAPM** (3.0). Ross's argument; an arbitrage by hand (A: β 1, 8%; B: β 2, 12%; 2A − B is
   riskless at 4% against cash at 3%); principal components of 49 industries (the first 56% of variance, correlation
   0.96 with the market; five components 73%); pricing by components (R² ≈ 0 with one, 0.22 with ten); Merton's ICAPM.
@@ -142,8 +142,8 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
    with a correlation of a half, diversification takes off less than three points (ch. 1).
 2. **Why is the security market line flatter than the CAPM says?** One reading (Black, 1972; Frazzini and Pedersen,
    2014): investors who cannot or will not borrow buy high-beta stocks to get more risk, bidding them up and lowering
-   their returns. Betting against beta, low-beta levered up long and high-beta levered down short, earned 5.6% a year
-   on the deciles (ch. 3).
+   their returns. Betting against beta, low-beta levered up long and high-beta levered down short, earned 5.2% a year
+   on the deciles, 1963–2020 (ch. 3).
 3. **An asset has a Sharpe ratio of 2. What does that say about any model that prices it?** By Hansen–Jagannathan,
    σ(m)/E(m) ≥ 2: a discount factor with a volatility of 200% a year, far beyond any consumption model. Suspect the
    data first: selection among many tries, stale or smoothed prices, or a tail risk that has not yet happened (ch. 4).
@@ -203,6 +203,10 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
   Gabaix and Koijen's elasticity; Tversky and Kahneman's parameters; Odean's PGR and PLR.
 * Illustrative inputs, labelled on screen: the two-asset examples, the APT arbitrage, the beta-noise example, the
   dealer's balance sheet, the logit investors, the Shleifer–Vishny parameters, the rational bubble.
+* The research window: every test that fits something and then holds it (the out-of-sample tangency, betting against
+  beta, the 25 portfolios' out-of-sample Sharpe ratio) stops at December 2020, so the sealed 2021–2025 hold-out stays
+  unread until Part 24 opens it for the classic factors. Descriptive history (the century of returns, consumption,
+  Shiller's data, the run-ups) runs to 2025.
 * No hold-out is opened in this part; the trial counter stays at 315.
 
 ---
@@ -212,7 +216,7 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 本部分是第四幕“收益溢价”（第23–29部分）的第一部分。第三幕问的是东西必须值多少钱；本部分问的是它们支付多少、为什么。它从Markowitz一直讲到无弹性市场假说，用一个世纪的公开数据检验每一块理论，并开设House的研究交易台。本部分讲：
 
 * 均值–方差：两资产前沿、用拉格朗日乘数求前沿、全局最小方差组合与切点组合、Tobin分离定理，以及估计误差（切点组合的夏普比率在样本外减半；1/N获胜）；
-* 推导CAPM；用六十二年按贝塔排序的十分位组合画出证券市场线——它是平的；含噪声的贝塔、组合与收缩；押注低贝塔；Roll的批评；
+* 推导CAPM；用五十七年按贝塔排序的十分位组合画出证券市场线——它是平的；含噪声的贝塔、组合与收缩；押注低贝塔；Roll的批评；
 * 随机贴现因子：p = E[mx]、它的特例、它与风险中性测度的等价，以及市场、行业和25个规模–价值组合上的Hansen–Jagannathan界；
 * APT（手算一次套利；49个行业的主成分）与Merton的ICAPM；
 * 消费：Lucas、欧拉方程、1948年以来美国数据上的Hansen–Singleton GMM；股权溢价之谜与无风险利率之谜；习惯、长期风险与灾难；
@@ -226,10 +230,10 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 ## 章节（约50分钟）
 
 * **风险值多少。** 1926年7月投入美国股市的一美元，到2025年底变成17,488美元，投入国库券只有24.9美元（每年10.3%对3.3%）；每个理论都写成E[R] − R_f = βλ，而它们全都是p = E[mx]；历史条（1952–2021）；本部分安排；研究交易台开张。
-* **1. Markowitz：前沿。** 两个波动率20%的资产，相关系数从−1变到1；用拉格朗日乘数求前沿（两基金分离）；不需要任何均值的全局最小方差组合；1990–2025年的十个美国行业（最小方差组合波动率11%，低于每个行业）；优化器给出的极端权重。
-* **2. 现金、切点组合与估计误差。** 资本市场线与Tobin分离定理；行业上的切点组合（夏普比率0.85，市场0.58）；用1990–2007年拟合并持有到2025年：样本内0.89，样本外0.45，对比1/N的0.64、最小方差组合的0.67和市场的0.66；收缩、约束（Jagannathan–Ma）与Black–Litterman。
-* **3. CAPM与那条平的线。** 由市场出清推导CAPM；证券市场线与Black–Jensen–Scholes；含噪声的贝塔（五年月度数据的标准误为0.26）、变量误差、组合、Blume与Vasicek的收缩；1963–2025年的贝塔十分位组合（贝塔0.60–1.60；拟合斜率3.3%，而溢价为7.1%，截距4.5%）；押注低贝塔（每年5.6%，夏普比率0.30，t = 2.35；Frazzini–Pedersen）；Roll的批评。
-* **4. 一个定价方程：贴现因子。** p = E[mx]，1 = E[mR]，E[R^e] = −cov(m, R^e)/E[m]；CAPM、消费模型、因子模型和中介模型都是对m的选择；m与风险中性测度，dQ/dP = m R_f；推导Hansen–Jagannathan界；市场0.46、十个行业0.63、25个规模–价值组合1.39（样本外0.86）；总收益的“杯形”下界，CRRA贴现因子只有在γ很高时才爬进去。
+* **1. Markowitz：前沿。** 两个波动率20%的资产，相关系数从−1变到1；用拉格朗日乘数求前沿（两基金分离）；不需要任何均值的全局最小方差组合；1990–2020年的十个美国行业（最小方差组合波动率11%，低于每个行业）；优化器给出的极端权重。
+* **2. 现金、切点组合与估计误差。** 资本市场线与Tobin分离定理；行业上的切点组合（夏普比率0.88，市场0.57）；用1990–2007年拟合并持有到2020年：样本内0.89，样本外0.38，对比1/N的0.63、最小方差组合的0.73和市场的0.65；收缩、约束（Jagannathan–Ma）与Black–Litterman。
+* **3. CAPM与那条平的线。** 由市场出清推导CAPM；证券市场线与Black–Jensen–Scholes；含噪声的贝塔（五年月度数据的标准误为0.26）、变量误差、组合、Blume与Vasicek的收缩；1963–2020年的贝塔十分位组合（贝塔0.61–1.60；拟合斜率2.4%，而溢价为6.8%，截距5.1%）；押注低贝塔（每年5.2%，夏普比率0.31，t = 2.35；Frazzini–Pedersen）；Roll的批评。
+* **4. 一个定价方程：贴现因子。** p = E[mx]，1 = E[mR]，E[R^e] = −cov(m, R^e)/E[m]；CAPM、消费模型、因子模型和中介模型都是对m的选择；m与风险中性测度，dQ/dP = m R_f；推导Hansen–Jagannathan界；1963–2020年市场0.44、十个行业0.63、25个规模–价值组合1.40（样本外0.90）；总收益的“杯形”下界，CRRA贴现因子只有在γ很高时才爬进去。
 * **5. 多个因子：APT与ICAPM。** Ross的论证；手算一次套利（A：β为1，8%；B：β为2，12%；2A − B无风险地赚4%，而现金是3%）；49个行业的主成分（第一个解释56%的方差，与市场的相关系数0.96；前五个73%）；用主成分定价（一个时R²约为0，十个时0.22）；Merton的ICAPM。
 * **6. 消费与GMM。** Lucas的果树与欧拉方程；对数正态下对溢价和无风险利率的预测；1948–2025年美国人均实际消费（波动率1.9%，市场17%，相关系数0.39）；带工具变量的Hansen–Singleton GMM（γ = 27，标准误22；β = 1.51；J = 5.4，p = 0.25）；无风险利率之谜（Weil）。
 * **7. 股权溢价之谜。** 溢价每年8.8%；要解释它γ约为68，以及这对一次赌博意味着什么；Mehra与Prescott（1985）；习惯（Campbell–Cochrane）、长期风险（Bansal–Yaron）与灾难（Rietz；Barro：p = 1.7%，b = 0.29；γ = 4时为2.1%，b = 0.40时为5.4%）；哪些已有共识，哪些没有。
@@ -244,7 +248,7 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 ## 交易台问题与解答
 
 1. **两个资产，波动率都是20%，相关系数0.5：最小方差权重和波动率？** 由对称性各一半。方差为0.25 × 0.04 + 0.25 × 0.04 + 2 × 0.25 × 0.5 × 0.04 = 0.03，所以波动率为17.3%：相关系数为一半时，分散化只降低不到三个百分点（第1章）。
-2. **为什么证券市场线比CAPM说的平？** 一种解读（Black，1972；Frazzini与Pedersen，2014）：不能或不愿借钱的投资者买高贝塔股票来获得更多风险，把它们的价格抬高、收益压低。押注低贝塔——把低贝塔加杠杆做多、高贝塔去杠杆做空——在十分位组合上每年赚5.6%（第3章）。
+2. **为什么证券市场线比CAPM说的平？** 一种解读（Black，1972；Frazzini与Pedersen，2014）：不能或不愿借钱的投资者买高贝塔股票来获得更多风险，把它们的价格抬高、收益压低。押注低贝塔——把低贝塔加杠杆做多、高贝塔去杠杆做空——在1963–2020年的十分位组合上每年赚5.2%（第3章）。
 3. **一个资产的夏普比率是2。这对任何能为它定价的模型意味着什么？** 由Hansen–Jagannathan界，σ(m)/E(m) ≥ 2：贴现因子每年的波动率达200%，远超任何消费模型。先怀疑数据：在多次尝试中挑选、陈旧或平滑的价格，或尚未发生的尾部风险（第4章）。
 4. **为什么股权溢价需要接近70的风险厌恶？** 因为股票与消费的协方差极小：消费的波动率为1.9%，市场为17%，相关系数0.39，协方差约0.0013，8.8% / 0.0013 ≈ 68。同样的γ又预测出远高于实际的无风险利率（第6–7章）。
 5. **股息率处于历史最低。接下来必须发生什么？** 由Campbell–Shiller恒等式：要么未来收益低，要么未来股息增长高，要么股息率无限期地保持低位。数据中股息率的变动预测的是收益，而不是股息（第8章）。
@@ -271,4 +275,5 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 * He、Kelly与Manela：资本比率与因子，以及作者公布的检验组合。
 * 引用而非计算的公开数字：3Com与Palm的价格（Lamont与Thaler）；Barro的灾难校准；Gabaix与Koijen的弹性；Tversky与Kahneman的参数；Odean的PGR与PLR。
 * 屏幕上标注为示意的输入：两资产的例子、APT套利、贝塔噪声的例子、交易商的资产负债表、logit投资者、Shleifer–Vishny的参数、理性泡沫。
+* 研究窗口：凡是先拟合、再持有的检验（样本外切点组合、押注低贝塔、25个组合的样本外夏普比率）都截止于2020年12月，封存的2021–2025年样本外数据保持未读，直到第24部分为经典因子打开它。描述性的历史（一个世纪的收益、消费、Shiller的数据、暴涨）延续到2025年。
 * 本部分不打开任何样本外数据；试验计数器保持在315。

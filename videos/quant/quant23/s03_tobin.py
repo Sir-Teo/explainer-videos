@@ -93,7 +93,7 @@ class Tobin(VoiceoverScene):
     def oos(self, f):
         o = f["oos"]
         rows = [(r"tangency, fitted 1990--2007: in sample", o["in_sharpe"], GREY_A),
-                (r"the same weights, 2008--2025", o["oos_sharpe"], BAD),
+                (r"the same weights, 2008--2020", o["oos_sharpe"], BAD),
                 (r"minimum variance, fitted 1990--2007", o["gmv_sharpe"], GOOD),
                 (r"equal weights, $1/N$", o["eq_sharpe"], TAN),
                 (r"the market", o["mkt_sharpe"], MKT)]
@@ -114,7 +114,7 @@ class Tobin(VoiceoverScene):
                              r"$1/N$ out of sample; the estimation error in the means outweighs the gain from optimising",
                              12.4, 17, GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Test it honestly. Fit the tangency on 1990 to 2007, then hold those weights from 2008 to 2025. "
+            "Test it honestly. Fit the tangency on 1990 to 2007, then hold those weights from 2008 to 2020, the end of the research window. "
             f"<bookmark mark='a'/> In sample, its Sharpe ratio was {o['in_sharpe']:.2f}. Out of sample it earned "
             f"{o['oos_sharpe']:.2f}, worse than the market's {o['mkt_sharpe']:.2f}, worse than simply holding the ten "
             f"industries in equal amounts, {o['eq_sharpe']:.2f}, and worse than the minimum-variance portfolio, which "

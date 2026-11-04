@@ -147,7 +147,7 @@ class SDF(VoiceoverScene):
                 [(x0 + x1) / 2, ax.c2p(0, y)[1], 0])
             bars.add(VGroup(b_, MathTex(f"{v:.2f}", font_size=22).next_to(b_, RIGHT, buff=0.08),
                             label(nm, font_size=16).next_to([x0 - 0.15, ax.c2p(0, y)[1], 0], LEFT, buff=0)))
-        foot = wrapped_label(r"monthly 1963--2025, annualised. The bound for any model that prices these assets: its "
+        foot = wrapped_label(r"monthly 1963--2020, annualised. The bound for any model that prices these assets: its "
                              r"discount factor must have $\sigma(m)/E(m)$ at least this large, about 0.5 a year for the "
                              r"market and far more for the cross-section", 12.4, 17, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(

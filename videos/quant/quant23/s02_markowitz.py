@@ -165,9 +165,9 @@ class Markowitz(VoiceoverScene):
                              r"41\%: no investor would hold it", 3.4, 17, GREY_A).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
             "But look at the weights the optimiser wants for its best portfolio. <bookmark mark='a'/> Short telecoms by "
-            "forty percent, long shops and utilities by forty, short the catch-all 'other' industry. These are not "
+            "thirty percent, long shops and utilities by more than forty, short the catch-all 'other' industry by more than half. These are not "
             "insights about industries. They are the optimiser chasing small differences in average returns, which are "
-            "measured with enormous error: a mean return over thirty-six years still has a standard error of about two "
+            "measured with enormous error: a mean return over thirty-one years still has a standard error of about two "
             "and a half points a year. Markowitz's machine maximises the error along with the return."
         ) as vo:
             self.play(FadeIn(g), Create(zero))

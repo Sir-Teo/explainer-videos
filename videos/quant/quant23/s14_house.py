@@ -48,7 +48,7 @@ class House(VoiceoverScene):
                              r"advice", 12.0, 18, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "The research desk's first sheet, every number from this part. <bookmark mark='a'/> A tangency portfolio "
-            "whose Sharpe ratio halves out of sample, beaten by equal weights. A security market line half as steep as "
+            "whose Sharpe ratio falls by more than half out of sample, beaten by equal weights. A security market line about a third as steep as "
             "the CAPM says. Twenty-five portfolios that, in sample, demand a discount factor more volatile than any "
             "consumption model gives. A risk aversion of nearly seventy to explain the premium. Prices that swing more "
             "than their dividends justify. And industry run-ups that crash about half the time. Each is a measurement "

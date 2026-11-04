@@ -11,7 +11,7 @@ DESK = [
      r"is 17.3\%: diversification takes off less than three points when the correlation is a half"),
     (r"Why is the security market line flatter than the CAPM says?",
      r"one reading: investors who cannot borrow buy high-beta stocks to get more risk, bidding them up (Black, 1972; "
-     r"Frazzini and Pedersen, 2014). Betting against beta, levered low-beta long and high-beta short, earned 5.6\% a "
+     r"Frazzini and Pedersen, 2014). Betting against beta, levered low-beta long and high-beta short, earned 5.2\% a "
      r"year here"),
     (r"An asset has a Sharpe ratio of 2. What does that say about any model that prices it?",
      r"its discount factor must have $\sigma(m)/\mathbb{E}(m) \ge 2$: a volatility of 200\% a year, far beyond any "
