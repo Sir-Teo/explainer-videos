@@ -98,7 +98,7 @@ class March(VoiceoverScene):
         fit_right(side)
         with self.voiceover(
             "The same three weeks in the spread of medium-grade bonds over Treasuries: "
-            f"<bookmark mark='a'/> from {v[k0]:.2f} percent on the twentieth of February to {v[k]:.2f} on the "
+            f"<bookmark mark='a'/> from {v[k0]:.2f} percent on the twentieth of February to {v[k]:.2f} on "
             f"{d[k] % 100} March, the day of the announcement. <bookmark mark='b'/> By the end of June it was "
             f"back to {v[-1]:.2f}. The spread had priced a wave of defaults; the backstop priced most of it away."
         ) as vo:
