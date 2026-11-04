@@ -111,8 +111,8 @@ class DML(VoiceoverScene):
                      ylabel=r"price", xticks=[-20, 0, 20], yticks=[0, 15, 30], font_size=13)
             return VGroup(g, DashedVMobject(curve(g.ax, u, ex, REF, stroke_width=2.2), num_dashes=36),
                           curve(g.ax, u, np.clip(np.asarray(r["plain"]["snaps"][ck[i]]), 0, 32), BAD, stroke_width=3),
-                          curve(g.ax, u, np.clip(np.asarray(r["diff"]["snaps"][ck[i]]), 0, 32), GOOD, stroke_width=3.5),
-                          label(rf"epoch {ck[i]}", font_size=18, color=GREY_A).next_to(g, DOWN, buff=0.12))
+                          curve(g.ax, u, np.clip(np.asarray(r["diff"]["snaps"][ck[i]]), 0, 32), GOOD, stroke_width=3.5))
+            # the replay prints the step above the loss curve; one counter is enough
         rp = TrainingReplay(ep, np.array(runs), frame, checkpoints=[1] + [int(c) for c in ck[1:]],
                             ylabel=r"value loss (normalized)", xlabel=r"epoch", log_y=True, color=GOOD)
         leg = legend([(REF, r"exact"), (BAD, r"payoffs only"), (GOOD, r"payoffs and slopes"),
