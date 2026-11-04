@@ -278,3 +278,26 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | riffle shuffle, total variation distance, cutoff phenomenon | 鸽尾洗牌，全变差距离，截断现象 |
 | mixing time | 混合时间 |
 | Metropolis algorithm, Gibbs sampling, MCMC | Metropolis 算法，吉布斯抽样，马尔可夫链蒙特卡洛 |
+
+## Glossary (Part 8)
+
+| English | 中文 |
+|---|---|
+| sampling distribution, standard error | 抽样分布，标准误 |
+| unbiased, bias, Bessel's correction | 无偏，偏差，贝塞尔校正 |
+| degrees of freedom | 自由度 |
+| Helmert transformation | 赫尔默特变换 |
+| chi-squared distribution, Cochran's theorem | 卡方分布，科克伦定理 |
+| Student's t distribution, pivot | 学生 t 分布，枢轴量 |
+| paired design, two-sample t-test | 配对设计，两样本 t 检验 |
+| F distribution, analysis of variance | F 分布，方差分析 |
+| mean squared error, bias–variance trade-off | 均方误差，偏差–方差权衡 |
+| shrinkage | 收缩 |
+| Cramér–Rao bound, Fisher information | 克拉默–拉奥下界，费希尔信息 |
+| consistency, plug-in estimator, statistical functional | 相合性，代入估计量，统计泛函 |
+| Fisher's z transformation | 费希尔 z 变换 |
+| ratio estimator | 比率估计量 |
+| finite-population correction | 有限总体校正 |
+| purposive vs random sampling | 立意抽样与随机抽样 |
+| coverage, nominal level, Monte Carlo standard error | 覆盖率，名义水平，蒙特卡洛标准误 |
+| robustness, kurtosis | 稳健性，峰度 |
