@@ -164,8 +164,8 @@ class Copula(VoiceoverScene):
         edges = np.linspace(0, 30, 61)
         hg = np.histogram(np.clip(Lg, 0, 29.99), edges)[0] / len(Lg)
         ht = np.histogram(np.clip(Lt, 0, 29.99), edges)[0] / len(Lt)
-        g = axes([0, 30], [-4, 0], x_length=7.6, y_length=4.4, xlabel=r"pool loss in a year, \% of notional",
-                 ylabel=r"$\log_{10}$ probability", xticks=[0, 5, 10, 15, 20, 25, 30], yticks=[-4, -3, -2, -1, 0],
+        g = axes([0, 30], [-5, 0], x_length=7.6, y_length=4.4, xlabel=r"pool loss in a year, \% of notional",
+                 ylabel=r"$\log_{10}$ probability", xticks=[0, 5, 10, 15, 20, 25, 30], yticks=[-5, -4, -3, -2, -1, 0],
                  font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         mid = 0.5 * (edges[1:] + edges[:-1])
@@ -198,6 +198,8 @@ class Copula(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(lt), FadeIn(side[2]), FadeIn(side[3]), run_time=1.5)
         self.add(illustration(r"40{,}000 simulated years of each copula (the House's \texttt{copula\_defaults})"))
+        self.wait(0.4)
+        self.clear_scene()
         q = ask(r"with a Gaussian copula, does correlating the names raise or lower the chance that none of them "
                 r"defaults?")
         with self.voiceover("With a Gaussian copula, does raising the correlation make it more or less likely that no "
