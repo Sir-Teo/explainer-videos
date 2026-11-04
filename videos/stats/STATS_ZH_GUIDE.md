@@ -71,3 +71,53 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | standard error | 标准误 |
 | confidence interval | 置信区间 |
 | coverage | 覆盖率 |
+
+## Glossary (Part 2)
+
+| English | 中文 |
+|---|---|
+| the problem of points | 点数问题（赌金分配问题） |
+| expected value, expectation | 期望值，期望 |
+| classical probability | 古典概率 |
+| equally likely | 等可能 |
+| sample space, outcome, event | 样本空间，结果，事件 |
+| permutation / combination | 排列 / 组合 |
+| stars and bars | 隔板法（星与杠） |
+| Pascal's triangle | 帕斯卡三角形（杨辉三角） |
+| Bertrand's paradox | 贝特朗悖论 |
+| Kolmogorov's axioms | 柯尔莫哥洛夫公理 |
+| σ-algebra | σ-代数 |
+| countable additivity | 可数可加性 |
+| inclusion–exclusion | 容斥原理 |
+| union bound | 并集上界（布尔不等式） |
+| Bonferroni inequalities | 邦费罗尼不等式 |
+| derangement, the hat-check problem | 错排，帽子问题 |
+| conditional probability | 条件概率 |
+| multiplication rule | 乘法法则 |
+| law of total probability | 全概率公式 |
+| Bayes' theorem | 贝叶斯定理 |
+| prior / posterior odds | 先验 / 后验几率 |
+| likelihood ratio | 似然比 |
+| sensitivity / specificity / prevalence | 灵敏度 / 特异度 / 患病率 |
+| natural frequencies | 自然频数 |
+| prosecutor's fallacy | 检察官谬误 |
+| Monty Hall problem | 蒙提霍尔问题（三门问题） |
+| independent, pairwise / mutually | 独立，两两独立 / 相互独立 |
+| conditional independence | 条件独立 |
+| random variable | 随机变量 |
+| distribution, push-forward | 分布，推前测度 |
+| cumulative distribution function (CDF) | 累积分布函数 |
+| discrete / continuous / mixed / singular | 离散 / 连续 / 混合 / 奇异 |
+| the Cantor distribution, devil's staircase | 康托尔分布，魔鬼阶梯 |
+| law of the unconscious statistician (LOTUS) | 无意识统计学家定律 |
+| linearity of expectation | 期望的线性性 |
+| indicator | 示性变量 |
+| coupon collector | 赠券收集问题 |
+| covariance | 协方差 |
+| St. Petersburg paradox | 圣彼得堡悖论 |
+| utility | 效用 |
+| probability generating function | 概率母函数 |
+| Sicherman dice | 西克曼骰子 |
+| frequentist / Bayesian | 频率学派 / 贝叶斯学派 |
+| Dutch book, coherence | 荷兰赌，融贯性 |
+| Cox's theorem | 考克斯定理 |

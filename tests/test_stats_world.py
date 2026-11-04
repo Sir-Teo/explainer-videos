@@ -60,6 +60,15 @@ class WorldTests(unittest.TestCase):
             self.assertGreater(r[t & group].mean(), r[~t & group].mean())
         self.assertLess(r[t].mean(), r[~t].mean())
 
+    def test_screening_tests_are_independent_given_the_condition(self):
+        s, a = self.w.screening, self.w.adult
+        sick, ta, tb = s["sick"][a], s["test_a"][a], s["test_b"][a]
+        self.assertFalse(s["sick"][~a].any() or s["test_a"][~a].any())
+        self.assertAlmostEqual(sick.mean(), 0.0097, delta=0.001)
+        self.assertAlmostEqual(tb[sick].mean(), 0.90, delta=0.01)
+        self.assertAlmostEqual(tb[ta & sick].mean(), tb[sick].mean(), delta=0.015)
+        self.assertGreater(tb[ta].mean(), 2 * tb.mean())  # dependent overall
+
     def test_sample_is_without_replacement_and_inside_the_pool(self):
         idx = self.w.sample(500, among=self.w.adult, seed=11)
         self.assertEqual(len(np.unique(idx)), 500)
