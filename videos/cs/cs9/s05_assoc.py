@@ -12,6 +12,7 @@ class Assoc(VoiceoverScene):
         self.card()
         self.ways()
         self.replace()
+        self.plru()
         self.measured()
         self.writes()
 
@@ -80,6 +81,53 @@ class Assoc(VoiceoverScene):
             for mk, it in zip("abcd", items):
                 vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plru(self):
+        head = label(r"Tree pseudo-LRU: \ three bits for four ways", font_size=34).to_edge(UP, buff=0.35)
+        ways = VGroup(*[box(1.2, 0.6, rf"\text{{way {k}}}", DATA, 20) for k in range(4)]).arrange(RIGHT, buff=0.35)
+        ways.move_to(DOWN * 1.6)
+        n0 = Circle(radius=0.32, color=CTRL).move_to(UP * 1.2)
+        n1 = Circle(radius=0.32, color=CTRL).move_to(UP * 0.0 + LEFT * 1.6)
+        n2 = Circle(radius=0.32, color=CTRL).move_to(UP * 0.0 + RIGHT * 1.6)
+        edges = VGroup(Line(n0.get_bottom(), n1.get_top(), color=GREY_D), Line(n0.get_bottom(), n2.get_top(), color=GREY_D),
+                       *[Line(n.get_bottom(), w.get_top(), color=GREY_D) for n, w in
+                         ((n1, ways[0]), (n1, ways[1]), (n2, ways[2]), (n2, ways[3]))])
+        bits = [0, 0, 0]
+
+        def bitlabels():
+            return VGroup(*[MathTex(str(b), font_size=30, color=CTRL).move_to(n) for b, n in zip(bits, (n0, n1, n2))])
+
+        cur = bitlabels()
+        rule = label(r"each bit points to the half used \textit{less} recently: \ follow the bits to the victim",
+                     font_size=24, color=HEAD).to_edge(DOWN, buff=0.35)
+        seq = [0, 2, 1, 3]
+        with self.voiceover(
+            "Here is how hardware approximates LRU cheaply. For a four-way set, keep three bits in a little tree. "
+            "<bookmark mark='a'/> Each bit points towards the half of the set that was used less recently. Every "
+            "access flips the bits on its path to point away from itself. <bookmark mark='b'/> Use way zero, then two, "
+            "then one, then three, and watch the bits. <bookmark mark='c'/> To choose a victim, follow the bits from the "
+            "root: they lead to a way that has not been used for a while, though not always the very least recent. "
+            "Three bits instead of a full ordering; for sixteen ways, fifteen bits instead of forty-five."
+        ) as vo:
+            self.play(FadeIn(head), Create(edges), Create(n0), Create(n1), Create(n2), FadeIn(ways), FadeIn(cur))
+            vo.wait_until("a")
+            self.play(FadeIn(rule))
+            vo.wait_until("b")
+            for w in seq:
+                # point away from the used half
+                bits[0] = 1 if w < 2 else 0
+                if w < 2:
+                    bits[1] = 1 if w == 0 else 0
+                else:
+                    bits[2] = 1 if w == 2 else 0
+                new = bitlabels()
+                self.play(Indicate(ways[w], color=YES), Transform(cur, new), run_time=0.9)
+            vo.wait_until("c")
+            v = (2 + (0 if bits[2] == 0 else 1)) if bits[0] else (0 if bits[1] == 0 else 1)
+            self.play(Indicate(ways[v], color=NO, scale_factor=1.2))
         self.wait(0.3)
         self.clear_scene()
 

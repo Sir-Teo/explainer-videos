@@ -11,6 +11,7 @@ class Wall(VoiceoverScene):
         self.card()
         self.gap()
         self.ratio()
+        self.pyramid()
 
     def card(self):
         card = chapter_card(1, r"The memory wall", r"Why is memory so far away?", lit=(1995,),
@@ -104,5 +105,45 @@ class Wall(VoiceoverScene):
             for mk, l in zip("abcd", lines):
                 vo.wait_until(mk)
                 self.play(FadeIn(l, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def pyramid(self):
+        head = label(r"The hierarchy: \ small and fast, \ big and cheap", font_size=36).to_edge(UP, buff=0.35)
+        levels = [(r"registers", r"about 1 KB", r"in the core", YES, 1.6),
+                  (r"L1 \ / \ L2 caches", r"32 KB \ / \ 1 MB per core", r"SRAM on the chip", YES, 3.0),
+                  (r"L3", r"tens of MB, \ shared", r"SRAM on the chip", DATA, 4.4),
+                  (r"DRAM", r"16 GB here", r"about \$3 a gigabyte", CTRL, 5.8),
+                  (r"SSD", r"terabytes", r"about 6 cents a gigabyte", INF, 7.2),
+                  (r"disk", r"tens of terabytes", r"about 2 cents a gigabyte", NO, 8.6)]
+        g = VGroup()
+        for k, (name, size, cost, col, w) in enumerate(levels):
+            r = Rectangle(width=w, height=0.62, stroke_color=col, stroke_width=2, fill_color=col, fill_opacity=0.18)
+            t = label(name, font_size=22, color=WHITE).move_to(r)
+            g.add(VGroup(r, t))
+        g.arrange(DOWN, buff=0.06).move_to(LEFT * 1.6 + DOWN * 0.2)
+        sides = VGroup()
+        for (name, size, cost, col, w), row in zip(levels, g):
+            sides.add(label(rf"{size} \quad {cost}", font_size=19, color=col).next_to(row, RIGHT, buff=0.3))
+        arrow = Arrow(g.get_corner(UL) + LEFT * 0.5, g.get_corner(DL) + LEFT * 0.5, color=GREY_B, stroke_width=3)
+        al = label(r"slower, \\ bigger, \\ cheaper", font_size=20, color=GREY_B).next_to(arrow, LEFT, buff=0.1)
+        cap = note(r"sizes for this machine; \ prices typical of 2024", font_size=18).to_edge(DOWN, buff=0.2)
+        with self.voiceover(
+            "So memory comes in layers. <bookmark mark='a'/> At the top, the registers: a few hundred bytes, inside "
+            "the core. Then caches made of SRAM, six transistors per bit, on the processor chip itself: tens of "
+            "kilobytes at the first level, a megabyte at the second, tens of megabytes shared. <bookmark mark='b'/> "
+            "Then DRAM, one transistor and one capacitor per bit, on separate chips: gigabytes, at a few dollars a "
+            "gigabyte. Then flash in an SSD, and magnetic disk, each about a hundred times cheaper per byte and "
+            "thousands of times slower than the last. <bookmark mark='c'/> No single technology is both fast and "
+            "cheap, so every computer builds this pyramid, and the art is to keep the data you need now near the top."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(VGroup(r, sd)) for r, sd in zip(g[:3], sides[:3])], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(VGroup(r, sd)) for r, sd in zip(g[3:], sides[3:])], lag_ratio=0.3))
+            vo.wait_until("c")
+            self.play(GrowArrow(arrow), FadeIn(al), FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()

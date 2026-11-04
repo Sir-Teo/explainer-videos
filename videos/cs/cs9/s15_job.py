@@ -11,6 +11,7 @@ class Job(VoiceoverScene):
     def construct(self):
         self.card()
         self.scans()
+        self.without()
         self.price()
         self.ledger()
 
@@ -64,6 +65,35 @@ class Job(VoiceoverScene):
             self.play(Create(ax), FadeIn(xt))
             self.play(Create(lru), FadeIn(ll), run_time=1.5)
             self.play(Create(front), FadeIn(lf), run_time=1.5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def without(self):
+        sc = load("scans")
+        j = load("job")
+        lat = j["clocks"]["pebble"]["latencies"]
+        dram_s = sc["line_reads"] * lat[3] / (884.9557522123894e6)
+        head = label(r"And with no cache at all?", font_size=36).to_edge(UP, buff=0.4)
+        lines = VGroup(
+            label(rf"{sc['line_reads'] / 1e9:.1f} billion table-line reads \ $\times$ \ {lat[3]} cycles of DRAM",
+                  font_size=26, color=NO),
+            label(rf"$\approx$ {dram_s / 60:.0f} minutes of waiting, \ against 57 seconds for the whole Job", font_size=28,
+                  color=HEAD),
+            label(r"the caches are why the out-of-order core's 57 seconds are possible at all", font_size=24,
+                  color=YES),
+        ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
+        with self.voiceover(
+            "Before asking what the misses cost, ask what the caches are worth. <bookmark mark='a'/> If every one of "
+            "the three billion table-line reads went to DRAM, a hundred sixty-six cycles each at Pebble's clock, and "
+            "nothing overlapped, <bookmark mark='b'/> the reads alone would take about nine minutes, against "
+            "fifty-seven seconds for the whole Job. <bookmark mark='c'/> Even missing L1 nine times in ten, the "
+            "hierarchy turns that into almost nothing, because the second level holds the entire table."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, l in zip("abc", lines):
+                vo.wait_until(mk)
+                self.play(FadeIn(l, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

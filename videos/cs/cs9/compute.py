@@ -859,5 +859,106 @@ def compute_frontier() -> dict:
 ITEMS.update({"oblivious": compute_oblivious, "pebbles": compute_pebbles, "dram": compute_dram,
               "frontier": compute_frontier})
 
+
+# ---------------------------------------------------------------------------
+# more measurements: line size, huge pages, data layout, software prefetch
+# ---------------------------------------------------------------------------
+def compute_linesize() -> dict:
+    """The Job's first chapter: miss rate of a 4 KB fully associative LRU cache against line size, and the bytes moved."""
+    from explainer.cs.pebble.cache import miss_curve, stack_distances
+
+    t = chapter_trace()
+    out = []
+    for line in (8, 16, 32, 64, 128, 256, 512, 1024):
+        lines = t.addr // line
+        d = stack_distances(lines)
+        m = miss_curve(d, [4096 // line])[0]
+        out.append({"line": line, "miss": m, "bytes_moved": m * len(t) * line})
+    return {"rows": out, "cache": 4096, "accesses": len(t)}
+
+
+CHASE_HUGE = CHASE.replace("char *buf = aligned_alloc(4096, bytes);",
+                           "char *buf = aligned_alloc(2 << 20, (bytes + (2 << 20) - 1) / (2 << 20) * (2 << 20));\n"
+                           "    madvise(buf, bytes, MADV_HUGEPAGE);").replace("#include <time.h>",
+                                                                          "#include <time.h>\n#include <sys/mman.h>")
+
+
+def compute_hugepages() -> dict:
+    """The staircase again, asking the kernel for 2 MB pages (transparent huge pages), so far fewer translations."""
+    sizes = [1 << k for k in range(20, 30)]
+    thp = Path("/sys/kernel/mm/transparent_hugepage/enabled")
+    mode = thp.read_text().strip() if thp.exists() else "unknown"
+    out = []
+    for b in sizes:
+        small = float(_run_c(CHASE, [b]).split()[0])
+        huge = float(_run_c(CHASE_HUGE, [b]).split()[0])
+        out.append({"bytes": b, "small": small, "huge": huge})
+    return {"points": out, "thp": mode}
+
+
+LAYOUT = r"""
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+static double now(void) { struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t); return t.tv_sec + t.tv_nsec * 1e-9; }
+typedef struct { float x, y, z, vx, vy, vz, mass, charge; int id, kind, flags, pad[5]; } P;  /* 64 bytes */
+int main(void) {
+    size_t n = 1 << 22;  /* 4 million particles: 256 MB as structs */
+    P *a = malloc(n * sizeof(P)); float *x = malloc(n * sizeof(float));
+    for (size_t i = 0; i < n; i++) { a[i].x = (float)(i % 1000); x[i] = a[i].x; }
+    double best_s = 1e9, best_a = 1e9; float s1 = 0, s2 = 0;
+    for (int r = 0; r < 5; r++) {
+        double t = now(); float s = 0; for (size_t i = 0; i < n; i++) s += a[i].x; t = now() - t; s1 += s;
+        if (t < best_s) best_s = t;
+        t = now(); s = 0; for (size_t i = 0; i < n; i++) s += x[i]; t = now() - t; s2 += s;
+        if (t < best_a) best_a = t;
+    }
+    printf("%.5f %.5f %g %g\n", best_s, best_a, s1, s2);
+    return 0;
+}
+"""
+
+
+def compute_layout() -> dict:
+    s, a, *_ = _run_c(LAYOUT, opt="-O2").split()
+    return {"structs": float(s), "array": float(a), "n": 1 << 22, "struct_bytes": 64}
+
+
+PREFETCH = r"""
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
+static double now(void) { struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t); return t.tv_sec + t.tv_nsec * 1e-9; }
+static uint64_t s = 88172645463325252ull;
+static uint64_t rnd(void) { s ^= s << 13; s ^= s >> 7; s ^= s << 17; return s; }
+int main(void) {
+    /* sum a[idx[i]]: the addresses are random, but known in advance, so software can ask for them early */
+    size_t n = 1 << 24, m = 1 << 25;            /* 16 M lookups into 32 M doubles (256 MB) */
+    double *a = malloc(m * sizeof(double)); uint32_t *idx = malloc(n * sizeof(uint32_t));
+    for (size_t i = 0; i < m; i++) a[i] = i & 7;
+    for (size_t i = 0; i < n; i++) idx[i] = rnd() % m;
+    double best0 = 1e9, best1 = 1e9, z = 0;
+    for (int r = 0; r < 3; r++) {
+        double t = now(), sum = 0; for (size_t i = 0; i < n; i++) sum += a[idx[i]]; t = now() - t; z += sum;
+        if (t < best0) best0 = t;
+        t = now(); sum = 0;
+        for (size_t i = 0; i < n; i++) { if (i + 16 < n) __builtin_prefetch(&a[idx[i + 16]]); sum += a[idx[i]]; }
+        t = now() - t; z += sum; if (t < best1) best1 = t;
+    }
+    printf("%.4f %.4f %g\n", best0, best1, z);
+    return 0;
+}
+"""
+
+
+def compute_swprefetch() -> dict:
+    t0, t1, _ = _run_c(PREFETCH).split()
+    return {"plain": float(t0), "prefetch": float(t1), "lookups": 1 << 24, "ahead": 16}
+
+
+ITEMS.update({"linesize": compute_linesize, "hugepages": compute_hugepages, "layout": compute_layout,
+              "swprefetch": compute_swprefetch})
+
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

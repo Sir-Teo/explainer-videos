@@ -10,6 +10,7 @@ class External(VoiceoverScene):
     def construct(self):
         self.card()
         self.model()
+        self.merge()
         self.btree()
 
     def card(self):
@@ -51,6 +52,40 @@ class External(VoiceoverScene):
             self.play(Write(sort))
             vo.wait_until("c")
             self.play(FadeIn(ex))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def merge(self):
+        head = label(r"External merge sort: \ two kinds of pass", font_size=34).to_edge(UP, buff=0.35)
+        n_runs = 8
+        blocks = VGroup(*[Rectangle(width=1.3, height=0.5, stroke_color=GREY_C, stroke_width=1.5) for _ in range(n_runs)])
+        blocks.arrange(RIGHT, buff=0.15).move_to(UP * 1.3)
+        lab0 = label(r"the input: \ $N$ items on disk", font_size=20, color=GREY_B).next_to(blocks, UP, buff=0.15)
+        runs = VGroup(*[b.copy().set_fill(DATA, opacity=0.4).set_stroke(DATA) for b in blocks])
+        rl = label(r"pass 1: \ read $M$ items, \ sort them in memory, \ write a sorted run: \ $N/M$ runs", font_size=22,
+                   color=DATA).next_to(blocks, DOWN, buff=0.3)
+        merged = Rectangle(width=blocks.width, height=0.5, stroke_color=YES, stroke_width=2, fill_color=YES,
+                           fill_opacity=0.35).move_to(DOWN * 1.2)
+        arrows = VGroup(*[Arrow(r.get_bottom(), merged.get_top(), buff=0.1, color=GREY_C, stroke_width=2) for r in runs])
+        ml = label(r"pass 2: \ merge up to $M/B$ runs at once, \ one block of each in memory", font_size=22,
+                   color=YES).next_to(merged, DOWN, buff=0.3)
+        tot = label(r"passes $= 1 + \lceil \log_{M/B} (N/M) \rceil$: \ each reads and writes everything once",
+                    font_size=24, color=HEAD).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "The algorithm that meets the sorting bound is external merge sort. <bookmark mark='a'/> First pass: read "
+            "as much as fits in memory, M items, sort it there, and write it back as a sorted run. That makes N over "
+            "M runs. <bookmark mark='b'/> Then merge: keep one block of each run in memory and repeatedly output the "
+            "smallest front item. With M over B blocks of room, M over B runs can be merged at once. <bookmark "
+            "mark='c'/> So the number of passes is one plus the logarithm, to the base M over B, of the number of "
+            "runs, and each pass reads and writes everything once. With a large memory that is usually two passes."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(blocks), FadeIn(lab0))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Transform(b, r) for b, r in zip(blocks, runs)], lag_ratio=0.15), FadeIn(rl))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.05), FadeIn(merged), FadeIn(ml))
+            vo.wait_until("c")
+            self.play(FadeIn(tot))
         self.wait(0.3)
         self.clear_scene()
 

@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FIELD_COLOR, FUNC, HEAD, HIST, INF, NO, PART, YES,
-                                  Shelves, address_bits, fmt, load, mono)
+                                  Shelves, address_bits, box, fmt, load, mono)
 
 # a little direct-mapped cache: 8 sets of one 16-byte line, 8-bit addresses: tag 1 bit, index 3, offset 4
 SETS, LINE = 8, 16
@@ -15,6 +15,7 @@ class Direct(VoiceoverScene):
     def construct(self):
         self.card()
         self.split()
+        self.lookup()
         self.walk()
         self.real()
 
@@ -58,6 +59,57 @@ class Direct(VoiceoverScene):
             self.play(FadeIn(a.braces[1]), FadeIn(expl[1]))
             vo.wait_until("d")
             self.play(FadeIn(a.braces[0]), FadeIn(expl[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def lookup(self):
+        head = label(r"The lookup, \ in hardware", font_size=36).to_edge(UP, buff=0.3)
+        a = address_bits(0x0A4C, 6, 4, 6, cell=0.32, font_size=15).to_edge(UP, buff=1.1)
+        rows = VGroup()
+        for k in range(8):
+            v = Rectangle(width=0.4, height=0.34, stroke_color=GREY_C, stroke_width=1)
+            t = Rectangle(width=1.4, height=0.34, stroke_color=FIELD_COLOR["tag"], stroke_width=1)
+            d = Rectangle(width=4.0, height=0.34, stroke_color=GREY_C, stroke_width=1)
+            rows.add(VGroup(v, t, d).arrange(RIGHT, buff=0))
+        rows.arrange(DOWN, buff=0).move_to(DOWN * 0.6 + LEFT * 1.6)
+        heads = VGroup(label(r"valid", font_size=16, color=GREY_B).next_to(rows[0][0], UP, buff=0.08),
+                       label(r"tag", font_size=16, color=FIELD_COLOR["tag"]).next_to(rows[0][1], UP, buff=0.08),
+                       label(r"data: \ 64 bytes", font_size=16, color=GREY_B).next_to(rows[0][2], UP, buff=0.08))
+        sel = rows[5].copy().set_fill(FIELD_COLOR["index"], opacity=0.3)
+        idx_arrow = Arrow(a.fields["index"].get_bottom(), rows[5].get_left() + LEFT * 0.05, buff=0.1,
+                          color=FIELD_COLOR["index"], stroke_width=3)
+        cmp_ = Circle(radius=0.32, color=HEAD).move_to(RIGHT * 2.9 + DOWN * 0.1)
+        cl = MathTex(r"=", font_size=36, color=HEAD).move_to(cmp_)
+        a1 = Arrow(a.fields["tag"].get_bottom(), cmp_.get_top(), buff=0.1, color=FIELD_COLOR["tag"], stroke_width=3)
+        a2 = Arrow(rows[5][1].get_right(), cmp_.get_left(), buff=0.1, color=FIELD_COLOR["tag"], stroke_width=3)
+        andg = box(0.9, 0.5, r"\text{AND}", YES, 18).next_to(cmp_, DOWN, buff=0.5)
+        a3 = Arrow(cmp_.get_bottom(), andg.get_top(), buff=0.05, color=HEAD, stroke_width=3)
+        a4 = Arrow(rows[5][0].get_bottom() + DOWN * 0.05, andg.get_left(), buff=0.1, color=GREY_B, stroke_width=2)
+        hit = label(r"hit", font_size=24, color=YES).next_to(andg, DOWN, buff=0.15)
+        mux = box(1.3, 0.5, r"\text{select byte}", FIELD_COLOR["offset"], 16).next_to(rows, DOWN, buff=0.45).align_to(
+            rows[5][2], RIGHT)
+        a5 = Arrow(rows[-1][2].get_bottom(), mux.get_top(), buff=0.05, color=GREY_B, stroke_width=2)
+        a6 = CurvedArrow(a.fields["offset"].get_right(), mux.get_right() + RIGHT * 0.05, angle=-1.2,
+                         color=FIELD_COLOR["offset"], stroke_width=3)
+        with self.voiceover(
+            "In hardware the lookup is a few gates, all working in parallel. <bookmark mark='a'/> The cache is a "
+            "small memory with one row per line: a valid bit, the stored tag, and the sixty-four bytes of data. The "
+            "index bits of the address select a row, exactly as Part 5's register file selected a register. <bookmark "
+            "mark='b'/> A comparator checks the row's stored tag against the address's tag, and an AND gate with the "
+            "valid bit says hit or miss. <bookmark mark='c'/> Meanwhile the offset bits steer a multiplexer that picks "
+            "the requested bytes out of the line. All three happen in the same cycle; that is why an L1 cache can "
+            "answer in four."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(a.cells), FadeIn(a.braces))
+            vo.wait_until("a")
+            self.play(FadeIn(rows), FadeIn(heads))
+            self.play(GrowArrow(idx_arrow), FadeIn(sel))
+            vo.wait_until("b")
+            self.play(GrowArrow(a1), GrowArrow(a2), Create(cmp_), FadeIn(cl))
+            self.play(GrowArrow(a3), GrowArrow(a4), FadeIn(andg), FadeIn(hit))
+            vo.wait_until("c")
+            self.play(FadeIn(mux), GrowArrow(a5), Create(a6))
         self.wait(0.3)
         self.clear_scene()
 

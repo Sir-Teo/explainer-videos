@@ -12,6 +12,7 @@ class Prefetch(VoiceoverScene):
         self.card()
         self.idea()
         self.measured()
+        self.software()
 
     def card(self):
         card = chapter_card(12, r"Prefetching", r"Can the cache fetch a line before it is asked?", lit=(1995,),
@@ -76,5 +77,37 @@ class Prefetch(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(GrowFromEdge(ch.bars[k], DOWN), FadeIn(ch.vals[k]), FadeIn(ch.names[k]))
             self.play(FadeIn(cold))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def software(self):
+        d = load("swprefetch")
+        head = label(r"Software prefetch: \ a cautionary measurement", font_size=34).to_edge(UP, buff=0.4)
+        code = VGroup(mono("for (i = 0; i < n; i++) {", 20),
+                      mono("    __builtin_prefetch(&a[idx[i + 16]]);   // ask early", 20, color=HEAD),
+                      mono("    sum += a[idx[i]];                      // random lines of 256 MB", 20),
+                      mono("}", 20)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(UP * 1.0)
+        res = VGroup(
+            label(rf"16 million random lookups: \ {d['plain']:.2f} s plain, \ {d['prefetch']:.2f} s with the prefetch",
+                  font_size=26, color=NO),
+            label(r"the out-of-order core already had a dozen independent misses in flight: \ the prefetches only "
+                  r"added work", font_size=24, color=GREY_A),
+            label(r"prefetch by hand only after measuring: \ it pays for pointer chains, \ not for independent loads",
+                  font_size=24, color=HEAD),
+        ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "Programs can prefetch for themselves, too. Here a loop sums sixteen million randomly chosen elements of a "
+            "two-hundred-fifty-six-megabyte array. The addresses are random, but known in advance, so the loop can ask "
+            "for the element sixteen iterations ahead. <bookmark mark='a'/> On this machine it made the loop slower: "
+            "point four eight seconds against point four three. <bookmark mark='b'/> The reason is Part 8's core. The "
+            "lookups do not depend on each other, so the out-of-order window already had a dozen misses in flight; "
+            "the prefetch instructions found nothing left to hide, and only added work. <bookmark mark='c'/> Software "
+            "prefetch pays where the core cannot look ahead, as in a chain of pointers, and only measurement tells "
+            "which case you are in."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(code))
+            for mk, r in zip("abc", res):
+                vo.wait_until(mk)
+                self.play(FadeIn(r, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

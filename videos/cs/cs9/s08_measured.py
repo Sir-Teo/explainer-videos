@@ -14,6 +14,7 @@ class Measured(VoiceoverScene):
         self.card()
         self.method()
         self.stairs()
+        self.huge()
         self.bandwidth()
 
     def card(self):
@@ -106,6 +107,49 @@ class Measured(VoiceoverScene):
             self.play(FadeIn(ann[4]))
             vo.wait_until("e")
             self.play(FadeIn(vm))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def huge(self):
+        d = load("hugepages")["points"]
+        head = label(r"The top of the staircase: \ translation", font_size=34).to_edge(UP, buff=0.3)
+        xs = [np.log2(p["bytes"]) for p in d]
+        ax = Axes(x_range=[min(xs), max(xs) + 0.3, 1], y_range=[0, 400, 100], x_length=9.5, y_length=3.8, tips=False,
+                  axis_config={"color": GREY_C, "font_size": 16}).move_to(DOWN * 0.4 + LEFT * 0.6)
+        ax.y_axis.add_numbers([0, 100, 200, 300, 400], font_size=16, num_decimal_places=0)
+        ticks = VGroup(*[label(size_label(p["bytes"]), font_size=15, color=GREY_B).next_to(
+            ax.c2p(np.log2(p["bytes"]), 0), DOWN, buff=0.12) for p in d])
+        small = VMobject(color=NO, stroke_width=4).set_points_as_corners(
+            [ax.c2p(np.log2(p["bytes"]), p["small"]) for p in d])
+        huge = VMobject(color=YES, stroke_width=4).set_points_as_corners(
+            [ax.c2p(np.log2(p["bytes"]), p["huge"]) for p in d])
+        ls = label(r"4 KB pages", font_size=22, color=NO).next_to(small.get_end(), UP, buff=0.1)
+        lh = label(r"2 MB pages", font_size=22, color=YES).next_to(huge.get_end(), DOWN, buff=0.15)
+        yl = note(r"nanoseconds per dependent load", font_size=18).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
+        facts = VGroup(
+            label(r"every address is translated, \ page by page; \ the TLB caches the translations", font_size=22,
+                  color=GREY_A),
+            label(rf"at 512 MB: \ {d[-1]['small']:.0f} ns \ $\to$ \ {d[-1]['huge']:.0f} ns \ with huge pages",
+                  font_size=24, color=HEAD),
+        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.25)
+        with self.voiceover(
+            "That last climb deserves a second look. Every address a program uses is virtual, and the hardware "
+            "translates it to a physical address, page by page, through tables that themselves live in memory. A "
+            "small cache of translations, the TLB, covers a few thousand four-kilobyte pages: a few megabytes. "
+            "<bookmark mark='a'/> Beyond that, a random load first misses in the TLB and walks the page tables, then "
+            "fetches the data. <bookmark mark='b'/> Ask the operating system for two-megabyte pages instead, and each "
+            "translation covers five hundred times as much memory. At five hundred twelve megabytes the latency "
+            "falls from three hundred seventy-six nanoseconds to a hundred seventy-seven: half of the time had been "
+            "spent finding where the data was. Databases and virtual machines use huge pages for exactly this "
+            "reason. Part 32 builds the tables."
+        ) as vo:
+            self.play(FadeIn(head), Create(ax), FadeIn(ticks), FadeIn(yl), FadeIn(facts[0]))
+            vo.wait_until("a")
+            self.play(Create(small), FadeIn(ls), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Create(huge), FadeIn(lh), run_time=1.5)
+            self.play(FadeIn(facts[1]))
         self.wait(0.3)
         self.clear_scene()
 
