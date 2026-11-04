@@ -11,8 +11,9 @@ class Rare(VoiceoverScene, TreeMixin):
         self.derive()
         self.converge()
         self.lecam()
-        self.tree_update(2, "The second arrow: <bookmark mark='t'/> a binomial with many trials and a small chance of "
-                            "success, n times p held at lambda, becomes a Poisson.")
+        self.moments()
+        self.tree_voiceover("The second arrow: <bookmark mark='t'/> a binomial with many trials and a small chance of "
+                            "success, n times p held at lambda, becomes a Poisson.", 2)
 
     def card(self):
         card = chapter_card(2, r"The law of rare events", r"Many chances, each tiny: \ why horse kicks are Poisson",
@@ -139,4 +140,36 @@ class Rare(VoiceoverScene, TreeMixin):
             self.play(Create(bd), Write(ex), FadeIn(leg))
             vo.wait_until("d")
             self.play(FadeIn(more))
+        self.clear_scene()
+
+    def moments(self):
+        rows = [
+            cmath(r"E X", r"=", r"\sum_{k \ge 1} k\, \frac{\lambda^k e^{-\lambda}}{k!}", r"=",
+                  r"\lambda \sum_{k \ge 1} \frac{\lambda^{k-1} e^{-\lambda}}{(k-1)!}", r"=", r"\lambda", font_size=32),
+            cmath(r"E\, X(X-1)", r"=", r"\lambda^2 \sum_{k \ge 2} \frac{\lambda^{k-2} e^{-\lambda}}{(k-2)!}", r"=",
+                  r"\lambda^2", font_size=32),
+            cmath(r"\mathrm{Var}\, X", r"=", r"\lambda^2 + \lambda - \lambda^2", r"=", r"\lambda", font_size=36),
+        ]
+        rows[0][6].set_color(EXACT)
+        rows[2][4].set_color(EXACT)
+        whys = [why(r"cancel one $k$; \ the sum is a whole Poisson"), why(r"cancel two"),
+                why(r"$E X^2 = E X(X-1) + E X$")]
+        bk = label(r"Bortkiewicz's corps-years: \ mean $0.61$, \ variance $0.61$", font_size=26, color=S.MUSEUM)
+        bk.to_edge(DOWN, buff=0.9)
+        od = label(r"a variance well above the mean signals something more: \ chapter 12", font_size=22, color=GREY_B)
+        od.next_to(bk, DOWN, buff=0.2)
+        with self.voiceover(
+            "One more property of the Poisson, and it's the one Bortkiewicz checked. <bookmark mark='a'/> Its mean: "
+            "cancel one k against the factorial, and what's left is lambda times a whole Poisson distribution, "
+            "which sums to one. <bookmark mark='b'/> Cancel two, and the expectation of X times X minus one is "
+            "lambda squared. <bookmark mark='c'/> So the variance is lambda too: for a Poisson, mean and variance are "
+            "equal. <bookmark mark='d'/> The horse kicks pass this test, point six one and point six one. When real "
+            "counts have a variance far above their mean, something else is going on, and chapter twelve says what."
+        ) as vo:
+            step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=0.6, edge=6.9)
+            for k, m in enumerate("abc"):
+                vo.wait_until(m)
+                step(k, transform=False)
+            vo.wait_until("d")
+            self.play(FadeIn(bk), FadeIn(od))
         self.clear_scene()

@@ -82,7 +82,16 @@ def compute_binomial():
     steps = g.random((40, n)) < p
     paths = np.cumsum(steps, axis=1)
     many = (g.random((20_000, n)) < p).sum(axis=1)
-    return {"n": n, "p": p, "pmf": pmf, "E": float(d.E()), "Var": float(d.var()), "paths": steps.astype(int),
+    # a poll: how many of 100 World adults are taller than 180 cm?
+    h = W.height[W.adult]
+    p180 = float((h > 180).mean())
+    polls = np.array([int((W.height[W.sample(100, among=W.adult, seed=7000 + s)] > 180).sum()) for s in range(2000)])
+    poll_k = np.arange(0, 41)
+    poll_emp = np.bincount(np.minimum(polls, 40), minlength=41)[:41] / len(polls)
+    poll_pmf = stats.binom.pmf(poll_k, 100, p180)
+    return {"p180": p180, "poll_k": poll_k, "poll_emp": poll_emp, "poll_pmf": poll_pmf,
+            "poll_mean": float(polls.mean()), "poll_var": float(polls.var()),
+            "n": n, "p": p, "pmf": pmf, "E": float(d.E()), "Var": float(d.var()), "paths": steps.astype(int),
             "ends": paths[:, -1], "sim_mean": float(many.mean()), "sim_var": float(many.var()),
             "c_10_3": math.comb(10, 3)}
 
@@ -173,7 +182,15 @@ def compute_process():
     counts = np.histogram(arrivals, np.arange(0, arrivals[-1], 60.0))[0]  # buses per hour
     # gamma: time to the 3rd bus
     third = g.gamma(3, mean_gap, 50_000)
-    return {"mean_gap": mean_gap, "times": times, "wait_mean": float(wait.mean()), "seen_mean": float(seen.mean()),
+    a_bus = np.cumsum(g.exponential(10.0, 30_000))
+    b_bus = np.cumsum(g.exponential(15.0, 20_000))
+    horizon = min(a_bus[-1], b_bus[-1])
+    merged = np.sort(np.r_[a_bus[a_bus < horizon], b_bus[b_bus < horizon]])
+    merged_gap = float(np.diff(merged).mean())
+    room = a_bus[g.random(len(a_bus)) < 0.6]
+    room_gap = float(np.diff(room).mean())
+    return {"merged_gap": merged_gap, "room_gap": room_gap, "a_sample": a_bus[a_bus < 120], "b_sample": b_bus[b_bus < 120],
+            "mean_gap": mean_gap, "times": times, "wait_mean": float(wait.mean()), "seen_mean": float(seen.mean()),
             "seen": seen[:4000], "gaps_sample": long_gaps[:4000], "per_hour": counts[:2000],
             "per_hour_mean": float(counts.mean()), "per_hour_var": float(counts.var()), "third": third[:20000]}
 
@@ -188,7 +205,12 @@ def compute_normal():
     r = np.hypot(xy[:, 0], xy[:, 1])
     th = np.arctan2(xy[:, 1], xy[:, 0])
     stirling = [(n, math.factorial(n), math.sqrt(2 * math.pi * n) * (n / math.e) ** n) for n in (1, 5, 10, 20)]
-    return {"binoms": nest(out), "xy": xy, "theta_hist": np.histogram(th, np.linspace(-np.pi, np.pi, 25))[0],
+    men = W.height[W.adult & W.male]
+    mu, sd = float(men.mean()), float(men.std())
+    within = [float((np.abs(men - mu) < k * sd).mean()) for k in (1, 2, 3)]
+    rule = [float(stats.norm.cdf(k) - stats.norm.cdf(-k)) for k in (1, 2, 3)]
+    return {"men_mu": mu, "men_sd": sd, "within": within, "rule": rule, "n_men": int(men.size),
+            "binoms": nest(out), "xy": xy, "theta_hist": np.histogram(th, np.linspace(-np.pi, np.pi, 25))[0],
             "r_mean": float(r.mean()), "stirling": [[n, float(a), float(b), float(a / b)] for n, a, b in stirling],
             "gauss_integral": float(np.sqrt(np.pi))}
 
@@ -268,7 +290,13 @@ def compute_tails():
     edges = np.logspace(0, np.log10(x.max()) + 1e-9, 25)
     h, e = np.histogram(x, edges, density=True)
     mid = np.sqrt(e[:-1] * e[1:])
-    return {"pops": pops, "ranks": ranks, "slope_rank": slope_rank, "alpha": alpha, "n": n,
+    inc = np.sort(W.income[W.adult])[::-1]
+    shares = {str(q): float(inc[: int(q * len(inc))].sum() / inc.sum()) for q in (0.01, 0.1, 0.2)}
+    a8020 = math.log(5) / math.log(4)
+    qs = np.linspace(0.01, 1, 100)
+    lorenz_par = {str(a): (qs ** (1 - 1 / a)).tolist() for a in (1.16, 2.0, 3.0)}
+    return {"shares": shares, "a8020": a8020, "qs": qs, "lorenz_par": lorenz_par,
+            "pops": pops, "ranks": ranks, "slope_rank": slope_rank, "alpha": alpha, "n": n,
             "ls": np.array(ls), "mle": np.array(mle), "ls_mean": float(np.mean(ls)), "ls_sd": float(np.std(ls)),
             "mle_mean": float(np.mean(mle)), "mle_sd": float(np.std(mle)), "ex_mid": mid[h > 0], "ex_h": h[h > 0]}
 

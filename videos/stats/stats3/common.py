@@ -47,7 +47,8 @@ def pmf_dots(ax, ks, ps, color, radius=0.06) -> VGroup:
 class TreeMixin:
     """The family tree at a chapter's end: earlier arrows lit, this chapter's arrows lighting up."""
 
-    def tree_update(self, chapter: int, narration: str, scale=0.92):
+    def tree_voiceover(self, narration: str, chapter: int, scale=0.92):
+        """(Named ``*_voiceover`` so ``tools/lecture_length.py`` counts its narration.)"""
         ft = FamilyTree().scale(scale)
         before = edges_before(chapter)
         nodes = {n for e in before for n in FAMILY_EDGES[e][:2]}

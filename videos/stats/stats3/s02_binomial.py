@@ -11,8 +11,9 @@ class Binomial(VoiceoverScene, TreeMixin):
         self.paths()
         self.formula()
         self.moments()
-        self.tree_update(1, "So the first arrow of the family tree: <bookmark mark='t'/> add up n independent "
-                            "Bernoulli trials, and you get a binomial.")
+        self.poll()
+        self.tree_voiceover("So the first arrow of the family tree: <bookmark mark='t'/> add up n independent "
+                            "Bernoulli trials, and you get a binomial.", 1)
 
     def card(self):
         card = chapter_card(1, r"Bernoulli to binomial", r"Count the successes in $n$ independent trials",
@@ -125,4 +126,44 @@ class Binomial(VoiceoverScene, TreeMixin):
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(chk), FadeIn(sim))
+        self.clear_scene()
+
+    def poll(self):
+        d = load("binomial")
+        k = np.asarray(d["poll_k"])
+        A = axes([-0.6, 35.6], [0, 0.14], x_length=8.2, y_length=4.2, xlabel=r"adults over 180 cm, \ in a poll of 100",
+                 xticks=[0, 5, 10, 15, 20, 25, 30, 35], yticks=[0, 0.05, 0.1], center=[-1.8, -0.5, 0])
+        ax = A.ax
+        bars = pmf_bars(ax, k[:36], np.asarray(d["poll_emp"])[:36], SIM, width=0.65)
+        dots = pmf_dots(ax, k[:36], np.asarray(d["poll_pmf"])[:36], EXACT, radius=0.06)
+        p = d["p180"]
+        info = VGroup(MathTex(rf"p = P(\text{{height}} > 180) = {p:.4f}", font_size=28, color=S.TRUTH),
+                      MathTex(rf"\text{{binomial}}(100, p):\ \ np = {100 * p:.2f},\ \ np(1-p) = {100 * p * (1 - p):.2f}",
+                              font_size=24, color=EXACT),
+                      MathTex(rf"\text{{2{{,}}000 polls: mean }} {d['poll_mean']:.2f},\ \text{{variance }} {d['poll_var']:.2f}",
+                              font_size=24, color=SIM)).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        info.move_to([3.6, 2.6, 0])
+        wr = label(r"sampled without replacement from $741{,}311$: \ chapter 4 explains why it is still binomial",
+                   font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
+        tag = simulated_tag(corner=UL)
+        with self.voiceover(
+            "Binomials are everywhere in statistics because every yes-or-no question asked of a random sample is one. "
+            "<bookmark mark='a'/> In the World, the share of adults taller than a hundred and eighty centimetres is "
+            f"a parameter: {p:.4f}. <bookmark mark='b'/> Poll a hundred adults at random and count the tall ones. "
+            "<bookmark mark='c'/> Two thousand polls, blue, against the binomial with n a hundred and that p, gold. "
+            f"They agree, mean about {100 * p:.1f} and variance about {100 * p * (1 - p):.1f}. "
+            "<bookmark mark='d'/> Strictly, a poll samples without replacement, so the count isn't exactly binomial; "
+            "chapter four shows why, from a population this large, the difference vanishes. The spread of this "
+            "count is the margin of error of every opinion poll, and Part 8 builds it into an interval."
+        ) as vo:
+            self.play(FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(info[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(A))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03), FadeIn(dots), FadeIn(info[1:]),
+                      run_time=2.5)
+            vo.wait_until("d")
+            self.play(FadeIn(wr))
         self.clear_scene()
