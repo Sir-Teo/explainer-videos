@@ -78,7 +78,7 @@ class Fourier(VoiceoverScene):
                     r"forced (problem 8). Simpson weights tame the endpoint"),
                 why(r"$\alpha$ needs that moment: for Heston it can fail at long maturities beyond a critical $\alpha$ "
                     r"(moment explosions; Andersen and Piterbarg)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.4, buff=0.4, edge=6.9)
         with self.voiceover(
             "The derivation. Write the damped call's transform and swap the order of integration: the strike "
             "integral can be done in closed form, leaving the characteristic function evaluated at a shifted complex "
