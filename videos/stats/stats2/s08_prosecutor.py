@@ -164,7 +164,7 @@ class Prosecutor(VoiceoverScene):
         arrays.arrange(RIGHT, buff=2.0).move_to([0, -1.95, 0])
         head = label(r"of 100 families with two such deaths:", font_size=24, color=GREY_A).next_to(arrays, UP, buff=0.25)
         src = note(r"double SIDS $:$ double murder \ estimated at $4.5$ to $9 : 1$ \ (Hill 2004); \ schematic").to_corner(
-            DR, buff=0.3)
+            UR, buff=0.3)
         with self.voiceover(
             "Bayes' theorem in odds form says exactly what to compare. <bookmark mark='a'/> The odds of innocence "
             "against guilt, given the evidence, are the prior odds, how often two sudden infant deaths are natural "
