@@ -240,7 +240,8 @@ def compute_sestm() -> dict:
                   "O_pos": tp["O_pos"], "O_neg": tp["O_neg"],
                   "train_dates": ds[tr], "train_score": sc_tr, "train_y": y[tr],
                   "test_dates": ds[te], "test_score": sc_te, "test_y": yte, "hit": hit, "rho": float(rho),
-                  "p_rho": float(p_rho), "rho_train": float(stats.spearmanr(sc_tr, y[tr])[0])})
+                  "p_rho": float(p_rho), "rho_train": float(stats.spearmanr(sc_tr, y[tr])[0]),
+                  "f_all": s["f"], "k_all": s["k"], "vocab": vocab})
 
 
 # ---------------------------------------------------------------------------
@@ -248,7 +249,10 @@ def compute_sestm() -> dict:
 # ---------------------------------------------------------------------------
 MIN_STOP = STOP | set("participants members staff noted said percent rate rates period recent quarter year months "
                       "month first second third fourth half january february march april may june july august "
-                      "september october november december meeting also could might many some while".split())
+                      "september october november december meeting also could might many some while messrs mr ms "
+                      "shall chairman chair president vice subcommittee paragraph division director al b c d e "
+                      "authorization authorizes authorized arrangements accounts secretary deputy associate assistant "
+                      "economist economists governors board bank reserve new york".split())
 
 
 def compute_topics(k: int = 8) -> dict:
