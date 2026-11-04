@@ -2925,3 +2925,58 @@ def test_shiller_cs_limits_bubbles():
     R[24:30, 0] = -0.15  # then a crash
     out = P.run_ups(R, np.zeros(T), months=24, threshold=1.0, crash=0.4, horizon=24)
     assert out["n"] == 1 and out["events"][0]["crash"]
+
+
+# ---------------------------------------------------------------------------- Part 24: factors, the Track Record
+def test_factor_stats_and_drawdown():
+    from explainer.quant.house import factors as FA
+    r = np.array([0.10, -0.50, 0.20, 0.10])
+    dd = FA.drawdown(r)
+    assert abs(dd["max"] - (0.55 / 1.10 - 1)) < 1e-12 and dd["peak"] == 0 and dd["trough"] == 1
+    s = FA.stats(np.r_[np.full(60, 0.01), np.full(60, -0.005)])
+    assert abs(s["mean"] - 0.0025 * 12) < 1e-12 and s["n"] == 120
+
+
+def test_two_by_three_signs():
+    from explainer.quant.house import factors as FA
+    size = np.array([1, 1, 1, 10, 10, 10.0])
+    bm = np.array([0.2, 1.0, 3.0, 0.2, 1.0, 3.0])
+    ret = np.array([0.02, 0.03, 0.05, 0.01, 0.015, 0.03])
+    t = FA.two_by_three(size, bm, np.ones(6, bool), ret, size)
+    assert t["smb"] > 0 and t["hml"] > 0
+    assert abs(t["hml"] - ((0.05 + 0.03) / 2 - (0.02 + 0.01) / 2)) < 1e-12
+
+
+def test_vol_scaled_and_factor_momentum_are_point_in_time():
+    from explainer.quant.house import factors as FA
+    rng = np.random.default_rng(0)
+    r = rng.normal(0.005, 0.05, 120)
+    a = FA.vol_scaled(r, 0.12, 6)
+    r2 = r.copy()
+    r2[80:] *= 5
+    b = FA.vol_scaled(r2, 0.12, 6)
+    assert np.allclose(a[:80], b[:80], equal_nan=True)
+    F = rng.normal(0, 0.03, (100, 3))
+    m1 = FA.factor_momentum(F, 12)["r"]
+    F2 = F.copy()
+    F2[60:] = -F2[60:]
+    m2 = FA.factor_momentum(F2, 12)["r"]
+    assert np.allclose(m1[:60], m2[:60], equal_nan=True)
+
+
+def test_ddm_bm_directions():
+    from explainer.quant.house import factors as FA
+    base = FA.ddm_bm(0.12, 0.05, 0.09)
+    assert FA.ddm_bm(0.08, 0.05, 0.09) > base      # less profitable: higher B/M
+    assert FA.ddm_bm(0.12, 0.07, 0.09) < base      # more investment: lower B/M
+    assert FA.ddm_bm(0.12, 0.05, 0.11) > base      # higher discount rate: higher B/M
+
+
+def test_track_record_rows(tmp_path, monkeypatch):
+    from explainer.quant.house import track
+    monkeypatch.setattr(track, "LEDGER", tmp_path / "t.json")
+    rng = np.random.default_rng(1)
+    row = track.record("toy", 24, rng.normal(0.01, 0.04, 240), rng.normal(0.0, 0.04, 60), 0.012)
+    assert row["holdout"]["n"] == 60 and row["research"]["sharpe_net"] < row["research"]["sharpe"]
+    with pytest.raises(RuntimeError):
+        track.record("toy", 25, np.ones(3) * 0.01, np.ones(3) * 0.01)
