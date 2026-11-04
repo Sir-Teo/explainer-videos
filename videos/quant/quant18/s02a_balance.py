@@ -29,7 +29,7 @@ class Balance(VoiceoverScene):
         tw, w = np.asarray(p["WALCL"]["t"]), np.asarray(p["WALCL"]["v"]) / 1e3
         tr, r = np.asarray(p["WRESBAL"]["t"]), np.asarray(p["WRESBAL"]["v"]) / 1e3
         tq, q = np.asarray(p["RRPONTSYD"]["t"]), np.asarray(p["RRPONTSYD"]["v"]) / 1e3
-        g = axes([2007, 2026], [0, 10], x_length=8.6, y_length=4.6, xlabel=r"year", ylabel=r"\$ trillion",
+        g = axes([2007, 2026], [0, 10], x_length=8.0, y_length=4.6, xlabel=r"year", ylabel=r"\$ trillion",
                  xticks=[2008, 2012, 2016, 2020, 2024], yticks=[0, 2, 4, 6, 8, 10], font_size=14).to_edge(
             LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -54,8 +54,9 @@ class Balance(VoiceoverScene):
             MathTex(rf"0.9 \to {pk['bn'] / 1e3:.2f}", font_size=34, color=TOT),
             label(r"\$ trillion, August 2008 to April 2022", font_size=17, color=GREY_B),
             wrapped_label(r"QE: the Fed buys long bonds with new reserves. It takes duration out of the market, which "
-                          r"is meant to lower long yields (chapter 14)", 3.9, 18, GREY_A),
+                          r"is meant to lower long yields (chapter 14)", 3.3, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.5, aligned_edge=LEFT)
+        side.shift(LEFT * max(0.0, side.get_right()[0] - 6.75))
         with self.voiceover(
             "The floor needs plenty of reserves, and the Fed created them by buying bonds. In August 2008 its balance "
             f"sheet was under a trillion dollars. <bookmark mark='a'/> Three rounds of quantitative easing took it to "

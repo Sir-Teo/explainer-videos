@@ -38,7 +38,7 @@ class Money(VoiceoverScene):
         assets.move_to(LEFT * W / 2 + UP * 0.6)
         liab.move_to(RIGHT * W / 2 + RIGHT * 0.4 + UP * 0.4)
         top = Line(LEFT * (W + 0.4) + UP * 2.1, RIGHT * (W + 1.2) + UP * 2.1, color=GREY_B)
-        mid = Line(UP * 2.4, DOWN * 1.2, color=GREY_B).shift(RIGHT * 0.25)
+        mid = Line(UP * 2.1, DOWN * 1.0, color=GREY_B).shift(RIGHT * 0.25)
         title = label(r"The Federal Reserve's balance sheet", font_size=30).to_edge(UP, buff=0.4)
         notes = VGroup(
             wrapped_label(r"reserves are money only banks can hold: their accounts at the Fed. Buying a bond from a bank "
@@ -135,7 +135,8 @@ class Money(VoiceoverScene):
                       (RRP_C, r"overnight reverse repo rate"), (MKT, r"effective fed funds"), (QC.SPOT, r"SOFR (repo)")],
                      font_size=17).to_edge(RIGHT, buff=0.35).shift(UP * 1.0)
         zoom = wrapped_label(r"2022--23: 525 bp of hikes in sixteen months; the market rate moved with the administered "
-                             r"ones, every meeting, to the basis point", 3.6, 18, GREY_A).next_to(leg, DOWN, buff=0.4)
+                             r"ones, every meeting, to the basis point", 3.2, 18, GREY_A).next_to(leg, DOWN, buff=0.4,
+                                                                                         aligned_edge=LEFT)
         with self.voiceover(
             "And here is the floor at work, every week since 2007. Before December 2008 the target was a single "
             "number; since then it has been a quarter-point range, shaded in yellow. <bookmark mark='a'/> Interest on "

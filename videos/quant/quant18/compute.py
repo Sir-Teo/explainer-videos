@@ -450,6 +450,10 @@ def compute_term() -> dict:
                   "mad": float(np.mean(np.abs(tp_ours[i] - ny["tp"][j, 9]))),
                   "fit_rmse_bp": acm["fit_rmse"] * 1e4,
                   "end": {"ours": float(tp_ours[-1]), "ny": float(ny["tp"][-1, 9]), "y": float(y_ours[-1])},
+                  "since_cut": {k_: {"y": float(y_ours[np.where(md // 100 == ym)[0][0]]),
+                                     "rn": float(rn_ours[np.where(md // 100 == ym)[0][0]]),
+                                     "tp": float(tp_ours[np.where(md // 100 == ym)[0][0]])}
+                                for k_, ym in (("2024-08", 202408), ("2025-12", 202512))},
                   "tp_1981": float(tp_ours[np.where(md // 100 == 198109)[0][0]]),
                   "tp_min": {"t": float(_frac_year(md)[int(np.argmin(tp_ours))]), "v": float(np.min(tp_ours))}})
 
