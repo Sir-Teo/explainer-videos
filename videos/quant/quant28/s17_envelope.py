@@ -119,6 +119,7 @@ class Envelope(VoiceoverScene):
         T = int(h["n"])
         sr_m = h["sharpe"] / np.sqrt(12)
         p0 = BT.psr(sr_m, 0.0, T)
+        n95 = 1 + (1.645 / max(sr_m, 1e-6)) ** 2
         rows = [cmath(r"\widehat{SR}", r"=", rf"{sr_m:.3f}\ \text{{a statement month}},\quad T = {T}", font_size=32,
                       colors={r"\widehat{SR}": OOS_C}),
                 cmath(r"\mathrm{PSR}(0)", r"=", r"\Phi\Big(\widehat{SR}\sqrt{T - 1}\big/\sqrt{1 + \tfrac12\widehat{SR}^2}\Big)"
@@ -135,7 +136,7 @@ class Envelope(VoiceoverScene):
             f"month the Sharpe ratio is {sr_m:.3f}, over {T} months. <bookmark mark='b'/> Part twenty-six's "
             f"probabilistic Sharpe ratio puts the chance that the true value is above zero at {100 * p0:.0f} percent. "
             "<bookmark mark='c'/> To push that to ninety-five percent, an edge this size would need about "
-            f"{1 + (1.645 / max(sr_m, 1e-6)) ** 2:.0f} statements: at eight a year, decades. Even if it is real, no one "
+            f"{n95:.0f} statements: at eight a year, decades. Even if it is real, no one "
             "could know in time to use it."
         ) as vo:
             step(0)

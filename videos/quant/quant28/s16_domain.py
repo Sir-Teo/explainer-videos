@@ -69,8 +69,9 @@ class Domain(VoiceoverScene):
         with self.voiceover(
             "Put the sizes side by side, on a log scale. <bookmark mark='a'/> FinBERT, the finance-adapted BERT of "
             "Allen Huang, Hui Wang and Yi Yang, was trained on about five billion tokens of filings, calls and analyst "
-            "reports. <bookmark mark='b'/> BloombergGPT, on seven hundred billion. The FOMC minutes we will train on "
-            "ourselves in the next chapter are a million or two: a thousandth of FinBERT, a millionth of the frontier."
+            "reports. <bookmark mark='b'/> BloombergGPT, on seven hundred billion. The FOMC minutes we trained on "
+            "ourselves in Chapter twelve are under two million: a few ten-thousandths of FinBERT's corpus, a millionth "
+            "of the frontier's."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

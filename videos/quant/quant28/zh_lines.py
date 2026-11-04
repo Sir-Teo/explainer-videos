@@ -462,6 +462,79 @@ ZH = {
 
     "Pause and predict. A data set's buyers go from four to nine.":
         "暂停预测一下。一份数据集的买家从四个变成九个。每个买家的利润下降多少倍，买家的总利润又如何？",
+
+    # ------------------------------------------------------------------ Domain
+    "Chapter fifteen. If finance has its own vocabulary":
+        "第十五章。如果金融有自己的词汇，正如Loughran和McDonald所表明的，它是否应该有自己的语言模型？交易公司实际上又是如何使用这一切的？",
+
+    "In March 2023 Bloomberg published BloombergGPT.":
+        "2023年3月，彭博发布了BloombergGPT。<bookmark mark='a'/>五百亿参数，在来自彭博自身档案的三千六百三十亿个金融文本词元上训练，其中包括新闻、申报文件和新闻稿，"
+        "再混合三千四百五十亿个通用文本词元。<bookmark mark='b'/>在金融基准上，它胜过了规模相近的通用模型，而在通用任务上损失不多：这是领域模型的论据，由世界上拥有最多金融文本的公司提出。",
+
+    "Put the sizes side by side, on a log scale.":
+        "把规模并排放在对数尺度上。<bookmark mark='a'/>FinBERT，Allen Huang、Hui Wang和Yi Yang为金融改造的BERT，在约五十亿个申报文件、电话会和分析师报告词元上训练。"
+        "<bookmark mark='b'/>BloombergGPT，七千亿。我们在第十二章自己训练所用的FOMC纪要不到两百万：只是FinBERT语料的万分之几，前沿模型的百万分之一。",
+
+    "Within months the frontier moved.":
+        "几个月内前沿就移动了。<bookmark mark='a'/>Xianzhi Li及其合作者在同类金融任务上测试ChatGPT和GPT-4，发现GPT-4在几乎所有任务上都领先于BloombergGPT。<bookmark mark='b'/>"
+        "通用模型最擅长对金融文本中的数字进行推理，而在情感分析上仍落后于像FinBERT这样经过微调的小型专用模型。规模和通识阅读胜过了领域语料；在狭窄的标注任务上，小型专用模型仍然难以击败。",
+
+    "How do firms use text?":
+        "公司如何使用文本？<bookmark mark='a'/>许多公司直接购买已经打好分的文本：RavenPack之类的供应商出售每一条新闻，标注其提及的公司、相关度、新颖度和情感分数，"
+        "时间戳精确到毫秒。<bookmark mark='b'/>另一些公司从申报文件、电话会和新闻中构建自己的特征，输入第二十七部分的模型；文本通常是数百列中的一列，很少单独成为一个策略。"
+        "<bookmark mark='c'/>如今语言模型替分析师阅读一切，并为模型打上标签。<bookmark mark='d'/>而最难的工程并不光鲜：确切知道每个词是何时公开的，以及是哪个模型的哪个版本读了它。",
+
+    "Pause and predict. A fifty-billion-parameter domain model":
+        "暂停预测一下。一个五百亿参数的领域模型在几个月内输给了一个更大的通用模型。什么时候你仍然会训练自己的模型？",
+
+    # ------------------------------------------------------------------ Envelope
+    "Chapter sixteen. One text signal from this part":
+        "第十六章。本部分的一个文本信号，登记并计入试验次数，在封存的2021到2025年上只打开一次。",
+
+    'f"The registration.':
+        "登记。<bookmark mark='a'/>第五章的模型，在到2020年为止的每份声明上重新拟合。这笔交易问的是一个显而易见的问题：如果文字偏鹰派，两年期收益率在声明日之后会继续上升吗？"
+        "在当天收盘时，分数高于二分之一就做空两年期国债，低于就买入，持有五个交易日。<bookmark mark='b'/>{e['n_trials']}次试验：第五章的十二组阈值和规则本身。计数器升到{e['trials']:,}。",
+
+    'f"First, the research years themselves':
+        "首先看研究期本身，模型正是在这些年份上拟合的。<bookmark mark='a'/>这笔交易毫无进展：夏普比率{r['sharpe']:.2f}，正确率百分之{100 * e['hit_research']:.0f}。"
+        "<bookmark mark='b'/>这正是要点。模型学会的是解释声明日的波动，而到当天收盘时波动已经发生了。解释一次反应与预测下一次反应是不同的问题。",
+
+    'f"Then the envelope.':
+        "然后是信封。<bookmark mark='a'/>2021年1月到2025年12月的{e['n_hold']}份声明，四十年来最快的紧缩时期。<bookmark mark='b'/>这笔交易平均每份声明赚得国债价值的"
+        "{e['mean_hold_bp']:+.1f}个基点，夏普比率{h['sharpe']:.2f}，标准误{h['sharpe_se']:.2f}，正确率百分之{100 * e['hit_hold']:.0f}：一枚硬币。",
+
+    'f"Could it be a small real edge':
+        "会不会是五年太短、看不出来的一个小小真实优势？<bookmark mark='a'/>按每个有声明的月份计，夏普比率是{sr_m:.3f}，共{T}个月。<bookmark mark='b'/>"
+        "第二十六部分的概率夏普比率给出真实值大于零的概率是百分之{100 * p0:.0f}。<bookmark mark='c'/>要把它推到百分之九十五，这么大的优势需要约{n95:.0f}份声明："
+        "按每年八份计，需要几十年。即使它是真的，也没人能及时知道并加以利用。",
+
+    "Why? <bookmark mark='a'/> The market reads a statement in minutes.":
+        "为什么？<bookmark mark='a'/>市场在几分钟内读完一份声明。到收盘时，文字已经被定价；用同样的文字得到的日度信号太晚了。<bookmark mark='b'/>值得检验的替代方案："
+        "文字相对于预期的意外，三周后的纪要，或者市场读得慢的文本，比如冗长的申报文件和小公司的新闻。<bookmark mark='c'/>业绩记录保留这一行，连同它的零，以及试验次数。"
+        "事先登记的零结果也是信息。",
+
+    "Pause and predict. The same score, measured from the release":
+        "暂停预测一下。同样的分数，如果从下午两点发布时度量到收盘，会看起来非常出色。为什么那不是一个可交易的结果？",
+
+    # ------------------------------------------------------------------ House
+    "Chapter seventeen. The House's twenty-eighth rule":
+        "第十七章。本系列公司的第二十八条规则：由文字构成的特征必须经受住什么。",
+
+    "The first sheet. <bookmark mark='a'/> Thirty years of the committee's words":
+        "第一张表。<bookmark mark='a'/>委员会三十年的文字，服从齐普夫定律。词典的语气没有告诉我们任何关于债券市场反应的东西。SESTM找到了拟合过去却无法迁移的词。"
+        "词嵌入学到了easing之于lower正如tightening之于raise。时点一致的语言模型被危机吓了一跳，而读过未来的模型则少得多。封存年份上打开的声明分数，是一枚硬币。",
+
+    "Part one's first rule, applied to words":
+        "第一部分的第一条规则用在文字上，就是本系列公司里的两个小函数。日期为t的模型只能知道日期早于t的文档的词汇；对每个词我们保留它首次出现的日期，"
+        "这样像pandemic一词占比这样的特征就不可能在2020年之前存在。本部分的每个分词器和每个模型都是这样构建的，只有模型B例外，它就是为了展示不这样做会怎样。",
+
+    "The tools this part adds.":
+        "本部分新增的工具。<bookmark mark='a'/>计数；词典；有监督的词；含义；形式；以及时间。<bookmark mark='b'/>还有第二十八条规则。一个文本特征只有满足以下条件才能进入本系列公司："
+        "每份文档都带有它公开的时刻；读它的每个模型和分词器都只用该时刻之前的文本训练，并记录版本；它在样本外胜过词典和简单的词袋；而且它的信号能经受住从文字发布到交易之间的延迟。",
+
+    "The rule against three cases.":
+        "用这条规则检验三个案例。<bookmark mark='a'/>一个在2015到2020年新闻上夏普比率为四的语言模型信号：检查模型的训练截止日期，匿名化后重跑，再用2015年之前的模型。"
+        "<bookmark mark='b'/>一个解释当天波动的词典分数：它是在解释，而不是预测；从发布之后的时刻开始度量。<bookmark mark='c'/>一份所有人都在买的新数据集：问问有多少基金拥有它，从什么时候开始。",
 }
 
 PHRASES = {}
