@@ -52,7 +52,7 @@ class TreeMixin:
         before = edges_before(chapter)
         nodes = {n for e in before for n in FAMILY_EDGES[e][:2]}
         ft.lit_state(nodes=nodes, edges=before)
-        head = label(r"The family tree", font_size=26, color=GREY_B).to_corner(UL, buff=0.25)
+        head = label(r"The family tree", font_size=26, color=GREY_B).to_edge(UP, buff=0.2)
         with self.voiceover(narration) as vo:
             self.play(FadeIn(ft), FadeIn(head))
             new = CHAPTER_EDGES.get(chapter, [])

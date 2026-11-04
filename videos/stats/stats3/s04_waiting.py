@@ -1,0 +1,125 @@
+from __future__ import annotations
+
+import numpy as np
+
+from videos.stats.stats3.common import *  # noqa: F403
+
+
+class Waiting(VoiceoverScene, TreeMixin):
+    def construct(self):
+        self.card()
+        self.geometric()
+        self.memoryless()
+        self.negbin()
+        self.tree_update(3, "Two more arrows: <bookmark mark='t'/> waiting for the first success turns Bernoulli "
+                            "trials into a geometric, and adding r independent geometric waits gives a negative "
+                            "binomial.")
+
+    def card(self):
+        card = chapter_card(3, r"Waiting", r"How long until the first six?", lit=(1654,), part=PART)
+        with self.voiceover("Chapter three. Waiting."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+
+    def geometric(self):
+        d = load("waiting")
+        ks, geo = np.asarray(d["ks"]), np.asarray(d["geo"])
+        A = axes([0.4, 30.6], [0, 0.18], x_length=8.6, y_length=4.2, xlabel=r"throws until the first six, $T$",
+                 xticks=[1, 5, 10, 15, 20, 25, 30], yticks=[0, 0.1], center=[-1.6, -0.6, 0])
+        bars = pmf_bars(A.ax, ks, geo, DISC, width=0.7)
+        f = MathTex(r"P(T = k)", r"=", r"(1-p)^{k-1}\, p", font_size=38).move_to([4.2, 2.6, 0])
+        f[0].set_color(DISC)
+        fw = label(r"$k - 1$ failures, \ then a success", font_size=22, color=GREY_B).next_to(f, DOWN, buff=0.15)
+        m = MathTex(r"E T", r"=", r"\frac1p", r"= 6", font_size=36).move_to([4.6, 1.0, 0])
+        m[3].set_color(EXACT)
+        sim = MathTex(rf"\text{{simulated}}\ {d['mean_wait']:.3f}", font_size=26, color=SIM).next_to(m, DOWN, buff=0.2)
+        why_ = label(r"layer cake: \ $E T = \sum_{k \ge 0} P(T > k) = \sum (1-p)^k = 1/p$", font_size=22, color=GREY_B)
+        why_.to_edge(DOWN, buff=0.3)
+        with self.voiceover(
+            "Instead of counting successes in a fixed number of trials, wait for the first one. <bookmark mark='a'/> "
+            "Throw a die until it shows a six. The wait T is k throws if the first k minus one fail and the k-th "
+            "succeeds: probability one minus p to the k minus one, times p. That's the geometric distribution. "
+            "<bookmark mark='b'/> Each extra throw multiplies the chance by five sixths, so the bars decay "
+            "geometrically, which is the name. <bookmark mark='c'/> On average you wait one over p throws: six for "
+            "a die. The layer-cake formula of Part 2 gives it in one line, and fifty thousand simulated waits "
+            "agree."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(Write(f), FadeIn(fw))
+            vo.wait_until("b")
+            self.play(FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.04), run_time=2.5)
+            vo.wait_until("c")
+            self.play(Write(m), FadeIn(sim), FadeIn(why_))
+        self.clear_scene()
+
+    def memoryless(self):
+        d = load("waiting")
+        ks, geo = np.asarray(d["ks"]), np.asarray(d["geo"])
+        s_, t_ = d["s"], d["t"]
+        A = axes([0.4, 30.6], [0, 0.18], x_length=8.6, y_length=3.6, xticks=[1, 5, 10, 15, 20, 25, 30],
+                 yticks=[0, 0.1], center=[-1.6, 0.4, 0])
+        ax = A.ax
+        bars = pmf_bars(ax, ks, geo, DISC, width=0.7)
+        cut = DashedLine(ax.c2p(s_ + 0.5, 0), ax.c2p(s_ + 0.5, 0.18), color=S.ACCENT, stroke_width=2)
+        cl = label(rf"already waited {s_}", font_size=22, color=S.ACCENT).next_to(cut, UP, buff=0.1)
+        tail = VGroup(*[b for k, b in zip(ks, bars) if k > s_])
+        head_bars = VGroup(*[b for k, b in zip(ks, bars) if k <= s_])
+        rescaled = pmf_bars(ax, ks[: len(tail)], geo[s_:] / (5 / 6) ** s_, S.ACCENT, width=0.7, opacity=0.6)
+        eq = MathTex(r"P(T > s + t \mid T > s)", r"=", r"P(T > t)", font_size=36).to_edge(DOWN, buff=1.2)
+        chk = MathTex(rf"\text{{simulated: }}{d['lhs']:.3f} \ \text{{vs}}\ {d['rhs']:.3f};\ \ \text{{exact }} "
+                      rf"(5/6)^3 = {d['exact_ml']:.3f}", font_size=26, color=SIM).next_to(eq, DOWN, buff=0.2)
+        with self.voiceover(
+            "The geometric has a remarkable property. <bookmark mark='a'/> Suppose you've already thrown five times "
+            "without a six. <bookmark mark='b'/> Throw away the first five bars, rescale the rest so they add to "
+            "one, and slide them back to the start. <bookmark mark='c'/> They match the original exactly. Having "
+            "waited tells you nothing about how much longer you'll wait: the die has no memory. "
+            "<bookmark mark='d'/> In symbols, the chance of waiting t more, given that you've waited s, is the "
+            "chance of waiting t from scratch. The gambler who thinks a six is overdue is wrong, and this is why."
+        ) as vo:
+            self.play(FadeIn(A), FadeIn(bars))
+            vo.wait_until("a")
+            self.play(Create(cut), FadeIn(cl))
+            vo.wait_until("b")
+            self.play(head_bars.animate.set_opacity(0.2))
+            self.play(ReplacementTransform(tail.copy(), rescaled), run_time=2.0)
+            vo.wait_until("c")
+            self.play(Indicate(rescaled, color=S.ACCENT, scale_factor=1.03))
+            vo.wait_until("d")
+            self.play(Write(eq), FadeIn(chk))
+        self.clear_scene()
+
+    def negbin(self):
+        d = load("waiting")
+        ks, nb = np.asarray(d["ks"]), np.asarray(d["nb"])
+        A = axes([0.4, 30.6], [0, 0.08], x_length=7.6, y_length=3.8, xlabel=r"throws until the third six",
+                 xticks=[3, 10, 20, 30], yticks=[0, 0.04, 0.08], center=[-2.2, -0.6, 0])
+        bars = pmf_bars(A.ax, ks, nb, DISC, width=0.7)
+        f = MathTex(r"P(T_3 = k)", r"=", r"\binom{k-1}{2} p^3 (1-p)^{k-3}", font_size=34).move_to([3.8, 2.6, 0])
+        f[0].set_color(DISC)
+        fw = label(r"the $k$-th throw is the third six; \ two sixes among the first $k-1$", font_size=22,
+                   color=GREY_B).next_to(f, DOWN, buff=0.15)
+        if fw.width > 6.0:
+            fw.width = 6.0
+        m = MathTex(r"T_r = G_1 + \cdots + G_r", r",\quad E T_r = \frac{r}{p} = 18", font_size=32).move_to([4.0, 0.6, 0])
+        nxt = label(r"its other life: \ a Poisson whose rate is random \ (chapter 12)", font_size=24, color=GREY_A)
+        nxt.move_to([4.0, -0.6, 0])
+        if nxt.width > 6.0:
+            nxt.width = 6.0
+        with self.voiceover(
+            "Wait for more than one success and you get the negative binomial. <bookmark mark='a'/> The wait for the "
+            "third six is k throws if the k-th throw is a six and exactly two of the first k minus one were: k minus "
+            "one choose two, times p cubed, times the failures. <bookmark mark='b'/> It's also a sum: the wait for "
+            "the first six, plus the further wait for the second, plus the wait for the third, three independent "
+            "geometric waits, because the die has no memory. So the mean is r over p, eighteen. "
+            "<bookmark mark='c'/> The negative binomial has a second life, as a Poisson count whose rate is itself "
+            "random, and in that guise it's the workhorse for counts more variable than a Poisson allows. We'll "
+            "derive that in chapter twelve."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(Write(f), FadeIn(fw), FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars],
+                                                                    lag_ratio=0.03), run_time=2.5)
+            vo.wait_until("b")
+            self.play(Write(m))
+            vo.wait_until("c")
+            self.play(FadeIn(nxt))
+        self.clear_scene()

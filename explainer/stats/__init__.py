@@ -161,6 +161,7 @@ TIMELINE = [
     (1869, r"Minard's map"),
     (1886, r"Galton's regression"),
     (1889, r"Bertrand's paradox"),
+    (1898, r"the law of small numbers"),
     (1894, r"Pearson's moments"),
     (1900, r"Pearson's $\chi^2$"),
     (1908, r"Student's $t$"),
