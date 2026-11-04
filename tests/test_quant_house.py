@@ -2381,3 +2381,85 @@ def test_trial_counter_is_cumulative_by_part():
     vals = [pit.trials_upto(n) for n in range(1, 44)]
     assert all(a <= b for a, b in zip(vals, vals[1:]))
     assert vals[-1] == pit.trials_so_far()
+
+
+# ---------------------------------------------------------------------------
+# Part 18: the rates desk
+# ---------------------------------------------------------------------------
+def test_bond_at_its_coupon_is_par_and_yield_inverts():
+    from explainer.quant.house import rates as R
+    assert abs(R.bond_price(0.045, 0.045, 10) - 100) < 1e-10
+    p = R.bond_price(0.03, 0.05, 7)
+    assert abs(R.bond_yield(p, 0.03, 7) - 0.05) < 1e-12
+
+
+def test_bond_risk_against_finite_differences():
+    from explainer.quant.house import rates as R
+    c, y, T, h = 0.04, 0.047, 12, 1e-5
+    r = R.bond_risk(c, y, T)
+    up, dn = R.bond_price(c, y + h, T), R.bond_price(c, y - h, T)
+    assert abs(-(up - dn) / (2 * h) / r["price"] - r["modified"]) < 1e-6
+    assert abs((up - 2 * r["price"] + dn) / h ** 2 / r["price"] - r["convexity"]) < 1e-3
+    assert abs(R.bond_risk(0.0, 0.04, 10, freq=1)["macaulay"] - 10) < 1e-12  # a zero's duration is its maturity
+
+
+def test_bootstrap_reprices_its_par_bonds():
+    from explainer.quant.house import rates as R
+    T = [0.25, 0.5, 1, 2, 3, 5, 7, 10, 20, 30]
+    y = [0.052, 0.051, 0.049, 0.045, 0.043, 0.041, 0.041, 0.042, 0.046, 0.044]
+    c = R.bootstrap_par(T, y)
+    for Ti, yi in zip(T, y):
+        if Ti > 1:
+            assert abs(c.par(Ti) - yi) < 1e-10
+    assert abs(c.fwd(2, 3) * 1 - (c.zero(3) * 3 - c.zero(2) * 2)) < 1e-12
+
+
+def test_fit_nss_recovers_a_svensson_curve():
+    from explainer.quant.house import rates as R
+    t = np.array([0.5, 1, 2, 3, 5, 7, 10, 15, 20, 30])
+    y = R.nss(t, [4.5, -1.2, 2.0, -1.5], (1.7, 9.0))
+    f = R.fit_nss(t, y)
+    assert f["rmse"] < 1e-6
+
+
+def test_conversion_factor_is_the_price_at_six_percent():
+    from explainer.quant.house import rates as R
+    assert R.conversion_factor(0.06, 9, 0) == 1.0
+    assert R.conversion_factor(0.06, 9, 3) == 0.9999  # linear accrual between coupon dates
+    # on a coupon date (z = 0) the factor is the bond's price per 1 at a 6% yield
+    assert abs(R.conversion_factor(0.04, 8, 0) - round(R.bond_price(0.04, 0.06, 8) / 100, 4)) < 1e-12
+    assert R.conversion_factor(0.04, 8, 4) == R.conversion_factor(0.04, 8, 3)  # quarters for the 10-year
+
+
+def test_key_rate_dv01s_sum_to_the_parallel_dv01():
+    from explainer.quant.house import rates as R
+    c = R.Curve([0.5, 2, 5, 10, 30], [0.04, 0.042, 0.043, 0.045, 0.047])
+    t, cf = np.arange(1, 21) / 2, np.r_[np.full(19, 2.0), 102.0]
+    kr = R.key_rate_dv01(t, cf, c, [0.5, 2, 5, 10, 30])
+    par = float(np.sum(cf * c.df(t) * (np.exp(1e-4 * t) - 1)))
+    assert abs(kr.sum() - par) < 1e-4 * par  # equal to first order
+
+
+def test_fly_is_neutral_to_level_and_slope():
+    from explainer.quant.house import rates as R
+    rng = np.random.default_rng(0)
+    L = np.linalg.qr(rng.normal(size=(6, 6)))[0].T
+    w = R.fly_weights(L, (1, 3, 5))
+    assert np.allclose(L[[0, 1]][:, [1, 3, 5]] @ w, 0)
+
+
+def test_swap_sofr_taylor():
+    from explainer.quant.house import rates as R
+    c = R.Curve([1, 5, 10], [0.03, 0.035, 0.04])
+    s = R.par_swap_rate(c, 10, freq=2)
+    assert abs(s - c.par(10)) < 1e-12 and abs(R.swap_value(c, 10, s, freq=2)) < 1e-12
+    assert abs(R.compound_in_arrears([0.05], [1]) - 0.05) < 1e-12
+    assert R.compound_in_arrears([0.05] * 90, [1] * 90) > 0.05
+    assert float(R.taylor_rule(2.0, 0.0)) == 4.0
+
+
+def test_ldi_spiral_amplifies_and_loses_nav():
+    from explainer.quant.house import rates as R
+    a = R.ldi_spiral(50, impact_bp_per_pct=0.0)
+    b = R.ldi_spiral(50, impact_bp_per_pct=1.5)
+    assert a["dy_bp"][-1] == 50 and b["dy_bp"][-1] > 50 and b["nav"][-1] < a["nav"][-1]

@@ -21,7 +21,10 @@ Sources (all free; see videos/quant/SYLLABUS.md, "Data"):
 * :func:`shiller`: Robert Shiller's monthly US stock market data since 1871 (price, dividends, earnings, CPI, CAPE);
 * :func:`ken_french_sorts`: his monthly portfolios sorted on a characteristic (accruals, profitability, ...);
 * :func:`yahoo_daily`: daily closes of an index from Yahoo Finance's chart API (CSI 500, HSCEI, ...), frozen through a
-  date and checksummed like the rest.
+  date and checksummed like the rest;
+* :func:`gsw`, :func:`acm`, :func:`treasury_par`, :func:`treasury_auctions`, :func:`sec_facts`: the
+  Fed's fitted Treasury curve, the NY Fed's term premium, Treasury's par yields, every Treasury note
+  auction, and a filer's XBRL facts (Part 18).
 
     python -m explainer.quant.data            # fetch everything the series uses so far (resumes)
 """
@@ -534,6 +537,154 @@ def cboe_vx(expiry: str) -> dict:
     frozen = json.dumps(a.round(4).tolist(), separators=(",", ":")).encode()
     _check(f"cboe/vx/{expiry}", frozen, CBOE_VX.format(expiry))
     return {"date": a[:, 0].astype(int), "settle": a[:, 1]}
+
+
+# ---------------------------------------------------------------------------
+# Rates (Part 18): the Fed's fitted Treasury curve, the NY Fed's term premium, Treasury's par yields, gilts, EDGAR
+# ---------------------------------------------------------------------------
+GSW = "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
+
+
+def gsw(start: str = "1961-06-14", through: str = "2025-12-31") -> dict:
+    """The Federal Reserve's fitted US Treasury curve (Gurkaynak, Sack and Wright 2007), one row a business day:
+    ``date`` (YYYYMMDD ints), the Svensson parameters ``beta`` (n, 4: percent) and ``tau`` (n, 2: years; ``beta[:, 3]``
+    is 0 and ``tau[:, 1]`` NaN on days fitted with Nelson-Siegel alone), and ``y`` (n, 30): continuously compounded
+    zero-coupon yields at 1..30 years, percent, NaN beyond the longest bond of the day.  The Fed refits and extends
+    the file daily, so the manifest checks the frozen window."""
+    path = DATA / "fed" / "feds200628.csv"
+    if not path.exists():
+        _atomic_write(path, _get(GSW))
+    lines = path.read_text().splitlines()
+    i0 = next(i for i, ln in enumerate(lines) if ln.startswith("Date,"))
+    head = lines[i0].split(",")
+    col = {h: j for j, h in enumerate(head)}
+    names = ["BETA0", "BETA1", "BETA2", "BETA3", "TAU1", "TAU2"] + [f"SVENY{k:02d}" for k in range(1, 31)]
+    lo, hi = int(start.replace("-", "")), int(through.replace("-", ""))
+    rows = []
+    for ln in lines[i0 + 1:]:
+        f = ln.split(",")
+        if len(f) < len(head) or not f[0]:
+            continue
+        d = int(f[0].replace("-", ""))
+        if lo <= d <= hi:
+            rows.append([d] + [float(f[col[n]]) if f[col[n]] not in ("NA", "") else np.nan for n in names])
+    a = np.array(rows)
+    frozen = json.dumps(np.nan_to_num(a, nan=-999).round(6).tolist(), separators=(",", ":")).encode()
+    _check(f"fed/gsw/{start}_{through}", frozen, GSW)
+    return {"date": a[:, 0].astype(int), "beta": a[:, 1:5], "tau": a[:, 5:7], "y": a[:, 7:37]}
+
+
+ACM = "https://www.newyorkfed.org/medialibrary/media/research/data_indicators/ACMTermPremium.xls"
+
+
+def acm(through: str = "2025-12") -> dict:
+    """The NY Fed's Adrian-Crump-Moench (2013) decomposition, monthly: ``date`` (YYYYMMDD, month end), and for 1..10
+    years (percent) the fitted yield ``y``, the term premium ``tp`` and the risk-neutral (expected average short
+    rate) yield ``rny``; ``y = tp + rny``.  Revised as the model is re-estimated, so the window is frozen."""
+    import xlrd
+
+    path = DATA / "nyfed" / "ACMTermPremium.xls"
+    if not path.exists():
+        _atomic_write(path, _get(ACM))
+    sh = xlrd.open_workbook(str(path)).sheet_by_name("ACM Monthly")
+    mon = {m: i for i, m in enumerate(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
+                                       "Dec"], 1)}
+    y1, m1 = map(int, through.split("-"))
+    rows = []
+    for i in range(1, sh.nrows):
+        r = sh.row_values(i)
+        dd, mm, yy = r[0].split("-")
+        d = int(yy) * 10000 + mon[mm] * 100 + int(dd)
+        if d // 100 <= y1 * 100 + m1:
+            rows.append([d] + [float(x) for x in r[1:31]])
+    a = np.array(rows)
+    _check(f"nyfed/acm_monthly/through_{through}", json.dumps(a.round(6).tolist(), separators=(",", ":")).encode(),
+           ACM)
+    return {"date": a[:, 0].astype(int), "y": a[:, 1:11], "tp": a[:, 11:21], "rny": a[:, 21:31]}
+
+
+TREASURY_PAR = ("https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/"
+                "{year}/all?type=daily_treasury_yield_curve&field_tdr_date_value={year}&page&_format=csv")
+
+
+def treasury_par(year: int) -> dict:
+    """The US Treasury's daily par yield curve (from its quotes of on-the-run securities) for one calendar year:
+    ``date`` (YYYYMMDD, oldest first), ``tenor`` (years) and ``y`` (days, tenors: percent, bond-equivalent; NaN where
+    not published, e.g. the 20-year before 1993 or the 30-year in 2002-2006).  Past years are final; frozen anyway."""
+    path = DATA / "treasury" / f"par_{year}.csv"
+    if not path.exists():
+        _atomic_write(path, _get(TREASURY_PAR.format(year=year)))
+    lines = path.read_text().strip().splitlines()
+    head = [h.strip('"') for h in lines[0].split(",")]
+    unit = {"Mo": 1 / 12, "Month": 1 / 12, "Yr": 1.0}
+    ten = []
+    for h in head[1:]:
+        n, u = h.split(" ", 1)
+        ten.append(float(n) * unit[u.split()[0]])
+    rows = []
+    for ln in lines[1:]:
+        f = ln.split(",")
+        m, d, y = f[0].split("/")
+        rows.append([int(y) * 10000 + int(m) * 100 + int(d)] + [float(x) if x else np.nan for x in f[1:]])
+    a = np.array(sorted(rows))
+    order = np.argsort(ten)
+    out = {"date": a[:, 0].astype(int), "tenor": np.array(ten)[order], "y": a[:, 1:][:, order]}
+    _check(f"treasury/par/{year}", json.dumps(np.nan_to_num(a, nan=-999).round(6).tolist(),
+                                               separators=(",", ":")).encode(), TREASURY_PAR.format(year=year))
+    return out
+
+
+SEC_UA = {"User-Agent": "explainer-videos research bot"}  # a client name, no personal contact
+
+
+def sec_facts(cik: int, concepts: tuple, filed_through: str = "2025-12-31") -> dict:
+    """Selected us-gaap facts from EDGAR's XBRL company facts (data.sec.gov) for ``cik``: for each concept, a list of
+    {unit, end, val, filed, form}, facts filed through ``filed_through`` only; the extract is checked."""
+    path = DATA / "edgar" / f"CIK{cik:010d}.json"
+    if not path.exists():
+        url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
+        with urllib.request.urlopen(urllib.request.Request(url, headers=SEC_UA), timeout=120) as r:
+            _atomic_write(path, r.read())
+    raw = json.loads(path.read_text())
+    lim = int(filed_through.replace("-", ""))
+    out = {}
+    for c in concepts:
+        body = raw["facts"].get("us-gaap", {}).get(c, {"units": {}})
+        rows = [{"unit": u, "end": x["end"], "val": x["val"], "filed": x["filed"], "form": x.get("form", "")}
+                for u, lst in body["units"].items() for x in lst if int(x["filed"].replace("-", "")) <= lim]
+        out[c] = sorted(rows, key=lambda q: (q["end"], q["filed"], q["form"], q["unit"]))
+    _check(f"edgar/facts/CIK{cik:010d}/{'_'.join(sorted(concepts))[:120]}/through_{filed_through}",
+           json.dumps(out, sort_keys=True, separators=(",", ":")).encode(),
+           f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json")
+    return {"name": raw.get("entityName", ""), "facts": out}
+
+
+TD = "https://www.treasurydirect.gov/TA_WS/securities/search?type={kind}&format=json"
+
+
+def treasury_auctions(kind: str = "Note") -> list:
+    """Every auction of Treasury ``kind`` ("Note" or "Bond") in TreasuryDirect's record, as dicts with ``cusip``,
+    ``coupon`` (percent), ``issue`` and ``maturity`` (YYYYMMDD), ``term`` (e.g. "10-Year"), ``reopening``; auctions
+    through 2025 only."""
+    path = DATA / "treasury" / f"auctions_{kind}.json"
+    if not path.exists():
+        _atomic_write(path, _get(TD.format(kind=kind)))
+    raw = path.read_bytes()
+    out = []
+    for r in json.loads(raw):
+        try:
+            iss = int(r["issueDate"][:10].replace("-", ""))
+            mat = int(r["maturityDate"][:10].replace("-", ""))
+            cpn = float(r["interestRate"])
+        except (KeyError, ValueError):
+            continue
+        if iss <= 20251231:
+            out.append({"cusip": r["cusip"], "coupon": cpn, "issue": iss, "maturity": mat,
+                        "term": r.get("securityTerm", ""), "reopening": r.get("reopening", "") == "Yes"})
+    out.sort(key=lambda q: (q["issue"], q["cusip"]))
+    _check(f"treasurydirect/{kind}/through_2025", json.dumps(out, sort_keys=True, separators=(",", ":")).encode(),
+           TD.format(kind=kind))
+    return out
 
 
 # ---------------------------------------------------------------------------

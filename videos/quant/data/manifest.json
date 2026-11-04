@@ -17079,6 +17079,11 @@
   "bytes": 263131,
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001637459.json"
  },
+ "edgar/facts/CIK0000719739/Assets_AvailableForSaleSecuritiesDebtSecurities_Deposits_HeldToMaturitySecurities_HeldToMaturitySecuritiesAccumulatedUnr/through_2023-03-31": {
+  "sha256": "f5cd0b613222151577df6353a8f20c342e044fd6bf8b008d2626c6eb1e773ed0",
+  "bytes": 47549,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000719739.json"
+ },
  "edgar/submissions/CIK0000320193/through_20261031": {
   "sha256": "d50a1784d59233a45255b424f4c1ef5894f40b907484320f2a10f54d65976c51",
   "bytes": 47180,
@@ -17088,6 +17093,11 @@
   "sha256": "e9886a5a0d9d0b780e0b7380d0f448caf30268492cb57009ad2c1e89352451d7",
   "bytes": 1936,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomchistorical<YYYY>.htm"
+ },
+ "fed/gsw/1961-06-14_2025-12-31": {
+  "sha256": "52510b394aa9871ed5401c8f5fb4fe503b5b8b935f10e6da72570e1e701b6a24",
+  "bytes": 4844063,
+  "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
  "fred/A794RX0Q048SBEA/1947-01-01_2025-12-31": {
   "sha256": "d0b2a04c1e926fd6d93e823b5148160ce93b625e37b9b9b0e79784d6d1888347",
@@ -17324,6 +17334,11 @@
   "bytes": 2255765,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_ME_daily_CSV.zip"
  },
+ "nyfed/acm_monthly/through_2025-12": {
+  "sha256": "3a2b6e9253b2eac57146b40a086043a756b9e17d78ae13d5893da3dbbacfc496",
+  "bytes": 219171,
+  "source": "https://www.newyorkfed.org/medialibrary/media/research/data_indicators/ACMTermPremium.xls"
+ },
  "osap/2024.10/PredictorLSretWide.parquet": {
   "sha256": "a69301813f547806e99a4fe4e4e00ec632cd4ebf2a059d8be39473d87068613d",
   "bytes": 1400235,
@@ -17348,6 +17363,16 @@
   "sha256": "d0580a40f10087aabdcc591481b0e1a31d2240bb2df987459e47ad2e08185b74",
   "bytes": 98719,
   "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+ },
+ "treasury/par/2022": {
+  "sha256": "544550ed1e8d4978c37de8b1f7ed99a6fe901669ad9f4e8d39a968849050ddc2",
+  "bytes": 19525,
+  "source": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2022/all?type=daily_treasury_yield_curve&field_tdr_date_value=2022&page&_format=csv"
+ },
+ "treasurydirect/Note/through_2025": {
+  "sha256": "a6e2e590c9cf7364e2f3b119aaba9b65c33d66e49057f1d348219a011cc141d9",
+  "bytes": 208736,
+  "source": "https://www.treasurydirect.gov/TA_WS/securities/search?type=Note&format=json"
  },
  "yahoo/510500.SS/2015-01-01_2025-11-30": {
   "sha256": "130e6f603e5a0d1d4cf9f24575aaf7dd0a31b35dc7367c203732b1a7ef49d6ef",
