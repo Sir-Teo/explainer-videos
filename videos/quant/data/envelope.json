@@ -1,5 +1,45 @@
 {
  "opened": {
+  "classic_bab_part24|factors/bab_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_cma_part24|factors/cma_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_hml_part24|factors/hml_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_mkt_part24|factors/mkt_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_qmj_part24|factors/qmj_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_rmw_part24|factors/rmw_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_smb_part24|factors/smb_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_tsmom_part24|factors/tsmom_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_umd_part24|factors/umd_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_valmom_part24|factors/valmom_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
   "cp_tent_oos|gsw_bond_rx": {
    "at": "2026-11-04",
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
@@ -162,6 +202,116 @@
    "params": {
     "data": "FRED DTB3 monthly 1954-2020",
     "starts": 5
+   },
+   "trials": 1
+  },
+  "classic_bab_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.015,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "BAB",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_cma_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "CMA",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_hml_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "HML",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_mkt_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.0005,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "MKT",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_qmj_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "QMJ",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_rmw_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "RMW",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_smb_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "SMB",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_tsmom_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "TSMOM",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_umd_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.03,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "UMD",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_valmom_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.015,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "VALMOM",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
    },
    "trials": 1
   },
@@ -406,6 +556,66 @@
    "first": 20211231,
    "last": 20231231,
    "n": 11946
+  },
+  "factors/bab_monthly": {
+   "digest": "8be429a03d831ae95a1c8d47c77199d3521bdfb2ba1144c631b9b7d7fa5a5190",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/cma_monthly": {
+   "digest": "6d31ddbb615a71e9240591b9b9fafb4e3d4393a66d6c837eb7eb2dc7d95eb3ad",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/hml_monthly": {
+   "digest": "1afd38fa880769196999dbe504a0b326971abee0341d89deaaa8eaed886b1357",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/mkt_monthly": {
+   "digest": "48d6d5acdce829ca3a3d8bad155e928fd392696e606297d4aa2d2f75ab6ff069",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/qmj_monthly": {
+   "digest": "d9cc54c6a2243bc0a74b3ec510edf8e08ddf7b7661f33418666d822d5f53ba5b",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/rmw_monthly": {
+   "digest": "ce941909912c573a9d6eafad660d5b9cd2e2b5170f03c0d64047dc30c599d6fb",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/smb_monthly": {
+   "digest": "e45a1ba59a575d62faf0b2054307ae775751a5819c45b31e2a414357ccbe45b3",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/tsmom_monthly": {
+   "digest": "99e890d8b682a1b96ec637c662385948ecc2f03f1283ff9706df4ac21a411395",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/umd_monthly": {
+   "digest": "61480dae10e8127d531ccdddc80bb3757823b376eb27ab3e81dc0179b5f23f16",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/valmom_monthly": {
+   "digest": "f730225cdecd38bd3a089c807d47d7bd763ca782edbf0b42d170427770d8c1c3",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
   },
   "fred/A794RX0Q048SBEA": {
    "digest": "42c3210adf01003ab30a8891d05baf17f39843a97eb3249c1666d3f9258ff9d9",

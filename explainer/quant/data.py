@@ -860,6 +860,135 @@ def hkm(kind: str = "quarterly_assets") -> dict:
     out["columns"] = cols
     return out
 
+
+# ---------------------------------------------------------------------------
+# Factor libraries (Part 24 on): Kenneth French's factor files, AQR's datasets, the q-factors, China's CH-4
+# ---------------------------------------------------------------------------
+def ken_french_monthly(fn: str, key: str, through: str = "2025-12", weighting: str = "value") -> dict:
+    """Any monthly file of Kenneth French's library (factors, international factors, two-way sorts) by its zip name:
+    ``date`` (YYYYMM), ``columns``, ``returns`` (decimal). Frozen through ``through`` and checksummed."""
+    return _kf_monthly(fn, key, through, weighting)
+
+
+def ken_french_block(fn: str, title: str, key: str, through: int) -> dict:
+    """A named block of a Kenneth French file (e.g. ``Sum of BE / Sum of ME`` in the BE-ME sorts, annual): ``date``
+    (the file's YYYY or YYYYMM stamps), ``columns``, ``values`` (as published, not rescaled; -99.99 as NaN), through
+    ``through`` (in the same units as the stamps)."""
+    path = DATA / "kenfrench" / fn
+    if not path.exists():
+        _atomic_write(path, _get(f"{KF}/{fn}"))
+    with zipfile.ZipFile(path) as z:
+        lines = z.read(z.namelist()[0]).decode("latin-1").splitlines()
+    i = next(k for k, ln in enumerate(lines) if ln.strip() == title.strip())
+    cols = [c.strip() for c in lines[i + 1].split(",")[1:]]
+    rows = []
+    for ln in lines[i + 2:]:
+        p = [x.strip() for x in ln.split(",")]
+        if not p[0].isdigit():
+            break
+        if int(p[0]) <= through:
+            rows.append([int(p[0])] + [float(x) for x in p[1:]])
+    a = np.array(rows)
+    a[:, 1:] = np.where(a[:, 1:] <= -99.99, np.nan, a[:, 1:])
+    frozen = json.dumps(np.nan_to_num(a, nan=-1).round(6).tolist(), separators=(",", ":")).encode()
+    _check(f"kenfrench/{key}/through_{through}", frozen, f"{KF}/{fn}")
+    return {"date": a[:, 0].astype(int), "columns": cols, "values": a[:, 1:]}
+
+
+AQR = "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets"
+
+
+def _xl_date(v) -> int | None:
+    """An AQR date cell (a datetime or 'MM/DD/YYYY') as YYYYMM."""
+    if v is None or v == "":
+        return None
+    if hasattr(v, "year"):
+        return v.year * 100 + v.month
+    s = str(v).strip()
+    try:
+        m, _, y = s.split("/")
+        return int(y) * 100 + int(m)
+    except ValueError:
+        return None
+
+
+def aqr(dataset: str, sheet: str, through: str = "2025-12") -> dict:
+    """One sheet of an AQR data set (``dataset`` is the file's name, e.g. ``Betting-Against-Beta-Equity-Factors-
+    Monthly``), as published: ``date`` (YYYYMM), ``columns`` and ``values`` (decimal returns, NaN where blank). AQR
+    rebuilds each file's full history at every update, so the parsed sheet is frozen through ``through`` and its hash
+    checked, not the raw file's. AQR's data sets are provided for research and education; see each file's
+    disclosures."""
+    import io
+
+    import openpyxl
+
+    path = DATA / "aqr" / f"{dataset}.xlsx"
+    if not path.exists():
+        _atomic_write(path, _get(f"{AQR}/{dataset}.xlsx", timeout=180))
+    wb = openpyxl.load_workbook(io.BytesIO(path.read_bytes()), read_only=True, data_only=True)
+    rows = list(wb[sheet].iter_rows(values_only=True))
+    h = next(i for i, r in enumerate(rows) if i + 1 < len(rows) and _xl_date(rows[i + 1][0]) is not None
+             and any(isinstance(c, str) and c.strip() for c in r[1:]))
+    cols = [str(c).strip() for c in rows[h][1:] if c is not None and str(c).strip()]
+    lim = int(through.replace("-", ""))
+    dates, vals = [], []
+    for r in rows[h + 1:]:
+        d = _xl_date(r[0])
+        if d is None:
+            if dates:
+                break
+            continue
+        if d > lim:
+            continue
+        dates.append(d)
+        vals.append([float(x) if isinstance(x, (int, float)) else np.nan for x in r[1:1 + len(cols)]])
+    a = np.array(vals, float)
+    frozen = json.dumps([dates, np.nan_to_num(a, nan=-99).round(8).tolist()], separators=(",", ":")).encode()
+    _check(f"aqr/{dataset}/{sheet}/through_{through}", frozen, f"{AQR}/{dataset}.xlsx")
+    return {"date": np.array(dates, int), "columns": cols, "values": a}
+
+
+GLOBALQ = "https://global-q.org/uploads/1/2/2/6/122679606/q5_factors_monthly_2025.csv"
+
+
+def q_factors(through: str = "2025-12") -> dict:
+    """Hou, Xue and Zhang's q5 factors, monthly, as global-q.org publishes them (percent → decimal): ``date``
+    (YYYYMM), ``R_F``, ``R_MKT``, ``R_ME``, ``R_IA``, ``R_ROE``, ``R_EG``."""
+    raw = _cached("globalq/q5_factors_monthly_2025", DATA / "globalq" / "q5_factors_monthly_2025.csv",
+                  lambda: _get(GLOBALQ), GLOBALQ)
+    lines = raw.decode("latin-1").splitlines()
+    cols = lines[0].strip().split(",")
+    lim = int(through.replace("-", ""))
+    rows = []
+    for ln in lines[1:]:
+        p = ln.strip().split(",")
+        if len(p) == len(cols) and p[0].isdigit():
+            d = int(p[0]) * 100 + int(p[1])
+            if d <= lim:
+                rows.append([d] + [float(x) / 100 for x in p[2:]])
+    a = np.array(rows)
+    out = {c: a[:, j - 1] for j, c in enumerate(cols) if j >= 2}
+    out["date"] = a[:, 0].astype(int)
+    return out
+
+
+CH4 = "https://faculty.wharton.upenn.edu/wp-content/uploads/2016/11/CH_4_fac_update_20211231.csv"
+
+
+def ch4() -> dict:
+    """Liu, Stambaugh and Yuan's (2019) China factors, monthly 2000-2021, as Robert Stambaugh publishes them (percent
+    → decimal): ``date`` (YYYYMM), ``rf``, ``mktrf``, ``VMG``, ``SMB``, ``PMO``."""
+    raw = _cached("stambaugh/CH_4_fac_update_20211231", DATA / "stambaugh" / "CH_4_fac_update_20211231.csv",
+                  lambda: _get(CH4), CH4)
+    rows = []
+    for ln in raw.decode("latin-1").splitlines():
+        p = [x.strip() for x in ln.split(",")]
+        if p and p[0].isdigit() and len(p[0]) == 8:
+            rows.append([int(p[0]) // 100] + [float(x) / 100 for x in p[1:6]])
+    a = np.array(rows)
+    return {"date": a[:, 0].astype(int), "rf": a[:, 1], "mktrf": a[:, 2], "VMG": a[:, 3], "SMB": a[:, 4],
+            "PMO": a[:, 5]}
+
 # ---------------------------------------------------------------------------
 # What the series has used so far: ``python -m explainer.quant.data`` fetches all of it
 # ---------------------------------------------------------------------------

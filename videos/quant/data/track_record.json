@@ -1,0 +1,242 @@
+{
+ "classic_bab_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.08188709726344197,
+   "vol": 0.11252018927523544,
+   "sharpe": 0.7277547059855904,
+   "sharpe_se": 0.11786181709720402,
+   "maxdd": -0.5464802323570683,
+   "n": 1081,
+   "sharpe_net": 0.5944452963888066,
+   "cost_per_year": 0.015
+  },
+  "holdout": {
+   "mean": 0.01585934860027363,
+   "vol": 0.08754678532846587,
+   "sharpe": 0.1811528377743524,
+   "sharpe_se": 0.4370751251519831,
+   "maxdd": -0.15250958285456606,
+   "n": 60,
+   "sharpe_net": 0.009815878413461415,
+   "cost_per_year": 0.015
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_cma_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.03005913043478261,
+   "vol": 0.06783284114725077,
+   "sharpe": 0.44313535930966796,
+   "sharpe_se": 0.13013875712902148,
+   "maxdd": -0.2508419387351932,
+   "n": 690,
+   "sharpe_net": 0.29571414222851844,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.013040000000000006,
+   "vol": 0.10532414792246468,
+   "sharpe": 0.12380826483969772,
+   "sharpe_se": 0.44618532796198324,
+   "maxdd": -0.27633342203870415,
+   "n": 60,
+   "sharpe_net": 0.028863276465696443,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_hml_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.030278260869565213,
+   "vol": 0.09824440856339407,
+   "sharpe": 0.3081932225183847,
+   "sharpe_se": 0.13237559603431842,
+   "maxdd": -0.5777720404536153,
+   "n": 690,
+   "sharpe_net": 0.20640625930869427,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.08072,
+   "vol": 0.14688028839379388,
+   "sharpe": 0.5495631911042097,
+   "sharpe_se": 0.4417309008019731,
+   "maxdd": -0.2028343741846812,
+   "n": 60,
+   "sharpe_net": 0.4814805361111213,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_mkt_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.06846434782608696,
+   "vol": 0.15465020205457106,
+   "sharpe": 0.44270454817723487,
+   "sharpe_se": 0.13709512094259382,
+   "maxdd": -0.5575082231927492,
+   "n": 690,
+   "sharpe_net": 0.43947144538553234,
+   "cost_per_year": 0.0005
+  },
+  "holdout": {
+   "mean": 0.10418,
+   "vol": 0.1533421762495536,
+   "sharpe": 0.6793956010540397,
+   "sharpe_se": 0.4681606264610158,
+   "maxdd": -0.2526049814917599,
+   "n": 60,
+   "sharpe_net": 0.6761349195362149,
+   "cost_per_year": 0.0005
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_qmj_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.040400252282695205,
+   "vol": 0.07460872348709564,
+   "sharpe": 0.5414950208829513,
+   "sharpe_se": 0.125835895930709,
+   "maxdd": -0.2820641127281096,
+   "n": 762,
+   "sharpe_net": 0.4074624368550314,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.0293748235684339,
+   "vol": 0.11866141368926988,
+   "sharpe": 0.24755160633224577,
+   "sharpe_se": 0.4524647888107088,
+   "maxdd": -0.29457030706541454,
+   "n": 60,
+   "sharpe_net": 0.1632782129089525,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_rmw_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.029589565217391298,
+   "vol": 0.07533815469333387,
+   "sharpe": 0.39275670260091283,
+   "sharpe_se": 0.13805717541314289,
+   "maxdd": -0.4178744871762301,
+   "n": 690,
+   "sharpe_net": 0.2600218348475775,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.058539999999999995,
+   "vol": 0.09373708109857783,
+   "sharpe": 0.6245127255289386,
+   "sharpe_se": 0.44147719065852703,
+   "maxdd": -0.140892074171455,
+   "n": 60,
+   "sharpe_net": 0.5178313579975178,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_smb_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.027561739130434783,
+   "vol": 0.10459343248388327,
+   "sharpe": 0.2635130951905776,
+   "sharpe_se": 0.1306641013866794,
+   "maxdd": -0.5644845779392695,
+   "n": 690,
+   "sharpe_net": 0.1679047977810735,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": -0.0466,
+   "vol": 0.10707946993404446,
+   "sharpe": -0.4351907982800367,
+   "sharpe_se": 0.4672991561120341,
+   "maxdd": -0.32675703550634705,
+   "n": 60,
+   "sharpe_net": -0.5285793816019331,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_tsmom_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.13171150309227514,
+   "vol": 0.12387567651811231,
+   "sharpe": 1.0632555703783955,
+   "sharpe_se": 0.1691157692975893,
+   "maxdd": -0.23525016493067508,
+   "n": 432,
+   "sharpe_net": 0.9825294723979108,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.03698491467795928,
+   "vol": 0.13257440163589732,
+   "sharpe": 0.2789747811160011,
+   "sharpe_se": 0.45395373388760757,
+   "maxdd": -0.1700793283339761,
+   "n": 60,
+   "sharpe_net": 0.20354543822170676,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_umd_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.07613297872340426,
+   "vol": 0.1637960533606023,
+   "sharpe": 0.4648034989939289,
+   "sharpe_se": 0.12836458310063564,
+   "maxdd": -0.7843714812680127,
+   "n": 1128,
+   "sharpe_net": 0.281648902869723,
+   "cost_per_year": 0.03
+  },
+  "holdout": {
+   "mean": 0.023119999999999995,
+   "vol": 0.12930727875484446,
+   "sharpe": 0.1787989061608321,
+   "sharpe_se": 0.4650601730434612,
+   "maxdd": -0.2254243181195067,
+   "n": 60,
+   "sharpe_net": -0.05320659491291207,
+   "cost_per_year": 0.03
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_valmom_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.04496625777766085,
+   "vol": 0.04175726338030199,
+   "sharpe": 1.076848771628857,
+   "sharpe_se": 0.13455903922063456,
+   "maxdd": -0.09800207264697747,
+   "n": 588,
+   "sharpe_net": 0.7176298289651981,
+   "cost_per_year": 0.015
+  },
+  "holdout": {
+   "mean": 0.033522454909619456,
+   "vol": 0.03164807874400597,
+   "sharpe": 1.059225590936337,
+   "sharpe_se": 0.441152981784774,
+   "maxdd": -0.02739032014717868,
+   "n": 60,
+   "sharpe_net": 0.585263170615927,
+   "cost_per_year": 0.015
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ }
+}

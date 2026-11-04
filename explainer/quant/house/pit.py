@@ -130,6 +130,10 @@ PARTS = {
     "pca_fly_2s5s10s": (18, 1),
     "cp_tent_oos": (19, 1), "mlp_bond_premia_oos": (19, 2),
     "logit_default_holdout": (20, 1), "gbm_default_holdout": (20, 2),
+    "classic_mkt_part24": (24, 1), "classic_smb_part24": (24, 2), "classic_hml_part24": (24, 3),
+    "classic_umd_part24": (24, 4), "classic_rmw_part24": (24, 5), "classic_cma_part24": (24, 6),
+    "classic_bab_part24": (24, 7), "classic_qmj_part24": (24, 8), "classic_tsmom_part24": (24, 9),
+    "classic_valmom_part24": (24, 10),
 }
 
 

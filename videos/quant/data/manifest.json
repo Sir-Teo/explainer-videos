@@ -1,4 +1,34 @@
 {
+ "aqr/Betting-Against-Beta-Equity-Factors-Monthly/BAB Factors/through_2025-12": {
+  "sha256": "6295b1fdfbd3f1d312747e85076f79da17ac1721b69b774354fe59c1ea3b14de",
+  "bytes": 280287,
+  "source": "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets/Betting-Against-Beta-Equity-Factors-Monthly.xlsx"
+ },
+ "aqr/Century-of-Factor-Premia-Monthly/Century of Factor Premia/through_2025-12": {
+  "sha256": "cb85ffc61291d29e893fbf734bed77161cd33d70d0c8dc72060d6716a04396fb",
+  "bytes": 574640,
+  "source": "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets/Century-of-Factor-Premia-Monthly.xlsx"
+ },
+ "aqr/Quality-Minus-Junk-Factors-Monthly/QMJ Factors/through_2025-12": {
+  "sha256": "9cfae94dc037a50967e4793dd489bd724ab5a01f02fd51e4660ff01aa19ac25c",
+  "bytes": 209906,
+  "source": "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets/Quality-Minus-Junk-Factors-Monthly.xlsx"
+ },
+ "aqr/The-Devil-in-HMLs-Details-Factors-Monthly/HML Devil/through_2025-12": {
+  "sha256": "a84d3f79c158a7a752341964761041ee51c42adc49b64a85bdaabdc4ddd7c65b",
+  "bytes": 289700,
+  "source": "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets/The-Devil-in-HMLs-Details-Factors-Monthly.xlsx"
+ },
+ "aqr/Time-Series-Momentum-Factors-Monthly/TSMOM Factors/through_2025-12": {
+  "sha256": "3b3c82d71f0c89a36718f500fc57107f320dc06418686377bddd13cf52ef0c8a",
+  "bytes": 32271,
+  "source": "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets/Time-Series-Momentum-Factors-Monthly.xlsx"
+ },
+ "aqr/Value-and-Momentum-Everywhere-Factors-Monthly/VME Factors/through_2025-12": {
+  "sha256": "8bccf1af07829dc59de337dabbd47a043e9a1a88b6cc0a9c4aeb2ffe3e2baa85",
+  "bytes": 161631,
+  "source": "https://www.aqr.com/-/media/AQR/Documents/Insights/Data-Sets/Value-and-Momentum-Everywhere-Factors-Monthly.xlsx"
+ },
  "binance/futures/cm/BTCUSD_210326/1h/2020-12": {
   "sha256": "894b267ed21383db5d9d6c069e30e693640fbc0270c2db4026fa2be734724ce8",
   "bytes": 33153,
@@ -19734,6 +19764,11 @@
   "bytes": 20214,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WSHOMCB"
  },
+ "globalq/q5_factors_monthly_2025": {
+  "sha256": "8b2e2f1364890f8f5876da20e6bfad0acd8d272425de3b65c725f54b51128f6a",
+  "bytes": 37117,
+  "source": "https://global-q.org/uploads/1/2/2/6/122679606/q5_factors_monthly_2025.csv"
+ },
  "hkm/factors_zip": {
   "sha256": "0e9bac2d35c80e62b20fc71f222a41f71eb8e607963f7022da55b1bb143c3bbf",
   "bytes": 1454750,
@@ -19809,6 +19844,21 @@
   "bytes": 106548,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_OP_CSV.zip"
  },
+ "kenfrench/RESVAR_value/through_2025-12": {
+  "sha256": "cb97985cb4e2711339f710969d9e72b799ab542785ff737e57b51e8b7d0a4ea8",
+  "bytes": 90339,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_RESVAR_CSV.zip"
+ },
+ "kenfrench/VAR_value/through_2025-12": {
+  "sha256": "7869c8431a69898c816769c02a3cbb5060c4861adfb351f14f8c337f0b50483b",
+  "bytes": 90343,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_VAR_CSV.zip"
+ },
+ "kenfrench/bm_sum_annual/through_2020": {
+  "sha256": "e2efd5e2ee78b18664c49c65e55e4d8fcfac823dc94f31941092d4154228a77b",
+  "bytes": 13220,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BE-ME_CSV.zip"
+ },
  "kenfrench/daily_factors/through_2020-12-31": {
   "sha256": "0106000fa427c0bfdaaeac8d08d5f58706101e3617c5df5e07906d1829708e83",
   "bytes": 1018744,
@@ -19818,6 +19868,21 @@
   "sha256": "40782c306bc1378b854a6bf42be100809cff4b6a538c15dc5c21f9c9a94ceaec",
   "bytes": 1070449,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
+ },
+ "kenfrench/dev5_value/through_2025-12": {
+  "sha256": "37584df75825881e2a23d494b977a5fe7ade3f4c0901de02ddb86326026174d5",
+  "bytes": 23072,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Developed_5_Factors_CSV.zip"
+ },
+ "kenfrench/devmom_value/through_2025-12": {
+  "sha256": "28d74497b1d2b7507ee0b2609b022c444664fbb945577375147be19a17f44259",
+  "bytes": 7689,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Developed_Mom_Factor_CSV.zip"
+ },
+ "kenfrench/em5_value/through_2025-12": {
+  "sha256": "0fe7beb7eccac7612e6632d448d3e20936684e08c53e945ed7975c7bebadb1f0",
+  "bytes": 23517,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Emerging_5_Factors_CSV.zip"
  },
  "kenfrench/ff25_value/through_2020-12": {
   "sha256": "3942e959389b37986028b0f6c5dfbb7ed93772c6de4e5884c0b822e87a5afdff",
@@ -19839,6 +19904,11 @@
   "bytes": 47418,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
  },
+ "kenfrench/ff5_monthly_value/through_2025-12": {
+  "sha256": "c334ea4cc9af4aa93bf5a1621151fd3bbcbe6928b5a1f529d4279e2aedbec1f4",
+  "bytes": 40764,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip"
+ },
  "kenfrench/industries10_value/through_2020-12": {
   "sha256": "d97ced3bc16b458a02c076d6493664d7e7ad1dd4469cc6390dd1e28ca4cebc19",
   "bytes": 95125,
@@ -19859,10 +19929,25 @@
   "bytes": 434031,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_CSV.zip"
  },
+ "kenfrench/mom_deciles_value/through_2025-12": {
+  "sha256": "64cd9ed53630804a1895ba1a96d429c5cdb6650913b43cc8ae37bccfba13722a",
+  "bytes": 99693,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Portfolios_Prior_12_2_CSV.zip"
+ },
+ "kenfrench/mom_monthly_value/through_2025-12": {
+  "sha256": "c7158562ef49a469fb64e076ec038a3a3afc61825b7ebaf2f04025ad2e785281",
+  "bytes": 21661,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_CSV.zip"
+ },
  "kenfrench/size_deciles_daily/through_2025-12-31": {
   "sha256": "81f1224d428adeaa10682134f1997a54dda765794a00bb10ff0dbf698f010ed3",
   "bytes": 2255765,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_ME_daily_CSV.zip"
+ },
+ "kenfrench/strev_monthly_value/through_2025-12": {
+  "sha256": "ae252c6fdfb81c4df5f86252cc1f00109ceb2110a70e3a0124b83e809b3bc735",
+  "bytes": 21960,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_ST_Reversal_Factor_CSV.zip"
  },
  "nyfed/acm_monthly/through_2025-12": {
   "sha256": "3a2b6e9253b2eac57146b40a086043a756b9e17d78ae13d5893da3dbbacfc496",
@@ -19898,6 +19983,11 @@
   "sha256": "d0580a40f10087aabdcc591481b0e1a31d2240bb2df987459e47ad2e08185b74",
   "bytes": 98719,
   "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+ },
+ "stambaugh/CH_4_fac_update_20211231": {
+  "sha256": "b12853ce209bc717b42b0eb4778d80e492315c5e25037cb06f4f1f4c7061d14f",
+  "bytes": 9932,
+  "source": "https://faculty.wharton.upenn.edu/wp-content/uploads/2016/11/CH_4_fac_update_20211231.csv"
  },
  "treasury/par/2022": {
   "sha256": "544550ed1e8d4978c37de8b1f7ed99a6fe901669ad9f4e8d39a968849050ddc2",
