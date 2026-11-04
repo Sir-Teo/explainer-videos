@@ -670,9 +670,116 @@ def compute_pretrained() -> dict:
     return _json(out)
 
 
+def _monthly_compound(dates, r):
+    """Weekly returns (dates YYYYMMDD) compounded into calendar months."""
+    ym = np.asarray(dates) // 100
+    out_ym, out = [], []
+    for m in np.unique(ym):
+        out_ym.append(int(m))
+        out.append(float(np.prod(1 + np.asarray(r)[ym == m]) - 1))
+    return np.array(out_ym), np.array(out)
+
+
+def _turnover_cost(d, f, qv, bps=10.0):
+    """Annual cost of the value-weighted decile long-short at ``bps`` per unit of one-way turnover."""
+    prev, tot, n = None, 0.0, 0
+    for w in np.unique(d):
+        m = d == w
+        k = np.argsort(np.argsort(f[m])) * 10 // m.sum()
+        wt = np.zeros(m.sum())
+        hi, lo = k == 9, k == 0
+        wt[hi] = qv[m][hi] / qv[m][hi].sum()
+        wt[lo] = -qv[m][lo] / qv[m][lo].sum()
+        cur = dict(zip(np.flatnonzero(m), wt))
+        if prev is not None:
+            keys = set(prev) | set(cur)
+            tot += sum(abs(cur.get(k_, 0) - prev.get(k_, 0)) for k_ in keys)
+            n += 1
+        prev = {P_: v for P_, v in cur.items()}
+    return 52 * (tot / max(n, 1)) * bps * 1e-4
+
+
+def compute_envelope() -> dict:
+    import inspect
+
+    from explainer.quant.house import track
+    P = _panel()
+    d = P["date"]
+    out = {}
+    # --- the network ensemble on coins: fitted on 2018-2020, opened on 2021-2025
+    code = inspect.getsource(_panel) + inspect.getsource(ML.MLPEnsemble) + inspect.getsource(_fit_zoo)
+    n_trials = len(ZOO) + 5 + 6 + 5            # the zoo, plus the tuning grids of ENet, PCR and PLS
+    pit.register("nn3_coin_ls_part27", code, {"model": "NN3 (32-16-8), 5 seeds", "train": "2018-01..2020-06",
+                                              "validate": "2020-07..2020-12", "portfolio": "decile long-short, weekly, "
+                                              "weighted by 28-day median dollar volume", "universe": f"median volume >= {MIN_QV}"},
+                 trials=n_trials)
+    weeks = np.unique(d)
+    M = np.full((len(weeks), len(P["names"])), -999.0)
+    for k, w in enumerate(weeks):
+        m = d == w
+        M[k, P["coin"][m]] = np.round(P["ret"][m], 10)
+    pit.open_envelope("nn3_coin_ls_part27", "binance/usdt_weekly_panel", weeks, M)
+    tr, va = d < 20200701, (d >= 20200701) & (d < 20201224)
+    f = _fit_zoo("NN3", P["X"][tr], _winsor(P["y"][tr]), P["X"][va], _winsor(P["y"][va]))
+    hold = d >= HOLD
+    fh = f(P["X"][hold])
+    vw = ML.decile_spread(d[hold], fh, P["ret"][hold], weights=P["qv"][hold])
+    ew = ML.decile_spread(d[hold], fh, P["ret"][hold])
+    z = load("zoo")["rows"]["NN3"]
+    cost = _turnover_cost(d[hold], fh, P["qv"][hold])
+    ym_r, mr = _monthly_compound(*_zoo_research_vw(P))
+    ym_h, mh = _monthly_compound(vw["date"], vw["ls"])
+    row = track.record("nn3_coin_ls_part27", 27, mr, mh, cost, note="value-weighted decile long-short, weekly")
+    out["nn3"] = {"row": row, "sr_vw": B.sharpe(vw["ls"], 52), "sr_ew": B.sharpe(ew["ls"], 52), "cost": cost,
+                  "r2": ML.r2_oos(P["y"][hold], fh), "weeks": vw["date"], "cum_vw": np.cumsum(np.log1p(np.clip(vw["ls"], -0.99, None))),
+                  "research_sr_vw": z["sr_vw"], "first": int(vw["date"][0]), "last": int(vw["date"][-1])}
+    # --- the random-feature timer: opened on the Welch-Goyal predictors of 2021-2025
+    pit.register("kmz_timer_part27", inspect.getsource(ML.kmz_timing) + inspect.getsource(ML.rff) +
+                 inspect.getsource(_timing_data), {"P": 12000, "z": 0.1, "T": 12, "gamma": 2.0, "seeds": 10,
+                                                   "scale": "10% a year in research"}, trials=len(KMZ_P) * len(KMZ_Z))
+    g = data.goyal_welch("2025-12")
+    cols = [k for k in g if k != "date"]
+    V = np.column_stack([np.nan_to_num(g[k], nan=-999) for k in cols])
+    pit.open_envelope("kmz_timer_part27", "goyal/welch_goyal_monthly", g["date"] * 100 + 1, V)
+    td = _timing_data("2025-12")
+    X, r, rx, vol, dd = td["X"], td["r"], td["rx"], td["vol"], td["date"]
+    t_h = int(np.searchsorted(dd, 202101))
+    fc = ML.kmz_timing(X, r, T=12, Ps=(12000,), zs=(0.1,), gamma=2.0, n_seeds=10, start=t_h)["F"][12000][0.1]
+    kres = load("kmz")
+    t0 = int(np.searchsorted(dd, kres["first"]))
+    f_res = np.asarray(kres["position"])
+    strat_res = f_res * r[t0:t_h]
+    scale = 0.10 / (np.std(strat_res) * math.sqrt(12))
+    strat_h = scale * fc[t_h:] * r[t_h:]
+    rowk = track.record("kmz_timer_part27", 27, scale * strat_res, strat_h, 0.001, note="RFF ridge, P = 12000, z = 0.1")
+    out["kmz"] = {"row": rowk, "sr_hold": B.sharpe(strat_h, 12), "sr_mkt_hold": B.sharpe(r[t_h:], 12),
+                  "ym": dd[t_h:], "cum": np.cumsum(strat_h), "first": int(dd[t_h]), "last": int(dd[-1])}
+    out["trials"] = pit.trials_so_far()
+    return _json(out)
+
+
+def _zoo_research_preds(P, f):
+    d = P["date"]
+    m = (d >= 20200101) & (d < 20201224)
+    return d[m], f(P["X"][m]), P["ret"][m]
+
+
+def _zoo_research_vw(P):
+    """The NN3 strategy's research-window weekly returns: the zoo's expanding 2019 and 2020 tests, value-weighted."""
+    out_d, out_r = [], []
+    for year in (2019, 2020):
+        tr, va, te = _split(P, year)
+        f = _fit_zoo("NN3", P["X"][tr], _winsor(P["y"][tr]), P["X"][va], _winsor(P["y"][va]))
+        s = ML.decile_spread(P["date"][te], f(P["X"][te]), P["ret"][te], weights=P["qv"][te])
+        out_d.append(s["date"])
+        out_r.append(s["ls"])
+    return np.concatenate(out_d), np.concatenate(out_r)
+
+
 ITEMS = {"snr": compute_snr, "kmz": compute_kmz, "nagel": compute_nagel, "panel": compute_panel, "zoo": compute_zoo,
          "descent": compute_descent, "autoenc": compute_autoenc, "attention": compute_attention, "images": compute_images,
-         "sdf": compute_sdf, "toolkit": compute_toolkit, "conformal": compute_conformal, "pretrained": compute_pretrained}
+         "sdf": compute_sdf, "toolkit": compute_toolkit, "conformal": compute_conformal, "pretrained": compute_pretrained,
+         "envelope": compute_envelope}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

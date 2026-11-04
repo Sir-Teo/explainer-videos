@@ -136,6 +136,7 @@ PARTS = {
     "classic_valmom_part24": (24, 10),
     "kns_sdf_part25": (25, 1), "zoo_equal_weight_part25": (25, 2),
     "stw_best_rule_part26": (26, 1),
+    "nn3_coin_ls_part27": (27, 1), "kmz_timer_part27": (27, 2),
 }
 
 
