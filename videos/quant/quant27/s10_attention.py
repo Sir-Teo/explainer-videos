@@ -133,7 +133,7 @@ class Attention(VoiceoverScene):
         for i in range(k):
             for j in range(k):
                 v = min(sub[i, j] / max(vmax, 1e-12), 1.0)
-                grid.add(Square(side_length=cell, stroke_width=0, fill_color=interpolate_color(BLACK, HURDLE, v),
+                grid.add(Square(side_length=cell, stroke_width=0, fill_color=interpolate_color(ManimColor(BLACK), ManimColor(HURDLE), v),
                                 fill_opacity=1).move_to(np.array([(j - k / 2) * cell, (k / 2 - i) * cell, 0])))
         grid.move_to(LEFT * 2.6 + DOWN * 0.2)
         frame = SurroundingRectangle(grid, color=GREY_C, buff=0.02, stroke_width=1.5)
