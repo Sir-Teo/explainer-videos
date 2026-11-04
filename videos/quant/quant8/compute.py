@@ -916,7 +916,72 @@ def compute_bsde_replay() -> dict:
     return _json({"frames": frames, "grid": grid, "Y0": float(Y.mean()), "bs_r": bs_r, "bs_R": bs_R,
                   "fan": fan, "t": np.linspace(0, T, steps + 1)[::2], "payoff": pay(grid)})
 
-ITEMS = {"coin": compute_coin, "bellman": compute_bellman, "merton_us": compute_merton_us, "kelly_us": compute_kelly_us,
+def compute_estrisk_theory() -> dict:
+    """The research chapter: estimation risk in Merton's and Kelly's rule.  With an estimated mean, the plug-in
+    fraction's expected certainty equivalent is (theta^2 - 1/T)/(2 gamma) a year; scaling it by c gives
+    (c theta^2 - c^2 (theta^2 + 1/T)/2)/gamma, maximised at c* = T theta^2/(T theta^2 + 1) (Kan and Zhou 2007, one
+    asset).  Checked by simulation with both moments estimated from monthly data, then run on the US market with an
+    expanding window from 1936."""
+    theta, sig = 0.4, 0.18
+    Ts = np.arange(1, 101)
+    ce = lambda c, T, g: (c * theta ** 2 - c ** 2 * (theta ** 2 + 1 / T) / 2) / g  # noqa: E731
+    cstar = Ts * theta ** 2 / (Ts * theta ** 2 + 1)
+    out = {"theta": theta, "sigma": sig, "T": Ts, "ce_max": theta ** 2 / 2,
+           "theory": {"plug": ce(1, Ts, 1), "half": ce(0.5, Ts, 1), "star": ce(cstar, Ts, 1)}, "cstar": cstar}
+    rng = np.random.default_rng(808)
+    mu = theta * sig
+    sims = {}
+    for T in (5, 10, 20, 50):
+        M = 20000
+        R = rng.normal(mu / 12, sig / np.sqrt(12), (M, 12 * T))
+        mh = R.mean(1) * 12
+        sh = R.std(1, ddof=1) * np.sqrt(12)
+        pi = mh / sh ** 2                         # gamma = 1: Kelly
+        th2 = (mh / sh) ** 2
+        chat = np.clip(1 - 1 / (T * th2), 0, 1)
+        real = lambda w: w * mu - w ** 2 * sig ** 2 / 2  # noqa: E731
+        n = 12 * T
+        a1, a2 = (n - 1) / (n - 3), (n - 1) ** 2 / ((n - 3) * (n - 5))  # E[sigma^2/s^2], E[sigma^4/s^4], normal data
+        sims[str(T)] = {"plug": float(np.mean(real(pi))), "half": float(np.mean(real(pi / 2))),
+                        "plug_se": float(np.std(real(pi)) / np.sqrt(M)),
+                        "plug_theory_s": float(a1 * theta ** 2 - a2 * (theta ** 2 + 1 / T) / 2),
+                        "chat": float(np.mean(real(chat * pi))), "plug_theory": float(ce(1, T, 1)),
+                        "star_theory": float(ce(T * theta ** 2 / (T * theta ** 2 + 1), T, 1)),
+                        "p_negative_ce": float(np.mean(real(pi) < 0))}
+    out["sims"] = sims
+    # the US market, monthly 1926-2020: an expanding window from 1936, gamma = 2
+    ym, x, rf = _us_monthly()
+    x = np.asarray(x, float)
+    g = 2.0
+    start = 120
+    rules = {"plug": [], "half": [], "chat": []}
+    for t in range(start, len(x)):
+        h = x[:t]
+        m_, s2 = h.mean() * 12, h.var(ddof=1) * 12
+        pi = m_ / (g * s2)
+        T_ = t / 12
+        th2 = m_ ** 2 / s2
+        c_ = max(0.0, 1 - 1 / (T_ * th2)) if th2 > 0 else 0.0
+        for k, w in (("plug", pi), ("half", pi / 2), ("chat", c_ * pi)):
+            rules[k].append(w * x[t])
+    full = x.mean() * 12 / (g * x.var(ddof=1) * 12)
+    out["us_theta"] = float(x[start:].mean() * 12 / (x[start:].std(ddof=1) * np.sqrt(12)))
+    out["us_theta_all"] = float(x.mean() * 12 / (x.std(ddof=1) * np.sqrt(12)))
+    out["us_pi_path"] = [float(r / x[start + i]) if x[start + i] != 0 else None for i, r in enumerate(rules["plug"])][::12]
+    out["us_c_path"] = [float(c / p) if p else None for c, p in zip(rules["chat"][::12], rules["plug"][::12])]
+    rules["hindsight"] = list(full * x[start:])
+    rules["market"] = list(x[start:])
+    us = {}
+    for k, v in rules.items():
+        v = np.asarray(v)
+        us[k] = {"ce": float(v.mean() * 12 - g / 2 * v.var(ddof=1) * 12), "mean": float(v.mean() * 12),
+                 "vol": float(v.std(ddof=1) * np.sqrt(12))}
+    out["us"] = us
+    out["us_first"], out["us_last"], out["gamma_us"] = int(ym[start]), int(ym[-1]), g
+    return _json(out)
+
+
+ITEMS = {"estrisk_theory": compute_estrisk_theory, "coin": compute_coin, "bellman": compute_bellman, "merton_us": compute_merton_us, "kelly_us": compute_kelly_us,
          "fractional": compute_fractional, "samuelson": compute_samuelson, "ergodic": compute_ergodic,
          "ltcm": compute_ltcm, "secretary": compute_secretary, "american": compute_american, "bsde": compute_bsde,
          "ppo": compute_ppo, "envelope": compute_envelope,

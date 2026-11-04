@@ -32,7 +32,12 @@ PROBLEMS = [
     r"For the perpetual American put, show that maximizing $(K - b)\,b^{\beta}$ over $b$ gives $b^* = \beta K/(1 + "
     r"\beta)$, and that this is equivalent to smooth fit $V'(b^*) = -1$.",
     r"For $N$ symmetric traders with $\phi = 0$, solve $2\eta Q'' + \kappa\frac{N-1}{N}Q' = 0$, $Q(0) = 1$, "
-    r"$Q(T) = 0$, and find the share sold by $T/5$ when $\kappa T/(2\eta) = 2$ and $N \to \infty$.",
+    r"$Q(T) = 0$, and find the share sold by $T/5$ when $\kappa T/(2\eta) = 2$ and $N \to \infty$.",    r"(qual) With $\hat\mu \sim N(\mu, \sigma^2/T)$ and $\sigma$ known, show that the expected certainty equivalent of "
+    r"$c\,\hat\mu/(\gamma\sigma^2)$ is $[c\theta^2 - c^2(\theta^2 + 1/T)/2]/\gamma$, that the plug-in loses in expectation "
+    r"when $T < 1/\theta^2$, and that $c^* = T\theta^2/(T\theta^2 + 1)$.",
+    r"(qual) Now estimate $\sigma^2$ by $s^2$ from $n$ iid normal returns. Using $\mathbb E[\sigma^2/s^2] = (n - 1)/(n - 3)$ "
+    r"and $\mathbb E[\sigma^4/s^4] = (n - 1)^2/((n - 3)(n - 5))$, find the plug-in's expected certainty equivalent, and "
+    r"show it is negative for $\theta = 0.4$, $T = 5$ years of monthly data.",
 ]
 
 
@@ -109,11 +114,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems: Kelly's formula for any odds, Merton's value function, fractional Kelly, the "
+            "And nine problems: Kelly's formula for any odds, Merton's value function, fractional Kelly, the "
             "secretary's one over e, how much to stake on Peters' coin, smooth fit for the perpetual put, and the "
-            "liquidating crowd. Solutions, in English and Chinese, are in the notes."
+            "liquidating crowd. Two are qualifying-exam problems: the exact cost of an estimated edge, and the "
+            "correction when the variance is estimated too. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)

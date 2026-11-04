@@ -932,7 +932,135 @@ def compute_neural_iv() -> dict:
             "n_train": int(keep.sum())}
 
 
-ITEMS = {"tree": compute_tree, "riskneutral": compute_riskneutral, "ledger": compute_ledger, "wrong_vol": compute_wrong_vol,
+def _dg(S, K, tau, sig):
+    """Black-Scholes call delta and gamma at zero rates (a light version of bs.greeks for the hedging loops)."""
+    from scipy.special import ndtr
+    sq = sig * np.sqrt(tau)
+    d1 = (np.log(S / K) + 0.5 * sq ** 2) / sq
+    return ndtr(d1), np.exp(-0.5 * d1 ** 2) / np.sqrt(2 * np.pi) / (S * sq)
+
+
+def _hedge_run(S, K, T, sig, rule, c):
+    """Hedge a short call along price paths S (paths x (M+1), equal steps over [0, T]), rebalancing by ``rule``:
+    'time' every c-th step; 'price' when |S - S_last| >= c; 'delta' when |delta - held| >= c; 'fukasawa' when
+    |delta - held| >= c sqrt(gamma_last).  Returns the hedging error (portfolio less payoff) and the trade count."""
+    P, M1 = S.shape
+    M = M1 - 1
+    dt = T / M
+    d0, g0 = _dg(S[:, 0], K, T, sig)
+    from scipy.special import ndtr
+    sq = sig * np.sqrt(T)
+    d1 = (np.log(S[:, 0] / K) + 0.5 * sq ** 2) / sq
+    V = S[:, 0] * ndtr(d1) - K * ndtr(d1 - sq)
+    h, s_last, g_last = d0.copy(), S[:, 0].copy(), g0.copy()
+    n = np.zeros(P)
+    for k in range(1, M):
+        V += h * (S[:, k] - S[:, k - 1])
+        if rule == "time":
+            if k % c:
+                continue
+            hit = np.ones(P, bool)
+            dk, gk = _dg(S[:, k], K, T - k * dt, sig)
+        else:
+            dk, gk = _dg(S[:, k], K, T - k * dt, sig)
+            if rule == "price":
+                hit = np.abs(S[:, k] - s_last) >= c
+            elif rule == "delta":
+                hit = np.abs(dk - h) >= c
+            else:
+                hit = np.abs(dk - h) >= c * np.sqrt(g_last)
+        h = np.where(hit, dk, h)
+        s_last = np.where(hit, S[:, k], s_last)
+        g_last = np.where(hit, gk, g_last)
+        n += hit
+    V += h * (S[:, M] - S[:, M - 1])
+    return V - np.maximum(S[:, M] - K, 0), n
+
+
+def compute_hedgetime_theory() -> dict:
+    """The research chapter: when to rebalance.  For a hedge rebalanced at hitting times of a band, each interval's
+    error is (1/2) Gamma sigma^2 S^2 (E tau - tau), whose variance is a third of the equal-time step's; minimizing
+    the error for a given number of trades puts the band at |delta - held|^2 = h Gamma, and N x Var tends to
+    (1/6) (E int Gamma sigma^2 S^2 dt)^2 (Fukasawa 2011), against (T/2) E int Gamma^2 sigma^4 S^4 dt for equal times.
+    Theory constants by quadrature; simulation on fine GBM paths; then Bitcoin minutes with hindsight volatility."""
+    K, T, sig, S0 = 100.0, 0.25, 0.2, 100.0
+    z, wz = np.polynomial.hermite_e.hermegauss(200)
+    wz = wz / wz.sum()
+    nt = 2000
+    ts = (np.arange(nt) + 0.5) * T / nt
+    J0 = J1 = J2 = I = 0.0
+    for t in ts:
+        St = S0 * np.exp(-0.5 * sig ** 2 * t + sig * np.sqrt(t) * z)
+        _, g = _dg(St, K, T - t, sig)
+        a = sig ** 2 * St ** 2
+        J0 += np.sum(wz * a); J1 += np.sum(wz * g * a); J2 += np.sum(wz * g ** 2 * a); I += np.sum(wz * (g * a) ** 2)
+    J0, J1, J2, I = (v * T / nt for v in (J0, J1, J2, I))
+    theory = {"time": T * I / 2, "price": J0 * J2 / 6, "delta": J0 * J2 / 6, "fukasawa": J1 ** 2 / 6}
+    out = {"K": K, "T": T, "sigma": sig, "J": {"J0": J0, "J1": J1, "J2": J2, "I": I}, "theory_NVar": theory,
+           "premium": float(bs.price(S0, K, T, sig))}
+    M, P = 2 ** 14, 3000
+    _, S = paths.gbm(S0, 0.0, sig, T, M, P, seed=1010)
+    S = np.asarray(S)
+    if S.shape[0] != P:
+        S = S.T
+    targets = [16, 64, 256]
+    sims = {}
+    for rule in ("time", "price", "delta", "fukasawa"):
+        rows = []
+        for N in targets:
+            if rule == "time":
+                c = M // N
+            elif rule == "price":
+                c = np.sqrt(J0 / N)
+            elif rule == "delta":
+                c = np.sqrt(J2 / N)
+            else:
+                c = np.sqrt(J1 / N)
+            e, n = _hedge_run(S, K, T, sig, rule, c)
+            rows.append({"target": N, "c": float(c), "N": float(n.mean()), "sd": float(e.std()),
+                         "NVar": float(n.mean() * e.var()), "mean": float(e.mean())})
+        sims[rule] = rows
+    out["sims"] = sims
+    # Bitcoin: 30-day at-the-money calls written every 15 days, 2019-2020, hedged on one-minute closes with the
+    # volatility each window actually realized (hindsight), so the remaining error is from trading in steps
+    b = data.binance_klines("BTCUSDT", "1m", "2019-01", "2020-12")
+    tm, c_ = np.asarray(b["time"], float), np.asarray(b["close"], float)
+    L, step = 30 * 1440, 15 * 1440
+    wins = []
+    for s0 in range(0, len(c_) - L - 1, step):
+        w = c_[s0: s0 + L + 1]
+        if np.any(~np.isfinite(w)) or np.any(w <= 0):
+            continue
+        wins.append(w)
+    W = np.vstack(wins)
+    Tb = 30 / 365
+    vol = np.sqrt(np.sum(np.diff(np.log(W), axis=1) ** 2, axis=1) / Tb)
+    btc = {"n_options": int(len(W)), "vol_median": float(np.median(vol)), "rows": []}
+    for N in (16, 64):
+        res = {}
+        Wn = W / W[:, :1] * 100
+        for rule in ("time", "fukasawa"):
+            if rule == "time":
+                cm = L // N
+            else:
+                lo, hi = 0.001, 5.0
+                for _ in range(24):  # calibrate c so the average count matches N
+                    cm = np.sqrt(lo * hi)
+                    nm = _hedge_run(Wn, 100.0, Tb, vol, "fukasawa", cm)[1].mean()
+                    lo, hi = (cm, hi) if nm > N else (lo, cm)
+                cm = np.sqrt(lo * hi)
+            e, ns = _hedge_run(Wn, 100.0, Tb, vol, rule, cm)
+            prem = bs.price(100.0, 100.0, Tb, vol)
+            errs = e / prem
+            res[rule] = {"N": float(np.mean(ns)), "rms_pct_premium": float(100 * np.sqrt(np.mean(errs ** 2))),
+                         "mean_pct_premium": float(100 * np.mean(errs))}
+        btc["rows"].append({"target": N, **res})
+    out["btc"] = btc
+    out["btc_first"], out["btc_last"] = int(tm[0]), int(tm[-1])
+    return _json(out)
+
+
+ITEMS = {"hedgetime_theory": compute_hedgetime_theory, "tree": compute_tree, "riskneutral": compute_riskneutral, "ledger": compute_ledger, "wrong_vol": compute_wrong_vol,
          "discrete": compute_discrete, "implied": compute_implied, "btc": compute_btc, "crash87": compute_crash87,
          "heat": compute_heat, "tree3d": compute_tree3d, "mc_seeds": compute_mc_seeds, "hedge_choice": compute_hedge_choice,
          "dgamma3d": compute_dgamma3d, "discrete_seeds": compute_discrete_seeds, "jump_floor": compute_jump_floor,

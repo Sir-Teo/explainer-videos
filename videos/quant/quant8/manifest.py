@@ -22,6 +22,7 @@ SCENES = [
     ("s20_rl", "RL", "16. Reinforcement learning on Merton's problem"),
     ("s21_industry", "Industry", "17. Who sizes bets for a living"),
     ("s10_frontier", "Frontier", "18. The frontier, 2023 to 2026"),
+    ("s22_research", "Research", "For the researcher: estimation risk in Merton's rule"),
     ("s11_house", "House", "19. The sizing module"),
     ("s12_outro", "Outro", "Recap, desk questions, problems"),
 ]

@@ -24,7 +24,7 @@ simulations, labelled on screen.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 57 minutes)
+## Chapters (about 63 minutes)
 
 * **How much to bet, and how we got here.** Haghani and Dewey (2016) gave 61 people $25 and a 60% coin at even odds;
   about 30% went bust. *Live:* 160 players in each of four columns flip the same coin 300 times on a log-wealth axis
@@ -109,7 +109,17 @@ simulations, labelled on screen.
 * **19. The sizing module.** The new House functions; the sizing pipeline (Kelly 238% → half 119%; the robust fraction at a 20% detection error, 145%, is not smaller; the
   band; the drawdown floor; recompute on volatility); Rule 9 extended. The trial counter reads 308 (this part
   registered three tests).
-* **Recap, desk questions, problems.**
+* **For the researcher: estimation risk in Merton's rule.** The plug-in fraction μ̂/(γσ²), with μ̂ ~ N(μ, σ²/T), has
+  expected certainty equivalent (θ² − 1/T)/(2γ): estimation costs exactly 1/(2γT) a year, and the plug-in loses
+  against cash in expectation when T < 1/θ² (6¼ years at a Sharpe ratio of 0.4). Scaling by c gives a parabola with
+  vertex c* = Tθ²/(Tθ² + 1) (Kan and Zhou 2007): 0.44 at five years, 0.76 at twenty; fractional Kelly as optimal
+  shrinkage. Simulation (20,000 monthly histories per horizon, both moments estimated, γ = 1, θ = 0.4): plug-in
+  −3.7/2.5/5.4/7.0% a year at 5/10/20/50 years (the chi-squared-corrected formula gives −3.4/2.6/5.4/7.0), half
+  3.2/4.7/5.4/5.7, an estimated multiple ĉ −0.9/2.3/4.4/6.5, c* known 3.6/4.9/6.1/7.1; the plug-in loses to cash in
+  39% of five-year histories. The US market, expanding window from 1926–35, scored July 1936 to December 2020 at
+  γ = 2: plug-in CE 4.9%, half 3.0%, ĉ 4.2%, 100% market 5.6%, full-sample Merton (hindsight) 6.2%; the Sharpe ratio
+  after 1936 was 0.52 (0.44 over the century). Three open problems; pause: θ = 0.3 over 25 years gives c* = 0.69.
+* **Recap, four desk questions, nine problems (two at qualifying-exam level), payoffs, references.**
 
 ## Hands-on
 
@@ -247,7 +257,25 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
    Q(t) = (e^{−at} − e^{−aT})/(1 − e^{−aT}) with Q(0) = 1, Q(T) = 0. As N → ∞, aT = κT/(2η) = 2, and the share sold by
    T/5 is 1 − Q(T/5) = (1 − e^{−0.4})/(1 − e^{−2}) = 0.3297/0.8647 = 38.1%, against 20% for one trader alone (a = 0,
    a straight line) and 28.7% for two (aT = 1).
+8. **(qual) The cost of an estimated edge.** CE(π) = πμ − ½γπ²σ². With π = cμ̂/(γσ²), E[π]μ = cμ²/(γσ²) = cθ²/γ and
+   ½γσ²E[π²] = c²E[μ̂²]/(2γσ²) = c²(μ² + σ²/T)/(2γσ²) = c²(θ² + 1/T)/(2γ). So E CE = [cθ² − ½c²(θ² + 1/T)]/γ. At c = 1
+   this is (θ² − 1/T)/(2γ), negative exactly when T < 1/θ². The derivative in c vanishes at c* = θ²/(θ² + 1/T) =
+   Tθ²/(Tθ² + 1), where E CE = (θ²/2γ)·c* > 0. With θ = 0.4, T = 5, γ = 1: plug-in −2.0%, c* = 0.44 earning 3.6%.
+9. **(qual) Estimating the variance too.** For iid normal returns (n − 1)s²/σ² ~ χ²_k with k = n − 1, independent of
+   μ̂. For X ~ χ²_k, E[1/X] = 1/(k − 2) and E[1/X²] = 1/((k − 2)(k − 4)), so E[σ²/s²] = (n − 1)/(n − 3) = a₁ and
+   E[σ⁴/s⁴] = (n − 1)²/((n − 3)(n − 5)) = a₂. With π̂ = μ̂/(γs²), E CE = [a₁θ² − ½a₂(θ² + 1/T)]/γ. For 60 months,
+   a₁ = 59/57 = 1.035 and a₂ = 3481/3135 = 1.110, so at θ = 0.4: 1.035 × 0.16 − 1.110 × 0.18 = −3.4% a year, against
+   −2.0% with σ known; the simulation gives −3.7% ± 0.1%.
 
+## For the researcher
+
+* **The theorems.** Klein and Bawa (1976) and Brown (1976) on estimation risk; Kan and Zhou (2007), "Optimal
+  Portfolio Choice with Parameter Uncertainty," *JFQA* 42(3), for the optimal scaling and the three-fund rule;
+  Barberis (2000) on learning and the horizon; MacLean, Thorp and Ziemba (eds., 2011) on fractional Kelly.
+* **Simplifications.** One risky asset, iid normal returns, a constant scaling chosen with the true θ; the
+  certainty-equivalent criterion rather than finite-horizon utility. Many assets are Part 30.
+* **Open problems.** A feasible scaling rule that dominates for all θ and T; shrinkage and window length chosen
+  together when the edge drifts; the exact cost to Kelly growth under fat tails and volatility clustering.
 
 ## Data and reproducibility
 
@@ -298,7 +326,7 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约57分钟）
+## 各章（约63分钟）
 
 * **该下多大的注，以及我们如何走到这里。** 哈加尼和杜威（2016）的硬币游戏，约30%的人输光。现场模拟：四列各160名玩家同抛一枚硬币300次（全押91%输光；押40%有18%输光；押20%有96%达到上限、无人输光）。凯利曲线；1738–2017年的历史，以期望效用为根的一棵树。
 * **1. 效用与风险厌恶。** 公理卡片；赌博作为挂在效用曲线上的两个砝码，确定性等价86.6（对数效用）；伽马旋钮实时弯曲曲线（伽马为3时67.1，为30时51.2）。推导阿罗-普拉特；精确值对比近似值；拉宾的警告。
@@ -320,7 +348,8 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 * **17. 谁以定仓位为生。** 索普1994年的体育投注测试；本特的分数凯利；伯利坎普与Axcom（大奖章的仓位方法未公开）；挪威主权基金1.25个百分点的跟踪误差上限；桥水全天候；据《华尔街日报》报道的千禧年回撤规则。格罗斯曼-周对凯利（最大回撤17%对99%）；波动率目标（夏普0.51对0.44，阿尔法每年3.5%，t = 2.9）。
 * **18. 前沿，2023–2026。** 各章构成一张图，每篇论文点亮它所建立的那条边。
 * **19. 仓位模块。** 新函数；定仓位流程（凯利238% → 一半119%；20%检测误差下的稳健比例145%并不更小）；扩展的第九条规则；试验计数器308。
-* **回顾、交易台问题与习题。**
+* **写给研究者：默顿规则中的估计风险。** 代入比例μ̂/(γσ²)（μ̂ ~ N(μ, σ²/T)）的确定性等价期望为(θ² − 1/T)/(2γ)：估计每年恰好花掉1/(2γT)；T < 1/θ²时（夏普0.4时为6¼年）期望上不如现金。乘以c得到一条抛物线，顶点c* = Tθ²/(Tθ² + 1)（Raymond Kan与周国富2007）：五年0.44，二十年0.76；分数凯利即最优收缩。模拟（每个期限20,000条月度历史，两个矩都估计，γ = 1，θ = 0.4）：代入规则在5/10/20/50年为每年−3.7/2.5/5.4/7.0%（卡方修正后的公式为−3.4/2.6/5.4/7.0），一半3.2/4.7/5.4/5.7，估计倍数ĉ为−0.9/2.3/4.4/6.5，已知c*为3.6/4.9/6.1/7.1；五年历史中39%代入规则不如现金。美国市场，扩展窗口从1926–35年开始，1936年7月至2020年12月计分，γ = 2：代入4.9%，一半3.0%，ĉ 4.2%，全仓市场5.6%，全样本默顿（事后）6.2%；1936年后的夏普比率0.52（整个世纪0.44）。三个开放问题；暂停题：25年、θ = 0.3时c* = 0.69。
+* **回顾、四道交易台问题、九道习题（两道为资格考试水平）、应用、参考文献。**
 
 ## 交易台问题与解答
 
@@ -360,4 +389,16 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 7. **清仓的人群。** φ = 0时方程为Q″ + aQ′ = 0，a = κ(N − 1)/(2Nη)，所以Q′ = Ce^{−at}，Q(t) = (e^{−at} − e^{−aT})/(1 − e^{−aT})，
    满足Q(0) = 1、Q(T) = 0。N → ∞时aT = κT/(2η) = 2，到T/5时卖出的份额为(1 − e^{−0.4})/(1 − e^{−2}) = 38.1%，
    单独一家（a = 0，直线）为20%，两家（aT = 1）为28.7%。
+8. **（资格考试）估计优势的代价。** CE(π) = πμ − ½γπ²σ²。取π = cμ̂/(γσ²)，则E[π]μ = cθ²/γ，½γσ²E[π²] = c²(μ² + σ²/T)/(2γσ²) =
+   c²(θ² + 1/T)/(2γ)，所以E CE = [cθ² − ½c²(θ² + 1/T)]/γ。c = 1时为(θ² − 1/T)/(2γ)，恰在T < 1/θ²时为负。对c求导为零得
+   c* = Tθ²/(Tθ² + 1)，此时E CE = (θ²/2γ)·c* > 0。θ = 0.4、T = 5、γ = 1时：代入规则−2.0%，c* = 0.44，挣3.6%。
+9. **（资格考试）方差也要估计。** 独立同分布正态收益下(n − 1)s²/σ² ~ χ²_k，k = n − 1，且与μ̂独立。X ~ χ²_k时E[1/X] = 1/(k − 2)，
+   E[1/X²] = 1/((k − 2)(k − 4))，所以E[σ²/s²] = (n − 1)/(n − 3) = a₁，E[σ⁴/s⁴] = (n − 1)²/((n − 3)(n − 5)) = a₂。
+   π̂ = μ̂/(γs²)时E CE = [a₁θ² − ½a₂(θ² + 1/T)]/γ。60个月时a₁ = 1.035，a₂ = 1.110，θ = 0.4时为1.035 × 0.16 − 1.110 × 0.18 =
+   每年−3.4%，σ已知时为−2.0%；模拟给出−3.7% ± 0.1%。
 
+## 写给研究者
+
+* **定理。** 克莱因与巴瓦（1976）、布朗（1976）论估计风险；Raymond Kan与周国富（2007），《参数不确定性下的最优组合选择》，*JFQA* 42(3)，给出最优缩放与三基金规则；巴伯里斯（2000）论学习与投资期限；麦克莱恩、索普与津巴（编，2011）论分数凯利。
+* **简化。** 单一风险资产，独立同分布正态收益，用真实θ选的常数缩放；用确定性等价而非有限期限效用作准则。多资产见第30部分。
+* **开放问题。** 对所有θ和T都占优的可行缩放规则；优势漂移时同时选择收缩与窗口长度；肥尾与波动率聚集下估计对凯利增长的确切代价。

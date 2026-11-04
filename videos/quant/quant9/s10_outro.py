@@ -29,7 +29,12 @@ PROBLEMS = [
     r"struck at 100, by super-replication and by its dual over risk-neutral measures.",
     r"Show that the model-free band for a forward-start call $(S_2/S_1 - 1)^+$ is exactly half the band for the "
     r"forward-start straddle $|S_2/S_1 - 1|$.",
-    r"Derive Margrabe's formula for the option to exchange asset 2 for asset 1 by changing numeraire to asset 2.",
+    r"Derive Margrabe's formula for the option to exchange asset 2 for asset 1 by changing numeraire to asset 2.",    r"(qual) For fractional Brownian motion with Hurst index $H$, show that consecutive increments on any uniform grid "
+    r"have correlation $2^{2H - 1} - 1$, and that $\sum_k |\Delta_k|^2$ over $[0, 1]$ tends to 0 for $H > \frac12$ and to "
+    r"$\infty$ for $H < \frac12$.",
+    r"(qual) For the sign strategy on $\sigma B^H$ with cost $\varepsilon$ per unit traded, derive the yearly mean "
+    r"$m(n) = n[\sigma n^{-H}\sqrt{2/\pi}\,|\rho| - 2\varepsilon p]$ with $p = \frac12 - \arcsin(\rho)/\pi$, find $n^*$, "
+    r"and show that $m(n^*) = H n^* \sigma (n^*)^{-H}\sqrt{2/\pi}\,|\rho|$.",
 ]
 
 
@@ -146,12 +151,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems: parity with a borrowing fee, the theorem from Stiemke's lemma, the "
+            "And nine problems: parity with a borrowing fee, the theorem from Stiemke's lemma, the "
             "binomial probability, the butterfly and the density, the trinomial interval and its "
-            "dual, the forward-start call's band, and Margrabe by change of numeraire. Solutions, in "
-            "English and Chinese, are in the notes."
+            "dual, the forward-start call's band, and Margrabe by change of numeraire. Two are "
+            "qualifying-exam problems: the memory of fractional Brownian motion, and the best trading "
+            "frequency under costs. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)

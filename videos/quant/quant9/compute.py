@@ -892,7 +892,76 @@ def compute_neural_mot() -> dict:
                   "gap_pct": [100 * (b / m["upper"] - 1) for b in bounds]})
 
 
-ITEMS = {"envelope": compute_envelope, "parity": compute_parity, "density": compute_density, "mot": compute_mot,
+def compute_friction_theory() -> dict:
+    """The research chapter: arbitrage with frictions.  Fractional Brownian motion with H != 1/2 is not a
+    semimartingale, so a frictionless market on it has arbitrage (Rogers 1997, Cheridito 2003): consecutive increments
+    are correlated, rho = 2^(2H-1) - 1 at every scale, and betting on the sign of the last increment earns a Sharpe
+    ratio that grows like sqrt(n) with the number of trades.  With a proportional cost the gross edge per trade
+    shrinks like n^-H while the cost does not, so there is a best frequency and no arbitrage (Guasoni 2006; Guasoni,
+    Rasonyi and Schachermayer 2008, via consistent price systems).  Checked by simulation, then on Bitcoin minutes."""
+    from explainer.quant import data
+    from explainer.quant.house import sim
+
+    sig, n_fine, P = 0.2, 2 ** 16, 160
+    js = list(range(4, 17))
+    eps = {"0": 0.0, "1bp": 1e-4, "10bp": 1e-3}
+    out = {"sigma": sig, "n": [2 ** j for j in js], "eps": eps, "H": {}}
+    for H in (0.4, 0.5, 0.6):
+        X = sig * sim.fbm(H, n_fine, 1.0, P, seed=909 + int(100 * H))
+        rho = 2 ** (2 * H - 1) - 1
+        side = 1.0 if rho >= 0 else -1.0
+        pflip = 0.5 - np.arcsin(rho) / np.pi
+        row = {"rho": rho, "pflip": pflip, "sim": {k: {"mean": [], "sharpe": []} for k in eps},
+               "theory": {k: {"mean": [], "sharpe": []} for k in eps}, "flip_sim": []}
+        for j in js:
+            n = 2 ** j
+            d = np.diff(X[:, :: n_fine // n], axis=1)
+            pos = side * np.sign(d[:, :-1])
+            pnl = pos * d[:, 1:]
+            turn = np.abs(np.diff(np.concatenate([np.zeros((P, 1)), pos], axis=1), axis=1))
+            row["flip_sim"].append(float(np.mean(turn[:, 1:]) / 2))
+            g = sig * n ** -H * np.sqrt(2 / np.pi) * abs(rho)
+            sd = sig * n ** -H * np.sqrt(1 - 2 * rho ** 2 / np.pi)
+            for k, e in eps.items():
+                yr = (pnl - e * turn).sum(1)
+                row["sim"][k]["mean"].append(float(yr.mean()))
+                row["sim"][k]["sharpe"].append(float(yr.mean() / yr.std(ddof=1)))
+                m = n * (g - 2 * e * pflip)
+                row["theory"][k]["mean"].append(float(m))
+                row["theory"][k]["sharpe"].append(float(m / (np.sqrt(n) * sd)))
+        if rho != 0:
+            for k, e in eps.items():
+                if e > 0:
+                    num = (1 - H) * sig * np.sqrt(2 / np.pi) * abs(rho)
+                    nstar = (num / (2 * e * pflip)) ** (1 / H)
+                    best = nstar * (sig * nstar ** -H * np.sqrt(2 / np.pi) * abs(rho) - 2 * e * pflip)
+                    row.setdefault("best", {})[k] = {"n_star": float(nstar), "mean": float(best)}
+        out["H"][f"{H:.1f}"] = row
+    # Bitcoin, one-minute closes, the research window
+    b = data.binance_klines("BTCUSDT", "1m", "2019-01", "2020-12")
+    t, c = np.asarray(b["time"], float), np.asarray(b["close"], float)
+    lx = np.log(c)
+    btc = {}
+    for m in (1, 5, 15, 60):
+        r = np.diff(lx[::m])
+        r = r[np.isfinite(r)]
+        rho = float(np.corrcoef(r[:-1], r[1:])[0, 1])
+        side = 1.0 if rho >= 0 else -1.0
+        pos = side * np.sign(r[:-1])
+        pnl = pos * r[1:]
+        turn = np.abs(np.diff(np.concatenate([[0.0], pos])))
+        per_year = 525600 / m
+        gross = float(pnl.mean() * per_year)
+        be = float(pnl.mean() / turn.mean())  # break-even cost per unit traded
+        btc[str(m)] = {"rho": rho, "H_implied": float(0.5 * (1 + np.log2(1 + rho))), "gross": gross,
+                       "net_1bp": float((pnl - 1e-4 * turn).mean() * per_year),
+                       "net_10bp": float((pnl - 1e-3 * turn).mean() * per_year), "breakeven_bp": 1e4 * be,
+                       "turnover": float(turn.mean()), "n": int(len(r))}
+    out["btc"] = btc
+    return _json(out)
+
+
+ITEMS = {"friction_theory": compute_friction_theory, "envelope": compute_envelope, "parity": compute_parity, "density": compute_density, "mot": compute_mot,
          "ross": compute_ross, "incomplete": compute_incomplete, "futures_basis": compute_futures_basis,
          "ftap": compute_ftap, "kernel": compute_kernel, "tree": compute_tree, "superlp": compute_superlp,
          "completing": compute_completing, "super_tree": compute_super_tree, "girsanov": compute_girsanov,

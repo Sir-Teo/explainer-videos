@@ -22,5 +22,6 @@ SCENES = [
     ("s19_motconv", "MOTConverge", "16. Model-free bounds, computed and converging"),
     ("s20_industry", "Industry", "17. How arbitrage is traded, and why it is limited"),
     ("s21_frontier", "Frontier", "18. The frontier, 2023 to 2026"),
+    ("s22_research", "Research", "For the researcher: arbitrage with frictions"),
     ("s10_outro", "Outro", "The arbitrage checker, recap, desk questions, problems"),
 ]
