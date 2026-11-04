@@ -106,3 +106,20 @@ and the industry term follows in parentheses on first use.
 | interval arithmetic | 区间算术 |
 | minimax polynomial, equioscillation | 最佳一致逼近多项式，等振荡 |
 | range reduction | 自变量约化 |
+| feedback, latch (SR, D), flip-flop (edge-triggered, master–slave) | 反馈，锁存器（SR、D），触发器（边沿触发、主从） |
+| ring oscillator | 环形振荡器 |
+| saddle point, eigenvalue, basin of attraction | 鞍点，特征值，吸引域 |
+| setup time, hold time, clock-to-Q delay | 建立时间，保持时间，时钟到输出延迟 |
+| clock skew, clock tree, clock gating, clock domain | 时钟偏斜，时钟树，时钟门控，时钟域 |
+| metastability, synchronizer, MTBF | 亚稳态，同步器，平均故障间隔时间 |
+| Buridan's principle | 布里丹原理 |
+| finite-state machine (Moore, Mealy), state encoding (binary, Gray, one-hot) | 有限状态机（摩尔、米利），状态编码（二进制、格雷码、独热码） |
+| finite automaton, regular language, Myhill–Nerode theorem, minimization | 有限自动机，正则语言，Myhill–Nerode 定理，最小化 |
+| linear-feedback shift register (Fibonacci, Galois), primitive polynomial | 线性反馈移位寄存器（斐波那契、伽罗瓦接法），本原多项式 |
+| register file, read port, write port, bypass (forwarding) | 寄存器堆，读端口，写端口，旁路（转发） |
+| SRAM, DRAM, sense amplifier, bit line, word line | 静态随机存储器，动态随机存储器，读出放大器，位线，字线 |
+| refresh, row buffer, bank, activate / precharge, row hit / conflict | 刷新，行缓冲，存储体，激活 / 预充电，行命中 / 行冲突 |
+| Rowhammer, aggressor / victim row, TRR | 行锤攻击，攻击行 / 受害行，目标行刷新（TRR） |
+| C-element, asynchronous circuit, arbiter | C 元件，异步电路，仲裁器 |
+| ROM, PLA, microcode | 只读存储器，可编程逻辑阵列，微码 |
+| delay line, Williams tube, core memory, core rope | 延迟线，威廉姆斯管，磁芯存储器，磁芯绳存储器 |

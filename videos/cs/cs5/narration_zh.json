@@ -1,0 +1,397 @@
+{
+ "title": "计算机科学，从零搭建 · 第5部分：存储与时间",
+ "chapters": {
+  "Hook": "会记忆的电路",
+  "Feedback": "1. 反馈",
+  "Dynamics": "2. 两个势阱与一个鞍点",
+  "FlipFlop": "3. 锁存器、触发器与时钟",
+  "Timing": "4. 时钟能有多快？",
+  "Meta": "5. 亚稳态",
+  "Fsm": "6. 有限状态机",
+  "Nerode": "7. 机器与语言",
+  "Lfsr": "8. 计数器与移位寄存器",
+  "RegFile": "9. Pebble 的寄存器堆",
+  "Sram": "10. 静态存储器",
+  "Dram": "11. 动态存储器",
+  "Rowhammer": "12. 当存储器泄漏时",
+  "Logic": "13. 时钟，以及作为逻辑的存储器",
+  "History": "14. 芯片之前的记忆",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "1b596bc7691f": {
+   "scene": "Hook",
+   "en": "Every circuit in Parts 3 and 4 had the same limitation. <bookmark mark='a'/> Its output depends only on its inputs right now. Change an input, and a few gate delays later the old answer is gone without a trace. An adder cannot remember the last sum, and a circuit like that cannot count, wait, or follow the steps of a program. <bookmark mark='b'/> A computer must remember: the program, the data, where it is in the program. This part is about how a circuit made of the same gates can hold on to a bit, and about what remembering costs.",
+   "zh": "第3和第4部分的每个电路都有同一个局限。<bookmark mark='a'/>它的输出只取决于此刻的输入。改变一个输入，几个门延迟之后，旧的答案就消失得无影无踪。加法器记不住上一个和，这样的电路不能计数、不能等待，也不能一步步执行程序。<bookmark mark='b'/>计算机必须记忆：程序、数据，以及它执行到程序的哪里。这一部分讲的是，由同样的门搭成的电路怎样留住一个位，以及记忆要付出什么代价。"
+  },
+  "33a20773a7b4": {
+   "scene": "Hook",
+   "en": "The trick is a loop. <bookmark mark='a'/> Take two NAND gates, and wire each one's output into the other's input. Every circuit so far flowed from inputs to outputs; this one feeds back on itself, and that changes everything. <bookmark mark='b'/> Push it one way and it stays that way; push it the other way and it stays the other way. With its inputs left alone, it remembers which way it was pushed last. It is the simplest memory there is, and every register, cache and memory chip descends from it.",
+   "zh": "诀窍是一个回路。<bookmark mark='a'/>拿两个与非门，把每一个的输出接到另一个的输入上。此前的每个电路都是从输入流向输出；这一个却反馈到自己身上，这改变了一切。<bookmark mark='b'/>朝一个方向推它，它就保持在那个方向；朝另一个方向推，它就保持在另一个方向。输入放着不动时，它记得自己最后被推向了哪边。这是最简单的存储器，每一个寄存器、缓存和存储芯片都是它的后代。"
+  },
+  "b19749817719": {
+   "scene": "Hook",
+   "en": "Memory brings something else into the story: time, and a strange risk. <bookmark mark='a'/> A latch is like a ball in a landscape with two valleys. Left is zero, right is one, and the ball rests in one of them. <bookmark mark='b'/> Between them is a ridge. A ball pushed exactly hard enough can come to rest on top, balanced, belonging to neither valley, and wait there for an amount of time that has no upper bound. Real flip-flops do this. It is called metastability, and every computer that listens to the outside world has to live with it.",
+   "zh": "存储给故事带来了别的东西：时间，以及一种奇怪的风险。<bookmark mark='a'/>锁存器就像一个球，处在有两个山谷的地形里。左边是零，右边是一，球停在其中一个谷里。<bookmark mark='b'/>两个谷之间是一道山脊。被推得恰到好处的球，可能停在山脊顶上，保持平衡，不属于任何一个谷，并在那里等待一段没有上限的时间。真实的触发器就会这样。这叫亚稳态，每一台倾听外部世界的计算机都必须与它共存。"
+  },
+  "23c2d2745835": {
+   "scene": "Hook",
+   "en": "This is Part 5 of Computer Science, Built. <bookmark mark='a'/> In this part: feedback, and the latch seen as a dynamical system with two stable states and a saddle between them. Flip-flops and the clock, setup and hold times, and the fastest clock a circuit can take. Metastability, measured, and the synchronizer that tames it. Finite-state machines, and the theorem that makes them the first rung of a theory of languages. Counters and linear feedback shift registers, and Pebble's register file, built and verified. Then real memory chips, static and dynamic, an attack that flips bits in them, and the strange machines that remembered before chips existed.",
+   "zh": "这是《计算机科学，从零搭建》的第5部分。<bookmark mark='a'/>这一部分的内容：反馈，以及把锁存器看作一个动力系统，它有两个稳定状态，中间夹着一个鞍点。触发器与时钟，建立时间和保持时间，以及一个电路能承受的最快时钟。亚稳态，测量它，以及驯服它的同步器。有限状态机，以及让它们成为语言理论第一级台阶的那个定理。计数器和线性反馈移位寄存器，以及 Pebble 的寄存器堆，搭好并验证。然后是真实的存储芯片，静态的和动态的，一种翻转其中位的攻击，以及芯片出现之前用来记忆的奇特机器。"
+  },
+  "7320f75878d4": {
+   "scene": "Feedback",
+   "en": "Chapter one. Feedback.",
+   "zh": "第1章。反馈。"
+  },
+  "1df01edacb2e": {
+   "scene": "Feedback",
+   "en": "Here is the latch again, with its inputs named S bar and R bar, for set and reset; the bars mean they act when they are zero. <bookmark mark='a'/> A NAND gate outputs one whenever either of its inputs is zero. So pull S bar to zero, and Q becomes one. Then the lower gate sees R bar equal to one and Q equal to one, so its output, Q bar, becomes zero, and that zero feeds back to hold Q at one. <bookmark mark='b'/> Now let S bar go back to one. Nothing changes: Q bar, still zero, keeps Q at one. The latch remembers that it was set. <bookmark mark='c'/> Pull R bar to zero, and the same story runs the other way: Q becomes zero, and stays zero when R bar is released. <bookmark mark='d'/> One input pattern is forbidden: both at zero forces both outputs to one, which is not a stored value at all, and releasing both at once leaves the latch with no idea which way to fall.",
+   "zh": "又是这个锁存器，它的输入叫作 S 非和 R 非，分别表示置位和复位；上面的横线表示它们在为零时起作用。<bookmark mark='a'/>只要任一输入为零，与非门就输出一。所以把 S 非拉到零，Q 就变成一。于是下面那个门看到 R 非为一、Q 为一，它的输出 Q 非变成零，这个零又反馈回去，把 Q 保持在一。<bookmark mark='b'/>现在让 S 非回到一。什么都没变：仍为零的 Q 非把 Q 保持在一。锁存器记得它被置位过。<bookmark mark='c'/>把 R 非拉到零，同样的故事反向上演：Q 变成零，并在 R 非释放后保持为零。<bookmark mark='d'/>有一种输入是禁止的：两个都为零会迫使两个输出都为一，这根本不是一个存储的值；而同时释放两者，锁存器就不知道该倒向哪一边。"
+  },
+  "5d32614d8f10": {
+   "scene": "Feedback",
+   "en": "Simulated in this series' library, with every gate taking one tick to respond, here is the whole story. <bookmark mark='a'/> Set, and Q rises one tick later, Q bar one tick after that. Hold, and nothing moves. Reset, and the pair flips back. <bookmark mark='b'/> Then the forbidden input: both outputs go to one. And when both inputs are released on the same tick, something new happens. Each gate sees the other's one, and flips to zero; then each sees the other's zero, and flips back to one. In this perfectly symmetric model they chase each other forever. <bookmark mark='c'/> Real gates are never perfectly matched, so a real latch eventually falls into one state or the other. Which one, and when, is the subject of the next chapter and of chapter five.",
+   "zh": "用本系列的库模拟，每个门用一个节拍来响应，整个故事是这样的。<bookmark mark='a'/>置位，一个节拍后 Q 升高，再过一个节拍 Q 非降低。保持，什么都不动。复位，这一对又翻回来。<bookmark mark='b'/>然后是禁止的输入：两个输出都变成一。当两个输入在同一个节拍被释放时，新的事情发生了。每个门看到对方的一，翻成零；接着每个门又看到对方的零，翻回一。在这个完全对称的模型里，它们永远互相追逐。<bookmark mark='c'/>真实的门从来不会完全匹配，所以真实的锁存器最终会落入一个状态或另一个。落入哪一个、何时落入，是下一章和第5章的主题。"
+  },
+  "882ca4212b76": {
+   "scene": "Feedback",
+   "en": "Two gates in a loop make a memory. Three inverters in a loop make something else. <bookmark mark='a'/> Each inverter wants its output to be the opposite of its input, and with an odd number of them, going all the way round contradicts itself: there is no consistent state. So the ring never settles. A change runs round and round it, and each signal flips every three gate delays, repeating every six. <bookmark mark='b'/> This ring oscillator is how chip makers measure the speed of a new manufacturing process, it is a cheap on-chip clock, and the jitter of free-running rings is one of the sources of true random numbers inside processors. Loops, it turns out, are where circuits get interesting.",
+   "zh": "两个门组成回路就是存储器。三个反相器组成回路则是别的东西。<bookmark mark='a'/>每个反相器都想让输出与输入相反，而当反相器个数是奇数时，绕一圈就自相矛盾：不存在一致的状态。所以这个环永远不会稳定。一个变化绕着它一圈圈地跑，每个信号每三个门延迟翻转一次，每六个门延迟重复一次。<bookmark mark='b'/>芯片厂商用这种环形振荡器测量新制造工艺的速度，它也是一种便宜的片上时钟，而自由运行的环的抖动，是处理器内部真随机数的来源之一。原来，回路正是电路变得有趣的地方。"
+  },
+  "29f8fedd9aff": {
+   "scene": "Dynamics",
+   "en": "Chapter two. Two wells and a saddle.",
+   "zh": "第2章。两个势阱与一个鞍点。"
+  },
+  "fed4a24b999e": {
+   "scene": "Dynamics",
+   "en": "To see what really happens inside a latch, stop thinking in zeros and ones. <bookmark mark='a'/> The heart of it is two inverters, each driving the other, and each output is a voltage, v one and v two. <bookmark mark='b'/> An inverter's output does not jump; as Part 3 showed, it charges its wire towards the value its transfer curve f says, with a time constant tau. So the voltages obey two differential equations: each one relaxes towards f of the other. <bookmark mark='c'/> Here f is a smooth inverter curve, a little gentler than a real one so that the picture is easy to see. The latch is now a dynamical system with two variables, and we can draw its whole behaviour at once.",
+   "zh": "要看清锁存器内部真正发生了什么，就别再用零和一来思考。<bookmark mark='a'/>它的核心是两个相互驱动的反相器，每个输出是一个电压，v1 和 v2。<bookmark mark='b'/>反相器的输出不会跳变；正如第3部分所示，它以时间常数 tau，把导线充电到传输曲线 f 所给出的值。所以这两个电压服从两个微分方程：每一个都朝着另一个的 f 值弛豫。<bookmark mark='c'/>这里的 f 是一条光滑的反相器曲线，比真实的平缓一些，好让图容易看清。锁存器现在是一个有两个变量的动力系统，我们可以一次画出它的全部行为。"
+  },
+  "3f80315e2da1": {
+   "scene": "Dynamics",
+   "en": "Every point of this square is a possible state of the latch: a voltage on each wire. <bookmark mark='a'/> At every point, the equations give a direction of motion, drawn as a small arrow. <bookmark mark='b'/> The two curves where one voltage stops changing cross in three places, and those are the equilibria. <bookmark mark='c'/> Start the latch anywhere and follow the arrows. Almost every start ends in one of two corners: v one low and v two high, or the reverse. Those are the two stable states, the zero and the one. <bookmark mark='d'/> The third crossing, in the middle, is a saddle: the arrows lead into it along the diagonal and away from it in every other direction. The diagonal is the watershed between the two basins. A latch that starts exactly on it, as the symmetric release of the last chapter did, slides into the saddle and has no reason to leave.",
+   "zh": "这个正方形里的每一点都是锁存器的一个可能状态：每根导线上的一个电压。<bookmark mark='a'/>在每一点，方程给出一个运动方向，画成一个小箭头。<bookmark mark='b'/>两条“某个电压停止变化”的曲线相交于三处，这就是平衡点。<bookmark mark='c'/>从任意一处启动锁存器，沿着箭头走。几乎每个起点都会到达两个角之一：v1 低而 v2 高，或者相反。这就是两个稳定状态，零和一。<bookmark mark='d'/>中间的第三个交点是一个鞍点：箭头沿对角线流入它，沿其他方向流出。对角线是两个吸引域之间的分水岭。恰好从对角线上出发的锁存器，就像上一章对称释放时那样，会滑进鞍点，而没有任何理由离开。"
+  },
+  "145e82cda42a": {
+   "scene": "Dynamics",
+   "en": "Zoom in on the saddle, where everything about metastability is decided. <bookmark mark='a'/> Near it the equations are almost linear, and their matrix has the inverter's slope off the diagonal. <bookmark mark='b'/> Its two eigenvalues tell the story. Along the diagonal, where both voltages move together, the eigenvalue is minus four: any common motion dies out. Across the diagonal, along the difference of the voltages, it is plus two: any imbalance grows exponentially. <bookmark mark='c'/> So an imbalance delta grows like delta times e to the lambda t, and the time to reach a clean zero or one is the logarithm of one over delta, divided by lambda. A latch that starts a little off balance resolves quickly. One that starts very nearly balanced takes longer, and as the imbalance shrinks to zero the time grows without bound. A steeper inverter, a larger lambda, makes it faster, but never instant.",
+   "zh": "放大鞍点，亚稳态的一切都在这里决定。<bookmark mark='a'/>在它附近，方程几乎是线性的，它们的矩阵非对角线上是反相器的斜率。<bookmark mark='b'/>两个特征值讲出了整个故事。沿对角线，即两个电压一起移动的方向，特征值是负四：任何共同的运动都会衰减。横跨对角线，即两个电压之差的方向，特征值是正二：任何不平衡都会指数增长。<bookmark mark='c'/>所以不平衡德尔塔按 德尔塔乘 e 的兰姆达 t 次方增长，达到干净的零或一所需的时间，是一除以德尔塔的对数再除以兰姆达。稍微失衡地出发，锁存器很快就能决断。几乎完全平衡地出发，就要更久；当不平衡缩小到零，时间就无限增长。更陡的反相器，也就是更大的兰姆达，能让它更快，但永远不会瞬间完成。"
+  },
+  "083313148857": {
+   "scene": "FlipFlop",
+   "en": "Chapter three. Latches, flip-flops and the clock.",
+   "zh": "第3章。锁存器、触发器与时钟。"
+  },
+  "650f10966efa": {
+   "scene": "FlipFlop",
+   "en": "An SR latch needs two inputs and has a forbidden one. Two more NAND gates fix both. <bookmark mark='a'/> Feed the latch from a data input D and an enable E, so that set is D and E, and reset is not D and E. <bookmark mark='b'/> While the enable is one, the latch is transparent: Q follows D, a few gate delays behind. While the enable is zero, the door is shut, and Q holds whatever D was at the moment it closed, no matter what D does afterwards. And since set and reset can never both be active, the forbidden input has disappeared. This is the D latch, simulated here gate by gate.",
+   "zh": "SR 锁存器需要两个输入，而且有一种禁止的输入。再加两个与非门就把两个问题都解决了。<bookmark mark='a'/>用一个数据输入 D 和一个使能 E 来驱动锁存器，让置位为 D 与 E，复位为非 D 与 E。<bookmark mark='b'/>当使能为一时，锁存器是透明的：Q 跟随 D，落后几个门延迟。当使能为零时，门关上了，Q 保持着关门那一刻 D 的值，不管 D 之后做什么。而且由于置位和复位永远不会同时有效，禁止的输入消失了。这就是 D 锁存器，这里逐门模拟。"
+  },
+  "aca56d0b798f": {
+   "scene": "FlipFlop",
+   "en": "A latch is transparent for as long as its enable is high, and that is a problem when its output feeds logic that feeds back into its input: the signal can race round the loop many times while the door is open. <bookmark mark='a'/> The cure is two latches in a row, enabled by opposite phases of a clock. While the clock is low, the first, the master, follows D, and the second, the slave, holds. When the clock rises, the master shuts, capturing D, and the slave opens, passing the captured value to Q. <bookmark mark='b'/> The two are never open at once, so nothing races through. Here it is, simulated: D changes freely, but Q changes only just after each rising edge, to the value D had at that edge. <bookmark mark='c'/> This is the edge-triggered D flip-flop, and it turns continuous time into discrete steps.",
+   "zh": "只要使能为高，锁存器就是透明的，当它的输出经过逻辑又反馈到它的输入时，这就成了问题：在门开着的时候，信号可能沿回路跑上许多圈。<bookmark mark='a'/>解药是两个串联的锁存器，由时钟的相反相位使能。时钟为低时，第一个即主锁存器跟随 D，第二个即从锁存器保持。时钟上升时，主锁存器关闭，捕获 D，从锁存器打开，把捕获的值送到 Q。<bookmark mark='b'/>两者从不同时打开，所以没有东西能一穿而过。这是模拟结果：D 自由变化，但 Q 只在每个上升沿之后才变化，变成 D 在那个沿时的值。<bookmark mark='c'/>这就是边沿触发的 D 触发器，它把连续的时间变成离散的步骤。"
+  },
+  "0d6fa3b00d49": {
+   "scene": "FlipFlop",
+   "en": "Put flip-flops side by side on the same clock and you have a register. <bookmark mark='a'/> Eight flip-flops make an eight-bit register; every bit of it changes at the same instant, on the clock's rising edge, and holds still for the rest of the cycle. <bookmark mark='b'/> Now the shape of almost every digital system: registers hold the state; combinational logic, the circuits of Parts 3 and 4, computes the next state from the current state and the inputs; and at each clock edge the registers load it. Between edges the logic can glitch as much as it likes, because nobody is looking. <bookmark mark='c'/> This series' hardware library simulates exactly this picture, one clock cycle at a time, and Pebble is built in it.",
+   "zh": "把触发器并排放在同一个时钟上，就是一个寄存器。<bookmark mark='a'/>八个触发器组成一个八位寄存器；它的每一位都在同一瞬间、在时钟上升沿改变，并在周期的其余时间保持不动。<bookmark mark='b'/>现在来看几乎每个数字系统的形状：寄存器保存状态；组合逻辑，也就是第3和第4部分的电路，由当前状态和输入算出下一个状态；在每个时钟沿，寄存器载入它。在两个时钟沿之间，逻辑想怎么毛刺都行，因为没人在看。<bookmark mark='c'/>本系列的硬件库正是这样模拟的，一次一个时钟周期，Pebble 就是在其中搭成的。"
+  },
+  "28280449b50a": {
+   "scene": "Timing",
+   "en": "Chapter four. How fast can the clock go?",
+   "zh": "第4章。时钟能有多快？"
+  },
+  "66cc6f56bd7a": {
+   "scene": "Timing",
+   "en": "A flip-flop makes a promise, but only if it is treated well. <bookmark mark='a'/> Around each rising edge there is a small window. D must be steady for a short time before the edge, the setup time, and for a short time after it, the hold time. Inside the window, the flip-flop's master latch is in the middle of closing, and a change there is exactly the balanced push that can leave it on the saddle. <bookmark mark='b'/> And the flip-flop is not instant either: the new value appears at Q a little after the edge, the clock-to-Q delay. These three numbers, from the datasheet of every flip-flop, set the speed limit of a whole processor.",
+   "zh": "触发器会信守承诺，但前提是被善待。<bookmark mark='a'/>在每个上升沿周围有一个小窗口。D 必须在沿之前稳定一小段时间，即建立时间，在沿之后也要稳定一小段时间，即保持时间。在窗口之内，触发器的主锁存器正处在关闭的过程中，此时的变化恰好就是那种能把它留在鞍点上的平衡推力。<bookmark mark='b'/>触发器也不是瞬时的：新值在沿之后稍晚才出现在 Q，这就是时钟到输出延迟。这三个数字，来自每个触发器的数据手册，决定了整个处理器的速度上限。"
+  },
+  "1819202f73a0": {
+   "scene": "Timing",
+   "en": "Now the clock. <bookmark mark='a'/> Between two registers sits some combinational logic. At a rising edge, the first register launches new values; they appear after the clock-to-Q delay, ripple through the logic, and must arrive at the second register at least a setup time before the next edge. <bookmark mark='b'/> So one clock period has to hold three things end to end: clock-to-Q, the slowest path through the logic, and the setup time. The fastest clock the circuit can take is one over their sum. <bookmark mark='c'/> Put Pebble's ALU between two registers: twenty-nine gate delays, at about ten picoseconds each, plus the flip-flops' own overheads, comes to three hundred and sixty picoseconds, a clock of at most about two point eight gigahertz. Every gate delay saved in Part 4 shows up here, and Part 7 will cut the path into pieces to go faster still.",
+   "zh": "现在来看时钟。<bookmark mark='a'/>两个寄存器之间是一段组合逻辑。在一个上升沿，第一个寄存器发出新值；它们在时钟到输出延迟之后出现，穿过逻辑，并且必须在下一个沿之前至少一个建立时间到达第二个寄存器。<bookmark mark='b'/>所以一个时钟周期必须首尾相接地容纳三件事：时钟到输出延迟、穿过逻辑的最慢路径，以及建立时间。电路能承受的最快时钟，就是它们之和的倒数。<bookmark mark='c'/>把 Pebble 的算术逻辑单元放在两个寄存器之间：二十九个门延迟，每个大约十皮秒，再加上触发器自身的开销，共三百六十皮秒，时钟最多约二点八吉赫。第4部分省下的每一个门延迟都体现在这里，而第7部分会把这条路径切成几段，跑得更快。"
+  },
+  "eee3558807a6": {
+   "scene": "Timing",
+   "en": "One more effect, because a clock signal is a wire too. <bookmark mark='a'/> It reaches different registers at slightly different times; call the difference delta, the clock skew. A late clock at the second register gives the data more time to arrive, which helps the setup inequality. <bookmark mark='b'/> But it hurts the second one, the hold condition: the fastest path from the first register must not change the second register's input before that register has finished capturing its old value. <bookmark mark='c'/> Notice what is missing from that inequality: the clock period. A setup violation can always be cured by running the clock slower. A hold violation cannot; the chip is broken at any speed. So design tools insert extra delay into paths that are too fast, and engineers build balanced trees of wires that deliver the clock to billions of transistors within a few picoseconds of each other.",
+   "zh": "还有一个效应，因为时钟信号也是一根导线。<bookmark mark='a'/>它到达不同寄存器的时间略有不同；把这个差叫作德尔塔，即时钟偏斜。第二个寄存器的时钟来得晚，就给数据留出了更多到达的时间，这对建立不等式有利。<bookmark mark='b'/>但它对第二个不等式不利，那就是保持条件：从第一个寄存器出发的最快路径，不能在第二个寄存器完成捕获旧值之前就改变它的输入。<bookmark mark='c'/>注意这个不等式里缺了什么：时钟周期。建立时间违例总可以靠放慢时钟来解决。保持时间违例却不行；芯片在任何速度下都是坏的。所以设计工具会在太快的路径上插入额外的延迟，工程师们则搭建平衡的导线树，把时钟送到几十亿个晶体管，彼此相差只有几皮秒。"
+  },
+  "0fd1f148fc35": {
+   "scene": "Meta",
+   "en": "Chapter five. Metastability.",
+   "zh": "第5章。亚稳态。"
+  },
+  "be5a5c22877a": {
+   "scene": "Meta",
+   "en": "Inside a single clocked circuit, setup and hold can always be met: the designer controls every path. But signals from outside, a key press, a network packet, a sensor, arrive whenever they like. <bookmark mark='a'/> Here is the flip-flop of chapter three again, simulated gate by gate, with D changing on the very tick of the clock edge. <bookmark mark='b'/> The master latch is caught half shut, with its two halves fighting, and in this model they oscillate for several gate delays before the slave copies out a value. For that time, Q is not a valid zero or one. In a real circuit the voltages hover near the saddle instead of oscillating, but the effect is the same: an output that is late by an amount nobody chose.",
+   "zh": "在单个时钟驱动的电路内部，建立和保持条件总能满足：设计者控制每一条路径。但来自外部的信号，按键、网络数据包、传感器，想什么时候到就什么时候到。<bookmark mark='a'/>这又是第3章的触发器，逐门模拟，D 恰好在时钟沿的那个节拍改变。<bookmark mark='b'/>主锁存器在关到一半时被抓住，两半互相争斗，在这个模型里它们振荡了好几个门延迟，从锁存器才复制出一个值。在这段时间里，Q 既不是有效的零也不是有效的一。在真实电路里，电压在鞍点附近徘徊而不是振荡，但效果相同：输出晚了一段没人选择过的时间。"
+  },
+  "68777d175f9b": {
+   "scene": "Meta",
+   "en": "How late? Use the dynamical system of chapter two. <bookmark mark='a'/> A data edge arrives at a random moment near the clock edge and leaves the latch with a small random imbalance. Here are forty thousand such arrivals, each integrated until the latch reaches a clean value. Most decide quickly. But the histogram has a long tail. <bookmark mark='b'/> Plot the fraction still undecided on a logarithmic scale, and the tail is a straight line: the probability of taking longer than T falls like e to the minus lambda T, with lambda the saddle's unstable eigenvalue. Waiting one more unit of time makes failure e squared, about seven, times less likely; but no amount of waiting makes it impossible.",
+   "zh": "会晚多少？用第2章的动力系统来算。<bookmark mark='a'/>数据沿在时钟沿附近的随机时刻到达，给锁存器留下一个小的随机不平衡。这里有四万次这样的到达，每一次都积分到锁存器达到干净的值为止。大多数很快就决断了。但直方图有一条长尾。<bookmark mark='b'/>把仍未决断的比例画在对数坐标上，尾巴是一条直线：耗时超过 T 的概率按 e 的负兰姆达 T 次方下降，兰姆达是鞍点的不稳定特征值。多等一个单位时间，失败的可能性就小 e 的平方倍，约七倍；但无论等多久，都不会变成不可能。"
+  },
+  "19bc1e3d85bd": {
+   "scene": "Meta",
+   "en": "Engineers turn this into a single number. <bookmark mark='a'/> The mean time between failures grows exponentially with the time t r allowed for resolving, divided by the latch's time constant tau, and falls with how often the data changes inside the dangerous window around the clock edge. <bookmark mark='b'/> With typical numbers, twenty-picosecond constants, a one gigahertz clock and data changing a hundred million times a second, a single flip-flop given half a nanosecond to settle fails about once every ten hours. For a chip that runs for years, that is a disaster.",
+   "zh": "工程师把这些归结为一个数字。<bookmark mark='a'/>平均故障间隔时间，随允许决断的时间 t r 除以锁存器时间常数 tau 指数增长，并随数据在时钟沿周围危险窗口内变化的频繁程度而下降。<bookmark mark='b'/>用典型的数值，二十皮秒的常数、一吉赫的时钟、数据每秒变化一亿次，单个触发器给半纳秒来稳定，大约每十个小时就失败一次。对一块要运行好几年的芯片来说，这是一场灾难。"
+  },
+  "4f887953b499": {
+   "scene": "Meta",
+   "en": "The cure is cheap. <bookmark mark='a'/> Send the outside signal through two flip-flops in a row. The first one may go metastable. But nobody looks at its output until the next clock edge, a whole cycle later, and only the second flip-flop does. <bookmark mark='b'/> That extra cycle multiplies the time allowed to resolve, and because the failure rate falls exponentially with that time, the mean time between failures becomes about ten to the eighteen years, hundreds of millions of times the age of the universe, for the price of one cycle of delay. <bookmark mark='c'/> Every place where signals cross from one clock to another on every chip uses a synchronizer like this. Thomas Chaney and Charles Molnar measured the effect convincingly in 1973, after years in which many engineers refused to believe in it; forgetting it still produces the rarest and most maddening hardware bugs.",
+   "zh": "解药很便宜。<bookmark mark='a'/>把外部信号送过两个串联的触发器。第一个可能进入亚稳态。但在下一个时钟沿之前，也就是整整一个周期之后，没有人看它的输出，只有第二个触发器看。<bookmark mark='b'/>多出来的这个周期，大大延长了允许决断的时间，而由于失败率随这个时间指数下降，平均故障间隔变成大约十的十八次方年，是宇宙年龄的几亿倍，代价只是一个周期的延迟。<bookmark mark='c'/>每块芯片上、每一个信号从一个时钟跨到另一个时钟的地方，都用这样的同步器。托马斯·钱尼和查尔斯·莫尔纳在1973年令人信服地测量了这个效应，此前许多年，许多工程师都拒绝相信它；忘记它，至今仍会造成最罕见、最让人抓狂的硬件错误。"
+  },
+  "16a4f4863e98": {
+   "scene": "Meta",
+   "en": "It is tempting to think a better flip-flop could eliminate metastability. It cannot, and the reason is a theorem. <bookmark mark='a'/> Plot the time a latch takes to decide against the moment the input changed, relative to the clock. Far from the edge it decides quickly. Near the edge it takes longer, and right at one critical moment, the time is unbounded. <bookmark mark='b'/> Leslie Lamport called this Buridan's principle, after the donkey that starved halfway between two bales of hay: a discrete decision based on an input with a continuous range of values cannot always be made in a bounded time. The argument is continuity. The physical state of any device depends continuously on its input, so if one input leads to zero and another to one, some input in between leads to a state that is neither, for as long as you care to wait. <bookmark mark='c'/> Engineers cannot remove the risk, only make it astronomically small, and that is exactly what the synchronizer does.",
+   "zh": "人们很容易以为，更好的触发器能消除亚稳态。不能，原因是一条定理。<bookmark mark='a'/>把锁存器决断所需的时间，对输入相对于时钟改变的时刻作图。远离时钟沿时，它很快决断。靠近时钟沿时就更久，而在某个临界时刻，时间是无界的。<bookmark mark='b'/>莱斯利·兰波特称之为布里丹原理，得名于那头饿死在两捆干草正中间的驴：基于一个取值连续的输入做出的离散决定，不可能总在有界的时间内做出。论证靠的是连续性。任何器件的物理状态都连续地依赖于它的输入，所以如果一个输入导向零、另一个导向一，那么两者之间就有某个输入导向一个既非零也非一的状态，你愿意等多久它就持续多久。<bookmark mark='c'/>工程师无法消除这个风险，只能让它小到天文数字级别，而这正是同步器所做的。"
+  },
+  "84b3b4ace9a7": {
+   "scene": "Fsm",
+   "en": "Chapter six. Finite-state machines.",
+   "zh": "第6章。有限状态机。"
+  },
+  "f648a65163d4": {
+   "scene": "Fsm",
+   "en": "A register and some logic make a finite-state machine: a circuit with a few bits of memory that reacts to a stream of inputs, one per clock cycle. <bookmark mark='a'/> Here is one that watches a stream of bits and raises its output whenever the last four were one, zero, one, one. Each state stands for how much of the pattern has just been seen: nothing, a one, one zero, one zero one, or the whole pattern. <bookmark mark='b'/> The arrows say where each input bit leads. A wrong bit does not always start from scratch: after one zero one, a zero leaves one zero, which is still the start of a match. <bookmark mark='c'/> Its output depends only on the state, which makes it a Moore machine, after Edward Moore's 1956 paper; George Mealy's machines of 1955 let the output depend on the input too, reacting one cycle sooner.",
+   "zh": "一个寄存器加上一些逻辑，就是一个有限状态机：一个只有几位存储的电路，对一串输入作出反应，每个时钟周期一个。<bookmark mark='a'/>这是一个观察比特流的机器，每当最近四位是一、零、一、一时，它就升高输出。每个状态代表刚刚看到了模式的多少：什么也没有、一个一、一零、一零一，或者整个模式。<bookmark mark='b'/>箭头表示每个输入位通向哪里。错的一位并不总是让它从头开始：在一零一之后，一个零留下的是一零，这仍然是一次匹配的开头。<bookmark mark='c'/>它的输出只取决于状态，这使它成为摩尔机，得名于爱德华·摩尔1956年的论文；乔治·米利1955年的机器则允许输出也取决于输入，早一个周期作出反应。"
+  },
+  "965e50ed489c": {
+   "scene": "Fsm",
+   "en": "Feed it the input one zero one one zero one one one zero one zero one one. <bookmark mark='a'/> The highlighted state walks through the diagram one clock cycle per bit, and the output rises exactly three times, each just after a complete one zero one one, including the two that overlap. Thirteen bits of history, and the machine never needed more than five states to keep track of what matters.",
+   "zh": "给它输入一零一一零一一一零一零一一。<bookmark mark='a'/>高亮的状态在图中游走，每个时钟周期一位，输出恰好升高三次，每次都紧跟在一个完整的一零一一之后，包括相互重叠的那两次。十三位的历史，而这台机器从未需要超过五个状态来记住要紧的东西。"
+  },
+  "46db71d38fc3": {
+   "scene": "Fsm",
+   "en": "George Mealy's style puts the output on the transitions instead of the states. <bookmark mark='a'/> Each arrow now carries two labels, the input bit that takes it and the output bit it produces. The detector no longer needs a state meaning the whole pattern has been seen: from one zero one, a one completes the pattern, and the output is raised on that very transition, as the machine moves back to the state that remembers a single one. <bookmark mark='b'/> Four states instead of five, and the answer comes one clock cycle sooner. <bookmark mark='c'/> The price is that a Mealy output depends directly on the input, through logic, within the cycle, so it can glitch; designers often register it, which gives back the cycle they saved. Every Moore machine has a Mealy equivalent and vice versa, so the choice is about timing and size, not about what can be computed.",
+   "zh": "乔治·米利的风格把输出放在转移上，而不是状态上。<bookmark mark='a'/>现在每条箭头带两个标签：走这条边的输入位，以及它产生的输出位。检测器不再需要一个表示“整个模式已看到”的状态：从一零一出发，一个一就完成了模式，输出就在这次转移上升高，同时机器回到记着单个一的那个状态。<bookmark mark='b'/>四个状态而不是五个，答案早一个时钟周期出来。<bookmark mark='c'/>代价是米利机的输出在周期之内通过逻辑直接依赖于输入，所以它可能出现毛刺；设计者往往给它加一个寄存器，这又把省下的那个周期还了回去。每个摩尔机都有等价的米利机，反之亦然，所以这种选择关乎时序和大小，而不关乎能计算什么。"
+  },
+  "9b013fb452e7": {
+   "scene": "Fsm",
+   "en": "To build the machine, give each state a binary code and store the code in flip-flops. <bookmark mark='a'/> The choice of codes matters. Numbering the states in binary needs three flip-flops. A Gray code, where consecutive codes differ in one bit, also needs three. One-hot gives each state its own flip-flop, five in all, with exactly one of them on. <bookmark mark='b'/> For each encoding, the next-state and output logic was minimized, with the unused codes as don't-cares, built as gates, and simulated against the specification. Here binary is cheapest, fourteen gates; one-hot pays two extra flip-flops for logic almost as small; Gray, with this numbering, is worst. <bookmark mark='c'/> There is no universal winner. On FPGAs, which have flip-flops to spare, one-hot is the usual choice; Gray codes shine when a state value has to cross between clock domains, because only one bit changes at a time.",
+   "zh": "要搭建这台机器，就给每个状态一个二进制编码，把编码存进触发器。<bookmark mark='a'/>编码的选择很重要。用二进制给状态编号需要三个触发器。格雷码，相邻编码只差一位，也需要三个。独热码给每个状态一个专属的触发器，一共五个，恰有一个为一。<bookmark mark='b'/>对每种编码，把次态逻辑和输出逻辑最小化，未用的编码作为无关项，搭成门，再与规格说明对照模拟。这里二进制最便宜，十四个门；独热码多付两个触发器，换来几乎一样小的逻辑；按这种编号，格雷码最差。<bookmark mark='c'/>没有放之四海而皆准的赢家。在触发器富余的 FPGA 上，独热码是通常的选择；当一个状态值必须跨越时钟域时，格雷码就大放异彩，因为每次只有一位改变。"
+  },
+  "b6e480767aa4": {
+   "scene": "Nerode",
+   "en": "Chapter seven. Machines and languages.",
+   "zh": "第7章。机器与语言。"
+  },
+  "9582fcccde80": {
+   "scene": "Nerode",
+   "en": "A state machine that only answers yes or no at the end of its input is called a finite automaton, and the set of inputs it says yes to is its language. <bookmark mark='a'/> Here is one for the binary numbers divisible by three, read from the most significant bit. Its state is the number read so far, modulo six: reading a bit b doubles the number and adds b. It accepts when the remainder is zero or three. <bookmark mark='b'/> It works, but it is wasteful. Is six states the fewest a machine for this language can have? A theorem from 1958 answers that question exactly, for every language at once.",
+   "zh": "只在输入结束时回答是或否的状态机，叫作有限自动机，它回答“是”的那些输入组成的集合，就是它的语言。<bookmark mark='a'/>这是一台识别能被三整除的二进制数的机器，从最高位开始读。它的状态是迄今读到的数模六：读入一位 b，就把数翻倍再加 b。余数为零或三时接受。<bookmark mark='b'/>它能用，但很浪费。六个状态是这个语言的机器所能有的最少数目吗？1958年的一条定理精确地回答了这个问题，而且对所有语言一次回答。"
+  },
+  "cae9ffd14c99": {
+   "scene": "Nerode",
+   "en": "John Myhill and Anil Nerode looked at a language from the outside, with no machine at all. <bookmark mark='a'/> Call two prefixes equivalent if no continuation can tell them apart: for every suffix z, x z is in the language exactly when y z is. <bookmark mark='b'/> Their theorem says a language can be recognized by a finite automaton exactly when this equivalence has finitely many classes, and then the smallest automaton has one state per class, no more and no fewer. <bookmark mark='c'/> The proof is short. Any machine must send two inequivalent prefixes to different states, because if they reached the same state every suffix would treat them alike; so a machine has at least as many states as there are classes. And the classes themselves form a machine: reading a bit takes the class of x to the class of x followed by that bit. <bookmark mark='d'/> For multiples of three, two prefixes are equivalent exactly when they leave the same remainder mod three. Three classes, so three states suffice, and the six-state machine has three it does not need.",
+   "zh": "约翰·迈希尔和阿尼尔·尼罗德从外部来看一个语言，完全不需要机器。<bookmark mark='a'/>如果没有任何后续能把两个前缀区分开，就称它们等价：对每个后缀 z，x z 属于这个语言当且仅当 y z 属于。<bookmark mark='b'/>他们的定理说，一个语言能被有限自动机识别，当且仅当这种等价关系只有有限多个类；而且此时最小的自动机每个类恰有一个状态，不多也不少。<bookmark mark='c'/>证明很短。任何机器都必须把两个不等价的前缀送到不同的状态，因为如果它们到达同一个状态，每个后缀都会同样对待它们；所以一台机器的状态数至少等于类的个数。而这些类本身就构成一台机器：读入一位，就把 x 的类送到 x 后接那一位的类。<bookmark mark='d'/>对三的倍数，两个前缀等价当且仅当它们模三的余数相同。三个类，所以三个状态就够了，那台六状态机器有三个状态是多余的。"
+  },
+  "4b3b8206834a": {
+   "scene": "Nerode",
+   "en": "There is an algorithm that finds those classes in any machine. <bookmark mark='a'/> Start by splitting the states into two blocks: accepting and rejecting. No suffix can make those equivalent. <bookmark mark='b'/> Then look at each block and ask, for each input bit, which block each state goes to. States that disagree must be split, because some suffix tells them apart. Here states one and four behave alike, and so do two and five, but differently from one and four, so the rejecting block splits in two. <bookmark mark='c'/> Repeat until no block splits. The three blocks that remain, zero and three, one and four, two and five, are exactly the remainders mod three. <bookmark mark='d'/> Merge each block into a single state and you have the minimal machine. Edward Moore's method, used here, is simple; John Hopcroft's refinement of 1971 does the same in n log n time, and is what tools use to shrink the automata inside every regular-expression engine and lexer.",
+   "zh": "有一个算法能在任何机器里找出这些类。<bookmark mark='a'/>先把状态分成两块：接受的和拒绝的。没有任何后缀能让它们等价。<bookmark mark='b'/>然后看每一块，对每个输入位，问每个状态去往哪一块。意见不一的状态必须分开，因为某个后缀能区分它们。这里状态一和四表现相同，二和五也相同，但与一和四不同，所以拒绝块一分为二。<bookmark mark='c'/>重复，直到没有块再分裂。剩下的三块，零和三、一和四、二和五，正是模三的余数。<bookmark mark='d'/>把每一块合并成一个状态，就得到最小的机器。这里用的爱德华·摩尔的方法很简单；约翰·霍普克罗夫特1971年的改进用 n log n 的时间做同样的事，工具就是用它来缩小每个正则表达式引擎和词法分析器里的自动机。"
+  },
+  "9dfd41c6e48e": {
+   "scene": "Nerode",
+   "en": "This is the first rung of a ladder that the series climbs in Part 12. <bookmark mark='a'/> Finite automata, with a fixed amount of memory, recognize the regular languages: the patterns of regular expressions and of every lexer. Add a stack and you get the machines that parse programming languages. Add an unbounded tape and you are back at Part 1's Turing machine, which can do anything computable. <bookmark mark='b'/> Myhill–Nerode also marks the ladder's first edge. The language of some zeros followed by the same number of ones has infinitely many classes, since zero to the i and zero to the j are told apart by the suffix one to the i. So no finite machine, however clever, can recognize it.",
+   "zh": "这是本系列将在第12部分攀登的梯子的第一级。<bookmark mark='a'/>有限自动机只有固定数量的存储，它们识别正则语言：正则表达式和每个词法分析器所用的模式。加一个栈，就得到能分析程序设计语言的机器。加一条无界的纸带，就回到第1部分的图灵机，它能做任何可计算的事。<bookmark mark='b'/>Myhill–Nerode 定理也标出了这梯子的第一道边界。一些零后面跟着同样多个一组成的语言，有无穷多个类，因为零的 i 次方和零的 j 次方能被后缀一的 i 次方区分开。所以没有任何有限机器，不管多巧妙，能识别它。"
+  },
+  "a73643579040": {
+   "scene": "Lfsr",
+   "en": "Chapter eight. Counters and shift registers.",
+   "zh": "第8章。计数器与移位寄存器。"
+  },
+  "7ed4cefb480c": {
+   "scene": "Lfsr",
+   "en": "With registers and a clock, some useful circuits need almost no logic. <bookmark mark='a'/> A counter is a register whose next value is itself plus one: Part 4's adder, fed back. It steps through every number and wraps around, and it is how a processor keeps its place in a program. <bookmark mark='b'/> A shift register needs no logic at all: each flip-flop takes the value of its neighbour at every clock edge, so the whole pattern slides one place per cycle. Every serial link, USB, PCI Express, Ethernet, uses shift registers to turn parallel words into a stream of bits and back. And with one small change, a shift register becomes something remarkable.",
+   "zh": "有了寄存器和时钟，有些有用的电路几乎不需要逻辑。<bookmark mark='a'/>计数器是一个下一个值等于自身加一的寄存器：把第4部分的加法器反馈回来。它走遍每一个数再绕回去，处理器就是靠它记住自己在程序中的位置。<bookmark mark='b'/>移位寄存器根本不需要逻辑：每个触发器在每个时钟沿取它邻居的值，于是整个模式每个周期滑动一位。每一条串行链路，USB、PCI Express、以太网，都用移位寄存器把并行的字变成比特流，再变回来。只要做一个小改动，移位寄存器就会变成非同寻常的东西。"
+  },
+  "c496328ec0e3": {
+   "scene": "Lfsr",
+   "en": "Take a four-bit shift register, and instead of feeding it from outside, feed it the exclusive-or of two of its own bits. <bookmark mark='a'/> Each clock cycle, the bits shift along, and the new bit is the exclusive-or of the last two. Start from one zero zero zero and watch the states. <bookmark mark='b'/> It runs through fifteen different patterns, every non-zero four-bit pattern exactly once, in a scrambled-looking order, before coming back to where it started. The all-zero state is the only one missing, since it would stay zero forever. <bookmark mark='c'/> This is a linear-feedback shift register, and the choice of taps corresponds to the polynomial x to the four plus x cubed plus one. With the wrong taps, the cycle would be shorter.",
+   "zh": "拿一个四位移位寄存器，不再从外部喂它，而是喂给它自己两位的异或。<bookmark mark='a'/>每个时钟周期，各位向前移动，新的一位是最后两位的异或。从一零零零开始，观察这些状态。<bookmark mark='b'/>它走过十五种不同的模式，每一种非零的四位模式恰好一次，顺序看起来是打乱的，然后回到起点。只有全零状态不在其中，因为它会永远保持为零。<bookmark mark='c'/>这就是线性反馈移位寄存器，抽头的选择对应于多项式 x 的四次方加 x 的三次方加一。抽头选错了，循环就会更短。"
+  },
+  "78ab7d67e297": {
+   "scene": "Lfsr",
+   "en": "The explanation is algebra over the field with two elements, where one plus one is zero and adding is exclusive-or. <bookmark mark='a'/> Read the register's bits as the coefficients of a polynomial; this is cleanest for the same taps wired in the so-called Galois form, which folds the exclusive-or into the shift. <bookmark mark='b'/> One clock step multiplies that polynomial by x, shifting every coefficient up, and the feedback reduces the result modulo the tap polynomial, exactly as an integer is reduced modulo a number. <bookmark mark='c'/> So the states the register visits are the powers of x, and its period is the smallest power of x that comes back to one; either wiring has the same period. <bookmark mark='d'/> The period is the maximum, two to the n minus one, exactly when the polynomial is primitive: when the powers of x run through every non-zero element of the finite field with two to the n elements. Solomon Golomb worked out this theory in the 1950s, and these registers have generated codes, ciphers and test patterns ever since.",
+   "zh": "解释是二元域上的代数，在那里一加一等于零，加法就是异或。<bookmark mark='a'/>把寄存器的各位读作一个多项式的系数；对同样的抽头采用所谓伽罗瓦接法时，这一点最清楚，这种接法把异或折叠进了移位之中。<bookmark mark='b'/>一个时钟步就是把这个多项式乘以 x，每个系数上移一位，而反馈把结果对抽头多项式取模，就像一个整数对一个数取模那样。<bookmark mark='c'/>所以寄存器访问的状态就是 x 的各次幂，它的周期是使 x 的幂回到一的最小次数；两种接法的周期相同。<bookmark mark='d'/>周期达到最大值，2 的 n 次方减一，当且仅当这个多项式是本原的：x 的各次幂走遍有 2 的 n 次方个元素的有限域中的每一个非零元素。所罗门·戈隆在20世纪50年代建立了这套理论，从那以后，这些寄存器就一直在产生编码、密码和测试模式。"
+  },
+  "cc0afe421447": {
+   "scene": "Lfsr",
+   "en": "Here is every possible feedback polynomial up to degree eight, each simulated until it repeats. <bookmark mark='a'/> At degree eight there are a hundred and twenty-eight of them, and sixteen give the maximal period of two hundred and fifty-five. In every row the count matches the formula from field theory: Euler's phi of two to the n minus one, divided by n. <bookmark mark='b'/> These little machines are everywhere. The checksums that catch errors on disks and networks divide by such polynomials, in Part 28. Stream ciphers were built from them, and Part 29 shows why their linearity makes them easy to break. Serial links scramble their bits with them, GPS satellites are told apart by them, and chips test themselves with them.",
+   "zh": "这是八次以内所有可能的反馈多项式，每一个都模拟到它重复为止。<bookmark mark='a'/>八次时有一百二十八个，其中十六个达到最大周期二百五十五。每一行的计数都与有限域理论的公式吻合：2 的 n 次方减一的欧拉 phi 函数，除以 n。<bookmark mark='b'/>这些小机器无处不在。在磁盘和网络上捕捉错误的校验和就是用这样的多项式做除法，见第28部分。流密码曾用它们搭建，第29部分会说明为什么它们的线性让它们很容易被攻破。串行链路用它们给比特加扰，GPS 卫星靠它们区分彼此，芯片用它们自我测试。"
+  },
+  "ac3e257bc4a7": {
+   "scene": "RegFile",
+   "en": "Chapter nine. Pebble's register file.",
+   "zh": "第9章。Pebble 的寄存器堆。"
+  },
+  "fb4a98cd17c9": {
+   "scene": "RegFile",
+   "en": "Pebble's instructions name three registers at once: add r three, r one, r two reads two registers and writes a third. So its register file has two read ports and one write port. <bookmark mark='a'/> Sixteen registers of thirty-two flip-flops each, except register zero, which the instruction set defines to be zero and so needs no flip-flops at all. <bookmark mark='b'/> To write, Part 3's decoder turns the four-bit write address into one enable line per register; at the clock edge, the enabled register loads the write data, and every other register, through a multiplexer on each bit, loads its own value back. <bookmark mark='c'/> To read, two trees of multiplexers, each thirty-two bits wide, pick out the two registers named by the read addresses, both in the same cycle.",
+   "zh": "Pebble 的指令一次要指明三个寄存器：add r3、r1、r2 读两个寄存器、写第三个。所以它的寄存器堆有两个读端口和一个写端口。<bookmark mark='a'/>十六个寄存器，每个三十二个触发器，只有寄存器零例外，指令集规定它恒为零，所以根本不需要触发器。<bookmark mark='b'/>写入时，第3部分的译码器把四位写地址变成每个寄存器一根使能线；在时钟沿，被使能的寄存器载入写数据，其余每个寄存器通过每一位上的多路选择器，把自己的值重新载入。<bookmark mark='c'/>读出时，两棵三十二位宽的多路选择器树，在同一个周期里挑出读地址指明的两个寄存器。"
+  },
+  "f6a9181dccaa": {
+   "scene": "RegFile",
+   "en": "One subtlety matters as soon as the processor gets faster. <bookmark mark='a'/> The first instruction writes register three; the next one reads it. The register file writes at the clock edge and reads during the cycle, so as long as the second instruction reads in the next cycle, the new value is already sitting in the flip-flops. <bookmark mark='b'/> In the pipelined processors of Part 7, though, one instruction may be reading register three in the very cycle another is writing it. Designs solve this either by writing in the first half of the cycle and reading in the second, or with a bypass: a comparator notices that the read address equals the write address, and a multiplexer hands the new value straight to the output. Those forwarding paths, and when they are not enough, are a large part of Part 7.",
+   "zh": "一旦处理器变快，有一个细节就变得要紧。<bookmark mark='a'/>第一条指令写寄存器三，下一条读它。寄存器堆在时钟沿写入、在周期中读出，所以只要第二条指令在下一个周期读，新值就已经在触发器里了。<bookmark mark='b'/>但在第7部分的流水线处理器里，一条指令可能恰好在另一条写寄存器三的同一个周期读它。设计上的解决办法，要么在周期的前半写、后半读，要么用旁路：一个比较器发现读地址等于写地址，一个多路选择器就把新值直接送到输出。这些转发通路，以及它们不够用的时候，是第7部分的一大块内容。"
+  },
+  "d2e6d15a2780": {
+   "scene": "RegFile",
+   "en": "In the series' library this register file is real. <bookmark mark='a'/> Four hundred and eighty flip-flops, and a little under six thousand gates of decoding and multiplexing around them. Two hundred and fifty-six copies were run for sixty-four cycles of random reads and writes, and every value read matched a Python model that simply keeps sixteen variables. <bookmark mark='b'/> Notice where the gates go. Every extra read port is another multiplexer tree, about two thousand gates; every extra write port is another decoder and wider multiplexers on all four hundred and eighty bits. Processors that execute several instructions per cycle need many ports, and their register files become some of the largest and hottest structures on the chip, as Parts 7 and 8 will show.",
+   "zh": "在本系列的库里，这个寄存器堆是真实存在的。<bookmark mark='a'/>四百八十个触发器，周围是不到六千个用于译码和多路选择的门。两百五十六份副本运行了六十四个周期的随机读写，读出的每个值都与一个只保存十六个变量的 Python 模型一致。<bookmark mark='b'/>注意门花在了哪里。每多一个读端口，就多一棵多路选择器树，大约两千个门；每多一个写端口，就多一个译码器，以及全部四百八十位上更宽的多路选择器。每个周期执行好几条指令的处理器需要很多端口，它们的寄存器堆就成了芯片上最大、最热的结构之一，第7和第8部分会讲到。"
+  },
+  "16f2d764c276": {
+   "scene": "Sram",
+   "en": "Chapter ten. Static memory.",
+   "zh": "第10章。静态存储器。"
+  },
+  "27f72d5038f3": {
+   "scene": "Sram",
+   "en": "A register file of flip-flops is fast but large. For memories of millions of bits, the cell is cut down to the bare minimum. <bookmark mark='a'/> At its heart is chapter two's latch again: two cross-coupled inverters, four transistors, with two stable states. <bookmark mark='b'/> Two more transistors, switched by a word line, connect the two sides of the latch to a pair of bit lines. Six transistors in all: the static RAM cell, which holds its bit for as long as the power is on. <bookmark mark='c'/> To read, both bit lines are charged up, and the word line opens the cell; the cell pulls one of them down slightly. That tiny difference is too weak to use directly, so a sense amplifier, which is yet another cross-coupled latch, balanced right on its saddle, falls one way or the other and turns it into a full zero or one. To write, strong drivers force the bit lines, and the cell's small inverters give in.",
+   "zh": "由触发器组成的寄存器堆很快，但很大。对数百万位的存储器，单元被削减到最低限度。<bookmark mark='a'/>它的核心又是第2章的锁存器：两个交叉耦合的反相器，四个晶体管，两个稳定状态。<bookmark mark='b'/>再加两个由字线控制的晶体管，把锁存器的两侧接到一对位线上。一共六个晶体管：静态随机存储器单元，只要通着电，它就一直保持它的位。<bookmark mark='c'/>读出时，两根位线都先充上电，字线打开单元；单元把其中一根稍微拉低。这么小的差别太弱，不能直接使用，所以由读出放大器来处理，它本身又是一个交叉耦合的锁存器，恰好平衡在鞍点上，倒向一边或另一边，把差别变成完整的零或一。写入时，强驱动器强行设定位线，单元里小小的反相器只好让步。"
+  },
+  "232843805836": {
+   "scene": "Sram",
+   "en": "The sense amplifier is a beautiful reuse of chapter two. <bookmark mark='a'/> It is a latch too, but one that is deliberately parked on its saddle: both sides are first held at exactly the middle voltage. <bookmark mark='b'/> Then the bit lines, nudged a few percent apart by the cell, are connected to it. <bookmark mark='c'/> When it is released, the instability that makes metastability dangerous does useful work: the imbalance grows exponentially, and the latch falls quickly to the side it was nudged towards, turning a whisper into a full zero or one. A smaller nudge simply takes longer to resolve, which is chapter five's tail again, and why memory designers specify the smallest signal their amplifiers can read in time.",
+   "zh": "读出放大器是对第2章的漂亮再利用。<bookmark mark='a'/>它也是一个锁存器，但被刻意停放在鞍点上：两侧先被精确地保持在中间电压。<bookmark mark='b'/>然后，被单元推开了百分之几的位线接到它上面。<bookmark mark='c'/>当它被释放时，那个让亚稳态变得危险的不稳定性做了有用的功：不平衡指数增长，锁存器迅速倒向它被推向的那一侧，把耳语变成完整的零或一。推力越小，决断就越慢，这又是第5章的长尾，也是存储器设计者要规定放大器能及时读出的最小信号的原因。"
+  },
+  "174bcf98abbf": {
+   "scene": "Sram",
+   "en": "Memories put their cells in a grid. <bookmark mark='a'/> The address splits in two. The high part goes to a row decoder, which raises one word line, and every cell in that row connects to its bit lines at once. <bookmark mark='b'/> A row of sense amplifiers reads them all, and a multiplexer picks out the bits that were asked for. <bookmark mark='c'/> The caches inside every processor are static RAM built this way, millions of cells, and Part 9 is about how they are organized. Fast as it is, static RAM is big: six transistors and their wiring for every bit. Main memory needs something much denser.",
+   "zh": "存储器把单元排成网格。<bookmark mark='a'/>地址被分成两部分。高位送到行译码器，它升高一根字线，那一行的每个单元同时接到各自的位线上。<bookmark mark='b'/>一排读出放大器把它们全部读出，一个多路选择器挑出被要求的那些位。<bookmark mark='c'/>每个处理器内部的缓存都是这样搭成的静态随机存储器，数百万个单元，第9部分讲的就是它们怎样组织。静态随机存储器虽快，却很大：每一位六个晶体管，外加它们的布线。主存需要密得多的东西。"
+  },
+  "d16dd21cf6ac": {
+   "scene": "Dram",
+   "en": "Chapter eleven. Dynamic memory.",
+   "zh": "第11章。动态存储器。"
+  },
+  "e0b3824387f6": {
+   "scene": "Dram",
+   "en": "In 1966 Robert Dennard at IBM found a much smaller way to store a bit. <bookmark mark='a'/> One transistor, used as a switch, and one capacitor. The bit is the charge on the capacitor: charged is one, empty is zero. <bookmark mark='b'/> To read it, raise the word line and connect the capacitor to the bit line. But the bit line is far larger than the cell, so the charge spreads out and moves its voltage by only a small fraction of a volt. A sense amplifier detects that. <bookmark mark='c'/> And the cell's charge is now gone: reading destroys the value, so the sense amplifier writes it straight back. This is dynamic RAM. Intel's 1103, the first commercial DRAM chip, appeared in 1970 and quickly replaced the magnetic memories of chapter fourteen.",
+   "zh": "1966年，IBM 的罗伯特·丹纳德找到了一种小得多的存储一位的方法。<bookmark mark='a'/>一个用作开关的晶体管，加一个电容。这一位就是电容上的电荷：充电为一，放空为零。<bookmark mark='b'/>读出时，升高字线，把电容接到位线上。但位线比单元大得多，所以电荷分散开来，只让它的电压变化一伏的一小部分。读出放大器检测这个变化。<bookmark mark='c'/>而单元的电荷此时已经没了：读出会毁掉这个值，所以读出放大器立刻把它写回去。这就是动态随机存储器。英特尔的1103，第一块商用 DRAM 芯片，在1970年问世，很快取代了第14章的磁性存储器。"
+  },
+  "024100850154": {
+   "scene": "Dram",
+   "en": "There is a second problem. <bookmark mark='a'/> A capacitor that small is not perfectly isolated, and its charge leaks away, in a fraction of a second for the weakest cells. Left alone, a one would slowly turn into a zero. <bookmark mark='b'/> So the memory refreshes itself: the controller reads every row and writes it back, on a fixed schedule, the standard being every sixty-four milliseconds, and the charge is topped up long before it falls below the threshold. That is why it is called dynamic: the bits survive only because they are constantly rewritten, at a cost of a few percent of the memory's time and power.",
+   "zh": "还有第二个问题。<bookmark mark='a'/>这么小的电容不可能完全绝缘，它的电荷会漏掉，对最弱的单元来说只要几分之一秒。放着不管，一就会慢慢变成零。<bookmark mark='b'/>所以存储器会自我刷新：控制器按固定时间表读出每一行再写回去，标准是每六十四毫秒一次，电荷在跌破阈值之前很久就被补满。这就是它被称为动态的原因：这些位能幸存，只是因为它们不断被重写，代价是存储器百分之几的时间和功耗。"
+  },
+  "a31f0da99688": {
+   "scene": "Dram",
+   "en": "That trade, a cell twenty times smaller than static RAM's in exchange for complexity, is why main memory is DRAM. <bookmark mark='a'/> A static cell answers in about a nanosecond; DRAM takes tens. <bookmark mark='b'/> A DRAM access opens an entire row of thousands of bits into a row buffer of sense amplifiers, reads the columns it wants from that buffer, and later closes the row, writing it back. Reading more of an open row is quick; reaching a different row means closing and opening, which is slow. So a processor that reads memory in order runs fast, and one that jumps around waits. Real chips split their rows into independent banks, each with its own open row, and memory controllers reorder waiting requests so that as many as possible hit a row that is already open; a DDR module streams data in bursts of eight words per request for the same reason. Part 9 builds the cache hierarchy that hides as much of this as possible.",
+   "zh": "这种交易，用复杂性换来比静态随机存储器小二十倍的单元，就是主存采用 DRAM 的原因。<bookmark mark='a'/>静态单元大约一纳秒就能响应；DRAM 要几十纳秒。<bookmark mark='b'/>一次 DRAM 访问，把整整一行数千位打开到由读出放大器组成的行缓冲里，从中读出想要的列，之后关闭这一行，把它写回去。在打开的行里多读一些很快；换到另一行就意味着关闭再打开，很慢。所以按顺序读内存的处理器跑得快，到处跳的就要等。真实的芯片把行分到独立的存储体里，每个存储体有自己打开的行，内存控制器重新排列等待中的请求，让尽可能多的请求命中已经打开的行；DDR 内存条每次请求以八个字为一组突发传输，也是出于同样的原因。第9部分搭建的缓存层次结构，就是尽可能把这些掩盖起来。"
+  },
+  "e039a3de29a1": {
+   "scene": "Rowhammer",
+   "en": "Chapter twelve. When memory leaks.",
+   "zh": "第12章。当存储器泄漏时。"
+  },
+  "1c01786a9ee0": {
+   "scene": "Rowhammer",
+   "en": "As DRAM cells shrank, their neighbours came uncomfortably close. In 2014 Yoonu Kim, Onur Mutlu and their colleagues at Carnegie Mellon and Intel published a disturbing measurement. <bookmark mark='a'/> Pick two rows of memory, and access them alternately, as fast as possible: open one, open the other, again and again. Each time a row is opened, the electrical activity disturbs the rows next to it, and a little charge leaks out of their cells. <bookmark mark='b'/> Do it enough times between two refreshes, and the weakest cells in the row in between, the victim, which the program never touches, lose enough charge to flip. <bookmark mark='c'/> Of a hundred and twenty-nine DDR3 memory modules they tested, a hundred and ten flipped bits, some after only a hundred and thirty-nine thousand activations, well within one sixty-four-millisecond refresh period.",
+   "zh": "随着 DRAM 单元缩小，它们的邻居近得让人不安。2014年，卡内基梅隆大学和英特尔的金允勋、奥努尔·穆特卢及其同事发表了一项令人不安的测量。<bookmark mark='a'/>选两行内存，尽可能快地交替访问它们：打开一行，打开另一行，一遍又一遍。每打开一行，电活动就会扰动它旁边的行，让那些单元漏掉一点电荷。<bookmark mark='b'/>在两次刷新之间这样做足够多次，夹在中间的那一行，受害行，程序从未碰过它，其中最弱的单元就会失去足够的电荷而翻转。<bookmark mark='c'/>他们测试的一百二十九条 DDR3 内存条中，有一百一十条出现了位翻转，有的只需十三万九千次激活，远在一个六十四毫秒的刷新周期之内。"
+  },
+  "a91a6bc7b367": {
+   "scene": "Rowhammer",
+   "en": "Why did this appear only around 2010? <bookmark mark='a'/> Because each generation of DRAM shrinks the cells and packs the rows closer, and a cell now holds only tens of thousands of electrons, or fewer. <bookmark mark='b'/> Opening a row swings its word line from zero to full voltage, and the electrical coupling into the neighbouring rows, together with charge trapped in the silicon between them, speeds up their leakage a little every time. <bookmark mark='c'/> The sixty-four millisecond refresh interval was chosen for ordinary leakage, with a safety margin, never imagining that a program might open the same neighbouring row hundreds of thousands of times inside one interval. A reliability margin had quietly become a security boundary, and nobody had been guarding it.",
+   "zh": "为什么这个问题直到2010年前后才出现？<bookmark mark='a'/>因为每一代 DRAM 都在缩小单元、把行挤得更近，一个单元现在只存几万个电子，甚至更少。<bookmark mark='b'/>打开一行，会让它的字线从零摆到满电压，耦合到相邻行的电效应，加上被困在它们之间硅中的电荷，每次都让它们的泄漏加快一点点。<bookmark mark='c'/>六十四毫秒的刷新间隔是为普通泄漏选定的，带有安全余量，从没想到一个程序会在一个间隔之内把同一相邻行打开几十万次。一个可靠性余量，悄悄地变成了一道安全边界，而没有人在守卫它。"
+  },
+  "9119c00b2b22": {
+   "scene": "Rowhammer",
+   "en": "At first it looked like a reliability problem. It is a security problem. <bookmark mark='a'/> In 2015 Mark Seaborn and Thomas Dullien at Google's Project Zero hammered rows until a bit flipped inside a page table, the structure Part 32 uses to keep programs out of each other's memory, and took over the machine. <bookmark mark='b'/> Others did it from JavaScript running in a web page, and from an ordinary Android app. <bookmark mark='c'/> The defences are refreshing more often, counting activations and refreshing a hammered row's neighbours early, and error-correcting codes. <bookmark mark='d'/> Each has been worked around: in 2020, new access patterns still flipped bits in memory that had all of them. <bookmark mark='e'/> The deeper lesson runs through the whole series. Every layer promises something simple; memory promises to hold what you wrote. Rowhammer is what happens when the physics underneath an abstraction leaks through it, and Part 42 meets its relatives.",
+   "zh": "起初它看起来是可靠性问题。其实它是安全问题。<bookmark mark='a'/>2015年，谷歌 Project Zero 的马克·西博恩和托马斯·杜利恩反复锤击某些行，直到页表里翻转了一位，页表是第32部分用来让程序互不侵入内存的结构，他们由此接管了机器。<bookmark mark='b'/>另一些人从网页里运行的 JavaScript、从普通的安卓应用做到了这一点。<bookmark mark='c'/>防御手段是更频繁地刷新，统计激活次数并提前刷新被锤击行的邻居，以及纠错码。<bookmark mark='d'/>每一种都被绕过了：2020年，新的访问模式仍能在具备所有这些防御的内存中翻转位。<bookmark mark='e'/>更深的教训贯穿整个系列。每一层都承诺一些简单的东西；存储器承诺保存你写进去的东西。行锤攻击就是抽象底下的物理泄漏出来时发生的事，第42部分会遇到它的亲戚。"
+  },
+  "5b00d74f4b91": {
+   "scene": "Logic",
+   "en": "Chapter thirteen. Clocks, and memory as logic.",
+   "zh": "第13章。时钟，以及作为逻辑的存储器。"
+  },
+  "36c0a18c07a6": {
+   "scene": "Logic",
+   "en": "Almost every digital system obeys a few strict rules. <bookmark mark='a'/> Every flip-flop shares one clock. Every loop passes through a register. Every path meets its setup and hold times, and every input from outside goes through a synchronizer. <bookmark mark='b'/> Obey them, and a chip of billions of transistors behaves exactly like a finite-state machine, taking one clean step per tick, simulated cycle by cycle the way this series simulates Pebble. That predictability is worth an enormous amount. <bookmark mark='c'/> The price is that every step waits for the slowest path, even when the work this cycle was easy, and the clock network that reaches every flip-flop can burn a third of a chip's power. Modern chips soften both costs: clock gating switches the clock off to idle blocks, and different parts of a chip run on different clocks, joined by the synchronizers of chapter five.",
+   "zh": "几乎每个数字系统都遵守几条严格的规则。<bookmark mark='a'/>每个触发器共享同一个时钟。每个回路都经过一个寄存器。每条路径都满足建立和保持时间，每个外部输入都经过同步器。<bookmark mark='b'/>遵守它们，一块有几十亿个晶体管的芯片就会完全像一个有限状态机那样运转，每个节拍走干净的一步，可以像本系列模拟 Pebble 那样逐周期模拟。这种可预测性价值巨大。<bookmark mark='c'/>代价是每一步都要等最慢的路径，即使这个周期的工作很简单；而通往每个触发器的时钟网络，可能消耗芯片三分之一的功率。现代芯片缓解了这两种代价：时钟门控把空闲模块的时钟关掉，芯片的不同部分运行在不同的时钟上，由第5章的同步器连接。"
+  },
+  "c95ff98b5c5d": {
+   "scene": "Logic",
+   "en": "There is another way: circuits with no clock at all, which signal to each other when they are done. <bookmark mark='a'/> Their basic element, invented by David Muller in the 1950s, is the C-element. When both inputs are one, its output becomes one; when both are zero, zero; when they disagree, it holds its last value. It is a tiny state machine, and like the latch it needs feedback inside. <bookmark mark='b'/> In effect it waits for both of its inputs to agree before it acts, which is exactly what a handshake needs: I am ready, you are ready, go. Asynchronous circuits built this way run each step as fast as that step allows and use no power while idle. They are hard to design and test, so they survive mainly in niches: ultra-low-power chips, the arbiters that decide which of two requests came first, and the boundaries between clock domains.",
+   "zh": "还有另一种方式：完全没有时钟、完成时互相发信号的电路。<bookmark mark='a'/>它们的基本元件是大卫·穆勒在20世纪50年代发明的 C 元件。两个输入都为一时，输出变为一；都为零时，变为零；不一致时，保持上一个值。它是一个小小的状态机，像锁存器一样，内部需要反馈。<bookmark mark='b'/>实际上，它等两个输入一致了才行动，这正是握手所需要的：我准备好了，你准备好了，开始。这样搭成的异步电路，每一步都以那一步允许的速度运行，空闲时不耗电。它们难以设计和测试，所以主要存在于一些小众领域：超低功耗芯片，判断两个请求谁先到的仲裁器，以及时钟域之间的边界。"
+  },
+  "49e6f4099a47": {
+   "scene": "Logic",
+   "en": "Memory and logic are closer than they look. <bookmark mark='a'/> A read-only memory takes an address and returns a stored word. Store a truth table in it, use the inputs as the address, and it computes the function: here, majority and parity of three bits. <bookmark mark='b'/> A programmable logic array does the same with a programmable plane of and gates feeding a plane of or gates, a normal form from Part 3 laid out in silicon. FPGAs pair Part 3's lookup tables with flip-flops, so they can hold state machines too. <bookmark mark='c'/> And many processors keep a ROM of control words, indexed by the instruction and the step within it, to generate the signals that steer their datapaths. That is microcode, and Part 6 builds Pebble's control the same way, or with plain logic, and compares the two.",
+   "zh": "存储器和逻辑比看起来更接近。<bookmark mark='a'/>只读存储器接受一个地址，返回一个存储的字。把一张真值表存进去，用输入作地址，它就计算这个函数：这里是三位的多数和奇偶。<bookmark mark='b'/>可编程逻辑阵列用一个可编程的与门平面接一个或门平面做同样的事，把第3部分的范式铺在硅片上。FPGA 把第3部分的查找表与触发器配对，所以也能容纳状态机。<bookmark mark='c'/>许多处理器保存一个控制字的只读存储器，用指令和指令内的步骤来索引，产生操控数据通路的信号。这就是微码，第6部分会用同样的方式，或者用普通的逻辑，来搭建 Pebble 的控制器，并比较两者。"
+  },
+  "cc0ff36c827a": {
+   "scene": "History",
+   "en": "Chapter fourteen. Remembering, before chips.",
+   "zh": "第14章。芯片之前的记忆。"
+  },
+  "df5063e864e1": {
+   "scene": "History",
+   "en": "Before chips, computers remembered in ways that sound like science fiction. <bookmark mark='a'/> Delay lines turned bits into pulses of sound travelling down tubes of mercury; a bit was available only at the moment its pulse arrived at the end, so programmers arranged their data around the timing. Maurice Wilkes's EDSAC, at Cambridge in 1949, used them. <bookmark mark='b'/> The Williams tube stored bits as spots of charge on the face of a cathode-ray tube, which had to be redrawn constantly, like DRAM's refresh; the Manchester Baby, the first stored-program computer, ran on one in 1948, with thirty-two words of memory. <bookmark mark='c'/> Then core memory, magnetized rings, which ruled for twenty years, until the Intel 1103 of 1970 put a thousand bits on a chip, and the curve of Moore's law took over. <bookmark mark='d'/> Flash memory, which keeps its charge without power, arrived in the 1980s; it is the storage of Part 34.",
+   "zh": "在芯片出现之前，计算机的记忆方式听起来像科幻小说。<bookmark mark='a'/>延迟线把位变成声脉冲，沿着装满水银的管子传播；一位只在它的脉冲到达末端的那一刻可用，所以程序员要围绕时序来安排数据。莫里斯·威尔克斯1949年在剑桥的 EDSAC 就用它们。<bookmark mark='b'/>威廉姆斯管把位存成阴极射线管屏幕上的电荷斑点，必须不断重画，就像 DRAM 的刷新；第一台存储程序计算机曼彻斯特宝贝机在1948年就靠它运行，有三十二个字的存储。<bookmark mark='c'/>然后是磁芯存储器，磁化的小环，它统治了二十年，直到1970年的英特尔1103把一千位放进一块芯片，摩尔定律的曲线接管了一切。<bookmark mark='d'/>断电也能保存电荷的闪存，在20世纪80年代出现；它是第34部分的存储。"
+  },
+  "fcf0fdaa60e6": {
+   "scene": "History",
+   "en": "The delay line deserves a closer look too, because it made programmers think about memory in a way they still do. <bookmark mark='a'/> A tube of mercury, about a metre and a half long, with a quartz crystal at each end. One crystal turns electrical pulses into sound; the sound crawls down the mercury; the other crystal turns it back into pulses, which are amplified, cleaned up and fed back in. The bits circulate for as long as the machine runs. <bookmark mark='b'/> But a word can be read only at the moment it passes the end of the tube. So programmers placed each instruction and each piece of data where it would arrive just as the previous step finished, a craft called optimum programming. <bookmark mark='c'/> It was the first case of a lesson that Part 9 builds a whole hierarchy around: where your data is, and when, decides how fast your program runs.",
+   "zh": "延迟线也值得细看，因为它让程序员以一种至今仍在沿用的方式思考存储器。<bookmark mark='a'/>一根约一米半长的水银管，两端各有一块石英晶体。一块晶体把电脉冲变成声音；声音沿着水银缓缓爬行；另一块晶体把它变回脉冲，经过放大、整形，再送回去。只要机器在运行，这些位就一直循环。<bookmark mark='b'/>但一个字只有在经过管子末端的那一刻才能读出。所以程序员把每条指令和每块数据放在恰好在上一步完成时到达的位置，这门手艺叫作最优编程。<bookmark mark='c'/>这是第9部分围绕它搭建整个层次结构的那个教训的第一个例子：你的数据在哪里、何时到达，决定了程序跑多快。"
+  },
+  "3f8e644e9643": {
+   "scene": "History",
+   "en": "Core memory deserves a closer look, because its ideas are still in every memory chip. <bookmark mark='a'/> Each bit was a tiny ring of ferrite, magnetized clockwise or anticlockwise, threaded on a grid of wires. <bookmark mark='b'/> To select one core, send half the current needed to flip a core down its row wire and half down its column wire. Only the core at the crossing feels the full current and flips: the first two-dimensional address decoder, made of physics. <bookmark mark='c'/> Reading worked by trying to flip the core to zero and sensing whether it pulsed, which destroyed the value, so every read was followed by a write-back, exactly as in DRAM today. <bookmark mark='d'/> Unlike DRAM, core kept its bits with the power off. It was threaded by hand, often by women from the textile industry, and the Apollo guidance computer's programs were woven permanently into a related form, rope memory, wire by wire.",
+   "zh": "磁芯存储器值得细看，因为它的思想至今仍存在于每块存储芯片里。<bookmark mark='a'/>每一位是一个小小的铁氧体环，顺时针或逆时针磁化，穿在一张导线网格上。<bookmark mark='b'/>要选中一个磁芯，就在它的行线上送翻转一个磁芯所需电流的一半，在列线上也送一半。只有交叉点上的磁芯感受到完整的电流而翻转：第一个二维地址译码器，由物理学搭成。<bookmark mark='c'/>读出靠的是试图把磁芯翻转为零，并检测它是否产生脉冲，这会毁掉原来的值，所以每次读出之后都要写回，和今天的 DRAM 完全一样。<bookmark mark='d'/>与 DRAM 不同，磁芯断电后仍保存着它的位。它是手工穿制的，往往由来自纺织业的女工完成，阿波罗导航计算机的程序就以一种相关的形式，即磁芯绳存储器，一根线一根线地被永久织了进去。"
+  },
+  "37932624968c": {
+   "scene": "Outro",
+   "en": "What we built in this part. Feedback, and the SR latch that holds a bit. The latch as a dynamical system, with two wells and a saddle, and metastability, whose undecided tail falls off exponentially and never reaches zero. Flip-flops, the clock, setup and hold, and the synchronizer. Finite-state machines, and the Myhill-Nerode theorem that gives the smallest one. Shift registers that count through every non-zero state, Pebble's register file, and memory chips that must rewrite their bits to keep them.",
+   "zh": "这一部分我们搭建了什么。反馈，以及能保存一位的 SR 锁存器。把锁存器看作动力系统，有两个势阱和一个鞍点，以及亚稳态，它那未决断的尾巴指数下降，却永远不会降到零。触发器、时钟、建立和保持时间，以及同步器。有限状态机，以及给出最小状态机的 Myhill-Nerode 定理。数遍每一个非零状态的移位寄存器、Pebble 的寄存器堆，以及必须重写自己的位才能保住它们的存储芯片。"
+  },
+  "b7c551ff546a": {
+   "scene": "Outro",
+   "en": "Where this comes back. Registers, the clock and the register file become Pebble in Part 6, and Part 7 slices its critical path with more registers. Static and dynamic memory are the raw material of Part 9's memory hierarchy. Finite automata are the first rung of Part 12's languages and of Part 25's limits. Shift registers over the field with two elements return as error-detecting codes in Part 28 and as ciphers in Part 29. Rowhammer returns in virtual memory and in web security, and arbiters, which decide which request came first, return when many processors, and many machines, have to agree.",
+   "zh": "这些会在哪里再出现。寄存器、时钟和寄存器堆在第6部分变成 Pebble，第7部分用更多的寄存器切开它的关键路径。静态和动态存储器是第9部分存储层次结构的原材料。有限自动机是第12部分语言、以及第25部分极限的第一级台阶。二元域上的移位寄存器在第28部分以检错码的形式回来，在第29部分以密码的形式回来。行锤攻击会在虚拟内存和网络安全中回来，而决定哪个请求先到的仲裁器，会在许多处理器、乃至许多机器必须达成一致时回来。"
+  },
+  "a10d0854edf9": {
+   "scene": "Outro",
+   "en": "In practice: every chip with more than one clock has dozens of clock-domain crossings, each with a synchronizer or a Gray-coded queue, and special tools check them all. Servers use error-correcting memory, which repairs single flipped bits, and scrub their memory in the background. Embedded firmware is built from state machines, and so are network protocols, parsers and regular-expression engines, which are finite automata written in software.",
+   "zh": "在实践中：每块有不止一个时钟的芯片都有几十处时钟域跨越，每一处都有同步器或格雷码队列，专门的工具会检查所有这些地方。服务器使用纠错存储器修复单个翻转的位，并在后台擦洗内存。嵌入式固件由状态机搭成，网络协议、语法分析器和正则表达式引擎也是如此，它们都是用软件写成的有限自动机。"
+  },
+  "dabdeabe88ef": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to use this series' sequential-circuit library yourself.",
+   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自使用本系列的时序电路库。"
+  },
+  "2e4c0f085de9": {
+   "scene": "Outro",
+   "en": "Next time: the stored-program computer, the end of act one. We have gates, adders, an ALU, registers and memory. Part 6 puts them together, with a program counter, an instruction decoder and a control unit, into Pebble itself: a thirty-two-bit processor, built from NAND gates, that fetches its own instructions from memory and runs them, including the Euclid program of Part 1.",
+   "zh": "下一次：存储程序计算机，第一幕的终点。我们已经有了门、加法器、算术逻辑单元、寄存器和存储器。第6部分把它们组装在一起，加上程序计数器、指令译码器和控制单元，就成了 Pebble 本身：一台由与非门搭成的三十二位处理器，它从存储器中取出自己的指令并执行，包括第1部分的欧几里得程序。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 5, Memory and Time",
+ "chapters_en": {
+  "Hook": "A circuit that remembers",
+  "Feedback": "1. Feedback",
+  "Dynamics": "2. Two wells and a saddle",
+  "FlipFlop": "3. Latches, flip-flops and the clock",
+  "Timing": "4. How fast can the clock go?",
+  "Meta": "5. Metastability",
+  "Fsm": "6. Finite-state machines",
+  "Nerode": "7. Machines and languages",
+  "Lfsr": "8. Counters and shift registers",
+  "RegFile": "9. Pebble's register file",
+  "Sram": "10. Static memory",
+  "Dram": "11. Dynamic memory",
+  "Rowhammer": "12. When memory leaks",
+  "Logic": "13. Clocks, and memory as logic",
+  "History": "14. Remembering, before chips",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
