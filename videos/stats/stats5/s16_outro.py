@@ -111,7 +111,8 @@ class Outro(VoiceoverScene):
              r"K. Pearson (1894, 1896); \ F. Eggenberger \& G. P\'olya (1923); \ B. de Finetti (1931)",
              r"A. Sklar (1959); \ D. X. Li (2000); \ D. MacKenzie \& T. Spears (2014)",
              r"C. Spearman (1904); \ M. Kendall (1938); \ G. Sz\'ekely, M. Rizzo \& N. Bakirov (2007)",
-             r"A. Tversky \& D. Kahneman (1974); \ D. Kahneman, \emph{Thinking, Fast and Slow} (2011)"])
+             r"A. Tversky \& D. Kahneman (1974); \ D. Kahneman, \emph{Thinking, Fast and Slow} (2011)",
+             r"E. Lukacs (1955); \ A. Dempster (1972); \ P. Diaconis \& D. Freedman (1980); \ J. Aitchison (1982)"])
         with self.voiceover(
             "The books and papers this part follows: Blitzstein and Hwang, Anderson's classic on multivariate "
             "analysis, Nelsen and Joe on copulas, and Stigler's histories, along with the original papers from "

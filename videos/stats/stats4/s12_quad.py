@@ -167,8 +167,7 @@ class Quad(VoiceoverScene):
                 A = axes([0, 2.5], [0, 5.0], x_length=4.6, y_length=3.6, xlabel=r"$\bar x$", ylabel=r"$s^2$",
                          xticks=[0, 1, 2], yticks=[0, 2, 4], center=[3.4, -0.8, 0])
             ax = A.ax
-            lo, hi = ax.x_range[0], ax.x_range[1]
-            ylo, yhi = 0, ax.y_range[1]
+            lo, hi, ylo, yhi = bounds(ax)
             pts = VGroup(*[Dot(ax.c2p(a, b), radius=0.018, color=col, fill_opacity=0.6) for a, b in zip(m_[:1500], v_[:1500])
                            if lo < a < hi and ylo < b < yhi])
             t = label(ttl, font_size=24, color=col).next_to(A, UP, buff=0.15)

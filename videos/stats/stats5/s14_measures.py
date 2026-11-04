@@ -13,6 +13,7 @@ class Measures(VoiceoverScene):
         self.card()
         self.gallery()
         self.ranks()
+        self.monotone()
         self.dcor_mi()
 
     def card(self):
@@ -37,7 +38,10 @@ class Measures(VoiceoverScene):
             t = label(nm, font_size=20, color=GREY_A).next_to(A, UP, buff=0.05)
             vals = VGroup(*[MathTex(rf"{lab} {c[k2]:.2f}", font_size=16, color=cl) for lab, k2, cl in
                             ((r"r", "pearson", S.EST), (r"\rho_S", "spearman", S.LIK), (r"\tau", "kendall", S.ACCENT),
-                             (r"\mathrm{dCor}", "dcor", S.POST), (r"\mathrm{MI}", "mi", S.PRIOR))]).arrange(RIGHT, buff=0.12)
+                             (r"\mathrm{dCor}", "dcor", S.POST), (r"\mathrm{MI}", "mi", S.PRIOR))])
+            vals = VGroup(VGroup(*vals[:3]).arrange(RIGHT, buff=0.18), VGroup(*vals[3:]).arrange(RIGHT, buff=0.18))
+            vals.arrange(DOWN, buff=0.06)
+            vals.width = min(vals.width, 2.7)
             vals.next_to(A, DOWN, buff=0.08)
             panels.add(VGroup(A, pts, t, vals))
         side = VGroup(*[label(t, font_size=18, color=c) for t, c in ((r"$r$: Pearson", S.EST), (r"$\rho_S$: Spearman", S.LIK),
@@ -119,4 +123,34 @@ class Measures(VoiceoverScene):
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(cost))
+        self.clear_scene()
+
+    def monotone(self):
+        e = load("extras")["mono"]
+        rows = VGroup(
+            label(r"800 of the World's fathers and sons; \ then replace the son's height by $e^{(\text{height} - 170)/6}$", font_size=24,
+                  color=GREY_A),
+            MathTex(rf"\text{{Pearson: }} {e['p_raw']:.3f} \to {e['p_exp']:.3f}", font_size=32, color=S.EST),
+            MathTex(rf"\text{{Spearman: }} {e['s_raw']:.3f} \to {e['s_exp']:.3f}", font_size=32, color=S.LIK),
+            MathTex(rf"\text{{Kendall: }} {e['k_raw']:.3f} \to {e['k_exp']:.3f}", font_size=32, color=S.ACCENT),
+            label(r"an increasing transformation keeps the order, \ so the ranks, \ so the copula", font_size=26, color=S.ACCENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([0, 0.3, 0])
+        tag = simulated_tag()
+        with self.voiceover(
+            "Here's that invariance, measured. <bookmark mark='a'/> Take eight hundred of the World's fathers and "
+            "sons, and then distort the son's height through an exponential: same order, different scale. "
+            f"<bookmark mark='b'/> Pearson's correlation drops from {e['p_raw']:.2f} to {e['p_exp']:.2f}. "
+            "<bookmark mark='c'/> Spearman's and Kendall's don't move at all, to the last digit. "
+            "<bookmark mark='d'/> An increasing transformation preserves order, so it preserves ranks and the copula, "
+            "and rank correlations measure only that."
+        ) as vo:
+            self.play(FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[2:4]))
+            vo.wait_until("d")
+            self.play(FadeIn(rows[4]))
         self.clear_scene()

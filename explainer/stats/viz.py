@@ -52,6 +52,13 @@ def histogram(ax, values, edges, density=False, color=None, opacity=0.75, stroke
     return g
 
 
+def bounds(ax):
+    """``(x_lo, x_hi, y_lo, y_hi)`` of ``ax`` in data coordinates.  ``CornerAxes`` stores its ranges shifted to start
+    at 0 (its ``c2p`` takes the original coordinates), so ``ax.x_range`` alone is not the data range."""
+    ox, oy = getattr(ax, "_off", (0.0, 0.0))
+    return ax.x_range[0] + ox, ax.x_range[1] + ox, ax.y_range[0] + oy, ax.y_range[1] + oy
+
+
 def dot_plot(ax, values, step: float, radius=0.06, color=None, gap=1.0) -> VGroup:
     """One dot per value, values rounded to ``step``; dots at the same rounded value stack upward (``gap`` dot
     diameters apart, in screen units)."""
@@ -62,7 +69,7 @@ def dot_plot(ax, values, step: float, radius=0.06, color=None, gap=1.0) -> VGrou
     for x in v:
         k = seen.get(x, 0)
         seen[x] = k + 1
-        p = ax.c2p(x, ax.y_range[0])
+        p = ax.c2p(x, bounds(ax)[2])
         g.add(Dot([p[0], p[1] + radius * (1 + 2 * gap * k) + 0.02, 0], radius=radius, color=color))
     return g
 
@@ -72,8 +79,8 @@ def ecdf_steps(ax, values, color=None, stroke_width=3, x_lo=None, x_hi=None) -> 
     color = color or S.EST
     x = np.sort(np.asarray(values, float))
     n = len(x)
-    lo = ax.x_range[0] if x_lo is None else x_lo
-    hi = ax.x_range[1] if x_hi is None else x_hi
+    lo = bounds(ax)[0] if x_lo is None else x_lo
+    hi = bounds(ax)[1] if x_hi is None else x_hi
     pts = [ax.c2p(lo, 0)]
     for i, xi in enumerate(x):
         pts += [ax.c2p(xi, i / n), ax.c2p(xi, (i + 1) / n)]
@@ -102,7 +109,7 @@ def box_plot(ax, summary: dict, y: float = 0.0, height: float = 0.5, color=None,
     median line, whiskers to the most extreme points within the fences, outliers as dots."""
     color = color or S.EST
     outlier_color = outlier_color or S.RESID
-    X = lambda v: ax.c2p(v, ax.y_range[0])[0]  # noqa: E731
+    X = lambda v: ax.c2p(v, bounds(ax)[2])[0]  # noqa: E731
     box = Rectangle(width=X(summary["q3"]) - X(summary["q1"]), height=height, stroke_color=color,
                     stroke_width=stroke_width, fill_color=color, fill_opacity=0.2)
     box.move_to([(X(summary["q1"]) + X(summary["q3"])) / 2, y, 0])
@@ -115,7 +122,7 @@ def box_plot(ax, summary: dict, y: float = 0.0, height: float = 0.5, color=None,
     ch = Line([X(summary["hi_whisker"]), y - height / 4, 0], [X(summary["hi_whisker"]), y + height / 4, 0],
               color=color, stroke_width=stroke_width)
     outs = VGroup(*[Dot([X(v), y, 0], radius=0.05, color=outlier_color) for v in summary["outliers"]
-                    if ax.x_range[0] <= v <= ax.x_range[1]])
+                    if bounds(ax)[0] <= v <= bounds(ax)[1]])
     g = VGroup(box, med, wl, wh, cl, ch, outs)
     g.box, g.median, g.whiskers, g.outliers = box, med, VGroup(wl, wh, cl, ch), outs
     return g

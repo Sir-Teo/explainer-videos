@@ -12,6 +12,7 @@ class Joint(VoiceoverScene):
         self.surface()
         self.slicing()
         self.bayes()
+        self.dice()
 
     def card(self):
         card = chapter_card(1, r"Joint, marginal, conditional", r"Three ways to read one table", lit=(1886,), part=PART)
@@ -188,4 +189,63 @@ class Joint(VoiceoverScene):
             step(1, transform=False)
             vo.wait_until("c")
             self.play(FadeIn(indep))
+        self.clear_scene()
+
+    def dice(self):
+        d = load("extras2")["dice"]
+        J = np.asarray(d["J36"])
+        cell = 0.62
+        o = np.array([-5.4, -2.2, 0])
+        grid, cells = VGroup(), {}
+        for i in range(6):
+            for j in range(6):
+                v = int(J[i, j])
+                sq = Square(side_length=cell, stroke_color=GREY_D, stroke_width=1, fill_color=COND if v else "#121722",
+                            fill_opacity=0.18 * v if v else 1)
+                sq.move_to(o + np.array([j * cell, i * cell, 0]))
+                t = MathTex(str(v), font_size=22, color=WHITE if v else GREY_D).move_to(sq)
+                cells[(i, j)] = VGroup(sq, t)
+                grid.add(cells[(i, j)])
+        rl = VGroup(*[MathTex(str(i + 1), font_size=22, color=GREY_B).next_to(cells[(i, 0)], LEFT, buff=0.15) for i in range(6)])
+        cl = VGroup(*[MathTex(str(j + 1), font_size=22, color=GREY_B).next_to(cells[(0, j)], DOWN, buff=0.15) for j in range(6)])
+        an = VGroup(label(r"max", font_size=22, color=GREY_A).next_to(rl, LEFT, buff=0.15),
+                    label(r"min", font_size=22, color=GREY_A).next_to(cl, DOWN, buff=0.12))
+        unit = MathTex(r"\times \tfrac{1}{36}", font_size=26, color=GREY_B).next_to(rl, UP, buff=0.35)
+        mr = VGroup(*[MathTex(str(v), font_size=22, color=MARG).next_to(cells[(i, 5)], RIGHT, buff=0.2) for i, v in enumerate(d["marg_max"])])
+        mc = VGroup(*[MathTex(str(v), font_size=22, color=MARG).next_to(cells[(5, j)], UP, buff=0.2) for j, v in enumerate(d["marg_min"])])
+        rows = [
+            cmath(r"P(\max = k)", r"=", r"\tfrac{2k - 1}{36}", font_size=30),
+            cmath(r"E\max = \tfrac{161}{36},\ \ E\min", r"=", r"\tfrac{91}{36}", font_size=30),
+            cmath(r"\mathrm{Cov}(\max, \min)", r"=", r"\big(\tfrac{35}{36}\big)^2", font_size=30),
+            cmath(r"\operatorname{corr}(\max, \min)", r"=", r"\tfrac{35}{73} \approx 0.48", font_size=32),
+        ]
+        rows[0][2].set_color(MARG)
+        rows[3][2].set_color(S.ACCENT)
+        whys = [why(r"the row sums: \ $k$ with $k$, \ plus $2(k - 1)$ pairs"), why(r"and $\max + \min = $ the total, $7$ on average"),
+                why(r"exactly, \ with Part 2's engine"), why(r"the zeros above the diagonal are dependence you can see")]
+        with self.voiceover(
+            "Here's a joint distribution we can compute exactly. Roll two dice, and record the larger and the "
+            "smaller. <bookmark mark='a'/> The table counts the thirty-six equally likely rolls. The diagonal has one "
+            "way each, a double; below it, two ways each, since either die can be the larger; above it, nothing, "
+            "since the minimum can't exceed the maximum. <bookmark mark='b'/> The row sums give the marginal of the "
+            "maximum: two k minus one out of thirty-six, climbing toward six. The column sums give the minimum's, the "
+            "mirror image. <bookmark mark='c'/> The means add to seven, as they must, since the maximum plus the "
+            "minimum is the total. <bookmark mark='d'/> The covariance comes out to exactly thirty-five over "
+            "thirty-six, squared, <bookmark mark='e'/> and the correlation to thirty-five over seventy-three, almost a "
+            "half. The empty triangle is dependence you can see: knowing the maximum is two rules out most of the "
+            "table."
+        ) as vo:
+            self.play(FadeIn(rl), FadeIn(cl), FadeIn(an), FadeIn(unit))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.02), run_time=2.0)
+            step = ladder(self, rows, whys, keep=4, top=2.6, x=2.4, buff=0.62, edge=6.9)
+            vo.wait_until("b")
+            self.play(FadeIn(mr), FadeIn(mc))
+            step(0, transform=False)
+            vo.wait_until("c")
+            step(1, transform=False)
+            vo.wait_until("d")
+            step(2, transform=False)
+            vo.wait_until("e")
+            step(3, transform=False)
         self.clear_scene()

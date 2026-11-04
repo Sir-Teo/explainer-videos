@@ -11,6 +11,7 @@ class MVN(VoiceoverScene):
         self.affine()
         self.properties()
         self.counterexample()
+        self.check()
 
     def card(self):
         card = chapter_card(5, r"The multivariate normal", r"Independent normals, \ stretched and turned", lit=(1886,), part=PART)
@@ -130,6 +131,43 @@ class MVN(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("d")
             self.play(FadeIn(rows[3:]))
+        self.clear_scene()
+
+
+    def check(self):
+        e = load("extras")["mvncheck"]
+        emp, theo = np.asarray(e["emp"]), np.asarray(e["theo"])
+        A = axes([0, 16], [0, 16], x_length=5.0, y_length=5.0, xlabel=r"$\chi^2_3$ quantiles", ylabel=r"sorted $d_M^2$",
+                 xticks=[0, 4, 8, 12, 16], yticks=[0, 4, 8, 12, 16], center=[-3.6, -0.4, 0])
+        ax = A.ax
+        diag = DashedLine(ax.c2p(0, 0), ax.c2p(16, 16), color=GREY_C, stroke_width=1.5)
+        pts = VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=SIM) for a, b in zip(theo, emp) if a < 16 and b < 16])
+        rows = VGroup(
+            MathTex(r"d_M^2 = (\mathbf X - \boldsymbol\mu)^\top \Sigma^{-1} (\mathbf X - \boldsymbol\mu) = \|\mathbf Z\|^2 \sim \chi^2_p",
+                    font_size=28),
+            label(r"so: \ a QQ plot of squared Mahalanobis distances against $\chi^2_p$ \ checks multivariate normality", font_size=24,
+                  color=GREY_A),
+            label(r"Part 1's QQ plot, \ in $p$ dimensions at once", font_size=24, color=S.ACCENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.9, 0.6, 0])
+        for r in rows:
+            if r.width > 6.6:
+                r.width = 6.6
+        tag = note(r"simulated: 4,000 draws from a 3-dimensional normal").to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "How would you check that data are multivariate normal? <bookmark mark='a'/> Whiten them: the squared "
+            "Mahalanobis distance of a multivariate normal vector is the squared length of the underlying standard "
+            "normal, so it's chi-squared with p degrees of freedom. <bookmark mark='b'/> So sort the squared "
+            "distances and plot them against chi-squared quantiles: Part 1's QQ plot, now testing p dimensions at "
+            "once. <bookmark mark='c'/> For four thousand simulated three-dimensional normal vectors, the points lie "
+            "on the diagonal. Curvature at the top would signal heavy tails or outliers, which Part 30 hunts."
+        ) as vo:
+            self.play(FadeIn(A), Create(diag), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1:]))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), run_time=2.0)
         self.clear_scene()
 
 

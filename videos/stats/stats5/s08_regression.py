@@ -10,6 +10,7 @@ class RegressionToMean(VoiceoverScene):
         self.card()
         self.world()
         self.both_ways()
+        self.stable()
         self.slump()
         self.flight()
 
@@ -63,7 +64,7 @@ class RegressionToMean(VoiceoverScene):
         rows = VGroup(
             label(r"tallest children ($\ge 72.2$ in):", font_size=26),
             MathTex(rf"\text{{their mid-parents average }} {mean_par_tall:.2f}", font_size=28, color=COND),
-            MathTex(rf"\text{{vs. children }} {y[tall_c].mean():.2f};\ \ \text{{mean mid-parent}} {d['mx']:.2f}", font_size=26, color=GREY_A),
+            MathTex(rf"\text{{vs. children }} {y[tall_c].mean():.2f};\ \ \text{{mean mid-parent}}\ {d['mx']:.2f}", font_size=26, color=GREY_A),
             label(r"parents regress toward the mean of \emph{their} generation too", font_size=26, color=S.ACCENT),
             label(r"time has no direction here: \ it is the ellipse", font_size=24, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.2, 0.3, 0])
@@ -149,4 +150,36 @@ class RegressionToMean(VoiceoverScene):
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite))
             vo.wait_until("c")
             self.play(FadeIn(moral))
+        self.clear_scene()
+
+    def stable(self):
+        e = load("extras")["stable"]
+        rows = [
+            cmath(r"\mathrm{Var}(\text{child})", r"=", r"b^2\,\mathrm{Var}(\text{mid-parent})", r"+", r"\mathrm{Var}(\text{residual})", font_size=32),
+            cmath(rf"{e['vy']:.2f}", r"=", rf"{e['b2vx']:.2f}", r"+", rf"{e['res']:.2f}", font_size=38),
+        ]
+        for r in rows:
+            r[2].set_color(COND)
+            r[4].set_color(S.RESID)
+        whys = [why(r"Eve's law, \ for the regression"), why(r"Galton's table")]
+        txt = VGroup(label(r"regression shrinks the predictable part toward the mean,", font_size=26),
+                     label(r"and the unpredictable part spreads it out again:", font_size=26),
+                     label(r"the spread of heights stays the same, \ generation after generation", font_size=26, color=S.ACCENT))
+        txt.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.7)
+        with self.voiceover(
+            "Galton's own puzzle was this: if children regress toward the mean, why doesn't the population become "
+            "more uniform every generation? Eve's law answers it. <bookmark mark='a'/> A child's height is the "
+            "predictable part, the slope times the parents' deviation, plus a residual. Their variances add. "
+            "<bookmark mark='b'/> In Galton's data, the predictable part has shrunk to a variance of about one point "
+            "three, but the residual adds five, and together they give back the children's full variance. "
+            "<bookmark mark='c'/> Regression pulls the predictable part toward the mean, and fresh, unpredictable "
+            "variation spreads it out again: the spread of heights stays the same, generation after generation."
+        ) as vo:
+            step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.4, buff=0.7, edge=6.9)
+            vo.wait_until("a")
+            step(0, transform=False)
+            vo.wait_until("b")
+            step(1, transform=False)
+            vo.wait_until("c")
+            self.play(FadeIn(txt))
         self.clear_scene()

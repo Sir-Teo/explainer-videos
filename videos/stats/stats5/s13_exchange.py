@@ -27,6 +27,7 @@ class Exchange(VoiceoverScene):
         self.limits()
         self.exchangeable()
         self.definetti()
+        self.finite()
 
     def card(self):
         card = chapter_card(12, r"Exchangeability", r"P\'olya's urn, \ and why de Finetti needed it", lit=(1931,), part=PART)
@@ -164,4 +165,33 @@ class Exchange(VoiceoverScene):
             self.play(FadeIn(polya))
             vo.wait_until("d")
             self.play(FadeIn(why_))
+        self.clear_scene()
+
+    def finite(self):
+        e = load("extras")["finite"]
+        rows = VGroup(
+            label(r"an urn of 2 red and 2 blue, \ drawn \emph{without} replacement:", font_size=26),
+            MathTex(rf"P(\text{{R, R}}) = {e['p_rr']}\ \ne\ P(\text{{R}})^2 = {e['p_r2']}", r",\qquad \operatorname{corr} = "
+                    rf"{e['corr']:.2f}", font_size=30),
+            label(r"exchangeable, \ but \emph{negatively} correlated: \ no mixture of i.i.d.\ sequences can do that", font_size=24,
+                  color=S.RESID),
+            VGroup(label(r"de Finetti needs an \emph{infinite} sequence;", font_size=24, color=GREY_A),
+                   label(r"for $n$ draws from an exchangeable sequence of length $N$, \ the error is at most about $n^2/N$ \ "
+                         r"(Diaconis \& Freedman 1980)", font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 0.4, 0])
+        for r in rows:
+            if r.width > 12.8:
+                r.width = 12.8
+        with self.voiceover(
+            "There's a fine print to de Finetti's theorem. <bookmark mark='a'/> Draw without replacement from an urn "
+            "of two red and two blue balls. The sequence is exchangeable, since every order of the colours is "
+            "equally likely, <bookmark mark='b'/> but the draws are negatively correlated: a red first makes red "
+            "less likely second. <bookmark mark='c'/> No mixture of independent sequences can produce negative "
+            "correlation, so the theorem fails here. <bookmark mark='d'/> It needs the sequence to go on forever, "
+            "or at least to be much longer than the part we see: Persi Diaconis and David Freedman showed in 1980 "
+            "that the error is at most about n squared over N for n draws from an exchangeable sequence of length N."
+        ) as vo:
+            for k, m in enumerate("abcd"):
+                vo.wait_until(m)
+                self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

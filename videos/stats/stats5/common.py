@@ -34,7 +34,8 @@ def ellipse_curve(ax, mean, cov, c=1.0, color=S.ACCENT, stroke_width=2.5, opacit
 
 
 def scatter(ax, x, y, color=WHITE, radius=0.025, opacity=0.7, xr=None, yr=None) -> VGroup:
-    xr = xr or ax.x_range[:2]
-    yr = yr or ax.y_range[:2]
+    b = bounds(ax)
+    xr = xr or b[:2]
+    yr = yr or b[2:]
     return VGroup(*[Dot(ax.c2p(a, b), radius=radius, color=color, fill_opacity=opacity) for a, b in zip(x, y)
                     if xr[0] <= a <= xr[1] and yr[0] <= b <= yr[1]])

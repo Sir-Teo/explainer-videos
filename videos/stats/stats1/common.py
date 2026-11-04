@@ -51,7 +51,7 @@ def readout(tex: str, color=WHITE, font_size=30) -> MathTex:
 
 
 def vline(ax, x, color, y0=None, y1=None, stroke_width=3, dashed=False):
-    y0 = ax.y_range[0] if y0 is None else y0
-    y1 = ax.y_range[1] if y1 is None else y1
+    y0 = bounds(ax)[2] if y0 is None else y0
+    y1 = bounds(ax)[3] if y1 is None else y1
     cls = DashedLine if dashed else Line
     return cls(ax.c2p(x, y0), ax.c2p(x, y1), color=color, stroke_width=stroke_width)

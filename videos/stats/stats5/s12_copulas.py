@@ -12,6 +12,7 @@ class Copulas(VoiceoverScene):
         self.card()
         self.sklar()
         self.three()
+        self.recipe()
         self.crisis()
 
     def card(self):
@@ -119,4 +120,46 @@ class Copulas(VoiceoverScene):
             self.play(FadeIn(rows[:2]))
             vo.wait_until("c")
             self.play(FadeIn(rows[2]), FadeIn(cite))
+        self.clear_scene()
+
+    def recipe(self):
+        d = load("extras2")["copsim"]
+        z, u, v = np.asarray(d["z"]), np.asarray(d["u"]), np.asarray(d["v"])
+        specs = [(z, [-3.3, 3.3], [-3.3, 3.3], r"$\mathbf Z \sim N_2(0, R)$", rf"$r = {d['r_z']:.2f},\ \tau = {d['tau_z']:.2f}$"),
+                 (u, [0, 1], [0, 1], r"$U_i = \Phi(Z_i)$", r"uniform margins: \ the copula"),
+                 (v, [0, 4.5], [0, 4.5], r"$X_1 = F_1^{-1}(U_1),\ X_2 = F_2^{-1}(U_2)$",
+                  rf"$r = {d['r_v']:.2f},\ \tau = {d['tau_v']:.2f}$")]
+        panels = VGroup()
+        for k, (P, xr, yr, t, s) in enumerate(specs):
+            A = axes(xr, yr, x_length=3.3, y_length=3.3, center=[-4.4 + 4.4 * k, -0.2, 0])
+            A.ax.x_axis.set_opacity(0.35)
+            A.ax.y_axis.set_opacity(0.35)
+            pts = scatter(A.ax, P[:, 0], P[:, 1], color=(SIM, S.ACCENT, S.POST)[k], radius=0.015, opacity=0.55, xr=xr, yr=yr)
+            tt = label(t, font_size=22).next_to(A, UP, buff=0.15)
+            ss = label(s, font_size=20, color=GREY_B).next_to(A, DOWN, buff=0.15)
+            panels.add(VGroup(A, pts, tt, ss))
+        arr = VGroup(*[Arrow([-2.4 + 4.4 * k, -0.2, 0], [-2.0 + 4.4 * k, -0.2, 0], buff=0, color=GREY_B) for k in range(2)])
+        marg = label(r"margins chosen freely: \ exponential and lognormal", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.75)
+        take = label(r"Kendall's $\tau$ survives every step, \ to the last digit; \ Pearson's $r$ does not", font_size=24,
+                     color=S.ACCENT).to_edge(DOWN, buff=0.3)
+        tag = note(r"simulated: 1,500 pairs").to_corner(UR, buff=0.25)
+        with self.voiceover(
+            "Sklar's theorem is also a recipe for simulation. <bookmark mark='a'/> Draw pairs from a bivariate normal "
+            "with correlation point seven. <bookmark mark='b'/> Pass each coordinate through the normal CDF. Now "
+            "both margins are uniform, and what's left is the Gaussian copula: the dependence, stripped of the "
+            "margins. <bookmark mark='c'/> Then push each uniform through the inverse CDF of any margin you like: "
+            "here, an exponential and a lognormal. <bookmark mark='d'/> Kendall's tau is unchanged through every "
+            "step, because each step is increasing in each coordinate. Pearson's correlation drifts. This recipe, "
+            "Part 3's probability integral transform run backwards in two dimensions, is how risk models and simulation studies build joint "
+            "distributions with realistic margins."
+        ) as vo:
+            self.play(FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(panels[0]))
+            vo.wait_until("b")
+            self.play(GrowArrow(arr[0]), FadeIn(panels[1]))
+            vo.wait_until("c")
+            self.play(GrowArrow(arr[1]), FadeIn(panels[2]), FadeIn(marg))
+            vo.wait_until("d")
+            self.play(FadeIn(take))
         self.clear_scene()
