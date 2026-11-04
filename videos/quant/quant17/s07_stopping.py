@@ -76,8 +76,9 @@ class Stopping(VoiceoverScene, ThreeDScene):
         regs = {int(k): np.asarray(v) for k, v in r["regions"].items()}
         dates = sorted(regs)
         ax = ThreeDAxes(x_range=[gr[0], gr[-1], 40], y_range=[gr[0], gr[-1], 40], z_range=[0, 9, 1], x_length=5.4,
-                        y_length=5.4, z_length=5.0, tips=False,
+                        y_length=5.4, z_length=3.4, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(RIGHT * 1.2 + DOWN * 0.9)  # the stack stays in frame and clear of the key
         st = 3
         dx = (gr[1] - gr[0]) * st
         layers = VGroup()
@@ -100,7 +101,7 @@ class Stopping(VoiceoverScene, ThreeDScene):
                       label(rf"share of the square where it stops: {100 * shares[0]:.0f}\% at date 1, "
                             rf"{100 * shares[-1]:.0f}\% at date 8", font_size=18, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.3)
-        self.set_camera_orientation(phi=62 * DEGREES, theta=-50 * DEGREES, zoom=0.85)
+        self.set_camera_orientation(phi=62 * DEGREES, theta=-50 * DEGREES, zoom=0.75)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
@@ -117,7 +118,7 @@ class Stopping(VoiceoverScene, ThreeDScene):
             self.play(LaggedStart(*[FadeIn(L_) for L_ in layers], lag_ratio=0.4, run_time=4), FadeIn(hint[1]))
             vo.wait_until("b")
             self.play(FadeIn(hint[2]))
-            self.move_camera(phi=40 * DEGREES, theta=-20 * DEGREES, zoom=0.95, run_time=max(vo.remaining(0.3), 2))
+            self.move_camera(phi=40 * DEGREES, theta=-20 * DEGREES, zoom=0.8, run_time=max(vo.remaining(0.3), 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, diag, layers)),
                                                                             FadeOut(hint)], run_time=1.2)
         self.clear_scene()
