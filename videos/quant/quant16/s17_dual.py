@@ -248,7 +248,7 @@ class Dual(VoiceoverScene):
                           r"1997, 2004); Glasserman ch.\ 8", 4.6, 17, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         q = predict(r"Your lower bound is 6.06 and your upper bound 6.41. Bad policy, or too few inner paths?",
-                    width=5.0, font_size=19).to_corner(DL, buff=0.2)
+                    width=5.0, font_size=19).to_corner(DR, buff=0.25)  # the lower left holds the axis label
         src = illustration(r"each policy judged on 2{,}000{,}000 fresh paths; bars $\pm 2$ s.e.", corner=UR)
         with self.voiceover(
             "Simulation's real home is many dimensions. Broadie and Glasserman's benchmark: a Bermudan call on the "
