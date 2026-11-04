@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs1.common import (COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, bowl, fmt, load, pebble,
-                                  pebble_pile)
+                                  pebble_pile, step_counter)
 
 
 def lam_tex(s: str, font_size=30, redex_color=None) -> MathTex:
@@ -305,7 +305,7 @@ class Models(VoiceoverScene, MovingCameraScene):
             "gliders forever. Streams of gliders can carry signals, and collisions can do logic. The Game of Life is "
             "universal too."
         ) as vo:
-            self.play(FadeOut(VGroup(icons, il, img, tl, thm)), FadeIn(lh), FadeIn(lt), FadeIn(life_img))
+            self.play(FadeOut(Group(icons, il, img, tl, thm)), FadeIn(lh), FadeIn(lt), FadeIn(life_img))
             vo.wait_until("a")
             self.play(tr.animate.set_value(len(rgba) - 1), FadeIn(lu), run_time=9.0, rate_func=linear)
         life_img.clear_updaters()
