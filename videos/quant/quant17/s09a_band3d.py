@@ -60,6 +60,7 @@ class Band3D(VoiceoverScene, ThreeDScene):
                       label(rf"width at the money: {wn[i30]:.2f} at 30 days, {wn[i5]:.2f} at 5 (theirs: {ww_w[i30]:.2f}, "
                             rf"{ww_w[i5]:.2f})", font_size=18, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.3)
+        hint[2].to_corner(DL, buff=0.4)  # clear of the surface
         self.set_camera_orientation(phi=64 * DEGREES, theta=-62 * DEGREES, zoom=0.8)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)

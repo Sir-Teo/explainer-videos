@@ -248,6 +248,7 @@ class NSDE(VoiceoverScene, ThreeDScene):
                       legend([(WHITE, r"Heston (mesh)"), (GOOD, r"the low model"), (OPT, r"the high model")], font_size=17),
                       label(rf"largest gap between the low and high smiles: {gap:.2f} vol points", font_size=19,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.3)
+        hint[2].to_corner(DL, buff=0.4)  # clear of the z axis
         self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.82)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
