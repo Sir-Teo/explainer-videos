@@ -211,7 +211,12 @@ def compute_bermudan() -> dict:
     K = float((c.df(T0) - c.df(Tend)) / c.df(times).sum())
     out = TS.bermudan_swaption_lsm(hw, K, T0, Tend, freq=1, payer=False, n_paths=60000, seed=0)
     out2 = TS.bermudan_swaption_lsm(hw, K, T0, Tend, freq=1, payer=False, n_paths=60000, seed=1)
-    return _json({"K": K, "a": a, "sigma": s, **out, "seed1": out2["price"], "se1": out2["se"]})
+    sweep = []
+    for aa in (0.005, 0.02, 0.05, 0.1, 0.2):  # the switch option against mean reversion, sigma held
+        h2 = TS.HullWhite(c, aa, s)
+        o = TS.bermudan_swaption_lsm(h2, K, T0, Tend, freq=1, payer=False, n_paths=30000, seed=2)
+        sweep.append({"a": aa, "bermudan": o["price"], "best_european": max(o["europeans"])})
+    return _json({"K": K, "a": a, "sigma": s, **out, "seed1": out2["price"], "se1": out2["se"], "sweep": sweep})
 
 
 def compute_negative() -> dict:

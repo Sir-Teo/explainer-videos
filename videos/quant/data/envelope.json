@@ -1,5 +1,13 @@
 {
  "opened": {
+  "cp_tent_oos|gsw_bond_rx": {
+   "at": "2026-11-04",
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
+  },
+  "mlp_bond_premia_oos|gsw_bond_rx": {
+   "at": "2026-11-04",
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
+  },
   "pca_fly_2s5s10s|gsw_fly_2s5s10s": {
    "at": "2026-11-04",
    "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
@@ -149,6 +157,20 @@
    },
    "trials": 1
   },
+  "cp_tent_oos": {
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2",
+   "params": {
+    "fit": "1964-2003 monthly",
+    "holdout": "2021-2025 (sealed)",
+    "models": [
+     "CP tent: OLS on y1 and four forwards",
+     "MLP 5-16-1 on the same five inputs, 3 seeds averaged, early stopping on 1994-2003"
+    ],
+    "target": "average 1-year excess log return of 2-5 year zeros (GSW)",
+    "validation": "2004-2020"
+   },
+   "trials": 1
+  },
   "earnings_forecaster_part3": {
    "code_sha256": "8e0f715897615195393249e8317e4f1fba534649025575a5b6589bd6cfc1841b",
    "params": {
@@ -196,6 +218,20 @@
    "code_sha256": "f90dd6357b46150ff1ed2478fbaba16f6aee074b9620c199ceb4b44402688d55",
    "params": {
     "rule": "4-week size-decile rotation"
+   },
+   "trials": 1
+  },
+  "mlp_bond_premia_oos": {
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2",
+   "params": {
+    "fit": "1964-2003 monthly",
+    "holdout": "2021-2025 (sealed)",
+    "models": [
+     "CP tent: OLS on y1 and four forwards",
+     "MLP 5-16-1 on the same five inputs, 3 seeds averaged, early stopping on 1994-2003"
+    ],
+    "target": "average 1-year excess log return of 2-5 year zeros (GSW)",
+    "validation": "2004-2020"
    },
    "trials": 1
   },
@@ -310,6 +346,12 @@
    "first": 20210104,
    "last": 20251230,
    "n": 1223
+  },
+  "gsw_bond_rx": {
+   "digest": "b535ebb069c1d88831b14f92b6eb1d9284677888c362a2720262d9abe06a1287",
+   "first": 20210129,
+   "last": 20241231,
+   "n": 48
   },
   "gsw_fly_2s5s10s": {
    "digest": "fc42da8e4297ecfb859894b041b5578123b7c4ccbe8a340441e595a7d803e174",
