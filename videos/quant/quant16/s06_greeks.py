@@ -96,7 +96,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
                     r"for $\sigma$: $\frac{Z^2 - 1}{\sigma} - Z\sqrt T$"),
                 why(r"Malliavin weights (Fourni\'e, Lasry, Lebuchoux, Lions and Touzi 1999): integration by parts on "
                     r"Wiener space; works for path-dependent payoffs with no known density")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.4, buff=0.4, edge=6.9)
         with self.voiceover(
             "The valley in symbols. A central bump has bias of order h squared, and with independent numbers a "
             "variance of order one over n h squared, so the best bump shrinks like n to the minus a sixth and the "
@@ -152,8 +152,8 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.clear_scene()
 
     def digital(self, g):
-        ga = axes([70, 130], [-0.2, 1.3], x_length=5.0, y_length=3.0, xlabel=r"$S_T$", ylabel=r"digital payoff and its slope",
-                  xticks=[80, 100, 120], yticks=[0, 1], font_size=14).to_edge(LEFT, buff=0.7).shift(UP * 0.6)
+        ga = axes([70, 130], [-0.2, 1.3], x_length=5.0, y_length=2.6, xlabel=r"$S_T$", ylabel=r"digital payoff and its slope",
+                  xticks=[80, 100, 120], yticks=[0, 1], font_size=14).to_edge(LEFT, buff=0.7).shift(UP * 1.1)
         ax = ga.ax
         step = VGroup(Line(ax.c2p(70, 0), ax.c2p(100, 0), stroke_color=OPT, stroke_width=4),
                       Line(ax.c2p(100, 1), ax.c2p(130, 1), stroke_color=OPT, stroke_width=4))
@@ -162,9 +162,9 @@ class Greeks(VoiceoverScene, ThreeDScene):
         cap1 = wrapped_label(r"pathwise sees the green slope: zero everywhere it exists. The red spike at the strike, "
                              r"a delta function, is exactly what it misses", 5.4, 18, GREY_A).next_to(ga, DOWN, buff=0.3)
         z = np.linspace(-3, 3, 200)
-        gb = axes([-3, 3], [-1.2, 1.2], x_length=5.0, y_length=3.0, xlabel=r"the normal $Z$",
+        gb = axes([-3, 3], [-1.2, 1.2], x_length=5.0, y_length=2.6, xlabel=r"the normal $Z$",
                   ylabel=r"likelihood-ratio weight $Z/(S_0\sigma\sqrt T)$, scaled", xticks=[-2, 0, 2], yticks=[-1, 0, 1],
-                  font_size=14).to_edge(RIGHT, buff=0.7).shift(UP * 0.6)
+                  font_size=14).to_edge(RIGHT, buff=0.7).shift(UP * 1.1)
         w = curve(gb.ax, z, z / 3, QC.Q, stroke_width=3)
         cap2 = wrapped_label(r"the likelihood ratio multiplies the payoff by this weight instead: no derivative of the "
                              r"payoff anywhere. Gamma of a call needs the same trick (pathwise once, then the ratio: "
