@@ -1437,26 +1437,45 @@ Management*; Chincarini–Kim; Muirhead (Wishart).
 *Desk:* "Why does the optimizer love the asset with the most estimation error?"
 *House:* `explainer/quant/house/portfolio.py` (the optimizer).
 
-### Part 31 · Risk Models, Costs and Trading Through Time (~55)
-1. The fundamental law (Grinold 1989), derived and its limits.
-2. Factor risk models (Barra-style): industries and styles, specific risk, Bayesian shrinkage of betas; estimated.
-3. Transaction costs (Frazzini–Israel–Moskowitz 2018; Novy-Marx–Velikov 2016).
-4. Gârleanu–Pedersen (2013): the aim portfolio, derived.
-5. Multi-period optimization (Boyd et al. 2017).
-6. Alpha combination: shrinkage, the "mega-alpha"; forecast horizon blending.
-7. Signal decay, turnover, capacity; Berk–Green (2004).
-8. Crowding (Lou–Polk); factor-neutral books; hedging the residual.
-9. P&L attribution: factor vs idiosyncratic, timing vs selection.
+### Part 31 · Risk Models, Costs and Trading Through Time (~55; built)
+0. Hook: IC 0.05 on 500 stocks monthly promises 3.87; a moving IC gives 1.58; where the information ratio goes.
+1. The fundamental law (Grinold 1989), derived and simulated; the transfer coefficient (Clarke–de Silva–Thorley 2002);
+   effective and time breadth; Grinold–Kahn's scale; limits.
+2. A Barra-style factor risk model of the coins: standardised styles, daily WLS factor returns, EWMA factor
+   covariance, specific variances; industries and the sum-to-zero constraint; the bias statistic; fundamental,
+   statistical and macro models (Connor 1995); Barra.
+3. Specific risk and Bayesian betas: Blume's regression to one; Vasicek (1973) scored on the next quarter;
+   Scholes–Williams and Dimson.
+4. Transaction costs: implementation shortfall (Perold 1988); the square-root law; Frazzini–Israel–Moskowitz (2018);
+   Novy-Marx–Velikov (2016); a capacity curve; costs inside the optimisation; the κ^{1/3} no-trade band.
+5. Gârleanu–Pedersen (2013): the aim portfolio and trade rate, derived and checked by value iteration; Λ ∝ Σ; GP
+   against myopic on the coins net of costs.
+6. Multi-period optimization (Boyd et al. 2017): receding horizon, per-period forecasts, constraints, a horizon
+   experiment with 3/2-power impact.
+7. Alpha combination: ic'C⁻¹ic; equal, IC and ridge weights trained 2018–19, judged 2020; horizons; forecast against
+   portfolio blending.
+8. Decay → turnover → capacity; the 4/9 rule; Berk–Green (2004) with square-root costs (fee a/3); Berk–van Binsbergen.
+9. Crowding: August 2007 (Khandani–Lo replayed on the daily industries), the unwind hypothesis, the risk model's blind
+   spot, comomentum (Lou–Polk).
+10. P&L attribution: factor against specific, Brinson, static against timing, Euler risk contributions; Part 29's mined
+    alpha is 86% factor.
+11. The aim-portfolio trader registered and opened on 2021–25: −0.96 (research 0.66), through forecast variances near
+    zero; the diagnosis; the House's guards.
+12. Rule 31: the risk model.
+Research: the information ratio when the IC moves: IR = μ/√(σ²(1 − 1/N) + (1 − μ²)/N) proved, simulated, the breadth
+N* ≈ 1/σ², and the coins' ladder of corrections (naive 0.52 → moving IC 0.23 → Pearson 0.117 → realised 0.087).
 
 *Textbooks:* Grinold–Kahn *Active Portfolio Management*; Isichenko; Paleologo *The Elements of Quantitative
-Investing*; Narang *Inside the Black Box*.
-*Computed:* a Barra-style risk model on portfolios and A-shares; GP vs myopic trading net of costs; capacity curves;
-ridge alpha combination.
-*Visuals:* the aim portfolio as a moving target; the capacity curve bending.
+Investing*; Narang *Inside the Black Box*; Boyd et al. (2017).
+*Computed:* a Barra-style risk model of the coins with bias tests; Vasicek betas out of sample; a capacity curve; GP
+vs myopic trading net of costs; ridge alpha combination; attribution; August 2007 on the daily industries; the
+moving-IC theorem against simulation and the coins.
+*Visuals:* the aim portfolio as a moving target; the capacity curve bending; the planned paths by horizon; the ladder
+of corrections.
 *Crisis:* August 2007 (Khandani–Lo), seen through the risk model.
-*Firms:* risk-model vendors; systematic equity funds.
+*Firms:* Barra; AQR's measured trading costs; Goldman's GEO (as announced and reported).
 *Desk:* "IC 0.05, 500 stocks, monthly rebalancing. Information ratio?"
-*House:* the risk model, the alpha combiner, attribution.
+*House:* `explainer/quant/house/riskmodel.py` (the risk model, the law, costs and trading, attribution, guards).
 
 ### Part 32 · Systematic Macro and Alternative Premia (~55)
 1. Trend following: a century of evidence (Hurst–Ooi–Pedersen 2017); the CTA business; why it pays in crises.

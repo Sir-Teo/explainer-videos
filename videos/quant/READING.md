@@ -1464,6 +1464,15 @@ Frontier (2023–2026):
 - DeMiguel, V., Martín-Utrera, A., Nogales, F., Uppal, R. (2020). "A transaction-cost perspective on the multitude of firm characteristics." *RFS*.
 - Collin-Dufresne, P., Daniel, K., Sağlam, M. (2020). "Liquidity regimes and optimal dynamic asset allocation." *JFE*.
 - Lou, D., Polk, C. (2022). "Comomentum: inferring arbitrage activity from return correlations." *RFS*.
+- Blume, M. (1971). "On the assessment of risk." *Journal of Finance*; (1975) "Betas and their regression tendencies." *Journal of Finance*.
+- Vasicek, O. (1973). "A note on using cross-sectional information in Bayesian estimation of security betas." *Journal of Finance*.
+- Scholes, M., Williams, J. (1977). "Estimating betas from nonsynchronous data." *JFE*; Dimson, E. (1979). "Risk measurement when shares are subject to infrequent trading." *JFE*.
+- Chen, N.-F., Roll, R., Ross, S. (1986). "Economic forces and the stock market." *Journal of Business*; Connor, G., Korajczyk, R. (1986). "Performance measurement with the arbitrage pricing theory." *JFE*.
+- Constantinides, G. (1986). "Capital market equilibrium with transaction costs." *JPE*; Davis, M., Norman, A. (1990). "Portfolio selection with transaction costs." *Math. of OR*; Shreve, S., Soner, H. M. (1994). "Optimal investment and consumption with transaction costs." *Annals of Applied Probability*.
+- Almgren, R., Thum, C., Hauptmann, E., Li, H. (2005). "Direct estimation of equity market impact." *Risk*; Tóth, B., et al. (2011). "Anomalous price impact and the critical nature of liquidity in financial markets." *PRX*.
+- Qian, E., Hua, R. (2004). "Active risk and information ratio." *J. Investment Management*; Ding, Z. (2010). "The fundamental law of active management: time series dynamics and cross-sectional properties." Working paper; Buckle, D. (2004). "How to calculate breadth." *J. Asset Management*; Ding, Z., Martin, R. D. (2017). "The fundamental law of active management: redux." *J. Empirical Finance*.
+- Berk, J., van Binsbergen, J. (2015). "Measuring skill in the mutual fund industry." *JFE*.
+- Goldman Sachs (2007). Press release on the Global Equity Opportunities fund, 13 August 2007.
 
 ### Part 32 · Systematic Macro and Alternative Premia
 - Ariel, R. (1987). "A monthly effect in stock returns." *JFE*; Lakonishok, J., Smidt, S. (1988). "Are seasonal anomalies real? A ninety-year perspective." *RFS*.
