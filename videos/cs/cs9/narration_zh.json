@@ -1,0 +1,419 @@
+{
+ "title": "计算机科学，从零搭建 · 第9部分：存储层次",
+ "chapters": {
+  "Hook": "每个周期一秒",
+  "Wall": "1. 存储墙",
+  "Locality": "2. 局部性",
+  "Direct": "3. 直接映射缓存",
+  "Assoc": "4. 相联度与替换",
+  "ThreeC": "5. 三种缺失",
+  "Amat": "6. 平均访存时间",
+  "Measured": "7. 这台机器的阶梯",
+  "Programming": "8. 为缓存编程",
+  "Oblivious": "9. 缓存无关算法",
+  "Pebbles": "10. 红蓝卵石游戏",
+  "External": "11. 外存与 B 树",
+  "Prefetch": "12. 预取",
+  "Dram": "13. DRAM 内部",
+  "Job": "14. 任务遇上存储器",
+  "Frontier": "15. 前沿：学习替换",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "a7f3df427605": {
+   "scene": "Hook",
+   "en": "Here is a way to feel how far away memory is. This computer's clock ticks two point eight billion times a second. Slow it down until each tick takes one second. <bookmark mark='a'/> Then a value in a register is ready in a second. <bookmark mark='b'/> The nearest cache, L1, answers in about four seconds; the next, L2, in twelve. <bookmark mark='c'/> The next level takes over a minute. <bookmark mark='d'/> Main memory, DRAM, takes six and a half minutes, and a quarter of an hour when the address must also be looked up in the page tables. <bookmark mark='e'/> A solid-state disk, about three days. A spinning disk, about five months. All of these numbers but the last two were measured on this machine, as this part will show.",
+   "zh": "这里有个办法，让你感受存储器有多远。这台计算机的时钟每秒跳动二十八亿次。把它放慢，直到每一跳要一秒。<bookmark mark='a'/>那么寄存器里的值一秒就能拿到。<bookmark mark='b'/>最近的缓存 L1 大约四秒回答；下一级 L2 要十二秒。<bookmark mark='c'/>再下一级要一分多钟。<bookmark mark='d'/>主存，也就是 DRAM，要六分半钟；如果地址还得在页表里查一遍，要一刻钟。<bookmark mark='e'/>固态硬盘，大约三天。机械硬盘，大约五个月。除了最后两个，这些数字都是在这台机器上测出来的，这一部分会展示怎么测。"
+  },
+  "c29626e3bcd3": {
+   "scene": "Hook",
+   "en": "Now the Job. <bookmark mark='a'/> Over all thirty novels its word table grows to fifty-eight thousand entries, six hundred eighty kilobytes. <bookmark mark='b'/> And for every one of four and a half million words, it scans that table from the start: almost three billion reads of a cache line. <bookmark mark='c'/> A cache of thirty-two kilobytes, like this machine's L1, misses eighty-eight percent of them. <bookmark mark='d'/> And yet, give Part 8's core this machine's whole memory hierarchy, and the Job slows down by a twentieth of one percent. By the end of this part you will know why both of those numbers are true, and when the second one stops being true.",
+   "zh": "现在看任务。<bookmark mark='a'/>在全部三十部小说上，它的单词表长到五万八千项，六百八十千字节。<bookmark mark='b'/>四百五十多万个词，每一个都从头扫描这张表：差不多三十亿次缓存行读取。<bookmark mark='c'/>一个三十二千字节的缓存，就像这台机器的 L1，会让其中百分之八十八缺失。<bookmark mark='d'/>然而，把这台机器的整个存储层次交给第8部分的核，任务只慢了万分之五。到这一部分结束时，你会明白为什么这两个数字都是真的，以及第二个什么时候不再成立。"
+  },
+  "57af67bee4ad": {
+   "scene": "Hook",
+   "en": "Here is where this part goes. <bookmark mark='a'/> Caches, built from nothing: how an address is split into tag, index and offset, sets and ways, and which line to throw out. <bookmark mark='b'/> The three kinds of miss, measured on the Job. <bookmark mark='c'/> This computer's memory, measured: a staircase of latencies, and the bandwidth at each level. <bookmark mark='d'/> Then theory: a game with red and blue pebbles that proves how much data any matrix multiplication must move. <bookmark mark='e'/> And the Job, given real memory, for the next row of the ledger.",
+   "zh": "这一部分要去的地方是这样的。<bookmark mark='a'/>从零开始造缓存：地址怎样切成标签、索引和偏移，组与路，以及该扔掉哪一行。<bookmark mark='b'/>三种缺失，在任务上测量。<bookmark mark='c'/>这台计算机的存储器，测出来：一段延迟的阶梯，以及每一级的带宽。<bookmark mark='d'/>然后是理论：一个红蓝卵石的游戏，它证明任何矩阵乘法必须搬动多少数据。<bookmark mark='e'/>最后，给任务真实的存储器，得到账本的下一行。"
+  },
+  "93f98dc5c470": {
+   "scene": "Hook",
+   "en": "This is Part 9 of Computer Science, Built, the third part of Act Two, Making It Fast. <bookmark mark='a'/> In this part: the memory wall, and locality, which is why caches work at all. Direct-mapped and set-associative caches, how they choose what to evict, and what they do with writes. The three kinds of miss, and the average time an access takes. This machine's memory, measured, and how to program for it, including algorithms that use every level of cache without knowing their sizes. The red-blue pebble game, and the theory of external memory behind every database index. Then prefetching, the inside of a DRAM chip, and the Job.",
+   "zh": "这是《计算机科学，从零搭建》的第9部分，第二幕“让它变快”的第三部分。<bookmark mark='a'/>这一部分讲：存储墙，以及让缓存得以奏效的局部性。直接映射和组相联缓存，它们怎样选择淘汰谁，怎样处理写。三种缺失，以及一次访问平均要多久。这台机器的存储器，测量出来，以及怎样为它编程，包括不知道各级缓存大小却能利用每一级的算法。红蓝卵石游戏，以及每个数据库索引背后的外存理论。然后是预取、DRAM 芯片的内部，以及任务。"
+  },
+  "8dca7627e310": {
+   "scene": "Wall",
+   "en": "Chapter one. The memory wall.",
+   "zh": "第一章。存储墙。"
+  },
+  "d501eaf04f14": {
+   "scene": "Wall",
+   "en": "For thirty years two curves pulled apart. <bookmark mark='a'/> Processors got faster at about a quarter a year in the early 1980s, then, through the pipelining and out-of-order execution of the last two parts, at about half again every year until 2003. <bookmark mark='b'/> The time to read a word from DRAM, main memory, improved by about seven percent a year. DRAM got enormously bigger and cheaper, but not much quicker. <bookmark mark='c'/> On a log scale, the gap between the curves grows to a factor of hundreds. <bookmark mark='d'/> In 1995 William Wulf and Sally McKee pointed out the obvious consequence: if the gap keeps growing, eventually every program waits on memory and processor speed stops mattering. They called it the memory wall.",
+   "zh": "三十年来，两条曲线越分越开。<bookmark mark='a'/>处理器在二十世纪八十年代初每年快大约四分之一，然后，靠着前两部分讲的流水线和乱序执行，到 2003 年为止每年快一半左右。<bookmark mark='b'/>而从主存 DRAM 读一个字的时间，每年只改进大约百分之七。DRAM 变得大得多、便宜得多，但没快多少。<bookmark mark='c'/>在对数坐标上，两条曲线之间的差距长到几百倍。<bookmark mark='d'/>1995 年，威廉·伍尔夫和萨莉·麦基指出了显而易见的后果：如果差距继续增长，最终每个程序都在等存储器，处理器的速度不再重要。他们称之为存储墙。"
+  },
+  "e28cad86fe12": {
+   "scene": "Wall",
+   "en": "The wall is a ratio, not a number. <bookmark mark='a'/> On this machine, the first-level cache answers in one and a half nanoseconds and DRAM in a hundred forty: about ninety times slower. <bookmark mark='b'/> To Pebble's out-of-order core, running at eight hundred eighty-five megahertz, DRAM is a hundred sixty-six cycles away. <bookmark mark='c'/> To this machine's own core, ticking three times faster, the same DRAM is five hundred twenty-five cycles away. <bookmark mark='d'/> Every speed-up of the core makes memory look further off. The answer, which every computer since the 1960s has used in some form, is not one memory but a hierarchy: small and fast near the core, large and slow further out, and the hope that most accesses find what they need nearby. Why that hope is usually justified is the next chapter.",
+   "zh": "这堵墙是一个比值，不是一个数。<bookmark mark='a'/>在这台机器上，第一级缓存一纳秒半回答，DRAM 要一百四十纳秒：慢了大约九十倍。<bookmark mark='b'/>对运行在八百八十五兆赫的 Pebble 乱序核来说，DRAM 在一百六十六个周期之外。<bookmark mark='c'/>对这台机器自己快三倍的核来说，同一块 DRAM 在五百二十五个周期之外。<bookmark mark='d'/>核每快一点，存储器看起来就更远一点。二十世纪六十年代以来的每台计算机都以某种形式采用的答案，不是一个存储器，而是一个层次：靠近核的又小又快，往外又大又慢，并寄希望于大多数访问都能在近处找到所需。为什么这个希望通常成立，是下一章的内容。"
+  },
+  "409168e54cef": {
+   "scene": "Wall",
+   "en": "So memory comes in layers. <bookmark mark='a'/> At the top, the registers: a few hundred bytes, inside the core. Then caches made of SRAM, six transistors per bit, on the processor chip itself: tens of kilobytes at the first level, a megabyte at the second, tens of megabytes shared. <bookmark mark='b'/> Then DRAM, one transistor and one capacitor per bit, on separate chips: gigabytes, at a few dollars a gigabyte. Then flash in an SSD, and magnetic disk, each about a hundred times cheaper per byte and thousands of times slower than the last. <bookmark mark='c'/> No single technology is both fast and cheap, so every computer builds this pyramid, and the art is to keep the data you need now near the top.",
+   "zh": "所以存储器是分层的。<bookmark mark='a'/>最顶上是寄存器：几百字节，在核里面。然后是用 SRAM 做的缓存，每位六个晶体管，就在处理器芯片上：第一级几十千字节，第二级一兆字节，共享的几十兆字节。<bookmark mark='b'/>然后是 DRAM，每位一个晶体管加一个电容，在单独的芯片上：几吉字节，每吉字节几美元。再往下是固态硬盘里的闪存，以及磁盘，每一层每字节都便宜大约一百倍，也慢几千倍。<bookmark mark='c'/>没有哪种技术既快又便宜，所以每台计算机都搭这座金字塔，而艺术在于把眼下需要的数据留在顶上。"
+  },
+  "5ecd8da0a1ab": {
+   "scene": "Locality",
+   "en": "Chapter two. Locality.",
+   "zh": "第二章。局部性。"
+  },
+  "cbbbe100f0bb": {
+   "scene": "Locality",
+   "en": "Caches work because programs are not random. Here is every load and store the Job makes in its first chapter, a hundred fifty-five thousand of them: time runs to the right, and the address goes up. <bookmark mark='a'/> The word table. Each scan is a diagonal stroke: the Job reads entry after entry, address after address, then starts again from the bottom for the next word. As new words arrive, the strokes reach higher. <bookmark mark='b'/> Below, the letters of the words, read when an entry has the right length, and written when a new word is added: scattered, but returning again and again to the same places. <bookmark mark='c'/> These are the two kinds of locality. Spatial: after reading one address, a program soon reads the ones next to it. Temporal: after reading an address, it soon reads it again. Peter Denning gave this its classic form in 1968: at any moment a program is using a small working set of its memory, and that set changes slowly.",
+   "zh": "缓存之所以奏效，是因为程序不是随机的。这里是任务在第一章里的每一次取数和存数，十五万五千次：时间向右，地址向上。<bookmark mark='a'/>单词表。每次扫描是一道斜线：任务一项接一项、一个地址接一个地址地读，然后为下一个词从底部重新开始。随着新词到来，斜线越伸越高。<bookmark mark='b'/>下面是单词的字母，在表项长度对上时被读，在加入新词时被写：分散，但一次次回到相同的地方。<bookmark mark='c'/>这就是两种局部性。空间局部性：读了一个地址，程序很快会读它旁边的。时间局部性：读了一个地址，程序很快会再读它。彼得·丹宁在 1968 年给了它经典的形式：任何时刻，程序只在使用它的存储器中一个小小的工作集，而这个集合变化得很慢。"
+  },
+  "928a06eafc40": {
+   "scene": "Locality",
+   "en": "Temporal locality can be measured. For every access, count the distinct cache lines touched since the same line was last used: its reuse distance, or LRU stack distance, an idea from Richard Mattson and his colleagues at IBM in 1970. <bookmark mark='a'/> For the Job's first chapter, almost every access has a tiny reuse distance. <bookmark mark='b'/> And here is why the measure matters. A cache that holds C lines and evicts the least recently used one hits exactly the accesses whose reuse distance is less than C. One pass over a trace gives the hit rate of every cache size at once.",
+   "zh": "时间局部性可以测量。对每次访问，数一数自同一行上次被用以来，碰过多少个不同的缓存行：这就是它的重用距离，或者叫 LRU 栈距离，这个想法来自 1970 年 IBM 的理查德·马特森和同事。<bookmark mark='a'/>在任务的第一章上，几乎每次访问的重用距离都很小。<bookmark mark='b'/>这个量为什么重要：一个容纳 C 行、淘汰最久未用行的缓存，恰好命中重用距离小于 C 的那些访问。对一条轨迹扫一遍，就同时得到每种大小缓存的命中率。"
+  },
+  "2fb0ddb8ef5d": {
+   "scene": "Locality",
+   "en": "From the reuse distances, the miss rate of every size of cache. <bookmark mark='a'/> On the first chapter, the Job touches only ninety-two lines of memory in all, under six kilobytes, and the curve falls to almost nothing by eight kilobytes. <bookmark mark='b'/> Over all thirty novels the picture changes. The table grows to six hundred eighty kilobytes, and the miss rate of its reads stays high, eighty-eight percent at thirty-two kilobytes, until the cache is big enough to hold the whole table; then it drops off a cliff. <bookmark mark='c'/> Every miss curve has this shape somewhere. The cliff is where the working set fits.",
+   "zh": "从重用距离，得到每种大小缓存的缺失率。<bookmark mark='a'/>在第一章上，任务一共只碰了九十二行存储器，不到六千字节，曲线到八千字节时几乎降到零。<bookmark mark='b'/>在全部三十部小说上，情形变了。表长到六百八十千字节，读表的缺失率一直很高，三十二千字节时百分之八十八，直到缓存大到能装下整张表；然后它从悬崖上掉下来。<bookmark mark='c'/>每条缺失率曲线都在某处有这样的形状。悬崖就在工作集装得下的地方。"
+  },
+  "bb7be50be4db": {
+   "scene": "Direct",
+   "en": "Chapter three. A direct-mapped cache.",
+   "zh": "第三章。直接映射缓存。"
+  },
+  "d8a0b8c53756": {
+   "scene": "Direct",
+   "en": "The first caches appeared in the 1960s; Maurice Wilkes described the idea in 1965 as a slave memory, and IBM's System/360 Model 85 shipped one in 1968. The simplest design is direct-mapped: every address has exactly one place in the cache it can go. <bookmark mark='a'/> Take a sixteen-kilobyte cache of two hundred fifty-six lines, each sixty-four bytes. An address is cut into three fields. <bookmark mark='b'/> The lowest six bits are the offset: which byte within the sixty-four-byte line. <bookmark mark='c'/> The next eight bits are the index: which of the two hundred fifty-six lines of the cache this address must live in. <bookmark mark='d'/> The rest is the tag. Many addresses share an index, so the cache stores the tag beside each line, and on every access compares it: same tag, a hit; different tag or an empty line, a miss.",
+   "zh": "最早的缓存出现在二十世纪六十年代；莫里斯·威尔克斯在 1965 年把这个想法描述为“从属存储器”，IBM 的 System/360 Model 85 在 1968 年装上了一个。最简单的设计是直接映射：每个地址在缓存里恰好只有一个可去的位置。<bookmark mark='a'/>取一个十六千字节的缓存，两百五十六行，每行六十四字节。地址被切成三段。<bookmark mark='b'/>最低六位是偏移：在六十四字节的行里是哪个字节。<bookmark mark='c'/>接下来八位是索引：这个地址必须住在两百五十六行中的哪一行。<bookmark mark='d'/>剩下的是标签。许多地址共用一个索引，所以缓存在每行旁边存下标签，每次访问都比较它：标签相同，命中；标签不同或者那行是空的，缺失。"
+  },
+  "66214022f74b": {
+   "scene": "Direct",
+   "en": "In hardware the lookup is a few gates, all working in parallel. <bookmark mark='a'/> The cache is a small memory with one row per line: a valid bit, the stored tag, and the sixty-four bytes of data. The index bits of the address select a row, exactly as Part 5's register file selected a register. <bookmark mark='b'/> A comparator checks the row's stored tag against the address's tag, and an AND gate with the valid bit says hit or miss. <bookmark mark='c'/> Meanwhile the offset bits steer a multiplexer that picks the requested bytes out of the line. All three happen in the same cycle; that is why an L1 cache can answer in four.",
+   "zh": "在硬件里，查找只是几个门，全部并行工作。<bookmark mark='a'/>缓存是一块小存储器，每行一项：一个有效位、存着的标签，以及六十四字节的数据。地址的索引位选出一行，正如第5部分的寄存器堆选出一个寄存器。<bookmark mark='b'/>一个比较器把这一行存着的标签和地址的标签比较，再和有效位做一次与运算，就得出命中还是缺失。<bookmark mark='c'/>同时，偏移位驱动一个多路选择器，从行里挑出所要的字节。三件事在同一个周期里发生；这就是为什么 L1 缓存能在四个周期内回答。"
+  },
+  "307b10d0bc38": {
+   "scene": "Direct",
+   "en": "Here is a toy cache to watch: eight lines of sixteen bytes, and eight-bit addresses, so one bit of tag, three of index and four of offset. <bookmark mark='a'/> The first access, hex fourteen, has index one: the line is empty, a miss, and the line is filled. The second, hex eighteen, falls in the same sixteen-byte line: a hit, by spatial locality. <bookmark mark='b'/> Watch hex ninety-four. Its index is also one, but its tag is different, so it throws out the line that hex fourteen brought in, and when hex fourteen comes back, it misses again. <bookmark mark='c'/> Two busy addresses that share an index fight over one line even when the rest of the cache is empty. That is the weakness of direct mapping, and the next chapter's subject.",
+   "zh": "这里有一个玩具缓存可以观察：八行，每行十六字节，八位地址，所以一位标签、三位索引、四位偏移。<bookmark mark='a'/>第一次访问，十六进制十四，索引是一：那行是空的，缺失，然后把那行填上。第二次，十六进制十八，落在同一个十六字节的行里：命中，这是空间局部性。<bookmark mark='b'/>看十六进制九十四。它的索引也是一，但标签不同，所以它把十六进制十四带进来的那行扔掉了，等十六进制十四再回来，又缺失了。<bookmark mark='c'/>两个共用一个索引的繁忙地址，即使缓存的其余部分都空着，也要为一行争个不停。这是直接映射的弱点，也是下一章的主题。"
+  },
+  "4517a238c6c3": {
+   "scene": "Direct",
+   "en": "This is not a toy problem. <bookmark mark='a'/> The Job keeps its word table at hex ten thousand and the letters of its words at hex eighty thousand. <bookmark mark='b'/> Both addresses are multiples of the cache size, so in a direct-mapped cache of eight or sixteen kilobytes, the table and the letters map to the same sets, line for line, and evict each other constantly. <bookmark mark='c'/> On the first chapter, an eight-kilobyte direct-mapped cache misses fifteen thousand times. <bookmark mark='d'/> Allow each set to hold two lines, and the same eight kilobytes miss ninety-two times: once for each line the chapter ever touches.",
+   "zh": "这不是玩具问题。<bookmark mark='a'/>任务把单词表放在十六进制一万处，把单词的字母放在十六进制八万处。<bookmark mark='b'/>两个地址都是缓存大小的倍数，所以在八千或十六千字节的直接映射缓存里，表和字母一行对一行地映射到相同的组，不停地互相驱逐。<bookmark mark='c'/>在第一章上，一个八千字节的直接映射缓存缺失一万五千次。<bookmark mark='d'/>允许每组放两行，同样的八千字节只缺失九十二次：第一章碰过的每一行各一次。"
+  },
+  "d4a1faa14933": {
+   "scene": "Assoc",
+   "en": "Chapter four. Associativity and replacement.",
+   "zh": "第四章。相联度与替换。"
+  },
+  "49870c7a6fa2": {
+   "scene": "Assoc",
+   "en": "The cure for conflicts is to give each address a choice. Group the lines into sets; an address's index picks a set, and the line may go in any of the set's ways. <bookmark mark='a'/> With one way per set, this is the direct-mapped cache. <bookmark mark='b'/> With two ways, two lines that share an index can live side by side. <bookmark mark='c'/> With all the lines in a single set, any address can go anywhere: fully associative. <bookmark mark='d'/> More ways means fewer conflicts, but on every access the cache must compare the tag against every way of the set at once, in parallel, which costs energy and time. First-level caches today are typically eight- to twelve-way; larger, slower levels sixteen or more.",
+   "zh": "治冲突的办法是给每个地址一点选择。把行分成组；地址的索引选出一组，而行可以放进这一组的任何一路。<bookmark mark='a'/>每组一路，就是直接映射缓存。<bookmark mark='b'/>每组两路，两个共用索引的行可以并排住下。<bookmark mark='c'/>所有行都在一组里，任何地址都可以去任何地方：全相联。<bookmark mark='d'/>路越多，冲突越少，但每次访问缓存都必须同时、并行地把标签和这一组的每一路比较，这要花能量和时间。今天的第一级缓存通常是八到十二路；更大、更慢的级别是十六路或更多。"
+  },
+  "79ba83a7f3a3": {
+   "scene": "Assoc",
+   "en": "When an access misses and its set is full, one line must go. <bookmark mark='a'/> The natural choice is the least recently used, LRU: the line whose last use is oldest, betting that the past predicts the future. Keeping an exact order is costly in an eight-way set, <bookmark mark='b'/> so hardware usually approximates it with a small tree of bits per set, each pointing away from the half used more recently: pseudo-LRU. <bookmark mark='c'/> Simpler still: evict the line that arrived first, or any line at random. <bookmark mark='d'/> And there is a perfect policy, found by László Bélády at IBM in 1966: evict the line whose next use is furthest in the future. No real cache can know the future, but a simulator replaying a trace can, which makes Belady's policy the yardstick for all the others.",
+   "zh": "当一次访问缺失而它的组已满时，必须有一行离开。<bookmark mark='a'/>自然的选择是最近最少使用的，LRU：上次使用最久远的那一行，赌过去能预测未来。在八路的组里保持精确的顺序代价很高，<bookmark mark='b'/>所以硬件通常每组用一棵小小的位树来近似它，每一位指向较少被用的那一半：伪 LRU。<bookmark mark='c'/>更简单的：淘汰最先到达的那行，或者随便一行。<bookmark mark='d'/>还有一个完美的策略，由 IBM 的拉斯洛·贝拉迪在 1966 年找到：淘汰下一次使用离现在最远的那一行。没有真实的缓存能知道未来，但重放轨迹的模拟器可以，这让贝拉迪的策略成了衡量所有其他策略的标尺。"
+  },
+  "2eb5135664cc": {
+   "scene": "Assoc",
+   "en": "Here is how hardware approximates LRU cheaply. For a four-way set, keep three bits in a little tree. <bookmark mark='a'/> Each bit points towards the half of the set that was used less recently. Every access flips the bits on its path to point away from itself. <bookmark mark='b'/> Use way zero, then two, then one, then three, and watch the bits. <bookmark mark='c'/> To choose a victim, follow the bits from the root: they lead to a way that has not been used for a while, though not always the very least recent. Three bits instead of a full ordering; for sixteen ways, fifteen bits instead of forty-five.",
+   "zh": "硬件就是这样廉价地近似 LRU 的。对一个四路的组，在一棵小树里存三个位。<bookmark mark='a'/>每一位指向较早被用过的那一半。每次访问都把它路径上的位翻转成背离自己。<bookmark mark='b'/>依次使用第零路、第二路、第一路、第三路，看这些位怎么变。<bookmark mark='c'/>要选牺牲者，就从根开始顺着位走：它们通向一个有一阵子没被用过的路，虽然不一定是最久未用的那个。三个位代替完整的顺序；十六路时，十五个位代替四十五个。"
+  },
+  "d85c15eb03f6": {
+   "scene": "Assoc",
+   "en": "How much does the choice matter? Run the Job's first chapter through a four-kilobyte, eight-way cache. <bookmark mark='a'/> LRU misses about four percent of the accesses, and pseudo-LRU and FIFO about the same. <bookmark mark='b'/> Random replacement misses only two percent: it beats LRU. <bookmark mark='c'/> And Belady's crystal ball, three quarters of a percent. <bookmark mark='d'/> Random wins because of the Job's table scans. A scan that is a little longer than the cache is LRU's worst case: by the time the scan comes round again, LRU has thrown out exactly the line it is about to need, every time. Random keeps some lines by luck. We will meet this again, much larger, over all thirty novels.",
+   "zh": "这个选择有多重要？让任务的第一章跑过一个四千字节、八路的缓存。<bookmark mark='a'/>LRU 缺失大约百分之四的访问，伪 LRU 和先进先出差不多。<bookmark mark='b'/>随机替换只缺失百分之二：它胜过了 LRU。<bookmark mark='c'/>贝拉迪的水晶球，百分之零点七五。<bookmark mark='d'/>随机之所以胜出，是因为任务的表扫描。比缓存稍长一点的扫描是 LRU 最坏的情形：等扫描绕回来时，LRU 每一次都恰好扔掉了它马上要用的那一行。随机替换凭运气留下了一些行。我们会在全部三十部小说上，以大得多的规模再遇见它。"
+  },
+  "daa1366e8f76": {
+   "scene": "Assoc",
+   "en": "Stores raise two more questions. <bookmark mark='a'/> When a store hits, does the new value go on to the next level at once? Write-through says yes: simple, and memory is always up to date, but every store becomes traffic. <bookmark mark='b'/> Write-back says no: mark the line dirty, and write it out only when it is evicted, so a line stored to a thousand times is written once. <bookmark mark='c'/> And when a store misses, does the line come into the cache? Write-allocate says yes, betting the program will touch it again. <bookmark mark='d'/> Almost every cache today is write-back and write-allocate. Our simulator does both, and Part 10 will meet the harder question these choices raise: when several cores each cache the same line, who sees which write?",
+   "zh": "存数带来另外两个问题。<bookmark mark='a'/>一次存数命中时，新值要不要马上传到下一级？写直达说要：简单，存储器永远是最新的，但每次存数都变成流量。<bookmark mark='b'/>写回说不要：把这行标记为脏，只在它被驱逐时才写出去，所以一行被写一千次只写回一次。<bookmark mark='c'/>一次存数缺失时，要不要把这行调进缓存？写分配说要，赌程序还会再碰它。<bookmark mark='d'/>今天几乎每个缓存都是写回加写分配。我们的模拟器两种都支持，而第10部分会遇到这些选择带来的更难的问题：当几个核各自缓存同一行时，谁看到哪一次写？"
+  },
+  "3c1545a86af1": {
+   "scene": "ThreeC",
+   "en": "Chapter five. Three kinds of miss.",
+   "zh": "第五章。三种缺失。"
+  },
+  "33d98a29f297": {
+   "scene": "ThreeC",
+   "en": "In 1987 Mark Hill gave every miss one of three names, and each name points to a cure. <bookmark mark='a'/> A compulsory miss is the first touch of a line: no cache, however big, could have had it. Bigger lines reduce them, by bringing in more neighbours at once. <bookmark mark='b'/> A capacity miss is one that a fully associative LRU cache of the same size would also suffer: the working set is simply bigger than the cache. Only a bigger cache helps. <bookmark mark='c'/> And a conflict miss is everything else: misses caused only by the restriction on where a line may go. More ways cure them. <bookmark mark='d'/> Counting the three on a trace tells an architect which cure to buy.",
+   "zh": "1987 年，马克·希尔给每次缺失取了三个名字之一，每个名字都指向一种疗法。<bookmark mark='a'/>强制缺失是对一行的第一次触碰：多大的缓存都不可能已经有它。更大的行可以减少它，一次带进更多邻居。<bookmark mark='b'/>容量缺失是同样大小的全相联 LRU 缓存也会遭受的缺失：工作集就是比缓存大。只有更大的缓存有用。<bookmark mark='c'/>冲突缺失是其余的一切：仅仅因为限制了行能放在哪里而造成的缺失。更多的路能治它。<bookmark mark='d'/>在一条轨迹上数出这三种，设计者就知道该买哪种药。"
+  },
+  "a2394e7a5eb8": {
+   "scene": "ThreeC",
+   "en": "Here are the three Cs for the Job's first chapter, in caches of one, four and eight kilobytes with one, two and eight ways. <bookmark mark='a'/> The compulsory misses are always ninety-two: the chapter touches ninety-two lines. At one kilobyte, capacity dominates: the working set does not fit. <bookmark mark='b'/> At eight kilobytes everything fits, and with two or more ways only the compulsory misses are left, while the direct-mapped cache still has fifteen thousand conflicts, the table and the letters colliding. <bookmark mark='c'/> And some conflict counts are negative. That is not an error: a set-associative LRU cache sometimes beats a fully associative one, because LRU is not the optimal policy, and splitting the cache into sets happens to protect some lines from the scans. The three Cs are a guide, not a law.",
+   "zh": "这是任务第一章的三种缺失，缓存为一、四、八千字节，一路、两路和八路。<bookmark mark='a'/>强制缺失总是九十二：这一章碰过九十二行。一千字节时，容量缺失占主导：工作集装不下。<bookmark mark='b'/>八千字节时一切都装得下，两路或更多路时只剩强制缺失，而直接映射缓存仍有一万五千次冲突，表和字母在相撞。<bookmark mark='c'/>还有一些冲突数是负的。这不是错误：组相联的 LRU 缓存有时胜过全相联的，因为 LRU 不是最优策略，而把缓存分成组恰好保护了一些行免受扫描的冲刷。三种缺失是指南，不是定律。"
+  },
+  "2cef093ca9b8": {
+   "scene": "Amat",
+   "en": "Chapter six. Average memory access time.",
+   "zh": "第六章。平均访存时间。"
+  },
+  "881d722d40c8": {
+   "scene": "Amat",
+   "en": "How long does a memory access take, on average? <bookmark mark='a'/> Every access pays the hit time of the cache. A fraction m of them, the miss rate, also pay the miss penalty: the time to fetch the line from wherever it is. <bookmark mark='b'/> With a four-cycle cache that misses five percent of the time in front of a two-hundred-cycle memory, the average is fourteen cycles: the five percent of misses cost two and a half times as much as all the hits together. <bookmark mark='c'/> Three knobs, and every cache design trades them: a bigger cache lowers the miss rate but raises the hit time; more ways the same.",
+   "zh": "一次访存平均要多久？<bookmark mark='a'/>每次访问都要付缓存的命中时间。其中一部分，比例为缺失率 m，还要付缺失代价：从它所在之处取来这一行的时间。<bookmark mark='b'/>一个四周期、缺失率百分之五的缓存，挡在两百周期的存储器前面，平均是十四个周期：百分之五的缺失花的时间是所有命中加起来的两倍半。<bookmark mark='c'/>三个旋钮，每种缓存设计都在权衡它们：更大的缓存降低缺失率，但抬高命中时间；更多的路也一样。"
+  },
+  "c2e5a350b416": {
+   "scene": "Amat",
+   "en": "With several levels, the formula nests: the miss penalty of each level is the average access time of the level below it. <bookmark mark='a'/> Put in this machine's measured latencies, which the next chapter measures, and some typical miss rates: ten percent of accesses miss L1, a fifth of those miss L2, and so on. <bookmark mark='b'/> The average comes to about three and a half nanoseconds. DRAM is ninety times slower than L1, yet the average access is less than three times slower, as long as each level catches most of what the level above it misses. That is the whole bet of a memory hierarchy.",
+   "zh": "有几级时，公式层层嵌套：每一级的缺失代价，就是它下面那一级的平均访问时间。<bookmark mark='a'/>代入这台机器下一章测出的延迟，以及一些典型的缺失率：百分之十的访问错过 L1，其中五分之一错过 L2，依此类推。<bookmark mark='b'/>平均大约三纳秒半。DRAM 比 L1 慢九十倍，而平均访问却慢不到三倍，只要每一级都接住上一级漏掉的大部分。这就是存储层次的全部赌注。"
+  },
+  "86f0780de9a1": {
+   "scene": "Measured",
+   "en": "Chapter seven. This machine's staircase.",
+   "zh": "第七章。这台机器的阶梯。"
+  },
+  "788dd69632d1": {
+   "scene": "Measured",
+   "en": "To measure how far away each level really is, we need a program whose every load must wait for the previous one. <bookmark mark='a'/> Fill a block of memory with pointers, one per cache line, linked in a random cycle, and follow them: each load's address is the value the last load returned. <bookmark mark='b'/> Because the order is random, no prefetcher can guess the next line, and because each load depends on the last, an out-of-order core cannot overlap them. The time per step is the latency of wherever the line lives. Vary the size of the block, and the latency of each level appears in turn.",
+   "zh": "要测出每一级究竟有多远，我们需要一个程序，它的每次取数都必须等前一次。<bookmark mark='a'/>在一块存储器里填满指针，每个缓存行一个，连成一个随机的环，然后顺着走：每次取数的地址就是上一次取数返回的值。<bookmark mark='b'/>因为顺序是随机的，没有预取器能猜到下一行；因为每次取数都依赖上一次，乱序核也无法让它们重叠。每一步的时间就是这一行所在之处的延迟。改变这块存储器的大小，每一级的延迟就依次显现。"
+  },
+  "b4096ede41a2": {
+   "scene": "Measured",
+   "en": "Here is the result, measured on the computer that made this video, a virtual machine on an Intel Xeon. <bookmark mark='a'/> Up to thirty-two kilobytes, a load takes one and a half nanoseconds: the L1 cache, about four cycles. <bookmark mark='b'/> Up to a megabyte, about four and a half: the L2. <bookmark mark='c'/> At two megabytes, twenty-five nanoseconds, part of the shared last level. <bookmark mark='d'/> And from four megabytes on, a hundred forty nanoseconds and climbing: DRAM. Past sixty-four megabytes it climbs further, to over three hundred, because the address translations themselves stop fitting in their own cache, the TLB, and every load first walks the page tables in memory. Part 32 explains that. <bookmark mark='e'/> One surprise: the processor reports thirty-three megabytes of third-level cache, but this machine falls off it near four. The cache is shared with whatever else runs on the chip; measured numbers are the ones to trust.",
+   "zh": "这是结果，在制作这个视频的计算机上测得，一台英特尔至强上的虚拟机。<bookmark mark='a'/>三十二千字节以内，一次取数一纳秒半：L1 缓存，大约四个周期。<bookmark mark='b'/>一兆字节以内，大约四纳秒半：L2。<bookmark mark='c'/>两兆字节时，二十五纳秒，是共享的最后一级的一部分。<bookmark mark='d'/>从四兆字节起，一百四十纳秒并且还在上升：DRAM。超过六十四兆字节它爬得更高，到三百多，因为地址翻译本身也装不进它们自己的缓存 TLB 了，每次取数都先要在存储器里走一遍页表。第32部分会讲这个。<bookmark mark='e'/>一个意外：处理器报告有三十三兆字节的三级缓存，但这台机器在四兆字节附近就掉下去了。这个缓存和芯片上运行的其他东西共享；测出来的数字才是可信的。"
+  },
+  "b74bf29f131f": {
+   "scene": "Measured",
+   "en": "That last climb deserves a second look. Every address a program uses is virtual, and the hardware translates it to a physical address, page by page, through tables that themselves live in memory. A small cache of translations, the TLB, covers a few thousand four-kilobyte pages: a few megabytes. <bookmark mark='a'/> Beyond that, a random load first misses in the TLB and walks the page tables, then fetches the data. <bookmark mark='b'/> Ask the operating system for two-megabyte pages instead, and each translation covers five hundred times as much memory. At five hundred twelve megabytes the latency falls from three hundred seventy-six nanoseconds to a hundred seventy-seven: half of the time had been spent finding where the data was. Databases and virtual machines use huge pages for exactly this reason. Part 32 builds the tables.",
+   "zh": "最后那段攀升值得再看一眼。程序用的每个地址都是虚拟的，硬件一页一页地把它翻译成物理地址，靠的是本身也放在存储器里的页表。一个小小的翻译缓存 TLB，覆盖几千个四千字节的页：几兆字节。<bookmark mark='a'/>超过这个范围，一次随机取数先在 TLB 里缺失、走一遍页表，然后才取数据。<bookmark mark='b'/>改向操作系统要两兆字节的页，每条翻译覆盖的存储器就多五百倍。在五百一十二兆字节时，延迟从三百七十六纳秒降到一百七十七：原来一半的时间都花在找数据在哪里。数据库和虚拟机正是因为这个原因使用大页。第32部分会造出这些表。"
+  },
+  "1aa5e8af9328": {
+   "scene": "Measured",
+   "en": "Latency is one number; bandwidth is the other. Read a block of memory in order, as fast as possible. <bookmark mark='a'/> From the caches, about sixty gigabytes a second; from the middle level, about thirty; from DRAM, about nine. <bookmark mark='b'/> Notice what that means. Nine gigabytes a second is a sixty-four-byte line every seven nanoseconds, yet each line is a hundred forty nanoseconds away. Reading in order, the hardware has twenty lines in flight at once, fetched ahead by the prefetcher before anyone asks. Latency can be hidden; bandwidth cannot be exceeded. Remember that when the Job's table scans meet real memory.",
+   "zh": "延迟是一个数；带宽是另一个。按顺序、尽可能快地读一块存储器。<bookmark mark='a'/>从缓存读，每秒大约六十吉字节；从中间那一级，大约三十；从 DRAM，大约九。<bookmark mark='b'/>注意这意味着什么。每秒九吉字节就是每七纳秒一个六十四字节的行，而每一行都在一百四十纳秒之外。按顺序读时，硬件同时有二十行在途，由预取器在任何人开口之前取来。延迟可以藏起来；带宽不能超越。等任务的表扫描遇上真实的存储器时，请记住这一点。"
+  },
+  "157a9a6b1ffe": {
+   "scene": "Programming",
+   "en": "Chapter eight. Programming for caches.",
+   "zh": "第八章。为缓存编程。"
+  },
+  "e344ed753aee": {
+   "scene": "Programming",
+   "en": "Now the programmer's side. Here are two ways to multiply matrices, with exactly the same arithmetic. <bookmark mark='a'/> In the textbook order, the innermost loop walks down a column of B. In C, a matrix is stored row after row, so consecutive elements of a column are a whole row apart: each one is in a different cache line. <bookmark mark='b'/> Swap the two inner loops, and the innermost loop walks along a row of B and a row of C. Now one cache line delivers eight doubles in a row. <bookmark mark='c'/> In our simulator, with an eight-kilobyte, eight-way cache, the column walk misses eight times as often. Part of that is conflict: the column's elements are a power of two apart, so they pile into the same few sets.",
+   "zh": "现在看程序员这一边。这里有两种做矩阵乘法的方式，算术完全相同。<bookmark mark='a'/>按教科书的顺序，最内层循环沿着 B 的一列往下走。在 C 语言里，矩阵是一行接一行存放的，所以一列中相邻的元素相隔整整一行：每一个都在不同的缓存行里。<bookmark mark='b'/>交换内层的两个循环，最内层循环就沿着 B 的一行和 C 的一行走。现在一个缓存行一次给出连续的八个双精度数。<bookmark mark='c'/>在我们的模拟器里，用一个八千字节、八路的缓存，走列的那种缺失多八倍。其中一部分是冲突：列中元素相隔二的幂，所以挤进同样的几个组。"
+  },
+  "7e771d6343d6": {
+   "scene": "Programming",
+   "en": "Now the real thing, in C, on this computer, for matrices from two hundred fifty-six to two thousand and forty-eight on a side. <bookmark mark='a'/> The textbook order starts at two billion operations a second and falls to half a billion as the matrices outgrow the caches. <bookmark mark='b'/> The swapped order is two to six times faster, until at two thousand and forty-eight the matrices are thirty-two megabytes each and even it starts to sink. <bookmark mark='c'/> The tiled version, which the next picture explains, holds steady at every size. <bookmark mark='d'/> And a tuned library does thirty times better again, using every core and the widest vector instructions, which is Part 10's subject.",
+   "zh": "现在来真的，用 C 语言，在这台计算机上，矩阵每边从两百五十六到两千零四十八。<bookmark mark='a'/>教科书顺序起初每秒二十亿次运算，随着矩阵超出缓存，降到五亿。<bookmark mark='b'/>交换后的顺序快二到六倍，直到两千零四十八时每个矩阵三十二兆字节，连它也开始下沉。<bookmark mark='c'/>分块的版本，下一张图会解释，在每个尺寸上都保持平稳。<bookmark mark='d'/>而一个调优过的库又好三十倍，用上了每个核和最宽的向量指令，那是第10部分的主题。"
+  },
+  "ee41c8a99aae": {
+   "scene": "Programming",
+   "en": "Tiling attacks the problem directly. Cut each matrix into square blocks, small enough that three of them fit in the cache together. <bookmark mark='a'/> Then multiply block by block: a block of C accumulates the products of a row of blocks of A with a column of blocks of B. While one block of each is in the cache, every element in it is used T times before it is thrown out, instead of once. <bookmark mark='b'/> The condition is only that three blocks fit: three T-squared numbers no more than the cache. Choose T for the cache you have, and the traffic to memory falls by a factor of about T.",
+   "zh": "分块直接对付这个问题。把每个矩阵切成小方块，小到三块能一起放进缓存。<bookmark mark='a'/>然后逐块相乘：C 的一块累加 A 的一行块与 B 的一列块的乘积。当每种各有一块在缓存里时，其中每个元素在被扔掉之前都被用了 T 次，而不是一次。<bookmark mark='b'/>条件只是三块要装得下：三个 T 的平方不超过缓存。按你手上的缓存选 T，到存储器的流量就降为大约 T 分之一。"
+  },
+  "3cc156d3f79a": {
+   "scene": "Programming",
+   "en": "The same reasoning shapes data. <bookmark mark='a'/> An array of structures keeps all the fields of one particle together; a structure of arrays keeps each field in its own array. <bookmark mark='b'/> A loop that reads only the x coordinates of every particle wastes most of every cache line in the first layout, and uses all of it in the second. Measured here, on four million particles of sixty-four bytes each, the sum takes twenty-eight milliseconds over the structures and five and a half over the plain array: five times faster, from layout alone. Game engines call the second style data-oriented design; databases that store each column separately, which Part 35 builds, are the same idea at scale.",
+   "zh": "同样的道理也塑造数据。<bookmark mark='a'/>结构体数组把一个粒子的所有字段放在一起；数组结构体把每个字段放在自己的数组里。<bookmark mark='b'/>一个只读每个粒子 x 坐标的循环，在第一种布局里浪费每个缓存行的大部分，在第二种布局里用满它。在这里实测，四百万个各六十四字节的粒子，对结构体求和要二十八毫秒，对普通数组要五毫秒半：只靠布局就快了五倍。游戏引擎把第二种风格叫面向数据的设计；把每一列分开存储的数据库，也就是第35部分要造的，是同一个想法的大规模版本。"
+  },
+  "2bba1f0d84c2": {
+   "scene": "Oblivious",
+   "en": "Chapter nine. Cache-oblivious algorithms.",
+   "zh": "第九章。缓存无关算法。"
+  },
+  "f9700d1a478e": {
+   "scene": "Oblivious",
+   "en": "Tiling has a flaw: the tile size is tuned to one cache, and a real machine has three. In 1999 Matteo Frigo, Charles Leiserson, Harald Prokop and Sridhar Ramachandran proposed a way round it. <bookmark mark='a'/> Model the memory as one cache of M words, moved in lines of B words, with perfect replacement. <bookmark mark='b'/> Measure an algorithm by how many lines it moves. <bookmark mark='c'/> And now the twist: write the algorithm without ever mentioning M or B. <bookmark mark='d'/> If it moves the fewest possible lines for every value of M and B, then it is simultaneously optimal for L1, for L2, for L3 and for the disk, without being told any of their sizes. The usual trick is to divide and conquer: halve the problem until it is tiny, and at some depth of the recursion, whatever the cache, the pieces fit.",
+   "zh": "分块有个缺点：块的大小是为一个缓存调的，而真实的机器有三个。1999 年，马泰奥·弗里戈、查尔斯·莱瑟森、哈拉尔德·普罗科普和斯里达尔·拉马钱德兰提出了一条出路。<bookmark mark='a'/>把存储器建模成一个 M 个字的缓存，以 B 个字的行为单位搬动，替换是完美的。<bookmark mark='b'/>用一个算法搬动多少行来衡量它。<bookmark mark='c'/>然后是关键的一招：写算法时永远不提 M 或 B。<bookmark mark='d'/>如果它对每个 M 和 B 都搬动最少的行，那它就同时对 L1、L2、L3 和磁盘都是最优的，而不需要被告知任何一个的大小。常用的诀窍是分而治之：把问题一半一半地切，直到很小，而在递归的某一层，不管缓存多大，各块都装得下。"
+  },
+  "00982ed62dc0": {
+   "scene": "Oblivious",
+   "en": "Here is the simplest example: transposing a matrix, reading A by rows and writing B by columns. <bookmark mark='a'/> Done row by row, every write to B lands in a different line, and until the cache can hold a whole column's worth of lines, more than half the accesses miss. <bookmark mark='b'/> Blocked into tiles tuned for a sixteen-kilobyte cache, it reaches the best possible, one line moved for every eight elements, but only on caches at least that big: below four kilobytes it is as bad as the naive loop. <bookmark mark='c'/> The recursive version splits the matrix in half, and in half again, never mentioning any size. It is optimal on every cache in the picture, from one kilobyte up.",
+   "zh": "最简单的例子：转置一个矩阵，按行读 A，按列写 B。<bookmark mark='a'/>一行一行地做，每次写 B 都落在不同的行里，直到缓存能装下一整列的行之前，一半以上的访问都缺失。<bookmark mark='b'/>切成为十六千字节缓存调好的块，能达到最好的情形，每八个元素搬动一行，但只在至少那么大的缓存上：小于四千字节时，它和朴素的循环一样差。<bookmark mark='c'/>递归的版本把矩阵一分为二，再一分为二，从不提任何大小。它在图中的每个缓存上都是最优的，从一千字节起。"
+  },
+  "9a040e837921": {
+   "scene": "Oblivious",
+   "en": "The same trick works for search trees. <bookmark mark='a'/> Lay out a binary tree not level by level but recursively: the top half of its levels as one small tree, stored together, then each of the subtrees hanging below it, each stored together, laid out the same way inside. <bookmark mark='b'/> Then a search from root to leaf crosses only about log base B of n cache lines, for every line size B at once. <bookmark mark='c'/> The design that builds B in, instead, is the B-tree, two chapters on.",
+   "zh": "同样的诀窍也适用于搜索树。<bookmark mark='a'/>把一棵二叉树不按层而是递归地排布：它上半部分的层作为一棵小树存在一起，然后挂在下面的每棵子树各自存在一起，内部也同样排布。<bookmark mark='b'/>这样从根到叶的一次搜索，只跨越大约以 B 为底 n 的对数个缓存行，对每种行大小 B 同时成立。<bookmark mark='c'/>把 B 直接设计进去的方案则是 B 树，两章之后讲。"
+  },
+  "1e0559c64123": {
+   "scene": "Pebbles",
+   "en": "Chapter ten. The red-blue pebble game.",
+   "zh": "第十章。红蓝卵石游戏。"
+  },
+  "bafb8c84db15": {
+   "scene": "Pebbles",
+   "en": "Programming tricks raise a question: how good can they get? In 1981 Jia-Wei Hong and H. T. Kung turned it into a game. <bookmark mark='a'/> Draw the computation as a graph: each operation a node, with arrows from its inputs. <bookmark mark='b'/> A red pebble on a node means its value is in fast memory, and you may have at most M red pebbles. <bookmark mark='c'/> A blue pebble means the value is in slow memory, and blue pebbles are unlimited. <bookmark mark='d'/> You may load a value, turning blue into red; store one, red into blue; or compute a node, if all its inputs are red. <bookmark mark='e'/> The cost of a strategy is the number of loads and stores: the traffic between the levels. The question is the least cost of any strategy, for a given graph and a given M.",
+   "zh": "编程技巧引出一个问题：它们最好能好到什么程度？1981 年，洪加威和孔祥重把它变成了一个游戏。<bookmark mark='a'/>把计算画成一张图：每个运算一个节点，箭头从它的输入指来。<bookmark mark='b'/>节点上的红色卵石表示它的值在快速存储器里，你最多只能有 M 个红色卵石。<bookmark mark='c'/>蓝色卵石表示值在慢速存储器里，蓝色卵石不限数量。<bookmark mark='d'/>你可以取数，把蓝变成红；存数，把红变成蓝；或者在一个节点的所有输入都是红色时计算它。<bookmark mark='e'/>一种策略的代价是取数和存数的次数：各级之间的流量。问题是，对给定的图和给定的 M，任何策略的最小代价是多少。"
+  },
+  "ad75791993f5": {
+   "scene": "Pebbles",
+   "en": "Here is the game on a tiny computation: y equals a plus b, times a plus c, with room for three red pebbles. The inputs start in slow memory, blue. <bookmark mark='a'/> Load a and b, compute their sum, and drop b, which is no longer needed. Load c, compute a plus c, then drop a and c. Compute y from the two sums, and store it. <bookmark mark='b'/> Four transfers: three loads and a store, the least possible, since every input must be loaded once and the output stored once. With only two red pebbles, the same computation would need extra transfers; for matrix multiplication the extra traffic is exactly what the bound measures.",
+   "zh": "这是这个游戏在一个小计算上的玩法：y 等于 a 加 b 乘以 a 加 c，有三个红色卵石的位置。输入一开始在慢速存储器里，是蓝色的。<bookmark mark='a'/>取进 a 和 b，算出它们的和，丢掉不再需要的 b。取进 c，算出 a 加 c，然后丢掉 a 和 c。由两个和算出 y，存出去。<bookmark mark='b'/>四次搬运：三次取数和一次存数，这是最少的，因为每个输入都必须取一次，输出必须存一次。如果只有两个红色卵石，同样的计算就需要额外的搬运；对矩阵乘法来说，下界度量的正是这种额外的流量。"
+  },
+  "548163dd1c6c": {
+   "scene": "Pebbles",
+   "en": "For multiplying two n by n matrices, Hong and Kung proved a lower bound. The idea fits on one screen. <bookmark mark='a'/> Cut any schedule into segments, each containing M loads and stores. <bookmark mark='b'/> During one segment, at most two M values can be at hand: the M already in fast memory and the M loaded during it. <bookmark mark='c'/> Now a geometric fact, the Loomis-Whitney inequality: if you hold a elements of A, b of B and c of C, you can do at most the square root of a b c of the multiplications A i k times B k j. <bookmark mark='d'/> So one segment does at most on the order of M to the three halves multiplications, and there are n cubed to do. The number of segments, times M, gives the bound: any schedule moves at least on the order of n cubed over the square root of M words. In 2019 Tyler Smith, Robert van de Geijn and colleagues pinned down the constant: two n cubed over root M.",
+   "zh": "对两个 n 乘 n 矩阵的乘法，洪加威和孔祥重证明了一个下界。思路一屏就能写下。<bookmark mark='a'/>把任何调度切成段，每段包含 M 次取数和存数。<bookmark mark='b'/>在一段中，手头最多有 2M 个值：已经在快速存储器里的 M 个，加上这段中取进来的 M 个。<bookmark mark='c'/>然后是一个几何事实，卢米斯—惠特尼不等式：如果你手里有 A 的 a 个元素、B 的 b 个、C 的 c 个，你最多能做 abc 的平方根次 A i k 乘 B k j。<bookmark mark='d'/>所以一段最多做 M 的二分之三次方量级的乘法，而总共有 n 的三次方次要做。段数乘以 M 就给出下界：任何调度都至少要搬动 n 的三次方除以 M 的平方根量级的字。2019 年，泰勒·史密斯、罗伯特·范德海恩和同事确定了常数：二乘 n 的三次方除以根号 M。"
+  },
+  "26a0adb9e05d": {
+   "scene": "Pebbles",
+   "en": "Our simulator can play the game for real. Take sixty-four by sixty-four matrices and a fast memory of a thousand and twenty-four words. <bookmark mark='a'/> The bound says any schedule must move at least fourteen thousand words. <bookmark mark='b'/> Both untiled orders move two hundred seventy thousand, nineteen times the bound. <bookmark mark='c'/> Tiles of four and eight move about seventy thousand; tiles of sixteen, forty-two thousand, within three times of the bound, with an ordinary LRU cache instead of an optimal one. <bookmark mark='d'/> The theorem says no cleverness can do better than the dashed line, and tiling gets close to it. The same bound, at scale, is why matrix multiplication on a GPU is limited by memory traffic as often as by arithmetic.",
+   "zh": "我们的模拟器可以真的玩这个游戏。取六十四乘六十四的矩阵，以及一千零二十四个字的快速存储器。<bookmark mark='a'/>下界说任何调度至少要搬动一万四千个字。<bookmark mark='b'/>两种不分块的顺序都搬动二十七万，是下界的十九倍。<bookmark mark='c'/>四和八的分块搬动大约七万；十六的分块搬动四万二千，在下界的三倍以内，而且用的是普通的 LRU 缓存，不是最优的。<bookmark mark='d'/>定理说任何聪明都不可能好过那条虚线，而分块已经很接近它。同一个下界放大来看，就是为什么 GPU 上的矩阵乘法常常受限于存储器流量，而不只是算术。"
+  },
+  "9a08954d6a28": {
+   "scene": "External",
+   "en": "Chapter eleven. External memory and B-trees.",
+   "zh": "第十一章。外存与 B 树。"
+  },
+  "1a6cb883283d": {
+   "scene": "External",
+   "en": "Take the hierarchy one step further, to a disk, where a single access costs milliseconds and data moves in big blocks. <bookmark mark='a'/> In 1988 Alok Aggarwal and Jeffrey Vitter made this a model: a memory holding M items, a disk read and written in blocks of B items, and the cost of an algorithm is the number of blocks it moves. Scanning N items costs N over B. <bookmark mark='b'/> And they proved the cost of sorting, matching upper and lower bounds: N over B, times the logarithm of N over B, to the base M over B. <bookmark mark='c'/> That base is enormous. Sorting ten billion records with a gigabyte of memory and hundred-thousand-record blocks takes about two passes over the data, not the thirty-three that a binary merge sort would. Every large database sort works this way.",
+   "zh": "把层次再往下推一步，到磁盘，在那里一次访问要几毫秒，数据以大块搬动。<bookmark mark='a'/>1988 年，阿洛克·阿加瓦尔和杰弗里·维特把它做成了一个模型：一个容纳 M 项的存储器，一个以 B 项为块读写的磁盘，算法的代价是它搬动的块数。扫描 N 项的代价是 N 除以 B。<bookmark mark='b'/>他们还证明了排序的代价，上下界吻合：N 除以 B，乘以 N 除以 B 的对数，底是 M 除以 B。<bookmark mark='c'/>这个底极大。用一吉字节的内存和十万条记录的块，对一百亿条记录排序只需要过数据大约两遍，而不是二路归并排序的三十三遍。每个大型数据库的排序都是这样工作的。"
+  },
+  "624ab24447be": {
+   "scene": "External",
+   "en": "The algorithm that meets the sorting bound is external merge sort. <bookmark mark='a'/> First pass: read as much as fits in memory, M items, sort it there, and write it back as a sorted run. That makes N over M runs. <bookmark mark='b'/> Then merge: keep one block of each run in memory and repeatedly output the smallest front item. With M over B blocks of room, M over B runs can be merged at once. <bookmark mark='c'/> So the number of passes is one plus the logarithm, to the base M over B, of the number of runs, and each pass reads and writes everything once. With a large memory that is usually two passes.",
+   "zh": "达到排序下界的算法是外部归并排序。<bookmark mark='a'/>第一遍：读进内存能装下的那么多，M 项，在内存里排好，写回成一个有序段。这样得到 N 除以 M 段。<bookmark mark='b'/>然后归并：在内存里为每一段留一块，反复输出最小的那个队首项。有 M 除以 B 块的空间，就能同时归并 M 除以 B 段。<bookmark mark='c'/>所以遍数是一加上段数以 M 除以 B 为底的对数，每一遍把所有数据读写一次。内存大的时候，通常就是两遍。"
+  },
+  "8665220a056c": {
+   "scene": "External",
+   "en": "For searching, the answer is the B-tree, invented by Rudolf Bayer and Edward McCreight in 1972. <bookmark mark='a'/> Make each node of a search tree exactly one block, holding not one key but hundreds, with a child between each pair. <bookmark mark='b'/> With a few hundred keys per node, a billion keys need only three or four levels, so a lookup costs three or four block reads, and the top levels stay in memory anyway. Every relational database index and nearly every file system uses a B-tree or a relative. Parts 17 and 35 build them.",
+   "zh": "对于搜索，答案是 B 树，由鲁道夫·拜尔和爱德华·麦克赖特在 1972 年发明。<bookmark mark='a'/>让搜索树的每个节点恰好是一块，装的不是一个键而是几百个，每两个键之间一个孩子。<bookmark mark='b'/>每个节点几百个键，十亿个键只需要三到四层，所以一次查找只要三四次块读取，而顶上几层反正都留在内存里。每个关系数据库的索引和几乎每个文件系统都使用 B 树或它的亲戚。第17和第35部分会造出它们。"
+  },
+  "ab955bc75f7f": {
+   "scene": "Prefetch",
+   "en": "Chapter twelve. Prefetching.",
+   "zh": "第十二章。预取。"
+  },
+  "3d9f3bfb029a": {
+   "scene": "Prefetch",
+   "en": "Chapter seven measured a hundred forty nanoseconds to DRAM, but nine gigabytes a second reading in order. The difference is prefetching: the cache guessing which line comes next and fetching it before it is asked for. <bookmark mark='a'/> The simplest rule: on a miss to one line, fetch the next one too. <bookmark mark='b'/> Better: watch each stream of accesses, and if its addresses step by a constant stride, fetch one and two strides ahead. Our simulator's prefetcher works this way, per four-kilobyte page. <bookmark mark='c'/> Or the program can say what it will need, with a prefetch instruction. <bookmark mark='d'/> A wrong guess costs something: it throws out a line someone wanted and uses bandwidth for nothing. Real prefetchers are judged on accuracy as well as coverage, much like branch predictors.",
+   "zh": "第七章测得 DRAM 要一百四十纳秒，但按顺序读每秒九吉字节。差别在于预取：缓存猜出下一行是哪一行，在被要求之前就取来。<bookmark mark='a'/>最简单的规则：一行缺失时，把下一行也取来。<bookmark mark='b'/>更好的：观察每一股访问流，如果它的地址按固定步长前进，就提前一步和两步去取。我们模拟器的预取器就是这样工作的，按每个四千字节的页。<bookmark mark='c'/>或者程序可以用一条预取指令说明它将要什么。<bookmark mark='d'/>猜错是有代价的：它扔掉了别人想要的一行，白白用掉带宽。真实的预取器既按覆盖率也按准确率评判，很像分支预测器。"
+  },
+  "039e82ddf147": {
+   "scene": "Prefetch",
+   "en": "Here is what a stride prefetcher does for the Job's table scan, on Part 8's core, with a table too big for the second-level cache. <bookmark mark='a'/> With perfect memory, three point one cycles per table entry. <bookmark mark='b'/> With this machine's memory hierarchy and the prefetcher, also three point one: the same. The scan reads entry after entry, the easiest pattern there is, and the prefetcher stays ahead of it. <bookmark mark='c'/> Without the prefetcher, three point five in the steady state. And on the first, cold pass through the table, when every line must come from DRAM, eight point three cycles an entry against three point four: two and a half times slower, because every line now waits its full latency.",
+   "zh": "这是步长预取器为任务的表扫描做的事，在第8部分的核上，用一张大到超出第二级缓存的表。<bookmark mark='a'/>用完美的存储器，每个表项三点一个周期。<bookmark mark='b'/>用这台机器的存储层次加上预取器，也是三点一：一样。扫描一项接一项地读，这是最容易的模式，预取器一直跑在它前面。<bookmark mark='c'/>没有预取器，稳定状态下三点五。而在第一次、冷的那遍扫描里，每一行都得从 DRAM 来，每项八点三个周期，对比有预取时的三点四：慢了两倍半，因为每一行现在都要等满它的延迟。"
+  },
+  "6333022a8af1": {
+   "scene": "Prefetch",
+   "en": "Programs can prefetch for themselves, too. Here a loop sums sixteen million randomly chosen elements of a two-hundred-fifty-six-megabyte array. The addresses are random, but known in advance, so the loop can ask for the element sixteen iterations ahead. <bookmark mark='a'/> On this machine it made the loop slower: point four eight seconds against point four three. <bookmark mark='b'/> The reason is Part 8's core. The lookups do not depend on each other, so the out-of-order window already had a dozen misses in flight; the prefetch instructions found nothing left to hide, and only added work. <bookmark mark='c'/> Software prefetch pays where the core cannot look ahead, as in a chain of pointers, and only measurement tells which case you are in.",
+   "zh": "程序也可以自己预取。这里一个循环对一个两百五十六兆字节数组中随机选出的一千六百万个元素求和。地址是随机的，但事先知道，所以循环可以提前十六次迭代去要那个元素。<bookmark mark='a'/>在这台机器上，它让循环变慢了：零点四八秒对零点四三秒。<bookmark mark='b'/>原因是第8部分的核。这些查找互不依赖，所以乱序窗口里本来就有十几次缺失在途；预取指令找不到还没藏起来的东西，只是多了工作。<bookmark mark='c'/>软件预取在核无法向前看的地方才划算，比如一条指针链，而只有测量才能告诉你属于哪种情形。"
+  },
+  "f4ef0ebfcf43": {
+   "scene": "Dram",
+   "en": "Chapter thirteen. Inside DRAM.",
+   "zh": "第十三章。DRAM 内部。"
+  },
+  "f751c22b4c9d": {
+   "scene": "Dram",
+   "en": "Why is DRAM slow? Part 5 built its cell: one transistor and one capacitor per bit, Robert Dennard's design of 1966. Billions of them are arranged in banks, each a grid of rows. <bookmark mark='a'/> To read anything, the bank first activates a row: the charge of every cell in it, eight kilobytes' worth, is sensed and copied into a row buffer. That takes about fourteen nanoseconds. <bookmark mark='b'/> Then a column is read out of the buffer: another fourteen or so. <bookmark mark='c'/> To read a different row, the bank must first write the buffer back and precharge: fourteen more. <bookmark mark='d'/> And because the capacitors leak, every row must be read and rewritten every sixty-four milliseconds, refresh, which Part 5's Rowhammer chapter exploited.",
+   "zh": "DRAM 为什么慢？第5部分造过它的单元：每位一个晶体管和一个电容，罗伯特·登纳德 1966 年的设计。几十亿个这样的单元排成存储体，每个存储体是一排排的行。<bookmark mark='a'/>要读任何东西，存储体先要激活一行：这一行每个单元的电荷，八千字节的量，被感测并复制到一个行缓冲里。这要大约十四纳秒。<bookmark mark='b'/>然后从缓冲里读出一列：又是十四纳秒左右。<bookmark mark='c'/>要读另一行，存储体必须先把缓冲写回并预充电：再十四纳秒。<bookmark mark='d'/>而且因为电容会漏电，每一行每六十四毫秒都必须被读出并重写一次，这就是刷新，第5部分的 Rowhammer 一章利用过它。"
+  },
+  "178b9fe7b793": {
+   "scene": "Dram",
+   "en": "So DRAM has its own cache, the open row. A memory controller that leaves a row open after reading it gets the next access to the same row with only the column read. <bookmark mark='a'/> Reading in order, ninety-nine percent of accesses hit the open row. <bookmark mark='b'/> Jumping four kilobytes each time, half do. <bookmark mark='c'/> At random, essentially none. <bookmark mark='d'/> The difference is the activate and precharge, about two thirds of a random access's time inside the chip. Locality pays all the way down.",
+   "zh": "所以 DRAM 有它自己的缓存：打开的那一行。一个读完一行后让它保持打开的存储器控制器，下一次访问同一行时只需要读列。<bookmark mark='a'/>按顺序读，百分之九十九的访问命中打开的行。<bookmark mark='b'/>每次跳四千字节，一半命中。<bookmark mark='c'/>随机读，几乎没有。<bookmark mark='d'/>差别就是激活和预充电，大约占芯片内一次随机访问时间的三分之二。局部性一路往下都有回报。"
+  },
+  "00c7b5fad8b3": {
+   "scene": "Dram",
+   "en": "Modern memory keeps the cell and changes the plumbing. <bookmark mark='a'/> A DDR5 module splits into two channels with many more banks, so more rows can be open at once. <bookmark mark='b'/> High-bandwidth memory stacks DRAM dies on top of each other, beside the processor, joined by a thousand wires per stack instead of sixty-four: the memory of every large AI accelerator, as AI, Built's seventeenth part showed. <bookmark mark='c'/> And one more lookup hides in every access: the address a program uses is virtual, and must be translated to a physical one through page tables, with its own small cache, the TLB. That was the extra climb at the top of the staircase. Part 32 builds it.",
+   "zh": "现代存储器保留了单元，改了管道。<bookmark mark='a'/>一条 DDR5 内存条分成两个通道，存储体也多得多，所以能同时打开更多行。<bookmark mark='b'/>高带宽存储器把 DRAM 晶粒一层层叠起来，放在处理器旁边，每叠用一千根导线相连，而不是六十四根：这是每个大型人工智能加速器的存储器，正如《AI，从零搭建》第十七部分所示。<bookmark mark='c'/>每次访问里还藏着一次查找：程序使用的地址是虚拟的，必须经由页表翻译成物理地址，这有它自己的小缓存 TLB。这就是阶梯顶端那段额外的攀升。第32部分会造出它。"
+  },
+  "e43d3865a609": {
+   "scene": "Job",
+   "en": "Chapter fourteen. The Job meets memory.",
+   "zh": "第十四章。任务遇上存储器。"
+  },
+  "832d75932432": {
+   "scene": "Job",
+   "en": "Now the Job, over all thirty novels. Simulating three billion cache-line reads one by one would take hours, but the table scans have a structure that gives the answer exactly. <bookmark mark='a'/> Every scan reads the table's lines from the first up to some last line. <bookmark mark='b'/> Between one read of line l and the next, the lines touched are exactly the lines of the previous scan that reached l. So in an LRU cache of C lines, line l hits if and only if that scan was shorter than C. <bookmark mark='c'/> A stack of recent scan lengths then gives the fate of every one of the three billion reads from four and a half million scans, in seconds. <bookmark mark='d'/> The result: LRU misses almost every table read until the cache holds the whole table, which is the scan pathology of chapter four at full scale. A cache that simply kept the front of the table would do far better at every size: the Frontier chapter returns to that.",
+   "zh": "现在是任务，在全部三十部小说上。一次一次地模拟三十亿次缓存行读取要好几个小时，但表扫描有一种结构，能精确地给出答案。<bookmark mark='a'/>每次扫描读表的行，从第一行一直读到某个最后的行。<bookmark mark='b'/>在 l 行的一次读取和下一次之间，被碰过的行恰好是之前那次到达 l 的扫描所读的行。所以在 C 行的 LRU 缓存里，l 行命中当且仅当那次扫描比 C 短。<bookmark mark='c'/>于是一个记录近期扫描长度的栈，就能从四百五十多万次扫描中，几秒钟内给出全部三十亿次读取的命运。<bookmark mark='d'/>结果：在缓存装下整张表之前，LRU 几乎每次读表都缺失，这正是第四章的扫描病态，以完整的规模出现。一个只是留住表前部的缓存，在每个大小上都会好得多：前沿一章会回到这一点。"
+  },
+  "9277617adbbf": {
+   "scene": "Job",
+   "en": "Before asking what the misses cost, ask what the caches are worth. <bookmark mark='a'/> If every one of the three billion table-line reads went to DRAM, a hundred sixty-six cycles each at Pebble's clock, and nothing overlapped, <bookmark mark='b'/> the reads alone would take about nine minutes, against fifty-seven seconds for the whole Job. <bookmark mark='c'/> Even missing L1 nine times in ten, the hierarchy turns that into almost nothing, because the second level holds the entire table.",
+   "zh": "在问缺失花了多少之前，先问缓存值多少。<bookmark mark='a'/>如果三十亿次读表的每一次都去 DRAM，在 Pebble 的时钟下每次一百六十六个周期，而且没有任何重叠，<bookmark mark='b'/>光是这些读取就要大约九分钟，而整个任务只要五十七秒。<bookmark mark='c'/>即使十次里九次错过 L1，存储层次也把它变成了几乎为零，因为第二级缓存装下了整张表。"
+  },
+  "741e6161da2b": {
+   "scene": "Job",
+   "en": "What do all those misses cost? We measured it on Part 8's core, running the scan with this machine's latencies converted to Pebble's clock, and the letter comparisons too, and weighted the results by how often each kind of read misses in the corpus run. <bookmark mark='a'/> Over the run, ninety-one percent of table reads and fifty-seven percent of letter reads miss the first-level cache. <bookmark mark='b'/> And at eight hundred eighty-five megahertz, the core hides them: the second-level cache is five cycles away, the out-of-order window covers that, and the prefetcher keeps ahead of the scan. The Job slows by five hundredths of a percent. <bookmark mark='c'/> Without the prefetcher, two percent. <bookmark mark='d'/> But give the same memory a core as fast as this machine's, two point eight gigahertz, and the same nanoseconds become three times as many cycles: then the misses cost fourteen percent. The memory wall, again, is a ratio.",
+   "zh": "这些缺失到底花了多少？我们在第8部分的核上测量：用这台机器的延迟换算成 Pebble 的时钟，跑扫描，也跑字母比较，再按语料运行中每种读取缺失的频率加权。<bookmark mark='a'/>在整个运行中，百分之九十一的读表和百分之五十七的读字母错过第一级缓存。<bookmark mark='b'/>而在八百八十五兆赫下，核把它们藏住了：第二级缓存在五个周期之外，乱序窗口盖得住，预取器跑在扫描前面。任务慢了万分之五。<bookmark mark='c'/>没有预取器，慢百分之二。<bookmark mark='d'/>但给同样的存储器配一个和这台机器一样快的核，二点八吉赫，同样的纳秒就变成三倍的周期数：这时缺失要花百分之十四。存储墙，再一次，是一个比值。"
+  },
+  "c714f8fec7d4": {
+   "scene": "Job",
+   "en": "So the ledger's fourth row is almost exactly its third: fifty-seven seconds for thirty novels, with real caches and real DRAM where Part 8 assumed every load took two cycles. <bookmark mark='a'/> This is not the usual story, and it is worth saying why. The Job reads memory in the friendliest way there is, in order, again and again, and Pebble's clock is slow. Programs that chase pointers, like a hash table or a tree, behave like the staircase's random walk, and at a modern clock they would pay in full. The Job's real problem is not where its data lives but how much of it it reads: three billion lines to count four and a half million words. Only a better algorithm fixes that, and Parts 16 and 17 bring two.",
+   "zh": "所以账本的第四行几乎和第三行一模一样：三十部小说五十七秒，用真实的缓存和真实的 DRAM，而第8部分假设每次取数两个周期。<bookmark mark='a'/>这不是通常的故事，值得说说为什么。任务以最友好的方式读存储器，按顺序，一遍又一遍，而且 Pebble 的时钟很慢。追逐指针的程序，比如哈希表或树，行为就像阶梯实验里的随机游走，在现代的时钟下它们会付出全部代价。任务真正的问题不在它的数据住在哪里，而在它读了多少：为了数四百五十多万个词，读了三十亿行。只有更好的算法能解决这个问题，第16和第17部分会带来两个。"
+  },
+  "77ce8e5f7fac": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: learning to replace.",
+   "zh": "第十五章。前沿：学习替换。"
+  },
+  "1fe3377284fd": {
+   "scene": "Frontier",
+   "en": "LRU fails on the Job because it trusts recency: every new line from a long scan goes to the top of the list, pushing out lines that will be needed soon. In 2007 Moinuddin Qureshi and colleagues proposed a small change. <bookmark mark='a'/> On a scaled-down version of the Job's scans, LRU misses sixty-four percent. Random replacement, fifty-five. <bookmark mark='b'/> Bimodal insertion puts a new line at the bottom of the list instead, where it will be the next to go unless it is used again, and only once in thirty-two at the top. A scan then sweeps through the bottom slot while the rest of the cache keeps the front of the table: forty-seven percent. Their adaptive version picks between the two policies by watching which does better. <bookmark mark='c'/> And Belady's crystal ball, thirty-three. Half the gap closed by one rule.",
+   "zh": "LRU 在任务上失败，是因为它相信新近性：长扫描中每个新来的行都被放到列表顶端，把很快就要用到的行挤出去。2007 年，莫伊努丁·库雷希和同事提出了一个小改动。<bookmark mark='a'/>在缩小版的任务扫描上，LRU 缺失百分之六十四。随机替换，百分之五十五。<bookmark mark='b'/>双峰插入把新行放在列表底部，除非它再次被用到，否则它就是下一个被淘汰的，只有三十二次中一次放在顶端。这样扫描只会扫过底部那一格，而缓存的其余部分留住表的前部：百分之四十七。他们的自适应版本通过观察哪种策略表现更好来在两者之间选择。<bookmark mark='c'/>贝拉迪的水晶球，百分之三十三。一条规则弥合了一半的差距。"
+  },
+  "63fd7c00f806": {
+   "scene": "Frontier",
+   "en": "Bimodal insertion is one fixed rule. The research since then learns the rule. <bookmark mark='a'/> In 2016 Akanksha Jain and Calvin Lin built Hawkeye. It cannot see the future, but it can replay the recent past: it runs Belady's policy on the last few thousand accesses to see which lines would have been worth keeping, and learns, for each load instruction, whether the lines it brings in tend to be. <bookmark mark='b'/> In 2019 their group trained a deep recurrent network offline on memory traces, found that what it learned could be captured by a few hundred integer weights, and built that into a policy called Glider. <bookmark mark='c'/> Replacement policy has become prediction, the same kind of problem as Part 7's branch predictors, scored in public championships.",
+   "zh": "双峰插入是一条固定的规则。此后的研究学习这条规则。<bookmark mark='a'/>2016 年，阿坎克莎·贾因和卡尔文·林造出了 Hawkeye。它看不到未来，但能重放最近的过去：它在最近几千次访问上运行贝拉迪的策略，看哪些行本值得留下，并为每条取数指令学习它带进来的行是否往往值得。<bookmark mark='b'/>2019 年，他们的团队在存储器轨迹上离线训练了一个深度循环网络，发现它学到的东西可以用几百个整数权重概括，并把它做进一个叫 Glider 的策略。<bookmark mark='c'/>替换策略变成了预测，和第7部分的分支预测器是同一类问题，在公开的锦标赛中比拼。"
+  },
+  "ebeb403ab5ed": {
+   "scene": "Frontier",
+   "en": "Where the research stands. <bookmark mark='a'/> How close can any policy that sees only the past come to Belady's? For some programs the gap closes; nobody can say in general. <bookmark mark='b'/> The pebble game's tight bounds are known for matrix multiplication and a few relatives; for graph algorithms, sparse computations and the layers of a neural network, mostly not. <bookmark mark='c'/> Data centres now put memory deliberately further away, in shared pools reached over links like CXL, trading hundreds of nanoseconds for flexibility. <bookmark mark='d'/> And some designs give up on moving data at all, putting arithmetic inside the memory chips. The research problem for this part starts with the Job's own scans.",
+   "zh": "研究的现状。<bookmark mark='a'/>一个只看得到过去的策略，能离贝拉迪的策略多近？对某些程序差距会合拢；一般情况下没有人说得清。<bookmark mark='b'/>卵石游戏的紧下界对矩阵乘法和少数几个亲戚是已知的；对图算法、稀疏计算和神经网络的各层，大多不知道。<bookmark mark='c'/>数据中心现在故意把存储器放得更远，放进通过 CXL 这样的链路访问的共享池，用几百纳秒换取灵活性。<bookmark mark='d'/>还有一些设计干脆放弃搬动数据，把算术放进存储器芯片里。这一部分的研究题，就从任务自己的扫描开始。"
+  },
+  "8279eee87e31": {
+   "scene": "Outro",
+   "en": "What we built in this part. Caches from nothing: an address cut into tag, index and offset; sets and ways; replacement and write policies; and the three kinds of miss, measured on the Job. This computer's memory, measured: a staircase from one and a half nanoseconds to three hundred, and the bandwidth at each step. Programs that respect the hierarchy, and algorithms that respect every level at once without knowing its size. A theorem about pebbles that says how much data any matrix multiply must move. And the Job, which turned out to hide its three billion cache misses almost completely.",
+   "zh": "我们在这一部分造了什么。从零开始的缓存：切成标签、索引和偏移的地址；组与路；替换和写策略；以及在任务上测出的三种缺失。这台计算机的存储器，测量出来：一段从一纳秒半到三百纳秒的阶梯，以及每一级的带宽。尊重存储层次的程序，以及不知道各级大小却同时尊重每一级的算法。一个关于卵石的定理，它说明任何矩阵乘法必须搬动多少数据。还有任务，它几乎完全藏住了自己的三十亿次缓存缺失。"
+  },
+  "a7fc13ad6f7a": {
+   "scene": "Outro",
+   "en": "Where this comes back. When several cores share memory, their caches must agree: Part 10's coherence. Address translation and its cache, the TLB, are Part 32. B-trees, external sorting and column stores return in Parts 17, 34 and 35. The Job's real problem, reading three billion lines to count four and a half million words, is solved by better algorithms in Parts 16 and 17. Caching across whole machines, with content delivery networks and Memcached, is Parts 39 and 45. And memory traffic is the limit of the accelerators in Part 60.",
+   "zh": "这些会在哪里再出现。当几个核共享存储器时，它们的缓存必须一致：第10部分的缓存一致性。地址翻译和它的缓存 TLB 在第32部分。B 树、外部排序和列存储在第17、34和35部分回来。任务真正的问题，为了数四百五十多万个词读了三十亿行，由第16和第17部分更好的算法解决。整台机器之间的缓存，内容分发网络和 Memcached，是第39和第45部分。存储器流量则是第60部分加速器的极限。"
+  },
+  "c50bdcf51867": {
+   "scene": "Outro",
+   "en": "In practice. Game engines lay out data for the cache, splitting hot fields from cold. Databases size their B-tree nodes to pages and store columns separately. Numerical libraries and AI frameworks are built from tiled kernels, and judge themselves on the roofline model, arithmetic against memory bandwidth. Servers place memory near the core that uses it and use huge pages to spare the TLB. And every system design starts from the same table of latencies this part measured, extended to disks and networks.",
+   "zh": "实践中。游戏引擎为缓存排布数据，把冷热字段分开。数据库按页的大小设定 B 树节点，并把列分开存储。数值库和人工智能框架由分块的内核搭成，用屋顶线模型，也就是算术对存储器带宽，来评判自己。服务器把内存放在使用它的核附近，并用大页来减轻 TLB 的负担。而每一次系统设计，都从这一部分测出的同一张延迟表开始，再延伸到磁盘和网络。"
+  },
+  "ef78c8436adf": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: add an insertion policy to our cache simulator and measure it on the Job's scans. The last, marked with a star, is a research problem: nobody knows its full answer, and the notes say where to start.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是动手题：给我们的缓存模拟器加一个插入策略，在任务的扫描上测量它。最后一道标了星号，是研究题：没有人知道它的完整答案，笔记里说明了从哪里入手。"
+  },
+  "d0e346b3d896": {
+   "scene": "Outro",
+   "en": "Next time. Around 2005 the clock stopped getting faster, for reasons of power that Part 10 derives, and processors became many cores sharing caches and memory, with vector units in each. Part 10 builds them: SIMD, multicore, cache coherence, GPUs, and the Job on four cores.",
+   "zh": "下一次。2005 年前后，时钟不再变快，原因在于功耗，第10部分会推导出来；处理器变成了共享缓存和存储器的多个核，每个核里还有向量单元。第10部分会造出它们：SIMD、多核、缓存一致性、GPU，以及在四个核上运行的任务。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 9, The Memory Hierarchy",
+ "chapters_en": {
+  "Hook": "A second for every cycle",
+  "Wall": "1. The memory wall",
+  "Locality": "2. Locality",
+  "Direct": "3. A direct-mapped cache",
+  "Assoc": "4. Associativity and replacement",
+  "ThreeC": "5. Three kinds of miss",
+  "Amat": "6. Average memory access time",
+  "Measured": "7. This machine's staircase",
+  "Programming": "8. Programming for caches",
+  "Oblivious": "9. Cache-oblivious algorithms",
+  "Pebbles": "10. The red-blue pebble game",
+  "External": "11. External memory and B-trees",
+  "Prefetch": "12. Prefetching",
+  "Dram": "13. Inside DRAM",
+  "Job": "14. The Job meets memory",
+  "Frontier": "15. Frontier: learning to replace",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

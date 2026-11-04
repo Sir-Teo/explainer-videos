@@ -147,9 +147,8 @@ class Pebbles(VoiceoverScene):
         y0 = ch.bars[0].get_bottom()[1]
         h = 3.4 * d["bound"] / 1000 / max(vals)
         bl = DashedLine([ch.get_left()[0], y0 + h, 0], [ch.get_right()[0], y0 + h, 0], color=HEAD, stroke_width=3)
-        blab = label(rf"the bound: \ {d['bound'] / 1000:.1f}K words", font_size=22, color=HEAD).next_to(bl, UP,
-                                                                                                   buff=0.08).align_to(
-            bl, RIGHT)
+        blab = label(rf"the bound: \\ {d['bound'] / 1000:.1f}K words", font_size=22, color=HEAD).next_to(bl, RIGHT,
+                                                                                                     buff=0.15)
         yl = note(r"words moved \ (simulated, \ fully associative LRU)", font_size=18).next_to(ch, UP, buff=0.3).align_to(
             ch, LEFT)
         punch = label(rf"the best tile is within {rows[-1]['words'] / d['bound']:.1f} times of the bound; \ the "

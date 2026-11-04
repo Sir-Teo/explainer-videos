@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, Shelves,
-                                  bar_chart, fmt, load, mono)
+                                  bar_chart, box, fmt, load, mono)
 
 
 class Assoc(VoiceoverScene):
