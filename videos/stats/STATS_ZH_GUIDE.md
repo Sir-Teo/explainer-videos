@@ -426,3 +426,30 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | A/B test, online controlled experiment | A/B 测试，在线对照试验 |
 | CUPED, analysis of covariance, regression adjustment | CUPED，协方差分析，回归调整 |
 | sample-ratio mismatch, A/A test, novelty effect | 样本比例失配，A/A 测试，新奇效应 |
+
+## Glossary (Part 14)
+
+| English | 中文 |
+|---|---|
+| binary outcome, linear probability model | 二元结局，线性概率模型 |
+| odds, log-odds (logit), odds ratio | 优势（比数），对数优势（logit），优势比（比值比） |
+| logistic regression, probit model, latent variable | 逻辑斯谛回归，概率单位（probit）模型，潜变量 |
+| canonical link, natural parameter | 典则连接函数，自然参数 |
+| iteratively reweighted least squares (IRLS), working response | 迭代加权最小二乘，工作响应 |
+| score equation, information matrix | 得分方程，信息矩阵 |
+| deviance, null deviance, likelihood-ratio test, Wald test | 偏差，零偏差，似然比检验，Wald 检验 |
+| profile likelihood, profile-likelihood interval | 剖面似然，剖面似然区间 |
+| separation (complete / quasi-complete) | （完全／拟完全）分离 |
+| extrapolation | 外推 |
+| Poisson regression, offset, exposure, rate ratio | 泊松回归，偏移量，暴露量，率比 |
+| overdispersion, dispersion parameter, quasi-likelihood | 过度离散，离散参数，拟似然 |
+| negative binomial, gamma frailty | 负二项分布，伽马脆弱性 |
+| contingency table, expected count, chi-squared test of independence | 列联表，期望频数，独立性卡方检验 |
+| risk difference, relative risk, Woolf's interval | 风险差，相对风险，伍尔夫区间 |
+| Simpson's paradox, mosaic plot | 辛普森悖论，马赛克图 |
+| stratification, Mantel–Haenszel estimator, Cochran–Mantel–Haenszel test | 分层，曼特尔–亨塞尔估计量，CMH 检验 |
+| homogeneity of odds ratios, Breslow–Day test | 优势比齐性，布雷斯洛–戴检验 |
+| case–control study, cohort study, outcome-dependent sampling | 病例对照研究，队列研究，依结局抽样 |
+| ROC curve, area under the curve (AUC), sensitivity, false-positive rate | ROC 曲线，曲线下面积，灵敏度，假阳性率 |
+| calibration, Brier score, proper scoring rule, log score | 校准，布里尔评分，严格适当评分规则，对数评分 |
+| decision threshold, misclassification cost | 判决阈值，误分类代价 |
