@@ -3335,3 +3335,21 @@ def test_riskmodel_gp_and_law():
     assert x.max() <= 100.0 + 1e-9
     c = RM.cap_positions(np.array([0.2, -0.3, 0.01]), cap=0.05, adv=np.array([1.0, 0.1, 1.0]))
     assert np.allclose(c, [0.05, -0.01, 0.01])
+
+
+def test_systematic_trend_identity_and_books():
+    import numpy as np
+    from explainer.quant.house import systematic as SY
+    rng = np.random.default_rng(32)
+    r = rng.standard_normal(12 * 20000) * 0.01
+    S, Q, P = SY.linear_trend_blocks(r, 12)
+    assert np.allclose(P, (S ** 2 - Q) / 2)
+    z = P - P.mean()
+    sk = np.mean(z ** 3) / np.mean(z ** 2) ** 1.5
+    assert abs(sk - SY.trend_skew_theory(12)) < 0.15
+    assert abs(SY.trend_skew_theory(2)) < 1e-12 and abs(SY.trend_skew_theory(10 ** 6) - 2 * 2 ** 0.5) < 1e-3
+    ac = np.zeros(12); ac[1] = 1e-5
+    assert abs(SY.trend_mean_theory(ac, 12) - 11e-5) < 1e-12
+    x, e = SY.vol_target(rng.standard_normal(1000) * 0.02, 0.10)
+    assert np.nanmax(e) <= 3.0
+    assert SY.max_drawdown(np.array([0.1, -0.5, 0.2])) == -0.5

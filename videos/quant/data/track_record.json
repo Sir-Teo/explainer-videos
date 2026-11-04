@@ -431,6 +431,30 @@
   },
   "note": "value-weighted quintile long-short, weekly"
  },
+ "riskparity_part32": {
+  "part": 32,
+  "research": {
+   "mean": 0.061183250823263494,
+   "vol": 0.12567429630141727,
+   "sharpe": 0.48683981230753465,
+   "sharpe_se": 0.29278214353624105,
+   "maxdd": -0.28993860822216977,
+   "n": 167,
+   "sharpe_net": 0.48683981230753465,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.01546782789543369,
+   "vol": 0.10477787527248744,
+   "sharpe": 0.14762494329272993,
+   "sharpe_se": 0.45733336765422966,
+   "maxdd": -0.25998035068414727,
+   "n": 59,
+   "sharpe_net": 0.14762494329272993,
+   "cost_per_year": 0.0
+  },
+  "note": "inverse-vol risk parity on 10 ETFs, excess of T-bills, before costs"
+ },
  "sestm_fomc_drift_part28": {
   "part": 28,
   "research": {
@@ -454,6 +478,30 @@
    "cost_per_year": 0.0015199999999999999
   },
   "note": "statement months only; flat in other months"
+ },
+ "trend_part32": {
+  "part": 32,
+  "research": {
+   "mean": 0.051421675674357584,
+   "vol": 0.10529890124685289,
+   "sharpe": 0.48834009724194,
+   "sharpe_se": 0.2653442536611037,
+   "maxdd": -0.1629392670514782,
+   "n": 165,
+   "sharpe_net": 0.48834009724194,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.026870128159557756,
+   "vol": 0.09774926744412529,
+   "sharpe": 0.27488828164279655,
+   "sharpe_se": 0.4492300195942672,
+   "maxdd": -0.1688432817962815,
+   "n": 59,
+   "sharpe_net": 0.27488828164279655,
+   "cost_per_year": 0.0
+  },
+  "note": "TSMOM on 23 ETFs, excess of T-bills, before costs"
  },
  "zoo_equal_weight_part25": {
   "part": 25,

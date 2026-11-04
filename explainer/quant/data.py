@@ -548,6 +548,28 @@ def yahoo_daily(symbol: str, start: str = "2015-01-01", through: str = "2025-11-
     return {"date": ymd, "close": close}
 
 
+def yahoo_total(symbol: str, start: str = "2006-01-01", through: str = "2025-11-30") -> dict:
+    """Daily total-return closes of a fund or ETF (Yahoo's dividend- and split-adjusted close) with the raw open and
+    close of each day: ``date``, ``adj`` (adjusted close), ``open``, ``close``. Shares :func:`yahoo_daily`'s file and
+    checks the adjusted series' own checksum."""
+    base = yahoo_daily(symbol, start, through)
+    safe = symbol.replace("^", "_").replace(".", "_")
+    d = json.loads((DATA / "yahoo" / f"{safe}_{start}_{through}.json").read_text())["chart"]["result"][0]
+    off = d["meta"].get("gmtoffset", 0)
+    ts = np.asarray(d["timestamp"], float) + off
+    q = d["indicators"]["quote"][0]
+    adj = np.asarray([np.nan if c is None else c for c in d["indicators"]["adjclose"][0]["adjclose"]], float)
+    op = np.asarray([np.nan if c is None else c for c in q["open"]], float)
+    cl = np.asarray([np.nan if c is None else c for c in q["close"]], float)
+    ymd = np.array([int(datetime.fromtimestamp(t, timezone.utc).strftime("%Y%m%d")) for t in ts])
+    ok = np.isfinite(adj) & np.isfinite(cl)
+    ymd, adj, op, cl = ymd[ok], adj[ok], op[ok], cl[ok]
+    frozen = json.dumps(np.column_stack([ymd, adj.round(4)]).tolist(), separators=(",", ":")).encode()
+    _check(f"yahoo/adj/{symbol}/{start}_{through}", frozen, f"{YAHOO}{symbol}")
+    assert len(base["date"]) >= len(ymd) - 1
+    return {"date": ymd, "adj": adj, "open": op, "close": cl}
+
+
 SHILLER = "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
 
 

@@ -104,6 +104,10 @@
    "at": "2026-11-04",
    "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
   },
+  "riskparity_part32|yahoo/etf_panel_excess": {
+   "at": "2026-11-04",
+   "code_sha256": "3e155763f60eb679cec438a93f210497841e1fc0bc13d1873866693d78ebfe5b"
+  },
   "sestm_fomc_drift_part28|fred/dgs2_fomc_5day_drift": {
    "at": "2026-11-04",
    "code_sha256": "9ad2cca57ae0219d9768adea318562184d10ea15ff9c73e734596e942c6ae76f"
@@ -115,6 +119,10 @@
   "stw_best_rule_part26|kenfrench/rf_daily": {
    "at": "2026-11-04",
    "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686"
+  },
+  "trend_part32|yahoo/etf_panel_excess": {
+   "at": "2026-11-04",
+   "code_sha256": "e36d6a8d927c145ff9372a82cd6fb46a238ad3d587a8e110700f9058e912a054"
   },
   "zoo_equal_weight_part25|osap/2024.10/PredictorLSretWide": {
    "at": "2026-11-04",
@@ -631,6 +639,15 @@
    },
    "trials": 1
   },
+  "riskparity_part32": {
+   "code_sha256": "3e155763f60eb679cec438a93f210497841e1fc0bc13d1873866693d78ebfe5b",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "inverse vol within class, equal risk across, levered to 10% on a 252-day covariance, cap 4x",
+    "universe": "SPY, EFA, EEM, TLT, IEF, TIP, LQD, HYG, GLD, DBC"
+   },
+   "trials": 2
+  },
   "sestm_fomc_drift_part28": {
    "code_sha256": "9ad2cca57ae0219d9768adea318562184d10ea15ff9c73e734596e942c6ae76f",
    "params": {
@@ -698,6 +715,16 @@
     "selected_on": "1926-07..1986-12, max Sharpe of 10,000 rules"
    },
    "trials": 10000
+  },
+  "trend_part32": {
+   "code_sha256": "e36d6a8d927c145ff9372a82cd6fb46a238ad3d587a8e110700f9058e912a054",
+   "params": {
+    "rebalance": "monthly",
+    "signal": "sign of the 252-day excess return",
+    "sizing": "40%/ex-ante EWMA vol (com 60) per asset, book scaled to 10%",
+    "universe": "23 ETFs, five classes"
+   },
+   "trials": 6
   },
   "turn_of_month_event": {
    "code_sha256": "e16540a4048fd28a988617f1d372c42952b84061aec9406cbfb22881aeff568d",
@@ -933,6 +960,12 @@
    "first": 20210101,
    "last": 20230901,
    "n": 33
+  },
+  "yahoo/etf_panel_excess": {
+   "digest": "60edcf005c336e22e5f1ce682d5e8d9162589f5bf5e77b60780d060496f4df84",
+   "first": 20210104,
+   "last": 20251128,
+   "n": 1233
   }
  }
 }
