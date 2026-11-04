@@ -19,6 +19,7 @@ SCENES = [
     ("s14_crisis", "Crisis", "13. March 2020"),
     ("s17_industry", "Industry", "14. Industry: the tails in the rulebooks"),
     ("s18_frontier", "Frontier", "15. Frontier: the facts as a test"),
+    ("s19_research", "Research", "For the researcher: the variance ratio's law"),
     ("s15_house", "House", "16. The House opens"),
     ("s16_outro", "Outro", "Recap, desk questions, problems"),
 ]

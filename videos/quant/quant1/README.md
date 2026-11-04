@@ -61,10 +61,11 @@ are labeled on screen.
 * **13. March 2020.** The crisis file: the US market on 16 March 2020 (−12.0%, 8.7σ against its own past year;
   3×10¹⁵ years under a bell curve, about 23 under the fitted tail) and Bitcoin on 12 March (−39.5%, 13.9σ; about 12
   years under its own tail).
+* **For the researcher: the variance ratio's law.** The proof of Lo and MacKinlay's iid limit $\sqrt n(\mathrm{VR}(q) - 1) \Rightarrow N(0, 2(2q-1)(q-1)/(3q))$ from Bartlett's theorem; the martingale-difference version with $\delta_k = E[\varepsilon_t^2\varepsilon_{t-k}^2]/\sigma^4$ and the robust $z^*$. Simulation (2,000 paths of 1,500 returns): under GARCH(1,1) $(0.05, 0.12, 0.86)$ the iid $z$ rejects a true walk 14–17% of the time (22–26% with $t_5$ shocks), $z^*$ 5–6%; the iid $z$'s standard deviation is 1.47. $\delta_1$ is 4.5 in theory, estimated at 3.0 from 400,000 returns because $\hat\delta_k$ needs an eighth moment the model lacks. Power of $z^*$ at $q = 4$: 22%, 65%, 98% for $\rho$ = 0.05, 0.1, 0.2. Chapter 4's data with both: small stocks 1962–85 $z$ 15.0, $z^*$ 10.8; 1986–2020 8.6 against 3.7. Three open problems.
 * **14. The House opens.** The data layer; rule 1, point in time; rule 2, the sealed envelope (research to 2020,
   2021–2025 sealed with recorded SHA-256 digests in [`../data/envelope.json`](../data/envelope.json)); the trial
   counter at 0.
-* **Recap, desk questions, problems.** Ten lines; three desk questions; five problems; where this comes back;
+* **Recap, desk questions, problems.** Ten lines; three desk questions; seven problems (two at qualifying-exam level); where this comes back;
   references; the House and the series map.
 
 ## Build it
@@ -117,6 +118,36 @@ The Martin–Nagel item (`nagel`) is the slow one: 300 simulated markets, about 
    growth falls back to the unlevered level at L = 2L* − 1 ≈ 4.2 and is negative beyond (μ − r + √((μ − r)² + 2rσ²))/σ²
    ≈ 5.6. Real funds pay fees and borrow above the bill rate, which moves the peak down.
 
+6. **(qual) The variance ratio's law.** Chapter 4's identity gives $\mathrm{VR}(q) - 1 = 2\sum_{k<q}(1 - k/q)\hat\rho_k
+   + O_p(1/n)$. For iid increments with $E\varepsilon^4 < \infty$, Bartlett's theorem gives $\sqrt n(\hat\rho_1, \dots,
+   \hat\rho_{q-1}) \Rightarrow N(0, I)$ (the products $\varepsilon_t\varepsilon_{t-k}$ are uncorrelated across $k$ with
+   variance $\sigma^4$; a martingale CLT and Slutsky handle the demeaning and the denominator). A fixed linear combination
+   is normal with variance $4\sum_{k=1}^{q-1}(1 - k/q)^2 = \tfrac{4}{q^2}\sum_{j=1}^{q-1}j^2 = \tfrac{2(q-1)(2q-1)}{3q}$.
+7. **(qual) GARCH's fourth moments.** $\delta_k = E[\varepsilon_t^2\varepsilon_{t-k}^2]/\sigma^4 = 1 +
+   \operatorname{cov}(\varepsilon_t^2, \varepsilon_{t-k}^2)/\sigma^4 = 1 + (\kappa - 1)\rho_k$, with $\rho_k$ the
+   autocorrelation of $\varepsilon^2$. GARCH(1,1) makes $\varepsilon_t^2$ an ARMA(1,1),
+   $\varepsilon_t^2 = \omega + (\alpha + \beta)\varepsilon_{t-1}^2 + v_t - \beta v_{t-1}$ with $v_t = \varepsilon_t^2 -
+   \sigma_t^2$, so $\rho_1 = \alpha(1 - \alpha\beta - \beta^2)/(1 - 2\alpha\beta - \beta^2)$ and $\rho_k =
+   (\alpha + \beta)^{k-1}\rho_1$; with normal shocks $\kappa = 3(1 - (\alpha + \beta)^2)/(1 - (\alpha + \beta)^2 -
+   2\alpha^2)$. For $(0.05, 0.12, 0.86)$: $\kappa = 11.0$, $\rho_1 = 0.349$, $\delta_1 = 4.49$. The variance of
+   $\hat\delta_k$ involves $E\varepsilon^8$, finite iff $E(\beta + \alpha z^2)^4 < 1$; here
+   $\beta^4 + 4\beta^3\alpha + 18\beta^2\alpha^2 + 60\beta\alpha^3 + 105\alpha^4 = 1.155$, so it is infinite: the
+   estimate converges, but slowly and not at rate $\sqrt n$.
+
+## For the researcher
+
+* **The theorem** (the research chapter) is Lo and MacKinlay (1988), Theorems 1–3: the iid limit, and the
+  heteroskedasticity-consistent limit under a martingale difference satisfying their Assumption H4,
+  $E[\varepsilon_t^2\varepsilon_{t-j}\varepsilon_{t-k}] = 0$ for $j \ne k$, which is what makes the autocorrelations
+  asymptotically uncorrelated.
+  Asymmetric GARCH (leverage) can violate it; then the covariances between $\hat\rho_j$ and $\hat\rho_k$ must be kept.
+* **Simplifications.** The video drops the $O_p(1/n)$ bias terms (the House's implementation keeps Lo and MacKinlay's
+  small-sample corrections) and treats $\hat\delta_k$ as consistent; it is, under a finite eighth moment.
+* **Reading.** Bartlett (1946); Lo and MacKinlay (1988, 1989); Richardson and Stock (1989); Chow and Denning (1993);
+  Davis and Mikosch (1998); Choi (1999); Kim (2006); Charles and Darné (2009), a survey.
+* **Open problems.** Variance-ratio inference with infinite fourth moments; horizons that grow with the sample;
+  choosing $q$ without a multiple-testing penalty.
+
 ## Data and reproducibility
 
 * Kenneth French's data library: the daily Fama–French factors (the market is Mkt−RF + RF) and the daily
@@ -166,3 +197,18 @@ The Martin–Nagel item (`nagel`) is the slow one: 300 simulated markets, about 
    L* = (μ − r)/σ²，即凯利杠杆，g(L*) = r + (μ − r)²/(2σ²)。用1926–2020年的日数据：μ = 10.6%，r = 3.0%，σ = 17.1%，
    L* = 2.62，g(L*) = 13.0%，而L = 1时为9.2%；L ≈ 4.2时增长率回落到不加杠杆的水平，约5.6倍以上为负。
    真实基金要付费用，借款利率高于国库券利率，会把峰值往下推。
+
+6. **（资格考试）方差比的极限分布。** 由第4章的恒等式，$\mathrm{VR}(q) - 1 = 2\sum_{k<q}(1 - k/q)\hat\rho_k + O_p(1/n)$。
+   增量独立同分布且四阶矩有限时，巴特利特定理给出$\sqrt n(\hat\rho_1, \dots, \hat\rho_{q-1}) \Rightarrow N(0, I)$；
+   固定线性组合是正态的，方差为$4\sum_{k=1}^{q-1}(1 - k/q)^2 = 2(q-1)(2q-1)/(3q)$。
+7. **（资格考试）GARCH的四阶矩。** $\delta_k = 1 + (\kappa - 1)\rho_k$，其中$\rho_k$是$\varepsilon^2$的自相关。GARCH(1,1)使
+   $\varepsilon_t^2$成为ARMA(1,1)，$\rho_1 = \alpha(1 - \alpha\beta - \beta^2)/(1 - 2\alpha\beta - \beta^2)$，$\rho_k =
+   (\alpha + \beta)^{k-1}\rho_1$；正态冲击下$\kappa = 3(1 - (\alpha + \beta)^2)/(1 - (\alpha + \beta)^2 - 2\alpha^2)$。
+   参数$(0.05, 0.12, 0.86)$时$\kappa = 11.0$，$\rho_1 = 0.349$，$\delta_1 = 4.49$。$\hat\delta_k$的方差涉及$E\varepsilon^8$，
+   它有限当且仅当$E(\beta + \alpha z^2)^4 < 1$；这里等于1.155，所以是无穷大：估计会收敛，但很慢，且不是$\sqrt n$的速度。
+
+## 写给研究者
+
+研究章节的定理是Lo与MacKinlay（1988）的定理1–3：独立同分布下的极限，以及鞅差下（要求其对称性假设H4）的异方差稳健极限。
+非对称GARCH（杠杆效应）可能违反该假设，此时必须保留$\hat\rho_j$与$\hat\rho_k$之间的协方差。开放问题：四阶矩无穷时的方差比推断；
+随样本增长的期限；在不付出多重检验代价的情况下选择$q$。

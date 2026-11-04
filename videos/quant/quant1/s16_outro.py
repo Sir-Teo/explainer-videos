@@ -25,6 +25,10 @@ PROBLEMS = [
     r"estimator. If daily returns have $\alpha = 3$, which moments exist?",
     r"A fund holds $L$ times the market, rebalanced daily, borrowing at $r$. Show its growth rate is about "
     r"$r + L(\mu - r) - \tfrac12 L^2\sigma^2$, find the best $L$, and evaluate it with chapter 2's numbers.",
+    r"(qual) For iid increments with a finite fourth moment, prove $\sqrt n(\operatorname{VR}(q) - 1) \Rightarrow "
+    r"N\big(0, 2(2q-1)(q-1)/(3q)\big)$.",
+    r"(qual) GARCH(1,1), normal shocks: show $\delta_k = 1 + (\kappa - 1)\rho_1(\alpha + \beta)^{k-1}$; for "
+    r"$(0.05, 0.12, 0.86)$ evaluate $\delta_1$ and show $\hat\delta_k$ has infinite variance.",
 ]
 
 
@@ -95,10 +99,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=23)
+        ps = problem_set(PROBLEMS, font_size=20)
         with self.voiceover(
-            "And five problems: martingales and the tower property, the lognormal means, the variance ratio, Hill's "
-            "estimator, and the leverage that maximizes growth. Solutions, in English and Chinese, are in the notes."
+            "And seven problems: martingales and the tower property, the lognormal means, the variance ratio, Hill's "
+            "estimator, the leverage that maximizes growth, and two at the level of a qualifying exam: the variance "
+            "ratio's limiting law, and the fourth moments of GARCH. Solutions, in English and Chinese, are in the "
+            "notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)

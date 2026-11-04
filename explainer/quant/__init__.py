@@ -279,6 +279,23 @@ def chapter_card(number, title: str, question: str = "", lit=(), part: int | Non
     return VGroup(g, strip)
 
 
+def research_card(title: str, question: str = "", lit=(), part: int | None = None) -> VGroup:
+    """The card of a part's research chapter (the PhD layer): like a chapter card, headed 'For the researcher'
+    instead of a chapter number, so it can join a finished part without renumbering the chapters around it."""
+    if zh():
+        head_text = (rf"第{part}部分 \textperiodcentered\ " if part else "") + "写给研究者"
+    else:
+        head_text = (rf"Part {part} \textperiodcentered\ " if part else "") + "For the researcher"
+    head = label(head_text, font_size=28, color=QC.IDEA)
+    t = label(title, font_size=50)
+    g = VGroup(head, t)
+    if question:
+        g.add(label(question, font_size=30, color=GREY_A))
+    g.arrange(DOWN, buff=0.3).shift(UP * 0.7)
+    strip = timeline(lit=lit).to_edge(DOWN, buff=1.0)
+    return VGroup(g, strip)
+
+
 def part_title(part: int, subtitle: str = "") -> VGroup:
     """The part's title card: series name, part number and title, and an optional subtitle."""
     s = label(SERIES_ZH if zh() else SERIES_EN, font_size=30, color=QC.HOUSE)

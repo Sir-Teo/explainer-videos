@@ -24,6 +24,7 @@ US stocks and Bitcoin here uses data up to that day, except the options chapter,
 * ``betting``     a fair game can't be beaten by betting systems (doubling, stopping rules); an edge from card
                   counting can (a six-deck shoe, Hi-Lo true counts);
 * ``crisis2020``  March 2020: the US market on 16 March and Bitcoin on 12 March, measured against their own tails;
+* ``vr_theory``   the research chapter: the variance ratio's asymptotic law, iid and heteroskedastic, by simulation;
 * ``envelope``    the sealed envelope: digests of the hold-out (2021 onward) of every dataset Part 1 reads.
 """
 
@@ -661,11 +662,59 @@ def compute_scorecard() -> dict:
             "garch": g["params"], "gjr": gj["params"], "n": n}
 
 
+def compute_vr_theory() -> dict:
+    """The research chapter: the variance ratio's asymptotic law under iid increments and under a heteroskedastic
+    martingale difference (Lo and MacKinlay 1988), checked by simulation: size of the iid z and the robust z*
+    under iid normal, GARCH(1,1) and GARCH with Student-t(5) shocks, and power against weekly AR(1) dependence."""
+    n, M, qs = 1500, 2000, (2, 4, 8, 16)
+    w, a, b = 0.05, 0.12, 0.86              # persistent clustering, about weekly-stock-like (alpha + beta = 0.98)
+    models = {
+        "iid": lambda rng: rng.standard_normal(n),
+        "garch": lambda rng: _sim_garch((w, a, b), n, rng),
+        "garch_t5": lambda rng: _sim_garch((w, a, b), n, rng, nu=5.0),
+    }
+    out = {"n": n, "M": M, "q": list(qs), "params": [w, a, b], "size": {}, "z_q4": {}}
+    for name, gen in models.items():
+        rej = {q: {"z": 0, "z_star": 0} for q in qs}
+        zs4, zss4 = [], []
+        for m in range(M):
+            x = gen(np.random.default_rng(7000 + m))
+            for q in qs:
+                v = stats.variance_ratio(x, q)
+                rej[q]["z"] += abs(v["z"]) > 1.96
+                rej[q]["z_star"] += abs(v["z_star"]) > 1.96
+                if q == 4:
+                    zs4.append(v["z"])
+                    zss4.append(v["z_star"])
+        out["size"][name] = {str(q): {k: rej[q][k] / M for k in ("z", "z_star")} for q in qs}
+        out["z_q4"][name] = {"z": np.histogram(zs4, 40, (-6, 6))[0], "z_star": np.histogram(zss4, 40, (-6, 6))[0],
+                             "sd_z": float(np.std(zs4)), "sd_z_star": float(np.std(zss4))}
+    # delta_k = E[e_t^2 e_{t-k}^2] / sigma^4 for the GARCH model, from one long path
+    x = _sim_garch((w, a, b), 400_000, np.random.default_rng(1))
+    d2 = (x - x.mean()) ** 2
+    out["delta"] = [float(np.mean(d2[k:] * d2[:-k]) / np.mean(d2) ** 2) for k in range(1, 16)]
+    # power against AR(1) with rho = 0.1 (the small-stock weekly autocorrelation of 1962-85 was about 0.3)
+    pw = {}
+    for rho in (0.05, 0.1, 0.2):
+        hits = 0
+        for m in range(M // 2):
+            rng = np.random.default_rng(9000 + m)
+            e = _sim_garch((w, a, b), n, rng)
+            y = np.empty(n)
+            y[0] = e[0]
+            for t in range(1, n):
+                y[t] = rho * y[t - 1] + e[t]
+            hits += abs(stats.variance_ratio(y, 4)["z_star"]) > 1.96
+        pw[str(rho)] = hits / (M // 2)
+    out["power_q4"] = pw
+    return _json(out)
+
+
 ITEMS = {"game": compute_game, "regnault": compute_regnault, "drag": compute_drag, "vr": compute_vr,
          "tails": compute_tails, "cluster": compute_cluster, "aggregation": compute_aggregation,
          "mandelbrot": compute_mandelbrot, "nagel": compute_nagel, "pq": compute_pq, "betting": compute_betting,
          "crisis2020": compute_crisis2020, "envelope": compute_envelope, "agg_theory": compute_agg_theory, "march": compute_march,
-         "industry": compute_industry,
+         "industry": compute_industry, "vr_theory": compute_vr_theory,
          "scorecard": compute_scorecard}
 
 if __name__ == "__main__":
