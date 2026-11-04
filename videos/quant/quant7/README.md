@@ -14,7 +14,7 @@ paper.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 57 minutes)
+## Chapters (about 60 minutes)
 
 * **The river under the noise.** A century of the US market's daily moves, clusters lighting up (1929–33, 1987,
   2008, 2020); pause and predict: sign or size? The autocorrelation of returns is 0.05 at lag 1 and nothing after;
@@ -104,7 +104,8 @@ paper.
 * **18. The volatility forecaster.** The module table; Rule 8; eleven models registered in this part, the series' trial
   counter at 305. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
   9.1% (1 day) → 15.3% (1 year), long run 17.6%.
-* **Recap, four desk questions, six problems, payoffs, references.**
+* **For the researcher: comparing nested forecasts.** Why Diebold–Mariano fails when one model nests another (the population differential is zero; estimation noise makes $E[\bar d] < 0$; Clark and McCracken's non-standard limit), and Clark and West's (2007) adjusted MSPE. Simulation (2,000 runs, $R$ = 100, $P$ = 200, a persistent regressor): with the null true DM rejects 0.4% at a nominal 5% (mean −0.84), CW 2.9% (−0.35); power at a slope of 0.05: 1.0% against 8.0%; at 0.1: 3.6% against 25.4%. Bitcoin's RV, recursive 2019–2020: HAR over one lag MSE ratio 1.013, DM −0.23, CW 0.82; HARQ over HAR 1.654 (March 2020), both −1.05. Three open problems.
+* **Recap, four desk questions, eight problems (two at qualifying-exam level), payoffs, references.**
 
 ## Textbook audit
 
@@ -227,6 +228,29 @@ market data (the leakage caveat on screen).
    P(W(1)² < 1) = P(|Z| < 1) ≈ 0.683, so the numerator is negative two times out of three and the distribution is
    skewed left (chapter 2's simulation: 5% point −2.89 with a constant).
 
+7. **(qual) Why DM leans small.** Under the null the big model's forecast is $\hat y_2 = \hat y_1 + g$, where the gap $g$
+   is a function of the estimated extra coefficients and the regressors at $t$, both known before the shock
+   $\varepsilon_{t+1}$. Then $e_2 = e_1 - g$ and $e_2^2 - e_1^2 = g^2 - 2ge_1$; since $E[g\,e_1] = E[g\,\varepsilon_{t+1}] +
+   E[g(\text{model 1's estimation error})] \approx 0$ to first order, $E[e_2^2 - e_1^2] \approx E[g^2] > 0$. So $E\bar d =
+   E[e_1^2 - e_2^2] < 0$: the statistic is centred below zero, and Clark and West's $f = e_1^2 - (e_2^2 - g^2)$ is centred
+   near zero.
+8. **(qual) How much.** With one extra regressor of variance $\sigma_x^2$, the recursive slope estimate at time $t$ has
+   variance $\approx \sigma^2/(t\sigma_x^2)$, so $E[g_t^2] \approx \sigma_x^2 \cdot \sigma^2/(t\sigma_x^2) = \sigma^2/t$.
+   Averaging over $t = R, \dots, R + P - 1$: $\frac{\sigma^2}{P}\sum 1/t \approx \sigma^2\ln(1 + P/R)/P$. With $R$ = 100 and
+   $P$ = 200: $1.10\sigma^2/200$ per forecast, a penalty no real gain of $R^2$ below about half a percent overcomes.
+
+**The research chapter's pause question.** DM $= -0.02/0.03 = -0.67$, favouring the small model; CW's mean is $-0.02 +
+0.05 = 0.03$, so with a similar standard error CW $\approx 1.0$: it leans to the big model, without significance.
+
+## For the researcher
+
+* **The theorems.** Diebold and Mariano (1995); West (1996) on parameter estimation error; Clark and McCracken (2001)
+  and McCracken (2007) for nested-model limits; Clark and West (2006, 2007); Giacomini and White (2006) for conditional
+  predictive ability; Hansen, Lunde and Nason (2011).
+* **Simplifications.** The simulations use squared loss and one extra regressor; CW is approximately, not exactly,
+  normal (it is mildly undersized here, 2.9%).
+* **Open problems.** Joint inference over many nested and non-nested models; method against model; non-quadratic losses.
+
 ## Data and reproducibility
 
 * Binance (data.binance.vision): BTCUSDT one-minute and daily spot candles, August 2017 to December 2020, and the
@@ -300,3 +324,11 @@ Aït-Sahalia–Jacod，Andersen等（2006）手册章节，CLM第12章，QRM，�
    由唐斯克定理T^{−1/2}x_{⌊rT⌋} ⇒ σW(r)，于是T^{−1}Σx_{t−1}ε_t ⇒ ½σ²(W(1)² − 1)，T^{−2}Σx²_{t−1} ⇒ σ²∫₀¹W(r)²dr；由连续映射，
    T(ρ̂ − 1) ⇒ ½(W(1)² − 1)/∫W²。由于W(1) ~ N(0, 1)，P(W(1)² < 1) = P(|Z| < 1) ≈ 0.683，所以分子三次中有两次为负，分布左偏
    （第2章的模拟：带常数项时5%分位点为−2.89）。
+7. **（资格考试）为什么DM偏向小模型。** 原假设下$\hat y_2 = \hat y_1 + g$，$g$在冲击之前已知；$e_2^2 - e_1^2 = g^2 - 2ge_1$，一阶近似下
+   $E[ge_1] \approx 0$，所以$E[e_2^2 - e_1^2] \approx E[g^2] > 0$：统计量中心低于零，而克拉克–韦斯特的$f = e_1^2 - (e_2^2 - g^2)$中心接近零。
+8. **（资格考试）偏多少。** 一个额外回归变量时，$E[g_t^2] \approx \sigma^2/t$；在$t = R, \dots, R + P - 1$上平均得约$\sigma^2\ln(1 + P/R)/P$。
+
+## 写给研究者
+
+迪博尔德–马里亚诺（1995）；参数估计误差（West 1996）；嵌套模型极限（Clark与McCracken 2001；McCracken 2007）；Clark与West（2006、2007）；
+条件预测能力（Giacomini与White 2006）；模型置信集（Hansen、Lunde与Nason 2011）。开放问题：多个嵌套与非嵌套模型的联合推断；方法与模型之辨；非二次损失。

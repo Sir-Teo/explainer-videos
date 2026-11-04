@@ -32,8 +32,8 @@ PROBLEMS = [
     r"cross-sectional variance of $x$, and that pooled OLS without them averages the within and between slopes.",
     r"Show that the iid bootstrap variance of $\sqrt n\,\bar x^*$ is $\hat\Gamma_0$, and that moving blocks of "
     r"length $\ell$ give approximately a Bartlett-weighted long-run variance.",
-    r"(qual) For a driftless random walk, use the functional CLT and continuous mapping to show $T(\hat\rho - 1) "
-    r"\Rightarrow \tfrac12(W(1)^2 - 1)/\int_0^1 W^2$ (no intercept).",
+    r"(qual) With $\rho = 1 + c/T$, show $T(\hat\rho - \rho) \Rightarrow \int_0^1 J_c\,dW/\int_0^1 J_c^2$, $dJ_c = cJ_c\,dt + dW$ "
+    r"(no intercept), from the FCLT for near-integrated processes.",
     r"(qual) With $\phi = -1$ and $\rho = 1$, show $t_{\hat\beta} = -\tau_{DF}$, and use Chapter 5's simulation tools to "
     r"estimate the size of a nominal 5\% one-sided test.",
 ]
@@ -167,7 +167,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "And nine problems: the cost of overlap, Stambaugh's bias derived, the Sharpe ratio's standard error, "
             "Holm against Bonferroni, the James-Stein estimator, the within and between decomposition of chapter four, "
-            "why the iid bootstrap forgets dependence, and two at the level of a qualifying exam: the Dickey-Fuller limit, "
+            "why the iid bootstrap forgets dependence, and two at the level of a qualifying exam: the local-to-unity limit, "
             "and the predictive t-test at a unit root. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))

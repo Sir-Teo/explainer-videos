@@ -210,6 +210,28 @@ def diebold_mariano(loss_a, loss_b, lags: int = 5) -> dict:
     return {"mean_diff": float(d.mean()), "t": float(t), "p": float(2 * norm.sf(abs(t)))}
 
 
+def clark_west(y, f_small, f_big, lags: int = 0) -> dict:
+    """Clark and West's (2007) test of a small model nested in a big one: the big model's squared error is adjusted
+    by (f_small - f_big)^2, the noise its extra, estimated parameters add under the null, and the mean of
+    e_small^2 - (e_big^2 - (f_small - f_big)^2) is tested one-sided with a Newey-West variance.  Positive t: the big
+    model is better.  Also returns the unadjusted Diebold-Mariano t in the same direction."""
+    y, a, b = (np.asarray(v, float) for v in (y, f_small, f_big))
+    ok = np.isfinite(y) & np.isfinite(a) & np.isfinite(b)
+    y, a, b = y[ok], a[ok], b[ok]
+    e1, e2 = y - a, y - b
+    out = {}
+    for key, d in (("cw", e1 ** 2 - (e2 ** 2 - (a - b) ** 2)), ("dm", e1 ** 2 - e2 ** 2)):
+        n = len(d)
+        dc = d - d.mean()
+        v = dc @ dc / n
+        for k in range(1, lags + 1):
+            v += 2 * (1 - k / (lags + 1)) * (dc[k:] @ dc[:-k]) / n
+        out[key] = float(d.mean() / np.sqrt(v / n))
+    from scipy.stats import norm
+    return {"t_cw": out["cw"], "t_dm": out["dm"], "p_cw": float(norm.sf(out["cw"])), "p_dm": float(norm.sf(out["dm"])),
+            "n": int(len(y))}
+
+
 # ---------------------------------------------------------------------------
 def acf(x, lags: int = 20) -> np.ndarray:
     x = np.asarray(x, float) - np.mean(x)

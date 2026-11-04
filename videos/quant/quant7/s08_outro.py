@@ -32,6 +32,10 @@ PROBLEMS = [
     r"signal-to-noise ratio.",
     r"For a random walk with $x_0 = 0$, show that $T(\hat\rho - 1) \Rightarrow \tfrac12(W(1)^2 - 1)/\int_0^1 W^2$, "
     r"and that $\Pr(W(1)^2 < 1) \approx 0.68$.",
+    r"(qual) Nested models, squared loss, the extra slope zero: show $\mathbb E[e_2^2 - e_1^2] \approx \mathbb E[(\hat y_1 - "
+    r"\hat y_2)^2] > 0$, so DM is centred below zero.",
+    r"(qual) One extra regressor, recursive OLS from $R$: show the mean squared forecast gap over $P$ forecasts is about "
+    r"$\sigma^2\ln(1 + P/R)/P$.",
 ]
 
 
@@ -113,12 +117,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=23)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And six problems: GARCH's term structure and half-life, GARCH as an ARMA model for squared returns, the "
+            "And eight problems: GARCH's term structure and half-life, GARCH as an ARMA model for squared returns, the "
             "bias that noise adds to realized variance and the optimal sampling rate, why QLIKE ranks forecasts "
-            "correctly, the Kalman gain, and the Dickey-Fuller limit. Solutions, in English and Chinese, are in the "
-            "notes."
+            "correctly, the Kalman gain, the Dickey-Fuller limit, and two at the level of a qualifying exam: why "
+            "Diebold and Mariano's test leans towards the smaller nested model, and by how much. Solutions, in English "
+            "and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)

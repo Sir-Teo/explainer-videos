@@ -1343,7 +1343,68 @@ def compute_house_fc() -> dict:
                   "us_long": float(np.sqrt(p[0] / (1 - g["persistence"]) * 252)), "us_date": int(d[-1])})
 
 
-ITEMS = {"daily": compute_daily, "spurious": compute_spurious, "coint": compute_coint, "regimes": compute_regimes, "garch": compute_garch,
+def compute_nested_theory() -> dict:
+    """The research chapter: comparing nested forecasts.  Under the null that the small model is right, the big
+    model's extra parameters only add estimation noise, so the Diebold-Mariano statistic is centred below zero and its
+    one-sided test is undersized; Clark and West's adjusted MSPE restores the size.  Recursive one-step forecasts with
+    R = 100 initial observations and P = 200 forecasts; then HAR against HARQ, and AR(1) against HAR, on Bitcoin's
+    realized variance, recursive from 2019."""
+    rng = np.random.default_rng(707)
+    R, P, M = 100, 200, 2000
+    res = {}
+    for b_true in (0.0, 0.05, 0.10):
+        dm, cw = [], []
+        for _ in range(M):
+            n = R + P + 1
+            x = np.zeros(n)
+            e = rng.standard_normal(n)
+            for t_ in range(1, n):
+                x[t_] = 0.9 * x[t_ - 1] + np.sqrt(1 - 0.81) * rng.standard_normal()
+            y = np.r_[0.0, b_true * x[:-1] + e[1:]]
+            fs, fb, yy = [], [], []
+            for t_ in range(R, R + P):
+                Y, X = y[1:t_ + 1], x[:t_]
+                fs.append(Y.mean())
+                A = np.column_stack([np.ones(len(X)), X])
+                c = np.linalg.lstsq(A, Y, rcond=None)[0]
+                fb.append(c[0] + c[1] * x[t_])
+                yy.append(y[t_ + 1])
+            o = vol.clark_west(yy, fs, fb)
+            dm.append(o["t_dm"])
+            cw.append(o["t_cw"])
+        dm, cw = np.asarray(dm), np.asarray(cw)
+        res[str(b_true)] = {"dm_reject": float(np.mean(dm > 1.645)), "cw_reject": float(np.mean(cw > 1.645)),
+                            "dm_mean": float(dm.mean()), "cw_mean": float(cw.mean()),
+                            "dm_hist": np.histogram(dm, 40, (-5, 5))[0], "cw_hist": np.histogram(cw, 40, (-5, 5))[0]}
+    out = {"R": R, "P": P, "M": M, "sim": res}
+    # Bitcoin's daily realized variance: recursive one-step forecasts through 2020, the first made in January 2019
+    rz = load("realized")
+    ymd, rv, rq = (np.asarray(rz[k]) for k in ("ymd", "rv", "rq"))
+    keep = ymd < 20210101
+    ymd, rv, rq = ymd[keep], rv[keep], rq[keep]
+    X0, y0 = vol._har_design(rv, None)
+    Xq, _ = vol._har_design(rv, rq)
+    dates = ymd[22:]
+    start = int(np.searchsorted(dates, 20190101))
+    pairs = {"AR1_vs_HAR": (X0[:, :1], X0), "HAR_vs_HARQ": (X0, Xq)}
+    app = {}
+    for k, (Xs, Xb) in pairs.items():
+        fs, fb, yy = [], [], []
+        for t_ in range(start, len(y0)):
+            for X_, lst in ((Xs, fs), (Xb, fb)):
+                A = np.column_stack([np.ones(t_), X_[:t_]])
+                c = np.linalg.lstsq(A, y0[:t_], rcond=None)[0]
+                lst.append(float(np.r_[1.0, X_[t_]] @ c))
+            yy.append(y0[t_])
+        o = vol.clark_west(yy, fs, fb, lags=5)
+        e1, e2 = np.asarray(yy) - fs, np.asarray(yy) - fb
+        app[k] = {**o, "mse_ratio": float(np.mean(e2 ** 2) / np.mean(e1 ** 2))}
+    out["btc"] = app
+    out["btc_first"], out["btc_last"] = int(dates[start]), int(dates[-1])
+    return _json(out)
+
+
+ITEMS = {"nested_theory": compute_nested_theory, "daily": compute_daily, "spurious": compute_spurious, "coint": compute_coint, "regimes": compute_regimes, "garch": compute_garch,
          "dcc": compute_dcc, "realized": compute_realized, "har": compute_har, "race": compute_race, "scaling": compute_scaling,
          "envelope": compute_envelope, "acf_arma": compute_acf_arma, "unitroot": compute_unitroot,
          "johansen": compute_johansen, "regimes_em": compute_regimes_em, "kalman": compute_kalman,

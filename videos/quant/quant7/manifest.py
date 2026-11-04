@@ -21,6 +21,7 @@ SCENES = [
     ("s19_frontier", "Frontier", "15. Foundation models and the frontier"),
     ("s06_march", "March", "16. March 2020"),
     ("s20_industry", "Industry", "17. Industry: volatility forecasting for money"),
+    ("s21_research", "Research", "For the researcher: comparing nested forecasts"),
     ("s07_house", "House", "18. The volatility forecaster"),
     ("s08_outro", "Outro", "Recap, desk questions, problems"),
 ]

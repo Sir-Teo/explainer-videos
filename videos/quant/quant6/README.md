@@ -240,12 +240,12 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
    mean contains ℓ − k pairs at lag k, so Var*(√n x̄*) ≈ Γ̂₀ + 2Σ_{k<ℓ}(1 − k/ℓ)Γ̂_k: a Bartlett-weighted long-run
    variance with bandwidth ℓ.
 
-8. **(qual) The Dickey–Fuller limit.** With $x_t = \sum_{s \le t}v_s$, $T(\hat\rho - 1) = \frac{T^{-1}\sum x_{t-1}v_t}
-   {T^{-2}\sum x_{t-1}^2}$. By the functional CLT, $T^{-1/2}x_{\lfloor Tr\rfloor} \Rightarrow \sigma W(r)$, so the
-   denominator tends to $\sigma^2\int_0^1 W^2$ (continuous mapping). For the numerator, $x_t^2 = x_{t-1}^2 + 2x_{t-1}v_t +
-   v_t^2$, so $\sum x_{t-1}v_t = \tfrac12(x_T^2 - \sum v_t^2)$, and $T^{-1}$ times it tends to $\tfrac12\sigma^2(W(1)^2 -
-   1)$. The two converge jointly, so $T(\hat\rho - 1) \Rightarrow \tfrac12(W(1)^2 - 1)/\int W^2$: a non-normal law with
-   most of its mass below zero (Kendall's bias, at its limit).
+8. **(qual) The local-to-unity limit.** With $x_t = \rho x_{t-1} + v_t$, $\rho = 1 + c/T$, the FCLT for near-integrated
+   processes (Bobkoski 1983; Phillips 1987) gives $T^{-1/2}x_{\lfloor Tr\rfloor} \Rightarrow \sigma J_c(r)$, the
+   Ornstein–Uhlenbeck process $dJ_c = cJ_c\,dt + dW$. Then $T(\hat\rho - \rho) = \frac{T^{-1}\sum x_{t-1}v_t}{T^{-2}\sum
+   x_{t-1}^2}$; the denominator tends to $\sigma^2\int_0^1 J_c^2$ by continuous mapping, and the numerator to
+   $\sigma^2\int_0^1 J_c\,dW$ by the weak convergence of stochastic integrals (Kurtz and Protter 1991), jointly. At $c =
+   0$ this is the Dickey–Fuller limit of Part 7's problem.
 9. **(qual) The unit-root $t$.** With $\phi = -1$, $u = -(\sigma_u/\sigma_v)v$, so $\hat\beta - \beta =
    -(\sigma_u/\sigma_v)(\hat\rho - \rho)$ and the residual variances scale identically: $t_{\hat\beta} = -\tau_{DF}$
    at $\rho = 1$. The test rejects when $\tau_{DF} < -1.645$; for the Dickey–Fuller law with an intercept that is
@@ -346,9 +346,9 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 7. **独立同分布自助法忘掉相依。** 每个x*_i从样本中均匀独立抽取，Var*(√n x̄*) = Γ̂₀；长度为ℓ的移动区块给出约Γ̂₀ + 2Σ_{k<ℓ}(1 − k/ℓ)Γ̂_k，
    即带宽为ℓ的巴特利特加权长期方差。
 
-8. **（资格考试）迪基–富勒极限。** 由泛函中心极限定理与连续映射，分母$T^{-2}\sum x_{t-1}^2 \to \sigma^2\int W^2$；由$\sum x_{t-1}v_t =
-   \tfrac12(x_T^2 - \sum v_t^2)$，分子$T^{-1}\sum x_{t-1}v_t \to \tfrac12\sigma^2(W(1)^2 - 1)$；两者联合收敛，故$T(\hat\rho - 1)
-   \Rightarrow \tfrac12(W(1)^2 - 1)/\int W^2$。
+8. **（资格考试）局部单位根极限。** 对$\rho = 1 + c/T$，近单位根过程的泛函中心极限定理给出$T^{-1/2}x_{\lfloor Tr\rfloor} \Rightarrow
+   \sigma J_c(r)$，即奥恩斯坦–乌伦贝克过程；分母趋于$\sigma^2\int J_c^2$，分子由随机积分的弱收敛趋于$\sigma^2\int J_c\,dW$，两者联合收敛。
+   $c = 0$时就是第7部分习题中的迪基–富勒极限。
 9. **（资格考试）单位根下的t。** $\phi = -1$时$t_{\hat\beta} = -\tau_{DF}$；检验在$\tau_{DF} < -1.645$时拒绝，对带截距的迪基–富勒
    分布约为46%。
 
