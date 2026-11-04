@@ -86,7 +86,7 @@ class Band(VoiceoverScene):
                 cmath(r"\hat\sigma^2", r"=", r"\sigma^2\Big(1 + \sqrt{2/\pi}\,\frac{k}{\sigma\sqrt{\Delta t}}\Big)",
                       font_size=40, colors={r"\hat\sigma^2": GOOD}),
                 cmath(r"\sigma\sqrt{\Delta t} = 0.0105", r"\Rightarrow",
-                      r"\text{Le} = 0.76,\ \ \hat\sigma = 26.6\%\ \text{at}\ c = 0.5\%", font_size=38,
+                      r"\text{Le} = 0.76,\ \ \hat\sigma = 26.5\%\ \text{at}\ c = 0.5\%", font_size=38,
                       colors={r"\Rightarrow": WHITE})]
         whys = [why(r"between rebalances the delta moves by about $\Gamma\,\Delta S$, and $|N(0,1)|$ has mean "
                     r"$\sqrt{2/\pi}$: the shares traded each time, in money"),
@@ -95,7 +95,7 @@ class Band(VoiceoverScene):
                     r"does, so a short option is priced and hedged as if volatility were higher"),
                 why(r"this part's setting: daily rebalancing at 20\% volatility. Leland's number is large, so the "
                     r"correction is large")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.42, edge=6.9)
         with self.voiceover(
             "What would theory have said? Two classical answers. The first is Hayne Leland's, from 1985. Between "
             "rebalances the delta moves by about gamma times the price move, so the money traded each time is gamma "
@@ -132,7 +132,7 @@ class Band(VoiceoverScene):
                 why(r"risk grows like $h^2$, cost falls like $1/h$: balance them"),
                 why(r"the band. A cube root: double the cost and it widens by $2^{1/3} \approx 1.26$, not 2. Widest where "
                     r"gamma is largest; it is the House's \texttt{quoting.ww\_band}")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.5, edge=6.9)
         with self.voiceover(
             "The second answer is Whalley and Wilmott's. A gap epsilon between holding and delta costs, under "
             "exponential utility, half the risk aversion times its variance. <bookmark mark='a'/> Keep the gap inside "
