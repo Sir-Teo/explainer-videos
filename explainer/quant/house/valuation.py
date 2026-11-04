@@ -258,3 +258,29 @@ def beneish_m(ratios: dict) -> float:
     """Beneish (1999): M = -4.84 + 0.920 DSRI + 0.528 GMI + 0.404 AQI + 0.892 SGI + 0.115 DEPI - 0.172 SGAI
     + 4.679 TATA - 0.327 LVGI; above -1.78 the firm is flagged."""
     return float(BENEISH["const"] + sum(BENEISH[k] * ratios[k] for k in BENEISH if k != "const"))
+
+
+def ohlson_value(book: float, xa: float, nu: float, omega: float, gamma: float, rate: float) -> dict:
+    """Ohlson's (1995) linear information dynamics: abnormal earnings x^a_{t+1} = omega x^a_t + nu_t + e1 and other
+    information nu_{t+1} = gamma nu_t + e2, with clean surplus.  Then the residual-income value is linear in the
+    state: P = b + a1 x^a + a2 nu, a1 = omega/(R - omega), a2 = R/((R - omega)(R - gamma)), R = 1 + r."""
+    R = 1 + rate
+    a1 = omega / (R - omega)
+    a2 = R / ((R - omega) * (R - gamma))
+    return {"value": float(book + a1 * xa + a2 * nu), "a1": float(a1), "a2": float(a2)}
+
+
+def ohlson_monte_carlo(book: float, xa: float, nu: float, omega: float, gamma: float, rate: float, n: int = 20000,
+                       horizon: int = 400, sd1: float = 1.0, sd2: float = 0.5, seed: int = 0) -> float:
+    """The same value by brute force: simulate the dynamics and average b + sum_t R^-t x^a_t (residual income)."""
+    rng = np.random.default_rng(seed)
+    R = 1 + rate
+    x = np.full(n, float(xa))
+    v = np.full(n, float(nu))
+    total = np.zeros(n)
+    disc = 1.0
+    for _ in range(horizon):
+        x, v = omega * x + v + sd1 * rng.standard_normal(n), gamma * v + sd2 * rng.standard_normal(n)
+        disc /= R
+        total += disc * x
+    return float(book + total.mean())

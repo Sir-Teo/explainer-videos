@@ -31,6 +31,10 @@ PROBLEMS = [
     r"With $\rho = 0.96$ and a dividend yield whose AR(1) persistence is $\phi = 0.95$, a one-year return slope "
     r"$b_r = 0.05$ and dividend-growth slope $b_d = -0.03$: check the Campbell--Shiller identity and give the long-run "
     r"shares.",
+    r"(qual) From the dividend discount model and clean surplus, prove $P_t = b_t + \sum_{\tau \ge 1}R^{-\tau}\mathbb E_t "
+    r"x^a_{t+\tau}$; state the transversality condition it needs.",
+    r"(qual) Under Ohlson's dynamics with $\nu = 0$, show $P_t = (1 - k)b_t + k(\varphi x_t - d_t)$ with $k = r\omega/(R - "
+    r"\omega)$, $\varphi = R/r$.",
 ]
 
 
@@ -109,11 +113,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems: the P/E from Gordon's model, a discounted cash flow, Modigliani and Miller with taxes, Merton's "
-            "model of equity and debt, overlapping windows, a project with two internal rates of return, and the Campbell–Shiller "
-            "identity. Solutions, in English and Chinese, are in the notes."       ):
+            "And nine problems: the P/E from Gordon's model, a discounted cash flow, Modigliani and Miller with taxes, Merton's "
+            "model of equity and debt, overlapping windows, a project with two internal rates of return, the Campbell–Shiller "
+            "identity, and two at the level of a qualifying exam: residual income from clean surplus, and Ohlson's value as "
+            "a blend of book and capitalised earnings. Solutions, in English and Chinese, are in the notes."       ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
         self.clear_scene()

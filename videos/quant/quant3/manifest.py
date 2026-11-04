@@ -22,5 +22,6 @@ SCENES = [
     ("s10_crisis", "Crisis", "16. When the statements lie"),
     ("s19_industry", "Industry", "17. Who values firms for a living"),
     ("s20_frontier", "Frontier", "18. Frontier: machines reading the statements"),
+    ("s21_research", "Research", "For the researcher: Ohlson's information dynamics"),
     ("s12_outro", "Outro", "Recap, desk questions, problems"),
 ]

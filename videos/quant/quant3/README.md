@@ -14,7 +14,7 @@ are labelled as allegations, and settlements without admission are said to be so
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 60 minutes)
+## Chapters (about 64 minutes)
 
 * **What is a share a claim on?** Shiller (1981) rebuilt on screen: p\* by the backward recursion
   p\*ₜ = (p\*ₜ₊₁ + Dₜ)/(1 + r), 1871–2020, at the average real return (8.3%). The price moves 8× as much as p\* from
@@ -105,6 +105,7 @@ are labelled as allegations, and settlements without admission are said to be so
   items, 3 pure noise; losses persist 0.4, profits 0.8): test MSE ×10⁻⁴ — random walk 16.23, OLS 13.24, ridge on
   splines 13.18, MLP (2×16, 5 seeds) 13.18 (seed range 13.15–13.22), noise floor 12.50. The MLP does not beat OLS by
   more than its seed spread. Replayed through 22 checkpoints with the seed band.
+* **For the researcher: Ohlson's information dynamics.** Clean surplus, abnormal earnings and Ohlson's (1995) linear information dynamics; the value $P = b + \alpha_1x^a + \alpha_2\nu$ with $\alpha_1 = \omega/(R - \omega)$, $\alpha_2 = R/((R - \omega)(R - \gamma))$ derived, and checked against a 20,000-path Monte Carlo (e.g. 150.00 against 149.84 at $\omega = 0.9$, $\gamma = 0.6$). Price-to-book for a 5% abnormal ROE: 1.00 at $\omega = 0$, 1.07 at 0.62, 1.63 at 1. EDGAR XBRL frames, fiscal 2010–2020: 32,994 firm-years of 6,209 filers; pooled $\hat\omega = 0.83$ (±0.01), 0.54 above the cost of equity and 0.92 below it (Dechow, Hutton and Sloan 1999: 0.62). Three open problems.
 * **Recap, desk questions, problems,** the House, payoffs, references.
 
 ## Build it
@@ -219,6 +220,18 @@ extension.
    linearisation's error. Long-run slopes: b_r/(1 − ρφ) = 0.05/0.088 = 0.57 and b_d/(1 − ρφ) = −0.34; their difference,
    0.91, is the share of the yield's variance explained, with returns carrying about 0.57/0.91 ≈ 63% of it.
 
+8. **(qual) Residual income from clean surplus.** Clean surplus gives $d_t = x_t - (b_t - b_{t-1}) = x^a_t + Rb_{t-1} -
+   b_t$. Then $\sum_{\tau=1}^{T}R^{-\tau}d_{t+\tau} = \sum_{\tau=1}^{T}R^{-\tau}x^a_{t+\tau} + b_t - R^{-T}b_{t+T}$
+   (the book terms telescope). Taking expectations and letting $T \to \infty$, $P_t = b_t + \sum_{\tau \ge 1}R^{-\tau}
+   E_tx^a_{t+\tau}$ provided $R^{-T}E_tb_{t+T} \to 0$: book may not grow as fast as the discount rate forever.
+9. **(qual) Ohlson's blend.** With $\nu = 0$, $P = b + \frac{\omega}{R - \omega}(x - rb_{t-1})$, and clean surplus gives
+   $b_{t-1} = b_t - x_t + d_t$, so $x - rb_{t-1} = Rx - rb - rd$. Hence $P = (1 - k)b + k(\varphi x - d)$ with $k =
+   r\omega/(R - \omega)$ and $\varphi = R/r$: a weighted average of book and capitalised earnings (net of the dividend),
+   with weight $k$ rising from 0 at $\omega = 0$ to 1 at $\omega = 1$.
+
+**The research chapter's pause question.** $R = 1.1$: $\alpha_1 = 0.7/0.4 = 1.75$, $\alpha_2 = 1.1/(0.4 \times 0.6) =
+4.58$; value $= 50 + 7.00 + 4.58 = 61.58$, of which the other information is 4.58, about 7%.
+
 ## Reading guide (beyond what is on screen)
 
 Every paper in [`READING.md`](../READING.md)'s Part 3 list appears on screen. Penman's textbook is the residual-income
@@ -242,6 +255,16 @@ is drawn from their results.
   forecaster's panel of chapter 18. Illustrative: the trade-off pie, the real option, the lease bridge.
 * Trials registered this part: the five French signals, the CAPE forecast, the 208 OSAP predictors (as one
   meta-test with 208 trials), and the forecaster's 8 configurations.
+
+
+## For the researcher
+
+* **The theorems.** Preinreich (1938), Edwards and Bell (1961) and Peasnell (1982) for residual income; Ohlson (1995) and
+  Feltham and Ohlson (1995) for linear information dynamics; Dechow, Hutton and Sloan (1999) for the estimates.
+* **Simplifications.** The video's EDGAR panel uses calendar-aligned XBRL frames (fiscal years ending within about a
+  month of the calendar year), a flat 8% cost of equity, and no "other information"; $\omega$ is estimated per dollar
+  of lagged book, which avoids a ratio of noisy scalings but is not Dechow, Hutton and Sloan's market-value deflator.
+* **Open problems.** Measuring $\nu$; nonlinear and conservative dynamics with closed forms; whether LID values price.
 
 ---
 
@@ -293,3 +316,12 @@ is drawn from their results.
 5. **重叠窗口。** 约13个独立的十年；把它们当作独立样本会把t统计量高估约√120 ≈ 11倍。第6部分推导修正方法与斯坦博偏差。
 6. **两个内部收益率。** 100x² − 230x + 132 = 0，x = 1.1或1.2：内部收益率10%和20%。15%时净现值为+0.19 > 0，应当接受。
 7. **坎贝尔–席勒。** b_r − b_d + ρφ = 0.05 + 0.03 + 0.912 = 0.992 ≈ 1（线性化误差）。长期斜率0.57与−0.34，差为0.91，其中收益率约占63%。
+8. **（资格考试）由净盈余关系推出剩余收益。** 净盈余给出$d_t = x^a_t + Rb_{t-1} - b_t$；贴现求和时账面项逐项相消，余下$b_t -
+   R^{-T}b_{t+T}$；取期望并令$T \to \infty$，在横截条件$R^{-T}E_tb_{t+T} \to 0$下得$P_t = b_t + \sum R^{-\tau}E_tx^a_{t+\tau}$。
+9. **（资格考试）奥尔森的加权形式。** $\nu = 0$时$P = b + \frac{\omega}{R - \omega}(x - rb_{t-1})$，由净盈余$x - rb_{t-1} = Rx - rb -
+   rd$，所以$P = (1 - k)b + k(\varphi x - d)$，$k = r\omega/(R - \omega)$，$\varphi = R/r$。
+
+## 写给研究者
+
+剩余收益（Preinreich 1938；Edwards与Bell 1961；Peasnell 1982）；线性信息动态（Ohlson 1995；Feltham与Ohlson 1995）；估计（Dechow、Hutton与
+Sloan 1999）。开放问题：测量$\nu$；有闭式解的非线性与稳健会计动态；LID价值能否定价。

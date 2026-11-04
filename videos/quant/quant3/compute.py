@@ -1001,12 +1001,56 @@ def compute_forecaster() -> dict:
             "n_test": len(yte), "var_y": float(yte.var())}
 
 
+def compute_ohlson_theory() -> dict:
+    """The research chapter: Ohlson's (1995) linear information dynamics.  The closed-form value against a Monte
+    Carlo of discounted abnormal earnings; the persistence omega of abnormal earnings estimated on every EDGAR filer
+    with positive book equity, fiscal 2010-2020 (net income and stockholders' equity from the XBRL frames), pooled
+    and split by sign; and what each omega implies for price-to-book."""
+    from explainer.quant.house import valuation as val
+    checks = []
+    for om, ga in ((0.0, 0.0), (0.6, 0.3), (0.9, 0.6), (0.62, 0.0)):
+        f = val.ohlson_value(100.0, 5.0, 2.0, om, ga, 0.08)
+        mc = val.ohlson_monte_carlo(100.0, 5.0, 2.0, om, ga, 0.08, n=20000, seed=int(om * 100 + ga * 10))
+        checks.append({"omega": om, "gamma": ga, "formula": f["value"], "mc": mc, "a1": f["a1"], "a2": f["a2"]})
+    r = 0.08
+    NI = {y: data.sec_frame("NetIncomeLoss", f"CY{y}") for y in range(2010, 2021)}
+    BE = {y: data.sec_frame("StockholdersEquity", f"CY{y}Q4I") for y in range(2009, 2021)}
+    rows = []
+    for y in range(2010, 2020):
+        for cik, (b0, *_rest) in BE[y - 1].items():
+            if cik not in NI[y] or cik not in NI[y + 1] or cik not in BE[y]:
+                continue
+            b1 = BE[y][cik][0]
+            if not (b0 > 1e7 and b1 > 0):
+                continue
+            xa0 = NI[y][cik][0] - r * b0
+            xa1 = NI[y + 1][cik][0] - r * b1
+            rows.append((cik, y, xa0 / b0, xa1 / b0))
+    R_ = np.array([r_[2:] for r_ in rows])
+    lo, hi = np.quantile(R_, [0.01, 0.99], axis=0)
+    R_ = np.clip(R_, lo, hi)
+    groups = np.array([r_[0] for r_ in rows])
+    pooled = econ.ols(R_[:, 1], R_[:, 0], se="cluster", groups=groups)
+    neg = R_[:, 0] < 0
+    by_sign = {}
+    for k, m in (("loss", neg), ("profit", ~neg)):
+        o = econ.ols(R_[m, 1], R_[m, 0], se="cluster", groups=groups[m])
+        by_sign[k] = {"omega": float(o["beta"][1]), "se": float(o["se"][1]), "n": int(m.sum())}
+    om = float(pooled["beta"][1])
+    pick = np.random.default_rng(3).choice(len(R_), min(2500, len(R_)), replace=False)
+    out = {"checks": checks, "r": r, "n_obs": int(len(R_)), "n_firms": int(len(set(groups))), "omega": om,
+           "omega_se": float(pooled["se"][1]), "intercept": float(pooled["beta"][0]), "by_sign": by_sign,
+           "scatter": R_[pick], "a1": om / (1 + r - om), "dhs_omega": 0.62}
+    out["pb_at_5pct"] = {str(w): 1 + w / (1 + r - w) * 0.05 for w in (0.0, 0.62, om, 0.9, 1.0)}
+    return _json(out)
+
+
 ITEMS = {"shiller": compute_shiller, "cape": compute_cape, "factors": compute_factors, "dcf": compute_dcf,
          "timevalue": compute_timevalue, "duration": compute_duration, "statements": compute_statements,
          "accruals": compute_accruals, "pit": compute_pit, "dcf_mc": compute_dcf_mc, "erp": compute_erp,
          "ri": compute_ri, "campbell_shiller": compute_campbell_shiller, "payout": compute_payout,
          "merton": compute_merton, "pead": compute_pead, "osap": compute_osap, "merger": compute_merger,
-         "mscore": compute_mscore, "forecaster": compute_forecaster, "envelope": compute_envelope}
+         "mscore": compute_mscore, "forecaster": compute_forecaster, "envelope": compute_envelope, "ohlson_theory": compute_ohlson_theory}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
