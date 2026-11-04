@@ -243,15 +243,13 @@ class Zoo(VoiceoverScene):
                           15, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3)
         fit_right(side)
-        best = max(models, key=lambda m: rows[m]["sr_ew"])
-        worst = min(models, key=lambda m: rows[m]["sr_ew"])
         with self.voiceover(
             "The results. <bookmark mark='a'/> First the R squared, out of sample, against a forecast of zero: every "
             "model is negative, between about minus one and a half and minus two and a half percent. On coins, a "
             "week is so noisy that no learner beats saying nothing. <bookmark mark='b'/> Then the portfolio: each "
             "week, buy the fifth of coins a model likes best and sell the fifth it likes least. The Sharpe ratios "
-            f"run from {self._say(rows[worst]['sr_ew'])} for {self._name(worst)} to {self._say(rows[best]['sr_ew'])} "
-            f"for {self._name(best)}. <bookmark mark='c'/> But draw the error bars. Two years of weekly tests give a "
+            "run from minus one point four for the three-layer network to about one for the boosted trees. "
+            "<bookmark mark='c'/> But draw the error bars. Two years of weekly tests give a "
             "Sharpe ratio a standard error of about seven tenths, and every bar overlaps every other and zero. This "
             "test cannot rank the zoo. That is itself the first finding."
         ) as vo:
@@ -266,25 +264,6 @@ class Zoo(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    @staticmethod
-    def _say(x):
-        words = {0: "zero", 1: "one", 2: "two", 3: "three"}
-        s = "minus " if x < 0 else ""
-        a = abs(x)
-        whole, frac = int(a), round((a - int(a)) * 10)
-        if frac == 10:
-            whole, frac = whole + 1, 0
-        return s + ("point " + ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"][frac]
-                    if whole == 0 else words.get(whole, str(whole)) + (
-                        " point " + ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"][frac]
-                        if frac else ""))
-
-    @staticmethod
-    def _name(m):
-        return {"OLS": "least squares", "OLS-3": "the three-variable regression", "ENet": "the elastic net",
-                "PCR": "principal components", "PLS": "partial least squares", "GBRT": "the boosted trees",
-                "NN1": "the one-layer network", "NN2": "the two-layer network", "NN3": "the three-layer network"}[m]
-
     def power(self, z):
         rows = [cmath(r"\operatorname{se}(\widehat{SR})", r"\approx", r"\sqrt{(1 + SR^2/2)/T_{\text{years}}}", font_size=32,
                       colors={r"\operatorname{se}(\widehat{SR})": HURDLE}),
@@ -292,7 +271,7 @@ class Zoo(VoiceoverScene):
                 cmath(r"SR_{\text{long-short}}", r"\approx", r"\sqrt{\tfrac{R^2}{1 - R^2}}\,\sqrt{N_{\text{bets}}}\,"
                       r"\sqrt{52}", font_size=32, colors={r"SR_{\text{long-short}}": NET})]
         whys = [why(r"Part 26: the Sharpe ratio's standard error from $T$ years of independent returns"),
-                why(r"two standard errors from zero: a true Sharpe ratio of 1 needs six years, of 0.5 seventeen"),
+                why(r"two standard errors from zero: a true Sharpe ratio of 1 needs six years, of 0.5 eighteen"),
                 why(r"Chapter 1's arithmetic, weekly: the long-short's Sharpe ratio scales with the square root of the "
                     r"number of independent bets; 40 coins sharing one crypto factor are far fewer than 40 bets")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.3, buff=0.5, edge=6.9)
@@ -303,7 +282,7 @@ class Zoo(VoiceoverScene):
         with self.voiceover(
             "Why can't it? <bookmark mark='a'/> A Sharpe ratio's standard error is roughly one over the square root of "
             "the years of data. <bookmark mark='b'/> To be two standard errors from zero, a true Sharpe ratio of one "
-            "needs six years, and one of a half needs seventeen. <bookmark mark='c'/> And the strategy's Sharpe ratio "
+            "needs six years, and one of a half needs eighteen. <bookmark mark='c'/> And the strategy's Sharpe ratio "
             "grows with the square root of the number of independent bets, which, for forty coins that all move with "
             "Bitcoin, is far fewer than forty. Gu, Kelly and Xiu tested on thirty years of several thousand stocks. "
             "Here there are two years of forty coins. The models are the same; the power is not. The sealed five "

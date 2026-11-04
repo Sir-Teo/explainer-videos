@@ -327,7 +327,7 @@ def _fit_zoo(name, X, y, Xv, yv, seed=0):
 
 def compute_zoo() -> dict:
     P = _panel()
-    out = {m: {"y": [], "f": [], "d": [], "qv": [], "ret": []} for m in ZOO}
+    out = {m: {"y": [], "f": [], "d": [], "qv": [], "ret": [], "coin": []} for m in ZOO}
     imp = {}
     for year in (2019, 2020):
         tr, va, te = _split(P, year)
@@ -340,6 +340,7 @@ def compute_zoo() -> dict:
             out[m]["d"].append(P["date"][te])
             out[m]["qv"].append(P["qv"][te])
             out[m]["ret"].append(P["ret"][te])
+            out[m]["coin"].append(P["coin"][te])
             if year == 2020 and m in ("NN3", "GBRT", "OLS"):
                 base = ML.r2_oos(y, f(X))
                 imp[m] = {}
@@ -351,12 +352,13 @@ def compute_zoo() -> dict:
     for m in ZOO:
         f, y = np.concatenate(out[m]["f"]), np.concatenate(out[m]["y"])
         d, qv, ret = np.concatenate(out[m]["d"]), np.concatenate(out[m]["qv"]), np.concatenate(out[m]["ret"])
+        coin = np.concatenate(out[m]["coin"])
         ew = ML.decile_spread(d, f, ret, q=QN)
         vw = ML.decile_spread(d, f, ret, q=QN, weights=qv)
         rows[m] = {"r2": ML.r2_oos(y, f), "sr_ew": B.sharpe(ew["ls"], 52), "sr_vw": B.sharpe(vw["ls"], 52),
                    "mean_ew": float(ew["ls"].mean() * 52), "mean_vw": float(vw["ls"].mean() * 52),
                    "cum_ew": np.cumsum(np.log1p(np.clip(ew["ls"], -0.99, None))), "weeks": ew["date"],
-                   "liq_split": _liq_split(d, f, ret, qv), "cost": _turnover_cost(d, f, qv),
+                   "liq_split": _liq_split(d, f, ret, qv), "cost": _turnover_cost(d, f, qv, coin),
                    "years": float(len(np.unique(d)) / 52), "coins_week": float(len(d) / len(np.unique(d)))}
     return _json({"rows": rows, "models": ZOO, "importance": imp, "features": FEATURES})
 
@@ -535,7 +537,10 @@ def compute_sdf() -> dict:
     ew = [float(P["ret"][idx].mean()) for _, _, _, idx in te]
     return _json({"sr_adv": B.sharpe(sdf_r, 52), "sr_lin": B.sharpe(lin, 52), "sr_ew": B.sharpe(ew, 52),
                   "cum_adv": np.cumsum(sdf_r), "cum_lin": np.cumsum(lin), "weeks": [w for _, _, w, _ in te],
-                  "corr": float(np.corrcoef(sdf_r, lin)[0, 1])})
+                  "corr": float(np.corrcoef(sdf_r, lin)[0, 1]), "corr_mkt_adv": float(np.corrcoef(sdf_r, ew)[0, 1]),
+                  "corr_mkt_lin": float(np.corrcoef(lin, ew)[0, 1]),
+                  "train_mkt": float(np.mean([P["ret"][idx].mean() for _, _, _, idx in tr]) * 52),
+                  "test_mkt": float(np.mean(ew) * 52)})
 
 
 def compute_toolkit() -> dict:
@@ -734,8 +739,9 @@ def _monthly_compound(dates, r):
     return np.array(out_ym), np.array(out)
 
 
-def _turnover_cost(d, f, qv, bps=10.0):
-    """Annual cost of the value-weighted quintile long-short at ``bps`` per unit of one-way turnover."""
+def _turnover_cost(d, f, qv, coin, bps=10.0):
+    """Annual cost of the value-weighted quintile long-short at ``bps`` per unit of one-way turnover: the sum over
+    coins of |w_t - w_{t-1}|, each week, positions matched by coin."""
     prev, tot, n = None, 0.0, 0
     for w in np.unique(d):
         m = d == w
@@ -744,12 +750,12 @@ def _turnover_cost(d, f, qv, bps=10.0):
         hi, lo = k == QN - 1, k == 0
         wt[hi] = qv[m][hi] / qv[m][hi].sum()
         wt[lo] = -qv[m][lo] / qv[m][lo].sum()
-        cur = dict(zip(np.flatnonzero(m), wt))
+        cur = dict(zip(coin[m].tolist(), wt))
         if prev is not None:
             keys = set(prev) | set(cur)
-            tot += sum(abs(cur.get(k_, 0) - prev.get(k_, 0)) for k_ in keys)
+            tot += sum(abs(cur.get(k_, 0.0) - prev.get(k_, 0.0)) for k_ in keys)
             n += 1
-        prev = {P_: v for P_, v in cur.items()}
+        prev = cur
     return 52 * (tot / max(n, 1)) * bps * 1e-4
 
 
@@ -780,7 +786,7 @@ def compute_envelope() -> dict:
     vw = ML.decile_spread(d[hold], fh, P["ret"][hold], q=QN, weights=P["qv"][hold])
     ew = ML.decile_spread(d[hold], fh, P["ret"][hold], q=QN)
     z = load("zoo")["rows"]["NN3"]
-    cost = _turnover_cost(d[hold], fh, P["qv"][hold])
+    cost = _turnover_cost(d[hold], fh, P["qv"][hold], P["coin"][hold])
     ym_r, mr = _monthly_compound(*_zoo_research_vw(P))
     ym_h, mh = _monthly_compound(vw["date"], vw["ls"])
     row = track.record("nn3_coin_ls_part27", 27, mr, mh, cost, note="value-weighted quintile long-short, weekly")
