@@ -29,11 +29,12 @@ class PlugIn(VoiceoverScene):
         rows = [
             cmath(r"\theta", r"=", r"T(F)", r"\qquad \text{a feature of the population's distribution}", font_size=32),
             cmath(r"\hat\theta", r"=", r"T(\hat F_n)", r"\qquad \hat F_n \text{: the sample's ECDF (Part 1)}", font_size=32),
-            cmath(r"\int x\,dF \ \to\ \bar x,\quad F^{-1}(\tfrac12) \ \to\ \text{median},\quad \int (x - \mu)^2 dF", r"\ \to\ ",
-                  r"\tfrac1n \sum (x_i - \bar x)^2", font_size=28),
+            cmath(r"\int x\,dF \ \to\ \bar x,\quad F^{-1}(\tfrac12)", r"\ \to\ ", r"\text{sample median}", font_size=30),
+            cmath(r"\int (x - \mu)^2 dF", r"\ \to\ ", r"\tfrac1n \textstyle\sum (x_i - \bar x)^2", font_size=30),
         ]
         rows[1][2].set_color(SIM)
-        whys = [why(r"a statistical functional"), why(r"plug in the empirical distribution"), why(r"every familiar summary is a plug-in")]
+        whys = [why(r"a statistical functional"), why(r"plug in the empirical distribution"), why(r"every familiar summary is a plug-in"),
+                why(r"the variance, \ with divisor $n$")]
         note_ = label(r"(the plug-in variance divides by $n$: \ chapter 2's small bias, \ which vanishes as $n$ grows)", font_size=22,
                       color=GREY_B).to_edge(DOWN, buff=0.8)
         with self.voiceover(
@@ -45,10 +46,11 @@ class PlugIn(VoiceoverScene):
             "median; the variance, the average squared deviation, with divisor n, and so a small bias that disappears "
             "as n grows."
         ) as vo:
-            step = ladder(self, rows, whys, keep=3, top=2.4, x=-2.0, buff=1.0, edge=6.9)
+            step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+            step(3, transform=False)
             self.play(FadeIn(note_))
         self.clear_scene()
 
@@ -113,19 +115,19 @@ class PlugIn(VoiceoverScene):
     def maximum(self):
         d = load("extras")["maximum"]
         ed = np.asarray(d["edges"])
-        A = axes([500, 1000], [0, 0.012], x_length=7.2, y_length=4.2, xlabel=r"the largest of 10 serial numbers, \ $1, \dots, 1000$",
-                 xticks=[500, 600, 700, 800, 900, 1000], yticks=[0, 0.005, 0.01], center=[-2.0, -0.4, 0])
+        A = axes([500, 1000], [0, 0.012], x_length=6.2, y_length=4.2, xlabel=r"the largest of 10 serial numbers, \ $1, \dots, 1000$",
+                 xticks=[500, 600, 700, 800, 900, 1000], yticks=[0, 0.005, 0.01], center=[-3.0, -0.4, 0])
         ax = A.ax
         h = hist_bars(ax, ed, np.asarray(d["hist"]), color=SIM, opacity=0.7)
         tr = DashedLine(ax.c2p(1000, 0), ax.c2p(1000, 0.012), color=EXACT, stroke_width=2.5)
         avg = DashedLine(ax.c2p(d["mean_max"], 0), ax.c2p(d["mean_max"], 0.012), color=RESID, stroke_width=2.5)
         rows = fit_rows(VGroup(
-            label(r"plug-in for $N$, \ the largest serial number: \ the sample maximum", font_size=22),
+            label(r"plug-in for $N$: \ the sample maximum", font_size=24),
             MathTex(rf"E\max = \frac{{n}}{{n + 1}}(N + 1) = {d['theory']:.0f}", font_size=28, color=RESID),
-            label(r"always too small: \ the sample can't see past its own largest value", font_size=22, color=GREY_A),
+            label(r"always too small", font_size=24, color=GREY_A),
             MathTex(rf"\max \cdot \Big(1 + \frac1n\Big) - 1:\ \text{{average }} {d['fixed_mean']:.0f}", font_size=28, color=EXACT),
             label(r"the German tank problem: \ Part 9", font_size=24, color=S.ACCENT),
-        ), 5.0, 0.3, [4.4, 0.2, 0])
+        ), 5.0, 0.3, [3.9, 0.2, 0])
         tag = simulated_tag(r"simulated: 20,000 samples of 10")
         with self.voiceover(
             "Plug-in has its limits. <bookmark mark='a'/> Suppose objects carry serial numbers one to N, and we see ten "

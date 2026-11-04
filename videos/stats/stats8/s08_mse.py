@@ -78,15 +78,15 @@ class MSE(VoiceoverScene):
         A = axes([2.5, 9], [0, 0.8], x_length=7.2, y_length=4.4, xlabel=r"divisor $c$ in $\tfrac1c \sum (x_i - \bar x)^2$, \ $n = 5$",
                  ylabel=r"$\div \sigma^4$", xticks=[3, 4, 5, 6, 7, 8, 9], yticks=[0, 0.2, 0.4, 0.6, 0.8], center=[-2.0, -0.4, 0])
         ax = A.ax
-        b2 = curve(ax, cs, np.asarray(d["bias2"]), S.RESID, 2.5)
-        vr = curve(ax, cs, np.asarray(d["var"]), SIM, 2.5)
-        ms = curve(ax, cs, np.asarray(d["mse"]), EXACT, 4)
+        b2 = pdf_curve(ax, cs, np.asarray(d["bias2"]), S.RESID, 2.5, ymax=0.8)
+        vr = pdf_curve(ax, cs, np.asarray(d["var"]), SIM, 2.5, ymax=0.8)
+        ms = pdf_curve(ax, cs, np.asarray(d["mse"]), EXACT, 4, ymax=0.8)
         leg = legend([(S.RESID, r"bias$^2$"), (SIM, r"variance"), (EXACT, r"MSE")], font_size=24).move_to([4.6, 2.0, 0])
         marks = VGroup()
         for c, lab, col in ((4, r"n - 1", SIM), (5, r"n", GREY_A), (6, r"n + 1", S.ACCENT)):
             v = d["marks"][str(c)]["mse"]
             marks.add(VGroup(Dot(ax.c2p(c, v), radius=0.08, color=col),
-                             MathTex(rf"{lab}:\ {v:.3f}", font_size=22, color=col).next_to(ax.c2p(c, v), UP, buff=0.12)))
+                             MathTex(rf"{lab}:\ {v:.3f}", font_size=22, color=col).next_to(ax.c2p(c, v), DR if c == 4 else UP, buff=0.12)))
         rows = fit_rows(VGroup(
             MathTex(r"\mathrm{MSE}(c) = \Big(\frac{n - 1}{c} - 1\Big)^2 + \frac{2(n - 1)}{c^2}", font_size=26),
             label(r"minimized at $c = n + 1$, \ not $n - 1$", font_size=24, color=S.ACCENT),

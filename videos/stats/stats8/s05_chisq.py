@@ -29,7 +29,8 @@ class ChiSq(VoiceoverScene):
         A = axes([0, 25], [0, 0.55], x_length=7.6, y_length=4.4, xlabel=r"$q$", xticks=[0, 5, 10, 15, 20, 25], yticks=[0, 0.25, 0.5],
                  center=[-2.0, -0.4, 0])
         ax = A.ax
-        cvs = VGroup(*[pdf_curve(ax, xs, np.asarray(d["pdf"][k]), c, 3, ymax=0.55) for k, c in CHI_COLS.items()])
+        keep = xs <= 25
+        cvs = VGroup(*[pdf_curve(ax, xs[keep], np.asarray(d["pdf"][k])[keep], c, 3, ymax=0.55) for k, c in CHI_COLS.items()])
         leg = legend([(c, rf"$k = {k}$") for k, c in CHI_COLS.items()], font_size=22).move_to([4.8, 1.8, 0])
         rows = fit_rows(VGroup(
             MathTex(r"\chi^2_k = Z_1^2 + \cdots + Z_k^2", font_size=30),

@@ -123,7 +123,8 @@ class Laplace(VoiceoverScene):
             MathTex(rf"\text{{SD of }} \hat N:\ {d['sd_est']:,.0f}".replace(",", "{,}"), font_size=26, color=SIM),
             MathTex(rf"\text{{average delta SE}}:\ {d['mean_se']:,.0f}".replace(",", "{,}"), font_size=26, color=S.POST),
             MathTex(rf"\hat N \pm 1.96\,\mathrm{{SE}} \text{{ covers }} {100 * d['cover']:.1f}\%", font_size=26, color=S.RESID),
-            label(r"30 towns from a Zipf island: \ a skewed ratio, \ so first order is not quite enough", font_size=20, color=GREY_A),
+            label(r"30 towns of very different sizes:", font_size=22, color=GREY_A),
+            label(r"first order is not quite enough", font_size=22, color=GREY_A),
         ), 3.6, 0.28, [5.2, -0.2, 0])
         tag = simulated_tag(r"simulated: 10,000 samples of 30 of the World's 200 towns")
         with self.voiceover(

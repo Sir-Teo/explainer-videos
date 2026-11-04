@@ -106,7 +106,7 @@ def coverage_board(rows: list[Row], lit_part: int | None = None, placeholders: i
             op = 1.0 if on else 0.45
             ach = r.achieved if r.kind == "coverage" else 1 - r.achieved
             nom = r.nominal if r.kind == "coverage" else 1 - r.nominal
-            name = label(rf"{r.method}\ \ {{\color[HTML]{{AAAAAA}}{r.setting}}}", font_size=font_size)
+            name = VGroup(label(r.method, font_size=font_size), label(r.setting, font_size=font_size, color=GREY_B)).arrange(RIGHT, buff=0.18)
             if name.width > name_w:
                 name.width = name_w
             name.move_to([x_name + name.width / 2, y, 0]).set_opacity(op)

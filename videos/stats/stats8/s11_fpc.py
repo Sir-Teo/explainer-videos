@@ -49,7 +49,7 @@ class FPC(VoiceoverScene):
         A = axes([0, 400], [0, 3.4], x_length=7.4, y_length=4.4, xlabel=r"sample size $n$ \ (population $N = 400$)",
                  ylabel=r"SE of $\bar x$ (cm)", xticks=[0, 100, 200, 300, 400], yticks=[0, 1, 2, 3], center=[-2.0, -0.4, 0])
         ax = A.ax
-        keep = ns >= 4
+        keep = ns >= 10
         wr = curve(ax, ns[keep], np.asarray(d["se_wr"])[keep], GREY_B, 2.5)
         wor = curve(ax, ns[keep], np.asarray(d["se_wor"])[keep], EXACT, 3.5)
         sims = VGroup(*[Dot(ax.c2p(n, v), radius=0.08, color=SIM) for n, v in zip(d["sim_ns"], d["sim"])])
