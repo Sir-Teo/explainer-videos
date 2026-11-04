@@ -177,9 +177,10 @@ class Normal(VoiceoverScene, TreeMixin):
         info = MathTex(rf"{fmt_int(d['n_men'])} \text{{ men: }} \mu = {d['men_mu']:.1f},\ \sigma = {d['men_sd']:.2f}",
                        font_size=24, color=S.WORLD).move_to([4.4, 0.0, 0])
         caveat = label(r"the rule describes the normal; \ the World's incomes break it badly", font_size=22,
-                       color=GREY_B).move_to([4.2, -1.0, 0])
-        if caveat.width > 5.8:
-            caveat.width = 5.8
+                       color=GREY_B)
+        if caveat.width > 5.2:
+            caveat.width = 5.2
+        caveat.move_to([3.9, -1.0, 0])
         tag = simulated_tag()
         with self.voiceover(
             "With the constant in hand, the normal gives the most quoted numbers in statistics. "
