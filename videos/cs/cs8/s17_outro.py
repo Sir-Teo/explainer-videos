@@ -47,8 +47,10 @@ class Outro(VoiceoverScene):
                        VMobject(color=YES, stroke_width=3).set_points_as_corners(
             [ax.c2p(k, v) for k, v in enumerate(L["perfect_branches"]["2048"])]))
         r = load("spectre")["rounds"][0]
-        probe = VGroup(*[Line([k * 0.012, 0, 0], [k * 0.012, v * 0.025, 0], color=YES if v < 20 else NO,
-                              stroke_width=1.5) for k, v in enumerate(r)])
+        k80 = int(np.argmin(r))
+        probe = VGroup(VMobject(color=NO, stroke_width=3).set_points_as_corners(
+            [[k * 0.012, v * 0.025, 0] for k, v in enumerate(r)]), Dot([k80 * 0.012, r[k80] * 0.025, 0], radius=0.07,
+                                                                         color=YES))
         job = load("job")
         led = ledger_table(job["ledger"], font_size=18, row_h=0.4, label_width=1.8, bar_width=3.0)
         tiles = Group(

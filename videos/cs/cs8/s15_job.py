@@ -32,7 +32,7 @@ class Job(VoiceoverScene):
         ideal = 0.25
         parts = [(r"4 a cycle: \ the width", ideal, GREY_B), (r"dependences, \ fetch, \ ports", cpi_perf - ideal, FUNC),
                  (r"wrong guesses", cpi_real - cpi_perf, NO)]
-        S = 5.6
+        S = 9.0
         bar = VGroup()
         x = 0
         for nm, v, c in parts:
@@ -44,7 +44,7 @@ class Job(VoiceoverScene):
                 t = label(rf"{nm} \\ {v:.3f}", font_size=17, color=c).next_to(r, DOWN, buff=0.15)
             bar.add(VGroup(r, t))
             x += w
-        bar.move_to(UP * 0.9).to_edge(LEFT, buff=1.2)
+        bar.move_to(UP * 0.9).to_edge(LEFT, buff=1.5)
         tot = label(rf"CPI {cpi_real:.3f} \ (IPC {1 / cpi_real:.2f})", font_size=26, color=HEAD).next_to(bar, UP,
                                                                                                     buff=0.3)
         pipe = Rectangle(width=S * cpi_pipe, height=0.5, stroke_width=0, fill_color=GREY_D, fill_opacity=0.6)
@@ -92,7 +92,7 @@ class Job(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=DATA) for a, b in zip(x, y)])
         chk = Dot(ax.c2p(ck["instructions"] / 1e6, ck["cycles"] / 1e6), radius=0.1, color=YES)
         guide = DashedLine(ax.c2p(0, 0), ax.c2p(7, 3.5), color=GREY_D, stroke_width=2)
-        gl = label(r"IPC 2", font_size=18, color=GREY_B).next_to(ax.c2p(6.2, 3.1), UP, buff=0.1)
+        gl = label(r"IPC 2", font_size=18, color=GREY_B).next_to(ax.c2p(4.4, 2.2), UP + LEFT, buff=0.05)
         cl = label(r"the check passage", font_size=18, color=YES).next_to(chk, LEFT, buff=0.15)
         side = VGroup(
             label(r"24 passages of 400 to 4000 bytes, \\ run on the core", font_size=22, color=DATA),
