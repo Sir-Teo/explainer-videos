@@ -3109,3 +3109,45 @@ def test_rules_and_engine():
     ok = B.Backtester(raw, hold).run().equity
     bad = B.Backtester(raw, hold, adjust_splits=False).run().equity
     assert ok[-1] == pytest.approx(ok[10], rel=1e-9) and bad[-1] == pytest.approx(0.5 * bad[10], rel=1e-9)
+
+
+def test_ml_linear_and_kernel():
+    from explainer.quant.house import ml
+    rng = np.random.default_rng(7)
+    X = rng.standard_normal((40, 3))
+    # random features approximate the Gaussian kernel exp(-gamma^2 |x - y|^2 / 2)
+    Z = ml.rff(X, 20000, gamma=0.7, seed=1)
+    K = np.exp(-0.5 * 0.49 * ((X[:, None, :] - X[None, :, :]) ** 2).sum(-1))
+    assert np.abs(Z @ Z.T - K).max() < 0.05
+    # the dual ridge equals the primal one
+    Z = ml.rff(X, 30, seed=2)
+    y = rng.standard_normal(40)
+    b = ml.ridge_dual(Z, y, 0.1)
+    assert np.allclose(b, np.linalg.solve(Z.T @ Z + 0.1 * 40 * np.eye(30), Z.T @ y), atol=1e-8)
+    # PCR and PLS with every component are OLS
+    X2 = rng.standard_normal((200, 4))
+    y2 = X2 @ np.array([1.0, -0.5, 0.2, 0.0]) + 0.1 * rng.standard_normal(200)
+    f_ols, f_pcr, f_pls = ml.ols(X2, y2), ml.pcr(X2, y2, 4), ml.pls(X2, y2, 4)
+    assert np.allclose(f_ols(X2), f_pcr(X2), atol=1e-8) and np.allclose(f_ols(X2), f_pls(X2), atol=1e-6)
+    assert ml.r2_oos(y2, f_ols(X2)) > 0.9
+
+
+def test_ml_trees_conformal_toolkit():
+    from explainer.quant.house import ml
+    rng = np.random.default_rng(8)
+    X = rng.uniform(-1, 1, (2000, 2))
+    y = np.where(X[:, 0] > 0, 1.0, -1.0) + 0.1 * rng.standard_normal(2000)
+    g = ml.GBMRegressor(n_trees=60, depth=2, lr=0.2, seed=0).fit(X, y)
+    assert np.mean((g.predict(X) - np.sign(X[:, 0])) ** 2) < 0.02
+    q = ml.split_conformal(rng.standard_normal(999), alpha=0.1)
+    test = rng.standard_normal(20000)
+    assert abs(np.mean(np.abs(test) <= q) - 0.9) < 0.02
+    x = np.cumsum(rng.standard_normal(300))
+    assert np.allclose(ml.fracdiff(x, 1.0)[1:], np.diff(x))
+    c = np.r_[np.full(5, 100.0), 103.0, np.full(5, 103.0)]
+    tb = ml.triple_barrier(c, np.full(len(c), 0.01), horizon=10, up=2, down=2)
+    assert tb["label"][0] == 1 and tb["end"][0] == 5
+    bars = ml.dollar_bars(np.arange(10), np.ones(10), np.full(10, 5.0), 10.0)
+    assert len(bars["t"]) == 5
+    w = ml.uniqueness_weights([0, 0], [1, 1], 3)
+    assert np.allclose(w, 0.5)

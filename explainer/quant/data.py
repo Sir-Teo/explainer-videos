@@ -37,6 +37,7 @@ import io
 import json
 import os
 import threading
+import re
 import time
 import urllib.parse
 import urllib.request
@@ -166,6 +167,116 @@ def binance_klines(symbol="BTCUSDT", interval="1h", start="2021-01", end="2025-1
     a = a[np.argsort(a[:, 0], kind="stable")]
     return {"time": a[:, 0], "open": a[:, 1], "high": a[:, 2], "low": a[:, 3], "close": a[:, 4],
             "volume": a[:, 5], "trades": a[:, 6]}
+
+
+BINANCE_S3 = "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision"
+_NOT_COINS = ("USDC", "BUSD", "TUSD", "PAX", "USDP", "USDS", "USDSB", "DAI", "FDUSD", "EUR", "GBP", "AUD", "TRY",
+              "BRL", "UST", "SUSD", "AEUR", "EURI", "USD1", "XUSD", "RLUSD", "BFUSD", "IDRT", "BIDR", "NGN", "RUB",
+              "UAH", "ZAR", "BKRW", "VAI", "USTC", "PAXG", "WBTC", "WBETH", "BETH")
+
+
+def _s3_list(prefix: str) -> list[str]:
+    """Every key prefix (``delimiter=/``) or key under ``prefix`` in Binance's public archive bucket, following its
+    pagination."""
+    out, marker = [], ""
+    while True:
+        q = urllib.parse.urlencode({"delimiter": "/", "prefix": prefix, "marker": marker})
+        xml = _get(f"{BINANCE_S3}?{q}").decode()
+        items = re.findall(r"<Prefix>([^<]*)</Prefix>", xml)[1:] + re.findall(r"<Key>([^<]*)</Key>", xml)
+        out += items
+        if "<IsTruncated>true" not in xml:
+            return out
+        nm = re.search(r"<NextMarker>([^<]*)</NextMarker>", xml)
+        marker = nm.group(1) if nm else items[-1]
+
+
+def binance_usdt_universe(frozen_as_of: str = "2026-11") -> list[str]:
+    """Every coin quoted in USDT on Binance spot that the public archive has daily candles for, listed or delisted:
+    leveraged tokens, stablecoins, fiat and wrapped coins left out.  The listing is frozen at its first download and
+    checked (the archive grows; the frozen list does not)."""
+    path = DATA / "binance" / f"usdt_universe_{frozen_as_of}.json"
+    if not path.exists():
+        pre = [x.rstrip("/").split("/")[-1] for x in _s3_list("data/spot/monthly/klines/")]
+        syms = sorted(x for x in pre if x.endswith("USDT"))
+        keep = []
+        for s_ in syms:
+            base = s_[:-4]
+            if not base or base in _NOT_COINS or re.search(r"(UP|DOWN|BULL|BEAR)$", base) and len(base) > 4:
+                continue
+            keep.append(s_)
+        _atomic_write(path, json.dumps(keep).encode())
+    raw = path.read_bytes()
+    _check(f"binance/usdt_universe/{frozen_as_of}", raw, f"{BINANCE_S3}?prefix=data/spot/monthly/klines/")
+    return json.loads(raw)
+
+
+def binance_daily(symbol: str, start: str = "2017-08", end: str = "2025-12") -> dict:
+    """A coin's daily candles from the public archive for whatever months it traded in [start, end] (a coin listed
+    late or delisted early simply has fewer): ``time``, ``open``, ``high``, ``low``, ``close``, ``volume`` (base),
+    ``quote`` (USDT volume), ``trades``.  The months available are frozen at first listing; each file is checked
+    against Binance's published SHA-256 and the manifest."""
+    lpath = DATA / "binance" / "spot" / symbol / "1d" / "months.json"
+    if not lpath.exists():
+        keys = _s3_list(f"data/spot/monthly/klines/{symbol}/1d/")
+        months = sorted({k.split("-1d-")[1][:7] for k in keys if k.endswith(".zip")})
+        _atomic_write(lpath, json.dumps(months).encode())
+    months = [m for m in json.loads(lpath.read_bytes()) if start <= m <= end]
+    base = f"https://data.binance.vision/data/spot/monthly/klines/{symbol}/1d"
+    cols = []
+    for ym in months:
+        name = f"{symbol}-1d-{ym}.zip"
+        path = DATA / "binance" / "spot" / symbol / "1d" / name
+        url = f"{base}/{name}"
+
+        def fetch(url=url, name=name):
+            raw = _get(url)
+            want = _get(url + ".CHECKSUM").decode().split()[0]
+            if _sha(raw) != want:
+                raise RuntimeError(f"{name}: sha256 does not match Binance's published checksum")
+            return raw
+
+        raw = _cached(f"binance/spot/{symbol}/1d/{ym}", path, fetch, url)
+        with zipfile.ZipFile(io.BytesIO(raw)) as z:
+            text = z.read(z.namelist()[0]).decode()
+        rows = [r.split(",") for r in text.strip().splitlines() if r and r[0].isdigit()]
+        if rows:
+            cols.append(np.array([[float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]), float(r[5]),
+                                   float(r[7]), float(r[8])] for r in rows]))
+    if not cols:
+        return {k: np.zeros(0) for k in ("time", "open", "high", "low", "close", "volume", "quote", "trades")}
+    a = np.concatenate(cols)
+    a[:, 0] = np.where(a[:, 0] > 1e14, a[:, 0] / 1e6, a[:, 0] / 1e3)
+    a = a[np.argsort(a[:, 0], kind="stable")]
+    return {"time": a[:, 0], "open": a[:, 1], "high": a[:, 2], "low": a[:, 3], "close": a[:, 4], "volume": a[:, 5],
+            "quote": a[:, 6], "trades": a[:, 7]}
+
+
+GOYAL_WELCH = "https://docs.google.com/spreadsheets/d/1qwpl2R_DNujpU5YUkk8lacP1tTeMb9iJ/export?format=xlsx"
+
+
+def goyal_welch(through: str = "2025-12") -> dict:
+    """Amit Goyal's update of Welch and Goyal's (2008) predictor data, monthly (from his website's Google Sheet):
+    ``date`` (YYYYMM) and the raw columns (Index, D12, E12, b/m, tbl, AAA, BAA, lty, ntis, Rfree, infl, ltr, corpr,
+    svar, csp, CRSP_SPvw, CRSP_SPvwx), NaN where blank.  The parsed sheet is frozen through ``through`` and checked."""
+    import io
+
+    import openpyxl
+
+    path = DATA / "goyal" / "PredictorData_monthly.xlsx"
+    if not path.exists():
+        _atomic_write(path, _get(GOYAL_WELCH, timeout=180))
+    wb = openpyxl.load_workbook(io.BytesIO(path.read_bytes()), read_only=True, data_only=True)
+    rows = list(wb["Monthly"].iter_rows(values_only=True))
+    head = [str(c) for c in rows[0]]
+    lim = int(through.replace("-", ""))
+    data_ = [r for r in rows[1:] if isinstance(r[0], (int, float)) and int(r[0]) <= lim]
+    out = {"date": np.array([int(r[0]) for r in data_])}
+    for j, h in enumerate(head[1:], 1):
+        out[h] = np.array([float(r[j]) if isinstance(r[j], (int, float)) else np.nan for r in data_])
+    frozen = json.dumps({k: np.nan_to_num(v, nan=-999).round(10).tolist() for k, v in out.items()}, sort_keys=True,
+                        separators=(",", ":")).encode()
+    _check(f"goyal/welch_goyal_monthly/through_{through}", frozen, GOYAL_WELCH)
+    return out
 
 
 # ---------------------------------------------------------------------------
