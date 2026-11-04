@@ -1993,4 +1993,5 @@ the result. Then the full Coverage Board, and back to Graunt.
 
 | Part | State | Length |
 |---|---|---|
-| — | master plan, draft 2 (this file) | — |
+| 0 | infrastructure: `explainer/stats` (series map, timeline, Transcript, upgrade cards, colours, the World, the Coverage Board, the Museum, the first instruments), tests | — |
+| 1 | **written**, English (16 chapters); silent 480p QA renders and contact sheets reviewed; narration with the production voice and the Chinese edition still to do | ≈ 63 min (silent) |

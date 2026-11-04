@@ -1,7 +1,7 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: master plan (draft 2, from first course to PhD), not yet in production.** No part has sources, data or
-renders yet. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
+**Status: in production.** Part 1, *The Shape of Data*, is written in English (16 chapters, about an hour), with its
+instruments in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
 This series is a whole education in statistics on video: **a bachelor's degree, a master's, and a PhD**. It runs to
 sixty-five parts in five stages, in English and Chinese, and assumes calculus at the start. By the end it reaches the
