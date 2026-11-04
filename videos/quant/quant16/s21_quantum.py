@@ -23,7 +23,7 @@ class Quantum(VoiceoverScene):
         self.play(FadeOut(c))
 
     def rotation(self, q):
-        th = q["theta"]
+        th = float(np.arcsin(np.sqrt(q["a"])))  # a = sin^2(theta)
         o = LEFT * 2.6 + DOWN * 0.6
         R = 2.8
         good = Arrow(o, o + UP * R, buff=0, stroke_width=2, color=GOOD, tip_length=0.15)
