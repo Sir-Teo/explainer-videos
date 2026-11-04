@@ -142,8 +142,8 @@ class Meaning(VoiceoverScene):
                           color=LOGIC, width=9.6, font_size=24).move_to([0, 1.0, 0])
         tri = VGroup(label(r"frequency", font_size=30, color=FREQ), label(r"logic", font_size=30, color=LOGIC),
                      label(r"belief", font_size=30, color=BELIEF))
-        tri.arrange(RIGHT, buff=2.0).move_to([0, -1.6, 0])
-        ax_l = label(r"the same axioms", font_size=28, color=EXACT).move_to([0, -2.6, 0])
+        tri.arrange(RIGHT, buff=2.8).move_to([0, -1.3, 0])
+        ax_l = label(r"the same axioms", font_size=30, color=EXACT).move_to([0, -3.1, 0])
         arrows = VGroup(*[Arrow(t.get_bottom(), ax_l.get_top(), buff=0.1, color=GREY_B, stroke_width=2) for t in tri])
         with self.voiceover(
             "The logical view has its own theorem. <bookmark mark='a'/> In 1946 the physicist Richard Cox showed "
