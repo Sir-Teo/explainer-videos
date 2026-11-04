@@ -31,7 +31,11 @@ PROBLEMS = [
     r"Compute the Basel capital $K$ for PD 2\%, LGD 45\%, $M$ = 2.5. Compare it with the expected loss.",
     r"Show that an equity tranche's expected loss falls, and a senior tranche's rises, with the copula correlation.",
     r"A logit's coefficient on leverage is 0.5 per standard deviation. By what factor does a two-standard-deviation "
-    r"rise in leverage multiply the odds of default?",
+    r"rise in leverage multiply the odds of default?",    r"(qual) For $N$ equal loans in Vasicek's model, show $\Pr(L \le k/N) = \int \operatorname{Bin}(k; N, p(y))\varphi(y)dy$ "
+    r"and that the $\alpha$-quantile of $L$ tends to $p(\Phi^{-1}(\alpha))$ as $N \to \infty$.",
+    r"(qual) For $L = \mu(Y) + \varepsilon U$ with $\mathbb E[U \mid Y] = 0$, derive the second-order expansion "
+    r"$q_\alpha(L) = q_\alpha(\mu) - \frac{\varepsilon^2}{2h(y)}\frac{d}{dy}\big[h(y)\operatorname{Var}(U \mid y)/\mu'(y)\big] + "
+    r"o(\varepsilon^2)$ at $y = q_\alpha(Y)$.",
 ]
 
 
@@ -120,11 +124,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=22)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And eight problems: Merton's debt and spread, the equity's volatility, the par spread with a flat "
+            "And ten problems: Merton's debt and spread, the equity's volatility, the par spread with a flat "
             "hazard, a bootstrap by hand, Vasicek's distribution, the Basel capital for a two percent PD, tranches "
-            "and correlation, and the odds in a logit. Solutions, in English and Chinese, are in the notes."
+            "and correlation, and the odds in a logit. Two are qualifying-exam problems: the exact finite-pool "
+            "distribution, and the granularity expansion. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

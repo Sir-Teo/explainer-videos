@@ -24,7 +24,7 @@ recessions), EDGAR (XBRL frames and company facts, full-text search of 8-K filin
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 50 minutes)
+## Chapters (about 54 minutes)
 
 * **What a promise is worth** (2.1 min). Lehman, 15 September 2008; the CDS auction of 10 October (8.625); the Baa
   spread to 6.16% (4 December 2008); the history strip (1968–2024); the plan; the credit desk opens.
@@ -77,7 +77,18 @@ reported by the sources named.*
   smoothed returns (Getmansky–Lo–Makarov).
 * **17. Rule 20: the credit desk** (1.7). Two default probabilities for the same firms, from accounts and from prices;
   AMR's 13% from its 2010 accounts; the credit module; Rule 20.
-* **Recap, desk questions, problems** (2.8). Thirteen lines; four desk questions; eight problems with solutions below.
+* **For the researcher: the granularity adjustment** (6.1). For N equal loans in Vasicek's model, NL | y ~
+  Binomial(N, p(y)) and P(L ≤ k/N) = ∫Bin(k; N, p(y))φ(y)dy exactly; as N → ∞ the α-quantile tends to the ASRF value
+  p(Φ⁻¹(α)). Gordy's (2003) adjustment (Gouriéroux–Laurent–Scaillet 2000; Martin and Wilde 2002) adds
+  GA = −(1/(2φ))d/dy[φσ²/μ′], here (1/(2N))[yp(1 − p)/(bφ(z)) − (1 − 2p) − zp(1 − p)/φ(z)], 2.04/N at PD 1%, ρ 0.12,
+  α 99.9%. Exact against ASRF: 10.5% against 9.0% at N = 100 (a sixth more capital), 9.6% at 250, 9.2% at 1,000;
+  ASRF + GA 11.1/9.9/9.2%, accurate from about 250 loans, overcorrecting at 25–50; Monte Carlo agrees. Relative
+  adjustment largest at low correlation (ρ 0.24: c = 1.48; PD 3%: c = 2.32). A Zipf book of 500 loans (largest 14.7%):
+  effective N = 1/HHI = 28, MC 99.9% loss 19.6% against ASRF 9.0% and ASRF + GA(28) 16.3%. Portfolio invariance holds
+  only in the ASRF limit (Gordy 2003), which is why Pillar 1 omits the term. Three open problems; pause: the
+  one-plus-399 book has HHI ≈ 0.25 + 0.25/399, effective N ≈ 4.
+* **Recap, desk questions, ten problems (two at qualifying-exam level)** (2.9). Thirteen lines; four desk questions;
+  solutions below.
 
 ## Hands-on
 
@@ -168,6 +179,25 @@ python tools/make.py quant20 --cpu-voice -q m                # English and Chine
    lowers its expectation; a senior tranche's loss is convex near its attachment, so spreading raises it.
 8. **Odds in a logit.** log-odds rise by 0.5 × 2 = 1.0, so the odds are multiplied by e¹ = 2.72; for a rare event the
    probability is multiplied by about the same.
+9. **(qual) The finite pool.** Given Y = y, the N defaults are independent Bernoulli(p(y)), so NL | y ~ Bin(N, p(y));
+   integrate over the factor. As N → ∞, L − p(Y) → 0 in probability given Y (law of large numbers), so L → p(Y) and,
+   p being increasing and continuous, q_α(L) → p(q_α(Y)) = p(Φ⁻¹(α)).
+10. **(qual) The granularity expansion.** Let x_ε be the α-quantile of μ(Y) + εU, with g the density of μ(Y).
+   Conditioning on Y and expanding to second order in ε (the first-order term vanishes since E[U | Y] = 0),
+   in the form of Gouriéroux, Laurent and Scaillet,
+   x_ε = x₀ − (ε²/(2g(x₀)))∂/∂x{E[U² | μ = x]g(x)}|_{x₀} + o(ε²). Changing variables to y, with
+   g(x) = h(y)/μ′(y) and ∂/∂x = (1/μ′)∂/∂y, gives −(ε²/(2h(y)))d/dy[h(y)Var(U | y)/μ′(y)] at y = q_α(Y).
+
+## For the researcher
+
+* **The theorems.** Vasicek (2002), "The distribution of loan portfolio value," *Risk*; Gordy (2003), "A risk-factor
+  model foundation for ratings-based bank capital rules," *J. Financial Intermediation* 12; Gouriéroux, Laurent and
+  Scaillet (2000), "Sensitivity analysis of values at risk," *J. Empirical Finance* 7; Martin and Wilde (2002),
+  "Unsystematic credit risk," *Risk*; Pykhtin (2004), "Multi-factor adjustment," *Risk*; Gordy and Lütkebohmert
+  (2013), *Int. J. Central Banking*.
+* **Simplifications.** One factor; full loss given default; equal loans for the exact formula; the lumpy book by
+  Monte Carlo.
+* **Open problems.** Many factors; small, lumpy books; estimation risk in PD and ρ.
 
 ## Data and reproducibility
 
@@ -197,7 +227,7 @@ python tools/make.py quant20 --cpu-voice -q m                # English and Chine
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约50分钟）
+## 章节（约54分钟）
 
 * **一个承诺值多少。** 雷曼，2008年9月15日；10月10日的CDS拍卖（8.625）；Baa利差升到6.16%（2008年12月4日）；历史条（1968–2024）；本部分安排；信用交易台开张。
 * **1. 信用利差衡量什么。** 1953年以来Baa和Aaa相对10年期国债的利差与衰退（平均1.91%和0.95%；2020年3月23日4.31%）；Baa减Aaa（平均0.97%，2008年底3.38%）；预期损失、风险溢价与流动性；信用三角；Huang–Huang、Longstaff–Mithal–Neis、Collin-Dufresne–Goldstein–Martin。
@@ -217,7 +247,8 @@ python tools/make.py quant20 --cpu-voice -q m                # English and Chine
 * **15. 公司债与2020年3月。** 到3月中旬LQD下跌20%，HYG下跌22%；Baa利差2.05% → 4.31% → 2.93%；美联储的公司信贷工具与Haddad–Moreira–Muir；信用因子与困境之谜。
 * **16. 私募信贷及其估值。** 这一资产类别（约2.1万亿美元，国际货币基金组织）；Ares Capital的股价（2020年3月23日8.08美元）对其报告的每股净资产值（17.32 → 16.97美元）；季度波动率4.5%（净资产值）对19.8%（股价）；平滑的收益（Getmansky–Lo–Makarov）。
 * **17. 第20条规则：信用交易台。** 同一批公司的两个违约概率，分别来自账目和价格；AMR从其2010年账目得到的13%；信用模块；第20条规则。
-* **回顾、交易台问题与习题。** 十三行回顾；四个交易台问题；八道习题，解答见下文。
+* **写给研究者：颗粒度调整。** Vasicek模型中N笔相同贷款的NL | y ~ Binomial(N, p(y))，精确地P(L ≤ k/N) = ∫Bin(k; N, p(y))φ(y)dy；N → ∞时α分位数趋于ASRF值p(Φ⁻¹(α))。戈迪（2003）的调整（古里耶鲁–洛朗–斯凯莱2000；Martin与Wilde 2002）加上GA = −(1/(2φ))d/dy[φσ²/μ′]，这里为(1/(2N))[yp(1 − p)/(bφ(z)) − (1 − 2p) − zp(1 − p)/φ(z)]，PD 1%、ρ 0.12、α 99.9%时为2.04/N。精确值对ASRF：N = 100时10.5%对9.0%（多六分之一资本），250时9.6%，1,000时9.2%；ASRF + GA为11.1/9.9/9.2%，从约250笔起准确，25–50笔时过度修正；蒙特卡洛一致。低相关时相对调整最大（ρ 0.24：c = 1.48；PD 3%：c = 2.32）。500笔齐普夫账簿（最大一笔14.7%）：有效N = 1/HHI = 28，蒙特卡洛99.9%损失19.6%，ASRF 9.0%，ASRF + GA(28) 16.3%。组合不变性只在ASRF极限下成立（戈迪2003），所以第一支柱省略了这一项。三个开放问题；暂停题：一笔加399笔的账簿HHI ≈ 0.25 + 0.25/399，有效N ≈ 4。
+* **回顾、交易台问题、十道习题（两道为资格考试水平）。**
 
 ## 交易台问题与解答
 
@@ -236,6 +267,8 @@ python tools/make.py quant20 --cpu-voice -q m                # English and Chine
 6. **违约概率2%时的巴塞尔资本。** ρ = 0.12w + 0.24(1 − w)，w = (1 − e^{−1})/(1 − e^{−50}) = 0.632：ρ = 0.164。第99.9个百分位处的条件违约概率为N((N⁻¹(0.02) + √0.164 × 3.09)/√0.836) = N((−2.054 + 1.252)/0.914) = N(−0.877) = 19.0%。b = (0.11852 − 0.05478 ln 0.02)² = 0.111，K = 0.45 × (0.190 − 0.02) × 1/(1 − 0.166) = 敞口的9.2%，约为0.9%预期损失的十倍。
 7. **分层与相关性。** 样本池的预期损失不依赖于ρ。ρ上升时L的分布更分散：更多质量集中在零附近，也有更多在尾部。权益分层的损失min(L, d)/d是L的凹函数，所以分散会降低其期望；优先级分层的损失在其起点附近是凸的，所以分散会提高其期望。
 8. **logit中的胜算。** 对数胜算上升0.5 × 2 = 1.0，所以胜算乘以e¹ = 2.72；对于罕见事件，概率也大约乘以同样的倍数。
+9. **（资格考试）有限资产池。** 给定Y = y，N个违约是独立的伯努利(p(y))，所以NL | y ~ Bin(N, p(y))；对因子积分。N → ∞时给定Y有L − p(Y) → 0（大数定律），所以L → p(Y)，p递增连续，q_α(L) → p(Φ⁻¹(α))。
+10. **（资格考试）颗粒度展开。** 令x_ε为μ(Y) + εU的α分位数。对Y条件化，P(μ + εU ≤ x) = G(x) + (ε²/2)∂/∂x{E[U² | μ = x]g(x)} + o(ε²)（一阶项因E[U | Y] = 0而消失），g是μ(Y)的密度。令其等于α并取x_ε = x₀ + ε²x₂，得x₂ = −(1/(2g))∂/∂x{E[U² | μ = x]g(x)}；换元到y（g = h/μ′，∂/∂x = (1/μ′)∂/∂y）得−(1/(2h(y)))d/dy[h(y)Var(U | y)/μ′(y)]，在y = q_α(Y)处取值。
 
 ## 数据与复现
 
@@ -245,3 +278,9 @@ python tools/make.py quant20 --cpu-voice -q m                # English and Chine
 * 引用而非计算的公开数字：雷曼的拍卖价格；金融危机调查委员会的调查结果；摩根大通工作组和美国参议院的数字；美联储的信贷工具；国际货币基金组织对私募信贷的估计。
 * 屏幕上标注为示意的输入：CDS报价、连接函数与分层参数、回收率模型。
 * 在样本外打开之前登记的两个模型：`logit_default_holdout`与`gbm_default_holdout`（各一种配置）；试验计数器从313升到315。
+
+## 写给研究者
+
+* **定理。** Vasicek（2002），*Risk*；戈迪（2003），*J. Financial Intermediation* 12；古里耶鲁、洛朗与斯凯莱（2000），*J. Empirical Finance* 7；Martin与Wilde（2002），*Risk*；Pykhtin（2004），*Risk*；戈迪与Lütkebohmert（2013），*Int. J. Central Banking*。
+* **简化。** 单因子；违约损失率为100%；精确公式用相同贷款；成块账簿用蒙特卡洛。
+* **开放问题。** 多因子；小而成块的账簿；PD与ρ的估计风险。

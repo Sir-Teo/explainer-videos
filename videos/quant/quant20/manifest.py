@@ -21,5 +21,6 @@ SCENES = [
     ("s16_march", "March", "15. Corporate bonds and March 2020"),
     ("s17_private", "Private", "16. Private credit and its marks"),
     ("s18_house", "House", "17. Rule 20: the credit desk"),
+    ("s20_research", "Research", "For the researcher: the granularity adjustment"),
     ("s19_outro", "Outro", "Recap, desk questions, problems"),
 ]

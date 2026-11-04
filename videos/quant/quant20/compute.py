@@ -656,7 +656,78 @@ def compute_envelope() -> dict:
     return {"trials": pit.trials_so_far(), "registered": load("models")["registered"]}
 
 
-ITEMS = {"spreads": compute_spreads, "merton": compute_merton, "kmv": compute_kmv, "blackcox": compute_blackcox,
+def compute_granularity_theory() -> dict:
+    """The research chapter: the granularity adjustment.  Vasicek's large-pool quantile (Basel's ASRF) assumes
+    infinitely many small loans.  For N equal loans the loss fraction given the factor y is Binomial(N, p(y))/N, so the
+    exact loss distribution is P(L <= k/N) = int BinomCDF(k; N, p(y)) phi(y) dy, and Gordy's (2003) adjustment (from
+    Gourieroux, Laurent and Scaillet 2000; Martin and Wilde 2002) adds
+    GA = -(1/(2N)) (1/phi(y)) d/dy[ phi(y) p(y)(1 - p(y)) / p'(y) ] at y = Phi^-1(alpha) to the large-pool quantile.
+    Checked against the exact quantile at Basel-like PD and correlation, and by Monte Carlo."""
+    from scipy.stats import binom
+    alpha = 0.999
+    Ns = [25, 50, 100, 250, 500, 1000, 2500, 10000]
+    y = np.linspace(-8, 8, 8001)
+    phi = norm.pdf(y)
+    out = {"alpha": alpha, "N": Ns, "cases": {}}
+    rng = np.random.default_rng(2020)
+    for pd_, rho in ((0.01, 0.12), (0.01, 0.24), (0.03, 0.12)):
+        p = norm.cdf((norm.ppf(pd_) + np.sqrt(rho) * y) / np.sqrt(1 - rho))   # y large is the bad state
+        ys = norm.ppf(alpha)
+        q_asrf = float(norm.cdf((norm.ppf(pd_) + np.sqrt(rho) * ys) / np.sqrt(1 - rho)))
+        dp = np.gradient(p, y)
+        inner = phi * p * (1 - p) / dp
+        dinner = np.gradient(inner, y)
+        ga_unit = float(-0.5 * np.interp(ys, y, dinner) / norm.pdf(ys))      # times 1/N
+        rows = []
+        for N in Ns:
+            ks = np.arange(N + 1)
+            # P(L <= k/N) for each k, by quadrature over the factor
+            F = np.array([np.trapezoid(binom.cdf(k, N, p) * phi, y) for k in ks]) if N <= 2500 else None
+            if F is None:
+                # large N: only the neighbourhood of the quantile matters
+                k0 = int(q_asrf * N)
+                kk = np.arange(max(0, k0 - 4 * int(np.sqrt(N) + 5)), min(N, k0 + 6 * int(np.sqrt(N) + 5)))
+                Fk = np.array([np.trapezoid(binom.cdf(k, N, p) * phi, y) for k in kk])
+                j = int(np.argmax(Fk >= alpha))
+                q_exact = float(kk[j] / N)
+                lo, hi = Fk[j - 1], Fk[j]
+                q_smooth = float((kk[j - 1] + (alpha - lo) / (hi - lo)) / N)
+            else:
+                j = int(np.argmax(F >= alpha))
+                q_exact = float(ks[j] / N)
+                lo, hi = F[j - 1], F[j]
+                q_smooth = float((ks[j - 1] + (alpha - lo) / (hi - lo)) / N)   # interpolated between the steps
+            # an independent Monte Carlo check: 400,000 factor draws, binomial defaults
+            if N in (50, 250, 1000):
+                Y = rng.standard_normal(400000)
+                P = norm.cdf((norm.ppf(pd_) + np.sqrt(rho) * Y) / np.sqrt(1 - rho))
+                L = rng.binomial(N, P) / N
+                q_mc = float(np.quantile(L, alpha))
+            else:
+                q_mc = None
+            rows.append({"N": N, "exact": q_exact, "smooth": q_smooth, "mc": q_mc, "asrf": q_asrf,
+                         "asrf_ga": q_asrf + ga_unit / N})
+        out["cases"][f"{pd_:g}_{rho:g}"] = {"pd": pd_, "rho": rho, "asrf": q_asrf, "ga_unit": ga_unit, "rows": rows}
+    # a lumpy book: 500 loans with Zipf exposures (the k-th largest proportional to 1/k), PD 1%, rho 0.12
+    pd_, rho = 0.01, 0.12
+    w = 1 / np.arange(1, 501)
+    w = w / w.sum()
+    n_eff = float(1 / np.sum(w ** 2))
+    c = out["cases"]["0.01_0.12"]
+    Ls = []
+    for b_ in range(10):
+        Y = rng.standard_normal(40000)
+        P = norm.cdf((norm.ppf(pd_) + np.sqrt(rho) * Y) / np.sqrt(1 - rho))
+        D = rng.random((40000, 500)) < P[:, None]
+        Ls.append(D @ w)
+    L = np.concatenate(Ls)
+    out["lumpy"] = {"n": 500, "n_eff": n_eff, "largest": float(w[0]), "q_mc": float(np.quantile(L, alpha)),
+                    "asrf": c["asrf"], "asrf_ga": c["asrf"] + c["ga_unit"] / n_eff,
+                    "q_equal500": [r_["smooth"] for r_ in c["rows"] if r_["N"] == 500][0]}
+    return _json(out)
+
+
+ITEMS = {"granularity_theory": compute_granularity_theory, "spreads": compute_spreads, "merton": compute_merton, "kmv": compute_kmv, "blackcox": compute_blackcox,
          "hazard": compute_hazard, "cds": compute_cds, "defaults": compute_defaults, "dataset": compute_dataset,
          "models": compute_models, "vasicek": compute_vasicek, "copula": compute_copula, "cjs": compute_cjs,
          "march2020": compute_march2020, "bdc": compute_bdc, "leland": compute_leland, "cox": compute_cox,
