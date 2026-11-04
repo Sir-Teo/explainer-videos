@@ -368,3 +368,24 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | prediction interval, tolerance interval | 预测区间，容许区间 |
 | credible interval, highest posterior density (HPD) | 可信区间，最高后验密度区间 |
 | conditionality principle, relevant subsets | 条件性原则，相关子集 |
+
+## Glossary (Part 12)
+
+| English | 中文 |
+|---|---|
+| least squares, ordinary least squares (OLS), normal equations | 最小二乘，普通最小二乘，正规方程 |
+| residual, fitted value, hat matrix, leverage | 残差，拟合值，帽子矩阵，杠杆值 |
+| least absolute deviations | 最小一乘（最小绝对偏差） |
+| best linear unbiased estimator (BLUE), Gauss–Markov theorem | 最佳线性无偏估计，高斯–马尔可夫定理 |
+| generalized / weighted least squares | 广义最小二乘，加权最小二乘 |
+| coefficient of determination ($R^2$), adjusted $R^2$ | 决定系数，调整决定系数 |
+| nested models, F-test, analysis of variance table | 嵌套模型，F 检验，方差分析表 |
+| Frisch–Waugh–Lovell theorem, partialling out | 弗里施–沃–洛弗尔定理，偏出 |
+| omitted-variable bias, confounder | 遗漏变量偏差，混杂变量 |
+| dummy variable, interaction, reference category | 虚拟变量，交互项，参照组 |
+| elasticity, spline, extrapolation | 弹性，样条，外推 |
+| confidence band, prediction band, Working–Hotelling band | 置信带，预测带，沃金–霍特林带 |
+| collinearity, variance inflation factor, condition number | 共线性，方差膨胀因子，条件数 |
+| studentized residual, Cook's distance, influential point | 学生化残差，库克距离，强影响点 |
+| heteroskedasticity, robust (sandwich) standard errors, HC3 | 异方差，稳健（三明治）标准误，HC3 |
+| regression to the mean, regression fallacy | 均值回归，回归谬误 |
