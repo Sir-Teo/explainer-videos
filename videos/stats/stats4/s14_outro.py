@@ -132,7 +132,9 @@ class Outro(VoiceoverScene):
             "Four parts of sixty-five. <bookmark mark='a'/> We have the tools; now we use them. In 1886 Francis "
             "Galton plotted parents' heights against their children's and saw ellipses, the same ellipses as our "
             "spectral theorem. <bookmark mark='b'/> Joint distributions of many variables, their covariances, "
-            "conditioning on some of them, and the multivariate normal: that's Part 5."
+            "conditioning on some of them, and the multivariate normal: that's Part 5. Galton's question was about "
+            "inheritance, but his answer, regression toward the mean, turned out to be a fact about ellipses, and "
+            "Part 5 will prove it with the Schur complement from chapter eight."
         ) as vo:
             self.play(FadeIn(tr))
             self.play(*[tr.cells[i].animate.set_fill(S.ACCENT, opacity=0.9) for i in range(4)])
