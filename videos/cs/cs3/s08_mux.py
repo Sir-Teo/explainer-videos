@@ -116,7 +116,7 @@ class Mux(VoiceoverScene):
                                                                                                     buff=0.4)
         expl = label(r"a function of $n$ inputs \ $=$ \ a multiplexer choosing between two functions of $n - 1$",
                      font_size=26, color=GREY_A).next_to(f, DOWN, buff=0.3)
-        tree = self.tree([1, 0, 0, 1, 0, 1, 1, 0], LEFT * 0.5 + DOWN * 1.6)
+        tree = self.tree([1, 0, 0, 1, 0, 1, 1, 0], LEFT * 0.5 + DOWN * 1.15)
         tl = note(r"keep expanding: \ a tree of multiplexers \ whose leaves are the truth table", font_size=22).next_to(
             tree, DOWN, buff=0.2)
         with self.voiceover(
@@ -176,14 +176,17 @@ class Mux(VoiceoverScene):
         par = [bin(k).count("1") % 2 for k in range(8)]
         # leaf order in the tree is index 4x + 2y + z read top to bottom
         tree = self.tree(maj, LEFT * 1.5 + DOWN * 0.4)
-        cfg = label(r"8 memory bits \ $=$ \ any function of 3 inputs", font_size=28, color=CTRL).move_to(RIGHT * 3.6 + UP * 1.5)
+        cfg = label(r"8 memory bits \ $=$ \ any function of 3 inputs", font_size=28, color=CTRL).move_to(
+            RIGHT * 0.6 + UP * 1.6, aligned_edge=LEFT)
         n1 = label(r"store majority's truth table: \ it computes majority", font_size=24, color=GREY_A).next_to(
-            cfg, DOWN, buff=0.4)
-        n2 = label(r"rewrite the bits: \ now it computes parity", font_size=24, color=GREY_A).next_to(n1, DOWN, buff=0.3)
-        fp = VGroup(label(r"an FPGA: \ hundreds of thousands of 6-input LUTs \\ ($2^6 = 64$ bits each) \ and "
-                          r"programmable wires between them", font_size=24, color=HEAD),
-                    note(r"hardware you can rewrite in seconds: \ prototypes, \ networking, \ the cloud's accelerators",
-                         font_size=22)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(n2, DOWN, buff=0.5)
+            cfg, DOWN, buff=0.4).align_to(cfg, LEFT)
+        n2 = label(r"rewrite the bits: \ now it computes parity", font_size=24, color=GREY_A).next_to(
+            n1, DOWN, buff=0.3).align_to(cfg, LEFT)
+        fp = VGroup(label(r"an FPGA: \ hundreds of thousands of 6-input LUTs \\ ($2^6 = 64$ bits each), \ and "
+                          r"programmable wires between them", font_size=23, color=HEAD),
+                    note(r"hardware you can rewrite in seconds: \\ prototypes, \ networking, \ the cloud's accelerators",
+                         font_size=21)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(n2, DOWN, buff=0.5).align_to(
+            cfg, LEFT)
         with self.voiceover(
             "Now turn that around. <bookmark mark='a'/> Build the tree of multiplexers in hardware, and instead of "
             "constants at the leaves, put eight bits of memory. Whatever eight bits you store, the circuit computes "
@@ -213,7 +216,7 @@ class Mux(VoiceoverScene):
         head = label(r"Decoders: \ a number in, \ one wire out", font_size=38).to_edge(UP, buff=0.35)
         outs = VGroup(*[VGroup(Line(ORIGIN, RIGHT * 0.9, color=WIRE, stroke_width=3),
                                MathTex(rf"y_{k}", font_size=26, color=GREY_B)).arrange(RIGHT, buff=0.1)
-                        for k in range(8)]).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(RIGHT * 0.4)
+                        for k in range(8)]).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(LEFT * 1.4)
         box = RoundedRectangle(width=1.6, height=outs.height + 0.4, corner_radius=0.12, stroke_color=CTRL,
                                stroke_width=3, fill_color="#151B26", fill_opacity=1).next_to(outs, LEFT, buff=0.0)
         bl = label(r"3-to-8", font_size=24, color=CTRL).move_to(box)
@@ -225,8 +228,8 @@ class Mux(VoiceoverScene):
                      label(rf"{r['gates']} gates, \ depth {r['depth']} \ (built and verified)", font_size=26, color=COST),
                      label(r"Pebble uses one to pick which register to write \ (Part 6)", font_size=26, color=HEAD),
                      label(r"the reverse, \ an \textit{encoder}, \ turns one hot wire back into a number: \ chapter 11",
-                           font_size=24, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(
-            RIGHT * 4.3 + DOWN * 0.2).scale(0.9)
+                           font_size=24, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        txt.scale_to_fit_width(6.2).move_to(RIGHT * 3.7 + DOWN * 0.2)
         with self.voiceover(
             "One more choosing circuit, which every memory needs. <bookmark mark='a'/> A decoder takes a number in "
             "binary, here three bits, and lights exactly one of eight output wires: the one with that number. "

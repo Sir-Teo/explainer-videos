@@ -49,8 +49,8 @@ class Timing(VoiceoverScene):
                      label(r"the slowest input-to-output path \ sets the speed: \ the \textit{critical path}",
                            font_size=26, color=COST),
                      label(rf"Pebble's 8-bit comparator: \ depth {rows['8-bit comparator']['nand_depth']} in NANDs",
-                           font_size=26, color=HEAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(
-            RIGHT * 3.6 + DOWN * 1.8).scale(0.92)
+                           font_size=26, color=HEAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        txt.scale_to_fit_width(6.6).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.8)
         with self.voiceover(
             "So far a gate's output changed the instant its inputs did. Real gates take time: a few picoseconds to "
             "charge the wire they drive. <bookmark mark='a'/> In a circuit, a change at an input ripples forward gate "
@@ -80,7 +80,7 @@ class Timing(VoiceoverScene):
         f = MathTex(r"f = a\,b + \bar a\, c, \qquad b = c = 1", font_size=36, color=GREY_A).next_to(head, DOWN, buff=0.3)
         should = note(r"with $b = c = 1$, \ $f = a + \bar a = 1$ \ whatever $a$ does", font_size=22).next_to(f, DOWN,
                                                                                                         buff=0.12)
-        x0 = -3.2
+        x0 = -4.4
         rows = [(b["a"], r"a", DATA), (b["not_a"], r"\bar a", CTRL), (b["ab"], r"a b", CTRL),
                 (b["nac"], r"\bar a c", CTRL), (b["f"], r"f", HEAD)]
         waves = VGroup(*[waveform(v, x0, 1.0 - 0.95 * i - 0.6, color=c, label_tex=t) for i, (v, t, c) in
@@ -119,7 +119,7 @@ class Timing(VoiceoverScene):
         f = MathTex(r"f = a\,b + \bar a\, c + b\,c", font_size=40, color=YES).next_to(head, DOWN, buff=0.35)
         why = note(r"the \textit{consensus} term $bc$: \ logically redundant, \ but it holds $f$ up while $a$ "
                    r"changes", font_size=22).next_to(f, DOWN, buff=0.15)
-        x0 = -3.2
+        x0 = -4.4
         rows = [(a["a"], r"a", DATA), (a["ab"], r"a b", CTRL), (a["nac"], r"\bar a c", CTRL), (a["bc"], r"b c", YES),
                 (a["f"], r"f", HEAD)]
         waves = VGroup(*[waveform(v, x0, 0.8 - 0.9 * i - 0.6, color=c, label_tex=t) for i, (v, t, c) in
@@ -127,8 +127,8 @@ class Timing(VoiceoverScene):
         lesson = VGroup(label(r"a K-map with every adjacent pair of 1s \\ covered by one loop \ has no static hazard",
                               font_size=24, color=GREY_A),
                         label(r"but the usual cure is the clock: \\ look at outputs only after everything settles "
-                              r"\ (Part 5)", font_size=24, color=CLOCK)).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(
-            RIGHT * 4.4 + DOWN * 0.8)
+                              r"\ (Part 5)", font_size=24, color=CLOCK)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        lesson.scale_to_fit_width(4.8).move_to(RIGHT * 4.5 + DOWN * 0.8)
         with self.voiceover(
             "One fix is surprising. <bookmark mark='a'/> Add the term b c, which the laws of chapter one say is "
             "redundant: it changes nothing about the function. <bookmark mark='b'/> But during the transition it holds "

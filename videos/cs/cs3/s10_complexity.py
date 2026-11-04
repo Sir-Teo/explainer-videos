@@ -34,7 +34,7 @@ class Complexity(VoiceoverScene):
             gs = []
             o = np.asarray(origin, float)
             for k in range(7):
-                gg = gate("XOR", size=0.5).move_to(o + np.array([k * 0.75, -k * 0.28, 0]))
+                gg = gate("XOR", size=0.5).move_to(o + np.array([k * 0.95, -k * 0.3, 0]))
                 gs.append(gg)
                 g.add(gg)
             for a, b in zip(gs, gs[1:]):
@@ -123,10 +123,10 @@ class Complexity(VoiceoverScene):
         d = load("counting")
         rows = d["rows"]
         head = label(r"The two towers", font_size=38).to_edge(UP, buff=0.35)
-        ax = Axes(x_range=[2, 30, 4], y_range=[0, 30, 5], x_length=8.0, y_length=4.6, tips=False,
+        ax = Axes(x_range=[2, 30, 4], y_range=[0, 30, 5], x_length=6.6, y_length=4.6, tips=False,
                   axis_config={"color": GREY_C, "font_size": 20},
                   x_axis_config={"numbers_to_include": list(range(2, 31, 4))},
-                  y_axis_config={"numbers_to_include": [0, 10, 20, 30]}).move_to(LEFT * 1.0 + DOWN * 0.3)
+                  y_axis_config={"numbers_to_include": [0, 10, 20, 30]}).move_to(LEFT * 2.6 + DOWN * 0.3)
         lf = VMobject(color=FUNC, stroke_width=4).set_points_as_corners(
             [ax.c2p(r["n"], min(math.log2(r["log2_functions"]), 30)) for r in rows])
         ls = VMobject(color=CTRL, stroke_width=4).set_points_as_corners(
@@ -138,7 +138,8 @@ class Complexity(VoiceoverScene):
         k1 = label(r"$\log_2\log_2$ of the number of functions: \ $n$", font_size=22, color=FUNC)
         k2 = label(r"$\log_2$ of the gates most functions need", font_size=22, color=CTRL)
         k3 = label(r"$\log_2 n$: \ a circuit of size $n$", font_size=22, color=YES)
-        keys = VGroup(k1, k2, k3).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(RIGHT * 4.6 + UP * 1.2)
+        keys = VGroup(k1, k2, k3).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        keys.move_to(RIGHT * 1.5 + UP * 1.2, aligned_edge=LEFT)
         tab = VGroup(*[MathTex(rf"n = {r['n']}: \ s \ge {fmt(r['s_needed'])}", font_size=24, color=GREY_A)
                        for r in rows if r["n"] in (10, 16, 20, 30)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         tab.next_to(keys, DOWN, buff=0.5).align_to(keys, LEFT)

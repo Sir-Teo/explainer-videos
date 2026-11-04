@@ -41,12 +41,12 @@ class Simulator(VoiceoverScene):
                        Text(args, font="DejaVu Sans Mono", font_size=20, color=DATA),
                        Text(nm, font="DejaVu Sans Mono", font_size=20, color=YES))
             for j, m in enumerate(r):
-                m.move_to([-3.6 + 1.6 * j, -0.6 - 0.36 * i, 0], aligned_edge=LEFT)
+                m.move_to([-6.0 + 1.45 * j, -0.6 - 0.36 * i, 0], aligned_edge=LEFT)
             table.add(r)
-        hdr = VGroup(*[note(t, font_size=20).move_to([-3.6 + 1.6 * j, -0.25, 0], aligned_edge=LEFT)
+        hdr = VGroup(*[note(t, font_size=20).move_to([-6.0 + 1.45 * j, -0.25, 0], aligned_edge=LEFT)
                        for j, t in enumerate((r"wire", r"kind", r"reads wires", r"name"))])
         rule = label(r"a gate may only read wires that already exist: \\ creation order is a topological order, \ "
-                     r"and one pass evaluates everything", font_size=24, color=HEAD).move_to(RIGHT * 4.3 + DOWN * 1.6)
+                     r"and one pass evaluates everything", font_size=24, color=HEAD).move_to(RIGHT * 3.4 + DOWN * 1.6)
         with self.voiceover(
             "Every circuit in this series, from this part's comparators to Pebble itself in Part 6, runs on one small "
             "piece of code, and it is worth seeing how it works. <bookmark mark='a'/> A circuit is built by calling "
