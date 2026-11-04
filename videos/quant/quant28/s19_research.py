@@ -235,7 +235,7 @@ class Research(VoiceoverScene):
             f"a permutation p-value of {d['p_perm']:.2f}. And the word-by-word screen of the simulation, which lets "
             f"almost no neutral word through, keeps {dz['n_real']}. The words of Chapter five were mostly chance, as "
             "the theorem said they would be at this sample size. At eight statements a year, the count that the "
-            "theorem asks for would take centuries."
+            "theorem asks for would take a century or more."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
