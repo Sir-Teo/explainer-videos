@@ -12,6 +12,7 @@ class LMM(VoiceoverScene):
         self.card()
         self.derive()
         self.check(m)
+        self.corr(load("lmmcorr"))
         self.fmm()
 
     def card(self):
@@ -92,6 +93,48 @@ class LMM(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def corr(self, c):
+        be, nv = np.asarray(c["beta"]), np.asarray(c["nvol"]) * 1e4
+        rows = [cmath(r"\rho_{ij}", r"=", r"e^{-\beta |T_i - T_j|}", font_size=38, colors={r"\rho_{ij}": FWD}),
+                cmath(r"\sigma_{N,\text{swaption}}^2", r"\approx", r"\textstyle\sum_{i,j} w_i w_j\,\rho_{ij}\,\sigma_i\sigma_j,"
+                      r"\quad w_i = \frac{\delta P(0, T_{i+1})}{A(0)}", font_size=32,
+                      colors={r"\sigma_{N,\text{swaption}}^2": NORMAL})]
+        g = axes([0, 1.05], [40, 100], x_length=6.0, y_length=3.6, xlabel=r"decorrelation $\beta$",
+                 ylabel=r"5y$\times$5y swaption vol, bp", xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[50, 70, 90],
+                 font_size=13).to_edge(LEFT, buff=0.6).shift(DOWN * 1.0)
+        ax = g.ax
+        cap = DashedLine(ax.c2p(0, 100 * c["caplet"] * 100), ax.c2p(1.05, 100 * c["caplet"] * 100), color=LOGN,
+                         stroke_width=2)
+        line = VGroup(curve(ax, be, nv, NORMAL, stroke_width=3.5, smooth=True),
+                      *[Dot(ax.c2p(x_, y_), color=NORMAL, radius=0.06) for x_, y_ in zip(be, nv)])
+        hdr = VGroup(rows[0], rows[1]).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=0.45)
+        side = VGroup(
+            legend([(LOGN, rf"every caplet: {1e4 * c['caplet']:.0f} bp"), (NORMAL, r"the swaption on all ten")],
+                   font_size=17),
+            MathTex(rf"\beta = {c['check_beta']:g}:\ \text{{formula}}\ {1e4 * c['check_formula']:.1f},\ "
+                    rf"\text{{simulated}}\ {1e4 * c['check_mc']:.1f}", font_size=22),
+            wrapped_label(r"the caplets are identical in every case; only the correlation changes. Caps price the "
+                          r"forwards one at a time, swaptions price them together: calibrating to both is how a desk "
+                          r"learns $\beta$ (Rebonato's formula, frozen weights)", 4.0, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.7)
+        fit_right(side)
+        with self.voiceover(
+            "One factor makes every forward move together. Real forwards decorrelate with distance: the six-month "
+            "rate five years out and the one ten years out are related, not identical. <bookmark mark='a'/> A "
+            "swaption is an option on a weighted average of forwards, so its volatility depends on their "
+            "correlation. Keep every caplet at ninety basis points and let the correlation fall off. "
+            f"<bookmark mark='b'/> The five-by-five swaption's volatility drops from {nv[0]:.0f} to {nv[-1]:.0f}: an "
+            "average of loosely related rates moves less. Caplets cannot see this; swaptions can, which is why a "
+            "desk calibrates its market model to both. The formula is checked against a simulation."
+        ) as vo:
+            self.play(FadeIn(hdr[0]), FadeIn(hdr[1]))
+            vo.wait_until("a")
+            self.play(FadeIn(g), Create(cap), FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(Create(line), FadeIn(side[1]), FadeIn(side[2]), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
     def fmm(self):
         rows = [cmath(r"R_i(t)", r"=", r"\frac{1}{\delta}\Big(\mathbb{E}^{T_{i+1}}_t\Big[e^{\int_{T_i}^{T_{i+1}} r_s\,ds}"
                       r"\Big] - 1\Big)", font_size=38, colors={r"R_i(t)": FWD}),
@@ -107,15 +150,17 @@ class LMM(VoiceoverScene):
             "2019 Andrei Lyashenko and Fabio Mercurio extended the market model to such rates: each forward lives on "
             "through its own accrual period. <bookmark mark='a'/> Inside the period, more of the rate is fixed every "
             "day, so its volatility shrinks linearly to zero at the payment date. One framework now covers the "
-            "LIBOR contracts still on the books and the SOFR ones that replaced them."
+            "LIBOR contracts still on the books and the SOFR ones that replaced them. It also shows why a SOFR caplet "
+            "is worth a little more than a LIBOR caplet on the same dates: its rate keeps moving during the period, "
+            "so it has more time to finish in the money."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
-        q = ask(r"in a market model, why must the forward rates of different periods be correlated less than "
-                r"perfectly to price a Bermudan swaption sensibly?")
-        with self.voiceover("Why does a market model need the forwards of different periods to be less than perfectly "
-                            "correlated, to price a Bermudan sensibly?"):
+        q = ask(r"caplets fix each forward's volatility. Which market prices fix the correlations, and why does a "
+                r"Bermudan care about them?")
+        with self.voiceover("Caplets fix each forward's volatility. Which market prices fix the correlations, and why "
+                            "does a Bermudan care?"):
             self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

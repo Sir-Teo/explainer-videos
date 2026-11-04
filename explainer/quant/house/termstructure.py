@@ -198,6 +198,45 @@ def bermudan_swaption_lsm(hw: HullWhite, K, T0, T_end, freq=1, payer=False, n_pa
             "boundary": sorted(bound.items())}
 
 
+
+def bermudan_swaption_lattice(hw: HullWhite, K, T0, T_end, freq=1, payer=False, dates=None, n_x=1201):
+    """The same Bermudan by backward induction on a grid of the Hull-White state, with no simulation: under the
+    T_end-forward measure (numeraire P(t, T_end)) the state moves between exercise dates as a Gaussian with known
+    mean and variance (Brigo and Mercurio, eq. 3.39), so each conditional expectation is a sum over the next
+    date's grid weighted by that Gaussian density (normalised row by row; robust to the payoff's kink).
+    ``dates`` overrides the exercise schedule (one date gives a European, a check against Jamshidian)."""
+    a, s, TN = hw.a, hw.s, float(T_end)
+    dates = np.arange(T0, T_end - 1e-9, 1 / freq) if dates is None else np.asarray(dates, float)
+
+    def MT(s_, t_):
+        return (s ** 2 / a ** 2 * (1 - np.exp(-a * (t_ - s_))) -
+                s ** 2 / (2 * a ** 2) * (np.exp(-a * (TN - t_)) - np.exp(-a * (TN + t_ - 2 * s_))))
+
+    def law(s_, t_):  # x(t) | x(s) ~ N(e x(s) + m, sd^2)
+        return np.exp(-a * (t_ - s_)), -MT(s_, t_), s * np.sqrt((1 - np.exp(-2 * a * (t_ - s_))) / (2 * a))
+
+    def expect(U, grid_next, mean, sd):
+        k = np.exp(-0.5 * ((grid_next[None, :] - np.atleast_1d(mean)[:, None]) / sd) ** 2)
+        return (k @ U) / k.sum(1)
+    grids = []
+    for t in dates:
+        e, m, sd = law(0.0, t)
+        grids.append(m + sd * np.linspace(-8, 8, n_x))
+
+    def exercise(t, x):
+        times = t + np.arange(1, int(round((TN - t) * freq)) + 1) / freq
+        P = hw.zcb(t, times[None, :], x[:, None])
+        ann = P.sum(1) / freq
+        par = (1 - P[:, -1]) / ann
+        v = (K - par) * ann if not payer else (par - K) * ann
+        return v / hw.zcb(t, TN, x)  # in units of the numeraire
+    U = np.maximum(exercise(dates[-1], grids[-1]), 0.0)
+    for i in range(len(dates) - 2, -1, -1):
+        e, m, sd = law(dates[i], dates[i + 1])
+        U = np.maximum(exercise(dates[i], grids[i]), expect(U, grids[i + 1], e * grids[i] + m, sd))
+    e, m, sd = law(0.0, dates[0])
+    return float(expect(U, grids[0], m, sd)[0]) * float(hw.c.df(TN))
+
 # ---------------------------------------------------------------------------
 # Quoting formulas
 # ---------------------------------------------------------------------------
@@ -341,10 +380,12 @@ def cpr_scurve(incentive, base=0.06, top=0.45, mid=0.0075, width=0.0035):
     return base + (top - base) / (1 + np.exp(-(np.asarray(incentive, float) - mid) / width))
 
 
-def mbs_price(coupon, rate_shift, base_rate=0.065, T=30, n_paths=400, seed=0, a=0.05, sigma=0.01, spread=0.017):
+def mbs_price(coupon, rate_shift, base_rate=0.065, T=30, n_paths=400, seed=0, a=0.05, sigma=0.01, spread=0.017,
+              oas=0.0):
     """A pass-through paying a fixed mortgage coupon on a balance that amortizes and prepays at :func:`cpr_scurve`
     of (coupon - current mortgage rate), priced by Monte Carlo on Vasicek short rates started at ``base_rate +
-    rate_shift`` (the mortgage rate is the short rate plus ``spread``).  Monthly; per 100 of balance.  Illustrative."""
+    rate_shift`` (the mortgage rate is the short rate plus ``spread``), discounted at the short rate plus ``oas``.
+    Monthly; per 100 of balance.  Illustrative."""
     rng = np.random.default_rng(seed)
     m, dt = 12 * T, 1 / 12
     r = np.full(n_paths, base_rate - spread + rate_shift)
@@ -361,7 +402,7 @@ def mbs_price(coupon, rate_shift, base_rate=0.065, T=30, n_paths=400, seed=0, a=
         smm = 1 - (1 - cpr) ** (1 / 12)
         prep = (bal - sched) * smm
         cf = bal * c + sched + prep
-        disc = disc * np.exp(-r * dt)
+        disc = disc * np.exp(-(r + oas) * dt)
         pv += cf * disc
         bal = bal - sched - prep
         r = r + a * (mean - r) * dt + sigma * np.sqrt(dt) * rng.standard_normal(n_paths)

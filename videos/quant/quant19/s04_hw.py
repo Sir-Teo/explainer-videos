@@ -12,8 +12,10 @@ class HW(VoiceoverScene):
         self.card()
         self.derive()
         self.calibrate(h)
+        self.windows(load("hwwin"))
         self.drift(h)
         self.fan(h)
+        self.trees()
 
     def card(self):
         c = chapter_card(3, r"Hull--White: fitting today's curve", r"Can a short-rate model reprice every bond?",
@@ -94,6 +96,51 @@ class HW(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def windows(self, w):
+        W = w["windows"]
+        cols = [QC.SPOT, QC.IMPLIED, QC.GAIN, QC.OPTION]
+        g = axes([0, 31], [0, 130], x_length=7.0, y_length=4.2, xlabel=r"zero maturity, years",
+                 ylabel=r"daily vol of the yield, bp a year", xticks=[1, 5, 10, 20, 30], yticks=[0, 40, 80, 120],
+                 font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        dots, fits = VGroup(), VGroup()
+        for c_, x in zip(cols, W):
+            m_, v_, f_ = np.asarray(x["mats"]), np.asarray(x["vol"]) * 1e4, np.asarray(x["fit"]) * 1e4
+            dots.add(VGroup(*[Dot(ax.c2p(a_, b_), color=c_, radius=0.06) for a_, b_ in zip(m_, v_)]))
+            fits.add(curve(ax, m_, f_, c_, stroke_width=2.5, smooth=True))
+
+        def a_txt(a):
+            return r"\approx 0" if a < 5e-4 else f"= {a:.4f}"
+        tab = VGroup(*[MathTex(rf"\text{{{x['window']}}}:\ a {a_txt(x['a'])},\ \sigma = {1e4 * x['sigma']:.0f}\ \text{{bp}}",
+                               font_size=24, color=c_) for c_, x in zip(cols, W)])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        side = VGroup(tab, wrapped_label(r"dots: the data; lines: the best Hull--White fit. When the short end was pinned "
+                                         r"near zero, short yields barely moved and long ones did: a vol curve rising "
+                                         r"with maturity, which Hull--White cannot draw with any positive $a$. The fit "
+                                         r"sits on its boundary, and the parameter means nothing", 3.9, 17, GREY_A)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        fit_right(side)
+        with self.voiceover(
+            "Fit the same two parameters in other three-year windows, and see how stable they are. "
+            "<bookmark mark='a'/> In 2004 to 2006, and again since 2023, the volatility of yields falls with maturity, "
+            "the shape the model is built for. <bookmark mark='b'/> But in 2010 to 2012, and 2019 to 2021, the Fed held "
+            "the short rate near zero; short yields barely moved while long ones did, and volatility rose with "
+            "maturity. No positive mean reversion can draw that. The fit runs to its boundary, and the parameter "
+            "stops meaning anything. A desk recalibrates every day, and a parameter that jumps when the regime changes "
+            "is a hedge that jumps with it."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            for i in (0, 3):
+                self.play(FadeIn(dots[i]), Create(fits[i]), FadeIn(tab[i]))
+            vo.wait_until("b")
+            for i in (1, 2):
+                self.play(FadeIn(dots[i]), Create(fits[i]), FadeIn(tab[i]))
+            self.play(FadeIn(side[1]))
+        self.add(illustration(r"Fed GSW zero yields, daily changes; least squares on nine maturities"))
+        self.wait(0.4)
+        self.clear_scene()
+
     def drift(self, h):
         t, phi, f0 = np.asarray(h["t"]), np.asarray(h["phi"]) * 100, np.asarray(h["f0"]) * 100
         g = axes([0, 30], [3, 10], x_length=8.2, y_length=4.4, xlabel=r"date $t$, years ahead", ylabel=r"percent",
@@ -162,8 +209,51 @@ class HW(VoiceoverScene):
             self.play(FadeIn(side[1]))
             vo.wait_until("b")
             self.play(FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def trees(self):
+        rows = [cmath(r"d\ln r_t", r"=", r"\big(\theta(t) - a\ln r_t\big)\,dt + \sigma\,dW_t", font_size=40,
+                      colors={r"d\ln r_t": VAS})]
+        whys = [why(r"Black, Derman and Toy (1990); Black and Karasinski (1991): model the logarithm of the rate, so it "
+                    r"stays positive and its volatility scales with its level; no closed forms, so prices come from a "
+                    r"lattice")]
+        step = ladder(self, rows, whys, keep=1, top=3.0, x=-0.6, buff=0.6, edge=6.9)
+        dx, dy, jmax, n = 1.5, 0.55, 2, 6
+        org = np.array([-4.6, -1.3, 0])
+
+        def P(i, j):
+            return org + np.array([dx * i, dy * j, 0])
+        nodes, edges = VGroup(), VGroup()
+        for i in range(n):
+            for j in range(-min(i, jmax), min(i, jmax) + 1):
+                nodes.add(Dot(P(i, j), radius=0.07, color=WHITE if abs(j) < jmax else QC.LOSS))
+                if i == n - 1:
+                    continue
+                ks = (0, -1, -2) if j == jmax else (0, 1, 2) if j == -jmax else (-1, 0, 1)
+                for k in ks:
+                    edges.add(Line(P(i, j), P(i + 1, j + k), stroke_width=1.6, color=GREY_B))
+        side = wrapped_label(r"Hull and White's trinomial tree (1994): each node branches up, middle or down, with "
+                             r"probabilities that match the drift and variance. At the edge (red) the branching turns "
+                             r"inward, which is mean reversion; a shift at each date fits today's curve. Then any "
+                             r"Bermudan or callable bond is valued backwards, node by node", 4.4, 18,
+                             GREY_A).to_edge(RIGHT, buff=0.35).shift(DOWN * 1.0)
+        fit_right(side)
+        with self.voiceover(
+            "Rates in Hull and White can go negative. In 1990 Fischer Black, Emanuel Derman and William Toy, and a "
+            "year later Black and Piotr Karasinski, modelled the logarithm of the rate instead: it stays positive, and "
+            "its volatility grows with its level. There are no closed forms, so the price comes from a lattice. "
+            "<bookmark mark='a'/> Hull and White's trinomial tree: from each node the rate goes up, stays, or goes "
+            "down, with probabilities that match the model's drift and variance. At the edges the branches turn "
+            "inward, which is mean reversion in a picture. Shift each column until the tree reprices today's curve, "
+            "and value any callable bond backwards from its maturity, node by node."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(e) for e in edges], lag_ratio=0.02, run_time=3), FadeIn(nodes), FadeIn(side))
         q_ = ask(r"Hull--White reprices today's curve exactly. Why can its option prices still be wrong tomorrow?")
-        with self.voiceover("It reprices today's curve exactly. Why can its option prices still be wrong tomorrow?"):
+        with self.voiceover("Any of these models reprices today's curve exactly. Why can its option prices still be "
+                            "wrong tomorrow?"):
             self.play(FadeIn(q_))
         self.wait(0.5)
         self.clear_scene()

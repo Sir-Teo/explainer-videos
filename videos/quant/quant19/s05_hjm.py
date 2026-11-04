@@ -12,6 +12,7 @@ class HJM(VoiceoverScene, ThreeDScene):
         j = load("hjm")
         self.card()
         self.derive()
+        self.holee(j)
         self.vols(j)
         self.surface(j)
         self.check(j)
@@ -56,6 +57,53 @@ class HJM(VoiceoverScene, ThreeDScene):
             step(2)
             vo.wait_until("c")
             step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def holee(self, j):
+        tau = np.asarray(j["tau"])
+        f0 = np.asarray(j["f0"]) * 100
+        sig = 0.01
+        rows = [cmath(r"\sigma(t, T)", r"=", r"\sigma\quad\text{(Ho and Lee, 1986)}", font_size=36,
+                      colors={r"\sigma(t, T)": FWD}),
+                cmath(r"\alpha(t, T)", r"=", r"\sigma\textstyle\int_t^T \sigma\,du = \sigma^2 (T - t)", font_size=36,
+                      colors={r"\alpha(t, T)": FWD}),
+                cmath(r"\mathbb{E}^{\mathbb{Q}}[f(t, T)]", r"=", r"f(0, T) + \sigma^2 t\,(T - t/2)", font_size=36,
+                      colors={r"\mathbb{E}^{\mathbb{Q}}[f(t, T)]": FWD})]
+        hdr = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(UP, buff=0.4).shift(LEFT * 0.4)
+        g = axes([0, 30], [3, 9], x_length=6.6, y_length=3.3, xlabel=r"maturity $T$, years",
+                 ylabel=r"forward, \%", xticks=[0, 10, 20, 30], yticks=[3, 5, 7, 9], font_size=13
+                 ).to_edge(LEFT, buff=0.6).shift(DOWN * 1.4)
+        ax = g.ax
+        cols = [WHITE, QC.SPOT, QC.OPTION]
+        lines = VGroup()
+        for t_, c_ in zip((0, 5, 10), cols):
+            T = tau[tau >= t_]
+            lines.add(curve(ax, T, f0[tau >= t_] + 100 * sig ** 2 * t_ * (T - t_ / 2), c_, stroke_width=3))
+        side = VGroup(
+            legend([(WHITE, r"today's forwards"), (QC.SPOT, r"expected in 5 years"), (QC.OPTION, r"expected in 10 years")],
+                   font_size=16),
+            wrapped_label(r"with 1\% a year of parallel volatility. Under the money-market measure, forwards drift up, "
+                          r"the more the longer: not a forecast but the convexity of bonds. A 30-year forward rises by "
+                          rf"{100 * sig ** 2 * 10 * 25:.1f} points over ten years in expectation", 4.0, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(DOWN * 1.2)
+        fit_right(side)
+        with self.voiceover(
+            "The simplest case shows what the condition means. Thomas Ho and Sang-Bin Lee, in 1986, gave every forward "
+            "the same constant volatility. <bookmark mark='a'/> Then the drift is sigma squared times the time to "
+            "maturity: zero for the short rate, larger and larger along the curve. <bookmark mark='b'/> Under the "
+            "money-market measure, the forward curve is expected to rise, and to steepen as it rises. "
+            "<bookmark mark='c'/> With one percent of volatility, the thirty-year forward is expected two and a half "
+            "points higher in ten years. That is not anyone's forecast; it is the convexity of long bonds, which the "
+            "drift must pay for, or there would be an arbitrage."
+        ) as vo:
+            self.play(FadeIn(hdr[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(hdr[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(hdr[2]), FadeIn(g), Create(lines[0]), Create(lines[1]), FadeIn(side[0]))
+            vo.wait_until("c")
+            self.play(Create(lines[2]), FadeIn(side[1]))
         self.wait(0.4)
         self.clear_scene()
 

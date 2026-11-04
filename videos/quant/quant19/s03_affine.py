@@ -15,6 +15,8 @@ class Affine(VoiceoverScene, ThreeDScene):
         self.shapes(s)
         self.surface(s)
         self.lab(s)
+        self.pq(load("pq"))
+        self.twofactor(load("twofactor"))
 
     def card(self):
         c = chapter_card(2, r"Affine term structures", r"How does a short-rate model price a bond?", part=PART)
@@ -146,10 +148,93 @@ class Affine(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(card))
             vo.wait_until("a")
             lab_run(self, card, out)
-        q = ask(r"in a one-factor model the 2-year and 10-year yields always move in the same direction. Why, and which "
-                r"chapter of Part 18 says that is wrong?")
-        with self.voiceover("In a one-factor model, the two-year and ten-year yields always move the same way. Why? And "
-                            "which chapter of Part eighteen says the curve does not behave like that?"):
+        self.wait(0.5)
+        self.clear_scene()
+
+    def pq(self, p):
+        T = np.asarray(p["T"])
+        g = axes([0, 10.5], [0, 6], x_length=7.0, y_length=4.2, xlabel=r"maturity, years", ylabel=r"yield, \%",
+                 xticks=[0, 2, 4, 6, 8, 10], yticks=[0, 2, 4, 6], font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        dat = VGroup(*[Dot(ax.c2p(m_, 100 * y_), color=WHITE, radius=0.08) for m_, y_ in zip(p["mats"], p["avg_curve"])])
+        lP = curve(ax, T, 100 * np.asarray(p["curve_P"]), VAS, stroke_width=3.5, smooth=True)
+        lQ = curve(ax, T, 100 * np.asarray(p["curve_Q"]), QC.IMPLIED, stroke_width=3.5, smooth=True)
+        side = VGroup(
+            legend([(WHITE, r"average curve, 1990--2025"), (VAS, r"Vasicek fitted to the rate's history ($\mathbb{P}$)"),
+                    (QC.IMPLIED, r"Vasicek fitted to the curves ($\mathbb{Q}$)")], font_size=16),
+            MathTex(rf"\mathbb{{P}}:\ a = {p['aP']:.3f},\ b = {100 * p['bP']:.1f}\%", font_size=26, color=VAS),
+            MathTex(rf"\mathbb{{Q}}:\ a = {p['aQ']:.3f},\ b = {100 * p['bQ']:.1f}\%", font_size=26, color=QC.IMPLIED),
+            wrapped_label(rf"same $\sigma$ in both (Girsanov moves drifts, not volatilities); the $\mathbb{{Q}}$ fit to "
+                          rf"{p['n']} month-end curves misses by {p['rmse_bp']:.0f} bp on average, the price of one "
+                          r"factor. The gap between the two drifts is the market price of risk", 3.8, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
+        if side.get_right()[0] > 6.75:
+            side.shift(LEFT * (side.get_right()[0] - 6.75))
+        with self.voiceover(
+            "Chapter one fitted Vasicek to the short rate's history. There is a second way: fit it to the curves "
+            "themselves, the prices of bonds, month after month. <bookmark mark='a'/> The history says the rate "
+            f"returns to {100 * p['bP']:.1f} percent; start from the average short rate, and that model's curve slopes "
+            "down. <bookmark mark='b'/> But the average curve of these thirty-six years sloped up, by about one and a "
+            f"half points. Fitted to the curves, Vasicek's rate returns to {100 * p['bQ']:.1f} percent, more slowly. "
+            "<bookmark mark='c'/> The volatility is the same in both, because changing the measure moves drifts, not "
+            "volatilities. The difference between the drifts is what bondholders are paid for bearing rate risk: the "
+            "market price of risk, Part four's Girsanov made visible."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(dat), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(Create(lP), FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(Create(lQ), FadeIn(side[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[3]))
+        self.add(illustration(r"Fed GSW curves and DTB3; one-factor Vasicek, least squares across 1--10 years"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def twofactor(self, t):
+        n = np.asarray(t["n"])
+        rows = [cmath(r"r_t", r"=", r"\varphi(t) + x_t + u_t,\quad d\langle x, u\rangle = \rho\,\sigma_x\sigma_u\,dt",
+                      font_size=36, colors={r"r_t": VAS}),
+                cmath(r"dy^{(n)}", r"=", r"\tfrac{B_{a_1}(n)}{n}\,dx + \tfrac{B_{a_2}(n)}{n}\,du", font_size=36,
+                      colors={r"dy^{(n)}": ZERO})]
+        hdr = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=0.45)
+        g = axes([0, 31], [0, 1.05], x_length=6.4, y_length=3.6, xlabel=r"maturity $n$, years",
+                 ylabel=r"correlation with the 2-year", xticks=[1, 5, 10, 20, 30], yticks=[0, 0.5, 1.0],
+                 font_size=13).to_edge(LEFT, buff=0.6).shift(DOWN * 1.0)
+        ax = g.ax
+        one = DashedLine(ax.c2p(0, 1), ax.c2p(31, 1), color=GREY_B, stroke_width=2)
+        ld = VGroup(*[Dot(ax.c2p(a_, b_), color=WHITE, radius=0.05) for a_, b_ in zip(n, t["data"])])
+        lm = curve(ax, n, np.asarray(t["model"]), VAS, stroke_width=3.5, smooth=True)
+        side = VGroup(
+            legend([(GREY_B, r"any one-factor model"), (WHITE, r"daily changes, 1990--2025"),
+                    (VAS, rf"two factors, $a = {t['a1']:g}$ and ${t['a2']:g}$")], font_size=16),
+            MathTex(rf"\rho(1\text{{y}}, 30\text{{y}}):\ \text{{data}}\ {t['data_1_30']:.2f},\ \text{{model}}\ "
+                    rf"{t['model_1_30']:.2f}", font_size=24),
+            wrapped_label(r"a slow factor for the level, a fast one for the short end (the G2++ model of Brigo and "
+                          r"Mercurio): still affine, still closed form, and now the ends of the curve can move apart", 3.9,
+                          17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.6)
+        if side.get_right()[0] > 6.75:
+            side.shift(LEFT * (side.get_right()[0] - 6.75))
+        with self.voiceover(
+            "One factor has a deeper problem. Every yield is a linear function of the same short rate, so every pair "
+            "of yields moves in perfect lockstep: a correlation of one. <bookmark mark='a'/> In the data, daily "
+            "changes in the two-year yield are correlated "
+            f"{t['data_2_10']:.2f} with the ten-year, and less with longer bonds. <bookmark mark='b'/> Add a second "
+            "factor: one slow, for the level, one fast, for the short end, a little correlated. Fitted to the "
+            f"correlations, the model tracks the data across the curve: {t['model_1_30']:.2f} between the one-year "
+            f"and the thirty-year, against {t['data_1_30']:.2f} measured. It is still affine and still in closed form; "
+            "Part eighteen's level and slope are its two factors."
+        ) as vo:
+            self.play(FadeIn(hdr), FadeIn(g), Create(one), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d) for d in ld], lag_ratio=0.03, run_time=2))
+            vo.wait_until("b")
+            self.play(Create(lm), FadeIn(side[1]), FadeIn(side[2]), run_time=1.5)
+        q = ask(r"under $\mathbb{P}$ the short rate returns to about 2\%, under $\mathbb{Q}$ to about 8\%. What does the "
+                r"gap pay for, and who earns it?")
+        with self.voiceover("Under the real-world measure the short rate returns to about two percent; under the "
+                            "pricing measure, to about eight. What does the gap pay for, and who earns it?"):
             self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

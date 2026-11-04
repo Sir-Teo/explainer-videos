@@ -13,7 +13,9 @@ class Bermudan(VoiceoverScene):
         self.what(b)
         self.lsm()
         self.result(b)
+        self.lattice(load("lattice"))
         self.boundary(b)
+        self.callable(load("lattice"))
         self.sweep(b)
 
     def card(self):
@@ -137,6 +139,81 @@ class Bermudan(VoiceoverScene):
             self.play(FadeIn(g), Create(Kl), FadeIn(side[1]))
             vo.wait_until("a")
             self.play(FadeIn(region), Create(lb), FadeIn(side[0]), FadeIn(side[2]), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def lattice(self, L):
+        rows = [cmath(r"\frac{V(t_i, x)}{P(t_i, T_N; x)}", r"=", r"\max\Big(\frac{\text{swap}(t_i, x)}{P(t_i, T_N; x)},\ "
+                      r"\mathbb{E}^{T_N}\Big[\frac{V(t_{i+1})}{P(t_{i+1}, T_N)}\,\Big|\,x\Big]\Big)", font_size=32,
+                      colors={r"\frac{V(t_i, x)}{P(t_i, T_N; x)}": ZERO})]
+        whys = [why(r"no simulation: under the measure that pays at the swap's end, the Hull--White state moves "
+                    r"between exercise dates as a Gaussian with a known mean and variance, so each expectation is an "
+                    r"integral on a grid of 1{,}201 states (the House's \texttt{bermudan\_swaption\_lattice})")]
+        step = ladder(self, rows, whys, keep=1, top=2.9, x=-0.6, buff=0.6, edge=6.9)
+        eu_l, eu_c = np.asarray(L["europeans_lattice"]), np.asarray(L["europeans_closed"])
+        tab = VGroup(
+            MathTex(rf"\text{{Europeans: grid vs Jamshidian, worst }} {100 * np.max(np.abs(eu_l / eu_c - 1)):.3f}\%",
+                    font_size=28),
+            MathTex(rf"\text{{Bermudan: grid }} {1e4 * L['lattice']:.1f}\ \text{{bp}}, \quad \text{{regression }} "
+                    rf"{1e4 * L['lsm']:.1f} \pm {2e4 * L['se']:.1f}\ \text{{bp}}", font_size=28, color=GOOD),
+            wrapped_label(r"the regression's rule is a feasible strategy, so it can only fall short of the best one: a "
+                          r"lower bound. Here it falls short by less than its own noise. With more factors a grid is "
+                          r"impossible and only simulation is left, which is why the regression is the industry's tool",
+                          11.0, 19, GREY_A),
+        ).arrange(DOWN, buff=0.35).shift(DOWN * 1.2)
+        with self.voiceover(
+            "How good is that number? In one factor it can be checked exactly. Under the measure that pays at the "
+            "swap's last date, the state moves between exercise dates as a Gaussian, so each continuation value is an "
+            "integral over a grid, and the whole price is a backward sweep with no randomness at all. "
+            "<bookmark mark='a'/> The grid reproduces every European's closed form to a few thousandths of a "
+            f"percent. <bookmark mark='b'/> And the Bermudan comes out at {1e4 * L['lattice']:.1f} basis points, "
+            f"against the regression's {1e4 * L['lsm']:.1f}. The regression's rule is a strategy someone could "
+            "follow, so it can only fall short of the best one; it falls short here by less than its own noise."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.play(FadeIn(tab[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(tab[1]), FadeIn(tab[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def callable(self, L):
+        cols = VGroup(
+            VGroup(label(r"10-year bullet bond", font_size=24, color=VAS),
+                   MathTex(rf"{L['bullet']:.2f}", font_size=40),
+                   MathTex(rf"\text{{yield}}\ {100 * L['y_bullet']:.2f}\%", font_size=28)).arrange(DOWN, buff=0.3),
+            MathTex(r"-", font_size=60),
+            VGroup(label(r"the Bermudan receiver", font_size=24, color=GOOD),
+                   MathTex(rf"{100 * L['lattice']:.2f}", font_size=40),
+                   label(r"the issuer's right to call", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.3),
+            MathTex(r"=", font_size=60),
+            VGroup(label(r"callable bond", font_size=24, color=BAD),
+                   MathTex(rf"{L['callable']:.2f}", font_size=40),
+                   MathTex(rf"\text{{yield}}\ {100 * L['y_callable']:.2f}\%", font_size=28)).arrange(DOWN, buff=0.3),
+        ).arrange(RIGHT, buff=0.6).shift(UP * 0.5)
+        head = label(rf"A 10-year bond paying {100 * L['K']:.2f}\% a year, callable at par every year from year 1",
+                     font_size=24).to_edge(UP, buff=0.6)
+        foot = wrapped_label(
+            rf"the call costs the investor {L['bullet'] - L['callable']:.2f} points of price, "
+            rf"{1e4 * (L['y_callable'] - L['y_bullet']):.0f} bp a year of yield. Agencies such as the Federal Home Loan "
+            r"Banks issue callable notes in volume and swap them into floating-rate funding with cancellable swaps, in "
+            r"effect selling the call to dealers, who are left long Bermudans to hedge", 12.0, 19,
+            GREY_A).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Who needs this? Anyone who issues a callable bond. Take a ten-year bond, paying "
+            f"{100 * L['K']:.2f} percent a year, that its issuer may repay at par on any anniversary. "
+            "<bookmark mark='a'/> The investor holds a plain bond and has sold the issuer the right to cancel it, "
+            "exactly the Bermudan receiver we just priced. <bookmark mark='b'/> So the callable bond is worth "
+            f"{L['callable']:.2f} instead of {L['bullet']:.2f}, and yields "
+            f"{1e4 * (L['y_callable'] - L['y_bullet']):.0f} basis points more. Government agencies issue these notes "
+            "by the billion, and swap them into floating rates with dealers, who are left holding Bermudans to hedge."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cols[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(cols[1]), FadeIn(cols[2]))
+            vo.wait_until("b")
+            self.play(FadeIn(cols[3]), FadeIn(cols[4]), FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
 

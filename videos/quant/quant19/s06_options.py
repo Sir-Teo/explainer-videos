@@ -12,7 +12,9 @@ class Options(VoiceoverScene):
         self.card()
         self.formulas()
         self.jamshidian()
+        self.parity()
         self.smile(h)
+        self.strip(load("capstrip"))
         self.grid(h)
 
     def card(self):
@@ -82,6 +84,48 @@ class Options(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def parity(self):
+        from explainer.quant.house import termstructure as TS
+        from videos.quant.quant19.compute import _curve_2025, _hw_params
+        c = _curve_2025()
+        a, sg, *_ = _hw_params()
+        hw = TS.HullWhite(c, a, sg)
+        T, n = 5.0, 5
+        times = T + np.arange(1, n + 1)
+        A = float(c.df(times).sum())
+        S = float((c.df(T) - c.df(times[-1])) / A)
+        rows = VGroup()
+        hx = [-4.6, -2.2, 0.2, 2.6, 5.0]
+        heads = [r"strike", r"payer", r"receiver", r"payer $-$ receiver", r"$A(0)\,(S_0 - K)$"]
+        rows.add(VGroup(*[label(h_, font_size=19, color=GREY_A).move_to([x_, 1.6, 0]) for h_, x_ in zip(heads, hx)]))
+        for i, dK in enumerate((-0.01, 0.0, 0.01)):
+            K = S + dK
+            pay, rec = hw.swaption(K, T, n, 1, payer=True), hw.swaption(K, T, n, 1, payer=False)
+            vals = [rf"{100 * K:.2f}\%"] + [f"{0.0 if abs(1e4 * x) < 0.05 else 1e4 * x:.1f}"
+                                            for x in (pay, rec, pay - rec, A * (S - K))]
+            rows.add(VGroup(*[MathTex(v_, font_size=28).move_to([x_, 0.8 - 0.7 * i, 0]) for v_, x_ in zip(vals, hx)]))
+        title = label(rf"5-year options on a 5-year swap, Hull--White; forward swap rate $S_0 = {100 * S:.2f}\%$, bp of "
+                      r"notional", font_size=22).to_edge(UP, buff=0.6)
+        foot = wrapped_label(r"put--call parity for swaptions: a payer minus a receiver at the same strike is a forward "
+                             r"swap, whatever the model. A payer plus a receiver at the money, the straddle, has no "
+                             r"exposure to the level of rates, only to how far they move: the market's way to trade "
+                             r"rate volatility itself", 12.0, 19, GREY_A).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "One identity holds in every model. A payer swaption pays if the swap rate ends above the strike, a "
+            "receiver if below. Hold a payer and sell a receiver at the same strike, and you are certain to enter the "
+            "swap: it is a forward swap, worth the annuity times the gap between the forward rate and the strike. "
+            "<bookmark mark='a'/> In the model, at three strikes, the differences match that line to the basis point. "
+            "<bookmark mark='b'/> And a payer plus a receiver at the money, a straddle, cares nothing for the direction "
+            "of rates, only for how far they move: it is how the market trades rate volatility itself."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(rows[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[1:]], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
     def smile(self, h):
         c = h["caplet"]
         K = (np.asarray(c["K"]) - c["F"]) * 1e4
@@ -112,6 +156,50 @@ class Options(VoiceoverScene):
             self.play(Create(l1), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(l2), FadeIn(foot), run_time=1.5)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def strip(self, c):
+        t, spot = np.asarray(c["t"]), np.asarray(c["spot"]) * 1e4
+        mats, flat, st = np.asarray(c["mats"]), np.asarray(c["flat"]) * 1e4, np.asarray(c["strip"]) * 1e4
+        rows = [cmath(r"\text{cap}_M(\sigma^{\text{flat}}_M)", r"=", r"\textstyle\sum_{T_i < M} \text{caplet}_i(\sigma_i)",
+                      font_size=34, colors={r"\text{cap}_M(\sigma^{\text{flat}}_M)": ZERO}),
+                cmath(r"\sigma_i", r"=", r"(a + bT_i)\,e^{-cT_i} + d", font_size=34, colors={r"\sigma_i": NORMAL})]
+        g = axes([0, 10.2], [60, 160], x_length=6.6, y_length=4.0, xlabel=r"years", ylabel=r"normal vol, bp a year",
+                 xticks=[0, 2, 4, 6, 8, 10], yticks=[60, 100, 140], font_size=13).to_edge(LEFT, buff=0.5).shift(DOWN * 0.6)
+        ax = g.ax
+        lspot = curve(ax, t, spot, NORMAL, stroke_width=3, smooth=True)
+        dflat = VGroup(*[Dot(ax.c2p(m_, f_), color=ZERO, radius=0.07) for m_, f_ in zip(mats, flat)])
+        steps = VGroup()
+        for i, m_ in enumerate(mats):
+            a_ = mats[i - 1] if i else 0.25
+            steps.add(Line(ax.c2p(a_, st[i]), ax.c2p(m_, st[i]), color=QC.HOUSE, stroke_width=4))
+        rows_g = VGroup(rows[0], rows[1]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.5)
+        side = VGroup(
+            legend([(NORMAL, r"caplet vols: Rebonato's hump"), (ZERO, r"flat cap vols, as quoted"),
+                    (QC.HOUSE, r"stripped back from the quotes")], font_size=17),
+            wrapped_label(r"a cap is quoted with one flat vol for all its caplets. Bootstrap, as for the curve: the "
+                          r"1-year cap fixes the first caplets, the 2-year cap the next, and so on. The flat vols are "
+                          r"averages; the hump shows only in the strip", 4.2, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.6)
+        fit_right(side)
+        with self.voiceover(
+            "Brokers quote a cap with one number: the flat volatility that, used for all its caplets, gives the cap's "
+            "price. But each caplet has its own volatility, and a model needs those. <bookmark mark='a'/> Suppose the "
+            "caplet vols have the hump shape Riccardo Rebonato parametrized, rising for two years as uncertainty about "
+            "policy builds, then falling. <bookmark mark='b'/> The flat vols quoted for caps of one to ten years are "
+            "averages of it: smoother, and late to fall. <bookmark mark='c'/> Strip them, the way chapter four of "
+            "Part eighteen bootstrapped the curve: the one-year cap fixes the first caplets, each longer cap the "
+            "next ones. The hump comes back, as a staircase."
+        ) as vo:
+            self.play(FadeIn(rows_g[0]), FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(rows_g[1]), Create(lspot), run_time=1.5)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(d) for d in dflat], lag_ratio=0.15))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[Create(l_) for l_ in steps], lag_ratio=0.2, run_time=2.5), FadeIn(side[1]))
+        self.add(illustration(r"illustrative caplet vols; forwards and discount factors from the Fed's curve, 31 December 2025"))
         self.wait(0.4)
         self.clear_scene()
 

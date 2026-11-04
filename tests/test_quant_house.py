@@ -2566,6 +2566,25 @@ def test_bermudan_is_worth_at_least_its_best_european():
     assert out["price"] + 3 * out["se"] >= max(out["europeans"])
 
 
+def test_lattice_bermudan_matches_jamshidian_and_bounds_lsm():
+    from explainer.quant.house import termstructure as TS
+    c, hw = _hw()
+    for t in (1.0, 5.0):  # one exercise date: a European, against the closed form
+        assert TS.bermudan_swaption_lattice(hw, 0.04, 1.0, 10.0, dates=[t]) == pytest.approx(
+            hw.swaption(0.04, t, 10.0 - t, 1, payer=False), rel=1e-3)
+    lat = TS.bermudan_swaption_lattice(hw, 0.04, 1.0, 10.0)
+    lsm = TS.bermudan_swaption_lsm(hw, 0.04, 1.0, 10.0, n_paths=20000, seed=0)
+    assert lsm["price"] - 3 * lsm["se"] <= lat <= lsm["price"] + 4 * lsm["se"] + 2e-4  # LSM is a lower bound
+
+
+def test_mbs_oas_below_zero_vol_spread():
+    from scipy.optimize import brentq
+    from explainer.quant.house import termstructure as TS
+    oas = brentq(lambda z: TS.mbs_price(0.065, 0.0, n_paths=200, seed=0, oas=z) - 101.0, -0.02, 0.05)
+    zvs = brentq(lambda z: TS.mbs_price(0.065, 0.0, n_paths=2, seed=0, sigma=1e-9, oas=z) - 101.0, -0.02, 0.05)
+    assert 0 < oas < zvs  # the option costs the holder yield
+
+
 def test_mbs_has_negative_convexity():
     from explainer.quant.house import termstructure as TS
     p = [TS.mbs_price(0.065, s, n_paths=300, seed=0) for s in (-0.01, 0.0, 0.01)]

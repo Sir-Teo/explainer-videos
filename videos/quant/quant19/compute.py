@@ -98,11 +98,11 @@ def compute_shortrate() -> dict:
                   "half_life_vas": float(np.log(2) / a), "half_life_cir": float(np.log(2) / cir["kappa"])})
 
 
-def _hw_params():
+def _hw_params(start="2023-01-01", end="2025-12-31"):
     """Hull-White's a and sigma from the term structure of the daily volatility of zero yields, 2023-2025: in the
     model the n-year zero yield moves by sigma B(n) / n per unit of the short rate's shock."""
     from scipy.optimize import least_squares
-    g = data.gsw("2023-01-01", "2025-12-31")
+    g = data.gsw(start, end)
     mats = np.array([1, 2, 3, 5, 7, 10, 15, 20, 30])
     Y = g["y"][:, mats - 1] / 100
     ok = ~np.isnan(Y).any(1)
@@ -228,8 +228,13 @@ def compute_negative() -> dict:
     Fs = np.linspace(-0.01, 0.02, 61)
     bach = TS.bachelier(Fs, K, T, 0.006)
     black = np.array([TS.black_swaption(F, max(K, 1e-6), T, 0.6) if F > 0 else np.nan for F in Fs])
+    g = data.fred("IRLTLT01DEM156N", "1999-01-01", "2025-12-31")  # German 10-year government yield, monthly
+    gn = g["value"] < 0
+    bund = {"t": _fy(g["date"]), "v": g["value"], "first": int(g["date"][np.argmax(gn)]),
+            "last": int(g["date"][np.where(gn)[0][-1]]), "min": float(g["value"].min()),
+            "min_date": int(g["date"][np.argmin(g["value"])]), "months": int(gn.sum())}
     return _json({"t": _fy(d), "dfr": v, "first_neg": first_neg, "last_neg": last_neg, "min": float(v.min()),
-                  "F": Fs, "bach": bach, "black": black})
+                  "F": Fs, "bach": bach, "black": black, "bund": bund})
 
 
 def compute_sabr() -> dict:
@@ -258,8 +263,14 @@ def compute_multicurve() -> dict:
     one = R.Curve(c.t, c.z + basis)  # discount on the LIBOR curve too
     o1 = one.df(t)
     fixed_one = float((1 - o1[-1]) / np.sum(0.25 * o1))
+    # an off-market swap: receive 1.5% fixed (struck when rates were low) against 3-month LIBOR, per 100 notional
+    K = 0.015
+    fwd_one = (np.r_[1.0, o1[:-1]] / o1 - 1) / 0.25
+    off_two = float(100 * np.sum(0.25 * ois * (K - fwd_lib)))
+    off_one = float(100 * np.sum(0.25 * o1 * (K - fwd_one)))
     return _json({"t": _fy(d), "ted": v, "peak": {"date": int(d[k]), "pct": float(v[k])}, "pre2007": float(pre),
-                  "fixed_two": fixed_two, "fixed_one": fixed_one, "basis": basis})
+                  "fixed_two": fixed_two, "fixed_one": fixed_one, "basis": basis, "K_off": K, "off_two": off_two,
+                  "off_one": off_one, "annuity_two": float(np.sum(0.25 * ois)), "annuity_one": float(np.sum(0.25 * o1))})
 
 
 # ---------------------------------------------------------------------------
@@ -357,7 +368,25 @@ def compute_mbs() -> dict:
     for s_ in shifts:
         tsy.append(mbs[k0] * np.exp(-dur * s_))
     conv = (mbs[k0 + 1] - 2 * mbs[k0] + mbs[k0 - 1]) / ((shifts[1] - shifts[0]) ** 2 * mbs[k0])
-    return _json({"t": _fy(d), "rate": v, "low": {"t": float(_fy(d)[int(np.argmin(v))]), "v": float(v.min())},
+    # option-adjusted spread: the spread over the model's rates that matches an (illustrative) market price, against
+    # the same spread with the option switched off (zero volatility); the gap is the option's cost
+    from scipy.optimize import brentq
+    mkt = 101.0
+    oas = brentq(lambda z: TS.mbs_price(0.065, 0.0, n_paths=300, seed=0, oas=z) - mkt, -0.02, 0.05, xtol=1e-6)
+    zvs = brentq(lambda z: TS.mbs_price(0.065, 0.0, n_paths=2, seed=0, sigma=1e-9, oas=z) - mkt, -0.02, 0.05,
+                 xtol=1e-6)
+    # the summer 2003 sell-off, often attributed in part to convexity hedging; and the Fed's MBS holdings
+    t10 = data.fred("DGS10", "2003-05-01", "2003-09-30")
+    i0 = int(np.argmin(t10["value"]))
+    i1 = i0 + int(np.argmax(t10["value"][i0:]))
+    fed = data.fred("WSHOMCB", "2009-01-01", "2025-12-31")
+    j = int(np.argmax(fed["value"]))
+    y2003 = {"low": {"date": int(t10["date"][i0]), "v": float(t10["value"][i0])},
+             "high": {"date": int(t10["date"][i1]), "v": float(t10["value"][i1])}}
+    fedmbs = {"t": _fy(fed["date"]), "v": fed["value"] / 1e6, "peak": {"date": int(fed["date"][j]),
+                                                                        "v": float(fed["value"][j] / 1e6)},
+              "end": float(fed["value"][-1] / 1e6)}
+    return _json({"y2003": y2003, "fed": fedmbs, "oas": {"mkt": mkt, "oas": float(oas), "zvs": float(zvs)}, "t": _fy(d), "rate": v, "low": {"t": float(_fy(d)[int(np.argmin(v))]), "v": float(v.min())},
                   "high": {"t": float(_fy(d)[int(np.argmax(v))]), "v": float(v.max())}, "inc": inc,
                   "cpr": TS.cpr_scurve(inc), "shifts": shifts, "mbs": mbs, "tsy": np.array(tsy), "duration": dur,
                   "convexity": conv, "end": float(v[-1])})
@@ -385,10 +414,326 @@ def compute_envelope() -> dict:
     return {"trials": pit.trials_so_far(), "registered": load("premia")["registered"]}
 
 
+# ---------------------------------------------------------------------------
+# Additions: estimation bias, the rate-level elasticity of vol, SABR's density, LMM correlation, cap stripping
+# ---------------------------------------------------------------------------
+def compute_meanrev() -> dict:
+    s = load("shortrate")
+    x = np.asarray(s["x"])
+    v = s["vas"]
+    dt, n = 1 / 12, len(x)
+    phi = np.exp(-v["a"] * dt)
+    sd = v["sigma"] * np.sqrt((1 - phi ** 2) / (2 * v["a"]))
+    # the AR(1) estimate's own standard error on the real data
+    X = np.c_[np.ones(n - 1), x[:-1]]
+    c, *_ = np.linalg.lstsq(X, x[1:], rcond=None)
+    res = x[1:] - X @ c
+    se_phi = float(np.sqrt(res.var() / np.sum((x[:-1] - x[:-1].mean()) ** 2)))
+    # re-estimate on 2000 Vasicek histories of the same length, started at the same point, with the fitted truth
+    rng = np.random.default_rng(0)
+    m = 2000
+    sims = np.zeros((m, n))
+    sims[:, 0] = x[0]
+    for k in range(n - 1):
+        sims[:, k + 1] = v["b"] + (sims[:, k] - v["b"]) * phi + sd * rng.standard_normal(m)
+    a_hat = np.empty(m)
+    for i in range(m):
+        y = sims[i]
+        Xi = np.c_[np.ones(n - 1), y[:-1]]
+        ci, *_ = np.linalg.lstsq(Xi, y[1:], rcond=None)
+        a_hat[i] = -np.log(min(max(ci[1], 1e-6), 0.999999)) / dt
+    return _json({"a": v["a"], "phi": float(c[1]), "se_phi": se_phi, "a_hat": a_hat, "years": n / 12,
+                  "median": float(np.median(a_hat)), "mean": float(a_hat.mean()),
+                  "q": np.quantile(a_hat, [0.05, 0.5, 0.95]),
+                  "share_double": float(np.mean(a_hat > 2 * v["a"])),
+                  "a_ci": [float(-np.log(min(c[1] + 1.96 * se_phi, 0.999999)) / dt),
+                           float(-np.log(c[1] - 1.96 * se_phi) / dt)]})
+
+
+def compute_ratevol() -> dict:
+    f = data.fred("DGS10", "1962-01-01", "2025-12-31")
+    d, v = f["date"], f["value"]
+    yr = d // 10000
+    rows = []
+    for y in range(1962, 2026):
+        s_ = yr == y
+        if s_.sum() < 150:
+            continue
+        lv = v[s_]
+        dv = np.diff(lv)
+        rows.append((y, lv.mean(), np.std(dv) * np.sqrt(252) * 100, np.std(np.diff(np.log(lv))) * np.sqrt(252) * 100))
+    a = np.array(rows)
+    X = np.c_[np.ones(len(a)), np.log(a[:, 1])]
+    cn, *_ = np.linalg.lstsq(X, np.log(a[:, 2]), rcond=None)
+    return _json({"year": a[:, 0], "level": a[:, 1], "nvol_bp": a[:, 2], "lvol_pct": a[:, 3], "beta": float(cn[1]),
+                  "c": float(cn[0]), "cv_n": float(np.std(a[:, 2]) / np.mean(a[:, 2])),
+                  "cv_l": float(np.std(a[:, 3]) / np.mean(a[:, 3]))})
+
+
+def compute_sabrpdf() -> dict:
+    F = 0.035
+    K = np.linspace(0.0005, 0.09, 1791)
+    dK = K[1] - K[0]
+    out = {}
+    for T in (2.0, 10.0):
+        p = {"alpha": 0.048, "beta": 0.5, "rho": -0.2, "nu": 0.35}
+        iv = TS.sabr_normal_iv(F, K, T, **p)
+        C = TS.bachelier(F, K, T, iv)
+        pdf = np.diff(C, 2) / dK ** 2
+        neg = pdf < 0
+        out[f"{T:g}"] = {"K": K[1:-1:5], "pdf": pdf[::5], "neg_upto": float(K[1:-1][neg].max()) if neg.any() else 0.0,
+                         "neg_mass": float(-pdf[neg].sum() * dK), "atm_nvol": float(iv[np.argmin(np.abs(K - F))])}
+    return _json({"F": F, "params": {"alpha": 0.048, "beta": 0.5, "rho": -0.2, "nu": 0.35}, **out})
+
+
+def compute_lmmcorr() -> dict:
+    c = _curve_2025()
+    dlt = 0.5
+    Ti = 5.0 + dlt * np.arange(10)  # the forwards of a 5y x 5y swaption
+    P = c.df(Ti + dlt)
+    L = (c.df(Ti) / P - 1) / dlt
+    w = dlt * P / np.sum(dlt * P)
+    S = float(np.sum(w * L))
+    sig = 0.009
+    betas = [0.0, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0]
+    vols = []
+    for b_ in betas:
+        rho = np.exp(-b_ * np.abs(Ti[:, None] - Ti[None, :]))
+        vols.append(float(np.sqrt(w @ (rho * sig * sig) @ w)))
+    # a check of the frozen-weight formula by simulation: correlated normal forwards to expiry, the swap rate exact
+    rng = np.random.default_rng(0)
+    b_chk = 0.2
+    rho = np.exp(-b_chk * np.abs(Ti[:, None] - Ti[None, :]))
+    Lc = np.linalg.cholesky(rho)
+    Z = rng.standard_normal((50000, len(Ti))) @ Lc.T
+    LT = L + sig * np.sqrt(5.0) * Z
+    PT = np.cumprod(1 / (1 + dlt * LT), axis=1)
+    ST = (1 - PT[:, -1]) / (dlt * PT.sum(1))
+    mc = float(np.std(ST) / np.sqrt(5.0))
+    return _json({"T": Ti, "S": S, "beta": betas, "nvol": vols, "caplet": sig, "check_beta": b_chk, "check_mc": mc,
+                  "check_formula": vols[betas.index(b_chk)]})
+
+
+def compute_capstrip() -> dict:
+    c = _curve_2025()
+    dlt = 0.25
+    t = dlt * np.arange(1, 40)  # caplet resets, 3 months to 9.75 years
+    P = c.df(t + dlt)
+    F = (c.df(t) / P - 1) / dlt
+
+    def abcd(T, a=0.004, b=0.006, c_=0.45, d=0.0075):  # Rebonato's hump, normal vol
+        return (a + b * T) * np.exp(-c_ * T) + d
+    sv = abcd(t)
+    mats = np.arange(1, 11)
+    flat, K = [], []
+    for M in mats:
+        sel = t + dlt <= M + 1e-9
+        k = float(np.sum(dlt * P[sel] * F[sel]) / np.sum(dlt * P[sel]))
+        price = float(np.sum(TS.bachelier(F[sel], k, t[sel], sv[sel], dlt * P[sel])))
+        from scipy.optimize import brentq
+        fv = brentq(lambda s_: float(np.sum(TS.bachelier(F[sel], k, t[sel], s_, dlt * P[sel]))) - price, 1e-5, 0.1)
+        flat.append(fv)
+        K.append(k)
+    # strip: from the flat vols back to piecewise-constant caplet vols between cap maturities
+    strip = []
+    from scipy.optimize import brentq
+    for i, M in enumerate(mats):
+        sel = t + dlt <= M + 1e-9
+        k = K[i]
+        target = float(np.sum(TS.bachelier(F[sel], k, t[sel], flat[i], dlt * P[sel])))
+        prev = t + dlt <= (mats[i - 1] if i else 0) + 1e-9
+        known = np.zeros(len(t))
+        for j, Mj in enumerate(mats[:i]):
+            known[(t + dlt <= Mj + 1e-9) & (t + dlt > (mats[j - 1] if j else 0) + 1e-9)] = strip[j]
+        new = sel & ~prev
+
+        def f(s_):
+            v_ = known.copy()
+            v_[new] = s_
+            return float(np.sum(TS.bachelier(F[sel], k, t[sel], v_[sel], dlt * P[sel]))) - target
+        strip.append(brentq(f, 1e-5, 0.1))
+    return _json({"t": t, "spot": sv, "mats": mats, "flat": flat, "strip": strip, "K": K})
+
+
+
+def compute_lattice() -> dict:
+    """The Bermudan again, by backward induction on the state with no simulation; and the callable bond it hedges."""
+    b = load("bermudan")
+    c = _curve_2025()
+    hw = TS.HullWhite(c, b["a"], b["sigma"])
+    K = b["K"]
+    lat = TS.bermudan_swaption_lattice(hw, K, 1.0, 10.0)
+    euro = [TS.bermudan_swaption_lattice(hw, K, 1.0, 10.0, dates=[t]) for t in b["dates"]]
+    sweep = [{"a": x["a"], "lattice": TS.bermudan_swaption_lattice(TS.HullWhite(c, x["a"], b["sigma"]), K, 1.0, 10.0),
+              "lsm": x["bermudan"]} for x in b["sweep"]]
+    # a 10-year bond paying K annually, callable at par each year from year 1: the investor is short the Bermudan
+    t = np.arange(1, 11)
+    bullet = float(100 * (K * c.df(t).sum() + c.df(10.0)))
+    callable_ = bullet - 100 * lat
+
+    def ytm(price):
+        from scipy.optimize import brentq
+        return brentq(lambda y: float(np.sum(100 * K / (1 + y) ** t) + 100 / (1 + y) ** 10) - price, -0.05, 0.3)
+    return _json({"lattice": lat, "lsm": b["price"], "se": b["se"], "europeans_lattice": euro,
+                  "europeans_closed": b["europeans"], "sweep": sweep, "bullet": bullet, "callable": callable_,
+                  "y_bullet": ytm(bullet), "y_callable": ytm(callable_), "K": K})
+
+
+def _month_end_curves(start="1990-01-01"):
+    g = data.gsw(start, "2025-12-31")
+    m = g["date"] // 100
+    idx = np.where(np.r_[m[1:] != m[:-1], True])[0]
+    r0 = []
+    for i in idx:
+        b_, t_ = g["beta"][i].copy(), g["tau"][i].copy()
+        if np.isnan(t_[1]) or np.isnan(b_[3]):
+            b_[3], t_[1] = 0.0, 1.0
+        r0.append(R.nss(np.array([0.25]), b_, t_)[0] / 100)
+    return g, idx, np.array(r0)
+
+
+def compute_pq() -> dict:
+    """Vasicek twice: fitted to the short rate's history (P) and to the cross-section of yields (Q), same sigma."""
+    from scipy.optimize import least_squares
+    s = load("shortrate")
+    v = s["vas"]
+    g, idx, r0 = _month_end_curves()
+    mats = np.array([1, 2, 3, 5, 7, 10.0])
+    Y = g["y"][idx][:, (mats - 1).astype(int)] / 100
+    ok = np.isfinite(Y).all(1)
+    sg = v["sigma"]
+
+    def res(p):
+        a, bq = p
+        return np.concatenate([-np.log(TS.vasicek_zcb(r0[ok], a, bq, sg, T)) / T - Y[ok][:, k]
+                               for k, T in enumerate(mats)])
+    f = least_squares(res, [0.1, 0.05], bounds=([1e-3, -0.1], [2.0, 0.3]))
+    aq, bq = f.x
+    T = np.linspace(0.25, 10, 40)
+    avg_r0 = float(r0[ok].mean())
+    return _json({"aP": v["a"], "bP": v["b"], "aQ": float(aq), "bQ": float(bq), "sigma": sg,
+                  "rmse_bp": float(np.sqrt(np.mean(f.fun ** 2)) * 1e4), "mats": mats, "avg_curve": Y[ok].mean(0),
+                  "avg_r0": avg_r0, "T": T,
+                  "curve_P": -np.log(TS.vasicek_zcb(avg_r0, v["a"], v["b"], sg, T)) / T,
+                  "curve_Q": -np.log(TS.vasicek_zcb(avg_r0, aq, bq, sg, T)) / T, "n": int(ok.sum()),
+                  "lam": float(aq * (bq - v["b"]) / sg)})
+
+
+def compute_twofactor() -> dict:
+    """Correlations of daily yield changes against the 2-year, in the data and in a two-factor Gaussian model."""
+    from scipy.optimize import least_squares
+    g = data.gsw("1990-01-01", "2025-12-31")
+    n = np.arange(1, 31)
+    dy = np.diff(g["y"], axis=0)
+    ok = np.isfinite(dy).all(1)
+    C = np.corrcoef(dy[ok].T)
+    a1, a2 = 0.02, 0.9
+
+    def model(p):
+        r_, rho = p
+        l1, l2 = (1 - np.exp(-a1 * n)) / (a1 * n), r_ * (1 - np.exp(-a2 * n)) / (a2 * n)
+        cov = np.outer(l1, l1) + np.outer(l2, l2) + rho * (np.outer(l1, l2) + np.outer(l2, l1))
+        sd = np.sqrt(np.diag(cov))
+        return cov / np.outer(sd, sd)
+    sel = [0, 1, 4, 9, 19, 29]
+    f = least_squares(lambda p: (model(p) - C)[np.ix_(sel, sel)].ravel(), [1.0, -0.5], bounds=([0.01, -0.99], [10, 0.99]))
+    M = model(f.x)
+    return _json({"n": n, "data": C[1], "model": M[1], "data_1_30": float(C[0, 29]), "model_1_30": float(M[0, 29]),
+                  "data_2_10": float(C[1, 9]), "model_2_10": float(M[1, 9]), "a1": a1, "a2": a2,
+                  "ratio": float(f.x[0]), "rho": float(f.x[1])})
+
+
+def compute_premia_acm() -> dict:
+    """The Cochrane-Piazzesi forecast against the NY Fed's ACM term premium (Part 18), month by month."""
+    p = load("premia")
+    a = data.acm()
+    t = np.asarray(p["t"])
+    pm = (np.floor(t) * 100 + np.floor((t - np.floor(t)) * 12 + 1e-6) + 1).astype(int)
+    am = a["date"] // 100
+    pos = {m: i for i, m in enumerate(am)}
+    pairs = [(i, pos[m]) for i, m in enumerate(pm) if m in pos]
+    i1, i2 = map(np.array, zip(*pairs))
+    cp = np.asarray(p["pred_cp"])[i1] * 100
+    tp5 = a["tp"][i2][:, 4]
+    return _json({"t": t[i1], "cp": cp, "tp5": tp5, "corr": float(np.corrcoef(cp, tp5)[0, 1]),
+                  "corr10": float(np.corrcoef(cp, a["tp"][i2][:, 9])[0, 1])})
+
+
+def compute_greeks() -> dict:
+    """The Bermudan's risks by the lattice: a 1 bp parallel move of the curve, 1 bp of normal volatility; and the
+    same for its most valuable European, the natural first hedge."""
+    b = load("bermudan")
+    c = _curve_2025()
+    K, a, sg = b["K"], b["a"], b["sigma"]
+    up = R.Curve(c.t, c.z + 1e-4)
+    dn = R.Curve(c.t, c.z - 1e-4)
+    k = int(np.argmax(b["europeans"]))
+    T = float(b["dates"][k])
+
+    def berm(cv, s_):
+        return TS.bermudan_swaption_lattice(TS.HullWhite(cv, a, s_), K, 1.0, 10.0)
+
+    def euro(cv, s_):
+        return TS.HullWhite(cv, a, s_).swaption(K, T, 10.0 - T, 1, payer=False)
+    out = {}
+    for name, f in (("bermudan", berm), ("european", euro)):
+        v0 = f(c, sg)
+        out[name] = {"price": v0, "delta": (f(up, sg) - f(dn, sg)) / 2, "vega": (f(c, sg + 1e-4) - f(c, sg - 1e-4)) / 2,
+                     "gamma": f(up, sg) + f(dn, sg) - 2 * v0}
+    n_eu = out["bermudan"]["vega"] / out["european"]["vega"]
+    # the swap that clears the remaining delta: a 10-year receiver swap's DV01 per unit notional
+    t = np.arange(1, 11)
+    swap_dv01 = float(np.sum(K * (R.Curve(c.t, c.z + 1e-4).df(t) - R.Curve(c.t, c.z - 1e-4).df(t))) / 2 +
+                      (R.Curve(c.t, c.z + 1e-4).df(10.0) - R.Curve(c.t, c.z - 1e-4).df(10.0)) / 2)
+    resid = out["bermudan"]["delta"] - n_eu * out["european"]["delta"]
+    return _json({**out, "T_eu": T, "n_eu": n_eu, "resid_delta": resid, "swap_dv01": swap_dv01,
+                  "n_swap": -resid / swap_dv01})
+
+
+def compute_famabliss() -> dict:
+    """Fama and Bliss (1987): each bond's excess return on its own forward spread, 1964-2025; the expectations
+    hypothesis says every slope is zero."""
+    d, lp = _premia_data()
+    cp = TS.cochrane_piazzesi(lp)
+    fwd, rx = cp["fwd"][:-12], cp["rx"]
+    dd = d[:-12]
+    sel = dd >= 19640101
+    out = []
+    for k, n in enumerate(range(2, 6)):
+        x = (fwd[:, k + 1] - fwd[:, 0])[sel]
+        y = rx[sel, k]
+        X = np.c_[np.ones(len(x)), x]
+        b_, *_ = np.linalg.lstsq(X, y, rcond=None)
+        e = y - X @ b_
+        # Newey-West standard error with 12 lags for the overlapping annual returns
+        u = X * e[:, None]
+        S = u.T @ u
+        for L in range(1, 13):
+            w = 1 - L / 13
+            G = u[L:].T @ u[:-L]
+            S += w * (G + G.T)
+        Q = np.linalg.inv(X.T @ X)
+        se = float(np.sqrt((Q @ S @ Q)[1, 1]))
+        out.append({"n": n, "slope": float(b_[1]), "se": se, "r2": float(1 - e.var() / y.var())})
+    return _json({"rows": out, "start": 1964, "end": int(dd[sel][-1] // 10000)})
+
+
+def compute_hwwin() -> dict:
+    """Hull-White's two parameters fitted to the same kind of data in four different three-year windows."""
+    out = []
+    for a_, b_ in (("2004-01-01", "2006-12-31"), ("2010-01-01", "2012-12-31"), ("2019-01-01", "2021-12-31"),
+                   ("2023-01-01", "2025-12-31")):
+        a, s_, mats, vol, fit = _hw_params(a_, b_)
+        out.append({"window": f"{a_[:4]}--{b_[:4]}", "a": a, "sigma": s_, "mats": mats, "vol": vol, "fit": fit})
+    return _json({"windows": out})
+
 ITEMS = {"shortrate": compute_shortrate, "hw": compute_hw, "hjm": compute_hjm, "lmm": compute_lmm,
          "bermudan": compute_bermudan, "negative": compute_negative, "sabr": compute_sabr,
          "multicurve": compute_multicurve, "premia": compute_premia, "mbs": compute_mbs, "y1994": compute_y1994,
-         "envelope": compute_envelope}
+         "meanrev": compute_meanrev, "ratevol": compute_ratevol, "sabrpdf": compute_sabrpdf, "lmmcorr": compute_lmmcorr,
+         "capstrip": compute_capstrip, "lattice": compute_lattice, "pq": compute_pq, "twofactor": compute_twofactor,
+         "premia_acm": compute_premia_acm, "greeks": compute_greeks,
+         "famabliss": compute_famabliss, "hwwin": compute_hwwin, "envelope": compute_envelope}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

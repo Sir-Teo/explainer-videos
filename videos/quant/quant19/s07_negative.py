@@ -4,6 +4,10 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant19.common import BAD, LOGN, NORMAL, PART, ask, fit_right, illustration, load
+from videos.quant.quant19.common import ZERO as ZERO_C
+
+MONTHS = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+          'November', 'December']
 
 
 class Negative(VoiceoverScene):
@@ -11,7 +15,9 @@ class Negative(VoiceoverScene):
         n = load("negative")
         self.card()
         self.ecb(n)
+        self.bund(n["bund"])
         self.models(n)
+        self.floors()
         self.oil()
 
     def card(self):
@@ -56,6 +62,44 @@ class Negative(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def bund(self, b):
+        t, v = np.asarray(b["t"]), np.asarray(b["v"])
+        g = axes([1999, 2026], [-1, 6], x_length=8.6, y_length=4.4, xlabel=r"year",
+                 ylabel=r"German 10-year government yield, \%", xticks=[2000, 2005, 2010, 2015, 2020, 2025],
+                 yticks=[-1, 0, 2, 4, 6], font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        zero = Line(ax.c2p(1999, 0), ax.c2p(2026, 0), color=WHITE, stroke_width=1.5)
+        line = curve(ax, t, v, ZERO_C, stroke_width=3)
+        neg = VGroup(*[Rectangle(width=ax.c2p(1 / 12, 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 0)[1] - ax.c2p(0, y_)[1],
+                                 stroke_width=0, fill_color=BAD, fill_opacity=0.5).move_to(
+            [ax.c2p(x_, 0)[0], (ax.c2p(0, 0)[1] + ax.c2p(0, y_)[1]) / 2, 0]) for x_, y_ in zip(t, v) if y_ < 0])
+        md = b["min_date"]
+        side = VGroup(
+            MathTex(rf"\min = {b['min']:.2f}\%", font_size=30, color=BAD),
+            label(rf"{MONTHS[md // 100 % 100]} {md // 10000}", font_size=19, color=GREY_A),
+            MathTex(rf"{b['months']}\ \text{{months below zero}}", font_size=26),
+            wrapped_label(r"a buyer of a ten-year Bund in mid-2019 locked in a loss in nominal terms, held to maturity. "
+                          r"Swiss, Dutch, French and Japanese yields went below zero too: at the peak in 2020, about "
+                          r"\$18 trillion of bonds worldwide had negative yields", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
+        fit_right(side)
+        with self.voiceover(
+            "And not only the overnight rate. The ten-year yield on German government bonds first averaged a month "
+            f"below zero in {MONTHS[b['first'] // 100 % 100]} {b['first'] // 10000}, and reached "
+            f"{b['min']:.2f} percent in {MONTHS[md // 100 % 100]} {md // 10000}. <bookmark mark='a'/> An investor who "
+            "bought then and held for ten years was guaranteed to get back less than they paid. Bonds of other "
+            "countries followed, until in 2020 about eighteen trillion dollars of debt worldwide paid negative "
+            "yields. Every model that assumed rates stay positive had to be retired or patched."
+        ) as vo:
+            self.play(FadeIn(g), Create(zero), Create(line), run_time=2)
+            self.play(FadeIn(neg), FadeIn(side[0]), FadeIn(side[1]))
+            vo.wait_until("a")
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        self.add(illustration(r"FRED: IRLTLT01DEM156N (OECD, monthly averages); the \$18 trillion is Bloomberg's "
+                              r"index of negative-yielding debt, December 2020"))
+        self.wait(0.4)
+        self.clear_scene()
+
     def models(self, n):
         F, b, bl = np.asarray(n["F"]) * 100, np.asarray(n["bach"]) * 1e4, np.asarray(n["black"], float) * 1e4
         g = axes([-1, 2], [0, 220], x_length=7.4, y_length=4.4, xlabel=r"forward rate, \%",
@@ -92,6 +136,44 @@ class Negative(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(ll), FadeIn(side[0]), FadeIn(side[1]), run_time=2)
             vo.wait_until("c")
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def floors(self):
+        from explainer.quant.house import termstructure as TS
+        F = np.linspace(-0.01, 0.02, 61)
+        T = np.arange(0.25, 5.0001, 0.25)
+        vals = np.array([sum(0.25 * TS.bachelier(f, 0.0, t, 0.006, cp=-1) for t in T) for f in F]) * 1e4
+        g = axes([-1, 2], [0, 600], x_length=7.0, y_length=4.2, xlabel=r"forward rate, every quarter, \%",
+                 ylabel=r"value of a 0\% floor, bp of notional", xticks=[-1, 0, 1, 2], yticks=[0, 200, 400, 600],
+                 font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        line = curve(ax, F * 100, vals, NORMAL, stroke_width=3.5, smooth=True)
+        k = int(np.argmin(np.abs(F - 0.005)))
+        dot = Dot(ax.c2p(0.5, vals[k]), color=WHITE)
+        side = VGroup(
+            label(r"a 5-year floor at 0\%, quarterly; Bachelier, 60 bp", font_size=18, color=GREY_A),
+            MathTex(rf"\text{{forward at }} 0.5\%:\ {vals[k]:.0f}\ \text{{bp}}", font_size=28),
+            MathTex(r"\text{Black: } 0 \text{ for any } F > 0", font_size=26, color=LOGN),
+            wrapped_label(r"from 2009 many leveraged loans and some deposits promised a floor: the floating rate never "
+                          r"below 0\% (or 1\%). The lender owns that floor. A lognormal model says a positive rate can "
+                          r"never reach zero, so it values the floor at nothing; a normal model gives it a real price, "
+                          r"and it was paid out for years", 3.8, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
+        fit_right(side)
+        with self.voiceover(
+            "Here is where the choice of model had a price. After 2009 many floating-rate loans promised that the rate "
+            "used would never go below zero, or below one percent: the lender owned a floor. <bookmark mark='a'/> "
+            "Value a five-year floor at zero percent. Under Bachelier, with rates at half a percent, it is worth "
+            f"about {vals[k]:.0f} basis points of notional, more as rates fall. <bookmark mark='b'/> Under Black it "
+            "is worth exactly nothing, because a lognormal rate cannot reach zero. Rates did reach zero, and "
+            "below, and those floors paid for years."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(Create(line), FadeIn(dot), FadeIn(side[1]), run_time=1.5)
+            vo.wait_until("b")
             self.play(FadeIn(side[2]), FadeIn(side[3]))
         self.wait(0.4)
         self.clear_scene()

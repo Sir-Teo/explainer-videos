@@ -12,6 +12,7 @@ class ShortRate(VoiceoverScene):
         self.card()
         self.models()
         self.fit(s)
+        self.bias(load("meanrev"))
         self.fans(s)
 
     def card(self):
@@ -89,6 +90,54 @@ class ShortRate(VoiceoverScene):
             self.play(FadeIn(side[2]), FadeIn(side[4]))
         self.add(illustration(r"FRED: DTB3, month ends; Vasicek by exact AR(1), CIR by its non-central chi-square "
                               r"likelihood (the House's \texttt{sim.cir\_mle})"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def bias(self, m):
+        a_hat = np.asarray(m["a_hat"])
+        edges = np.linspace(0, 0.5, 26)
+        h, _ = np.histogram(np.clip(a_hat, 0, 0.4999), bins=edges)
+        g = axes([0, 0.5], [0, max(h) * 1.15], x_length=7.4, y_length=4.2, xlabel=r"estimated mean reversion $\hat a$",
+                 ylabel=r"histories", xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5], yticks=[], font_size=14
+                 ).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        bars = VGroup(*[Rectangle(width=ax.c2p(edges[i + 1], 0)[0] - ax.c2p(edges[i], 0)[0] - 0.02,
+                                  height=max(ax.c2p(0, c_)[1] - ax.c2p(0, 0)[1], 0.005), stroke_width=0,
+                                  fill_color=VAS, fill_opacity=0.7).move_to(
+            [(ax.c2p(edges[i], 0)[0] + ax.c2p(edges[i + 1], 0)[0]) / 2, (ax.c2p(0, c_)[1] + ax.c2p(0, 0)[1]) / 2, 0])
+            for i, c_ in enumerate(h)])
+        top = ax.c2p(0, max(h) * 1.1)[1]
+        truth = DashedLine(ax.c2p(m["a"], 0), [ax.c2p(m["a"], 0)[0], top, 0], color=WHITE, stroke_width=3)
+        med = DashedLine(ax.c2p(m["median"], 0), [ax.c2p(m["median"], 0)[0], top, 0], color=BAD, stroke_width=3)
+        lo, hi = m["a_ci"]
+        side = VGroup(
+            legend([(WHITE, rf"truth, $a = {m['a']:.3f}$"), (BAD, rf"median estimate, {m['median']:.3f}")], font_size=17),
+            MathTex(rf"{100 * m['share_double']:.0f}\%\ \text{{of histories: }}\hat a > 2a", font_size=26),
+            wrapped_label(rf"on the real data, the 95\% interval for $a$ runs from {lo:.3f} to {hi:.3f}: a half-life "
+                          rf"from {np.log(2) / hi:.0f} to {np.log(2) / lo:.0f} years", 3.8, 18, GREY_A),
+            wrapped_label(r"the level is estimated from the range of the data, the pull only from how often the rate "
+                          r"returns: in 36 years, a few times. Least squares overstates the pull (Phillips and Yu, "
+                          r"2005, for this model)", 3.8, 17, GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        fit_right(side)
+        with self.voiceover(
+            "How far should we trust that half-life? Run the experiment. Take the fitted Vasicek as the truth, "
+            f"simulate two thousand histories of {m['years']:.0f} years each, and fit each one again. "
+            "<bookmark mark='a'/> The middle nine tenths of the estimates run from about half the true pull to nearly three "
+            "times it, and their "
+            f"median, {m['median']:.2f}, is well above the truth, {m['a']:.2f}. In {100 * m['share_double']:.0f} "
+            "percent of histories the estimate is more than double. <bookmark mark='b'/> On the real data, the "
+            f"interval for the half-life runs from about {np.log(2) / hi:.0f} to {np.log(2) / lo:.0f} years. The "
+            "level of rates is visible in a few years of data; the speed of their pull needs centuries, because it "
+            "is learned only from how often the rate comes back."
+        ) as vo:
+            self.play(FadeIn(g), Create(truth), FadeIn(side[0]))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.04, run_time=2))
+            vo.wait_until("a")
+            self.play(Create(med), FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        self.add(illustration(r"2{,}000 Vasicek histories at the fitted parameters, re-estimated by AR(1)"))
         self.wait(0.4)
         self.clear_scene()
 
