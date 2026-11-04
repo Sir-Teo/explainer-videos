@@ -124,7 +124,7 @@ class AAD(VoiceoverScene):
                 why(r"Griewank's cheap gradient principle (Griewank and Walther, \textit{Evaluating Derivatives}, 2008); "
                     r"Giles and Glasserman's ``smoking adjoints'' (2006) applied it path by path to Monte Carlo; "
                     r"Capriotti (2011) generalised it to any pricing code")]
-        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=-0.6, buff=0.45, edge=6.9)
         q = predict(r"A swap book has 2{,}000 curve points. Bumping costs 4{,}000 prices. AAD costs about?", width=5.0,
                     font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
