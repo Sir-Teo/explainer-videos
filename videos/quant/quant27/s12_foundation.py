@@ -116,7 +116,7 @@ class Foundation(VoiceoverScene):
             desk_question(r"what the House did not do", r"run Kronos itself: these are the authors' numbers on their own "
                           r"benchmarks, not replicated in this series", width=12.0, font_size=19),
             desk_question(r"what to ask", r"which markets and dates the pretraining corpus covered, against the test "
-                          r"windows; and whether a better RankIC survives costs, as Chapter 2's did not", width=12.0,
+                          r"windows; and whether a better RankIC survives costs, Chapter 3's question", width=12.0,
                           font_size=19)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.3)
         src = note(r"Shi, Fu, Chen, Zhao, Xu, Zhang and Li (2025), arXiv:2508.02739", font_size=15,
                    color=GREY_C).next_to(head, DOWN, buff=0.15)
@@ -188,7 +188,7 @@ class Foundation(VoiceoverScene):
         r2 = {k: {m: 1 - e[k][m] / e[k]["zero"] for m in ("ewma", "har", "net")} for k in ETFS}
         top = max(max(v.values()) for v in r2.values())
         g = axes([-0.6, len(ETFS) - 0.4], [0, max(0.05, top * 1.25)], x_length=9.0, y_length=4.2, xlabel=r"",
-                 ylabel=r"$R^2$ of next-day $\log|r|$, out of sample", xticks=[], yticks=[0, 0.1, 0.2, 0.3],
+                 ylabel=r"$R^2$ of next-day $\log|r|$, out of sample", xticks=[], yticks=[0, 0.05, 0.1],
                  yfmt=lambda v: rf"{100 * v:.0f}\%", font_size=13).move_to(LEFT * 1.4 + DOWN * 0.2)
         ax = g.ax
         bars = VGroup()
@@ -207,16 +207,22 @@ class Foundation(VoiceoverScene):
                      font_size=18).to_edge(RIGHT, buff=0.3).shift(UP * 1.5)
         fit_right(leg)
         wins = sum(r2[k]["net"] >= max(r2[k]["ewma"], r2[k]["har"]) for k in ETFS)
-        side = wrapped_label(rf"the network beats or ties both fitted models on {wins} of {len(ETFS)} funds", 3.4, 17,
-                             NET).next_to(leg, DOWN, buff=0.4)
+        side = wrapped_label(rf"the zero-shot network beats both fitted models on {wins} of {len(ETFS)} funds; it beats "
+                             r"HAR on one (EEM)", 3.4, 17, NET).next_to(leg, DOWN, buff=0.4)
         fit_right(side)
         with self.voiceover(
             "The result. <bookmark mark='a'/> For each fund, the share of the variance of the next day's log move each "
-            "model explains, on the second half of its history. RESULT_SENTENCE"
+            "model explains, on the second half of its history. The RiskMetrics average, with one fitted offset, is "
+            "best on every fund, explaining three to nine percent. <bookmark mark='b'/> The pocket model, never shown "
+            "a stock or a bar of gold, explains something on four of the five: between a third and three fifths of "
+            "what the exponential average does, nothing on gold, and more than the fitted HAR model only on emerging "
+            "markets. Something transferred: the shape of volatility learned from coins carried to stocks. But it did "
+            "not beat a one-parameter rule fitted to the asset itself."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(leg))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.05, run_time=2.5))
+            vo.wait_until("b")
             self.play(FadeIn(side))
         self.wait(0.4)
         self.clear_scene()

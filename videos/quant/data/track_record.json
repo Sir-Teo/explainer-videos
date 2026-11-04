@@ -239,6 +239,30 @@
   },
   "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
  },
+ "kmz_timer_part27": {
+  "part": 27,
+  "research": {
+   "mean": 0.032682829920034184,
+   "vol": 0.10004632847132944,
+   "sharpe": 0.32667695476101544,
+   "sharpe_se": 0.1088293840577907,
+   "maxdd": -0.42568988499794946,
+   "n": 1080,
+   "sharpe_net": 0.31668158546281505,
+   "cost_per_year": 0.001
+  },
+  "holdout": {
+   "mean": -0.009815001584613778,
+   "vol": 0.05624517956226064,
+   "sharpe": -0.17450387146064764,
+   "sharpe_se": 0.44728693475452036,
+   "maxdd": -0.15086519699218792,
+   "n": 60,
+   "sharpe_net": -0.19228317286536722,
+   "cost_per_year": 0.001
+  },
+  "note": "RFF ridge, P = 12000, z = 0.1"
+ },
  "kns_sdf_part25": {
   "part": 25,
   "research": {
@@ -262,6 +286,30 @@
    "cost_per_year": 0.02
   },
   "note": "{\"universe\": \"OSAP 2024.10 predictors complete 1973-2023 (154)\", \"fit\": \"1973-01 to 2020-12\", \"kappa_grid\": 20, \"folds\": 3, \"scale\": \"10% a year in sample\", \"cost_per_year\": 0.02}"
+ },
+ "nn3_coin_ls_part27": {
+  "part": 27,
+  "research": {
+   "mean": -0.4432392508526824,
+   "vol": 0.621875405035291,
+   "sharpe": -0.7127460698136612,
+   "sharpe_se": 0.7711087429469794,
+   "maxdd": -0.8268630993186549,
+   "n": 24,
+   "sharpe_net": -0.9073037169280322,
+   "cost_per_year": 0.12099061560196284
+  },
+  "holdout": {
+   "mean": 0.9586707645143223,
+   "vol": 0.7412228423986774,
+   "sharpe": 1.2933637627949508,
+   "sharpe_se": 0.3361973349301962,
+   "maxdd": -0.3684516879693863,
+   "n": 60,
+   "sharpe_net": 1.1301326686068327,
+   "cost_per_year": 0.12099061560196284
+  },
+  "note": "value-weighted quintile long-short, weekly"
  },
  "zoo_equal_weight_part25": {
   "part": 25,

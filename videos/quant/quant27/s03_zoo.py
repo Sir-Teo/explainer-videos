@@ -72,7 +72,7 @@ class Zoo(VoiceoverScene):
             "Each Sunday, the universe is every coin listed for at least sixty days that traded a median of a quarter "
             "of a million dollars a day over the last four weeks. <bookmark mark='b'/> In mid-2018 that is six coins. "
             "By the end of 2020, about a hundred and forty. <bookmark mark='c'/> Then the panel is sealed: the five "
-            "years from 2021 are read once, at the end of this part, when they hold more than three hundred coins a "
+            "years from 2021 are read once, at the end of this part, when they hold about three hundred coins a "
             "week. <bookmark mark='d'/> What is left for research is small: a hundred and seventy coins, sixty-two of "
             "them since delisted, and six thousand coin-weeks. Gu, Kelly and Xiu had thirty thousand stocks and sixty "
             "years. Keep that ratio in mind."

@@ -48,6 +48,10 @@
    "at": "2026-11-04",
    "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
   },
+  "kmz_timer_part27|goyal/welch_goyal_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "62dd0fe0cb90dbecd392a5afd04af509bec8df820eaa920c68957aac8ea453c6"
+  },
   "kns_sdf_part25|osap/2024.10/PredictorLSretWide": {
    "at": "2026-11-04",
    "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb"
@@ -59,6 +63,10 @@
   "mlp_bond_premia_oos|gsw_bond_rx": {
    "at": "2026-11-04",
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
+  },
+  "nn3_coin_ls_part27|binance/usdt_weekly_panel": {
+   "at": "2026-11-04",
+   "code_sha256": "9994bd915e6af9a7bde1cc818526b2ddd731491ec8cf761e8777e5f5c711dcc9"
   },
   "pca_fly_2s5s10s|gsw_fly_2s5s10s": {
    "at": "2026-11-04",
@@ -417,6 +425,18 @@
    },
    "trials": 1
   },
+  "kmz_timer_part27": {
+   "code_sha256": "62dd0fe0cb90dbecd392a5afd04af509bec8df820eaa920c68957aac8ea453c6",
+   "params": {
+    "P": 12000,
+    "T": 12,
+    "gamma": 2.0,
+    "scale": "10% a year in research",
+    "seeds": 10,
+    "z": 0.1
+   },
+   "trials": 84
+  },
   "kns_sdf_part25": {
    "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb",
    "params": {
@@ -487,6 +507,17 @@
     "horizons": "1..36"
    },
    "trials": 1
+  },
+  "nn3_coin_ls_part27": {
+   "code_sha256": "9994bd915e6af9a7bde1cc818526b2ddd731491ec8cf761e8777e5f5c711dcc9",
+   "params": {
+    "model": "NN3 (32-16-8), 5 seeds",
+    "portfolio": "quintile long-short, weekly, weighted by 28-day median dollar volume",
+    "train": "2018-01..2020-06",
+    "universe": "median volume >= 250000.0",
+    "validate": "2020-07..2020-12"
+   },
+   "trials": 25
   },
   "osap_predictors_part3": {
    "code_sha256": "a6f753f0a7b179ac75a6d27fe4b7bfa0ae94cb95f6757516d067174658f3f8d6",
@@ -608,6 +639,12 @@
    "last": 20251231,
    "n": 1826
   },
+  "binance/usdt_weekly_panel": {
+   "digest": "3c764ae2322071dba703387e871553cc75db2d07756b416761421c9958bb9ae1",
+   "first": 20210103,
+   "last": 20251228,
+   "n": 261
+  },
   "edgar_default_firm_years": {
    "digest": "59add85e1551ed1064262b875c4acd64145c292ee5195b9f53bcf61945b816f8",
    "first": 20211231,
@@ -685,6 +722,12 @@
    "first": 20210104,
    "last": 20251230,
    "n": 1223
+  },
+  "goyal/welch_goyal_monthly": {
+   "digest": "c0ae5e26eeffd739c3ecd3206e3478a7c2b1a6517856f6f307c075e0337d80bf",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
   },
   "gsw_bond_rx": {
    "digest": "b535ebb069c1d88831b14f92b6eb1d9284677888c362a2720262d9abe06a1287",

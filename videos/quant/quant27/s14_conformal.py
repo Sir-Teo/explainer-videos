@@ -87,8 +87,10 @@ class Conformal(VoiceoverScene):
         with self.voiceover(
             "Try it on the coin panel. <bookmark mark='a'/> Take a network's forecast of every coin's next-week return, "
             "calibrate on the second half of 2019, and draw ninety and eighty percent intervals for each coin in each "
-            "week of 2020. <bookmark mark='b'/> Over the whole year the coverage is PANEL_SENTENCE. But week by week the "
-            "lines swing: in a crash every coin's error is large at once, and the coins of that week are not "
+            "week of 2020. <bookmark mark='b'/> Over the whole year the ninety percent intervals cover eighty-nine point "
+            "seven percent, close to the promise; the eighty percent ones cover only seventy-four. And week by week "
+            "the lines swing: in the week of the March crash, twelve percent of coins were inside their ninety "
+            "percent intervals. In a crash every coin's error is large at once, and the coins of that week are not "
             "exchangeable with last year's. The guarantee is an average over exchangeable draws, and a market is a "
             "sequence."
         ) as vo:
@@ -117,7 +119,9 @@ class Conformal(VoiceoverScene):
         with self.voiceover(
             "A sequence breaks exchangeability in a simpler way too. <bookmark mark='a'/> Forecast Bitcoin's daily "
             "return as zero, and calibrate a ninety percent interval on the first hundred and twenty days. <bookmark "
-            "mark='b'/> Then use that fixed width for the next two and a half years. DRIFT_SENTENCE"
+            "mark='b'/> Then use that fixed width for the next two and a half years. Calibrated in the turbulent first "
+            "months of 2018, plus or minus ten percent is too wide for the calm of 2019: it covers ninety-eight "
+            "percent of days, wasting width, and it still misses four days of March 2020."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -157,7 +161,9 @@ class Conformal(VoiceoverScene):
             "t. After every miss, lower it a little, which widens the interval; after every hit, raise it a little. "
             "<bookmark mark='b'/> The average miss rate is then forced to alpha in the long run, whatever the data do, "
             "with no exchangeability at all, because a run of misses keeps widening the interval until it stops "
-            "missing. <bookmark mark='c'/> ACI_SENTENCE This is the honest error bar for the House's forecasts: not a "
+            "missing. <bookmark mark='c'/> On Bitcoin, the adaptive interval covers eighty-nine point seven percent of "
+            "days against a target of ninety, narrowing to two and a half percent in the calm and widening to eleven "
+            "after the storms; the fixed one covers ninety-eight. This is the honest error bar for the House's forecasts: not a "
             "model of the errors, but a rule that keeps count of them."
         ) as vo:
             self.play(FadeIn(eqs[0]))

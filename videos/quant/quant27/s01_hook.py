@@ -126,6 +126,7 @@ class Hook(VoiceoverScene):
             r"Why returns are a low signal-to-noise problem, and what that does to every model",
             r"The model zoo on a survivorship-free coin panel: linear, trees, networks; where the edge lives",
             r"The virtue of complexity, double descent, and the critique that reread them",
+            r"For the researcher: Marchenko--Pastur and the exact risk of ridge(less) regression, proved and simulated",
             r"Autoencoders, adversarial SDFs, attention across assets, images of prices",
             r"A pocket foundation model; the practitioner's toolkit; conformal intervals",
             r"Two firms from the public record; the models registered and opened on 2021--2025",
@@ -133,8 +134,8 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "The plan: why return prediction is a problem of tiny signals in loud noise, and what that does to every "
             "model; the whole model zoo, run on every coin Binance has ever listed, dead or alive; where the edge "
-            "lives; the virtue of complexity and its critics; four modern architectures; a small foundation model of "
-            "our own, tested on markets it never saw; the practitioner's tools; intervals with guarantees; two firms "
+            "lives; the virtue of complexity and its critics; the theorem behind both, proved; four modern "
+            "architectures; a small foundation model of our own, tested on markets it never saw; the practitioner's tools; intervals with guarantees; two firms "
             "from the public record; and the models, registered and opened on sealed years."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in card.rows],
