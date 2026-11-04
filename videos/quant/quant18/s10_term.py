@@ -135,7 +135,7 @@ class Term(VoiceoverScene):
             step(3)
         self.wait(0.4)
         self.clear_scene()
-        card = house_lab(r"Lab: the term premium in three regressions", R.acm_decompose, "# 2. excess returns", 14, width=8.4)
+        card = house_lab(r"the term premium in three regressions", R.acm_decompose, "# 2. excess returns", 14, width=8.4)
         card.to_edge(LEFT, buff=0.4).to_edge(UP, buff=0.4)
         with self.voiceover(
             "In the House it is forty lines, and the heart of it is here: the excess returns, the regression on news "

@@ -101,7 +101,7 @@ class Bootstrap(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, c):
-        card = house_lab(r"Lab: bootstrap a par curve", R.bootstrap_par, "for Ti, yi in zip(T, y):", 13, width=7.4)
+        card = house_lab(r"bootstrap a par curve", R.bootstrap_par, "for Ti, yi in zip(T, y):", 13, width=7.4)
         card.to_edge(LEFT, buff=0.4).to_edge(UP, buff=0.4)
         cv = R.Curve(c["nodes_t"], c["nodes_z"])
         out = [rf"zero rates: 2y {100 * cv.zero(2.0):.3f}%  10y {100 * cv.zero(10.0):.3f}%  30y "
@@ -124,14 +124,14 @@ class Bootstrap(VoiceoverScene):
         s = np.asarray(c["s"])
         z, f, gsw = (np.asarray(c[k]) * 100 for k in ("zero", "fwd", "gsw"))
         T, y = np.asarray(c["tenor"]), np.asarray(c["par"]) * 100
-        g = axes([0, 30], [3, 6], x_length=8.4, y_length=4.6, xlabel=r"maturity, years", ylabel=r"percent",
-                 xticks=[0, 2, 5, 10, 20, 30], yticks=[3, 4, 5, 6], font_size=14).to_edge(LEFT, buff=0.6).shift(
+        g = axes([0, 30], [2, 6], x_length=8.0, y_length=4.6, xlabel=r"maturity, years", ylabel=r"percent",
+                 xticks=[0, 2, 5, 10, 20, 30], yticks=[2, 3, 4, 5, 6], font_size=14).to_edge(LEFT, buff=0.6).shift(
             DOWN * 0.3)
         ax = g.ax
         pd = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=PAR) for a, b in zip(T, y)])
-        lz = curve(ax, s, np.clip(z, 3, 6), ZERO, stroke_width=3.5)
-        lf = curve(ax, s, np.clip(f, 3, 6), FWD, stroke_width=2.5)
-        lg = DashedVMobject(curve(ax, s, np.clip(gsw, 3, 6), WHITE, stroke_width=2), num_dashes=60)
+        lz = curve(ax, s, np.clip(z, 2, 6), ZERO, stroke_width=3.5)
+        lf = curve(ax, s, np.clip(f, 2, 6), FWD, stroke_width=2.5)
+        lg = DashedVMobject(curve(ax, s, np.clip(gsw, 2, 6), WHITE, stroke_width=2), num_dashes=60)
         m2 = s >= 2
         gap = float(np.max(np.abs(gsw[m2] - z[m2])) * 100)
         leg = legend([(PAR, r"par yields"), (ZERO, r"zero rates (bootstrap)"), (FWD, r"forwards (bootstrap)"),
@@ -140,8 +140,9 @@ class Bootstrap(VoiceoverScene):
             MathTex(rf"10\text{{y}} - 2\text{{y}} = {c['spread_2s10s_bp']:.0f}\ \text{{bp}}", font_size=32,
                     color=QC.LOSS),
             wrapped_label(rf"from two years out, the bootstrap and the Fed's fit differ by at most {gap:.0f} bp; the "
-                          r"Fed's fit leaves out bills, so at the short end it is an extrapolation", 3.8, 17, GREY_A),
+                          r"Fed's fit leaves out bills, so at the short end it is an extrapolation", 3.3, 17, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(leg, DOWN, buff=0.4, aligned_edge=LEFT)
+        side.shift(LEFT * max(0.0, side.get_right()[0] - 6.75))
         with self.voiceover(
             "A very different day: the eighth of March 2023, two days before Silicon Valley Bank failed. Short rates "
             "were above five percent; ten-year yields were near four. <bookmark mark='a'/> The ten-year minus two-year "

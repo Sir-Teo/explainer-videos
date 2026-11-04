@@ -151,7 +151,7 @@ class Fit(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, c):
-        card = house_lab(r"Lab: fit Nelson--Siegel--Svensson", R.fit_nss, "pairs = [(a, b) for a in grid", 12, width=7.6)
+        card = house_lab(r"fit Nelson--Siegel--Svensson", R.fit_nss, "pairs = [(a, b) for a in grid", 12, width=7.6)
         card.to_edge(LEFT, buff=0.4).to_edge(UP, buff=0.4)
         n = c["nss"]
         out = [rf"beta = {n['beta'][0]:.3f}, {n['beta'][1]:.3f}, {n['beta'][2]:.3f}, {n['beta'][3]:.3f}",

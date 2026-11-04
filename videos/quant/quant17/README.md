@@ -24,9 +24,67 @@ retrains them at full size. Data: Part 13's Deribit BTC option surfaces, and Bin
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 61 minutes)
 
-CHAPTERS_EN
+* **A machine that hedges** (2.7 min). A network learns a corridor around delta at 0.5% costs; it needs 3.01 where
+  daily delta hedging needs 3.55, and on one simulated month it trades on 11 of 30 days; J.P. Morgan's data-driven
+  hedging of index option books since 2018 (as reported by Risk.net); the history strip (1985–2026); the plan.
+* **1. Learning a pricing formula** (3.2). Hutchinson, Lo and Poggio (1994) redone: Merton's homogeneity, universal
+  approximation, a 3 × 64 network trained on 66,150 simulated prices (worst error 0.05% of the strike), its delta
+  hedging 200 fresh options as well as the true delta (tracking error 0.214–0.217 against 0.209); **lab**:
+  `train_mlp_regressor`.
+* **2. A network's Greeks** (2.8). The second derivative of a ReLU network vanishes almost everywhere: its gamma error
+  is 12 times SiLU's; butterflies priced by the network are negative 13% of the time with ReLU, 4% with SiLU, never
+  with softplus (Breeden–Litzenberger).
+* **3. The neural calibrator: learning the map** (3.0). 12,000 rough Bergomi parameter sets, 894,903 Monte Carlo
+  labels, a 4 × 96 network over 40 epochs; label noise bounds the held-out error, and the gap to a fresh simulation
+  overstates it by √1.5.
+* **4. Calibrating through the network** (3.1). A tanh map into the training box and its vanishing gradient at the
+  walls; 12 starts of Adam and L-BFGS fit the Surface to 0.97 vol points in 2.8 s (H = 0.074, η = 1.89, ρ = −0.40),
+  against hours by simulation; **lab**: `calibrate_neural`.
+* **5. Rough volatility, week by week** (2.3). 100 weekly surfaces: 77 calibrations end on the box's floor H = 0.02,
+  every Monte Carlo re-check agrees within half a vol point; argmin in the box is not the market's H.
+* **6. Differential machine learning** (2.7). Pathwise derivatives as labels (Huge and Savine 2020), unbiased by
+  dominated convergence: with 256 samples the price error falls from 3.69–5.28 to 0.43–0.81 and deltas are 22 times
+  more accurate; **lab**: the twin loss.
+* **7. Differential labels in three dimensions** (2.5). Tangent planes on 64 payoffs; the Gaussian process with
+  gradients (Dixon, Halperin and Bilokon, ch. 3) as the exact twin: grid errors 45.4 / 6.6 / 3.5 (payoffs only,
+  with slopes, GP), and its cubic cost.
+* **8. A hundred dimensions: the deep BSDE** (3.0). Itô and the non-linear Feynman–Kac formula (Pardoux–Peng 1990);
+  Han, Jentzen and E's default-risk claim on 100 assets; shooting from a guessed u₀ with 39 small networks; the
+  curse of dimensionality against polynomial work; Deep Galerkin and multilevel Picard.
+* **9. Watching the deep BSDE converge** (2.6). 256 test paths landing on their payoffs; 57.35 ± 0.05 against the
+  reference 57.300 (+0.08%); the linear check without default lands 4.04 below plain Monte Carlo; **lab**: the
+  forward sweep.
+* **10. Deep optimal stopping** (3.4). Becker, Cheridito and Jentzen (2019): bang-bang decisions, one network per
+  date; the five-asset Bermudan max-call at 26.107 ± 0.040 against Longstaff–Schwartz's 26.103 ± 0.028 and the
+  published [26.156, 26.162]; two assets 13.886 against a tree's 13.902; the exercise tunnel in 3D.
+* **11. The deep hedger** (3.1). Buehler, Gonon, Teichmann and Wood (2019): entropic risk, cash invariance, the
+  indifference price; with no costs the network converges onto delta (price 2.360 against 2.355, holdings within
+  0.095 shares); **lab**: `hedge_pnl`.
+* **12. Risk measures and the drift trap** (3.6). CVaR by Rockafellar–Uryasev (the learned w = 2.819, the empirical
+  VaR 2.818); under a 30% drift the hedger adds Merton's μ/γσ²S, a bet on the drift (the drift-trained hedger prices
+  2.292 against 2.385); QLBS, RL hedging and deep Bellman hedging.
+* **13. Where not to trade** (3.0). The band opening in the trade map; Leland (1985: σ̂ = 26.5% at 0.5% costs) and
+  Whalley–Wilmott's cube-root band (1997) derived; at 0.5% costs: daily delta 3.55, Leland 3.37, Whalley–Wilmott
+  3.08, the band network 3.01.
+* **14. The band as a surface** (3.1). The learned band's two sheets over time and price against Whalley–Wilmott's
+  (width at the money 0.22 at 30 days, 0.28 at 5; theirs 0.31 and 0.58); Imaki et al.'s architecture and Davis,
+  Panas and Zariphopoulou (1993); doubling the cost widens it 1.17 times against 2^{1/3} = 1.26; **lab**:
+  `Hedger.band`.
+* **15. Neural SDEs and robust bounds** (3.5). Gierjatowicz et al. (2022): 36 vanillas repriced within 0.19 vol
+  points while a down-and-out call ranges from 0.0671 to 0.0703 (Heston 0.0685); the two extreme smiles never more
+  than 0.72 vol points apart; the bounds nest inside Part 9's MOT bounds.
+* **16. Market generators** (3.7). GJR-GARCH, a signature-trained network and a diffusion model invent 32-day bitcoin
+  windows, scored on the stylized facts and on expected-signature distances; four real and four invented windows.
+* **17. Production and model risk** (3.1). SR 26-2 (17 April 2026) replacing SR 11-7, PRA SS1/23; the checklist
+  applied to this part's networks; the known-answer scoreboard; firm files (J.P. Morgan, Danske Bank).
+* **18. The frontier, 2023 to 2026** (1.8). Generative option markets (SANOS, DYSANOS, GROMM), whether deep hedgers
+  hedge, second-order training, stopping and duals, signature-kernel generators; one claim re-run.
+* **19. Rule 17, tested** (1.7). Four hedgers priced on Black–Scholes paths, on GJR-GARCH paths and on 1,010 real
+  30-day stretches of bitcoin; Rule 17 (no network without a slower independent engine; inputs outside the box go to
+  it; hedgers tested on two generators and on history).
+* **Recap, desk questions, problems** (2.7). Eleven lines; four desk questions; eight problems with solutions below.
 
 ## Hands-on
 
@@ -187,9 +245,29 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约58分钟）
+## 章节（约61分钟）
 
-CHAPTERS_ZH
+* **一台会对冲的机器。** 在0.5%成本下，网络在Delta周围学出一条走廊：它需要3.01，而每日Delta对冲需要3.55；在一个模拟月份里它只在30天中的11天交易；据Risk.net报道，摩根大通自2018年起用数据驱动的引擎对冲指数期权账本；历史条（1985–2026）；本部分安排。
+* **1. 学习一个定价公式。** 重做Hutchinson、Lo与Poggio（1994）：默顿齐次性、万能逼近定理；一个3 × 64的网络在66,150个模拟价格上训练（最大误差为行权价的0.05%），它的Delta对冲200个新期权，与真实Delta一样好（跟踪误差0.214–0.217，对0.209）；**实验**：`train_mlp_regressor`。
+* **2. 网络的希腊字母。** ReLU网络的二阶导数几乎处处为零：它的gamma误差是SiLU的12倍；网络给出的蝶式价差，ReLU有13%为负，SiLU为4%，softplus从不为负（Breeden–Litzenberger）。
+* **3. 神经网络校准器：学习映射。** 12,000组粗糙Bergomi参数、894,903个蒙特卡洛标签、4 × 96网络训练40轮；标签噪声为留出集误差设了下限，与新模拟之差把它夸大了√1.5倍。
+* **4. 通过网络来校准。** 用tanh映射进训练框，以及它在边界处消失的梯度；12个起点的Adam与L-BFGS在2.8秒内把曲面拟合到0.97个波动率点（H = 0.074，η = 1.89，ρ = −0.40），而用模拟要几个小时；**实验**：`calibrate_neural`。
+* **5. 逐周的粗糙波动率。** 100个周度曲面：77次校准停在训练框的下限H = 0.02，每次蒙特卡洛复核都在半个波动率点之内；框内的最优点不是市场的H。
+* **6. 差分机器学习。** 用路径导数作标签（Huge与Savine，2020），由控制收敛定理保证无偏：256个样本时价格误差从3.69–5.28降到0.43–0.81，Delta平均精确22倍；**实验**：孪生损失。
+* **7. 三维中的导数标签。** 64个收益上的切平面；带梯度的高斯过程（Dixon、Halperin与Bilokon，第3章）是精确的孪生方法：网格误差45.4 / 6.6 / 3.5（只用收益、加斜率、高斯过程），以及它的三次方成本。
+* **8. 一百维：深度BSDE。** 伊藤公式与非线性费曼-卡茨公式（Pardoux–Peng，1990）；Han、Jentzen与E挂钩100个资产、带违约风险的衍生品；从猜测的u₀出发用39个小网络打靶；维数灾难对多项式工作量；深度Galerkin与多层Picard。
+* **9. 看深度BSDE收敛。** 256条测试路径落在各自的收益上；57.35 ± 0.05，对参考值57.300（+0.08%）；无违约的线性检验比普通蒙特卡洛低4.04；**实验**：前向扫描。
+* **10. 深度最优停时。** Becker、Cheridito与Jentzen（2019）：bang-bang决策，每个日期一个网络；五资产百慕大最大值看涨期权26.107 ± 0.040，对Longstaff–Schwartz的26.103 ± 0.028和已发表的[26.156, 26.162]；两资产13.886，对二叉树13.902；三维中的行权隧道。
+* **11. 深度对冲器。** Buehler、Gonon、Teichmann与Wood（2019）：熵风险、现金不变性、无差异价格；无成本时网络收敛到Delta（价格2.360对2.355，持仓相差不超过0.095股）；**实验**：`hedge_pnl`。
+* **12. 风险度量与漂移陷阱。** 用Rockafellar–Uryasev公式求CVaR（学到的w = 2.819，经验VaR为2.818）；在30%的漂移下，对冲者加上默顿项μ/γσ²S，即对漂移的押注（带漂移训练的对冲者定价2.292，对2.385）；QLBS、强化学习对冲与深度Bellman对冲。
+* **13. 何时不交易。** 交易图中打开的无交易区间；推导Leland（1985：0.5%成本下σ̂ = 26.5%）与Whalley–Wilmott的立方根区间（1997）；0.5%成本下：每日Delta 3.55，Leland 3.37，Whalley–Wilmott 3.08，区间网络3.01。
+* **14. 作为曲面的无交易区间。** 学到的区间在时间与价格上的两张曲面，对Whalley–Wilmott的（平值处宽度30天0.22、5天0.28；他们的0.31与0.58）；Imaki等的架构与Davis、Panas与Zariphopoulou（1993）；成本加倍时区间变宽1.17倍，而2^{1/3} = 1.26；**实验**：`Hedger.band`。
+* **15. 神经SDE与稳健界。** Gierjatowicz等（2022）：36个普通期权都重新定价到0.19个波动率点之内，而一个向下敲出看涨期权的价格可在0.0671到0.0703之间（赫斯顿为0.0685）；两个极端模型的微笑相差从未超过0.72个波动率点；这些界嵌在第9部分的鞅最优传输界之内。
+* **16. 市场生成器。** GJR-GARCH、用签名训练的网络和扩散模型生成32天的比特币窗口，按典型事实和期望签名距离评分；四个真实窗口与四个生成窗口。
+* **17. 投产与模型风险。** 2026年4月17日的SR 26-2取代SR 11-7，英国PRA SS1/23；把清单用于本部分的网络；已知答案记分板；公司档案（摩根大通、丹斯克银行）。
+* **18. 前沿：2023至2026年。** 生成式期权市场（SANOS、DYSANOS、GROMM）、深度对冲者是否在对冲、二阶训练、停时与对偶、签名核生成器；重跑一个论断。
+* **19. 检验第17条规则。** 四个对冲者分别在Black–Scholes路径、GJR-GARCH路径和1,010段真实的30天比特币区间上定价；第17条规则（没有更慢的独立引擎就不用网络；训练框外的输入交给它；对冲者要在两个生成器和历史上检验）。
+* **回顾、交易台问题与习题。** 十一行回顾；四个交易台问题；八道习题，解答见下文。
 
 ## 交易台问题与解答
 
