@@ -133,7 +133,7 @@ class AltData(VoiceoverScene):
         sim_txt = ", ".join(f"{s_['each']:.3f}" for s_ in a["sim"][:3])
         with self.voiceover(
             "Draw it. <bookmark mark='a'/> Each fund's profit against the number of funds with the data: half the "
-            "maximum is gone by the second buyer. The orange dots are a simulation of the market, two hundred "
+            "maximum is gone by the second buyer. The dots are a simulation of the market, two hundred "
             f"thousand draws each, landing on the formula: {sim_txt} for one, two and five buyers. "
             "<bookmark mark='b'/> Now let a vendor sell the data to more funds each year, along an S-shaped adoption "
             "curve. The profit of being a buyer collapses within a few years of the data's launch, long before most "
