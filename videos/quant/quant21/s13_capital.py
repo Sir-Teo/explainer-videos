@@ -142,9 +142,9 @@ class Capital(VoiceoverScene):
         sc = rw * M * ead * df / 1.4
         ns = np.arange(1, 101)
         per = np.sqrt((0.5 * ns) ** 2 + 0.75 * ns) / ns
-        g = axes([0, 100], [0, 1.05], x_length=5.2, y_length=2.4, xlabel=r"identical counterparties",
+        g = axes([0, 100], [0, 1.05], x_length=5.2, y_length=1.9, xlabel=r"identical counterparties",
                  ylabel=r"capital per name, $\times$ one", xticks=[1, 25, 50, 75, 100], yticks=[0, 0.5, 1.0], font_size=12
-                 ).to_edge(DOWN, buff=0.5).shift(LEFT * 3.0)
+                 ).to_edge(DOWN, buff=0.3).shift(LEFT * 3.0)
         ax = g.ax
         line = curve(ax, ns, per, CVA_C, stroke_width=3)
         half = DashedLine(ax.c2p(0, 0.5), ax.c2p(100, 0.5), color=GREY_B, stroke_width=1.5)

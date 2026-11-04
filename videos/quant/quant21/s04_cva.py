@@ -42,7 +42,7 @@ class CVA(VoiceoverScene):
                 why(r"on the exposure grid: each bucket's expected exposure, discounted, times the chance of default in "
                     r"that bucket (independence of exposure and default assumed, for now)"),
                 why(r"the mirror: what the bank would not have to pay if it defaulted itself, using its own CDS curve")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.25, x=-1.0, buff=0.3, edge=6.9)
         with self.voiceover(
             "A trade with a counterparty that can default is worth less than the same trade with one that cannot. "
             "<bookmark mark='a'/> By how much? Integrate: the fraction lost on default, times the discounted expected "
