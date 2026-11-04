@@ -136,12 +136,12 @@ Frontier topic; each is refined in that part's frontier sweep.
 
 | Part | Frontier chapter |
 |---|---|
-| 1 | BB(5) settled and machine-checked (2024); BB(6) and its Collatz-like cryptids; the physical Church–Turing thesis |
-| 2 | the 2023 exponential improvement for diagonal Ramsey numbers; the sensitivity conjecture's two-page proof (2019); formal proof in Lean |
-| 3 | why explicit circuit lower bounds stall near 3n; the minimum circuit size problem; SAT-based exact synthesis |
-| 4 | integer multiplication in O(n log n) (2019); correctly rounded libraries; low-precision formats for machine learning |
-| 5 | Rowhammer at today's densities, and the limits of its mitigations; formal metastability analysis; new memories (MRAM, CXL) |
-| 6 | formal ISA specifications (Sail RISC-V); verified processors; fuzzing RTL against a golden model |
+| 1 | how BB(5) was proved (non-halting certificates, deciders); BB(6) in Knuth's arrows; Antihydra, run and decoded, and the gambler's-ruin heuristic; machines beyond ZFC (7,910 → 432 states) |
+| 2 | Ramsey numbers: R(3,3) by pigeonhole and exhaustion, the Paley graph on 17, Erdős's bounds, the 2023–24 exponential improvements; explicit constructions and Paley clique numbers (computed) |
+| 3 | exact minimum circuits for every 3-input function (computed); the census wall at five inputs; gate elimination and the 3.1n record; MCSP and meta-complexity |
+| 4 | integer multiplication measured on this machine and the race to n log n; correct rounding of eˣ measured, the table-maker's dilemma, CORE-MATH; the hardest float32 eˣ (computed) |
+| 5 | falling Rowhammer thresholds; PARA's probability and Misra–Gries counting, derived; a many-sided attack simulated; Half-Double, RowPress, PRAC |
+| 6 | mutation analysis of random co-simulation (computed); coverage-guided CPU fuzzing (DifuzzRTL, Cascade); Sail, Kami, Silver; verifying speculative cores |
 | 7 | the limits of branch prediction, computed: idealised PPM against TAGE at every storage budget; the perceptron's linear blind spot; TAGE-SC-L, BranchNet; the data-centre front-end bottleneck |
 | 8 | ILP limit studies revisited; speculative non-interference as a formal model of Spectre; value prediction |
 | 9 | learned replacement (Hawkeye, Glider) against Belady; the red–blue pebble lower bounds; memory disaggregation |
@@ -193,8 +193,8 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 55 | formal defences against speculation; memory safety at scale; verified bootstrapping |
 | 56–61 | each Act XI part is research-level throughout; its Frontier chapter is the open problems of its field |
 
-Parts 1–6 were built before the research tier; their Frontier chapters are added in a retrofit after Part 7, with
-their notes, problems and Chinese editions.
+Parts 1–6 were built before the research tier; their Frontier chapters were added in a retrofit after Part 7
+(2026-11-04), with their notes, research problems and Chinese editions.
 
 ## 2. The devices
 
@@ -3129,11 +3129,11 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 
 | Part | State | Length |
 |---|---|---|
-| 1 | scenes, computations, notes and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 58 min (estimate) |
-| 2 | scenes, computations, notes and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 63 min (estimate) |
-| 3 | scenes, computations, notes and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 4 | scenes, computations, notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 62 min (estimate) |
-| 5 | scenes, computations, notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
+| 1 | scenes, computations, notes and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 65 min (estimate) |
+| 2 | scenes, computations, notes and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 69 min (estimate) |
+| 3 | scenes, computations, notes and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
+| 4 | scenes, computations, notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
+| 5 | scenes, computations, notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
+| 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
 | 8–61 | planned (this document) | — |

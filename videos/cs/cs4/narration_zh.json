@@ -16,7 +16,8 @@
   "Wilkinson": "12. 条件与稳定",
   "Formats": "13. IEEE 之外",
   "Functions": "14. 计算 sin、exp 和 log",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
+  "Outro": "回顾、习题，以及它们会在哪里再出现",
+  "Frontier": "15. 前沿：算术的未解问题"
  },
  "lines": {
   "860c1acab98a": {
@@ -429,6 +430,31 @@
    "en": "Here is the run, for an angle of one radian. <bookmark mark='a'/> Each row turns the vector one way or the other by a smaller angle, and the angle left in z shrinks, roughly halving each time. <bookmark mark='b'/> After sixteen steps, the vector's coordinates give the cosine and the sine of one, right to about five decimal places, using nothing but shifts, additions and a small table of arctangents. <bookmark mark='c'/> The HP-35 of 1972, the first scientific pocket calculator, computed its functions with this kind of shift-and-add algorithm, and CORDIC is still used inside FPGAs, radio chips and small processors that have no multiplier.",
    "zh": "这是角度为一弧度时的运行过程。<bookmark mark='a'/>每一行把向量向一边或另一边转一个更小的角度，z 中剩下的角度不断缩小，大致每次减半。<bookmark mark='b'/>十六步之后，向量的坐标给出一的余弦和正弦，准确到大约小数点后五位，只用了移位、加法和一张小小的反正切表。<bookmark mark='c'/>1972年的 HP-35，第一台科学袖珍计算器，就是用这类移位加法算法来计算函数的，而 CORDIC 至今仍在 FPGA、无线电芯片和没有乘法器的小处理器里使用。"
   },
+  "5dcae21afede": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: arithmetic's open questions.",
+   "zh": "第15章。前沿：算术的未解问题。"
+  },
+  "cfb875999c54": {
+   "scene": "Frontier",
+   "en": "Chapter six multiplied numbers the way school does, in time proportional to the square of their length. How fast can it really be done? <bookmark mark='a'/> Here are two multipliers already inside Python, timed on this machine. <bookmark mark='b'/> Python's integers switch to Karatsuba's method, which Part 19 derives, and their time grows like the length to the power of about 1.4. <bookmark mark='c'/> Python's decimal module, for very long numbers, multiplies with a number-theoretic transform: a fast Fourier transform done in modular arithmetic, so that no rounding happens at all. Its time grows almost linearly, and at a million digits it is about 6 times faster.",
+   "zh": "第6章像学校里那样做乘法，所用时间与长度的平方成正比。乘法究竟能有多快？<bookmark mark='a'/>这是 Python 里已有的两个乘法器，在这台机器上计时。<bookmark mark='b'/>Python 的整数会切换到 Karatsuba 方法，第19部分会推导它，它的时间大约按长度的 1.4 次方增长。<bookmark mark='c'/>Python 的 decimal 模块对非常长的数用数论变换做乘法：在模算术里做的快速傅里叶变换，所以完全不发生舍入。它的时间几乎是线性增长的，到一百万位时大约快 6 倍。"
+  },
+  "ff431bd5c65d": {
+   "scene": "Frontier",
+   "en": "The theory went further than any library. <bookmark mark='a'/> Anatoly Karatsuba broke the square in 1960, Toom and Cook pushed the exponent towards one, and in 1971 Arnold Schönhage and Volker Strassen used the fast Fourier transform to reach n log n times log log n, and conjectured that n log n was the truth. <bookmark mark='b'/> Martin Fürer improved the last factor in 2007, and in 2019 David Harvey and Joris van der Hoeven reached n log n itself, with a Fourier transform in one thousand seven hundred and twenty-nine dimensions. <bookmark mark='c'/> Their algorithm only wins for numbers with more than two to the seventeen-twenty-nine to the twelfth bits, far more than there are atoms; it matters for what it proves, not for what it runs. <bookmark mark='d'/> Is n log n the best possible? Nobody can prove it. The only lower bound, from 2019, holds if a conjecture about information flow in networks is true.",
+   "zh": "理论走得比任何程序库都远。<bookmark mark='a'/>阿纳托利·卡拉楚巴在1960年打破了平方，图姆和库克把指数推向一，1971年阿诺尔德·舍恩哈格和福尔克尔·施特拉森用快速傅里叶变换达到了 n log n 乘以 log log n，并猜想 n log n 才是真相。<bookmark mark='b'/>马丁·菲雷尔在2007年改进了最后那个因子，2019年戴维·哈维和约里斯·范德赫芬达到了 n log n 本身，用的是一个一千七百二十九维的傅里叶变换。<bookmark mark='c'/>他们的算法只有在数的位数超过二的一千七百二十九的十二次方次方时才占优，远远多于宇宙中的原子；它的意义在于证明了什么，而不在于能运行什么。<bookmark mark='d'/>n log n 是最好的吗？没有人能证明。唯一的下界来自2019年，它成立的前提是关于网络中信息流动的一个猜想为真。"
+  },
+  "13fa5e954fa9": {
+   "scene": "Frontier",
+   "en": "The second question is about chapter fourteen's functions. <bookmark mark='a'/> The IEEE standard requires addition, subtraction, multiplication, division and square root to be correctly rounded: the exact answer, rounded once. For the exponential, the logarithm and the sines it only recommends it. <bookmark mark='b'/> So we tested the single-precision exponential of NumPy, on this machine, on ten million random inputs, against the correctly rounded answer, which we checked at two hundred bits of precision. <bookmark mark='c'/> About 39 percent of its answers are not the correctly rounded one, off by one unit in the last place or, rarely, 2. <bookmark mark='d'/> That is a deliberate trade: vectorized code, which Part 10 explains, is several times faster if it is allowed to miss the last bit.",
+   "zh": "第二个问题关于第14章的函数。<bookmark mark='a'/>IEEE 标准要求加、减、乘、除和平方根都正确舍入：精确答案只舍入一次。对指数、对数和正弦，它只是建议这样做。<bookmark mark='b'/>于是我们在这台机器上测试了 NumPy 的单精度指数函数，用一千万个随机输入，对照正确舍入的答案，这个答案我们用两百位精度核对过。<bookmark mark='c'/>它大约有百分之 39 的答案不是正确舍入的那个，差最后一位的一个单位，偶尔差 2 个。<bookmark mark='d'/>这是有意的取舍：向量化的代码，第10部分会讲到，只要允许它错过最后一位，就能快好几倍。"
+  },
+  "f221595e0e38": {
+   "scene": "Frontier",
+   "en": "Why is correct rounding hard? <bookmark mark='a'/> Rounding means deciding which of two neighbouring floats the true value is nearer to, which side of halfway it lies. When it lies extremely close to halfway, you have to compute many more digits than the answer itself has before you know. This is the table-maker's dilemma, as old as printed tables of logarithms. <bookmark mark='b'/> How many more? Nothing short of an exhaustive search over every input can say, and Vincent Lefèvre and Jean-Michel Muller ran such searches, finding that the worst cases in double precision need more than twice its fifty-three bits. <bookmark mark='c'/> With those worst cases known, correctly rounded functions can be fast: the CORE-MATH project has written them for single precision at the speed of ordinary libraries, and since 2024 the GNU C library has been adopting them. <bookmark mark='d'/> Doing the same for every double-precision function, fast and with proofs, is open, and finding a hard case yourself is this part's research problem.",
+   "zh": "正确舍入为什么难？<bookmark mark='a'/>舍入就是判断真值离相邻的两个浮点数中哪一个更近，也就是它落在中点的哪一边。当它极其接近中点时，你得算出比答案本身多得多的位数才能知道。这就是制表者的两难，和印刷的对数表一样古老。<bookmark mark='b'/>要多算多少位？只有对每一个输入做穷举搜索才说得清，樊尚·勒费夫尔和让-米歇尔·米勒做过这样的搜索，发现双精度下最坏的情形需要的位数超过它五十三位的两倍。<bookmark mark='c'/>知道了这些最坏情形，正确舍入的函数就能做得很快：CORE-MATH 项目已经为单精度写出了和普通函数库一样快的版本，而且从2024年起，GNU C 库一直在采用它们。<bookmark mark='d'/>对每一个双精度函数做到同样的事，既快又有证明，仍是未解问题；亲手找到一个难舍入的情形，就是这一部分的研究题。"
+  },
   "8702361d91b1": {
    "scene": "Outro",
    "en": "What we built in this part. Integers on a clock, with two's complement letting one adder serve signed and unsigned numbers. The ripple-carry adder, and the associative carry operator that turns addition into a parallel prefix, logarithmic in depth. Multipliers as trees of carry-save adders, and division by SRT, with the table that cost Intel half a billion dollars. Pebble's ALU, built and verified. And floating point: a ruler with the same relative precision everywhere, correctly rounded operations, and the difference between an unstable formula and an ill-conditioned problem.",
@@ -444,10 +470,10 @@
    "en": "In practice: integer overflow is still a common cause of security holes, when a length wraps around and a buffer is allocated too small, which is why Rust checks arithmetic and why sanitizers exist. Money is kept in integers or decimal types, never in binary floats. Numerical libraries, from LAPACK to the maths library behind every sine, are built on Wilkinson's analysis and minimax polynomials. Machine learning trains in bfloat16 and FP8. And since the FDIV bug, chip makers prove their floating-point units correct by machine.",
    "zh": "在实践中：整数溢出仍然是安全漏洞的常见原因，一个长度绕回去，缓冲区就分配得太小，这就是 Rust 检查算术、以及消毒器存在的原因。钱用整数或十进制类型来存，绝不用二进制浮点数。数值库，从 LAPACK 到每个正弦背后的数学库，都建立在威尔金森的分析和最佳一致逼近多项式之上。机器学习用 bfloat16 和 FP8 训练。自从 FDIV 错误以来，芯片厂商都用机器来证明它们的浮点单元是正确的。"
   },
-  "3c4e92627ca3": {
+  "41afd86a2cd9": {
    "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to use this series' arithmetic library yourself.",
-   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自使用本系列的算术库。"
+   "en": "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build problem: it asks you to use this series' arithmetic library yourself. The last, marked with a star, is a research problem: a search over every single-precision number, the kind that underlies correctly rounded libraries.",
+   "zh": "七道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第六道是动手题：要你亲自使用本系列的算术库。最后一道标了星号，是研究题：对每一个单精度数做一次搜索，正确舍入函数库正是建立在这类搜索之上。"
   },
   "78289380e84b": {
    "scene": "Outro",
@@ -477,6 +503,7 @@
   "Wilkinson": "12. Conditioning and stability",
   "Formats": "13. Beyond IEEE",
   "Functions": "14. Computing sin, exp and log",
+  "Frontier": "15. Frontier: arithmetic's open questions",
   "Outro": "Recap, problems, and where this comes back"
  }
 }
