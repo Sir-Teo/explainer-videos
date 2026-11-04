@@ -22,5 +22,6 @@ SCENES = [
     ("s10_surrogate", "Surrogate", "16. A neural pricer for the book, trained on screen"),
     ("s20_industry", "Industry", "17. Industry: how desks mark, reserve and report"),
     ("s21_frontier", "Frontier", "18. Frontier, 2023-2026"),
+    ("s22_research", "Research", "For the researcher: what the vanillas alone say about a one-touch"),
     ("s12_outro", "Outro", "Recap, desk questions, problems"),
 ]

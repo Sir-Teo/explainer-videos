@@ -1145,7 +1145,57 @@ def compute_dek() -> dict:
     return _json(out)
 
 
-ITEMS = {"market": compute_market, "barrier": compute_barrier, "digital": compute_digital, "asian": compute_asian,
+def compute_touch_bounds() -> dict:
+    """The research chapter: what the vanillas alone say about a one-touch.  A down one-touch at B is super-hedged,
+    in every model with continuous paths and zero rates, by 1/(K - B) puts struck at K > B, plus buying 1/(K - B)
+    forwards at the moment B is touched: so its price is at most min_{K > B} P(K)/(K - B), and this bound is attained
+    by some model consistent with the puts (an Azema-Yor construction; Hobson 1998, Brown, Hobson and Rogers 2001).
+    It is at least the digital P(S_T <= B).  Checked on the four models fitted to the Bitcoin Surface in Part 13
+    (daily paths, 79 days), against their own one-touch prices, and path by path for the super-hedge."""
+    import videos.quant.quant13.compute as Q13
+    days = 79
+    T = days / 365
+    Bs = np.round(np.arange(0.60, 0.96, 0.025), 3)
+    Kg = np.round(np.arange(0.55, 1.40, 0.0025), 4)
+    out = {"days": days, "B": Bs, "models": {}}
+    for m in ("LV", "Heston", "Bates", "VG"):
+        S = np.exp(Q13._simulate(m, n_paths=20000, days=days, seed=15))
+        ST, mn = S[days], S[: days + 1].min(axis=0)
+        puts = np.array([np.mean(np.maximum(k - ST, 0)) for k in Kg])
+        atm = float(np.mean(np.maximum(ST - 1, 0)))
+        sig_atm = float(bs.implied_vol(atm, 1.0, 1.0, T))
+        rows = {"upper": [], "k_star": [], "digital": [], "touch": [], "bs": []}
+        for B in Bs:
+            ok = Kg > B + 1e-9
+            ratio = puts[ok] / (Kg[ok] - B)
+            j = int(np.argmin(ratio))
+            rows["upper"].append(float(ratio[j]))
+            rows["k_star"].append(float(Kg[ok][j]))
+            rows["digital"].append(float(np.mean(ST <= B)))
+            rows["touch"].append(float(np.mean(mn <= B)))
+            rows["bs"].append(X.one_touch(1.0, float(B), T, sig_atm))
+        out["models"][m] = {**rows, "sig_atm": sig_atm}
+        if m == "Heston":
+            # the super-hedge path by path at B = 0.8
+            B = 0.8
+            ok = Kg > B
+            j = int(np.argmin(puts[ok] / (Kg[ok] - B)))
+            K = float(Kg[ok][j])
+            hit = mn <= B
+            first = np.argmax(S[: days + 1] <= B, axis=0)
+            S_tau = S[first, np.arange(S.shape[1])]
+            value = np.maximum(K - ST, 0) / (K - B) + np.where(hit, (ST - S_tau) / (K - B), 0.0)
+            surplus = value - hit.astype(float)
+            out["superhedge"] = {"B": B, "K": K, "cost": float(puts[ok][j] / (K - B)), "touch": float(hit.mean()),
+                                 "surplus_mean": float(surplus.mean()), "surplus_min": float(surplus.min()),
+                                 "share_negative": float(np.mean(surplus < -1e-12)),
+                                 "neg_mean_gap": float(np.mean(np.where(hit, (B - S_tau) / (K - B), 0.0))),
+                                 "hist": np.histogram(surplus, bins=40, range=(-0.2, 1.8))[0],
+                                 "hist_edges": np.linspace(-0.2, 1.8, 41)}
+    return _json(out)
+
+
+ITEMS = {"touch_bounds": compute_touch_bounds, "market": compute_market, "barrier": compute_barrier, "digital": compute_digital, "asian": compute_asian,
          "snowball": compute_snowball, "surrogate": compute_surrogate, "book2024": compute_book2024,
          "korea": compute_korea, "worstof": compute_worstof, "uvm": compute_uvm, "envelope": compute_envelope,
          "decompose": compute_decompose, "buyers": compute_buyers, "barrier_surface": compute_barrier_surface,

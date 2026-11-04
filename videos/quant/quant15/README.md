@@ -1,7 +1,7 @@
 # Quant, Built — Part 15: Exotics and Structured Products
 
 Part 15 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), in Act III, Derivatives: a hook, eighteen chapters and an outro, about 58 minutes.
+[the syllabus](../SYLLABUS.md)), in Act III, Derivatives: a hook, eighteen chapters, a chapter for the researcher and an outro, about 64 minutes.
 It covers:
 
 * a structured note taken apart into priced pieces, the issuer's funding and margin, and what buyers earned;
@@ -19,7 +19,7 @@ Every number is computed by the series' own code ([`compute.py`](compute.py), an
 *An education in methods, not investment advice. Firms and episodes are described from the public record;
 investors' losses are reported as the regulators and the press reported them.*
 
-## Chapters (about 60 minutes)
+## Chapters (about 64 minutes)
 
 | # | Chapter | Min | Signature visual · experiment |
 |---|---|---|---|
@@ -42,7 +42,16 @@ investors' losses are reported as the regulators and the press reported them.*
 | 16 | A neural pricer for the book, trained on screen | 2.6 | lab; `TrainingReplay` with 3 seeds (`surrogate_replay`); the polynomial baseline; speed |
 | 17 | Industry: how desks mark, reserve and report | 2.9 | prudent valuation, day-one P&L, FRTB, conduct, validation; the House's Rule 15 |
 | 18 | Frontier, 2023–2026 | 2.3 | three digital-delta estimators racing, 5 seeds (`pathwise_digital`); the papers |
-| — | Recap, desk questions, problems | 2.5 | twelve lines, three desk questions, eight problems |
+| R | For the researcher: what the vanillas alone say about a one-touch | 4.6 | the super-hedge (puts plus forwards at the touch), Hobson / Brown–Hobson–Rogers bounds; Bitcoin Surface, four fitted models, 79 days |
+| — | Recap, desk questions, problems | 2.6 | twelve lines, three desk questions, ten problems (two at qualifying-exam level) |
+
+**For the researcher.** A down one-touch at B is dominated, on every path and in every model, by 1/(K − B) puts at
+K > B plus 1/(K − B) forwards bought at the first touch (a gap below B only lowers their cost), so
+P(S_T ≤ B) ≤ OT ≤ min_{K>B} P(K)/(K − B), the upper bound attained by a continuous model consistent with the puts
+(Hobson 1998; Brown, Hobson and Rogers 2001). On the four models fitted to the Bitcoin Surface (20,000 daily paths,
+79 days), floor / Heston / ceiling: 0.081/0.142/0.208 at B = 0.7, 0.164/0.285/0.408 at 0.8, 0.296/0.538/0.716 at 0.9;
+at 0.8 the models span 0.281–0.297 (Black–Scholes at the at-the-money vol 0.333). The super-hedge on the Heston paths
+at 0.8 (K* = 0.96, cost 0.408): minimum surplus 0, mean 0.126. Variance gamma, a pure-jump model, lies inside too.
 
 **Labs** (House code on screen, then run): `down_out_call` (ch. 3), `static_dic_hedge` (ch. 4),
 `geometric_asian_call` (ch. 6), `snowball_payoff` (ch. 7), `uvm_price` (ch. 13), the surrogate's training loop
@@ -162,6 +171,28 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
    * Use S₂ as numéraire: E^Q[e^{−rT}(S₁ − S₂)⁺] = S₂(0) E^{Q2}[(S₁/S₂ − 1)⁺].
    * Under Q2, X = S₁/S₂ is a martingale with volatility σ² = σ₁² + σ₂² − 2ρσ₁σ₂ (Itô for a ratio).
    * So the price is S₁(0)N(d₁) − S₂(0)N(d₂), d₁ = [log(S₁/S₂) + σ²T/2]/(σ√T), d₂ = d₁ − σ√T.
+9. **(qual) The one-touch's model-free bounds.**
+   * Floor: on {S_T ≤ B} the price has touched B, so 1{touched} ≥ 1{S_T ≤ B} pathwise; take expectations.
+   * Ceiling: with τ the first time S ≤ B and K > B, the portfolio (K − S_T)⁺/(K − B) + 1{τ ≤ T}(S_T − S_τ)/(K − B)
+     costs P(K)/(K − B) (forwards are free at zero rates). Touched: since S_τ ≤ B, it is at least
+     [(K − S_T)⁺ + S_T − B]/(K − B) ≥ 1. Untouched: at least 0. So OT ≤ P(K)/(K − B) for every K > B.
+   * The minimizer: d/dK[P(K)/(K − B)] = 0 gives P′(K*)(K* − B) = P(K*): the line from (B, 0) to (K*, P(K*)) has the
+     slope of the put curve at K*, a tangent; since P is convex, it is unique.
+10. **(qual) The up one-touch.** Hold 1/(B − K) calls at K < B and sell 1/(B − K) forwards at the first time S ≥ B.
+   Touched: (S_T − K)⁺/(B − K) − (S_T − S_τ)/(B − K) ≥ (S_τ − K)/(B − K) ≥ 1, and an upward gap (S_τ > B) only adds.
+   So OT_up ≤ min_{K<B} C(K)/(B − K). In Black–Scholes with σ = 50%, T = 0.25, B = 1.2: K* ≈ 0.973, bound 0.494,
+   against the model's own continuous-monitoring price 0.424 and the digital 0.196.
+
+## For the researcher
+
+* **The theorems.** Hobson (1998), "Robust hedging of the lookback option," *Finance Stoch.* 2; Brown, Hobson and
+  Rogers (2001), "Robust hedging of barrier options," *Math. Finance* 11(3); Cox and Obłój (2011) for double-touch
+  options; Beiglböck, Henry-Labordère and Penkner (2013) for the transport framework (Part 9).
+* **Simplifications.** Zero rates; one maturity's vanillas; a down one-touch paying at expiry; models simulated daily,
+  so their touch prices are slightly below the continuous-monitoring values; the bound from one model's puts (the four
+  models' puts nearly coincide).
+* **Open problems.** Sharp bounds with more marginals or other barriers; bounds over plausible model classes; gaps
+  and discrete monitoring.
 
 ## Data and reproducibility
 
@@ -179,7 +210,7 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
 
 # 量化金融，从零搭建 — 第15部分：奇异期权与结构化产品
 
-开场、十八章和结尾，约58分钟。本部分讲：
+开场、十八章、写给研究者的一章和结尾，约64分钟。本部分讲：
 
 * 把一张结构化票据拆成有价格的零件：发行人的融资与利润，以及买家赚了什么；
 * 障碍期权：反射原理、闭式解与偏微分方程的镜像、离散观察，以及静态对冲；
@@ -192,7 +223,7 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录；投资者亏损按监管机构和媒体的报道描述。*
 
-## 章节（约60分钟）
+## 章节（约64分钟）
 
 | # | 章节 | 分钟 |
 |---|---|---|
@@ -215,7 +246,10 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
 | 16 | 账本的神经网络定价器，在屏幕上训练 | 2.6 |
 | 17 | 业界：交易台如何估值、计提准备和报告 | 2.9 |
 | 18 | 前沿，2023-2026 | 2.3 |
-| — | 回顾、交易台问题与习题 | 2.5 |
+| R | 写给研究者：只凭普通期权，能对一触即付期权说什么 | 4.6 |
+| — | 回顾、交易台问题与习题（十道习题，两道为资格考试水平） | 2.6 |
+
+**写给研究者。** 在每条路径、每个模型中，B处的向下一触即付期权都被K > B处的1/(K − B)份看跌期权加上首次触碰时买入的1/(K − B)份远期所占优（跳到B以下只会降低它们的成本），所以P(S_T ≤ B) ≤ OT ≤ min_{K>B} P(K)/(K − B)，上界由一个与看跌期权一致的连续模型达到（霍布森1998；布朗、霍布森与罗杰斯2001）。在拟合比特币曲面的四个模型上（20,000条日度路径，79天），下限/赫斯顿/上限：B = 0.7时0.081/0.142/0.208，0.8时0.164/0.285/0.408，0.9时0.296/0.538/0.716；0.8处各模型为0.281–0.297（平值波动率的布莱克–斯科尔斯为0.333）。赫斯顿路径上0.8处的超对冲（K* = 0.96，成本0.408）：最小盈余0，平均0.126。纯跳跃的方差伽马也在区间内。
 
 教科书对照表与论文清单见上面的英文部分。
 
@@ -252,3 +286,11 @@ build Parts 12 and 13 first. About 25 CPU-minutes on an idle core in all.
    一份到T的看涨期权，加上e^{−q(T−t₁)}份到t₁、执行价为K e^{−(r−q)(T−t₁)}的看跌期权。
 8. **马格拉布公式。** 以S₂为计价单位：E^Q[e^{−rT}(S₁ − S₂)⁺] = S₂(0) E^{Q2}[(S₁/S₂ − 1)⁺]。在Q2下X = S₁/S₂是鞅，
    波动率σ² = σ₁² + σ₂² − 2ρσ₁σ₂（比值的伊藤公式）。所以价格为S₁(0)N(d₁) − S₂(0)N(d₂)，d₁ = [log(S₁/S₂) + σ²T/2]/(σ√T)，d₂ = d₁ − σ√T。
+9. **（资格考试）一触即付的无模型界。** 下限：在{S_T ≤ B}上价格必已触碰B，所以逐路径1{触碰} ≥ 1{S_T ≤ B}，取期望即得。上限：τ为首次S ≤ B的时刻、K > B，组合(K − S_T)⁺/(K − B) + 1{τ ≤ T}(S_T − S_τ)/(K − B)的成本为P(K)/(K − B)（零利率下远期免费）。触碰时由S_τ ≤ B，它至少为[(K − S_T)⁺ + S_T − B]/(K − B) ≥ 1；未触碰时至少为0。最小化点：P′(K*)(K* − B) = P(K*)，即从(B, 0)到看跌期权曲线的切线；P是凸的，所以唯一。
+10. **（资格考试）向上一触即付。** 持有K < B处的1/(B − K)份看涨期权，在首次S ≥ B时卖出1/(B − K)份远期。触碰时(S_T − K)⁺/(B − K) − (S_T − S_τ)/(B − K) ≥ (S_τ − K)/(B − K) ≥ 1，向上跳空（S_τ > B）只会增加。所以OT_up ≤ min_{K<B} C(K)/(B − K)。布莱克–斯科尔斯中σ = 50%、T = 0.25、B = 1.2时：K* ≈ 0.973，界为0.494，模型自身的连续观察价格0.424，数字期权0.196。
+
+## 写给研究者
+
+* **定理。** 霍布森（1998），*Finance Stoch.* 2；布朗、霍布森与罗杰斯（2001），*Math. Finance* 11(3)；Cox与Obłój（2011）论双触碰期权；Beiglböck、Henry-Labordère与Penkner（2013）的运输框架（第9部分）。
+* **简化。** 零利率；只有一个到期日的普通期权；到期支付的向下一触即付；模型按日模拟，所以触碰价格略低于连续观察的值；界来自一个模型的看跌期权（四个模型的看跌期权几乎重合）。
+* **开放问题。** 加入更多边际或其他障碍时的紧界；在合理模型类上的界；跳空与离散观察。

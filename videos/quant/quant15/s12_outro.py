@@ -29,7 +29,10 @@ PROBLEMS = [
     r"sign of the buyer's vega.",
     r"Show that the snowball's value is affine in the coupon, $V(c) = A + cB$, and solve for the fair coupon.",
     r"Price a chooser option (call or put, chosen at $t_1$) as a call plus a put, by put--call parity.",
-    r"Derive Margrabe's formula for $\mathbb E[e^{-rT}(S_1 - S_2)^+]$ by changing the numeraire to $S_2$.",
+    r"Derive Margrabe's formula for $\mathbb E[e^{-rT}(S_1 - S_2)^+]$ by changing the numeraire to $S_2$.",    r"(qual) Prove that a down one-touch at $B$ satisfies $\Pr(S_T \le B) \le \operatorname{OT} \le \min_{K > B}P(K)/(K - B)$ "
+    r"for any price process, and that the minimizing $K^*$ is where the tangent from $(B, 0)$ touches the put curve.",
+    r"(qual) Write the call super-hedge of an up one-touch at $B > S_0$, show it dominates on every path even with "
+    r"upward gaps, and compute the bound in Black--Scholes for $\sigma = 50\%$, $T = 0.25$, $B = 1.2$.",
 ]
 
 
@@ -112,11 +115,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And eight problems: the barrier formula by reflection, the discrete-monitoring shift, the geometric "
+            "And ten problems: the barrier formula by reflection, the discrete-monitoring shift, the geometric "
             "average, the call spread's bound, the snowball taken apart and solved as a line, the chooser by parity, "
-            "and Margrabe's formula by a change of numeraire. Solutions, in English and Chinese, are in the notes."
+            "and Margrabe's formula by a change of numeraire. Two are qualifying-exam problems: the one-touch's "
+            "model-free bounds, and the up-touch hedge. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(5)
