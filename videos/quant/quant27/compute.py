@@ -664,9 +664,12 @@ def compute_pretrained() -> dict:
         half = len(H) // 2
         bh = np.linalg.lstsq(H[:half], Ye[:half], rcond=None)[0]
         f_har = H @ bh
+        # E log|r| lies below log(sigma) (by 0.64 for a normal): EWMA gets the same fitted offset HAR's intercept gives it
+        f_ew = ewc + np.mean(Ye[:half] - ewc[:half])
         sl = slice(half, None)
         mse = lambda f: float(np.mean((Ye[sl] - f[sl]) ** 2))  # noqa: E731
-        out["etfs"][sym] = {"net": mse(f_net), "ewma": mse(ewc), "har": mse(f_har), "zero": mse(np.zeros(len(Ye)))}
+        out["etfs"][sym] = {"net": mse(f_net), "ewma": mse(f_ew), "har": mse(f_har), "zero": mse(np.zeros(len(Ye))),
+                            "n_test": int(len(Ye) - half), "first_test": int(b["date"][L + 1 + half])}
     return _json(out)
 
 
