@@ -2784,3 +2784,84 @@ def test_wrong_way_cva_rises_with_correlation():
     V = np.stack([XV.swap_values_hw(hw, x[:, j], t, K, 10.0) for j, t in enumerate(times)], 1)
     cv = [XV.wrong_way_cva(V, x, times, c.df, 0.02, rho=r_, seed=1) for r_ in (-0.5, 0.0, 0.5)]
     assert cv[0] < cv[1] < cv[2]
+
+
+# ---------------------------------------------------------------------------- Part 22: the macro desk
+def test_cip_basis_zero_at_parity_and_signs():
+    from explainer.quant.house import macro as M
+    Q, ru, rf, tau = 1.27, 0.05, 0.01, 0.25
+    F = M.cip_forward(Q, ru, rf, tau)
+    assert F > Q  # the low-rate currency trades at a forward premium
+    assert abs(M.cip_basis(Q, F, ru, rf, tau)) < 1e-12
+    # a forward above parity: swapping pounds into dollars costs more than borrowing dollars directly -> negative x
+    assert M.cip_basis(Q, F * 1.0005, ru, rf, tau) < 0
+
+
+def test_fama_regression_recovers_uip_and_carry_sort():
+    from explainer.quant.house import macro as M
+    rng = np.random.default_rng(0)
+    T = 600
+    ru = np.full(T, 0.03)
+    rf = 0.03 + 0.04 * np.sin(np.arange(T) / 40)
+    h = 1 / 12
+    s = np.zeros(T)  # s = ln(foreign per dollar); UIP: E[ds] = (rf - ru) h
+    for t in range(1, T):
+        s[t] = s[t - 1] + (rf[t - 1] - ru[t - 1]) * h + 0.002 * rng.standard_normal()
+    out = M.fama_regression(np.exp(-s), ru, rf, h)
+    assert out["beta"] == pytest.approx(1.0, abs=0.15)
+    ex = np.array([[0.01, 0.0, -0.01, 0.02, -0.02, 0.0]])
+    diff = np.array([[5, 4, 3, 2, 1, 0]], float)
+    cs = M.carry_sort(ex, diff, k=2)
+    assert cs["long"][0] == pytest.approx(0.005) and cs["short"][0] == pytest.approx(-0.01)
+    assert cs["ls"][0] == pytest.approx(0.015)
+
+
+def test_fx_deltas_and_strikes():
+    from explainer.quant.house import macro as M
+    S, T, sig, rd, rf = 1.10, 0.5, 0.09, 0.045, 0.025
+    for kind in ("spot", "forward", "spot_pa", "forward_pa"):
+        for cp, d in ((1, 0.25), (-1, -0.25)):
+            K = M.strike_from_delta(S, T, sig, rd, rf, d, cp, kind)
+            assert float(M.fx_delta(S, K, T, sig, rd, rf, cp, kind)) == pytest.approx(d, abs=1e-8)
+    F = S * np.exp((rd - rf) * T)
+    for pa, kind in ((False, "forward"), (True, "forward_pa")):
+        K = M.atm_dns_strike(F, T, sig, pa)
+        assert float(M.fx_delta(S, K, T, sig, rd, rf, 1, kind) + M.fx_delta(S, K, T, sig, rd, rf, -1, kind)) == \
+            pytest.approx(0.0, abs=1e-12)
+    q = M.smile_quotes(0.08, -0.01, 0.003)
+    assert q["25c"] - q["25p"] == pytest.approx(-0.01) and (q["25c"] + q["25p"]) / 2 - q["atm"] == pytest.approx(0.003)
+    # Garman-Kohlhagen put-call parity
+    c = M.garman_kohlhagen(S, 1.1, T, sig, rd, rf, 1)
+    p = M.garman_kohlhagen(S, 1.1, T, sig, rd, rf, -1)
+    assert float(c - p) == pytest.approx(S * np.exp(-rf * T) - 1.1 * np.exp(-rd * T), abs=1e-12)
+
+
+def test_commodity_carry_roll_and_basis():
+    from explainer.quant.house import macro as M
+    F1 = M.carry_forward(70.0, 1 / 12, 0.05, storage=0.02, convenience=0.10)
+    F2 = M.carry_forward(70.0, 2 / 12, 0.05, storage=0.02, convenience=0.10)
+    assert M.implied_convenience(F1, F2, 1 / 12, 0.05, storage=0.02) == pytest.approx(0.10)
+    # a flat, unchanging curve earns nothing, whichever contract is held
+    days = np.array([20200100 + d for d in range(1, 29)] + [20200200 + d for d in range(1, 28)] +
+                    [20200300 + d for d in range(1, 30)])
+    c = np.full(len(days), 50.0)
+    out = M.rolled_front(days, c, c)
+    assert np.nanmax(np.abs(out["r"])) == 0
+    # WTI's May 2020 contract stopped trading on 21 April 2020
+    td = np.array([20200400 + d for d in (1, 2, 3, 6, 7, 8, 9, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 27)])
+    assert M.wti_last_trade(2020, 5, td) == 20200421
+    rp = M.implied_repo(cash_dirty=101.0, futures=110.0, cf=0.92, accrued_delivery=0.5, days=90)
+    assert rp == pytest.approx(((110 * 0.92 + 0.5) / 101 - 1) * 4)
+
+
+def test_attack_model_and_breakeven():
+    from explainer.quant.house import macro as M
+    a = M.attack_model(peg=1.0, d0=0.5, mu=0.05, alpha=2.0)
+    assert a["t_star"] == pytest.approx(8.0)  # (1 - 0.1 - 0.5)/0.05
+    assert a["t_star"] < a["reserves_if_no_attack_run_out"]  # the attack comes before reserves would run out
+    i = np.searchsorted(a["t"], a["t_star"])
+    assert a["s"][i + 1] == pytest.approx(a["shadow"][i + 1]) and a["R"][i + 1] == 0
+    assert M.breakeven(0.045, 0.02) == pytest.approx(0.025)
+    d = np.array([20000101 + 100 * m for m in range(12)] + [20010101 + 100 * m for m in range(12)])
+    cpi = np.r_[np.full(12, 100.0), np.full(12, 103.0)]
+    assert M.realised_inflation(d, cpi, 20000115, 1) == pytest.approx(0.03)
