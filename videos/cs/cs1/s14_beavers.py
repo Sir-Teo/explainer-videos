@@ -23,7 +23,6 @@ class Beavers(VoiceoverScene, MovingCameraScene):
         self.champions()
         self.five()
         self.uncomputable()
-        self.frontier()
 
     def card(self):
         card = chapter_card(13, r"Busy beavers", r"How long can a small machine run, and still stop?",
@@ -251,35 +250,5 @@ class Beavers(VoiceoverScene, MovingCameraScene):
             self.play(FadeIn(steps[4]))
             vo.wait_until("d")
             self.play(FadeIn(grow))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def frontier(self):
-        head = label(r"Beyond five states", font_size=40).to_edge(UP, buff=0.4)
-        items = VGroup(*[label(t, font_size=28, color=c) for t, c in (
-            (r"6 states: \ a machine found in 2022 runs for more than $10\uparrow\uparrow 15$ steps, \\ a tower of "
-             r"fifteen 10s; \ the record has grown since", WHITE),
-            (r"some 6-state machines halt only if open problems like the Collatz \\ conjecture come out a particular way: "
-             r"\ nobody can say whether they halt", GREY_A),
-            (r"a machine with a few thousand states halts if and only if \\ the axioms of set theory are inconsistent: "
-             r"\ its value can never be proved", LIMIT),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(DOWN * 0.2)
-        src = note(r"Yedidia and Aaronson (2016), \ and later smaller machines; \ details in Part 25", font_size=22)
-        src.to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Six states is already past the edge of the knowable. <bookmark mark='a'/> A six-state machine found in 2022 "
-            "runs for more than ten tetrated to fifteen steps, a tower of fifteen tens, and the record has grown since. "
-            "<bookmark mark='b'/> Some six-state machines behave like famous open problems, such as the Collatz "
-            "conjecture: whether they halt depends on questions nobody can answer. <bookmark mark='c'/> And Adam Yedidia "
-            "and Scott Aaronson built a machine with a few thousand states that halts only if the standard axioms of "
-            "mathematics are inconsistent. Its busy-beaver value can never be proved from those axioms. Hilbert's "
-            "mechanical certainty runs out, here, at a machine you could write on a few pages."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abc", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it, shift=RIGHT * 0.15))
-            self.play(FadeIn(src))
         self.wait(0.3)
         self.clear_scene()

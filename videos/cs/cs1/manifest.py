@@ -17,6 +17,7 @@ SCENES = [
     ("s12_halting", "Halting", "11. The halting problem"),
     ("s13_reductions", "Reductions", "12. Reductions"),
     ("s14_beavers", "Beavers", "13. Busy beavers"),
-    ("s15_series", "Series", "14. What we will build"),
-    ("s16_outro", "Outro", "Recap, problems, and where this comes back"),
+    ("s15_frontier", "Frontier", "14. Frontier: the edge of the knowable"),
+    ("s16_series", "Series", "15. What we will build"),
+    ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

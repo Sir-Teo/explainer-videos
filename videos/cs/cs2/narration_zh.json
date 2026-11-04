@@ -16,7 +16,8 @@
   "Numbers": "12. 数",
   "Chance": "13. 机会",
   "Graphs": "14. 图",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
+  "Outro": "回顾、习题，以及它们会在哪里再出现",
+  "Frontier": "15. 前沿：混乱中的秩序"
  },
  "lines": {
   "db2701c3ac2c": {
@@ -444,6 +445,36 @@
    "en": "One more theorem, which Part 18 turns into an algorithm. <bookmark mark='a'/> Can the vertices be coloured with two colours so that every edge joins different colours? Colour one vertex blue, its neighbours orange, theirs blue, and so on outward. On this graph it works. <bookmark mark='b'/> On a cycle of five, going round, the colours alternate, blue, orange, blue, orange, blue, and the last vertex is next to the first: a clash. <bookmark mark='c'/> That is the whole story: a graph can be two-coloured exactly when it has no cycle of odd length. Going round an odd cycle flips the colour an odd number of times and you cannot get home; and if there is no odd cycle, colouring by the parity of the distance from a start vertex always works. Parity, one last time.",
    "zh": "再讲一条定理，第18部分会把它变成算法。<bookmark mark='a'/>能否用两种颜色给顶点上色，使得每条边连接的两端颜色不同？把一个顶点涂蓝，它的邻居涂橙，邻居的邻居涂蓝，依此向外。在这个图上可以。<bookmark mark='b'/>在一个五边的圈上，绕一圈，颜色交替，蓝、橙、蓝、橙、蓝，而最后一个顶点紧挨着第一个：冲突。<bookmark mark='c'/>整个道理就是这样：一个图能被两种颜色上色，恰好当它没有长度为奇数的圈。绕一个奇圈，颜色翻转奇数次，你回不了家；而如果没有奇圈，按到起点距离的奇偶性上色总是可行的。奇偶性，最后一次。"
   },
+  "9211053fafe7": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: order in chaos.",
+   "zh": "第15章。前沿：混乱中的秩序。"
+  },
+  "e3245042eea6": {
+   "scene": "Frontier",
+   "en": "Part 2's pigeons lead straight to an open frontier. Among any six people, either three all know each other or three are all strangers; five people are not enough. <bookmark mark='a'/> Here are five, with friendship in red and strangers in blue: the red pentagon and the blue star contain no triangle of either colour. <bookmark mark='b'/> With six, pick one person. Five edges, two colours: by the pigeonhole principle, three of them share a colour, say red. <bookmark mark='c'/> If any two of those three people are friends, they make a red triangle with the first; if no two are, the three of them are a blue triangle. <bookmark mark='d'/> A computer agrees: of all thirty-two thousand ways to colour six people's relationships, not one escapes. Frank Ramsey proved in 1930 that this happens for any size: for every k there is a number R of k, a party size where k mutual friends or k mutual strangers are forced. Complete disorder is impossible.",
+   "zh": "第2部分的鸽子直接通向一片未解的前沿。任意六个人中，要么有三个人彼此认识，要么有三个人彼此陌生；五个人则不够。<bookmark mark='a'/>这是五个人，朋友关系用红色，陌生关系用蓝色：红色的五边形和蓝色的五角星里，都没有任何一种颜色的三角形。<bookmark mark='b'/>六个人时，挑出一个人。五条边，两种颜色：根据鸽巢原理，其中三条颜色相同，比如红色。<bookmark mark='c'/>如果这三个人中有任何两个是朋友，他们就和第一个人构成红色三角形；如果没有两个是朋友，这三个人就构成蓝色三角形。<bookmark mark='d'/>计算机也同意：给六个人的关系着色的三万两千多种方式里，没有一种能逃过。弗兰克·拉姆齐在1930年证明，任何大小都是如此：对每个 k，都有一个数 R(k)，到了这么多人的聚会，k 个彼此认识或 k 个彼此陌生的人必然出现。完全的无序是不可能的。"
+  },
+  "20aeae26390c": {
+   "scene": "Frontier",
+   "en": "For four, the answer is eighteen. <bookmark mark='a'/> The colouring that shows seventeen is not enough comes from number theory: seat seventeen people in a circle and make two of them friends when the difference of their seats is a perfect square modulo seventeen. <bookmark mark='b'/> The largest group of mutual friends has three people, and so has the largest group of strangers: our program checked every group of four. <bookmark mark='c'/> And in 1955 Greenwood and Gleason proved that eighteen people always contain four. After that the exact values stop. For five, the answer is known only to lie between forty-three and forty-six.",
+   "zh": "对四来说，答案是十八。<bookmark mark='a'/>说明十七个人还不够的那种着色来自数论：让十七个人围坐一圈，当两人座位号之差是模十七的完全平方数时，让他们成为朋友。<bookmark mark='b'/>最大的一群彼此认识的人有三个，最大的一群彼此陌生的人也有三个：我们的程序检查了每一组四个人。<bookmark mark='c'/>1955年，格林伍德和格利森证明了十八个人中总有四个。此后精确值就断了。对五来说，只知道答案在四十三到四十六之间。"
+  },
+  "03991b6fc52d": {
+   "scene": "Frontier",
+   "en": "For large k, two bounds from Paul Erdős have stood for most of a century. <bookmark mark='a'/> The upper one, with George Szekeres in 1935, is an induction of the kind Part 2 taught: R of k and l is at most R of k minus one and l, plus R of k and l minus one, which solves to a binomial coefficient, less than four to the k. <bookmark mark='b'/> The lower one, from 1947, founded the probabilistic method. Colour every relationship by tossing a coin, and count the expected number of one-colour groups of k, by linearity of expectation. Below two to the k over two people, that expectation is less than one, so some colouring has no such group at all. <bookmark mark='c'/> So R of k lies between root two to the k and four to the k: an exponential gap, and for seventy-five years nobody could move either end by an exponential factor.",
+   "zh": "对很大的 k，保罗·埃尔德什的两个界维持了将近一个世纪。<bookmark mark='a'/>上界是他和乔治·塞凯赖什在1935年给出的，用的是第2部分教过的那种归纳：R(k, l) 至多是 R(k−1, l) 加上 R(k, l−1)，解出来是一个二项式系数，小于四的 k 次方。<bookmark mark='b'/>下界来自1947年，它开创了概率方法。用抛硬币决定每一段关系的颜色，再用期望的线性性数出单色的 k 人组的期望个数。人数少于二的 k/2 次方时，这个期望小于一，所以一定有某种着色根本没有这样的组。<bookmark mark='c'/>于是 R(k) 落在根号二的 k 次方和四的 k 次方之间：一个指数级的鸿沟，七十五年来，没有人能把哪一端移动一个指数因子。"
+  },
+  "498e87b9970e": {
+   "scene": "Frontier",
+   "en": "Then, in 2023, the upper end moved. <bookmark mark='a'/> For decades the only progress shaved off factors smaller than any exponential: Andrew Thomason in 1988, David Conlon in 2009. <bookmark mark='b'/> In March 2023 Marcelo Campos, Simon Griffiths, Robert Morris and Julian Sahasrabudhe proved that R of k is less than four minus a small epsilon, all to the k, the first exponential improvement since 1935, with a new way of growing a structure they called a book. <bookmark mark='c'/> A year later Gupta, Ndiaye, Norin and Wei sharpened the same argument to three point eight to the k. The lower bound has not moved by an exponential factor since 1947. <bookmark mark='d'/> And the small cases remain brutally hard: the five-person number is between forty-three and forty-six, the forty-six proved in 2024 with linear programming and a large computer search. Erdős liked to say that if aliens demanded R of five on pain of destroying the Earth, we should set every computer to work on it; if they asked for R of six, we should try to destroy the aliens.",
+   "zh": "然后，在2023年，上界动了。<bookmark mark='a'/>几十年来，唯一的进展只削掉了比任何指数都小的因子：1988年的安德鲁·托马森，2009年的戴维·康伦。<bookmark mark='b'/>2023年3月，马塞洛·坎波斯、西蒙·格里菲斯、罗伯特·莫里斯和朱利安·萨哈斯拉布德证明了 R(k) 小于四减去一个小小的 ε 的 k 次方，这是1935年以来第一个指数级的改进，用的是一种培养他们称之为“书”的结构的新方法。<bookmark mark='c'/>一年后，古普塔、恩迪亚耶、诺林和魏把同一个论证打磨到了三点八的 k 次方。下界自1947年以来没有移动过一个指数因子。<bookmark mark='d'/>而小的情形依然极其困难：五人的那个数在四十三到四十六之间，其中的四十六是2024年用线性规划和大规模计算机搜索证明的。埃尔德什喜欢说，如果外星人以毁灭地球相要挟，要我们给出 R(5)，我们应该动用所有的计算机去算；如果他们要的是 R(6)，我们应该设法消灭外星人。"
+  },
+  "2ff9bd6a10d5": {
+   "scene": "Frontier",
+   "en": "The lower bound hides a deeper open problem. <bookmark mark='a'/> Erdős's argument proves that good colourings exist, colourings of two to the k over two people with no large one-colour group, without saying where a single one of them is. <bookmark mark='b'/> Nobody knows how to build one by a rule that matches a random colouring: this has been open since 1947. <bookmark mark='c'/> Paley graphs are the natural candidate. We computed the largest group of friends in every Paley graph up to four hundred people: it grows like the logarithm, as a random colouring's would, nine at most here. But the best bound anyone can prove is of the order of the square root, near twenty at four hundred, far from the truth. <bookmark mark='d'/> Building order-free structures on purpose is the same problem as extracting good randomness from bad sources, which Parts 20 and 27 take up. It is the research problem of this part.",
+   "zh": "下界背后藏着一个更深的未解问题。<bookmark mark='a'/>埃尔德什的论证证明了好的着色存在，也就是二的 k/2 次方个人、没有大的单色组的着色，却没有说出其中任何一个在哪里。<bookmark mark='b'/>没有人知道怎样按某种规则构造出一个和随机着色一样好的着色：这个问题自1947年起悬而未决。<bookmark mark='c'/>Paley 图是天然的候选。我们算出了四百人以内每个 Paley 图中最大的一群朋友：它像对数那样增长，就像随机着色会做的那样，这里最多九个。但任何人能证明的最好的界是平方根量级，四百人时接近二十，离真相很远。<bookmark mark='d'/>有意地构造没有秩序的结构，和从劣质来源中提取好的随机性是同一个问题，第20和第27部分会讨论它。这就是这一部分的研究题。"
+  },
   "0aaec899cf51": {
    "scene": "Outro",
    "en": "What we built in this part. Logic, the grammar of precise statements, and the ways to prove them: directly, by contrapositive, by contradiction, by cases, and by induction, on numbers and on structures. Invariants, which proved Loyd's puzzle impossible and every jug amount a multiple of the gcd. Counting: choices, Pascal's triangle and its hidden fractal, pigeonholes, inclusion and exclusion, and the Catalan numbers. And remainders, chance and graphs, the raw materials of cryptography, algorithms and networks.",
@@ -459,10 +490,10 @@
    "en": "In practice, this mathematics is everywhere in engineering, usually without its name. An assertion is an invariant you check while the program runs, and property-based testing tries it on thousands of random inputs. The best question in a code review is: what is true at the top of this loop? Capacity planning is counting. Incident analysis is probability, with base rates that make most alarms false. And these are the puzzles of the first round of technical interviews.",
    "zh": "在实践中，这些数学在工程中无处不在，只是通常不叫这个名字。断言就是你在程序运行时检查的不变量，基于性质的测试则在成千上万个随机输入上尝试它。代码评审中最好的问题是：在这个循环的开头，什么是成立的？容量规划就是计数。事故分析是概率，而基础比率让大多数警报都是误报。这些也正是技术面试第一轮的题目。"
   },
-  "064572764038": {
+  "18874e4ce54c": {
    "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to run this part's search on a board we did not show.",
-   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你在一个我们没有展示的棋盘上运行这一部分的搜索。"
+   "en": "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build problem: it asks you to run this part's search on a board we did not show. The last, marked with a star, is a research problem whose second half nobody has solved.",
+   "zh": "七道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第六道是动手题：要你在一个我们没有展示的棋盘上运行这一部分的搜索。最后一道标了星号，是研究题，它的后半部分至今无人解决。"
   },
   "13b0a1023918": {
    "scene": "Outro",
@@ -492,6 +523,7 @@
   "Numbers": "12. Numbers",
   "Chance": "13. Chance",
   "Graphs": "14. Graphs",
+  "Frontier": "15. Frontier: order in chaos",
   "Outro": "Recap, problems, and where this comes back"
  }
 }

@@ -125,10 +125,14 @@ class Outro(VoiceoverScene):
             r"work on single-cycle Pebble, \ and why might it fail on a pipeline?",
             r"\textit{Build.} \ Change \texttt{JOB\_V0} so that a word that is found swaps places with the entry above "
             r"it. \ Run both versions on chapter 1 with the emulator: \ how many instructions does the change save?",
-        ], font_size=23)
+            r"$\bigstar$ \textit{Research.} \ Change \texttt{random\_program} so that all nine planted bugs of chapter "
+            r"15 are caught in 2{,}000 programs, \ without naming any of them. \ Open: \ a test generator with a proof of "
+            r"what it covers.",
+        ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: "
-            "it asks you to change the Job's program yourself and measure what a small idea buys."
+            "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
+            "problem: it asks you to change the Job's program yourself and measure what a small idea buys. The last, "
+            "marked with a star, is a research problem about the tests themselves."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

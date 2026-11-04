@@ -97,10 +97,13 @@ class Outro(VoiceoverScene):
             r"\textit{Build.} \ Run our universal machine (\texttt{videos/cs/cs1/machines.py}) on the 4-state champion "
             r"and measure its steps per simulated step. \ Reorder the rules of $\langle M \rangle$ so the most used "
             r"come first: \ how much faster is it?",
-        ], font_size=24)
+            r"$\bigstar$ \textit{Research.} \ Show that Antihydra never halts if and only if, \ for every $N$, \ at "
+            r"least a third of $h_0, \ldots, h_{N-1}$ are even. \ Then try to prove it: \ nobody has.",
+        ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The last one is a build "
-            "problem: it asks you to run and change the universal machine this part used."
+            "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
+            "problem: it asks you to run and change the universal machine this part used. The last, marked with a "
+            "star, is a research problem, and its final step is open."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

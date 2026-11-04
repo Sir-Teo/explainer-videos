@@ -111,10 +111,13 @@ class Outro(VoiceoverScene):
             r"remainder construction.",
             r"\textit{Build.} \ Run the breadth-first search of \texttt{videos/cs/cs2/compute.py} on the $2 \times 4$ "
             r"puzzle: \ how many positions are reachable, \ and how far is the farthest?",
-        ], font_size=24)
+            r"$\bigstar$ \textit{Research.} \ Compute the largest clique of the Paley graph $P_q$ for primes "
+            r"$q \equiv 1 \pmod 4$ up to 1000. \ Open: \ prove it is at most $(\log q)^{C}$ for some constant $C$.",
+        ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: "
-            "it asks you to run this part's search on a board we did not show."
+            "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
+            "problem: it asks you to run this part's search on a board we did not show. The last, marked with a star, "
+            "is a research problem whose second half nobody has solved."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

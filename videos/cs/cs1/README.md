@@ -53,9 +53,16 @@ proofs about busy beavers are the published ones, cited on screen.
 * **13. Busy beavers.** Radó's S(n) (1962); all 20,736 two-state machines run (9,784 halt, the longest in 6 steps);
   the 3- and 4-state champions (Lin & Radó 1965, Brady 1983); the 5-state champion (Marxen & Buntrock 1990) run for
   all 47,176,870 steps, with 4,098 ones, in one picture and its first 1,200 steps in full; S(5) proved by the
-  bbchallenge collaboration (2024, checked in Coq); S is uncomputable, by reduction from Chapter 12; six states and
-  beyond (a 2022 lower bound beyond 10↑↑15; Collatz-like machines; Yedidia & Aaronson's machine independent of ZFC).
-* **14. What we will build.** The tower of abstractions and the eleven acts; Pebble-32, the computer of Part 6, running
+  bbchallenge collaboration (2024, checked in Coq); S is uncomputable, by reduction from Chapter 12.
+* **14. Frontier: the edge of the knowable.** How BB(5) was proved: non-halting certificates (a set of
+  configurations containing the start, closed under a step, with no halting configuration), the deciders (cyclers,
+  translated cyclers, n-gram and repeated-word methods, finite-automata reduction) and the 13 sporadic machines.
+  Knuth's arrows and the BB(6) record (Kropitz 2022, beyond 10↑↑15; mxdys 2025, beyond 10↑↑10↑↑10↑↑8). Antihydra
+  (mxdys, 2024), run here for 100,000,000 steps without halting, and its Collatz-like rule (Racheline) run for a
+  million rounds (c = 498,503); the gambler's-ruin heuristic, q = 1/φ, P(halt) ≈ 10^−104,181; why the parities resist
+  proof (Collatz, Mahler's 3/2 problem). The smallest machines whose halting ZFC cannot settle: 7,910 states (2016),
+  745 (2023), 636 (2024), 432 (2025, not yet formally verified).
+* **15. What we will build.** The tower of abstractions and the eleven acts; Pebble-32, the computer of Part 6, running
   Euclid on this series' emulator (21, as the rectangle said); the Job and its ledger; in practice.
 * **Recap, problems, and where this comes back.**
 
@@ -122,6 +129,22 @@ the counter-machine compiler, the cellular automata) and in the series toolkit (
    because most of the scan is spent crossing the rules of *other* states. Numbering the busiest states first helps
    more; a real interpreter replaces the scan by a jump to the right rule, the idea behind Part 15's dispatch tables.
 
+7. **★ Research: Antihydra.** Antihydra's rule is h ← 8, c ← 0; each round c ← c + 2 if h is even and c − 1 if h is
+   odd, then h ← h + ⌊h/2⌋; it halts when c = −1. (a) Show that, for steps of +2 and −1 with equal probability, the
+   probability of ever falling one below the start is 1/φ. (b) Show that Antihydra never halts if and only if, for
+   every N, at least a third of h₀, …, h_{N−1} are even. (c) Open: prove it.
+
+   *What is known, and where to start.* (a) Either the first step falls (probability ½) or it rises by two and must
+   fall three times: q = ½ + ½q³, so (q − 1)(q² + q − 1) = 0 and the root below 1 is q = (√5 − 1)/2 = 1/φ. (b) After
+   N rounds with E even values, c = 2E − (N − E) = 3E − N. The counter moves by +2 or −1, so it first goes negative
+   exactly at −1, and c ≥ 0 for all N is the same as E ≥ N/3 for all N. (c) Nobody knows how. The parities of
+   ⌊3h/2⌋-iterates are a deterministic sequence of the kind that defeats every known method: the same family as the
+   Collatz conjecture and Mahler's 3/2 problem (does any α make the fractional parts of α(3/2)ⁿ stay below ½?). The
+   bbchallenge wiki (Antihydra, Cryptids) collects what has been tried. Start from `compute_frontier` in
+   `videos/cs/cs1/compute.py`: it runs a million rounds in half a minute with Python integers, and 3E − N is never
+   negative in the first million rounds. A cheaper way to get the parities than carrying all of h (it has
+   0.585 N bits after N rounds) would be news in its own right.
+
 ## 习题与解答
 
 1. **二进制加一。** 设计一台图灵机，把纸带上写成二进制的数加一，读写头从最左边的数字开始。输入 1ⁿ 时要走多少步？
@@ -158,6 +181,18 @@ the counter-machine compiler, the cellular automata) and in the series toolkit (
    次数，并在每个状态内部把最常用的排在前面（我们的编码按状态分组列出规则），得到 **13,308 步，约每步 124 步**：只省了 4.5%，因为
    扫描的大部分时间花在跨过*其他*状态的规则上。把最忙的状态编号排在前面效果更好；真正的解释器用一次跳转直接找到规则，这正是第15部分
    分派表的思想。
+
+7. **★ 研究题：反九头蛇。** 反九头蛇的规则是：h ← 8，c ← 0；每一轮，h 为偶数时 c ← c + 2，为奇数时 c ← c − 1，然后
+   h ← h + ⌊h/2⌋；c = −1 时停机。（a）证明对于等概率的 +2 和 −1 两种步长，有朝一日比起点低一的概率是 1/φ。（b）证明反九头蛇永不
+   停机，当且仅当对每个 N，h₀, …, h_{N−1} 中至少有三分之一是偶数。（c）未解：证明它。
+
+   *已知什么，从哪里入手。*（a）要么第一步就下降（概率 ½），要么先升二，然后必须下降三次：q = ½ + ½q³，于是
+   (q − 1)(q² + q − 1) = 0，小于 1 的根是 q = (√5 − 1)/2 = 1/φ。（b）N 轮中有 E 个偶数时，c = 2E − (N − E) = 3E − N。计数器每次
+   变化 +2 或 −1，所以它第一次变负时恰好是 −1；对所有 N 都有 c ≥ 0，等价于对所有 N 都有 E ≥ N/3。（c）没有人知道怎么做。⌊3h/2⌋
+   迭代的奇偶性是一个确定性的序列，正是让所有已知方法失效的那一类：与考拉兹猜想和马勒的二分之三问题（是否存在 α，使 α(3/2)ⁿ 的小数
+   部分始终小于 ½？）属于同一家族。bbchallenge 维基（Antihydra、Cryptids 条目）收集了已有的尝试。从 `videos/cs/cs1/compute.py` 里的
+   `compute_frontier` 入手：它用 Python 整数半分钟跑一百万轮，前一百万轮里 3E − N 从未变负。如果能找到比携带整个 h（N 轮后有
+   0.585 N 位）更便宜的办法得到奇偶性，那本身就是新闻。
 
 ## Sources
 

@@ -475,10 +475,69 @@ def compute_chance() -> dict:
             "per10000": per10000, "coins": {"exact": exact, "markov": markov, "chebyshev": cheb}, "birthday": bday}
 
 
+# ---------------------------------------------------------------------------
+# The Frontier chapter (videos/cs/SYLLABUS.md 1.1): Ramsey numbers
+# ---------------------------------------------------------------------------
+def _cliques_k(adj: list[int], k: int, n: int):
+    """Is there a k-clique in the graph with bitset adjacency ``adj``?  (A small branch-and-bound.)"""
+    def go(cand: int, need: int) -> bool:
+        if need == 0:
+            return True
+        if bin(cand).count("1") < need:
+            return False
+        while cand:
+            v = cand.bit_length() - 1
+            cand &= ~(1 << v)
+            if go(cand & adj[v], need - 1):
+                return True
+        return False
+    return go((1 << n) - 1, k)
+
+
+def clique_number(adj: list[int], n: int) -> int:
+    k = 1
+    while _cliques_k(adj, k + 1, n):
+        k += 1
+    return k
+
+
+def paley(q: int) -> list[int]:
+    squares = {x * x % q for x in range(1, q)}
+    return [sum(1 << j for j in range(q) if j != i and (j - i) % q in squares) for i in range(q)]
+
+
+def compute_ramsey() -> dict:
+    # R(3,3) = 6: the pentagon colouring of K5, and every one of the 2^15 colourings of K6
+    edges6 = list(itertools.combinations(range(6), 2))
+    tri6 = [[edges6.index(e) for e in itertools.combinations(t, 2)] for t in itertools.combinations(range(6), 3)]
+    good6 = 0
+    for c in range(1 << 15):
+        if not any(len({(c >> e) & 1 for e in t}) == 1 for t in tri6):
+            good6 += 1
+    edges5 = list(itertools.combinations(range(5), 2))
+    pent = [1 if (b - a) % 5 in (1, 4) else 0 for a, b in edges5]  # red: the pentagon, blue: the pentagram
+    tri5 = [[edges5.index(e) for e in itertools.combinations(t, 2)] for t in itertools.combinations(range(5), 3)]
+    pent_ok = not any(len({pent[e] for e in t}) == 1 for t in tri5)
+    # R(4,4) > 17: the Paley graph on 17 vertices has no 4-clique, and neither has its complement
+    adj = paley(17)
+    comp = [((1 << 17) - 1) & ~a & ~(1 << i) for i, a in enumerate(adj)]
+    w17, a17 = clique_number(adj, 17), clique_number(comp, 17)
+    # Erdos (1947): a random colouring of K_n has C(n,k) 2^(1 - C(k,2)) monochromatic K_k on average
+    erdos = {k: max(n for n in range(k, 400) if math.comb(n, k) * 2.0 ** (1 - math.comb(k, 2)) < 1)
+             for k in range(3, 11)}
+    # clique numbers of Paley graphs: a construction, against the probabilistic method's 2 log2 q
+    qs = [q for q in range(5, 400) if q % 4 == 1 and all(q % d for d in range(2, int(q ** 0.5) + 1))]
+    pal = [{"q": q, "omega": clique_number(paley(q), q)} for q in qs]
+    return {"good6": good6, "pentagon_ok": pent_ok, "pentagon": pent, "paley17_omega": w17, "paley17_alpha": a17,
+            "paley17_edges": [[i, j] for i in range(17) for j in range(i + 1, 17) if adj[i] >> j & 1],
+            "erdos": erdos, "paley": pal,
+            "known": [(3, "6", "6"), (4, "18", "18"), (5, "43", "46"), (6, "102", "160")]}
+
+
 ITEMS = {
     "puzzles": compute_puzzles, "jugs": compute_jugs, "tromino": compute_tromino, "rationals": compute_rationals,
     "pascal": compute_pascal, "monotone": compute_monotone, "derange": compute_derange, "catalan": compute_catalan,
-    "numbers": compute_numbers, "chance": compute_chance,
+    "numbers": compute_numbers, "chance": compute_chance, "ramsey": compute_ramsey,
 }
 
 if __name__ == "__main__":

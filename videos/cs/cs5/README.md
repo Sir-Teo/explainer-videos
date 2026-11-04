@@ -47,6 +47,14 @@ simulated gate by gate with unit delays (`Loop` in `explainer/cs/pebble/seq.py`)
   handshakes; ROMs, PLAs and FPGAs as memory doing logic; microcode previewed.
 * **14. Remembering, before chips.** Mercury delay lines (EDSAC), Williams tubes (the Manchester Baby), core memory
   (Forrester, Whirlwind 1953; coincident-current selection and destructive reads), the Intel 1103, flash.
+* **15. Frontier: defending memory.** Falling Rowhammer thresholds (139,000 activations in 2014; about 10,000 for new
+  DDR4 and 4,800 for the most vulnerable chips in 2020, Kim et al.) against W = 1,383,783 activations per bank per
+  64 ms refresh window. PARA's coin toss: (1 − p)^T ≤ 10⁻² per year of attack gives p = 0.02% at T = 139,000, 0.3% at
+  10,000, 3% at 1,000. Misra–Gries counting (1982): the estimate undercounts by at most W/(k + 1), so refreshing at T/2
+  is safe with k ≥ 2W/T counters (20, 277, 577, 2,768 as T falls); Graphene (2020). A simulated 20-sided attack: 4 or
+  16 counters let each aggressor reach 60,739 unrefreshed activations; 64 survive by luck, 277 by proof; TRRespass
+  (2020). Half-Double (2021), RowPress (2023), DDR5's PRAC (2024), count-min trackers (CoMeT, 2024); the open problem
+  of a provably safe, cheap defence.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -101,6 +109,21 @@ python tools/build.py cs5                  # 1080p
    times **31**; the maximal tap sets are {4, 1}, {4, 2}, {4, 0, 1, 2}, {4, 0, 1, 3}, {4, 0, 2, 3} and {4, 1, 2, 3}.
    31 is prime, so φ(31)/5 = 30/5 = **6**.
 
+7. **★ Research: how many counters?** Prove that a deterministic tracker which guarantees that no row is activated T
+   times between refreshes of its neighbours, in a window of W activations, needs about W/T counters. Open: a
+   randomized tracker with far fewer bits that is safe even against an attacker who adapts to its behaviour.
+
+   *What is known, and where to start.* The lower bound is an adversary argument. With fewer than W/T counters, an
+   attacker cycles through W/T + 1 rows in turn: at every moment some row has no counter, and the attacker can arrange
+   (as in our simulation, `compute_hammerdefence` in `videos/cs/cs5/compute.py`) that the rows evicted are the ones
+   about to be needed, so a row's activations are forgotten before they reach T/2. Made precise, this is the classic
+   Ω(1/ε) space lower bound for deterministic frequent-items algorithms, with ε = T/W, which Misra–Gries meets. The
+   open half: randomized trackers (sampling as in PARA, count-min sketches as in CoMeT) use less state, but their
+   guarantees usually assume an attacker who cannot see the randomness; an attacker who observes refresh timing, the
+   channel PRAC's back-off signal opens, may adapt. A tracker whose guarantee holds against adaptive attackers with
+   o(W/T) bits, or a proof that none exists, would be a real result. The literature to start from: Park, Litz and
+   Kasikci, "Graphene" (MICRO 2020); Bostancı et al., "CoMeT" (HPCA 2024); and the analyses of PRAC from 2024 on.
+
 ## 习题与解答
 
 1. **或非锁存器。** 用两个或非门搭一个 SR 锁存器。现在哪个输入是禁止的？输出会怎样？
@@ -138,6 +161,17 @@ python tools/build.py cs5                  # 1080p
    *解答。* 抽头取第 4 位（这样寄存器长度确实为 5），再加第 0–3 位的任意子集：共 16 个寄存器。用 `lfsr(taps, 5)` 从状态 1
    运行到回到起点。周期为 **5、6、8、12、14、14、15、15、21、21**，以及六个 **31**；达到最大周期的抽头集合是 {4, 1}、
    {4, 2}、{4, 0, 1, 2}、{4, 0, 1, 3}、{4, 0, 2, 3} 和 {4, 1, 2, 3}。31 是素数，所以 φ(31)/5 = 30/5 = **6**。
+
+7. **★ 研究题：需要多少个计数器？** 证明：在 W 次激活的窗口内，若一个确定性的跟踪器保证没有任何行在它的邻居两次刷新之间被激活 T 次，
+   它大约需要 W/T 个计数器。未解：一个用少得多的比特、即使面对会根据其行为调整策略的攻击者也安全的随机化跟踪器。
+
+   *已知什么，从哪里入手。* 下界用的是对手论证。计数器少于 W/T 个时，攻击者轮流激活 W/T + 1 行：任何时刻总有某一行没有计数器，攻击者
+   可以安排（就像我们在 `videos/cs/cs5/compute.py` 的 `compute_hammerdefence` 里的模拟那样）让被逐出的恰好是即将用到的行，于是一行的
+   激活次数在达到 T/2 之前就被遗忘。把它写严格，就是确定性频繁项算法经典的 Ω(1/ε) 空间下界，其中 ε = T/W，Misra–Gries 恰好达到它。
+   未解的那一半：随机化跟踪器（像 PARA 那样采样，像 CoMeT 那样用 count-min sketch）占用的状态更少，但它们的保证通常假设攻击者看不到
+   随机性；一个能观察刷新时机的攻击者，也就是 PRAC 的退避信号所打开的那个信道，可能会调整策略。一个用 o(W/T) 比特、对自适应攻击者
+   仍然成立的跟踪器，或者一个证明它不存在的论证，都会是真正的成果。可以从这些文献入手：Park、Litz 与 Kasikci 的 “Graphene”
+   （MICRO 2020）；Bostancı 等的 “CoMeT”（HPCA 2024）；以及2024年以来对 PRAC 的分析。
 
 ## Glossary additions
 

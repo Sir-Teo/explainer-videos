@@ -55,6 +55,14 @@ counting, remainders, chance and graphs. Every search, count and simulation runs
   the birthday problem.
 * **14. Graphs.** Königsberg (Euler, 1736); the handshake lemma; trees and their equivalent definitions; two-colouring
   and odd cycles.
+* **15. Frontier: order in chaos.** Ramsey numbers. R(3,3) = 6 by the pigeonhole principle (the pentagon colouring
+  of K₅; all 32,768 colourings of K₆ checked, none escapes); R(4,4) = 18 (the Paley graph on 17 vertices, its
+  largest cliques and independent sets of size 3, checked; Greenwood and Gleason, 1955); Erdős and Szekeres's upper
+  bound (1935) and Erdős's probabilistic lower bound (1947), √2ᵏ < R(k) < 4ᵏ; Thomason (1988) and Conlon (2009); the
+  first exponential improvement, R(k) < (4 − 2⁻⁷)ᵏ (Campos, Griffiths, Morris and Sahasrabudhe, 2023), and 3.8^(k+o(k))
+  (Gupta, Ndiaye, Norin and Wei, 2024); 43 ≤ R(5,5) ≤ 46 (Angeltveit and McKay, 2024). The open problem of explicit
+  Ramsey colourings: Paley clique numbers computed for primes up to 400 (they grow like log q; the provable bound is of
+  order √q).
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -101,6 +109,20 @@ python tools/build.py cs2                  # 1080p
    *Solution.* `bfs((1, 2, 3, 4, 5, 6, 7, 0), 2, 4)` reaches **20,160** positions, half of 8!, as the invariant
    predicts; the farthest is **36** moves away, and there is exactly one such position.
 
+7. **★ Research: Paley cliques.** Compute the largest clique of the Paley graph P_q (vertices 0, …, q − 1, with i and
+   j adjacent when i − j is a nonzero square mod q) for primes q ≡ 1 (mod 4) up to 1000. Open: prove that it is at
+   most (log q)^C for some constant C.
+
+   *What is known, and where to start.* `compute_ramsey` in `videos/cs/cs2/compute.py` finds the clique numbers up
+   to q = 400 in about seven minutes with a plain branch-and-bound; the largest found is 9. To reach 1000, use the
+   symmetry: P_q is vertex-transitive (x ↦ x + c) and the map x ↦ ax for a square a fixes 0 and permutes its
+   neighbours, so a largest clique can be assumed to contain 0 and 1, and the search runs inside the common
+   neighbourhood of 0 and 1, about q/4 vertices. A colouring-based bound (as in Östergård's *cliquer*) prunes far
+   more. On the theory side, the trivial bound is √q; Hanson and Petridis (2021) proved about √(q/2), and nothing of
+   the form q^(1/2 − ε) is known for prime q. Random graphs have clique number about 2 log₂ q, and every computation
+   suggests Paley graphs do no worse. A proof would give explicit Ramsey colourings, a problem open since 1947, and
+   would matter for pseudorandomness (Parts 20 and 27).
+
 ## 习题与解答
 
 1. **奇数之和。** 证明 1 + 3 + 5 + ⋯ + (2n − 1) = n²，并画出提示它的图。
@@ -133,6 +155,16 @@ python tools/build.py cs2                  # 1080p
 
    *解答。* `bfs((1, 2, 3, 4, 5, 6, 7, 0), 2, 4)` 可达 **20,160** 个局面，正好是 8! 的一半，与不变量的预言一致；最远的局面需要
    **36** 步，而且只有一个。
+
+7. **★ 研究题：Paley 图的团。** 对素数 q ≡ 1 (mod 4)，q 不超过 1000，计算 Paley 图 P_q（顶点 0, …, q − 1，当 i − j 是模 q
+   的非零平方数时 i 与 j 相邻）的最大团。未解：证明它至多是 (log q)^C，C 是某个常数。
+
+   *已知什么，从哪里入手。* `videos/cs/cs2/compute.py` 里的 `compute_ramsey` 用普通的分支定界法，大约七分钟算出 q ≤ 400 的团数；
+   找到的最大值是 9。要算到 1000，就利用对称性：P_q 是顶点传递的（x ↦ x + c），而对平方数 a，映射 x ↦ ax 保持 0 不动并置换它的邻居，
+   所以可以假定最大团包含 0 和 1，只需在 0 和 1 的公共邻域（约 q/4 个顶点）里搜索。基于着色的上界（如 Östergård 的 *cliquer*）
+   剪枝效果好得多。理论上，平凡的上界是 √q；Hanson 和 Petridis（2021）证明了约 √(q/2)，对素数 q 还不知道任何形如 q^(1/2 − ε)
+   的界。随机图的团数约为 2 log₂ q，而所有计算都表明 Paley 图不比它差。一个证明将给出显式的拉姆齐着色，这个问题自1947年起悬而未决，
+   也会影响伪随机性的研究（第20、27部分）。
 
 ## Glossary additions
 

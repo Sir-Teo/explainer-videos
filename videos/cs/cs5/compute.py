@@ -404,9 +404,76 @@ def compute_dram() -> dict:
             "tau": tau, "fail_no_refresh": float(-tau * math.log(0.5))}
 
 
+# ---------------------------------------------------------------------------
+# The Frontier chapter (videos/cs/SYLLABUS.md 1.1): defending against Rowhammer, by probability and by counting
+# ---------------------------------------------------------------------------
+REFRESH_S = 0.064      # every row is refreshed once per 64 ms
+T_RC_S = 46.25e-9      # DDR4 row cycle time: one activation per bank at most every tRC
+THRESHOLDS = [         # (year, activations of one aggressor row before a flip, source)
+    (2014, 139_000, r"DDR3 \ (Kim et al.)"), (2020, 10_000, r"new DDR4 \ (Kim et al.)"),
+    (2020, 4_800, r"most vulnerable \ (Kim et al.)")]
+
+
+def misra_gries(stream, k: int, threshold: int):
+    """Misra and Gries (1982): k counters; an item's estimate undercounts it by at most n / (k + 1).  A row whose
+    estimate reaches ``threshold`` has its neighbours refreshed and its counter reset (Graphene's use, 2020).
+    Returns how many times each row was activated between refreshes of its neighbours, at most."""
+    counters: dict[int, int] = {}
+    since = {}
+    worst = {}
+    for r in stream:
+        since[r] = since.get(r, 0) + 1
+        worst[r] = max(worst.get(r, 0), since[r])
+        if r in counters:
+            counters[r] += 1
+        elif len(counters) < k:
+            counters[r] = 1
+        else:
+            for q in list(counters):
+                counters[q] -= 1
+                if counters[q] == 0:
+                    del counters[q]
+        if counters.get(r, 0) >= threshold:
+            counters[r] = 0
+            since[r] = 0
+    return worst
+
+
+def compute_hammerdefence() -> dict:
+    window = int(REFRESH_S / T_RC_S)            # activations one bank can make between refreshes
+    year = 365 * 24 * 3600
+    para = []
+    for t in (139_000, 50_000, 10_000, 4_800, 2_000, 1_000, 500):
+        attempts = year / (t * T_RC_S)          # back-to-back attempts in a year
+        # (1 - p)^t * attempts <= 1e-2: one success per century of continuous hammering, at most
+        p = 1 - (1e-2 / attempts) ** (1 / t)
+        para.append({"t": t, "p": p})
+    # trigger a refresh at t/2; Misra-Gries undercounts by at most window/(k+1), so k >= 2 window / t keeps every
+    # row below t between refreshes of its neighbours
+    counters = [{"t": t, "k": math.ceil(2 * window / t)} for t in (139_000, 10_000, 4_800, 1_000, 100)]
+    # a many-sided attack against a small tracker (TRRespass's insight), simulated: 20 aggressor rows, round robin,
+    # with one benign access in every eight
+    rng = np.random.default_rng(5)
+    t = 10_000
+    aggressors = list(range(20))
+    n = window
+    stream = np.empty(n, np.int64)
+    stream[:] = np.array(aggressors * (n // 20 + 1))[:n]
+    benign = rng.random(n) < 1 / 8
+    stream[benign] = rng.integers(1000, 65_536, benign.sum())
+    sim = []
+    for k in (4, 16, 64, math.ceil(2 * window / t)):
+        worst = misra_gries(stream.tolist(), k, t // 2)
+        top = max(worst[a] for a in aggressors)
+        sim.append({"k": k, "max_unrefreshed": int(top), "flips": bool(top >= t), "bound": t // 2 + window // (k + 1)})
+    return {"window": window, "thresholds": THRESHOLDS, "para": para, "counters": counters, "sim_t": t,
+            "sim_aggressors": len(aggressors), "sim": sim}
+
+
 ITEMS = {
     "latch": compute_latch, "phase": compute_phase, "meta": compute_meta, "fsm": compute_fsm,
     "nerode": compute_nerode, "lfsr": compute_lfsr, "regfile": compute_regfile, "dram": compute_dram,
+    "hammerdefence": compute_hammerdefence,
 }
 
 if __name__ == "__main__":

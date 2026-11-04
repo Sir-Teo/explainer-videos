@@ -538,10 +538,105 @@ def compute_functions() -> dict:
             "remez": remez_exp()}
 
 
+# ---------------------------------------------------------------------------
+# The Frontier chapter (videos/cs/SYLLABUS.md 1.1): fast multiplication and correctly rounded functions,
+# measured on this machine
+# ---------------------------------------------------------------------------
+def _cpu_name() -> str:
+    try:
+        for ln in open("/proc/cpuinfo"):
+            if ln.startswith("model name"):
+                return ln.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    import platform
+    return platform.processor() or platform.machine()
+
+
+def compute_frontier() -> dict:
+    import decimal
+    import random
+    import time
+
+    import mpmath
+
+    def best(f, reps=3):
+        b = 9e9
+        for _ in range(reps):
+            t = time.perf_counter()
+            f()
+            b = min(b, time.perf_counter() - t)
+        return b
+
+    rnd = random.Random(1)
+    mul = []
+    for d in (1000, 3000, 10_000, 30_000, 100_000, 300_000, 1_000_000):
+        bits = int(d * 3.3219)
+        a, b = rnd.getrandbits(bits) | 1, rnd.getrandbits(bits) | 1
+        ti = best(lambda: a * b)
+        ctx = decimal.Context(prec=2 * d + 10, Emax=decimal.MAX_EMAX, Emin=decimal.MIN_EMIN)
+        da = decimal.Decimal("".join(rnd.choice("123456789") for _ in range(d)))
+        db = decimal.Decimal("".join(rnd.choice("123456789") for _ in range(d)))
+        td = best(lambda: ctx.multiply(da, db))
+        mul.append({"digits": d, "int": ti, "decimal": td})
+    lx = np.log([m["digits"] for m in mul[2:]])
+    slope_int = float(np.polyfit(lx, np.log([m["int"] for m in mul[2:]]), 1)[0])
+    slope_dec = float(np.polyfit(lx, np.log([m["decimal"] for m in mul[2:]]), 1)[0])
+    # float32 exp: NumPy's against the correctly rounded value (float64 exp, rounded once, checked by mpmath)
+    rng = np.random.default_rng(0)
+    n = 10_000_000
+    x = rng.uniform(-87, 88, n).astype(np.float32)
+    got = np.exp(x)
+    ref = np.exp(x.astype(np.float64)).astype(np.float32)
+    ulps = np.abs(got.view(np.int32).astype(np.int64) - ref.view(np.int32).astype(np.int64))
+    bad = np.nonzero(ulps)[0]
+    mpmath.mp.prec = 200
+    sample = bad[:: max(1, len(bad) // 200)][:200]
+    agree = sum(np.float32(float(mpmath.exp(mpmath.mpf(float(x[i]))))) == ref[i] for i in sample)
+    return {"cpu": _cpu_name(), "numpy": np.__version__, "mul": mul, "slope_int": slope_int, "slope_dec": slope_dec,
+            "ratio_1m": mul[-1]["int"] / mul[-1]["decimal"],
+            "exp_n": n, "exp_bad": int(len(bad)), "exp_frac": float(len(bad) / n),
+            "exp_ulps": {str(k): int((ulps == k).sum()) for k in range(int(ulps.max()) + 1)},
+            "exp_max_ulp": int(ulps.max()), "exp_checked": int(len(sample)), "exp_agree": int(agree)}
+
+
+def compute_hardround() -> dict:
+    """The float32 input whose e^x lies nearest a rounding midpoint (the research problem's answer).  Every float32
+    in [-87.33, 88.72] is screened in float64 (error below 2^-28 of a float32 ulp), and the 200 nearest candidates are
+    re-measured at 300 bits with mpmath."""
+    import mpmath
+
+    lo, hi = np.float32(-87.33), np.float32(88.72)
+    ranges = [(0, int(hi.view(np.int32)) + 1, np.uint32), (int(np.float32(-0.0).view(np.uint32)),
+                                                          int(lo.view(np.uint32)) + 1, np.uint32)]
+    cand, total = [], 0
+    for a0, b0, dt in ranges:
+        for a in range(a0, b0, 50_000_000):
+            u = np.arange(a, min(b0, a + 50_000_000), dtype=dt)
+            x = u.view(np.float32).astype(np.float64)
+            m, _ = np.frexp(np.exp(x))
+            s = m * 2.0 ** 24
+            dist = np.abs(s - np.floor(s) - 0.5)
+            k = np.argpartition(dist, 40)[:40]
+            cand.extend(zip(dist[k].tolist(), x[k].tolist()))
+            total += len(u)
+    cand.sort()
+    mpmath.mp.prec = 300
+    exact = []
+    for _, x in cand[:200]:
+        m, _ = mpmath.frexp(mpmath.exp(mpmath.mpf(x)))
+        s = m * 2 ** 24
+        exact.append((float(abs(s - mpmath.floor(s) - mpmath.mpf(0.5))), x))
+    exact.sort()
+    return {"inputs": total, "worst": [{"x": float(np.float32(x)), "distance_ulp": dd,
+                                        "bits": 24 + float(-np.log2(dd))} for dd, x in exact[:5]]}
+
+
 ITEMS = {
     "clock": compute_clock, "adders": compute_adders, "prefix": compute_prefix, "mult": compute_mult,
     "divide": compute_divide, "alu": compute_alu, "floats": compute_floats, "error": compute_error,
-    "wilkinson": compute_wilkinson, "functions": compute_functions,
+    "wilkinson": compute_wilkinson, "functions": compute_functions, "frontier": compute_frontier,
+    "hardround": compute_hardround,
 }
 
 if __name__ == "__main__":

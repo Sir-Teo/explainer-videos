@@ -18,5 +18,6 @@ SCENES = [
     ("s13_simulator", "Simulator", "12. Our hardware layer"),
     ("s14_history", "History", "13. Machines of switches"),
     ("s15_reversible", "Reversible", "14. Gates that forget nothing"),
-    ("s16_outro", "Outro", "Recap, problems, and where this comes back"),
+    ("s16_frontier", "Frontier", "15. Frontier: the smallest circuit"),
+    ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

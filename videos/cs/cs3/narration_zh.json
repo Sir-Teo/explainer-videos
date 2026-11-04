@@ -16,7 +16,8 @@
   "Simulator": "12. 我们的硬件层",
   "History": "13. 开关搭成的机器",
   "Reversible": "14. 什么都不忘的门",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
+  "Outro": "回顾、习题，以及它们会在哪里再出现",
+  "Frontier": "15. 前沿：最小的电路"
  },
  "lines": {
   "d6b54cf7f8f2": {
@@ -404,6 +405,31 @@
    "en": "This is not just a curiosity. <bookmark mark='a'/> A quantum computer must be reversible: its gates are rotations of a state, and every rotation can be undone. <bookmark mark='b'/> The Toffoli gate is one of its standard gates, and in Part 53 we will simulate a small quantum computer, Toffoli gates included. <bookmark mark='c'/> And the idea of keeping what you would have thrown away, so you can go back, appears much higher up the tower, in the logs that let databases and file systems undo a crash.",
    "zh": "这不只是个奇谈。<bookmark mark='a'/>量子计算机必须是可逆的：它的门是对状态的旋转，而每一个旋转都能撤销。<bookmark mark='b'/>托福利门是它的标准门之一，在第53部分我们会模拟一台小小的量子计算机，托福利门也在其中。<bookmark mark='c'/>而保留本会扔掉的东西、好让你能够回退的想法，在塔的高处还会出现，在让数据库和文件系统从崩溃中恢复的日志里。"
   },
+  "17747155adb1": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: the smallest circuit.",
+   "zh": "第15章。前沿：最小的电路。"
+  },
+  "fcd9a995b9bb": {
+   "scene": "Frontier",
+   "en": "Chapter nine counted how many gates a typical function needs. For very small functions we can do better than count: we can find the best circuit for every one. <bookmark mark='a'/> Treat a circuit as the set of functions its wires compute. Start from the three inputs, add every possible two-input gate, and keep each new set once. <bookmark mark='b'/> One gate gives thirty distinct circuits, two give eight hundred and forty-three, three give twenty-two thousand, four give more than half a million, and at four gates every one of the two hundred and fifty-six functions of three inputs has appeared. <bookmark mark='c'/> So every function of three inputs needs at most four gates, and we know exactly how many each needs: parity of three needs two, the multiplexer three, and majority four, one of the twenty-four hardest. These are not estimates but proofs, by exhaustion.",
+   "zh": "第9章数过一个典型函数需要多少个门。对非常小的函数，我们可以做得比计数更好：为每一个函数找出最好的电路。<bookmark mark='a'/>把电路看作它的导线所计算的函数的集合。从三个输入出发，加上每一种可能的二输入门，每个新集合只保留一次。<bookmark mark='b'/>一个门得到三十个不同的电路，两个门得到八百四十三个，三个门两万两千个，四个门超过五十万个，而到了四个门，三个输入的全部二百五十六个函数都出现了。<bookmark mark='c'/>所以三个输入的每个函数至多需要四个门，而且我们确切知道每个函数需要几个：三输入的奇偶需要两个，多路选择器三个，多数函数四个，它是最难的二十四个之一。这些不是估计，而是证明，靠的是穷举。"
+  },
+  "7e3d9ea09057": {
+   "scene": "Frontier",
+   "en": "This cannot go much further. <bookmark mark='a'/> Four inputs give sixty-five thousand functions, and Donald Knuth computed all of their exact costs in 2005: the hardest need seven gates. Five inputs give four billion functions; Knuth settled almost all of them, and the last few were finished by computer in 2019: the hardest needs twelve. <bookmark mark='b'/> At six inputs there are eighteen quintillion functions, and nobody knows the hardest cost. <bookmark mark='c'/> The number of functions squares with every input added. Modern SAT solvers, which Part 26 builds, can find circuits of ten or twelve gates, but proving that no twelve-gate circuit exists for a single six-input function is already at their limit. Exact knowledge of circuit size ends at five inputs.",
+   "zh": "这走不了多远。<bookmark mark='a'/>四个输入有六万五千个函数，高德纳在2005年算出了它们全部的确切代价：最难的需要七个门。五个输入有四十亿个函数；高德纳解决了几乎所有的，最后几个在2019年由计算机完成：最难的需要十二个。<bookmark mark='b'/>到六个输入，有一千八百亿亿个函数，没有人知道最难的代价是多少。<bookmark mark='c'/>每增加一个输入，函数的个数就平方一次。现代的 SAT 求解器，第26部分会搭建它，能找到十到十二个门的电路，但要证明某一个六输入函数不存在十二个门的电路，就已经到了它们的极限。关于电路规模的精确知识止步于五个输入。"
+  },
+  "97599f398039": {
+   "scene": "Frontier",
+   "en": "How are the lower bounds that do exist proved? Almost all of them by one idea, gate elimination. <bookmark mark='a'/> Fix one input to a constant. <bookmark mark='b'/> Every gate that input fed now computes a constant, or simply copies its other input, so it can be removed, and sometimes the gates it fed can be removed too. <bookmark mark='c'/> Choose the function so cleverly that, whatever the circuit, some input can always be fixed to remove at least three gates, and what remains is a function of the same kind with one input fewer. Then induction on the number of inputs gives three n. <bookmark mark='d'/> Norbert Blum reached three n in 1984. It took thirty-two years to add one eighty-sixth of n, and six more to reach three point one n, each by a longer case analysis of how a minimal circuit can look, for functions called affine dispersers, which stay non-constant on every large affine subspace. Three eliminated gates per input is a long way from two to the n over n.",
+   "zh": "那些确实存在的下界是怎么证明的？几乎都靠同一个想法：门消去。<bookmark mark='a'/>把一个输入固定为常数。<bookmark mark='b'/>这个输入所驱动的每一个门，现在要么计算一个常数，要么只是照抄它的另一个输入，于是可以去掉，有时它驱动的门也能一并去掉。<bookmark mark='c'/>把函数选得足够巧妙，使得无论电路是什么样，总能固定某个输入去掉至少三个门，而剩下的是同一类、少一个输入的函数。那么对输入个数做归纳，就得到三 n。<bookmark mark='d'/>诺伯特·布卢姆在1984年达到了三 n。此后花了三十二年才多加了八十六分之一个 n，又过了六年才到三点一 n，每一步都靠对最小电路可能长什么样做更长的情形分析，针对的是一类叫仿射分散器的函数，它们在每个大的仿射子空间上都不是常数。每个输入消去三个门，离二的 n 次方除以 n 还差得很远。"
+  },
+  "bbbb284d15f3": {
+   "scene": "Frontier",
+   "en": "So ask a computer the question directly. <bookmark mark='a'/> Given the truth table of a function and a number s, is there a circuit of at most s gates? This is the minimum circuit size problem. <bookmark mark='b'/> It is in NP, the class Part 26 defines: a small circuit, once found, is easy to check against every row. Is it as hard as everything in NP? Leonid Levin wondered in the 1970s, Valentine Kabanets and Jin-Yi Cai made the question famous in 2000, and it is still open. <bookmark mark='c'/> In 2022 Shuichi Hirahara proved the version with some rows left unspecified NP-hard, the closest anyone has come. <bookmark mark='d'/> And the question reaches cryptography: Yanyi Liu and Rafael Pass proved in 2020 that one-way functions, the foundation of Parts 29 and 30, exist exactly when a time-bounded version of Kolmogorov complexity is mildly hard on average. <bookmark mark='e'/> This young field, meta-complexity, asks how hard it is to tell how hard something is, and it is one of the most active in theory today.",
+   "zh": "那就直接把这个问题交给计算机。<bookmark mark='a'/>给定一个函数的真值表和一个数 s，是否存在至多 s 个门的电路？这就是最小电路规模问题。<bookmark mark='b'/>它属于 NP，也就是第26部分定义的那个类：小电路一旦找到，对照每一行检查起来很容易。它和 NP 里的一切一样难吗？列昂尼德·列文在二十世纪七十年代就想过这个问题，瓦伦丁·卡巴涅茨和蔡进一在2000年让它出了名，而它至今未解。<bookmark mark='c'/>2022年，平原秀一证明了允许某些行不加规定的那个版本是 NP 难的，这是迄今最接近的结果。<bookmark mark='d'/>这个问题还通向密码学：刘妍伊和拉斐尔·帕斯在2020年证明，第29和第30部分的基础，单向函数，存在当且仅当某种有时间限制的柯尔莫哥洛夫复杂度在平均意义下略微困难。<bookmark mark='e'/>这个年轻的领域叫元复杂性，它问的是：判断一件事有多难，本身有多难。它是当今理论计算机科学中最活跃的方向之一。"
+  },
   "f9001f6335f2": {
    "scene": "Outro",
    "en": "What we built in this part. Shannon's dictionary, which turns switching circuits into Boole's algebra and back. The transistor as a switch, and the CMOS inverter, whose steep curve throws noise away at every stage. NAND and NOR in four transistors each, and the proof that NAND alone builds everything. Normal forms, maps and decision diagrams, the ways to write a function down and to shrink it. And Shannon's counting argument: almost every function needs an enormous circuit, though nobody can name one.",
@@ -419,10 +445,10 @@
    "en": "In practice: hardware engineers write circuits as programs, in Verilog, VHDL or Chisel, much like this series' netlists. Synthesis tools apply the laws of chapter one, at enormous scale, to turn those programs into gates. FPGAs run them as lookup tables. Equivalence checkers, built on decision diagrams and satisfiability solvers, prove the optimized circuit still matches the specification. And a large part of every chip project is timing closure: making every critical path fit inside the clock.",
    "zh": "在实践中：硬件工程师把电路写成程序，用 Verilog、VHDL 或 Chisel，很像本系列的网表。综合工具以极大的规模运用第1章的定律，把这些程序变成门。FPGA 把它们作为查找表运行。建立在决策图和可满足性求解器之上的等价性检查器，证明优化后的电路仍然符合规格说明。而每个芯片项目的一大部分工作是时序收敛：让每条关键路径都装进时钟周期里。"
   },
-  "81cb79eb3359": {
+  "074d7091f3b4": {
    "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to use this series' hardware library yourself.",
-   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自使用本系列的硬件库。"
+   "en": "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build problem: it asks you to use this series' hardware library yourself. The last, marked with a star, is a research problem: a computation that took Knuth real ingenuity, and a question nobody can answer.",
+   "zh": "七道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第六道是动手题：要你亲自使用本系列的硬件库。最后一道标了星号，是研究题：一个当年让高德纳颇费心思的计算，以及一个没有人能回答的问题。"
   },
   "2d312369d255": {
    "scene": "Outro",
@@ -452,6 +478,7 @@
   "Simulator": "12. Our hardware layer",
   "History": "13. Machines of switches",
   "Reversible": "14. Gates that forget nothing",
+  "Frontier": "15. Frontier: the smallest circuit",
   "Outro": "Recap, problems, and where this comes back"
  }
 }

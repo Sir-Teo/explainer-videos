@@ -498,10 +498,52 @@ def compute_blocks() -> dict:
     return {"rows": rows}
 
 
+# ---------------------------------------------------------------------------
+# The Frontier chapter (videos/cs/SYLLABUS.md 1.1): exact circuit sizes
+# ---------------------------------------------------------------------------
+def compute_census() -> dict:
+    """The exact minimum number of two-input gates (any of the ten non-trivial ones) for every 3-input function.
+    Breadth-first over circuits: a circuit is the set of functions its wires compute, so level s holds every
+    distinct set reachable with s gates, and a function's cost is the first level at which it appears."""
+    n = 3
+    full = (1 << (1 << n)) - 1
+    xs = [sum(1 << r for r in range(1 << n) if r >> i & 1) for i in range(n)]
+    ops = [lambda a, b: a & b, lambda a, b: a | b, lambda a, b: a ^ b, lambda a, b: full & ~(a & b),
+           lambda a, b: full & ~(a | b), lambda a, b: full & ~(a ^ b), lambda a, b: a & ~b & full,
+           lambda a, b: ~a & b & full, lambda a, b: (a | ~b) & full, lambda a, b: (~a | b) & full]
+    cost = {0: 0, full: 0, **{x: 0 for x in xs}}
+    level, states = {frozenset(xs)}, []
+    s = 0
+    while len(cost) < 1 << (1 << n):
+        s += 1
+        nxt = set()
+        for st in level:
+            ws = list(st)
+            for i in range(len(ws)):
+                for j in range(i + 1, len(ws)):
+                    for op in ops:
+                        f = op(ws[i], ws[j])
+                        if f in st:
+                            continue
+                        cost.setdefault(f, s)
+                        nxt.add(st | {f})
+        level = nxt
+        states.append(len(level))
+    hist = [sum(1 for v in cost.values() if v == k) for k in range(max(cost.values()) + 1)]
+    a, b, c = xs[0], xs[1], xs[2]
+    named = {"x xor y xor z": a ^ b ^ c, "majority": (a & b) | (a & c) | (b & c), "x and y and z": a & b & c,
+             "if x then y else z": (a & b) | (full & ~a & c)}
+    return {"hist": hist, "states": states, "named": {k: cost[v] for k, v in named.items()},
+            # published: the largest exact costs for 4 and 5 inputs (Knuth, TAOCP 7.1.2, 2005-08; the last
+            # 5-input holdouts settled by computer in 2019) and the number of functions
+            "known": [(3, "4", "256"), (4, "7", "65{,}536"), (5, "12", "4.3 \\times 10^{9}"),
+                      (6, "?", "1.8 \\times 10^{19}")]}
+
+
 ITEMS = {
     "cmos": compute_cmos, "post": compute_post, "nandmin": compute_nandmin, "kmap": compute_kmap,
     "parity": compute_parity, "bdd": compute_bdd, "counting": compute_counting, "glitch": compute_glitch,
-    "blocks": compute_blocks,
+    "blocks": compute_blocks, "census": compute_census,
 }
 
 if __name__ == "__main__":
