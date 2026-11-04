@@ -22,6 +22,7 @@ CHAPTERS = {
     'Models': '10. 比较模型',
     'Track': '11. 收缩SDF，登记并打开',
     'House': '12. 第25条规则：SDF模型',
+    'Research': '写给研究者：有多少异象是真的？',
     'Outro': '回顾、交易台问题与习题',
 }
 
@@ -562,9 +563,10 @@ ZH = {
         "一个存在于等权微盘股中的异象，可能是真的，却仍无法大规模交易。<bookmark mark='a'/>一篇新论文报告的每月百分之零点八，应按它的三分之一到一半来计划。"
         "<bookmark mark='b'/>而一个被因子库张成的因子，只有作为持有张成它的因子的更便宜方式时才值得持有。完整解答在讲义里。",
 
-    "And ten problems: the distribution of the best of n":
-        "还有十道习题：n个中最好者的分布；动物园的Bonferroni；五个p值上的三种程序；经验贝叶斯收缩；主成分中的岭回归，以及它不信任哪个方向；RP-PCA的特例；"
-        "弱因子的衰减；Barillas和Shanken的比较；以及数据挖掘者偶然会找到什么。中英文解答都在讲义里。",
+    "And twelve problems: the distribution of the best of n":
+        "还有十二道习题：n个中最好者的分布；动物园的Bonferroni；五个p值上的三种程序；经验贝叶斯收缩；主成分中的岭回归，以及它不信任哪个方向；RP-PCA的特例；"
+        "弱因子的衰减；Barillas和Shanken的比较；以及数据挖掘者偶然会找到什么。然后是两道资格考试题：证明Benjamini–Hochberg定理，"
+        "并证明Storey的估计偏高、尾部错误发现率是局部错误发现率的平均。中英文解答都在讲义里。",
 
     "Where this comes back. Part twenty-six puts":
         "这些内容会在哪里再出现。第二十六部分把试验计数器放进每一次回测，并把它变成紧缩后的夏普比率。第二十七部分把特征交给机器学习的贴现因子。"
@@ -578,6 +580,67 @@ ZH = {
         "研究交易台有了一个因子库、一个贴现因子模型，以及对自己试验次数的计数。它知道，多次尝试中最好的一个看起来比实际要好，已发表的溢价会缩水，"
         "大多数新因子对旧因子没有增益，而对整个动物园收缩后的组合，比任何单个赢家都是更好的猜测。<bookmark mark='a'/>下一部分，第二十六部分：不自欺的回测。"
         "回测说谎的每一种方式，每一种都埋了一个错误等你去找；成本、融资和借券；以及紧缩后的夏普比率。",
+
+    # ------------------------------------------------------------------ Research
+    "For the researcher: Chapter 2 controlled the false discovery rate":
+        "写给研究者：第2章用Benjamini和Hochberg的规则控制了错误发现率。还剩两个更深的问题：这条规则为什么有效，以及这些异象中究竟有多少是真的。"
+        "回答它需要那些没有因显著而被挑选出来的p值，而动物园恰好有。",
+
+    "First, why the rule works.":
+        "先看这条规则为什么有效。<bookmark mark='a'/>把p值排序，拒绝直到最后一个落在直线q乘k除以m之下的所有假设。<bookmark mark='b'/>"
+        "把错误发现比例的期望写成对真零假设和拒绝个数的求和。<bookmark mark='c'/>对独立检验，在其余p值给定的条件下，每个真零假设恰好贡献q除以m。"
+        "所以错误发现率等于真零假设的占比乘以q：比目标低的恰好是这个占比。如果知道这个占比，我们就能多拒绝一些。",
+
+    "How to estimate that share?":
+        "这个占比怎么估计？<bookmark mark='a'/>真零假设的p值均匀地分布在零和一之间；真实效应的p值堆在零附近。<bookmark mark='b'/>"
+        "John Storey在2002年提出的估计量：数一数大于某个lambda的p值，那里几乎全是零假设，再按宽度放大。<bookmark mark='c'/>"
+        "它偏高，因为弱的真实效应也会在那里留下一些p值：这是一个保守的估计。",
+
+    "Check both on simulated zoos of the same size.":
+        "在同样大小的模拟动物园上检验两者。<bookmark mark='a'/>Benjamini和Hochberg实际的错误发现率一行接一行地落在零假设占比乘以q上，正如定理所说。"
+        "<bookmark mark='b'/>Storey的估计每次都高于真值，高出四到十四个百分点，真实效应越多越弱时高得越多：如所承诺的那样保守，离散约为六七个百分点。",
+
+    'f"Now the zoo.':
+        "现在看动物园。<bookmark mark='a'/>样本内的p值对此毫无用处：这些异象因为显著才被发表，所以几乎全都低于百分之五，"
+        "Storey的估计会说只有百分之{100 * t['pi0_in']:.0f}是零假设。这是挑选造成的。<bookmark mark='b'/>发表后的p值从未被挑选过。"
+        "它们的直方图在零附近有一堆，右侧平坦，Storey对零假设占比的估计约为百分之{100 * t['pi0']:.0f}。这个估计随lambda变化，lambda越大它越小，"
+        "但在每个lambda上都偏高；所以按这个计算，至少十分之六的已发表异象在发表后仍有收益。",
+
+    "Bradley Efron's two-group model goes one step further.":
+        "Bradley Efron的两组模型又进了一步。<bookmark mark='a'/>每个t统计量要么是零假设，服从标准正态，要么是分布未知的真实效应；"
+        "混合密度直接从数据中估计。<bookmark mark='b'/>由贝叶斯法则，这个特定异象是零假设的概率，等于零假设占比乘以正态密度，再除以混合密度：局部错误发现率。"
+        "<bookmark mark='c'/>把一减去它加总，就得到真实效应的期望个数，完全不需要任何阈值。",
+
+    'f"Here is the zoo through that lens.':
+        "用这个视角看动物园。<bookmark mark='a'/>白色曲线是发表后t统计量的混合密度估计；灰色曲线是其中零假设的部分。<bookmark mark='b'/>"
+        "白色远高于灰色的地方，异象很可能是真的：其中{t['n_lfdr_02']}个的局部错误发现率低于五分之一。对全部求和，真实效应的期望个数约为"
+        "{t['expected_true']:.0f}，其中大多数很小，位于重叠区域，任何单个检验都挑不出来。",
+
+    'f"Put the numbers side by side.':
+        "把这些数字并排放。<bookmark mark='a'/>在百分之十的水平下，Benjamini和Hochberg挑出{t['bh10']}个。知道只有约百分之{100 * t['pi0']:.0f}"
+        "是零假设，同样的保证就能挑出{t['storey_bh10']}个。<bookmark mark='b'/>局部规则挑出{t['n_lfdr_02']}个，而整个动物园约含"
+        "{t['expected_true']:.0f}个真实效应。<bookmark mark='c'/>它们回答的是不同的问题：你会押注哪些异象，以及真实效应有多少。"
+        "动物园的大部分很可能是真的，而大部分真实效应都很小。",
+
+    "Three open questions. <bookmark mark='a'/> Anomalies share stocks and factors.":
+        "三个开放问题。<bookmark mark='a'/>异象共享股票和因子。逐步上升规则在正相关下仍然成立，但零假设占比和局部估计会变得更嘈杂，"
+        "它们在现实相关结构下的标准误还没有定论。<bookmark mark='b'/>发表后t接近零，可能意味着异象从来不是真的，也可能是被交易掉了；这个模型分不清两者。"
+        "<bookmark mark='c'/>而每月一个基点的真实效应算是一项发现，扣除成本后却一文不值；针对有经济意义的零假设做检验的研究很少。",
+
+    "Pause and predict. Of a thousand tests":
+        "暂停预测一下。一千个检验中，有三百八十个p值大于二分之一。估计零假设的占比。如果在百分之十的水平下逐步上升规则拒绝了一百二十个，其中大约有多少是错误的？",
+
+    "The key step deserves a line of its own.":
+        "关键的一步值得单独写出来。<bookmark mark='a'/>令R i为把第i个p值换成零后的拒绝个数。它只依赖于其余的p值，所以与这个p值独立。"
+        "<bookmark mark='b'/>如果第i个零假设在共k个拒绝中被拒绝，那么把它的p值设为零什么也不改变：被拒绝的仍是那k个。所以这个事件拆成两个独立的部分。"
+        "<bookmark mark='c'/>均匀分布的p值落在q乘k除以m之下的概率就是q乘k除以m。k相互抵消，R i的各个概率加起来为一，每个零假设贡献q除以m。"
+        "对零假设求和，错误发现率就是零假设占比乘以q。在相关情形下，论证在因子分解那一步失效，这正是Benjamini和Yekutieli修正的用武之地。",
+
+    'f"The choice of lambda matters here.':
+        "这里lambda的选择很重要。<bookmark mark='a'/>如果零假设的p值恰好均匀，且所有真实效应都位于零附近，那么随着lambda增大，估计会在真实占比处变平。"
+        "<bookmark mark='b'/>实际上它一直在下降，从零附近的{pc[0]:.2f}降到十分之九处的{pc[-1]:.2f}。直方图的最右端，也就是发表后反转的异象，"
+        "比均匀分布应有的更稀。这说明零假设并不全是严格的零：许多衰减了的异象可能还保留着一点正效应。<bookmark mark='c'/>"
+        "Storey和Tibshirani对这条曲线做平滑，并在接近一处读数；也可以用自助法来选lambda。不过在最右端只剩寥寥几个p值，所以取一半处的估计更稳妥。",
 }
 
 PHRASES = {}

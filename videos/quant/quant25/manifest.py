@@ -16,5 +16,6 @@ SCENES = [
     ("s11_models", "Models", "10. Comparing models"),
     ("s12_track", "Track", "11. The shrinkage SDF, registered and opened"),
     ("s13_house", "House", "12. Rule 25: the SDF model"),
+    ("s15_research", "Research", "For the researcher: how many anomalies are real?"),
     ("s14_outro", "Outro", "Recap, desk questions, problems"),
 ]

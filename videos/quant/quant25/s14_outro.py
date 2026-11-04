@@ -40,6 +40,10 @@ PROBLEMS = [
     r"Model A's factors reach $SR^2 = 0.5$ a year, model B's 0.8. Which is better by Barillas--Shanken, and why are no "
     r"test assets needed?",
     r"A data miner tries 29{,}000 signals with no true premium. How many clear $|t| > 2$ by chance? $|t| > 3$?",
+    r"(qual) For independent, continuous $p$-values, prove that Benjamini--Hochberg at level $q$ has "
+    r"$\mathrm{FDR} = \pi_0 q$ exactly. Hint: $V/R = \sum_{i \in H_0} 1\{p_i \le qR/m\}/R$; condition on the other $p$'s.",
+    r"(qual) Show $\mathbb E\,\hat\pi_0(\lambda) \ge \pi_0$ when null $p$'s are uniform. Then, in the two-group model, "
+    r"show that the tail-area rate $\pi_0\bar\Phi(z)/\bar F(z)$ equals $\mathbb E[\operatorname{lfdr}(Z) \mid Z \ge z]$.",
 ]
 
 
@@ -156,12 +160,14 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=20)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: the distribution of the best of n; Bonferroni for the zoo; three procedures on five "
+            "And twelve problems: the distribution of the best of n; Bonferroni for the zoo; three procedures on five "
             "p-values; empirical-Bayes shrinkage; ridge in principal components, and which direction it distrusts; "
             "RP-PCA's special case; the attenuation of a weak factor; Barillas and Shanken's comparison; and what a "
-            "data miner finds by chance. Solutions, in English and Chinese, are in the notes."
+            "data miner finds by chance. Then two qualifying-exam problems: prove Benjamini and Hochberg's theorem, and show "
+            "that Storey's estimate errs high and that the tail-area rate averages the local one. Solutions, in English "
+            "and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

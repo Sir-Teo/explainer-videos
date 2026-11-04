@@ -28,7 +28,7 @@ global-q.org's q5 factors.
 *An education in methods, not investment advice. The predictors' returns are paper returns of their original
 portfolios, before realistic trading costs.*
 
-## Chapters (about 50 minutes)
+## Chapters (about 56 minutes)
 
 * **Two hundred coins** (2.8 min). 200 noise strategies, 20 years each: five clear t = 1.96, the best t = 2.89; the
   file drawer and forking paths; the zoo's count by publication year (51 by 2000, 212 by 2016); the history strip
@@ -77,7 +77,18 @@ portfolios, before realistic trading costs.*
   comes next; the counter 325 → 346.
 * **12. Rule 25: the SDF model** (2.8). The trial count by part; the first sheet; **lab**: `kns_b`, `rp_pca`,
   `double_selection`; the `zoo` module; Rule 25; the rule against this part's cases.
-* **Recap, desk questions, problems** (3.7). Fourteen lines; six desk questions; ten problems, solutions below.
+* **For the researcher: how many anomalies are real?** (6.0). Benjamini and Hochberg's theorem, FDR = π₀q for
+  independent tests, with the proof's key step (replace p_i by 0; the rejection count R⁽ⁱ⁾ is then independent of
+  p_i, and Σ_k (1/k)(qk/m)Pr(R⁽ⁱ⁾ = k) = q/m). Storey's π̂₀(λ) = #{p > λ}/(m(1 − λ)), conservative. Simulated zoos
+  of 208 tests (400 replications, real effects with gamma-distributed mean t, mean 2): realized FDR 0.030, 0.047,
+  0.083 against π₀q = 0.03, 0.05, 0.08; π̂₀ = 0.44, 0.60, 0.84 (± 0.06–0.07) for π₀ = 0.3, 0.5, 0.8. The zoo: the
+  in-sample p-values are selected (π̂₀ = 0.03, meaningless); the 208 post-publication t-statistics give π̂₀(½) = 0.375,
+  and π̂₀(λ) falls from 0.75 (λ = 0.05) to 0.14 (λ = 0.9), so the far right is thinner than uniform. Efron's two-group
+  model with a kernel mixture density: 70 anomalies with lfdr < 0.2, Σ(1 − lfdr) ≈ 135 real effects; BH at 10% finds
+  41, Storey-adjusted BH 76. Strongest after publication: DivYieldST (t 9.7), AnnouncementReturn (7.3),
+  AnalystRevision (6.6). Three open problems; pause: π̂₀ = 0.76, so about 0.076 × 120 ≈ 9 false discoveries.
+* **Recap, desk questions, problems** (3.8). Fourteen lines; six desk questions; twelve problems (two at
+  qualifying-exam level), solutions below.
 
 ## Hands-on
 
@@ -163,6 +174,30 @@ python tools/make.py quant25 --cpu-voice -q m                 # English and Chin
    higher SR²(f) leaves less to explain for every R.
 10. **Mining by chance.** Two-sided: 29,000 × 0.0455 ≈ 1,320 clear |t| > 2, and 29,000 × 0.0027 ≈ 78 clear |t| > 3,
     with no true premium anywhere (if independent).
+11. **(qual) Benjamini and Hochberg's theorem.** BH rejects p_i iff p_i ≤ qR/m, so V/max(R, 1) = Σ_{i∈H₀}Σ_k
+    (1/k)1{p_i ≤ qk/m, R = k}. Let R⁽ⁱ⁾ be the number of rejections with p_i set to 0, a function of p₋ᵢ only. On
+    {p_i ≤ qk/m}, R = k iff R⁽ⁱ⁾ = k (p_i rejected with k rejections ⇒ lowering it changes nothing; conversely, if
+    R⁽ⁱ⁾ = k and p_i ≤ qk/m, raising p_i from 0 leaves every count #{p ≤ qj/m}, j ≥ k, unchanged). By independence and uniformity,
+    Pr(p_i ≤ qk/m, R⁽ⁱ⁾ = k) = (qk/m)Pr(R⁽ⁱ⁾ = k), so each null contributes (q/m)Σ_k Pr(R⁽ⁱ⁾ = k) = q/m, and
+    FDR = m₀q/m = π₀q.
+12. **(qual) Storey and the tail-area rate.** E#{p > λ} = m₀(1 − λ) + Σ_{i∈H₁}Pr(p_i > λ) ≥ m₀(1 − λ), so
+    E π̂₀(λ) ≥ π₀ (before capping at 1). In the two-group model f = π₀φ + (1 − π₀)f₁, the tail-area false discovery
+    rate is Fdr(z) = Pr(H₀ | Z ≥ z) = π₀Φ̄(z)/F̄(z) = ∫_z^∞ [π₀φ(u)/f(u)] f(u)du / F̄(z) = E[lfdr(Z) | Z ≥ z]: the tail
+    rate averages the local rate over the tail, so it is smaller than lfdr at the threshold when lfdr decreases in z.
+
+## For the researcher
+
+* **The theorems.** Benjamini and Hochberg (1995), "Controlling the false discovery rate," *JRSS B* 57; Benjamini and
+  Yekutieli (2001), *Annals of Statistics* 29, on dependence; Storey (2002), "A direct approach to false discovery
+  rates," *JRSS B* 64; Storey and Tibshirani (2003), *PNAS* 100; Storey, Taylor and Siegmund (2004), *JRSS B* 66;
+  Efron, Tibshirani, Storey and Tusher (2001), *JASA* 96, and Efron, *Large-Scale Inference* (2010), on the two-group
+  model and the local false discovery rate. In finance: Harvey, Liu and Zhu (2016); McLean and Pontiff (2016);
+  Jensen, Kelly and Pedersen (2023).
+* **Simplifications.** One-sided p-values from the post-publication t-statistics in the published direction; a
+  standard normal null (Efron's empirical null, fitted to the centre, would differ); a Gaussian kernel for the
+  mixture density; λ = ½ for π̂₀; anomalies treated as independent.
+* **Open problems.** Standard errors of π̂₀ and lfdr under realistic dependence; separating anomalies that were never
+  real from those traded away; testing against an economically meaningful null rather than zero.
 
 ## Data and reproducibility
 
@@ -198,7 +233,7 @@ python tools/make.py quant25 --cpu-voice -q m                 # English and Chin
 
 *讲的是方法，不构成投资建议。预测变量的收益是其原始组合的纸面收益，未扣除现实的交易成本。*
 
-## 章节（约50分钟）
+## 章节（约56分钟）
 
 * **两百枚硬币。** 200个噪声策略，各20年：五个超过t = 1.96，最好的t = 2.89；抽屉问题与分岔路径；动物园按发表年份的数量（2000年51个，2016年212个）；历史条（1979–2023）；本部分安排；SDF模型。
 * **1. 数以百计的因子与上升的门槛。** 最大值的规律；200个中最好者的诚实p值（t = 2.9：单独0.0019，作为200个中最好者0.31）；一个领域的算术（Ioannidis：π = 0.1、检验力0.5时，显著结果中53%为真）；模拟的最佳t对n（10个1.5，200个2.8，1000个3.3）；随动物园增长的Bonferroni门槛（1980年2.58，2000年3.30，2016年3.68）；Harvey–Liu–Zhu（316个因子，t > 3）；动物园复现的t（87%高于1.96，58%高于3）。
@@ -213,7 +248,8 @@ python tools/make.py quant25 --cpu-voice -q m                 # English and Chin
 * **10. 比较模型。** Barillas–Shanken的洞见；检验资产如何误导；有名字的模型（1967–1993年的SR²：CAPM 0.10、FF3 0.73、Carhart 1.80、FF5 2.77、FF6 3.53、q4 4.37、q5 7.13；样本外夏普比率0.57到1.47）；382个模型（秩相关0.77）；前五名（混合各族）；Fama–French的“选择因子”；贝叶斯模型平均（Bryzgalova–Huang–Julliard）。
 * **11. 收缩SDF，登记并打开。** 登记了什么（20次试验和1次）；结果（研究期夏普比率4.6和2.1；2021–23年：每年+34.7%、夏普比率3.06 ± 0.60，以及+7.2%、2.14 ± 0.63）；路径；成本盈亏平衡（约每年35%）；注意事项（纸面收益、杠杆）；为什么样本外不需要修正；接下来会怎样；计数器325 → 346。
 * **12. 第25条规则：SDF模型。** 按部分的试验次数；第一张表；**实验**：`kns_b`、`rp_pca`、`double_selection`；`zoo`模块；第25条规则；用本部分的案例检验这条规则。
-* **回顾、交易台问题与习题。** 十四行回顾；六个交易台问题；十道习题，解答见下文。
+* **写给研究者：有多少异象是真的？** Benjamini–Hochberg定理：独立检验下FDR = π₀q，并给出证明的关键一步（把p_i换成0；此时拒绝个数R⁽ⁱ⁾与p_i独立，且Σ_k (1/k)(qk/m)Pr(R⁽ⁱ⁾ = k) = q/m）。Storey的π̂₀(λ) = #{p > λ}/(m(1 − λ))，是保守的。208个检验的模拟动物园（400次重复，真实效应的t均值服从均值为2的伽马分布）：实际FDR为0.030、0.047、0.083，对应π₀q = 0.03、0.05、0.08；π₀ = 0.3、0.5、0.8时π̂₀ = 0.44、0.60、0.84（± 0.06–0.07）。动物园：样本内p值经过挑选（π̂₀ = 0.03，没有意义）；208个发表后的t统计量给出π̂₀(½) = 0.375，π̂₀(λ)从0.75（λ = 0.05）降到0.14（λ = 0.9），说明最右端比均匀分布更稀。Efron的两组模型，混合密度用核估计：70个异象的lfdr < 0.2，Σ(1 − lfdr) ≈ 135个真实效应；10%水平的BH找到41个，经Storey调整的BH找到76个。发表后最强的：DivYieldST（t 9.7）、AnnouncementReturn（7.3）、AnalystRevision（6.6）。三个开放问题；暂停题：π̂₀ = 0.76，所以约0.076 × 120 ≈ 9个错误发现。
+* **回顾、交易台问题与习题。** 十四行回顾；六个交易台问题；十二道习题（两道为资格考试难度），解答见下文。
 
 ## 交易台问题与解答
 
@@ -236,6 +272,8 @@ python tools/make.py quant25 --cpu-voice -q m                 # English and Chin
 8. **衰减。** plim λ̂ = λ · 0.01/(0.01 + 0.04) = 0.2λ：溢价被估计为真实大小的五分之一。
 9. **模型比较。** B，因为0.8 > 0.5。对可交易因子，任何检验资产R都给出GRS(f; R) ∝ SR²(f, R) − SR²(f)，而当R包含两组因子时，SR²(f, R)对两个模型相同，所以SR²(f)更高的模型对每个R留下的待解释部分都更少。
 10. **偶然挖掘。** 双侧：29,000 × 0.0455 ≈ 1,320个超过|t| > 2，29,000 × 0.0027 ≈ 78个超过|t| > 3，而且哪里都没有真实溢价（若相互独立）。
+11. **（资格考试）Benjamini–Hochberg定理。** BH拒绝p_i当且仅当p_i ≤ qR/m，所以V/max(R, 1) = Σ_{i∈H₀}Σ_k (1/k)1{p_i ≤ qk/m, R = k}。令R⁽ⁱ⁾为把p_i设为0后的拒绝个数，它只是p₋ᵢ的函数。在{p_i ≤ qk/m}上，R = k当且仅当R⁽ⁱ⁾ = k（p_i在共k个拒绝中被拒绝 ⇒ 把它调低什么也不改变；反之，若R⁽ⁱ⁾ = k且p_i ≤ qk/m，把p_i从0调回原值不改变任何j ≥ k的计数#{p ≤ qj/m}）。由独立性和均匀性，Pr(p_i ≤ qk/m, R⁽ⁱ⁾ = k) = (qk/m)Pr(R⁽ⁱ⁾ = k)，所以每个零假设贡献(q/m)Σ_k Pr(R⁽ⁱ⁾ = k) = q/m，FDR = m₀q/m = π₀q。
+12. **（资格考试）Storey与尾部错误发现率。** E#{p > λ} = m₀(1 − λ) + Σ_{i∈H₁}Pr(p_i > λ) ≥ m₀(1 − λ)，所以E π̂₀(λ) ≥ π₀（截断到1之前）。在两组模型f = π₀φ + (1 − π₀)f₁中，尾部错误发现率Fdr(z) = Pr(H₀ | Z ≥ z) = π₀Φ̄(z)/F̄(z) = ∫_z^∞ [π₀φ(u)/f(u)] f(u)du / F̄(z) = E[lfdr(Z) | Z ≥ z]：尾部率是局部率在尾部上的平均，所以当lfdr随z递减时，它小于阈值处的lfdr。
 
 ## 数据与复现
 
@@ -244,3 +282,9 @@ python tools/make.py quant25 --cpu-voice -q m                 # English and Chin
 * 本部分登记：`kns_sdf_part25`（20次试验：κ网格）和`zoo_equal_weight_part25`（1次）；计数器从325升到346。第26部分之前的占位成本：SDF每年2%，等权每年1%。
 * 引用而非计算的公开数字：Hou–Xue–Zhang的失败率；Jensen–Kelly–Pedersen的样本；McLean–Pontiff的百分比；Chen–Lopez-Lira–Zimmermann的保留率；Harvey–Liu–Zhu的计数；Fama–French的微盘股份额。
 * 模拟或示意：200枚硬币、最佳n曲线、弱因子直方图、五个p值、两个方向、lasso玩具例子、Ioannidis算术。
+
+## 写给研究者
+
+* **定理。** Benjamini与Hochberg（1995），*JRSS B* 57；Benjamini与Yekutieli（2001），*Annals of Statistics* 29，论相关情形；Storey（2002），*JRSS B* 64；Storey与Tibshirani（2003），*PNAS* 100；Storey、Taylor与Siegmund（2004），*JRSS B* 66；Efron、Tibshirani、Storey与Tusher（2001），*JASA* 96，以及Efron的*Large-Scale Inference*（2010），论两组模型与局部错误发现率。金融中：Harvey、Liu与Zhu（2016）；McLean与Pontiff（2016）；Jensen、Kelly与Pedersen（2023）。
+* **简化。** 用发表后t统计量在发表方向上的单侧p值；标准正态零分布（Efron按中心拟合的经验零分布会不同）；混合密度用高斯核；π̂₀取λ = ½；把异象视为相互独立。
+* **开放问题。** 现实相关结构下π̂₀和lfdr的标准误；区分从来不真的异象与被交易掉的异象；针对有经济意义的零假设而非零做检验。

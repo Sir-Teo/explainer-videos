@@ -347,7 +347,63 @@ def compute_envelope() -> dict:
     return _json({"rows": out, "registered": reg, "trials": pit.trials_so_far()})
 
 
-ITEMS = {"zoo": compute_zoo, "noise": compute_noise, "mtest": compute_mtest, "shrink": compute_shrink,
+def compute_discovery_theory() -> dict:
+    """The research chapter: how many anomalies are real?  Benjamini and Hochberg's step-up rule controls the false
+    discovery rate at pi0 q under independence; Storey (2002) estimates the share of true nulls pi0 from the flat
+    right side of the p-value histogram, pi0(lambda) = #{p > lambda}/(m(1 - lambda)); Efron's two-group model gives each
+    hypothesis a local false discovery rate lfdr(z) = pi0 phi(z)/f(z).  Checked by simulation; then applied to the 208
+    anomalies' post-publication t-statistics, which, unlike the in-sample ones, were not selected for significance."""
+    from scipy.stats import gaussian_kde
+    rng = np.random.default_rng(2525)
+    m = 208
+    sims = []
+    for pi0 in (0.3, 0.5, 0.8):
+        fdr, pis, power = [], [], []
+        for _ in range(400):
+            null = rng.random(m) < pi0
+            mu = np.where(null, 0.0, rng.gamma(2.0, 1.0, m))
+            t = mu + rng.standard_normal(m)
+            p = stats.norm.sf(t)
+            o = np.argsort(p)
+            k = np.where(p[o] <= 0.10 * np.arange(1, m + 1) / m)[0]
+            rej = np.zeros(m, bool)
+            if len(k):
+                rej[o[: k.max() + 1]] = True
+            fdr.append(float((rej & null).sum() / max(rej.sum(), 1)))
+            power.append(float((rej & ~null).sum() / max((~null).sum(), 1)))
+            pis.append(float(np.mean(p > 0.5) / 0.5))
+        sims.append({"pi0": pi0, "fdr": float(np.mean(fdr)), "fdr_bound": 0.10 * pi0, "pi0_hat": float(np.mean(pis)),
+                     "pi0_hat_sd": float(np.std(pis)), "power": float(np.mean(power))})
+    _, _, _, recs = _records()
+    post = [r_ for r_ in recs if r_["t_post"] is not None]
+    tp = np.array([r_["t_post"] for r_ in post])
+    ti = np.array([r_["t_in"] for r_ in recs])
+    p_post = stats.norm.sf(tp)                    # one-sided, in the published direction
+    p_in = stats.norm.sf(ti)
+    lams = np.linspace(0.05, 0.9, 18)
+    pi0_curve = [float(min(1.0, np.mean(p_post > l_) / (1 - l_))) for l_ in lams]
+    pi0 = float(min(1.0, np.mean(p_post > 0.5) / 0.5))
+    pi0_in = float(min(1.0, np.mean(p_in > 0.5) / 0.5))
+    # Efron's local fdr with a kernel estimate of the mixture density
+    kde = gaussian_kde(tp)
+    lfdr = np.minimum(1.0, pi0 * stats.norm.pdf(tp) / kde(tp))
+    zz = np.linspace(-4, 7, 221)
+    names = [r_["name"] for r_ in post]
+    order = np.argsort(lfdr)
+    # BH at 10% with and without the pi0 adjustment
+    o = np.argsort(p_post)
+    k1 = np.where(p_post[o] <= 0.10 * np.arange(1, len(tp) + 1) / len(tp))[0]
+    k2 = np.where(p_post[o] <= 0.10 / max(pi0, 1e-9) * np.arange(1, len(tp) + 1) / len(tp))[0]
+    out = {"sims": sims, "m": int(len(tp)), "t_post": tp, "t_in": ti, "p_post_hist": np.histogram(p_post, bins=20, range=(0, 1))[0],
+           "p_in_hist": np.histogram(p_in, bins=20, range=(0, 1))[0], "lams": lams, "pi0_curve": pi0_curve, "pi0": pi0,
+           "pi0_in": pi0_in, "density_z": zz, "density_f": kde(zz), "density_null": pi0 * stats.norm.pdf(zz),
+           "lfdr": lfdr, "n_lfdr_02": int(np.sum(lfdr < 0.2)), "expected_true": float(np.sum(1 - lfdr)),
+           "bh10": int(k1.max() + 1) if len(k1) else 0, "storey_bh10": int(k2.max() + 1) if len(k2) else 0,
+           "best": [{"name": names[i], "t_post": float(tp[i]), "lfdr": float(lfdr[i])} for i in order[:8]]}
+    return _json(out)
+
+
+ITEMS = {"discovery_theory": compute_discovery_theory, "zoo": compute_zoo, "noise": compute_noise, "mtest": compute_mtest, "shrink": compute_shrink,
          "kns": compute_kns, "pca": compute_pca, "fgx": compute_fgx, "weak": compute_weak, "models": compute_models,
          "envelope": compute_envelope}
 
