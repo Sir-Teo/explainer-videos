@@ -24,7 +24,7 @@ retrains them at full size. Data: Part 13's Deribit BTC option surfaces, and Bin
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 61 minutes)
+## Chapters (about 64 minutes)
 
 * **A machine that hedges** (2.7 min). A network learns a corridor around delta at 0.5% costs; it needs 3.01 where
   daily delta hedging needs 3.55, and on one simulated month it trades on 11 of 30 days; J.P. Morgan's data-driven
@@ -84,7 +84,18 @@ reported by the sources named.*
 * **19. Rule 17, tested** (1.7). Four hedgers priced on Black–Scholes paths, on GJR-GARCH paths and on 1,010 real
   30-day stretches of bitcoin; Rule 17 (no network without a slower independent engine; inputs outside the box go to
   it; hedgers tested on two generators and on history).
-* **Recap, desk questions, problems** (2.7). Eleven lines; four desk questions; eight problems with solutions below.
+* **For the researcher: the deep BSDE's loss as an error certificate** (4.7). In the linear case (no default),
+  Y_T − g = e^{RT}(y₀ − u₀) + ∫e^{R(T−t)}(Z − Z*)·dW, so by Itô's isometry the loss is e^{2RT}(y₀ − u₀)² plus the
+  hedge's error and |y₀ − u₀| ≤ e^{−RT}√loss; Han and Long (2020) prove sup E|Y − Ŷ|² + E∫|Z − Ẑ|² ≤ C(h + loss) for
+  Lipschitz drivers. Ten-dimensional basket minimum (reference 72.548 ± 0.006 from 2 million paths), trained 3,000
+  iterations at N = 5/10/20/40 steps: the error never crosses the bound; final loss 17.4/12.2/9.3/9.6, bound
+  4.09/3.42/2.98/3.03, actual error 0.004/0.016/0.044/0.138 (loose by 20–1,000×: the loss is mostly the hedge's
+  variance); the floor falls with h, then the networks' own error takes over. The 100-dimensional default-risk run of
+  chapter 9: y₀ → 57.3 inside y₀ ± √loss (indicative, the constant unknown). Three open problems; pause: loss 9 at
+  R = 2%, T = 1 bounds the price error by e^{−0.02} × 3 = 2.94; with the true hedge the loss would shrink to
+  e^{2RT}(y₀ − u₀)² plus the time-step floor.
+* **Recap, desk questions, ten problems (two at qualifying-exam level)** (2.7). Eleven lines; four desk questions;
+  solutions below.
 
 ## Hands-on
 
@@ -212,6 +223,24 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
 8. **Label noise.** If y = F + ε with ε independent of the network's prediction F̂, E(F̂ − y)² = E(F̂ − F)² + E ε² ≥ E ε².
    Doubling the label variance raises this floor, but a smooth fit to many labels near each θ averages their noise, so
    the network's own error E(F̂ − F)² grows much less than the labels' variance.
+9. **(qual) The loss decomposition.** Solve the linear SDE: Y_T = e^{RT}y₀ + ∫₀^T e^{R(T−t)}Z_t·dW_t, and by the
+   martingale representation of e^{−RT}g, g = e^{RT}u₀ + ∫e^{R(T−t)}Z*_t·dW_t. Then Y_T − g = e^{RT}(y₀ − u₀) +
+   ∫e^{R(T−t)}(Z − Z*)·dW. For adapted, square-integrable Z the integral has mean zero, so the cross term vanishes, and
+   Itô's isometry gives E|Y_T − g|² = e^{2RT}(y₀ − u₀)² + E∫e^{2R(T−t)}|Z − Z*|²dt.
+10. **(qual) The floor.** By problem 9 the loss is at least E∫e^{2R(T−t)}|Z − Z*|² ≥ min over step processes of
+   E∫|Z − Z*|²; on each step the best constant is the conditional mean Z̄_i = E[(1/h)∫_{t_i}^{t_{i+1}}Z*dt | F_{t_i}], and
+   Σ_iE∫_{t_i}^{t_{i+1}}|Z*_t − Z̄_i|²dt ≤ Σ_i∫E|Z*_t − Z*_{t_i}|²dt ≤ Σ_i C h² = C T h if E|Z*_t − Z*_s|² ≤ C|t − s|
+   (Zhang 2004 shows this L²-regularity for Lipschitz data): the floor is O(1/N).
+
+## For the researcher
+
+* **The theorems.** Han, Jentzen and E (2018), *PNAS* 115; Han and Long (2020), "Convergence of the deep BSDE method for
+  coupled FBSDEs," *Probab. Uncertain. Quant. Risk* 5:5 (Theorem 1, the a posteriori estimate); Zhang (2004), "A
+  numerical scheme for BSDEs," *Ann. Appl. Probab.* 14, for the L²-regularity of Z.
+* **Simplifications.** The linear case for the exact identity; batch losses averaged over 500 iterations; one seed per
+  step count, started from different initial y₀; the nonlinear band uses C = 1, which is not a theorem.
+* **Open problems.** Sharper certificates that separate price and hedge; why training reaches small losses; computable
+  constants for validation.
 
 ## Data and reproducibility
 
@@ -245,7 +274,7 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约61分钟）
+## 章节（约64分钟）
 
 * **一台会对冲的机器。** 在0.5%成本下，网络在Delta周围学出一条走廊：它需要3.01，而每日Delta对冲需要3.55；在一个模拟月份里它只在30天中的11天交易；据Risk.net报道，摩根大通自2018年起用数据驱动的引擎对冲指数期权账本；历史条（1985–2026）；本部分安排。
 * **1. 学习一个定价公式。** 重做Hutchinson、Lo与Poggio（1994）：默顿齐次性、万能逼近定理；一个3 × 64的网络在66,150个模拟价格上训练（最大误差为行权价的0.05%），它的Delta对冲200个新期权，与真实Delta一样好（跟踪误差0.214–0.217，对0.209）；**实验**：`train_mlp_regressor`。
@@ -267,7 +296,8 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
 * **17. 投产与模型风险。** 2026年4月17日的SR 26-2取代SR 11-7，英国PRA SS1/23；把清单用于本部分的网络；已知答案记分板；公司档案（摩根大通、丹斯克银行）。
 * **18. 前沿：2023至2026年。** 生成式期权市场（SANOS、DYSANOS、GROMM）、深度对冲者是否在对冲、二阶训练、停时与对偶、签名核生成器；重跑一个论断。
 * **19. 检验第17条规则。** 四个对冲者分别在Black–Scholes路径、GJR-GARCH路径和1,010段真实的30天比特币区间上定价；第17条规则（没有更慢的独立引擎就不用网络；训练框外的输入交给它；对冲者要在两个生成器和历史上检验）。
-* **回顾、交易台问题与习题。** 十一行回顾；四个交易台问题；八道习题，解答见下文。
+* **写给研究者：深度BSDE的损失作为误差证书。** 线性情形（无违约）下Y_T − g = e^{RT}(y₀ − u₀) + ∫e^{R(T−t)}(Z − Z*)·dW，由伊藤等距，损失等于e^{2RT}(y₀ − u₀)²加上对冲的误差，所以|y₀ − u₀| ≤ e^{−RT}√损失；Han与Long（2020）对利普希茨驱动项证明sup E|Y − Ŷ|² + E∫|Z − Ẑ|² ≤ C(h + 损失)。十维篮子最小值（200万条路径得参考值72.548 ± 0.006），N = 5/10/20/40步各训练3,000次：误差从不越过界；最终损失17.4/12.2/9.3/9.6，界4.09/3.42/2.98/3.03，实际误差0.004/0.016/0.044/0.138（宽松20–1,000倍：损失主要是对冲的方差）；下限随h下降，然后网络自身的误差接管。第9章的一百维违约风险运行：y₀ → 57.3，位于y₀ ± √损失之内（示意，常数未知）。三个开放问题；暂停题：R = 2%、T = 1时损失9给出价格误差上界e^{−0.02} × 3 = 2.94；用真实对冲时损失会缩小到e^{2RT}(y₀ − u₀)²加上时间步长下限。
+* **回顾、交易台问题、十道习题（两道为资格考试水平）。** 十一行回顾；四个交易台问题；解答见下文。
 
 ## 交易台问题与解答
 
@@ -300,3 +330,11 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
 6. **利兰的波动率。** 两次再平衡之间ΔΔ ≈ ΓΔS，所以E|ΔΔ|S = ΓS²σ√Δt √(2/π)；单位时间成本为(k/2)ΓS²σ√(2/π)/√Δt，往返成本k = 2c。把它加到卖出期权定价方程中的½σ²S²Γ项上，得½σ̂²S²Γ，σ̂² = σ²(1 + √(2/π) k/(σ√Δt))。
 7. **默顿项。** 在零利率的完备市场中，带权益的终值财富为−Z + (δ·S)_T。令δ = Δ + η：Δ部分精确复制Z，剩下max E[−e^{−γ(x − p + (η·S)_T)}]，即没有权益的CARA问题，其解持有金额μ/(γσ²)，即η = μ/(γσ²S)。
 8. **标签噪声。** 若y = F + ε且ε独立于网络的预测F̂，则E(F̂ − y)² = E(F̂ − F)² + Eε² ≥ Eε²。标签方差加倍会抬高这个下限，但对每个θ附近许多标签的光滑拟合会平均掉它们的噪声，所以网络自身的误差E(F̂ − F)²增长远小于标签的方差。
+9. **（资格考试）损失的分解。** 解线性SDE：Y_T = e^{RT}y₀ + ∫₀^T e^{R(T−t)}Z_t·dW_t；由e^{−RT}g的鞅表示，g = e^{RT}u₀ + ∫e^{R(T−t)}Z*_t·dW_t。于是Y_T − g = e^{RT}(y₀ − u₀) + ∫e^{R(T−t)}(Z − Z*)·dW。对适应、平方可积的Z，积分均值为零，交叉项消失，伊藤等距给出E|Y_T − g|² = e^{2RT}(y₀ − u₀)² + E∫e^{2R(T−t)}|Z − Z*|²dt。
+10. **（资格考试）下限。** 由第9题，损失至少为在阶梯过程上取最小的E∫|Z − Z*|²；每步上最好的常数是条件均值Z̄_i，且若E|Z*_t − Z*_s|² ≤ C|t − s|（Zhang 2004对利普希茨数据证明了这种L²正则性），Σ_iE∫|Z*_t − Z̄_i|²dt ≤ C T h：下限为O(1/N)。
+
+## 写给研究者
+
+* **定理。** Han、Jentzen与E（2018），*PNAS* 115；Han与Long（2020），*Probab. Uncertain. Quant. Risk* 5:5（定理1，后验估计）；Zhang（2004），*Ann. Appl. Probab.* 14，论Z的L²正则性。
+* **简化。** 精确恒等式只对线性情形；批损失在500次迭代上平均；每种步数一个种子，从不同的初始y₀出发；非线性的带取C = 1，这不是定理。
+* **开放问题。** 把价格与对冲分开的更紧证书；训练为何能达到小损失；可用于验证的可计算常数。

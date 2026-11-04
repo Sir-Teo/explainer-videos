@@ -40,7 +40,10 @@ PROBLEMS = [
     r"Show that in a complete market with zero rates the exponential-utility hedge of a claim under drift $\mu$ is "
     r"$\delta^* = \Delta + \mu / (\gamma\sigma^2 S)$.",
     r"Labels with Monte Carlo variance $s^2$: show that a held-out error against them is at least $s$, and explain why "
-    r"doubling $s^2$ need not double the network's error against the truth.",
+    r"doubling $s^2$ need not double the network's error against the truth.",    r"(qual) For $dY = RY\,dt + Z\cdot dW$, $Y_0 = y_0$, and $g = e^{RT}u_0 + \int e^{R(T-t)}Z^*\cdot dW$, show "
+    r"$\mathbb E|Y_T - g|^2 = e^{2RT}(y_0 - u_0)^2 + \mathbb E\int e^{2R(T-t)}|Z - Z^*|^2dt$ for adapted $Z$.",
+    r"(qual) With $Z$ constant on each of $N$ steps, show the loss cannot fall below $\min_{Z \text{ step}}\mathbb E\int "
+    r"|Z - Z^*|^2dt$, and that this is $O(1/N)$ when $Z^*$ is $\frac12$-H\"older in mean square.",
 ]
 
 
@@ -127,11 +130,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=23)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And eight problems: the indifference price, the band's scaling, the BSDE behind the deep solver, "
+            "And ten problems: the indifference price, the band's scaling, the BSDE behind the deep solver, "
             "differential regression, why deep stopping gives a lower bound, Leland's volatility, Merton's term in the "
-            "hedge, and what label noise does to a calibrator. Solutions, in English and Chinese, are in the notes."
+            "hedge, and what label noise does to a calibrator. Two are qualifying-exam problems: the loss "
+            "decomposition, and its floor. Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

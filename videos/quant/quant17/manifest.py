@@ -23,5 +23,6 @@ SCENES = [
     ("s12_production", "Production", "17. Production and model risk"),
     ("s12a_frontier", "Frontier", "18. The frontier, 2023 to 2026"),
     ("s13_house", "House", "19. Rule 17, tested"),
+    ("s15_research", "Research", "For the researcher: the deep BSDE's loss as an error certificate"),
     ("s14_outro", "Outro", "Recap, desk questions, problems"),
 ]
