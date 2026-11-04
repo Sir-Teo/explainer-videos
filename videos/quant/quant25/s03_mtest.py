@@ -187,9 +187,11 @@ class MTest(VoiceoverScene):
         fit_right(side)
         with self.voiceover(
             "Here is the procedure on the zoo, with a test that is honest: each predictor's returns after its paper was "
-            "published, through 2020, tested in the direction the paper claimed. <bookmark mark='a'/> The smallest "
-            "eighty p-values, sorted. The Benjamini-Hochberg line rises from the origin; the last crossing is at "
-            f"{nb}. Bonferroni's bar is almost flat on the axis, and only a handful get under it."
+            "published, through 2020, tested in the direction the paper claimed. These are returns no author could "
+            "have seen or chosen. <bookmark mark='a'/> The smallest eighty p-values, sorted. The Benjamini-Hochberg "
+            "line rises from the origin, and the last p-value under it is the twenty-fourth. Bonferroni's bar is "
+            "almost flat on the axis, and only a handful get under it. Between the two lies the choice of what error "
+            "a researcher is willing to make."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
             vo.wait_until("a")

@@ -202,7 +202,8 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "The textbooks this part follows, and the papers it draws on, from Holm's step-down test to the replication "
             "debate. Every number on screen was computed by the House's code from public data, with simulations "
-            "labelled as such."
+            "labelled as such. The predictors' returns are Chen and Zimmermann's open-source release, which anyone can "
+            "download and check against these numbers."
         ):
             self.play(FadeIn(card))
             self.wait(3)
@@ -213,7 +214,10 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 26, Backtesting Without Fooling Yourself", font_size=30, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The research desk has a factor library, a discount-factor model and a count of its own trials. "
+            "The research desk has a factor library, a discount-factor model and a count of its own trials. It knows "
+            "that the best of many tries looks better than it is, that published premia shrink, that most new factors "
+            "add nothing to the old ones, and that a shrunk combination of the whole zoo is a better guess than any "
+            "single winner. "
             "<bookmark mark='a'/> Next, Part twenty-six: backtesting without fooling yourself. Every way a backtest "
             "lies, each with a planted error to find; costs, funding and borrow; and the deflated Sharpe ratio."
         ) as vo:

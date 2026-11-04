@@ -48,7 +48,8 @@ class Track(VoiceoverScene):
             "December 2020 and scaled to ten percent volatility. <bookmark mark='b'/> Beside it, a benchmark with no "
             "estimation at all: every predictor in equal weights. <bookmark mark='c'/> Twenty values of kappa were "
             "tried, so the discount factor counts as twenty trials, the benchmark as one. <bookmark mark='d'/> The "
-            "data release ends in 2023, so the envelope holds thirty-six months."
+            "data release ends in 2023, so the envelope holds thirty-six months. Everything about the strategy was "
+            "fixed, hashed and recorded before the first of those months was read."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c", "d")):
                 vo.wait_until(mk)

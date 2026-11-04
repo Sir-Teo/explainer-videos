@@ -175,7 +175,8 @@ class Weak(VoiceoverScene):
             "Two habits follow. <bookmark mark='a'/> Before estimating any premium, check that the factor moves the "
             "test assets at all: the spread of its betas and their t-statistics. <bookmark mark='b'/> And be most "
             "suspicious of non-traded factors, consumption or inflation: they are often weak, and the premia "
-            "estimated for them from portfolio sorts can be almost anything."
+            "estimated for them from portfolio sorts can be almost anything. Part twenty-three's consumption model "
+            "was an example."
         ) as vo:
             for i, mk in enumerate(("a", "b")):
                 vo.wait_until(mk)

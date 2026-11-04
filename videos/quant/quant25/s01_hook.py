@@ -161,7 +161,9 @@ class Hook(VoiceoverScene):
         chart = house_chart(PART, lit=("research",))
         with self.voiceover(
             "In the House, the research desk adds its first statistical model of returns: a discount factor that "
-            "loads on the whole zoo at once, shrunk toward caution, and kept honest by counting every trial."
+            "loads on the whole zoo at once, shrunk toward caution, and kept honest by counting every trial. By the "
+            "end of the part it will be registered, and opened on the sealed years, like the factors of Part "
+            "twenty-four."
         ):
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["research"], color=QC.HOUSE, scale_factor=1.05))
