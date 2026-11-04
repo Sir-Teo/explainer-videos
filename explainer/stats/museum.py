@@ -401,3 +401,16 @@ MENDEL_DIHYBRID = (315, 108, 101, 32)
 # so closely that a fit this good would arise by chance less than once in ten thousand repetitions.
 # The lady tasting tea (Fisher 1935, ch. 2): eight cups, four with the milk poured first.
 TEA = {"cups": 8, "milk_first": 4}
+
+# The space shuttle's first 23 flights with recovered boosters (Dalal, Fowlkes & Hoadley, JASA 84, 1989; the UCI
+# "o-ring erosion only" file): launch temperature (deg F) and the number of the six field-joint O-rings with thermal
+# distress, in launch order.  Challenger launched on 28 January 1986; Dalal et al. analyse a forecast of 31 deg F.
+CHALLENGER_TEMP = [66, 70, 69, 68, 67, 72, 73, 70, 57, 63, 70, 78, 67, 53, 67, 75, 70, 81, 76, 79, 75, 76, 58]
+CHALLENGER_DISTRESS = [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 1]
+CHALLENGER_LAUNCH_F = 31
+# Berkeley graduate admissions, fall 1973, the six largest departments (Bickel, Hammel & O'Connell, Science 187,
+# 1975; R's UCBAdmissions): department -> (men admitted, men rejected, women admitted, women rejected).
+BERKELEY = {"A": (512, 313, 89, 19), "B": (353, 207, 17, 8), "C": (120, 205, 202, 391),
+            "D": (138, 279, 131, 244), "E": (53, 138, 94, 299), "F": (22, 351, 24, 317)}
+# Doll & Hill (BMJ, 1950), men: smokers among 649 lung-cancer patients and 649 matched controls.
+DOLL_HILL = {"cases": 649, "cases_smokers": 647, "controls": 649, "controls_smokers": 622}

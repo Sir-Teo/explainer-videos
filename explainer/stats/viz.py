@@ -1077,3 +1077,59 @@ class FieldPlot(VGroup):
         h = a.get_top()[1] - b.get_bottom()[1] + self.gap
         return Rectangle(width=w, height=h, color=color or S.ACCENT, stroke_width=stroke_width).move_to(
             [(a.get_left()[0] + b.get_right()[0]) / 2, (a.get_top()[1] + b.get_bottom()[1]) / 2, 0])
+
+
+class ChallengerDashboard(VGroup):
+    """Risk as a function of temperature (Part 14).  ``x, y`` are the flights (temperature, 0/1 distress) on axes ``ax``
+    whose y-axis runs 0-1; ``fit`` is a ``statkit.glm`` logistic fit on (1, x).  Draws the data as dots at 0 and 1 (ties
+    stacked), the fitted curve and its 95% Wald band, and a probe: a dashed line at the tracker ``tx`` with the fitted
+    probability and its interval read out.  ``slide_to(x)`` moves the probe; call ``stop()`` before clearing."""
+
+    def __init__(self, ax, x, y, fit, x0=None, color=None, band_color=None, font_size=26, stack=0.045, readout_pos=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.ax, self.fit = ax, fit
+        x, y = np.asarray(x, float), np.asarray(y, float)
+        x_lo, x_hi, _, _ = bounds(ax)
+        col = color or S.FIT
+        seen: dict = {}
+        self.dots = VGroup()
+        for a, b in zip(x, y):
+            k = seen.get((a, b), 0)
+            seen[(a, b)] = k + 1
+            off = (k * stack) * (-1 if b > 0.5 else 1)
+            self.dots.add(Dot(ax.c2p(a, b + off), radius=0.07, color=S.BROKEN if b > 0.5 else S.DATA))
+        xs = np.linspace(x_lo, x_hi, 240)
+        Xg = np.column_stack([np.ones_like(xs), xs])
+        lo, mid, hi = fit.predict_ci(Xg)
+        self.curve = VMobject(stroke_color=col, stroke_width=4).set_points_smoothly([ax.c2p(a, b) for a, b in zip(xs, mid)])
+        pts = [ax.c2p(a, b) for a, b in zip(xs, hi)] + [ax.c2p(a, b) for a, b in zip(xs[::-1], lo[::-1])]
+        self.band = Polygon(*pts, stroke_width=0, fill_color=band_color or col, fill_opacity=0.18)
+        self.tx = ValueTracker(x0 if x0 is not None else float(np.mean(x)))
+        self.readout_pos = np.array(readout_pos if readout_pos is not None else [4.6, 1.2, 0])
+
+        def probe():
+            t = self.tx.get_value()
+            p = float(fit.predict(np.array([1.0, t])))
+            return VGroup(DashedLine(ax.c2p(t, 0), ax.c2p(t, 1), color=S.ACCENT, stroke_width=2.5),
+                          Dot(ax.c2p(t, p), radius=0.1, color=S.ACCENT))
+
+        def readout():
+            t = self.tx.get_value()
+            lo_, p, hi_ = (float(v[0]) for v in fit.predict_ci(np.array([[1.0, t]])))
+            return VGroup(label(rf"{t:.0f}$^\circ$F", font_size=font_size, color=S.ACCENT),
+                          MathTex(rf"\hat p = {p:.4f}", font_size=font_size, color=col),
+                          MathTex(rf"[{lo_:.3f},\ {min(hi_, 0.9999):.4f}]", font_size=font_size - 4, color=GREY_A)
+                          ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to(self.readout_pos)
+
+        self.probe = always_redraw(probe)
+        self.readout = always_redraw(readout)
+        self.add(self.band, self.curve, self.dots)
+
+    def slide_to(self, x, run_time=2.0):
+        return self.tx.animate(run_time=run_time).set_value(x)
+
+    def stop(self):
+        for m in (self.probe, self.readout):
+            m.clear_updaters()
