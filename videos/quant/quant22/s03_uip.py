@@ -18,7 +18,7 @@ class UIP(VoiceoverScene):
 
     def card(self):
         c = chapter_card(2, r"Uncovered parity and the forward premium puzzle",
-                         r"Do high interest rates predict a falling currency?", lit=(1984,), part=PART)
+                         r"Do high interest rates predict a falling currency?", lit=(), part=PART)
         with self.voiceover("Chapter two. Uncovered interest parity, and the puzzle Eugene Fama found in it."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

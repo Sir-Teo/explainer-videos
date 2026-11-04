@@ -281,9 +281,9 @@ def compute_fxopt() -> dict:
         kc = M.strike_from_delta(S, Tn, qq["25c"], rd, rf, 0.25, 1, "forward")
         kp = M.strike_from_delta(S, Tn, qq["25p"], rd, rf, -0.25, -1, "forward")
         z = np.linspace(-1.6, 1.6, 33)
-        kk = Fn * np.exp(z * a_ * np.sqrt(Tn))
+        kn = Fn * np.exp(z * a_ * np.sqrt(Tn))
         term.append({"T": Tn, "atm": a_, "rr": r_, "bf": b_, "z": z,
-                     "vol": QT.vanna_volga(kk, Fn, Tn, [kp, ka, kc], [qq["25p"], a_, qq["25c"]], a_)})
+                     "vol": QT.vanna_volga(kn, Fn, Tn, [kp, ka, kc], [qq["25p"], a_, qq["25c"]], a_)})
     return _json({"S": S, "T": T, "rd": rd, "rf": rf, "F": F, "quotes": q, "rr": rr, "bf": bf, "term": term,
                   "K": {"25p": K25p, "atm": Katm, "25c": K25c}, "Ks": Ks, "vv": vv, "deltas": deltas,
                   "gk_atm": gk, "gk_pips": gk * 1e4, "vega_atm": float(g["vega"]) / 100,
