@@ -3353,3 +3353,27 @@ def test_systematic_trend_identity_and_books():
     x, e = SY.vol_target(rng.standard_normal(1000) * 0.02, 0.10)
     assert np.nanmax(e) <= 3.0
     assert SY.max_drawdown(np.array([0.1, -0.5, 0.2])) == -0.5
+
+
+def test_statarb_ou_band_and_decomposition():
+    import math
+    import numpy as np
+    from explainer.quant.house import statarb as SA
+    k, s = 1.0, math.sqrt(2.0)
+    m, R = SA.optimal_band(k, s, 0.3)
+    assert 0.8 < m < 1.3
+    sim = SA.simulate_band(m, k, s, 0.3, T=2000, dt=0.001, seed=3)
+    assert abs(sim["rate"] - R) / R < 0.1
+    assert abs(SA.band_rate(1e-4, k, s, 0.0) - s * math.sqrt(k / math.pi)) < 0.01
+    rng = np.random.default_rng(0)
+    x = np.zeros(5000)
+    for t in range(1, 5000):
+        x[t] = 0.9 * x[t - 1] + rng.standard_normal()
+    f = SA.ou_fit(x)
+    assert abs(f["b"] - 0.9) < 0.02 and abs(f["half_life"] - math.log(2) / -math.log(0.9)) < 1.0
+    R2 = rng.standard_normal((3000, 5)) * 0.01
+    d = SA.lo_mackinlay(R2)
+    assert abs(d["total"] - d["realised"]) < 2e-5
+    y = 2.0 * np.arange(200) / 200 + 0.01 * rng.standard_normal(200)
+    a, b = SA.kalman_beta(y, np.arange(200) / 200, q=1e-6, r=1e-4)
+    assert abs(b[-1] - 2.0) < 0.2

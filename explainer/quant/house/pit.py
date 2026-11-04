@@ -141,6 +141,7 @@ PARTS = {
     "lw_gmv_part30": (30, 1), "hrp_part30": (30, 2), "equal_weight_part30": (30, 3),
     "gp_calm_reversal_part31": (31, 1),
     "trend_part32": (32, 1), "riskparity_part32": (32, 2),
+    "residual_sscore_part33": (33, 1),
     "sestm_fomc_drift_part28": (28, 1),
 }
 
