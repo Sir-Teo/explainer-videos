@@ -13,7 +13,7 @@ models are labelled as illustrations on screen.
 SEBI matter is described as alleged, from the regulator's interim order and statements and the firm's public
 statements; no final finding had been made at the time of writing.*
 
-## Chapters (about 59 minutes)
+## Chapters (about 64 minutes)
 
 * **Gamma against theta (hook).** The desk question (a hedged straddle in a quiet week). May 2021 run live: a 30-day ATM
   BTC straddle bought at DVOL's 74%, hedged hourly, realized 127%, earned +1.7 on a premium of 16.9, the ledger's gamma
@@ -94,7 +94,20 @@ statements; no final finding had been made at the time of writing.*
   features (66 out-of-sample weeks): correlations with the outcome about zero; both learn only "sell", earning what
   always selling earns (+0.86 a week, t 2.6) against +0.32 for chapter 7's single signal. Bali–Beckmeyer–Mörke–Weigert
   (2023), Cao et al. (2023), Baldacci–Bergault–Guéant (2021), Fang–Xu (2023).
-* **The quoting engine, recap, desk questions, problems (outro).** The House's new functions; Rule 11; the trial
+* **For the researcher: demand-based option pricing.** A competitive mean-variance dealer who must hold −d options,
+  with hedged residuals ε (payoff less discrete delta-hedge gains), prices p = E[x] + γΣ_ε d (the first-order form of
+  Gârleanu, Pedersen and Poteshman 2009): own impact γVar ε_i, cross-impact γCov(ε_i, ε_j), none when Σ_ε = 0.
+  Simulation: a Merton jump-diffusion (σ 45%, 4 jumps a year of mean −8%, spread 10%), 30-day OTM options at strikes
+  80–120, hedged daily at the total volatility 52%, 40,000 paths: residual sd 1.1–2.0 per 100 (no jumps 0.4–0.9,
+  hourly 0.08–0.19). With γ set so that one unit of 85-put demand moves its own volatility one point, it moves the
+  80 put 1.1 points and the 120 call 0.19 (no jumps, daily: 0.13; hourly: 0.006); demand for every put adds 4.0 points
+  at 80 and 1.0 at 120, demand for calls tilts the smile the other way (1.4 at 80, 2.4 at 120). Exact exponential-
+  utility indifference against the first-order line, the short put's residual skewness 4.6: the marginal premium is
+  9% higher at one unit and 51% at four. Deribit taker flow on the Surface's two days, net share of traded vega: OTM
+  puts within 30 days −21%, beyond +14%; OTM calls −2% and −23%; near the money about 0. Three open problems; pause:
+  in dollars the 90 put rises more (1.08 of the 85's own impact, against 0.72 for the 80 put), in volatility the 80 put
+  (1.1 points against 0.8), because the 80 put has less vega.
+* **The quoting engine, recap, desk questions, ten problems (two at qualifying-exam level) (outro).** The House's new functions; Rule 11; the trial
   counter (310 when chapter 18 registered).
 
 ## Textbook audit
@@ -192,6 +205,24 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
    larger it is), so θ(q) − θ(q+1) increases in q and θ(q) − θ(q−1) decreases in q: when q grows the bid moves away
    from fair value and the ask moves toward it. Both quotes shift down, by about (q ± ½)√(φe/(Ak)) in the GLFT
    approximation.
+9. **(qual) Demand pressure.** A dealer who sells q options to end users at prices p and hedges them has wealth
+   W = q^⊤(p − E x) − q^⊤ε, with E W = q^⊤(p − E x) and Var W = q^⊤Σ_ε q. Maximizing
+   E W − (γ/2)Var W gives p − E x = γΣ_ε q, and market clearing q = d gives p = E x + γΣ_ε d. Then ∂p_i/∂d_j = γΣ_ij =
+   γΣ_ji = ∂p_j/∂d_i (symmetric, as Σ is), and with Σ_ε = 0 (perfect replication) p = E x whatever d is.
+10. **(qual) Exact exponential utility.** Short q units at price p with residual ε, the dealer's terminal wealth is
+   q(p − E x − ε). Indifference: E[−e^{−γq(p − Ex − ε)}] = −1, so p − E x = (1/(γq))log E e^{γqε}. With the cumulant
+   expansion log E e^{tε} = κ₂t²/2 + κ₃t³/6 + …, t = γq: p − E x = γqκ₂/2 + γ²q²κ₃/6 + … The first term is the
+   mean-variance (average) premium; a positive third cumulant, a residual that loses big in crashes, adds a term
+   growing like q², so large positions in crash protection are priced more than proportionally.
+## For the researcher
+
+* **The theorems.** Gârleanu, Pedersen and Poteshman (2009), "Demand-Based Option Pricing," *RFS* 22(10); Bollen and
+  Whaley (2004) on net buying pressure; Stoikov and Sağlam (2009) on option market making under inventory risk.
+* **Simplifications.** One period, a single competitive dealer with mean-variance preferences, delta hedges at a fixed
+  volatility rather than optimal hedges, γ chosen for scale; the Deribit flow is two days and the taker side is only a
+  proxy for end users.
+* **Open problems.** Identifying dealers' risk aversion; demand against risk in the volatility premium; dynamic
+  equilibrium with many dealers and inventories.
 
 ## Data and reproducibility
 
@@ -207,14 +238,14 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 
 # 量化金融，从零搭建 — 第11部分：交易期权
 
-第三幕中属于从业者的一部分：开场、十八章和结尾，约58分钟。每个数字都由本系列自己的代码计算（`compute.py`；公司库的`quoting`、`hedge`、
+第三幕中属于从业者的一部分：开场、十八章、写给研究者的一章和结尾，约64分钟。每个数字都由本系列自己的代码计算（`compute.py`；公司库的`quoting`、`hedge`、
 `sim`和`trees`，在`tests/test_quant_house.py`中测试），数据来自Deribit的成交和DVOL、币安的BTCUSDT小时数据、第12部分的每周Deribit微笑、
 芝加哥期权交易所的COR3M、FRED的VIX、肯尼斯·弗伦奇的市场与行业数据，以及公开的监管与法院记录。玩具模型在画面上标明为示意。
 
 *讲的是方法，不构成投资建议。期权策略的结果是历史的、只针对一个市场。SEBI一案根据监管机构的临时命令和声明以及该公司的公开声明描述为指控；
 截至撰写时尚无最终认定。*
 
-## 各章（约59分钟）
+## 各章（约64分钟）
 
 * **伽马对时间损耗（开场）。** 交易台问题；实时重放2021年5月：按DVOL的74%买入、每小时对冲的三十天平值比特币跨式组合，已实现127%，
   在16.9的权利金上只赚+1.7。历史：1973、1985、1987、2018–2020、2021、2024。
@@ -246,6 +277,8 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 * **16. 危机档案。** 两本示意性的做空看跌账（近对冲与深对冲），2020年3月回撤−26.6与−36.3；LJM与安联Structured Alpha。
 * **17. 业界。** OCC成交量；散户期权与批发商；SIG、Optiver、IMC、简街；CFTC诉Optiver；交易台的循环。
 * **18. 前沿。** 登记过的样本外预测器：与结果的相关性约为零，只学会了"卖"；巴利等人、曹等人、巴尔达奇等人、方与许。
+* **写给研究者：基于需求的期权定价。** 必须持有−d份期权、对冲后残差为ε（收益减去离散Delta对冲收益）的竞争性均值–方差交易商定价为p = E[x] + γΣ_ε d（格尔莱亚努、佩德森与波特什曼2009的一阶形式）：自身冲击γVar ε_i，交叉冲击γCov(ε_i, ε_j)，Σ_ε = 0时为零。模拟：默顿跳跃扩散（σ 45%，每年4次、均值−8%、离散度10%的跳跃），执行价80–120的30天虚值期权，按总波动率52%每日对冲，40,000条路径：残差标准差每100为1.1–2.0（无跳跃0.4–0.9，每小时0.08–0.19）。取γ使一单位85看跌需求将其自身波动率抬高一点，则80看跌抬高1.1点、120看涨0.19点（无跳跃每日0.13，每小时0.006）；对每个看跌的需求在80处加4.0点、120处1.0点，对看涨的需求让微笑反向倾斜（80处1.4、120处2.4）。精确指数效用无差异价与一阶线对照，卖出看跌残差偏度4.6：边际溢价在一单位时高9%，四单位时高51%。曲面两天的Deribit吃单流量，占成交vega的净份额：30天内虚值看跌−21%，以上+14%；虚值看涨−2%与−23%；平值附近约为0。三个开放问题；暂停题：以美元计90看跌涨得更多（为85自身冲击的1.08，80看跌为0.72），以波动率计80看跌更多（1.1点对0.8点），因为80看跌的vega更小。
+* **结尾：报价引擎、回顾、交易台问题、十道习题（两道为资格考试水平）。**
 
 ## 教材对照
 
@@ -302,6 +335,14 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 8. **最优报价的方向。** 由一阶条件δ^{b*} = 1/k + θ(q) − θ(q+1)，δ^{a*} = 1/k + θ(q) − θ(q−1)。价值θ对q是凹的（惩罚−φq²使库存越大，
    多一单位越贵），所以θ(q) − θ(q+1)随q增大、θ(q) − θ(q−1)随q减小：q增大时买价远离公允价值、卖价靠近它。两个报价都下移，
    在GLFT近似下约为(q ± ½)√(φe/(Ak))。
+9. **（资格考试）需求压力。** 持有q份期权、残差为ε的交易商财富为W = q^⊤(p − E x) − q^⊤ε，E W = q^⊤(p − E x)，Var W = q^⊤Σ_ε q。最大化E W − (γ/2)Var W得p − E x = γΣ_ε q，市场出清q = d给出p = E x + γΣ_ε d。于是∂p_i/∂d_j = γΣ_ij = ∂p_j/∂d_i（对称），Σ_ε = 0（完美复制）时无论d为何p = E x。
+10. **（资格考试）精确的指数效用。** 以价格p卖出q单位、残差为ε时，期末财富为q(p − E x − ε)。无差异条件E[−e^{−γq(p − Ex − ε)}] = −1给出p − E x = (1/(γq))log E e^{γqε}。由累积量展开log E e^{tε} = κ₂t²/2 + κ₃t³/6 + …，t = γq：p − E x = γqκ₂/2 + γ²q²κ₃/6 + …。第一项是均值–方差（平均）溢价；正的三阶累积量，即在崩盘中大亏的残差，增加一个按q²增长的项，所以对崩盘保护的大仓位被定价得超过比例。
+
+## 写给研究者
+
+* **定理。** 格尔莱亚努、佩德森与波特什曼（2009），《基于需求的期权定价》，*RFS* 22(10)；Bollen与Whaley（2004）论净买入压力；Stoikov与Sağlam（2009）论库存风险下的期权做市。
+* **简化。** 单期、单一竞争性的均值–方差交易商、按固定波动率做Delta对冲而非最优对冲、γ只为确定尺度；Deribit的流量只有两天，吃单方只是终端用户的代理。
+* **开放问题。** 识别交易商的风险厌恶；波动率溢价中需求与风险之分；多交易商、跨期库存下的动态均衡。
 
 ## 数据与可复现性
 

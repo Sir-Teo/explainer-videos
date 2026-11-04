@@ -1250,7 +1250,92 @@ ITEMS_NEW = {"buckets": compute_buckets, "explain": compute_explain, "scalp_shuf
              "frontier_ml": compute_frontier_ml}
 
 
-ITEMS = {"scalp": compute_scalp, "edge": compute_edge, "mm": compute_mm, "dispersion": compute_dispersion,
+def compute_demand_theory() -> dict:
+    """The research chapter: demand-based option pricing (Garleanu, Pedersen and Poteshman 2009).  A competitive,
+    risk-averse dealer who must absorb end users' net demand d and can only hedge in discrete time, with jumps, keeps a
+    residual risk eps = payoff - hedge gains; to first order the price is p = E[x] + gamma Cov(eps) d.  Demand raises
+    the price of what is bought, and of everything whose residual risk covaries with it; with no residual risk demand
+    has no effect.  Checked against the exact exponential-utility indifference price, then a look at the taker flow on
+    the Surface's two days of Deribit trades."""
+    from explainer.quant.house import sim
+
+    S0, T, n = 100.0, 30 / 365, 30
+    sig, lam, mj, sj = 0.45, 4.0, -0.08, 0.10
+    sig_tot = float(np.sqrt(sig ** 2 + lam * (mj ** 2 + sj ** 2)))
+    Ks = np.arange(80.0, 121.0, 5.0)
+    cps = np.where(Ks < 100, -1, 1)
+    P = 40000
+
+    def residuals(S, hedge_vol):
+        dt = T / (S.shape[1] - 1)
+        eps, fair = [], []
+        for K, cp in zip(Ks, cps):
+            x = np.maximum(cp * (S[:, -1] - K), 0)
+            H = np.zeros(len(S))
+            for k in range(S.shape[1] - 1):
+                d = bs.greeks(S[:, k], K, T - k * dt, hedge_vol, cp=cp)["delta"]
+                H += d * (S[:, k + 1] - S[:, k])
+            fair.append(x.mean())
+            e = x - H
+            eps.append(e - e.mean())
+        return np.array(eps), np.array(fair)
+
+    S = sim.merton_jumps(S0, 0.0, sig, lam, mj, sj, T, n, P, seed=1111)
+    E, fair = residuals(S, sig_tot)
+    Sig = np.cov(E)
+    ivs = np.array([float(bs.implied_vol(f, S0, K, T, cp=int(c))) for f, K, c in zip(fair, Ks, cps)])
+    veg = np.array([float(bs.greeks(S0, K, T, v, cp=int(c))["vega"]) for K, v, c in zip(Ks, ivs, cps)])
+    j85 = int(np.where(Ks == 85)[0][0])
+    gam = 0.01 * veg[j85] / Sig[j85, j85]     # one unit of demand for the 85 put moves its own vol one point
+    scen = {"put85": np.eye(len(Ks))[j85], "puts": (Ks < 100).astype(float), "calls": (Ks > 100).astype(float)}
+    out = {"K": Ks, "cp": cps, "fair_iv": ivs, "sigma": sig, "lam": lam, "mj": mj, "sj": sj, "hedge_vol": sig_tot,
+           "gamma": gam, "resid_sd": np.sqrt(np.diag(Sig)), "corr": np.corrcoef(E), "cross_85": Sig[:, j85] / Sig[j85, j85],
+           "scen": {}}
+    for k, d in scen.items():
+        dp = gam * Sig @ d
+        iv = np.array([float(bs.implied_vol(f + q, S0, K, T, cp=int(c))) for f, q, K, c in zip(fair, dp, Ks, cps)])
+        out["scen"][k] = {"dp": dp, "iv": iv, "d_iv_pts": 100 * (iv - ivs)}
+    # no residual risk, no effect: diffusion only, hedged daily and hourly at the true volatility
+    for name, steps, lam_ in (("diff_daily", 30, 0.0), ("diff_hourly", 720, 0.0)):
+        Sd = sim.merton_jumps(S0, 0.0, sig_tot, lam_, 0.0, 0.0, T, steps, 8000, seed=1112)
+        Ed, _ = residuals(Sd, sig_tot)
+        out[name] = {"resid_sd": np.sqrt(np.var(Ed, axis=1)), "put85_d_iv_pts": 0.0}
+        dp = gam * np.cov(Ed)[:, j85]
+        out[name]["put85_d_iv_pts"] = float(100 * (bs.implied_vol(fair[j85] + dp[j85], S0, 85.0, T, cp=-1) - ivs[j85]))
+    # exact exponential-utility indifference against the first-order formula, for a dealer short q of the 85 put
+    e85 = E[j85]
+    qs = np.linspace(0.05, 4.0, 40)
+    exact_avg = [float(np.log(np.mean(np.exp(gam * q * e85))) / (gam * q)) for q in qs]
+    exact_marg = [float(np.mean(e85 * np.exp(gam * q * e85)) / np.mean(np.exp(gam * q * e85))) for q in qs]
+    out["indiff"] = {"q": qs, "exact_avg": exact_avg, "mv_avg": list(0.5 * gam * qs * Sig[j85, j85]),
+                     "exact_marg": exact_marg, "mv_marg": list(gam * qs * Sig[j85, j85]),
+                     "skew_eps": float(np.mean(e85 ** 3) / np.std(e85) ** 3)}
+    # the Surface's two days: taker flow by moneyness and expiry, in vega
+    flow = {}
+    for day in surface.DAYS:
+        for t in data.deribit_trades(day):
+            exp, K, cp = surface.parse_instrument(t["instrument_name"])
+            tau = (exp.timestamp() - t["timestamp"] / 1e3) / (365 * 86400)
+            if tau <= 1 / 365 or not t.get("iv"):
+                continue
+            m = K / t["index_price"]
+            mb = "otm_put" if (cp < 0 and m < 0.95) else "otm_call" if (cp > 0 and m > 1.05) else "near"
+            if mb == "near" and not (0.95 <= m <= 1.05):
+                mb = "itm"
+            tb = "short" if tau <= 30 / 365 else "long"
+            v = float(bs.greeks(t["index_price"], K, tau, t["iv"] / 100, cp=cp)["vega"]) / 100 * t["amount"]
+            sgn = 1 if t["direction"] == "buy" else -1
+            f = flow.setdefault(f"{mb}_{tb}", {"net_vega": 0.0, "gross_vega": 0.0, "trades": 0})
+            f["net_vega"] += sgn * v
+            f["gross_vega"] += v
+            f["trades"] += 1
+    for f in flow.values():
+        f["net_share"] = f["net_vega"] / f["gross_vega"] if f["gross_vega"] else 0.0
+    out["flow"] = flow
+    return _json(out)
+
+
+ITEMS = {"demand_theory": compute_demand_theory, "scalp": compute_scalp, "edge": compute_edge, "mm": compute_mm, "dispersion": compute_dispersion,
          "alleged": compute_alleged, "hedging": compute_hedging, "envelope": compute_envelope, **ITEMS_NEW}
 
 if __name__ == "__main__":

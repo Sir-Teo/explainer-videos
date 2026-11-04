@@ -28,7 +28,12 @@ PROBLEMS = [
     r"Derive vanna $= -\varphi(d_1)d_2/\sigma$ and volga $= \mathcal{V}d_1d_2/\sigma$, and show volga $\approx 0$ at the "
     r"money.",
     r"Show that the P\&L of a vega-matched dispersion trade has the sign of $\rho_{\text{impl}} - \rho_{\text{real}}$.",
-    r"From the HJB of chapter 9, show that the optimal quotes move down when inventory is long.",
+    r"From the HJB of chapter 9, show that the optimal quotes move down when inventory is long.",    r"(qual) A competitive mean-variance dealer must hold $-d$ options with hedged residuals $\varepsilon$. Derive "
+    r"$p = \mathbb E x + \gamma\Sigma_\varepsilon d$, show the cross-effects $\partial p_i/\partial d_j$ are symmetric, and "
+    r"that demand has no effect when $\Sigma_\varepsilon = 0$.",
+    r"(qual) For an exponential-utility dealer short $q$ units, show the indifference premium is "
+    r"$\frac{1}{\gamma q}\log\mathbb E\,e^{\gamma q\varepsilon} = \frac{\gamma q}{2}\kappa_2 + \frac{\gamma^2q^2}{6}\kappa_3 + \dots$ "
+    r"in the cumulants of $\varepsilon$; what does a crash-skewed residual do to large positions?",
 ]
 
 
@@ -150,12 +155,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And eight problems: the gamma-theta integral, gamma at expiry, implied correlation for two assets, the "
+            "And ten problems: the gamma-theta integral, gamma at expiry, implied correlation for two assets, the "
             "die game with an informed counterparty, the scaling of the hedging band, vanna and volga, the sign of "
-            "the dispersion trade, and the direction of the optimal quotes. Solutions, in English and Chinese, are "
-            "in the notes."
+            "the dispersion trade, and the direction of the optimal quotes. Two are qualifying-exam problems: the "
+            "dealer's demand pressure, and its exact form under exponential utility. Solutions, in English and "
+            "Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)

@@ -22,5 +22,6 @@ SCENES = [
     ("s19_shortvol", "ShortVol", "16. Crisis file: when short volatility blows up"),
     ("s20_industry", "Industry", "17. Industry: who makes options markets"),
     ("s21_frontier", "Frontier", "18. Frontier: learning to trade options"),
+    ("s22_research", "Research", "For the researcher: demand-based option pricing"),
     ("s10_outro", "Outro", "The quoting engine, recap, desk questions, problems"),
 ]

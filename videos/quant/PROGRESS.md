@@ -64,6 +64,9 @@ one research chapter, two exam problems and the README section per part, in orde
 | 5 | the error in realized variance: the CLT proved, coverage by frequency, the log statistic (noise and jumps are Part 7's) | `rv_theory` |
 | 6 | predictive regressions near a unit root: local-to-unity, size by persistence and T | `predreg_theory` |
 | 7 | comparing nested forecasts: DM's degeneracy, Clark-West, size and power, HAR/HARQ on Bitcoin | `nested_theory` |
+| 8 | estimation risk in Merton's rule: the plug-in's expected CE, Kan-Zhou scaling, chi-squared correction, US out of sample | `estrisk_theory` |
+| 9 | arbitrage with frictions: fBM's memory, the sign strategy, the best frequency under costs, consistent price systems, Bitcoin minutes | `friction_theory` |
+| 10 | when to rebalance a hedge: exit-time variance, the Gamma^-1/2 band and Fukasawa's bound, four rules simulated, Bitcoin hedges | `hedgetime_theory` |
 
 Before choosing a topic, grep the whole series for it: Part 3's first draft repeated Part 6's chapter 5 and was moved.
 
