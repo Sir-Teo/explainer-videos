@@ -78,11 +78,9 @@ class Hook(VoiceoverScene):
             wrapped_label(rf"chapter 6 of Part 18, backwards: a loss of \$1.5--1.7 bn on \${p['assets']} bn, after a "
                           rf"{100 * y['dy5']:.1f}-point rise in the 5-year yield, means an average duration of "
                           rf"{lo:.1f}--{hi:.1f} years", 4.4, 19, GREY_A),
-            label(r"Pause and predict: what did a 1994 option on rates need to know that a bond's duration does not "
-                  r"tell you?", font_size=22, color=QC.IDEA),
+            wrapped_label(r"Pause and predict: what did a 1994 option on rates need to know that a bond's duration does "
+                          r"not tell you?", 4.4, 21, QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).to_edge(RIGHT, buff=0.4)
-        if side[1].width > 4.6:
-            side[1].scale_to_fit_width(4.6)
         with self.voiceover(
             "The most famous casualty was Orange County, California. Its treasurer ran investment pools for the county "
             f"and its towns: about {p['equity']} billion dollars of their money, borrowed against by reverse repo to "

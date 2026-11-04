@@ -4,6 +4,14 @@
    "at": "2026-11-04",
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
   },
+  "gbm_default_holdout|edgar_default_firm_years": {
+   "at": "2026-11-04",
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
+  },
+  "logit_default_holdout|edgar_default_firm_years": {
+   "at": "2026-11-04",
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
+  },
   "mlp_bond_premia_oos|gsw_bond_rx": {
    "at": "2026-11-04",
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
@@ -191,6 +199,35 @@
    },
    "trials": 1
   },
+  "gbm_default_holdout": {
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f",
+   "params": {
+    "features": [
+     "WC/TA",
+     "RE/TA",
+     "EBIT/TA",
+     "ME/TL",
+     "S/TA",
+     "NI/TA",
+     "TL/TA",
+     "Cash/TA",
+     "CFO/TA",
+     "log TA",
+     "log ME",
+     "Int/TA"
+    ],
+    "fit": "fiscal years 2010-2016",
+    "holdout": "2021-2023 (sealed)",
+    "models": [
+     "logit, ridge 1e-3",
+     "boosted trees: depth 3, lr 0.05, min leaf 30, 0.8 rows, early stopping on validation log loss, max 600 trees"
+    ],
+    "prep": "winsorise 1/99% on the fit years, median-impute, standardise",
+    "target": "a bankruptcy filing (8-K Item 1.03) 3-15 months after the fiscal year end",
+    "validation": "2017-2020"
+   },
+   "trials": 1
+  },
   "industry_capm_alphas": {
    "code_sha256": "54f561ad6d5881bce05e5be15386f78d40065cddafb61214ab959da2ba4fe2fa",
    "params": {
@@ -211,6 +248,35 @@
     "apply": "1973-2020",
     "choose": "1926-1972",
     "grid": "0..5 step 0.02"
+   },
+   "trials": 1
+  },
+  "logit_default_holdout": {
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f",
+   "params": {
+    "features": [
+     "WC/TA",
+     "RE/TA",
+     "EBIT/TA",
+     "ME/TL",
+     "S/TA",
+     "NI/TA",
+     "TL/TA",
+     "Cash/TA",
+     "CFO/TA",
+     "log TA",
+     "log ME",
+     "Int/TA"
+    ],
+    "fit": "fiscal years 2010-2016",
+    "holdout": "2021-2023 (sealed)",
+    "models": [
+     "logit, ridge 1e-3",
+     "boosted trees: depth 3, lr 0.05, min leaf 30, 0.8 rows, early stopping on validation log loss, max 600 trees"
+    ],
+    "prep": "winsorise 1/99% on the fit years, median-impute, standardise",
+    "target": "a bankruptcy filing (8-K Item 1.03) 3-15 months after the fiscal year end",
+    "validation": "2017-2020"
    },
    "trials": 1
   },
@@ -334,6 +400,12 @@
    "first": 20210101,
    "last": 20251231,
    "n": 1826
+  },
+  "edgar_default_firm_years": {
+   "digest": "59add85e1551ed1064262b875c4acd64145c292ee5195b9f53bcf61945b816f8",
+   "first": 20211231,
+   "last": 20231231,
+   "n": 11946
   },
   "fred/A794RX0Q048SBEA": {
    "digest": "42c3210adf01003ab30a8891d05baf17f39843a97eb3249c1666d3f9258ff9d9",

@@ -112,10 +112,11 @@ def compute_kmv() -> dict:
     r = 0.03
     for tk, (cik, name) in KMV_FIRMS.items():
         px = data.yahoo_daily(tk, "2017-01-01", "2025-11-30")
-        f = data.sec_facts(cik, ("LiabilitiesCurrent", "LongTermDebtNoncurrent", "LongTermDebt",
-                                 "dei:EntityCommonStockSharesOutstanding"))["facts"]
+        debt_tags = ("LongTermDebtNoncurrent", "LongTermDebtAndCapitalLeaseObligations", "LongTermDebt")
+        f = data.sec_facts(cik, ("LiabilitiesCurrent",) + debt_tags + ("dei:EntityCommonStockSharesOutstanding",))["facts"]
         fl, cl = _quarterly(f, "LiabilitiesCurrent")
-        ltd_c = "LongTermDebtNoncurrent" if len(f["LongTermDebtNoncurrent"]) else "LongTermDebt"
+        # the first tag the company used continuously from 2018 (filers differ in how they tag their debt)
+        ltd_c = next(c for c in debt_tags if f[c] and min(x["end"] for x in f[c]) <= "2018-03-31")
         fd, ld = _quarterly(f, ltd_c)
         fs, sh = _quarterly(f, "dei:EntityCommonStockSharesOutstanding")
         d = px["date"]
@@ -347,7 +348,11 @@ def compute_models() -> dict:
              "safe": float(y[h][alt[h] >= 2.99].mean()),
              "share": [float(np.mean(alt[h] < 1.81)), float(np.mean((alt[h] >= 1.81) & (alt[h] < 2.99))),
                        float(np.mean(alt[h] >= 2.99))]}
+    cik = np.asarray(d["cik"], int)
+    firms = {tk: [{"fy": int(fy[i]), "logit": float(pl[i]), "gbm": float(pg[i]), "y": int(y[i])}
+                  for i in np.where(cik == c_)[0]] for tk, (c_, _) in KMV_FIRMS.items()}
     return _json({"results": res, "roc": roc, "calib": calib, "top_decile_capture": float(y[h][top].sum() / y[h].sum()),
+                  "firms": firms,
                   "logit_beta": b, "gbm_importance": g.importance(len(FEATURES)), "gbm_trees": len(g.trees),
                   "features": FEATURES, "zones": zones, "registered": reg, "trials": pit.trials_so_far(),
                   "rule": MODEL_RULE, "val_loss": g.val_loss})
@@ -385,19 +390,16 @@ def compute_copula() -> dict:
     rhos = np.linspace(0.01, 0.9, 45)
     tr = {"equity 0-3%": (0.0, 0.03), "mezzanine 3-7%": (0.03, 0.07), "senior 15-30%": (0.15, 0.30)}
     el = {k: [CR.lhp_tranche_el(pd_, r_, R, a, d) for r_ in rhos] for k, (a, d) in tr.items()}
-    # a 't-copula market': price [0, d] tranches by simulation under t, read off the Gaussian base correlations
+    # a market that prices a calm state (correlation 5%, 85% of the time) and a systemic one (80%, 15%): price the
+    # [0, d] tranches there, and read off the one flat Gaussian correlation that matches each: the base correlations
     dets = [0.03, 0.07, 0.10, 0.15, 0.30]
+    mix = [(0.05, 0.85), (0.8, 0.15)]
     Lt = (1 - R) * kt / N
-    base = []
-    for d_ in dets:
-        e = float(CR.tranche_loss(Lt, 0, d_).mean())
-        try:
-            base.append(CR.base_correlation(e, pd_, R, d_))
-        except ValueError:
-            base.append(float("nan"))
+    base = [CR.base_correlation(sum(w * CR.lhp_tranche_el(pd_, r_, R, 0, d_) for r_, w in mix), pd_, R, d_)
+            for d_ in dets]
     tail = {"gauss": float(np.mean((1 - R) * kg / N > 0.15)), "t": float(np.mean(Lt > 0.15))}
     return _json({"pts": pts, "rho2": rho, "nu": nu, "losses_g": (1 - R) * kg / N, "losses_t": Lt, "rhos": rhos,
-                  "el": el, "dets": dets, "base": base, "pd": pd_, "R": R, "N": N, "tail": tail})
+                  "el": el, "dets": dets, "base": base, "mix": mix, "pd": pd_, "R": R, "N": N, "tail": tail})
 
 
 def compute_cjs() -> dict:

@@ -17164,10 +17164,20 @@
   "bytes": 4209,
   "source": "https://efts.sec.gov/LATEST/search-index?q=%22Item%201.03%22&forms=8-K&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&from=0"
  },
+ "edgar/facts/CIK0000006201/LiabilitiesCurrent_LongTermDebt_LongTermDebtAndCapitalLeaseObligations_LongTermDebtNoncurrent_dei:EntityCommonStockShare/through_2025-12-31": {
+  "sha256": "1ea292dffb057c64c5e2635838f54a0e2023dbbe6caaf5b0bbb994054ea14bc8",
+  "bytes": 33313,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000006201.json"
+ },
  "edgar/facts/CIK0000006201/LiabilitiesCurrent_LongTermDebt_LongTermDebtNoncurrent_dei:EntityCommonStockSharesOutstanding/through_2025-12-31": {
   "sha256": "93da4a4817daf268cb41e34657fd2b6a46d477ed09a04ae0df692f69e1a40fde",
   "bytes": 24919,
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000006201.json"
+ },
+ "edgar/facts/CIK0000012927/LiabilitiesCurrent_LongTermDebt_LongTermDebtAndCapitalLeaseObligations_LongTermDebtNoncurrent_dei:EntityCommonStockShare/through_2025-12-31": {
+  "sha256": "012db1cf7a3f1d8a62ded66c7e8ac5e4a31732faefb13ff4a000411ab5a20102",
+  "bytes": 32712,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000012927.json"
  },
  "edgar/facts/CIK0000012927/LiabilitiesCurrent_LongTermDebt_LongTermDebtNoncurrent_dei:EntityCommonStockSharesOutstanding/through_2025-12-31": {
   "sha256": "4b11ad324e93c79ab0647bc808c036363ab9d5f6a7f15117b7c77c7b428dcc88",
@@ -17198,6 +17208,16 @@
   "sha256": "0abaebdd7c6555fd4e136010ed6a0fdad764a7c31c8ece3f99448905907fab0c",
   "bytes": 6617,
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001287750.json"
+ },
+ "edgar/facts/CIK0001513761/LiabilitiesCurrent_LongTermDebt_LongTermDebtAndCapitalLeaseObligations_LongTermDebtNoncurrent_dei:EntityCommonStockShare/through_2025-12-31": {
+  "sha256": "4e9f2c910147e0ed5de6675150efe3412cababdbb6bd8f8cf13e46918bb2f8e0",
+  "bytes": 23419,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001513761.json"
+ },
+ "edgar/facts/CIK0001513761/LiabilitiesCurrent_LongTermDebt_LongTermDebtNoncurrent_dei:EntityCommonStockSharesOutstanding/through_2025-12-31": {
+  "sha256": "e27917b9240dab475d2f3dcc16f427b2327f192ddc324da8a4856017352390ed",
+  "bytes": 14223,
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001513761.json"
  },
  "edgar/frames/dei/EntityPublicFloat/USD/CY2009Q2I": {
   "sha256": "ccaf2a992e090e96144368af5341f190cabb9a122f19c64c542b1a7598445943",
@@ -17239,10 +17259,45 @@
   "bytes": 369362,
   "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2016Q2I.json"
  },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2017Q2I": {
+  "sha256": "ff4199e5ca7074611667fdf6545935f6f14c06693027450f2dedad3d7741215c",
+  "bytes": 365031,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2017Q2I.json"
+ },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2018Q2I": {
+  "sha256": "7a0b9dbb96315aff4714c8a4ec32517021602fc6709e7c51f8b7d3027d90e361",
+  "bytes": 359741,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2018Q2I.json"
+ },
  "edgar/frames/dei/EntityPublicFloat/USD/CY2019Q2I": {
   "sha256": "262ed29d0629fd03bcd720b5c9b5a1080e01d29d46e39685c8afc919d6b278b9",
   "bytes": 345548,
   "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2019Q2I.json"
+ },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2020Q2I": {
+  "sha256": "4b634a1bc2e34a601a252793da515342f776a1cc92beed34bed2b371c31cfc02",
+  "bytes": 354785,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2020Q2I.json"
+ },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2021Q2I": {
+  "sha256": "5ead86b5233688d35497ebc63583878b647d30c89c448bbddbca9f89d7777198",
+  "bytes": 411166,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2021Q2I.json"
+ },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2022Q2I": {
+  "sha256": "4c72456e94fc3d11979b4de5ca8797a78c95ca4ec89406384e0bb84f6c98e471",
+  "bytes": 406156,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2022Q2I.json"
+ },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2023Q2I": {
+  "sha256": "76ae5af96e1882fb034cd0e510a5713b23173bdd41ebb4c01f4c264ef7667c3a",
+  "bytes": 371333,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2023Q2I.json"
+ },
+ "edgar/frames/dei/EntityPublicFloat/USD/CY2024Q2I": {
+  "sha256": "f6f884fa9fa3232e99962942043ba9f577f55c44c07112124c48f4c633b11c6b",
+  "bytes": 353746,
+  "source": "https://data.sec.gov/api/xbrl/frames/dei/EntityPublicFloat/USD/CY2024Q2I.json"
  },
  "edgar/frames/us-gaap/Assets/USD/CY2009Q4I": {
   "sha256": "4260b31e7097edd0dcab2e2d5cded468e9ba42d92e3a394c997428a369b22590",
@@ -17289,10 +17344,40 @@
   "bytes": 524510,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2017Q4I.json"
  },
+ "edgar/frames/us-gaap/Assets/USD/CY2018Q4I": {
+  "sha256": "e4346059cc04bcfdc8aff4dfaf83b56d12fe812d029fda9c8824cac2e640e4b4",
+  "bytes": 510664,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2018Q4I.json"
+ },
  "edgar/frames/us-gaap/Assets/USD/CY2019Q4I": {
   "sha256": "bad9efb69fa84950849be0654663a2e52e1765c164493d91637836b93a6153ac",
   "bytes": 501013,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/Assets/USD/CY2020Q4I": {
+  "sha256": "6f5348e2ee8c4eed767bdab3ab3e28b069c814a8a8b08831d03dbe50c78c572d",
+  "bytes": 557935,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/Assets/USD/CY2021Q4I": {
+  "sha256": "d9a6f8085af78675bef3913d1255a38f7a814b250da6a2f5c3d0dbfebae1bc11",
+  "bytes": 589911,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/Assets/USD/CY2022Q4I": {
+  "sha256": "785b41d7f79d2331fe9879ccb9a652f54ec80a0f5566ba3e9c12e76b4a66a063",
+  "bytes": 562536,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/Assets/USD/CY2023Q4I": {
+  "sha256": "cd38737c4e95b574b2855e203b225d909572a2e08b6991a3f3e888c438b823ed",
+  "bytes": 524755,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/Assets/USD/CY2024Q4I": {
+  "sha256": "a705aac3311d11336911ec14ee1e0aa847694e03908b9550d9fa0a6dd90f5f79",
+  "bytes": 513345,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2024Q4I.json"
  },
  "edgar/frames/us-gaap/AssetsCurrent/USD/CY2009Q4I": {
   "sha256": "4b5759d95fd3ca1be01c9dd1addf9867506fc063d30ddb8be13f9e6d38804a5c",
@@ -17339,6 +17424,41 @@
   "bytes": 405923,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2017Q4I.json"
  },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2018Q4I": {
+  "sha256": "f05092d8516aa58afdac0b7798bebc217b301d7bfd3ecbd6ad1be4075e35bfd4",
+  "bytes": 398705,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2019Q4I": {
+  "sha256": "8bd2e26a3daad8bfd54bf7bf50e32b473c6dccb3484b0c45d0a4918e76a8cf39",
+  "bytes": 394631,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2020Q4I": {
+  "sha256": "2ded4626c1c4077220af49c523f5f8fc0ab1ad743f31add37b944e2029c0a1ee",
+  "bytes": 446844,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2021Q4I": {
+  "sha256": "3d55d41a106183f77c49459c45973870a8aed60b99b0c72c227f62fd2650c9c4",
+  "bytes": 480594,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2022Q4I": {
+  "sha256": "6167002308f0d8692a2ebb26943853739c5d7cd8c0b7ad471df7bb2a9759d354",
+  "bytes": 449914,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2023Q4I": {
+  "sha256": "ba4ad0473b346d451e47ff98097a9c4835f9b35205be55d71d3105ea582f89d8",
+  "bytes": 411972,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/AssetsCurrent/USD/CY2024Q4I": {
+  "sha256": "564fcd716091a71670fc3b76ca6899ab18920e3cb17e578afdaf63991eea2d63",
+  "bytes": 398312,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/AssetsCurrent/USD/CY2024Q4I.json"
+ },
  "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2009Q4I": {
   "sha256": "9ea8bc5c94b9e4554a5d29bb82aeb247430145c2bc48f470c49696b2945b9b80",
   "bytes": 466731,
@@ -17383,6 +17503,41 @@
   "sha256": "71c119911f6aba776b4b45bdc67a5027dfd4533d2fd48fbf59cfbd988ef32071",
   "bytes": 487474,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2017Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2018Q4I": {
+  "sha256": "abe99c7a5fb941907d068c059d168ffb9e35f935a0d88c86bac169ee9261ec25",
+  "bytes": 467991,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2019Q4I": {
+  "sha256": "396058ae22dec059780c9acad7096c6ed78b8ae0ec5dc1f25e0b07d9f5de2e54",
+  "bytes": 460504,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2020Q4I": {
+  "sha256": "37190b97902b88b5cc149a44989da5067419c2c82447ab6e8b440f4c3b4c6e0d",
+  "bytes": 496228,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2021Q4I": {
+  "sha256": "1bd5b417e99bd7032ebd65b578b631b21a3f8da8d80d44c35dd999c7b1d9c8aa",
+  "bytes": 507578,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2022Q4I": {
+  "sha256": "39eb5a147dc20bf8934957a79744c8cd3b603b74603db961a0b6c485109d042f",
+  "bytes": 464100,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2023Q4I": {
+  "sha256": "c19d87a8479ab10188e5d39ecc238bb0428465588f18f7d8ea145d04e902fc8e",
+  "bytes": 429462,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2024Q4I": {
+  "sha256": "fd9f2637f2d3f2f82635649c410ed2ac1a6f07a5755c4afee2a7ec77243fbf20",
+  "bytes": 414430,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/CY2024Q4I.json"
  },
  "edgar/frames/us-gaap/InterestExpense/USD/CY2009": {
   "sha256": "54ec5fa96d900c5940eda2875562f1cad729bbfd4851835e59c90d34503e6326",
@@ -17429,6 +17584,41 @@
   "bytes": 335373,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2017.json"
  },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2018": {
+  "sha256": "98233f6205429aa4f520bded4227497c9f60bea68533b3bcbd92a7fae2a261ad",
+  "bytes": 329223,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2019": {
+  "sha256": "58edecd1313e160181b98673ca461c8f6107daae8e8e4e8b4a3a4a253d81ab9f",
+  "bytes": 328307,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2020": {
+  "sha256": "451d79dd2cc7012d4585aaa01fb804d349f1ec4fb8b06c64a214d5ccf5f4c1af",
+  "bytes": 333254,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2021": {
+  "sha256": "b6361d64e25232214bd66a192993bfc8dff9f28b800cca165158c4c5e4b34b1c",
+  "bytes": 332505,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2022": {
+  "sha256": "fb446e61910aba930b3c93bb3f5da69e97d11998ef80100c8baf982317bf3eee",
+  "bytes": 320201,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2023": {
+  "sha256": "2b8291bd510fc1b43ed4666b1ba35cc7f3e2de7c43940a5c93a5f5557ccafe8c",
+  "bytes": 289546,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/InterestExpense/USD/CY2024": {
+  "sha256": "e9afba513568deae866aba1800e90585fb7b923ac2c6c5d279bb856f34e17112",
+  "bytes": 106900,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/InterestExpense/USD/CY2024.json"
+ },
  "edgar/frames/us-gaap/Liabilities/USD/CY2009Q4I": {
   "sha256": "92b7f256fcbee4008b563ebb4eaa6c2897535d9aac58e5a969a452e92dc6f287",
   "bytes": 71045,
@@ -17473,6 +17663,41 @@
   "sha256": "732a309374c48826cee8e235ad6b136319d0849d7aa6f7d0f71c484b1a6ab7da",
   "bytes": 432109,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2017Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2018Q4I": {
+  "sha256": "8b90ffc5e05b0246a879c06a8d3d3c9e223050d6032570f1a38513129500e719",
+  "bytes": 429742,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2019Q4I": {
+  "sha256": "7c0adaae9ca854850b248c2e11ae847d8ebc182a59aa33f8411e8f293c8d8c50",
+  "bytes": 427967,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2020Q4I": {
+  "sha256": "6cd6c1ed6b4d06fe8eebca099e78dc52a8fbb1a6ee0362ce574c4f189d0e6248",
+  "bytes": 488886,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2021Q4I": {
+  "sha256": "dcc89bef675c4dcf623735291fb8f0c6735557d4875c65773d5197c4cbce090f",
+  "bytes": 523473,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2022Q4I": {
+  "sha256": "b27eaecdb2f849fcac82e9d2927c076208e70eb122b0b8bb5345f1e18e946c9b",
+  "bytes": 500316,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2023Q4I": {
+  "sha256": "bc02a26391faccc16722958c58c33c98eedf51f80360a769792d20cc73c04762",
+  "bytes": 468365,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/Liabilities/USD/CY2024Q4I": {
+  "sha256": "a0dd74ab6787fa315e74974a63aaf3ee6b242adcd3f4c0783951e5d121f25a6e",
+  "bytes": 460136,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Liabilities/USD/CY2024Q4I.json"
  },
  "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2009Q4I": {
   "sha256": "deedf9bccd0ef8f86d19cc8e0fe1c4f35189a40407b4eb46ef6d5aa01ab92c19",
@@ -17519,6 +17744,41 @@
   "bytes": 523541,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2017Q4I.json"
  },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2018Q4I": {
+  "sha256": "ddf7331d411912cc37f56bbd632fd11ee4466cae088fd532d523579a97920169",
+  "bytes": 509536,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2019Q4I": {
+  "sha256": "283fa4d0536499ac73fb352cd10eb5e42d8f0f87fa9a32bee7f224bfc901013d",
+  "bytes": 500364,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2020Q4I": {
+  "sha256": "fc02897434c6e56ae71e9ec230ea051f3b2b9225060013c82d3f04ea067f7d4e",
+  "bytes": 556534,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2021Q4I": {
+  "sha256": "b9061616d7475b07e4856a7d31ff9fad065a1f0050c7fae1bc504b6555ddb8bd",
+  "bytes": 586057,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2022Q4I": {
+  "sha256": "c2f6180182c88e2806b6a6aa886c2b205d724364cf1a5e360f21378e578a0de6",
+  "bytes": 556839,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2023Q4I": {
+  "sha256": "bce3ea549a8b757e3147f0a15b375bad832a6d17062cb582503a34bf54c771c3",
+  "bytes": 518076,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2024Q4I": {
+  "sha256": "9cea1163d4b1f9bc6148f05b8df69219da41446e6a7671e8ea127ba15bb84679",
+  "bytes": 504786,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesAndStockholdersEquity/USD/CY2024Q4I.json"
+ },
  "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2009Q4I": {
   "sha256": "e57fe2921479770f797d8da34edabc8c0b005522691bef4727bcb4466be80b80",
   "bytes": 83882,
@@ -17563,6 +17823,41 @@
   "sha256": "c653e172ba31159e0731df2eb2e833363ba6284aa9ce201bd5fdb4fe4ada7ef8",
   "bytes": 407302,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2017Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2018Q4I": {
+  "sha256": "3602494dcb2b35354cc16e170fa89ddbcc21c84e34118ee135f4a5744178dadb",
+  "bytes": 399188,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2019Q4I": {
+  "sha256": "65e99d0d3d8b1ebc5a523c5f7f37a7f2e1d7d939b92c00539f6c7a951f013e24",
+  "bytes": 395612,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2020Q4I": {
+  "sha256": "f3c05d1f04fe2088a4542b24c68a698aa9b83496f675332d5bf63de95942b9be",
+  "bytes": 450372,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2021Q4I": {
+  "sha256": "35c27b0a2d34932da955a09d52a8336f5e67762151b99f861701cfd743507a26",
+  "bytes": 481550,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2022Q4I": {
+  "sha256": "7d8304dbb19172a69c5d759127d06be4dcaeeffe5b1552207f3a7c171f430fec",
+  "bytes": 449793,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2023Q4I": {
+  "sha256": "f2280f9d07b1a0798a0d1d97c721ab4e53096036957ca9b97af6f8058945c2d9",
+  "bytes": 411773,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/LiabilitiesCurrent/USD/CY2024Q4I": {
+  "sha256": "8d675a5fe4d3ac7232ede2b7fc045a0d084181797b9e344f1ffab93ef9a1cbe3",
+  "bytes": 397903,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LiabilitiesCurrent/USD/CY2024Q4I.json"
  },
  "edgar/frames/us-gaap/LongTermDebt/USD/CY2009Q4I": {
   "sha256": "e86b2db4be5d28ef2599f2f8329c596fbe7b36b96b820b3f6cfcdd03bb49108f",
@@ -17609,6 +17904,41 @@
   "bytes": 182895,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2017Q4I.json"
  },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2018Q4I": {
+  "sha256": "99699595122fa28d80f77f68d8d61fc5179668aa0e61b39dcdcbc09b4f5eedcc",
+  "bytes": 181931,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2019Q4I": {
+  "sha256": "985dbb11f8f9eabde0072be10661f1d68a6d137b92be8e99282530ccae5efa19",
+  "bytes": 180987,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2020Q4I": {
+  "sha256": "74304df9a1f249e590e400cc9f3573099e4dd919f167db8b14ec1eefc0d7aa87",
+  "bytes": 192546,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2021Q4I": {
+  "sha256": "c66dce48cebd4f2b7b7766ec37735a8c83b55b431c4747f7b62e2af8e2da19bf",
+  "bytes": 194324,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2022Q4I": {
+  "sha256": "a585661c66bf7a118a978ab954638b1dfae657aaf865db1e4314f34609b9ebd6",
+  "bytes": 193439,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2023Q4I": {
+  "sha256": "1b0abbe0caabea7a85bf9c20c4279037b17f7601142318fb7bdb93994f62032f",
+  "bytes": 186699,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebt/USD/CY2024Q4I": {
+  "sha256": "6596498823be33aeb46a02504d733ceff925e49ff9cdba356b4a50c4bade849c",
+  "bytes": 180596,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebt/USD/CY2024Q4I.json"
+ },
  "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2009Q4I": {
   "sha256": "0601dd95ebcab2e12cb0c54764de6269ef76aa87a0bf7cae5aad76fadb315f63",
   "bytes": 47257,
@@ -17653,6 +17983,41 @@
   "sha256": "c9d666cc32fac96683d72c24525a7fca04e84d3b99ac74ff40e0a0e016d6020b",
   "bytes": 156841,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2017Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2018Q4I": {
+  "sha256": "18e1ff4f9212d9bf889b1ad171f56fadaa3e1a40c51c940fec9e88768d3a3c1f",
+  "bytes": 156798,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2019Q4I": {
+  "sha256": "e8a154962afc2640208cc678945bf2eb0cdd35642586efe60efdbf3990199522",
+  "bytes": 156548,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2020Q4I": {
+  "sha256": "6a1d8f300c8edee3313d9c628d9f0215929f4793df24e98753c88777ddef754b",
+  "bytes": 170048,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2021Q4I": {
+  "sha256": "7f169a94a2dbec575bb982d08b75001f8ba76f90cf69525475b9f89f2773fbbb",
+  "bytes": 165408,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2022Q4I": {
+  "sha256": "5d4c1279d1bd4d273482814dfbd8e37014299a6fa5d78ff3ef424024025ff8ca",
+  "bytes": 158729,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2023Q4I": {
+  "sha256": "59fa516a9a9627813d30ed63f3e63565c590a791f0da57273f721083bc298594",
+  "bytes": 149874,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2024Q4I": {
+  "sha256": "a72cde80c4fab0395cb88b7c01019549e8d8a51ff3bd9e7b734935b3d72bc3ad",
+  "bytes": 145993,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/LongTermDebtNoncurrent/USD/CY2024Q4I.json"
  },
  "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2009": {
   "sha256": "67fc803fa9f99321ba1e8c8a2a74ef487414c3ae406606a793fd8f3854b4e5f9",
@@ -17699,6 +18064,41 @@
   "bytes": 507710,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2017.json"
  },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2018": {
+  "sha256": "79de7fd5508713c693025e7ef3f34fa7d47e99e0b6652a1ab67c2129bb16951e",
+  "bytes": 508436,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2019": {
+  "sha256": "6afd9963fda9d8deb14c24ed4638e30044aeeedafb4bafd21b26b08ac478e03d",
+  "bytes": 516494,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2020": {
+  "sha256": "2975d24c050019ae9611f6e7fc17b079bbcd7b724f68877ca43b01ce89518a65",
+  "bytes": 532761,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2021": {
+  "sha256": "e47170f5e6cbbc99e4e2a3376194348e950d3ddcd601a2175da4d7249fbb19eb",
+  "bytes": 573966,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2022": {
+  "sha256": "6a3fee580f303b62c566727d5981ecbff7f51ccd11664488ab442b766e201be0",
+  "bytes": 566156,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2023": {
+  "sha256": "0646e54e5752fe1d685b9c0d90ceb5cb13ff6c1a80fda268ff793d037be895f4",
+  "bytes": 528507,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2024": {
+  "sha256": "ad89cc43b7ace36b1ba06c30b11acc5d61b070630966a353442ac32ab94141af",
+  "bytes": 502890,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/CY2024.json"
+ },
  "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2009": {
   "sha256": "a1da77ec64bc804c4bd9b4b2587353d273e01503513349cfd134c1d39d037902",
   "bytes": 367390,
@@ -17743,6 +18143,41 @@
   "sha256": "9e6eda033528689672e2275bc7ed92c7fe8bd8e15402018d591fc872969e16dd",
   "bytes": 502478,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2017.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2018": {
+  "sha256": "801888edb91bb5434f31adf6825b815803b515eac4ad62e92fc603364a2dc8d7",
+  "bytes": 492449,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2019": {
+  "sha256": "22a1865d62cf9d3ba129fad47432be1e01d42fb0818d41768bf897d987d95088",
+  "bytes": 498144,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2020": {
+  "sha256": "768f7066f728cd17f7a2b500c61ce277e70937b5d0a3045b3d72c0580dd9c5c4",
+  "bytes": 515339,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2021": {
+  "sha256": "ac5533ba27979928cbb7715275adaa2594723a37abe6c65296fb660d533dde81",
+  "bytes": 562294,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2022": {
+  "sha256": "5eb690144110cb91e5235b26b1da77aad89b90c68170b1ebcb9f8244a459f96d",
+  "bytes": 553865,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2023": {
+  "sha256": "ec0c5d6a1b8181655d7f52827a833b689ca91d960c0134da4ad4970db5ccbc53",
+  "bytes": 517715,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/NetIncomeLoss/USD/CY2024": {
+  "sha256": "5e101291ba6d2a9b3dd99a7d435309645c76e7dc902b88f5e46b48b05619bd57",
+  "bytes": 492716,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/NetIncomeLoss/USD/CY2024.json"
  },
  "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2009": {
   "sha256": "956f9c6ad71435fd016ee7a78d1e14500a4f88d438d7d87af1c25423b3a72e76",
@@ -17789,6 +18224,41 @@
   "bytes": 418753,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2017.json"
  },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2018": {
+  "sha256": "8280bd4dde1561fbf5513d37449ff0fa8b4a0b655c522965806b2bda443d3bf3",
+  "bytes": 411903,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2019": {
+  "sha256": "e9f1b4f7a2ed96384e9c7752dcd189c26d5f84546f1ca0f1a5c4d18f246c6463",
+  "bytes": 420576,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2020": {
+  "sha256": "c5564e9f59c1daf32b05b01ca468ee363c859c5441968af23e0e5ccdef65a4ab",
+  "bytes": 432761,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2021": {
+  "sha256": "6a6c853a2719ab70c2a31b4c1b25c1e1b2972ceb3fa39ccdf97397a7b2d5a1a3",
+  "bytes": 473083,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2022": {
+  "sha256": "65b2cca143e851a34a551ac6e7067109b6de9e5b3d8af09533bcd830d6e0ac93",
+  "bytes": 465536,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2023": {
+  "sha256": "3d834aacbc917e82995059dbfcff856b4b5c243ec7a65516c53bc4ae85339d8e",
+  "bytes": 431436,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/OperatingIncomeLoss/USD/CY2024": {
+  "sha256": "cae6591e7af8129857a579f9f21abb9df58b89ed4183c8e9a2d726ac827c30b7",
+  "bytes": 405110,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/OperatingIncomeLoss/USD/CY2024.json"
+ },
  "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2009Q4I": {
   "sha256": "441048a612662634da99b812ec4c288f5ca9e552c244c7597b6ca7ff8a2cb8a2",
   "bytes": 104027,
@@ -17833,6 +18303,41 @@
   "sha256": "8e5eaa1d639d0f1e350a781a7f03b48f46be7d2beb6653b7fe69bda27a39263b",
   "bytes": 491790,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2017Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2018Q4I": {
+  "sha256": "065998adfe905648102878b7bd8b9df684287bda32fa88614c55ec0afb84835a",
+  "bytes": 480812,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2019Q4I": {
+  "sha256": "337089f9faff1f5a237ec09dcdafa79ee4aa59796516778f48a7fc3c01267ddd",
+  "bytes": 473585,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2020Q4I": {
+  "sha256": "991ed754141ec633572ccbff2db414c316bdf83e97398ccf18a3cfc14fc1466b",
+  "bytes": 531680,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2021Q4I": {
+  "sha256": "d8d533045739baae510d5ebb5fffb540c82890d87534c99f6308c15ee3498178",
+  "bytes": 566703,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2022Q4I": {
+  "sha256": "29e62110bd7b72ecc9401b190b18be5157215a286687d3d26313dc2cd0079bed",
+  "bytes": 540850,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2023Q4I": {
+  "sha256": "5c3914f5e13cd6bc66eedab5701dddb40a8eff3928364ba7558994fdb508118f",
+  "bytes": 504275,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2024Q4I": {
+  "sha256": "2ec402a3a6be8e3f6be19e279b39dbfc597a8c0c641e98b272581dc36b554a12",
+  "bytes": 490524,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RetainedEarningsAccumulatedDeficit/USD/CY2024Q4I.json"
  },
  "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2009": {
   "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -17879,6 +18384,41 @@
   "bytes": 172308,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2017.json"
  },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2018": {
+  "sha256": "ff099746fe2b3d355ed6b84c382e690b20749d9a120937809e52238516370e5e",
+  "bytes": 224620,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2019": {
+  "sha256": "a3e55fd99f94e9ae96ee737d016d08d357f8b31289c2c0ebedbc9df03822a0dc",
+  "bytes": 245528,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2020": {
+  "sha256": "af0cffbc7c351467c29a8cbefa72d3672507ead9424d3ef877f0c77fadf23327",
+  "bytes": 254021,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2021": {
+  "sha256": "ba0beb02191dbf96c017cdb26f5e92dbb2313d6b1b9ed56536deab4a0f1968d7",
+  "bytes": 257680,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2022": {
+  "sha256": "c09dd982b290634a57a100f6316528c854748dc345958bb503c10aba13d48375",
+  "bytes": 259305,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2023": {
+  "sha256": "0e2afa8d3ffbea16891e46403b54c1ea8ea767e6671db283f8df5ab7aaed4498",
+  "bytes": 252312,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2024": {
+  "sha256": "549a79a79155cee641dfebb313cbec257b77139bf9f7d5f923120d20c988b8ef",
+  "bytes": 238661,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/CY2024.json"
+ },
  "edgar/frames/us-gaap/Revenues/USD/CY2009": {
   "sha256": "f830e39782778bee44792041e516791a36a8bc715d2b07f13d477491e04d86c8",
   "bytes": 146850,
@@ -17923,6 +18463,41 @@
   "sha256": "fdfa96a0d83fc3f77f9cd824ba14dbbff4146cfee9abd0f882b5d3dcbfe1d8bf",
   "bytes": 311513,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2017.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2018": {
+  "sha256": "9ded19772d838882708e72bc1e10e303c0e13b94f63696d5adffda4844c09129",
+  "bytes": 262656,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2019": {
+  "sha256": "728aa7b8a724a06598e9c22d35a8fd3ab8ae8c3884853d4c941dd1f0c555d948",
+  "bytes": 229000,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2020": {
+  "sha256": "96fbc0355afcbbdf4760790686dd4b8eefc6029885394477d364f428daf6b9a9",
+  "bytes": 222376,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2021": {
+  "sha256": "84fea1df005e427b21ca018e9e0068f73e04cf0e917129138ea6099ae55a538d",
+  "bytes": 223849,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2022": {
+  "sha256": "84e02a50f701b35de5a34698dd86f4d4c2a67d7b68185851b557251d87a7f0ac",
+  "bytes": 225065,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2023": {
+  "sha256": "b70f9c561589987ce1e21cf2f1618e1431e32eac8304a41db0e20233665efc1b",
+  "bytes": 215698,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/Revenues/USD/CY2024": {
+  "sha256": "af33cb56b971b00ed43a4a1f6fcfc1b2b174f554133250a892e8da2e1051548a",
+  "bytes": 202089,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2024.json"
  },
  "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2009": {
   "sha256": "79c2e9b5251c2466a3b0bc40493f0b59063d417e95a095aae74d8114a55d610f",
@@ -17969,6 +18544,41 @@
   "bytes": 131604,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2017.json"
  },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2018": {
+  "sha256": "5602be0ce5732b3501a0dcc69a8e4fe0b99906e0042d4939631a1b36b2b4ec94",
+  "bytes": 9599,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2018.json"
+ },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2019": {
+  "sha256": "7c3abe7bbb998e0a01f3fde7f7e03a7712aec2a93f249bb51d401e333b9cc36b",
+  "bytes": 80,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2019.json"
+ },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2020": {
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "bytes": 2,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2020.json"
+ },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2021": {
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "bytes": 2,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2021.json"
+ },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2022": {
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "bytes": 2,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2022.json"
+ },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2023": {
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "bytes": 2,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2023.json"
+ },
+ "edgar/frames/us-gaap/SalesRevenueNet/USD/CY2024": {
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "bytes": 2,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/SalesRevenueNet/USD/CY2024.json"
+ },
  "edgar/frames/us-gaap/StockholdersEquity/USD/CY2009Q4I": {
   "sha256": "875bffe2df896a05385b2664f7f4ef1a340fbc06208672f3295752458a7eabac",
   "bytes": 347747,
@@ -18013,6 +18623,41 @@
   "sha256": "66b1852bf682ead523d1da39bf1d6735bc9b8fb2586f6f9edcb2908e6119fddb",
   "bytes": 513107,
   "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2017Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2018Q4I": {
+  "sha256": "3bcd08205687f14bd63ecb38e78b0d4508932872178a5c36942cd885d9291e74",
+  "bytes": 516968,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2018Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2019Q4I": {
+  "sha256": "674b2f71cdc2ca830c879b9ce1f8c1874364f983a9875f69b07c3d97958879fc",
+  "bytes": 521358,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2019Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2020Q4I": {
+  "sha256": "c8a1c31d0ec28aeed7227c5d2dac732a0edef30cbdd785fceee13d73fe982392",
+  "bytes": 562556,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2020Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2021Q4I": {
+  "sha256": "eb062f4136f18fdab1cf7ff05ef62fdee4ddd99500fd3630727df12034f0cd28",
+  "bytes": 584176,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2021Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2022Q4I": {
+  "sha256": "32c855493a0dcf5bafe277600c56a625dd69499cae346856162133c268f1af5c",
+  "bytes": 550063,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2022Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2023Q4I": {
+  "sha256": "23e635a9e4b0f73a7be93ecda42b09610885eb3c2adbe99c51950568128700dd",
+  "bytes": 510124,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2023Q4I.json"
+ },
+ "edgar/frames/us-gaap/StockholdersEquity/USD/CY2024Q4I": {
+  "sha256": "0562157b3943411f1485c67a955526d4df7207acfae6f386b0c35cb71366d252",
+  "bytes": 490273,
+  "source": "https://data.sec.gov/api/xbrl/frames/us-gaap/StockholdersEquity/USD/CY2024Q4I.json"
  },
  "edgar/submissions/CIK0000320193/through_20261031": {
   "sha256": "d50a1784d59233a45255b424f4c1ef5894f40b907484320f2a10f54d65976c51",
@@ -18878,6 +19523,11 @@
   "sha256": "c5b3e174e5fdd637148800d5dd8ef653abb09a271d7124ea429524934706d8a3",
   "bytes": 10071,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/MERFX?period1=596937600&period2=1609545600&interval=1mo&events=div%2Csplit"
+ },
+ "yahoo/NCLH/2017-01-01_2025-11-30": {
+  "sha256": "6178bf8be1312d8c55e6c71e8a23e625b94b63de107378c533d2b421e3aef6dd",
+  "bytes": 42299,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/NCLH"
  },
  "yahoo/SPWR/2018-01-01_2025-11-30": {
   "sha256": "5ea93761d2d3cb3c81d6bd3cac44c4b21436d06e0c70134408f8ea235c08182f",
