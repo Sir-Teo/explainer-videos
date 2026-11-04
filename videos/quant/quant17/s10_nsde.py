@@ -121,7 +121,7 @@ class NSDE(VoiceoverScene, ThreeDScene):
                     r"so the model cannot buy a fit with an arbitrage"),
                 why(r"a local search inside one model class finds a range inside the true one, which in turn lies inside "
                     r"the model-free martingale optimal transport bounds of Part 9")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.42, edge=6.9)
         with self.voiceover(
             "In equations. Calibrate: minimize the squared errors of the thirty-six vanilla prices, each a Monte "
             "Carlo average, differentiated through every Euler step back to the networks' weights. "
@@ -236,7 +236,7 @@ class NSDE(VoiceoverScene, ThreeDScene):
         lo, hi = np.asarray(t["low"]["iv"]), np.asarray(t["high"]["iv"])
         ax = ThreeDAxes(x_range=[0.8, 1.2, 0.1], y_range=[0.25, 1.0, 0.25], z_range=[0.15, 0.32, 0.05], x_length=6.4,
                         y_length=4.6, z_length=3.2, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2}).shift(DOWN * 0.4)
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2}).shift(DOWN * 0.8 + RIGHT * 1.4)  # clear of the key
 
         def sheet(Z, col, op, sw):
             f = grid_fn(K, mats, np.clip(np.nan_to_num(Z, nan=0.2), 0.15, 0.32))
@@ -248,7 +248,7 @@ class NSDE(VoiceoverScene, ThreeDScene):
                       legend([(WHITE, r"Heston (mesh)"), (GOOD, r"the low model"), (OPT, r"the high model")], font_size=17),
                       label(rf"largest gap between the low and high smiles: {gap:.2f} vol points", font_size=19,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.3)
-        self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.9)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-58 * DEGREES, zoom=0.82)
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
