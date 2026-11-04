@@ -148,14 +148,14 @@ class HullWhite:
 
 
 def bermudan_swaption_lsm(hw: HullWhite, K, T0, T_end, freq=1, payer=False, n_paths=40000, seed=0, deg=3):
-    """A Bermudan swaption exercisable on each reset date from T0 into the swap to T_end, by Longstaff-Schwartz on
-    exact Hull-White paths (exercise decided on in-sample regressions of discounted continuation on the swap value).
-    Returns the price, its standard error, the most valuable European in the schedule, and the exercise boundary
-    (the swap rate at which exercise starts, per date)."""
+    """A Bermudan receiver or payer swaption exercisable on each reset date from T0 into the swap to T_end, by
+    Longstaff-Schwartz on exact Hull-White paths.  The exercise rule (regressions of discounted continuation on the
+    state, in the money only) is fitted on one set of paths and applied to an independent set, so the price is a
+    true lower bound with no look-ahead.  Returns the price and its standard error, the in-sample price, every
+    European in the schedule, and the exercise boundary: the swap rate beyond which the rule exercises, per date."""
     dates = np.arange(T0, T_end - 1e-9, 1 / freq)
-    x, D = hw.simulate_x(dates, n_paths, seed)
 
-    def swap_value(i):
+    def swap_value(x, i):
         t = dates[i]
         times = t + np.arange(1, int(round((T_end - t) * freq)) + 1) / freq
         P = hw.zcb(t, times[None, :], x[:, i:i + 1])
@@ -163,26 +163,39 @@ def bermudan_swaption_lsm(hw: HullWhite, K, T0, T_end, freq=1, payer=False, n_pa
         par = (1 - P[:, -1]) / ann
         v = (K - par) * ann if not payer else (par - K) * ann
         return v, par
-    cash = np.zeros(n_paths)
-    when = np.full(n_paths, len(dates) - 1)
-    v_last, _ = swap_value(len(dates) - 1)
-    cash = np.maximum(v_last, 0) * D[:, -1]
-    boundary = []
-    for i in range(len(dates) - 2, -1, -1):
-        v, par = swap_value(i)
-        itm = v > 0
-        if itm.sum() > 50:
-            X = np.vander(x[itm, i], deg + 1)
-            beta, *_ = np.linalg.lstsq(X, cash[itm] / D[itm, i], rcond=None)
-            cont = X @ beta
-            ex = v[itm] > cont
+
+    def run(x, D, betas=None):
+        n = x.shape[0]
+        v_last, _ = swap_value(x, len(dates) - 1)
+        cash = np.maximum(v_last, 0) * D[:, -1]
+        fitted, bound = {}, {}
+        for i in range(len(dates) - 2, -1, -1):
+            v, par = swap_value(x, i)
+            itm = v > 0
+            if itm.sum() < 50:
+                continue
+            Xr = np.vander(x[itm, i], deg + 1)
+            if betas is None:
+                beta, *_ = np.linalg.lstsq(Xr, cash[itm] / D[itm, i], rcond=None)
+                fitted[i] = beta
+            else:
+                beta = betas.get(i)
+                if beta is None:
+                    continue
+            ex = v[itm] > Xr @ beta
             idx = np.where(itm)[0][ex]
             cash[idx] = v[idx] * D[idx, i]
-            boundary.append((float(dates[i]), float(np.min(par[idx])) if (len(idx) and not payer) else
-                             float(np.max(par[idx])) if len(idx) else float("nan")))
+            if len(idx):
+                bound[float(dates[i])] = float(np.max(par[idx]) if not payer else np.min(par[idx]))
+        return cash, fitted, bound
+    xa, Da = hw.simulate_x(dates, n_paths, seed)
+    cash_a, betas, _ = run(xa, Da)
+    xb, Db = hw.simulate_x(dates, n_paths, seed + 1000)
+    cash_b, _, bound = run(xb, Db, betas)
     euro = [hw.swaption(K, t, T_end - t, freq, payer=payer) for t in dates]
-    return {"price": float(cash.mean()), "se": float(cash.std() / np.sqrt(n_paths)), "europeans": euro,
-            "dates": dates, "boundary": boundary[::-1]}
+    return {"price": float(cash_b.mean()), "se": float(cash_b.std() / np.sqrt(n_paths)),
+            "in_sample": float(cash_a.mean()), "europeans": euro, "dates": dates,
+            "boundary": sorted(bound.items())}
 
 
 # ---------------------------------------------------------------------------

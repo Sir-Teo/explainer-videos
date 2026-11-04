@@ -17119,6 +17119,11 @@
   "bytes": 2839275,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
+ "fed/gsw/1993-06-01_1995-12-31": {
+  "sha256": "6bfe96a5a20b964d85f4b9649c30fdd4010dd871c314ddc3161218b444df99cc",
+  "bytes": 219058,
+  "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
+ },
  "fed/gsw/1993-12-01_2020-12-31": {
   "sha256": "28e7118cc99e99e187630b7b35c068c78a87f3a4bc8392222b3448f1eba63f8d",
   "bytes": 2055201,
@@ -17129,9 +17134,19 @@
   "bytes": 163941,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
+ "fed/gsw/2023-01-01_2025-12-31": {
+  "sha256": "a2c60657fca65405ea0e4c864882d495828af799782b6e05e82e46ccbd24298a",
+  "bytes": 214633,
+  "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
+ },
  "fed/gsw/2025-11-01_2025-12-31": {
   "sha256": "f02d4b8bf7a9e12c6cf0d7b825c5ec55f1d5adf147702d5f7b94182d3fc5c4c2",
   "bytes": 11800,
+  "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
+ },
+ "fed/gsw/2025-12-01_2025-12-31": {
+  "sha256": "8e287ef3785cf6ad05be0ecc6088f0b4c1cb748b2dc624a4f2283fb3a472c099",
+  "bytes": 6317,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
  "fred/A794RX0Q048SBEA/1947-01-01_2025-12-31": {
@@ -17148,6 +17163,11 @@
   "sha256": "17af9c4d6aef4f74e813592d1dd662a88041c29676d71536515bad7dfa558b83",
   "bytes": 1188,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO"
+ },
+ "fred/DFEDTAR/1993-06-01_1995-12-31": {
+  "sha256": "f0ba09e287f5b3196e65964e1584cc78988e1214ad356b35c69c600a9dbdd004",
+  "bytes": 16472,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTAR"
  },
  "fred/DFEDTAR/2007-01-01_2008-12-15": {
   "sha256": "6d8c6d541db85ac9a313980c309512a6ace7af83d27d25cb695f4d480e763c0d",
@@ -17194,6 +17214,11 @@
   "bytes": 52267,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF"
  },
+ "fred/DFII10/1950-01-01_2025-12-31": {
+  "sha256": "eae8d5e3aa1c609db97c8eb0a9d2fb3189fdfc0ca2d32fcf7d34a765cbef62dc",
+  "bytes": 103946,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10"
+ },
  "fred/DGS10/1950-01-01_2025-12-31": {
   "sha256": "9cdc74d51a89d1bf9cdc1603192f5ea5fbf3ad023ab241b182bddbb2a5d623f6",
   "bytes": 287522,
@@ -17218,6 +17243,11 @@
   "sha256": "c8202441c747fb86737768bbf28fb5607ab41688a5100ba74348abddfcb1e984",
   "bytes": 73109,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
+ },
+ "fred/DGS1MO/1950-01-01_2025-12-31": {
+  "sha256": "20b0e148b3bbd2fe006756ab6565e485a6ab5f4640a163a8ccd37abe54dc7b4e",
+  "bytes": 109353,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS1MO"
  },
  "fred/DGS2/1950-01-01_2025-12-31": {
   "sha256": "995313eab81bd9f445f4290ea6b62523c44b3c9201c5a2e1663f690bea2169c6",
@@ -17309,6 +17339,11 @@
   "bytes": 322613,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
  },
+ "fred/DTB3/1990-01-01_2025-12-31": {
+  "sha256": "585bf176125fc1e5a708f8cf12a049d8be231a5470e033a7f1ef460dcfc5d640",
+  "bytes": 161256,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
+ },
  "fred/DTB3/1990-01-02_2025-12-31": {
   "sha256": "585bf176125fc1e5a708f8cf12a049d8be231a5470e033a7f1ef460dcfc5d640",
   "bytes": 161256,
@@ -17323,6 +17358,16 @@
   "sha256": "6d2aae013ba9697d69cb0eb2f4627115f179eda0cb8cd37bcd474670a0bde2fe",
   "bytes": 34697,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
+ },
+ "fred/ECBDFR/1950-01-01_2025-12-31": {
+  "sha256": "391c1081dc7df7cf6d825c41c90154489dc71e2fa173b83f031067bb2cf9c7c1",
+  "bytes": 173476,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ECBDFR"
+ },
+ "fred/ECBDFR/1999-01-01_2025-12-31": {
+  "sha256": "391c1081dc7df7cf6d825c41c90154489dc71e2fa173b83f031067bb2cf9c7c1",
+  "bytes": 173476,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ECBDFR"
  },
  "fred/FEDFUNDS/1950-01-01_2025-12-31": {
   "sha256": "5307dbefcd6c84098f8901d8aa39d5f297d077e395ee807f8585fa6504f07cfb",
@@ -17409,6 +17454,16 @@
   "bytes": 6269,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
  },
+ "fred/MORTGAGE30US/1950-01-01_2025-12-31": {
+  "sha256": "44785bc5460df9c9c4413b2fc2bb407b329eacbc1db9c3497d5bae2e7d365e2a",
+  "bytes": 51685,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US"
+ },
+ "fred/MORTGAGE30US/1971-01-01_2025-12-31": {
+  "sha256": "44785bc5460df9c9c4413b2fc2bb407b329eacbc1db9c3497d5bae2e7d365e2a",
+  "bytes": 51685,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US"
+ },
  "fred/NIKKEI225/1949-05-01_2025-12-31": {
   "sha256": "23f5bfafd1efb069207e081b712ab44e2ce60aab40bc90cc0ed58c39a9595cb8",
   "bytes": 403661,
@@ -17418,6 +17473,11 @@
   "sha256": "1c4480e3662c7f6160758a58492fec569384bbe3b201d148ef890de01c1dde3d",
   "bytes": 4100,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NIKKEI225"
+ },
+ "fred/OBMMIJUMBO30YF/1950-01-01_2025-12-31": {
+  "sha256": "69b4ba6cec9d4308a25a1ef5bc030c351c9fe3cd7e02965db06a35d014c3001d",
+  "bytes": 42443,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=OBMMIJUMBO30YF"
  },
  "fred/PCEPILFE/1950-01-01_2025-12-31": {
   "sha256": "ffa4c5eca8095508e8a6eed7374cefa1ed7e911c7912a83201be86753d89816c",
@@ -17494,10 +17554,30 @@
   "bytes": 34549,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR75"
  },
+ "fred/SOFR90DAYAVG/1950-01-01_2025-12-31": {
+  "sha256": "2b329086e95c2aed1dcab9ed0129ce43ae7d23c3923e82af43bbd7ccb0178504",
+  "bytes": 38985,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR90DAYAVG"
+ },
  "fred/SOFR99/2018-01-01_2025-12-31": {
   "sha256": "57fe1c72b78b6da3b30115f420b42973725cd253404f5d56526223cc71bd5f36",
   "bytes": 34532,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR99"
+ },
+ "fred/T10YIE/1950-01-01_2025-12-31": {
+  "sha256": "98df78adf0347b58916e718758317db5421db90eaaded32b2e2ea1afd1f4c4c7",
+  "bytes": 103012,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10YIE"
+ },
+ "fred/TEDRATE/1950-01-01_2025-12-31": {
+  "sha256": "7e9870e5321d90aa8356706b0800a812b839896634538e1df3c3f2bce8feaa29",
+  "bytes": 158421,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TEDRATE"
+ },
+ "fred/TEDRATE/1986-01-01_2022-01-21": {
+  "sha256": "7e9870e5321d90aa8356706b0800a812b839896634538e1df3c3f2bce8feaa29",
+  "bytes": 158421,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TEDRATE"
  },
  "fred/VIXCLS/1990-01-01_2020-12-31": {
   "sha256": "5adcd44bb0d7ff4129d5893b270d99a8871fd1c6434b7d44c0b984a3cf82c261",

@@ -131,9 +131,9 @@ class SOFR(VoiceoverScene):
                     r"period's rate is known only at its end. The House's \texttt{compound\_in\_arrears}")]
         step = ladder(self, rows, whys, keep=1, top=3.1, x=-2.6, buff=0.4, edge=6.9, highlight=False)
         t, so, ar, bi = (np.asarray(s[k]) for k in ("t", "sofr", "arrears", "bill"))
-        g = axes([2018.2, 2026], [0, 6], x_length=8.4, y_length=3.6, xlabel=r"start of the 3-month period",
+        g = axes([2018.2, 2026], [0, 6], x_length=8.4, y_length=2.9, xlabel=r"start of the 3-month period",
                  ylabel=r"percent", xticks=[2019, 2021, 2023, 2025], yticks=[0, 2, 4, 6], font_size=14).to_edge(
-            DOWN, buff=1.0).to_edge(LEFT, buff=0.6)
+            DOWN, buff=0.95).to_edge(LEFT, buff=0.6)
         ax = g.ax
         l_s = curve(ax, t, so, MKT, stroke_width=2)
         l_a = curve(ax, t, ar, ARR, stroke_width=2.5)
