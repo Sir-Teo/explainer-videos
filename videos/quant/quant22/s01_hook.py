@@ -76,8 +76,10 @@ class Hook(VoiceoverScene):
                           r"of it at once. Every model calibrated to the calm said a 1.20 floor was a sure thing",
                           width=12.0, font_size=21),
         ).arrange(DOWN, buff=0.3)
-        if cards.height > 6.6:
-            cards.scale_to_fit_height(6.6)
+        head = label(r"15 January 2015: who was holding the floor", font_size=30).to_edge(UP, buff=0.35)
+        if cards.height > 6.0:
+            cards.scale_to_fit_height(6.0)
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "The losses landed on whoever had treated the floor as a law of nature. <bookmark mark='a'/> At FXCM, a "
             "large American retail broker, clients' accounts went negative by about two hundred and seventy-five "
@@ -87,6 +89,7 @@ class Hook(VoiceoverScene):
             "once. That is the first lesson of this part: in currencies and commodities, the price you see is often "
             "held in place by someone's balance sheet, and the risk is what happens when they let go."
         ) as vo:
+            self.play(FadeIn(head))
             for i, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
