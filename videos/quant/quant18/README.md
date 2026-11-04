@@ -23,7 +23,7 @@ par yields and auction records, FRED, the NY Fed's ACM term premium, and SVB's 1
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 53 minutes)
+## Chapters (about 54 minutes)
 
 * **The safest asset** (2.9 min). Silicon Valley Bank's $91.3 bn held-to-maturity book marked through 2022 off the
   Fed's 6-year zero yield (+2.55 points): a $15.16 bn reported loss against $16.0 bn of equity (10-K, EDGAR); 8–10
@@ -203,7 +203,7 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约53分钟）
+## 章节（约54分钟）
 
 * **最安全的资产。** 用美联储6年期零息收益率（+2.55个百分点）给硅谷银行913亿美元的持有至到期账簿逐日估值：10-K报告的亏损为151.6亿美元，而权益为160亿美元（EDGAR）；2023年3月8–10日（美联储审查报告）；历史条（1938–2025）；本部分安排；利率交易台开张。
 * **1. 货币、准备金与地板体系。** 美联储的T型账户；Poole（1968）的准备金需求，稀缺对充裕；2009年以来每周的联邦基金利率减准备金利率对准备金；2007–2025年的管理利率，以及夹在中间的市场利率。

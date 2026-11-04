@@ -129,6 +129,7 @@ PARTS = {
     "btc_vol_forecast_edge": (11, 1), "btc_hedged_straddle_ml": (11, 2),
     "pca_fly_2s5s10s": (18, 1),
     "cp_tent_oos": (19, 1), "mlp_bond_premia_oos": (19, 2),
+    "logit_default_holdout": (20, 1), "gbm_default_holdout": (20, 2),
 }
 
 

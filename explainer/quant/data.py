@@ -639,7 +639,8 @@ SEC_UA = {"User-Agent": "explainer-videos research bot"}  # a client name, no pe
 
 
 def sec_facts(cik: int, concepts: tuple, filed_through: str = "2025-12-31") -> dict:
-    """Selected us-gaap facts from EDGAR's XBRL company facts (data.sec.gov) for ``cik``: for each concept, a list of
+    """Selected facts (us-gaap, or ``dei:Name``) from EDGAR's XBRL company facts (data.sec.gov) for ``cik``: for each
+    concept, a list of
     {unit, end, val, filed, form}, facts filed through ``filed_through`` only; the extract is checked."""
     path = DATA / "edgar" / f"CIK{cik:010d}.json"
     if not path.exists():
@@ -650,7 +651,8 @@ def sec_facts(cik: int, concepts: tuple, filed_through: str = "2025-12-31") -> d
     lim = int(filed_through.replace("-", ""))
     out = {}
     for c in concepts:
-        body = raw["facts"].get("us-gaap", {}).get(c, {"units": {}})
+        tax, name = c.split(":", 1) if ":" in c else ("us-gaap", c)  # e.g. dei:EntityCommonStockSharesOutstanding
+        body = raw["facts"].get(tax, {}).get(name, {"units": {}})
         rows = [{"unit": u, "end": x["end"], "val": x["val"], "filed": x["filed"], "form": x.get("form", "")}
                 for u, lst in body["units"].items() for x in lst if int(x["filed"].replace("-", "")) <= lim]
         out[c] = sorted(rows, key=lambda q: (q["end"], q["filed"], q["form"], q["unit"]))
@@ -659,6 +661,68 @@ def sec_facts(cik: int, concepts: tuple, filed_through: str = "2025-12-31") -> d
            f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json")
     return {"name": raw.get("entityName", ""), "facts": out}
 
+
+
+def _sec_get(url: str, retries: int = 5) -> bytes:
+    err = None
+    for k in range(retries):
+        try:
+            time.sleep(0.15)  # EDGAR asks for at most ten requests a second
+            with urllib.request.urlopen(urllib.request.Request(url, headers=SEC_UA), timeout=120) as r:
+                return r.read()
+        except Exception as e:
+            err = e
+            time.sleep(min(2 ** k, 30))
+    raise RuntimeError(f"failed to fetch {url}: {err}")
+
+
+def sec_frame(concept: str, period: str, unit: str = "USD", taxonomy: str = "us-gaap") -> dict:
+    """One XBRL concept for every filer in one calendar period from EDGAR's frames API: ``period`` is CY2019 for a
+    year's flow, CY2019Q4I for an instant at the year's end (CY2019Q2I for mid-year).  Returns {cik: (val, end,
+    accn, name)}; the compact extract is cached and checked (frames gain late filers, so the first fetch is frozen)."""
+    path = DATA / "edgar" / "frames" / f"{taxonomy}_{concept}_{unit}_{period}.json"
+    url = f"https://data.sec.gov/api/xbrl/frames/{taxonomy}/{concept}/{unit}/{period}.json"
+    if not path.exists():
+        try:
+            raw = json.loads(_sec_get(url))
+            rows = sorted([[int(x["cik"]), x["val"], x.get("end", ""), x.get("accn", ""), x.get("entityName", "")]
+                           for x in raw.get("data", [])])
+        except RuntimeError as e:
+            if "404" not in str(e):
+                raise
+            rows = []  # no filer used the concept in that period
+        _atomic_write(path, json.dumps(rows, separators=(",", ":")).encode())
+    body = path.read_bytes()
+    _check(f"edgar/frames/{taxonomy}/{concept}/{unit}/{period}", body, url)
+    return {r[0]: (r[1], r[2], r[3], r[4]) for r in json.loads(body)}
+
+
+EFTS = "https://efts.sec.gov/LATEST/search-index?q=%22Item%201.03%22&forms=8-K&dateRange=custom&startdt={a}&enddt={b}&from={k}"
+
+
+def sec_bankruptcy_8k(year: int) -> list:
+    """Current reports (8-K) filed in ``year`` that report Item 1.03, Bankruptcy or Receivership, from EDGAR's
+    full-text search: [cik, file_date (YYYYMMDD), form, name], one row per filing, sorted; checked."""
+    path = DATA / "edgar" / "efts" / f"item103_{year}.json"
+    if not path.exists():
+        rows, k = {}, 0
+        while True:
+            d = json.loads(_sec_get(EFTS.format(a=f"{year}-01-01", b=f"{year}-12-31", k=k)))
+            hits = d["hits"]["hits"]
+            for h in hits:
+                src = h["_source"]
+                if "1.03" not in (src.get("items") or []):
+                    continue
+                for c in src.get("ciks", [])[:1]:
+                    rows[(int(c), src["adsh"])] = [int(c), int(src["file_date"].replace("-", "")), src.get("form", ""),
+                                                   (src.get("display_names") or [""])[0].split("  (")[0]]
+            k += len(hits)
+            if not hits or k >= d["hits"]["total"]["value"] or k >= 9900:
+                break
+        _atomic_write(path, json.dumps(sorted(rows.values()), separators=(",", ":")).encode())
+    body = path.read_bytes()
+    _check(f"edgar/efts/item1.03/{year}", body, EFTS.format(a=f"{year}-01-01", b=f"{year}-12-31", k=0))
+    return json.loads(body)
 
 TD = "https://www.treasurydirect.gov/TA_WS/securities/search?type={kind}&format=json"
 
