@@ -1389,19 +1389,29 @@ Frontier (2023–2026):
 - Also on screen in Part 28: Kyle (1985); Admati and Pfleiderer (1988); Kuttner (2001), *JME*; Gürkaynak, Sack and Swanson (2005), *IJCB*; Meade and Stasavage (2008), *Economic Journal*; Mikolov et al. (2013); Levy and Goldberg (2014); Loughran and McDonald (2014), "Measuring readability in financial disclosures," *JF*; Yao et al. (2023), ReAct; Li et al. (2023), "Are ChatGPT and GPT-4 general-purpose solvers for financial text analytics?", EMNLP industry track.
 
 ### Part 29 · Alpha Mining and Automated Research
-- Koza, J. (1992). *Genetic Programming*.
+- Brown, S. (1976). *Optimal portfolio choice under uncertainty: a Bayesian approach.* PhD thesis, University of Chicago (estimation risk).
+- Koza, J. (1992). *Genetic Programming: On the Programming of Computers by Means of Natural Selection.* MIT Press.
+- Williams, R. J. (1992). "Simple statistical gradient-following algorithms for connectionist reinforcement learning." *Machine Learning* 8.
 - Neely, C., Weller, P., Dittmar, R. (1997). "Is technical analysis in the foreign exchange market profitable? A genetic programming approach." *JFQA*.
-- Allen, F., Karjalainen, R. (1999). "Using genetic algorithms to find technical trading rules." *JFE*.
-- Kakushadze, Z. (2016). "101 formulaic alphas." *Wilmott*.
-- Tulchinsky, I., et al. (2019). *Finding Alphas* (2nd ed.).
+- Allen, F., Karjalainen, R. (1999). "Using genetic algorithms to find technical trading rules." *JFE* 51.
+- Kan, R., Zhou, G. (2007). "Optimal portfolio choice with parameter uncertainty." *JFQA* 42.
+- Bali, T., Cakici, N., Whitelaw, R. (2011). "Maxing out: stocks as lotteries and the cross-section of expected returns." *JFE* 99.
+- Frazzini, A., Pedersen, L. H. (2014). "Betting against beta." *JFE* 111.
+- Tulchinsky, I., et al. (2015; 2nd ed. 2019). *Finding Alphas.* Wiley.
+- Kakushadze, Z. (2016). "101 formulaic alphas." *Wilmott* 84.
+- McLean, R. D., Pontiff, J. (2016). "Does academic research destroy stock return predictability?" *JF* 71.
+- Kakushadze, Z., Serur, J. A. (2018). *151 Trading Strategies.* Palgrave Macmillan.
+- López de Prado, M., Lewis, M. (2019). "Detection of false investment strategies using unsupervised learning methods." *Quantitative Finance* 19.
 - Chordia, T., Goyal, A., Saretto, A. (2020). "Anomalies and false rejections." *RFS*.
 - Yang, X., Liu, W., Zhou, D., Bian, J., Liu, T.-Y. (2020). "Qlib: an AI-oriented quantitative investment platform." arXiv.
-- Yu, S., et al. (2023). "Generating synergistic formulaic alpha collections via reinforcement learning." *KDD*.
-- Wang, S., et al. (2023). "Alpha-GPT: human–AI interactive alpha mining for quantitative investment." arXiv *(verify)*.
+- Isichenko, M. (2021). *Quantitative Portfolio Management.* Wiley.
+- Yu, S., Xue, H., Ao, X., Pan, F., He, J., Tu, D., He, Q. (2023). "Generating synergistic formulaic alpha collections via reinforcement learning." KDD 2023; arXiv 2306.12964 (checked at the source, November 2026).
+- Wang, S., et al. (2023). "Alpha-GPT: human–AI interactive alpha mining for quantitative investment." arXiv 2308.00016; EMNLP 2025 system demonstrations.
+- DeepSeek-AI (2024). "Fire-Flyer AI-HPC: a cost-effective software-hardware co-design for deep learning." SC'24; arXiv 2408.14158 (checked at the source).
 - DeepSeek-AI (2024). "DeepSeek-V3 technical report." arXiv (High-Flyer's AI lab; see *AI, Built* Parts 14, 16).
-- Li, Y., et al. (2025). "R&D-Agent-Quant." arXiv *(verify)*.
-- Tang, Z., et al. (2025). "AlphaAgent." arXiv *(verify)*.
-- Public sources on the Chinese quant industry: Asset Management Association of China statistics; exchange and CSRC notices of February 2024 *(verify)*.
+- Li, Y., et al. (2025). "R&D-Agent-Quant: a multi-agent framework for data-centric factors and model joint optimization." NeurIPS 2025 datasets and benchmarks; arXiv 2505.15155.
+- Tang, Z., Chen, Z., Yang, J., Mai, J., Zheng, Y., Wang, K., Chen, J., Lin, L. (2025). "AlphaAgent: LLM-driven alpha mining with regularized exploration to counteract alpha decay." arXiv 2502.16789 (checked at the source).
+- Public record on the Chinese quant industry, February 2024: exchange notices on Ningbo Lingjun (Shanghai and Shenzhen, 20 February 2024); Bloomberg, Reuters, Caixin and SCMP reporting; WorldQuant press releases on BRAIN (August 2022) and the International Quant Championship (2023).
 
 ### Part 30 · Portfolio Construction
 - Marchenko, V., Pastur, L. (1967). "Distribution of eigenvalues for some sets of random matrices." *Mat. Sbornik*.

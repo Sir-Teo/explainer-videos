@@ -17,6 +17,7 @@ class Combine(VoiceoverScene):
         self.heat(c)
         self.spectrum(c)
         self.sharpes(c)
+        self.residual()
         self.question()
 
     def card(self):
@@ -68,6 +69,7 @@ class Combine(VoiceoverScene):
         leg = legend([(col, rf"$\rho = {r:.2f}$" + (r": our top 40" if k == 3 else ""))
                       for k, (r, col) in enumerate(zip(rhos, RHO_COL))], font_size=15).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
         fit_right(leg)
+        ceil_ = 1 / np.sqrt(c["rho"])
         side = wrapped_label(rf"with $\rho = 0.3$ the ceiling is $1/\sqrt{{0.3}} = {1 / np.sqrt(0.3):.2f}$ times one "
                              rf"alpha; with our $\rho = {c['rho']:.2f}$, ${1 / np.sqrt(c['rho']):.2f}$", 3.4, 15,
                              GREY_A).next_to(leg, DOWN, buff=0.3)
@@ -78,7 +80,7 @@ class Combine(VoiceoverScene):
             "little correlation the curve flattens. At rho of point three, the ceiling is less than twice a single "
             "alpha's IC. <bookmark mark='c'/> And the forty best of our random formulas have an average correlation of "
             f"{c['rho']:.2f} with one another: however many of their kind we add, the combined IC stays under "
-            f"{1 / np.sqrt(c['rho']):.1f} times one of them."
+            f"{ceil_:.1f} times one of them."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")
@@ -137,11 +139,12 @@ class Combine(VoiceoverScene):
                 wrapped_label(r"the participation ratio: how many equal, independent directions would give the same "
                               r"spread of eigenvalues", 3.4, 15, GREY_A)]
         side = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+        share1 = 100 * eig[0] / eig.sum()
         fit_right(side)
         with self.voiceover(
             "Count the directions. <bookmark mark='a'/> The correlation matrix's eigenvalues say how much of the forty "
             f"alphas' movement lies along each independent direction. The first alone carries "
-            f"{100 * eig[0] / eig.sum():.0f} percent. <bookmark mark='b'/> A standard way to count effective directions, "
+            f"{share1:.0f} percent. <bookmark mark='b'/> A standard way to count effective directions, "
             f"the participation ratio, gives {c['n_eff']:.1f}. Forty mined alphas: about three bets."
         ) as vo:
             self.play(FadeIn(g))
@@ -188,6 +191,34 @@ class Combine(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(lines[2]), run_time=1.5)
         self.wait(0.4)
+        self.clear_scene()
+
+    def residual(self):
+        rows = [cmath(r"s_{\text{new}}", r"=", r"B\,s_{\text{lib}} + e", font_size=34, colors={r"s_{\text{new}}": COMB}),
+                cmath(r"IC(e)", r"=", r"\operatorname{Corr}(e, r)", font_size=34, colors={r"IC(e)": HURDLE}),
+                cmath(r"IC^2_{\text{lib} + \text{new}}", r"=", r"IC^2_{\text{lib}} + \frac{\operatorname{Cov}(e, r)^2}{\operatorname{Var}(e)}",
+                      font_size=30, colors={r"IC^2_{\text{lib} + \text{new}}": GOOD})]
+        whys = [why(r"regress the new signal on the library's signals, day by day across the assets; $e$ is what is new"),
+                why(r"the residual's own IC: the only part of the new alpha the library does not already have"),
+                why(r"for the best linear combination, the squared IC rises by exactly the residual's squared covariance "
+                    r"with the return over its variance (a projection, the Frisch--Waugh theorem)")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "So the question for any new alpha is not how good it is, but what it adds. <bookmark mark='a'/> Regress it "
+            "on the signals the library already has, across the assets each day; the residual is what is new. "
+            "<bookmark mark='b'/> The residual's IC is the only part of the new alpha that the library does not already "
+            "own. <bookmark mark='c'/> And for the best linear combination, the squared IC rises by exactly that residual's "
+            "squared covariance with the return, divided by its variance: a projection, the Frisch-Waugh theorem. A "
+            "brilliant alpha that is a cousin of the library adds nothing; a modest one that is new can add a lot."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

@@ -14,6 +14,7 @@ class Hook(VoiceoverScene):
         self.title_card()
         self.flood(r)
         self.climb(r, c)
+        self.act()
         self.history()
         self.objectives()
         self.house()
@@ -84,6 +85,19 @@ class Hook(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(q_, shift=LEFT * 0.2) for q_ in qs], lag_ratio=0.5))
         self.wait(0.4)
+        self.clear_scene()
+
+    def act(self):
+        smap = series_map(current=PART, done=PART - 1)
+        with self.voiceover(
+            "Where this sits. This is the last part of the series' fourth act, on return premia. Parts twenty-three to "
+            "twenty-five asked which risks are paid and how many factors are real; Part twenty-six built the tools to "
+            "test a backtest without fooling yourself; twenty-seven turned machine learning on returns, and twenty-eight "
+            "turned it on words. This part hands the whole research loop to machines, and asks what is left of those "
+            "tests when the search itself is automatic."
+        ):
+            self.play(FadeIn(smap))
+            self.wait(1.0)
         self.clear_scene()
 
     def history(self):

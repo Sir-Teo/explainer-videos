@@ -193,6 +193,40 @@ def compute_noise(n: int = 300) -> dict:
                   "valid": va, "max_abs": float(np.abs(tr).max()), "corr": float(np.corrcoef(tr, va)[0, 1])})
 
 
+def compute_permnull(n_forms: int = 500, n_perm: int = 20) -> dict:
+    """The search's null with its dependence kept: shuffle tomorrow's returns across the coins of each day (one
+    permutation shared by every formula, so the formulas stay as correlated as they are), score the first ``n_forms``
+    random formulas of Chapter 3 on the training days, and record the best |IC|.  Against the independent-trials bar
+    sigma_e sqrt(2 ln 2N), this gives an effective number of independent trials."""
+    d, names, F, fwd, mask, train, valid = _research()
+    rng_f = np.random.default_rng(2929)
+    trees = [A.random_tree(rng_f, 4) for _ in range(n_forms)]       # the first draws of ``random``
+    rng = np.random.default_rng(2932)
+    perms = []
+    for _ in range(n_perm):
+        P = np.full_like(fwd, np.nan)
+        for t in range(fwd.shape[0]):
+            idx = np.flatnonzero(mask[t] & np.isfinite(fwd[t]))
+            P[t, idx] = fwd[t, rng.permutation(idx)]
+        perms.append(P)
+    best = np.zeros(n_perm)
+    real = []
+    for tr in trees:
+        sig = A.evaluate(tr, F)
+        real.append(abs(A.score(A.ic_series(sig, fwd, mask), train)["ic"]))
+        for k, P in enumerate(perms):
+            v = abs(A.score(A.ic_series(sig, P, mask), train)["ic"])
+            if np.isfinite(v):
+                best[k] = max(best[k], v)
+    sd_e = load("noise")["sd_train"]
+    indep = sd_e * math.sqrt(2 * math.log(2 * n_forms))
+    m = float(best.mean())
+    n_eff = 0.5 * math.exp((m / sd_e) ** 2 / 2)
+    return _json({"n_forms": n_forms, "n_perm": n_perm, "best_null": best, "mean_null_max": m, "indep_bar": indep,
+                  "sd_e": sd_e, "n_eff": n_eff, "real_best": float(np.nanmax(real)),
+                  "real_median": float(np.nanmedian(real))})
+
+
 def compute_gp() -> dict:
     d, names, F, fwd, mask, train, valid = _research()
     runs = []
@@ -418,7 +452,25 @@ def compute_decay() -> dict:
     ic1 = A.ic_series(s, fwd, mask)
     years = sorted(set(d[30:] // 10000))
     by_year = {str(y): A.score(ic1, np.flatnonzero((d // 10000 == y) & (np.arange(len(d)) >= 30)))["ic"] for y in years}
-    return _json({"formula": picked[0], "horizons": out, "lag": lag, "by_year": by_year})
+    # how fast each signal changes: the day-to-day cross-sectional rank autocorrelation, and the turnover of its
+    # rank book (dollars traded a day per dollar long), for the mined alpha and the three classic ones
+    def churn(sig):
+        R = A.rank(np.where(mask, sig, np.nan))
+        rho = []
+        for t in range(1, R.shape[0]):
+            m = np.isfinite(R[t]) & np.isfinite(R[t - 1])
+            if m.sum() >= 10 and np.ptp(R[t, m]) > 0 and np.ptp(R[t - 1, m]) > 0:
+                rho.append(np.corrcoef(R[t, m], R[t - 1, m])[0, 1])
+        W = _book(sig, mask)
+        turn = np.abs(np.diff(W, axis=0)).sum(axis=1)
+        live = (np.abs(W[1:]).sum(axis=1) > 0) & (np.abs(W[:-1]).sum(axis=1) > 0)
+        return {"autocorr": float(np.mean(rho)), "turnover": float(np.mean(turn[live]))}
+    Fc = dict(F)
+    Fc["geo_hl"] = np.sqrt(F["high"] * F["low"])
+    speed = {"mined": churn(s)}
+    for name, tr in _classic_trees().items():
+        speed[name] = churn(A.evaluate(tr, Fc))
+    return _json({"formula": picked[0], "horizons": out, "lag": lag, "by_year": by_year, "speed": speed})
 
 
 # ---------------------------------------------------------------------------
@@ -560,7 +612,7 @@ def compute_counter() -> dict:
 PART_NO = 29
 
 ITEMS = {"grid": compute_grid, "classic": compute_classic, "space": compute_space, "random": compute_random,
-         "noise": compute_noise,
+         "noise": compute_noise, "permnull": compute_permnull,
          "gp": compute_gp, "rl": compute_rl, "combine": compute_combine, "decay": compute_decay, "theory": compute_theory,
          "counter": compute_counter,
          "envelope": compute_envelope}

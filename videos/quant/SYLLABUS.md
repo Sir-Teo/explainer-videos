@@ -1358,27 +1358,46 @@ test on the statements).
 *Desk:* "Your LLM signal backtests at Sharpe 4 on 2015–2020 news. What's the first thing you check?"
 *House:* `explainer/quant/house/text.py`.
 
-### Part 29 · Alpha Mining and Automated Research (~55; frontier)
-1. The alpha factory: formulaic alphas (Kakushadze 2016), WorldQuant's model and its public BRAIN platform.
-2. Genetic programming for alphas: the search space, fitness, bloat, overfitting.
-3. RL alpha mining (AlphaGen, Yu et al. 2023): generating synergistic alpha sets.
-4. LLMs as quant researchers: Alpha-GPT (2023), agentic research loops *(verify: R&D-Agent-Quant 2025;
-   AlphaAgent 2025)*.
-5. Combining thousands of weak alphas (Part 31 preview): correlation, decay, capacity.
-6. The trial counter explodes: what a million searched formulas does to the hurdle.
-7. China's quant industry: index enhancement (指数增强), the 2019–2023 boom, the February 2024 micro-cap drawdown,
-   DMA products, regulators' response.
-8. High-Flyer (幻方): from a quant fund to DeepSeek (AI Parts 14, 16).
-9. What remains for humans: economic priors, data, and judgment.
+### Part 29 · Alpha Mining and Automated Research (~56; frontier; built)
+0. Hook: ten thousand random formulas; the best of N climbing; where Act IV ends.
+1. Formulaic alphas: Kakushadze (2016), 101 alphas as trees; delay, neutralisation, rank weights, decay; three of the
+   101 on coins.
+2. The search space: the count by depth (doubly exponential); Koza's grow method; distinct formulas against distinct
+   scores.
+3. Random search against a pure-noise baseline; the winner's curse and shrinkage; on coins, a few real patterns
+   restated (low volatility above all).
+4. Genetic programming (Koza 1992): crossover, tournaments, bloat and parsimony; equal-budget comparison with random
+   search; Allen–Karjalainen (1999).
+5. RL alpha mining: AlphaGen (Yu, Xue, Ao, Pan, He, Tu and He, KDD 2023), the synergy reward; a REINFORCE generator
+   trained here; the policy gradient derived.
+6. LLM research agents: Alpha-GPT (Wang et al. 2023), AlphaAgent (Tang et al. 2025), R&D-Agent-Quant (Li et al.,
+   NeurIPS 2025), as reported; an honest protocol. No agent run here.
+7. Combining weak alphas: the IC ceiling c/√ρ; the participation ratio; equal against estimated weights;
+   residualising against the library (Frisch–Waugh).
+8. The trial counter explodes (10,468 → 23,478): the independent-trials bar; a daily-shuffle null that keeps the
+   trials' correlation (500 formulas ≈ 32 effective).
+9. Decay with the horizon and through time (McLean–Pontiff 2016); signal speed and turnover; WorldQuant and BRAIN
+   (public record); crowding.
+10. China's quant industry: index enhancement (指数增强), February 2024 (micro-caps, DMA, Ningbo Lingjun's one-minute
+    sale and three-day ban), the hedge's arithmetic.
+11. High-Flyer (幻方) to DeepSeek; Fire-Flyer 2 (arXiv 2408.14158).
+12. What remains for humans: priors (the economics of low volatility: Frazzini–Pedersen; Bali–Cakici–Whitelaw), data,
+    judgement, when to stop.
+13. The mined combination registered (13,010 trials) and opened on 2021–25: 2.78 ± 0.71 gross, 1.64 net.
+14. Rule 29: the alpha factory.
+Research: the out-of-sample Sharpe ratio of an estimated combination, SR*/√(1 + K/(T SR*²)) (Brown 1976; Kan–Zhou
+2007): derivation, the in-sample mirror, the limit, simulations, the Wishart bias, the bar for one more alpha, the
+mined alphas.
 
-*Textbooks:* Kakushadze–Serur *151 Trading Strategies*; Isichenko ch. 2–3.
-*Trained:* a GP miner, an RL miner, and an LLM-agent miner on the A-share and crypto cross-sections, all on the
-trial counter and deflated.
-*Visuals:* the formula tree growing; the hurdle rising with the search.
+*Textbooks:* Kakushadze–Serur *151 Trading Strategies*; Isichenko ch. 2–3; Koza; Sutton–Barto ch. 13.
+*Trained:* a random miner, a GP miner (three runs) and a REINFORCE token generator on the crypto cross-section, all on
+the trial counter; the LLM-agent miner is described, not run.
+*Visuals:* the formula tree growing and splicing; the hurdle against the search; the correlation matrix of mined
+alphas; equal against estimated weights by K.
 *Crisis:* February 2024 A-share quant drawdown.
-*Firms:* WorldQuant; High-Flyer; Ubiquant and the Chinese quant private funds (public record).
+*Firms:* WorldQuant; High-Flyer; Ningbo Lingjun (public record).
 *Desk:* "You mined 10,000 alphas with average out-of-sample IC 0.01 and correlation 0.3. What's the combined IC?"
-*House:* the alpha miners (the finale uses only what survives deflation).
+*House:* `explainer/quant/house/alphas.py` (the finale uses only what survives deflation).
 
 ### Act V · Portfolios, Strategies and the Firm
 

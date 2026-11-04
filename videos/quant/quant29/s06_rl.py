@@ -13,6 +13,7 @@ class RL(VoiceoverScene):
         self.paper()
         self.tokens()
         self.reward()
+        self.gradient()
         self.training(r)
         self.pool(r)
         self.question()
@@ -118,6 +119,43 @@ class RL(VoiceoverScene):
             "<bookmark mark='c'/> The update is REINFORCE, from Ronald Williams in 1992: make every token of a formula "
             "more likely in proportion to the reward it earned. <bookmark mark='d'/> Formulas that help join the pool; "
             "past ten, the least useful is dropped."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def gradient(self):
+        rows = [cmath(r"J(\theta)", r"=", r"\mathbb E_{f \sim \pi_\theta}[R(f)] = \textstyle\sum_f \pi_\theta(f)\,R(f)",
+                      font_size=32, colors={r"J(\theta)": RL_C}),
+                cmath(r"\nabla_\theta J", r"=", r"\textstyle\sum_f \pi_\theta(f)\,\nabla_\theta\log\pi_\theta(f)\,R(f)",
+                      font_size=32, colors={r"\nabla_\theta J": RL_C}),
+                cmath(r"\log\pi_\theta(f)", r"=", r"\textstyle\sum_k \log\pi_\theta(a_k \mid a_{<k})", font_size=32),
+                cmath(r"\mathbb E[\nabla_\theta\log\pi_\theta(f)\, b]", r"=", r"b\,\nabla_\theta \textstyle\sum_f"
+                      r"\pi_\theta(f) = 0", font_size=30, colors={r"\mathbb E[\nabla_\theta\log\pi_\theta(f)\, b]": HURDLE})]
+        whys = [why(r"the objective: the expected reward of a formula drawn from the policy"),
+                why(r"the log-derivative trick, $\nabla\pi = \pi\,\nabla\log\pi$: the gradient is itself an expectation, "
+                    r"so a sampled formula gives an unbiased estimate"),
+                why(r"a formula's probability is the product of its tokens' probabilities: the reward is credited to every "
+                    r"token"),
+                why(r"any baseline $b$ can be subtracted from the reward without bias, because the probabilities sum to one: "
+                    r"it only lowers the variance")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "Why does that update work? <bookmark mark='a'/> The goal is the expected reward of a formula drawn from the "
+            "policy. <bookmark mark='b'/> Its gradient uses one trick: the gradient of a probability is the probability "
+            "times the gradient of its logarithm. So the gradient is itself an average over formulas, and a single "
+            "sampled formula gives an unbiased estimate of it. <bookmark mark='c'/> A formula's log-probability is the sum "
+            "over its tokens, so the reward is shared by every token that wrote it. <bookmark mark='d'/> And a baseline "
+            "can be subtracted from the reward for free: its expected contribution is zero, because the probabilities "
+            "always sum to one. Here the baseline is the pool's current score, which is why the reward is the gain."
         ) as vo:
             step(0)
             vo.wait_until("a")

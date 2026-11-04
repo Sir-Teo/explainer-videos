@@ -16,6 +16,7 @@ class Formulaic(VoiceoverScene):
         self.paper()
         self.operators()
         self.tree()
+        self.settings()
         self.coins(g)
         self.table(c)
         self.question()
@@ -57,8 +58,10 @@ class Formulaic(VoiceoverScene):
                                r"\texttt{vwap}"], QC.SPOT),
                   (r"across assets", [r"\texttt{rank}(x)"], QC.CASH),
                   (r"through time", [r"\texttt{ts\_mean}(x, d)", r"\texttt{ts\_std}(x, d)", r"\texttt{ts\_rank}(x, d)",
-                                     r"\texttt{delta}(x, d)", r"\texttt{delay}(x, d)", r"\texttt{corr}(x, y, d)"], QC.OPTION),
-                  (r"arithmetic", [r"$+\ -\ \times\ \div$", r"\texttt{sign}", r"\texttt{abs}", r"\texttt{log}"], QC.VEGA)]
+                                     r"\texttt{ts\_max}(x, d)", r"\texttt{ts\_min}(x, d)", r"\texttt{delta}(x, d)",
+                                     r"\texttt{delay}(x, d)", r"\texttt{corr}(x, y, d)"], QC.OPTION),
+                  (r"arithmetic", [r"$+\ -\ \times\ \div$", r"\texttt{neg}", r"\texttt{sign}", r"\texttt{abs}",
+                                   r"\texttt{slog}: signed log"], QC.VEGA)]
         cols = VGroup()
         for title, items, col in groups:
             g = VGroup(label(title, font_size=22, color=col), *[label(t_, font_size=19) for t_ in items])
@@ -94,8 +97,8 @@ class Formulaic(VoiceoverScene):
         root = node(r"\texttt{mul}", QC.VEGA).move_to(UP * 2.2)
         a = node(r"\texttt{sign}", QC.VEGA).move_to(LEFT * 2.6 + UP * 0.9)
         b = node(r"\texttt{neg}", QC.VEGA).move_to(RIGHT * 2.6 + UP * 0.9)
-        a1 = node(r"\texttt{delta}(\cdot, 1)", QC.OPTION).move_to(LEFT * 2.6 + DOWN * 0.4)
-        b1 = node(r"\texttt{delta}(\cdot, 1)", QC.OPTION).move_to(RIGHT * 2.6 + DOWN * 0.4)
+        a1 = node(r"\texttt{delta}($\cdot$, 1)", QC.OPTION).move_to(LEFT * 2.6 + DOWN * 0.4)
+        b1 = node(r"\texttt{delta}($\cdot$, 1)", QC.OPTION).move_to(RIGHT * 2.6 + DOWN * 0.4)
         a2 = node(r"\texttt{volume}", QC.SPOT).move_to(LEFT * 2.6 + DOWN * 1.7)
         b2 = node(r"\texttt{close}", QC.SPOT).move_to(RIGHT * 2.6 + DOWN * 1.7)
         nodes = [root, a, b, a1, b1, a2, b2]
@@ -118,6 +121,44 @@ class Formulaic(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(f))
         self.wait(0.4)
+        self.clear_scene()
+
+    def settings(self):
+        rows = [cmath(r"\text{delay}", r":", r"s_t \text{ uses data to the close of day } t;\ \text{traded from that close}",
+                      font_size=30, colors={r"\text{delay}": FORMULA}),
+                cmath(r"\text{neutralise}", r":", r"s_{t,i} - \tfrac1{n_t}\textstyle\sum_j s_{t,j}\quad"
+                      r"\text{(or within each industry)}", font_size=30, colors={r"\text{neutralise}": FORMULA}),
+                cmath(r"\text{weights}", r":", r"w_{t,i} \propto \operatorname{rank}(s_t)_i - \overline{\operatorname{rank}},"
+                      r"\quad \textstyle\sum_i |w_{t,i}| = 2", font_size=30, colors={r"\text{weights}": FORMULA}),
+                cmath(r"\text{decay}", r":", r"\tilde s_t = \textstyle\sum_{k=0}^{m-1}(m - k)\, s_{t-k}\big/\sum_k (m - k)",
+                      font_size=30, colors={r"\text{decay}": FORMULA})]
+        whys = [why(r"when the signal is known, and when it can first be traded: the commonest source of a too-good "
+                    r"backtest is a delay of zero that could not be traded"),
+                why(r"take out the day's average, so the book bets on differences between assets, not on the market"),
+                why(r"the portfolio of this part: one dollar long and one short, in proportion to the demeaned rank"),
+                why(r"an optional linear moving average of the signal, which trades less at the price of a slower "
+                    r"signal; we do not use it")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "A formula is not yet a trade. In practice it comes with settings. <bookmark mark='a'/> The delay: the "
+            "signal for day t uses data up to that day's close, and is traded from that close onward, never before. A "
+            "delay of zero that no one could have traded is the commonest way a formula looks too good. "
+            "<bookmark mark='b'/> Neutralisation: subtract the day's average, across all assets or within each industry, "
+            "so the book bets on differences, not on the market. <bookmark mark='c'/> The weights: here, one dollar long "
+            "and one dollar short, in proportion to each asset's rank. <bookmark mark='d'/> And sometimes a decay, a "
+            "moving average of the signal itself, which trades less but reacts more slowly. Every one of these choices "
+            "is another dial a miner can turn, and every turn is a trial."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.5)
         self.clear_scene()
 
     def coins(self, g):
@@ -180,7 +221,7 @@ class Formulaic(VoiceoverScene):
             "ago, and on coins in 2018 and 2019 all three have negative information coefficients: on this market they "
             f"point the wrong way. <bookmark mark='b'/> In 2020, Alpha forty-one turns to {r41['valid']['ic']:+.3f}, and "
             f"Alpha twelve to {r12['valid']['ic']:+.3f}. A formula's sign and size change from one market and one year to "
-            "the next. That is the raw material of mining: thousands of weak, unstable relations, most of them noise."
+            "the next. That is the raw material of mining: thousands of weak relations that do not travel well."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")

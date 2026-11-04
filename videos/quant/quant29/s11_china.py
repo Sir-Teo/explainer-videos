@@ -9,6 +9,8 @@ class China(VoiceoverScene):
         self.card()
         self.enhancement()
         self.february()
+        self.lingjun()
+        self.hedge()
         self.lessons()
         self.question()
 
@@ -76,6 +78,65 @@ class China(VoiceoverScene):
             vo.wait_until("b")
             self.play(Indicate(card, color=QC.CRISIS, scale_factor=1.01))
         self.wait(0.4)
+        self.clear_scene()
+
+    def lingjun(self):
+        card = firm_card(r"Ningbo Lingjun Investment (宁波灵均)", r"a quantitative fund manager; at the open on Monday 19 "
+                         r"February 2024 it sold about 2.57 billion yuan of A-shares within one minute, as the exchanges "
+                         r"reported. The Shanghai and Shenzhen exchanges barred it from trading from 20 to 22 February",
+                         numbers=((r"2.57\ \text{bn}", r"yuan of shares sold between 9:30 and 9:31, as reported"),
+                                  (r"60\ \text{bn}+", r"yuan managed, by the firm's own account; it apologised, saying its "
+                                                       r"models had been hit by abnormal short-term market conditions")),
+                         source=r"exchange notices; Bloomberg, Reuters and SCMP, 20--21 February 2024", kind=r"Public record",
+                         width=10.6, font_size=22).move_to(ORIGIN)
+        with self.voiceover(
+            "The fund whose accounts were frozen is a matter of public record. <bookmark mark='a'/> At the open on the "
+            "nineteenth of February, Ningbo Lingjun Investment sold about two and a half billion yuan of shares within "
+            "a single minute, as the exchanges reported, and both exchanges barred it from trading for the next three "
+            "days. <bookmark mark='b'/> The firm apologised, saying its models had been hit by abnormal short-term "
+            "market conditions. The episode shows the other side of automation: a model's sell order, executed at "
+            "machine speed into a falling market, became a regulatory event."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def hedge(self):
+        rows = [cmath(r"r_{\text{book}}", r"=", r"r_{\text{long}} - \beta\, r_{\text{future}}", font_size=34,
+                      colors={r"r_{\text{book}}": FORMULA}),
+                cmath(r"r_{\text{long}}", r"=", r"\beta\,r_{\text{index}} + \underbrace{(r_{\text{small}} - r_{\text{index}})}"
+                      r"_{\text{the size spread}} + \alpha", font_size=30),
+                cmath(r"r_{\text{book}}", r"\approx", r"\alpha + (r_{\text{small}} - r_{\text{index}}) - \text{basis change}",
+                      font_size=30, colors={r"r_{\text{book}}": BAD}),
+                cmath(r"\text{loss}", r"=", r"L \times \big|r_{\text{small}} - r_{\text{index}}\big|", font_size=32,
+                      colors={r"\text{loss}": BAD})]
+        whys = [why(r"a long book of stocks, short index futures in proportion to its beta"),
+                why(r"a book tilted toward smaller stocks than the index carries the size spread on top of its stock picks"),
+                why(r"the hedge removes the index, not the spread; and futures can trade at a discount that moves too"),
+                why(r"with leverage $L$, the spread's fall is multiplied, and margin calls turn it into forced selling")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "The arithmetic of the hedge. <bookmark mark='a'/> A book is long stocks and short index futures in "
+            "proportion to its beta. <bookmark mark='b'/> If its stocks are smaller than the index's, the long side "
+            "carries the spread between small and large stocks, on top of whatever the stock picks add. "
+            "<bookmark mark='c'/> The hedge removes the index's move but not that spread, and the futures' own discount to "
+            "the index can move against you as well. <bookmark mark='d'/> Add leverage and the spread's fall is "
+            "multiplied; margin calls then turn the loss into selling, and the selling into the next day's loss."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.5)
         self.clear_scene()
 
     def lessons(self):

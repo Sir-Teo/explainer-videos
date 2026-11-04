@@ -16,8 +16,10 @@ class Research(VoiceoverScene):
         self.card()
         self.setup_()
         self.derive()
+        self.mirror()
         self.theorem()
         self.sims(t)
+        self.wishart(t)
         self.marginal(t)
         self.data(t)
         self.open_problems()
@@ -99,11 +101,40 @@ class Research(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def mirror(self):
+        rows = [cmath(r"SR_{\text{in}}(\hat w)", r"=", r"\frac{\hat w^\top\hat\mu}{\sqrt{\hat w^\top\Sigma\hat w}} = \|z\|",
+                      font_size=32, colors={r"SR_{\text{in}}(\hat w)": TRAIN_C}),
+                cmath(r"\|z\|", r"\approx", r"\sqrt{SR_*^2 + K/T}", font_size=32, colors={r"\|z\|": TRAIN_C}),
+                cmath(r"SR_{\text{in}} \cdot SR_{\text{out}}", r"\approx", r"SR_*^2", font_size=34,
+                      colors={r"SR_{\text{in}} \cdot SR_{\text{out}}": HURDLE})]
+        whys = [why(r"measured on the same days that estimated the weights, the Sharpe ratio is the length of $z$ itself"),
+                why(r"it grows with $K$ even when the alphas are worthless: $\sqrt{K/T}$ of pure fit"),
+                why(r"in-sample optimism and out-of-sample loss are two faces of one quantity: the more one rises, the more "
+                    r"the other falls")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "The same calculation explains the training years. <bookmark mark='a'/> Measured on the days that estimated "
+            "the weights, the Sharpe ratio is simply the length of z. <bookmark mark='b'/> That is about the square root "
+            "of the true squared Sharpe ratio plus K over T: it grows with every alpha added, even worthless ones. "
+            "<bookmark mark='c'/> Multiply the two: the in-sample and out-of-sample Sharpe ratios multiply to about the "
+            "true squared Sharpe ratio. Optimism in sample and disappointment out of sample are one quantity seen from "
+            "two sides, which is exactly what Chapter seven's training and 2020 lines showed."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def theorem(self):
         st = VGroup(MathTex(r"SR(\hat w) \xrightarrow{\ p\ } \frac{SR_*}{\sqrt{1 + \gamma/SR_*^2}},\qquad K, T \to \infty,\ "
                             r"K/T \to \gamma", font_size=32),
                     wrapped_label(r"with the covariance estimated as well, the loss is larger: the estimated inverse "
-                                  r"covariance is biased up by $T/(T - K - 2)$ and noisy, as Kan and Zhou (2007) work out "
+                                  r"covariance is biased up by $(T - 1)/(T - K - 2)$ and noisy, as Kan and Zhou (2007) work out "
                                   r"exactly for the plug-in portfolio; shrinkage recovers part of it", 9.6, 20)
                     ).arrange(DOWN, buff=0.35)
         card = theorem_card(r"Estimation risk in combinations", st, r"after Brown (1976); Kan and Zhou (2007), "
@@ -147,8 +178,9 @@ class Research(VoiceoverScene):
                              GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         r250 = t["sims"]["250"]
+        sr_year = t["sr_each"] * math.sqrt(365)
         with self.voiceover(
-            f"Check it. Give every alpha the same small edge, a Sharpe ratio of {t['sr_each'] * math.sqrt(365):.2f} a year, "
+            f"Check it. Give every alpha the same small edge, a Sharpe ratio of {sr_year:.2f} a year, "
             "and make them independent. <bookmark mark='a'/> The grey line is what the true weights would earn: it grows like the square "
             "root of K. <bookmark mark='b'/> The coloured lines are the formula for one, two and four years of data, and "
             "the dots are simulations: they sit on the lines. With a year of data, forty alphas earn "
@@ -163,6 +195,40 @@ class Research(VoiceoverScene):
             vo.wait_until("c")
             self.play(*[FadeIn(e_) for e_ in est])
         self.wait(0.4)
+        self.clear_scene()
+
+    def wishart(self, t):
+        rows = [cmath(r"(T - 1)\hat\Sigma", r"\sim", r"W_K(T - 1, \Sigma)", font_size=32, colors={r"(T - 1)\hat\Sigma": HURDLE}),
+                cmath(r"\mathbb E\big[\hat\Sigma^{-1}\big]", r"=", r"\frac{T - 1}{T - K - 2}\,\Sigma^{-1}", font_size=32,
+                      colors={r"\mathbb E\big[\hat\Sigma^{-1}\big]": BAD}),
+                cmath(r"\hat w", r"=", r"\hat\Sigma^{-1}\hat\mu:\ \text{two noises, and the second is not averaged away}",
+                      font_size=30, colors={r"\hat w": HURDLE})]
+        whys = [why(r"the sample covariance of normal returns is a Wishart matrix with $T - 1$ degrees of freedom, "
+                    r"independent of $\hat\mu$"),
+                why(r"its inverse is biased upward, without bound as $K$ approaches $T$; the bias inflates every weight "
+                    r"alike, but the noise around it tilts the weights in random directions"),
+                why(rf"in the simulation: with $T = 250$ and $K = 80$, "
+                    rf"{t['sims']['250'][-1]['known']:.3f} a day with $\Sigma$ known, "
+                    rf"{t['sims']['250'][-1]['estimated']:.3f} with $\Sigma$ estimated")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        r80 = t["sims"]["250"][-1]
+        with self.voiceover(
+            "Why does estimating the covariance cost more? <bookmark mark='a'/> The sample covariance of normal returns is "
+            "a Wishart matrix with T minus one degrees of freedom, independent of the estimated means. "
+            "<bookmark mark='b'/> Its inverse is biased upward by T minus one over T minus K minus two, which explodes as "
+            "the number of alphas approaches the number of days. A pure scale would not change the Sharpe ratio, but the "
+            "noise around it tilts the weights in random directions. <bookmark mark='c'/> So the plug-in rule carries two "
+            "noises, and the second does not average away. In the simulation with one year of data and eighty alphas: "
+            f"{r80['known']:.3f} a day with the covariance known, {r80['estimated']:.3f} with it estimated."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def marginal(self, t):

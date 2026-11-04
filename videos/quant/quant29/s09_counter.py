@@ -17,6 +17,7 @@ class Counter(VoiceoverScene):
         self.sources(c)
         self.hurdle(c, e)
         self.correlated(c, e)
+        self.shuffled(load("permnull"), c, e)
         self.question()
 
     def card(self):
@@ -43,12 +44,12 @@ class Counter(VoiceoverScene):
         t26 = label(rf"Part 26: {comma(cnt[i26] - cnt[i26 - 1])} trading rules", font_size=17, color=QC.HOUSE).next_to(
             bars[i26], UP, buff=0.15).shift(LEFT * 1.4)
         t29 = MathTex(comma(cnt[-1]), font_size=26, color=HURDLE).next_to(bars[-1], UP, buff=0.12)
+        n25, n_add, n_now = int(cnt[i26 - 1]), int(cnt[-1] - cnt[-2]), int(cnt[-1])
         with self.voiceover(
             "The counter, part by part. <bookmark mark='a'/> For twenty-five parts it crept up: a few dozen "
-            f"configurations at a time, to {comma(cnt[i26 - 1]).replace('{,}', ',')} by Part twenty-five. Part twenty-six "
+            f"configurations at a time, to {n25:,} by Part twenty-five. Part twenty-six "
             "added the ten thousand technical trading rules of its data-snooping study. <bookmark mark='b'/> This part "
-            f"adds {comma(cnt[-1] - cnt[-2]).replace('{,}', ',')} more, and the counter stands at "
-            f"{comma(cnt[-1]).replace('{,}', ',')}. More than half of every trial in the series so far was made in this "
+            f"adds {n_add:,} more, and the counter stands at {n_now:,}. More than half of every trial in the series so far was made in this "
             "one part."
         ) as vo:
             self.play(FadeIn(g))
@@ -80,9 +81,9 @@ class Counter(VoiceoverScene):
                     font_size=15, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Where they came from. <bookmark mark='a'/> Ten thousand random formulas. The distinct trees that evolution "
-            "evaluated across three runs. The distinct formulas the learned generator wrote, though most of its fifteen "
-            "hundred attempts were repeats. And the handful of combinations we compared. <bookmark mark='b'/> "
-            f"{comma(tot).replace('{,}', ',')} in all. A trial is any configuration whose result could have changed what "
+            "evaluated across three runs. The distinct formulas the learned generator wrote, though most of its attempts "
+            "were repeats. And the handful of combinations we compared. <bookmark mark='b'/> "
+            f"{tot:,} in all. A trial is any configuration whose result could have changed what "
             "we registered, whatever the algorithm called it: a draw, an individual, an episode."
         ) as vo:
             vo.wait_until("a")
@@ -114,7 +115,7 @@ class Counter(VoiceoverScene):
             "Part twenty-six's arithmetic. <bookmark mark='a'/> An annual Sharpe ratio measured over T years carries "
             "noise of about one over root T. <bookmark mark='b'/> So if all N strategies were worthless, the best would "
             "still show the square root of two log N over root T. <bookmark mark='c'/> With this part's "
-            f"{comma(N).replace('{,}', ',')} trials and three research years, that is {h:.2f}. <bookmark mark='d'/> Our "
+            f"{N:,} trials and three research years, that is {h:.2f}. <bookmark mark='d'/> Our "
             f"mined combination earned {e['sr_res']:.2f} on its research years. Judged this way, it would not clear the "
             "bar: an in-sample number from a search this size proves nothing on its own."
         ) as vo:
@@ -154,6 +155,55 @@ class Counter(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def shuffled(self, p, c, e):
+        rows = [cmath(r"\tilde r_{t+1}", r"=", r"\pi_t(r_{t+1}),\quad \pi_t \text{ a random shuffle of the coins on day } t",
+                      font_size=30, colors={r"\tilde r_{t+1}": HURDLE}),
+                cmath(r"M", r"=", r"\max_{i \le N}\,\big|\overline{IC}_i(\tilde r)\big|,\qquad N = " + f"{p['n_forms']}",
+                      font_size=30, colors={r"M": BAD}),
+                cmath(r"\sigma_e\sqrt{2\ln 2N}", r"=", rf"{p['indep_bar']:.4f}\quad\text{{(independent trials)}}", font_size=30),
+                cmath(r"\overline M", r"=", rf"{p['mean_null_max']:.4f}\ \Rightarrow\ N_{{\text{{eff}}}} \approx "
+                      rf"{p['n_eff']:.0f}", font_size=30, colors={r"\overline M": COMB})]
+        whys = [why(r"destroy any link between signal and return, but keep everything else: one shuffle per day, shared "
+                    r"by every formula, so the formulas stay exactly as correlated with one another as they are"),
+                why(rf"the best score among the first {p['n_forms']} random formulas, on the shuffled returns "
+                    rf"({p['n_perm']} shuffles)"),
+                why(r"what the best would be if the formulas were independent (both signs counted)"),
+                why(r"the number of independent formulas that would give the same expected best: the search's effective "
+                    r"size")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        frac = 100 * p["n_eff"] / p["n_forms"]
+        n_all = sum(c["by_source"].values())
+        n_scaled = int(round(n_all * p["n_eff"] / p["n_forms"]))
+        bar_scaled = math.sqrt(2 * math.log(n_scaled)) / math.sqrt(3.0)
+        sr_res = e["sr_res"]
+        note_ = wrapped_label(rf"scaled to the whole search (a rough extrapolation): about {n_scaled:,} effective trials, a bar "
+                              rf"of {bar_scaled:.2f} against the combination's {sr_res:.2f}".replace(",", "{,}", 1), 11.6, 17,
+                              COMB).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "We can measure how correlated our trials are, with a shuffle. <bookmark mark='a'/> On each day, shuffle "
+            "tomorrow's returns among the coins. Any real link between a signal and the returns is destroyed, but the "
+            "formulas themselves, and their correlations with one another, are untouched. <bookmark mark='b'/> Score "
+            f"the first {p['n_forms']} random formulas on the shuffled returns and keep the best, {p['n_perm']} times over. "
+            f"<bookmark mark='c'/> Independent trials would put that best at {p['indep_bar']:.4f}. "
+            f"<bookmark mark='d'/> The shuffles give {p['mean_null_max']:.4f}: what about {p['n_eff']:.0f} independent "
+            f"formulas would give, {frac:.0f} percent of the {p['n_forms']}. This is the honest correction: not a guess "
+            "about correlation, but the null of this very search, run again. Scaled roughly to the whole search, that is "
+            f"about {n_scaled:,} effective trials, and a bar of {bar_scaled:.2f}, which the combination's in-sample "
+            f"{sr_res:.2f} just clears."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+            self.play(FadeIn(note_))
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

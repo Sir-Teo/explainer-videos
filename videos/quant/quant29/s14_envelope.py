@@ -13,11 +13,13 @@ class Envelope(VoiceoverScene):
         e = load("envelope")
         self.card()
         self.register(e)
+        self.book(e)
         self.research(e)
         self.opened(e)
         self.years(e)
         self.checks(e)
         self.reading(e)
+        self.next_steps()
         self.question(e)
 
     def card(self):
@@ -36,6 +38,7 @@ class Envelope(VoiceoverScene):
                                   (r"10\ \text{bp}", rf"a round trip, on the measured turnover of {e['turnover']:.2f} "
                                                      r"dollars a day per dollar long: the cost charged")),
                          kind=r"Registered", width=10.6, font_size=22).move_to(UP * 0.5)
+        n_tr, n_now = int(e["n_trials"]), int(e["trials"])
         ctr = MathTex(rf"\text{{the counter}}:\ {comma(e['trials'] - e['n_trials'])}\ \to\ {comma(e['trials'])}", font_size=30,
                       color=QC.HOUSE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
@@ -43,14 +46,39 @@ class Envelope(VoiceoverScene):
             "book, combined with weights estimated on 2018 to 2020. The number of formulas was chosen by the estimated "
             "combination's score on 2020, a rule written before Chapter seven's comparison, and kept: equal weights look "
             "better there, but switching now would be a second look. <bookmark mark='b'/> "
-            f"{comma(e['n_trials']).replace('{,}', ',')} trials, and costs of ten basis points a round trip on the "
-            f"turnover the book actually needs. The counter moves to {comma(e['trials']).replace('{,}', ',')}."
+            f"{n_tr:,} trials, and costs of ten basis points a round trip on the "
+            f"turnover the book actually needs. The counter moves to {n_now:,}."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
             self.play(FadeIn(ctr))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def book(self, e):
+        rows = VGroup()
+        for f, w in zip(e["formulas"], e["weights"]):
+            rows.add(VGroup(label(tt(f, 64), font_size=15, color=GREY_A),
+                            MathTex(f"{w:+.3f}", font_size=26, color=GOOD if w > 0 else BAD)))
+        for j, r_ in enumerate(rows):
+            r_[0].move_to([-1.0, 1.8 - 0.7 * j, 0]).align_to(np.array([-6.2, 0, 0]), LEFT)
+            r_[1].move_to([5.2, 1.8 - 0.7 * j, 0])
+        head = VGroup(label(r"the registered formulas", font_size=20, color=GREY_B).move_to([-3.6, 2.6, 0]),
+                      label(r"weight", font_size=20, color=GREY_B).move_to([5.2, 2.6, 0]))
+        foot = wrapped_label(r"each formula's sign is set by its 2018--19 IC; the weights are mean-variance on 2018--2020, "
+                             r"scaled so their absolute values sum to one. A negative weight shorts that formula's book",
+                             11.6, 16, GREY_A).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "Here is the book, in full. <bookmark mark='a'/> Five formulas, four of them about the day's range in one "
+            "form or another, and their weights. Look at the signs: the optimiser shorts one cousin to "
+            "hedge another, which is what estimated weights do with correlated signals, and why Chapter seven did not "
+            "trust them. Nothing here was changed after the envelope was opened."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 
@@ -71,6 +99,7 @@ class Envelope(VoiceoverScene):
     def research(self, e):
         g1, l1 = self._cum(e["res_dates"], e["cum_res"], TRAIN_C, r"2018--2020: the research years")
         r = e["row"]["research"]
+        n_tr = int(e["n_trials"])
         VGroup(g1, l1).move_to(LEFT * 2.2 + DOWN * 0.2)
         side = VGroup(MathTex(rf"SR = {r['sharpe']:.2f} \pm {r['sharpe_se']:.2f}", font_size=26, color=TRAIN_C),
                       MathTex(rf"\text{{net of costs}}:\ {r['sharpe_net']:.2f}", font_size=24),
@@ -81,7 +110,7 @@ class Envelope(VoiceoverScene):
         with self.voiceover(
             "First, the research years, on which everything was chosen. <bookmark mark='a'/> A Sharpe ratio of "
             f"{r['sharpe']:.2f} before costs, {r['sharpe_net']:.2f} after. That is the promise, and promises from a search "
-            "of thirteen thousand formulas are cheap."
+            f"of {n_tr:,} formulas are cheap."
         ) as vo:
             self.play(FadeIn(g1))
             vo.wait_until("a")
@@ -92,6 +121,7 @@ class Envelope(VoiceoverScene):
     def opened(self, e):
         g2, l2 = self._cum(e["hold_dates"], e["cum_hold"], OOS_C, r"2021--2025: sealed until now")
         h = e["row"]["holdout"]
+        dd = abs(100 * h["maxdd"])
         VGroup(g2, l2).move_to(LEFT * 2.2 + DOWN * 0.2)
         side = VGroup(MathTex(rf"SR = {h['sharpe']:.2f} \pm {h['sharpe_se']:.2f}", font_size=26, color=OOS_C),
                       MathTex(rf"\text{{net of costs}}:\ {h['sharpe_net']:.2f}", font_size=24),
@@ -103,7 +133,7 @@ class Envelope(VoiceoverScene):
             "Then the envelope. <bookmark mark='a'/> Five years the miners never saw: a crypto boom, the crash of 2022, "
             "and the recovery. <bookmark mark='b'/> The combination rose steadily through all of it. A Sharpe ratio of "
             f"{h['sharpe']:.2f} with a standard error of {h['sharpe_se']:.2f} before costs, {h['sharpe_net']:.2f} after, "
-            f"and a worst fall of {abs(100 * h['maxdd']):.1f} percent. The patterns the miners found were not noise."
+            f"and a worst fall of {dd:.1f} percent. The patterns the miners found were not noise."
         ) as vo:
             self.play(FadeIn(g2))
             vo.wait_until("a")
@@ -204,6 +234,28 @@ class Envelope(VoiceoverScene):
             "edge; and the backtest trades at the very close it uses to compute the signal, which in practice means a "
             "little later and a little worse. <bookmark mark='c'/> The Track Record keeps the row, gross and net, with "
             "its trials counted, and the finale deflates it with everything else."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def next_steps(self):
+        cards = VGroup(
+            desk_question(r"before any money", r"trade it on paper with real fills: the close is a moment, not a price "
+                          r"(Part 37, execution)", width=12.4, font_size=19),
+            desk_question(r"before any size", r"how much the coins' books can absorb before the edge pays for its own "
+                          r"impact (Part 31, capacity)", width=12.4, font_size=19),
+            desk_question(r"before any trust", r"watch it decay live, against the counter, with a rule for switching "
+                          r"it off written now", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "What a desk would do next, in order. <bookmark mark='a'/> Before any money, trade it on paper against real "
+            "fills, because a closing price is a moment, not a price you can always get. <bookmark mark='b'/> Before any "
+            "size, measure how much the coins' order books can absorb before the edge pays for its own impact. "
+            "<bookmark mark='c'/> And before any trust, watch it live, with a rule for switching it off written down "
+            "now, not after the first bad month."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

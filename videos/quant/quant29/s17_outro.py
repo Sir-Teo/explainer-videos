@@ -80,6 +80,7 @@ class Outro(VoiceoverScene):
         gp_tr = sum(x["train"] for x in gp_last) / len(gp_last)
         gp_va = sum(x["valid"] for x in gp_last) / len(gp_last)
         h = env["row"]["holdout"]
+        n_eff = c["n_eff"]
         items = [
             (r"formulaic alphas: Kakushadze's 101, short-horizon, 15.9\% average correlation; two of three, on coins, "
              r"changed sign in 2020", FORMULA),
@@ -114,7 +115,7 @@ class Outro(VoiceoverScene):
             "above all that calm coins beat wild ones. Genetic programming breeds formulas and bloats them; a learned "
             "generator writes them token by token, rewarded for what they add, and both found the same patterns. "
             "Language-model agents now run the whole loop, on their authors' numbers. And the best alphas turn out to "
-            "be cousins: forty of them, about three bets."
+            f"be cousins: forty of them, about {n_eff:.0f} bets."
         ):
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                 run_time=20))

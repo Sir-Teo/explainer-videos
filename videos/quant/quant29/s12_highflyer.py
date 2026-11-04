@@ -8,6 +8,7 @@ class HighFlyer(VoiceoverScene):
     def construct(self):
         self.card()
         self.story()
+        self.fireflyer()
         self.meaning()
         self.question()
 
@@ -50,6 +51,29 @@ class HighFlyer(VoiceoverScene):
             for k, mk in enumerate(("a", "b", "c", "d")):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def fireflyer(self):
+        card = firm_card(r"Fire-Flyer 2 (DeepSeek-AI, 2024)", r"`Fire-Flyer AI-HPC: a cost-effective software-hardware "
+                         r"co-design for deep learning', accepted at SC'24: the cluster built for the fund and then for the "
+                         r"language models, with its own communication library and distributed file system",
+                         numbers=((r"10{,}000", r"PCIe A100 graphics processors, as the authors report"),
+                                  (r"\tfrac12", r"about half the cost of comparable DGX systems and 40\% less energy, for "
+                                                 r"similar performance, as reported")),
+                         source=r"arXiv 2408.14158", kind=r"Paper file", width=10.6, font_size=22).move_to(ORIGIN)
+        with self.voiceover(
+            "The machine itself is described in a paper. <bookmark mark='a'/> In 2024 DeepSeek's engineers published the "
+            "design of Fire-Flyer two: ten thousand graphics processors of a cheaper kind, with their own software for "
+            "moving data between them. <bookmark mark='b'/> They report performance close to the vendor's premium "
+            "systems at about half the cost and forty percent less energy. A quant fund's habit of squeezing cost out "
+            "of every computation became a language-model lab's advantage."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
         self.wait(0.4)
         self.clear_scene()
 

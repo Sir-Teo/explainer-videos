@@ -9,6 +9,8 @@ class Humans(VoiceoverScene):
         self.card()
         self.three()
         self.priors()
+        self.economics()
+        self.stopping()
         self.question()
 
     def card(self):
@@ -61,6 +63,62 @@ class Humans(VoiceoverScene):
             "square root of two log N standard errors above zero. <bookmark mark='b'/> Ten thousand tries put the bar at "
             f"{h4:.1f} standard errors; a hundred tries at {h2:.1f}. <bookmark mark='c'/> So a researcher's prior is "
             "worth exactly what it removes from the search without removing the truth."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def economics(self):
+        cards = VGroup(
+            desk_question(r"leverage constraints", r"investors who cannot borrow buy risky assets to get risk, bidding them "
+                          r"up and their future returns down (Frazzini and Pedersen, `Betting against beta', 2014)",
+                          width=12.4, font_size=19),
+            desk_question(r"lottery demand", r"assets with extreme daily jumps are bought as lottery tickets and earn less "
+                          r"afterwards (Bali, Cakici and Whitelaw, 2011, the MAX effect)", width=12.4, font_size=19),
+            desk_question(r"a prior predicts, it does not only explain", r"each story says where the effect should be "
+                          r"strongest: where borrowing is costly, or where retail attention is high; that is the test, "
+                          r"and it must be stated before the data are seen", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Take the pattern our miners found: calm coins beat wild ones. A researcher's first job is to ask why anyone "
+            "would leave that on the table. <bookmark mark='a'/> One answer is leverage constraints: investors who "
+            "cannot borrow buy risky assets to get risk, which bids them up and lowers their later returns, Andrea "
+            "Frazzini and Lasse Pedersen's betting against beta. <bookmark mark='b'/> Another is lottery demand: assets "
+            "with extreme daily jumps are bought like lottery tickets and do worse afterwards, as Turan Bali, Nusret "
+            "Cakici and Robert Whitelaw found in stocks. <bookmark mark='c'/> A story earns its place only if it "
+            "predicts where the effect should be strongest, and the prediction is written down before the data are "
+            "looked at. A story told afterwards, to fit what was found, is just one more trial."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def stopping(self):
+        rows = [cmath(r"\mathbb E\max_{i \le N} \hat\theta_i", r"\approx", r"\sigma\sqrt{2\ln N}", font_size=32,
+                      colors={r"\mathbb E\max_{i \le N} \hat\theta_i": HURDLE}),
+                cmath(r"\frac{d}{dN}\,\sigma\sqrt{2\ln N}", r"=", r"\frac{\sigma}{N\sqrt{2\ln N}}", font_size=32),
+                cmath(r"\text{stop when}", r"\ ", r"\text{a new trial's expected gain} < \text{its cost} + "
+                      r"\text{the bar's rise}", font_size=28, colors={r"\text{stop when}": GOOD})]
+        whys = [why(r"the best of $N$ draws of pure noise, the yardstick for every search"),
+                why(r"the gain from one more trial shrinks almost like $1/N$: the thousandth formula is worth a thousandth "
+                    r"of the first"),
+                why(r"every trial also raises the bar the winner must clear by the same amount: past a point, searching "
+                    r"more makes the result less believable, not more")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "And judgement includes knowing when to stop. <bookmark mark='a'/> The best of N noise draws sits at sigma "
+            "times the root of two log N. <bookmark mark='b'/> Its slope falls almost like one over N: the thousandth "
+            "formula adds a thousandth as much as the first. <bookmark mark='c'/> But every trial also raises the bar "
+            "that the winner must clear, by exactly the same amount. So past a point, a larger search does not make the "
+            "result more convincing. It makes it less."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -13,6 +13,7 @@ class RandomSearch(VoiceoverScene):
         r = load("random")
         self.card()
         self.draws(r)
+        self.spread(r, load("noise"))
         self.scatter(r)
         self.best(r)
         self.curse(r)
@@ -52,6 +53,54 @@ class RandomSearch(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(foot))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def spread(self, r, nz):
+        tr = np.asarray(r["train"], float)
+        tr = tr[np.isfinite(tr)]
+        noise = np.abs(np.asarray(nz["train"], float))
+        top = float(np.ceil(np.percentile(tr, 99.9) * 100) / 100)
+        bins = np.linspace(0, top, 31)
+        h_r, _ = np.histogram(np.clip(tr, 0, top), bins)
+        h_n, _ = np.histogram(np.clip(noise, 0, top), bins)
+        f_r, f_n = h_r / h_r.sum(), h_n / h_n.sum()
+        ym = float(np.ceil(max(f_r.max(), f_n.max()) * 20) / 20)
+        g = axes([0, top], [0, ym], x_length=7.4, y_length=4.4, xlabel=r"$|$mean daily IC$|$ on 2018--19",
+                 ylabel=r"share of formulas", xticks=[0, top / 2, top], yticks=[0, ym / 2, ym], font_size=15,
+                 xfmt=lambda v: f"{v:.2f}", yfmt=lambda v: f"{v:.2f}").move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        w = bins[1] - bins[0]
+
+        def bars(f, col, op):
+            return VGroup(*[Rectangle(width=ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0], height=max(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1],
+                                                                                          0.001),
+                                      stroke_width=0, fill_color=col, fill_opacity=op).move_to(
+                ax.c2p(b + w / 2, 0), aligned_edge=DOWN) for b, v in zip(bins[:-1], f) if v > 0])
+        bn, br = bars(f_n, GREY_B, 0.6), bars(f_r, RAND_C, 0.85)
+        leg = legend([(GREY_B, rf"{nz['n']} pure-noise signals"), (RAND_C, rf"{r['n']:,} random formulas".replace(",", "{,}"))],
+                     font_size=15).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        med_r, med_n = float(np.median(tr)), float(np.median(noise))
+        ratio = med_r / med_n
+        side = VGroup(MathTex(rf"	ext{{median, formulas}}: {med_r:.3f}", font_size=22, color=RAND_C),
+                      MathTex(rf"	ext{{median, noise}}: {med_n:.3f}", font_size=22, color=GREY_B),
+                      wrapped_label(r"noise: a fresh random number for every coin and day, scored by the same code",
+                                    3.4, 15, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.35)
+        fit_right(side)
+        with self.voiceover(
+            "Before the winners, the crowd. <bookmark mark='a'/> What does a formula score when it knows nothing? We "
+            "gave the same scoring code a fresh random number for every coin on every day, a few hundred times. Those "
+            f"scores pile up near zero: the median is {med_n:.3f}. <bookmark mark='b'/> The random formulas sit far to "
+            f"the right: a median of {med_r:.3f}, about {ratio:.0f} times the noise. Almost any formula built from prices "
+            "and volumes on these coins is correlated with something that predicts tomorrow. That is the first surprise "
+            "of mining on this market, and it changes every chapter that follows."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bn], lag_ratio=0.03))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in br], lag_ratio=0.03), FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
 
@@ -130,8 +179,7 @@ class RandomSearch(VoiceoverScene):
             "Now keep only the best so far. <bookmark mark='a'/> As the search grows from ten formulas to ten thousand, "
             f"the winner's training score climbs, to {last['train']:.3f}. <bookmark mark='b'/> What would pure noise "
             "reach? We fed the same machinery signals of random numbers: the best of ten thousand noise formulas "
-            f"would score about {h_end:.3f}. The real winner is above that bar, but not by a wide margin, and a "
-            "less patterned market would have put it below. <bookmark mark='c'/> On 2020 the same winners held up: the "
+            f"would score about {h_end:.3f}. The real winner sits well above that bar. <bookmark mark='c'/> On 2020 the same winners held up: the "
             f"best of ten thousand scored {last['valid']:+.3f}. Here the search found something, because the space "
             "contains patterns larger than the sampling noise."
         ) as vo:

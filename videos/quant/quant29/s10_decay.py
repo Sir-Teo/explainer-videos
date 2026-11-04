@@ -13,6 +13,7 @@ class Decay(VoiceoverScene):
         self.lags(d)
         self.years(d)
         self.model()
+        self.speed(d)
         self.factory()
         self.crowding()
         self.question()
@@ -125,6 +126,45 @@ class Decay(VoiceoverScene):
             vo.wait_until("d")
             step(3)
         self.wait(0.5)
+        self.clear_scene()
+
+    def speed(self, d):
+        sp = d["speed"]
+        names = [("mined", r"the mined alpha", FORMULA), ("Alpha#12", r"Alpha\#12", BAD), ("Alpha#41", r"Alpha\#41", BAD),
+                 ("Alpha#101", r"Alpha\#101", BAD)]
+        hx = [-3.6, 0.4, 3.4]
+        head = VGroup(label(r"signal", font_size=18, color=GREY_B), label(r"rank autocorrelation, day to day", font_size=18,
+                                                                          color=GREY_B),
+                      label(r"turnover a day, per \$1 long", font_size=18, color=GREY_B))
+        tab = VGroup(head)
+        for k, t, col in names:
+            tab.add(VGroup(label(t, font_size=20, color=col), MathTex(f"{sp[k]['autocorr']:+.3f}", font_size=26),
+                           MathTex(rf"\${sp[k]['turnover']:.2f}", font_size=26)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 2.0 - 0.75 * j, 0])
+        cost_m = 365 * sp["mined"]["turnover"] * 5 / 1e4
+        cost_c = 365 * sp["Alpha#12"]["turnover"] * 5 / 1e4
+        foot = wrapped_label(rf"at 10 bp a round trip (5 bp per dollar traded): about {100 * cost_m:.0f}\% a year for the "
+                             rf"mined alpha, about {100 * cost_c:.0f}\% for Alpha\#12, before any edge", 11.4, 17,
+                             GREY_A).to_edge(DOWN, buff=0.6)
+        a_m, t_m = sp["mined"]["autocorr"], sp["mined"]["turnover"]
+        t_12 = sp["Alpha#12"]["turnover"]
+        pc_m, pc_c = 100 * cost_m, 100 * cost_c
+        with self.voiceover(
+            "Measure the speed directly. <bookmark mark='a'/> The ranks our mined alpha gives the coins barely change from "
+            f"one day to the next: an autocorrelation of {a_m:.3f}, and a book that trades {t_m:.2f} dollars a day per "
+            "dollar long. <bookmark mark='b'/> Kakushadze's three alphas, on the same coins, reshuffle completely every "
+            f"day: autocorrelations near zero, and turnover of about {t_12:.1f} dollars a day, the whole book replaced. At "
+            f"ten basis points a round trip, that costs about {pc_c:.0f} percent a year before any edge; the mined alpha "
+            f"costs about {pc_m:.0f}. Fast alphas are built for desks that trade for almost nothing."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(tab[1]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[2:]], lag_ratio=0.3), FadeIn(foot))
+        self.wait(0.4)
         self.clear_scene()
 
     def factory(self):

@@ -12,6 +12,7 @@ class Agents(VoiceoverScene):
         self.alphaagent()
         self.rdagent()
         self.checks()
+        self.protocol()
         self.question()
 
     def card(self):
@@ -139,6 +140,38 @@ class Agents(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def protocol(self):
+        rows = [cmath(r"1.", r"\ ", r"\text{a model whose training data end before the test period (Part 28)}", font_size=28),
+                cmath(r"2.", r"\ ", r"\text{every hypothesis, every code version, every backtest: logged and counted}",
+                      font_size=28),
+                cmath(r"3.", r"\ ", r"\text{the agent, its prompts and its tools frozen and registered}", font_size=28),
+                cmath(r"4.", r"\ ", r"\text{one opening, on data neither the model nor the loop has seen}", font_size=28)]
+        whys = [why(r"otherwise the agent may simply remember which factors worked in the years it is tested on"),
+                why(r"the counter's input: an agent's loop can run thousands of times a day"),
+                why(r"the strategy registered is the whole machine, not only the formula it last printed"),
+                why(r"the sealed envelope, as for every strategy in this series")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "So how would one test a research agent honestly? Four rules. <bookmark mark='a'/> Its language model must "
+            "have been trained on data that end before the test period: Part twenty-eight's dated models. "
+            "<bookmark mark='b'/> Every hypothesis, every version of the code and every backtest is logged and counted. "
+            "<bookmark mark='c'/> The agent, its prompts and its tools are frozen and registered, because the strategy is "
+            "the whole machine, not just the last formula it printed. <bookmark mark='d'/> And it is opened once, on data "
+            "that neither the model nor the loop has seen. We did not run an agent here; this is the bar one would have "
+            "to clear."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant29.common import FORMULA, GP_C, HURDLE, PART, TRAIN_C, VALID_C, fit_right, illustration, load, tt
+from videos.quant.quant29.common import FORMULA, GP_C, HURDLE, PART, RAND_C, TRAIN_C, VALID_C, fit_right, illustration, load, tt
 
 
 def node(text, col, fs=20):
@@ -44,8 +44,10 @@ class GP(VoiceoverScene):
         self.crossover()
         self.algorithm()
         self.runs(g)
+        self.budget(g, load("random"))
         self.bloat(g)
         self.winners(g)
+        self.allen()
         self.question()
 
     def card(self):
@@ -58,9 +60,9 @@ class GP(VoiceoverScene):
 
     def crossover(self):
         A_ = (r"\texttt{rank}", GP_C, [(r"\texttt{sub}", GP_C, [(r"\texttt{close}", FORMULA, []),
-                                                               (r"\texttt{ts\_mean}(\cdot, 5)", QC.OPTION,
+                                                               (r"\texttt{ts\_mean}($\cdot$, 5)", QC.OPTION,
                                                                 [(r"\texttt{close}", FORMULA, [])])])])
-        B_ = (r"\texttt{neg}", GP_C, [(r"\texttt{mul}", GP_C, [(r"\texttt{delta}(\cdot, 1)", QC.OPTION,
+        B_ = (r"\texttt{neg}", GP_C, [(r"\texttt{mul}", GP_C, [(r"\texttt{delta}($\cdot$, 1)", QC.OPTION,
                                                                [(r"\texttt{volume}", FORMULA, [])]),
                                                               (r"\texttt{ret}", FORMULA, [])])])
         ta, na = small_tree(A_, (-3.6, 2.4))
@@ -70,7 +72,7 @@ class GP(VoiceoverScene):
         cut_a = SurroundingRectangle(VGroup(na[(0, 1)], na[(0, 1, 0)]), color=HURDLE, buff=0.08)
         cut_b = SurroundingRectangle(VGroup(nb[(0, 0)], nb[(0, 0, 0)]), color=HURDLE, buff=0.08)
         C_ = (r"\texttt{rank}", GP_C, [(r"\texttt{sub}", GP_C, [(r"\texttt{close}", FORMULA, []),
-                                                               (r"\texttt{delta}(\cdot, 1)", QC.OPTION,
+                                                               (r"\texttt{delta}($\cdot$, 1)", QC.OPTION,
                                                                 [(r"\texttt{volume}", FORMULA, [])])])])
         tc, nc = small_tree(C_, (0, -0.6))
         ch = label(r"the child: A with B's subtree spliced in", font_size=20, color=HURDLE).next_to(tc, DOWN, buff=0.25)
@@ -154,18 +156,53 @@ class GP(VoiceoverScene):
         o_t = float(np.mean(t_fin[others]))
         o_v = float(np.mean(v_fin[others]))
         hi_t, hi_v = float(t_fin[k_hi]), float(v_fin[k_hi])
+        ev_run = ev // len(R)
         with self.voiceover(
             "Three runs, from three random starts. <bookmark mark='a'/> On the training years, every champion improves "
             "or holds, generation by generation: evolution works on whatever it is rewarded for. <bookmark mark='b'/> On "
             "2020, which no generation saw, the runs split. The run that climbed highest, to a training score of "
             f"{hi_t:.3f}, fell furthest, to {hi_v:+.3f}. The other two stopped lower, at {o_t:.3f} on average, and kept "
-            f"far more: {o_v:+.3f} in 2020. Each run also tried about {ev // len(R):,} formulas, and every one is a trial."
+            f"far more: {o_v:+.3f} in 2020. Each run also tried about {ev_run:,} formulas, and every one is a trial."
         ) as vo:
             self.play(FadeIn(gr), Create(zero), FadeIn(leg), FadeIn(side))
             vo.wait_until("a")
             self.play(*[Create(l_) for l_ in lt], run_time=2)
             vo.wait_until("b")
             self.play(*[Create(l_) for l_ in lv], run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def budget(self, g, r):
+        b = r["best_by_n"]
+        xr = np.log10([x["n"] for x in b])
+        yr = [x["train"] for x in b]
+        top = float(np.ceil(max(max(yr), max(abs(x["train"]) for run in g["runs"] for x in run)) * 100 + 1) / 100)
+        gr = axes([1, 4], [0, top], x_length=7.2, y_length=4.4, xlabel=r"distinct formulas evaluated (log scale)",
+                  ylabel=r"best training IC so far", xticks=[1, 2, 3, 4], yticks=[0, top / 2, top], font_size=15,
+                  xfmt=lambda v: f"{10 ** v:,.0f}".replace(",", "{,}"), yfmt=lambda v: f"{v:.2f}").move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = gr.ax
+        lr = curve(ax, xr, yr, RAND_C, stroke_width=3)
+        lg = VGroup()
+        for run in g["runs"]:
+            ev = np.log10([max(x["evaluated"], 10) for x in run])
+            lg.add(curve(ax, ev, [abs(x["train"]) for x in run], GP_C, stroke_width=2.5))
+        leg = legend([(RAND_C, r"random search, Chapter 3"), (GP_C, r"genetic programming, three runs")], font_size=15
+                     ).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        at1k = next(x for x in b if x["n"] == 1000)
+        with self.voiceover(
+            "Is evolution a better search than chance? Compare them at equal budgets. <bookmark mark='a'/> The grey line "
+            "is random search: the best training score after each number of formulas tried, "
+            f"{at1k['train']:.3f} by a thousand. <bookmark mark='b'/> The coloured lines are the three evolutionary runs, "
+            "against the distinct formulas each had evaluated. Two of them keep pace with chance; the third climbs far "
+            "above it. And that third run is the one whose edge vanished in 2020. A better optimiser of the training "
+            "score is not a better finder of signals: past a point, it is a better finder of noise."
+        ) as vo:
+            self.play(FadeIn(gr), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(Create(lr), run_time=1.5)
+            vo.wait_until("b")
+            self.play(*[Create(l_) for l_ in lg], run_time=2)
         self.wait(0.4)
         self.clear_scene()
 
@@ -232,6 +269,31 @@ class GP(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.4))
             vo.wait_until("b")
             self.play(Indicate(rows[k_hi], color=QC.LOSS, scale_factor=1.02))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def allen(self):
+        card = firm_card(r"Allen and Karjalainen (1999)", r"`Using genetic algorithms to find technical trading rules', "
+                         r"\textit{Journal of Financial Economics}: genetic programming bred market-timing rules for the "
+                         r"S\&P 500 from daily prices, 1928--1995, each trained on one period, selected on the next, and "
+                         r"tested on the years after",
+                         numbers=((r"\times", r"after transaction costs, no consistent excess return over buying and "
+                                               r"holding the index out of sample"),
+                                  (r"\sigma\downarrow", r"the rules were in the market when daily volatility was low and "
+                                                        r"out when it was high")),
+                         source=r"JFE 51 (1999)", kind=r"Paper file", width=10.6, font_size=22).move_to(ORIGIN)
+        with self.voiceover(
+            "This is not the first time evolution was set loose on a market. <bookmark mark='a'/> In 1999 Franklin Allen "
+            "and Risto Karjalainen bred trading rules for the S&P 500 from nearly seventy years of daily prices, training each "
+            "generation on one period, selecting on the next and testing on the years after. <bookmark mark='b'/> After "
+            "costs, the rules did not beat simply holding the index. But what they had learned is telling: they stayed "
+            "in the market when volatility was low and left when it was high. Evolution found calm then, too."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
         self.wait(0.4)
         self.clear_scene()
 

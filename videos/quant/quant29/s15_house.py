@@ -10,6 +10,7 @@ class House(VoiceoverScene):
         self.card()
         self.sheet(load("space"), load("random"), load("gp"), load("rl"), load("combine"), load("envelope"))
         self.lab()
+        self.gp_lab()
         self.module()
         self.test()
 
@@ -68,6 +69,20 @@ class House(VoiceoverScene):
             "leaf, an operator at each node. Evaluating it walks the tree, and every time-series operator looks only "
             "backward, at the days up to today. That single property, enforced in one place, is what keeps ten "
             "thousand formulas from reading the future."
+        ):
+            self.play(FadeIn(card))
+            self.wait(1.5)
+        self.clear_scene()
+
+    def gp_lab(self):
+        card = house_lab(r"One generation of a genetic program", A.gp, "nxt = [P[best]]", 15, width=10.6)
+        card.move_to(ORIGIN)
+        with self.voiceover(
+            "And here is one generation of Chapter four's evolution, as the House runs it. The champion is copied first. "
+            "Then, until the new population is full, a tournament picks a parent; seven times in ten a second parent is "
+            "picked and a random branch of the first is replaced by a random branch of the second; twice in ten a branch "
+            "is replaced by a fresh random tree; otherwise the parent is copied. A child deeper than six levels is "
+            "replaced by its parent. Every child that is new is scored, and every score is a trial."
         ):
             self.play(FadeIn(card))
             self.wait(1.5)
