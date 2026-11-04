@@ -71,6 +71,7 @@ class Cmos(VoiceoverScene):
         self.card()
         self.nand()
         self.nor()
+        self.aoi()
         self.costs()
         self.power()
 
@@ -142,6 +143,44 @@ class Cmos(VoiceoverScene):
             self.run(g, lambda a, b: not (a or b), tt)
             vo.wait_until("b")
             self.play(FadeIn(txt, lag_ratio=0.3))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def aoi(self):
+        from videos.cs.cs3.s03_relays import ladder
+        head = label(r"Any expression, \ as one gate", font_size=38).to_edge(UP, buff=0.35)
+        f = MathTex(r"\text{out} = \overline{A B + C}", font_size=42, color=YES).next_to(head, DOWN, buff=0.35)
+        dn, _ = ladder([[r"A", r"B"], [r"C"]], x0=-5.6, x1=-2.2, y0=0.4, dy=1.0, length=0.75)
+        up, _ = ladder([[r"A"], [r"B"]], x0=1.4, x1=3.4, y0=0.4, dy=1.0, length=0.75)
+        c_up = VGroup(Line([3.4, -0.1, 0], [3.9, -0.1, 0], color=WIRE, stroke_width=3))
+        from videos.cs.cs3.common import switch
+        sc = switch(False, length=0.75).move_to([4.4, -0.1, 0])
+        c_lab = MathTex(r"C", font_size=28, color=DATA).next_to(sc, UP, buff=0.1)
+        c_up.add(sc, c_lab, Line(sc.right(), [5.4, -0.1, 0], color=WIRE, stroke_width=3))
+        ldn = label(r"pull-down (nMOS): \ $AB$ in parallel with $C$", font_size=24, color=CTRL).next_to(dn, DOWN, buff=0.4)
+        lup = label(r"pull-up (pMOS): \ the dual, \ ($A$ or $B$ low) in series with $C$ low", font_size=24,
+                    color=CTRL).next_to(VGroup(up, c_up), DOWN, buff=0.4)
+        cnt = label(r"6 transistors: \ one AND-OR-INVERT gate, \ instead of a NAND, a NOT and a NOR \ (10)",
+                    font_size=26, color=HEAD).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "Duality does more than NAND and NOR. <bookmark mark='a'/> Take any expression built from and and or, "
+            "say A and B, or C, and invert it. <bookmark mark='b'/> Build the expression itself as a network of n "
+            "transistors pulling the output down: A and B in series, in parallel with C. <bookmark mark='c'/> Build "
+            "its dual from p transistors pulling up: A and B in parallel, in series with C. The result is a single "
+            "gate, an and-or-invert, in six transistors, where separate gates would need ten. "
+            "<bookmark mark='d'/> Real cell libraries are full of these compound gates, and a synthesis tool chooses "
+            "among them the way a chess program chooses moves."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(Write(f))
+            vo.wait_until("b")
+            self.play(Create(dn), FadeIn(ldn))
+            vo.wait_until("c")
+            self.play(Create(up), Create(c_up), FadeIn(lup))
+            vo.wait_until("d")
+            self.play(FadeIn(cnt))
         self.wait(0.3)
         self.clear_scene()
 

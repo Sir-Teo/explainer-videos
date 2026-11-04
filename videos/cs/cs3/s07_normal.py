@@ -105,7 +105,7 @@ class Normal(VoiceoverScene):
         ones = set(d["minterms"])
         head = label(r"Karnaugh maps: \ the 4-cube, \ unfolded", font_size=36).to_edge(UP, buff=0.3)
         g = self.grid4(ones, origin=LEFT * 3.4 + DOWN * 0.4)
-        gl = note(r"rows and columns in Gray-code order: \ neighbours differ in one bit, \ and the edges wrap around "
+        gl = note(r"rows and columns in Gray-code order: \ neighbours differ in one bit, \\ and the edges wrap around "
                   r"(a torus)", font_size=21).next_to(g, DOWN, buff=0.3)
         cols = [HEAD, CTRL, FUNC, INF]
         loops = VGroup()
@@ -155,7 +155,7 @@ class Normal(VoiceoverScene):
         head = label(r"Where normal forms explode: \ parity", font_size=38).to_edge(UP, buff=0.35)
         ones = {m for m in range(16) if bin(m).count("1") % 2}
         g = self.grid4(ones, cell=0.7, origin=LEFT * 4.2 + DOWN * 0.2)
-        gl = note(r"a checkerboard: \ no two ones are neighbours, \ nothing merges", font_size=22).next_to(g, DOWN, buff=0.3)
+        gl = note(r"a checkerboard: \ no two 1s touch, \\ nothing merges", font_size=21).next_to(g, DOWN, buff=0.3)
         rows = d["rows"]
         ax = Axes(x_range=[2, 12, 2], y_range=[0, 12, 2], x_length=5.4, y_length=3.6, tips=False,
                   axis_config={"color": GREY_C, "font_size": 18},
