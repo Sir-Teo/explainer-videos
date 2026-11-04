@@ -7,7 +7,8 @@ from videos.quant.quant22.common import BAD, BASIS, CARRY, FOR, GAS, INFL, OIL, 
 
 DESK = [
     (r"Dollar rates are 5\% and yen rates 0\%. Is the yen forward at a premium or a discount?",
-     r"at a premium: by covered parity F/S = (1.05)/(1.00), so a dollar buys about 5\% fewer yen for delivery in a "
+     r"at a premium: by covered parity, in yen per dollar, F/S = 1.00/1.05, so a dollar buys about 5\% fewer yen for "
+     r"delivery in a "
      r"year. Carry does not arbitrage it away because there is nothing to arbitrage: the forward is set by the rates. "
      r"The carry trade bets instead that the spot will not fall that far, and is paid for the crashes when it does"),
     (r"Covered parity is an arbitrage. Why did it fail for years after 2008?",
@@ -33,7 +34,7 @@ PROBLEMS = [
     r"Sterling 3-month: $S$ = 1.30, $F$ = 1.3025, $r_\$$ = 2.0\%, $r_\pounds$ = 1.2\%. Compute the basis in basis points "
     r"(ignore day counts).",
     r"In the Fama regression, write $f - s = \mathbb{E}[\Delta s] + p$ and show that "
-    r"$\beta = 1 + \text{cov}(p, f - s)/\text{var}(f - s)$. What does $\beta < 0$ require?",
+    r"$\beta = 1 - \text{cov}(p, f - s)/\text{var}(f - s)$. What does $\beta < 0$ require?",
     r"Show that the Garman--Kohlhagen forward delta of a call is $N(d_1)$ and its premium-adjusted forward delta "
     r"$(K/F) N(d_2)$.",
     r"Show that the delta-neutral straddle strike is $F e^{\sigma^2 T/2}$.",

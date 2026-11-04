@@ -50,12 +50,13 @@ class UIP(VoiceoverScene):
     def regression(self):
         rows = [cmath(r"s_{t+1} - s_t", r"=", r"\alpha + \beta\,(f_t - s_t) + \varepsilon_{t+1}", font_size=40,
                       colors={r"s_{t+1} - s_t": FOR}),
-                cmath(r"\beta", r"=", r"1 + \frac{\text{cov}(p_t,\ f_t - s_t)}{\text{var}(f_t - s_t)}", font_size=40,
+                cmath(r"\beta", r"=", r"1 - \frac{\text{cov}(p_t,\ f_t - s_t)}{\text{var}(f_t - s_t)}", font_size=40,
                       colors={r"\beta": BAD})]
         whys = [why(r"Fama (1984): regress the change in the exchange rate on the forward premium. Uncovered parity "
                     r"says $\beta = 1$. In the data of the 1970s and 80s it was negative, for every major currency"),
-                why(r"write the forward premium as the expected change plus a risk premium $p_t$; then a slope below 1 "
-                    r"means the premium moves against the expected change, and is more volatile than it")]
+                why(r"write the forward premium as the expected change plus a risk premium, $f_t - s_t = \mathbb{E}_t[\Delta s] + "
+                    r"p_t$; a slope below 0 needs the premium to move with the forward premium more than one for one: "
+                    r"against the expected change, and more volatile than it")]
         step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
         with self.voiceover(
             "In 1984 Eugene Fama ran the test. Regress next month's change in the exchange rate on this month's "
