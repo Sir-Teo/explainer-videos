@@ -35,8 +35,8 @@ class Fit(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=3.1, x=-2.4, buff=0.5, edge=6.9, highlight=False)
         t = np.linspace(0.05, 30, 200)
         L = R.nss_loadings(t, 1.5, 12.0)
-        g = axes([0, 30], [0, 1.05], x_length=8.0, y_length=3.0, xlabel=r"maturity, years", ylabel=r"loading",
-                 xticks=[0, 5, 10, 20, 30], yticks=[0, 0.5, 1], font_size=14).to_edge(DOWN, buff=0.4).shift(LEFT * 1.0)
+        g = axes([0, 30], [0, 1.05], x_length=8.0, y_length=2.6, xlabel=r"maturity, years", ylabel=r"loading",
+                 xticks=[0, 5, 10, 20, 30], yticks=[0, 0.5, 1], font_size=14).to_edge(DOWN, buff=0.3).shift(LEFT * 1.0)
         ax = g.ax
         cols = [LEVEL, SLOPE, CURV, HUMP2]
         lines = VGroup(*[curve(ax, t, L[:, i], c_, stroke_width=3) for i, c_ in enumerate(cols)])
@@ -151,7 +151,7 @@ class Fit(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, c):
-        card = house_lab(r"fit Nelson--Siegel--Svensson", R.fit_nss, "pairs = [(a, b) for a in grid", 12, width=7.6)
+        card = house_lab(r"fit Nelson--Siegel--Svensson", R.fit_nss, "for a, b in pairs:", 12, width=7.6)
         card.to_edge(LEFT, buff=0.4).to_edge(UP, buff=0.4)
         n = c["nss"]
         out = [rf"beta = {n['beta'][0]:.3f}, {n['beta'][1]:.3f}, {n['beta'][2]:.3f}, {n['beta'][3]:.3f}",

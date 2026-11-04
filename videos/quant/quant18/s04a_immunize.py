@@ -94,12 +94,12 @@ class Immunize(VoiceoverScene, ThreeDScene):
                 why(rf"and more convexity, so any parallel move leaves a surplus: here {im['convexity_assets']:.0f} "
                     rf"against {im['convexity_liab']:.0f}")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-4.6, buff=0.45, edge=6.9)
-        g = axes([-3, 3], [-12, 12], x_length=6.4, y_length=3.4, xlabel=r"move, percentage points",
-                 ylabel=r"surplus, per liability of $L$", xticks=[-3, -2, -1, 0, 1, 2, 3], yticks=[-10, 0, 10],
+        g = axes([-3, 3], [-12, 30], x_length=6.4, y_length=3.4, xlabel=r"move, percentage points",
+                 ylabel=r"surplus, per liability of $L$", xticks=[-3, -2, -1, 0, 1, 2, 3], yticks=[-10, 0, 10, 20, 30],
                  font_size=13).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.8)
         ax = g.ax
-        lp = curve(ax, sh, np.clip(par, -12, 12), GOOD, stroke_width=3)
-        lt = curve(ax, sh, np.clip(tw, -12, 12), BAD, stroke_width=3)
+        lp = curve(ax, sh, np.clip(par, -12, 30), GOOD, stroke_width=3)
+        lt = curve(ax, sh, np.clip(tw, -12, 30), BAD, stroke_width=3)
         leg = legend([(GOOD, r"parallel shift"), (BAD, r"a twist about 15 years")], font_size=17).next_to(g, RIGHT,
                                                                                                        buff=0.4)
         k = int(np.argmin(np.abs(sh + 1)))

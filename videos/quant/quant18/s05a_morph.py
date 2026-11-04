@@ -103,6 +103,7 @@ class Morph(VoiceoverScene, ThreeDScene):
         leg = legend(items, font_size=17).to_edge(RIGHT, buff=0.5)
         stat = wrapped_label(rf"inverted (10-year below 1-year) on {100 * m['inverted_share']:.0f}\% of days since 1972",
                              3.4, 18, GREY_A).next_to(leg, DOWN, buff=0.4, aligned_edge=LEFT)
+        stat.shift(LEFT * max(0.0, stat.get_right()[0] - 6.75))
         with self.voiceover(
             "Nine moments, side by side. The 1981 peak, a curve inverted at fifteen percent. The ordinary upward "
             "slopes of the nineties. The flat curve of 2000 before the dot-com bust. The crisis, and the long "
