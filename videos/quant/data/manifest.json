@@ -17099,6 +17099,11 @@
   "bytes": 4844063,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
+ "fed/gsw/1965-01-01_2025-12-31": {
+  "sha256": "e2fa11eb03f3429dc62f7e3e6b6ae600d298c77a9113c17ccf24893798f5bb79",
+  "bytes": 4592923,
+  "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
+ },
  "fed/gsw/1972-01-01_2025-12-31": {
   "sha256": "45c88a515cd3902760da6acca47ead25a7e57bdf23ca5deb1829b3d915519e63",
   "bytes": 4099927,
@@ -17199,6 +17204,11 @@
   "bytes": 287522,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
  },
+ "fred/DGS10/1976-06-01_2025-12-31": {
+  "sha256": "a91d0e5182d1805911276f36d1b6277d6a2021247dee9f929bfb6286d928c33a",
+  "bytes": 223305,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
+ },
  "fred/DGS10/1990-01-02_2025-12-31": {
   "sha256": "973af3fbb0b2643dfc45039e4a816191d90cadcbe53282ba5cca6f008b2768cb",
   "bytes": 161184,
@@ -17210,6 +17220,11 @@
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
  },
  "fred/DGS2/1950-01-01_2025-12-31": {
+  "sha256": "995313eab81bd9f445f4290ea6b62523c44b3c9201c5a2e1663f690bea2169c6",
+  "bytes": 222974,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2"
+ },
+ "fred/DGS2/1976-06-01_2025-12-31": {
   "sha256": "995313eab81bd9f445f4290ea6b62523c44b3c9201c5a2e1663f690bea2169c6",
   "bytes": 222974,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2"
@@ -17389,6 +17404,11 @@
   "bytes": 28042,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
  },
+ "fred/IORB/2025-01-01_2025-12-31": {
+  "sha256": "f5da37d0ae6985141765d9effdcd89fa9e821ca9e07bd1d5d69f2ad23189d9b2",
+  "bytes": 6269,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
+ },
  "fred/NIKKEI225/1949-05-01_2025-12-31": {
   "sha256": "23f5bfafd1efb069207e081b712ab44e2ce60aab40bc90cc0ed58c39a9595cb8",
   "bytes": 403661,
@@ -17452,6 +17472,11 @@
  "fred/SOFR/2018-04-01_2025-12-31": {
   "sha256": "48eb5ccfa657a7166263b04d01e2080700c11c35e9ab6bbdbfe920b2e338a040",
   "bytes": 34572,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR"
+ },
+ "fred/SOFR/2025-01-01_2025-12-31": {
+  "sha256": "f63f600ce79f5fa4cfa7460de7f11897a4e7c1ae84aabf05ae855bfd9bdd5b7b",
+  "bytes": 4457,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR"
  },
  "fred/SOFR1/2018-01-01_2025-12-31": {

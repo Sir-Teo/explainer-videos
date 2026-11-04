@@ -12,6 +12,7 @@ class Morph(VoiceoverScene, ThreeDScene):
         self.card()
         self.movie(m)
         self.eras(m)
+        self.recessions(m)
         self.surface(m)
 
     def card(self):
@@ -115,6 +116,52 @@ class Morph(VoiceoverScene, ThreeDScene):
                                              lag_ratio=0.5, run_time=9))
             vo.wait_until("a")
             self.play(FadeIn(stat))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def recessions(self, m):
+        t, Y = np.asarray(m["t"]), np.asarray(m["Y"], float)
+        spr = (Y[:, 9] - Y[:, 0]) * 100
+        # NBER business-cycle peaks and troughs (months)
+        cycles = [(1973.83, 1975.17), (1980.0, 1980.5), (1981.5, 1982.83), (1990.5, 1991.17), (2001.17, 2001.83),
+                  (2007.92, 2009.42), (2020.08, 2020.25)]
+        g = axes([1972, 2026], [-300, 400], x_length=9.0, y_length=4.2, xlabel=r"year",
+                 ylabel=r"10-year minus 1-year zero yield, bp", xticks=[1980, 1990, 2000, 2010, 2020],
+                 yticks=[-200, 0, 200, 400], font_size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        bands = VGroup(*[Rectangle(width=ax.c2p(b, 0)[0] - ax.c2p(a, 0)[0], height=ax.c2p(0, 400)[1] - ax.c2p(0, -300)[1],
+                                   stroke_width=0, fill_color=GREY_B, fill_opacity=0.22).move_to(
+            [(ax.c2p(a, 0)[0] + ax.c2p(b, 0)[0]) / 2, (ax.c2p(0, 400)[1] + ax.c2p(0, -300)[1]) / 2, 0]) for a, b in cycles])
+        zero = Line(ax.c2p(1972, 0), ax.c2p(2026, 0), color=WHITE, stroke_width=1.5)
+        line = curve(ax, t, np.clip(spr, -300, 400), ZERO, stroke_width=2.5)
+        neg = VGroup(*[Dot(ax.c2p(a, b), radius=0.025, color=QC.LOSS) for a, b in zip(t, spr) if b < 0])
+        leads = []
+        for a, _ in cycles:
+            w = (t < a) & (t >= a - 3)
+            k = np.where(w & (spr < 0))[0]
+            leads.append(a - t[k[0]] if len(k) else None)
+        txt = ", ".join(f"{12 * x:.0f}" for x in leads if x is not None)
+        side = VGroup(
+            label(r"grey: NBER recessions", font_size=18, color=GREY_B),
+            wrapped_label(rf"months from the first inversion to each recession's start: {txt}", 3.4, 18, GREY_A),
+            wrapped_label(r"the inversion of 2022--24, the longest here, has had no recession through 2025", 3.4, 18,
+                          QC.LOSS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+        lo, hi = min(x for x in leads if x is not None), max(x for x in leads if x is not None)
+        with self.voiceover(
+            "Now the slope alone: the ten-year zero yield minus the one-year, every month since 1972, with the "
+            "recessions dated by the National Bureau of Economic Research in grey. <bookmark mark='a'/> Each red stretch "
+            "is an inversion. Each of the seven recessions in this sample was preceded by one, "
+            f"{12 * lo:.0f} to {12 * hi:.0f} months ahead. <bookmark mark='b'/> And the longest inversion in the picture, "
+            "from 2022 to 2024, has so far been followed by none. A strong regularity, built on seven events, one of "
+            "them still open."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(bands), Create(zero), Create(line), FadeIn(side[0]), run_time=2.5)
+            vo.wait_until("a")
+            self.play(FadeIn(neg), FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[2]))
+        self.add(illustration(r"the Fed's GSW curve, month ends; recession dates: NBER"))
         self.wait(0.4)
         self.clear_scene()
 
