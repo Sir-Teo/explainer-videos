@@ -1365,7 +1365,126 @@ def compute_calib_speed() -> dict:
     return _json({"rBergomi MC": t_rb, "rough Heston": t_rh, "lifted Heston": t_lh,
                   "neural (Part 17)": c17["t_net_surface"], "rBergomi MC (Part 17)": c17["t_mc_surface"]})
 
-ITEMS = {"skew": compute_skew, "roughness": compute_roughness, "artefact": compute_artefact,
+def compute_convergence_theory() -> dict:
+    """The research chapter: how fast a rough simulation converges.  For Y_t = sqrt(2H) int_0^t (t - s)^(H - 1/2) dW_s
+    on a grid of n cells, a step-function kernel leaves a mean squared error 2H Delta^(2H) sum_j int_(j-1)^j (x^a -
+    c_j^a)^2 dx (a = H - 1/2): the strong rate is n^-H whatever the evaluation points c_j; the hybrid scheme
+    (Bennedsen, Lunde and Pakkanen 2017) integrates the first kappa cells exactly and shrinks the constant, not the
+    rate.  Checked by Monte Carlo on the exact joint Gaussian law of (Y on the grid, the increments, the cell
+    integrals); then the error each scheme leaves in a rough Bergomi price, with the S-step identical, so that only
+    the volatility's discretization differs."""
+    from scipy.integrate import quad
+
+    def cell_sum(H, n, kappa, opt):
+        a = H - 0.5
+        tot = 0.0
+        for j in range(kappa + 1, n + 1):
+            c = R._b(j, a) if (opt and j >= 2) else float(j)
+            f = lambda x: (x ** a - c ** a) ** 2  # noqa: E731
+            tot += quad(f, j - 1, j, limit=200)[0]
+        return 2 * H * tot
+
+    Hs = [0.05, 0.1, 0.2, 0.3, 0.4]
+    ns = [8, 16, 32, 64, 128, 256, 512, 1024]
+    exact = {}
+    for H in Hs:
+        row = {}
+        for name, kappa, opt in (("riemann", 0, False), ("riemann_opt", 0, True), ("hybrid1", 1, True),
+                                 ("hybrid2", 2, True)):
+            mse = [cell_sum(H, n, kappa, opt) * (1 / n) ** (2 * H) for n in ns]
+            row[name] = {"rmse": list(np.sqrt(mse)), "const": float(cell_sum(H, 2000, kappa, opt))}
+        exact[f"{H:g}"] = row
+    out = {"H": Hs, "n": ns, "exact": exact}
+
+    # Monte Carlo on the exact joint law, H = 0.1, at t = 1
+    H, a = 0.1, -0.4
+
+    def joint_cov(n):
+        D = 1.0 / n
+        t = np.arange(1, n + 1) * D
+        N = 3 * n
+        C = np.zeros((N, N))
+        # 0..n-1: dW_k (cell k = [t_{k-1}, t_k]); n..2n-1: I_k = int_cell (t_k - s)^a dW; 2n..3n-1: Y at t_i
+        for k in range(n):
+            C[k, k] = D
+            C[n + k, n + k] = D ** (2 * a + 1) / (2 * a + 1)
+            C[k, n + k] = C[n + k, k] = D ** (a + 1) / (a + 1)
+        for i in range(n):
+            ti = t[i]
+            for k in range(i + 1):
+                lo, hi = k * D, (k + 1) * D
+                cw = np.sqrt(2 * H) * ((ti - lo) ** (a + 1) - (ti - hi) ** (a + 1)) / (a + 1)
+                C[2 * n + i, k] = C[k, 2 * n + i] = cw
+                ci = np.sqrt(2 * H) * quad(lambda s_: (ti - s_) ** a * (hi - s_) ** a, lo, hi, limit=200)[0]
+                C[2 * n + i, n + k] = C[n + k, 2 * n + i] = ci
+            for j in range(i + 1):
+                tj = t[j]
+                cy = 2 * H * quad(lambda s_: (ti - s_) ** a * (tj - s_) ** a, 0, tj, limit=200)[0]
+                C[2 * n + i, 2 * n + j] = C[2 * n + j, 2 * n + i] = cy
+        return C
+
+    def schemes(Z, n):
+        D = 1.0 / n
+        dW, I = Z[:, :n], Z[:, n:2 * n]
+        Yr = np.zeros_like(dW)
+        Yh = np.zeros_like(dW)
+        g_r = (np.arange(1, n + 1) * D) ** a                              # lag j cells: left point, j Delta
+        g_h = np.array([0.0] + [(R._b(j, a) * D) ** a for j in range(2, n + 1)])
+        for i in range(n):
+            lags = i - np.arange(i + 1) + 1                               # cell k at lag i - k + 1
+            Yr[:, i] = np.sqrt(2 * H) * dW[:, : i + 1] @ g_r[lags - 1]
+            Yh[:, i] = np.sqrt(2 * H) * (I[:, i] + (dW[:, :i] @ g_h[lags[:-1] - 1] if i > 0 else 0))
+        return Yr, Yh
+
+    mc = []
+    price = []
+    eta, rho, xi = 1.9, -0.9, 0.04
+    for n in (8, 16, 32, 64):
+        C = joint_cov(n)
+        lam, U = np.linalg.eigh(0.5 * (C + C.T))   # singular by construction: Y at t_1 is sqrt(2H) I_1
+        L = U * np.sqrt(np.clip(lam, 0, None))[None, :]
+        se_r, se_h = [], []
+        pay = {"exact": [], "riemann": [], "hybrid1": [], "riemann_wick": []}
+        rng = np.random.default_rng(1414 + n)
+        for b_ in range(10):
+            Z = rng.standard_normal((20000, len(C))) @ L.T
+            Y = Z[:, 2 * n:]
+            Yr, Yh = schemes(Z, n)
+            se_r.append(np.mean((Yr[:, -1] - Y[:, -1]) ** 2))
+            se_h.append(np.mean((Yh[:, -1] - Y[:, -1]) ** 2))
+            D = 1.0 / n
+            tg = np.arange(1, n + 1) * D
+            dW = Z[:, :n]
+            dB = rho * dW + np.sqrt(1 - rho ** 2) * rng.standard_normal(dW.shape) * np.sqrt(D)
+            g_r = (np.arange(1, n + 1) * D) ** a
+            var_r = 2 * H * np.cumsum(g_r ** 2) * D        # the Riemann scheme's own variance at each t_i
+            for name, YY, var in (("exact", Y, tg ** (2 * H)), ("riemann", Yr, tg ** (2 * H)),
+                                  ("hybrid1", Yh, tg ** (2 * H)), ("riemann_wick", Yr, var_r)):
+                v = xi * np.exp(eta * YY - 0.5 * eta ** 2 * var[None, :])
+                vprev = np.concatenate([np.full((len(v), 1), xi), v[:, :-1]], axis=1)
+                x = np.sum(np.sqrt(vprev) * dB - 0.5 * vprev * D, axis=1)
+                pay[name].append(np.maximum(np.exp(x) - 1.0, 0.0))
+        mc.append({"n": n, "rmse_riemann": float(np.sqrt(np.mean(se_r))), "rmse_hybrid1": float(np.sqrt(np.mean(se_h))),
+                   "formula_riemann": float(np.sqrt(cell_sum(H, n, 0, False) / n ** (2 * H))),
+                   "formula_hybrid1": float(np.sqrt(cell_sum(H, n, 1, True) / n ** (2 * H)))})
+        row = {"n": n}
+        ex = np.concatenate(pay["exact"])
+        for name in ("exact", "riemann", "hybrid1", "riemann_wick"):
+            pp = np.concatenate(pay[name])
+            row[name] = float(pp.mean())
+            row[name + "_iv"] = float(bs.implied_vol(pp.mean(), 1.0, 1.0, 1.0))
+            if name != "exact":
+                d = pp - ex
+                row[name + "_diff"] = float(d.mean())
+                row[name + "_diff_se"] = float(d.std() / np.sqrt(len(d)))
+        price.append(row)
+    out["mc"] = mc
+    out["price"] = price
+    out["rbergomi"] = {"H": H, "eta": eta, "rho": rho, "xi": xi, "T": 1.0, "K": 1.0}
+    return _json(out)
+
+
+ITEMS = {"convergence_theory": compute_convergence_theory, "skew": compute_skew, "roughness": compute_roughness, "artefact": compute_artefact,
          "rbergomi": compute_rbergomi, "rbskew": compute_rbskew, "rheston": compute_rheston, "rprofile": compute_rprofile, "lift": compute_lift, "hawkes": compute_hawkes,
          "pdv": compute_pdv, "envelope": compute_envelope,
          "skew_weekly": compute_skew_weekly, "skew_models": compute_skew_models, "roughness_2018": compute_roughness_2018,

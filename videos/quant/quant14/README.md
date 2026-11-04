@@ -2,7 +2,7 @@
 
 Part 14 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), in Act III, Derivatives. It is the series' frontier part on volatility: a lecture of
-about 58 minutes, with every number computed by the series' own code ([`compute.py`](compute.py) and the House's
+about 64 minutes, with every number computed by the series' own code ([`compute.py`](compute.py) and the House's
 [`rough`](../../../explainer/quant/house/rough.py) module, tested in `tests/test_quant_house.py`).
 
 The data: the Surface and 102 weekly Deribit BTC option days (2024–2025); Binance BTCUSDT 1-minute (2018–2020),
@@ -11,7 +11,7 @@ daily market return; Part 13's cached Heston, Bates and forward variance curve.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 60 minutes)
+## Chapters (about 64 minutes)
 
 * **Hook: Rough (2.4).** A Brownian path and an H = 0.1 path under a continuous ×256 zoom (pause and predict); how
   we got here, 1968–2024; objectives; the rough lab.
@@ -75,7 +75,18 @@ daily market return; Part 13's cached Heston, Bates and forward variance curve.
   Risk Awards (2021 Quants of the Year; 2023 Rising Star Rømer); VIX1D; hedging with forward variance; the House's
   functions and Rule 14 applied to the part's scoreboard.
 * **18. The frontier, 2023–2026 (2.2).** Eight results; forest expansion and regularity structures; the closing board.
-* **Outro (2.8).** Twelve-line recap, four desk questions, eight problems, payoffs, references.
+* **For the researcher: how fast a rough simulation converges (4.7).** For Y₁ = √(2H)∫(1 − s)^{H−½}dW and any
+  step kernel frozen at c_jΔ, Itô's isometry gives E|Y₁ − Ŷ₁|² = 2HΔ^{2H}Σ_j∫_{j−1}^{j}(x^a − c_j^a)²dx: strong rate n^{−H}
+  whatever the points. The hybrid scheme (Bennedsen, Lunde and Pakkanen 2017) integrates the first κ cells exactly:
+  same rate, constant collapsing. Exact errors at H = 0.1: Riemann 0.596 at n = 8 and 0.393 at 1,024; κ = 1 0.030 → 0.020;
+  κ = 2 0.016 → 0.011 (asymptotic constants C = 0.538, 0.0014, 0.0004); at H = 0.05/0.2/0.3/0.4 the same pattern.
+  Monte Carlo on the exact joint Gaussian law (200,000 draws, n = 8–64) matches the formula to three digits. Rough
+  Bergomi (H 0.1, η 1.9, ρ −0.9, ξ 0.04), one-year at-the-money call, the same price step for all: exact 16.5–16.3%,
+  Riemann with the true compensator t^{2H} 12.2/11.8/11.8/12.0% (its variance deficit falls like n^{−2H}), Riemann with
+  its own variance 17.7/17.2/16.9/16.5% (about n^{−2/3}, near Bayer, Hall and Tempone's H + ½), hybrid within 0.01
+  points. Three open problems; pause: halving the error takes 2^{1/H} times the steps (1,024 at H = 0.1, 5.7 at 0.4).
+* **Outro (2.9).** Twelve-line recap, four desk questions, ten problems (two at qualifying-exam level), payoffs,
+  references.
 
 ## Textbook audit
 
@@ -156,6 +167,26 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 8. **The 4-factor PDV.** With K(τ) = λe^{−λτ}, R_t = ∫ λe^{−λ(t−u)} r_u^n du (returns per unit time); differentiating,
    dR = λ(r_t^n − R_t)dt: an exponential moving average, Markov. A convex mix of two such kernels is a mix of two
    EMAs: four factors for R₁ and R₂.
+9. **(qual) The exact strong error.** Y₁ − Ŷ₁ = √(2H)Σ_j∫_{cell j}((1 − s)^a − (c_jΔ)^a)dW_s, so by Itô's isometry
+   E|Y₁ − Ŷ₁|² = 2HΣ_j∫_{(j−1)Δ}^{jΔ}(r^a − (c_jΔ)^a)²dr; with r = xΔ this is 2HΔ^{2a+1}Σ_j∫_{j−1}^{j}(x^a − c_j^a)²dx
+   and 2a + 1 = 2H. For large j, x^a − c_j^a ≈ a c_j^{a−1}(x − c_j), so the j-th term is O(j^{2a−2}), summable since
+   2a − 2 < −1. Each cell's term is minimized over c_j when c_j^a equals the cell average of x^a, which is
+   (j^{a+1} − (j − 1)^{a+1})/(a + 1): c_j = b_j.
+10. **(qual) The naive scheme's bias.** Var Ŷ₁ = 2HΔ^{2H}Σ_{j≤n}j^{2a}, and for s = −2a = 1 − 2H ∈ (0, 1),
+   Σ_{j≤n}j^{−s} = n^{1−s}/(1 − s) + ζ(s) + O(n^{−s}). So Var Ŷ₁ = 1 + 2Hζ(1 − 2H)Δ^{2H} + o(Δ^{2H}), with ζ(1 − 2H) < 0.
+   Then E[exp(ηŶ₁ − ½η²)] = exp(½η²(Var Ŷ₁ − 1)) = exp(−η²H|ζ(1 − 2H)|Δ^{2H}): at H = 0.1, ζ(0.8) = −4.44, and
+   with η = 1.9 the factor is exp(−1.60Δ^{0.2}), 0.50 at n = 64. Using Var Ŷ in the exponent instead removes this bias.
+
+## For the researcher
+
+* **The theorems.** Bennedsen, Lunde and Pakkanen (2017), "Hybrid scheme for Brownian semistationary processes,"
+  *Finance Stoch.* 21(4); Bayer, Hall and Tempone (2022), "Weak error rates for option pricing under linear rough
+  volatility," *IJTAF* 25 (strong rate H, weak rate H + ½ for Euler); Gassiat (2022), arXiv:2203.09298, on weak rates
+  of rough schemes.
+* **Simplifications.** The error at one time, t = 1; the price experiment fixes the price step and varies only the
+  volatility's discretization, with the exact Y on the grid as reference, so the S-step's own error is not measured.
+* **Open problems.** The weak rate for rough Bergomi with general payoffs; multilevel Monte Carlo with a strong rate
+  of H; error expansions for path-dependent payoffs and joint models.
 
 ## Data and reproducibility
 
@@ -174,7 +205,7 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 
 # 量化金融，从零搭建 — 第14部分：粗糙与路径依赖波动率
 
-本系列四十三部分中的第14部分，属于第三幕“衍生品”，是本系列关于波动率的前沿部分：一堂约58分钟的课，所有数字都由本系列自己的代码计算
+本系列四十三部分中的第14部分，属于第三幕“衍生品”，是本系列关于波动率的前沿部分：一堂约64分钟的课，所有数字都由本系列自己的代码计算
 （[`compute.py`](compute.py)，以及经过测试的我们公司的 [`rough`](../../../explainer/quant/house/rough.py) 模块）。
 
 数据：基准曲面和2024—2025年102个每周的Deribit比特币期权交易日；币安BTCUSDT一分钟（2018—2020）、五分钟（2024—2025）和日度
@@ -183,7 +214,7 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 
 *这是方法的教育，不是投资建议。*
 
-## 各章（约60分钟）
+## 各章（约64分钟）
 
 * **开场：粗糙。** 布朗路径和H = 0.1路径在连续放大256倍下的对比；1968—2024年的来龙去脉；本部分目标；粗糙实验室。
 * **1. 事实：爆炸的偏斜。** 102条每周偏斜期限结构的三维“织布机”；中位幂律指数0.56（四分位0.37—0.70），比二分之一更陡，按字面读
@@ -209,7 +240,8 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 * **16. 签名波动率。** 实验六（`sigvol_logS`）；十六参数拟合样本内0.88、新路径1.50（过拟合）。
 * **17. 交易台用什么。** 校准速度；替代模型的谱系；Risk奖项；VIX1D；用远期方差对冲；第十四条规则。
 * **18. 前沿，2023—2026。** 八个结果；森林展开与正则结构；最后的记分牌。
-* **结尾。** 十二句回顾、四个交易台问题、八道习题。
+* **写给研究者：粗糙模拟收敛得多快。** 对Y₁ = √(2H)∫(1 − s)^{H−½}dW与任何冻结在c_jΔ处的阶梯核，伊藤等距给出E|Y₁ − Ŷ₁|² = 2HΔ^{2H}Σ_j∫_{j−1}^{j}(x^a − c_j^a)²dx：无论选哪些点，强速率都是n^{−H}。混合格式（本内德森、伦德与帕卡宁2017）精确积分前κ个格子：速率相同，常数崩塌。H = 0.1时的精确误差：黎曼和在n = 8时0.596、1,024时0.393；κ = 1为0.030 → 0.020；κ = 2为0.016 → 0.011（渐近常数C = 0.538、0.0014、0.0004）；H = 0.05/0.2/0.3/0.4时规律相同。在精确联合高斯分布上的蒙特卡洛（200,000次抽取，n = 8–64）与公式三位一致。粗糙贝尔戈米（H 0.1、η 1.9、ρ −0.9、ξ 0.04），一年期平值看涨，所有格式共用价格步：精确16.5–16.3%；用真实补偿项t^{2H}的黎曼12.2/11.8/11.8/12.0%（方差缺口按n^{−2H}缩小）；用自身方差的黎曼17.7/17.2/16.9/16.5%（约n^{−2/3}，接近拜尔、霍尔与坦蓬内的H + ½）；混合格式在0.01点以内。三个开放问题；暂停题：误差减半需要2^{1/H}倍的步数（H = 0.1时1,024倍，0.4时5.7倍）。
+* **结尾。** 十二句回顾、四个交易台问题、十道习题（两道为资格考试水平）、应用、参考文献。
 
 ## 教材对照
 
@@ -251,8 +283,17 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 7. **混合格式的b_k。** 令(b_kΔ)^{H−½}等于核在第k个格子上的平均Δ^{H−½}(k^{H+½} − (k − 1)^{H+½})/(H + ½)，解出b_k。
 8. **四因子PDV。** 对K(τ) = λe^{−λτ}，R_t对t求导得dR = λ(r_t^n − R_t)dt：指数移动平均，马尔可夫；两个这样的核的凸组合就是两个EMA。
 
+9. **（资格考试）精确的强误差。** Y₁ − Ŷ₁ = √(2H)Σ_j∫_{格子j}((1 − s)^a − (c_jΔ)^a)dW_s，由伊藤等距E|Y₁ − Ŷ₁|² = 2HΣ_j∫(r^a − (c_jΔ)^a)²dr；令r = xΔ得2HΔ^{2H}Σ_j∫_{j−1}^{j}(x^a − c_j^a)²dx。j大时x^a − c_j^a ≈ a c_j^{a−1}(x − c_j)，第j项为O(j^{2a−2})，因2a − 2 < −1而可和。每个格子的项在c_j^a等于x^a的格子平均(j^{a+1} − (j − 1)^{a+1})/(a + 1)时最小：c_j = b_j。
+10. **（资格考试）朴素格式的偏差。** Var Ŷ₁ = 2HΔ^{2H}Σ_{j≤n}j^{2a}，对s = 1 − 2H ∈ (0, 1)有Σ_{j≤n}j^{−s} = n^{1−s}/(1 − s) + ζ(s) + O(n^{−s})。所以Var Ŷ₁ = 1 + 2Hζ(1 − 2H)Δ^{2H} + o(Δ^{2H})，ζ(1 − 2H) < 0。于是E[exp(ηŶ₁ − ½η²)] = exp(−η²H|ζ(1 − 2H)|Δ^{2H})：H = 0.1时ζ(0.8) = −4.44，η = 1.9时因子为exp(−1.60Δ^{0.2})，n = 64时为0.50。在指数中改用Var Ŷ就消除了这个偏差。
+
 ## 数据与可复现性
 
 * 所有数字由`compute.py`计算并缓存在`.cache/quant14/`；长计算项会保存中间结果并可续算。
 * 事实均对照一手来源核实（见英文部分）。开盘前的VIX数字引用为“超过65”（美国证券交易委员会工作人员论文）。
 * 本部分没有检验任何策略；试验计数器仍为310。
+
+## 写给研究者
+
+* **定理。** 本内德森、伦德与帕卡宁（2017），*Finance Stoch.* 21(4)；拜尔、霍尔与坦蓬内（2022），*IJTAF* 25（欧拉格式强速率H、弱速率H + ½）；Gassiat（2022），arXiv:2203.09298，论粗糙格式的弱速率。
+* **简化。** 只看一个时刻t = 1的误差；价格实验固定价格步、只改变波动率的离散化，以网格上的精确Y为参照，所以不度量价格步自身的误差。
+* **开放问题。** 一般收益下粗糙贝尔戈米的弱速率；强速率为H时的多层蒙特卡洛；路径依赖收益与联合模型的误差展开。

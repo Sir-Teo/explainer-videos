@@ -22,5 +22,6 @@ SCENES = [
     ("s09c_signature", "Signature", "16. Signature volatility models"),
     ("s11_house", "House", "17. What desks use, and the rough lab"),
     ("s10_frontier", "Frontier", "18. The frontier, 2023-2026"),
+    ("s13_research", "Research", "For the researcher: how fast a rough simulation converges"),
     ("s12_outro", "Outro", "Recap, desk questions, problems"),
 ]

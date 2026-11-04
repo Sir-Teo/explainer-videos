@@ -33,6 +33,12 @@ PROBLEMS = [
     r"Compute $\int_0^T\!\int_t^T (u - t)^{H - 1/2}\,du\,dt$, and deduce the rough skew's $T^{H - 1/2}$.",
     r"Show that $b_k$ in the hybrid scheme is the point where the kernel equals its own average over cell $k$.",
     r"Show that each factor of the 4-factor PDV obeys $dR = \lambda(r^2/dt - R)\,dt$, an exponential moving average.",
+    r"(qual) For $Y_1 = \sqrt{2H}\int_0^1(1 - s)^{H - 1/2}dW_s$ and a step kernel frozen at $c_j\Delta$ on the cell at lag "
+    r"$j$, show $\mathbb E|Y_1 - \hat Y_1|^2 = 2H\Delta^{2H}\sum_j\int_{j-1}^{j}(x^{a} - c_j^{a})^2dx$, that the sum converges, "
+    r"and that the optimal $c_j$ on each cell is $b_j$.",
+    r"(qual) Show that the left-point Riemann scheme's variance is $1 - \Delta^{2H}2H|\zeta(1 - 2H)|(1 + o(1))$ "
+    r"(for $H < \frac12$), and hence that exponentiating with $t^{2H}$ biases $\mathbb E[v_1]$ by a factor "
+    r"$e^{-\eta^2 H|\zeta(1 - 2H)|\Delta^{2H}}$."
 ]
 
 
@@ -117,11 +123,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=20)
+        ps = problem_set(PROBLEMS, font_size=17)
         with self.voiceover(
-            "And eight problems: the variance of a rough process, the scaling law behind the estimator, rough "
+            "And ten problems: the variance of a rough process, the scaling law behind the estimator, rough "
             "Bergomi's martingale property, the identity behind the lift, the Hawkes mean rate, the double integral "
-            "behind the rough skew, the hybrid scheme's optimal points, and the Markovian PDV factor. Solutions, in "
+            "behind the rough skew, the hybrid scheme's optimal points, and the Markovian PDV factor. Two more are "
+            "qualifying-exam problems: the exact strong error, and the bias of the naive scheme. Solutions, in "
             "English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
