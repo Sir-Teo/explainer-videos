@@ -1324,28 +1324,39 @@ A-shares.
 *Desk:* "Your model has monthly R² of 1%. Is that good? What Sharpe does it imply?"
 *House:* ML signals.
 
-### Part 28 · Text, LLMs and Alternative Data (~55; frontier)
-1. Tetlock (2007); Loughran–McDonald (2011).
-2. SESTM (Ke–Kelly–Xiu 2019); FinBERT.
-3. Text as macro data (Bybee–Kelly–Manela–Xiu 2024); FOMC (Hansen–McMahon–Prat 2018).
-4. LLMs read the news (Lopez-Lira–Tang 2023); LLM embeddings (Jiang–Kelly–Xiu 2022); LLM statement analysis
-   (Kim–Muhn–Nikolaev 2024).
-5. Look-ahead bias (Glasserman–Lin 2023; Sarkar–Vafa 2024); chronologically consistent models *(verify:
-   He–Lv–Manela–Wu 2025)*.
-6. The time-sliced experiment, trained here.
-7. LLM trading agents *(verify: TradingAgents 2024 and successors)*.
-8. Alternative data: satellites, card panels, web traffic, job postings; decay as it spreads.
-9. BloombergGPT (2023) vs general models.
-10. The LLM signal registered and opened.
+### Part 28 · Text, LLMs and Alternative Data (~57; frontier; built)
+0. Hook: the 22 January 2008 statement, word by word; the two-year's 28 bp fall.
+1. Words as numbers: bag of words, document-term matrix, Zipf and Heaps, tf-idf (Gentzkow–Kelly–Taddy 2019).
+2. Dictionaries: Tetlock (2007); Antweiler–Frank (2004); Tetlock–Saar-Tsechansky–Macskassy (2008); Loughran–McDonald
+   (2011); the central-bank misfit (*unemployment*, *stability*).
+3. Tone and the two-year yield; Kuttner (2001); Gürkaynak–Sack–Swanson (2005), the path factor.
+4. Length, readability (Loughran–McDonald 2014), how much a statement changes; Cohen–Malloy–Nguyen's lazy prices;
+   forward-guidance phrases.
+5. SESTM (Ke–Kelly–Xiu 2019), fitted on statements.
+6. Topics (NMF; LDA) as eras; Bybee–Kelly–Manela–Xiu (2024).
+7. Inside the FOMC: Hansen–McMahon–Prat (2018); Meade–Stasavage (2008); Shapiro–Wilson (2022);
+   Gorodnichenko–Pham–Talavera (2023).
+8. Embeddings: PPMI–SVD, Levy–Goldberg (2014), word2vec (Mikolov et al. 2013).
+9. Transformers; FinBERT (Huang–Wang–Yang 2023); a pocket LM trained on the minutes.
+10. LLMs read the news: Lopez-Lira–Tang (2023); Chen–Kelly–Xiu (2022); Kim–Muhn–Nikolaev (2024); Araci (2019);
+    Hansen–Kazinnik (2023); Cao–Jiang–Wang–Yang (2024).
+11. Look-ahead bias: Glasserman–Lin (2023); Sarkar–Vafa (2024); He–Lv–Manela–Wu (2025).
+12. The time-sliced experiment: three pocket LMs (to 2007; to 2020; to 2007 and 2013–2020), bits per character,
+    probes, samples.
+13. LLM agents: ReAct; TradingAgents (Xiao–Sun–Luo–Wang 2024).
+14. Alternative data: Katona–Painter–Patatoukas–Zeng (2025); Zhu (2019); Kyle with N insiders.
+15. Domain models: BloombergGPT (Wu et al. 2023); Li et al. (2023); the text desk.
+16. The statement score registered (13 trials) and opened on 2021–25.
+17. Rule 28: text features.
+Research: why screening finds the words (Chebyshev's association lemma; sure screening; recovery by n; permutation
+test on the statements).
 
-*Textbooks:* Kelly–Xiu ch. on text; Gentzkow–Kelly–Taddy "Text as data" (2019).
-*Trained:* time-sliced pocket LMs on FOMC and EDGAR text (`explainer.lm`); a FinBERT-style classifier; an
-open-weight LLM run locally.
-*Computed:* FOMC hawkishness vs 2-year moves; the look-ahead gap.
-*Visuals:* FOMC sentences lighting up; the gap opening between models.
-*Firms:* news-analytics vendors; Bloomberg.
+*Textbooks:* Gentzkow–Kelly–Taddy "Text as data" (2019); Kelly–Xiu, the text chapter; Jurafsky–Martin.
+*Trained:* three time-sliced pocket LMs on FOMC minutes (`explainer.lm.pocket`), point-in-time BPE tokenizers.
+*Computed:* FOMC tone vs 2-year moves; SESTM; NMF topics; PPMI–SVD embeddings; the look-ahead gap.
+*Firms:* Bloomberg; news-analytics vendors (RavenPack), from the public record.
 *Desk:* "Your LLM signal backtests at Sharpe 4 on 2015–2020 news. What's the first thing you check?"
-*House:* text features.
+*House:* `explainer/quant/house/text.py`.
 
 ### Part 29 · Alpha Mining and Automated Research (~55; frontier)
 1. The alpha factory: formulaic alphas (Kakushadze 2016), WorldQuant's model and its public BRAIN platform.
