@@ -1,6 +1,6 @@
 # Computer Science, Built — Part 1: What Is a Computation?
 
-Part 1 of a fifty-five-part course in computer science (see [the series plan](../README.md) and
+Part 1 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). Hilbert asked for a machine that settles every mathematical question; Turing defined
 the machine, showed that one machine can imitate all others, and proved that no machine can do what Hilbert asked.
 Every machine in this part runs on the computer that renders the video (`compute.py`); dates, quotations and the
@@ -55,7 +55,7 @@ proofs about busy beavers are the published ones, cited on screen.
   all 47,176,870 steps, with 4,098 ones, in one picture and its first 1,200 steps in full; S(5) proved by the
   bbchallenge collaboration (2024, checked in Coq); S is uncomputable, by reduction from Chapter 12; six states and
   beyond (a 2022 lower bound beyond 10↑↑15; Collatz-like machines; Yedidia & Aaronson's machine independent of ZFC).
-* **14. What we will build.** The tower of abstractions and the ten acts; Pebble-32, the computer of Part 6, running
+* **14. What we will build.** The tower of abstractions and the eleven acts; Pebble-32, the computer of Part 6, running
   Euclid on this series' emulator (21, as the rectangle said); the Job and its ledger; in practice.
 * **Recap, problems, and where this comes back.**
 

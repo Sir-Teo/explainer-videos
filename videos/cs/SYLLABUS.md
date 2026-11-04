@@ -1,11 +1,11 @@
-# Computer Science, Built: the syllabus (plan of record, draft 2)
+# Computer Science, Built: the syllabus (plan of record, draft 3)
 
 Goal: a university computer-science degree in video, followed by the curriculum industry actually works from. It
 aims to be **as comprehensive as the standard textbooks, as technical as a graduate course, as practical as a senior
 engineer's working knowledge, and as close to the frontier as primary sources allow**. It tells how the field got
 here alongside the mathematics. It is made in English and Chinese to the standard of *Analysis, Built* and *AI,
 Built*, and renders on macOS and Linux. Each part runs **50–60 minutes**, and its content decides where in that range
-it lands. Fifty-five parts come to about **52 hours**.
+it lands. Sixty-one parts come to about **58 hours**: a degree in fifty-five, and a research tier in six more.
 
 The plan has the shape of a degree plus a career:
 - **Act I** opens with discrete mathematics (Lehman, Leighton & Meyer) and then builds the machine. Acts I and II
@@ -25,6 +25,12 @@ The plan has the shape of a degree plus a career:
   Engineering at Google*, Kleppmann, Xu, the SRE books, Manning et al., Kohavi et al.).
 - **Act X** covers graphics, numerical analysis, quantum computing, formal methods and security (PBRT, Trefethen &
   Bau, Nielsen & Chuang, Baier & Katoen, Anderson).
+- **The research tier** runs through the whole series and ends in its own act. Every part closes with a *Frontier*
+  chapter at the level of a PhD qualifying exam or a first-year graduate seminar (§1.1). **Act XI** (Parts 56–61)
+  then covers the graduate breadth a degree leaves out: spectral graph theory and expanders, learning theory,
+  programming-language semantics, distributed-computing theory, domain-specific hardware, and how research itself
+  is done (Spielman, Hoory–Linial–Wigderson, Shalev-Shwartz & Ben-David, Winskel, Harper, Lynch, Attiya & Welch,
+  Hennessy & Patterson ch. 7, Jain).
 
 Each part's **Reading** line names the textbooks, the classic papers and the frontier papers it follows, and its
 reference card shows them on screen. Each part's **In practice** line names the industrial systems, roles and
@@ -34,6 +40,9 @@ graduates do.
 *Draft 2 (2026-11-04)* adds Part 2 (discrete mathematics), Part 24 (algorithms in practice), Acts VIII and IX (Parts
 40–50, industry practice), the *In practice* lines and the degree and industry maps, and renumbers the parts to match.
 The decisions in §7 are confirmed.
+
+*Draft 3 (2026-11-04)* adds the research tier at the user's request: a *Frontier* chapter and a research problem in
+every part (§1.1), and Act XI (Parts 56–61). Parts 1–55 keep their numbers.
 
 ## 1. The standard every part meets
 
@@ -66,6 +75,8 @@ serves that story. A chapter that doesn't is cut, or moved to the part it serves
 - A reference card listing textbooks, the classic papers and the frontier papers.
 - **(CS)** An *In practice* card in the outro: the systems, roles and skills the part maps to (the plan's *In
   practice* line).
+- **(CS, research tier)** A *Frontier* chapter before the outro, and a research problem (★) in the problem set
+  (§1.1).
 
 **The history thread.**
 - Every part opens with its era ("how we got here", 2–3 min), lit on the timeline strip (1800–2030).
@@ -103,6 +114,87 @@ change.
 
 **Gates per part:** `tools/lecture_length.py` (fails under 50 min), `contact_sheet.py`, `dead_air.py`,
 `collect_text.py --check`, `check_narration.py`, `zh_lines.py --verify`, and the part's `tests/test_cs*_*.py`.
+
+### 1.1 The research tier
+
+A degree teaches what is settled; a PhD starts where that stops. Every part therefore ends its content with a
+**Frontier** chapter (5–8 minutes, one or two scenes), written to the level of a qualifying exam or a first-year
+graduate seminar. It does four things:
+
+1. **The limit.** What is the best possible, and how close does the state of the art come? Where we can, the limit is
+   computed, not quoted: a limit study on our own traces, a lower bound proved on screen, an idealised machine run
+   beside the real one.
+2. **What is open**, stated precisely, with the current record and its date ("ω < 2.371339: Alman, Duan, Vassilevska
+   Williams, Xu, Xu & Zhou, 2024 **(verify)**").
+3. **Recent papers**: two or three from the last five or so years where the field has them, with what each changed.
+   Each is checked in the frontier sweep before it goes on screen.
+4. **A research problem (★)** in the problem set: open-ended, and possibly open. The README says what is known, how
+   a researcher would attack it, and which tool in the repository is the place to start.
+
+The README's reading list is split into the *qualifying-exam canon* and *recent work*. The table gives each part's
+Frontier topic; each is refined in that part's frontier sweep.
+
+| Part | Frontier chapter |
+|---|---|
+| 1 | BB(5) settled and machine-checked (2024); BB(6) and its Collatz-like cryptids; the physical Church–Turing thesis |
+| 2 | the 2023 exponential improvement for diagonal Ramsey numbers; the sensitivity conjecture's two-page proof (2019); formal proof in Lean |
+| 3 | why explicit circuit lower bounds stall near 3n; the minimum circuit size problem; SAT-based exact synthesis |
+| 4 | integer multiplication in O(n log n) (2019); correctly rounded libraries; low-precision formats for machine learning |
+| 5 | Rowhammer at today's densities, and the limits of its mitigations; formal metastability analysis; new memories (MRAM, CXL) |
+| 6 | formal ISA specifications (Sail RISC-V); verified processors; fuzzing RTL against a golden model |
+| 7 | the limits of branch prediction, computed: idealised PPM against TAGE at every storage budget; the perceptron's linear blind spot; TAGE-SC-L, BranchNet; the data-centre front-end bottleneck |
+| 8 | ILP limit studies revisited; speculative non-interference as a formal model of Spectre; value prediction |
+| 9 | learned replacement (Hawkeye, Glider) against Belady; the red–blue pebble lower bounds; memory disaggregation |
+| 10 | out-of-thin-air and the unsolved C/C++ memory model; work-stealing bounds; dark silicon |
+| 11 | Robson's allocator lower bound; formal semantics of undefined behaviour; capability hardware (CHERI) |
+| 12 | regex matching and parsing under fine-grained hardness (SETH); Valiant's parsing-as-matrix-multiplication; derivatives |
+| 13 | equality saturation; superoptimization; verified compilation; ML-guided optimization |
+| 14 | dependent and cubical type theory; gradual-typing soundness; effect handlers; Hindley–Milner's DEXPTIME-completeness |
+| 15 | pause-time lower bounds for garbage collection; meta-tracing JITs; mechanized WebAssembly |
+| 16 | smoothed analysis; lower bounds beyond comparisons; fine-grained complexity |
+| 17 | the dynamic optimality conjecture; recent optimal open addressing and tiny pointers **(verify)**; succinct structures |
+| 18 | almost-linear max-flow (2022); negative-weight shortest paths (2022); universally optimal Dijkstra (2024) and recent sorting-barrier results **(verify)** |
+| 19 | the matrix-multiplication exponent ω; SETH-hardness of edit distance; the limits of the laser method |
+| 20 | derandomization (PRIMES in P; identity testing open); optimal sketches and their lower bounds |
+| 21 | compressed indexes in O(r) space; edit-distance lower bounds |
+| 22 | robust and exact geometric computation; lower bounds for high-dimensional nearest neighbours |
+| 23 | near-linear-time linear programming; the polynomial Hirsch conjecture; hardness of approximation and the UGC |
+| 24 | learned indexes and algorithms with predictions; the theory–practice gap measured |
+| 25 | the smallest Turing machine independent of ZFC; Hilbert's tenth problem over other rings |
+| 26 | the three barriers; geometric complexity theory; meta-complexity; recent time–space simulations **(verify)** |
+| 27 | the 2-to-2 theorem (2018); MIP* = RE (2020); succinct arguments in practice |
+| 28 | polar and Reed–Muller codes achieving capacity; locally decodable codes; list decoding |
+| 29 | collisions found in practice (SHA-1, 2017); indistinguishability obfuscation from standard assumptions (2021) |
+| 30 | post-quantum standards (2024); SIKE's break (2022); fast bootstrapping in FHE |
+| 31 | verified kernels at scale; scheduling for tail latency; verified eBPF |
+| 32 | translation-reach research; memory tiering; formal models of virtual memory |
+| 33 | the complexity of checking linearizability; weak-memory verification; the cost of wait-freedom |
+| 34 | the LSM design space; verified crash consistency; zoned storage |
+| 35 | worst-case optimal joins and the AGM bound; learned optimizers; checking isolation levels |
+| 36 | programmable data planes (P4); network verification; routing convergence |
+| 37 | congestion control's impossibility results (starvation, 2022); the theory of fairness |
+| 38 | lower bounds for consensus; linear-communication BFT (HotStuff); verified distributed systems |
+| 39 | the limits of consistency under availability (CAC); CRDT theory; Jepsen's findings |
+| 40 | empirical software engineering's evidence base; evaluating AI coding agents |
+| 41 | structured merge; complete version solving; formally correct builds |
+| 42 | layout complexity; JIT-engine security; formal web security models |
+| 43 | session types; API evolution, measured; exactly-once, formalized |
+| 44 | causal inference under interference; always-valid inference |
+| 45 | bin-packing schedulers' guarantees; serverless cold starts; carbon-aware scheduling |
+| 46 | Kahn networks and dataflow semantics; differential dataflow; approximate query processing |
+| 47 | graph-based nearest-neighbour search and its guarantees; learned sparse retrieval |
+| 48 | load balancing in heavy traffic (JSQ, power of d); TTL-cache theory |
+| 49 | interleaving anomalies in collaborative editing (Fugue); verified payment protocols |
+| 50 | metastable failures, formalized; gray failure; automated root-cause analysis |
+| 51 | differentiable and neural rendering (NeRF, Gaussian splatting); ReSTIR |
+| 52 | randomized numerical linear algebra; mixed-precision iterative refinement |
+| 53 | below-threshold surface codes (2024); quantum-advantage claims and classical spoofing; Regev's factoring (2023) |
+| 54 | verification at scale; proof automation with language models; Iris |
+| 55 | formal defences against speculation; memory safety at scale; verified bootstrapping |
+| 56–61 | each Act XI part is research-level throughout; its Frontier chapter is the open problems of its field |
+
+Parts 1–6 were built before the research tier; their Frontier chapters are added in a retrofit after Part 7, with
+their notes, problems and Chinese editions.
 
 ## 2. The devices
 
@@ -190,6 +282,7 @@ measured exactly in Part 6), so `make.py` computes `ai1` first. The ledger (`exp
 | 18 | 49 | as a service at a million books a day: p50 and p99 latency, cache hit rate, cost |
 | 19 | 50 | that service under crashes, partitions and slow nodes: availability and SLO burn |
 | 20 | 55 | the final ledger: every row, and native Python and C on this machine |
+| 21 | 60 | **research tier**: the Job in hardware, a word-counting accelerator built in Pebble's HDL; then Part 61 puts confidence intervals on every measured row |
 
 ### 2.3 The tower, the timeline and the payoffs
 
@@ -2727,7 +2820,7 @@ compiler, then catch it, and close the series by walking the tower from a NAND g
     Reproducible builds; bootstrapping from a tiny seed (cited).
 13. **The tower revisited**: the Job end to end, from NAND to cluster; the final ledger (row 20); what each layer hides
     and what leaks through.
-14. Open problems across the series:
+14. Open problems across the series (Part 61 returns to them at research depth):
     - P vs NP, and whether one-way functions exist;
     - ω = 2?;
     - BB(6);
@@ -2748,13 +2841,225 @@ tower lit end to end, the camera rising from a NAND gate to the cluster**; the f
 Thompson 1984; Wheeler 2009; Shacham 2007; Abadi et al. 2005; Lampson 1974; Harrison, Ruzzo & Ullman 1976; Lowe 1996;
 Kocher et al. 2019; Jung et al. 2018.
 
+## Act XI · The Research Frontier
+
+The degree ends at Part 55. Act XI is the first year of a PhD: the graduate breadth a qualifying exam expects, each
+part built, like the rest of the series, on Pebble and the Job. It assumes the whole degree, and every part ends on
+problems that are open.
+
+### Part 56 · Spectral Graphs and Expanders (~60)
+*Story:* A graph's adjacency matrix has eigenvalues, and they know things the graph's drawing hides: how fast a
+random walk forgets where it started, how hard the graph is to cut, how well it spreads information. Graphs that are
+sparse yet impossible to cut, expanders, turn out to be everywhere in theory, from error-correcting codes to
+derandomization, and their linear algebra became, in 2022, the route to a max-flow algorithm in almost-linear time.
+1. The Laplacian L = D − A; quadratic forms xᵀLx as energy; λ₂ and connectivity.
+2. The Courant–Fischer theorem; Rayleigh quotients; why the second eigenvector partitions a graph (spectral
+   clustering, Fiedler 1973).
+3. **Cheeger's inequality**, both directions, proved on screen; the sweep cut.
+4. Random walks: stationary distributions, mixing time from the spectral gap; the lazy walk; PageRank revisited (Part
+   18).
+5. Expanders: definitions (edge, vertex, spectral); the expander mixing lemma; Ramanujan graphs and the Alon–Boppana
+   bound; existence by the probabilistic method (Part 2).
+6. Explicit constructions: Margulis–Gabber–Galil; the **zig-zag product** (Reingold, Vadhan & Wigderson 2000);
+   Reingold's SL = L (2005).
+7. Expanders at work: expander codes (Sipser & Spielman), randomness-efficient sampling, the PCP theorem's gap
+   amplification (Dinur 2006, callback to Part 27).
+8. Electrical networks: effective resistance, the Laplacian as a circuit (Part 3's physics), commute times.
+9. Laplacian solvers: spectral sparsification (Spielman & Srivastava), the Spielman–Teng near-linear solver (2004),
+   preconditioning with low-stretch trees.
+10. Electrical flows to max-flow: Christiano et al. (2011), interior-point methods; **Chen, Kyng, Liu, Peng,
+    Probst Gutenberg & Sachdeva (2022)**, almost-linear max-flow (verify).
+11. Frontier: high-dimensional expanders; spectral independence and the resolution of sampling conjectures; open
+    problems.
+12. Outro.
+
+*Computed:* spectra of the series' graphs (the novels' word co-occurrence graph, the city grid of Part 18, the
+internet of Part 36); a spectral partition against the true communities; mixing times measured against the
+spectral-gap bound; Cheeger's inequality checked on random graphs; a zig-zag expander built and its λ₂ measured; a
+Laplacian solved by CG with and without a sparsifier.
+*Visuals:* eigenvectors drawn as vertex colours; the sweep cut moving through the Fiedler order; a random walk's
+distribution flattening; the zig-zag product as a step, a cloud move, a step.
+*In practice:* spectral clustering, graph partitioning for sharding (METIS), graph neural networks' spectral roots,
+expander-based network topologies (Jellyfish, Xpander).
+*Reading:* Spielman, *Spectral and Algebraic Graph Theory*; Hoory, Linial & Wigderson 2006 (survey); Chung,
+*Spectral Graph Theory*; Vadhan, *Pseudorandomness*; Reingold, Vadhan & Wigderson 2000; Reingold 2005; Spielman & Teng
+2004; Chen et al. 2022.
+
+### Part 57 · Learning Theory (~60)
+*Story:* *AI, Built* showed machines that learn. This part asks when learning is possible at all: how many examples
+a learner needs, why a model with more parameters than data can still generalize, and what it means to learn while an
+adversary picks the examples. The answers are theorems, and some of them are about the branch predictors of Part 7.
+1. The PAC model (Valiant 1984); realizable and agnostic learning; the finite-class bound from the union bound.
+2. **VC dimension**; Sauer–Shelah, proved; the fundamental theorem of PAC learning, both directions.
+3. Rademacher complexity and margin bounds; why the perceptron's mistake bound (Novikoff 1962) depends on the margin,
+   not the dimension (callback to Part 7).
+4. Boosting: weak to strong learning (Schapire 1990); AdaBoost as a zero-sum game; multiplicative weights again
+   (Part 23).
+5. Online learning: the halving algorithm, the mistake-bound model, Littlestone dimension; regret and the experts
+   problem; online gradient descent; online-to-batch conversion.
+6. Bandits: explore and exploit; UCB, Thompson sampling; the Lai–Robbins lower bound (callback to Part 44's
+   experiments).
+7. The limits of learning: cryptographic hardness of learning (Kearns & Valiant); statistical-query lower bounds and
+   parity (callback to Part 7's parity branch).
+8. Generalization in the overparameterized regime: double descent, implicit bias of gradient descent, benign
+   overfitting (callbacks to *AI, Built*).
+9. Learning and compression: Occam's razor bounds, sample compression schemes, MDL (callback to Part 21).
+10. Frontier: the sample-compression conjecture (compression schemes of size O(d)? Moran & Yehudayoff 2016 gave
+    size exponential in d) **(verify)**; learning theory of transformers and in-context learning; open problems.
+11. Outro.
+
+*Computed:* VC bounds against measured learning curves; shattering animated; AdaBoost's margins over rounds; regret
+curves for Hedge, UCB and Thompson sampling against their bounds; the perceptron's mistakes against Novikoff's bound
+on Part 7's branch traces; SQ hardness of parity, measured as learning time.
+*Visuals:* the shattering of point sets by half-planes; the boosting distribution re-weighting points; regret
+curves bending under √T.
+*In practice:* model selection and validation, online recommendation, bandit-based experimentation, ad auctions.
+*Reading:* Shalev-Shwartz & Ben-David, *Understanding Machine Learning*; Mohri, Rostamizadeh & Talwalkar,
+*Foundations of Machine Learning*; Kearns & Vazirani; Cesa-Bianchi & Lugosi, *Prediction, Learning, and Games*;
+Lattimore & Szepesvári, *Bandit Algorithms*; Valiant 1984; Littlestone 1988; Freund & Schapire 1997; Belkin et al.
+2019.
+
+### Part 58 · Semantics (~60)
+*Story:* What does a program mean? Part 14 gave types; this part gives meaning itself three ways: as steps a
+machine takes, as a mathematical object a program denotes, and as the laws it obeys. Scott's answer for recursion,
+fixed points of continuous functions, is the same lattice idea as Part 13's dataflow analysis; and a theorem about
+all programs of a type, parametricity, writes code's properties for free.
+1. Operational semantics: small-step and big-step for a language with recursion; determinism; the CEK machine
+   (callback to Part 15).
+2. Denotational semantics: what a program denotes; compositionality; recursion as a least fixed point.
+3. **Domain theory**: complete partial orders, continuity, Kleene's fixed-point theorem (callback to Part 13's
+   lattices); Scott's D∞ model of the untyped λ-calculus (1969).
+4. Adequacy and full abstraction; Plotkin's PCF and parallel-or (1977); game semantics' answer (1990s).
+5. Program equivalence: contextual equivalence; bisimulation; **logical relations**, and normalization of the
+   simply typed λ-calculus proved with them (Tait).
+6. **Parametricity**: Reynolds (1983), Wadler's *Theorems for free!* (1989), derived for map and sort.
+7. Axiomatic semantics revisited (Part 54): Hoare logic proved sound against the operational semantics.
+8. Effects: monads (Moggi 1991), algebraic effects and handlers; state, exceptions, nondeterminism as monads.
+9. Dependent types: Martin-Löf type theory, propositions as types extended (Part 14); a proof assistant's kernel.
+10. Concurrency semantics: CCS and the π-calculus; session types (callback to Part 43).
+11. Frontier: mechanized semantics of real languages (CompCert's C, CakeML, WebAssembly); homotopy type theory;
+    open problems.
+12. Outro.
+
+*Computed:* a small-step interpreter, a big-step interpreter and a CEK machine for the same language, agreeing on
+random programs; Kleene iterates of a recursive definition converging; normalization by evaluation; free theorems
+checked by property tests; bisimulation checked by our model checker (Part 54).
+*Visuals:* the Kleene chain rising through a cpo; logical relations as a ladder of types; a bisimulation game
+played between two transition systems.
+*In practice:* language design and specification (WebAssembly's formal spec), compilers' correctness arguments,
+refactoring tools, effect systems in modern languages.
+*Reading:* Winskel, *The Formal Semantics of Programming Languages*; Harper, *Practical Foundations for Programming
+Languages*; Pierce et al., *Software Foundations*; Scott 1970; Plotkin 1977; Reynolds 1983; Wadler 1989; Moggi 1991;
+Milner, *Communicating and Mobile Systems*.
+
+### Part 59 · Distributed Computing Theory (~60)
+*Story:* Part 38 proved that consensus is impossible in one model and built Raft in another. This part is the
+theory underneath: what n processes can and cannot compute when they see only their neighbours, or crash, or lie.
+Some answers are lower bounds as sharp as log* n; one of them came from algebraic topology.
+1. Models: synchronous and asynchronous; message passing and shared memory; crash, omission and Byzantine faults.
+2. The LOCAL model: what a node knows after t rounds; **Cole–Vishkin's 3-colouring of a ring in O(log* n)**, run.
+3. **Linial's lower bound** (1992): no o(log* n) algorithm; round elimination (Brandt 2019) as a proof machine.
+4. Synchronous consensus: the f + 1 round lower bound; the n > 3f bound for Byzantine agreement, proved by the
+   hexagon argument; authenticated agreement (Dolev–Strong).
+5. Asynchronous impossibility: FLP revisited (Part 38) as a valency argument; randomized consensus (Ben-Or 1983).
+6. Shared memory: registers, the consensus hierarchy (Herlihy 1991, callback to Part 33); universality.
+7. **Topology**: k-set agreement is impossible (Herlihy & Shavit; Borowsky & Gafni; Saks & Zaharoglou, 1993), via
+   Sperner's lemma; the asynchronous computability theorem.
+8. Failure detectors (Chandra & Toueg 1996); Ω as the weakest for consensus.
+9. Lower bounds in communication: the cost of Byzantine agreement (Dolev–Reischuk); recent quadratic bounds.
+10. Population protocols and the theory of chemical computation.
+11. Frontier: the complexity theory of locality (LCL classification); distributed graph algorithms (CONGEST); open
+    problems.
+12. Outro.
+
+*Computed:* Cole–Vishkin on rings of 10⁶ nodes, rounds against log* n; round elimination steps for sinkless
+orientation; the hexagon counterexample run; Ben-Or's expected rounds; Sperner colourings of subdivided triangles
+checked; a population protocol computing majority.
+*Visuals:* colours collapsing round by round on a ring; the hexagon of processes fooling a Byzantine protocol; a
+simplex subdivided, its Sperner triangle found.
+*In practice:* the guarantees behind consensus libraries, blockchains' Byzantine assumptions, gossip protocols,
+self-stabilizing network protocols.
+*Reading:* Lynch, *Distributed Algorithms*; Attiya & Welch, *Distributed Computing*; Herlihy, Kozlov & Rajsbaum,
+*Distributed Computing through Combinatorial Topology*; Peleg, *Distributed Computing: A Locality-Sensitive Approach*;
+Linial 1992; Cole & Vishkin 1986; Fischer, Lynch & Paterson 1985; Herlihy & Shavit 1999; Brandt 2019.
+
+### Part 60 · Domain-Specific Hardware (~60)
+*Story:* When Act II's free speedups ended, the industry's answer was specialization: hardware that does one kind of
+work, enormously well. A matrix multiplier wired as a grid of cells passing numbers to their neighbours (H. T. Kung's
+systolic array, 1978) became Google's TPU. We build one in Pebble's gate simulator, put it on the roofline, and end
+with the Job in hardware.
+1. The end of general-purpose scaling (callback to Part 10); Hennessy & Patterson's "new golden age" (2018 Turing
+   lecture); the energy of an instruction against the energy of an operation.
+2. **The roofline model** (Williams, Waterman & Patterson 2009): arithmetic intensity, derived; this machine's roofline
+   measured.
+3. Systolic arrays (Kung & Leiserson 1978): a matrix multiplier built from Part 4's multipliers, simulated at gate
+   level and verified; weight-stationary against output-stationary dataflow.
+4. The TPU (Jouppi et al. 2017): a 256 × 256 systolic array; quantization (callback to Part 4's floats); what the
+   numbers in its paper mean.
+5. GPUs revisited (Part 10): SIMT, tensor cores, the memory wall again.
+6. Dataflow and spatial architectures; coarse-grained reconfigurable arrays; FPGAs (Part 5) as accelerators.
+7. Near-memory and in-memory computing; the cost of moving a byte.
+8. Sparsity and approximation: sparse accelerators, stochastic rounding, approximate computing.
+9. Design methodology: high-level synthesis, Chisel and the agile hardware movement, design-space exploration;
+   co-design of algorithm and hardware.
+10. **The Job in hardware**: a pipelined word-hashing and counting unit built in Pebble's HDL, verified against the
+    software Job; ledger row 21.
+11. Frontier: accelerators for language models; wafer-scale and chiplets; open problems in hardware design
+    automation.
+12. Outro.
+
+*Computed:* a gate-level systolic array multiplying matrices, cycle by cycle, against numpy; the roofline of this
+machine measured; the energy per operation table (cited); the word-counting accelerator's throughput, area in gates,
+and the Job's time on it.
+*Visuals:* numbers flowing through the systolic grid in diagonal waves; the roofline with each kernel as a point; the
+Job's accelerator as a pipeline of hash stages.
+*In practice:* ML accelerators (TPU, Trainium, tensor cores), FPGA offload in data centres, video and crypto engines,
+hardware design roles.
+*Reading:* Hennessy & Patterson, *Computer Architecture*, 6th ed., ch. 7; Sze, Chen, Yang & Emer, *Efficient
+Processing of Deep Neural Networks*; Kung & Leiserson 1978; Kung 1982; Williams, Waterman & Patterson 2009; Jouppi et
+al. 2017; Hennessy & Patterson 2019 (CACM).
+
+### Part 61 · Doing Research (~60; the coda)
+*Story:* The series has quoted a thousand results. Where do they come from, and how would you make one? This part
+is about method: how to measure without fooling yourself (changing the size of an environment variable can change a
+program's speed by a third), how to read and review a paper, how to find a problem, and how to know whether you have
+solved it. It ends on the open problems the series met, gathered on one map, and on the tower one last time.
+1. What research is: a question, a method, evidence; the shape of a paper; conferences and journals in CS.
+2. **Measurement bias** (Mytkowicz, Diwan, Hauswirth & Sweeney 2009), reproduced: link order and environment size
+   change the Job's measured speed on this machine.
+3. Statistically rigorous performance evaluation (Georges, Buytaert & Eeckhout 2007): confidence intervals, repeated
+   runs, warm-up; the statistics of speedups (geometric means, and why).
+4. Benchmarks and their failures; reproducibility and artifact evaluation; p-hacking in systems research.
+5. Proof as research: how a conjecture becomes a theorem; counterexample search by computer; formal proof (callback
+   to Parts 2, 54).
+6. Reading and reviewing: the three-pass method; how to review; how to find what is not said.
+7. Finding problems: Hamming's "You and Your Research" (1986); limit studies as a way to find headroom (Part 7's).
+8. Writing: the structure of an argument; figures that carry the claim; the series' own conventions as a case study.
+9. **The open-problems map**: P vs NP and one-way functions; ω; BB(6); dynamic optimality; the UGC; derandomization;
+   circuit lower bounds; a memory model for C; practical quantum advantage; verified software at scale; each with its
+   record and the part that met it.
+10. The bridge to *AI, Built* and *Analysis, Built*: where the series meet.
+11. The pebble, the last time: from Hilbert's question to the frontier.
+12. Outro: the series map, the final reading list.
+
+*Computed:* the measurement-bias experiment on this machine (link orders × environment sizes); bootstrap confidence
+intervals for the ledger's measured rows; a counterexample search (an open conjecture's small cases, checked); the
+open-problems map with each record and date.
+*Visuals:* the same program's runtime jumping as an environment variable grows; confidence intervals tightening with
+runs; the open-problems map as a sky over the tower.
+*In practice:* research roles in industry labs, performance engineering, writing design documents and papers,
+reviewing.
+*Reading:* Hamming 1986; Mytkowicz et al. 2009; Georges et al. 2007; Jain, *The Art of Computer Systems Performance
+Analysis*; Keshav, "How to read a paper" (2007); Pólya, *How to Solve It*; Zobel, *Writing for Computer Science*;
+Aaronson, "P =? NP" (2016).
+
 ---
 
 ## 5. Phases
 
 0. **Infrastructure:**
    - `explainer/cs/`:
-     - the series constants (`SERIES_EN`, `SERIES_ZH`, `ACTS`, `PARTS`) and `series_map` for 55 parts in ten acts;
+     - the series constants (`SERIES_EN`, `SERIES_ZH`, `ACTS`, `PARTS`) and `series_map` for 61 parts in eleven acts;
      - `chapter_card` with the tower and the timeline, and the ledger;
      - the first instruments (`Tower`, `TapeView`, `Netlist`, `MemoryStrip`, `Datapath`); the rest are added as
        parts first need them;
@@ -2774,9 +3079,10 @@ Kocher et al. 2019; Jung et al. 2018.
    user**, then lock the standard.
 2. **Act I, Parts 2–6**, in order: proof and counting, then the hardware Pebble. **Part 6 is the second review**: the
    machine runs the Job.
-3. **Roll-out in series order, Parts 7 → 55.** The order matters, because each part's Pebble layer rests on the ones
+3. **Roll-out in series order, Parts 7 → 61**, with the Act I Frontier retrofit (§1.1) right after Part 7. The order matters, because each part's Pebble layer rests on the ones
    before it. Acts VIII–IX run their services on Act VII's simulator. **Part 40 is the third review**, as the first
-   industry part, which sets that act's tone. Each part goes through:
+   industry part, which sets that act's tone; **Part 56 is the fourth**, as the first research-tier part. Each part
+   goes through:
    - the frontier sweep;
    - locking the chapter list;
    - building its Pebble layer and tests;
@@ -2788,8 +3094,8 @@ Kocher et al. 2019; Jung et al. 2018.
 ## 6. Scale and risks
 
 **Scale:**
-- about 52 hours of video;
-- about 8,000 narration words per part per language, roughly 440,000 per language in all;
+- about 58 hours of video;
+- about 8,000 narration words per part per language, roughly 490,000 per language in all;
 - roughly 4–6k lines of scene code per part (what *AI, Built* took);
 - Pebble and its substrate, about 30–40k lines with tests across the series.
 
@@ -2808,14 +3114,16 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 
 ## 7. Decisions (confirmed 2026-11-04)
 
-1. **Name and handle**: *Computer Science, Built* (计算机科学，从零搭建), videos `cs1` … `cs55` in `videos/cs/`.
+1. **Name and handle**: *Computer Science, Built* (计算机科学，从零搭建), videos `cs1` … `cs61` in `videos/cs/`.
 2. **Scope**: the full plan. That is fifty-five parts in ten acts, including the industry acts (VIII–IX), discrete
    mathematics (Part 2) and algorithms in practice (Part 24).
 3. **Bilingual from the start**: English, then Chinese, for each part, as *AI, Built* does.
 4. **The machine**: Pebble, as our own RISC-V-like ISA (cleaner encodings to draw; a comparison card covers the
    differences from RV32I).
-5. **Order**: Phase 0, then the Part 1 pilot and a review, then Act I with a review at Part 6, then Parts 7–55 in
-   order with a review at Part 40.
+5. **Order**: Phase 0, then the Part 1 pilot and a review, then Act I with a review at Part 6, then Parts 7–61 in
+   order with reviews at Parts 40 and 56.
+6. **The research tier** (the user, 2026-11-04: "this course should also include PhD stuff"): a Frontier chapter and
+   a research problem in every part (§1.1), and Act XI, Parts 56–61.
 
 ## 8. Progress (updated as parts land)
 
@@ -2827,4 +3135,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 4 | scenes, computations, notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 62 min (estimate) |
 | 5 | scenes, computations, notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
-| 7–55 | planned (this document) | — |
+| 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration written; Chinese on-screen text in progress; QA previews (480p, silent) reviewed | ≈ 54 min (estimate) |
+| 8–61 | planned (this document) | — |

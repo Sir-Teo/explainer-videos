@@ -1,6 +1,6 @@
 # Computer Science, Built — Part 6: The Stored-Program Computer
 
-Part 6 of a fifty-five-part course in computer science (see [the series plan](../README.md) and
+Part 6 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), and the end of Act I. ENIAC was programmed with cables; the EDVAC report put the
 program in memory, beside the data. This part builds that machine, Pebble, from the gates, adders and registers of
 Parts 3–5: an instruction set designed bit by bit, a single-cycle datapath and its control unit, an assembler, and

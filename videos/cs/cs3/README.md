@@ -1,6 +1,6 @@
 # Computer Science, Built — Part 3: Logic from Switches
 
-Part 3 of a fifty-five-part course in computer science (see [the series plan](../README.md) and
+Part 3 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), and the first step of act one: building a computer from switches. Boole turns logic
 into algebra; a 21-year-old Shannon notices that relay circuits obey it; the transistor makes the switch fast and
 small; one gate, NAND, turns out to be enough for everything; and yet almost every function needs an astronomically

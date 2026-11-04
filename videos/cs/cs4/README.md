@@ -1,6 +1,6 @@
 # Computer Science, Built — Part 4: Arithmetic
 
-Part 4 of a fifty-five-part course in computer science (see [the series plan](../README.md) and
+Part 4 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). A machine has only finitely many bits, so its integers live on a clock and its reals
 on a sparse, uneven ruler. The carry chain that makes addition slow turns, seen the right way, into a parallel prefix
 computation; multipliers become trees of adders; division hides a table that cost Intel $475 million; and floating

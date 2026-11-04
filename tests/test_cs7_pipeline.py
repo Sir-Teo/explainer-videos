@@ -104,5 +104,34 @@ class Predictors(unittest.TestCase):
         self.assertEqual(int(np.argmax(np.abs(w[1:]))) + 1, 5)
 
 
+class Limits(unittest.TestCase):
+    def test_limit_predictors_and_parity(self):
+        """The Frontier chapter's instruments: an unbounded per-length table, idealised PPM, and the parity branch
+        that a perceptron cannot learn but a history table can."""
+        src = P.parity(1500)
+        prog = assemble(src)
+        m = run(prog, trace=True)
+        tr = [(s.pc, bool(s.taken)) for s in m.log if s.taken is not None]
+        target = prog.labels["b_no"] - 8
+
+        def on_b(pred):
+            right = n = 0
+            for pc, t in tr:
+                if pc == target:
+                    right += pred.predict(pc) == t
+                    n += 1
+                pred.update(pc, t)
+            return right / n
+
+        self.assertLess(on_b(PR.Perceptron(h=16)), 0.6)  # not linearly separable
+        self.assertGreater(on_b(PR.Unlimited(6)), 0.95)  # a table of the last 6 outcomes holds x xor y
+        self.assertGreater(on_b(PR.PPM(confidence=1)), 0.95)
+        acc0, h0 = PR.in_sample(tr, 0)
+        acc8, h8 = PR.in_sample(tr, 8)
+        self.assertGreaterEqual(acc8, acc0)
+        self.assertLessEqual(h8, h0 + 1e-9)  # conditioning never raises entropy
+        self.assertGreaterEqual(acc8, PR.accuracy(PR.Unlimited(8), tr))  # hindsight is an upper bound
+
+
 if __name__ == "__main__":
     unittest.main()

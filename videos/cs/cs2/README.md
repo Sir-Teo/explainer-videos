@@ -1,6 +1,6 @@
 # Computer Science, Built — Part 2: Proof and Counting
 
-Part 2 of a fifty-five-part course in computer science (see [the series plan](../README.md) and
+Part 2 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). Part 1 used proofs without saying what a proof is; this part supplies the mathematics
 the rest of the series stands on: logic, the standard proof techniques, induction and invariants, sets and orders,
 counting, remainders, chance and graphs. Every search, count and simulation runs on the computer that renders the video

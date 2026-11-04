@@ -211,7 +211,7 @@ class Hook(VoiceoverScene):
             r"and what this series will build: \ a real computer, \ from one gate up",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
-            "This is Part 1 of Computer Science, Built: fifty-five lectures that start here, with the question of what "
+            "This is Part 1 of Computer Science, Built: sixty-one lectures that start here, with the question of what "
             "computing is, build a working computer from a single kind of gate, and climb all the way to the systems "
             "that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the "
             "engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; "
