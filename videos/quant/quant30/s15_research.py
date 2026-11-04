@@ -12,11 +12,14 @@ class Research(VoiceoverScene):
         self.card()
         self.setup_()
         self.insample()
+        self.lemma()
         self.outsample()
         self.theorem()
         self.sims(t)
         self.hists(t)
+        self.beyond(load("shrink"))
         self.data(t)
+        self.shrunk(t)
         self.correction(t)
         self.open_problems()
         self.question()
@@ -87,6 +90,43 @@ class Research(VoiceoverScene):
             step(1)
             vo.wait_until("c")
             step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def lemma(self):
+        rows = [cmath(r"a = e_1", r":", r"\text{rotate and scale so the vector is the first coordinate}", font_size=30,
+                      colors={r"a = e_1": HURDLE}),
+                cmath(r"(W^{-1})_{11}", r"=", r"\frac{1}{W_{11\cdot 2}},\quad W_{11\cdot2} = W_{11} - W_{12}W_{22}^{-1}W_{21}",
+                      font_size=30),
+                cmath(r"W_{11\cdot2}", r"\sim", r"\sigma_{11\cdot2}\,\chi^2_{n - K + 1},\quad (\Sigma^{-1})_{11} = "
+                      r"\frac{1}{\sigma_{11\cdot 2}}", font_size=30, colors={r"W_{11\cdot2}": HURDLE}),
+                cmath(r"\frac{(\Sigma^{-1})_{11}}{(W^{-1})_{11}}", r"=", r"\frac{W_{11\cdot2}}{\sigma_{11\cdot2}} \sim "
+                      r"\chi^2_{n-K+1}", font_size=30)]
+        whys = [why(r"the ratio is unchanged by an invertible change of coordinates applied to $a$, $W$ and $\Sigma$ "
+                    r"together"),
+                why(r"the inverse of a partitioned matrix: the top-left entry of the inverse is one over a Schur complement"),
+                why(r"the Schur complement of a Wishart matrix is Wishart with $K - 1$ fewer degrees of freedom: regressing "
+                    r"on the other $K - 1$ coordinates uses them up"),
+                why(r"so the ratio is a chi-square with $n - K + 1$ degrees of freedom, as claimed")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "Why the lemma holds, in four lines. <bookmark mark='a'/> Change coordinates so the fixed vector is the first "
+            "axis; the ratio does not change. <bookmark mark='b'/> The top-left entry of an inverse matrix is one over a "
+            "Schur complement: the first variance left over after regressing on the others. <bookmark mark='c'/> For a "
+            "Wishart matrix that complement is again Wishart, a scaled chi-square, with K minus one fewer degrees of "
+            "freedom: each of the other coordinates uses one up. <bookmark mark='d'/> Divide by the true complement, and "
+            "the ratio is a chi-square with n minus K plus one degrees of freedom. The optimizer's optimism is exactly "
+            "those lost degrees of freedom."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
         self.wait(0.5)
         self.clear_scene()
 
@@ -174,7 +214,7 @@ class Research(VoiceoverScene):
         fit_right(side)
         with self.voiceover(
             "Check it, with the industries' own covariance as the truth. <bookmark mark='a'/> The red line is the limit of "
-            "what the optimizer reports, the blue one the limit of what it has. <bookmark mark='b'/> The dots are "
+            "what the optimizer reports, the teal one the limit of what it has. <bookmark mark='b'/> The dots are "
             "simulations, a thousand samples at each length. At ten years of data they give "
             f"{s120['in']:.3f} and {s120['out']:.3f}, against exact values of {s120['in_th']:.3f} and {s120['out_th']:.3f}. "
             f"At five years the true variance is {s60['out']:.1f} times the minimum, while the optimizer reports "
@@ -223,6 +263,40 @@ class Research(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def beyond(self, sh):
+        Ts = ["60", "120", "240"]
+        gam = np.array([49 / int(T) for T in Ts])
+        gg = np.linspace(0.15, 0.85, 50)
+        g = axes([0, 0.9], [0, 6], x_length=7.4, y_length=4.4, xlabel=r"$\gamma = K/T$", ylabel=r"true variance "
+                 r"relative to the minimum", xticks=[0, 0.3, 0.6, 0.9], yticks=[0, 1, 3, 6], font_size=15
+                 ).move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        lout = curve(ax, gg, np.minimum(1 / (1 - gg), 6), REAL_C, stroke_width=2.5)
+        cols = {"sample": BAD, "LW const-corr": SHRINK_C, "nonlinear": GOOD}
+        dots = VGroup()
+        for k, c in cols.items():
+            dots.add(VGroup(*[Dot(ax.c2p(a, min(sh["sims"][T][k]["gmv"], 6)), radius=0.07, color=c) for a, T in zip(gam, Ts)]))
+        leg = legend([(REAL_C, r"the theorem: sample covariance"), (BAD, r"sample, simulated"),
+                      (SHRINK_C, r"constant-correlation shrinkage"), (GOOD, r"nonlinear shrinkage")], font_size=15
+                     ).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        s60 = sh["sims"]["60"]
+        with self.voiceover(
+            "The theorem is about the sample covariance, and shrinkage escapes it. <bookmark mark='a'/> The teal line is "
+            "the limit, and the red dots, Chapter four's simulations of the sample matrix, sit on it. "
+            "<bookmark mark='b'/> The shrunk estimators sit far below: at gamma of about point eight, "
+            f"{s60['nonlinear']['gmv']:.2f} times the minimum instead of {s60['sample']['gmv']:.1f}. The loss of K minus "
+            "one degrees of freedom is the price of estimating every covariance freely; a structured or shrunk estimate "
+            "does not pay it in full."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(Create(lout), FadeIn(dots[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(dots[1]), FadeIn(dots[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
     def data(self, t):
         rows = t["data"]
         hx = [-4.0, -1.4, 1.2, 3.6, 5.6]
@@ -252,6 +326,41 @@ class Research(VoiceoverScene):
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def shrunk(self, t):
+        Ws = [r["W"] for r in t["data"]]
+        xs = np.arange(len(Ws))
+        samp = np.log10([r["ratio"] for r in t["data"]])
+        lw = np.log10([r["ratio"] for r in t["lw"]])
+        th = np.log10([r["theory"] for r in t["data"]])
+        g = axes([-0.3, len(Ws) - 0.7], [0, 2], x_length=7.4, y_length=4.4, xlabel=r"estimation window, months",
+                 ylabel=r"true over reported variance (log scale)", xticks=list(xs), yticks=[0, 1, 2],
+                 xfmt=lambda v: f"{Ws[int(round(v))]}", yfmt=lambda v: f"10^{{{int(v)}}}", font_size=15
+                 ).move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        ls, ll, lt = (curve(ax, xs, y, c, stroke_width=3) for y, c in ((samp, BAD), (lw, SHRINK_C), (th, HURDLE)))
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=c) for y, c in ((samp, BAD), (lw, SHRINK_C)) for a, b in
+                        zip(xs, y)])
+        one = DashedLine(ax.c2p(-0.3, 0), ax.c2p(len(Ws) - 0.7, 0), color=GREY_B, stroke_width=1.2)
+        leg = legend([(BAD, r"sample covariance, the industries"), (HURDLE, r"normal theory"),
+                      (SHRINK_C, r"constant-correlation shrinkage")], font_size=15).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        r0, l0 = t["data"][0]["ratio"], t["lw"][0]["ratio"]
+        r2, l2 = t["data"][2]["ratio"], t["lw"][2]["ratio"]
+        with self.voiceover(
+            "Does shrinkage cure the illusion? <bookmark mark='a'/> The red line is the sample matrix's ratio of true to "
+            "reported variance on the industries, the yellow one the normal theory. <bookmark mark='b'/> Shrink the "
+            f"covariance first and the ratio collapses: from {r0:.0f} to {l0:.1f} with five-year windows, from "
+            f"{r2:.1f} to {l2:.1f} with ten. A shrunk optimizer still flatters itself a little, but no longer by an order "
+            "of magnitude."
+        ) as vo:
+            self.play(FadeIn(g), Create(one), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(Create(ls), Create(lt), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Create(ll), FadeIn(dots), run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
 

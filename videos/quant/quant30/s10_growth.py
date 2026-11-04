@@ -14,9 +14,12 @@ class Growth(VoiceoverScene):
         self.card()
         self.kelly(g)
         self.curve_(g)
+        self.fractional(g)
         self.cover_math()
         self.cover(g)
+        self.regret(g)
         self.fernholz(g)
+        self.excess()
         self.question()
 
     def card(self):
@@ -94,6 +97,44 @@ class Growth(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def fractional(self, g):
+        import math
+        sr2 = g["mu"] ** 2 / g["s2"]
+        c51 = sr2 / (sr2 + 1 / 51)
+        c5 = sr2 / (sr2 + 1 / 5)
+        rows = [cmath(r"\hat f", r"=", r"c\,\hat\mu/\sigma^2,\quad \hat\mu \sim N(\mu,\ \sigma^2/T)", font_size=32,
+                      colors={r"\hat f": HURDLE}),
+                cmath(r"\mathbb E\,g(\hat f)", r"=", r"c\,\frac{\mu^2}{\sigma^2} - \frac{c^2}{2}\,\frac{\mu^2 + \sigma^2/T}{\sigma^2}",
+                      font_size=30),
+                cmath(r"c^*", r"=", r"\frac{SR^2}{SR^2 + 1/T}", font_size=36, colors={r"c^*": GOOD}),
+                cmath(r"SR = " + f"{math.sqrt(sr2):.2f}", r":", rf"c^* = {c51:.2f}\ (T = 51\ \text{{years}}),\quad "
+                      rf"{c5:.2f}\ (T = 5)", font_size=30)]
+        whys = [why(r"bet a fraction $c$ of the Kelly leverage computed from an estimated mean ($T$ years of data)"),
+                why(r"the expected growth rate, averaging over the estimation error: the error adds $\sigma^2/T$ to the "
+                    r"squared mean in the penalty"),
+                why(r"the best fraction of Kelly: always below one, and lower the shorter the history"),
+                why(r"the US market's Sharpe ratio, 1970--2020: with five years of data, the optimal bet is about half Kelly")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "Why half Kelly is not timidity. <bookmark mark='a'/> Bet a fraction c of the Kelly leverage computed from "
+            "an estimated mean. <bookmark mark='b'/> Average the growth rate over the estimation error: the error adds "
+            "sigma squared over T to the penalty. <bookmark mark='c'/> The best fraction is the squared Sharpe ratio over "
+            "itself plus one over T: always less than one. <bookmark mark='d'/> For the American market, with fifty-one "
+            f"years of data, about {c51:.2f}; with five years, about {c5:.2f}. Half Kelly is what estimation error "
+            "demands."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.5)
+        self.clear_scene()
+
     def cover_math(self):
         rows = [cmath(r"S_n(b)", r"=", r"\textstyle\prod_{t \le n} b^\top x_t", font_size=34, colors={r"S_n(b)": RP_C}),
                 cmath(r"\hat b_{n+1}", r"=", r"\frac{\int b\,S_n(b)\,db}{\int S_n(b)\,db}", font_size=34,
@@ -157,6 +198,38 @@ class Growth(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def regret(self, g):
+        import math
+        n = g["cover"]["n"]
+        per = math.log(n + 1) / n
+        rows = [cmath(r"\frac1n\log\frac{\max_b S_n(b)}{\hat S_n}", r"\le", r"\frac{(m - 1)\log(n + 1)}{n} \to 0", font_size=32,
+                      colors={r"\frac1n\log\frac{\max_b S_n(b)}{\hat S_n}": HURDLE}),
+                cmath(rf"m = 2,\ n = {n}", r":", rf"\le {100 * per:.2f}\%\ \text{{a month in growth rate}}", font_size=30),
+                cmath(r"\text{the price}", r":", r"\text{no forecast, but no better than the best constant mix}", font_size=30)]
+        whys = [why(r"the bound, per period: the universal portfolio's growth rate converges to the best constant mix's, "
+                    r"for every possible sequence of prices"),
+                why(r"over our fifty-one years the worst-case gap is about a percent a month, and the realised one was "
+                    r"far smaller"),
+                why(r"it competes with hindsight among constant mixes only; for many assets the bound grows with $m$ and "
+                    r"the integral over mixes becomes expensive")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "Read Cover's bound per period. <bookmark mark='a'/> The gap in growth rate between the universal portfolio "
+            "and the best constant mix shrinks like the log of n over n, for every possible sequence of prices, with no "
+            f"model at all. <bookmark mark='b'/> Over our {n} months the worst case is about {100 * per:.2f} percent a "
+            "month, and the realised gap was far smaller. <bookmark mark='c'/> The price: it only competes with constant "
+            "mixes, and with many assets the bound and the computation both grow quickly."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def fernholz(self, g):
         sp = g["spt"]
         d = np.asarray(sp["dates"], float)
@@ -187,6 +260,37 @@ class Growth(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(line), run_time=2)
         self.wait(0.4)
+        self.clear_scene()
+
+    def excess(self):
+        rows = [cmath(r"\gamma^*_\pi", r"=", r"\tfrac12\Big(\textstyle\sum_i \pi_i\sigma_{ii} - \sigma_{\pi\pi}\Big)", font_size=34,
+                      colors={r"\gamma^*_\pi": SHRINK_C}),
+                cmath(r"\gamma^*_\pi", r"\ge", r"0", font_size=36, colors={r"\gamma^*_\pi": SHRINK_C}),
+                cmath(r"\log V_\pi", r"=", r"\textstyle\sum_i \pi_i \log X_i + \int_0^t \gamma^*_\pi\,ds\ \ "
+                      r"\text{(constant weights)}", font_size=28)]
+        whys = [why(r"the excess growth rate: half the gap between the average variance of the holdings and the "
+                    r"variance of the portfolio"),
+                why(r"by convexity it is never negative, and it is positive whenever the assets do not move in lockstep: "
+                    r"it is the reward for rebalancing"),
+                why(r"a constant-weight portfolio grows like the weighted average of the log prices plus the accumulated "
+                    r"excess growth: the source of Cover's and Fernholz's gains")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "The quantity behind both results. <bookmark mark='a'/> The excess growth rate: half the gap between the "
+            "average variance of the holdings and the variance of the portfolio itself. <bookmark mark='b'/> By "
+            "convexity it can never be negative, and it is positive whenever the assets do not move in lockstep. "
+            "<bookmark mark='c'/> A portfolio rebalanced to constant weights grows like the weighted average of its "
+            "assets' log prices plus this term, accumulated. Rebalancing between assets that wander apart harvests it; "
+            "that is where the universal portfolio's and the diversity-weighted portfolio's edge comes from."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

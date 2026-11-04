@@ -11,7 +11,10 @@ class CVaR(VoiceoverScene):
         c = load("cvar")
         self.card()
         self.robust()
+        self.robust_meaning()
         self.lp()
+        self.var_problem()
+        self.tails(c)
         self.result(c)
         self.question()
 
@@ -52,6 +55,36 @@ class CVaR(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def robust_meaning(self):
+        rows = [cmath(r"\Omega = \Sigma/T", r":", r"\max_w\ w^\top\hat\mu - \tfrac{\kappa}{\sqrt T}\sqrt{w^\top\Sigma w} - "
+                      r"\tfrac\gamma2 w^\top\Sigma w", font_size=30, colors={r"\Omega = \Sigma/T": HURDLE}),
+                cmath(r"\hat w", r"\propto", r"\Sigma^{-1}\hat\mu\ \text{with a larger effective risk aversion}", font_size=30),
+                cmath(r"1^\top w = 1", r"\Rightarrow", r"\hat w = (1 - a)\,w_{\text{tan}} + a\,w_{\text{GMV}},\ a \uparrow "
+                      r"\text{in } \kappa", font_size=30, colors={r"1^\top w = 1": SHRINK_C})]
+        whys = [why(r"the most common choice: the uncertainty of the means is the covariance over the sample size"),
+                why(r"the first-order condition is still $\Sigma w \propto \hat\mu$ minus a multiple of $\Sigma w$: only "
+                    r"the scale changes"),
+                why(r"with a budget constraint the extra caution moves the portfolio toward the minimum-variance "
+                    r"portfolio, which uses no estimated means")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "What robustness buys depends on the shape of the set. <bookmark mark='a'/> The common choice makes the means' "
+            "uncertainty the covariance divided by the sample size. <bookmark mark='b'/> Then the robust portfolio "
+            "points in the same direction as the ordinary one: the worst case acts like extra risk aversion. "
+            "<bookmark mark='c'/> With the budget fixed at one, more aversion means a mix that leans toward the "
+            "minimum-variance portfolio, the one that needs no expected returns. Robust optimisation, done this way, "
+            "rediscovers Chapter two's lesson."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def lp(self):
         rows = [cmath(r"\mathrm{CVaR}_\beta(L)", r"=", r"\mathbb E[L \mid L \ge \mathrm{VaR}_\beta]", font_size=32,
                       colors={r"\mathrm{CVaR}_\beta(L)": BAD}),
@@ -80,6 +113,72 @@ class CVaR(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+    def var_problem(self):
+        cards = VGroup(
+            desk_question(r"VaR is not subadditive", r"two bonds, each defaulting with probability 4\%, each have a 95\% "
+                          r"VaR of zero; together, the chance of at least one default is 7.8\%, so the pair's VaR is a "
+                          r"full loss: diversification `raised' the risk", width=12.4, font_size=19),
+            desk_question(r"so VaR is a bad objective", r"it is not convex in the weights: an optimizer that minimises it "
+                          r"finds local minima and hides risk just beyond the quantile", width=12.4, font_size=19),
+            desk_question(r"CVaR is coherent and convex", r"subadditive, it rewards diversification, and its minimisation is "
+                          r"a linear program (Artzner, Delbaen, Eber and Heath 1999 define coherence; Part 40)",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Why not simply minimise value at risk? <bookmark mark='a'/> Two bonds, each with a four percent chance of "
+            "default. Each alone has a ninety-five percent value at risk of zero. Together, the chance that at least one "
+            "defaults is seven point eight percent, so the pair's value at risk is a full default: by this measure, "
+            "diversifying raised the risk. <bookmark mark='b'/> Value at risk is not convex in the weights, and an "
+            "optimizer minimising it learns to hide losses just beyond the quantile. <bookmark mark='c'/> CVaR is "
+            "coherent: it always rewards diversification, and minimising it is a linear program."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def tails(self, c):
+        a = 100 * np.asarray(c["in"]["min variance"]["r"], float)
+        b = 100 * np.asarray(c["in"]["min CVaR"]["r"], float)
+        lo, hi = -18, 0
+        bins = np.linspace(lo, hi, 19)
+        ha, _ = np.histogram(np.clip(a, lo, hi), bins)
+        hb, _ = np.histogram(np.clip(b, lo, hi), bins)
+        ym = float(max(ha.max(), hb.max()) + 2)
+        g = axes([lo, hi], [0, ym], x_length=7.4, y_length=4.2, xlabel=r"monthly excess return, \% (losses only)",
+                 ylabel=r"months", xticks=[-15, -10, -5, 0], yticks=[0, ym], yfmt=lambda v: f"{v:.0f}", font_size=15
+                 ).move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        w = bins[1] - bins[0]
+
+        def bars(h, col, dx):
+            return VGroup(*[Rectangle(width=(ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0]) * 0.42,
+                                      height=max(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1], 0.001), stroke_width=0, fill_color=col,
+                                      fill_opacity=0.85).move_to(ax.c2p(x0 + w * (0.5 + dx), 0), aligned_edge=DOWN)
+                            for x0, v in zip(bins[:-1], h) if v > 0])
+        ba, bb = bars(ha, SHRINK_C, -0.22), bars(hb, BAD, 0.22)
+        q = float(np.quantile(a, 0.05))
+        n6a, n6b = int((a < -6).sum()), int((b < -6).sum())
+        n2a, n2b = int((a < -2).sum()), int((b < -2).sum())
+        line = DashedLine(ax.c2p(q, 0), ax.c2p(q, ym), color=HURDLE, stroke_width=2)
+        leg = legend([(SHRINK_C, rf"min variance ({c['in']['min variance']['n_held']} industries held)"),
+                      (BAD, rf"min CVaR ({c['in']['min CVaR']['n_held']} held)")], font_size=15).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        with self.voiceover(
+            "The two portfolios' losing months, 1970 to 2020. <bookmark mark='a'/> The minimum-variance portfolio's in "
+            "grey, the minimum-CVaR portfolio's in red, with the five percent quantile marked. Minimising CVaR moves "
+            f"months out of the tail: {n6a} months below minus six percent become {n6b}. The price is more moderate "
+            f"losses, {n2a} months below minus two percent become {n2b}. It also holds fewer industries, because it fits "
+            "itself to a few dozen worst months."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg), Create(line))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(x, DOWN) for x in ba], lag_ratio=0.05),
+                      LaggedStart(*[GrowFromEdge(x, DOWN) for x in bb], lag_ratio=0.05))
+        self.wait(0.4)
         self.clear_scene()
 
     def result(self, c):

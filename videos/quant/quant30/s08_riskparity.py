@@ -15,8 +15,10 @@ class RiskParity(VoiceoverScene):
         self.contributions(r)
         self.erc_math()
         self.dendrogram(r)
+        self.blocks(r)
         self.hrp_steps()
         self.compare(r)
+        self.oos(load("rolling"))
         self.question()
 
     def card(self):
@@ -118,6 +120,39 @@ class RiskParity(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def blocks(self, r):
+        C = np.asarray(r["corr"], float)
+        n = C.shape[0]
+        orders = [list(range(n)), list(r["order"])]
+        cell = 4.4 / n
+        mats = VGroup()
+        for o in orders:
+            sq = VGroup()
+            for i in range(n):
+                for j in range(n):
+                    v = float(np.clip(C[o[i], o[j]], 0, 1))
+                    col = interpolate_color(ManimColor(GREY_E), ManimColor(HRP_C), v)
+                    sq.add(Square(side_length=cell, stroke_width=0, fill_color=col, fill_opacity=1).move_to(
+                        [(j - n / 2 + 0.5) * cell, (n / 2 - i - 0.5) * cell, 0]))
+            mats.add(sq)
+        mats[0].move_to(LEFT * 3.2 + DOWN * 0.3)
+        mats[1].move_to(RIGHT * 3.2 + DOWN * 0.3)
+        t0 = label(r"in the file's order", font_size=18, color=GREY_B).next_to(mats[0], UP, buff=0.2)
+        t1 = label(r"in the tree's order", font_size=18, color=HRP_C).next_to(mats[1], UP, buff=0.2)
+        with self.voiceover(
+            "What the ordering does. <bookmark mark='a'/> On the left, the industries' correlation matrix in the order "
+            "Kenneth French's file lists them: structure is hard to see. <bookmark mark='b'/> On the right, the same matrix "
+            "in the tree's order: blocks of related industries appear along the diagonal. HRP allocates between those "
+            "blocks first, and within them afterwards, so an error in one block's estimates cannot leak into another's "
+            "weights."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(mats[0], lag_ratio=0.001, run_time=1.5), FadeIn(t0))
+            vo.wait_until("b")
+            self.play(FadeIn(mats[1], lag_ratio=0.001, run_time=1.5), FadeIn(t1))
+        self.wait(0.4)
+        self.clear_scene()
+
     def hrp_steps(self):
         from explainer.quant.house import portfolio as P
         card = house_lab(r"Recursive bisection", P.hrp, "stack = [order]", 13, width=10.6)
@@ -161,6 +196,40 @@ class RiskParity(VoiceoverScene):
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.25))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def oos(self, ro):
+        res = ro["res"]["120"]
+        names = ["1/N", "inverse volatility", "ERC", "HRP", "LW const-corr GMV"]
+        hx = [-3.8, -0.6, 1.8, 4.2]
+        head = VGroup(label(r"rule, 1980--2020", font_size=18, color=GREY_B), label(r"Sharpe", font_size=18, color=GREY_B),
+                      label(r"volatility", font_size=18, color=GREY_B), label(r"turnover / month", font_size=18,
+                                                                               color=GREY_B))
+        tab = VGroup(head)
+        for n in names:
+            x = res[n]
+            col = RULE_C.get(n, SHRINK_C)
+            tab.add(VGroup(label(n.replace(" GMV", " minimum variance"), font_size=18, color=col),
+                           MathTex(f"{x['sharpe']:.2f}", font_size=24), MathTex(rf"{100 * x['vol']:.1f}\%", font_size=24),
+                           MathTex(rf"{100 * x['turnover']:.1f}\%", font_size=24)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 1.9 - 0.7 * j, 0])
+        foot = wrapped_label(r"rolling ten-year windows, monthly rebalancing, before costs", 11.0, 16, GREY_A
+                             ).to_edge(DOWN, buff=0.6)
+        h, e, w = res["HRP"], res["ERC"], res["1/N"]
+        with self.voiceover(
+            "Out of sample, on Chapter two's contest. <bookmark mark='a'/> Risk parity and HRP land between one over N "
+            f"and minimum variance, as designed: HRP at {100 * h['vol']:.1f} percent volatility and a Sharpe ratio of "
+            f"{h['sharpe']:.2f}, risk parity at {100 * e['vol']:.1f} percent and {e['sharpe']:.2f}, against one over N's "
+            f"{100 * w['vol']:.1f} and {w['sharpe']:.2f}. And they trade little: HRP turns over "
+            f"{100 * h['turnover']:.1f} percent a month. Their virtue is not a higher return; it is that they never "
+            "invert a noisy matrix, so they never blow up."
+        ) as vo:
+            self.play(FadeIn(tab[0]), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 

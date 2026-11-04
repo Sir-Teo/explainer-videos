@@ -125,7 +125,16 @@ def compute_michaud(reps: int = 300) -> dict:
             maxw.append(np.abs(wt).max())
         out[str(T)] = {"est": est_f, "pts": real_pts, "corr_err": float(np.mean(corr_err)),
                        "maxw_median": float(np.median(maxw)), "resampled": res_pts}
-    return _json({"targets": targets, "true": true_f, "sims": out, "reps": reps,
+    # Best and Grauer's sensitivity: raise one industry's expected return by 1% a year
+    i_s = cols.index("Softw")
+    w0 = P.tangency(mu, S)
+    shock = math.sqrt(S[i_s, i_s] / 60)                   # one standard error of a five-year mean
+    mu1 = mu.copy()
+    mu1[i_s] += shock
+    w1 = P.tangency(mu1, S)
+    sens = {"industry": "Softw", "dw_l1": float(np.abs(w1 - w0).sum()), "dw_self": float(w1[i_s] - w0[i_s]),
+            "gross0": float(np.abs(w0).sum()), "shock_year": float(shock * 12), "w0_self": float(w0[i_s])}
+    return _json({"targets": targets, "true": true_f, "sims": out, "reps": reps, "sens": sens,
                   "true_min_vol": float(1 / math.sqrt(np.ones(49) @ np.linalg.solve(S, np.ones(49))))})
 
 
@@ -374,7 +383,7 @@ def compute_bl() -> dict:
     w_eq = np.linalg.solve(S, pi) / delta
     w_samp = np.linalg.solve(S, Y.mean(0)) / delta
     sweep = []
-    base = float(Pm @ (tau * S) @ Pm.T)
+    base = float((Pm @ (tau * S) @ Pm.T)[0, 0])
     for c in np.logspace(-2, 2, 21):
         _, pc = P.black_litterman(S, w_m, delta, tau, Pm, Q, np.array([[base * c]]))
         sweep.append([float(c), float((pc[i_s] - pc[i_u]) * 12)])
@@ -402,7 +411,7 @@ def compute_riskparity() -> dict:
     sd = np.sqrt(np.diag(S))
     C = S / np.outer(sd, sd)
     Z = linkage(squareform(np.sqrt(np.maximum((1 - C) / 2, 0)), checks=False), method="single")
-    return _json({"columns": cols, "weights": ws, "rc": rc, "order": order, "linkage": Z,
+    return _json({"columns": cols, "weights": ws, "rc": rc, "order": order, "linkage": Z, "corr": C,
                   "vol": {k: float(math.sqrt(w @ S @ w * 12)) for k, w in ws.items()}})
 
 
@@ -585,8 +594,18 @@ def compute_theory() -> dict:
                         "hist_in": np.histogram(s["in"], bins=30, range=(0, 2))[0],
                         "hist_out": np.histogram(s["out"], bins=30, range=(0, 6))[0]}
     # the data: predicted (in-sample) against realised (next 12 months) variance of the sample GMV, rolling
-    data_rows = []
+    data_rows, lw_rows = [], []
     for W in (60, 80, 120, 240):
+        pl, rl_ = [], []
+        for t in range(W, len(X) - 12, 12):
+            if d[t] < EVAL_START:
+                continue
+            Y = X[t - W:t]
+            S = P.lw_constcorr(Y)[0]
+            w = P.gmv(S)
+            pl.append(w @ S @ w)
+            rl_.append(np.var(X[t:t + 12] @ w, ddof=1))
+        lw_rows.append({"W": W, "ratio": float(np.mean(rl_) / np.mean(pl))})
         pred, real = [], []
         for t in range(W, len(X) - 12, 12):
             if d[t] < EVAL_START:
@@ -599,7 +618,7 @@ def compute_theory() -> dict:
         th = P.gmv_theory(49, W)
         data_rows.append({"W": W, "ratio": float(np.mean(real) / np.mean(pred)), "theory": th["out"] / th["in"],
                           "pred_vol": float(math.sqrt(np.mean(pred) * 12)), "real_vol": float(math.sqrt(np.mean(real) * 12))})
-    return _json({"sims": sims, "data": data_rows, "K": 49})
+    return _json({"sims": sims, "data": data_rows, "lw": lw_rows, "K": 49})
 
 
 # ---------------------------------------------------------------------------
@@ -642,6 +661,7 @@ def compute_envelope() -> dict:
         row = track.record(s, 30, r[res], r[hold], cost_year,
                            note=f"{rule}, {W}-month window, monthly; cost 10 bp a dollar traded on measured turnover")
         out[s] = {"rule": rule, "row": row, "cum_hold": np.cumsum(np.log1p(r[hold] + rf[np.isin(D, dd[hold])])),
+                  "cum_res": np.cumsum(np.log1p(r[res] + rf[np.isin(D, dd[res])])), "res_dates": dd[res],
                   "hold_dates": dd[hold], "vol_hold": float(r[hold].std(ddof=1) * math.sqrt(12)),
                   "vol_res": float(r[res].std(ddof=1) * math.sqrt(12)), "turnover": float(np.mean(to[res]))}
     # the Sharpe-ratio difference between 1/N and each optimizer on the hold-out, with its standard error

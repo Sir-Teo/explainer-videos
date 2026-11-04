@@ -14,6 +14,9 @@ class BlackLitterman(VoiceoverScene):
         self.formula()
         self.view(b)
         self.weights(b)
+        self.he_litterman()
+        self.sweep(b)
+        self.jorion(load("factor"))
         self.question()
 
     def card(self):
@@ -153,6 +156,93 @@ class BlackLitterman(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def he_litterman(self):
+        rows = [cmath(r"w_{\text{BL}}", r"=", r"\tfrac1\delta\Sigma_{\text{post}}^{-1}\mu_{\text{BL}}", font_size=34,
+                      colors={r"w_{\text{BL}}": SHRINK_C}),
+                cmath(r"w_{\text{BL}}", r"=", r"\frac{1}{1 + \tau}\big(w_{\text{mkt}} + P^\top\Lambda\big)", font_size=34,
+                      colors={r"w_{\text{BL}}": SHRINK_C}),
+                cmath(r"\Lambda", r"\in", r"\mathbb R^{k}:\ \text{one weight per view}", font_size=32)]
+        whys = [why(r"the optimal portfolio under the posterior, with its covariance $\Sigma_{\text{post}} = \Sigma + M$ "
+                    r"inflated by parameter uncertainty"),
+                why(r"He and Litterman (1999): it is the market portfolio, scaled, plus a weighted sum of the view "
+                    r"portfolios, the rows of $P$, and nothing else"),
+                why(r"the weight on each view grows with its confidence and with how much it disagrees with equilibrium, "
+                    r"and is zero for a view that equilibrium already satisfies")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "Why the portfolio moved only along the view. <bookmark mark='a'/> Optimise with the posterior mean, and a "
+            "covariance inflated by the remaining uncertainty about the means. <bookmark mark='b'/> Guangliang He and "
+            "Robert Litterman showed that the result is always the market portfolio, scaled, plus a weighted sum of the "
+            "view portfolios, and nothing else. <bookmark mark='c'/> Each view's weight grows with its confidence and with "
+            "how far it departs from equilibrium. A view that agrees with the market adds nothing at all."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def sweep(self, b):
+        sw = np.asarray(b["sweep"], float)
+        x = np.log10(sw[:, 0])
+        y = 100 * sw[:, 1]
+        g = axes([-2, 2], [0, 10], x_length=7.4, y_length=4.2, xlabel=r"the view's uncertainty $\Omega$, as a multiple of "
+                 r"the prior's (log scale)", ylabel=r"posterior software minus utilities, \% a year", xticks=[-2, 0, 2],
+                 yticks=[0, 5, 10], xfmt=lambda v: f"10^{{{int(v)}}}", font_size=15).move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        line = curve(ax, x, y, SHRINK_C, stroke_width=3)
+        lv = DashedLine(ax.c2p(-2, 100 * b["view"][2]), ax.c2p(2, 100 * b["view"][2]), color=EST_C, stroke_width=2)
+        le = DashedLine(ax.c2p(-2, y[-1]), ax.c2p(2, y[-1]), color=TRUE_C, stroke_width=2)
+        leg = legend([(EST_C, r"the view"), (TRUE_C, r"equilibrium"), (SHRINK_C, r"the posterior")], font_size=15
+                     ).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        with self.voiceover(
+            "How much the view counts is set by its confidence. <bookmark mark='a'/> Very confident, at the left, and the "
+            f"posterior spread is the view itself, {y[0]:.1f} percent; no confidence, at the right, and it is the "
+            f"equilibrium, {y[-1]:.1f}. In between, a smooth precision-weighted blend. Choosing omega and tau is the "
+            "art of the method, and the place where its users disagree."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg), Create(lv), Create(le))
+            vo.wait_until("a")
+            self.play(Create(line), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def jorion(self, f):
+        rows = [cmath(r"\hat\mu_{\text{BS}}", r"=", r"(1 - \phi)\hat\mu + \phi\,\mu_0 1", font_size=34,
+                      colors={r"\hat\mu_{\text{BS}}": SHRINK_C}),
+                cmath(r"\phi", r"=", r"\frac{N + 2}{(N + 2) + T(\hat\mu - \mu_0 1)^\top\hat\Sigma^{-1}(\hat\mu - \mu_0 1)}",
+                      font_size=30, colors={r"\phi": HURDLE})]
+        whys = [why(r"Jorion (1986): shrink every mean toward the mean of the minimum-variance portfolio, a James--Stein "
+                    r"estimator for portfolio means"),
+                why(rf"on ten-year windows of the industries the estimated intensity averages {f['phi_mean']:.2f} "
+                    rf"(from {f['phi_min']:.2f} to {f['phi_max']:.2f})")]
+        step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        bs, st = f["res"]["Bayes-Stein tangency"], f["res"]["sample tangency"]
+        res = MathTex(rf"\text{{tangency, 1980--2020: sample means}}\ {st['sharpe']:.2f}\ \to\ \text{{Bayes--Stein}}\ "
+                      rf"{bs['sharpe']:.2f}\quad (\text{{gross}}\ {st['gross']:.0f} \to {bs['gross']:.0f})", font_size=26
+                      ).to_edge(DOWN, buff=0.9)
+        with self.voiceover(
+            "Black-Litterman shrinks the means toward equilibrium. An older idea shrinks them toward each other. "
+            "<bookmark mark='a'/> Philippe Jorion's Bayes-Stein estimator of 1986 pulls every mean toward the mean of the "
+            "minimum-variance portfolio, by an amount the data choose. <bookmark mark='b'/> On the industries the data "
+            f"chose about {f['phi_mean']:.2f}: nearly half the way. It helps the tangency portfolio, from "
+            f"{st['sharpe']:.2f} to {bs['sharpe']:.2f}, with a fraction of the leverage. But it does not rescue it. Means "
+            "estimated from ten years of returns are simply too noisy to trade on."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            self.play(FadeIn(res))
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

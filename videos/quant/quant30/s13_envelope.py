@@ -16,9 +16,12 @@ class Envelope(VoiceoverScene):
         e = load("envelope")
         self.card()
         self.register(e)
+        self.research(e)
         self.opened(e)
         self.table(e)
+        self.difference(e)
         self.reading(e)
+        self.next_steps()
         self.question()
 
     def card(self):
@@ -53,6 +56,32 @@ class Envelope(VoiceoverScene):
             self.wait(0.1)
             vo.wait_until("b")
             self.play(FadeIn(ctr))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def research(self, e):
+        st = e["strats"]
+        d = np.asarray(st["lw_gmv_part30"]["res_dates"], float)
+        x = d // 100 + ((d % 100) - 0.5) / 12
+        ys = {k: 100 * np.asarray(v["cum_res"], float) for k, v in st.items()}
+        hi = float(np.ceil(max(y.max() for y in ys.values()) / 100) * 100)
+        g = axes([x[0], x[-1]], [0, hi], x_length=7.4, y_length=4.4, xlabel=r"1980--2020: the research years",
+                 ylabel=r"cumulative log return, \%", xticks=[1980, 2000, 2020], yticks=[0, hi / 2, hi],
+                 xfmt=lambda v: f"{v:.0f}", font_size=15).move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        lines = VGroup(*[curve(ax, x, ys[k], S_COL[k], stroke_width=3) for k in st])
+        leg = legend([(S_COL[k], S_NAME[k]) for k in st], font_size=15).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
+        fit_right(leg)
+        lw, ew = st["lw_gmv_part30"]["row"]["research"], st["equal_weight_part30"]["row"]["research"]
+        with self.voiceover(
+            "First the research years, on which the rules were chosen. <bookmark mark='a'/> Over forty-one years the three "
+            "rules end close together; shrunk minimum variance gets there with the least risk, "
+            f"{100 * lw['vol']:.1f} percent volatility against {100 * ew['vol']:.1f} for one over N, and so the higher "
+            f"Sharpe ratio, {lw['sharpe']:.2f} against {ew['sharpe']:.2f}."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(*[Create(l_) for l_ in lines], run_time=2.5)
         self.wait(0.4)
         self.clear_scene()
 
@@ -116,6 +145,38 @@ class Envelope(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def difference(self, e):
+        d1, d2 = e["diffs"]["lw_gmv_part30"], e["diffs"]["hrp_part30"]
+        rows = [cmath(r"\operatorname{Var}(\widehat{SR}_a - \widehat{SR}_b)", r"\approx", r"\frac{1}{T}\Big[2 - 2\rho + "
+                      r"\tfrac12\big(SR_a^2 + SR_b^2 - 2SR_aSR_b\rho^2\big)\Big]", font_size=28,
+                      colors={r"\operatorname{Var}(\widehat{SR}_a - \widehat{SR}_b)": HURDLE}),
+                cmath(r"1/N - \text{shrunk GMV}", r":", rf"{d1['diff']:+.2f} \pm {d1['se']:.2f},\quad \rho = {d1['rho']:.2f}",
+                      font_size=30),
+                cmath(r"1/N - \text{HRP}", r":", rf"{d2['diff']:+.2f} \pm {d2['se']:.2f},\quad \rho = {d2['rho']:.2f}",
+                      font_size=30)]
+        whys = [why(r"Jobson and Korkie (1981), corrected by Memmel (2003): the standard error of a difference of Sharpe "
+                    r"ratios (monthly, then annualised), for two correlated strategies"),
+                why(r"minimum variance and 1/N hold very different portfolios: their difference is as noisy as either"),
+                why(r"HRP and 1/N move almost together, so even a small difference is measured more precisely")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "Can five years tell them apart? Test the differences directly. <bookmark mark='a'/> The standard error of a "
+            "difference in Sharpe ratios depends on how correlated the two strategies are: Jobson and Korkie's test, "
+            "with Memmel's correction. <bookmark mark='b'/> One over N minus shrunk minimum variance: "
+            f"{d1['diff']:+.2f}, with a standard error of {d1['se']:.2f}. <bookmark mark='c'/> One over N minus HRP: "
+            f"{d2['diff']:+.2f}, with a much smaller standard error, {d2['se']:.2f}, because the two portfolios are "
+            f"{100 * d2['rho']:.0f} percent correlated. Neither difference is significant."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def reading(self, e):
         st = e["strats"]
         lw = st["lw_gmv_part30"]
@@ -137,6 +198,30 @@ class Envelope(VoiceoverScene):
             f"volatile: the correlation between an industry's return in them and its volatility in the decade before was "
             f"{e['vol_return_corr']:.2f}. Those are exactly the industries a risk-based rule leans away from. <bookmark mark='c'/> The Track Record keeps "
             "three rows whose standard errors are larger than their differences, which is itself the honest finding."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def next_steps(self):
+        cards = VGroup(
+            desk_question(r"before trading it", r"add the real constraints (position limits, sector caps, a turnover "
+                          r"budget) and the costs into the optimisation itself, not afterwards (Part 31)", width=12.4,
+                          font_size=19),
+            desk_question(r"while trading it", r"track realised against predicted risk every month: the research chapter "
+                          r"says how large the gap should be, so a larger gap is a signal that the covariance has moved",
+                          width=12.4, font_size=19),
+            desk_question(r"when to change it", r"only on evidence that clears the same bar as the original: a new rule is a "
+                          r"new trial, and the counter applies", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "What a portfolio desk would do next. <bookmark mark='a'/> Put the real constraints and the costs inside the "
+            "optimisation, not afterwards: Part thirty-one does exactly that. <bookmark mark='b'/> Track realised against "
+            "predicted risk every month; the research chapter says how large the gap should be, so a larger one means the "
+            "covariance has moved. <bookmark mark='c'/> And change the rule only on evidence that clears the same bar as "
+            "the original, because a new rule is a new trial."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

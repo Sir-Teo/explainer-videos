@@ -11,9 +11,11 @@ class EndToEnd(VoiceoverScene):
         e = load("e2e")
         self.card()
         self.idea()
+        self.paper()
         self.replay(e)
         self.table(e)
         self.reading(e)
+        self.spo()
         self.question()
 
     def card(self):
@@ -52,6 +54,30 @@ class EndToEnd(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+    def paper(self):
+        card = firm_card(r"Zhang, Zohren and Roberts (2020)", r"`Deep learning for portfolio optimization', \textit{Journal "
+                         r"of Financial Data Science}: a network maps the recent prices of a few exchange-traded index funds "
+                         r"directly to weights, trained on the Sharpe ratio",
+                         numbers=((r"\text{ETFs}", r"of market indices, not single stocks: a small universe, few weights to learn"),
+                                  (r"\checkmark", r"the authors report a higher Sharpe ratio than the classical allocations "
+                                                   r"they compare with, over 2011 to April 2020")),
+                         source=r"JFDS 2 (2020); arXiv 2005.13665", kind=r"Paper file", width=10.6, font_size=22
+                         ).move_to(ORIGIN)
+        with self.voiceover(
+            "The idea comes from published work. <bookmark mark='a'/> Zihao Zhang, Stefan Zohren and Stephen Roberts "
+            "trained a network to map the recent prices of a few index funds directly to portfolio weights, with the "
+            "Sharpe ratio as the loss. <bookmark mark='b'/> They report beating the classical allocations they compared "
+            "with, from 2011 to 2020. Note the universe: a handful of funds, so very few weights to learn. Ours has "
+            "forty-nine."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
+        self.wait(0.4)
         self.clear_scene()
 
     def replay(self, e):
@@ -137,6 +163,34 @@ class EndToEnd(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def spo(self):
+        rows = [cmath(r"\hat c", r"=", r"\arg\min_c \textstyle\sum_t \|c - r_{t+1}\|^2\ \text{(predict)},\quad "
+                      r"w(\hat c) = \arg\max_{w \in W} \hat c^\top w\ \text{(optimise)}", font_size=26, colors={r"\hat c": EST_C}),
+                cmath(r"\ell_{\text{SPO}}", r"=", r"r^\top w(r) - r^\top w(\hat c)", font_size=32, colors={r"\ell_{\text{SPO}}": BAD}),
+                cmath(r"\ell_{\text{SPO+}}", r"\ge", r"\ell_{\text{SPO}},\ \text{convex in } \hat c", font_size=32,
+                      colors={r"\ell_{\text{SPO+}}": SHRINK_C})]
+        whys = [why(r"the two-step pipeline: fit the forecast for accuracy, then optimise as if it were true"),
+                why(r"the regret of the decision: what was lost by acting on the forecast instead of the truth"),
+                why(r"Elmachtoub and Grigas (2022), `Smart predict, then optimize': a convex surrogate of the regret, which "
+                    r"trains a forecast for the decision it feeds")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "There is a principled middle ground. <bookmark mark='a'/> The classical pipeline fits the forecast for "
+            "accuracy, then optimises as if the forecast were true. <bookmark mark='b'/> What matters is the regret of the "
+            "decision: what was lost by acting on the forecast. <bookmark mark='c'/> Adam Elmachtoub and Paul Grigas gave a "
+            "convex upper bound on that regret, so a forecast can be trained for the decision it feeds while keeping the "
+            "optimizer's structure, and its constraints, in place. That is where decision-focused learning is heading."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

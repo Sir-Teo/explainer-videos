@@ -17,7 +17,9 @@ class OneOverN(VoiceoverScene):
         self.dgu()
         self.table(r, "120")
         self.risk(r)
+        self.costs(r)
         self.window(r)
+        self.combos()
         self.question()
 
     def card(self):
@@ -126,6 +128,43 @@ class OneOverN(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def costs(self, r):
+        res = r["res"]["120"]
+        names = ["1/N", "LW const-corr GMV", "nonlinear GMV", "long-only GMV", "HRP", "sample GMV"]
+        hx = [-3.8, -0.8, 1.6, 4.2]
+        head = VGroup(label(r"rule, 10-year windows", font_size=18, color=GREY_B), label(r"gross", font_size=18, color=GREY_B),
+                      label(r"net at 10 bp", font_size=18, color=GREY_B), label(r"net at 50 bp", font_size=18, color=GREY_B))
+        tab = VGroup(head)
+        cols = dict(SHOW)
+
+        def net(x, bp):
+            m = x["mean"] - 2 * x["turnover"] * bp / 1e4 * 12
+            return m / x["vol"]
+        for n in names:
+            x = res[n]
+            tab.add(VGroup(label(n, font_size=18, color=cols[n]), MathTex(f"{x['sharpe']:.2f}", font_size=24),
+                           MathTex(f"{net(x, 10):.2f}", font_size=24), MathTex(f"{net(x, 50):.2f}", font_size=24)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 2.2 - 0.62 * j, 0])
+        foot = wrapped_label(r"Sharpe ratios; cost charged per dollar traded on each rule's measured monthly turnover; 50 bp "
+                             r"is closer to what trading 49 industry baskets would cost a small investor", 11.4, 15,
+                             GREY_A).to_edge(DOWN, buff=0.4)
+        sg, lw = res["sample GMV"], res["LW const-corr GMV"]
+        lw10, lw50, sg50 = net(lw, 10), net(lw, 50), net(sg, 50)
+        with self.voiceover(
+            "Costs change the ranking again. <bookmark mark='a'/> A rule that trades a lot pays for it. At ten basis points "
+            f"per dollar traded, shrunk minimum variance keeps a Sharpe ratio of {lw10:.2f}; at fifty, "
+            f"{lw50:.2f}. The unshrunk sample rule, which turns over {100 * sg['turnover']:.0f} percent a month, "
+            f"falls to {sg50:.2f}. Noise in the estimates shows up twice: once in the weights, and again in the "
+            "trading needed to follow them as they jump around."
+        ) as vo:
+            self.play(FadeIn(tab[0]), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.25))
+        self.wait(0.4)
+        self.clear_scene()
+
     def window(self, r):
         a, b = r["res"]["60"], r["res"]["120"]
         rows = VGroup()
@@ -152,6 +191,32 @@ class OneOverN(VoiceoverScene):
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def combos(self):
+        cards = VGroup(
+            desk_question(r"Kan and Zhou (2007): a three-fund rule", r"hold cash, the estimated tangency portfolio and the "
+                          r"estimated minimum-variance portfolio, with weights chosen to minimise the expected loss from "
+                          r"estimation error: the minimum-variance fund absorbs much of the tangency fund's noise",
+                          width=12.4, font_size=19),
+            desk_question(r"Tu and Zhou (2011): combine with 1/N", r"a weighted average of 1/N and an optimizer, the weight "
+                          r"chosen from the data, beats both parts in their simulations: shrinkage of the weights toward a "
+                          r"target that has no estimation error", width=12.4, font_size=19),
+            desk_question(r"the common thread", r"every fix shrinks something toward something simpler: the means, the "
+                          r"covariance, or the weights themselves", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "If neither the optimizer nor one over N is right, combine them. <bookmark mark='a'/> Raymond Kan and Guofu Zhou "
+            "proposed in 2007 a three-fund rule: cash, the estimated tangency portfolio, and the estimated minimum-variance "
+            "portfolio, mixed to minimise the expected loss from estimation error. <bookmark mark='b'/> Jun Tu and Zhou "
+            "then combined an optimizer directly with one over N, with the mixing weight chosen from the data. "
+            "<bookmark mark='c'/> The common thread runs through the whole part: every fix shrinks something toward "
+            "something simpler, whether the means, the covariance or the weights themselves."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

@@ -1401,26 +1401,41 @@ alphas; equal against estimated weights by K.
 
 ### Act V · Portfolios, Strategies and the Firm
 
-### Part 30 · Portfolio Construction (~55)
-1. Error maximization (Michaud 1989); 1/N (DeMiguel–Garlappi–Uppal 2009).
-2. Covariance in high dimension: Marchenko–Pastur; RMT cleaning (Laloux et al. 1999; Bun–Bouchaud–Potters 2017).
-3. Ledoit–Wolf, linear and nonlinear.
-4. Constraints as shrinkage (Jagannathan–Ma 2003).
-5. Black–Litterman.
-6. Risk parity and ERC; HRP (López de Prado 2016).
-7. Robust optimization; CVaR as an LP (Rockafellar–Uryasev 2000).
-8. Kelly portfolios; Cover's universal portfolio; stochastic portfolio theory (Fernholz).
-9. Entropy pooling and views (Meucci).
-10. End-to-end portfolios trained on the decision loss.
-11. Minimum-variance and HRP registered and opened.
+### Part 30 · Portfolio Construction (~55; built)
+0. Hook: the optimizer's promise against its delivery; Act V begins.
+1. Error maximisation (Michaud 1989): a known-truth experiment on the 49 industries; Best–Grauer sensitivity;
+   Chopra–Ziemba; 5 against 20 years; resampled efficiency (no better).
+2. 1/N (DeMiguel–Garlappi–Uppal 2009): the rolling contest 1980–2020 with costs and windows; predicted against
+   realised risk; Kan–Zhou (2007) and Tu–Zhou (2011) combinations.
+3. Covariance in high dimension: Marchenko–Pastur against the daily spectrum; market and sector modes; crises;
+   RMT clipping (Laloux et al. 1999; Bun–Bouchaud–Potters 2017).
+4. Ledoit–Wolf, linear (identity, constant correlation) and analytical nonlinear (2020) against the oracle; factor-model
+   covariances; the window.
+5. Constraints as shrinkage (Jagannathan–Ma 2003), proved and checked; norm constraints (DeMiguel et al. 2009).
+6. Black–Litterman: reverse optimisation, a view relative to equilibrium, He–Litterman's view portfolios, confidence;
+   Bayes–Stein means (Jorion 1986).
+7. Risk parity (Spinu's convex ERC) and HRP (López de Prado 2016).
+8. Robust optimisation; VaR's non-subadditivity; CVaR as an LP (Rockafellar–Uryasev 2000).
+9. Kelly and fractional Kelly under estimation error; Cover's universal portfolio; Fernholz's diversity weights and the
+   excess growth rate.
+10. Entropy pooling (Meucci 2008): a stress view on returns and one on volatility.
+11. End-to-end portfolios trained on the Sharpe ratio (Zhang–Zohren–Roberts 2020); smart predict-then-optimize
+    (Elmachtoub–Grigas 2022).
+12. Shrunk minimum variance, HRP and 1/N registered and opened on 2021–25 (0.35, 0.50, 0.58; differences inside one
+    standard error).
+13. Rule 30: the optimizer.
+Research: why the optimizer underestimates its own risk: the exact laws of the sample GMV's reported and true variance
+(a Wishart χ² lemma via a Schur complement; Kempf–Memmel's F law), the limits 1 − γ and 1/(1 − γ), simulations,
+shrinkage, and the industries.
 
 *Textbooks:* Meucci *Risk and Asset Allocation*; Grinold–Kahn ch. 14–15; Paleologo *Advanced Portfolio
-Management*; Chincarini–Kim.
+Management*; Chincarini–Kim; Muirhead (Wishart).
 *Trained:* the end-to-end portfolio network.
-*Computed:* frontiers with error clouds; MP vs empirical spectra; LW vs RMT vs sample.
-*Visuals:* the true and estimated frontiers diverging; the spectrum against MP.
+*Computed:* frontiers with error clouds; MP vs empirical spectra; LW vs RMT vs nonlinear vs sample; every rule rolled
+1980–2020.
+*Visuals:* the true and estimated frontiers diverging; the spectrum against MP; the eigenvalues against the oracle.
 *Desk:* "Why does the optimizer love the asset with the most estimation error?"
-*House:* the optimizer.
+*House:* `explainer/quant/house/portfolio.py` (the optimizer).
 
 ### Part 31 · Risk Models, Costs and Trading Through Time (~55)
 1. The fundamental law (Grinold 1989), derived and its limits.

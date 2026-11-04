@@ -13,6 +13,8 @@ class Constraints(VoiceoverScene):
         self.weights(c)
         self.kkt(c)
         self.meaning()
+        self.oos(load("rolling"))
+        self.norms()
         self.question()
 
     def card(self):
@@ -113,6 +115,66 @@ class Constraints(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def oos(self, ro):
+        rows = []
+        for W in ("60", "120"):
+            r = ro["res"][W]
+            rows.append((W, r["sample GMV"], r["long-only GMV"], r["LW const-corr GMV"]))
+        hx = [-4.0, -1.0, 1.6, 4.2]
+        head = VGroup(label(r"realised volatility", font_size=18, color=GREY_B), label(r"sample GMV", font_size=18, color=EST_C),
+                      label(r"long only", font_size=18, color=SHRINK_C), label(r"shrunk", font_size=18, color=GOOD))
+        tab = VGroup(head)
+        for W, a, b, c in rows:
+            tab.add(VGroup(label(rf"{int(W) // 12}-year windows", font_size=19),
+                           *[MathTex(rf"{100 * x['vol']:.1f}\%\ ({x['sharpe']:.2f})", font_size=24) for x in (a, b, c)]))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 1.4 - 0.9 * j, 0])
+        foot = wrapped_label(r"the 49 industries, 1980--2020, rebalanced monthly; Sharpe ratios in brackets", 11.0, 16,
+                             GREY_A).to_edge(DOWN, buff=0.8)
+        a60, b60 = ro["res"]["60"]["sample GMV"], ro["res"]["60"]["long-only GMV"]
+        with self.voiceover(
+            "Out of sample, on the industries. <bookmark mark='a'/> With five-year windows the unconstrained sample "
+            f"portfolio realised {100 * a60['vol']:.1f} percent volatility; long only, {100 * b60['vol']:.1f}: the "
+            "constraint did as much as formal shrinkage. With ten-year windows the gap narrows, as there is less noise "
+            "for the constraint to remove."
+        ) as vo:
+            self.play(FadeIn(tab[0]), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def norms(self):
+        rows = [cmath(r"\min_w", r"\ ", r"w^\top\hat\Sigma w\quad\text{s.t.}\ 1^\top w = 1,\ \|w\|_1 \le c", font_size=32,
+                      colors={r"\min_w": SHRINK_C}),
+                cmath(r"c = 1", r":", r"\text{long only};\qquad c = \infty:\ \text{unconstrained}", font_size=30),
+                cmath(r"\|w\|_2^2 \le c", r":", r"\hat\Sigma \to \hat\Sigma + \nu I,\ \text{shrinkage toward the identity}",
+                      font_size=30)]
+        whys = [why(r"DeMiguel, Garlappi, Nogales and Uppal (2009): bound the total gross exposure instead of forbidding "
+                    r"shorts"),
+                why(r"a family between the two extremes, tuned by cross-validation"),
+                why(r"a bound on the squared weights is exactly Ledoit--Wolf-type shrinkage toward the identity: the "
+                    r"constraint's multiplier is the intensity")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "The idea generalises. <bookmark mark='a'/> Victor DeMiguel, Lorenzo Garlappi, Francisco Nogales and Raman "
+            "Uppal bounded the portfolio's total gross exposure instead of forbidding short sales. <bookmark mark='b'/> "
+            "A bound of one is long only; no bound is the unconstrained optimizer; in between, a family tuned on the "
+            "data. <bookmark mark='c'/> And a bound on the sum of squared weights turns out to be exactly shrinkage toward "
+            "the identity, with the constraint's multiplier playing the intensity. Constraints and shrinkage are two "
+            "languages for one idea."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

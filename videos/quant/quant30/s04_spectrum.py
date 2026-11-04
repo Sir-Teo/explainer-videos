@@ -14,7 +14,9 @@ class Spectrum(VoiceoverScene):
         self.law(s)
         self.histogram(s, "2019")
         self.modes(s)
+        self.vectors(s)
         self.share(s)
+        self.crisis(s)
         self.clip()
         self.question()
 
@@ -136,6 +138,41 @@ class Spectrum(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def vectors(self, s):
+        y = s["years"]["2019"]
+        v1 = np.sort(np.asarray(y["v1"], float))
+        g = axes([-0.5, 48.5], [-0.05, 0.25], x_length=7.4, y_length=4.0, xlabel=r"the 49 industries, sorted",
+                 ylabel=r"loading on the top eigenvector", xticks=[], yticks=[0, 0.1, 0.2], yfmt=lambda v: f"{v:.1f}",
+                 font_size=15).move_to(LEFT * 1.8 + DOWN * 0.2)
+        ax = g.ax
+        bars = VGroup()
+        for k, v in enumerate(v1):
+            h = abs(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1])
+            r = Rectangle(width=0.09, height=max(h, 0.002), stroke_width=0, fill_color=EST_C, fill_opacity=0.85)
+            r.move_to([ax.c2p(k, 0)[0], (ax.c2p(0, 0)[1] + ax.c2p(0, v)[1]) / 2, 0])
+            bars.add(r)
+        eq = DashedLine(ax.c2p(-0.5, 1 / 7), ax.c2p(48.5, 1 / 7), color=GREY_B, stroke_width=1.5)
+        side = VGroup(label(r"the second eigenvector sets", font_size=17, color=GREY_B),
+                      label(", ".join(y["v2_low"]), font_size=17, color=TRUE_C),
+                      label(r"against", font_size=17, color=GREY_B),
+                      label(", ".join(y["v2_high"]), font_size=17, color=BAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.15
+                                                                                       ).to_edge(RIGHT, buff=0.4)
+        fit_right(side)
+        with self.voiceover(
+            "Look inside the two modes that escaped the noise, in 2019. <bookmark mark='a'/> The top eigenvector's "
+            "loadings: almost every industry near one over the square root of forty-nine, the dashed line. It is the "
+            "market. <bookmark mark='b'/> The second sets defensive industries, utilities, beer, soft drinks, household "
+            "goods, against cyclical ones: coal, shipping, autos, steel. Two directions of real structure, and "
+            f"{49 - y['n_above']} of noise."
+        ) as vo:
+            self.play(FadeIn(g), Create(eq))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02))
+            vo.wait_until("b")
+            self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
     def share(self, s):
         yrs = np.asarray(s["share_years"], float)
         sh = 100 * np.asarray(s["share"], float)
@@ -158,6 +195,33 @@ class Spectrum(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(line), run_time=2)
             self.play(FadeIn(tag))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def crisis(self, s):
+        a, b = s["years"]["2019"], s["years"]["2008"]
+        hx = [-3.2, 0.6, 3.6]
+        head = VGroup(label(r"daily, one year", font_size=18, color=GREY_B), label(r"2019", font_size=20, color=GREY_B),
+                      label(r"2008", font_size=20, color=BAD))
+        rows = [(r"largest eigenvalue", f"{a['lam'][0]:.1f}", f"{b['lam'][0]:.1f}"),
+                (r"its share of the total", rf"{100 * a['share1']:.0f}\%", rf"{100 * b['share1']:.0f}\%"),
+                (r"second eigenvalue", f"{a['lam'][1]:.2f}", f"{b['lam'][1]:.2f}"),
+                (r"eigenvalues above the edge", f"{a['n_above']}", f"{b['n_above']}")]
+        tab = VGroup(head)
+        for t, x, y in rows:
+            tab.add(VGroup(label(t, font_size=19), MathTex(x, font_size=26), MathTex(y, font_size=26, color=BAD)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 1.8 - 0.75 * j, 0])
+        with self.voiceover(
+            "A calm year against a crisis year. <bookmark mark='a'/> In 2008 the market mode swelled to "
+            f"{b['lam'][0]:.1f}, {100 * b['share1']:.0f} percent of all variance, while the second mode shrank. In a "
+            "crisis the structure collapses toward a single factor: the industries stop being forty-nine bets and become "
+            "one, which is exactly when a portfolio built on calm-year correlations is most exposed."
+        ) as vo:
+            self.play(FadeIn(tab[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 

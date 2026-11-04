@@ -10,6 +10,7 @@ class House(VoiceoverScene):
         self.card()
         self.sheet(load("michaud"), load("spectrum"), load("shrink"), load("rolling"), load("theory"), load("envelope"))
         self.lab()
+        self.lab2()
         self.module()
         self.test()
 
@@ -69,6 +70,21 @@ class House(VoiceoverScene):
             "average variance times the identity. Its distance from the sample matrix, and the sample matrix's own noise, "
             "measured observation by observation, give the intensity, capped at one. No tuning, no cross-validation: the "
             "data choose how much to distrust themselves."
+        ):
+            self.play(FadeIn(card))
+            self.wait(1.5)
+        self.clear_scene()
+
+    def lab2(self):
+        card = house_lab(r"Long-only minimum variance, exactly", P._gmv_long_only, "for _ in range(max_iter):", 16,
+                         width=10.6)
+        card.move_to(ORIGIN)
+        with self.voiceover(
+            "And the long-only optimizer, which this part had to write for itself, because the general-purpose solver "
+            "took seconds per portfolio. It is a primal active-set method: on the assets still free, jump toward the "
+            "unconstrained optimum; if a weight would turn negative, stop at zero and fix it there; when the target is "
+            "reached, release the fixed weight whose multiplier says it wants back in. It finishes in a few milliseconds "
+            "and matches the general solver to the last digit."
         ):
             self.play(FadeIn(card))
             self.wait(1.5)
