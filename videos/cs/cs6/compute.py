@@ -75,7 +75,7 @@ def compute_isa() -> dict:
         w = int.from_bytes(assemble(src).image[4 * k:4 * k + 4], "little")
         ex.append({"src": shown, "word": w, "bits": format(w, "032b"), "fields": I.fields(w),
                    "fmt": I.FORMAT[I.decode(w).op]})
-    ops = [{"code": k, "op": m, "fmt": f} for k, (m, f) in sorted(I.OPS.items())]
+    ops = [{"code": k, "op": m, "fmt": f} for k, (m, f) in sorted(I.OPS.items()) if m not in I.M_EXT]
     rv = [  # (aspect, Pebble-32, RV32I), the comparison card
         ("registers", "16, r0 = 0", "32, x0 = 0"),
         ("register field", "4 bits", "5 bits"),
@@ -86,7 +86,7 @@ def compute_isa() -> dict:
         ("multiply, divide", "Part 7 (reserved)", "the M extension"),
         ("stop", r"\texttt{halt}", r"\texttt{ecall} to an OS"),
     ]
-    return {"examples": ex, "ops": ops, "rv": rv, "reserved": I.RESERVED, "n_ops": len(I.OPS)}
+    return {"examples": ex, "ops": ops, "rv": rv, "reserved": I.RESERVED, "n_ops": len(ops)}
 
 
 # ---------------------------------------------------------------------------
@@ -289,10 +289,15 @@ def compute_job() -> dict:
     top = P.job_reference(full).decode()
     out["corpus"] = {"features": f, "cycles": cyc, "per_byte": cyc / f["bytes"], "share": share, "top": top,
                      "sha": hashlib.sha256(full).hexdigest()[:12], "books": len(books)}
-    clocks = {"Z3 relays (5.3 Hz)": 5.3, "ENIAC (5,000 additions per second)": 5000.0, "1 GHz": 1e9}
+    from explainer.cs.pebble import tech
+
+    period = tech.single_cycle_period_ps(load("cpu")["settle_max"]) * 1e-12
+    clocks = {"Z3 relays (5.3 Hz)": 5.3, "ENIAC (5,000 additions per second)": 5000.0, "1 GHz": 1e9,
+              "single cycle": 1 / period}
     out["projections"] = {k: cyc / hz for k, hz in clocks.items()}
-    out["ledger"] = [{"part": 6, "label": r"Pebble at gate level", "seconds": cyc / 1e9, "cycles": cyc,
-                      "clock": "1 GHz", "cycles_per_byte": cyc / f["bytes"]}]
+    out["clock_mhz"] = 1e-6 / period
+    out["ledger"] = [{"part": 6, "label": r"Pebble, single cycle", "seconds": cyc * period, "cycles": cyc,
+                      "clock_mhz": 1e-6 / period, "cycles_per_byte": cyc / f["bytes"]}]
     CACHE.dir.mkdir(parents=True, exist_ok=True)
     (CACHE.dir / "ledger.json").write_text(json.dumps(out["ledger"], indent=1))
     return out

@@ -19,8 +19,9 @@ viewer can read); immediates in one contiguous field, not scattered (RISC-V scat
 one place for the hardware; we draw ours); offsets in instructions, not half-words (no compressed instructions);
 a ``halt`` instruction until Part 31 gives the machine an operating system to return to.
 
-Later parts add the extensions the syllabus lists, with their opcodes reserved here: ``mul mulh div rem``
-(Part 4's multiplier and divider, wired into the CPU in Part 7), ``ecall eret csrr csrw`` (Part 31), ``cas amoadd``
+Later parts add the extensions the syllabus lists.  Part 7 adds ``mul mulh div rem`` (the M extension: Part 4's
+multiplier and divider, wired into the pipeline; ``BASE`` is the 34 instructions of Part 6, which the gate-level
+CPU implements); still reserved are ``ecall eret csrr csrw`` (Part 31) and ``cas amoadd``
 (Parts 10 and 33).  Opcode 0 is illegal, so a jump into zeroed memory stops the machine.
 """
 
@@ -46,13 +47,15 @@ OPS = {
     23: ("sw", "S"), 24: ("sb", "S"),
     25: ("beq", "S"), 26: ("bne", "S"), 27: ("blt", "S"), 28: ("bge", "S"), 29: ("bltu", "S"), 30: ("bgeu", "S"),
     31: ("jal", "J"), 32: ("jalr", "I"), 33: ("lui", "J"),
+    34: ("mul", "R"), 35: ("mulh", "R"), 36: ("div", "R"), 37: ("rem", "R"),
     63: ("halt", "J"),
 }
-RESERVED = {34: "mul", 35: "mulh", 36: "div", 37: "rem", 48: "ecall", 49: "eret", 50: "csrr", 51: "csrw",
+M_EXT = ("mul", "mulh", "div", "rem")
+RESERVED = {48: "ecall", 49: "eret", 50: "csrr", 51: "csrw",
             52: "cas", 53: "amoadd"}
 OPCODE = {m: op for op, (m, _) in OPS.items()}
 FORMAT = {m: f for _, (m, f) in OPS.items()}
-BASE = tuple(m for _, (m, _) in sorted(OPS.items()))
+BASE = tuple(m for _, (m, _) in sorted(OPS.items()) if m not in M_EXT)
 
 IMM_BITS = {"R": 0, "I": 18, "S": 18, "J": 22}
 

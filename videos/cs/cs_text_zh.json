@@ -3220,7 +3220,8 @@
     "...  lw   t1, 0(t1)  # the rule: write, move, next": "...  lw   t1, 0(t1)  # the rule: write, move, next",
     "sb   t2, 0(s1)       # write": "sb   t2, 0(s1)       # write",
     "addi s1, s1, 1 / -1  # move": "addi s1, s1, 1 / -1  # move",
-    "srli s2, t1, 16      # next state": "srli s2, t1, 16      # next state"
+    "srli s2, t1, 16      # next state": "srli s2, t1, 16      # next state",
+    "6\\quad Pebble, single cycle": "6\\quad Pebble，单周期"
   },
   "phrases": {},
   "patterns": [
@@ -3239,6 +3240,14 @@
     [
       "^\\\\text\\{state \\} (.*)$",
       "\\\\text{状态 } \\1"
+    ],
+    [
+      "^single-cycle Pebble, \\\\ (\\d+) MHz: \\\\ ([\\d.]+) min$",
+      "单周期 Pebble，\\\\ \\1 MHz：\\\\ \\2 分钟"
+    ],
+    [
+      "^([\\d.]+) min$",
+      "\\1 分钟"
     ]
   ]
 }

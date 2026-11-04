@@ -242,7 +242,7 @@ class Job(VoiceoverScene):
             label(rf"{100 * co['share']['scan'] / co['cycles']:.1f}\% of them inside the linear search", font_size=24,
                   color=NO),
         ).arrange(DOWN, buff=0.18).move_to(UP * 1.5)
-        rows = [{"part": 6, "label": r"Pebble at gate level", "seconds": co["cycles"] / 1e9}] + [
+        rows = [{"part": 6, "label": r"Pebble, single cycle", "seconds": pr["single cycle"]}] + [
             {"part": p_, "label": t} for p_, t in ((7, r"a pipeline"), (9, r"caches"), (10, r"four cores"),
                                                    (13, r"an optimizing compiler"), (16, r"sort, then count"),
                                                    (17, r"a hash table"))]
@@ -251,7 +251,8 @@ class Job(VoiceoverScene):
             label(rf"on the Z3's relays: \ {human_time(pr['Z3 relays (5.3 Hz)'])}", font_size=22, color=GREY_A),
             label(rf"at ENIAC's speed: \ {human_time(pr['ENIAC (5,000 additions per second)'])}", font_size=22,
                   color=GREY_A),
-            label(rf"at 1 GHz: \ {human_time(pr['1 GHz'])}", font_size=22, color=YES),
+            label(rf"single-cycle Pebble, \ {j['clock_mhz']:.0f} MHz: \ {human_time(pr['single cycle'])}", font_size=22,
+                  color=YES),
         ).arrange(RIGHT, buff=0.6).next_to(facts, DOWN, buff=0.25)
         with self.voiceover(
             "So here is version zero on all thirty novels. <bookmark mark='a'/> Twenty-five million bytes; four and a "
@@ -259,7 +260,8 @@ class Job(VoiceoverScene):
             "every time, the program scans fifteen billion table entries. <bookmark mark='b'/> In total, a hundred and "
             "seven billion Pebble cycles, more than four thousand per byte of text, and more than ninety-nine percent "
             "of them inside the linear search. <bookmark mark='c'/> On the Z3's relays, that would take six centuries. "
-            "At ENIAC's speed, eight months. At a gigahertz, a hundred and seven seconds. <bookmark mark='d'/> That is "
+            "At ENIAC's speed, eight months. And on a real single-cycle Pebble, whose clock the memories hold to about "
+            "three hundred and eighty megahertz, under five minutes. <bookmark mark='d'/> That is "
             "the first row of the ledger. Every later row will say what a better machine, or a better idea, buys; "
             "and the numbers on this screen already hint which will matter more."
         ) as vo:

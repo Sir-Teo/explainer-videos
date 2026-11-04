@@ -21,6 +21,23 @@ class MachineError(RuntimeError):
     pass
 
 
+def mext(op: str, a: int, b: int) -> int:
+    """The M extension (Part 7): signed multiply (low and high words), signed division truncating towards zero, and
+    its remainder (the sign of the dividend).  Dividing by zero stops the machine (Part 6's exception, which Part 31
+    turns into a trap); -2^31 / -1 gives -2^31, as on RISC-V."""
+    sa, sb = sext(a, 32), sext(b, 32)
+    if op == "mul":
+        return sa * sb
+    if op == "mulh":
+        return (sa * sb) >> 32
+    if sb == 0:
+        raise MachineError("division by zero")
+    q = abs(sa) // abs(sb) * (1 if (sa < 0) == (sb < 0) else -1)
+    if op == "div":
+        return q
+    return sa - q * sb
+
+
 @dataclass
 class Step:
     pc: int
@@ -149,6 +166,8 @@ class Machine:
             wr = int(a < b)
         elif op == "sltiu":
             wr = int(a < (imm & MASK))
+        elif op in ("mul", "mulh", "div", "rem"):
+            wr = mext(op, a, b)
         elif op == "lw":
             wr = self.load(a + imm, 4)
         elif op == "lb":

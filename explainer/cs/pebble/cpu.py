@@ -89,7 +89,10 @@ def control_word(op: str) -> dict[str, int]:
 
 
 def control_table() -> dict[int, dict[str, int]]:
-    return {code: control_word(m) for code, (m, _) in sorted(OPS.items())}
+    """The base instruction set only: the gate-level CPU leaves the M extension (Part 7) illegal."""
+    from .isa import M_EXT
+
+    return {code: control_word(m) for code, (m, _) in sorted(OPS.items()) if m not in M_EXT}
 
 
 def build_control(c: Circuit, op: list[int], style: str = "table") -> tuple[dict[str, int], dict]:
@@ -328,7 +331,9 @@ def critical_path(cpu: Seq, samples: int = 2048, seed: int = 0) -> dict:
     for name, ws in c.inputs.items():
         if len(ws) == 32:
             vals[name] = rng.integers(0, 1 << 32, samples, dtype=np.int64)
-    codes = np.array(sorted(OPS), dtype=np.int64)
+    from .isa import M_EXT
+
+    codes = np.array(sorted(k for k, (m, _) in OPS.items() if m not in M_EXT), dtype=np.int64)
     vals["instr"] = (vals["instr"] & ((1 << 26) - 1)) | (codes[rng.integers(0, len(codes), samples)] << 26)
     t = c.settle(vals)
     return {"depth": c.depth(), "settle_max": int(np.max(t)), "settle_mean": float(np.mean(t))}
