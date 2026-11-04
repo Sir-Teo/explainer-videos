@@ -46,7 +46,7 @@ class HLP(VoiceoverScene, ThreeDScene):
                 why(r"and the test is the hedge, not the fit: the tracking error of a daily rebalanced hedge, which even "
                     r"the true delta cannot drive to zero (Part 10: its spread falls like one over the square root of "
                     r"the number of rebalances)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.42, edge=6.9)
         n = h["n_train"]
         with self.voiceover(
             "In 1994 James Hutchinson, Andrew Lo and Tomaso Poggio asked: could a network discover an option pricing "
@@ -110,7 +110,7 @@ class HLP(VoiceoverScene, ThreeDScene):
         gx, gT = np.asarray(r["grid_x"]), np.asarray(r["grid_T"])
         Z, E = np.asarray(s0["surf"]), np.asarray(s0["surf_err"]) * 100
         f, fe = grid_fn(gx, gT, Z), grid_fn(gx, gT, E)
-        ax = surf3d_axes([0.8, 1.2, 0.1], [0, 0.25, 0.05], [0, 0.22, 0.05]).shift(DOWN * 0.4)
+        ax = surf3d_axes([0.8, 1.2, 0.1], [0, 0.25, 0.05], [0, 0.22, 0.05]).shift(DOWN * 0.6 + RIGHT * 1.2)  # clear of the key
         surf = Surface(lambda u, v: ax.c2p(u, v, f(u, v)), u_range=(0.8, 1.2), v_range=(gT[0], 0.25),
                        resolution=(30, 20), fill_opacity=0.9, stroke_width=0.3, stroke_color="#0E1117",
                        checkerboard_colors=False)
@@ -118,13 +118,13 @@ class HLP(VoiceoverScene, ThreeDScene):
         for face in surf:
             u, v, _ = ax.p2c(face.get_center())
             e = abs(fe(u, v))
-            face.set_fill(interpolate_color(ManimColor("#3B3F9B"), ManimColor(BAD), min(e / thr, 1.0)), opacity=0.9)
+            face.set_fill(interpolate_color(ManimColor("#6366F1"), ManimColor(BAD), min(e / thr, 1.0)), opacity=0.9)
         payoff = VMobject(stroke_color=WHITE, stroke_width=3).set_points_as_corners(
             [ax.c2p(x, gT[0], max(x - 1, 0)) for x in np.linspace(0.8, 1.2, 41)])
         big = float(np.mean(np.abs(E) > thr)) * 100
         worst = float(np.abs(E).max())
         hint = VGroup(label(r"moneyness $S/K$ (across), time to expiry (back), $C/K$ (up)", font_size=20),
-                      legend([("#3B3F9B", r"error below 0.1\% of the strike"), (BAD, r"error above 0.1\%")],
+                      legend([("#6366F1", r"error below 0.1\% of the strike"), (BAD, r"error above 0.1\%")],
                              font_size=17),
                       label(rf"{big:.0f}\% of the grid above 0.1\%; worst {worst:.2f}\%", font_size=20, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.35)

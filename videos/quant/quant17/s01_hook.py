@@ -161,7 +161,7 @@ class Hook(VoiceoverScene):
 
     def history(self):
         I, F, R = QC.IDEA, QC.FIRM, QC.HOUSE
-        entries = [(1985, r"Leland: hedging with costs", I), (1989, r"Hodges--Neuberger; Cybenko", I),
+        entries = [(1985, r"Leland: costs", I), (1989, r"Hodges--Neuberger; Cybenko", I),
                    (1994, r"Hutchinson--Lo--Poggio", I), (1997, r"Whalley--Wilmott's band", I),
                    (2011, r"SR 11-7", R), (2016, r"Hernandez: calibration by network", I),
                    (2017, r"deep BSDE", I), (2019, r"deep hedging; deep stopping", I),
