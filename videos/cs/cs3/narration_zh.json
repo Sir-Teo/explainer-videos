@@ -1,0 +1,457 @@
+{
+ "title": "计算机科学，从零搭建 · 第3部分：用开关搭逻辑",
+ "chapters": {
+  "Hook": "一篇关于开关的论文",
+  "Boole": "1. 布尔代数",
+  "Relays": "2. 电路就是表达式",
+  "Transistors": "3. 晶体管",
+  "Cmos": "4. CMOS 门",
+  "Complete": "5. 一种门就够了",
+  "Normal": "6. 范式与卡诺图",
+  "Mux": "7. 用门做选择",
+  "Bdd": "8. 决策图",
+  "Complexity": "9. 需要多少个门？",
+  "Timing": "10. 门需要时间",
+  "Blocks": "11. Pebble 需要的部件",
+  "Simulator": "12. 我们的硬件层",
+  "History": "13. 开关搭成的机器",
+  "Reversible": "14. 什么都不忘的门",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "d6b54cf7f8f2": {
+   "scene": "Hook",
+   "en": "In 1937 a twenty-one-year-old student at MIT, Claude Shannon, was looking after a room-sized machine built of gears, motors and hundreds of telephone relays, Vannevar Bush's differential analyzer. <bookmark mark='a'/> Designing relay circuits then was an art, done by trial and error. Shannon noticed that it did not have to be. The algebra George Boole had invented in 1854 to describe the laws of thought described these circuits exactly. <bookmark mark='b'/> His master's thesis on the idea has been called possibly the most important master's thesis of the century. It is the reason every computer since has been designed with algebra.",
+   "zh": "1937年，麻省理工学院一位21岁的学生克劳德·香农，在照看一台占满整个房间的机器：由齿轮、电机和几百个电话继电器组成的范内瓦·布什微分分析机。<bookmark mark='a'/>当时设计继电器电路是一门手艺，靠反复试错。香农注意到，其实不必如此。乔治·布尔在1854年为描述思维规律而发明的代数，恰好精确地描述了这些电路。<bookmark mark='b'/>他关于这个想法的硕士论文，被称为也许是本世纪最重要的硕士论文。此后的每一台计算机都用代数来设计，原因就在这里。"
+  },
+  "03ba1e5bad88": {
+   "scene": "Hook",
+   "en": "Here is his observation, in its simplest form. A battery, a lamp, and two switches, A and B, one after the other. <bookmark mark='a'/> Current flows, and the lamp lights, only if A is closed and B is closed. Try all four settings. <bookmark mark='b'/> The table is Boole's and: switches in series compute A and B.",
+   "zh": "这是他的发现最简单的形式。一个电池、一盏灯，和两个前后相接的开关 A 和 B。<bookmark mark='a'/>只有 A 闭合并且 B 闭合，电流才能流过，灯才会亮。把四种设置都试一遍。<bookmark mark='b'/>这张表就是布尔的“且”：串联的开关计算 A 且 B。"
+  },
+  "64d5bfa52a4e": {
+   "scene": "Hook",
+   "en": "Now put the two switches side by side, so the current has two ways through. <bookmark mark='a'/> The lamp lights if A is closed, or B is, or both. <bookmark mark='b'/> Switches in parallel compute A or B. And a switch that opens when you push it, instead of closing, computes not. And with and, or and not, as chapter five will prove, you can build any truth table at all.",
+   "zh": "现在把两个开关并排放，让电流有两条路可走。<bookmark mark='a'/>A 闭合，或 B 闭合，或两者都闭合，灯就亮。<bookmark mark='b'/>并联的开关计算 A 或 B。一个按下时断开、而不是闭合的开关，计算“非”。而有了且、或、非，正如第5章将证明的，你能搭出任何一张真值表。"
+  },
+  "f8e725c06bfa": {
+   "scene": "Hook",
+   "en": "There is one more ingredient, and it is what makes a machine possible. <bookmark mark='a'/> In a relay, the switch is not pushed by a finger. A current through a coil makes a magnet, and the magnet pulls the contact closed. <bookmark mark='b'/> So the output of one switching circuit can work the switches of the next. Expressions can be plugged into expressions, without limit. <bookmark mark='c'/> Relays gave way to vacuum tubes and then to transistors, a billion times faster and a billion times smaller, but the idea in Shannon's thesis did not change at all. This part builds logic up from that single idea, all the way to the circuits Pebble will need.",
+   "zh": "还有一样东西，正是它让机器成为可能。<bookmark mark='a'/>在继电器里，开关不是用手指按的。线圈中的电流产生磁场，磁铁把触点吸合。<bookmark mark='b'/>所以一个开关电路的输出，可以操纵下一个电路的开关。表达式可以嵌进表达式，没有限制。<bookmark mark='c'/>继电器让位给真空管，又让位给晶体管，快了十亿倍、小了十亿倍，但香农论文里的想法一点也没变。这一部分就从这一个想法出发，一直搭到 Pebble 需要的电路。"
+  },
+  "e25bb6f3c3df": {
+   "scene": "Hook",
+   "en": "This is Part 3 of Computer Science, Built, the first step of act one: building a computer from switches. <bookmark mark='a'/> In this part: Boole's algebra, and Shannon's switches. The transistor, the CMOS inverter, and NAND and NOR gates in silicon. A proof that one kind of gate is enough, and Emil Post's test for exactly which sets of gates are. Normal forms, the Boolean cube and Karnaugh maps, multiplexers and decision diagrams. How many gates a function needs, which Shannon answered with a counting argument, and the embarrassing question nobody can answer. Then delay and glitches, the building blocks Pebble needs, the simulator that will run every circuit in this series, and gates that never forget.",
+   "zh": "这是《计算机科学，从零搭建》的第3部分，第一幕的第一步：用开关搭一台计算机。<bookmark mark='a'/>这一部分讲：布尔代数和香农的开关。晶体管、CMOS 反相器，以及硅中的与非门和或非门。证明一种门就够了，以及埃米尔·波斯特判定哪些门集合够用的准则。范式、布尔立方体与卡诺图、多路选择器和决策图。一个函数需要多少个门，香农用一个计数论证回答了它，以及那个没人能回答的尴尬问题。然后是延迟与毛刺、Pebble 需要的构件、将运行本系列每一个电路的模拟器，以及永不遗忘的门。"
+  },
+  "4ecda4fd7ff8": {
+   "scene": "Boole",
+   "en": "Chapter one. Boole's algebra.",
+   "zh": "第1章。布尔代数。"
+  },
+  "624fd4c28eb9": {
+   "scene": "Boole",
+   "en": "George Boole was a self-taught schoolmaster who became a professor in Cork. In 1854 he published An Investigation of the Laws of Thought, and its idea was audacious: reasoning is a kind of algebra. <bookmark mark='a'/> A variable stands for a statement, and takes the value one for true or zero for false. <bookmark mark='b'/> Multiplication is and, addition is or, and a bar is not. <bookmark mark='c'/> His favourite law was x squared equals x: saying something twice is the same as saying it once, which is false for ordinary numbers but true for zero and one. Engineers still use his notation.",
+   "zh": "乔治·布尔是一位自学成才的中学教师，后来成为科克的教授。1854年，他出版了《思维规律的研究》，其中的想法大胆至极：推理是一种代数。<bookmark mark='a'/>一个变量代表一个命题，真取值一，假取值零。<bookmark mark='b'/>乘法是且，加法是或，一道横线是非。<bookmark mark='c'/>他最喜欢的定律是 x 的平方等于 x：一件事说两遍和说一遍一样，这对普通的数不成立，对零和一却成立。工程师们至今还在用他的记号。"
+  },
+  "1429dfc31fc4": {
+   "scene": "Boole",
+   "en": "Boole's own showpiece was the oldest piece of logic there is: Aristotle's syllogisms. <bookmark mark='a'/> Every x is a y becomes an equation: x equals x times y, since being an x and a y is the same as being an x. Every y is a z: y equals y z. <bookmark mark='b'/> Now calculate. x equals x y; substitute y z for y; regroup; substitute x for x y; and x equals x z. <bookmark mark='c'/> Every x is a z. Two thousand years of memorized rules for valid arguments became a few lines of algebra that a clerk, or a machine, could check.",
+   "zh": "布尔自己的得意之作，是最古老的逻辑：亚里士多德的三段论。<bookmark mark='a'/>“每个 x 都是 y”变成一个等式：x 等于 x 乘 y，因为既是 x 又是 y，就等于是 x。“每个 y 都是 z”：y 等于 y z。<bookmark mark='b'/>现在来算。x 等于 x y；把 y 换成 y z；重新组合；把 x y 换回 x；得到 x 等于 x z。<bookmark mark='c'/>每个 x 都是 z。两千年来靠背诵的有效论证规则，变成了几行代数，一个职员或一台机器就能检查。"
+  },
+  "dc330af466cb": {
+   "scene": "Boole",
+   "en": "Boole's algebra obeys a short list of laws, and they come in pairs. <bookmark mark='a'/> Identity, annihilation, idempotence, complement: each has a version for and and a version for or. <bookmark mark='b'/> Commutativity, distributivity, absorption, and De Morgan's laws from Part 2. <bookmark mark='c'/> Every law on the left turns into the one on the right if you swap and with or, and zero with one. That is the principle of duality, and in chapter four it will reappear in silicon. <bookmark mark='d'/> One law has no counterpart in ordinary arithmetic: or distributes over and. x plus y z equals x plus y, times x plus z. With numbers that is false. Here it is true.",
+   "zh": "布尔代数遵守一份简短的定律清单，而且它们成对出现。<bookmark mark='a'/>同一律、零一律、幂等律、互补律：每一条都有“且”的版本和“或”的版本。<bookmark mark='b'/>交换律、分配律、吸收律，以及第2部分的德摩根律。<bookmark mark='c'/>把且和或互换、零和一互换，左边的每一条定律都变成右边那一条。这就是对偶原理，在第4章它会在硅片上重现。<bookmark mark='d'/>有一条定律在普通算术里没有对应：或对且可分配。x 加 y z 等于 x 加 y，乘以 x 加 z。对数来说这是错的，在这里却是对的。"
+  },
+  "5b853dd4dede": {
+   "scene": "Boole",
+   "en": "A picture makes it believable. Draw x, y and z as overlapping regions, true inside and false outside. <bookmark mark='a'/> On the left, y and z is the region inside both; add x, and you get everything in x, plus that lens. <bookmark mark='b'/> On the right, x or y is one big region, x or z another, and their and is where they overlap. <bookmark mark='c'/> The same shape. Every law can be checked like this, or by a truth table with eight rows, and that is the difference between Boole's algebra and ours: there are only finitely many cases, so every identity can be checked mechanically.",
+   "zh": "一幅图能让人信服。把 x、y、z 画成重叠的区域，里面为真，外面为假。<bookmark mark='a'/>左边，y 且 z 是两者都覆盖的区域；再或上 x，就得到 x 的全部加上那块透镜形。<bookmark mark='b'/>右边，x 或 y 是一大片，x 或 z 是另一大片，它们的“且”是两片重叠的地方。<bookmark mark='c'/>同样的形状。每条定律都能这样检验，或者用一张八行的真值表，这正是布尔代数和我们的代数的区别：情形只有有限多种，所以每个恒等式都能机械地检验。"
+  },
+  "6c79bd18eea8": {
+   "scene": "Boole",
+   "en": "Laws let you simplify without truth tables. <bookmark mark='a'/> Absorption: x plus x y. Write x as x times one; factor out x; one plus anything is one; so the whole thing is x. <bookmark mark='b'/> As a circuit, an and gate and an or gate collapse into a plain wire. Every simplification of an expression removes gates from a circuit, and logic synthesis tools, which turn a hardware description into a chip, are at heart very fast, very clever users of these laws.",
+   "zh": "有了定律，不用真值表也能化简。<bookmark mark='a'/>吸收律：x 加 x y。把 x 写成 x 乘一；提出 x；一加任何东西都是一；所以整个式子就是 x。<bookmark mark='b'/>作为电路，一个与门和一个或门塌缩成一根导线。对表达式的每一次化简，都从电路里去掉了门，而把硬件描述变成芯片的逻辑综合工具，本质上就是这些定律的极快、极聪明的使用者。"
+  },
+  "eeb96bcd0e8c": {
+   "scene": "Relays",
+   "en": "Chapter two. Circuits are expressions.",
+   "zh": "第2章。电路就是表达式。"
+  },
+  "be83ddf195a9": {
+   "scene": "Relays",
+   "en": "Shannon's thesis is a dictionary between two languages. <bookmark mark='a'/> Switches in series are multiplication: and. Switches in parallel are addition: or. A contact that opens when its relay is energized is not. Several contacts worked by the same relay are the same variable, used several times. <bookmark mark='b'/> And so any network of switches between two points is an expression, which is true exactly when current can flow. The dictionary works both ways: to analyse a circuit, write its expression; to design one, write the expression you want, simplify it with the laws, and translate back.",
+   "zh": "香农的论文是两种语言之间的一本词典。<bookmark mark='a'/>串联的开关是乘法：且。并联的开关是加法：或。继电器通电时断开的触点是非。同一个继电器驱动的几个触点，是同一个变量用了几次。<bookmark mark='b'/>所以两点之间的任何开关网络都是一个表达式，恰好在电流能流过时为真。这本词典两个方向都能用：要分析一个电路，写出它的表达式；要设计一个电路，写出你想要的表达式，用定律化简，再翻译回去。"
+  },
+  "27674a810af4": {
+   "scene": "Relays",
+   "en": "An example every house has. A staircase light, with a switch at the bottom and a switch at the top: flipping either one changes the light. <bookmark mark='a'/> In Shannon's language, the lamp should be on when A is up and B is down, or A is down and B is up. Two branches in parallel, each with two contacts in series; the bars are contacts that close when their switch is down. <bookmark mark='b'/> Try the four positions. <bookmark mark='c'/> The lamp is A exclusive-or B. The real two-way switch in your wall is this circuit, folded into one clever contact.",
+   "zh": "一个家家都有的例子。楼梯灯，楼下一个开关，楼上一个开关：扳动任何一个都会改变灯的状态。<bookmark mark='a'/>用香农的语言说，当 A 向上而 B 向下，或 A 向下而 B 向上时，灯应该亮。两条并联的支路，每条有两个串联的触点；带横线的是开关向下时闭合的触点。<bookmark mark='b'/>试试四种位置。<bookmark mark='c'/>灯就是 A 异或 B。你墙上真正的双控开关，就是把这个电路折叠进了一个巧妙的触点里。"
+  },
+  "461e1ed8f02c": {
+   "scene": "Relays",
+   "en": "Here is the payoff. <bookmark mark='a'/> A circuit with three parallel paths: x and y; x and z; x and not y and not z. Seven contacts. <bookmark mark='b'/> Write its expression and apply the laws. Factor out x. What is left in the bracket is y or z, or the negation of y or z, by De Morgan. Something or its negation is always true. <bookmark mark='c'/> So the whole network is just x: one contact does the work of seven. Shannon did exactly this to real telephone circuits, and in the same thesis designed a relay circuit that adds binary numbers, which is where Part 4 begins.",
+   "zh": "回报来了。<bookmark mark='a'/>一个有三条并联路径的电路：x 且 y；x 且 z；x 且非 y 且非 z。七个触点。<bookmark mark='b'/>写出它的表达式，运用定律。提出 x。括号里剩下的是 y 或 z，或者由德摩根律，y 或 z 的否定。一个东西或它的否定，永远为真。<bookmark mark='c'/>所以整个网络就是 x：一个触点干了七个的活。香农正是这样处理真实的电话电路的，并在同一篇论文里设计了一个做二进制加法的继电器电路，那正是第4部分的起点。"
+  },
+  "9444b149dd34": {
+   "scene": "Relays",
+   "en": "The dictionary also works for analysis. <bookmark mark='a'/> Here is a circuit with three paths: x and y; not x and z; y and z. Its expression is x y plus not x z plus y z. <bookmark mark='b'/> Is the bottom path doing anything? It conducts when y and z are both closed. But then x is either closed, and the top path conducts anyway, or open, and the middle one does. The bottom path never adds a connection the others lack. <bookmark mark='c'/> So y z can be removed: this is the consensus theorem, and synthesis tools apply it constantly. Chapter ten will show a reason you might deliberately keep that useless contact.",
+   "zh": "这本词典也可以用来分析。<bookmark mark='a'/>这是一个有三条路径的电路：x 且 y；非 x 且 z；y 且 z。它的表达式是 x y 加非 x z 加 y z。<bookmark mark='b'/>最下面那条路径有用吗？它在 y 和 z 都闭合时导通。可那时 x 要么闭合，上面的路径照样导通；要么断开，中间那条导通。最下面那条从不提供别的路径没有的连接。<bookmark mark='c'/>所以 y z 可以去掉：这就是共识定理，综合工具时时刻刻都在用它。第10章会说明，为什么你有时会故意保留那个没用的触点。"
+  },
+  "185c766d754c": {
+   "scene": "Transistors",
+   "en": "Chapter three. The transistor.",
+   "zh": "第3章。晶体管。"
+  },
+  "755dec0eef55": {
+   "scene": "Transistors",
+   "en": "Shannon's algebra does not care what the switches are made of, which is lucky, because relays are slow. <bookmark mark='a'/> A relay moves a piece of metal, and takes about a hundredth of a second. <bookmark mark='b'/> A vacuum tube steers electrons through a vacuum and switches a thousand times faster, but it is hot and it burns out; ENIAC, in 1945, had seventeen and a half thousand of them. <bookmark mark='c'/> The transistor, invented at Bell Labs in 1947, switches electrons in a solid crystal with nothing moving at all, and today's switch in a few picoseconds. The kind in every chip is the MOSFET, from 1959, and from 1958 they were built many at a time on one slice of silicon: the integrated circuit.",
+   "zh": "香农的代数不在乎开关是用什么做的，这很幸运，因为继电器很慢。<bookmark mark='a'/>继电器要移动一块金属，大约需要百分之一秒。<bookmark mark='b'/>真空管让电子穿过真空，切换速度快一千倍，但它很热，还会烧坏；1945年的 ENIAC 有一万七千五百个真空管。<bookmark mark='c'/>1947年在贝尔实验室发明的晶体管，在固体晶体里切换电子，什么都不用移动，今天的晶体管几皮秒就能切换。每块芯片里用的是 MOSFET，始于1959年；从1958年起，人们开始在同一片硅上一次造出许多个：集成电路。"
+  },
+  "a2728806b2d4": {
+   "scene": "Transistors",
+   "en": "For logic, a MOSFET is just a switch with three wires. <bookmark mark='a'/> In an n-type transistor, a high voltage on the gate connects the drain to the source; a low voltage disconnects them. The gate itself draws almost no current: it works like the coil of a relay, through an electric field instead of a magnet. <bookmark mark='b'/> A p-type transistor is the mirror image: it conducts when its gate is low. The little bubble on the symbol means not, as on a gate. <bookmark mark='c'/> Two kinds of switch, one that closes on one and one that closes on zero. Put them together and something remarkable happens.",
+   "zh": "对逻辑来说，MOSFET 只是一个有三根引线的开关。<bookmark mark='a'/>在 n 型晶体管里，栅极加高电压，漏极和源极就接通；低电压则断开。栅极本身几乎不取电流：它像继电器的线圈，只不过靠的是电场而不是磁铁。<bookmark mark='b'/>p 型晶体管是它的镜像：栅极为低时导通。符号上的小圆圈表示“非”，和门上的一样。<bookmark mark='c'/>两种开关，一种遇一闭合，一种遇零闭合。把它们放在一起，就会发生了不起的事。"
+  },
+  "5f6e81887ed9": {
+   "scene": "Transistors",
+   "en": "Stack a p-type transistor on an n-type one, the p on top connected to the supply voltage, the n below connected to ground, and join their gates as the input and their middle as the output. This is the CMOS inverter, the C standing for complementary. <bookmark mark='a'/> Input zero: the p transistor conducts and the n does not, so the output is connected to the supply: one. <bookmark mark='b'/> Input one: the n conducts and the p does not, so the output is connected to ground: zero. It computes not. <bookmark mark='c'/> And in either state one of the two transistors is off, so there is no path from the supply to ground, and no current flows at all while it sits still. That is why your phone does not melt.",
+   "zh": "把一个 p 型晶体管叠在一个 n 型晶体管上面，上面的 p 接电源电压，下面的 n 接地，两个栅极连在一起作输入，中间连接点作输出。这就是 CMOS 反相器，C 代表互补。<bookmark mark='a'/>输入为零：p 导通、n 不导通，所以输出接到电源：一。<bookmark mark='b'/>输入为一：n 导通、p 不导通，所以输出接地：零。它计算的是“非”。<bookmark mark='c'/>而且在任一状态下，两个晶体管中总有一个是关断的，所以从电源到地没有通路，静止时完全没有电流。这就是你的手机不会熔化的原因。"
+  },
+  "b95042a9cc28": {
+   "scene": "Transistors",
+   "en": "Real voltages are not exactly zero and one, so look at everything in between. <bookmark mark='a'/> Sweep the input from ground to the supply, and plot the output, computed here from a standard model of the two transistors. It stays high, then plunges, then stays low. <bookmark mark='b'/> It crosses the diagonal at half the supply: the switching threshold. And in the middle it is very steep: a small change in the input makes a change in the output more than a hundred times bigger. <bookmark mark='c'/> The flat parts are the point. Anything below about forty-five percent of the supply is read as a clean zero, and anything above about fifty-five percent as a clean one. The gaps between what a gate guarantees to produce and what the next gate needs to see are the noise margins.",
+   "zh": "真实的电压并不恰好是零和一，所以要看看中间的一切。<bookmark mark='a'/>把输入从地扫到电源电压，画出输出，这里是用两个晶体管的标准模型算出来的。它先保持高，然后骤降，然后保持低。<bookmark mark='b'/>它在电源电压的一半处穿过对角线：这是切换阈值。中间非常陡：输入的一点小变化，会让输出变化一百多倍。<bookmark mark='c'/>平坦的部分才是关键。低于电源约百分之四十五的输入都被读成干净的零，高于约百分之五十五的都被读成干净的一。一个门保证输出的电平和下一个门需要看到的电平之间的余量，就是噪声容限。"
+  },
+  "0ca3b2822103": {
+   "scene": "Transistors",
+   "en": "That steep curve does something wonderful. <bookmark mark='a'/> Feed a chain of inverters a sloppy zero, at thirty-eight percent of the supply, almost in the middle. <bookmark mark='b'/> After one inverter it is a confident one. After two, an almost perfect zero, and it stays perfect. Each gate restores the signal towards the rails. <bookmark mark='c'/> This is what digital means. In an analog circuit, noise accumulates with every stage. In a digital one, every gate throws it away, so a signal can pass through billions of gates and arrive intact. Everything from here on counts in zeros and ones, and it is allowed to because of this curve.",
+   "zh": "这条陡峭的曲线做了一件奇妙的事。<bookmark mark='a'/>给一串反相器输入一个马虎的零，电源的百分之三十八，几乎在正中间。<bookmark mark='b'/>经过一个反相器，它变成一个干脆的一。经过两个，变成几乎完美的零，并保持完美。每个门都把信号推回电源轨。<bookmark mark='c'/>这就是“数字”的含义。在模拟电路里，噪声随每一级累积。在数字电路里，每个门都把噪声扔掉，所以一个信号可以穿过数十亿个门而完好到达。从这里开始，一切都用零和一来计，而之所以可以这样，靠的就是这条曲线。"
+  },
+  "2a924e53425f": {
+   "scene": "Cmos",
+   "en": "Chapter four. CMOS gates.",
+   "zh": "第4章。CMOS 门。"
+  },
+  "ac594d3c1158": {
+   "scene": "Cmos",
+   "en": "The inverter's trick extends to two inputs. <bookmark mark='a'/> To pull the output down to zero, put two n transistors in series between the output and ground: the path conducts only if A and B are both high. <bookmark mark='b'/> To pull it up, put two p transistors in parallel between the supply and the output: either one conducting, when A or B is low, connects the output to one. <bookmark mark='c'/> Run the four inputs. The output is zero only when both are one: not and, NAND. And as before, for every input exactly one of the two networks conducts.",
+   "zh": "反相器的诀窍可以推广到两个输入。<bookmark mark='a'/>要把输出拉到零，在输出和地之间串联两个 n 晶体管：只有 A 和 B 都为高，这条路才导通。<bookmark mark='b'/>要把它拉高，在电源和输出之间并联两个 p 晶体管：A 或 B 为低时，任何一个导通，都把输出接到一。<bookmark mark='c'/>把四种输入跑一遍。只有两个都为一时输出才是零：与非，NAND。和之前一样，对每个输入，两个网络中恰好有一个导通。"
+  },
+  "459ab1667bdf": {
+   "scene": "Cmos",
+   "en": "Swap the arrangement: n transistors in parallel below, p transistors in series above. <bookmark mark='a'/> Now either input high pulls the output down, and only both low pulls it up. NOR. <bookmark mark='b'/> The two networks of every CMOS gate are each other's duals: series in one is parallel in the other, exactly chapter one's duality, and the p network computes the De Morgan twin of the n network. Any expression built from and and or, with an inversion on the output, becomes one CMOS gate this way.",
+   "zh": "把排列反过来：下面的 n 晶体管并联，上面的 p 晶体管串联。<bookmark mark='a'/>现在任一输入为高都会把输出拉低，只有两个都为低才拉高。或非，NOR。<bookmark mark='b'/>每个 CMOS 门的两个网络互为对偶：一个里的串联就是另一个里的并联，正是第1章的对偶，而 p 网络计算的是 n 网络的德摩根孪生。任何由且和或组成、输出再取反的表达式，都能这样变成一个 CMOS 门。"
+  },
+  "20af43ed1eae": {
+   "scene": "Cmos",
+   "en": "Duality does more than NAND and NOR. <bookmark mark='a'/> Take any expression built from and and or, say A and B, or C, and invert it. <bookmark mark='b'/> Build the expression itself as a network of n transistors pulling the output down: A and B in series, in parallel with C. <bookmark mark='c'/> Build its dual from p transistors pulling up: A and B in parallel, in series with C. The result is a single gate, an and-or-invert, in six transistors, where separate gates would need ten. <bookmark mark='d'/> Real cell libraries are full of these compound gates, and a synthesis tool chooses among them the way a chess program chooses moves.",
+   "zh": "对偶的用处不止于与非门和或非门。<bookmark mark='a'/>任取一个由且和或组成的表达式，比如 A 且 B，或 C，再取反。<bookmark mark='b'/>把表达式本身做成一个拉低输出的 n 晶体管网络：A 和 B 串联，再与 C 并联。<bookmark mark='c'/>用 p 晶体管搭出它的对偶来拉高：A 和 B 并联，再与 C 串联。结果是一个单独的门，与或非门，六个晶体管，而分开的门需要十个。<bookmark mark='d'/>真实的单元库里满是这样的复合门，综合工具在其中挑选，就像国际象棋程序挑选走法一样。"
+  },
+  "e5f2d5b16986": {
+   "scene": "Cmos",
+   "en": "Count the transistors. <bookmark mark='a'/> An inverter takes two. NAND and NOR take four. And or or takes six, because CMOS naturally inverts: you build a NAND and then invert it. Exclusive-or takes eight or more. <bookmark mark='b'/> So the natural gates of CMOS are the inverting ones. And between those two, NAND wins: its series transistors are n-type, and electrons, which carry the current in n-type transistors, move two to three times faster than the holes in p-type ones. A modern chip is mostly NAND gates and inverters, which is why the next chapter asks whether NAND alone is enough.",
+   "zh": "数一数晶体管。<bookmark mark='a'/>反相器要两个。与非和或非要四个。与或者或要六个，因为 CMOS 天生会取反：你先搭一个与非，再取反。异或要八个或更多。<bookmark mark='b'/>所以 CMOS 的天然门是带取反的那些。而在这两者之间，与非门胜出：它的串联晶体管是 n 型的，而在 n 型晶体管中载流的电子，比 p 型中的空穴快两到三倍。现代芯片大多由与非门和反相器组成，所以下一章要问：只用与非门够不够？"
+  },
+  "4909580538c5": {
+   "scene": "Cmos",
+   "en": "One more property, and it is why CMOS won. <bookmark mark='a'/> The current the inverter draws from its supply, computed across the sweep, is zero at both ends and spikes only in the middle, while both transistors are partly on. <bookmark mark='b'/> A CMOS circuit sitting still uses almost no power. It pays when it switches: a little current while both transistors conduct, and the charge needed to flip the wires and gates it drives. <bookmark mark='c'/> So the power is roughly the fraction of wires that switch, times their capacitance, times the supply voltage squared, times the clock frequency. That one formula explains why clocks stopped getting faster around 2005, and why chips grew many cores instead, which is Part 10.",
+   "zh": "还有一个性质，正是它让 CMOS 胜出。<bookmark mark='a'/>反相器从电源取的电流，在整个扫描中计算出来，两端都是零，只在中间、两个晶体管都部分导通时出现一个尖峰。<bookmark mark='b'/>静止的 CMOS 电路几乎不耗电。它在切换时付出代价：两个晶体管同时导通时的一点电流，以及翻转它所驱动的导线和门所需的电荷。<bookmark mark='c'/>所以功率大约是：发生切换的导线比例，乘以它们的电容，乘以电源电压的平方，乘以时钟频率。这一个公式解释了为什么时钟在2005年前后不再变快，以及芯片为什么改为长出许多核心，那是第10部分。"
+  },
+  "ea8139311127": {
+   "scene": "Complete",
+   "en": "Chapter five. One gate is enough.",
+   "zh": "第5章。一种门就够了。"
+  },
+  "aa284336dc19": {
+   "scene": "Complete",
+   "en": "Chapter four said a chip is mostly NAND gates. Could it be nothing but NAND gates? <bookmark mark='a'/> Not: join a NAND's two inputs together. x NAND x is not x. One gate. <bookmark mark='b'/> And: a NAND, then a not. Two gates. <bookmark mark='c'/> Or: invert both inputs, then NAND them. By De Morgan, not x NAND not y is x or y. Three gates. <bookmark mark='d'/> We searched every possible arrangement of NAND gates, for every one of the sixteen functions of two inputs. Not needs one, and needs two, or three, exclusive-or four, and the hardest, exclusive-nor, five.",
+   "zh": "第4章说芯片大多是与非门。能不能只用与非门？<bookmark mark='a'/>非：把与非门的两个输入连在一起。x 与非 x 就是非 x。一个门。<bookmark mark='b'/>且：一个与非门，再接一个非。两个门。<bookmark mark='c'/>或：把两个输入都取反，再与非。由德摩根律，非 x 与非 非 y 就是 x 或 y。三个门。<bookmark mark='d'/>我们对两个输入的全部十六个函数，搜索了与非门的每一种可能的连接方式。非需要一个，且需要两个，或需要三个，异或四个，最难的同或需要五个。"
+  },
+  "3432ae57a357": {
+   "scene": "Complete",
+   "en": "Here is the four-gate exclusive-or, a small classic. <bookmark mark='a'/> The first gate computes not x and y. <bookmark mark='b'/> Each of the next two combines it with one input: the top one is zero only when x is one and y is not, the bottom one only when y is one and x is not. <bookmark mark='c'/> The last NAND is one when either of those is zero: exactly when the inputs differ. Sharing that first gate between both paths is what makes four enough.",
+   "zh": "这是四个门的异或，一个小小的经典。<bookmark mark='a'/>第一个门计算 x 且 y 的非。<bookmark mark='b'/>接下来两个门各把它和一个输入组合：上面那个只在 x 为一而 y 不为一时为零，下面那个只在 y 为一而 x 不为一时为零。<bookmark mark='c'/>最后一个与非门在这两者之一为零时为一：恰好在两个输入不同时。让第一个门在两条路径之间共享，正是四个门就够的原因。"
+  },
+  "a211abbdbd8d": {
+   "scene": "Complete",
+   "en": "Now the general argument. <bookmark mark='a'/> Take any truth table, here one with three inputs. <bookmark mark='b'/> For each row where the output is one, write an and of the inputs, each either plain or negated, so that it is true on that row and no other. <bookmark mark='c'/> Then or those terms together. The result is true on exactly the rows it should be. This is the disjunctive normal form, and it shows that and, or and not can build every function. <bookmark mark='d'/> Since NAND builds all three, NAND alone can build every function. It is complete. So is NOR, by the mirror argument.",
+   "zh": "现在是一般的论证。<bookmark mark='a'/>任取一张真值表，这里是三个输入的。<bookmark mark='b'/>对每一个输出为一的行，写出输入的“且”，每个输入或原样或取反，使它恰好在这一行为真、在其他行都为假。<bookmark mark='c'/>再把这些项“或”起来。结果恰好在应为真的那些行上为真。这就是析取范式，它说明且、或、非能搭出每一个函数。<bookmark mark='d'/>既然与非门能搭出这三者，只用与非门就能搭出每一个函数。它是完备的。或非门也是，论证完全对称。"
+  },
+  "f80d54fb75d5": {
+   "scene": "Complete",
+   "en": "Which other sets of gates are complete? Emil Post answered that completely in 1941. <bookmark mark='a'/> There are exactly five ways for a set of gates to be trapped. If every gate keeps zero, giving zero on all zero inputs, then every circuit does too, and you can never build not. The same for keeping one. If every gate is monotone, circuits are monotone: and and or alone can never invert. If every gate is self-dual, or every gate is affine, an exclusive-or of its inputs plus a constant, circuits stay trapped there too. <bookmark mark='b'/> Here are some gates against the five properties. A cross means the gate escapes that trap. <bookmark mark='c'/> Post proved that escaping all five is also enough. A set is complete exactly when each trap is escaped by some gate in it. Among single two-input gates, only NAND and NOR escape all five.",
+   "zh": "还有哪些门的集合是完备的？埃米尔·波斯特在1941年彻底回答了这个问题。<bookmark mark='a'/>一个门的集合被困住的方式恰好有五种。如果每个门都保零，全零输入时输出零，那么每个电路也都如此，你永远造不出非。保一也一样。如果每个门都是单调的，电路也是单调的：只用且和或永远无法取反。如果每个门都是自对偶的，或每个门都是仿射的，也就是输入的异或加一个常数，电路也会被困在那里。<bookmark mark='b'/>这里是一些门对照这五种性质。叉号表示这个门逃出了那个陷阱。<bookmark mark='c'/>波斯特证明，逃出全部五个也就够了。一个集合是完备的，恰好当每个陷阱都被其中某个门逃出。在单个的两输入门中，只有与非门和或非门能逃出全部五个。"
+  },
+  "4c3b33867b5a": {
+   "scene": "Normal",
+   "en": "Chapter six. Normal forms and maps.",
+   "zh": "第6章。范式与卡诺图。"
+  },
+  "d207564bcd69": {
+   "scene": "Normal",
+   "en": "Chapter five's normal form always works, but it can be wasteful. Here is a way to see the waste. <bookmark mark='a'/> A function of three inputs assigns a value to each of the eight corners of a cube, one corner for each input pattern. This one is majority: green where at least two inputs are one. <bookmark mark='b'/> The disjunctive normal form has one term per green corner: four terms. <bookmark mark='c'/> But two green corners joined by an edge differ in one variable only, and that variable does not matter there: a b c and a b not c together are just a b. So cover the green corners with edges, or, better, whole faces. Three edges cover majority: a b plus b c plus a c.",
+   "zh": "第5章的范式总能用，但可能很浪费。这里有一种看清浪费的方法。<bookmark mark='a'/>一个三输入的函数，给立方体的八个顶点各指定一个值，每种输入模式对应一个顶点。这是多数函数：至少两个输入为一的顶点是绿色的。<bookmark mark='b'/>析取范式每个绿色顶点一项：四项。<bookmark mark='c'/>但由一条棱相连的两个绿色顶点只差一个变量，而那个变量在那里无关紧要：a b c 和 a b 非 c 合起来就是 a b。所以用棱，或者更好，用整个面，来覆盖绿色顶点。三条棱覆盖了多数函数：a b 加 b c 加 a c。"
+  },
+  "1a9539218c9c": {
+   "scene": "Normal",
+   "en": "With four inputs the cube has sixteen corners, and in 1953 Maurice Karnaugh found a way to flatten it. <bookmark mark='a'/> Lay the corners out in a four by four grid, with rows and columns in Gray-code order, so that cells side by side differ in exactly one bit. The left edge is next to the right edge, and the top to the bottom: the map is really a torus. <bookmark mark='b'/> Now groups of ones in rectangles of two, four or eight cells are terms with variables dropped. Here three groups cover everything, including the four corners, which are neighbours on the torus. <bookmark mark='c'/> Ten terms of four literals become three terms of two. <bookmark mark='d'/> For more inputs, maps fail and an algorithm takes over: Quine and McCluskey's method merges terms that differ in one bit, again and again, to find every prime implicant, and then picks the fewest that cover the function.",
+   "zh": "四个输入时立方体有十六个顶点，1953年莫里斯·卡诺找到了把它压平的办法。<bookmark mark='a'/>把顶点排成四乘四的网格，行和列都按格雷码顺序，使相邻的格子恰好差一位。左边缘与右边缘相邻，上边与下边相邻：这张图其实是一个环面。<bookmark mark='b'/>现在由二、四或八个格子组成的矩形里的一组一，就是去掉了若干变量的项。这里三组就覆盖了全部，包括四个角，它们在环面上互为邻居。<bookmark mark='c'/>十个四文字的项，变成三个两文字的项。<bookmark mark='d'/>输入更多时，卡诺图就不管用了，由算法接手：奎因–麦克拉斯基方法反复合并只差一位的项，找出每一个质蕴涵项，再挑出覆盖函数所需的最少几个。"
+  },
+  "3ae461a0329f": {
+   "scene": "Normal",
+   "en": "Normal forms can be terrible. <bookmark mark='a'/> Parity, which is one when an odd number of inputs are one, makes a perfect checkerboard on the map. No two ones are neighbours, nothing merges, and every one of the eight ones needs its own term. <bookmark mark='b'/> With n inputs the normal form needs two to the n minus one terms, which for sixty-four inputs is about nine billion billion terms. <bookmark mark='c'/> But a tree of n minus one exclusive-or gates computes it easily. The two-level form, an or of ands, is a poor model of what circuits can do; depth, how many layers deep a circuit is, changes everything, and chapter nine measures it.",
+   "zh": "范式可能糟糕透顶。<bookmark mark='a'/>奇偶函数，在奇数个输入为一时为一，在图上形成完美的棋盘。没有两个一是相邻的，什么都合并不了，八个一每个都需要自己的一项。<bookmark mark='b'/>n 个输入时，范式需要 2 的 n 减一次方项，六十四个输入时大约是九百亿亿项。<bookmark mark='c'/>但一棵由 n 减一个异或门组成的树轻松就能算出它。两级形式，即与项的或，很不适合描述电路的能力；深度，也就是电路有几层，改变一切，第9章会度量它。"
+  },
+  "b3905a2d31dc": {
+   "scene": "Normal",
+   "en": "So how hard is it to find the smallest formula for a function? <bookmark mark='a'/> Even for two-level forms, starting from the truth table, it is NP-hard, a word Part 26 makes precise: no efficient method is known, and probably none exists. <bookmark mark='b'/> Starting from a formula, asking whether a smaller equivalent one exists is even harder, complete for the second level of the polynomial hierarchy. <bookmark mark='c'/> So the logic synthesis tools that design real chips use clever heuristics, and do not promise the smallest circuit. They are extremely good at it anyway.",
+   "zh": "那么，找一个函数的最小公式有多难？<bookmark mark='a'/>即使是两级形式，从真值表出发，它也是 NP 难的，这个词第26部分会讲精确：没有已知的高效方法，而且很可能根本不存在。<bookmark mark='b'/>从一个公式出发，问是否存在更小的等价公式，就更难了，它对多项式层级的第二层是完全的。<bookmark mark='c'/>所以设计真实芯片的逻辑综合工具用巧妙的启发式方法，并不保证得到最小的电路。尽管如此，它们做得极好。"
+  },
+  "8aa8978cc186": {
+   "scene": "Mux",
+   "en": "Chapter seven. Choosing with gates.",
+   "zh": "第7章。用门做选择。"
+  },
+  "e2a3c6684c81": {
+   "scene": "Mux",
+   "en": "A circuit can choose. <bookmark mark='a'/> A multiplexer has two data inputs, a and b, and a select input s. When s is zero, the output is a; when s is one, it is b. <bookmark mark='b'/> In gates: not s and a, or s and b. Four gates. <bookmark mark='c'/> Watch it route one input or the other to the output as the select bit flips. It is the electrical version of an if statement, and it is about to turn out to be universal too.",
+   "zh": "电路可以做选择。<bookmark mark='a'/>多路选择器有两个数据输入 a 和 b，以及一个选择输入 s。s 为零时，输出 a；s 为一时，输出 b。<bookmark mark='b'/>用门写：非 s 且 a，或 s 且 b。四个门。<bookmark mark='c'/>看着选择位翻转时，它把这个或那个输入送到输出。它是 if 语句的电路版本，而且马上就会发现，它也是通用的。"
+  },
+  "1dbd360eaaf2": {
+   "scene": "Mux",
+   "en": "A multiplexer can imitate the basic gates. <bookmark mark='a'/> Select with x, and feed in one and zero: if x then zero else one, which is not x. <bookmark mark='b'/> Feed in zero and y: if x then y else zero, which is x and y. <bookmark mark='c'/> Feed in y and one: if x then one else y, which is x or y. So a multiplexer, given the constants zero and one, is complete on its own, and Post's test agrees. This is why some chip families were built entirely from multiplexers.",
+   "zh": "多路选择器可以模仿基本的门。<bookmark mark='a'/>用 x 作选择，输入一和零：若 x 则零否则一，这就是非 x。<bookmark mark='b'/>输入零和 y：若 x 则 y 否则零，这就是 x 且 y。<bookmark mark='c'/>输入 y 和一：若 x 则一否则 y，这就是 x 或 y。所以给了常数零和一，多路选择器本身就是完备的，波斯特判据也同意。这就是为什么有些芯片家族完全由多路选择器搭成。"
+  },
+  "b6fc47eb73e6": {
+   "scene": "Mux",
+   "en": "Shannon also noticed this identity. <bookmark mark='a'/> Any function of x and other inputs equals: if x is zero, the function with x set to zero; if x is one, the function with x set to one. That is a multiplexer, choosing between two simpler functions. <bookmark mark='b'/> Expand those the same way, and again, until no inputs are left. What remains at the leaves are constants, zeros and ones: the truth table itself, read off by a tree of multiplexers driven by the inputs.",
+   "zh": "香农还注意到了这个恒等式。<bookmark mark='a'/>任何关于 x 和其他输入的函数都等于：若 x 为零，取 x 设为零时的函数；若 x 为一，取 x 设为一时的函数。这就是一个多路选择器，在两个更简单的函数之间做选择。<bookmark mark='b'/>把它们同样展开，再展开，直到没有输入剩下。叶子上剩下的是常数，零和一：正是真值表本身，由一棵受输入驱动的多路选择器树读出。"
+  },
+  "65dc45f3668b": {
+   "scene": "Mux",
+   "en": "Now turn that around. <bookmark mark='a'/> Build the tree of multiplexers in hardware, and instead of constants at the leaves, put eight bits of memory. Whatever eight bits you store, the circuit computes that truth table. <bookmark mark='b'/> Store majority's table, and it is a majority gate. <bookmark mark='c'/> Rewrite the bits, and the same circuit computes parity. <bookmark mark='d'/> This is a lookup table, and it is how a field-programmable gate array works: hundreds of thousands of six-input lookup tables, sixty-four bits each, with programmable wiring between them. Hardware you can change in a few seconds, used for prototyping chips, for network equipment, and for accelerators in data centres.",
+   "zh": "现在反过来想。<bookmark mark='a'/>在硬件里搭出这棵多路选择器树，叶子上不放常数，而放八位存储器。无论你存进哪八位，这个电路就计算那张真值表。<bookmark mark='b'/>存进多数函数的表，它就是一个多数门。<bookmark mark='c'/>改写这些位，同一个电路就计算奇偶。<bookmark mark='d'/>这就是查找表，也是现场可编程门阵列的工作方式：几十万个六输入查找表，每个六十四位，之间是可编程的连线。几秒钟就能改变的硬件，用于芯片原型、网络设备和数据中心的加速器。"
+  },
+  "2d93691a8067": {
+   "scene": "Mux",
+   "en": "One more choosing circuit, which every memory needs. <bookmark mark='a'/> A decoder takes a number in binary, here three bits, and lights exactly one of eight output wires: the one with that number. <bookmark mark='b'/> Count through the inputs and the lit wire walks down. Each output is an and of the inputs, plain or negated, which is chapter five's normal form, one term per wire. <bookmark mark='c'/> Pebble uses one to decide which of its sixteen registers to write, and every memory chip uses one to find the row you asked for.",
+   "zh": "再看一个做选择的电路，每个存储器都需要它。<bookmark mark='a'/>译码器接受一个二进制数，这里是三位，并点亮八根输出线中恰好一根：编号等于那个数的那根。<bookmark mark='b'/>把输入依次数一遍，点亮的线就一路往下走。每个输出是输入的且，各自原样或取反，这正是第5章的范式，每根线一项。<bookmark mark='c'/>Pebble 用一个译码器决定写十六个寄存器中的哪一个，每个存储芯片也用一个来找到你要的那一行。"
+  },
+  "aa3efdd1792e": {
+   "scene": "Bdd",
+   "en": "Chapter eight. Decision diagrams.",
+   "zh": "第8章。决策图。"
+  },
+  "0ca7c8bc2310": {
+   "scene": "Bdd",
+   "en": "Truth tables and normal forms are either huge or not unique. In 1986 Randal Bryant made a data structure that is often small and always unique. <bookmark mark='a'/> Start with a decision tree. Here is majority: test a, then b, then c, and read the answer at a leaf. Dashed lines are zero, solid lines one. It is just the truth table, spread out. <bookmark mark='b'/> Now apply two rules. Share any two identical pieces, so all the zero leaves become one leaf and all the ones another. And delete any test whose two branches lead to the same place, because it does not matter. <bookmark mark='c'/> Repeat until neither rule applies. What remains is a reduced ordered binary decision diagram: for majority, four tests instead of seven.",
+   "zh": "真值表和范式要么巨大，要么不唯一。1986年，兰德尔·布莱恩特提出了一种通常很小、而且总是唯一的数据结构。<bookmark mark='a'/>从一棵决策树开始。这是多数函数：先测 a，再测 b，再测 c，在叶子上读出答案。虚线是零，实线是一。它不过是摊开的真值表。<bookmark mark='b'/>现在应用两条规则。共享任意两个相同的部分，于是所有的零叶子变成一个叶子，所有的一叶子变成另一个。删去任何两个分支通向同一处的测试，因为它无关紧要。<bookmark mark='c'/>重复，直到两条规则都不再适用。剩下的就是简化有序二元决策图：对多数函数，四个测试而不是七个。"
+  },
+  "f1082806ccda": {
+   "scene": "Bdd",
+   "en": "There is a catch. <bookmark mark='a'/> Take x one and x two, or x three and x four, or x five and x six. Test the variables in their natural order, and the diagram is a neat ladder: eight nodes. <bookmark mark='b'/> Test all the odd ones first, then the even ones, and the diagram has to remember which of the first three were one before it can see their partners: sixteen nodes. <bookmark mark='c'/> Computed for more pairs, the good order grows by two nodes per pair; the bad order doubles. With fourteen variables, sixteen nodes against two hundred and fifty-six. Finding the best order is itself NP-hard, so real tools reorder heuristically as they go.",
+   "zh": "这里有个陷阱。<bookmark mark='a'/>取 x1 且 x2，或 x3 且 x4，或 x5 且 x6。按自然顺序测试变量，图是一架整齐的梯子：八个结点。<bookmark mark='b'/>先测所有奇数号的，再测偶数号的，图就必须记住前三个里哪些是一，才能看到它们的搭档：十六个结点。<bookmark mark='c'/>对更多的对计算：好的顺序每多一对只多两个结点；坏的顺序则翻倍。十四个变量时，十六个结点对两百五十六个。找最好的顺序本身是 NP 难的，所以实际工具一边算一边启发式地重排。"
+  },
+  "aff8560c5780": {
+   "scene": "Bdd",
+   "en": "Why go to this trouble? <bookmark mark='a'/> Because with the order fixed, every function has exactly one reduced diagram. <bookmark mark='b'/> So to check that a clever optimized circuit computes the same function as its simple specification, build both diagrams in one shared table and compare two pointers. <bookmark mark='c'/> And, or and not on diagrams, and asking whether any input makes the function true, are all fast, taking time proportional to the sizes of the diagrams involved. Counting how many inputs make a function true is fast too: one pass over the nodes. That made decision diagrams the workhorse of chip verification in the 1990s. <bookmark mark='d'/> The catch never goes away: Bryant also proved that the middle output bit of a multiplier has an exponentially large diagram under every possible order. Part 54 uses them anyway, where they work, and Part 26 meets the other great approach, satisfiability solvers.",
+   "zh": "为什么要费这个事？<bookmark mark='a'/>因为顺序固定后，每个函数恰好有一个简化图。<bookmark mark='b'/>所以要检查一个巧妙优化过的电路是否和它简单的规格说明计算同一个函数，就在一张共享表里建出两个图，比较两个指针。<bookmark mark='c'/>在图上做且、或、非，以及问是否有某个输入使函数为真，都很快，时间与涉及的图的大小成正比。数出有多少个输入使函数为真也很快：扫一遍结点就行。这让决策图成了20世纪90年代芯片验证的主力。<bookmark mark='d'/>陷阱始终存在：布莱恩特还证明，乘法器中间那一位输出，在每一种可能的顺序下都有指数大的图。第54部分在它们管用的地方照样使用它们，第26部分则会遇到另一种伟大的方法，可满足性求解器。"
+  },
+  "b029c1dbbe2c": {
+   "scene": "Complexity",
+   "en": "Chapter nine. How many gates?",
+   "zh": "第9章。需要多少个门？"
+  },
+  "4e7bb7151b77": {
+   "scene": "Complexity",
+   "en": "A circuit has two costs. <bookmark mark='a'/> Its size, the number of gates, is area on the chip and power. Its depth, the longest path from an input to the output, is time: every gate on that path adds a delay. <bookmark mark='b'/> Parity of eight bits, as a chain of exclusive-ors: seven gates, seven deep. <bookmark mark='c'/> The same seven gates as a tree: three deep. Same size, less than half the time, and the gap grows: a chain is n deep, a tree log n. Part 4's adders are a long fight to turn chains into trees.",
+   "zh": "电路有两种代价。<bookmark mark='a'/>它的规模，也就是门的个数，是芯片面积和功耗。它的深度，从输入到输出的最长路径，是时间：路径上每个门都增加一份延迟。<bookmark mark='b'/>八位奇偶，做成一串异或门：七个门，七层深。<bookmark mark='c'/>同样七个门做成一棵树：三层深。规模相同，时间不到一半，而且差距会增长：一条链有 n 层深，一棵树只有 log n。第4部分的加法器，就是一场把链变成树的漫长战斗。"
+  },
+  "263d49f8be6c": {
+   "scene": "Complexity",
+   "en": "How many gates does a typical function need? Shannon answered in 1949 without designing a single circuit. He counted. <bookmark mark='a'/> A function of n inputs is a truth table with two to the n rows, so there are two to the two to the n functions. For twenty inputs, a number with three hundred and fifteen thousand digits. <bookmark mark='b'/> A circuit with s gates is a list of s choices: a kind of gate, and two input wires. So there are at most about n plus s squared, to the s, of them. <bookmark mark='c'/> If there are fewer small circuits than functions, most functions have no small circuit. Solving the inequality: almost every function of n inputs needs on the order of two to the n over n gates. Exponential. A random truth table is, almost surely, hopelessly hard.",
+   "zh": "一个典型的函数需要多少个门？香农在1949年没有设计任何电路就回答了。他数了数。<bookmark mark='a'/>n 个输入的函数是一张有 2 的 n 次方行的真值表，所以共有 2 的 2 的 n 次方个函数。二十个输入时，这是一个三十一万五千位的数。<bookmark mark='b'/>有 s 个门的电路是 s 个选择组成的清单：一种门，加两根输入线。所以这样的电路至多大约有 n 加 s 的平方的 s 次方个。<bookmark mark='c'/>如果小电路比函数少，大多数函数就没有小电路。解这个不等式：几乎每个 n 输入函数都需要大约 2 的 n 次方除以 n 个门。指数级。一张随机的真值表，几乎肯定是无可救药地难。"
+  },
+  "1471c13063ba": {
+   "scene": "Complexity",
+   "en": "Here are the numbers, computed. <bookmark mark='a'/> The gates most functions need grow like two to the n over n: for thirty inputs, tens of millions of gates. <bookmark mark='b'/> Compare a circuit that grows like n, the kind engineers actually build, down at the bottom. <bookmark mark='c'/> And it is tight: Oleg Lupanov showed in 1958 that about two to the n over n gates are always enough, for any function. Almost every function sits at that worst case. The functions we can build are the rare exceptions.",
+   "zh": "这是算出来的数字。<bookmark mark='a'/>大多数函数需要的门数按 2 的 n 次方除以 n 增长：三十个输入时，几千万个门。<bookmark mark='b'/>对比一个按 n 增长的电路，也就是工程师实际搭的那种，在最下面。<bookmark mark='c'/>而且这是紧的：奥列格·卢帕诺夫在1958年证明，大约 2 的 n 次方除以 n 个门对任何函数都总是够的。几乎每个函数都处在这个最坏情形。我们能搭出来的函数，才是罕见的例外。"
+  },
+  "155c02e0c0ef": {
+   "scene": "Complexity",
+   "en": "There is a second way to measure. <bookmark mark='a'/> A formula is a circuit in which every gate's output is used only once, so it is a tree, like the expressions of Part 2. A circuit may reuse a result as often as it likes. <bookmark mark='b'/> Sharing matters. Parity of n bits needs only about four n gates of and, or and not as a circuit. <bookmark mark='c'/> But as a formula, Valery Khrapchenko proved in 1971 that it needs at least n squared leaves, and n squared is enough. <bookmark mark='d'/> So sharing can save a polynomial factor. Whether it can ever save more than that, for some function, is another open question, and it is tangled up with whether problems can be solved quickly in parallel, which Part 10 meets.",
+   "zh": "还有第二种度量方式。<bookmark mark='a'/>公式是这样一种电路：每个门的输出只用一次，所以它是一棵树，就像第2部分的表达式。电路则可以随意重复使用一个结果。<bookmark mark='b'/>共享很重要。n 位奇偶作为电路，只需要大约 4n 个与、或、非门。<bookmark mark='c'/>但作为公式，瓦列里·赫拉普琴科在1971年证明，它至少需要 n 平方个叶子，而 n 平方也够了。<bookmark mark='d'/>所以共享能省下一个多项式因子。对某个函数，它是否能省下更多，是另一个悬而未决的问题，它和问题能否快速并行求解纠缠在一起，第10部分会遇到它。"
+  },
+  "5153e02849a5": {
+   "scene": "Complexity",
+   "en": "And now the embarrassment. <bookmark mark='a'/> Almost every function needs exponentially many gates. <bookmark mark='b'/> Yet name a specific function, one you can actually write down and check, and nobody has proved it needs more than about three point one times n gates. That record is from 2022. <bookmark mark='c'/> The reason it matters: proving that some problem in NP needs more than polynomially many gates would prove that P is not equal to NP, the most famous open problem in the field. <bookmark mark='d'/> In weaker models we can prove such things. Parity needs exponentially many terms in depth two, as chapter six showed, and Johan Håstad proved it needs exponential size in any constant depth. Part 27 explains why the general case has resisted every technique so far.",
+   "zh": "现在说说尴尬之处。<bookmark mark='a'/>几乎每个函数都需要指数多个门。<bookmark mark='b'/>可是说出一个具体的函数，一个你真能写下来并检验的函数，却没有人证明过它需要超过大约 3.1 乘 n 个门。这个纪录来自2022年。<bookmark mark='c'/>这之所以重要，是因为证明 NP 中某个问题需要超多项式个门，就证明了 P 不等于 NP，这个领域最著名的未解问题。<bookmark mark='d'/>在更弱的模型里我们能证明这样的事。奇偶在深度二需要指数多项，正如第6章所示，约翰·霍斯塔德证明了它在任何常数深度下都需要指数规模。第27部分会解释，为什么一般情形至今抵挡住了每一种技巧。"
+  },
+  "7a581ba30b85": {
+   "scene": "Timing",
+   "en": "Chapter ten. Gates take time.",
+   "zh": "第10章。门需要时间。"
+  },
+  "d699fbdaa0b7": {
+   "scene": "Timing",
+   "en": "So far a gate's output changed the instant its inputs did. Real gates take time: a few picoseconds to charge the wire they drive. <bookmark mark='a'/> In a circuit, a change at an input ripples forward gate by gate. <bookmark mark='b'/> The output is not settled until the change has travelled the longest path, here four gates deep. That path is the critical path, and it sets how fast the whole circuit can run. <bookmark mark='c'/> Every block in this part is counted in depth as well as size, because in Part 5 the critical path becomes the length of Pebble's clock cycle. For scale: a four gigahertz clock ticks every two hundred and fifty picoseconds, and a fast gate takes around ten, so a processor gets only a couple of dozen gate delays per cycle. Every design decision in act two is about living inside that budget.",
+   "zh": "到目前为止，门的输入一变，输出立刻就变。真实的门需要时间：几皮秒来给它驱动的导线充电。<bookmark mark='a'/>在电路里，一个输入的变化一个门一个门地向前传播。<bookmark mark='b'/>直到这个变化走完最长的路径，这里是四个门深，输出才稳定。这条路径就是关键路径，它决定了整个电路能跑多快。<bookmark mark='c'/>这一部分的每个部件都既算规模也算深度，因为在第5部分，关键路径会变成 Pebble 时钟周期的长度。打个比方：四吉赫的时钟每二百五十皮秒跳一次，一个快门大约要十皮秒，所以处理器每个周期只有二十来个门延迟可用。第二幕的每一个设计决策，都是为了在这个预算里过日子。"
+  },
+  "bcc8a007bc38": {
+   "scene": "Timing",
+   "en": "Delays cause stranger things than slowness. <bookmark mark='a'/> Take f equals a b plus not a c, with b and c held at one. Then f is a or not a, which is always one, whatever a does. <bookmark mark='b'/> Now simulate it with every gate taking one unit of time, and let a fall from one to zero. <bookmark mark='c'/> The a b term drops immediately. But the not-a term needs the inverter to react first, so it rises one delay late. For that one moment, both terms are zero, and the output, which should never change, flickers to zero. This is a glitch, from a static hazard. If anything downstream is watching at that moment, it sees a wrong answer.",
+   "zh": "延迟带来的不只是慢，还有更奇怪的事。<bookmark mark='a'/>取 f 等于 a b 加非 a c，b 和 c 保持为一。那么 f 就是 a 或非 a，无论 a 怎样都恒为一。<bookmark mark='b'/>现在模拟它，每个门耗时一个单位，让 a 从一降到零。<bookmark mark='c'/>a b 这一项立刻变低。但非 a 这一项要等反相器先反应，所以晚一个延迟才升高。在那一瞬间，两项都是零，本该永不改变的输出，闪了一下变成零。这就是毛刺，来自静态险象。如果下游有什么东西恰好在那一刻观察，它就会看到错误的答案。"
+  },
+  "2a7933fc47f9": {
+   "scene": "Timing",
+   "en": "One fix is surprising. <bookmark mark='a'/> Add the term b c, which the laws of chapter one say is redundant: it changes nothing about the function. <bookmark mark='b'/> But during the transition it holds the output up, and the glitch is gone. On a Karnaugh map, the rule is to cover every pair of neighbouring ones with a single loop. <bookmark mark='c'/> The more common cure is to stop caring: make every circuit settle before anybody looks at it, by reading outputs only at the tick of a clock. That is how Part 5 builds memory and time.",
+   "zh": "有一种修法出人意料。<bookmark mark='a'/>加上 b c 这一项，第1章的定律说它是多余的：它丝毫不改变函数。<bookmark mark='b'/>但在跳变期间，它把输出撑住，毛刺就消失了。在卡诺图上，规则是用一个圈覆盖每一对相邻的一。<bookmark mark='c'/>更常见的办法是不再在乎：让每个电路在任何人观察之前先稳定下来，只在时钟跳动时读取输出。这就是第5部分搭建存储和时间的方式。"
+  },
+  "e6a4053dff39": {
+   "scene": "Timing",
+   "en": "Where does the delay come from? <bookmark mark='a'/> A wire, and every gate input on it, is a small capacitor, and the transistor driving it is a resistor. Charging a capacitor through a resistor takes time: the voltage rises along an exponential, with a time constant R times C. <bookmark mark='b'/> A gate that drives four others has four times the load, and takes four times as long to reach the threshold. <bookmark mark='c'/> So fan-out, the number of inputs a gate drives, costs time, and chip designers limit it and insert buffers to drive long wires. Today, on the largest chips, the wires are slower than the gates.",
+   "zh": "延迟从哪里来？<bookmark mark='a'/>一根导线，以及它上面的每个门输入，都是一个小电容，而驱动它的晶体管是一个电阻。通过电阻给电容充电需要时间：电压沿指数曲线上升，时间常数是 R 乘 C。<bookmark mark='b'/>驱动四个门的门负载是四倍，要四倍的时间才能达到阈值。<bookmark mark='c'/>所以扇出，即一个门驱动的输入个数，是要花时间的，芯片设计者会限制它，并插入缓冲器来驱动长导线。在今天最大的芯片上，导线比门还慢。"
+  },
+  "7125755bb6d6": {
+   "scene": "Blocks",
+   "en": "Chapter eleven. The blocks Pebble needs.",
+   "zh": "第11章。Pebble 需要的部件。"
+  },
+  "42316259346e": {
+   "scene": "Blocks",
+   "en": "With the tools of this part we can now build the parts a processor needs. Pebble will compare numbers, for instructions like branch if less than. <bookmark mark='a'/> Is a less than b? Scan from the most significant bit. While the bits agree, the answer depends on what comes later. <bookmark mark='b'/> At the first place they differ, the number with the zero there is smaller. Here a has a one where b has a zero, so a is bigger. <bookmark mark='c'/> As a formula: an equal signal for each bit, an exclusive-nor, and a sum of terms, one per position, each requiring all the higher bits to be equal. Built and checked on every pair of inputs, the four-bit version takes twenty-one gates.",
+   "zh": "有了这一部分的工具，我们现在可以搭出处理器需要的部件。Pebble 要比较数，用于“小于则跳转”这类指令。<bookmark mark='a'/>a 小于 b 吗？从最高位开始扫描。只要各位一致，答案就取决于后面的位。<bookmark mark='b'/>在第一个不同的位置，那一位是零的数更小。这里 a 是一而 b 是零，所以 a 更大。<bookmark mark='c'/>写成公式：每一位一个“相等”信号，即一个同或门，再加上一串项的和，每个位置一项，每一项都要求所有更高的位相等。在每一对输入上搭建并检查过，四位的版本用二十一个门。"
+  },
+  "778b3acbc55d": {
+   "scene": "Blocks",
+   "en": "Next, a priority encoder. <bookmark mark='a'/> Given eight wires, report the position of the highest one that is on. Here, bits five, three and two are on; the answer is five, and a valid flag says that some bit was on at all. <bookmark mark='b'/> The circuit first keeps only the highest one, by and-ing each bit with not of everything above it, and then turns that single hot wire back into a number. Processors use it to decide which interrupt to serve first, and to normalize floating-point numbers by counting leading zeros.",
+   "zh": "接下来是优先编码器。<bookmark mark='a'/>给定八根线，报告亮着的最高那一根的位置。这里第五、三、二位亮着；答案是五，还有一个有效标志说明确实有某一位亮着。<bookmark mark='b'/>电路先只保留最高的那一个，方法是把每一位与它上面所有位的非相与，然后把这一根热线变回一个数。处理器用它决定先服务哪个中断，以及通过数前导零来规格化浮点数。"
+  },
+  "2b7db5c958fa": {
+   "scene": "Blocks",
+   "en": "Shifting a number left by k places multiplies it by two to the k, and Pebble has instructions that shift by any amount from zero to thirty-one. Doing it one place at a time would take thirty-one steps. <bookmark mark='a'/> A barrel shifter does it in log n stages instead. Write the shift amount in binary. The first stage shifts by one, or not, according to the lowest bit; the second by two, or not; the third by four. <bookmark mark='b'/> To shift twenty-three by five, which is four plus one: shift by one, skip the two, shift by four. <bookmark mark='c'/> Each stage is a row of multiplexers, so any shift takes the same time: three multiplexers deep for eight bits, five for thirty-two.",
+   "zh": "把一个数左移 k 位，等于乘以 2 的 k 次方，Pebble 有指令可以移动零到三十一的任意位数。一次移一位要三十一步。<bookmark mark='a'/>桶形移位器只用 log n 级就做到了。把移位数写成二进制。第一级按最低位决定移一位或不移；第二级移两位或不移；第三级移四位或不移。<bookmark mark='b'/>把二十三移五位，五等于四加一：移一位，跳过二，移四位。<bookmark mark='c'/>每一级是一排多路选择器，所以任何移位都花同样的时间：八位时三个选择器深，三十二位时五个。"
+  },
+  "4253c4b1498f": {
+   "scene": "Blocks",
+   "en": "Here is everything this chapter built, plus the decoder and multiplexer from chapter seven, with their costs. <bookmark mark='a'/> Each one is a netlist in this series' hardware library, simulated on every possible input and compared with its specification: for the eight-bit comparator, all sixty-five thousand pairs. <bookmark mark='b'/> The last columns rebuild each block from NAND gates only, as chapter five promised was possible: roughly twice the gates, and twice the depth. Pebble will be built from these blocks, and nothing else.",
+   "zh": "这是本章搭建的全部部件，加上第7章的译码器和多路选择器，以及它们的代价。<bookmark mark='a'/>每一个都是本系列硬件库里的网表，在每一种可能的输入上模拟，并与它的规格说明比较：对八位比较器，是全部六万五千对。<bookmark mark='b'/>最后几列把每个部件只用与非门重新搭建，正如第5章承诺的那样可行：门数大约翻倍，深度也大约翻倍。Pebble 将用这些部件搭成，别无其他。"
+  },
+  "2ead889a6a15": {
+   "scene": "Simulator",
+   "en": "Chapter twelve. Our hardware layer.",
+   "zh": "第12章。我们的硬件层。"
+  },
+  "e59b97f97185": {
+   "scene": "Simulator",
+   "en": "Every circuit in this series, from this part's comparators to Pebble itself in Part 6, runs on one small piece of code, and it is worth seeing how it works. <bookmark mark='a'/> A circuit is built by calling functions: make three inputs, an exclusive-or, another, two ands and an or. That is a full adder, Part 4's first circuit. <bookmark mark='b'/> Underneath, the circuit is just a numbered list of wires: each entry says what kind of gate drives it and which earlier wires it reads. <bookmark mark='c'/> Because a gate can only read wires that already exist, the list is in an order where every gate comes after its inputs. So evaluating the whole circuit is one pass down the list.",
+   "zh": "本系列中的每一个电路，从这一部分的比较器到第6部分的 Pebble 本身，都运行在一小段代码上，值得看看它是怎么工作的。<bookmark mark='a'/>电路通过调用函数来搭建：建三个输入，一个异或，再一个，两个与，一个或。这就是全加器，第4部分的第一个电路。<bookmark mark='b'/>在底层，电路只是一张编了号的导线清单：每一项说明是哪种门驱动它，以及它读取哪些更早的导线。<bookmark mark='c'/>因为一个门只能读取已经存在的导线，清单的顺序保证每个门都排在它的输入之后。所以求值整个电路，就是沿清单走一遍。"
+  },
+  "63a9b8941307": {
+   "scene": "Simulator",
+   "en": "The other trick makes it fast. <bookmark mark='a'/> Each wire does not hold one bit. It holds a 64-bit machine word, and bit number j of that word is the wire's value in test number j. <bookmark mark='b'/> So a single and instruction on two words evaluates an and gate on sixty-four different inputs at once. <bookmark mark='c'/> Checking the eight-bit comparator on all sixty-five thousand of its inputs takes a thousand and twenty-four words per wire, one pass, and a fraction of a second. This is bit-parallel simulation, and chip companies use the same idea, on far bigger machines, before they build anything.",
+   "zh": "另一个诀窍让它很快。<bookmark mark='a'/>每根导线存的不是一位，而是一个64位的机器字，这个字的第 j 位是这根导线在第 j 个测试中的值。<bookmark mark='b'/>所以对两个字做一条与指令，就一次在六十四个不同的输入上求值了一个与门。<bookmark mark='c'/>在全部六万五千个输入上检查八位比较器，每根导线要一千零二十四个字，走一遍，不到一秒。这就是位并行模拟，芯片公司在造出任何东西之前，也在大得多的机器上用同样的想法。"
+  },
+  "6a4eef137cb0": {
+   "scene": "Simulator",
+   "en": "The library can also rewrite a circuit. <bookmark mark='a'/> Every gate is replaced by its construction from chapter five: a not by one NAND, an and by two, an or by three, an exclusive-or by four. <bookmark mark='b'/> The comparator's twenty-one gates become fifty-three NANDs; the barrel shifter's ninety-six become a hundred and ninety-two. <bookmark mark='c'/> And then the rewritten circuit goes through the same exhaustive check as the original. That is how Part 6 can honestly say that Pebble runs on nothing but NAND gates: the claim is checked, not assumed.",
+   "zh": "这个库还能改写电路。<bookmark mark='a'/>每个门都被替换成第5章的构造：非换成一个与非门，与换成两个，或换成三个，异或换成四个。<bookmark mark='b'/>比较器的二十一个门变成五十三个与非门；桶形移位器的九十六个变成一百九十二个。<bookmark mark='c'/>然后改写后的电路要经过和原电路同样的穷举检查。这就是为什么第6部分可以诚实地说，Pebble 只用与非门运行：这个说法是检查过的，而不是假设的。"
+  },
+  "1128acd2f9e6": {
+   "scene": "Simulator",
+   "en": "So every block in this series is checked the same way. <bookmark mark='a'/> On one side, the specification, written as plain arithmetic. On the other, the gate-level implementation. <bookmark mark='b'/> Run both on every possible input, and compare. For the comparator, sixty-five thousand inputs, all equal. <bookmark mark='c'/> This only works for small blocks: at thirty-two input bits there are four billion cases, and a sixty-four-bit adder has two to the hundred and twenty-eight. Beyond that, verification needs the decision diagrams of chapter eight, the satisfiability solvers of Part 26, or the machine-checked proofs of Part 54.",
+   "zh": "所以本系列的每个部件都用同样的方式检查。<bookmark mark='a'/>一边是规格说明，用普通算术写成。另一边是门级实现。<bookmark mark='b'/>在每一种可能的输入上运行两者，然后比较。对比较器，六万五千个输入，全部相等。<bookmark mark='c'/>这只对小部件管用：三十二个输入位时有四十亿种情形，六十四位加法器有 2 的一百二十八次方种。超出这个范围，验证就需要第8章的决策图、第26部分的可满足性求解器，或第54部分的机器检查证明。"
+  },
+  "fc5b589f8d0b": {
+   "scene": "History",
+   "en": "Chapter thirteen. Machines of switches.",
+   "zh": "第13章。开关搭成的机器。"
+  },
+  "b4b44013a35d": {
+   "scene": "History",
+   "en": "Shannon's thesis arrived just as people started building computers from switches. <bookmark mark='a'/> In 1937 George Stibitz at Bell Labs wired a relay adder on his kitchen table. In Berlin, Konrad Zuse built the Z1, binary and mechanical, and then in 1941 the Z3, with two thousand six hundred relays, the first working programmable computer. In Iowa, John Atanasoff and Clifford Berry built an electronic calculator with vacuum tubes. At Bletchley Park, Colossus used tubes to break German teleprinter ciphers. And in Philadelphia, ENIAC used seventeen and a half thousand of them and a hundred and fifty kilowatts. <bookmark mark='b'/> Different countries, different purposes, mostly in secret, and all built on the same ideas: binary, switches, and Boole's algebra.",
+   "zh": "香农的论文问世时，人们正开始用开关造计算机。<bookmark mark='a'/>1937年，贝尔实验室的乔治·斯蒂比茨在他的厨房桌子上接出了一个继电器加法器。在柏林，康拉德·楚泽造出了 Z1，二进制、机械式，然后在1941年造出 Z3，有两千六百个继电器，是第一台能工作的可编程计算机。在爱荷华，约翰·阿塔纳索夫和克利福德·贝里用真空管造了一台电子计算器。在布莱切利园，巨人机用真空管破译德国的电传密码。在费城，ENIAC 用了一万七千五百个真空管和一百五十千瓦。<bookmark mark='b'/>不同的国家，不同的目的，大多在秘密中进行，而全都建立在同样的想法上：二进制、开关和布尔代数。"
+  },
+  "b8a941fc76b7": {
+   "scene": "History",
+   "en": "Two of these machines are worth a closer look. <bookmark mark='a'/> Zuse's Z3 worked in binary floating point, twenty-two bits per number, and managed about five additions a second. Its program was punched into discarded cinema film. It was destroyed in an air raid in 1943, and in 1998 Raúl Rojas showed that, with some contortions, it could in principle compute anything a Turing machine can. <bookmark mark='b'/> ENIAC was decimal and a thousand times faster, but it was programmed by plugging cables and setting switches, which could take days. The six women who first worked out how to do that, Kay McNulty, Betty Jennings, Betty Snyder, Marlyn Wescoff, Fran Bilas and Ruth Lichterman, were for decades left out of its history. <bookmark mark='c'/> What both machines lacked was the idea of Part 1's universal machine: a program stored as data in the computer's own memory. Part 6 gives Pebble exactly that.",
+   "zh": "其中两台机器值得细看。<bookmark mark='a'/>楚泽的 Z3 用二进制浮点数，每个数二十二位，每秒大约能做五次加法。它的程序打孔在废弃的电影胶片上。它在1943年的一次空袭中被毁，1998年劳尔·罗哈斯证明，经过一些曲折，它在原则上能计算图灵机能计算的任何东西。<bookmark mark='b'/>ENIAC 是十进制的，快一千倍，但它靠插接电缆和设置开关来编程，可能要花好几天。最早摸索出怎么做的六位女性，凯·麦克纳尔蒂、贝蒂·詹宁斯、贝蒂·斯奈德、玛琳·韦斯科夫、弗兰·比拉斯和露丝·利希特曼，几十年来一直被排除在它的历史之外。<bookmark mark='c'/>两台机器都缺少第1部分通用机的那个想法：把程序作为数据存放在计算机自己的存储器里。第6部分正好给 Pebble 这一点。"
+  },
+  "3550d1a6762c": {
+   "scene": "History",
+   "en": "Then came the transistor in 1947 and the integrated circuit in 1958, and the switches started shrinking. <bookmark mark='a'/> In 1965 Gordon Moore, later a founder of Intel, noticed that the number of transistors on a chip was doubling every year, and predicted it would continue; in 1975 he revised it to every two years. <bookmark mark='b'/> Here are some landmark chips on a logarithmic scale, from Intel's 4004 in 1971, with two thousand three hundred transistors, to GPUs of 2024 with about two hundred billion. <bookmark mark='c'/> Half a century of doubling every two years, almost exactly on the line. Each of those transistors is the switch of chapter three, and each chip is, at heart, Shannon's algebra.",
+   "zh": "接着是1947年的晶体管和1958年的集成电路，开关开始缩小。<bookmark mark='a'/>1965年，后来成为英特尔创始人之一的戈登·摩尔注意到，芯片上的晶体管数每年翻一番，并预言这会继续下去；1975年他修正为每两年一番。<bookmark mark='b'/>这里是一些标志性芯片，画在对数坐标上，从1971年英特尔的4004，两千三百个晶体管，到2024年约两千亿个晶体管的 GPU。<bookmark mark='c'/>半个世纪，每两年翻一番，几乎恰好落在直线上。其中每个晶体管都是第3章的那个开关，而每块芯片，本质上都是香农的代数。"
+  },
+  "2584c358c0f3": {
+   "scene": "Reversible",
+   "en": "Chapter fourteen. Gates that forget nothing.",
+   "zh": "第14章。什么都不忘的门。"
+  },
+  "55f65930d7c0": {
+   "scene": "Reversible",
+   "en": "One last question about gates, and a glimpse of the end of the series. <bookmark mark='a'/> An and gate takes four possible inputs to two possible outputs. Three different inputs all give zero. <bookmark mark='b'/> Seeing a zero, you cannot tell which of them it was: the gate has destroyed information. <bookmark mark='c'/> In 1961 Rolf Landauer, at IBM, argued that destroying information has a physical price. Erasing one bit must release at least k T log two of heat, about three zeptojoules at room temperature. Real gates spend about a million times more than that, so the limit is far away, but it is a law of physics, not of engineering.",
+   "zh": "关于门的最后一个问题，也是对系列结尾的一瞥。<bookmark mark='a'/>与门把四种可能的输入映到两种可能的输出。三种不同的输入都给出零。<bookmark mark='b'/>看到一个零，你分不清是其中哪一种：这个门销毁了信息。<bookmark mark='c'/>1961年，IBM 的罗尔夫·兰道尔论证，销毁信息有物理代价。擦除一位至少要放出 k T 乘 ln 2 的热量，室温下大约三仄焦。真实的门耗费的大约是它的一百万倍，所以这个极限还很远，但它是物理定律，而不是工程问题。"
+  },
+  "54916ff43932": {
+   "scene": "Reversible",
+   "en": "Can you compute without forgetting? <bookmark mark='a'/> Tommaso Toffoli's gate has three inputs and three outputs. The first two pass straight through; the third is flipped exactly when the first two are both one. <bookmark mark='b'/> Its table is a shuffle of the eight states: every output comes from exactly one input, so nothing is lost, and applying it twice gives back what you started with. <bookmark mark='c'/> Feed it a constant one on the third wire, and the third output is not a and b: a NAND. So by chapter five, reversible gates can compute anything, as Charles Bennett showed in 1973, as long as you keep the extra outputs instead of throwing them away. <bookmark mark='d'/> Edward Fredkin's gate is another: it swaps its last two wires when the first is one, and it never changes how many ones there are, so it can be pictured as billiard balls bouncing through a maze, a model Fredkin and Toffoli proposed in 1982.",
+   "zh": "能不能计算而不遗忘？<bookmark mark='a'/>托马索·托福利的门有三个输入和三个输出。前两个直接通过；第三个在前两个都为一时恰好翻转。<bookmark mark='b'/>它的表是八个状态的一次洗牌：每个输出恰好来自一个输入，所以什么都没丢，连用两次就回到起点。<bookmark mark='c'/>在第三根线上输入常数一，第三个输出就是 a 且 b 的非：一个与非门。所以由第5章，可逆门能计算任何东西，正如查尔斯·贝内特在1973年所证明的，只要你保留额外的输出而不把它们扔掉。<bookmark mark='d'/>爱德华·弗雷德金的门是另一种：当第一根线为一时交换后两根线，而且它从不改变一的个数，所以可以想象成在迷宫里弹跳的台球，这是弗雷德金和托福利在1982年提出的模型。"
+  },
+  "8583dca30657": {
+   "scene": "Reversible",
+   "en": "This is not just a curiosity. <bookmark mark='a'/> A quantum computer must be reversible: its gates are rotations of a state, and every rotation can be undone. <bookmark mark='b'/> The Toffoli gate is one of its standard gates, and in Part 53 we will simulate a small quantum computer, Toffoli gates included. <bookmark mark='c'/> And the idea of keeping what you would have thrown away, so you can go back, appears much higher up the tower, in the logs that let databases and file systems undo a crash.",
+   "zh": "这不只是个奇谈。<bookmark mark='a'/>量子计算机必须是可逆的：它的门是对状态的旋转，而每一个旋转都能撤销。<bookmark mark='b'/>托福利门是它的标准门之一，在第53部分我们会模拟一台小小的量子计算机，托福利门也在其中。<bookmark mark='c'/>而保留本会扔掉的东西、好让你能够回退的想法，在塔的高处还会出现，在让数据库和文件系统从崩溃中恢复的日志里。"
+  },
+  "f9001f6335f2": {
+   "scene": "Outro",
+   "en": "What we built in this part. Shannon's dictionary, which turns switching circuits into Boole's algebra and back. The transistor as a switch, and the CMOS inverter, whose steep curve throws noise away at every stage. NAND and NOR in four transistors each, and the proof that NAND alone builds everything. Normal forms, maps and decision diagrams, the ways to write a function down and to shrink it. And Shannon's counting argument: almost every function needs an enormous circuit, though nobody can name one.",
+   "zh": "这一部分我们搭建了什么。香农的词典，把开关电路翻译成布尔代数，再翻译回来。作为开关的晶体管，以及 CMOS 反相器，它陡峭的曲线在每一级都把噪声扔掉。各用四个晶体管的与非门和或非门，以及只用与非门就能搭出一切的证明。范式、卡诺图和决策图，写下一个函数并把它缩小的种种方法。还有香农的计数论证：几乎每个函数都需要巨大的电路，尽管没人能指出一个来。"
+  },
+  "3e668770752c": {
+   "scene": "Outro",
+   "en": "Where this comes back. Gates, multiplexers and decoders build the adders of Part 4, the memories of Part 5 and Pebble itself in Part 6. Depth and the critical path decide how fast those circuits run, and Part 7's pipeline exists to shorten it. The power formula explains Part 10's turn to many cores. Decision diagrams come back in Part 54 to check hardware and software, circuit lower bounds in Parts 26 and 27, and reversible gates in Part 53's quantum computer.",
+   "zh": "这些会在哪里再出现。门、多路选择器和译码器会搭成第4部分的加法器、第5部分的存储器，以及第6部分的 Pebble 本身。深度和关键路径决定这些电路跑多快，第7部分的流水线就是为了缩短它。功率公式解释了第10部分转向多核。决策图会在第54部分回来检查硬件和软件，电路下界在第26和27部分，可逆门在第53部分的量子计算机里。"
+  },
+  "823ec1a629c4": {
+   "scene": "Outro",
+   "en": "In practice: hardware engineers write circuits as programs, in Verilog, VHDL or Chisel, much like this series' netlists. Synthesis tools apply the laws of chapter one, at enormous scale, to turn those programs into gates. FPGAs run them as lookup tables. Equivalence checkers, built on decision diagrams and satisfiability solvers, prove the optimized circuit still matches the specification. And a large part of every chip project is timing closure: making every critical path fit inside the clock.",
+   "zh": "在实践中：硬件工程师把电路写成程序，用 Verilog、VHDL 或 Chisel，很像本系列的网表。综合工具以极大的规模运用第1章的定律，把这些程序变成门。FPGA 把它们作为查找表运行。建立在决策图和可满足性求解器之上的等价性检查器，证明优化后的电路仍然符合规格说明。而每个芯片项目的一大部分工作是时序收敛：让每条关键路径都装进时钟周期里。"
+  },
+  "81cb79eb3359": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to use this series' hardware library yourself.",
+   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自使用本系列的硬件库。"
+  },
+  "2d312369d255": {
+   "scene": "Outro",
+   "en": "Next time: arithmetic. With gates in hand, we teach them to count. A half adder, a full adder, and a ripple of them that adds numbers of any length, slowly; then the tricks that make addition take log n time instead of n, two's complement for negative numbers, multiplication, and the arithmetic unit at the heart of Pebble.",
+   "zh": "下一次：算术。有了门，我们教它们数数。半加器、全加器，以及把它们串起来、能加任意长度的数、但很慢的行波加法器；然后是让加法只需 log n 而不是 n 时间的技巧、表示负数的补码、乘法，以及 Pebble 核心的算术单元。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 3, Logic from Switches",
+ "chapters_en": {
+  "Hook": "A thesis about switches",
+  "Boole": "1. Boole's algebra",
+  "Relays": "2. Circuits are expressions",
+  "Transistors": "3. The transistor",
+  "Cmos": "4. CMOS gates",
+  "Complete": "5. One gate is enough",
+  "Normal": "6. Normal forms and maps",
+  "Mux": "7. Choosing with gates",
+  "Bdd": "8. Decision diagrams",
+  "Complexity": "9. How many gates?",
+  "Timing": "10. Gates take time",
+  "Blocks": "11. The blocks Pebble needs",
+  "Simulator": "12. Our hardware layer",
+  "History": "13. Machines of switches",
+  "Reversible": "14. Gates that forget nothing",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

@@ -166,13 +166,53 @@ class Complexity(VoiceoverScene):
     # ------------------------------------------------------------------
     def formulas(self):
         head = label(r"Formulas against circuits", font_size=38).to_edge(UP, buff=0.35)
-        lines = VGroup(*[label(t, font_size=28, color=c) for t, c in (
-            (r"a \textit{formula} is a circuit that never reuses a gate's output: \ a tree", GREY_A),
-            (r"a \textit{circuit} may share: \ one output can feed many gates", GREY_A),
-            (r"parity of $n$ bits: \ a circuit of $n - 1$ XORs, \ about $4n$ gates of AND, OR, NOT", YES),
-            (r"as a formula of AND, OR, NOT: \ at least $n^2$ leaves \ (Khrapchenko, 1971), \ and $n^2$ suffice", NO),
-            (r"sharing can save a polynomial; \ whether it ever saves more \ is open", HEAD),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(DOWN * 0.1)
+        defs = VGroup(label(r"a \textit{formula} never reuses a gate's output: \ it is a tree", font_size=26,
+                            color=GREY_A),
+                      label(r"a \textit{circuit} may share: \ one output can feed many gates", font_size=26,
+                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(head, DOWN, buff=0.3)
+        # parity of four bits as an and/or formula with negations at the leaves: 16 leaves
+        xor = lambda u, v: [(u, 0), (v, 1), (u, 1), (v, 0)]       # (u and not v) or (not u and v)
+        xnor = lambda u, v: [(u, 0), (v, 0), (u, 1), (v, 1)]      # (u and v) or (not u and not v)
+        lits = xor(1, 2) + xnor(3, 4) + xnor(1, 2) + xor(3, 4)
+        vcol = {1: DATA, 2: CTRL, 3: FUNC, 4: HEAD}
+        cx, top, dy, sp = -3.2, 0.9, 0.78, 0.4
+        leaf_y = top - 4 * dy
+        leaves = VGroup(*[MathTex(rf"\bar x_{v}" if neg else rf"x_{v}", font_size=24, color=vcol[v]).move_to(
+            [cx + (i - 7.5) * sp, leaf_y, 0]) for i, (v, neg) in enumerate(lits)])
+        nodes, edges = VGroup(), VGroup()
+        below = [m.get_center() for m in leaves]
+        for lvl in (3, 2, 1, 0):
+            sym = r"\wedge" if lvl % 2 else r"\vee"
+            here = []
+            for i in range(2 ** lvl):
+                kids = below[2 * i: 2 * i + 2]
+                p = np.array([(kids[0][0] + kids[1][0]) / 2, top - lvl * dy, 0])
+                for k in kids:
+                    d = (k - p) / np.linalg.norm(k - p)
+                    edges.add(Line(p + d * 0.17, k - d * (0.17 if lvl < 3 else 0.2), color=GREY_C, stroke_width=2))
+                nodes.add(VGroup(Circle(0.17, stroke_color=GREY_A, stroke_width=2, fill_color="#121722",
+                                        fill_opacity=1), MathTex(sym, font_size=22, color=GREY_A)).move_to(p))
+                here.append(p)
+            below = here
+        ftree = VGroup(edges, nodes, leaves)
+        flab = label(r"formula: \ 16 leaves \ $= n^2$", font_size=26, color=NO).next_to(leaves, DOWN, buff=0.25)
+        # the same function as a circuit: three XORs, each input read once
+        o = np.array([2.6, -0.9, 0])
+        g1 = gate("XOR", size=0.6).move_to(o + np.array([-0.4, 0.75, 0]))
+        g2 = gate("XOR", size=0.6).move_to(o + np.array([-0.4, -0.75, 0]))
+        g3 = gate("XOR", size=0.6).move_to(o + np.array([1.2, 0, 0]))
+        ins = VGroup()
+        for gg, (u, v) in ((g1, (1, 2)), (g2, (3, 4))):
+            for pin, w in zip(gg.inp, (u, v)):
+                ins.add(MathTex(rf"x_{w}", font_size=24, color=vcol[w]).next_to(pin(), LEFT, buff=0.35))
+                ins.add(Line(pin() + LEFT * 0.3, pin(), color=WIRE, stroke_width=2))
+        circ = VGroup(g1, g2, g3, ins, wire(g1.out(), g3.inp[0]()), wire(g2.out(), g3.inp[1]()),
+                      Line(g3.out(), g3.out() + RIGHT * 0.4, color=WIRE, stroke_width=2))
+        clab = label(r"circuit: \ 3 XORs \ $\approx 4n$ gates", font_size=26, color=YES).next_to(circ, DOWN, buff=0.45)
+        khr = label(r"parity as a formula: \ $\ge n^2$ leaves \ (Khrapchenko, 1971), \ and $n^2$ suffice", font_size=26,
+                    color=NO).to_edge(DOWN, buff=0.3).shift(UP * 0.0)
+        tail = label(r"sharing can save a polynomial; \ whether it ever saves more \ is open", font_size=26,
+                     color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "There is a second way to measure. <bookmark mark='a'/> A formula is a circuit in which every gate's output "
             "is used only once, so it is a tree, like the expressions of Part 2. A circuit may reuse a result as often "
@@ -184,28 +224,44 @@ class Complexity(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(lines[0]), FadeIn(lines[1]))
+            self.play(FadeIn(defs))
             vo.wait_until("b")
-            self.play(FadeIn(lines[2]))
+            self.play(FadeIn(circ, lag_ratio=0.05), FadeIn(clab))
             vo.wait_until("c")
-            self.play(FadeIn(lines[3]))
+            self.play(Create(edges), FadeIn(nodes), run_time=1.6)
+            self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in leaves], lag_ratio=0.06), FadeIn(flab))
+            self.play(FadeIn(khr))
             vo.wait_until("d")
-            self.play(FadeIn(lines[4]))
+            self.play(FadeOut(khr), FadeIn(tail))
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def gap(self):
         head = label(r"The embarrassing gap", font_size=38).to_edge(UP, buff=0.4)
-        lines = VGroup(*[label(t, font_size=28, color=c) for t, c in (
-            (r"almost every function needs $\approx 2^n / n$ gates", FUNC),
-            (r"yet for no \textit{explicit} function \ (one we can write down, \ in NP) \\ has anyone proved more than "
-             r"about $3.1\,n$ \ (Li and Yang, 2022)", LIMIT),
-            (r"a superpolynomial lower bound for such a function \ would prove P $\ne$ NP", HEAD),
+        n = 100
+        most = math.log10(2 ** n / n)
+        proved = math.log10(3.1 * n)
+        scale, x0, y0 = 0.36, -5.6, 0.15
+        axis = NumberLine(x_range=[0, 30, 5], length=30 * scale, color=GREY_C, include_ticks=True,
+                          stroke_width=2).move_to([x0 + 15 * scale, y0, 0])
+        ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(axis.n2p(k), DOWN, buff=0.15)
+                         for k in range(0, 31, 5)])
+        cap = note(rf"gates needed by a function of $n = {n}$ inputs \ (log scale)", font_size=22).next_to(
+            axis, DOWN, buff=0.6).align_to(axis, LEFT)
+        bar_most = Rectangle(width=most * scale, height=0.34, stroke_width=0, fill_color=FUNC, fill_opacity=0.85)
+        bar_most.move_to(axis.n2p(0) + UP * 1.55, aligned_edge=LEFT)
+        bar_pr = Rectangle(width=proved * scale, height=0.34, stroke_width=0, fill_color=LIMIT, fill_opacity=0.9)
+        bar_pr.move_to(axis.n2p(0) + UP * 0.75, aligned_edge=LEFT)
+        l_most = label(rf"almost every function: \ $\approx 2^n/n \approx 10^{{{most:.0f}}}$", font_size=26,
+                       color=FUNC).next_to(bar_most, UP, buff=0.15).align_to(bar_most, LEFT)
+        l_pr = label(rf"best proved for an explicit function: \ $3.1\,n \approx {3.1 * n:.0f}$", font_size=26,
+                     color=LIMIT).next_to(bar_pr, RIGHT, buff=0.25)
+        lines = VGroup(*[label(t, font_size=26, color=c) for t, c in (
+            (r"a superpolynomial lower bound for one function in NP \ would prove P $\ne$ NP", HEAD),
             (r"in restricted models we can: \ parity needs $2^{n-1}$ terms in depth 2, \\ and exponential size in any "
-             r"constant depth \ (H\aa stad, 1986)", YES),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(DOWN * 0.1)
-        later = note(r"why it is so hard to prove: \ Part 27", font_size=22).to_edge(DOWN, buff=0.35)
+             r"constant depth \ (H\aa stad, 1986); \ why the rest is so hard: \ Part 27", YES),
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.35).align_to(axis, LEFT)
         with self.voiceover(
             "And now the embarrassment. <bookmark mark='a'/> Almost every function needs exponentially many gates. "
             "<bookmark mark='b'/> Yet name a specific function, one you can actually write down and check, and nobody "
@@ -216,14 +272,18 @@ class Complexity(VoiceoverScene):
             "depth two, as chapter six showed, and Johan Håstad proved it needs exponential size in any constant depth. "
             "Part 27 explains why the general case has resisted every technique so far."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abcd", lines):
-                vo.wait_until(mk)
-                self.play(FadeIn(l, shift=RIGHT * 0.1))
-            self.play(FadeIn(later))
+            self.play(FadeIn(head), Create(axis), FadeIn(ticks), FadeIn(cap))
+            vo.wait_until("a")
+            self.play(GrowFromEdge(bar_most, LEFT), FadeIn(l_most), run_time=1.6)
+            vo.wait_until("b")
+            self.play(GrowFromEdge(bar_pr, LEFT), FadeIn(l_pr))
+            self.play(Indicate(bar_pr, color=NO))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[0], shift=RIGHT * 0.1))
+            vo.wait_until("d")
+            self.play(FadeIn(lines[1], shift=RIGHT * 0.1))
         self.wait(0.3)
         self.clear_scene()
-
 
 def fmt(n) -> str:
     return f"{int(n):,}".replace(",", "{,}")

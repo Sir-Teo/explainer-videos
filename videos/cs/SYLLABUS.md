@@ -2821,5 +2821,7 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 
 | Part | State | Length |
 |---|---|---|
-| 1 | scenes, computations, notes and Chinese narration written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 58 min (estimate) |
-| 2–55 | planned (this document) | — |
+| 1 | scenes, computations, notes and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 58 min (estimate) |
+| 2 | scenes, computations, notes and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 63 min (estimate) |
+| 3 | scenes, computations, notes and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 4–55 | planned (this document) | — |

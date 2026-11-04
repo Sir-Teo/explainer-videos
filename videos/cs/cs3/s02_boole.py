@@ -72,10 +72,10 @@ class Boole(VoiceoverScene):
         chain[-1].set_color(YES)
         why = VGroup(note(r"substitute $y = yz$", font_size=22), note(r"associativity", font_size=22),
                      note(r"substitute $xy = x$", font_size=22))
-        for w, part in zip(why, chain[2:]):
-            w.next_to(part, DOWN, buff=0.2)
-        concl = label(r"so: \ ``every $x$ is a $z$'' \ (Aristotle's \textit{Barbara})", font_size=30, color=HEAD).move_to(
-            RIGHT * 4.2 + UP * 0.4)
+        for k, (w, part) in enumerate(zip(why, chain[2:])):
+            w.next_to(part, DOWN, buff=0.2 + 0.4 * (k % 2))
+        concl = label(r"so: \ ``every $x$ is a $z$'' \ (Aristotle's \textit{Barbara})", font_size=30, color=HEAD)
+        concl.next_to(chain, DOWN, buff=1.2).align_to(chain, LEFT)
         with self.voiceover(
             "Boole's own showpiece was the oldest piece of logic there is: Aristotle's syllogisms. "
             "<bookmark mark='a'/> Every x is a y becomes an equation: x equals x times y, since being an x and a y is "

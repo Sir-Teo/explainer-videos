@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs3.common import COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, YES
+from videos.cs.cs3.common import COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, WIRE, YES
 
 
 class Reversible(VoiceoverScene):
@@ -65,18 +65,45 @@ class Reversible(VoiceoverScene):
             a, b, c = (k >> 2) & 1, (k >> 1) & 1, k & 1
             c2 = c ^ (a & b)
             hot = a & b
-            rows.add(VGroup(MathTex(f"{a}{b}{c}", font_size=32, color=DATA),
-                            MathTex(r"\mapsto", font_size=30, color=GREY_C),
-                            MathTex(f"{a}{b}{c2}", font_size=32, color=HEAD if hot else DATA)).arrange(RIGHT, buff=0.35))
-        rows.arrange(DOWN, buff=0.16).move_to(LEFT * 3.6 + DOWN * 0.3)
-        rule = MathTex(r"(a, b, c) \mapsto (a,\ b,\ c \oplus ab)", font_size=40, color=CTRL).move_to(RIGHT * 2.8 + UP * 1.6)
-        txt = VGroup(label(r"a permutation of the 8 states: \ nothing is lost, \ run it twice to undo it", font_size=26,
+            rows.add(VGroup(MathTex(f"{a}{b}{c}", font_size=30, color=DATA),
+                            MathTex(r"\mapsto", font_size=28, color=GREY_C),
+                            MathTex(f"{a}{b}{c2}", font_size=30, color=HEAD if hot else DATA)).arrange(RIGHT, buff=0.3))
+        rows.arrange(DOWN, buff=0.14).move_to(LEFT * 5.5 + DOWN * 0.5)
+        rule = MathTex(r"(a, b, c) \mapsto (a,\ b,\ c \oplus ab)", font_size=40, color=CTRL).next_to(head, DOWN, buff=0.35)
+
+        def symbol(kind, y0):
+            ys = [y0, y0 - 0.65, y0 - 1.3]
+            x0, x1, xm = -3.9, -1.5, -2.7
+            g = VGroup(*[Line([x0, y, 0], [x1, y, 0], color=WIRE, stroke_width=2.5) for y in ys])
+            if kind == "toffoli":
+                g.add(Dot([xm, ys[0], 0], radius=0.09, color=GREY_A), Dot([xm, ys[1], 0], radius=0.09, color=GREY_A))
+                g.add(Line([xm, ys[0], 0], [xm, ys[2] - 0.2, 0], color=GREY_A, stroke_width=2.5))
+                g.add(Circle(0.2, color=GREY_A, stroke_width=2.5).move_to([xm, ys[2], 0]))
+                outs = (r"a", r"b", r"c \oplus ab")
+            else:
+                g.add(Dot([xm, ys[0], 0], radius=0.09, color=GREY_A),
+                      Line([xm, ys[0], 0], [xm, ys[2], 0], color=GREY_A, stroke_width=2.5))
+                for y in ys[1:]:
+                    g.add(MathTex(r"\times", font_size=40, color=GREY_A).move_to([xm, y, 0]))
+                outs = (r"a", r"a\,?\,c : b", r"a\,?\,b : c")
+            for y, t in zip(ys, (r"a", r"b", r"c")):
+                g.add(MathTex(t, font_size=26, color=DATA).next_to([x0, y, 0], LEFT, buff=0.1))
+            for y, t in zip(ys, outs):
+                g.add(MathTex(t, font_size=24, color=DATA).next_to([x1, y, 0], RIGHT, buff=0.1))
+            return g
+
+        tof = symbol("toffoli", 1.0)
+        fred = symbol("fredkin", -1.4)
+        tof_l = note(r"Toffoli (1980)", font_size=20).next_to(tof, UP, buff=0.1)
+        fred_l = note(r"Fredkin: \ swap $b$ and $c$ when $a = 1$", font_size=20).next_to(fred, UP, buff=0.1)
+        txt = VGroup(label(r"a permutation of the 8 states: \\ nothing is lost, \ run it twice to undo it", font_size=26,
                            color=GREY_A),
                      label(r"set $c = 1$: \ the third output is $\overline{ab}$ \ $=$ \ NAND", font_size=26, color=YES),
-                     label(r"so reversible gates can compute anything, \\ if you keep the extra outputs (Bennett, 1973)",
+                     label(r"so reversible gates can compute anything, \\ if you keep the extra outputs \ (Bennett, 1973)",
                            font_size=26, color=HEAD),
-                     label(r"Fredkin's gate: \ swap $b$ and $c$ \ when $a = 1$", font_size=24, color=GREY_B)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.32).next_to(rule, DOWN, buff=0.45)
+                     label(r"Fredkin's gate conserves the number of 1s: \\ billiard balls in a maze \ "
+                           r"(Fredkin and Toffoli, 1982)", font_size=24, color=GREY_B)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.4).move_to(RIGHT * 0.1 + DOWN * 0.4, aligned_edge=LEFT)
         with self.voiceover(
             "Can you compute without forgetting? <bookmark mark='a'/> Tommaso Toffoli's gate has three inputs and three "
             "outputs. The first two pass straight through; the third is flipped exactly when the first two are both "
@@ -84,18 +111,21 @@ class Reversible(VoiceoverScene):
             "input, so nothing is lost, and applying it twice gives back what you started with. "
             "<bookmark mark='c'/> Feed it a constant one on the third wire, and the third output is not a and b: a "
             "NAND. So by chapter five, reversible gates can compute anything, as Charles Bennett showed in 1973, as "
-            "long as you keep the extra outputs instead of throwing them away. Edward Fredkin's gate is another: it "
-            "swaps its last two wires when the first is one, and it never changes how many ones there are, so it "
-            "can be pictured as billiard balls bouncing through a maze, a model Fredkin and Toffoli proposed in 1982."
+            "long as you keep the extra outputs instead of throwing them away. <bookmark mark='d'/> Edward Fredkin's "
+            "gate is another: it swaps its last two wires when the first is one, and it never changes how many ones "
+            "there are, so it can be pictured as billiard balls bouncing through a maze, a model Fredkin and Toffoli "
+            "proposed in 1982."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Write(rule))
+            self.play(Write(rule), FadeIn(tof), FadeIn(tof_l))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.12), FadeIn(txt[0]), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(txt[1]), Indicate(VGroup(rows[6], rows[7]), color=HEAD))
-            self.play(FadeIn(txt[2]), FadeIn(txt[3]))
+            self.play(FadeIn(txt[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(fred), FadeIn(fred_l), FadeIn(txt[3]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -108,7 +138,17 @@ class Reversible(VoiceoverScene):
             (r"the Toffoli gate is one of them, \ and Part 53 simulates a small quantum computer with it", HEAD),
             (r"the same move, \ keeping what you would have thrown away, \\ turns up in undo logs and journaling "
              r"file systems \ (Parts 34 and 35)", GREY_A),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.55).move_to(DOWN * 0.1)
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(DOWN, buff=0.5)
+        for l in lines:
+            l.scale(0.92, about_edge=LEFT)
+        c0 = UP * 1.0
+        ring = Circle(1.15, color=GREY_D, stroke_width=2).move_to(c0)
+        th = ValueTracker(0.35)
+        vec = always_redraw(lambda: Arrow(c0, c0 + 1.15 * np.array([np.cos(th.get_value()), np.sin(th.get_value()), 0]),
+                                          buff=0, stroke_width=4, color=INF, max_tip_length_to_length_ratio=0.18))
+        st = MathTex(r"|\psi\rangle", font_size=30, color=INF).move_to(c0 + RIGHT * 1.6 + UP * 0.5)
+        rot = MathTex(r"U", font_size=32, color=HEAD).move_to(c0 + LEFT * 2.2 + UP * 0.4)
+        inv = MathTex(r"U^{-1}", font_size=32, color=YES).move_to(c0 + LEFT * 2.2 + DOWN * 0.4)
         with self.voiceover(
             "This is not just a curiosity. <bookmark mark='a'/> A quantum computer must be reversible: its gates are "
             "rotations of a state, and every rotation can be undone. <bookmark mark='b'/> The Toffoli gate is one of its "
@@ -116,8 +156,12 @@ class Reversible(VoiceoverScene):
             "<bookmark mark='c'/> And the idea of keeping what you would have thrown away, so you can go back, appears "
             "much higher up the tower, in the logs that let databases and file systems undo a crash."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abc", lines):
+            self.play(FadeIn(head), Create(ring), FadeIn(vec), FadeIn(st))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=RIGHT * 0.1))
+            self.play(FadeIn(rot), th.animate.set_value(1.85), run_time=1.4)
+            self.play(FadeIn(inv), th.animate.set_value(0.35), run_time=1.4)
+            for mk, l in zip("bc", lines[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l, shift=RIGHT * 0.1))
         self.wait(0.3)
