@@ -23,5 +23,6 @@ SCENES = [
     ("s10_hardware", "Hardware", "17. Industry: the overnight run, GPUs and adjoints"),
     ("s21_quantum", "Quantum", "18. Quantum amplitude estimation"),
     ("s22_frontier", "Frontier", "19. Frontier: pricing faster, 2023-2026"),
+    ("s23_research", "Research", "For the researcher: paths against basis functions"),
     ("s12_outro", "Outro", "The pricing engine, recap, desk questions, problems"),
 ]

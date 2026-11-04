@@ -1076,7 +1076,7 @@ def _bermudan_tree(S0, K, T, sigma, r, dates, steps_per=40):
 def compute_paths_basis() -> dict:
     """The research chapter: paths against basis functions in Longstaff-Schwartz (Glasserman and Yu 2004).  The
     regression's sample Gram matrix converges only when the number of paths is large against the fourth moments of the
-    basis functions; for orthonormal Hermite polynomials of a Gaussian E[h_k^4] grows geometrically (about 3^k), for
+    basis functions; for orthonormal Hermite polynomials of a Gaussian E[h_k^4] grows geometrically (about 9^k), for
     normalized monomials of a lognormal like exp(c k^2).  Then the experiment: a Bermudan put, a fixed out-of-sample set
     of paths to value each fitted policy (a lower bound), degree against number of paths, a tree as the truth."""
     z, w = np.polynomial.hermite_e.hermegauss(240)

@@ -17,7 +17,11 @@ PROBLEMS = [
     r"Build a mixed estimator of a call's gamma: pathwise once (for delta), then the likelihood ratio.",
     r"Multilevel Monte Carlo with $\beta = \gamma$: show that $\sum_l \sqrt{V_l C_l}$ grows like $L \sim \log "
     r"\varepsilon^{-1}$, so the cost is $O(\varepsilon^{-2}(\log\varepsilon)^2)$.",
-    r"Show that the FFT forces $\lambda\eta = 2\pi/N$ in Carr and Madan's discretisation.",
+    r"Show that the FFT forces $\lambda\eta = 2\pi/N$ in Carr and Madan's discretisation.",    r"(qual) Show that $\operatorname{Var}(\hat G_{kk}) = (\mathbb E\psi_k^4 - (\mathbb E\psi_k^2)^2)/N$, and that for "
+    r"$\psi_k = S^k/\sqrt{\mathbb E S^{2k}}$ with $S = e^{\sigma W_t - \sigma^2t/2}$, $\mathbb E\psi_k^4 = e^{4\sigma^2tk^2}$.",
+    r"(qual) For a one-date stopping problem (stop and get $h$, or continue and get $C$), show that using $\hat C$ "
+    r"loses $\mathbb E[|C - h|\,\mathbf 1\{\text{wrong}\}] \le \mathbb E[|C - \hat C|\,\mathbf 1\{|C - h| \le |C - \hat C|\}]$, "
+    r"and that this is $O(\varepsilon^2)$ if $\Pr(|C - h| \le \varepsilon) = O(\varepsilon)$ and $|C - \hat C| \le \varepsilon$.",
 ]
 
 
@@ -136,11 +140,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And eight problems: the optimal control variate, importance sampling's shift, the duality bound, the "
+            "And ten problems: the optimal control variate, importance sampling's shift, the duality bound, the "
             "explicit scheme's stability, why reverse mode is cheap, a gamma estimator, the multilevel cost when beta "
-            "equals gamma, and the FFT's grid constraint. Solutions, in English and Chinese, are in the notes."
+            "equals gamma, and the FFT's grid constraint. Two are qualifying-exam problems: the Gram matrix's "
+            "fourth moments, and why a wrong exercise rule costs only second order. Solutions, in English and "
+            "Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

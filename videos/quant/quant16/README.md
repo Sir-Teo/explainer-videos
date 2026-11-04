@@ -30,7 +30,7 @@ against an exact or near-exact price.
 *An education in methods, not investment advice. Firms and episodes are described from the public record; figures
 that come from a firm's or vendor's own account are labelled as such.*
 
-## Chapters (about 60 minutes)
+## Chapters (about 64 minutes)
 
 * **One price, many machines** (2.8 min). Four engines race on one Heston call, drawn as the wall clock reaches each
   run; the history from Crank–Nicolson (1947) and Metropolis–Ulam (1949) to quantum resource estimates (2021, 2024);
@@ -113,7 +113,18 @@ that come from a firm's or vendor's own account are labelled as such.*
   error 4 × 10⁻² → 3.7 × 10⁻⁶ from 8 to 32 nodes per axis (1,024 COS calls); a query 0.11 ms against 0.35 ms for COS.
   RQMC median-of-means (Pan–Owen 2023): 2,000× more accurate than the mean at 1,024 points. Junike (2024),
   Bayer–Pelizzari–Schoenmakers (2023), Stamatopoulos–Zeng (2024), Dalzell et al. (2023), Glau–Kressner–Statti (2020).
-* **The pricing engine, recap, desk questions, problems** (2.5). Rule 16; the trial counter stays at 310.
+* **For the researcher: paths against basis functions** (4.6). Each date's regression β̂ = Ĝ⁻¹m̂ needs the sample
+  Gram matrix to converge, Var(Ĝ_kk) = (E ψ_k⁴ − (E ψ_k²)²)/N, so N must dwarf the basis's largest fourth moment
+  (Glasserman and Yu 2004: worst-case path counts exponential in the degree for Brownian motion, faster for GBM).
+  Exact fourth moments: orthonormal Hermite h_k of a Gaussian 93 at k = 3, 3.5 × 10⁴ at 6, 9.5 × 10⁹ at 12, about 9^k;
+  normalized powers of a lognormal at σ√t = 0.2, e^{4σ²tk²}, 1.0 × 10¹⁰ at k = 12. Experiment: Longstaff and
+  Schwartz's Bermudan put (S₀ 36, K 40, σ 20%, r 6%, one year, 50 dates; a 3,000-step tree gives 4.478), rules fitted
+  on N paths with polynomials in S/K, valued on 100,000 fresh paths (s.e. 0.009), three seeds: with 500 paths
+  4.451 at degree 4 and 4.349 at 12; with 2,000 4.464 and 4.452; with 10,000 and 50,000 every degree 3–12 is within
+  0.007 of the tree. The price's error is second order in the regression's near the boundary (Belomestny 2011's margin
+  condition). Three open problems; pause: a 2% continuation error costs of the order of 0.04%.
+* **The pricing engine, recap, desk questions, ten problems (two at qualifying-exam level)** (2.4). Rule 16; the trial
+  counter stays at 310.
 
 ## Hands-on
 
@@ -223,6 +234,23 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
    2ε^{−2}(Σ√(V_lC_l))² = O(ε^{−2}(log ε)²).
 8. **λη = 2π/N.** The FFT computes Σ_j e^{−2πijm/N} x_j. The Carr–Madan sum is Σ_j e^{−iu_jk_m} ψ(u_j)η with
    u_j = jη, k_m = −b + mλ, so e^{−iu_jk_m} = e^{ijηb} e^{−ijmηλ}: matching the kernel needs ηλ = 2π/N.
+9. **(qual) The Gram matrix's fourth moments.** Ĝ_kk = (1/N)Σ_nψ_k(X_n)² is a mean of N iid copies of ψ_k², so
+   Var Ĝ_kk = Var(ψ_k²)/N = (E ψ_k⁴ − (E ψ_k²)²)/N. With S = e^{σW_t − σ²t/2}, E S^m = e^{m(m−1)σ²t/2}, so for
+   ψ_k = S^k/√(E S^{2k}): E ψ_k⁴ = E S^{4k}/(E S^{2k})² = exp[(4k(4k − 1) − 2·2k(2k − 1))σ²t/2] = e^{4σ²tk²}.
+10. **(qual) Second-order loss.** Stopping pays h, continuing C; the rule continues when Ĉ > h. It is wrong only
+   when C and Ĉ lie on opposite sides of h, and then |C − h| ≤ |C − Ĉ|. So the loss is E[|C − h|1{wrong}] ≤
+   E[|C − Ĉ|1{|C − h| ≤ |C − Ĉ|}] ≤ ε·Pr(|C − h| ≤ ε) = O(ε²) when |C − Ĉ| ≤ ε and the margin condition
+   Pr(|C − h| ≤ ε) = O(ε) holds.
+
+## For the researcher
+
+* **The theorems.** Longstaff and Schwartz (2001); Clément, Lamberton and Protter (2002) on convergence; Glasserman
+  and Yu (2004), "Number of paths versus number of basis functions in American option pricing," *Ann. Appl. Probab.*
+  14(4); Stentoft (2004) on polynomial growth for bounded underlyings; Belomestny (2011), "Pricing Bermudan options by
+  nonparametric regression: optimal rates of convergence for lower estimates," *Finance Stoch.* 15.
+* **Simplifications.** One asset, monomials in S/K, in-the-money regressions only, three seeds; the tree's 50-date
+  Bermudan as truth; the fourth moments computed for the stationary laws, not for the conditional regressions.
+* **Open problems.** Bases and rates in high dimension; the dual bound's own trade-off; Greeks of regressed rules.
 
 ## Data and reproducibility
 
@@ -259,7 +287,7 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录；来自公司或供应商自述的数字均已注明。*
 
-## 各章（约60分钟）
+## 各章（约64分钟）
 
 * **一个价格，多台机器。** 四台引擎为同一个赫斯顿看涨期权竞赛；从克兰克-尼科尔森（1947）、梅特罗波利斯-乌拉姆（1949）到量子资源估算（2021、2024）的历史；本部分安排；我们公司的定价引擎。
 * **1. 蒙特卡洛：带误差棒的平均。** 三个随机种子到一百万条路径的运行估计与95%漏斗；强大数定律、中心极限定理、Slutsky；收益标准差14.7，95%下正负一分钱约需830万条路径；误差带在1000次运行中覆盖真价94.4%。
@@ -281,7 +309,8 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 * **17. 业界。** 交易×情景；SIMM与FRTB；丹斯克银行（据Risk.net报道）；摩根大通与Maxeler（据银行与供应商自述，八小时降到四分钟以内）；STAC-A2；QuantLib、ORE、OCC；本机实测（Python循环3.6秒、numpy 19毫秒、float32 2.3毫秒，四个进程并不更快）；夜间验证报告。
 * **18. 量子振幅估计。** Grover旋转；最大似然振幅估计回放：斜率−0.94对−0.5；资源估算：8000逻辑量子比特、T深度5400万（2021），4700逻辑量子比特、10⁹个T门、45 MHz（2024）。
 * **19. 前沿。** 切比雪夫定价器（32×32节点误差3.7 × 10⁻⁶）；随机化拟蒙特卡洛的中位数（Pan–Owen 2023）；阅读清单。
-* **定价引擎、回顾、交易台问题与习题。** 第16条规矩；试验计数器仍为310。
+* **写给研究者：路径数与基函数。** 每个日期的回归β̂ = Ĝ⁻¹m̂要求样本格拉姆矩阵收敛，Var(Ĝ_kk) = (E ψ_k⁴ − (E ψ_k²)²)/N，所以N必须远大于基中最大的四阶矩（格拉斯曼与Bin Yu 2004：最坏情形下路径数对布朗运动按次数指数增长，对几何布朗运动更快）。精确的四阶矩：高斯变量的标准正交埃尔米特多项式h_k在k = 3时93、6时3.5 × 10⁴、12时9.5 × 10⁹，约为9^k；σ√t = 0.2的对数正态归一化幂e^{4σ²tk²}，k = 12时1.0 × 10¹⁰。实验：朗斯塔夫–施瓦茨的百慕大看跌（S₀ 36、K 40、σ 20%、r 6%、一年、50个日期；3,000步二叉树给出4.478），用S/K的多项式在N条路径上拟合规则，在100,000条新路径上估值（标准误0.009），三个种子：500条路径时4次为4.451、12次为4.349；2,000条时4.464与4.452；10,000与50,000条时3–12次都在二叉树值的0.007以内。在边界附近，价格误差是回归误差的二阶量（别洛梅斯特尼2011的边际条件）。三个开放问题；暂停题：2%的继续价值误差只造成约0.04%量级的损失。
+* **定价引擎、回顾、交易台问题、十道习题（两道为资格考试水平）。** 第16条规矩；试验计数器仍为310。
 
 ## 交易台问题与解答
 
@@ -300,6 +329,8 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 6. **混合Gamma估计量。** 路径法Delta为e^{−rT} 1{S_T > K} S_T/S₀；它对S₀的导数含有δ函数，所以对剩下的显式依赖改用似然比：Γ = E[e^{−rT} 1{S_T > K} (S_T/S₀²)(Z/(σ√T) − 1)]。
 7. **β = γ时多层方法的成本。** √(V_l C_l)为常数，所以和与L成正比；偏差要求L ≈ log(1/ε)/(α log M)，于是成本为O(ε^{−2}(log ε)²)。
 8. **λη = 2π/N。** FFT计算Σ_j e^{−2πijm/N} x_j；Carr–Madan的核为e^{−iu_jk_m} = e^{ijηb} e^{−ijmηλ}，要与之匹配必须ηλ = 2π/N。
+9. **（资格考试）格拉姆矩阵的四阶矩。** Ĝ_kk = (1/N)Σ_nψ_k(X_n)²是N个独立同分布ψ_k²的均值，所以Var Ĝ_kk = (E ψ_k⁴ − (E ψ_k²)²)/N。S = e^{σW_t − σ²t/2}时E S^m = e^{m(m−1)σ²t/2}，所以ψ_k = S^k/√(E S^{2k})的E ψ_k⁴ = E S^{4k}/(E S^{2k})² = e^{4σ²tk²}。
+10. **（资格考试）二阶损失。** 停止得h，继续得C；规则在Ĉ > h时继续。只有当C和Ĉ在h的两侧时它才错，此时|C − h| ≤ |C − Ĉ|。所以损失E[|C − h|1{错}] ≤ E[|C − Ĉ|1{|C − h| ≤ |C − Ĉ|}] ≤ ε·Pr(|C − h| ≤ ε)，在|C − Ĉ| ≤ ε且边际条件Pr(|C − h| ≤ ε) = O(ε)成立时为O(ε²)。
 
 ## 数据与可复现性
 
@@ -308,3 +339,9 @@ python tools/make.py quant16 --cpu-voice -q m             # English and Chinese,
 * `american.bermudan_tree25`（25步二叉树，6.146）不是百慕大参考值，不在画面上使用；`bermudan_ref`才是。
 * 第17部分的深度停时结果读取自其缓存，不重新计算。
 * 本部分没有测试任何策略；试验计数器仍为310。
+
+## 写给研究者
+
+* **定理。** 朗斯塔夫与施瓦茨（2001）；Clément、Lamberton与Protter（2002）论收敛；格拉斯曼与Bin Yu（2004），*Ann. Appl. Probab.* 14(4)；Stentoft（2004）论有界标的下的多项式增长；别洛梅斯特尼（2011），*Finance Stoch.* 15。
+* **简化。** 单一资产、S/K的单项式、只对实值路径回归、三个种子；以50个日期的二叉树百慕大价格为真值；四阶矩按平稳分布计算，而非条件回归。
+* **开放问题。** 高维下的基与速率；对偶上界自身的取舍；回归规则的希腊字母。

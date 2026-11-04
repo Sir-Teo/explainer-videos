@@ -630,7 +630,91 @@ def compute_envelope() -> dict:
     return {"trials": pit.trials_so_far(), "registered": {"pca_fly_2s5s10s": load("fly")["registered"]}}
 
 
-ITEMS = {"policy": compute_policy, "taylor": compute_taylor, "bonds": compute_bonds, "curve_day": compute_curve_day,
+def _sign_changes(v, tol=1e-9):
+    v = np.asarray(v, float)
+    v = v[np.abs(v) > tol * np.abs(v).max()]
+    return int(np.sum(np.sign(v[1:]) != np.sign(v[:-1])))
+
+
+def _tp_share(C, order):
+    """The share of the order-r minors with increasing row and column indices that are positive."""
+    from itertools import combinations
+    n = len(C)
+    pos = tot = 0
+    for rows in combinations(range(n), order):
+        for cols in combinations(range(n), order):
+            tot += 1
+            pos += np.linalg.det(C[np.ix_(rows, cols)]) > 0
+    return pos / tot
+
+
+def compute_oscillation_theory() -> dict:
+    """The research chapter: why level, slope and curvature.  If the covariance of yield changes, with maturities in
+    order, is an oscillation matrix (totally nonnegative, some power totally positive), Gantmacher and Krein's theorem
+    makes the k-th eigenvector change sign exactly k - 1 times, whatever the economics.  Checked on smooth random
+    kernels against unordered random correlation matrices; then on the Treasury curve's daily changes (GSW,
+    1986-2025): the minors' signs and the eigenvectors' sign changes, for yields and for forward rates."""
+    rng = np.random.default_rng(1818)
+    sims = {"ordered": np.zeros((3, 4), int), "unordered": np.zeros((3, 4), int)}
+    M = 2000
+    for _ in range(M):
+        m = np.sort(rng.uniform(0.25, 30, 9))
+        ell = rng.uniform(3, 40)
+        C = np.exp(-((m[:, None] - m[None, :]) / ell) ** 2) + 1e-9 * np.eye(9)   # a Gaussian kernel: totally positive
+        w, V = np.linalg.eigh(C)
+        V = V[:, ::-1]
+        for k in range(3):
+            sims["ordered"][k, min(_sign_changes(V[:, k]), 3)] += 1
+        A = rng.standard_normal((9, 3))
+        Cu = A @ A.T + np.diag(rng.uniform(0.05, 0.3, 9))   # a three-factor covariance with no ordering
+        d = np.sqrt(np.diag(Cu))
+        Cu = Cu / d[:, None] / d[None, :]
+        w, V = np.linalg.eigh(Cu)
+        V = V[:, ::-1]
+        for k in range(3):
+            sims["unordered"][k, min(_sign_changes(V[:, k]), 3)] += 1
+    out = {"M": M, "sims": {k: v.tolist() for k, v in sims.items()}}
+    # the exponential (Markov) correlation, rho^|i - j|: eigenvectors are discrete sinusoids
+    n = 9
+    rho = 0.9
+    Cx = rho ** np.abs(np.subtract.outer(np.arange(n), np.arange(n)))
+    w, V = np.linalg.eigh(Cx)
+    V = V[:, ::-1] * np.sign(V[:, ::-1][0])
+    out["markov"] = {"rho": rho, "vec": V[:, :4].T, "share": (w[::-1] / w.sum())[:4],
+                     "changes": [_sign_changes(V[:, k]) for k in range(4)]}
+    # the Treasury curve
+    g = data.gsw("1985-12-01")
+    mats = [1, 2, 3, 5, 7, 10, 15, 20, 30]
+    Y = g["y"][:, [m - 1 for m in mats]]
+    ok = ~np.isnan(Y).any(1)
+    Y = Y[ok]
+    dy = np.diff(Y, axis=0) * 100
+    C = np.cov(dy.T)
+    Cr = np.corrcoef(dy.T)
+    w, V = np.linalg.eigh(C)
+    V = V[:, ::-1]
+    V = V * np.sign(V[0])
+    # forward rates between the same maturities: f(m_{i-1}, m_i)
+    yy = Y
+    mm = np.array(mats, float)
+    F = np.column_stack([yy[:, 0]] + [(mm[i] * yy[:, i] - mm[i - 1] * yy[:, i - 1]) / (mm[i] - mm[i - 1])
+                                      for i in range(1, len(mats))])
+    df = np.diff(F, axis=0) * 100
+    Cf = np.cov(df.T)
+    wf, Vf = np.linalg.eigh(Cf)
+    Vf = Vf[:, ::-1]
+    Vf = Vf * np.sign(Vf[0])
+    out["treasury"] = {"mats": mats, "n_days": int(len(dy)), "share": (w[::-1] / w.sum())[:5], "vec": V[:, :5].T,
+                       "changes": [_sign_changes(V[:, k]) for k in range(5)],
+                       "tp2": _tp_share(Cr, 2), "tp3": _tp_share(Cr, 3), "corr": Cr,
+                       "fwd_share": (wf[::-1] / wf.sum())[:5], "fwd_vec": Vf[:, :5].T,
+                       "fwd_changes": [_sign_changes(Vf[:, k]) for k in range(5)],
+                       "fwd_tp2": _tp_share(np.corrcoef(df.T), 2), "fwd_tp3": _tp_share(np.corrcoef(df.T), 3),
+                       "fwd_corr": np.corrcoef(df.T)}
+    return _json(out)
+
+
+ITEMS = {"oscillation_theory": compute_oscillation_theory, "policy": compute_policy, "taylor": compute_taylor, "bonds": compute_bonds, "curve_day": compute_curve_day,
          "morph": compute_morph, "pca": compute_pca, "swaps": compute_swaps, "futures": compute_futures,
          "sofr": compute_sofr, "term": compute_term, "fomc": compute_fomc, "immunize": compute_immunize,
          "fly": compute_fly, "ldi": compute_ldi, "svb": compute_svb, "envelope": compute_envelope}
