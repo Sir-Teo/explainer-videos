@@ -20,7 +20,7 @@ class PCA(VoiceoverScene, ThreeDScene):
         self.walk(p)
 
     def card(self):
-        c = chapter_card(10, r"Level, slope and curvature", r"How many numbers move the whole curve?", lit=(1991,),
+        c = chapter_card(10, r"Level, slope and curvature", r"How many numbers move the whole curve?", lit=(1987,),
                          part=PART)
         with self.voiceover("Chapter ten. Level, slope and curvature."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))

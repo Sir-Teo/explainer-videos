@@ -15,8 +15,7 @@ class Morph(VoiceoverScene, ThreeDScene):
         self.surface(m)
 
     def card(self):
-        c = chapter_card(9, r"Five decades of the curve", r"How has the price of time moved since 1972?", lit=(1979,),
-                         part=PART)
+        c = chapter_card(9, r"Five decades of the curve", r"How has the price of time moved since 1972?", part=PART)
         with self.voiceover("Chapter nine. Five decades of the curve."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

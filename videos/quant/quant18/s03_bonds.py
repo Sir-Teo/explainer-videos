@@ -124,8 +124,9 @@ class Bonds(VoiceoverScene):
         k1, k2 = int(np.argmin(np.abs(s - 15))), int(np.argmin(np.abs(s - 25)))
         tip = wrapped_label(rf"the bootstrap's forwards are steps: flat between quoted maturities, jumping at each one. "
                             rf"{f[k1]:.2f}\% from 10 to 20 years, {f[k2]:.2f}\% from 20 to 30, as the zero curve "
-                            rf"flattens. Chapter 8 fits a smooth curve instead", 3.8, 18, GREY_A).next_to(
+                            rf"flattens. Chapter 8 fits a smooth curve instead", 3.3, 18, GREY_A).next_to(
             leg, DOWN, buff=0.4, aligned_edge=LEFT)
+        tip.shift(LEFT * max(0.0, tip.get_right()[0] - 6.75))
         with self.voiceover(
             "Three curves from the same day, the last of 2025. In blue, the par yields: the coupon at which a new "
             "bond of each maturity would price at a hundred; the dots are Treasury's own quotes. <bookmark mark='a'/> "

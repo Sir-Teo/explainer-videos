@@ -18,7 +18,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
         self.plane(t)
 
     def card(self):
-        c = chapter_card(3, r"The Taylor rule", r"Where should the policy rate be?", lit=(1993,), part=PART)
+        c = chapter_card(3, r"The Taylor rule", r"Where should the policy rate be?", part=PART)
         with self.voiceover("Chapter three. The Taylor rule."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
@@ -39,7 +39,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
                     r"coefficient below one would let inflation feed itself"),
                 why(r"the output gap, here from the CBO's estimate of potential output; inflation is the GDP deflator "
                     r"over four quarters, as Taylor used")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.55, edge=6.9)
         with self.voiceover(
             "In 1993 John Taylor proposed a rule of thumb for the policy rate. Take the neutral real rate, add "
             "inflation, then lean against two gaps: half of inflation's distance from its target, and half of output's "
@@ -61,7 +61,7 @@ class Taylor(VoiceoverScene, ThreeDScene):
 
     def history(self, t):
         T, ff, rule, core = (np.asarray(t[k]) for k in ("t", "ff", "rule", "rule_core"))
-        g = axes([1987, 2026], [-6, 14], x_length=9.2, y_length=4.6, xlabel=r"year", ylabel=r"percent",
+        g = axes([1987, 2026], [-6, 14], x_length=8.4, y_length=4.6, xlabel=r"year", ylabel=r"percent",
                  xticks=[1990, 2000, 2010, 2020], yticks=[-5, 0, 5, 10], font_size=14).to_edge(LEFT, buff=0.5).shift(
             DOWN * 0.3)
         ax = g.ax
@@ -85,8 +85,9 @@ class Taylor(VoiceoverScene, ThreeDScene):
                           17, GREY_A),
             wrapped_label(rf"2021--22: {abs(t['dev_2021_22']):.1f} points below, on average; in "
                           rf"{t['worst']['t']:.0f} the rule said {t['worst']['rule']:.0f}\%, the Fed was at "
-                          rf"{t['worst']['ff']:.1f}\%", 4.0, 17, QC.LOSS),
+                          rf"{t['worst']['ff']:.1f}\%", 3.6, 17, QC.LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.35, aligned_edge=LEFT)
+        notes.shift(LEFT * max(0.0, notes.get_right()[0] - 6.75))
         with self.voiceover(
             "Here is the rule against what the Fed actually did, every quarter since 1987. <bookmark mark='a'/> From "
             "1987 to 2007 they moved together, with a correlation of "

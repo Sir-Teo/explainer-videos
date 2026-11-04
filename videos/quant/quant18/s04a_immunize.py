@@ -19,7 +19,7 @@ class Immunize(VoiceoverScene, ThreeDScene):
         self.surface(im)
 
     def card(self):
-        c = chapter_card(7, r"Key rates and immunization", r"Is one duration number enough?", lit=(1952,), part=PART)
+        c = chapter_card(7, r"Key rates and immunization", r"Is one duration number enough?", part=PART)
         with self.voiceover("Chapter seven. Key rates, and immunizing a pension fund."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

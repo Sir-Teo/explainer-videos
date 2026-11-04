@@ -20,7 +20,7 @@ class SOFR(VoiceoverScene):
 
     def card(self):
         c = chapter_card(13, r"Repo, SOFR and the end of LIBOR", r"What is the floating rate, and who sets it?",
-                         lit=(2012, 2017), part=PART)
+                         part=PART)
         with self.voiceover("Chapter thirteen. Repo, SOFR, and the end of LIBOR."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

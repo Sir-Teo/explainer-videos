@@ -20,7 +20,7 @@ class Fit(VoiceoverScene):
 
     def card(self):
         c = chapter_card(8, r"Fitting the curve: Nelson--Siegel and Svensson", r"Can four numbers describe a curve?",
-                         lit=(1987,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter eight. Fitting the whole curve with a handful of numbers."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
