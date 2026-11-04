@@ -35,7 +35,11 @@ address to ``IO_FLUSH`` evicts its cache line (x86's ``clflush``; 0xFFFFFFFF emp
 The direction predictor is trained in program order on the correct path, as in Part 7's accuracy study: the emulator
 first records the program's correct path, and a fetched instruction on that path is trained with its true outcome
 (equivalent to a predictor whose speculative history is repaired perfectly).  With ``training="commit"`` the core
-instead trains it as branches commit, for programs whose control flow depends on timing (the Spectre experiment).  The core is checked against the
+instead trains it as branches commit, for programs whose control flow depends on timing (the Spectre experiment).
+
+``secure=True`` is the simplest secure-speculation scheme (in the spirit of NDA and STT, 2019): a load that completes
+while an older branch is still unresolved keeps its value to itself until every older branch has executed, so nothing
+that depends on a speculatively loaded value can run, and the value can leave no footprint.  The core is checked against the
 emulator (tests/test_cs8_ooo.py): the same registers, memory, output and instruction count on every program.
 """
 
@@ -119,12 +123,14 @@ class OutOfOrder:
                  iq_size: int = 64, lsq_size: int = 48, fe_depth: int = 3, predictor=None, mem_latency: int = 2,
                  disambiguation: str = "wait-table", cache: Cache | None = None, timer: str = "retired",
                  record: int = 0, max_cycles: int = 200_000_000, perfect_prediction: bool = False,
-                 training: str = "path"):
+                 training: str = "path", secure: bool = False, record_start: int = 0, occupancy: bool = False):
         self.image, self.tape, self.mem_size = image, tape, mem_size
         self.width, self.rob_size, self.iq_size, self.lsq_size = width, rob_size, iq_size, lsq_size
         self.fe_depth, self.predictor, self.mem_latency = fe_depth, predictor, mem_latency
         self.disamb, self.cache, self.timer, self.record = disambiguation, cache, timer, record
         self.max_cycles, self.perfect, self.training = max_cycles, perfect_prediction, training
+        self.secure, self.record_start = secure, record_start
+        self.occupancy = array("H") if occupancy else None  # reorder-buffer entries in use, each cycle
         self.mem = bytearray(mem_size)
         self.mem[: len(image)] = image
         self.regs = [0] * NREGS
@@ -203,6 +209,8 @@ class OutOfOrder:
         self.jtarget: dict[int, int] = {}
         self.wait_table: set[int] = set()
         self.barriers: list[Uop] = []  # renamed reads of the cycle counter: nothing younger issues past them
+        self.unresolved: list[Uop] = []  # (secure) branches and jalrs renamed but not yet executed, oldest first
+        self.parked: list[Uop] = []  # (secure) loads complete but not yet allowed to pass their value on
         self._dec: dict[int, tuple] = {}
         while not self.halted:
             if self.cycles >= self.max_cycles:
@@ -214,6 +222,8 @@ class OutOfOrder:
             self._issue(W)
             self._rename(W)
             self._fetch(W)
+            if self.occupancy is not None:
+                self.occupancy.append(len(self.rob))
             self.cycles += 1
         return self
 
@@ -344,11 +354,13 @@ class OutOfOrder:
                 if u.rd:
                     self.rat[u.rd] = u
             self.rob.append(u)
+            if self.secure and (u.op in BRANCH or u.op == "jalr"):
+                self.unresolved.append(u)
             if u.op in STORES:
                 self.sq.append(u)
             elif u.op in LOADS:
                 self.lq.append(u)
-            if self.record and len(self.timeline) < self.record:
+            if self.record and len(self.timeline) < self.record and u.seq >= self.record_start:
                 self.timeline.append(u)
             if ins is None or u.op == "halt":
                 u.state = 2
@@ -360,20 +372,49 @@ class OutOfOrder:
 
     # -- wakeup -----------------------------------------------------------------------------------------------
     def _wake(self):
+        if self.secure:
+            self._release()
         for u in self.waking.pop(self.cycles, ()):
             if u.squashed:
                 continue
-            u.state = 2
-            u.t[3] = self.cycles
-            for c in u.consumers:
-                if not c.squashed:
-                    c.left -= 1
-                    if c.left == 0 and c.state == 0:
-                        heapq.heappush(self.ready, (c.seq, id(c), c))
-            if u.op in BRANCH or u.op == "jalr":
-                self._resolve(u)
-            if u.op in STORES and self.disamb != "conservative":
-                self._check_order(u)
+            if self.secure and u.op in LOADS and self._shadowed(u):
+                self.parked.append(u)  # complete, but its value stays put until no older guess is pending
+                continue
+            self._broadcast(u)
+
+    def _shadowed(self, u: Uop) -> bool:
+        for b in self.unresolved:
+            if b.squashed or b.state == 2:
+                continue
+            return b.seq < u.seq
+        return False
+
+    def _release(self):
+        self.unresolved = [b for b in self.unresolved if not b.squashed and b.state < 2]
+        if not self.parked:
+            return
+        keep = []
+        for u in self.parked:
+            if u.squashed:
+                continue
+            if self._shadowed(u):
+                keep.append(u)
+            else:
+                self._broadcast(u)
+        self.parked = keep
+
+    def _broadcast(self, u: Uop):
+        u.state = 2
+        u.t[3] = self.cycles
+        for c in u.consumers:
+            if not c.squashed:
+                c.left -= 1
+                if c.left == 0 and c.state == 0:
+                    heapq.heappush(self.ready, (c.seq, id(c), c))
+        if u.op in BRANCH or u.op == "jalr":
+            self._resolve(u)
+        if u.op in STORES and self.disamb != "conservative":
+            self._check_order(u)
 
     def _value(self, u: Uop, i: int) -> int:
         r, p = u.srcs[i]

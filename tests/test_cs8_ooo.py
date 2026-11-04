@@ -80,6 +80,22 @@ class Agrees(unittest.TestCase):
         self.assertGreaterEqual(spec.stats["violations"], 1)
         self.assertEqual(cons.stats["violations"], 0)
 
+    def test_histogram_with_cache_misses(self):
+        from videos.cs.cs8.compute import histogram_image
+
+        src, img = histogram_image(n=200)
+        ref = run(assemble(src))  # the emulator, on the same image
+        from explainer.cs.pebble.emu import Machine
+
+        m = Machine(img)
+        while not m.halted:
+            m.step()
+        for mode in ("conservative", "speculative", "wait-table"):
+            c = OutOfOrder(img, predictor=PR.Tournament(), disambiguation=mode, cache=Cache()).run()
+            self.assertEqual(c.regs, m.regs, mode)
+            self.assertEqual(bytes(c.mem[0x1000:0x1100]), bytes(m.mem[0x1000:0x1100]), mode)
+        self.assertGreater(ref.steps, 0)
+
     def test_partial_forwarding(self):
         src = "li s0, 0x800\nli a0, 0x11223344\nsw a0, 0(s0)\nli a1, 0x99\nsb a1, 1(s0)\nlw a2, 0(s0)\n" \
               "lbu a3, 1(s0)\nlb a4, 1(s0)\nhalt"
@@ -97,6 +113,14 @@ class Spectre(unittest.TestCase):
             core = OutOfOrder(P.spectre_image(secret, mit), cache=Cache(), timer="cycles", predictor=PR.TwoBit(),
                               training="commit").run()
             self.assertNotEqual(bytes(core.output), secret)
+        core = OutOfOrder(P.spectre_image(secret), cache=Cache(), timer="cycles", predictor=PR.TwoBit(),
+                          training="commit", secure=True).run()
+        self.assertNotEqual(bytes(core.output), secret)
+
+    def test_secure_core_agrees(self):
+        for seed in range(60):
+            p = assemble(random_program(seed, mext=seed % 2 == 0))
+            self.assertTrue(same(OutOfOrder(p.image, predictor=PR.Tournament(), secure=True).run(), run(p)), seed)
 
 
 class Limits(unittest.TestCase):
