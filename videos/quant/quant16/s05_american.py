@@ -123,7 +123,7 @@ class American(VoiceoverScene):
                 why(r"the fitted rule is a strategy, so its value is a lower bound; evaluate it on fresh paths to remove "
                     r"the foresight of fitting and judging on the same paths. Cl\'ement, Lamberton and Protter (2002): "
                     r"it converges as basis and paths grow")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.8, buff=0.42, edge=6.9)
         with self.voiceover(
             "In symbols. The option's value is the Snell envelope of Part eight: at each date, the larger of "
             "exercising and the expected discounted value of tomorrow. <bookmark mark='a'/> A conditional "
