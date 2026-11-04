@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant21.common import BAD, CVA_C, EXPO, GOOD, PART, ask, fit_right, illustration, load
+from videos.quant.quant21.common import BAD, CVA_C, EXPO, GOOD, PART, ask, comma, fit_right, illustration, load
 
 
 class Deep(VoiceoverScene):
@@ -13,6 +13,7 @@ class Deep(VoiceoverScene):
         self.idea()
         self.train(d)
         self.result(d)
+        self.standard(d, load("lsmexpo"))
 
     def card(self):
         c = chapter_card(7, r"A network that learns future values", r"Can exposure be learned from cash flows alone?",
@@ -84,24 +85,80 @@ class Deep(VoiceoverScene):
             MathTex(rf"\text{{CVA: exact }} {1e3 * d['cva_exact']:.0f}\text{{k}},\ \text{{network }} "
                     rf"{1e3 * d['cva_net']:.0f}\text{{k}}\ ({err:+.0f}\%)", font_size=22),
             MathTex(rf"\text{{RMSE of values}} = {d['rmse']:.2f}\ \text{{vs spread}}\ {d['scale']:.1f}", font_size=22),
-            wrapped_label(r"fresh paths, not the training ones. Exposure keeps only the positive part, so small errors in "
-                          r"value become a bias in EE near zero; that is the part a desk checks against an exact "
-                          r"model wherever one exists", 3.6, 17, GREY_A),
+            wrapped_label(r"fresh paths, not the training ones. A network smooth in the date rounds off the drops at "
+                          r"each payment; the errors on either side of a coupon largely cancel in the CVA. Checked "
+                          r"against an exact model wherever one exists", 3.6, 17, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
         fit_right(side)
         with self.voiceover(
             "On fresh paths, the network's values against the exact ones, turned into expected exposure. "
-            "<bookmark mark='a'/> The profile follows the exact one. <bookmark mark='b'/> The CVA from the network is "
-            f"{1e3 * d['cva_net']:.0f} thousand against {1e3 * d['cva_exact']:.0f} exact, {abs(err):.0f} percent "
-            f"{'high' if err > 0 else 'low'}. The values themselves are close; the exposure takes only their positive "
-            "part, so small errors near zero become a bias. A desk would use such a network only where it can still be "
-            "checked against a method it trusts."
+            "<bookmark mark='a'/> The exact profile has steps: each time a coupon is paid, the value drops. The "
+            "network, smooth in the date, rounds them off, a little low just after a payment and a little high just "
+            "before. <bookmark mark='b'/> Averaged over the life of the trades, the errors largely cancel: the CVA "
+            f"from the network is {1e3 * d['cva_net']:.0f} thousand against {1e3 * d['cva_exact']:.0f} exact, "
+            f"{abs(err):.0f} percent {'high' if err > 0 else 'low'}. Feeding it the time to the next payment would "
+            "sharpen the steps. A desk would use such a network only where it can still be checked against a method "
+            "it trusts."
         ) as vo:
             self.play(FadeIn(g), Create(le), FadeIn(side[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in ln], lag_ratio=0.05, run_time=2))
             vo.wait_until("b")
             self.play(FadeIn(side[1]), FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def standard(self, d, m):
+        hx = [-4.2, -0.9, 1.9, 4.6]
+        heads = [r"method", r"error in values (RMSE)", r"CVA, \$ thousand", r"against exact"]
+        tab = VGroup(VGroup(*[label(h_, font_size=18, color=GREY_A).move_to([x, 2.3, 0]) for h_, x in zip(heads, hx)]))
+        ex = m["cva_exact"]
+        rows = [(r"exact Hull--White", None, ex, EXPO), (r"regression per date, linear", m["deg1"]["rmse"], m["deg1"]["cva"], GREY_A),
+                (r"regression per date, cubic", m["deg3"]["rmse"], m["deg3"]["cva"], GOOD),
+                (r"one network over (date, state)", d["rmse"], d["cva_net"], QC.IDEA)]
+        for i, (nm, e_, cv, c_) in enumerate(rows):
+            y = 1.65 - 0.55 * i
+            tab.add(VGroup(label(nm, font_size=18, color=c_).move_to([hx[0], y, 0]),
+                           MathTex("" if e_ is None else f"{e_:.2f}", font_size=26).move_to([hx[1], y, 0]),
+                           MathTex(f"{1e3 * cv:.0f}", font_size=26).move_to([hx[2], y, 0]),
+                           MathTex("" if e_ is None else rf"{100 * (cv / ex - 1):+.1f}\%", font_size=26).move_to([hx[3], y, 0])))
+        nb = m["nbasis_cubic"]
+        dims = [1, 2, 5, 10, 20, 50]
+        g = axes([-0.5, 5.5], [0, 5], x_length=5.4, y_length=2.2, xlabel=r"risk factors",
+                 ylabel=r"$\log_{10}$ cubic terms", xticks=[], yticks=[0, 2, 4], font_size=12).to_edge(DOWN, buff=0.55
+                                                                                                    ).shift(LEFT * 2.8)
+        ax = g.ax
+        bars = VGroup()
+        for i, dd in enumerate(dims):
+            v = np.log10(nb[str(dd)])
+            y0, y1 = ax.c2p(0, 0)[1], ax.c2p(0, v)[1]
+            bars.add(VGroup(Rectangle(width=0.45, height=max(y1 - y0, 0.01), stroke_width=0, fill_color=BAD,
+                                      fill_opacity=0.8).move_to([ax.c2p(i, 0)[0], (y0 + y1) / 2, 0]),
+                            label(str(dd), font_size=14).next_to(ax.c2p(i, 0), DOWN, buff=0.08),
+                            MathTex(comma(nb[str(dd)]), font_size=16).next_to(ax.c2p(i, v), UP, buff=0.05)))
+        side = wrapped_label(r"with one factor, a separate regression on each date is better: it sees the coupon steps. "
+                             r"A full cubic in 50 factors needs 23{,}426 terms on every date; a network's size grows with "
+                             r"the problem's structure, not the factor count. That is why deep xVA solvers exist", 5.0, 16,
+                             GREY_A).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
+        fit_right(side, 6.85)
+        with self.voiceover(
+            "Is the network better than what banks already use? The standard method regresses the same simulated "
+            "cash flows on polynomials of the state, separately on each date: Part sixteen's Longstaff–Schwartz "
+            "regression, applied to exposure. <bookmark mark='a'/> With a cubic on each date, the values are five "
+            f"times closer to the exact ones than the network's, and the CVA is within {100 * (m['deg3']['cva'] / ex - 1):.0f} "
+            "percent. A separate regression per date sees every coupon step. <bookmark mark='b'/> But this book has "
+            "one risk factor. A real netting set depends on several curves, currencies and spreads, and a full cubic "
+            "in fifty factors needs more than twenty-three thousand terms on every date. The network's size grows "
+            "with the structure of the problem, not with the number of factors. For one factor, the polynomial wins; "
+            "for fifty, it cannot be run at all."
+        ) as vo:
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[2:]], lag_ratio=0.4))
+            vo.wait_until("b")
+            self.play(FadeIn(g), LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.2), FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
         q = ask(r"a network prices a book's future values 50 times faster than the model it learned from. When is it "
                 r"safe to use it for capital?")
         with self.voiceover("A network prices a book's future values fifty times faster than the model it learned from. "

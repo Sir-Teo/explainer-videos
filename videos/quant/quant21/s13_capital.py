@@ -12,6 +12,8 @@ class Capital(VoiceoverScene):
         self.card()
         self.formula()
         self.numbers(s)
+        self.multiplier(s)
+        self.bacva(s)
         self.balance()
 
     def card(self):
@@ -85,6 +87,94 @@ class Capital(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def multiplier(self, s):
+        rows = [cmath(r"\text{mult}", r"=", r"\min\Big\{1,\ 0.05 + 0.95\,\exp\Big(\frac{V - C}{2 \times 0.95 \times "
+                      r"\text{AddOn}}\Big)\Big\}", font_size=34, colors={r"\text{mult}": EXPO})]
+        whys = [why(r"the add-on is scaled down when the netting set is out of the money or over-collateralised ($V - C "
+                    r"< 0$): a trade deep against the counterparty is unlikely to become an exposure soon. The floor of "
+                    r"5\% means no amount of collateral removes the charge entirely")]
+        step = ladder(self, rows, whys, keep=1, top=2.8, x=-0.4, buff=0.8, edge=6.9)
+        z = np.linspace(-6, 1, 200)
+        m = np.minimum(1, 0.05 + 0.95 * np.exp(z / (2 * 0.95)))
+        g = axes([-6, 1], [0, 1.1], x_length=6.4, y_length=2.8, xlabel=r"$(V - C)/\text{AddOn}$", ylabel=r"multiplier",
+                 xticks=[-6, -4, -2, 0], yticks=[0, 0.5, 1.0], font_size=13).to_edge(DOWN, buff=0.5).shift(LEFT * 2.4)
+        ax = g.ax
+        line = curve(ax, z, m, EXPO, stroke_width=3.5)
+        floor = DashedLine(ax.c2p(-6, 0.05), ax.c2p(1, 0.05), color=GREY_B, stroke_width=1.5)
+        ex = [(-1.0, r"out of the money by one add-on"), (-3.0, r"by three")]
+        dots = VGroup()
+        for zz, t_ in ex:
+            mm = float(np.minimum(1, 0.05 + 0.95 * np.exp(zz / 1.9)))
+            dots.add(VGroup(Dot(ax.c2p(zz, mm), color=BAD), label(rf"{t_}: {mm:.2f}", font_size=15, color=BAD).next_to(
+                ax.c2p(zz, mm), UR, buff=0.08)))
+        side = wrapped_label(rf"for the margined netting set, the add-on is \${s['margined']['AddOn']:.2f}m: posting "
+                             r"collateral beyond the exposure lowers the charge, but never below the floor", 4.6, 16,
+                             GREY_A).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.7)
+        fit_right(side, 6.85)
+        with self.voiceover(
+            "One more piece of the formula rewards collateral beyond what is owed. <bookmark mark='a'/> The add-on "
+            "is multiplied by a factor that falls when the netting set is out of the money, or when the bank holds "
+            "more collateral than the trades are worth. <bookmark mark='b'/> One add-on out of the money, and the "
+            "multiplier is about point six; three, and about a quarter. It never goes below five percent: however "
+            "much collateral there is, some charge remains, because the market can always move further than the "
+            "collateral covers."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.play(FadeIn(g), Create(floor), Create(line), FadeIn(side), run_time=2)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.5))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def bacva(self, s):
+        rows = [cmath(r"\text{SCVA}_c", r"=", r"\tfrac{1}{\alpha}\,RW_c\,M_c\,\text{EAD}_c\,\text{DF}_c,\quad "
+                      r"\text{DF} = \tfrac{1 - e^{-0.05M}}{0.05M}", font_size=32, colors={r"\text{SCVA}_c": CVA_C}),
+                cmath(r"K", r"=", r"0.65\sqrt{\big(\rho\textstyle\sum_c \text{SCVA}_c\big)^2 + (1 - \rho^2)\textstyle\sum_c "
+                      r"\text{SCVA}_c^2},\quad \rho = 0.5", font_size=30, colors={r"K": CVA_C})]
+        whys = [why(r"Basel's basic approach to CVA capital (2020): each counterparty's stand-alone charge from its "
+                    r"exposure, maturity and a risk weight set by sector and rating"),
+                why(r"a single common factor with correlation 0.5: part of every counterparty's spread moves together "
+                    r"and cannot be diversified away")]
+        step = ladder(self, rows, whys, keep=2, top=2.9, x=-0.6, buff=0.7, edge=6.9)
+        ead, M, rw = s["net"]["EAD"], 6.0, 0.05
+        df = (1 - np.exp(-0.05 * M)) / (0.05 * M)
+        sc = rw * M * ead * df / 1.4
+        ns = np.arange(1, 101)
+        per = np.sqrt((0.5 * ns) ** 2 + 0.75 * ns) / ns
+        g = axes([0, 100], [0, 1.05], x_length=5.2, y_length=2.4, xlabel=r"identical counterparties",
+                 ylabel=r"capital per name, $\times$ one", xticks=[1, 25, 50, 75, 100], yticks=[0, 0.5, 1.0], font_size=12
+                 ).to_edge(DOWN, buff=0.5).shift(LEFT * 3.0)
+        ax = g.ax
+        line = curve(ax, ns, per, CVA_C, stroke_width=3)
+        half = DashedLine(ax.c2p(0, 0.5), ax.c2p(100, 0.5), color=GREY_B, stroke_width=1.5)
+        side = VGroup(
+            MathTex(rf"\text{{one name}}: K = 0.65 \times {1e3 * sc:.0f}\text{{k}} = \${0.65 * 1e3 * sc:.0f}\text{{k}}",
+                    font_size=24, color=CVA_C),
+            wrapped_label(rf"the netting set's SA-CCR EAD \${ead:.1f}m, an assumed effective maturity of {M:g} years and a "
+                          rf"{100 * rw:g}\% risk weight. Across many names the charge per name falls toward half: "
+                          r"the common factor stays", 5.0, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
+        fit_right(side, 6.85)
+        with self.voiceover(
+            "The charge for CVA's own volatility has a formula too, Basel's basic approach since 2020. "
+            "<bookmark mark='a'/> Each counterparty's stand-alone charge scales with its exposure at default, its "
+            "maturity, and a risk weight set by its sector and rating. <bookmark mark='b'/> Then they are combined "
+            "as if every spread had one common factor, with correlation one half. <bookmark mark='c'/> For our "
+            f"netting set alone, with a five percent risk weight, the charge is about {0.65 * 1e3 * sc:.0f} thousand "
+            "dollars of capital. Spread the same exposure over a hundred counterparties, and the charge per name "
+            "falls only to about half: the part of credit spreads that moves together cannot be diversified away, "
+            "which is exactly what happened in 2008."
+        ) as vo:
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            self.play(FadeIn(g), Create(half), Create(line), FadeIn(side), run_time=2)
+        self.add(illustration(r"Basel Framework MAR50; inputs illustrative", UR))
+        self.wait(0.4)
+        self.clear_scene()
+
     def balance(self):
         cards = VGroup(
             desk_question(r"CVA capital", r"a separate charge for the volatility of CVA itself (chapter 3's two thirds), "
@@ -99,8 +189,8 @@ class Capital(VoiceoverScene):
         if cards.height > 6.6:
             cards.scale_to_fit_height(6.6)
         with self.voiceover(
-            "Two more charges complete the picture. A capital charge for the volatility of CVA itself, since that is "
-            "where most of the crisis losses came from. <bookmark mark='a'/> And the leverage ratio: capital of at "
+            "So capital is charged twice for one counterparty: for its default, and for the volatility of its CVA, "
+            "where most of the crisis losses came from. <bookmark mark='a'/> And then the leverage ratio: capital of at "
             "least three percent of all exposures, whatever their risk, so even Treasuries and repo use capital. "
             "<bookmark mark='b'/> The consequence runs through the series: dealers now charge for their balance "
             "sheets, which is why swap spreads went below Treasury yields in Part eighteen, why the gaps in Part "

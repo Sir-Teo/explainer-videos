@@ -11,8 +11,10 @@ class CCP(VoiceoverScene):
         c = load("ccp")
         self.card()
         self.novation()
+        self.duffiezhu()
         self.waterfall(c)
         self.sim(c)
+        self.cases()
 
     def card(self):
         c = chapter_card(10, r"Central clearing", r"What happens when a clearing member fails?", part=PART)
@@ -49,6 +51,54 @@ class CCP(VoiceoverScene):
             self.play(FadeIn(left), FadeIn(llab), Create(ledges))
             vo.wait_until("b")
             self.play(FadeIn(right), FadeIn(rlab), FadeIn(hub), FadeIn(hl), Create(redges), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def duffiezhu(self):
+        rows = [cmath(r"\text{bilateral}", r":", r"(N - 1)\,\sigma\sqrt{K}\,\varphi", font_size=34,
+                      colors={r"\text{bilateral}": BAD}),
+                cmath(r"\text{one class cleared}", r":", r"(N - 1)\,\sigma\sqrt{K - 1}\,\varphi + \sigma\sqrt{N - 1}\,\varphi",
+                      font_size=34, colors={r"\text{one class cleared}": COLL})]
+        whys = [why(r"a dealer facing $N - 1$ others in $K$ independent asset classes of equal size: netting each "
+                    r"counterparty across all $K$ classes, the expected exposure per counterparty is "
+                    r"$\sigma\sqrt K\,\varphi$, with $\varphi = 1/\sqrt{2\pi}$"),
+                why(r"clear one class: that class nets across all dealers at the CCP, but is lost from every bilateral "
+                    r"netting set. Duffie and Zhu (2011)")]
+        step = ladder(self, rows, whys, keep=2, top=2.9, x=-0.6, buff=0.65, edge=6.9)
+        ns = np.arange(2, 61)
+        g = axes([0, 60], [0.6, 1.3], x_length=5.8, y_length=2.5, xlabel=r"dealers $N$",
+                 ylabel=r"with CCP / without", xticks=[0, 20, 40, 60], yticks=[0.8, 1.0, 1.2], font_size=12
+                 ).to_edge(DOWN, buff=0.45).shift(LEFT * 2.6)
+        ax = g.ax
+        one = DashedLine(ax.c2p(0, 1), ax.c2p(60, 1), color=GREY_B, stroke_width=1.5)
+        cols = {2: COLL, 4: QC.IMPLIED, 8: BAD}
+        lines = VGroup()
+        for K, c_ in cols.items():
+            r_ = ((ns - 1) * np.sqrt(K - 1) + np.sqrt(ns - 1)) / ((ns - 1) * np.sqrt(K))
+            lines.add(curve(ax, ns, np.clip(r_, 0.6, 1.3), c_, stroke_width=3))
+        be = {K: int(np.ceil(1 + (np.sqrt(K) + np.sqrt(K - 1)) ** 2)) for K in cols}
+        side = VGroup(
+            legend([(c_, rf"$K$ = {K} classes: helps if $N \ge {be[K]}$") for K, c_ in cols.items()], font_size=16),
+            wrapped_label(r"a clearing house that takes one product from a world of bilateral netting can raise total "
+                          r"exposure: it helps only when it nets many dealers relative to the netting it destroys", 4.6,
+                          16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
+        fit_right(side, 6.85)
+        with self.voiceover(
+            "Does clearing always reduce risk? Darrell Duffie and Haoxiang Zhu showed that it need not. "
+            "<bookmark mark='a'/> Take a dealer trading with every other dealer in several independent asset classes. "
+            "Netting with each counterparty across all classes, its exposure to each grows like the square root of "
+            "the number of classes. <bookmark mark='b'/> Now clear one class. That class nets across every dealer at "
+            "the clearing house, but it is pulled out of every bilateral netting set, and those lose some of their "
+            "netting. <bookmark mark='c'/> With two classes, clearing one helps as soon as there are a handful of "
+            f"dealers; with eight, it takes {be[8]} or more. Below that, a new clearing house makes the system's "
+            "exposure larger. The lesson is to clear many products in a few clearing houses, not one product in many."
+        ) as vo:
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            self.play(FadeIn(g), Create(one), Create(lines), FadeIn(side), run_time=2)
         self.wait(0.4)
         self.clear_scene()
 
@@ -117,6 +167,59 @@ class CCP(VoiceoverScene):
             self.play(FadeIn(bars[0]), FadeIn(bars[1]))
             vo.wait_until("b")
             self.play(FadeIn(bars[2]), FadeIn(bars[3]), FadeIn(bars[4]), FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def cases(self):
+        def column(title, sub, layers, x):
+            # layers: (name, fraction used 0..1, colour), bottom first
+            grp = VGroup()
+            y = -2.3
+            for nm, used, c_ in layers:
+                box = Rectangle(width=2.6, height=0.85, stroke_color=GREY_B, stroke_width=1.5, fill_opacity=0).move_to([x, y, 0])
+                fill = Rectangle(width=2.6 * max(used, 0.004), height=0.85, stroke_width=0, fill_color=c_,
+                                 fill_opacity=0.75).align_to(box, LEFT).set_y(y)
+                txt = label(nm, font_size=16).next_to(box, RIGHT, buff=0.15)
+                grp.add(VGroup(box, fill, txt))
+                y += 0.95
+            head = VGroup(label(title, font_size=24), wrapped_label(sub, 5.4, 16, GREY_A)).arrange(DOWN, buff=0.12)
+            head.move_to([x + 0.9, 2.45, 0])
+            return head, grp
+        h1, w1 = column(r"Lehman at LCH, September 2008",
+                        r"66,390 interest-rate swaps, \$9 trillion of notional, hedged and auctioned within weeks",
+                        [(r"Lehman's initial margin: about a third used", 1 / 3, IM_C),
+                         (r"Lehman's default fund contribution", 0.0, GREY_B),
+                         (r"LCH's own capital", 0.0, GREY_B), (r"other members' fund", 0.0, GREY_B)], -5.4)
+        h2, w2 = column(r"Einar Aas at Nasdaq Clearing, September 2018",
+                        r"one trader's spread between Nordic and German power futures; \texteuro 114m lost beyond his "
+                        r"collateral", [(r"Aas's collateral: all used", 1.0, BAD),
+                                        (r"Nasdaq's capital: \texteuro 7m, all used", 1.0, BAD),
+                                        (r"members' fund: \texteuro 107m of \texteuro 166m", 107 / 166, BAD),
+                                        (r"assessments: not needed", 0.0, GREY_B)], 1.6)
+        foot = wrapped_label(r"sources: BIS Quarterly Review, December 2018, 'Two defaults at CCPs, 10 years apart'; LCH. "
+                             r"Members replenished the Nasdaq fund within a week", 12.4, 16, GREY_B).to_edge(DOWN, buff=0.25)
+        with self.voiceover(
+            "Two real defaults show the waterfall at its best and at its most exposed. <bookmark mark='a'/> When "
+            "Lehman failed in September 2008, it had more than sixty-six thousand interest-rate swaps at LCH's "
+            "SwapClear service, nine trillion dollars of notional. LCH hedged the book and auctioned it to the other "
+            "members within weeks, and used about a third of Lehman's own initial margin. No one else paid. "
+            "<bookmark mark='b'/> Ten years later, a single Norwegian power trader, Einar Aas, a clearing member in "
+            "his own right, held a large bet that Nordic and German electricity prices would converge. They moved "
+            "apart. His collateral was gone, then Nasdaq's own seven million euros, and then about a hundred and "
+            "seven million euros of the other members' default fund of a hundred and sixty-six: about two thirds of "
+            "it, for one person's position. <bookmark mark='c'/> The members refilled the fund within a week, and "
+            "asked why their money stood behind a concentrated bet that the margin model had not seen: the "
+            "question of chapter fourteen, in a different market."
+        ) as vo:
+            self.play(FadeIn(h1), FadeIn(h2))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in w1], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in w2], lag_ratio=0.5, run_time=4))
+            vo.wait_until("c")
+            self.play(FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
         q = ask(r"a clearing house lowers its margin to win business from a rival. Who bears the risk it no longer "
                 r"collects?")
         with self.voiceover("A clearing house lowers its margins to win business from a rival. Who bears the risk it no "

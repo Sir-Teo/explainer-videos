@@ -12,6 +12,8 @@ class WWR(VoiceoverScene):
         self.card()
         self.idea()
         self.curve_(w)
+        self.hazard(load("wwrhw"))
+        self.alpha(w)
         self.examples()
 
     def card(self):
@@ -71,6 +73,67 @@ class WWR(VoiceoverScene):
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(Create(line), FadeIn(side[1]), FadeIn(side[2]), FadeIn(side[3]), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def hazard(self, h):
+        rows = [cmath(r"\lambda_i(t)", r"=", r"\exp\big(a(t) + b\,V_i(t)\big)", font_size=40, colors={r"\lambda_i(t)": BAD}),
+                cmath(r"\tfrac{1}{N}\textstyle\sum_i e^{-\int_0^t \lambda_i}", r"=", r"Q_{\text{CDS}}(t)", font_size=36)]
+        whys = [why(r"Hull and White (2012): on each path the counterparty's hazard rate rises with the value the bank "
+                    r"is owed, by a factor $e^{b}$ per \$1 million"),
+                why(r"$a(t)$ is re-fitted date by date so the average survival still matches the counterparty's CDS "
+                    r"curve: the market's default probability is untouched; only where the defaults fall changes")]
+        step = ladder(self, rows, whys, keep=2, top=2.9, x=-0.6, buff=0.7, edge=6.9)
+        rs = h["rows"]
+        hx = [-3.0, 0.0, 3.0]
+        tab = VGroup(VGroup(*[label(t_, font_size=18, color=GREY_A).move_to([x, -0.9, 0]) for t_, x in
+                              zip([r"$b$, per \$1m", r"CVA, \$ thousand", r"against $b = 0$"], hx)]))
+        base = next(r_["cva"] for r_ in rs if r_["b"] == 0)
+        for i, r_ in enumerate(rs):
+            y = -1.4 - 0.36 * i
+            tab.add(VGroup(MathTex(f"{r_['b']:+.2f}", font_size=24).move_to([hx[0], y, 0]),
+                           MathTex(f"{1e3 * r_['cva']:.0f}", font_size=24).move_to([hx[1], y, 0]),
+                           MathTex(rf"\times {r_['cva'] / base:.2f}", font_size=24,
+                                   color=BAD if r_["b"] > 0 else (GOOD if r_["b"] < 0 else WHITE)).move_to([hx[2], y, 0])))
+        b10 = next(r_["cva"] for r_ in rs if abs(r_["b"] - 0.1) < 1e-9)
+        with self.voiceover(
+            "A copula is one way to tie default to exposure. John Hull and Alan White proposed a more direct one. "
+            "<bookmark mark='a'/> On every path, let the counterparty's hazard rate depend on the value the bank is "
+            "owed: up by a factor e to the b for each million. <bookmark mark='b'/> Then shift the hazard's level "
+            "date by date so that, averaged over the paths, survival still matches the counterparty's credit swaps. "
+            "The market's probability of default is kept; only where the defaults land is changed. "
+            f"<bookmark mark='c'/> With b of point one, the CVA rises from {1e3 * base:.0f} to {1e3 * b10:.0f} "
+            "thousand. The model has one parameter with a meaning a desk can argue about: how much worse does this "
+            "client's credit get for each million it owes us?"
+        ) as vo:
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def alpha(self, w):
+        r_, c_ = np.asarray(w["rhos"]), np.asarray(w["cva"])
+        k0 = int(np.argmin(np.abs(r_)))
+        k3 = int(np.argmin(np.abs(r_ - 0.3)))
+        rows = [cmath(r"\alpha", r"=", r"\frac{\text{capital with the true joint dynamics}}{\text{capital with "
+                      r"EPE as if independent}}", font_size=36, colors={r"\alpha": BAD})]
+        whys = [why(rf"Basel sets $\alpha$ = 1.4 for banks' own models, and allows estimates no lower than 1.2. Here a "
+                    rf"modest correlation of 0.3 multiplies the CVA by {c_[k3] / c_[k0]:.2f}: the multiplier is, in "
+                    r"part, a charge for wrong-way risk that the profile cannot see")]
+        step = ladder(self, rows, whys, keep=1, top=1.8, x=-0.4, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "This is where chapter one's alpha comes from. When regulators let banks use their own exposure models, "
+            "they multiply the expected positive exposure by alpha, one point four, and allow a bank's own estimate "
+            "only if it is at least one point two. Studies of portfolios found that concentration and wrong-way "
+            "dependence push the true capital above what the expected profile implies. <bookmark mark='a'/> On this "
+            f"netting set, a correlation of just point three multiplies the CVA by {c_[k3] / c_[k0]:.2f}. Alpha is a "
+            "blunt but honest admission that the profile alone is not the whole risk."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
         self.wait(0.4)
         self.clear_scene()
 

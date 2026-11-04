@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant21.common import BAD, CVA_C, DVA_C, EXPO, NEG, PART, ask, fit_right, illustration, load
+from videos.quant.quant21.common import BAD, CVA_C, DVA_C, EXPO, GOOD, NEG, PART, ask, fit_right, illustration, load
 
 
 class CVA(VoiceoverScene):
@@ -14,6 +14,10 @@ class CVA(VoiceoverScene):
         self.derive()
         self.compute(v, e)
         self.dva(v)
+        r = load("cvarisk")
+        self.hedge(r)
+        self.incremental(r)
+        self.accuracy(load("convergence"), load("modelrisk"))
         self.losses()
 
     def card(self):
@@ -124,6 +128,123 @@ class CVA(VoiceoverScene):
             vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(line), FadeIn(side[3]), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def hedge(self, r):
+        m, pth = np.asarray(r["mults"]), np.asarray(r["path"]) * 1e3
+        g = axes([0, 4.5], [0, 1400], x_length=6.8, y_length=4.2, xlabel=r"counterparty's CDS, multiple of today's",
+                 ylabel=r"CVA, \$ thousand", xticks=[0, 1, 2, 3, 4], yticks=[0, 400, 800, 1200], font_size=14
+                 ).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        line = VGroup(curve(ax, np.r_[0, m], np.r_[0, pth], CVA_C, stroke_width=3.5),
+                      *[Dot(ax.c2p(a, b), color=CVA_C) for a, b in zip(m, pth)])
+        side = VGroup(
+            MathTex(rf"\text{{CS01}} = \${1e6 * r['cs01']:,.0f}\ \text{{per bp}}".replace(",", "{,}"), font_size=26,
+                    color=CVA_C),
+            MathTex(rf"\text{{hedge: buy}}\ \${r['cds_hedge_notional']:.1f}\text{{m of 5-year CDS}}", font_size=26,
+                    color=GOOD),
+            wrapped_label(r"CVA is a short position in the counterparty's credit: it grows as the spread widens, less "
+                          r"than in proportion because a likelier default comes sooner and the trades are worth less by "
+                          r"then. Buying protection on the counterparty offsets the spread risk; the exposure moves with "
+                          r"rates, so the rate risk is hedged with swaps", 3.8, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "Once CVA is on the books, it is a position, and positions are hedged. <bookmark mark='a'/> Double the "
+            f"counterparty's spreads and the CVA goes from {pth[1]:.0f} to {pth[3]:.0f} thousand; quadruple them and it "
+            f"reaches {pth[-1]:,.0f}. It is short the counterparty's credit, and curves over because a likelier "
+            "default comes sooner, before the exposure has grown. <bookmark mark='b'/> One basis point on the "
+            f"counterparty's curve moves the CVA by about {1e6 * r['cs01']:,.0f} dollars, so the desk buys about "
+            f"{r['cds_hedge_notional']:.1f} million of five-year protection on that name. The exposure itself moves "
+            "with interest rates, and that part is hedged with swaps. The CVA desk is a trading desk, with the "
+            "bank's own counterparties as its underlyings."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(Create(line), run_time=2)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(x_) for x_ in side], lag_ratio=0.4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def incremental(self, r):
+        inc = r["incremental"]
+        rows = [cmath(r"\Delta\text{CVA}_{\text{new}}", r"=", r"\text{CVA}(\text{book} + \text{new}) - \text{CVA}(\text{book})",
+                      font_size=36, colors={r"\Delta\text{CVA}_{\text{new}}": CVA_C})]
+        whys = [why(r"exposure is a property of the netting set, so a new trade's price is the change it makes to the "
+                    r"set's CVA, not its own")]
+        step = ladder(self, rows, whys, keep=1, top=2.6, x=-0.4, buff=0.8, edge=6.9)
+        hx = [-3.4, 0.4, 3.6]
+        heads = [r"new 5-year swap, \$50m", r"CVA alone", r"CVA it adds to the book"]
+        tab = VGroup(VGroup(*[label(h_, font_size=19, color=GREY_A).move_to([x, 0.2, 0]) for h_, x in zip(heads, hx)]))
+        for i, (nm, k) in enumerate(((r"receiver (offsets the 10-year payer)", "receiver"),
+                                     (r"payer (adds to it)", "payer"))):
+            y = -0.55 - 0.65 * i
+            a, b = 1e3 * inc[k]["alone"], 1e3 * inc[k]["incremental"]
+            tab.add(VGroup(label(nm, font_size=19).move_to([hx[0], y, 0]),
+                           MathTex(rf"{a:.1f}\text{{k}}", font_size=28).move_to([hx[1], y, 0]),
+                           MathTex(rf"{b:+.1f}\text{{k}}", font_size=28, color=GOOD if b < 0 else CVA_C).move_to([hx[2], y, 0])))
+        foot = wrapped_label(r"the same counterparty, the same day, two quotes: the trade that reduces the book's exposure "
+                             r"earns the client a credit; the one that adds to it pays less than it would alone, because "
+                             r"its exposure is not perfectly aligned with the book's", 12.0, 18, GREY_A).to_edge(DOWN, buff=0.4)
+        rv, py = inc["receiver"], inc["payer"]
+        with self.voiceover(
+            "Because exposure belongs to the netting set, so does the price. A new trade is charged the change it "
+            "makes to the set's CVA. <bookmark mark='a'/> A new five-year receiver swap, which partly offsets the "
+            f"book's ten-year payer, would carry {1e3 * rv['alone']:.0f} thousand of CVA on its own; added to this "
+            f"book it reduces the CVA by {abs(1e3 * rv['incremental']):.0f} thousand, so the desk can pay the client "
+            f"to do it. A new payer swap would cost {1e3 * py['alone']:.0f} thousand alone and adds "
+            f"{1e3 * py['incremental']:.0f}. Two clients asking for the same swap can get different prices, and both "
+            "can be right."
+        ) as vo:
+            step(0)
+            self.play(FadeIn(tab[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(x_) for x_ in tab[1:]], lag_ratio=0.4), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def accuracy(self, cv, mr):
+        rows = cv["rows"]
+        n = np.array([r_["n"] for r_ in rows], float)
+        sd = np.array([r_["sd"] for r_ in rows]) * 1e3
+        g = axes([2, 4.5], [0, 30], x_length=5.4, y_length=3.6, xlabel=r"paths ($\log_{10}$)",
+                 ylabel=r"CVA's std.\ error, \$k", xticks=[2.5, 3, 3.5, 4], yticks=[0, 10, 20, 30], font_size=13
+                 ).to_edge(LEFT, buff=0.5).shift(DOWN * 0.4)
+        ax = g.ax
+        dots = VGroup(*[Dot(ax.c2p(np.log10(a), b), color=CVA_C, radius=0.07) for a, b in zip(n, sd)])
+        ref = curve(ax, np.linspace(2.3, 4.3, 50), sd[0] * np.sqrt(n[0] / 10 ** np.linspace(2.3, 4.3, 50)), GREY_B,
+                    stroke_width=2)
+        mrows = mr["rows"]
+        hx = [2.4, 4.4, 6.0]
+        heads = [r"mean reversion $a$", r"$\sigma$, bp", r"CVA, \$k"]
+        tab = VGroup(VGroup(*[label(h_, font_size=17, color=GREY_A).move_to([x, 2.0, 0]) for h_, x in zip(heads, hx)]))
+        for i, r_ in enumerate(mrows):
+            y = 1.45 - 0.5 * i
+            tab.add(VGroup(MathTex(f"{r_['a']:.3g}", font_size=24).move_to([hx[0], y, 0]),
+                           MathTex(f"{1e4 * r_['sigma']:.0f}", font_size=24).move_to([hx[1], y, 0]),
+                           MathTex(f"{1e3 * r_['cva']:.0f}", font_size=24).move_to([hx[2], y, 0])))
+        cvas = [1e3 * r_["cva"] for r_ in mrows]
+        tnote = wrapped_label(r"each model re-fitted to the same 10-year yield volatility, on the same random numbers",
+                              5.0, 16, GREY_A).next_to(tab, DOWN, buff=0.25)
+        title = label(r"Two kinds of error", font_size=28).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            "Two kinds of error sit in every CVA number. <bookmark mark='a'/> The first is Monte Carlo noise. Twenty "
+            f"independent runs with two hundred and fifty paths scatter by {sd[0]:.0f} thousand; with sixteen thousand "
+            f"paths, by {sd[-1]:.1f}. Four times the paths halve the error, the square-root law of Part sixteen. "
+            "<bookmark mark='b'/> The second is the model. Change the Hull–White mean reversion from almost none to "
+            "point two, re-fitting the volatility each time so the ten-year yield moves as much as the market says, "
+            f"and the CVA ranges only from {min(cvas):.0f} to {max(cvas):.0f} thousand. For ten-year swaps, the "
+            "calibration to ten-year volatility pins it down. A book of Bermudans or short-rate options would not be "
+            "so forgiving: their exposure depends on how volatility is spread across the curve, which is exactly what "
+            "the mean reversion changes."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(g))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.3), Create(ref))
+            vo.wait_until("b")
+            self.play(FadeIn(tab), FadeIn(tnote))
         self.wait(0.4)
         self.clear_scene()
 

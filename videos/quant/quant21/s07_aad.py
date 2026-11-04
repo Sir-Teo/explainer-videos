@@ -12,6 +12,7 @@ class AAD(VoiceoverScene):
         a = load("aad")
         self.card()
         self.why()
+        self.tape()
         self.grads(a)
         self.lab()
 
@@ -41,6 +42,72 @@ class AAD(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def tape(self):
+        lam, t, ee, D, R = 0.02, 5.0, 4.0, 0.82, 0.4
+        S = np.exp(-lam * t)
+        PD = 1 - S
+        cva = (1 - R) * ee * PD * D
+        b_pd = (1 - R) * ee * D
+        b_s = -b_pd
+        b_lam = b_s * (-t * S)
+        b_ee = (1 - R) * PD * D
+
+        def node(tex, val, pos, col=WHITE):
+            box = RoundedRectangle(corner_radius=0.12, width=2.5, height=1.05, stroke_color=col, stroke_width=2,
+                                   fill_opacity=0).move_to(pos)
+            top = MathTex(tex, font_size=28, color=col).move_to(box.get_center() + UP * 0.2)
+            v = MathTex(val, font_size=24, color=GREY_A).move_to(box.get_center() + DOWN * 0.25)
+            return VGroup(box, top, v)
+        n_lam = node(r"\lambda", f"{lam:.2f}", [-5.2, 1.0, 0], BAD)
+        n_ee = node(r"\text{EE}", f"{ee:.1f}", [-5.2, -1.4, 0], BAD)
+        n_s = node(r"S = e^{-\lambda t}", f"{S:.3f}", [-1.9, 1.0, 0])
+        n_pd = node(r"\text{PD} = 1 - S", f"{PD:.3f}", [1.3, 1.0, 0])
+        n_c = node(r"\text{CVA}", f"{cva:.3f}", [4.6, -0.2, 0], QC.LOSS)
+        nodes = [n_lam, n_ee, n_s, n_pd, n_c]
+        edges = [(n_lam, n_s), (n_s, n_pd), (n_pd, n_c), (n_ee, n_c)]
+        arrows = VGroup(*[Arrow(a_.get_right(), b_.get_left(), buff=0.08, color=GREY_B, stroke_width=3) for a_, b_ in edges])
+        adj = [(n_c, r"\bar{c} = 1"), (n_pd, rf"\bar{{\text{{PD}}}} = (1-R)\,\text{{EE}}\,D = {b_pd:.2f}"),
+               (n_s, rf"\bar S = -\bar{{\text{{PD}}}} = {b_s:.2f}"),
+               (n_lam, rf"\bar\lambda = \bar S\cdot(-t S) = {b_lam:.1f}"),
+               (n_ee, rf"\bar{{\text{{EE}}}} = (1-R)\,\text{{PD}}\,D = {b_ee:.3f}")]
+        adjs = VGroup(*[MathTex(tx, font_size=22, color=GOOD).next_to(n_, DOWN if n_ is not n_ee else UP, buff=0.15)
+                        for n_, tx in adj])
+        adjs[0].next_to(n_c, DOWN, buff=0.15)
+        adjs[4].next_to(n_ee, DOWN, buff=0.15)
+        title = label(r"One default bucket: forward values, then adjoints backwards", font_size=26).to_edge(UP, buff=0.4)
+        foot = wrapped_label(rf"$t$ = {t:g} years, discount $D$ = {D}, recovery {int(100 * R)}\%. Check: "
+                             rf"$\partial\,\text{{CVA}}/\partial\lambda = (1-R)\,\text{{EE}}\,D\,t\,e^{{-\lambda t}}$ = "
+                             rf"{(1 - R) * ee * D * t * S:.1f}. Every node is visited once each way, whatever the "
+                             r"number of inputs", 12.4, 18, GREY_A).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "How does one backward pass give every derivative? Take a single bucket of the CVA sum. "
+            "<bookmark mark='a'/> Going forward, each step is computed and written down: the survival from the "
+            "hazard rate, the default probability, and the CVA from that and the expected exposure. "
+            "<bookmark mark='b'/> Now go backwards. Start with the derivative of the CVA with respect to itself, "
+            "one. Each node passes back its own adjoint times its local derivative: the default probability's "
+            f"adjoint is {b_pd:.2f}; the survival's is minus that; <bookmark mark='c'/> and the hazard rate's is "
+            f"that times minus t times the survival, {b_lam:.1f}. The exposure gets its adjoint in the same sweep. "
+            "<bookmark mark='d'/> Each node is visited once forwards and once backwards, however many inputs feed "
+            "it. That is why the cost does not grow with the number of sensitivities, and why the memory does: "
+            "every intermediate value of the forward pass must be kept for the way back."
+        ) as vo:
+            self.play(FadeIn(title))
+            vo.wait_until("a")
+            self.play(LaggedStart(FadeIn(n_lam), FadeIn(n_ee), GrowArrow(arrows[0]), FadeIn(n_s), GrowArrow(arrows[1]),
+                                  FadeIn(n_pd), GrowArrow(arrows[2]), GrowArrow(arrows[3]), FadeIn(n_c),
+                                  lag_ratio=0.35, run_time=4))
+            vo.wait_until("b")
+            self.play(FadeIn(adjs[0]), Indicate(n_c, color=GOOD))
+            self.play(FadeIn(adjs[1]), Indicate(n_pd, color=GOOD))
+            self.play(FadeIn(adjs[2]), Indicate(n_s, color=GOOD))
+            vo.wait_until("c")
+            self.play(FadeIn(adjs[3]), Indicate(n_lam, color=GOOD))
+            self.play(FadeIn(adjs[4]), Indicate(n_ee, color=GOOD))
+            vo.wait_until("d")
+            self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
 
@@ -94,10 +161,10 @@ class AAD(VoiceoverScene):
             "code; the derivatives come with it."
         ):
             self.play(FadeIn(card))
-        q = ask(r"AAD gives the CVA's derivative with respect to 10,000 inputs for the cost of a few valuations. What "
-                r"is the catch?")
-        with self.voiceover("Adjoint differentiation gives ten thousand derivatives for the cost of a few valuations. "
-                            "What is the catch?"):
+        q = ask(r"exposure is $\max(V, 0)$, and a digital option's payoff jumps. What does a backward pass get wrong "
+                r"at a kink or a jump, and how would you fix it?")
+        with self.voiceover("Exposure takes the positive part of the value, and some payoffs jump. What does a backward "
+                            "pass get wrong at a kink or a jump, and how would you fix it?"):
             self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

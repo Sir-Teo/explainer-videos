@@ -215,8 +215,11 @@ def compute_deepxva() -> dict:
             for k in range(1, int(T) + 1):
                 if k <= t + 1e-12:
                     continue
-                d1, d0 = disc_at(float(k)), disc_at(float(k - 1)) if k - 1 > 0 else np.ones(x.shape[0])
-                L = (d0 / d1 - 1)  # realised annual simple rate, paid at k
+                d1 = disc_at(float(k))
+                # the floating leg as the exact valuation treats it: the period under way resets today, so it accrues
+                # from t; later periods accrue from their own start
+                d0 = Dt[:, j] if k - 1 < t - 1e-12 else (disc_at(float(k - 1)) if k - 1 > 0 else np.ones(x.shape[0]))
+                L = (d0 / d1 - 1)  # realised simple rate over the period, paid at k
                 cf = N * (L - K) * (1 if payer else -1)
                 pv += cf * d1
         tgt = pv / Dt[:, j]
@@ -354,9 +357,325 @@ def compute_nickel() -> dict:
     return _json({"t": _fy(f["date"]), "v": f["value"], "max": {"date": int(f["date"][k]), "v": float(f["value"][k])}})
 
 
+
+def compute_products() -> dict:
+    """Expected exposure profiles of four product shapes on $100 million, from the same rate model where one is
+    needed: an interest-rate swap (diffusion against run-off), an FX forward (diffusion only), a cross-currency swap
+    (a final exchange of notionals: diffusion and an FX leg that keeps growing), and a bought option (exposure is its
+    whole value, never negative)."""
+    from scipy.stats import norm
+    e = load("exposure")
+    t = np.asarray(TIMES)
+    s_fx = 0.10
+    fx_fwd = 100 * s_fx * np.sqrt(t) * norm.pdf(0)  # EE of N(0, s sqrt t) x 100: s sqrt(t / 2 pi)
+    xccy = np.asarray(e["single"]["EE"]) * 0.6 + 100 * s_fx * np.sqrt(t) * norm.pdf(0) * 0.8
+    T = 10.0
+    opt = np.array([100 * 0.2 * np.sqrt(T) * norm.pdf(0)] * len(t))  # ATM option value, flat in expectation
+    eff = np.maximum.accumulate(np.asarray(e["net"]["EE"]))
+    one = t <= 1.0 + 1e-9
+    return _json({"times": t, "swap": e["single"]["EE"], "fx_forward": fx_fwd, "xccy": xccy, "option": opt,
+                  "eff_EE": eff, "EEPE": float(np.mean(eff[one])), "EPE_1y": float(np.mean(np.asarray(e["net"]["EE"])[one]))})
+
+
+def compute_calls() -> dict:
+    """How the minimum transfer amount trades exposure against operational load: margin calls a year and EPE, on a
+    daily grid over one year of the netting set."""
+    c, hw, a, s = _setup()
+    tw = np.round(np.arange(1, 253) / 252, 6)
+    xw, _ = hw.simulate_x(tw, 4000, seed=3)
+    Vw, _ = _values(hw, xw, _book(c), tw)
+    out = []
+    for mta in (0.0, 0.25, 0.5, 1.0, 2.0):
+        C = np.zeros_like(Vw)
+        held = np.zeros(Vw.shape[0])
+        calls = np.zeros(Vw.shape[0])
+        for j in range(Vw.shape[1]):
+            need = Vw[:, j - 10] if j >= 10 else np.zeros(Vw.shape[0])  # what the 10-day-stale value calls for
+            move = need - held
+            do = np.abs(move) >= max(mta, 1e-12)
+            held = np.where(do, need, held)
+            calls += do
+            C[:, j] = held
+        out.append({"mta": mta, "calls": float(calls.mean()), "EPE": float(np.maximum(Vw - C, 0).mean())})
+    return _json({"rows": out})
+
+
+def compute_cvarisk() -> dict:
+    """CVA as a position: its sensitivity to the counterparty's spread (CS01), the CDS notional that hedges it, and
+    the incremental CVA of adding a new 5-year trade to the netting set, against its stand-alone CVA."""
+    c, hw, a, s = _setup()
+    x, _ = hw.simulate_x(TIMES, 20000, seed=0)
+    book = _book(c)
+    V, _ = _values(hw, x, book)
+    EE = XV.exposure_profile(V)["EE"]
+
+    def cva_at(mult, ee=EE):
+        k, h = _hazards({"tenors": CPTY_CDS["tenors"], "spreads_bp": list(np.array(CPTY_CDS["spreads_bp"]) * mult)})
+        return XV.cva(ee, TIMES, c.df, k, h)
+    base = cva_at(1.0)
+    mults = [0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+    path = [cva_at(m_) for m_ in mults]
+    # CS01: a parallel 1 bp in the counterparty's curve
+    k1, h1 = _hazards({"tenors": CPTY_CDS["tenors"], "spreads_bp": list(np.array(CPTY_CDS["spreads_bp"]) + 1.0)})
+    cs01 = XV.cva(EE, TIMES, c.df, k1, h1) - base
+    k0, h0 = _hazards(CPTY_CDS)
+    a5, _ = CR.cds_legs(5.0, k0, h0, lambda t: np.exp(-0.04 * np.asarray(t, float)))
+    cds_cs01 = a5 * 1e-4  # per unit notional, per bp
+    hedge = cs01 / cds_cs01
+    # incremental CVA: a new 5-year receiver (offsets the 10-year payer) and a new 5-year payer (adds to it)
+    out = {}
+    for name, payer in (("receiver", False), ("payer", True)):
+        K = _par(c, 5)
+        vn = np.stack([XV.swap_values_hw(hw, x[:, j], t, K, 5.0, notional=50.0, payer=payer)
+                       for j, t in enumerate(TIMES)], 1)
+        alone = XV.cva(XV.exposure_profile(vn)["EE"], TIMES, c.df, k0, h0)
+        withb = XV.cva(XV.exposure_profile(V + vn)["EE"], TIMES, c.df, k0, h0)
+        out[name] = {"alone": alone, "incremental": withb - base}
+    return _json({"base": base, "mults": mults, "path": path, "cs01": cs01, "cds_hedge_notional": hedge,
+                  "incremental": out})
+
+
+def compute_fvaasym() -> dict:
+    """FVA with a funding spread to borrow above the spread earned when lending: the cost no longer cancels."""
+    c, hw, a, s = _setup()
+    e = load("exposure")
+    EE, ENE = np.asarray(e["net"]["EE"]), np.asarray(e["net"]["ENE"])
+    kc, hc = _hazards(CPTY_CDS)
+    surv = CR.survival(TIMES, kc, hc)
+    rows = []
+    for b_, l_ in ((0.008, 0.008), (0.008, 0.002), (0.015, 0.002), (0.003, 0.003)):
+        f = XV.fva(EE, ENE, TIMES, c.df, b_, l_, survival=surv)
+        rows.append({"borrow": b_, "lend": l_, **f})
+    return _json({"rows": rows})
+
+
+def compute_imcva() -> dict:
+    """Initial margin against CVA: two-way IM sized at the q-quantile of the 10-day move removes most of the
+    exposure, and costs its funding instead. CVA and MVA as the IM quantile rises."""
+    c, hw, a, s = _setup()
+    tw = np.round(np.arange(1, 253 * 3) / 252, 6)
+    tw = tw[tw <= 3.0]
+    xw, _ = hw.simulate_x(tw, 3000, seed=4)
+    Vw, _ = _values(hw, xw, _book(c), tw)
+    kc, hc = _hazards(CPTY_CDS)
+    d10 = Vw[:, 10:] - Vw[:, :-10]
+    out = []
+    for q in (0.0, 0.9, 0.95, 0.99, 0.999):
+        im = np.quantile(np.abs(d10), q) if q > 0 else 0.0
+        E = np.maximum(XV.collateralised(Vw, tw, threshold=0.0, mpor=10 / 252) - im, 0.0)
+        ee = E.mean(0)
+        cv = XV.cva(ee, tw, c.df, kc, hc)
+        mva = XV.capital_cost(np.full(len(tw), im), tw, c.df, 0.008)
+        out.append({"q": q, "im": float(im), "cva": cv, "mva": mva})
+    return _json({"rows": out, "horizon": 3.0})
+
+
+def compute_apc() -> dict:
+    """Anti-procyclicality tools (as in EMIR): a 25% buffer released in stress, and a floor from a 10-year look-back,
+    applied to the EWMA margin of chapter 9; how far each one cuts the jump of March 2020."""
+    f = data.fred("DGS10", "2006-01-01", "2025-12-31")
+    d, y = f["date"], f["value"]
+    dy = np.diff(y) * 100
+    dd = d[1:]
+    dv01 = 0.085
+    lam, v = 0.97, np.var(dy[:250])
+    ew, fl = [], []
+    for i in range(250, len(dy)):
+        v = lam * v + (1 - lam) * dy[i - 1] ** 2
+        ew.append(2.33 * np.sqrt(10 * v) * dv01)
+        lo = max(0, i - 2520)
+        fl.append(np.sqrt(10) * np.quantile(np.abs(dy[lo:i]), 0.99) * dv01)
+    t = _fy(dd[250:])
+    ew, fl = np.array(ew), np.array(fl)
+    buffered = np.maximum(ew * 1.25, 0)
+    # the buffer is released in stress: margin = max(ewma, 1.25 x ewma of calm times) -> use a 1.25 x one-year median
+    calm = np.array([np.median(ew[max(0, i - 250):i + 1]) for i in range(len(ew))]) * 1.25
+    buf = np.maximum(ew, calm)
+    floor = np.maximum(ew, fl)
+    sel = t >= 2017
+    k = (t > 2020.1) & (t < 2020.4)
+    pre = (t > 2019.9) & (t < 2020.15)
+
+    def jump(z):
+        return float(z[k].max() / z[pre].mean())
+    return _json({"t": t[sel], "ewma": ew[sel], "buffer": buf[sel], "floor": floor[sel],
+                  "jump": {"ewma": jump(ew), "buffer": jump(buf), "floor": jump(floor)},
+                  "calm_level": {"ewma": float(ew[pre].mean()), "buffer": float(buf[pre].mean()),
+                                 "floor": float(floor[pre].mean())}})
+
+
+def compute_modelrisk() -> dict:
+    """The same netting set's EE and CVA under Hull-White with other mean reversions, each re-fitted to the same
+    10-year yield volatility (sigma scaled so the 10-year zero's volatility matches): exposure is a model output."""
+    c = _curve_2025()
+    a0, s0, *_ = _hw_params()
+    kc, hc = _hazards(CPTY_CDS)
+
+    def vol10(a, s):
+        return s * (1 - np.exp(-a * 10)) / (a * 10)
+    out = []
+    for a in (0.0087, 0.03, 0.06, 0.1, 0.2):
+        s = s0 * vol10(a0, s0) / vol10(a, s0) if a != a0 else s0
+        hw = TS.HullWhite(c, a, s)
+        x, _ = hw.simulate_x(TIMES, 10000, seed=0)
+        V, _ = _values(hw, x, _book(c))
+        ee = XV.exposure_profile(V)["EE"]
+        out.append({"a": a, "sigma": float(s), "EE": ee, "cva": XV.cva(ee, TIMES, c.df, kc, hc)})
+    return _json({"rows": out, "times": TIMES})
+
+
+def compute_convergence() -> dict:
+    """CVA's Monte Carlo error: twenty independent runs at each path count."""
+    c, hw, a, s = _setup()
+    kc, hc = _hazards(CPTY_CDS)
+    book = _book(c)
+    tm = TIMES[::2]
+    out = []
+    for n in (250, 1000, 4000, 16000):
+        vals = []
+        for r_ in range(20):
+            x, _ = hw.simulate_x(tm, n, seed=100 + r_)
+            V, _ = _values(hw, x, book, tm)
+            vals.append(XV.cva(XV.exposure_profile(V)["EE"], tm, c.df, kc, hc))
+        out.append({"n": n, "mean": float(np.mean(vals)), "sd": float(np.std(vals))})
+    return _json({"rows": out})
+
+
+def compute_wwrhw() -> dict:
+    """Hull and White's (2012) wrong-way model: the counterparty's hazard rate depends on the netting set's value,
+    lambda_i(t) = exp(a(t) + b V_i(t)), with a(t) re-fitted at each date so the average survival still matches the
+    CDS curve. CVA as b varies (b > 0: default likelier when the bank is owed more)."""
+    from scipy.optimize import brentq
+    c, hw, a, s = _setup()
+    x, _ = hw.simulate_x(TIMES, 20000, seed=0)
+    V, _ = _values(hw, x, _book(c))
+    kc, hc = _hazards(CPTY_CDS)
+    Q = CR.survival(TIMES, kc, hc)
+    dt = np.diff(np.r_[0.0, TIMES])
+    P = c.df(TIMES)
+    out = []
+    for b in (-0.1, -0.05, 0.0, 0.05, 0.1, 0.2):
+        Sprev = np.ones(V.shape[0])
+        cva = 0.0
+        for j in range(len(TIMES)):
+            def gap(aj):
+                return float(np.mean(Sprev * np.exp(-np.exp(aj + b * V[:, j]) * dt[j]))) - Q[j]
+            aj = brentq(gap, -30.0, 5.0)
+            S = Sprev * np.exp(-np.exp(aj + b * V[:, j]) * dt[j])
+            cva += 0.6 * P[j] * float(np.mean(np.maximum(V[:, j], 0.0) * (Sprev - S)))
+            Sprev = S
+        out.append({"b": b, "cva": cva})
+    return _json({"rows": out})
+
+def compute_haircut() -> dict:
+    """Non-cash collateral: the counterparty posts 10-year Treasuries instead of cash. Over the margin period the
+    bonds lose value exactly when rates rise, which is when this pay-fixed netting set's exposure grows. Exposure
+    with cash, with bonds at no haircut, and with Basel's 4% supervisory haircut for long sovereigns. Daily grid,
+    first year, zero threshold, 10-day margin period."""
+    c, hw, a, s = _setup()
+    tw = np.round(np.arange(1, 253) / 252, 6)
+    xw, _ = hw.simulate_x(tw, 8000, seed=1)
+    Vw, _ = _values(hw, xw, _book(c), tw)
+    lag = np.searchsorted(tw, tw - 10 / 252 + 1e-12, side="right") - 1
+    ok = lag >= 0
+    Vl = np.where(ok[None, :], Vw[:, np.clip(lag, 0, None)], 0.0)
+    xl = np.where(ok[None, :], xw[:, np.clip(lag, 0, None)], 0.0)
+    C = Vl  # zero threshold, two-way
+    B10 = (1 - np.exp(-a * 10)) / a
+    dy = B10 / 10 * (xw - xl)          # change in the 10-year zero yield over the margin period
+    dur = 8.5
+    out = {}
+    for name, h_ in (("cash", None), ("bonds, no haircut", 0.0), ("bonds, 4% haircut", 0.04)):
+        if h_ is None:
+            held = C
+        else:
+            # the poster delivers C/(1-h) of bonds at the call date; only collateral received is haircut
+            # (collateral the bank has posted is left as a cash-like claim: only what it receives is in bonds)
+            held = np.where(C > 0, C / (1 - h_) * (1 - dur * dy), C)
+        E = np.maximum(Vw - held, 0.0)
+        out[name] = {"EE": E.mean(0), "EPE": float(E.mean())}
+    corr = float(np.corrcoef((Vw - Vl)[:, 20:].ravel(), -dy[:, 20:].ravel())[0, 1])
+    return _json({"t": tw, "profiles": out, "corr": corr, "duration": dur})
+
+def compute_lsmexpo() -> dict:
+    """The industry's standard for the same problem: at each exposure date, regress the realised discounted cash
+    flows on polynomials of the state (Part 16's Longstaff-Schwartz regression, used for exposure), on the same
+    training paths and targets as chapter 7's network; then EE and CVA on fresh paths. Also the count of basis
+    functions a full cubic needs as the number of risk factors grows."""
+    c, hw, a, s = _setup()
+    book = _book(c)
+    tm = TIMES[::4]
+    grid = np.unique(np.round(np.r_[tm, np.arange(1, 11)], 9))
+    x_all, D = hw.simulate_x(grid, 8000, seed=2)
+    pos = {round(float(g_), 9): i for i, g_ in enumerate(grid)}
+    x = x_all[:, [pos[round(float(t), 9)] for t in tm]]
+    Dt = D[:, [pos[round(float(t), 9)] for t in tm]]
+
+    def disc_at(T):
+        return D[:, pos[round(float(T), 9)]]
+    xe, _ = hw.simulate_x(tm, 20000, seed=9)
+    Ve, _ = _values(hw, xe, book, tm)
+    out = {}
+    for deg in (1, 3):
+        Vr = np.zeros_like(Ve)
+        for j, t in enumerate(tm):
+            pv = np.zeros(x.shape[0])
+            for K, T, N, payer in book:
+                for k in range(1, int(T) + 1):
+                    if k <= t + 1e-12:
+                        continue
+                    d1 = disc_at(float(k))
+                    d0 = Dt[:, j] if k - 1 < t - 1e-12 else (disc_at(float(k - 1)) if k - 1 > 0 else np.ones(x.shape[0]))
+                    pv += N * ((d0 / d1 - 1) - K) * (1 if payer else -1) * d1
+            tgt = pv / Dt[:, j]
+            sc = x[:, j].std() + 1e-12
+            B = np.vander(x[:, j] / sc, deg + 1)
+            beta, *_ = np.linalg.lstsq(B, tgt, rcond=None)
+            Vr[:, j] = np.vander(xe[:, j] / sc, deg + 1) @ beta
+        ee_r = XV.exposure_profile(Vr)["EE"]
+        kc, hc = _hazards(CPTY_CDS)
+        out[f"deg{deg}"] = {"EE": ee_r, "cva": XV.cva(ee_r, tm, c.df, kc, hc),
+                            "rmse": float(np.sqrt(np.mean((Ve - Vr) ** 2)))}
+    from math import comb
+    nbasis = {d: comb(d + 3, 3) for d in (1, 2, 5, 10, 20, 50)}
+    ee_e = XV.exposure_profile(Ve)["EE"]
+    kc, hc = _hazards(CPTY_CDS)
+    return _json({"times": tm, "EE_exact": ee_e, "cva_exact": XV.cva(ee_e, tm, c.df, kc, hc), **out,
+                  "nbasis_cubic": nbasis})
+
+def compute_imbacktest() -> dict:
+    """Backtesting a margin model: how often did the 10-day move in the 10-year yield exceed the EWMA margin set ten
+    days before, 2017-2025? A 99% model should be exceeded about 1% of the time (Kupiec's likelihood-ratio test)."""
+    from scipy.stats import chi2
+    f = data.fred("DGS10", "2016-01-01", "2025-12-31")
+    y = f["value"]
+    dy = np.diff(y) * 100
+    lam, v = 0.97, np.var(dy[:250])
+    exc, n = 0, 0
+    flags = []
+    for i in range(250, len(dy) - 10):
+        v = lam * v + (1 - lam) * dy[i - 1] ** 2
+        lim = 2.576 * np.sqrt(10 * v)  # two-sided 99%: either direction of move is a loss to one side
+        move = abs(y[i + 10] - y[i]) * 100
+        hit = move > lim
+        flags.append(hit)
+        exc += hit
+        n += 1
+    p_hat = exc / n
+    p = 0.01
+    lr = -2 * (np.log((1 - p) ** (n - exc) * p ** exc) - np.log((1 - p_hat) ** (n - exc) * max(p_hat, 1e-12) ** exc))
+    t = _fy(f["date"][1:][250:len(dy) - 10])
+    fl = np.array(flags)
+    by_year = {int(yr): float(fl[t.astype(int) == yr].mean()) for yr in range(2017, 2026)}
+    return _json({"rate": p_hat, "n": n, "exceptions": int(exc), "lr": float(lr), "pval": float(1 - chi2.cdf(lr, 1)),
+                  "by_year": by_year})
+
 ITEMS = {"exposure": compute_exposure, "collateral": compute_collateral, "cva": compute_cva, "wwr": compute_wwr,
          "im": compute_im, "fva": compute_fva, "aad": compute_aad, "deepxva": compute_deepxva,
-         "procyc": compute_procyc, "saccr": compute_saccr, "ccp": compute_ccp, "nickel": compute_nickel}
+         "procyc": compute_procyc, "saccr": compute_saccr, "ccp": compute_ccp, "nickel": compute_nickel,
+         "products": compute_products, "calls": compute_calls, "cvarisk": compute_cvarisk, "fvaasym": compute_fvaasym,
+         "imcva": compute_imcva, "apc": compute_apc, "modelrisk": compute_modelrisk, "convergence": compute_convergence,
+         "imbacktest": compute_imbacktest, "wwrhw": compute_wwrhw, "haircut": compute_haircut, "lsmexpo": compute_lsmexpo}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

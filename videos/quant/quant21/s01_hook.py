@@ -102,7 +102,11 @@ class Hook(VoiceoverScene):
             "The plan: exposure, simulated and netted; the credit adjustment and its mirror; when default and exposure "
             "move together; the costs of funding, capital and margin; sensitivities by a single backward pass, and a "
             "network that learns what the book will be worth; initial margin, clearing houses and their waterfalls; "
-            "capital; and two episodes from the public record."
+            "capital; and two episodes from the public record. Along the way: why netting is a matter of law, how a "
+            "CVA desk hedges, why a new trade's price depends on everything else the client has done with you, when "
+            "a clearing house makes the system safer and when it does not, and how much margin a concentrated "
+            "position really needs. Every number is computed by the House's code, and every case comes from the "
+            "public record."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=11))

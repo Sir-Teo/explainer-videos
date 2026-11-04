@@ -13,7 +13,9 @@ class FVA(VoiceoverScene):
         self.card()
         self.funding()
         self.debate()
+        self.kva(f)
         self.stack(f, v)
+        self.asym(load("fvaasym"))
 
     def card(self):
         c = chapter_card(5, r"FVA, KVA and MVA", r"What does it cost to fund, hold capital and post margin?", part=PART)
@@ -83,6 +85,41 @@ class FVA(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def kva(self, f):
+        t = np.asarray(load("exposure")["times"])
+        cap = np.asarray(f["capital_profile"])
+        rows = [cmath(r"\text{KVA}", r"=", r"h\sum_i K(t_i)\,P(0, t_i)\,\Delta t_i", font_size=40, colors={r"\text{KVA}": BAD})]
+        whys = [why(r"capital $K(t)$ must be held against the trade for its whole life, and shareholders want a return "
+                    r"$h$ on it, here 10\% a year: KVA is that cost, discounted (Green, Kenyon and Dennis, 2014)")]
+        step = ladder(self, rows, whys, keep=1, top=2.8, x=-0.4, buff=0.8, edge=6.9)
+        g = axes([0, 10], [0, max(cap) * 1.25], x_length=6.6, y_length=2.8, xlabel=r"years", ylabel=r"capital, \$m",
+                 xticks=[0, 2, 4, 6, 8, 10], yticks=[0, 0.4, 0.8], font_size=13).to_edge(DOWN, buff=0.5).shift(LEFT * 2.6)
+        ax = g.ax
+        line = curve(ax, np.r_[0, t], np.r_[cap[0], cap], BAD, stroke_width=3)
+        fn = ax.plot(lambda u: float(np.interp(u, np.r_[0, t], np.r_[cap[0], cap])), x_range=[0, 10, 0.05])
+        area = ax.get_area(fn, x_range=[0, 10], color=BAD, opacity=0.25)
+        side = VGroup(
+            MathTex(rf"\text{{KVA}} = \${1e3 * f['KVA']:.0f}\text{{k}}", font_size=30, color=BAD),
+            wrapped_label(r"capital here: a stand-in from the netting set's potential exposure, 1.4 times PFE, at 8\% "
+                          r"and a 50\% risk weight (illustrative). The longer and larger the exposure, the more capital "
+                          r"years the trade consumes", 4.6, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.6)
+        fit_right(side, 6.85)
+        with self.voiceover(
+            "A third cost is capital. Regulators require the bank to hold capital against the trade for as long as "
+            "it lives, and capital is the shareholders' money, on which they expect a return. <bookmark mark='a'/> "
+            "The capital valuation adjustment, KVA, is that return, charged on the whole profile of capital the "
+            "trade will need, and discounted. Andrew Green, Chris Kenyon and Chris Dennis gave it its name in 2014. "
+            "<bookmark mark='b'/> On this netting set, with capital that follows its potential exposure and a ten "
+            f"percent hurdle, KVA comes to about {1e3 * f['KVA']:.0f} thousand dollars: the area under the capital "
+            "curve, times the hurdle rate."
+        ) as vo:
+            step(0)
+            vo.wait_until("b")
+            self.play(FadeIn(g), Create(line), FadeIn(area), FadeIn(side), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
     def stack(self, f, v):
         items = [("CVA", v["cva"], CVA_C), ("DVA", -v["dva"], DVA_C), ("FCA", f["FCA"], FVA_C), ("FBA", f["FBA"], GOOD),
                  ("KVA", f["KVA"], BAD), ("MVA", f["MVA"], IM_C)]
@@ -120,6 +157,48 @@ class FVA(VoiceoverScene):
             self.play(FadeIn(bars[4]), FadeIn(bars[5]))
             vo.wait_until("c")
             self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def asym(self, fa):
+        rows = fa["rows"]
+        hx = [-4.6, -2.4, -0.2, 2.0, 4.4]
+        heads = [r"borrow at", r"lend at", r"funding cost", r"funding benefit", r"FVA"]
+        tab = VGroup(VGroup(*[label(h_, font_size=19, color=GREY_A).move_to([x, 1.9, 0]) for h_, x in zip(heads, hx)]))
+        for i, r_ in enumerate(rows):
+            y = 1.2 - 0.62 * i
+            tab.add(VGroup(MathTex(rf"{1e4 * r_['borrow']:.0f}\text{{ bp}}", font_size=26).move_to([hx[0], y, 0]),
+                           MathTex(rf"{1e4 * r_['lend']:.0f}\text{{ bp}}", font_size=26).move_to([hx[1], y, 0]),
+                           MathTex(rf"{1e3 * r_['FCA']:.0f}\text{{k}}", font_size=26, color=FVA_C).move_to([hx[2], y, 0]),
+                           MathTex(rf"{1e3 * r_['FBA']:.0f}\text{{k}}", font_size=26, color=GOOD).move_to([hx[3], y, 0]),
+                           MathTex(rf"{1e3 * r_['FVA']:.0f}\text{{k}}", font_size=28).move_to([hx[4], y, 0])))
+        title = label(r"When borrowing costs more than lending earns", font_size=28).to_edge(UP, buff=0.4)
+        foot = wrapped_label(r"spreads over the risk-free rate. A bank's treasury rarely pays its desks for cash at the rate "
+                             r"it charges them; when the two differ, the benefit of the client's posted value no longer "
+                             r"offsets the cost of funding the exposure, and FVA becomes a real cost. A weaker bank's "
+                             r"wider spread makes it uncompetitive on exactly the trades that need funding",
+                             12.4, 18, GREY_A).to_edge(DOWN, buff=0.35)
+        r0, r1, r2, r3 = rows
+        with self.voiceover(
+            "The cancellation depends on symmetry. <bookmark mark='a'/> If the bank borrows and lends at the same "
+            f"eighty basis points, the funding cost of {1e3 * r0['FCA']:.0f} thousand is nearly paid back by the "
+            f"benefit, and FVA is {1e3 * r0['FVA']:.0f} thousand. <bookmark mark='b'/> But a treasury seldom pays its "
+            "desks for spare cash what it charges them for borrowing. Pay twenty basis points on the benefit side and "
+            f"FVA becomes {1e3 * r1['FVA']:.0f} thousand; a bank whose borrowing spread is a hundred and fifty pays "
+            f"{1e3 * r2['FVA']:.0f}. <bookmark mark='c'/> A strong bank at thirty both ways pays "
+            f"{1e3 * r3['FVA']:.0f}. Cheap funding wins the uncollateralised business, and an expensive funder "
+            "is left with the collateralised trades, which need no funding. Whether that is how it should be is the "
+            "question to end the chapter."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(tab[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(tab[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(tab[2]), FadeIn(tab[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(tab[4]), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
         q = ask(r"two banks quote the same uncollateralised swap. One funds at 20 bp over SOFR, the other at 150 bp. "
                 r"Who wins the trade, and is that the right outcome?")
         with self.voiceover("Two banks quote the same uncollateralised swap; one funds at twenty basis points over SOFR, "

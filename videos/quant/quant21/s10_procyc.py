@@ -12,6 +12,8 @@ class Procyc(VoiceoverScene):
         self.card()
         self.chart(p)
         self.loop()
+        self.tools(load("apc"))
+        self.backtest(load("imbacktest"))
 
     def card(self):
         c = chapter_card(9, r"Margin procyclicality", r"Why does margin rise exactly when cash is scarce?", lit=(2020,),
@@ -85,10 +87,93 @@ class Procyc(VoiceoverScene):
             self.play(Create(arrows[3]))
             vo.wait_until("d")
             self.play(FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def tools(self, a):
+        t = np.asarray(a["t"])
+        g = axes([2017, 2026], [0, 8], x_length=8.0, y_length=4.4, xlabel=r"year",
+                 ylabel=r"margin per \$100 of 10-year notes, \$", xticks=[2017, 2019, 2021, 2023, 2025], yticks=[0, 2, 4, 6, 8],
+                 font_size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        cols = {"ewma": BAD, "buffer": QC.IMPLIED, "floor": IM_C}
+        lines = {k: curve(ax, t, np.asarray(a[k]), c_, stroke_width=2.4) for k, c_ in cols.items()}
+        j, cl = a["jump"], a["calm_level"]
+        side = VGroup(
+            legend([(BAD, r"EWMA alone"), (QC.IMPLIED, r"with a 25\% buffer, released in stress"),
+                    (IM_C, r"floored at a 10-year look-back")], font_size=16),
+            *[MathTex(rf"\times {j[k]:.1f}\ \text{{in March 2020; calm level}}\ \${cl[k]:.2f}", font_size=21, color=c_)
+              for k, c_ in cols.items()],
+            wrapped_label(r"the tools Europe's clearing rules (EMIR) require of CCPs: a buffer of at least 25\% that can be "
+                          r"drawn down in stress, or a floor from a ten-year window. Smaller jumps, paid for with more "
+                          r"margin every calm day", 3.8, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(RIGHT, buff=0.25)
+        fit_right(side, 6.85)
+        with self.voiceover(
+            "Europe's clearing rules make the remedies concrete. A clearing house must use one of a few "
+            "anti-procyclicality tools. <bookmark mark='a'/> The responsive model alone jumped "
+            f"{j['ewma']:.1f} times in March 2020. <bookmark mark='b'/> A buffer of twenty-five percent, collected in calm "
+            f"times and released in a stress, makes the jump {j['buffer']:.1f} times. <bookmark mark='c'/> A floor at the "
+            f"level of a ten-year look-back makes it {j['floor']:.1f} times. <bookmark mark='d'/> The price is paid "
+            f"every quiet day: before the crisis, the floored margin was {cl['floor']:.2f} dollars against "
+            f"{cl['ewma']:.2f}, about {100 * (cl['floor'] / cl['ewma'] - 1):.0f} percent more. Stability is bought with "
+            "collateral that sits idle in good times."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(Create(lines["ewma"]), FadeIn(side[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(lines["buffer"]), FadeIn(side[2]), run_time=2)
+            vo.wait_until("c")
+            self.play(Create(lines["floor"]), FadeIn(side[3]), run_time=2)
+            vo.wait_until("d")
+            self.play(FadeIn(side[4]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def backtest(self, b):
+        rows = [cmath(r"\text{LR}", r"=", r"-2\ln\frac{(1-p)^{n-x}p^{x}}{(1-\hat p)^{n-x}\hat p^{x}} \sim \chi^2_1",
+                      font_size=36, colors={r"\text{LR}": IM_C})]
+        whys = [why(rf"Kupiec's test: with $p$ = 1\%, $n$ = {b['n']:,} days and $x$ = {b['exceptions']} exceptions, "
+                    rf"$\hat p$ = {100 * b['rate']:.2f}\%, LR = {b['lr']:.2f}, p-value {b['pval']:.2f}: not rejected"
+                    .replace(",", "{,}", 1))]
+        step = ladder(self, rows, whys, keep=1, top=2.7, x=-0.4, buff=0.8, edge=6.9)
+        yrs = sorted(b["by_year"], key=int)
+        vals = [100 * b["by_year"][y] for y in yrs]
+        g = axes([-0.6, len(yrs) - 0.4], [0, 6], x_length=7.6, y_length=2.6, xlabel=r"", ylabel=r"exceptions, \%",
+                 xticks=[], yticks=[0, 1, 3, 5], font_size=13).to_edge(DOWN, buff=0.6).shift(LEFT * 1.4)
+        ax = g.ax
+        one = DashedLine(ax.c2p(-0.6, 1), ax.c2p(len(yrs) - 0.4, 1), color=GREY_B, stroke_width=1.5)
+        bars = VGroup()
+        for i, (y, v_) in enumerate(zip(yrs, vals)):
+            y0, y1 = ax.c2p(0, 0)[1], ax.c2p(0, v_)[1]
+            bars.add(VGroup(Rectangle(width=0.5, height=max(y1 - y0, 0.01), stroke_width=0,
+                                      fill_color=BAD if v_ > 2 else IM_C, fill_opacity=0.85).move_to(
+                [ax.c2p(i, 0)[0], (y0 + y1) / 2, 0]), label(str(y), font_size=15).next_to(ax.c2p(i, 0), DOWN, buff=0.1)))
+        side = wrapped_label(r"overall, the model passes; year by year, its misses cluster in the two years when "
+                             r"volatility changed fastest. Independence tests (Christoffersen's) catch what a count "
+                             r"cannot", 3.4, 17, GREY_A).to_edge(RIGHT, buff=0.35).shift(DOWN * 1.6)
+        with self.voiceover(
+            "And a margin model has to be checked against what happened. Set the responsive model's ten-day, "
+            "ninety-nine percent margin on the ten-year yield each day since 2017, and count the days when the next "
+            f"ten days' move exceeded it. <bookmark mark='a'/> {b['exceptions']} exceptions in {b['n']:,} days, "
+            f"{100 * b['rate']:.2f} percent against one percent expected. Paul Kupiec's likelihood-ratio test cannot "
+            "reject the model. <bookmark mark='b'/> But look by year. The misses cluster: about five percent of days "
+            f"in 2019, {vals[yrs.index('2020')]:.0f} percent in 2020, almost none in calmer years. A model can be right "
+            "on average and wrong exactly when it matters; tests of independence, like Peter Christoffersen's, are "
+            "built to catch that."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.play(FadeIn(g), Create(one))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.15), FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
         q = ask(r"a margin model with a 10-year look-back barely moved in March 2020. Why might a regulator still "
                 r"dislike it?")
         with self.voiceover("A margin model with a ten-year look-back barely moved in March 2020. Why might a regulator "
                             "still dislike it?"):
-            self.play(FadeOut(foot), FadeIn(q))
+            self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

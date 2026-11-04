@@ -13,7 +13,10 @@ class Exposure(VoiceoverScene):
         self.define()
         self.fan(e)
         self.profiles(e)
+        self.shapes(load("products"))
         self.netting(e)
+        self.legal()
+        self.regulatory(load("products"))
 
     def card(self):
         c = chapter_card(1, r"Exposure", r"What could the other side owe you, and when?", part=PART)
@@ -119,6 +122,106 @@ class Exposure(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def shapes(self, p):
+        t = np.asarray(p["times"])
+        cols = {"swap": EXPO, "fx_forward": QC.IMPLIED, "xccy": BAD, "option": QC.GAIN}
+        names = {"swap": r"interest-rate swap", "fx_forward": r"FX forward", "xccy": r"cross-currency swap",
+                 "option": r"bought option"}
+        g = axes([0, 10], [0, 30], x_length=7.4, y_length=4.4, xlabel=r"years", ylabel=r"EE on \$100m, \$ million",
+                 xticks=[0, 2, 4, 6, 8, 10], yticks=[0, 10, 20, 30], font_size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        lines = VGroup(*[curve(ax, np.r_[0, t], np.r_[0 if k != "option" else p[k][0], p[k]], c_, stroke_width=3)
+                         for k, c_ in cols.items()])
+        side = VGroup(
+            legend([(c_, names[k]) for k, c_ in cols.items()], font_size=17),
+            wrapped_label(r"the shape is the product's: a swap's payments run off; an FX forward only diffuses; a "
+                          r"cross-currency swap exchanges its notionals at the end, so its exposure keeps growing; a bought "
+                          r"option is always an asset, its whole value at risk. FX vol 10\%, option vol 20\% "
+                          r"(illustrative)", 3.6, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "Every product has its own shape. <bookmark mark='a'/> A swap's exposure has the hump of run-off. An FX "
+            "forward settles once, at the end, so its exposure just diffuses, growing with the square root of time. "
+            "<bookmark mark='b'/> A cross-currency swap exchanges its principals at maturity, so the exchange-rate "
+            "risk on the whole notional keeps growing to the very end. <bookmark mark='c'/> And a bought option is "
+            "never a liability: the counterparty owes its whole value, all the time, which is why selling options to "
+            "a weak counterparty is cheap and buying from one is not."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(Create(lines[0]), Create(lines[1]), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(lines[2]), run_time=1.5)
+            vo.wait_until("c")
+            self.play(Create(lines[3]), FadeIn(side[1]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def legal(self):
+        rows = [cmath(r"\text{claim}", r"=", r"\textstyle\sum_i V_i\quad\text{not}\quad \textstyle\sum_i \max(V_i, 0)\ "
+                      r"\text{owed},\ \textstyle\sum_i \min(V_i, 0)\ \text{paid}", font_size=32,
+                      colors={r"\text{claim}": EXPO})]
+        whys = [why(r"close-out netting: on default every trade under one master agreement is terminated and valued, and "
+                    r"the values are added into a single amount; without it, a liquidator could demand payment on the "
+                    r"trades it loses on and leave the others as unsecured claims ('cherry-picking')")]
+        step = ladder(self, rows, whys, keep=1, top=2.6, x=-0.4, buff=0.8, edge=6.9)
+        cards = VGroup(
+            desk_question(r"the contract", r"ISDA's master agreements (1987, 1992, 2002): all trades form a single "
+                          r"agreement, so a default ends them all at once, at one net amount", width=12.0, font_size=19),
+            desk_question(r"the law", r"netting is only worth what courts enforce: dealers collect legal opinions country "
+                          r"by country, and count a netting set only where netting is known to hold; US bankruptcy law "
+                          r"exempts swaps from the automatic stay (widened in 2005)", width=12.0, font_size=19),
+        ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "Netting is not arithmetic; it is law. <bookmark mark='a'/> When a counterparty fails, its liquidator "
+            "would like to collect on every trade it is winning and leave the bank to queue as an unsecured creditor "
+            "on the rest. Close-out netting forbids that: all trades under one master agreement are terminated "
+            "together and added into a single amount. <bookmark mark='b'/> The industry's master agreements, from "
+            "1987 onwards, make every trade part of one contract for exactly this reason. <bookmark mark='c'/> And "
+            "netting is only worth what a court will enforce, so dealers collect legal opinions country by country, "
+            "and count a netting set only where it is known to hold. In the United States, swaps are also exempt "
+            "from the freeze on creditors that bankruptcy normally imposes, an exemption widened in 2005, and "
+            "debated ever since Lehman."
+        ) as vo:
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("c")
+            self.play(FadeIn(cards[1], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def regulatory(self, p):
+        rows = [cmath(r"\text{EE}^{\text{eff}}(t_k)", r"=", r"\max_{j \le k} \text{EE}(t_j)", font_size=40,
+                      colors={r"\text{EE}^{\text{eff}}(t_k)": EXPO}),
+                cmath(r"\text{EEPE}", r"=", r"\frac{1}{1\,\text{yr}}\int_0^{1\,\text{yr}} \text{EE}^{\text{eff}}(t)\,dt,\quad "
+                      r"\text{EAD} = \alpha\,\text{EEPE},\ \alpha = 1.4", font_size=34, colors={r"\text{EEPE}": EXPO})]
+        whys = [why(r"the regulators' version for banks with approved models: expected exposure that is never allowed to "
+                    r"fall, since maturing trades are assumed to be replaced"),
+                why(rf"effective EPE over the first year; here \${p['EEPE']:.2f}m against \${p['EPE_1y']:.2f}m of plain EPE, "
+                    r"and $\alpha$ adds a margin for wrong-way risk and model error")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "Regulators take the same profile and make it conservative. The effective expected exposure is never "
+            "allowed to fall, on the assumption that trades which mature are replaced. <bookmark mark='a'/> Its "
+            "average over the first year, times a multiplier alpha of one point four, is the exposure at default "
+            "for banks allowed to use their own models; the alpha covers wrong-way risk and model error."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        self.wait(0.4)
+        self.clear_scene()
+        q = ask(r"a bank has two swaps with the same counterparty that exactly offset. What is its exposure with netting, "
+                r"and without it?")
+        with self.voiceover("A bank has two swaps with one counterparty that exactly offset. What is its exposure with "
+                            "netting, and without?"):
+            self.play(FadeIn(q))
+        self.wait(0.5)
+        self.clear_scene()
+
     def netting(self, e):
         t = np.asarray(e["times"])
         g = axes([0, 10], [0, 8], x_length=7.6, y_length=4.4, xlabel=r"years", ylabel=r"EE, \$ million",
@@ -149,10 +252,5 @@ class Exposure(VoiceoverScene):
             self.play(Create(lg), Create(ln), run_time=2)
             vo.wait_until("b")
             self.play(FadeIn(side[4]), FadeIn(side[5]))
-        q = ask(r"a bank has two swaps with the same counterparty that exactly offset. What is its exposure with netting, "
-                r"and without it?")
-        with self.voiceover("A bank has two swaps with one counterparty that exactly offset. What is its exposure with "
-                            "netting, and without?"):
-            self.play(FadeIn(q))
-        self.wait(0.5)
+        self.wait(0.4)
         self.clear_scene()

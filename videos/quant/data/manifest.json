@@ -18889,6 +18889,16 @@
   "bytes": 1898,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
  },
+ "fred/DGS10/2006-01-01_2025-12-31": {
+  "sha256": "e794a1ce5ba30ade4744d2529ab6ece229a7fb219b9f174f17e56b87336098aa",
+  "bytes": 89580,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
+ },
+ "fred/DGS10/2016-01-01_2025-12-31": {
+  "sha256": "1416ece0be79a10add55eaf5607128812f905cf0d4377f2deba00b632cb0443b",
+  "bytes": 44765,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10"
+ },
  "fred/DGS1MO/1950-01-01_2025-12-31": {
   "sha256": "20b0e148b3bbd2fe006756ab6565e485a6ab5f4640a163a8ccd37abe54dc7b4e",
   "bytes": 109353,
@@ -19143,6 +19153,11 @@
   "sha256": "687fec79bfd37b9c740e05161450ead45752bed66b219b826a356787c83e6043",
   "bytes": 9887,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCEPILFE"
+ },
+ "fred/PNICKUSDM/2015-01-01_2025-12-31": {
+  "sha256": "c6ed2071379865f58242ec38db13ef49d8b37a70b8d3013a330b01bc4800561e",
+  "bytes": 3295,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PNICKUSDM"
  },
  "fred/RRPONTSYAWARD/1950-01-01_2025-12-31": {
   "sha256": "0a6feee73a653694ddbd12de7f1f225717a547616572d0d9b2f3bffc3531214b",

@@ -10,7 +10,9 @@ class House(VoiceoverScene):
     def construct(self):
         self.card()
         self.report(load("cva"), load("fva"), load("im"), load("saccr"), load("exposure"))
+        self.night()
         self.module()
+        self.test()
 
     def card(self):
         c = chapter_card(14, r"Rule 21: the XVA desk", r"What must every trade's price include?", part=PART)
@@ -51,6 +53,52 @@ class House(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(tot), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def night(self):
+        steps = [(r"scenarios", r"rates, credit and FX on every path and date (chapter 1)"),
+                 (r"values", r"every trade on every path: formulas, or a learned network (chapter 7)"),
+                 (r"netting and collateral", r"by legal agreement: thresholds, transfer amounts, margin period (chapters 1--2)"),
+                 (r"adjustments", r"CVA, DVA, FVA, KVA, MVA per counterparty, and per new trade as an increment (3--5)"),
+                 (r"sensitivities", r"one backward pass for every curve node and spread (chapter 6)"),
+                 (r"hedges and limits", r"CDS and swaps against the CVA's risks; PFE against each credit line; "
+                                        r"wrong-way and margin-period stresses (Rule 21)")]
+        boxes = VGroup()
+        for i, (h_, d_) in enumerate(steps):
+            b_ = RoundedRectangle(corner_radius=0.12, width=3.9, height=1.25, stroke_color=CVA_C if i == 3 else GREY_B,
+                                  stroke_width=2, fill_opacity=0)
+            t_ = VGroup(label(h_, font_size=20), wrapped_label(d_, 3.6, 14, GREY_A)).arrange(DOWN, buff=0.08).move_to(b_)
+            boxes.add(VGroup(b_, t_))
+        boxes.arrange_in_grid(rows=2, cols=3, buff=(0.45, 0.7)).move_to(DOWN * 0.2)
+        arrows = VGroup(*[Arrow(boxes[i].get_right(), boxes[i + 1].get_left(), buff=0.06, color=GREY_B, stroke_width=3)
+                          for i in (0, 1, 3, 4)],
+                        Arrow(boxes[2].get_bottom(), boxes[5].get_top(), buff=0.06, color=GREY_B, stroke_width=3))
+        # the grid reads 0 1 2 / 3 4 5: route 2 -> 3 as the turn of the line
+        arrows[-1].become(CurvedArrow(boxes[2].get_bottom() + DOWN * 0.05, boxes[3].get_top() + UP * 0.05, angle=-0.6,
+                                      color=GREY_B, stroke_width=3))
+        title = label(r"The XVA desk's night", font_size=28).to_edge(UP, buff=0.4)
+        foot = wrapped_label(r"the same machinery prices a client's new trade during the day: rerun only the increment "
+                             r"its netting set changes", 12.0, 18, GREY_A).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "Behind the ticket is a process that runs every night. <bookmark mark='a'/> Simulate the markets, on "
+            "thousands of paths and dates. Value every trade on every path, by formula where one exists and by a "
+            "learned approximation where it does not. Net and collateralise by legal agreement. "
+            "<bookmark mark='b'/> Compute every adjustment for every counterparty, and their sensitivities in one "
+            "backward pass. Then hedge the credit and rate risks of the CVA, check potential exposure against each "
+            "credit line, and run the stresses the rule requires. <bookmark mark='c'/> During the day, the same "
+            "machinery quotes a new trade by rerunning only the netting set it changes."
+        ) as vo:
+            self.play(FadeIn(title))
+            vo.wait_until("a")
+            self.play(LaggedStart(FadeIn(boxes[0]), GrowArrow(arrows[0]), FadeIn(boxes[1]), GrowArrow(arrows[1]),
+                                  FadeIn(boxes[2]), lag_ratio=0.4, run_time=3))
+            vo.wait_until("b")
+            self.play(Create(arrows[4]))
+            self.play(LaggedStart(FadeIn(boxes[3]), GrowArrow(arrows[2]), FadeIn(boxes[4]), GrowArrow(arrows[3]),
+                                  FadeIn(boxes[5]), lag_ratio=0.4, run_time=3))
+            vo.wait_until("c")
+            self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
 
@@ -95,4 +143,36 @@ class House(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(rule))
         self.wait(0.4)
+        self.clear_scene()
+
+
+    def test(self):
+        cards = VGroup(
+            desk_question(r"Archegos, 2021", r"the rule asks for the client's concentration and its positions at other "
+                          r"dealers before margin is set; at a few days' volume per name, the liquidation-horizon margin "
+                          r"of chapter 13 is several times 20\%. The House would have refused the size, or charged for it",
+                          width=12.0, font_size=20),
+            desk_question(r"a power trader at a clearing house, 2018", r"a member's one-way bet on a spread is a "
+                          r"concentration the CCP's margin model did not price; the House, as a member, stresses its "
+                          r"default-fund share for the largest such positions it can learn of", width=12.0, font_size=20),
+            desk_question(r"nickel, 2022", r"a margin period twice the contract's, and wrong-way stress on the "
+                          r"collateral, would have shown the short side's calls as unpayable in a day; the House limits "
+                          r"exposure to any client whose calls it could not meet in cash", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        if cards.height > 6.6:
+            cards.scale_to_fit_height(6.6)
+        with self.voiceover(
+            "Would the rule have helped in this part's three cases? <bookmark mark='a'/> For Archegos, it asks what "
+            "the client holds elsewhere and how concentrated it is before setting margin. At several days' volume per "
+            "name, the margin of chapter thirteen is several times twenty percent: the House would have refused the "
+            "size, or charged for it. <bookmark mark='b'/> For the power trader, the House as a clearing member "
+            "stresses its share of the default fund against the largest one-way positions it can learn of. "
+            "<bookmark mark='c'/> And for nickel, a doubled margin period and stressed collateral show calls that "
+            "cannot be paid in a day. No rule prevents every loss. This one asks the questions whose answers were "
+            "available, and ignored."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
+        self.wait(0.5)
         self.clear_scene()

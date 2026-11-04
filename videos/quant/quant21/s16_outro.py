@@ -21,6 +21,13 @@ DESK = [
      r"margin models scale with recent volatility, and volatility rises in crises; every margined position is called "
      r"at once, and the cash is raised by selling, which raises volatility again. Floors, buffers and longer windows "
      r"dampen the loop at the cost of more margin in calm times"),
+    (r"What does a backward pass get wrong at $\max(V, 0)$ or at a jump in a payoff?",
+     r"at a kink it returns one side's derivative, fine on average; at a jump the pathwise derivative misses the "
+     r"jump's mass entirely and reports zero. Smooth the payoff (a narrow sigmoid), or use likelihood-ratio or "
+     r"conditional-expectation estimators for those terms"),
+    (r"A client posts 20\% margin on a single-stock swap. What do you most want to know?",
+     r"the size of its position against the stock's daily volume, at every dealer combined: that sets the time to "
+     r"liquidate, and with it the margin. It is not visible because swaps leave the shares in the dealers' names"),
 ]
 
 PROBLEMS = [
@@ -38,6 +45,10 @@ PROBLEMS = [
     r"require, and who pays if the third largest also defaults?",
     r"Why can AAD compute $n$ sensitivities for the cost of a few valuations, while bumping costs $n$? What does it "
     r"cost in memory?",
+    r"With $N$ dealers and $K$ independent, equal asset classes, show that clearing one class lowers a dealer's expected "
+    r"exposure if and only if $N > 1 + (\sqrt K + \sqrt{K - 1})^2$.",
+    r"A trade needs capital $K(t) = K_0(1 - t/T)$ for $T$ years. With hurdle $h$ and no discounting, show that "
+    r"$\text{KVA} = h K_0 T/2$.",
 ]
 
 
@@ -53,62 +64,88 @@ class Outro(VoiceoverScene):
 
     def recap(self, e, c, v, w, f, a, d, im, p, cc, s):
         rr = np.asarray(w["cva"])
-        items = [
+        r = load("cvarisk")
+        pages = [[
             (r"Archegos: more than \$10 billion of bank losses on one client's swaps", BAD),
-            (rf"exposure: a hump from diffusion and run-off; netting cut it by {100 * e['netting_benefit']:.0f}\%", EXPO),
-            (rf"collateral cuts exposure to the margin period's moves: EPE {c['profiles']['none']['EPE']:.1f} to "
-             rf"{c['profiles']['threshold 0']['EPE']:.1f}", COLL),
-            (rf"CVA \${1e3 * v['cva']:.0f}k; DVA \${1e3 * v['dva']:.0f}k, rising as the bank's own credit worsens", CVA_C),
+            (rf"exposure: a hump from diffusion and run-off; netting, enforced by law, cut it by "
+             rf"{100 * e['netting_benefit']:.0f}\%", EXPO),
+            (rf"collateral leaves the margin period's moves: EPE {c['profiles']['none']['EPE']:.1f} to "
+             rf"{c['profiles']['threshold 0']['EPE']:.1f}; haircuts and segregation protect what is held", COLL),
+            (rf"CVA \${1e3 * v['cva']:.0f}k, a position with a CS01 of \${1e6 * r['cs01']:,.0f} a bp; DVA rises as the "
+             r"bank weakens".replace(",", "{,}", 1), CVA_C),
+            (r"price by increment: a trade that offsets the netting set earns a credit", CVA_C),
             (rf"wrong-way risk: the same trade's CVA {rr[-1] / rr[2]:.1f} times larger when default and exposure move "
-             r"together", BAD),
-            (r"FVA, KVA and MVA: funding, capital and margin, the costs a screen price leaves out", FVA_C),
-            (rf"AAD: every sensitivity in one backward pass, {a['t_aad']:.0f} s against {a['t_bump']:.0f} s of bumps", DVA_C),
-            (r"a network learned the book's future values from cash flows alone", EXPO),
-            (rf"initial margin \${im['im']:.1f}m by a SIMM-style formula; it doubled in March 2020", IM_C),
-            (r"clearing: netting through the CCP, and a waterfall sized to Cover 2", COLL),
-            (r"the LME cancelled a day of nickel trades rather than let members default", BAD),
-            (rf"SA-CCR: \${s['sum_alone']:.1f}m of exposure alone, \${s['net']['EAD']:.1f}m netted, "
-             rf"\${s['margined']['EAD']:.1f}m margined", EXPO),
-            (r"capital made balance sheets expensive, and that price runs through the whole market", FVA_C),
-        ]
-        rows = VGroup()
-        for i, (t, col) in enumerate(items, 1):
-            rows.add(VGroup(MathTex(str(i), font_size=24, color=col), label(t, font_size=21)).arrange(RIGHT, buff=0.3))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13)
-        title = label(r"Part 21 in thirteen lines", font_size=36).to_edge(UP, buff=0.3)
-        rows.next_to(title, DOWN, buff=0.3)
-        if rows.width > 13.0:
-            rows.scale_to_fit_width(13.0)
-        if rows.height > 6.7:
-            rows.scale_to_fit_height(6.7)
-        with self.voiceover(
-            "Part twenty-one in thirteen lines. Archegos cost its banks more than ten billion dollars, all of it "
-            "counterparty risk. Exposure has a hump, from rates that diffuse and payments that run off, and netting "
-            "shrinks it. Collateral leaves only the moves of the margin period. CVA prices the counterparty's "
-            "default; DVA prices the bank's own, and grows as the bank weakens. When default and exposure move "
-            "together, CVA multiplies. Funding, capital and margin have prices too. Adjoint differentiation gives "
-            "every sensitivity in one pass, and a network can learn a book's future values from its cash flows. "
-            "Initial margin follows volatility, which makes it procyclical. Clearing houses net everyone, and share "
-            "the tail through a waterfall; the LME chose to cancel trades instead. And capital rules made balance "
-            "sheets expensive, a price that runs through the rest of this act."
-        ):
+             r"together; Basel's alpha of 1.4 is partly its price", BAD),
+            (r"FVA cancels only when borrowing and lending cost the same; KVA charges for capital, MVA for margin",
+             FVA_C),
+            (rf"AAD: every sensitivity in one backward pass, {a['t_aad']:.0f} s against {a['t_bump']:.0f} s of bumps",
+             DVA_C)],
+            [(r"a network learns future values from cash flows; per-date regression is better for one factor, "
+              r"impossible for fifty", EXPO),
+             (rf"initial margin \${im['im']:.1f}m by a SIMM-style formula; it removes the gap risk at several times its "
+              r"cost", IM_C),
+             (r"margin follows volatility: buffers and floors damp the jump and cost margin every calm day", IM_C),
+             (r"clearing nets everyone, but one product cleared alone can raise total exposure", COLL),
+             (r"Lehman's swaps closed out within a third of its margin; one power trader took two thirds of a fund",
+              COLL),
+             (r"the LME cancelled a day of nickel trades rather than let members default", BAD),
+             (rf"capital: SA-CCR \${s['net']['EAD']:.1f}m netted, a CVA charge, and a leverage ratio that prices "
+              r"balance sheet", FVA_C),
+             (r"margin must follow the time it takes to sell; for Archegos's positions that was weeks", BAD)]]
+        shown = []
+        for k, items in enumerate(pages):
+            rows = VGroup()
+            for i, (t, col) in enumerate(items, 1 + 8 * k):
+                rows.add(VGroup(MathTex(str(i), font_size=24, color=col), label(t, font_size=21)).arrange(RIGHT, buff=0.3))
+            rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+            title = label(r"Part 21 in sixteen lines" + ("" if k == 0 else r", continued"), font_size=34).to_edge(UP, buff=0.35)
+            rows.next_to(title, DOWN, buff=0.4)
+            if rows.width > 13.0:
+                rows.scale_to_fit_width(13.0)
+            if rows.height > 6.4:
+                rows.scale_to_fit_height(6.4)
+            shown.append((title, rows))
+
+        def show(k):
+            title, rows = shown[k]
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
-                                                 run_time=24))
+                                                 run_time=16))
+        with self.voiceover(
+            "Part twenty-one in sixteen lines. Archegos cost its banks more than ten billion dollars, all of it "
+            "counterparty risk. Exposure has a hump, from rates that diffuse and payments that run off, and "
+            "netting, which only the law makes real, shrinks it. Collateral leaves only the moves of the margin "
+            "period, and haircuts and segregation protect what is held. CVA prices the counterparty's default, "
+            "and is itself a position to hedge; new trades are priced by what they change. When default and "
+            "exposure move together, CVA multiplies. Funding cancels only when it is symmetric, and capital and "
+            "margin have prices too. Adjoint differentiation gives every sensitivity in one pass."
+        ):
+            show(0)
+        self.wait(0.5)
+        self.clear_scene()
+        with self.voiceover(
+            "A network can learn a book's future values, though for one factor the old regression is better. "
+            "Initial margin removes the gap risk, at a high price. It follows volatility, so it is procyclical, "
+            "and buffers and floors trade calm-time cost for stability. Clearing nets everyone, but not always "
+            "for the better; Lehman's default stopped at its own margin, a power trader's did not, and the LME "
+            "cancelled trades instead. Capital rules made balance sheets expensive. And margin must follow how "
+            "long a position takes to sell."
+        ):
+            show(1)
         self.wait(0.5)
         self.clear_scene()
 
     def desk(self):
-        cards = VGroup(*[desk_question(q, a, width=12.4, font_size=23) for q, a in DESK]).arrange(DOWN, buff=0.25)
+        cards = VGroup(*[desk_question(q, a, width=12.4, font_size=23) for q, a in DESK[:4]]).arrange(DOWN, buff=0.25)
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Four desk questions. Why does DVA rise as the bank's credit worsens, and is it real? It is the value of "
+            "Six desk questions. Why does DVA rise as the bank's credit worsens, and is it real? It is the value of "
             "not paying, if the bank fails; it is booked, but it can only be collected by failing. "
             "<bookmark mark='a'/> Two offsetting swaps with one counterparty: nothing with netting, the sum of both "
             "positive parts without it. <bookmark mark='b'/> With daily margin and no threshold, a bank still loses "
             "the move during the margin period, and more if the collateral falls with the counterparty. "
             "<bookmark mark='c'/> And margin rises when cash is scarce because it follows volatility, which spikes in "
-            "a crisis. Full solutions are in the notes."
+            "a crisis."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -119,13 +156,27 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(cards[3], shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()
+        more = VGroup(*[desk_question(q, a, width=12.4, font_size=23) for q, a in DESK[4:]]).arrange(DOWN, buff=0.35)
+        with self.voiceover(
+            "Two more. What does a backward pass get wrong at the positive part of a value, or at a jump? At a kink, "
+            "almost nothing; at a jump, it misses the jump altogether and reports zero, so the payoff is smoothed, or "
+            "those terms are estimated another way. <bookmark mark='a'/> And the number to know about a client with "
+            "twenty percent margin on a single stock: its position against the stock's daily volume, at every "
+            "dealer combined. That sets the time to sell, and the margin; and the swap keeps it out of sight."
+        ) as vo:
+            self.play(FadeIn(more[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(more[1], shift=UP * 0.2))
+        self.wait(0.5)
+        self.clear_scene()
 
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=22)
         with self.voiceover(
-            "And eight problems: expected and potential exposure of a forward, the swap's hump, CVA as a spread, "
-            "bilateral CVA, collateralised exposure, an SA-CCR add-on by hand, a Cover 2 fund, and the cost of "
-            "adjoint differentiation. Solutions, in English and Chinese, are in the notes."
+            "And ten problems: expected and potential exposure of a forward, the swap's hump, CVA as a spread, "
+            "bilateral CVA, collateralised exposure, an SA-CCR add-on by hand, a Cover 2 fund, the cost of adjoint "
+            "differentiation, when clearing one product helps, and a KVA by hand. Solutions, in English and Chinese, "
+            "are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)
