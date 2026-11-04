@@ -102,3 +102,10 @@ MINARD = [(24.0, 54.9, 340000, 'A', 1), (24.5, 55.0, 340000, 'A', 1), (25.5, 54.
     (27.4, 55.6, 33000, 'A', 2), (28.7, 55.5, 33000, 'A', 2), (28.7, 55.5, 33000, 'R', 2), (29.2, 54.2, 30000, 'R', 2),
     (28.5, 54.1, 30000, 'R', 2), (28.3, 54.2, 28000, 'R', 2), (24.0, 55.2, 22000, 'A', 3), (24.5, 55.3, 22000, 'A', 3),
     (24.6, 55.8, 6000, 'A', 3), (24.6, 55.8, 6000, 'R', 3), (24.2, 54.4, 6000, 'R', 3), (24.1, 54.4, 6000, 'R', 3)]
+
+# --- Bortkiewicz (1898): Prussian cavalrymen killed by horse kicks, per corps per year ---
+# L. von Bortkiewicz, *Das Gesetz der kleinen Zahlen* (1898), 1875-1894; the 200 corps-years of the ten corps usually
+# quoted (four irregular corps excluded), e.g. M. P. Quine & E. Seneta, "Bortkiewicz's data and the law of small
+# numbers", Int. Statist. Rev. 55 (1987).  Deaths k = 0, 1, 2, 3, 4 and how many corps-years had k.
+HORSEKICK_K = [0, 1, 2, 3, 4]
+HORSEKICK_N = [109, 65, 22, 3, 1]

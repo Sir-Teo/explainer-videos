@@ -448,3 +448,146 @@ def icon_array(colors, cols=50, size=0.1, buff=0.035, shape="square") -> VGroup:
     rows = int(np.ceil(len(colors) / cols))
     g.arrange_in_grid(rows, cols, buff=buff)
     return g
+
+
+# ---------------------------------------------------------------------------
+# The family tree of distributions (Part 3 onward; after Leemis & McQueston 2008)
+# ---------------------------------------------------------------------------
+FAMILY_NODES = {
+    "bernoulli": (r"Bernoulli", (-6.0, 2.7), "d"), "binomial": (r"binomial", (-3.4, 2.7), "d"),
+    "hyper": (r"hypergeometric", (-6.0, 3.65), "d"), "betabin": (r"beta-binomial", (5.6, -3.45), "d"),
+    "poisson": (r"Poisson", (-3.4, 0.8), "d"), "geometric": (r"geometric", (-6.0, 0.8), "d"),
+    "negbin": (r"negative binomial", (-5.6, -1.1), "d"), "normal": (r"normal", (0.4, 0.8), "c"),
+    "uniform": (r"uniform", (0.4, -1.1), "c"), "exponential": (r"exponential", (-2.9, -1.1), "c"),
+    "gamma": (r"gamma", (-1.4, -2.7), "c"), "beta": (r"beta", (3.0, -2.7), "c"),
+    "lognormal": (r"log-normal", (2.8, 2.7), "c"), "chisq": (r"$\chi^2$", (3.0, 0.8), "c"),
+    "t": (r"$t$", (5.7, 2.0), "c"), "f": (r"$F$", (5.7, 0.2), "c"), "cauchy": (r"Cauchy", (5.6, -1.5), "c"),
+    "pareto": (r"Pareto", (-4.4, -3.3), "c"),
+}
+FAMILY_EDGES = {  # key: (from, to, label, arc angle)
+    "sum_bern": ("bernoulli", "binomial", r"sum of $n$", 0.0),
+    "hyper_bin": ("hyper", "binomial", r"$N \to \infty$", 0.0),
+    "rare": ("binomial", "poisson", r"$n \to \infty,\ np = \lambda$", 0.0),
+    "first": ("bernoulli", "geometric", r"wait for the first", 0.0),
+    "sum_geo": ("geometric", "negbin", r"sum of $r$", 0.0),
+    "gaps": ("poisson", "exponential", r"gaps", 0.0),
+    "sum_exp": ("exponential", "gamma", r"sum of $k$", 0.0),
+    "geo_exp": ("geometric", "exponential", r"continuous limit", 0.0),
+    "gp": ("gamma", "negbin", r"Poisson, gamma rate", -0.35),
+    "demoivre": ("binomial", "normal", r"de Moivre", 0.0),
+    "pois_norm": ("poisson", "normal", r"$\lambda \to \infty$", 0.0),
+    "exp_log": ("normal", "lognormal", r"$e^X$", 0.0),
+    "squares": ("normal", "chisq", r"sum of squares", 0.0),
+    "gamma_chi": ("gamma", "chisq", r"special case", 0.55),
+    "student": ("chisq", "t", r"$Z/\sqrt{V/\nu}$", 0.0),
+    "ratio": ("chisq", "f", r"ratio", 0.0),
+    "t1": ("t", "cauchy", r"$\nu = 1$", -0.7),
+    "tinf": ("t", "normal", r"$\nu \to \infty$", 0.35),
+    "neglog": ("uniform", "exponential", r"$-\log U$", 0.0),
+    "order": ("uniform", "beta", r"order statistics", 0.0),
+    "gamma_beta": ("gamma", "beta", r"$X/(X+Y)$", 0.0),
+    "pareto": ("exponential", "pareto", r"$e^X$", 0.0),
+    "mix_p": ("beta", "betabin", r"mix $p$", 0.0),
+    "box_muller": ("uniform", "normal", r"Box--Muller", 0.0),
+}
+
+
+def _paint(arr, color=None, opacity=1.0):
+    """Colour an arrow's line (stroke only, so curved arrows stay unfilled) and its tip."""
+    arr.set_fill(opacity=0)
+    if color is not None:
+        arr.set_stroke(color=color)
+    arr.set_stroke(opacity=opacity)
+    tip = getattr(arr, "tip", None)
+    if tip is not None:
+        tip.set_fill(color if color is not None else tip.get_fill_color(), opacity=opacity)
+        tip.set_stroke(color if color is not None else tip.get_stroke_color(), opacity=opacity)
+    return arr
+
+
+class FamilyTree(VGroup):
+    """The family of distributions as a graph: discrete laws (blue) on the left, continuous (green) on the right; each
+    arrow a derivation.  Everything starts dim; ``light_nodes`` and ``light_edges`` return the animations that switch
+    nodes and arrows on, so each chapter adds the arrows it has derived."""
+
+    D_COL, C_COL, DIM = "#7EC8F5", "#7BD88F", "#3A4658"
+
+    def __init__(self, font_size=22, scale=1.0):
+        from explainer.analysis import label
+
+        super().__init__()
+        self.nodes, self.edges = {}, {}
+        for key, (name, (x, y), kind) in FAMILY_NODES.items():
+            t = label(name, font_size=font_size, color=WHITE)
+            box = RoundedRectangle(width=t.width + 0.36, height=t.height + 0.26, corner_radius=0.12,
+                                   stroke_color=self.D_COL if kind == "d" else self.C_COL, stroke_width=2,
+                                   fill_color="#0E141D", fill_opacity=1)
+            g = VGroup(box, t.move_to(box))
+            g.move_to([x * scale, y * scale, 0])
+            g.kind = kind
+            self.nodes[key] = g
+        for key, (a, b, lab, angle) in FAMILY_EDGES.items():
+            A, B = self.nodes[a], self.nodes[b]
+            p, q = A.get_center(), B.get_center()
+            d = (q - p) / max(np.linalg.norm(q - p), 1e-9)
+            start = self._exit(A, d)
+            end = self._exit(B, -d)
+            if abs(angle) > 1e-6:
+                arr = CurvedArrow(start, end, angle=angle, color=GREY_B, stroke_width=2.2, tip_length=0.16)
+            else:
+                arr = Arrow(start, end, buff=0.02, color=GREY_B, stroke_width=2.2, tip_length=0.16,
+                            max_tip_length_to_length_ratio=0.2)
+            mid = arr.point_from_proportion(0.5)
+            nrm = np.array([-d[1], d[0], 0])
+            bulge = mid - (start + end) / 2
+            if np.linalg.norm(bulge) > 0.05:  # a curved arrow: put the label outside its bulge
+                nrm = bulge / np.linalg.norm(bulge)
+            tl = label(lab, font_size=font_size - 6, color=GREY_A)
+            tl.move_to(mid + nrm * (0.12 + 0.5 * abs(nrm[0]) * tl.width / 2 + 0.5 * abs(nrm[1]) * tl.height))
+            self.edges[key] = VGroup(arr, tl)
+        for e in self.edges.values():
+            self.add(e)
+        for n in self.nodes.values():
+            self.add(n)
+        self.dim_all()
+
+    @staticmethod
+    def _exit(box, d):
+        """Where a ray from the box centre in direction d leaves the box."""
+        w, h = box.width / 2, box.height / 2
+        tx = w / abs(d[0]) if abs(d[0]) > 1e-9 else np.inf
+        ty = h / abs(d[1]) if abs(d[1]) > 1e-9 else np.inf
+        return box.get_center() + d * (min(tx, ty) + 0.04)
+
+    def dim_all(self):
+        for n in self.nodes.values():
+            n[0].set_stroke(opacity=0.35)
+            n[1].set_opacity(0.35)
+        for e in self.edges.values():
+            _paint(e[0], self.DIM, 0.5)
+            e[1].set_opacity(0.0)
+        return self
+
+    def lit_state(self, nodes=(), edges=()):
+        """Set (without animating) these nodes and edges to their lit look."""
+        for k in nodes:
+            self.nodes[k][0].set_stroke(opacity=1)
+            self.nodes[k][1].set_opacity(1)
+        for k in edges:
+            _paint(self.edges[k][0], S.ACCENT, 1.0)
+            self.edges[k][1].set_opacity(1)
+        return self
+
+    def light_nodes(self, *keys):
+        return [a for k in keys for a in (self.nodes[k][0].animate.set_stroke(opacity=1),
+                                          self.nodes[k][1].animate.set_opacity(1))]
+
+    def light_edges(self, *keys, color=None):
+        color = color or S.ACCENT
+        anims = []
+        for k in keys:
+            a, b = FAMILY_EDGES[k][:2]
+            anims += self.light_nodes(a, b)
+            target = _paint(self.edges[k][0].copy(), color, 1.0)
+            anims += [Transform(self.edges[k][0], target), self.edges[k][1].animate.set_opacity(1)]
+        return anims
