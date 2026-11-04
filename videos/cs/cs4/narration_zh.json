@@ -1,0 +1,482 @@
+{
+ "title": "计算机科学，从零搭建 · 第4部分：算术",
+ "chapters": {
+  "Hook": "用完了的数",
+  "Positional": "1. 作为数的位",
+  "Clock": "2. 钟面上的整数",
+  "Ripple": "3. 一位一位地相加",
+  "Prefix": "4. 并行的进位",
+  "Race": "5. 加法器赛跑",
+  "Multiply": "6. 乘法",
+  "Divide": "7. 除法，与一个著名的错误",
+  "Alu": "8. Pebble 的算术逻辑单元",
+  "Fixed": "9. 定点数",
+  "Floats": "10. 浮点数",
+  "Error": "11. 舍入误差",
+  "Wilkinson": "12. 条件与稳定",
+  "Formats": "13. IEEE 之外",
+  "Functions": "14. 计算 sin、exp 和 log",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "860c1acab98a": {
+   "scene": "Hook",
+   "en": "In December 2014, YouTube announced that one music video had been watched more times than its view counter was ever designed to hold. <bookmark mark='a'/> The count had been kept in a signed thirty-two-bit integer, and the largest number that fits is two to the thirty-one, minus one: two billion, one hundred and forty-seven million and some. <bookmark mark='b'/> One more than that, and such a counter does not grow. It wraps around, to minus two billion. YouTube had switched to sixty-four bits just in time, which will last a while.",
+   "zh": "2014年12月，YouTube 宣布，有一段音乐视频被观看的次数，超出了它的观看计数器当初设计能容纳的范围。<bookmark mark='a'/>这个计数存放在一个有符号的32位整数里，能放下的最大数是2的31次方减1：二十一亿四千七百多万。<bookmark mark='b'/>再多一次，这样的计数器不会变大，而是绕回去，变成负二十一亿。YouTube 及时换成了64位，够用很久了。"
+  },
+  "3e7b89a33a05": {
+   "scene": "Hook",
+   "en": "In May 2015 the Federal Aviation Administration told airlines to switch their Boeing 787s off and on again, regularly. <bookmark mark='a'/> Each of the plane's electrical generators was run by a controller that counted time in hundredths of a second, in a signed thirty-two-bit integer. <bookmark mark='b'/> After two to the thirty-one hundredths of a second, which is two hundred and forty-eight days, that counter overflows, and the controllers, all powered up together, would all fail together, in flight.",
+   "zh": "2015年5月，美国联邦航空管理局要求航空公司定期把波音787关掉再重新开机。<bookmark mark='a'/>飞机上每台发电机都由一个控制器管理，它以百分之一秒为单位计时，存在一个有符号的32位整数里。<bookmark mark='b'/>经过2的31次方个百分之一秒，也就是两百四十八天，这个计数器就会溢出；而这些控制器是同时通电的，会在飞行中同时失效。"
+  },
+  "32f96ee1a14b": {
+   "scene": "Hook",
+   "en": "And on any computer you own, ask for zero point one plus zero point two. <bookmark mark='a'/> The answer is not zero point three. It is zero point three, then fifteen zeros, then a four. Python says so, JavaScript says so, and so does the chip underneath them. None of them is broken.",
+   "zh": "在你拥有的任何一台计算机上，算一下零点一加零点二。<bookmark mark='a'/>答案不是零点三，而是零点三，后面十五个零，再跟一个四。Python 这么说，JavaScript 这么说，它们底下的芯片也这么说。它们都没有坏。"
+  },
+  "69a5879b4b91": {
+   "scene": "Hook",
+   "en": "All three stories have one cause. A machine has only finitely many bits. <bookmark mark='a'/> So its integers do not go on forever: they live on a clock, and going past the top brings you round to the bottom. <bookmark mark='b'/> And its real numbers are not a continuum. They are a sparse ruler, finely marked near zero and coarsely marked far away, and every answer is rounded to the nearest mark. <bookmark mark='c'/> This part builds the arithmetic of Pebble on top of those facts: the circuits that add, multiply and divide, as fast as gates allow, and the number formats that every calculation in the rest of the series runs on, with the ways they can bite.",
+   "zh": "三个故事有同一个原因：机器只有有限个位。<bookmark mark='a'/>所以它的整数不会无穷无尽：它们住在一个钟面上，越过顶端就会绕回底部。<bookmark mark='b'/>它的实数也不是连续统，而是一把稀疏的尺子，靠近零处刻得密，远处刻得疏，每个答案都被舍入到最近的刻度。<bookmark mark='c'/>这一部分在这些事实之上搭建 Pebble 的算术：在门允许的范围内尽可能快地做加、乘、除的电路，以及本系列此后每一次计算都要依赖的数的格式，还有它们会怎样咬人。"
+  },
+  "a52d8c02bbb0": {
+   "scene": "Hook",
+   "en": "This is Part 4 of Computer Science, Built. Part 3 gave us gates; this part teaches them arithmetic. <bookmark mark='a'/> In this part: binary and two's complement, the trick that lets one adder serve both signed and unsigned numbers. The ripple-carry adder, and the beautiful idea that makes addition logarithmic: carries as a parallel prefix. Multipliers as trees of adders, division, and the most expensive table in the history of chips. Pebble's arithmetic logic unit, built and verified. Then floating point: the uneven ruler, rounding, and how errors grow, with a polynomial whose roots fly apart, the new formats that machine learning runs on, and how a chip computes a sine.",
+   "zh": "这是《计算机科学，从零搭建》的第4部分。第3部分给了我们门，这一部分教它们算术。<bookmark mark='a'/>这一部分的内容：二进制与补码，让同一个加法器同时服务有符号数和无符号数的技巧。行波进位加法器，以及让加法变成对数时间的美妙想法：把进位看作并行前缀。由加法器组成的树做乘法，除法，以及芯片史上最昂贵的一张表。Pebble 的算术逻辑单元，搭好并验证。然后是浮点数：不均匀的尺子、舍入、误差如何增长，一个根会四散飞开的多项式，机器学习所用的新格式，以及芯片怎样计算正弦。"
+  },
+  "43b95dc9284c": {
+   "scene": "Positional",
+   "en": "Chapter one. Bits as numbers.",
+   "zh": "第1章。作为数的位。"
+  },
+  "698b90f2b022": {
+   "scene": "Positional",
+   "en": "Two thousand and twenty-six means two thousands, no hundreds, two tens and six ones. A digit's value depends on its place, and each place is worth ten times the one to its right. <bookmark mark='a'/> Nothing about this needs ten. In base two each place is worth twice the one to its right, and each digit is a zero or a one: a bit. <bookmark mark='b'/> Two thousand and twenty-six is eleven bits: the places worth one thousand and twenty-four, five hundred and twelve, and so on, wherever there is a one. <bookmark mark='c'/> Add those up, and you get the number back. <bookmark mark='d'/> With n bits there are two to the n patterns, so they can count from zero to two to the n minus one; and a number N needs about log base two of N bits. Gottfried Leibniz worked all of this out in 1679, and thought it so elegant that he saw creation in it: everything from one and nothing.",
+   "zh": "两千零二十六的意思是两个千、零个百、两个十和六个一。一个数字的值取决于它的位置，每个位置的权是它右边那个位置的十倍。<bookmark mark='a'/>这一切并不非要用十。在二进制里，每个位置的权是右边的两倍，每个数字是零或一：一个位。<bookmark mark='b'/>两千零二十六是十一位：在权为一千零二十四、五百一十二等等、凡是有一的位置上。<bookmark mark='c'/>把它们加起来，就得回这个数。<bookmark mark='d'/>n 个位有 2 的 n 次方种组合，所以能从零数到 2 的 n 次方减一；一个数 N 大约需要以二为底 N 的对数那么多位。戈特弗里德·莱布尼茨在1679年就把这些都想清楚了，他觉得这太优美，以至于从中看到了创世：万物都来自一和无。"
+  },
+  "a03a60784568": {
+   "scene": "Positional",
+   "en": "Why two, and not ten? Because of noise. <bookmark mark='a'/> A wire's voltage is never exactly what it should be: neighbouring wires, heat and the supply all jiggle it. With two levels, a zero and a one, there is half the supply voltage between them, and Part 3's inverter snaps anything near a level back to it. <bookmark mark='b'/> With ten levels, each gets a tenth of the range, and the same jiggle carries a three into a four. Every gate would need ten thresholds, and each stage would add error rather than remove it. Two levels is the most robust choice there is, and it pays for itself many times over: we simply use more wires.",
+   "zh": "为什么是二，而不是十？因为噪声。<bookmark mark='a'/>一根导线的电压从来不会恰好是它应有的值：邻近的导线、热和电源都在让它抖动。只有两个电平，零和一，它们之间隔着半个电源电压，第3部分的反相器会把任何接近某个电平的值拉回去。<bookmark mark='b'/>如果有十个电平，每个只占十分之一的范围，同样的抖动就会把三推成四。每个门都需要十个阈值，每一级都会增加误差而不是消除误差。两个电平是最稳健的选择，它的好处远远超过代价：我们只要多用几根线就行了。"
+  },
+  "7dec6e3ad351": {
+   "scene": "Positional",
+   "en": "To go the other way, from a decimal number to its bits, keep halving. <bookmark mark='a'/> Two thousand and twenty-six is even, so its lowest bit is zero; half of it is one thousand and thirteen, which is odd, so the next bit is one; and so on down to zero. <bookmark mark='b'/> Reading the remainders from the bottom up gives the bits from the top down. <bookmark mark='c'/> It works because halving a binary number shifts every bit one place to the right, and the remainder is the bit that falls off the end. Every routine that prints a number, in any base, is this loop.",
+   "zh": "反过来，从十进制数得到它的各位，只要不断减半。<bookmark mark='a'/>两千零二十六是偶数，所以最低位是零；它的一半是一千零一十三，是奇数，所以下一位是一；就这样一直到零。<bookmark mark='b'/>把余数从下往上读，就得到从高到低的各位。<bookmark mark='c'/>它之所以成立，是因为把二进制数减半就是把每一位右移一位，余数就是从末端掉出去的那一位。每一个打印数字的程序，无论用什么进制，都是这个循环。"
+  },
+  "bd85d3259bc3": {
+   "scene": "Positional",
+   "en": "Long strings of bits are hard for people to read, so we write them in base sixteen. <bookmark mark='a'/> Sixteen is two to the fourth, so every group of four bits, counted from the right, is exactly one hexadecimal digit, from zero to nine and then a to f for ten to fifteen. <bookmark mark='b'/> Two thousand and twenty-six is seven, e, a in hexadecimal. <bookmark mark='c'/> Converting is just regrouping the bits: no arithmetic at all. That is why memory addresses, colours on a web page and machine code are written in hex. Pebble's instructions in Part 6 will be too.",
+   "zh": "长长的一串位让人很难读，所以我们用十六进制来写。<bookmark mark='a'/>十六是二的四次方，所以从右边数起每四位一组，恰好是一个十六进制数字：从零到九，再用 a 到 f 表示十到十五。<bookmark mark='b'/>两千零二十六写成十六进制是 7、E、A。<bookmark mark='c'/>转换只是把位重新分组，完全不用算术。这就是为什么内存地址、网页上的颜色和机器码都用十六进制书写。第6部分里 Pebble 的指令也会这样写。"
+  },
+  "68340988cd23": {
+   "scene": "Clock",
+   "en": "Chapter two. Integers on a clock.",
+   "zh": "第2章。钟面上的整数。"
+  },
+  "6ba5569d3a30": {
+   "scene": "Clock",
+   "en": "Four bits make sixteen patterns. <bookmark mark='a'/> Lay them around a clock face, zero at the top, counting clockwise to fifteen. Adding is turning the hand: to add five, go five clicks. <bookmark mark='b'/> Thirteen plus five goes past fifteen and comes round to two. Eighteen does not fit in four bits, so the hardware keeps eighteen minus sixteen. <bookmark mark='c'/> The sixteen that went missing is the carry out of the top bit. This is arithmetic modulo two to the n, the integers on a clock, and every adder in this part computes it: it is the most honest description of what a register holds.",
+   "zh": "四个位组成十六种组合。<bookmark mark='a'/>把它们排在一个钟面上，零在顶端，顺时针数到十五。加法就是转动指针：加五，就走五格。<bookmark mark='b'/>十三加五越过十五，绕回到二。十八放不进四个位，所以硬件保留的是十八减十六。<bookmark mark='c'/>丢掉的那个十六，就是从最高位出去的进位。这就是模 2 的 n 次方的算术，钟面上的整数，这一部分的每个加法器计算的都是它：这是对寄存器里装着什么最诚实的描述。"
+  },
+  "3ce0c9e7b97b": {
+   "scene": "Clock",
+   "en": "Now the trick that every computer uses for negative numbers. <bookmark mark='a'/> Keep the clock, and relabel the bottom half: fifteen is one step before zero, so call it minus one; fourteen is minus two; down to eight, which becomes minus eight. <bookmark mark='b'/> Thirteen is now minus three, and turning five clicks still lands on two. Minus three plus five is two. Nothing changed but the labels: the same bits, and the same adder, serve signed and unsigned numbers. <bookmark mark='c'/> In formulas, the top bit counts as minus two to the n minus one instead of plus, and so it doubles as the sign. One, one, zero, one is minus eight plus four plus one: minus three. This is two's complement, proposed by John von Neumann in 1945, and it won because the hardware gets it for free.",
+   "zh": "现在来看每台计算机都用来表示负数的技巧。<bookmark mark='a'/>保留这个钟面，把下半部分重新标号：十五在零的前一格，叫它负一；十四是负二；一直到八，它变成负八。<bookmark mark='b'/>十三现在是负三，转五格仍然落在二上。负三加五等于二。除了标号，什么都没变：同样的位、同一个加法器，服务有符号数和无符号数。<bookmark mark='c'/>写成公式，最高位的权是负的 2 的 n 减 1 次方而不是正的，所以它兼作符号位。一、一、零、一是负八加四加一：负三。这就是补码，约翰·冯·诺伊曼在1945年提出，它之所以胜出，是因为硬件可以白白得到它。"
+  },
+  "a81cc6298f20": {
+   "scene": "Clock",
+   "en": "How do you negate a number? <bookmark mark='a'/> Add any x to its bitwise inverse, and every bit is a one: the pattern for minus one. So minus x equals the inverse of x, plus one. <bookmark mark='b'/> Six is zero zero zero zero zero one one zero; invert it, add one, and you have minus six. One hundred works the same way. <bookmark mark='c'/> To widen a number from four bits to eight, copy its sign bit into the new places: one one zero one is minus three, and so is one one one one, one one zero one, because the new minus one twenty-eight and the extra ones add up to the old minus eight. <bookmark mark='d'/> One oddity: the most negative number has no positive partner. Negate minus one hundred and twenty-eight in eight bits, and you get minus one hundred and twenty-eight back.",
+   "zh": "怎样求一个数的相反数？<bookmark mark='a'/>任何 x 加上它按位取反的结果，每一位都是一：这正是负一的模式。所以负 x 等于 x 取反再加一。<bookmark mark='b'/>六是零零零零零一一零；取反，加一，就得到负六。一百也一样。<bookmark mark='c'/>要把一个数从四位扩展到八位，就把符号位复制到新的位置上：一一零一是负三，一一一一一一零一也是，因为新的负一百二十八和多出来的那些一，加起来正好是原来的负八。<bookmark mark='d'/>有一个怪现象：最负的那个数没有正的搭档。在八位里对负一百二十八取相反数，得到的还是负一百二十八。"
+  },
+  "6ac41d9a1dea": {
+   "scene": "Clock",
+   "en": "The clock has an edge, and crossing it is overflow. <bookmark mark='a'/> In signed four-bit arithmetic, five plus four goes past seven and lands on minus seven. <bookmark mark='b'/> The adder cannot know whether you meant signed or unsigned, so it reports both kinds of trouble. For unsigned numbers, overflow is a carry out of the top bit. For signed numbers it is subtler: the result is wrong exactly when the carry into the top bit differs from the carry out of it, which happens when two positives give a negative or two negatives a positive. One exclusive-or gate detects it. <bookmark mark='c'/> Languages disagree about what to do. In C, signed overflow is undefined behaviour, and compilers optimize as if it never happens; Java and Go wrap around the clock; Rust panics in debug builds; Python's integers simply grow. Integer overflow is still behind a steady stream of security holes.",
+   "zh": "钟面有一道边，越过它就是溢出。<bookmark mark='a'/>在有符号的四位算术里，五加四越过七，落到了负七。<bookmark mark='b'/>加法器无从知道你指的是有符号还是无符号，所以它把两种麻烦都报告出来。对无符号数，溢出就是最高位的进位输出。对有符号数则微妙一些：当且仅当进入最高位的进位和从最高位出去的进位不同时，结果是错的，这发生在两个正数得到负数、或两个负数得到正数的时候。一个异或门就能检测出来。<bookmark mark='c'/>各种语言对怎么处理意见不一。在 C 语言里，有符号溢出是未定义行为，编译器假定它从不发生来做优化；Java 和 Go 绕着钟面回转；Rust 在调试版本里会报错退出；Python 的整数则干脆一直变大。整数溢出至今仍是源源不断的安全漏洞的根源。"
+  },
+  "644a6386e129": {
+   "scene": "Ripple",
+   "en": "Chapter three. Adding, one bit at a time.",
+   "zh": "第3章。一位一位地相加。"
+  },
+  "10973215e99a": {
+   "scene": "Ripple",
+   "en": "Adding binary numbers works exactly like the method from school, with fewer facts to remember. <bookmark mark='a'/> Eleven plus six: start at the right. One plus zero is one. One plus one is two, which in binary is one zero: write zero, carry one. Zero plus one plus the carry is two again: write zero, carry one. One plus zero plus the carry: zero, carry one, and that last carry becomes a new top digit. Seventeen. <bookmark mark='b'/> Every column does the same small job: three bits come in, the two digits and the carry, and two bits go out, a sum and a carry for the next column. Build that job once in gates, copy it n times, and you can add.",
+   "zh": "二进制加法和学校里教的方法完全一样，只是要记的东西更少。<bookmark mark='a'/>十一加六：从右边开始。一加零是一。一加一是二，二进制写作一零：写零，进一。零加一再加进位又是二：写零，进一。一加零再加进位：写零，进一，最后这个进位成了新的最高位。十七。<bookmark mark='b'/>每一列做的都是同一件小事：进来三个位，两个数字和一个进位；出去两个位，一个和、一个给下一列的进位。把这件事用门搭一次，复制 n 遍，就能做加法了。"
+  },
+  "a4a20bc83fa2": {
+   "scene": "Ripple",
+   "en": "Start with two bits. <bookmark mark='a'/> Their sum is a two-bit number: the low bit is one when exactly one input is one, an exclusive-or; the high bit, the carry, is one when both are, an and. That is a half adder. <bookmark mark='b'/> A column in the middle of a sum has three inputs, the two digits and the carry from the right. The sum bit is the exclusive-or of all three: it is one when an odd number of them are. The carry out is one when at least two of them are: the majority function from Part 3. <bookmark mark='c'/> In gates: one half adder adds a and b, a second adds the carry in, and an or combines the two possible carries, which can never both be one. Five gates. This is the full adder, and it is the atom of computer arithmetic.",
+   "zh": "从两个位开始。<bookmark mark='a'/>它们的和是一个两位数：低位在恰好有一个输入为一时为一，是异或；高位，也就是进位，在两个都为一时为一，是与。这就是半加器。<bookmark mark='b'/>一个和式中间的列有三个输入：两个数字，和来自右边的进位。和的那一位是三者的异或：其中有奇数个为一时它为一。进位输出在至少两个为一时为一：这是第3部分的多数函数。<bookmark mark='c'/>用门来搭：一个半加器加 a 和 b，第二个加上进位输入，一个或门把两个可能的进位合在一起，它们不可能同时为一。五个门。这就是全加器，计算机算术的原子。"
+  },
+  "26dca0ffd407": {
+   "scene": "Ripple",
+   "en": "Now copy the full adder, once per bit, and chain them. <bookmark mark='a'/> Bit zero on the right takes a carry in; each adder's carry out becomes the next one's carry in; the last carry out is the top bit of the answer, or, in a register of fixed width, the overflow. <bookmark mark='b'/> This is the ripple-carry adder: n full adders, five n gates. <bookmark mark='c'/> And it subtracts for free. Since minus b is not b plus one, a minus b is a plus not b plus one: put an exclusive-or on each b input to invert it, and feed a one into the carry. One circuit, two operations, signed or unsigned.",
+   "zh": "现在把全加器每一位复制一个，串成一条链。<bookmark mark='a'/>右边的第零位接收进位输入；每个加法器的进位输出成为下一个的进位输入；最后的进位输出是答案的最高位，在固定宽度的寄存器里，就是溢出。<bookmark mark='b'/>这就是行波进位加法器：n 个全加器，5n 个门。<bookmark mark='c'/>而且它顺便就能做减法。因为负 b 等于 b 取反加一，a 减 b 就是 a 加上 b 取反再加一：在每个 b 输入上放一个异或门把它取反，再给进位输入送一个一。一个电路，两种运算，有符号无符号都行。"
+  },
+  "a5d47e9541a1": {
+   "scene": "Ripple",
+   "en": "Why is the chain right? By induction, as in Part 2. <bookmark mark='a'/> The claim: after the first k adders, the k sum bits plus the carry coming out of them, worth two to the k, equal the sum of the low k bits of a and b, plus the carry in. <bookmark mark='b'/> For k equal to zero there are no bits, and the carry is the carry in. <bookmark mark='c'/> For the step, one more full adder does exactly what its truth table says: its three inputs add up to its sum bit plus twice its carry out. Multiply that by two to the k and add it to the claim for k: the old carry term cancels, and the claim for k plus one appears. <bookmark mark='d'/> At k equal to n, it says the adder's outputs are exactly a plus b plus the carry in. Correct for every one of the two to the two n plus one inputs, and we never had to try them.",
+   "zh": "为什么这条链是对的？用归纳法，就像第2部分那样。<bookmark mark='a'/>命题是：前 k 个加法器之后，k 个和位加上从它们出去的进位（权为 2 的 k 次方），等于 a 和 b 的低 k 位之和，再加上进位输入。<bookmark mark='b'/>k 等于零时没有位，进位就是进位输入。<bookmark mark='c'/>归纳步骤：再多一个全加器，它所做的正是它的真值表所说的：三个输入之和等于它的和位加上两倍的进位输出。把它乘以 2 的 k 次方，加到关于 k 的命题上：旧的进位项消去，关于 k 加一的命题就出现了。<bookmark mark='d'/>当 k 等于 n 时，它说的是加法器的输出恰好是 a 加 b 加进位输入。对 2 的 2n 加 1 次方个输入中的每一个都正确，而我们从未需要逐一去试。"
+  },
+  "2b4939e6ba5f": {
+   "scene": "Ripple",
+   "en": "There is a catch, and it is time. <bookmark mark='a'/> Add one to zero, one, one, one, one, one, one, one. Bit zero produces a carry; bit one cannot know its sum until that carry arrives; then it produces a carry for bit two, and so on. <bookmark mark='b'/> Simulated gate by gate, with every gate taking one unit of time, the sum bits settle one after another, two gate delays apart, from the right to the left. <bookmark mark='c'/> The worst case grows in step with the width: two n plus one gate delays. For sixty-four bits that is a hundred and twenty-nine, when Part 3's clock budget allowed a processor about twenty-five per cycle. A ripple-carry adder is correct, small and far too slow. The next chapter is about breaking the chain.",
+   "zh": "这里有一个问题，那就是时间。<bookmark mark='a'/>给零一一一一一一一加一。第零位产生一个进位；第一位在那个进位到达之前无法知道自己的和；然后它又为第二位产生一个进位，依此类推。<bookmark mark='b'/>一个门一个门地模拟，每个门耗时一个单位，和位从右到左一个接一个地稳定下来，彼此相隔两个门延迟。<bookmark mark='c'/>最坏情况随宽度同步增长：2n 加 1 个门延迟。六十四位时是一百二十九个，而第3部分的时钟预算只给处理器每个周期大约二十五个。行波进位加法器正确、小巧，但慢得多。下一章讲的是怎样打断这条链。"
+  },
+  "f3115755c50d": {
+   "scene": "Prefix",
+   "en": "Chapter four. Carries in parallel.",
+   "zh": "第4章。并行的进位。"
+  },
+  "cfccea018b23": {
+   "scene": "Prefix",
+   "en": "To break the chain, look at what one column does with a carry, before knowing what the carry is. <bookmark mark='a'/> If both of its bits are one, it sends a carry out no matter what comes in: it generates. If exactly one bit is one, a carry that comes in goes straight out: it propagates. If both are zero, no carry leaves: it kills. <bookmark mark='b'/> These three cases depend only on the column's own two bits, so every column knows its letter after one gate delay, all at once. <bookmark mark='c'/> In symbols: g is a and b, p is a exclusive-or b, the carry out is g, or p and the carry in, and the sum bit is p exclusive-or the carry in. The whole problem of fast addition is now computing every carry from these letters quickly.",
+   "zh": "要打断这条链，就在知道进位是什么之前，先看看一列会怎样对待进位。<bookmark mark='a'/>如果它的两个位都是一，不管进来什么，它都送出一个进位：它“生成”。如果恰好一个位是一，进来的进位会直接出去：它“传递”。如果两个都是零，就没有进位离开：它“消除”。<bookmark mark='b'/>这三种情形只取决于这一列自己的两个位，所以每一列在一个门延迟后就同时知道了自己的字母。<bookmark mark='c'/>用符号写：g 是 a 与 b，p 是 a 异或 b，进位输出是 g 或者 p 与进位输入，和位是 p 异或进位输入。快速加法的整个问题，现在变成了从这些字母快速算出每一个进位。"
+  },
+  "790baec53e50": {
+   "scene": "Prefix",
+   "en": "One idea is to unroll the recurrence. <bookmark mark='a'/> The carry into position one is g zero, or p zero and the carry in. Substitute that into the next one, and the next. <bookmark mark='b'/> The carry into position four reads like a sentence: a carry arrives if some position generated one and every position after it propagated it. <bookmark mark='c'/> In principle every carry is now two levels of gates, an and of p's and a g, then an or. In practice the formula for carry n has n terms with up to n inputs each, and gates with dozens of inputs are slow. Real carry-lookahead adders use this for groups of four bits, then treat each group as one big position and do it again. That repetition is the real idea, and it has a beautiful algebra.",
+   "zh": "一种想法是把递推式展开。<bookmark mark='a'/>进入第一位的进位是 g0，或者 p0 与进位输入。把它代入下一个，再下一个。<bookmark mark='b'/>进入第四位的进位读起来像一句话：如果某个位置生成了进位，而它之后的每个位置都把它传递下去，进位就会到达。<bookmark mark='c'/>原则上，每个进位现在都只要两级门：一些 p 与一个 g 相与，然后相或。实际上，第 n 个进位的公式有 n 项，每项多达 n 个输入，而有几十个输入的门很慢。真实的超前进位加法器把它用于四位一组，再把每一组当成一个大位置，重复一次。这种重复才是真正的想法，而它有一套漂亮的代数。"
+  },
+  "46b172df76ab": {
+   "scene": "Prefix",
+   "en": "Here is the algebra. <bookmark mark='a'/> Think of a column, or any block of columns, as a function from the carry that comes in to the carry that goes out. There are only three such functions: kill sends everything to zero, propagate is the identity, and generate sends everything to one. Every block is one of them, and is described by its pair, g and p. <bookmark mark='b'/> Putting a high block after a low one is composing their functions, and the pair of the combination is g plus p g prime, and p p prime. <bookmark mark='c'/> Composition of functions is always associative, so this operator is too: combine three blocks either way and you get the same pair. <bookmark mark='d'/> That one fact is the key. It means the carries are prefix combinations, like running totals, and running totals of an associative operation can be computed by a tree instead of a chain, in logarithmic depth.",
+   "zh": "代数是这样的。<bookmark mark='a'/>把一列，或任意一块连续的列，看成一个函数：从进来的进位映到出去的进位。这样的函数只有三种：消除把一切都送到零，传递是恒等映射，生成把一切都送到一。每一块都是其中之一，由它的一对值 g 和 p 描述。<bookmark mark='b'/>把高的一块接在低的一块之后，就是复合它们的函数，组合后的一对值是 g 加 p 乘 g 撇，以及 p 乘 p 撇。<bookmark mark='c'/>函数复合总是满足结合律，所以这个运算也满足：三块无论怎样组合，得到的都是同一对值。<bookmark mark='d'/>这一个事实就是关键。它意味着进位是前缀组合，就像累计和；而满足结合律的运算的累计和，可以用一棵树而不是一条链来计算，深度是对数级的。"
+  },
+  "59b1bc41b593": {
+   "scene": "Prefix",
+   "en": "Draw the sixteen positions as columns, bit zero on the right, and draw a dot wherever two blocks are combined. <bookmark mark='a'/> The ripple adder is a chain: position one absorbs position zero, then two absorbs that, and so on, one combine per level, fifteen levels deep. <bookmark mark='b'/> Fifteen combines, the fewest possible, and the slowest.",
+   "zh": "把十六个位置画成列，第零位在右边，凡是有两块合并的地方画一个点。<bookmark mark='a'/>行波加法器是一条链：第一位吸收第零位，然后第二位吸收它，依此类推，每层一次合并，十五层深。<bookmark mark='b'/>十五次合并，是最少的，也是最慢的。"
+  },
+  "e7d843589a88": {
+   "scene": "Prefix",
+   "en": "In 1973 Peter Kogge and Harold Stone published the fastest arrangement. <bookmark mark='a'/> At the first level every position combines with its neighbour one to the right; at the second, with the position two to the right; then four, then eight. After four levels every position holds the combination of everything below it: all sixteen carries, in log two of n levels. <bookmark mark='b'/> The price is size, forty-nine combines, and wiring: the long diagonal wires are what make real Kogge-Stone adders hard to lay out.",
+   "zh": "1973年，彼得·科格和哈罗德·斯通发表了最快的排法。<bookmark mark='a'/>第一层，每个位置与右边一格的邻居合并；第二层，与右边两格的位置合并；然后四格，然后八格。四层之后，每个位置都持有它以下所有位置的组合：全部十六个进位，只用以二为底 n 的对数层。<bookmark mark='b'/>代价是规模，四十九次合并，以及布线：那些长长的斜线，正是真实的 Kogge-Stone 加法器难以布局的原因。"
+  },
+  "9232ba528803": {
+   "scene": "Prefix",
+   "en": "Richard Brent and H. T. Kung found the frugal arrangement in 1982. <bookmark mark='a'/> Build a binary tree upwards, combining pairs, then pairs of pairs, until the top position holds the whole sum; then send the partial results back down the tree to fill in the positions between. <bookmark mark='b'/> Twenty-six combines, fewer than twice the ripple's, in seven levels: about two log n. The same up-and-down sweep is the parallel scan of Part 10, which sums, sorts and allocates on graphics processors.",
+   "zh": "理查德·布伦特和孔祥重在1982年找到了节俭的排法。<bookmark mark='a'/>向上建一棵二叉树，两两合并，再把两对合并，直到最顶端的位置持有整个和；然后把部分结果沿树送回下面，填补中间的位置。<bookmark mark='b'/>二十六次合并，不到行波的两倍，七层：大约两倍的 log n。同样的上扫与下扫，就是第10部分的并行扫描，它在图形处理器上做求和、排序和分配。"
+  },
+  "a5bec05b62d6": {
+   "scene": "Prefix",
+   "en": "The oldest is Jack Sklansky's, from 1960, and it is divide and conquer. <bookmark mark='a'/> Solve the low half and the high half separately, then let the top result of the low half fan out to every position in the high half, and do the same inside each half. Four levels, as fast as Kogge-Stone, with thirty-two combines. <bookmark mark='b'/> But one value must drive eight gates at once, and Part 3 showed that fan-out costs time. Every real adder is a compromise between these three.",
+   "zh": "最古老的是杰克·斯克兰斯基在1960年提出的，它就是分治法。<bookmark mark='a'/>分别解决低半部分和高半部分，然后让低半部分的顶端结果扇出到高半部分的每一个位置，在每一半内部也这样做。四层，和 Kogge-Stone 一样快，三十二次合并。<bookmark mark='b'/>但一个值必须同时驱动八个门，而第3部分说过，扇出是要花时间的。每一个真实的加法器，都是这三者之间的折中。"
+  },
+  "4495de5fd1c9": {
+   "scene": "Prefix",
+   "en": "Side by side, for sixteen positions. <bookmark mark='a'/> The ripple chain is smallest and deepest. Kogge-Stone is shallowest and biggest, with fan-out two but a forest of long wires. Brent-Kung is nearly as small as the ripple at twice Kogge-Stone's depth. Sklansky is shallow and small, but with a fan-out of nine. <bookmark mark='b'/> And there is a theorem saying you cannot have everything: Marc Snir proved in 1986 that for any prefix network, the size plus the depth is at least two n minus two. Designers of real chips use hybrids, Han-Carlson, Ladner-Fischer and others, tuned to the wires and gates of each process.",
+   "zh": "把十六个位置的情形并排放在一起。<bookmark mark='a'/>行波链最小、最深。Kogge-Stone 最浅、最大，扇出为二，但有一大片长导线。Brent-Kung 几乎和行波一样小，深度是 Kogge-Stone 的两倍。Sklansky 又浅又小，但扇出达到九。<bookmark mark='b'/>还有一条定理说你不能样样都要：马克·斯尼尔在1986年证明，任何前缀网络的规模加深度至少是 2n 减 2。真实芯片的设计者使用混合结构，Han-Carlson、Ladner-Fischer 等等，针对每种工艺的导线和门来调整。"
+  },
+  "168cd0e98f78": {
+   "scene": "Race",
+   "en": "Chapter five. The adders, raced.",
+   "zh": "第5章。加法器赛跑。"
+  },
+  "1587e7b55f7f": {
+   "scene": "Race",
+   "en": "Before the prefix trees, engineers found cheaper ways to stop waiting. <bookmark mark='a'/> Split the adder into blocks. Every block except the first adds its bits twice, once assuming the carry coming in is zero and once assuming it is one, both at the same time. <bookmark mark='b'/> When the real carry finally arrives, there is nothing left to add: it just chooses between two finished answers, with one multiplexer per block. <bookmark mark='c'/> Make the blocks grow, one bit, two, three, so that each block's internal ripple finishes just as the choosing chain reaches it. With k blocks covering n bits, k is about the square root of two n, and the delay grows like the square root of n. This is the carry-select adder, from 1962, at the cost of doing most of the work twice.",
+   "zh": "在前缀树之前，工程师们找到了更便宜的办法来少等一会儿。<bookmark mark='a'/>把加法器分成若干块。除了第一块，每一块都把自己的位加两次，一次假设进来的进位是零，一次假设是一，两者同时进行。<bookmark mark='b'/>当真正的进位终于到达时，已经没有什么要加的了：它只是在两个现成的答案之间选择，每块一个多路选择器。<bookmark mark='c'/>让块逐渐变大，一位、两位、三位，使每一块内部的行波，恰好在选择链到达它的时候完成。用 k 块覆盖 n 位，k 大约是 2n 的平方根，延迟按 n 的平方根增长。这就是1962年的进位选择加法器，代价是大部分工作做了两遍。"
+  },
+  "103b418c765f": {
+   "scene": "Race",
+   "en": "A second trick is cheaper still. <bookmark mark='a'/> Keep ripple blocks of four bits, but give each one a bypass. If every bit in a block propagates, which one and gate detects straight from the inputs, a multiplexer passes the block's carry-in straight to its carry-out, skipping the ripple inside. <bookmark mark='b'/> This adder holds a lesson about timing. Count the longest path through its gates, and at thirty-two bits it is eighty-one deep, worse than the ripple adder. But simulate it, with every gate taking one unit of time, on worst-case and random inputs, and nothing ever takes longer than twenty-nine. <bookmark mark='c'/> The long path is false: whenever a carry would ripple through a block, that block was generating or killing its own carry anyway. Timing tools that only count gates overestimate such circuits, and a whole subfield, false-path analysis, exists to find them.",
+   "zh": "第二种技巧更便宜。<bookmark mark='a'/>保留四位一块的行波，但给每一块加一条旁路。如果一块里的每一位都传递，这可以直接从输入用一个与门检测出来，一个多路选择器就把这一块的进位输入直接送到进位输出，跳过内部的行波。<bookmark mark='b'/>这个加法器藏着一个关于时序的教训。数一数穿过它的门的最长路径，在三十二位时有八十一层深，比行波加法器还差。但是模拟它，每个门耗时一个单位，用最坏情况和随机的输入，没有任何一次超过二十九。<bookmark mark='c'/>那条长路径是伪路径：每当一个进位要在某块中行波传递时，那一块其实本来就在生成或消除它自己的进位。只数门的时序工具会高估这样的电路，于是有了一整个分支领域，伪路径分析，专门找出它们。"
+  },
+  "5a9cd2c0aff3": {
+   "scene": "Race",
+   "en": "Now race them. Every adder here is a netlist from this series' hardware library, checked against Python's integers on every input at eight bits and on thousands of chosen inputs up to sixty-four, then timed gate by gate. <bookmark mark='a'/> On the left, delay against width. The ripple adder climbs in a straight line; carry-skip and carry-select bend like square roots; the three prefix adders barely rise, adding a couple of gate delays each time the width doubles. <bookmark mark='b'/> On the right, the bill. The ripple adder is cheapest, Kogge-Stone grows like n log n and costs more than three times as much at sixty-four bits, and carry-select pays for its duplicated work. Brent-Kung costs half again as much as the ripple, and is five times faster.",
+   "zh": "现在让它们赛跑。这里的每个加法器都是本系列硬件库中的网表，在八位时对每一个输入、在直到六十四位时对数千个精选输入与 Python 的整数核对过，然后一个门一个门地计时。<bookmark mark='a'/>左边是延迟对宽度。行波加法器沿直线攀升；进位跳跃和进位选择像平方根那样弯曲；三种前缀加法器几乎不升高，宽度每翻一番只多一两个门延迟。<bookmark mark='b'/>右边是账单。行波加法器最便宜，Kogge-Stone 按 n log n 增长，在六十四位时代价超过三倍，进位选择为它重复的工作付出了代价。Brent-Kung 比行波多花一半，快五倍。"
+  },
+  "81356f09111a": {
+   "scene": "Race",
+   "en": "At sixty-four bits, the numbers side by side. <bookmark mark='a'/> The ripple adder: three hundred and twenty gates, a hundred and twenty-nine delays. Kogge-Stone: about a thousand gates, fifteen delays, almost nine times faster for three and a half times the gates. <bookmark mark='b'/> That trade, spending area to buy time, is the theme of every chapter on hardware in this series. Real processors make it every time: their adders are prefix trees, tuned to the length of their wires, and they add sixty-four bits in a fraction of a clock cycle. Pebble's arithmetic unit will use Kogge-Stone.",
+   "zh": "六十四位时，把数字并排放在一起。<bookmark mark='a'/>行波加法器：三百二十个门，一百二十九个延迟。Kogge-Stone：大约一千个门，十五个延迟，用三倍半的门换来快将近九倍。<bookmark mark='b'/>这种交易，用面积换时间，是本系列每一章硬件内容的主题。真实的处理器每次都这样做：它们的加法器是针对导线长度调整过的前缀树，在一个时钟周期的一小部分内就能加完六十四位。Pebble 的算术单元将采用 Kogge-Stone。"
+  },
+  "16e7f2c6b9a6": {
+   "scene": "Multiply",
+   "en": "Chapter six. Multiplication.",
+   "zh": "第6章。乘法。"
+  },
+  "e122ef408b15": {
+   "scene": "Multiply",
+   "en": "Multiplication in binary is the schoolbook method with the times table thrown away. <bookmark mark='a'/> To multiply eleven by thirteen, go through the bits of thirteen from the right. Each bit is a zero or a one, so each row is either nothing or eleven itself, shifted one more place left. <bookmark mark='b'/> Add the rows and you have a hundred and forty-three. <bookmark mark='c'/> In gates, each digit of each row is a bit of a anded with a bit of b, so the rows cost n squared and gates all at once, in one gate delay. Everything else is adding n numbers together, and the question, again, is how fast.",
+   "zh": "二进制乘法就是去掉了乘法表的课本方法。<bookmark mark='a'/>要算十一乘十三，从右边起依次看十三的每一位。每一位是零或一，所以每一行要么什么都没有，要么就是十一本身，再多左移一位。<bookmark mark='b'/>把这些行加起来，就是一百四十三。<bookmark mark='c'/>用门来实现，每行的每个数字是 a 的一位与 b 的一位相与，所以这些行总共要 n 的平方个与门，同时完成，只需一个门延迟。其余的工作就是把 n 个数加起来，问题又是：能多快？"
+  },
+  "1baffae0fbaf": {
+   "scene": "Multiply",
+   "en": "The obvious circuit adds the rows one at a time. <bookmark mark='a'/> Each row of the array is an adder that takes the running sum from the row above, adds the next partial product, and passes the result down. <bookmark mark='b'/> It is regular and easy to lay out on a chip, which is why early multipliers looked like this. But the carries ripple along each row and the sums ripple down the rows, and the delay grows in step with n: for sixteen-bit numbers, eighty-eight gate delays. A processor that wanted to multiply in one cycle needed a better idea.",
+   "zh": "显而易见的电路一次加一行。<bookmark mark='a'/>阵列的每一行都是一个加法器，接过上一行的累计和，加上下一个部分积，再把结果传下去。<bookmark mark='b'/>它很规整，容易在芯片上布局，这就是早期乘法器长这个样子的原因。但进位沿每一行行波传递，和又沿各行向下行波传递，延迟随 n 同步增长：十六位的数要八十八个门延迟。想在一个周期内做完乘法的处理器，需要一个更好的主意。"
+  },
+  "6b36feb63bb0": {
+   "scene": "Multiply",
+   "en": "The better idea is to stop adding, in the usual sense. <bookmark mark='a'/> Take three numbers. Put a full adder on every column, all side by side, each adding the three bits in its own column. <bookmark mark='b'/> Each full adder makes a sum bit, which stays in its column, and a carry bit, which belongs one column to the left. Collect the sums into one number and the carries into another. <bookmark mark='c'/> The three numbers have become two with the same total, and it took one full-adder delay, no matter how wide the numbers are, because no carry travelled anywhere. This is carry-save addition, and a full adder used this way is called a three-to-two compressor.",
+   "zh": "更好的主意是：停止通常意义上的相加。<bookmark mark='a'/>拿三个数。在每一列放一个全加器，全部并排，各自把本列的三个位加起来。<bookmark mark='b'/>每个全加器产生一个和位，留在本列，和一个进位位，它属于左边一列。把所有的和收集成一个数，把所有的进位收集成另一个数。<bookmark mark='c'/>三个数变成了总和相同的两个数，只用了一个全加器的延迟，不管数有多宽，因为没有任何进位跑到别处去。这就是进位保留加法，这样使用的全加器叫作三到二压缩器。"
+  },
+  "9b7066195eb7": {
+   "scene": "Multiply",
+   "en": "In 1964 Chris Wallace put this to work on all the partial products at once. <bookmark mark='a'/> Draw every partial-product bit of an eight-by-eight multiplication as a dot in its column: sixty-four dots, piled eight high in the middle. <bookmark mark='b'/> In every column, group the dots in threes and send each group through a full adder: one dot stays, one moves left. Every column shrinks to about two thirds of its height, all at the same time. Eight becomes six, then four, then three, then two. <bookmark mark='c'/> Two rows are left, and one fast prefix adder from chapter four finishes the job. Because each stage cuts the height by a constant factor, the number of stages grows like the logarithm of n. <bookmark mark='d'/> At sixteen bits the tree needs six stages and twenty-eight gate delays, where the array needed eighty-eight. Luigi Dadda's refinement of 1965 compresses only as much as each stage requires, and saves gates for the same depth.",
+   "zh": "1964年，克里斯·华莱士把它一次用在了所有的部分积上。<bookmark mark='a'/>把八乘八乘法的每个部分积位画成所在列中的一个点：六十四个点，中间堆了八层高。<bookmark mark='b'/>在每一列里，把点三个一组，每组送进一个全加器：一个点留下，一个点左移。每一列都缩到原来高度的大约三分之二，同时进行。八变成六，再变成四，再变成三，再变成二。<bookmark mark='c'/>剩下两行，第4章的一个快速前缀加法器完成剩下的工作。因为每一级都按常数比例降低高度，级数按 n 的对数增长。<bookmark mark='d'/>十六位时，这棵树需要六级、二十八个门延迟，而阵列需要八十八个。路易吉·达达在1965年的改进，每一级只压缩到恰好需要的程度，在同样深度下省下门。"
+  },
+  "a7b51d99f874": {
+   "scene": "Multiply",
+   "en": "One more trick halves the work before it starts. <bookmark mark='a'/> Andrew Booth, in 1951, noticed that a run of ones in the multiplier, like the three ones in a row here, can be written as a big power of two minus a small one. The modern form reads the multiplier two bits at a time, plus one bit of overlap, and turns each pair into one digit from minus two to two. <bookmark mark='b'/> A hundred and eighteen becomes two times sixty-four, minus sixteen, plus two times four, minus two. <bookmark mark='c'/> Each digit picks a partial product that is zero, plus or minus a, or plus or minus two a, which is only a shift and a negation. Half as many rows go into the tree, and because the recoding treats the top bit as a sign, two's complement numbers multiply correctly without any correction. Most fast multipliers use it, in the radix-four form Orville MacSorley described in 1961.",
+   "zh": "还有一个技巧，在开始之前就把工作减半。<bookmark mark='a'/>安德鲁·布斯在1951年注意到，乘数里连续的一，比如这里连着的三个一，可以写成一个大的二的幂减去一个小的。现代的形式每次读乘数的两位，外加一位重叠，把每一对变成从负二到二的一个数字。<bookmark mark='b'/>一百一十八变成二乘六十四，减十六，加二乘四，减二。<bookmark mark='c'/>每个数字选出一个部分积：零、正负 a，或正负 2a，只需移位和取反。进入树的行数减半，而且由于这种编码把最高位当作符号，补码数相乘不需要任何修正就是对的。大多数快速乘法器都用它，采用奥维尔·麦克索利在1961年描述的基四形式。"
+  },
+  "1a210b1aed63": {
+   "scene": "Multiply",
+   "en": "Measured in our netlists. <bookmark mark='a'/> The array multiplier's delay climbs in a straight line; the two trees climb slowly, like log n. <bookmark mark='b'/> At sixteen bits, Dadda's tree is three and a half times faster than the array, for about sixteen percent more gates, and fewer than Wallace's. The multiplier inside a modern processor is a Booth-recoded tree with a prefix adder at the bottom: three or four cycles for sixty-four bits, pipelined so a new multiplication can start every cycle.",
+   "zh": "在我们的网表中测量。<bookmark mark='a'/>阵列乘法器的延迟沿直线攀升；两种树则缓慢上升，像 log n。<bookmark mark='b'/>十六位时，达达树比阵列快三倍半，门只多了大约百分之十六，也比华莱士树少。现代处理器里的乘法器是经过布斯编码的树，底部接一个前缀加法器：六十四位要三四个周期，并且流水化，使每个周期都能开始一次新的乘法。"
+  },
+  "d3dddfa4f45d": {
+   "scene": "Divide",
+   "en": "Chapter seven. Division, and a famous bug.",
+   "zh": "第7章。除法，与一个著名的错误。"
+  },
+  "ef2ee1f32678": {
+   "scene": "Divide",
+   "en": "Division is the hard one, because each digit depends on the remainder left by the one before. <bookmark mark='a'/> The schoolbook method, in binary: bring down the next bit of two hundred, and try subtracting thirteen. If it fits, the quotient bit is one and the difference becomes the remainder. If it does not, the bit is zero and the old remainder is restored. <bookmark mark='b'/> Eight steps give fifteen, remainder five. <bookmark mark='c'/> That is one quotient bit per subtraction, and every subtraction waits for the last, so a sixty-four-bit division takes sixty-four of them. Skipping the restore, and adding the divisor back on the next step instead, saves a little; it is called non-restoring division. To go faster, you have to produce more than one bit per step, and that needs a cleverer idea.",
+   "zh": "除法是最难的，因为每一位都取决于前一位留下的余数。<bookmark mark='a'/>二进制的课本方法：移入二百的下一位，试着减去十三。如果够减，商位为一，差成为新的余数。如果不够，商位为零，恢复原来的余数。<bookmark mark='b'/>八步之后得到十五，余五。<bookmark mark='c'/>每次减法得到一个商位，而每次减法都要等上一次，所以六十四位的除法要做六十四次。跳过恢复，改为在下一步把除数加回去，能省一点；这叫不恢复余数除法。要更快，就必须每一步产生不止一位，这需要一个更聪明的想法。"
+  },
+  "047ebde5e063": {
+   "scene": "Divide",
+   "en": "In 1958 Dura Sweeney at IBM, James Robertson at Illinois and Keith Tocher in London found that idea, independently, and division with it carries their initials: SRT. <bookmark mark='a'/> Work in base four, so each step makes two bits of quotient, and allow negative digits: each quotient digit is one of minus two, minus one, zero, one or two. The remainder is kept within two thirds of the divisor. <bookmark mark='b'/> Here is why that helps. For each digit, draw the range of remainders it can handle without the next remainder leaving the band. The ranges overlap. Near a boundary, two digits are both right, and either choice is corrected automatically by the digits that follow. <bookmark mark='c'/> So the hardware never needs the exact remainder to choose. A handful of its leading bits, and a few leading bits of the divisor, are enough to look the digit up in a small table, while the full subtraction happens in carry-save form, with no carries to wait for.",
+   "zh": "1958年，IBM 的杜拉·斯威尼、伊利诺伊大学的詹姆斯·罗伯逊和伦敦的基思·托克，各自独立地想到了这个主意，用它做的除法以他们的姓氏首字母命名：SRT。<bookmark mark='a'/>在基四下工作，这样每一步产生两位商，并允许负的数字：每个商数字是负二、负一、零、一或二之一。余数保持在除数的三分之二以内。<bookmark mark='b'/>这样做的好处是：对每个数字，画出它能处理、又不让下一个余数离开这条带的余数范围。这些范围是重叠的。在边界附近，两个数字都对，无论选哪个，后面的数字都会自动修正。<bookmark mark='c'/>所以硬件做选择时从不需要精确的余数。余数的几个高位，加上除数的几个高位，就足以在一张小表里查出这个数字，而完整的减法以进位保留的形式进行，不必等待任何进位。"
+  },
+  "a3c837b68187": {
+   "scene": "Divide",
+   "en": "Here is that table, built for this video: the same shape as a real radix-four divider's. <bookmark mark='a'/> Across, the divisor, from one to two; up, an estimate of four times the remainder. Each little cell is coloured by the quotient digit it holds, and each digit was checked against every point of its cell: whatever the true values inside, that digit keeps the next remainder in range. <bookmark mark='b'/> The staircases are the overlaps of the last picture, seen in two dimensions. <bookmark mark='c'/> Run four hundred thousand random divisions through it, and a striking thing appears: hundreds of cells, near the top and bottom edges, are never visited at all. The divisions come out right to the last bit. And the never-visited cells are exactly where trouble hides.",
+   "zh": "这就是那张表，为这个视频构造，形状和真实的基四除法器一样。<bookmark mark='a'/>横轴是除数，从一到二；纵轴是四倍余数的估计值。每个小格按它所存的商数字着色，每个数字都对格中的每一点检查过：无论格内的真实值是多少，这个数字都能让下一个余数保持在范围内。<bookmark mark='b'/>这些阶梯，就是上一张图中的重叠，在二维中的样子。<bookmark mark='c'/>让四十万次随机除法通过它，会出现一件引人注目的事：靠近上下边缘的数百个格子，从来没有被访问过。除法的结果精确到最后一位。而那些从未被访问的格子，正是问题藏身的地方。"
+  },
+  "1e71fefee2b9": {
+   "scene": "Divide",
+   "en": "In 1994 Thomas Nicely, a mathematician in Virginia, was adding up the reciprocals of twin primes on a new Intel Pentium, and the sums came out wrong. <bookmark mark='a'/> The cause was the table. Intel's divider used radix-four SRT with a table of one thousand and sixty-six entries, and five of them, on the upper edge, held zero where they should have held two: they had been assumed unreachable. <bookmark mark='b'/> The most famous example: four million, one hundred and ninety-five thousand, eight hundred and thirty-five divided by three million, one hundred and forty-five thousand, seven hundred and twenty-seven is one point three three three eight two; the Pentium said one point three three three seven three, wrong in the fourth decimal place. <bookmark mark='c'/> We can do the same to our table. Empty the highest cell that random divisions ever visit, in five columns, and run two million divisions. Almost one in a hundred now comes out wrong, some badly, because a wrong digit throws the remainder out of the band and no later digit can bring it back. Intel's cells were reached about once in nine billion random divisions, which is why its testing missed them. Intel first said most users would never notice, then replaced the chips, for four hundred and seventy-five million dollars. Since then, chip arithmetic has been proved correct by machine, as Part 54 will show.",
+   "zh": "1994年，弗吉尼亚州的数学家托马斯·奈斯利在一台新的英特尔奔腾机上累加孪生素数的倒数，结果算错了。<bookmark mark='a'/>原因就在那张表。英特尔的除法器使用基四 SRT，表中有一千零六十六个条目，其中位于上边缘的五个本应是二，却存成了零：它们被认为是不可达的。<bookmark mark='b'/>最著名的例子：四百一十九万五千八百三十五除以三百一十四万五千七百二十七，等于一点三三三八二；奔腾给出一点三三三七三，在小数点后第四位就错了。<bookmark mark='c'/>我们可以对自己的表做同样的事。在五列里，把随机除法曾经访问过的最高格子清空，运行两百万次除法。现在差不多每一百次就有一次出错，有的错得很厉害，因为一个错误的数字把余数抛出了那条带，后面的任何数字都拉不回来。英特尔的那些格子大约每九十亿次随机除法才碰到一次，所以它的测试没有发现。英特尔起初说大多数用户永远不会注意到，后来还是更换了芯片，花了四亿七千五百万美元。从那以后，芯片的算术都要用机器证明其正确性，第54部分会讲到。"
+  },
+  "17e18b0f02f1": {
+   "scene": "Divide",
+   "en": "There is a completely different way to divide: do not. Compute the reciprocal of d, and multiply. <bookmark mark='a'/> To find one over d, apply Newton's method to the function one over y minus d. The iteration needs only multiplications: y times two minus d y. <bookmark mark='b'/> And its error squares at every step. If the error is a hundredth, the next is about a ten-thousandth. <bookmark mark='c'/> Start from a rough guess read from a small table, and watch the correct digits roughly double at every step. Five steps give one over one point seven to full double precision. <bookmark mark='d'/> Each step costs two multiplications on the fast multiplier we just built. Robert Goldschmidt's variant multiplies the numerator and the denominator by the same factors in parallel, and floating-point units use these methods for division and square roots.",
+   "zh": "还有一种完全不同的除法：不除。先算出 d 的倒数，再乘。<bookmark mark='a'/>为了求一除以 d，对函数“一除以 y 减 d”使用牛顿法。这个迭代只需要乘法：y 乘以括号里二减 d 乘 y。<bookmark mark='b'/>它的误差每一步都平方。如果误差是百分之一，下一步大约是万分之一。<bookmark mark='c'/>从一张小表里读出一个粗略的初值，看着正确的位数每一步大致翻一番。五步之后，一除以一点七就精确到完整的双精度。<bookmark mark='d'/>每一步要在我们刚搭好的快速乘法器上做两次乘法。罗伯特·戈德施密特的变体把分子和分母同时乘以相同的因子，并行进行，浮点运算单元就用这些方法做除法和开平方。"
+  },
+  "78c8c4cbdda4": {
+   "scene": "Alu",
+   "en": "Chapter eight. Pebble's ALU.",
+   "zh": "第8章。Pebble 的算术逻辑单元。"
+  },
+  "a4a5a84cc6e3": {
+   "scene": "Alu",
+   "en": "Pebble's processor will need one unit that does all of its arithmetic and logic, the ALU. Here are the operations its instruction set asks for. <bookmark mark='a'/> An adder, which also subtracts by inverting b and setting the carry in. A logic unit, which is just one and, one or and one exclusive-or per bit. A barrel shifter, from Part 3, extended to shift right as well, filling with zeros or with copies of the sign bit. And comparisons, which need no new hardware at all, as we will see. <bookmark mark='b'/> All of them compute at once, on every instruction, and a four-bit operation code selects which answer leaves, through a multiplexer on every output bit. Two flags come out too: whether the result is zero, which branches will test, and whether a signed add overflowed. <bookmark mark='c'/> Ten operations in all, exactly the ones Pebble's emulator implements.",
+   "zh": "Pebble 的处理器需要一个单元来完成所有的算术和逻辑运算，这就是算术逻辑单元。下面是它的指令集所要求的运算。<bookmark mark='a'/>一个加法器，它也能通过把 b 取反、置进位输入来做减法。一个逻辑单元，每一位只是一个与门、一个或门和一个异或门。一个桶形移位器，来自第3部分，扩展为也能右移，用零或符号位的副本来填充。还有比较，我们会看到，它根本不需要新的硬件。<bookmark mark='b'/>它们在每条指令上同时计算，由一个四位的操作码通过每个输出位上的多路选择器，选出哪个答案送出去。还有两个标志位输出：结果是否为零，分支指令会检测它；以及有符号加法是否溢出。<bookmark mark='c'/>一共十种运算，正好是 Pebble 的模拟器所实现的那些。"
+  },
+  "25fc0189a402": {
+   "scene": "Alu",
+   "en": "How does an adder compare? <bookmark mark='a'/> For unsigned numbers, a is less than b exactly when a minus b has to borrow, and in two's complement subtraction a borrow shows up as a carry out of zero. For signed numbers, look at the sign of a minus b, but correct it with the overflow bit. <bookmark mark='b'/> Minus three minus two is minus five: the sign is one, no overflow, so minus three is less. Minus eight minus one should be minus nine, which does not fit in four bits; it wraps round to plus seven, with a sign of zero, but the overflow flag is set, and flipping the sign gives the right answer. <bookmark mark='c'/> Getting this wrong is a classic bug in hand-written assembly: comparing by the sign of a difference works until the numbers get large.",
+   "zh": "加法器怎样做比较？<bookmark mark='a'/>对无符号数，a 小于 b 当且仅当 a 减 b 需要借位，而在补码减法里，借位表现为进位输出为零。对有符号数，看 a 减 b 的符号，但要用溢出位来修正。<bookmark mark='b'/>负三减二是负五：符号为一，没有溢出，所以负三更小。负八减一应该是负九，放不进四位；它绕回到正七，符号为零，但溢出标志置位了，把符号翻转一下就得到正确答案。<bookmark mark='c'/>弄错这一点是手写汇编里的经典错误：靠差的符号来比较，在数变大之前一直管用。"
+  },
+  "a2e842aa294b": {
+   "scene": "Alu",
+   "en": "This ALU exists, as a netlist in the series' library. <bookmark mark='a'/> The eight-bit version was checked on every one of its six hundred and fifty-five thousand cases: every pair of operands, for all ten operations. The thirty-two-bit version was checked on twenty thousand inputs, random ones and worst-case carries and borrows, against exactly what Pebble's emulator computes. <bookmark mark='b'/> With a ripple adder inside, the thirty-two-bit ALU has about sixteen hundred gates and takes seventy-eight gate delays. With Kogge-Stone, about three hundred gates more, and twenty-nine delays. <bookmark mark='c'/> The fast adder costs a fifth more gates and makes the whole unit almost three times faster, because addition was the slowest thing in it. Rewritten in NAND gates alone, it is about four and a half thousand of them. In Part 6 this circuit becomes the heart of Pebble.",
+   "zh": "这个算术逻辑单元是真实存在的，是本系列库里的一个网表。<bookmark mark='a'/>八位的版本在全部六十五万五千个情形上检查过：每一对操作数，全部十种运算。三十二位的版本在两万个输入上检查过，包括随机的和最坏情况的进位与借位，与 Pebble 的模拟器计算的结果逐一比对。<bookmark mark='b'/>内部用行波加法器时，三十二位的算术逻辑单元约有一千六百个门，需要七十八个门延迟。用 Kogge-Stone 时，多大约三百个门，二十九个延迟。<bookmark mark='c'/>快速加法器多花五分之一的门，让整个单元快了将近三倍，因为加法原本是其中最慢的部分。只用与非门改写，它大约有四千五百个。在第6部分，这个电路将成为 Pebble 的心脏。"
+  },
+  "3886ce1f5d27": {
+   "scene": "Fixed",
+   "en": "Chapter nine. Fixed point.",
+   "zh": "第9章。定点数。"
+  },
+  "0c49c4d7ffd5": {
+   "scene": "Fixed",
+   "en": "The integer hardware we have built can hold fractions, with one agreement. <bookmark mark='a'/> Decide that the binary point sits in a fixed place, say four bits from the right. The places to its left are worth eight, four, two and one; to its right, a half, a quarter, an eighth and a sixteenth. <bookmark mark='b'/> Then these eight bits mean five point six two five, which is the integer ninety divided by sixteen. <bookmark mark='c'/> This is fixed point, and its format is written Q four point four. Adding and subtracting are exactly the integer operations, on the same adder. Multiplying two such numbers multiplies their scale factors too, so multiply the integers and shift the result right by four. Nothing new is needed in the hardware.",
+   "zh": "我们搭好的整数硬件也能表示分数，只要有一个约定。<bookmark mark='a'/>约定二进制小数点位于固定位置，比如从右边数第四位。它左边的位置权为八、四、二、一；右边是二分之一、四分之一、八分之一和十六分之一。<bookmark mark='b'/>于是这八个位表示五点六二五，也就是整数九十除以十六。<bookmark mark='c'/>这就是定点数，它的格式写作 Q4.4。加法和减法就是整数运算，用同一个加法器。两个这样的数相乘，它们的比例因子也相乘，所以把整数相乘，再把结果右移四位。硬件上什么都不需要新增。"
+  },
+  "8f3b1d75db9a": {
+   "scene": "Fixed",
+   "en": "Fixed point has one place where it is not optional: money. <bookmark mark='a'/> In floating point, ten cents plus twenty cents is not thirty cents, and ten dimes do not make a dollar; they make zero point nine nine nine, and so on. <bookmark mark='b'/> Counted as integers, in cents, every sum is exact. <bookmark mark='c'/> The root cause is that one tenth has no finite expansion in binary, just as one third has none in decimal: it is zero point zero, then zero zero one one, repeating forever, and any format with finitely many bits must round it. So financial software keeps money in integer cents, or in decimal types, and writes down exactly how and when to round.",
+   "zh": "有一个地方定点数是不可替代的：钱。<bookmark mark='a'/>在浮点数里，一角加两角不等于三角，十个一角凑不成一元；它们只凑成零点九九九，一直下去。<bookmark mark='b'/>用整数、以分为单位来计，每一个和都是精确的。<bookmark mark='c'/>根本原因是十分之一在二进制里没有有限的展开，正如三分之一在十进制里没有：它是零点零，然后零零一一无限循环，任何只有有限位的格式都必须对它舍入。所以金融软件用整数分或十进制类型来存钱，并且把怎样、何时舍入白纸黑字地写清楚。"
+  },
+  "5e232882285c": {
+   "scene": "Fixed",
+   "en": "What fixed point cannot do is range. <bookmark mark='a'/> Science deals with numbers from the mass of an electron, about ten to the minus thirty kilograms, to the mass of the Sun, about ten to the thirty. <bookmark mark='b'/> A thirty-two-bit fixed-point number with sixteen bits on each side of the point covers nine decades, from about one sixty-thousandth to about thirty thousand, with the same absolute spacing everywhere: superb near thirty thousand and useless near zero. Classic Doom did its geometry in exactly this format, and signal processors and embedded chips still live in it. <bookmark mark='c'/> To cover all of science you would need two hundred bits. Instead, let the point float: store the digits and, separately, where the point goes. A thirty-two-bit floating-point number spans seventy-six decades with about seven significant digits at every scale. That is the next chapter.",
+   "zh": "定点数做不到的是范围。<bookmark mark='a'/>科学要处理的数，小到电子的质量，约十的负三十次方千克，大到太阳的质量，约十的三十次方千克。<bookmark mark='b'/>小数点两侧各十六位的三十二位定点数，覆盖九个数量级，从大约六万分之一到大约三万，各处的绝对间隔都相同：在三万附近极好，在零附近毫无用处。经典的《毁灭战士》就是用这种格式做几何运算的，信号处理器和嵌入式芯片至今仍生活在其中。<bookmark mark='c'/>要覆盖整个科学，你需要两百位。不如让小数点浮动起来：存储有效数字，并另外存储小数点的位置。一个三十二位的浮点数跨越七十六个数量级，在每个尺度上都有大约七位有效数字。这是下一章的内容。"
+  },
+  "567c8884ef10": {
+   "scene": "Floats",
+   "en": "Chapter ten. Floating point.",
+   "zh": "第10章。浮点数。"
+  },
+  "7623f0e368ed": {
+   "scene": "Floats",
+   "en": "In 1985 the IEEE published a standard, led by William Kahan of Berkeley, that ended a decade of every company doing floating point its own way. <bookmark mark='a'/> A number is stored like scientific notation, in binary: a sign, an exponent and a fraction. The value is plus or minus one point f, times two to the power e minus a bias. <bookmark mark='b'/> In thirty-two bits: one bit of sign, eight of exponent, twenty-three of fraction. <bookmark mark='c'/> Here is zero point one. Its exponent field says two to the minus four; its fraction says one point six, nearly. The number actually stored is zero point one, zero zero zero, zero zero zero, one four nine and more: the closest float to a tenth, but not a tenth. <bookmark mark='d'/> Two tricks make the format efficient. The leading one of a normalized number is always one, so it is not stored, buying a free bit. And the exponent is stored with a bias, so that comparing two positive floats as integers gives the right answer.",
+   "zh": "1985年，IEEE 发布了一个标准，由伯克利的威廉·卡亨主导，结束了此前十年各家公司各搞一套浮点数的局面。<bookmark mark='a'/>一个数像科学记数法那样以二进制存储：一个符号、一个指数和一个小数部分。它的值是正负一点 f，乘以 2 的 e 减偏置次方。<bookmark mark='b'/>在三十二位里：一位符号，八位指数，二十三位小数。<bookmark mark='c'/>这是零点一。它的指数字段表示 2 的负四次方；小数字段表示一点六，近似地。实际存储的数是零点一，零零零，零零零，一四九，后面还有：最接近十分之一的浮点数，但并不是十分之一。<bookmark mark='d'/>有两个技巧让这种格式很高效。规格化数的首位总是一，所以不存储，白赚一位。指数以偏置形式存储，所以把两个正浮点数当整数比较，就能得到正确的大小关系。"
+  },
+  "63e982d74cd8": {
+   "scene": "Floats",
+   "en": "To see the shape of this ruler, shrink the format until every value fits on the screen. <bookmark mark='a'/> Six bits: a sign, three bits of exponent and two of fraction. Here are all of its positive finite values. <bookmark mark='b'/> Between one and two there are four of them, a quarter apart. Between two and four, four more, half apart; between four and eight, four more, one apart. Every power of two begins a new band, with the same number of marks and twice the spacing. The ruler is uniform in relative terms, logarithmic in absolute ones. <bookmark mark='c'/> Near zero, a special rule takes over. When the exponent field is all zeros, the hidden leading one becomes a zero, and the values continue evenly down to zero. These are the subnormal numbers.",
+   "zh": "为了看清这把尺子的形状，把格式缩小到所有的值都能放进屏幕。<bookmark mark='a'/>六个位：一位符号、三位指数和两位小数。这是它所有的正有限值。<bookmark mark='b'/>在一和二之间有四个，相隔四分之一。在二和四之间又有四个，相隔二分之一；在四和八之间又有四个，相隔一。每个二的幂开始一个新的区段，刻度数相同，间隔加倍。这把尺子在相对意义上是均匀的，在绝对意义上是对数的。<bookmark mark='c'/>在零附近，一条特殊的规则接手。当指数字段全为零时，隐藏的首位一变成零，数值均匀地一直延续到零。这些就是次正规数。"
+  },
+  "3cebf59da186": {
+   "scene": "Floats",
+   "en": "The gap between a float and the next one up is called an ulp, a unit in the last place. <bookmark mark='a'/> In thirty-two-bit floats, the ulp of one is two to the minus twenty-three, about one ten-millionth; between two and four it is twice that, and so on. Divide the ulp by the number itself, and you get a sawtooth that never leaves a factor of two: every float, large or small, is stored with the same relative precision. <bookmark mark='b'/> Two to the minus twenty-three is the format's machine epsilon. Half of it, called u, bounds the relative error of rounding any real number to the nearest float. For sixty-four-bit doubles, epsilon is about two times ten to the minus sixteen: sixteen decimal digits. <bookmark mark='c'/> One consequence surprises people. Above two to the twenty-four, sixteen million, a thirty-two-bit float's ulp is two, and the odd integers are simply gone: sixteen million, seven hundred and seventy-seven thousand, two hundred and seventeen rounds to the even number below it.",
+   "zh": "一个浮点数与比它大的下一个浮点数之间的间隔，叫作 ulp，即末位单位。<bookmark mark='a'/>在三十二位浮点数中，一的 ulp 是 2 的负二十三次方，大约千万分之一；在二和四之间是它的两倍，依此类推。把 ulp 除以这个数本身，得到一条锯齿，它的变化从不超过两倍：每一个浮点数，无论大小，都以相同的相对精度存储。<bookmark mark='b'/>2 的负二十三次方是这种格式的机器精度。它的一半叫作 u，是把任何实数舍入到最近浮点数的相对误差的上界。对六十四位的双精度，机器精度约为二乘十的负十六次方：十六位十进制有效数字。<bookmark mark='c'/>有一个推论让人吃惊。超过 2 的二十四次方，即一千六百万以后，三十二位浮点数的 ulp 是二，奇数干脆消失了：一千六百七十七万七千二百一十七会被舍入到它下面那个偶数。"
+  },
+  "8c4bec48ac50": {
+   "scene": "Floats",
+   "en": "The two extreme exponent patterns are reserved. <bookmark mark='a'/> An exponent of all zeros, with a zero fraction, is zero, and since the sign bit is separate there are two zeros, plus and minus, which compare equal but remember which side they came from. With a non-zero fraction, it is a subnormal. <bookmark mark='b'/> An exponent of all ones with a zero fraction is infinity, the honest answer to one over zero or to a result too large to hold; with any other fraction it is NaN, not a number, the answer to zero over zero or the square root of minus one. NaNs flow through any later arithmetic, so an error is never silently replaced by a plausible number. <bookmark mark='c'/> A NaN is the only value that is not equal to itself, which is how programs test for one. And the subnormals buy a guarantee that sounds obvious but fails without them: x minus y is zero only when x equals y. Kahan fought for this gradual underflow against fierce opposition, because it cost hardware. The standard is a large part of why he received the Turing Award in 1989.",
+   "zh": "指数的两个极端模式是保留的。<bookmark mark='a'/>指数全为零、小数为零，是零；而因为符号位是独立的，所以有两个零，正零和负零，它们比较时相等，却记得自己来自哪一侧。小数不为零时，它是次正规数。<bookmark mark='b'/>指数全为一、小数为零，是无穷大，这是对一除以零、或对大到存不下的结果的诚实回答；小数是其他值时，它是 NaN，非数，是零除以零或负一的平方根的回答。NaN 会在之后的任何运算中传播下去，所以一个错误永远不会被悄悄换成一个看似合理的数。<bookmark mark='c'/>NaN 是唯一不等于自身的值，程序就是这样检测它的。次正规数还换来一个听起来显然、但没有它们就不成立的保证：x 减 y 为零，当且仅当 x 等于 y。卡亨顶着激烈的反对为这种渐进下溢而战，因为它要花费硬件。这个标准，是他在1989年获得图灵奖的重要原因。"
+  },
+  "d454807b007c": {
+   "scene": "Floats",
+   "en": "The heart of the standard is one sentence. <bookmark mark='a'/> The result of adding, subtracting, multiplying, dividing or taking a square root must be the exact mathematical answer, rounded once to the nearest float. The hardware may use any method it likes inside, extra bits, the SRT divider, Newton's iteration, but what comes out must be as if it had computed exactly. <bookmark mark='b'/> On a ruler with two fraction bits, the true result is rounded to the nearest mark. <bookmark mark='c'/> When it lands exactly halfway, it goes to the neighbour whose last bit is zero, so that ties do not drift upwards on average. <bookmark mark='d'/> This rule is what makes error analysis possible: every operation is exact, up to one rounding, with a relative error no bigger than u. The next chapter is about what happens when many such small errors meet.",
+   "zh": "这个标准的核心是一句话。<bookmark mark='a'/>加、减、乘、除或开平方的结果，必须是精确的数学答案，再舍入一次到最近的浮点数。硬件内部可以用任何方法，额外的位、SRT 除法器、牛顿迭代，但输出的结果必须如同精确计算过一样。<bookmark mark='b'/>在一把只有两位小数的尺子上，真实结果被舍入到最近的刻度。<bookmark mark='c'/>当它恰好落在正中间时，它去往末位为零的那个邻居，这样平局在平均意义上不会向上漂移。<bookmark mark='d'/>正是这条规则让误差分析成为可能：每次运算都是精确的，只差一次舍入，相对误差不超过 u。下一章讲的是许多这样的小误差相遇时会发生什么。"
+  },
+  "60dcd829ed1d": {
+   "scene": "Error",
+   "en": "Chapter eleven. Rounding error.",
+   "zh": "第11章。舍入误差。"
+  },
+  "d9c55dec848c": {
+   "scene": "Error",
+   "en": "The rounding rule gives a simple model for every operation. <bookmark mark='a'/> The computed result is the exact result times one plus delta, where delta is at most u in size: about six parts in a hundred million for single precision, about one in ten million billion for double. <bookmark mark='b'/> So every single operation is very accurate, relative to its own answer. Trouble only comes from what later operations do with those errors, and it comes in two main forms. Subtracting two nearly equal numbers turns small relative errors into huge ones. And adding up very many numbers lets errors pile up. James Wilkinson built the whole of numerical analysis on this model in the 1960s.",
+   "zh": "舍入规则为每次运算给出一个简单的模型。<bookmark mark='a'/>计算出的结果等于精确结果乘以一加德尔塔，其中德尔塔的大小至多为 u：单精度约为一亿分之六，双精度约为一千万亿分之一。<bookmark mark='b'/>所以每一次单独的运算，相对于它自己的答案都非常精确。麻烦只来自后续运算怎样对待这些误差，主要有两种形式。两个几乎相等的数相减，会把小的相对误差变成巨大的误差。而把非常多的数加起来，会让误差累积。詹姆斯·威尔金森在20世纪60年代把整个数值分析建立在这个模型之上。"
+  },
+  "9bc95cb3d24b": {
+   "scene": "Error",
+   "en": "Here is cancellation, in a function that should be harmless. <bookmark mark='a'/> One minus cos x, over x squared, tends to one half as x goes to zero. <bookmark mark='b'/> Compute it as written, in double precision, for smaller and smaller x. Down to a ten-thousandth it is fine. Then it wobbles, and at ten to the minus eight it collapses to zero. <bookmark mark='c'/> The reason: cos x is very close to one, so one minus cos x subtracts two numbers whose leading digits agree. Those digits cancel, and what is left is mostly the rounding error in cos x, now magnified by one over x squared. At ten to the minus eight, cos x rounds to exactly one. <bookmark mark='d'/> The cure is algebra, not more bits: rewrite one minus cos x as two sine squared of x over two, which subtracts nothing, and the answer is right everywhere.",
+   "zh": "这是抵消现象，出现在一个本应无害的函数里。<bookmark mark='a'/>一减 cos x，除以 x 的平方，当 x 趋于零时趋于二分之一。<bookmark mark='b'/>按原样用双精度计算，x 越来越小。到万分之一都没问题。然后它开始抖动，到十的负八次方时塌缩为零。<bookmark mark='c'/>原因是：cos x 非常接近一，所以一减 cos x 是两个前几位数字相同的数相减。这些数字相互抵消，剩下的主要是 cos x 中的舍入误差，现在被放大了 x 平方分之一倍。在十的负八次方，cos x 恰好被舍入为一。<bookmark mark='d'/>解药是代数，而不是更多的位：把一减 cos x 改写成二倍的 sin 平方 x 除以二，它不做任何减法，答案处处正确。"
+  },
+  "70435b7278af": {
+   "scene": "Error",
+   "en": "The second danger is accumulation. <bookmark mark='a'/> Add up a million random numbers in single precision, one at a time. Once the running sum is large, each new small number loses its low bits when it is added, and the losses pile up: the relative error grows with n, and by a million terms it is around ten to the minus five, a hundred times u. <bookmark mark='b'/> Adding in pairs, then pairs of pairs, a tree like chapter four's, keeps the error growing only like log n; numpy does this by default. <bookmark mark='c'/> William Kahan's compensated summation, from 1965, does better with four lines. It keeps a second variable, c, holding exactly the low bits that the last addition threw away, and feeds them back into the next one. Its error bound does not grow with n at all, to first order, and the curve is flat. Python's math dot fsum goes further still and returns the correctly rounded sum.",
+   "zh": "第二种危险是累积。<bookmark mark='a'/>用单精度把一百万个随机数一个一个地加起来。一旦累计和变大，每个新加入的小数都会丢掉它的低位，这些损失不断累积：相对误差随 n 增长，到一百万项时约为十的负五次方，是 u 的一百倍。<bookmark mark='b'/>两两相加，再把两对相加，像第4章那样的一棵树，让误差只按 log n 增长；numpy 默认就是这样做的。<bookmark mark='c'/>威廉·卡亨1965年的补偿求和，用四行代码做得更好。它保留第二个变量 c，恰好存放上一次加法丢掉的那些低位，并把它们送回下一次加法。它的误差界在一阶意义下完全不随 n 增长，曲线是平的。Python 的 math.fsum 更进一步，返回正确舍入的和。"
+  },
+  "e138e5a7357a": {
+   "scene": "Error",
+   "en": "In the Gulf War, a Patriot missile battery in Dhahran had been running for about a hundred hours. <bookmark mark='a'/> Its clock counted tenths of a second as an integer, and to get time in seconds the software multiplied by one tenth, kept in a twenty-four-bit fixed-point register. <bookmark mark='b'/> One tenth has no finite binary expansion, so the register held it chopped: too small by about ten to the minus seven seconds per tick. <bookmark mark='c'/> After a hundred hours, three point six million ticks, the clock was a third of a second slow. A Scud missile covers more than half a kilometre in a third of a second, and the radar looked in the wrong place. <bookmark mark='d'/> On the twenty-fifth of February 1991 the battery failed to intercept a Scud, and twenty-eight soldiers were killed. The corrected software, already on its way, arrived the next day.",
+   "zh": "海湾战争中，达兰的一个爱国者导弹连已经连续运行了大约一百小时。<bookmark mark='a'/>它的时钟以整数计数十分之一秒，为了得到以秒为单位的时间，软件把它乘以十分之一，而这个十分之一存放在一个二十四位的定点寄存器里。<bookmark mark='b'/>十分之一没有有限的二进制展开，所以寄存器存的是截断后的值：每个计时单位少了大约十的负七次方秒。<bookmark mark='c'/>一百小时后，三百六十万个计时单位，时钟慢了三分之一秒。一枚飞毛腿导弹在三分之一秒里飞行半公里以上，雷达找错了地方。<bookmark mark='d'/>1991年2月25日，这个导弹连没能拦截一枚飞毛腿，二十八名士兵丧生。修正后的软件已经在路上，第二天就到了。"
+  },
+  "82f559cf43c6": {
+   "scene": "Error",
+   "en": "Five years later, on the first flight of the European Ariane 5 rocket, a number simply did not fit. <bookmark mark='a'/> The inertial guidance software converted a sixty-four-bit floating-point value, the horizontal bias, into a sixteen-bit signed integer, whose largest value is thirty-two thousand, seven hundred and sixty-seven. <bookmark mark='b'/> The code had been reused from Ariane 4, whose slower trajectory never produced a value that large, so the check had been left out. Ariane 5 was faster. The conversion overflowed, the guidance computer shut itself down, and its backup, running the identical code, had already failed in the same way. Thirty-seven seconds after launch the rocket veered and broke up. The fix would have been one range check, the lesson of chapter two.",
+   "zh": "五年后，在欧洲阿丽亚娜5号火箭的首飞中，一个数干脆放不下。<bookmark mark='a'/>惯性导航软件把一个六十四位浮点值，即水平偏差，转换成一个十六位有符号整数，后者的最大值是三万两千七百六十七。<bookmark mark='b'/>这段代码是从阿丽亚娜4号沿用来的，4号较慢的轨迹从未产生这么大的值，所以检查被省掉了。阿丽亚娜5号更快。转换溢出，导航计算机自行关机，而它的备份运行着完全相同的代码，早已以同样的方式失效。发射后三十七秒，火箭偏离航向并解体。修复只需要一次范围检查，正是第2章的教训。"
+  },
+  "bf15777e3344": {
+   "scene": "Wilkinson",
+   "en": "Chapter twelve. Conditioning and stability.",
+   "zh": "第12章。条件与稳定。"
+  },
+  "5718dbfd4b98": {
+   "scene": "Wilkinson",
+   "en": "When a computed answer is wrong, there are two different suspects. <bookmark mark='a'/> The first is the problem itself. Its condition number measures how much a small relative change in the input can change the exact answer. Subtracting two nearly equal numbers is badly conditioned: a tiny change in either changes the difference enormously. <bookmark mark='b'/> The second is the algorithm. A backward-stable algorithm returns the exact answer to a slightly perturbed question, perturbed by about u. <bookmark mark='c'/> Put together, the error of a stable algorithm is about the condition number times u. Chapter eleven's function was perfectly well conditioned; the formula was unstable, and rewriting it fixed everything. But if the problem itself is ill conditioned, no algorithm and no rewriting can save you. James Wilkinson found that out, painfully, in 1959.",
+   "zh": "当计算出的答案错了，有两个不同的嫌疑人。<bookmark mark='a'/>第一个是问题本身。它的条件数衡量输入的一个小的相对变化能让精确答案改变多少。两个几乎相等的数相减是病态的：任何一个的微小变化都会让差发生巨大变化。<bookmark mark='b'/>第二个是算法。向后稳定的算法返回的，是一个被轻微扰动过的问题的精确答案，扰动大约是 u。<bookmark mark='c'/>两者合起来，稳定算法的误差大约是条件数乘以 u。第11章的函数条件非常好；不稳定的是公式，改写就解决了一切。但如果问题本身是病态的，任何算法、任何改写都救不了你。詹姆斯·威尔金森在1959年痛苦地发现了这一点。"
+  },
+  "fa8348e68570": {
+   "scene": "Wilkinson",
+   "en": "Wilkinson was testing a root-finding program on the Pilot ACE computer in London, and chose an easy polynomial: the one whose roots are one, two, three, up to twenty. <bookmark mark='a'/> Multiplied out, its coefficients are huge integers, from minus two hundred and ten down to twenty factorial. <bookmark mark='b'/> Here are its roots, the integers on the real line. <bookmark mark='c'/> Now change one coefficient, the minus two hundred and ten in front of x to the nineteen, by two to the minus twenty-three, about one part in two billion of it, and watch the roots, computed here with sixty-digit arithmetic so that no rounding interferes. <bookmark mark='d'/> The small roots barely move. The large ones collide in pairs and leave the real line: ten of them become complex, with imaginary parts as large as two point eight. This is not rounding error. It is the exact answer to the slightly different question. Wilkinson later called it the most traumatic experience of his career as a numerical analyst.",
+   "zh": "威尔金森当时在伦敦的 Pilot ACE 计算机上测试一个求根程序，挑了一个简单的多项式：根是一、二、三，一直到二十的那个。<bookmark mark='a'/>把它乘开，系数是巨大的整数，从负二百一十一直到二十的阶乘。<bookmark mark='b'/>这是它的根，实轴上的整数。<bookmark mark='c'/>现在改变一个系数，x 的十九次方前面的负二百一十，改变 2 的负二十三次方，大约是它的二十亿分之一，然后观察这些根；这里用六十位数字的精度计算，没有任何舍入干扰。<bookmark mark='d'/>小的根几乎不动。大的根两两相撞，离开实轴：其中十个变成了复数，虚部大到二点八。这不是舍入误差。这是那个略有不同的问题的精确答案。威尔金森后来称之为他作为数值分析学家的职业生涯中最痛苦的经历。"
+  },
+  "0fbba7382eec": {
+   "scene": "Wilkinson",
+   "en": "Why are the large roots so fragile? <bookmark mark='a'/> Differentiate the equation p of r equals zero with respect to that coefficient, and the sensitivity of root k comes out as k to the nineteen, over the product of its distances to all the other roots. <bookmark mark='b'/> For the small roots that is modest. For roots in the middle teens, k to the nineteen is astronomical, and the product below it is not: root sixteen has a sensitivity of about two billion. <bookmark mark='c'/> Two billion times a change of a ten-millionth is a change of hundreds, far beyond the linear estimate's range, which is why the roots do not just shift but leave the line. The problem of finding roots from coefficients is ill conditioned, and nothing about the algorithm can fix that.",
+   "zh": "为什么大的根如此脆弱？<bookmark mark='a'/>把方程 p(r) 等于零对那个系数求导，第 k 个根的敏感度就是 k 的十九次方，除以它到所有其他根的距离之积。<bookmark mark='b'/>对小的根，这不大。对十几中间的根，k 的十九次方是天文数字，而分母却不是：第十六个根的敏感度约为二十亿。<bookmark mark='c'/>二十亿乘以千万分之一的变化，是几百的变化，远远超出线性估计的适用范围，这就是为什么根不只是移动，而是离开了实轴。从系数求根这个问题是病态的，算法上的任何东西都无法弥补。"
+  },
+  "3707d02af07a": {
+   "scene": "Wilkinson",
+   "en": "Wilkinson turned that shock into a discipline. <bookmark mark='a'/> Never compute eigenvalues by forming a characteristic polynomial and finding its roots: the coefficients destroy the information. <bookmark mark='b'/> Use algorithms that are backward stable, like the QR algorithm, Gaussian elimination with pivoting and the fast Fourier transform. <bookmark mark='c'/> And report how well conditioned a problem is along with its answer. <bookmark mark='d'/> Every numerical library we use, LAPACK under numpy and MATLAB, and the linear algebra inside every machine learning framework, is built on his theory, and Part 52 of this series returns to it in depth.",
+   "zh": "威尔金森把那次震撼变成了一门学问。<bookmark mark='a'/>永远不要通过构造特征多项式再求根来计算特征值：系数会毁掉信息。<bookmark mark='b'/>使用向后稳定的算法，比如 QR 算法、带主元的高斯消去法和快速傅里叶变换。<bookmark mark='c'/>在给出答案的同时，报告问题的条件有多好。<bookmark mark='d'/>我们使用的每一个数值库，numpy 和 MATLAB 底下的 LAPACK，以及每个机器学习框架里的线性代数，都建立在他的理论之上，本系列的第52部分会深入回到这里。"
+  },
+  "d19bbfb5d461": {
+   "scene": "Formats",
+   "en": "Chapter thirteen. Beyond IEEE.",
+   "zh": "第13章。IEEE 之外。"
+  },
+  "b6a758e5147a": {
+   "scene": "Formats",
+   "en": "The same design comes in many sizes. <bookmark mark='a'/> Double precision, sixty-four bits, with eleven bits of exponent and fifty-two of fraction, gives about sixteen decimal digits; scientific computing lives here. Single precision gives about seven. Half precision, sixteen bits, gives three digits and a largest value of only sixty-five thousand. <bookmark mark='b'/> Below it are formats invented in the last decade for machine learning: bfloat16, and two eight-bit formats, FP8, with barely one significant digit. Each row splits its bits between exponent, for range, and fraction, for precision, and the interesting question is which matters more.",
+   "zh": "同样的设计有许多种尺寸。<bookmark mark='a'/>双精度，六十四位，十一位指数和五十二位小数，给出大约十六位十进制有效数字；科学计算生活在这里。单精度给出大约七位。半精度，十六位，给出三位有效数字，最大值只有六万五千。<bookmark mark='b'/>再往下，是过去十年为机器学习发明的格式：bfloat16，以及两种八位格式 FP8，只有勉强一位有效数字。每一行都在指数（为了范围）和小数（为了精度）之间分配它的位，有趣的问题是哪个更重要。"
+  },
+  "e68ab5115a1d": {
+   "scene": "Formats",
+   "en": "Machine learning answered that question in an unusual way. <bookmark mark='a'/> Google Brain's bfloat16 is simply the top half of a single-precision float: the same eight exponent bits, and only seven bits of fraction. IEEE's half precision made the opposite choice, five exponent bits and ten of fraction. <bookmark mark='b'/> For training neural networks, bfloat16 wins. Gradients span many decades, and half precision's small range flushes the small ones to zero, while a network is surprisingly tolerant of noise in its weights, so two or three digits are enough. <bookmark mark='c'/> Fewer bits also means more numbers per transfer from memory, which is usually the real bottleneck, and a multiplier's area grows with the square of the fraction width. In 2022 the industry agreed on two eight-bit formats, one with more precision for weights and activations and one with more range for gradients. Part 17 of AI, Built trains a model in these formats and measures what they cost.",
+   "zh": "机器学习以一种不寻常的方式回答了这个问题。<bookmark mark='a'/>谷歌大脑的 bfloat16 就是单精度浮点数的上半部分：同样的八位指数，只有七位小数。IEEE 的半精度做了相反的选择，五位指数、十位小数。<bookmark mark='b'/>训练神经网络时，bfloat16 胜出。梯度跨越许多个数量级，半精度的小范围会把小的梯度冲刷成零；而网络对权重中的噪声出奇地宽容，两三位有效数字就够了。<bookmark mark='c'/>位数更少，也意味着每次从内存传输的数更多，而内存往往才是真正的瓶颈；乘法器的面积按小数位宽的平方增长。2022年，业界商定了两种八位格式，一种精度多一些，用于权重和激活值，一种范围大一些，用于梯度。《人工智能，从零搭建》的第17部分用这些格式训练一个模型，并测量它们的代价。"
+  },
+  "64ca68bb3e14": {
+   "scene": "Formats",
+   "en": "There are other answers altogether. <bookmark mark='a'/> Interval arithmetic stores a lower and an upper bound, and uses IEEE's directed rounding modes to round each end outward, so the true value is guaranteed to lie inside. Its weakness is that it forgets where numbers came from: x minus x, for x between one and two, comes out as minus one to one, not zero. <bookmark mark='b'/> John Gustafson's posits, from 2017, use a variable-length exponent, spending more bits on precision near one and fewer far away. <bookmark mark='c'/> And when exactness matters more than speed, integers can simply grow, as Python's do: two to the hundred, all thirty-one digits of it. Multiplying such numbers the schoolbook way takes time proportional to the square of their length; a cleverer method, Karatsuba's, waits for Part 19.",
+   "zh": "还有完全不同的答案。<bookmark mark='a'/>区间算术存储一个下界和一个上界，并使用 IEEE 的定向舍入模式把两端都向外舍入，所以真实值保证在区间之内。它的弱点是会忘记数从哪里来：x 减 x，当 x 在一到二之间时，结果是负一到一，而不是零。<bookmark mark='b'/>约翰·古斯塔夫森2017年提出的 posit，使用变长的指数，在一附近把更多的位用于精度，远处则更少。<bookmark mark='c'/>当精确比速度更重要时，整数可以干脆一直变大，就像 Python 的整数那样：2 的一百次方，全部三十一位数字。按课本方法相乘，所需时间与长度的平方成正比；一种更聪明的方法，Karatsuba 算法，留待第19部分。"
+  },
+  "42f216b669ca": {
+   "scene": "Functions",
+   "en": "Chapter fourteen. Computing sine, exp and log.",
+   "zh": "第14章。计算正弦、指数和对数。"
+  },
+  "9553c21f548a": {
+   "scene": "Functions",
+   "en": "A chip can only add, multiply and divide, so every other function must be built from those. The first step is always to make the argument small. <bookmark mark='a'/> For the exponential, write x as k times log two plus a small remainder r; then e to the x is two to the k times e to the r, and multiplying by two to the k just adds k to the exponent field. <bookmark mark='b'/> For the sine, subtract a multiple of pi over two, and the problem becomes a sine or cosine of something less than pi over four. It sounds easy, but for an argument like ten to the twenty-two, the subtraction needs pi to over a hundred bits, or the remainder is pure noise; Mary Payne and Robert Hanek showed how to do it in 1983. <bookmark mark='c'/> For the logarithm, the float's own exponent field already did most of the work.",
+   "zh": "芯片只会加、乘、除，所以其他每一个函数都必须由它们搭成。第一步总是让自变量变小。<bookmark mark='a'/>对指数函数，把 x 写成 k 乘 ln 2 加一个小余数 r；于是 e 的 x 次方等于 2 的 k 次方乘 e 的 r 次方，而乘以 2 的 k 次方只是给指数字段加上 k。<bookmark mark='b'/>对正弦，减去 π/2 的某个倍数，问题就变成了一个小于 π/4 的数的正弦或余弦。听起来简单，但对于像十的二十二次方这样的自变量，这次减法需要一百多位的 π，否则余数就是纯粹的噪声；玛丽·佩恩和罗伯特·哈内克在1983年给出了做法。<bookmark mark='c'/>对对数，浮点数自己的指数字段已经完成了大部分工作。"
+  },
+  "0e6e4148c045": {
+   "scene": "Functions",
+   "en": "On the small interval, a polynomial does the rest, and the obvious choice, the Taylor series, is the wrong one. <bookmark mark='a'/> Here is the error of e to the x minus its degree-four Taylor polynomial, on the reduced interval. It is perfect at zero and worst at the ends, about four times ten to the minus five. <bookmark mark='b'/> The best polynomial of the same degree, the one that minimizes the largest error, spreads its error evenly. Its error curve touches its maximum six times, alternating in sign: Chebyshev's equioscillation theorem says that is exactly what the best polynomial looks like. <bookmark mark='c'/> With the same five coefficients, the error is seventeen times smaller. Evgeny Remez's exchange algorithm, from 1934, finds it, and it is how the coefficients in every maths library are chosen, with the final evaluation arranged by Horner's rule: four multiplications and four additions.",
+   "zh": "在这个小区间上，一个多项式完成剩下的工作，而显而易见的选择，泰勒级数，是错误的选择。<bookmark mark='a'/>这是 e 的 x 次方减去它的四次泰勒多项式在约化区间上的误差。它在零处完美，在两端最差，约为四乘十的负五次方。<bookmark mark='b'/>同次数的最佳多项式，也就是让最大误差最小的那个，把误差均匀地摊开。它的误差曲线六次触及最大值，符号交替：切比雪夫等振荡定理说，最佳多项式恰好就是这个样子。<bookmark mark='c'/>用同样的五个系数，误差小了十七倍。叶夫根尼·列梅兹1934年的交换算法能找到它，每一个数学库里的系数都是这样选出来的，最后用霍纳法则来求值：四次乘法和四次加法。"
+  },
+  "4cd092b7a524": {
+   "scene": "Functions",
+   "en": "There is also a way to compute sines with no multiplier at all, born in a navigation computer. <bookmark mark='a'/> Start with a vector along the x axis, and the angle you want in a register z. <bookmark mark='b'/> At step i, rotate the vector by plus or minus the angle whose tangent is two to the minus i, whichever moves it towards the target, and subtract that angle from z. <bookmark mark='c'/> A rotation by such an angle needs only multiplications by two to the minus i, which are shifts, plus additions. The rotations stretch the vector by the same factor every time, whichever way they turn, so one constant, K, about zero point six one, fixes it at the end. <bookmark mark='d'/> Each step adds about one bit of accuracy. Jack Volder invented this in 1959 for the B-58 bomber's navigation computer, and it is called CORDIC.",
+   "zh": "还有一种完全不用乘法器计算正弦的方法，诞生于一台导航计算机。<bookmark mark='a'/>从一个沿 x 轴的向量开始，把想要的角度放进寄存器 z。<bookmark mark='b'/>第 i 步，把向量旋转正或负的、正切为 2 的负 i 次方的那个角度，选朝向目标的方向，并从 z 中减去这个角度。<bookmark mark='c'/>旋转这样一个角度，只需要乘以 2 的负 i 次方，也就是移位，再加上加法。无论朝哪个方向转，每次旋转都把向量拉长同样的倍数，所以一个常数 K，约为零点六一，在最后把它修正过来。<bookmark mark='d'/>每一步大约增加一位精度。杰克·沃尔德在1959年为 B-58 轰炸机的导航计算机发明了它，叫作 CORDIC。"
+  },
+  "1a3fe6720658": {
+   "scene": "Functions",
+   "en": "Here is the run, for an angle of one radian. <bookmark mark='a'/> Each row turns the vector one way or the other by a smaller angle, and the angle left in z shrinks, roughly halving each time. <bookmark mark='b'/> After sixteen steps, the vector's coordinates give the cosine and the sine of one, right to about five decimal places, using nothing but shifts, additions and a small table of arctangents. <bookmark mark='c'/> The HP-35 of 1972, the first scientific pocket calculator, computed its functions with this kind of shift-and-add algorithm, and CORDIC is still used inside FPGAs, radio chips and small processors that have no multiplier.",
+   "zh": "这是角度为一弧度时的运行过程。<bookmark mark='a'/>每一行把向量向一边或另一边转一个更小的角度，z 中剩下的角度不断缩小，大致每次减半。<bookmark mark='b'/>十六步之后，向量的坐标给出一的余弦和正弦，准确到大约小数点后五位，只用了移位、加法和一张小小的反正切表。<bookmark mark='c'/>1972年的 HP-35，第一台科学袖珍计算器，就是用这类移位加法算法来计算函数的，而 CORDIC 至今仍在 FPGA、无线电芯片和没有乘法器的小处理器里使用。"
+  },
+  "8702361d91b1": {
+   "scene": "Outro",
+   "en": "What we built in this part. Integers on a clock, with two's complement letting one adder serve signed and unsigned numbers. The ripple-carry adder, and the associative carry operator that turns addition into a parallel prefix, logarithmic in depth. Multipliers as trees of carry-save adders, and division by SRT, with the table that cost Intel half a billion dollars. Pebble's ALU, built and verified. And floating point: a ruler with the same relative precision everywhere, correctly rounded operations, and the difference between an unstable formula and an ill-conditioned problem.",
+   "zh": "这一部分我们搭建了什么。钟面上的整数，补码让同一个加法器服务有符号数和无符号数。行波进位加法器，以及满足结合律的进位运算，它把加法变成并行前缀，深度为对数级。由进位保留加法器组成的树做乘法，用 SRT 做除法，还有那张让英特尔损失近五亿美元的表。Pebble 的算术逻辑单元，搭好并验证。以及浮点数：一把处处相对精度相同的尺子，正确舍入的运算，以及不稳定的公式与病态的问题之间的区别。"
+  },
+  "498b3de027cb": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 6 wires this ALU into Pebble, and Part 7 adds the multiplier and the divider to its pipeline. The parallel prefix returns in Part 10 as the scan, a basic tool of parallel programming. Overflow and integer types come back in the compiler of Part 13 and in the security of Part 55. Big integers and fast multiplication meet in Part 19 and drive public-key cryptography in Part 30. Rounding and conditioning return in optimization and in Part 52's real numbers, and machine-checked arithmetic in Part 54.",
+   "zh": "这些会在哪里再出现。第6部分把这个算术逻辑单元接进 Pebble，第7部分把乘法器和除法器加入它的流水线。并行前缀在第10部分以扫描的形式回来，这是并行编程的基本工具。溢出和整数类型会在第13部分的编译器和第55部分的安全中回来。大整数和快速乘法在第19部分相遇，并在第30部分驱动公钥密码学。舍入与条件会在优化和第52部分的实数中回来，机器检查的算术在第54部分。"
+  },
+  "9ab6f7dd665c": {
+   "scene": "Outro",
+   "en": "In practice: integer overflow is still a common cause of security holes, when a length wraps around and a buffer is allocated too small, which is why Rust checks arithmetic and why sanitizers exist. Money is kept in integers or decimal types, never in binary floats. Numerical libraries, from LAPACK to the maths library behind every sine, are built on Wilkinson's analysis and minimax polynomials. Machine learning trains in bfloat16 and FP8. And since the FDIV bug, chip makers prove their floating-point units correct by machine.",
+   "zh": "在实践中：整数溢出仍然是安全漏洞的常见原因，一个长度绕回去，缓冲区就分配得太小，这就是 Rust 检查算术、以及消毒器存在的原因。钱用整数或十进制类型来存，绝不用二进制浮点数。数值库，从 LAPACK 到每个正弦背后的数学库，都建立在威尔金森的分析和最佳一致逼近多项式之上。机器学习用 bfloat16 和 FP8 训练。自从 FDIV 错误以来，芯片厂商都用机器来证明它们的浮点单元是正确的。"
+  },
+  "3c4e92627ca3": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to use this series' arithmetic library yourself.",
+   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自使用本系列的算术库。"
+  },
+  "78289380e84b": {
+   "scene": "Outro",
+   "en": "Next time: memory and time. Every circuit in this part forgets its answer the moment its inputs change. Feed a gate's output back into its own input, and it can remember. Part 5 builds latches and flip-flops, the clock that keeps them in step, the strange physics of metastability, finite state machines, and the registers and memories Pebble will run on.",
+   "zh": "下一次：存储与时间。这一部分的每个电路，在输入一变时就忘掉了它的答案。把一个门的输出接回它自己的输入，它就能记住。第5部分搭建锁存器和触发器，让它们步调一致的时钟，亚稳态的奇特物理，有限状态机，以及 Pebble 将要运行于其上的寄存器和存储器。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 4, Arithmetic",
+ "chapters_en": {
+  "Hook": "Numbers that run out",
+  "Positional": "1. Bits as numbers",
+  "Clock": "2. Integers on a clock",
+  "Ripple": "3. Adding, one bit at a time",
+  "Prefix": "4. Carries in parallel",
+  "Race": "5. The adders, raced",
+  "Multiply": "6. Multiplication",
+  "Divide": "7. Division, and a famous bug",
+  "Alu": "8. Pebble's ALU",
+  "Fixed": "9. Fixed point",
+  "Floats": "10. Floating point",
+  "Error": "11. Rounding error",
+  "Wilkinson": "12. Conditioning and stability",
+  "Formats": "13. Beyond IEEE",
+  "Functions": "14. Computing sin, exp and log",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

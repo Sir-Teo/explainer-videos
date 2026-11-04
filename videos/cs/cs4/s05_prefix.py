@@ -178,52 +178,68 @@ class Prefix(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def show_network(self, kind, title_tex, narration, marks):
+    def net_parts(self, kind, title_tex):
         d = load("prefix")[kind]
         head = label(title_tex, font_size=34).to_edge(UP, buff=0.3)
         rails, tops, per_level, outs = network(d["levels"], color=KIND_COLOR[kind])
         stats = label(rf"{d['nodes']} combines, \ depth {d['depth']}, \ fan-out {d['fanout']}", font_size=26,
                       color=KIND_COLOR[kind]).to_edge(DOWN, buff=0.25)
-        with self.voiceover(narration) as vo:
-            self.play(FadeIn(head), FadeIn(rails), FadeIn(tops))
-            vo.wait_until(marks[0])
-            for g in per_level:
-                self.play(LaggedStart(*[Create(m) for m in g], lag_ratio=0.02), run_time=0.6)
-            self.play(FadeIn(outs))
-            vo.wait_until(marks[1])
-            self.play(FadeIn(stats))
-        self.wait(0.3)
-        self.clear_scene()
+        return head, rails, tops, per_level, outs, stats
+
+    def play_net(self, vo, parts):
+        head, rails, tops, per_level, outs, stats = parts
+        self.play(FadeIn(head), FadeIn(rails), FadeIn(tops))
+        vo.wait_until("a")
+        for g in per_level:
+            self.play(LaggedStart(*[Create(m) for m in g], lag_ratio=0.02), run_time=0.6)
+        self.play(FadeIn(outs))
+        vo.wait_until("b")
+        self.play(FadeIn(stats))
 
     def networks(self):
-        self.show_network(
-            "ripple", r"The ripple adder, \ as a prefix network: \ a chain",
+        parts = self.net_parts("ripple", r"The ripple adder, \ as a prefix network: \ a chain")
+        with self.voiceover(
             "Draw the sixteen positions as columns, bit zero on the right, and draw a dot wherever two blocks are "
             "combined. <bookmark mark='a'/> The ripple adder is a chain: position one absorbs position zero, then two "
             "absorbs that, and so on, one combine per level, fifteen levels deep. <bookmark mark='b'/> Fifteen "
-            "combines, the fewest possible, and the slowest.", ("a", "b"))
-        self.show_network(
-            "kogge-stone", r"Kogge--Stone (1973): \ double the reach every level",
+            "combines, the fewest possible, and the slowest."
+        ) as vo:
+            self.play_net(vo, parts)
+        self.wait(0.3)
+        self.clear_scene()
+        parts = self.net_parts("kogge-stone", r"Kogge--Stone (1973): \ double the reach every level")
+        with self.voiceover(
             "In 1973 Peter Kogge and Harold Stone published the fastest arrangement. <bookmark mark='a'/> At the first "
             "level every position combines with its neighbour one to the right; at the second, with the position two "
             "to the right; then four, then eight. After four levels every position holds the combination of everything "
             "below it: all sixteen carries, in log two of n levels. <bookmark mark='b'/> The price is size, forty-nine "
-            "combines, and wiring: the long diagonal wires are what make real Kogge-Stone adders hard to lay out.",
-            ("a", "b"))
-        self.show_network(
-            "brent-kung", r"Brent--Kung (1982): \ a tree up, \ and a tree down",
+            "combines, and wiring: the long diagonal wires are what make real Kogge-Stone adders hard to lay out."
+        ) as vo:
+            self.play_net(vo, parts)
+        self.wait(0.3)
+        self.clear_scene()
+        parts = self.net_parts("brent-kung", r"Brent--Kung (1982): \ a tree up, \ and a tree down")
+        with self.voiceover(
             "Richard Brent and H. T. Kung found the frugal arrangement in 1982. <bookmark mark='a'/> Build a binary "
             "tree upwards, combining pairs, then pairs of pairs, until the top position holds the whole sum; then send "
             "the partial results back down the tree to fill in the positions between. <bookmark mark='b'/> Twenty-six "
             "combines, fewer than twice the ripple's, in seven levels: about two log n. The same up-and-down sweep is "
-            "the parallel scan of Part 10, which sums, sorts and allocates on graphics processors.", ("a", "b"))
-        self.show_network(
-            "sklansky", r"Sklansky (1960): \ divide and conquer",
+            "the parallel scan of Part 10, which sums, sorts and allocates on graphics processors."
+        ) as vo:
+            self.play_net(vo, parts)
+        self.wait(0.3)
+        self.clear_scene()
+        parts = self.net_parts("sklansky", r"Sklansky (1960): \ divide and conquer")
+        with self.voiceover(
             "The oldest is Jack Sklansky's, from 1960, and it is divide and conquer. <bookmark mark='a'/> Solve the low "
             "half and the high half separately, then let the top result of the low half fan out to every position in "
             "the high half, and do the same inside each half. Four levels, as fast as Kogge-Stone, with thirty-two "
             "combines. <bookmark mark='b'/> But one value must drive eight gates at once, and Part 3 showed that "
-            "fan-out costs time. Every real adder is a compromise between these three.", ("a", "b"))
+            "fan-out costs time. Every real adder is a compromise between these three."
+        ) as vo:
+            self.play_net(vo, parts)
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def compare(self):

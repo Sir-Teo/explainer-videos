@@ -81,3 +81,28 @@ and the industry term follows in parentheses on first use.
 | interpreter, emulator, virtual machine | 解释器，模拟器，虚拟机 |
 | proof assistant | 证明助手 |
 | tetration (10↑↑15) | 迭代幂（10↑↑15） |
+| two's complement, sign extension | 补码，符号扩展 |
+| overflow (signed / unsigned) | 溢出（有符号 / 无符号） |
+| half adder, full adder | 半加器，全加器 |
+| ripple-carry adder | 行波进位加法器 |
+| generate, propagate, kill | 生成，传递，消除 |
+| carry lookahead | 超前进位 |
+| parallel prefix (Kogge–Stone, Brent–Kung, Sklansky) | 并行前缀（Kogge–Stone、Brent–Kung、Sklansky） |
+| carry-select, carry-skip adder | 进位选择加法器，进位跳跃加法器 |
+| false path | 伪路径 |
+| carry-save addition, 3:2 compressor | 进位保留加法，三到二压缩器 |
+| Wallace tree, Dadda tree | 华莱士树，达达树 |
+| Booth recoding | 布斯编码 |
+| restoring / non-restoring division, SRT | 恢复余数 / 不恢复余数除法，SRT 除法 |
+| ALU | 算术逻辑单元 |
+| fixed point, Q format | 定点数，Q 格式 |
+| floating point, significand, biased exponent | 浮点数，有效数，偏置指数 |
+| subnormal, gradual underflow | 次正规数，渐进下溢 |
+| ulp, machine epsilon, unit roundoff u | 末位单位（ulp），机器精度，单位舍入误差 u |
+| correctly rounded, ties to even | 正确舍入，平局取偶 |
+| catastrophic cancellation | 灾难性抵消 |
+| compensated (Kahan) summation | 补偿（卡亨）求和 |
+| condition number, backward stable | 条件数，向后稳定 |
+| interval arithmetic | 区间算术 |
+| minimax polynomial, equioscillation | 最佳一致逼近多项式，等振荡 |
+| range reduction | 自变量约化 |
