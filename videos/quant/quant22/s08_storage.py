@@ -14,6 +14,7 @@ class Storage(VoiceoverScene):
         self.convenience()
         self.snapshots(o)
         self.slope(o)
+        self.working()
         self.theory()
 
     def card(self):
@@ -145,6 +146,37 @@ class Storage(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def working(self):
+        inv = np.linspace(0.05, 1.0, 120)
+        spread = 0.04 * inv - 0.25 * np.exp(-7 * inv)
+        g = axes([0, 1.05], [-0.2, 0.06], x_length=7.2, y_length=4.2, xlabel=r"inventories (relative to normal)",
+                 ylabel=r"$(F_2 - F_1)/F_1$, a month", xticks=[], yticks=[-0.15, -0.1, -0.05, 0, 0.05], font_size=14
+                 ).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        zero = DashedLine(ax.c2p(0, 0), ax.c2p(1.05, 0), color=GREY_B, stroke_width=1.2)
+        line = curve(ax, inv, spread, OIL, stroke_width=3.5)
+        cap = DashedLine(ax.c2p(0, 0.045), ax.c2p(1.05, 0.045), color=BAD, stroke_width=1.5)
+        capl = label(r"full carry: storage plus financing", font_size=15, color=BAD).next_to(ax.c2p(0.55, 0.045), UP,
+                                                                                         buff=0.06)
+        side = wrapped_label(r"a stylised Working curve: when stocks are scarce, the spread falls steeply below zero "
+                             r"(backwardation, a high convenience yield); when they are ample, it rises toward full carry "
+                             r"and stops there, because cash and carry caps it. Illustrative shape", 3.6, 17,
+                             GREY_A).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "Holbrook Working drew the shape in 1949. <bookmark mark='a'/> Plot the spread between next month's future "
+            "and this month's against inventories. When stocks are scarce, the spread plunges below zero: people pay "
+            "heavily to have oil now. As stocks grow it rises, <bookmark mark='b'/> toward full carry, the cost of "
+            "storage and financing, and it cannot go beyond, because cash and carry would cap it. The curve is steep "
+            "on the left and flat on the right: scarcity moves prices far more than plenty does."
+        ) as vo:
+            self.play(FadeIn(g), Create(zero))
+            vo.wait_until("a")
+            self.play(Create(line), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(cap), FadeIn(capl), FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
     def theory(self):
         cards = VGroup(
             desk_question(r"the theory of storage", r"Working's curve: the spread between near and far futures rises "
@@ -160,7 +192,7 @@ class Storage(VoiceoverScene):
         if cards.height > 6.6:
             cards.scale_to_fit_height(6.6)
         with self.voiceover(
-            "Holbrook Working drew the relationship in 1949. <bookmark mark='a'/> The spread between near and far "
+            "The relationship has been measured many times. <bookmark mark='a'/> The spread between near and far "
             "futures rises with inventories: steeply when stocks are scarce, flat when they are ample. "
             "<bookmark mark='b'/> Gary Gorton, Fumio Hayashi and Geert Rouwenhorst confirmed it on thirty-one "
             "commodities: low inventories predict backwardation, higher volatility, and higher returns to holding "

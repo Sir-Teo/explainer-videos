@@ -1,7 +1,7 @@
 # Quant, Built — Part 18: Money, Bonds and the Curve
 
 Part 18 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the first part of Act IV, Fixed Income and Credit. It covers:
+[the syllabus](../SYLLABUS.md)), part of Act III, Derivatives (Q), and the first of its five parts on rates, credit and the basis (18–22). It covers:
 
 * money and the central bank: the floor system (interest on reserves, the overnight reverse repo), the balance sheet
   through QE and QT, and Taylor's rule against the funds rate;

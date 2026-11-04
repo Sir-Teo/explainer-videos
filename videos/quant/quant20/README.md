@@ -1,7 +1,7 @@
 # Quant, Built — Part 20: Credit
 
 Part 20 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the third part of Act IV, Fixed Income and Credit. Parts 18 and 19 priced bonds that
+[the syllabus](../SYLLABUS.md)), part of Act III, Derivatives (Q), and the third of its five parts on rates, credit and the basis (18–22). Parts 18 and 19 priced bonds that
 always pay; this part prices the chance that they do not. It covers:
 
 * what a credit spread measures, from seventy years of Moody's yields, and the credit spread puzzle;

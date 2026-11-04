@@ -271,7 +271,20 @@ def compute_fxopt() -> dict:
     kk = F2 * np.exp(np.linspace(-0.5, 0.5, 101))
     dpa = M.fx_delta(S2, kk, T, v2, rd2, rf2, 1, "forward_pa")
     dnp = M.fx_delta(S2, kk, T, v2, rd2, rf2, 1, "forward")
-    return _json({"S": S, "T": T, "rd": rd, "rf": rf, "F": F, "quotes": q, "rr": rr, "bf": bf,
+    # a term structure of quotes (illustrative): the smile at five tenors, on a standardised moneyness axis
+    term = []
+    for Tn, a_, r_, b_ in ((1 / 52, 0.070, -0.0030, 0.0012), (1 / 12, 0.073, -0.0045, 0.0018), (0.25, atm, rr, bf),
+                           (0.5, 0.077, -0.0075, 0.0030), (1.0, 0.079, -0.0090, 0.0035)):
+        qq = M.smile_quotes(a_, r_, b_)
+        Fn = S * np.exp((rd - rf) * Tn)
+        ka = M.atm_dns_strike(Fn, Tn, a_)
+        kc = M.strike_from_delta(S, Tn, qq["25c"], rd, rf, 0.25, 1, "forward")
+        kp = M.strike_from_delta(S, Tn, qq["25p"], rd, rf, -0.25, -1, "forward")
+        z = np.linspace(-1.6, 1.6, 33)
+        kk = Fn * np.exp(z * a_ * np.sqrt(Tn))
+        term.append({"T": Tn, "atm": a_, "rr": r_, "bf": b_, "z": z,
+                     "vol": QT.vanna_volga(kk, Fn, Tn, [kp, ka, kc], [qq["25p"], a_, qq["25c"]], a_)})
+    return _json({"S": S, "T": T, "rd": rd, "rf": rf, "F": F, "quotes": q, "rr": rr, "bf": bf, "term": term,
                   "K": {"25p": K25p, "atm": Katm, "25c": K25c}, "Ks": Ks, "vv": vv, "deltas": deltas,
                   "gk_atm": gk, "gk_pips": gk * 1e4, "vega_atm": float(g["vega"]) / 100,
                   "pa": {"S": S2, "F": F2, "K_pa": k_pa, "K_np": k_np, "kk": kk, "dpa": dpa, "dnp": dnp},

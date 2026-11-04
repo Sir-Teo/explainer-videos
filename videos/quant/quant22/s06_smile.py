@@ -14,6 +14,7 @@ class Smile(VoiceoverScene):
         self.strikes(x)
         self.vv_idea()
         self.vv_plot(x)
+        self.term(x)
         self.why_vv()
 
     def card(self):
@@ -142,6 +143,41 @@ class Smile(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(line), FadeIn(side[1]), run_time=2)
         self.add(illustration(r"illustrative quotes; the House's quoting.vanna\_volga"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def term(self, x):
+        tm = x["term"]
+        g = axes([-1.7, 1.7], [6.6, 10.4], x_length=7.4, y_length=4.4,
+                 xlabel=r"moneyness, $\ln(K/F)/(\sigma_{\text{ATM}}\sqrt T)$", ylabel=r"implied volatility, \%",
+                 xticks=[-1.5, -1, -0.5, 0, 0.5, 1, 1.5], yticks=[7, 8, 9, 10], font_size=13).to_edge(LEFT, buff=0.6).shift(
+            DOWN * 0.3)
+        ax = g.ax
+        cols = [GREY_B, FOR, GOOD, USD, BASIS]
+        names = [r"1 week", r"1 month", r"3 months", r"6 months", r"1 year"]
+        lines = VGroup(*[curve(ax, np.asarray(t_["z"]), 100 * np.asarray(t_["vol"]), c_, stroke_width=2.8)
+                         for t_, c_ in zip(tm, cols)])
+        side = VGroup(
+            legend(list(zip(cols, names)), font_size=16),
+            wrapped_label(r"illustrative quotes rising with tenor: ATM from 7.0\% to 7.9\%, risk reversal from $-0.3$ to "
+                          r"$-0.9$, butterfly from 0.12 to 0.35. Each tenor's smile from its own three quotes; the "
+                          r"desk's surface is these curves, interpolated in time", 3.6, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "A desk quotes those three numbers at every standard tenor, from a week to a year and beyond. "
+            "<bookmark mark='a'/> Build each tenor's smile from its own quotes and lay them on a common axis, "
+            "moneyness measured in standard deviations. In this illustrative market the longer smiles sit higher, "
+            "lean more to the left, and curve more: more time for a large move, and more fear of a falling euro. "
+            "<bookmark mark='b'/> Between the tenors the desk interpolates in time, usually in total variance, so that "
+            "no calendar spread comes out with a negative price: Part twelve's no-arbitrage conditions, applied to "
+            "currencies."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), run_time=3)
+            vo.wait_until("b")
+            self.play(FadeIn(side[1]))
         self.wait(0.4)
         self.clear_scene()
 

@@ -1,7 +1,7 @@
 # Quant, Built — Part 19: Term-Structure Models
 
 Part 19 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the second part of Act IV, Fixed Income and Credit. Part 18 built the curve; this part
+[the syllabus](../SYLLABUS.md)), part of Act III, Derivatives (Q), and the second of its five parts on rates, credit and the basis (18–22). Part 18 built the curve; this part
 makes it random, and prices the options on it. It covers:
 
 * short-rate models: Vasicek (1977) and Cox–Ingersoll–Ross (1985) fitted to the bill rate, how badly the speed of mean

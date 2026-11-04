@@ -1,7 +1,7 @@
 # Quant, Built — Part 21: Counterparty Risk, XVA and Clearing
 
 Part 21 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the last part of Act IV, Fixed Income and Credit. Part 20 priced the chance that a
+[the syllabus](../SYLLABUS.md)), part of Act III, Derivatives (Q), and the fourth of its five parts on rates, credit and the basis (18–22). Part 20 priced the chance that a
 borrower does not pay; this part prices the same chance for the other side of every derivative, and the collateral,
 funding, capital and clearing that grew up around it. It covers:
 
