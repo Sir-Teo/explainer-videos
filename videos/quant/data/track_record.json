@@ -287,6 +287,30 @@
   },
   "note": "{\"universe\": \"OSAP 2024.10 predictors complete 1973-2023 (154)\", \"fit\": \"1973-01 to 2020-12\", \"kappa_grid\": 20, \"folds\": 3, \"scale\": \"10% a year in sample\", \"cost_per_year\": 0.02}"
  },
+ "mined_combination_part29": {
+  "part": 29,
+  "research": {
+   "mean": 0.14072345283483767,
+   "vol": 0.08138925257948487,
+   "sharpe": 1.7290176328552336,
+   "sharpe_se": 0.5429719055526289,
+   "maxdd": -0.037743408689326796,
+   "n": 36,
+   "sharpe_net": 0.8820440154723592,
+   "cost_per_year": 0.06893454967333476
+  },
+  "holdout": {
+   "mean": 0.16877283380285824,
+   "vol": 0.06071146136415563,
+   "sharpe": 2.7799171690257256,
+   "sharpe_se": 0.7112666393759276,
+   "maxdd": -0.07279880308554965,
+   "n": 60,
+   "sharpe_net": 1.644471766717652,
+   "cost_per_year": 0.06893454967333476
+  },
+  "note": "daily long-short of the mined combination; cost: 10 bp a round trip on the measured 2018-2020 turnover"
+ },
  "nn3_coin_ls_part27": {
   "part": 27,
   "research": {

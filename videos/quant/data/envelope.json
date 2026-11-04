@@ -60,6 +60,10 @@
    "at": "2026-11-04",
    "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
   },
+  "mined_combination_part29|binance/usdt_daily_returns": {
+   "at": "2026-11-04",
+   "code_sha256": "e4fae7924dfb612847af1397af0f30b5b715889655e450821581026efe3f1d22"
+  },
   "mlp_bond_premia_oos|gsw_bond_rx": {
    "at": "2026-11-04",
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
@@ -489,6 +493,16 @@
    },
    "trials": 1
   },
+  "mined_combination_part29": {
+   "code_sha256": "e4fae7924dfb612847af1397af0f30b5b715889655e450821581026efe3f1d22",
+   "params": {
+    "alphas": "the 5 best random formulas by 2018-19 IC, de-duplicated",
+    "cost_bp": 10.0,
+    "universe": "Binance USDT coins, 60 days listed, median volume >= 250000",
+    "weights": "mean-variance on 2018-2020 daily long-short returns"
+   },
+   "trials": 13010
+  },
   "mlp_bond_premia_oos": {
    "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2",
    "params": {
@@ -650,6 +664,12 @@
  "sealed": {
   "binance/BTCUSDT/1d": {
    "digest": "7bdad00d93ed73da631de456141d06f5ae44061c4bd30b0002c07d00d5c10ef4",
+   "first": 20210101,
+   "last": 20251231,
+   "n": 1826
+  },
+  "binance/usdt_daily_returns": {
+   "digest": "9ce51448677a656c7e7d670e6f6a9294a01c38e3e828be43b5d32275772db8eb",
    "first": 20210101,
    "last": 20251231,
    "n": 1826

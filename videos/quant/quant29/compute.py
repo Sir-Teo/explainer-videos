@@ -177,6 +177,22 @@ def compute_random() -> dict:
                   "top100_valid_mean": float(np.mean(va_s[order[:100]])), "top100_train_mean": float(np.mean(tr_s[order[:100]]))})
 
 
+def compute_noise(n: int = 300) -> dict:
+    """Pure-noise signals on the same days and coins: the sampling spread of a mean IC when nothing is there, and the
+    best of n, to set against the random formulas."""
+    d, names, F, fwd, mask, train, valid = _research()
+    rng = np.random.default_rng(2931)
+    tr, va = [], []
+    for _ in range(n):
+        z = rng.standard_normal(fwd.shape)
+        ic = A.ic_series(z, fwd, mask)
+        tr.append(A.score(ic, train)["ic"])
+        va.append(A.score(ic, valid)["ic"])
+    tr, va = np.array(tr), np.array(va)
+    return _json({"n": n, "sd_train": float(tr.std(ddof=1)), "sd_valid": float(va.std(ddof=1)), "train": tr,
+                  "valid": va, "max_abs": float(np.abs(tr).max()), "corr": float(np.corrcoef(tr, va)[0, 1])})
+
+
 def compute_gp() -> dict:
     d, names, F, fwd, mask, train, valid = _research()
     runs = []
@@ -334,7 +350,8 @@ def _top_alphas(k: int = 40, return_trees: bool = False):
     for i in order:
         t = trees[i]
         raw = A.evaluate(t, F)
-        sgn = 1.0 if np.nan_to_num(r["train"][i]) >= 0 else -1.0
+        # ``random`` stores scores already signed; the sign to trade is that of the raw formula's training IC
+        sgn = 1.0 if A.score(A.ic_series(raw, fwd, mask), train)["ic"] >= 0 else -1.0
         s = A.rank(np.where(mask, sgn * raw, np.nan))
         sv = np.nan_to_num(s[train]).ravel()
         if any(abs(np.corrcoef(sv, np.nan_to_num(q[train]).ravel())[0, 1]) > 0.9 for q in sigs):
@@ -350,6 +367,13 @@ def _top_alphas(k: int = 40, return_trees: bool = False):
     return picked, sigs, np.array(rets).T
 
 
+def _apply(R, w):
+    """The combination's daily return; a day on which no alpha traded (too few eligible coins) is missing, not zero."""
+    out = np.nan_to_num(R) @ w
+    out[np.isnan(R).all(axis=1)] = np.nan
+    return out
+
+
 def compute_combine() -> dict:
     d, names, F, fwd, mask, train, valid = _research()
     picked, sigs, R = _top_alphas(40)
@@ -361,9 +385,9 @@ def compute_combine() -> dict:
     for K in Ks:
         ew_t, ew_v = np.nanmean(Rt[:, :K], 1), np.nanmean(Rv[:, :K], 1)
         w = A.combine(Rt[:, :K])
-        mv_t, mv_v = np.nan_to_num(Rt[:, :K]) @ w, np.nan_to_num(Rv[:, :K]) @ w
+        mv_t, mv_v = _apply(Rt[:, :K], w), _apply(Rv[:, :K], w)
         ws = A.combine(Rt[:, :K], shrink=1.0)
-        sh_v = np.nan_to_num(Rv[:, :K]) @ ws
+        sh_v = _apply(Rv[:, :K], ws)
         rows.append({"K": K, "ew_train": A.sharpe(ew_t), "ew_valid": A.sharpe(ew_v), "mv_train": A.sharpe(mv_t),
                      "mv_valid": A.sharpe(mv_v), "shrunk_valid": A.sharpe(sh_v)})
     single_t = [A.sharpe(Rt[:, i]) for i in range(R.shape[1])]
@@ -385,10 +409,16 @@ def compute_decay() -> dict:
             fw[t] = np.nansum(ret[t + 1:t + 1 + h], axis=0)
         ic = A.ic_series(s, fw, mask)
         out[str(h)] = {"train": A.score(ic, train), "valid": A.score(ic, valid)}
+    lag = {}
+    for h in range(1, 11):                                     # the h-th day ahead alone: how fast the edge fades
+        fw = np.full_like(ret, np.nan)
+        fw[:len(ret) - h] = ret[h:]
+        ic = A.ic_series(s, fw, mask)
+        lag[str(h)] = {"train": A.score(ic, train)["ic"], "valid": A.score(ic, valid)["ic"]}
     ic1 = A.ic_series(s, fwd, mask)
     years = sorted(set(d[30:] // 10000))
     by_year = {str(y): A.score(ic1, np.flatnonzero((d // 10000 == y) & (np.arange(len(d)) >= 30)))["ic"] for y in years}
-    return _json({"formula": picked[0], "horizons": out, "by_year": by_year})
+    return _json({"formula": picked[0], "horizons": out, "lag": lag, "by_year": by_year})
 
 
 # ---------------------------------------------------------------------------
@@ -432,6 +462,21 @@ STRATEGY = "mined_combination_part29"
 COST_BP = 10.0          # a round trip on a liquid coin, in basis points of the traded notional
 
 
+def _book(signal, mask):
+    """The dollar-neutral rank weights that ``A.ls_returns`` trades (one dollar long, one short), coin by coin."""
+    R = A.rank(np.where(mask, signal, np.nan))
+    W = np.zeros_like(R)
+    for t in range(R.shape[0]):
+        m = np.isfinite(R[t])
+        if m.sum() < 10:
+            continue
+        w = R[t, m] - R[t, m].mean()
+        a = np.abs(w).sum()
+        if a > 0:
+            W[t, m] = w / a * 2
+    return W
+
+
 def compute_envelope() -> dict:
     import inspect
     from explainer.quant.house import track
@@ -441,7 +486,7 @@ def compute_envelope() -> dict:
     gp_ev = sum(r[-1]["evaluated"] for r in load("gp")["runs"])
     n_trials = N_RANDOM + gp_ev + load("rl")["evaluated"] + len(rows)
     code = inspect.getsource(_top_alphas) + inspect.getsource(A.combine) + inspect.getsource(A.ls_returns) + \
-        inspect.getsource(A.evaluate)
+        inspect.getsource(A.evaluate) + inspect.getsource(_apply) + inspect.getsource(_book)
     pit.register(STRATEGY, code, {"alphas": f"the {K} best random formulas by 2018-19 IC, de-duplicated",
                                   "weights": "mean-variance on 2018-2020 daily long-short returns",
                                   "universe": f"Binance USDT coins, 60 days listed, median volume >= {MIN_QV:.0f}",
@@ -462,30 +507,62 @@ def compute_envelope() -> dict:
     fin = np.isfinite(fwda)
     hd, hv = pit.open_envelope(STRATEGY, "binance/usdt_daily_returns", da, np.where(fin, np.round(fwda, 8), -999.0))
     rets = []
-    for t_, s in kept:
+    book = np.zeros(fwda.shape)
+    for (t_, s), wk in zip(kept, w):
         sig = A.rank(np.where(ma, s * A.evaluate(t_, Fa), np.nan))
         rets.append(A.ls_returns(sig, fwda, ma))
-    P = np.nan_to_num(np.array(rets).T) @ w
+        book += wk * _book(sig, ma)
+    P = _apply(np.array(rets).T, w)
     hold = da > VALID_END
     res = (da >= START) & (da <= VALID_END)
-    cost_day = 2 * COST_BP / 1e4 * 0.5                         # assumed: half the book turns over each day
+    turn = np.r_[0.0, np.abs(np.diff(book, axis=0)).sum(axis=1)]   # dollars traded per day, per dollar long
+    traded = res & np.isfinite(P)
+    cost_day = float(np.mean(turn[traded])) * COST_BP / 2 / 1e4      # half a round trip per dollar traded
     def monthly(m):
         ym = da[m] // 100
         keys = np.unique(ym)
-        return keys, np.array([np.prod(1 + P[m][ym == k]) - 1 for k in keys])
+        return keys, np.array([np.prod(1 + np.nan_to_num(P[m][ym == k])) - 1 for k in keys])
     kr, mr = monthly(res)
     kh, mh = monthly(hold)
-    row = track.record(STRATEGY, 29, mr, mh, cost_day * 365, note="daily long-short of the mined combination, gross; "
-                       "cost charged at 10 bp a round trip, half the book a day")
-    cum_h = np.cumsum(np.log1p(np.clip(P[hold], -0.99, None)))
+    row = track.record(STRATEGY, 29, mr, mh, cost_day * 365, note="daily long-short of the mined combination; cost: "
+                       "10 bp a round trip on the measured 2018-2020 turnover")
+    # descriptive checks on the opened hold-out (no new strategy is chosen from them): the coin market's equal-weighted
+    # daily return, the book's beta to it, and the Sharpe ratio left after hedging that beta
+    M = np.array([np.nanmean(np.where(ma[t], fwda[t], np.nan)) if ma[t].any() else np.nan for t in range(len(da))])
+    ok = hold & np.isfinite(P) & np.isfinite(M)
+    beta = float(np.cov(P[ok], M[ok])[0, 1] / np.var(M[ok], ddof=1))
+    corr_m = float(np.corrcoef(P[ok], M[ok])[0, 1])
+    sr_hedged = A.sharpe(P[ok] - beta * M[ok])
+    n_open = sum(1 for k in pit._read()["registered"] if pit.PARTS.get(k, (99,))[0] <= 29)
+    cum_h = np.cumsum(np.log1p(np.clip(np.nan_to_num(P[hold]), -0.99, None)))
+    cum_r = np.cumsum(np.log1p(np.clip(np.nan_to_num(P[res]), -0.99, None)))
     return _json({"trials": pit.trials_so_far(), "n_trials": n_trials, "K": K, "formulas": picked, "weights": w,
                   "row": row, "sr_hold": A.sharpe(P[hold]), "sr_res": A.sharpe(P[res]), "cum_hold": cum_h,
+                  "cum_res": cum_r, "res_dates": da[res],
                   "hold_dates": da[hold], "first": int(da[hold][0]), "last": int(da[hold][-1]), "cost_year": cost_day * 365,
+                  "turnover": float(np.mean(turn[traded])), "turnover_hold": float(np.mean(turn[hold & np.isfinite(P)])),
+                  "n_hold_days": int(np.isfinite(P[hold]).sum()), "sr_res_net": A.sharpe(P[res] - cost_day),
+                  "sr_hold_net": A.sharpe(P[hold] - cost_day), "beta": beta, "corr_market": corr_m,
+                  "sr_hedged": sr_hedged, "n_registered": n_open, "sr_market": A.sharpe(M[ok]),
                   "by_year": {str(y): A.sharpe(P[hold & (da // 10000 == y)]) for y in range(2021, 2026)}})
 
 
+def compute_counter() -> dict:
+    """The series' trial counter as each part showed it, and this part's own trials by source."""
+    g = load("gp")
+    by_source = {"random": N_RANDOM, "gp": sum(r[-1]["evaluated"] for r in g["runs"]), "rl": load("rl")["evaluated"],
+                 "combinations": len(load("combine")["rows"])}
+    parts = list(range(1, PART_NO + 1))
+    return _json({"parts": parts, "count": [pit.trials_upto(p) for p in parts], "by_source": by_source,
+                  "n_registered": [sum(1 for k in pit._read()["registered"] if pit.PARTS[k][0] <= p) for p in parts]})
+
+
+PART_NO = 29
+
 ITEMS = {"grid": compute_grid, "classic": compute_classic, "space": compute_space, "random": compute_random,
+         "noise": compute_noise,
          "gp": compute_gp, "rl": compute_rl, "combine": compute_combine, "decay": compute_decay, "theory": compute_theory,
+         "counter": compute_counter,
          "envelope": compute_envelope}
 
 

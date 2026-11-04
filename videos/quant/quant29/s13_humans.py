@@ -44,9 +44,11 @@ class Humans(VoiceoverScene):
         self.clear_scene()
 
     def priors(self):
+        import math
+        h4, h2 = math.sqrt(2 * math.log(1e4)), math.sqrt(2 * math.log(1e2))
         rows = [cmath(r"\text{hurdle}(N)", r"\approx", r"\sqrt{2\ln N}\ \cdot\ \text{s.e.}", font_size=34,
                       colors={r"\text{hurdle}(N)": HURDLE}),
-                cmath(r"N = 10^{4}", r"\to", r"4.3\ \text{s.e.},\qquad N = 10^{2} \to 3.0\ \text{s.e.}", font_size=32),
+                cmath(r"N = 10^{4}", r"\to", rf"{h4:.1f}\ \text{{s.e.}},\qquad N = 10^{{2}} \to {h2:.1f}\ \text{{s.e.}}", font_size=32),
                 cmath(r"\text{a prior}", r"=", r"\text{a smaller } N \text{ with the same chance of containing the truth}",
                       font_size=28, colors={r"\text{a prior}": GOOD})]
         whys = [why(r"the best of $N$ independent noise statistics sits about $\sqrt{2\ln N}$ standard errors above zero "
@@ -57,7 +59,7 @@ class Humans(VoiceoverScene):
         with self.voiceover(
             "There is arithmetic behind the first. <bookmark mark='a'/> The best of N pure-noise statistics sits about the "
             "square root of two log N standard errors above zero. <bookmark mark='b'/> Ten thousand tries put the bar at "
-            "four point three standard errors; a hundred tries at three. <bookmark mark='c'/> So a researcher's prior is "
+            f"{h4:.1f} standard errors; a hundred tries at {h2:.1f}. <bookmark mark='c'/> So a researcher's prior is "
             "worth exactly what it removes from the search without removing the truth."
         ) as vo:
             step(0)

@@ -132,3 +132,12 @@ def house_lab(title, obj, first, count, extra=(), width=6.6):
         lines += [""] + src_lines(o, f, c)
     src = inspect.getsourcefile(obj).split("explainer-videos/")[-1]
     return lab_card(title, lines, source=f"{src}: {obj.__qualname__}", width=width)
+
+
+def tt(formula: str, n: int = 70) -> str:
+    """A formula string for TeX in typewriter type: cut to ``n`` characters (before escaping, so a cut never splits an
+    escape), then escaped."""
+    f = formula if len(formula) <= n else formula[:n - 3].rstrip() + "..."
+    f = f.replace("\\", "").replace("_", r"\_").replace("#", r"\#").replace("^", r"\^{}").replace("%", r"\%")
+    f = f.replace("...", r"\ldots")
+    return r"\texttt{" + f + "}"
