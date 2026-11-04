@@ -83,7 +83,7 @@ class Binomial(VoiceoverScene, TreeMixin):
         A = axes([-0.6, 10.6], [0, 0.3], x_length=6.0, y_length=3.0, xlabel=r"$k$", xticks=list(range(0, 11)),
                  yticks=[0, 0.1, 0.2, 0.3], center=[-1.8, -2.0, 0])
         bars = pmf_bars(A.ax, range(n + 1), d["pmf"], DISC, width=0.6)
-        eng = code_block(["coin(0.3).iid_sum(10).P(3)   # exact"], font_size=20).to_corner(DR, buff=0.35)
+        eng = code_block(["coin(0.3).iid_sum(10).P(3)   # exact"], font_size=20).next_to(A, RIGHT, buff=0.6)
         with self.voiceover(
             "The formula is two ideas from Part 2. <bookmark mark='a'/> Any one path with k up-steps has "
             "probability p to the k times one minus p to the n minus k, because the trials are independent. "
