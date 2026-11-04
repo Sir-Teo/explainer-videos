@@ -17134,6 +17134,11 @@
   "bytes": 2055201,
   "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
  },
+ "fed/gsw/1993-12-31_1994-12-31": {
+  "sha256": "6687318fe92db370194450ce1e6a4f895f2ffeaaac1b810b96a9d621f2603d71",
+  "bytes": 84738,
+  "source": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv"
+ },
  "fed/gsw/2020-12-01_2023-03-10": {
   "sha256": "259a643b1a6ea99692b2f658b341811a483b39989d4570e10ba340fbaf5ceada",
   "bytes": 163941,
