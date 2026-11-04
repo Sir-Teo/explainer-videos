@@ -113,9 +113,9 @@ class Floods(VoiceoverScene):
     def levels(self):
         d = load("portpirie")
         mu, s, xi = d["mu"], d["sigma"], d["xi"]
-        A = axes([0, 4], [3.5, 5.5], x_length=7.0, y_length=4.4, xlabel=r"return period $T$ (years, log scale)",
+        A = axes([0, 4], [3.5, 5.5], x_length=7.0, y_length=3.7, xlabel=r"return period $T$ (years, log scale)",
                  ylabel=r"return level (m)", xticks=[0, 1, 2, 3, 4], yticks=[3.5, 4.0, 4.5, 5.0, 5.5],
-                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.4, -0.5, 0])
+                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.4, -1.0, 0])
         ax = A.ax
         Ts = np.logspace(np.log10(1.1), 4, 200)
         yp = -np.log(1 - 1 / Ts)
@@ -144,7 +144,7 @@ class Floods(VoiceoverScene):
             "record. <bookmark mark='e'/> The ten-thousand-year level: five point three four. Note what a hundred-year "
             "level does not mean: the chance of seeing one in the next thirty years is twenty-six percent."
         ) as vo:
-            step = ladder(self, rows, whys, keep=2, top=2.8, x=3.4, buff=0.9, edge=6.9)
+            step = ladder(self, rows, whys, keep=2, top=3.1, x=-0.6, buff=0.85, edge=6.9)
             vo.wait_until("a")
             step(0, transform=False)
             vo.wait_until("b")
@@ -165,7 +165,8 @@ class Floods(VoiceoverScene):
                  center=[-2.6, -0.5, 0])
         ax = A.ax
         base = prof.max() - 4.6
-        cv = curve(ax, zs, prof - base, S.PRIOR, 3)
+        keep = (prof - base) >= 0
+        cv = curve(ax, zs[keep], (prof - base)[keep], S.PRIOR, 3)
         cut = DashedLine(ax.c2p(4.4, d["cut"] - base), ax.c2p(5.4, d["cut"] - base), color=GREY_B, stroke_width=1.5)
         lo, hi = d["ci100"]
         seg = Line(ax.c2p(lo, 0.15), ax.c2p(hi, 0.15), color=S.ACCENT, stroke_width=6)
@@ -173,8 +174,8 @@ class Floods(VoiceoverScene):
             MathTex(rf"\hat z_{{100}} = {d['rl'][5]:.2f}\ \text{{m}}", font_size=30, color=EXACT),
             MathTex(rf"95\%\ \text{{interval: }} [{lo:.2f},\ {hi:.2f}]", font_size=30, color=S.ACCENT),
             label(r"lopsided: \ the data rule out low levels better than high ones", font_size=22, color=GREY_A),
-            label(r"65 years of data, \ asked about 100: \ and the Delta Committee asked about 10,000", font_size=22,
-                  color=BOUND),
+            label(r"65 years of data, \ asked about 100;", font_size=24, color=BOUND),
+            label(r"the Delta Committee asked about 10,000", font_size=24, color=BOUND),
             label(r"the profile likelihood: \ Part 22", font_size=22, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28)
         for r in rows:
@@ -214,8 +215,8 @@ class Floods(VoiceoverScene):
                 why(r"$V$: \ what a flood destroys; \ $\delta$: \ the discount rate; \ $k$: \ cost per metre"),
                 why(r"the optimal height: \ worth raising until the next metre costs more than it saves")]
         hc = note(r"D. van Dantzig, \ ``Economic decision problems for flood prevention'', \ \emph{Econometrica} 24 (1956)")
-        hc.to_edge(DOWN, buff=0.45)
-        tail = label(r"statistics as decision-making: \ Part 45", font_size=24, color=GREY_A).next_to(hc, UP, buff=0.3)
+        hc.to_edge(DOWN, buff=0.25)
+        tail = label(r"statistics as decision-making: \ Part 45", font_size=24, color=GREY_A).to_corner(UR, buff=0.4)
         with self.voiceover(
             "Van Dantzig's own contribution was to turn the question into a decision. <bookmark mark='a'/> Above the "
             "current dike height, the chance that the sea goes over falls roughly exponentially with each extra "

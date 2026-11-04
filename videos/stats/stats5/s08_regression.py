@@ -101,8 +101,8 @@ class RegressionToMean(VoiceoverScene):
             MathTex(rf"\operatorname{{corr}}(\text{{test 1}}, \text{{test 2}}) = {d['r12']:.2f}", font_size=28, color=GREY_A),
             MathTex(rf"\text{{top tenth on test 1: }} {d['best_t1']:.2f} \to {d['best_t2']:.2f}", font_size=28, color=S.RESID),
             MathTex(rf"\text{{bottom tenth: }} {d['worst_t1']:.2f} \to {d['worst_t2']:.2f}", font_size=28, color=S.LIK),
-            label(r"the rookie of the year's second season; \ the cover jinx; \ the treatment that ``works'' on the worst cases",
-                  font_size=22, color=GREY_B),
+            label(r"the rookie of the year's second season; \ the cover jinx;", font_size=24, color=GREY_B),
+            label(r"the treatment that ``works'' on the worst cases", font_size=24, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.0, 0.2, 0])
         for r in rows:
             if r.width > 6.4:
@@ -127,7 +127,7 @@ class RegressionToMean(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[3]))
             vo.wait_until("d")
-            self.play(FadeIn(rows[4]))
+            self.play(FadeIn(rows[4:]))
         self.clear_scene()
 
     def flight(self):

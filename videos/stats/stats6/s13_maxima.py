@@ -83,7 +83,11 @@ class Maxima(VoiceoverScene):
         nl = MathTex(r"n = 10", font_size=36).move_to([4.8, 1.6, 0])
         rows = VGroup(label(r"gold: \ Gumbel, \ $e^{-x}\exp(-e^{-x})$", font_size=24, color=EXACT),
                       label(r"skewed to the right: \ the maximum's long upper tail", font_size=22, color=GREY_A)
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.6, 0.5, 0])
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        for r in rows:
+            if r.width > 4.2:
+                r.width = 4.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.7, 0.5, 0])
         tag = note(r"simulated: 20,000 maxima of each size").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Here it is. <bookmark mark='a'/> Twenty thousand maxima of ten exponentials, shifted by log ten. "

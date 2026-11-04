@@ -272,6 +272,23 @@ class NSpace(VGroup):
 
         return self._redraw(make)
 
+    def cloud(self, pts, color=WHITE, radius=0.02, opacity=0.8) -> VGroup:
+        """Many points at once: one updater projects all of them each frame (cheaper than one ``dot`` each)."""
+        P = np.asarray(pts, float)
+        g = VGroup(*[Dot(radius=radius, color=color, fill_opacity=opacity) for _ in range(len(P))])
+
+        def upd(m):
+            a, t = self.angle.get_value(), self.tilt.get_value()
+            X, Y, Z = P[:, 0], P[:, 2], P[:, 1]
+            X, Z = X * np.cos(a) + Z * np.sin(a), -X * np.sin(a) + Z * np.cos(a)
+            Y = Y * np.cos(t) - Z * np.sin(t)
+            xy = self.center_[:2] + self.scale_ * np.c_[X, Y]
+            for d_, (u, v) in zip(m, xy):
+                d_.move_to([u, v, 0])
+        upd(g)
+        g.add_updater(upd)
+        return g
+
     def point_label(self, mob: Mobject, p, offset=(0.25, 0.2)) -> Mobject:
         p = np.asarray(p, float)
         off = np.array([offset[0], offset[1], 0])
