@@ -38,6 +38,7 @@ class Relays(VoiceoverScene):
         self.dictionary()
         self.staircase()
         self.simplify()
+        self.consensus()
 
     def card(self):
         card = chapter_card(2, r"Circuits are expressions", r"How does a switching circuit compute?", lit=(1937,),
@@ -159,5 +160,35 @@ class Relays(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(one), FadeIn(ol), FadeIn(cnt2))
             self.play(FadeIn(hist))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def consensus(self):
+        head = label(r"Analysis: \ a contact that does nothing", font_size=38).to_edge(UP, buff=0.35)
+        g, _ = ladder([[r"x", r"y"], [r"\bar x", r"z"], [r"y", r"z"]], x0=-6.2, x1=-2.0, y0=1.3, dy=1.1, length=0.8)
+        f = MathTex(r"f = x y + \bar x z + y z", font_size=38, color=GREY_A).move_to(RIGHT * 2.6 + UP * 1.6)
+        argm = VGroup(*[label(t, font_size=26, color=c) for t, c in (
+            (r"if $y = z = 1$: \ either $x = 1$ \ (top path) \ or $x = 0$ \ (middle path)", GREY_A),
+            (r"so the bottom path never carries current \ that the others do not", HEAD),
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(f, DOWN, buff=0.4)
+        thm = MathTex(r"x y + \bar x z + y z = x y + \bar x z", font_size=38, color=YES).next_to(argm, DOWN, buff=0.45)
+        tl = note(r"the \textit{consensus} theorem: \ $yz$ is redundant \ (but see chapter 10)", font_size=22).next_to(
+            thm, DOWN, buff=0.15)
+        with self.voiceover(
+            "The dictionary also works for analysis. <bookmark mark='a'/> Here is a circuit with three paths: x and y; "
+            "not x and z; y and z. Its expression is x y plus not x z plus y z. <bookmark mark='b'/> Is the bottom path "
+            "doing anything? It conducts when y and z are both closed. But then x is either closed, and the top path "
+            "conducts anyway, or open, and the middle one does. The bottom path never adds a connection the others "
+            "lack. <bookmark mark='c'/> So y z can be removed: this is the consensus theorem, and synthesis tools apply "
+            "it constantly. Chapter ten will show a reason you might deliberately keep that useless contact."
+        ) as vo:
+            self.play(FadeIn(head), Create(g))
+            vo.wait_until("a")
+            self.play(Write(f))
+            vo.wait_until("b")
+            self.play(FadeIn(argm, lag_ratio=0.3))
+            vo.wait_until("c")
+            self.play(Write(thm), FadeIn(tl))
         self.wait(0.3)
         self.clear_scene()

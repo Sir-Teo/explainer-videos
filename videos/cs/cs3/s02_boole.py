@@ -21,6 +21,7 @@ class Boole(VoiceoverScene):
     def construct(self):
         self.card()
         self.laws_of_thought()
+        self.syllogism()
         self.laws()
         self.distributive()
         self.proofs()
@@ -55,6 +56,43 @@ class Boole(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
             self.play(FadeIn(note_))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def syllogism(self):
+        head = label(r"Boole's syllogisms, \ as equations", font_size=38).to_edge(UP, buff=0.35)
+        rows = VGroup(*[VGroup(label(a, font_size=28, color=GREY_A), MathTex(b, font_size=36, color=c)).arrange(
+            RIGHT, buff=0.6) for a, b, c in (
+            (r"``every $x$ is a $y$''", r"x = x\,y", DATA),
+            (r"``every $y$ is a $z$''", r"y = y\,z", DATA),
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=1.2)
+        chain = MathTex(r"x", r"= x y", r"= x (y z)", r"= (x y) z", r"= x z", font_size=42).next_to(rows, DOWN, buff=0.7)
+        chain.align_to(rows, LEFT)
+        chain[-1].set_color(YES)
+        why = VGroup(note(r"substitute $y = yz$", font_size=22), note(r"associativity", font_size=22),
+                     note(r"substitute $xy = x$", font_size=22))
+        for w, part in zip(why, chain[2:]):
+            w.next_to(part, DOWN, buff=0.2)
+        concl = label(r"so: \ ``every $x$ is a $z$'' \ (Aristotle's \textit{Barbara})", font_size=30, color=HEAD).move_to(
+            RIGHT * 4.2 + UP * 0.4)
+        with self.voiceover(
+            "Boole's own showpiece was the oldest piece of logic there is: Aristotle's syllogisms. "
+            "<bookmark mark='a'/> Every x is a y becomes an equation: x equals x times y, since being an x and a y is "
+            "the same as being an x. Every y is a z: y equals y z. <bookmark mark='b'/> Now calculate. x equals x y; "
+            "substitute y z for y; regroup; substitute x for x y; and x equals x z. <bookmark mark='c'/> Every x is a "
+            "z. Two thousand years of memorized rules for valid arguments became a few lines of algebra that a clerk, "
+            "or a machine, could check."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(rows, lag_ratio=0.4))
+            vo.wait_until("b")
+            self.play(FadeIn(chain[0]))
+            for k in range(1, 5):
+                self.play(FadeIn(chain[k], shift=RIGHT * 0.1), *([FadeIn(why[k - 2])] if k >= 2 else []), run_time=0.7)
+            vo.wait_until("c")
+            self.play(FadeIn(concl))
         self.wait(0.3)
         self.clear_scene()
 

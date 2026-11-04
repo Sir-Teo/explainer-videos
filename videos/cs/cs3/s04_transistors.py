@@ -28,18 +28,18 @@ class Transistors(VoiceoverScene):
         head = label(r"Faster switches", font_size=38).to_edge(UP, buff=0.35)
         rows = [
             (r"relay", r"1930s", r"$\sim 10^{-2}$ s", r"a moving metal contact; \ clicks, \ wears out"),
-            (r"vacuum tube", r"1940s", r"$\sim 10^{-6}$ s", r"electrons through a vacuum; \ hot, \ burns out \ "
+            (r"vacuum tube", r"1940s", r"$\sim 10^{-6}$ s", r"electrons through a vacuum; \ hot, \ burns out \\ "
                                                              r"(ENIAC: 17{,}468 tubes)"),
             (r"transistor", r"1947 $\to$", r"$\sim 10^{-11}$ s", r"electrons through silicon; \ nothing moves"),
         ]
         tab = VGroup()
         for i, (a, b, c, d) in enumerate(rows):
             r = VGroup(label(a, font_size=30, color=[CTRL, HEAD, YES][i]), label(b, font_size=26, color=GREY_B),
-                       label(c, font_size=30, color=COST), label(d, font_size=24, color=GREY_A))
+                       label(c, font_size=30, color=COST), label(d, font_size=23, color=GREY_A))
             r[0].move_to([-5.4, 1.2 - 1.1 * i, 0], aligned_edge=LEFT)
             r[1].move_to([-2.6, 1.2 - 1.1 * i, 0], aligned_edge=LEFT)
             r[2].move_to([-0.9, 1.2 - 1.1 * i, 0], aligned_edge=LEFT)
-            r[3].move_to([1.2, 1.2 - 1.1 * i, 0], aligned_edge=LEFT)
+            r[3].move_to([0.9, 1.2 - 1.1 * i, 0], aligned_edge=LEFT)
             tab.add(r)
         hdr = VGroup(note(r"switch", font_size=22).move_to([-5.4, 2.0, 0], aligned_edge=LEFT),
                      note(r"switching time", font_size=22).move_to([-0.9, 2.0, 0], aligned_edge=LEFT))
@@ -124,14 +124,14 @@ class Transistors(VoiceoverScene):
 
     def inverter(self):
         head = label(r"The CMOS inverter", font_size=38).to_edge(UP, buff=0.35)
-        inv = self.inverter_mob(LEFT * 2.6 + DOWN * 0.3)
+        inv = self.inverter_mob(LEFT * 3.6 + DOWN * 0.3)
         in_v = MathTex(r"\text{in} = 0", font_size=34, color=GREY_B).next_to(inv.inp, LEFT, buff=0.15)
         out_v = MathTex(r"\text{out} = 1", font_size=34, color=YES).next_to(inv.out, RIGHT, buff=0.15)
         txt = VGroup(*[label(t, font_size=27, color=c) for t, c in (
             (r"in $= 0$: \ the pMOS conducts, \ the nMOS does not: \\ out is pulled up to $V_{DD}$ \ $= 1$", GREY_A),
             (r"in $= 1$: \ the nMOS conducts, \ the pMOS does not: \\ out is pulled down to ground \ $= 0$", GREY_A),
             (r"one of the two is always off: \\ no path from $V_{DD}$ to ground, \ no steady current", HEAD),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(RIGHT * 3.2 + DOWN * 0.2)
+        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(RIGHT * 3.5 + DOWN * 0.2)
         with self.voiceover(
             "Stack a p-type transistor on an n-type one, the p on top connected to the supply voltage, the n below "
             "connected to ground, and join their gates as the input and their middle as the output. This is the CMOS "

@@ -39,7 +39,7 @@ class Complete(VoiceoverScene):
         l1 = label(r"NOT: \ 1 gate", font_size=26, color=CTRL).next_to(not_c, DOWN, buff=0.5)
         # AND: NAND then NOT
         g2 = gate("NAND", size=0.8).move_to(LEFT * 1.3 + UP * 0.8)
-        g3 = gate("NAND", size=0.8).move_to(LEFT * 0.0 + UP * 0.8)
+        g3 = gate("NAND", size=0.8).move_to(RIGHT * 0.3 + UP * 0.8)
         mid = g2.out()
         and_c = VGroup(g2, g3, wire(mid, g3.inp[0]()), wire(mid, g3.inp[1]()), dot(mid),
                        inp("x", g2.inp[0]()), inp("y", g2.inp[1]()),
