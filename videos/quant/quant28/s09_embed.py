@@ -169,11 +169,11 @@ class Embeddings(VoiceoverScene):
         self.clear_scene()
 
     def question(self):
-        q = pause_card(r"`easing' and `tightening' are each other's nearest neighbours. Would a sentiment score built on "
-                       r"these vectors tell a hawkish statement from a dovish one?")
+        q = pause_card(r"`tightening's nearest neighbour is `easing'. Would a sentiment score built on these vectors tell a "
+                       r"hawkish statement from a dovish one?")
         with self.voiceover(
-            "Pause and predict. Easing and tightening are each other's nearest neighbours. Would a sentiment score built "
-            "on these vectors tell a hawkish statement from a dovish one?"
+            "Pause and predict. Tightening's nearest neighbour is easing. Would a sentiment score built on these vectors "
+            "tell a hawkish statement from a dovish one?"
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

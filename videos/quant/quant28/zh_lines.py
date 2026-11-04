@@ -204,6 +204,90 @@ ZH = {
 
     'f"Pause and predict. With {s[\'n_train\']} statements':
         "暂停预测一下。有{s['n_train']}份声明和{s['n_vocab']}个候选词，如果标签是抛硬币，会有多少个词通过这个筛选？",
+
+    # ------------------------------------------------------------------ Topics
+    "Chapter six. Instead of good and bad, ask what a document is about.":
+        "第六章。不问好与坏，而问一份文档讲的是什么。机器能在没有人告诉它的情况下，找到三十年纪要的主题吗？",
+
+    'f"A topic model factors the document-term matrix.':
+        "主题模型对文档-词项矩阵做分解。<bookmark mark='a'/>取纪要的加权矩阵，把它写成两个非负矩阵的乘积，中间是{t['k']}个主题。<bookmark mark='b'/>每份文档成为主题的混合，"
+        "每个主题成为词的加权，而因为没有什么能为负，每一块读起来都像一个主题。<bookmark mark='c'/>2003年的隐含狄利克雷分配是大多数金融论文使用的概率版本；"
+        "非负矩阵分解给出同样形状的输出，二十行代码就能写完。",
+
+    'f"The whole fit is two lines repeated.':
+        "整个拟合就是重复两行代码。<bookmark mark='a'/>Lee和Seung的乘法更新：把主题乘以一个比值，拟合偏小时它大于一，偏大时小于一，再对每份文档的权重做同样的事。"
+        "什么都不会变成负数，误差每一步都在下降。<bookmark mark='b'/>在纪要上，五百步把相对误差从{t['err'][0]:.2f}降到{t['err'][-1]:.2f}：八个主题留下三十年的大部分细节无法解释，"
+        "却保住了大的轮廓。",
+
+    "Here are the eight topics, each named by us":
+        "这里是八个主题，每个都是我们读了它的高频词之后命名的；模型只是找到了它们。<bookmark mark='a'/>货币区间与约束；放缓与通胀回落；紧缩与移除宽松；流动性便利；"
+        "资产购买与指引；正常化；准备金与回购；还有一个纯程序性的主题，即委员会每年一月会议上续签的授权。<bookmark mark='b'/>注意它们是什么样的主题。不是通胀对就业，而是时代。",
+
+    "Plot each year's mix.":
+        "画出每年的混合。<bookmark mark='a'/>纪要从一个时代流向下一个时代：九十年代后期的货币区间；2001年的放缓；2004到2006年的逐步紧缩；2008年的流动性便利，2020年再次出现；"
+        "到2014年为止的资产购买与前瞻指引；正常化；然后是准备金和回购这些管道问题。<bookmark mark='b'/>程序性主题是那条从不消失的稳定色带。一个无监督的模型，没有日期也没有标签，"
+        "写出了一部委员会议程的历史。",
+
+    "Leland Bybee, Bryan Kelly, Asaf Manela and Dacheng Xiu":
+        "Leland Bybee、Bryan Kelly、Asaf Manela和修大成对财经报刊做了同样的事。<bookmark mark='a'/>1984到2017年八十万篇《华尔街日报》文章，变成每个主题每月获得的关注度占比。"
+        "<bookmark mark='b'/>这种关注度紧密跟踪经济，能预测股市，并为标准的宏观经济动态模型增加预测力。新闻是一个宏观数据序列，每天都有，远早于官方统计。",
+
+    "Pause and predict. These topics are eras, not themes.":
+        "暂停预测一下。这些主题是时代，而不是主题本身。如果你想要一个贯穿每个十年的通胀主题，你会改变什么：主题的个数、加权方式，还是文档？",
+
+    # ------------------------------------------------------------------ FOMC
+    "Chapter seven. Text is not only an input to trading":
+        "第七章。文本不只是交易的输入；它也是关于决策如何作出的证据。当说话的人知道自己的话会被阅读时，他们会说得不一样吗？",
+
+    "The committee speaks through several documents.":
+        "委员会通过几种文件说话。<bookmark mark='a'/>声明，自1994年起。纪要，不具名的讨论摘要，自2005年1月起在每次会议三周后发布。<bookmark mark='b'/>会议记录：每一个字，"
+        "署名，五年后发布。自2007年起还有参会者自己的预测，自2011年起有新闻发布会。<bookmark mark='c'/>每一种都是不同的文本，为不同的读者而写，有不同的时滞。",
+
+    "That makes a natural experiment.":
+        "这就构成了一个自然实验。<bookmark mark='a'/>自1970年代起会议就被录音以帮助撰写纪要，而委员们以为录音事后会被抹掉。1993年10月，艾伦·格林斯潘透露会议记录是存在的，"
+        "美联储同意在五年后公布。一夜之间，每位委员都知道自己的话会被阅读。<bookmark mark='b'/>Stephen Hansen、Michael McMahon和Andrea Prat在前后两个时期对每位发言者的话"
+        "运行了主题模型。他们发现了两种效应。纪律：经验较少的委员准备得更充分，用了更多数据。从众：他们也更贴近主席的路线。总体而言，讨论变得更有信息量。",
+
+    "Theory predicted both effects.":
+        "理论预言了这两种效应。<bookmark mark='a'/>一位知道自己会被评判的专家会更努力：这是纪律。<bookmark mark='b'/>同一位专家也害怕显得出错，并向观察者所预期的观点靠拢："
+        "这是从众。Ellen Meade和David Stasavage已经表明，1993年之后FOMC的反对票变少了。<bookmark mark='c'/>但投票是粗糙的记录。文本让你能度量每位委员说了什么、怎么说，"
+        "正是这一点把委员会经济学的一个老问题变成了一次测量。",
+
+    'f"Our own corpus shows the minutes changing too.':
+        "我们自己的语料也显示纪要在变化。<bookmark mark='a'/>每根柱子是一份纪要，只计讨论段落。<bookmark mark='b'/>从2005年起，纪要在会议三周后发布，而不是在下一次会议之后，"
+        "并本身成为了一份能推动市场的文件。中位数从2005年以前的约{early:,.0f}个词增长到2009年以来的约{late:,.0f}个词。当一份文件成为信号，它的作者就会为它的读者写作。",
+
+    "Pause and predict. A model trained on minutes from before 2005":
+        "暂停预测一下。一个用2005年以前的纪要训练的模型被用在之后写的纪要上。即使经济什么都没变，它的分数为什么也可能漂移？",
+
+    # ------------------------------------------------------------------ Embeddings
+    "Chapter eight. A bag of words treats easing and tightening":
+        "第八章。词袋把easing和tightening当作毫不相关的符号。机器能在没有任何词典的情况下学会词的含义吗？",
+
+    "The idea is from the linguist J. R. Firth in 1957":
+        "这个想法来自语言学家J. R. Firth，1957年：观其伴，知其词。<bookmark mark='a'/>raise和lower出现在相同的位置：委员会决定把目标区间如何如何。"
+        "有相同邻居的词有相同的含义，或者至少有相同的角色。<bookmark mark='b'/>词嵌入给每个词一个概括其邻居的向量，使得用法相似的词指向同一个方向。",
+
+    "Here is how, with nothing but counting and linear algebra.":
+        "具体做法只需要计数和线性代数。<bookmark mark='a'/>统计每个词在其他每个词五个词之内出现的频率，越近的词对计数越多。<bookmark mark='b'/>把计数转换成点互信息："
+        "这一对词比偶然情况下多出现了多少；把负值设为零。<bookmark mark='c'/>用奇异值分解分解这个矩阵，保留五十个方向：每个词现在是五十维空间中的一个点。<bookmark mark='d'/>"
+        "Omer Levy和Yoav Goldberg在2014年证明，让词嵌入出名的神经网络方法word2vec，隐含地做的正是同样的分解。",
+
+    "Train it on the minutes, and ask for each word's nearest neighbours.":
+        "在纪要上训练它，并询问每个词的最近邻。<bookmark mark='a'/>inflation挨着expectations、core和survey-based；purchases挨着asset、large-scale和美联储购买的"
+        "mortgage-backed证券；housing挨着residential、homebuilding和construction。<bookmark mark='b'/>tightening的最近邻是easing：扮演同一角色的反义词。"
+        "而liquidity与facilities、swap lines和emergency provision住在一起，这是2008年的词汇。这些都没有告诉模型；全在于谁与谁为伴。",
+
+    "Project the two hundred and fifty most common words":
+        "把最常见的两百五十个词投影到最能把它们分开的两个方向上。<bookmark mark='a'/>这张图很粗糙，五十维中只取了两维，但邻域显现出来：关于价格和通胀的词在一个区域，"
+        "关于劳动力市场的在另一个，金融管道的在第三个。",
+
+    'f"Directions carry relations, too.':
+        "方向也承载着关系。<bookmark mark='a'/>取tightening的向量，减去raise，加上lower，问哪个词离它最近。答案是{an['best'][0]}。<bookmark mark='b'/>"
+        "tightening之于raise，正如easing之于lower：对含义做算术，这正是让Tomas Mikolov的word2vec在2013年出名的那个技巧，这里只用美联储自己的纪要就重现了。",
+
+    "Pause and predict. Tightening's nearest neighbour is easing.":
+        "暂停预测一下。tightening的最近邻是easing。基于这些向量构建的情感分数能区分鹰派声明和鸽派声明吗？",
 }
 
 PHRASES = {}
