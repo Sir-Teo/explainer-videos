@@ -2484,3 +2484,89 @@ def test_acm_finds_no_term_premium_where_there_is_none():
     out = R.acm_decompose(logp, K=3, rx_mats=np.arange(6, N, 6))
     assert np.mean(np.abs(out["tp"][:, -1])) < 1.5e-3  # under 15 bp at five years, on average
     assert out["fit_rmse"] < 2e-4
+
+
+# ---------------------------------------------------------------------------
+# Part 19: term-structure models
+# ---------------------------------------------------------------------------
+def test_affine_riccati_matches_vasicek_and_cir():
+    from explainer.quant.house import termstructure as TS
+    T = np.array([0.5, 2.0, 10.0])
+    assert np.allclose(TS.affine_zcb(0.03, 0.3, 0.05, 0.01 ** 2, 0.0, T), TS.vasicek_zcb(0.03, 0.3, 0.05, 0.01, T),
+                       rtol=1e-8)
+    assert np.allclose(TS.affine_zcb(0.03, 0.3, 0.05, 0.0, 0.08 ** 2, T), TS.cir_zcb(0.03, 0.3, 0.05, 0.08, T),
+                       rtol=1e-8)
+
+
+def _hw():
+    from explainer.quant.house import rates as R, termstructure as TS
+    c = R.Curve([0.5, 1, 2, 5, 10, 30], [0.04, 0.039, 0.037, 0.038, 0.041, 0.045])
+    return c, TS.HullWhite(c, a=0.05, sigma=0.01)
+
+
+def test_hull_white_fits_the_curve_and_simulates_it():
+    c, hw = _hw()
+    T = np.array([1.0, 3.0, 7.0, 15.0])
+    assert np.allclose(hw.zcb(0.0, T, 0.0), c.df(T), rtol=1e-12)
+    x, D = hw.simulate_x(T, 200000, seed=1)
+    assert np.allclose(D.mean(0), c.df(T), rtol=3e-3)
+    # a bond's price at t from the formula equals the discounted expectation of 1 at T
+    t, S = 3.0, 10.0
+    x3, D3 = hw.simulate_x(np.array([t, S]), 200000, seed=2)
+    assert abs(np.mean(D3[:, 0] * hw.zcb(t, S, x3[:, 0])) - c.df(S)) < 3e-3 * c.df(S)
+
+
+def test_hull_white_options_parity_and_jamshidian():
+    from explainer.quant.house import termstructure as TS
+    c, hw = _hw()
+    K, T, S = 0.8, 2.0, 7.0
+    call, put = hw.zcb_option(K, T, S, 1), hw.zcb_option(K, T, S, -1)
+    assert abs(call - put - (c.df(S) - K * c.df(T))) < 1e-12
+    # payer minus receiver swaption is a forward-starting payer swap
+    k, T0, ten = 0.04, 2.0, 5.0
+    pay, rec = hw.swaption(k, T0, ten, payer=True), hw.swaption(k, T0, ten, payer=False)
+    times = T0 + np.arange(1, 6)
+    fwd_swap = c.df(T0) - c.df(times[-1]) - k * c.df(times).sum()
+    assert abs(pay - rec - fwd_swap) < 1e-10
+
+
+def test_bachelier_and_normal_sabr():
+    from explainer.quant.house import termstructure as TS
+    p = TS.bachelier(0.03, 0.031, 2.0, 0.009)
+    assert abs(TS.normal_iv(p, 0.03, 0.031, 2.0) - 0.009) < 1e-10
+    # with no vol of vol, normal SABR is Bachelier with vol alpha
+    assert np.allclose(TS.sabr_normal_iv(0.03, np.array([0.02, 0.03, 0.04]), 1.0, 0.008, 0.0, 0.0, 1e-10), 0.008)
+
+
+def test_hjm_discounted_bonds_are_martingales():
+    from explainer.quant.house import termstructure as TS
+    tau = np.linspace(0, 10, 81)
+    f0 = 0.03 + 0.01 * (1 - np.exp(-tau / 3))
+    vols = np.array([0.008 * np.ones_like(tau), 0.006 * np.exp(-tau / 2)])
+    out = TS.hjm_gaussian(f0, tau, vols, T=2.0, n_steps=200, n_paths=20000, seed=0)
+    fT = out["curves"][-1]
+    P_T = np.exp(-np.trapezoid(fT[:, :41], tau[:41], axis=1))  # P(2, 7)
+    P0 = np.exp(-np.trapezoid(f0[:57], tau[:57]))  # P(0, 7)
+    assert abs(np.mean(P_T / out["bank"]) / P0 - 1) < 2e-3
+
+
+def test_lmm_caplets_match_black_and_bachelier():
+    from explainer.quant.house import termstructure as TS
+    L0 = np.array([0.03, 0.032, 0.034, 0.035])
+    o = TS.lmm_caplets(L0, 0.5, 0.2, n_paths=40000, seed=0)
+    assert np.allclose(o["mc"], o["exact"], rtol=0.03)
+    o = TS.lmm_caplets(L0, 0.5, 0.008, n_paths=40000, seed=0, normal=True)
+    assert np.allclose(o["mc"], o["exact"], rtol=0.03)
+
+
+def test_bermudan_is_worth_at_least_its_best_european():
+    from explainer.quant.house import termstructure as TS
+    c, hw = _hw()
+    out = TS.bermudan_swaption_lsm(hw, 0.04, 1.0, 10.0, n_paths=20000, seed=0)
+    assert out["price"] + 3 * out["se"] >= max(out["europeans"])
+
+
+def test_mbs_has_negative_convexity():
+    from explainer.quant.house import termstructure as TS
+    p = [TS.mbs_price(0.065, s, n_paths=300, seed=0) for s in (-0.01, 0.0, 0.01)]
+    assert p[0] + p[2] - 2 * p[1] < 0  # concave in rates near par: prepayment caps the upside
