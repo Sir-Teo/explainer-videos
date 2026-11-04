@@ -168,8 +168,10 @@ class FD(VoiceoverScene, ThreeDScene):
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
         cols = {"implicit": BAD, "cn": OPT, "cn+rannacher": GOOD}
-        lines = VGroup(*[polyline(ax, grids, np.clip(np.log10(np.maximum(np.asarray(f["errors"][k]), 1e-7)), -3, 0), cols[k])
-                         for k in ("implicit", "cn", "cn+rannacher")])
+        # Crank--Nicolson and its Rannacher start agree on the price to 3 digits: draw plain CN last, dashed, on top
+        pl = [polyline(ax, grids, np.clip(np.log10(np.maximum(np.asarray(f["errors"][k]), 1e-7)), -3, 0), cols[k])
+              for k in ("implicit", "cn+rannacher", "cn")]
+        lines = VGroup(pl[0], pl[1], VGroup(DashedVMobject(pl[2][0], num_dashes=30), *pl[2][1:]))
         leg = legend([(BAD, r"fully implicit: first order"), (OPT, r"Crank--Nicolson"),
                       (GOOD, r"Crank--Nicolson after two implicit half-steps (Rannacher)")], font_size=16)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
@@ -177,7 +179,8 @@ class FD(VoiceoverScene, ThreeDScene):
         rc = f["errors"]["cn"][-2] / f["errors"]["cn"][-1]
         side = wrapped_label(rf"at the finest grids, doubling cuts the implicit error {ri:.1f} times and Crank--Nicolson's "
                              rf"{rc:.1f} times, the mark of second order; the implicit ratio is falling toward 2 as its "
-                             r"first-order time error takes over. Finite elements (Seydel's textbook) are the other "
+                             r"first-order time error takes over. On the price the Rannacher start changes almost "
+                             r"nothing; it is for the Greeks (chapter 13). Finite elements (Seydel's textbook) are the other "
                              r"family; desks rarely use them for vanillas", 4.4, 19, GREY_A).to_edge(RIGHT, buff=0.4)
         q = predict(r"Double the price points of a stable explicit grid. How many more time steps?", width=4.4,
                     font_size=20).to_corner(DR, buff=0.3)
