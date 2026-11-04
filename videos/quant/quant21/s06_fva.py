@@ -96,8 +96,8 @@ class FVA(VoiceoverScene):
                  xticks=[0, 2, 4, 6, 8, 10], yticks=[0, 0.4, 0.8], font_size=13).to_edge(DOWN, buff=0.5).shift(LEFT * 2.6)
         ax = g.ax
         line = curve(ax, np.r_[0, t], np.r_[cap[0], cap], BAD, stroke_width=3)
-        fn = ax.plot(lambda u: float(np.interp(u, np.r_[0, t], np.r_[cap[0], cap])), x_range=[0, 10, 0.05])
-        area = ax.get_area(fn, x_range=[0, 10], color=BAD, opacity=0.25)
+        xs = np.r_[0, t]
+        area = band(ax, xs, np.zeros(len(xs)), np.r_[cap[0], cap], BAD, opacity=0.25)  # Axes.get_area breaks on 2D axes
         side = VGroup(
             MathTex(rf"\text{{KVA}} = \${1e3 * f['KVA']:.0f}\text{{k}}", font_size=30, color=BAD),
             wrapped_label(r"capital here: a stand-in from the netting set's potential exposure, 1.4 times PFE, at 8\% "
