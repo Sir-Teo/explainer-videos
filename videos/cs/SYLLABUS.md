@@ -143,7 +143,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 5 | falling Rowhammer thresholds; PARA's probability and Misra–Gries counting, derived; a many-sided attack simulated; Half-Double, RowPress, PRAC |
 | 6 | mutation analysis of random co-simulation (computed); coverage-guided CPU fuzzing (DifuzzRTL, Cascade); Sail, Kami, Silver; verifying speculative cores |
 | 7 | the limits of branch prediction, computed: idealised PPM against TAGE at every storage budget; the perceptron's linear blind spot; TAGE-SC-L, BranchNet; the data-centre front-end bottleneck |
-| 8 | ILP limit studies revisited; speculative non-interference as a formal model of Spectre; value prediction |
+| 8 | value prediction in the limit study (computed: perfect prediction of every load +19% on the Job, a stride predictor loses at every confidence); secure speculation: an STT/NDA-style rule built into the core, blocking the gadget for 3.5%; speculative non-interference; the cost floor |
 | 9 | learned replacement (Hawkeye, Glider) against Belady; the red–blue pebble lower bounds; memory disaggregation |
 | 10 | out-of-thin-air and the unsolved C/C++ memory model; work-stealing bounds; dark silicon |
 | 11 | Robson's allocator lower bound; formal semantics of undefined behaviour; capability hardware (CHERI) |
@@ -3136,4 +3136,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 5 | scenes, computations, notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
-| 8–61 | planned (this document) | — |
+| 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
+| 9–61 | planned (this document) | — |
