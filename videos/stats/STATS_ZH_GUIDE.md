@@ -121,3 +121,35 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | frequentist / Bayesian | 频率学派 / 贝叶斯学派 |
 | Dutch book, coherence | 荷兰赌，融贯性 |
 | Cox's theorem | 考克斯定理 |
+
+## Glossary (Part 3)
+
+| English | 中文 |
+|---|---|
+| Bernoulli / binomial | 伯努利 / 二项分布 |
+| law of rare events (law of small numbers) | 稀有事件定律（小数定律） |
+| Poisson distribution, Poisson process | 泊松分布，泊松过程 |
+| total variation distance | 全变差距离 |
+| Le Cam's inequality | 勒卡姆不等式 |
+| geometric / negative binomial | 几何分布 / 负二项分布 |
+| memorylessness | 无记忆性 |
+| first-step analysis | 首步分析 |
+| hypergeometric | 超几何分布 |
+| capture–recapture | 捕获–再捕获法（标记重捕法） |
+| exponential / gamma | 指数分布 / 伽马分布 |
+| superposition / thinning | 叠加 / 稀疏化 |
+| inspection paradox, length-biased sampling | 检查悖论，长度偏倚抽样 |
+| normal distribution, Stirling's formula | 正态分布，斯特林公式 |
+| change of variables, Jacobian | 变量替换，雅可比行列式 |
+| Box–Muller transform | Box–Muller变换 |
+| log-normal | 对数正态分布 |
+| chi-squared / Student's t / F | 卡方分布 / 学生t分布 / F分布 |
+| Cauchy distribution | 柯西分布 |
+| order statistics, beta distribution | 次序统计量，贝塔分布 |
+| the German tank problem | 德国坦克问题 |
+| Pareto / Zipf's law | 帕累托分布 / 齐普夫定律 |
+| moment generating function / characteristic function | 矩母函数 / 特征函数 |
+| mixture, overdispersion | 混合分布，过度离散 |
+| beta-binomial | 贝塔二项分布 |
+| law of total variance | 全方差公式 |
+| exponential family, natural parameter, sufficient statistic, log-normalizer | 指数族，自然参数，充分统计量，对数配分函数 |
