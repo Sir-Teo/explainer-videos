@@ -21,8 +21,8 @@ class Research(VoiceoverScene):
         self.curse()
         self.condition()
         self.invert()
-        self.picture(t)
         self.sim(t)
+        self.picture(t)
         self.data(t)
         self.reading(t)
         self.open_problems()
@@ -144,42 +144,46 @@ class Research(VoiceoverScene):
         self.clear_scene()
 
     def picture(self, t):
-        w = t["data"]["1926-86"]
-        xs = np.asarray(t["dens_x"])
-        top = float(max(np.max(t["dens"]["med"]), np.max(t["dens"]["x"]))) * 1.1
-        g = axes([xs[0], xs[-1]], [0, top], x_length=8.0, y_length=4.0, xlabel=r"annualised Sharpe ratio of the winner, "
-                 r"1926--86", ylabel=r"density, given that it won", xticks=[round(v, 1) for v in np.linspace(xs[0], xs[-1], 5)],
-                 yticks=[], font_size=15).move_to(LEFT * 1.5 + DOWN * 0.2)
+        w = t["data"]["1987-2003"]
+        inv = t["inv"]
+        mu = np.asarray(inv["mu"], float)
+        g = axes([-3, 2], [0, 1], x_length=8.0, y_length=4.2, xlabel=r"candidate true Sharpe ratio $\mu$ of the "
+                 r"1987--2003 winner", ylabel=r"$F(\mu)$: chance of an estimate at or below the one observed, given it won",
+                 xticks=[-3, -2, -1, 0, 1, 2], yticks=[0, 0.5, 1], font_size=15).move_to(LEFT * 1.4 + DOWN * 0.2)
         ax = g.ax
-        d_med = curve(ax, xs, t["dens"]["med"], COND, stroke_width=3)
-        d_x = curve(ax, xs, t["dens"]["x"], NAIVE, stroke_width=3)
-        Lline = DashedLine(ax.c2p(w["L"], 0), ax.c2p(w["L"], top), color=HURDLE, stroke_width=2)
-        Ltag = MathTex(r"L", font_size=26, color=HURDLE).next_to(Lline, UP, buff=0.08)
-        xline = Line(ax.c2p(w["x"], 0), ax.c2p(w["x"], top * 0.9), color=WHITE, stroke_width=2)
-        xtag = MathTex(rf"x_j = {w['x']:.2f}", font_size=24).next_to(xline, UP, buff=0.08)
-        leg = legend([(NAIVE, rf"truth $= x_j$: the naive guess"), (COND, rf"truth $= \hat\mu_{{1/2}} = {w['med']:.2f}$"),
-                      (HURDLE, r"$L$: where the winner would stop winning")], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
+        curves = {}
+        for key, col in (("naive", NAIVE), ("cond", COND), ("hybrid", HYB)):
+            y = np.asarray(inv[key], float)
+            ok = np.isfinite(y)
+            curves[key] = curve(ax, mu[ok], y[ok], col, stroke_width=3)
+        levels = VGroup(*[DashedLine(ax.c2p(-3, v), ax.c2p(2, v), color=GREY_C, stroke_width=1.5) for v in (0.025, 0.5, 0.975)])
+        dots = VGroup(Dot(ax.c2p(w["x"], 0.5), color=NAIVE), Dot(ax.c2p(w["med"], 0.5), color=COND),
+                      Dot(ax.c2p(w["hyb_med"], 0.5), color=HYB))
+        leg = legend([(NAIVE, r"naive: a plain normal"), (COND, r"conditional on winning"),
+                      (HYB, r"hybrid: inside the simultaneous interval")], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
         fit_right(leg)
-        side = wrapped_label(rf"{w['label']}, the best of 10{{,}}000 rules on {w['T']:,} days; its closest rival in "
-                             rf"this sense, {w['binding']}, sets $L = {w['L']:.2f}$, {w['gap']:.1f} standard errors below. "
-                             r"At the median-unbiased value, half the truncated density lies below $x_j$", 3.4, 15,
+        side = wrapped_label(rf"{w['label']} won by {w['gap']:.2f} standard errors over {w['binding']}. Estimates where "
+                             rf"each curve crosses $\frac12$: {w['x']:.2f}, {w['med']:.2f}, {w['hyb_med']:.2f}; the "
+                             rf"conditional interval runs off the chart to {w['cond'][0]:.1f}", 3.4, 15,
                              GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            "Here it is for the best rule of the in-sample era. <bookmark mark='a'/> The white line is its Sharpe "
-            f"ratio, {w['x']:.2f}. The dashed line is L, where it would have stopped winning. <bookmark mark='b'/> If "
-            "the truth were the estimate itself, the truncated distribution, in red, would put more than half its mass "
-            "above what we saw. <bookmark mark='c'/> Slide the truth down until exactly half lies below: that is the "
-            f"median-unbiased estimate, {w['med']:.2f}. Here the winner won by {w['gap']:.1f} standard errors, so the "
-            "correction is modest."
+            "Here is the inversion, for the rule chosen on 1987 to 2003. It beat its closest rival by a hair: "
+            f"{w['gap']:.2f} standard errors. <bookmark mark='a'/> Red is the naive distribution function, a plain "
+            f"normal. It crosses one half at the estimate itself, {w['x']:.2f}. <bookmark mark='b'/> Green is the "
+            "conditional one. Because the winner sits right at the point where it would stop winning, the curve stays "
+            f"high far to the left: the median-unbiased estimate is {w['med']:.2f}, and the interval runs off the chart, "
+            f"to {w['cond'][0]:.0f}. That is the conditional method's weakness. <bookmark mark='c'/> Purple is the "
+            "hybrid, defined only inside the simultaneous interval. It crosses one half at "
+            f"{w['hyb_med']:.2f}, and its interval runs from {w['hybrid'][0]:.2f} to {w['hybrid'][1]:.2f}."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side))
+            self.play(FadeIn(g), FadeIn(levels), FadeIn(side))
             vo.wait_until("a")
-            self.play(Create(xline), FadeIn(xtag), Create(Lline), FadeIn(Ltag), FadeIn(leg[2]))
+            self.play(Create(curves["naive"]), FadeIn(dots[0]), FadeIn(leg[0]))
             vo.wait_until("b")
-            self.play(Create(d_x), FadeIn(leg[0]))
+            self.play(Create(curves["cond"]), FadeIn(dots[1]), FadeIn(leg[1]), run_time=1.5)
             vo.wait_until("c")
-            self.play(Create(d_med), FadeIn(leg[1]))
+            self.play(Create(curves["hybrid"]), FadeIn(dots[2]), FadeIn(leg[2]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -242,11 +246,12 @@ class Research(VoiceoverScene):
                              r"multiplier bootstrap of all 10{,}000 rules", 11.4, 16, GREY_A).to_edge(DOWN, buff=0.55)
         a_, b_ = t["data"]["1926-86"], t["data"]["1987-2003"]
         with self.voiceover(
-            "Now the ten thousand rules, chosen twice. <bookmark mark='a'/> Chosen on 1926 to 1986, the winner's "
-            f"Sharpe ratio is {a_['x']:.2f}; the honest estimate is {a_['med']:.2f}, with an interval far above zero. "
-            f"Afterwards it earned {a_['out']:.2f}. <bookmark mark='b'/> Chosen on 1987 to 2003, the winner's "
-            f"{b_['x']:.2f} becomes {b_['med']:.2f}, and the interval reaches down to {b_['cond'][0]:.2f}. "
-            f"Afterwards it earned {b_['out']:.2f}."
+            "Now the ten thousand rules, chosen twice. <bookmark mark='a'/> Chosen on 1926 to 1986, the winner led by "
+            f"{a_['gap']:.1f} standard errors, and conditioning changes nothing: {a_['x']:.2f}, with an interval from "
+            f"{a_['cond'][0]:.2f} to {a_['cond'][1]:.2f}. Afterwards it earned {a_['out']:.2f}. <bookmark mark='b'/> "
+            f"Chosen on 1987 to 2003, the winner's {b_['x']:.2f} becomes about zero under the hybrid, with an interval "
+            f"from {b_['hybrid'][0]:.2f} to {b_['hybrid'][1]:.2f}. Afterwards it earned {b_['out']:.2f}, give or take "
+            f"{1.96 * b_['s_out']:.2f}."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
@@ -257,25 +262,28 @@ class Research(VoiceoverScene):
         self.clear_scene()
 
     def reading(self, t):
-        a_ = t["data"]["1926-86"]
+        a_, b_ = t["data"]["1926-86"], t["data"]["1987-2003"]
         cards = VGroup(
-            desk_question(r"selection explains a little", rf"the 1926--86 winner won by {a_['gap']:.1f} standard errors, so "
-                          rf"correcting for having picked it moves {a_['x']:.2f} only to {a_['med']:.2f}", width=12.4, font_size=18),
-            desk_question(r"the rest is the world changing", r"no interval for the in-sample mean covers what came after. "
-                          r"Inference on winners corrects for selection, not for a market that stopped rewarding the "
-                          r"rule: index autocorrelation, much of it stale prices, faded after the 1980s", width=12.4, font_size=18),
+            desk_question(r"1926--86: not selection, but the world changing", rf"the winner led by {a_['gap']:.1f} "
+                          r"standard errors, so having picked it costs nothing; no interval for the in-sample mean covers "
+                          r"what came after. Index autocorrelation, much of it attributed to stale prices, faded after "
+                          r"the 1980s", width=12.4, font_size=18),
+            desk_question(r"1987--2003: selection, all of it", rf"{b_['n_close']} rules lay within two standard errors of "
+                          r"the winner; picked from a crowd, its honest estimate is about zero, as the next seventeen years "
+                          r"agreed", width=12.4, font_size=18),
             desk_question(r"what it adds to deflation", r"the deflated Sharpe ratio asks whether the winner beats noise; "
-                          r"this asks how good it is, with an interval that covers. Both use the same trial count, here "
-                          r"through the rivals' covariance", width=12.4, font_size=18),
+                          r"this asks how good it is, with an interval that covers. Both use the trials, here through the "
+                          r"rivals' covariance", width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
-            "What does it say? <bookmark mark='a'/> Selection explains only a little of the old winner's collapse. It won "
-            f"by {a_['gap']:.1f} standard errors, so correcting for having picked it moves {a_['x']:.2f} only to "
-            f"{a_['med']:.2f}. <bookmark mark='b'/> The rest is the world changing. Inference on winners corrects for "
-            "selection, not for a market that stopped paying: the short-term autocorrelation of the index, much of it "
-            "stale prices, faded after the 1980s. <bookmark mark='c'/> And it complements deflation. The deflated Sharpe "
-            "ratio asks whether the winner beats noise; this asks how good it is. Both use the trial count, here through "
-            "the rivals' covariance."
+            "Two different failures. <bookmark mark='a'/> The old winner's collapse was not selection. It led by "
+            f"{a_['gap']:.0f} standard errors, so having picked it costs nothing. The market changed: the short-term "
+            "autocorrelation of the index, much of it attributed to stale prices, faded after the 1980s. Inference on "
+            "winners corrects for selection, not for a world that stops paying. <bookmark mark='b'/> The later winner's "
+            f"collapse was selection, all of it. {b_['n_close']} rules lay within two standard errors of it; picked from "
+            "a crowd, its honest estimate is about zero, and the next seventeen years agreed. <bookmark mark='c'/> And it "
+            "complements deflation. The deflated Sharpe ratio asks whether the winner beats noise; this asks how good it "
+            "is. Both use the trials, here through the rivals' covariance."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

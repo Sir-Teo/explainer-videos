@@ -144,7 +144,7 @@ class Research(VoiceoverScene):
 
     def table(self, t):
         hx = [-4.2, -1.4, 1.2, 3.6, 5.8]
-        head = VGroup(label(r"$10^{-4}$ a month, \pm\ s.e.", font_size=17, color=GREY_B), label(r"profit", font_size=20, color=GOOD),
+        head = VGroup(label(r"$10^{-4}$ a month, $\pm$ s.e.", font_size=17, color=GREY_B), label(r"profit", font_size=20, color=GOOD),
                       label(r"own", font_size=20, color=OWN), label(r"lead--lag", font_size=20, color=CROSS),
                       label(r"means", font_size=20, color=DISP))
         tab = VGroup(head)

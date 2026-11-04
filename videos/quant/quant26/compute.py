@@ -723,7 +723,8 @@ def _winner_inference(X, s, rho, j, c_beta, alpha=0.05, beta=0.005):
     lo_p, hi_p = x - c_beta * s, x + c_beta * s
     at = (alpha - beta) / (1 - beta)
     grid = np.linspace(lo_p, hi_p, 801)
-    F = np.array([_tn_cdf(x, m_, s, max(L, m_ - c_beta * s), min(U, m_ + c_beta * s)) for m_ in grid])
+    lo_t, hi_t = np.maximum(L, grid - c_beta * s), np.minimum(U, grid + c_beta * s)
+    F = stats.truncnorm.cdf(x, (lo_t - grid) / s, (hi_t - grid) / s, loc=grid, scale=s)
     ok = (F >= at / 2) & (F <= 1 - at / 2)
     hyb = (float(grid[ok].min()), float(grid[ok].max())) if ok.any() else (x, x)
     k = int(np.argmin(np.abs(F - 0.5)))
@@ -738,7 +739,7 @@ def compute_winners() -> dict:
     1926-86 and on 1987-2003, against what each earned afterwards."""
     rng = np.random.default_rng(2626)
     # ---- simulation: J equicorrelated estimates with known variance
-    J, rho0, reps = 50, 0.5, 1000
+    J, rho0, reps = 50, 0.5, 4000
     C = np.full((J, J), rho0) + (1 - rho0) * np.eye(J)
     Lc = np.linalg.cholesky(C)
     xi = rng.standard_normal((20000, J)) @ Lc.T
@@ -803,16 +804,19 @@ def compute_winners() -> dict:
                                             (1 - rho[(np.arange(len(X)) != j) & (rho < 1 - 1e-9)])))])]),
                           "first": int(d[mi][0]), "last": int(d[mi][-1]), "first_out": int(d[mo][0]),
                           "last_out": int(d[mo][-1])}
-    # the conditional density for the 1926-86 winner, on a grid, at the median-unbiased estimate and at the naive one
-    w = data_out["1926-86"]
-    xs = np.linspace(w["x"] - 4 * w["s"], w["x"] + 4 * w["s"], 241)
-    dens = {}
-    for key in ("med", "x"):
-        m_ = w[key]
-        a = (w["L"] - m_) / w["s"]
-        dens[key] = np.where(xs >= w["L"], stats.truncnorm.pdf(xs, a, np.inf, loc=m_, scale=w["s"]), 0.0)
+    # the inversion for the 1987-2003 winner (it won by a hair): F(mu) = P_mu(X_j <= x_j | won), naive, conditional
+    # and hybrid (the hybrid is defined only inside the projection interval)
+    w = data_out["1987-2003"]
+    mus = np.linspace(-3.0, 2.0, 401)
+    x_, s_, L_, cb_ = w["x"], w["s"], w["L"], w["c_beta"]
+    F_naive = stats.norm.cdf((x_ - mus) / s_)
+    F_cond = stats.truncnorm.cdf(x_, (L_ - mus) / s_, np.inf, loc=mus, scale=s_)
+    inside = np.abs(x_ - mus) <= cb_ * s_
+    lo_t = np.maximum(L_, mus - cb_ * s_)
+    F_hyb = np.where(inside, stats.truncnorm.cdf(x_, (lo_t - mus) / s_, cb_, loc=mus, scale=s_), np.nan)
+    inv = {"mu": mus, "naive": F_naive, "cond": F_cond, "hybrid": F_hyb}
     return _json({"J": J, "rho": rho0, "reps": reps, "c_beta": c_beta, "c_95": c_95, "sims": sims, "data": data_out,
-                  "dens_x": xs, "dens": dens})
+                  "inv": inv})
 
 
 ITEMS = {"lookahead": compute_lookahead, "survivor": compute_survivor, "select": compute_select,
