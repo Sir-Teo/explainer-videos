@@ -1283,7 +1283,7 @@ class _Text(__import__("html.parser").parser.HTMLParser):
 
     def handle_data(self, d):
         if not self.skip:
-            self.out.append(d)
+            self.out.append(d.replace("\n", " "))  # source line breaks are spaces in HTML
 
 
 def _page_text(raw: bytes) -> str:
@@ -1310,7 +1310,7 @@ def _statement_body(t: str) -> str:
     for x in lines:
         if re.match(r"^(Voting for|Voting against|Implementation Note|In a related action|In taking the discount rate)", x):
             break
-        if len(x) < 60 or re.match(r"^(Release Date|For (immediate )?release|For release at|Share|Press Release)", x, re.I):
+        if len(x) < 60 or re.match(r"^(FRB:|Release Date|For (immediate )?release|For release at|Share|Press Release)", x, re.I):
             continue
         out.append(x)
     return "\n".join(out)
@@ -1368,8 +1368,9 @@ def fomc_text(kind: str = "statement", through: str = "2025-12-31") -> list:
             _atomic_write(path, t.encode())
         body = path.read_bytes()
         _check(f"fomc/{kind}/{d}", body, FED + rel)
-        if body.strip():
-            out.append([d, body.decode()])
+        t = "\n".join(x for x in body.decode().split("\n") if not x.startswith("FRB:"))  # the old pages' title line
+        if t.strip():
+            out.append([d, t])
     return out
 
 
