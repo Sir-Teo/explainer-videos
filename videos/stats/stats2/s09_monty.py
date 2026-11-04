@@ -161,7 +161,7 @@ class Monty(VoiceoverScene):
         box = exact_sim(r"\tfrac23", 2 / 3, d["sim_switch"], n).move_to([4.6, 2.5, 0])
         eng = code_block(["car = Dist.uniform([1, 2, 3])", "tree = car.then(host)",
                           "tree.given(opened_3).P(car_2)   # 2/3"], font_size=18)
-        eng.to_edge(RIGHT, buff=0.3).shift(DOWN * 0.9)
+        eng.to_corner(DR, buff=0.35)
         with self.voiceover(
             "Erdős wanted a simulation, so here's one. <bookmark mark='a'/> Three thousand games, the car placed at "
             "random, the host following his rule, the contestant always switching. <bookmark mark='b'/> The "

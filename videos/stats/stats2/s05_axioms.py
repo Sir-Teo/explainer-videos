@@ -51,7 +51,9 @@ class Axioms(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(dfn, DOWN, buff=0.35)
         axs[2][1].set_color(GREY_B).scale(0.8)
         foot = note(r"why not every subset? \ some sets cannot be sized consistently (Vitali 1905): \ Part 43")
-        foot.move_to([3.6, -3.5, 0])
+        if foot.width > 7.0:
+            foot.width = 7.0
+        foot.move_to([3.3, -3.55, 0])
         with self.voiceover(
             "Bertrand's paradox showed that at random has to be defined. In 1933 Andrey Kolmogorov, thirty years "
             "old, defined it. <bookmark mark='a'/> In 1900 David Hilbert had listed the axioms of probability among "

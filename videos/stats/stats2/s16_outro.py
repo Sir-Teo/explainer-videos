@@ -44,14 +44,17 @@ class Outro(VoiceoverScene):
             (r"generating functions: \ sums become products", S.PRIOR),
             (r"frequency, \ logic, \ belief: \ one set of axioms", GREY_A),
         ]
-        rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=29, color=c) for i, (t, c) in enumerate(items)])
-        cols = VGroup(VGroup(*rows[:8]).arrange(DOWN, aligned_edge=LEFT, buff=0.36),
-                      VGroup(*rows[8:]).arrange(DOWN, aligned_edge=LEFT, buff=0.36)).arrange(RIGHT, buff=0.7,
+        rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=31, color=c) for i, (t, c) in enumerate(items)])
+        cols = VGroup(VGroup(*rows[:8]).arrange(DOWN, aligned_edge=LEFT, buff=0.44),
+                      VGroup(*rows[8:]).arrange(DOWN, aligned_edge=LEFT, buff=0.44)).arrange(RIGHT, buff=0.7,
                                                                                             aligned_edge=UP)
         if cols.width > 13.3:
             cols.width = 13.3
         head = label(r"Part 2, \ in fifteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.45)
+        if cols.get_bottom()[1] < -3.7:
+            cols.height = cols.height - (-3.7 - cols.get_bottom()[1])
+            cols.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
             "Part two in fifteen lines. <bookmark mark='a'/> Fermat completed the future and counted it; Pascal "
             "averaged over it, and expectation was born. Probability began with equally likely cases, and Galileo "
