@@ -144,6 +144,78 @@ class Circuit:
         lv = self.levels()
         return max((lv[w] for ws in self.outputs.values() for w in ws), default=0)
 
+    def pruned(self) -> "Circuit":
+        """The same circuit without gates that no output depends on (building helpers often leave a few)."""
+        live = set()
+        stack = [w for ws in self.outputs.values() for w in ws]
+        while stack:
+            w = stack.pop()
+            if w in live:
+                continue
+            live.add(w)
+            stack.extend(self.args[w])
+        n = Circuit(self.name)
+        m: dict[int, int] = {}
+        for name, ws in self.inputs.items():
+            new = n.input(name, len(ws))
+            new = [new] if isinstance(new, int) else new
+            m.update(zip(ws, new))
+        for i, (kind, ins) in enumerate(zip(self.kinds, self.args)):
+            if kind == "INPUT" or i not in live:
+                continue
+            m[i] = n._new(kind, *[m[w] for w in ins])
+        for name, ws in self.outputs.items():
+            n.output(name, [m[w] for w in ws])
+        return n
+
+    def settle(self, values: dict[str, np.ndarray]) -> np.ndarray:
+        """Floating-mode delay, one input pattern per array element: the time (in unit gate delays) at which every
+        output has its final value.  A gate whose output is forced by one input (a 0 into AND or NAND, a 1 into OR or
+        NOR) settles one delay after the earliest such input; otherwise one delay after its last input.  Unlike
+        ``depth()``, this sees through false paths, such as the ripple path of a carry-skip adder."""
+        v: list = [None] * len(self.kinds)
+        t: list = [None] * len(self.kinds)
+        size = None
+        for name, ws in self.inputs.items():
+            x = np.asarray(values[name], dtype=np.int64)
+            size = x.shape
+            for i, w in enumerate(ws):
+                v[w] = (x >> i) & 1
+                t[w] = np.zeros(size, np.int64)
+        big = 1 << 40
+        for i, (kind, ins) in enumerate(zip(self.kinds, self.args)):
+            if kind == "INPUT":
+                continue
+            if kind in ("CONST0", "CONST1"):
+                v[i] = np.full(size, int(kind == "CONST1"), np.int64)
+                t[i] = np.zeros(size, np.int64)
+                continue
+            a = [v[w] for w in ins]
+            ta = [t[w] for w in ins]
+            if kind == "BUF":
+                v[i], t[i] = a[0], ta[0]
+                continue
+            if kind == "NOT":
+                v[i], t[i] = 1 - a[0], ta[0] + 1
+                continue
+            if kind in ("AND", "NAND", "OR", "NOR"):
+                ctl = 0 if kind in ("AND", "NAND") else 1
+                forced = [np.where(x == ctl, tx, big) for x, tx in zip(a, ta)]
+                early = np.minimum(forced[0], forced[1])
+                late = np.maximum(ta[0], ta[1])
+                t[i] = np.where(early < big, early, late) + 1
+                r = (a[0] & a[1]) if ctl == 0 else (a[0] | a[1])
+                v[i] = r if kind in ("AND", "OR") else 1 - r
+                continue
+            r = a[0] ^ a[1]
+            v[i] = r if kind == "XOR" else 1 - r
+            t[i] = np.maximum(ta[0], ta[1]) + 1
+        out = np.zeros(size, np.int64)
+        for ws in self.outputs.values():
+            for w in ws:
+                out = np.maximum(out, t[w])
+        return out
+
     def to_nand(self) -> "Circuit":
         """The same function from NAND gates alone (Part 3's completeness proof, as a rewrite)."""
         n = Circuit(self.name + " (NAND only)")
@@ -203,3 +275,30 @@ def unpack(v: np.ndarray, n: int) -> np.ndarray:
     v = np.asarray(v, dtype=np.uint64)
     bits = (v[:, None] >> np.arange(64, dtype=np.uint64)) & np.uint64(1)
     return bits.reshape(-1)[:n].astype(np.int64)
+
+
+def simulate(c: Circuit, values: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
+    """Run many input patterns given as integer arrays (one element per pattern, bit i = wire i of that input) and
+    return each output as a uint64 array.  Patterns are packed 64 to a machine word, so this is bit-parallel too."""
+    V = len(next(iter(values.values())))
+    words = (V + 63) // 64
+    pad = words * 64 - V
+    packed = {}
+    shifts = np.arange(64, dtype=np.uint64)
+    for name, ws in c.inputs.items():
+        x = np.concatenate([np.asarray(values[name], dtype=np.uint64), np.zeros(pad, np.uint64)])
+        bits = []
+        for i in range(len(ws)):
+            b = ((x >> np.uint64(i)) & np.uint64(1)).reshape(words, 64)
+            bits.append((b << shifts).sum(axis=1, dtype=np.uint64))
+        packed[name] = bits if len(ws) > 1 else bits[0]
+    out = c.evaluate(packed)
+    res = {}
+    for name, vs in out.items():
+        acc = np.zeros(words * 64, np.uint64)
+        for i, w in enumerate(vs):
+            w = np.broadcast_to(np.asarray(w, np.uint64), (words,))
+            b = ((w[:, None] >> shifts) & np.uint64(1)).reshape(-1)
+            acc |= b << np.uint64(i)
+        res[name] = acc[:V]
+    return res
