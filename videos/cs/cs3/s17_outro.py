@@ -114,10 +114,13 @@ class Outro(VoiceoverScene):
             r"$f = x\bar y + y z$ \ with $x = z = 1$: \ which input change causes a glitch, \ and what term removes it?",
             r"\textit{Build.} \ With \texttt{explainer/cs/pebble/hdl.py}, \ build a 4-to-1 multiplexer from NAND gates "
             r"only, \ verify it on all 64 inputs, \ and compare your count with \texttt{to\_nand()}.",
-        ], font_size=24)
+            r"$\bigstar$ \textit{Research.} \ Extend \texttt{compute\_census} to all 65{,}536 functions of four inputs "
+            r"\ and recover Knuth's maximum of 7 gates. \ Open: \ is the Minimum Circuit Size Problem NP-complete?",
+        ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: "
-            "it asks you to use this series' hardware library yourself."
+            "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
+            "problem: it asks you to use this series' hardware library yourself. The last, marked with a star, is a "
+            "research problem: a computation that took Knuth real ingenuity, and a question nobody can answer."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

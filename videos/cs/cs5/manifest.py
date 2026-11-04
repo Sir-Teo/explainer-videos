@@ -18,5 +18,6 @@ SCENES = [
     ("s13_rowhammer", "Rowhammer", "12. When memory leaks"),
     ("s14_logic", "Logic", "13. Clocks, and memory as logic"),
     ("s15_history", "History", "14. Remembering, before chips"),
-    ("s16_outro", "Outro", "Recap, problems, and where this comes back"),
+    ("s16_frontier", "Frontier", "15. Frontier: defending memory"),
+    ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

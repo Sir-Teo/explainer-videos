@@ -357,12 +357,63 @@ def compute_pebble() -> dict:
             "trace": trace, "steps": m.steps, "result": m.regs[3]}
 
 
+# ---------------------------------------------------------------------------
+# The Frontier chapter (videos/cs/SYLLABUS.md 1.1): BB(6), Antihydra, and where provability ends
+# ---------------------------------------------------------------------------
+ANTIHYDRA = "1RB1RA_0LC1LE_1LD1LC_1LA0LB_1LF1RE_---0RA"  # mxdys, 28 June 2024 (wiki.bbchallenge.org/wiki/Antihydra)
+# BB(6) records, (year, who, the bound on the number of steps S(6), as on-screen TeX); wiki.bbchallenge.org/wiki/BB(6)
+BB6_RECORDS = [
+    (1964, r"Green", r"436"),
+    (1990, r"Marxen and Buntrock", r"13{,}122{,}572{,}797"),
+    (2010, r"Kropitz", r"3.8 \times 10^{21132}"),
+    (2022, r"Kropitz", r"10 \uparrow\uparrow 15"),
+    (2025, r"mxdys", r"10 \uparrow\uparrow 10 \uparrow\uparrow 10 \uparrow\uparrow 8"),
+]
+# the smallest known machine whose halting ZFC cannot settle (if ZFC is consistent); wiki.bbchallenge.org,
+# "Independence from ZFC": the later entries are not yet formally verified
+ZFC_RECORDS = [(2016, 7910, r"Yedidia and Aaronson"), (2023, 745, r"Riebel"), (2024, 636, r"Ridenour"),
+               (2025, 432, r"Wade")]
+
+
+def compute_frontier() -> dict:
+    """Antihydra run as a Turing machine on our simulator, and as its Collatz-like rule (Racheline): h = 8, c = 0;
+    each step c += 2 if h is even, else c -= 1, then h += floor(h / 2); the machine halts iff c reaches -1."""
+    m = TM.parse(ANTIHYDRA)
+    big = run_fast(m, 10 ** 8, size=1 << 20)
+    assert not big["halted"]
+    early = run_fast(m, 6000, size=1 << 12, snap_every=1, n_snaps=6000)
+    e_lo, e_hi = int(early["snap_bounds"][:, 0].min()), int(early["snap_bounds"][:, 1].max())
+    es = early["snaps"][:, (1 << 11) + e_lo: (1 << 11) + e_hi + 1]
+    h, c, even, n = 8, 0, 0, 10 ** 6
+    first, path, frac = [], [], []
+    for i in range(n):
+        if i < 16:
+            first.append((h, h & 1, c))
+        if h & 1:
+            c -= 1
+        else:
+            c += 2
+            even += 1
+        h += h >> 1
+        assert c >= 0
+        if (i + 1) % 1000 == 0:
+            path.append(c)
+            frac.append(even / (i + 1))
+    phi = (1 + 5 ** 0.5) / 2
+    return {"table": ANTIHYDRA, "tm_steps": big["steps"], "tm_cells": big["hi"] - big["lo"] + 1,
+            "tm_ones": big["ones"], "early": es, "early_heads": early["snap_heads"] - e_lo,
+            "first": first, "iterations": n, "c_path": path, "even_frac": frac, "c_final": c,
+            "even_final": even / n, "h_bits": h.bit_length(),
+            "q": 1 / phi, "log10_p": -(c + 1) * float(np.log10(phi)),
+            "bb6": BB6_RECORDS, "zfc": ZFC_RECORDS}
+
+
 ITEMS = {
     "pebbles": compute_pebbles, "euclid": compute_euclid, "difference": compute_difference,
     "bernoulli": compute_bernoulli, "adder": compute_adder, "palindrome": compute_palindrome,
     "universal": compute_universal, "lam": compute_lam, "counters": compute_counters, "rule110": compute_rule110,
     "life": compute_life, "machines": compute_machines, "diagonal": compute_diagonal, "beavers2": compute_beavers2,
-    "beavers": compute_beavers, "pebble": compute_pebble,
+    "beavers": compute_beavers, "pebble": compute_pebble, "frontier": compute_frontier,
 }
 
 if __name__ == "__main__":

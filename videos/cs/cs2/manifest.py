@@ -18,5 +18,6 @@ SCENES = [
     ("s13_numbers", "Numbers", "12. Numbers"),
     ("s14_chance", "Chance", "13. Chance"),
     ("s15_graphs", "Graphs", "14. Graphs"),
-    ("s16_outro", "Outro", "Recap, problems, and where this comes back"),
+    ("s16_frontier", "Frontier", "15. Frontier: order in chaos"),
+    ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

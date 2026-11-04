@@ -18,5 +18,6 @@ SCENES = [
     ("s13_selfmod", "SelfMod", "12. Code is data"),
     ("s14_interrupts", "Interrupts", "13. When the world interrupts"),
     ("s15_counted", "Counted", "14. The whole machine, counted"),
-    ("s16_outro", "Outro", "Recap, problems, and where this comes back"),
+    ("s16_frontier", "Frontier", "15. Frontier: is the processor right?"),
+    ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

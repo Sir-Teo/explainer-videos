@@ -15,8 +15,9 @@
   "Halting": "11. 停机问题",
   "Reductions": "12. 归约",
   "Beavers": "13. 忙碌海狸",
-  "Series": "14. 我们将要搭建什么",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
+  "Series": "15. 我们将要搭建什么",
+  "Outro": "回顾、习题，以及它们会在哪里再出现",
+  "Frontier": "14. 前沿：可知的边缘"
  },
  "lines": {
   "4f0ecaa7f155": {
@@ -51,7 +52,7 @@
   },
   "c2f6533a93d2": {
    "scene": "Hook",
-   "en": "This is Part 1 of Computer Science, Built: sixty-one lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
+   "en": "This is Part 1 of Computer Science, Built: fifty-five lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
    "zh": "这是《计算机科学，从零搭建》的第1部分。全系列61讲，从这里出发，从“什么是计算”这个问题开始，用一种逻辑门搭出一台能工作的计算机，一直爬到支撑互联网的那些系统。<bookmark mark='a'/>这一部分讲：机器出现之前的算法，巴贝奇和洛夫莱斯的计算引擎；希尔伯特的问题，以及图灵机，我们会亲手给它编程；为什么增加纸带或换别的设计都不会增加能力，以及能运行任何其他机器的通用机；λ演算、计数器机和元胞自动机，以及丘奇–图灵论题；为什么问题比程序多，停机问题，还有忙碌海狸。最后，是这个系列将要搭建的东西。"
   },
   "e26c9b47db11": {
@@ -494,15 +495,45 @@
    "en": "Radó's real point was that S is not merely hard to compute. <bookmark mark='a'/> No machine can compute it. <bookmark mark='b'/> Suppose one could. Then take any machine M with n states. Compute S of n. Run M on a blank tape for S of n steps. If it has halted, it halts. If it is still running, it can never halt, because no halting n-state machine runs longer than S of n. <bookmark mark='c'/> That would decide the blank-tape halting problem, which the last chapter showed is impossible. <bookmark mark='d'/> In fact S grows faster than any function a computer can compute: faster than exponentials, towers of exponentials, anything.",
    "zh": "拉多真正的要点是：S不仅仅是难算。<bookmark mark='a'/>没有任何机器能计算它。<bookmark mark='b'/>假设有一台能。那么任取一台有n个状态的机器M。算出S(n)。让M在空白纸带上运行S(n)步。如果它停机了，它就停机。如果它还在运行，它就永远不会停机，因为没有任何会停机的n状态机器运行得比S(n)更久。<bookmark mark='c'/>这就判定了空白纸带停机问题，而上一章已经证明这是不可能的。<bookmark mark='d'/>事实上，S比计算机能计算的任何函数都增长得快：比指数快，比指数塔快，比什么都快。"
   },
-  "e187cc392afe": {
-   "scene": "Beavers",
-   "en": "Six states is already past the edge of the knowable. <bookmark mark='a'/> A six-state machine found in 2022 runs for more than ten tetrated to fifteen steps, a tower of fifteen tens, and the record has grown since. <bookmark mark='b'/> Some six-state machines behave like famous open problems, such as the Collatz conjecture: whether they halt depends on questions nobody can answer. <bookmark mark='c'/> And Adam Yedidia and Scott Aaronson built a machine with a few thousand states that halts only if the standard axioms of mathematics are inconsistent. Its busy-beaver value can never be proved from those axioms. Hilbert's mechanical certainty runs out, here, at a machine you could write on a few pages.",
-   "zh": "六个状态，就已经越过了可知的边缘。<bookmark mark='a'/>2022年找到的一台六状态机器，运行步数超过10的15层迭代幂，也就是十五个10叠成的塔，而且纪录此后还在增长。<bookmark mark='b'/>有些六状态机器的行为就像著名的未解问题，比如考拉兹猜想：它们是否停机，取决于没有人能回答的问题。<bookmark mark='c'/>而亚当·耶迪迪亚和斯科特·阿伦森造了一台几千个状态的机器，它停机，当且仅当数学的标准公理是不一致的。它的忙碌海狸值永远无法从这些公理中证明。希尔伯特的机械确定性，在这里走到了尽头，就在一台几页纸就能写下的机器上。"
+  "dbbeda2aefd0": {
+   "scene": "Frontier",
+   "en": "Chapter fourteen. Frontier: the edge of the knowable.",
+   "zh": "第14章。前沿：可知的边缘。"
   },
-  "20f2dc7c4aca": {
+  "43dcb127bc33": {
+   "scene": "Frontier",
+   "en": "Chapter thirteen ended on the proof that the five-state busy beaver is forty-seven million, one hundred and seventy-six thousand, eight hundred and seventy. How do you prove that a machine never halts, when running it cannot? <bookmark mark='a'/> With a certificate: a set of configurations that contains the starting one, is closed under taking a step, and contains no halting configuration. If such a set exists, the machine is trapped in it forever. It is the invariant method of Part 2, applied to machines. <bookmark mark='b'/> The bbchallenge collaboration built deciders that search for certificates of different shapes: a configuration that repeats; one that repeats shifted along the tape; tapes always built from a finite set of pieces; and, most powerful, sets of tapes recognised by a finite automaton, which Part 12 will build. <bookmark mark='c'/> Of about a hundred million five-state machines, all but thirteen fell to these deciders, and the thirteen sporadic machines each needed an argument of its own. Every step of the proof was checked by a proof assistant, which Part 54 explains.",
+   "zh": "第13章结束在一个证明上：五状态的忙碌海狸是四千七百一十七万六千八百七十。机器永远不停机，而运行它又证明不了这一点，那该怎么证明？<bookmark mark='a'/>用一张证书：一个由格局组成的集合，它包含起始格局，在走一步之下封闭，而且不含任何停机格局。只要这样的集合存在，机器就永远被困在里面。这就是第2部分的不变量方法，用在了机器上。<bookmark mark='b'/>bbchallenge 合作项目造了一批判定器，去寻找各种形状的证书：一个会重复的格局；一个沿纸带平移后重复的格局；总是由有限几种片段拼成的纸带；以及最强大的一种，由有限自动机识别的纸带集合，第12部分会搭建它。<bookmark mark='c'/>大约一亿台五状态机器中，除了十三台，全都被这些判定器解决了，而这十三台零星的机器各自需要一个单独的论证。整个证明的每一步都由一个证明助手检查过，第54部分会讲到它。"
+  },
+  "7837ca951590": {
+   "scene": "Frontier",
+   "en": "At six states, ordinary notation fails. <bookmark mark='a'/> Donald Knuth's arrows climb it: one arrow is a power, ten to the three; two arrows are a tower of powers, so ten double-arrow three is ten to the ten to the ten. <bookmark mark='b'/> The six-state record was four hundred and thirty-six steps in 1964, thirteen billion in 1990, and a number of twenty-one thousand digits in 2010. In 2022 Pavel Kropitz found a machine that runs for more than a tower of fifteen tens. <bookmark mark='c'/> And in June 2025 a contributor known as mxdys found one whose running time is a tower of tens whose height is itself a tower whose height is a tower, ten double-arrow ten double-arrow ten double-arrow eight. Nobody will ever run it.",
+   "zh": "到了六个状态，普通的记号就不够用了。<bookmark mark='a'/>高德纳的箭头可以往上爬：一个箭头是幂，十的三次方；两个箭头是幂塔，所以十双箭头三就是十的十的十次方。<bookmark mark='b'/>六状态的纪录，1964年是四百三十六步，1990年是一百三十亿，2010年是一个两万一千位的数。2022年，帕维尔·克罗皮茨找到了一台运行步数超过十五个十叠成的塔的机器。<bookmark mark='c'/>而在2025年6月，一位名叫 mxdys 的贡献者找到了一台，它的运行时间是一座十的塔，塔高本身是一座塔，那座塔的塔高又是一座塔：十双箭头十双箭头十双箭头八。永远没有人能运行它。"
+  },
+  "2431ae9b28f0": {
+   "scene": "Frontier",
+   "en": "BB(6) cannot be settled the way BB(5) was, because of machines like this one. <bookmark mark='a'/> It is called Antihydra: six states, one missing transition that would halt it, found by mxdys in June 2024. <bookmark mark='b'/> We ran it here for a hundred million steps. It has not halted, and its tape has grown to fourteen thousand cells. <bookmark mark='c'/> Racheline decoded what it is doing. It keeps two numbers, h starting at eight, and a counter c at zero. Each round, if h is even the counter goes up by two, and if h is odd it goes down by one; then h grows by half of itself, rounded down. The machine halts exactly when the counter reaches minus one. Each round takes the machine longer than the last, so our hundred million steps are only about twenty rounds.",
+   "zh": "BB(6) 没法像 BB(5) 那样解决，原因就在于这样的机器。<bookmark mark='a'/>它叫反九头蛇：六个状态，缺一条会让它停机的转移，2024年6月由 mxdys 发现。<bookmark mark='b'/>我们在这里把它运行了一亿步。它没有停机，纸带长到了一万四千格。<bookmark mark='c'/>Racheline 破译了它在做什么。它保存两个数：h 从八开始，计数器 c 从零开始。每一轮，如果 h 是偶数，计数器加二；如果 h 是奇数，计数器减一；然后 h 增加它自己的一半，向下取整。机器恰好在计数器到达负一时停机。每一轮都比上一轮花更久，所以我们的一亿步只是大约二十轮。"
+  },
+  "0e00696c6a9a": {
+   "scene": "Frontier",
+   "en": "Simulating the rule instead of the machine, a million rounds take half a minute. <bookmark mark='a'/> Here are the first ten: eight, twelve, eighteen, twenty-seven, forty. Even, even, even, odd. The counter climbs. <bookmark mark='b'/> If h were even half the time, the counter would rise by half a step per round on average. So plot what is left when that average is taken away. Over a million rounds the remainder wanders like a random walk, inside the dashed band where a fair coin's walk usually stays. <bookmark mark='c'/> After a million rounds the counter stands at nearly half a million, h is even forty-nine point nine five percent of the time, and h itself has grown to five hundred and eighty-five thousand bits. Antihydra halts only if, somewhere ahead, odd numbers come so often that this lead is wiped out.",
+   "zh": "不模拟机器，改为模拟这条规则，一百万轮只要半分钟。<bookmark mark='a'/>这是前十轮：八、十二、十八、二十七、四十。偶、偶、偶、奇。计数器在攀升。<bookmark mark='b'/>如果 h 有一半时间是偶数，计数器平均每轮会上升半步。所以把这个平均值减掉，画出剩下的部分。一百万轮里，这个余量像随机游走一样晃荡，待在公平硬币的游走通常不会越出的那条虚线带里。<bookmark mark='c'/>一百万轮之后，计数器接近五十万，h 是偶数的时间占百分之四十九点九五，而 h 本身已经长到五十八万五千位。只有在前方某处奇数来得如此频繁，把这段领先全部抹掉，反九头蛇才会停机。"
+  },
+  "7e9b7301d52a": {
+   "scene": "Frontier",
+   "en": "How likely is that? Pretend the parities are fair coin tosses, and ask for q, the probability that the counter ever falls by one below where it stands. <bookmark mark='a'/> Either the first toss takes it down at once, or it goes up two, and must then fall three times, each with probability q. So q equals a half, plus a half q cubed. <bookmark mark='b'/> The cubic factors, and the root below one is the golden ratio's reciprocal, zero point six one eight. <bookmark mark='c'/> To reach minus one from a counter at c, it must fall c plus one times: probability q to the c plus one, which after our million rounds is ten to the minus one hundred and four thousand. <bookmark mark='d'/> Antihydra almost certainly never halts. But the parities are not coin tosses: they are fixed by arithmetic. Proving that they behave like coins is a problem of the same family as the Collatz conjecture and Kurt Mahler's three-halves problem of 1968, and nobody knows how to do it. Until somebody does, BB(6) is unknown.",
+   "zh": "这有多大可能？假装奇偶性是公平的抛硬币，求 q，也就是计数器有朝一日比现在低一的概率。<bookmark mark='a'/>要么第一次抛就让它立刻下降，要么它先升二，然后必须下降三次，每次的概率都是 q。所以 q 等于二分之一，加上二分之一乘以 q 的立方。<bookmark mark='b'/>这个三次方程可以因式分解，小于一的那个根是黄金比的倒数，零点六一八。<bookmark mark='c'/>计数器从 c 到达负一，必须下降 c 加一次：概率是 q 的 c 加一次方，在我们的一百万轮之后，约为十的负十万四千次方。<bookmark mark='d'/>反九头蛇几乎肯定永远不会停机。但奇偶性不是抛硬币，它们由算术决定。要证明它们表现得像硬币，属于和考拉兹猜想、库尔特·马勒1968年的二分之三问题同一类的问题，没有人知道怎么做。在有人做到之前，BB(6) 是未知的。"
+  },
+  "902adb56ec48": {
+   "scene": "Frontier",
+   "en": "Somewhere above six states, knowledge does not merely become hard; it becomes impossible. <bookmark mark='a'/> A Turing machine can search through every proof that follows from the axioms of set theory, halting if it ever finds a contradiction. If the axioms are consistent it never halts, and Gödel's theorem, which Part 25 proves, says the axioms cannot prove that. So its busy-beaver value can never be proved. <bookmark mark='b'/> In 2016 Adam Yedidia and Scott Aaronson built such a machine with seven thousand nine hundred and ten states. Since then, smaller ones: seven hundred and forty-five in 2023, six hundred and thirty-six in 2024, and four hundred and thirty-two in 2025, though the newest constructions have not yet been formally verified. <bookmark mark='c'/> So the busy-beaver function is known up to five, unknown at six, and unknowable by 432. Exactly where the line falls is one of the open questions at the border of computer science and logic, and a problem in this part's set.",
+   "zh": "在六个状态之上的某处，知识不只是变难，而是变得不可能。<bookmark mark='a'/>一台图灵机可以搜遍从集合论公理推出的每一个证明，一旦找到矛盾就停机。如果公理是一致的，它就永不停机，而哥德尔定理，第25部分会证明它，说这些公理证明不了这一点。所以它的忙碌海狸值永远无法被证明。<bookmark mark='b'/>2016年，亚当·耶迪迪亚和斯科特·阿伦森造出了这样一台机器，有七千九百一十个状态。此后越来越小：2023年七百四十五个，2024年六百三十六个，2025年四百三十二个，不过最新的构造还没有经过形式化验证。<bookmark mark='c'/>所以忙碌海狸函数到五为止是已知的，在六处未知，到432就不可知了。这条界线究竟落在哪里，是计算机科学与逻辑交界处的未解问题之一，也是这一部分习题集里的一道题。"
+  },
+  "488110825222": {
    "scene": "Series",
-   "en": "Chapter fourteen. What we will build.",
-   "zh": "第14章。我们将要搭建什么。"
+   "en": "Chapter fifteen. What we will build.",
+   "zh": "第15章。我们将要搭建什么。"
   },
   "4b7aa2f7f762": {
    "scene": "Series",
@@ -539,10 +570,10 @@
    "en": "Where this comes back. The universal machine becomes the stored-program computer of Part 6, the interpreters of Part 15 and the hypervisors of Part 32. Invariants and shrinking quantities are the proofs of Part 2 and Part 54. The finite control of a Turing machine is the finite automaton of Parts 5 and 12. The lambda calculus becomes the type theory of Part 14. Diagonalization and reductions drive Parts 25 to 27. And the extended thesis is the foundation of complexity theory, and the claim quantum computers test.",
    "zh": "这些会在哪里再出现。通用机会变成第6部分的存储程序计算机、第15部分的解释器和第32部分的虚拟机监控器。不变量和不断缩小的量，是第2部分和第54部分的证明。图灵机的有限控制器，就是第5部分和第12部分的有限自动机。λ演算会变成第14部分的类型论。对角线方法和归约驱动着第25到第27部分。而扩展论题是复杂性理论的基础，也是量子计算机要检验的断言。"
   },
-  "bffbcfd36c8b": {
+  "593aa6f0e097": {
    "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last one is a build problem: it asks you to run and change the universal machine this part used.",
-   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你运行并修改这一部分用到的那台通用机。"
+   "en": "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build problem: it asks you to run and change the universal machine this part used. The last, marked with a star, is a research problem, and its final step is open.",
+   "zh": "七道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第六道是动手题：要你运行并修改这一部分用到的那台通用机。最后一道标了星号，是研究题，它的最后一步至今无人解决。"
   },
   "a837e9e7842b": {
    "scene": "Outro",
@@ -571,7 +602,8 @@
   "Halting": "11. The halting problem",
   "Reductions": "12. Reductions",
   "Beavers": "13. Busy beavers",
-  "Series": "14. What we will build",
+  "Frontier": "14. Frontier: the edge of the knowable",
+  "Series": "15. What we will build",
   "Outro": "Recap, problems, and where this comes back"
  }
 }

@@ -54,6 +54,14 @@ gate by gate with `Circuit.settle` (unit delays, which sees through false paths)
 * **14. Computing sin, exp and log.** Range reduction (Payne–Hanek for huge arguments); a Remez minimax polynomial
   for eˣ against Taylor's (17× smaller error, equioscillating); CORDIC (Volder, 1959) rotating by arctan 2⁻ⁱ with
   shifts and adds, run for 16 steps; the HP-35.
+* **15. Frontier: arithmetic's open questions.** Multiplication measured on this machine: CPython's integers
+  (Karatsuba) against `decimal`'s number-theoretic transform, about 5–6 times faster at a million digits (the
+  measured slopes are on screen and vary from run to run). The race to n log n: Karatsuba (1960), Toom–Cook,
+  Schönhage–Strassen (1971), Fürer (2007), Harvey and van der Hoeven (2019), galactic beyond 2^(1729¹²) bits; a lower
+  bound only under the network-coding conjecture (Afshani, Freksen, Kamma and Larsen, 2019). Correctly rounded
+  functions: NumPy's float32 `exp` on this machine misses the correctly rounded value for 39% of 10 million inputs
+  (by 1 ulp, rarely 2; 200 misses rechecked at 200 bits with mpmath); the table-maker's dilemma; Lefèvre and Muller's
+  worst-case searches; CORE-MATH and its adoption in glibc.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -107,6 +115,21 @@ python tools/build.py cs4                  # 1080p
    everywhere. Measured: **94 gates, settling in 12 gate delays**, against the ripple adder's 40 gates and 17 delays
    and Kogge–Stone's 70 gates and 9 delays (the default block sizes 1, 2, 3, 2 give 105 gates and also 12).
 
+7. **★ Research: the hardest float32 exponential.** Find the float32 x whose eˣ lies nearest a rounding midpoint. How
+   many bits must an `expf` compute to round every input correctly?
+
+   *Solution, and what remains open.* `compute_hardround` in `videos/cs/cs4/compute.py` screens all 2,237,667,740
+   float32 inputs in [−87.33, 88.72] in float64 (whose own error is below 2⁻²⁸ of a float32 ulp), then re-measures the
+   200 nearest candidates at 300 bits with mpmath. The hardest is **x = −14.56709** (the float32 nearest it): e^x lies
+   **2.36 × 10⁻⁹ of an ulp** from a midpoint, so deciding its rounding needs about **52.7 bits**, 28.7 more than the
+   24 of the answer. The next are −0.0073526 (51.7 bits) and 1.5199 × 10⁻⁵ (51.6). So evaluating eˣ in double
+   precision is *not quite* enough to round every float32 result correctly: a double-precision polynomial has an error
+   of an ulp or more, about 2⁻⁵², and the worst case needs 2⁻⁵²·⁷. CORE-MATH's `expf` handles this by a fast path with
+   a rigorous error bound and a slower, more precise path for the rare inputs where the fast one cannot decide. For
+   double precision itself, the same exhaustive search covers 2⁶⁴ inputs, beyond brute force; Lefèvre and Muller
+   reduced it with lattice methods to find the worst cases of exp and other functions. Doing the same, with proofs,
+   for every function the standard recommends, and making each correctly rounded double function fast, is open.
+
 ## 习题与解答
 
 1. **补码。** 用 8 位写出 −37，并证明映射 x ↦ x̄ + 1 只把 0 和 −128 映到自身。
@@ -144,6 +167,17 @@ python tools/build.py cs4                  # 1080p
    *解答。* `carry_select_adder(8, [2, 3, 3])`，用 `hdl.simulate` 在全部 2¹⁷ 个输入上模拟，处处等于 a + b + c。测得：**94 个
    门，12 个门延迟后稳定**；行波加法器为 40 个门、17 个延迟，Kogge–Stone 为 70 个门、9 个延迟（默认块大小 1、2、3、2 为 105 个
    门，也是 12 个延迟）。
+
+7. **★ 研究题：最难舍入的单精度指数。** 找出使 eˣ 最接近舍入中点的 float32 x。一个 `expf` 必须计算多少位，才能把每个输入都正确舍入？
+
+   *解答，以及仍然未解的部分。* `videos/cs/cs4/compute.py` 里的 `compute_hardround` 用 float64 筛查 [−87.33, 88.72] 内全部
+   2,237,667,740 个 float32 输入（float64 自身的误差小于 float32 一个 ulp 的 2⁻²⁸），再用 mpmath 以 300 位精度重新测量最接近的 200 个
+   候选。最难的是 **x = −14.56709**（离它最近的 float32）：e^x 离中点只有 **一个 ulp 的 2.36 × 10⁻⁹**，判断它的舍入大约需要 **52.7 位**，
+   比答案的 24 位多 28.7 位。其次是 −0.0073526（51.7 位）和 1.5199 × 10⁻⁵（51.6 位）。所以用双精度计算 eˣ，*不足以*把每个单精度结果都正确
+   舍入：一个双精度多项式的误差有一个 ulp 甚至更多，约 2⁻⁵²，而最坏情形需要 2⁻⁵²·⁷。CORE-MATH 的 `expf` 的做法是：一条带严格误差界的快速
+   路径，加上一条更慢、更精确的路径，专门处理快速路径无法判断的少数输入。对双精度本身，同样的穷举要覆盖 2⁶⁴ 个输入，超出了蛮力的能力；
+   勒费夫尔和米勒用格方法缩小了搜索范围，找到了 exp 等函数的最坏情形。对标准建议的每一个函数都做到这一点并给出证明，并让每一个正确舍入
+   的双精度函数都很快，仍是未解问题。
 
 ## Glossary additions
 

@@ -125,10 +125,13 @@ class Outro(VoiceoverScene):
             r"Use Myhill--Nerode to show that no finite automaton recognizes the palindromes over $\{0, 1\}$.",
             r"\textit{Build.} \ With \texttt{explainer/cs/pebble/seq.py}, \ find the period of every 5-bit LFSR, \ and "
             r"check that exactly $\varphi(31)/5 = 6$ are maximal.",
-        ], font_size=24)
+            r"$\bigstar$ \textit{Research.} \ Prove that a deterministic tracker which keeps every row below $T$ needs "
+            r"about $W/T$ counters. \ Open: \ a randomized one with far fewer bits, \ safe against an adaptive attacker.",
+        ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: "
-            "it asks you to use this series' sequential-circuit library yourself."
+            "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
+            "problem: it asks you to use this series' sequential-circuit library yourself. The last, marked with a "
+            "star, is a research problem: a lower bound you can prove, and a better defence nobody has."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

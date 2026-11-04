@@ -137,10 +137,14 @@ class Outro(VoiceoverScene):
             r"\textit{Build.} \ With \texttt{explainer/cs/pebble/blocks.py}, \ make an 8-bit carry-select adder with "
             r"blocks of 2, 3 and 3 bits; \ verify it on all inputs \ and compare its gates and delay with ripple and "
             r"Kogge--Stone.",
-        ], font_size=24)
+            r"$\bigstar$ \textit{Research.} \ Find the \texttt{float32} $x$ whose $e^x$ lies nearest a rounding "
+            r"midpoint. \ How many bits must an \texttt{expf} compute to round every input correctly?",
+        ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: "
-            "it asks you to use this series' arithmetic library yourself."
+            "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
+            "problem: it asks you to use this series' arithmetic library yourself. The last, marked with a star, is a "
+            "research problem: a search over every single-precision number, the kind that underlies correctly "
+            "rounded libraries."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

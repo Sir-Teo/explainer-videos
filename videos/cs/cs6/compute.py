@@ -303,9 +303,94 @@ def compute_job() -> dict:
     return out
 
 
+# ---------------------------------------------------------------------------
+# The Frontier chapter (videos/cs/SYLLABUS.md 1.1): how good is random testing?  Mutation analysis on the emulator
+# ---------------------------------------------------------------------------
+def _mutant_class():
+    from explainer.cs.pebble.emu import Machine
+
+    MASK, sext = I.MASK, I.sext
+
+    class Mutant(Machine):
+        """The emulator with one planted bug, applied after each correct step."""
+        bug = ""
+
+        def step(self):
+            if self.halted:
+                return
+            pc = self.pc
+            op, rd, rs1, rs2, imm, w = self._decoded(pc)
+            a, b = self.regs[rs1], self.regs[rs2]
+            super().step()
+            g, R = self.bug, self.regs
+            if g == "sltu: equal counts as less" and op == "sltu" and a == b and rd:
+                R[rd] = 1
+            elif g == "sra shifts in zeros" and op in ("sra", "srai") and rd:
+                sh = (b if op == "sra" else imm) & 31
+                R[rd] = (a >> sh) & MASK
+            elif g == "shifts use 4 bits of the amount" and op in ("sll", "slli", "srl", "srli", "sra", "srai") and rd:
+                sh = (b if op in ("sll", "srl", "sra") else imm) & 15
+                R[rd] = ((a << sh) if op[:3] == "sll" else (a >> sh) if op[:3] == "srl" else
+                         (sext(a, 32) >> sh)) & MASK
+            elif g == "add loses the carry into bit 31" and op in ("add", "addi") and rd:
+                y = b if op == "add" else imm & MASK
+                if ((a & 0x7FFF_FFFF) + (y & 0x7FFF_FFFF)) >> 31 & 1:
+                    R[rd] ^= 1 << 31
+            elif g == "bge compares unsigned" and op == "bge":
+                if (sext(a, 32) >= sext(b, 32)) != (a >= b):
+                    self.pc = (pc + 4 * imm if a >= b else pc + 4) & MASK
+            elif g == "lb forgets the sign" and op == "lb" and rd:
+                R[rd] &= 0xFF
+            elif g == "sb also writes the next byte" and op == "sb":
+                self.store(a + imm + 1, 1, b)
+            elif g == "beq of two zeros is not taken" and op == "beq" and a == 0 and b == 0:
+                self.pc = (pc + 4) & MASK
+            elif g == "div of -2^31 by -1 returns 0" and op == "div" and a == 0x8000_0000 and b == MASK and rd:
+                R[rd] = 0
+
+    return Mutant
+
+
+MUTANTS = ["sra shifts in zeros", "shifts use 4 bits of the amount", "add loses the carry into bit 31",
+           "bge compares unsigned", "sb also writes the next byte", "lb forgets the sign", "sltu: equal counts as less",
+           "beq of two zeros is not taken", "div of -2^31 by -1 returns 0"]
+
+
+def compute_mutants() -> dict:
+    """Each planted bug, against 2,000 random programs (with multiply and divide): the fraction whose final
+    registers, memory or output differ from the correct emulator's."""
+    from explainer.cs.pebble.emu import Machine
+
+    Mutant = _mutant_class()
+    n = 2000
+    progs = []
+    for seed in range(n):
+        img = assemble(random_program(seed, mext=True)).image
+        ref = Machine(img, mem_size=1 << 14).run()
+        progs.append((img, ref.regs[:], bytes(ref.mem), bytes(ref.output)))
+    rows = []
+    for g in MUTANTS:
+        hits = 0
+        first = None
+        for k, (img, regs, mem, out) in enumerate(progs):
+            m = Mutant(img, mem_size=1 << 14)
+            m.bug = g
+            try:
+                m.run()
+                diff = m.regs != regs or bytes(m.mem) != mem or bytes(m.output) != out
+            except Exception:  # a wrong branch can run into data
+                diff = True
+            if diff:
+                hits += 1
+                first = k if first is None else first
+        rows.append({"bug": g, "detected": hits, "rate": hits / n, "first": first})
+    return {"programs": n, "rows": rows}
+
+
 ITEMS = {
     "isa": compute_isa, "control": compute_control, "cpu": compute_cpu, "cosim": compute_cosim,
     "programs": compute_programs, "assembler": compute_assembler, "tm": compute_tm, "job": compute_job,
+    "mutants": compute_mutants,
 }
 
 if __name__ == "__main__":

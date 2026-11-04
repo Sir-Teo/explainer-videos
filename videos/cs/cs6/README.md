@@ -47,6 +47,13 @@ version 0, whose exact cycle count for thirty novels is the first row of the led
 * **14. The whole machine, counted.** Gates by block (the register file's read ports are the biggest); ≈ 90,000
   transistors in CMOS against the 6502, 8086, 80386 and a 16-billion-transistor laptop chip; a trip down the tower,
   datapath to transistors, and back.
+* **15. Frontier: is the processor right?** Mutation analysis of this part's random co-simulation: nine bugs planted
+  one at a time in a copy of the emulator, each run against 2,000 random programs. A store that also writes the next
+  byte is caught by 67% of them and shifts that read 4 bits of their amount by 54%; a byte load that forgets its sign
+  by 0.25%, a branch wrong only for two zeros by 2.7%; dividing −2³¹ by −1 by none (2⁻³² per divide). Detection
+  budgets, 1 − (1 − r)^N; Dijkstra (1969); the FDIV bug. Coverage-guided CPU fuzzing (DifuzzRTL, 2021; Cascade, 2024:
+  37 new bugs in 5 of 6 RISC-V CPUs). Sail, RISC-V's golden model; verified processors (Kami, 2017; CakeML's Silver,
+  2019); the open problem of verifying speculative, out-of-order cores.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -146,6 +153,21 @@ written to `.cache/cs6/ledger.json`.
    million (**3.4%**). The printed top twenty is identical. A small idea buys a little; Part 17's hash table removes the
    search altogether.
 
+7. **★ Research: tests that find what matters.** Change `random_program` (in `explainer/cs/pebble/randprog.py`) so
+   that all nine planted bugs of chapter 15 are caught within 2,000 programs, without special-casing any of them.
+   Open: a generator with a proof of what it covers.
+
+   *What is known, and where to start.* `compute_mutants` in `videos/cs/cs6/compute.py` is the harness: it runs every
+   mutant against the programs and reports the share caught. The bugs random values miss live at boundaries, so bias
+   the operands: with probability one half, draw a register's starting value from a small set of interesting words
+   (0, 1, −1, 2³¹ − 1, −2³¹, 0x7F, 0x80, 0xFF), and store some of them to memory before the loads run. With eight
+   boundary values chosen half the time, both divide operands are the bad pair with probability (1/16)² = 1/256 per
+   divide, so a few hundred divides suffice; the byte-load and zero-branch bugs become common too. That is the
+   classical idea of boundary-value testing; coverage-guided fuzzers (DifuzzRTL, Cascade) learn such biases
+   automatically by rewarding programs that reach new hardware states. What nobody has is a generator with a
+   *guarantee*: a proof that every behaviour of a given kind (every pair of operand classes, every pipeline hazard of
+   Part 7) is exercised. Formal methods give guarantees for the design, not the tests; connecting the two is open.
+
 ## 习题与解答
 
 1. **手工编码。** 把 `sub t0, a1, a2` 和 `sw t0, -8(sp)` 逐字段编码成十六进制。
@@ -184,6 +206,16 @@ written to `.cache/cs6/ledger.json`.
    和计数存到上面（三次存数）。常用词会逐渐漂到前面，线性查找就能更早找到它们。在《傲慢与偏见》第 1 章上，指令数从 827,576 降到
    **822,271（0.6%）**；在小说的前 60 kB 上，从 2745 万降到 2653 万（**3.4%**）。打印出的前二十个词完全相同。小主意只换来一点点；
    第 17 部分的哈希表则彻底去掉了查找。
+
+7. **★ 研究题：能找到要紧错误的测试。** 修改 `random_program`（在 `explainer/cs/pebble/randprog.py` 里），让第 15 章植入的全部九个
+   错误都能在 2,000 个程序内被发现，且不为其中任何一个开特例。未解：一个能证明自己覆盖了什么的测试生成器。
+
+   *已知什么，从哪里入手。* `videos/cs/cs6/compute.py` 里的 `compute_mutants` 就是测试框架：它把每个变异体放在这些程序上运行，报告被发现
+   的比例。随机值漏掉的错误都藏在边界上，所以要让操作数有所偏向：以一半的概率，从一小组有意思的字（0、1、−1、2³¹ − 1、−2³¹、0x7F、
+   0x80、0xFF）里抽取寄存器的初值，并在取数指令运行之前把其中一些存进存储器。一半的时候从八个边界值里选，两个除法操作数恰好是那对坏值的
+   概率是每次除法 (1/16)² = 1/256，几百次除法就够了；字节取数和零值分支的错误也会变得常见。这就是经典的边界值测试思想；覆盖率引导的
+   模糊测试器（DifuzzRTL、Cascade）通过奖励触及新硬件状态的程序，自动学会这类偏向。还没有人做到的是带*保证*的生成器：证明某一类的每一种
+   行为（每一对操作数类别、第7部分的每一种流水线冒险）都被执行到了。形式化方法为设计提供保证，而不是为测试；把两者连接起来仍是未解问题。
 
 ## Glossary additions
 

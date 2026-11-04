@@ -18,5 +18,6 @@ SCENES = [
     ("s13_wilkinson", "Wilkinson", "12. Conditioning and stability"),
     ("s14_formats", "Formats", "13. Beyond IEEE"),
     ("s15_functions", "Functions", "14. Computing sin, exp and log"),
-    ("s16_outro", "Outro", "Recap, problems, and where this comes back"),
+    ("s16_frontier", "Frontier", "15. Frontier: arithmetic's open questions"),
+    ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

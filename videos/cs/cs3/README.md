@@ -43,6 +43,15 @@ large circuit, and nobody can name one that does. Every circuit here is a netlis
   programmers; Moore's law on landmark chips from the 4004 to 2024's GPUs.
 * **14. Gates that forget nothing.** Landauer's bound; the Toffoli gate (reversible and universal); Fredkin's gate;
   why quantum computing (Part 53) needs them.
+* **15. Frontier: the smallest circuit.** Exact minimum circuits: every 3-input function solved by breadth-first
+  search over circuits (30, 843, 21,778 and 569,780 distinct circuits of 1–4 gates; costs 0–4 for 5, 30, 117, 80 and
+  24 functions; parity 2, the multiplexer 3, majority 4). The census beyond: 4 inputs, at most 7 gates (Knuth,
+  2005); 5 inputs, at most 12 (the last cases settled by computer in 2019); 6 inputs unknown, at the limit of SAT
+  solvers. Gate elimination, the method behind every linear lower bound: fix an input, remove at least three gates,
+  induct (Blum's 3n, 1984; (3 + 1/86)n, 2016; 3.1n, Li and Yang, 2022, for affine dispersers). The Minimum Circuit
+  Size Problem: in NP, NP-completeness open (Levin; Kabanets and Cai, 2000); partial MCSP
+  NP-hard (Hirahara, 2022); one-way functions and time-bounded Kolmogorov complexity (Liu and Pass, 2020);
+  meta-complexity.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -92,6 +101,23 @@ python tools/build.py cs3                  # 1080p
    `mux_n(2).to_nand()` gives **24** (it rewrites each AND, OR and NOT separately, without sharing or simplifying),
    with depth 9 against the hand design's 5. Both pass the exhaustive check on all 64 inputs.
 
+7. **★ Research: four inputs, and MCSP.** Extend `compute_census` (in `videos/cs/cs3/compute.py`) to all 65,536
+   functions of four inputs and recover Knuth's result that the hardest need 7 gates. Open: is the Minimum Circuit
+   Size Problem NP-complete?
+
+   *What is known, and where to start.* The breadth-first search over sets of wires that settles three inputs in
+   six seconds explodes at four: the number of distinct circuits grows roughly thirtyfold per gate, and seven gates
+   are needed. Three ideas make it tractable. (1) *Symmetry*: permuting and negating inputs and negating the output
+   (the NPN group, of order 2⁴·4!·2 = 768) preserves cost, so only the 222 NPN classes of 4-input functions need a
+   search. (2) *Meet in the middle*: the cost of f is at most the cost of g and h plus one when f = g ∘ h, so costs
+   can be built up from small ones without storing circuits (Knuth's "footprint" method, TAOCP 7.1.2). (3) *SAT*:
+   encode "a circuit of r gates computes f" as a formula and ask a solver; this is how the last 5-input cases were
+   closed (Haaswijk, Soeken, Mishchenko and De Micheli; Kulikov and others). A correct answer is checked by
+   exhibiting, for each class, a circuit of the claimed size and an exhaustive proof that none is smaller. On MCSP:
+   it is in NP; it is not known to be NP-hard under the usual reductions, and there are results showing that
+   proving it NP-hard by certain natural kinds of reduction would itself imply new circuit lower bounds (Murray and
+   Williams, 2015). Hirahara (2022) proved NP-hardness for partial truth tables. The full question is open.
+
 ## 习题与解答
 
 1. **NOR 是完备的。** 用 NOR 搭出 NOT、OR 和 AND。
@@ -125,6 +151,18 @@ python tools/build.py cs3                  # 1080p
    *解答。* 用 NAND 搭的 2 选 1 多路选择器是 NAND(NAND(a, s'), NAND(b, s))，其中 s' = NAND(s, s)：四个门。三个这样的选择器组成 4 选
    1，第一级的两个共享同一个 s₀ 的反相器：**11 个 NAND**。库中机械的 `mux_n(2).to_nand()` 给出 **24** 个（它把每个 AND、OR、NOT 分
    别改写，不共享也不化简），深度 9，而手工设计是 5。两者都通过了全部 64 个输入的穷举检查。
+
+7. **★ 研究题：四个输入，以及 MCSP。** 把 `compute_census`（在 `videos/cs/cs3/compute.py` 里）推广到四个输入的全部 65,536
+   个函数，重新得到高德纳的结论：最难的需要 7 个门。未解：最小电路规模问题（MCSP）是 NP 完全的吗？
+
+   *已知什么，从哪里入手。* 对导线集合做广度优先搜索，六秒就能解决三个输入，到四个输入就爆炸了：不同电路的数目每加一个门大约增长
+   三十倍，而需要七个门。三个想法让它变得可行。（1）*对称性*：置换、取反输入以及对输出取反（NPN 群，阶为 2⁴·4!·2 = 768）不改变
+   代价，所以只需搜索四输入函数的 222 个 NPN 等价类。（2）*中间相遇*：当 f = g ∘ h 时，f 的代价至多是 g 与 h 的代价之和加一，于是
+   可以不存储电路、由小代价逐步建立大代价（高德纳的“足迹”方法，TAOCP 7.1.2）。（3）*SAT*：把“r 个门的电路计算 f”编码成公式交给
+   求解器；最后几个五输入情形就是这样解决的（Haaswijk、Soeken、Mishchenko 与 De Micheli；Kulikov 等）。正确的答案要这样检验：对每个
+   等价类，给出一个达到所称规模的电路，并穷举证明不存在更小的。关于 MCSP：它属于 NP；在通常的归约下还不知道它是 NP 难的，而且有
+   结果表明，用某些自然的归约证明它 NP 难，本身就会推出新的电路下界（Murray 与 Williams，2015）。Hirahara（2022）对部分真值表证明了
+   NP 难。完整的问题仍然悬而未决。
 
 ## Glossary additions
 

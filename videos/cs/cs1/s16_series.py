@@ -29,9 +29,9 @@ class Series(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(14, r"What we will build", r"From Turing's paper machine to a real one", part=PART,
+        card = chapter_card(15, r"What we will build", r"From Turing's paper machine to a real one", part=PART,
                             layers=tuple(k for k, _ in __import__("explainer.cs", fromlist=["LAYERS"]).LAYERS))
-        with self.voiceover("Chapter fourteen. What we will build."):
+        with self.voiceover("Chapter fifteen. What we will build."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
