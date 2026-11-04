@@ -1178,6 +1178,71 @@ def compute_ou_lab() -> dict:
                   "frac_neg_T": float(np.mean(big < 0))})
 
 
+def compute_rv_theory() -> dict:
+    """The research chapter: the asymptotic theory of realized variance on simulated stochastic-volatility days
+    (23,400 one-second steps).  The studentized CLT (Barndorff-Nielsen and Shephard 2002) at 5-minute to 1-second
+    sampling; the bias from microstructure noise and the two-scales estimator; bipower variation and the Huang-
+    Tauchen jump test with and without a jump."""
+    from math import gamma, pi
+    from explainer.quant.house import vol as V
+    rng = np.random.default_rng(505)
+    N, M = 23400, 3000
+    ns = (39, 78, 390, 2340, 23400)
+    s0, eta = 0.30 / np.sqrt(252), 0.6          # 30% a year; intraday vol of vol
+    u = np.linspace(0, 1, N + 1)
+    shape = 1 + 0.6 * (2 * u - 1) ** 2           # the U-shaped intraday pattern
+    shape /= np.sqrt(np.mean(shape[:-1] ** 2))
+    mu43 = 2 ** (2 / 3) * gamma(7 / 6) / gamma(0.5)
+    tstats = {n: [] for n in ns}
+    rel = {n: [] for n in ns}
+    omega = 5e-4                                 # 5 basis points of noise on each observed log price
+    sig_noise = {n: [] for n in ns}
+    tsrv, rv5n, ivs, inv_iv = [], [], [], []
+    ht = {"none": [], "jump": []}
+    for m in range(M):
+        B = np.cumsum(rng.standard_normal(N)) * np.sqrt(1 / N)
+        sig = s0 * shape[:-1] * np.exp(eta * np.r_[0, B[:-1]] - 0.5 * eta ** 2 * u[:-1])
+        dX = sig * rng.standard_normal(N) * np.sqrt(1 / N)
+        iv = float(np.sum(sig ** 2) / N)
+        ivs.append(iv)
+        X = np.r_[0, np.cumsum(dX)]
+        for n in ns:
+            r = np.diff(X[::N // n])
+            rv = float(np.sum(r ** 2))
+            rq = n / 3 * float(np.sum(r ** 4))
+            tstats[n].append((rv - iv) / np.sqrt(2 * rq / n))
+            rel[n].append(rv / iv - 1)
+        if m < 1000:
+            inv_iv.append(1 / iv)
+            Y = X + omega * rng.standard_normal(N + 1)
+            for n in ns:
+                sig_noise[n].append(float(np.sum(np.diff(Y[::N // n]) ** 2)) / iv)
+            tsrv.append(V.two_scale_rv(Y, K=int(round(N ** (2 / 3) / 4))) / iv)
+            rv5n.append(float(np.sum(np.diff(Y[::N // 78]) ** 2)) / iv)
+        # jumps: the Huang-Tauchen ratio test on 5-minute returns, with and without one jump of 1%
+        for key in ("none", "jump"):
+            Xj = X.copy()
+            if key == "jump":
+                k = rng.integers(1, N)
+                Xj[k:] += 0.01 * rng.choice([-1, 1])
+            r = np.diff(Xj[::N // 78])
+            rv, bv = float(np.sum(r ** 2)), V.bipower_variation(r)
+            a = np.abs(r) ** (4 / 3)
+            tq = 78 * mu43 ** -3 * float(np.sum(a[2:] * a[1:-1] * a[:-2])) * 78 / 76
+            z = ((rv - bv) / rv) / np.sqrt((pi ** 2 / 4 + pi - 5) / 78 * max(1.0, tq / bv ** 2))
+            ht[key].append(z)
+    out = {"N": N, "M": M, "ns": list(ns), "omega": omega, "iv_mean": float(np.mean(ivs))}
+    out["clt"] = {str(n): {"cover95": float(np.mean(np.abs(tstats[n]) < 1.96)), "sd_t": float(np.std(tstats[n])),
+                           "rel_sd": float(np.std(rel[n])), "hist": np.histogram(tstats[n], 40, (-4, 4))[0]}
+                  for n in ns}
+    out["noise"] = {"rv_over_iv": {str(n): float(np.mean(sig_noise[n])) for n in ns},
+                    "bias_theory": {str(n): float(2 * n * omega ** 2 * np.mean(inv_iv)) for n in ns},
+                    "tsrv_mean": float(np.mean(tsrv)), "tsrv_sd": float(np.std(tsrv)),
+                    "rv5_mean": float(np.mean(rv5n)), "rv5_sd": float(np.std(rv5n))}
+    out["jumps"] = {k: {"reject": float(np.mean(np.asarray(v) > 1.645))} for k, v in ht.items()}
+    return _json(out)
+
+
 ITEMS2 = {"construct": compute_construct, "reflection": compute_reflection, "qv_live": compute_qv_live,
           "wong_zakai": compute_wong_zakai, "lemma_column": compute_lemma_column, "picard": compute_picard,
           "cir_mle": compute_cir_mle, "fp_surface": compute_fp_surface,
@@ -1187,7 +1252,7 @@ ITEMS2 = {"construct": compute_construct, "reflection": compute_reflection, "qv_
           "hawkes_check": compute_hawkes_check, "hawkes_rescale": compute_hawkes_rescale,
           "fbm_morph": compute_fbm_morph, "cont_das": compute_cont_das, "helix": compute_helix,
           "sig_regression": compute_sig_regression, "wti": compute_wti, "varswap": compute_varswap,
-          "nsde": compute_nsde, "nsde_eval": compute_nsde_eval, "envelope2": compute_envelope2, "ou_lab": compute_ou_lab}
+          "nsde": compute_nsde, "nsde_eval": compute_nsde_eval, "envelope2": compute_envelope2, "ou_lab": compute_ou_lab, "rv_theory": compute_rv_theory}
 
 
 ITEMS = {"variation": compute_variation, "signature": compute_signature, "ito": compute_ito, "orders": compute_orders,

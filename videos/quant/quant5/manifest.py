@@ -22,5 +22,6 @@ SCENES = [
     ("s19_signature", "Signatures", "16. Rough paths and signatures"),
     ("s20_industry", "Industry", "17. Industry: how desks build, test and run SDE models"),
     ("s21_frontier", "Frontier", "18. Frontier: learning stochastic dynamics from data"),
+    ("s22_research", "Research", "For the researcher: the error in realized variance"),
     ("s10_outro", "Outro", "Recap, desk questions, problems"),
 ]

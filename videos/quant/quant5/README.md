@@ -18,7 +18,7 @@ python tools/make.py quant5 --cpu-voice -q m              # English and Chinese,
 .venv/bin/python -m pytest -q tests/test_quant_house.py   # the House's tests (Rule 6)
 ```
 
-## Chapters (about 57 minutes)
+## Chapters (about 62 minutes)
 
 | # | Chapter (module) | What is shown, built or computed |
 |---|---|---|
@@ -41,7 +41,8 @@ python tools/make.py quant5 --cpu-voice -q m              # English and Chinese,
 | 16 | Rough paths and signatures (`s19_signature`, 3D) | Lyons' helix (‖X‖ = 1/n → 0, Y³₁ → 1); Chen's identity, the shuffle product, universality; **lab**: `signature`; **replay**: ridge regression on signatures of 20,000 two-asset paths, depth 1–5: the average and the Lévy area exact at depth 2 (R² = 1.000; the raw path explains 0.4% of the area), the Asian call 0.618 → 0.980 at depth 4, 0.951 at depth 5 (overfitting), against 0.795 for the raw path. |
 | 17 | Industry (`s20_industry`) | Crisis file: WTI, 20 April 2020; GBM against Bachelier; CME's switch; firm file: Interactive Brokers and the CFTC; OCC's STANS Monte Carlo margin; the variance swap as Itô's lemma (Heston replication sd 1.2 and 0.11 in 10⁻⁴; the jump bias −17.1 against −16.8 predicted); SR 11-7 → SR 26-2; the House's validation report. |
 | 18 | Frontier (`s21_frontier`) | **Replay**: a neural SDE trained on Bitcoin by expected-signature matching, three seeds; scored on the 2020 hold-out against GBM and a bootstrap (see the numbers below); the 2023–2026 papers. |
-| — | Outro (`s10_outro`) | Recap, three desk questions, seven problems, where it comes back, references, the House. |
+| R | For the researcher (`s22_research`) | The CLT for realized variance (Jacod; Barndorff-Nielsen–Shephard), proved by the martingale CLT; on 3,000 simulated stochastic-volatility days the studentized 95% interval covers 89% at 10-minute sampling, 92% at 5, 94% at 1 minute and 95% at 10 and 1 seconds; the error falls from 27% to 1.1%. Noise of 5 bp: $E\,\mathrm{RV} = \mathrm{IV} + 2n\omega^2$ matches simulation to three digits (42.9 times the truth at 1 second, +14% at 5 minutes); TSRV 0.99 ± 0.13. Bipower variation and the Huang–Tauchen test: 10.5% false alarms at a nominal 5%, 51% power against one 1% jump. Three open problems. |
+| — | Outro (`s10_outro`) | Recap, three desk questions, nine problems (two at qualifying-exam level), where it comes back, references, the House. |
 
 Hands-on: six labs (`euler_maruyama`/`milstein`, `ou_exact`, `is_digital`, `hawkes_thinning`, `fbm`, `signature`),
 four replays (CIR MLE, Hawkes MLE, signature regression, the neural SDE), three 3D scenes (the lemma's tangent planes,
@@ -145,6 +146,34 @@ Part 16, MLMC and the optimal importance-sampling shift too.
    W_T³ = ∫3W²dW + ∫3W dt, and ∫_0^T W_t dt = ∫_0^T (T − t) dW_t (integration by parts), so
    W_T³ = ∫_0^T 3(W_t² + T − t) dW_t, with mean zero as it should be.
 
+8. **(qual) Realized variance's CLT.** With deterministic $\sigma$, $\Delta_iX \sim N(0, v_i)$ independently,
+   $v_i = \int_{(i-1)/n}^{i/n}\sigma^2$. Then $\xi_i = (\Delta_iX)^2 - v_i$ are independent, mean zero, $\operatorname{Var}
+   \xi_i = 2v_i^2$, and $n\sum 2v_i^2 \to 2\int\sigma^4$ (a Riemann sum, $v_i \approx \sigma^2_{i/n}/n$). Lyapunov's
+   condition holds since $E\xi_i^4 = 60v_i^4$, so $\sum E\xi_i^4/(\sum 2v_i^2)^2 = O(1/n) \to 0$; hence
+   $\sqrt n(\mathrm{RV}_n - \mathrm{IV}) \Rightarrow N(0, 2\int\sigma^4)$.
+9. **(qual) Noise.** $\mathrm{RV}_n(Y) = \mathrm{RV}_n(X) + 2\sum\Delta_iX\,\Delta_i\varepsilon + \sum(\Delta_i\varepsilon)^2$.
+   The middle term has mean zero (independence), and $E\sum(\varepsilon_i - \varepsilon_{i-1})^2 = 2n\omega^2$, so
+   $E\,\mathrm{RV}_n(Y) = \mathrm{IV} + 2n\omega^2$. Dividing by $2n$, the first two terms vanish and the last is an
+   average of a 1-dependent stationary sequence with mean $2\omega^2$, so the law of large numbers gives
+   $\mathrm{RV}_n(Y)/2n \to \omega^2$: the noise variance is estimable from the finest data, which TSRV uses.
+
+**The pause question of the research chapter.** $\operatorname{se} = \sqrt{2\,\mathrm{RQ}/n} = \sqrt{2 \times 2.4 \times
+10^{-7}/78} = 7.8 \times 10^{-5}$, so IV $\in [2.5, 5.5] \times 10^{-4}$, a daily volatility between 1.6% and 2.4%
+(point estimate 2.0%).
+
+## For the researcher
+
+* **The theorems.** Jacod (1994) and Barndorff-Nielsen and Shephard (2002) for the CLT, stable convergence (Jacod and
+  Shiryaev, ch. IX); Barndorff-Nielsen and Shephard (2004) for bipower variation; Huang and Tauchen (2005); Zhang,
+  Mykland and Aït-Sahalia (2005) for TSRV; Barndorff-Nielsen, Hansen, Lunde and Shephard (2008) for realized kernels;
+  Jacod, Li, Mykland, Podolskij and Vetter (2009) for pre-averaging; Aït-Sahalia and Jacod, *High-Frequency
+  Financial Econometrics* (2014).
+* **Simplifications.** The proof sketch assumes no drift (it is negligible at the $\sqrt n$ scale) and continuous
+  paths; the jump test's false-alarm rate here is inflated by the intraday volatility pattern, which robust versions
+  correct.
+* **Open problems.** Efficient estimation under endogenous, autocorrelated noise and irregular times; spot volatility
+  when volatility is rough; volatility jumps and co-jumps.
+
 ## Data and reproducibility
 
 * Binance BTCUSDT one-minute candles for 2019–2020 (and 2020 for the signature plot) and one-hour candles for
@@ -211,3 +240,13 @@ Part 16, MLMC and the optimal importance-sampling shift too.
 6. **E τ_a = ∞。** P(τ_a < ∞) = lim 2(1 − Φ(a/√T)) = 1。但t很大时f(t) ~ a(2π)^{−½}t^{−3/2}，所以E τ_a = ∫ t f(t) dt像∫ t^{−1/2} dt一样发散。
 7. **W_T³的克拉克–奥科内被积函数。** D_tW_T³ = 3W_T²，所以H_t = E[3W_T² ∣ 𝓕_t] = 3(W_t² + T − t)。检验：由伊藤，W_T³ = ∫3W²dW + ∫3W dt，
    而∫_0^T W_t dt = ∫_0^T (T − t) dW_t（分部积分），所以W_T³ = ∫_0^T 3(W_t² + T − t) dW_t，均值为零，正如应有的那样。
+8. **（资格考试）已实现方差的中心极限定理。** σ确定时$\Delta_iX \sim N(0, v_i)$相互独立；$\xi_i = (\Delta_iX)^2 - v_i$独立、
+   均值为零、方差为$2v_i^2$，$n\sum 2v_i^2 \to 2\int\sigma^4$；李雅普诺夫条件成立，故$\sqrt n(\mathrm{RV}_n - \mathrm{IV})
+   \Rightarrow N(0, 2\int\sigma^4)$。
+9. **（资格考试）噪声。** $\mathrm{RV}_n(Y) = \mathrm{RV}_n(X) + 2\sum\Delta_iX\,\Delta_i\varepsilon + \sum(\Delta_i\varepsilon)^2$，
+   期望为$\mathrm{IV} + 2n\omega^2$；除以$2n$后由大数定律得$\mathrm{RV}_n(Y)/2n \to \omega^2$。
+
+## 写给研究者
+
+中心极限定理（Jacod 1994；Barndorff-Nielsen与Shephard 2002），双幂变差（2004），黄–陶臣检验（2005），双尺度估计量（Zhang、Mykland与
+Aït-Sahalia 2005），已实现核与预平均。开放问题：内生、自相关噪声与不规则时间下的有效估计；粗糙波动率下的即期波动率；波动率跳跃与共同跳跃。

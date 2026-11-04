@@ -25,6 +25,10 @@ PROBLEMS = [
     r"From the first-passage density $f_{\tau_a}(t) = \frac{a}{\sqrt{2\pi t^3}}e^{-a^2/2t}$, show that "
     r"$\mathbb{E}\,\tau_a = \infty$ although $P(\tau_a < \infty) = 1$.",
     r"Compute the Clark--Ocone integrand of $F = W_T^3$, and check it with It\^o's lemma.",
+    r"(qual) For $dX = \sigma_t dW$ with deterministic $\sigma_t$, prove $\sqrt n(\mathrm{RV}_n - \int\sigma^2) \Rightarrow "
+    r"N(0, 2\int\sigma^4)$ by the Lindeberg CLT.",
+    r"(qual) With iid noise $\varepsilon$ of variance $\omega^2$ added to each price, show $\mathbb E\,\mathrm{RV}_n(Y) = "
+    r"\mathrm{IV} + 2n\omega^2$ and $\mathrm{RV}_n(Y)/2n \to \omega^2$.",
 ]
 
 
@@ -107,11 +111,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=23)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And seven problems: the variations of Brownian motion, the two integrals of W against itself, Milstein's "
+            "And nine problems: the variations of Brownian motion, the two integrals of W against itself, Milstein's "
             "correction, the Vasicek distribution, a Hawkes process's long-run rate, the infinite mean of a first "
-            "passage time, and a Clark-Ocone integrand. Solutions, in English and Chinese, are in the notes."
+            "passage time, a Clark-Ocone integrand, and two at the level of a qualifying exam: realized variance's "
+            "central limit theorem, and the bias that noise adds to it. Solutions, in English and Chinese, are in the "
+            "notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(6)
