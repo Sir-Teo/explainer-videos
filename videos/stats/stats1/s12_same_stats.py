@@ -151,7 +151,7 @@ class SameStats(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         if steps.width > 5.9:
             steps.width = 5.9
-        steps.move_to([3.85, -2.45, 0])
+        steps.move_to([3.85, -2.05, 0])
         moral = label(r"a summary is a projection: \ many datasets, \ one shadow", font_size=30, color=S.ACCENT)
         moral.move_to([-2.9, 3.35, 0])
         with self.voiceover(

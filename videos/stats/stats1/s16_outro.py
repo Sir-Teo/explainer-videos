@@ -43,9 +43,9 @@ class Outro(VoiceoverScene):
             (r"honest graphics: \ position, \ zero baselines", GREY_A),
             (r"every statistic has a sampling distribution", S.EST),
         ]
-        rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
-        cols = VGroup(VGroup(*rows[:7]).arrange(DOWN, aligned_edge=LEFT, buff=0.3),
-                      VGroup(*rows[7:]).arrange(DOWN, aligned_edge=LEFT, buff=0.3)).arrange(RIGHT, buff=0.8,
+        rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=31, color=c) for i, (t, c) in enumerate(items)])
+        cols = VGroup(VGroup(*rows[:7]).arrange(DOWN, aligned_edge=LEFT, buff=0.42),
+                      VGroup(*rows[7:]).arrange(DOWN, aligned_edge=LEFT, buff=0.42)).arrange(RIGHT, buff=0.8,
                                                                                             aligned_edge=UP)
         if cols.width > 13.2:
             cols.width = 13.2

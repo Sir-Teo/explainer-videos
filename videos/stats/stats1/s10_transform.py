@@ -233,7 +233,7 @@ class Transform(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(s_) for s_ in right[2]], lag_ratio=0.3))
             vo.wait_until("c")
             self.play(FadeOut(left), right.animate.shift(RIGHT * 0.8))
-            step = ladder(self, rows, whys, keep=2, top=2.4, x=-4.2, buff=0.6, edge=1.2)
+            step = ladder(self, rows, whys, keep=2, top=2.4, x=-4.4, buff=0.6)
             step(0)
             step(1)
         self.clear_scene()
