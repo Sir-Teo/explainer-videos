@@ -220,6 +220,27 @@ def attribute(h, X, f, u):
     return hx * f, float(h[m] @ u[m])
 
 
+# ---------------------------------------------------------------------------
+# Guards (Rule 31): what the registered rule of Part 31 lacked
+# ---------------------------------------------------------------------------
+
+
+def floor_variance(sig2, floor: float):
+    """Forecast variances with a floor: no asset is ever forecast to be safer than ``floor`` (a daily variance set from
+    the asset class, not from the asset's own recent history), so 1/sigma^2 rules cannot take unbounded positions."""
+    return np.maximum(np.asarray(sig2, float), floor)
+
+
+def cap_positions(x, book: float = 1.0, cap: float = 0.05, adv=None, adv_cap: float = 0.1):
+    """Position limits that do not depend on the model: |x_i| <= cap x book and, if daily volumes ``adv`` (in the same
+    units as x) are given, |x_i| <= adv_cap x adv_i."""
+    x = np.asarray(x, float)
+    lim = np.full_like(x, cap * book)
+    if adv is not None:
+        lim = np.minimum(lim, adv_cap * np.nan_to_num(np.asarray(adv, float), nan=0.0))
+    return np.clip(x, -lim, lim)
+
+
 __all__ = ["standardise", "factor_returns", "ewma_cov", "specific_var", "vasicek", "portfolio_risk", "bias_statistic",
            "fundamental_ir", "ir_time_varying", "simulate_ic_strategy", "sqrt_impact", "gp_trade_rate", "gp_aim_weight",
-           "riccati_scalar", "attribute"]
+           "riccati_scalar", "attribute", "floor_variance", "cap_positions"]

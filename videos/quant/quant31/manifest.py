@@ -14,7 +14,7 @@ SCENES = [
     ("s09_capacity", "Capacity", "8. Decay, capacity and Berk-Green"),
     ("s10_quake", "Quake", "9. Crowding and August 2007"),
     ("s11_attribution", "Attribution", "10. P&L attribution"),
-    ("s12_envelope", "Envelope", "11. The factor-neutral calm book, registered and opened"),
+    ("s12_envelope", "Envelope", "11. The aim portfolio on the coins, registered and opened"),
     ("s13_house", "House", "12. Rule 31: the risk model"),
     ("s14_research", "Research", "For the researcher: the information ratio when the IC moves"),
     ("s15_outro", "Outro", "Recap, desk questions, problems"),

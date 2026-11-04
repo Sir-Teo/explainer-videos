@@ -3331,3 +3331,7 @@ def test_riskmodel_gp_and_law():
     R = X @ f_true + 0.01 * rng.standard_normal((T, N))
     f, u = RM.factor_returns(R, X)
     assert np.allclose(f.mean(0), f_true, atol=2e-3)
+    x = 0.01 / RM.floor_variance(np.array([1e-8, 4e-4]), 1e-4)
+    assert x.max() <= 100.0 + 1e-9
+    c = RM.cap_positions(np.array([0.2, -0.3, 0.01]), cap=0.05, adv=np.array([1.0, 0.1, 1.0]))
+    assert np.allclose(c, [0.05, -0.01, 0.01])

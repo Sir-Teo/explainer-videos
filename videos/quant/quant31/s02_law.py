@@ -13,6 +13,8 @@ class Law(VoiceoverScene):
         self.derive()
         self.table(l)
         self.transfer(l)
+        self.breadth()
+        self.scale()
         self.limits()
         self.question()
 
@@ -113,6 +115,61 @@ class Law(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+    def breadth(self):
+        n, rho = 100, 0.2
+        eff = n / (1 + (n - 1) * rho)
+        rows = [cmath(r"BR_{\text{eff}}", r"=", r"\frac{N}{1 + (N - 1)\bar\rho}", font_size=40, colors={r"BR_{\text{eff}}": HURDLE}),
+                cmath(r"N = 100,\ \bar\rho = 0.2", r":", rf"BR_{{\text{{eff}}}} = {eff:.1f}", font_size=34),
+                cmath(r"\text{time breadth}", r":", r"\text{only new information counts}", font_size=32)]
+        whys = [why(r"bets whose outcomes are correlated $\bar\rho$ on average count as fewer independent bets: the same "
+                    r"formula as the effective number of trials in Part 26"),
+                why(r"a hundred stocks whose residual bets are 20\% correlated are fewer than five independent bets"),
+                why(r"rebalancing a monthly signal every day does not multiply breadth by twenty: the forecast has not "
+                    r"changed, only the trading has")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What does breadth mean? <bookmark mark='a'/> It counts independent bets. If the bets' outcomes are "
+            "correlated, the effective number is N over one plus N minus one times the average correlation: the same "
+            "formula Part twenty-six used for effective trials. <bookmark mark='b'/> A hundred stocks whose bets are "
+            f"twenty percent correlated are worth {eff:.1f} independent bets. <bookmark mark='c'/> And breadth in time "
+            "counts only new information. Rebalancing a monthly signal every day does not make twenty times the bets; "
+            "the forecast has not changed, only the trading has, and the trading costs money."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def scale(self):
+        items = [(r"0.5", r"good: top quartile of active managers, before fees", GOOD),
+                 (r"0.75", r"very good", HURDLE),
+                 (r"1.0", r"exceptional, and rare over long periods", BAD)]
+        rows = VGroup()
+        for v, d, col in items:
+            rows.add(VGroup(MathTex(rf"IR = {v}", font_size=34, color=col), label(d, font_size=20, color=GREY_A)).arrange(
+                RIGHT, buff=0.5))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(UP * 0.4)
+        foot = wrapped_label(r"annual information ratios, Grinold and Kahn's scale; a monthly IC of 0.02 to 0.10 is typical "
+                             r"of a useful equity signal; the law's 3.9 for IC 0.05 on 500 stocks is far off this scale",
+                             11.4, 18, GREY_A).to_edge(DOWN, buff=0.7)
+        with self.voiceover(
+            "For scale: Grinold and Kahn call an annual information ratio of one half good, three quarters very good, "
+            "and one exceptional. <bookmark mark='a'/> Useful equity signals have monthly ICs between about two and ten "
+            "percent. So the law's three point nine for an IC of five percent on five hundred stocks is off the scale "
+            "of what managers achieve. Either the forecasts are worse than their IC suggests, or the law leaves "
+            "something out. Both are true, and this part finds out how much of each."
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.4))
+            vo.wait_until("a")
+            self.play(FadeIn(foot))
+        self.wait(0.4)
         self.clear_scene()
 
     def limits(self):
