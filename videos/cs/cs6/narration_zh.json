@@ -1,0 +1,432 @@
+{
+ "title": "计算机科学，从零搭建 · 第6部分：存储程序计算机",
+ "chapters": {
+  "Hook": "读取自身指令的机器",
+  "History": "1. 先是电缆，然后是存储器",
+  "Idea": "2. 指令就是数据",
+  "Isa": "3. 设计一套指令集",
+  "Datapath": "4. 数据通路，一次一条指令",
+  "Control": "5. 控制单元",
+  "Assembler": "6. 汇编器",
+  "First": "7. 最初的程序，逐门运行",
+  "Cost": "8. 一个程序的代价",
+  "Io": "9. 与外界对话",
+  "Job": "10. 任务，第0版",
+  "Universal": "11. Pebble 与图灵机",
+  "SelfMod": "12. 代码就是数据",
+  "Interrupts": "13. 当外界打断时",
+  "Counted": "14. 整台机器，清点一遍",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "db14dc3dd195": {
+   "scene": "Hook",
+   "en": "For five parts we have been collecting pieces. <bookmark mark='a'/> Gates, built from switches in Part 3. Arithmetic in Part 4: adders, multipliers, and an ALU that does ten operations. Registers and memory in Part 5, the circuits that remember. <bookmark mark='b'/> Each piece works, and each was checked against a model. But none of them, on its own, computes anything you would call a program. Today they become one machine: Pebble, a thirty-two-bit processor, built entirely from the gates we already have. <bookmark mark='c'/> The question for this part is what turns a pile of parts into a machine that runs programs.",
+   "zh": "五个部分以来，我们一直在收集零件。<bookmark mark='a'/>门，在第3部分用开关搭成。算术在第4部分：加法器、乘法器，以及一个能做十种运算的算术逻辑单元。寄存器和存储器在第5部分，那些会记忆的电路。<bookmark mark='b'/>每个零件都能工作，每个都对照模型检验过。但它们中没有一个能单独算出你称之为程序的东西。今天它们合成一台机器：Pebble，一台三十二位处理器，完全由我们已有的门搭成。<bookmark mark='c'/>这一部分的问题是：是什么把一堆零件变成一台能运行程序的机器？"
+  },
+  "d91bc1d61497": {
+   "scene": "Hook",
+   "en": "The answer is an idea from 1945, and it is the subject of this part. <bookmark mark='a'/> The program is not wired in. It sits in memory, as numbers, beside the data it works on. These words are Part 1's Euclid, the algorithm that found the greatest common divisor by repeated subtraction, written as Pebble instructions. <bookmark mark='b'/> A register called the program counter holds the address of the next instruction. The machine fetches that word, decodes what it asks for, does it, and moves on. <bookmark mark='c'/> Because the program is just numbers in memory, a machine can load a new one in a moment, and a program can even read or write programs. That single fact is why one machine can be a word processor in the morning and a game in the afternoon.",
+   "zh": "答案是1945年的一个想法，也就是这一部分的主题。<bookmark mark='a'/>程序不是接线接出来的。它以数字的形式放在存储器里，就在它要处理的数据旁边。这些字就是第1部分的欧几里得算法，那个用反复相减求最大公约数的算法，写成了 Pebble 指令。<bookmark mark='b'/>一个叫程序计数器的寄存器保存着下一条指令的地址。机器取出那个字，译出它要求做什么，执行它，然后继续。<bookmark mark='c'/>因为程序不过是存储器里的数字，机器可以在转眼间装入一个新程序，程序甚至可以读写程序。正是这一事实，让同一台机器上午是文字处理器，下午是游戏机。"
+  },
+  "a1c54370e4d9": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> A thirty-two-bit processor of about eight thousand gates and five hundred flip-flops, with its own instruction set, an assembler, and programs written for it. <bookmark mark='b'/> Every piece is checked: the gate-level machine and a fast emulator run three hundred random programs and end with every register and every byte of memory equal. <bookmark mark='c'/> It will run a Turing machine, closing a loop from Part 1, and it will run the Job, the word count over thirty novels that the series carries from part to part. Version zero is honest and naive, and it costs a hundred and seven billion cycles.",
+   "zh": "我们要去的地方是这样的。<bookmark mark='a'/>一台三十二位处理器，大约八千个门、五百个触发器，有自己的指令集、汇编器，以及为它写的程序。<bookmark mark='b'/>每个零件都经过检验：门级机器和一个快速模拟器运行三百个随机程序，最后每个寄存器、存储器的每个字节都相同。<bookmark mark='c'/>它将运行一台图灵机，闭合第1部分开启的一个环；它还将运行“任务”，即本系列一部分接一部分带着走的三十本小说的词频统计。第0版老实而天真，要花一千零七十亿个周期。"
+  },
+  "1adb1ae9932e": {
+   "scene": "Hook",
+   "en": "This is Part 6 of Computer Science, Built, the last part of the first act. <bookmark mark='a'/> In this part: how ENIAC was programmed with cables, and the report that put the program in memory. An instruction set designed from scratch, bit by bit, and compared with RISC-V. The datapath and the control unit, built from the circuits of Parts 3 to 5 and verified. The assembler, the first programs, and devices that live at memory addresses. The Job, version zero, and the first row of the ledger. Then Pebble and the Turing machine, code that rewrites itself, interrupts, and the whole machine counted.",
+   "zh": "这是《计算机科学，从零搭建》的第6部分，第一幕的最后一部分。<bookmark mark='a'/>这一部分的内容：ENIAC 怎样用电缆编程，以及那份把程序放进存储器的报告。一套从零设计、逐位推敲的指令集，并与 RISC-V 比较。数据通路和控制单元，用第3到第5部分的电路搭成并验证。汇编器、最初的程序，以及住在存储器地址上的设备。任务第0版，以及账本的第一行。然后是 Pebble 与图灵机、改写自身的代码、中断，以及把整台机器清点一遍。"
+  },
+  "d5386a6fba44": {
+   "scene": "History",
+   "en": "Chapter one. Cables, then memory.",
+   "zh": "第1章。先是电缆，然后是存储器。"
+  },
+  "36391d40b28e": {
+   "scene": "History",
+   "en": "In 1945, at the University of Pennsylvania, John Presper Eckert and John Mauchly finished ENIAC, the first large general-purpose electronic computer. <bookmark mark='a'/> It filled a room: seventeen thousand vacuum tubes, thirty tons, and it added five thousand numbers a second, a thousand times faster than the relay machines before it. <bookmark mark='b'/> But it had no program in the sense we mean. Each problem was set up by hand: units connected by cables, and switches set on every panel, so that numbers flowed from accumulator to multiplier in the right order. A new problem took days of re-plugging. <bookmark mark='c'/> The people who did it were six women hired as human computers: Kay McNulty, Betty Jennings, Betty Snyder, Marlyn Wescoff, Fran Bilas and Ruth Lichterman. With no manuals, they learned the machine from its logic diagrams and worked out every connection. They were not introduced when ENIAC was shown to the press in 1946, and their work was recognised only decades later.",
+   "zh": "1945年，在宾夕法尼亚大学，约翰·普雷斯珀·埃克特和约翰·莫奇利完成了 ENIAC，第一台大型通用电子计算机。<bookmark mark='a'/>它占满一个房间：一万七千个真空管，三十吨重，每秒做五千次加法，比此前的继电器机器快一千倍。<bookmark mark='b'/>但它没有我们所说的那种程序。每个问题都要手工设置：用电缆连接各个单元，在每块面板上拨好开关，让数字按正确的顺序从累加器流向乘法器。换一个问题要花几天时间重新插线。<bookmark mark='c'/>做这件事的人是六位被雇来当人工计算员的女性：凯·麦克纳尔蒂、贝蒂·詹宁斯、贝蒂·斯奈德、玛琳·韦斯科夫、弗兰·比拉斯和露丝·利希特曼。没有任何手册，她们从逻辑图中学会了这台机器，并设计出每一处连接。1946年 ENIAC 向新闻界展示时，没有人介绍她们，她们的工作直到几十年后才得到承认。"
+  },
+  "4a0134d3ed4b": {
+   "scene": "History",
+   "en": "While ENIAC was still being built, its designers were already planning a successor, the EDVAC, and in June 1945 John von Neumann wrote up their discussions in a hundred-page report. <bookmark mark='a'/> It describes a machine with a central arithmetic part, a central control part, input and output, and one large memory. <bookmark mark='b'/> The crucial sentence is about what goes in that memory: the instructions as well as the numbers, coded the same way. The program is no longer wiring. It is data the control unit reads, one instruction after another. <bookmark mark='c'/> The report circulated under von Neumann's name alone, and Eckert and Mauchly, whose ideas it drew on, never forgave it; the stored-program design is still called the von Neumann architecture. And in a sense Turing had got there first: his universal machine of 1936, from Part 1, already read its program from its own tape.",
+   "zh": "ENIAC 还在建造时，它的设计者已经在规划后继者 EDVAC，1945年6月，约翰·冯·诺依曼把他们的讨论写成了一份一百页的报告。<bookmark mark='a'/>报告描述了一台机器：一个中央算术部分、一个中央控制部分、输入和输出，以及一个大存储器。<bookmark mark='b'/>关键的一句是关于存储器里放什么：指令和数字一样放在里面，用同样的方式编码。程序不再是接线，而是控制单元一条接一条读取的数据。<bookmark mark='c'/>这份报告只署了冯·诺依曼一个人的名字流传开来，而报告所依据的想法来自埃克特和莫奇利，他们始终没有原谅这件事；存储程序设计至今仍被称为冯·诺依曼体系结构。某种意义上图灵走在了前面：他1936年的通用机器，第1部分讲过的那台，早已从自己的纸带上读取程序。"
+  },
+  "efb544cd5093": {
+   "scene": "History",
+   "en": "The first machine to actually run a program from its memory was small. <bookmark mark='a'/> At Manchester, Freddie Williams, Tom Kilburn and Geoff Tootill built a test bed for Williams's tube memory, nicknamed the Baby: thirty-two words of thirty-two bits, stored as dots of charge on a screen. <bookmark mark='b'/> On the twenty-first of June 1948, it ran Kilburn's first program: find the largest proper factor of two to the eighteen. The Baby could not divide, or even add; it could only subtract. So the program tried every number downwards, dividing by repeated subtraction. <bookmark mark='c'/> After fifty-two minutes and about three and a half million instructions, the answer appeared on the screen: a hundred and thirty-one thousand and seventy-two. Seven instructions, a kilobit of memory, and the first program ever to run from the same store that held its data.",
+   "zh": "第一台真正从存储器运行程序的机器很小。<bookmark mark='a'/>在曼彻斯特，弗雷迪·威廉姆斯、汤姆·基尔伯恩和杰夫·图蒂尔为威廉姆斯管存储器搭了一台试验机，昵称“宝贝”：三十二个三十二位的字，以电荷点的形式存在屏幕上。<bookmark mark='b'/>1948年6月21日，它运行了基尔伯恩的第一个程序：求 2 的 18 次方的最大真因数。宝贝机不会除法，连加法都不会，只会减法。所以程序从大到小逐个尝试每个数，用反复相减来做除法。<bookmark mark='c'/>经过五十二分钟、大约三百五十万条指令，答案出现在屏幕上：十三万一千零七十二。七条指令，一千位的存储器，以及历史上第一个从存放数据的同一存储器中运行的程序。"
+  },
+  "d128ff84a9c7": {
+   "scene": "History",
+   "en": "A year later at Cambridge, Maurice Wilkes's EDSAC became the first stored-program computer in regular service. <bookmark mark='a'/> On the sixth of May 1949 it printed its first output, a table of squares, and soon it was computing for scientists across the university. <bookmark mark='b'/> Its team invented much of what programming still is. David Wheeler found a way to call a subroutine and come back: the caller jumps, leaving its own address where the subroutine can find it, and the subroutine ends by jumping to that address. <bookmark mark='c'/> They built a library of tested subroutines, and a loader, the initial orders, that read programs from paper tape and fixed up their addresses. Pebble's jump-and-link instruction does Wheeler's trick in a single step, and Part 11 builds the calling convention on it.",
+   "zh": "一年后在剑桥，莫里斯·威尔克斯的 EDSAC 成为第一台正式投入日常使用的存储程序计算机。<bookmark mark='a'/>1949年5月6日，它打印出第一份输出，一张平方表，很快它就为全校的科学家做计算了。<bookmark mark='b'/>它的团队发明了编程至今仍在使用的许多东西。大卫·惠勒找到了调用子程序再返回的办法：调用者跳转时，把自己的地址留在子程序能找到的地方，子程序最后跳回那个地址。<bookmark mark='c'/>他们建立了一个经过测试的子程序库，还有一个装入程序，即“初始指令”，从纸带读入程序并修正其中的地址。Pebble 的跳转并链接指令一步就完成惠勒的技巧，第11部分会在它之上建立调用约定。"
+  },
+  "05b0da20d4e7": {
+   "scene": "Idea",
+   "en": "Chapter two. Instructions are data.",
+   "zh": "第2章。指令就是数据。"
+  },
+  "e81e029db5a0": {
+   "scene": "Idea",
+   "en": "Every stored-program computer does one thing, over and over. <bookmark mark='a'/> Fetch: read the word in memory at the address held in the program counter. <bookmark mark='b'/> Decode: work out which instruction that word is, and which registers and constants it names. <bookmark mark='c'/> Execute: do it, an addition, a comparison, a load from memory or a store to it, and write the result. <bookmark mark='d'/> Next: move the program counter on to the following word, or, if the instruction was a jump or a branch that is taken, to somewhere else. Then start again. <bookmark mark='e'/> Your phone's processor runs this loop billions of times a second, every second it is switched on. Everything else in this series, from compilers to databases to the cloud, is built on top of it.",
+   "zh": "每台存储程序计算机都在一遍又一遍地做同一件事。<bookmark mark='a'/>取指：读出程序计数器所指地址上的那个字。<bookmark mark='b'/>译码：弄清这个字是哪条指令，它指明了哪些寄存器和常数。<bookmark mark='c'/>执行：做它，一次加法、一次比较、一次从存储器取数或向它存数，并写下结果。<bookmark mark='d'/>下一条：把程序计数器移到下一个字；如果这条指令是跳转或成立的分支，就移到别处。然后从头再来。<bookmark mark='e'/>你手机的处理器每秒运行这个循环几十亿次，只要它开着，每一秒都是如此。本系列其余的一切，从编译器到数据库再到云，都建立在它之上。"
+  },
+  "70d19f6577a8": {
+   "scene": "Idea",
+   "en": "Here is the loop on a tiny program. <bookmark mark='a'/> Memory holds five instructions, each one a thirty-two-bit word, and below them a word of data. The program counter starts at zero. <bookmark mark='b'/> The first two instructions put five and seven into registers a zero and a one. <bookmark mark='c'/> The third adds them. Its word is decoded field by field: the opcode says add, and three four-bit fields name the destination and the two sources. The sum, twelve, goes into a two. <bookmark mark='d'/> The fourth stores a two into memory at address sixty-four, as data. The last one halts. Notice that nothing distinguishes the instruction words from the data word except how the program counter happens to reach them.",
+   "zh": "下面用一个很小的程序来看这个循环。<bookmark mark='a'/>存储器里有五条指令，每条是一个三十二位的字，下面还有一个数据字。程序计数器从零开始。<bookmark mark='b'/>前两条指令把五和七放进寄存器 a0 和 a1。<bookmark mark='c'/>第三条把它们相加。它的字被逐个字段译码：操作码说是加法，三个四位字段指明目的寄存器和两个源寄存器。和，十二，放进 a2。<bookmark mark='d'/>第四条把 a2 存到存储器地址六十四，作为数据。最后一条停机。请注意，除了程序计数器恰好怎样走到它们之外，没有任何东西区分指令字和数据字。"
+  },
+  "1d9af507e35b": {
+   "scene": "Idea",
+   "en": "The list of instructions a machine understands, and exactly what each one does, is its instruction set architecture. <bookmark mark='a'/> It is a contract. Above it, compilers and programs rely only on what the instructions promise. <bookmark mark='b'/> Below it, the hardware is free to keep the promise any way it likes. This part builds the simplest machine that does: one instruction per clock cycle. Part 7 overlaps instructions like an assembly line, and Part 8 runs them out of order. <bookmark mark='c'/> All three run exactly the same programs, which is why an instruction set can outlive the hardware that first implemented it by decades: x86 software from 1978 still runs today.",
+   "zh": "一台机器能理解的指令清单，以及每条指令究竟做什么，就是它的指令集体系结构。<bookmark mark='a'/>它是一份契约。在它之上，编译器和程序只依赖指令所承诺的东西。<bookmark mark='b'/>在它之下，硬件可以用任何方式兑现这些承诺。这一部分搭建能做到这一点的最简单的机器：每个时钟周期一条指令。第7部分像装配线那样让指令重叠，第8部分让它们乱序执行。<bookmark mark='c'/>这三者运行完全相同的程序，这就是为什么一套指令集能比最先实现它的硬件多活几十年：1978年的 x86 软件今天仍能运行。"
+  },
+  "49f60e410894": {
+   "scene": "Idea",
+   "en": "Putting instructions and data in one memory has a cost, and it has a name. <bookmark mark='a'/> Every instruction must travel from memory to the processor, and so must most of the data it works on, along one path, one word at a time. <bookmark mark='b'/> John Backus, who led the team that built FORTRAN, called it the von Neumann bottleneck in his Turing Award lecture of 1977: a connecting tube between the processor and the store, through which every computation is squeezed. Since then processors have grown far faster than memory, so the tube matters more with every decade. <bookmark mark='c'/> Part 9 widens it with caches, small fast memories that keep the words a program is using close to the processor, so most of them never make the trip at all.",
+   "zh": "把指令和数据放在同一个存储器里是有代价的，而且这代价有个名字。<bookmark mark='a'/>每条指令都必须从存储器走到处理器，它所处理的大部分数据也是如此，沿着同一条通路，一次一个字。<bookmark mark='b'/>领导团队开发 FORTRAN 的约翰·巴克斯在1977年的图灵奖演讲中称之为冯·诺依曼瓶颈：处理器和存储器之间的一根连接管，每一次计算都要从中挤过。此后处理器的速度增长远远超过存储器，所以这根管子一年比一年重要。<bookmark mark='c'/>第9部分用缓存把它加宽：小而快的存储器，把程序正在使用的字留在处理器旁边，于是其中大部分根本不必走这一趟。"
+  },
+  "f48e6f596617": {
+   "scene": "Isa",
+   "en": "Chapter three. Designing an instruction set.",
+   "zh": "第3章。设计一套指令集。"
+  },
+  "b576ebfe9f08": {
+   "scene": "Isa",
+   "en": "Designing an instruction set starts with what a program can see. <bookmark mark='a'/> Pebble has sixteen registers of thirty-two bits. Registers are the processor's working values: a handful of fast storage cells right next to the ALU, and few enough that four bits can name any of them. Register zero always reads zero, which turns out to be wonderfully useful: it is a free constant, and writing to it throws a result away. <bookmark mark='b'/> Memory is a long array of bytes, numbered from zero. A word is four consecutive bytes at an address divisible by four, stored little end first, the convention of x86, ARM and RISC-V. <bookmark mark='c'/> And there is the program counter, which no instruction reads or writes directly: it moves on by itself, or jumps.",
+   "zh": "设计一套指令集，要从程序能看到什么开始。<bookmark mark='a'/>Pebble 有十六个三十二位的寄存器。寄存器是处理器的工作值：紧挨着算术逻辑单元的少数几个快速存储单元，少到四位就能指明其中任何一个。寄存器零总是读出零，这一点出奇地有用：它是一个免费的常数，写进去的结果则被扔掉。<bookmark mark='b'/>存储器是一长串字节，从零开始编号。一个字是地址能被四整除的连续四个字节，低位字节在前，这是 x86、ARM 和 RISC-V 的约定。<bookmark mark='c'/>还有程序计数器，没有哪条指令直接读写它：它自己前进，或者跳转。"
+  },
+  "a61f6b8d7026": {
+   "scene": "Isa",
+   "en": "Every Pebble instruction is one thirty-two-bit word, in one of four formats. <bookmark mark='a'/> R format, for register operations like add, names two source registers and a destination. <bookmark mark='b'/> I format replaces the second source with an eighteen-bit constant, the immediate, so adding minus one is a single instruction. <bookmark mark='c'/> S format, for stores and branches, names two registers to read and carries a constant: the offset to the address, or how far to branch. <bookmark mark='d'/> J format gives a twenty-two-bit constant to jumps and to lui, which loads the upper bits of a register. <bookmark mark='e'/> The layout is regular on purpose. The opcode is always the top six bits, and register fields sit in the same places, so the hardware can read the registers before it has even finished working out what the instruction is.",
+   "zh": "每条 Pebble 指令都是一个三十二位的字，属于四种格式之一。<bookmark mark='a'/>R 格式，用于加法这样的寄存器运算，指明两个源寄存器和一个目的寄存器。<bookmark mark='b'/>I 格式把第二个源换成一个十八位常数，即立即数，于是加负一只需一条指令。<bookmark mark='c'/>S 格式，用于存数和分支，指明两个要读的寄存器并带一个常数：地址的偏移，或分支跳多远。<bookmark mark='d'/>J 格式给跳转和 lui 一个二十二位常数，lui 用来装入寄存器的高位。<bookmark mark='e'/>布局有意做得规整。操作码总是最高六位，寄存器字段也在相同的位置，所以硬件甚至在弄清这是什么指令之前就可以开始读寄存器。"
+  },
+  "01c30f504232": {
+   "scene": "Isa",
+   "en": "Pebble has thirty-four instructions. <bookmark mark='a'/> Ten that combine two registers, the ALU operations of Part 4. Nine that combine a register with a constant. Five that move data between registers and memory, a word or a byte at a time. Six conditional branches. And jumps, lui, and halt, which stops the machine until Part 31 gives it an operating system to return to. <bookmark mark='b'/> The design follows a few rules that every good instruction set shares. Keep it regular. Keep it simple to decode: Pebble gives every instruction its own opcode, so the decoder is a table you can read. Make the common case fast: most constants in real programs are small, so they fit inside the instruction, and a large one costs two instructions. <bookmark mark='c'/> And make mistakes loud: opcode zero means nothing, so a program that jumps into empty memory stops at once instead of running garbage.",
+   "zh": "Pebble 有三十四条指令。<bookmark mark='a'/>十条组合两个寄存器，也就是第4部分算术逻辑单元的运算。九条组合一个寄存器和一个常数。五条在寄存器和存储器之间搬运数据，一次一个字或一个字节。六条条件分支。还有跳转、lui 和停机，停机让机器停下，直到第31部分给它一个可以返回的操作系统。<bookmark mark='b'/>这套设计遵循每套好的指令集都共有的几条规则。保持规整。保持易于译码：Pebble 给每条指令一个专属的操作码，所以译码器是一张你能读懂的表。让常见情况变快：真实程序里的常数大多很小，所以它们能放进指令里，大常数则要花两条指令。<bookmark mark='c'/>还要让错误大声暴露：操作码零没有任何含义，所以跳进空存储器的程序会立刻停下，而不是执行一堆垃圾。"
+  },
+  "2d1d6508228b": {
+   "scene": "Isa",
+   "en": "Pebble is a close cousin of RISC-V, the open instruction set begun at Berkeley in 2010, and the differences are deliberate. <bookmark mark='a'/> RISC-V has thirty-two registers and five-bit register fields; Pebble's sixteen leave room for longer constants. RISC-V packs several instructions under one opcode, told apart by extra function fields; Pebble gives each its own. <bookmark mark='b'/> And RISC-V scatters the bits of its constants around the word, so that the sign bit is always bit thirty-one and the hardware saves a multiplexer. That is a good engineering trade, and a terrible one for drawing, so Pebble keeps each constant in one piece. <bookmark mark='c'/> Both descend from the reduced instruction set computers of around 1980, IBM's 801, Berkeley's RISC and Stanford's MIPS, which bet that a few simple instructions, run fast, beat many complicated ones.",
+   "zh": "Pebble 是 RISC-V 的近亲，RISC-V 是2010年在伯克利开始的开放指令集，两者的差别是有意为之。<bookmark mark='a'/>RISC-V 有三十二个寄存器、五位的寄存器字段；Pebble 的十六个寄存器给更长的常数留出了空间。RISC-V 把几条指令放在同一个操作码下，用额外的功能字段区分；Pebble 给每条指令各自的操作码。<bookmark mark='b'/>RISC-V 还把常数的各位分散在字的各处，好让符号位总是第三十一位，硬件省下一个多路选择器。这是一个好的工程取舍，却很不利于画图，所以 Pebble 让每个常数保持完整的一段。<bookmark mark='c'/>两者都源自1980年前后的精简指令集计算机，IBM 的 801、伯克利的 RISC 和斯坦福的 MIPS，它们押注：少量简单的指令跑得快，胜过许多复杂的指令。"
+  },
+  "18badbe6e5ad": {
+   "scene": "Datapath",
+   "en": "Chapter four. The datapath, one instruction at a time.",
+   "zh": "第4章。数据通路，一次一条指令。"
+  },
+  "8df864967415": {
+   "scene": "Datapath",
+   "en": "Now we build the machine that runs this loop, one piece at a time, and send instructions through it. <bookmark mark='a'/> It starts with the program counter, a thirty-two-bit register from Part 5, and the instruction memory, which takes an address and returns the word stored there. <bookmark mark='b'/> In the same cycle, a small adder computes the program counter plus four, the address of the next instruction, ready to be loaded at the next clock edge. <bookmark mark='c'/> That is the whole of fetch: a register, a memory, an adder, and a wire looping back.",
+   "zh": "现在我们一块一块地搭建运行这个循环的机器，并让指令从中流过。<bookmark mark='a'/>它从程序计数器开始，那是第5部分的一个三十二位寄存器，还有指令存储器，给它一个地址，它返回那里存的字。<bookmark mark='b'/>在同一个周期里，一个小加法器算出程序计数器加四，也就是下一条指令的地址，准备在下一个时钟沿载入。<bookmark mark='c'/>这就是取指的全部：一个寄存器、一个存储器、一个加法器，以及一根绕回来的导线。"
+  },
+  "2609d660dbd4": {
+   "scene": "Datapath",
+   "en": "Next, an instruction that adds two registers. <bookmark mark='a'/> The instruction's bits fan out. Two four-bit fields go to the register file's read ports, which is Part 5's register file exactly. <bookmark mark='b'/> The two values flow into Part 4's ALU, and a few bits from the control unit tell it to add. <bookmark mark='c'/> The sum flows back around to the register file's write port, addressed by the third field, and is written at the next clock edge, at the same moment as the program counter moves on. Nothing in this machine happens between clock edges except electricity settling.",
+   "zh": "接下来是一条把两个寄存器相加的指令。<bookmark mark='a'/>指令的各位散开。两个四位字段送到寄存器堆的读端口，那正是第5部分的寄存器堆。<bookmark mark='b'/>两个值流进第4部分的算术逻辑单元，控制单元的几位告诉它做加法。<bookmark mark='c'/>和绕回到寄存器堆的写端口，由第三个字段寻址，在下一个时钟沿写入，与程序计数器前进是同一时刻。在这台机器里，两个时钟沿之间除了电信号趋于稳定，什么也不发生。"
+  },
+  "b60da76f6ce1": {
+   "scene": "Datapath",
+   "en": "To add a constant instead, the instruction's low eighteen bits go to the immediate unit. <bookmark mark='a'/> It sign-extends them: copies the top bit into the fourteen bits above, so minus one in eighteen bits becomes minus one in thirty-two. No gates at all, just wires. <bookmark mark='b'/> A multiplexer in front of the ALU chooses the second operand: the register, for an R-format instruction, or the immediate. Which one is chosen is another bit from the control unit.",
+   "zh": "如果要加一个常数，指令的低十八位就送到立即数单元。<bookmark mark='a'/>它做符号扩展：把最高位复制到上面的十四位，于是十八位的负一变成三十二位的负一。完全不用门，只是导线。<bookmark mark='b'/>算术逻辑单元前面的一个多路选择器选择第二个操作数：对 R 格式指令选寄存器，否则选立即数。选哪个，又是控制单元给出的一位。"
+  },
+  "b7fee177965f": {
+   "scene": "Datapath",
+   "en": "Loads and stores need the second memory, for data. <bookmark mark='a'/> For a load, the ALU adds the base register and the offset, and the sum is an address. The data memory reads the word there, and a second multiplexer, at the end, chooses what is written back: the ALU's result or the loaded word. <bookmark mark='b'/> A store uses the same address calculation, but sends the second register's value to the memory's data input, and tells the register file not to write. <bookmark mark='c'/> The load is the longest journey any instruction makes in this machine: through the instruction memory, the register file, the ALU, the data memory and the write-back multiplexer, all within one clock cycle. That path sets the clock for every instruction.",
+   "zh": "取数和存数需要第二个存储器，用于数据。<bookmark mark='a'/>对取数指令，算术逻辑单元把基址寄存器和偏移相加，和就是一个地址。数据存储器读出那里的字，末端的第二个多路选择器选择写回什么：算术逻辑单元的结果，还是取来的字。<bookmark mark='b'/>存数指令使用同样的地址计算，但把第二个寄存器的值送到存储器的数据输入，并告诉寄存器堆不要写。<bookmark mark='c'/>取数是这台机器里任何指令走过的最长旅程：经过指令存储器、寄存器堆、算术逻辑单元、数据存储器和写回多路选择器，全部在一个时钟周期之内。正是这条路径决定了每条指令的时钟。"
+  },
+  "b80898f4d9a3": {
+   "scene": "Datapath",
+   "en": "Last, the instructions that change the flow. <bookmark mark='a'/> A branch compares two registers in the ALU, by subtracting them and testing for zero, or comparing signs. <bookmark mark='b'/> Meanwhile a second adder computes the target: the program counter plus four times the offset in the instruction. <bookmark mark='c'/> If the condition holds, the multiplexer in front of the program counter takes the target instead of pc plus four. <bookmark mark='d'/> A jump-and-link always takes its target, and writes pc plus four into a register on the way, so that the code it jumps to can return: EDSAC's Wheeler jump, in hardware. Jump-and-link-register takes its target from the ALU instead, which is how a function returns.",
+   "zh": "最后是改变执行流程的指令。<bookmark mark='a'/>分支指令在算术逻辑单元里比较两个寄存器：相减后检测是否为零，或者比较符号。<bookmark mark='b'/>同时，第二个加法器计算目标：程序计数器加上四乘以指令中的偏移。<bookmark mark='c'/>如果条件成立，程序计数器前面的多路选择器就选目标，而不是 pc 加四。<bookmark mark='d'/>跳转并链接指令总是选目标，并在途中把 pc 加四写进一个寄存器，好让被跳到的代码能够返回：这就是硬件实现的 EDSAC 惠勒跳转。跳转并链接寄存器指令则从算术逻辑单元取得目标，函数就是这样返回的。"
+  },
+  "3c2328074965": {
+   "scene": "Datapath",
+   "en": "That is the whole datapath: about a dozen blocks, every one of them a circuit from an earlier part, with the control unit's dashed lines steering the multiplexers and the ALU. <bookmark mark='a'/> Built as a netlist in this series' library, it comes to a little over eight thousand gates and five hundred and twelve flip-flops: the program counter and fifteen registers of thirty-two bits. One instruction finishes in every clock cycle.",
+   "zh": "这就是整个数据通路：大约十几个模块，每一个都是前面某部分的电路，控制单元的虚线操纵着多路选择器和算术逻辑单元。<bookmark mark='a'/>在本系列的库中把它搭成网表，共有八千多个门和五百一十二个触发器：程序计数器，以及十五个三十二位的寄存器。每个时钟周期完成一条指令。"
+  },
+  "6d73ee4c421c": {
+   "scene": "Datapath",
+   "en": "It helps to watch one cycle in time. <bookmark mark='a'/> At the rising edge, the program counter and the registers load their new values, and everything downstream starts to change. <bookmark mark='b'/> The instruction word comes out of memory first, then the register file's outputs settle, then the ALU's result, then, for a load, the data from memory, and last of all the value to be written back. Before each one settles, the wires carry nonsense, glitches and half-finished sums, and nobody looks. <bookmark mark='c'/> At the next rising edge, the register file and the program counter capture what is on their inputs, and the cycle starts again. The only rule is the one from Part 5: the last row must settle before the next edge, with the setup time to spare. The next chapter opens the one block we have treated as a black box: the control unit.",
+   "zh": "看一个周期在时间上的展开会很有帮助。<bookmark mark='a'/>在上升沿，程序计数器和寄存器载入新值，下游的一切开始变化。<bookmark mark='b'/>最先从存储器出来的是指令字，然后寄存器堆的输出稳定下来，然后是算术逻辑单元的结果，对取数指令还有存储器的数据，最后是要写回的值。在各自稳定之前，导线上是无意义的东西，毛刺和算了一半的和，没人去看。<bookmark mark='c'/>在下一个上升沿，寄存器堆和程序计数器捕获它们输入上的值，周期重新开始。唯一的规则来自第5部分：最后一行必须在下一个时钟沿之前稳定，并留出建立时间。下一章打开我们一直当作黑盒的那个模块：控制单元。"
+  },
+  "ed4b646dbfcc": {
+   "scene": "Control",
+   "en": "Chapter five. The control unit.",
+   "zh": "第5章。控制单元。"
+  },
+  "5499ea72607b": {
+   "scene": "Control",
+   "en": "The datapath has about twenty control wires: whether to write a register, which input the ALU takes, which operation it does, whether to touch memory, what to write back, whether this is a branch. <bookmark mark='a'/> For each instruction, those wires take fixed values, so the control unit is a truth table with the six-bit opcode as its input and twenty outputs. <bookmark mark='b'/> Here it is, one row per instruction, a bright cell for every one. <bookmark mark='c'/> The load-word row, for example, asks for a register write, the immediate as the ALU's second operand, an addition, a memory read, and the loaded word on the write-back path. Every other opcode, thirty of the sixty-four, is illegal.",
+   "zh": "数据通路大约有二十根控制线：是否写寄存器，算术逻辑单元取哪个输入，做哪种运算，是否访问存储器，写回什么，是不是分支。<bookmark mark='a'/>对每条指令，这些线取固定的值，所以控制单元就是一张真值表，以六位操作码为输入，有二十个输出。<bookmark mark='b'/>这就是它，每条指令一行，每个为一的信号一个亮格。<bookmark mark='c'/>例如取字那一行，要求写寄存器、立即数作为算术逻辑单元的第二个操作数、做加法、读存储器，并在写回路径上放取来的字。其余的操作码，六十四个中的三十个，都是非法的。"
+  },
+  "42860b036fe7": {
+   "scene": "Control",
+   "en": "A truth table can be built in two ways, and Pebble's library builds both. <bookmark mark='a'/> The direct way gives every opcode its own detector, an AND of six literals, and makes each control signal the OR of the detectors where it is one. This is a programmable logic array, or a read-only memory: an AND plane and an OR plane, and changing the instruction set means changing which dots are connected. It costs about three hundred gates. <bookmark mark='b'/> The clever way minimizes each signal with Part 3's Quine–McCluskey method, using the thirty illegal opcodes as don't-cares, and shares the product terms between signals. Two hundred and five gates, a third fewer. <bookmark mark='c'/> Both versions of the processor run the same three hundred random programs, and end in exactly the same state.",
+   "zh": "一张真值表可以用两种方式搭建，Pebble 的库两种都搭了。<bookmark mark='a'/>直接的方式给每个操作码一个专属的检测器，即六个文字的与，再让每个控制信号成为它为一的那些检测器的或。这就是可编程逻辑阵列，或者只读存储器：一个与平面和一个或平面，改变指令集就是改变哪些点相连。它大约要三百个门。<bookmark mark='b'/>巧妙的方式用第3部分的 Quine–McCluskey 方法把每个信号最小化，把三十个非法操作码作为无关项，并让各信号共享乘积项。两百零五个门，少了三分之一。<bookmark mark='c'/>两个版本的处理器运行同样的三百个随机程序，最后的状态完全相同。"
+  },
+  "b0ac9b68ff79": {
+   "scene": "Control",
+   "en": "There is a third way, and for decades it was the usual one. <bookmark mark='a'/> In 1951 Maurice Wilkes, of EDSAC, proposed that control should itself be a program: a store of microinstructions, each a row of control signals plus the address of the next row, kept in a matrix of diodes. <bookmark mark='b'/> A simple instruction uses one row. A complicated one, a multiplication or a string copy, walks through several, one per clock cycle, just as a program walks through instructions. <bookmark mark='c'/> Microcode let IBM's System/360 of 1964 offer one instruction set on a whole family of machines, small to huge, most of them microcoded. Modern x86 processors still hard-wire the common instructions and microcode the rare complex ones, and the microcode can be patched after the chip is sold: some of the fixes for the Spectre attacks in 2018 shipped exactly this way. Pebble's instructions are all simple, so its whole control store would be one row each: thirty-four words of twenty bits.",
+   "zh": "还有第三种方式，几十年里它都是通常的做法。<bookmark mark='a'/>1951年，EDSAC 的莫里斯·威尔克斯提出，控制本身应该是一个程序：一个微指令的存储器，每条微指令是一行控制信号再加下一行的地址，保存在一个二极管矩阵里。<bookmark mark='b'/>简单的指令用一行。复杂的指令，比如乘法或字符串复制，要走过好几行，每个时钟周期一行，就像程序走过一条条指令。<bookmark mark='c'/>微码让 IBM 1964年的 System/360 能在一整个系列、从小到大的机器上提供同一套指令集，其中大多数是微码实现的。现代 x86 处理器仍然把常用指令做成硬连线，把少见的复杂指令做成微码，而且微码可以在芯片售出后打补丁：2018年针对幽灵攻击的部分修复正是这样发布的。Pebble 的指令都很简单，所以它整个控制存储器每条指令只需一行：三十四个二十位的字。"
+  },
+  "9caafc9cffc7": {
+   "scene": "Assembler",
+   "en": "Chapter six. The assembler.",
+   "zh": "第6章。汇编器。"
+  },
+  "b0a35c2cda2a": {
+   "scene": "Assembler",
+   "en": "The machine wants words like these. <bookmark mark='a'/> People want to write something like this: a short name for each operation, names for the registers, and, most importantly, names for places in the program, called labels, instead of addresses that change every time a line is added. <bookmark mark='b'/> A program that translates one into the other is an assembler. <bookmark mark='c'/> Kathleen Booth designed one of the first assembly notations in 1947, for the ARC computer at Birkbeck College, and EDSAC's initial orders of 1949 already translated letters into orders as they loaded the tape. Pebble's assembler, in the series' library, is a few hundred lines of Python.",
+   "zh": "机器要的是这样的字。<bookmark mark='a'/>人想写的则是这样的东西：每种操作一个简短的名字，寄存器有名字，最重要的是，程序中的位置有名字，叫作标号，而不是每加一行就会变的地址。<bookmark mark='b'/>把后者翻译成前者的程序就是汇编器。<bookmark mark='c'/>凯瑟琳·布斯1947年为伯贝克学院的 ARC 计算机设计了最早的汇编记法之一，EDSAC 1949年的初始指令也已经在装入纸带时把字母翻译成指令。Pebble 的汇编器在本系列的库中，是几百行 Python。"
+  },
+  "db7ff0df5e88": {
+   "scene": "Assembler",
+   "en": "Labels create a chicken-and-egg problem: a branch near the top of a program may name a label near the bottom, whose address is not known yet. So the assembler reads the program twice. <bookmark mark='a'/> The first pass encodes nothing. It walks down the lines with a counter, adding the size of each one: four bytes for most instructions, eight for li, which becomes two. <bookmark mark='b'/> Whenever it meets a label, it records the counter's value in a symbol table. Here, loop is at address sixteen.",
+   "zh": "标号带来一个先有鸡还是先有蛋的问题：程序开头附近的一条分支可能指向末尾附近的一个标号，而那个标号的地址还不知道。所以汇编器把程序读两遍。<bookmark mark='a'/>第一遍什么也不编码。它带着一个计数器逐行往下走，加上每一行的大小：大多数指令四个字节，li 八个字节，因为它会变成两条。<bookmark mark='b'/>每遇到一个标号，就把计数器的值记进符号表。这里，loop 在地址十六。"
+  },
+  "ddac7e18040f": {
+   "scene": "Assembler",
+   "en": "The second pass encodes. <bookmark mark='a'/> Each line becomes a word: look up the opcode, put each register number in its field, and place the constant. <bookmark mark='b'/> A branch to a label stores not the label's address but its distance from the branch, counted in instructions. The branch at twenty-four goes back to sixteen, so its offset is minus two. Because the distance, not the address, is stored, the same machine code works wherever in memory the program is loaded.",
+   "zh": "第二遍编码。<bookmark mark='a'/>每一行变成一个字：查出操作码，把每个寄存器号放进它的字段，再放好常数。<bookmark mark='b'/>指向标号的分支存的不是标号的地址，而是它与分支之间的距离，以指令为单位。地址二十四的分支跳回十六，所以偏移是负二。因为存的是距离而不是地址，同样的机器码无论装到存储器的哪里都能工作。"
+  },
+  "923666ac39b4": {
+   "scene": "Assembler",
+   "en": "Assemblers also accept instructions the machine does not have. <bookmark mark='a'/> Load-immediate of a big constant becomes two real instructions, lui for the top twenty-two bits and ori for the low ten. Move is an add of zero. Jump is a jump-and-link that writes its return address into the zero register, which throws it away. Branch-if-zero compares with the zero register. <bookmark mark='b'/> Call and return are jump-and-link and jump-to-register. Half of these exist only because register zero always reads zero, which is exactly why the architecture has one.",
+   "zh": "汇编器还接受机器并没有的指令。<bookmark mark='a'/>装入一个大常数的 li 变成两条真正的指令：lui 负责高二十二位，ori 负责低十位。mv 是加零。j 是把返回地址写进零寄存器的跳转并链接，返回地址就被扔掉了。为零则分支是与零寄存器比较。<bookmark mark='b'/>call 和 ret 是跳转并链接和跳转到寄存器。其中一半之所以存在，只是因为寄存器零总是读出零，这正是体系结构设置它的原因。"
+  },
+  "7cfebee7c399": {
+   "scene": "Assembler",
+   "en": "Real programs are written in many files. <bookmark mark='a'/> Each file is assembled on its own, into an object file: the machine code, plus a list of the labels it defines, plus holes where it uses a label defined somewhere else, like a call to a print routine in another file. <bookmark mark='b'/> A linker joins the object files into one image, decides where each piece goes, and fills in the holes. Branches and jumps need no help, because they store distances. But an absolute address, the kind la builds, must be patched once the linker knows where things landed: that patch is called a relocation. <bookmark mark='c'/> Finally a loader copies the image into memory and points the program counter at its first instruction. Pebble's loader is three lines of Python; EDSAC's was its initial orders, wired into the machine. Part 11 returns to linking, and Part 41 to building programs from thousands of files.",
+   "zh": "真实的程序写在许多文件里。<bookmark mark='a'/>每个文件单独汇编成一个目标文件：机器码，加上它定义的标号的列表，再加上它使用别处定义的标号时留下的空洞，比如调用另一个文件里的打印例程。<bookmark mark='b'/>链接器把目标文件合并成一个映像，决定每一块放在哪里，并填上空洞。分支和跳转不需要帮忙，因为它们存的是距离。但绝对地址，也就是 la 构造的那种，必须在链接器知道各部分落在哪里之后打上补丁：这个补丁叫重定位。<bookmark mark='c'/>最后，装入程序把映像复制进存储器，并让程序计数器指向第一条指令。Pebble 的装入程序是三行 Python；EDSAC 的是它的初始指令，固化在机器里。第11部分会回到链接，第41部分则讲如何由成千上万个文件构建程序。"
+  },
+  "cb188a1b430f": {
+   "scene": "First",
+   "en": "Chapter seven. First programs, gate by gate.",
+   "zh": "第7章。最初的程序，逐门运行。"
+  },
+  "77ada6816b87": {
+   "scene": "First",
+   "en": "The first program anyone writes for a new machine is a loop. <bookmark mark='a'/> This one adds the numbers from one to ten: a zero counts down from ten, a one accumulates the sum, and the branch jumps back until a zero reaches zero. <bookmark mark='b'/> Here it runs on the gate-level Pebble, the netlist itself, every one of its eight thousand gates evaluated in every clock cycle. The highlighted line is where the program counter points. <bookmark mark='c'/> Thirty-five cycles later the machine halts with fifty-five in a one.",
+   "zh": "人们为一台新机器写的第一个程序总是一个循环。<bookmark mark='a'/>这个程序把一到十加起来：a0 从十倒数，a1 累加和，分支不断跳回，直到 a0 变成零。<bookmark mark='b'/>它运行在门级 Pebble 上，也就是网表本身，每个时钟周期都计算全部八千个门。高亮的行就是程序计数器所指之处。<bookmark mark='c'/>三十五个周期后，机器停下，a1 中是五十五。"
+  },
+  "a71c3a28e189": {
+   "scene": "First",
+   "en": "Now Euclid's algorithm from Part 1, the oldest algorithm in this series, on a machine built from NAND gates. <bookmark mark='a'/> The program subtracts the smaller number from the larger until one of them is zero, swapping them when necessary. <bookmark mark='b'/> Watch the two registers, cycle by cycle. A zero starts at one thousand and seventy-one and drops by four hundred and sixty-two, twice; then the registers swap, and the remainders shrink, a hundred and forty-seven, then twenty-one. <bookmark mark='c'/> After sixty cycles the machine halts with twenty-one in a zero, the greatest common divisor, exactly as Euclid's pebbles found it.",
+   "zh": "现在是第1部分的欧几里得算法，本系列中最古老的算法，运行在一台由与非门搭成的机器上。<bookmark mark='a'/>程序从大数中减去小数，直到其中一个为零，必要时交换两者。<bookmark mark='b'/>逐个周期看这两个寄存器。a0 从一千零七十一开始，减去四百六十二，减了两次；然后两个寄存器交换，余数不断缩小，一百四十七，然后二十一。<bookmark mark='c'/>六十个周期后，机器停下，a0 中是二十一，即最大公约数，和欧几里得的石子算出的完全一样。"
+  },
+  "c48ab10ddfdc": {
+   "scene": "First",
+   "en": "Two programs are not a proof. To trust the gate-level machine, the series' library tests it against an independent model. <bookmark mark='a'/> The emulator is a short Python program that states what each instruction means, with no circuits at all. <bookmark mark='b'/> A generator writes random programs, every kind of instruction, random registers and constants, branches and jumps, loads and stores of words and bytes. <bookmark mark='c'/> Both machines run three hundred of them, with both versions of the control unit. Every register, every byte of memory and the number of steps agree, every time. <bookmark mark='d'/> To make that affordable, the netlist is compiled to C, one line per gate, so the gate-level Pebble runs a few thousand cycles a second: slow, but fast enough to run real programs.",
+   "zh": "两个程序不是证明。为了信任门级机器，本系列的库拿一个独立的模型来检验它。<bookmark mark='a'/>模拟器是一个简短的 Python 程序，说明每条指令的含义，完全不涉及电路。<bookmark mark='b'/>一个生成器写出随机程序，包含各种指令、随机的寄存器和常数、分支和跳转、字和字节的取数与存数。<bookmark mark='c'/>两台机器运行其中三百个，用两个版本的控制单元。每个寄存器、存储器的每个字节以及步数，每一次都一致。<bookmark mark='d'/>为了负担得起这些运行，网表被编译成 C，每个门一行，于是门级 Pebble 每秒能跑几千个周期：很慢，但足以运行真实的程序。"
+  },
+  "9481111e6ce5": {
+   "scene": "Cost",
+   "en": "Chapter eight. What a program costs.",
+   "zh": "第8章。一个程序的代价。"
+  },
+  "4ef7dd72cb38": {
+   "scene": "Cost",
+   "en": "How long does a program take? Computer architects call the answer the iron law of performance. <bookmark mark='a'/> Time is the number of instructions executed, times the average number of clock cycles per instruction, times the length of a cycle. <bookmark mark='b'/> The three factors belong to different people. The instruction count belongs to the algorithm and the compiler. Cycles per instruction belong to how the processor is organized. The cycle time belongs to the circuits. <bookmark mark='c'/> Our single-cycle Pebble makes the middle factor exactly one: every instruction takes one cycle. The price is that the cycle must be long enough for the slowest instruction of all.",
+   "zh": "一个程序要运行多久？计算机体系结构的研究者把答案称为性能铁律。<bookmark mark='a'/>时间等于执行的指令数，乘以每条指令的平均时钟周期数，再乘以一个周期的长度。<bookmark mark='b'/>这三个因子分属不同的人。指令数属于算法和编译器。每条指令的周期数属于处理器的组织方式。周期长度属于电路。<bookmark mark='c'/>我们的单周期 Pebble 让中间那个因子恰好为一：每条指令一个周期。代价是这个周期必须长到足以容纳最慢的那条指令。"
+  },
+  "ef9812686c1d": {
+   "scene": "Cost",
+   "en": "The slowest instruction is the load. <bookmark mark='a'/> In one cycle it must fetch itself from memory, be decoded, read a register, add the offset in the ALU, read the data memory, and write the result back. <bookmark mark='b'/> The series' library measures the logic part of that path in the netlist itself. The deepest chain of gates is fifty-nine long; simulating thousands of random instructions with real gate delays, the outputs settle within fifty-six. At ten picoseconds a gate, plus the flip-flop overheads of Part 5, that is a cycle of about six hundred and thirty picoseconds. <bookmark mark='c'/> But the two memory accesses are in the cycle too, and a real memory takes around a nanosecond. So the single-cycle machine runs well under a gigahertz, and an add, which needs neither memory access, waits just as long as a load. Part 7 fixes that by cutting the path into pieces.",
+   "zh": "最慢的指令是取数。<bookmark mark='a'/>在一个周期里，它必须从存储器取出自己，被译码，读一个寄存器，在算术逻辑单元里加上偏移，读数据存储器，再把结果写回。<bookmark mark='b'/>本系列的库在网表本身中测量了这条路径的逻辑部分。最深的门链有五十九级；用真实的门延迟模拟成千上万条随机指令，输出在五十六个门延迟之内稳定。按每个门十皮秒，再加上第5部分讲的触发器开销，周期大约是六百三十皮秒。<bookmark mark='c'/>但两次存储器访问也在这个周期里，而真实的存储器大约要一纳秒。所以单周期机器的频率远低于一吉赫，而一条完全不访问存储器的加法，也要和取数等得一样久。第7部分把这条路径切成几段来解决这个问题。"
+  },
+  "95fcfeebfb68": {
+   "scene": "Cost",
+   "en": "Most real work is a loop over data, so it is worth costing one exactly. <bookmark mark='a'/> This loop adds a hundred numbers stored in memory. A pointer register walks along the array a word at a time, and a counter counts down. <bookmark mark='b'/> Each trip runs five instructions: a load and an add do the work, and three more move the pointer, decrement the counter and branch back. With six instructions to start and a halt, that is five hundred and seven for a hundred elements, and the gate-level machine agrees. <bookmark mark='c'/> Three in every five instructions are bookkeeping. A compiler can unroll the loop, handling four elements per trip so the bookkeeping is paid a quarter as often, which is one of the optimizations Part 13 builds.",
+   "zh": "大多数真正的工作都是对数据的循环，所以值得精确地算一算一个循环的代价。<bookmark mark='a'/>这个循环把存储器里的一百个数加起来。一个指针寄存器沿着数组一次走一个字，一个计数器倒数。<bookmark mark='b'/>每一趟运行五条指令：一次取数和一次加法做实事，另外三条移动指针、计数器减一并跳回。开头六条指令，最后一条停机，一百个元素共五百零七条，门级机器给出同样的结果。<bookmark mark='c'/>每五条指令中有三条是簿记。编译器可以把循环展开，每一趟处理四个元素，于是簿记的开销只需付四分之一，这是第13部分要实现的优化之一。"
+  },
+  "b6b69282b967": {
+   "scene": "Cost",
+   "en": "Which instructions does a real program actually run? <bookmark mark='a'/> Here is the Job, version zero, counting the words of the first chapter of Pride and Prejudice: eight hundred thousand instructions, sorted by kind. <bookmark mark='b'/> A quarter are add-immediates, mostly stepping pointers and counters. Then branches, loads, and jumps back to the top of a loop. Arithmetic beyond addition hardly appears. <bookmark mark='c'/> This is the evidence behind the design rule to make the common case fast: real programs mostly move data, compare it and branch, and that is what the hardware should do quickly.",
+   "zh": "一个真实的程序究竟执行哪些指令？<bookmark mark='a'/>这是任务第0版在统计《傲慢与偏见》第一章的词：八十万条指令，按种类排列。<bookmark mark='b'/>四分之一是加立即数，大多用来移动指针和计数器。然后是分支、取数，以及跳回循环开头的跳转。加法以外的算术几乎没有出现。<bookmark mark='c'/>这正是“让常见情况变快”这条设计规则背后的证据：真实程序大多在搬运数据、比较它、做分支，而硬件应该把这些做得很快。"
+  },
+  "fe4447701c13": {
+   "scene": "Io",
+   "en": "Chapter nine. Talking to the world.",
+   "zh": "第9章。与外界对话。"
+  },
+  "0debd7acc240": {
+   "scene": "Io",
+   "en": "A computer that cannot print is not much use. Pebble talks to the world without any special instructions at all. <bookmark mark='a'/> Its addresses run from zero to four billion, but only the first megabyte here is memory. <bookmark mark='b'/> The top of the address space belongs to devices. Store a byte to this address, and it appears on the console. Load from this one, and you get the next byte of input from the tape, or minus one when it runs out. This one counts the instructions run so far. <bookmark mark='c'/> This is memory-mapped input and output. The same loads and stores that reach memory reach the devices, and the address alone decides who answers. DEC's PDP-11 made it famous in 1970, and today every microcontroller works this way: switching on an LED is a store to the right address.",
+   "zh": "一台不能打印的计算机没多大用处。Pebble 不用任何特殊指令就能与外界对话。<bookmark mark='a'/>它的地址从零到四十亿，但这里只有最前面的一兆字节是存储器。<bookmark mark='b'/>地址空间的顶端属于设备。向这个地址存一个字节，它就出现在控制台上。从这个地址取数，就得到纸带上的下一个输入字节，读完时得到负一。这个地址统计到目前为止执行的指令数。<bookmark mark='c'/>这就是内存映射的输入输出。访问存储器的同样那些取数和存数也能访问设备，由地址单独决定谁来回答。DEC 的 PDP-11 在1970年让这种做法出了名，今天每一块微控制器都这样工作：点亮一个发光二极管，就是向正确的地址存一个数。"
+  },
+  "fe9240575327": {
+   "scene": "Io",
+   "en": "So printing a message is a loop of loads and stores. <bookmark mark='a'/> A pointer walks along the string in memory. Each trip loads a byte, stops if it is the zero that ends the string, and otherwise stores it to the console's address, then moves on. <bookmark mark='b'/> On the gate-level machine, the letters appear one at a time, five instructions apart, a hundred and two instructions in all.",
+   "zh": "所以打印一条消息就是一个取数和存数的循环。<bookmark mark='a'/>一个指针沿着存储器中的字符串前进。每一趟取一个字节，如果是结束字符串的零就停下，否则把它存到控制台的地址，然后继续。<bookmark mark='b'/>在门级机器上，字母一个接一个出现，相隔五条指令，总共一百零二条指令。"
+  },
+  "50f0f07b0dcf": {
+   "scene": "Io",
+   "en": "Reading works the same way. <bookmark mark='a'/> To get the next character, the program loads from the tape's address, and checks for minus one, the end. The Job reads all of its input like this. <bookmark mark='b'/> Asking a device over and over is called polling. It is perfect for a tape that always has the next byte ready, and wasteful for a keyboard, where the program would spin for minutes between keys. <bookmark mark='c'/> The alternative is to let the device interrupt the processor when something happens, which chapter thirteen previews. And device addresses bring a subtlety: a cache, in Part 9, must never keep a copy of one, because reading the tape twice must give two different bytes.",
+   "zh": "读入也是同样的方式。<bookmark mark='a'/>要得到下一个字符，程序从纸带的地址取数，并检查是否为负一，即结尾。任务就是这样读入全部输入的。<bookmark mark='b'/>一遍又一遍地询问设备叫作轮询。对总是备好下一个字节的纸带，它很完美；对键盘则很浪费，程序要在两次按键之间空转好几分钟。<bookmark mark='c'/>另一种办法是让设备在有事发生时打断处理器，第13章会先介绍一下。设备地址还带来一个微妙之处：第9部分的缓存绝不能保留它的副本，因为读两次纸带必须得到两个不同的字节。"
+  },
+  "5ccac76c20ca": {
+   "scene": "Job",
+   "en": "Chapter ten. The Job, version zero.",
+   "zh": "第10章。任务，第0版。"
+  },
+  "6510082ec2cc": {
+   "scene": "Job",
+   "en": "Now the Job, the task that travels through the whole series: count the words of thirty novels and list the twenty most common. Version zero does it in the most direct way there is. <bookmark mark='a'/> Read the text one character at a time from the tape, folding capitals to lower case, and collect letters into a word. <bookmark mark='b'/> At the end of each word, look it up in a table by comparing it with every entry in turn, from the top. If it is there, add one to its count. If not, append it at the bottom. <bookmark mark='c'/> At the end, find the largest count, print that word, cross it off, and repeat twenty times. No sorting, no hashing, nothing clever: Parts 16 and 17 will supply the clever versions.",
+   "zh": "现在来看任务，那个贯穿整个系列的工作：统计三十本小说中的词，列出最常见的二十个。第0版用最直接的方式来做。<bookmark mark='a'/>从纸带上一次读一个字符，把大写字母转成小写，把字母收集成一个词。<bookmark mark='b'/>每个词结束时，在一张表中查找它：从表头开始，依次与每个条目比较。如果在表里，就把它的计数加一；如果不在，就把它添到表尾。<bookmark mark='c'/>最后，找出最大的计数，打印那个词，把它划掉，重复二十次。不排序，不散列，没有任何巧妙之处：第16和第17部分会给出巧妙的版本。"
+  },
+  "27bf03c0df0d": {
+   "scene": "Job",
+   "en": "Here is the heart of it in Pebble assembly. <bookmark mark='a'/> For each table entry, the loop checks whether it has reached the end, loads the entry's length, and if the lengths differ, steps to the next entry. Six instructions per entry. <bookmark mark='b'/> Only entries of the right length go on to compare letters. The whole program, reading, the table, and printing the counts in decimal by repeated subtraction, since Pebble has no divide instruction yet, is about a hundred lines.",
+   "zh": "这是用 Pebble 汇编写的核心部分。<bookmark mark='a'/>对每个表项，循环检查是否已到表尾，取出这个条目的长度，如果长度不同，就跳到下一个条目。每个条目六条指令。<bookmark mark='b'/>只有长度相同的条目才继续比较字母。整个程序，包括读入、表，以及用反复相减以十进制打印计数，因为 Pebble 还没有除法指令，大约一百行。"
+  },
+  "69b5ffc3a44d": {
+   "scene": "Job",
+   "en": "Time to run it. <bookmark mark='a'/> The opening paragraph of Pride and Prejudice, six hundred and thirteen bytes, on the gate-level machine: fifty-three thousand six hundred and sixty-five clock cycles, half a minute of simulation, every gate in every cycle. <bookmark mark='b'/> The whole first chapter is more than the gates can comfortably do, so it runs on the emulator: four thousand seven hundred bytes, eight hundred and twenty-seven thousand instructions. On the paragraph, the two machines print exactly the same thing in exactly the same number of steps. <bookmark mark='c'/> And here is what Pebble prints for chapter one: you, of, to, a, the. It is a chapter of conversation between Mr and Mrs Bennet.",
+   "zh": "该运行它了。<bookmark mark='a'/>《傲慢与偏见》的开头一段，六百一十三个字节，在门级机器上：五万三千六百六十五个时钟周期，半分钟的模拟，每个周期计算每一个门。<bookmark mark='b'/>整个第一章对门级机器来说太多了，所以在模拟器上运行：四千七百个字节，八十二万七千条指令。在那一段上，两台机器打印出完全相同的内容，步数也完全相同。<bookmark mark='c'/>这就是 Pebble 为第一章打印的结果：you、of、to、a、the。那一章是班纳特先生和班纳特太太之间的对话。"
+  },
+  "ed27fc9a9b2a": {
+   "scene": "Job",
+   "en": "Thirty novels on the emulator would take months. But we do not need to run them to know exactly how long Pebble would take. <bookmark mark='a'/> Every path through the program costs a fixed number of instructions: each byte read costs nine, each letter three more, each table entry scanned six, each entry of the same length nine more, each matching letter eight. So the total is a sum over events in the text, which Python can count directly. <bookmark mark='b'/> The formula is not an estimate. On twenty random passages from the novels, it matches the emulator's instruction count exactly, every one, to the last instruction.",
+   "zh": "在模拟器上跑三十本小说要好几个月。但我们不必运行它们，就能精确地知道 Pebble 要花多久。<bookmark mark='a'/>程序中的每条路径都花固定数量的指令：每读一个字节九条，每个字母再加三条，每扫描一个表项六条，每个长度相同的条目再加九条，每个匹配的字母八条。所以总数是对文本中各种事件的求和，Python 可以直接数出来。<bookmark mark='b'/>这个公式不是估计。在从小说中随机抽取的二十个段落上，它与模拟器的指令数完全吻合，每一个都是，精确到最后一条指令。"
+  },
+  "4cdfb15cfa76": {
+   "scene": "Job",
+   "en": "So here is version zero on all thirty novels. <bookmark mark='a'/> Twenty-five million bytes; four and a half million words, of fifty-eight thousand different kinds. Because the table is searched from the top every time, the program scans fifteen billion table entries. <bookmark mark='b'/> In total, a hundred and seven billion Pebble cycles, more than four thousand per byte of text, and more than ninety-nine percent of them inside the linear search. <bookmark mark='c'/> On the Z3's relays, that would take six centuries. At ENIAC's speed, eight months. At a gigahertz, a hundred and seven seconds. <bookmark mark='d'/> That is the first row of the ledger. Every later row will say what a better machine, or a better idea, buys; and the numbers on this screen already hint which will matter more.",
+   "zh": "所以，这就是第0版在全部三十本小说上的表现。<bookmark mark='a'/>两千五百万个字节；四百五十万个词，共五万八千种不同的词。因为每次都从表头开始查找，程序扫描了一百五十亿个表项。<bookmark mark='b'/>总共一千零七十亿个 Pebble 周期，每个文本字节四千多个，其中百分之九十九以上花在线性查找里。<bookmark mark='c'/>在 Z3 的继电器上，这要六个世纪。以 ENIAC 的速度，八个月。在一吉赫上，一百零七秒。<bookmark mark='d'/>这就是账本的第一行。以后的每一行都会说明，一台更好的机器或者一个更好的主意能换来什么；而这屏幕上的数字已经暗示了哪个更重要。"
+  },
+  "3997b8e0af76": {
+   "scene": "Universal",
+   "en": "Chapter eleven. Pebble and the Turing machine.",
+   "zh": "第11章。Pebble 与图灵机。"
+  },
+  "eb704d315a64": {
+   "scene": "Universal",
+   "en": "Part 1 claimed that any reasonable computer can do exactly what a Turing machine can do, no more and no less. Pebble is a reasonable computer, so let us check both directions. <bookmark mark='a'/> First, Pebble can run a Turing machine. The tape is a row of bytes in memory, the head is a pointer, and the machine's rules are a table of words. <bookmark mark='b'/> The interpreter is a loop of fifteen instructions: load the symbol under the head, look up the rule for this state and symbol, write, move the pointer left or right, and change state. <bookmark mark='c'/> Fed the three-state busy beaver from Part 1, it stops after twenty-one steps with five ones on the tape, exactly as before, on the emulator and on the gates alike. The four-state champion takes a hundred and seven steps and leaves thirteen.",
+   "zh": "第1部分断言，任何合理的计算机能做的恰好就是图灵机能做的，不多也不少。Pebble 是一台合理的计算机，所以我们来检验两个方向。<bookmark mark='a'/>首先，Pebble 能运行图灵机。纸带是存储器中的一排字节，读写头是一个指针，机器的规则是一张由字组成的表。<bookmark mark='b'/>解释器是一个大约十五条指令的循环：取出读写头下的符号，查出这个状态和符号对应的规则，写入，把指针左移或右移，并改变状态。<bookmark mark='c'/>喂给它第1部分的三状态忙碌海狸，它在二十一步后停下，纸带上有五个一，和以前完全一样，在模拟器上和门级机器上都是如此。四状态的冠军走一百零七步，留下十三个一。"
+  },
+  "8d539f59903d": {
+   "scene": "Universal",
+   "en": "The other direction is an argument rather than a demonstration, but it is short. <bookmark mark='a'/> Write Pebble's entire state on a Turing machine's tape: the program counter, the fifteen registers and all of memory, in binary. <bookmark mark='b'/> To run one Pebble instruction, the Turing machine walks the tape to find the word the program counter points to, comparing addresses bit by bit. Decoding it is a finite table, which a finite set of states can hold. Adding, comparing and copying words are the kind of machines Part 1 built, like the binary adder. So each Pebble instruction becomes a long but finite run of Turing-machine steps. <bookmark mark='c'/> Each can imitate the other. They compute exactly the same functions; the difference is only speed, and that Pebble's memory is finite. This is the Church–Turing thesis, checked on a machine we built ourselves, and it closes the loop that Part 1 opened.",
+   "zh": "另一个方向是一个论证而不是演示，但它很短。<bookmark mark='a'/>把 Pebble 的整个状态写在图灵机的纸带上：程序计数器、十五个寄存器以及全部存储器，用二进制。<bookmark mark='b'/>为了运行一条 Pebble 指令，图灵机沿纸带走，找到程序计数器所指的那个字，逐位比较地址。译码是一张有限的表，有限个状态就能装下。字的加法、比较和复制，正是第1部分搭建过的那类机器，比如二进制加法器。所以每条 Pebble 指令都变成一段很长但有限的图灵机步骤。<bookmark mark='c'/>两者都能模仿对方。它们计算的函数完全相同；差别只在速度，以及 Pebble 的存储器是有限的。这就是丘奇–图灵论题，在一台我们亲手搭建的机器上检验过，它闭合了第1部分开启的那个环。"
+  },
+  "40b9cfe7dedb": {
+   "scene": "Universal",
+   "en": "Universality has a very practical face: emulation. In this part, the same Pebble program has run on three different machines. <bookmark mark='a'/> The gate-level netlist, every gate computed in C, manages about two thousand instructions a second. The Python emulator, which just follows the instruction set's rules, runs almost a million. A real silicon Pebble, at the clock rate of problem 3, would run hundreds of millions. <bookmark mark='b'/> They print the same output in the same number of steps, every time. That is how QEMU runs ARM programs on an x86 laptop, and how a phone runs games written for consoles of the 1980s. <bookmark mark='c'/> Each layer of simulation costs a factor of hundreds in speed, and nothing in what can be computed.",
+   "zh": "通用性有一张非常实际的面孔：模拟。在这一部分里，同一个 Pebble 程序已经在三台不同的机器上运行过。<bookmark mark='a'/>门级网表，每个门都在 C 中计算，每秒大约两千条指令。Python 模拟器只是按指令集的规则执行，每秒将近一百万条。一台真正的硅片 Pebble，以习题3的时钟频率，每秒能跑好几亿条。<bookmark mark='b'/>它们打印出相同的输出，步数也相同，每一次都是。QEMU 就是这样在 x86 笔记本上运行 ARM 程序的，手机也是这样运行为20世纪80年代游戏机写的游戏的。<bookmark mark='c'/>每多一层模拟，速度就要付出几百倍的代价，而能计算什么却丝毫不变。"
+  },
+  "4dc5e42ef9fb": {
+   "scene": "SelfMod",
+   "en": "Chapter twelve. Code is data.",
+   "zh": "第12章。代码就是数据。"
+  },
+  "2d2fab33b2f4": {
+   "scene": "SelfMod",
+   "en": "Because instructions are data, a program can change itself, and early programmers did it all the time. <bookmark mark='a'/> EDSAC had no way to say load the next element of an array: an instruction's address was fixed in the instruction. So to walk through an array, a program added one to the address inside its own load instruction, each time round the loop. <bookmark mark='b'/> Here is that trick on Pebble. The load reads the element at offset zero. Then the program loads the load instruction itself, as an ordinary word, adds four to it, which adds four to its offset field, and stores it back. <bookmark mark='c'/> Next time round, the same instruction reads the next element. Eight trips later the sum is thirty-one, on the emulator and on the gates.",
+   "zh": "因为指令就是数据，程序可以改变自己，早期的程序员一直这么做。<bookmark mark='a'/>EDSAC 没有办法表达“取数组的下一个元素”：指令的地址固定在指令里。所以要遍历一个数组，程序每绕一圈，就给自己那条取数指令里的地址加一。<bookmark mark='b'/>这是 Pebble 上的同一个技巧。取数指令读出偏移为零的元素。然后程序把这条取数指令本身当作普通的字取出来，加上四，也就是给它的偏移字段加四，再存回去。<bookmark mark='c'/>下一圈，同一条指令就读出下一个元素。八趟之后和是三十一，在模拟器上和门级机器上都是。"
+  },
+  "fe59fc8b8e5b": {
+   "scene": "SelfMod",
+   "en": "Self-modifying code has almost disappeared, for three reasons. <bookmark mark='a'/> The first was invented in 1949 at Manchester: the B-lines, the first index registers, which add a register to an instruction's address. Pebble's loads work this way, base plus offset, so the trick is unnecessary. <bookmark mark='b'/> The second is speed. Pipelined processors and caches fetch instructions long before they run, so a rewritten instruction may already be on its way in its old form. <bookmark mark='c'/> The third is security. If data can turn into code, then an attacker who can write data can run code, and that is how a great many attacks work. So modern systems mark memory either writable or executable, never both: write xor execute, which Part 55 returns to. <bookmark mark='d'/> And yet the idea lives on, carefully fenced. A JavaScript engine compiles hot code to machine code while your page runs, writes it into memory as data, and only then flips that memory to executable. Code is data, still.",
+   "zh": "自修改代码几乎已经消失，原因有三。<bookmark mark='a'/>第一个原因在1949年的曼彻斯特被发明出来：B 线，最早的变址寄存器，它把一个寄存器加到指令的地址上。Pebble 的取数就是这样工作的，基址加偏移，所以这个技巧没有必要了。<bookmark mark='b'/>第二个原因是速度。流水线处理器和缓存会在指令执行之前很久就把它们取来，所以一条被改写的指令可能已经以旧的形式在路上了。<bookmark mark='c'/>第三个原因是安全。如果数据能变成代码，那么能写数据的攻击者就能运行代码，大量攻击正是这样得逞的。所以现代系统把存储器标为可写或可执行，绝不兼得：写异或执行，第55部分会回到这里。<bookmark mark='d'/>然而这个想法仍然活着，只是被小心地围了起来。JavaScript 引擎在网页运行时把热点代码编译成机器码，作为数据写进存储器，然后才把那块存储器改为可执行。代码依然是数据。"
+  },
+  "4d0d319ec88d": {
+   "scene": "Interrupts",
+   "en": "Chapter thirteen. When the world interrupts.",
+   "zh": "第13章。当外界打断时。"
+  },
+  "407a87318d09": {
+   "scene": "Interrupts",
+   "en": "Polling asks a device again and again whether anything has happened. <bookmark mark='a'/> For a keyboard, that means checking thousands of times for every key, and doing nothing useful in between. <bookmark mark='b'/> The alternative turns it round. The processor gets on with its work, and when the key is pressed, the device raises a signal. At the end of the instruction it is running, the processor saves the program counter, jumps to a piece of code called a handler, deals with the key, and returns to exactly where it was, as though nothing had happened. <bookmark mark='c'/> The idea appeared in the mid-1950s, first in the DYSEAC of 1954, and it changed what computers could be: without interrupts there is no operating system juggling many programs, which is Part 31's subject.",
+   "zh": "轮询一遍又一遍地询问设备是否发生了什么。<bookmark mark='a'/>对键盘来说，这意味着每按一个键都要检查成千上万次，其间什么有用的事也没做。<bookmark mark='b'/>另一种办法把它倒过来。处理器继续做它的工作，键被按下时，设备发出一个信号。在正在执行的那条指令结束时，处理器保存程序计数器，跳到一段叫作处理程序的代码，处理这个按键，然后回到原来的地方，就好像什么都没发生过。<bookmark mark='c'/>这个想法出现在20世纪50年代中期，最早是1954年的 DYSEAC，它改变了计算机可以成为的样子：没有中断，就没有同时照管许多程序的操作系统，那是第31部分的主题。"
+  },
+  "c34651c1efbc": {
+   "scene": "Interrupts",
+   "en": "What does the hardware have to do when an interrupt arrives? <bookmark mark='a'/> Finish the instruction it is running. Copy the program counter into a special register, the exception program counter, and record the cause in another. Load the program counter with the address of the handler. The handler saves any registers it is going to use, does its work, restores them, and runs a return-from-exception instruction that puts the saved program counter back. <bookmark mark='b'/> Pebble's instruction set already reserves the opcodes for this, ready for Part 31. <bookmark mark='c'/> The subtle requirement is that the interrupt be precise: every instruction before the saved point has completely finished, and none after it has started, so the program can resume as if nothing happened. On a machine that runs one instruction at a time this is free. On a pipeline with five instructions in flight, or an out-of-order core with a hundred, it is one of the hardest things to get right.",
+   "zh": "中断到来时，硬件必须做什么？<bookmark mark='a'/>完成正在执行的指令。把程序计数器复制到一个专门的寄存器，即异常程序计数器，并把原因记在另一个寄存器里。把处理程序的地址装入程序计数器。处理程序保存它要用到的寄存器，完成工作，恢复它们，再执行一条从异常返回的指令，把保存的程序计数器放回去。<bookmark mark='b'/>Pebble 的指令集已经为此预留了操作码，为第31部分做好了准备。<bookmark mark='c'/>微妙的要求是中断必须是精确的：保存点之前的每条指令都已完全结束，之后的指令一条都没有开始，这样程序才能像什么都没发生过一样继续。在一次只执行一条指令的机器上，这是免费的。在有五条指令同时在途的流水线上，或者有一百条指令的乱序核心上，这是最难做对的事情之一。"
+  },
+  "0dc5c943b0c4": {
+   "scene": "Interrupts",
+   "en": "The same mechanism handles events that come from inside. <bookmark mark='a'/> An instruction the machine does not understand: Pebble's control unit already raises a signal for that, and today the machine simply stops. A division by zero, once Part 7 adds a divider. <bookmark mark='b'/> A load from memory that has been moved to disk, which the operating system quietly fetches before re-running the load. And a system call, a deliberate interrupt by which a program asks the operating system to do something on its behalf. <bookmark mark='c'/> These are called exceptions or traps, and they are how an operating system takes control. Until Part 31, Pebble has none to return to, so it stops.",
+   "zh": "同样的机制也处理来自内部的事件。<bookmark mark='a'/>一条机器不认识的指令：Pebble 的控制单元已经为此发出信号，如今机器只是停下。一次除以零，等第7部分加上除法器之后。<bookmark mark='b'/>一次从已被移到磁盘上的存储器取数，操作系统会悄悄地把它取回来，再重新执行那条取数指令。还有系统调用，一种有意的中断，程序借此请求操作系统替它做某件事。<bookmark mark='c'/>这些叫作异常或陷阱，操作系统就是靠它们取得控制权的。在第31部分之前，Pebble 没有可以返回的操作系统，所以它就停下。"
+  },
+  "63366bac3c7f": {
+   "scene": "Counted",
+   "en": "Chapter fourteen. The whole machine, counted.",
+   "zh": "第14章。整台机器，清点一遍。"
+  },
+  "b264bbd8a3f9": {
+   "scene": "Counted",
+   "en": "Now count the whole machine. <bookmark mark='a'/> The biggest block is not the ALU. It is the register file's two read ports: thirty-two-bit multiplexer trees choosing among sixteen registers, three and a half thousand gates. Next are the multiplexers that write a register or keep its value, then the ALU itself, the two adders and multiplexers that choose the next program counter, and finally the control unit, a few hundred gates, and the immediates, almost nothing. <bookmark mark='b'/> Eight thousand two hundred and twenty-four gates and five hundred and twelve flip-flops. Most of a processor, it turns out, is choosing and moving data, not computing on it.",
+   "zh": "现在来清点整台机器。<bookmark mark='a'/>最大的模块不是算术逻辑单元，而是寄存器堆的两个读端口：在十六个寄存器中做选择的三十二位多路选择器树，三千五百个门。其次是写寄存器或保持原值的多路选择器，然后是算术逻辑单元本身，选择下一个程序计数器的两个加法器和多路选择器，最后是控制单元，几百个门，以及立即数，几乎不占什么。<bookmark mark='b'/>八千二百二十四个门，五百一十二个触发器。事实证明，处理器的大部分是在选择和搬运数据，而不是在对数据做计算。"
+  },
+  "7252fd365ddd": {
+   "scene": "Counted",
+   "en": "How does that compare with real chips? <bookmark mark='a'/> Built in CMOS, with four transistors to each two-input NAND and about two dozen to each flip-flop, Pebble would need about ninety thousand transistors. <bookmark mark='b'/> The 6502, the processor of the Apple II and, in a variant, the Commodore 64, had three and a half thousand, because it was eight bits wide and squeezed by brilliant hand design. Intel's 8086 had twenty-nine thousand, and the 386, the first thirty-two-bit x86, two hundred and seventy-five thousand. <bookmark mark='c'/> A modern laptop chip has sixteen billion, a hundred and eighty thousand Pebbles, and most of them are caches, graphics, and the machinery of the next three parts, which spends transistors lavishly to run one program faster.",
+   "zh": "这和真实的芯片比起来怎么样？<bookmark mark='a'/>用 CMOS 搭建，每个两输入与非门四个晶体管，每个触发器大约二十四个，Pebble 需要大约九万个晶体管。<bookmark mark='b'/>6502，Apple II 的处理器，它的一个变体也用在 Commodore 64 上，只有三千五百个，因为它只有八位宽，而且经过了精妙的手工设计。英特尔的 8086 有两万九千个，386，第一款三十二位 x86，有二十七万五千个。<bookmark mark='c'/>一块现代笔记本芯片有一百六十亿个，相当于十八万个 Pebble，其中大部分是缓存、图形处理器，以及接下来三个部分要讲的机制，它们不惜花费大量晶体管，只为让一个程序跑得更快。"
+  },
+  "051c7ad2ca93": {
+   "scene": "Counted",
+   "en": "Pebble is a complete computer, but a modest one, and the next acts add what real processors have. <bookmark mark='a'/> Pipelines and then out-of-order execution, to work on many instructions at once. Multiplication, division and floating point, from Part 4's circuits. <bookmark mark='b'/> Caches, so that most memory accesses never leave the chip. Several cores, and the surprisingly deep problem of letting them share memory. And privilege levels and virtual memory, so that an operating system can keep programs from trampling each other. <bookmark mark='c'/> Each of these keeps the contract of the instruction set. The Job's program will not change for the next three parts; only the machine under it will.",
+   "zh": "Pebble 是一台完整的计算机，但很朴素，接下来的几幕会加上真实处理器拥有的东西。<bookmark mark='a'/>流水线，然后是乱序执行，同时处理许多条指令。乘法、除法和浮点，来自第4部分的电路。<bookmark mark='b'/>缓存，让大多数存储器访问根本不离开芯片。多个核心，以及让它们共享存储器这个出人意料的深刻问题。还有特权级和虚拟内存，让操作系统能防止程序互相践踏。<bookmark mark='c'/>每一项都遵守指令集的契约。在接下来的三个部分里，任务的程序不会改变；改变的只是它下面的机器。"
+  },
+  "4138cd6e0329": {
+   "scene": "Counted",
+   "en": "Before we leave Act One, take the trip down the tower once, all the way. <bookmark mark='a'/> Here is Pebble's datapath. Pick the ALU, and look inside. <bookmark mark='b'/> Its adder is a row of full adders, one per bit, with carries rippling between them, or racing through a prefix tree, as in Part 4. <bookmark mark='c'/> Pick one full adder: five gates. <bookmark mark='d'/> Pick one gate, built as NANDs, and one NAND is four transistors, two pulling the output up and two pulling it down, as in Part 3. <bookmark mark='e'/> And back up again: transistors make gates, gates make adders, adders make an ALU, and an ALU, registers and a little control make a computer that runs any program you can write. Every layer of that tower, in this series, is code you can read and run.",
+   "zh": "在离开第一幕之前，沿着这座塔一直往下走一趟。<bookmark mark='a'/>这是 Pebble 的数据通路。选中算术逻辑单元，看看里面。<bookmark mark='b'/>它的加法器是一排全加器，每位一个，进位在它们之间逐位传递，或者像第4部分那样，在前缀树中飞速传播。<bookmark mark='c'/>选中一个全加器：五个门。<bookmark mark='d'/>选中一个门，它由与非门搭成，而一个与非门是四个晶体管，两个把输出往上拉，两个往下拉，就像第3部分那样。<bookmark mark='e'/>再回到上面：晶体管组成门，门组成加法器，加法器组成算术逻辑单元，算术逻辑单元加上寄存器和一点控制，组成一台能运行你写得出的任何程序的计算机。在本系列中，这座塔的每一层都是你可以阅读和运行的代码。"
+  },
+  "29667a5b3b93": {
+   "scene": "Outro",
+   "en": "What we built in this part. An instruction set, designed bit by bit. A single-cycle datapath, assembled from the circuits of Parts 3 to 5, and a control unit that is a truth table, built two ways. An assembler, the first programs, and devices at memory addresses. A gate-level machine that agrees with its emulator on every program we tried, runs Euclid and a Turing machine, and counts the words of a paragraph. And the first row of the ledger: a hundred and seven billion cycles for thirty novels.",
+   "zh": "这一部分我们搭建了什么。一套逐位设计的指令集。一条单周期数据通路，用第3到第5部分的电路组装而成，以及一个就是一张真值表的控制单元，用两种方式搭成。一个汇编器、最初的程序，以及位于存储器地址上的设备。一台门级机器，它在我们试过的每个程序上都与模拟器一致，运行了欧几里得算法和一台图灵机，还统计了一段文字中的词。还有账本的第一行：三十本小说，一千零七十亿个周期。"
+  },
+  "029485bbb673": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 7 cuts the single-cycle machine's long path into a pipeline, and Part 8 runs instructions out of order. Part 9 builds the memory hierarchy behind the loads and stores. Part 11 turns jump-and-link into a calling convention, and Part 13 writes a compiler whose output runs on Pebble. Interrupts and exceptions become an operating system in Parts 31 and 32. And the ledger gains a row each time the Job gets faster, from better hardware or better ideas.",
+   "zh": "这些会在哪里再出现。第7部分把单周期机器的长路径切成流水线，第8部分让指令乱序执行。第9部分搭建取数和存数背后的存储层次结构。第11部分把跳转并链接变成调用约定，第13部分写一个输出能在 Pebble 上运行的编译器。中断和异常在第31和第32部分变成操作系统。而每当任务变快，无论来自更好的硬件还是更好的主意，账本就会多出一行。"
+  },
+  "e7e2f05dd84e": {
+   "scene": "Outro",
+   "en": "In practice: RISC-V now runs in microcontrollers and data centres, ARM in phones and laptops, x86 in PCs and servers. QEMU runs one instruction set on another, the same idea as our emulator. Simulators like gem5 are where processors are designed before they are built. Every microcontroller's peripherals are addresses. And every chip team checks its hardware description against an instruction-set model, running random programs on both, exactly as this part did.",
+   "zh": "在实践中：RISC-V 如今运行在微控制器和数据中心里，ARM 在手机和笔记本里，x86 在个人电脑和服务器里。QEMU 在一种指令集上运行另一种，和我们的模拟器是同一个想法。gem5 这样的模拟器，是处理器在造出来之前被设计的地方。每块微控制器的外设都是地址。每个芯片团队都拿指令集模型来检查他们的硬件描述，在两者上运行随机程序，和这一部分的做法完全一样。"
+  },
+  "9a4248ada96e": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last is a build problem: it asks you to change the Job's program yourself and measure what a small idea buys.",
+   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你亲自修改任务的程序，量一量一个小主意能换来多少。"
+  },
+  "3ed56d049a21": {
+   "scene": "Outro",
+   "en": "Next time, Act Two begins: making it fast. Pebble's clock waits for the slowest instruction. Part 7 cuts the datapath into five stages, like an assembly line, so that five instructions are in flight at once and the clock can run several times faster. Then we find out everything that goes wrong when an instruction needs a result that has not been written yet.",
+   "zh": "下一次，第二幕开始：让它变快。Pebble 的时钟要等最慢的那条指令。第7部分把数据通路切成五级，像装配线一样，让五条指令同时在途，时钟就能快好几倍。然后我们会看到，当一条指令需要一个还没写好的结果时，会出哪些问题。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 6, The Stored-Program Computer",
+ "chapters_en": {
+  "Hook": "A machine that reads its own instructions",
+  "History": "1. Cables, then memory",
+  "Idea": "2. Instructions are data",
+  "Isa": "3. Designing an instruction set",
+  "Datapath": "4. The datapath, one instruction at a time",
+  "Control": "5. The control unit",
+  "Assembler": "6. The assembler",
+  "First": "7. First programs, gate by gate",
+  "Cost": "8. What a program costs",
+  "Io": "9. Talking to the world",
+  "Job": "10. The Job, version 0",
+  "Universal": "11. Pebble and the Turing machine",
+  "SelfMod": "12. Code is data",
+  "Interrupts": "13. When the world interrupts",
+  "Counted": "14. The whole machine, counted",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

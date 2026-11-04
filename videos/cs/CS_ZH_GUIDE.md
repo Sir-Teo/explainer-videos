@@ -123,3 +123,18 @@ and the industry term follows in parentheses on first use.
 | C-element, asynchronous circuit, arbiter | C 元件，异步电路，仲裁器 |
 | ROM, PLA, microcode | 只读存储器，可编程逻辑阵列，微码 |
 | delay line, Williams tube, core memory, core rope | 延迟线，威廉姆斯管，磁芯存储器，磁芯绳存储器 |
+| stored-program computer, von Neumann architecture, von Neumann bottleneck | 存储程序计算机，冯·诺依曼体系结构，冯·诺依曼瓶颈 |
+| program counter (pc), fetch / decode / execute | 程序计数器（pc），取指 / 译码 / 执行 |
+| instruction set architecture (ISA), opcode, format (R, I, S, J) | 指令集体系结构，操作码，格式（R、I、S、J） |
+| immediate, sign extension, little-endian | 立即数，符号扩展，小端序 |
+| datapath, control unit, control word, control signal | 数据通路，控制单元，控制字，控制信号 |
+| single-cycle, critical path, CPI, the iron law | 单周期，关键路径，每条指令周期数（CPI），性能铁律 |
+| microcode, control store, microinstruction | 微码，控制存储器，微指令 |
+| assembler, label, symbol table, pseudo-instruction, two-pass | 汇编器，标号，符号表，伪指令，两遍扫描 |
+| object file, linker, relocation, loader | 目标文件，链接器，重定位，装入程序 |
+| jump-and-link (jal), return address, Wheeler jump | 跳转并链接（jal），返回地址，惠勒跳转 |
+| memory-mapped I/O, polling, interrupt, handler | 内存映射输入输出，轮询，中断，处理程序 |
+| exception, trap, precise interrupt, system call, exception program counter | 异常，陷阱，精确中断，系统调用，异常程序计数器 |
+| self-modifying code, index register (B-line), write xor execute, JIT | 自修改代码，变址寄存器（B 线），写异或执行，即时编译 |
+| emulator, co-simulation, random program testing | 模拟器，协同仿真，随机程序测试 |
+| the Job, the ledger | 任务，账本 |

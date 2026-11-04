@@ -76,6 +76,21 @@ class Circuit:
     def buf(self, a):
         return self._new("BUF", a)
 
+    def embed(self, sub: "Circuit", **inputs) -> dict[str, list[int]]:
+        """Copy ``sub``'s gates into this circuit, its inputs wired to ``inputs[name]`` (wires here); returns its
+        outputs as lists of wires.  How a CPU uses Part 4's ALU as one block."""
+        m: dict[int, int] = {}
+        for name, ws in sub.inputs.items():
+            src = inputs[name]
+            src = [src] if isinstance(src, int) else list(src)
+            if len(src) != len(ws):
+                raise ValueError(f"{sub.name}: input {name} is {len(ws)} bits, got {len(src)}")
+            m.update(zip(ws, src))
+        for i, (kind, ins) in enumerate(zip(sub.kinds, sub.args)):
+            if kind != "INPUT":
+                m[i] = self._new(kind, *[m[w] for w in ins])
+        return {name: [m[w] for w in ws] for name, ws in sub.outputs.items()}
+
     # -- evaluation -----------------------------------------------------------------
     def evaluate(self, values: dict) -> dict[str, list[np.ndarray]]:
         """``values[name]`` is a list (one per bit of the input, LSB first) of uint64 arrays, or for a 1-bit input a
