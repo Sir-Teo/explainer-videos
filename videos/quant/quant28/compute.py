@@ -502,6 +502,9 @@ def _f_limit(theta, s_len, O_j_pos, O_j_neg, grid=20001):
     return float(np.trapezoid(g * q, p) / np.trapezoid(q, p))
 
 
+Z_SCREEN = math.sqrt(2 * math.log(1000))
+
+
 def compute_theory() -> dict:
     rng = np.random.default_rng(2828)
     n_s, V = 20, 1000
@@ -523,8 +526,9 @@ def compute_theory() -> dict:
                 tp_, fd_, corr_ = [], [], []
                 for rep in range(8):
                     D, y, p, Op, On = _sestm_world(rng, n, theta, s_len)
-                    a = 1.0 * math.sqrt(math.log(V) / n)            # alpha shrinking like sqrt(log m / n)
-                    sc = TX.sestm_screen(D, y, alpha=a, kappa=max(3, int(0.01 * n)))
+                    # word by word: |f_j - pi| >= z sqrt(pi(1-pi)/k_j), z = sqrt(2 log m), the scale of the largest of m
+                    # null z-scores (the paper's alpha carries the same sqrt(log m) and word-frequency terms)
+                    sc = TX.sestm_screen(D, y, kappa=5, z=Z_SCREEN)
                     S = set(sc["S"].tolist())
                     true = set(range(2 * n_s))
                     tp_.append(len(S & true) / len(true))
@@ -562,6 +566,12 @@ def compute_theory() -> dict:
         yy = rng.permutation(yv[ok])
         null.append(len(TX.sestm_screen(Dtr, yy, alpha=sm["alpha"], kappa=sm["kappa"])["S"]))
     null = np.array(null)
+    zs = math.sqrt(2 * math.log(len(vocab)))
+    real_z = TX.sestm_screen(Dtr, yv[ok], kappa=5, z=zs)
+    null_z = np.array([len(TX.sestm_screen(Dtr, rng.permutation(yv[ok]), kappa=5, z=zs)["S"]) for _ in range(500)])
+    out["data_z"] = {"z": zs, "n_real": int(len(real_z["S"])), "words": [vocab[j] for j in real_z["S"]],
+                     "null_mean": float(null_z.mean()), "p_perm": float(np.mean(null_z >= len(real_z["S"])))}
+    out["z_screen"] = Z_SCREEN
     out["data"] = {"n": int(ok.sum()), "alpha": sm["alpha"], "kappa": sm["kappa"], "n_real": int(len(real["S"])),
                    "null_mean": float(null.mean()), "null_q95": float(np.quantile(null, 0.95)),
                    "p_perm": float(np.mean(null >= len(real["S"]))), "null_hist": np.bincount(null, minlength=60)[:60],

@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant28.common import DOVE, HAWK, HURDLE, IS_C, OOS_C, PART, WORD, fit_right, load
+from explainer.quant.house import text as TX
+from videos.quant.quant28.common import DOVE, HAWK, HURDLE, IS_C, OOS_C, PART, WORD, fit_right, house_lab, load
 
 
 class SESTM(VoiceoverScene):
@@ -136,19 +137,10 @@ class SESTM(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, s):
-        card = lab_card(r"SESTM, step one", [
-            "def sestm_screen(D, y, alpha, kappa):",
-            "    has = D > 0",
-            "    k = has.sum(0)                  # documents per word",
-            "    pos = y > 0",
-            "    pi = pos.mean()",
-            "    f = (has & pos[:, None]).sum(0) / k",
-            "    keep_pos = (k >= kappa) & (f >= pi + alpha)",
-            "    keep_neg = (k >= kappa) & (f <= pi - alpha)",
-            "    return keep_pos, keep_neg",
-        ], source="explainer/quant/house/text.py", width=7.4).to_edge(LEFT, buff=0.5).shift(UP * 0.6)
+        card = house_lab(r"SESTM, step one", TX.sestm_screen, "D = np.asarray(D)", 12, width=8.6)
+        card.to_edge(LEFT, buff=0.4).shift(UP * 0.5)
         with self.voiceover(
-            "The screen itself is five lines of the House's text module. <bookmark mark='a'/> Which documents contain "
+            "The screen itself is a dozen lines of the House's text module. <bookmark mark='a'/> Which documents contain "
             "each word; how many; the share with a positive label; and two thresholds. Run on the statements to 2012, "
             f"it keeps {s['n_pos'] + s['n_neg']} words out of {s['n_vocab']}."
         ) as vo:

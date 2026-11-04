@@ -105,16 +105,19 @@ def lm_sets(lm: dict) -> dict:
 # ---------------------------------------------------------------------------
 # SESTM
 # ---------------------------------------------------------------------------
-def sestm_screen(D, y, alpha: float = 0.05, kappa: int = 5) -> dict:
+def sestm_screen(D, y, alpha: float = 0.05, kappa: int = 5, z: float | None = None) -> dict:
     """Ke, Kelly and Xiu's screening step.  For each word, f_j = the share of the documents containing it whose
     outcome is positive; keep words in at least ``kappa`` documents with f_j >= pi + alpha (positive) or
-    f_j <= pi - alpha (negative), where pi is the share of positive outcomes overall."""
+    f_j <= pi - alpha (negative), where pi is the share of positive outcomes overall.  With ``z``, the threshold is
+    word by word, alpha_j = z sqrt(pi (1 - pi) / k_j): a z-test of each word's share against pi."""
     D = np.asarray(D)
     has = D > 0
     k = has.sum(0)
     pos = (np.asarray(y) > 0)
     pi = float(pos.mean())
     f = np.where(k > 0, (has & pos[:, None]).sum(0) / np.maximum(k, 1), pi)
+    if z is not None:
+        alpha = z * np.sqrt(pi * (1 - pi) / np.maximum(k, 1))
     keep_pos = (k >= kappa) & (f >= pi + alpha)
     keep_neg = (k >= kappa) & (f <= pi - alpha)
     return {"f": f, "k": k, "pi": pi, "pos": np.flatnonzero(keep_pos), "neg": np.flatnonzero(keep_neg),
