@@ -83,10 +83,11 @@ class Negative(VoiceoverScene):
                           r"\$18 trillion of bonds worldwide had negative yields", 3.6, 17, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         fit_right(side)
+        first = f"{MONTHS[b['first'] // 100 % 100]} {b['first'] // 10000}"
+        low = f"{MONTHS[md // 100 % 100]} {md // 10000}"
         with self.voiceover(
             "And not only the overnight rate. The ten-year yield on German government bonds first averaged a month "
-            f"below zero in {MONTHS[b['first'] // 100 % 100]} {b['first'] // 10000}, and reached "
-            f"{b['min']:.2f} percent in {MONTHS[md // 100 % 100]} {md // 10000}. <bookmark mark='a'/> An investor who "
+            f"below zero in {first}, and reached {b['min']:.2f} percent in {low}. <bookmark mark='a'/> An investor who "
             "bought then and held for ten years was guaranteed to get back less than they paid. Bonds of other "
             "countries followed, until in 2020 about eighteen trillion dollars of debt worldwide paid negative "
             "yields. Every model that assumed rates stay positive had to be retired or patched."

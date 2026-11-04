@@ -33,15 +33,16 @@ class Bermudan(VoiceoverScene):
         lab = VGroup(
             label(rf"a 10-non-call-1 receiver: on any anniversary from year 1 to year 9, enter a swap to year 10, "
                   rf"receiving {100 * b['K']:.2f}\% (today's par rate)", font_size=22),
-            wrapped_label(r"who buys it: issuers of callable bonds hedge the call they sold investors; mortgage investors "
-                          r"hedge the borrower's right to prepay (chapter 12)", 12.0, 20, GREY_A),
+            wrapped_label(r"who trades it: issuers of callable bonds own it and sell it on to dealers through cancellable "
+                          r"swaps; mortgage investors are short the borrower's right to prepay (chapter 12)", 12.0, 20,
+                          GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "A Bermudan swaption is the right to enter a swap on any one of a schedule of dates. This one, a ten "
             "non-call one, lets its holder start receiving a fixed rate, today's par rate of "
             f"{100 * b['K']:.2f} percent, on any anniversary from year one to year nine, for the rest of the ten "
-            "years. <bookmark mark='a'/> Companies that issue callable bonds buy them back from dealers to hedge the "
-            "call; investors in mortgages hold the same option in reverse."
+            "years. <bookmark mark='a'/> Issuers of callable bonds own this option, and often sell it on to dealers; "
+            "investors in mortgages are short the same kind of option, granted to every borrower."
         ) as vo:
             self.play(Create(line), FadeIn(marks), FadeIn(end), FadeIn(lab[0]))
             vo.wait_until("a")
