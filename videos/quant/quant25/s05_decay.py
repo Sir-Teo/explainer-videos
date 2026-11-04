@@ -235,7 +235,7 @@ class Decay(VoiceoverScene):
             "results with t above two get published, the published t-statistics are a truncated sample. Fitting that "
             "truncation, they found the bias small, about a tenth, because most published t's are far above two. "
             "<bookmark mark='b'/> So most of the decay is not a statistical illusion. Something happened after "
-            "publication: the market learned. <bookmark mark='c'/> A working rule: expect to keep between a third and "
+            "publication: the market learned, and traded the premium away. <bookmark mark='c'/> A working rule: expect to keep between a third and "
             "a half of a published anomaly's return, before costs."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
