@@ -166,6 +166,7 @@ TIMELINE = [
     (1900, r"Pearson's $\chi^2$"),
     (1908, r"Student's $t$"),
     (1922, r"Fisher's likelihood"),
+    (1931, r"de Finetti's theorem"),
     (1933, r"Neyman--Pearson; Kolmogorov"),
     (1935, r"Fisher's \emph{Design}"),
     (1937, r"confidence intervals"),

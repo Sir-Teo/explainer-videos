@@ -252,6 +252,19 @@ class NSpace(VGroup):
 
         return self._redraw(make)
 
+    def polyline(self, pts, color=WHITE, stroke_width=2, opacity=1.0, fill=None, fill_opacity=0.0) -> VMobject:
+        """A path through 3D points (a curve on a surface, or a filled slice if ``fill`` is given)."""
+        pts = [np.asarray(q, float) for q in pts]
+
+        def make():
+            m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
+            m.set_points_as_corners([self.project(q) for q in pts])
+            if fill is not None:
+                m.set_fill(fill, opacity=fill_opacity)
+            return m
+
+        return self._redraw(make)
+
     def point_label(self, mob: Mobject, p, offset=(0.25, 0.2)) -> Mobject:
         p = np.asarray(p, float)
         off = np.array([offset[0], offset[1], 0])
@@ -591,3 +604,72 @@ class FamilyTree(VGroup):
             target = _paint(self.edges[k][0].copy(), color, 1.0)
             anims += [Transform(self.edges[k][0], target), self.edges[k][1].animate.set_opacity(1)]
         return anims
+
+
+# ---------------------------------------------------------------------------
+# The Gaussian slicer (Part 5): a bivariate normal density as a wireframe, sliced and renormalized
+# ---------------------------------------------------------------------------
+class GaussianSlicer:
+    """A bivariate normal density drawn as a wireframe surface in an ``NSpace`` (x across, y into the screen,
+    density up), with a vertical slice at x = x0: the slice's curve f(x0, y), and the renormalized conditional density
+    f(y | x0) = f(x0, y) / f_X(x0).  Coordinates are standardized internally so the picture fits; ``lines`` sets the
+    wireframe density."""
+
+    def __init__(self, mean, cov, xr, yr, scale=0.9, center=(-2.6, -1.6, 0), angle=-0.75, tilt=0.42, lines=17,
+                 height=3.2, axis_labels=None):
+        self.mu, self.S = np.asarray(mean, float), np.asarray(cov, float)
+        self.xr, self.yr = xr, yr
+        self.Si = np.linalg.inv(self.S)
+        self.norm = 1 / (2 * np.pi * np.sqrt(np.linalg.det(self.S)))
+        self.h = height / self.norm  # density scale: peak at ``height``
+        self.ns = NSpace(scale=scale, center=center, angle=angle, tilt=tilt, axis_len=0.0001,
+                         axis_labels=axis_labels or ["", "", ""])
+        self.ns.axes3.set_opacity(0)
+        self.sx = 6.0 / (xr[1] - xr[0])
+        self.sy = 6.0 / (yr[1] - yr[0])
+        g = VGroup()
+        for xv in np.linspace(*xr, lines):
+            g.add(self.ns.polyline([self.p3(xv, yv) for yv in np.linspace(*yr, 60)], color=GREY_B, stroke_width=1.2,
+                                   opacity=0.55))
+        for yv in np.linspace(*yr, lines):
+            g.add(self.ns.polyline([self.p3(xv, yv) for xv in np.linspace(*xr, 60)], color=GREY_B, stroke_width=1.2,
+                                   opacity=0.55))
+        self.wire = g
+        self.floor = self.ns.polyline([self.p3(xr[0], yr[0], 0), self.p3(xr[1], yr[0], 0), self.p3(xr[1], yr[1], 0),
+                                       self.p3(xr[0], yr[1], 0), self.p3(xr[0], yr[0], 0)], color=GREY_D, stroke_width=1.5)
+
+    def f(self, x, y):
+        d = np.array([x, y]) - self.mu
+        return self.norm * np.exp(-0.5 * d @ self.Si @ d)
+
+    def p3(self, x, y, z=None):
+        z = self.f(x, y) * self.h if z is None else z
+        return np.array([(x - (self.xr[0] + self.xr[1]) / 2) * self.sx, (y - (self.yr[0] + self.yr[1]) / 2) * self.sy, z])
+
+    def slice(self, x0, color=None, renorm=False, fill_opacity=0.35):
+        """The curve y -> f(x0, y) on the surface; with ``renorm``, rescaled to the conditional density f(y | x0),
+        drawn so every conditional density has the same peak (1.5 x the joint peak): the slices of a Gaussian differ
+        only in where they sit."""
+        color = color or S.ACCENT
+        ys = np.linspace(*self.yr, 80)
+        vals = np.array([self.f(x0, yv) for yv in ys])
+        k = 1.5 * self.norm / vals.max() if renorm else 1.0
+        pts = [self.p3(x0, ys[0], 0)] + [self.p3(x0, yv, v * k * self.h) for yv, v in zip(ys, vals)] + \
+              [self.p3(x0, ys[-1], 0)]
+        return self.ns.polyline(pts, color=color, stroke_width=3.5, fill=color, fill_opacity=fill_opacity)
+
+    def marginal_x(self, x0):
+        s = np.sqrt(self.S[0, 0])
+        return np.exp(-0.5 * ((x0 - self.mu[0]) / s) ** 2) / (s * np.sqrt(2 * np.pi))
+
+    def cond(self, x0):
+        m = self.mu[1] + self.S[0, 1] / self.S[0, 0] * (x0 - self.mu[0])
+        v = self.S[1, 1] - self.S[0, 1] ** 2 / self.S[0, 0]
+        return m, np.sqrt(v)
+
+    def objects(self):
+        return [self.floor, *self.wire]
+
+    def stop(self, *extra):
+        for m in [*self.objects(), *extra]:
+            m.clear_updaters()
