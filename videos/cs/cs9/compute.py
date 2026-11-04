@@ -12,8 +12,15 @@ Items:
     machine     this computer: CPU name, cache sizes (lscpu), clock
     staircase   the pointer-chasing latency staircase: nanoseconds per dependent load, working sets 4 KB to 512 MB
     bandwidth   sequential read bandwidth against working-set size
-    matmul      n = 1024 matrix multiply in C: i-j-k, i-k-j, tiled; and the misses of each order simulated on a
-                small cache (n = 64)
+    matmul      matrix multiply in C from n = 256 to 2048: i-j-k, i-k-j, tiled, against a tuned BLAS (numpy), in
+                GFLOP/s; the misses of each order simulated on a small cache (n = 64), fully associative and 8-way
+    trace       the Job's first chapter as a memory trace: the scatter, reuse distances, the miss-ratio curve
+    policies    LRU, tree pseudo-LRU, FIFO, random and Belady's optimum on that trace, by cache size
+    threec      compulsory, capacity and conflict misses by size and associativity
+    scans       all thirty novels: every table scan, and its exact LRU misses at every cache size, against keeping
+                the front of the table
+    scancost    cycles per scanned table entry on Part 8's core with this machine's latencies at 885 MHz: the
+                table in L1, in L2, beyond; with and without a stride prefetcher
 """
 
 from __future__ import annotations
@@ -241,8 +248,6 @@ def compute_matmul() -> dict:
 ITEMS = {"machine": compute_machine, "staircase": compute_staircase, "bandwidth": compute_bandwidth,
          "matmul": compute_matmul}
 
-if __name__ == "__main__":
-    CACHE.main(ITEMS, __doc__)
 
 
 # ---------------------------------------------------------------------------
@@ -288,3 +293,177 @@ def lru_scan_misses(ends_lines: np.ndarray, capacity: int) -> tuple[int, int]:
             stack.pop()
         stack.append(e)
     return accesses, misses
+
+
+# ---------------------------------------------------------------------------
+# the Job's memory trace
+# ---------------------------------------------------------------------------
+def chapter_trace():
+    from explainer.cs.pebble import assemble
+    from explainer.cs.pebble import programs as P
+    from explainer.cs.pebble.cache import memtrace
+    from videos.cs.cs8.compute import chapter_tape
+
+    return memtrace(assemble(P.JOB_V0).image, tape=chapter_tape())
+
+
+def compute_trace() -> dict:
+    from explainer.cs.pebble.cache import miss_curve, stack_distances
+
+    t = chapter_trace()
+    lines = t.addr // 64
+    d = stack_distances(lines)
+    # a picture: every access as (time, address), thinned evenly
+    k = max(1, len(t) // 6000)
+    scatter = {"step": t.step[::k].tolist(), "addr": t.addr[::k].tolist(), "store": t.store[::k].tolist()}
+    regions = {"table": [65536, 65536 + 12 * 4000], "pool": [524288, 524288 + 8 * 4000], "code": [0, 600]}
+    caps = [1 << k for k in range(0, 15)]  # lines: 64 B .. 1 MB
+    curve = miss_curve(d, caps)
+    hist = np.bincount(np.clip(d[d >= 0], 0, 4095) // 16, minlength=256)[:256].tolist()
+    return {"accesses": len(t), "instructions": t.instructions, "loads": int((~t.store).sum()),
+            "stores": int(t.store.sum()), "distinct_lines": int(len(np.unique(lines))), "scatter": scatter,
+            "regions": regions, "capacities_lines": caps, "miss_curve": curve, "first_touch": int((d < 0).sum()),
+            "reuse_hist16": hist, "reuse_median": float(np.median(d[d >= 0]))}
+
+
+def compute_policies() -> dict:
+    from explainer.cs.pebble.cache import SetAssoc, belady
+
+    t = chapter_trace()
+    lines = (t.addr // 64).tolist()
+    out = {}
+    for kb in (1, 2, 4, 8):
+        row = {}
+        for pol in ("lru", "plru", "fifo", "random"):
+            c = SetAssoc(kb * 1024, line=64, ways=8, policy=pol)
+            row[pol] = sum(not c.access(a) for a in t.addr.tolist()) / len(lines)
+        row["opt (fully associative)"] = belady(lines, kb * 1024 // 64) / len(lines)
+        c = SetAssoc(kb * 1024, line=64, ways=kb * 1024 // 64)
+        row["lru (fully associative)"] = sum(not c.access(a) for a in t.addr.tolist()) / len(lines)
+        out[str(kb)] = row
+    return {"rows": out, "accesses": len(lines)}
+
+
+def compute_threec() -> dict:
+    from explainer.cs.pebble.cache import three_c
+
+    t = chapter_trace()
+    lines = t.addr // 64
+    out = []
+    for kb in (1, 2, 4, 8, 16):
+        for ways in (1, 2, 8):
+            sets = kb * 1024 // 64 // ways
+            r = three_c(lines, sets=sets, ways=ways)
+            out.append({"kb": kb, "ways": ways, **r})
+    return {"rows": out}
+
+
+def compute_scans() -> dict:
+    """The Job over all thirty novels: every table scan, and the LRU misses of the table at every cache size; and
+    the misses if the cache simply kept the front of the table (close to Belady's optimum on these scans)."""
+    import videos.ai.ai1.compute as A
+    from explainer.cs.pebble import programs as P
+    from videos.cs.cs6.compute import novels
+
+    books = novels()
+    full = P.job_tape("\n".join(books[n] for n in A.BOOKS))
+    ends = scan_ends(full)
+    e_lines = (ends * 12 + 11) // 64
+    caps_kb = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
+    rows = []
+    total = int((e_lines + 1).sum())
+    for kb in caps_kb:
+        c = kb * 1024 // 64
+        acc, mis = lru_scan_misses(e_lines, c)
+        keep_front = int(np.maximum(0, e_lines + 1 - c).sum()) + min(c, int(e_lines.max()) + 1)
+        rows.append({"kb": kb, "lru": mis / acc, "keep_front": keep_front / acc, "misses": mis})
+    lengths = np.bincount(np.minimum(ends // 256, 255), minlength=256).tolist()
+    return {"words": len(ends), "table_entries": int(ends.max()) + 1, "table_kb": (int(ends.max()) + 1) * 12 / 1024,
+            "line_reads": total, "rows": rows, "scan_hist256": lengths, "mean_scan": float(ends.mean() + 1)}
+
+
+ITEMS.update({"trace": compute_trace, "policies": compute_policies, "threec": compute_threec,
+              "scans": compute_scans})
+
+
+# ---------------------------------------------------------------------------
+# the price of a missed line, measured on Part 8's core with a realistic hierarchy
+# ---------------------------------------------------------------------------
+MHZ = 884.9557522123894  # Part 7's clock, kept by the ledger
+
+
+def pebble_hierarchy(prefetch: str | None = "stride"):
+    """L1 32 KB 8-way, L2 1 MB 16-way, a 4 MB third level, then DRAM: this machine's measured latencies
+    (load("staircase")) converted to cycles of Pebble's 885 MHz clock."""
+    from explainer.cs.pebble.cache import Hierarchy, SetAssoc
+
+    st = load("staircase")["points"]
+
+    def ns(kb):
+        return min(st, key=lambda p: abs(p["bytes"] - kb * 1024))["ns"]
+
+    cyc = [max(1, int(np.ceil(ns(k) * MHZ / 1000))) for k in (16, 512, 2048, 65536)]
+    l1, l2, l3, dram = cyc
+    return Hierarchy([SetAssoc(32 << 10, ways=8, hit=l1, name="L1"),
+                      SetAssoc(1 << 20, ways=16, hit=l2 - l1, name="L2"),
+                      SetAssoc(4 << 20, ways=16, hit=l3 - l2, name="L3")], dram=dram - l3, prefetch=prefetch), cyc
+
+
+SCAN_BENCH = """
+        li   s0, 65536        # the table
+        li   s1, {n}           # entries
+        li   a1, {target}      # the length looked for
+        li   s2, {reps}
+rep:    mv   t0, s0
+        li   a2, 0
+scan:   beq  a2, s1, done
+        lw   t1, 4(t0)
+        bne  t1, a1, next
+        addi a3, a3, 1        # (a match: the Job would compare letters here)
+next:   addi t0, t0, 12
+        addi a2, a2, 1
+        j    scan
+done:   addi s2, s2, -1
+        bnez s2, rep
+        halt
+"""
+
+
+def compute_scancost() -> dict:
+    """Cycles per scanned table entry on the out-of-order core when the table lives in L1, in L2, or beyond, with
+    the word lengths in the corpus's table order."""
+    import videos.ai.ai1.compute as A
+    from explainer.cs.pebble import assemble
+    from explainer.cs.pebble import predict as PR
+    from explainer.cs.pebble import programs as P
+    from explainer.cs.pebble.ooo import OutOfOrder
+    from videos.cs.cs6.compute import novels
+
+    books = novels()
+    full = P.job_tape("\n".join(books[n] for n in A.BOOKS))
+    seen: dict[bytes, int] = {}
+    for w in P.job_words(full):
+        if w not in seen:
+            seen[w] = len(w)
+    lengths = list(seen.values())
+    rows = []
+    for n, reps in ((1000, 60), (40000, 2), (120000, 1)):
+        prog = assemble(SCAN_BENCH.format(n=n, target=6, reps=reps))
+        img = bytearray(prog.image)
+        img.extend(bytes(65536 + 12 * n + 64 - len(img)))
+        for i in range(n):
+            o = 65536 + 12 * i
+            img[o + 4:o + 8] = lengths[i % len(lengths)].to_bytes(4, "little")
+        res = {}
+        for name in ("ideal", "hierarchy", "no prefetch"):
+            kw = {} if name == "ideal" else {"cache": pebble_hierarchy(None if name == "no prefetch" else "stride")[0]}
+            c = OutOfOrder(bytes(img), predictor=PR.Tournament(), mem_size=1 << 21, **kw).run()
+            res[name] = {"cycles": c.cycles, "per_entry": c.cycles / (n * reps), "ipc": c.ipc}
+        rows.append({"entries": n, "kb": 12 * n / 1024, "reps": reps, **res})
+    return {"rows": rows, "latencies": pebble_hierarchy()[1], "mhz": MHZ}
+
+
+ITEMS["scancost"] = compute_scancost
+
+if __name__ == "__main__":
+    CACHE.main(ITEMS, __doc__)
