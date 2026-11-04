@@ -1245,6 +1245,151 @@ def philly_rtdsm(var: str = "routput", through_vintage: str = "2020M12") -> dict
 # ---------------------------------------------------------------------------
 # What the series has used so far: ``python -m explainer.quant.data`` fetches all of it
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Text: FOMC statements and minutes, the Loughran-McDonald dictionary (Part 28)
+# ---------------------------------------------------------------------------
+FED = "https://www.federalreserve.gov"
+_FOMC_STMT = [re.compile(r'href="(/boarddocs/press/(?:general|monetary)/\d{4}/(\d{8})/(?:default\.htm)?)"'),
+              re.compile(r'href="(/newsevents/press/monetary/(\d{8})[a-z]?\.htm)"'),
+              re.compile(r'href="(/newsevents/pressreleases/monetary(\d{8})[a-z]\.htm)"')]
+_FOMC_MIN = [re.compile(r'href="(/fomc/minutes/(\d{8})\.htm)"'),
+             re.compile(r'href="/monetarypolicy/(?:files/)?fomcminutes(\d{8})\.(?:htm|pdf)"')]
+
+
+def _fed_get(url: str) -> bytes:
+    time.sleep(0.4)  # be gentle with the Board's servers
+    return _get(url)
+
+
+class _Text(__import__("html.parser").parser.HTMLParser):
+    """Visible text of a page, one block element per line; marks the Board's article container."""
+
+    def __init__(self):
+        super().__init__()
+        self.out, self.skip = [], 0
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in ("script", "style", "noscript"):
+            self.skip += 1
+        if tag in ("p", "br", "div", "h1", "h2", "h3", "h4", "h5", "li", "tr", "table"):
+            self.out.append("\n")
+        if a.get("id") in ("article", "lastUpdate"):
+            self.out.append(f"\n[[{a['id']}]]\n")
+
+    def handle_endtag(self, tag):
+        if tag in ("script", "style", "noscript"):
+            self.skip = max(0, self.skip - 1)
+
+    def handle_data(self, d):
+        if not self.skip:
+            self.out.append(d)
+
+
+def _page_text(raw: bytes) -> str:
+    p = _Text()
+    p.feed(raw.decode("utf-8", errors="ignore"))
+    t = "".join(p.out)
+    t = re.sub(r"[ \t\r\xa0]+", " ", t)
+    t = "\n".join(x.strip() for x in t.split("\n"))
+    t = re.sub(r"\n{2,}", "\n", t)
+    if "[[article]]" in t:
+        t = t.split("[[article]]", 1)[1]
+    if "[[lastUpdate]]" in t:
+        t = t.split("[[lastUpdate]]", 1)[0]
+    for end in ("\nLast update:", "\nLast Update:", "\nHome | "):
+        if end in t:
+            t = t.split(end, 1)[0]
+    return t.strip()
+
+
+def _statement_body(t: str) -> str:
+    """A statement's policy text: after the release line, before the vote (names are not sentiment)."""
+    lines = [x for x in t.split("\n") if x]
+    out = []
+    for x in lines:
+        if re.match(r"^(Voting for|Voting against|Implementation Note|In a related action|In taking the discount rate)", x):
+            break
+        if len(x) < 60 or re.match(r"^(Release Date|For (immediate )?release|For release at|Share|Press Release)", x, re.I):
+            continue
+        out.append(x)
+    return "\n".join(out)
+
+
+def _minutes_body(t: str) -> str:
+    """The minutes' discussion: paragraphs (the attendance lists are short lines and are dropped)."""
+    return "\n".join(x for x in t.split("\n") if len(x) >= 120)
+
+
+def fomc_index(through: str = "2025-12-31") -> dict:
+    """Every FOMC statement and set of minutes the Board's meeting pages link to, 1994 to ``through``:
+    {"statement": [[YYYYMMDD, path], ...], "minutes": [[YYYYMMDD, path], ...]}.  Built from the historical pages
+    (one a year) and the current calendar, frozen at ``through`` and checked."""
+    lim = int(through.replace("-", ""))
+    path = DATA / "fomc" / f"index_{lim}.json"
+    if not path.exists():
+        stmt, mins = {}, {}
+        pages = [f"{FED}/monetarypolicy/fomchistorical{y}.htm" for y in range(1994, 2021)]
+        pages.append(f"{FED}/monetarypolicy/fomccalendars.htm")
+        for url in pages:
+            try:
+                h = _fed_get(url).decode("utf-8", errors="ignore")
+            except RuntimeError:
+                continue  # a year with no historical page yet
+            for rx in _FOMC_STMT:
+                for m in rx.finditer(h):
+                    stmt.setdefault(int(m.group(2)), m.group(1))
+            for m in _FOMC_MIN[0].finditer(h):
+                mins.setdefault(int(m.group(2)), m.group(1))
+            for m in _FOMC_MIN[1].finditer(h):
+                mins.setdefault(int(m.group(1)), f"/monetarypolicy/fomcminutes{m.group(1)}.htm")
+        idx = {"statement": sorted([d, u] for d, u in stmt.items() if d <= lim),
+               "minutes": sorted([d, u] for d, u in mins.items() if d <= lim)}
+        _atomic_write(path, json.dumps(idx, separators=(",", ":")).encode())
+    body = path.read_bytes()
+    _check(f"fomc/index/{lim}", body, f"{FED}/monetarypolicy/fomchistorical{{1994..2020}}.htm + fomccalendars.htm")
+    return json.loads(body)
+
+
+def fomc_text(kind: str = "statement", through: str = "2025-12-31") -> list:
+    """The text of every FOMC statement (``kind="statement"``: the policy paragraphs, before the vote) or set of
+    minutes (``"minutes"``: the discussion paragraphs), as [[YYYYMMDD, text], ...] sorted by date.  Each document's
+    extracted text is cached and checked on its own, so a fetch resumes."""
+    out = []
+    for d, rel in fomc_index(through)[kind]:
+        path = DATA / "fomc" / kind / f"{d}.txt"
+        if not path.exists():
+            try:
+                raw = _fed_get(FED + rel)
+            except RuntimeError:
+                continue  # a dead link on the meeting page
+            t = _page_text(raw)
+            t = _statement_body(t) if kind == "statement" else _minutes_body(t)
+            _atomic_write(path, t.encode())
+        body = path.read_bytes()
+        _check(f"fomc/{kind}/{d}", body, FED + rel)
+        if body.strip():
+            out.append([d, body.decode()])
+    return out
+
+
+LM_DICT = "https://drive.google.com/uc?export=download&id=1iq2RUf8qGFEAk1g8wQntP3habOnR3fXF"
+
+
+def lm_dictionary() -> dict:
+    """The Loughran-McDonald master dictionary, 1993-2025 edition (sraf.nd.edu; free for academic use): the word
+    lists {"Negative": [...], "Positive": [...], "Uncertainty": [...], "Litigious": [...], "Strong_Modal": [...],
+    "Weak_Modal": [...], "Constraining": [...]} (upper case) and each word's count in 10-K/10-Q filings."""
+    raw = _cached("loughran_mcdonald/master_1993_2025.csv", DATA / "loughran_mcdonald" / "master_1993_2025.csv",
+                  lambda: _get(LM_DICT), "sraf.nd.edu/loughranmcdonald-master-dictionary/")
+    import csv
+    rows = list(csv.DictReader(io.StringIO(raw.decode("utf-8", errors="ignore"))))
+    cats = ("Negative", "Positive", "Uncertainty", "Litigious", "Strong_Modal", "Weak_Modal", "Constraining")
+    out = {c: sorted(r["Word"] for r in rows if r.get(c, "0") not in ("0", "")) for c in cats}
+    out["count"] = {r["Word"]: int(float(r["Word Count"] or 0)) for r in rows}
+    return out
+
+
 def fetch_all() -> None:
     from explainer.quant.house import surface
 

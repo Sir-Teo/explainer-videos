@@ -3180,3 +3180,54 @@ def test_christoffersen_independence():
         clustered[s:s + 5] = 1                 # 50 hits, the right count, in runs of five
     c2 = funding.christoffersen(clustered, 0.01)
     assert c2["LR_uc"] < 1.0 and c2["p_ind"] < 1e-6 and c2["p11"] > 0.7
+
+
+def test_text_counting_and_tone():
+    import numpy as np
+    from explainer.quant.house import text as TX
+    toks = TX.tokenize("The Committee's decision: rates rose 25 basis points; risks are well-balanced.")
+    assert toks == ["the", "committee's", "decision", "rates", "rose", "basis", "points", "risks", "are", "well-balanced"]
+    D = TX.dtm([["a", "b", "a"], ["b"]], ["a", "b"])
+    assert D.tolist() == [[2, 1], [0, 1]]
+    lm = TX.lm_sets({"Negative": ["LOSS", "WEAK"], "Positive": ["GAIN"], "Uncertainty": ["MAY"], "Litigious": [],
+                     "Constraining": []})
+    t = TX.tone(["loss", "gain", "may", "the"], lm)
+    assert t["negative"] == 0.25 and t["net"] == 0.0 and t["uncertainty"] == 0.25
+    z = TX.zipf([f"w{int(k)}" for k in np.random.default_rng(0).zipf(2.0, 20000)])
+    assert z["slope"] < -1.0
+    assert TX.word_diff("a b c", "a x c") == [("=", "a"), ("-", "b"), ("+", "x"), ("=", "c")]
+    assert abs(TX.fog("This is a short sentence. Another one here.")["words_per_sentence"] - 4.0) < 1e-9
+
+
+def test_sestm_recovers_planted_words():
+    import numpy as np
+    from explainer.quant.house import text as TX
+    rng = np.random.default_rng(1)
+    V, n = 300, 3000
+    Op, On = np.zeros(V), np.zeros(V)
+    Op[:10], On[10:20] = 1 / 10, 1 / 10
+    neutral = np.full(V, 1.0 / (V - 20)); neutral[:20] = 0
+    p = rng.random(n)
+    y = np.where(rng.random(n) < p, 1.0, -1.0)
+    D = np.array([rng.multinomial(10, pi * Op + (1 - pi) * On) + rng.multinomial(60, neutral) for pi in p])
+    s = TX.sestm_screen(D, y, alpha=0.08, kappa=20)
+    assert set(range(10)) <= set(s["pos"].tolist()) and set(range(10, 20)) <= set(s["neg"].tolist())
+    assert len(s["S"]) < 40
+    tp = TX.sestm_topics(D[:, s["S"]], y)
+    sc = [TX.sestm_score(d, tp["O_pos"], tp["O_neg"]) for d in D[:300, s["S"]]]
+    assert np.corrcoef(sc, p[:300])[0, 1] > 0.6
+    assert TX.chebyshev_gap([1, 2, 3], [1, 2, 4]) > 0
+
+
+def test_embeddings_and_topics():
+    import numpy as np
+    from explainer.quant.house import text as TX
+    docs = [["rate", "hike", "inflation"], ["rate", "cut", "unemployment"], ["inflation", "rate", "hike"]] * 20
+    vocab = TX.vocabulary(docs, min_df=1)
+    E = TX.ppmi_svd(TX.cooccurrence(docs, vocab, window=2), dim=3)
+    assert np.allclose(np.linalg.norm(E, axis=1), 1)
+    nb = TX.neighbours(E, vocab, "hike", k=2)
+    assert len(nb) == 2
+    X = TX.tfidf(TX.dtm(docs, vocab))
+    r = TX.nmf_topics(X, k=2, iters=200)
+    assert r["err"][-1] < r["err"][0] and np.allclose(r["share"].sum(1), 1)
