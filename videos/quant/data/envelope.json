@@ -64,6 +64,14 @@
    "at": "2026-11-04",
    "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
   },
+  "stw_best_rule_part26|kenfrench/mkt_daily": {
+   "at": "2026-11-04",
+   "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686"
+  },
+  "stw_best_rule_part26|kenfrench/rf_daily": {
+   "at": "2026-11-04",
+   "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686"
+  },
   "zoo_equal_weight_part25|osap/2024.10/PredictorLSretWide": {
    "at": "2026-11-04",
    "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb"
@@ -547,6 +555,22 @@
    },
    "trials": 4
   },
+  "stw_best_rule_part26": {
+   "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686",
+   "params": {
+    "returns": "position at close t times the next day's market excess return",
+    "rule": {
+     "band": 0.0,
+     "delay": 0,
+     "family": "ma",
+     "fast": 1,
+     "hold": 0,
+     "slow": 5
+    },
+    "selected_on": "1926-07..1986-12, max Sharpe of 10,000 rules"
+   },
+   "trials": 10000
+  },
   "turn_of_month_event": {
    "code_sha256": "e16540a4048fd28a988617f1d372c42952b84061aec9406cbfb22881aeff568d",
    "params": {
@@ -688,6 +712,12 @@
   },
   "kenfrench/mkt_daily": {
    "digest": "2919993e28205ab6abb35b6874c8e0ec94d0566ce25e0ca7991657c7d14ee194",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  },
+  "kenfrench/rf_daily": {
+   "digest": "3568e3569b474786129c61978424ab6edbc1657319be85e1ad5016b1ad8366d6",
    "first": 20210104,
    "last": 20251231,
    "n": 1255

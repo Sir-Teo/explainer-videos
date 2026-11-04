@@ -367,38 +367,56 @@ def compute_rules() -> dict:
                   "share_out_below_half": float(np.mean(sr["out"][top] < 0.5 * sr["in"][top]))})
 
 
+def compute_acf() -> dict:
+    """The daily market's first-order autocorrelation by decade: the stale prices of thinly traded stocks make an
+    index's daily returns positively autocorrelated (Fisher 1966; Lo and MacKinlay 1990)."""
+    kf = data.ken_french_daily(through="2020-12-31")
+    d, ex = kf["date"], kf["mkt"] - kf["rf"]
+    out = []
+    for y0 in range(1930, 2021, 10):
+        m = (d >= y0 * 10000) & (d < (y0 + 10) * 10000)
+        x = ex[m]
+        if len(x) > 1000:   # whole decades only (2020 alone is one extraordinary year)
+            out.append({"decade": y0, "rho1": float(np.corrcoef(x[:-1], x[1:])[0, 1])})
+    m = d < 19300101
+    x = ex[m]
+    out.insert(0, {"decade": 1926, "rho1": float(np.corrcoef(x[:-1], x[1:])[0, 1])})
+    return _json({"rows": out})
+
+
 def compute_dsr() -> dict:
     d, ex, rules, R = _rule_matrix()
-    m = _eras(d)["in"]
-    X = R[m].astype(np.float64)
-    T = X.shape[0]
-    sr = _sr(X)                                             # per day
-    j = int(np.argmax(sr))
-    x = X[:, j]
-    g3, g4 = float(stats.skew(x)), float(stats.kurtosis(x, fisher=False))
-    var = float(sr.var(ddof=1))
-    rng = np.random.default_rng(1)
-    live = np.flatnonzero(X.std(0) > 0)
-    samp = rng.choice(live, 1500, replace=False)
-    C = np.corrcoef(X[:, samp].T)
-    ev = np.linalg.eigvalsh(np.nan_to_num(C))
-    n_eff_share = float(ev.sum() ** 2 / (ev ** 2).sum()) / len(samp)
-    n_eff = n_eff_share * X.shape[1]
-    out = {"T": T, "sr_best": float(sr[j] * math.sqrt(252)), "skew": g3, "kurt": g4, "var_trials": var,
-           "sd_trials_ann": math.sqrt(var * 252), "psr0": B.psr(sr[j], 0.0, T, g3, g4), "n": X.shape[1],
-           "n_eff": n_eff, "n_eff_share": n_eff_share}
-    for key, n in (("raw", X.shape[1]), ("eff", n_eff)):
-        r = B.deflated_sharpe(sr[j], T, n, var, g3, g4)
-        out[key] = {"n": n, "sr0": r["sr0"] * math.sqrt(252), "dsr": r["dsr"]}
-    # the same arithmetic with noise-only variance (1/T): what a researcher assuming independent trials would use
-    r = B.deflated_sharpe(sr[j], T, X.shape[1], 1 / T, g3, g4)
-    out["noise"] = {"sr0": r["sr0"] * math.sqrt(252), "dsr": r["dsr"]}
-    # DSR as a function of N for the best rule
-    grid = np.unique(np.round(np.logspace(0, 4, 41)))
-    out["grid"] = grid
-    out["dsr_curve"] = [B.deflated_sharpe(sr[j], T, n, var, g3, g4)["dsr"] for n in grid]
-    out["sr0_curve"] = [B.expected_max_sr(n, var) * math.sqrt(252) for n in grid]
-    return _json(out)
+    res = {}
+    for era, m in _eras(d).items():
+        X = R[m].astype(np.float64)
+        T = X.shape[0]
+        sr = _sr(X)                                             # per day
+        j = int(np.argmax(sr))
+        x = X[:, j]
+        g3, g4 = float(stats.skew(x)), float(stats.kurtosis(x, fisher=False))
+        var = float(sr.var(ddof=1))
+        rng = np.random.default_rng(1)
+        live = np.flatnonzero(X.std(0) > 0)
+        samp = rng.choice(live, 1500, replace=False)
+        ev = np.linalg.eigvalsh(np.nan_to_num(np.corrcoef(X[:, samp].T)))
+        n_eff_share = float(ev.sum() ** 2 / (ev ** 2).sum()) / len(samp)
+        n_eff = n_eff_share * X.shape[1]
+        out = {"T": T, "label": B.rule_label(rules[j]), "sr_best": float(sr[j] * math.sqrt(252)), "skew": g3,
+               "kurt": g4, "var_trials": var, "sd_trials_ann": math.sqrt(var * 252), "psr0": B.psr(sr[j], 0.0, T, g3, g4),
+               "n": X.shape[1], "n_eff": n_eff, "n_eff_share": n_eff_share,
+               "sr_hist": np.histogram(sr * math.sqrt(252), 70, (-1.5, 2.0))[0]}
+        for key, n in (("raw", X.shape[1]), ("eff", n_eff)):
+            r = B.deflated_sharpe(sr[j], T, n, var, g3, g4)
+            out[key] = {"n": n, "sr0": r["sr0"] * math.sqrt(252), "dsr": r["dsr"]}
+        r = B.deflated_sharpe(sr[j], T, X.shape[1], 1 / T, g3, g4)
+        out["noise"] = {"sr0": r["sr0"] * math.sqrt(252), "dsr": r["dsr"]}
+        grid = np.unique(np.round(np.logspace(0, 4, 41)))
+        out["grid"] = grid
+        out["dsr_curve"] = [B.deflated_sharpe(sr[j], T, n, var, g3, g4)["dsr"] for n in grid]
+        out["sr0_curve"] = [B.expected_max_sr(n, var) * math.sqrt(252) for n in grid]
+        res[era] = out
+        del X
+    return _json(res)
 
 
 def compute_pbo() -> dict:
@@ -672,7 +690,7 @@ def compute_envelope() -> dict:
 
 ITEMS = {"lookahead": compute_lookahead, "survivor": compute_survivor, "select": compute_select,
          "engine": compute_engine, "sharpe": compute_sharpe, "counter": compute_counter, "rules": compute_rules,
-         "dsr": compute_dsr, "pbo": compute_pbo, "cv": compute_cv, "rc": compute_rc, "monitor": compute_monitor,
+         "acf": compute_acf, "dsr": compute_dsr, "pbo": compute_pbo, "cv": compute_cv, "rc": compute_rc, "monitor": compute_monitor,
          "planted": compute_planted, "funding": compute_funding, "envelope": compute_envelope}
 
 
