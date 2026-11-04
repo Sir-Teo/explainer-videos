@@ -261,7 +261,7 @@ class NSDE(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(FadeIn(sl), FadeIn(sH), FadeIn(hint[1]), FadeIn(hint[2]))
             self.move_camera(theta=-25 * DEGREES, run_time=max(vo.remaining(0.3), 2))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, sh, sl, sH)), FadeOut(hint)],
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, sh, sl, sH)), FadeOut(hint)],
                          run_time=1.2)
         self.clear_scene()
         rel = wrapped_label(r"the same idea elsewhere: Cuchiero, Khosrawi and Teichmann (2020) calibrate a local "

@@ -120,7 +120,7 @@ class Calibrate(VoiceoverScene, ThreeDScene):
                 self.play(Transform(s, surf(i)), FadeOut(pan), FadeIn(new), run_time=per * 0.75)
                 pan = new
                 self.move_camera(theta=(-62 + 4 * i) * DEGREES, run_time=per * 0.25)
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, s, dots)), FadeOut(hint),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, s, dots)), FadeOut(hint),
                                                                   FadeOut(pan)], run_time=1.2)
         self.clear_scene()
 

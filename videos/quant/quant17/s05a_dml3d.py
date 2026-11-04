@@ -86,7 +86,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeOut(pl), Create(df), FadeIn(hint[1][4]), FadeIn(errs), run_time=2)
             self.move_camera(theta=-70 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(0.3), 1.5))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, dots, tiles, ex, df)),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, dots, tiles, ex, df)),
                                                                   FadeOut(hint), FadeOut(errs)], run_time=1.2)
         self.clear_scene()
 
@@ -162,7 +162,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(FadeIn(up), FadeIn(dn), FadeIn(hint[1]))
             self.move_camera(theta=-25 * DEGREES, run_time=max(vo.remaining(0.3), 2))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, gp, up, dn, dots)),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, gp, up, dn, dots)),
                                                                   FadeOut(hint)], run_time=1.2)
         self.clear_scene()
 

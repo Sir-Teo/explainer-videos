@@ -82,7 +82,7 @@ class Band3D(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.add(bead)
             self.play(MoveAlongPath(bead, trail), Create(trail), run_time=max(vo.remaining(0.3), 4), rate_func=linear)
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, dl, s_lo, s_hi, w_lo, w_hi, trail, bead)),
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, dl, s_lo, s_hi, w_lo, w_hi, trail, bead)),
                                                                   FadeOut(hint)], run_time=1.2)
         self.clear_scene()
 

@@ -144,7 +144,7 @@ class HLP(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(FadeIn(hint[1]), FadeIn(hint[2]))
             self.move_camera(theta=-30 * DEGREES, phi=60 * DEGREES, run_time=max(vo.remaining(0.5), 2))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, payoff)), FadeOut(hint)],
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, surf, payoff)), FadeOut(hint)],
                          run_time=1.2)
         self.clear_scene()
 
