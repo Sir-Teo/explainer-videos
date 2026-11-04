@@ -1,21 +1,39 @@
-# Computer Science, Built: the syllabus (plan of record, draft 1)
+# Computer Science, Built: the syllabus (plan of record, draft 2)
 
-Goal: a university computer-science degree in video. It aims to be **as comprehensive as the standard textbooks,
-as technical as a graduate course, and as close to the frontier as primary sources allow**, and to tell how the
-field got here alongside the mathematics. It is made in English and Chinese to the standard of *Analysis, Built* and
-*AI, Built*, and renders on macOS and Linux. Each part runs **50–60 minutes**, and its content decides where in that
-range it lands. Forty-two parts come to about **39 hours**.
+Goal: a university computer-science degree in video, followed by the curriculum industry actually works from. It
+aims to be **as comprehensive as the standard textbooks, as technical as a graduate course, as practical as a senior
+engineer's working knowledge, and as close to the frontier as primary sources allow**. It tells how the field got
+here alongside the mathematics. It is made in English and Chinese to the standard of *Analysis, Built* and *AI,
+Built*, and renders on macOS and Linux. Each part runs **50–60 minutes**, and its content decides where in that range
+it lands. Fifty-five parts come to about **52 hours**.
 
-The plan has the shape of a degree. Act I and Act II are a computer-organization and architecture sequence (Harris &
-Harris, Patterson & Hennessy, Hennessy & Patterson). Act III covers systems programming, compilers and programming
-languages (CS:APP, the Dragon Book, Cooper & Torczon, TAPL, SICP). Act IV is a two-semester algorithms course (CLRS,
-Kleinberg & Tardos, Knuth, Motwani & Raghavan, de Berg et al., Williamson & Shmoys). Act V covers theory of
-computation, complexity, coding theory and cryptography (Sipser, Arora & Barak, MacKay, Katz & Lindell, Boneh &
-Shoup). Act VI covers operating systems, storage and databases (OSTEP, Herlihy & Shavit, Silberschatz et al., the Red
-Book). Act VII covers networks and distributed systems (Kurose & Ross, Peterson & Davie, Lynch, Kleppmann). Act VIII
-covers graphics, numerical analysis, quantum computing, formal methods and security (PBRT, Trefethen & Bau, Nielsen &
-Chuang, Baier & Katoen, Anderson). Each part's **Reading** line names the textbooks, the classic papers and the
-frontier papers it follows, and its reference card shows them on screen.
+The plan has the shape of a degree plus a career:
+- **Act I** opens with discrete mathematics (Lehman, Leighton & Meyer) and then builds the machine. Acts I and II
+  together are a computer-organization and architecture sequence (Harris & Harris, Patterson & Hennessy, Hennessy &
+  Patterson).
+- **Act III** covers systems programming, compilers and programming languages (CS:APP, the Dragon Book, Cooper &
+  Torczon, TAPL, SICP).
+- **Act IV** is a two-semester algorithms course that ends in algorithm engineering (CLRS, Kleinberg & Tardos, Knuth,
+  Motwani & Raghavan, de Berg et al., Williamson & Shmoys, Skiena).
+- **Act V** covers the theory of computation, complexity, coding theory and cryptography (Sipser, Arora & Barak,
+  MacKay, Katz & Lindell, Boneh & Shoup).
+- **Act VI** covers operating systems, storage and databases (OSTEP, Herlihy & Shavit, Silberschatz et al., the Red
+  Book).
+- **Act VII** covers networks and distributed systems (Kurose & Ross, Peterson & Davie, Lynch, Kleppmann).
+- **Acts VIII and IX are the industry curriculum**: software engineering and its tools, the web, services, product
+  experimentation, the cloud, data engineering, search, system design and reliability (Ousterhout, *Software
+  Engineering at Google*, Kleppmann, Xu, the SRE books, Manning et al., Kohavi et al.).
+- **Act X** covers graphics, numerical analysis, quantum computing, formal methods and security (PBRT, Trefethen &
+  Bau, Nielsen & Chuang, Baier & Katoen, Anderson).
+
+Each part's **Reading** line names the textbooks, the classic papers and the frontier papers it follows, and its
+reference card shows them on screen. Each part's **In practice** line names the industrial systems, roles and
+interview topics it maps to. §2.4 maps the whole series onto the ACM/IEEE-CS/AAAI CS2023 curriculum and onto the jobs
+graduates do.
+
+*Draft 2 (2026-11-04)* adds Part 2 (discrete mathematics), Part 24 (algorithms in practice), Acts VIII and IX (Parts
+40–50, industry practice), the *In practice* lines and the degree and industry maps, and renumbers the parts to match.
+The decisions in §7 are confirmed.
 
 ## 1. The standard every part meets
 
@@ -42,20 +60,24 @@ serves that story. A chapter that doesn't is cut, or moved to the part it serves
   highlighted line by line as it runs.
 - A problem set: 4–6 problems, about 90 s on screen, with full solutions in the part's README in English and Chinese.
   **(CS)** At least one problem is a *build* problem against the repository's code, for example "add a `mul`
-  instruction to Pebble and re-run the Job", with the expected result in the README.
+  instruction to Pebble and re-run the Job", with the expected result in the README. **(CS)** Parts with an
+  interview-style counterpart (Acts IV, VII–IX) add one problem in that style, such as "design a rate limiter for…",
+  with a worked answer.
 - A reference card listing textbooks, the classic papers and the frontier papers.
+- **(CS)** An *In practice* card in the outro: the systems, roles and skills the part maps to (the plan's *In
+  practice* line).
 
 **The history thread.**
 - Every part opens with its era ("how we got here", 2–3 min), lit on the timeline strip (1800–2030).
 - Every idea is credited with its people and year, its dead ends included: delay lines, Itanium, the Lisp machines,
-  CODASYL, the OSI stack.
+  CODASYL, the OSI stack, waterfall.
 - The timeline strip gains each part's milestones. The tower strip lights the part's layer.
 
 **Frontier sweep.** Before a part is written, its literature is checked against primary sources (papers, standards,
-RFCs, vendor documentation) up to the writing date. Recent results the plan relies on (mostly from 2024 on) are
-marked **(verify)** below, and must be checked against their primary sources before they go on screen. Examples: the 2025 directed-SSSP result,
-optimal open addressing, Williams' square-root-space simulation, BB(6) bounds, and resource estimates for quantum
-factoring.
+RFCs, vendor documentation, engineering post-mortems) up to the writing date. Recent results the plan relies on
+(mostly from 2024 on) are marked **(verify)** below, and must be checked against their primary sources before they go
+on screen. **(CS)** Industry facts (prices, product behaviour, defaults) are dated on screen ("as of …"), because they
+change.
 
 **Numbers are real.**
 - Computed numbers come from the part's `compute.py`, cached under `.cache/csN/`. Published numbers are cited.
@@ -63,20 +85,20 @@ factoring.
 - **(CS)** Measurements of the machine that renders the video (cache latencies, branch-prediction costs,
   context-switch time, matrix-multiply throughput) are labelled `measured on this machine`. They are reported as
   measured, and the narration follows them, so the Mac build and the Linux build may say different numbers.
-- **(CS)** Everything we build is checked against an independent reference (§2) before its numbers go on screen.
+- **(CS)** Everything we build is checked against an independent reference (§2.1) before its numbers go on screen.
   Those checks live in `tests/test_cs_*.py`.
 - CPU budget: ≤ 2 h per part by default, seeded and resumable (`CACHE.partial`). The named exceptions are listed per
   part.
 - Scene assertions use tolerances, not exact equality.
 - Narration that states a result is an f-string over the data. When a verdict depends on the data (an algorithm
-  beats hardware, a predictor wins), the sentence branches on the computed result.
+  beats hardware, a predictor wins, a cache helps), the sentence branches on the computed result.
 
 **Bilingual standard (as *Analysis, Built* and *AI, Built*).**
 - Every narration line has its entry in `narration_zh.json`, or in the part's `zh_lines.py` template when the line is
   computed.
 - Every on-screen string is in `cs_text_zh.json`, and `tools/collect_text.py --check csN` is clean.
 - The glossary in `CS_ZH_GUIDE.md` grows with every new term (图灵机, 停机问题, 与非门, 流水线, 乱序执行, 缓存一致性, 虚拟内存,
-  死锁, 共识, 线性一致性, …).
+  死锁, 共识, 线性一致性, 幂等, 限流, 灰度发布, 可观测性, …).
 - Code on screen is never translated. Comments and captions are.
 
 **Gates per part:** `tools/lecture_length.py` (fails under 50 min), `contact_sheet.py`, `dead_air.py`,
@@ -92,22 +114,26 @@ teaches it. Each layer is also checked against something that does not share its
 
 | Layer | Module | Built in | Checked against |
 |---|---|---|---|
-| Netlists and a bit-parallel gate simulator (64 test vectors per `uint64` word, levelized evaluation, unit and real delays) | `hdl.py` | 2 | exhaustive truth tables; random vectors |
-| Adders (ripple, Kogge–Stone, Brent–Kung), multipliers (array, Booth, Wallace), divider, ALU, shifter | `blocks.py` | 3 | Python integer arithmetic over all edge cases; exhaustive at 8 bits |
-| Latches, flip-flops, register file, SRAM/DRAM models, FSM synthesis | `seq.py` | 4 | cycle-by-cycle reference models |
-| **Pebble-32**: the ISA, the gate-level single-cycle CPU, the fast ISA emulator, the assembler | `isa.py`, `cpu.py`, `emu.py`, `asm.py` | 5 | co-simulation of gate level against the emulator on random programs; disassembly round trips |
-| Pipeline (5-stage, cycle-accurate), branch predictors, out-of-order core (Tomasulo plus ROB), caches, multicore with MESI | `uarch/` | 6–9 | architectural state equals the emulator's after every program |
-| Object format, linker, loader, allocator | `link.py`, `alloc.py` | 10 | relocation round trips; allocator invariants |
-| The **Pebble language** (a small C-like language with functions, arrays, structs and pointers): regex engine, lexer, LL and LR parsers, type checker, SSA compiler with optimizations and register allocation | `lang/` | 11–12 | a Python reference interpreter for the language; differential testing of compiled against interpreted code |
-| The λ-core (a small ML: closures, ADTs, Hindley–Milner), bytecode VM, three garbage collectors | `lang/ml/` | 13–14 | a substitution-based reducer; GC heap invariants after every collection |
-| **PebbleOS**: traps, timer, processes, schedulers, MMU and paging, locks, a file system on a simulated disk | `os/` | 29–32 | invariants under randomized interrupt timing and crash points |
-| A relational database: SQL parser, optimizer, executor, B+ tree, WAL and recovery | `db/` | 33 | `sqlite3` from the standard library, on the same queries and data |
-| A network: links with loss and delay, Ethernet-like framing, IP routing, TCP-lite | `net/` | 34–35 | delivery and ordering invariants under seeded loss |
-| Distributed systems: a deterministic event simulator, Raft, MapReduce, CRDTs, consistent hashing | `dist/` | 36–37 | safety invariants over thousands of seeded fault schedules |
-| Cryptography (**educational, never for real use**, said on screen): AES, SHA-256, HMAC, RSA, ECC, a toy LWE, a TLS-like handshake | `crypto/` | 27–28 | FIPS-197 and FIPS-180 vectors, `hashlib`, `hmac`, Python's `pow` |
-| A rasterizer and a path tracer | `render/` | 38 | analytic images (the white-furnace test, a lit sphere) |
-| A state-vector quantum simulator | `quantum/` | 40 | closed-form states; unitarity and norm checks |
-| A VC generator, an explicit and a BDD model checker, abstract interpretation, a fuzzer | `verify/` | 41 | known-answer suites |
+| Netlists and a bit-parallel gate simulator (64 test vectors per `uint64` word, levelized evaluation, unit and real delays) | `hdl.py` | 3 | exhaustive truth tables; random vectors |
+| Adders (ripple, Kogge–Stone, Brent–Kung), multipliers (array, Booth, Wallace), divider, ALU, shifter | `blocks.py` | 4 | Python integer arithmetic over all edge cases; exhaustive at 8 bits |
+| Latches, flip-flops, register file, SRAM/DRAM models, FSM synthesis | `seq.py` | 5 | cycle-by-cycle reference models |
+| **Pebble-32**: the ISA, the gate-level single-cycle CPU, the fast ISA emulator, the assembler | `isa.py`, `cpu.py`, `emu.py`, `asm.py` | 6 | co-simulation of gate level against the emulator on random programs; disassembly round trips |
+| Pipeline (5-stage, cycle-accurate), branch predictors, out-of-order core (Tomasulo plus ROB), caches, multicore with MESI | `uarch/` | 7–10 | architectural state equals the emulator's after every program |
+| Object format, linker, loader, allocator | `link.py`, `alloc.py` | 11 | relocation round trips; allocator invariants |
+| The **Pebble language** (a small C-like language with functions, arrays, structs and pointers): regex engine, lexer, LL and LR parsers, type checker, SSA compiler with optimizations and register allocation | `lang/` | 12–13 | a Python reference interpreter for the language; differential testing of compiled against interpreted code |
+| The λ-core (a small ML: closures, ADTs, Hindley–Milner), bytecode VM, three garbage collectors | `lang/ml/` | 14–15 | a substitution-based reducer; GC heap invariants after every collection |
+| **PebbleOS**: traps, timer, processes, schedulers, MMU and paging, locks, a file system on a simulated disk | `os/` | 31–34 | invariants under randomized interrupt timing and crash points |
+| A relational database: SQL parser, optimizer, executor, B+ tree, WAL and recovery | `db/` | 35 | `sqlite3` from the standard library, on the same queries and data |
+| A network: links with loss and delay, Ethernet-like framing, IP routing, TCP-lite | `net/` | 36–37 | delivery and ordering invariants under seeded loss |
+| Distributed systems: a deterministic event simulator, Raft, MapReduce, CRDTs, consistent hashing | `dist/` | 38–39 | safety invariants over thousands of seeded fault schedules |
+| Developer tools: a git-compatible object store, a build engine with early cutoff, a version solver, a merge queue | `dev/` | 41 | real git's object hashes (where git is installed); brute-force resolution on small instances |
+| A toy browser: an HTML-subset tokenizer and tree builder, the CSS cascade, block and inline layout | `web/` | 42 | hand-computed layouts; a subset of the HTML specification's tokenizer tests |
+| Services: RPC with protobuf-style encoding, queues, idempotency keys, sagas; a partitioned log and a stream processor; an inverted index | `svc/`, `stream/`, `search/` | 43, 46, 47 | the published encoding examples; exactly-once invariants under seeded loss and duplication; brute-force query evaluation |
+| The cluster substrate: a reconciler, a bin-packing scheduler, an autoscaler, load balancers, caches, rate limiters, fault injection, and metrics, traces and profiles | `cloud/`, `ops/` | 45, 48–50 | closed-form queueing results; exhaustive optimal packing on small instances |
+| Cryptography (**educational, never for real use**, said on screen): AES, SHA-256, HMAC, RSA, ECC, a toy LWE, a TLS-like handshake | `crypto/` | 29–30 | FIPS-197 and FIPS-180 vectors, `hashlib`, `hmac`, Python's `pow` |
+| A rasterizer and a path tracer | `render/` | 51 | analytic images (the white-furnace test, a lit sphere) |
+| A state-vector quantum simulator | `quantum/` | 53 | closed-form states; unitarity and norm checks |
+| A VC generator, an explicit and a BDD model checker, abstract interpretation, a fuzzer | `verify/` | 54 | known-answer suites |
 
 **Pebble-32** is our own clean 32-bit RISC in the RISC-V mould. It has sixteen registers with `r0 = 0`,
 byte-addressed little-endian memory, four instruction formats and about thirty instructions:
@@ -117,77 +143,159 @@ byte-addressed little-endian memory, four instruction formats and about thirty i
 - jumps: `jal jalr`.
 
 Later parts add extensions as the series reaches them:
-- `mul/div` (Part 3's multiplier, wired into the CPU in Part 6);
-- `ecall/eret` and control registers (Part 29);
-- a page-table MMU (Part 30);
-- `cas` and `amoadd` (Parts 9 and 31).
+- `mul/div` (Part 4's multiplier, wired into the CPU in Part 7);
+- `ecall/eret` and control registers (Part 31);
+- a page-table MMU (Part 32);
+- `cas` and `amoadd` (Parts 10 and 33).
 
-I/O is memory-mapped: a console, the *tape* (the input stream), a timer, a disk and a network card. A card in Part 5
+I/O is memory-mapped: a console, the *tape* (the input stream), a timer, a disk and a network card. A card in Part 6
 compares Pebble-32 with RV32I and says where it differs and why. Two speeds are documented: the gate-level CPU runs
-a paragraph, and the emulator runs a novel.
+a paragraph, and the emulator runs a novel. From Part 43 on, the simulated machines are "nodes" in the event
+simulator of `dist/`. The industry acts run their services on that substrate, so every failure they survive is one we
+injected.
 
 ### 2.2 The Job and its ledger
 
-**The Job:** count the words in the thirty novels and list the twenty most common. The text is *AI, Built* Part 1's
-reading (`BOOKS` in `ai1`'s `compute.py`: thirty Project Gutenberg novels, several million words, measured exactly
-in Part 5), so `make.py` computes `ai1` first. The
-ledger (`explainer.cs.ledger`, `.cache/cs*/ledger.json`) keeps one row per change. Each row records:
+**The Job:** count the words in the thirty novels and list the twenty most common. The text is the reading of *AI,
+Built*'s first part (`BOOKS` in `ai1`'s `compute.py`: thirty Project Gutenberg novels, several million words,
+measured exactly in Part 6), so `make.py` computes `ai1` first. The ledger (`explainer.cs.ledger`,
+`.cache/cs*/ledger.json`) keeps one row per change. Each row records:
 - what changed;
 - Pebble cycles per byte of text (simulated);
 - the projected time for all thirty novels at a stated clock;
-- from Part 15 on, the time measured on this machine;
-- memory used.
+- from Part 16 on, the time measured on this machine;
+- memory used;
+- from Act IX on, p99 latency, availability and cost in dollars.
 
 | Row | Part | What changes |
 |---|---|---|
-| 0 | 5 | single-cycle Pebble at gate level, hand-written assembly, words kept in an unsorted list (linear search). Projected at relay speed (the Z3's ~5 Hz), at ENIAC's, and at 1 GHz |
-| 1 | 6 | 5-stage pipeline: a faster clock, CPI from the stall breakdown |
-| 2 | 7 | 4-wide out-of-order core |
-| 3 | 8 | realistic caches (and what the list does to them) |
-| 4 | 9 | four cores, SIMD character scanning |
-| 5 | 12 | the Job written in the Pebble language: `-O0` against optimized |
-| 6 | 14 | the Job in the λ-core, garbage-collected: what GC costs |
-| 7 | 15 | **algorithm**: sort then count, n log n |
-| 8 | 16 | **algorithm**: a hash table, expected linear time. Rows 0 → 8 are set beside rows 0 → 4: the narration says which mattered more, from the data |
-| 9 | 19 | Count-Min and a heap: the top twenty in kilobytes. The ledger's memory column, and the accuracy given up |
-| 10 | 29 | under PebbleOS: system calls and context switches |
-| 11 | 32 | the novels read from our file system |
-| 12 | 33 | `SELECT word, COUNT(*) … GROUP BY word ORDER BY 2 DESC LIMIT 20` on our database: the plan it chose |
-| 13 | 35 | the novels fetched over our TCP on a lossy link: bytes, round trips, time |
-| 14 | 37 | MapReduce on sixteen simulated Pebbles, one of which crashes |
-| 15 | 42 | the final ledger: every row, and native Python and C on this machine |
+| 0 | 6 | single-cycle Pebble at gate level, hand-written assembly, words kept in an unsorted list (linear search). Projected at relay speed (the Z3's ~5 Hz), at ENIAC's, and at 1 GHz |
+| 1 | 7 | 5-stage pipeline: a faster clock, CPI from the stall breakdown |
+| 2 | 8 | 4-wide out-of-order core |
+| 3 | 9 | realistic caches (and what the list does to them) |
+| 4 | 10 | four cores, SIMD character scanning |
+| 5 | 13 | the Job written in the Pebble language: `-O0` against optimized |
+| 6 | 15 | the Job in the λ-core, garbage-collected: what GC costs |
+| 7 | 16 | **algorithm**: sort then count, n log n |
+| 8 | 17 | **algorithm**: a hash table, expected linear time. Rows 0 → 8 are set beside rows 0 → 4: the narration says which mattered more, from the data |
+| 9 | 20 | Count-Min and a heap: the top twenty in kilobytes. The ledger's memory column, and the accuracy given up |
+| 10 | 24 | **engineering**: a SIMD tokenizer and a Swiss-table-style map, native, against the textbook version |
+| 11 | 31 | under PebbleOS: system calls and context switches |
+| 12 | 34 | the novels read from our file system |
+| 13 | 35 | `SELECT word, COUNT(*) … GROUP BY word ORDER BY 2 DESC LIMIT 20` on our database: the plan it chose |
+| 14 | 37 | the novels fetched over our TCP on a lossy link: bytes, round trips, time |
+| 15 | 39 | MapReduce on sixteen simulated Pebbles, one of which crashes |
+| 16 | 45 | on autoscaled containers: the bill in dollars, at cited and dated prices |
+| 17 | 46 | as a stream: a live top-20 with event-time windows, late and duplicate events, exactly-once state |
+| 18 | 49 | as a service at a million books a day: p50 and p99 latency, cache hit rate, cost |
+| 19 | 50 | that service under crashes, partitions and slow nodes: availability and SLO burn |
+| 20 | 55 | the final ledger: every row, and native Python and C on this machine |
 
 ### 2.3 The tower, the timeline and the payoffs
 
-- `explainer.cs.tower`: the stack drawn on every chapter card, with the part's layer lit. From the bottom: physics,
-  switches, gates, arithmetic and memory, the ISA, the microarchitecture, machine code, languages, algorithms, the
-  OS, storage and data, networks, distributed systems, applications. A side column holds the *limits*:
-  computability, complexity, information. Acts V and the theory chapters light it.
-- `explainer.cs.timeline`: 1800–2030. Babbage (1822, 1837), Boole (1854), Hilbert (1928), Gödel (1931), Church and
-  Turing (1936), Shannon (1937, 1948, 1949), Z3 (1941), ENIAC and EDVAC (1945), the transistor (1947), the Baby
-  (1948), Hamming (1950), FORTRAN (1957), the IC (1958), Dijkstra (1959), LISP (1960), Unix (1969), Codd (1970),
-  Cook (1971), Diffie–Hellman (1976), RSA (1977), TCP/IP (1983), Paxos (1989), the Web (1991), Shor (1994), MapReduce
-  (2004), Raft (2014), Spectre (2018), BB(5) (2024), ML-KEM (2024), and on.
+- `explainer.cs.tower`: the stack drawn on every chapter card, with the part's layer lit. From the bottom:
+  1. physics, switches, gates;
+  2. arithmetic and memory;
+  3. the ISA and the microarchitecture;
+  4. machine code, languages, algorithms;
+  5. the OS, storage and data;
+  6. networks and distributed systems;
+  7. services and the cloud;
+  8. applications (the web, search, products).
+
+  Two side columns sit beside it. *The limits* (computability, complexity, information) is lit by Act V and by the
+  theory chapters. *The practice* (engineering, tooling, operations) is lit by Acts VIII–IX.
+- `explainer.cs.timeline`, 1800–2030. Among its milestones:
+
+  | Era | Milestones |
+  |---|---|
+  | 1822–1945 | Babbage (1822, 1837), Boole (1854), Hilbert (1928), Gödel (1931), Church and Turing (1936), Shannon (1937), Z3 (1941), ENIAC and EDVAC (1945) |
+  | 1947–1970 | the transistor (1947), the Baby (1948), Shannon (1948, 1949), Hamming (1950), FORTRAN (1957), the IC (1958), Dijkstra (1959), LISP (1960), the NATO software-engineering conference (1968), Unix (1969), Codd (1970) |
+  | 1971–1998 | Cook (1971), Make (1976), Diffie–Hellman (1976), RSA (1977), TCP/IP (1983), Paxos (1989), the Web (1991), Shor (1994), Google (1998) |
+  | 2004–2025 | MapReduce (2004), git (2005), EC2 and S3 (2006), Kafka (2011), Raft (2014), Kubernetes (2014), Spectre (2018), BB(5) (2024), ML-KEM (2024), and on |
 - `payoff_card` ("where this comes back") and `reference_card` from `explainer.ai`. The **callbacks** to other series
   are cards, not repeats:
 
 | Here | Elsewhere |
 |---|---|
-| 1 Computation, 23 Undecidable | *AI, Built* 2 (Turing, the halting problem sketched); *Analysis, Built* 1 (Cantor's diagonal) |
-| 3 Arithmetic, 39 Real Numbers | *AI, Built* 4 (floats and numerics), 17 (number formats) |
-| 6–9 Architecture | *AI, Built* 17 (GPUs, the roofline), 18 (collectives) |
-| 15–16 Sorting, hashing | *AI, Built* 1 (bits from a comparison, Huffman) |
-| 17 Graphs | *AI, Built* 2 (A*), 5 (Markov chains, PageRank's power iteration) |
-| 18 FFT, DP | *Analysis, Built* 9 (the Fourier transform); *AI, Built* 7 (Viterbi), 26 (AlphaTensor) |
-| 19 Randomness | *AI, Built* 3 (Johnson–Lindenstrauss), 5 (concentration, MCMC), 18 (MinHash dedup) |
-| 20 Strings | *AI, Built* 1 (compression), 23 (BPE) |
-| 22 Optimization | *AI, Built* 4 (Lagrange, KKT), 6 (boosting), 11 (gradient methods) |
-| 24 P vs NP | *AI, Built* 2 (DPLL, CDCL, the 3-SAT phase transition) |
-| 26 Codes | *AI, Built* 1 (typical sets), 7 (belief propagation) |
-| 38 Graphics | *AI, Built* 22 (NeRF, Gaussian splatting) |
-| 40 Quantum | *Quantum Mechanics, Visualized* and *Part 2* (the physics) |
-| 41 Proofs | *AI, Built* 25 (Lean and AlphaProof) |
-| 42 Trust | *AI, Built* 31 (can we trust it?) |
+| 1 Computation, 25 Undecidable | *AI, Built* 2 (Turing, the halting problem sketched); *Analysis, Built* 1 (Cantor's diagonal) |
+| 2 Proof and Counting | *Analysis, Built* 1–2 (proof in analysis, ε–δ) |
+| 4 Arithmetic, 52 Real Numbers | *AI, Built* 4 (floats and numerics), 17 (number formats) |
+| 7–10 Architecture | *AI, Built* 17 (GPUs, the roofline), 18 (collectives) |
+| 16–17 Sorting, hashing | *AI, Built* 1 (bits from a comparison, Huffman) |
+| 18 Graphs | *AI, Built* 2 (A*), 5 (Markov chains, PageRank's power iteration) |
+| 19 FFT, DP | *Analysis, Built* 9 (the Fourier transform); *AI, Built* 7 (Viterbi), 26 (AlphaTensor) |
+| 20 Randomness | *AI, Built* 3 (Johnson–Lindenstrauss), 5 (concentration, MCMC), 18 (MinHash dedup) |
+| 21 Strings | *AI, Built* 1 (compression), 23 (BPE) |
+| 23 Optimization | *AI, Built* 4 (Lagrange, KKT), 6 (boosting), 11 (gradient methods) |
+| 26 P vs NP | *AI, Built* 2 (DPLL, CDCL, the 3-SAT phase transition) |
+| 28 Codes | *AI, Built* 1 (typical sets), 7 (belief propagation) |
+| 44 People and Products | *AI, Built* 26 (bandits), 31 (Goodhart, privacy) |
+| 47 Search | *AI, Built* 6 (boosted trees for ranking), 15 (retrieval), 24 (embeddings) |
+| 51 Graphics | *AI, Built* 22 (NeRF, Gaussian splatting) |
+| 53 Quantum | *Quantum Mechanics, Visualized* and *Part 2* (the physics) |
+| 54 Proofs | *AI, Built* 25 (Lean and AlphaProof) |
+| 55 Trust | *AI, Built* 31 (can we trust it?) |
+
+### 2.4 The degree and the industry
+
+**A CS degree, course by course.** The areas are those of the ACM/IEEE-CS/AAAI curriculum guidelines (CS2023). The
+AI area is the companion series, *AI, Built*.
+
+| Course | CS2023 area | Parts |
+|---|---|---|
+| Discrete mathematics, probability for CS | MSF | 2 (with 16, 20, 44) |
+| Theory of computation | AL | 1, 5, 12, 25 |
+| Digital logic, computer organization | AR, SF | 3–6 |
+| Computer architecture | AR | 7–10 |
+| Systems programming | SF, SDF | 11, 15 |
+| Compilers | FPL | 12–13 |
+| Programming languages | FPL | 14–15 |
+| Algorithms and data structures (two semesters) | AL | 16–24 |
+| Computational complexity | AL | 26–27 |
+| Coding theory and cryptography | SEC, MSF | 28–30 |
+| Operating systems | OS, SF | 31–34 |
+| Databases | DM | 35 (with 34, 46) |
+| Computer networks | NC | 36–37 |
+| Distributed systems | PDC | 38–39 |
+| Parallel computing | PDC | 10, 33 |
+| Software engineering | SE, SEP | 40–41, 54 |
+| Web and mobile development | SPD, HCI | 42–43 |
+| Human–computer interaction | HCI | 44 |
+| Cloud computing | PDC, SPD | 45 |
+| Data engineering | DM, PDC | 46 |
+| Information retrieval | DM | 47 |
+| System design | PDC, SE | 48–49 |
+| Reliability and performance | SF, SE | 50 (with 7–9) |
+| Computer graphics | GIT | 51 |
+| Numerical methods | MSF | 52 |
+| Quantum computing | AR (quantum architectures) | 53 |
+| Formal methods | FPL, SE | 54 |
+| Security | SEC, SEP | 55 (with 8, 11, 29–30) |
+| Society, ethics and the profession | SEP | 40, 44, 55 (with *AI, Built* 31) |
+
+Embedded and real-time systems (SPD) are covered in Parts 5, 6 and 31: memory-mapped I/O, interrupts, RTOS
+scheduling, and synchronizers. Games are covered in Parts 22 and 51.
+
+**The industry, role by role.** Each part's outro *In practice* card says which of these it serves.
+
+| Role | Core parts |
+|---|---|
+| Backend and product engineer | 16–18, 35, 37, 40–43, 48–50 |
+| Infrastructure, platform and SRE | 31–34, 36–39, 41, 45, 50 |
+| Data engineer | 35, 39, 46, 47 |
+| Frontend and mobile engineer | 42, 44, 51 |
+| Security engineer | 8, 11, 29–30, 54–55 |
+| Systems and performance engineer | 7–10, 24, 31–34, 50 |
+| Compiler, language and runtime engineer | 12–15, 54 |
+| Hardware, FPGA and chip designer | 3–10 |
+| Search and ML infrastructure | 20, 45–47 (with *AI, Built*) |
+| Low-latency and quantitative systems | 9–10, 24, 33, 37, 52 |
+| Embedded and robotics | 5–6, 22, 31, 52 |
+| Researcher | 1–2, 16–30, 53–54 |
+
+**Interviews.** Coding interviews draw on Parts 16–24. System design interviews draw on Parts 39 and 45–50 (Part 49 is
+the canon of case studies). Engineering judgement and collaboration questions draw on Parts 40–41 and 50.
 
 ## 3. Visual instruments
 
@@ -205,25 +313,30 @@ and curves), `explainer/ai/lecture.py` (the cards) and `explainer/ai/games.py` (
 | `CacheView` | sets × ways with tags; hits and misses flashing; address bits splitting into tag, index and offset |
 | `TapeView` | a Turing machine's tape, head and state, with its space–time history scrolling down |
 | `Automaton` | state diagrams with tokens moving; the subset construction merging states |
-| `TreeView` | BSTs, heaps, tries, parse trees, ASTs, λ-terms; rotations, splays and reductions morph |
+| `TreeView` | BSTs, heaps, tries, parse trees, ASTs, λ-terms, DOM trees; rotations, splays and reductions morph |
 | `GraphView` | graphs carrying algorithm state: frontiers, distances, flows, colors, cuts |
-| `ArrayView` | arrays as bars and cells; DP tables filling, with traceback |
+| `ArrayView` | arrays as bars and cells; DP tables filling, with traceback; Fenwick and segment trees over arrays |
 | `Lattice` | Hasse diagrams: dataflow lattices, CRDT joins, the consistency hierarchy, complexity classes |
-| `Gantt` | schedules, job pipelines, MapReduce phases, pipeline bubbles |
+| `Gantt` | schedules, job pipelines, MapReduce phases, pipeline bubbles, CI pipelines |
 | `SpaceTime` | Lamport diagrams: processes, messages, logical clocks, consistent cuts |
-| `SequenceDiagram` | protocols (TCP, TLS, Raft RPCs, Paxos), with loss and retransmission |
+| `SequenceDiagram` | protocols (TCP, TLS, Raft RPCs, Paxos, OAuth, sagas), with loss and retransmission |
 | `InterleavingTree` | thread interleavings branching; reachable bad states lit |
+| `CommitGraph` | git's DAG: commits, branches, merge bases, a rebase replaying commits |
+| `ArchDiagram` | system-design diagrams whose boxes are live simulations: requests flow as packets, queues fill, caches flash hit or miss, a box zooms into its internals |
+| `TraceWaterfall` / `FlameGraph` | distributed traces with the critical path lit; profiles as flame graphs |
+| `SLOBoard` | error budgets draining, burn rates, latency percentiles over time |
 | `QCircuit` / `BlochSphere` / `AmpBars` | quantum circuits, states on the sphere, amplitudes colored by phase |
 | `Tower` / `Ledger` | the series devices |
 
-3D camera tours: the Boolean cube and Hamming space, the simplex walking an LP polytope (and the squashed Klee–Minty
-cube), Delaunay lifted to the paraboloid, RANDU's points turning until fifteen planes appear, the Bloch sphere, rays
-bouncing in our scene, the memory hierarchy as a zoom from registers to disk ("if a cycle were a second").
+3D camera tours: the Boolean cube and Hamming space; the simplex walking an LP polytope (and the squashed Klee–Minty
+cube); Delaunay lifted to the paraboloid; RANDU's points turning until fifteen planes appear; the Bloch sphere; rays
+bouncing in our scene; the memory hierarchy as a zoom from registers to disk ("if a cycle were a second"); a data
+center zoomed from building to rack to container.
 
 ## 4. Part by part
 
 Lengths are targets; the content decides. Each part lists its **story**, its chapters, what is **computed**, the
-signature **visuals**, and its **reading**.
+signature **visuals**, **in practice**, and its **reading**.
 
 ---
 
@@ -237,7 +350,7 @@ outlives the proof, and the series sets out to build one.
 2. Algorithms before machines: Euclid's GCD and its termination by descent; al-Khwārizmī; what "mechanical" meant.
 3. Babbage's Difference Engine: the method of finite differences, which tabulates a polynomial using additions alone
    (computed). The Analytical Engine; Lovelace's Note G and its Bernoulli-number program (1843).
-4. Hilbert's program, and Gödel 1931 in one picture (paid off in Part 23).
+4. Hilbert's program, and Gödel 1931 in one picture (paid off in Part 25).
 5. Turing's machine (1936): tape, head, states, transition table. Definition card. Our simulator runs an
    incrementer and a unary adder, with the tape's space–time history drawn.
 6. Programming a Turing machine: palindromes, copying, binary addition, subroutines. What they cost: palindromes take
@@ -245,7 +358,7 @@ outlives the proof, and the series sets out to build one.
 7. Robustness: a multitape machine simulated on a single tape with quadratic slowdown (proved by construction);
    two-way tapes and larger alphabets; nondeterminism adds no power, at an exponential cost in simulation.
 8. The universal machine: encoding machines as strings, so that U simulates any M. This is the stored-program idea,
-   paid off in Part 5. Small universal machines.
+   paid off in Part 6. Small universal machines.
 9. Other models with the same power:
    - the λ-calculus (Church 1936): Church numerals computing 2 + 3 on screen;
    - μ-recursive functions;
@@ -253,13 +366,13 @@ outlives the proof, and the series sets out to build one.
    - Post systems;
    - Rule 110 (Cook 2004) and Conway's Life.
 10. The Church–Turing thesis: what it claims and what it doesn't. The physical thesis, and the extended
-    (complexity-theoretic) thesis that Part 40 challenges.
+    (complexity-theoretic) thesis that Part 53 challenges.
 11. Diagonalization: Cantor's argument, then counting. There are countably many machines and uncountably many
     languages, so almost every problem is unsolvable.
 12. The halting problem: Turing's proof, animated as an infinite table with its diagonal flipped; the paradoxical
     program.
 13. Reductions: from halting to "does M ever print 1?" and "does M halt on a blank tape?". Rice's theorem as a teaser
-    (proved in Part 23).
+    (proved in Part 25).
 14. Busy beavers (Radó 1962):
     - BB(2) = 6, BB(3) = 21 and BB(4) = 107 steps, recomputed by our simulator;
     - BB(5) = 47,176,870 (bbchallenge, Coq-verified, 2024). We run the champion for all 47 million steps and draw
@@ -273,11 +386,72 @@ outlives the proof, and the series sets out to build one.
 machine; Rule 110 and a Life glider gun.
 *Visuals:* the tape with its history scrolling down like a cellular automaton; the diagonal flipping; BB(5)'s 47
 million steps as one giant space–time image, the camera diving in; Church numerals as towers of function boxes.
+*In practice:* interpreters, emulators and VMs (the JVM, QEMU, smart-contract VMs) are universal machines; undecidability is why linters, static analyzers and virus scanners must guess.
 *Reading:* Turing 1936; Church 1936; Petzold, *The Annotated Turing*; Sipser ch. 3; Moore & Mertens, *The Nature of
 Computation* ch. 7; Minsky, *Computation: Finite and Infinite Machines*; Davis, *The Universal Computer*; Aaronson,
 "The Busy Beaver Frontier" (2020); bbchallenge (2024–25).
 
-### Part 2 · Logic from Switches (~55)
+### Part 2 · Proof and Counting (~55)
+*Story:* Hilbert's question was about proofs, so before building anything we learn what a proof is. Logic supplies
+the grammar. Induction and invariants supply the moves that every later correctness argument uses, from the adder to
+Raft. Counting tells us how many things there are (pigeons, subsets, paths, programs), which is the raw material of
+every bound in the series. The hook is a puzzle that sold millions of copies and has no solution, and an invariant
+proves it.
+1. Hook: the 14–15 puzzle (Loyd's $1,000 prize). An invariant (permutation parity plus the blank's row) proves the
+   swapped position unreachable (Johnson & Story 1879). BFS on small sliding puzzles finds exactly half the positions
+   reachable (computed).
+2. Propositions, connectives, truth tables; vacuous truth; equivalences; predicates and quantifiers. Negating ∀∃
+   statements, played as a game between a prover and a skeptic (callback to *Analysis, Built* 2's ε–δ).
+3. Proof techniques:
+   - direct proof, contrapositive and contradiction (√2 is irrational; there are infinitely many primes);
+   - proof by cases;
+   - constructive against non-constructive proof (irrational a, b with aᵇ rational).
+4. Induction: ordinary, strong and well-ordering, and why they are equivalent; the "all horses are one color" trap;
+   tiling a 2ⁿ × 2ⁿ board with L-trominoes (recursion animated).
+5. Structural induction on recursively defined strings and trees, the form used for parse trees and type
+   derivations (Parts 12 and 14).
+6. Invariants and variants: the state-machine method (Lehman, Leighton & Meyer); the Die Hard water jugs and their
+   gcd invariant; termination by a decreasing measure. This previews Floyd and Hoare (Part 54).
+7. Sets, relations, functions:
+   - injections, surjections, bijections;
+   - equivalence relations and partitions (Myhill–Nerode in Part 5);
+   - partial orders and Hasse diagrams; lattices (dataflow in Part 13, CRDTs in Part 39);
+   - Dilworth's theorem, briefly.
+8. Cardinality: countable sets (ℚ by Cantor's pairing, computed); Cantor–Schröder–Bernstein; Part 1's
+   uncountability, revisited.
+9. Counting I:
+   - the sum and product rules; permutations and combinations;
+   - bijective proofs; the binomial theorem; Pascal's triangle (Sierpiński mod 2);
+   - Vandermonde's identity, proved combinatorially; stars and bars.
+10. The pigeonhole principle:
+    - generalized pigeonhole;
+    - **Erdős–Szekeres** (a monotone subsequence of length √n, proved);
+    - no lossless compressor shrinks every input (callback to *AI, Built* 1).
+11. Inclusion–exclusion: derangements (→ 1/e), surjections, Euler's φ; Bonferroni bounds.
+12. Counting with recurrences: Fibonacci tilings; **Catalan numbers** with their bijections (parentheses, binary trees,
+    triangulations, lattice paths, morphing into each other); Stirling numbers. Generating functions wait for Part 16.
+13. Number theory: divisibility; gcd and Bézout (Euclid from Part 1); congruences as clock arithmetic; **the Chinese
+    remainder theorem**; the fundamental theorem of arithmetic. Part 30 builds RSA on these.
+14. Discrete probability:
+    - conditional probability and Bayes (Monty Hall); independence;
+    - **linearity of expectation**: in the hat-check problem, the expected number of fixed points is 1 for every n;
+    - indicator variables, the tool behind quicksort's analysis (Part 16);
+    - Markov, Chebyshev and the union bound.
+15. Graph basics: the handshake lemma; trees (n − 1 edges, and the equivalent definitions); bipartite iff no odd
+    cycle (Part 18 builds on these). Outro.
+
+*Computed:* reachable-state counts for sliding puzzles and the parity split; Cantor pairing; derangement ratios
+converging to 1/e; Catalan bijections enumerated; hat-check simulations; Erdős–Szekeres over random permutations.
+*Visuals:* the 15-puzzle with its invariant ticking; the recursive tromino tiling; Pascal's triangle turning into
+Sierpiński's; Hasse diagrams; Catalan objects morphing into one another.
+*In practice:* invariants are what assertions, code review and property-based tests check; counting is capacity
+planning; probability is load and failure analysis; all three appear in the first round of technical interviews.
+*Reading:* Lehman, Leighton & Meyer, *Mathematics for Computer Science*; Rosen, *Discrete Mathematics and Its
+Applications*; Graham, Knuth & Patashnik, *Concrete Mathematics*; Velleman, *How to Prove It*; Pólya, *How to Solve
+It*; Aigner & Ziegler, *Proofs from THE BOOK*; Stanley, *Enumerative Combinatorics* vol. 1 ch. 1; Johnson & Story
+1879.
+
+### Part 3 · Logic from Switches (~55)
 *Story:* Boole turns logic into algebra, and a 21-year-old Shannon notices that relays obey that algebra. One gate,
 NAND, turns out to be enough for everything. Yet almost every function needs an astronomically large circuit, and no
 one can point to a single one that does.
@@ -296,13 +470,13 @@ one can point to a single one that does.
 6. Multiplexers, decoders, encoders. Shannon expansion f = x·f₁ + x̄·f₀. The mux as a lookup table, which is how
    FPGAs work.
 7. Binary decision diagrams (Bryant 1986): reduce and share to get a canonical form. Variable order changes the size
-   exponentially (computed). Part 41 uses them.
+   exponentially (computed). Part 54 uses them.
 8. Circuit complexity:
    - size and depth;
    - Shannon's counting argument (1949): almost all n-input functions need ≳ 2ⁿ/n gates (proved by counting
      circuits against functions);
    - Lupanov's matching upper bound;
-   - yet the best lower bound for an explicit function is about 3.1n. The gap returns in Part 25.
+   - yet the best lower bound for an explicit function is about 3.1n. The gap returns in Part 27.
 9. Formulas against circuits; parity needs 2ⁿ⁻¹ terms in depth two.
 10. Gates take time: propagation delay, the critical path, glitches and hazards, fan-out, RC delay. Our simulator with
     unit delays shows a glitch.
@@ -312,19 +486,20 @@ one can point to a single one that does.
     verification of every block.
 13. History: Zuse's Z1–Z3 (1938–41), Stibitz's relay calculators, Atanasoff–Berry, Colossus (1944); Moore's 1965
     paper.
-14. Reversible gates (Toffoli, Fredkin) as a preview of Part 40. Outro.
+14. Reversible gates (Toffoli, Fredkin) as a preview of Part 53. Outro.
 
 *Computed:* gate counts and critical paths of every block; exhaustive checks; BDD sizes under good and bad variable
 orders; Shannon's counting curves; glitch traces.
 *Visuals:* relay contacts clicking into series and parallel; the CMOS inverter's transfer curve; truth table →
 Boolean cube → K-map faces; a BDD collapsing as nodes merge; two towers of numbers, 2^(2ⁿ) functions against the
 circuits of size s.
+*In practice:* FPGAs and hardware description languages (Verilog, VHDL, Chisel), logic synthesis, BDD- and SAT-based hardware verification.
 *Reading:* Harris & Harris, *Digital Design and Computer Architecture* ch. 1–2; Nisan & Schocken, *The Elements of
 Computing Systems* ch. 1; Petzold, *Code*; Shannon 1938, 1949; Bryant 1986; Wegener, *The Complexity of Boolean
 Functions*; Jukna, *Boolean Function Complexity*; Knuth, TAOCP 4A §7.1; Weste & Harris, *CMOS VLSI Design* ch. 1;
 Li & Yang 2022 (3.1n).
 
-### Part 3 · Arithmetic (~55)
+### Part 4 · Arithmetic (~55)
 *Story:* A machine has only finitely many bits, so its integers live on a clock and its reals are a sparse,
 uneven ruler. The carry chain that makes addition slow becomes, seen the right way, a parallel prefix computation.
 Floating point is carefully engineered, and still a wrong number can bring down a rocket.
@@ -334,7 +509,7 @@ Floating point is carefully engineered, and still a wrong number can bring down 
 3. Half and full adders. The ripple-carry adder, correct by induction, with delay Θ(n) measured.
 4. Carry lookahead: generate and propagate. The carry operator (g, p) ∘ (g′, p′) is associative, which gives a
    parallel prefix tree. Kogge–Stone, Brent–Kung and Sklansky drawn: depth O(log n), with their size, depth and
-   fan-out trade-offs. The prefix tree returns in Part 9 (scan).
+   fan-out trade-offs. The prefix tree returns in Part 10 (scan).
 5. Carry-select and carry-skip adders (√n). Critical paths measured in our netlists.
 6. Multiplication: shift-and-add; the array multiplier; Booth recoding; carry-save 3:2 compressors; Wallace and Dadda
    trees, depth O(log n).
@@ -356,7 +531,7 @@ Floating point is carefully engineered, and still a wrong number can bring down 
 12. Conditioning against stability (Wilkinson): perturb one coefficient of ∏(x − k), k = 1…20, by 2⁻²³ and watch the
     roots fly into the complex plane (computed).
 13. Beyond IEEE: bfloat16 and FP8 (callback to *AI, Built* 17); posits; interval arithmetic; bignums (Karatsuba waits
-    for Part 18).
+    for Part 19).
 14. Computing sin, exp and log: range reduction, minimax polynomials, CORDIC shift-and-add rotations (the HP-35).
     Outro.
 
@@ -364,12 +539,13 @@ Floating point is carefully engineered, and still a wrong number can bring down 
 Kahan against naive summation; Wilkinson's roots; CORDIC iterations.
 *Visuals:* the 2ⁿ clock; a prefix tree of carries lighting level by level; the float number line with its spacing
 doubling at each power of two; the roots scattering.
+*In practice:* integer-overflow bugs and CVEs, money in fixed point (never in floats), numerical libraries, ML number formats, the FDIV recall as a lesson in testing.
 *Reading:* Harris & Harris ch. 5; Parhami, *Computer Arithmetic*; Koren, *Computer Arithmetic Algorithms*; Goldberg,
 "What Every Computer Scientist Should Know About Floating-Point Arithmetic" (1991); Higham, *Accuracy and Stability
 of Numerical Algorithms* ch. 1–4; Muller et al., *Handbook of Floating-Point Arithmetic*; Knuth, TAOCP 2 §4.1–4.3;
 Overton, *Numerical Computing with IEEE Floating Point Arithmetic*.
 
-### Part 4 · Memory and Time (~55)
+### Part 5 · Memory and Time (~55)
 *Story:* Connect a circuit's output back to its input and it can remember. Memory brings time into the design, and a
 cost that never quite vanishes: a flip-flop can balance between 0 and 1 for an unbounded time. The same machines
 that remember turn out to be the first rung of a theory of languages.
@@ -381,33 +557,34 @@ that remember turn out to be the first rung of a theory of languages.
    synchronizer (computed).
 5. Finite-state machines, Moore and Mealy: a sequence detector; binary, one-hot and Gray state encodings.
 6. FSMs are DFAs: the Myhill–Nerode theorem (proved), and minimization by partition refinement (Hopcroft's
-   n log n). The bridge to Part 11.
+   n log n). The bridge to Part 12.
 7. Counters and shift registers. LFSRs: maximal-length sequences from primitive polynomials over GF(2) (period
-   2ⁿ − 1), with the LFSR as multiplication by x in GF(2ⁿ). Returns in CRCs (Part 26) and stream ciphers (Part 27).
+   2ⁿ − 1), with the LFSR as multiplication by x in GF(2ⁿ). Returns in CRCs (Part 28) and stream ciphers (Part 29).
 8. The register file from decoders, multiplexers and flip-flops; what each extra port costs.
 9. Memory arrays:
    - the 6T SRAM cell (cross-coupled inverters again), word and bit lines, sense amplifiers;
    - the 1T1C DRAM cell, destructive reads, refresh every 64 ms, row buffers;
-   - why DRAM is dense and slow. Part 8 builds on this.
+   - why DRAM is dense and slow. Part 9 builds on this.
 10. Rowhammer (2014): hammering one DRAM row flips bits in its neighbours, and the hardware abstraction leaks (Part
     42 returns to it).
 11. The synchronous discipline, and why nearly everyone clocks; asynchronous circuits and the Muller C-element.
 12. ROMs, PLAs, FPGAs: memory as logic; a preview of microcode.
 13. History: mercury delay lines (EDSAC), Williams tubes, core memory (Forrester, Whirlwind 1953), the Intel 1103
-    DRAM (1970); flash previewed for Part 32.
+    DRAM (1970); flash previewed for Part 34.
 14. Outro.
 
 *Computed:* the cross-coupled-inverter ODE phase portrait; a metastability histogram; Myhill–Nerode minimization;
 LFSR periods for every polynomial of degree ≤ 8; the register file in the simulator.
 *Visuals:* a ball rolling into one of two wells or balancing on the saddle; setup and hold windows on a waveform;
 the DRAM capacitor leaking charge until refresh.
+*In practice:* clock-domain crossings in chip design, DRAM refresh and ECC in servers, Rowhammer mitigations, state machines in embedded firmware and protocol code.
 *Reading:* Harris & Harris ch. 3; Nisan & Schocken ch. 3; Sipser ch. 1; Hopcroft, Motwani & Ullman ch. 4; Jacob, Ng &
 Wang, *Memory Systems*; Golomb, *Shift Register Sequences*; Kim et al. 2014 (Rowhammer); Ginosar, "Metastability and
 Synchronizers" (2011).
 
-### Part 5 · The Stored-Program Computer (~60)
+### Part 6 · The Stored-Program Computer (~60)
 *Story:* ENIAC was programmed with cables. The EDVAC report put the program in memory, alongside the data. We build
-that machine, Pebble, from the gates of Parts 2–4. It runs Euclid, runs a Turing machine, and runs the Job, which
+that machine, Pebble, from the gates of Parts 3–5. It runs Euclid, runs a Turing machine, and runs the Job, which
 closes the loop back to Part 1. It also turns out to be very slow.
 1. History: ENIAC (1945) and its six programmers; von Neumann's *First Draft* (1945); the Manchester Baby (21 June
    1948); EDSAC (1949), Wilkes and the Wheeler jump.
@@ -427,8 +604,8 @@ closes the loop back to Part 1. It also turns out to be very slow.
     on the emulator, with identical results. Ledger row 0, projected to the Z3's relays, ENIAC and 1 GHz.
 11. Universality closed: a Turing-machine interpreter in Pebble assembly runs Part 1's BB(3); a TM can simulate
     Pebble. Part 1's loop closes.
-12. Code as data: self-modifying code in EDSAC's day, and why we forbid it later (W^X, Part 42).
-13. Interrupts and exceptions previewed (Part 29).
+12. Code as data: self-modifying code in EDSAC's day, and why we forbid it later (W^X, Part 55).
+13. Interrupts and exceptions previewed (Part 31).
 14. The whole machine counted: Pebble's gates and critical path, against the 6502 (~3,500 transistors) and a modern
     core (cited).
 15. Outro.
@@ -436,6 +613,7 @@ closes the loop back to Part 1. It also turns out to be very slow.
 *Computed:* the whole CPU netlist; gate-level/emulator co-simulation on random programs; the Job v0; BB(3) on Pebble.
 *Visuals:* instruction bits lighting their fields; the datapath with glowing packets; the camera zooms from the
 block diagram into one NAND gate and back, the first trip down the tower.
+*In practice:* ISA design (RISC-V, ARM, x86), emulators and simulators (QEMU, gem5), memory-mapped peripherals in embedded firmware.
 *Reading:* Patterson & Hennessy, *Computer Organization and Design (RISC-V)* ch. 2, 4; Harris & Harris ch. 6–7;
 Nisan & Schocken ch. 4–6; von Neumann 1945; Wilkes 1951; Haigh, Priestley & Rope, *ENIAC in Action*; the RISC-V
 unprivileged specification.
@@ -444,7 +622,7 @@ unprivileged specification.
 
 ## Act II · Making It Fast
 
-### Part 6 · Pipelines (~55)
+### Part 7 · Pipelines (~55)
 *Story:* The iron law says time is instructions × CPI × clock period. Pipelining shrinks the clock period, like
 starting the next load of laundry before the first is dry. That creates hazards, and the hardest is the branch,
 because the machine must guess where the program goes next. The guessers inside every CPU are small learning
@@ -456,7 +634,7 @@ machines, and the best of them is a perceptron.
 4. Structural hazards.
 5. Data hazards: RAW; stalls; forwarding paths drawn; the load-use stall.
 6. Control hazards: the branch penalty; MIPS's delayed branch as a historical choice.
-7. Branch prediction: static; 1-bit against 2-bit saturating counters (Part 4's FSMs); accuracy measured on the Job's
+7. Branch prediction: static; 1-bit against 2-bit saturating counters (Part 5's FSMs); accuracy measured on the Job's
    branch trace.
 8. Correlating predictors:
    - global history and gshare;
@@ -466,7 +644,7 @@ machines, and the best of them is a perceptron.
 9. Branch target buffers and return-address stacks.
 10. Precise exceptions in a pipeline.
 11. The Job's CPI on the cycle-accurate pipeline, with its stall breakdown. Ledger row 1.
-12. The deep-pipeline era and its end: the Pentium 4's 31 stages, the frequency race, and the power wall (Part 9).
+12. The deep-pipeline era and its end: the Pentium 4's 31 stages, the frequency race, and the power wall (Part 10).
 13. Amdahl's law, derived, with its corollaries.
 14. The sorted-array puzzle, measured on this machine: why sorting data makes a branchy loop several times faster;
     branchless code and conditional moves.
@@ -476,11 +654,12 @@ machines, and the best of them is a perceptron.
 traces of the Job and other programs; sorted against unsorted branches timed on this machine.
 *Visuals:* the pipeline chart with bubbles, forwarding arrows and flushes; predictor state machines flipping; the
 perceptron's weights as a heatmap over branch history.
+*In practice:* performance work with hardware counters (`perf stat`: IPC, branch misses); branchless code in databases, codecs and trading systems.
 *Reading:* Patterson & Hennessy ch. 4; Hennessy & Patterson, *Computer Architecture: A Quantitative Approach* ch. 3,
 App. C; Shen & Lipasti, *Modern Processor Design*; Smith 1981; Yeh & Patt 1991; McFarling 1993; Seznec & Michaud
 2006; Jiménez & Lin 2001; Amdahl 1967.
 
-### Part 7 · Out of Order (~55)
+### Part 8 · Out of Order (~55)
 *Story:* An in-order machine waits whenever one instruction waits. Tomasulo's 1967 idea is to let instructions run
 as soon as their operands are ready. Add renaming, a reorder buffer and speculation, and modern cores keep hundreds
 of instructions in flight. The guesses leave traces, and in 2018 Spectre showed how to read them.
@@ -497,9 +676,9 @@ of instructions in flight. The guesses leave traces, and in 2018 Spectre showed 
 7. Speculation past predicted branches, and recovery.
 8. Memory disambiguation: load and store queues; store-to-load forwarding.
 9. Spectre and Meltdown (2018): speculation leaves cache footprints. The bounds-check-bypass gadget runs in our
-   out-of-order model, with a simulated cache-timing channel (Part 42 returns to it).
+   out-of-order model, with a simulated cache-timing channel (Part 55 returns to it).
 10. VLIW and EPIC (Itanium): the compiler-scheduled alternative and why it lost; list scheduling and software
-    pipelining (Part 12).
+    pipelining (Part 13).
 11. RISC against CISC: the IBM 801 (Cocke), Berkeley RISC, Stanford MIPS, x86 µops, ARM, RISC-V; the 2017 Turing
     Award.
 12. Simultaneous multithreading.
@@ -511,10 +690,11 @@ of instructions in flight. The guesses leave traces, and in 2018 Spectre showed 
 dataflow-limit study; the Spectre toy.
 *Visuals:* the CDB broadcasting tags as glowing pulses; the Job's inner-loop dataflow graph with its critical path;
 the ROB as a ring buffer filling and retiring.
+*In practice:* CPU design teams, Spectre mitigations in kernels, browsers and clouds, reading microarchitecture guides for tuning.
 *Reading:* Hennessy & Patterson ch. 3; Tomasulo 1967; Thornton, *Design of a Computer: The Control Data 6600*; Smith &
 Pleszkun 1985; Shen & Lipasti; Wall 1991; Patterson & Ditzel 1980; Kocher et al. 2019; Lipp et al. 2018.
 
-### Part 8 · The Memory Hierarchy (~55)
+### Part 9 · The Memory Hierarchy (~55)
 *Story:* Processors got fast and memory didn't; by the 1990s a DRAM access cost hundreds of instructions. Locality
 saves us, through caches. The deepest version of the idea is a theorem about pebbles: a lower bound on how much data
 any matrix multiply must move.
@@ -531,10 +711,10 @@ any matrix multiply must move.
 9. The ideal-cache model (Frigo et al. 1999): cache-oblivious transpose and multiply; the van Emde Boas tree layout.
 10. **The red–blue pebble game** (Hong & Kung 1981): any schedule for n × n matrix multiply with M words of fast
     memory moves Ω(n³/√M) words (proof idea). Our tiled multiply against the bound.
-11. External memory (Aggarwal & Vitter 1988): the sorting bound (N/B) log_{M/B}(N/B); B-trees (Parts 16, 33).
+11. External memory (Aggarwal & Vitter 1988): the sorting bound (N/B) log_{M/B}(N/B); B-trees (Parts 17, 35).
 12. Prefetching: stride prefetchers and software prefetch.
 13. DRAM in depth: banks, rows, CAS and RAS, row-buffer hits; HBM (callback to *AI, Built* 17). The TLB previewed
-    (Part 30).
+    (Part 32).
 14. The Job with a cache model. Ledger row 3.
 15. Outro.
 
@@ -542,14 +722,15 @@ any matrix multiply must move.
 bandwidth; tiled matmul speedups; the pebble-game bound against simulated misses.
 *Visuals:* address bits splitting; cache sets as shelves with tags; the staircase; the camera zooming down the
 hierarchy on the "cycle = second" scale.
+*In practice:* cache-friendly data layout in game engines, databases and HPC; NUMA tuning; the latency numbers behind every system design.
 *Reading:* Hennessy & Patterson ch. 2, App. B; Bryant & O'Hallaron, *Computer Systems: A Programmer's Perspective*
 ch. 6; Jacob, Ng & Wang; Drepper, "What Every Programmer Should Know About Memory" (2007); Frigo, Leiserson, Prokop &
 Ramachandran 1999; Hong & Kung 1981; Aggarwal & Vitter 1988; Wulf & McKee 1995.
 
-### Part 9 · Parallel Machines (~55)
+### Part 10 · Parallel Machines (~55)
 *Story:* Around 2005 the clocks stopped getting faster, because power density had hit a wall. The way forward was
 more cores. That brought new trouble: caches that disagree, memory that reorders, and programs whose speed is set by
-their longest chain of dependencies. The adder's carry tree from Part 3 comes back as the core of parallel
+their longest chain of dependencies. The adder's carry tree from Part 4 comes back as the core of parallel
 computation.
 1. The power wall: P = αCV²f; Dennard scaling (1974) and its end; fifty years of microprocessor trends (cited); dark
    silicon.
@@ -557,13 +738,13 @@ computation.
 3. Cache coherence: the problem; snooping MSI and MESI as state machines, animated; directories; coherence misses;
    false sharing measured on this machine.
 4. Memory consistency: sequential consistency (Lamport 1979); store buffers break it, as the store-buffering litmus
-   test shows (both threads read 0); TSO, weak models, fences. The deep dive is Part 31.
-5. Atomic instructions: test-and-set, CAS, LL/SC, fetch-and-add (Part 31 uses them).
+   test shows (both threads read 0); TSO, weak models, fences. The deep dive is Part 33.
+5. Atomic instructions: test-and-set, CAS, LL/SC, fetch-and-add (Part 33 uses them).
 6. SIMD and vectors: Cray-1 (1976), SSE and AVX, NEON, SVE; vectorizing the Job's character scan.
 7. GPUs in one chapter: SIMT, warps, divergence (callback to *AI, Built* 17).
 8. The work–span model: T₁, T∞, parallelism T₁/T∞; **Brent's theorem** T_p ≤ T₁/p + T∞ (proved); greedy
    scheduling; work stealing (Blumofe & Leiserson) and its bounds.
-9. Parallel prefix (scan): Part 3's carry tree reappears. Blelloch's work-efficient scan and its uses (radix sort,
+9. Parallel prefix (scan): Part 4's carry tree reappears. Blelloch's work-efficient scan and its uses (radix sort,
    stream compaction, lexing).
 10. Sorting networks: the **0–1 principle** (proved); Batcher's bitonic sort, depth O(log² n); AKS; optimal small
     networks found by computer search (cited).
@@ -579,6 +760,7 @@ Brent's bound against simulated greedy schedules; the 0–1 principle checked ex
 networks; scan.
 *Visuals:* cache lines changing color through MESI; the litmus test as two timelines; a work–span DAG with its
 critical path glowing; a bitonic network's wires; the scan tree's up-sweep and down-sweep.
+*In practice:* multithreaded servers, OpenMP, TBB and Rayon, SIMD intrinsics, GPU kernels, HPC and MPI.
 *Reading:* Hennessy & Patterson ch. 5; Sorin, Hill & Wood, *A Primer on Memory Consistency and Cache Coherence*;
 Herlihy & Shavit ch. 1; Blelloch 1990; Blumofe & Leiserson 1999; Knuth, TAOCP 3 §5.3.4; Leighton, *Introduction to
 Parallel Algorithms and Architectures*; Valiant 1990; Dennard et al. 1974; Esmaeilzadeh et al. 2011.
@@ -587,7 +769,7 @@ Parallel Algorithms and Architectures*; Valiant 1990; Dennard et al. 1974; Esmae
 
 ## Act III · Speaking to the Machine
 
-### Part 10 · The Running Program (~55)
+### Part 11 · The Running Program (~55)
 *Story:* Follow one program from source to process. Its data turns into bytes, its control flow into branches, its
 function calls into a stack, its names into addresses. The linker stitches the pieces together and the loader brings
 them to life. Then one unchecked copy overwrites a return address, and the program does something its author never
@@ -608,27 +790,28 @@ wrote.
 8. Linking, step by step with Pebble's linker: symbol resolution and relocation.
 9. Static against dynamic linking; position-independent code (GOT and PLT); shared libraries; interposition.
 10. Loading: the address-space layout, `_start`, argv and envp.
-11. Exceptional control flow previewed: exceptions, signals, setjmp and longjmp (Part 29).
+11. Exceptional control flow previewed: exceptions, signals, setjmp and longjmp (Part 31).
 12. Undefined behaviour: why it exists, and what optimizers do with it (signed overflow; a deleted null check).
 13. Buffer overflows: the stack smash (the Morris worm 1988; Aleph One 1996) on our Pebble stack, overwriting the
-    return address. Part 42 picks this up.
-14. The Job in the Pebble language, compiled by hand in this part (automatically in Part 12): frames and heap lists.
+    return address. Part 55 picks this up.
+14. The Job in the Pebble language, compiled by hand in this part (automatically in Part 13): frames and heap lists.
 15. Outro.
 
 *Computed:* Pebble's linker and loader; first-fit, best-fit and segregated allocators on traces, with fragmentation;
 stack-depth traces.
 *Visuals:* memory as a tall strip, the stack growing down and the heap up; frames pushing and popping; relocation
 arrows patching addresses; free lists as chains.
+*In practice:* debugging with gdb and lldb, reading compiler output, ABI and linker errors, the exploit mitigations every binary ships with.
 *Reading:* Bryant & O'Hallaron ch. 3, 7, 9; Levine, *Linkers and Loaders*; Wilson et al. 1995 (the allocation
 survey); Knuth, TAOCP 1 §2.5; Aleph One 1996; the System V ABI.
 
-### Part 11 · Languages and Automata (~60)
-*Story:* To program a machine in sentences, we need machines that read sentences. The finite automata from Part 4
+### Part 12 · Languages and Automata (~60)
+*Story:* To program a machine in sentences, we need machines that read sentences. The finite automata from Part 5
 read regular languages, and a stack is what lets a machine handle nesting. The Chomsky hierarchy orders languages by
 the memory needed to recognize them. A regex can also run in exponential time and take down a large part of the
 web.
 1. Languages as sets of strings; recognition against parsing.
-2. Regular expressions (Kleene 1951); DFAs (callback to Part 4); NFAs.
+2. Regular expressions (Kleene 1951); DFAs (callback to Part 5); NFAs.
 3. Thompson's construction (1968): regex to NFA, simulated on sets of states in linear time.
 4. The subset construction, and its exponential blow-up: the language "the n-th symbol from the end is 1" needs 2ⁿ
    states (by Myhill–Nerode).
@@ -641,22 +824,23 @@ web.
    precedence).
 10. The Chomsky hierarchy, with a machine for each level: DFA, PDA, LBA, TM.
 11. Pushdown automata; CFG ⇔ PDA; the CFL pumping lemma (aⁿbⁿcⁿ); Chomsky normal form.
-12. CYK in O(n³) as dynamic programming (Part 18); Valiant's reduction to matrix multiplication; Earley's algorithm.
+12. CYK in O(n³) as dynamic programming (Part 19); Valiant's reduction to matrix multiplication; Earley's algorithm.
 13. Top-down parsing: recursive descent; LL(1) with FIRST and FOLLOW; removing left recursion; Pratt parsing.
 14. Bottom-up parsing: shift–reduce; LR(0) items and the LR automaton (Knuth 1965); SLR, LALR (yacc), LR(1);
     conflicts.
 15. The Pebble language parsed: its grammar, its parser, its ASTs.
-16. Undecidable questions about grammars, such as ambiguity and equivalence (Part 23). Outro.
+16. Undecidable questions about grammars, such as ambiguity and equivalence (Part 25). Outro.
 
 *Computed:* our Thompson regex engine against a backtracking one (timing blow-up); subset-construction sizes; CYK
 and Earley on ambiguous sentences; the LR tables for the Pebble grammar.
 *Visuals:* tokens multiplying along ε-edges; states merging in the subset construction; the pumping lemma cutting a
 string; parse trees growing top-down and bottom-up; the LR automaton.
+*In practice:* regex engines (RE2, PCRE), parser generators and incremental parsers (ANTLR, tree-sitter), configuration and query languages, protocol parsers.
 *Reading:* Sipser ch. 1–2; Hopcroft, Motwani & Ullman; Aho, Lam, Sethi & Ullman, *Compilers* (the Dragon Book) ch.
 2–4; Grune & Jacobs, *Parsing Techniques*; Thompson 1968; Knuth 1965; Cox 2007; Pratt 1973; Nystrom, *Crafting
 Interpreters*.
 
-### Part 12 · The Compiler (~60)
+### Part 13 · The Compiler (~60)
 *Story:* In 1957 FORTRAN had to produce code as good as hand-written code, or nobody would use it. The compiler
 turns a parse tree into a graph. On that graph, optimization becomes a fixed-point computation over lattices, and
 register allocation becomes graph coloring: NP-hard in general, but solvable in polynomial time on SSA programs.
@@ -680,24 +864,25 @@ register allocation becomes graph coloring: NP-hard in general, but solvable in 
     - simplify and spill;
     - **SSA interference graphs are chordal** (Hack et al. 2006), so they color optimally in polynomial time;
     - linear scan.
-13. Instruction scheduling: list scheduling on the dependence DAG; software pipelining (callback to Part 7).
+13. Instruction scheduling: list scheduling on the dependence DAG; software pipelining (callback to Part 8).
 14. The Job compiled from the Pebble language, unoptimized against optimized. Ledger row 5.
-15. Correctness: Csmith's compiler bugs (Yang et al. 2011); translation validation; CompCert previewed (Part 41).
+15. Correctness: Csmith's compiler bugs (Yang et al. 2011); translation validation; CompCert previewed (Part 54).
 16. LLVM and MLIR; superoptimization. Outro.
 
 *Computed:* our compiler with each pass switched on in turn: instructions and cycles on Pebble; fixpoint iterations;
 coloring with spills; a chordality check on SSA interference graphs.
 *Visuals:* dataflow facts flowing around the CFG as colored tokens; φs landing at dominance frontiers; the
 interference graph being colored; the code shrinking pass by pass.
+*In practice:* LLVM and GCC, JIT tiers, compiler engineering, reading optimizer output, choosing optimization levels.
 *Reading:* the Dragon Book; Cooper & Torczon, *Engineering a Compiler*; Appel, *Modern Compiler Implementation in
 ML*; Muchnick, *Advanced Compiler Design and Implementation*; Rastello & Bouchez, *SSA-based Compiler Design*;
 Nielson, Nielson & Hankin, *Principles of Program Analysis*; Cytron et al. 1991; Chaitin 1981; Kildall 1973; Hack et
 al. 2006; Poletto & Sarkar 1999; Lattner & Adve 2004.
 
-### Part 13 · Lambda and Types (~60)
+### Part 14 · Lambda and Types (~60)
 *Story:* Church's λ-calculus is a whole programming language made of functions alone. Types tame it. Well-typed
 programs cannot go wrong, which we prove. A type can be inferred without being written. And types turn out to be
-propositions and programs to be proofs, which is the foundation of the proof assistants of Part 41.
+propositions and programs to be proofs, which is the foundation of the proof assistants of Part 54.
 1. λ-terms: free and bound variables, α-equivalence, capture-avoiding substitution.
 2. β-reduction, normal forms, Ω = (λx.xx)(λx.xx).
 3. Programming in pure λ: booleans, numerals, pairs, lists, arithmetic; the predecessor (Kleene's trick, said to have
@@ -705,7 +890,7 @@ propositions and programs to be proofs, which is the foundation of the proof ass
 4. Recursion: the Y combinator derived; fixed points.
 5. Reduction strategies: normal order, call-by-value, call-by-name, call-by-need; standardization.
 6. **Church–Rosser** confluence (by parallel reduction and the diamond property, animated).
-7. De Bruijn indices; environments against substitution (Part 14).
+7. De Bruijn indices; environments against substitution (Part 15).
 8. Why types: Milner's slogan (1978). The simply typed λ-calculus, with typing rules as inference rules and
    derivation trees on screen.
 9. **Type safety = progress + preservation**, proved for a small language by induction on derivations.
@@ -716,19 +901,20 @@ propositions and programs to be proofs, which is the foundation of the proof ass
 12. System F (Girard 1972, Reynolds 1974); parametricity and theorems for free (Wadler 1989).
 13. **Curry–Howard**: implication, conjunction and disjunction as function, product and sum types; a proof as a
     program; call/cc and Peirce's law (Griffin 1990).
-14. Dependent types: Π and Σ; Martin-Löf; the calculus of constructions; Lean and Rocq (Part 41).
-15. Linear and affine types, and Rust's ownership and borrowing (Part 42).
+14. Dependent types: Π and Σ; Martin-Löf; the calculus of constructions; Lean and Rocq (Part 54).
+15. Linear and affine types, and Rust's ownership and borrowing (Part 55).
 16. Algebraic data types and pattern matching; subtyping and variance; gradual typing. Outro.
 
 *Computed:* our λ reducer (β-step counts, Church arithmetic); HM inference, including the exponential let; typing
 derivations generated by our checker.
 *Visuals:* β-reduction rewriting a subtree; Church numerals as stacked function boxes; the Church–Rosser diamond;
 unification merging nodes; the Curry–Howard dictionary.
+*In practice:* the type systems of TypeScript, Rust, Haskell, OCaml and Scala; generics; IDE type inference; proof assistants.
 *Reading:* Pierce, *Types and Programming Languages*; Harper, *Practical Foundations for Programming Languages*;
 Barendregt, *The Lambda Calculus*; Hindley & Seldin; Sørensen & Urzyczyn, *Lectures on the Curry–Howard
 Isomorphism*; Girard, Lafont & Taylor, *Proofs and Types*; Wadler 1989, 2015; Milner 1978; Damas & Milner 1982.
 
-### Part 14 · Runtimes (~55)
+### Part 15 · Runtimes (~55)
 *Story:* A program needs a runtime to live in. Environments make closures, continuations turn the stack into data,
 and a virtual machine provides a portable instruction set. The garbage collector cleans up memory while the program
 keeps running, kept correct by an invariant stated in three colors.
@@ -759,6 +945,7 @@ keeps running, kept correct by an invariant stated in three colors.
 allocation traces, with their pause distributions; inline-cache hit rates.
 *Visuals:* the heap as cells and arrows; the mark wavefront painting tri-color; Cheney's scan and free pointers; a
 closure capturing its environment frame.
+*In practice:* the JVM, V8, CPython, .NET and the Go runtime; GC tuning (pause targets, heap sizing); WebAssembly runtimes.
 *Reading:* Abelson & Sussman, *SICP* ch. 4–5; Friedman & Wand, *Essentials of Programming Languages*; Appel,
 *Compiling with Continuations*; Jones, Hosking & Moss, *The Garbage Collection Handbook*; Smith & Nair, *Virtual
 Machines*; Nystrom; Ierusalimschy et al. 2005; Hölzle et al. 1991–92; Haas et al. 2017.
@@ -767,7 +954,7 @@ Machines*; Nystrom; Ierusalimschy et al. 2005; Hölzle et al. 1991–92; Haas et
 
 ## Act IV · Algorithms
 
-### Part 15 · Counting Steps (~60)
+### Part 16 · Counting Steps (~60)
 *Story:* The Job v0 is quadratic, and no hardware from Act II rescues it. Sorting is where computer science learned
 to count steps: recursion trees, a lower bound that comes from information, and a randomized algorithm whose average
 case, 2n ln n, is a small piece of calculus.
@@ -800,12 +987,13 @@ case, 2n ln n, is a small piece of calculus.
 quicksort histogram; the decision-tree bound against Ford–Johnson for n ≤ 12; timings on this machine; the Job v1.
 *Visuals:* bars with the invariant region lit; recursion trees summing level by level; a decision tree whose leaves
 are permutations; the growth ladder as the camera pulls out.
+*In practice:* choosing standard-library sorts, complexity arguments in code review, the first questions of a coding interview.
 *Reading:* Cormen, Leiserson, Rivest & Stein, *Introduction to Algorithms* (CLRS) ch. 1–9, 16; Knuth, TAOCP 3 ch. 5;
 Sedgewick & Flajolet, *An Introduction to the Analysis of Algorithms*; Graham, Knuth & Patashnik, *Concrete
 Mathematics*; Kleinberg & Tardos ch. 2, 5; Erickson, *Algorithms*; Flajolet & Sedgewick, *Analytic Combinatorics*;
 Hoare 1962; Blum et al. 1973; de Gouw et al. 2015.
 
-### Part 16 · Data Structures (~60)
+### Part 17 · Data Structures (~60)
 *Story:* The Job is a dictionary problem: insert, look up, count. Hashing does it in expected constant time, if the
 hash function can't be gamed. Balanced trees guarantee their time, and splay trees earn it on average. The ledger
 records an order-of-magnitude drop.
@@ -827,13 +1015,13 @@ records an order-of-magnitude drop.
 9. Treaps and skip lists (Pugh 1990).
 10. Splay trees (Sleator & Tarjan 1985): the access lemma by potential (proved); the working-set and static
     optimality theorems; the dynamic optimality conjecture, open since 1985.
-11. B-trees (Bayer & McCreight 1970): fan-out and height log_B n (Part 33).
+11. B-trees (Bayer & McCreight 1970): fan-out and height log_B n (Part 35).
 12. Priority queues: binomial, **Fibonacci heaps** (Fredman & Tarjan 1987) with O(1) amortized decrease-key, pairing
     heaps.
 13. **Union–find**: union by rank and path compression, O(m α(n)) (Tarjan 1975); Ackermann's function; the log*
     argument.
-14. Tries and radix trees; rank and select; succinct structures (Part 20 builds on them).
-15. Persistent structures (path copying, Okasaki); cache-friendliness (callback to Part 8).
+14. Tries and radix trees; rank and select; succinct structures (Part 21 builds on them).
+15. Persistent structures (path copying, Okasaki); cache-friendliness (callback to Part 9).
 16. The Job v2, a hash table on Pebble and natively. Ledger row 8: rows 0 → 8 against rows 0 → 4, with the verdict
     from the data. Outro.
 
@@ -841,19 +1029,20 @@ records an order-of-magnitude drop.
 worst cases; splay amortized costs on access sequences; union–find path lengths; the Job v2.
 *Visuals:* buckets filling while clusters form; rotations as smooth morphs; 2–3–4 ↔ red–black; a zig-zig splay;
 a union–find forest flattening.
+*In practice:* hash maps and their DoS hardening, B-trees in every database, priority queues in schedulers and timers, union–find in compilers and image processing.
 *Reading:* CLRS ch. 10–13, 18–19, 21; Knuth, TAOCP 3 ch. 6; Sedgewick & Wayne, *Algorithms* ch. 3; Tarjan, *Data
 Structures and Network Algorithms*; Mehlhorn & Sanders, *Algorithms and Data Structures*; Okasaki, *Purely Functional
 Data Structures*; Navarro, *Compact Data Structures*; Carter & Wegman 1979; Pagh & Rodler 2004; Sleator & Tarjan
 1985; Fredman & Tarjan 1987.
 
-### Part 17 · Graphs (~60)
+### Part 18 · Graphs (~60)
 *Story:* Euler invented the graph to walk the bridges of Königsberg. Graphs are now the shape of road maps, the
 internet, compilers and markets. Dijkstra designed his algorithm in twenty minutes at a café, and in 2024–25 it was
 proved universally optimal and also beaten. Flows and cuts turn out to be two faces of one theorem.
 1. Königsberg (1736): Eulerian circuits by degree (proved); representations and their costs.
 2. BFS: layers, unweighted shortest paths, bipartiteness.
 3. DFS: discovery and finish times, the parenthesis theorem, edge classes, the white-path theorem.
-4. Topological sort (DFS order; Kahn); DAGs in build systems, spreadsheets and Part 12's compiler.
+4. Topological sort (DFS order; Kahn); DAGs in build systems, spreadsheets and Part 13's compiler.
 5. SCCs: Kosaraju, and Tarjan's one-pass low-links (animated); the condensation; 2-SAT via SCCs.
 6. Dijkstra (1956/59):
    - correctness by invariant;
@@ -862,17 +1051,17 @@ proved universally optimal and also beaten. Flows and cuts turn out to be two fa
 7. The frontier: Dijkstra is universally optimal (Haeupler et al. 2024); directed SSSP beyond the sorting barrier,
    O(m log^{2/3} n) (Duan et al. 2025) **(verify)**.
 8. Negative edges: Bellman–Ford, negative cycles, arbitrage as a negative cycle in −log rates; distance-vector
-   routing (Part 34).
+   routing (Part 36).
 9. All pairs: Floyd–Warshall as DP; Johnson's reweighting by potentials (proved); the min-plus product and the APSP
-   conjecture (Part 25).
+   conjecture (Part 27).
 10. A* (callback to *AI, Built* 2), landmarks, contraction hierarchies (how a map app answers in microseconds).
-11. MSTs: the cut and cycle properties (proved); Kruskal (with Part 16's union–find), Prim, Borůvka (1926, for the
+11. MSTs: the cut and cycle properties (proved); Kruskal (with Part 17's union–find), Prim, Borůvka (1926, for the
     Moravian grid); randomized linear time (Karger, Klein & Tarjan).
 12. **Max-flow min-cut**: Ford–Fulkerson, residual graphs, the theorem (proved), Edmonds–Karp, push–relabel; the
     almost-linear-time max flow (Chen et al. 2022).
 13. Matching: bipartite matching as flow; Hall's theorem and König; the Hungarian algorithm; **Gale–Shapley** (1962,
     with stability proved) and the residency match.
-14. Easy and hard: Euler tours against Hamiltonian cycles (Part 24).
+14. Easy and hard: Euler tours against Hamiltonian cycles (Part 26).
 15. PageRank (Brin & Page 1998) as a random surfer's stationary distribution, by power iteration (callback to *AI,
     Built* 5).
 16. Planarity: Euler's V − E + F = 2; the four-color theorem (1976, verified in Coq in 2005). Outro.
@@ -881,11 +1070,12 @@ proved universally optimal and also beaten. Flows and cuts turn out to be two fa
 MST algorithms; Edmonds–Karp augmentations; Gale–Shapley; PageRank on a synthetic web.
 *Visuals:* the Dijkstra wavefront; DFS as a thread through a maze with parenthesis intervals; flows as water in
 pipes, and the min cut as a slice; proposals in stable matching.
+*In practice:* route planning in maps, network routing, dependency graphs, social graphs, scheduling, graph databases.
 *Reading:* CLRS ch. 20–26; Kleinberg & Tardos ch. 3, 4, 7; Tarjan; Ahuja, Magnanti & Orlin, *Network Flows*; Even,
 *Graph Algorithms*; Schrijver, *Combinatorial Optimization*; Dijkstra 1959; Ford & Fulkerson 1956; Tarjan 1972; Gale &
 Shapley 1962; Chen et al. 2022; Haeupler et al. 2024.
 
-### Part 18 · The Great Paradigms (~60)
+### Part 19 · The Great Paradigms (~60)
 *Story:* Most good algorithms come from a handful of ideas: be greedy when an exchange argument allows it, divide
 and conquer, or remember subproblems. Divide and conquer, applied to the right points (the roots of unity), gives
 the most important algorithm of the century, the FFT. The same problem solved four ways closes the part.
@@ -900,16 +1090,16 @@ the most important algorithm of the century, the FFT. The same problem solved fo
 6. **The FFT, II**: Cooley–Tukey (1965, and Gauss c. 1805); the butterfly; bit reversal; the inverse by conjugation
    (orthogonality of characters, proved); O(n log n).
 7. Applications: big-integer multiplication, convolution, spectra (callback to *Analysis, Built* 9);
-   Schönhage–Strassen (1971); Harvey & van der Hoeven's O(n log n) (2019); the NTT over finite fields (Part 28).
+   Schönhage–Strassen (1971); Harvey & van der Hoeven's O(n log n) (2019); the NTT over finite fields (Part 30).
 8. Closest pair in the plane (the strip argument, with at most seven neighbours).
 9. **Dynamic programming**: Bellman (1957) and the story of the name; memoization against tabulation; DP as
    shortest paths in a DAG.
-10. Edit distance (Wagner–Fischer), with the table filling and its traceback; LCS (Part 20 takes up diff).
-11. Knapsack's O(nW), and why that isn't polynomial (W is written in log W bits); subset sum (Part 24).
+10. Edit distance (Wagner–Fischer), with the table filling and its traceback; LCS (Part 21 takes up diff).
+11. Knapsack's O(nW), and why that isn't polynomial (W is written in log W bits); subset sum (Part 26).
 12. Matrix chains; optimal BSTs and Knuth's O(n²) speedup (the quadrangle inequality).
 13. DP on trees and graphs: independent sets on trees; Floyd–Warshall and Bellman–Ford as DP; **Held–Karp** TSP in
     O(n²2ⁿ) against n!.
-14. Viterbi and CYK as DP (callbacks to *AI, Built* 7 and Part 11); DP speedups (convex-hull trick, divide-and-conquer
+14. Viterbi and CYK as DP (callbacks to *AI, Built* 7 and Part 12); DP speedups (convex-hull trick, divide-and-conquer
     optimization).
 15. Backtracking and branch-and-bound: n-queens; Sudoku as exact cover with **Dancing Links** (Knuth 2000).
 16. One problem, four paradigms: maximum subarray by brute force O(n³), divide and conquer O(n log n), and Kadane's
@@ -920,11 +1110,12 @@ big-number multiplication (a million digits of π by Chudnovsky's series); edit-
 brute force; Dancing Links on Sudoku.
 *Visuals:* the roots of unity squaring onto half as many points; butterflies; Strassen's seven products as colored
 blocks; DP tables with traceback arrows; matroid exchange.
+*In practice:* diff tools, bioinformatics, the FFT in audio, images and radios, dynamic programming in pricing and scheduling.
 *Reading:* CLRS ch. 4, 14–15, 30; Kleinberg & Tardos ch. 4–6; Dasgupta, Papadimitriou & Vazirani, *Algorithms* ch. 2,
 5–6; Knuth, TAOCP 2 §4.3.3 and 4B; Cooley & Tukey 1965; Strassen 1969; Karatsuba & Ofman 1962; Harvey & van der
 Hoeven 2021; Bellman 1957; Edmonds 1971; Alman et al. 2024.
 
-### Part 19 · Randomness as a Resource (~55)
+### Part 20 · Randomness as a Resource (~55)
 *Story:* A coin flip can stand in for cleverness. With one, you can check a matrix product in n², find a minimum
 cut by contracting random edges, test primality in milliseconds, and count the top words of thirty novels in a few
 kilobytes. Randomness has to come from somewhere, though, and some generators hide fifteen planes.
@@ -933,7 +1124,7 @@ kilobytes. Randomness has to come from somewhere, though, and some generators hi
 3. The **Schwartz–Zippel** lemma (proved); perfect matchings via the Tutte matrix (Lovász 1979); fingerprints.
 4. **Karger's min cut** (1993): success ≥ 2/(n(n − 1)) (proved); Karger–Stein; at most C(n, 2) min cuts as a
    corollary.
-5. Primality: Fermat and the Carmichael numbers; **Miller–Rabin** (error ≤ ¼); AKS (2002). Part 28 needs big
+5. Primality: Fermat and the Carmichael numbers; **Miller–Rabin** (error ≤ ¼); AKS (2002). Part 30 needs big
    primes.
 6. Random walks: 2-SAT in O(n²) expected (gambler's ruin); Schöning's (4/3)ⁿ for 3-SAT; Reingold's SL = L (cited).
 7. Balls into bins: max load log n/log log n, and with two choices log log n/log 2 (simulated).
@@ -948,26 +1139,27 @@ kilobytes. Randomness has to come from somewhere, though, and some generators hi
 14. Derandomization:
     - conditional expectations (MAX-CUT ≥ m/2);
     - pairwise independence;
-    - expanders (Part 25);
+    - expanders (Part 27);
     - where random bits come from: LCGs and **RANDU's fifteen planes** in 3D, Mersenne Twister, cryptographic PRGs
-      (Part 27).
+      (Part 29).
 15. Outro.
 
 *Computed:* Freivalds error rates; Karger's success rate against the bound; Miller–Rabin on Carmichael numbers;
 max loads; Bloom filters against theory; Count-Min and HLL on the novels; MinHash duplicates; RANDU.
 *Visuals:* a graph contracting edge by edge; bins filling with one and two choices; **RANDU's cube rotating until the
 planes appear**; a Bloom bit array lighting up.
+*In practice:* Bloom filters in databases and caches, HyperLogLog in Redis and analytics engines, Count-Min in network monitoring, MinHash dedup in data pipelines.
 *Reading:* Motwani & Raghavan, *Randomized Algorithms*; Mitzenmacher & Upfal, *Probability and Computing*; Alon &
 Spencer, *The Probabilistic Method*; Cormode & Yi, *Small Summaries for Big Data*; Muthukrishnan, *Data Streams*;
 Knuth, TAOCP 2 ch. 3; Karger 1993; Flajolet et al. 2007; Alon, Matias & Szegedy 1996; Moser & Tardos 2010.
 
-### Part 20 · Strings (~55)
+### Part 21 · Strings (~55)
 *Story:* Text is the oldest data. Searching it efficiently led to automata built from patterns, then to indexes of
 every suffix, then to a reversible transform that sorts a book into compressible runs and lets you search the
 compressed result. Each `git diff` runs a shortest-path algorithm on a grid.
 1. Matching: naive O(nm) and its worst cases.
 2. Rabin–Karp: rolling hashes mod p and their collision probability.
-3. **KMP** (1977): the failure function as an automaton (callback to Part 11); amortized linear time (proved).
+3. **KMP** (1977): the failure function as an automaton (callback to Part 12); amortized linear time (proved).
 4. Boyer–Moore: bad-character and good-suffix rules; sublinear on average (why grep is fast).
 5. Aho–Corasick (1975): many patterns at once, with failure links in a trie.
 6. Suffix tries and **suffix trees** (Weiner 1973; Ukkonen 1995, sketched); longest repeats; generalized trees for
@@ -984,7 +1176,7 @@ compressed result. Each `git diff` runs a shortest-path algorithm on a grid.
     - DEFLATE as LZ77 plus Huffman (callback to *AI, Built* 1);
     - ANS (Duda) and zstd.
 11. Alignment: Needleman–Wunsch, Smith–Waterman, affine gaps, BLAST; **no O(n^{2−ε}) edit distance under SETH**
-    (Backurs & Indyk 2015; Part 25).
+    (Backurs & Indyk 2015; Part 27).
 12. **Myers' diff** (1986): the O(ND) algorithm on the edit graph (diagonals and snakes); patience diff; three-way
     merge.
 13. Rolling hashes at scale: content-defined chunking; rsync (Tridgell 1996); dedup.
@@ -995,12 +1187,13 @@ queries; our LZ77-plus-Huffman compressor against zlib; Myers' diff on revisions
 rsync chunking.
 *Visuals:* the KMP automaton; the BWT's rotation matrix sorting, with its clustered last column; LF arrows walking
 the text back out; snakes in the edit graph; LZ back-references as arcs over the text.
+*In practice:* grep and ripgrep, gzip, zstd and bzip2, genome alignment, git diff, rsync and deduplicating backups.
 *Reading:* Gusfield, *Algorithms on Strings, Trees, and Sequences*; Crochemore, Hancart & Lecroq, *Algorithms on
 Strings*; Mäkinen, Belazzougui, Cunial & Tomescu, *Genome-Scale Algorithm Design*; Navarro; Salomon & Motta,
 *Handbook of Data Compression*; Knuth, Morris & Pratt 1977; Burrows & Wheeler 1994; Ferragina & Manzini 2000; Ziv &
 Lempel 1977–78; Myers 1986.
 
-### Part 21 · Geometry (~55)
+### Part 22 · Geometry (~55)
 *Story:* Geometry looks easy until a computer gets it wrong: a floating-point orientation test can say a point lies
 on both sides of a line. Get the predicates right and beautiful structure follows. Voronoi diagrams grow as a
 parabolic beach line, and every Delaunay triangulation is the shadow of a convex hull on a paraboloid.
@@ -1020,21 +1213,22 @@ parabolic beach line, and every Delaunay triangulation is the shadow of a convex
 10. Range searching: kd-trees (Bentley 1975), with O(√n + k) queries; range trees and fractional cascading;
     interval and segment trees.
 11. Point location with trapezoidal maps.
-12. High dimensions: the curse; LSH (callback to Part 19); graph-based ANN (HNSW).
+12. High dimensions: the curse; LSH (callback to Part 20); graph-based ANN (HNSW).
 13. Duality and arrangements; the ham-sandwich theorem.
-14. Uses: configuration spaces and Minkowski sums in robot motion planning; Ruppert's meshing; BVHs (Part 38).
+14. Uses: configuration spaces and Minkowski sums in robot motion planning; Ruppert's meshing; BVHs (Part 51).
     Outro.
 
 *Computed:* floating-point orientation failure maps; hull counts and timings; Bentley–Ottmann events; Fortune frames;
 Delaunay via the lifting map, cross-checked against scipy's hull; kd-tree visits; Fisk's guards.
 *Visuals:* the speckled failure grid near a line; Fortune's beach line; Delaunay rising onto the paraboloid; sweep
 events.
+*In practice:* GIS and maps, CAD, robot motion planning, mesh generation for simulation, collision detection in games.
 *Reading:* de Berg, Cheong, van Kreveld & Overmars, *Computational Geometry: Algorithms and Applications*; Preparata &
 Shamos; O'Rourke, *Computational Geometry in C*; Devadoss & O'Rourke, *Discrete and Computational Geometry*;
 Edelsbrunner, *Geometry and Topology for Mesh Generation*; Shewchuk 1997; Kettner et al. 2008; Fortune 1987; Seidel
 1991; Chan 1996.
 
-### Part 22 · Optimization (~60)
+### Part 23 · Optimization (~60)
 *Story:* Many problems are "choose the best point of a polytope." The simplex method walks the polytope's edges.
 Duality certifies the answer from the other side. When integrality makes a problem hard, LP relaxations and random
 hyperplanes still get provably close. Online, without seeing the future, you can still be competitive.
@@ -1046,12 +1240,12 @@ hyperplanes still get provably close. Online, without seeing the future, you can
 5. Polynomial time: the ellipsoid method (Khachiyan 1979; volume shrinks by e^{−1/(2(n+1))}); separation ≡
    optimization (Grötschel, Lovász & Schrijver); interior point (Karmarkar 1984), with the central path, the log
    barrier and Newton steps (callback to *AI, Built* 4).
-6. LPs for combinatorics: max-flow/min-cut duality (Part 17); **total unimodularity** gives integral vertices
+6. LPs for combinatorics: max-flow/min-cut duality (Part 18); **total unimodularity** gives integral vertices
    (proved for bipartite incidence matrices).
 7. Integer programming: NP-hard; relaxations and integrality gaps; branch and bound; Gomory cuts; decades of solver
    speedups (Bixby, cited).
 8. Approximation: vertex cover 2 by maximal matching and by LP rounding; greedy set cover H_n ≈ ln n (proved), and
-   ln n hardness (Part 25).
+   ln n hardness (Part 27).
 9. TSP:
    - inapproximable in general (via Hamiltonian cycle);
    - metric TSP: double tree 2, Christofides–Serdyukov 3/2, and 3/2 − 10⁻³⁶ (Karlin, Klein & Oveis Gharan);
@@ -1059,7 +1253,7 @@ hyperplanes still get provably close. Online, without seeing the future, you can
    - 2-opt and LKH; Concorde's 85,900 cities (cited).
 10. Knapsack FPTAS by rounding.
 11. **Goemans–Williamson** MAX-CUT: vectors on a sphere, a random hyperplane, cut probability θ/π, and 0.878 =
-    min 2θ/(π(1 − cos θ)) (derived); optimal under the UGC (Part 25).
+    min 2θ/(π(1 − cos θ)) (derived); optimal under the UGC (Part 27).
 12. Online algorithms: ski rental (2, and e/(e − 1) randomized); paging, where LRU is k-competitive and no
     deterministic algorithm does better (proved); randomized marking, O(log k).
 13. **Multiplicative weights**: regret O(√(T log n)); one algorithm behind boosting (callback to *AI, Built* 6), von
@@ -1071,28 +1265,79 @@ heuristics against exact solutions (Held–Karp for small n); GW against exact M
 on the Job's page trace; MW regret.
 *Visuals:* the polytope with the simplex walk; the dual as a family of tilted planes; ellipsoids shrinking; a
 hyperplane slicing a sphere of unit vectors; the squashed Klee–Minty cube.
+*In practice:* operations research (logistics, crew scheduling, ad allocation), LP and MIP solvers (Gurobi, HiGHS, OR-Tools), cache replacement as an online problem.
 *Reading:* Bertsimas & Tsitsiklis, *Introduction to Linear Optimization*; Chvátal, *Linear Programming*; Matoušek &
 Gärtner, *Understanding and Using Linear Programming*; Schrijver, *Theory of Linear and Integer Programming*;
 Williamson & Shmoys, *The Design of Approximation Algorithms*; Vazirani, *Approximation Algorithms*; Borodin &
 El-Yaniv, *Online Computation and Competitive Analysis*; Applegate, Bixby, Chvátal & Cook, *The Traveling Salesman
 Problem*; Boyd & Vandenberghe; Goemans & Williamson 1995; Arora, Hazan & Kale 2012; Karlin, Klein & Oveis Gharan 2021.
 
+### Part 24 · Algorithms in Practice (~55)
+*Story:* Big-O hides constants, and in production the constants and the machine decide. This part covers the
+everyday tools of real code and of interviews: prefix sums, Fenwick and segment trees, two pointers, monotonic
+stacks, bit tricks. It then turns to algorithm engineering, where a textbook hash table, sort or binary search
+becomes ten times faster by respecting the caches, branch predictors and SIMD units of Act II. Theory meets the
+machine, and the ledger gets its native row.
+1. Hook: two correct implementations with the same big-O differ by 20× on this machine (measured).
+2. Prefix sums and difference arrays; 2D integral images (callback to *AI, Built* 6's Viola–Jones); O(1) range sums.
+3. **Fenwick trees** (1994): the lowbit trick i & −i; O(log n) update and query, proved from binary representations,
+   with each node's responsibility range drawn.
+4. **Segment trees**: range queries over any monoid; lazy propagation; persistence, briefly.
+5. Range minimum and LCA:
+   - sparse tables with O(1) queries (by idempotence);
+   - LCA by Euler tour plus RMQ, and by binary lifting;
+   - the Cartesian-tree equivalence of RMQ and LCA (Bender & Farach-Colton 2000).
+6. Two pointers and sliding windows: invariants that only move forward (amortized O(n)); monotonic deques for the
+   sliding-window maximum; monotonic stacks (next greater element, largest rectangle in a histogram).
+7. Binary search on the answer (monotone predicates); galloping search; ternary search.
+8. Bits:
+   - popcount and the lowest set bit; Gray codes (callback to Part 4);
+   - submask enumeration (Σ 3ⁿ);
+   - bitset DP and **the Four Russians** (word-level parallelism: transitive closure and LCS in O(n²/w)).
+9. Meet in the middle (subset sum in 2^{n/2}); square-root decomposition; Mo's algorithm.
+10. Algorithm engineering I, layouts: binary search over a sorted array, an Eytzinger layout and a B-tree-like
+    layout (measured on this machine, Khuong & Morin 2017); branchless search (callback to Parts 7–8).
+11. Algorithm engineering II, SIMD and hashing: vectorized scanning (the Job's tokenizer; simdjson's ideas); Swiss-table
+    metadata bytes; chaining against open addressing in practice (measured).
+12. Sorting in practice: the radix-against-comparison crossover (measured); vectorized and parallel sorts (vqsort,
+    IPS⁴o, cited).
+13. Benchmarking honestly:
+    - warm-up and variance; confidence intervals;
+    - measurement bias: environment size and link order change results (Mytkowicz et al. 2009);
+    - dead-code elimination in microbenchmarks.
+14. Problem solving as a craft: Pólya's heuristics; reducing to a known problem; the coding-interview repertoire
+    mapped to the series' parts (a card).
+15. The Job, engineered: a SIMD tokenizer and a Swiss-table-style map, natively, against Part 17's textbook version.
+    Ledger row 10. Outro.
+
+*Computed:* Fenwick and segment-tree operation counts; the RMQ structures; monotonic-deque traces; Four Russians
+speedups; search layouts and branchless search timed on this machine; hash-map variants; the radix crossover; the
+run-to-run distribution of a benchmark.
+*Visuals:* Fenwick responsibility ranges as bars by lowbit; a segment tree lighting its covering nodes; a sliding
+window with its deque; a tree folding into an Eytzinger array; benchmark distributions as strips of dots.
+*In practice:* the data structures inside databases, search engines, game engines and trading systems; the core
+repertoire of coding interviews; performance work on hot paths.
+*Reading:* Skiena, *The Algorithm Design Manual*; Bentley, *Programming Pearls*; Warren, *Hacker's Delight*;
+Laaksonen, *Guide to Competitive Programming*; Halim & Halim, *Competitive Programming*; Müller-Hannemann & Schirra
+(eds.), *Algorithm Engineering*; Fenwick 1994; Bender & Farach-Colton 2000; Khuong & Morin 2017; Mytkowicz et al.
+2009; Langdale & Lemire 2019 (simdjson).
+
 ---
 
 ## Act V · Limits and Secrets
 
-### Part 23 · Undecidable (~55)
+### Part 25 · Undecidable (~55)
 *Story:* Part 1 proved that one problem can't be solved. This part finds the same impossibility in Diophantine
 equations, in tilings of the plane, in Gödel's theorem and in randomness itself. A program can print its own source,
 and that fact is enough to prove all of it. The busy beaver marks where provability runs out.
 1. Formally: decidable, recognizable, co-recognizable; the halting set K.
 2. Mapping reductions; A_TM, E_TM, EQ_TM; recognizable but undecidable; neither.
 3. **Rice's theorem** (proved): every non-trivial semantic property is undecidable. What that means for compilers,
-   antivirus and static analysis, and how Part 41 escapes it by approximation.
+   antivirus and static analysis, and how Part 54 escapes it by approximation.
 4. **The recursion theorem** (Kleene): programs that know their own code; quines in the Pebble language and in
    Python; a shorter proof of halting's undecidability.
 5. Post's correspondence problem (1946), via computation histories (dominoes animated); ambiguity of CFGs (callback
-   to Part 11).
+   to Part 12).
 6. Tiling: Wang tiles (1961); Berger's aperiodic set and undecidability (1966); Penrose tilings; the 2023 aperiodic
    monotile, "the hat".
 7. Hilbert's tenth (Matiyasevich 1970, on Davis, Putnam and Robinson): every r.e. set is Diophantine; the
@@ -1117,11 +1362,12 @@ and that fact is enough to prove all of it. The busy beaver marks where provabil
 *Computed:* a bounded PCP solver and the reduction; Wang tilings; compressors as a Kolmogorov proxy on random against
 structured strings; BB champions; Conway's PRIMEGAME producing primes; Collatz trajectories.
 *Visuals:* the PCP domino stack; a Wang tiling growing; the hat; the arithmetic hierarchy as a ladder; Ω's bits.
+*In practice:* why static analyzers report false positives and no virus scanner can be perfect; self-reproducing code.
 *Reading:* Sipser ch. 4–6; Rogers, *Theory of Recursive Functions and Effective Computability*; Soare, *Turing
 Computability*; Boolos, Burgess & Jeffrey, *Computability and Logic*; Li & Vitányi, *An Introduction to Kolmogorov
 Complexity*; Davis 1973; Matiyasevich, *Hilbert's Tenth Problem*; Chaitin 1975; Aaronson 2020; Smith et al. 2023.
 
-### Part 24 · P versus NP (~60)
+### Part 26 · P versus NP (~60)
 *Story:* In 1956 Gödel wrote to von Neumann asking whether finding a proof could be as easy as checking one. Cook
 and Levin turned that question into SAT, and Karp showed that twenty-one famous problems are all secretly the same
 problem. Here is why the question has resisted fifty years of work, and what each answer would mean.
@@ -1135,7 +1381,7 @@ problem. Here is why the question has resisted fifty years of work, and what eac
 6. The reduction web: SAT → 3SAT → independent set → clique and vertex cover; 3SAT → 3-coloring (gadgets drawn);
    3SAT → subset sum (digits); Hamiltonian cycle; Karp's 21 as a family tree.
 7. NP-completeness everywhere (Garey & Johnson): Tetris, Minesweeper, generalized Sudoku, scheduling, folding.
-8. Strong against weak NP-hardness; pseudo-polynomial algorithms (knapsack, Part 18).
+8. Strong against weak NP-hardness; pseudo-polynomial algorithms (knapsack, Part 19).
 9. coNP; NP ∩ coNP (factoring lives there); the polynomial hierarchy and its collapses.
 10. Space:
     - TQBF is PSPACE-complete;
@@ -1148,7 +1394,7 @@ problem. Here is why the question has resisted fifty years of work, and what eac
 14. Why it's hard: relativization (Baker, Gill & Solovay 1975; oracles both ways), natural proofs (Razborov & Rudich),
     algebrization (Aaronson & Wigderson).
 15. **Impagliazzo's five worlds** (Algorithmica, Heuristica, Pessiland, Minicrypt, Cryptomania): where cryptography
-    lives (Parts 27–28).
+    lives (Parts 29–30).
 16. If P = NP: Gödel's letter, and the consequences. Outro.
 
 *Computed:* our reductions, implemented and verified (a SAT instance → 3-coloring → solved → mapped back); a
@@ -1156,12 +1402,13 @@ Cook–Levin tableau for a tiny NTM; our CDCL solver on reduced instances; the 3
 generalized geography.
 *Visuals:* the tableau grid with sliding windows; gadget graphs assembling; the reduction family tree; the five
 worlds as a map; the class zoo as nested sets, zoomed.
+*In practice:* recognizing NP-hard problems at work (scheduling, packing, configuration, dependency resolution) and reaching for SAT or ILP solvers, or heuristics.
 *Reading:* Sipser ch. 7–8; Arora & Barak, *Computational Complexity: A Modern Approach* ch. 1–6; Papadimitriou,
 *Computational Complexity*; Garey & Johnson, *Computers and Intractability*; Moore & Mertens ch. 4–6; Goldreich, *P,
 NP, and NP-Completeness*; Cook 1971; Karp 1972; Levin 1973; Aaronson, "P =? NP" (2016); Impagliazzo 1995; Fortnow, *The
 Golden Ticket*.
 
-### Part 25 · Proofs and Randomness (~60)
+### Part 27 · Proofs and Randomness (~60)
 *Story:* Two ideas change what a proof is. With randomness, a verifier can check an exponentially long argument by
 asking a few questions, and can be convinced that a statement is true while learning nothing else. The PCP theorem
 says a few random bits of a proof are enough. That one fact explains why many approximation algorithms can't be
@@ -1177,34 +1424,35 @@ improved.
    - monotone clique (Razborov);
    - NEXP ⊄ ACC⁰ (Williams 2011): algorithms imply lower bounds.
 4. Communication complexity (Yao 1979): equality, deterministic n against randomized O(log n); disjointness Ω(n);
-   fooling sets and rank; streaming lower bounds (callback to Part 19).
+   fooling sets and rank; streaming lower bounds (callback to Part 20).
 5. Interactive proofs: graph non-isomorphism; GMR (1985), Babai's Arthur–Merlin.
 6. Arithmetization and **sum-check** (Lund, Fortnow, Karloff & Nisan 1990), step by step over a finite field; #SAT ∈
    IP; **IP = PSPACE** (Shamir 1990).
-7. **Zero knowledge**: Ali Baba's cave; GMW's 3-coloring protocol with commitments; simulation; Fiat–Shamir (Part 28).
+7. **Zero knowledge**: Ali Baba's cave; GMW's 3-coloring protocol with commitments; simulation; Fiat–Shamir (Part 30).
 8. **The PCP theorem** (AS, ALMSS 1992; Dinur 2005): checking a proof by reading O(1) bits; gap amplification.
 9. Hardness of approximation: MAX-3SAT can't beat 7/8 (Håstad 2001), so a random assignment is optimal; clique
    n^{1−ε}; set cover ln n.
-10. The **Unique Games Conjecture** (Khot 2002): vertex cover 2 and MAX-CUT 0.878 would be optimal (Part 22); the
+10. The **Unique Games Conjecture** (Khot 2002): vertex cover 2 and MAX-CUT 0.878 would be optimal (Part 23); the
     2-to-2 theorem (2018).
-11. Fine-grained complexity: SETH, OV, 3SUM, APSP; edit distance (Part 20); what conditional lower bounds buy.
+11. Fine-grained complexity: SETH, OV, 3SUM, APSP; edit distance (Part 21); what conditional lower bounds buy.
 12. Parameterized complexity: FPT; vertex cover by bounded search trees; kernels (Buss); W[1]-hardness of clique;
     treewidth and Courcelle.
 13. Counting: #P (Valiant 1979); the permanent against the determinant; Toda's theorem; approximate counting
     (Jerrum, Sinclair & Vigoda; callback to MCMC).
-14. Average case and one-way functions, the bridge to Part 27. Outro.
+14. Average case and one-way functions, the bridge to Part 29. Outro.
 
 *Computed:* Adleman's union bound in numbers; sum-check on a small #SAT instance, where a cheating prover is caught
 with the computed probability; ZK 3-coloring with cheating probability (1 − 1/m)ᵏ; equality by fingerprints; random
 assignments against the best found on MAX-3SAT; FPT vertex cover; permanent against determinant timings.
 *Visuals:* a DNF collapsing under a random restriction; sum-check's rounds as univariate polynomials; a ZK coloring
 revealing one edge; the PCP verifier sampling a few bits from a giant proof.
+*In practice:* zero-knowledge proofs in identity systems and blockchains, succinct proofs in rollups, conditional lower bounds that say when to stop optimizing.
 *Reading:* Arora & Barak ch. 7–11, 13–14, 18–22; Goldreich, *Computational Complexity: A Conceptual Perspective*;
 Wigderson, *Mathematics and Computation*; Kushilevitz & Nisan, *Communication Complexity*; Jukna; Thaler, *Proofs,
 Arguments, and Zero-Knowledge*; Cygan et al., *Parameterized Algorithms*; O'Donnell, *Analysis of Boolean Functions*;
 Vassilevska Williams 2018 (survey); Håstad 2001; Khot 2002; Dinur 2007; Shamir 1992.
 
-### Part 26 · Error-Correcting Codes (~55)
+### Part 28 · Error-Correcting Codes (~55)
 *Story:* In 1947 Hamming's weekend jobs kept dying on bad bits, so he taught the machine to fix them. A year later
 Shannon proved that noise costs only a fixed fraction of the channel's rate, but not how to get there. It took fifty
 years and several rediscoveries (Reed–Solomon, LDPC, turbo and polar codes) to reach that limit. We scratch a QR code
@@ -1214,7 +1462,7 @@ and get its message back.
 3. **Hamming(7,4)**: parity checks as a matrix; the syndrome names the bad bit; the Venn picture; a perfect code.
 4. Bounds: Hamming (sphere packing), Singleton, Gilbert–Varshamov, on the rate–distance plane.
 5. Linear codes and duality; the Golay code (Voyager, cited) and the Leech lattice, briefly.
-6. Finite fields GF(p) and GF(2ᵐ) from irreducible polynomials (callback to Part 4's LFSRs); a cyclic multiplicative
+6. Finite fields GF(p) and GF(2ᵐ) from irreducible polynomials (callback to Part 5's LFSRs); a cyclic multiplicative
    group.
 7. **Reed–Solomon** (1960):
    - codewords as evaluations of polynomials, MDS by counting roots (proved);
@@ -1223,28 +1471,29 @@ and get its message back.
    - CDs, QR codes, deep space, RAID-6.
 8. **Our QR code**: encode a message, scratch the image, decode it back.
 9. Cyclic codes and CRCs: polynomial division over GF(2) as a shift-register circuit; guarantees for burst errors;
-   CRC-32 (Part 34).
+   CRC-32 (Part 36).
 10. **Shannon's channel coding theorem** (1948): BSC capacity 1 − H(p); random coding by typical sets (callback to
     *AI, Built* 1), proved; the converse via Fano.
-11. Concatenated codes (Forney); convolutional codes and Viterbi (callbacks to *AI, Built* 7 and Part 18).
+11. Concatenated codes (Forney); convolutional codes and Viterbi (callbacks to *AI, Built* 7 and Part 19).
 12. Turbo codes (1993) and the rediscovery of **LDPC** (Gallager 1962; MacKay & Neal): Tanner graphs, belief
     propagation (callback to *AI, Built* 7), density evolution, the computed waterfall.
 13. **Polar codes** (Arıkan 2009): channel polarization computed and animated, with capacities splitting toward 0 and
     1; successive cancellation; 5G.
-14. List decoding (Sudan, Guruswami–Sudan); locally decodable and testable codes and PCPs (Part 25).
-15. Storage codes: RAID-5 and 6, LRCs (Azure), fountain and LT codes (Luby). Quantum codes previewed (Part 40).
+14. List decoding (Sudan, Guruswami–Sudan); locally decodable and testable codes and PCPs (Part 27).
+15. Storage codes: RAID-5 and 6, LRCs (Azure), fountain and LT codes (Luby). Quantum codes previewed (Part 53).
     Outro.
 
 *Computed:* Hamming(7,4) BER curves; the bounds; RS encode and decode of a scratched QR-like image; CRC detection
 rates; random codes at small n; the LDPC waterfall; polarization.
 *Visuals:* spheres around codewords in Hamming space; the Venn diagram; a polynomial through points with a corrupted
 point pulled back; the polarization fan; messages flowing on a Tanner graph.
+*In practice:* ECC memory, RAID and erasure-coded cloud storage, QR codes, Wi-Fi, 5G and satellite links, the CRC in every protocol.
 *Reading:* MacKay, *Information Theory, Inference, and Learning Algorithms*; Cover & Thomas ch. 7; Guruswami, Rudra &
 Sudan, *Essential Coding Theory*; MacWilliams & Sloane; Roth, *Introduction to Coding Theory*; Richardson & Urbanke,
 *Modern Coding Theory*; Lin & Costello; Hamming 1950; Reed & Solomon 1960; Gallager 1962; Berrou et al. 1993; Arıkan
 2009; Shannon 1948.
 
-### Part 27 · Secrets (~55)
+### Part 29 · Secrets (~55)
 *Story:* For two thousand years ciphers were broken by counting letters. Shannon proved that perfect secrecy needs a
 key as long as the message. Modern cryptography gets around that by assuming the adversary's computing power is
 limited, and builds pseudorandomness, block ciphers and hashes on that assumption. The attacks show how much care it
@@ -1260,22 +1509,22 @@ takes.
 6. **PRFs**: the GGM tree, by a hybrid argument; PRPs and Luby–Rackoff (three Feistel rounds give a PRP).
 7. Block ciphers:
    - DES (1977; broken by brute force by Deep Crack in 1998);
-   - **AES** (2001): SubBytes (inversion in GF(2⁸), callback to Part 26), ShiftRows, MixColumns (an MDS matrix),
+   - **AES** (2001): SubBytes (inversion in GF(2⁸), callback to Part 28), ShiftRows, MixColumns (an MDS matrix),
      AddRoundKey;
    - the avalanche effect, where one flipped bit changes half the output.
 8. Modes: **the ECB penguin** (computed on our own image); CBC and Vaudenay's padding oracle (2002); CTR.
 9. Integrity: CBC-MAC and HMAC; authenticated encryption; GCM's GHASH as polynomial evaluation; ChaCha20-Poly1305.
 10. Hashes:
-    - the birthday bound 2^{n/2} (callback to Part 16);
+    - the birthday bound 2^{n/2} (callback to Part 17);
     - Merkle–Damgård and length extension;
     - MD5 and SHA-1 collisions (Wang 2004; SHAttered 2017);
     - the **SHA-3 sponge**.
-11. Hash applications: Merkle trees (git, certificate transparency, Part 36's blockchains); commitments; salted,
+11. Hash applications: Merkle trees (git, certificate transparency, Part 38's blockchains); commitments; salted,
     slow, memory-hard password hashing (bcrypt, scrypt, Argon2).
 12. Cryptanalysis on a toy SPN: differential (Biham & Shamir; DES's S-boxes, hardened against it in 1974) and linear
     (Matsui); meet-in-the-middle and why 2DES fails.
 13. Side channels: timing (Kocher 1996) and constant-time code; power analysis; cache attacks on AES T-tables
-    (callback to Parts 7–8).
+    (callback to Parts 8–9).
 14. Randomness failures: the Debian OpenSSL bug (2008); Dual_EC_DRBG. Outro.
 
 *Computed:* frequency analysis breaking a cipher; an Enigma simulation and its cycle structures; the ECB penguin
@@ -1283,13 +1532,14 @@ takes.
 4-round SPN; birthday collisions on truncated SHA-256.
 *Visuals:* the penguin under ECB against noise under CBC; AES's 4 × 4 state transforming round by round; an avalanche
 heatmap; rotors stepping; the sponge absorbing and squeezing.
+*In practice:* TLS cipher suites, disk and database encryption, password storage, HMAC-signed tokens, constant-time code review.
 *Reading:* Katz & Lindell, *Introduction to Modern Cryptography*; Boneh & Shoup, *A Graduate Course in Applied
 Cryptography*; Goldreich, *Foundations of Cryptography* I–II; Menezes, van Oorschot & Vanstone, *Handbook of Applied
 Cryptography*; Daemen & Rijmen, *The Design of Rijndael*; Ferguson, Schneier & Kohno, *Cryptography Engineering*;
 Kahn, *The Codebreakers*; Singh, *The Code Book*; Shannon 1949; Heys' tutorial on linear and differential
 cryptanalysis.
 
-### Part 28 · Public Keys (~60)
+### Part 30 · Public Keys (~60)
 *Story:* Two strangers who have never met agree on a secret while everyone listens. It took Diffie and Hellman
 (1976), RSA (1977) and the number theory of groups to make that possible. Elliptic curves made it compact, and
 lattices may keep it safe against a quantum computer. By the end, two of our Pebbles carry out a TLS 1.3–style
@@ -1311,16 +1561,16 @@ handshake.
    - ECDH and ECDSA; Curve25519;
    - why no index calculus means smaller keys;
    - nonce reuse (the 2010 PS3 key recovery, recomputed on a toy curve).
-9. Signatures and PKI: certificates, chains of trust, certificate transparency (Part 27's Merkle logs).
+9. Signatures and PKI: certificates, chains of trust, certificate transparency (Part 29's Merkle logs).
 10. **TLS 1.3** (RFC 8446) as a sequence diagram between two simulated Pebbles: ECDHE, signatures, HKDF, AEAD;
     forward secrecy.
-11. Shor's threat (Part 40), and "harvest now, decrypt later."
+11. Shor's threat (Part 53), and "harvest now, decrypt later."
 12. **Lattices**:
     - bases and shortest vectors; LLL (1982), animated in 2D;
     - **LWE** (Regev 2005) and worst-case to average-case reductions;
-    - **ML-KEM** (FIPS 203, 2024): module-LWE with the NTT (callback to Part 18);
+    - **ML-KEM** (FIPS 203, 2024): module-LWE with the NTT (callback to Part 19);
     - ML-DSA and SLH-DSA; Lamport one-time signatures and Merkle trees.
-13. Zero knowledge in practice: Schnorr and Fiat–Shamir (Part 25); SNARKs from polynomial commitments (KZG), sketched.
+13. Zero knowledge in practice: Schnorr and Fiat–Shamir (Part 27); SNARKs from polynomial commitments (KZG), sketched.
 14. Beyond: FHE (Gentry 2009, bootstrapping); MPC (Yao's garbled circuits; Shamir sharing, the Reed–Solomon
     polynomials again); differential privacy (callback to *AI, Built* 31). Outro.
 
@@ -1329,6 +1579,7 @@ semiprimes grow; BSGS; the group law over ℝ and F_p; ECDSA nonce-reuse key rec
 breaking a toy knapsack; toy LWE and its noise; Shamir sharing.
 *Visuals:* the elliptic curve's chord, third point and reflection; the F_p cloud; lattice bases reducing; LWE's
 blurred lattice; the handshake.
+*In practice:* TLS certificates and Let's Encrypt, SSH keys, code signing, passkeys, the post-quantum migration.
 *Reading:* Katz & Lindell ch. 9–14; Boneh & Shoup parts II–III; Hoffstein, Pipher & Silverman, *An Introduction to
 Mathematical Cryptography*; Washington, *Elliptic Curves*; Silverman & Tate, *Rational Points on Elliptic Curves*;
 Shoup, *A Computational Introduction to Number Theory and Algebra*; Crandall & Pomerance, *Prime Numbers*; Diffie &
@@ -1338,7 +1589,7 @@ Hellman 1976; Rivest, Shamir & Adleman 1978; Regev 2009; Peikert 2016; NIST FIPS
 
 ## Act VI · One Machine, Many Programs
 
-### Part 29 · The Kernel (~55)
+### Part 31 · The Kernel (~55)
 *Story:* Early computers ran one job at a time, and an expensive machine sat idle while a person thought.
 Time-sharing gave every user the illusion of a whole machine. That needed protection, interrupts, processes and a
 scheduler. Queueing theory explains why a server at 90% load feels ten times slower than one at 50%. PebbleOS boots.
@@ -1354,34 +1605,35 @@ scheduler. Queueing theory explains why a server at 90% load feels ten times slo
 7. Scheduling metrics; FCFS and the convoy effect; **SJF minimizes mean completion time** (exchange argument); SRTF.
 8. Round robin and the quantum; **MLFQ** (Corbató 1962) and how to game it.
 9. Proportional share: lottery and stride (Waldspurger 1994–95); CFS's virtual runtime in a red–black tree (2007;
-   callback to Part 16); EEVDF (Linux 6.6).
-10. Multiprocessor scheduling: affinity, load balancing, work stealing (callback to Part 9).
+   callback to Part 17); EEVDF (Linux 6.6).
+10. Multiprocessor scheduling: affinity, load balancing, work stealing (callback to Part 10).
 11. Real time: rate-monotonic scheduling and **Liu–Layland's U ≤ n(2^{1/n} − 1) → ln 2** (1973, sketched); EDF is
     optimal; priority inversion on Mars Pathfinder (1997) and priority inheritance.
 12. **Queueing theory**: Little's law L = λW (proved by areas); M/M/1's 1/(μ − λ) (derived) and its hockey stick;
     Pollaczek–Khinchine (variance matters); SRPT is optimal (Schrage 1968).
 13. Kernel designs: monolithic, microkernel (Mach, L4; the Tanenbaum–Torvalds debate of 1992), exokernel, unikernel;
-    seL4 (Part 41).
-14. **PebbleOS boots on the emulator** and runs two processes doing the Job concurrently. Ledger row 10. Outro.
+    seL4 (Part 54).
+14. **PebbleOS boots on the emulator** and runs two processes doing the Job concurrently. Ledger row 11. Outro.
 
 *Computed:* PebbleOS traces (traps, timer, context switches); simulations of FCFS, SJF, RR, MLFQ, stride and
 CFS-lite; M/M/1 against the formula; RMS and EDF schedulability; context-switch cost on this machine.
 *Visuals:* Gantt charts; the system call as a camera dive into the kernel and back; a queue's random walk under the
 hockey-stick curve; the process state machine.
+*In practice:* Linux internals (CFS and EEVDF, system calls, `strace`), real-time and embedded RTOSes, eBPF, capacity planning with queueing.
 *Reading:* Arpaci-Dusseau & Arpaci-Dusseau, *Operating Systems: Three Easy Pieces* (OSTEP), virtualization of the
 CPU; Tanenbaum & Bos, *Modern Operating Systems*; Silberschatz, Galvin & Gagne; Anderson & Dahlin, *Operating Systems:
 Principles and Practice*; Cox, Kaashoek & Morris, *xv6*; Ritchie & Thompson 1974; Corbató et al. 1962; Liu & Layland
 1973; Harchol-Balter, *Performance Modeling and Design of Computer Systems*; Kleinrock, *Queueing Systems*.
 
-### Part 30 · Virtual Memory (~55)
+### Part 32 · Virtual Memory (~55)
 *Story:* Every program believes it owns a huge, private, contiguous memory. None of them does. Address translation
 maintains the illusion with a radix tree walked in hardware and cached in the TLB. Because memory is finite, some
 page must leave, and Belady showed both which page is optimal and that adding memory can make things worse.
 1. The problem: protection and relocation; Atlas (1962) invents paging.
-2. Base and bounds; segmentation; external fragmentation (callback to Part 10).
+2. Base and bounds; segmentation; external fragmentation (callback to Part 11).
 3. Paging: VPN | offset split, animated; PTE bits (valid, protection, dirty, accessed).
 4. Multi-level page tables as a radix-tree walk (x86-64 four and five levels); inverted and hashed tables.
-5. **The TLB**, a cache for translations (callback to Part 8): reach, ASIDs, huge pages. The TLB-miss staircase is
+5. **The TLB**, a cache for translations (callback to Part 9): reach, ASIDs, huge pages. The TLB-miss staircase is
    measured on this machine.
 6. Page faults: demand paging and swapping; effective access time (why one fault per million accesses matters).
 7. Replacement:
@@ -1391,8 +1643,8 @@ page must leave, and Belady showed both which page is optimal and that adding me
    - CLOCK and WSClock; 2Q, ARC, LIRS.
 8. Working sets (Denning 1968) and thrashing; the Job's trace replayed through every policy, with miss curves
    against frames.
-9. Copy-on-write fork; zero pages; mmap; shared libraries (callback to Part 10).
-10. The kernel's own mapping; KPTI after Meltdown (callback to Part 7).
+9. Copy-on-write fork; zero pages; mmap; shared libraries (callback to Part 11).
+10. The kernel's own mapping; KPTI after Meltdown (callback to Part 8).
 11. Kernel allocators: buddy and slab (Bonwick 1994).
 12. Virtualization:
     - **Popek–Goldberg** (1974) and trap-and-emulate;
@@ -1407,11 +1659,12 @@ page must leave, and Belady showed both which page is optimal and that adding me
 traces; the TLB staircase on this machine; the nested-walk count.
 *Visuals:* address bits walking down a radix tree; frames shuffling to disk and back; the anomaly curve rising; the
 CLOCK hand sweeping.
+*In practice:* hypervisors (KVM, Xen), containers (Docker, cgroups, namespaces), huge pages for databases, OOM debugging.
 *Reading:* OSTEP (virtualization of memory); Tanenbaum & Bos ch. 3; Denning 1970; Belady 1966; Belady, Nelson &
 Shedler 1969; Mattson et al. 1970; Kilburn et al. 1962; Bonwick 1994; Popek & Goldberg 1974; Adams & Agesen 2006;
 Bhargava et al. 2008; Gorman, *Understanding the Linux Virtual Memory Manager*.
 
-### Part 31 · Concurrency (~60)
+### Part 33 · Concurrency (~60)
 *Story:* Two threads each add one to a counter, and the count goes up by one. Mutual exclusion can be built from
 plain reads and writes (Peterson) until the hardware reorders them. The fix has two parts: a theory of memory
 models, and a hierarchy that orders synchronization primitives by power. In that hierarchy, compare-and-swap can
@@ -1421,7 +1674,7 @@ implement every concurrent object.
    exhaustive interleaving model checker.
 3. Mutual exclusion (safety, liveness, fairness): Dekker (1965); **Peterson (1981), proved by invariant**; Lamport's
    bakery (1974); the Burns–Lynch n-register lower bound.
-4. Peterson breaks under TSO: the store-buffer litmus test (callback to Part 9), checked under SC and TSO models, and
+4. Peterson breaks under TSO: the store-buffer litmus test (callback to Part 10), checked under SC and TSO models, and
    repaired with a fence.
 5. Hardware locks: TAS, TTAS with backoff, ticket locks, **MCS** (1991) and its cache-line traffic (callback to
    MESI).
@@ -1434,10 +1687,10 @@ implement every concurrent object.
 10. **Linearizability** (Herlihy & Wing 1990), on timelines; a computed history checker.
 11. Lock-free structures: the Treiber stack and ABA; tags, hazard pointers, epochs and RCU; the Michael–Scott queue.
 12. Progress conditions, and **consensus numbers** (Herlihy 1991): registers 1, test-and-set and queues 2, CAS ∞,
-    proved by valency (a preview of FLP in Part 36); the universality of consensus.
+    proved by valency (a preview of FLP in Part 38); the universality of consensus.
 13. Transactional memory (Herlihy & Moss 1993; TSX's troubles).
 14. Other models: CSP (Hoare 1978) and Go channels; actors and Erlang; async/await.
-15. In the wild: Therac-25 and the 2003 blackout (cited); race detectors with vector clocks (Part 36).
+15. In the wild: Therac-25 and the 2003 blackout (cited); race detectors with vector clocks (Part 38).
 16. PebbleOS gains a CAS mutex and threads. Outro.
 
 *Computed:* exhaustive interleavings for counter++, Peterson and the bakery with property checks; SC against TSO
@@ -1445,16 +1698,17 @@ model checking; a lock benchmark (C on this machine where available, otherwise a
 linearizability checking; the ABA scenario; dining philosophers; the banker's algorithm.
 *Visuals:* interleavings branching as a tree; Peterson's state graph with the bad state unreachable; the MCS queue as
 linked waiters; the consensus ladder.
+*In practice:* mutexes, channels and async runtimes (Go, Rust's tokio, java.util.concurrent), race detectors (TSan), lock-free queues in low-latency systems.
 *Reading:* Herlihy & Shavit, *The Art of Multiprocessor Programming*; OSTEP (concurrency); Downey, *The Little Book of
 Semaphores*; Lynch, *Distributed Algorithms* ch. 10; Sorin, Hill & Wood; McKenney, *Is Parallel Programming Hard?*;
 Lamport 1974, 1979; Dijkstra 1965; Hoare 1974, 1978; Herlihy 1991; Herlihy & Wing 1990; Adve & Gharachorloo 1996;
 Boehm & Adve 2008; Mellor-Crummey & Scott 1991.
 
-### Part 32 · Storage (~55)
+### Part 34 · Storage (~55)
 *Story:* Memory forgets when the power goes, so data must live on spinning platters or in leaky flash. An append
 that needs three writes can be cut short by a crash between any two of them. Journals, logs and copy-on-write trees
-are the answers, and RAID's parity is Part 26's codes at work.
-1. Persistence and the bottom of the hierarchy (callback to Part 8).
+are the answers, and RAID's parity is Part 28's codes at work.
+1. Persistence and the bottom of the hierarchy (callback to Part 9).
 2. Disks: seek + rotation + transfer (computed); random against sequential (100×); SSTF, SCAN, C-SCAN.
 3. Flash:
    - cells, pages, erase blocks, wear;
@@ -1468,24 +1722,25 @@ are the answers, and RAID's parity is Part 26's codes at work.
 7. **Crash consistency**: fsck; journaling (data and metadata, ordered mode), with a replay animated; soft updates;
    our file system **crashed at every write point** and checked each time.
 8. Log-structured FS (Rosenblum & Ousterhout 1992): segment cleaning and cost–benefit; bimodal utilization.
-9. Copy-on-write (ZFS, btrfs): Merkle checksums (callback to Part 27); snapshots for free.
-10. **RAID** (Patterson, Gibson & Katz 1988): levels 0/1/4/5/6 (callback to Part 26); the small-write problem; the
+9. Copy-on-write (ZFS, btrfs): Merkle checksums (callback to Part 29); snapshots for free.
+10. **RAID** (Patterson, Gibson & Katz 1988): levels 0/1/4/5/6 (callback to Part 28); the small-write problem; the
     chance of a second failure during rebuild (computed).
 11. Reliability in the field (Schroeder & Gibson 2007, cited); latent sector errors; end-to-end checksums.
 12. fsync and the illusion of durability: write caches and barriers; "fsyncgate" (2018).
 13. **LSM trees** (O'Neil et al. 1996): memtables, SSTables, leveled against tiered compaction; read, write and space
-    amplification (the RUM conjecture); Bloom filters per run (callback to Part 19).
-14. Our file system and key-value store on PebbleOS's disk; the novels stored and read back. Ledger row 11. Outro.
+    amplification (the RUM conjecture); Bloom filters per run (callback to Part 20).
+14. Our file system and key-value store on PebbleOS's disk; the novels stored and read back. Ledger row 12. Outro.
 
 *Computed:* the disk-time model; an FTL simulator; crash injection; LSM against B-tree amplification; RAID rebuild
 risk; LFS cleaning.
 *Visuals:* the head seeking while the platter spins; erase blocks being collected; the journal replaying after a
 crash; LSM levels compacting in cascades.
+*In practice:* choosing ext4, XFS or ZFS, SSD endurance in production, fsync and durability bugs, RocksDB and LSM tuning.
 *Reading:* OSTEP (persistence); McKusick et al. 1984; Rosenblum & Ousterhout 1992; Patterson, Gibson & Katz 1988;
 Pillai et al. 2014; O'Neil et al. 1996; Petrov, *Database Internals* part I; Agrawal et al. 2008; Giampaolo,
 *Practical File System Design*; Schroeder & Gibson 2007.
 
-### Part 33 · Databases (~60)
+### Part 35 · Databases (~60)
 *Story:* In 1970 Codd said programs should ask for *what* data they want and never *how* to find it. That one idea
 created a mathematics (relational algebra), an optimizer that searches for the cheapest plan, and the theory of
 transactions, which lets thousands of users act as if each were alone, even through crashes. The Job becomes one
@@ -1496,12 +1751,12 @@ line of SQL.
 3. Functional dependencies, Armstrong's axioms, BCNF and 3NF; update anomalies.
 4. **The Job as SQL**, and the question of how a database answers it.
 5. Query processing: iterators (Volcano, Graefe); scans; index selection.
-6. Joins: nested loops, block, index, sort–merge, Grace hash. I/O costs derived (callback to Part 8's external
+6. Joins: nested loops, block, index, sort–merge, Grace hash. I/O costs derived (callback to Part 9's external
    memory).
 7. **Selinger's optimizer** (1979): dynamic programming over join orders with interesting orders; the size of plan
    space (Catalan × n!); cardinality estimation and how independence assumptions fail.
 8. Indexes: B+ trees (three levels index a billion rows); clustered against unclustered; hash and bitmap indexes;
-   LSM (Part 32).
+   LSM (Part 34).
 9. Transactions: ACID; schedules; **conflict serializability by precedence graphs** (a cycle means not
    serializable, proved); view serializability is NP-complete.
 10. **2PL ⇒ serializable** (proved); strict 2PL; deadlock handling (wait-die, wound-wait); intention locks.
@@ -1510,16 +1765,17 @@ line of SQL.
 12. Isolation levels and their anomalies (Berenson et al. 1995; Adya 1999).
 13. **Recovery**: WAL, steal/no-force; **ARIES** (Mohan 1992) with its analysis, redo and undo passes over LSNs;
     checkpoints.
-14. Analytics: column stores (C-Store, MonetDB/X100, DuckDB); compression (callback to Part 20); vectorized against
+14. Analytics: column stores (C-Store, MonetDB/X100, DuckDB); compression (callback to Part 21); vectorized against
     compiled execution.
 15. **Our database** runs the Job's SQL on the novels and shows the plan it chose against the alternatives, with
-    costs, cross-checked against `sqlite3`. Ledger row 12.
-16. Beyond relational: key-value, document and graph stores; distributed transactions (Part 37). Outro.
+    costs, cross-checked against `sqlite3`. Ledger row 13.
+16. Beyond relational: key-value, document and graph stores; distributed transactions (Part 39). Outro.
 
 *Computed:* join I/O against formulas; Selinger DP against exhaustive search; estimation errors under correlation; a
 serializability checker; 2PL; write skew; ARIES on crashed logs; row against column scans; our database.
 *Visuals:* tables transformed by algebra operators; join trees with costs; a precedence-graph cycle lighting up;
 ARIES' three sweeps over the log; row against column layouts.
+*In practice:* PostgreSQL and MySQL internals, reading query plans (`EXPLAIN`), index design, isolation-level bugs, SQLite everywhere, DuckDB for analytics.
 *Reading:* Silberschatz, Korth & Sudarshan, *Database System Concepts*; Ramakrishnan & Gehrke; Garcia-Molina, Ullman &
 Widom, *Database Systems: The Complete Book*; Hellerstein & Stonebraker, *Readings in Database Systems* (the Red
 Book); Gray & Reuter, *Transaction Processing*; Weikum & Vossen; Bernstein, Hadzilacos & Goodman; Abiteboul, Hull &
@@ -1530,7 +1786,7 @@ Vianu, *Foundations of Databases*; Codd 1970; Selinger et al. 1979; Mohan et al.
 
 ## Act VII · Many Machines
 
-### Part 34 · Networks I: Moving Bits (~55)
+### Part 36 · Networks I: Moving Bits (~55)
 *Story:* The phone network reserved a wire for every call. Baran and Davies proposed cutting messages into packets
 that find their own way. The Internet is that idea, organized in layers, with IP as the narrow waist. This part
 derives what limits it at each layer: Shannon's capacity, ALOHA's 1/2e, the count-to-infinity problem, and BGP's
@@ -1540,13 +1796,13 @@ policies.
    & Clark 1984); Clark's design philosophy (1988).
 3. Physical layer: Nyquist and **Shannon–Hartley C = B log₂(1 + S/N)**; QAM constellations in noise; fiber and the
    speed of light; the bandwidth–delay product.
-4. Link layer: framing and bit stuffing; CRC (callback to Part 26); MAC addresses.
+4. Link layer: framing and bit stuffing; CRC (callback to Part 28); MAC addresses.
 5. Multiple access: **ALOHA, S = G e^{−2G}, max 1/(2e)** (derived); slotted 1/e; CSMA/CD and exponential backoff
    (Metcalfe 1973); Wi-Fi's CSMA/CA and hidden terminals.
 6. Bridges and switches; Perlman's spanning tree (1985); VLANs.
 7. IP: CIDR, NAT, IPv6; fragmentation; ICMP and traceroute's TTL trick.
-8. Forwarding: longest-prefix match with tries (callback to Part 16); TCAMs; nanoseconds per packet at 400 Gb/s.
-9. **Distance vector = distributed Bellman–Ford** (callback to Part 17); count-to-infinity animated; split horizon and
+8. Forwarding: longest-prefix match with tries (callback to Part 17); TCAMs; nanoseconds per packet at 400 Gb/s.
+9. **Distance vector = distributed Bellman–Ford** (callback to Part 18); count-to-infinity animated; split horizon and
    poisoned reverse.
 10. Link state: flooding plus Dijkstra (OSPF); convergence and transient loops.
 11. **BGP**: path vector; policy (Gao–Rexford); hijacks (YouTube, 2008, cited); RPKI.
@@ -1558,12 +1814,13 @@ policies.
 lookups; distance-vector and link-state convergence; a BGP policy example; traceroute in the simulation.
 *Visuals:* envelopes nesting headers; collisions on an ALOHA timeline; noisy constellations; distance-vector tables
 counting up; an AS graph.
+*In practice:* subnets and CIDR, BGP at ISPs and clouds, Ethernet and Wi-Fi troubleshooting, `traceroute` and `tcpdump`.
 *Reading:* Kurose & Ross, *Computer Networking: A Top-Down Approach*; Peterson & Davie, *Computer Networks: A Systems
 Approach*; Tanenbaum & Wetherall; Stevens, *TCP/IP Illustrated* vol. 1; Bertsekas & Gallager, *Data Networks*;
 Varghese, *Network Algorithmics*; Tse & Viswanath, *Fundamentals of Wireless Communication*; Baran 1964; Cerf & Kahn
 1974; Saltzer, Reed & Clark 1984; Abramson 1970; Metcalfe & Boggs 1976; Clark 1988.
 
-### Part 35 · Networks II: Reliable Conversation (~55)
+### Part 37 · Networks II: Reliable Conversation (~55)
 *Story:* IP loses, reorders and duplicates packets, and TCP turns that into a reliable stream. In October 1986 the
 Internet's throughput fell a thousandfold, and Van Jacobson's fix, additive increase and multiplicative decrease,
 turned out to be a distributed optimization algorithm. The Job's novels arrive over our own TCP on a lossy link.
@@ -1586,19 +1843,20 @@ turned out to be a distributed optimization algorithm. The Job's novels arrive o
     22's duality).
 11. DNS (Mockapetris 1983): hierarchy, caching, TTLs; Kaminsky's poisoning (2008).
 12. The web: HTTP/1.1 and head-of-line blocking; HTTP/2; **QUIC** (RFC 9000) and HTTP/3: streams over UDP, 0-RTT,
-    migration; TLS 1.3 inside (callback to Part 28).
+    migration; TLS 1.3 inside (callback to Part 30).
 13. CDNs and anycast; Zipf's law of requests, fitted on the novels' words.
-14. Our TCP fetching the novels over a lossy link: cwnd traces. Ledger row 13. Outro.
+14. Our TCP fetching the novels over a lossy link: cwnd traces. Ledger row 14. Outro.
 
 *Computed:* our rdt and TCP-lite under loss and reordering; utilization against window; Chiu–Jain trajectories;
 sawtooth throughput against Mathis; bufferbloat delays; BBR-lite against Reno-lite; NUM by dual ascent; the Zipf fit.
 *Visuals:* sequence diagrams with drops and retransmits; a window sliding over the byte stream; Chiu–Jain zig-zags
 toward the fairness line; the cwnd sawtooth; queues swelling.
+*In practice:* TCP tuning, CDNs, HTTP/2 and HTTP/3 deployments, DNS operations, Wireshark.
 *Reading:* Kurose & Ross ch. 2–3; Peterson & Davie ch. 5–6; Stevens; Srikant & Ying, *Communication Networks*;
 Grigorik, *High Performance Browser Networking*; Jacobson 1988; Chiu & Jain 1989; Mathis et al. 1997; Kelly, Maulloo &
 Tan 1998; Cardwell et al. 2016; Langley et al. 2017; Nichols & Jacobson 2012.
 
-### Part 36 · Distributed Systems I: Agreement (~60)
+### Part 38 · Distributed Systems I: Agreement (~60)
 *Story:* "A distributed system is one in which the failure of a computer you didn't even know existed can render
 your own computer unusable" (Lamport). With no shared clock and failures that look like slowness, even agreeing on
 one bit is provably impossible in general (FLP). Paxos and Raft agree anyway, by giving up a guarantee that FLP
@@ -1606,7 +1864,7 @@ says no one can have. We build Raft and try to break it.
 1. Partial failure, no global clock, asynchrony.
 2. **The two generals** cannot agree over a lossy link (proved by induction on messages).
 3. Time: NTP and its limits; **happened-before and Lamport clocks** (1978) on space–time diagrams; **vector clocks**
-   characterize causality (proved); race detectors (callback to Part 31).
+   characterize causality (proved); race detectors (callback to Part 33).
 4. **Chandy–Lamport snapshots** (1985): consistent cuts, animated.
 5. Failure models (crash, omission, Byzantine); synchrony, asynchrony, partial synchrony (DLS 1988); failure
    detectors (◇S).
@@ -1623,20 +1881,21 @@ says no one can have. We build Raft and try to break it.
     sufficient; signatures; PBFT (1999); HotStuff.
 14. **Nakamoto consensus** (2008): proof of work, the longest chain, the double-spend probability recomputed;
     selfish mining; proof of stake.
-15. Checking protocols: TLA+ at Amazon (Part 41); Jepsen's findings (cited). Outro.
+15. Checking protocols: TLA+ at Amazon (Part 54); Jepsen's findings (cited). Outro.
 
 *Computed:* vector-clock causality; snapshots; FLP's valency explored exhaustively on a tiny protocol; Raft with
 fault injection and invariant checks; the Byzantine counterexample; PBFT message counts; Nakamoto's probabilities
 against Monte Carlo.
 *Visuals:* space–time diagrams with clock stamps; consistent and inconsistent cuts; Raft terms and logs lining up;
 configuration graphs colored by valency; a traitor sending split messages.
+*In practice:* etcd, ZooKeeper and Consul, leader election inside every distributed database, blockchains.
 *Reading:* Lynch, *Distributed Algorithms*; Attiya & Welch, *Distributed Computing*; Cachin, Guerraoui & Rodrigues,
 *Introduction to Reliable and Secure Distributed Programming*; van Steen & Tanenbaum, *Distributed Systems*;
 Kleppmann, *Designing Data-Intensive Applications* ch. 8–9; Lamport 1978, 1998, 2001; Fischer, Lynch & Paterson 1985;
 Ongaro & Ousterhout 2014; Lamport, Shostak & Pease 1982; Castro & Liskov 1999; Nakamoto 2008; Dwork, Lynch &
 Stockmeyer 1988; Chandy & Lamport 1985.
 
-### Part 37 · Distributed Systems II: Scale (~55)
+### Part 39 · Distributed Systems II: Scale (~55)
 *Story:* At planet scale, every guarantee has a price in latency or availability. CAP states the trade-off, CRDTs
 avoid it by making merges commutative, and Spanner pays for it with atomic clocks. One slow server in a hundred
 makes most requests slow. The Job finally runs as MapReduce on sixteen machines, one of which dies.
@@ -1654,17 +1913,18 @@ makes most requests slow. The Job finally runs as MapReduce on sixteen machines,
 9. Distributed transactions: 2PC and its blocking; 3PC; **Spanner** (2012): TrueTime and commit wait, animated;
    Calvin.
 10. **MapReduce** (Dean & Ghemawat 2004): map, shuffle, reduce. The Job on sixteen simulated Pebbles, with a crash and
-    re-execution; stragglers and backup tasks. Ledger row 14.
-11. Spark's RDDs and lineage; streaming with watermarks; exactly-once via Chandy–Lamport (callback to Part 36).
+    re-execution; stragglers and backup tasks. Ledger row 15.
+11. Spark's RDDs and lineage; streaming with watermarks; exactly-once via Chandy–Lamport (callback to Part 38).
 12. Coordination: Chubby and ZooKeeper; leases and fencing tokens.
 13. **The tail at scale** (Dean & Barroso 2013): 1 − 0.99¹⁰⁰ ≈ 63% (computed); hedged requests; two choices
-    (callback to Part 19).
+    (callback to Part 20).
 14. Failure at scale: correlated, gray and metastable failures; chaos engineering; post-mortems (cited). Outro.
 
 *Computed:* PBS; CRDT convergence under random delivery orders; consistent-hashing variance; Chord hops; 2PC
 blocking; Spanner's timeline; the MapReduce Job with a failure; tail amplification; hedging.
 *Visuals:* the consistency hierarchy as a map; replicas merging up a lattice; the hash ring; Chord fingers; the
 shuffle as colored streams; the fan-out tail.
+*In practice:* Cassandra, DynamoDB, Spanner and CockroachDB, Redis Cluster, Spark; consistency choices as product decisions.
 *Reading:* Kleppmann, *Designing Data-Intensive Applications*; Barroso, Hölzle & Ranganathan, *The Datacenter as a
 Computer*; Saltzer & Kaashoek, *Principles of Computer System Design*; van Steen & Tanenbaum; DeCandia et al. 2007;
 Corbett et al. 2012; Dean & Ghemawat 2004; Zaharia et al. 2012; Shapiro et al. 2011; Gilbert & Lynch 2002; Karger et
@@ -1673,9 +1933,602 @@ al. 1997; Stoica et al. 2001; Dean & Barroso 2013; Burrows 2006; Hunt et al. 201
 
 ---
 
-## Act VIII · Horizons and Trust
+## Act VIII · Building Software
 
-### Part 38 · Light and Pixels (~60)
+### Part 40 · Software Engineering (~55)
+*Story:* What one person writes in a weekend fails in different ways from what a thousand people change every day.
+The discipline born at the 1968 NATO "software crisis" conference is about managing complexity. Modules hide
+decisions, interfaces survive change, tests pin down behaviour, and a team's communication structure ends up as the
+system's architecture. Some of this is mathematics: Brooks' n(n − 1)/2, the tails of task durations, dependency
+metrics. Much of it is hard-won practice, which we test against evidence where evidence exists.
+1. Hook: the 1968 NATO conference; OS/360 and Brooks' law (adding people to a late project makes it later).
+2. Complexity, essential and accidental ("No Silver Bullet", 1986). **Parnas 1972**: the KWIC system decomposed two
+   ways, and one change rippling through one decomposition but not the other.
+3. Abstraction:
+   - abstract data types (Liskov & Zilles 1974);
+   - representation invariants and abstraction functions;
+   - design by contract (Meyer);
+   - **behavioural subtyping** (Liskov & Wing 1994).
+4. Coupling and cohesion, measured on **this repository's own import graph**: cycles, layering, dependency inversion,
+   instability and abstractness metrics.
+5. Object-oriented design: encapsulation, polymorphism (vtables, callback to Part 15), composition over inheritance;
+   SOLID stated precisely, each with a counterexample.
+6. Design patterns (Gamma et al. 1994) as reusable shapes:
+   - strategy, observer, visitor, adapter, decorator, factory;
+   - the expression problem (Wadler 1998);
+   - their functional equivalents; anti-patterns.
+7. Functional design in industry: immutability; a pure core inside an imperative shell; making illegal states
+   unrepresentable with algebraic data types (callback to Part 14).
+8. Testing in practice:
+   - the test pyramid; unit, integration and end-to-end tests;
+   - test doubles (fakes, stubs, mocks);
+   - **flaky tests** and their causes (order, time, concurrency; Google's statistics, cited);
+   - coverage and its limits; mutation score.
+9. Refactoring (Opdyke 1992; Fowler): behaviour-preserving transformations; code smells; characterization tests for
+   legacy code (Feathers).
+10. Technical debt (Cunningham 1992) as a debt with interest. The cost-of-a-defect curve, and how weakly the classic
+    100× figure is supported (Menzies et al. 2016, cited).
+11. Code review: what it catches (Bacchelli & Bird 2013); review size against detection; linters and static analysis
+    in CI (Part 54).
+12. Process:
+    - waterfall (Royce 1970, who argued against it), iterative development, agile, Scrum and Kanban;
+    - work in progress as a queue (Little's law again, callback to Part 31);
+    - **the DORA metrics** (*Accelerate*).
+13. **Conway's law** (1968) and the inverse Conway manoeuvre; Brooks' law with n(n − 1)/2 communication channels and
+    a ramp-up model (simulated).
+14. Estimation: the planning fallacy; heavy-tailed (lognormal) task durations; a Monte Carlo schedule with its tail;
+    the cone of uncertainty.
+15. The profession:
+    - permissive against copyleft licenses;
+    - the economics of open source;
+    - privacy by design (data minimization, purpose limitation);
+    - accessibility obligations; the ACM Code of Ethics.
+
+    Outro.
+
+*Computed:* this repository's import graph with its cycles and layering metrics; flakiness of an order-dependent test
+suite; a Brooks' law simulation; Monte Carlo schedules; mutation testing of a Pebble toolchain module.
+*Visuals:* the two KWIC decompositions with a change rippling through one; dependency graphs with cycles lit; the
+communication graph's edges growing quadratically as people join; a schedule distribution and its tail.
+*In practice:* how industry codebases are structured, reviewed and tested; the vocabulary of design docs and design
+reviews; working on a team.
+*Reading:* Brooks, *The Mythical Man-Month* (with "No Silver Bullet"); Ousterhout, *A Philosophy of Software Design*;
+McConnell, *Code Complete*; Hunt & Thomas, *The Pragmatic Programmer*; Gamma, Helm, Johnson & Vlissides, *Design
+Patterns*; Fowler, *Refactoring*; Feathers, *Working Effectively with Legacy Code*; Liskov & Guttag, *Program
+Development in Java*; Meyer, *Object-Oriented Software Construction*; Winters, Manshreck & Wright, *Software
+Engineering at Google*; Forsgren, Humble & Kim, *Accelerate*; Naur & Randell 1969; Parnas 1972; Conway 1968; Liskov &
+Wing 1994.
+
+### Part 41 · Version Control, Builds and Dependencies (~55)
+*Story:* Every change to modern software passes through three machines. The version-control system is secretly a
+content-addressed Merkle DAG. The build system is secretly an incremental computation over a dependency graph. The
+package manager is secretly a SAT solver, because choosing versions is NP-complete. Above them, CI and deployment turn
+a change into running software safely, a little at a time.
+1. Hook: the 2005 BitKeeper split and git's first ten days; from RCS, CVS and SVN to distributed version control.
+2. Git's object model: blobs, trees, commits, tags, all content-addressed (callback to Part 29's hashes); history as a
+   Merkle DAG, with integrity for free. We build a small object store and check its hashes against real git's.
+3. Refs, branches, the index and the reflog; what checkout actually does.
+4. **Merging**:
+   - merge bases as lowest common ancestors in the DAG (several of them, and git's recursive strategy);
+   - three-way merge over Myers' diff (callback to Part 21);
+   - conflicts; ort.
+5. Rebase against merge; cherry-pick as applying a diff; **bisect** as binary search over history.
+6. Storage: packfiles and delta compression (callback to Part 21); shallow and partial clones; monorepos at scale
+   (Google, cited) against polyrepos.
+7. Other models: patch theory (Darcs, Pijul) and commuting patches; CRDT-based version control (callback to Part 39).
+8. Build systems:
+   - Make (Feldman 1979): the dependency DAG, timestamps and how they lie;
+   - topological order (callback to Part 18);
+   - parallel builds as a work–span problem (callback to Part 10).
+9. **Build systems à la carte** (Mokhov, Mitchell & Peyton Jones 2018):
+   - schedulers × rebuilders;
+   - static and dynamic dependencies; minimality and correctness;
+   - early cutoff;
+   - the spreadsheet as a build system.
+10. Hermetic, reproducible, remote-cached builds (Bazel, Nix): content hashes as cache keys.
+11. Dependencies:
+    - semantic versioning;
+    - **version resolution is NP-complete** (reduction from 3-SAT, on screen; Di Cosmo et al. 2006);
+    - CDCL and PubGrub solvers in practice (callback to Part 26);
+    - lockfiles, diamond dependencies, vendoring.
+12. Supply-chain hygiene: signatures, SBOMs, SLSA (Part 55 returns to it).
+13. Continuous integration: trunk-based development; **merge queues** (the probability that a batch is green, and
+    bisection on failure, computed); test selection by dependency graph.
+14. Continuous delivery:
+    - blue/green and canary deploys, with statistical detection of a bad canary (callback to Part 44);
+    - progressive rollout, feature flags, rollback;
+    - expand–contract schema migrations.
+15. The Job's own pipeline end to end: commit, CI, build cache, canary, rollout. Outro.
+
+*Computed:* our object store against git's hashes; LCAs on synthetic DAGs; bisect step counts; a make-like engine with
+early cutoff on a synthetic project (rebuild counts); a version solver on a reduced 3-SAT instance; merge-queue
+throughput against batch size and failure rate; canary detection power.
+*Visuals:* hashes changing all the way up the DAG when one blob changes; three columns converging in a three-way
+merge; the build DAG lighting the minimal rebuild set; the 3-SAT gadget written as package versions.
+*In practice:* git workflows, Bazel/Buck/Nix, npm/pip/cargo resolvers, CI/CD pipelines, monorepo tooling, release
+engineering.
+*Reading:* Chacon & Straub, *Pro Git*; Mokhov, Mitchell & Peyton Jones 2018; Feldman 1979; Dolstra 2006 (the Nix
+thesis); Di Cosmo et al. 2006; Humble & Farley, *Continuous Delivery*; Winters, Manshreck & Wright ch. 16–24; Potvin &
+Levenberg 2016; Beyer et al., *Site Reliability Engineering* (release engineering).
+
+### Part 42 · The Browser and the Web (~55)
+*Story:* Type a URL and press enter. Within a few hundred milliseconds, a dozen protocols and three compilers turn
+bytes into pixels you can interact with. The browser is a fault-tolerant parser, a layout constraint solver, a GPU
+compositor, a JIT compiler and an operating system for untrusted code. A single event loop holds it together, with
+a 16 ms deadline for every frame. We build a toy browser that renders the series' own README.
+1. Hook: "what happens when you type a URL", answered layer by layer (callbacks to Parts 30, 36 and 37).
+2. History: Berners-Lee (1989–91), Mosaic (1993), JavaScript in ten days (1995), AJAX (2005), the living standard.
+3. **HTML parsing**: the tokenizer as a state machine with error recovery (callback to Part 12), and why HTML isn't
+   parsed by a grammar; the tree builder; the DOM.
+4. CSS: the cascade; specificity as a lexicographic order (a, b, c); right-to-left selector matching, and why;
+   inheritance.
+5. **Layout**:
+   - the box model and normal flow;
+   - flexbox as a constrained distribution of space (the grow/shrink algorithm on screen);
+   - grid;
+   - line breaking: greedy against **Knuth–Plass** dynamic programming (callback to Part 19);
+   - incremental relayout.
+6. Rendering: paint, layers, GPU compositing (callback to Part 51); the 16.7 ms frame budget; jank;
+   `requestAnimationFrame`.
+7. **The event loop**: tasks, microtasks and rendering steps; run-to-completion; promises and async/await (callback to
+   Part 33); why one long task freezes a page.
+8. JavaScript engines: lazy parsing, bytecode, inline caches and hidden classes, the optimizing JIT and
+   deoptimization, generational GC (callbacks to Part 15).
+9. UI frameworks:
+   - the virtual DOM, and why React's O(n) heuristic diff replaces O(n³) tree edit distance (computed);
+   - keyed lists;
+   - fine-grained reactivity (signals) as a dependency graph (callback to Part 41).
+10. Client state: caches, service workers and offline; local-first software and CRDTs (callback to Part 39).
+11. Web performance: the critical rendering path; loading priorities; **Core Web Vitals** (LCP, INP, CLS); compression
+    and images; HTTP/2 and HTTP/3 in practice (callback to Part 37).
+12. The browser security model: same-origin, CORS, CSP; process sandboxing and site isolation (Spectre, callback to
+    Part 8); WebAssembly (callback to Part 15).
+13. Accessibility: the accessibility tree, ARIA, keyboard navigation; **the WCAG contrast ratio**, derived (Part 44).
+14. Mobile and native apps: the UI thread, frame deadlines, battery and radio power states (why batching requests
+    saves energy, cited); cross-platform frameworks.
+15. Our toy browser: an HTML-subset parser, the cascade, block and inline layout, and Part 51's rasterizer, rendering
+    a page of this repository's README. Outro.
+
+*Computed:* the toy browser; specificity orderings; Knuth–Plass against greedy line breaking on a novel's paragraph;
+keyed against unkeyed list diffs; event-loop orderings; contrast ratios.
+*Visuals:* the tokenizer state machine consuming characters; the DOM and CSSOM merging into the render tree; flex
+items growing and shrinking; Knuth–Plass's breakpoint graph with the optimal path; a frame timeline where a long task
+causes jank.
+*In practice:* frontend and mobile engineering, web performance, accessibility, the engines behind Chrome, Firefox and
+Safari, React/Vue/Svelte.
+*Reading:* Panchekha & Harrelson, *Web Browser Engineering*; Grigorik, *High Performance Browser Networking*; Garsiel &
+Irish, "How Browsers Work"; the WHATWG HTML Living Standard (parsing) and the CSS specifications (cascade, flexbox);
+Knuth & Plass 1981; Haverbeke, *Eloquent JavaScript*; Flanagan, *JavaScript: The Definitive Guide*; WCAG 2.2.
+
+### Part 43 · APIs and Services (~55)
+*Story:* Once a program is split across machines, every function call becomes a message that can be lost,
+duplicated, delayed or reordered (callback to Part 38). Industry's answers have real mathematics underneath:
+- compatibility rules for evolving schemas;
+- idempotency;
+- exactly-once as at-least-once plus deduplication;
+- sagas in place of distributed locks;
+- backpressure.
+
+We split the Job into services and keep its counts exact while the network loses and duplicates messages.
+1. Hook: the eight fallacies of distributed computing, each matched to a real outage.
+2. RPC (Birrell & Nelson 1984): stubs and marshalling; why remote is not local (Waldo et al. 1994).
+3. Serialization:
+   - JSON's numbers (doubles, 2⁵³, callback to Part 4);
+   - **Protocol Buffers' wire format**: varints and zigzag, derived; field tags;
+   - schema evolution: forward and backward compatibility as a subtyping question (callback to Part 14);
+   - Avro; zero-copy formats.
+4. API styles:
+   - REST (Fielding 2000) and the safety and idempotency of HTTP methods;
+   - offset against cursor pagination (why offsets are O(n) and skip rows under inserts, computed);
+   - gRPC and streaming;
+   - GraphQL, the N + 1 problem and batching.
+5. **Idempotency and delivery semantics**: at-most, at-least and exactly once; exactly-once = at-least-once + dedup
+   (proved in a model); idempotency keys; the two generals again.
+6. API design and versioning: **Hyrum's law**; deprecation; additive changes; consumer-driven contract tests.
+7. Queues and pub/sub: acknowledgements, visibility timeouts, dead-letter queues, per-key ordering.
+8. Backpressure: bounded queues and load shedding; queueing between services (callback to Part 31).
+9. Monolith against microservices: team autonomy against distributed complexity; bounded contexts (DDD); the
+   distributed monolith; latency budgets across a call graph (callback to Part 39's tail).
+10. Data across services:
+    - the dual-write problem;
+    - **the transactional outbox** and change data capture (Part 46);
+    - **sagas** (Garcia-Molina & Salem 1987) with compensations, animated on an order–payment–shipping flow.
+11. Discovery and routing: client-side load balancing, sidecars and service meshes, mTLS (callback to Part 30).
+12. Authentication and authorization between services: OAuth 2.0 flows; JWTs and the `alg: none` pitfall; capability
+    tokens and macaroons (Part 55).
+13. Time in APIs: wall against monotonic clocks, time zones, leap seconds (callback to Part 38).
+14. The Job as three services (tokenize, count, rank) on our network with loss and duplication. Its counts stay
+    exact with idempotency keys and drift without them (computed). Outro.
+
+*Computed:* varint and zigzag encoders checked against the published encoding examples; a schema-compatibility
+checker; pagination anomalies under concurrent inserts; double-count rates with and without idempotency keys; sagas
+under injected failures; latency budgets composed over a call graph.
+*Visuals:* varint bytes with their continuation bits; a retry storm against idempotent dedup; a saga's forward steps
+and compensations; a call graph with latencies accumulating along the critical path.
+*In practice:* REST, gRPC and GraphQL APIs; Kafka, RabbitMQ and SQS; payment-grade idempotency; service meshes; OAuth;
+backend engineering at any company.
+*Reading:* Kleppmann, *Designing Data-Intensive Applications* ch. 4, 11–12; Newman, *Building Microservices*;
+Richardson, *Microservices Patterns*; Evans, *Domain-Driven Design*; Hohpe & Woolf, *Enterprise Integration Patterns*;
+Fielding 2000; Birrell & Nelson 1984; Waldo et al. 1994; Garcia-Molina & Salem 1987; the Protocol Buffers encoding
+documentation; RFC 6749 and RFC 7519; Google's API design guide.
+
+### Part 44 · People and Products (~55)
+*Story:* Software is used by people, and both the people and the product can be measured. Fitts's law falls out of
+Shannon's channel capacity. Hick's law is the entropy of a choice. Perception has thresholds, and colour has
+formulas. Where intuition runs out, industry runs controlled experiments, and an A/B test checked every morning is
+among the most common statistical mistakes in the world.
+1. Hook: Engelbart's 1968 demo (mouse, hypertext, collaborative editing); Xerox PARC and the GUI.
+2. **Fitts's law**, MT = a + b log₂(D/W + 1), derived from channel capacity (MacKenzie's form); why screen edges are
+   infinitely deep targets; the steering law.
+3. **Hick–Hyman**: decision time grows with the entropy of the choice (callback to *AI, Built* 1).
+4. GOMS and the keystroke-level model (Card, Moran & Newell): predicting task time.
+5. Perception: the 0.1 s / 1 s / 10 s thresholds; input latency; Weber–Fechner and just-noticeable differences;
+   preattentive features.
+6. Colour:
+   - XYZ, sRGB and gamma; perceptual spaces (CIELAB, OKLab);
+   - colour-blindness simulated on the series' own palette;
+   - **the WCAG contrast ratio** (L₁ + 0.05)/(L₂ + 0.05), derived from relative luminance.
+7. Text on screens: glyph rasterization (callback to Part 51), hinting, readability.
+8. Accessibility: assistive technology, the accessibility tree, motor and cognitive accessibility, universal design.
+9. Usability evaluation: Nielsen's heuristics; think-aloud studies; "five users find 85%" from 1 − (1 − p)ⁿ (Nielsen &
+   Landauer 1993) and its caveats.
+10. **Experiments**: the A/B test as a randomized controlled trial; the two-proportion z-test, derived; power and
+    sample size (n ≈ 16σ²/δ², derived).
+11. **The peeking problem**: checking daily multiplies the false-positive rate (simulated); sequential tests and
+    always-valid p-values (Johari et al. 2017) fix it.
+12. **CUPED** (Deng et al. 2013): regression on the pre-period cuts variance by (1 − ρ²) (derived); stratification.
+13. Pitfalls at scale:
+    - multiple testing and false discovery rates;
+    - Simpson's paradox; novelty effects;
+    - interference in marketplaces and social graphs, and cluster randomization;
+    - sample-ratio-mismatch checks (χ²); Twyman's law.
+14. Bandits against A/B tests (callback to *AI, Built* 26): regret against clean inference.
+15. Metrics and ethics: north-star metrics; Goodhart's law (callback to *AI, Built* 31); dark patterns;
+    privacy-preserving analytics. Outro.
+
+*Computed:* Fitts and Hick regressions (on published data, cited, and on simulated pointing); colour conversions,
+contrast ratios and colour-blind views of the palette; Nielsen–Landauer curves; power calculations; peeking
+simulations; sequential tests; CUPED on synthetic data; SRM detection.
+*Visuals:* targets shrinking and moving under the log curve; the sRGB cube sitting inside OKLab; p-value paths
+wandering across 0.05 under peeking; a confidence interval shrinking under CUPED.
+*In practice:* product engineering, UX research, growth and experimentation platforms, design systems,
+accessibility compliance.
+*Reading:* Norman, *The Design of Everyday Things*; Card, Moran & Newell, *The Psychology of Human-Computer
+Interaction*; Shneiderman et al., *Designing the User Interface*; MacKenzie, *Human-Computer Interaction: An Empirical
+Research Perspective*; Krug, *Don't Make Me Think*; Kohavi, Tang & Xu, *Trustworthy Online Controlled Experiments*;
+Fitts 1954; Hick 1952; Hyman 1953; Nielsen & Landauer 1993; Deng et al. 2013; Johari et al. 2017; WCAG 2.2; Ottosson
+2020.
+
+---
+
+## Act IX · Systems at Scale
+
+### Part 45 · The Cloud (~55)
+*Story:* A modern application rents its computer by the second, from a building the size of a stadium. Under the
+abstraction sit:
+- power and cooling budgets;
+- virtual machines shrunk to microVMs;
+- containers placed by a bin-packing heuristic;
+- control loops that reconcile what is with what should be;
+- storage that promises eleven nines by scattering erasure-coded fragments across failure domains.
+
+The Job gets a price in dollars.
+1. Hook: from owning servers to renting them; McCarthy's utility computing (1961), EC2 and S3 (2006).
+2. The warehouse-scale computer: racks, power, cooling; PUE defined (values cited); failure rates at scale (callbacks
+   to Parts 34 and 39).
+3. Virtualization recap (callback to Part 32) and microVMs (Firecracker 2020): minimal devices, fast boots, isolation
+   for serverless.
+4. Containers: namespaces and cgroups (callback to Part 32); images as content-addressed layers (callback to Part 41).
+5. Orchestration: Borg (Verma et al. 2015) and Kubernetes; declarative desired state and **the reconciliation loop**,
+   level- against edge-triggered; etcd and Raft underneath (callback to Part 38).
+6. **Scheduling as bin packing**: NP-hard (from partition); first-fit decreasing's 11/9 OPT + 6/9 (Dósa 2007, cited)
+   and next-fit's 2 (proved); vector packing over CPU and memory; priorities and preemption; utilization gains
+   (cited).
+7. **Autoscaling as control**: a proportional controller with delay oscillates or settles (computed); capacity from
+   queueing, with Erlang C derived for c servers (callback to Part 31); predictive scaling.
+8. Serverless: cold-start distributions; concurrency limits; per-request billing against reserved servers
+   (break-even computed from cited, dated list prices).
+9. **Object storage**: S3's semantics (strong read-after-write since 2020, cited); durability from erasure coding across
+   failure domains (callback to Part 28), with a Markov model of failure and repair and MTTDL derived; block against
+   file against object.
+10. Cloud networking: VPCs and overlays (encapsulation, callback to Part 36); managed load balancers (Part 48);
+    anycast; the cost of egress.
+11. Infrastructure as code: a plan is a diff between desired and actual state, applied in topological order (callbacks
+    to Parts 18 and 41); drift; immutable infrastructure.
+12. Multi-tenancy: noisy neighbours in caches and memory bandwidth (callback to Part 9); performance variability
+    (cited); side channels.
+13. Regions, zones and failure domains; placement for availability (Part 50); data residency.
+14. Cost engineering: on-demand, reserved and spot pricing (spot interruptions with checkpoints, expected cost
+    computed); right-sizing. The Job on autoscaled containers, in dollars (at cited, dated prices). Ledger row 16.
+15. Energy and carbon: carbon-aware scheduling; the energy footprint of computing (cited). Outro.
+
+*Computed:* a toy reconciler converging; packing heuristics against optimal solutions on small instances; autoscaler
+stability with delay; Erlang C capacity; MTTDL for replication against erasure coding; spot against on-demand costs;
+the Job's bill.
+*Visuals:* a zoom from building to rack to server to VM to container; bins filling; a control loop overshooting and
+settling; erasure-coded fragments scattered across racks surviving failures; a reconciliation diff.
+*In practice:* AWS, GCP and Azure; Kubernetes; Terraform; Lambda and Firecracker; S3; platform and infrastructure
+engineering; cloud cost reviews.
+*Reading:* Barroso, Hölzle & Ranganathan, *The Datacenter as a Computer*; Burns, Beda & Hightower, *Kubernetes: Up and
+Running*; Morris, *Infrastructure as Code*; Verma et al. 2015; Burns et al. 2016 ("Borg, Omega, and Kubernetes");
+Agache et al. 2020; Armbrust et al. 2010; Jonas et al. 2019; Coffman, Garey & Johnson (the bin-packing survey); Dósa
+2007; Harchol-Balter (Erlang C).
+
+### Part 46 · Logs, Streams and Warehouses (~55)
+*Story:* Every company's data ends up in two places: an append-only log that records everything as it happens, and
+a column-oriented warehouse that answers questions about all of it. Between them, stream processors compute answers
+continuously. The hard part is time: events arrive late, out of order and more than once. The Job becomes a live
+top-twenty over a stream of novels.
+1. Hook: "The Log" (Kreps 2013), the log as the unifying abstraction (callbacks to Part 35's WAL and Part 38's Raft
+   log).
+2. **The partitioned log** (Kafka 2011): segments, offsets, keys and partitions; consumer groups and rebalancing;
+   retention and compaction; in-sync replicas (callback to Part 39).
+3. Throughput engineering: sequential I/O (callback to Part 34), batching, zero-copy, the page cache.
+4. Change data capture (the database's WAL as a stream, callback to Part 35); the outbox (callback to Part 43); event
+   sourcing and CQRS, with state as a fold over events.
+5. **The dataflow model** (Akidau et al. 2015):
+   - event time against processing time;
+   - tumbling, sliding and session windows;
+   - watermarks and lateness; triggers and accumulation;
+   - the event-time/processing-time plot, animated.
+6. **Exactly-once state**: keyed state and checkpoints by asynchronous barrier snapshots (Carbone et al. 2015, a
+   Chandy–Lamport descendant, callback to Part 38); idempotent and transactional sinks; exactly-once only ever holds
+   end to end.
+7. Streaming algorithms in production: top-k, distinct counts, quantiles with t-digest and KLL (callback to Part 20);
+   windowed stream joins.
+8. Lambda against Kappa; streaming as a superset of batch.
+9. The warehouse: OLTP against OLAP; star and snowflake schemas; facts, dimensions and slowly changing dimensions.
+10. **Columnar files**:
+    - Parquet: row groups, column chunks, pages;
+    - dictionary, RLE/bit-packing and delta encodings (callbacks to Parts 21 and 28);
+    - statistics and predicate pushdown;
+    - **Dremel's repetition and definition levels** for nested data, derived on an example.
+11. Lakehouses: table formats (Iceberg, Delta) with snapshots, manifests and optimistic commits, giving ACID on object
+    storage (callbacks to Parts 35 and 45); time travel.
+12. MPP query engines: partitioned execution and shuffles (callback to Part 39); broadcast against shuffle hash joins
+    (cost model derived); skew and salting; vectorized execution (callback to Part 35).
+13. Data quality: schema evolution (callback to Part 43), data contracts, validation tests, lineage graphs.
+14. Approximate and private analytics: sampling with confidence intervals, sketches in SQL, differentially private
+    counts.
+15. The Job as a stream: novels arriving as events, some late and some duplicated; a continuously updated top-20 with
+    event-time windows and exactly-once state. Ledger row 17. Outro.
+
+*Computed:* a partitioned-log simulator with consumer groups; a stream processor with watermarks and late data
+(correctness against latency); checkpoint-and-recover with an exactly-once check; a Parquet-style encoder on the
+novels' words (sizes by encoding); Dremel levels; join costs; t-digest accuracy.
+*Visuals:* the event-time/processing-time plot with its watermark curve; windows sliding; barriers flowing through a
+dataflow graph; a Parquet file exploded into row groups and pages; a shuffle with one hot key overloading a worker.
+*In practice:* Kafka, Flink, Spark Structured Streaming, Debezium; Snowflake, BigQuery, Redshift; Parquet, Iceberg,
+Delta; dbt; data engineering.
+*Reading:* Kleppmann ch. 3, 10–12; Akidau, Chernyak & Lax, *Streaming Systems*; Kimball & Ross, *The Data Warehouse
+Toolkit*; Kreps 2013; Kreps, Narkhede & Rao 2011; Akidau et al. 2015; Carbone et al. 2015; Melnik et al. 2010; Armbrust
+et al. 2020, 2021; Abadi et al. 2013 (the design of column stores); Dunning & Ertl 2019; Karnin, Lang & Liberty 2016.
+
+### Part 47 · Search Engines (~55)
+*Story:* How do you find the ten most relevant pages among billions in a fifth of a second? The pieces:
+- an inverted index turns search into merging sorted lists;
+- compression keeps those lists in memory;
+- a probabilistic model of relevance yields BM25;
+- a random surfer yields PageRank;
+- dense vectors and graph-based nearest-neighbour search now sit beside them.
+
+We build a search engine for the thirty novels.
+1. Hook: from Archie (1990) and AltaVista (1995) to Google (1998); the scale of a web index (cited).
+2. Tokenizing and normalizing: Porter's stemmer; case folding; stop words. **Zipf's and Heaps' laws** fitted on the
+   novels.
+3. The inverted index: dictionary and postings; sort-based and single-pass in-memory construction (callback to Part
+   16's external sort).
+4. Boolean retrieval: merging postings; skip pointers (√n); galloping intersection (callback to Part 24); positional
+   indexes for phrases.
+5. **Postings compression**: gaps; variable-byte; Elias γ and δ (code lengths derived, callback to *AI, Built* 1);
+   Golomb–Rice with its optimal parameter derived; SIMD block codecs (callback to Part 24).
+6. **Ranking**: tf–idf and cosine similarity; the probability ranking principle (Robertson 1977); the binary
+   independence model up to **BM25**, with its k₁ saturation and b length normalization derived.
+7. Evaluation: precision, recall, MAP, **nDCG** (derived); test collections and pooled judgments; significance
+   (callback to Part 44).
+8. Top-k retrieval: **WAND** and block-max WAND (dynamic pruning with score upper bounds); tiered indexes.
+9. Link analysis: PageRank as an eigenvector (callback to Part 18); HITS; link spam.
+10. Crawling: the URL frontier, politeness, freshness policies, near-duplicates by SimHash (callback to Part 20).
+11. Serving at scale: document- against term-partitioned indexes (callback to Part 39); replicas; fan-out and the tail
+    (callback to Part 39); result and postings caches.
+12. Spelling and autocomplete: noisy-channel correction with edit distance (callbacks to Parts 19 and 21); BK-trees;
+    top-k completion over tries (callback to Part 17).
+13. Learning to rank: pointwise, pairwise, listwise; LambdaMART (callback to *AI, Built* 6); click models and position
+    bias.
+14. Dense retrieval: embeddings (callback to *AI, Built* 24); **product quantization** (Jégou et al. 2011) and **HNSW**
+    (Malkov & Yashunin); hybrid lexical-plus-dense retrieval; retrieval for language models (*AI, Built* 15).
+15. Our engine for the novels: the index, BM25, phrases, snippets, and an evaluation on a small query set we judge
+    ourselves (labelled illustrative). Outro.
+
+*Computed:* Zipf and Heaps fits; index sizes under each code; comparison counts for intersection algorithms; BM25
+against tf–idf on our judged set; WAND pruning rates; PageRank on a synthetic web; SimHash near-duplicates; PQ
+distortion; HNSW recall against speed.
+*Visuals:* postings lists sliding together during intersection; gap codes as bit strings; BM25's saturation curves;
+WAND's pivot moving across lists; a random surfer on a graph; HNSW's descent through its layers.
+*In practice:* Lucene, Elasticsearch, OpenSearch; web and e-commerce search; vector databases; retrieval-augmented
+generation.
+*Reading:* Manning, Raghavan & Schütze, *Introduction to Information Retrieval*; Büttcher, Clarke & Cormack,
+*Information Retrieval: Implementing and Evaluating Search Engines*; Witten, Moffat & Bell, *Managing Gigabytes*;
+Zobel & Moffat 2006; Robertson & Zaragoza 2009; Porter 1980; Brin & Page 1998; Kleinberg 1999; Broder et al. 2003; Ding
+& Suel 2011; Charikar 2002; Jégou, Douze & Schmid 2011; Malkov & Yashunin 2018; Burges 2010.
+
+### Part 48 · System Design I: Building Blocks (~55)
+*Story:* Designing a large system means choosing and composing a small set of blocks under numbers you can estimate
+on a napkin: load balancers, caches, queues, shards, replicas, indexes. Each block has mathematics of its own:
+- hashing that rebalances gracefully;
+- caches that avoid stampedes;
+- rate limiters that are token buckets in disguise;
+- IDs that sort by time without coordination;
+- space-filling curves that turn maps into keys.
+1. Hook: the napkin. Back-of-the-envelope estimation: QPS from daily users and peak factors, storage per year,
+   bandwidth; powers of two; the latency numbers (callback to Part 39).
+2. The method: functional and non-functional requirements; SLOs (Part 50); the capacity model; the data model; the API
+   (callback to Part 43); the high-level design; deep dives; trade-offs; the design doc.
+3. **Load balancing**:
+   - L4 against L7;
+   - round robin, least connections, **power of two choices** (callback to Part 20);
+   - consistent hashing and **Maglev hashing** (Eisenbud et al. 2016; disruption computed);
+   - health checks and outlier ejection.
+4. **Caching I**:
+   - where caches sit (client, CDN, proxy, application, database);
+   - cache-aside, read-through, write-through, write-back;
+   - eviction: LRU, LFU, W-TinyLFU's Count-Min admission (callback to Part 20);
+   - hit rate against size on Zipf traffic, with **Che's approximation** derived.
+5. **Caching II**: invalidation; TTLs; thundering herds; request coalescing; **probabilistic early expiration**
+   (Vattani et al. 2015, derived); leases (memcache at Facebook, Nishtala et al. 2013).
+6. **Rate limiting**: token bucket as a (σ, ρ) envelope (derived); leaky bucket; fixed and sliding windows (the
+   approximation's error computed); GCRA; distributed limits with approximate counters.
+7. Queues and asynchrony (callback to Part 43): absorbing bursts; why latency explodes as utilization nears 1
+   (callback to Part 31); priorities; delayed jobs; worker pools.
+8. Choosing storage: relational, key–value, document, wide-column, graph, time-series; access patterns decide;
+   denormalization; indexes (callback to Part 35).
+9. **Sharding** (callback to Part 39): shard keys; hot keys and the celebrity problem; resharding; local against
+   global secondary indexes; cross-shard queries.
+10. Replication in practice: read replicas and lag; failover; split brain and fencing tokens (callback to Part 39);
+    active–active across regions and conflict resolution.
+11. **Unique IDs**: UUIDv4 collisions by the birthday bound (callback to Part 17); UUIDv7 and Snowflake IDs; clock skew
+    (callback to Part 38); index locality of time-ordered keys (B-trees, callback to Part 17).
+12. Blobs and CDNs (callback to Part 45): chunking, content addressing, signed URLs, cache keys at the edge.
+13. **Geospatial indexes**: geohash and Morton (Z-order) bit interleaving; quadtrees; S2's Hilbert-curve cells (with
+    locality preservation measured); H3 hexagons; nearest-neighbour queries (callback to Part 22).
+14. Real-time blocks: WebSockets against long polling; notifications; presence; search as a block (callback to Part
+    47).
+15. The Job as a service ("upload a book, get its top words"): estimated, designed, then load-tested in simulation,
+    with p50 and p99 against QPS, with and without the cache. Outro.
+
+*Computed:* estimation worksheets; two choices against random and round-robin assignment on uneven servers; Maglev
+against ring disruption; LRU and TinyLFU hit rates on Zipf traces against Che's approximation; stampedes with and
+without early expiration; token-bucket conformance; sliding-window error; ID collision probabilities; Hilbert against
+Z-order locality; the Job service's load test.
+*Visuals:* a napkin turning into a capacity table; requests flowing through a load balancer into queues; hit-rate
+curves; a stampede at expiry, smoothed; a token bucket filling and draining; space-filling curves drawing across a
+map.
+*In practice:* the system design interview; NGINX, Envoy, HAProxy; Redis and Memcached; CDNs; Snowflake IDs; PostGIS,
+S2, H3; backend and infrastructure design reviews.
+*Reading:* Kleppmann; Xu, *System Design Interview* vols. 1–2; Burns, *Designing Distributed Systems*; Petrov,
+*Database Internals*; Nishtala et al. 2013; Eisenbud et al. 2016; Einziger, Friedman & Manes 2017; Che, Tung & Wang
+2002; Vattani, Chierichetti & Lowenstein 2015; Mitzenmacher 2001; Cruz 1991; RFC 9562 (UUIDs); the S2 and H3
+documentation.
+
+### Part 49 · System Design II: Case Studies (~60)
+*Story:* Eight systems everyone uses, each designed from the napkin up and stress-tested in simulation:
+- a URL shortener;
+- a news feed;
+- a chat service;
+- a web crawler;
+- a ride-hailing dispatcher;
+- a video platform;
+- a payment ledger;
+- a collaborative editor.
+
+Each turns on one hard idea, and each idea is one the series has already built. The capstone is the Job as a service
+at a million books a day.
+1. The method and the card of blocks (callback to Part 48).
+2. **URL shortener**: the ID space (base62 length for N links, derived); hashing against counters against Snowflake
+   IDs; 301 against 302 and their caching; read-heavy Zipf traffic; click analytics as a stream (callback to Part 46).
+3. **News feed I**: fan-out on write against fan-out on read, with the cost model derived over a power-law follower
+   graph; the celebrity problem; the hybrid (computed on a synthetic graph).
+4. **News feed II**: ranking (callback to Part 47); cursor pagination (callback to Part 43); timeline caches;
+   read-your-writes (callback to Part 39).
+5. **Chat**: connection servers and WebSockets; per-conversation sequence numbers for ordering (callback to Part 38);
+   receipts; offline sync; group fan-out; end-to-end encryption with the double ratchet, briefly (callbacks to Parts
+   29–30).
+6. **Web crawler** (callback to Part 47): the frontier as per-host priority queues; politeness; DNS caching; dedup by
+   Bloom filters and SimHash (callback to Part 20); partitioning by host hash; the throughput for a billion pages.
+7. **Ride-hailing dispatch**:
+   - hexagonal geo-indexes (callback to Part 48);
+   - location-update write rates;
+   - batched matching as bipartite assignment (callback to Part 18) against greedy matching;
+   - ETAs by contraction hierarchies (callback to Part 18);
+   - surge pricing as a market.
+8. **Video streaming**:
+   - encoding ladders and HLS/DASH segments; CDN placement under Zipf popularity (callback to Part 45);
+   - **adaptive bitrate as control**: buffer-based (Huang et al. 2014) against MPC (Yin et al. 2015), simulated with
+     rebuffering.
+9. **Payments**: double-entry bookkeeping as an invariant (Σ = 0, callback to Part 2); idempotency (callback to Part
+   43); a payment's state machine; reconciliation with outside processors; why a ledger chooses consistency over
+   availability (callback to Part 39).
+10. **Collaborative editing**: operational transformation (Ellis & Gibbs 1989) against CRDTs (callback to Part 39);
+    cursors and presence; convergence checked on our sequence CRDT.
+11. **A Dynamo-style key–value store**, end to end: partitioning, replication, quorums, Merkle-tree anti-entropy
+    (callback to Part 29), hinted handoff, simulated under failures (callbacks to Parts 38–39).
+12. **A metrics pipeline**: high-cardinality time series, downsampling, retention tiers (Part 50 uses it).
+13. **The Job at a million books a day**: p99, cost and cache hit rates from the simulated load test. Ledger row 18.
+14. How designs fail, from post-mortems; a checklist of trade-offs (consistency, latency, cost, complexity,
+    operability). Outro.
+
+*Computed:* base62 sizing; fan-out costs on a power-law graph; ordering anomalies with and without sequence numbers;
+crawler throughput and dedup accuracy; greedy against optimal dispatch; ABR simulations (rebuffer ratio against mean
+bitrate); ledger invariants under concurrent retries; CRDT convergence; the key–value store under failures; the Job
+service at scale.
+*Visuals:* each architecture built block by block, with requests flowing through it as packets; the follower graph's
+celebrities as giant nodes; an ABR buffer trace with bitrate steps; a double-entry ledger balancing; hexagons over a
+city.
+*In practice:* the system design interview canon, and how large consumer products are actually built.
+*Reading:* Xu, *System Design Interview* vols. 1–2; Kleppmann; Burns, *Designing Distributed Systems*; DeCandia et al.
+2007; Silberstein et al. 2010; Huang et al. 2014; Yin et al. 2015; Perrin & Marlinspike 2016; Ellis & Gibbs 1989;
+Heydon & Najork 1999; published engineering write-ups (cited where used).
+
+### Part 50 · Keeping It Running (~60)
+*Story:* A system is only as good as its worst hour, and reliability engineering turns that into mathematics:
+- availability composes in series and in parallel;
+- an error budget turns reliability into a resource to spend;
+- retries melt a system unless they back off with jitter;
+- an overload can outlast its cause.
+
+Observability (metrics, logs, traces, profiles) is how you find out what happened. Performance engineering is the
+same discipline aimed at speed.
+1. Hook: three post-mortems (the 2017 S3 typo, the 2019 regex, the 2024 endpoint update, all cited), each a lesson.
+2. **Availability arithmetic**:
+   - nines as downtime budgets;
+   - series ∏Aᵢ against parallel 1 − ∏(1 − Aᵢ), derived and drawn as Part 3's switch circuits;
+   - A = MTBF/(MTBF + MTTR);
+   - correlated failures break the independence assumption.
+3. SLIs, SLOs and SLAs; **error budgets**; multiwindow burn-rate alerts (thresholds derived).
+4. Failure modes: fail-stop against gray failure; cascading failures; **metastable failures** (Bronson et al. 2021;
+   Huang et al. 2022), where a retry-amplified overload persists after its trigger (simulated).
+5. **Timeouts, retries, backoff and jitter** (full, equal and decorrelated jitter compared; Brooker 2015); retry
+   budgets; hedged requests (callback to Part 39).
+6. Circuit breakers, bulkheads, load shedding and admission control (CoDel for services, callback to Part 37);
+   graceful degradation; backpressure (callback to Part 43).
+7. Redundancy: N + 1 and N + 2; active–passive against active–active; regional evacuation; a Raft group's
+   availability (callback to Part 38).
+8. **Metrics**: counters, gauges, histograms; why averages lie; quantile sketches (HDR histograms; **DDSketch** and its
+   relative-error guarantee, derived; callback to Part 46); cardinality.
+9. **Traces**: structured logs; distributed tracing (Dapper 2010) with spans and context propagation; head against
+   tail sampling; critical-path analysis of a trace (callback to Part 19's DAGs).
+10. **Coordinated omission**: how load generators under-report tail latency (measured against true p99 in simulation);
+    open against closed load (Schroeder et al. 2006).
+11. **Profiling**:
+    - sampling profilers and the binomial error of a sample count;
+    - **flame graphs** (Gregg), built from a profile of our own Pebble emulator running the Job;
+    - off-CPU time; eBPF (callback to Part 31).
+12. Performance method: USE and RED; the roofline again (callback to Part 9 and *AI, Built* 17); capacity planning with
+    queueing (callbacks to Parts 31 and 45); catching performance regressions in CI by change-point detection.
+13. Incidents: on-call, incident command, communication; blameless post-mortems; the Swiss-cheese model; Cook's "How
+    Complex Systems Fail".
+14. **Chaos engineering** (Chaos Monkey 2011; Basiri et al. 2016): hypotheses and blast radius; fault injection on our
+    Job service and Raft cluster.
+15. The Job service under crashes, partitions and slow nodes, with its availability and SLO burn measured. Ledger row
+    19. Outro.
+
+*Computed:* availability compositions; burn-rate alerts on synthetic error streams; a metastable retry storm; backoff
+contention with and without jitter; circuit-breaker dynamics; sketch errors; trace-sampling coverage; coordinated
+omission; a flame graph of the emulator; capacity plans; chaos experiments on our services.
+*Visuals:* availability as series and parallel circuits; an error budget draining; a metastable loop stuck in its bad
+state; backoff timelines with and without jitter; a flame graph; a trace waterfall with its critical path lit.
+*In practice:* SRE and on-call; Prometheus, Grafana, OpenTelemetry; load testing; performance engineering; incident
+management.
+*Reading:* Beyer, Jones, Petoff & Murphy, *Site Reliability Engineering*, and *The Site Reliability Workbook*; Nygard,
+*Release It!*; Gregg, *Systems Performance* (2nd ed.) and *BPF Performance Tools*; Jain, *The Art of Computer Systems
+Performance Analysis*; Harchol-Balter; Sigelman et al. 2010; Masson, Rim & Lee 2019; Bronson et al. 2021; Huang et al.
+2022; Brooker 2015; Schroeder, Wierman & Harchol-Balter 2006; Cook 1998; Basiri et al. 2016.
+
+---
+
+## Act X · Horizons and Trust
+
+### Part 51 · Light and Pixels (~60)
 *Story:* A picture is millions of samples of light. Projecting triangles onto a screen is linear algebra plus one
 division, and getting the samples right is Nyquist again. The physics of light comes down to one integral
 equation, which Monte Carlo solves one bounced path at a time. Our path tracer renders the series' own scene, and
@@ -1685,15 +2538,15 @@ its noise falls as 1/√N.
    quaternions and slerp (3D).
 3. **Perspective projection** derived from similar triangles; the frustum squashed into the cube; NDC; the depth
    nonlinearity and z-fighting.
-4. Rasterization: edge functions (Part 21's orientation test); barycentrics; **perspective-correct interpolation
+4. Rasterization: edge functions (Part 22's orientation test); barycentrics; **perspective-correct interpolation
    (why 1/w)**; the z-buffer (Catmull 1974). Our rasterizer.
 5. Shading: Lambert's cosine law; Phong and Blinn–Phong; Gouraud against Phong.
-6. Textures and **sampling**: moiré as aliasing (Nyquist, callback to Part 34); mipmaps (Williams 1983); trilinear
+6. Textures and **sampling**: moiré as aliasing (Nyquist, callback to Part 36); mipmaps (Williams 1983); trilinear
    and anisotropic filtering; supersampling and MSAA.
 7. The GPU pipeline: vertex and fragment shaders (callback to *AI, Built* 17).
 8. Ray tracing (Whitted 1980): ray–sphere and **Möller–Trumbore** intersection derived; shadows; Snell and
    Fresnel–Schlick.
-9. Acceleration: BVHs with the surface-area heuristic (callback to Part 21); O(log n) per ray.
+9. Acceleration: BVHs with the surface-area heuristic (callback to Part 22); O(log n) per ray.
 10. Radiometry: solid angle, radiance, irradiance; BRDFs (reciprocity, energy conservation); microfacets
     (Cook–Torrance, GGX).
 11. **The rendering equation** (Kajiya 1986) as energy balance; its Neumann series as paths of light, summed bounce
@@ -1709,14 +2562,15 @@ its noise falls as 1/√N.
 gains; BVH traversal counts; mipmap comparisons; slerp against Euler paths.
 *Visuals:* the frustum folding into the cube; barycentric color blends; rays bouncing in our scene; the bounce-by-
 bounce Neumann sum; de Casteljau's construction.
+*In practice:* game engines (Unreal, Unity), GPU pipelines (Vulkan, Metal, WebGPU), film rendering, UI rendering.
 *Reading:* Pharr, Jakob & Humphreys, *Physically Based Rendering* (4th ed.); Marschner & Shirley, *Fundamentals of
 Computer Graphics*; Akenine-Möller et al., *Real-Time Rendering*; Hughes et al., *Computer Graphics: Principles and
 Practice*; Farin, *Curves and Surfaces for CAGD*; Kajiya 1986; Veach 1997; Whitted 1980; Cook & Torrance 1982; Catmull
 1974; Sutherland 1963.
 
-### Part 39 · Computing with Real Numbers (~55)
+### Part 52 · Computing with Real Numbers (~55)
 *Story:* In 2000 a journal named the ten algorithms that most shaped science and engineering in the 20th century.
-Most of them are numerical. The organizing question is the one Part 3 left open: with rounding everywhere, which
+Most of them are numerical. The organizing question is the one Part 4 left open: with rounding everywhere, which
 answers can we trust? The answer separates the problem's conditioning from the algorithm's stability, and it
 produced a set of algorithms that are stable, fast, and almost magical.
 1. Conditioning: condition numbers for f(x) and for Ax = b (κ = ‖A‖‖A⁻¹‖), derived; stability.
@@ -1739,7 +2593,7 @@ produced a set of algorithms that are stable, fast, and almost magical.
 12. Quadrature: Gauss, adaptive, Monte Carlo.
 13. ODEs: RK and step control; **stiffness** and A-stability; symplectic integrators conserve energy (leapfrog
     against RK4 over long orbits, computed).
-14. Speed: BLAS levels 1, 2 and 3 and arithmetic intensity (callbacks to Part 8 and *AI, Built* 17); LAPACK;
+14. Speed: BLAS levels 1, 2 and 3 and arithmetic intensity (callbacks to Part 9 and *AI, Built* 17); LAPACK;
     mixed-precision iterative refinement; HPL and the Top500. Outro.
 
 *Computed:* pivoting failures; growth factors; orthogonality loss; QR-algorithm convergence; CG against steepest
@@ -1747,15 +2601,16 @@ descent; multigrid; the Newton fractal; Runge against Chebyshev; stiffness; orbi
 machine.
 *Visuals:* Householder mirrors; subdiagonal entries fading under QR; the fractal zoom; the multigrid spectrum;
 drifting orbits.
+*In practice:* NumPy, SciPy and LAPACK; simulation and scientific computing; numerics in finance, engineering and ML training.
 *Reading:* Trefethen & Bau, *Numerical Linear Algebra*; Golub & Van Loan, *Matrix Computations*; Higham; Demmel,
 *Applied Numerical Linear Algebra*; Saad, *Iterative Methods for Sparse Linear Systems*; Briggs, Henson & McCormick, *A
 Multigrid Tutorial*; Trefethen, *Approximation Theory and Approximation Practice*; Hairer, Lubich & Wanner, *Geometric
 Numerical Integration*; Wilkinson, *The Algebraic Eigenvalue Problem*; Dongarra & Sullivan 2000.
 
-### Part 40 · Quantum Computation (~60)
+### Part 53 · Quantum Computation (~60)
 *Story:* Feynman asked whether a classical computer can simulate quantum physics efficiently, and suspected it
 can't. A computer made of quantum parts interferes over 2ⁿ amplitudes at once. Shor used that to factor and break
-Part 28's cryptography. Grover's √N is all it does for general search. Error correction, once thought impossible,
+Part 30's cryptography. Grover's √N is all it does for general search. Error correction, once thought impossible,
 crossed its threshold in 2024. This is the one serious challenge to the extended Church–Turing thesis of Part 1.
 1. Landauer (kT ln 2 per erased bit) and Bennett: reversible computation; Toffoli and Fredkin; compute, copy,
    uncompute.
@@ -1767,16 +2622,16 @@ crossed its threshold in 2024. This is the one serious challenge to the extended
 5. Circuits and universality (H, T, CNOT; Solovay–Kitaev); our state-vector simulator.
 6. Interference as the resource: Deutsch, Deutsch–Jozsa, phase kickback.
 7. Bernstein–Vazirani; **Simon's problem**, an oracle separation and the seed of Shor.
-8. **The QFT** derived from the FFT's butterfly (callback to Part 18), with O(n²) gates for 2ⁿ points.
+8. **The QFT** derived from the FFT's butterfly (callback to Part 19), with O(n²) gates for 2ⁿ points.
 9. Phase estimation.
-10. **Shor** (1994): order finding (Part 28's number theory), the QFT, continued fractions. Our simulator factors 15
+10. **Shor** (1994): order finding (Part 30's number theory), the QFT, continued fractions. Our simulator factors 15
     and 21, and the amplitude spikes at multiples of 2ⁿ/r are animated.
 11. **Grover** (1996): two reflections make a rotation by 2θ; √N iterations; overshoot; optimality (BBBV 1997,
     sketched); amplitude amplification.
 12. BQP's place (BPP ⊆ BQP ⊆ PP ⊆ PSPACE); no known speedup for NP-complete problems beyond Grover's; the extended
     Church–Turing thesis; supremacy claims and the classical replies (cited, carefully).
 13. **Quantum error correction**: why it seemed impossible; the 3-qubit code and syndromes; Shor's 9-qubit code;
-    stabilizers (Gottesman); **the surface code and the threshold** (callback to Part 26); below threshold (Google
+    stabilizers (Gottesman); **the surface code and the threshold** (callback to Part 28); below threshold (Google
     2024, cited) **(verify)**.
 14. Simulation and chemistry; BB84 (an eavesdropper shows up as a 25% error rate); resource estimates for RSA-2048
     (Gidney 2025) **(verify)**. Outro.
@@ -1786,39 +2641,40 @@ Grover's success probability against iterations; logical against physical error 
 BB84.
 *Visuals:* gates rotating the Bloch sphere; amplitude bars colored by phase, interfering; Grover's rotation in the
 plane; Shor's peaks; a surface-code lattice lighting its syndromes.
+*In practice:* quantum SDKs (Qiskit, Cirq), post-quantum migration planning, the honest state of the hardware.
 *Reading:* Nielsen & Chuang, *Quantum Computation and Quantum Information*; Mermin, *Quantum Computer Science*;
 Aaronson, *Quantum Computing Since Democritus*; Kitaev, Shen & Vyalyi; de Wolf's lecture notes; Preskill's Ph219
 notes; Watrous, *The Theory of Quantum Information*; Feynman 1982; Deutsch 1985; Shor 1997; Grover 1996; Bennett et
 al. 1997; Gottesman 1997; Fowler et al. 2012; Bennett & Brassard 1984; Landauer 1961; Bennett 1973.
 
-### Part 41 · Proving Programs Correct (~55)
+### Part 54 · Proving Programs Correct (~55)
 *Story:* Testing can show that bugs are present but never that they are absent, and Rice's theorem rules out
 deciding correctness in general. We prove programs correct anyway: by writing the invariants ourselves, by
 exhausting finite state spaces symbolically, or by approximating soundly. Verified compilers and kernels exist, and
 so do the proof assistants that check their proofs.
-1. The cost of bugs (Ariane 5, Therac-25, Heartbleed, cited); Dijkstra's dictum; Rice (Part 23) and the three ways
+1. The cost of bugs (Ariane 5, Therac-25, Heartbleed, cited); Dijkstra's dictum; Rice (Part 25) and the three ways
    around it.
 2. Specifications; Turing's "Checking a Large Routine" (1949), the first program proof.
 3. **Floyd–Hoare logic** (1967, 1969): triples and the rules (assignment by backward substitution, sequence,
    conditionals, while with its invariant); soundness and relative completeness (Cook 1978).
 4. Binary search proved: the invariant, and Bloch's 2006 overflow bug; total correctness by variants and
    well-founded orders.
-5. **Weakest preconditions** (Dijkstra 1975); VC generation; our VCs checked by our SAT solver (Part 24), or by z3 if
+5. **Weakest preconditions** (Dijkstra 1975); VC generation; our VCs checked by our SAT solver (Part 26), or by z3 if
    it is installed.
 6. **Separation logic** (Reynolds, O'Hearn): the frame rule; in-place list reversal proved; Infer at scale.
 7. **Model checking** (Clarke, Emerson, Sifakis; the 2007 Turing Award):
    - Kripke structures; LTL and CTL over computation trees;
    - state explosion;
-   - **symbolic model checking with BDDs** (callback to Part 2) and bounded model checking with SAT;
-   - Peterson (Part 31) and Raft-lite (Part 36) checked.
+   - **symbolic model checking with BDDs** (callback to Part 3) and bounded model checking with SAT;
+   - Peterson (Part 33) and Raft-lite (Part 38) checked.
 8. **Abstract interpretation** (Cousot & Cousot 1977): Galois connections; intervals and widening, the fixpoint
    converging; Astrée on Airbus flight software (cited).
-9. Types as lightweight proofs (callback to Part 13); refinement types.
+9. Types as lightweight proofs (callback to Part 14); refinement types.
 10. **Proof assistants**: the LCF trusted kernel (Milner 1972); Rocq, Isabelle, Lean; a proof on screen; the
     four-color theorem, Flyspeck, the Liquid Tensor Experiment, mathlib (callback to *AI, Built* 25).
 11. Verified systems: **CompCert** (Leroy; Csmith found no wrong-code bugs in its verified parts), **seL4** (2009,
     about 9k lines of C and 200k lines of proof), verified cryptography (HACL*, Fiat-Crypto), CakeML.
-12. **TLA+** (Lamport): systems as state machines; an invariant checked on a protocol (Part 36); refinement.
+12. **TLA+** (Lamport): systems as state machines; an invariant checked on a protocol (Part 38); refinement.
 13. Testing as science: coverage; mutation testing; property-based testing (QuickCheck 2000) with shrinking;
     coverage-guided fuzzing (Miller 1990; AFL); symbolic and concolic execution (KLEE); differential testing (Csmith).
     **Our fuzzer finds a bug planted in the Pebble compiler.**
@@ -1829,6 +2685,7 @@ Peterson and the dining philosophers; BDD reachability sizes; interval analysis 
 for natural deduction; property tests and fuzzing of the Pebble toolchain.
 *Visuals:* assertions flowing backward through code; computation trees with CTL paths lit; the interval lattice's
 widening jumps; the small trusted kernel inside a large system.
+*In practice:* TLA+ at AWS and Azure, static analyzers (Infer, CodeQL), fuzzing in CI (OSS-Fuzz), property-based testing, verified cryptography in browsers.
 *Reading:* Huth & Ryan, *Logic in Computer Science*; Baier & Katoen, *Principles of Model Checking*; Clarke, Grumberg,
 Kroening, Peled & Veith, *Model Checking*; Nipkow & Klein, *Concrete Semantics*; Pierce et al., *Software
 Foundations*; Bradley & Manna, *The Calculus of Computation*; Kroening & Strichman, *Decision Procedures*; Dijkstra, *A
@@ -1836,39 +2693,39 @@ Discipline of Programming*; Gries, *The Science of Programming*; Lamport, *Speci
 *Static Program Analysis*; Rival & Yi; Zeller et al., *The Fuzzing Book*; Hoare 1969; Floyd 1967; Cousot & Cousot
 1977; Reynolds 2002; Leroy 2009; Klein et al. 2009; Claessen & Hughes 2000; Newcombe et al. 2015.
 
-### Part 42 · Trusting Trust (~60; the finale)
+### Part 55 · Trusting Trust (~60; the finale)
 *Story:* Security is a property of the whole tower, and every layer leaks: buffers overflow, speculation leaves
 traces, DRAM rows disturb their neighbours, parsers confuse code with data. In 1984 Ken Thompson showed that even a
 compiler you built yourself can hide a backdoor that its source never shows. We build his attack against our own
 compiler, then catch it, and close the series by walking the tower from a NAND gate to a cluster.
 1. Threat models; Saltzer & Schroeder's principles (1975).
-2. Memory corruption revisited (Part 10):
+2. Memory corruption revisited (Part 11):
    - the stack smash on Pebble;
    - canaries, W^X, ASLR (its entropy computed);
    - **return-oriented programming** (Shacham 2007), a Turing-complete chain of gadgets in our own binary;
    - CFI; CHERI.
-3. Memory safety: the ~70% statistic (cited); Rust's ownership as affine types (callback to Part 13); what the borrow
+3. Memory safety: the ~70% statistic (cited); Rust's ownership as affine types (callback to Part 14); what the borrow
    checker proves; RustBelt.
-4. Hardware: Rowhammer (Part 4), Spectre and Meltdown (Part 7) and what the mitigations cost; side channels (Part
+4. Hardware: Rowhammer (Part 5), Spectre and Meltdown (Part 8) and what the mitigations cost; side channels (Part
    27).
-5. Authentication: password entropy and guessing; salted slow hashes (Part 27); TOTP as an HMAC over time; passkeys
-   (Part 28). **Needham–Schroeder (1978) and Lowe's 1995 attack, found by our model checker** (callback to Part 41).
+5. Authentication: password entropy and guessing; salted slow hashes (Part 29); TOTP as an HMAC over time; passkeys
+   (Part 30). **Needham–Schroeder (1978) and Lowe's 1995 attack, found by our model checker** (callback to Part 54).
 6. Access control: Lampson's matrix; ACLs against capabilities (the confused deputy); Bell–LaPadula; **safety is
-   undecidable in the HRU model (1976)** (callback to Part 23).
-7. Isolation: processes and paging (Part 30); sandboxes, site isolation, WebAssembly (Part 14); enclaves and their
+   undecidable in the HRU model (1976)** (callback to Part 25).
+7. Isolation: processes and paging (Part 32); sandboxes, site isolation, WebAssembly (Part 15); enclaves and their
    breaks.
 8. The web: same origin; XSS and CSRF; **SQL injection on our own database**, fixed by parameterized queries, a parsing
-   fix (callback to Part 11); PKI failures (DigiNotar).
-9. Networks: amplification DDoS, BGP hijacks (Part 34), DNS (Part 35).
+   fix (callback to Part 12); PKI failures (DigiNotar).
+9. Networks: amplification DDoS, BGP hijacks (Part 36), DNS (Part 37).
 10. Supply chains: dependency confusion; **the xz-utils backdoor** (2024), and how a 500 ms slowdown exposed it (cited).
-11. **Reflections on Trusting Trust** (Thompson 1984), built on our compiler (Part 12) with Part 23's quine trick:
+11. **Reflections on Trusting Trust** (Thompson 1984), built on our compiler (Part 13) with Part 25's quine trick:
     - a backdoor in `login`;
     - a compiler that inserts it when it compiles `login`;
     - and inserts itself when it compiles a compiler;
     - remove the source, and the binary keeps both.
 12. **Diverse double-compiling** (Wheeler 2009) catches it, using our independent Python reference compiler.
     Reproducible builds; bootstrapping from a tiny seed (cited).
-13. **The tower revisited**: the Job end to end, from NAND to cluster; the final ledger (row 15); what each layer hides
+13. **The tower revisited**: the Job end to end, from NAND to cluster; the final ledger (row 20); what each layer hides
     and what leaks through.
 14. Open problems across the series:
     - P vs NP, and whether one-way functions exist;
@@ -1885,6 +2742,7 @@ TOTP; Lowe's attack found by model checking; an HRU example; SQL injection and i
 caught by DDC; the final ledger.
 *Visuals:* ROP gadgets as a train of return addresses; the trojan compiler reproducing itself in a loop; **the whole
 tower lit end to end, the camera rising from a NAND gate to the cluster**; the final ledger.
+*In practice:* application security reviews, migrations to memory-safe languages, supply-chain security (SLSA, reproducible builds), incident response to a compromise.
 *Reading:* Anderson, *Security Engineering* (3rd ed.); Bishop, *Computer Security: Art and Science*; Erickson,
 *Hacking: The Art of Exploitation*; Szekeres et al. 2013 (SoK: eternal war in memory); Saltzer & Schroeder 1975;
 Thompson 1984; Wheeler 2009; Shacham 2007; Abadi et al. 2005; Lampson 1974; Harrison, Ruzzo & Ullman 1976; Lowe 1996;
@@ -1896,7 +2754,7 @@ Kocher et al. 2019; Jung et al. 2018.
 
 0. **Infrastructure:**
    - `explainer/cs/`:
-     - the series constants (`SERIES_EN`, `SERIES_ZH`, `ACTS`, `PARTS`) and `series_map` for 42 parts in eight acts;
+     - the series constants (`SERIES_EN`, `SERIES_ZH`, `ACTS`, `PARTS`) and `series_map` for 55 parts in ten acts;
      - `chapter_card` with the tower and the timeline, and the ledger;
      - the first instruments (`Tower`, `TapeView`, `Netlist`, `MemoryStrip`, `Datapath`); the rest are added as
        parts first need them;
@@ -1909,15 +2767,16 @@ Kocher et al. 2019; Jung et al. 2018.
        hard-code `videos/ai`;
      - `tools/package_uploads.py --series cs` with `videos/cs/cs_upload.json`.
    - `videos/cs/cs_text_zh.json` and `videos/cs/CS_ZH_GUIDE.md` (the glossary).
-   - Entries in `CLAUDE.md` and the top-level README.
    - A silent en + zh smoke render of an empty chapter on Linux.
 1. **Pilot: Part 1 (What Is a Computation?)**. It sets up the story and every series device: Pebble introduced, the
-   tower, the timeline, the ledger's empty frame, the payoff cards. It exercises `TapeView` and the C fast path
-   (BB(5)). It is delivered in English and Chinese, with previews and contact sheets. **Review with the user**, then
-   lock the standard.
-2. **Act I, Parts 2–5**, in order: the hardware Pebble. **Part 5 is the second review**: the machine runs the Job.
-3. **Roll-out in series order, Parts 6 → 42.** The order matters, because each part's Pebble layer rests on the one
-   before. Each part goes through:
+   tower, the timeline, the ledger's empty frame, the payoff and *In practice* cards. It exercises `TapeView` and the C
+   fast path (BB(5)). It is delivered in English and Chinese, with previews and contact sheets. **Review with the
+   user**, then lock the standard.
+2. **Act I, Parts 2–6**, in order: proof and counting, then the hardware Pebble. **Part 6 is the second review**: the
+   machine runs the Job.
+3. **Roll-out in series order, Parts 7 → 55.** The order matters, because each part's Pebble layer rests on the ones
+   before it. Acts VIII–IX run their services on Act VII's simulator. **Part 40 is the third review**, as the first
+   industry part, which sets that act's tone. Each part goes through:
    - the frontier sweep;
    - locking the chapter list;
    - building its Pebble layer and tests;
@@ -1929,35 +2788,37 @@ Kocher et al. 2019; Jung et al. 2018.
 ## 6. Scale and risks
 
 **Scale:**
-- about 39 hours of video;
-- about 8,000 narration words per part per language, roughly 340,000 per language in all;
+- about 52 hours of video;
+- about 8,000 narration words per part per language, roughly 440,000 per language in all;
 - roughly 4–6k lines of scene code per part (what *AI, Built* took);
-- Pebble itself, about 20–30k lines with its tests across the series.
+- Pebble and its substrate, about 30–40k lines with tests across the series.
 
 At *AI, Built*'s pace, that is one part per one or two long sessions.
 
 | Risk | Mitigation |
 |---|---|
 | Gate-level simulation is slow | bit-parallel, levelized numpy evaluation; gate level only for short runs (a paragraph of the Job, BB(3)); the emulator for the rest, bridged by co-simulation tests |
-| Pebble's breadth (CPU to Raft) | every layer small and tested against an independent reference; later parts use a layer only through its API, so a layer can be rewritten without touching the scenes |
+| Pebble's breadth (CPU to cloud) | every layer small and tested against an independent reference; later parts use a layer only through its API, so a layer can be rewritten without touching the scenes |
 | Overlap with *AI, Built* | callback cards, not repeats (§2.3); the CS treatment goes deeper where the AI series only sketched (Turing, SAT, GPUs, floats) |
-| Frontier claims age | **(verify)** markers; the frontier sweep before each part is written |
+| Frontier claims and industry facts age | **(verify)** markers; dated "as of …" captions on prices, defaults and product behaviour; the frontier sweep before each part is written |
+| Practice turns into opinion | each practice claim is either derived (queueing, availability, statistics), simulated on our substrate, or cited to evidence (empirical software-engineering studies, published post-mortems); folklore is labelled as such |
 | Machine-dependent measurements | labelled `measured on this machine`; the narration branches on the measurement; macOS and Linux both supported |
 | Educational crypto mistaken for real crypto | labelled on screen and in the code; known-answer tests only; never imported outside the series |
-| No outbound network in some environments | every network experiment is simulated; real-Internet numbers are cited, not measured |
+| No outbound network in some environments | every network and cloud experiment runs on the simulator; real-Internet and real-cloud numbers are cited, not measured |
 
-## 7. Decisions to confirm before Phase 0
+## 7. Decisions (confirmed 2026-11-04)
 
-1. **Name and handle**: *Computer Science, Built* (计算机科学，从零搭建), videos `cs1` … `cs42` in `videos/cs/`.
-2. **Scope: 42 parts (recommended).** A shorter 36-part cut would merge Parts 6 + 7, 20 + 21, 34 + 35 and 36 + 37,
-   fold 25 into 24, and fold 39 into Parts 3 and 22, at the cost of depth.
-3. **Bilingual from the start** (English, then Chinese for each part, as *AI, Built* does).
-4. **The machine's name and ISA**: Pebble, as our own RISC-V-like ISA rather than RV32I verbatim (cleaner encodings to
-   draw; a comparison card covers the differences).
-5. **Pilot**: Part 1, then Act I in order.
+1. **Name and handle**: *Computer Science, Built* (计算机科学，从零搭建), videos `cs1` … `cs55` in `videos/cs/`.
+2. **Scope**: the full plan. That is fifty-five parts in ten acts, including the industry acts (VIII–IX), discrete
+   mathematics (Part 2) and algorithms in practice (Part 24).
+3. **Bilingual from the start**: English, then Chinese, for each part, as *AI, Built* does.
+4. **The machine**: Pebble, as our own RISC-V-like ISA (cleaner encodings to draw; a comparison card covers the
+   differences from RV32I).
+5. **Order**: Phase 0, then the Part 1 pilot and a review, then Act I with a review at Part 6, then Parts 7–55 in
+   order with a review at Part 40.
 
 ## 8. Progress (updated as parts land)
 
 | Part | State | Length |
 |---|---|---|
-| 1–42 | planned (this document) | — |
+| 1–55 | planned (this document) | — |
