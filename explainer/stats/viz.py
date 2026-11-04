@@ -900,3 +900,52 @@ class PermutationMachine(VGroup):
         x0, x1, y0, y1 = bounds(ax)
         return DashedLine(ax.c2p(stat, y0), ax.c2p(stat, y1 if height is None else height), color=color or S.ACCENT,
                           stroke_width=3)
+
+
+class IntervalRain(VGroup):
+    """Neyman's promise as weather (Part 11): intervals fall one per sample onto axes ``ax`` (estimate on the x-axis,
+    sample index up the y-axis), green if they catch ``truth`` and red if they miss, with a running tally.
+    ``rain(scene, intervals)`` animates a batch; ``tally`` is the counter mobject (hits of total)."""
+
+    def __init__(self, ax, truth, y_top=None, dy=None, hit=None, miss=None, stroke_width=2.5, font_size=26, tally_pos=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.ax, self.truth = ax, truth
+        x0, x1, y0, y1 = bounds(ax)
+        self.y_top = y1 if y_top is None else y_top
+        self.dy = dy
+        self.hit, self.miss = hit or S.KEPT, miss or S.BROKEN
+        self.sw = stroke_width
+        self.n = self.k = 0
+        self.line = DashedLine(ax.c2p(truth, y0), ax.c2p(truth, y1), color=S.TRUTH, stroke_width=2)
+        self.drops = VGroup()
+        self.tally = label(r"0 of 0", font_size=font_size)
+        self.tally.move_to(tally_pos if tally_pos is not None else ax.c2p(x1, y1) + UP * 0.3 + LEFT * 1.0)
+        self.font_size = font_size
+        self.add(self.line, self.drops, self.tally)
+
+    def _seg(self, lo, hi, i):
+        x0, x1, y0, y1 = bounds(self.ax)
+        dy = self.dy or (y1 - y0) / 50
+        y = self.y_top - dy * (i + 0.5)
+        ok = lo <= self.truth <= hi
+        seg = Line(self.ax.c2p(max(lo, x0), y), self.ax.c2p(min(hi, x1), y), color=self.hit if ok else self.miss,
+                   stroke_width=self.sw)
+        return seg, ok
+
+    def rain(self, scene, intervals, run_time=2.0, lag=0.1):
+        from explainer.analysis import label
+
+        segs = VGroup()
+        for lo, hi in intervals:
+            s_, ok = self._seg(lo, hi, self.n)
+            self.n += 1
+            self.k += ok
+            segs.add(s_)
+        self.drops.add(*segs)
+        new_tally = label(rf"{self.k} of {self.n} \ ({100 * self.k / max(self.n, 1):.0f}\%)", font_size=self.font_size)
+        new_tally.move_to(self.tally)
+        scene.play(LaggedStart(*[FadeIn(s_, shift=DOWN * 0.3) for s_ in segs], lag_ratio=lag),
+                   Transform(self.tally, new_tally), run_time=run_time)
+        return segs

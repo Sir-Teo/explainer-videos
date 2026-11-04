@@ -171,6 +171,7 @@ TIMELINE = [
     (1908, r"Student's $t$"),
     (1915, r"Fisher's geometry"),
     (1922, r"Fisher's likelihood"),
+    (1927, r"Wilson's interval"),
     (1928, r"extreme values"),
     (1931, r"de Finetti's theorem"),
     (1933, r"Neyman--Pearson; Kolmogorov"),
