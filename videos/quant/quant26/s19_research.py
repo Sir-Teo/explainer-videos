@@ -206,13 +206,16 @@ class Research(VoiceoverScene):
                              rf"{t['reps']:,} draws per row; coverage of the winner's true mean by 95\% intervals, median "
                              r"length in brackets; projection: the simultaneous max-$|t|$ interval", 11.4, 16,
                              GREY_A).to_edge(DOWN, buff=0.6)
+        z, c1 = t["sims"]["all zero"], t["sims"]["one clear winner"]
         with self.voiceover(
-            "Check it. Fifty correlated estimates, a thousand draws for each world. <bookmark mark='a'/> When every "
-            "true mean is zero, the naive interval badly undercovers, and its estimate is biased up. When one rule is "
-            "clearly best, the naive interval is fine: there is no curse when the winner was never in doubt. "
-            "<bookmark mark='b'/> The conditional and hybrid intervals cover ninety-five percent in every world, and the "
-            "median-unbiased estimate has no median bias. <bookmark mark='c'/> The price is length: wider than naive, "
-            "but the hybrid is shorter than the simultaneous interval."
+            f"Check it. Fifty correlated estimates, {t['reps']:,} draws for each world. <bookmark mark='a'/> When every "
+            f"true mean is zero, the naive interval covers only {100 * z['cover']['naive']:.0f} percent of the time, and "
+            f"its estimate is {z['medbias_naive']:.1f} standard errors too high. When one rule is clearly best, the naive "
+            f"interval covers {100 * c1['cover']['naive']:.0f} percent: there is little curse when the winner was never "
+            "in doubt. <bookmark mark='b'/> The conditional and hybrid intervals cover ninety-five percent or a little "
+            "more in every world, and the median-unbiased estimate has almost no median bias. <bookmark mark='c'/> The "
+            "price is length. The conditional interval can be very long; the hybrid is shorter than the simultaneous "
+            "interval, and longer than the naive one, which is the honest price of having searched."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot), *[FadeIn(r_[0]) for r_ in tab[1:]])
             vo.wait_until("a")

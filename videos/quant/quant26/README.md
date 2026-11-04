@@ -28,7 +28,7 @@ file), Yahoo Finance daily bars with splits and dividends, Cboe's PutWrite index
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 67 minutes)
 
 * **Ten thousand rules** (3.3 min). The best of 10,000 rules on 1926–1986 (long above the 5-day average, short
   below): Sharpe 1.67 against the market's 0.42; 0.02 on 1987–2020, rank 3,281. "Your backtest has a Sharpe ratio of 3:
@@ -91,7 +91,21 @@ file), Yahoo Finance daily bars with splits and dividends, Cboe's PutWrite index
   10,346. 2021–2025: Sharpe −0.27 ± 0.45 against the market's 0.61. Three eras: 1.67, 0.02, −0.27.
 * **16. Rule 26: the backtest protocol** (3.0). The first sheet; a protocol after Arnott, Harvey and Markowitz, with
   execution added; the lab (`expected_max_sr`, `deflated_sharpe`, `psr`); the module; the rule; four cases.
-* **Recap, desk questions, problems** (3.8).
+* **For the researcher: inference on the winner** (5.9). X ~ N(μ, Σ), winner ĵ = argmax X; the winner's curse and
+  the naive interval's undercoverage (0.975⁵⁰ − 0.025⁵⁰ ≈ 28% for 50 independent noise rules). Conditioning: Z =
+  X − Σ_{·j}X_j/Σ_jj is independent of X_j, {ĵ = j} = {L(Z) ≤ X_j ≤ U(Z)}, so X_j given winning is a truncated normal;
+  inverting it gives a median-unbiased estimate and an interval with exact conditional coverage (Andrews, Kitagawa
+  and McCloskey 2024); the hybrid adds a β = 0.5% projection interval. Simulated (50 estimates, correlation 0.5,
+  4,000 draws a world): with all means zero, naive covers 69% with median bias +1.58 s.e., conditional 95.6% and
+  hybrid 95.8% (median lengths 10.7 and 5.5 against naive 3.9 and projection 6.3); one clear winner: naive 94%;
+  means spread 0 to 2: naive 77%, conditional and hybrid 95.5–95.6%. The 10,000 rules: chosen on 1926–86, MA 1/5
+  (band 0%) at 1.67 led by 6.9 s.e., so conditioning changes nothing ([1.43, 1.92]), and it earned 0.02 on
+  1987–2020: the market changed (index autocorrelation faded), not selection. Chosen on 1987–2003, filter 0.5% at
+  1.07 beat its closest rival by 0.06 s.e. with 42 rules within two s.e.: conditional estimate −1.73 with interval
+  [−13.5, 1.23], hybrid −0.08 with [−0.10, 1.25]; on 2004–20 it earned −0.40 ± 0.48. Three open problems; pause:
+  0.98 against 1.0 is a near tie, so the conditional interval is very wide; 0.2 against 1.0 is a clear win, so it is
+  close to the naive one.
+* **Recap, desk questions, problems** (3.9). Twelve problems (two at qualifying-exam level), solutions below.
 
 ## Hands-on
 
@@ -201,6 +215,17 @@ python tools/make.py quant26 --cpu-voice -q m                   # English and Ch
     0.950 for J = 2 (the curse is mild), 0.282 for J = 50. The conditional interval has coverage 0.95 given every
     winner j and every Z, so averaging over them it is 0.95 for any J.
 
+## For the researcher
+
+* **The theorems.** Andrews, Kitagawa and McCloskey (2024), "Inference on winners," *QJE* 139(1): conditional,
+  unconditional and hybrid inference after selection by argmax; Lee, Sun, Sun and Taylor (2016), *Annals of
+  Statistics* 44, on exact post-selection inference by the same truncated-normal device; Bailey and López de Prado (2014) for the deflated Sharpe ratio.
+* **Simplifications.** Sharpe ratios treated as normal with covariance ρ_jk/T (exact for small Sharpe ratios and iid
+  returns; daily returns are neither exactly); the projection critical value by a Gaussian multiplier bootstrap that
+  ignores serial dependence; the rivals' correlations estimated, not known.
+* **Open problems.** Finite-sample accuracy under fat tails and changing volatility; conditioning on a sequential
+  research path; selection and structural change together.
+
 ## Data and reproducibility
 
 * Kenneth French: daily factors 1926-07 to 2025-12 (the sealed 2021–2025 market and T-bill returns read only in
@@ -236,7 +261,7 @@ python tools/make.py quant26 --cpu-voice -q m                   # English and Ch
 
 *讲的是方法，不构成投资建议。*
 
-## 章节（约58分钟）
+## 章节（约67分钟）
 
 * **一万条规则**（3.3分钟）。1926–1986年10,000条规则中最好的一条（收盘高于5日均线做多，低于做空）：夏普比率1.67，市场0.42；1987–2020年为0.02，排第3,281名。以“你的回测夏普比率为3：列出可能出错的地方”作为本部分的地图；历史条（1933年Cowles到2019年Arnott–Harvey–Markowitz）；计划；本系列公司。
 * **1. 前视偏差与时点数据**（3.8）。在200日均线规则中植入一天的前视（1990–2020）：诚实0.22，植入1.31，买入持有0.50；5日均线为8.8。前视偏差进入的四种方式。2008年第四季度GDP的各个版本：首次−3.8%（2009年1月），−6.2%，−8.9%（2011年7月），−8.4%（2020年12月）。1966年以来216个季度：平均修订1.5个百分点，7%改变符号，相关系数0.79。FRED以季度首日为时间戳“截至”合并：GDP择时规则的夏普比率实时为0.38，朴素为0.43。
@@ -255,7 +280,8 @@ python tools/make.py quant26 --cpu-voice -q m                   # English and Ch
 * **14. 一个策略如何获得资金**（3.1）。想法、研究评审、孵化、爬坡、满额配置、监控与退役（Lopez de Prado的元策略范式；Arnott–Harvey–Markowitz）。由监控把关的爬坡：过拟合的策略在62%的五年生涯中被停止（中位数第43个月），真实的为4%；若只检验回测的一半，为10%。
 * **15. 最佳规则，登记并打开**（1.9）。以10,000次试验登记：计数器从346升到10,346。2021–2025：夏普−0.27 ± 0.45，市场0.61。三个时代：1.67、0.02、−0.27。
 * **16. 第26条规则：回测规程**（3.0）。第一张表；仿Arnott、Harvey与Markowitz并加上执行的规程；实验（`expected_max_sr`、`deflated_sharpe`、`psr`）；模块；规则；四个案例。
-* **回顾、交易台问题与习题**（3.8）。
+* **写给研究者：对赢家的推断**（5.9）。X ~ N(μ, Σ)，赢家ĵ = argmax X；赢家的诅咒与朴素区间的覆盖不足（50条独立噪声规则时为0.975⁵⁰ − 0.025⁵⁰ ≈ 28%）。条件化：Z = X − Σ_{·j}X_j/Σ_jj与X_j独立，{ĵ = j} = {L(Z) ≤ X_j ≤ U(Z)}，所以给定胜出时X_j服从截断正态分布；反解它得到中位数无偏估计和条件覆盖率精确的区间（Andrews、Kitagawa与McCloskey 2024）；混合方法再加上β = 0.5%的投影区间。模拟（50个估计，相关0.5，每个世界4,000次抽样）：所有均值为零时，朴素区间覆盖69%、中位数偏差+1.58个标准误，条件区间95.6%，混合区间95.8%（中位长度10.7和5.5，朴素3.9，投影6.3）；一个明显赢家：朴素94%；均值分布在0到2：朴素77%，条件与混合95.5–95.6%。一万条规则：在1926–86年选出的MA 1/5（带宽0%）为1.67，领先6.9个标准误，条件化什么也不改变（[1.43, 1.92]），它在1987–2020年赚到0.02：是市场变了（指数自相关消退），而不是选择。在1987–2003年选出的0.5%过滤规则为1.07，只以0.06个标准误胜过最接近的对手，两个标准误内有42条规则：条件估计−1.73、区间[−13.5, 1.23]，混合估计−0.08、区间[−0.10, 1.25]；它在2004–20年赚到−0.40 ± 0.48。三个开放问题；暂停题：0.98对1.0几乎是平局，所以条件区间很宽；0.2对1.0是明显胜出，所以它接近朴素区间。
+* **回顾、交易台问题与习题**（3.9）。十二道习题（两道为资格考试难度），解答见下文。
 
 ## 交易台问题与解答
 
@@ -291,3 +317,9 @@ python tools/make.py quant26 --cpu-voice -q m                   # English and Ch
 * 本部分登记：`stw_best_rule_part26`（10,000次试验）；计数器从346升到10,346。封存数据`kenfrench/rf_daily`在此首次封存。
 * 引用而非计算的已发表数字：Shumway的−30%；Leinweber的R²；Lo的65%；Bailey等人的45次尝试。
 * 模拟或示意：N个中最佳的分布、幸存者经理、五年夏普的抽样分布、平滑收益、植入市场、资金爬坡、规则家族的价格路径。
+
+## 写给研究者
+
+* **定理。** Andrews、Kitagawa与McCloskey（2024），《Inference on winners》，*QJE* 139(1)：按argmax选择之后的条件、无条件与混合推断；Lee、Sun、Sun与Taylor（2016），*Annals of Statistics* 44，用同样的截断正态方法做精确的选择后推断；Bailey与López de Prado（2014）的紧缩夏普比率。
+* **简化。** 把夏普比率当作协方差为ρ_jk/T的正态估计（对小夏普比率和独立同分布收益是准确的；日收益两者都不完全满足）；投影临界值用忽略序列相关的高斯乘子自助法得到；对手之间的相关是估计的，而非已知。
+* **开放问题。** 厚尾和波动率变化下的有限样本精度；以序贯的研究路径为条件；同时处理选择与结构变化。
