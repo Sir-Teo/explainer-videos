@@ -128,8 +128,8 @@ class PCA(VoiceoverScene, ThreeDScene):
             label(rf"{d // 10000}-{d // 100 % 100:02d}-{d % 100:02d}: the day after Black Monday", font_size=22),
             label(r"grey: the actual change", font_size=19, color=GREY_B),
             *[MathTex(rf"s_{k + 1} = {sc[k]:+.0f}", font_size=30, color=COLS[k]) for k in range(3)],
-            wrapped_label(rf"three factors: the largest miss is {np.max(np.abs(acc - dy)):.0f} bp, at "
-                          rf"{mats[int(np.argmax(np.abs(acc - dy)))]:.0f} years", 4.0, 18, GREY_A),
+            wrapped_label(rf"three factors: the largest miss is {np.max(np.abs(acc - dy)):.0f} bp, at the "
+                          rf"{mats[int(np.argmax(np.abs(acc - dy)))]:.0f}-year point", 4.0, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "One day, decomposed: the twentieth of October 1987, the day after the stock market's Black Monday, when "

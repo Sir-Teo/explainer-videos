@@ -70,7 +70,8 @@ class Bootstrap(VoiceoverScene):
                      font_size=18).to_edge(RIGHT, buff=0.3).shift(UP * 2.2)
         tr = ValueTracker(0)
         readout_box = always_redraw(lambda: VGroup(
-            MathTex(rf"T = {nt[int(tr.get_value())]:g}\ \text{{yr}}", font_size=30),
+            MathTex((rf"T = {12 * nt[int(tr.get_value())]:.1f}".rstrip("0").rstrip(".") + r"\ \text{mo}")
+                    if nt[int(tr.get_value())] < 1 else rf"T = {nt[int(tr.get_value())]:g}\ \text{{yr}}", font_size=30),
             MathTex(rf"y = {y[int(tr.get_value())]:.2f}\% \to z = {nz[int(tr.get_value())]:.3f}\%", font_size=30,
                     color=ZERO)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(leg, DOWN, buff=0.6,
                                                                                     aligned_edge=LEFT))
