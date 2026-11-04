@@ -202,6 +202,17 @@ class World:
         return {"sick": sick, "test_a": pos[0], "test_b": pos[1], "tested": self.adult.copy()}
 
     # ------------------------------------------------------------------
+    # The lake (Part 3): a fish population, for capture-recapture
+    # ------------------------------------------------------------------
+    @cached_property
+    def lake(self) -> dict:
+        """The island's lake and its fish: the number is the truth that capture-recapture estimates (about 8,000), with
+        each fish's length in cm (log-normal, median 31)."""
+        g = self.rng("lake")
+        n = int(g.poisson(8000))
+        return {"n_fish": n, "length": np.exp(g.normal(np.log(31.0), 0.18, n))}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
