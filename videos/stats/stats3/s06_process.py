@@ -119,8 +119,8 @@ class Process(VoiceoverScene, TreeMixin):
         d = load("process")
         a, b = np.asarray(d["a_sample"]), np.asarray(d["b_sample"])
         rowsy = [1.9, 1.0, 0.1]
-        lines = VGroup(*[NumberLine(x_range=[0, 120, 20], length=11.0, include_numbers=False, color=GREY_C)
-                         .move_to([0.6, y, 0]) for y in rowsy])
+        lines = VGroup(*[NumberLine(x_range=[0, 120, 20], length=9.6, include_numbers=False, color=GREY_C)
+                         .move_to([1.4, y, 0]) for y in rowsy])
         names = VGroup(label(r"route A: \ every 10 min", font_size=22, color=S.EST),
                        label(r"route B: \ every 15 min", font_size=22, color=S.LIK),
                        label(r"either", font_size=22, color=S.ACCENT))
