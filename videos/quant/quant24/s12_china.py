@@ -43,7 +43,8 @@ class China(VoiceoverScene):
             "returns following the odds of being taken over rather than their own businesses."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -82,7 +83,8 @@ class China(VoiceoverScene):
             "has bid up, and they go on to lag. A sentiment factor, built for a market of individual traders."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -167,7 +169,8 @@ class China(VoiceoverScene):
             "same crowding as America's, a story Part twenty-nine tells."
         ) as vo:
             for i, mk in enumerate(("a", "b")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

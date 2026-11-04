@@ -46,7 +46,8 @@ class Everywhere(VoiceoverScene):
             "has fallen for five years; and momentum, again, the past year. No market-specific tuning."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -254,7 +255,8 @@ class Everywhere(VoiceoverScene):
             "reduction there is."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

@@ -74,7 +74,8 @@ class SDF(VoiceoverScene):
             "intermediary models of chapter nine. The equation is always the same; the economics is in m."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c", "d")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

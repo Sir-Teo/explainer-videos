@@ -109,7 +109,8 @@ class House(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(title))
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cols[i], shift=UP * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -224,7 +225,8 @@ class House(VoiceoverScene):
             "little it knows."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c", "d")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()

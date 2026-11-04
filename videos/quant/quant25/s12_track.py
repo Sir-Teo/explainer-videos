@@ -52,7 +52,8 @@ class Track(VoiceoverScene):
             "fixed, hashed and recorded before the first of those months was read."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c", "d")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -171,7 +172,8 @@ class Track(VoiceoverScene):
             "the whole zoo, survived three unseen years. That is evidence about a method, not yet about a fund."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -195,7 +197,8 @@ class Track(VoiceoverScene):
             "would become just another research window. One look per registration keeps them clean."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -217,7 +220,8 @@ class Track(VoiceoverScene):
             "leverage, turnover and capacity, with a proper risk model."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

@@ -173,7 +173,8 @@ class Regimes(VoiceoverScene):
             "as nearly certain. Three calm years had made protection against its end look free."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

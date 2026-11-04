@@ -68,7 +68,8 @@ class Replicate(VoiceoverScene):
             "this part uses."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -92,7 +93,8 @@ class Replicate(VoiceoverScene):
             "this part computes."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -195,7 +197,8 @@ class Replicate(VoiceoverScene):
             "family. Both papers are careful. They answer different questions."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

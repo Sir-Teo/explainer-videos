@@ -190,7 +190,8 @@ class Counter(VoiceoverScene):
             "ideas abandoned before any code was written, and the colleague's notebook, are tries the counter never saw."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

@@ -82,7 +82,8 @@ class Firms(VoiceoverScene):
             "can buy before an index adds a stock and sell before it drops one, and the fund's holders pay for it."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -133,7 +134,8 @@ class Firms(VoiceoverScene):
             "twenty-six puts costs into every backtest; Part thirty-seven measures impact."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

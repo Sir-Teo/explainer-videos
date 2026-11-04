@@ -85,7 +85,8 @@ class Funding(VoiceoverScene):
             "is known, larger as the live record confirms the backtest, and stopped by a rule decided in advance."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

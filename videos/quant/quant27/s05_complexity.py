@@ -189,7 +189,8 @@ class Complexity(VoiceoverScene):
             "belongs to the critics."
         ) as vo:
             for k_, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if k_:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k_], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

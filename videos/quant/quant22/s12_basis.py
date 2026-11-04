@@ -70,7 +70,8 @@ class Basis(VoiceoverScene):
             "options, and a basis trader who forgets them has sold them for nothing."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -212,7 +213,8 @@ class Basis(VoiceoverScene):
             "is one answer; Part twenty-one's waterfall, applied to the government bond market."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

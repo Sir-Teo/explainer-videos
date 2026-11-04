@@ -221,7 +221,8 @@ class Survivor(VoiceoverScene):
             "to look like the firm's. The House keeps its dead strategies in the Track Record for exactly this reason."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

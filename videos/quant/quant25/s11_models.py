@@ -67,7 +67,8 @@ class Models(VoiceoverScene):
             "remedy is the Sharpe-ratio comparison, and test assets the modeller did not choose."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -213,7 +214,8 @@ class Models(VoiceoverScene):
             "average over it rather than crowning one. That is what the shrinkage discount factor of chapter six does."
         ) as vo:
             for i, mk in enumerate(("a", "b")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

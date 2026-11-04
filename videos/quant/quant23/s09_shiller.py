@@ -170,7 +170,8 @@ class Shiller(VoiceoverScene):
             "returns are predictable over years, barely over months, and fragile out of sample, as Part six found."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

@@ -91,7 +91,8 @@ class Signal(VoiceoverScene):
             "can lose more than years of small, correct forecasts made."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c", "d")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

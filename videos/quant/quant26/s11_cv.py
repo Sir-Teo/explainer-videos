@@ -220,7 +220,8 @@ class PurgedCV(VoiceoverScene):
             "for any series whose neighbours resemble each other, which is almost every series in finance."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

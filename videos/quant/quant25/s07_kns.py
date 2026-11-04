@@ -168,7 +168,8 @@ class KNS(VoiceoverScene):
             "cross-validation cannot itself overfit badly."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -254,7 +255,8 @@ class KNS(VoiceoverScene):
             "twenty values on the research window: twenty trials on the counter, in chapter eleven."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

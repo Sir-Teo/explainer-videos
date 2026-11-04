@@ -200,7 +200,8 @@ class Storage(VoiceoverScene):
             "today's price, adjusted for what holding the stuff costs, and what having it is worth."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

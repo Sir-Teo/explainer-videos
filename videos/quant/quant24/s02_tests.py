@@ -275,7 +275,8 @@ class Tests(VoiceoverScene):
             "whether: compare pricing errors, or the squared Sharpe ratio each model's factors can reach."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

@@ -91,7 +91,8 @@ class NegOil(VoiceoverScene):
             "price of a place to put it. Chapter seven's cost of carry, with the storage cost gone vertical."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

@@ -109,7 +109,8 @@ class Green(VoiceoverScene):
             "It is a bet that concern will rise faster than prices already assume."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -148,7 +149,8 @@ class Green(VoiceoverScene):
             "valuations cannot keep changing in one direction for ever."
         ) as vo:
             for i, mk in enumerate(("a", "b")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

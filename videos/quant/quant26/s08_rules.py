@@ -72,7 +72,8 @@ class Rules(VoiceoverScene):
             "variants: a band around the trigger, a delay before acting, a fixed holding period."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c", "d")):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(panels[k], shift=UP * 0.15))
         self.add(illustration(r"illustration: a simulated price path"))
         self.wait(0.4)

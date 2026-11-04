@@ -50,7 +50,8 @@ class SizeValue(VoiceoverScene):
             "turned them into two portfolios to stand beside the market as factors."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c", "d")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -233,7 +234,8 @@ class SizeValue(VoiceoverScene):
             "once low-quality small firms are set aside, a size premium reappears, steadier than before."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
-                vo.wait_until(mk)
+                if i:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
