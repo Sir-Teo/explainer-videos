@@ -21,7 +21,7 @@ class Everywhere(VoiceoverScene):
 
     def card(self):
         c = chapter_card(7, r"Value and momentum everywhere; carry; quality", r"Are the factors a feature of stocks, or of "
-                         r"markets?", lit=(2013,), part=PART)
+                         r"markets?", lit=(), part=PART)
         with self.voiceover("Chapter seven. If value and momentum are real, they should appear in every market. Do "
                             "they?"):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
