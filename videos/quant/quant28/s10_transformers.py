@@ -128,9 +128,9 @@ class Transformers(VoiceoverScene):
 
         ck = [int(steps[0]), int(steps[len(steps) // 3]), int(steps[2 * len(steps) // 3]), int(steps[-1])]
         txt = "".join(ch for ch in samples[0][:150] if ch.isascii() and (ch.isprintable() or ch == " ")).strip()
-        txt = txt.rsplit(" ", 1)[0] + r" \ldots"
         for ch, rep in (("\\", ""), ("_", r"\_"), ("%", r"\%"), ("$", r"\$"), ("&", r"\&"), ("#", r"\#"), ("{", ""), ("}", "")):
             txt = txt.replace(ch, rep)
+        txt = txt.rsplit(" ", 1)[0] + r" \ldots"
 
         def frame(k):
             e = float(np.interp(ck[k], ev[:, 0], ev[:, 2]))

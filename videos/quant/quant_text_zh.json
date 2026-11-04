@@ -18915,7 +18915,17 @@
     "\\text{loss on 2008--2012 minutes} = 3.42": "\\text{2008--2012年纪要上的损失} = 3.42",
     "its continuation of: \\emph{In light of the deterioration in financial conditions, the Committee}": "它对下面这句话的续写：\\emph{In light of the deterioration in financial conditions, the Committee}",
     "\\texttt{percentage point to the path of policy for time. In their view, a high degree of policy easing likely would be made in the direction of any policy t}": "\\texttt{percentage point to the path of policy for time. In their view, a high degree of policy easing likely would be made in the direction of any policy t}",
-    "Pause and predict: the loss of a model that guesses uniformly over 2{,}048 tokens is $\\log 2048$. What is it in nats, and in bits?": "暂停预测一下：在2{,}048个词元上均匀猜测的模型，损失是$\\log 2048$。用奈特表示是多少，用比特表示呢？"
+    "Pause and predict: the loss of a model that guesses uniformly over 2{,}048 tokens is $\\log 2048$. What is it in nats, and in bits?": "暂停预测一下：在2{,}048个词元上均匀猜测的模型，损失是$\\log 2048$。用奈特表示是多少，用比特表示呢？",
+    "\\ldots the federal funds rate at 0 to": "\\ldots the federal funds rate at 0 to",
+    "\\ldots would purchase large quantities of agency mortgage-backed": "\\ldots would purchase large quantities of agency mortgage-backed",
+    "\\ldots federal funds rate at its effective lower": "\\ldots federal funds rate at its effective lower",
+    "\\ldots decided to increase its holdings of Treasury": "\\ldots decided to increase its holdings of Treasury",
+    "\\ldots its target for the federal funds rate": "\\ldots its target for the federal funds rate",
+    "\\texttt{percentage point to the path of policy for time. In their view, a high degree of policy easing likely would be made in the direction of any policy tightening in the \\ldots}": "\\texttt{percentage point to the path of policy for time. In their view, a high degree of policy easing likely would be made in the direction of any policy tightening in the \\ldots}",
+    "\\texttt{decided that the Committee would be failed on a number of uncertainties about the appropriate path of the federal funds rate and its tools in its plans. Members \\ldots}": "\\texttt{decided that the Committee would be failed on a number of uncertainties about the appropriate path of the federal funds rate and its tools in its plans. Members \\ldots}",
+    "\\texttt{'s intended federal funds rate to 1/4 percent. In the context of recent developments and, the Committee's policy decisions at this meeting is not described in \\ldots}": "\\texttt{'s intended federal funds rate to 1/4 percent. In the context of recent developments and, the Committee's policy decisions at this meeting is not described in \\ldots}",
+    "4\\text{m tokens, next-token prediction, on a laptop CPU}": "4\\text{百万词元，下一词元预测，在笔记本电脑CPU上}",
+    "\\texttt{percentage point to the path of policy for time. In their view, a high degree of policy easing likely would be made in the direction of any policy \\ldots}": "\\texttt{percentage point to the path of policy for time. In their view, a high degree of policy easing likely would be made in the direction of any policy \\ldots}"
   },
   "phrases": {
     "you owe": "你欠",
