@@ -12,6 +12,7 @@ class Weak(VoiceoverScene):
         self.card()
         self.problem()
         self.sim(w)
+        self.attenuate()
         self.omitted()
         self.threepass()
         self.lesson()
@@ -84,6 +85,34 @@ class Weak(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(panels[1]))
         self.add(illustration(r"simulated: the House's \texttt{econ.two\_pass}", corner=UR))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def attenuate(self):
+        rows = [cmath(r"\hat\beta_i", r"=", r"\beta_i + u_i,\quad \text{var}(u) = \frac{\sigma_\varepsilon^2}{T\,\sigma_f^2}",
+                      font_size=40, colors={r"\hat\beta_i": SDF}),
+                cmath(r"\text{plim}\,\hat\lambda", r"=", r"\lambda\,\frac{\text{var}(\beta)}{\text{var}(\beta) + \text{var}(u)}",
+                      font_size=42, colors={r"\text{plim}\,\hat\lambda": BAD}),
+                cmath(r"\frac{0.01}{0.01 + 0.04}", r"=", r"0.2", font_size=42)]
+        whys = [why(r"each estimated beta is the truth plus estimation noise, smaller with more months and a more volatile "
+                    r"factor"),
+                why(r"the cross-sectional slope is attenuated by the share of the betas' spread that is signal: Part 6's "
+                    r"errors in variables"),
+                why(r"if the true betas vary across assets by a variance of 0.01 and the noise is 0.04, the estimated premium "
+                    r"is a fifth of the truth, before any omitted factor")]
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "Why toward zero? Each estimated beta is its true value plus noise. <bookmark mark='a'/> The second-pass "
+            "slope is then attenuated by the share of the betas' spread that is real: errors in variables, from Part "
+            "six and from Part twenty-four's noisy betas. <bookmark mark='b'/> If the true betas vary across assets "
+            "with a variance of one hundredth and the noise has four hundredths, the estimated premium converges to "
+            "one fifth of the truth. With a weak factor, signal is small and the noise dominates."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
         self.wait(0.4)
         self.clear_scene()
 

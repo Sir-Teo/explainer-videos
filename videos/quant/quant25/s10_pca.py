@@ -12,7 +12,9 @@ class PCA(VoiceoverScene):
         self.card()
         self.scree(p)
         self.rp()
+        self.pc1(p)
         self.oos(p)
+        self.gamma()
         self.rms(p)
         self.ipca()
         self.lesson()
@@ -76,6 +78,30 @@ class PCA(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def pc1(self, p):
+        a, b = p["pca"][0], p["rp"][0]
+        rows = [cmath(r"\text{PC}_1", r":", rf"\text{{a third of the variance}},\ \text{{Sharpe out of sample}}\ {a['sr_out']:.2f}",
+                      font_size=36, colors={r"\text{PC}_1": QC.SPOT}),
+                cmath(r"\text{RP-PC}_1", r":", rf"\text{{Sharpe out of sample}}\ {b['sr_out']:.2f}", font_size=36,
+                      colors={r"\text{RP-PC}_1": QC.IMPLIED})]
+        whys = [why(r"the zoo's largest common movement is a mix of its long--short legs that rises and falls together, "
+                    r"largely with the market's volatility, and earns almost nothing: big risk, no reward"),
+                why(r"the first risk-premium component tilts toward the directions that pay; alone it carries a Sharpe ratio "
+                    r"near 0.9 out of sample. An SDF built from variance alone starts in the wrong place")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "Look at the first component alone. Ordinary PCA's first component explains a third of the zoo's variance, "
+            "and out of sample its Sharpe ratio is essentially zero. It is the zoo's biggest common risk, a movement of "
+            "many long-short legs together, and it is not rewarded. <bookmark mark='a'/> The first risk-premium "
+            "component, tilted toward what pays, has an out-of-sample Sharpe ratio near nine tenths by itself. A "
+            "discount factor built from variance alone starts in the wrong place."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
     def oos(self, p):
         K = np.asarray(p["K"])
         a = np.array([r_["sr_out"] for r_ in p["pca"]])
@@ -108,6 +134,30 @@ class PCA(VoiceoverScene):
             self.play(Create(la), FadeIn(da), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(lb), FadeIn(db), FadeIn(side[1]), FadeIn(side[2]), run_time=1.5)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def gamma(self):
+        cards = VGroup(
+            desk_question(r"$\gamma$ is a dial", r"at $-1$, PCA; at large $\gamma$, the first component points toward the "
+                          r"mean returns themselves, the equal-risk 'average anomaly'. Lettau and Pelger use about 10",
+                          width=12.0, font_size=20),
+            desk_question(r"chosen in advance", r"this part fixes $\gamma = 10$ before looking at 2001--2020 and does not "
+                          r"tune it: one choice, honestly reported", width=12.0, font_size=20),
+            desk_question(r"why it helps", r"the means are noisy, but averaged over many portfolios their direction is "
+                          r"far better measured than any single mean: weak factors with large premia become visible",
+                          width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "About gamma. <bookmark mark='a'/> It is a dial: at minus one, ordinary PCA; very large, and the first "
+            "component simply points along the mean returns. Lettau and Pelger use about ten. <bookmark mark='b'/> "
+            "Here it was fixed at ten before looking at the test period, and not tuned. <bookmark mark='c'/> It helps "
+            "because, although each mean is noisy, the direction of the means across many portfolios is far better "
+            "measured, and that makes weak factors with large premia visible."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

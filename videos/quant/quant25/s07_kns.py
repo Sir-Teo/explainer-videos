@@ -12,7 +12,9 @@ class KNS(VoiceoverScene):
         self.card()
         self.sdf()
         self.prior()
+        self.twodir()
         self.path(k)
+        self.blocks()
         self.weights(k)
         self.split(k)
         self.notes()
@@ -81,6 +83,37 @@ class KNS(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def twodir(self):
+        hx = [-3.8, -1.0, 1.6, 4.2]
+        heads = [r"direction", r"variance $\lambda_k$", r"unshrunk loading", r"$\gamma = 0.001$"]
+        tab = VGroup(VGroup(*[label(h_, font_size=18, color=GREY_A).move_to([x, 1.8, 0]) for h_, x in zip(heads, hx)]))
+        for i, (nm, lam) in enumerate(((r"a big component", 0.01), (r"a tiny component", 0.0001))):
+            y = 1.1 - 0.7 * i
+            b0 = 0.002 / lam
+            b1 = lam / (lam + 0.001) * b0
+            tab.add(VGroup(label(nm, font_size=19).move_to([hx[0], y, 0]), MathTex(f"{lam}", font_size=26).move_to([hx[1], y, 0]),
+                           MathTex(f"{b0:.1f}", font_size=26, color=BAD).move_to([hx[2], y, 0]),
+                           MathTex(f"{b1:.2f}", font_size=26, color=SDF).move_to([hx[3], y, 0])))
+        foot = wrapped_label(r"both directions earn the same 0.2\% a month. The tiny one does it with a hundredth of the "
+                             r"variance, a Sharpe ratio ten times higher, so the plug-in SDF bets a hundred times more on it. "
+                             r"Shrinkage cuts that bet by a factor of eleven and the big one's by a tenth: it distrusts "
+                             r"high Sharpe ratios that rest on little variance", 12.0, 17, GREY_A).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Two directions, in numbers. Both earn two tenths of a percent a month. One has a variance of one percent, "
+            "the other a hundredth of that. <bookmark mark='a'/> The plug-in discount factor loads one hundred times "
+            "more on the small direction, because the same mean on a hundredth of the variance is a Sharpe ratio ten "
+            "times higher. <bookmark mark='b'/> With gamma at a thousandth, the big direction keeps nine tenths of its "
+            "loading and the small one keeps one eleventh. Shrinkage distrusts exactly the high Sharpe ratios that rest "
+            "on very little variance, which is where estimation error hides."
+        ) as vo:
+            self.play(FadeIn(tab[0]), *[FadeIn(r_[:2]) for r_ in tab[1:]])
+            vo.wait_until("a")
+            self.play(*[FadeIn(r_[2]) for r_ in tab[1:]])
+            vo.wait_until("b")
+            self.play(*[FadeIn(r_[3]) for r_ in tab[1:]], FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
     def path(self, k):
         kap, r2c, r2i = np.asarray(k["kappas"]), np.asarray(k["r2_cv"]), np.asarray(k["r2_in"])
         g = axes([-1.6, 0.6], [-0.4, 1.0], x_length=7.6, y_length=4.4, xlabel=r"$\log_{10}\kappa$ (prior Sharpe ratio, a "
@@ -113,6 +146,30 @@ class KNS(VoiceoverScene):
             self.play(Create(li), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(lc), FadeIn(dot), FadeIn(side[1]), FadeIn(side[2]), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def blocks(self):
+        cards = VGroup(
+            desk_question(r"why blocks of months", r"returns are autocorrelated and regimes last years; random months would "
+                          r"put a crisis in both the fitting and the testing set and flatter the fit", width=12.0, font_size=20),
+            desk_question(r"why the cross-sectional $R^2$", r"the SDF's job is to explain average returns: the metric asks "
+                          r"how much of the held-out means $\Sigma b$ reproduces, the pricing analogue of an out-of-sample "
+                          r"forecast", width=12.0, font_size=20),
+            desk_question(r"what the choice is", r"one number from a grid of twenty: few enough choices that the "
+                          r"cross-validation cannot itself overfit badly", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "Three details of that cross-validation. <bookmark mark='a'/> The folds are blocks of consecutive months, "
+            "not random months: returns cluster in regimes, and random months would put the same crisis in both the "
+            "fitting and the testing set. <bookmark mark='b'/> The score is the cross-sectional R squared, how much of "
+            "the held-out average returns the discount factor reproduces: the pricing version of an out-of-sample "
+            "forecast. <bookmark mark='c'/> And the choice is one number from a grid of twenty, few enough that the "
+            "cross-validation cannot itself overfit badly."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

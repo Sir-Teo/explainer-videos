@@ -10,6 +10,7 @@ from videos.quant.quant25.common import BAD, GOOD, HURDLE, NOISE, PART, SDF, TRU
 class House(VoiceoverScene):
     def construct(self):
         self.card()
+        self.byparts()
         self.sheet(load("noise"), load("zoo"), load("mtest"), load("shrink"), load("kns"), load("fgx"), load("envelope"))
         self.lab()
         self.module()
@@ -52,6 +53,42 @@ class House(VoiceoverScene):
             self.play(FadeIn(title))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab], lag_ratio=0.35), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def byparts(self):
+        from explainer.quant.house import pit
+        reg = pit._read()["registered"]
+        parts = {}
+        for k, r_ in reg.items():
+            p = pit.PARTS[k][0]
+            if p <= PART:  # the count as this part shows it: later parts' registrations are not yet made
+                parts[p] = parts.get(p, 0) + r_["trials"]
+        ps = sorted(parts)
+        g = axes([-0.6, len(ps) - 0.4], [0, 2.6], x_length=9.0, y_length=4.0, xlabel=r"", ylabel=r"$\log_{10}$ trials "
+                 r"registered", xticks=[], yticks=[0, 1, 2], font_size=13).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = g.ax
+        grp = VGroup()
+        for i, p in enumerate(ps):
+            v = np.log10(parts[p] + 1)
+            y0, y1 = ax.c2p(0, 0)[1], ax.c2p(0, v)[1]
+            grp.add(VGroup(Rectangle(width=0.5, height=max(y1 - y0, 0.01), stroke_width=0,
+                                     fill_color=SDF if p == PART else QC.HOUSE, fill_opacity=0.85).move_to(
+                [ax.c2p(i, 0)[0], (y0 + y1) / 2, 0]), MathTex(str(parts[p]), font_size=16).next_to(ax.c2p(i, v), UP, buff=0.05),
+                label(rf"{p}", font_size=13, color=GREY_A).next_to(ax.c2p(i, 0), DOWN, buff=0.1)))
+        side = VGroup(MathTex(rf"\text{{total}}:\ {sum(parts.values())}", font_size=28, color=QC.HOUSE),
+                      wrapped_label(r"configurations tried, by the part that registered them (bars labelled by part). "
+                                    r"Part 3's 208 published predictors and Part 6's 49 industries dominate so far",
+                                    3.2, 16, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        with self.voiceover(
+            "Where the count comes from, part by part. <bookmark mark='a'/> Part three registered two hundred and "
+            "twenty-two configurations, most of them published predictors; Part six fifty-nine, most of them "
+            "industries; Part seven eleven volatility models; Part twenty-four ten factors; and this part twenty-one. Three hundred and forty-six configurations so far, every one a line of code that "
+            "registered it. The research desk's claims are only as honest as this number, and it can only go up."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in grp], lag_ratio=0.1), FadeIn(side), run_time=2.5)
         self.wait(0.4)
         self.clear_scene()
 

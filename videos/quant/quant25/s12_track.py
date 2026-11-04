@@ -13,7 +13,10 @@ class Track(VoiceoverScene):
         self.register(e)
         self.result(e)
         self.paths(e)
+        self.breakeven(e)
         self.caveats()
+        self.clean()
+        self.next_()
         self.counter(e)
 
     def card(self):
@@ -111,6 +114,39 @@ class Track(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def breakeven(self, e):
+        rows = e["rows"]
+        d = np.asarray(rows["kns_sdf_part25"]["holdout_cum"])
+        r = np.r_[d[0] - 1, d[1:] / d[:-1] - 1]
+        costs = np.linspace(0, 0.40, 41)
+        sr = [(r - c / 12).mean() / (r - c / 12).std() * np.sqrt(12) for c in costs]
+        be = float(r.mean() * 12)
+        g = axes([0, 0.40], [-0.5, 3.5], x_length=7.2, y_length=4.2, xlabel=r"trading and funding cost, a year",
+                 ylabel=r"Sharpe ratio, 2021--23", xticks=[0, 0.1, 0.2, 0.3, 0.4], yticks=[0, 1, 2, 3], font_size=13).to_edge(
+            LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        line = curve(ax, costs, sr, SDF, stroke_width=3.5)
+        z = DashedLine(ax.c2p(0, 0), ax.c2p(0.4, 0), color=GREY_B, stroke_width=1.5)
+        side = VGroup(
+            MathTex(rf"\text{{break-even cost}} \approx {100 * be:.0f}\%\ \text{{a year}}", font_size=24, color=SDF),
+            wrapped_label(r"the hold-out's Sharpe ratio as a cost per year is subtracted. A book of 154 long--short legs, "
+                          r"many in small stocks and some turning over monthly, can plausibly cost tens of percent of its "
+                          r"capital a year at this leverage; Part 26 estimates it properly", 3.6, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "How much cost could it bear? Subtract a cost per year and recompute the hold-out's Sharpe ratio. "
+            "<bookmark mark='a'/> The line falls steadily and crosses zero near thirty-five percent a year. That sounds "
+            "like a lot of room. It is less than it sounds: a hundred and fifty-four long-short legs, many in small "
+            "stocks, some turned over every month, levered to ten percent volatility, can plausibly cost tens of "
+            "percent of capital a year. The answer depends on numbers this part has not measured."
+        ) as vo:
+            self.play(FadeIn(g), Create(z))
+            vo.wait_until("a")
+            self.play(Create(line), FadeIn(side), run_time=2)
+        self.wait(0.4)
+        self.clear_scene()
+
     def caveats(self):
         cards = VGroup(
             desk_question(r"paper, not fund", r"many predictors are equal-weighted, rebalanced monthly, short microcaps; "
@@ -132,6 +168,52 @@ class Track(VoiceoverScene):
             "long-short legs means gross positions many times the capital, with all the funding and margin of Parts "
             "twenty-one and twenty-two. <bookmark mark='c'/> What it does show is that the estimator, shrinkage across "
             "the whole zoo, survived three unseen years. That is evidence about a method, not yet about a fund."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def clean(self):
+        cards = VGroup(
+            desk_question(r"why the hold-out needs no correction", r"the 2021--23 Sharpe ratio comes from one look at data "
+                          r"no choice was fitted to: its $p$-value is honest as it stands", width=12.0, font_size=20),
+            desk_question(r"what does need one", r"the research window's 4.6: chosen among twenty shrinkage values, on "
+                          r"154 predictors that were themselves selected by their papers", width=12.0, font_size=20),
+            desk_question(r"why the counter still matters", r"if the House opened the envelope for many variants and "
+                          r"reported the best, the hold-out would become another research window. One look per "
+                          r"registration is what keeps it clean", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "One subtle point. <bookmark mark='a'/> The hold-out's Sharpe ratio needs no multiple-testing correction: "
+            "it comes from one look at data that no choice was fitted to. <bookmark mark='b'/> The research window's "
+            "four and a half does need one: it was chosen among twenty shrinkage values, on predictors that their own "
+            "papers had already selected. <bookmark mark='c'/> And that is why the counter matters even for the "
+            "hold-out. If the House opened the envelope for many variants and reported the best, the sealed years "
+            "would become just another research window. One look per registration keeps them clean."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def next_(self):
+        cards = VGroup(
+            desk_question(r"costs (Part 26)", r"the SDF's legs re-priced with spreads, impact, borrow fees and funding; its "
+                          r"net row replaces this paper row", width=12.0, font_size=20),
+            desk_question(r"machine learning (Part 27)", r"nonlinear SDFs and expected returns from the characteristics "
+                          r"behind these predictors, scored on the same envelope", width=12.0, font_size=20),
+            desk_question(r"a portfolio (Part 30)", r"the SDF's weights become positions only with constraints: leverage, "
+                          r"turnover, capacity and a risk model", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "What happens to this row next. <bookmark mark='a'/> Part twenty-six re-prices every leg with spreads, "
+            "impact, borrowing fees and funding, and a net row replaces this paper one. <bookmark mark='b'/> Part "
+            "twenty-seven builds nonlinear discount factors from the characteristics behind these predictors, scored "
+            "on the same envelope. <bookmark mark='c'/> And Part thirty turns weights into positions, under limits on "
+            "leverage, turnover and capacity, with a proper risk model."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

@@ -14,8 +14,12 @@ class MTest(VoiceoverScene):
         self.fwer()
         self.holm()
         self.fdr()
+        self.table()
+        self.byhand()
         self.bhplot(m)
         self.results(m)
+        self.bootstrap()
+        self.qchoice()
         self.reading()
 
     def card(self):
@@ -94,6 +98,72 @@ class MTest(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def table(self):
+        hx = [-3.0, 0.2, 2.8, 5.0]
+        tab = VGroup(VGroup(label(r"", font_size=18).move_to([hx[0], 1.8, 0]),
+                            label(r"declared significant", font_size=18, color=GREY_A).move_to([hx[1], 1.8, 0]),
+                            label(r"not declared", font_size=18, color=GREY_A).move_to([hx[2], 1.8, 0]),
+                            label(r"total", font_size=18, color=GREY_A).move_to([hx[3], 1.8, 0])))
+        for i, (nm, a, b, c, col) in enumerate(((r"no true premium", r"V", r"U", r"m_0", BAD),
+                                                (r"true premium", r"S", r"T", r"m_1", GOOD),
+                                                (r"total", r"R", r"m - R", r"m", WHITE))):
+            y = 1.1 - 0.7 * i
+            tab.add(VGroup(label(nm, font_size=19, color=col).move_to([hx[0], y, 0]),
+                           MathTex(a, font_size=32, color=BAD if a == "V" else WHITE).move_to([hx[1], y, 0]),
+                           MathTex(b, font_size=32).move_to([hx[2], y, 0]), MathTex(c, font_size=32).move_to([hx[3], y, 0])))
+        eqs = VGroup(MathTex(r"\text{FWER} = \Pr(V \ge 1)", font_size=32, color=BAD),
+                     MathTex(r"\text{FDR} = \mathbb{E}[V / \max(R, 1)]", font_size=32, color=GOOD)).arrange(RIGHT, buff=1.2).to_edge(DOWN, buff=0.8)
+        with self.voiceover(
+            "The two error rates, in one table. Of m tests, some have no true premium and some do. We declare R of "
+            "them significant; V of those are false discoveries. <bookmark mark='a'/> The familywise error rate is the "
+            "chance that V is at least one. The false discovery rate is the expected value of V over R: the share of "
+            "what we declare that is wrong. With hundreds of tests and many true effects, the first is almost "
+            "impossible to keep small without discarding nearly everything; the second is not."
+        ) as vo:
+            self.play(FadeIn(tab))
+            vo.wait_until("a")
+            self.play(FadeIn(eqs))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def byhand(self):
+        ps = [0.001, 0.008, 0.012, 0.03, 0.2]
+        hx = [-4.2, -2.6, -0.6, 1.6, 4.0]
+        heads = [r"rank $k$", r"$p_{(k)}$", r"Bonferroni: $0.05/5$", r"Holm: $0.05/(6-k)$", r"BH: $0.05\,k/5$"]
+        tab = VGroup(VGroup(*[label(h_, font_size=17, color=GREY_A).move_to([x, 2.2, 0]) for h_, x in zip(heads, hx)]))
+        holm_ok = True
+        for k, p in enumerate(ps, 1):
+            y = 1.6 - 0.55 * (k - 1)
+            b = p <= 0.01
+            h = holm_ok and p <= 0.05 / (6 - k)
+            holm_ok = h
+            bh = k <= 4
+            tab.add(VGroup(MathTex(str(k), font_size=24).move_to([hx[0], y, 0]), MathTex(f"{p}", font_size=24).move_to([hx[1], y, 0]),
+                           MathTex(r"\checkmark" if b else r"\times", font_size=24, color=GOOD if b else BAD).move_to([hx[2], y, 0]),
+                           MathTex(rf"{0.05 / (6 - k):.4f}\ " + (r"\checkmark" if h else r"\times"), font_size=22,
+                                   color=GOOD if h else BAD).move_to([hx[3], y, 0]),
+                           MathTex(rf"{0.01 * k:.2f}\ " + (r"\checkmark" if bh else r"\times"), font_size=22,
+                                   color=GOOD if bh else BAD).move_to([hx[4], y, 0])))
+        foot = MathTex(r"\text{rejections}:\ \ \text{Bonferroni } 2,\quad \text{Holm } 3,\quad \text{BH } 4", font_size=30,
+                       color=HURDLE).to_edge(DOWN, buff=0.7)
+        with self.voiceover(
+            "By hand, on five p-values. <bookmark mark='a'/> Bonferroni tests each at one percent: two pass. "
+            "<bookmark mark='b'/> Holm tests the smallest at one percent, the next at one and a quarter, the third at "
+            "one and two thirds, the fourth at two and a half: three pass, and the fourth fails at zero point zero "
+            "three. <bookmark mark='c'/> Benjamini and Hochberg compare the k-th smallest with k percent: the fourth, "
+            "at three percent, is under its four percent line, so four are rejected. The looser the goal, the more "
+            "discoveries, and the more of them may be false."
+        ) as vo:
+            self.play(FadeIn(tab[0]), *[FadeIn(r_[:2]) for r_ in tab[1:]])
+            vo.wait_until("a")
+            self.play(*[FadeIn(r_[2]) for r_ in tab[1:]])
+            vo.wait_until("b")
+            self.play(*[FadeIn(r_[3]) for r_ in tab[1:]])
+            vo.wait_until("c")
+            self.play(*[FadeIn(r_[4]) for r_ in tab[1:]], FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
     def bhplot(self, m):
         tp = np.asarray(m["t_post"])
         p = np.sort(stats.norm.sf(tp))
@@ -156,6 +226,50 @@ class MTest(VoiceoverScene):
             self.play(FadeIn(tab[1]))
             vo.wait_until("b")
             self.play(FadeIn(tab[2]), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def bootstrap(self):
+        rows = [cmath(r"\tilde r^{(b)}_{it}", r"=", r"r_{i,t^{(b)}} - \bar r_i", font_size=40, colors={r"\tilde r^{(b)}_{it}": NOISE}),
+                cmath(r"c_{0.95}", r"=", r"\text{95th percentile of } \max_i |t_i^{(b)}|\ \text{over } b", font_size=38,
+                      colors={r"c_{0.95}": HURDLE})]
+        whys = [why(r"White's (2000) reality check: demean every strategy so all nulls are true, then resample whole months "
+                    r"(the same rows for every strategy), keeping their correlation"),
+                why(r"the hurdle is the 95th percentile of the best resampled $t$: Bonferroni's guarantee, without its "
+                    r"assumption that the tests are unrelated. Romano and Wolf (2005) make it step-down, like Holm")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "A better hurdle uses the data's own dependence. Halbert White's reality check subtracts each strategy's "
+            "mean, so every null hypothesis is true by construction, and then resamples whole months, the same months "
+            "for every strategy, so their correlations are kept. <bookmark mark='a'/> The hurdle is the ninety-fifth "
+            "percentile of the best resampled t-statistic. Correlated strategies share their luck, so the hurdle comes "
+            "out lower than Bonferroni's, with the same guarantee. Joseph Romano and Michael Wolf made it step-down, "
+            "as Holm did for Bonferroni."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def qchoice(self):
+        rows = [cmath(r"q = 5\%,\ R = 24", r"\Rightarrow", r"\mathbb{E}[V] \lesssim 1.2", font_size=42, colors={r"q = 5\%,\ R = 24": GOOD}),
+                cmath(r"q = 20\%", r"\Rightarrow", r"\text{more discoveries, up to a fifth of them false}", font_size=38)]
+        whys = [why(r"the false discovery rate is a promise about the expected share: of the 24 post-publication "
+                    r"discoveries, about one is expected to be false"),
+                why(r"a looser $q$ admits more candidates and more duds. For a diversified book of many weak signals, a "
+                    r"few duds cost little; for a single concentrated bet, they cost everything")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "What does q mean in practice? <bookmark mark='a'/> At five percent, of the twenty-four post-publication "
+            "discoveries about one is expected to be false. <bookmark mark='b'/> A looser q, say a fifth, admits more "
+            "candidates, and up to a fifth of them may be duds. For a diversified book of many weak signals, a few "
+            "duds cost little. For one concentrated bet, a dud costs everything. The right q depends on how the "
+            "discoveries will be used."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
         self.wait(0.4)
         self.clear_scene()
 

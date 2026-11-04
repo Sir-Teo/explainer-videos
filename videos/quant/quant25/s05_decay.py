@@ -11,8 +11,10 @@ class Decay(VoiceoverScene):
         s = load("shrink")
         self.card()
         self.eb(s)
+        self.worked(s)
         self.scatter(s)
         self.compare(s)
+        self.mp()
         self.categories(s)
         self.pubbias()
 
@@ -52,6 +54,30 @@ class Decay(VoiceoverScene):
             step(1)
             vo.wait_until("b")
             step(2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def worked(self, s):
+        e = s["eb"]
+        rows = [cmath(r"t = 7", r"\Rightarrow", rf"{e['m']:.1f} + {e['shrink']:.2f}\,(7 - {e['m']:.1f}) \approx "
+                      rf"{e['m'] + e['shrink'] * (7 - e['m']):.1f}", font_size=40, colors={r"t = 7": SDF}),
+                cmath(r"t = 2.5", r"\Rightarrow", rf"{e['m']:.1f} + {e['shrink']:.2f}\,(2.5 - {e['m']:.1f}) \approx "
+                      rf"{e['m'] + e['shrink'] * (2.5 - e['m']):.1f}", font_size=40, colors={r"t = 2.5": SDF})]
+        whys = [why(r"a very strong predictor is pulled down a little toward the zoo's average"),
+                why(r"and a marginal one is pulled up: in this zoo the average published predictor is strong, so empirical "
+                    r"Bayes, ignoring how the zoo was selected, is generous to weak ones. That is the first sign that noise "
+                    r"is not the whole story")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "Two examples. <bookmark mark='a'/> A predictor with a t-statistic of seven is pulled down a little, to "
+            "about six and a half. <bookmark mark='b'/> A marginal one at two and a half is pulled up, toward the "
+            "zoo's average of nearly four. Measured against the zoo it came from, a weak result looks better than it "
+            "is, because the zoo is full of strong ones. That is the first hint that noise around the published "
+            "numbers is not the whole story: the zoo itself was selected."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
         self.wait(0.4)
         self.clear_scene()
 
@@ -121,6 +147,42 @@ class Decay(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in grp], lag_ratio=0.4))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in side], lag_ratio=0.4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def mp(self):
+        g = axes([-0.6, 2.6], [0, 1.1], x_length=6.4, y_length=4.0, xlabel=r"", ylabel=r"share of the in-sample return",
+                 xticks=[], yticks=[0, 0.25, 0.5, 0.75, 1.0], font_size=13).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
+        ax = g.ax
+        vals = [(r"in sample", 1.0, GOOD), (r"after the sample, before publication", 0.74, HURDLE),
+                (r"after publication", 0.42, BAD)]
+        grp = VGroup()
+        for i, (nm, v, col) in enumerate(vals):
+            y0, y1 = ax.c2p(0, 0)[1], ax.c2p(0, v)[1]
+            grp.add(VGroup(Rectangle(width=0.8, height=y1 - y0, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to(
+                [ax.c2p(i, 0)[0], (y0 + y1) / 2, 0]), MathTex(f"{100 * v:.0f}\\%", font_size=24).next_to(ax.c2p(i, v), UP,
+                                                                                                        buff=0.08),
+                wrapped_label(nm, 1.8, 14, GREY_A).next_to(ax.c2p(i, 0), DOWN, buff=0.15)))
+        side = VGroup(
+            wrapped_label(r"McLean and Pontiff (2016), 97 predictors: returns 26\% lower after the paper's sample ends but "
+                          r"before it is published, 58\% lower after publication", 4.4, 17, GREY_A),
+            MathTex(r"26\%\ \text{(statistical bias)} + 32\%\ \text{(publication)}", font_size=24, color=BAD),
+            wrapped_label(r"the gap between the two windows isolates what publication itself does: investors learn, and "
+                          r"trade", 4.4, 17, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "David McLean and Jeffrey Pontiff separated the causes with a clever timeline. Between the end of a "
+            "paper's sample and its publication, the predictor is out of sample but still unknown to the market. "
+            "<bookmark mark='a'/> In that window, returns were about a quarter lower than in sample: that is the "
+            "statistical bias, the selection and noise. After publication they were fifty-eight percent lower. "
+            "<bookmark mark='b'/> The extra thirty-two points are what publication itself does. Investors read the "
+            "paper, and trade."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in grp], lag_ratio=0.4), FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[1]), FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()
 

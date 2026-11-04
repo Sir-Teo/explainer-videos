@@ -10,6 +10,7 @@ class Mined(VoiceoverScene):
     def construct(self):
         self.card()
         self.experiment()
+        self.chance()
         self.result()
         self.risk()
         self.yanzheng()
@@ -40,6 +41,29 @@ class Mined(VoiceoverScene):
             "any of them. <bookmark mark='a'/> For each published predictor, find the mined signals that would have "
             "passed a t of two in the same years: what a data miner with no theory would have published instead. "
             "Then compare what each does after its sample ends."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def chance(self):
+        rows = [cmath(r"\Pr(|t| > 2 \mid H_0)", r"\approx", r"4.6\%\ \Rightarrow\ 29{,}000 \times 0.046 \approx 1{,}320", font_size=38,
+                      colors={r"\Pr(|t| > 2 \mid H_0)": NOISE}),
+                cmath(r"\Pr(|t| > 3 \mid H_0)", r"\approx", r"0.27\%\ \Rightarrow\ \approx 78", font_size=38,
+                      colors={r"\Pr(|t| > 3 \mid H_0)": HURDLE})]
+        whys = [why(r"if none of the 29,000 mined signals had a true premium, and they were independent, about thirteen "
+                    r"hundred would still clear $|t| > 2$ in any given sample"),
+                why(r"and about eighty would clear three. Mining finds false positives by the hundred: the experiment's "
+                    r"question is whether its winners do any worse out of sample than the journals' winners")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "First, what chance alone would give. <bookmark mark='a'/> If none of the twenty-nine thousand signals had "
+            "any premium, about four and a half percent would still clear a t of two in any sample: some thirteen "
+            "hundred false positives. <bookmark mark='b'/> About eighty would clear three. So the miner's winners "
+            "surely include many duds. The interesting question is whether they do any worse, out of sample, than the "
+            "journals' winners."
         ) as vo:
             step(0)
             vo.wait_until("a")

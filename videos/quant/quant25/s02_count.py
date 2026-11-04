@@ -11,6 +11,8 @@ class Count(VoiceoverScene):
         n, z = load("noise"), load("zoo")
         self.card()
         self.maxlaw()
+        self.honest()
+        self.field()
         self.maxcurve(n)
         self.hurdle(z)
         self.hlz()
@@ -40,6 +42,58 @@ class Count(VoiceoverScene):
             "tries, slowly, roughly as the square root of two log n: about one and a half for ten strategies, two and "
             "a half for a hundred, three and a third for a thousand. The best t-statistic you find measures how hard "
             "you searched, as much as the strategy."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def honest(self):
+        rows = [cmath(r"p_{\text{one}}", r"=", r"1 - \Phi(2.9) = 0.0019", font_size=42, colors={r"p_{\text{one}}": GOOD}),
+                cmath(r"p_{\text{best of } n}", r"=", r"1 - (1 - p_{\text{one}})^n", font_size=42,
+                      colors={r"p_{\text{best of } n}": BAD}),
+                cmath(r"n = 200", r"\Rightarrow", r"1 - 0.9981^{200} \approx 0.31", font_size=42, colors={r"n = 200": HURDLE})]
+        whys = [why(r"a $t$ of 2.9, alone, has a one-sided $p$-value of about two in a thousand: a strong result, if it was "
+                    r"the only test"),
+                why(r"but the question that was really asked is how likely the best of $n$ is to reach 2.9: one minus the "
+                    r"chance that all $n$ fall short (Sidak's correction, for independent tests)"),
+                why(r"for two hundred tries, about 0.31: the 'discovery' is what noise produces about one time in three")]
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.7, edge=6.9)
+        with self.voiceover(
+            "Put a number on it. A t-statistic of two point nine, on its own, has a one-sided p-value of about two in "
+            "a thousand. <bookmark mark='a'/> But if it is the best of n tries, the right question is how likely the "
+            "best of n is to reach two point nine: one minus the chance that all n fall short. <bookmark mark='b'/> "
+            "For two hundred independent tries, about thirty-one percent. The impressive result is what noise "
+            "produces about one time in three. The same number on the page means completely different things "
+            "depending on a count the page does not show."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def field(self):
+        rows = [cmath(r"\Pr(\text{true} \mid \text{significant})", r"=", r"\frac{\pi\,(1 - \beta)}{\pi\,(1 - \beta) + "
+                      r"(1 - \pi)\,\alpha}", font_size=40, colors={r"\Pr(\text{true} \mid \text{significant})": GOOD}),
+                cmath(r"\pi = 0.1,\ 1 - \beta = 0.5,\ \alpha = 0.05", r"\Rightarrow", r"\frac{0.05}{0.05 + 0.045} \approx 53\%",
+                      font_size=36, colors={r"\pi = 0.1,\ 1 - \beta = 0.5,\ \alpha = 0.05": HURDLE})]
+        whys = [why(r"a field's view (Ioannidis 2005, for medicine): of all ideas tested, a share $\pi$ are true; a test "
+                    r"detects a true one with power $1 - \beta$ and flags a false one with probability $\alpha$"),
+                why(r"if one idea in ten is true and tests have even odds of detecting it, only about half of what clears "
+                    r"$t = 2$ is real. Raising the hurdle to 3 cuts $\alpha$ to 0.003 and lifts the share to about 90\%, "
+                    r"at some cost in power")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "Step back and look at a whole field, as John Ioannidis did for medicine. Of all the ideas researchers "
+            "test, some share is true. A test detects a true idea with some power, and flags a false one with "
+            "probability alpha. <bookmark mark='a'/> Suppose one idea in ten is true and tests have even odds of "
+            "detecting it. Then of everything that clears the usual hurdle, only about half is real. Raise the hurdle "
+            "to three, and alpha falls to three in a thousand: about nine in ten of the survivors are real, at the "
+            "price of missing some true ideas. That is the arithmetic behind a hurdle of three."
         ) as vo:
             step(0)
             vo.wait_until("a")

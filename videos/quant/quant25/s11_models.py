@@ -11,9 +11,11 @@ class Models(VoiceoverScene):
         m = load("models")
         self.card()
         self.insight()
+        self.mislead()
         self.named(m)
         self.scatter(m)
         self.top(m)
+        self.ff2018()
         self.bayes()
         self.lesson()
 
@@ -43,6 +45,30 @@ class Models(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def mislead(self):
+        cards = VGroup(
+            desk_question(r"test assets built from a model's own sorts", r"the 25 size--value portfolios flatter the "
+                          r"three-factor model, because SMB and HML were built from the same sorts", width=12.0, font_size=20),
+            desk_question(r"assets with a strong factor structure", r"Lewellen, Nagel and Shanken: almost any factor "
+                          r"correlated with size and value 'prices' the 25 portfolios with a high cross-sectional $R^2$",
+                          width=12.0, font_size=20),
+            desk_question(r"the remedy", r"compare traded-factor models by the Sharpe ratio their factors reach, and test "
+                          r"on assets the modeller did not choose", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "Why can test assets mislead? <bookmark mark='a'/> When they are built from a model's own sorts, they "
+            "flatter it: the twenty-five size and value portfolios suit the three-factor model because its factors "
+            "were built from the same sorts. <bookmark mark='b'/> And when the assets have a strong factor structure, "
+            "almost any factor correlated with that structure appears to price them, with a high R squared, as "
+            "Lewellen, Nagel and Shanken showed with deliberately meaningless factors. <bookmark mark='c'/> The "
+            "remedy is the Sharpe-ratio comparison, and test assets the modeller did not choose."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
@@ -133,6 +159,24 @@ class Models(VoiceoverScene):
             self.play(FadeIn(tab[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def ff2018(self):
+        rows = [cmath(r"SR^2(\text{MKT, SMB, HML, RMW}_{cp}, \text{CMA, UMD})", r">", r"SR^2(\text{FF5})", font_size=36,
+                      colors={r"SR^2(\text{MKT, SMB, HML, RMW}_{cp}, \text{CMA, UMD})": GOOD})]
+        whys = [why(r"Fama and French (2018), 'Choosing factors', used exactly this criterion on their own models: adding "
+                    r"momentum, and measuring profitability with cash rather than accounting earnings, raised the squared "
+                    r"Sharpe ratio. They warned that the gains are small and partly in-sample, and kept the five-factor "
+                    r"model as a benchmark")]
+        step = ladder(self, rows, whys, keep=1, top=2.4, x=-0.4, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "Fama and French used the same criterion on their own models. In 'Choosing factors' they found that "
+            "adding momentum, and measuring profitability with cash flows rather than accounting earnings, raised the "
+            "squared Sharpe ratio. And they warned that such gains are small and partly in sample, the same caution "
+            "the near-ties above demand."
+        ) as vo:
+            step(0)
         self.wait(0.4)
         self.clear_scene()
 

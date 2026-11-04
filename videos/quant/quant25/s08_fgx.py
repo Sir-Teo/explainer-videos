@@ -12,6 +12,7 @@ class FGX(VoiceoverScene):
         self.card()
         self.question()
         self.lasso()
+        self.toy()
         self.three(f)
         self.results(f)
         self.funnel(f)
@@ -62,6 +63,30 @@ class FGX(VoiceoverScene):
             "That is omitted-variable bias, chosen by an algorithm."
         ) as vo:
             step(0)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def toy(self):
+        rows = [cmath(r"\mathbb{E}[R]", r"=", r"c_g\,\lambda_g + c_h\,\lambda_h,\quad \lambda_g = 0,\ \lambda_h > 0,\ "
+                      r"\text{corr}(c_g, c_h) = 0.9", font_size=36, colors={r"\mathbb{E}[R]": SDF}),
+                cmath(r"\text{lasso drops } h", r"\Rightarrow", r"\hat\lambda_g \approx 0.9\,\frac{\sigma_h}{\sigma_g}\,\lambda_h"
+                      r" \ne 0", font_size=36, colors={r"\text{lasso drops } h": BAD})]
+        whys = [why(r"a toy: the new factor $g$ has no role in the SDF, but its covariances with the assets, $c_g$, are "
+                    r"highly correlated with those of an old factor $h$ that does"),
+                why(r"a single lasso, penalising both, may keep $g$ and drop $h$; then $g$ looks priced, borrowing $h$'s "
+                    r"premium. The second selection step keeps $h$ because it predicts $c_g$, and the bias is removed")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "A toy makes the danger concrete. Suppose the new factor plays no role at all in the discount factor, but "
+            "its covariances with the assets are ninety percent correlated with those of an old factor that does. "
+            "<bookmark mark='a'/> A single lasso, penalising both, may keep the new one and drop the old. Then the new "
+            "factor looks priced, borrowing the old one's premium. The second selection step exists for exactly this: "
+            "it keeps the old factor because it predicts the new one's covariances, and the borrowed premium is "
+            "returned."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
         self.wait(0.4)
         self.clear_scene()
 

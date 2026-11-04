@@ -11,6 +11,7 @@ class Hook(VoiceoverScene):
     def construct(self):
         self.title_card()
         self.coins(load("noise"))
+        self.drawer()
         self.zoo(load("zoo"))
         self.history()
         self.objectives()
@@ -57,6 +58,30 @@ class Hook(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[2]))
         self.add(illustration(r"simulated: the House's \texttt{zoo.noise\_max\_t}"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def drawer(self):
+        cards = VGroup(
+            desk_question(r"the file drawer", r"the strategies that failed are not written up: a reader sees the winner and "
+                          r"none of the losers it was chosen from", width=12.0, font_size=20),
+            desk_question(r"the garden of forking paths", r"even one idea has many versions: which months, which stocks, "
+                          r"which weights, which breakpoints, which lag. Each choice is a test, made quietly", width=12.0,
+                          font_size=20),
+            desk_question(r"the cure is a count", r"report how many were tried, and judge the best against the best of "
+                          r"that many noise strategies", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "Why does this happen in practice? <bookmark mark='a'/> The file drawer: the strategies that failed are "
+            "not written up, so a reader sees the winner and none of the losers it was chosen from. "
+            "<bookmark mark='b'/> And the garden of forking paths: even a single idea has many versions, which months, "
+            "which stocks, which weights, which lag, and each choice is a test, made quietly. <bookmark mark='c'/> The "
+            "cure is a count: report how many were tried, and judge the best against the best of that many noise "
+            "strategies."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

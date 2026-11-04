@@ -12,8 +12,10 @@ class Replicate(VoiceoverScene):
         self.card()
         self.crisis()
         self.osap()
+        self.howto()
         self.scatter(z)
         self.choices()
+        self.microcaps()
         self.jkp()
 
     def card(self):
@@ -64,6 +66,30 @@ class Replicate(VoiceoverScene):
             "had been merged: does the paper's own result reproduce, and does the effect survive a common, "
             "conservative method? <bookmark mark='c'/> And it gives the zoo a census anyone can check. It is the data "
             "this part uses."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def howto(self):
+        cards = VGroup(
+            desk_question(r"the returns", r"one column per predictor: the long--short portfolio as its paper built it, "
+                          r"monthly, from 1926 where the data allow, in percent", width=12.0, font_size=20),
+            desk_question(r"the documentation", r"for each predictor: authors, journal, year, the paper's sample and "
+                          r"$t$-statistic, the weighting and quantiles, the data category, and notes on any differences",
+                          width=12.0, font_size=20),
+            desk_question(r"what it allows", r"in-sample, out-of-sample and post-publication windows for every predictor, "
+                          r"computed the same way: the decay, the tests and the SDF of this part", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "What the open-source release contains. <bookmark mark='a'/> One column of monthly returns per predictor, "
+            "the long-short portfolio exactly as its paper built it. <bookmark mark='b'/> And documentation for each: "
+            "the authors, journal and year, the paper's sample and reported t-statistic, its weighting and quantiles, "
+            "its data category, and notes wherever the rebuild differs. <bookmark mark='c'/> That is enough to place "
+            "every predictor in its own in-sample, out-of-sample and post-publication windows, which is everything "
+            "this part computes."
         ) as vo:
             for i, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
@@ -122,6 +148,29 @@ class Replicate(VoiceoverScene):
             "all those based on trading frictions, which live in the stocks that are hardest to trade."
         ) as vo:
             step(0)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def microcaps(self):
+        rows = [cmath(r"\text{microcaps}", r"=", r"\text{below the NYSE 20th size percentile}", font_size=40,
+                      colors={r"\text{microcaps}": BAD}),
+                cmath(r"\approx 60\%\ \text{of stocks}", r"\leftrightarrow", r"\approx 3\%\ \text{of market value}", font_size=40)]
+        whys = [why(r"Fama and French (2008), 'Dissecting anomalies': the smallest stocks, by NYSE breakpoints, are most of "
+                    r"the stocks in the sample and almost none of its value"),
+                why(r"in an equal-weighted sort they are most of each portfolio; in a value-weighted one they barely count. "
+                    r"Their bid--ask spreads and borrowing costs are also the largest, so a premium that lives there is the "
+                    r"hardest to collect")]
+        step = ladder(self, rows, whys, keep=2, top=2.5, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "How much do microcaps matter? Eugene Fama and Kenneth French defined them as stocks below the twentieth "
+            "percentile of exchange-listed size. <bookmark mark='a'/> They are about three in five of all stocks and "
+            "about three percent of the market's value. In an equal-weighted portfolio they are most of the holdings; "
+            "value-weighted, they barely count. They also have the widest spreads and the hardest borrowing, so a "
+            "premium that lives in them is the hardest to collect."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
         self.wait(0.4)
         self.clear_scene()
 
