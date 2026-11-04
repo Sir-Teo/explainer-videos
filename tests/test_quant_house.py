@@ -2980,3 +2980,38 @@ def test_track_record_rows(tmp_path, monkeypatch):
     assert row["holdout"]["n"] == 60 and row["research"]["sharpe_net"] < row["research"]["sharpe"]
     with pytest.raises(RuntimeError):
         track.record("toy", 25, np.ones(3) * 0.01, np.ones(3) * 0.01)
+
+
+# ---------------------------------------------------------------------------- Part 25: the factor zoo
+def test_zoo_hurdles_and_shrinkage():
+    from explainer.quant.house import zoo as Z
+    assert Z.bonferroni_t(1) == pytest.approx(1.95996, abs=1e-4)
+    assert Z.bonferroni_t(100) > Z.bonferroni_t(10) > 2.0
+    m = Z.noise_max_t(200, 120, 500, seed=1)
+    assert 2.4 < m["mean"] < 3.1
+    rng = np.random.default_rng(0)
+    theta = rng.normal(2.0, 1.0, 4000)
+    t = theta + rng.standard_normal(4000)
+    eb = Z.eb_shrink(t)
+    assert eb["shrink"] == pytest.approx(0.5, abs=0.05)
+
+
+def test_kns_and_rp_pca_and_lasso():
+    from explainer.quant.house import zoo as Z
+    rng = np.random.default_rng(2)
+    F = rng.normal(0.005, 0.03, (300, 8))
+    mu, S = F.mean(0), np.cov(F.T)
+    b0 = Z.kns_b(mu, S, 0.0)
+    assert np.allclose(S @ b0, mu)
+    assert np.linalg.norm(Z.kns_b(mu, S, 1.0)) < np.linalg.norm(b0)
+    cv = Z.kns_cv(F, [1e-6, 1e-4, 1e-2], folds=3)
+    assert len(cv["r2"]) == 3
+    p = Z.pca(F)
+    assert p["share"].sum() == pytest.approx(1.0) and np.all(np.diff(p["eig"]) <= 1e-15)
+    rp = Z.rp_pca(F, 10.0)
+    assert rp["V"].shape == (8, 8)
+    X = rng.normal(size=(300, 6))
+    y = 3 * X[:, 0] + 0.1 * rng.standard_normal(300)
+    b = Z.lasso(X, y, 0.1)
+    assert abs(b[0] - 3) < 0.3 and np.all(np.abs(b[1:]) < 0.05)
+    assert Z.max_sh2(F[:, :1]) <= Z.max_sh2(F) + 1e-12

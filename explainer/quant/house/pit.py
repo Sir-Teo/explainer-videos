@@ -134,6 +134,7 @@ PARTS = {
     "classic_umd_part24": (24, 4), "classic_rmw_part24": (24, 5), "classic_cma_part24": (24, 6),
     "classic_bab_part24": (24, 7), "classic_qmj_part24": (24, 8), "classic_tsmom_part24": (24, 9),
     "classic_valmom_part24": (24, 10),
+    "kns_sdf_part25": (25, 1), "zoo_equal_weight_part25": (25, 2),
 }
 
 
