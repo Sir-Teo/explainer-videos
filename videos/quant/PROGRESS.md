@@ -52,6 +52,20 @@ chapter is on overparameterised prediction: Marchenko–Pastur, the ridgeless ri
 Tibshirani, random features to kernels). Parts 28–43 follow it. **Retrofit pass for Parts 1–26**: after Part 27,
 one research chapter, two exam problems and the README section per part, in order, each part committed on its own.
 
+### PhD-layer retrofit status (each: research scene `sNN_research.py` with `research_card`, a compute item, two
+"(qual)" problems in the outro and README, "For the researcher" in both README halves, zh narration)
+
+| Part | research chapter | compute item |
+|---|---|---|
+| 1 | the variance ratio's law: iid limit, robust z*, size under GARCH, delta_k and the missing eighth moment | `vr_theory` |
+| 2 | backtesting a margin model: Wilks for Kupiec, exact size, Christoffersen, power, US 1926-2020 | `backtest_theory` |
+| 3 | Ohlson's information dynamics: closed form, Monte Carlo, omega on EDGAR | `ohlson_theory` |
+| 4 | how far a fair walk wanders: LIL, Robbins's mixture, stitched boundaries | `lil_theory` |
+| 5 | the error in realized variance: CLT, noise bias, TSRV, jump test | `rv_theory` |
+| 6 | predictive regressions near a unit root: local-to-unity, size by persistence and T | `predreg_theory` |
+
+Before choosing a topic, grep the whole series for it: Part 3's first draft repeated Part 6's chapter 5 and was moved.
+
 ## Direction, 2 November 2026 (evening): every part to 50–60 minutes
 
 The owner's instructions: parts must replace college lectures (3Blue1Brown-style visuals, full technical depth),
