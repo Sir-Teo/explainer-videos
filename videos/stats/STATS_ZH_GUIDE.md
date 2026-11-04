@@ -348,3 +348,23 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | optional stopping, sequential analysis, group-sequential design | 可选停止，序贯分析，成组序贯设计 |
 | family-wise error rate, Bonferroni correction, false discovery rate | 族错误率，邦费罗尼校正，错误发现率 |
 | the garden of forking paths, preregistration | 分岔路径花园，预注册 |
+
+## Glossary (Part 11)
+
+| English | 中文 |
+|---|---|
+| confidence interval, confidence level, coverage | 置信区间，置信水平，覆盖率 |
+| confidence coefficient | 置信系数 |
+| Wald interval, Wilson (score) interval | 沃尔德区间，威尔逊（得分）区间 |
+| Agresti–Coull interval, Clopper–Pearson (exact) interval, Jeffreys interval | 阿格雷斯蒂–库尔区间，克洛珀–皮尔逊（精确）区间，杰弗里斯区间 |
+| pivot, pivotal quantity | 枢轴量 |
+| confidence belt, inverting a test, duality | 置信带，检验反演，对偶性 |
+| likelihood interval, profile likelihood | 似然区间，轮廓似然 |
+| rule of three | 三法则 |
+| mid-p, randomized interval | 中 p 值，随机化区间 |
+| one-sided confidence bound | 单侧置信限 |
+| Fieller's theorem, ratio of means | 菲勒定理，均值之比 |
+| simultaneous intervals, Scheffé's method, DKW band | 同时置信区间，谢费方法，DKW 置信带 |
+| prediction interval, tolerance interval | 预测区间，容许区间 |
+| credible interval, highest posterior density (HPD) | 可信区间，最高后验密度区间 |
+| conditionality principle, relevant subsets | 条件性原则，相关子集 |
