@@ -2589,3 +2589,103 @@ def test_mbs_has_negative_convexity():
     from explainer.quant.house import termstructure as TS
     p = [TS.mbs_price(0.065, s, n_paths=300, seed=0) for s in (-0.01, 0.0, 0.01)]
     assert p[0] + p[2] - 2 * p[1] < 0  # concave in rates near par: prepayment caps the upside
+
+
+# ---------------------------------------------------------------------------
+# Part 20: credit
+# ---------------------------------------------------------------------------
+def test_merton_solve_round_trip_and_kmv_recovers_asset_vol():
+    from explainer.quant.house import credit as CR
+    V, s, D, r, T = 120.0, 0.25, 100.0, 0.03, 1.0
+    E, delta = CR.merton_equity(V, s, D, r, T)
+    sE = delta * s * V / E
+    v2, s2 = CR.merton_solve(float(E), float(sE), D, r, T)
+    assert v2 == pytest.approx(V, rel=1e-6) and s2 == pytest.approx(s, rel=1e-6)
+    rng = np.random.default_rng(0)
+    n, dt = 750, 1 / 252
+    lv = np.log(150.0) + np.cumsum((0.05 - 0.5 * 0.2 ** 2) * dt + 0.2 * np.sqrt(dt) * rng.standard_normal(n))
+    Es = CR.merton_equity(np.exp(lv), 0.2, D, r, T)[0]
+    out = CR.kmv_iterate(Es, D, r, T)
+    assert out["sigma_V"] == pytest.approx(0.2, rel=0.08)
+    assert np.all(out["V"] > Es)
+
+
+def test_black_cox_first_passage_exceeds_terminal_default():
+    from explainer.quant.house import credit as CR
+    term = CR.merton_pd(100.0, 0.3, 70.0, 0.05, 2.0)
+    fp = CR.black_cox_pd(100.0, 0.3, 0.05, 70.0, 2.0)
+    assert fp > term > 0
+    # Monte Carlo check of the first-passage formula
+    rng = np.random.default_rng(1)
+    n, steps = 20000, 2000
+    dt = 2.0 / steps
+    x = np.zeros(n)
+    hit = np.zeros(n, bool)
+    for _ in range(steps):
+        x += (0.05 - 0.045) * dt + 0.3 * np.sqrt(dt) * rng.standard_normal(n)
+        hit |= x <= np.log(0.7)
+    assert hit.mean() == pytest.approx(fp, abs=0.015)
+
+
+def test_cds_credit_triangle_bootstrap_and_upfront():
+    from explainer.quant.house import credit as CR
+
+    def df(t):
+        return np.exp(-0.03 * np.asarray(t, float))
+    s = CR.cds_par_spread(5.0, [5.0], [0.02], df, R=0.4)
+    assert s == pytest.approx(0.02 * 0.6, rel=0.01)  # spread ~ hazard x (1 - R)
+    k, h = CR.bootstrap_hazard([1, 3, 5, 7, 10], [0.006, 0.009, 0.012, 0.014, 0.015], df, R=0.4)
+    for T, q in zip([1, 3, 5, 7, 10], [0.006, 0.009, 0.012, 0.014, 0.015]):
+        assert CR.cds_par_spread(T, k, h, df, 0.4) == pytest.approx(q, abs=1e-10)
+    assert CR.cds_upfront(CR.cds_par_spread(5.0, k, h, df), 5.0, k, h, df) == pytest.approx(0.0, abs=1e-12)
+    assert CR.cds_upfront(0.01, 5.0, k, h, df) > 0  # par spread above the 100 bp coupon: the buyer pays upfront
+
+
+def test_logit_and_gbm_and_auc():
+    from explainer.quant.house import credit as CR
+    rng = np.random.default_rng(0)
+    n = 20000
+    X = rng.standard_normal((n, 3))
+    eta = -3 + 1.0 * X[:, 0] - 0.5 * X[:, 1]
+    y = rng.random(n) < 1 / (1 + np.exp(-eta))
+    b = CR.logit_fit(X, y)
+    assert np.allclose(b, [-3, 1.0, -0.5, 0.0], atol=0.12)
+    # a nonlinear target the logit cannot see but the trees can
+    y2 = rng.random(n) < 1 / (1 + np.exp(-(-3 + 2.0 * (np.abs(X[:, 2]) > 1.2))))
+    tr, te = slice(0, 15000), slice(15000, None)
+    g = CR.GBM(n_trees=150, depth=2, lr=0.1, seed=0).fit(X[tr], y2[tr])
+    a_g = CR.auc(y2[te], g.predict_proba(X[te]))
+    a_l = CR.auc(y2[te], CR.logit_predict(CR.logit_fit(X[tr], y2[tr]), X[te]))
+    assert a_g > 0.65 > a_l
+    assert np.argmax(g.importance(3)) == 2
+    # AUC against the pairwise definition
+    s = rng.random(300)
+    yy = rng.random(300) < 0.3
+    pair = np.mean([(a > c) + 0.5 * (a == c) for a in s[yy] for c in s[~yy]])
+    assert CR.auc(yy, s) == pytest.approx(pair, abs=1e-12)
+
+
+def test_vasicek_pool_basel_and_tranches():
+    from explainer.quant.house import credit as CR
+    pd_, rho = 0.02, 0.15
+    q = CR.vasicek_quantile(0.99, pd_, rho)
+    assert CR.vasicek_loss_cdf(q, pd_, rho) == pytest.approx(0.99, abs=1e-9)
+    x = np.linspace(1e-6, 1 - 1e-6, 200001)
+    assert np.trapezoid(x * CR.vasicek_loss_pdf(x, pd_, rho), x) == pytest.approx(pd_, rel=1e-3)
+    # the Basel risk weight for PD 1%, LGD 45%, M 2.5 is 92.32% (BCBS example tables)
+    assert 12.5 * CR.basel_irb_k(0.01) == pytest.approx(0.9232, abs=0.002)
+    # tranches partition the pool's expected loss
+    R = 0.4
+    cuts = [0, 0.03, 0.07, 0.1, 0.15, 0.3, 1.0]
+    tot = sum((d - a) * CR.lhp_tranche_el(pd_, rho, R, a, d) for a, d in zip(cuts[:-1], cuts[1:]))
+    assert tot == pytest.approx((1 - R) * pd_, rel=1e-4)
+    # a finite pool by simulation approaches the large-pool equity tranche loss
+    k, _ = CR.copula_defaults(500, pd_, rho, 20000, seed=0)
+    mc = CR.tranche_loss((1 - R) * k / 500, 0, 0.03).mean()
+    assert mc == pytest.approx(CR.lhp_tranche_el(pd_, rho, R, 0, 0.03), rel=0.03)
+    el = CR.lhp_tranche_el(pd_, 0.3, R, 0, 0.03)
+    assert CR.base_correlation(el, pd_, R, 0.03) == pytest.approx(0.3, abs=1e-6)
+    # the t copula fattens the senior tail at the same pd and rho
+    kg, _ = CR.copula_defaults(200, pd_, rho, 20000, seed=1)
+    kt, _ = CR.copula_defaults(200, pd_, rho, 20000, seed=1, nu=4)
+    assert np.mean(kt / 200 > 0.15) > np.mean(kg / 200 > 0.15)
