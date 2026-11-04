@@ -37,7 +37,7 @@ def narration_words(path: Path, cls: str) -> int:
             continue
         for call in ast.walk(node):
             if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
-                    and call.func.attr == "voiceover" and call.args):
+                    and (call.func.attr == "voiceover" or call.func.attr.endswith("_voiceover")) and call.args):
                 continue
             arg = call.args[0]
             for sub in ast.walk(arg):

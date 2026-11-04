@@ -12,10 +12,11 @@ class Process(VoiceoverScene, TreeMixin):
         self.card()
         self.buses()
         self.gaps()
+        self.merge_thin()
         self.paradox()
-        self.tree_update(5, "Three arrows: <bookmark mark='t'/> the gaps of a Poisson process are exponential; sums "
+        self.tree_voiceover("Three arrows: <bookmark mark='t'/> the gaps of a Poisson process are exponential; sums "
                             "of exponential gaps are gamma; and the geometric, shrunk to infinitely many tiny trials, "
-                            "becomes the exponential.")
+                            "becomes the exponential.", 5)
 
     def card(self):
         card = chapter_card(5, r"Continuous time", r"Buses at random, \ and why you always seem to wait longer",
@@ -74,8 +75,8 @@ class Process(VoiceoverScene, TreeMixin):
         ]
         rows[1][0].set_color(CONT)
         whys = [why(r"Poisson$(\lambda t)$ at $0$"), why(r"the exponential: \ memoryless, \ like the geometric")]
-        A = axes([0, 60], [0, 0.11], x_length=5.6, y_length=2.6, xlabel=r"minutes", xticks=[0, 10, 20, 30, 40, 50, 60],
-                 center=[-3.4, -2.2, 0])
+        A = axes([0, 60], [0, 0.11], x_length=5.6, y_length=2.2, xlabel=r"minutes", xticks=[0, 10, 20, 30, 40, 50, 60],
+                 center=[-3.4, -2.55, 0])
         A.ax.y_axis.set_opacity(0)
         xs = np.linspace(0, 60, 200)
         gaps = np.asarray(d["gaps_sample"])
@@ -83,8 +84,8 @@ class Process(VoiceoverScene, TreeMixin):
         h = hist_bars(A.ax, edges, np.histogram(gaps, edges)[0] / (len(gaps) * np.diff(edges)), color=SIM, opacity=0.6)
         cv = curve(A.ax, xs, np.exp(-xs / 10) / 10, EXACT, 3)
         al = label(r"gaps between buses", font_size=22, color=GREY_A).next_to(A, UP, buff=0.1)
-        B = axes([0, 80], [0, 0.03], x_length=5.6, y_length=2.6, xlabel=r"minutes until the third bus",
-                 xticks=[0, 20, 40, 60, 80], center=[3.4, -2.2, 0])
+        B = axes([0, 80], [0, 0.03], x_length=5.6, y_length=2.2, xlabel=r"minutes until the third bus",
+                 xticks=[0, 20, 40, 60, 80], center=[3.4, -2.55, 0])
         B.ax.y_axis.set_opacity(0)
         third = np.asarray(d["third"])
         e2 = np.linspace(0, 80, 41)
@@ -104,7 +105,7 @@ class Process(VoiceoverScene, TreeMixin):
         ) as vo:
             self.play(self.line.animate.shift(UP * 0.6), self.marks.animate.shift(UP * 0.6),
                       self.ticks.animate.shift(UP * 0.6), FadeOut(self.tl))
-            step = ladder(self, rows, whys, keep=2, top=1.9, x=0.2, buff=0.5)
+            step = ladder(self, rows, whys, keep=2, top=2.0, x=0.2, buff=0.35)
             vo.wait_until("a")
             step(0, transform=False)
             vo.wait_until("b")
@@ -112,6 +113,55 @@ class Process(VoiceoverScene, TreeMixin):
             self.play(FadeIn(A), FadeIn(h), Create(cv), FadeIn(al))
             vo.wait_until("c")
             self.play(FadeIn(B), FadeIn(h2), Create(g), FadeIn(gl))
+        self.clear_scene()
+
+    def merge_thin(self):
+        d = load("process")
+        a, b = np.asarray(d["a_sample"]), np.asarray(d["b_sample"])
+        rowsy = [1.9, 1.0, 0.1]
+        lines = VGroup(*[NumberLine(x_range=[0, 120, 20], length=11.0, include_numbers=False, color=GREY_C)
+                         .move_to([0.6, y, 0]) for y in rowsy])
+        names = VGroup(label(r"route A: \ every 10 min", font_size=22, color=S.EST),
+                       label(r"route B: \ every 15 min", font_size=22, color=S.LIK),
+                       label(r"either", font_size=22, color=S.ACCENT))
+        for n_, ln in zip(names, lines):
+            n_.next_to(ln, LEFT, buff=0.25)
+        ma = VGroup(*[Line(lines[0].n2p(t) + DOWN * 0.15, lines[0].n2p(t) + UP * 0.15, color=S.EST, stroke_width=4) for t in a])
+        mb = VGroup(*[Line(lines[1].n2p(t) + DOWN * 0.15, lines[1].n2p(t) + UP * 0.15, color=S.LIK, stroke_width=4) for t in b])
+        mm = VGroup(*[Line(lines[2].n2p(t) + DOWN * 0.15, lines[2].n2p(t) + UP * 0.15,
+                           color=S.EST if t in set(a) else S.LIK, stroke_width=4) for t in np.sort(np.r_[a, b])])
+        rows = VGroup(
+            MathTex(r"\text{superposition: }\ \lambda_A + \lambda_B = \tfrac1{10} + \tfrac1{15} = \tfrac16", r"\quad",
+                    rf"\text{{simulated mean gap }} {d['merged_gap']:.2f}", font_size=28),
+            MathTex(r"\text{thinning: keep each bus w.p. } 0.6\ \Rightarrow\ \text{rate } \tfrac{0.6}{10}", r"\quad",
+                    rf"\text{{simulated mean gap }} {d['room_gap']:.2f}", font_size=28),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, -1.9, 0])
+        for r in rows:
+            r[2].set_color(SIM)
+            if r.width > 13:
+                r.width = 13
+        why_ = label(r"both follow from the law of rare events: \ rare chances add, \ and a random subset of rare chances "
+                     r"is still rare", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
+        if why_.width > 13:
+            why_.width = 13
+        with self.voiceover(
+            "Poisson processes combine beautifully. <bookmark mark='a'/> Two independent bus routes stop at the same "
+            "corner, one every ten minutes on average and one every fifteen, each a Poisson process. "
+            "<bookmark mark='b'/> Watch for either bus, and the arrivals merge into one Poisson process whose rate "
+            "is the sum: a tenth plus a fifteenth, one bus every six minutes. <bookmark mark='c'/> Run it the other "
+            "way: if each bus has room for you with probability point six, independently, the buses with room "
+            "form a Poisson process too, with the rate multiplied by point six. <bookmark mark='d'/> Superposition "
+            "and thinning, and simulation confirms both: mean gaps of six minutes and sixteen and two thirds."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(Create(lines[0]), Create(lines[1]), FadeIn(names[:2]), FadeIn(ma), FadeIn(mb))
+            vo.wait_until("b")
+            self.play(Create(lines[2]), FadeIn(names[2]), TransformFromCopy(VGroup(ma, mb), mm), run_time=2.0)
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[1]))
+            vo.wait_until("d")
+            self.play(FadeIn(why_))
         self.clear_scene()
 
     def paradox(self):

@@ -10,10 +10,11 @@ class Waiting(VoiceoverScene, TreeMixin):
         self.card()
         self.geometric()
         self.memoryless()
+        self.first_step()
         self.negbin()
-        self.tree_update(3, "Two more arrows: <bookmark mark='t'/> waiting for the first success turns Bernoulli "
+        self.tree_voiceover("Two more arrows: <bookmark mark='t'/> waiting for the first success turns Bernoulli "
                             "trials into a geometric, and adding r independent geometric waits gives a negative "
-                            "binomial.")
+                            "binomial.", 3)
 
     def card(self):
         card = chapter_card(3, r"Waiting", r"How long until the first six?", lit=(1654,), part=PART)
@@ -86,6 +87,43 @@ class Waiting(VoiceoverScene, TreeMixin):
             self.play(Indicate(rescaled, color=S.ACCENT, scale_factor=1.03))
             vo.wait_until("d")
             self.play(Write(eq), FadeIn(chk))
+        self.clear_scene()
+
+    def first_step(self):
+        lv = ["", "", WHITE, [(r"\text{six}", r"p", S.ACCENT, []), (r"\text{not}", r"1 - p", GREY_B, [])]]
+        tree = prob_tree(lv, x0=-6.0, dx=3.0, height=3.0, font_size=30).move_to([-4.0, 1.2, 0])
+        done = label(r"done: \ $1$ throw", font_size=24, color=S.ACCENT).next_to(tree.nodes[(0,)], RIGHT, buff=0.3)
+        again = label(r"start over: \ $1 + T'$", font_size=24, color=GREY_B).next_to(tree.nodes[(1,)], RIGHT, buff=0.3)
+        rows = [
+            cmath(r"E T", r"=", r"p \cdot 1 + (1 - p)(1 + E T)", font_size=38),
+            cmath(r"p\, E T", r"=", r"1", font_size=38),
+            cmath(r"E T", r"=", r"\frac1p", font_size=42),
+        ]
+        rows[2][2].set_color(EXACT)
+        whys = [why(r"condition on the first throw; \ no memory: \ $T'$ is a fresh $T$"), why(r"rearrange"), None]
+        pas = label(r"Pascal's method from Part 2: \ value now $=$ average of the values next", font_size=24,
+                    color=GREY_B).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "Memorylessness gives a second, slicker way to the mean, and it's Pascal's method from Part 2. "
+            "<bookmark mark='a'/> Condition on the first throw. With probability p it's a six, and you're done in "
+            "one throw. <bookmark mark='b'/> Otherwise you've used one throw, and because the die has no memory, "
+            "you're back where you started: the rest of the wait is a fresh copy of T. <bookmark mark='c'/> So the "
+            "expected wait satisfies an equation involving itself: p times one, plus one minus p times one plus the "
+            "expected wait. <bookmark mark='d'/> Solve it, and the expected wait is one over p. This first-step "
+            "analysis solves waiting problems far harder than this one, from the gambler's ruin to Markov chains "
+            "in Part 7."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(tree), FadeIn(done))
+            vo.wait_until("b")
+            self.play(FadeIn(again))
+            step = ladder(self, rows, whys, keep=3, top=2.4, x=2.6, buff=0.55, edge=6.9)
+            vo.wait_until("c")
+            step(0, transform=False)
+            vo.wait_until("d")
+            step(1)
+            step(2)
+            self.play(FadeIn(pas))
         self.clear_scene()
 
     def negbin(self):

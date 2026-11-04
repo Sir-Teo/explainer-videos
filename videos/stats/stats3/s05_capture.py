@@ -15,9 +15,9 @@ class Capture(VoiceoverScene, TreeMixin):
         self.hypergeometric()
         self.estimate()
         self.repeat()
-        self.tree_update(4, "The fourth arrow: <bookmark mark='t'/> sampling without replacement from a population "
+        self.tree_voiceover("The fourth arrow: <bookmark mark='t'/> sampling without replacement from a population "
                             "much larger than the sample is almost the same as sampling with replacement, so the "
-                            "hypergeometric becomes the binomial.")
+                            "hypergeometric becomes the binomial.", 4)
 
     def card(self):
         card = chapter_card(4, r"Without replacement", r"How many fish are in the lake?", lit=(1898,), part=PART)
@@ -75,12 +75,12 @@ class Capture(VoiceoverScene, TreeMixin):
         bars = pmf_bars(ax, kk, d["hyp"], DISC, width=0.7)
         dots = pmf_dots(ax, kk, d["bino"], EXACT, radius=0.045)
         f = MathTex(r"P(m)", r"=", r"\frac{\binom{n_1}{m} \binom{N - n_1}{n_2 - m}}{\binom{N}{n_2}}", font_size=36)
-        f.move_to([4.2, 2.4, 0])
+        f.move_to([3.9, 2.4, 0])
         f[0].set_color(DISC)
         fw = label(r"choose $m$ tagged and $n_2 - m$ untagged \ of all $\binom{N}{n_2}$ catches", font_size=22,
                    color=GREY_B).next_to(f, DOWN, buff=0.2)
-        if fw.width > 5.8:
-            fw.width = 5.8
+        if fw.width > 5.0:
+            fw.width = 5.0
         leg = legend([(DISC, r"hypergeometric"), (EXACT, rf"binomial$({d['n2']}, n_1/N)$")], font_size=22)
         leg.move_to([4.4, 0.4, 0])
         nt = label(r"without replacement \ $\approx$ \ with, \ when $N \gg n_2$", font_size=24, color=GREY_A)
@@ -134,13 +134,13 @@ class Capture(VoiceoverScene, TreeMixin):
     def repeat(self):
         d = load("capture")
         lp, chap = np.asarray(d["lp"]), np.asarray(d["chap"])
-        A = axes([3000, 16000], [0, 0.00032], x_length=8.6, y_length=4.2, xlabel=r"estimated number of fish",
+        A = axes([3000, 16000], [0, 0.00042], x_length=8.6, y_length=4.2, xlabel=r"estimated number of fish",
                  xticks=[4000, 8000, 12000, 16000], xfmt=lambda v: fmt_int(v), center=[-1.4, -0.4, 0])
         A.ax.y_axis.set_opacity(0)
         ax = A.ax
-        edges = np.linspace(3000, 16000, 53)
+        edges = np.linspace(3000, 16000, 27)
         h = hist_bars(ax, edges, np.histogram(lp, edges)[0] / (len(lp) * np.diff(edges)), color=SIM)
-        tl = Line(ax.c2p(d["N"], 0), ax.c2p(d["N"], 0.00032), color=S.TRUTH, stroke_width=4)
+        tl = Line(ax.c2p(d["N"], 0), ax.c2p(d["N"], 0.00042), color=S.TRUTH, stroke_width=4)
         tlab = MathTex(rf"N = {money(d['N'])}", font_size=28, color=S.TRUTH).next_to(tl, UP, buff=0.08)
         ours = Line(ax.c2p(d["estimate"], 0), ax.c2p(d["estimate"], 0.0001), color=S.ACCENT, stroke_width=4)
         ol = label(r"ours", font_size=22, color=S.ACCENT).next_to(ours, UP, buff=0.05)
@@ -151,7 +151,7 @@ class Capture(VoiceoverScene, TreeMixin):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.6, 1.6, 0])
         why_ = label(r"$1/m$ is convex: \ Jensen pushes $E[1/m]$ above $1/E m$ \ (Part 9)", font_size=22, color=GREY_B)
         why_.to_edge(DOWN, buff=0.3)
-        tag = simulated_tag(r"simulated: 2,000 repetitions in the World's lake")
+        tag = simulated_tag(r"simulated: 2,000 repetitions in the World's lake", corner=UR)
         with self.voiceover(
             "In the World we can find out, by doing the whole experiment again, two thousand times. "
             "<bookmark mark='a'/> Here are two thousand Lincoln–Petersen estimates. <bookmark mark='b'/> They "
