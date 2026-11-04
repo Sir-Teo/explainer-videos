@@ -23,5 +23,6 @@ SCENES = [
     ("s12_gilts", "Gilts", "17. September 2022: gilts and LDI"),
     ("s13_svb", "SVB", "18. March 2023: Silicon Valley Bank"),
     ("s14_house", "House", "19. Rule 18: the rates desk"),
+    ("s16_research", "Research", "For the researcher: why level, slope and curvature"),
     ("s15_outro", "Outro", "Recap, desk questions, problems"),
 ]

@@ -36,7 +36,11 @@ PROBLEMS = [
     r"zeros, matching value and duration, and check Redington's convexity condition.",
     r"Taylor's rule with $r^* = \pi^* = 2$: what rate does it prescribe for inflation of 4\% and an output gap of $-1\%$?",
     r"An LDI pool has leverage 4 in gilts of duration 25. What yield rise wipes it out? After a 50 bp rise, what fraction "
-    r"of its gilts must it sell to restore its original buffer?",
+    r"of its gilts must it sell to restore its original buffer?",    r"(qual) Show that the $n \times n$ matrix $\rho^{|i - j|}$, $0 < \rho < 1$, is totally nonnegative (its inverse is "
+    r"tridiagonal), and verify the sign-change pattern of its eigenvectors for $n = 3$.",
+    r"(qual) Yields are averages of forward rates, $y(m) = \frac1m\int_0^m f$. If forward changes have covariance "
+    r"$c(s, t)$, write the covariance of yield changes, and explain why averaging tends to make it smoother and closer to "
+    r"total positivity.",
 ]
 
 
@@ -124,10 +128,11 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=22)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And eight problems: forward rates, two durations, the value of convexity, a bootstrap by hand, the par swap "
-            "rate, Redington's conditions, Taylor's rule, and an LDI pool's buffer. Solutions, in English and Chinese, "
+            "And ten problems: forward rates, two durations, the value of convexity, a bootstrap by hand, the par swap "
+            "rate, Redington's conditions, Taylor's rule, and an LDI pool's buffer. Two are qualifying-exam problems: "
+            "total positivity of a Markov correlation, and why averaging smooths. Solutions, in English and Chinese, "
             "are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))

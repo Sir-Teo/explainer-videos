@@ -23,7 +23,7 @@ par yields and auction records, FRED, the NY Fed's ACM term premium, and SVB's 1
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 54 minutes)
+## Chapters (about 57 minutes)
 
 * **The safest asset** (2.9 min). Silicon Valley Bank's $91.3 bn held-to-maturity book marked through 2022 off the
   Fed's 6-year zero yield (+2.55 points): a $15.16 bn reported loss against $16.0 bn of equity (10-K, EDGAR); 8–10
@@ -87,7 +87,20 @@ reported by the sources named.*
   Term Funding Program at par; Jiang, Matvos, Piskorski and Seru (about $2 tn across US banks).
 * **19. Rule 18: the rates desk** (1.5). Four positions reported three ways (DV01, and level, slope and curvature risk):
   a steepener and an immunized fund with zero DV01 and real factor risk; the rates module; Rule 18.
-* **Recap, desk questions, problems** (2.7). Thirteen lines; four desk questions; eight problems with solutions below.
+* **For the researcher: why level, slope and curvature** (4.5). If the covariance of yield changes, maturities in
+  order, is an oscillation matrix (totally nonnegative, a power totally positive), Gantmacher and Krein's theorem gives
+  distinct eigenvalues and a k-th eigenvector with exactly k − 1 sign changes (applied to curves by Forzani and
+  Tolmasky 2003, Salinelli and Sgarra 2006). The Markov correlation ρ^{|i−j|} (ρ = 0.9, nine points): 75/14/5/2% of
+  the variance, sign changes 0/1/2/3. 2,000 random Gaussian kernels on random maturities: all 2,000 give 0/1/2; 2,000
+  random three-factor correlations with no ordering: 86% have three or more sign changes in every component.
+  Treasury (GSW zero yields, 10,005 daily changes, 1986–2025, nine maturities): 83.9/10.6/3.4% of the variance, sign
+  changes 0/1/2/3/4 for the first five, though only 96% of 2 × 2 and 76% of 3 × 3 minors of the correlation are
+  positive. Forward rates between the same maturities: the sign pattern survives but the shapes do not (the second
+  component is mostly the 30-year forward), 77% of 2 × 2 minors positive, the first three explain 93% (yields 98%):
+  averaging smooths (Lekkos 2000). Three open problems; pause: for the 3 × 3 Markov matrix the eigenvectors are
+  (1, a, 1), (1, 0, −1), (1, −b, 1) with a, b > 0, sign changes 0, 1, 2 for every ρ in (0, 1).
+* **Recap, desk questions, problems** (2.8). Thirteen lines; four desk questions; ten problems (two at
+  qualifying-exam level) with solutions below.
 
 ## Hands-on
 
@@ -172,6 +185,31 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 8. **An LDI buffer.** NAV falls by L × D × Δy of itself, so the pool is wiped out at Δy = 1/(4 × 25) = 1 point. After 50
    bp, NAV = 1 − 100 × 0.005 = 0.5 and gilt holdings fall to 4 × (1 − 25 × 0.005) = 3.5. Restoring a 1-point buffer
    needs holdings of 0.5/(25 × 0.01) = 2: sell 1.5, or 43% of the gilts, into a falling market.
+9. **(qual) A Markov correlation is totally nonnegative.** Write ρ^{|i−j|} = φ_{min(i,j)}ψ_{max(i,j)} with φ_i = ρ^{−i},
+   ψ_j = ρ^{j}: a single-pair (Green's) matrix with φ/ψ = ρ^{−2i} increasing, and Gantmacher and Krein show every minor
+   of such a matrix with ordered rows and columns factors into terms ψφ(φ_a/ψ_a − φ_b/ψ_b)-type differences that are
+   ≥ 0; it is oscillatory because its inverse, (1/(1 − ρ²)) times the tridiagonal with diagonal 1, 1 + ρ², …, 1 + ρ², 1
+   and off-diagonal −ρ, has nonzero off-diagonal entries. For n = 3, (1, 0, −1) is an eigenvector with eigenvalue
+   1 − ρ², and (1, x, 1) is one when x² + ρx − 2 = 0, x = (−ρ ± √(ρ² + 8))/2: one positive root (no sign change, the
+   level, the largest eigenvalue 1 + ρ² + ρx) and one negative (two sign changes, the curvature), for every ρ.
+10. **(qual) Averaging smooths.** With y(m) = (1/m)∫₀^m f(s)ds, Cov(Δy(m₁), Δy(m₂)) = (1/(m₁m₂))∫₀^{m₁}∫₀^{m₂}c(s, t)dsdt.
+   Integrating twice is a smoothing operator: high-frequency (alternating) structure in c, such as the 30-year forward
+   moving against its neighbours, is averaged away, while slowly varying, positively correlated structure survives.
+   Smooth, decreasing-in-distance kernels are the totally positive ones (the Gaussian kernel, e^{−|s−t|}), so yields
+   inherit total positivity more readily than forwards; their correlations also rise, concentrating the variance in
+   fewer components.
+
+## For the researcher
+
+* **The theorems.** Gantmacher and Krein, *Oscillation Matrices and Kernels and Small Vibrations of Mechanical Systems*
+  (1950; AMS 2002); Karlin, *Total Positivity* (1968); Forzani and Tolmasky (2003), "A family of models explaining the
+  level-slope-curvature effect," *IJTAF* 6; Salinelli and Sgarra (2006), "Correlation matrices of yields and total
+  positivity," *Linear Algebra Appl.* 418; Lekkos (2000), "A critique of factor analysis of interest rates,"
+  *J. Derivatives* 8.
+* **Simplifications.** Nine maturities; correlations rather than covariances for the minors; sign changes counted
+  after dropping near-zero loadings.
+* **Open problems.** Which features of the loadings are economic; total positivity in crises; hedging factors against
+  forecasting factors.
 
 ## Data and reproducibility
 
@@ -203,7 +241,7 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约54分钟）
+## 章节（约57分钟）
 
 * **最安全的资产。** 用美联储6年期零息收益率（+2.55个百分点）给硅谷银行913亿美元的持有至到期账簿逐日估值：10-K报告的亏损为151.6亿美元，而权益为160亿美元（EDGAR）；2023年3月8–10日（美联储审查报告）；历史条（1938–2025）；本部分安排；利率交易台开张。
 * **1. 货币、准备金与地板体系。** 美联储的T型账户；Poole（1968）的准备金需求，稀缺对充裕；2009年以来每周的联邦基金利率减准备金利率对准备金；2007–2025年的管理利率，以及夹在中间的市场利率。
@@ -225,7 +263,8 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 * **17. 2022年9月：英国国债与LDI。** 养老基金与加杠杆的LDI基金池；缓冲为1/(LD)；三天上升130个基点；模拟螺旋（随着价格冲击加大，50个基点的冲击变成64、88、139或335个基点）；三维中在（冲击，价格冲击）上的曲面；英格兰银行的193亿英镑（9月28日至10月14日）；250个基点的标准。
 * **18. 2023年3月：硅谷银行。** 来自10-K的资产负债表（资产2,118亿美元，持有至到期913亿，94%的存款未受保险）；2022年逐日估算的亏损对权益；三月的三天；按面值估价抵押品的银行定期融资计划；Jiang、Matvos、Piskorski与Seru（美国银行合计约2万亿美元）。
 * **19. 第18条规则：利率交易台。** 四个头寸，三种报告方式（DV01，以及水平、斜率和曲率风险）：DV01为零却有真实因子风险的陡峭化交易和免疫基金；利率模块；第18条规则。
-* **回顾、交易台问题与习题。** 十三行回顾；四个交易台问题；八道习题，解答见下文。
+* **写给研究者：为什么是水平、斜率与曲率。** 如果按期限排序的收益率变化协方差是一个振荡矩阵（全非负、某个幂全正），甘特马赫尔–克赖因定理给出互异的特征值，且第k个特征向量恰好变号k − 1次（Forzani与Tolmasky 2003、Salinelli与Sgarra 2006将其用于曲线）。马尔可夫相关ρ^{|i−j|}（ρ = 0.9、九个点）：方差75/14/5/2%，变号0/1/2/3。随机期限上的2,000个随机高斯核：全部2,000个给出0/1/2；2,000个无顺序的随机三因子相关矩阵：86%在每个成分上都有三次或更多变号。美国国债（GSW零息收益率、10,005个日变化、1986–2025、九个期限）：方差83.9/10.6/3.4%，前五个成分变号0/1/2/3/4，尽管相关矩阵的二阶子式只有96%、三阶只有76%为正。同样期限之间的远期利率：变号模式保留但形状不再（第二个成分主要是30年远期），二阶子式77%为正，前三个解释93%（收益率98%）：平均带来光滑（Lekkos 2000）。三个开放问题；暂停题：3 × 3马尔可夫矩阵的特征向量为(1, a, 1)、(1, 0, −1)、(1, −b, 1)，a, b > 0，对每个ρ ∈ (0, 1)变号都是0、1、2。
+* **回顾、交易台问题与习题。** 十三行回顾；四个交易台问题；十道习题（两道为资格考试水平），解答见下文。
 
 ## 交易台问题与解答
 
@@ -244,6 +283,8 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 6. **Redington。** 连续复利下零息债券的久期就是其期限。由价值权重w₅ + w₃₀ = 1和5w₅ + 30w₃₀ = 15得w₃₀ = 0.4、w₅ = 0.6，负债价值为100e^{−0.6} = 54.88。零息债券的凸性为T²：资产0.6 × 25 + 0.4 × 900 = 375，对负债的225，所以任何平行移动都留下盈余；扭转仍可能亏钱（第7章）。
 7. **泰勒规则。** i = 2 + 4 + ½(4 − 2) + ½(−1) = 6.5%。
 8. **LDI缓冲。** 净资产值按自身的L × D × Δy下降，所以在Δy = 1/(4 × 25) = 1个百分点时被耗尽。上升50个基点后，净资产值 = 1 − 100 × 0.005 = 0.5，国债持仓降为4 × (1 − 25 × 0.005) = 3.5。要恢复1个百分点的缓冲，持仓需为0.5/(25 × 0.01) = 2：在下跌的市场中卖出1.5，即43%的国债。
+9. **（资格考试）马尔可夫相关矩阵是全非负的。** 写ρ^{|i−j|} = φ_{min(i,j)}ψ_{max(i,j)}，φ_i = ρ^{−i}，ψ_j = ρ^{j}：这是φ/ψ = ρ^{−2i}递增的单对（格林）矩阵，甘特马赫尔与克赖因证明这种矩阵行列有序的每个子式都分解为非负的差的乘积，所以都≥ 0；它是振荡矩阵，因为它的逆（1/(1 − ρ²)乘以对角线为1、1 + ρ²、…、1 + ρ²、1、副对角线为−ρ的三对角矩阵）副对角线非零。n = 3时(1, 0, −1)是特征向量（特征值1 − ρ²），(1, x, 1)在x² + ρx − 2 = 0即x = (−ρ ± √(ρ² + 8))/2时是特征向量：一个正根（不变号，水平，最大特征值1 + ρ² + ρx），一个负根（变号两次，曲率），对每个ρ都成立。
+10. **（资格考试）平均带来光滑。** 由y(m) = (1/m)∫₀^m f(s)ds，Cov(Δy(m₁), Δy(m₂)) = (1/(m₁m₂))∫₀^{m₁}∫₀^{m₂}c(s, t)dsdt。两次积分是光滑算子：c中的高频（交替）结构，比如30年远期与邻近期限反向变动，被平均掉，而缓慢变化、正相关的结构保留下来。光滑、随距离递减的核正是全正的那些（高斯核、e^{−|s−t|}），所以收益率比远期更容易继承全正性；它们的相关性也更高，方差集中到更少的成分上。
 
 ## 数据与复现
 
@@ -254,3 +295,9 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 * 硅谷银行金融集团在EDGAR上的XBRL数据（2022年10-K，2023年2月24日提交）；美联储的硅谷银行审查报告。
 * 引用而非计算的公开数字：英格兰银行的国债购买与130个基点的变动；SOFR成交量（纽约联储）；巴克莱的罚款；所罗门兄弟的和解金额。
 * 登记并检验了一个策略：`pca_fly_2s5s10s`（一种配置）；试验计数器从310升到311。
+
+## 写给研究者
+
+* **定理。** 甘特马赫尔与克赖因，《振荡矩阵与核及力学系统的微小振动》（1950；AMS 2002）；Karlin，《全正性》（1968）；Forzani与Tolmasky（2003），*IJTAF* 6；Salinelli与Sgarra（2006），*Linear Algebra Appl.* 418；Lekkos（2000），*J. Derivatives* 8。
+* **简化。** 九个期限；子式用相关矩阵而非协方差矩阵计算；数变号前去掉接近零的载荷。
+* **开放问题。** 载荷的哪些特征是经济的；危机中的全正性；对冲因子与预测因子。
