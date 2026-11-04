@@ -205,18 +205,20 @@ class MonteCarlo(VoiceoverScene):
         n = 400
         H = np.array([[vdc(i, 2), vdc(i, 3)] for i in range(1, n + 1)])
         R = np.random.Generator(np.random.PCG64(1967)).random((n, 2))
-        A = axes([0, 1], [0, 1], x_length=4.2, y_length=4.2, xticks=[0, 1], yticks=[0, 1], center=[-4.4, -0.2, 0])
-        B = axes([0, 1], [0, 1], x_length=4.2, y_length=4.2, xticks=[0, 1], yticks=[0, 1], center=[0.4, -0.2, 0])
+        A = axes([0, 1], [0, 1], x_length=3.7, y_length=3.7, xticks=[0, 1], yticks=[0, 1], center=[-4.9, -0.2, 0])
+        B = axes([0, 1], [0, 1], x_length=3.7, y_length=3.7, xticks=[0, 1], yticks=[0, 1], center=[-0.8, -0.2, 0])
         pr = VGroup(*[Dot(A.ax.c2p(a, b), radius=0.03, color=GOOD) for a, b in R])
         ph = VGroup(*[Dot(B.ax.c2p(a, b), radius=0.03, color=S.ACCENT) for a, b in H])
         t1 = label(r"400 random points: \ clumps and gaps", font_size=22, color=GOOD).next_to(A, UP, buff=0.15)
         t2 = label(r"400 Halton points (bases 2, 3)", font_size=22, color=S.ACCENT).next_to(B, UP, buff=0.15)
         rows = fit_rows(VGroup(
-            label(r"quasi-Monte Carlo: \ points spread deliberately evenly", font_size=22),
+            label(r"quasi-Monte Carlo:", font_size=24),
+            label(r"points spread deliberately evenly", font_size=24),
             MathTex(r"\text{error} \approx \frac{(\log n)^d}{n} \ \text{vs}\ \frac{\sigma}{\sqrt n}", font_size=26, color=S.ACCENT),
             label(r"Halton (1960), \ Sobol' (1967)", font_size=20, color=GREY_A),
-            label(r"wins for smooth integrands in moderate $d$; \ randomized to get error bars", font_size=20, color=GREY_A),
-        ), 3.4, 0.28, [5.2, -0.2, 0])
+            label(r"wins for smooth integrands, \ moderate $d$", font_size=22, color=GREY_A),
+            label(r"randomized to get error bars", font_size=22, color=GREY_A),
+        ), 4.6, 0.26, [4.2, -0.2, 0])
         with self.voiceover(
             "Random points have a flaw for integration: by chance, they clump and leave gaps. "
             "<bookmark mark='a'/> Here are four hundred random points in the square. <bookmark mark='b'/> And four "

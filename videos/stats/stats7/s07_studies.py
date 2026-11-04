@@ -53,8 +53,8 @@ class Studies(VoiceoverScene):
     def wald(self):
         d = load("simstudy")
         ps, cov, mcse, ex, wil = (np.asarray(d[k]) for k in ("ps", "cover", "mcse", "exact", "wilson"))
-        A = axes([0, 1], [0.4, 1.0], x_length=7.6, y_length=4.6, xlabel=r"true $p$", ylabel=r"coverage of a nominal 95\% interval",
-                 xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.4, 0.6, 0.8, 0.95, 1.0], center=[-1.8, -0.4, 0])
+        A = axes([0, 1], [0.4, 1.0], x_length=6.8, y_length=4.6, xlabel=r"true $p$", ylabel=r"coverage of a nominal 95\% interval",
+                 xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.4, 0.6, 0.8, 0.95, 1.0], center=[-2.6, -0.4, 0])
         ax = A.ax
         nom = DashedLine(ax.c2p(0, 0.95), ax.c2p(1, 0.95), color=GREY_B, stroke_width=1.5)
         bars_ = VGroup(*[Line(ax.c2p(p, c - 2 * s), ax.c2p(p, c + 2 * s), color=BAD, stroke_width=2) for p, c, s in zip(ps, cov, mcse)])
@@ -67,7 +67,7 @@ class Studies(VoiceoverScene):
             label(r"gold: \ the exact coverage, \ by summing the binomial", font_size=22, color=EXACT),
             label(r"green: \ Wilson's interval (1927)", font_size=22, color=GOOD),
             label(r"the Wald interval is broken: \ Part 11", font_size=24, color=S.ACCENT),
-        ), 5.0, 0.28, [4.4, 0.4, 0])
+        ), 4.6, 0.28, [4.6, 0.4, 0])
         with self.voiceover(
             "Here's a small simulation study with a big result. <bookmark mark='a'/> The aim: does the textbook "
             "interval for a proportion, the sample share plus or minus one point nine six standard errors, cover the "

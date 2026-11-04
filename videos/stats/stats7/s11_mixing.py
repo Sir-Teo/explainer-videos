@@ -89,7 +89,7 @@ class Mixing(VoiceoverScene):
             label(r"one riffle shuffle makes at most 2; \ $k$ shuffles at most $2^k$", font_size=22, color=GREY_A),
             label(r"total variation: \ the largest difference, over any event, \ between the deck's law and the uniform", font_size=22,
                   color=GREY_A),
-        ), 12.6, 0.22, [0, -2.2, 0])
+        ), 12.6, 0.2, [0, -2.75, 0])
         with self.voiceover(
             "How close is the deck to uniform after k shuffles? There are fifty-two factorial orderings, about eight "
             "times ten to the sixty-seven, so we can't list them. Dave Bayer and Persi Diaconis found a way around "

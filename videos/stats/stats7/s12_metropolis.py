@@ -59,7 +59,9 @@ class Metropolis(VoiceoverScene):
             "    if uniform() < f(y) / f(x):     # better: always; worse: sometimes",
             "        x = y                        # accept",
             "    record x                         # (a rejected step repeats x)",
-        ], font_size=24).move_to([0, 1.0, 0])
+        ], font_size=24)
+        code.width = min(code.width, 12.4)
+        code.move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
             label(r"only the \emph{ratio} $f(y)/f(x)$: \ the unknown constant cancels", font_size=26, color=S.ACCENT),
             label(r"uphill moves are always taken; \ downhill ones with chance $f(y)/f(x)$", font_size=26),
@@ -109,7 +111,7 @@ class Metropolis(VoiceoverScene):
         panels = VGroup()
         for k, (sd, c) in enumerate(SDS):
             tr = np.asarray(d[sd]["trace"])
-            A = axes([0, 600], [-5, 5.5], x_length=11.0, y_length=1.6, yticks=[-2, 2], center=[0.4, 2.0 - 2.15 * k, 0], font_size=16)
+            A = axes([0, 600], [-5, 5.5], x_length=9.4, y_length=1.6, yticks=[-2, 2], center=[1.6, 2.0 - 2.15 * k, 0], font_size=16)
             A.ax.x_axis.set_opacity(0.3)
             ln = polyline(A.ax, np.arange(len(tr)), np.clip(tr, -5, 5.5), c, 1.6)
             t = label(rf"step $s = {float(sd):g}$: \ accepts {100 * d[sd]['rate']:.0f}\%", font_size=22, color=c)
