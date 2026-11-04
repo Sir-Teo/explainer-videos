@@ -113,8 +113,8 @@ class CCP(VoiceoverScene):
             blocks.add(VGroup(r_, label(t, font_size=19).move_to(r_)))
         arrow = Arrow([2.0, 2.6, 0], [2.0, -2.2, 0], buff=0, color=BAD, stroke_width=4)
         side = wrapped_label(r"each layer is used only when the one above is exhausted. The default fund is sized to "
-                             rf"'Cover 2' (CPMI--IOSCO, 2012): the default of the two members with the largest exposures in "
-                             r"extreme but plausible conditions. Here: {c['df_total']:.0f} against total margin of 100",
+                             r"'Cover 2' (CPMI--IOSCO, 2012): the default of the two members with the largest exposures in "
+                             rf"extreme but plausible conditions. Here: {c['df_total']:.0f} against total margin of 100",
                              4.2, 18, GREY_A).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "If a member defaults, its losses run down a waterfall. <bookmark mark='a'/> First its own initial margin, "
