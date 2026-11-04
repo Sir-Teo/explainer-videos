@@ -170,8 +170,9 @@ class Spectral(VoiceoverScene):
                     r"(\mathbf x - \boldsymbol\mu)\|^2", font_size=28).to_edge(UP, buff=0.3)
         arr = Arrow([-1.0, -0.3, 0], [0.0, -0.3, 0], color=GREY_B, stroke_width=3)
         al = MathTex(r"\Sigma^{-1/2}", font_size=28).next_to(arr, UP, buff=0.1)
-        info = label(rf"circled: \ ordinary in each coordinate, \ Mahalanobis distance {e['md_odd']:.1f}: \ tall parents, "
-                     r"short child", font_size=22, color=RES).to_edge(DOWN, buff=0.35)
+        pdesc = "tall parents, short child" if x[io] > mu[0] else "short parents, tall child"
+        info = label(rf"circled: \ not extreme in either coordinate, \ Mahalanobis distance {e['md_odd']:.1f}: \ {pdesc}",
+                     font_size=22, color=RES).to_edge(DOWN, buff=0.35)
         ring_l = label(rf"$\chi^2_2$ 95\% circle: \ {100 * e['frac_out']:.1f}\% outside", font_size=22, color=EIG)
         ring_l.next_to(ring, DOWN, buff=0.1)
         tag = simulated_tag(corner=UR)
@@ -182,8 +183,8 @@ class Spectral(VoiceoverScene):
             "ordinary distance after multiplying by Sigma to the minus a half, the inverse square root from the "
             "spectral theorem. That map whitens the data: <bookmark mark='c'/> the tilted ellipse becomes a round "
             "cloud with identity covariance. <bookmark mark='d'/> In the whitened picture, the circled family stands "
-            "out. Neither its parents' height nor its child's is extreme, but tall parents with a short child go "
-            "against the correlation, and the Mahalanobis distance sees it. <bookmark mark='e'/> For normal data the "
+            f"out. Neither its parents' height nor its child's is far out on its own, but {pdesc} goes against the "
+            "correlation, and the Mahalanobis distance sees it. <bookmark mark='e'/> For normal data the "
             "squared distance is chi-squared with two degrees of freedom, so the ninety-five percent circle should "
             f"leave about five percent outside; here it leaves {100 * e['frac_out']:.1f}."
         ) as vo:
