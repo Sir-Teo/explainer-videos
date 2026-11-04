@@ -19484,6 +19484,11 @@
   "bytes": 283597,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NASDAQCOM"
  },
+ "fred/NASDAQCOM/1971-02-05_2025-12-31": {
+  "sha256": "ffdf2d124377877f50ab67eaaa8a01158c6dc30e9d669c39aa0a4d9028860e9b",
+  "bytes": 283597,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NASDAQCOM"
+ },
  "fred/NIKKEI225/1949-05-01_2025-12-31": {
   "sha256": "23f5bfafd1efb069207e081b712ab44e2ce60aab40bc90cc0ed58c39a9595cb8",
   "bytes": 403661,
@@ -19808,6 +19813,11 @@
   "sha256": "40782c306bc1378b854a6bf42be100809cff4b6a538c15dc5c21f9c9a94ceaec",
   "bytes": 1070449,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
+ },
+ "kenfrench/ff25_value/through_2025-12": {
+  "sha256": "ac7af7b3f6da5fb0dec87ae88aee9619bad2a07bbdc70fd6478621031526ade6",
+  "bytes": 290014,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_5x5_CSV.zip"
  },
  "kenfrench/ff3_monthly_value/through_2020-12": {
   "sha256": "704bdac392abac09503717903a8245431fc2d70789ceccce3a6fc6d8360149ad",

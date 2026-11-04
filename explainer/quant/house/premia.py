@@ -69,7 +69,10 @@ def two_asset_gmv(s1, s2, rho) -> dict:
     """Two assets: the minimum-variance weight on the first, (s2^2 - rho s1 s2)/(s1^2 + s2^2 - 2 rho s1 s2), and its
     volatility."""
     c = rho * s1 * s2
-    w = (s2 * s2 - c) / (s1 * s1 + s2 * s2 - 2 * c)
+    den = s1 * s1 + s2 * s2 - 2 * c
+    if abs(den) < 1e-15:  # perfectly correlated with equal volatility: every mix has the same risk
+        return {"w1": 0.5, "sd": float(s1)}
+    w = (s2 * s2 - c) / den
     v = w * w * s1 * s1 + (1 - w) ** 2 * s2 * s2 + 2 * w * (1 - w) * c
     return {"w1": float(w), "sd": float(np.sqrt(v))}
 
