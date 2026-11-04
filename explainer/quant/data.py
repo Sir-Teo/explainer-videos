@@ -752,6 +752,88 @@ def treasury_auctions(kind: str = "Note") -> list:
     return out
 
 
+BOE = ("https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/{y0}"
+       "&Dateto=31/Dec/2025&SeriesCodes={code}&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N")
+_MON = {m: i + 1 for i, m in enumerate(("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
+                                        "Dec"))}
+
+
+def boe(code: str, start_year: int = 1975) -> dict:
+    """A Bank of England database series (daily, as published, through 2025) as ``date`` and ``value``: e.g.
+    XUDLUSS (spot US dollars per pound, London late afternoon), XUDLDS1/XUDLDS3/XUDLDSY (one-, three- and twelve-month
+    forward outright rates, the same quote), IUDSOIA (SONIA)."""
+    path = DATA / "boe" / f"{code}_{start_year}.csv"
+
+    def fetch():  # the database sometimes answers with an error page: wait and ask again, politely
+        for k in range(6):
+            b = _get(BOE.format(y0=start_year, code=code))
+            if b.startswith(b"DATE"):
+                return b
+            time.sleep(5 * (k + 1))
+        raise RuntimeError(f"BoE {code}: the database returned an error page, not data")
+    raw = _cached(f"boe/{code}/{start_year}_2025", path, fetch, BOE.format(y0=start_year, code=code))
+    rows = []
+    for line in raw.decode().strip().splitlines()[1:]:
+        d, v = line.split(",")[:2]
+        if not v.strip():
+            continue
+        dd, mm, yy = d.split()
+        rows.append((int(yy) * 10000 + _MON[mm] * 100 + int(dd), float(v)))
+    if not rows:
+        raise RuntimeError(f"BoE {code}: no data (is the series code right?)")
+    rows.sort()
+    a = np.array(rows)
+    return {"date": a[:, 0].astype(int), "value": a[:, 1]}
+
+
+EIA = "https://www.eia.gov/dnav/{kind}/hist_xls/{series}d.xls"
+
+
+def eia_daily(series: str, kind: str = "pet") -> dict:
+    """An EIA daily price history from its spreadsheet (e.g. RCLC1..RCLC4, the NYMEX WTI futures contracts 1-4 at
+    Cushing, which EIA published through April 2024; RWTC, the WTI spot; kind "ng" for RNGC1..RNGC4, Henry Hub
+    futures). Excel dates become YYYYMMDD."""
+    import xlrd
+
+    path = DATA / "eia" / f"{series}d.xls"
+    raw = _cached(f"eia/{series}/daily", path, lambda: _get(EIA.format(kind=kind, series=series)),
+                  EIA.format(kind=kind, series=series))
+    book = xlrd.open_workbook(file_contents=raw)
+    sh = book.sheet_by_index(1)
+    rows = []
+    for i in range(3, sh.nrows):
+        d, v = sh.row_values(i)[:2]
+        if v in ("", None):
+            continue
+        y, m, dd, *_ = xlrd.xldate_as_tuple(d, book.datemode)
+        rows.append((y * 10000 + m * 100 + dd, float(v)))
+    a = np.array(rows)
+    return {"date": a[:, 0].astype(int), "value": a[:, 1]}
+
+
+CFTC_TFF = "https://publicreporting.cftc.gov/resource/gpe5-46if.json"
+
+
+def cftc_tff(code: str, start: str = "2010-01-01", through: str = "2025-12-31") -> dict:
+    """The CFTC's Traders in Financial Futures report (futures only) for one contract market code (e.g. 043602, the
+    10-year note; 044601, the 5-year; 042601, the 2-year; 020601, the bond), weekly: open interest and the long and
+    short positions of dealers, asset managers, leveraged funds and other reportables, in contracts."""
+    import urllib.parse
+
+    q = urllib.parse.urlencode({"$where": f"cftc_contract_market_code='{code}' AND report_date_as_yyyy_mm_dd between "
+                                          f"'{start}T00:00:00' and '{through}T00:00:00'",
+                                "$order": "report_date_as_yyyy_mm_dd", "$limit": 5000})
+    url = f"{CFTC_TFF}?{q}"
+    path = DATA / "cftc" / f"tff_{code}_{start}_{through}.json"
+    raw = _cached(f"cftc/tff/{code}/{start}_{through}", path, lambda: _get(url), url)
+    keys = ["open_interest_all", "dealer_positions_long_all", "dealer_positions_short_all", "asset_mgr_positions_long",
+            "asset_mgr_positions_short", "lev_money_positions_long", "lev_money_positions_short"]
+    rows = json.loads(raw)
+    out = {"date": np.array([int(r["report_date_as_yyyy_mm_dd"][:10].replace("-", "")) for r in rows])}
+    for k in keys:
+        out[k] = np.array([float(r.get(k, "nan")) for r in rows])
+    return out
+
 # ---------------------------------------------------------------------------
 # What the series has used so far: ``python -m explainer.quant.data`` fetches all of it
 # ---------------------------------------------------------------------------
