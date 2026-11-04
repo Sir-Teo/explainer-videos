@@ -205,7 +205,7 @@ class Negative(VoiceoverScene):
                 r"and why is it weak?")
         with self.voiceover("In a Bachelier world a rate can reach minus five percent. What stops that in practice, and "
                             "why is the stop weak?"):
-            self.play(FadeIn(q))
+            self.play(FadeOut(foot), FadeIn(q))
         self.add(illustration(r"CME Group and Risk.net reports, April 2020; NYMEX WTI settlement, 20 April 2020"))
         self.wait(0.5)
         self.clear_scene()

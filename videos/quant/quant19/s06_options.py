@@ -207,7 +207,7 @@ class Options(VoiceoverScene):
         sw = h["swaptions"]
         exps, tens = (1, 2, 5, 10), (2, 5, 10)
         W, H = 2.4, 0.9
-        x0, y0 = -1.6, 1.4
+        x0, y0 = -3.0, 1.4
         cells = VGroup()
         vals = np.array([[sw[f"{e}x{t}"]["nvol"] for t in tens] for e in exps]) * 1e4
         lo, hi = vals.min(), vals.max()
