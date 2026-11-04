@@ -3231,3 +3231,42 @@ def test_embeddings_and_topics():
     X = TX.tfidf(TX.dtm(docs, vocab))
     r = TX.nmf_topics(X, k=2, iters=200)
     assert r["err"][-1] < r["err"][0] and np.allclose(r["share"].sum(1), 1)
+
+
+def test_alphas_evaluate_and_score():
+    import numpy as np
+    from explainer.quant.house import alphas as A
+    rng = np.random.default_rng(0)
+    T, N = 300, 40
+    ret = rng.standard_normal((T, N)) * 0.02
+    close = np.exp(np.cumsum(ret, axis=0))
+    F = {"close": close, "high": close * 1.01, "low": close * 0.99, "volume": rng.random((T, N)) + 1, "ret": ret,
+         "vwap": close}
+    tr = ("rank", ("ts_mean", ("field", "ret"), 5))
+    v = A.evaluate(tr, F)
+    assert v.shape == (T, N) and np.nanmax(np.abs(v)) <= 0.5 + 1e-12
+    assert A.to_str(tr) == "rank(ts_mean(ret, 5))" and A.size(tr) == 3 and A.depth(tr) == 3
+    m = np.ones((T, N), bool)
+    fwd = np.vstack([ret[1:], np.full((1, N), np.nan)])
+    # a planted signal: tomorrow's return plus noise has a large IC
+    ic = A.ic_series(fwd + rng.standard_normal((T, N)) * 0.02, fwd, m)
+    assert A.score(ic)["ic"] > 0.5
+    ic0 = A.ic_series(v, fwd, m)
+    assert abs(A.score(ic0)["ic"]) < 0.05
+    n = A.count_trees(3)
+    assert n[0] == len(A.FIELDS) and n[2] > n[1] > n[0]
+    t = A.random_tree(rng, 4)
+    assert A.depth(t) <= 4
+
+
+def test_combination_estimation_risk():
+    import numpy as np
+    from explainer.quant.house import alphas as A
+    rng = np.random.default_rng(1)
+    theta = np.full(10, 0.05)                    # ten signals, per-period Sharpe 0.05 each
+    sr_star = float(np.linalg.norm(theta))
+    sim = A.sr_oos_sim(theta, 250, 400, rng).mean()
+    th = A.sr_oos_theory(sr_star, 10, 250)
+    assert abs(sim / th - 1) < 0.08 and th < sr_star
+    est = A.sr_oos_sim(theta, 250, 400, rng, known_cov=False).mean()
+    assert est < sim
