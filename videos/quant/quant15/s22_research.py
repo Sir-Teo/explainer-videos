@@ -119,12 +119,14 @@ class Research(VoiceoverScene):
                              rf"{max(t['models'][m]['touch'][j] for m in MODELS):.2f}", 3.3, 13, GREY_A).next_to(
             leg, DOWN, buff=0.25)
         fit_right(side)
+        lo8 = min(t["models"][m]["touch"][j] for m in MODELS)
+        hi8 = max(t["models"][m]["touch"][j] for m in MODELS)
         with self.voiceover(
             "Now on the Bitcoin Surface, with the four models of Chapter 14, each fitted to the same smile. "
             "<bookmark mark='a'/> The upper bound from the puts, and the digital floor: every model must price the "
             "one-touch between them. <bookmark mark='b'/> The four models: local volatility, Heston, Bates and "
             f"variance gamma. At a barrier of point eight they agree to within two cents, between "
-            f"{min(t['models'][m]['touch'][j] for m in MODELS):.2f} and {max(t['models'][m]['touch'][j] for m in MODELS):.2f}. "
+            f"{lo8:.2f} and {hi8:.2f}. "
             f"<bookmark mark='c'/> But the vanillas alone allow anything from {h['digital'][j]:.2f} to {h['upper'][j]:.2f}. "
             "The models' agreement is a property of the models, not of the market. <bookmark mark='d'/> And "
             "Black-Scholes at the at-the-money volatility, ignoring the smile, prices near barriers higher than any "

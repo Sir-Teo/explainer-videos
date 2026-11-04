@@ -1055,7 +1055,113 @@ def compute_drop_first() -> dict:
     return {"rows": out}
 
 
-ITEMS = {"mc": compute_mc, "qmc": compute_qmc, "mlmc": compute_mlmc, "american": compute_american,
+def _bermudan_tree(S0, K, T, sigma, r, dates, steps_per=40):
+    """A CRR tree for a Bermudan put exercisable on ``dates`` equally spaced dates (the last at T)."""
+    n = dates * steps_per
+    dt = T / n
+    u = np.exp(sigma * np.sqrt(dt))
+    d = 1 / u
+    q = (np.exp(r * dt) - d) / (u - d)
+    disc = np.exp(-r * dt)
+    j = np.arange(n + 1)
+    V = np.maximum(K - S0 * u ** (n - 2 * j), 0.0)
+    for i in range(n - 1, -1, -1):
+        V = disc * (q * V[:-1] + (1 - q) * V[1:])
+        if i > 0 and i % steps_per == 0:
+            Si = S0 * u ** (i - 2 * np.arange(i + 1))
+            V = np.maximum(V, K - Si)
+    return float(V[0])
+
+
+def compute_paths_basis() -> dict:
+    """The research chapter: paths against basis functions in Longstaff-Schwartz (Glasserman and Yu 2004).  The
+    regression's sample Gram matrix converges only when the number of paths is large against the fourth moments of the
+    basis functions; for orthonormal Hermite polynomials of a Gaussian E[h_k^4] grows geometrically (about 3^k), for
+    normalized monomials of a lognormal like exp(c k^2).  Then the experiment: a Bermudan put, a fixed out-of-sample set
+    of paths to value each fitted policy (a lower bound), degree against number of paths, a tree as the truth."""
+    z, w = np.polynomial.hermite_e.hermegauss(240)
+    w = w / w.sum()
+    from math import factorial
+    m4_bm = []
+    for k in range(0, 31):
+        c = np.zeros(k + 1)
+        c[k] = 1.0
+        hk = np.polynomial.hermite_e.hermeval(z, c) / np.sqrt(float(factorial(k)))
+        m4_bm.append(float(np.sum(w * hk ** 4)))
+    sig_t = 0.2  # sigma sqrt(t) of the lognormal at one year
+    ks = np.arange(0, 13)
+    m4_gbm = list(np.exp(4 * sig_t ** 2 * ks ** 2))   # E[S^{4k}] / E[S^{2k}]^2 for S = exp(sigma W_t)
+    out = {"m4_bm": m4_bm, "m4_gbm": m4_gbm, "k_bm": list(range(31)), "k_gbm": ks}
+    # the Longstaff-Schwartz experiment: S0 36, K 40, sigma 20%, r 6%, one year, 50 exercise dates
+    S0, K, sig, r, T, D = 36.0, 40.0, 0.2, 0.06, 1.0, 50
+    true = _bermudan_tree(S0, K, T, sig, r, D, steps_per=60)
+    dt = T / D
+    disc = np.exp(-r * dt)
+
+    def paths(n, seed):
+        rng = np.random.default_rng(seed)
+        Z = rng.standard_normal((n, D))
+        return S0 * np.exp(np.cumsum((r - 0.5 * sig ** 2) * dt + sig * np.sqrt(dt) * Z, axis=1))
+
+    def basis(x, deg):
+        return np.vander(x / K, deg + 1, increasing=True)
+
+    def fit(S, deg):
+        n = len(S)
+        cash = np.maximum(K - S[:, -1], 0.0)
+        betas = [None] * D
+        for t in range(D - 2, -1, -1):
+            cash = cash * disc
+            ex = K - S[:, t]
+            itm = ex > 0
+            if itm.sum() > deg + 1:
+                X = basis(S[itm, t], deg)
+                b = np.linalg.lstsq(X, cash[itm], rcond=None)[0]
+                betas[t] = b
+                cont = X @ b
+                go = ex[itm] > cont
+                idx = np.where(itm)[0][go]
+                cash[idx] = ex[idx]
+        return betas
+
+    def value(S, betas, deg):
+        n = len(S)
+        alive = np.ones(n, bool)
+        pv = np.zeros(n)
+        for t in range(D - 1):
+            b = betas[t]
+            ex = K - S[:, t]
+            if b is None:
+                continue
+            cand = alive & (ex > 0)
+            if cand.any():
+                cont = basis(S[cand, t], deg) @ b
+                go = ex[cand] > cont
+                idx = np.where(cand)[0][go]
+                pv[idx] = ex[idx] * np.exp(-r * (t + 1) * dt)
+                alive[idx] = False
+        pv[alive] = np.maximum(K - S[alive, -1], 0.0) * np.exp(-r * T)
+        return float(pv.mean()), float(pv.std() / np.sqrt(n))
+
+    test = paths(100000, 1616)
+    Ns = [500, 2000, 10000, 50000]
+    degs = list(range(1, 13))
+    grid = {}
+    for N in Ns:
+        rows = []
+        for deg in degs:
+            vals = []
+            for seed in range(3):
+                b = fit(paths(N, 100 * N + seed), deg)
+                vals.append(value(test, b, deg)[0])
+            rows.append({"deg": deg, "mean": float(np.mean(vals)), "min": float(np.min(vals)), "max": float(np.max(vals))})
+        grid[str(N)] = rows
+    out["lsm"] = {"S0": S0, "K": K, "sigma": sig, "r": r, "T": T, "dates": D, "true": true, "grid": grid,
+                  "test_se": value(test, fit(paths(50000, 7), 3), 3)[1]}
+    return _json(out)
+
+
+ITEMS = {"paths_basis": compute_paths_basis, "mc": compute_mc, "qmc": compute_qmc, "mlmc": compute_mlmc, "american": compute_american,
          "greeks": compute_greeks, "fd": compute_fd, "adi": compute_adi, "fourier": compute_fourier,
          "race": compute_race, "envelope": compute_envelope,
          "mc_live": compute_mc_live, "rng": compute_rng, "control": compute_control, "is_sweep": compute_is_sweep,

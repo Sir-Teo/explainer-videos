@@ -285,12 +285,13 @@ class Research(VoiceoverScene):
                              r"returns at each sampling; implied $H$ from $\rho = 2^{2H-1} - 1$; the sign strategy reverses "
                              r"the last move ($\rho < 0$); break-even: the cost per unit traded that sets its mean to zero",
                              11.8, 16, GREY_A).to_edge(DOWN, buff=0.45)
+        be_max = max(v["breakeven_bp"] for v in b.values())
         with self.voiceover(
             "Is a real price fractional? Bitcoin, sampled every one, five, fifteen and sixty minutes, in 2019 and 2020. "
             "<bookmark mark='a'/> The autocorrelations are small and negative, so the implied H is just under one half, "
             "and the strategy reverses the last move. <bookmark mark='b'/> At one minute it loses even before costs. "
             "At the other samplings its break-even cost is at most about "
-            f"{max(v['breakeven_bp'] for v in b.values()):.1f} basis points per unit traded: at a one basis point "
+            f"{be_max:.1f} basis points per unit traded: at a one basis point "
             "cost it loses everywhere except hourly, where it makes a tenth of a basis point a trade. "
             "<bookmark mark='c'/> The market's memory is about the size of the cost of exploiting it. That is what "
             "the theorem predicts a market with frictions can sustain."

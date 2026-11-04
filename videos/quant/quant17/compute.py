@@ -1477,7 +1477,55 @@ def compute_crossgen() -> dict:
                   "train": part["garch_trained"], "tests": list(tests), "hedgers": list(hedgers)})
 
 
-ITEMS = {"calib_data": compute_calib_data, "calib": compute_calib, "calib_hist": compute_calib_hist, "hlp": compute_hlp,
+def compute_aposteriori() -> dict:
+    """The research chapter: the deep BSDE's loss is an error certificate.  For the linear case (no default, driver
+    R y), Y_T - g = e^{RT}(Y_0 - u_0) + int e^{R(T - t)}(Z - Z*) dW, so the training loss equals
+    e^{2RT}(Y_0 - u_0)^2 + E int e^{2R(T-t)} |Z - Z*|^2 dt plus the time-discretization floor: sqrt(loss) e^{-RT}
+    bounds the price error.  Han and Long (2020) prove the nonlinear version, |Y_0 - u_0|^2 <= C(h + loss).  Checked on
+    a 10-dimensional basket-minimum, trained at N = 5, 10, 20, 40 steps against a 2-million-path Monte Carlo price,
+    and on the cached 100-dimensional default-risk run of Chapter 9 against its published reference."""
+    _threads()
+    base = dict(D.DEFAULT_RISK, d=10, delta=1.0)
+    rng = np.random.default_rng(1717)
+    vals = []
+    for _ in range(100):
+        z = rng.standard_normal((20000, base["d"]))
+        XT = base["x0"] * np.exp((base["mu"] - 0.5 * base["sigma"] ** 2) * base["T"] + base["sigma"] * np.sqrt(base["T"]) * z)
+        vals.append(XT.min(1))
+    v = np.exp(-base["R"] * base["T"]) * np.concatenate(vals)
+    ref, ref_se = float(v.mean()), float(v.std() / np.sqrt(len(v)))
+    part = CACHE.partial("aposteriori", {str(N): 3000 for N in (5, 10, 20, 40)})
+    for N in (5, 10, 20, 40):
+        if str(N) in part:
+            continue
+        p = dict(base, N=N, reference=ref)
+        t0 = time.time()
+        r = D.deep_bsde(p, iters=3000, batch=256, lr=0.008, seed=N, log_every=25)
+        r["seconds"] = time.time() - t0
+        part[str(N)] = _json(r)
+    disc = float(np.exp(-base["R"] * base["T"]))
+    runs = {}
+    for N in (5, 10, 20, 40):
+        c = part[str(N)]["curve"]
+        it = np.array([x["iter"] for x in c])
+        u0 = np.array([x["u0"] for x in c])
+        loss = np.array([x["loss"] for x in c])
+        k = 20  # smooth the noisy batch losses with a trailing mean of 20 logs
+        sm = np.convolve(loss, np.ones(k) / k, mode="full")[: len(loss)] / np.minimum(np.arange(1, len(loss) + 1), k)
+        runs[str(N)] = {"iter": it, "u0": u0, "loss": loss, "loss_smooth": sm, "err": np.abs(u0 - ref),
+                        "bound": disc * np.sqrt(sm), "final_err": float(np.abs(u0[-20:] - ref).mean()),
+                        "floor": float(loss[-40:].mean()), "seconds": part[str(N)]["seconds"],
+                        "violations": float(np.mean(np.abs(u0 - ref) > disc * np.sqrt(sm)))}
+    out = {"reference": ref, "reference_se": ref_se, "d": base["d"], "runs": runs, "disc": disc}
+    # the 100-dimensional nonlinear run (Chapter 9's cached seed 1) against the published reference
+    bs_ = CACHE.load("bsde_seeds")
+    c = bs_["seed1"]["curve"]
+    out["nonlinear"] = {"iter": [x["iter"] for x in c], "u0": [x["u0"] for x in c], "loss": [x["loss"] for x in c],
+                        "reference": D.DEFAULT_RISK["reference"]}
+    return _json(out)
+
+
+ITEMS = {"aposteriori": compute_aposteriori, "calib_data": compute_calib_data, "calib": compute_calib, "calib_hist": compute_calib_hist, "hlp": compute_hlp,
          "dml": compute_dml, "bsde": compute_bsde, "stopping": compute_stopping, "hedge": compute_hedge,
          "nsde": compute_nsde, "generator": compute_generator, "envelope": compute_envelope,
          # the expansion (cheapest and most needed first)

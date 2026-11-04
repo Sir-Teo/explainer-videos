@@ -67,6 +67,11 @@ one research chapter, two exam problems and the README section per part, in orde
 | 8 | estimation risk in Merton's rule: the plug-in's expected CE, Kan-Zhou scaling, chi-squared correction, US out of sample | `estrisk_theory` |
 | 9 | arbitrage with frictions: fBM's memory, the sign strategy, the best frequency under costs, consistent price systems, Bitcoin minutes | `friction_theory` |
 | 10 | when to rebalance a hedge: exit-time variance, the Gamma^-1/2 band and Fukasawa's bound, four rules simulated, Bitcoin hedges | `hedgetime_theory` |
+| 11 | demand-based option pricing: p = E x + gamma Sigma d, residual risk with jumps, smile under demand, exact CARA premium, Deribit taker flow | `demand_theory` |
+| 12 | the density from noisy prices: butterfly bias and variance, optimal width, square-root rate, Deribit trade-vs-mark noise | `density_theory` |
+| 13 | moment explosions and the wings: Andersen-Piterbarg T*, sample moments that never settle, Lee's formula, Bitcoin's critical moments | `moments_theory` |
+| 14 | how fast rough simulation converges: exact strong error n^-H, hybrid constants, MC on the exact joint law, rough Bergomi price errors | `convergence_theory` |
+| 15 | model-free bounds for a one-touch: put-and-forward super-hedge, floor and ceiling, four fitted models inside, pathwise check | `touch_bounds` |
 
 Before choosing a topic, grep the whole series for it: Part 3's first draft repeated Part 6's chapter 5 and was moved.
 

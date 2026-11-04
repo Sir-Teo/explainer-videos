@@ -435,7 +435,7 @@ ZH = {
     "f'Now on the Bitcoin Surface":
         "现在在比特币曲面上，用第14章的四个模型，每个都拟合同一个微笑。<bookmark mark='a'/>来自看跌期权的上界，和数字期权的下限：每个模型都必须把一触即付定价在它们之间。"
         "<bookmark mark='b'/>四个模型：局部波动率、赫斯顿、贝茨和方差伽马。在障碍为零点八时，它们相差不到两分钱，在"
-        "{min(t['models'][m]['touch'][j] for m in MODELS):.2f}到{max(t['models'][m]['touch'][j] for m in MODELS):.2f}之间。"
+        "{lo8:.2f}到{hi8:.2f}之间。"
         "<bookmark mark='c'/>但仅凭普通期权，允许从{h['digital'][j]:.2f}到{h['upper'][j]:.2f}的任何价格。模型之间的一致是模型的性质，不是市场的性质。"
         "<bookmark mark='d'/>而忽略微笑、用平值波动率的布莱克–斯科尔斯，对近障碍定价高于它们中任何一个，对远障碍则低得多：它没有肥的左尾。",
 

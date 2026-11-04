@@ -724,7 +724,7 @@ ZH = {
     "f'Is a real price fractional?":
         "真实的价格是分数的吗？比特币，每一、五、十五和六十分钟采样一次，2019和2020年。<bookmark mark='a'/>自相关很小，而且为负，"
         "所以隐含的H略低于二分之一，策略反转上一步。<bookmark mark='b'/>在一分钟上，它扣成本之前就亏钱。在其他采样上，它的盈亏平衡成本"
-        "最多约为每交易一个单位{max(v['breakeven_bp'] for v in b.values()):.1f}个基点：成本为一个基点时，它处处亏损，只有按小时交易时，"
+        "最多约为每交易一个单位{be_max:.1f}个基点：成本为一个基点时，它处处亏损，只有按小时交易时，"
         "每笔交易挣十分之一个基点。<bookmark mark='c'/>市场的记忆，大约就是利用它的成本那么大。这正是定理预言一个有摩擦的市场所能维持的。",
 
     "Three open questions. <bookmark mark='a'/> A consistent price system exists":
