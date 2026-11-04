@@ -1,7 +1,7 @@
 # Computer Science, Built (计算机科学，从零搭建)
 
-A fifty-five-part course on computer science in English and Chinese, made to the standard of *Analysis, Built* and
-*AI, Built*. It covers a full degree and then the practice industry runs on:
+A sixty-one-part course on computer science in English and Chinese, made to the standard of *Analysis, Built* and
+*AI, Built*. It covers a full degree, the practice industry runs on, and the first year of a PhD:
 - **foundations**: Hilbert's question and Turing's paper machine; the mathematics of proof and counting;
 - **the machine**: a real computer built from a single gate;
 - **software**: the languages and compilers that program it, and the algorithms that make it efficient;
@@ -11,18 +11,23 @@ A fifty-five-part course on computer science in English and Chinese, made to the
 - **industry practice**: software engineering and its tools, the web, services, product experimentation, the cloud,
   data engineering, search, system design and reliability;
 - **horizons**: graphics, numerical computing, quantum computation, proofs of correctness, and the question of
-  whether the whole tower can be trusted.
+  whether the whole tower can be trusted;
+- **the research frontier**: in every part, a *Frontier* chapter at qualifying-exam level, with the limits computed,
+  the open problems stated and a research problem set; then a final act of graduate breadth (spectral graph theory,
+  learning theory, semantics, distributed-computing theory, domain-specific hardware) and a part on how research is
+  done.
 
 Each part is a 50–60 minute lecture that derives its mathematics on screen and tells its history. It also builds
 something that runs, and says where the idea lives in industry. Every number on screen comes from one of three
 sources: a real computation run by the part's `compute.py`, a measurement on the machine that renders the video, or
 a published source, which is cited. Schematics carry the label `schematic`, and made-up examples the label
-`illustrative`. The videos are `cs1` … `cs55`.
+`illustrative`. The videos are `cs1` … `cs61`.
 
 The chapter-by-chapter plan, the production standard, and the maps onto a CS degree (CS2023) and onto industry roles
 are in [`SYLLABUS.md`](SYLLABUS.md).
 
-**Status:** plan of record, draft 2 (2026-11-04); the decisions in its §7 are confirmed. No part has been built yet.
+**Status:** plan of record, draft 3 (2026-11-04: the research tier added); Parts 1–6 are built, Part 7 is in progress
+(see [`SYLLABUS.md`](SYLLABUS.md) §8).
 
 ## The story
 
@@ -60,7 +65,11 @@ to the tower:
   it running (reliability, observability, performance).
 * **Act X, Horizons and Trust (51–55).** *What other kinds of computation are there, and can we trust what we built?*
   Graphics, numerical computing, quantum computation and proving programs correct. The finale is Ken Thompson's
-  "Reflections on Trusting Trust", carried out against our own compiler.
+  "Reflections on Trusting Trust", carried out against our own compiler. That ends the degree.
+* **Act XI, The Research Frontier (56–61).** *Where does the field stop knowing, and how do you push it?* Spectral
+  graphs and expanders, learning theory, semantics, distributed-computing theory and domain-specific hardware, each
+  at graduate depth; then a part on doing research (measurement without self-deception, reading and writing papers,
+  finding problems), ending on the map of open problems the series has met.
 
 Every part ends on the question the next part answers. Every act ends on the limit the next act gets past.
 
@@ -188,6 +197,13 @@ The series draws in the manner of 3Blue1Brown, with the instruments of `explaine
 | 53 | Quantum Computation | Landauer and reversibility, qubits and the Bloch sphere, interference, Simon, the QFT, Shor, Grover, BQP, error correction and the surface code | a state-vector simulator factoring 15 and 21 |
 | 54 | Proving Programs Correct | Hoare logic, weakest preconditions, separation logic, model checking with BDDs and SAT, abstract interpretation, proof assistants, CompCert and seL4, fuzzing | a verifier, a model checker and a fuzzer |
 | 55 | Trusting Trust | memory safety and ROP, hardware attacks, authentication, access control and HRU, the web, supply chains, **Thompson's compiler backdoor in our own compiler**, diverse double-compiling; the tower revisited | the trojan compiler, built and caught; the final ledger |
+| **XI** | **The Research Frontier** | | |
+| 56 | Spectral Graphs and Expanders | Laplacians, Cheeger's inequality, mixing times, expanders and the zig-zag product, SL = L, Laplacian solvers, almost-linear max-flow | spectral partitions of the novels' word graph; a zig-zag expander |
+| 57 | Learning Theory | PAC, VC dimension and Sauer–Shelah, Rademacher and margins, boosting, online learning and regret, bandits, SQ lower bounds, benign overfitting | learning curves against VC bounds; regret curves |
+| 58 | Semantics | operational and denotational semantics, domain theory and Scott's D∞, PCF and full abstraction, logical relations, parametricity, monads and effects, π-calculus | three interpreters that agree; free theorems checked |
+| 59 | Distributed Computing Theory | the LOCAL model, Cole–Vishkin and Linial's log* n bound, round elimination, the n > 3f bound, consensus hierarchy, k-set agreement via Sperner's lemma | 3-colouring a million-node ring; the hexagon argument run |
+| 60 | Domain-Specific Hardware | the roofline, systolic arrays, the TPU, GPUs and tensor cores, dataflow, near-memory computing, sparsity, high-level synthesis | a gate-level systolic array; the Job in hardware (ledger row 21) |
+| 61 | Doing Research | measurement bias, rigorous performance evaluation, reproducibility, reading and reviewing, Hamming's advice, the open-problems map | measurement bias reproduced on this machine; the map of open problems |
 
 ## Shared code and the Chinese edition
 

@@ -51,8 +51,8 @@
   },
   "c2f6533a93d2": {
    "scene": "Hook",
-   "en": "This is Part 1 of Computer Science, Built: fifty-five lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
-   "zh": "这是《计算机科学，从零搭建》的第1部分。全系列55讲，从这里出发，从“什么是计算”这个问题开始，用一种逻辑门搭出一台能工作的计算机，一直爬到支撑互联网的那些系统。<bookmark mark='a'/>这一部分讲：机器出现之前的算法，巴贝奇和洛夫莱斯的计算引擎；希尔伯特的问题，以及图灵机，我们会亲手给它编程；为什么增加纸带或换别的设计都不会增加能力，以及能运行任何其他机器的通用机；λ演算、计数器机和元胞自动机，以及丘奇–图灵论题；为什么问题比程序多，停机问题，还有忙碌海狸。最后，是这个系列将要搭建的东西。"
+   "en": "This is Part 1 of Computer Science, Built: sixty-one lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
+   "zh": "这是《计算机科学，从零搭建》的第1部分。全系列61讲，从这里出发，从“什么是计算”这个问题开始，用一种逻辑门搭出一台能工作的计算机，一直爬到支撑互联网的那些系统。<bookmark mark='a'/>这一部分讲：机器出现之前的算法，巴贝奇和洛夫莱斯的计算引擎；希尔伯特的问题，以及图灵机，我们会亲手给它编程；为什么增加纸带或换别的设计都不会增加能力，以及能运行任何其他机器的通用机；λ演算、计数器机和元胞自动机，以及丘奇–图灵论题；为什么问题比程序多，停机问题，还有忙碌海狸。最后，是这个系列将要搭建的东西。"
   },
   "e26c9b47db11": {
    "scene": "Algorithms",

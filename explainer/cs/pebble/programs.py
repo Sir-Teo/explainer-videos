@@ -367,3 +367,252 @@ load:   lw   t0, 0(s0)       # its offset: rewritten
         .align 4
 array:  .word 3, 1, 4, 1, 5, 9, 2, 6
 """
+
+
+# ---------------------------------------------------------------------------
+# Part 7's benchmarks: programs whose branches behave in different ways
+# ---------------------------------------------------------------------------
+def _words(vals) -> str:
+    vals = list(vals)
+    return "\n".join("        .word " + ", ".join(str(int(v)) for v in vals[k:k + 16]) for k in range(0, len(vals), 16))
+
+
+def _bytes(vals) -> str:
+    vals = list(vals)
+    return "\n".join("        .byte " + ", ".join(str(int(v)) for v in vals[k:k + 32]) for k in range(0, len(vals), 32))
+
+
+def insertion_sort(values) -> str:
+    """Sort words in place: the inner loop's exit depends on the data."""
+    return f"""
+        la   s0, arr
+        li   s1, {len(values)}
+        li   t0, 1            # i
+outer:  bge  t0, s1, done
+        slli t1, t0, 2
+        add  t1, t1, s0       # &a[i]
+        lw   a0, 0(t1)        # the key
+        mv   t2, t1
+inner:  beq  t2, s0, place
+        lw   a1, -4(t2)
+        bge  a0, a1, place    # the data decides
+        sw   a1, 0(t2)
+        addi t2, t2, -4
+        j    inner
+place:  sw   a0, 0(t2)
+        addi t0, t0, 1
+        j    outer
+done:   halt
+        .align 4
+arr:
+{_words(values)}
+"""
+
+
+def sieve(n: int) -> str:
+    """Count the primes below n (Eratosthenes, marking from p*p: uses mul)."""
+    return f"""
+        la   s0, flags
+        li   s1, {n}
+        li   t0, 2
+        li   a0, 0            # primes found
+outer:  bge  t0, s1, done
+        add  t1, s0, t0
+        lbu  t2, 0(t1)
+        bnez t2, next         # crossed off?
+        addi a0, a0, 1
+        mul  t3, t0, t0
+        bge  t3, s1, next
+mark:   add  t1, s0, t3
+        li   t2, 1
+        sb   t2, 0(t1)
+        add  t3, t3, t0
+        blt  t3, s1, mark
+next:   addi t0, t0, 1
+        j    outer
+done:   halt
+flags:  .space {n}
+"""
+
+
+def threshold(data, passes: int = 1, branchless: bool = False) -> str:
+    """Sum the bytes that are at least 128: the sorted-array puzzle.  ``branchless`` turns the if into arithmetic:
+    a mask of all ones or all zeros from the comparison."""
+    body = """        sltiu t3, t2, 128     # 1 if small
+        addi t3, t3, -1       # all ones if big, 0 if small
+        and  t3, t3, t2
+        add  a0, a0, t3""" if branchless else """        sltiu t3, t2, 128
+        bnez t3, skip         # the data decides
+        add  a0, a0, t2
+skip:"""
+    return f"""
+        la   s0, data
+        li   s1, {len(data)}
+        li   s2, {passes}
+        li   a0, 0            # the sum
+pass:   mv   t0, s0
+        mv   t1, s1
+loop:   lbu  t2, 0(t0)
+{body}
+        addi t0, t0, 1
+        addi t1, t1, -1
+        bnez t1, loop
+        addi s2, s2, -1
+        bnez s2, pass
+        halt
+data:
+{_bytes(data)}
+"""
+
+
+def fib(n: int) -> str:
+    """Recursive Fibonacci: calls and returns, nested deep (the return-address stack)."""
+    return f"""
+        li   a0, {n}
+        call fib
+        halt
+fib:    li   t0, 2
+        blt  a0, t0, base     # fib(0) = 0, fib(1) = 1
+        addi sp, sp, -12
+        sw   ra, 0(sp)
+        sw   a0, 4(sp)
+        addi a0, a0, -1
+        call fib
+        sw   a0, 8(sp)
+        lw   a0, 4(sp)
+        addi a0, a0, -2
+        call fib
+        lw   t0, 8(sp)
+        add  a0, a0, t0
+        lw   ra, 0(sp)
+        addi sp, sp, 12
+base:   ret
+"""
+
+
+def correlated(iterations: int, noise: int = 3) -> str:
+    """Branch A tests a random bit; ``noise`` branches test other random bits; branch B tests A's bit again.  B is
+    unpredictable alone, and certain given the outcome noise + 1 branches back.  The bits are the top bits of a
+    linear congruential generator (x <- 1103515245 x + 12345, with Part 7's mul): unlike an LFSR's, they cannot be
+    read off the outcomes of earlier branches."""
+    noise_code = "\n".join(f"""        srli t2, s0, {29 - k}
+        andi t2, t2, 1
+        beqz t2, n{k}         # noise
+        addi a1, a1, 1
+n{k}:""" for k in range(noise))
+    return f"""
+        li   s0, 12345        # the generator's state
+        li   s1, {iterations}
+        li   s2, 1103515245
+        li   a0, 0
+        li   a1, 0
+loop:   mul  s0, s0, s2       # the next random number
+        addi s0, s0, 12345
+        srli t0, s0, 30
+        andi t0, t0, 1        # a random bit x
+        beqz t0, a_no         # branch A: on x
+        addi a2, a2, 1
+a_no:
+{noise_code}
+        beqz t0, b_no         # branch B: on x again
+        addi a0, a0, 1
+b_no:   addi s1, s1, -1
+        bnez s1, loop
+        halt
+"""
+
+
+def parity(iterations: int, noise: int = 2) -> str:
+    """Branches A and C test two independent random bits x and y; ``noise`` branches test others; branch B tests
+    x xor y.  B is certain given A and C, but not linearly: no perceptron weights separate it (Minsky and Papert's
+    XOR), while a table indexed by the history learns it."""
+    noise_code = "\n".join(f"""        srli t2, s0, {28 - k}
+        andi t2, t2, 1
+        beqz t2, n{k}         # noise
+        addi a1, a1, 1
+n{k}:""" for k in range(noise))
+    return f"""
+        li   s0, 12345        # the generator's state
+        li   s1, {iterations}
+        li   s2, 1103515245
+        li   a0, 0
+        li   a1, 0
+loop:   mul  s0, s0, s2       # the next random number
+        addi s0, s0, 12345
+        srli t0, s0, 30
+        andi t0, t0, 1        # x
+        srli t1, s0, 29
+        andi t1, t1, 1        # y
+        beqz t0, a_no         # branch A: on x
+        addi a2, a2, 1
+a_no:   beqz t1, c_no         # branch C: on y
+        addi a3, a3, 1
+c_no:
+{noise_code}
+        xor  t3, t0, t1
+        beqz t3, b_no         # branch B: on x xor y
+        addi a0, a0, 1
+b_no:   addi s1, s1, -1
+        bnez s1, loop
+        halt
+"""
+
+
+def decimal(limit: int, use_div: bool) -> str:
+    """Print 1 .. limit in decimal: by repeated subtraction of powers of ten (as the Job does), or with div and rem."""
+    head = f"""
+        li   s0, 1
+        li   s1, {limit + 1}
+        li   s2, {IO_CONSOLE:#x}
+"""
+    if use_div:
+        return head + """        li   a5, 10
+        la   a4, bufend
+num:    mv   t0, s0
+        mv   t1, a4
+dig:    rem  t2, t0, a5       # the last digit
+        div  t0, t0, a5
+        addi t2, t2, 48
+        addi t1, t1, -1
+        sb   t2, 0(t1)
+        bnez t0, dig
+out:    lbu  t2, 0(t1)
+        sb   t2, 0(s2)
+        addi t1, t1, 1
+        bne  t1, a4, out
+        sb   a5, 0(s2)        # a newline
+        addi s0, s0, 1
+        bne  s0, s1, num
+        halt
+buf:    .space 12
+bufend:
+"""
+    return head + """        la   a4, pow10
+num:    mv   t1, s0
+        mv   t0, a4
+        li   a2, 0            # a digit printed yet?
+pnext:  lw   t2, 0(t0)
+        beqz t2, pend
+        li   a5, 48
+psub:   bltu t1, t2, pdig
+        sub  t1, t1, t2
+        addi a5, a5, 1
+        j    psub
+pdig:   li   a1, 48
+        bne  a5, a1, pout
+        bnez a2, pout
+        li   a1, 1
+        beq  t2, a1, pout
+        j    pskip
+pout:   sb   a5, 0(s2)
+        li   a2, 1
+pskip:  addi t0, t0, 4
+        j    pnext
+pend:   li   a5, 10
+        sb   a5, 0(s2)
+        addi s0, s0, 1
+        bne  s0, s1, num
+        halt
+        .align 4
+pow10:  .word 1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1, 0
+"""

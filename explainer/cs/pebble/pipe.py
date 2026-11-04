@@ -165,6 +165,7 @@ class Pipeline:
         self.stats = {"load_use": 0, "raw": 0, "branch_flush": 0, "jump_redirect": 0, "jalr_flush": 0,
                       "divide": 0, "branches": 0, "mispredicts": 0, "jalr": 0, "jalr_miss": 0}
         self.chart: list[dict] = []
+        self.seqinfo: dict[int, tuple[int, int, bool]] = {}  # recorded: seq -> (pc, word, flushed at fetch)
         self.counts: dict[str, int] = {}
 
     # -- memory ---------------------------------------------------------------
@@ -351,6 +352,11 @@ class Pipeline:
         elif flush_to is not None:
             if rec is not None:
                 rec["events"].append(("flush", [s.seq for s in (self.ifid,) if s] + [self.seq]))
+            if rec is not None:
+                self.seqinfo[self.seq] = (self.pc, fetch_word, True)
+                if self.ifid is not None and self.ifid.seq in self.seqinfo:
+                    pc_, w_, _ = self.seqinfo[self.ifid.seq]
+                    self.seqinfo[self.ifid.seq] = (pc_, w_, True)
             self.seq += 1  # the instruction fetched this cycle is thrown away too
             self.pc = flush_to
             new_ifid = None
@@ -363,12 +369,14 @@ class Pipeline:
         elif redirect_to is not None:
             if rec is not None:
                 rec["events"].append(("flush", [self.seq]))
+                self.seqinfo[self.seq] = (self.pc, fetch_word, True)
             self.seq += 1
             self.pc = redirect_to
         else:
             slot = Slot(self.seq, self.pc, fetch_word)
             if rec is not None:
                 rec["IF"] = self.seq
+                self.seqinfo[self.seq] = (self.pc, fetch_word, False)
             self.seq += 1
             opc = (fetch_word >> 26) & 0x3F
             if opc not in OPS:

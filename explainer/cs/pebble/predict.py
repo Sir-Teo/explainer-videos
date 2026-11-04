@@ -221,6 +221,74 @@ class Perceptron:
         return self.w[(pc >> 2) % self.n].copy()
 
 
+class Unlimited:
+    """A limit-study predictor: an unbounded table with one counter per (branch, last h global outcomes) context, no
+    aliasing, and the majority so far as the prediction (ties: taken).  It must learn every context from scratch, so a
+    longer history sees sharper patterns but learns them more slowly: no single h is best everywhere."""
+
+    def __init__(self, h=8):
+        self.h, self.name = h, f"unlimited, h = {h}"
+        self.ghr = 0
+        self.mask = (1 << h) - 1
+        self.c: dict[tuple[int, int], list[int]] = {}
+
+    def predict(self, pc):
+        n = self.c.get((pc, self.ghr))
+        return True if n is None else n[1] >= n[0]
+
+    def update(self, pc, taken):
+        self.c.setdefault((pc, self.ghr), [0, 0])[int(taken)] += 1
+        self.ghr = ((self.ghr << 1) | int(taken)) & self.mask
+
+
+class PPM:
+    """Prediction by partial matching (Cleary and Witten, 1984), as a branch predictor (Chen, Coffey and Mudge, 1996):
+    unbounded tables for every history length in ``lengths``; predict from the longest context seen at least
+    ``confidence`` times whose majority is strict, falling back to shorter ones.  An idealised TAGE, with no limit on
+    storage."""
+
+    def __init__(self, lengths=(0, 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64), confidence=2):
+        self.lengths, self.k = tuple(sorted(lengths)), confidence
+        self.name = "PPM, unlimited"
+        self.ghr = 0
+        self.mask = (1 << max(self.lengths)) - 1
+        self.c = [dict() for _ in self.lengths]
+
+    def _ctx(self, pc, h):
+        return pc, self.ghr & ((1 << h) - 1)
+
+    def predict(self, pc):
+        for t, h in reversed(list(enumerate(self.lengths))):
+            n = self.c[t].get(self._ctx(pc, h))
+            if n is not None and n[0] + n[1] >= self.k and n[0] != n[1]:
+                return n[1] > n[0]
+        return True
+
+    def update(self, pc, taken):
+        for t, h in enumerate(self.lengths):
+            self.c[t].setdefault(self._ctx(pc, h), [0, 0])[int(taken)] += 1
+        self.ghr = ((self.ghr << 1) | int(taken)) & self.mask
+
+
+def in_sample(trace, h) -> tuple[float, float]:
+    """The best any history-h predictor could do with hindsight: each (branch, history) context predicted by its
+    majority over the whole trace.  Returns (accuracy, conditional entropy in bits per branch)."""
+    c: dict[tuple[int, int], list[int]] = {}
+    g, mask = 0, (1 << h) - 1
+    for pc, t in trace:
+        c.setdefault((pc, g), [0, 0])[int(t)] += 1
+        g = ((g << 1) | int(t)) & mask
+    n = len(trace)
+    acc = sum(max(v) for v in c.values()) / n
+    ent = 0.0
+    for a, b in c.values():
+        m = a + b
+        for x in (a, b):
+            if x:
+                ent -= x / n * np.log2(x / m)
+    return acc, ent
+
+
 def accuracy(p, trace) -> float:
     """Fraction of a branch trace [(pc, taken), ...] predicted right, training as it goes."""
     right = 0

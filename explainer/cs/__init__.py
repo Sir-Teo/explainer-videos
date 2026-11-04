@@ -1,4 +1,4 @@
-"""Shared instruments for the computer-science series (videos/cs/cs1 ... cs55), *Computer Science, Built*.
+"""Shared instruments for the computer-science series (videos/cs/cs1 ... cs61), *Computer Science, Built*.
 
     from explainer.cs import *
 
@@ -10,7 +10,7 @@ the devices that hold this series together (videos/cs/SYLLABUS.md, section 2):
 * :func:`chapter_card`, with the **tower** of abstractions (the part's layer lit) and the **timeline strip**,
   1800-2030 (the chapter's years lit);
 * :func:`tower`, the stack itself, drawn large when a part talks about where it sits;
-* :func:`series_map`, the fifty-five parts in ten acts, the current one lit;
+* :func:`series_map`, the sixty-one parts in eleven acts, the current one lit;
 * :func:`ledger_table`, the Job's running record (the cost of counting the words of thirty novels, one row per part
   that changes it; ``.cache/cs*/ledger.json``);
 * :func:`payoff_card` ("where this comes back") and :func:`practice_card` ("in practice").
@@ -30,7 +30,7 @@ SERIES_EN = "Computer Science, Built"
 SERIES_ZH = "计算机科学，从零搭建"
 
 # ---------------------------------------------------------------------------
-# The fifty-five parts in ten acts
+# The sixty-one parts in eleven acts: a degree (I-X) and the research frontier (XI)
 # ---------------------------------------------------------------------------
 ACTS = [
     (r"I.\ The Machine", (1, 6)),
@@ -43,6 +43,7 @@ ACTS = [
     (r"VIII.\ Building Software", (40, 44)),
     (r"IX.\ Systems at Scale", (45, 50)),
     (r"X.\ Horizons and Trust", (51, 55)),
+    (r"XI.\ The Research Frontier", (56, 61)),
 ]
 PARTS = {
     1: r"What Is a Computation?", 2: r"Proof and Counting", 3: r"Logic from Switches", 4: r"Arithmetic",
@@ -63,6 +64,8 @@ PARTS = {
     48: r"System Design I: Building Blocks", 49: r"System Design II: Case Studies", 50: r"Keeping It Running",
     51: r"Light and Pixels", 52: r"Computing with Real Numbers", 53: r"Quantum Computation",
     54: r"Proving Programs Correct", 55: r"Trusting Trust",
+    56: r"Spectral Graphs and Expanders", 57: r"Learning Theory", 58: r"Semantics",
+    59: r"Distributed Computing Theory", 60: r"Domain-Specific Hardware", 61: r"Doing Research",
 }
 # Short names, for the series map (five columns of a frame)
 SHORT = dict(PARTS)
@@ -71,11 +74,12 @@ SHORT.update({1: r"What Is Computation?", 6: r"Stored Programs", 9: r"Memory Hie
               28: r"Codes", 36: r"Networks I", 37: r"Networks II", 40: r"Software Engineering",
               41: r"Version Control, Builds", 42: r"Browser and Web", 43: r"APIs and Services",
               44: r"People, Products", 46: r"Logs and Streams", 48: r"System Design I", 49: r"System Design II",
-              50: r"Keeping It Running", 52: r"Real Numbers", 53: r"Quantum", 54: r"Proving Programs"})
+              50: r"Keeping It Running", 52: r"Real Numbers", 53: r"Quantum", 54: r"Proving Programs",
+              56: r"Spectral Graphs", 59: r"Distributed Theory", 60: r"Domain-Specific Hardware"})
 
 
 def act_of(part: int) -> int:
-    """The act (1-10) a part belongs to."""
+    """The act (1-11) a part belongs to."""
     for i, (_, (a, b)) in enumerate(ACTS, 1):
         if a <= part <= b:
             return i
@@ -83,7 +87,7 @@ def act_of(part: int) -> int:
 
 
 def series_map(current: int | None = None, done: int = 0, font_size=17, width=13.4, height=7.3) -> VGroup:
-    """The ten acts in a grid of five columns and two rows; each part a row.  Parts up to ``done`` are white,
+    """The acts in a grid of two rows (six columns for eleven acts); each part a row.  Parts up to ``done`` are white,
     ``current`` is lit and boxed, the rest are dim.  ``.part[p]`` is the row of part p; ``.cols[i]`` act i+1."""
     cols = VGroup()
     for act, (a, b) in ACTS:
@@ -98,7 +102,7 @@ def series_map(current: int | None = None, done: int = 0, font_size=17, width=13
         col = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         col.head, col.rows = head, rows
         cols.add(col)
-    cols.arrange_in_grid(rows=2, cols=5, buff=(0.32, 0.42), cell_alignment=UL)
+    cols.arrange_in_grid(rows=2, cols=(len(ACTS) + 1) // 2, buff=(0.32, 0.42), cell_alignment=UL)
     if cols.width > width:
         cols.width = width
     if cols.height > height:
@@ -150,7 +154,9 @@ PART_LAYERS = {1: ("math", "limits"), 2: ("math",), 3: ("physics", "gates"), 4: 
                42: ("apps", "practice"), 43: ("cloud",), 44: ("apps", "practice"), 45: ("cloud",),
                46: ("data", "cloud"), 47: ("apps",), 48: ("cloud", "dist"), 49: ("cloud", "dist"),
                50: ("cloud", "practice"), 51: ("apps",), 52: ("algo",), 53: ("physics", "limits"),
-               54: ("lang", "practice"), 55: tuple(k for k, _ in LAYERS) + ("limits", "practice")}
+               54: ("lang", "practice"), 55: tuple(k for k, _ in LAYERS) + ("limits", "practice"),
+               56: ("algo", "math"), 57: ("algo", "limits"), 58: ("lang", "math"), 59: ("dist", "limits"),
+               60: ("uarch", "gates"), 61: tuple(k for k, _ in LAYERS) + ("limits", "practice")}
 
 
 def tower(lit=(), height=5.4, width=2.3, font_size=15, labels="lit", lit_color=None) -> VGroup:

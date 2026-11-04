@@ -1,6 +1,6 @@
 # Computer Science, Built — Part 5: Memory and Time
 
-Part 5 of a fifty-five-part course in computer science (see [the series plan](../README.md) and
+Part 5 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). Connect a circuit's output back to its input and it can remember. Memory brings time
 into the design, and a cost that never quite vanishes: a flip-flop can balance between 0 and 1 for an unbounded time.
 The same machines that remember turn out to be the first rung of a theory of languages. Circuits with feedback are
