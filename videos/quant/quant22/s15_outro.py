@@ -44,7 +44,10 @@ PROBLEMS = [
     r"WTI: $F_1$ = 70, $F_2$ = 71.5 a month later, $r$ = 5\%. Find the convenience yield net of storage.",
     r"A bond: dirty price 100.2, futures 112.0, conversion factor 0.89, accrued at delivery 1.1, 92 days. Find the "
     r"implied repo rate.",
-    r"Why does a long position in an at-the-money spread option lose value as the correlation of its two legs rises?",
+    r"Why does a long position in an at-the-money spread option lose value as the correlation of its two legs rises?",    r"(qual) In the storage model, show that $F_t - p_t = k + (\beta^{-1} - 1)p_t$ whenever $I_t > 0$, and that $f$ is "
+    r"decreasing with $f(x) = P(x)$ below a threshold $x^*$; find $x^*$ in terms of $\mathbb E f(z')$.",
+    r"(qual) Show that the time-iteration operator $Tf(x) = P(x - I_f(x))$ maps decreasing functions to decreasing "
+    r"functions, and explain why inventory's nonnegativity makes the price distribution right-skewed.",
 ]
 
 
@@ -138,12 +141,13 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: covered parity derived and a basis computed by hand; the algebra of Fama's slope; FX "
+            "And twelve problems: covered parity derived and a basis computed by hand; the algebra of Fama's slope; FX "
             "deltas and the straddle strike; pillar vols from quotes; the date of a speculative attack; a convenience "
-            "yield; an implied repo rate; and why a spread option dislikes correlation. Solutions, in English and "
-            "Chinese, are in the notes."
+            "yield; an implied repo rate; and why a spread option dislikes correlation. Two more are qualifying-exam "
+            "problems: full carry in the storage model, and its time iteration. Solutions, in English and Chinese, are "
+            "in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

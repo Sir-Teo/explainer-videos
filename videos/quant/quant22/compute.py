@@ -551,7 +551,15 @@ def compute_storage_theory() -> dict:
     bins = [{"lo": float(qs[i]), "hi": float(qs[i + 1]),
              "dev": float(dev[(dev >= qs[i]) & (dev <= qs[i + 1])].mean()),
              "spread": float(sp[(dev >= qs[i]) & (dev <= qs[i + 1])].mean())} for i in range(10)]
-    out = {"model": model, "params": {"beta": beta, "k": k, "elasticity": -0.5, "harvest_sd": 0.1},
+    pm = {}
+    for d_, a_ in zip(d1, v1):
+        if 19900101 <= d_ <= 20201231 and a_ > 0:
+            pm.setdefault(d_ // 100, []).append(a_)
+    mp = np.array([np.mean(pm[m]) for m in sorted(pm)])
+    lp = np.log(mp)
+    data_ac = {"monthly_log_price_ac1": float(np.corrcoef(lp[:-1], lp[1:])[0, 1]),
+               "monthly_log_price_ac12": float(np.corrcoef(lp[:-12], lp[12:])[0, 1])}
+    out = {"model": model, "params": {"beta": beta, "k": k, "elasticity": -0.5, "harvest_sd": 0.1}, "data_ac": data_ac,
            "data": {"month": pts[:, 0].astype(int), "dev": dev, "spread": sp, "bins": bins,
                     "corr": float(np.corrcoef(dev, sp)[0, 1]), "share_backwardation": float(np.mean(sp < 0)),
                     "n": int(len(sp))}}

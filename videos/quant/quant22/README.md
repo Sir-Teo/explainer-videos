@@ -27,7 +27,7 @@ the CFTC (Traders in Financial Futures).
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 50 minutes)
+## Chapters (about 54 minutes)
 
 * **A floor that broke** (2.9 min). EUR/CHF 2010–2016 and the 1.20 floor (6 September 2011); 15 January 2015: 1.2009 →
   1.0357 at New York noon, −13.8%, about 80 daily standard deviations of 2012–14; FXCM's $275 million of client debit
@@ -73,7 +73,20 @@ reported by the sources named.*
   swaps and the swap–TIPS basis.
 * **13. Rule 22: the macro desk** (2.5). The desk's first sheet; **lab**: `cip_basis`, `implied_convenience`,
   `implied_repo`; the `macro` module; Rule 22; the rule against the franc, Amaranth, negative oil and the basis trade.
-* **Recap, desk questions, problems** (3.1). Eleven lines; six desk questions; ten problems, solutions below.
+* **For the researcher: the competitive storage model** (5.6). Availability x = I₋₁ + z, price p = P(x − I), storers
+  with P(x − I) + k ≥ βE[p′] (equality when I > 0): the price is the fixed point f(x) = max{P(x), βE f(I* + z′) − k}
+  (Gustafson 1958; Williams and Wright 1991; Deaton and Laroque 1992), and with risk-neutral storers the one-period
+  spread is full carry k + (β⁻¹ − 1)p whenever stocks are positive and backwardation at stock-outs: Working's curve,
+  derived. Solved by time iteration (elasticity −0.5, harvest sd 0.1, interest 1%, storage 0.5% a period; 163
+  iterations); simulated 200,000 periods: stock-outs 8.8%, price skewness 3.2, autocorrelation 0.46. Data: WTI's
+  second over first contract (EIA, monthly average) against US commercial crude stocks relative to the same month's
+  5-year average, 372 months 1990–2020: correlation 0.47, 39% of months in backwardation, the scarcest decile
+  (−10.3%) −2.6% a month, the most plentiful (+29%) +1.9%. The persistence puzzle: WTI's monthly log price
+  autocorrelation is 0.99 (0.87 at twelve months) against the model's 0.46 (Deaton and Laroque 1992, 1996; Cafiero,
+  Bobenrieth, Bobenrieth and Wright 2011). Three open problems; pause: at most 70 × 0.004 + 0.30 = $0.58 of contango;
+  no arbitrage limit on backwardation.
+* **Recap, desk questions, problems** (3.1). Eleven lines; six desk questions; twelve problems (two at
+  qualifying-exam level), solutions below.
 
 ## Hands-on
 
@@ -168,6 +181,26 @@ python tools/make.py quant22 --cpu-voice -q m                # English and Chine
 10. **Spread options and correlation.** The exchange option's volatility is √(σ₁² + σ₂² − 2ρσ₁σ₂), which falls as ρ
     rises; an at-the-money option's value is about 0.4 × S × σ√T, so it falls too. Perfectly correlated legs leave
     nothing to exchange.
+11. **(qual) Full carry and the threshold.** If I_t > 0 the storer's first-order condition holds with equality:
+   P(x − I) + k = βE[p′], and p_t = P(x − I), so βF_t = p_t + k with F_t = E_t[p′] under risk neutrality, i.e.
+   F_t − p_t = (β⁻¹ − 1)p_t + β⁻¹k (≈ k + rp). Storage is zero exactly when even the first unit is unprofitable:
+   P(x) + k ≥ βE f(z′) (storing nothing, next availability is the harvest alone), so x* solves P(x*) = βE f(z′) − k;
+   below x*, f = P, decreasing; above, f is decreasing because both P and the stored amount respond monotonically.
+12. **(qual) Monotonicity and skew.** If f is decreasing, E f(I + z′) is decreasing in I, so the root I_f(x) of
+   P(x − I) + k = βE f(I + z′) is increasing in x with slope below 1; hence x − I_f(x) increases and Tf(x) = P(x − I_f(x))
+   decreases. Skew: when availability is high, storage absorbs the surplus and the price falls only a little; when it
+   is low, stocks cannot go below zero, the whole shortfall hits consumption, and P is steep there: high prices are
+   reached in a few states with large moves, low prices are compressed, so the distribution is right-skewed.
+
+## For the researcher
+
+* **The theorems.** Gustafson (1958); Williams and Wright, *Storage and Commodity Markets* (1991); Deaton and Laroque
+  (1992), "On the behaviour of commodity prices," *Rev. Econ. Studies* 59, and (1996), "Competitive storage and
+  commodity price dynamics," *J. Political Economy* 104; Cafiero, Bobenrieth, Bobenrieth and Wright (2011), *J.
+  Econometrics* 162; Working (1949); Kaldor (1939).
+* **Simplifications.** IID harvests, a constant storage cost, risk-neutral storers, no upper bound on storage; one
+  period is not calibrated to a month; the data's inventory deviation uses a 5-year same-month average.
+* **Open problems.** Persistence; risk premia in the curve; storage capacity limits.
 
 ## Data and reproducibility
 
@@ -199,7 +232,7 @@ python tools/make.py quant22 --cpu-voice -q m                # English and Chine
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约50分钟）
+## 章节（约54分钟）
 
 * **一个崩塌的下限。** 2010–2016年的欧元/瑞郎与1.20的下限（2011年9月6日）；2015年1月15日：纽约中午1.2009 → 1.0357，−13.8%，约为2012–14年日标准差的80倍；FXCM客户2.75亿美元的负余额与Leucadia的3亿美元贷款；Alpari英国；历史条（1983–2024）；本部分安排；宏观交易台开张。
 * **1. 抛补利率平价。** 从今天的一美元到三个月后一美元的两条路径；推导远期汇率；基差（Du–Tepper–Verdelhan）；2016年6月的算例（x = −18个基点）；两边都用LIBOR的1986–2016年英镑（2007年年中以前+7 ± 8个基点，2008年11月−147个基点，2010–16年−12 ± 11个基点）；原因：资产负债表的资本成本、季末；谁付钱、谁能套利；美联储的货币互换额度。
@@ -215,7 +248,8 @@ python tools/make.py quant22 --cpu-voice -q m                # English and Chine
 * **11. 国债基差交易。** 期货、转换因子与最便宜可交割券；空头的交割期权；隐含回购利率算例；杠杆与保证金；杠杆基金在2年、5年、10年和长期国债期货上的净空头（2020年2月−3,660亿美元，2025年底−1.05万亿美元）；2020年3月（对冲基金卖出1,730亿美元，美联储工作人员）；此后的规模（2023年9月2,600–5,740亿美元；2025年9月约8,300亿美元）。
 * **12. 通胀：盈亏平衡率与溢价。** TIPS与盈亏平衡率的分解；2003–2025（2008年11月−2.24%，2022年3月3.59%；5y5y平均2.25%）；5年期盈亏平衡率对随后的CPI（−0.60 ± 1.20个点）；2021–22年的通胀飙升（CPI 9.0%）；预期通胀、风险溢价与流动性（D'Amico–Kim–Wei）；通胀互换与互换–TIPS基差。
 * **13. 第22条规则：宏观交易台。** 交易台的第一张表；**实验**：`cip_basis`、`implied_convenience`、`implied_repo`；`macro`模块；第22条规则；用瑞郎、Amaranth、负油价和基差交易检验这条规则。
-* **回顾、交易台问题与习题。** 十一行回顾；六个交易台问题；十道习题，解答见下文。
+* **写给研究者：竞争性储存模型。** 可用量x = I₋₁ + z，价格p = P(x − I)，储存者满足P(x − I) + k ≥ βE[p′]（I > 0时取等号）：价格是不动点f(x) = max{P(x), βE f(I* + z′) − k}（Gustafson 1958；Williams与Wright 1991；迪顿与拉罗克1992），风险中性的储存者下，单期价差在库存为正时为完全持有成本k + (β⁻¹ − 1)p，断货时为现货升水：推导出的沃金曲线。时间迭代求解（弹性−0.5、收成标准差0.1、利率1%、储存每期0.5%；163次迭代）；模拟200,000期：断货8.8%、价格偏度3.2、自相关0.46。数据：WTI第二与第一合约之差（EIA，月均）对美国商业原油库存相对同月五年平均的偏离，1990–2020年372个月：相关0.47，39%的月份为现货升水，最稀缺十分位（−10.3%）每月−2.6%，最充裕（+29%）+1.9%。持续性之谜：WTI月度对数价格自相关0.99（十二个月0.87），模型为0.46（迪顿与拉罗克1992、1996；Cafiero、Bobenrieth、Bobenrieth与Wright 2011）。三个开放问题；暂停题：期货升水至多70 × 0.004 + 0.30 = 0.58美元；现货升水没有套利限制。
+* **回顾、交易台问题与习题。** 十一行回顾；六个交易台问题；十二道习题（两道为资格考试水平），解答见下文。
 
 ## 交易台问题与解答
 
@@ -238,6 +272,8 @@ python tools/make.py quant22 --cpu-voice -q m                # English and Chine
 8. **便利收益。** y − u = r − ln(F₂/F₁)/Δt = 0.05 − 12 ln(71.5/70) = 0.05 − 0.254 = 每年−20.4%：持有者是被付钱来储存石油的；库存充足（期货升水）。
 9. **隐含回购利率。** 发票价格 = 112.0 × 0.89 + 1.1 = 100.78；(100.78/100.2 − 1) × 360/92 = 2.27%。如果这只票据能以低于此的利率融资，买入它并卖出期货就能赚取差额。
 10. **价差期权与相关性。** 交换期权的波动率为√(σ₁² + σ₂² − 2ρσ₁σ₂)，随ρ上升而下降；平价期权的价值约为0.4 × S × σ√T，所以也下降。完全相关的两条腿没有什么可交换的。
+11. **（资格考试）完全持有成本与阈值。** I_t > 0时储存者的一阶条件取等号：P(x − I) + k = βE[p′]，而p_t = P(x − I)，风险中性下F_t = E_t[p′]，所以F_t − p_t = (β⁻¹ − 1)p_t + β⁻¹k（≈ k + rp）。恰当第一个单位也不赚钱时储存为零：P(x) + k ≥ βE f(z′)，所以x*满足P(x*) = βE f(z′) − k；x*以下f = P递减，以上因P与储存量都单调响应，f仍递减。
+12. **（资格考试）单调性与偏度。** 若f递减，则E f(I + z′)对I递减，所以P(x − I) + k = βE f(I + z′)的根I_f(x)对x递增且斜率小于1；于是x − I_f(x)递增，Tf(x) = P(x − I_f(x))递减。偏度：可用量高时，储存吸收过剩，价格只稍降；可用量低时，库存不能低于零，全部短缺落到消费上，而P在那里很陡：高价只在少数状态中以大幅变动出现，低价被压缩，所以分布右偏。
 
 ## 数据与复现
 
@@ -248,3 +284,9 @@ python tools/make.py quant22 --cpu-voice -q m                # English and Chine
 * 引用而非计算的公开数字：瑞士央行的决定；FXCM的申报文件；欧洲汇率机制的区间与英国财政部的成本；Amaranth的损失（美国参议院调查小组委员会，据EDHEC的概述）；CME的通告；美联储对基差交易的估计；Optiver的和解。
 * 屏幕上标注为示意的输入：外汇期权市场（欧元/美元、美元/日元）、冲击模型的参数、Working曲线、点火价差期权、国债交易的价格、Bachelier看跌期权的波动率。
 * 本部分不打开任何样本外数据；试验计数器保持在315。
+
+## 写给研究者
+
+* **定理。** Gustafson（1958）；Williams与Wright，《储存与大宗商品市场》（1991）；迪顿与拉罗克（1992），*Rev. Econ. Studies* 59，以及（1996），*J. Political Economy* 104；Cafiero、Bobenrieth、Bobenrieth与Wright（2011），*J. Econometrics* 162；Working（1949）；Kaldor（1939）。
+* **简化。** 独立同分布的收成、固定储存成本、风险中性储存者、无储存上限；一期并未校准为一个月；数据中的库存偏离用五年同月平均。
+* **开放问题。** 持续性；曲线中的风险溢价；储存能力上限。

@@ -17,5 +17,6 @@ SCENES = [
     ("s12_basis", "Basis", "11. The Treasury basis trade"),
     ("s13_inflation", "Inflation", "12. Inflation: breakevens and the premium"),
     ("s14_house", "House", "13. Rule 22: the macro desk"),
+    ("s16_research", "Research", "For the researcher: the competitive storage model"),
     ("s15_outro", "Outro", "Recap, desk questions, problems"),
 ]
