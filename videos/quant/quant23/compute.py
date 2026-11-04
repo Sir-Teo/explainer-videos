@@ -330,9 +330,34 @@ def compute_bubbles() -> dict:
                              "trough": {"date": int(nd[j]), "v": float(nv[j])}}})
 
 
+def compute_hook() -> dict:
+    fd, mkt, rf = _ff()
+    t = fd // 100 + (fd % 100 - 0.5) / 12
+    st = np.cumprod(1 + mkt + rf)
+    bi = np.cumprod(1 + rf)
+    yrs = (len(fd)) / 12
+    return _json({"t": t[::3], "stocks": st[::3], "bills": bi[::3], "end_stocks": float(st[-1]),
+                  "end_bills": float(bi[-1]), "years": yrs, "cagr_s": float(st[-1] ** (1 / yrs) - 1),
+                  "cagr_b": float(bi[-1] ** (1 / yrs) - 1), "start": int(fd[0]), "end": int(fd[-1])})
+
+
+def compute_disaster() -> dict:
+    """Barro's (2006) rare disasters, simplified: lognormal consumption growth (sigma 2%) plus, with probability p a
+    year, a contraction by b; for a claim on consumption the premium is about gamma sigma^2 + p E[b (1 - b)^-gamma].
+    p = 1.7% and mean b = 0.29 are his calibration; a fixed b is used here, so the numbers are a lower bound."""
+    gams = np.linspace(1, 10, 37)
+    sig, p = 0.02, 0.017
+    out = {}
+    for b in (0.29, 0.40):
+        out[str(b)] = gams * sig ** 2 + p * b * (1 - b) ** (-gams)
+    base = gams * sig ** 2
+    return _json({"gams": gams, "prem": out, "base": base, "p": p, "sig": sig})
+
+
 ITEMS = {"frontier": compute_frontier, "twoasset": compute_twoasset, "capm": compute_capm, "hj": compute_hj,
          "puzzle": compute_puzzle, "shiller": compute_shiller, "intermediary": compute_intermediary,
-         "apt": compute_apt, "limits": compute_limits, "bubbles": compute_bubbles}
+         "apt": compute_apt, "limits": compute_limits, "bubbles": compute_bubbles, "hook": compute_hook,
+         "disaster": compute_disaster}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
