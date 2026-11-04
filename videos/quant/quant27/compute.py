@@ -20,6 +20,7 @@ once, in ``envelope``.
 * ``toolkit``    dollar bars, triple-barrier labels and meta-labels, fractional differencing, uniqueness weights;
 * ``conformal``  split and adaptive conformal intervals;
 * ``pretrained`` a pocket foundation model: pretrained on coins, tested zero-shot on stock-market volatility;
+* ``theory``     the research chapter: Marchenko-Pastur, the exact ridge(less) risk, random features to kernels;
 * ``envelope``   the network ensemble and the random-feature timer, registered and opened on 2021-2025.
 """
 
@@ -355,7 +356,8 @@ def compute_zoo() -> dict:
         rows[m] = {"r2": ML.r2_oos(y, f), "sr_ew": B.sharpe(ew["ls"], 52), "sr_vw": B.sharpe(vw["ls"], 52),
                    "mean_ew": float(ew["ls"].mean() * 52), "mean_vw": float(vw["ls"].mean() * 52),
                    "cum_ew": np.cumsum(np.log1p(np.clip(ew["ls"], -0.99, None))), "weeks": ew["date"],
-                   "liq_split": _liq_split(d, f, ret, qv)}
+                   "liq_split": _liq_split(d, f, ret, qv), "cost": _turnover_cost(d, f, qv),
+                   "years": float(len(np.unique(d)) / 52), "coins_week": float(len(d) / len(np.unique(d)))}
     return _json({"rows": rows, "models": ZOO, "importance": imp, "features": FEATURES})
 
 
@@ -474,15 +476,19 @@ def compute_images() -> dict:
         from datetime import datetime, timezone
         t = int(datetime.strptime(str(w), "%Y%m%d").replace(tzinfo=timezone.utc).timestamp() // 86400) - d0
         m = P["date"] == w
+        # training weeks: an image for every day of the week before (labels overlap; the test uses Sundays only)
+        lags = range(7) if w < 20190624 else (0,)
         for j in P["coin"][m]:
-            seg = C[t - 19:t + 1, j]
-            if not np.isfinite(seg).all() or not np.isfinite(C[min(t + 5, len(C) - 1), j]):
-                continue
-            imgs.append(ML.chart_images(O[:, j], H[:, j], L[:, j], C[:, j], np.nan_to_num(Q[:, j]), t, 20, 32))
-            ys.append(float(C[t + 5, j] > C[t, j]))
-            dates.append(w)
-            mom.append(C[t, j] / C[t - 19, j] - 1)
-            js_.append(j)
+            for k in lags:
+                tt = t - k
+                seg = C[tt - 19:tt + 1, j]
+                if not np.isfinite(seg).all() or not np.isfinite(C[min(tt + 5, len(C) - 1), j]):
+                    continue
+                imgs.append(ML.chart_images(O[:, j], H[:, j], L[:, j], C[:, j], np.nan_to_num(Q[:, j]), tt, 20, 32))
+                ys.append(float(C[tt + 5, j] > C[tt, j]))
+                dates.append(w)
+                mom.append(C[tt, j] / C[tt - 19, j] - 1)
+                js_.append(j)
     imgs, ys, dates, mom = np.array(imgs), np.array(ys), np.array(dates), np.array(mom)
     tr, va, te = dates < 20190701, (dates >= 20190701) & (dates < 20191224), dates >= 20200101
     probs = []
@@ -674,6 +680,50 @@ def compute_pretrained() -> dict:
     return _json(out)
 
 
+def compute_theory() -> dict:
+    """The research chapter: the Marchenko-Pastur law, the exact ridge and ridgeless risk of the isotropic linear
+    model against simulation, and random features converging to their kernel."""
+    rng = np.random.default_rng(7)
+    out = {"mp": {}}
+    for g in (0.25, 0.8, 2.0):
+        N = 400
+        X = rng.standard_normal((N, int(g * N)))
+        ev = np.linalg.eigvalsh(X.T @ X / N)
+        xs = np.linspace(0, (1 + math.sqrt(g)) ** 2 * 1.05, 300)
+        out["mp"][str(g)] = {"eig": ev, "x": xs, "density": ML.mp_density(xs, g), "atom": max(0.0, 1 - 1 / g),
+                             "min_eig": float(np.min(ev[ev > 1e-9])), "edge": (1 - math.sqrt(g)) ** 2}
+    gs = np.r_[np.linspace(0.05, 0.95, 19), np.linspace(1.05, 10, 60)]
+    snr = 1.0
+    th = {"ridgeless": [ML.ridge_risk_theory(g, 0.0, snr, 1.0) for g in gs],
+          "optimal": [ML.ridge_risk_theory(g, g / snr, snr, 1.0) for g in gs]}
+    sim_g = [0.2, 0.5, 0.8, 0.9, 1.2, 1.5, 2.0, 3.0, 5.0, 8.0]
+    N = 200
+    sim = {"ridgeless": [], "optimal": []}
+    for g in sim_g:
+        for k, lam in (("ridgeless", 0.0), ("optimal", g / snr)):
+            r = ML.ridge_risk_sim(N, int(g * N), lam, snr, 1.0, seeds=30)
+            sim[k].append({"median": float(np.median(r)), "lo": float(np.quantile(r, 0.1)),
+                           "hi": float(np.quantile(r, 0.9))})
+    out["risk"] = {"gamma": gs, "snr": snr, "N": N, "sim_gamma": sim_g, "sim": sim,
+                   "ridgeless": [d["risk"] for d in th["ridgeless"]], "bias": [d["bias"] for d in th["ridgeless"]],
+                   "var": [d["var"] for d in th["ridgeless"]], "optimal": [d["risk"] for d in th["optimal"]],
+                   "null": snr}
+    # the misspecified model: the learner sees P of P_total = 10 N features (the virtue of complexity, explained)
+    G, r2m = 10.0, 2.0
+    out["mis"] = {"gamma": gs, "G": G, "r2": r2m, "null": r2m + 1.0,
+                  "ridgeless": [ML.ridge_risk_misspecified(g, G, 0.0, r2m) for g in gs],
+                  "optimal": [ML.ridge_risk_misspecified(g, G, g * (1 + r2m * (1 - g / G)) / (r2m * g / G), r2m)
+                              for g in gs],
+                  "sim_gamma": sim_g + [10.0], "sim": []}
+    for g in out["mis"]["sim_gamma"]:
+        r = ML.ridge_risk_misspecified_sim(N, int(g * N), int(G * N), 0.0, r2m, seeds=20)
+        out["mis"]["sim"].append({"median": float(np.median(r)), "lo": float(np.quantile(r, 0.1)),
+                                  "hi": float(np.quantile(r, 0.9))})
+    Ps = [10, 30, 100, 300, 1000, 3000, 10000, 30000]
+    out["rff"] = {"P": Ps, "err": ML.rff_kernel_error(P_list=Ps)}
+    return _json(out)
+
+
 def _monthly_compound(dates, r):
     """Weekly returns (dates YYYYMMDD) compounded into calendar months."""
     ym = np.asarray(dates) // 100
@@ -782,7 +832,7 @@ def _zoo_research_vw(P):
 
 ITEMS = {"snr": compute_snr, "kmz": compute_kmz, "nagel": compute_nagel, "panel": compute_panel, "zoo": compute_zoo,
          "descent": compute_descent, "autoenc": compute_autoenc, "attention": compute_attention, "images": compute_images,
-         "sdf": compute_sdf, "toolkit": compute_toolkit, "conformal": compute_conformal, "pretrained": compute_pretrained,
+         "sdf": compute_sdf, "theory": compute_theory, "toolkit": compute_toolkit, "conformal": compute_conformal, "pretrained": compute_pretrained,
          "envelope": compute_envelope}
 
 if __name__ == "__main__":

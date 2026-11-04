@@ -17,9 +17,9 @@ class Conformal(VoiceoverScene):
         self.question()
 
     def card(self):
-        c = chapter_card(12, r"Conformal prediction", r"How wide is a forecast's error, with no model of the errors?",
+        c = chapter_card(13, r"Conformal prediction", r"How wide is a forecast's error, with no model of the errors?",
                          part=PART)
-        with self.voiceover("Chapter twelve. Every forecast in this part has been a single number. How wide should its "
+        with self.voiceover("Chapter thirteen. Every forecast in this part has been a single number. How wide should its "
                             "error bar be, if we refuse to assume anything about the errors?"):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

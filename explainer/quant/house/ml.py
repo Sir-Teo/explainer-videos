@@ -49,6 +49,109 @@ def ridge_dual(Z, y, z: float):
     return Z.T @ np.linalg.solve(Z @ Z.T + z * T * np.eye(T), y)
 
 
+# ---------------------------------------------------------------------------
+# The theory of overparameterised regression (the research chapter of Part 27)
+# ---------------------------------------------------------------------------
+def mp_density(s, gamma: float):
+    """The Marchenko-Pastur density of the eigenvalues of X'X/N, X an N x P matrix of independent standard normals,
+    as N, P -> infinity with P/N -> gamma: sqrt((b - s)(s - a)) / (2 pi gamma s) on [a, b] = [(1 -+ sqrt(gamma))^2].
+    For gamma > 1 it integrates to 1/gamma; the rest, 1 - 1/gamma, is an atom at zero."""
+    s = np.asarray(s, float)
+    a, b = (1 - math.sqrt(gamma)) ** 2, (1 + math.sqrt(gamma)) ** 2
+    out = np.zeros_like(s)
+    m = (s > a) & (s < b)
+    out[m] = np.sqrt((b - s[m]) * (s[m] - a)) / (2 * math.pi * gamma * s[m])
+    return out
+
+
+def _mp_integral(f, gamma: float, n: int = 4000) -> float:
+    """The integral of f against the continuous part of the Marchenko-Pastur law (substituting s = a + (b - a)
+    (1 - cos t)/2, which removes the square-root endpoints)."""
+    a, b = (1 - math.sqrt(gamma)) ** 2, (1 + math.sqrt(gamma)) ** 2
+    t = (np.arange(n) + 0.5) * math.pi / n
+    s = a + (b - a) * (1 - np.cos(t)) / 2
+    ds = (b - a) * np.sin(t) / 2 * (math.pi / n)
+    return float(np.sum(f(s) * mp_density(s, gamma) * ds))
+
+
+def ridge_risk_theory(gamma: float, lam: float, r2: float = 1.0, s2: float = 1.0) -> dict:
+    """Out-of-sample excess risk E[(x'(b_hat - b))^2] of ridge with penalty ``lam`` in the isotropic linear model
+    y = x'b + e, x ~ N(0, I_P), |b|^2 = r2, Var e = s2, as P/N -> gamma (Hastie, Montanari, Rosset and Tibshirani
+    2022, thm. 5): bias^2 = r2 lam^2 int (s + lam)^-2 dF, variance = s2 gamma int s (s + lam)^-2 dF, F the
+    Marchenko-Pastur law (its atom at zero counts in the bias only). lam -> 0 gives the ridgeless risk:
+    s2 gamma/(1 - gamma) below the interpolation threshold, r2 (1 - 1/gamma) + s2/(gamma - 1) above it."""
+    atom = max(0.0, 1 - 1 / gamma)
+    if lam <= 0:
+        if gamma < 1:
+            return {"bias": 0.0, "var": s2 * gamma / (1 - gamma), "risk": s2 * gamma / (1 - gamma)}
+        bias, var = r2 * (1 - 1 / gamma), s2 / (gamma - 1) if gamma > 1 else math.inf
+        return {"bias": bias, "var": var, "risk": bias + var}
+    bias = r2 * lam ** 2 * (_mp_integral(lambda s: 1 / (s + lam) ** 2, gamma) + atom / lam ** 2)
+    var = s2 * gamma * _mp_integral(lambda s: s / (s + lam) ** 2, gamma)
+    return {"bias": bias, "var": var, "risk": bias + var}
+
+
+def ridge_risk_sim(N: int, P: int, lam: float, r2: float = 1.0, s2: float = 1.0, seeds: int = 20) -> np.ndarray:
+    """The same risk by simulation: |b_hat - b|^2 (isotropic x makes it the out-of-sample excess risk), one per
+    seed; ridge in its dual form when P > N, so ``lam`` = 0 is the minimum-norm interpolator."""
+    out = []
+    for s in range(seeds):
+        rng = np.random.default_rng(1000 + s)
+        X = rng.standard_normal((N, P))
+        b = rng.standard_normal(P)
+        b *= math.sqrt(r2) / np.linalg.norm(b)
+        y = X @ b + math.sqrt(s2) * rng.standard_normal(N)
+        if P > N:
+            bh = X.T @ np.linalg.solve(X @ X.T + lam * N * np.eye(N), y)
+        else:
+            bh = np.linalg.solve(X.T @ X + lam * N * np.eye(P), X.T @ y)
+        out.append(float(np.sum((bh - b) ** 2)))
+    return np.array(out)
+
+
+def ridge_risk_misspecified(gamma: float, gamma_total: float, lam: float, r2: float = 2.0, s2: float = 1.0) -> float:
+    """Total out-of-sample MSE when the learner sees only the first P of P_total isotropic features that carry the
+    signal (|b|^2 = r2 spread evenly), P/N = gamma, P_total/N = gamma_total (Hastie et al. 2022, sec. 5; the
+    mechanism of Kelly, Malamud and Zhou's 'virtue of complexity'). The unseen share of the signal acts as noise:
+    MSE = s_eff + excess risk(gamma, lam; r2 rho, s_eff), rho = gamma/gamma_total, s_eff = s2 + r2 (1 - rho)."""
+    rho = min(gamma / gamma_total, 1.0)
+    se = s2 + r2 * (1 - rho)
+    return se + ridge_risk_theory(gamma, lam, r2 * rho, se)["risk"]
+
+
+def ridge_risk_misspecified_sim(N: int, P: int, P_total: int, lam: float, r2: float = 2.0, s2: float = 1.0,
+                                seeds: int = 20) -> np.ndarray:
+    """The same by simulation: the total MSE |b_hat - b_seen|^2 + |b_unseen|^2 + s2, one per seed."""
+    out = []
+    for s in range(seeds):
+        rng = np.random.default_rng(2000 + s)
+        X = rng.standard_normal((N, P_total))
+        b = rng.standard_normal(P_total)
+        b *= math.sqrt(r2) / np.linalg.norm(b)
+        y = X @ b + math.sqrt(s2) * rng.standard_normal(N)
+        Xs = X[:, :P]
+        if P > N:
+            bh = Xs.T @ np.linalg.solve(Xs @ Xs.T + lam * N * np.eye(N), y)
+        else:
+            bh = np.linalg.solve(Xs.T @ Xs + lam * N * np.eye(P), Xs.T @ y)
+        out.append(float(np.sum((bh - b[:P]) ** 2) + np.sum(b[P:] ** 2) + s2))
+    return np.array(out)
+
+
+def rff_kernel_error(d: int = 15, P_list=(10, 100, 1000, 10000), gamma: float = 0.5, n: int = 200, seed: int = 0):
+    """Rahimi and Recht: the random-feature inner product z(x)'z(y) estimates exp(-gamma^2 |x - y|^2 / 2) with
+    error of order 1/sqrt(P). Returns the mean absolute error over n random pairs, for each P."""
+    rng = np.random.default_rng(seed)
+    X = rng.standard_normal((n, d)) / math.sqrt(d)
+    Y = X + rng.standard_normal((n, d)) * 0.5 / math.sqrt(d)
+    k = np.exp(-gamma ** 2 * np.sum((X - Y) ** 2, 1) / 2)
+    out = []
+    for P in P_list:
+        Z = rff(np.vstack([X, Y]), P, gamma, seed=seed + 1)
+        out.append(float(np.mean(np.abs(np.sum(Z[:n] * Z[n:], 1) - k))))
+    return np.array(out)
+
+
 def kmz_timing(X, r, T: int = 12, Ps=(2, 6, 12, 60, 120, 600, 1200, 6000, 12000), zs=(1e-3, 1e-1, 10.0, 1e3),
                gamma: float = 2.0, n_seeds: int = 5, start: int | None = None) -> dict:
     """Kelly, Malamud and Zhou's experiment: each month t, fit ridge on the last ``T`` months (predictors at s-1,
@@ -300,7 +403,7 @@ class CondAutoencoder:
         torch = _torch()
         torch.manual_seed(self.seed)
         self.beta = _mlp(d, self.hidden, self.K)
-        self.fac = torch.nn.Linear(d, self.K, bias=False)
+        self.fac = torch.nn.Linear(d + 1, self.K, bias=False)   # managed portfolios, plus the equal-weighted market
         return torch.nn.ModuleList([self.beta, self.fac])
 
     def fit(self, panels, val=None):
@@ -315,12 +418,17 @@ class CondAutoencoder:
                 yield P[k]
 
         def loss(Z, r):
-            x = Z.T @ r / len(r)                     # managed portfolios
-            f = self.fac(x)
+            f = self.fac(self._managed(Z, r))
             return torch.mean((r - self.beta(Z) @ f) ** 2)
         vf = (lambda: sum(float(loss(Z, r)) for Z, r in V) / len(V)) if V else None
         _train(model, loss, batches, model.parameters(), self.epochs, self.lr, self.l1, vf)
         return self
+
+    @staticmethod
+    def _managed(Z, r):
+        """Characteristic-managed portfolios x_t = [1, Z_{t-1}]' r_t / N_t: the first is the equal-weighted market."""
+        torch = _torch()
+        return torch.cat([r.mean().reshape(1), Z.T @ r / len(r)])
 
     def predict(self, Z, lam):
         """The predictive version: beta(z_{i,t-1})' lambda, with lambda the average factor realisation in training."""
@@ -332,13 +440,13 @@ class CondAutoencoder:
         torch = _torch()
         with torch.no_grad():
             Zt, rt = torch.tensor(Z, dtype=torch.float32), torch.tensor(r, dtype=torch.float32)
-            return self.fac(Zt.T @ rt / len(rt)).numpy()
+            return self.fac(torch.cat([rt.mean().reshape(1), Zt.T @ rt / len(rt)])).numpy()
 
     def fitted(self, Z, r):
         torch = _torch()
         with torch.no_grad():
             Zt, rt = torch.tensor(Z, dtype=torch.float32), torch.tensor(r, dtype=torch.float32)
-            return (self.beta(Zt) @ self.fac(Zt.T @ rt / len(rt))).numpy()
+            return (self.beta(Zt) @ self.fac(torch.cat([rt.mean().reshape(1), Zt.T @ rt / len(rt)]))).numpy()
 
 
 class CrossAttention:
@@ -462,7 +570,8 @@ class ChartCNN:
 class AdversarialSDF:
     """Chen, Pelger and Zhu's (2024) idea, small: SDF weights w(z_i) from a network of each asset's characteristics,
     M_{t+1} = 1 - sum_i w_i R_{i,t+1}; a second network g(z_i) chooses the test assets (conditional moments
-    E[M R_i g(z_i)] = 0) that the SDF prices worst, and the two are trained against each other."""
+    E[M R_i g(z_i)] = 0, with g = 1 always among them) that the SDF prices worst, and the two are trained against
+    each other."""
 
     def __init__(self, hidden=(32, 16), n_moments=4, epochs=40, lr=1e-3, seed=0, rounds=3):
         self.hidden, self.M, self.epochs, self.lr, self.seed, self.rounds = hidden, n_moments, epochs, lr, seed, rounds
@@ -481,7 +590,8 @@ class AdversarialSDF:
                 w = self.w(Z).squeeze(-1)
                 w = w / (w.abs().sum() + 1e-6)
                 m = 1 - (w * r).sum()
-                errs.append((m * r[:, None] * self.g(Z)).mean(0))
+                h = torch.cat([torch.ones(len(r), 1), self.g(Z)], 1)      # the constant: unconditional moments
+                errs.append((m * r[:, None] * h).mean(0))
             return torch.stack(errs).mean(0)
         opt_w = torch.optim.Adam(self.w.parameters(), lr=self.lr)
         opt_g = torch.optim.Adam(self.g.parameters(), lr=self.lr)

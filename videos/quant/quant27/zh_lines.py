@@ -16,16 +16,17 @@ CHAPTERS = {
     'Limits': '3. 优势在哪里',
     'Complexity': '4. 复杂度的美德',
     'Critics': '5. 批评者',
-    'Autoencoder': '6. 自编码器资产定价',
-    'DeepSDF': '7. 带对抗矩的深度SDF',
-    'Attention': '8. 跨资产的注意力',
-    'Images': '9. 价格的图像',
-    'Foundation': '10. 基础模型',
-    'Toolkit': '11. 实践者的工具箱',
-    'Conformal': '12. 共形预测',
-    'Firms': '13. 来自公开记录：Two Sigma与文艺复兴',
-    'Envelope': '14. 机器学习策略，登记并打开',
-    'House': '15. 第27条规则：模型部门',
+    'Theory': '6. 过参数化预测的理论',
+    'Autoencoder': '7. 自编码器资产定价',
+    'DeepSDF': '8. 带对抗矩的深度SDF',
+    'Attention': '9. 跨资产的注意力',
+    'Images': '10. 价格的图像',
+    'Foundation': '11. 基础模型',
+    'Toolkit': '12. 实践者的工具箱',
+    'Conformal': '13. 共形预测',
+    'Firms': '14. 来自公开记录：Two Sigma与文艺复兴',
+    'Envelope': '15. 机器学习策略，登记并打开',
+    'House': '16. 第27条规则：模型部门',
     'Outro': '回顾、交易台问题与习题',
 }
 
@@ -152,8 +153,8 @@ ZH = {
         "暂停思考。一个深度网络的每日股票预测与一个月反转信号的相关系数为0.8。在为这个网络付钱之前，你会做哪两项检验？",
 
     # ------------------------------------------------------------------ Firms
-    "Chapter thirteen. Two firms that run on models":
-        "第13章。两家靠模型运转的公司，就公开记录所能显示的而言。",
+    "Chapter fourteen. Two firms that run on models":
+        "第14章。两家靠模型运转的公司，就公开记录所能显示的而言。",
 
     "Renaissance Technologies was founded in 1982":
         "文艺复兴科技公司由数学家詹姆斯·西蒙斯于1982年创立，他曾为美国政府破译密码。<bookmark mark='a'/>它的大奖章基金自2005年起只对本公司员工开放，"
@@ -181,8 +182,8 @@ ZH = {
         "暂停思考。一个基金扣费后每年赚百分之三十九，却拒绝新资金。它的管理者为什么可能宁愿这样而不扩张？这说明了策略的容量什么？",
 
     # ------------------------------------------------------------------ Toolkit
-    "Chapter eleven. Marcos Lopez de Prado's toolkit":
-        "第11章。马科斯·洛佩斯·德普拉多为金融机器学习准备的工具箱，每件工具都与它所取代的简单做法对比检验。",
+    "Chapter twelve. Marcos Lopez de Prado's toolkit":
+        "第12章。马科斯·洛佩斯·德普拉多为金融机器学习准备的工具箱，每件工具都与它所取代的简单做法对比检验。",
 
     "First, the clock.":
         "第一，时钟。价格通常按固定时间采样，每天一个收盘价。但市场并不按固定的速度做生意。<bookmark mark='a'/>洛佩斯·德普拉多的信息驱动K线"

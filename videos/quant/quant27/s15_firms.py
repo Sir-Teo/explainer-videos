@@ -14,9 +14,9 @@ class Firms(VoiceoverScene):
         self.question()
 
     def card(self):
-        c = chapter_card(13, r"From the public record: Two Sigma and Renaissance",
+        c = chapter_card(14, r"From the public record: Two Sigma and Renaissance",
                          r"What do the most successful model shops show, and hide?", lit=(1982, 2001), part=PART)
-        with self.voiceover("Chapter thirteen. Two firms that run on models, as far as the public record shows them."):
+        with self.voiceover("Chapter fourteen. Two firms that run on models, as far as the public record shows them."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 

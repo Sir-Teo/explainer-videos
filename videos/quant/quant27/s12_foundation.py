@@ -21,9 +21,9 @@ class Foundation(VoiceoverScene):
         self.question()
 
     def card(self):
-        c = chapter_card(10, r"Foundation models", r"Can one model, trained on every market, forecast one it has never "
+        c = chapter_card(11, r"Foundation models", r"Can one model, trained on every market, forecast one it has never "
                          r"seen?", lit=(2024, 2025), part=PART)
-        with self.voiceover("Chapter ten. Foundation models: one network, pretrained on every market at once, and asked "
+        with self.voiceover("Chapter eleven. Foundation models: one network, pretrained on every market at once, and asked "
                             "about a market it has never seen."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

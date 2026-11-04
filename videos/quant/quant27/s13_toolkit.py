@@ -18,9 +18,9 @@ class Toolkit(VoiceoverScene):
         self.question()
 
     def card(self):
-        c = chapter_card(11, r"The practitioner's toolkit", r"Which of the tricks pay for themselves?", lit=(2018,),
+        c = chapter_card(12, r"The practitioner's toolkit", r"Which of the tricks pay for themselves?", lit=(2018,),
                          part=PART)
-        with self.voiceover("Chapter eleven. Marcos Lopez de Prado's toolkit for machine learning in finance, each tool "
+        with self.voiceover("Chapter twelve. Marcos Lopez de Prado's toolkit for machine learning in finance, each tool "
                             "tested against the simple thing it replaces."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

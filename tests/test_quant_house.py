@@ -3151,3 +3151,18 @@ def test_ml_trees_conformal_toolkit():
     assert len(bars["t"]) == 5
     w = ml.uniqueness_weights([0, 0], [1, 1], 3)
     assert np.allclose(w, 0.5)
+
+
+def test_ridge_theory_matches_simulation():
+    import numpy as np
+    from explainer.quant.house import ml as ML
+    x = np.linspace(0, 12, 120001)
+    assert abs(np.trapezoid(ML.mp_density(x, 0.5), x) - 1) < 1e-3
+    assert abs(np.trapezoid(ML.mp_density(x, 2.0), x) - 0.5) < 1e-3
+    for g, lam in ((0.5, 0.0), (1.5, 0.0), (3.0, 3.0), (0.9, 0.9)):
+        th = ML.ridge_risk_theory(g, lam)["risk"]
+        sm = np.median(ML.ridge_risk_sim(200, int(g * 200), lam, seeds=10))
+        assert abs(sm / th - 1) < 0.12
+    assert ML.ridge_risk_theory(2.0, 0.0)["risk"] == 1.0 * 0.5 + 1.0
+    e = ML.rff_kernel_error(P_list=(100, 10000))
+    assert e[1] < e[0] / 5
