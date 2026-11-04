@@ -260,7 +260,7 @@ def compute_topics(k: int = 8) -> dict:
     return _json({"dates": dm, "share": r["share"], "top_words": tops, "err": r["err"], "n_vocab": len(vocab), "k": k})
 
 
-PHRASES = ["considerable period", "measured", "extended period", "exceptionally low levels", "patient",
+PHRASES = ["considerable period", "likely to be measured", "extended period", "exceptionally low levels", "patient",
            "some time", "gradual", "accommodative", "ongoing increases", "highly accommodative", "transitory",
            "balance of risks", "pandemic"]
 

@@ -133715,198 +133715,198 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomchistorical{1994..2020}.htm + fomccalendars.htm"
  },
  "fomc/minutes/19960130": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "d8eed34e8814427c3f89a8753ec042f730214a62c0de502b709e7d9893456bf4",
+  "bytes": 58403,
   "source": "https://www.federalreserve.gov/fomc/minutes/19960130.htm"
  },
  "fomc/minutes/19960326": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "a4baf071903b9230bfa2e81c5d5d854e40289263e62cc84641766082911946bc",
+  "bytes": 28593,
   "source": "https://www.federalreserve.gov/fomc/minutes/19960326.htm"
  },
  "fomc/minutes/19960521": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "5e2d0eae1aba2d4f9c0167f5a180709a4fcaa45640a6008913844b58df381c51",
+  "bytes": 29144,
   "source": "https://www.federalreserve.gov/fomc/minutes/19960521.htm"
  },
  "fomc/minutes/19960702": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "1a02f79614f64d6b4fff6368ac9213e288a3408c54f7a77656b0722a610c4634",
+  "bytes": 38098,
   "source": "https://www.federalreserve.gov/fomc/minutes/19960702.htm"
  },
  "fomc/minutes/19960820": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "a965a8a50979116f29f91dc02b5119a0887ae2dd60a817d1a329e85dedd6ff6c",
+  "bytes": 25390,
   "source": "https://www.federalreserve.gov/fomc/minutes/19960820.htm"
  },
  "fomc/minutes/19960924": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "84016ddf3cec146e2eb1d53661dd440fcd5192fc931e17d5fcecc61f5351b60e",
+  "bytes": 31000,
   "source": "https://www.federalreserve.gov/fomc/minutes/19960924.htm"
  },
  "fomc/minutes/19961113": {
-  "sha256": "c76232ac3199c39e7ff6247e1cf51248caca6ae5e9fce47752e5787967af38c9",
-  "bytes": 138,
+  "sha256": "4ae3b4e51a9a635a9091d9dcec074e00ec9ac394cb34411cc8e95342bc339d4a",
+  "bytes": 29236,
   "source": "https://www.federalreserve.gov/fomc/minutes/19961113.htm"
  },
  "fomc/minutes/19961217": {
-  "sha256": "c802d529523eb67f2fc38c0ea0a5c126d7a639575d6f7b027c67990db2565975",
-  "bytes": 274,
+  "sha256": "cdfa7f6a1989c06d85b76f707a2a8b75c4489457cd20bae6b1c0f7402275b844",
+  "bytes": 29042,
   "source": "https://www.federalreserve.gov/fomc/minutes/19961217.htm"
  },
  "fomc/minutes/19970204": {
-  "sha256": "898a5605af77315417662ca226bc938c2ec4eb32bfa64ffecc7cc176fdbc9054",
-  "bytes": 837,
+  "sha256": "3e89d3e2e410780ca27c0e1218c296ac09a3c93d3a33e0f67ae1bfa4341b214e",
+  "bytes": 52812,
   "source": "https://www.federalreserve.gov/fomc/minutes/19970204.htm"
  },
  "fomc/minutes/19970325": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "8a6d890f8aeb9159486444685d0b2f5000f6682c1edcf105338f7e674e8946af",
+  "bytes": 29471,
   "source": "https://www.federalreserve.gov/fomc/minutes/19970325.htm"
  },
  "fomc/minutes/19970520": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "2e12b9aa534a5d1377528af519c90dd0eb52cb630204601a0df61a40f8399f27",
+  "bytes": 30234,
   "source": "https://www.federalreserve.gov/fomc/minutes/19970520.htm"
  },
  "fomc/minutes/19970701": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "0e601fff933f09796139ac1a0af91d43c8afb63808fa07f886a5d644537c8bd2",
+  "bytes": 35982,
   "source": "https://www.federalreserve.gov/fomc/minutes/19970701.htm"
  },
  "fomc/minutes/19970819": {
-  "sha256": "af465a4572870c7be522071cdcbdb186455b076177131064ad16d4053ae0667b",
-  "bytes": 125,
+  "sha256": "8d8e7f7207b854aeddc71829357226e07bee8bc2598811d1f46f979803fdee09",
+  "bytes": 28753,
   "source": "https://www.federalreserve.gov/fomc/minutes/19970819.htm"
  },
  "fomc/minutes/19970930": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "324a49e78d0fc1f6af20676b602571240ac237d383e74d47bfa96a24243d9769",
+  "bytes": 27784,
   "source": "https://www.federalreserve.gov/fomc/minutes/19970930.htm"
  },
  "fomc/minutes/19971112": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "ca4187a5f62129cec3d4846441fde48c21da487bb117dbf21f08ab16eab46387",
+  "bytes": 28533,
   "source": "https://www.federalreserve.gov/fomc/minutes/19971112.htm"
  },
  "fomc/minutes/19971216": {
-  "sha256": "d2a4efb33350128f543f5e1ce4249ec51f31705ffbe3de26ef5b080b7e325665",
-  "bytes": 596,
+  "sha256": "505eadd846479d781068eefa0862505abcc4aa476035d16a542893c291cb521b",
+  "bytes": 28116,
   "source": "https://www.federalreserve.gov/fomc/minutes/19971216.htm"
  },
  "fomc/minutes/19980203": {
-  "sha256": "21ceb0c7e4340bb32aaab41f08d9959b906fd24ee8e9944fe1f3db3fa3f3f638",
-  "bytes": 135,
+  "sha256": "9dd854241786d5617fbbab61d3f49fa22aab47ea9d994eafb20c3dfa7f8c071a",
+  "bytes": 54343,
   "source": "https://www.federalreserve.gov/fomc/minutes/19980203.htm"
  },
  "fomc/minutes/19980331": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "7ecad5779d8ae4093fe832ac38a9e6f28f373c64bd48556b97786124a4999305",
+  "bytes": 27753,
   "source": "https://www.federalreserve.gov/fomc/minutes/19980331.htm"
  },
  "fomc/minutes/19980519": {
-  "sha256": "f744f84439bde2f9ec3d9e0dfd852fb917de8835aec5f87fa4fa59e7d55f6938",
-  "bytes": 723,
+  "sha256": "69bd9814919bcd57e0d42b23f44fbecc35ebfd4ee990d0cfae193396d698abeb",
+  "bytes": 33671,
   "source": "https://www.federalreserve.gov/fomc/minutes/19980519.htm"
  },
  "fomc/minutes/19980630": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "3b3153147663378c73a9cc16a7f213cc92208da4dfa571624378b50474e4c15f",
+  "bytes": 39115,
   "source": "https://www.federalreserve.gov/fomc/minutes/19980630.htm"
  },
  "fomc/minutes/19980818": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "c8c86c27dcbf8bb10cf8ef9cfa3d32cad2c8733e8f13f136c26c1d1ee114a2b8",
+  "bytes": 31419,
   "source": "https://www.federalreserve.gov/fomc/minutes/19980818.htm"
  },
  "fomc/minutes/19980929": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "1e93c6776237b53e779676f9649f1ac3324857387e0454ce7c85081dcd736c58",
+  "bytes": 34258,
   "source": "https://www.federalreserve.gov/fomc/minutes/19980929.htm"
  },
  "fomc/minutes/19981117": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "4c9e9f4cda077bb371ec096fef8ee7a6de26f1a77d4b7506dcbc74d441e91188",
+  "bytes": 41690,
   "source": "https://www.federalreserve.gov/fomc/minutes/19981117.htm"
  },
  "fomc/minutes/19981222": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "cc8f651fd3b13c3ab33fa71c95de8deddfad60ca46bccfce925a753fae0de96b",
+  "bytes": 29715,
   "source": "https://www.federalreserve.gov/fomc/minutes/19981222.htm"
  },
  "fomc/minutes/19990202": {
-  "sha256": "d8ad0aa1a675e57da958b3533167770a012a69b1451f1ffcb16bbac76f21e507",
-  "bytes": 46278,
+  "sha256": "a2b636d2293e842896698435d2da81cc943a8b6557fc4beaf6266e1968dc3c77",
+  "bytes": 52546,
   "source": "https://www.federalreserve.gov/fomc/minutes/19990202.htm"
  },
  "fomc/minutes/19990330": {
-  "sha256": "c75faf1a2ec5c35a70d83bbbf97dbf2ad3e6d6c99e106d8066be200637480f56",
-  "bytes": 23831,
+  "sha256": "a1a23928b9285af24d6d4df029a7de63addd8c73fdb68aba00fe774dcf80914e",
+  "bytes": 27316,
   "source": "https://www.federalreserve.gov/fomc/minutes/19990330.htm"
  },
  "fomc/minutes/19990518": {
-  "sha256": "0113e6abacb0d5003256fe89624f16bd73d5d09f3c4218eedb6e970e82e738ac",
-  "bytes": 24469,
+  "sha256": "e5f9f03aa28e451475ae3ab4f5d370775fdec105fadffacf729c03efa50bffd1",
+  "bytes": 28055,
   "source": "https://www.federalreserve.gov/fomc/minutes/19990518.htm"
  },
  "fomc/minutes/19990629": {
-  "sha256": "3242c009d62b4d6c629bc3ff4030616bbeda950c9b066636c1efd5352d3c8bb5",
-  "bytes": 31925,
+  "sha256": "9387d252d7c8193bfab9effeb87aa9346e94a667dd70d9793ba8ce8315edf1c3",
+  "bytes": 36928,
   "source": "https://www.federalreserve.gov/fomc/minutes/19990629.htm"
  },
  "fomc/minutes/19990824": {
-  "sha256": "72a4766353bb991d48168a21cc239c8a02fb8e8c406bc0aadc642ef4603e3aca",
-  "bytes": 36170,
+  "sha256": "81d7cc0fca6abc12be31a5e83078c80a2b89feb48226948dd62dd0a546f13f70",
+  "bytes": 39766,
   "source": "https://www.federalreserve.gov/fomc/minutes/19990824.htm"
  },
  "fomc/minutes/19991005": {
-  "sha256": "7c45744a01258b83000e53d8405a9ff7ab67da9a513098aa547e0d62ea7ed972",
-  "bytes": 24682,
+  "sha256": "d43b2ca42b2dcaffcdce6e405ee128de71d9682ca225a263b74c48927f86fc58",
+  "bytes": 27509,
   "source": "https://www.federalreserve.gov/fomc/minutes/19991005.htm"
  },
  "fomc/minutes/19991116": {
-  "sha256": "317fe8353c2fd48d71aa21ccfb9ce3b35f8300d1be1116dabf77e9b737383494",
-  "bytes": 26874,
+  "sha256": "0fb72e4dfd4e79d41107acaccebb4f42cd26e2d525a4263c042b89b2f33f65ad",
+  "bytes": 29055,
   "source": "https://www.federalreserve.gov/fomc/minutes/19991116.htm"
  },
  "fomc/minutes/19991221": {
-  "sha256": "3f7003ef272e07065fca243ef66f6745b65880b2ef985caeb7f7cdbf5b70142c",
-  "bytes": 26194,
+  "sha256": "bd0b18d2c122f3354d082b811c7483934761ce5d17d3e90115781af11c5845e0",
+  "bytes": 29143,
   "source": "https://www.federalreserve.gov/fomc/minutes/19991221.htm"
  },
  "fomc/minutes/20000202": {
-  "sha256": "78ec7248c02bdcda525171fe0eb9adeedb6ab0e63cc3111eb270dc69458678ef",
-  "bytes": 49445,
+  "sha256": "25b3312d2a9e6639fa0683e5d5d254a97faf21d1e0acf831e06f6789c203b73e",
+  "bytes": 50636,
   "source": "https://www.federalreserve.gov/fomc/minutes/20000202.htm"
  },
  "fomc/minutes/20000321": {
-  "sha256": "b35141ca70bbf8fc589f266def9ed4073942d7a385e02c53cb94420e44b7849b",
-  "bytes": 27229,
+  "sha256": "290c401afd49cbfdfbcfff3196e2156c73de3efe5c1f1a159260d70ed47a9796",
+  "bytes": 27697,
   "source": "https://www.federalreserve.gov/fomc/minutes/20000321.htm"
  },
  "fomc/minutes/20000516": {
-  "sha256": "81f84331dcdd71ce2582ca11fa09affdeaa47fd9c1c8a9165c241deb96641b1d",
-  "bytes": 24590,
+  "sha256": "e77d9b1b0e4fdead4294ff50a49678355f71a918fbdd6e4f9fa5aba8da103a6a",
+  "bytes": 25062,
   "source": "https://www.federalreserve.gov/fomc/minutes/20000516.htm"
  },
  "fomc/minutes/20000628": {
-  "sha256": "210c29fdde34d44254e0fcaae5df6cc80ff5d893a72bcdc765ffaa1930f06b6a",
-  "bytes": 25328,
+  "sha256": "43e2b96e62436941c95059761c182a8627ff59cd34692654ecadb7f3817ef30f",
+  "bytes": 26363,
   "source": "https://www.federalreserve.gov/fomc/minutes/20000628.htm"
  },
  "fomc/minutes/20000822": {
-  "sha256": "1346caf927d558d3fb278a18fef028f72ab0de3cb5674558701c00ebf32c600d",
-  "bytes": 25449,
+  "sha256": "78a52e2920cd83642acb80bddf44dcd7d2da6ead2879cae951c98e6ef6d15380",
+  "bytes": 26355,
   "source": "https://www.federalreserve.gov/fomc/minutes/20000822.htm"
  },
  "fomc/minutes/20001003": {
-  "sha256": "ae0d9be2a90a5b1f78a72928932b25452bd0fd6286ffeb8add57e7ce174dd21a",
-  "bytes": 22395,
+  "sha256": "5d8ce6eecc2dc0606000da6be65bbe60305762d5eeed0903071b0ae7d6aaf4c1",
+  "bytes": 23160,
   "source": "https://www.federalreserve.gov/fomc/minutes/20001003.htm"
  },
  "fomc/minutes/20001115": {
-  "sha256": "d7f1e2f43e355c2ee0aa955d7624669d73f53c99b96eb7bbd860aa397912cb40",
-  "bytes": 25961,
+  "sha256": "0cee79aa89f8f19eeb3ddafdb6c1d7431f44d7789b0b6b5747d3e2b2047b3c19",
+  "bytes": 27068,
   "source": "https://www.federalreserve.gov/fomc/minutes/20001115.htm"
  },
  "fomc/minutes/20001219": {
@@ -133915,58 +133915,58 @@
   "source": "https://www.federalreserve.gov/fomc/minutes/20001219.htm"
  },
  "fomc/minutes/20010131": {
-  "sha256": "cb3866e20a9a32f5a84cf25d69fd115623bdbcfa874df7981533bbe7054903c8",
-  "bytes": 53108,
+  "sha256": "de8c5178a8d29f63173b595c2e6e0508f830c85eb68632577c79ef64f3f04d0a",
+  "bytes": 54935,
   "source": "https://www.federalreserve.gov/fomc/minutes/20010131.htm"
  },
  "fomc/minutes/20010320": {
-  "sha256": "3be7a80c4745524b9ea7b88ff9096324d14ba3c4a3c46f9d4702180ba58ff48d",
-  "bytes": 29617,
+  "sha256": "00c0c7eb1b8bf7edcc2381b12cc18e53099d5dac3729c8349d4229f90ffa5850",
+  "bytes": 30304,
   "source": "https://www.federalreserve.gov/fomc/minutes/20010320.htm"
  },
  "fomc/minutes/20010515": {
-  "sha256": "c567c9ee0f1a0f39c513fa30656ec498aebb9139550d49e871fd5fda2811dae1",
-  "bytes": 29499,
+  "sha256": "953838210022ba3c7c6208c30cdfbf2261b015b9d6eac430a20385aafcca6cd3",
+  "bytes": 30459,
   "source": "https://www.federalreserve.gov/fomc/minutes/20010515.htm"
  },
  "fomc/minutes/20010627": {
-  "sha256": "45cb68c122ceb2fddaeeb42d0164e4b897464119e7cad755215c8b34cc891a2c",
-  "bytes": 29006,
+  "sha256": "f27f983fae57750ef2cea7e4f69cb0da553d6c090b9e11f7714ead2ce065a150",
+  "bytes": 29767,
   "source": "https://www.federalreserve.gov/fomc/minutes/20010627.htm"
  },
  "fomc/minutes/20010821": {
-  "sha256": "2dd9ee1d085b1ba8b7f73c49cdb094f8eabe619f5483556f6c97b6f3d3b58991",
-  "bytes": 28185,
+  "sha256": "d957ad715e9dc0167e95bb50adaa9f2de59c9e005d130437113a90df11036173",
+  "bytes": 29057,
   "source": "https://www.federalreserve.gov/fomc/minutes/20010821.htm"
  },
  "fomc/minutes/20011002": {
-  "sha256": "96c2c52ad1df9eaae11dfe5af93649f32b31a35c5f3a9b5f473bb12011edbaf5",
-  "bytes": 25980,
+  "sha256": "f0011ece1a8f9c17aa6d4aa655836168d4d79f2b14ed15056ce9ce6cb32e9654",
+  "bytes": 27491,
   "source": "https://www.federalreserve.gov/fomc/minutes/20011002.htm"
  },
  "fomc/minutes/20011106": {
-  "sha256": "ddba5a1d1348b356947cb2539117125b7b69596a5f3295e5781aa4caba544e0e",
-  "bytes": 25414,
+  "sha256": "63cda5c10ee391d8a2be8ef999dab4f227493ba0996cec89ddfa8ec979c69460",
+  "bytes": 26456,
   "source": "https://www.federalreserve.gov/fomc/minutes/20011106.htm"
  },
  "fomc/minutes/20011211": {
-  "sha256": "33667b4f5cae7bfdc38ed647b2933ef8e42af8617777f6579da7b7b8b1fce8bc",
-  "bytes": 27062,
+  "sha256": "3996f393ffde8889eeeb3aa727f3409a6c15d3e18b056fb606781effb71d61dc",
+  "bytes": 28174,
   "source": "https://www.federalreserve.gov/fomc/minutes/20011211.htm"
  },
  "fomc/minutes/20020130": {
-  "sha256": "d730932433f13cf4950333aba6c599355e530657fdf9d4b06eb4124ec1c0e305",
-  "bytes": 46373,
+  "sha256": "ad2a0a19e7f8ebd548342057a4a6538dd32239eac0572f83001ff981ab5b988c",
+  "bytes": 47198,
   "source": "https://www.federalreserve.gov/fomc/minutes/20020130.htm"
  },
  "fomc/minutes/20020319": {
-  "sha256": "94a527d47f958b788458f10d5a9476c7476eb6002a35994cf3f0128ec1034453",
-  "bytes": 28515,
+  "sha256": "c163dda3358a4a068760a6c621868eb9a9d8cb7e531983d46e024ec2151af37b",
+  "bytes": 28651,
   "source": "https://www.federalreserve.gov/fomc/minutes/20020319.htm"
  },
  "fomc/minutes/20020507": {
-  "sha256": "57ca281c8854d0770994055cc87913d86a0caafbceac9e867ad2bd8ba5409e61",
-  "bytes": 23713,
+  "sha256": "75fec8bf42fa9b713242befd7fd8eb5a936662176aeec7e287f306c7a32cc3d1",
+  "bytes": 24049,
   "source": "https://www.federalreserve.gov/fomc/minutes/20020507.htm"
  },
  "fomc/minutes/20020626": {
@@ -133980,208 +133980,208 @@
   "source": "https://www.federalreserve.gov/fomc/minutes/20020813.htm"
  },
  "fomc/minutes/20020924": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "611241e353ae0ace1073f6c1d0b7a91ae4ad6225c74fd4783b01b805bbe3a35f",
+  "bytes": 23646,
   "source": "https://www.federalreserve.gov/fomc/minutes/20020924.htm"
  },
  "fomc/minutes/20021106": {
-  "sha256": "aed1fdead184546cef982c4a355ddf331367bb53126bbf937ff195078eb35a36",
-  "bytes": 27417,
+  "sha256": "79dcb6ff4b71efca98868cf138070617bb8345fa855e42e3ccf53158d4d96f31",
+  "bytes": 28134,
   "source": "https://www.federalreserve.gov/fomc/minutes/20021106.htm"
  },
  "fomc/minutes/20021210": {
-  "sha256": "5c9ef096b976a417b8985e73799614e60949342e530eee5c7504df82ac8bdd6e",
-  "bytes": 19909,
+  "sha256": "41351c42f15814604e9c37b1cb39d450b906d1688a3f7371bb60fb554eb70f42",
+  "bytes": 20271,
   "source": "https://www.federalreserve.gov/fomc/minutes/20021210.htm"
  },
  "fomc/minutes/20030129": {
-  "sha256": "7cc1cab5c0ffff5c5612d327026272c4795cd0871596bb568dd168dddca7ee5f",
-  "bytes": 43751,
+  "sha256": "84381d79e2c29c9146e5a81956e376ddf613bbe4e61fc44cdab4b272641af3db",
+  "bytes": 45088,
   "source": "https://www.federalreserve.gov/fomc/minutes/20030129.htm"
  },
  "fomc/minutes/20030318": {
-  "sha256": "80893a2693eccf3a8713b9586d8cd47574636d7d14621e8131ac04be4db508fc",
-  "bytes": 21854,
+  "sha256": "cade44c60d2bfe465aae937380399fbd9bcbb4df87aec8e0332eca6a6e3b0dd2",
+  "bytes": 22502,
   "source": "https://www.federalreserve.gov/fomc/minutes/20030318.htm"
  },
  "fomc/minutes/20030506": {
-  "sha256": "b9d44fad2ee2c2cadec9be94494d580f8f94adafec6d5e6888e16b410ebdde0f",
-  "bytes": 24456,
+  "sha256": "98febfa57e5fe1a86b0f0a033a43f5e99495c6f7dc268ef31939c7f1479dfe5f",
+  "bytes": 24595,
   "source": "https://www.federalreserve.gov/fomc/minutes/20030506.htm"
  },
  "fomc/minutes/20030625": {
-  "sha256": "d68b0441c16092408264ca177cf3209df3b7b8da1745c4367a2e664c8bcaa7dd",
-  "bytes": 30681,
+  "sha256": "4847e13d52febe6bf71fa81944d6487a96f865d205697c2911fc6c01702f3af9",
+  "bytes": 30764,
   "source": "https://www.federalreserve.gov/fomc/minutes/20030625.htm"
  },
  "fomc/minutes/20030812": {
-  "sha256": "bf6dadea163c30b9a5dc533f6de89483780cae9b0045b5e839b39e85967bac3f",
-  "bytes": 23694,
+  "sha256": "9c38eba881dca7507a8be1f44344a71f62133d5d0ba19c36028e41d0d9f774b6",
+  "bytes": 23793,
   "source": "https://www.federalreserve.gov/fomc/minutes/20030812.htm"
  },
  "fomc/minutes/20030916": {
-  "sha256": "fadbf451b9c9aa6db97dab719b1f3082bdd504b851dfcbf072f48450fe22e366",
-  "bytes": 24253,
+  "sha256": "a281db6447870380229a019cf7dbf011f6fa8eb25ae356fe2898ea5f98e6ba42",
+  "bytes": 24922,
   "source": "https://www.federalreserve.gov/fomc/minutes/20030916.htm"
  },
  "fomc/minutes/20031028": {
-  "sha256": "b7e8b9b8c54508220b9dea92600aa48513ad739ed393c7963b31b46bfaac93e6",
-  "bytes": 22978,
+  "sha256": "d9c5e22b9969d6d33deb8e8f77b70674afebe028ad20dd92cf9a045488597521",
+  "bytes": 23499,
   "source": "https://www.federalreserve.gov/fomc/minutes/20031028.htm"
  },
  "fomc/minutes/20031209": {
-  "sha256": "ee57ff19cc3b00b434ed285c01fa28646f9a518910b4fc2006c0eb744abb93e2",
-  "bytes": 190,
+  "sha256": "8d93430cf28e20286ea596de89b4326656e8d3321a53197596962c9b473dc5d6",
+  "bytes": 26087,
   "source": "https://www.federalreserve.gov/fomc/minutes/20031209.htm"
  },
  "fomc/minutes/20040128": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "7aa3baf127a724d27a5d085bbf7ddc5aa4b8b6dcf8e10db5a4f742ec0707a818",
+  "bytes": 47821,
   "source": "https://www.federalreserve.gov/fomc/minutes/20040128.htm"
  },
  "fomc/minutes/20040316": {
-  "sha256": "9ef97be76a5746d73f72379dd162c9bac3550ed6fd2fba73c7adb5f96af9bf29",
-  "bytes": 23204,
+  "sha256": "e01458d36a7b91823aa887b716e197f0304cfa1c9775efe5549024e023523feb",
+  "bytes": 23922,
   "source": "https://www.federalreserve.gov/fomc/minutes/20040316.htm"
  },
  "fomc/minutes/20040504": {
-  "sha256": "477c0a779b1f5a77431ae997f56e67f07db62aa48ee4c44d19d78861f8ea7d83",
-  "bytes": 29154,
+  "sha256": "bcd8349c690c192425e9b170836c17ffaf33784372a7946f14ca342207688bea",
+  "bytes": 29297,
   "source": "https://www.federalreserve.gov/fomc/minutes/20040504.htm"
  },
  "fomc/minutes/20040630": {
-  "sha256": "cdf44ce6c116acbbecde24ea6ee650ed12425a45c813504a82ca7995bab9a7dd",
-  "bytes": 26072,
+  "sha256": "0cfeb6fb95131e6fefb2c8be65150cdbcaaf53cb3eb36f3616f3c6bf6223377f",
+  "bytes": 26949,
   "source": "https://www.federalreserve.gov/fomc/minutes/20040630.htm"
  },
  "fomc/minutes/20040810": {
-  "sha256": "a7027af86b46029dc2f4360e41b413c93106cc28ed7318a9870ec074efaebbfb",
-  "bytes": 23311,
+  "sha256": "1b08b6663f4775e4bf8c79dd21fddaefa9ab6980151ccbf08fda86bd5501e6b8",
+  "bytes": 23477,
   "source": "https://www.federalreserve.gov/fomc/minutes/20040810.htm"
  },
  "fomc/minutes/20040921": {
-  "sha256": "d8019c15776d55e5f6499d31c83d17408378c4590f1ff3e25381b43bc96994a8",
-  "bytes": 24006,
+  "sha256": "b3e4358fd907425df1745632065e5837ad8ede2da983f6f2a6321c555ffafc8f",
+  "bytes": 24256,
   "source": "https://www.federalreserve.gov/fomc/minutes/20040921.htm"
  },
  "fomc/minutes/20041110": {
-  "sha256": "04babbeb64f7cfdcc84b2ed2dbd8f0d6e0c44be4638c650a819ec06609ba0334",
-  "bytes": 20647,
+  "sha256": "a5f9f62677db3f5c2dc5e08499810a9b4dbf6d80c56495146596fc65dc2169e5",
+  "bytes": 21359,
   "source": "https://www.federalreserve.gov/fomc/minutes/20041110.htm"
  },
  "fomc/minutes/20041214": {
-  "sha256": "d19a96ec385179a0cda0a0d752b82d3573b9ec3f563dc0eb84f922645e8318e0",
-  "bytes": 23251,
+  "sha256": "bbec14e69343187855059d1856e1390a9f9519b528d77a6ca1b1e7503ef77dd9",
+  "bytes": 24082,
   "source": "https://www.federalreserve.gov/fomc/minutes/20041214.htm"
  },
  "fomc/minutes/20050202": {
-  "sha256": "513a162da85e86ce4ba0f42e37920a1354ef9a98c5aaebd3e0e28ae308024902",
-  "bytes": 2498,
+  "sha256": "f7f7ae27cf05b93b30e8a492db7cf1ba90489a99143f091042e74dc59c071c8b",
+  "bytes": 42118,
   "source": "https://www.federalreserve.gov/fomc/minutes/20050202.htm"
  },
  "fomc/minutes/20050322": {
-  "sha256": "7683bf40227de6746022fcf2b902320ab7ab8a0adfaec40f7cfad5496de72081",
-  "bytes": 25886,
+  "sha256": "f4e3a2def0b56b15489d3a588ac7988ca3e7801f888048fd2ef7d0dc3ea5e9e6",
+  "bytes": 26461,
   "source": "https://www.federalreserve.gov/fomc/minutes/20050322.htm"
  },
  "fomc/minutes/20050503": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "284bfcd8d27273419ab4f731fe4b9b5c1d45b3f8a174e00fbf07bf765abb9af7",
+  "bytes": 25339,
   "source": "https://www.federalreserve.gov/fomc/minutes/20050503.htm"
  },
  "fomc/minutes/20050630": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "8177462e9cd1026c9ef742c538103d44cd129dce63c4eabfaaa9d127b4f535b5",
+  "bytes": 26258,
   "source": "https://www.federalreserve.gov/fomc/minutes/20050630.htm"
  },
  "fomc/minutes/20050809": {
-  "sha256": "da59d528821d995c77de38a00e9b0598a845f728f9e969101eee14f1dcf3d746",
-  "bytes": 19470,
+  "sha256": "bd5eef478c1e4671e06040ef9ef2e99ec22193221fa3f79c982043d6c642c9fc",
+  "bytes": 19765,
   "source": "https://www.federalreserve.gov/fomc/minutes/20050809.htm"
  },
  "fomc/minutes/20050920": {
-  "sha256": "ed54e40fd9d10364c55261081519299957f629e4275df0f5b29e0574f6edfdff",
-  "bytes": 20778,
+  "sha256": "696969b1f929fce2910cdf226132ef1aa61428f52dc1a38bd49d7dc303398216",
+  "bytes": 20975,
   "source": "https://www.federalreserve.gov/fomc/minutes/20050920.htm"
  },
  "fomc/minutes/20051101": {
-  "sha256": "a39dddc255f03e3bad59e2af436cb08e60082dbde42fea1441ee606171f99f67",
-  "bytes": 22201,
+  "sha256": "f68fc1b1c1d731d74d77b3d08e37f36151f27a5686d2d1113be224f185c7cfff",
+  "bytes": 22575,
   "source": "https://www.federalreserve.gov/fomc/minutes/20051101.htm"
  },
  "fomc/minutes/20051213": {
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "bytes": 0,
+  "sha256": "bf69bcaf31ced332a53adb6cf559507165c08f58beeef78cceaae79192b75a48",
+  "bytes": 21729,
   "source": "https://www.federalreserve.gov/fomc/minutes/20051213.htm"
  },
  "fomc/minutes/20060131": {
-  "sha256": "25ae30f4e5fb1a041dccd972ef80dc095c425e7b2e326bdff29ff160ed9602d2",
-  "bytes": 39824,
+  "sha256": "365942e55da5286e5c749ec0db1f79e92e5834b949e66c284eda4d7112adc396",
+  "bytes": 40151,
   "source": "https://www.federalreserve.gov/fomc/minutes/20060131.htm"
  },
  "fomc/minutes/20060328": {
-  "sha256": "75db466bceb96ea69aab35b5a2e6ef8bc426bc74533b9e7189d77f2be5759b65",
-  "bytes": 24081,
+  "sha256": "20bb24201ade356546ab2db6f29e04ff8cec42f71e660d6b2c21190d371b0a11",
+  "bytes": 24472,
   "source": "https://www.federalreserve.gov/fomc/minutes/20060328.htm"
  },
  "fomc/minutes/20060510": {
-  "sha256": "ae0e4accb48f4d680a345c118ad51a3eab3119a9534d8e8b05bb388610721d0b",
-  "bytes": 25923,
+  "sha256": "3564bca075d3528609aaf3a885b920d6ef01cc9ae65b32eb561b8787ec1875e4",
+  "bytes": 26077,
   "source": "https://www.federalreserve.gov/fomc/minutes/20060510.htm"
  },
  "fomc/minutes/20060629": {
-  "sha256": "6377e2f14ca6faadf293e2839e38072966153c71f004f3039f2ada1e2e85197e",
-  "bytes": 24552,
+  "sha256": "0713478b0a0e5b158c555d1b07ad87c14edb2fc29149702688f6c6742b331ba0",
+  "bytes": 24951,
   "source": "https://www.federalreserve.gov/fomc/minutes/20060629.htm"
  },
  "fomc/minutes/20060808": {
-  "sha256": "8a95b548dbd08daeaed0e4a880d2a40eadcfcf4005b70f558d7a8d284406d7a2",
-  "bytes": 22034,
+  "sha256": "eec59dd66a867421f5ee363788459fb3729b3b9b6c4310fab74cb730d3eae721",
+  "bytes": 22605,
   "source": "https://www.federalreserve.gov/fomc/minutes/20060808.htm"
  },
  "fomc/minutes/20060920": {
-  "sha256": "d3c250948c243d7d3935e38062c558011d234c07c03e38b05e72060c857ecb28",
-  "bytes": 22567,
+  "sha256": "a07962330d6d4c471e5e02fcd29278fc4ce60200fb9d33a8aa8febb5f05e0f41",
+  "bytes": 22882,
   "source": "https://www.federalreserve.gov/fomc/minutes/20060920.htm"
  },
  "fomc/minutes/20061025": {
-  "sha256": "bc0dd9cf885d274dd3b6fa044dcb05c4db085619880b9eeecb7ebfafc9f390e8",
-  "bytes": 26643,
+  "sha256": "f7ef3ff01f9bb5c39f4d9358f9c833d3e38c0ee4c662f918f21e8d92c8993276",
+  "bytes": 27251,
   "source": "https://www.federalreserve.gov/fomc/minutes/20061025.htm"
  },
  "fomc/minutes/20061212": {
-  "sha256": "3dd3e791027be1803a758adf918e78fa5fd0fe1237233544b56a81b09cb15e99",
-  "bytes": 24621,
+  "sha256": "ee0715b21842a36564e86bef1adb76c99fc85cdb00ad23bf5e88b5bbcde5b395",
+  "bytes": 25149,
   "source": "https://www.federalreserve.gov/fomc/minutes/20061212.htm"
  },
  "fomc/minutes/20070131": {
-  "sha256": "6cffab4899a1e787c7c9cf9edbe8efb5ab4c75848cf67d895f6c7b065dad26e1",
-  "bytes": 43813,
+  "sha256": "80c3a7ea47ac0b263d26d57fbd683ecc2438b0fc5bdddf7af44a758d2ec8c490",
+  "bytes": 44819,
   "source": "https://www.federalreserve.gov/fomc/minutes/20070131.htm"
  },
  "fomc/minutes/20070321": {
-  "sha256": "241a553a78ed0323ce13d123a5a28eb0e55504cc3f0139bb92e295e25bca7ff6",
-  "bytes": 23690,
+  "sha256": "205eb17bc29201d664c77eabca56578533354d49fbdc5461a3766cfba26a8613",
+  "bytes": 25334,
   "source": "https://www.federalreserve.gov/fomc/minutes/20070321.htm"
  },
  "fomc/minutes/20070509": {
-  "sha256": "487ba34d14da8313cb899af9e3d2b8a11639665e2a77eaaf76d5f0f2dccfdfd4",
-  "bytes": 25094,
+  "sha256": "ffe64c40445423eb10f76a3a93ccd05e71ac9047a2c0d8eccb0513f6e63ac125",
+  "bytes": 26279,
   "source": "https://www.federalreserve.gov/fomc/minutes/20070509.htm"
  },
  "fomc/minutes/20070628": {
-  "sha256": "3b0a9a93fe013c7e1259a634d77f46356fa63ce772e4f758b208313855b49ebf",
-  "bytes": 26889,
+  "sha256": "6aca695f4accad20cdccb78aa493362cc728e1e8e3c8d17dd845e15b095a2225",
+  "bytes": 27866,
   "source": "https://www.federalreserve.gov/fomc/minutes/20070628.htm"
  },
  "fomc/minutes/20070807": {
-  "sha256": "4037bc724ce1b795e97c165e989bd5dbf6a5bffa4940416b1976bfd62ab681fb",
-  "bytes": 25762,
+  "sha256": "a32554858fc9b4eb39784ab8b707483d7d483c09dc74e80f9008fc6ccc094344",
+  "bytes": 26417,
   "source": "https://www.federalreserve.gov/fomc/minutes/20070807.htm"
  },
  "fomc/minutes/20070918": {
-  "sha256": "4e45d2e5c4ab98fe8bbed154c257c6df1abf38963ee9e557cc18cb7781f9e88d",
-  "bytes": 33638,
+  "sha256": "4869bdec54f020b91cd228f8aa960755c172d50ca5d5f17dbb0e095498dbcb73",
+  "bytes": 34053,
   "source": "https://www.federalreserve.gov/fomc/minutes/20070918.htm"
  },
  "fomc/minutes/20071031": {
@@ -134195,8 +134195,8 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20071211.htm"
  },
  "fomc/minutes/20080130": {
-  "sha256": "99428267de07c7c80c0a9481a03025fe1c9351aa5426c05a9f08059947ac62bc",
-  "bytes": 57887,
+  "sha256": "83e6db226ec32300996afd454006f04f16148dacd50c30c0f160ccad4e66669b",
+  "bytes": 57904,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20080130.htm"
  },
  "fomc/minutes/20080318": {
@@ -134205,7 +134205,7 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20080318.htm"
  },
  "fomc/minutes/20080430": {
-  "sha256": "0540acd80878dcbe8f2e26180ad65fb032965afda38453255c5e16ca442e3497",
+  "sha256": "ec1bf34e6dc0a5af2b9590513b2b4999f3f0479d1f967b42d8c715fa42ae0e6b",
   "bytes": 43029,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20080430.htm"
  },
@@ -134230,17 +134230,17 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20081216.htm"
  },
  "fomc/minutes/20090128": {
-  "sha256": "c158e3a10d02d6f225c5a110e74bfadafb7a71e92b404d91196d58d5843778fa",
-  "bytes": 66027,
+  "sha256": "6f3c17c1e28f5daa19bc4411aa18b880f37caa0ebc9116b905ba3ecc8e6b1c7d",
+  "bytes": 66132,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090128.htm"
  },
  "fomc/minutes/20090318": {
-  "sha256": "85042913250741ad6ae1c7e7f87d1963095fe16ca2e64cf4c6ed110aa44bda92",
+  "sha256": "e0b0100a89d5b4f22ce4ce59847cf125c3e4d0ab2eb6354545949eec831dc76f",
   "bytes": 43568,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090318.htm"
  },
  "fomc/minutes/20090429": {
-  "sha256": "7bd95414a3355207bebd41a49002b0728fe17ccdfc78bd8e1c8879e6715cde55",
+  "sha256": "bcd88288d3a3c41323703ed945374f1f3c8217a3c4308f93e6b923ed0b6116eb",
   "bytes": 41208,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090429.htm"
  },
@@ -134250,12 +134250,12 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090624.htm"
  },
  "fomc/minutes/20090812": {
-  "sha256": "cde7508fae032e5c0f42414bf7dca12ee549d0a7240ac07b6ecbc24ebeaa477c",
+  "sha256": "33ad0a8e43b1a3da790c9672a8a34f9eeed621fb6ac85b50e5d53c9ace76f7ab",
   "bytes": 43240,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090812.htm"
  },
  "fomc/minutes/20090923": {
-  "sha256": "fcdfec7522280fb0eb7f5b33f66d3d2171a37fa7d76b68d4fff59ee9ceeccb80",
+  "sha256": "827df1326dd05c532a8b0dbab5d3341076cbba9ca4e7655a04a83bbe2a35cb44",
   "bytes": 47002,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090923.htm"
  },
@@ -134265,97 +134265,97 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20091104.htm"
  },
  "fomc/minutes/20091216": {
-  "sha256": "f46d71e599615afee98e93b0a214c2b800b37663fd8ae6c1d90294401522645d",
+  "sha256": "a2041313a6f6ad9f2062ff888b264a2714f49da80fc378f4be6f6512392fe3e8",
   "bytes": 50487,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20091216.htm"
  },
  "fomc/minutes/20100127": {
-  "sha256": "e04eee40116ce6632a76d9184d92e61ef658fe7c2adb8a97173cf00f3e34cb5b",
-  "bytes": 69579,
+  "sha256": "d114f074e503a38a685a0c5404bf7056331bae3aa8a954b9b8aafa8a6714dcf3",
+  "bytes": 69711,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100127.htm"
  },
  "fomc/minutes/20100316": {
-  "sha256": "11b3c571973d6492b2b2cfaa9b73000ff01ab895d436b98afc323f853150fcb2",
+  "sha256": "e6846adb31c4a535f8e693910c8eea6340163f72e1d4e9c0f063b8aa6b9ba3c6",
   "bytes": 41411,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100316.htm"
  },
  "fomc/minutes/20100428": {
-  "sha256": "7ad8988df2c2da17425508a24c14c36f73e602144efdb132bf5f9d0ec205f56c",
+  "sha256": "6e3cdb9d9fba1a75996eb706c53a50e7aa593f186eb36e56d7199b22774cdd49",
   "bytes": 43930,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100428.htm"
  },
  "fomc/minutes/20100623": {
-  "sha256": "934987acbfff3f0a62ebec86c1d60e3265b62627ab74642ba3067728cf9dd665",
+  "sha256": "de1633e7aaddd6626669566ffb69b1e76d155901e87e55ac27aa964c92dce5b9",
   "bytes": 49735,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100623.htm"
  },
  "fomc/minutes/20100810": {
-  "sha256": "b8efa5ffbde1d7970a01b265f37dc3095d9a963e03220c76a1f338ee6de269a7",
-  "bytes": 41489,
+  "sha256": "fe6ed932c8769ead4b5cdcf504da8e79670669066585506e1fe91848a3f90e36",
+  "bytes": 41571,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100810.htm"
  },
  "fomc/minutes/20100921": {
-  "sha256": "a2d2be1e618556e093db423473054ad5e9005ffc24023414e532ef3720512448",
-  "bytes": 38127,
+  "sha256": "96ef5b34db3d5609514e5b17317ee5e41fb4643d3f205f8361b6ef6a40a9a37c",
+  "bytes": 38209,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100921.htm"
  },
  "fomc/minutes/20101103": {
-  "sha256": "50323bf27a50e933d3f98497c0c53543701d81c85c11eda438ade85b33b926ba",
+  "sha256": "54caaa8c592acab26cf8fd14c76f71adee516e040ec2f3fb2562058c5475767c",
   "bytes": 45025,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20101103.htm"
  },
  "fomc/minutes/20101214": {
-  "sha256": "2e4cbb6fa573d5688a6334993fe141391fa7ef463c4f42dcad1458931936f00f",
+  "sha256": "ab3d7abaeaab4254d1080f0f4fa0c9b40723c61019c3e84b05ff18d90bf4249e",
   "bytes": 42053,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20101214.htm"
  },
  "fomc/minutes/20110126": {
-  "sha256": "c3933a079bbd1fceefef1c95db25db68041706f6263a2b66fec2d65a6a8bcd89",
-  "bytes": 64156,
+  "sha256": "315937a4dc3ae062fec946e2c9751215460e166a97a7ac5f004e3a91ba5eef43",
+  "bytes": 64175,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110126.htm"
  },
  "fomc/minutes/20110315": {
-  "sha256": "5ee59aee91b22defc7a4e25afbfa14c7a6a0e65021380f6757819e2a5f6b1b6c",
+  "sha256": "f8b851fd98092bbc43848986663c808ff0f0e92d14fb77a3dbcd7867bc4ec218",
   "bytes": 42812,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110315.htm"
  },
  "fomc/minutes/20110427": {
-  "sha256": "b55050358c4347499ded3e15b00dacae3de618901f34b2f6821604e8a1f5bc05",
+  "sha256": "aa3996d99a32dc15a5e9a8b98df768cee5e6b042fdadd0736f57ea7bb12f2770",
   "bytes": 48609,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110427.htm"
  },
  "fomc/minutes/20110622": {
-  "sha256": "3921ec2c7b2bbbf5167c8ff4db03e648c1309bd4ad9112d8355a60b79bc34431",
+  "sha256": "4338865550078f69a7d86a32fea41d0800f54b36f094e13449ed4dfded2e90d3",
   "bytes": 46569,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110622.htm"
  },
  "fomc/minutes/20110809": {
-  "sha256": "59cf61800ea9305160af70d8d22d57bdfd07b4504078211fa5f5cd159d6c9fa2",
+  "sha256": "4f7f920c3cb1058b98ecc7aeefc717a1495cd3a6f92efa219e2ebb8522195411",
   "bytes": 41090,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110809.htm"
  },
  "fomc/minutes/20110921": {
-  "sha256": "ed115cbb95dda30c680283b5c6ad344c9bfc601a63f618c32a6fb548f2a50851",
-  "bytes": 53211,
+  "sha256": "fbcd2b9c0765c2f3e0148fe1993ee9db401e0ff63485848d366e2c9ddcd3c0d7",
+  "bytes": 53293,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110921.htm"
  },
  "fomc/minutes/20111102": {
-  "sha256": "742f878ca842c1b59c26da05935db8340cc7a07f9f6cb70c068be485aa2f1833",
+  "sha256": "6fa38b39421e26b2440bf8c69b407c840bf952f9efc06813be43ae95f7665acf",
   "bytes": 48013,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20111102.htm"
  },
  "fomc/minutes/20111213": {
-  "sha256": "57b72a7acc9b8ea4628c3f14ad147d766569a02444a1f24064bbbbe659f6efc2",
+  "sha256": "df0527bef373c6ecfd28028b18b794589304d77ecf5193a1f99f6841f380fdf1",
   "bytes": 48830,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20111213.htm"
  },
  "fomc/minutes/20120125": {
-  "sha256": "86df050f6aea495605cb2ea5a8568426c399151c387d9b2695b57c812b6c5231",
+  "sha256": "b067a9bfb17ffe0eeecd9d41d0a550572ef036dc0e6f600e1d17c35c5118998a",
   "bytes": 66697,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120125.htm"
  },
  "fomc/minutes/20120313": {
-  "sha256": "94070f6fcc74e91f3be3ef90e2402425a4768bed9b138e98d13a43375b39d6e2",
+  "sha256": "fdf458fb3fa8e32fa0892968baab9410f817e352dfd48f712c7f9515992b5e42",
   "bytes": 40208,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120313.htm"
  },
@@ -134365,12 +134365,12 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120425.htm"
  },
  "fomc/minutes/20120620": {
-  "sha256": "cec2f17b0d2d95b7a66cabde73e956bbff600a857dd6a27be82f6eb61b6824e3",
-  "bytes": 50523,
+  "sha256": "b2a6446ce81ca8f286f1193e70d3c85b04184198b302412f329453b55ced7a88",
+  "bytes": 50535,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120620.htm"
  },
  "fomc/minutes/20120801": {
-  "sha256": "99f0e8a3aadf517acb96def5a65d4e4980acddc7d698043f45b51fa691a0efa3",
+  "sha256": "124a254525f700c634cf0117e0219ee34d92a03f35939892aaa3fa048790d6ff",
   "bytes": 45028,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120801.htm"
  },
@@ -134380,18 +134380,18 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120913.htm"
  },
  "fomc/minutes/20121024": {
-  "sha256": "bd9b5b3f4b5c0eac9588d333c139a313ff0d55d77beb33179941d0a0d1b7f213",
+  "sha256": "79803eaa7d4cc69f11ac15cf54e4bff0de19b30a24de29162ef2bd3c6bf63c4c",
   "bytes": 42124,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20121024.htm"
  },
  "fomc/minutes/20121212": {
-  "sha256": "b005661ef9e65dbad8cfbf7275814429b65361562ef2a81d203edaa299fd0728",
+  "sha256": "a7e267a928a15a26e14bce8a9e7153dbab59d6b71826515a4ffa871819926e79",
   "bytes": 48640,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20121212.htm"
  },
  "fomc/minutes/20130130": {
-  "sha256": "07ae9711f72a1f9b7689d02ad167add438c6fc1372a248c99ab755f8428bd145",
-  "bytes": 67880,
+  "sha256": "151b788aaa24afeeac7cf71a00220eb54132a6225305f0d8addb0388ce8f0c48",
+  "bytes": 67911,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20130130.htm"
  },
  "fomc/minutes/20130320": {
@@ -134405,18 +134405,18 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20130501.htm"
  },
  "fomc/minutes/20130619": {
-  "sha256": "f974f7f2ddc0a3ba5d2926aa5d50a8e8fd5572d5539f4d54e5d95f59bcf116e3",
-  "bytes": 51261,
+  "sha256": "2beb55acca7ae3a277559abfdc9c2ea9524cc41d63aa321145a246f8b28b348f",
+  "bytes": 51273,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20130619.htm"
  },
  "fomc/minutes/20130731": {
-  "sha256": "94d494b48b8465eda243db103d11b8f4c8c211f780bc9bfa54503124e90393cc",
-  "bytes": 45271,
+  "sha256": "e2cbee3d2ec922cc9b46b9d07a159688e91118de6e346860d5ae5b584a2bbc42",
+  "bytes": 45283,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20130731.htm"
  },
  "fomc/minutes/20130918": {
-  "sha256": "b8666fb0cb335dd7f15ece3e228101292e37a81d246fb3ec76c10732559f8c60",
-  "bytes": 51946,
+  "sha256": "62286b344f4065de28852b78f886688acdc28c939c0035137c63f187ed00972e",
+  "bytes": 52028,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20130918.htm"
  },
  "fomc/minutes/20131030": {
@@ -134425,68 +134425,68 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20131030.htm"
  },
  "fomc/minutes/20131218": {
-  "sha256": "dfa63750d23ff2569528791af9b7e33dfa9fe1aa394b757ab3353f3eeb1e2c1e",
+  "sha256": "c633d812133abf385011a222ebe20fa55cca4efcd76b980ffeb62b23269bbd07",
   "bytes": 55786,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20131218.htm"
  },
  "fomc/minutes/20140129": {
-  "sha256": "66a82225aa15b880ecf1482682200474c5d0195d533ed80ee3445b1df1dd40ca",
-  "bytes": 73648,
+  "sha256": "20f77ec4a206e5d571ba1ea6c4eadddb92d7c731b2ac08d25fd3f7073bd41fdb",
+  "bytes": 73749,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140129.htm"
  },
  "fomc/minutes/20140319": {
-  "sha256": "d1e75b25d32be0ee78b95d756a8702976f4e65b323a4abd1557b120147e0b649",
+  "sha256": "e3aa7a0ff146d053b7967080e43648f3c0418cac7f3b8534f019d0a99007460e",
   "bytes": 53139,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140319.htm"
  },
  "fomc/minutes/20140430": {
-  "sha256": "a8270a91624dba087bd171e873b3c47f148b3a4bf298f64c02ddbc02d9f52f91",
-  "bytes": 41477,
+  "sha256": "359909ca33546a0c53a7b5664077fc0a7df6fe58f86933a799d765b6c10ae963",
+  "bytes": 41559,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140430.htm"
  },
  "fomc/minutes/20140618": {
-  "sha256": "40ef98ebc682ff538c2876da9e500f2a5d83ec43ad2d88a540eb4ddf99500906",
-  "bytes": 53697,
+  "sha256": "c2e6564b00c8822c981b00053527422c9ff06ef9472300216898419a4d774105",
+  "bytes": 53791,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140618.htm"
  },
  "fomc/minutes/20140730": {
-  "sha256": "b456e89a2905e8f4d4e80fb4058e43ed9be76d8eaf55ac0d9614cceb916a21ba",
-  "bytes": 50106,
+  "sha256": "cf0f4644dd4b40c1822e08678102f98e0e8e3b4004dbd811a10cd1a820c82206",
+  "bytes": 50118,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140730.htm"
  },
  "fomc/minutes/20140917": {
-  "sha256": "90aec7a74dca75c32917d3031c8d0e2c71b66eac11572f9f6c414d6ef4dc67a7",
-  "bytes": 57580,
+  "sha256": "b48879d4bcb9b943773287b5a24d5f51f2d612502f18d60bac115d3de2985290",
+  "bytes": 57634,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140917.htm"
  },
  "fomc/minutes/20141029": {
-  "sha256": "1c2dec2fa91f908a947cf78c8f90a6c39563860ed86c4217226726bced538e35",
-  "bytes": 51937,
+  "sha256": "fe9923f1c85f5ecc679c476f376b78dc62caa556bcf2549d9e84c240a7880e1b",
+  "bytes": 51949,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20141029.htm"
  },
  "fomc/minutes/20141217": {
-  "sha256": "14d4c0c2374c48f518938ab5101713c646500ab17cfc3a1b73e98e46a0308143",
-  "bytes": 47272,
+  "sha256": "3712a8a6b48f8eb186ad38118b63f6810526b2a1ce7c1454aff8a7dcd379f5bd",
+  "bytes": 47476,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20141217.htm"
  },
  "fomc/minutes/20150128": {
-  "sha256": "b7aeac9a15b7d451cf55d125379e71af354e97f373645b9a0148c126303d8910",
-  "bytes": 88039,
+  "sha256": "b7d0f37a9f0065382f5b9a050ceb45ffa4c8430b01b7ccbbec86b97c46570b63",
+  "bytes": 88373,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20150128.htm"
  },
  "fomc/minutes/20150318": {
-  "sha256": "04dd8156ea6f171cd5651256ce909cf8ca8d438526f1d353b18d5081e76440df",
-  "bytes": 52749,
+  "sha256": "93c952ddf20b81cd57be763272ea751face375ebf998968e5e37be9baa4220c0",
+  "bytes": 52761,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20150318.htm"
  },
  "fomc/minutes/20150429": {
-  "sha256": "00c0101a5c11c093353cb154c83ead0d8a0e075c38c02fd4c854f8e9b23f0463",
-  "bytes": 47219,
+  "sha256": "1d697437bc2f57d842419e308e3530d0c04659d47236f07ddaeb57646787f4f4",
+  "bytes": 47231,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20150429.htm"
  },
  "fomc/minutes/20150617": {
-  "sha256": "e1ffa62357a3800dc196b45bd1678dbac3aa791833d2d9c18b812544b6c125eb",
-  "bytes": 50260,
+  "sha256": "347d0240524df2a2a80af0060c3d7dad5d347e20033cc31f5b15770b13b2677d",
+  "bytes": 50272,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20150617.htm"
  },
  "fomc/minutes/20150729": {
@@ -134505,13 +134505,13 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20151028.htm"
  },
  "fomc/minutes/20151216": {
-  "sha256": "f3acab25534bb7683e67a562fbafd45b28692d94b9091c6ed860607a4ad92e0d",
-  "bytes": 47783,
+  "sha256": "2210008bf1ba1f1e8a33b7835384ec788a6d187563ba0bbbd7ecbc501423008d",
+  "bytes": 47795,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20151216.htm"
  },
  "fomc/minutes/20160127": {
-  "sha256": "3944e1c5efba59ae8718d63533a6b782db71a17a011a7e3e5f2d5c946d379c5d",
-  "bytes": 83870,
+  "sha256": "b28c81074201ae54379e776fe92b179efc67126df0acc45c1f764f4f04d55235",
+  "bytes": 84009,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20160127.htm"
  },
  "fomc/minutes/20160316": {
@@ -134525,8 +134525,8 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20160427.htm"
  },
  "fomc/minutes/20160615": {
-  "sha256": "cf5b8edc58ac092d22046f646b89df2d64d19b2d3a745d0d6a66088daa58d831",
-  "bytes": 51935,
+  "sha256": "732276cd9728c596bc68c8be440a06127477f3bb9366598c0b6ef8f455510e74",
+  "bytes": 52067,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20160615.htm"
  },
  "fomc/minutes/20160727": {
@@ -134535,8 +134535,8 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20160727.htm"
  },
  "fomc/minutes/20160921": {
-  "sha256": "25c315576fecb20807fd8b4c079439ed9828ee71accb99f0eb62c482f6a4b477",
-  "bytes": 66394,
+  "sha256": "bde931870d4111d3760927d5a3583d0248bb5a277032ad1968c2a31187d51615",
+  "bytes": 66406,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20160921.htm"
  },
  "fomc/minutes/20161102": {
@@ -134545,93 +134545,93 @@
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20161102.htm"
  },
  "fomc/minutes/20161214": {
-  "sha256": "e18194bee5ef5d3f9a2ed868e9afe4bd3f410845a38fd08a7929c0f6dc53b8ed",
-  "bytes": 52989,
+  "sha256": "bea57b57d310a61849de88259488ef0276772cdf3763ebf08c6360c6c6d2b7ba",
+  "bytes": 53001,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20161214.htm"
  },
  "fomc/minutes/20170201": {
-  "sha256": "d7ebe99bcccd0b9c970f703042e40993c0d11aca2f053f48dd311e927b7d5f48",
-  "bytes": 76726,
+  "sha256": "4353bbf5ec993d7feed058db28e7bfafbe826fe1d46305188321333b5758e4bc",
+  "bytes": 76946,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170201.htm"
  },
  "fomc/minutes/20170315": {
-  "sha256": "57bd044792afa837b611c1a0fc4cedec284997dea0d19030a69c9148de6be4e2",
-  "bytes": 56901,
+  "sha256": "3e9db7cdc4a471477d74cefa3556ae8c15a0cbcd8eebb9971adb2e64b8ccd052",
+  "bytes": 56913,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170315.htm"
  },
  "fomc/minutes/20170503": {
-  "sha256": "b17f226234f8b1a4c0939f1984ad129a047173dade1026dc1bd4d62dbb0e43ea",
-  "bytes": 54018,
+  "sha256": "f9832795ae095be52c38fea40b315768fe4398bf8f84d6b9329f92abda7823f7",
+  "bytes": 54030,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170503.htm"
  },
  "fomc/minutes/20170614": {
-  "sha256": "d077887b7989962a6e83d00955d82f41fa67e30c0f6d5a7175dd0f7053d67aca",
-  "bytes": 55519,
+  "sha256": "3d4dc16bbad2841f9806168372a4cdfba9985a23bdacd4a1febab0adaf0df4c1",
+  "bytes": 55531,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614.htm"
  },
  "fomc/minutes/20170726": {
-  "sha256": "00c4e88a1344f3120f2f0f8b5ba48c71c7940b38ffccc5fda00847b6c3205592",
-  "bytes": 47643,
+  "sha256": "dacab56624d035f57add81e8a3bc99b614abcba47ae8f4a751954113958f26a8",
+  "bytes": 47655,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170726.htm"
  },
  "fomc/minutes/20170920": {
-  "sha256": "ce273b444c9f469ff3b67fbbf0c5257bb643492a980c33776fa258944e3f0cec",
-  "bytes": 54764,
+  "sha256": "00b3df6d3ce29527b6a670ff97c940a4c9c2a3a7d4e8617811ab2f252be5a6b8",
+  "bytes": 54776,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170920.htm"
  },
  "fomc/minutes/20171101": {
-  "sha256": "79202b7ee05ea49e9410f605ae52d7068e1f198aacf9e3aa8042d0519d41d567",
-  "bytes": 47979,
+  "sha256": "b4ad3845b5fd088f15e2787adbf8c3ec61afcdfca77dfc72a17d329329d4a5bc",
+  "bytes": 47991,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20171101.htm"
  },
  "fomc/minutes/20171213": {
-  "sha256": "f6ffba35967c71b9e99f0ca9413016ca7b5d33e633f54917e363613542433f21",
-  "bytes": 46848,
+  "sha256": "09ad691b44ed3a1f122a6a6d22be19398124957c9c6265422776bf12ed6f5cf3",
+  "bytes": 46860,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20171213.htm"
  },
  "fomc/minutes/20180131": {
-  "sha256": "2286a56385cdbbc0926dc840e6570f1ad186119dcc34bb5e0acdd3e910cfc259",
-  "bytes": 75118,
+  "sha256": "7feb0b0e91fa013b24f4f751c4b9f6f784754a43d8e1403a2254b1fdd912bbfc",
+  "bytes": 75130,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20180131.htm"
  },
  "fomc/minutes/20180321": {
-  "sha256": "a10e193d6171ed4133cb7336578cc36bd957a353c1fc019b06aa1a40630c5c5b",
-  "bytes": 45965,
+  "sha256": "581751873bb4a6576d46f2b64af5dbe380ceffd3290d06dd318bcbd832909382",
+  "bytes": 45977,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20180321.htm"
  },
  "fomc/minutes/20180502": {
-  "sha256": "130211865a11d054efb02c1cec47731a3195c5cc22504e6291b4713d75f1305a",
-  "bytes": 49912,
+  "sha256": "fdd47c57480e90b2b673d6ba43d1dfee1693be1193012dd0564644b86b41799a",
+  "bytes": 49924,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20180502.htm"
  },
  "fomc/minutes/20180613": {
-  "sha256": "0511de5c7952531640105c041f8646e419fe0f27917487ef8e1e6dde1a665931",
-  "bytes": 44561,
+  "sha256": "b924ee3314c8c28eb39a981c0401926f61b4a748b0d68a84a041695714d2def1",
+  "bytes": 44573,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20180613.htm"
  },
  "fomc/minutes/20180801": {
-  "sha256": "9304a7dcafe5d35d1ea05c3f94bdca16f62d0e590488c91a89e72eea8a401302",
-  "bytes": 52016,
+  "sha256": "ed96f252d6b84108e384f5a49cc544e9f0b797fada06a45e6e035b35cd00eaf9",
+  "bytes": 52028,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20180801.htm"
  },
  "fomc/minutes/20180926": {
-  "sha256": "faa114ff4f7a5104b630face443d34f679435e1c76cfe9fc6c87912e75ee18e2",
-  "bytes": 44720,
+  "sha256": "d105c90b8208d09f750c2b09d317ab3b025892ac90ffbd1d9011d5d55173ccf6",
+  "bytes": 44732,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20180926.htm"
  },
  "fomc/minutes/20181108": {
-  "sha256": "44653b0dcdc17831d2f951d798f9bffd9d364dd6590788ca44749fb4b18a3b62",
-  "bytes": 52837,
+  "sha256": "457973b74de678c3d4f0641114041f9368f688f6a0139ce8441851d7b69b4e1c",
+  "bytes": 52849,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20181108.htm"
  },
  "fomc/minutes/20181219": {
-  "sha256": "4e3a8de51557a12b56542530b11ad4569e2aca8e1c89882ffa4d45e0c6c2870e",
-  "bytes": 53394,
+  "sha256": "5799974193d1d65e53c9e60ef0e2ddde59eff960b48cbc94ae752f8477a886be",
+  "bytes": 53406,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20181219.htm"
  },
  "fomc/minutes/20190130": {
-  "sha256": "9a6b631a2e58084400294156733922bfc0810477e1fc1d300b11ff07198ce730",
-  "bytes": 87360,
+  "sha256": "3ca0ceb5ff12afd53fa70debc6fbc8e98c5f75af666c94e8d11d24c874ce3737",
+  "bytes": 87372,
   "source": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190130.htm"
  },
  "fomc/minutes/20190320": {
