@@ -185,7 +185,7 @@ class DML(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, d, sd):
-        card = house_lab(r"the twin loss", D.train_differential, "xb = Xn[j].requires_grad_(use_d)", 9)
+        card = house_lab(r"the twin loss", D.train_differential, "xb = Xn[j].requires_grad_(use_d)", 9, width=8.6)
         card.to_edge(UP, buff=0.4).to_edge(LEFT, buff=0.6)
         rows = [r for r in d["rows"] + sd["rows"] if r["n"] == 1024]
         outs = []

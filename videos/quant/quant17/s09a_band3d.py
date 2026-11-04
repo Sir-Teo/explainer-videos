@@ -198,7 +198,7 @@ class Band3D(VoiceoverScene, ThreeDScene):
 
     def lab(self, h, hs):
         card = house_lab(r"the band, learned and derived", D.Hedger.band, "t = torch.clamp", 5,
-                         extra=[(quoting.ww_band, "g = bs.greeks", 2)])
+                         extra=[(quoting.ww_band, "g = bs.greeks", 2)], width=8.6)
         card.to_edge(UP, buff=0.35).to_edge(LEFT, buff=0.6)
         m = h["mlp_cost"]["ww_slices"]["100"]
         b = hs["runs"]["0.005_3"]["band_atm"]
