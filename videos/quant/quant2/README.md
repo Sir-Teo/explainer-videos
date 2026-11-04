@@ -12,7 +12,7 @@ described from the public record, with allegations labelled as allegations.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 60 minutes)
+## Chapters (about 64 minutes)
 
 * **What happens when you press buy?** A trade's life with a collateral clock; 27–28 January 2021 from the SEC staff
   report: NSCC's intraday calls of $6.9 bn on 36 members ($2.1 bn mark-to-market, $4.8 bn special charge), $25.5 bn
@@ -78,6 +78,7 @@ described from the public record, with allegations labelled as allegations.
   the basis trade, regulators (SEC, FCA, SEBI's Jane Street interim order: allegations); the quant map and roles.
 * **18. Frontier, 2023 to 2026.** Six papers and the rule changes (T+1, Rule 612's delay, Treasury clearing, 13f-2 and
   10c-1a, EU/UK T+1).
+* **For the researcher: backtesting a margin model.** Kupiec's likelihood ratio and Wilks's $\chi^2_1$ limit, proved by a second-order expansion; at 250 days the exact size of the nominal 5% test is 9.5% (it rejects 0 and 7 or more breaches; 12 distinct values), 5.5% at 1,000 days; the Basel traffic light puts a correct model in yellow or red 10.8% of years. Christoffersen's Markov independence and conditional-coverage tests. Simulated GARCH(1,1): a constant margin with the right long-run variance is breached 1.5% of days and fails $\text{LR}_{uc}$ 54% of the time but $\text{LR}_{ind}$ only 26%; EWMA 8% and 6%. The US market 1926–2020 (24,876 days): EWMA breached 2.1% of days ($\text{LR}_{ind}$ 34), the constant margin 1.9% with 195 breaches in the 1930s ($\text{LR}_{ind}$ 94). Three open problems (duration tests; backtesting expected shortfall; estimation error).
 * **The funding desk; recap, desk questions, problems.**
 
 ## Build it
@@ -155,6 +156,34 @@ netting; D'Avolio (2002), p. 271–272; the SIFMA–ICI–DTCC T+1 after-action 
 5. **Smoothing.** Σθ² = 0.36 + 0.09 + 0.01 = 0.46. True Sharpe = reported × √0.46 = 1.5 × 0.678 = 1.02. Reported
    ρ₁ = (θ₀θ₁ + θ₁θ₂)/Σθ² = (0.18 + 0.03)/0.46 = 0.46.
 
+6. **(qual) Wilks for Kupiec.** With $\ell(q) = x\ln q + (T - x)\ln(1 - q)$, $\text{LR}_{uc} = 2[\ell(\hat p) -
+   \ell(p)]$. Taylor-expand $\ell(p)$ around $\hat p$: $\ell'(\hat p) = 0$ and $\ell''(\hat p) = -T/(\hat p(1 - \hat p))$,
+   so $\text{LR}_{uc} = T(\hat p - p)^2/(\hat p(1 - \hat p)) + O_p(T^{-1/2})$, and $\hat p \to p$ makes the denominator
+   $p(1 - p)$. Under $H_0$, $\sqrt T(\hat p - p)/\sqrt{p(1 - p)} \Rightarrow N(0, 1)$ (the CLT for Bernoulli draws), so
+   its square, and $\text{LR}_{uc}$ by Slutsky, tends to $\chi^2_1$.
+7. **(qual) Christoffersen.** The Markov likelihood is $(1 - \pi_{01})^{n_{00}}\pi_{01}^{n_{01}}(1 - \pi_{11})^{n_{10}}
+   \pi_{11}^{n_{11}}$; each factor is a Bernoulli likelihood, so $\hat\pi_{01} = n_{01}/(n_{00} + n_{01})$ and $\hat\pi_{11} =
+   n_{11}/(n_{10} + n_{11})$. Independence is the one restriction $\pi_{01} = \pi_{11}$, so Wilks gives $\chi^2_1$ (with
+   $p$ interior, the chain ergodic and both rows' counts growing). For 4 breaches in 250 days, three in a row:
+   $n_{01} = 2$, $n_{11} = 2$, $n_{10} = 2$, $n_{00} = 243$, $\hat\pi_{01} = 0.008$, $\hat\pi_{11} = 0.5$;
+   $\text{LR}_{uc} = 0.77$ (the count is fine), $\text{LR}_{ind} = 12.2$, $\text{LR}_{cc} = 13.0$ ($p$ = 0.002):
+   independence rejects. With so few breaches the $\chi^2$ approximation is rough, and an exact or simulated $p$-value
+   is better.
+
+## For the researcher
+
+* **The theorems.** Wilks (1938) for both likelihood ratios; Kupiec (1995) and Christoffersen (1998) for the tests.
+  Their asymptotics need many breaches: at $p$ = 1% and $T$ = 250 there are about 2.5, so exact binomial (or
+  simulated Markov) distributions should replace $\chi^2$ in practice.
+* **Simplifications.** The video ignores the estimation of the margin's parameters (Escanciano and Olmo 2010 show the
+  test's size changes), and its GARCH simulation uses normal shocks; Student-$t$ shocks raise the breach rate of any
+  normal-quantile margin further.
+* **Reading.** Wilks (1938); Kupiec (1995); Christoffersen (1998); Christoffersen and Pelletier (2004); Engle and
+  Manganelli (2004); Escanciano and Olmo (2010); Gneiting (2011); Fissler and Ziegel (2016); Acerbi and Szekely (2014);
+  Basel Committee, *Supervisory framework for the use of backtesting* (1996).
+* **Open problems.** Tests with power against realistic, longer-lag clustering; backtesting expected shortfall;
+  inference that accounts for an estimated margin.
+
 ## Data and reproducibility
 
 * Binance's public archive (data.binance.vision), each file checked against Binance's SHA-256 and recorded in
@@ -213,7 +242,22 @@ T+1的实际效果）。8. 保证金与强平（2020年3月逐小时、反射原
 5. **平滑。** Σθ² = 0.36 + 0.09 + 0.01 = 0.46。真实夏普 = 报告值 × √0.46 = 1.5 × 0.678 = 1.02。报告收益的一阶自相关
    ρ₁ = (θ₀θ₁ + θ₁θ₂)/Σθ² = (0.18 + 0.03)/0.46 = 0.46。
 
+6. **（资格考试）库皮耶克检验的威尔克斯定理。** 令$\ell(q) = x\ln q + (T - x)\ln(1 - q)$，$\text{LR}_{uc} = 2[\ell(\hat p) -
+   \ell(p)]$。在$\hat p$处泰勒展开，$\ell'(\hat p) = 0$，$\ell''(\hat p) = -T/(\hat p(1 - \hat p))$，所以$\text{LR}_{uc} =
+   T(\hat p - p)^2/(\hat p(1 - \hat p)) + O_p(T^{-1/2})$。原假设下$\sqrt T(\hat p - p)/\sqrt{p(1 - p)} \Rightarrow N(0, 1)$，
+   其平方以及$\text{LR}_{uc}$都趋于$\chi^2_1$。
+7. **（资格考试）克里斯托弗森检验。** 马尔可夫似然的每个因子都是伯努利似然，所以$\hat\pi_{01} = n_{01}/(n_{00} + n_{01})$，
+   $\hat\pi_{11} = n_{11}/(n_{10} + n_{11})$；独立性是一个约束$\pi_{01} = \pi_{11}$，由威尔克斯定理得$\chi^2_1$。250天内4次击穿、
+   其中三次连续：$n_{01} = 2$，$n_{11} = 2$，$n_{10} = 2$，$n_{00} = 243$；$\text{LR}_{uc} = 0.77$，$\text{LR}_{ind} = 12.2$，
+   $\text{LR}_{cc} = 13.0$（$p$ = 0.002）：独立性检验拒绝。击穿这么少时卡方近似很粗糙，最好用精确或模拟的$p$值。
+
 ## 数据与复现
 
 币安公开数据（逐文件SHA-256校验并记入`videos/quant/data/manifest.json`），其中本版新增币本位季度合约BTCUSD_210326；
 FRED（新增SOFR1、SOFR25、SOFR75、SOFR99）；肯尼斯·弗伦奇数据库；所有模拟均固定随机种子。
+
+## 写给研究者
+
+两个似然比都依赖威尔克斯定理（1938）；检验来自库皮耶克（1995）和克里斯托弗森（1998）。它们的渐近理论需要很多次击穿：$p$ = 1%、
+$T$ = 250时只有约2.5次，所以实践中应改用精确的二项分布（或模拟的马尔可夫分布）。开放问题：对现实中更长滞后的聚集有功效的检验；
+预期短缺的回测；考虑保证金参数估计误差的推断。

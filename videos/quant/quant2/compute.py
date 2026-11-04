@@ -885,6 +885,69 @@ def compute_industry() -> dict:
             "sebi_jane_cr": 4843.57, "nscc_netting": 0.98, "t1_cf_cut_bn": 2.4, "t1_cf_from": 12.2, "t1_cf_to": 9.8}
 
 
+def compute_backtest_theory() -> dict:
+    """The research chapter: likelihood-ratio backtests of a margin model.  Wilks's chi-squared limit for Kupiec's
+    LR against the exact law at 250 and 1,000 days; Christoffersen's independence and conditional-coverage tests;
+    their power against a margin that gets the count right but the timing wrong (a constant margin under GARCH);
+    and both margins on the US market, 1926-2020."""
+    from scipy import stats as st
+    rng = np.random.default_rng(202)
+    p, M = 0.01, 20000
+    out = {"p": p, "M": M, "size": {}}
+    for T in (250, 1000):
+        x = rng.binomial(T, p, M)
+        lr = np.array([funding.kupiec(int(k), T, p)["LR"] for k in x])
+        exact = {k: funding.kupiec(k, T, p)["LR"] for k in range(0, 40)}
+        pk = st.binom.pmf(np.arange(40), T, p)
+        rej = [k for k in range(40) if exact[k] > 3.841]
+        out["size"][str(T)] = {"sim": float(np.mean(lr > 3.841)), "exact": float(pk[rej].sum()),
+                               "support": int(len(set(np.round(lr, 6)))), "lr_hist": np.histogram(lr, 30, (0, 12))[0],
+                               "pmf": st.binom.pmf(np.arange(16), T, p)}
+    out["traffic"] = {"green_max": 4, "red_min": 10, "p_yellow_or_worse": float(st.binom.sf(4, 250, p)),
+                      "p_red": float(st.binom.sf(9, 250, p))}
+    # power: GARCH(1,1) daily returns; an EWMA margin and a constant margin with the right long-run variance
+    w, a, b = 1e-6, 0.09, 0.90
+    lv = w / (1 - a - b)
+    z = st.norm.ppf(1 - p)
+    T, Mp = 1000, 2000
+    pw = {k: {"uc": 0, "ind": 0, "cc": 0, "hits": 0.0, "p11": 0.0} for k in ("ewma", "constant")}
+    for m in range(Mp):
+        r_ = np.random.default_rng(5000 + m)
+        N = T + 500
+        e = r_.standard_normal(N)
+        h = lv
+        x = np.empty(N)
+        for t_ in range(N):
+            x[t_] = np.sqrt(h) * e[t_]
+            h = w + a * x[t_] ** 2 + b * h
+        x = x[500:]
+        v = funding.ewma_var(x, 0.97, v0=lv)
+        hits = {"ewma": (x < -z * np.sqrt(v)).astype(int), "constant": (x < -z * np.sqrt(lv)).astype(int)}
+        for k, hh in hits.items():
+            c = funding.christoffersen(hh, p)
+            pw[k]["uc"] += c["LR_uc"] > 3.841
+            pw[k]["ind"] += c["p_ind"] < 0.05
+            pw[k]["cc"] += c["p_cc"] < 0.05
+            pw[k]["hits"] += c["hits"] / T
+            pw[k]["p11"] += c["p11"]
+    out["power"] = {k: {kk: float(vv / Mp) for kk, vv in d.items()} for k, d in pw.items()}
+    out["garch"] = [w, a, b]
+    # the US market, 1926-2020: EWMA(0.97) against a constant margin from the full-sample standard deviation
+    kf = data.ken_french_daily()
+    d, simple = pit.research(kf["date"], kf["mkt"])
+    r = np.log1p(simple)
+    v = funding.ewma_var(r, 0.97)
+    real = {}
+    for k, thr in (("ewma", z * np.sqrt(v)), ("constant", z * r.std() * np.ones(len(r)))):
+        hh = (r[20:] < -thr[20:]).astype(int)
+        real[k] = funding.christoffersen(hh, p)
+        yrs = (d[20:] // 10000)
+        real[k]["by_decade"] = {str(dec): int(hh[(yrs >= dec) & (yrs < dec + 10)].sum()) for dec in range(1920, 2030, 10)}
+    out["us"] = real
+    out["us_T"] = int(len(r) - 20)
+    return _json(out)
+
+
 ITEMS = {"margin": compute_margin, "netting": compute_netting, "auction": compute_auction, "funding": compute_funding,
          "repo": compute_repo, "fees": compute_fees, "basis": compute_basis, "hedge": compute_hedge,
          "book": compute_book, "auction_live": compute_auction_live, "rfq": compute_rfq,
@@ -892,7 +955,7 @@ ITEMS = {"margin": compute_margin, "netting": compute_netting, "auction": comput
          "liq_surface": compute_liq_surface, "imodel": compute_imodel, "squeeze": compute_squeeze,
          "sofr_fan": compute_sofr_fan, "reserve_curve": compute_reserve_curve, "spiral": compute_spiral,
          "fire_sale": compute_fire_sale, "glm": compute_glm, "index_rd": compute_index_rd, "limits": compute_limits,
-         "industry": compute_industry}
+         "industry": compute_industry, "backtest_theory": compute_backtest_theory}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

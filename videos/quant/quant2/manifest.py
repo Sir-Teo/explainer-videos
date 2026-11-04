@@ -25,5 +25,6 @@ SCENES = [
     ("s10_world", "World", "16. Markets around the world"),
     ("s20_industry", "Industry", "17. Industry: who runs the machine"),
     ("s21_frontier", "Frontier", "18. Frontier, 2023 to 2026"),
+    ("s22_research", "Research", "For the researcher: backtesting a margin model"),
     ("s12_outro", "Outro", "The funding desk; recap, desk questions, problems"),
 ]

@@ -25,6 +25,10 @@ PROBLEMS = [
     r"Find the minimum-variance hedge ratio and its effectiveness when $\rho = 0.8$ and $\sigma_S/\sigma_F = 1.25$.",
     r"A fund's returns are smoothed with $\theta = (0.6, 0.3, 0.1)$ and its reported Sharpe ratio is 1.5. What is its "
     r"true Sharpe ratio, and its reported lag-1 autocorrelation?",
+    r"(qual) Show $\text{LR}_{uc} = (\hat p - p)^2/(p(1 - p)/T) + o_p(1)$ under $H_0$, and hence $\text{LR}_{uc} "
+    r"\Rightarrow \chi^2_1$.",
+    r"(qual) Derive the Markov MLEs $\hat\pi_{01}, \hat\pi_{11}$ and show $\text{LR}_{ind} \Rightarrow \chi^2_1$; "
+    r"evaluate it for 4 breaches in 250 days, three in a row.",
 ]
 
 
@@ -137,11 +141,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And five problems: liquidation odds by the reflection principle, netting by hand, the deleveraging "
-            "loop's fixed point, a hedge ratio, and undoing smoothed returns. Solutions, in English and Chinese, "
-            "are in the notes."
+            "And seven problems: liquidation odds by the reflection principle, netting by hand, the deleveraging "
+            "loop's fixed point, a hedge ratio, undoing smoothed returns, and two at the level of a qualifying exam: "
+            "Wilks's theorem for Kupiec's test, and Christoffersen's independence test. Solutions, in English and "
+            "Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)

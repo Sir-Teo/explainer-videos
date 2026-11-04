@@ -191,6 +191,30 @@ def kupiec(breaches: int, T: int, p: float = 0.01) -> dict:
     return {"rate": ph, "LR": lr, "p_value": float(chi2.sf(lr, 1))}
 
 
+def christoffersen(hits, p: float = 0.01) -> dict:
+    """Christoffersen's (1998) tests on a 0/1 breach sequence: the independence test LR_ind (a first-order Markov
+    chain for the hits against independence, chi-squared(1)) and conditional coverage LR_cc = LR_uc + LR_ind
+    (chi-squared(2)), with Kupiec's LR_uc.  Clustered breaches fail LR_ind even when their count is right."""
+    from scipy.stats import chi2
+    h = np.asarray(hits, int)
+    a, b = h[:-1], h[1:]
+    n00, n01 = int(np.sum((a == 0) & (b == 0))), int(np.sum((a == 0) & (b == 1)))
+    n10, n11 = int(np.sum((a == 1) & (b == 0))), int(np.sum((a == 1) & (b == 1)))
+
+    def xlogy(x, y):
+        return x * np.log(y) if x > 0 else 0.0
+    p01 = n01 / max(n00 + n01, 1)
+    p11 = n11 / max(n10 + n11, 1)
+    p1 = (n01 + n11) / max(n00 + n01 + n10 + n11, 1)
+    ll_ind = xlogy(n00, 1 - p01) + xlogy(n01, p01) + xlogy(n10, 1 - p11) + xlogy(n11, p11)
+    ll_0 = xlogy(n00 + n10, 1 - p1) + xlogy(n01 + n11, p1)
+    lr_ind = float(max(-2 * (ll_0 - ll_ind), 0.0))
+    uc = kupiec(int(h.sum()), len(h), p)
+    lr_cc = uc["LR"] + lr_ind
+    return {"LR_uc": uc["LR"], "LR_ind": lr_ind, "LR_cc": lr_cc, "p_ind": float(chi2.sf(lr_ind, 1)),
+            "p_cc": float(chi2.sf(lr_cc, 2)), "p01": p01, "p11": p11, "n11": n11, "hits": int(h.sum())}
+
+
 def liquidation_probability(leverage, horizon_days, sigma_daily: float, maintenance: float = 0.005) -> np.ndarray:
     """The chance a long opened with ``leverage`` is liquidated within ``horizon_days``, if the log price is a
     driftless Brownian motion with daily volatility ``sigma_daily``: by the reflection principle,

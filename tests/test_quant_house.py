@@ -3166,3 +3166,17 @@ def test_ridge_theory_matches_simulation():
     assert ML.ridge_risk_theory(2.0, 0.0)["risk"] == 1.0 * 0.5 + 1.0
     e = ML.rff_kernel_error(P_list=(100, 10000))
     assert e[1] < e[0] / 5
+
+
+def test_christoffersen_independence():
+    import numpy as np
+    from explainer.quant.house import funding
+    rng = np.random.default_rng(0)
+    iid = (rng.random(5000) < 0.01).astype(int)
+    c = funding.christoffersen(iid, 0.01)
+    assert c["p_ind"] > 0.01 and abs(c["LR_cc"] - c["LR_uc"] - c["LR_ind"]) < 1e-9
+    clustered = np.zeros(5000, int)
+    for s in range(100, 5000, 500):
+        clustered[s:s + 5] = 1                 # 50 hits, the right count, in runs of five
+    c2 = funding.christoffersen(clustered, 0.01)
+    assert c2["LR_uc"] < 1.0 and c2["p_ind"] < 1e-6 and c2["p11"] > 0.7
