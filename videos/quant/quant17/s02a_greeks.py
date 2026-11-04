@@ -82,7 +82,7 @@ class Greeks(VoiceoverScene):
                     r"neutral density, so a price must be convex in the strike. A network can break this, and a negative "
                     r"butterfly is an arbitrage. Remedies: build convexity into the architecture (Dugas et al.\ 2009) or "
                     r"penalize it (Ackerer, Tagasovska and Vatter 2020); Part 12 builds arbitrage-free surfaces")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-0.4, buff=0.5, edge=6.9)
         with self.voiceover(
             "Why? Write a network with one hidden layer: weights, biases, and an activation applied to every unit. "
             "<bookmark mark='a'/> Differentiate twice with the chain rule. The curvature of the whole network is a "
