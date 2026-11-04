@@ -1493,6 +1493,17 @@ Frontier (2023–2026):
 - Cederburg, S., O'Doherty, M., Wang, F., Yan, X. (2020). "On the performance of volatility-managed portfolios." *JFE*.
 - Kelly, B., Moskowitz, T., Pruitt, S. (2021). "Understanding momentum and reversal." *JFE*.
 - Bridgewater Associates. "The All Weather Story" (public note).
+- Asness, C., Moskowitz, T., Pedersen, L. H. (2013). "Value and momentum everywhere." *Journal of Finance*.
+- Frazzini, A., Pedersen, L. H. (2014). "Betting against beta." *JFE*.
+- Brunnermeier, M., Nagel, S., Pedersen, L. H. (2008). "Carry trades and currency crashes." *NBER Macroeconomics Annual*.
+- Garleanu, N., Pedersen, L. H., Poteshman, A. (2009). "Demand-based option pricing." *RFS*.
+- Daniel, K., Moskowitz, T. (2016). "Momentum crashes." *JFE*.
+- Potters, M., Bouchaud, J.-P. (2005). "Trend followers lose more often than they gain." *Wilmott*.
+- Ogden, J. (1990). "Turn-of-month evaluations of liquid profits and stock returns." *Journal of Finance*.
+- Bouman, S., Jacobsen, B. (2002). "The Halloween indicator, 'sell in May and go away': another puzzle." *AER*.
+- Lucca, D., Moench, E. (2015). "The pre-FOMC announcement drift." *Journal of Finance*.
+- Sullivan, R., Timmermann, A., White, H. (2001). "Dangers of data mining: the case of calendar effects in stock returns." *J. Econometrics*.
+- Bernard, V., Thomas, J. (1989). "Post-earnings-announcement drift: delayed price response or risk premium?" *J. Accounting Research*.
 
 ### Part 33 · Statistical Arbitrage
 - Lehmann, B. (1990). "Fads, martingales, and market efficiency." *QJE*.

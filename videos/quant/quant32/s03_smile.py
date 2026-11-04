@@ -239,7 +239,8 @@ class Smile(VoiceoverScene):
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):
                 cell.move_to([hx[i], 1.6 - 0.9 * j, 0])
-        foot = wrapped_label(r"60/40 with part of its capital moved into the trend book, rebalanced monthly, 2007--2020; "
+        foot = wrapped_label(r"60/40 with part of its capital moved into the trend book, rebalanced monthly, 2007--2020; Sharpe "
+                             r"ratios from monthly returns, so not comparable with Chapter 1's daily ones; "
                              r"before fees", 11.0, 17, GREY_A).to_edge(DOWN, buff=0.7)
         sr0, sr1 = rows[0][1], rows[1][1]
         dd0, dd1 = abs(100 * rows[0][2]), abs(100 * rows[1][2])

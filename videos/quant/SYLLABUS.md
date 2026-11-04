@@ -1477,24 +1477,40 @@ of corrections.
 *Desk:* "IC 0.05, 500 stocks, monthly rebalancing. Information ratio?"
 *House:* `explainer/quant/house/riskmodel.py` (the risk model, the law, costs and trading, attribution, guards).
 
-### Part 32 · Systematic Macro and Alternative Premia (~55)
-1. Trend following: a century of evidence (Hurst–Ooi–Pedersen 2017); the CTA business; why it pays in crises.
-2. Volatility targeting and its effect (Moreira–Muir 2017) and the critique (Cederburg et al. 2020).
-3. Carry across asset classes (Part 22, 24) as one book.
-4. Risk parity: Bridgewater's All Weather (1996), the leverage it needs; 2022 when stocks and bonds fell together.
-5. Selling volatility and insurance: the premium and the left tail (Part 12).
-6. Event-driven: merger arbitrage, index rebalancing, earnings drift.
-7. Seasonality and calendar effects; the turn of the month; overnight vs intraday returns.
-8. Managed futures in 2008 and 2022.
+### Part 32 · Systematic Macro and Alternative Premia (~55; built)
+0. Hook: 2008 (stocks −38%, 60/40 −18%, trend +7%); three kinds of premium: risk, behavioural, structural.
+1. Trend following: time-series momentum (Moskowitz–Ooi–Pedersen 2012) on a 23-ETF macro panel; lookbacks and
+   sizing; by class; a century of evidence (Hurst–Ooi–Pedersen 2017; Lempérière et al. 2014); AHL/Man, Winton; fees.
+2. The smile and the crisis: slow crises, fast crashes, reversals (2009); 2020Q1; the straddle identity; trend as a
+   diversifier of 60/40.
+3. Volatility targeting asset by asset (Moreira–Muir 2017; Cederburg et al. 2020; Harvey et al. 2018); the leverage
+   effect; crowding in vol-control rules.
+4. Risk parity: 60/40's risk concentration; leverage aversion (Asness–Frazzini–Pedersen 2012); All Weather (1996) and
+   its four environments; leverage dial and financing; the stock–bond correlation 1962–2020 (Campbell–Sunderam–Viceira).
+5. Value, momentum, carry and defensive across asset classes, 1926–2020 (AQR, as published); correlations; everywhere
+   (Asness–Moskowitz–Pedersen 2013); betting against beta; crisis years.
+6. Carry made visible: fund minus spot for oil, gas and six currencies; contango and backwardation; bond carry;
+   negative oil (April 2020); a currency carry book and its 2008 crash (Koijen et al. 2018).
+7. Selling insurance: Cboe PUT 2007–2020; Israelov–Nielsen; Volmageddon (February 2018); demand-based option pricing.
+8. Calendars, nights and events: turn of the month and sell-in-May by era; FOMC days (Lucca–Moench); overnight vs
+   intraday (Lou–Polk–Skouras); merger arbitrage, index changes, drift; data mining (Sullivan–Timmermann–White).
+9. The trend and risk-parity books registered and opened on 2021–25 (0.27 and 0.15; 2022 +15% and −23%; the
+   stock–bond correlation turned positive).
+10. Rule 32: the macro books.
+Research: why trend following is long a straddle: P = ½(S² − Q) exactly; E P = Σ(n − k)γ_k; skewness
+2^{3/2}(n − 2)/√(n(n − 1)) → 2√2 by counting triangles; the limit ½(Z² − 1) and P(P > 0) → 31.7%; simulations and
+the 23 funds; diversification, the sign rule, matched filters.
 
-*Textbooks:* Pedersen *Efficiently Inefficient* ch. 9–15; Ilmanen; Kakushadze–Serur; Clenow *Following the Trend*.
-*Computed:* trend, carry, risk-parity, vol-targeting and short-vol books on public futures-like data (Ken French
-and FRED proxies; crypto perps); their crisis behaviour.
-*Visuals:* the trend book's "smile" against market returns; the risk-parity leverage dial.
-*Crisis:* 2022: the stock–bond correlation flip.
-*Firms:* Man AHL, Winton, AQR managed futures, Bridgewater.
+*Textbooks:* Pedersen *Efficiently Inefficient*; Ilmanen *Expected Returns*; Kakushadze–Serur; Clenow *Following the
+Trend*.
+*Computed:* trend, vol-targeting and risk-parity books on 23 ETFs; the stock–bond correlation since 1962; carry as fund
+minus spot; the PUT index; calendar, FOMC and overnight effects; the trend identity simulated and measured.
+*Visuals:* the smile and the exact parabolas; the risk-parity leverage dial; the stock–bond correlation; the oil fund
+against spot.
+*Crisis:* 2022: the stock–bond correlation flip; negative oil (April 2020); Volmageddon (February 2018).
+*Firms:* AHL/Man, Winton, Bridgewater (All Weather), AQR's published series.
 *Desk:* "Why does trend following have positive skew?"
-*House:* the macro books.
+*House:* `explainer/quant/house/systematic.py` (the macro books).
 
 ### Part 33 · Statistical Arbitrage (~50)
 1. History: Morgan Stanley's APT group (Tartaglia), D. E. Shaw (1988), Princeton/Newport.
