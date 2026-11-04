@@ -143,7 +143,7 @@ class VarRed(VoiceoverScene):
             MathTex(rf"\text{{importance: sd }} {d['sd_imp']:.1e}".replace("e-07", r"\times 10^{-7}"), font_size=26, color=GOOD),
             label(rf"a variance {(d['sd_plain_is'] / d['sd_imp']) ** 2:,.0f} times smaller".replace(",", "{,}"), font_size=26,
                   color=S.ACCENT),
-        ), 6.4, 0.25, [3.5, -2.2, 0])
+        ), 5.4, 0.25, [4.1, 0.3, 0])
         with self.voiceover(
             "The most powerful trick changes where you sample. <bookmark mark='a'/> Suppose we want the chance that a "
             "standard normal exceeds four: about three in a hundred thousand. With a hundred thousand plain draws, "
@@ -160,7 +160,7 @@ class VarRed(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(gq), FadeIn(leg[1]))
             vo.wait_until("c")
-            step = ladder(self, rows, whys, keep=1, top=-0.9, x=-2.4, buff=0.8, edge=6.9)
+            step = ladder(self, rows, whys, keep=1, top=-2.1, x=-2.6, buff=0.8, edge=6.9)
             step(0, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(res[2:]))
@@ -195,7 +195,7 @@ class VarRed(VoiceoverScene):
         n, reps = 1000, 2000
         plain = np.exp(g.random((reps, n))).mean(1)
         strat = np.exp((np.arange(n) + g.random((reps, n))) / n).mean(1)
-        f = (plain.std() / strat.std()) ** 2
+        f = float(f"{(plain.std() / strat.std()) ** 2:.2g}")
         x0, x1, y = -5.6, 5.6, 1.6
         line = Line([x0, y, 0], [x1, y, 0], color=GREY_B, stroke_width=2)
         ticks = VGroup(*[Line([x0 + k * (x1 - x0) / 10, y - 0.15, 0], [x0 + k * (x1 - x0) / 10, y + 0.15, 0], color=GREY_C,

@@ -227,9 +227,11 @@ class Chains(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"one long run of the weather chain", font_size=24),
             label(r"the share of sunny, cloudy, rainy days $\to \pi$", font_size=24, color=EXACT),
-            label(r"the ergodic theorem: \ a time average of one path equals the average over $\pi$", font_size=22, color=CHAIN),
-            label(r"why one long MCMC run can stand in for independent draws", font_size=22, color=GREY_A),
-        ), 4.8, 0.28, [4.4, -0.4, 0])
+            label(r"the ergodic theorem:", font_size=24, color=CHAIN),
+            label(r"one path's time average $=$ the average over $\pi$", font_size=24, color=CHAIN),
+            label(r"why one long MCMC run can stand in", font_size=22, color=GREY_A),
+            label(r"for independent draws", font_size=22, color=GREY_A),
+        ), 5.0, 0.24, [4.5, -0.4, 0])
         with self.voiceover(
             "There's a second way to see the stationary law. <bookmark mark='a'/> Instead of evolving the whole "
             "distribution, simulate one long run of the chain: here are its first sixty-four days. "

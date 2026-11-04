@@ -4,7 +4,7 @@ import numpy as np
 
 from videos.stats.stats7.common import *  # noqa: F403
 
-GRAPH_POS = [(-5.4, 1.2), (-5.4, -1.4), (-3.4, -0.1), (-1.0, -0.1), (1.0, 1.2), (1.0, -1.4)]
+GRAPH_POS = [(-6.0, 1.2), (-6.0, -1.4), (-4.3, -0.1), (-2.2, -0.1), (-0.5, 1.2), (-0.5, -1.4)]
 PAGE_POS = [(-1.6, 1.6), (-3.4, 0.0), (-1.2, -0.6), (-3.6, -2.2), (0.8, -2.0), (2.8, -0.4), (2.4, 1.8)]
 
 
@@ -100,7 +100,7 @@ class Stationary(VoiceoverScene):
             MathTex(r"\pi_i = \frac{\deg i}{2|E|}", font_size=34, color=EXACT),
             label(r"check: \ $\pi_i P_{ij} = \frac{1}{2|E|} = \pi_j P_{ji}$", font_size=24, color=GREY_A),
             MathTex(rf"\pi = (" + ",\\ ".join(f"{v:.3f}" for v in sq) + ")", font_size=24, color=CHAIN),
-        ), 5.6, 0.3, [3.9, 0.2, 0])
+        ), 5.2, 0.3, [4.2, 0.2, 0])
         with self.voiceover(
             "Detailed balance makes some stationary distributions obvious. <bookmark mark='a'/> A random walk on a "
             "graph steps to a neighbour chosen at random; the number on each node is its degree, how many neighbours "
@@ -136,7 +136,8 @@ class Stationary(VoiceoverScene):
         labs = VGroup(*[MathTex(f"{pr[i]:.2f}", font_size=22).move_to(pos[i]) for i in range(7)])
         grp = VGroup(arrows, nodes, big, labs).shift(LEFT * 1.6)
         rows = fit_rows(VGroup(
-            label(r"the random surfer: \ follow a random link with chance 0.85, \ else jump to any page", font_size=22),
+            label(r"the random surfer: \ follow a random link (0.85),", font_size=24),
+            label(r"or jump to any page (0.15)", font_size=24),
             MathTex(r"G = 0.85\, L + 0.15\, \tfrac{1}{n}\mathbf 1\mathbf 1^\top", font_size=28),
             MathTex(r"\text{PageRank} = \text{the stationary } \pi \text{ of } G", font_size=28, color=S.EST),
             label(r"power iteration: \ $\pi \leftarrow \pi G$, \ 40 steps", font_size=22, color=GREY_A),
@@ -155,11 +156,11 @@ class Stationary(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(nodes), LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.08), FadeIn(hc))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(rows[:2]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[1:3]))
+            self.play(FadeIn(rows[2:4]))
             vo.wait_until("c")
-            self.play(Transform(nodes, big), FadeIn(labs), FadeIn(rows[3:]))
+            self.play(Transform(nodes, big), FadeIn(labs), FadeIn(rows[4:]))
         self.clear_scene()
 
     def periodic(self):
