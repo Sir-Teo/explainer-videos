@@ -234,7 +234,7 @@ def _residual_book(d, R, n_fac=5, window=60, bands=(1.25, 0.5, 0.75), start=1994
 
 PCA_CONFIGS = [(nf, w, b) for nf in (3, 5) for w in (30, 60) for b in ((1.25, 0.5, 0.75), (1.0, 0.25, 0.25))] + \
     [(5, 60, "theory")]
-REGISTERED = (5, 60, "theory")     # decided before any result: the research chapter's band, at the House's costs
+REGISTERED = (5, 60, "theory")     # the research chapter's band, at the House's costs; added after the eight AL-band rules, so charged all nine
 
 
 def compute_pca() -> dict:
@@ -510,16 +510,26 @@ def compute_envelope() -> dict:
         return ks, np.array([np.sum(pnl[mask & (md == k)]) for k in ks])
     rm_d, rm = monthly(res)
     hm_d, hm = monthly(hold)
-    row = track.record(STRATEGY, 33, rm, hm, 0.0, note="Avellaneda-Lee residual s-scores on the 49 industries, net of 5 bp")
+    row = track.record(STRATEGY, 33, rm, hm, 0.0, note="Avellaneda-Lee residual s-scores on the 49 industries, research-chapter band, net of 5 bp")
     years = {str(y): _stats(pnl[hold & (d // 10000 == y)]) for y in range(2021, 2026)}
     return _json({"trials": pit.trials_so_far(), "n_trials": int(p["n_trials"]), "res": _stats(pnl[res]),
                   "hold": _stats(pnl[hold]), "res_gross": _stats(gross[res]), "hold_gross": _stats(gross[hold]), "row": row, "years": years, "cum_hold": np.cumsum(pnl[hold]),
                   "hold_dates": d[hold], "turn_hold": float(np.mean(turn[hold]))})
 
 
+def compute_smallc() -> dict:
+    """The small-cost law: m*/s_eq -> (3c/s_eq)^(1/3), checked against the exact optimum (kappa = 1, s_eq = 1)."""
+    k, sig = 1.0, math.sqrt(2.0)
+    rows = []
+    for c in (0.0005, 0.002, 0.01, 0.05, 0.1, 0.3):
+        m, r = SA.optimal_band(k, sig, c)
+        rows.append({"c": c, "m": m, "law": (3 * c) ** (1 / 3), "ratio": m / (3 * c) ** (1 / 3), "rate": r})
+    return _json({"rows": rows})
+
+
 ITEMS = {"pairs": compute_pairs, "coint": compute_coint, "pca": compute_pca, "kalman": compute_kalman,
          "lomac": compute_lomac, "nagel": compute_nagel, "deep": compute_deep, "theory": compute_theory,
-         "envelope": compute_envelope}
+         "envelope": compute_envelope, "smallc": compute_smallc}
 
 
 if __name__ == "__main__":

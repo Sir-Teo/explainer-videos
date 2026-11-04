@@ -78,7 +78,7 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, buff=0.3)
         with self.voiceover(
             "That is the textbook promise. <bookmark mark='a'/> This part tests it. <bookmark mark='b'/> On the "
-            "forty-nine American industries, the classic pairs rule lost money over half a century. Pairs that pass a "
+            "American industries, the classic pairs rule lost money over half a century. Pairs that pass a "
             f"cointegration test in one year are about {100 * fr:.0f} percent of them, barely twice the rate for random "
             "walks with no connection at all, and passing once says almost nothing about passing again. "
             "<bookmark mark='c'/> What survives is subtler: residuals against a factor model, traded with a band "

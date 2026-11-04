@@ -431,6 +431,30 @@
   },
   "note": "value-weighted quintile long-short, weekly"
  },
+ "residual_sscore_part33": {
+  "part": 33,
+  "research": {
+   "mean": 0.006317544860511448,
+   "vol": 0.02893787970332268,
+   "sharpe": 0.21831402042168485,
+   "sharpe_se": 0.1918369799991889,
+   "maxdd": -0.11960081074020446,
+   "n": 324,
+   "sharpe_net": 0.21831402042168485,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.010512909921140809,
+   "vol": 0.029595667838581738,
+   "sharpe": 0.3552178642657925,
+   "sharpe_se": 0.4422662732998599,
+   "maxdd": -0.05508420589831731,
+   "n": 60,
+   "sharpe_net": 0.3552178642657925,
+   "cost_per_year": 0.0
+  },
+  "note": "Avellaneda-Lee residual s-scores on the 49 industries, research-chapter band, net of 5 bp"
+ },
  "riskparity_part32": {
   "part": 32,
   "research": {

@@ -1516,7 +1516,17 @@ Frontier (2023–2026):
 - Nagel, S. (2012). "Evaporating liquidity." *RFS*.
 - Leung, T., Li, X. (2015). "Optimal mean reversion trading with transaction costs and stop-loss exit." *Int. J. Theoretical and Applied Finance*.
 - Krauss, C. (2017). "Statistical arbitrage pairs trading strategies: review and outlook." *J. Economic Surveys*.
-- Guijarro-Ordonez, J., Pelger, M., Zanotti, G. (2022). "Deep learning statistical arbitrage." Working paper *(verify: venue)*.
+- Guijarro-Ordonez, J., Pelger, M., Zanotti, G. (2021). "Deep learning statistical arbitrage." arXiv:2106.04028 (revised 2022).
+- Krauss, C., Do, X. A., Huck, N. (2017). "Deep neural networks, gradient-boosted trees, random forests: statistical arbitrage on the S&P 500." *EJOR*.
+- Engle, R., Granger, C. (1987). "Co-integration and error correction." *Econometrica*.
+- Johansen, S. (1991). "Estimation and hypothesis testing of cointegration vectors in Gaussian vector autoregressive models." *Econometrica*.
+- Froot, K., Dabora, E. (1999). "How are stock prices affected by the location of trade?" *JFE*.
+- Roll, R. (1984). "A simple implicit measure of the effective bid-ask spread in an efficient market." *JF*.
+- Grossman, S., Miller, M. (1988). "Liquidity and market structure." *JF*.
+- Shleifer, A., Vishny, R. (1997). "The limits of arbitrage." *JF*.
+- Coval, J., Stafford, E. (2007). "Asset fire sales (and purchases) in equity markets." *JFE*.
+- Engelberg, J., Reed, A., Ringgenberg, M. (2018). "Short-selling risk." *JF*.
+- Khandani, A., Lo, A. W. (2011). "What happened to the quants in August 2007? Evidence from factors and transactions data." *J. Financial Markets*.
 
 ### Part 34 · Inside a Quant Firm
 - Virtu Financial (2014). *Form S-1 Registration Statement*.

@@ -239,10 +239,15 @@ class Research(VoiceoverScene):
         dens = np.array([1 / math.sqrt(2 * math.pi * (2 * u + 1)) * math.exp(-(2 * u + 1) / 2) * 2 for u in xs])
         c = curve(ax, xs, np.minimum(dens, 1.0), TREND_C, stroke_width=3)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, 1.0), color=GREY_C, stroke_width=1.5)
-        lo = ax.get_area(ax.plot(lambda u: min(1.0, 2 / math.sqrt(2 * math.pi * (2 * u + 1)) * math.exp(-(2 * u + 1) / 2)),
-                                 x_range=[-0.49, 0]), x_range=[-0.49, 0], color=BAD, opacity=0.4)
-        hi = ax.get_area(ax.plot(lambda u: 2 / math.sqrt(2 * math.pi * (2 * u + 1)) * math.exp(-(2 * u + 1) / 2),
-                                 x_range=[0, 6]), x_range=[0, 6], color=GOOD, opacity=0.3)
+        def dens_f(u):
+            return 2 / math.sqrt(2 * math.pi * (2 * u + 1)) * math.exp(-(2 * u + 1) / 2)
+
+        def area(a_, b_, col, op):
+            us = np.linspace(a_, b_, 120)
+            pts = [ax.c2p(a_, 0)] + [ax.c2p(u, min(1.0, dens_f(u))) for u in us] + [ax.c2p(b_, 0)]
+            return Polygon(*pts, color=col, fill_opacity=op, stroke_width=0)
+        lo = area(-0.49, 0, BAD, 0.4)
+        hi = area(0, 6, GOOD, 0.3)
         txt = VGroup(label(r"68\% of blocks lose, never more than $\frac12$", font_size=17, color=BAD),
                      label(r"32\% win, without limit", font_size=17, color=GOOD)).arrange(DOWN, aligned_edge=LEFT,
                                                                                        buff=0.15)

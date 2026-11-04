@@ -116424,6 +116424,16 @@
   "bytes": 261704,
   "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv"
  },
+ "cboe/VIX/through_2020-12-31": {
+  "sha256": "96df878cc313649a688bc8e9f5bd31dbb15672e0db9635216166ba7c0df03806",
+  "bytes": 147554,
+  "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
+ },
+ "cboe/VIX/through_2025-12-31": {
+  "sha256": "60073c28bfc1bfb1b41c1f46ea6980e959817c0f50e7782200cae71b83b570eb",
+  "bytes": 171772,
+  "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
+ },
  "cboe/vx/2017-05-17": {
   "sha256": "61aa2acf069195688560d428ff68d3fcd2fb58334ed21a124aa45fa9dcfcfe32",
   "bytes": 3676,
@@ -137274,6 +137284,11 @@
   "bytes": 9125770,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_daily_CSV.zip"
  },
+ "kenfrench/industries49_daily/through_2025-12-31": {
+  "sha256": "5ad9025af88a8bba2086607b1ce3fdcf2e8fef6507fd8e91732334430ee1fdae",
+  "bytes": 9594847,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_daily_CSV.zip"
+ },
  "kenfrench/industries49_nfirms/through_202012": {
   "sha256": "6001295c30eb60195320eb10b2fc9d3e29c232c465faddea6653a8bf2553c269",
   "bytes": 284941,
@@ -137303,6 +137318,11 @@
   "sha256": "c7158562ef49a469fb64e076ec038a3a3afc61825b7ebaf2f04025ad2e785281",
   "bytes": 21661,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_CSV.zip"
+ },
+ "kenfrench/size_deciles_daily/through_2020-12-31": {
+  "sha256": "2b3c1a85ba488879bbc781ce6a3e575b807f0c068e3201f0b6a392c1d3dc39a3",
+  "bytes": 2146924,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_ME_daily_CSV.zip"
  },
  "kenfrench/size_deciles_daily/through_2025-12-31": {
   "sha256": "81f1224d428adeaa10682134f1997a54dda765794a00bb10ff0dbf698f010ed3",

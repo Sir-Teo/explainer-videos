@@ -104,6 +104,10 @@
    "at": "2026-11-04",
    "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
   },
+  "residual_sscore_part33|kenfrench/industries49_daily": {
+   "at": "2026-11-04",
+   "code_sha256": "c705c91d0b1ade2e21450c03214df4e0353f94d2a3386d6baf4c0528224b5c4e"
+  },
   "riskparity_part32|yahoo/etf_panel_excess": {
    "at": "2026-11-04",
    "code_sha256": "3e155763f60eb679cec438a93f210497841e1fc0bc13d1873866693d78ebfe5b"
@@ -639,6 +643,17 @@
    },
    "trials": 1
   },
+  "residual_sscore_part33": {
+   "code_sha256": "c705c91d0b1ade2e21450c03214df4e0353f94d2a3386d6baf4c0528224b5c4e",
+   "params": {
+    "bands": "the research chapter's optimal band at each residual's cost and s_eq; exit at the mean",
+    "cost": "5 bp per dollar",
+    "factors": "5 correlation-PCA eigenportfolios, trailing 252 days, refit every 21",
+    "universe": "Ken French 49 industries, daily",
+    "window": 60
+   },
+   "trials": 9
+  },
   "riskparity_part32": {
    "code_sha256": "3e155763f60eb679cec438a93f210497841e1fc0bc13d1873866693d78ebfe5b",
    "params": {
@@ -888,6 +903,12 @@
    "first": 20210101,
    "last": 20251201,
    "n": 60
+  },
+  "kenfrench/industries49_daily": {
+   "digest": "748aca451e6daeeef83c5a03b847ef96694f1315f4bc386af91f043a5cc9f47c",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
   },
   "kenfrench/mkt_daily": {
    "digest": "2919993e28205ab6abb35b6874c8e0ec94d0566ce25e0ca7991657c7d14ee194",

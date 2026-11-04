@@ -1512,25 +1512,36 @@ against spot.
 *Desk:* "Why does trend following have positive skew?"
 *House:* `explainer/quant/house/systematic.py` (the macro books).
 
-### Part 33 · Statistical Arbitrage (~50)
-1. History: Morgan Stanley's APT group (Tartaglia), D. E. Shaw (1988), Princeton/Newport.
-2. Pairs (Gatev–Goetzmann–Rouwenhorst 2006), re-run.
-3. Cointegrated pairs; half-lives.
-4. OU trading rules (Bertram 2010; Leung–Li 2015), derived.
-5. PCA and ETF residuals (Avellaneda–Lee 2010).
-6. Kalman hedge ratios.
-7. Lead–lag and reversal (Lo–MacKinlay 1990).
-8. Deep stat arb (Guijarro-Ordonez–Pelger–Zanotti 2022), trained.
-9. Crowding and decay.
-10. Registered and opened.
+### Part 33 · Statistical Arbitrage (~55; built)
+0. Hook: two prices on an elastic band; what survives on the industries.
+1. History: Princeton/Newport (1969), Morgan Stanley's APT group (Bamberger, Tartaglia), D. E. Shaw (1988),
+   Renaissance, PDT (1993), as reported; what decimalisation and competition changed.
+2. Pairs by distance (Gatev–Goetzmann–Rouwenhorst 2006) re-run on the industries (Sharpe −0.25); Do–Faff 2010; the
+   short leg (borrow fees, recalls, the 2008 ban; Engelberg–Reed–Ringgenberg 2018).
+3. Cointegration and the screening problem: Engle–Granger year by year (7.3% pass against a 3.7% false-positive rate;
+   8.1% pass again); selection-biased half-lives; Johansen baskets; Royal Dutch/Shell (Froot–Dabora 1999).
+4. The OU spread: AR(1) map, s-score, Kendall's bias, the half-life's interval; Bertram 2010, Leung–Li 2015.
+5. Eigenportfolios and residuals (Avellaneda–Lee 2010): gross 0.88, net −0.39; eight variants against turnover; the
+   research band +0.21 net; by era; refinements; hedge netting.
+6. Kalman hedge ratios on BTC/ETH: the forecast-error trap (ADF −14.8, half-life 1.3 days); the effective window.
+7. Reversal and lead-lag (Lo–MacKinlay 1990; Lehmann 1990): the decomposition computed exactly; the post-1990 flip;
+   Roll's bounce; horizons (Jegadeesh; Moskowitz–Grinblatt; De Bondt–Thaler).
+8. Learning the residual (Krauss–Do–Huck 2017; Guijarro-Ordonez–Pelger–Zanotti 2021): a network on residual paths,
+   IC 0.003, net −7.2.
+9. Liquidity, crowding and decay: Grossman–Miller; Nagel 2012 on industries (t −0.26); Shleifer–Vishny 1997; index
+   changes and fire sales; August 2007.
+10. The residual book registered (9 trials) and opened on 2021–25: gross 1.13, net 0.30; break-even 6–7 bp a side.
+11. Rule 33: the stat-arb book.
+Research: the optimal band for an OU spread: renewal-reward rate (m − c)/(E_0[τ_m] + E_{−m}[T_0]) from Dynkin; the
+universal curve m*/s_eq = h(c/s_eq); frictionless limit σ√(κ/π); the small-cost law m*/s_eq ≈ (3c/s_eq)^{1/3};
+simulations and the industries.
 
-*Textbooks:* Chan *Algorithmic Trading*; Pole *Statistical Arbitrage*; Avellaneda–Lee.
-*Trained:* deep stat arb on ETFs, crypto perps and A-shares (seeds).
-*Visuals:* the spread in its OU band; eigenportfolios.
-*Crisis:* the August 2007 quant quake (Khandani–Lo).
-*Firms:* D. E. Shaw, Morgan Stanley's PDT, Renaissance.
-*Desk:* "A spread is OU with half-life 5 days. When do you enter?"
-*House:* the stat-arb book.
+*Textbooks:* Vidyamurthy *Pairs Trading*; Pole *Statistical Arbitrage*; Chan *Algorithmic Trading*; Pedersen
+*Efficiently Inefficient*; Leung–Li *Optimal Mean Reversion Trading*.
+*Computed:* distance pairs, cointegration screens with a random-walk control, the residual book in nine
+configurations, a Kalman hedge ratio, Lo–MacKinlay's decomposition, a residual-path network, Nagel's regression, the
+optimal band exactly and by simulation.
+*Crisis:* August 2007; the 2008 short-sale ban; LTCM's twin-share trade (1998).
 
 ### Part 34 · Inside a Quant Firm (~55; industry)
 1. Business models: proprietary trading (Jane Street, HRT, Jump, XTX), market making (Citadel Securities, Virtu,

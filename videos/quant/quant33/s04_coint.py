@@ -15,6 +15,8 @@ class Coint(VoiceoverScene):
         self.years(c)
         self.persistence(c)
         self.half_lives(c)
+        self.johansen()
+        self.twins()
         self.screening(c)
         self.question()
 
@@ -169,6 +171,69 @@ class Coint(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.05), FadeIn(txt))
         self.wait(0.4)
+        self.clear_scene()
+
+    def johansen(self):
+        rows = [cmath(r"\Delta y_t", r"=", r"\Pi\, y_{t-1} + \textstyle\sum_{k} \Gamma_k \Delta y_{t-k} + e_t", font_size=36),
+                cmath(r"\Pi", r"=", r"\alpha\beta^\top,\quad \operatorname{rank}\Pi = r", font_size=36,
+                      colors={r"\beta^\top": SPREAD_C}),
+                cmath(r"\lambda_{\text{trace}}(r)", r"=", r"-T\textstyle\sum_{i > r} \ln(1 - \hat\lambda_i)", font_size=34),
+                cmath(r"n \text{ assets}", r"\Rightarrow", r"\text{many more candidate baskets than pairs}", font_size=32,
+                      colors={r"n \text{ assets}": BAD})]
+        whys = [why(r"for a basket of $n$ prices: the vector error-correction model, Granger's representation of "
+                    r"cointegrated series"),
+                why(r"the columns of $\beta$ are the cointegrating portfolios, the spreads; $\alpha$ says how fast each price "
+                    r"is pulled back toward them"),
+                why(r"Johansen (1991): test the rank by the small eigenvalues of a canonical-correlation problem, one "
+                    r"likelihood-ratio test for all $n$ assets at once"),
+                why(r"the screening problem grows: every subset of a universe is a candidate basket, and every one tested is "
+                    r"a trial")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.45, edge=6.9)
+        with self.voiceover(
+            "Beyond pairs: baskets. <bookmark mark='a'/> For several prices, write the changes as an error-correction "
+            "model: each price moves partly in response to how far the system is from its long-run ties. "
+            "<bookmark mark='b'/> The matrix of that response factors into speeds and cointegrating portfolios; its rank "
+            "is the number of independent spreads. <bookmark mark='c'/> Soren Johansen's test reads the rank from "
+            "eigenvalues, one likelihood-ratio test for the whole basket. <bookmark mark='d'/> But the screening problem "
+            "only grows: every subset of a universe is a candidate basket, and every basket tested is a trial."
+        ) as vo:
+            step(0)
+            for k, mk in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(mk)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def twins(self):
+        rows = [cmath(r"\text{Royal Dutch}", r":", r"\text{Shell}\ =\ 60 : 40", font_size=36,
+                      colors={r"\text{Royal Dutch}": SPREAD_C}),
+                cmath(r"\text{the price ratio}", r"\neq", r"\text{parity, for years}", font_size=34,
+                      colors={r"\text{parity, for years}": BAD}),
+                cmath(r"\text{the tie}", r"=", r"\text{a contract, until 2005}", font_size=34)]
+        whys = [why(r"two listed shares with a fixed claim on one group's cash flows: the purest pair there is"),
+                why(r"Froot and Dabora (1999): the two prices deviated from parity for long periods, by more than ten "
+                    r"percent at times, and each moved with its home market"),
+                why(r"Long-Term Capital Management held the trade when it failed in 1998, as reported; the gap closed for "
+                    r"good only when the two companies unified in 2005")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The purest pair there is. <bookmark mark='a'/> Royal Dutch and Shell were two listed shares with fixed "
+            "claims, sixty to forty, on the cash flows of one group. Their prices should have been tied exactly. "
+            "<bookmark mark='b'/> Kenneth Froot and Emil Dabora found they deviated from parity for long periods, by "
+            "more than ten percent at times, and that each share moved with its own home market. "
+            "<bookmark mark='c'/> Long-Term Capital Management held this trade when it failed in 1998, as reported. "
+            "The gap closed for good only in 2005, when the companies unified. Even a contract does not make a spread "
+            "revert on your schedule."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def screening(self, c):

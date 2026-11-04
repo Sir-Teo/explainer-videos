@@ -17,6 +17,7 @@ class OU(VoiceoverScene):
         self.path()
         self.sscore()
         self.bias()
+        self.halflife()
         self.rules()
         self.question()
 
@@ -180,6 +181,44 @@ class OU(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+    def halflife(self):
+        T = 60
+        bs = [0.8, 0.9, 0.95]
+        rows = []
+        for b in bs:
+            se = math.sqrt((1 - b * b) / T)
+            lo, hi = b - 2 * se, b + 2 * se
+            rows.append((b, math.log(2) / -math.log(b), math.log(2) / -math.log(lo),
+                         math.log(2) / -math.log(hi) if hi < 1 else float("inf")))
+        hx = [-3.6, -1.0, 1.6, 4.2]
+        head = VGroup(label(r"AR(1) slope $b$", font_size=17, color=GREY_B), label(r"half-life", font_size=17, color=OU_C),
+                      label(r"low end", font_size=17, color=GREY_B), label(r"high end", font_size=17, color=GREY_B))
+        tab = VGroup(head)
+        for b, h, a, c in rows:
+            tab.add(VGroup(MathTex(f"{b:.2f}", font_size=26), MathTex(rf"{h:.1f}\ \text{{d}}", font_size=26),
+                           MathTex(rf"{a:.1f}\ \text{{d}}", font_size=26), MathTex(rf"{c:.0f}\ \text{{d}}" if c < 1e9 else r"\infty", font_size=26)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 1.6 - 0.8 * j, 0])
+        foot = wrapped_label(r"on a 60-day window, with the textbook standard error $\sqrt{(1-b^2)/T}$ and $\pm 2$ "
+                             r"standard errors; $\infty$ where the interval reaches $b = 1$, a random walk; before Kendall's bias", 11.0, 16,
+                             GREY_A).to_edge(DOWN, buff=0.6)
+        b9 = rows[1]
+        with self.voiceover(
+            "How well sixty days pin down a speed. <bookmark mark='a'/> With an autoregressive slope of point nine, the "
+            f"half-life is {b9[1]:.1f} days, but two standard errors either way run from {b9[2]:.1f} days at the fast "
+            "end to a slope of one at the slow end: no reversion at all. <bookmark mark='b'/> The slower the spread, the wider the range. The s-score uses this estimate every day: a book of s-scores is a book of very "
+            "uncertain speeds, which is one reason the research chapter's band depends on the width of the spread, not "
+            "on its speed."
+        ) as vo:
+            self.play(FadeIn(tab[0]), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(FadeIn(tab[1]), FadeIn(tab[2]))
+            vo.wait_until("b")
+            self.play(FadeIn(tab[3]))
+        self.wait(0.4)
         self.clear_scene()
 
     def rules(self):

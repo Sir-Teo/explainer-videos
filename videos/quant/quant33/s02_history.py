@@ -11,6 +11,7 @@ class History(VoiceoverScene):
         self.morgan()
         self.shaw()
         self.renaissance()
+        self.pdt()
         self.what_changed()
         self.question()
 
@@ -88,6 +89,26 @@ class History(VoiceoverScene):
         ):
             self.play(FadeIn(card))
             self.wait(1.0)
+        self.clear_scene()
+
+    def pdt(self):
+        card = firm_card(r"Process Driven Trading", r"started inside Morgan Stanley in 1993 by Peter Muller, as reported; "
+                         r"a proprietary quantitative group that ran statistical arbitrage among other strategies for the "
+                         r"bank's own capital, and was spun out as an independent firm in 2012", kind=r"Firm", width=10.6,
+                         font_size=22).move_to(UP * 0.4)
+        foot = wrapped_label(r"the public record only: firm histories as reported in the press and in the firms' own "
+                             r"statements; nothing here is an allegation or a performance claim", 11.0, 16,
+                             GREY_A).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Morgan Stanley tried again. <bookmark mark='a'/> In 1993 Peter Muller started a quantitative group inside the "
+            "bank, Process Driven Trading, which, as reported, ran statistical arbitrage among other strategies with the "
+            "bank's own capital, and was spun out as an independent firm in 2012, after new rules limited banks' "
+            "proprietary trading. The pattern repeats through this history: the methods start inside a bank and end up in "
+            "independent firms."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(card), FadeIn(foot))
+        self.wait(0.4)
         self.clear_scene()
 
     def what_changed(self):

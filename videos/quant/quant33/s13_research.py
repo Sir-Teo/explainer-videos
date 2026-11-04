@@ -23,8 +23,12 @@ class Research(VoiceoverScene):
         self.rates(t)
         self.universal(t)
         self.frictionless(t)
+        self.cuberoot(load("smallc"))
+        self.cubetable(load("smallc"))
+        self.example()
         self.sims(t)
         self.data(load("pca"))
+        self.related()
         self.open_problems()
         self.question()
 
@@ -292,6 +296,114 @@ class Research(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def cuberoot(self, sc):
+        rows = [cmath(r"\mathbb E_{-m}[T_0]", r"=", r"\frac{1}{\kappa}\Big(a\tilde m - \frac{\tilde m^2}{2} + "
+                      r"\frac{a\tilde m^3}{6}\Big) + O(\tilde m^4)", font_size=30),
+                cmath(r"\mathbb E_0[\tau_m]", r"=", r"\frac{1}{\kappa}\Big(\frac{\tilde m^2}{2} + \frac{\tilde m^4}{12}\Big)"
+                      r" + O(\tilde m^6)", font_size=30),
+                cmath(r"R(m)", r"\approx", r"\frac{\kappa s_{\text{eq}}}{a}\,\frac{\tilde m - \tilde c}{\tilde m + \tilde m^3/6}\ "
+                      r"\Rightarrow\ \tilde m^{*3} \approx 3\tilde c", font_size=30, colors={r"3\tilde c": GOOD}),
+                cmath(r"\frac{m^*}{s_{\text{eq}}}", r"\approx", r"\Big(\frac{3c}{s_{\text{eq}}}\Big)^{1/3},\quad "
+                      r"\frac{R(m^*)}{R(0^+)} \approx 1 - \tfrac12\Big(\frac{3c}{s_{\text{eq}}}\Big)^{2/3}", font_size=30,
+                      colors={r"\frac{m^*}{s_{\text{eq}}}": HURDLE})]
+        whys = [why(r"expand the Dynkin integrals in $\tilde m = m/s_{\text{eq}}$, with $a = \sqrt{\pi/2}$: the holding "
+                    r"time has a negative quadratic term"),
+                why(r"the waiting time's quadratic term is exactly the opposite: in the cycle length, the $\tilde m^2$ "
+                    r"terms cancel"),
+                why(r"so the first correction is cubic; set the derivative to zero and keep the leading terms"),
+                why(r"the small-cost law, with no free constant and no dependence on the speed $\kappa$; the profit lost to "
+                    r"costs grows like $c^{2/3}$")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.45, edge=6.9)
+        with self.voiceover(
+            "And the cube root can be made exact. <bookmark mark='a'/> Expand the two passage times for a small band, "
+            "measured in equilibrium deviations. The time back to the mean has a negative quadratic term. "
+            "<bookmark mark='b'/> The time out to the band has exactly the opposite one. In the length of a cycle, "
+            "they cancel. <bookmark mark='c'/> So the first correction to the linear term is cubic, and setting the "
+            "derivative of the profit rate to zero gives: the band cubed equals three times the cost. "
+            "<bookmark mark='d'/> The small-cost law. The best band is the cube root of three times the cost, in "
+            "equilibrium deviations, with no free constant and no dependence on the speed. And the fraction of the "
+            "frictionless profit lost to costs grows like the cost to the power two thirds."
+        ) as vo:
+            step(0)
+            for k, mk in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(mk)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def cubetable(self, sc):
+        rows = sc["rows"]
+        hx = [-3.6, -1.2, 1.2, 3.6]
+        head = VGroup(label(r"cost $c/s_{\text{eq}}$", font_size=17, color=GREY_B),
+                      label(r"exact band", font_size=17, color=OU_C), label(r"$(3c)^{1/3}$", font_size=17, color=HURDLE),
+                      label(r"ratio", font_size=17, color=GREY_B))
+        tab = VGroup(head)
+        for r in rows:
+            tab.add(VGroup(MathTex(f"{r['c']:g}", font_size=24), MathTex(f"{r['m']:.3f}", font_size=24),
+                           MathTex(f"{r['law']:.3f}", font_size=24), MathTex(f"{r['ratio']:.3f}", font_size=24)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 2.4 - 0.62 * j, 0])
+        foot = wrapped_label(r"the exact band from \texttt{statarb.optimal\_band} (Dynkin integrals, Simpson's rule); the law "
+                             r"from the expansion; Part 31's no-trade band for quadratic risk has the same cube root", 11.4,
+                             16, GREY_A).to_edge(DOWN, buff=0.4)
+        r1, r3 = rows[2], rows[-1]
+        e1 = 100 * abs(r1["ratio"] - 1)
+        e3 = 100 * abs(r3["ratio"] - 1)
+        with self.voiceover(
+            "Checked against the exact optimum. <bookmark mark='a'/> At a cost of a hundredth of a deviation the law is "
+            f"within {e1:.1f} percent of the exact band; at a cost of {r3['c']:g} deviations, already a large cost, it is "
+            f"within {e3:.0f} percent. <bookmark mark='b'/> It is the same cube root as Part thirty-one's no-trade band, "
+            "for a different reason: there the cost was traded against quadratic risk, here against the time a cycle "
+            "takes."
+        ) as vo:
+            self.play(FadeIn(tab[0]), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.2))
+            vo.wait_until("b")
+            self.play(Indicate(VGroup(*[r_[3] for r_ in tab[1:]]), color=GOOD, scale_factor=1.03))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def example(self):
+        from explainer.quant.house import statarb as SA
+        s_eq, hl, cost = 0.02, 8.0, 0.002
+        kappa = math.log(2) / hl
+        sigma = s_eq * math.sqrt(2 * kappa)
+        m, r = SA.optimal_band(kappa, sigma, cost)
+        cyc = SA.ou_time_to_mean(m, kappa, sigma) + SA.ou_time_to_band(m, kappa, sigma)
+        law = (3 * cost / s_eq) ** (1 / 3)
+        rows = [cmath(r"s_{\text{eq}} = 2\%,\ \ \text{half-life } 8\ \text{days},\ \ c = 0.2\%", r"\Rightarrow",
+                      rf"c/s_{{\text{{eq}}}} = {cost / s_eq:.2f}", font_size=30),
+                cmath(r"m^*", r"=", rf"{100 * m:.2f}\%\ =\ {m / s_eq:.2f}\, s_{{\text{{eq}}}}\quad "
+                      rf"(\text{{law: }} {law:.2f})", font_size=32, colors={r"m^*": HURDLE}),
+                cmath(r"\text{a cycle}", r"\approx", rf"{cyc:.0f}\ \text{{days}},\quad R = {1e4 * r:.1f}\ "
+                      rf"\text{{bp a day per unit}}", font_size=30, colors={r"\text{a cycle}": OU_C})]
+        whys = [why(r"a typical industry residual: two percent wide, an eight-day half-life, and a round trip of 20 bp "
+                    r"on both legs"),
+                why(r"the exact optimum from the House's functions, and the small-cost law beside it"),
+                why(r"the expected time from the mean out to the band and back, and the profit rate it implies")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        mb, ms, ra = 100 * m, m / s_eq, 1e4 * r
+        with self.voiceover(
+            "A worked example. <bookmark mark='a'/> A residual two percent wide, with an eight-day half-life, and a "
+            "round trip costing twenty basis points on both legs: a cost of a tenth of a deviation. "
+            f"<bookmark mark='b'/> The best band is {mb:.2f} percent, {ms:.2f} deviations, and the small-cost law gives "
+            f"{law:.2f}. <bookmark mark='c'/> A cycle takes about {cyc:.0f} days, and the rule earns {ra:.1f} basis points "
+            "a day for each unit held. Avellaneda and Lee's habit of one and a quarter deviations would be nearly twice "
+            "as wide."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def sims(self, t):
         rows = t["sims"]
         hx = [-4.8, -2.8, -0.8, 1.4, 3.6, 5.6]
@@ -359,6 +471,29 @@ class Research(VoiceoverScene):
             self.play(FadeIn(tab[1]))
             vo.wait_until("b")
             self.play(FadeIn(tab[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def related(self):
+        cards = VGroup(
+            desk_question(r"Bertram (2010)", r"the same renewal argument for an entry level and an exit level, "
+                          r"maximising the expected return per unit time, with first-passage times from the OU's known "
+                          r"series", width=12.4, font_size=18),
+            desk_question(r"Leung and Li (2015)", r"entry and exit as optimal stopping problems with discounting and a "
+                          r"stop-loss: free boundaries instead of a fixed cycle", width=12.4, font_size=18),
+            desk_question(r"Part 31's no-trade band", r"a cost against quadratic risk gives a band in holdings, also "
+                          r"growing like the cube root of the cost: two problems, one exponent", width=12.4, font_size=18),
+        ).arrange(DOWN, buff=0.22)
+        with self.voiceover(
+            "Where the theorem sits. <bookmark mark='a'/> William Bertram used the same renewal argument for an entry level and "
+            "an exit level, with the passage times from the process's known series. <bookmark mark='b'/> Tim Leung and Xin Li "
+            "treat entry and exit as optimal stopping problems with discounting and a stop-loss, whose answer is a pair "
+            "of free boundaries rather than a fixed cycle. <bookmark mark='c'/> And Part thirty-one's no-trade band, a "
+            "cost traded against quadratic risk, grows with the same cube root: two different problems, one exponent."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

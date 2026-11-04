@@ -14,6 +14,7 @@ class Kalman(VoiceoverScene):
         self.filter_()
         self.betas(k)
         self.spreads(k)
+        self.window()
         self.trap(k)
         self.lessons()
         self.question()
@@ -136,6 +137,34 @@ class Kalman(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(tab[2]))
         self.wait(0.4)
+        self.clear_scene()
+
+    def window(self):
+        rows = [cmath(r"K_\infty", r"\approx", r"\sqrt{q/r}", font_size=38, colors={r"K_\infty": KAL_C}),
+                cmath(r"m_t", r"\approx", r"(1 - K_\infty)\, m_{t-1} + K_\infty \cdot \text{today's estimate}", font_size=32),
+                cmath(r"\text{effective window}", r"\approx", r"1/\sqrt{q/r}\ \text{days}", font_size=34,
+                      colors={r"\text{effective window}": HURDLE})]
+        whys = [why(r"for a random-walk coefficient with a steady regressor, the filter's gain settles near the root of "
+                    r"the signal-to-noise ratio when that ratio is small"),
+                why(r"so the filter is an exponentially weighted regression: it forgets the past at the rate of its gain"),
+                why(r"a ratio of $10^{-4}$ is a window of about a hundred days; $10^{-2}$, about ten: short enough that the "
+                    r"hedge ratio absorbs the spread")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What the speed setting means. <bookmark mark='a'/> In steady state the filter's gain settles near the "
+            "square root of the signal-to-noise ratio, when that ratio is small. <bookmark mark='b'/> So the filter is "
+            "an exponentially weighted regression that forgets the past at the rate of its gain. "
+            "<bookmark mark='c'/> A ratio of one in ten thousand is a window of about a hundred days; one in a hundred, "
+            "about ten days. At ten days the hedge ratio moves fast enough to swallow the spread, and the trap closes."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def trap(self, k):

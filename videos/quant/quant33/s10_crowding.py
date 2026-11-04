@@ -13,6 +13,8 @@ class Crowding(VoiceoverScene):
         self.liquidity()
         self.test(n)
         self.scatter(n)
+        self.limits()
+        self.demanders()
         self.quake()
         self.decay()
         self.question()
@@ -106,6 +108,62 @@ class Crowding(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.005), FadeIn(st))
             vo.wait_until("b")
             self.wait(0.1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def limits(self):
+        rows = [cmath(r"\text{capital}_{t+1}", r"=", r"\text{capital}_t \times f(\text{past return})", font_size=34,
+                      colors={r"\text{capital}_{t+1}": COST_C}),
+                cmath(r"\text{loss}", r"\Rightarrow", r"\text{withdrawals} \Rightarrow \text{forced selling} \Rightarrow "
+                      r"\text{wider spread}", font_size=30, colors={r"\text{loss}": BAD}),
+                cmath(r"\text{the best trades}", r"=", r"\text{when the arbitrageur has least capital}", font_size=30,
+                      colors={r"\text{the best trades}": GOOD})]
+        whys = [why(r"Shleifer and Vishny (1997): arbitrageurs manage other people's money, and investors judge them by "
+                    r"recent returns"),
+                why(r"a spread that widens before it converges costs the arbitrageur capital at exactly the wrong time"),
+                why(r"so mispricing can persist and grow: the limits of arbitrage are limits on the arbitrageur's capital, "
+                    r"not on the idea")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Why a reversal can widen before it closes. <bookmark mark='a'/> Andrei Shleifer and Robert Vishny: "
+            "arbitrageurs manage other people's money, and investors judge them by recent returns. "
+            "<bookmark mark='b'/> A spread that widens costs the arbitrageur capital, investors withdraw, and the forced "
+            "selling widens it further. <bookmark mark='c'/> So the best trades arrive exactly when the arbitrageur has "
+            "the least capital to take them. The limits of arbitrage are limits on capital, not on ideas."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def demanders(self):
+        cards = VGroup(
+            desk_question(r"index changes", r"a stock added to the S\&P 500 must be bought by every index fund on one day; "
+                          r"Shleifer (1986) found inclusion raised prices, a demand curve that slopes down", width=12.4,
+                          font_size=19),
+            desk_question(r"fire sales", r"Coval and Stafford (2007): mutual funds hit by outflows sell the stocks they "
+                          r"hold, prices fall below value, and recover over the following months", width=12.4,
+                          font_size=19),
+            desk_question(r"margin calls and mandates", r"levered funds forced to cut risk, and portfolios rebalanced on a "
+                          r"calendar: predictable sellers who care about the date, not the price", width=12.4,
+                          font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Who demands immediacy, concretely? <bookmark mark='a'/> Index funds when a stock joins an index: they must "
+            "buy on one day, and Andrei Shleifer found that inclusion raised prices. <bookmark mark='b'/> Mutual funds "
+            "with outflows: Joshua Coval and Erik Stafford showed their forced sales push prices below value, and the "
+            "prices recover over the following months. <bookmark mark='c'/> And funds meeting margin calls or "
+            "rebalancing on a calendar. Each is a seller who cares about the date rather than the price, and the "
+            "stat-arb trader is paid for taking the other side."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

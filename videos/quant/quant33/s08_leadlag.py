@@ -15,6 +15,8 @@ class LeadLag(VoiceoverScene):
         self.lead(l)
         self.bars(l)
         self.eras(l)
+        self.bounce()
+        self.horizons()
         self.reading()
         self.question()
 
@@ -172,6 +174,67 @@ class LeadLag(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(tab[2]))
         self.wait(0.4)
+        self.clear_scene()
+
+    def bounce(self):
+        rows = [cmath(r"p_t", r"=", r"m_t + \tfrac{s}{2}\, q_t,\quad q_t = \pm 1", font_size=36),
+                cmath(r"\operatorname{Cov}(\Delta p_t, \Delta p_{t-1})", r"=", r"-\tfrac{s^2}{4}", font_size=34,
+                      colors={r"-\tfrac{s^2}{4}": BAD}),
+                cmath(r"\text{nonsynchronous trading}", r"\Rightarrow", r"\text{spurious cross-autocorrelation}", font_size=30)]
+        whys = [why(r"Roll (1984): a trade prints at the bid or the ask around the efficient price $m_t$, at random"),
+                why(r"so recorded price changes are negatively autocorrelated even when $m_t$ is a random walk: reversal "
+                    r"that no one can trade, because it is the spread itself"),
+                why(r"and small stocks that trade late carry yesterday's news into today's prices: lead-lag that is partly "
+                    r"a measurement effect (Lo and MacKinlay 1990)")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Two warnings about measured reversal. <bookmark mark='a'/> Richard Roll's model: trades print at the bid or "
+            "at the ask, at random, around an efficient price. <bookmark mark='b'/> So recorded price changes are "
+            "negatively autocorrelated even when the efficient price is a random walk. That reversal cannot be traded: "
+            "it is the bid-ask spread itself. Bruce Lehmann's weekly contrarian profits on stocks were partly this. "
+            "<bookmark mark='c'/> And stocks that trade late carry yesterday's news into today's closing prices, which "
+            "makes lead-lag appear even where no one could act on it. Portfolios and residuals reduce both effects; "
+            "they do not remove them."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def horizons(self):
+        rows = [cmath(r"\text{days to a month}", r":", r"\text{stocks reverse}", font_size=34,
+                      colors={r"\text{stocks reverse}": RES_C}),
+                cmath(r"\text{3 to 12 months}", r":", r"\text{industries continue}", font_size=34,
+                      colors={r"\text{industries continue}": BAD}),
+                cmath(r"\text{3 to 5 years}", r":", r"\text{both reverse again}", font_size=34)]
+        whys = [why(r"Jegadeesh (1990), Lehmann (1990): the short-term reversal of single stocks, partly the bid-ask "
+                    r"bounce and partly the price of immediacy"),
+                why(r"Moskowitz and Grinblatt (1999): industries that did well over the past months keep doing well, and "
+                    r"industry momentum explains much of stock momentum"),
+                why(r"De Bondt and Thaler (1985): long-horizon reversal; the sign of the bet depends on the horizon and "
+                    r"on the unit traded")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Why the unit and the horizon matter. <bookmark mark='a'/> Over days to a month, single stocks reverse: "
+            "Narasimhan Jegadeesh and Bruce Lehmann. <bookmark mark='b'/> Over three to twelve months, industries "
+            "continue: Tobias Moskowitz and Mark Grinblatt found industry momentum, and that it explains much of stock "
+            "momentum. That is why the industry contrarian of Chapter nine loses. <bookmark mark='c'/> And over three to "
+            "five years both reverse again, Werner De Bondt and Richard Thaler's long-horizon reversal. Reversion is a "
+            "statement about a unit and a horizon, never about prices in general."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def reading(self):

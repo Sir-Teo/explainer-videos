@@ -11,10 +11,12 @@ class Pairs(VoiceoverScene):
         p = load("pairs")
         self.card()
         self.rule()
+        self.ggr()
         self.example(p)
         self.decades(p)
         self.why_not(p)
         self.literature()
+        self.shorting()
         self.question()
 
     def card(self):
@@ -42,8 +44,8 @@ class Pairs(VoiceoverScene):
             "<bookmark mark='b'/> Over a year, measure the distance between every pair of paths, and keep the twenty "
             "closest. <bookmark mark='c'/> Over the next six months, when a pair's gap exceeds twice its formation "
             "standard deviation, sell the high one and buy the low one, and close when the paths cross. "
-            "<bookmark mark='d'/> These are the original paper's choices, re-run here unchanged on the forty-nine "
-            "industries."
+            "<bookmark mark='d'/> These are the original paper's choices, re-run here unchanged on the "
+            "industries with complete histories."
         ) as vo:
             step(0)
             for k, mk in enumerate(("a", "b", "c", "d")):
@@ -51,6 +53,24 @@ class Pairs(VoiceoverScene):
                 if k:
                     step(k)
         self.wait(0.5)
+        self.clear_scene()
+
+    def ggr(self):
+        card = firm_card(r"Gatev, Goetzmann and Rouwenhorst (2006)", r"the distance rule on US stocks, 1962--2002: the top "
+                         r"20 pairs earned average annualised excess returns of up to 11\% on committed capital, as "
+                         r"reported; the profits survived waiting a day before trading, which removes the bid-ask bounce, "
+                         r"and exceeded their conservative cost estimates; they were lower in the later years",
+                         kind=r"Paper", width=10.6, font_size=22).move_to(UP * 0.3)
+        with self.voiceover(
+            "The paper that made the rule famous. <bookmark mark='a'/> Evan Gatev, William Goetzmann and Geert "
+            "Rouwenhorst ran it on American stocks from 1962 to 2002. The top twenty pairs earned, as reported, average "
+            "annualised excess returns of up to eleven percent. The profits survived waiting a day before trading, which "
+            "removes the bid-ask bounce, and exceeded their cost estimates. But they were lower in the later years, a "
+            "decline the House is about to see continue."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(card))
+        self.wait(0.4)
         self.clear_scene()
 
     def example(self, p):
@@ -163,6 +183,33 @@ class Pairs(VoiceoverScene):
             "<bookmark mark='b'/> Costs make it worse: every round trip trades four times on two legs. "
             "<bookmark mark='c'/> A rule without a reason decays first. The next chapters add the reason: a model of "
             "why a spread should revert at all."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def shorting(self):
+        cards = VGroup(
+            desk_question(r"the short leg costs money", r"borrowing a stock to sell it costs a fee, usually a fraction of a "
+                          r"percent a year, but tens of percent for hard-to-borrow names, and the cheap stock in a pair is "
+                          r"often the one everyone wants to short", width=12.4, font_size=19),
+            desk_question(r"the lender can recall", r"a borrowed share can be called back at any time; Engelberg, Reed and "
+                          r"Ringgenberg (2018) show that the risk of fees rising and of recalls itself limits arbitrage",
+                          width=12.4, font_size=19),
+            desk_question(r"the rule can change", r"in September 2008 the SEC temporarily banned short sales of hundreds of "
+                          r"financial stocks; a pair whose short leg cannot be held is not a pair", width=12.4,
+                          font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "A backtest on portfolios hides the short leg. On stocks it is real. <bookmark mark='a'/> Borrowing a share "
+            "to sell it costs a fee, usually small, but tens of percent a year for hard-to-borrow names, and the "
+            "expensive stock in a pair is often the one everyone else wants to short. <bookmark mark='b'/> The lender "
+            "can recall the share at any time, and Joseph Engelberg, Adam Reed and Matthew Ringgenberg showed that the "
+            "risk of rising fees and recalls itself deters arbitrage. <bookmark mark='c'/> And the rules can change: in "
+            "September 2008 the SEC temporarily banned short sales of hundreds of financial stocks. A pair whose short "
+            "leg cannot be held is not a pair."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
