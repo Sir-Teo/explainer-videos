@@ -175,11 +175,11 @@ class BSDETrain(VoiceoverScene):
         cards = VGroup(
             firm_card(r"Deep Galerkin (DGM)", r"Sirignano and Spiliopoulos (2018): minimize the PDE's residual at random "
                       r"points; needs second derivatives of the network, which the BSDE form avoids", width=4.0,
-                      font_size=16),
+                      font_size=16, kind=r"Method"),
             firm_card(r"Multilevel Picard", r"E, Hutzenthaler, Jentzen and Kruse: a non-learned Monte Carlo method for "
-                      r"the same equations; the source of the 57.300 reference", width=4.0, font_size=16),
+                      r"the same equations; the source of the 57.300 reference", width=4.0, font_size=16, kind=r"Method"),
             firm_card(r"Part 16's grids", r"finite differences: exact and fast in one to three dimensions, impossible "
-                      r"beyond", width=4.0, font_size=16),
+                      r"beyond", width=4.0, font_size=16, kind=r"Method"),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.3)
         for c_ in cards:
             c_[0].set_stroke(GREY_C)

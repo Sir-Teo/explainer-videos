@@ -138,15 +138,15 @@ class Generator(VoiceoverScene):
     def contenders(self, g, r):
         cs = VGroup(
             firm_card(r"GJR-GARCH", r"the econometric baseline of Part 7: volatility that reacts to the last shock, "
-                      r"more to falls than to rises", width=3.1, font_size=15),
+                      r"more to falls than to rises", width=3.1, font_size=15, kind=r"Method"),
             firm_card(r"Quant GANs", r"Wiese, Knobloch, Korn and Kretschmer (2020): temporal convolutions trained "
                       r"adversarially; volatility clustering and leverage", source=r"\textit{Quantitative Finance}",
-                      width=3.1, font_size=15),
+                      width=3.1, font_size=15, kind=r"Method"),
             firm_card(r"Signature generators", r"Buehler, Horvath, Lyons, Perez Arribas and Wood (2020), for small data; "
                       r"Ni, Szpruch et al.\ (2020, 2021): Sig-Wasserstein GANs; Kidger et al.\ (2021): neural SDEs as GANs",
-                      width=3.1, font_size=15),
+                      width=3.1, font_size=15, kind=r"Method"),
             firm_card(r"Diffusion", r"Ho, Jain and Abbeel (2020): the image generators' method, here on return windows",
-                      width=3.1, font_size=15),
+                      width=3.1, font_size=15, kind=r"Method"),
         ).arrange(RIGHT, buff=0.15).to_edge(UP, buff=0.35)
         for c_ in cs:
             c_[0].set_stroke(GREY_C)

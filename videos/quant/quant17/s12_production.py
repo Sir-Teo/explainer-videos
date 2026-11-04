@@ -66,13 +66,13 @@ class Production(VoiceoverScene):
             firm_card(r"Quantum deep hedging", r"Cherrat, Raj, Kerenidis, \dots, Wood, \dots, Pistoia (2023), with J.P. "
                       r"Morgan researchers: deep hedging with quantum networks on a trapped-ion processor, circuits of up "
                       r"to 16 qubits; comparable performance with fewer trainable parameters", source=r"\textit{Quantum} 7, "
-                      r"1191", width=4.1, font_size=16),
+                      r"1191", width=4.1, font_size=16, kind=r"Method"),
             firm_card(r"Deeply learning derivatives", r"Ferguson and Green (2018): a network trained on randomly generated "
                       r"basket-call valuations, ``a million times faster'' than the traditional model, as the authors "
-                      r"claim", source=r"arXiv 1809.02233", width=4.1, font_size=16),
+                      r"claim", source=r"arXiv 1809.02233", width=4.1, font_size=16, kind=r"Method"),
             firm_card(r"PRA SS1/23", r"UK model risk principles for banks with internal-model approval: published 17 May "
                       r"2023, in force 17 May 2024, revised 23 April 2026; covers the use of artificial intelligence and "
-                      r"machine learning in models", source=r"Bank of England", width=4.1, font_size=16),
+                      r"machine learning in models", source=r"Bank of England", width=4.1, font_size=16, kind=r"Rule"),
         ).arrange(RIGHT, buff=0.2).shift(UP * 0.3)
         for c_ in cs:
             c_[0].set_stroke(GREY_C)

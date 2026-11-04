@@ -240,12 +240,12 @@ class Drift(VoiceoverScene):
         cs = VGroup(
             firm_card(r"QLBS", r"Halperin (2020): Q-learning in a discrete Black--Scholes world: price and hedge from "
                       r"data, one rebalancing at a time", source=r"Dixon, Halperin and Bilokon, ch.\ 10", width=4.1,
-                      font_size=17),
+                      font_size=17, kind=r"Method"),
             firm_card(r"RL hedging", r"Kolm and Ritter (2019); Cao, Chen, Hull and Poulos (2021): reinforcement learning "
                       r"agents that trade off cost against variance", source=r"\textit{J.\ Financial Data Science}",
-                      width=4.1, font_size=17),
+                      width=4.1, font_size=17, kind=r"Method"),
             firm_card(r"Deep Bellman hedging", r"Buehler, Murray and Wood (2022): a value function over whole portfolios, "
-                      r"so one training hedges any starting book", source=r"arXiv 2207.00932", width=4.1, font_size=17),
+                      r"so one training hedges any starting book", source=r"arXiv 2207.00932", width=4.1, font_size=17, kind=r"Method"),
         ).arrange(RIGHT, buff=0.22).shift(UP * 0.4)
         for c_ in cs:
             c_[0].set_stroke(GREY_C)

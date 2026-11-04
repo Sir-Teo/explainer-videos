@@ -320,10 +320,11 @@ def crisis_card(date: str, name: str, body="", stats=(), width: float = 6.6, fon
     return card
 
 
-def firm_card(name: str, what: str, numbers=(), source: str = "", width: float = 6.2, font_size=23) -> VGroup:
+def firm_card(name: str, what: str, numbers=(), source: str = "", width: float = 6.2, font_size=23,
+              kind: str = r"Firm file") -> VGroup:
     """A firm file: the firm, what it does and how it earns, a few disclosed numbers (``numbers``: (figure,
-    caption)), and the public source the numbers come from."""
-    tag = label(r"Firm file", font_size=font_size - 6, color=QC.FIRM)
+    caption)), and the public source the numbers come from.  ``kind`` relabels the card (a method, a rule)."""
+    tag = label(kind, font_size=font_size - 6, color=QC.FIRM)
     nm = label(name, font_size=font_size + 8, color=WHITE)
     head = VGroup(tag, nm).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
     parts = VGroup(_body(what, width - 0.8, font_size - 2, GREY_A))
