@@ -106,7 +106,7 @@ class Research(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeOut(VGroup(*self.mobjects)))
+            self.play(FadeOut(Group(*self.mobjects)))
             self.play(FadeIn(theorem, shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()
