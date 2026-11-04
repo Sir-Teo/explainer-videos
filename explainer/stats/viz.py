@@ -1006,3 +1006,74 @@ class InfluenceProbe(VGroup):
     def stop(self):
         for m in (self.line, self.dot, self.readout):
             m.clear_updaters()
+
+
+class FieldPlot(VGroup):
+    """A field trial seen from above (Part 13): ``rows x cols`` plots drawn as squares, row 0 at the top and column 0
+    on the west.  ``paint(values)`` colours every plot by a number (fertility, a yield) from bare soil to deep green;
+    ``tags(alloc)`` writes a treatment's letter in each plot; ``outline(r0, r1, c0, c1)`` frames a block.  ``cells[r][c]``
+    is one plot's square."""
+
+    SOIL, LEAF = "#5B4632", "#7BD88F"
+
+    def __init__(self, rows: int, cols: int, cell: float = 0.38, gap: float = 0.04, center=ORIGIN):
+        super().__init__()
+        self.rows, self.cols, self.cell, self.gap = rows, cols, cell, gap
+        self.cells = []
+        for r in range(rows):
+            line = []
+            for c in range(cols):
+                sq = Square(side_length=cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=self.SOIL, fill_opacity=0.9)
+                sq.move_to([(c - (cols - 1) / 2) * (cell + gap), ((rows - 1) / 2 - r) * (cell + gap), 0])
+                line.append(sq)
+                self.add(sq)
+            self.cells.append(line)
+        self.move_to(center)
+
+    @classmethod
+    def colour(cls, v, lo, hi):
+        t = float(np.clip((v - lo) / max(hi - lo, 1e-12), 0, 1))
+        return interpolate_color(ManimColor(cls.SOIL), ManimColor(cls.LEAF), t)
+
+    def paint(self, values, lo=None, hi=None, run_time=1.5):
+        """An animation colouring each plot by ``values[r, c]`` (lo, hi default to the values' range)."""
+        v = np.asarray(values, float)
+        lo = v.min() if lo is None else lo
+        hi = v.max() if hi is None else hi
+        return AnimationGroup(*[self.cells[r][c].animate.set_fill(self.colour(v[r, c], lo, hi), opacity=0.95)
+                                for r in range(self.rows) for c in range(self.cols)], run_time=run_time)
+
+    def painted(self, values, lo=None, hi=None):
+        """Colour the plots immediately (no animation); returns self."""
+        v = np.asarray(values, float)
+        lo = v.min() if lo is None else lo
+        hi = v.max() if hi is None else hi
+        for r in range(self.rows):
+            for c in range(self.cols):
+                self.cells[r][c].set_fill(self.colour(v[r, c], lo, hi), opacity=0.95)
+        return self
+
+    def tags(self, alloc, names="ABCDEFGH", colors=None, font_size=None) -> VGroup:
+        """A letter in each plot for the treatment ``alloc[r, c]`` (an integer; negative leaves the plot blank)."""
+        from explainer.analysis import label
+
+        colors = colors or [S.TREAT, S.CTRL, S.ALT, S.PRIOR, S.POST, S.TRUTH, S.LIK, WHITE]
+        fs = font_size or max(12, int(self.cell * 52))
+        g = VGroup()
+        for r in range(self.rows):
+            for c in range(self.cols):
+                k = int(alloc[r][c])
+                if k < 0:
+                    continue
+                t = label(names[k], font_size=fs, color=colors[k % len(colors)])
+                disc = Circle(radius=self.cell * 0.36, stroke_width=0, fill_color="#101418", fill_opacity=0.72)
+                g.add(VGroup(disc, t).move_to(self.cells[r][c]))
+        return g
+
+    def outline(self, r0, r1, c0, c1, color=None, stroke_width=3.0) -> Rectangle:
+        """A frame around plots rows r0..r1, columns c0..c1 (inclusive)."""
+        a, b = self.cells[r0][c0], self.cells[r1][c1]
+        w = b.get_right()[0] - a.get_left()[0] + self.gap
+        h = a.get_top()[1] - b.get_bottom()[1] + self.gap
+        return Rectangle(width=w, height=h, color=color or S.ACCENT, stroke_width=stroke_width).move_to(
+            [(a.get_left()[0] + b.get_right()[0]) / 2, (a.get_top()[1] + b.get_bottom()[1]) / 2, 0])
