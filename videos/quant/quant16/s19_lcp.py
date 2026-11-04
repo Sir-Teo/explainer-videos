@@ -28,7 +28,7 @@ class LCP(VoiceoverScene, ThreeDScene):
 
     def ringing(self, f):
         # the highest-frequency mode under Crank-Nicolson with a large lambda: g close to -1, flipping every step
-        top = axes([0, 20], [-1.2, 1.2], x_length=5.6, y_length=2.4, xlabel=r"grid point", ylabel=r"one mode, step $n$",
+        top = axes([0, 20], [-1.2, 1.2], x_length=5.6, y_length=1.9, xlabel=r"grid point", ylabel=r"one mode, step $n$",
                    xticks=[], yticks=[-1, 0, 1], font_size=14).to_corner(UL, buff=0.5)
         ta = top.ax
         lam, s = 20.0, 1.0
@@ -43,7 +43,7 @@ class LCP(VoiceoverScene, ThreeDScene):
         S = np.asarray(f["gamma_S"])
         ge = np.asarray(f["gamma_exact"])
         lo, hi = np.percentile(ge, 1) * 1.6, np.percentile(ge, 99) * 1.6
-        g = axes([85, 115], [lo, hi], x_length=6.4, y_length=3.4, xlabel=r"spot", ylabel=r"gamma of a digital, a week to expiry",
+        g = axes([85, 115], [lo, hi], x_length=6.4, y_length=2.9, xlabel=r"spot", ylabel=r"gamma of a digital, a week to expiry",
                  xticks=[90, 100, 110], yticks=[], font_size=14).to_edge(DOWN, buff=0.5).to_edge(LEFT, buff=0.7)
         ax = g.ax
         cn = curve(ax, np.asarray(f["gamma"]["cn"]["S"]), np.clip(np.asarray(f["gamma"]["cn"]["gamma"]), lo, hi), BAD,
@@ -158,7 +158,7 @@ class LCP(VoiceoverScene, ThreeDScene):
                     r"it converges for an M-matrix and $0 < \omega < 2$"),
                 why(r"the penalty method (Forsyth and Vetzal 2002): a huge penalty $\rho$ where $x$ falls below the "
                     r"payoff; Newton on the active set stops in a few iterations")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.6, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.6, edge=6.9)
         q = predict(r"Where on the surface is $\partial_\tau V = \mathcal{L}V$ \emph{not} satisfied?", width=4.8,
                     font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
