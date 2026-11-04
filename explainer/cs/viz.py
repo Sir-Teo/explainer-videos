@@ -241,3 +241,77 @@ def bitmap(arr, palette=None, width=None, height=None, smooth=False) -> ImageMob
     elif height is not None:
         img.scale_to_fit_height(height)
     return img
+
+
+# ---------------------------------------------------------------------------
+# State diagrams (Turing machines here; finite automata in Parts 5 and 12)
+# ---------------------------------------------------------------------------
+class StateDiagram(VGroup):
+    """States as circles, transitions as labelled arrows.
+
+    ``nodes``: {name: position}; ``edges``: (source, target, text, bend) with ``bend`` the arc angle (0 straight), or
+    for a self-loop (source == target) the direction the loop points (UP, DOWN, LEFT, RIGHT).  ``accept`` and
+    ``reject`` name halting states (drawn as double circles, green or red).  ``.node[name]`` and ``.edge[i]`` give
+    the pieces; :meth:`light` moves a glow onto a state."""
+
+    def __init__(self, nodes: dict, edges: list, radius=0.42, font_size=24, edge_font=18, accept=(), reject=(),
+                 color=None, names: dict | None = None):
+        super().__init__()
+        color = color or C.CS_CONTROL
+        self.node = {}
+        for name, pos in nodes.items():
+            pos = np.array(list(pos) + [0.0] * (3 - len(pos)), float)
+            col = C.CS_TRUE if name in accept else (C.CS_FALSE if name in reject else color)
+            circ = Circle(radius=radius, stroke_color=col, stroke_width=2.5, fill_color=col, fill_opacity=0.12)
+            g = VGroup(circ)
+            if name in accept or name in reject:
+                g.add(Circle(radius=radius * 0.82, stroke_color=col, stroke_width=1.5))
+            t = _verbatim_text((names or {}).get(name, name), font=MONO, font_size=font_size, color=WHITE)
+            if t.width > radius * 1.7:
+                t.width = radius * 1.7
+            g.add(t.move_to(circ))
+            g.move_to(pos)
+            g.circle = circ
+            self.node[name] = g
+        self.edge = []
+        for src, dst, text, bend in edges:
+            a, b = self.node[src].circle, self.node[dst].circle
+            lab = _verbatim_text(text, font=MONO, font_size=edge_font, color=GREY_A)
+            if src == dst:
+                d = np.array(bend if bend is not None and not isinstance(bend, (int, float)) else UP, float)
+                c = a.get_center()
+                p0 = c + radius * rotate_vector(d, 0.45)
+                p1 = c + radius * rotate_vector(d, -0.45)
+                arr = CurvedArrow(p0, p1, angle=-4.4, color=GREY_B, stroke_width=2, tip_length=0.13)
+                lab.next_to(arr, d, buff=0.06)
+            else:
+                ang = float(bend or 0)
+                ca, cb = a.get_center(), b.get_center()
+                v = (cb - ca) / np.linalg.norm(cb - ca)
+                start = ca + radius * rotate_vector(v, ang / 2)
+                end = cb - radius * rotate_vector(v, -ang / 2)
+                arr = (CurvedArrow(start, end, angle=ang, color=GREY_B, stroke_width=2, tip_length=0.15) if ang
+                       else Arrow(start, end, buff=0, color=GREY_B, stroke_width=2, max_tip_length_to_length_ratio=0.12,
+                                  tip_length=0.15))
+                mid = arr.point_from_proportion(0.5)
+                nrm = rotate_vector(v, PI / 2)
+                side = -1 if ang > 0 else 1
+                lab.move_to(mid + nrm * side * (0.2 + lab.height / 2) if ang else mid + nrm * (0.18 + lab.height / 2))
+            e = VGroup(arr, lab)
+            e.src, e.dst = src, dst
+            self.edge.append(e)
+        self.edges = VGroup(*self.edge)
+        self.nodes = VGroup(*self.node.values())
+        self.add(self.edges, self.nodes)
+        self.glow = Circle(radius=radius * 1.22, stroke_color=C.CS_HEAD, stroke_width=4).set_opacity(0)
+        self.add(self.glow)
+        self.lit = None
+
+    def light(self, name, run_time=0.25) -> Animation:
+        target = self.node[name].get_center()
+        if self.lit is None:
+            self.lit = name
+            self.glow.move_to(target)
+            return self.glow.animate(run_time=run_time).set_stroke(opacity=1)
+        self.lit = name
+        return self.glow.animate(run_time=run_time).move_to(target)
