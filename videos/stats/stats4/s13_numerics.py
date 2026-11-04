@@ -13,6 +13,7 @@ class Numerics(VoiceoverScene):
         self.experiment()
         self.centring()
         self.cancellation()
+        self.practice()
 
     def card(self):
         card = chapter_card(12, r"Conditioning and numerics", r"Why you should never invert $X^\top X$", lit=(1947,), part=PART)
@@ -181,4 +182,32 @@ class Numerics(VoiceoverScene):
             self.play(FadeIn(hdr), LaggedStart(*[FadeIn(t, shift=RIGHT * 0.2) for t in tbl], lag_ratio=0.3))
             vo.wait_until("d")
             self.play(FadeIn(take))
+        self.clear_scene()
+
+    def practice(self):
+        steps = VGroup(
+            label(r"1. \ centre and scale the columns", font_size=28),
+            label(r"2. \ factor $X = QR$ \ (Householder reflections, \ Golub 1965)", font_size=28),
+            label(r"3. \ solve the triangular system $R\hat{\boldsymbol\beta} = Q^\top\mathbf y$ \ by back-substitution", font_size=28),
+            label(r"4. \ for standard errors, \ use $(X^\top X)^{-1} = R^{-1}R^{-\top}$, \ never the product itself", font_size=28),
+            label(r"5. \ if $R$ has tiny diagonal entries, \ the design is nearly rank-deficient: \ pivot, \ or use the SVD", font_size=28),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([0, 0.2, 0])
+        for s_ in steps:
+            if s_.width > 12.8:
+                s_.width = 12.8
+        head = label(r"How regression software actually solves least squares", font_size=34, color=S.ACCENT).to_edge(UP, buff=0.5)
+        with self.voiceover(
+            "So here, in five steps, is how good regression software solves least squares, and how this part's "
+            "toolkit fits together. <bookmark mark='a'/> Centre and scale the columns, to keep the conditioning down. "
+            "<bookmark mark='b'/> Factor X as Q R, using Householder's reflections, as Gene Golub showed in 1965, "
+            "which is more stable still than Gram–Schmidt. <bookmark mark='c'/> Solve the triangular system by "
+            "back-substitution. <bookmark mark='d'/> When standard errors need X transpose X inverse, get it from R, "
+            "never by forming the product. <bookmark mark='e'/> And if R has a tiny diagonal entry, the design is "
+            "nearly rank-deficient: pivot the columns, or fall back on the SVD and the pseudoinverse. Every formula "
+            "in Part 12 will be written with inverses; every computation should be done like this."
+        ) as vo:
+            self.play(FadeIn(head))
+            for k, m in enumerate("abcde"):
+                vo.wait_until(m)
+                self.play(FadeIn(steps[k], shift=RIGHT * 0.2))
         self.clear_scene()

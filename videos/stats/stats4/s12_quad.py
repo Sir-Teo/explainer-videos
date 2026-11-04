@@ -13,6 +13,7 @@ class Quad(VoiceoverScene):
         self.cochran()
         self.noncentral()
         self.independence()
+        self.student()
 
     def card(self):
         card = chapter_card(11, r"Quadratic forms in normal vectors", r"When is $\mathbf z^\top A \mathbf z$ chi-squared?",
@@ -191,4 +192,33 @@ class Quad(VoiceoverScene):
             self.play(FadeIn(panels[0][0]), FadeIn(panels[0][2]), FadeIn(panels[0][1], lag_ratio=0.001), FadeIn(panels[0][3]))
             vo.wait_until("c")
             self.play(FadeIn(panels[1][0]), FadeIn(panels[1][2]), FadeIn(panels[1][1], lag_ratio=0.001), FadeIn(panels[1][3]))
+        self.clear_scene()
+
+    def student(self):
+        rows = [
+            cmath(r"\sqrt n\,\frac{\bar x - \mu}{\sigma}", r"\sim", r"N(0, 1)", font_size=34),
+            cmath(r"\frac{(n-1)s^2}{\sigma^2}", r"=", r"\frac{\|(I - P_{\mathbf 1})\mathbf x\|^2}{\sigma^2}", r"\sim", r"\chi^2_{n-1}",
+                  font_size=32),
+            cmath(r"T = \sqrt n\,\frac{\bar x - \mu}{s}", r"=", r"\frac{N(0, 1)}{\sqrt{\chi^2_{n-1}/(n-1)}}", r"\sim", r"t_{n-1}",
+                  font_size=32),
+        ]
+        rows[2][4].set_color(EXACT)
+        whys = [why(r"the projection onto $\mathbf 1$"), why(r"the projection off $\mathbf 1$: \ rank $n - 1$"),
+                why(r"independent numerator and denominator: \ Part 3's $t$")]
+        take = label(r"Student's 1908 result, \ in three lines of projections: \ Part 8 proves every step", font_size=26,
+                     color=S.ACCENT).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Put the pieces together and Student's t falls out. <bookmark mark='a'/> For normal data, the sample "
+            "mean, standardized with the true sigma, is standard normal: it lives in the projection onto the ones "
+            "vector. <bookmark mark='b'/> The sample variance lives in the perpendicular projection, of rank n minus "
+            "one, so scaled by sigma squared it's chi-squared with n minus one degrees of freedom. <bookmark mark='c'/> "
+            "And the two are independent. So the mean standardized with the estimated s is a standard normal over "
+            "the root of an independent chi-squared over its degrees of freedom: exactly Part 3's definition of t "
+            "with n minus one degrees of freedom. Gosset's 1908 result, in three lines of projections."
+        ) as vo:
+            step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.6, edge=6.9)
+            for k, m in enumerate("abc"):
+                vo.wait_until(m)
+                step(k, transform=False)
+            self.play(FadeIn(take))
         self.clear_scene()

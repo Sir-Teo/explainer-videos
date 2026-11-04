@@ -200,7 +200,10 @@ class Hook(VoiceoverScene):
             "matrices and the Woodbury identity; Kronecker products; matrix calculus; the quadratic forms that are "
             "chi-squared; and, at the end, what floating-point arithmetic does to all of it. "
             "<bookmark mark='c'/> Along the way we'll use a projection lab: three-dimensional space you can turn, "
-            "where every projection can be seen."
+            "where every projection can be seen. Most of the formulas of the next sixty parts are written in this "
+            "language, from the standard errors of regression to the eigenvalues of random matrices, so it's worth "
+            "learning to read it fluently. We'll prove what we use, check every identity numerically, and keep the "
+            "statistics in view: every chapter ends with what the tool is for."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))
