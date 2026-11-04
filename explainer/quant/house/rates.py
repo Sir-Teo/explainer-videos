@@ -313,3 +313,71 @@ def ldi_spiral(shock_bp: float, leverage: float = 3.0, duration: float = 20.0, i
         if dy < 0.1:
             break
     return {"dy_bp": np.array(path), "nav": np.array(navs), "sold": np.array(sold)}
+
+
+# ---------------------------------------------------------------------------
+# The term premium by regression (Adrian, Crump and Moench 2013)
+# ---------------------------------------------------------------------------
+def _affine(mu, Phi, Sigma, sig2, d0, d1, lam0, lam1, n_max):
+    """Log bond prices log P(n) = A[n] + B[n] . X by the no-arbitrage recursion, n = 0..n_max (months)."""
+    K = len(mu)
+    A = np.zeros(n_max + 1)
+    B = np.zeros((n_max + 1, K))
+    for n in range(1, n_max + 1):
+        b = B[n - 1]
+        A[n] = A[n - 1] + b @ (mu - lam0) + 0.5 * (b @ Sigma @ b + sig2) - d0
+        B[n] = b @ (Phi - lam1) - d1
+    return A, B
+
+
+def acm_decompose(logp, K: int = 5, rx_mats=None, pc_from: int = 1) -> dict:
+    """Adrian-Crump-Moench (2013) on monthly log zero prices ``logp`` (T months, maturities 1..N months, column n-1
+    is maturity n; column 0 is the one-month bill that defines the short rate).  Three regressions:
+
+    1. the pricing factors X are the first ``K`` principal components of the yields (of maturities ``pc_from`` months
+       and longer), and follow a VAR(1);
+    2. excess returns of bonds of maturities ``rx_mats`` (months, after a month has passed) on a constant, the VAR's
+       innovations and the lagged factors give their exposures beta and their predictable part;
+    3. the prices of risk lam0, lam1 come out of one cross-sectional regression on beta.
+
+    Fitted log yields follow from the affine recursion with those prices of risk; the "risk-neutral" yields from the
+    same recursion with the prices set to zero, which is the average expected short rate (plus a small convexity
+    term).  Returns per-month annualized decimals ``y``, ``rny`` and ``tp = y - rny`` (T, N), the factors, and the
+    regression's pricing errors ``fit_rmse`` (yields, decimal a year)."""
+    logp = np.asarray(logp, float)
+    T, N = logp.shape
+    n = np.arange(1, N + 1)
+    Y = -logp / n  # monthly log yields
+    rx_mats = np.asarray(rx_mats if rx_mats is not None else np.arange(6, min(N, 121), 6))
+    # 1. factors and their VAR
+    Yc = Y[:, pc_from - 1:] - Y[:, pc_from - 1:].mean(0)
+    w, V = np.linalg.eigh(np.cov(Yc, rowvar=False))
+    V = V[:, np.argsort(w)[::-1][:K]]
+    X = Yc @ V
+    Z = np.c_[np.ones(T - 1), X[:-1]]
+    coef, *_ = np.linalg.lstsq(Z, X[1:], rcond=None)
+    mu, Phi = coef[0], coef[1:].T
+    v = X[1:] - Z @ coef
+    Sigma = v.T @ v / (T - 1)
+    # 2. excess returns: rx(t+1, m) = log P(t+1, m) - log P(t, m+1) + log P(t, 1)
+    rf = -logp[:-1, 0]
+    rx = np.stack([logp[1:, m - 1] - logp[:-1, m] - rf for m in rx_mats], axis=0)  # (N_rx, T-1)
+    R = np.c_[np.ones(T - 1), v, X[:-1]]
+    G, *_ = np.linalg.lstsq(R, rx.T, rcond=None)
+    a, beta, c = G[0], G[1:K + 1], G[K + 1:].T  # a (N_rx,), beta (K, N_rx), c (N_rx, K)
+    E = rx - (R @ G).T
+    sig2 = float(np.sum(E ** 2) / E.size)
+    # 3. prices of risk
+    Bstar = np.stack([np.outer(beta[:, i], beta[:, i]).ravel() for i in range(beta.shape[1])])  # (N_rx, K*K)
+    BB = beta @ beta.T
+    lam0 = np.linalg.solve(BB, beta @ (a + 0.5 * (Bstar @ Sigma.ravel() + sig2)))
+    lam1 = np.linalg.solve(BB, beta @ c)
+    # the short rate on the factors
+    d, *_ = np.linalg.lstsq(np.c_[np.ones(T), X], Y[:, 0], rcond=None)
+    d0, d1 = d[0], d[1:]
+    A, B = _affine(mu, Phi, Sigma, sig2, d0, d1, lam0, lam1, N)
+    A0, B0 = _affine(mu, Phi, Sigma, sig2, d0, d1, np.zeros(K), np.zeros((K, K)), N)
+    yf = -(A[1:][None, :] + X @ B[1:].T) / n * 12
+    rn = -(A0[1:][None, :] + X @ B0[1:].T) / n * 12
+    return {"y": yf, "rny": rn, "tp": yf - rn, "X": X, "lam0": lam0, "lam1": lam1,
+            "fit_rmse": float(np.sqrt(np.mean((yf - Y * 12) ** 2))), "sig2": sig2}

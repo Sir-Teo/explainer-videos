@@ -571,6 +571,7 @@ def gsw(start: str = "1961-06-14", through: str = "2025-12-31") -> dict:
     a = np.array(rows)
     frozen = json.dumps(np.nan_to_num(a, nan=-999).round(6).tolist(), separators=(",", ":")).encode()
     _check(f"fed/gsw/{start}_{through}", frozen, GSW)
+    a = a[~np.isnan(a[:, 1])]  # holidays: rows of NA
     return {"date": a[:, 0].astype(int), "beta": a[:, 1:5], "tau": a[:, 5:7], "y": a[:, 7:37]}
 
 

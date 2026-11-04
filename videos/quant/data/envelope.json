@@ -1,5 +1,10 @@
 {
- "opened": {},
+ "opened": {
+  "pca_fly_2s5s10s|gsw_fly_2s5s10s": {
+   "at": "2026-11-04",
+   "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
+  }
+ },
  "registered": {
   "accounting_signals_part3": {
    "code_sha256": "37bc4b8e880d26a4531f2a2d76b3a3464d23d0f6d06c6b7348e03e40034fc820",
@@ -212,6 +217,23 @@
    },
    "trials": 208
   },
+  "pca_fly_2s5s10s": {
+   "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d",
+   "params": {
+    "cost_bp": 0.5,
+    "enter": "|z| > 1, against the sign",
+    "exit": "z crosses 0",
+    "legs": [
+     2,
+     5,
+     10
+    ],
+    "signal": "z = (fly - 250-day mean) / 250-day sd",
+    "unit": "fly in bp of yield, belly DV01 = 1",
+    "weights_fit": "PCA of daily GSW changes 1990-2020, level and slope neutral"
+   },
+   "trials": 1
+  },
   "shiller_oos_predictors": {
    "code_sha256": "eebb73156ed3044b21e2346f15abad4dbb460c09a11ab8f464d699174c6aa92a",
    "params": {
@@ -288,6 +310,12 @@
    "first": 20210104,
    "last": 20251230,
    "n": 1223
+  },
+  "gsw_fly_2s5s10s": {
+   "digest": "fc42da8e4297ecfb859894b041b5578123b7c4ccbe8a340441e595a7d803e174",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1249
   },
   "kenfrench/ff3_monthly": {
    "digest": "672b35bffc04356cf19872a44af7679e6970c6eac06820a8e88ccb7797527827",

@@ -127,6 +127,7 @@ PARTS = {
     "btc_vol_toy_tsfm_np_2020": (7, 4),
     "kelly_us_split": (8, 1), "myopic_loss_aversion_us": (8, 2), "vol_target_us_market": (8, 3),
     "btc_vol_forecast_edge": (11, 1), "btc_hedged_straddle_ml": (11, 2),
+    "pca_fly_2s5s10s": (18, 1),
 }
 
 
