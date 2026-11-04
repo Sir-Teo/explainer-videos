@@ -111,20 +111,21 @@ master dictionary (1993–2025 edition, free for academic use, cached and not re
 ## Papers, chapter by chapter
 
 * Hook and ch. 1: Stone et al. (1966); Gentzkow, Kelly and Taddy (2019).
-* ch. 2: Tetlock (2007), *JF* 62; Loughran and McDonald (2011), *JF* 66.
+* ch. 2: Tetlock (2007), *JF* 62; Antweiler and Frank (2004), *JF* 59; Tetlock, Saar-Tsechansky and Macskassy (2008), *JF* 63; Loughran and McDonald (2011), *JF* 66.
 * ch. 3: Kuttner (2001), *JME* 47; Gürkaynak, Sack and Swanson (2005), *IJCB* 1.
-* ch. 4: Gunning (1952); Loughran and McDonald (2014), *JF* 69.
+* ch. 4: Gunning (1952); Loughran and McDonald (2014), *JF* 69; Cohen, Malloy and Nguyen (2020), "Lazy prices", *JF* 75.
 * ch. 5: Ke, Kelly and Xiu (2019), NBER w26186.
 * ch. 6: Blei, Ng and Jordan (2003); Lee and Seung (1999); Bybee, Kelly, Manela and Xiu (2024), *JF* 79.
-* ch. 7: Hansen, McMahon and Prat (2018), *QJE* 133; Meade and Stasavage (2008), *Economic Journal* 118.
+* ch. 7: Hansen, McMahon and Prat (2018), *QJE* 133; Meade and Stasavage (2008), *Economic Journal* 118; Shapiro and Wilson (2022), *REStud*; Gorodnichenko, Pham and Talavera (2023), *AER*.
 * ch. 8: Firth (1957); Mikolov et al. (2013); Levy and Goldberg (2014).
 * ch. 9: Vaswani et al. (2017); Huang, Wang and Yang (2023), *CAR* 40.
 * ch. 10: Lopez-Lira and Tang (2023), arXiv 2304.07619; Chen, Kelly and Xiu (2022); Kim, Muhn and Nikolaev (2024),
-  arXiv 2407.17866.
+  arXiv 2407.17866; Araci (2019); Hansen and Kazinnik (2023); Cao, Jiang, Wang and Yang (2024), *JFE*.
 * ch. 11–12: Glasserman and Lin (2023), arXiv 2309.17322; Sarkar and Vafa (2024); He, Lv, Manela and Wu (2025), arXiv
   2502.21206.
 * ch. 13: Yao et al. (2023), ReAct; Xiao, Sun, Luo and Wang (2024), arXiv 2412.20138.
-* ch. 14: Kyle (1985); Admati and Pfleiderer (1988); Katona, Painter, Patatoukas and Zeng (2025), *JFQA* 60.
+* ch. 14: Kyle (1985); Admati and Pfleiderer (1988); Katona, Painter, Patatoukas and Zeng (2025), *JFQA* 60; Zhu (2019),
+  *RFS* 32.
 * ch. 15: Wu et al. (2023), arXiv 2303.17564; Li et al. (2023), EMNLP industry track.
 
 ## For the researcher

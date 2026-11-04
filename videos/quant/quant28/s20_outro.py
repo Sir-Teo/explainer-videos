@@ -199,6 +199,9 @@ class Outro(VoiceoverScene):
              r"\textit{Financial Machine Learning} (2023), the text chapter; Jurafsky and Martin, \textit{Speech and "
              r"Language Processing}"],
             [r"Stone et al.\ (1966); Gunning (1952); Kyle (1985); Admati and Pfleiderer (1988); Kuttner (2001); "
+             r"Antweiler and Frank (2004); Tetlock, Saar-Tsechansky and Macskassy (2008); Meade and Stasavage (2008); "
+             r"Araci (2019); Zhu (2019); Cohen, Malloy and Nguyen (2020); Shapiro and Wilson (2022); Gorodnichenko, Pham "
+             r"and Talavera (2023); Hansen and Kazinnik (2023); Cao, Jiang, Wang and Yang (2024); "
              r"G\"urkaynak, Sack and Swanson (2005); Tetlock (2007); Loughran and McDonald (2011, 2014); Mikolov et al.\ "
              r"(2013); Levy and Goldberg (2014); Vaswani et al.\ (2017); Hansen, McMahon and Prat (2018); Ke, Kelly and "
              r"Xiu (2019); Chen, Kelly and Xiu (2022)",

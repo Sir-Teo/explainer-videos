@@ -19,6 +19,7 @@ class AltData(VoiceoverScene):
         self.card()
         self.kinds()
         self.space()
+        self.zhu()
         self.kyle(a)
         self.decay(a)
         self.question()
@@ -79,6 +80,22 @@ class AltData(VoiceoverScene):
             self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
         self.wait(0.4)
         self.clear_scene()
+
+    def zhu(self):
+        cards = VGroup(
+            desk_question(r"Zhu (2019), `Big data as a governance mechanism'", r"when alternative data such as satellite images and consumer transactions cover a firm, its prices become more informative and its managers' insider trading less profitable", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "And one consequence for firms themselves. <bookmark mark='a'/> Christina Zhu found that when alternative data "
+            "cover a company, its share price becomes more informative and its managers profit less from trading on "
+            "inside information: big data as a governance mechanism."
+        ) as vo:
+            for k, mk in enumerate(('a',)):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def kyle(self, a):
         rows = [cmath(r"v \sim N(0, \sigma_v^2)", r",", r"u \sim N(0, \sigma_u^2),\quad x_n = \beta v,\quad p = \lambda\big(\textstyle"

@@ -610,6 +610,28 @@ ZH = {
     "The House now has a reading room":
         "本系列公司现在有了一间阅览室：把委员会的文字变成特征的工具，一条给每个词标上其公开时刻的规则，以及追问一个模型已经读过什么的习惯。<bookmark mark='a'/>"
         "下一部分，第二十九部分：阿尔法挖掘与自动化研究。在数以百万计的公式中搜寻信号的机器，自己撰写研究的语言模型，以及一个必须跟上节奏的试验计数器。",
+
+    # ------------------------------------------------------------------ papers added to chapters 2, 4, 7, 10, 14
+    "Two more dictionary papers mark the territory.":
+        "另外两篇词典论文划定了这片领域。<bookmark mark='a'/>Werner Antweiler和Murray Frank读了网络股票论坛上一百五十万条帖子：这些议论能预测波动率，对收益的影响真实但很小。"
+        "<bookmark mark='b'/>Tetlock与Maytal Saar-Tsechansky和Sofus Macskassy一起，从市场专栏转向关于单个公司的新闻：负面词占比预示着低盈利和低收益，而价格吸收它很慢。"
+        "文字携带的是关于基本面的信息，而不只是情绪。",
+
+    "Firms show the same thing.":
+        "公司也表现出同样的规律。<bookmark mark='a'/>Lauren Cohen、Christopher Malloy和Quoc Nguyen发现，当一家公司的年报或季报语言与上一年相比发生变化时，"
+        "它未来的收益更低：这些变化预示着坏消息，而投资者读得很慢。他们称之为懒惰的价格。",
+
+    "Two more papers read the committee itself.":
+        "另外两篇论文研读的是委员会本身。<bookmark mark='a'/>Adam Shapiro和Daniel Wilson用会议记录、纪要和讲话的语气，估计委员会真正的目标：从它自己的话中推断出它的目标。"
+        "<bookmark mark='b'/>Yuriy Gorodnichenko、Tho Pham和Oleksandr Talavera度量了主席在新闻发布会上声音中的情绪：语调在文字之外也会推动市场。",
+
+    "Three more strands.":
+        "另外三条线索。<bookmark mark='a'/>Dogu Araci在2019年提出的第一个FinBERT，在金融新闻上训练。<bookmark mark='b'/>Anne Lundgaard Hansen和Sophia Kazinnik问ChatGPT能否解读美联储的话语；"
+        "较大的模型给委员会语句标注鹰派或鸽派的水平接近人类专家。<bookmark mark='c'/>Sean Cao、Wei Jiang、Junbo Wang和Baozhong Yang用公开数据构建了一个人工智能分析师，"
+        "它胜过了大多数人类分析师，而与它合作的分析师胜过两者。",
+
+    "And one consequence for firms themselves.":
+        "还有一个对公司本身的影响。<bookmark mark='a'/>Christina Zhu发现，当另类数据覆盖一家公司时，它的股价变得更有信息含量，其管理层利用内幕信息交易的获利则减少：大数据作为一种治理机制。",
 }
 
 PHRASES = {}

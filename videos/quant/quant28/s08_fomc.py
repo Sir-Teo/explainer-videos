@@ -18,6 +18,7 @@ class FOMC(VoiceoverScene):
         self.documents()
         self.hmp()
         self.dissent()
+        self.more_papers()
         self.minutes(f)
         self.question()
 
@@ -119,6 +120,24 @@ class FOMC(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+
+    def more_papers(self):
+        cards = VGroup(
+            desk_question(r"Shapiro and Wilson (2022)", r"the sentiment of FOMC transcripts, minutes and speeches, read against the economy, reveals what the committee was trying to achieve: its objectives estimated from its own words", width=12.4, font_size=19),
+            desk_question(r"Gorodnichenko, Pham and Talavera (2023), `The voice of monetary policy'", r"the emotion in the chair's voice at press conferences, measured by a neural network, moves stock prices and exchange rates beyond what the words say", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Two more papers read the committee itself. <bookmark mark='a'/> Adam Shapiro and Daniel Wilson used the tone "
+            "of transcripts, minutes and speeches to estimate what the committee was actually aiming for: its objectives "
+            "inferred from its own words. <bookmark mark='b'/> And Yuriy Gorodnichenko, Tho Pham and Oleksandr Talavera "
+            "measured the emotion in the chair's voice at press conferences: tone of voice moves markets beyond the text."
+        ) as vo:
+            for k, mk in enumerate(('a', 'b')):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
         self.clear_scene()
 
 

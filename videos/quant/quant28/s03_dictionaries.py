@@ -11,6 +11,7 @@ class Dictionaries(VoiceoverScene):
         t = load("tone")
         self.card()
         self.tetlock()
+        self.more_papers()
         self.lm(t)
         self.statements(t)
         self.misfit(t)
@@ -47,6 +48,26 @@ class Dictionaries(VoiceoverScene):
             self.wait(0.1)
         self.wait(0.4)
         self.clear_scene()
+
+    def more_papers(self):
+        cards = VGroup(
+            desk_question(r"Antweiler and Frank (2004)", r"1.5 million messages on Yahoo! Finance and Raging Bull about 45 large firms: bullish talk predicts volatility, and its effect on returns is statistically significant but economically small", width=12.4, font_size=19),
+            desk_question(r"Tetlock, Saar-Tsechansky and Macskassy (2008)", r"the share of negative words in firm-specific news predicts low earnings and low returns, and prices underreact to it: words carry information about fundamentals, not only sentiment", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Two more dictionary papers mark the territory. <bookmark mark='a'/> Werner Antweiler and Murray Frank read a "
+            "million and a half messages on internet stock boards: the chatter predicted volatility, and its effect on "
+            "returns was real but small. <bookmark mark='b'/> And Tetlock, with Maytal Saar-Tsechansky and Sofus Macskassy, "
+            "moved from the market column to news about single firms: the share of negative words predicted low earnings "
+            "and low returns, and prices were slow to absorb it. Words carry information about fundamentals, not only "
+            "about mood."
+        ) as vo:
+            for k, mk in enumerate(('a', 'b')):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def lm(self, t):
         words = [r"tax", r"cost", r"capital", r"board", r"liability", r"foreign", r"vice"]

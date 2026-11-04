@@ -23,6 +23,7 @@ class Form(VoiceoverScene):
         self.length(f)
         self.fog(f)
         self.change(ch)
+        self.lazy()
         self.guidance(p)
         self.question()
 
@@ -122,6 +123,23 @@ class Form(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.01), run_time=2)
             vo.wait_until("b")
             self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
+
+    def lazy(self):
+        cards = VGroup(
+            desk_question(r"Cohen, Malloy and Nguyen (2020), `Lazy prices'", r"when firms change the language of their 10-Ks and 10-Qs, their future returns are lower; investors are slow to notice the changes, which predict bad news to come", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Firms show the same thing. <bookmark mark='a'/> Lauren Cohen, Christopher Malloy and Quoc Nguyen found that "
+            "when a company changes the language of its annual or quarterly report from one year to the next, its future "
+            "returns are lower: the changes predict bad news, and investors are slow to read them. They called it lazy "
+            "prices."
+        ) as vo:
+            for k, mk in enumerate(('a',)):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

@@ -11,6 +11,7 @@ class LLMs(VoiceoverScene):
         self.lopez()
         self.embeddings()
         self.statements()
+        self.more_papers()
         self.caveats()
         self.question()
 
@@ -128,6 +129,26 @@ class LLMs(VoiceoverScene):
             self.play(Indicate(card.submobjects[-1], color=QC.FIRM, scale_factor=1.02))
         self.wait(0.4)
         self.clear_scene()
+
+    def more_papers(self):
+        cards = VGroup(
+            desk_question(r"Araci (2019)", r"the first FinBERT: BERT further trained on financial news and fine-tuned on the Financial PhraseBank's labelled sentences", width=12.4, font_size=19),
+            desk_question(r"Hansen and Kazinnik (2023), `Can ChatGPT decipher Fedspeak?'", r"GPT models classify the stance of FOMC sentences, hawkish or dovish, close to human experts, and explain their reasons", width=12.4, font_size=19),
+            desk_question(r"Cao, Jiang, Wang and Yang (2024)", r"an AI analyst built from public data beats most human analysts' price targets; analysts working with the machine beat both", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Three more strands. <bookmark mark='a'/> Dogu Araci's FinBERT of 2019, the first, trained on financial news. "
+            "<bookmark mark='b'/> Anne Lundgaard Hansen and Sophia Kazinnik asked whether ChatGPT can decipher Fedspeak; "
+            "the larger models label the committee's sentences as hawkish or dovish close to human experts. "
+            "<bookmark mark='c'/> And Sean Cao, Wei Jiang, Junbo Wang and Baozhong Yang built an artificial analyst from "
+            "public data that beat most human analysts, while analysts working with it beat both."
+        ) as vo:
+            for k, mk in enumerate(('a', 'b', 'c')):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
 
     def caveats(self):
         cards = VGroup(

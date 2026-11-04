@@ -1372,7 +1372,7 @@ Frontier (2023–2026):
 - Zhu, C. (2019). "Big data as a governance mechanism." *RFS*.
 - Cohen, L., Malloy, C., Nguyen, Q. (2020). "Lazy prices." *Journal of Finance*.
 - Shapiro, A. H., Wilson, D. (2022). "Taking the Fed at its word: a new approach to estimating central bank objectives using text analysis." *REStud*.
-- Jiang, J., Kelly, B., Xiu, D. (2022). "Expected returns and large language models." Working paper.
+- Chen, Y., Kelly, B., Xiu, D. (2022). "Expected returns and large language models." Working paper.
 - Huang, A., Wang, H., Yang, Y. (2023). "FinBERT: a large language model for extracting information from financial text." *Contemporary Accounting Research*.
 - Gorodnichenko, Y., Pham, T., Talavera, O. (2023). "The voice of monetary policy." *AER*.
 - Wu, S., et al. (2023). "BloombergGPT: a large language model for finance." arXiv.
@@ -1384,8 +1384,9 @@ Frontier (2023–2026):
 - Cao, S., Jiang, W., Wang, J., Yang, B. (2024). "From man vs. machine to man + machine: the art and AI of stock analyses." *JFE*.
 - Sarkar, S. K., Vafa, K. (2024). "Lookahead bias in pretrained language models." Working paper.
 - Xiao, Y., Sun, E., Luo, D., Wang, W. (2024). "TradingAgents: multi-agents LLM financial trading framework." arXiv.
-- He, S., Lv, L., Manela, A., Wu, J. (2025). "Chronologically consistent large language models." Working paper *(verify)*.
-- Katona, Z., Painter, M., Patatoukas, P., Zeng, J. (2025). "On the capital market consequences of big data: evidence from outer space." *JFQA* *(verify)*.
+- He, S., Lv, L., Manela, A., Wu, J. (2025). "Chronologically consistent large language models." arXiv 2502.21206.
+- Katona, Z., Painter, M., Patatoukas, P., Zeng, J. (2025). "On the capital market consequences of big data: evidence from outer space." *JFQA* 60(2).
+- Also on screen in Part 28: Kyle (1985); Admati and Pfleiderer (1988); Kuttner (2001), *JME*; Gürkaynak, Sack and Swanson (2005), *IJCB*; Meade and Stasavage (2008), *Economic Journal*; Mikolov et al. (2013); Levy and Goldberg (2014); Loughran and McDonald (2014), "Measuring readability in financial disclosures," *JF*; Yao et al. (2023), ReAct; Li et al. (2023), "Are ChatGPT and GPT-4 general-purpose solvers for financial text analytics?", EMNLP industry track.
 
 ### Part 29 · Alpha Mining and Automated Research
 - Koza, J. (1992). *Genetic Programming*.
