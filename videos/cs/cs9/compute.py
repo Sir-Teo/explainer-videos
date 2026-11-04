@@ -711,5 +711,153 @@ def compute_job() -> dict:
 
 ITEMS["job"] = compute_job
 
+
+# ---------------------------------------------------------------------------
+# cache-oblivious transpose; the red-blue pebble bound; DRAM row buffers; learned and adaptive replacement
+# ---------------------------------------------------------------------------
+def _transpose_trace(n: int, how: str, b: int = 8) -> list[int]:
+    """Addresses of B = A^T (doubles, row major; A at 0, B after it)."""
+    A, Bb = 0, 8 * n * n
+    out: list[int] = []
+
+    def cell(i, j):
+        out.append(A + 8 * (i * n + j))
+        out.append(Bb + 8 * (j * n + i))
+
+    if how == "naive":
+        for i in range(n):
+            for j in range(n):
+                cell(i, j)
+    elif how == "blocked":
+        for ii in range(0, n, b):
+            for jj in range(0, n, b):
+                for i in range(ii, ii + b):
+                    for j in range(jj, jj + b):
+                        cell(i, j)
+    else:  # recursive: split the larger dimension until a block is 4 x 4 (no size known to the algorithm)
+        def rec(i0, i1, j0, j1):
+            if (i1 - i0) * (j1 - j0) <= 16:
+                for i in range(i0, i1):
+                    for j in range(j0, j1):
+                        cell(i, j)
+            elif i1 - i0 >= j1 - j0:
+                m = (i0 + i1) // 2
+                rec(i0, m, j0, j1)
+                rec(m, i1, j0, j1)
+            else:
+                m = (j0 + j1) // 2
+                rec(i0, i1, j0, m)
+                rec(i0, i1, m, j1)
+        rec(0, n, 0, n)
+    return out
+
+
+def compute_oblivious() -> dict:
+    from explainer.cs.pebble.cache import miss_curve, stack_distances
+
+    n = 256
+    caps_kb = [1, 2, 4, 8, 16, 32, 64]
+    rows = {}
+    for how, b in (("naive", 0), ("blocked", 32), ("recursive", 0)):
+        tr = np.array(_transpose_trace(n, how, b=b or 8)) // 64
+        d = stack_distances(tr)
+        rows[how] = miss_curve(d, [k * 1024 // 64 for k in caps_kb])
+    return {"n": n, "caps_kb": caps_kb, "rows": rows, "accesses": 2 * n * n, "ideal": 2 * n * n * 8 // 64}
+
+
+def compute_pebbles() -> dict:
+    """Words moved between a fast memory of M words and slow memory by tiled matrix multiplies, against the red-blue
+    pebble lower bound 2 n^3 / sqrt(M) - 2M (Hong and Kung 1981; the constant from Smith et al. 2019)."""
+    from explainer.cs.pebble.cache import miss_curve, stack_distances
+
+    n = 64
+    M_words = 1024  # an 8 KB fast memory of doubles
+    lines_cap = M_words * 8 // 64
+    bound = 2 * n ** 3 / np.sqrt(M_words) - 2 * M_words
+    rows = []
+    for order, T in (("ijk", 0), ("ikj", 0), ("tiled", 4), ("tiled", 8), ("tiled", 16)):
+        tr = np.array(_matmul_trace(n, order, T=T or 8)) // 64
+        d = stack_distances(tr)
+        words = miss_curve(d, [lines_cap])[0] * len(tr) * 8
+        rows.append({"order": order, "T": T, "words": words})
+    return {"n": n, "M": M_words, "bound": bound, "rows": rows, "flops": 2 * n ** 3}
+
+
+def compute_dram() -> dict:
+    """Row-buffer hits of an open-page DRAM (8 banks, 8 KB rows, the bank chosen by the bits above the row offset) on
+    sequential, strided and random line streams."""
+    rng = np.random.default_rng(3)
+    streams = {
+        "sequential": np.arange(0, 64 * 50000, 64),
+        "stride 4 KB": np.arange(0, 4096 * 50000, 4096) % (1 << 30),
+        "random": rng.integers(0, 1 << 30, 50000) // 64 * 64,
+    }
+    rows = {}
+    for name, addrs in streams.items():
+        open_row = {}
+        hits = 0
+        for a in addrs.tolist():
+            row = a >> 13
+            bank = row % 8
+            if open_row.get(bank) == row:
+                hits += 1
+            open_row[bank] = row
+        rows[name] = hits / len(addrs)
+    return {"rows": rows, "tRCD_ns": 14, "tCAS_ns": 14, "tRP_ns": 14}
+
+
+def compute_frontier() -> dict:
+    """Replacement on the Job's scans, scaled down (the first words of the corpus, an 8 KB cache): LRU, bimodal
+    insertion (Qureshi et al. 2007: insert at the LRU end, at the MRU end once in 32), random, and Belady's optimum."""
+    from explainer.cs.pebble.cache import belady
+
+    words = corpus_words()[:6000]
+    lines, _ = window_events(words, 0, len(words))
+    cap = 128
+    seq = lines.tolist()
+
+    def lru_like(insert_mru):
+        rnd = np.random.default_rng(4)
+        from collections import OrderedDict
+        c = OrderedDict()
+        miss = 0
+        for ln in seq:
+            if ln in c:
+                c.move_to_end(ln)
+                continue
+            miss += 1
+            if len(c) >= cap:
+                c.popitem(last=False)
+            c[ln] = True
+            if not insert_mru(rnd):
+                c.move_to_end(ln, last=False)
+        return miss / len(seq)
+
+    def random_policy():
+        rnd = np.random.default_rng(5)
+        c, pos = [], {}
+        miss = 0
+        for ln in seq:
+            if ln in pos:
+                continue
+            miss += 1
+            if len(c) >= cap:
+                k = int(rnd.integers(len(c)))
+                del pos[c[k]]
+                c[k] = ln
+                pos[ln] = k
+            else:
+                pos[ln] = len(c)
+                c.append(ln)
+        return miss / len(seq)
+
+    res = {"lru": lru_like(lambda r: True), "bip": lru_like(lambda r: r.random() < 1 / 32),
+           "random": random_policy(), "opt": belady(seq, cap) / len(seq)}
+    return {"words": len(words), "accesses": len(seq), "cache_lines": cap, "rows": res}
+
+
+ITEMS.update({"oblivious": compute_oblivious, "pebbles": compute_pebbles, "dram": compute_dram,
+              "frontier": compute_frontier})
+
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
