@@ -209,6 +209,11 @@
   "bytes": 1799,
   "source": "https://data.binance.vision/data/spot/monthly/klines/0GUSDT/1d/0GUSDT-1d-2025-12.zip"
  },
+ "binance/spot/0GUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "8430be19e54dbc89f265c8646cfae7bf7311122d31cf5e31efce5f5571b45a91",
+  "bytes": 8416,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/0GUSDT"
+ },
  "binance/spot/1000CATUSDT/1d/2024-12": {
   "sha256": "48029dd3b8ba46aff157ea8dffdd9190c873b2d3ac1a9374d0d2e72bd5c7068c",
   "bytes": 1019,
@@ -274,6 +279,11 @@
   "bytes": 1758,
   "source": "https://data.binance.vision/data/spot/monthly/klines/1000CATUSDT/1d/1000CATUSDT-1d-2025-12.zip"
  },
+ "binance/spot/1000CATUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "f8be9ba699950a42c5cdec0e940483852745611cb946794d729eb34ef0a65a90",
+  "bytes": 26272,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/1000CATUSDT"
+ },
  "binance/spot/1000CHEEMSUSDT/1d/2025-02": {
   "sha256": "cf36676d0acfe46528bea31662e7efae68e00c6207207378df9863fa83a4b2bd",
   "bytes": 1279,
@@ -328,6 +338,11 @@
   "sha256": "e8991a8fdd6ff77333a30c836d5e8156d478942aed42de027770b7160aa90961",
   "bytes": 1808,
   "source": "https://data.binance.vision/data/spot/monthly/klines/1000CHEEMSUSDT/1d/1000CHEEMSUSDT-1d-2025-12.zip"
+ },
+ "binance/spot/1000CHEEMSUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "8e6607d8ab1706a4faabfa82ca7f25c04d54ff3e532062a6192ff8504009a0db",
+  "bytes": 22816,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/1000CHEEMSUSDT"
  },
  "binance/spot/1000SATSUSDT/1d/2023-12": {
   "sha256": "5f7e69a2d5bde77b4b6e300c11018c28bd96026340a8ba547f077bff167dd9b1",
@@ -453,6 +468,11 @@
   "sha256": "5679331a35e0a43e6b8448a9fb4a87784f94066273c2e1f19be7994a0e91aa6f",
   "bytes": 1907,
   "source": "https://data.binance.vision/data/spot/monthly/klines/1000SATSUSDT/1d/1000SATSUSDT-1d-2025-12.zip"
+ },
+ "binance/spot/1000SATSUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "5923773dca50eae7779a47515c496b067180df50bb58b250c672cd543e88ed58",
+  "bytes": 50016,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/1000SATSUSDT"
  },
  "binance/spot/1INCHUSDT/1d/2020-12": {
   "sha256": "adfaa1558ea9bb474ab6367c0579615d42009464c8c5abafae4e39984e2476dd",
@@ -759,6 +779,11 @@
   "bytes": 1732,
   "source": "https://data.binance.vision/data/spot/monthly/klines/1INCHUSDT/1d/1INCHUSDT-1d-2025-12.zip"
  },
+ "binance/spot/1INCHUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "45e45dcc18a3c90c81956da42c77543d76fe48abc045c36f32eeadec6dde23c5",
+  "bytes": 119264,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/1INCHUSDT"
+ },
  "binance/spot/1MBABYDOGEUSDT/1d/2024-09": {
   "sha256": "a7ca89bf438e24afc33e06aa4b52384a5478f7162dbfbf65e95e98e2c2650349",
   "bytes": 1066,
@@ -839,6 +864,11 @@
   "bytes": 1894,
   "source": "https://data.binance.vision/data/spot/monthly/klines/1MBABYDOGEUSDT/1d/1MBABYDOGEUSDT-1d-2025-12.zip"
  },
+ "binance/spot/1MBABYDOGEUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "7c54d4cbec4a2d9627d7182d820f1efda70f0a2b153f51ed385fa949ccd81717",
+  "bytes": 32160,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/1MBABYDOGEUSDT"
+ },
  "binance/spot/2ZUSDT/1d/2025-10": {
   "sha256": "fad023ffe485102a66189c93f260f3a45aaf8ab033332c52ceec52a92ab8fd33",
   "bytes": 1839,
@@ -853,6 +883,11 @@
   "sha256": "0c28a79e78f2326e6daa4d96fecbcb9307116238a76ee8437f033c19bce383e1",
   "bytes": 1800,
   "source": "https://data.binance.vision/data/spot/monthly/klines/2ZUSDT/1d/2ZUSDT-1d-2025-12.zip"
+ },
+ "binance/spot/2ZUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "878a0085247ca072ebef4190a00039feb2eb46dcaf2defb9e3db3505a2face25",
+  "bytes": 7776,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/2ZUSDT"
  },
  "binance/spot/A2ZUSDT/1d/2025-07": {
   "sha256": "82020600028912854eeaee7bc4500e4c47f7f014c054480fba151d876f7e01d2",
@@ -883,6 +918,21 @@
   "sha256": "81d92d6cd29afd5be8db36df76e6616e49547cc16a6b075b9f858d69614fd6d0",
   "bytes": 1769,
   "source": "https://data.binance.vision/data/spot/monthly/klines/A2ZUSDT/1d/A2ZUSDT-1d-2025-12.zip"
+ },
+ "binance/spot/A2ZUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "5e6e740dee9780fb40027c1a1af1ce2f26816a3955bcb0d6c8c8595bfae1658e",
+  "bytes": 11872,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/A2ZUSDT"
+ },
+ "binance/spot/AAOIBUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "0624c9a8ac1318aa2f5b344a8d9b7e3062cd81befa6062705603f0d5a874086a",
+  "bytes": 1952,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/AAOIBUSDT"
+ },
+ "binance/spot/AAPLBUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "0624c9a8ac1318aa2f5b344a8d9b7e3062cd81befa6062705603f0d5a874086a",
+  "bytes": 1952,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/AAPLBUSDT"
  },
  "binance/spot/AAVEUSDT/1d/2020-10": {
   "sha256": "f864aac59f391d9511ecfb5d6e2ba5a1e6298efe944d17e9465d3c5a5089b298",
@@ -1198,6 +1248,11 @@
   "sha256": "368718bef96df895c7a386b636f74a3d15813c101c3c2bfa5e65271b1e936db9",
   "bytes": 1908,
   "source": "https://data.binance.vision/data/spot/monthly/klines/AAVEUSDT/1d/AAVEUSDT-1d-2025-12.zip"
+ },
+ "binance/spot/AAVEUSDT/1d/assembled_2017-08_2025-12": {
+  "sha256": "3c919c5dd4d0983ff772a1284dced41da50b5ecc2b0afe25fee60e96556d26a2",
+  "bytes": 123808,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/AAVEUSDT"
  },
  "binance/spot/ACAUSDT/1d/2022-01": {
   "sha256": "b49596f6a62723ac8bd008d77f894d2af956c0acd44785e127aa47f051efd2dd",
