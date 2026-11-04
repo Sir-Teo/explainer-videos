@@ -110,7 +110,7 @@ class ADI(VoiceoverScene, ThreeDScene):
                     r"In 't Hout and Foulon (2010) compared this with MCS and Hundsdorfer--Verwer"),
                 why(r"spacing $\propto \cosh\xi$, smallest at $K$ (and near $v = 0$); three-point weights on uneven "
                     r"spacing keep second order if the map is smooth")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-4.2, buff=0.5, edge=6.9)  # short left sides: room on the right
         with self.voiceover(
             "The scheme. Heston's pricing equation has second derivatives in price and in variance, and a mixed "
             "derivative from their correlation. <bookmark mark='a'/> Split its operator into three: the mixed part, "
@@ -147,7 +147,7 @@ class ADI(VoiceoverScene, ThreeDScene):
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         e = {(r["nS"], r["uniform"]): r["err"] for r in rows}
         h = loglog(np.log10(15), np.log10(220), -4, 0, r"price points", r"error, Douglas and Craig--Sneyd", x_length=4.4,
-                   y_length=3.2, xt=[2], yt=[-4, -2, 0], font_size=13).to_edge(RIGHT, buff=0.6).shift(UP * 0.9)
+                   y_length=2.8, xt=[2], yt=[-4, -2, 0], font_size=13).to_edge(RIGHT, buff=0.6).shift(UP * 1.25)
         cols = {"do": BAD, "cs": GOOD}
         lines = VGroup()
         for sch in ("do", "cs"):
@@ -159,7 +159,7 @@ class ADI(VoiceoverScene, ThreeDScene):
         side = MathTex(rf"{best['nS']}\times{best['nv']}:\ {best['price']:.4f}\ \text{{vs COS}}\ {a['ref']:.4f}\ "
                        rf"({best['time']:.1f}\,\text{{s}})", font_size=24, color=GOOD).next_to(leg2, DOWN, buff=0.25)
         side.align_to(h, LEFT)
-        q = predict(r"Why crowd the variance grid near $v = 0$?", width=4.4, font_size=20).to_corner(DR, buff=0.25)
+        q = predict(r"Why crowd the variance grid near $v = 0$?", width=4.4, font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
             "Does the stretching matter? Measured against the exact Fourier price: on a forty by twenty grid, a "
             f"uniform grid is off by {e[(40, True)]:.2f}; the stretched grid by {e[(40, False)]:.3f}, "
