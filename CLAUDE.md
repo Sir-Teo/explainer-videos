@@ -12,6 +12,7 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *AI, Built* (`videos/ai/`): thirty-one parts (`ai1` … `ai31`); the series plan is `videos/ai/README.md`, the
   chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
   instruments in `explainer/ai/`.
-- *Statistics, Built* (`videos/stats/`): planned, thirty-six parts (`stats1` … `stats36`); the series plan is
-  `videos/stats/README.md`, the chapter-by-chapter syllabus and production standard `videos/stats/SYLLABUS.md`;
-  shared instruments will live in `explainer/stats/` (the World, the Coverage Board, the Museum, statkit).
+- *Statistics, Built* (`videos/stats/`): planned, sixty-five parts in five stages from a first course to a PhD
+  (`stats1` … `stats65`); the series plan is `videos/stats/README.md`, the chapter-by-chapter syllabus and
+  production standard `videos/stats/SYLLABUS.md`; shared instruments will live in `explainer/stats/` (the World,
+  the Coverage Board, the Museum, statkit).
