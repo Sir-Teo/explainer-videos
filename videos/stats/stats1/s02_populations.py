@@ -127,7 +127,7 @@ class Populations(VoiceoverScene):
         cap = label(rf"20 samples of 25: \ {d['n_cover']} intervals catch $\theta$", font_size=26,
                     color=GREY_A).next_to(A, DOWN, buff=0.2)
         preview = note(r"a preview: \ intervals are built in Part 11").to_corner(DL, buff=0.3)
-        board = coverage_board([], placeholders=6, font_size=24).scale_to_fit_width(6.3).move_to([3.55, 0.1, 0])
+        board = coverage_board([], placeholders=6, font_size=24)
         with self.voiceover(
             "That's what statistics promises: not the answer, but an honest statement of how often you'll be "
             "wrong. <bookmark mark='a'/> The classic form is an interval: a range computed from the sample, built so "
@@ -145,7 +145,7 @@ class Populations(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(cap), *[Indicate(b, color=S.BROKEN) for b, c in zip(bars, d["cover"]) if not c])
             vo.wait_until("c")
-            self.play(FadeIn(board, shift=LEFT * 0.3))
+            self.play(FadeOut(VGroup(A, tl, tlab, bars, cap, preview)), FadeIn(board, shift=UP * 0.3))
             vo.wait_until("d")
             self.play(Indicate(board.body, color=GREY_B, scale_factor=1.02))
         self.clear_scene()

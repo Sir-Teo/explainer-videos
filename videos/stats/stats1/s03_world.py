@@ -46,7 +46,7 @@ class TheWorld(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.9, 1.2, 0])
         why_card = definition_card(r"Why build a world?", r"In real data the truth is hidden. \ Here every "
                                    r"parameter is a number we can compute, \ so every method can be graded.",
-                                   color=S.WORLD, width=4.6, font_size=22).move_to([4.9, -1.8, 0])
+                                   color=S.WORLD, width=4.3, font_size=22).move_to([4.8, -1.8, 0])
         tag = simulated_tag()
         with self.voiceover(
             "Statistics has a teaching problem. Its methods promise things about the truth, and in real data "
