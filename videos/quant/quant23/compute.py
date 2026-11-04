@@ -355,7 +355,51 @@ def compute_disaster() -> dict:
     return _json({"gams": gams, "prem": out, "base": base, "p": p, "sig": sig})
 
 
-ITEMS = {"frontier": compute_frontier, "twoasset": compute_twoasset, "capm": compute_capm, "hj": compute_hj,
+def compute_speculation_theory() -> dict:
+    """The research chapter: speculative bubbles from disagreement (Harrison and Kreps 1978).  Two types of risk-neutral
+    investors disagree about a two-state Markov dividend; short sales are impossible; the asset is held by whoever
+    values it most, including the option to resell.  The price solves P = beta max_i Q_i (d + P) and exceeds every
+    type's own buy-and-hold valuation V_i = sum beta^t Q_i^t d: the difference is the value of the resale option.
+    Harrison and Kreps's own example, then a sweep of disagreement with the turnover it implies."""
+    beta = 0.75
+    d = np.array([0.0, 1.0])
+    Q1 = np.array([[1 / 2, 1 / 2], [2 / 3, 1 / 3]])
+    Q2 = np.array([[2 / 3, 1 / 3], [1 / 4, 3 / 4]])
+
+    def bh(Q):
+        return np.linalg.solve(np.eye(2) - beta * Q, beta * Q @ d)
+
+    def spec(Qs):
+        P = np.zeros(2)
+        for _ in range(5000):
+            P = beta * np.max(np.stack([Q @ (d + P) for Q in Qs]), axis=0)
+        holder = np.argmax(np.stack([Q @ (d + P) for Q in Qs]), axis=0)
+        return P, holder
+    P, holder = spec([Q1, Q2])
+    V1, V2 = bh(Q1), bh(Q2)
+    hk = {"beta": beta, "Q1": Q1, "Q2": Q2, "V1": V1, "V2": V2, "P": P, "holder": holder,
+          "premium": P - np.maximum(V1, V2), "iterations_check": float(np.max(np.abs(P - beta * np.maximum(Q1 @ (d + P),
+                                                                                                    Q2 @ (d + P)))))}
+    # disagreement sweep: beliefs symmetric around a common (true) chain
+    Qbar = 0.5 * (Q1 + Q2)
+    D = 0.5 * (Q1 - Q2)
+    pi = np.linalg.eig(Qbar.T)[1][:, 0].real
+    pi = pi / pi.sum()
+    rows = []
+    for lam in np.linspace(0, 1.0, 21):
+        A, B = Qbar + lam * D, Qbar - lam * D
+        Pl, hl = spec([A, B])
+        Vmax = np.maximum(bh(A), bh(B))
+        Vtrue = bh(Qbar)
+        # turnover under the true chain: the chance the holder type changes from one state to the next
+        switch = sum(pi[s_] * Qbar[s_, t_] * (hl[s_] != hl[t_]) for s_ in range(2) for t_ in range(2))
+        rows.append({"lam": float(lam), "P": Pl, "Vmax": Vmax, "Vtrue": Vtrue,
+                     "bubble_vs_true": float(np.dot(pi, Pl - Vtrue)), "premium": float(np.dot(pi, Pl - Vmax)),
+                     "turnover": float(switch)})
+    return _json({"hk": hk, "sweep": rows, "pi": pi})
+
+
+ITEMS = {"speculation_theory": compute_speculation_theory, "frontier": compute_frontier, "twoasset": compute_twoasset, "capm": compute_capm, "hj": compute_hj,
          "puzzle": compute_puzzle, "shiller": compute_shiller, "intermediary": compute_intermediary,
          "apt": compute_apt, "limits": compute_limits, "bubbles": compute_bubbles, "hook": compute_hook,
          "disaster": compute_disaster}

@@ -28,7 +28,7 @@ CPI, the Nasdaq Composite) and He, Kelly and Manela's published factors and test
 *An education in methods, not investment advice. Firms and episodes are described from the public record, as
 reported by the sources named.*
 
-## Chapters (about 50 minutes)
+## Chapters (about 54 minutes)
 
 * **What risk is worth** (2.4 min). A dollar in US stocks in July 1926 → $17,488 at the end of 2025, against $24.9 in
   bills (10.3% against 3.3% a year); every theory as E[R] − R_f = β λ, and all of them as p = E[mx]; the history
@@ -83,7 +83,17 @@ reported by the sources named.*
   `shleifer_vishny`; risk, constraint or error: three reasons for a premium; the research pipeline (claim, reason,
   estimate, hold-out, stress, ledger); the `premia` module; Rule 23; the rule against the optimiser, a new anomaly,
   the arbitrage fund and the industry that doubled.
-* **Recap, desk questions, problems** (3.6). Fourteen lines; six desk questions; ten problems, solutions below.
+* **For the researcher: speculative bubbles from disagreement** (5.6). Harrison and Kreps (1978): types with
+  beliefs Q_i about a Markov dividend, no short sales; the price P = β max_i Q_i(d + P) exceeds every buy-and-hold
+  value V_i = Σβᵗ Q_iᵗ d when the identity of the optimist changes with the state. Their example (β = 3/4): V₁ =
+  1.333/1.222, V₂ = 1.455/1.909, P = 24/13 = 1.846 and 27/13 = 2.077 (premium 0.39 and 0.17 over the best
+  valuation); type 1 holds in state 0, type 2 in state 1. Proof: P − V_i ≥ βQ_i(P − V_i) ⇒ P ≥ V_i; Miller (1977) on
+  short sales. Disagreement sweep around the average belief: the bubble over the average belief's value rises almost
+  linearly to +0.53 (37%), the pure resale premium to +0.29. Scheinkman and Xiong (2003): overconfidence, the bubble
+  as a perpetual option on disagreement, heavy trading; Xiong and Yu (2011): the Chinese warrants. Three open
+  problems; pause: with common beliefs P = V; with type 2 alone, exactly 1.455.
+* **Recap, desk questions, problems** (3.6). Fourteen lines; six desk questions; twelve problems (two at
+  qualifying-exam level), solutions below.
 
 ## Hands-on
 
@@ -190,6 +200,25 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 10. **Shleifer–Vishny.** p₁ = V − S₁ + F₁ = 1 − 0.3 + 0.2 = 0.90. p₂ = (V − S₂ + F₁(1 − a))/(1 − aF₁/p₁) =
     (1 − 0.4 − 0.1)/(1 − 0.3/0.9) = 0.5/0.667 = 0.75 (against 0.80 without withdrawals). F₂ = F₁ + aF₁(p₂/p₁ − 1) =
     0.2 + 0.3 × (−0.167) = 0.15: the fund loses a quarter of its capital just as the price is furthest from value.
+11. **(qual) The fixed point.** The map TP = β max_i Q_i(d + P) is monotone and satisfies |TP − TP′|_∞ ≤ β|P − P′|_∞
+   (each Q_i is a stochastic matrix and max is 1-Lipschitz), so it is a contraction with a unique fixed point. Since
+   P = TP ≥ βQ_i(d + P) and V_i = βQ_i(d + V_i), P − V_i ≥ βQ_i(P − V_i); iterating, P − V_i ≥ (βQ_i)ⁿ(P − V_i) → 0.
+   For the example, guess the holders (type 1 in state 0, type 2 in state 1) and solve the linear system
+   P₀ = ¾[½(0 + P₀) + ½(1 + P₁)], P₁ = ¾[¼(0 + P₀) + ¾(1 + P₁)]: P₀ = 24/13, P₁ = 27/13; check that the guessed type is
+   indeed the higher bidder in each state.
+12. **(qual) When the premium vanishes.** If type j has the highest Q_j(d + P) in every state, P = βQ_j(d + P), the
+   same equation as V_j, whose solution is unique: P = V_j = max_i V_i. A strict premium needs different optimists
+   in different states, so that each holder values the option to sell to the other.
+
+## For the researcher
+
+* **The theorems.** Harrison and Kreps (1978), "Speculative investor behavior in a stock market with heterogeneous
+  expectations," *QJE* 92; Miller (1977), *J. Finance* 32; Scheinkman and Xiong (2003), "Overconfidence and speculative
+  bubbles," *JPE* 111; Xiong and Yu (2011), "The Chinese warrants bubble," *AER* 101; Brunnermeier, Simsek and Xiong
+  (2014), *QJE* 129.
+* **Simplifications.** Two types, two states, risk neutrality, unlimited capital within each type; the sweep keeps
+  the average belief fixed; no data test here beyond the cited evidence.
+* **Open problems.** Sources of disagreement; costly, limited short sales; welfare and policy.
 
 ## Data and reproducibility
 
@@ -227,7 +256,7 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 
 *讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录，并注明报道来源。*
 
-## 章节（约50分钟）
+## 章节（约54分钟）
 
 * **风险值多少。** 1926年7月投入美国股市的一美元，到2025年底变成17,488美元，投入国库券只有24.9美元（每年10.3%对3.3%）；每个理论都写成E[R] − R_f = βλ，而它们全都是p = E[mx]；历史条（1952–2021）；本部分安排；研究交易台开张。
 * **1. Markowitz：前沿。** 两个波动率20%的资产，相关系数从−1变到1；用拉格朗日乘数求前沿（两基金分离）；不需要任何均值的全局最小方差组合；1990–2020年的十个美国行业（最小方差组合波动率11%，低于每个行业）；优化器给出的极端权重。
@@ -243,7 +272,8 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 * **11. 行为与套利的限制。** Barberis与Thaler的两大支柱；3Com与Palm（2000年3月2日；3Com的其余业务估值约−220亿美元；Lamont–Thaler）；推导并画出Shleifer–Vishny的基于业绩的套利（第一次冲击后0.90；无赎回时0.80；a = 3时0.60）；前景理论的两条曲线（Tversky–Kahneman 1992：损失的权重是收益的2.25倍；1%的机会感觉像5.5%；Barberis–Huang）；处置效应（Odean 1998：PGR为0.148，PLR为0.098）；噪声交易者风险与外推。
 * **12. 泡沫。** Fama与Shiller的定义；纳斯达克（2000年3月10日5,048.62，2002年10月9日1,114.11，−78%）；Greenwood–Shleifer–You在49个行业上的暴涨，1926–2025（60次暴涨，53%崩盘，随后两年的平均收益+20%）；它们发生在何时；理性泡沫（Blanchard–Watson：r = 5%、每年10%的破裂概率时，每年上涨16.7%；为什么理论排除了大多数泡沫）；骑在泡沫上（Brunnermeier–Nagel）。
 * **13. 第23条规则：研究交易台。** 交易台的第一张表；**实验**：`tangency`、`hj_excess`、`shleifer_vishny`；风险、约束或错误：溢价的三种理由；研究流程（主张、理由、估计、样本外、压力、台账）；`premia`模块；第23条规则；用优化器、一个新异象、套利基金和翻倍的行业检验这条规则。
-* **回顾、交易台问题与习题。** 十四行回顾；六个交易台问题；十道习题，解答见下文。
+* **写给研究者：分歧产生的投机泡沫。** 哈里森与克雷普斯（1978）：各类投资者对马尔可夫股息有信念Q_i，不能卖空；当乐观者的身份随状态改变时，价格P = β max_i Q_i(d + P)高于每个买入持有价值V_i = Σβᵗ Q_iᵗ d。他们的例子（β = 3/4）：V₁ = 1.333/1.222，V₂ = 1.455/1.909，P = 24/13 = 1.846和27/13 = 2.077（比最高估值高0.39和0.17）；状态0由第1类持有，状态1由第2类持有。证明：P − V_i ≥ βQ_i(P − V_i) ⇒ P ≥ V_i；米勒（1977）论卖空。围绕平均信念的分歧扫描：相对平均信念价值的泡沫几乎线性地升到+0.53（37%），纯转售溢价升到+0.29。沙因克曼与熊伟（2003）：过度自信、泡沫作为对分歧的永续期权、大量交易；熊伟与Jialin Yu（2011）：中国权证。三个开放问题；暂停题：信念相同时P = V；只有第2类时恰为1.455。
+* **回顾、交易台问题与习题。** 十四行回顾；六个交易台问题；十二道习题（两道为资格考试水平），解答见下文。
 
 ## 交易台问题与解答
 
@@ -266,6 +296,8 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 8. **一次灾难。** 边际效用与C^{−γ}成比例，所以下跌29%使它上升0.71^{−4} ≈ 3.9倍。在这种状态下大幅亏损的资产，其损失以接近四的权重计价；γ更大时权重会爆炸：很小的概率乘以很大的权重，就是很大的溢价。
 9. **Campbell–Shiller常数。** R_{t+1} = (P_{t+1} + D_{t+1})/P_t；取对数r = pd_{t+1} − pd_t + Δd + ln(1 + e^{−pd_{t+1}})。在均值附近对最后一项做一阶展开得到κ + ρ pd_{t+1}，其中ρ = 1/(1 + e^{dp̄})（dp̄为平均对数股息率）。dp̄ = −3.25时，ρ = 1/(1 + e^{−3.25}) = 0.963。
 10. **Shleifer–Vishny。** p₁ = V − S₁ + F₁ = 1 − 0.3 + 0.2 = 0.90。p₂ = (V − S₂ + F₁(1 − a))/(1 − aF₁/p₁) = (1 − 0.4 − 0.1)/(1 − 0.3/0.9) = 0.5/0.667 = 0.75（无赎回时为0.80）。F₂ = F₁ + aF₁(p₂/p₁ − 1) = 0.2 + 0.3 × (−0.167) = 0.15：恰在价格离价值最远时，基金损失了四分之一的资本。
+11. **（资格考试）不动点。** 映射TP = β max_i Q_i(d + P)单调且满足|TP − TP′|_∞ ≤ β|P − P′|_∞，是压缩映射，有唯一不动点。由P = TP ≥ βQ_i(d + P)与V_i = βQ_i(d + V_i)得P − V_i ≥ βQ_i(P − V_i)，迭代得P − V_i ≥ 0。对例子，猜测持有者（状态0为第1类，状态1为第2类）并解线性方程组P₀ = ¾[½P₀ + ½(1 + P₁)]、P₁ = ¾[¼P₀ + ¾(1 + P₁)]：P₀ = 24/13，P₁ = 27/13；再验证所猜的类型在每个状态下确实出价更高。
+12. **（资格考试）溢价何时消失。** 若第j类在每个状态下都有最高的Q_j(d + P)，则P = βQ_j(d + P)，与V_j的方程相同，而其解唯一：P = V_j = max_i V_i。严格的溢价需要不同状态下有不同的乐观者，使每个持有者都看重卖给对方的期权。
 
 ## 数据与复现
 
@@ -277,3 +309,9 @@ python tools/make.py quant23 --cpu-voice -q m                 # English and Chin
 * 屏幕上标注为示意的输入：两资产的例子、APT套利、贝塔噪声的例子、交易商的资产负债表、logit投资者、Shleifer–Vishny的参数、理性泡沫。
 * 研究窗口：凡是先拟合、再持有的检验（样本外切点组合、押注低贝塔、25个组合的样本外夏普比率）都截止于2020年12月，封存的2021–2025年样本外数据保持未读，直到第24部分为经典因子打开它。描述性的历史（一个世纪的收益、消费、Shiller的数据、暴涨）延续到2025年。
 * 本部分不打开任何样本外数据；试验计数器保持在315。
+
+## 写给研究者
+
+* **定理。** 哈里森与克雷普斯（1978），*QJE* 92；米勒（1977），*J. Finance* 32；沙因克曼与熊伟（2003），*JPE* 111；熊伟与Jialin Yu（2011），*AER* 101；布伦纳迈尔、西姆塞克与熊伟（2014），*QJE* 129。
+* **简化。** 两类、两状态、风险中性、每类资本无限；扫描保持平均信念不变；除所引证据外没有数据检验。
+* **开放问题。** 分歧的来源；代价高昂而有限的卖空；福利与政策。

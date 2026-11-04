@@ -44,7 +44,10 @@ PROBLEMS = [
     r"1.7\% chance of it matter so much?",
     r"Derive the Campbell--Shiller approximation and $\rho = 1/(1 + e^{\overline{dp}})$; with $\overline{dp} = -3.25$, "
     r"find $\rho$.",
-    r"Shleifer--Vishny with $V$ = 1, $S_1$ = 0.3, $S_2$ = 0.4, $F_1$ = 0.2, $a$ = 1.5: find $p_1$, $p_2$ and $F_2$.",
+    r"Shleifer--Vishny with $V$ = 1, $S_1$ = 0.3, $S_2$ = 0.4, $F_1$ = 0.2, $a$ = 1.5: find $p_1$, $p_2$ and $F_2$.",    r"(qual) In Harrison and Kreps's model show that $P = \beta\max_i Q_i(d + P)$ has a unique solution, that "
+    r"$P \ge \max_i V_i$, and compute $P$ for their example ($24/13$, $27/13$).",
+    r"(qual) Show that if one type is the most optimistic in every state, $P = \max_i V_i$: the speculative premium "
+    r"needs the identity of the optimist to change with the state.",
 ]
 
 
@@ -166,12 +169,14 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=20)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: the frontier by Lagrange; a two-asset minimum-variance portfolio; the tangency Sharpe "
+            "And twelve problems: the frontier by Lagrange; a two-asset minimum-variance portfolio; the tangency Sharpe "
             "ratio as the Hansen-Jagannathan bound; how many years a mean return needs; the CAPM derived, and its "
             "discount factor; the riskless-rate puzzle in numbers; marginal utility in a disaster; the Campbell-Shiller "
-            "constant; and Shleifer and Vishny's prices by hand. Solutions, in English and Chinese, are in the notes."
+            "constant; and Shleifer and Vishny's prices by hand. Two more are qualifying-exam problems: Harrison "
+            "and Kreps's fixed point, and when the premium vanishes. Solutions, in English and Chinese, are in the "
+            "notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)

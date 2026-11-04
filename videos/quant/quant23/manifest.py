@@ -17,5 +17,6 @@ SCENES = [
     ("s12_behaviour", "Behaviour", "11. Behaviour and the limits of arbitrage"),
     ("s13_bubbles", "Bubbles", "12. Bubbles"),
     ("s14_house", "House", "13. Rule 23: the research desk"),
+    ("s16_research", "Research", "For the researcher: speculative bubbles from disagreement"),
     ("s15_outro", "Outro", "Recap, desk questions, problems"),
 ]
