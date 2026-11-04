@@ -392,7 +392,7 @@ ITEMS.update({"trace": compute_trace, "policies": compute_policies, "threec": co
 MHZ = 884.9557522123894  # Part 7's clock, kept by the ledger
 
 
-def pebble_hierarchy(prefetch: str | None = "stride"):
+def pebble_hierarchy(prefetch: str | None = "stride", mhz: float = MHZ):
     """L1 32 KB 8-way, L2 1 MB 16-way, a 4 MB third level, then DRAM: this machine's measured latencies
     (load("staircase")) converted to cycles of Pebble's 885 MHz clock."""
     from explainer.cs.pebble.cache import Hierarchy, SetAssoc
@@ -402,7 +402,7 @@ def pebble_hierarchy(prefetch: str | None = "stride"):
     def ns(kb):
         return min(st, key=lambda p: abs(p["bytes"] - kb * 1024))["ns"]
 
-    cyc = [max(1, int(np.ceil(ns(k) * MHZ / 1000))) for k in (16, 512, 2048, 65536)]
+    cyc = [max(1, int(np.ceil(ns(k) * mhz / 1000))) for k in (16, 512, 2048, 65536)]
     l1, l2, l3, dram = cyc
     return Hierarchy([SetAssoc(32 << 10, ways=8, hit=l1, name="L1"),
                       SetAssoc(1 << 20, ways=16, hit=l2 - l1, name="L2"),
@@ -447,23 +447,269 @@ def compute_scancost() -> dict:
             seen[w] = len(w)
     lengths = list(seen.values())
     rows = []
-    for n, reps in ((1000, 60), (40000, 2), (120000, 1)):
-        prog = assemble(SCAN_BENCH.format(n=n, target=6, reps=reps))
-        img = bytearray(prog.image)
-        img.extend(bytes(65536 + 12 * n + 64 - len(img)))
-        for i in range(n):
-            o = 65536 + 12 * i
-            img[o + 4:o + 8] = lengths[i % len(lengths)].to_bytes(4, "little")
+    for n in (1000, 40000, 120000):
+        img = None
         res = {}
         for name in ("ideal", "hierarchy", "no prefetch"):
-            kw = {} if name == "ideal" else {"cache": pebble_hierarchy(None if name == "no prefetch" else "stride")[0]}
-            c = OutOfOrder(bytes(img), predictor=PR.Tournament(), mem_size=1 << 21, **kw).run()
-            res[name] = {"cycles": c.cycles, "per_entry": c.cycles / (n * reps), "ipc": c.ipc}
-        rows.append({"entries": n, "kb": 12 * n / 1024, "reps": reps, **res})
+            cyc = {}
+            for reps in (1, 3):  # the difference is two warm passes: compulsory misses cancel
+                prog = assemble(SCAN_BENCH.format(n=n, target=6, reps=reps))
+                img = bytearray(prog.image)
+                img.extend(bytes(65536 + 12 * n + 64 - len(img)))
+                for i in range(n):
+                    o = 65536 + 12 * i
+                    img[o + 4:o + 8] = lengths[i % len(lengths)].to_bytes(4, "little")
+                kw = {} if name == "ideal" else {
+                    "cache": pebble_hierarchy(None if name == "no prefetch" else "stride")[0]}
+                cyc[reps] = OutOfOrder(bytes(img), predictor=PR.Tournament(), mem_size=1 << 21, **kw).run().cycles
+            res[name] = {"per_entry": (cyc[3] - cyc[1]) / (2 * n), "cold_pass": cyc[1] / n}
+        rows.append({"entries": n, "kb": 12 * n / 1024, **res})
     return {"rows": rows, "latencies": pebble_hierarchy()[1], "mhz": MHZ}
 
 
 ITEMS["scancost"] = compute_scancost
+
+
+# ---------------------------------------------------------------------------
+# the Job's line accesses at sampled points of the corpus run, through a three-level hierarchy
+# ---------------------------------------------------------------------------
+TABLE, POOL = 65536, 524288
+
+
+def corpus_words() -> list[bytes]:
+    import videos.ai.ai1.compute as A
+    from explainer.cs.pebble import programs as P
+    from videos.cs.cs6.compute import novels
+
+    books = novels()
+    return P.job_words(P.job_tape("\n".join(books[n] for n in A.BOOKS)))
+
+
+def window_events(words: list[bytes], start: int, count: int):
+    """The cache lines the Job reads for words ``start`` .. ``start + count``: each table entry scanned (its line),
+    and, for each entry of the word's length, the pool line of its first letter (and the next letters while they
+    match).  Returns (lines, is_pool) in program order, with the table state as it is at ``start``."""
+    index: dict[bytes, int] = {}
+    offs: list[int] = []
+    lens: list[int] = []
+    off = 0
+    for w in words[:start]:
+        if w not in index:
+            index[w] = len(offs)
+            offs.append(off)
+            lens.append(len(w))
+            off += len(w)
+    lines: list[int] = []
+    pool: list[bool] = []
+    for w in words[start:start + count]:
+        i = index.get(w)
+        end = len(offs) if i is None else i  # the scan reads entries 0 .. end (end itself only if found)
+        L = len(w)
+        last = -1
+        for e in range(min(end + 1, len(offs))):
+            ln = (TABLE + 12 * e + 4) // 64
+            if ln != last:
+                lines.append(ln)
+                pool.append(False)
+                last = ln
+            if lens[e] == L:
+                o = offs[e]
+                lines.append((POOL + o) // 64)
+                pool.append(True)
+        if i is None:
+            index[w] = len(offs)
+            offs.append(off)
+            lens.append(L)
+            off += L
+    return np.array(lines, np.int64), np.array(pool, bool)
+
+
+def compute_job_memory() -> dict:
+    """Misses of table and pool reads in L1 / L2 / L3 at four points of the corpus run (each window warmed by the
+    words before it), from which ledger row 3 is projected."""
+    from explainer.cs.pebble.cache import SetAssoc
+
+    words = corpus_words()
+    n = len(words)
+    out = []
+    for frac in (0.1, 0.35, 0.6, 0.85):
+        start = int(n * frac)
+        warm, count = 300, 1500
+        lines, pool = window_events(words, start - warm, warm + count)
+        levels = [SetAssoc(32 << 10, ways=8), SetAssoc(1 << 20, ways=16), SetAssoc(4 << 20, ways=16)]
+        # the warm-up: the events of the first ``warm`` words
+        wl, _ = window_events(words, start - warm, warm)
+        cut = len(wl)
+        stats = {k: {"accesses": 0, "L1": 0, "L2": 0, "L3": 0} for k in ("table", "pool")}
+        for j, (ln, ip) in enumerate(zip(lines.tolist(), pool.tolist())):
+            a = ln * 64
+            lvl = 0
+            for lv in levels:
+                if lv.access(a):
+                    break
+                lvl += 1
+            if j >= cut:
+                st = stats["pool" if ip else "table"]
+                st["accesses"] += 1
+                for k, name in enumerate(("L1", "L2", "L3")):
+                    if lvl > k:
+                        st[name] += 1
+        out.append({"frac": frac, "word": start, "events": int(len(lines) - cut), **stats})
+    return {"windows": out, "words": n}
+
+
+POOL_BENCH = """
+        li   s0, 65536        # the table: every entry has the looked-for length, pointing somewhere in the pool
+        li   s1, {n}
+        li   a1, 6
+        li   s2, {reps}
+        li   a3, 524288        # the word being looked up, at the end of the pool: never equal
+rep:    mv   t0, s0
+        li   a2, 0
+scan:   beq  a2, s1, done
+        lw   t1, 4(t0)
+        bne  t1, a1, next
+        lw   t2, 0(t0)        # its letters
+        lbu  a4, 0(t2)
+        lbu  a5, 0(a3)
+        bne  a4, a5, next     # the first letter differs
+next:   addi t0, t0, 12
+        addi a2, a2, 1
+        j    scan
+done:   addi s2, s2, -1
+        bnez s2, rep
+        halt
+"""
+
+
+def compute_poolcost() -> dict:
+    """Cycles per same-length entry when its letters live in L1, L2 or beyond (random pool lines)."""
+    from explainer.cs.pebble import assemble
+    from explainer.cs.pebble import predict as PR
+    from explainer.cs.pebble.ooo import OutOfOrder
+
+    rng = np.random.default_rng(2)
+    rows = []
+    density = 1697048776 / 15020950949  # same-length entries among those scanned, over the corpus (Part 6's counts)
+    for n, pool_kb in ((1000, 8), (20000, 512), (20000, 3072)):
+        res = {}
+        same_n = 0
+        for name in ("ideal", "hierarchy"):
+            cyc = {}
+            for reps in (1, 3):
+                rng = np.random.default_rng(2)
+                prog = assemble(POOL_BENCH.format(n=n, reps=reps))
+                size = 524288 + pool_kb * 1024 + 4096
+                img = bytearray(prog.image)
+                img.extend(bytes(size - len(img)))
+                img[524288] = ord("z")
+                same_n = 0
+                for i in range(n):
+                    o = 65536 + 12 * i
+                    p = 524288 + 64 + int(rng.integers(0, pool_kb * 1024 // 64 - 1)) * 64
+                    img[o:o + 4] = p.to_bytes(4, "little")
+                    same = rng.random() < density
+                    same_n += same
+                    img[o + 4:o + 8] = (6 if same else 5).to_bytes(4, "little")
+                    img[p] = ord("a") + int(rng.integers(0, 25))
+                kw = {} if name == "ideal" else {"cache": pebble_hierarchy()[0]}
+                cyc[reps] = OutOfOrder(bytes(img), predictor=PR.Tournament(), mem_size=1 << 22, **kw).run().cycles
+            res[name] = {"per_entry": (cyc[3] - cyc[1]) / (2 * n)}
+        extra = (res["hierarchy"]["per_entry"] - res["ideal"]["per_entry"]) * n / max(same_n, 1)
+        rows.append({"entries": n, "pool_kb": pool_kb, "same_length": same_n, "extra_per_same": extra, **res})
+    return {"rows": rows, "density": density}
+
+
+ITEMS.update({"job_memory": compute_job_memory, "poolcost": compute_poolcost})
+
+
+def _steady(src_fn, fill, mem, cache_fn, n):
+    """Cycles per entry of two warm passes (three passes minus one), so compulsory misses cancel."""
+    from explainer.cs.pebble import assemble
+    from explainer.cs.pebble import predict as PR
+    from explainer.cs.pebble.ooo import OutOfOrder
+
+    cyc = {}
+    for reps in (1, 3):
+        prog = assemble(src_fn(reps))
+        img = bytearray(prog.image)
+        img.extend(bytes(mem - len(img)))
+        fill(img)
+        cyc[reps] = OutOfOrder(bytes(img), predictor=PR.Tournament(), mem_size=1 << 22, cache=cache_fn()).run().cycles
+    return (cyc[3] - cyc[1]) / (2 * n)
+
+
+def compute_job() -> dict:
+    """Ledger row 3: the Job with this machine's memory hierarchy at Pebble's clock.  The extra cycles per scanned
+    entry and per same-length entry (their letters read from the pool) are measured on the core in steady state,
+    with the table and the pool in L2 as they are over the corpus, and weighted by the fraction of those reads that
+    miss L1 in the sampled windows.  The same at this machine's own clock shows the memory wall as a ratio."""
+    import videos.ai.ai1.compute as A
+    from explainer.cs.pebble import programs as P
+    from videos.cs.cs6.compute import load as load6
+    from videos.cs.cs6.compute import novels
+    from videos.cs.cs8.compute import load as load8
+
+    books = novels()
+    full = P.job_tape("\n".join(books[n] for n in A.BOOKS))
+    seen: dict[bytes, int] = {}
+    for w in P.job_words(full):
+        if w not in seen:
+            seen[w] = len(w)
+    lengths = list(seen.values())
+    f = load6("job")["corpus"]["features"]
+    density = f["same_length"] / f["scanned"]
+    win = load("job_memory")["windows"]
+    m_table = sum(w["table"]["L1"] for w in win) / sum(w["table"]["accesses"] for w in win)
+    m_pool = sum(w["pool"]["L1"] for w in win) / sum(w["pool"]["accesses"] for w in win)
+    n = 20000
+    rng = np.random.default_rng(2)
+    same = rng.random(n) < density
+    ptrs = 524288 + 64 + rng.integers(0, 512 * 1024 // 64 - 1, n) * 64
+
+    def fill_scan(img):
+        for i in range(n):
+            o = 65536 + 12 * i
+            img[o + 4:o + 8] = lengths[i % len(lengths)].to_bytes(4, "little")
+
+    def fill_pool(img):
+        img[524288] = ord("z")
+        for i in range(n):
+            o = 65536 + 12 * i
+            img[o:o + 4] = int(ptrs[i]).to_bytes(4, "little")
+            img[o + 4:o + 8] = (6 if same[i] else 5).to_bytes(4, "little")
+            img[int(ptrs[i])] = ord("a") + i % 25
+
+    out = {}
+    for name, mhz in (("pebble", MHZ), ("this machine", load("machine")["ghz"] * 1000)):
+        row = {"mhz": mhz, "latencies": pebble_hierarchy(mhz=mhz)[1]}
+        for pf in ("stride", None):
+            key = "prefetch" if pf else "no prefetch"
+            scan = {c: _steady(lambda r: SCAN_BENCH.format(n=n, target=6, reps=r), fill_scan, 65536 + 12 * n + 64,
+                               (lambda: None) if c == "ideal" else (lambda: pebble_hierarchy(pf, mhz)[0]), n)
+                    for c in ("ideal", "real")}
+            pool = {c: _steady(lambda r: POOL_BENCH.format(n=n, reps=r), fill_pool, 524288 + 512 * 1024 + 4096,
+                               (lambda: None) if c == "ideal" else (lambda: pebble_hierarchy(pf, mhz)[0]), n)
+                    for c in ("ideal", "real")}
+            e_scan = scan["real"] - scan["ideal"]
+            e_pool = (pool["real"] - pool["ideal"] - e_scan) * n / max(int(same.sum()), 1)
+            # the benchmarks miss L1 on every line; over the corpus a fraction m of these reads do
+            extra = e_scan * f["scanned"] * m_table + max(e_pool, 0) * f["same_length"] * m_pool
+            row[key] = {"scan_extra_per_entry": e_scan, "pool_extra_per_same": e_pool, "extra_cycles": extra}
+        out[name] = row
+    led = json.loads((Cache("cs8").dir / "ledger.json").read_text())[:3]
+    base = led[2]
+    cycles = base["cycles"] + out["pebble"]["prefetch"]["extra_cycles"]
+    seconds = cycles / (MHZ * 1e6)
+    led.append({"part": 9, "label": r"real caches", "seconds": seconds, "cycles": cycles, "clock_mhz": MHZ})
+    CACHE.dir.mkdir(parents=True, exist_ok=True)
+    (CACHE.dir / "ledger.json").write_text(json.dumps(led, indent=1))
+    return {"clocks": out, "m_table": m_table, "m_pool": m_pool, "density": density, "ledger": led,
+            "row2": base, "change": cycles / base["cycles"] - 1,
+            "no_prefetch_change": out["pebble"]["no prefetch"]["extra_cycles"] / base["cycles"]}
+
+
+ITEMS["job"] = compute_job
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)
