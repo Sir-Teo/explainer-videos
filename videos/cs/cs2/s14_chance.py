@@ -105,7 +105,7 @@ class Chance(VoiceoverScene):
         l1 = label(rf"sick: \ {f['sick']}", font_size=22, color=NO).next_to(sick, UP, buff=0.1)
         l2 = label(rf"healthy: \ ${fmt(f['well'])}$", font_size=22, color=DATA).next_to(well, UP, buff=0.1)
         l3 = label(rf"{f['sick_pos']} test positive", font_size=22, color=NO).next_to(sick_pos, LEFT, buff=0.1)
-        l4 = label(rf"{f['well_pos']} test positive", font_size=22, color=HEAD).move_to(well_pos)
+        l4 = label(rf"{f['well_pos']} test positive", font_size=22, color=BACKGROUND).move_to(well_pos)
         cap = note(r"out of $10{,}000$ people \ (column widths exaggerated, heights to scale; \ the yellow strip "
                    r"three times taller)", font_size=18).next_to(VGroup(sick, well), DOWN, buff=0.12)
         q = MathTex(r"P(\text{sick} \mid +) = \frac{99}{99 + 495} = \frac16", font_size=40, color=YES).move_to(

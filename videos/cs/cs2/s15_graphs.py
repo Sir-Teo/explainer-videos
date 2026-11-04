@@ -52,6 +52,8 @@ class Graphs(VoiceoverScene):
         dl = {k: MathTex(str(v), font_size=30, color=NO).next_to(nodes[k], RIGHT if k != "E" else UP, buff=0.12)
               for k, v in degs.items()}
         dl["I"].next_to(nodes["I"], UR, buff=0.08)
+        for m in dl.values():
+            m.add_background_rectangle(color=BACKGROUND, opacity=1, buff=0.04)
         txt = VGroup(*[label(t, font_size=27, color=c) for t, c in (
             (r"walk across every bridge exactly once?", GREY_A),
             (r"each pass through a place uses two bridges: \\ in and out", CTRL),
@@ -87,7 +89,7 @@ class Graphs(VoiceoverScene):
         rng = np.random.default_rng(8)
         n = 9
         ang = np.linspace(0, 2 * PI, n, endpoint=False) + 0.3
-        pos = {k: np.array([2.2 * np.cos(a) - 2.8, 2.0 * np.sin(a) - 0.4, 0]) for k, a in enumerate(ang)}
+        pos = {k: np.array([2.2 * np.cos(a) - 2.8, 1.75 * np.sin(a) + 0.15, 0]) for k, a in enumerate(ang)}
         edges = [(a, b) for a in range(n) for b in range(a + 1, n) if rng.random() < 0.3]
         g = graph(pos, edges)
         deg = {k: sum(1 for e in edges if k in e) for k in range(n)}
@@ -132,7 +134,8 @@ class Graphs(VoiceoverScene):
             (r"exactly one path between any two vertices", YES),
             (r"connected, \ but removing any edge disconnects it", YES),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.0 + UP * 0.4)
-        n_e = label(rf"$9$ vertices, \ $8$ edges", font_size=26, color=CTRL).next_to(g, DOWN, buff=0.3)
+        n_e = label(rf"$9$ vertices, \ $8$ edges", font_size=26, color=CTRL).next_to(eq, DOWN, buff=0.5).align_to(
+            eq, LEFT)
         extra = Line(g.v[4].get_center(), g.v[8].get_center(), buff=0.2, color=NO, stroke_width=4)
         cyc = label(r"one more edge: \ a cycle", font_size=26, color=NO).next_to(n_e, DOWN, buff=0.15)
         cut = label(r"one fewer: \ two pieces", font_size=26, color=HEAD).next_to(cyc, DOWN, buff=0.15)
