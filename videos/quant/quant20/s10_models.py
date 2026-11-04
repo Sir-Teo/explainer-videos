@@ -12,7 +12,7 @@ class Models(VoiceoverScene, ThreeDScene):
     def construct(self):
         m = load("models")
         self.card()
-        self.setup(m)
+        self.task(m)
         self.trees()
         self.roc(m)
         self.table(m)
@@ -28,7 +28,7 @@ class Models(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def setup(self, m):
+    def task(self, m):
         rows = [cmath(r"\mathbb{P}(y_{i,t} = 1)", r"=", r"\frac{1}{1 + e^{-(\beta_0 + \beta^\top x_{i,t})}}", font_size=38,
                       colors={r"\mathbb{P}(y_{i,t} = 1)": LOGIT}),
                 cmath(r"F_K(x)", r"=", r"F_0 + \eta\sum_{k=1}^{K} f_k(x),\quad f_k = \text{a depth-3 tree fitted to the "
