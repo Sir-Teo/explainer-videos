@@ -122,6 +122,21 @@ class Caches(unittest.TestCase):
         self.assertLess(t1, t0 / 2)
 
 
+class Scans(unittest.TestCase):
+    def test_prefix_scan_misses_are_lru(self):
+        from videos.cs.cs9.compute import lru_scan_misses
+
+        rng = random.Random(8)
+        for _ in range(100):
+            ends = [rng.randrange(30) for _ in range(rng.randrange(1, 40))]
+            lines = [l for e in ends for l in range(e + 1)]
+            d = stack_distances(lines)
+            for cap in (1, 3, 8, 20):
+                acc, mis = lru_scan_misses(np.array(ends), cap)
+                self.assertEqual(acc, len(lines))
+                self.assertEqual(mis, round(miss_curve(d, [cap])[0] * len(lines)))
+
+
 class Trace(unittest.TestCase):
     def test_memtrace_counts(self):
         src = P.fib(10)
