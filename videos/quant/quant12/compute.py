@@ -1247,7 +1247,86 @@ def compute_operator_net() -> dict:
                   "n_train_weeks": cut, "n_quotes": int(len(k)), "first_test_day": rows[cut]["day"]})
 
 
-ITEMS = {"surface": compute_surface, "localvol": compute_localvol, "varswap": compute_varswap,
+def compute_density_theory() -> dict:
+    """The research chapter: reading the density from noisy prices.  The second difference
+    q_h(K) = [C(K - h) - 2C(K) + C(K + h)]/h^2 has bias (h^2/12) q''(K) + O(h^4) and, with independent price errors of
+    standard deviation s, variance 6 s^2/h^4, so the mean squared error is minimized at h* = (864 s^2/q''^2)^(1/8) and
+    the best error falls only like s^(1/2).  Checked by simulation on a lognormal; then the size of real price errors,
+    Deribit trades against their own mark prices on the Surface's two days, sets h* for Bitcoin."""
+    from scipy.stats import norm
+
+    F, T, sig = 100.0, 30 / 365, 0.6
+    sd = sig * np.sqrt(T)
+
+    def q(K):  # the lognormal risk-neutral density of F_T, zero rates
+        z = (np.log(K / F) + 0.5 * sd ** 2) / sd
+        return norm.pdf(z) / (K * sd)
+
+    def call(K):
+        return bs.black(F, K, T, sig, 1.0, 1)
+
+    def q2(K, e=1e-3):
+        return (q(K + e) - 2 * q(K) + q(K - e)) / e ** 2
+
+    delta = 0.25
+    hs = delta * np.arange(1, 41)
+    out = {"F": F, "T": T, "sigma": sig, "delta": delta, "h": hs, "at": {}}
+    rng = np.random.default_rng(1212)
+    M = 4000
+    for name, K0 in (("atm", 100.0), ("put_wing", 85.0)):
+        rows = {}
+        for s_ in (0.002, 0.01, 0.05):
+            mse_sim, mse_th, bias_sim = [], [], []
+            qq, qpp = float(q(K0)), float(q2(K0))
+            for h in hs:
+                c = np.array([call(K0 - h), call(K0), call(K0 + h)], float)
+                noise = rng.normal(0, s_, (M, 3))
+                est = ((c[0] + noise[:, 0]) - 2 * (c[1] + noise[:, 1]) + (c[2] + noise[:, 2])) / h ** 2
+                mse_sim.append(float(np.mean((est - qq) ** 2)))
+                bias_sim.append(float((c[0] - 2 * c[1] + c[2]) / h ** 2 - qq))
+                mse_th.append(float((h ** 2 * qpp / 12) ** 2 + 6 * s_ ** 2 / h ** 4))
+            hstar = float((864 * s_ ** 2 / qpp ** 2) ** 0.125)
+            rows[f"{s_:g}"] = {"mse_sim": mse_sim, "mse_th": mse_th, "bias_exact": bias_sim, "h_star": hstar,
+                               "rmse_star": float(np.sqrt((hstar ** 2 * qpp / 12) ** 2 + 6 * s_ ** 2 / hstar ** 4)),
+                               "h_best_sim": float(hs[int(np.argmin(mse_sim))])}
+        out["at"][name] = {"K": K0, "q": float(q(K0)), "q2": float(q2(K0)), "noise": rows}
+    # real price errors: each Deribit trade against the mark price at that moment, in units of 100 of the forward
+    errs, spac = [], []
+    strikes = {}
+    for day in surface.DAYS:
+        for t_ in data.deribit_trades(day):
+            exp, K, cp = surface.parse_instrument(t_["instrument_name"])
+            tau = (exp.timestamp() - t_["timestamp"] / 1e3) / (365 * 86400)
+            if not (20 / 365 <= tau <= 45 / 365):
+                continue
+            if abs(np.log(K / t_["index_price"])) > 0.15:
+                continue
+            errs.append(100 * (t_["price"] - t_["mark_price"]))   # prices are in BTC per BTC: x100 = per 100 of F
+            strikes.setdefault(exp, set()).add(K)
+    errs = np.asarray(errs)
+    mad = float(1.4826 * np.median(np.abs(errs - np.median(errs))))
+    S = float(np.median([t_["index_price"] for t_ in data.deribit_trades(surface.DAYS[0], hours=range(1))]))
+    for e, ks in strikes.items():
+        ks = np.sort(list(ks))
+        near = ks[np.abs(np.log(ks / S)) < 0.1]
+        if len(near) > 3:
+            spac.append(float(np.median(np.diff(near)) / S * 100))
+    sur = surface.build(surface.DAYS[0])
+    j = int(np.argmin(np.abs(np.asarray(sur["T"]) - 30 / 365) + 10 * np.abs(np.asarray(sur["k"]))))
+    atm_iv = float(sur["iv"][j])
+    sd_b = atm_iv * np.sqrt(30 / 365)
+
+    def qb(K):
+        z = (np.log(K / 100) + 0.5 * sd_b ** 2) / sd_b
+        return norm.pdf(z) / (K * sd_b)
+    qpp_b = float((qb(100.001) - 2 * qb(100) + qb(99.999)) / 1e-6)
+    out["btc"] = {"n_trades": int(len(errs)), "noise_sd": mad, "noise_sd_raw": float(np.std(errs)),
+                  "strike_spacing_pct": float(np.median(spac)) if spac else None, "atm_iv": atm_iv,
+                  "q2_atm": qpp_b, "h_star": float((864 * mad ** 2 / qpp_b ** 2) ** 0.125), "S": S}
+    return _json(out)
+
+
+ITEMS = {"density_theory": compute_density_theory, "surface": compute_surface, "localvol": compute_localvol, "varswap": compute_varswap,
          "history": compute_history, "history_ext": compute_history_ext, "volmageddon": compute_volmageddon,
          "termskew": compute_termskew, "dynamics": compute_dynamics, "arbitrage": compute_arbitrage,
          "svi_replay": compute_svi_replay, "ssvi_replay": compute_ssvi_replay, "bbf": compute_bbf,

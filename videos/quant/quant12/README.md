@@ -15,7 +15,7 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 59 minutes)
+## Chapters (about 63 minutes)
 
 * **The shape of fear.** A 3D tour of the Surface (10 December 2025): 254 quotes and an SSVI fit at 0.74 vol points,
   vega-weighted. How we got here (1973–2024), a flat Black–Scholes plane bending into the Surface, the objectives,
@@ -89,8 +89,17 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   and Derman–Kani, Dupire at Paribas, SVI at Merrill Lynch, Andreasen–Huge at Danske Bank); the House's builder.
 * **19. Frontier, 2023–2026.** Operator deep smoothing (ICLR 2025), VolGAN (2024), surfaces as images (Kelly et al.
   2023), no-arbitrage SVI and eSSVI (Martini–Mingone 2022); one network for all weeks, trained here (three seeds).
-* **Outro.** Twelve lines, Rule 12 (the trial counter stays at 310), three desk questions, seven problems, payoffs,
-  references.
+* **For the researcher: reading the density from noisy prices.** The butterfly q̂_h = [C̃(K−h) − 2C̃(K) + C̃(K+h)]/h²
+  with independent price errors of sd s: bias (h²/12)q″ + O(h⁴), variance 6s²/h⁴, best half-width
+  h* = (864s²/q″²)^{1/8}, MSE(h*) = (√6/6)|q″|s, so the error falls like s^{1/2}. Simulation (a lognormal at 60%, 30
+  days, 4,000 draws per width): at the money, s = 0.002/0.01/0.05 per 100 of the forward gives h* = 5.4/8.1/12.1%
+  (simulated best 5.5/8.0/10.0 on a 0.25% grid) and a relative error at h* of 1.0/2.3/5.2%; the put wing at 85
+  agrees. Deribit BTC options, the Surface's two days, 644 trades of 20–45 days within 15% of spot: trade price
+  against mark price, robust sd 0.026 per 100 of the forward; listed strikes 1.08% apart; at the Surface's 46%
+  at-the-money volatility h* = 8.4%, about eight strikes on each side; adjacent strikes would leave noise of ±184% of
+  the density. Three open problems; pause: errors cut 16-fold halve h* (16^{1/4} = 2) and quarter the error.
+* **Outro.** Twelve lines, Rule 12 (the trial counter stays at 310), three desk questions, nine problems (two at
+  qualifying-exam level), payoffs, references.
 
 ## Build it
 
@@ -182,6 +191,24 @@ paper; Deribit DVOL methodology: ch. 11.
 7. **The vol swap's convexity.** √V ≈ √K + (V − K)/(2√K) − (V − K)²/(8K^{3/2}) about K = E V. Taking expectations,
    the linear term vanishes: E√V ≈ √K − Var(V)/(8K^{3/2}). For Bitcoin the variance of variance is large and the
    expansion overshoots (4.1 against a measured 3.0 vol points).
+8. **(qual) The butterfly's bias and variance.** Taylor-expand C(K ± h) to fourth order: the odd terms cancel in
+   C(K−h) − 2C(K) + C(K+h) = h²C″ + (h⁴/12)C⁗ + O(h⁶), and C″ = q, so E q̂_h = q + (h²/12)q″ + O(h⁴). The noise
+   (η₋ − 2η₀ + η₊)/h² has variance (1 + 4 + 1)s²/h⁴. MSE = h⁴q″²/144 + 6s²/h⁴; its derivative vanishes at
+   h⁸ = 864s²/q″², where the two terms are equal, so MSE(h*) = 12s²/h*⁴ = 12s²|q″|/(√864·s) = (√6/6)|q″|s.
+9. **(qual) Correlated errors.** A common error η₀ added to all three prices enters with weights 1 − 2 + 1 = 0 and
+   cancels. With corr(η(K), η(K ± h)) = ρ and corr(η(K−h), η(K+h)) = ρ₂, Var = (s²/h⁴)[6 − 8ρ + 2ρ₂]: positively
+   correlated neighbours help, which is why smooth (correlated) errors such as a stale forward do less harm than
+   independent ones, and why alternating errors (bid–ask bounce, ρ < 0) do more.
+## For the researcher
+
+* **The theorems.** Breeden and Litzenberger (1978); Aït-Sahalia and Lo (1998), "Nonparametric estimation of
+  state-price densities implicit in financial asset prices," *JF* 53; Aït-Sahalia and Duarte (2003), "Nonparametric
+  option pricing under shape restrictions," *J. Econometrics* 116; the second-derivative rate is the standard one of
+  nonparametric statistics (Stone 1982).
+* **Simplifications.** A lognormal truth, zero rates, three equally spaced strikes, independent errors; the Deribit
+  noise is trade against mark, which includes the half-spread and the mark's own error.
+* **Open problems.** Optimal rates under shape constraints and correlated errors; stale and alternating errors; tail
+  inference.
 
 ## Data and reproducibility
 
@@ -202,7 +229,7 @@ paper; Deribit DVOL methodology: ch. 11.
 
 *讲的是方法，不构成投资建议。*
 
-## 章节（约59分钟）
+## 章节（约63分钟）
 
 * **恐惧的形状。** 基准曲面的三维巡览；1973–2024年的来龙去脉；布莱克–斯科尔斯的平面弯成基准曲面。
 * **1. 读懂微笑。** 微笑即风险中性分布的偏度与峰度（Gram–Charlier滑块与Backus–Foresi–Wu公式）；243个周度曲面上的期限结构与偏斜：
@@ -225,6 +252,7 @@ paper; Deribit DVOL methodology: ch. 11.
 * **17. 学习曲面。** VAE回放（2.93对主成分3.59个波动率点）；带无套利惩罚的网络：留出误差更低且无违规，但按vega加权SSVI更好。
 * **18. 业界。** 交易所指数、交易商的量化研究、我们的曲面构建器。
 * **19. 前沿。** 算子深度平滑、VolGAN、把曲面当图像、无套利SVI与eSSVI；“一个网络用于所有周”的小规模复现。
+* **写给研究者：从含噪价格中读出密度。** 独立价格误差标准差为s时，蝶式q̂_h = [C̃(K−h) − 2C̃(K) + C̃(K+h)]/h²的偏差为(h²/12)q″ + O(h⁴)，方差6s²/h⁴，最佳半宽h* = (864s²/q″²)^{1/8}，MSE(h*) = (√6/6)|q″|s，所以误差按s^{1/2}下降。模拟（60%对数正态、30天、每个宽度4,000次抽取）：平值处s = 每100远期0.002/0.01/0.05时h* = 5.4/8.1/12.1%（0.25%网格上模拟最佳为5.5/8.0/10.0），h*处的相对误差为1.0/2.3/5.2%；85处的看跌翼一致。曲面两天的Deribit BTC期权，644笔20–45天、距现价15%以内的成交：成交价相对标记价的稳健标准差为每100远期0.026；挂牌执行价间距1.08%；在曲面平值波动率46%下h* = 8.4%，每边约八个执行价；用相邻执行价会留下相当于密度±184%的噪声。三个开放问题；暂停题：误差降为十六分之一时h*减半（16^{1/4} = 2），误差降为四分之一。
 
 ## 交易台问题与解答
 
@@ -257,9 +285,18 @@ paper; Deribit DVOL methodology: ch. 11.
 7. **波动率互换的凸性。** 在K = E V处展开√V ≈ √K + (V − K)/(2√K) − (V − K)²/(8K^{3/2})。取期望，线性项消失：
    E√V ≈ √K − Var(V)/(8K^{3/2})。比特币的方差的方差很大，展开会高估（4.1对实测的3.0个波动率点）。
 
+8. **（资格考试）蝶式的偏差与方差。** 把C(K ± h)展开到四阶：C(K−h) − 2C(K) + C(K+h) = h²C″ + (h⁴/12)C⁗ + O(h⁶)，奇数项抵消，C″ = q，所以E q̂_h = q + (h²/12)q″ + O(h⁴)。噪声(η₋ − 2η₀ + η₊)/h²的方差为(1 + 4 + 1)s²/h⁴。MSE = h⁴q″²/144 + 6s²/h⁴，导数在h⁸ = 864s²/q″²处为零，此时两项相等，MSE(h*) = (√6/6)|q″|s。
+9. **（资格考试）相关的误差。** 加在三个价格上的共同误差η₀以权重1 − 2 + 1 = 0进入，相互抵消。若corr(η(K), η(K ± h)) = ρ、corr(η(K−h), η(K+h)) = ρ₂，则Var = (s²/h⁴)[6 − 8ρ + 2ρ₂]：正相关的相邻误差有帮助，所以平滑（相关）的误差如陈旧的远期危害较小，而交替的误差（买卖价反弹，ρ < 0）危害更大。
+
 ## 数据与可复现性
 
 * 基准曲面：2025年12月10日和11日的Deribit比特币期权成交。
 * 周度曲面：2021年4月7日至2025年11月26日每个周三的Deribit成交（UTC 00:00–12:00），共243天，无缺失，每一份都记录校验和。
 * 币安BTCUSDT小时数据；Deribit DVOL；FRED的VIXCLS与VXVCLS；雅虎财经^GSPC；Cboe期货交易所的VX结算价（`data.cboe_vx`）。
 * 没有检验任何策略；第12章的预测回归是描述性的。试验计数器保持310。
+
+## 写给研究者
+
+* **定理。** Breeden与Litzenberger（1978）；Aït-Sahalia与Lo（1998），*JF* 53；Aït-Sahalia与Duarte（2003），*J. Econometrics* 116；二阶导数的速率是非参数统计中的标准速率（Stone 1982）。
+* **简化。** 对数正态真值、零利率、三个等间距执行价、独立误差；Deribit的噪声是成交相对标记价，包含半个价差和标记价自身的误差。
+* **开放问题。** 形状约束与相关误差下的最优速率；陈旧与交替的误差；尾部推断。

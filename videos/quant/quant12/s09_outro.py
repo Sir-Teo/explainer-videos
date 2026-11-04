@@ -27,7 +27,10 @@ PROBLEMS = [
     r"\approx 2\,\partial_k\sigma_{imp}$.",
     r"Derive Martin's bound: if $\text{cov}(m_T R_T, R_T) \le 0$, then $\mathbb{E}[R_T] - R_f \ge \text{var}^Q(R_T)/R_f$.",
     r"Derive Gatheral's $g(k)$ from Black's formula written in total variance $w$ and log-moneyness $k$.",
-    r"Show that $K_{vol} \approx \sqrt{K_{var}} - \text{Var}(V)/(8K_{var}^{3/2})$ for a volatility swap.",
+    r"Show that $K_{vol} \approx \sqrt{K_{var}} - \text{Var}(V)/(8K_{var}^{3/2})$ for a volatility swap.",    r"(qual) Show that the butterfly estimate $\hat q_h$ has bias $\frac{h^2}{12}q'' + O(h^4)$ and, with independent price "
+    r"errors of variance $s^2$, variance $6s^2/h^4$; find $h^*$ and show $\operatorname{MSE}(h^*) = \frac{\sqrt6}{6}|q''|s$.",
+    r"(qual) If every price carries the same error $\eta_0$ plus independent errors, show $\eta_0$ cancels in $\hat q_h$; if "
+    r"instead errors at neighbouring strikes have correlation $\rho$, find the variance of $\hat q_h$.",
 ]
 
 
@@ -125,10 +128,11 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=21)
+        ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And seven problems: Dupire's formula, the log contract's strip, SSVI's two conditions, the local skew's "
+            "And nine problems: Dupire's formula, the log contract's strip, SSVI's two conditions, the local skew's "
             "factor of two, Martin's bound, Gatheral's g from Black's formula, and the volatility swap's convexity. "
+            "Two are qualifying-exam problems: the butterfly's bias and variance, and correlated price errors. "
             "Solutions, in English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))

@@ -26,5 +26,6 @@ SCENES = [
     ("s07_learning", "Learning", "17. Learning surfaces"),
     ("s21_industry", "Industry", "18. Who builds surfaces, and who sells them"),
     ("s22_frontier", "Frontier", "19. Frontier, 2023–2026"),
+    ("s23_research", "Research", "For the researcher: reading the density from noisy prices"),
     ("s09_outro", "Outro", "Recap, desk questions, problems"),
 ]
