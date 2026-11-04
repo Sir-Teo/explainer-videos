@@ -289,3 +289,29 @@ GALTON_FAMILIES = [
     (64.0, 63.0, 'M', 64.5), (64.0, 60.0, 'M', 66.0), (64.0, 60.0, 'F', 60.0), (63.0, 63.5, 'F', 68.5), (63.0, 63.5, 'F', 63.5), (62.0, 66.0, 'M', 64.0),
     (62.0, 66.0, 'F', 62.0), (62.0, 66.0, 'F', 61.0), (62.5, 63.0, 'M', 66.5), (62.5, 63.0, 'F', 57.0),
 ]
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Galton's ox (Part 6).  F. Galton, "Vox populi", Nature 75 (7 March 1907), 450-451: 787 legible tickets from the
+# weight-judging competition at the West of England Fat Stock and Poultry Exhibition, Plymouth, 1906.  Galton printed the
+# estimates at every 5 degrees of the "length of array" (the 5th, 10th, ..., 95th percentiles), in lbs; the dressed
+# weight proved to be 1,198 lbs.  The mean, 1,197 lbs, is from his follow-up letter "The ballot-box", Nature 75 (28 March
+# 1907), 509; see K. F. Wallis, "Revisiting Francis Galton's forecasting competition", Statist. Sci. 29 (2014).
+OX_DEGREES = list(range(5, 100, 5))
+OX_ESTIMATES = [1074, 1109, 1126, 1148, 1162, 1174, 1181, 1188, 1197, 1207, 1214, 1219, 1225, 1230, 1236, 1243, 1254, 1267,
+                1293]
+OX_N = 787
+OX_TRUTH = 1198
+OX_MEAN = 1197
+
+# Jacob Bernoulli, Ars Conjectandi (1713), Part IV, ch. 5: an urn with 3 fertile (white) to 2 sterile (black) tokens;
+# to be "morally certain" (odds 1000 to 1) that the observed share lies within 1/50 of 3/5, his bound needs 25,550 draws.
+BERNOULLI = {"p": 0.6, "eps": 0.02, "odds": 1000, "n": 25550}
+
+# Port Pirie, South Australia: annual maximum sea levels (metres), 1923-1987.  S. Coles, An Introduction to Statistical
+# Modeling of Extreme Values (2001), section 3.4.1; data from the ismev / texmex packages (via Rdatasets).
+PORTPIRIE_YEARS = list(range(1923, 1988))
+PORTPIRIE = [4.03, 3.83, 3.65, 3.88, 4.01, 4.08, 4.18, 3.80, 4.36, 3.96, 3.98, 4.69, 3.85, 3.96, 3.85, 3.93, 3.75,
+             3.63, 3.57, 4.25, 3.97, 4.05, 4.24, 4.22, 3.73, 4.37, 4.06, 3.71, 3.96, 4.06, 4.55, 3.79, 3.89, 4.11,
+             3.85, 3.86, 3.86, 4.21, 4.01, 4.11, 4.24, 3.96, 4.21, 3.74, 3.85, 3.88, 3.66, 4.11, 3.71, 4.18, 3.90,
+             3.78, 3.91, 3.72, 4.00, 3.66, 3.62, 4.33, 4.55, 3.75, 4.08, 3.90, 3.88, 3.94, 4.33]

@@ -103,6 +103,7 @@ class Copulas(VoiceoverScene):
         for r in rows:
             if r.width > 12.6:
                 r.width = 12.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hc, DOWN, buff=0.45)  # re-align after clamping
         cite = note(r"see D. MacKenzie \& T. Spears, ``The formula that killed Wall Street?'' (2014)").to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "This mattered in the real world. <bookmark mark='a'/> In 2000 David Li showed how to price bundles of "

@@ -223,3 +223,31 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | simplex, multinomial, Dirichlet distribution | 单纯形，多项分布，狄利克雷分布 |
 | conjugacy | 共轭性 |
 | spurious correlation, compositional data, log-ratio | 伪相关，成分数据，对数比 |
+
+## Glossary (Part 6)
+
+| English | 中文 |
+|---|---|
+| the wisdom of crowds, vox populi | 群体智慧，民意 |
+| Markov's inequality, Chebyshev's inequality, Jensen's inequality | 马尔可夫不等式，切比雪夫不等式，詹森不等式 |
+| convex function | 凸函数 |
+| law of large numbers (weak, strong) | （弱、强）大数定律 |
+| the gambler's fallacy | 赌徒谬误 |
+| convergence in probability, in distribution, almost surely, in mean square | 依概率收敛，依分布收敛，几乎必然收敛，均方收敛 |
+| central limit theorem | 中心极限定理 |
+| Galton board (quincunx) | 高尔顿板（梅花机） |
+| convolution power | 卷积幂 |
+| de Moivre–Laplace theorem, continuity correction | 棣莫弗–拉普拉斯定理，连续性校正 |
+| Lindeberg condition | 林德伯格条件 |
+| Berry–Esseen theorem | 贝里–埃森定理 |
+| delta method, variance-stabilizing transformation | Delta 方法，方差稳定变换 |
+| Slutsky's theorem, continuous mapping theorem | 斯卢茨基定理，连续映射定理 |
+| consistent estimator | 相合估计量 |
+| heavy tail, stable law, generalized CLT | 重尾，稳定分布，广义中心极限定理 |
+| concentration inequality, Hoeffding's inequality, Chernoff bound | 集中不等式，霍夫丁不等式，切尔诺夫界 |
+| union bound | 联合界（布尔不等式） |
+| large deviations, rate function | 大偏差，速率函数 |
+| extreme value theory, GEV distribution | 极值理论，广义极值分布 |
+| Gumbel, Fréchet, Weibull distributions | 冈贝尔分布，弗雷歇分布，韦布尔分布 |
+| return level, return period | 重现水平，重现期 |
+| profile likelihood | 剖面似然 |

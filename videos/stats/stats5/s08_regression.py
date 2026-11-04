@@ -107,6 +107,7 @@ class RegressionToMean(VoiceoverScene):
         for r in rows:
             if r.width > 6.4:
                 r.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.0, 0.2, 0])  # re-align after clamping
         tag = note(r"simulated: 10,000 people, \ skill and luck independent standard normals").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Regression to the mean fools people constantly. <bookmark mark='a'/> Suppose a test score is skill plus "

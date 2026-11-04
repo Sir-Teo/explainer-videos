@@ -680,3 +680,87 @@ class GaussianSlicer:
     def stop(self, *extra):
         for m in [*self.objects(), *extra]:
             m.clear_updaters()
+
+
+class GaltonBoard:
+    """Galton's quincunx (1873; *Natural Inheritance*, 1889): balls fall through ``rows`` rows of pegs, bouncing left
+    or right at each, and pile up in ``rows + 1`` bins.  The bin a ball reaches is the number of rightward bounces,
+    so the pile is a binomial histogram, and with many rows it takes the shape of the normal curve.
+
+    ``board.mobjects()`` gives the pegs, the funnel and the bins; ``board.drops(scene, bits)`` animates balls whose
+    bounces are the rows of ``bits`` (0 = left, 1 = right), stacking each where it lands; ``board.bars(counts)``
+    draws the pile as bars, for when there are too many balls to animate one by one."""
+
+    def __init__(self, rows: int = 12, center=ORIGIN, dx: float = 0.42, dy: float = 0.3, bin_height: float = 2.6,
+                 peg_color=GREY_B, ball_color=None, ball_radius: float = 0.055):
+        self.rows, self.dx, self.dy, self.bin_height = rows, dx, dy, bin_height
+        self.ball_color = ball_color or S.EST
+        self.r = ball_radius
+        c = np.asarray(center, float)
+        height = rows * dy + bin_height
+        self.top = c + UP * (height / 2 - 0.2)
+        self.pegs = VGroup(*[Dot(self.peg(i, j), radius=0.035, color=peg_color) for i in range(rows) for j in range(i + 1)])
+        self.floor = self.top[1] - rows * dy - bin_height
+        self.bin_top = self.top[1] - rows * dy + 0.05
+        xs = [self.bin_x(k) - dx / 2 for k in range(rows + 2)]
+        self.walls = VGroup(*[Line([x, self.floor, 0], [x, self.bin_top, 0], color=GREY_D, stroke_width=1.5) for x in xs])
+        self.base = Line([xs[0], self.floor, 0], [xs[-1], self.floor, 0], color=GREY_C, stroke_width=2)
+        f = self.top + UP * 0.45
+        self.funnel = VGroup(Line(f + LEFT * 0.5 + UP * 0.3, f + LEFT * 0.12, color=GREY_C, stroke_width=2),
+                             Line(f + RIGHT * 0.5 + UP * 0.3, f + RIGHT * 0.12, color=GREY_C, stroke_width=2))
+        self.heights = [0] * (rows + 1)
+
+    def peg(self, i: int, j: int) -> np.ndarray:
+        return self.top + RIGHT * (j - i / 2) * self.dx + DOWN * i * self.dy
+
+    def bin_x(self, k: int) -> float:
+        return float(self.top[0] + (k - self.rows / 2) * self.dx)
+
+    def mobjects(self) -> VGroup:
+        return VGroup(self.funnel, self.pegs, self.walls, self.base)
+
+    def path(self, bits) -> VMobject:
+        """The zig-zag a ball follows: over each peg it meets, then down into its bin, onto the current pile."""
+        pts = [self.top + UP * 0.45]
+        j = 0
+        for i, b in enumerate(bits):
+            pts.append(self.peg(i, j) + UP * (self.r + 0.04))
+            j += int(b)
+        k = j
+        h = self.heights[k]
+        self.heights[k] += 1
+        pts.append(np.array([self.bin_x(k), self.bin_top, 0]))
+        pts.append(np.array([self.bin_x(k), self.floor + self.r * (2 * h + 1), 0]))
+        m = VMobject()
+        m.set_points_as_corners(pts)
+        return m
+
+    def drops(self, scene, bits, run_time: float = 1.6, lag: float = 0.25) -> VGroup:
+        """Animate one ball per row of ``bits``, released ``lag`` seconds apart; returns the balls, left in place."""
+        balls, anims = VGroup(), []
+        for b in bits:
+            p = self.path(b)
+            ball = Dot(p.get_start(), radius=self.r, color=self.ball_color)
+            balls.add(ball)
+            anims.append(MoveAlongPath(ball, p, rate_func=linear, run_time=run_time))
+        if anims:
+            scene.play(LaggedStart(*anims, lag_ratio=lag / run_time))
+        return balls
+
+    def bars(self, counts, scale: float | None = None, color=None, opacity: float = 0.75) -> VGroup:
+        """The pile as bars (one per bin); ``scale`` is screen height per ball (default: tallest bar fills the bin)."""
+        counts = np.asarray(counts, float)
+        scale = scale or (self.bin_height * 0.92 / max(1.0, counts.max()))
+        g = VGroup()
+        for k, c in enumerate(counts):
+            h = max(1e-3, c * scale)
+            g.add(Rectangle(width=self.dx * 0.82, height=h, stroke_width=0, fill_color=color or self.ball_color,
+                            fill_opacity=opacity).move_to([self.bin_x(k), self.floor + h / 2, 0]))
+        g.scale_per_ball = scale
+        return g
+
+    def curve(self, values, scale: float, color=None, stroke_width: float = 3) -> VMobject:
+        """A smooth curve over the bins: ``values`` is a function of the bin index k (float), in balls."""
+        ks = np.linspace(-0.5, self.rows + 0.5, 200)
+        pts = [np.array([self.top[0] + (k - self.rows / 2) * self.dx, self.floor + values(k) * scale, 0]) for k in ks]
+        return VMobject(stroke_color=color or S.TRUTH, stroke_width=stroke_width).set_points_smoothly(pts)
