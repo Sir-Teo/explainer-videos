@@ -52,7 +52,9 @@ reported by the sources named.*
 * **8. Fitting the curve: Nelson–Siegel and Svensson** (2.2). The loadings; four dials sculpting a curve; Svensson fits
   to two days (3.3 and 6.9 bp RMSE) against the Fed's; **lab**: `fit_nss`, betas by regression for each pair of taus.
 * **9. Five decades of the curve** (1.8). The zero curve at every month end since 1972, animated (10-year peak 14.9%,
-  September 1981; low 0.55%, 2020); nine eras side by side (inverted on 16% of days); the whole history as a 3D surface.
+  September 1981; low 0.55%, 2020); nine eras side by side (inverted on 16% of days); the 10-year minus 1-year spread
+  with NBER recessions: an inversion 7 to 34 months before each of seven, and the longest inversion (27 months,
+  2022–24) without one so far; the whole history as a 3D surface.
 * **10. Level, slope and curvature** (2.6). PCA derived; 10,005 daily changes since 1985: 83.9%, 10.6% and 3.4% of
   variance; 20 October 1987 rebuilt from three scores; the same shapes in every decade; forty years as a walk in factor
   space (3D).
@@ -212,7 +214,7 @@ python tools/make.py quant18 --cpu-voice -q m              # English and Chinese
 * **6. 久期与凸性。** Macaulay的平衡点；推导久期、凸性与DV01；30年期债券在±100个基点下（精确值−15.45 / +19.69，久期给出∓17.38）；交易台问题；用一行算术算出硅谷银行的亏损（6.2 × 2.55% × 913亿 = 145亿，对报告的151.6亿）。
 * **7. 关键利率与免疫。** 10年期票据和DV01中性陡峭化交易的关键利率DV01；Redington的三个条件；用5年和30年零息债券为15年期负债融资：任何平行移动都留下盈余，而一个百分点的扭转造成11%的亏损；三维中盈余在（平移，扭转）上的曲面。
 * **8. 拟合曲线：Nelson–Siegel与Svensson。** 载荷；用四个旋钮塑造一条曲线；在两天上的Svensson拟合（均方根误差3.3和6.9个基点）对美联储的曲线；**实验**：`fit_nss`，对每对tau用回归求beta。
-* **9. 收益率曲线的五十年。** 1972年以来每个月末的零息曲线，动画呈现（10年期峰值14.9%，1981年9月；低点0.55%，2020年）；九个时代并排（16%的交易日倒挂）；整段历史作为一张三维曲面。
+* **9. 收益率曲线的五十年。** 1972年以来每个月末的零息曲线，动画呈现（10年期峰值14.9%，1981年9月；低点0.55%，2020年）；九个时代并排（16%的交易日倒挂）；10年期减1年期利差与美国国家经济研究局的衰退：七次衰退之前7到34个月都出现过倒挂，而最长的一次倒挂（27个月，2022–24）至今没有带来衰退；整段历史作为一张三维曲面。
 * **10. 水平、斜率与曲率。** 推导主成分分析；1985年以来10,005个日变化：方差的83.9%、10.6%和3.4%；用三个得分重建1987年10月20日；每个十年都是同样的形状；四十年在因子空间中的游走（三维）。
 * **11. 互换与负的互换利差。** 推导平价互换利率；2000–2016年的互换利差（2008年前10年期约58个基点；30年期自2008年10月24日起为负，10年期自2015年9月15日起为负）；为什么套利没有消失（Jermann，2020）。
 * **12. 国债期货与最便宜可交割券。** 10年期国债期货合约；推导转换因子、发票价格与基差；可交割到2025年12月合约的19只票据，用美联储曲线定价；当10年期收益率越过约5.3%时，最便宜可交割券从最短的票据换成最长的。
