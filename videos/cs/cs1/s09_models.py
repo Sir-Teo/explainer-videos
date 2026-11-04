@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs1.common import (COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, bowl, fmt, load, pebble,
+from videos.cs.cs1.common import (COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, bowl, fmt, say, load, pebble,
                                   pebble_pile, step_counter)
 
 
@@ -236,8 +236,8 @@ class Models(VoiceoverScene, MovingCameraScene):
             "one means multiplying by three, which a second bowl can do as scratch space; testing r one means asking "
             "whether the number is divisible by three. <bookmark mark='c'/> We wrote a compiler that turns any program "
             f"into a two-bowl program; the adder becomes {d['two_len']} instructions. On three plus four, the big bowl "
-            f"starts with {fmt(r['godel_in'])} pebbles and ends with {fmt(r['godel_out'])}, five to the seventh. "
-            f"Three bowls took {r['three_steps']} steps. Two bowls take {fmt(r['steps'])}. Same power; an exponential "
+            f"starts with {say(r['godel_in'])} pebbles and ends with {say(r['godel_out'])}, five to the seventh. "
+            f"Three bowls took {r['three_steps']} steps. Two bowls take {say(r['steps'])}. Same power; an exponential "
             "price."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))

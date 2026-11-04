@@ -113,6 +113,11 @@ def fmt(n) -> str:
     return f"{int(n):,}".replace(",", "{,}")
 
 
+def say(n) -> str:
+    """An integer with thousands separators, for narration (``fmt`` is for TeX)."""
+    return f"{int(n):,}"
+
+
 def live_int(value=0, font_size=32, color=COST) -> Integer:
     """An Integer driven by ``.tracker`` (a ValueTracker): animate the tracker, never the number itself, so a change
     in the number of digits redraws cleanly."""

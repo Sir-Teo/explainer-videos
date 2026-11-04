@@ -1,0 +1,577 @@
+{
+ "title": "计算机科学，从零搭建 · 第1部分：什么是计算？",
+ "chapters": {
+  "Hook": "石子",
+  "Algorithms": "1. 机器出现之前的算法",
+  "Engines": "2. 计算引擎",
+  "Hilbert": "3. 希尔伯特的问题",
+  "Machine": "4. 图灵机",
+  "Programming": "5. 用一张表编程",
+  "Robust": "6. 更多纸带，同样的能力",
+  "Universal": "7. 通用机",
+  "Models": "8. 别的机器，同样的能力",
+  "Thesis": "9. 丘奇–图灵论题",
+  "Diagonal": "10. 问题比程序多",
+  "Halting": "11. 停机问题",
+  "Reductions": "12. 归约",
+  "Beavers": "13. 忙碌海狸",
+  "Series": "14. 我们将要搭建什么",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "4f0ecaa7f155": {
+   "scene": "Hook",
+   "en": "Here is a game for someone who knows nothing about numbers. Two piles of pebbles. <bookmark mark='a'/> One rule. If the piles are different, take away from the bigger pile as many pebbles as there are in the smaller one. <bookmark mark='b'/> When the piles are equal, stop.",
+   "zh": "这是一个给完全不懂数字的人玩的游戏。两堆石子。<bookmark mark='a'/>一条规则：如果两堆不一样多，就从大的那堆里拿走和小的那堆一样多的石子。<bookmark mark='b'/>两堆一样多时，停。"
+  },
+  "4f26e507d6b0": {
+   "scene": "Hook",
+   "en": "Twenty-four and eighteen. The left pile is bigger, so take eighteen pebbles from it. <bookmark mark='a'/> Six and eighteen: now the right is bigger; take six from it. <bookmark mark='b'/> Six and twelve: take six again. <bookmark mark='c'/> Six and six. The piles are equal, and the game is over.",
+   "zh": "24和18。左边那堆大，所以从里面拿走18颗。<bookmark mark='a'/>6和18：现在右边大了，从右边拿走6颗。<bookmark mark='b'/>6和12：再拿走6颗。<bookmark mark='c'/>6和6。两堆一样多，游戏结束。"
+  },
+  "5a6ea5682364": {
+   "scene": "Hook",
+   "en": "The player has computed something. <bookmark mark='a'/> Six is the greatest common divisor of twenty-four and eighteen: the largest number that divides both. <bookmark mark='b'/> This is Euclid's algorithm, written down about twenty-three hundred years ago. And the player needed no idea what a divisor is. They only had to follow the rule.",
+   "zh": "玩家算出了一样东西。<bookmark mark='a'/>6是24和18的最大公约数：能同时整除两者的最大的数。<bookmark mark='b'/>这就是欧几里得算法，大约两千三百年前写下来的。而玩家根本不需要知道什么是约数，只需要遵守规则。"
+  },
+  "221b58dedac1": {
+   "scene": "Hook",
+   "en": "Moving pebbles by rule is an old way of thinking. <bookmark mark='a'/> The Latin word for a pebble is calculus. Roman merchants reckoned with pebbles on lined counting boards: <bookmark mark='b'/> a pebble on the lowest line counts one, on the next line ten, then a hundred, then a thousand. <bookmark mark='c'/> To calculate was, literally, to move the stones.",
+   "zh": "按规则移动石子，是一种很古老的思考方式。<bookmark mark='a'/>拉丁语里，石子叫作calculus。罗马商人在画着横线的算板上用石子计数：<bookmark mark='b'/>最下面一条线上的石子算1，往上一条算10，再往上算100，再往上算1000。<bookmark mark='c'/>“计算”，字面意思就是移动石头。"
+  },
+  "bdc84a808e73": {
+   "scene": "Hook",
+   "en": "In 1928 the mathematician David Hilbert, with Wilhelm Ackermann, asked whether all of mathematics could be done this way. <bookmark mark='a'/> Is there a mechanical procedure, a set of rules for moving symbols like pebbles, <bookmark mark='b'/> that takes any precisely stated mathematical claim and decides, in a finite number of steps, whether it is true? <bookmark mark='c'/> Such a procedure would settle every open problem at once, by turning the crank. <bookmark mark='d'/> Hilbert called it the decision problem, the Entscheidungsproblem, and he expected the answer to be yes.",
+   "zh": "1928年，数学家大卫·希尔伯特和威廉·阿克曼一起提问：能不能用这种方式完成全部数学？<bookmark mark='a'/>有没有一种机械的程序，一套像摆弄石子一样摆弄符号的规则，<bookmark mark='b'/>对任何一个表述精确的数学命题，都能在有限步之内判定它是否为真？<bookmark mark='c'/>这样的程序只要摇一摇手柄，就能一下子解决所有悬而未决的问题。<bookmark mark='d'/>希尔伯特称之为判定问题，Entscheidungsproblem，他期待答案是“能”。"
+  },
+  "f2fcdfd034ab": {
+   "scene": "Hook",
+   "en": "Eight years later, a twenty-three-year-old in Cambridge, Alan Turing, sent off his answer. <bookmark mark='a'/> The answer was no. No such procedure can exist. <bookmark mark='b'/> But to prove that, Turing first had to say exactly what a mechanical procedure is. His definition was a machine: a tape of symbols, a head that reads and writes one of them at a time, and a finite table of rules. <bookmark mark='c'/> He invented it to show what machines cannot do. It became the blueprint of every computer built since.",
+   "zh": "八年后，剑桥一位23岁的年轻人阿兰·图灵寄出了他的答案。<bookmark mark='a'/>答案是“不能”。这样的程序不可能存在。<bookmark mark='b'/>但为了证明这一点，图灵必须先说清楚，机械的程序到底是什么。他给出的定义是一台机器：一条写着符号的纸带，一个每次读写一个符号的读写头，和一张有限的规则表。<bookmark mark='c'/>他发明这台机器，是为了说明机器做不到什么。结果它成了此后每一台计算机的蓝图。"
+  },
+  "c2f6533a93d2": {
+   "scene": "Hook",
+   "en": "This is Part 1 of Computer Science, Built: fifty-five lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
+   "zh": "这是《计算机科学，从零搭建》的第1部分。全系列55讲，从这里出发，从“什么是计算”这个问题开始，用一种逻辑门搭出一台能工作的计算机，一直爬到支撑互联网的那些系统。<bookmark mark='a'/>这一部分讲：机器出现之前的算法，巴贝奇和洛夫莱斯的计算引擎；希尔伯特的问题，以及图灵机，我们会亲手给它编程；为什么增加纸带或换别的设计都不会增加能力，以及能运行任何其他机器的通用机；λ演算、计数器机和元胞自动机，以及丘奇–图灵论题；为什么问题比程序多，停机问题，还有忙碌海狸。最后，是这个系列将要搭建的东西。"
+  },
+  "e26c9b47db11": {
+   "scene": "Algorithms",
+   "en": "Chapter one. Algorithms before machines.",
+   "zh": "第1章。机器出现之前的算法。"
+  },
+  "32572a7461ea": {
+   "scene": "Algorithms",
+   "en": "Euclid's rule from the opening, with a short cut. Instead of taking the smaller pile away again and again, take it away as many times as it fits at once, and keep the remainder. <bookmark mark='a'/> Here it is on a picture. A rectangle, one thousand and seventy-one by four hundred and sixty-two. <bookmark mark='b'/> Cut off as many squares of side four hundred and sixty-two as fit: two of them. <bookmark mark='c'/> What is left is a strip one hundred and forty-seven wide. That is the remainder: one thousand and seventy-one is two times four hundred and sixty-two, plus one hundred and forty-seven.",
+   "zh": "开场那条欧几里得规则，加一个捷径：不要一次又一次地拿走小的那堆，而是一次拿走它能装下的最多份，留下余数。<bookmark mark='a'/>把它画成图。一个长方形，1071乘462。<bookmark mark='b'/>切下尽可能多的边长462的正方形：能切两个。<bookmark mark='c'/>剩下一条宽147的长条。这就是余数：1071等于2乘462，再加147。"
+  },
+  "3a0e2810c703": {
+   "scene": "Algorithms",
+   "en": "Now the strip is the new rectangle. Cut squares of side one hundred and forty-seven from it: three fit. <bookmark mark='a'/> The remainder is a sliver twenty-one high. <bookmark mark='b'/> Cut squares of side twenty-one from the sliver. <bookmark mark='c'/> Seven of them fit exactly, with nothing left over. <bookmark mark='d'/> So squares of side twenty-one tile the sliver, and therefore the strip, and therefore the whole rectangle. Twenty-one is the greatest common divisor of one thousand and seventy-one and four hundred and sixty-two.",
+   "zh": "现在这条长条就是新的长方形。从里面切边长147的正方形：能切3个。<bookmark mark='a'/>余下的是一条高21的窄条。<bookmark mark='b'/>从窄条里切边长21的正方形。<bookmark mark='c'/>正好切7个，什么也不剩。<bookmark mark='d'/>所以边长21的正方形能铺满窄条，因而铺满长条，因而铺满整个长方形。21就是1071和462的最大公约数。"
+  },
+  "f4d884e47b26": {
+   "scene": "Algorithms",
+   "en": "Why does this work for any two numbers? <bookmark mark='a'/> One step of the rule writes a as q copies of b, plus a remainder r. <bookmark mark='b'/> Take any number d that divides both a and b. Then it divides a minus q times b, which is r. <bookmark mark='c'/> And the other way: anything dividing b and r divides q times b plus r, which is a. <bookmark mark='d'/> So the pair a, b and the pair b, r have exactly the same common divisors, and so the same greatest one. Each step changes the numbers but not the answer. <bookmark mark='e'/> When the remainder reaches zero, the answer is in plain sight: the greatest common divisor of twenty-one and zero is twenty-one.",
+   "zh": "为什么对任何两个数都成立？<bookmark mark='a'/>规则的一步把a写成q份b，加上余数r。<bookmark mark='b'/>任取一个同时整除a和b的数d，它就整除a减q乘b，也就是r。<bookmark mark='c'/>反过来，任何同时整除b和r的数，也整除q乘b加r，也就是a。<bookmark mark='d'/>所以数对a、b和数对b、r的公约数完全相同，最大公约数也就相同。每一步都改变了数，却没有改变答案。<bookmark mark='e'/>当余数变成0，答案就摆在眼前：21和0的最大公约数是21。"
+  },
+  "40eae2421a4d": {
+   "scene": "Algorithms",
+   "en": "That kind of argument has a name. Something the procedure never changes is an invariant. Show it holds at the start, and that every step preserves it, and it holds when the procedure stops. Invariants are how we will prove circuits, algorithms and whole distributed systems correct, all through this series.",
+   "zh": "这种论证有个名字。程序从不改变的东西，叫作不变量。证明它在开始时成立，并且每一步都保持它，那么程序停下时它也成立。在整个系列里，我们都会用不变量来证明电路、算法，乃至整个分布式系统是正确的。"
+  },
+  "746973f3c18f": {
+   "scene": "Algorithms",
+   "en": "And why does it ever stop? <bookmark mark='a'/> Each remainder is smaller than the number it came from: four hundred and sixty-two, one hundred and forty-seven, twenty-one, zero. <bookmark mark='b'/> In general, b is bigger than the first remainder, which is bigger than the second, and so on, and none of them can be negative. <bookmark mark='c'/> A decreasing sequence of natural numbers cannot go on forever, so the procedure stops after at most b steps. A quantity that shrinks and cannot go below zero is the standard way to prove that a loop ends. We will meet it again in Part 2, and in Part 54, when we prove programs correct by machine.",
+   "zh": "那它为什么一定会停？<bookmark mark='a'/>每个余数都比它的来源小：462、147、21、0。<bookmark mark='b'/>一般地，b大于第一个余数，第一个余数大于第二个，依此类推，而且没有一个能是负数。<bookmark mark='c'/>自然数的递减序列不可能无限延续，所以程序最多b步就停。一个不断缩小、又不能低于0的量，是证明循环会结束的标准方法。我们会在第2部分再见到它，在第54部分用机器证明程序正确时还会再见到。"
+  },
+  "c75d0fc70d89": {
+   "scene": "Algorithms",
+   "en": "How many steps does it take? Here is every pair of numbers up to two hundred and thirty-three, coloured by the number of steps, computed. <bookmark mark='a'/> Along the diagonal, one step. Near the axes, few. The bright rays are the hard cases. <bookmark mark='b'/> The very worst cases sit at consecutive Fibonacci numbers, where every quotient is one and the remainders shrink as slowly as they possibly can: the hardest pair here, 233 and 144, takes 12 steps. <bookmark mark='c'/> In 1844 Gabriel Lamé turned that into a theorem: the number of steps is at most five for each decimal digit of the smaller number. It is one of the first proofs of how long an algorithm takes, and Part 16 makes that question the centre of a whole subject.",
+   "zh": "要走多少步？这里是233以内的每一对数，按所需步数上色，全部算出来的。<bookmark mark='a'/>对角线上，一步。靠近坐标轴，步数很少。那些明亮的射线是困难的情形。<bookmark mark='b'/>最坏的情形落在相邻的斐波那契数上，那里每个商都是1，余数缩小得尽可能慢：这里最难的一对，233和144，要走12步。<bookmark mark='c'/>1844年，加布里埃尔·拉梅把它变成了一条定理：步数不超过较小那个数的十进制位数的5倍。这是最早的关于算法要花多长时间的证明之一，第16部分会把这个问题变成一整门学科的中心。"
+  },
+  "4daed8257e97": {
+   "scene": "Algorithms",
+   "en": "The word algorithm itself comes from a name. <bookmark mark='a'/> Around eight hundred and twenty-five, in Baghdad, Muhammad ibn Musa al-Khwarizmi wrote the book that taught Europe to calculate with Hindu-Arabic numerals. In Latin his name became Algoritmi, and a rule for calculating became an algorithm. <bookmark mark='b'/> For more than a thousand years that was a word, not a definition: a finite list of precise instructions that a clerk could carry out step by step without understanding them, and that stops with the answer. <bookmark mark='c'/> Good enough to use. Not good enough to prove anything about. How precise is precise? Who decides what needs understanding? How much may one step do? Those questions only mattered once someone wanted to prove that no algorithm exists for a problem. That is where this story is going.",
+   "zh": "“算法”这个词本身来自一个人名。<bookmark mark='a'/>大约公元825年，在巴格达，穆罕默德·伊本·穆萨·花拉子米写了一本书，后来教会了欧洲用印度–阿拉伯数字计算。他的名字在拉丁语里变成了Algoritmi，于是一条计算规则就叫作algorithm，算法。<bookmark mark='b'/>一千多年里，它只是一个词，而不是一个定义：一张有限的、精确的指令清单，一个职员不必理解，也能一步步执行，并且会带着答案停下来。<bookmark mark='c'/>拿来用，够了；拿来证明什么，不够。精确要精确到什么程度？谁来决定哪些需要理解？一步可以做多少事？只有当有人想证明某个问题根本不存在算法时，这些问题才变得要紧。而这正是这个故事要去的地方。"
+  },
+  "d11085030016": {
+   "scene": "Engines",
+   "en": "Chapter two. The engines.",
+   "zh": "第2章。计算引擎。"
+  },
+  "54bd9e65d12d": {
+   "scene": "Engines",
+   "en": "For centuries, anyone who navigated a ship or aimed a cannon used printed tables: logarithms, tides, the positions of the stars. <bookmark mark='a'/> They were computed by hand, by people whose job title was computer, and they were full of mistakes. <bookmark mark='b'/> In 1821 Charles Babbage and John Herschel spent a day checking two clerks' calculations against each other and kept finding errors. Babbage later remembered saying: I wish to God these calculations had been executed by steam.",
+   "zh": "几百年里，凡是驾船航海或者瞄准大炮的人，都要用印好的数表：对数、潮汐、星辰的位置。<bookmark mark='a'/>这些表是手算的，算的人职业名称就叫“计算员”，computer，而表里错误百出。<bookmark mark='b'/>1821年，查尔斯·巴贝奇和约翰·赫歇尔花了一整天，把两位职员的计算互相核对，不断发现错误。巴贝奇后来回忆，他当时说：我真希望这些计算是用蒸汽完成的。"
+  },
+  "d688d3b64838": {
+   "scene": "Engines",
+   "en": "Babbage's idea was that many tables need only addition. Take his favourite demonstration, the polynomial x squared plus x plus forty-one. <bookmark mark='a'/> Tabulate it: forty-one, forty-three, forty-seven. Next to each value, the difference to the next one: two, four. And the difference of the differences: two. <bookmark mark='b'/> For any quadratic, the second differences are constant. So once the first few rows are in place, every new row comes from two additions: add the constant to the difference, then add the difference to the value. No multiplication, no thought: a job for gears.",
+   "zh": "巴贝奇的想法是：许多数表只需要加法。拿他最喜欢的演示来说，多项式x平方加x加41。<bookmark mark='a'/>把它列成表：41、43、47。每个值旁边写上它和下一个值的差：2、4。再写差的差：2。<bookmark mark='b'/>对任何二次多项式，二阶差分都是常数。所以只要前几行就位，每一个新行都只需两次加法：把常数加到差上，再把差加到值上。不用乘法，不用思考：这是齿轮的活。"
+  },
+  "5147216e15f1": {
+   "scene": "Engines",
+   "en": "Watch the engine turn. The two flows down into the difference column, the difference flows into the value column, and a new value appears: fifty-three, sixty-one, seventy-one. <bookmark mark='a'/> Faster. Every value up to x equals thirty-nine is a prime number, which is why the polynomial was famous. <bookmark mark='b'/> At x equals forty it gives sixteen hundred and eighty-one, which is forty-one squared. The engine does not care. It only adds.",
+   "zh": "看引擎转动。2流进差分那一列，差流进数值那一列，一个新值出现了：53、61、71。<bookmark mark='a'/>再快一点。直到x等于39，每一个值都是素数，这正是这个多项式出名的原因。<bookmark mark='b'/>到x等于40，它给出1681，也就是41的平方。引擎不在乎，它只管做加法。"
+  },
+  "a6659442c2bc": {
+   "scene": "Engines",
+   "en": "Babbage built a working piece of his Difference Engine. Then he designed something far more ambitious. <bookmark mark='a'/> The Analytical Engine had a store, holding a thousand numbers of forty digits each, <bookmark mark='b'/> and a mill that did arithmetic on numbers brought from the store. <bookmark mark='c'/> It was controlled by punched cards, borrowed from Jacquard's loom, which wove patterns from chains of cards. <bookmark mark='d'/> And crucially, the engine could skip or repeat cards depending on a result: it could branch and loop. <bookmark mark='e'/> In today's words: memory, a processor, a program, and output. It was never built; Babbage died in 1871 still revising the design. A Difference Engine was finally built from his drawings by the Science Museum in London, in 1991. It works.",
+   "zh": "巴贝奇造出了差分机能工作的一部分。然后他设计了一样雄心大得多的东西。<bookmark mark='a'/>分析机有一个存储器，能存一千个40位的数，<bookmark mark='b'/>还有一个运算器，对从存储器取来的数做算术。<bookmark mark='c'/>它由打孔卡片控制，这是从雅卡尔织布机借来的，织布机用一串卡片织出花纹。<bookmark mark='d'/>最关键的是，分析机可以根据某个结果跳过或重复卡片：它能分支，也能循环。<bookmark mark='e'/>用今天的话说：内存、处理器、程序和输出。它从来没有造出来；巴贝奇1871年去世时还在修改设计。直到1991年，伦敦科学博物馆才按他的图纸造出了一台差分机。它能工作。"
+  },
+  "3d39f4b5ac55": {
+   "scene": "Engines",
+   "en": "In 1843 Ada Lovelace translated an Italian article about the Analytical Engine, and added seven notes of her own, three times as long as the article. <bookmark mark='a'/> The last, Note G, works out in full how the engine would compute the Bernoulli numbers, the coefficients of this series, which appear all over mathematics. <bookmark mark='b'/> They obey a recurrence: each one follows from all the ones before. So the program is a loop, with variables in the store reused on every pass. <bookmark mark='c'/> Here they are, computed exactly. Her table ends at the one she called B seven, which today is written B eight: minus one thirtieth. It is the first published program for a general-purpose machine, written for a computer that did not exist.",
+   "zh": "1843年，埃达·洛夫莱斯翻译了一篇介绍分析机的意大利文章，并加上了她自己写的七条注释，篇幅是原文的三倍。<bookmark mark='a'/>最后一条，注释G，完整地推演了分析机如何计算伯努利数，也就是这个级数的系数，它们在数学里随处可见。<bookmark mark='b'/>伯努利数满足一个递推关系：每一个都由前面所有的数得出。所以程序是一个循环，存储器里的变量每一轮都被重复使用。<bookmark mark='c'/>这里是精确算出来的结果。她的表格止于她称为B7的那一个，今天写作B8：负三十分之一。这是为通用机器发表的第一个程序，写给一台当时并不存在的计算机。"
+  },
+  "c4b26668e90f": {
+   "scene": "Engines",
+   "en": "Lovelace saw further than the arithmetic. <bookmark mark='a'/> The engine weaves algebraic patterns, she wrote, the way the loom weaves flowers and leaves. Its operations need not be on numbers at all: <bookmark mark='b'/> if the relations of musical sounds could be expressed in its notation, it might compose elaborate pieces of music. Symbols, not just numbers. <bookmark mark='c'/> And she drew a line: the engine originates nothing; it does whatever we know how to order it to do. Turing would answer her objection by name, a century later. <bookmark mark='d'/> But notice what neither Babbage nor Lovelace asked: what can such orders do at all? What is the set of everything a machine like this could ever compute? That question came from somewhere else entirely: from the foundations of mathematics.",
+   "zh": "洛夫莱斯看得比算术更远。<bookmark mark='a'/>她写道，分析机编织代数的图案，就像织布机编织花朵和叶子。它的运算对象根本不必是数：<bookmark mark='b'/>如果乐音之间的关系能用它的记号表达，它也许能创作精致复杂的乐曲。是符号，而不只是数。<bookmark mark='c'/>她也划了一条线：分析机不创造任何东西；我们知道怎样命令它做什么，它就做什么。一个世纪后，图灵会点名回应她的这个反对意见。<bookmark mark='d'/>但请注意，巴贝奇和洛夫莱斯都没有问：这样的命令究竟能做到什么？这样一台机器所能计算的一切，构成一个怎样的集合？这个问题来自一个完全不同的地方：数学的基础。"
+  },
+  "e9e2df43cea2": {
+   "scene": "Hilbert",
+   "en": "Chapter three. Hilbert's question.",
+   "zh": "第3章。希尔伯特的问题。"
+  },
+  "a7da5aed103c": {
+   "scene": "Hilbert",
+   "en": "The dream is older than any machine. <bookmark mark='a'/> Around 1685 Gottfried Leibniz imagined a language in which every idea could be written exactly, and a calculus for reasoning in it. <bookmark mark='b'/> If philosophers disagreed, he wrote, they would not argue. They would sit down with their slates and say: let us calculate.",
+   "zh": "这个梦想比任何机器都古老。<bookmark mark='a'/>大约1685年，戈特弗里德·莱布尼茨设想了一种语言，每一个思想都能在其中被精确地写下，还有一套用它来推理的演算。<bookmark mark='b'/>他写道，如果哲学家们意见不合，他们不必争吵。他们会拿起石板坐下来，说：让我们算一算。"
+  },
+  "0a1aee732e1c": {
+   "scene": "Hilbert",
+   "en": "Two centuries later, logic became exact enough to try. <bookmark mark='a'/> In 1879 Gottlob Frege published the first complete formal language for logic. A statement is a string of symbols. A proof is a list of statements in which every line follows from earlier lines by a small set of fixed rules. <bookmark mark='b'/> All men are mortal; Socrates is a man; so, by instantiating the first premise and applying modus ponens, Socrates is mortal. <bookmark mark='c'/> Whether each line follows can be checked by rule, with no understanding: a clerk, or a machine, could check a proof. <bookmark mark='d'/> The question is whether a machine could also find one.",
+   "zh": "两个世纪后，逻辑终于精确到可以一试了。<bookmark mark='a'/>1879年，戈特洛布·弗雷格发表了第一套完整的逻辑形式语言。一个命题是一串符号。一个证明是一列命题，其中每一行都按照一小组固定规则，从前面的行推出。<bookmark mark='b'/>凡人皆有一死；苏格拉底是人；于是，把第一个前提实例化，再用肯定前件式，苏格拉底会死。<bookmark mark='c'/>每一行是否成立，都可以按规则检查，不需要理解：一个职员，或者一台机器，就能检查一个证明。<bookmark mark='d'/>问题是，机器能不能也找到一个证明。"
+  },
+  "746e0054e544": {
+   "scene": "Hilbert",
+   "en": "In the 1920s David Hilbert, the most influential mathematician of his time, set out a programme to put all of mathematics on such foundations. He wanted three things. <bookmark mark='a'/> Completeness: every true statement can be proved. <bookmark mark='b'/> Consistency: no contradiction can be proved. <bookmark mark='c'/> And decidability: a mechanical procedure that, given any statement, decides whether it can be proved. <bookmark mark='d'/> In his 1928 textbook with Wilhelm Ackermann the third wish became a precise problem: give a procedure that takes any formula of first-order logic and decides, in finitely many steps, whether it is valid. They called it the main problem of mathematical logic.",
+   "zh": "20世纪20年代，当时最有影响力的数学家大卫·希尔伯特提出了一个纲领，要把全部数学建立在这样的基础上。他想要三样东西。<bookmark mark='a'/>完备性：每个真命题都能被证明。<bookmark mark='b'/>一致性：不能证明出矛盾。<bookmark mark='c'/>还有可判定性：一个机械的程序，给它任何命题，它都能判定这个命题能否被证明。<bookmark mark='d'/>在他和威廉·阿克曼1928年合写的教科书里，第三个愿望成了一个精确的问题：给出一个程序，它接受任何一阶逻辑公式，在有限步内判定它是否普遍有效。他们称之为数理逻辑的主要问题。"
+  },
+  "3a3d5f126c40": {
+   "scene": "Hilbert",
+   "en": "The first two wishes did not survive long, and the timing was cruel. <bookmark mark='a'/> On the seventh of September 1930, at a conference in Königsberg, a twenty-four-year-old Kurt Gödel announced that arithmetic contains true statements it cannot prove. <bookmark mark='b'/> The next day, in the same city, Hilbert gave a radio address that ended: we must know, we will know. <bookmark mark='c'/> Gödel's idea, in one picture: he built, inside arithmetic, a statement G that says of itself, I have no proof. <bookmark mark='d'/> If G had a proof, it would be false, and the system would prove something false. So, if the system is consistent, G has no proof, which is exactly what it says. G is true and unprovable. Completeness is impossible. We will prove this properly in Part 25, using what this part builds.",
+   "zh": "前两个愿望没过多久就破灭了，时机还格外残酷。<bookmark mark='a'/>1930年9月7日，在柯尼斯堡的一次会议上，24岁的库尔特·哥德尔宣布：算术中存在它自己无法证明的真命题。<bookmark mark='b'/>第二天，在同一座城市，希尔伯特发表了一次广播讲话，结尾是：我们必须知道，我们必将知道。<bookmark mark='c'/>哥德尔的想法，用一张图来说：他在算术内部构造了一个命题G，它谈论自己，说：我没有证明。<bookmark mark='d'/>如果G有证明，它就是假的，系统就证明了一个假命题。所以，只要系统是一致的，G就没有证明，而这恰恰是它所说的。G为真，却不可证。完备性是不可能的。我们会在第25部分，用这一部分搭建的东西，正式证明它。"
+  },
+  "ec394c8badf7": {
+   "scene": "Hilbert",
+   "en": "Gödel had not answered the third question, the decision problem, and there was a reason it was hard. <bookmark mark='a'/> To show that a procedure exists, you write one down and check it works. <bookmark mark='b'/> To show that none exists, you must say exactly what counts as a procedure, every possible procedure, and then rule them all out. Nobody had a definition of a mechanical procedure. <bookmark mark='c'/> In 1936, within weeks of each other, two people supplied one. In Princeton, Alonzo Church, with a calculus of functions. In Cambridge, Alan Turing, with a machine. Both answered Hilbert: no. We start with Turing's, because his definition is the one you can build.",
+   "zh": "哥德尔没有回答第三个问题，也就是判定问题，而它难是有原因的。<bookmark mark='a'/>要证明某个程序存在，你把它写出来，检查它能用就行。<bookmark mark='b'/>要证明程序不存在，你必须精确地说明什么算作程序，涵盖每一个可能的程序，然后把它们全部排除。当时没有人有机械程序的定义。<bookmark mark='c'/>1936年，前后只隔了几个星期，两个人各自给出了一个定义。在普林斯顿，阿隆佐·丘奇，用一套函数的演算。在剑桥，阿兰·图灵，用一台机器。两人都回答了希尔伯特：不能。我们从图灵的定义开始，因为他的定义是你能动手造出来的。"
+  },
+  "410e4268d720": {
+   "scene": "Machine",
+   "en": "Chapter four. Turing's machine.",
+   "zh": "第4章。图灵机。"
+  },
+  "0eb66c87ecda": {
+   "scene": "Machine",
+   "en": "Turing's definition came from looking at a person computing. <bookmark mark='a'/> Computing, he wrote, is normally done by writing symbols on paper, and we may suppose the paper is divided into squares, like a child's arithmetic book. <bookmark mark='b'/> What does the person actually do? <bookmark mark='c'/> They write symbols from some finite stock. <bookmark mark='d'/> They attend to only a few squares at a time; with a little more bookkeeping, to one. <bookmark mark='e'/> They have only finitely many states of mind that matter: remembering a carry, say. <bookmark mark='f'/> And each step is simple: change the symbol they are looking at, move their attention to a nearby square, and perhaps change their state of mind.",
+   "zh": "图灵的定义，来自观察一个正在计算的人。<bookmark mark='a'/>他写道，计算通常是在纸上写符号，我们可以设想纸被分成方格，就像小孩的算术本。<bookmark mark='b'/>这个人实际上在做什么？<bookmark mark='c'/>他写的符号来自某个有限的符号库。<bookmark mark='d'/>他每次只注意少数几个方格；多记一点账，就可以只注意一个。<bookmark mark='e'/>他只有有限多种要紧的心理状态：比如，记着一个进位。<bookmark mark='f'/>每一步都很简单：改掉他正看着的那个符号，把注意力移到附近的方格，也许再改变一下心理状态。"
+  },
+  "220fec12c6d6": {
+   "scene": "Machine",
+   "en": "Turing then argued that nothing essential is lost if we simplify further. The page can be one long row of squares, a tape, unlimited in both directions. The person's attention becomes a head, sitting on one square. Their state of mind becomes one of finitely many states. What remains is a machine.",
+   "zh": "图灵接着论证，再进一步简化，也不会丢掉任何本质的东西。纸页可以是一长排方格，一条纸带，向两个方向都无限延伸。人的注意力变成一个读写头，停在一个方格上。他的心理状态变成有限多个状态之一。剩下的，就是一台机器。"
+  },
+  "3159c8aced3f": {
+   "scene": "Machine",
+   "en": "Here it is, written precisely. A Turing machine has a finite set of states, including a start state and one or more halting states, and a finite alphabet of tape symbols, including a blank. Its whole behaviour is one table, the transition function. <bookmark mark='a'/> In state q, reading symbol a, the table gives three things: a symbol to write, a direction to move, and the next state. <bookmark mark='b'/> A configuration is a snapshot: the state, the tape, and where the head is. Running the machine means applying the table to get from each configuration to the next, until it reaches a halting state, if it ever does.",
+   "zh": "把它精确地写出来。一台图灵机有一个有限的状态集合，其中有一个开始状态和一个或多个停机状态；还有一个有限的纸带符号表，其中有一个空白符号。它的全部行为就是一张表：转移函数。<bookmark mark='a'/>在状态q下，读到符号a，这张表给出三样东西：要写的符号，移动的方向，以及下一个状态。<bookmark mark='b'/>格局是一张快照：状态、纸带，以及读写头的位置。运行这台机器，就是反复用这张表从一个格局走到下一个格局，直到进入停机状态，如果它会进入的话。"
+  },
+  "136c2f614b7f": {
+   "scene": "Machine",
+   "en": "Let's program one. Numbers in unary: three is one one one. <bookmark mark='a'/> On the tape, three, a plus sign, two. The head starts on the first square, in state A. <bookmark mark='b'/> The program is five rules. <bookmark mark='c'/> In state A, walk right over the ones. At the plus sign, write a one instead, and switch to state B. That joins the two numbers, with one one too many. <bookmark mark='d'/> In state B, walk right to the end, step back, and in state C erase the last one, and halt.",
+   "zh": "我们来编一个程序。用一进制表示数：3就是111。<bookmark mark='a'/>纸带上写着3、一个加号、2。读写头从第一个方格开始，处于状态A。<bookmark mark='b'/>程序是五条规则。<bookmark mark='c'/>在状态A，向右走过所有的1。遇到加号，改写成1，切换到状态B。这就把两个数接在了一起，只是多了一个1。<bookmark mark='d'/>在状态B，向右走到头，退回一格，在状态C里擦掉最后一个1，然后停机。"
+  },
+  "f7dea4e61e05": {
+   "scene": "Machine",
+   "en": "Now run it, one step at a time. Each step: find the rule for the current state and symbol, write, move, change state. <bookmark mark='a'/> After 8 steps the machine halts with five ones on the tape. Three plus two is five, and nothing in the machine knows what a number is.",
+   "zh": "现在运行它，一次一步。每一步：找到当前状态和符号对应的规则，写，移动，换状态。<bookmark mark='a'/>8步之后，机器停机，纸带上有五个1。三加二等于五，而机器里没有任何部分知道数是什么。"
+  },
+  "fce879384510": {
+   "scene": "Machine",
+   "en": "There is a better way to see a whole run at once. Draw each configuration as a row of coloured squares, and stack the rows, so that time runs down the page. <bookmark mark='a'/> The head's square is outlined. You can read the program off the picture: a march to the right across the ones, the plus turning into a one, the turn at the end, the last one erased. <bookmark mark='b'/> This space-time diagram will let us look at runs of millions of steps, where watching one step at a time would take years.",
+   "zh": "有一种更好的办法，能一眼看到整个运行过程。把每个格局画成一行彩色方格，把这些行叠起来，让时间沿着页面向下流。<bookmark mark='a'/>读写头所在的方格加了边框。你能从图上读出程序：向右穿过所有的1，加号变成1，到头折返，擦掉最后一个1。<bookmark mark='b'/>有了这种时空图，我们就能看几百万步的运行；要是一步一步地看，得看好几年。"
+  },
+  "1a526d6bf175": {
+   "scene": "Machine",
+   "en": "One more machine, the simplest possible. One rule: in state A, reading a blank, write a blank, move right, stay in state A. <bookmark mark='a'/> It never reaches a halting state. It walks right forever, and its space-time diagram is a diagonal line that never ends. <bookmark mark='b'/> A Turing machine may halt, or it may run forever, and the table alone does not announce which. That gap, between running and halting, is where the whole second half of this part lives.",
+   "zh": "再看一台机器，最简单的那种。一条规则：在状态A，读到空白，写空白，右移，留在状态A。<bookmark mark='a'/>它永远不会进入停机状态。它永远向右走，它的时空图是一条永不结束的对角线。<bookmark mark='b'/>图灵机可能停机，也可能永远运行下去，而光看规则表，并不会告诉你是哪一种。运行和停机之间的这道缝隙，就是这一部分整个后半段所在的地方。"
+  },
+  "4851fbdb3bda": {
+   "scene": "Programming",
+   "en": "Chapter five. Programming with a table.",
+   "zh": "第5章。用一张表编程。"
+  },
+  "d4c214fec696": {
+   "scene": "Programming",
+   "en": "A harder program. Given a string of zeros and ones, decide whether it is a palindrome: the same read forwards and backwards. <bookmark mark='a'/> Zero one one zero, yes. One zero zero one zero zero one, yes. Zero one one one, no. <bookmark mark='b'/> A plan a person might follow: erase the first symbol and remember it; run to the far end; check that the last symbol is the same, and erase it; run back; repeat until nothing is left. <bookmark mark='c'/> The tricky word is remember. The machine has no memory except the tape and its state.",
+   "zh": "一个难一点的程序。给定一串0和1，判定它是不是回文：正着读和反着读一样。<bookmark mark='a'/>0110，是。1001001，是。0111，不是。<bookmark mark='b'/>一个人可能会这样做：擦掉第一个符号并记住它；跑到另一头；检查最后一个符号是否相同，然后擦掉它；跑回来；重复，直到什么都不剩。<bookmark mark='c'/>难办的词是“记住”。机器除了纸带和自己的状态，没有别的记忆。"
+  },
+  "e31456b3ebec": {
+   "scene": "Programming",
+   "en": "So the memory goes into the state. Here is the whole program as a diagram: each circle is a state, each arrow a rule, labelled with the symbol read, and what to write and which way to move. <bookmark mark='a'/> State have zero means: I erased a zero, and I am carrying that fact to the far end. Have one is its twin. <bookmark mark='b'/> At the end, want zero checks that the last symbol is a zero, erases it, and hands over to back, which returns to the start. <bookmark mark='c'/> Any mismatch goes to reject. Running out of symbols goes to accept. Eight working states, eighteen rules.",
+   "zh": "所以记忆就放进状态里。这是用图画出来的整个程序：每个圆圈是一个状态，每个箭头是一条规则，标着读到的符号、要写什么、往哪边走。<bookmark mark='a'/>状态have0的意思是：我擦掉了一个0，正把这件事带到另一头。have1是它的孪生兄弟。<bookmark mark='b'/>到了另一头，want0检查最后一个符号是不是0，擦掉它，交给back，back再回到开头。<bookmark mark='c'/>任何不匹配都转到reject。符号用完了就转到accept。八个工作状态，十八条规则。"
+  },
+  "e28487317de3": {
+   "scene": "Programming",
+   "en": "Run it on zero one one zero. Watch the lit state carry the erased symbol across the tape. <bookmark mark='a'/> First pass: erase the zero, carry it to the end, match it, erase it, come back. <bookmark mark='b'/> Second pass: the same for the ones. <bookmark mark='c'/> Nothing left: accept, after 15 steps.",
+   "zh": "在0110上运行它。看那个亮起的状态，如何带着被擦掉的符号穿过纸带。<bookmark mark='a'/>第一趟：擦掉0，带到另一头，匹配，擦掉，回来。<bookmark mark='b'/>第二趟：对两个1做同样的事。<bookmark mark='c'/>什么都不剩了：接受，共15步。"
+  },
+  "9fd4050d9222": {
+   "scene": "Programming",
+   "en": "How long does this take? Here is a longer run as a space-time diagram: an input of twenty-four symbols, time running down. <bookmark mark='a'/> The head zig-zags across the whole remaining input on every pass, and the passes get shorter by two each time: a long sawtooth. <bookmark mark='b'/> Measured on inputs of every length up to sixty, the number of steps grows like the square of the length: about one half of n squared. Double the input, and the machine takes four times as long.",
+   "zh": "这要花多长时间？这是一次更长的运行，画成时空图：输入有24个符号，时间向下流。<bookmark mark='a'/>每一趟，读写头都要在剩下的整段输入上来回走一遍，而每一趟比上一趟短两格：一条长长的锯齿。<bookmark mark='b'/>在长度不超过60的每一种输入上实测，步数随长度的平方增长：大约是n平方的一半。输入长一倍，机器就要花四倍的时间。"
+  },
+  "fcaecdbd1d4b": {
+   "scene": "Programming",
+   "en": "Is that just a clumsy program? No. <bookmark mark='a'/> In 1965 Frederick Hennie proved that every one-tape machine that recognizes palindromes needs a number of steps proportional to n squared on some inputs. <bookmark mark='b'/> The idea: the first half of the input has to be compared with the second half. That is n over two bits of information that must cross the middle of the tape. <bookmark mark='c'/> But the only thing that crosses the middle is the head, carrying its state, which is a constant number of bits. So the head must cross the middle many times, and far from the middle, each crossing costs a long walk. <bookmark mark='d'/> It is one of the first lower bounds in complexity theory: a proof that something cannot be done quickly on this machine. Part 27 builds this into a whole theory, communication complexity. And the obvious way around it is to give the machine a second tape.",
+   "zh": "这只是程序写得笨吗？不是。<bookmark mark='a'/>1965年，弗雷德里克·亨尼证明：任何识别回文的单带图灵机，在某些输入上都需要与n平方成正比的步数。<bookmark mark='b'/>思路是：输入的前一半必须和后一半作比较。这是n/2个比特的信息，必须穿过纸带的中点。<bookmark mark='c'/>但能穿过中点的只有读写头，它带着自己的状态，而状态只有常数个比特。所以读写头必须多次穿过中点，而在远离中点的地方，每一次穿越都要走很长的路。<bookmark mark='d'/>这是复杂性理论中最早的下界之一：证明某件事在这台机器上无法快速完成。第27部分会把它发展成一整套理论，通信复杂性。而绕过它最显然的办法，是给机器第二条纸带。"
+  },
+  "20a773095a44": {
+   "scene": "Robust",
+   "en": "Chapter six. More tapes, same power.",
+   "zh": "第6章。更多纸带，同样的能力。"
+  },
+  "994539c5b939": {
+   "scene": "Robust",
+   "en": "Give the machine a second tape, with its own head. A rule now reads the symbols under both heads, writes on both tapes, and moves both heads, each left or right. <bookmark mark='a'/> Palindromes become easy. Copy the input onto tape two. Rewind tape one. Then compare: tape one read forwards, tape two read backwards, both at once.",
+   "zh": "给机器第二条纸带，带着它自己的读写头。现在一条规则读取两个读写头下的符号，在两条纸带上写，并移动两个读写头，各自向左或向右。<bookmark mark='a'/>回文变得很容易。把输入复制到第二条纸带上。把第一条纸带倒回去。然后比较：第一条正着读，第二条反着读，同时进行。"
+  },
+  "665241b298f7": {
+   "scene": "Robust",
+   "en": "On zero one one zero it takes 15 steps, the same as one tape. But the zig-zag is gone: each head crosses the input a fixed number of times.",
+   "zh": "在0110上，它要走15步，和单带一样。但锯齿不见了：每个读写头只穿过输入固定的几次。"
+  },
+  "3af583632e0b": {
+   "scene": "Robust",
+   "en": "Measured on every length up to sixty: with one tape the steps grow like n squared over two. With two tapes, exactly three n plus three. <bookmark mark='a'/> So a second tape makes the machine faster, and Hennie's theorem says no one-tape program can catch up. Does it also make the machine more powerful: can two tapes compute something one tape cannot?",
+   "zh": "在不超过60的每一种长度上实测：单带时，步数像n平方的一半那样增长。双带时，恰好是3n加3。<bookmark mark='a'/>所以第二条纸带让机器更快，而亨尼的定理说，没有任何单带程序能追上。那它是否也让机器更强大：两条纸带能不能算出一条纸带算不出的东西？"
+  },
+  "442d13a94216": {
+   "scene": "Robust",
+   "en": "No. Here is why. <bookmark mark='a'/> Take any configuration of a two-tape machine. <bookmark mark='b'/> Write both tapes onto a single tape, side by side, separated by a marker symbol. Mark where each head is with a dot: a dotted zero is just one more symbol in a bigger alphabet. <bookmark mark='c'/> To simulate one step, the single head sweeps right across everything, collecting the dotted symbols in its state, <bookmark mark='d'/> then sweeps back, writing the new symbols and moving the dots. If a dot runs into a separator, the tape is shifted along to make room.",
+   "zh": "不能。原因如下。<bookmark mark='a'/>任取双带机器的一个格局。<bookmark mark='b'/>把两条纸带并排写到一条纸带上，中间用一个标记符号隔开。用一个点标出每个读写头的位置：带点的0只不过是更大的符号表里的又一个符号。<bookmark mark='c'/>为了模拟一步，单个读写头先向右扫过所有内容，把带点的符号收集到自己的状态里，<bookmark mark='d'/>然后扫回来，写下新的符号并移动那些点。如果一个点撞上了分隔符，就把纸带往后挪，腾出地方。"
+  },
+  "133685e1f05d": {
+   "scene": "Robust",
+   "en": "Each simulated step costs a sweep over everything written so far, and after t steps that is at most about t cells. So t steps become about t squared. <bookmark mark='a'/> Here is the simulation, run for real on the palindrome machine: its steps grow quadratically, about 1.3 times the square of the two-tape step count at length sixty. Slower, much slower; but it computes exactly the same answers.",
+   "zh": "每模拟一步，都要扫过目前写下的全部内容，而t步之后，内容最多约t格。所以t步变成了大约t的平方步。<bookmark mark='a'/>这是在回文机器上真正运行的模拟：它的步数按平方增长，在长度60时，大约是双带步数平方的1.3倍。慢，慢得多；但它算出的答案完全一样。"
+  },
+  "5e0dac75d370": {
+   "scene": "Robust",
+   "en": "The same trick works for every variation anyone proposed. <bookmark mark='a'/> A tape infinite in both directions: fold it into two tracks. More symbols: write each one as a few binary digits. A stay-put move: step right and back. Several tapes: tracks and dots. A two-dimensional tape, or memory you can jump around in by address: lay it out in a row. <bookmark mark='b'/> Each extra feature can be simulated by the plain machine, at worst with a polynomial slowdown. The set of things that can be computed does not move.",
+   "zh": "同样的技巧，对人们提出过的每一种变体都管用。<bookmark mark='a'/>向两个方向无限延伸的纸带：把它对折成两条轨道。更多的符号：把每个符号写成几位二进制数。原地不动的移动：右移一格再移回来。多条纸带：轨道加上点。二维纸带，或者可以按地址跳来跳去的内存：把它排成一行。<bookmark mark='b'/>每一种附加功能，都能被普通的图灵机模拟，最坏也只是多项式级的减速。可计算的东西，一样也没有变。"
+  },
+  "2ccde4724196": {
+   "scene": "Robust",
+   "en": "One more variation, and the most important. Let the table offer several possible moves in some configurations, and let the machine take any of them. A run is no longer a line but a tree of possibilities. <bookmark mark='a'/> Say the machine accepts if any branch accepts. <bookmark mark='b'/> This still computes nothing new: a deterministic machine can explore the tree, level by level, until it finds an accepting branch. But the tree can have two to the t branches after t steps, and the obvious simulation takes exponential time. Whether that exponential can always be avoided is the most famous open question in computer science, P versus NP: Part 26.",
+   "zh": "再看一种变体，也是最重要的一种。让规则表在某些格局下提供好几种可能的动作，机器可以任选其一。一次运行就不再是一条线，而是一棵可能性之树。<bookmark mark='a'/>规定：只要有任何一个分支接受，机器就接受。<bookmark mark='b'/>这仍然算不出任何新东西：一台确定性机器可以一层一层地探索这棵树，直到找到接受的分支。但t步之后，这棵树可能有2的t次方个分支，显然的模拟要花指数时间。这个指数能否总是避免，是计算机科学中最著名的未解问题，P对NP：第26部分。"
+  },
+  "9a6ef42b4831": {
+   "scene": "Universal",
+   "en": "Chapter seven. The universal machine.",
+   "zh": "第7章。通用机。"
+  },
+  "631d36788bf8": {
+   "scene": "Universal",
+   "en": "Here is the busy beaver with two states from earlier, as a table: four rules. A Turing machine's table is finite. So it can be written down as a string of symbols. <bookmark mark='a'/> One way: number the states in unary, A is one, B is one one, halting is the empty string. Write each rule as its state, the symbol read, the symbol written, the direction, and the next state, separated by bars, and end each rule with a hash. <bookmark mark='b'/> The first rule, A reading zero, write one, move right, go to B, becomes one, bar, zero, bar, one, bar, R, bar, one one, hash. <bookmark mark='c'/> And so on for all four. The whole machine is now this string. Call it angle-bracket M: the description of M.",
+   "zh": "这是前面那台两状态的忙碌海狸，写成表：四条规则。图灵机的规则表是有限的，所以它能写成一串符号。<bookmark mark='a'/>一种写法：用一进制给状态编号，A是1，B是11，停机是空串。每条规则依次写出它的状态、读到的符号、写下的符号、方向和下一个状态，用竖线隔开，每条规则以井号结尾。<bookmark mark='b'/>第一条规则，A读到0，写1，右移，转到B，就变成：1，竖线，0，竖线，1，竖线，R，竖线，11，井号。<bookmark mark='c'/>四条都这样写。整台机器现在就是这一串符号。把它记作尖括号M：M的描述。"
+  },
+  "2397d0dc36fb": {
+   "scene": "Universal",
+   "en": "Now the key idea. <bookmark mark='a'/> A universal machine, U, takes two inputs: the description of any machine M, and an input w. It does exactly what M would do on w. It halts if and only if M halts, and it leaves the same output. <bookmark mark='b'/> In symbols: U of M and w equals M of w. Turing built one in the same 1936 paper, and his impossibility proofs depend on it. <bookmark mark='c'/> Here is ours, written for this series and tested against every machine it runs: 14 states, 29 rules, and three tapes. The first holds the description. The second is M's tape. The third holds M's current state, in unary.",
+   "zh": "现在是关键的想法。<bookmark mark='a'/>通用机U接受两个输入：任意一台机器M的描述，和一个输入w。它做的事和M在w上做的完全一样。M停机，它才停机，并且留下同样的输出。<bookmark mark='b'/>用符号写：U作用于M的描述和w，等于M作用于w。图灵在1936年的同一篇论文里就造出了一台，他的不可能性证明都依赖于它。<bookmark mark='c'/>这是我们的这一台，为本系列编写，并在它运行的每一台机器上测试过：14个状态，29条规则，三条纸带。第一条存放描述。第二条是M的纸带。第三条用一进制存放M的当前状态。"
+  },
+  "cdcfb868b819": {
+   "scene": "Universal",
+   "en": "Watch it work. At the start, tape three says M is in state one, A, and M's head on tape two reads a blank. <bookmark mark='a'/> U walks along the description, comparing each rule's state with tape three, one stroke at a time. The first rule matches: state A, reading zero. <bookmark mark='b'/> So U applies it to tape two: write a one, move right. Then it copies the rule's next state, one one, onto tape three, and rewinds. That was one step of M.",
+   "zh": "看它工作。开始时，第三条纸带说M处在状态1，也就是A，而第二条纸带上M的读写头读到空白。<bookmark mark='a'/>U沿着描述走，把每条规则的状态和第三条纸带一笔一笔地比较。第一条规则匹配：状态A，读到0。<bookmark mark='b'/>于是U把它用到第二条纸带上：写1，右移。然后把规则的下一个状态11复制到第三条纸带上，再倒带。这就是M的一步。"
+  },
+  "142b3ee6a5b9": {
+   "scene": "Universal",
+   "en": "Faster now. Every step of M costs U a scan through the description. <bookmark mark='a'/> M takes six steps and halts with four ones on its tape. U takes 374 steps to do the same, and halts with the same four ones on tape two. A machine that can do what any machine does, given its description.",
+   "zh": "加快速度。M的每一步，都要U把描述扫一遍。<bookmark mark='a'/>M走6步就停机，纸带上有四个1。U要走374步才做到同样的事，并且停机时第二条纸带上也是那四个1。一台只要给出描述，就能做任何机器所做之事的机器。"
+  },
+  "ff3237705b0b": {
+   "scene": "Universal",
+   "en": "Universality has a price, and we can measure it. <bookmark mark='a'/> For the two-state busy beaver, U runs about 62 times slower than M. For three states, about 106 times. For four, about 130. <bookmark mark='b'/> Every simulated step scans the description, so the slowdown grows with the size of M. Real universal machines are built to make that price small, and much of this series is about how: the stored-program computer in Part 6, and the interpreters, compilers and virtual machines of Parts 13 to 15.",
+   "zh": "通用是有代价的，而且我们能测出来。<bookmark mark='a'/>对两状态的忙碌海狸，U大约比M慢62倍。三个状态，大约106倍。四个状态，大约130倍。<bookmark mark='b'/>每模拟一步都要扫描描述，所以减速随M的大小增长。真正的通用机就是为了把这个代价降到很小而设计的，这个系列的很大一部分讲的就是怎么做到：第6部分的存储程序计算机，以及第13到第15部分的解释器、编译器和虚拟机。"
+  },
+  "fe6eb55667c4": {
+   "scene": "Universal",
+   "en": "This is the idea that created software. <bookmark mark='a'/> Before it, a new task meant a new machine: one for tides, one for logarithms, one for ciphers. <bookmark mark='b'/> After it, one machine, and a description for each task. The description is data: it can be stored, copied, sent, and even computed by another program. <bookmark mark='c'/> The processor in your phone is a universal machine, and every app is a description. Emulators, the Java virtual machine and Python's interpreter are universal machines written in software, running on universal machines made of silicon.",
+   "zh": "正是这个想法创造了软件。<bookmark mark='a'/>在它之前，一项新任务就意味着一台新机器：一台算潮汐，一台算对数，一台算密码。<bookmark mark='b'/>在它之后，只要一台机器，每项任务一份描述。描述就是数据：它可以被存储、复制、发送，甚至可以由另一个程序计算出来。<bookmark mark='c'/>你手机里的处理器是一台通用机，每个应用都是一份描述。模拟器、Java虚拟机和Python解释器，是用软件写成的通用机，运行在用硅做成的通用机上。"
+  },
+  "0eb3f61bb64f": {
+   "scene": "Models",
+   "en": "Chapter eight. Other machines, same power.",
+   "zh": "第8章。别的机器，同样的能力。"
+  },
+  "ef5bb49ee94a": {
+   "scene": "Models",
+   "en": "Church's answer to Hilbert looked nothing like a machine. <bookmark mark='a'/> His lambda calculus has only three kinds of expression: a variable; a function, lambda x dot M, meaning the function that takes x to M; and an application, M applied to N. <bookmark mark='b'/> And one rule of computation, beta reduction: a function applied to an argument becomes its body, with the argument substituted for the variable. <bookmark mark='c'/> There are no numbers. You build them. The number n is the function that applies f to x, n times: zero applies it no times, three applies it three times.",
+   "zh": "丘奇对希尔伯特的回答，看起来一点也不像机器。<bookmark mark='a'/>他的λ演算只有三种表达式：变量；函数，λx点M，意思是把x映到M的函数；以及应用，M作用于N。<bookmark mark='b'/>还有一条计算规则，β归约：函数作用于参数，就变成它的函数体，并把参数代入变量。<bookmark mark='c'/>这里没有数。数要你自己造。数n就是把f作用于x共n次的函数：0一次也不作用，3作用三次。"
+  },
+  "aac89e894f02": {
+   "scene": "Models",
+   "en": "Addition is a function too. PLUS takes m and n, and returns the numeral that applies f n times, then m more times. <bookmark mark='a'/> Now compute two plus three by reduction alone. Each line comes from the one above by one beta step, on the highlighted part; this is the leftmost, outermost choice, which our reducer always takes. <bookmark mark='b'/> After 6 steps there is nothing left to reduce: lambda f x, f applied five times. Five. Multiplication and powers work the same way, with a few more steps. Church showed that numerals, pairs, lists, recursion, anything, can be built from functions alone.",
+   "zh": "加法也是一个函数。PLUS接受m和n，返回这样一个数：先把f作用n次，再作用m次。<bookmark mark='a'/>现在只用归约来计算二加三。每一行都由上一行在高亮部分做一次β归约得到；这是最左、最外的选择，我们的归约器总是这样选。<bookmark mark='b'/>6步之后，再没有可以归约的了：λf x，f作用五次。五。乘法和乘方也是一样，只是步数多一些。丘奇证明了，数、序对、列表、递归，任何东西，都能只用函数搭出来。"
+  },
+  "0b02eb88eb2d": {
+   "scene": "Models",
+   "en": "Here is a third definition, and the opening's pebbles come back. <bookmark mark='a'/> A counter machine has a few bowls of pebbles, and a numbered list of instructions of only two kinds: add a pebble to a bowl; or, if a bowl is not empty, take a pebble out and go to one instruction, and if it is empty, go to another. <bookmark mark='b'/> This five-line program moves every pebble from bowl one into bowl zero, then every pebble from bowl zero into bowl two. It computes r zero plus r one. <bookmark mark='c'/> Three plus four:",
+   "zh": "这是第三种定义，开场的石子又回来了。<bookmark mark='a'/>计数器机有几个装石子的碗，和一张编了号的指令清单，指令只有两种：往一个碗里放一颗石子；或者，如果一个碗不空，取出一颗石子并转到某条指令，如果它是空的，就转到另一条。<bookmark mark='b'/>这段五行的程序，先把1号碗里的石子全部移到0号碗，再把0号碗里的石子全部移到2号碗。它计算的是r0加r1。<bookmark mark='c'/>三加四："
+  },
+  "1170ab34fa50": {
+   "scene": "Models",
+   "en": "pebble by pebble, 24 steps, and bowl two holds seven. A person moving pebbles by these rules could compute anything a Turing machine can, given enough bowls, pebbles and patience. Minsky proved it.",
+   "zh": "一颗一颗地，24步，2号碗里有七颗。一个人按这些规则摆弄石子，只要碗、石子和耐心足够，就能算出图灵机能算的任何东西。明斯基证明了这一点。"
+  },
+  "945732d68faf": {
+   "scene": "Models",
+   "en": "In fact two bowls are enough. <bookmark mark='a'/> The trick is to pack all the counters into one number: two to the r zero, times three to the r one, times five to the r two. <bookmark mark='b'/> Adding one to r one means multiplying by three, which a second bowl can do as scratch space; testing r one means asking whether the number is divisible by three. <bookmark mark='c'/> We wrote a compiler that turns any program into a two-bowl program; the adder becomes 42 instructions. On three plus four, the big bowl starts with 648 pebbles and ends with 78,125, five to the seventh. Three bowls took 24 steps. Two bowls take 578,473. Same power; an exponential price.",
+   "zh": "事实上，两个碗就够了。<bookmark mark='a'/>诀窍是把所有计数器打包成一个数：2的r0次方，乘3的r1次方，乘5的r2次方。<bookmark mark='b'/>给r1加一，就是乘以3，用第二个碗当草稿就能做到；检查r1，就是问这个数能不能被3整除。<bookmark mark='c'/>我们写了一个编译器，能把任何程序变成双碗程序；那个加法器变成了42条指令。在三加四上，大碗开始时有648颗石子，结束时有78125颗，也就是5的7次方。三个碗用了24步。两个碗要578473步。能力相同；代价是指数级的。"
+  },
+  "6ac49f0366bb": {
+   "scene": "Models",
+   "en": "Even simpler. A row of cells, each black or white. At every tick, each cell looks at itself and its two neighbours and changes colour by a fixed table of eight cases. <bookmark mark='a'/> This table is called Rule 110. Start it from a single black cell and draw each generation under the last. <bookmark mark='b'/> Structure appears: triangles, and gliders that crawl across the background and collide. <bookmark mark='c'/> In 2004 Matthew Cook proved that those collisions can be arranged to simulate any Turing machine. Eight cases, and nothing else, is universal.",
+   "zh": "还可以更简单。一排格子，每个是黑或白。每一拍，每个格子看看自己和左右两个邻居，按一张固定的八种情形的表改变颜色。<bookmark mark='a'/>这张表叫作规则110。从一个黑格子开始，把每一代画在上一代下面。<bookmark mark='b'/>结构出现了：三角形，还有在背景上爬行、相互碰撞的滑翔机。<bookmark mark='c'/>2004年，马修·库克证明，这些碰撞可以被安排来模拟任何图灵机。八种情形，别无其他，就是通用的。"
+  },
+  "91dee9883e60": {
+   "scene": "Models",
+   "en": "In two dimensions, John Conway's Game of Life: a cell lives on with two or three live neighbours, and comes to life with exactly three. <bookmark mark='a'/> This pattern, Bill Gosper's glider gun, fires a stream of gliders forever. Streams of gliders can carry signals, and collisions can do logic. The Game of Life is universal too.",
+   "zh": "在二维，约翰·康威的生命游戏：一个活格子有两个或三个活邻居就继续活着，一个空格子恰好有三个活邻居就会诞生。<bookmark mark='a'/>这个图案是比尔·高斯珀的滑翔机枪，它永远不停地发射滑翔机。滑翔机流可以传递信号，碰撞可以做逻辑运算。生命游戏也是通用的。"
+  },
+  "2badad5a4e75": {
+   "scene": "Models",
+   "en": "Machines with tapes; functions alone; recursive definitions, which Gödel and Kleene studied; bowls of pebbles; a row of cells; a grid of cells. <bookmark mark='a'/> Each was proposed independently, each looks completely different, and each can simulate every other one. They all compute exactly the same functions. <bookmark mark='b'/> So will Pebble, the computer we build in Part 6, and so does the laptop you are watching on, apart from its finite memory.",
+   "zh": "带纸带的机器；只有函数；哥德尔和克莱尼研究的递归定义；装石子的碗；一排格子；一片格子。<bookmark mark='a'/>每一种都是独立提出的，每一种看起来都完全不同，而每一种都能模拟其余每一种。它们计算的函数完全相同。<bookmark mark='b'/>我们在第6部分搭建的计算机Pebble也是如此，你正用来看视频的电脑也是如此，只是它的内存有限。"
+  },
+  "8c727d7cfc51": {
+   "scene": "Thesis",
+   "en": "Chapter nine. The Church-Turing thesis.",
+   "zh": "第9章。丘奇–图灵论题。"
+  },
+  "64c1ec482f80": {
+   "scene": "Thesis",
+   "en": "Church and Turing had each given a precise definition of computing. <bookmark mark='a'/> On one side, the intuitive idea from chapter one: what a clerk can do by following rules. On the other, a mathematical object: what a Turing machine can do. <bookmark mark='b'/> The Church-Turing thesis says they are the same. Anything that can be computed by any mechanical procedure at all can be computed by a Turing machine. <bookmark mark='c'/> Notice what kind of statement this is. It cannot be proved, because one side of the equals sign is not mathematics. It is a claim that a definition is the right one.",
+   "zh": "丘奇和图灵各自给出了计算的精确定义。<bookmark mark='a'/>一边，是第1章那个直观的想法：一个职员按规则能做的事。另一边，是一个数学对象：图灵机能做的事。<bookmark mark='b'/>丘奇–图灵论题说，两者是一回事。凡是能用任何机械程序计算的，都能用图灵机计算。<bookmark mark='c'/>注意这是什么样的命题。它无法被证明，因为等号的一边不是数学。它断言的是：某个定义是对的。"
+  },
+  "fb5b4f3f263c": {
+   "scene": "Thesis",
+   "en": "Three reasons. <bookmark mark='a'/> First, every attempt to define computation, made independently by different people with different intuitions, gives exactly the same set of functions. <bookmark mark='b'/> Second, Turing's analysis starts from what a person computing actually does, and arrives at his machine, step by step. That is what convinced Gödel, who had been sceptical of Church's version. <bookmark mark='c'/> Third, ninety years later, after every programming language and every computer ever built, nothing computes a single function a Turing machine cannot. <bookmark mark='d'/> Gödel called Turing's definition precise and unquestionably adequate.",
+   "zh": "三个理由。<bookmark mark='a'/>第一，不同的人凭着不同的直觉，各自独立地尝试定义计算，每一次得到的都是完全相同的函数集合。<bookmark mark='b'/>第二，图灵的分析从一个正在计算的人实际做的事出发，一步一步，得到了他的机器。正是这一点说服了哥德尔，而他原本对丘奇的版本心存怀疑。<bookmark mark='c'/>第三，九十年过去了，经历了每一种编程语言和每一台造出来的计算机，没有任何东西算出过一个图灵机算不出的函数。<bookmark mark='d'/>哥德尔称图灵的定义精确，而且无可置疑地恰当。"
+  },
+  "3a542277ddfc": {
+   "scene": "Thesis",
+   "en": "It is easy to read too much into it. <bookmark mark='a'/> It says nothing about speed: a Turing machine can compute what your laptop computes, only perhaps far more slowly. <bookmark mark='b'/> It says nothing about minds: it is a claim about procedures, which people can follow, not about everything people do. <bookmark mark='c'/> And it says nothing, by itself, about physics. Whether every physical process can be simulated by a Turing machine is a different question.",
+   "zh": "人们很容易对它过度解读。<bookmark mark='a'/>它没有说速度：图灵机能算你电脑算的东西，只是可能慢得多。<bookmark mark='b'/>它没有说心智：它谈的是程序，是人可以照着做的步骤，而不是人所做的一切。<bookmark mark='c'/>它本身也没有说物理。每一个物理过程能否被图灵机模拟，是另一个问题。"
+  },
+  "e1bb07419a96": {
+   "scene": "Thesis",
+   "en": "In fact there are three theses, and they get bolder. <bookmark mark='a'/> The Church-Turing thesis, about procedures, is almost universally accepted. <bookmark mark='b'/> The physical version says every physical process can be simulated by a Turing machine. Most physicists believe it, but it is an open claim about the universe. <bookmark mark='c'/> The extended version says more: that every reasonable machine can be simulated with at most a polynomial slowdown, like the quadratic cost of extra tapes we measured. It is the foundation of complexity theory. And it may be false. Quantum computers can factor large numbers in polynomial time by Shor's algorithm, and nobody knows how to do that on an ordinary machine. We will build one, simulated, in Part 53. <bookmark mark='d'/> What matters for now is that computable has become a precise word. And once a word is precise, you can prove things about everything it covers: including that some things are not computable at all.",
+   "zh": "事实上有三个论题，一个比一个大胆。<bookmark mark='a'/>关于程序的丘奇–图灵论题，几乎被普遍接受。<bookmark mark='b'/>物理版本说，每一个物理过程都能被图灵机模拟。大多数物理学家相信它，但它是关于宇宙的一个未决的断言。<bookmark mark='c'/>扩展版本说得更多：每一台合理的机器，都能以至多多项式级的减速被模拟，就像我们测到的多纸带的平方代价那样。它是复杂性理论的基础。而它可能是错的。量子计算机可以用肖尔算法在多项式时间内分解大数，而没有人知道如何在普通机器上做到这一点。我们会在第53部分搭一台，用模拟的方式。<bookmark mark='d'/>眼下要紧的是：“可计算”已经成了一个精确的词。而一个词一旦精确，你就能对它涵盖的一切证明东西：包括有些东西根本不可计算。"
+  },
+  "acbf2d4b2efe": {
+   "scene": "Diagonal",
+   "en": "Chapter ten. More problems than programs.",
+   "zh": "第10章。问题比程序多。"
+  },
+  "3c61a0e63ee0": {
+   "scene": "Diagonal",
+   "en": "To compare problems with programs, we need to compare infinite sets, and the tool is Georg Cantor's, from the 1870s. Two sets have the same size if their elements can be paired off, one to one, with none left over. <bookmark mark='a'/> The natural numbers and the even numbers: pair n with two n. So there are as many even numbers as numbers. <bookmark mark='b'/> Pairs of numbers, and so fractions: lay them out in a grid and walk the diagonals, numbering as you go. Every pair gets a number. <bookmark mark='c'/> A set that can be listed like this, first, second, third, is called countable.",
+   "zh": "要比较问题和程序，就要比较无限集合，工具来自格奥尔格·康托尔，19世纪70年代。两个集合一样大，如果它们的元素能一一配对，一个也不剩。<bookmark mark='a'/>自然数和偶数：把n和2n配对。所以偶数和自然数一样多。<bookmark mark='b'/>数对，因而分数：把它们排成网格，沿着对角线走，边走边编号。每个数对都得到一个编号。<bookmark mark='c'/>能像这样列出来，第一个、第二个、第三个，的集合，叫作可数集。"
+  },
+  "c1d99cf56c0a": {
+   "scene": "Diagonal",
+   "en": "Programs are countable. <bookmark mark='a'/> Every program, and every machine description, is a finite string of symbols. List all finite strings: the empty string, then those of length one, then length two, in dictionary order, and so on. Every string appears somewhere in the list. <bookmark mark='b'/> So the machines can be listed too: M one, M two, M three, and so on, in the order of their descriptions. <bookmark mark='c'/> The list grows fast: there are about twenty thousand machines with two states, sixty trillion with five. But it is a list.",
+   "zh": "程序是可数的。<bookmark mark='a'/>每个程序，每份机器描述，都是有限的一串符号。把所有有限串列出来：先是空串，然后是长度为1的，再是长度为2的，按字典序，依此类推。每个串都会出现在列表的某个位置。<bookmark mark='b'/>所以机器也能列出来：M1、M2、M3，依此类推，按它们描述的顺序。<bookmark mark='c'/>这个列表增长得很快：两状态的机器大约有两万台，五状态的有六十多万亿台。但它仍是一个列表。"
+  },
+  "67eb3af08be1": {
+   "scene": "Diagonal",
+   "en": "Now a set that is not countable. <bookmark mark='a'/> Suppose someone hands you a list of infinite sequences of zeros and ones, s one, s two, s three, and claims it contains every such sequence. <bookmark mark='b'/> Look at the diagonal: the first digit of the first sequence, the second digit of the second, and so on. <bookmark mark='c'/> Now build a new sequence, d, by flipping every diagonal digit. <bookmark mark='d'/> d is not s one: they differ in the first place. It is not s two: they differ in the second. It differs from the k-th sequence in the k-th place, so it is nowhere in the list. <bookmark mark='e'/> Any list misses something. The infinite sequences cannot be listed: there are strictly more of them than there are natural numbers.",
+   "zh": "现在看一个不可数的集合。<bookmark mark='a'/>假设有人递给你一张由0和1组成的无限序列的列表，s1、s2、s3，并声称它包含了所有这样的序列。<bookmark mark='b'/>看对角线：第一个序列的第一位，第二个序列的第二位，依此类推。<bookmark mark='c'/>现在造一个新序列d，把对角线上的每一位都翻转。<bookmark mark='d'/>d不是s1：它们在第一位不同。它不是s2：它们在第二位不同。它和第k个序列在第k位不同，所以它不在列表里的任何地方。<bookmark mark='e'/>任何列表都会漏掉一些东西。无限序列无法被列出：它们严格地比自然数多。"
+  },
+  "bee6d2b88149": {
+   "scene": "Diagonal",
+   "en": "Now connect the two. <bookmark mark='a'/> A yes-or-no problem about strings, like is it a palindrome, is exactly an infinite sequence of zeros and ones: for each string in our list, a one if the answer is yes and a zero if it is no. Empty string, yes. Zero, yes. One, yes. Zero zero, yes. Zero one, no. And every infinite sequence is some problem. <bookmark mark='b'/> So the problems are uncountable, and the programs are countable. There are strictly more problems than programs. <bookmark mark='c'/> Most problems, in a precise sense almost all of them, cannot be solved by any program. But notice: this argument proves they exist without naming a single one. Turing named one. And it is a problem you would very much like to solve.",
+   "zh": "现在把两者联系起来。<bookmark mark='a'/>一个关于串的是非问题，比如“它是回文吗”，恰好就是一个由0和1组成的无限序列：对列表里的每个串，答案是“是”就写1，“否”就写0。空串，是。0，是。1，是。00，是。01，否。而每一个无限序列也都是某个问题。<bookmark mark='b'/>所以问题是不可数的，程序是可数的。问题严格地比程序多。<bookmark mark='c'/>大多数问题，在精确的意义上几乎所有问题，都不能被任何程序解决。但请注意：这个论证证明了它们存在，却一个也没有指名道姓。图灵指出了一个。而且那是一个你非常想解决的问题。"
+  },
+  "1311ed281aee": {
+   "scene": "Halting",
+   "en": "Chapter eleven. The halting problem.",
+   "zh": "第11章。停机问题。"
+  },
+  "b9c00692a14c": {
+   "scene": "Halting",
+   "en": "Every programmer has wanted this tool. You give it a program and an input, and it tells you whether the program will eventually finish, or hang forever. <bookmark mark='a'/> Call it H. It must always stop itself, and always be right. <bookmark mark='b'/> The set of program-input pairs where the program halts is called HALT, and H would be a decider for it.",
+   "zh": "每个程序员都想要这样一个工具。你给它一个程序和一个输入，它告诉你这个程序最终会结束，还是会永远卡住。<bookmark mark='a'/>把它叫作H。它自己必须总会停下，而且总是对的。<bookmark mark='b'/>使程序停机的那些程序–输入对组成的集合，叫作HALT，而H就是它的判定器。"
+  },
+  "3b5c704a9f94": {
+   "scene": "Halting",
+   "en": "Why not just run the program and see? Here are some real two-state machines from our list, each run on short inputs for ten thousand steps. <bookmark mark='a'/> A number means the machine halted after that many steps. A question mark means it was still running when we stopped. <bookmark mark='b'/> Running settles every halts answer, eventually. But a question mark is ambiguous: it might mean runs forever, or it might mean halts at step ten thousand and one. No finite amount of running can tell those apart. <bookmark mark='c'/> Running gives a recognizer for HALT, not a decider. Could something cleverer than running always work?",
+   "zh": "为什么不直接运行程序看看？这是我们列表里一些真实的两状态机器，每台都在短输入上运行了一万步。<bookmark mark='a'/>数字表示机器在这么多步后停机了。问号表示我们停下时它还在运行。<bookmark mark='b'/>运行终究能确定每一个“停机”的答案。但问号是含糊的：它可能意味着永远运行下去，也可能意味着在第10001步停机。运行有限的时间，无论多久，都分辨不出这两者。<bookmark mark='c'/>运行给出的是HALT的识别器，而不是判定器。有没有比运行更聪明的办法，总能奏效？"
+  },
+  "73d55eb9557f": {
+   "scene": "Halting",
+   "en": "Turing's proof takes a few lines. Suppose H exists. Use it to build a new program, D. <bookmark mark='a'/> D takes a program p, and asks H: would p halt if it were given its own description as input? <bookmark mark='b'/> If H says yes, D deliberately loops forever. If H says no, D halts. D does the opposite of whatever H predicts. <bookmark mark='c'/> Now feed D its own description. Does D halt on D? <bookmark mark='d'/> If it halts, then H must have said it halts, so D loops forever. If it loops forever, H must have said it loops, so D halts. <bookmark mark='e'/> Both answers contradict themselves. The only way out is that H, the perfect halting checker, cannot exist.",
+   "zh": "图灵的证明只要几行。假设H存在。用它造一个新程序D。<bookmark mark='a'/>D接受一个程序p，然后问H：如果把p自己的描述作为输入交给p，p会停机吗？<bookmark mark='b'/>如果H说会，D就故意永远循环下去。如果H说不会，D就停机。H预言什么，D就偏偏反着做。<bookmark mark='c'/>现在把D自己的描述喂给D。D在D上会停机吗？<bookmark mark='d'/>如果它停机，那么H一定说了它会停机，于是D永远循环。如果它永远循环，那么H一定说了它会循环，于是D停机。<bookmark mark='e'/>两个答案都自相矛盾。唯一的出路是：H，那个完美的停机检查器，不可能存在。"
+  },
+  "8da4837fe996": {
+   "scene": "Halting",
+   "en": "It is Cantor's diagonal again. <bookmark mark='a'/> Make a table: the rows are all machines, M one, M two, and so on; the columns are their descriptions; each entry says whether that machine halts on that description. <bookmark mark='b'/> The diagonal is each machine run on its own description. <bookmark mark='c'/> D is built to do the opposite of the diagonal: where M i halts on its own description, D loops, and where M i loops, D halts. <bookmark mark='d'/> So D's row differs from every row in the table, in the diagonal place. D is not on the list. But the list contains every machine, and D would be a machine if H existed. So H does not exist.",
+   "zh": "这又是康托尔的对角线。<bookmark mark='a'/>画一张表：行是所有的机器，M1、M2，依此类推；列是它们的描述；每一格写着那台机器在那份描述上是否停机。<bookmark mark='b'/>对角线就是每台机器在它自己的描述上运行。<bookmark mark='c'/>D就是专门和对角线反着来的：Mi在自己的描述上停机的地方，D循环；Mi循环的地方，D停机。<bookmark mark='d'/>所以D的那一行和表中每一行都不同，就在对角线的位置上。D不在列表里。但列表包含了每一台机器，而如果H存在，D就会是一台机器。所以H不存在。"
+  },
+  "3ff4432d946b": {
+   "scene": "Halting",
+   "en": "And this answers Hilbert. <bookmark mark='a'/> Turing showed how to write down, for any machine, a formula of logic that is provable exactly when the machine halts. <bookmark mark='b'/> So a procedure that decided provability in logic would also decide halting. Halting cannot be decided, so neither can logic. <bookmark mark='c'/> The decision problem has no solution. Church reached the same answer with the lambda calculus, weeks earlier. No mechanical procedure can settle every mathematical question. The dream of Leibniz and Hilbert ends here, and the theory of computation begins.",
+   "zh": "这就回答了希尔伯特。<bookmark mark='a'/>图灵展示了如何为任何一台机器写出一个逻辑公式，这个公式可证，恰好当且仅当机器停机。<bookmark mark='b'/>所以，一个能判定逻辑中可证性的程序，也就能判定停机。停机不可判定，所以逻辑也不可判定。<bookmark mark='c'/>判定问题没有解。丘奇用λ演算得到了同样的答案，还早了几个星期。没有任何机械程序能解决所有的数学问题。莱布尼茨和希尔伯特的梦想到此为止，而计算理论从这里开始。"
+  },
+  "3b611146a7d4": {
+   "scene": "Reductions",
+   "en": "Chapter twelve. Reductions.",
+   "zh": "第12章。归约。"
+  },
+  "bf18c42dc721": {
+   "scene": "Reductions",
+   "en": "One impossible problem gives many. Suppose you want to show that some problem B has no decider. <bookmark mark='a'/> Find a program that turns any halting question, a machine and an input, into a question about B, with the same answer. <bookmark mark='b'/> Then if B had a decider, you could chain them: transform, then decide. That would decide halting, which is impossible. <bookmark mark='c'/> So B has no decider either. This is called a reduction: halting reduces to B. It is the most used tool in this whole theory, and Part 26 runs on it.",
+   "zh": "一个不可能的问题，能引出许多个。假设你想证明某个问题B没有判定器。<bookmark mark='a'/>找一个程序，把任何一个停机问题，也就是一台机器加一个输入，变成一个关于B的问题，并且答案相同。<bookmark mark='b'/>那么，如果B有判定器，你就能把它们串起来：先变换，再判定。这就判定了停机，而这是不可能的。<bookmark mark='c'/>所以B也没有判定器。这叫作归约：停机问题归约到B。它是整个这套理论里用得最多的工具，第26部分就靠它运转。"
+  },
+  "9b5826e10a06": {
+   "scene": "Reductions",
+   "en": "A first example. Is there a decider for the simpler question: does M halt when started on a blank tape? <bookmark mark='a'/> Given any M and w, build a new machine, M sub w. It writes w on its tape, rewinds, and then behaves exactly like M. Building it is mechanical: a few new states in front of M's table. <bookmark mark='b'/> M sub w halts on a blank tape exactly when M halts on w. <bookmark mark='c'/> So a decider for blank tapes would decide halting. There is none. We will need this one in the next chapter.",
+   "zh": "第一个例子。对一个更简单的问题，有没有判定器：M从空白纸带开始，会停机吗？<bookmark mark='a'/>给定任意的M和w，造一台新机器，M下标w。它先把w写到纸带上，倒回去，然后完全照M那样运行。造它是机械的：在M的规则表前面加几个新状态就行。<bookmark mark='b'/>M下标w在空白纸带上停机，恰好当且仅当M在w上停机。<bookmark mark='c'/>所以空白纸带的判定器就能判定停机。这样的判定器不存在。下一章我们会用到这个结论。"
+  },
+  "82da7d84cf05": {
+   "scene": "Reductions",
+   "en": "The same trick spreads impossibility everywhere. <bookmark mark='a'/> Does a machine ever write a one? Rig it to write a one exactly when it would have halted. Does it accept nothing at all? Do two programs compute the same thing? Will this program ever divide by zero? Is it the shortest program that does its job? <bookmark mark='b'/> Each comes with its own reduction from halting, and none has a decider.",
+   "zh": "同样的技巧把不可能性传播到各处。<bookmark mark='a'/>一台机器会不会写出一个1？把它改装成恰好在本该停机的时候写一个1。它是不是什么都不接受？两个程序算的是不是同一个东西？这个程序会不会除以零？它是不是完成这项工作的最短程序？<bookmark mark='b'/>每一个都有自己的、从停机问题出发的归约，没有一个有判定器。"
+  },
+  "82d2fd7ff9e6": {
+   "scene": "Reductions",
+   "en": "In 1953 Henry Rice proved the general law. <bookmark mark='a'/> Any question about what a program does, as opposed to how it is written, is undecidable, unless the answer is the same for every program. <bookmark mark='b'/> Questions about the text are fine: does it contain a while loop, is it under a hundred lines. <bookmark mark='c'/> Questions about behaviour are not: does it ever loop forever, does it ever print a password. We prove Rice's theorem in Part 25.",
+   "zh": "1953年，亨利·莱斯证明了普遍的规律。<bookmark mark='a'/>任何关于程序做什么、而不是关于它怎么写的问题，都是不可判定的，除非这个问题对每个程序的答案都一样。<bookmark mark='b'/>关于文本的问题没问题：它包不包含while循环，是不是少于一百行。<bookmark mark='c'/>关于行为的问题就不行了：它会不会永远循环，会不会打印出密码。我们会在第25部分证明莱斯定理。"
+  },
+  "fb03be041dce": {
+   "scene": "Reductions",
+   "en": "This is not only theory. <bookmark mark='a'/> It is why no virus scanner can detect every virus, which Fred Cohen proved in 1987. It is why every static analyzer and linter either misses some bugs or complains about some correct code. It is why compilers cannot always find the best program, and why tests can show bugs but never prove their absence in general. <bookmark mark='b'/> Engineers live with this by approximating, by restricting what programs may do, and by asking people to supply proofs, which is how Part 54 verifies software anyway.",
+   "zh": "这不只是理论。<bookmark mark='a'/>正因为如此，没有任何病毒扫描器能检测出所有病毒，弗雷德·科恩在1987年证明了这一点。正因为如此，每一个静态分析器和代码检查工具，要么漏掉一些错误，要么对一些正确的代码报错。正因为如此，编译器不能总找到最好的程序，测试能发现错误，却在一般情况下永远无法证明没有错误。<bookmark mark='b'/>工程师们与之共处的办法是：近似，限制程序能做的事，以及请人提供证明，第54部分就是这样验证软件的。"
+  },
+  "89278c82ecd7": {
+   "scene": "Beavers",
+   "en": "Chapter thirteen. Busy beavers.",
+   "zh": "第13章。忙碌海狸。"
+  },
+  "143c1282f4c6": {
+   "scene": "Beavers",
+   "en": "Here is a problem that looks innocent. In 1962 Tibor Radó proposed a game. <bookmark mark='a'/> Take every Turing machine with n states and two symbols. Start each one on a blank tape. Throw away the ones that never halt. Among the rest, find the one that runs longest before it stops: call its number of steps S of n. <bookmark mark='b'/> There are only finitely many machines with n states, so S of n is a perfectly definite number. The machines that achieve it are called busy beavers.",
+   "zh": "这是一个看起来人畜无害的问题。1962年，蒂博尔·拉多提出了一个游戏。<bookmark mark='a'/>取所有有n个状态、两种符号的图灵机。让每一台都从空白纸带开始。扔掉那些永不停机的。在剩下的机器里，找出停机前运行最久的那一台：把它的步数记作S(n)。<bookmark mark='b'/>n个状态的机器只有有限多台，所以S(n)是一个完全确定的数。达到它的机器，叫作忙碌海狸。"
+  },
+  "f2ccb9a0c32a": {
+   "scene": "Beavers",
+   "en": "For two states we can simply try them all. There are twenty thousand, seven hundred and thirty-six. <bookmark mark='a'/> Run every one from a blank tape. Here are the ones that halt, by how many steps they take. <bookmark mark='b'/> Nine thousand seven hundred and eighty-four halt. The longest takes six steps, so S of two is six. Radó checked by hand that every machine still running after six steps runs forever. <bookmark mark='c'/> Here is the champion, the machine from earlier, writing four ones in six steps.",
+   "zh": "两个状态时，我们可以把它们全部试一遍。一共有20736台。<bookmark mark='a'/>让每一台都从空白纸带开始运行。这是会停机的那些，按它们走的步数分类。<bookmark mark='b'/>有9784台停机。最长的走6步，所以S(2)等于6。拉多亲手验证过，走了6步还在运行的机器都会永远运行下去。<bookmark mark='c'/>这是冠军，就是前面那台机器，6步写出四个1。"
+  },
+  "f3f44709b24a": {
+   "scene": "Beavers",
+   "en": "With more states, the champions get stranger. <bookmark mark='a'/> For three states the record is twenty-one steps, proved by Shen Lin and Radó in 1965. <bookmark mark='b'/> For four, a hundred and seven steps, found by Allen Brady in 1983, who also proved nothing does better. <bookmark mark='c'/> One, six, twenty-one, one hundred and seven. And for five states, for decades, nobody knew.",
+   "zh": "状态再多，冠军就越来越古怪。<bookmark mark='a'/>三个状态的纪录是21步，由林申和拉多在1965年证明。<bookmark mark='b'/>四个状态是107步，艾伦·布雷迪在1983年找到，他还证明了没有更好的。<bookmark mark='c'/>1、6、21、107。而五个状态的答案，几十年里没有人知道。"
+  },
+  "61bf286f3205": {
+   "scene": "Beavers",
+   "en": "In 1990 Heiner Marxen and Jürgen Buntrock found a five-state machine: this table, ten entries. Started on a blank tape, it halts after forty-seven million, one hundred and seventy-six thousand, eight hundred and seventy steps. <bookmark mark='r'/> We ran it here, in compiled code, for every one of those steps. <bookmark mark='a'/> This is its whole run, squeezed into one picture: time runs down, each row is about 29,485 steps, and the tape spans 12,289 cells. <bookmark mark='b'/> In 2024 an online collaboration called bbchallenge proved that no halting five-state machine runs longer, so this is S of five. They had to show, for every one of the five-state machines, that it either halts within those forty-seven million steps or provably never halts, and the whole proof was checked by a computer proof assistant.",
+   "zh": "1990年，海纳·马克森和于尔根·布恩特罗克找到了一台五状态机器：就是这张表，十个条目。从空白纸带开始，它在47,176,870步后停机。<bookmark mark='r'/>我们在这里用编译过的代码，把这些步一步不落地跑了一遍。<bookmark mark='a'/>这是它的整个运行过程，压进了一张图：时间向下流，每一行大约是29485步，纸带跨越12289个格子。<bookmark mark='b'/>2024年，一个名叫bbchallenge的网上协作项目证明了：没有任何会停机的五状态机器运行得更久，所以这就是S(5)。他们必须对每一台五状态机器证明：它要么在这四千七百多万步之内停机，要么可以证明永不停机，而整个证明都由计算机证明助手检查过。"
+  },
+  "a5d1bf0f007c": {
+   "scene": "Beavers",
+   "en": "Zoom in on the first twelve hundred steps, cell by cell, and you can see the machine at work: a head sweeping back and forth across a growing block of ones, in a pattern that keeps almost repeating, and never quite does. That near-regularity, sustained for forty-seven million steps and then broken, is what made proving it so hard.",
+   "zh": "放大看最初的1200步，一格一格地看，就能看到机器在干活：一个读写头在一块不断增长的1上来回扫，图案几乎在重复，却又从不完全重复。这种近乎规则的样子，维持了四千七百多万步，然后被打破，这正是证明它如此困难的原因。"
+  },
+  "921279a13851": {
+   "scene": "Beavers",
+   "en": "Radó's real point was that S is not merely hard to compute. <bookmark mark='a'/> No machine can compute it. <bookmark mark='b'/> Suppose one could. Then take any machine M with n states. Compute S of n. Run M on a blank tape for S of n steps. If it has halted, it halts. If it is still running, it can never halt, because no halting n-state machine runs longer than S of n. <bookmark mark='c'/> That would decide the blank-tape halting problem, which the last chapter showed is impossible. <bookmark mark='d'/> In fact S grows faster than any function a computer can compute: faster than exponentials, towers of exponentials, anything.",
+   "zh": "拉多真正的要点是：S不仅仅是难算。<bookmark mark='a'/>没有任何机器能计算它。<bookmark mark='b'/>假设有一台能。那么任取一台有n个状态的机器M。算出S(n)。让M在空白纸带上运行S(n)步。如果它停机了，它就停机。如果它还在运行，它就永远不会停机，因为没有任何会停机的n状态机器运行得比S(n)更久。<bookmark mark='c'/>这就判定了空白纸带停机问题，而上一章已经证明这是不可能的。<bookmark mark='d'/>事实上，S比计算机能计算的任何函数都增长得快：比指数快，比指数塔快，比什么都快。"
+  },
+  "e187cc392afe": {
+   "scene": "Beavers",
+   "en": "Six states is already past the edge of the knowable. <bookmark mark='a'/> A six-state machine found in 2022 runs for more than ten tetrated to fifteen steps, a tower of fifteen tens, and the record has grown since. <bookmark mark='b'/> Some six-state machines behave like famous open problems, such as the Collatz conjecture: whether they halt depends on questions nobody can answer. <bookmark mark='c'/> And Adam Yedidia and Scott Aaronson built a machine with a few thousand states that halts only if the standard axioms of mathematics are inconsistent. Its busy-beaver value can never be proved from those axioms. Hilbert's mechanical certainty runs out, here, at a machine you could write on a few pages.",
+   "zh": "六个状态，就已经越过了可知的边缘。<bookmark mark='a'/>2022年找到的一台六状态机器，运行步数超过10的15层迭代幂，也就是十五个10叠成的塔，而且纪录此后还在增长。<bookmark mark='b'/>有些六状态机器的行为就像著名的未解问题，比如考拉兹猜想：它们是否停机，取决于没有人能回答的问题。<bookmark mark='c'/>而亚当·耶迪迪亚和斯科特·阿伦森造了一台几千个状态的机器，它停机，当且仅当数学的标准公理是不一致的。它的忙碌海狸值永远无法从这些公理中证明。希尔伯特的机械确定性，在这里走到了尽头，就在一台几页纸就能写下的机器上。"
+  },
+  "20f2dc7c4aca": {
+   "scene": "Series",
+   "en": "Chapter fourteen. What we will build.",
+   "zh": "第14章。我们将要搭建什么。"
+  },
+  "4b7aa2f7f762": {
+   "scene": "Series",
+   "en": "Here is what this part found. <bookmark mark='a'/> Computing is following finite rules on symbols, and every reasonable way of saying that precisely gives the same answer. <bookmark mark='b'/> One machine, given a description, can do what any machine does. <bookmark mark='c'/> And some questions, including whether a program halts, no machine can answer.",
+   "zh": "这一部分的发现是这些。<bookmark mark='a'/>计算就是在符号上遵守有限的规则，而把这句话说精确的每一种合理方式，给出的答案都一样。<bookmark mark='b'/>一台机器，只要给出描述，就能做任何机器所做的事。<bookmark mark='c'/>而有些问题，包括一个程序会不会停机，没有任何机器能回答。"
+  },
+  "e82aa0c5ddf6": {
+   "scene": "Series",
+   "en": "Now we build. This is the tower the series climbs. <bookmark mark='a'/> At the bottom, mathematics and logic, where this part stands, with the limits beside it. <bookmark mark='b'/> Act one builds a computer from switches: gates, arithmetic, memory, an instruction set. <bookmark mark='c'/> Act two makes it fast. <bookmark mark='d'/> Act three teaches it languages. <bookmark mark='e'/> Act four is algorithms. <bookmark mark='f'/> Act five returns to the limits, and turns them into cryptography. <bookmark mark='g'/> Act six shares one machine among many programs, act seven connects many machines, <bookmark mark='h'/> acts eight and nine are how industry builds and runs software at scale, <bookmark mark='i'/> and act ten looks at the horizons, and at whether we can trust the whole thing.",
+   "zh": "现在开始搭建。这是这个系列要攀登的塔。<bookmark mark='a'/>最底层是数学和逻辑，这一部分就站在这里，旁边是极限。<bookmark mark='b'/>第一幕用开关搭出一台计算机：逻辑门、算术、存储器、指令集。<bookmark mark='c'/>第二幕让它变快。<bookmark mark='d'/>第三幕教它语言。<bookmark mark='e'/>第四幕是算法。<bookmark mark='f'/>第五幕回到极限，并把它们变成密码学。<bookmark mark='g'/>第六幕让一台机器由许多程序共享，第七幕把许多机器连起来，<bookmark mark='h'/>第八幕和第九幕讲业界如何大规模地构建和运行软件，<bookmark mark='i'/>第十幕眺望前沿，并追问我们能否信任这一整套东西。"
+  },
+  "c40a7f30cebd": {
+   "scene": "Series",
+   "en": "The machine we build has a name: Pebble, after the calculi of the opening. Here is a preview. <bookmark mark='a'/> This is Euclid's algorithm from chapter one, in Pebble's own machine language: load the two numbers, then subtract, compare and swap, in a loop. <bookmark mark='b'/> The program runs on this series' Pebble emulator. Watch the registers: a zero and a one hold the two numbers, and t zero is scratch. <bookmark mark='c'/> After 60 instructions, a zero holds 21: the same twenty-one the rectangle gave us. In Part 6 we build this exact machine out of NAND gates, and it runs this exact program.",
+   "zh": "我们要搭的机器有个名字：Pebble，石子机，取自开场的那些石子。先预览一下。<bookmark mark='a'/>这是第1章的欧几里得算法，用Pebble自己的机器语言写成：载入两个数，然后在一个循环里做减法、比较和交换。<bookmark mark='b'/>程序运行在本系列的Pebble模拟器上。看寄存器：a0和a1存放两个数，t0是草稿。<bookmark mark='c'/>60条指令之后，a0里是21：正是长方形给出的那个21。在第6部分，我们会用与非门搭出这台机器，原样不动，它也会原样运行这个程序。"
+  },
+  "9ace73e51d0d": {
+   "scene": "Series",
+   "en": "And one task will travel with us through every layer. The Job: count the words in thirty novels, the same thirty that AI, Built reads, and list the twenty most common. <bookmark mark='a'/> Each part that changes how fast or how cheaply the Job can be done adds a row to this ledger, with the time it takes: first on Pebble, gate by gate, in Part 6, then with pipelines, caches and more cores, a compiler, better algorithms, a database, a network, and finally a cluster and a cloud bill. <bookmark mark='b'/> The ledger will settle a question with data: which matters more, better hardware or better ideas?",
+   "zh": "还有一项任务会陪我们走过每一层。那项任务：数出三十本小说里的词，就是《人工智能，从零搭建》读的那三十本，列出最常见的二十个。<bookmark mark='a'/>每当某一部分改变了完成这项任务的速度或成本，它就在这本账上添一行，写上所需的时间：先是第6部分，在Pebble上一个门一个门地跑，然后是流水线、缓存和更多核心，编译器，更好的算法，数据库，网络，最后是集群和一张云账单。<bookmark mark='b'/>这本账会用数据回答一个问题：更好的硬件和更好的想法，哪个更重要？"
+  },
+  "a53eb70ee3fa": {
+   "scene": "Series",
+   "en": "In practice, the ideas of this part are everywhere. Emulators and virtual machines are universal machines in software. Every interpreter is a description and a machine that runs it. Universality turns up in places nobody planned, which is a security problem, because anything universal can be made to run code nobody intended; we come back to that at the very end, in Part 55. And undecidability is why every tool that checks programs has to approximate.",
+   "zh": "在实践中，这一部分的思想无处不在。模拟器和虚拟机是软件中的通用机。每一个解释器都是一份描述加上一台运行它的机器。通用性会出现在没人计划过的地方，这是个安全问题，因为任何通用的东西，都能被用来运行没人想要的代码；我们会在最后的第55部分回到这一点。而不可判定性，正是每一个检查程序的工具都只能近似的原因。"
+  },
+  "507ff9fbe826": {
+   "scene": "Outro",
+   "en": "What we found in this part. Euclid's rule, followed without understanding, and Lamé's bound on its worst cases. Turing's machine, which settles palindromes in n squared steps on one tape and three n on two. A universal machine, running any other from its description, for a price. Functions alone, bowls of pebbles, and a row of cells, all computing the same things. And beyond them all, the halting problem, and a five-state machine whose forty-seven million steps took the world until 2024 to understand.",
+   "zh": "这一部分我们发现了什么。欧几里得的规则，不需理解就能遵守，以及拉梅对它最坏情形的界。图灵机，在单带上用n平方步判定回文，在双带上用3n步。通用机，凭描述运行任何其他机器，代价可测。只用函数，几碗石子，一排格子，算的都是同样的东西。而在它们之外，是停机问题，以及一台五状态机器，它的四千七百多万步，全世界直到2024年才弄明白。"
+  },
+  "25cd432c7df7": {
+   "scene": "Outro",
+   "en": "Where this comes back. The universal machine becomes the stored-program computer of Part 6, the interpreters of Part 15 and the hypervisors of Part 32. Invariants and shrinking quantities are the proofs of Part 2 and Part 54. The finite control of a Turing machine is the finite automaton of Parts 5 and 12. The lambda calculus becomes the type theory of Part 14. Diagonalization and reductions drive Parts 25 to 27. And the extended thesis is the foundation of complexity theory, and the claim quantum computers test.",
+   "zh": "这些会在哪里再出现。通用机会变成第6部分的存储程序计算机、第15部分的解释器和第32部分的虚拟机监控器。不变量和不断缩小的量，是第2部分和第54部分的证明。图灵机的有限控制器，就是第5部分和第12部分的有限自动机。λ演算会变成第14部分的类型论。对角线方法和归约驱动着第25到第27部分。而扩展论题是复杂性理论的基础，也是量子计算机要检验的断言。"
+  },
+  "bffbcfd36c8b": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The last one is a build problem: it asks you to run and change the universal machine this part used.",
+   "zh": "六道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。最后一道是动手题：要你运行并修改这一部分用到的那台通用机。"
+  },
+  "a837e9e7842b": {
+   "scene": "Outro",
+   "en": "Next time: proof and counting. This part used proofs without saying what a proof is. Part 2 fixes that: logic, induction, invariants, and the counting that every later bound needs. It opens with a puzzle that sold millions of copies in 1880: slide the tiles to swap the fourteen and the fifteen. Can it be done? An invariant answers, in one line.",
+   "zh": "下一次：证明与计数。这一部分用了证明，却没有说什么是证明。第2部分来补上：逻辑、归纳法、不变量，以及后面每一个界都要用到的计数。它从一个1880年卖出了几百万份的谜题开始：滑动方块，把14和15交换过来。能做到吗？一个不变量，一行就能回答。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 1, What Is a Computation?",
+ "chapters_en": {
+  "Hook": "Pebbles",
+  "Algorithms": "1. Algorithms before machines",
+  "Engines": "2. The engines",
+  "Hilbert": "3. Hilbert's question",
+  "Machine": "4. Turing's machine",
+  "Programming": "5. Programming with a table",
+  "Robust": "6. More tapes, same power",
+  "Universal": "7. The universal machine",
+  "Models": "8. Other machines, same power",
+  "Thesis": "9. The Church-Turing thesis",
+  "Diagonal": "10. More problems than programs",
+  "Halting": "11. The halting problem",
+  "Reductions": "12. Reductions",
+  "Beavers": "13. Busy beavers",
+  "Series": "14. What we will build",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

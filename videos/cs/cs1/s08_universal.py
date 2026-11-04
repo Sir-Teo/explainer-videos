@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from explainer.cs.turing import CHAMPIONS, TM
-from videos.cs.cs1.common import CODE, COST, CTRL, DATA, HEAD, HIST, PART, YES, fmt, live_int, load
+from videos.cs.cs1.common import CODE, COST, CTRL, DATA, HEAD, HIST, PART, YES, fmt, say, live_int, load
 
 LO = [0, -3, 0]  # the windows compute recorded for U's three tapes
 FIELD_COLOR = [CTRL, DATA, DATA, GREY_B, CTRL]  # state, read, write, move, next
@@ -194,7 +194,7 @@ class Universal(VoiceoverScene):
         checkpoints = [w for w in d["writes"][2:]] + [len(hist) - 1]
         with self.voiceover(
             f"Faster now. Every step of M costs U a scan through the description. <bookmark mark='a'/> M takes six "
-            f"steps and halts with four ones on its tape. U takes {fmt(d['u_steps'])} steps to do the same, and halts "
+            f"steps and halts with four ones on its tape. U takes {say(d['u_steps'])} steps to do the same, and halts "
             f"with the same four ones on tape two. A machine that can do what any machine does, given its description."
         ) as vo:
             nM_ = nM
