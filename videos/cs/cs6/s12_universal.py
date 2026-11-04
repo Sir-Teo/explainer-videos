@@ -157,7 +157,7 @@ class Universal(VoiceoverScene):
             y = 1.3 - 0.95 * k
             r = Rectangle(width=w, height=0.5, stroke_width=0, fill_color=c, fill_opacity=0.7).move_to([x0 + w / 2, y, 0])
             nl = label(name, font_size=20, color=c).move_to([x0 - 0.25, y, 0], aligned_edge=RIGHT)
-            vl = label(rf"{fmt(rate)} instructions a second", font_size=19, color=GREY_A).next_to(r, RIGHT, buff=0.12)
+            vl = label(rf"{fmt(rate)} / s", font_size=19, color=GREY_A).next_to(r, RIGHT, buff=0.12)
             bars.add(VGroup(nl, r, vl))
         notes = VGroup(
             label(r"every one gives the same answer, \ to the last bit and the last step", font_size=24, color=YES),

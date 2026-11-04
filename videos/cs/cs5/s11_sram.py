@@ -170,8 +170,10 @@ class Sram(VoiceoverScene):
             "a row decoder, which raises one word line, and every cell in that row connects to its bit lines at once. "
             "<bookmark mark='b'/> A row of sense amplifiers reads them all, and a multiplexer picks out the bits that "
             "were asked for. <bookmark mark='c'/> The caches inside every processor are static RAM built this way, "
-            "millions of cells, and Part 9 is about how they are organized. Fast as it is, static RAM is big: six "
-            "transistors and their wiring for every bit. Main memory needs something much denser."
+            "millions of cells, and Part 9 is about how they are organized. A large server processor carries hundreds of "
+            "megabytes of it, billions of these cells, and still finds them too few. Fast as it is, static RAM is big: "
+            "six transistors and their wiring for every bit, so on many chips the caches take more area than the "
+            "processor cores themselves. Main memory needs something much denser."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid, lag_ratio=0.005))
             vo.wait_until("a")

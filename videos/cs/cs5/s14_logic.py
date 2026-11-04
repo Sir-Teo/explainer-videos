@@ -138,7 +138,9 @@ class Logic(VoiceoverScene):
             "function: here, majority and parity of three bits. <bookmark mark='b'/> A programmable logic array does "
             "the same with a programmable plane of and gates feeding a plane of or gates, a normal form from Part 3 "
             "laid out in silicon. FPGAs pair Part 3's lookup tables with flip-flops, so they can hold state machines "
-            "too. <bookmark mark='c'/> And many processors keep a ROM of control words, indexed by the instruction and "
+            "too. Because an FPGA can be rewired in a second, chip designers run their next processor on racks of them "
+            "long before it is manufactured, and data centres use them for network cards and search engines whose "
+            "logic changes every few months. <bookmark mark='c'/> And many processors keep a ROM of control words, indexed by the instruction and "
             "the step within it, to generate the signals that steer their datapaths. That is microcode, and Part 6 "
             "builds Pebble's control the same way, or with plain logic, and compares the two."
         ) as vo:
