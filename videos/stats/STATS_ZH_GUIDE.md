@@ -301,3 +301,28 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | purposive vs random sampling | 立意抽样与随机抽样 |
 | coverage, nominal level, Monte Carlo standard error | 覆盖率，名义水平，蒙特卡洛标准误 |
 | robustness, kurtosis | 稳健性，峰度 |
+
+## Glossary (Part 9)
+
+| English | 中文 |
+|---|---|
+| estimator, estimate | 估计量，估计值 |
+| the German tank problem, serial number | 德国坦克问题，序列号 |
+| method of moments, generalized method of moments | 矩估计法，广义矩估计 |
+| likelihood, log-likelihood, maximum likelihood estimator (MLE) | 似然，对数似然，最大似然估计量 |
+| score, likelihood equation | 得分函数，似然方程 |
+| invariance of the MLE | 最大似然估计的不变性 |
+| Newton's method, quadratic convergence | 牛顿法，二次收敛 |
+| observed information, curvature | 观测信息，曲率 |
+| asymptotic normality, regularity conditions | 渐近正态性，正则条件 |
+| Kullback–Leibler divergence, identifiability | KL 散度，可识别性 |
+| irregular model, boundary MLE | 非正则模型，边界上的最大似然估计 |
+| sufficient statistic, factorization theorem | 充分统计量，因子分解定理 |
+| minimal sufficient statistic, exponential family | 极小充分统计量，指数族 |
+| Rao–Blackwell theorem, Rao–Blackwellization | 拉奥–布莱克韦尔定理，拉奥–布莱克韦尔化 |
+| complete statistic, Lehmann–Scheffé theorem | 完备统计量，莱曼–谢菲定理 |
+| uniformly minimum-variance unbiased estimator (UMVUE) | 一致最小方差无偏估计 |
+| Fisher information matrix, nuisance parameter, orthogonal parameters | 费希尔信息矩阵，冗余参数，正交参数 |
+| Cramér–Rao bound, information inequality, efficiency | 克拉默–拉奥下界，信息不等式，有效性 |
+| superefficiency (Hodges) | 超有效性（霍奇斯） |
+| misspecification, robustness | 模型误设，稳健性 |

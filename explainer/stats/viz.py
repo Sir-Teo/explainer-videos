@@ -781,3 +781,44 @@ class GaltonBoard:
         ks = np.linspace(-0.5, self.rows + 0.5, 200)
         pts = [np.array([self.top[0] + (k - self.rows / 2) * self.dx, self.floor + values(k) * scale, 0]) for k in ks]
         return VMobject(stroke_color=color or S.TRUTH, stroke_width=stroke_width).set_points_smoothly(pts)
+
+
+class TankFactory(VGroup):
+    """The German tank problem as a picture (Part 9): ``N`` tanks with serial numbers 1..N in a grid, of which the
+    ``captured`` serials are lit and labelled.  ``hidden`` dims the tanks we cannot see (all but the captured ones);
+    ``reveal(scene)`` brightens the whole factory, the answer the estimators were guessing."""
+
+    def __init__(self, N: int, captured, cols: int = 30, cell: float = 0.2, center=ORIGIN, color=None, lit=None,
+                 show_numbers: bool = True, font_size: int = 18):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.N, self.cols, self.cell = N, cols, cell
+        self.color = color or GREY_D
+        self.lit_color = lit or S.ACCENT
+        rows = int(np.ceil(N / cols))
+        self.tanks = VGroup()
+        for k in range(N):
+            r, c = divmod(k, cols)
+            body = RoundedRectangle(width=cell * 0.86, height=cell * 0.56, corner_radius=cell * 0.12, stroke_width=0,
+                                    fill_color=self.color, fill_opacity=0.35)
+            body.move_to([(c - (cols - 1) / 2) * cell, ((rows - 1) / 2 - r) * cell, 0])
+            self.tanks.add(body)
+        self.tanks.move_to(center)
+        self.captured = list(captured)
+        self.marks, self.numbers = VGroup(), VGroup()
+        for s_ in self.captured:
+            t = self.tanks[s_ - 1]
+            self.marks.add(t.copy().set_fill(self.lit_color, opacity=1.0))
+            if show_numbers:
+                self.numbers.add(label(str(s_), font_size=font_size, color=self.lit_color).next_to(t, UP, buff=0.04))
+        self.add(self.tanks, self.marks, self.numbers)
+
+    def capture_anims(self, lag=0.2):
+        if len(self.numbers) == 0:
+            return LaggedStart(*[FadeIn(m, scale=1.6) for m in self.marks], lag_ratio=lag)
+        return LaggedStart(*[AnimationGroup(FadeIn(m, scale=1.6), FadeIn(n)) for m, n in zip(self.marks, self.numbers)],
+                           lag_ratio=lag)
+
+    def reveal(self, opacity=0.9):
+        return self.tanks.animate.set_fill(self.color, opacity=opacity)
