@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer.paths import video_package  # noqa: E402
 from tools.make import all_videos  # noqa: E402
 from tools.qa_series import OUT, check_status, fingerprint, inputs_current, preflight_passed, runtime_completed  # noqa: E402
 
@@ -49,9 +50,9 @@ def main():
         return image.exists() and proof.get("sheet_sha256") == hashlib.sha256(image.read_bytes()).hexdigest()
     blocks, checked, total, issues = [], 0, 0, 0
     visual_checked, motion_checked, motion_clean, audio_checked, audio_clean = 0, 0, 0, 0, 0
-    for video in all_videos("ai"):
+    for video in [v for series in ("ai", "cs") for v in all_videos(series)]:
         key = fingerprint(video)
-        manifest = importlib.import_module(f"videos.ai.{video}.manifest")
+        manifest = importlib.import_module(f"{video_package(video)}.manifest")
         rows = []
         for lang in ("en", "zh"):
             for _, scene, title in manifest.SCENES:

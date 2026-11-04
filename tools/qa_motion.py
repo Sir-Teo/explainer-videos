@@ -29,6 +29,7 @@ import hashlib
 import html
 import json
 import math
+import re
 import subprocess
 import sys
 import tempfile
@@ -235,8 +236,8 @@ def provenance(path):
             evidence = {"record": str(candidate), "sha256": sha256(candidate),
                         "fingerprint": record.get("fingerprint"), "status": record.get("status")}
             video = record.get("video")
-            if (not isinstance(video, str) or not video.startswith("ai") or not video[2:].isdigit()
-                    or not (root / "videos" / "ai" / video / "manifest.py").is_file()
+            if (not isinstance(video, str) or not re.fullmatch(r"(ai|cs)\d+", video)
+                    or not (root / "videos" / video[:2] / video / "manifest.py").is_file()
                     or not isinstance(record.get("inputs"), dict)):
                 return dict(evidence, current_source_and_inputs=None,
                             current_source_and_inputs_reason="nonstandard record; not evaluated")

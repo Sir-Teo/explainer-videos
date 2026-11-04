@@ -51,7 +51,7 @@ def main():
     import numpy as np
     import soundfile as sf
     from explainer import lang, tts
-    from explainer.paths import video_package
+    from explainer.paths import video_dir, video_package
     from tools.qa_series import OUT, fingerprint, inputs_current
 
     if tts.BACKEND == "silent":
@@ -101,7 +101,7 @@ def main():
             raw = line["raw"]
             start = time.monotonic()
             try:
-                spoken, _ = _strip_bookmarks(lang.translate(raw, ROOT / "videos" / "ai" / args.video, scene))
+                spoken, _ = _strip_bookmarks(lang.translate(raw, video_dir(args.video), scene))
                 utterance = tts.synthesize(spoken)
                 samples, sr = sf.read(utterance.audio_path)
                 duration = len(samples) / sr
