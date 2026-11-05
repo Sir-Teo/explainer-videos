@@ -136,14 +136,14 @@ class Metropolis(VoiceoverScene):
     def burnin(self):
         d = load("mcmc")
         A = axes([0, 600], [-0.75, 0.15], x_length=9.0, y_length=3.6, xlabel=r"iteration", ylabel=r"$\beta_1$", xticks=[0, 200, 400, 600],
-                 yticks=[-0.6, -0.4, -0.2, 0], center=[-0.6, 0.4, 0])
+                 yticks=[-0.6, -0.4, -0.2, 0], center=[-0.6, 0.8, 0])
         tr = trace(A.ax, d["start0_trace"], S.LIK)
         z = DashedLine(A.ax.c2p(0, 0), A.ax.c2p(600, 0), color=GREY_C, stroke_width=1.5)
         rows = fit_rows(VGroup(
             label(r"start from a bad guess, \ $\beta_1 = 0$: \ the chain must first find the posterior", font_size=24),
             label(r"discard the early draws: \ the burn-in, \ or warm-up", font_size=24, color=OBS),
             label(r"run several chains from scattered starts, \ and check that they agree \ ($\hat R$, \ Part 27)", font_size=22, color=GREY_A),
-        ), 12.4, 0.26, [0, -2.4, 0])
+        ), 12.4, 0.24, [0, -2.75, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A chain must also find the posterior before it can explore it. This one starts at a slope of "
             "zero, no temperature effect at all, and takes a few dozen steps to drift into the region of high probability. "
