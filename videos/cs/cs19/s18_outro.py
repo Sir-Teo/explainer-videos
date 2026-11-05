@@ -100,14 +100,15 @@ class Outro(VoiceoverScene):
             r"for the DFT matrix.",
             r"Prove the edit-distance recurrence correct, \ and recover an optimal edit script from the table in "
             r"$O(n + m)$ extra time.",
-            r"\textit{Build.} \ Implement the number-theoretic transform modulo $998244353$ in the Pebble language, "
-            r"\ multiply two 1,000-digit numbers on the emulator, \ and compare its instruction count with Karatsuba.",
+            r"\textit{Build.} \ Implement the number-theoretic transform modulo $40961 = 5 \cdot 2^{13} + 1$ in the "
+            r"Pebble language, \ multiply two 500-digit numbers on the emulator, \ and compare its instruction count "
+            r"with Karatsuba.",
             r"$\bigstar$ \textit{Research.} \ Prove that every linear circuit computing the $n$-point DFT needs "
             r"$\Omega(n \log n)$ additions, \ without assuming bounded coefficients.",
         ], font_size=22)
         with self.voiceover(
             "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: the number-theoretic transform in the Pebble language, multiplying thousand-digit numbers on "
+            "problem: the number-theoretic transform in the Pebble language, multiplying five-hundred-digit numbers on "
             "the emulator. The last, marked with a star, is a research problem: its answer is not known, and the "
             "notes say where to start."
         ):
