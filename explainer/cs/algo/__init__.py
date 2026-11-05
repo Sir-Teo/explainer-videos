@@ -11,4 +11,7 @@
 * :mod:`.graphs`: Euler circuits, BFS and DFS, topological order, strongly connected components and 2-SAT, shortest
   paths (Dijkstra, bidirectional, A*, landmarks, contraction hierarchies, Bellman–Ford, Floyd–Warshall, Johnson),
   spanning trees, Edmonds–Karp, Gale–Shapley, the Hungarian algorithm, Held–Karp, PageRank and colouring (Part 18).
+* :mod:`.paradigms`: greedy scheduling, Huffman and the matroid greedy; Karatsuba, Strassen, the DFT, FFT and NTT, an
+  FFT multiplier and Chudnovsky's π; closest pair; edit distance, LCS, knapsack, matrix chains, optimal BSTs and tree
+  DP; n-queens and Dancing Links; maximum subarray four ways (Part 19).
 """
