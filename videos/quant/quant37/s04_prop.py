@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant37.common import (HURDLE, KERNEL_C, PART, PRICE_C, comma, fit_right, load)
+from videos.quant.quant37.common import (HURDLE, IMPACT_C, KERNEL_C, PART, PRICE_C, comma, fit_right, load)
 
 
 class Prop(VoiceoverScene):
@@ -13,8 +13,11 @@ class Prop(VoiceoverScene):
         self.model()
         self.response(p)
         self.fit_(p)
+        self.through(p)
+        self.pitfalls()
         self.balance(p)
         self.history_dep()
+        self.hdim()
         self.question()
 
     def card(self):
@@ -110,6 +113,60 @@ class Prop(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def through(self, p):
+        G = np.asarray(p["G"], float)
+        lags = np.asarray(p["G_lags"], float)
+        step_ = lags[1] - lags[0]
+        n_on, n_tot = 120, 200                       # a metaorder of 120 steps of 5 trades, then 80 steps of silence
+        imp = []
+        for t in range(n_tot):
+            s = np.arange(min(t, n_on - 1) + 1)
+            k = np.minimum(((t - s) * step_ / step_).astype(int), len(G) - 1)
+            imp.append(float(np.sum(G[k])))
+        imp = np.asarray(imp) / max(imp)
+        x = np.arange(n_tot) * step_
+        g = axes([0, float(x[-1])], [0, 1.1], x_length=8.4, y_length=4.0, xlabel=r"trades since the metaorder began",
+                 ylabel=r"impact, relative to its peak", xticks=[0, 300, 600, 900], yticks=[0, 0.5, 1], font_size=15)
+        g.move_to(DOWN * 0.3)
+        ax = g.ax
+        c_ = curve(ax, x, imp, IMPACT_C, stroke_width=3)
+        stop = DashedLine(ax.c2p(n_on * step_, 0), ax.c2p(n_on * step_, 1.1), color=GREY_B, stroke_width=1.5)
+        end = float(imp[-1])
+        with self.voiceover(
+            "A metaorder through Bitcoin's fitted propagator. One of the market's trades in every five is ours, all "
+            "buys, for six hundred trades, then nothing. <bookmark mark='a'/> The impact rises concavely while we buy, "
+            f"and after we stop it decays, to about {100 * end:.0f} percent of its peak four hundred trades later: "
+            "Chapter one's shape, from a single kernel measured on the tape."
+        ) as vo:
+            self.play(FadeIn(g), Create(stop))
+            vo.wait_until("a")
+            self.play(Create(c_), run_time=3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def pitfalls(self):
+        cards = VGroup(
+            desk_question(r"what a trade is", r"Binance's aggregated trades merge fills of one taker at one price; a sweep "
+                          r"becomes several consecutive records, which bends the shortest lags", width=12.4, font_size=19),
+            desk_question(r"the clock", r"our mid is read from a 100-ms grid just before each trade; several trades "
+                          r"share a snapshot, so the first few lags of the fit are not to be trusted", width=12.4,
+                          font_size=19),
+            desk_question(r"stationarity", r"four days, two of them a weekend: the propagator changes with volatility "
+                          r"and time of day, so one curve is an average over regimes", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "What to distrust in this fit. <bookmark mark='a'/> What counts as a trade: aggregated records merge the "
+            "fills of one taker at one price, so a sweep becomes several records. <bookmark mark='b'/> The clock: the "
+            "mid comes from a grid of a tenth of a second, and several trades share each snapshot, so the first few "
+            "lags are unreliable. <bookmark mark='c'/> And stationarity: four days, two of them a weekend. One curve is "
+            "an average over regimes."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
     def balance(self, p):
         rows = [cmath(r"G(\ell)", r"\sim", r"\ell^{-\beta}", font_size=40, colors={r"G(\ell)": KERNEL_C}),
                 cmath(r"\text{Var}(p_n)", r"\sim", r"n^{\,2 - \gamma - 2\beta}", font_size=40),
@@ -163,6 +220,34 @@ class Prop(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def hdim(self):
+        rows = [cmath(r"\text{TIM}", r":", r"p_n = \textstyle\sum G(n - m)\,\varepsilon_m", font_size=38),
+                cmath(r"\text{HDIM}", r":", r"r_n = \textstyle\sum \kappa(n - m)\,(\varepsilon_m - \hat\varepsilon_m)",
+                      font_size=36, colors={r"\text{HDIM}": KERNEL_C}),
+                cmath(r"\text{both}", r":", r"\text{the efficiency of prices from predictable flow}", font_size=32)]
+        whys = [why(r"the transient impact model of this chapter: every trade's impact decays by a fixed kernel"),
+                why(r"history-dependent impact: only the surprise in each sign moves the price, so expected trades cost "
+                    r"little (Lillo and Farmer's asymmetric liquidity; Taranto et al. 2018)"),
+                why(r"two descriptions of one fact; they differ in how impact depends on the state of the book, and in "
+                    r"what they predict for a single trader's metaorder")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Two ways to say it. <bookmark mark='a'/> The transient impact model of this chapter: every trade's impact "
+            "decays by a fixed kernel. <bookmark mark='b'/> Or history-dependent impact: only the surprise in each sign "
+            "moves the price, so an expected trade costs little. Lillo and Farmer called it asymmetric liquidity: the "
+            "side that is expected to be hit fills up. <bookmark mark='c'/> Both reconcile predictable flow with "
+            "unpredictable prices; they differ in what they predict for a single trader's metaorder."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def question(self):

@@ -46,6 +46,8 @@ class Outro(VoiceoverScene):
         self.recap(load("aggregate"), load("latent"), load("propagator"), load("ac"), load("ow"), load("rl"),
                    load("research"))
         self.lessons()
+        self.formulas()
+        self.connections()
         self.desk()
         self.answers()
         self.problems()
@@ -124,6 +126,52 @@ class Outro(VoiceoverScene):
             "make claims about free lunches; test them before optimising against them. <bookmark mark='c'/> And judge "
             "learning against the plain answer: a learner that cannot beat TWAP in a simulator will not beat it in a "
             "market."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def formulas(self):
+        rows = VGroup(
+            MathTex(r"I \approx Y\sigma\sqrt{Q/V}", font_size=34, color=IMPACT_C),
+            MathTex(r"\Delta = \sqrt{2Q/\mathcal L}", font_size=34),
+            MathTex(r"\beta = (1 - \gamma)/2", font_size=34, color=KERNEL_C),
+            MathTex(r"\mathcal C = \tfrac12 \iint G(|t - s|)\,dX_s\,dX_t \ge 0", font_size=34),
+            MathTex(r"x(t) = X\sinh\kappa(T - t)/\sinh\kappa T,\quad \kappa = \sqrt{\lambda\sigma^2/\eta}", font_size=34,
+                    color=SCHED_C),
+            MathTex(r"dX^* = \tfrac{X}{2 + \rho T}(\delta_0 + \rho\,dt + \delta_T),\quad \mathcal C^* = \tfrac{X^2}{q(2 + \rho T)}",
+                    font_size=32, color=SCHED_C),
+        ).arrange(DOWN, buff=0.32)
+        head = label(r"The part on one card", font_size=34).to_edge(UP, buff=0.4)
+        rows.next_to(head, DOWN, buff=0.4)
+        with self.voiceover(
+            "The part on one card. The square-root law. The latent book's triangle. The propagator's balance with sign "
+            "memory. The cost of a schedule under transient impact, never negative for an allowed kernel. Almgren and "
+            "Chriss's hyperbolic sine. And Obizhaeva and Wang's blocks, with their cost."
+        ):
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.5,
+                                                run_time=8))
+        self.wait(0.6)
+        self.clear_scene()
+
+    def connections(self):
+        cards = VGroup(
+            desk_question(r"backwards", r"Part 31's costs and capacity now have their microstructure: the square root, "
+                          r"its prefactor and its decay; Part 35's Kyle is the linear, permanent special case",
+                          width=12.4, font_size=19),
+            desk_question(r"sideways", r"Part 36's book supplied the simulator and the signals; Part 8's control and "
+                          r"mean-field games supplied the mathematics", width=12.4, font_size=19),
+            desk_question(r"forwards", r"the market maker of Part 38 earns what the executor pays, and Part 41's fire "
+                          r"sales are metaorders that everyone sends at once", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How this part connects. <bookmark mark='a'/> Backwards: Part thirty-one's costs now have their "
+            "microstructure, and Kyle's model of Part thirty-five is the linear, permanent special case. "
+            "<bookmark mark='b'/> Sideways: Part thirty-six supplied the simulator and the signals, and Part eight the "
+            "mathematics. <bookmark mark='c'/> Forwards: the market maker of Part thirty-eight earns what the executor "
+            "pays, and the fire sales of Part forty-one are metaorders that everyone sends at once."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

@@ -12,11 +12,13 @@ class NoArb(VoiceoverScene):
         self.card()
         self.cost_formula()
         self.permanent()
+        self.hs_example()
         self.box(k)
         self.gatheral()
         self.convex()
         self.gauss(k)
         self.refine(k)
+        self.btc_passes(load("propagator"))
         self.lessons()
         self.question()
 
@@ -80,6 +82,34 @@ class NoArb(VoiceoverScene):
             step(1)
             vo.wait_until("c")
             step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def hs_example(self):
+        rows = [cmath(r"f(v)", r"=", r"v^2", font_size=40),
+                cmath(r"\text{buy 1 in time 1}", r":", r"\Delta p = \int f(1)\,dt = 1", font_size=34, colors={r"\text{buy 1 in time 1}": BUY_C}),
+                cmath(r"\text{sell 1 in time 10}", r":", r"\Delta p = -\int f(0.1)\,dt = -0.1", font_size=34,
+                      colors={r"\text{sell 1 in time 10}": SELL_C}),
+                cmath(r"\text{net}", r":", r"\text{the price ends } 0.9 \text{ higher, holding nothing}", font_size=32,
+                      colors={r"\text{net}": BAD})]
+        whys = [why(r"suppose permanent impact grew like the square of the trading rate"),
+                why(r"buying one unit fast pushes the price up by one"),
+                why(r"selling it back slowly pushes it down by only a tenth"),
+                why(r"so the selling happened at prices above the buying's average: repeat, and the trader is a money "
+                    r"machine; a linear $f$ makes the two moves cancel exactly")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "Why it must be linear, in numbers. <bookmark mark='a'/> Suppose permanent impact grew like the square of "
+            "the trading rate. <bookmark mark='b'/> Buy one unit quickly, in one unit of time: the price rises by one. "
+            "<bookmark mark='c'/> Sell it back slowly, over ten: it falls by only a tenth. <bookmark mark='d'/> The "
+            "position is flat and the price is higher: the sales were made at prices above the purchases. Repeat, and "
+            "it is a money machine. Only a linear function makes the two moves cancel."
+        ) as vo:
+            step(0)
+            for k_, mk in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(mk)
+                if k_:
+                    step(k_)
         self.wait(0.5)
         self.clear_scene()
 
@@ -220,6 +250,33 @@ class NoArb(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4))
         self.wait(0.4)
+        self.clear_scene()
+
+    def btc_passes(self, p):
+        rows = [cmath(r"G(\ell)", r"=", rf"(1 + \ell/{p['G_peak_lag']})^{{-{p['beta']:.2f}}}", font_size=40,
+                      colors={r"G(\ell)": KERNEL_C}),
+                cmath(r"\text{decreasing, convex}", r":", r"\text{yes}", font_size=38, colors={r"\text{yes}": GOOD}),
+                cmath(r"\text{positive definite}", r":", r"\text{yes (Pólya)}", font_size=38, colors={r"\text{yes (Pólya)}": GOOD})]
+        whys = [why(r"Chapter 3's propagator, as a power law beyond its peak"),
+                why(r"its derivative is negative and its second derivative positive"),
+                why(r"Pólya's criterion: an even function that is convex and decreasing to zero on the half-line is "
+                    r"positive definite; so the fitted kernel admits no round-trip profit and no buying by selling")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Does Bitcoin's fitted kernel pass? <bookmark mark='a'/> Beyond its peak, Chapter three's propagator is a "
+            f"power law with exponent {p['beta']:.2f}. <bookmark mark='b'/> It is decreasing and convex. "
+            "<bookmark mark='c'/> And by Pólya's criterion, an even function that is convex and decreasing to zero is "
+            "positive definite. So the measured kernel allows neither round-trip profits nor buying by selling: the "
+            "market, as fitted, is free of dynamic arbitrage."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def lessons(self):

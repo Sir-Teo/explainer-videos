@@ -13,6 +13,7 @@ class Hook(VoiceoverScene):
         self.question()
         self.claims(load("aggregate"), load("latent"), load("rl"), load("ac"))
         self.stakes()
+        self.myths()
         self.act()
         self.history()
         self.objectives()
@@ -93,6 +94,30 @@ class Hook(VoiceoverScene):
             "Part thirty-one's square root already set the House's sizes. <bookmark mark='b'/> For a fund that trades "
             "large, impact is the largest cost it pays, far above fees and spreads. <bookmark mark='c'/> And a whole "
             "industry, brokers' algorithms, transaction-cost analysis and order routing, exists because of one curve."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def myths(self):
+        cards = VGroup(
+            desk_question(r"``impact is the spread''", r"for a small order, nearly; for an order that is a real share of "
+                          r"the day, the spread is a rounding error next to impact", width=12.4, font_size=19),
+            desk_question(r"``slicing always helps''", r"slicing hides an order and spreads its risk, but under the "
+                          r"square-root law it barely lowers the expected impact; size matters more than speed",
+                          width=12.4, font_size=19),
+            desk_question(r"``a cheap execution was a good one''", r"a single order's cost is mostly luck: its noise is "
+                          r"ten times its expected impact, so execution can only be judged over many orders",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Three beliefs this part corrects. <bookmark mark='a'/> That impact is the spread: true for a small order, "
+            "but for a real share of the day the spread is a rounding error. <bookmark mark='b'/> That slicing always "
+            "helps: it hides the order and spreads the risk, but under the square-root law it barely lowers the "
+            "expected impact. <bookmark mark='c'/> And that a cheap execution was a good one: a single order's cost is "
+            "mostly luck, and execution can only be judged over many orders."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

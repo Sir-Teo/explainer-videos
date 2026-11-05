@@ -11,7 +11,7 @@ class Trading(VoiceoverScene):
         z = load("queue")
         self.card(z)
         self.priority()
-        self.setup(z)
+        self.design(z)
         self.table(z)
         self.by_queue(z)
         self.value(z)
@@ -60,7 +60,7 @@ class Trading(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def setup(self, z):
+    def design(self, z):
         n = z["back"]["n"]
         rows = [cmath(r"\text{every 30 s}", r":", r"\text{a tiny order joins the best bid or offer}", font_size=34),
                 cmath(r"\text{ahead}", r"\leftarrow", r"\text{trades at its price};\ \text{cancels pro rata}", font_size=32),

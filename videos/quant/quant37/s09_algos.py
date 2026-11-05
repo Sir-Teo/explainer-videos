@@ -15,8 +15,12 @@ class Algos(VoiceoverScene):
         self.curve_(v)
         self.week(v)
         self.pov()
+        self.closing()
         self.routing()
+        self.crypto()
+        self.pretrade()
         self.tca()
+        self.example()
         self.benchmarks()
         self.question()
 
@@ -163,6 +167,31 @@ class Algos(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def closing(self):
+        cards = VGroup(
+            desk_question(r"the closing auction", r"one price at the close, set by matching all market-on-close and "
+                          r"limit-on-close orders; index funds rebalance there, so a large share of some days' volume "
+                          r"trades in one instant", width=12.4, font_size=19),
+            desk_question(r"imbalance messages", r"exchanges publish the auction's imbalance before the close, and "
+                          r"liquidity providers trade against it; the impact of a closing order shows up in that "
+                          r"response", width=12.4, font_size=19),
+            desk_question(r"no close in crypto", r"Bitcoin has no auction; its benchmarks are reference rates computed "
+                          r"from several venues over a window, which an executor can track like a short VWAP",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "The close. <bookmark mark='a'/> Stock exchanges end the day with an auction, one price for every "
+            "market-on-close and limit-on-close order; index funds rebalance there. <bookmark mark='b'/> The exchanges "
+            "publish the auction's imbalance beforehand, and liquidity providers trade against it. "
+            "<bookmark mark='c'/> Crypto has no close: its benchmarks are reference rates computed from several venues "
+            "over a window, which an executor tracks like a short VWAP."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
     def routing(self):
         cards = VGroup(
             desk_question(r"the router", r"beneath each algorithm, a smart order router splits child orders across "
@@ -187,6 +216,61 @@ class Algos(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def crypto(self):
+        cards = VGroup(
+            desk_question(r"no consolidated quote", r"Bitcoin trades on dozens of exchanges with no national best bid "
+                          r"and offer and no order-protection rule; routing between them is the trader's own problem",
+                          width=12.4, font_size=19),
+            desk_question(r"spot and perpetual", r"the same exposure trades as spot and as perpetual futures (Part 35's "
+                          r"price discovery); an executor can split across both, paying the basis and funding",
+                          width=12.4, font_size=19),
+            desk_question(r"counterparty and custody", r"each venue holds the trader's collateral; Part 39 meets the cost "
+                          r"of that when an exchange fails", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "And in crypto. <bookmark mark='a'/> There is no consolidated quote and no order-protection rule: Bitcoin "
+            "trades on dozens of exchanges, and routing among them is the trader's own problem. <bookmark mark='b'/> "
+            "The same exposure trades as spot and as perpetual futures, and an executor can split across both, paying "
+            "the basis and the funding. <bookmark mark='c'/> And every venue holds collateral, a counterparty risk that "
+            "Part thirty-nine prices."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def pretrade(self):
+        sig, v, q, spread_bp, fee_bp = 0.012, 30e9, 150e6, 0.3, 0.2
+        part = q / v
+        imp = 1e4 * sig * part ** 0.5
+        tot = spread_bp / 2 + imp + fee_bp
+        rows = [cmath(r"Q/V", r"=", rf"\frac{{150\text{{m}}}}{{30\text{{bn}}}} = {100 * part:.1f}\%", font_size=36),
+                cmath(r"\text{impact}", r"\approx", rf"1.2\% \times \sqrt{{{part:.3f}}} = {imp:.1f}\ \text{{bp}}", font_size=36,
+                      colors={r"\text{impact}": IMPACT_C}),
+                cmath(r"\text{total}", r"\approx", rf"\tfrac12 (0.3) + {imp:.1f} + 0.2 = {tot:.1f}\ \text{{bp}}", font_size=36,
+                      colors={r"\text{total}": HURDLE})]
+        whys = [why(r"an illustration: buying \$150 million of a broad equity fund that trades \$30 billion a day"),
+                why(r"the square root with $Y = 1$ and a daily volatility of 1.2\%"),
+                why(r"half a 0.3-bp spread and 0.2 bp of fees: the impact is nearly all of the cost")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "A pre-trade estimate, as an illustration. <bookmark mark='a'/> Buy a hundred and fifty million dollars of a "
+            "broad equity fund that trades thirty billion a day: half a percent of the day. <bookmark mark='b'/> With "
+            f"a daily volatility of 1.2 percent, the square root says about {imp:.1f} basis points. "
+            f"<bookmark mark='c'/> Add half the spread and the fees, and the total is about {tot:.1f}: impact is nearly "
+            "all of it."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def tca(self):
         rows = [cmath(r"\text{arrival}", r":", r"p_{\text{decision}}\ \text{or}\ p_{\text{first fill}}", font_size=36),
                 cmath(r"\text{IS}", r"=", r"\text{delay} + \text{impact} + \text{timing} + \text{opportunity} + \text{fees}",
@@ -206,6 +290,43 @@ class Algos(VoiceoverScene):
             "realised cost with a pre-trade estimate, judged against the noise. For a single order that noise is "
             "enormous, as the Almgren and Chriss standard deviation showed: TCA is a statistics problem over many "
             "orders."
+        ) as vo:
+            step(0)
+            for k, mk in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(mk)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def example(self):
+        dec, arr, avg, end = 100.00, 100.05, 100.30, 100.60
+        q_f, q_t = 90_000, 100_000
+        delay = (arr - dec) * q_f
+        impact = (avg - arr) * q_f
+        opp = (end - dec) * (q_t - q_f)
+        total = delay + impact + opp
+        bp = 1e4 * total / (dec * q_t)
+        rows = [cmath(r"\text{delay}", r"=", rf"(100.05 - 100.00) \times 90{{,}}000 = \${delay:,.0f}".replace(",", "{,}"),
+                      font_size=32),
+                cmath(r"\text{execution}", r"=", rf"(100.30 - 100.05) \times 90{{,}}000 = \${impact:,.0f}".replace(",", "{,}"),
+                      font_size=32, colors={r"\text{execution}": IMPACT_C}),
+                cmath(r"\text{opportunity}", r"=", rf"(100.60 - 100.00) \times 10{{,}}000 = \${opp:,.0f}".replace(",", "{,}"),
+                      font_size=32),
+                cmath(r"\text{IS}", r"=", rf"\${total:,.0f} = {bp:.1f}\ \text{{bp}}".replace(",", "{,}"), font_size=36,
+                      colors={r"\text{IS}": HURDLE})]
+        whys = [why(r"a buy of 100,000 shares decided at \$100.00; the algorithm starts at \$100.05"),
+                why(r"90,000 filled at an average \$100.30: crossing, impact and timing together"),
+                why(r"10,000 never filled, and the price ended at \$100.60: the cost of what was missed"),
+                why(r"the shortfall against the paper portfolio, in dollars and in basis points of the order")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "A worked example. A buy of a hundred thousand shares is decided at a hundred dollars. "
+            "<bookmark mark='a'/> The algorithm starts five cents higher: delay. <bookmark mark='b'/> Ninety thousand "
+            "shares are filled at an average of a hundred dollars thirty: the execution cost, spread, impact and timing "
+            "together. <bookmark mark='c'/> Ten thousand are never filled, and the price ends at a hundred and sixty "
+            f"cents above: the opportunity cost. <bookmark mark='d'/> In all, {bp:.0f} basis points of the order. Notice "
+            "that the unfilled tenth cost almost as much as the delay."
         ) as vo:
             step(0)
             for k, mk in enumerate(("a", "b", "c", "d")):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant36.common import (BAD, HURDLE, MID_C, OFI_C, PART, comma, load)
+from videos.quant.quant36.common import (BAD, GOOD, HURDLE, MID_C, OFI_C, PART, comma, load)
 
 
 class Events(VoiceoverScene):

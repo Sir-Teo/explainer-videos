@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant37.common import (BUY_C, IMPACT_C, KERNEL_C, PART, SCHED_C, TWAP_C, fit_right,
+from videos.quant.quant37.common import (HURDLE, BUY_C, IMPACT_C, KERNEL_C, PART, SCHED_C, TWAP_C, fit_right,
                                          load)
 
 
@@ -16,7 +16,9 @@ class OW(VoiceoverScene):
         self.answer(o)
         self.schedule(o)
         self.by_rho(o)
+        self.ow_btc(load("resilience"))
         self.powerlaw(k)
+        self.bitcoin(load("resilience"))
         self.signals()
         self.crowd()
         self.question()
@@ -140,6 +142,36 @@ class OW(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def ow_btc(self, rs):
+        dep = rs["depth"]
+        miss = 1 - dep[0]
+        rho = float(-np.log(max(1e-3, (1 - dep[1]) / miss)) / 0.1) if dep[1] < 1 else 20.0
+        rT = rho * 3600
+        blk = 1 / (2 + rT)
+        rows = [cmath(r"\rho_{\text{displayed}}", r"\gtrsim", rf"{rho:.0f}\ \text{{per second}}", font_size=38),
+                cmath(r"\rho T\ (1\ \text{hour})", r"\approx", rf"{rT:,.0f}".replace(",", "{,}"), font_size=38),
+                cmath(r"\text{blocks}", r"\approx", rf"{100 * blk:.4f}\%", font_size=38, colors={r"\text{blocks}": HURDLE})]
+        whys = [why(r"the displayed queues recover within a tenth of a second after a sweep"),
+                why(r"over an hour's order, the displayed book recovers tens of thousands of times"),
+                why(r"so Obizhaeva--Wang on the displayed book says trade steadily; the slow resilience that justifies "
+                    r"blocks must come from the latent book and the propagator")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Put Bitcoin's displayed resilience into the theorem. <bookmark mark='a'/> The best queues recover at a rate "
+            f"of at least {rho:.0f} per second. <bookmark mark='b'/> Over an hour, rho T is in the tens of thousands. "
+            "<bookmark mark='c'/> The blocks vanish: on the displayed book alone, trade steadily. The slow resilience "
+            "that makes blocks worthwhile lives in the latent book, and in the propagator's slow decay."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def powerlaw(self, k):
         t = np.asarray(k["t"], float)
         ex = k["kernels"]["exponential"]
@@ -171,6 +203,40 @@ class OW(VoiceoverScene):
             self.play(Create(ce))
             vo.wait_until("b")
             self.play(Create(cp))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def bitcoin(self, rs):
+        ks = np.asarray(rs["ks"], float)
+        path = np.asarray(rs["path"], float)
+        pre = np.asarray(rs["pre"], float)
+        pk = np.asarray(rs["pre_ks"], float)
+        x = np.r_[-pk[::-1] / 10, ks / 10]
+        y = np.r_[-pre[::-1], path]
+        xs = np.sign(x) * np.log10(1 + np.abs(x) * 10)
+        top = float(np.ceil(y.max() / 10) * 10)
+        g = axes([-2.6, 3.6], [-10, top], x_length=8.4, y_length=4.0, xlabel=r"time from the sweep (log scale both ways)",
+                 ylabel=r"price, ticks, in the sweep's direction", xticks=[0], yticks=[0, top], yfmt=lambda v: f"{v:.0f}",
+                 font_size=15).move_to(DOWN * 0.4)
+        ax = g.ax
+        c_ = VGroup(curve(ax, xs, y, IMPACT_C, stroke_width=3), *[Dot(ax.c2p(a, b), radius=0.05, color=IMPACT_C)
+                                                                  for a, b in zip(xs, y)])
+        dep = np.asarray(rs["depth"], float)
+        st = label(rf"best-queue depth: {100 * dep[0]:.0f}\% of normal just after, back within "
+                   rf"{100 * (rs['half_steps'] + 1)} ms", font_size=18, color=GREY_A).to_edge(UP, buff=0.7)
+        with self.voiceover(
+            f"How resilient is Bitcoin's book? Take the {rs['n']:,} sweeps of two days, moves of ten ticks or more in a "
+            "tenth of a second. <bookmark mark='a'/> The best queues are refilled almost at once: depth falls to about "
+            f"{100 * dep[0]:.0f} percent of normal and is back within a couple of hundred milliseconds. "
+            "<bookmark mark='b'/> But the price does not come back. After the sweep it keeps drifting the same way, to "
+            f"about {path[-2]:.0f} ticks after two minutes. Here the sweep is news, not a dent in the book: the "
+            "resilience that matters for a large order is in the latent liquidity, not the displayed queue."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(FadeIn(st))
+            vo.wait_until("b")
+            self.play(Create(c_), run_time=2.5)
         self.wait(0.4)
         self.clear_scene()
 

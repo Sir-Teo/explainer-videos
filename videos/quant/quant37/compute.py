@@ -17,6 +17,7 @@ Almgren-Chriss, decay kernels, and the House's queue-reactive simulator.
 * ``ow``          Obizhaeva-Wang: the discrete optimum against the closed form as the grid refines;
 * ``rl``          a Q-learning executor in the queue-reactive simulator against TWAP, a dump and heuristics;
 * ``volume``      the intraday volume curve (VWAP schedule) and participation;
+* ``resilience``  the book after sweeps on Bitcoin: how fast the best queues refill, and whether the price reverts;
 * ``research``    Obizhaeva-Wang against TWAP by resilience, the Fredholm residual, and the optimal schedule under
                   Bitcoin's fitted power-law propagator.
 """
@@ -211,6 +212,41 @@ def compute_ow() -> dict:
                   "by_rho": [{"rho": r, **E.ow_closed_form(X, T, r)} for r in rhos]})
 
 
+def compute_resilience() -> dict:
+    """After sweeps (the mid jumps ten ticks or more in 100 ms, events at least 30 s apart, 16-17 May): the best-queue
+    depth relative to its median over the preceding 5 s, and the price path in the sweep's direction, in ticks, for 5
+    minutes before and after."""
+    ks = [0, 1, 2, 5, 10, 20, 50, 100, 300, 600, 1200, 3000]
+    pre_ks = [10, 50, 100, 300]
+    deps, paths, pres, n = [], [], [], 0
+    for d in BOOK_DAYS[:2]:
+        b = data.binance_book_day("BTCUSDT", d)
+        m = L.mid(b) / TICK
+        dep = b["bq"] + b["aq"]
+        dm = np.diff(m)
+        ev = np.flatnonzero(np.abs(dm) >= 10) + 1
+        ev = ev[(ev > 400) & (ev < len(m) - 3001)]
+        keep, last = [], -10 ** 9
+        for e in ev:
+            if e - last > 300:
+                keep.append(e)
+                last = e
+        ev = np.array(keep)
+        s = np.sign(dm[ev - 1])
+        base = np.array([np.median(dep[e - 50:e - 1]) for e in ev])
+        deps.append(np.array([dep[e:e + 301] / bb for e, bb in zip(ev, base)]))
+        paths.append(np.array([s * (m[ev + k] - m[ev - 1]) for k in ks]).T)
+        pres.append(np.array([s * (m[ev - 1] - m[ev - 1 - k]) for k in pre_ks]).T)
+        n += len(ev)
+    D = np.concatenate(deps)
+    P = np.concatenate(paths)
+    R = np.concatenate(pres)
+    curve = np.median(D, 0)
+    half = int(np.argmax(curve >= 1 - 0.5 * (1 - curve[0])))
+    return _json({"n": n, "depth": curve[:51], "half_steps": half, "ks": ks, "path": P.mean(0),
+                  "path_se": P.std(0) / math.sqrt(len(P)), "pre_ks": pre_ks, "pre": R.mean(0)})
+
+
 def compute_research() -> dict:
     """The research chapter's checks: Obizhaeva-Wang against TWAP across resilience, analytically and on a grid; the
     first-order condition's residual; and the optimal schedule under the power-law propagator fitted to Bitcoin."""
@@ -294,7 +330,7 @@ def compute_volume() -> dict:
 
 
 ITEMS = {"aggregate": compute_aggregate, "propagator": compute_propagator, "latent": compute_latent,
-         "ac": compute_ac, "kernels": compute_kernels, "ow": compute_ow, "rl": compute_rl, "volume": compute_volume,
+         "ac": compute_ac, "kernels": compute_kernels, "ow": compute_ow, "rl": compute_rl, "volume": compute_volume, "resilience": compute_resilience,
          "research": compute_research}
 
 

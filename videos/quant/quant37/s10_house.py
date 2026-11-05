@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import execution as E
-from videos.quant.quant37.common import (GOOD, HURDLE, IMPACT_C, KERNEL_C, PART, RL_C, SCHED_C, house_lab,
-                                         load)
+from videos.quant.quant37.common import (GOOD, HURDLE, IMPACT_C, KERNEL_C, PART, RL_C, SCHED_C, fit_right,
+                                         house_lab, load)
 
 
 class House(VoiceoverScene):
@@ -13,10 +13,13 @@ class House(VoiceoverScene):
         self.card()
         self.sheet(load("aggregate"), load("propagator"), load("latent"), load("ac"), load("ow"), load("rl"))
         self.sizing(load("ac"))
+        self.report()
+        self.capacity_chart(load("ac"))
         self.lab()
         self.lab2()
         self.lab3()
         self.lab4()
+        self.lab5()
         self.module()
         self.test()
 
@@ -120,6 +123,64 @@ class House(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def report(self):
+        cards = VGroup(
+            desk_question(r"before", r"every parent order carries its size as a share of expected volume, the "
+                          r"square-root estimate with its uncertainty, the signal's half-life, and the chosen schedule",
+                          width=12.0, font_size=19),
+            desk_question(r"during", r"the desk watches participation, the realised path against the schedule, and the "
+                          r"microprice of Part 36 before each child order", width=12.0, font_size=19),
+            desk_question(r"after", r"the shortfall against arrival, split as in Chapter 1, the markouts, and the "
+                          r"realised against the estimated cost, pooled over orders until the noise averages out",
+                          width=12.0, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "What the desk records, for every order. <bookmark mark='a'/> Before: its share of expected volume, the "
+            "square-root estimate with its uncertainty, the signal's half-life, and the schedule. "
+            "<bookmark mark='b'/> During: participation, the path against the schedule, and the microprice before each "
+            "child order. <bookmark mark='c'/> After: the shortfall against arrival, split into its parts, the "
+            "markouts, and the realised cost against the estimate, pooled over many orders until the noise averages "
+            "out. That record is what later parts use to measure capacity."
+        ) as vo:
+            for k_, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k_], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def capacity_chart(self, ac):
+        import numpy as np
+        sig = ac["sigma_day"] / ac["price"]
+        v_usd = ac["v_day"] * ac["price"]
+        sizes = np.logspace(5, 9, 60)
+        cost = 1e4 * sig * np.sqrt(sizes / v_usd)
+        x = np.log10(sizes)
+        g = axes([5, 9], [0, 60], x_length=6.4, y_length=4.4, xlabel=r"order size, dollars",
+                 ylabel=r"square-root cost, bp", xticks=[5, 6, 7, 8, 9], xfmt=lambda v: f"10^{{{v:.0f}}}",
+                 yticks=[0, 10, 20, 40, 60], yfmt=lambda v: f"{v:.0f}", font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
+        ax = g.ax
+        c_ = curve(ax, x, cost, IMPACT_C, stroke_width=3)
+        alpha = DashedLine(ax.c2p(5, 10), ax.c2p(9, 10), color=GOOD, stroke_width=2)
+        cap = (0.0010 / sig) ** 2 * v_usd
+        mark = Dot(ax.c2p(np.log10(cap), 10), radius=0.09, color=HURDLE)
+        leg = legend([(IMPACT_C, r"impact, $Y = 1$"), (GOOD, r"a 10-bp signal")], font_size=16)
+        leg.to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
+        fit_right(leg)
+        with self.voiceover(
+            "The same sizing as a picture. <bookmark mark='a'/> The square-root cost of an order on Bitcoin's perpetual "
+            "against its size, from a hundred thousand dollars to a billion. <bookmark mark='b'/> The signal's ten "
+            f"basis points cross it at about {cap / 1e6:.0f} million dollars. Left of the dot the trade pays; right of "
+            "it the market is paid. Every strategy the House runs has a picture like this, and its size sits well to "
+            "the left."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(Create(c_))
+            vo.wait_until("b")
+            self.play(Create(alpha), FadeIn(mark))
+        self.wait(0.4)
+        self.clear_scene()
+
     def lab(self):
         card = house_lab(r"The latent order book", E.latent_book, "for n in range(n_tot):", 10, width=10.6)
         card.move_to(ORIGIN)
@@ -162,6 +223,18 @@ class House(VoiceoverScene):
         with self.voiceover(
             "And Chapter three's fit: the sign autocorrelation and the cross-correlation of price changes with past "
             "signs, a Toeplitz system solved, and a cumulative sum. The propagator is what remains of a trade's impact."
+        ):
+            self.play(FadeIn(card))
+            self.wait(1.5)
+        self.clear_scene()
+
+    def lab5(self):
+        card = house_lab(r"A market sell in the simulator", E.QueueExec._sell, "while k > 0:", 9, width=10.6)
+        card.move_to(ORIGIN)
+        with self.voiceover(
+            "And Chapter seven's market order. While units remain, take what the best bid holds, at half a tick below "
+            "the mid; when the queue is emptied the mid falls half a tick and new queues are drawn. Impact, in nine "
+            "lines."
         ):
             self.play(FadeIn(card))
             self.wait(1.5)

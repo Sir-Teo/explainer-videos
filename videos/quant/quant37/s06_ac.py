@@ -15,11 +15,15 @@ class AC(VoiceoverScene):
         self.model()
         self.objective()
         self.solution()
+        self.continuous()
         self.trajectories(a)
         self.frontier(a)
         self.numbers(a)
+        self.lam_meaning(a)
         self.versus(a)
+        self.practitioner()
         self.extensions()
+        self.beyond_var()
         self.question()
 
     def card(self):
@@ -98,6 +102,35 @@ class AC(VoiceoverScene):
             "solution is a hyperbolic sine. <bookmark mark='c'/> The constant kappa, the root of lambda sigma squared "
             "over eta, is the urgency: one over kappa is the order's half-life. With no risk aversion it is a straight "
             "line, TWAP; with a lot, the sale is nearly immediate."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def continuous(self):
+        rows = [cmath(r"\min_x", r"\ ", r"\int_0^T \big(\eta\,\dot x^2 + \lambda\sigma^2 x^2\big)\,dt", font_size=40),
+                cmath(r"\eta\,\ddot x", r"=", r"\lambda\sigma^2\,x", font_size=42),
+                cmath(r"x(0) = X,\ x(T) = 0", r"\Rightarrow", r"x = X\frac{\sinh\kappa(T - t)}{\sinh\kappa T}", font_size=34,
+                      colors={r"x = X\frac{\sinh\kappa(T - t)}{\sinh\kappa T}": SCHED_C})]
+        whys = [why(r"in continuous time: the cost of speed, $\eta\dot x^2$, against the risk of holding, "
+                    r"$\lambda\sigma^2 x^2$, a Lagrangian of classical mechanics"),
+                why(r"its Euler--Lagrange equation: a particle pulled toward zero by a spring of stiffness "
+                    r"$\lambda\sigma^2/\eta$"),
+                why(r"the boundary conditions give the hyperbolic sine; Part 8's calculus of variations, applied to "
+                    r"trading")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The same answer in continuous time, by Part eight's calculus of variations. <bookmark mark='a'/> Minimise "
+            "the integral of the cost of speed, eta times the rate squared, plus the cost of risk, lambda sigma squared "
+            "times the holding squared. <bookmark mark='b'/> The Euler-Lagrange equation is a particle pulled toward "
+            "zero by a spring. <bookmark mark='c'/> With the order full at the start and empty at the end, the solution "
+            "is the hyperbolic sine."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -201,6 +234,34 @@ class AC(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def lam_meaning(self, a):
+        sd = a["show"]["1e-06"]["sd"]
+        pen = 1e-6 * sd ** 2
+        rows = [cmath(r"\lambda", r"=", r"10^{-6}\ \text{per dollar}", font_size=38),
+                cmath(r"\lambda\,\text{Var}", r"=", rf"10^{{-6}} \times ({sd / 1000:.0f}\text{{k}})^2 \approx "
+                      rf"\${pen / 1000:.0f}\text{{k}}", font_size=36, colors={r"\lambda\,\text{Var}": HURDLE}),
+                cmath(r"\text{read as}", r":", r"\text{the dollars paid to remove the risk}", font_size=34)]
+        whys = [why(r"risk aversion has units: dollars of expected cost per squared dollar of uncertainty"),
+                why(r"at that schedule's standard deviation, the risk term is worth about this much"),
+                why(r"a certainty equivalent: the desk would pay that much, in expected impact, to remove the "
+                    r"uncertainty entirely")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What lambda means. <bookmark mark='a'/> It has units: dollars of expected cost per squared dollar of "
+            "uncertainty. <bookmark mark='b'/> At ten to the minus six, the schedule's risk term is worth about "
+            f"{pen / 1000:.0f} thousand dollars. <bookmark mark='c'/> Read it as a certainty equivalent: what the desk "
+            "would pay, in expected impact, to remove the uncertainty. Choosing lambda is choosing that price."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def versus(self, a):
         notional = a["X"] * a["price"]
         frac = a["X"] / a["v_day"]
@@ -236,6 +297,36 @@ class AC(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def practitioner(self):
+        rows = [cmath(r"\text{cost}", r"\approx", r"\tfrac12\,\text{spread} + Y\sigma\sqrt{Q/V} + \text{fees}", font_size=36,
+                      colors={r"\text{cost}": IMPACT_C}),
+                cmath(r"h(v)", r"\propto", r"v^{3/5}", font_size=40),
+                cmath(r"\text{schedule}", r":", r"\text{Almgren--Chriss shape, square-root price}", font_size=34,
+                      colors={r"\text{schedule}": SCHED_C})]
+        whys = [why(r"the pre-trade estimate a desk quotes: half the spread on every share, the square root for the "
+                    r"order, and the fees"),
+                why(r"Almgren, Thum, Hauptmann and Li (2005) fitted temporary impact as the rate to the power 0.6 on "
+                    r"Citigroup's orders, with permanent impact linear"),
+                why(r"in practice: shape the schedule with the optimal-control answer, and price it with the empirical "
+                    r"law")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What desks actually use. <bookmark mark='a'/> A pre-trade estimate: half the spread on every share, the "
+            "square root for the order, and the fees. <bookmark mark='b'/> Almgren and colleagues fitted temporary "
+            "impact on Citigroup's own orders as the trading rate to the power three-fifths, with permanent impact "
+            "linear. <bookmark mark='c'/> So the practice is a hybrid: shape the schedule with the optimal-control "
+            "answer, and price it with the empirical law."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def extensions(self):
         cards = VGroup(
             desk_question(r"nonlinear temporary impact", r"Almgren (2003): a power of the rate changes the curve's shape "
@@ -252,6 +343,30 @@ class AC(VoiceoverScene):
             "cost alone with a predictable drift: without one, the answer is TWAP. <bookmark mark='c'/> And the "
             "mean-variance schedule is static. Almgren and Julian Lorenz showed that re-optimising as prices move, "
             "selling faster after gains, does better, at the price of time-consistency."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def beyond_var(self):
+        cards = VGroup(
+            desk_question(r"utility, not variance", r"Schied and Schöneborn (2009): with exponential utility the static "
+                          r"schedule is optimal; with other utilities the best schedule depends on wealth and adapts",
+                          width=12.4, font_size=19),
+            desk_question(r"tail risk", r"minimising a conditional value at risk of the shortfall front-loads more than "
+                          r"variance when price jumps are possible", width=12.4, font_size=19),
+            desk_question(r"the risk aversion in practice", r"desks set urgency, not $\lambda$: a target half-life or a "
+                          r"participation rate, chosen from the signal's decay and the order's share of volume",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Beyond variance. <bookmark mark='a'/> Alexander Schied and Torsten Schöneborn showed that with exponential "
+            "utility the static schedule is optimal, and with other utilities the schedule adapts to wealth. "
+            "<bookmark mark='b'/> Minimising a tail measure of the shortfall front-loads more when prices can jump. "
+            "<bookmark mark='c'/> And in practice desks do not choose a lambda: they set an urgency, a half-life or a "
+            "participation rate, from the signal's decay and the order's size."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

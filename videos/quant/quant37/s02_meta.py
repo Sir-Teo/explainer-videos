@@ -14,7 +14,9 @@ class Meta(VoiceoverScene):
         self.metaorder()
         self.shortfall()
         self.path()
+        self.who_pays()
         self.public(ag)
+        self.detect()
         self.phi(ag)
         self.size(ag)
         self.question()
@@ -111,6 +113,30 @@ class Meta(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def who_pays(self):
+        cards = VGroup(
+            desk_question(r"impact is someone's revenue", r"the price moved against the buyer is the price earned by "
+                          r"those who sold to it: market makers, and patient traders on the other side", width=12.4,
+                          font_size=19),
+            desk_question(r"temporary and permanent", r"the part that reverts is paid for liquidity; the part that "
+                          r"stays is the market learning that someone wanted to buy", width=12.4, font_size=19),
+            desk_question(r"Kyle's answer and the data's", r"Part 35's Kyle market makes all impact permanent and "
+                          r"linear; real metaorders are concave and partly transient, which needs more than Kyle",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Who receives the cost. <bookmark mark='a'/> Impact is someone's revenue: the price moved against the buyer "
+            "is earned by those who sold to it, the market makers and the patient traders on the other side. "
+            "<bookmark mark='b'/> The part that reverts is the price of liquidity. The part that stays is the market "
+            "learning that someone wanted to buy. <bookmark mark='c'/> Kyle's market of Part thirty-five makes all of "
+            "it permanent and linear. Real metaorders are concave and partly transient, which needs more than Kyle."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
     def public(self, ag):
         cards = VGroup(
             desk_question(r"metaorders are private", r"the studies use brokers' or funds' own execution records; a "
@@ -128,6 +154,27 @@ class Meta(VoiceoverScene):
             "impact: the price change over a window against the signed volume of everyone together. "
             "<bookmark mark='c'/> Our tape: ten days of Bitcoin's perpetual future in May twenty twenty-three, with "
             f"about {ag['v_day'] / 1000:.0f} thousand bitcoin traded a day."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def detect(self):
+        cards = VGroup(
+            desk_question(r"proprietary records", r"a broker's or fund's own child orders, linked to their parents: the "
+                          r"gold standard, behind the published square-root law", width=12.4, font_size=19),
+            desk_question(r"leaked account data", r"Mt.\ Gox's records identified accounts, so metaorders could be "
+                          r"rebuilt from public-looking trades (Chapter 2)", width=12.4, font_size=19),
+            desk_question(r"proxies from the tape", r"runs of same-sign trades, or broker codes on some exchanges: noisy, "
+                          r"and biased toward the orders that were easy to see", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How researchers see metaorders at all. <bookmark mark='a'/> Proprietary records, a broker's or a fund's "
+            "own child orders linked to their parents: the gold standard. <bookmark mark='b'/> Leaked account data, as "
+            "from the Mt. Gox exchange. <bookmark mark='c'/> Or proxies from the tape, such as runs of same-sign trades "
+            "or broker codes: noisy, and biased toward the orders that were easy to spot."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

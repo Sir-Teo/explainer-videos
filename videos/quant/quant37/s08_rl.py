@@ -17,6 +17,8 @@ class RL(VoiceoverScene):
         self.table(r)
         self.policy(r)
         self.why_not(r)
+        self.better()
+        self.features()
         self.question()
 
     def card(self, r):
@@ -206,6 +208,52 @@ class RL(VoiceoverScene):
             "<bookmark mark='c'/> Learning can help in books with memory, signals and resilience, where the optimum is "
             "no simple formula; but only in a simulator that passes the scorecard. A learned executor should be judged, "
             "first, against TWAP."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def better(self):
+        cards = VGroup(
+            desk_question(r"common random numbers", r"compare policies on the same simulated paths, so that the noise "
+                          r"cancels in the difference; it shrinks the variance of comparisons many times", width=12.4,
+                          font_size=19),
+            desk_question(r"structure first", r"learn the residual around TWAP or Almgren--Chriss instead of the "
+                          r"whole schedule; the learner then needs to find only the deviations that pay", width=12.4,
+                          font_size=19),
+            desk_question(r"a market that reacts", r"train in a simulator with memory, sweeps and resilience, scored "
+                          r"against data, and evaluate out of sample on replayed history with an impact model",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "What would do better. <bookmark mark='a'/> Common random numbers: compare policies on the same simulated "
+            "paths, so the noise cancels in the difference. <bookmark mark='b'/> Structure first: learn the deviation "
+            "from TWAP or from Almgren and Chriss, not the whole schedule. <bookmark mark='c'/> And a market that "
+            "reacts, with memory, sweeps and resilience, scored against data, with the final test out of sample."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def features(self):
+        cards = VGroup(
+            desk_question(r"what a richer state would add", r"the spread, the recent order-flow imbalance, the microprice's "
+                          r"lean and short-term volatility: Part 36's measurements, as inputs", width=12.4, font_size=19),
+            desk_question(r"what the reward should be", r"the shortfall against arrival, plus a penalty for risk, so "
+                          r"that the learner faces Almgren--Chriss's trade-off rather than a risk-neutral one",
+                          width=12.4, font_size=19),
+            desk_question(r"what it must be compared with", r"TWAP, the Almgren--Chriss schedule at the same risk, and a "
+                          r"simple imbalance rule, on the same random paths", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Designing a better experiment. <bookmark mark='a'/> A richer state: the spread, the recent imbalance, the "
+            "microprice's lean, and short-term volatility. <bookmark mark='b'/> A reward with a risk penalty, so the "
+            "learner faces Almgren and Chriss's trade-off. <bookmark mark='c'/> And comparisons on the same random paths "
+            "with TWAP, with Almgren and Chriss at the same risk, and with a simple imbalance rule."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

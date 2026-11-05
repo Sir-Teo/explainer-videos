@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant37.common import (BUY_C, GOOD, HURDLE, IMPACT_C, KERNEL_C, PART, SCHED_C, TWAP_C, fit_right,
+from videos.quant.quant37.common import (BAD, BUY_C, GOOD, HURDLE, IMPACT_C, KERNEL_C, PART, SCHED_C, TWAP_C, fit_right,
                                          load)
 
 
@@ -17,9 +17,13 @@ class Research(VoiceoverScene):
         self.first_order()
         self.verify()
         self.solve()
+        self.why_measures()
         self.theorem()
+        self.intuition()
+        self.limits()
         self.grid(o)
         self.saving(r)
+        self.power_case()
         self.btc(r)
         self.related()
         self.open_problems()
@@ -169,6 +173,34 @@ class Research(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def why_measures(self):
+        rows = [cmath(r"\mathcal A_{\text{rate}}", r"=", r"\{dX = v(t)\,dt\}", font_size=38),
+                cmath(r"\inf_{\mathcal A_{\text{rate}}} \mathcal C", r"=", r"\mathcal C^*\ \text{but not attained}",
+                      font_size=36, colors={r"\mathcal C^*\ \text{but not attained}": BAD}),
+                cmath(r"v_\varepsilon", r"=", r"\frac{a}{\varepsilon}\mathbb 1_{[0,\varepsilon]} + b + "
+                      r"\frac{a}{\varepsilon}\mathbb 1_{[T - \varepsilon, T]}", font_size=34)]
+        whys = [why(r"restrict to strategies with a trading rate, no blocks"),
+                why(r"the cost can be brought arbitrarily close to the optimum, but no rate reaches it"),
+                why(r"bursts of width $\varepsilon$ approximate the blocks, and their cost tends to $\mathcal C^*$ as "
+                    r"$\varepsilon \to 0$; so the right space is measures, where the minimum exists")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Why the theorem needs measures. <bookmark mark='a'/> Restrict strategies to trading rates, with no blocks. "
+            "<bookmark mark='b'/> Then the cost can get as close to the optimum as you like, but never reach it. "
+            "<bookmark mark='c'/> Bursts that grow narrower and taller approach the blocks, and their cost approaches "
+            "the minimum. So the natural space is measures, where the minimum exists: Almgren and Chriss could use "
+            "rates only because their temporary impact punishes bursts infinitely."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def theorem(self):
         st = VGroup(MathTex(r"\min_{\mathcal A} \mathcal C\ \text{has at most one solution, characterised by } \int_0^T "
                             r"G(|t - s|)\,dX^*_s = \lambda\ \ \forall t \in [0, T]", font_size=28),
@@ -192,6 +224,58 @@ class Research(VoiceoverScene):
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(Indicate(st[1], color=HURDLE, scale_factor=1.03))
+        self.wait(0.5)
+        self.clear_scene()
+
+    def intuition(self):
+        cards = VGroup(
+            desk_question(r"why a block at the start", r"the book is undisturbed: the first units are the cheapest the "
+                          r"order will ever buy, and their impact has the whole horizon to heal", width=12.4, font_size=19),
+            desk_question(r"why a block at the end", r"the last trade's impact harms no later trade; only its own "
+                          r"half-cost remains, so it is worth buying a lump", width=12.4, font_size=19),
+            desk_question(r"why a constant rate between", r"each unit bought pays the impact left by all earlier ones; "
+                          r"keeping that impact constant makes every moment equally expensive, the Fredholm "
+                          r"condition", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Why the shape, in words. <bookmark mark='a'/> A block at the start, because the book is undisturbed: those "
+            "units are the cheapest the order will buy, and their impact has the whole horizon to heal. "
+            "<bookmark mark='b'/> A block at the end, because the last trade's impact harms no later trade. "
+            "<bookmark mark='c'/> And a constant rate between, because keeping the accumulated impact constant makes "
+            "every moment equally expensive. If one moment were cheaper, buying more then would lower the cost: that is "
+            "the Fredholm condition."
+        ) as vo:
+            for k_, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k_], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def limits(self):
+        rows = [cmath(r"\rho \to 0", r":", r"\mathcal C^* \to \tfrac{X^2}{2q}\ \text{for every schedule}", font_size=36),
+                cmath(r"\rho T \to \infty", r":", r"\mathcal C^* \approx \frac{X^2}{q\rho T} = \eta\,\frac{X^2}{T}",
+                      font_size=36),
+                cmath(r"\eta", r"=", r"\frac{1}{q\rho}", font_size=40, colors={r"\eta": HURDLE})]
+        whys = [why(r"no resilience: impact is permanent and linear, Huberman and Stanzl's case; the schedule does not "
+                    r"matter"),
+                why(r"fast resilience: the blocks vanish, the rate is $X/T$, and the cost is TWAP's under Almgren--Chriss "
+                    r"temporary impact"),
+                why(r"so Almgren--Chriss's temporary impact is a thin book that heals fast: depth times resilience is the "
+                    r"liquidity it measures")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The two limits connect the models. <bookmark mark='a'/> Without resilience, impact is permanent and "
+            "linear, and the schedule does not matter. <bookmark mark='b'/> With fast resilience the blocks vanish and "
+            "the cost is that of trading steadily against Almgren and Chriss's temporary impact. <bookmark mark='c'/> "
+            "So their eta is one over depth times resilience: temporary impact is a thin book that heals fast."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
         self.wait(0.5)
         self.clear_scene()
 
@@ -248,6 +332,34 @@ class Research(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(c_), run_time=2)
         self.wait(0.4)
+        self.clear_scene()
+
+    def power_case(self):
+        rows = [cmath(r"G(t)", r"=", r"(1 + t/\ell_0)^{-\beta}", font_size=40, colors={r"G(t)": KERNEL_C}),
+                cmath(r"\text{Fredholm}", r":", r"\int_0^T G(|t - s|)\,dX_s = \lambda", font_size=36),
+                cmath(r"\text{solution}", r":", r"\text{blocks} + \text{a U-shaped rate}", font_size=36,
+                      colors={r"\text{solution}": SCHED_C})]
+        whys = [why(r"the power-law propagator of Chapter 3, convex and decreasing, positive definite"),
+                why(r"the same characterisation, but no closed form: solve the integral equation numerically, as the "
+                    r"House's \texttt{kernel\_optimal} does on a grid"),
+                why(r"Gatheral, Schied and Slynko: blocks at both ends and a density that is largest near them, singular "
+                    r"for a pure power law; with a convex kernel, never negative")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Beyond the exponential. <bookmark mark='a'/> Take Chapter three's power-law propagator. "
+            "<bookmark mark='b'/> The theorem still characterises the optimum, but the integral equation has no closed "
+            "form, so it is solved on a grid, as the House's code does. <bookmark mark='c'/> The answer keeps the "
+            "blocks and bends the rate into a U, largest near the ends: Gatheral, Schied and Slynko found the density "
+            "can even blow up at the ends for a pure power law. With a convex kernel it never sells."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def btc(self, r):

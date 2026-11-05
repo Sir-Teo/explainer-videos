@@ -13,7 +13,7 @@ class Deep(VoiceoverScene):
         self.universal()
         self.benchmark()
         self.labels()
-        self.setup(d)
+        self.design(d)
         self.results(d)
         self.why_high(d)
         self.lessons()
@@ -161,7 +161,7 @@ class Deep(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def setup(self, d):
+    def design(self, d):
         ntr = d["1 s"]["n_train"]
         nte = d["1 s"]["n_test"]
         rows = [cmath(r"x_t", r"=", r"\big(\tfrac{\text{OFI}}{\text{depth}},\ \Delta M,\ I - \tfrac12\big)_{t-9..t}",

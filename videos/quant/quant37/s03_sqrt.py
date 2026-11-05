@@ -15,11 +15,15 @@ class Sqrt(VoiceoverScene):
         self.card()
         self.law()
         self.universal()
+        self.bitcoin_sizes()
         self.puzzle()
+        self.dimensions()
+        self.visible()
         self.latent_picture()
         self.derive()
         self.sim(lt)
         self.decay(lt)
+        self.fair_pricing()
         self.invariance()
         self.question()
 
@@ -106,6 +110,37 @@ class Sqrt(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def bitcoin_sizes(self):
+        ac = load("ac")
+        sig = ac["sigma_day"] / ac["price"]
+        v_usd = ac["v_day"] * ac["price"]
+        shares = (0.001, 0.01, 0.1)
+        costs = [1e4 * sig * (s ** 0.5) for s in shares]
+        rows = [cmath(rf"{100 * s:g}\%\ \text{{of a day}}", r":", rf"\${s * v_usd / 1e6:,.0f}\text{{m}} \to {c:.0f}\ "
+                      r"\text{bp}".replace(",", "{,}"), font_size=36, colors={rf"{c:.0f}\ \text{{bp}}": IMPACT_C})
+                for s, c in zip(shares, costs)]
+        whys = [why(rf"Bitcoin's perpetual: daily volatility {100 * sig:.1f}\%, daily volume about "
+                    rf"\${v_usd / 1e9:.0f}bn, with $Y = 1$"),
+                why(r"ten times the size, about three times the impact"),
+                why(r"a tenth of the day's volume: an order that moves the price by a third of a day's volatility")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What the law says for Bitcoin's perpetual, with a prefactor of one. <bookmark mark='a'/> A tenth of a "
+            f"percent of a day's volume, about {shares[0] * v_usd / 1e6:.0f} million dollars, costs about "
+            f"{costs[0]:.0f} basis points. <bookmark mark='b'/> One percent, about {costs[1]:.0f}: ten times the size, "
+            f"three times the cost. <bookmark mark='c'/> A tenth of the day, about {costs[2]:.0f} basis points, a third "
+            "of a day's volatility."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def puzzle(self):
         cards = VGroup(
             desk_question(r"not Kyle", r"Part 35's Kyle model gives linear impact; a square root means the market absorbs "
@@ -126,6 +161,64 @@ class Sqrt(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def dimensions(self):
+        rows = [cmath(r"\frac{I}{\sigma}", r"=", r"F\!\left(\frac{Q}{V},\ \frac{T}{T_{\text{day}}}\right)", font_size=40),
+                cmath(r"\text{no } T", r"\Rightarrow", r"F = F(Q/V)", font_size=40),
+                cmath(r"\text{risk-neutral liquidity}", r"\Rightarrow", r"F \propto \sqrt{Q/V}", font_size=36,
+                      colors={r"F \propto \sqrt{Q/V}": GOOD})]
+        whys = [why(r"impact in units of volatility, as a function of the order's share of volume and its duration"),
+                why(r"the empirical fact that duration barely matters"),
+                why(r"one argument: liquidity providers demand compensation proportional to the risk of the position they "
+                    r"absorb, $\sigma\sqrt{T}$, while the volume they supply in that time is $\propto V T$; eliminating "
+                    r"$T$ leaves a square root (a heuristic, not a theorem)")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "A second route, by dimensions. <bookmark mark='a'/> Impact in units of volatility can depend only on the "
+            "order's share of volume and its duration. <bookmark mark='b'/> The data say the duration barely matters. "
+            "<bookmark mark='c'/> A heuristic closes the argument: liquidity providers absorbing the order over a time "
+            "T demand compensation for a risk of sigma root T, while the volume they supply grows with T; eliminating "
+            "the time leaves a square root. A heuristic, not a theorem, but it explains why the law is so universal."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def visible(self):
+        ac = load("ac")
+        best = 10.0
+        share = 100 * best / ac["v_day"]
+        rows = [cmath(r"\text{best queues}", r"\approx", r"10\ \text{BTC}", font_size=38),
+                cmath(r"V_{\text{day}}", r"\approx", rf"{ac['v_day'] / 1000:.0f}{{,}}000\ \text{{BTC}}", font_size=38),
+                cmath(r"\text{displayed}", r"\approx", rf"{share:.3f}\%\ \text{{of a day}}", font_size=38,
+                      colors={r"\text{displayed}": HURDLE})]
+        whys = [why(r"Part 36: the two best queues of Bitcoin's perpetual hold about ten bitcoin at a time"),
+                why(r"against the day's volume on the same contract"),
+                why(r"the displayed book is a sliver; the liquidity that absorbs a metaorder arrives as the price moves, "
+                    r"which is what latent means")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "How small the visible book is. <bookmark mark='a'/> Part thirty-six measured about ten bitcoin at the two "
+            "best quotes. <bookmark mark='b'/> The contract trades about "
+            f"{ac['v_day'] / 1000:.0f} thousand bitcoin a day. <bookmark mark='c'/> The displayed best quotes hold "
+            f"{share:.3f} percent of a day's volume. Whatever absorbs a large order arrives as the price moves: that is "
+            "what latent means."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def latent_picture(self):
@@ -237,6 +330,35 @@ class Sqrt(VoiceoverScene):
             vo.wait_until("b")
             self.wait(0.2)
         self.wait(0.4)
+        self.clear_scene()
+
+    def fair_pricing(self):
+        rows = [cmath(r"I(q)", r"=", r"c\sqrt q\quad (0 \le q \le Q)", font_size=40, colors={r"I(q)": IMPACT_C}),
+                cmath(r"\bar p - p_0", r"=", r"\frac1Q\int_0^Q c\sqrt q\,dq = \tfrac23\,c\sqrt Q", font_size=36),
+                cmath(r"\text{fair pricing}", r":", r"p_\infty = \bar p \Rightarrow \frac{I_\infty}{I(Q)} = \frac23",
+                      font_size=36, colors={r"\frac{I_\infty}{I(Q)} = \frac23": GOOD})]
+        whys = [why(r"the price impact after the first $q$ units of a metaorder: a square root"),
+                why(r"the average price the buyer paid lies two-thirds of the way up"),
+                why(r"Farmer, Gerig, Lillo and Waelbroeck (2013): if, after the order, the price settles at the average "
+                    r"price paid, neither side profits on average; then two-thirds of the peak remains, as Chapter 1 "
+                    r"reported")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "And a striking consequence. <bookmark mark='a'/> Suppose impact grows as the square root of the quantity "
+            "already bought. <bookmark mark='b'/> Then the average price paid is two-thirds of the way up to the peak. "
+            "<bookmark mark='c'/> Doyne Farmer, Austin Gerig, Fabrizio Lillo and Henri Waelbroeck argued for fair "
+            "pricing: in a competitive market, the price should settle at the average price paid, so that neither the "
+            "buyer nor the liquidity providers profit on average. Then two-thirds of the peak remains: the reversion "
+            "Chapter one reported, derived from the square root."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def invariance(self):
