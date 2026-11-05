@@ -1178,47 +1178,56 @@ by level; a decision tree whose leaves are permutations; the growth ladder; radi
 Mathematics*; Kleinberg & Tardos ch. 2, 5; Erickson, *Algorithms*; Flajolet & Sedgewick, *Analytic Combinatorics*;
 Hoare 1962; Blum et al. 1973; de Gouw et al. 2015; Spielman & Teng 2001.
 
-### Part 17 · Data Structures (~60)
+### Part 17 · Data Structures (~50)
 *Story:* The Job is a dictionary problem: insert, look up, count. Hashing does it in expected constant time, if the
 hash function can't be gamed. Balanced trees guarantee their time, and splay trees earn it on average. The ledger
-records an order-of-magnitude drop.
-1. Abstract data types against implementations; the dictionary.
-2. Hashing and the birthday bound, 1 − e^{−n²/2m} (derived).
-3. Chaining: expected length α; **universal hashing** (Carter & Wegman 1979), with ((ax + b) mod p) mod m proved
-   universal; hash flooding (2011) and SipHash.
-4. Open addressing:
-   - linear probing's ½(1 + 1/(1 − α)²) (Knuth 1963, his first analysis of an algorithm), with primary clustering
-     shown;
-   - 5-independence suffices (Pagh, Pagh & Ružić);
-   - double hashing, Robin Hood hashing, Swiss tables.
-5. Cuckoo hashing (Pagh & Rodler 2001): the cuckoo graph, worst-case O(1) lookups, the ½ load threshold.
-6. Optimal open addressing without reordering (Farach-Colton, Krapivin & Kuszmaul, 2024–25), which disproves Yao's
-   1985 conjecture **(verify)**. Perfect hashing (FKS 1984).
-7. BSTs: random BSTs have expected depth ~2 ln n, the same as quicksort (proved by the bijection).
-8. Rotations; AVL trees, with height ≤ 1.44 log₂ n via Fibonacci trees; red–black trees **as 2–3–4 trees**
-   (Guibas & Sedgewick 1978), morphing between the two; left-leaning red–black trees.
-9. Treaps and skip lists (Pugh 1990).
-10. Splay trees (Sleator & Tarjan 1985): the access lemma by potential (proved); the working-set and static
-    optimality theorems; the dynamic optimality conjecture, open since 1985.
-11. B-trees (Bayer & McCreight 1970): fan-out and height log_B n (Part 35).
-12. Priority queues: binomial, **Fibonacci heaps** (Fredman & Tarjan 1987) with O(1) amortized decrease-key, pairing
-    heaps.
-13. **Union–find**: union by rank and path compression, O(m α(n)) (Tarjan 1975); Ackermann's function; the log*
-    argument.
-14. Tries and radix trees; rank and select; succinct structures (Part 21 builds on them).
-15. Persistent structures (path copying, Okasaki); cache-friendliness (callback to Part 9).
-16. The Job v2, a hash table on Pebble and natively. Ledger row 8: rows 0 → 8 against rows 0 → 4, with the verdict
-    from the data. Outro.
+records the drop: 0.81 s, and the verdict of Act IV so far, hardware's 24× against algorithms' 72×.
+1. Abstract data types against implementations (Liskov & Zilles 1974); Luhn's hashing (1953); the birthday bound,
+   1 − e^{−n²/2m} (derived), and on our vocabulary (101 full-hash collisions predicted 100; 12,495 slot pairs
+   predicted 12,786).
+2. Chaining against Poisson; **universal hashing** (Carter & Wegman 1979), ((ax + b) mod p) mod m proved universal
+   and checked; a flooding attack on a fixed hash; Klink & Wälde (2011) and SipHash.
+3. Open addressing: linear probing's ½(1 + 1/(1 − α)²) (Knuth 1963), measured over α, with primary clustering shown;
+   double hashing against uniform probing; Robin Hood hashing's variance; Swiss tables.
+4. Cuckoo hashing (Pagh & Rodler 2001): two probes, kicks animated, the failure threshold at load ½ (the cuckoo
+   graph, Erdős–Rényi); FKS perfect hashing (1984) in about three slots per key.
+5. BSTs: random BSTs have expected depth 2(1 + 1/n)Hₙ − 4, measured; height (Devroye); sorted input; the bijection
+   with quicksort, counted (24,944 both ways).
+6. Rotations; AVL trees, with height < 1.4405 lg(n + 2) via Fibonacci trees; red–black trees **as 2–3–4 trees**
+   (Guibas & Sedgewick 1978); left-leaning red–black trees (Sedgewick 2008); heights and rotations measured.
+7. Treaps (Seidel & Aragon 1989) on sorted input, and skip lists (Pugh 1990), measured.
+8. Splay trees (Sleator & Tarjan 1985): the three steps; the access lemma by potential; static optimality; splay
+   against AVL on sequential, uniform, Zipf and hot-set sequences; the dynamic optimality conjecture.
+9. B-trees (Bayer & McCreight 1970): fan-out and height log_t n, splitting at the root, five fan-outs measured; a
+   billion keys in four levels (Part 35).
+10. Priority queues: binary, binomial, **Fibonacci heaps** (Fredman & Tarjan 1987) with cascading cuts, pairing
+    heaps; Dijkstra with each, counted; why the Fibonacci heap loses in practice (Larkin, Sen & Tarjan 2014).
+11. **Union–find** (Galler & Fischer 1964): union by rank and path compression, 2,312 parent steps per find against
+    1.0; O(m α(n)) (Tarjan 1975), optimal (Fredman & Saks 1989); Ackermann's function and log*.
+12. Tries (Fredkin 1960) and radix trees on the vocabulary; rank and select in O(1) with a 20% directory (Jacobson
+    1989); LOUDS (Part 21 builds on them).
+13. Persistent structures (path copying, Driscoll et al. 1989; Okasaki); lookups timed on this machine from 10³ to
+    10⁷ keys (red–black tree 2.3 µs, sorted array 0.33 µs, chaining 74 ns, open addressing 31 ns: callback to Part
+    9).
+14. Hash tables in practice: Python, Java, C++, Rust and Go; the Job natively (Python 0.91 s, C++ 0.19 s, C 0.11 s).
+15. The Job v2, a hash table in the Pebble language: 1.06 slots per word on the corpus; an exact 27-event
+    instruction model (0.01% on held-out passages); the corpus through Part 9's caches (+6%); ledger row 8 (0.81 s:
+    6.3× row 7, 72× row 5, 15× row 4); rows 0 → 4 against rows 5 → 8. *Frontier*: Yao's conjecture refuted
+    (Farach-Colton, Krapivin & Kuszmaul 2025) against measured uniform probing; dynamic optimality and tango trees;
+    cell-probe lower bounds; learned indexes; open problems. Outro.
 
-*Computed:* probe-count distributions against Knuth's formula over α; cuckoo failure rates; BST depths; AVL
-worst cases; splay amortized costs on access sequences; union–find path lengths; the Job v2.
-*Visuals:* buckets filling while clusters form; rotations as smooth morphs; 2–3–4 ↔ red–black; a zig-zig splay;
-a union–find forest flattening.
+*Computed:* probe counts against Knuth's formula over α; chain lengths against Poisson; cuckoo failure rates; FKS
+space; BST depths and the quicksort bijection; AVL and red–black heights and rotations; treaps and skip lists;
+splay costs on four sequences; B-tree heights; Dijkstra's heap comparisons; union–find path lengths; the
+vocabulary's trie; persistence; lookups and the Job timed natively; the Job v2 on the emulator, its model, the
+corpus counted in C and run through Part 9's caches.
+*Visuals:* buckets filling while clusters form; chains; cuckoo kicks; rotations; 2–3–4 ↔ red–black; a treap and a
+skip list; B-tree splits; a union–find path compressing; a trie; path copying.
 *In practice:* hash maps and their DoS hardening, B-trees in every database, priority queues in schedulers and timers, union–find in compilers and image processing.
 *Reading:* CLRS ch. 10–13, 18–19, 21; Knuth, TAOCP 3 ch. 6; Sedgewick & Wayne, *Algorithms* ch. 3; Tarjan, *Data
 Structures and Network Algorithms*; Mehlhorn & Sanders, *Algorithms and Data Structures*; Okasaki, *Purely Functional
 Data Structures*; Navarro, *Compact Data Structures*; Carter & Wegman 1979; Pagh & Rodler 2004; Sleator & Tarjan
-1985; Fredman & Tarjan 1987.
+1985; Fredman & Tarjan 1987; Farach-Colton, Krapivin & Kuszmaul 2025.
 
 ### Part 18 · Graphs (~60)
 *Story:* Euler invented the graph to walk the bridges of Königsberg. Graphs are now the shape of road maps, the
@@ -3237,4 +3246,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 14 | scenes (17, with the *Frontier* chapter), computations (our λ reducer under four strategies and a lazy environment machine; Church arithmetic and Y counted in β-steps; reduction graphs with confluence checked; the STLC checker, its derivations and 5,000 random terms checked for progress and preservation; termination of random untyped terms; HM inference traced on the Job in the λ-core; free theorems tested; a propositional prover with Kripke countermodels; rustc, tsc and node on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 15 | scenes (17, with the *Frontier* chapter), computations (the λ-core's bytecode compiler and reference VM under four collectors; the VM and Cheney's collector in the Pebble language, co-simulated and priced on Part 8's core for ledger row 6; reference-count traffic, lifetimes and nurseries; tri-color marking with and without barriers; a CEK machine and a tiny Prolog; CPython, V8, HotSpot, Go, gcc and node timed and traced on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 16 | scenes (18, with the *Frontier* chapter), computations (every sort counting its comparisons, with insertion, merge, heap, quick, Ford–Johnson, counting, radix, Timsort, quickselect and median of medians; decision trees; the Job v1 in the Pebble language on the emulator, an instruction model and a C event counter over the corpus for ledger row 7; repeated squaring, radix sort and `std::sort` timed on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 17–61 | planned (this document) | — |
+| 17 | scenes (18, with the *Frontier* chapter), computations (every structure counting its work: chaining, universal hashing, linear and double hashing, Robin Hood, cuckoo and FKS perfect hashing; plain, AVL, red–black, treap, splay, persistent trees, skip lists and B-trees; binary, pairing and Fibonacci heaps under Dijkstra; union–find; tries and rank; the Job v2 hash table in the Pebble language on the emulator, an exact instruction model, a C event counter and a C replay through Part 9's caches for ledger row 8; lookups and the Job timed natively), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
+| 18–61 | planned (this document) | — |
