@@ -3377,3 +3377,32 @@ def test_statarb_ou_band_and_decomposition():
     y = 2.0 * np.arange(200) / 200 + 0.01 * rng.standard_normal(200)
     a, b = SA.kalman_beta(y, np.arange(200) / 200, q=1e-6, r=1e-4)
     assert abs(b[-1] - 2.0) < 0.2
+
+
+def test_firm_drawdown_stop_and_platform():
+    import math
+
+    import numpy as np
+
+    from explainer.quant.house import firm as F
+    # zero drift: E tau = d^2/sigma^2, E M = d; the formulas are continuous at mu = 0
+    assert abs(F.stop_time(0.0, 1.0, 0.5) - 0.25) < 1e-12
+    assert abs(F.stop_time(1e-6, 1.0, 0.5) - 0.25) < 1e-5
+    assert abs(F.peak_at_stop(1e-6, 1.0, 0.5) - 0.5) < 1e-5
+    # Wald: mu E tau = E[X_tau] = E M - d
+    for mu in (-0.5, 0.3, 1.0):
+        assert abs(mu * F.stop_time(mu, 1.0, 0.7) - (F.peak_at_stop(mu, 1.0, 0.7) - 0.7)) < 1e-12
+    # Sharpe 1, a stop half a volatility deep: (e - 2)/2
+    assert abs(F.stop_time_sharpe(1.0, 0.5) - (math.e - 2) / 2) < 1e-12
+    sim = F.simulate_stop(1.0, 1.0, 0.5, n=3000, dt=1 / 1000, horizon=20, seed=1)
+    # discrete monitoring notices the drawdown late: the simulated time is a little long, by O(sqrt(dt))
+    assert sim["stopped"] > 0.99 and 0 < sim["tau"] / F.stop_time(1.0, 1.0, 0.5) - 1 < 0.2
+    # apply_stop stands aside for `wait` periods after a breach
+    r = np.array([0.01, -0.03, 0.02, 0.02, 0.02, 0.01])
+    out, n = F.apply_stop(r, 0.025, 2)
+    assert n == 1 and list(out) == [0.01, -0.03, 0.0, 0.0, 0.02, 0.01]
+    # the disclosed-statistic map
+    assert abs(F.implied_daily_sharpe(1, 1238) - 3.153) < 0.01
+    assert 0.003 < F.binomial_upper(1, 1238) < 0.004
+    p = F.platform(50, 10, 0.5, 0.5, 0.1, 0.05, 0.075, seed=0)
+    assert p["fired_skill"] < p["final_skill"] + 0.5 and 0 < p["payout_share"] < 1
