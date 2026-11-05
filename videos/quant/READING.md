@@ -1788,6 +1788,22 @@ Frontier (2023–2026):
 - Duffie, D. (2020). "Still the world's safe haven? Redesigning the U.S. Treasury market after the COVID-19 crisis." Hutchins Center WP.
 - Vissing-Jorgensen, A. (2021). "The Treasury market in spring 2020 and the response of the Federal Reserve." *J. Monetary Economics*.
 - He, Z., Nagel, S., Song, Z. (2022). "Treasury inconvenience yields during the COVID-19 crisis." *JFE*.
+- Tarski, A. (1955). "A lattice-theoretical fixpoint theorem and its applications." *Pacific J. Mathematics*.
+- Carlsson, H., van Damme, E. (1993). "Global games and equilibrium selection." *Econometrica*.
+- Subrahmanyam, A. (1994). "Circuit breakers and market volatility: a theoretical perspective." *Journal of Finance*.
+- Morris, S., Shin, H. S. (1998). "Unique equilibrium in a model of self-fulfilling currency attacks." *AER*.
+- Goldstein, I., Pauzner, A. (2005). "Demand-deposit contracts and the probability of bank runs." *Journal of Finance*.
+- Cifuentes, R., Ferrucci, G., Shin, H. S. (2005). "Liquidity risk and contagion." *JEEA*.
+- Lorenzoni, G. (2008). "Inefficient credit booms." *Review of Economic Studies*.
+- Adrian, T., Shin, H. S. (2010). "Liquidity and leverage." *J. Financial Intermediation*.
+- Mistrulli, P. (2011). "Assessing financial contagion in the interbank market: maximum entropy versus observed interbank lending patterns." *J. Banking & Finance*.
+- Stein, J. (2012). "Monetary policy as financial stability regulation." *QJE*.
+- Rogers, L. C. G., Veraart, L. (2013). "Failure and rescue in an interbank network." *Management Science*.
+- Glasserman, P., Young, H. P. (2015). "How likely is contagion in financial networks?" *J. Banking & Finance*.
+- Anand, K., et al. (2018). "The missing links: a global study on uncovering financial network structures from partial data." *J. Financial Stability*.
+- Chen, H., Petukhov, A., Wang, J. (2018). "The dark side of circuit breakers." Working paper *(verify: published version)*.
+- Board of Governors of the Federal Reserve System (2023). *Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank*.
+- Paul, Weiss (2021). *Report on Archegos Capital Management* (to the Board of Credit Suisse Group).
 - FINMA (2023). *Lessons Learned from the CS Crisis*; FSB (2023). *Enhancing the Resilience of Non-Bank Financial Intermediation*.
 - Jiang, E., Matvos, G., Piskorski, T., Seru, A. (2024). "Monetary tightening and U.S. bank fragility in 2023." *JFE*.
 

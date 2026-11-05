@@ -273,7 +273,7 @@ class Outro(VoiceoverScene):
              r"by the Invisible Hand} (2010); Kindleberger and Aliber, \textit{Manias, Panics, and Crashes} (2015); "
              r"Lowenstein, \textit{When Genius Failed} (2000)"],
             [r"Diamond and Dybvig (1983); Shleifer and Vishny (1992); Morris and Shin (1998); Allen and Gale (2000); "
-             r"Eisenberg and Noe (2001); Goldstein and Pauzner (2005); Cifuentes, Shin and Rochet (2005); Brunnermeier and "
+             r"Eisenberg and Noe (2001); Goldstein and Pauzner (2005); Cifuentes, Ferrucci and Shin (2005); Brunnermeier and "
              r"Pedersen (2009); Adrian and Shin (2010); Geanakoplos (2010); Gorton and Metrick (2012)",
              r"Greenwood, Landier and Thesmar (2015); Acemoglu, Ozdaglar and Tahbaz-Salehi (2015); Glasserman and Young "
              r"(2015); Adrian and Brunnermeier (2016); Acharya, Pedersen, Philippon and Richardson (2017); Brownlees and "

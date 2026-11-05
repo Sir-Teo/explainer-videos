@@ -371,12 +371,12 @@ class Research(VoiceoverScene):
             for j, c in enumerate(row):
                 c.set_x(xs[j])
         note_ = wrapped_label(r"each bank also holds one unit of a common asset; defaulters sell it, and its price falls "
-                              r"as $e^{-0.15 \times \text{units sold}}$ (Cifuentes, Shin and Rochet 2005)", 11.6, 18,
+                              r"as $e^{-0.15 \times \text{units sold}}$ (Cifuentes, Ferrucci and Shin 2005)", 11.6, 18,
                               GREY_B).next_to(tab, DOWN, buff=0.5)
         f4 = [x for x in fs if x["shock"] == 4.0][0]
         with self.voiceover(
             "Add Chapter three to Chapter four. <bookmark mark='a'/> Each bank also holds one unit of a common asset, "
-            "and defaulters sell it, pushing its price down for everyone: Cifuentes, Shin and Rochet's model. "
+            "and defaulters sell it, pushing its price down for everyone: Cifuentes, Ferrucci and Shin's model. "
             "<bookmark mark='b'/> Now the complete network, which shared a shock of four with a single default, loses "
             f"all {f4['complete_fs']}: the fire sale lowers every bank's buffer, and the threshold falls below the shock. "
             "The ring, which lost a few, loses all of them. Diversification across counterparties does not diversify a "

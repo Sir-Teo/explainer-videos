@@ -1753,18 +1753,28 @@ Hull *Risk Management and Financial Institutions*.
 *Desk:* "Your 99% one-day VaR is $10 m. Ten-day? What did you assume?" (√10 assumes iid normal; history says 3.4×)
 *House:* the risk function's evening report and Rule 40.
 
-### Part 41 · Leverage, Liquidity and Crises (~60)
-1. Minsky and Kindleberger.
-2. Diamond–Dybvig (1983).
-3. Brunnermeier–Pedersen (2009) spirals.
-4. Leverage cycles; fire sales (Shleifer–Vishny; Cont–Schaanning; Greenwood–Landier–Thesmar).
-5. Eisenberg–Noe; contagion's phase transition (Acemoglu–Ozdaglar–Tahbaz-Salehi 2015).
-6. CoVaR, SRISK.
-7. LTCM, 1998.
-8. 2007–08: repo runs, Lehman, AIG.
-9. March 2020: the dash for cash.
-10. China 2015: margin financing, the crash, the 2016 circuit breaker suspended after four days.
-11. 2022–23: gilts, SVB, Credit Suisse; NBFI and policy.
+### Part 41 · Leverage, Liquidity and Crises (~53; built)
+1. Leverage and its cycle: haircuts cap leverage; the desk question (sell 56.7 of 90); Minsky, Kindleberger,
+   Geanakoplos; two liquidities. (Diamond–Dybvig is in chapter 10, with the runs of 2023.)
+2. Spirals: Brunnermeier–Pedersen loss and margin spirals in a minimal fixed point (3% → 13.9%, 21.8% with margins that
+   rise as prices fall); by shock and depth; Gorton–Metrick; Bagehot.
+3. Fire sales: Shleifer–Vishny; Greenwood–Landier–Thesmar on five banks (first round 34%, fire sales 28% of equity);
+   Coval–Stafford; Cont–Schaanning.
+4. Networks: Eisenberg–Noe; ring, complete and clustered networks with senior debt; the threshold n(a − v)
+   (Acemoglu–Ozdaglar–Tahbaz-Salehi 2015).
+5. CoVaR, MES and SRISK on 1990–2020 industries; Lehman's 2007 SRISK; G-SIB surcharges; limits.
+6. LTCM, 1998: its book as reported, crowding, the Baa spread, the recapitalisation.
+7. 2007–08: the shadow banks, the TED spread (4.58), repo, Bear, Lehman, AIG, Reserve Primary, the response.
+8. March 2020: the dash for cash (10-year 0.54% → 1.18% as stocks fell), the basis trade, the Fed's two weeks.
+9. China 2015: margin and grey margin, −43% in eleven weeks, the national team, the 2016 circuit breaker suspended
+   after four days, the magnet effect.
+10. 2022–23: gilts and LDI; SVB from its annual report; Diamond–Dybvig with a fire-sale value and the global-games
+   threshold (1.49 at r = 0.85), checked by solving the noisy game; Credit Suisse and AT1; NBFI.
+11. Rule 41: the House's liquidity stress (2× gross; term funding; a cash buffer; no position above half a day's
+   volume); Archegos; volatility-linked against through-the-cycle margins through 2008–09; the fire-sale externality.
+Research: the clearing vector (existence by Tarski, uniqueness under regularity, fictitious default in ≤ n rounds, the
+contagion threshold derived), checked on 200 random networks, a cycle counterexample, a fine shock grid and with fire
+sales added.
 
 *Textbooks:* Brunnermeier–Oehmke "Bubbles, Financial Crises, and Systemic Risk"; Gorton *Slapped by the Invisible
 Hand*; Kindleberger–Aliber *Manias, Panics, and Crashes*; Lowenstein *When Genius Failed*.

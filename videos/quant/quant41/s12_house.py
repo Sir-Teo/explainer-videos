@@ -65,9 +65,9 @@ class House(VoiceoverScene):
     def card(self):
         c = chapter_card(11, r"Rule 41: survive the margin call you have not been sent", r"How much leverage can the House "
                          r"carry through a crisis?", part=PART)
-        with self.voiceover("Chapter eleven. The House's forty-first rule belongs to its treasury and funding desk. Every "
-                            "crisis in this part ended a firm that was solvent on paper and could not fund itself for a "
-                            "week. The rule is a liquidity stress test, run every day."):
+        with self.voiceover("Chapter eleven. The House's forty-first rule belongs to its treasury and funding desk. Most "
+                            "of the firms this part has followed looked solvent on paper and could not fund themselves for "
+                            "a week. The rule is a liquidity stress test, run every day."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 

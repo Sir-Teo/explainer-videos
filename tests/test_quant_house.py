@@ -3633,3 +3633,46 @@ def test_risk_var_es_backtests_evt_elicitability():
     assert min(g)[1:] == (1.0, 1.0)
     m = R.mixture_var_es([1.0], [1.0], [0.0, 2.0], [0.95, 0.05], 0.5, 0.9)
     assert abs(m["es"][0] - 1) < 1e-9 and abs(m["es"][1] - 1) < 1e-9 and abs(m["es"][2] - 1.25) < 1e-9
+
+
+def test_crisis_clearing_spirals_runs():
+    import numpy as np
+
+    from explainer.quant.house import crisis as C
+    # the desk question: 5x, -10%, haircut 30%
+    d = C.deleverage(100.0, 20.0, 0.10, 0.30)
+    assert abs(d["sale"] - 56.6667) < 1e-3 and abs(d["sale_frac"] - 0.6296) < 1e-3
+    # leverage targeting: sale = (lambda - 1) A delta (problem 4)
+    assert abs(C.deleverage(100.0, 5.0, 0.01, 1 / 20)["sale"] - 19.0) < 1e-9
+    # Eisenberg-Noe: problem 5, unique and found in few rounds
+    L = np.array([[0, 2.0, 0], [0, 0, 2.0], [1.0, 0, 0]])
+    e = np.array([0.5, 0.0, 0.3])
+    r = C.eisenberg_noe(L, e)
+    assert np.allclose(r["p"], [1.5, 1.5, 1.0]) and r["rounds"] <= 3
+    assert np.allclose(C.clearing_iterate(L, e, "top"), C.clearing_iterate(L, e, "bottom"))
+    # the cycle without outside assets has two clearing vectors
+    Lc = np.array([[0, 1.0], [1.0, 0]])
+    assert np.allclose(C.clearing_iterate(Lc, np.zeros(2), "top"), 1.0)
+    assert np.allclose(C.clearing_iterate(Lc, np.zeros(2), "bottom"), 0.0)
+    # the ring of three with outside assets 0.5 pays in full (the research chapter's pause)
+    Lr = np.array([[0, 1.0, 0], [0, 0, 1.0], [1.0, 0, 0]])
+    assert np.allclose(C.eisenberg_noe(Lr, np.full(3, 0.5))["p"], 1.0)
+    # the contagion threshold n (a - v) in the complete network with senior debt
+    n, y, a, v = 10, 6.0, 1.5, 1.0
+    P = C.complete_pi(n)
+    for eps, want in ((4.9, 1), (5.1, n)):
+        sh = np.zeros(n)
+        sh[0] = eps
+        assert int(C.senior_clearing(P, np.full(n, y), np.full(n, a), v, sh)["default"].sum()) == want
+    # Diamond-Dybvig: problem 9, and the threshold above one, falling with insurance and with r
+    e_, w_ = C.dd_payoffs([0.5], 1.2, 0.8)
+    assert abs(e_[0] - 1.0) < 1e-12 and abs(w_[0] - 0.9) < 1e-12
+    t85 = C.run_threshold(0.85)
+    assert 1.4 < t85 < 1.6
+    assert 1.0 < C.run_threshold(0.85, insured=0.5) < t85 and C.run_threshold(0.99) < C.run_threshold(0.6)
+    # margin path: a through-the-cycle margin that never binds forces no sale
+    rr = np.array([-0.05, -0.05, 0.02, -0.08])
+    assert C.margin_path(rr, 2.0, 0.3)["forced"].sum() == 0.0
+    assert C.margin_path(rr, 2.0, np.array([0.3, 0.45, 0.45, 0.6]))["forced"].sum() > 0.0
+    # SRISK (problem 8)
+    assert abs(C.srisk(500.0, 20.0, 0.5) - 30.8) < 1e-9
