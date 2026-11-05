@@ -258,7 +258,7 @@ class Micro(VoiceoverScene):
 
     def small_tick(self, m):
         mv = m["move_med"]
-        rows = [cmath(r"\text{tick}", r"=", r"\$0.10 \approx 0.4\ \text{bp}", font_size=38),
+        rows = [cmath(r"\text{tick}", r"=", r"\$0.10 \approx 0.04\ \text{bp}", font_size=38),
                 cmath(r"|\Delta M|_{100\,\text{ms}}", r"\approx", rf"{mv:.0f}\ \text{{ticks (median move)}}", font_size=34),
                 cmath(r"(I, S)", r"\ \text{is not}\ ", r"\text{a Markov state}", font_size=38,
                       colors={r"\text{a Markov state}": BAD})]
@@ -270,7 +270,7 @@ class Micro(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
         with self.voiceover(
             "Why the theory fails here. <bookmark mark='a'/> Bitcoin's perpetual is a small-tick market: ten cents "
-            "on twenty-seven thousand dollars is under half a basis point. <bookmark mark='b'/> Between two snapshots a "
+            "on twenty-seven thousand dollars is about four hundredths of a basis point. <bookmark mark='b'/> Between two snapshots a "
             f"tenth of a second apart, the mid that moves typically jumps {mv:.0f} ticks: the best queues are a thin "
             "slice of a deep book. <bookmark mark='c'/> And the state is not Markov. After a move, the depth beyond the "
             "best, the recent flow and the memory of Chapter three all matter, so a chain that sees only imbalance and "

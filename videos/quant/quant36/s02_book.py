@@ -40,14 +40,14 @@ class Book(VoiceoverScene):
         whys = [why(r"the maker supplies liquidity: Part 35's dealer, now anyone"),
                 why(r"the taker demands it, and pays the spread"),
                 why(r"price-time priority: so a place in the queue is an asset, and arriving early is worth paying for"),
-                why(r"0.1 dollars on Binance's BTCUSDT perpetual: at \$27{,}000, less than half a basis point")]
+                why(r"0.1 dollars on Binance's BTCUSDT perpetual: at \$27{,}000, about four hundredths of a basis point")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.45, edge=6.9)
         with self.voiceover(
             "The rules. <bookmark mark='a'/> A limit order rests at a price until it is filled or cancelled: its owner "
             "supplies liquidity. <bookmark mark='b'/> A market order trades now against the best resting orders, and "
             "pays the spread. <bookmark mark='c'/> Priority: best price first, and at the same price, first come first "
             "served. So a place in the queue is an asset. <bookmark mark='d'/> And the tick, the smallest price step: on "
-            "Bitcoin's perpetual future, ten cents, less than half a basis point."
+            "Bitcoin's perpetual future, ten cents, about four hundredths of a basis point."
         ) as vo:
             step(0)
             for k, mk in enumerate(("a", "b", "c", "d")):
@@ -139,7 +139,7 @@ class Book(VoiceoverScene):
         with self.voiceover(
             "The data: Binance's public stream of best bids and offers for Bitcoin's perpetual future, four days in May "
             "2023. <bookmark mark='a'/> The spread is one tick more than ninety-nine percent of the time. The best queues "
-            "hold a few bitcoin, a few hundred thousand dollars. And the best quotes change about "
+            "hold a few bitcoin, one to three hundred thousand dollars. And the best quotes change about "
             f"{d0['updates_per_s']:.0f} times a second on a weekday, fewer at the weekend. The first two days fit the "
             "models, the weekend tests them."
         ) as vo:

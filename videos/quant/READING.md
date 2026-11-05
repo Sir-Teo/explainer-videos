@@ -1610,6 +1610,18 @@ Frontier (2023–2026):
 - Coletta, A., et al. (2023). "Conditional generators for limit order book environments: explainability, challenges, and robustness." *ICAIF* *(verify)*.
 - Prata, M., et al. (2024). "LOB-based deep learning models for stock price trend prediction: a benchmark study." *Artificial Intelligence Review*.
 - LOB-Bench (2025). Benchmark for generative order-book models *(verify: authors and venue)*.
+- Hawkes, A. (1971). "Spectra of some self-exciting and mutually exciting point processes." *Biometrika*. Hawkes, A., Oakes, D. (1974). "A cluster process representation of a self-exciting process." *J. Applied Probability*.
+- Copeland, T., Galai, D. (1983). "Information effects on the bid-ask spread." *Journal of Finance*.
+- Farmer, J. D., Patelli, P., Zovko, I. (2005). "The predictive power of zero intelligence in financial markets." *PNAS*.
+- Lillo, F., Mike, S., Farmer, J. D. (2005). "Theory for long memory in supply and demand." *Physical Review E*.
+- Avellaneda, M., Reed, J., Stoikov, S. (2011). "Forecasting prices from Level-I quotes in the presence of hidden liquidity." *Algorithmic Finance*.
+- Dayri, K., Rosenbaum, M. (2015). "Large tick assets: implicit spread and optimal tick size." *Market Microstructure and Liquidity*.
+- Gould, M., Bonart, J. (2016). "Queue imbalance as a one-tick-ahead price predictor in a limit order book." *Market Microstructure and Liquidity*.
+- Moallemi, C., Yuan, K. (2017). "A model for queue position valuation in a limit order book." Working paper.
+- Byrd, D., Hybinette, M., Balch, T. (2020). "ABIDES: towards high-fidelity multi-agent market simulation." *ACM SIGSIM-PADS*.
+- Vyetrenko, S., et al. (2020). "Get real: realism metrics for robust limit order book market simulations." *ICAIF*.
+- Coletta, A., et al. (2021). "Towards realistic market simulations: a generative adversarial networks approach." *ICAIF*.
+- Cont, R., Cucuringu, M., Zhang, C. (2023). "Cross-impact of order flow imbalance in equity markets." *Quantitative Finance*.
 
 ### Part 37 · Market Impact and Execution
 - Kraus, A., Stoll, H. (1972). "Price impacts of block trading on the New York Stock Exchange." *Journal of Finance*.

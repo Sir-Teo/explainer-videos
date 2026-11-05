@@ -230,27 +230,34 @@ class Deep(VoiceoverScene):
         self.clear_scene()
 
     def why_high(self, d):
+        e = load("edge")
         tr = d["1 s"]["linear"]["train_acc"]
         te = d["1 s"]["linear"]["test_acc"]
+        big = e["by_size"][-1]
+        t1 = e["trade"][1]
+        per_bp = 1 / e["tick_bp"]
         cards = VGroup(
-            desk_question(r"high accuracy, tiny $R^2$", r"most seconds have no move; when the mid does move, its sign is "
-                          r"often predictable (the queue race, and the same-direction pairs of half-tick moves from "
-                          r"Chapter 3), but its size is not", width=12.4, font_size=19),
-            desk_question(r"not money", r"the predictable moves are half a tick; crossing the spread costs a tick plus "
-                          r"fees, so a taker cannot trade them, and a maker earns them only by being in the queue "
-                          r"(Chapter 8)", width=12.4, font_size=19),
+            desk_question(r"high accuracy, tiny $R^2$", rf"{100 * e['zero']:.0f}\% of seconds have no move; when the mid "
+                          rf"does move, the linear rule calls the direction, even for jumps of five ticks or more "
+                          rf"({100 * big['acc']:.0f}\%), but not the size", width=12.4, font_size=19),
+            desk_question(r"not money", rf"trading the forecast's sign whenever it exceeds a tick captures "
+                          rf"{t1['gain']:.1f} ticks of mid change per second traded; the spread costs a tick, and taker fees "
+                          rf"of a few basis points cost far more: one basis point is about {per_bp:.0f} ticks",
+                          width=12.4, font_size=19),
             desk_question(r"easier test days", rf"the linear rule scored {100 * tr:.0f}\% on the training days and "
                           rf"{100 * te:.0f}\% on the test days: the weekend book was quieter, not the model better",
                           width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
         with self.voiceover(
-            "How to read that. <bookmark mark='a'/> Accuracy is high and the variance explained is tiny because most "
-            "seconds have no move, and when the mid does move, the direction is often predictable from the queue race "
-            "and from the pairs of half-tick moves that follow each other, while the size is not. <bookmark mark='b'/> It is not "
-            "money. The predictable moves are half a tick, and crossing the spread costs a tick plus fees: a taker cannot "
-            "trade them, and a maker earns them only from a place in the queue. <bookmark mark='c'/> And the test "
-            f"scores are higher than the training scores, {100 * te:.0f} against {100 * tr:.0f} percent, because the "
-            "weekend was quieter, not because the model got better. Always ask what changed between the samples."
+            f"How to read that. <bookmark mark='a'/> In {100 * e['zero']:.0f} percent of seconds the mid does not move "
+            "at all. When it does, the linear rule calls the direction remarkably well, even for jumps of five ticks or "
+            f"more, {100 * big['acc']:.0f} percent of the time; what it cannot call is the size, so the variance "
+            "explained stays tiny. <bookmark mark='b'/> It is not money. Trading the forecast's sign whenever it exceeds "
+            f"a tick captures about {t1['gain']:.1f} ticks of mid change per second traded. The spread costs a tick, and "
+            f"taker fees of a few basis points cost far more: one basis point is about {per_bp:.0f} ticks here. And "
+            "the mid is not a price anyone can trade at. <bookmark mark='c'/> Finally, the test scores are higher than "
+            f"the training scores, {100 * te:.0f} against {100 * tr:.0f} percent, because the weekend was quieter, not "
+            "because the model got better. Always ask what changed between the samples."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

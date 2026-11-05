@@ -12,6 +12,7 @@ The data are Binance's public best-bid/best-offer stream and aggregated trades f
 * ``ofi``        Cont-Kukanov-Stoikov order-flow imbalance against mid changes, and the impact coefficient against depth;
 * ``memory``     trade-sign autocorrelation (Lillo-Farmer), a Hawkes fit to trade arrivals, and the signature plot;
 * ``deep``       a small network on recent book states against linear rules, in and out of sample;
+* ``edge``       what the linear rule's direction calls are worth: accuracy by move size, and the mid change captured;
 * ``qr``         the queue-reactive simulator fitted to the book, and its stylized-fact scorecard against the data;
 * ``queue``      a small passive order replayed against the book and the trade tape: fill rates, time to fill and
                  markouts at the back and the front of the queue (adverse selection);
@@ -249,6 +250,28 @@ def compute_deep() -> dict:
     return _json(out)
 
 
+def compute_edge() -> dict:
+    """What the linear rule's direction calls are worth: accuracy by the size of the next second's move, and the mean
+    mid change, in ticks, captured by trading the sign of the forecast whenever it exceeds a threshold (test days)."""
+    Xtr, ytr = zip(*[_features(_book(d), horizon=1) for d in TRAIN])
+    Xtr, ytr = np.concatenate(Xtr), np.concatenate(ytr)
+    Xte, yte = zip(*[_features(_book(d), horizon=1) for d in TEST])
+    Xte, yte = np.concatenate(Xte), np.concatenate(yte)
+    bl, *_ = np.linalg.lstsq(np.column_stack([np.ones(len(Xtr)), Xtr]), ytr, rcond=None)
+    p = np.column_stack([np.ones(len(Xte)), Xte]) @ bl
+    by = []
+    for lo, hi in ((0.01, 1.6), (1.6, 5.0), (5.0, np.inf)):
+        k = (np.abs(yte) >= lo) & (np.abs(yte) < hi)
+        by.append({"lo": lo, "hi": float(min(hi, 1e9)), "share": float(k.mean()),
+                   "acc": float(np.mean(np.sign(p[k]) == np.sign(yte[k])))})
+    trade = []
+    for th in (0.5, 1.0, 2.0):
+        k = np.abs(p) > th
+        trade.append({"th": th, "share": float(k.mean()), "gain": float(np.mean(np.sign(p[k]) * yte[k]))})
+    return _json({"zero": float(np.mean(yte == 0)), "by_size": by, "trade": trade, "tick_bp": float(
+        TICK / np.median(L.mid(_book(TEST[0]))) * 1e4)})
+
+
 def compute_qr() -> dict:
     tr = _book(TRAIN[1])
     unit = float(np.median(np.r_[tr["bq"], tr["aq"]]) / 4)
@@ -396,7 +419,7 @@ def compute_research() -> dict:
 
 
 ITEMS = {"book": compute_book, "micro": compute_micro, "ofi": compute_ofi, "memory": compute_memory,
-         "deep": compute_deep, "qr": compute_qr, "queue": compute_queue,
+         "deep": compute_deep, "qr": compute_qr, "queue": compute_queue, "edge": compute_edge,
          "research": compute_research}
 
 

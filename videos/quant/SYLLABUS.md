@@ -1605,24 +1605,34 @@ Hasbrouck IS; daily λ.
 *Crisis:* 6 May 2010; 15 October 2014; May 2021 and November 2022 on Bitcoin.
 *House:* surveillance; a signed-flow feed.
 
-### Part 36 · The Limit Order Book (~55; frontier)
-1. Queues (Cont–Stoikov–Talreja 2010); queue-reactive (Huang–Lehalle–Rosenbaum 2015).
-2. Hawkes in finance (Bacry–Mastromatteo–Muzy 2015), estimated; near-criticality.
-3. Order flow's long memory (Lillo–Farmer 2004).
-4. OFI (Cont–Kukanov–Stoikov 2014); deep OFI (Kolm–Turiel–Westray 2023).
-5. The microprice (Stoikov 2018).
-6. DeepLOB; universal features (Sirignano–Cont 2019).
-7. LOBCAST (Prata et al. 2024): fragile generalization.
-8. Generative order books (Nagy et al. 2023) *(verify: LOB-Bench 2025)*.
-9. Our generative book, trained here, and its stylized-fact scorecard.
+### Part 36 · The Limit Order Book (~55; built)
+1. The book on Binance's BTCUSDT perpetual (best quotes on a 100-ms grid, May 2023): one-tick spread over 99% of the
+   time, a median 8-tick jump when the mid moves, so small-tick by Dayri–Rosenbaum; order types.
+2. Queues: Cont–Stoikov–Talreja (2010); Cont–de Larrard (2013) P(up) derived from the quadrant's harmonic measure, too
+   steep against the data (16% to 86%); queue-reactive (Huang–Lehalle–Rosenbaum 2015).
+3. Hawkes on trades (branching 0.68; cluster representation; near-criticality, Hardiman–Bercot–Bouchaud 2013);
+   sign memory ℓ^−0.85 (Lillo–Farmer 2004; Lillo–Mike–Farmer 2005); a rising signature plot; same-direction pairs.
+4. OFI (Cont–Kukanov–Stoikov 2014): R² 0.37–0.45 at 10 s on every day; impact ∝ depth^−1.17; multi-level, integrated
+   and deep OFI (Xu–Gould–Howison; Cont–Cucuringu–Zhang 2023; Kolm–Turiel–Westray 2023).
+5. The microprice (Stoikov 2018) with every move counted: ±25 ticks on Bitcoin, worse than the mid out of sample; a
+   per-horizon table of mean moves cuts 10-s error 3–5%; the interview answer from a large-tick book.
+6. DeepLOB, universal features (Sirignano–Cont 2019), LOBCAST (Prata et al. 2024); our 30-input test: linear 87.2%
+   against network 84.0% on direction; the edge per trade (~1.5 ticks) against spread and fees (1 bp ≈ 27 ticks).
+7. Simulators: zero intelligence (Smith et al. 2003; Farmer–Patelli–Zovko 2005), ABIDES, generative books (Coletta et
+   al. 2021; Nagy et al. 2023); the House's queue-reactive simulator and its five-fact scorecard (one right).
+8. Trading in the queue: a passive-order replay on the tape (back: 82% filled, −14.7 ticks at 1 s; front: −1.6); the
+   value of queue position (Moallemi–Yuan); the free option (Copeland–Galai 1983); the cancel race.
+9. Rule 36: score the book against the spread.
+Research: the microprice theorem (H1–H3; first-step, strong-Markov and Perron–Frobenius lemmas; martingale and
+uniqueness; why symmetry), checked in the simulator (drift flat, realised drift → g) and on Bitcoin (peaks at 0.46 g;
+a direct Markov test rejects H1).
 
 *Textbooks:* Bouchaud–Bonart–Donier–Gould *Trades, Quotes and Prices*; Abergel et al. *Limit Order Books*;
 Cartea–Jaimungal–Penalva ch. 1–4.
-*Trained:* DeepLOB (honest out-of-sample); **the generative order-book transformer**.
-*Visuals:* `OrderBookLadder` with Hawkes intensity glowing; the microprice moving.
-*Firms:* HRT, Jump, Tower (public talks and papers).
+*Computed:* every number from Binance's `bookTicker` and `aggTrades` and the House simulator. Not built: a generative
+transformer; the House's simulator is the queue-reactive model, scored, as the baseline a learned generator must beat.
 *Desk:* "Bid 100 × 500, ask 100.01 × 100. Where is fair value?"
-*House:* the order-book simulator (used by 37, 38, 42).
+*House:* the order-book simulator and the fill replay (used by 37, 38, 42).
 
 ### Part 37 · Market Impact and Execution (~55)
 1. Metaorders; what public data shows.
