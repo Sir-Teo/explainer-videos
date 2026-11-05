@@ -1441,3 +1441,68 @@ class L1Geometry(VGroup):
             pts = np.vstack([pts, [[t, 0], [0, t], [-t, 0], [0, -t]]])
         L = np.einsum("ij,jk,ik->i", pts - self.ols, self.Q, pts - self.ols)
         return pts[int(np.argmin(L))]
+
+
+def marching_squares(Z, xs, ys, level):
+    """Line segments of the level set {Z = level} on the grid (xs[j], ys[i]) -> Z[i, j], by marching squares (the
+    two ambiguous saddle cases split by the cell's mean).  Returns a list of ((x0, y0), (x1, y1))."""
+    Z = np.asarray(Z, float)
+    segs = []
+    for i in range(len(ys) - 1):
+        for j in range(len(xs) - 1):
+            v = [Z[i, j], Z[i, j + 1], Z[i + 1, j + 1], Z[i + 1, j]]  # corners: bottom-left, bottom-right, top-right, top-left
+            c = [(xs[j], ys[i]), (xs[j + 1], ys[i]), (xs[j + 1], ys[i + 1]), (xs[j], ys[i + 1])]
+            above = [a > level for a in v]
+            if all(above) or not any(above):
+                continue
+            cuts = []
+            for e in range(4):
+                a, b = e, (e + 1) % 4
+                if above[a] != above[b]:
+                    t = (level - v[a]) / (v[b] - v[a])
+                    cuts.append((c[a][0] + t * (c[b][0] - c[a][0]), c[a][1] + t * (c[b][1] - c[a][1])))
+            if len(cuts) == 2:
+                segs.append((cuts[0], cuts[1]))
+            elif len(cuts) == 4:
+                if (np.mean(v) > level) == above[0]:
+                    segs += [(cuts[0], cuts[1]), (cuts[2], cuts[3])]
+                else:
+                    segs += [(cuts[3], cuts[0]), (cuts[1], cuts[2])]
+    return segs
+
+
+class Landscape(VGroup):
+    """Level sets of a function of two parameters on ``ax`` (an objective, a likelihood), and the paths optimizers
+    take across it.  ``f(X, Y)`` must accept arrays, or ``f`` may be a precomputed grid ``Z[i, j]`` at
+    ``(x_j, y_i)`` spanning the ranges.  ``levels`` are drawn from the first (brightest) on."""
+
+    def __init__(self, ax, f, x_range, y_range, levels, n: int = 90, color=None, stroke_width: float = 2.0, **kw):
+        super().__init__(**kw)
+        self.ax = ax
+        if callable(f):
+            xs = np.linspace(x_range[0], x_range[1], n)
+            ys = np.linspace(y_range[0], y_range[1], n)
+            Xg, Yg = np.meshgrid(xs, ys)
+            self.Z = np.asarray(f(Xg, Yg), float)
+        else:  # a precomputed grid: Z[i, j] at (x_j, y_i) over the ranges
+            self.Z = np.asarray(f, float)
+            ys = np.linspace(y_range[0], y_range[1], self.Z.shape[0])
+            xs = np.linspace(x_range[0], x_range[1], self.Z.shape[1])
+        self.xs, self.ys = xs, ys
+        color = color or S.EST
+        self.levels = VGroup()
+        for k, lv in enumerate(levels):
+            vm = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=max(0.25, 0.95 - 0.08 * k))
+            for p0, p1 in marching_squares(self.Z, xs, ys, lv):
+                vm.start_new_path(ax.c2p(*p0))
+                vm.add_line_to(ax.c2p(*p1))
+            self.levels.add(vm)
+        self.add(self.levels)
+
+    def path(self, pts, color=None, radius: float = 0.06, stroke_width: float = 3.0) -> VGroup:
+        """An optimizer's iterates as dots joined by segments (one Line per step, so steps can be animated)."""
+        color = color or S.ACCENT
+        pts = [self.ax.c2p(float(a), float(b)) for a, b in np.asarray(pts, float)]
+        dots = VGroup(*[Dot(p, radius=radius, color=color) for p in pts])
+        steps = VGroup(*[Line(p, q, color=color, stroke_width=stroke_width) for p, q in zip(pts, pts[1:])])
+        return VGroup(steps, dots)
