@@ -1824,6 +1824,28 @@ Frontier (2023–2026):
 - Dou, W., Goldstein, I., Ji, Y. (2024). "AI-powered trading, algorithmic collusion, and price efficiency." Working paper *(verify)*.
 - IMF (2024). *Global Financial Stability Report*, October, ch. 3 (AI and capital markets); FSB (2024). *The Financial Stability Implications of Artificial Intelligence*.
 - Lopez-Lira, A. (2025). "Can large language models trade? Testing financial theories with LLM agents in market simulations." Working paper *(verify)*.
+- Friedman, J. (1971). "A non-cooperative equilibrium for supergames." *Review of Economic Studies*.
+- Green, E., Porter, R. (1984). "Noncooperative collusion under imperfect price information." *Econometrica*.
+- Fudenberg, D., Maskin, E. (1986). "The folk theorem in repeated games with discounting or with incomplete information." *Econometrica*.
+- Abreu, D. (1988). "On the theory of infinitely repeated games with discounting." *Econometrica*.
+- Bikhchandani, S., Hirshleifer, D., Welch, I. (1992). "A theory of fads, fashion, custom, and cultural change as informational cascades." *JPE*; Banerjee, A. (1992). "A simple model of herd behavior." *QJE*.
+- Lakonishok, J., Shleifer, A., Vishny, R. (1992). "The impact of institutional trading on stock prices." *JFE*.
+- Kirman, A. (1993). "Ants, rationality, and recruitment." *QJE*.
+- Gode, D., Sunder, S. (1993). "Allocative efficiency of markets with zero-intelligence traders." *JPE*.
+- Brock, W., Hommes, C. (1998). "Heterogeneous beliefs and routes to chaos in a simple asset pricing model." *JEDC*.
+- Ivaldi, M., Jullien, B., Rey, P., Seabright, P., Tirole, J. (2003). *The Economics of Tacit Collusion*. Report for DG Competition.
+- Alfarano, S., Lux, T., Wagner, F. (2005). "Estimation of agent-based models: the case of an asymmetric herding model." *Computational Economics*.
+- Farmer, J. D., Patelli, P., Zovko, I. (2005). "The predictive power of zero intelligence in financial markets." *PNAS*.
+- Franke, R., Westerhoff, F. (2012). "Structural stochastic volatility in asset pricing dynamics: estimation and model contest." *JEDC*.
+- Harrington, J. (2018). "Developing competition law for collusion by autonomous artificial agents." *J. Competition Law & Economics*.
+- Spooner, T., Fearnley, J., Savani, R., Koukorinis, A. (2018). "Market making via reinforcement learning." *AAMAS*.
+- Braun-Munzinger, K., Liu, Z., Turrell, A. (2018). "An agent-based model of corporate bond trading." *Quantitative Finance*.
+- Levine, S., Kumar, A., Tucker, G., Fu, J. (2020). "Offline reinforcement learning: tutorial, review, and perspectives on open problems." arXiv.
+- Brown, Z., MacKay, A. (2023). "Competition in pricing algorithms." *AEJ: Microeconomics*.
+- Banchio, M., Mantegazza, G. (2023). "Adaptive algorithms and collusion via coupling." *EC '23* *(verify: venue)*.
+- Assad, S., Clark, R., Ershov, D., Xu, L. (2024). "Algorithmic pricing and competition: empirical evidence from the German retail gasoline market." *JPE*.
+- Fish, S., Gonczarowski, Y., Shorrer, R. (2024). "Algorithmic collusion by large language models." arXiv.
+- US Department of Justice (2024). *United States et al. v. RealPage, Inc.* (complaint; allegations).
 
 ### Part 43 · Can You Beat the Market?
 - Jensen, M. (1968). "The performance of mutual funds in the period 1945–1964." *Journal of Finance*.

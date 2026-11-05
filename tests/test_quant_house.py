@@ -3676,3 +3676,56 @@ def test_crisis_clearing_spirals_runs():
     assert C.margin_path(rr, 2.0, np.array([0.3, 0.45, 0.45, 0.6]))["forced"].sum() > 0.0
     # SRISK (problem 8)
     assert abs(C.srisk(500.0, 20.0, 0.5) - 30.8) < 1e-9
+
+
+def test_agents_herding_cascades_collusion_crowd():
+    import numpy as np
+
+    from explainer.quant.house import agents as A
+    # Kirman's chain: the exact stationary law is beta-binomial
+    for N, eps, d in ((20, 0.01, 0.05), (50, 0.002, 0.01)):
+        pi = A.kirman_stationary(N, eps, d)
+        assert np.abs(pi - A.betabinom_pmf(N, A.kirman_alpha(N, eps, d))).max() < 1e-12
+    # passage times: the recursion against a direct linear solve on a small chain
+    N, eps, d = 12, 0.02, 0.1
+    k = np.arange(N + 1)
+    up = (1 - k / N) * (eps + (1 - d) * k / (N - 1))
+    dn = (k / N) * (eps + (1 - d) * (N - k) / (N - 1))
+    b, a = 2, 10
+    idx = list(range(b + 1, N + 1))                  # states above b; T(b) = 0
+    M = np.zeros((len(idx), len(idx)))
+    rhs = np.ones(len(idx))
+    for i, s in enumerate(idx):
+        M[i, i] = up[s] + dn[s]
+        if s + 1 <= N:
+            M[i, idx.index(s + 1)] -= up[s]
+        if s - 1 > b:
+            M[i, idx.index(s - 1)] -= dn[s]
+    T = np.linalg.solve(M, rhs)
+    assert abs(T[idx.index(a)] - A.kirman_passage(N, eps, d, a, b)) < 1e-6 * T[idx.index(a)]
+    # cascades: theory against simulation
+    th = A.cascade_theory(0.7)
+    assert abs(th["wrong"] - 0.09 / 0.58) < 1e-12
+    assert abs(A.cascade_sim(0.7, trials=40_000, seed=1)["wrong"] - th["wrong"]) < 0.01
+    # the logit game: Nash first-order condition p - c = mu / (1 - q), monopoly above Nash
+    pts = A.bertrand_points()
+    q = A.logit_demand([pts["p_nash"], pts["p_nash"]])[0]
+    assert abs((pts["p_nash"] - 1.0) - 0.25 / (1 - q)) < 1e-4 and pts["p_mon"] > pts["p_nash"]
+    # thresholds: grim (problem 7) and finite punishments falling to it
+    assert abs(A.grim_threshold(3.0, 2.0, 4.0) - 0.5) < 1e-12
+    assert A.punish_threshold(3.0, 2.0, 4.0, 1) == float("inf")
+    assert A.punish_threshold(0.3375, 0.2229, 0.4117, 5) > A.grim_threshold(0.3375, 0.2229, 0.4117)
+    # a short Calvano run: shapes and a greedy cycle
+    c = A.calvano(sessions=4, iters=20_000, seed=0)
+    assert c["Q"].shape == (4, 2, 225, 15)
+    g = A.greedy_cycle(c["Q"][0], int(c["state"][0]), c["k"], c["R"])
+    assert g["len"] >= 1 and len(g["profit"]) == 2
+    # the crowd: flow variance against N[w^2 N + (1 - w)^2]
+    cr = A.crowd(N=50, share=0.3, T=20_000, seed=2)
+    assert abs(cr["flow_var"] / cr["flow_var_th"] - 1) < 0.05
+    # the dealer market: inventory stays in bounds and rewards are finite
+    env = A.DealerEnv(seed=3)
+    s = env.reset()
+    for _ in range(200):
+        s, r, done = env.step(3, 1)
+        assert abs(env.inv) <= env.max_inv and np.isfinite(r)

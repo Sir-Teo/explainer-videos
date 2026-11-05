@@ -1785,22 +1785,25 @@ Hand*; Kindleberger–Aliber *Manias, Panics, and Crashes*; Lowenstein *When Gen
 *Desk:* "A fund at 5× leverage loses 10%. Its lender raises haircuts from 20% to 30%. What must it sell?"
 *House:* liquidity stress for the House.
 
-### Part 42 · Machines in the Market (~55; frontier)
-1. The Santa Fe market (Arthur et al. 1997); Lux–Marchesi (1999).
-2. Simulators: ABIDES (Byrd–Hybinette–Balch 2020), the Part 36 generative book; the sim-to-real gap.
-3. RL in markets: hedging, execution, market making, allocation; offline RL and why a backtest is not an
-   environment.
-4. LLM agents as traders, in the simulator.
-5. Algorithmic collusion (Calvano et al. 2020; Colliard–Foucault–Lovo 2022; Dou–Goldstein–Ji *(verify)*),
-   reproduced with multi-agent RL.
-6. Herding when everyone shares a model (Gensler–Bailey 2020).
-7. AI and stability: IMF (October 2024), FSB (2024); regulation *(verify: the current US rules)*.
-8. Moore's law vs Murphy's law (Kirilenko–Lo 2013).
-
-*Trained:* multi-agent RL market makers (collusion measured in spreads); LLM-agent traders.
-*Visuals:* spreads converging above competition; shocks with diverse vs identical agents.
-*Desk:* "Two algorithms that never communicate end up with wide spreads. Is that collusion?"
-*House:* the House's agents placed in the simulated market.
+### Part 42 · Machines in the Market (~53; built)
+1. Artificial markets: the Santa Fe market; a Franke–Westerhoff-type fundamentalist–chartist market with herding;
+   stylised facts against the US market; simulated moments (one of two behaviours identified); Brock–Hommes; zero
+   intelligence.
+2. Herding: Kirman's ant model; its stationary law proved exactly beta-binomial, its passage times; Lux–Marchesi and
+   Alfarano–Lux–Wagner; LSV; information cascades (wrong with probability q²/(p² + q²)).
+3. Simulators: ABIDES; realism metrics; calibration; the three gaps; the Lucas critique; the House's dealer market.
+4. Learning to trade: a Q-learning market maker against every fixed rule (85% of the best; no gain from training in the
+   right regime); the learning curve; model-based quotes; the replay bias (445 against 129); offline RL. (The RL
+   market maker moved here from Part 38.)
+5. LLM agents: uses, a clean bench, an honest test, chronological consistency, shared foundation models; none run.
+6. Algorithmic collusion, reproduced (Calvano et al. 2020): index 0.23–0.81 by δ; per-session punishment; noise lowers
+   it; Colliard–Foucault–Lovo, Dou–Goldstein–Ji; 1 − 1/n; the law; Assad et al.; RealPage (alleged).
+7. Monoculture (Gensler–Bailey 2020; Danielsson–Macrae–Uthemann 2022): the common share, a model's error, measurement.
+8. AI and stability: IMF (October 2024), FSB (November 2024), MiFID II RTS 6, the market access rule, the EU AI Act,
+   the withdrawn SEC proposal; Moore vs Murphy (Kirilenko–Lo 2013); machine-speed failures; model risk.
+9. Rule 42: test the agent against the market it creates.
+Research: the one-shot deviation principle (sketched), grim trigger proved, the T-period corollary, Abreu's minmax
+bound; computed for the logit game and checked against the learners and their punishments.
 
 ### Finale
 
