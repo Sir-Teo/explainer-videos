@@ -416,3 +416,39 @@ BERKELEY = {"A": (512, 313, 89, 19), "B": (353, 207, 17, 8), "C": (120, 205, 202
 DOLL_HILL = {"cases": 649, "cases_smokers": 647, "controls": 649, "controls_smokers": 622}
 # Laplace (1778, "Mémoire sur les probabilités"): baptisms in Paris, 1745-1770.
 PARIS_BIRTHS = {"boys": 251_527, "girls": 241_945, "years": (1745, 1770)}
+# Efron's law-school sample (Efron 1982; Efron & Tibshirani 1993, Table 3.1): 15 of the 82 American law schools of
+# 1973, with each class's average LSAT score and undergraduate GPA.  The correlation is 0.776.
+LAW_LSAT = [576, 635, 558, 578, 666, 580, 555, 661, 651, 605, 653, 575, 545, 572, 594]
+LAW_GPA = [3.39, 3.30, 2.81, 3.03, 3.44, 3.07, 3.00, 3.43, 3.36, 3.13, 3.12, 2.74, 2.76, 2.88, 2.96]
+# Yule (JRSS 89, 1926), "Why do we sometimes get nonsense-correlations between time-series?", p. 3: England and Wales,
+# 1866-1911, standardized mortality per 1,000 persons and Church of England marriages per 1,000 of all marriages.
+# Values as read from Yule's graph by Hipel & McLeod (StatLib, hipel-mcleod/roberts/yule1.1, yule2.1); their
+# correlation is 0.9515, against Yule's 0.9512 from the original figures.
+YULE_YEARS = (1866, 1911)
+YULE_MORTALITY = [22.0, 21.8, 21.5, 21.3, 21.1, 21.2, 21.0, 20.8, 20.5, 20.4, 20.1, 19.9, 19.6, 19.4, 19.2, 19.1, 19.1,
+                  18.9, 18.7, 18.7, 18.7, 18.4, 18.4, 18.3, 18.4, 18.3, 18.3, 18.0, 17.7, 17.7, 17.9, 17.6, 17.7, 17.4,
+                  17.1, 16.8, 16.5, 16.2, 15.8, 15.5, 15.2, 14.9, 14.6, 14.4, 14.5, 14.2]
+YULE_CE_MARRIAGES = [78.1, 74.5, 74.6, 75.5, 76.9, 76.3, 73.8, 73.4, 75.8, 76.9, 73.2, 72.1, 74.3, 73.1, 72.2, 69.4,
+                     70.8, 71.1, 71.2, 70.6, 71.1, 70.3, 68.3, 68.9, 71.9, 73.3, 70.9, 70.0, 65.5, 70.1, 66.6, 67.4,
+                     67.8, 69.4, 69.4, 66.7, 65.0, 63.1, 65.0, 63.9, 63.0, 62.2, 61.4, 61.0, 58.8, 61.0]
+
+
+def sunspots() -> tuple:
+    """Yearly sunspot numbers 1700-2008 (the version statsmodels ships), as (years, numbers).  Yule (1927) fitted his
+    autoregression to the years 1749-1924."""
+    import statsmodels.api as sm
+
+    d = sm.datasets.sunspots.load_pandas().data
+    return d["YEAR"].to_numpy().astype(int), d["SUNACTIVITY"].to_numpy().astype(float)
+
+
+def co2_monthly() -> tuple:
+    """Mauna Loa CO2 (ppm), Keeling's record as statsmodels ships it (weekly, March 1958 - December 2001), averaged to
+    months with gaps filled by interpolation: (decimal year, ppm), from January 1959 to December 2001."""
+    import statsmodels.api as sm
+
+    s = sm.datasets.co2.load_pandas().data["co2"]
+    m = s.resample("MS").mean().interpolate()
+    m = m[(m.index.year >= 1959)]
+    t = m.index.year + (m.index.month - 0.5) / 12
+    return t.to_numpy(), m.to_numpy()
