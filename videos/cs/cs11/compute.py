@@ -420,7 +420,8 @@ static int calls;                      /* local to this file: .bss */
 const char *greeting = "hello";        /* initialised data: .data, pointing into .rodata */
 int main(void) {
   calls++;
-  printf("%d %d\n", count(greeting), total);
+  int n = count(greeting);
+  printf("%d %d\n", n, total);
   return 0;
 }
 """
@@ -738,11 +739,194 @@ def compute_frontier() -> dict:
                                                                  for n in (2 ** k for k in range(1, 21, 3))]}
 
 
+# ---------------------------------------------------------------------------
+# practice: a debugger's backtrace, static archives and link order, sanitizers
+# ---------------------------------------------------------------------------
+BT_C = r"""
+#include <stdio.h>
+#include <stdlib.h>
+long fact(long n) {
+  if (n <= 1) return 1;
+  return n * fact(n - 1);
+}
+int main(int argc, char **argv) {
+  printf("%ld\n", fact(argc > 1 ? atol(argv[1]) : 5));
+  return 0;
+}
+"""
+
+
+def compute_backtrace() -> dict:
+    """gdb stops fact(5) at its deepest call and walks the frames, printing each frame's stack pointer."""
+    with tempfile.TemporaryDirectory() as d:
+        c, exe = Path(d) / "fact.c", Path(d) / "fact"
+        c.write_text(BT_C)
+        subprocess.run(["gcc", "-O0", "-g", "-fno-omit-frame-pointer", "-o", str(exe), str(c)], check=True)
+        cmds = ["-ex", "set pagination off", "-ex", "break fact if n == 1", "-ex", "run", "-ex", "bt"]
+        for k in range(6):
+            cmds += ["-ex", f"frame {k}", "-ex", "p/x $sp", "-ex", "p/x *(long *)($rbp + 8)"]
+        out = subprocess.run(["gdb", "-q", "-batch", "-nx", *cmds, str(exe)], capture_output=True, text=True).stdout
+    bt = [l for l in out.splitlines() if l.startswith("#")]
+    vals = [l.split("=", 1)[1].strip() for l in out.splitlines() if l.startswith("$")]
+    sps = [int(v, 16) for v in vals[0::2]]
+    ras = [int(v, 16) for v in vals[1::2]]
+    seen, frames = set(), []
+    for line in bt:
+        k = int(line.split()[0][1:])
+        if k in seen:
+            continue
+        seen.add(k)
+        frames.append(line)
+    return {"bt": frames[:6], "sp": sps[:6], "ra": ras[:6], "frame_bytes": sps[1] - sps[0] if len(sps) > 1 else None,
+            "source": BT_C.strip()}
+
+
+AR_MAIN = "int count(const char *s);\nint main(void) { return count(\"hello\") == 5 ? 0 : 1; }\n"
+AR_COUNT = "int count(const char *s) { int n = 0; while (*s++) n++; return n; }\n"
+AR_UNUSED = "static char table[100000] = {1};\nint unused(int i) { return table[i]; }\n"
+
+
+def compute_archive() -> dict:
+    """A static library is an archive of object files; the linker pulls in a member only if it resolves a symbol
+    that is undefined at that point of its left-to-right scan."""
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        for n, src in (("main", AR_MAIN), ("count", AR_COUNT), ("unused", AR_UNUSED)):
+            (d / f"{n}.c").write_text(src)
+            subprocess.run(["gcc", "-O2", "-c", "-o", str(d / f"{n}.o"), str(d / f"{n}.c")], check=True)
+        subprocess.run(["ar", "rcs", str(d / "libjob.a"), str(d / "count.o"), str(d / "unused.o")], check=True)
+        members = _sh(["ar", "t", str(d / "libjob.a")]).split()
+        res = {}
+        for name, order in (("objects", ["main.o", "count.o", "unused.o"]), ("archive", ["main.o", "libjob.a"]),
+                            ("archive first", ["libjob.a", "main.o"])):
+            exe = d / "p"
+            r = subprocess.run(["gcc", "-o", str(exe), *[str(d / f) for f in order]], capture_output=True, text=True)
+            row = {"order": order, "ok": r.returncode == 0,
+                   "error": [l.split(": ", 1)[-1] for l in r.stderr.splitlines() if "undefined" in l][:1]}
+            if r.returncode == 0:
+                syms = _sh(["nm", str(exe)])
+                row.update(bytes=exe.stat().st_size, has_count=" count\n" in syms, has_unused=" unused\n" in syms)
+                exe.unlink()
+            res[name] = row
+    return {"members": members, "links": res}
+
+
+SAN = {
+    "overflow": ("-fsanitize=undefined", r"""
+#include <limits.h>
+#include <stdio.h>
+int main(int argc, char **argv) { int x = INT_MAX - 1 + argc; printf("%d\n", x + 1); return 0; }
+"""),
+    "heap": ("-fsanitize=address", r"""
+#include <stdlib.h>
+int main(void) { int *a = malloc(16 * sizeof(int)); for (int i = 0; i <= 16; i++) a[i] = i; free(a); return 0; }
+"""),
+    "freed": ("-fsanitize=address", r"""
+#include <stdlib.h>
+int main(void) { int *a = malloc(16 * sizeof(int)); free(a); return a[3]; }
+"""),
+    "stack": ("-fsanitize=address", r"""
+#include <string.h>
+int main(void) { char buf[64]; for (int i = 0; i <= 64; i++) buf[i] = 'A'; return buf[3]; }
+"""),
+}
+
+SAN_BENCH = r"""
+#include <stdio.h>
+#include <stdlib.h>
+struct node { struct node *next; long v; };
+int main(void) {
+  long total = 0;
+  for (int round = 0; round < 40; round++) {
+    struct node *head = 0;
+    for (long i = 0; i < 200000; i++) { struct node *n = malloc(sizeof *n); n->v = i; n->next = head; head = n; }
+    while (head) { struct node *n = head; total += n->v; head = n->next; free(n); }
+  }
+  printf("%ld\n", total);
+  return 0;
+}
+"""
+
+
+SAN_WORDS = r"""
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define N 65536
+static char *key[N]; static int cnt[N];
+int main(int argc, char **argv) {
+  FILE *f = fopen(argv[1], "rb"); fseek(f, 0, SEEK_END); long n = ftell(f); rewind(f);
+  char *t = malloc(n + 1); fread(t, 1, n, f); t[n] = 0; fclose(f);
+  long words = 0; int distinct = 0;
+  for (int rep = 0; rep < 20; rep++)
+    for (long i = 0; i < n;) {
+      while (i < n && !isalpha((unsigned char)t[i])) i++;
+      long s = i; unsigned h = 2166136261u;
+      while (i < n && isalpha((unsigned char)t[i])) { h = (h ^ (unsigned char)tolower(t[i])) * 16777619u; i++; }
+      if (i == s) break;
+      int len = i - s; words++;
+      for (unsigned j = h & (N - 1);; j = (j + 1) & (N - 1)) {
+        if (!key[j]) { key[j] = malloc(len + 1); for (int k = 0; k < len; k++) key[j][k] = tolower(t[s + k]);
+                       key[j][len] = 0; cnt[j] = 1; distinct++; break; }
+        if ((int)strlen(key[j]) == len && !strncasecmp(key[j], t + s, len)) { cnt[j]++; break; }
+      }
+    }
+  printf("%ld %d\n", words, distinct);
+  return 0;
+}
+"""
+
+
+def compute_sanitize() -> dict:
+    import resource
+    import videos.ai.ai1.compute as A
+
+    out = {}
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        for name, (flag, src) in SAN.items():
+            c, exe = d / f"{name}.c", d / name
+            c.write_text(src)
+            subprocess.run(["gcc", "-O0", "-g", flag, "-o", str(exe), str(c)], check=True)
+            r = subprocess.run([str(exe)], capture_output=True, text=True,
+                               env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"})
+            lines = [l for l in r.stderr.splitlines() if "ERROR" in l or "runtime error" in l or "located" in l]
+            first = lines[0] if lines else ""
+            if "ERROR: AddressSanitizer:" in first:
+                first = first.split("ERROR: AddressSanitizer: ", 1)[1].split(" on address")[0]
+            elif "runtime error:" in first:
+                first = first.split("runtime error: ", 1)[1]
+            loc = next((l.strip() for l in lines if "located" in l), "")
+            out[name] = {"report": first, "where": loc, "exit": r.returncode}
+        book = str(A.BOOK_DIR / "1342.txt")
+        bench = {}
+        for bname, src, args in (("words", SAN_WORDS, [book]), ("malloc", SAN_BENCH, [])):
+            c = d / f"{bname}.c"
+            c.write_text(src)
+            times = {}
+            for name, flags in (("plain", []), ("asan", ["-fsanitize=address"])):
+                exe = d / f"{bname}_{name}"
+                subprocess.run(["gcc", "-O2", *flags, "-o", str(exe), str(c)], check=True)
+                best = None
+                for _ in range(5):
+                    t0 = time.perf_counter()
+                    r = subprocess.run([str(exe), *args], check=True, capture_output=True, text=True,
+                                       env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"})
+                    dt = time.perf_counter() - t0
+                    best = dt if best is None else min(best, dt)
+                times[name] = best
+                times[name + "_out"] = r.stdout.strip()
+            bench[bname] = {**times, "slowdown": times["asan"] / times["plain"]}
+    return {"cases": out, "bench": bench}
+
+
 ITEMS = {
     "tools": compute_tools, "layout": compute_layout, "switch": compute_switch, "stack": compute_stack,
     "ackermann": compute_ackermann, "heap": compute_heap, "fifty": compute_fifty, "robson": compute_robson,
     "elf": compute_elf, "pebblelink": compute_pebblelink, "dynamic": compute_dynamic, "aslr": compute_aslr,
     "maps": compute_maps, "ub": compute_ub, "smash": compute_smash, "job": compute_job, "frontier": compute_frontier,
+    "backtrace": compute_backtrace, "archive": compute_archive, "sanitize": compute_sanitize,
 }
 
 if __name__ == "__main__":
