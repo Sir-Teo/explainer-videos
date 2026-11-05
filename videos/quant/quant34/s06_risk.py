@@ -89,6 +89,7 @@ class Risk(VoiceoverScene):
         days = pos / (part * adv)
         sig = 0.02
         cost = sig * math.sqrt(part) * 1.0
+        cost_bp = 1e4 * cost
         rows = [cmath(r"\text{days to exit}", r"=", r"\frac{\text{position}}{\text{participation} \times \text{ADV}}",
                       font_size=36, colors={r"\text{days to exit}": HURDLE}),
                 cmath(r"\$50\text{m},\ \text{ADV } \$20\text{m},\ 10\%", r"\Rightarrow", rf"{days:.0f}\ \text{{days}}",
@@ -104,7 +105,7 @@ class Risk(VoiceoverScene):
             "Liquidity is a limit measured in time. <bookmark mark='a'/> Days to exit: the position over the share of "
             "daily volume the firm allows itself. <bookmark mark='b'/> Fifty million dollars in a stock that trades "
             f"twenty million a day, at a tenth of the volume, takes {days:.0f} days. <bookmark mark='c'/> And by Part "
-            f"thirty-one's square-root law it costs about {1e4 * cost:.0f} basis points. In a crisis volume falls and "
+            f"thirty-one's square-root law it costs about {cost_bp:.0f} basis points. In a crisis volume falls and "
             "volatility rises, so both get worse at once, which is why the limit is set for the crisis, not the average day."
         ) as vo:
             step(0)

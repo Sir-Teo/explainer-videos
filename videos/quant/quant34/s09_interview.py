@@ -203,6 +203,7 @@ class Interview(VoiceoverScene):
         share_mm = 0.2
         avg_trade = 100
         trades = shares * share_mm / avg_trade
+        trades_m = trades / 1e6
         rows = [cmath(r"\text{US equity volume}", r"\approx", r"10^{10}\ \text{shares a day}", font_size=34),
                 cmath(r"\text{one firm's share}", r"\approx", r"20\%,\quad \text{about 100 shares a trade}", font_size=32),
                 cmath(r"\text{trades a day}", r"\approx", rf"{trades / 1e6:.0f}\ \text{{million}}", font_size=36,
@@ -218,7 +219,7 @@ class Interview(VoiceoverScene):
             "Question six, an estimate. How many trades a day does a large American equity market maker do? "
             "<bookmark mark='a'/> Start from the market: around ten billion shares a day, order of magnitude. "
             "<bookmark mark='b'/> A large market maker in a fifth of it, at about a hundred shares a trade. "
-            f"<bookmark mark='c'/> About {trades / 1e6:.0f} million trades a day. Chapter two's law of large numbers "
+            f"<bookmark mark='c'/> About {trades_m:.0f} million trades a day. Chapter two's law of large numbers "
             "needed around a hundred thousand independent ones, so the disclosed statistic is plausible. Estimation "
             "questions test exactly this: a chain of rough numbers, each defended."
         ) as vo:
