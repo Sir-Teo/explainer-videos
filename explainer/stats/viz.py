@@ -1381,3 +1381,63 @@ class IslandMap(VGroup):
             else:
                 anims.append(d.animate.set_opacity(0.15))
         return AnimationGroup(*anims)
+
+
+class L1Geometry(VGroup):
+    """Ridge and lasso as geometry (Parts 19, 32): the (beta1, beta2) plane with the least-squares estimate ``ols``,
+    elliptical contours of the loss (b - ols)' Q (b - ols), and constraint balls |b|_q <= t.  ``ball(q, t)`` draws a
+    diamond (q = 1) or circle (q = 2); ``touch(q, t)`` is the constrained minimum (a corner, for the diamond, more often
+    than not); ``contour(c)`` the loss level set through value c."""
+
+    def __init__(self, ols, Q=None, center=ORIGIN, unit=1.0, extent=3.0, font_size=22):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.c = np.asarray(center, float)
+        self.unit = unit
+        self.ols = np.asarray(ols, float)
+        self.Q = np.eye(2) if Q is None else np.asarray(Q, float)
+        e = extent * unit
+        self.axes_ = VGroup(Line(self.c + LEFT * e, self.c + RIGHT * e, color=GREY_C, stroke_width=1.5),
+                            Line(self.c + DOWN * e, self.c + UP * e, color=GREY_C, stroke_width=1.5))
+        self.labels = VGroup(MathTex(r"\beta_1", font_size=font_size, color=GREY_B).next_to(self.c + RIGHT * e, DOWN, buff=0.1),
+                             MathTex(r"\beta_2", font_size=font_size, color=GREY_B).next_to(self.c + UP * e, LEFT, buff=0.1))
+        self.ols_dot = Dot(self.p(self.ols), radius=0.08, color=S.FIT)
+        self.add(self.axes_, self.labels, self.ols_dot)
+
+    def p(self, b) -> np.ndarray:
+        return self.c + self.unit * np.array([b[0], b[1], 0.0])
+
+    def loss(self, b) -> float:
+        d = np.asarray(b, float) - self.ols
+        return float(d @ self.Q @ d)
+
+    def contour(self, level: float, color=None, stroke_width=2.0) -> VMobject:
+        w, V = np.linalg.eigh(self.Q)
+        th = np.linspace(0, 2 * np.pi, 160)
+        pts = [self.ols + V @ (np.sqrt(level / w) * np.array([np.cos(t), np.sin(t)])) for t in th]
+        return VMobject(stroke_color=color or S.FIT, stroke_width=stroke_width, stroke_opacity=0.8).set_points_smoothly(
+            [self.p(q) for q in pts])
+
+    def _boundary(self, q: float, t: float, m: int = 4000) -> np.ndarray:
+        th = np.linspace(0, 2 * np.pi, m, endpoint=False)
+        c, s = np.cos(th), np.sin(th)
+        r = t / (np.abs(c) ** q + np.abs(s) ** q) ** (1 / q)
+        return np.column_stack([r * c, r * s])
+
+    def ball(self, q: float, t: float, color=None, fill=0.15) -> VMobject:
+        if q == 1:
+            return Polygon(*[self.p(v) for v in ((t, 0), (0, t), (-t, 0), (0, -t))], color=color or S.ACCENT, stroke_width=2.5,
+                           fill_color=color or S.ACCENT, fill_opacity=fill)
+        pts = self._boundary(q, t, 240)
+        return Polygon(*[self.p(v) for v in pts], color=color or S.ACCENT, stroke_width=2.5, fill_color=color or S.ACCENT,
+                       fill_opacity=fill)
+
+    def touch(self, q: float, t: float) -> np.ndarray:
+        if np.sum(np.abs(self.ols) ** q) ** (1 / q) <= t:
+            return self.ols.copy()
+        pts = self._boundary(q, t)
+        if q == 1:
+            pts = np.vstack([pts, [[t, 0], [0, t], [-t, 0], [0, -t]]])
+        L = np.einsum("ij,jk,ik->i", pts - self.ols, self.Q, pts - self.ols)
+        return pts[int(np.argmin(L))]
