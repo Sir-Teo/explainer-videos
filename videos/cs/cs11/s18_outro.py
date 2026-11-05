@@ -28,8 +28,8 @@ class Outro(VoiceoverScene):
         self.references()
 
     def recap(self):
-        mem = memory_strip([(r"code", 0.2, DATA), (r"data", 0.15, CTRL), (r"heap", 0.25, YES), (r"", 0.15, BG),
-                            (r"stack", 0.25, NO)], w=1.6, total_h=2.2)
+        mem = memory_strip([(r"code", 0.2, DATA), (r"data", 0.15, CTRL), (r"heap $\uparrow$", 0.25, YES), (r"", 0.15, BG),
+                            (r"stack $\downarrow$", 0.25, NO)], w=1.6, total_h=2.2)
         frames = VGroup(*[region(2.4, 0.4, t, c, font_size=16) for t, c in (("main", GREY_B), ("lookup", DATA),
                                                                            ("alloc", CTRL))]).arrange(DOWN, buff=0)
         h = load("heap")["rows"]

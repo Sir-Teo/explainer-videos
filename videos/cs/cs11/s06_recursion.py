@@ -27,7 +27,7 @@ class Recursion(VoiceoverScene):
                                                         (3, 6))]
         body = [[rf"$A({r['m']}, {r['n']})$", f"{r['value']:,}", f"{r['calls']:,}", f"{r['frames']:,}"] for r in pick]
         colors = [[GREY_A, YES, CTRL, NO]] * len(body)
-        t = grid_table([r"call", r"value", r"calls", r"deepest stack \ (frames)"], body, [2.2, 1.8, 2.2, 3.2],
+        t = grid_table([r"call", r"value", r"calls made", r"deepest stack \ (frames)"], body, [2.2, 1.8, 2.2, 3.2],
                        row_h=0.42, font_size=21, colors=colors, mono_cols=()).next_to(defn, DOWN, buff=0.4)
         cap = label(r"$A(4, 2)$ has 19,729 digits: \ no computer will ever finish it this way", font_size=21,
                     color=NO).to_edge(DOWN, buff=0.35)
