@@ -1,0 +1,281 @@
+from __future__ import annotations
+
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant37.common import (BUY_C, GOOD, HURDLE, IMPACT_C, PART, SELL_C, SIM_C, fit_right,
+                                         load)
+
+
+class Sqrt(VoiceoverScene):
+    def construct(self):
+        lt = load("latent")
+        self.answer()
+        self.card()
+        self.law()
+        self.universal()
+        self.puzzle()
+        self.latent_picture()
+        self.derive()
+        self.sim(lt)
+        self.decay(lt)
+        self.invariance()
+        self.question()
+
+    def answer(self):
+        rows = [cmath(r"\sqrt{4}\times 10", r"=", r"20\ \text{bp}", font_size=40, colors={r"20\ \text{bp}": GOOD}),
+                cmath(r"4 \times 10", r"=", r"40\ \text{bp}", font_size=40),
+                cmath(r"\text{per unit bought}", r":", r"\text{cheaper for big orders}", font_size=34)]
+        whys = [why(r"the square root: four times the size, twice the impact"),
+                why(r"a straight line: four times the size, four times the impact"),
+                why(r"under the square root the cost per share falls with size, which is why it matters so much for "
+                    r"capacity and for how to slice")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The answer to the pause. <bookmark mark='a'/> Under the square-root law, four times the size moves the "
+            "price twice as far: twenty basis points. <bookmark mark='b'/> Under a straight line, forty. "
+            "<bookmark mark='c'/> The difference is not a detail: under the square root, the impact per unit bought "
+            "falls with size."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def card(self):
+        c = chapter_card(2, r"The square-root law", r"Why does impact grow like the square root of size?", part=PART)
+        with self.voiceover("Chapter two. The most robust empirical regularity in market microstructure, and a puzzle "
+                            "about why it holds. Then a model of hidden liquidity that explains it."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def law(self):
+        rows = [cmath(r"I(Q)", r"\approx", r"Y\,\sigma_{\text{day}}\,\sqrt{\frac{Q}{V_{\text{day}}}}", font_size=44,
+                      colors={r"I(Q)": IMPACT_C}),
+                cmath(r"Y", r"\approx", r"0.5\text{--}1", font_size=40, colors={r"Y": HURDLE}),
+                cmath(r"\text{independent of}", r":", r"\text{the duration, roughly}", font_size=34)]
+        whys = [why(r"Loeb (1983) and Torre (1997) for equities; Almgren, Thum, Hauptmann and Li (2005); Tóth et al. (2011): "
+                    r"the impact of a metaorder in units of the daily volatility, against its share of daily volume"),
+                why(r"a prefactor of order one, the same for very different markets"),
+                why(r"to a first approximation, the impact depends on how much was bought, not on how fast")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The law. <bookmark mark='a'/> The impact of a metaorder, in units of the daily volatility, is about the "
+            "square root of its share of daily volume. Measured on equities by Thomas Loeb and Nicolò Torre, by Almgren "
+            "and colleagues on Citigroup's orders, and by Bence Tóth and colleagues on futures. "
+            "<bookmark mark='b'/> With a prefactor of order one in very different markets. <bookmark mark='c'/> And, "
+            "to a first approximation, it depends on how much was bought, not on how fast."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def universal(self):
+        cards = VGroup(
+            desk_question(r"equities and futures", r"brokers' and funds' records across thousands of stocks and dozens of "
+                          r"futures: exponents near one half over several decades of size", width=12.4, font_size=19),
+            desk_question(r"Bitcoin", r"Donier and Bonart (2015) reconstructed about a million metaorders from the Mt.Gox "
+                          r"exchange's leaked account-level records, and found the square root there too", width=12.4,
+                          font_size=19),
+            desk_question(r"its limits", r"very small orders show linear impact (Bucci et al. 2019); some data sets fit a "
+                          r"logarithm better (Zarinelli et al. 2015); the prefactor varies with the market", width=12.4,
+                          font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How universal. <bookmark mark='a'/> Across thousands of stocks and dozens of futures, exponents near one "
+            "half over several decades of size. <bookmark mark='b'/> On Bitcoin, Jonathan Donier and Julius Bonart "
+            "reconstructed about a million metaorders from the account-level records leaked from the Mt. Gox exchange, "
+            "and found a square root there too. <bookmark mark='c'/> With limits: very small orders show linear impact, "
+            "some data fit a logarithm better, and the prefactor varies."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def puzzle(self):
+        cards = VGroup(
+            desk_question(r"not Kyle", r"Part 35's Kyle model gives linear impact; a square root means the market absorbs "
+                          r"large orders more cheaply than a fixed depth would", width=12.4, font_size=19),
+            desk_question(r"not the visible book", r"the displayed book holds a tiny fraction of a day's volume; a "
+                          r"metaorder of 1\% of the day would empty it many times over", width=12.4, font_size=19),
+            desk_question(r"so where is the liquidity?", r"in orders that are not yet in the book: traders who would buy "
+                          r"or sell at a price, and reveal it only when the price comes near", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Why is it a puzzle? <bookmark mark='a'/> Kyle's model gives a straight line. A square root means the market "
+            "absorbs large orders more cheaply than any fixed depth would. <bookmark mark='b'/> The visible book is no "
+            "help: it holds a tiny fraction of a day's volume, and a metaorder of one percent would empty it many times "
+            "over. <bookmark mark='c'/> So the liquidity must be latent: traders who would buy or sell at some price, "
+            "and reveal it only when the price comes near."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def latent_picture(self):
+        g = axes([-4, 4], [-4, 4], x_length=7.4, y_length=4.4, xlabel=r"price, relative to the current price",
+                 ylabel=r"latent volume", xticks=[0], yticks=[0], font_size=15).move_to(DOWN * 0.2)
+        ax = g.ax
+        bids = Polygon(ax.c2p(-4, 0), ax.c2p(0, 0), ax.c2p(-4, 4), fill_color=BUY_C, fill_opacity=0.45, stroke_width=0)
+        asks = Polygon(ax.c2p(0, 0), ax.c2p(4, 0), ax.c2p(4, -4), fill_color=SELL_C, fill_opacity=0.45, stroke_width=0)
+        eaten = Polygon(ax.c2p(0, 0), ax.c2p(2, 0), ax.c2p(2, -2), fill_color=IMPACT_C, fill_opacity=0.9, stroke_width=0)
+        mark = DashedLine(ax.c2p(2, -4), ax.c2p(2, 4), color=HURDLE, stroke_width=2)
+        labs = VGroup(label(r"latent bids", font_size=18, color=BUY_C).move_to(ax.c2p(-2.6, 1.5)),
+                      label(r"latent offers", font_size=18, color=SELL_C).move_to(ax.c2p(2.8, -1.0)),
+                      label(r"a buyer eats a triangle", font_size=18, color=IMPACT_C).next_to(ax.c2p(1, -2), DOWN,
+                                                                                         buff=0.6))
+        with self.voiceover(
+            "The picture of latent liquidity. <bookmark mark='a'/> Hidden intentions to buy below the price and to sell "
+            "above it. Jonathan Donier, Julius Bonart, Iacopo Mastromatteo and Bouchaud showed that if these latent "
+            "orders keep arriving, being cancelled and revising their prices at random, the density near the price is "
+            "a V: it grows linearly with the distance from the price. <bookmark mark='b'/> A buyer must eat the offers "
+            "between the old price and the new one: a triangle."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(FadeIn(bids), FadeIn(asks), FadeIn(labs[:2]))
+            vo.wait_until("b")
+            self.play(FadeIn(eaten), Create(mark), FadeIn(labs[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self):
+        rows = [cmath(r"\rho(x)", r"=", r"\mathcal L\,|x|", font_size=40),
+                cmath(r"Q", r"=", r"\int_0^{\Delta} \mathcal L\,x\,dx = \tfrac12\,\mathcal L\,\Delta^2", font_size=40),
+                cmath(r"\Delta", r"=", r"\sqrt{2Q/\mathcal L}", font_size=44, colors={r"\Delta": IMPACT_C}),
+                cmath(r"\mathcal L", r"\propto", r"V_{\text{day}} / \sigma_{\text{day}}^2", font_size=38)]
+        whys = [why(r"the latent density near the price: linear, with slope $\mathcal L$"),
+                why(r"to move the price from 0 to $\Delta$, a buyer must absorb all the offers in between: the area of the "
+                    r"triangle"),
+                why(r"invert: the square root, from nothing but the V shape"),
+                why(r"by dimensional analysis the slope scales as volume over variance, which gives the law's "
+                    r"$\sigma\sqrt{Q/V}$")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "The derivation in three lines. <bookmark mark='a'/> Near the price, the latent density is linear, with "
+            "slope script L. <bookmark mark='b'/> To move the price from zero to delta, a buyer must absorb every offer "
+            "in between: the area of the triangle, one half L delta squared. <bookmark mark='c'/> Invert, and the price "
+            "moves as the square root of two Q over L. <bookmark mark='d'/> And by dimensions the slope scales as volume "
+            "over variance, which turns this into the law's sigma times the root of Q over V."
+        ) as vo:
+            step(0)
+            for k, mk in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(mk)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def sim(self, lt):
+        rows = lt["rows"]
+        x = np.log10([r["Q"] for r in rows])
+        y = np.log10([r["I"] for r in rows])
+        g = axes([-2, 3], [float(np.floor(y.min())), float(np.ceil(y.max()))], x_length=6.4, y_length=4.4,
+                 xlabel=r"metaorder size $Q$, executed in one unit of time", ylabel=r"impact at the end",
+                 xticks=[-2, 0, 2], yticks=[float(np.floor(y.min())), 0, float(np.ceil(y.max()))],
+                 xfmt=lambda v: f"10^{{{v:.0f}}}", yfmt=lambda v: f"10^{{{v:.0f}}}", font_size=15)
+        g.move_to(LEFT * 1.6 + DOWN * 0.2)
+        ax = g.ax
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=SIM_C) for a, b in zip(x, y)])
+        sq = DashedLine(ax.c2p(0, 0.5 * np.log10(2)), ax.c2p(3, 0.5 * np.log10(2) + 1.5), color=GOOD, stroke_width=2)
+        st = VGroup(label(rf"small orders: slope {lt['slope_small']:.2f}", font_size=18, color=SIM_C),
+                    label(rf"large orders: slope {lt['slope_large']:.2f}", font_size=18, color=SIM_C),
+                    label(r"$\sqrt{2Q/\mathcal L}$, the static book", font_size=18, color=GOOD))
+        st.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.4).shift(UP * 1.4)
+        fit_right(st)
+        with self.voiceover(
+            "Now simulate it: the latent density diffusing, a buyer removing offers at the price for one unit of time, "
+            "for sizes across five decades. <bookmark mark='a'/> Small orders move the price in proportion, slope "
+            f"{lt['slope_small']:.2f}: the book has time to refill around them. <bookmark mark='b'/> Large orders bend "
+            f"toward the square root, slope {lt['slope_large']:.2f}, approaching the static book's formula. Linear for "
+            "small orders, square root for large: the crossover Federico Bucci and colleagues found in real data."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(st))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.08))
+            vo.wait_until("b")
+            self.play(Create(sq))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def decay(self, lt):
+        t = np.asarray(lt["path_t"], float)
+        p = np.asarray(lt["path_p"], float)
+        top = float(np.ceil(p.max()))
+        g = axes([0, float(t[-1])], [0, top], x_length=8.4, y_length=4.2, xlabel=r"time (the order runs from 0 to 1)",
+                 ylabel=r"price", xticks=[0, 1, 5, 10], yticks=[0, top], yfmt=lambda v: f"{v:.0f}",
+                 font_size=15).move_to(DOWN * 0.2)
+        c_ = curve(g.ax, t, p, IMPACT_C, stroke_width=3)
+        stop = DashedLine(g.ax.c2p(1, 0), g.ax.c2p(1, top), color=GREY_B, stroke_width=1.5)
+        peak = float(p.max())
+        end = float(p[-1])
+        with self.voiceover(
+            "And after the order stops. <bookmark mark='a'/> The price peaks when buying ends, at "
+            f"{peak:.1f}, <bookmark mark='b'/> then decays as the latent book heals, to {end:.1f} after nine more units "
+            "of time, and on, slowly, like one over the square root of time. In this pure model nothing is permanent; "
+            "in real markets, information makes part of it stay."
+        ) as vo:
+            self.play(FadeIn(g), Create(stop))
+            vo.wait_until("a")
+            self.play(Create(c_), run_time=3)
+            vo.wait_until("b")
+            self.wait(0.2)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def invariance(self):
+        rows = [cmath(r"W", r"=", r"\sigma\,P\,V", font_size=40, colors={r"W": HURDLE}),
+                cmath(r"\text{bets per day}", r"\propto", r"W^{2/3}", font_size=38),
+                cmath(r"\frac{I}{\sigma}", r"=", r"f\!\left(\frac{Q}{V}\,W^{2/3}\right)", font_size=40,
+                      colors={r"\frac{I}{\sigma}": IMPACT_C})]
+        whys = [why(r"Kyle and Obizhaeva (2016): trading activity, volatility times dollar volume"),
+                why(r"their invariance hypothesis: bets arrive in business time, and their dollar risk transfer is the "
+                    r"same in every market; this fixes how the number of bets, and so their typical share of volume, scale "
+                    r"with activity"),
+                why(r"so impact in units of volatility is one function of size measured in bets, the same for every "
+                    r"asset; a square root is consistent with it, and it predicts how the prefactor varies")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "A different route to universality. <bookmark mark='a'/> Albert Kyle and Anna Obizhaeva define trading "
+            "activity as volatility times dollar volume. <bookmark mark='b'/> Their invariance hypothesis says that "
+            "bets arrive in business time, and transfer the same dollar risk in every market; that fixes how the number "
+            "of bets scales with activity, as its two-thirds power. <bookmark mark='c'/> So impact in units of volatility is one function of size "
+            "measured in bets, for every asset. The square root fits inside it, and it predicts how the prefactor "
+            "should vary from market to market."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def question(self):
+        q = pause_card(r"signs of trades are predictable for hundreds of trades ahead (Part 36), yet prices are not. "
+                       r"What must happen to the impact of each trade over time?")
+        with self.voiceover(
+            "Pause and predict. The signs of trades are predictable hundreds of trades ahead, as Part thirty-six "
+            "showed, yet prices are not. What must happen to the impact of each trade over time?"
+        ):
+            self.play(FadeIn(q))
+        self.wait(0.5)
+        self.clear_scene()
