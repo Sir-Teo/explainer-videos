@@ -109,9 +109,12 @@ class FitchView(VGroup):
     RULE_TEX = {"premise": r"premise", "assume": r"assumption", "reit": r"R", "andI": r"$\land$I",
                 "andE": r"$\land$E", "orI": r"$\lor$I", "orE": r"$\lor$E", "impI": r"$\to$I", "impE": r"$\to$E",
                 "notI": r"$\lnot$I", "notE": r"$\lnot$E", "botE": r"$\bot$E", "dne": r"$\lnot\lnot$E",
-                "iffI": r"$\leftrightarrow$I", "iffE": r"$\leftrightarrow$E"}
+                "iffI": r"$\leftrightarrow$I", "iffE": r"$\leftrightarrow$E", "allE": r"$\forall$E",
+                "allI": r"$\forall$I", "exE": r"$\exists$E", "exI": r"$\exists$I", "eqI": r"$=$I"}
 
-    def __init__(self, lines, font_size=28, line_h=0.52, indent=0.42, center=ORIGIN, just_x=3.2):
+    def __init__(self, lines, font_size=28, line_h=0.52, indent=0.42, center=ORIGIN, just_x=3.2, tex=None):
+        """``tex``: how to typeset a line's formula (default: a propositional formula, :func:`ftex`); pass
+        ``lambda s: fol.show(fol.parse(s), tex=True)`` for first-order proofs."""
         super().__init__()
         self.line = []
         self.bars = VGroup()
@@ -147,7 +150,7 @@ class FitchView(VGroup):
         rows = VGroup()
         for i, (d, f, r, refs) in enumerate(lines):
             num = MathTex(str(i + 1), font_size=font_size - 4, color=GREY_B).move_to([x0 - 0.45, y(i), 0])
-            fm = fmath(f, font_size=font_size, color=CONCL_C if i == n - 1 and d == 0 else WHITE)
+            fm = MathTex((tex or ftex)(f), font_size=font_size, color=CONCL_C if i == n - 1 and d == 0 else WHITE)
             fm.move_to([x0 + 0.15 + d * indent, y(i), 0], aligned_edge=LEFT)
             ref_s = ", ".join(f"{a}" if isinstance(a, int) else f"{a[0]}–{a[1]}" for a in refs)
             jt = self.RULE_TEX.get(r, r) + (rf"\ {ref_s}" if ref_s else "")
