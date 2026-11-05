@@ -213,6 +213,29 @@ class World:
         return {"n_fish": n, "length": np.exp(g.normal(np.log(31.0), 0.18, n))}
 
     # ------------------------------------------------------------------
+    # Surveys (Part 18): an election, a telephone-and-car frame, and who answers
+    # ------------------------------------------------------------------
+    @cached_property
+    def survey(self) -> dict:
+        """Adults only.  ``vote_blue``: support for the challenger, Blue, in a two-way election, likelier with income
+        (logistic in log income), older age and some regions (38.2% overall).  ``listed``: on the island's
+        telephone-and-car registers, likelier with income (the *Literary Digest*'s frame).  ``propensity``: the chance
+        of returning a mailed ballot, higher for Blue voters and the well-off (as Squire, 1988, found in 1936).
+        ``turnout``: an enthusiasm score used by the pollsters' likely-voter screens.  Children are False / NaN."""
+        g = self.rng("survey")
+        a = self.age.astype(float)
+        li = np.log(np.where(self.adult, self.income, 20_000.0))
+        reg_eff = np.array([0.35, -0.25, 0.1, -0.4, 0.2, 0.0, -0.15, 0.3, -0.3, 0.15])[self.region]
+        z_vote = -0.78 + 0.9 * (li - np.log(30_000)) + 0.012 * (a - 45) + reg_eff
+        vote = self.adult & (g.random(self.n) < 1 / (1 + np.exp(-z_vote)))
+        z_list = -1.6 + 1.5 * (li - np.log(30_000)) + 0.02 * (a - 45)
+        listed = self.adult & (g.random(self.n) < 1 / (1 + np.exp(-z_list)))
+        z_resp = -2.1 + 0.45 * vote + 0.25 * (li - np.log(30_000)) + 0.01 * (a - 45)
+        propensity = np.where(self.adult, 1 / (1 + np.exp(-z_resp)), np.nan)
+        turnout = np.where(self.adult, 1 / (1 + np.exp(-(-0.2 + 0.03 * (a - 45) + 0.3 * (li - np.log(30_000))))), np.nan)
+        return {"vote_blue": vote, "listed": listed, "propensity": propensity, "turnout": turnout}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
@@ -232,6 +255,7 @@ class World:
             "median_income": lambda: float(np.median(y)),
             "sd_income": lambda: float(y.std()),
             "n_adults": lambda: float(self.adult.sum()),
+            "blue_share": lambda: float(self.survey["vote_blue"][self.adult].mean()),
             "corr_midparent_child": lambda: float(np.corrcoef((self.families["z_father"] + self.families["z_mother"]) / 2,
                                                               self.families["z_child"])[0, 1]),
         }
