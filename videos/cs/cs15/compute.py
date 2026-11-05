@@ -25,7 +25,7 @@ Items:
     dispatch   virtual against direct calls; the cost of try and of throw (C++ on this machine)
     wasm       a hand-assembled WebAssembly module run in node; a module that fails validation
     prolog     append run backwards; unification counted
-    ledger     the Job on the Pebble VM, priced on Part 8's core: ledger row 6, and what the collector costs
+    job        the Job on the Pebble VM, priced on Part 8's core: ledger row 6, and what the collector costs
 """
 
 from __future__ import annotations
@@ -746,7 +746,7 @@ def compute_prolog() -> dict:
             "forwards": P.unlist(fwd[0]["Z"]), "stats_fwd": st2}
 
 
-def compute_ledger() -> dict:
+def compute_job() -> dict:
     """Row 6: the Job in the λ-core, run by the Pebble VM (with Cheney's collector) on six passages, priced like
     row 5 at row 3's cost per hand-written cycle; the collector's share measured by rerunning with a heap so large
     that it never collects."""
@@ -800,7 +800,7 @@ ITEMS = {
     "hook": compute_hook, "interp": compute_interp, "scope": compute_scope, "cps": compute_cps, "vm": compute_vm,
     "rc": compute_rc, "tracing": compute_tracing, "cost": compute_cost, "gen": compute_gen,
     "tricolor": compute_tricolor, "pauses": compute_pauses, "jit": compute_jit, "dispatch": compute_dispatch,
-    "wasm": compute_wasm, "prolog": compute_prolog, "ledger": compute_ledger,
+    "wasm": compute_wasm, "prolog": compute_prolog, "job": compute_job,
 }
 
 if __name__ == "__main__":

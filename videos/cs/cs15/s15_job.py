@@ -20,7 +20,7 @@ class Job(VoiceoverScene):
         self.play(FadeOut(card))
 
     def measure(self):
-        d = load("ledger")
+        d = load("job")
         head = label(r"The Job on the Pebble VM, \ measured", font_size=34).to_edge(UP, buff=0.3)
         rows = [[words(r["bytes"]), words(r["bytecodes"]), words(r["steps"]), str(r["gcs"]),
                  f"{100 * (1 - r['steps_nogc'] / r['steps']):.1f}\\%"] for r in d["rows"]]
@@ -55,7 +55,7 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def ledger(self):
-        d = load("ledger")
+        d = load("job")
         led = d["ledger"]
         head = label(r"Ledger row 6", font_size=38).to_edge(UP, buff=0.35)
         rows = led + [{"part": p_, "label": t} for p_, t in ((16, r"sort, then count"), (17, r"a hash table"))]
@@ -84,7 +84,7 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def where(self):
-        d = load("ledger")
+        d = load("job")
         tot_b = sum(r["bytes"] for r in d["rows"])
         bc = sum(r["bytecodes"] for r in d["rows"]) / tot_b
         wd = sum(r["words"] for r in d["rows"]) / tot_b
