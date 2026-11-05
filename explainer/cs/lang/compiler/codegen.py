@@ -389,7 +389,7 @@ def color(mf: MFunc, k_regs=ALLOCATABLE, no_spill=frozenset()):
         if not ok:
             spills.append(n)
             continue
-        pref = [colors[m] for m in moves.get(n, ()) if m in colors and colors[m] in ok]
+        pref = [colors[m] for m in sorted(moves.get(n, ()), key=str) if m in colors and colors[m] in ok]
         colors[n] = pref[0] if pref else ok[0]
     return {n: c for n, c in colors.items() if n not in PHYS}, spills, adj
 
