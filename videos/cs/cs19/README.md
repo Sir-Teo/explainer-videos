@@ -114,19 +114,23 @@ python tools/build.py cs19                 # 1080p
    minimum. Each move decreases i + j by one or two, so there are at most n + m moves, each O(1), and reading the
    moves backwards gives the edits.
 
-5. **Build: the NTT on Pebble.** Implement the number-theoretic transform modulo p = 998244353 in the Pebble
-   language, multiply two 1,000-digit numbers on the emulator, and compare its instruction count with Karatsuba.
+5. **Build: the NTT on Pebble.** Implement the number-theoretic transform modulo p = 40961 = 5 · 2¹³ + 1 in the
+   Pebble language, multiply two 500-digit numbers on the emulator, and compare its instruction count with
+   Karatsuba.
 
-   *Solution sketch.* Use decimal digits as coefficients. A product coefficient is at most 1,000 · 81 = 81,000 < p,
-   so the result modulo p is exact; with base 10⁴ the coefficients would reach 10¹¹ and wrap. Pad to n = 2,048
-   points. Compute the bit-reversal permutation once. Then for each of the 11 stages, multiply by the twiddles:
-   precompute w = 3^{(p−1)/len} and step it by one modular multiplication. Each product of two residues is below
-   2⁶⁰, so it fits Pebble's 64-bit registers, and one `%` reduces it. Transform both inputs, multiply pointwise,
-   transform back with w⁻¹ = w^{p−2}, multiply by n⁻¹, and carry. There are three transforms of 1,024 · 11 =
-   11,264 butterflies, at about 20 instructions each, so expect on the order of 700,000 instructions. Karatsuba
-   with a cutoff of 32 does about 3^5 · 32² ≈ 250,000 digit products plus its additions, so the two land within
-   a small factor at a thousand digits. Run both at 10,000 and 100,000 digits too: the NTT's n log n pulls ahead,
-   as `decimal` did in chapter 7. Check the product against Python's integers.
+   *Solution sketch.* Pebble is a 32-bit machine and the Pebble language has no access to the high word of a
+   product, so the modulus must keep every product of two residues below 2³¹: p² = 1,677,803,521 < 2³¹, and 3 is a
+   primitive root modulo p. Use decimal digits as coefficients. A product coefficient is at most 500 · 81 = 40,500
+   < p, so the result modulo p is exact; this is why the numbers are 500 digits long. Pad to n = 1,024 points
+   (2¹⁰ divides p − 1). Compute the bit-reversal permutation once. Then for each of the 10 stages, multiply by the
+   twiddles: precompute w = 3^{(p−1)/len} mod p and step it by one modular multiplication, a `*` and a `%`.
+   Transform both inputs, multiply pointwise, transform back with w⁻¹ = w^{p−2}, multiply by n⁻¹, and carry. There
+   are three transforms of 512 · 10 = 5,120 butterflies, at about 20 instructions each, so expect on the order of
+   300,000 instructions. Karatsuba with a cutoff of 32 does 3⁴ · 32² ≈ 83,000 digit products plus its additions,
+   so the two land within a small factor at 500 digits. Check the product against Python's integers. Beyond 500
+   digits one such prime no longer holds the coefficients: compute modulo two of them (12289 = 3 · 2¹² + 1 is
+   another) and recombine by the Chinese remainder theorem, Part 30's tool, and then the NTT's n log n pulls ahead
+   as `decimal` did in chapter 7.
 
 6. **★ Research: a lower bound for the DFT.** Prove that every linear circuit computing the n-point DFT needs
    Ω(n log n) additions, without assuming bounded coefficients.
@@ -177,15 +181,17 @@ python tools/build.py cs19                 # 1080p
    要恢复脚本，从 (n, m) 出发，反复移到一个前驱格子，使其值加上这一步的代价等于当前值；这样的前驱总存在，因为当前值正是作为这样的
    最小值算出来的。每一步让 i + j 减少一或二，所以至多 n + m 步，每步 O(1)，倒过来读就是编辑操作。
 
-5. **动手：在 Pebble 上实现 NTT。** 用 Pebble 语言实现模 p = 998244353 的数论变换，在模拟器上做两个 1,000 位数的乘法，并与
-   Karatsuba 比较指令数。
+5. **动手：在 Pebble 上实现 NTT。** 用 Pebble 语言实现模 p = 40961 = 5 · 2¹³ + 1 的数论变换，在模拟器上做两个 500 位数的乘法，
+   并与 Karatsuba 比较指令数。
 
-   *解答提要。* 用十进制数字作系数。乘积的系数至多 1,000 · 81 = 81,000 < p，所以模 p 的结果是精确的；若用 10⁴ 进制，系数会达到
-   10¹¹ 而发生回绕。补齐到 n = 2,048 个点。先算一次位反转置换。然后在 11 级中的每一级乘以旋转因子：预先算出 w = 3^{(p−1)/len}，
-   每步做一次模乘向前推进。两个剩余的乘积小于 2⁶⁰，能放进 Pebble 的 64 位寄存器，一次 `%` 就能约简。对两个输入做变换，逐点相乘，
-   用 w⁻¹ = w^{p−2} 变换回来，乘以 n⁻¹，再进位。三次变换各有 1,024 · 11 = 11,264 个蝶形，每个约 20 条指令，所以预计约 70 万条指令。
-   截断为 32 的 Karatsuba 约做 3^5 · 32² ≈ 25 万次数字乘法再加上它的加法，所以在一千位时两者相差一个小倍数。再在一万位和十万位上
-   运行两者：NTT 的 n log n 会领先，就像第 7 章的 `decimal` 那样。用 Python 的整数检验乘积。
+   *解答提要。* Pebble 是 32 位机器，Pebble 语言又拿不到乘积的高位字，所以模数必须让两个剩余的乘积都小于 2³¹：
+   p² = 1,677,803,521 < 2³¹，并且 3 是模 p 的原根。用十进制数字作系数。乘积的系数至多 500 · 81 = 40,500 < p，所以模 p 的结果是
+   精确的；这就是数取 500 位的原因。补齐到 n = 1,024 个点（2¹⁰ 整除 p − 1）。先算一次位反转置换。然后在 10 级中的每一级乘以旋转
+   因子：预先算出 w = 3^{(p−1)/len} mod p，每步用一次模乘（一个 `*` 和一个 `%`）向前推进。对两个输入做变换，逐点相乘，用
+   w⁻¹ = w^{p−2} 变换回来，乘以 n⁻¹，再进位。三次变换各有 512 · 10 = 5,120 个蝶形，每个约 20 条指令，所以预计约 30 万条指令。截断为
+   32 的 Karatsuba 做 3⁴ · 32² ≈ 8.3 万次数字乘法再加上它的加法，所以在 500 位时两者相差一个小倍数。用 Python 的整数检验乘积。超过
+   500 位时，一个这样的素数就装不下系数了：改为模两个这样的素数（12289 = 3 · 2¹² + 1 是另一个）计算，再用第30部分的中国剩余定理
+   合起来，这时 NTT 的 n log n 就会领先，就像第 7 章的 `decimal` 那样。
 
 6. **★ 研究题：DFT 的下界。** 不假设系数有界，证明每个计算 n 点 DFT 的线性电路都需要 Ω(n log n) 次加法。
 

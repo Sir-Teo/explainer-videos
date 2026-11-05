@@ -11336,7 +11336,6 @@
     "Solve $T(n) = 3T(n/2) + cn$, \\ $T(1) = 1$, \\ exactly for $n = 2^k$, \\ and show that Karatsuba does exactly $3^k$ digit products.": "对 $n = 2^k$ 精确求解 $T(n) = 3T(n/2) + cn$，\\ $T(1) = 1$，\\ 并证明 Karatsuba 恰好做 $3^k$ 次数字乘法。",
     "Prove $\\sum_{k=0}^{n-1} \\omega^{jk} = 0$ for $n \\nmid j$, \\ and deduce $F^{-1} = \\frac{1}{n}\\overline{F}$ for the DFT matrix.": "证明当 $n \\nmid j$ 时 $\\sum_{k=0}^{n-1} \\omega^{jk} = 0$，\\ 并推出 DFT 矩阵满足 $F^{-1} = \\frac{1}{n}\\overline{F}$。",
     "Prove the edit-distance recurrence correct, \\ and recover an optimal edit script from the table in $O(n + m)$ extra time.": "证明编辑距离递推式正确，\\ 并在 $O(n + m)$ 额外时间内从表中恢复一个最优编辑脚本。",
-    "\\textit{Build.} \\ Implement the number-theoretic transform modulo $998244353$ in the Pebble language, \\ multiply two 1,000-digit numbers on the emulator, \\ and compare its instruction count with Karatsuba.": "\\textit{动手。}\\ 用 Pebble 语言实现模 $998244353$ 的数论变换，\\ 在模拟器上做两个 1,000 位数的乘法，\\ 并与 Karatsuba 比较指令数。",
     "$\\bigstar$ \\textit{Research.} \\ Prove that every linear circuit computing the $n$-point DFT needs $\\Omega(n \\log n)$ additions, \\ without assuming bounded coefficients.": "$\\bigstar$ \\textit{研究。}\\ 不假设系数有界，\\ 证明每个计算 $n$ 点 DFT 的线性电路都需要 $\\Omega(n \\log n)$ 次加法。",
     "Next: \\ Part 20, \\ Randomness as a Resource": "下一部分：\\ 第20部分，\\ 作为资源的随机性",
     "checking a matrix product in $n^2$ \\ (Freivalds)": "在 $n^2$ 内检验矩阵乘积\\ （弗赖瓦尔兹）",
@@ -11449,7 +11448,8 @@
     "best = cur = a[0]": "best = cur = a[0]",
     "best = max(best, cur)": "best = max(best, cur)",
     "out[k]        = even[k] + t": "out[k]        = even[k] + t",
-    "for x in a[1:]:": "for x in a[1:]:"
+    "for x in a[1:]:": "for x in a[1:]:",
+    "\\textit{Build.} \\ Implement the number-theoretic transform modulo $40961 = 5 \\cdot 2^{13} + 1$ in the Pebble language, \\ multiply two 500-digit numbers on the emulator, \\ and compare its instruction count with Karatsuba.": "\\textit{动手。}\\ 用 Pebble 语言实现模 $40961 = 5 \\cdot 2^{13} + 1$ 的数论变换，\\ 在模拟器上做两个 500 位数的乘法，\\ 并与 Karatsuba 比较指令数。"
   },
   "phrases": {},
   "patterns": [
