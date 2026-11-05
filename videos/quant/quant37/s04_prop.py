@@ -68,10 +68,13 @@ class Prop(VoiceoverScene):
         c_ = VGroup(curve(ax, lags, R, PRICE_C, stroke_width=3), *[Dot(ax.c2p(a, b), radius=0.06, color=PRICE_C)
                                                                    for a, b in zip(lags, R)])
         k = int(np.argmax(R))
+        n_tr = comma(p["n"])
+        r_max = float(R.max())
+        lag_max = p["lags"][k]
         with self.voiceover(
-            f"Measured on Bitcoin's tape, {comma(p['n'])} trades over four days, with the mid just before each trade. "
+            f"Measured on Bitcoin's tape, {n_tr} trades over four days, with the mid just before each trade. "
             "<bookmark mark='a'/> After a buy the price rises for hundreds of trades, because more buys follow, and "
-            f"peaks at about {R.max():.0f} ticks some {p['lags'][k]} trades later. <bookmark mark='b'/> Then it "
+            f"peaks at about {r_max:.0f} ticks some {lag_max} trades later. <bookmark mark='b'/> Then it "
             "flattens and bends down slightly. It does not keep growing, even though the buys keep coming."
         ) as vo:
             self.play(FadeIn(g))

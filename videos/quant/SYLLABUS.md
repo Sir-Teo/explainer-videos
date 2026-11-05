@@ -1634,27 +1634,31 @@ transformer; the House's simulator is the queue-reactive model, scored, as the b
 *Desk:* "Bid 100 × 500, ask 100.01 × 100. Where is fair value?"
 *House:* the order-book simulator and the fill replay (used by 37, 38, 42).
 
-### Part 37 · Market Impact and Execution (~55)
-1. Metaorders; what public data shows.
-2. The square-root law (Tóth et al. 2011) and latent liquidity (Donier et al. 2015); universality *(verify:
-   recent complete-market surveys)*.
-3. Microstructure invariance (Kyle–Obizhaeva 2016).
-4. The propagator (Bouchaud et al. 2004).
-5. No dynamic arbitrage (Gatheral 2010).
-6. Almgren–Chriss derived; the execution frontier.
-7. Obizhaeva–Wang (2013).
-8. Signals and many agents (Cartea–Jaimungal; MFG).
-9. RL execution, trained here, vs Almgren–Chriss.
-10. TCA, algos (VWAP, TWAP, POV, implementation shortfall), smart order routing.
+### Part 37 · Market Impact and Execution (~55; built)
+1. Metaorders, implementation shortfall (Perold 1988), the impact path (two-thirds remains); aggregate impact on ten
+   days of Binance trades: sigmoid in imbalance, a minute's move ∝ signed volume^0.81.
+2. The square-root law (Loeb; Torre; Almgren et al. 2005; Tóth et al. 2011; Donier–Bonart on Mt. Gox); latent
+   liquidity (Donier et al. 2015) derived and simulated (exponent 1.02 → 0.42, Bucci et al. 2019); fair pricing
+   (Farmer et al. 2013); invariance (Kyle–Obizhaeva 2016).
+3. The propagator (Bouchaud et al. 2004) fitted on 3.4m trades: peak 0.72 tick at 77 trades, decay ℓ^−0.17 against
+   (1 − γ)/2 = 0.10; history-dependent impact.
+4. No dynamic arbitrage: Huberman–Stanzl; Gatheral (2010) positive definiteness (a box kernel's money machine);
+   Alfonsi–Schied–Slynko convexity (a Gaussian kernel buys by selling); Bitcoin's kernel passes (Pólya).
+5. Almgren–Chriss derived (discrete and variational); 5,000 BTC in an hour: TWAP 1.6 bp, sd $267k; the frontier; the
+   linear model against the square root's 20 bp.
+6. Obizhaeva–Wang (2013): blocks and the recovery rate; Bitcoin's sweeps refill in 100–200 ms but the price keeps
+   drifting; signals (Cartea–Jaimungal; Lehalle–Neuman); crowding (Cardaliaguet–Lehalle).
+7. A Q-learning executor in the Part 36 simulator: 52.7 against TWAP's 50.7 half-ticks; why, and what would do better.
+8. TWAP, VWAP, POV, IS; Bitcoin's volume curve; the close; routing; TCA and benchmarks.
+9. Rule 37: price the trade before you make it.
+Research: the optimal schedule under transient impact (uniqueness, the Fredholm condition, the Obizhaeva–Wang
+solution; why measures), checked on a grid, across resilience (saving peaks at 12%) and with Bitcoin's kernel.
 
-*Textbooks:* Cartea–Jaimungal–Penalva; Guéant *The Financial Mathematics of Market Liquidity*; Lehalle–Laruelle
-*Market Microstructure in Practice*; Bouchaud et al.
-*Trained:* the RL executor in the Part 36 simulator.
-*Computed:* propagator fits on ITCH; Almgren–Chriss frontiers; square-root emergence in a latent-book simulation.
-*Visuals:* `ImpactTrace`; trajectories bending with risk aversion.
-*Firms:* bank and broker algo desks.
+*Textbooks:* Bouchaud et al.; Cartea–Jaimungal–Penalva; Guéant; Lehalle–Laruelle.
+*Computed:* everything from Binance's trades, best quotes and bars, the latent book and the House simulator; ITCH data
+were not used (not public), so the propagator is fitted on Bitcoin.
 *Desk:* "Trading 10% of daily volume costs 30 bp. What does 40% cost?" (√ law: 60 bp)
-*House:* the execution desk.
+*House:* the execution desk and Rule 37.
 
 ### Part 38 · Market Making, ETFs and the Speed Race (~55)
 1. Inventory and adverse selection.

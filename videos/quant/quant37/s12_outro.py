@@ -218,6 +218,7 @@ class Outro(VoiceoverScene):
         rate = rt * blk
         cost = 1 / (2 + rt)
         twap = (1 / rt) * (1 - (1 - math.exp(-rt)) / rt)
+        save = 100 * (1 - cost / twap)
         cards = VGroup(
             desk_question(r"Research: $\rho T = 2$", rf"blocks of $1/(2 + 2) = {blk:.2f}$ at each end, a rate of "
                           rf"{rate:.2f} between, cost {cost:.3f}; TWAP costs "
@@ -226,7 +227,7 @@ class Outro(VoiceoverScene):
         )
         with self.voiceover(
             f"The research chapter's pause, answered. Blocks of a quarter at each end, a rate of {rate:.1f} between, and "
-            f"a cost of {cost:.2f}. TWAP costs {twap:.3f}: the optimum saves {100 * (1 - cost / twap):.0f} percent."
+            f"a cost of {cost:.2f}. TWAP costs {twap:.3f}: the optimum saves {save:.0f} percent."
         ):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
         self.wait(0.4)

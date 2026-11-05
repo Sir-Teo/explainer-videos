@@ -98,6 +98,7 @@ class House(VoiceoverScene):
         sig = ac["sigma_day"] / ac["price"]
         v_day_usd = ac["v_day"] * ac["price"]
         cap = (0.0010 / sig) ** 2 * v_day_usd
+        cap_m = cap / 1e6
         rows = [cmath(r"\text{alpha}", r"=", r"10\ \text{bp}", font_size=38),
                 cmath(r"Y\sigma\sqrt{Q/V}", r"<", r"10\ \text{bp}", font_size=38, colors={r"Y\sigma\sqrt{Q/V}": IMPACT_C}),
                 cmath(r"Q", r"<", rf"\left(\frac{{0.001}}{{{sig:.3f}}}\right)^2 V \approx \${cap / 1e6:.0f}\text{{m}}",
@@ -111,7 +112,7 @@ class House(VoiceoverScene):
             "How the desk sizes a trade. <bookmark mark='a'/> A signal expected to earn ten basis points. "
             "<bookmark mark='b'/> It is worth trading only while the square-root impact is smaller. "
             f"<bookmark mark='c'/> On Bitcoin's perpetual, with its daily volatility and volume, that caps the order at "
-            f"about {cap / 1e6:.0f} million dollars. Bigger, and the signal pays the market."
+            f"about {cap_m:.0f} million dollars. Bigger, and the signal pays the market."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -162,6 +163,7 @@ class House(VoiceoverScene):
         c_ = curve(ax, x, cost, IMPACT_C, stroke_width=3)
         alpha = DashedLine(ax.c2p(5, 10), ax.c2p(9, 10), color=GOOD, stroke_width=2)
         cap = (0.0010 / sig) ** 2 * v_usd
+        cap_m = cap / 1e6
         mark = Dot(ax.c2p(np.log10(cap), 10), radius=0.09, color=HURDLE)
         leg = legend([(IMPACT_C, r"impact, $Y = 1$"), (GOOD, r"a 10-bp signal")], font_size=16)
         leg.to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
@@ -169,7 +171,7 @@ class House(VoiceoverScene):
         with self.voiceover(
             "The same sizing as a picture. <bookmark mark='a'/> The square-root cost of an order on Bitcoin's perpetual "
             "against its size, from a hundred thousand dollars to a billion. <bookmark mark='b'/> The signal's ten "
-            f"basis points cross it at about {cap / 1e6:.0f} million dollars. Left of the dot the trade pays; right of "
+            f"basis points cross it at about {cap_m:.0f} million dollars. Left of the dot the trade pays; right of "
             "it the market is paid. Every strategy the House runs has a picture like this, and its size sits well to "
             "the left."
         ) as vo:

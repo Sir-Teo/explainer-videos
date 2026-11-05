@@ -3474,3 +3474,37 @@ def test_lob_queue_fills():
     assert np.all(front["steps"] < 10) and np.all((back["steps"] > 50) & (back["steps"] < 62))
     # a flat mid: the markout of a bid filled at 100.0 is half a tick
     assert np.allclose(back["markout"][10], 0.5)
+
+
+def test_execution_kernels_ac_latent_propagator():
+    import numpy as np
+
+    from explainer.quant.house import execution as E
+    # Obizhaeva-Wang: the discrete optimum under an exponential kernel converges to the closed form, and never sells
+    n, rho = 400, 5.0
+    t = np.linspace(0, 1, n)
+    v = E.kernel_optimal(np.exp(-rho * t), 1.0)
+    cf = E.ow_closed_form(1.0, 1.0, rho)
+    assert abs(E.kernel_cost(v, np.exp(-rho * t)) - cf["cost"]) < 1e-3 and v.min() > 0
+    assert abs(v[0] - cf["block"]) < 5e-3 and abs(v[n // 2] * (n - 1) - cf["rate"]) < 1e-2
+    # a box kernel admits a round trip with negative cost
+    box = (t < 0.3).astype(float)
+    Gm = box[np.abs(np.subtract.outer(np.arange(n), np.arange(n)))]
+    assert np.linalg.eigvalsh(Gm).min() < 0
+    # Almgren-Chriss: no risk aversion is TWAP; more risk aversion front-loads and lowers variance
+    a0 = E.almgren_chriss(100.0, 1.0, 10, 1.0, 0.1, 0.0)
+    a1 = E.almgren_chriss(100.0, 1.0, 10, 1.0, 0.1, 1.0)
+    assert np.allclose(a0["trades"], 10.0) and a1["trades"][0] > a1["trades"][-1] and a1["var"] < a0["var"]
+    # the latent book: impact is linear for small orders and bends toward a square root for large ones
+    small = [E.latent_book(q, 1.0, nx=601, half_width=40)["p"][-1] for q in (0.01, 0.02)]
+    large = [E.latent_book(q, 1.0, nx=601, half_width=40)["p"][-1] for q in (300.0, 600.0)]
+    assert abs(np.log(small[1] / small[0]) / np.log(2) - 1) < 0.1
+    assert np.log(large[1] / large[0]) / np.log(2) < 0.65
+    # a synthetic tape with a known propagator: G(l) = 1 for l <= 5, then 0 (impact that vanishes) is recovered
+    rng = np.random.default_rng(0)
+    eps = rng.choice([-1.0, 1.0], 200000)
+    g_true = np.r_[1.0, np.zeros(4), -1.0]
+    r = np.convolve(eps, g_true)[:len(eps)] + rng.normal(0, 0.5, len(eps))
+    p = np.r_[0.0, np.cumsum(r)]
+    g, G = E.propagator_fit(p, np.r_[eps, 1.0], n_lag=10)
+    assert abs(G[1] - 1) < 0.05 and abs(G[8]) < 0.05

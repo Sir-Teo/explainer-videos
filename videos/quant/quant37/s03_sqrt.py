@@ -116,6 +116,7 @@ class Sqrt(VoiceoverScene):
         v_usd = ac["v_day"] * ac["price"]
         shares = (0.001, 0.01, 0.1)
         costs = [1e4 * sig * (s ** 0.5) for s in shares]
+        m01 = shares[0] * v_usd / 1e6
         rows = [cmath(rf"{100 * s:g}\%\ \text{{of a day}}", r":", rf"\${s * v_usd / 1e6:,.0f}\text{{m}} \to {c:.0f}\ "
                       r"\text{bp}".replace(",", "{,}"), font_size=36, colors={rf"{c:.0f}\ \text{{bp}}": IMPACT_C})
                 for s, c in zip(shares, costs)]
@@ -126,7 +127,7 @@ class Sqrt(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
         with self.voiceover(
             "What the law says for Bitcoin's perpetual, with a prefactor of one. <bookmark mark='a'/> A tenth of a "
-            f"percent of a day's volume, about {shares[0] * v_usd / 1e6:.0f} million dollars, costs about "
+            f"percent of a day's volume, about {m01:.0f} million dollars, costs about "
             f"{costs[0]:.0f} basis points. <bookmark mark='b'/> One percent, about {costs[1]:.0f}: ten times the size, "
             f"three times the cost. <bookmark mark='c'/> A tenth of the day, about {costs[2]:.0f} basis points, a third "
             "of a day's volatility."

@@ -324,9 +324,9 @@ class Algos(VoiceoverScene):
             "A worked example. A buy of a hundred thousand shares is decided at a hundred dollars. "
             "<bookmark mark='a'/> The algorithm starts five cents higher: delay. <bookmark mark='b'/> Ninety thousand "
             "shares are filled at an average of a hundred dollars thirty: the execution cost, spread, impact and timing "
-            "together. <bookmark mark='c'/> Ten thousand are never filled, and the price ends at a hundred and sixty "
-            f"cents above: the opportunity cost. <bookmark mark='d'/> In all, {bp:.0f} basis points of the order. Notice "
-            "that the unfilled tenth cost almost as much as the delay."
+            "together. <bookmark mark='c'/> Ten thousand are never filled, and the price ends at a hundred dollars sixty: "
+            f"the opportunity cost. <bookmark mark='d'/> In all, {bp:.0f} basis points of the order. Notice that the "
+            "unfilled tenth cost more than the delay."
         ) as vo:
             step(0)
             for k, mk in enumerate(("a", "b", "c", "d")):

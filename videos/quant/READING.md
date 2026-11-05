@@ -1647,6 +1647,20 @@ Frontier (2023–2026):
 - Lehalle, C.-A., Neuman, E. (2019). "Incorporating signals into optimal trading." *Finance and Stochastics*.
 - Ning, B., Lin, F. H. T., Jaimungal, S. (2021). "Double deep Q-learning for optimal execution." *Applied Mathematical Finance*.
 - Sato, Y., Kanazawa, K. (2025). Survey of the square-root law on the Tokyo Stock Exchange *(verify: title and venue)*.
+- Loeb, T. (1983). "Trading cost: the critical link between investment information and results." *Financial Analysts Journal*.
+- Perold, A. (1988). "The implementation shortfall: paper versus reality." *J. Portfolio Management*.
+- Brunnermeier, M., Pedersen, L. H. (2005). "Predatory trading." *Journal of Finance*.
+- Almgren, R., Lorenz, J. (2007). "Adaptive arrival price." *Algorithmic Trading III*.
+- Moro, E., et al. (2009). "Market impact and trading profile of hidden orders in stock markets." *Physical Review E*.
+- Schied, A., Schöneborn, T. (2009). "Risk aversion and the dynamics of optimal liquidation strategies in illiquid markets." *Finance and Stochastics*.
+- Humphery-Jenner, M. (2011). "Optimal VWAP trading under noisy conditions." *J. Banking and Finance*.
+- Alfonsi, A., Schied, A., Slynko, A. (2012). "Order book resilience, price manipulation, and the positive portfolio problem." *SIAM J. Financial Mathematics*.
+- Gatheral, J., Schied, A., Slynko, A. (2012). "Transient linear price impact and Fredholm integral equations." *Mathematical Finance*.
+- Bershova, N., Rakhlin, D. (2013). "The non-linear market impact of large trades: evidence from buy-side order flow." *Quantitative Finance*.
+- Farmer, J. D., Gerig, A., Lillo, F., Waelbroeck, H. (2013). "How efficiency shapes market impact." *Quantitative Finance*.
+- Donier, J., Bonart, J. (2015). "A million metaorder analysis of market impact on the Bitcoin." *Market Microstructure and Liquidity*.
+- Patzelt, F., Bouchaud, J.-P. (2018). "Universal scaling and nonlinearity of aggregate price impact in financial markets." *Physical Review E*.
+- Taranto, D., Bormetti, G., Bouchaud, J.-P., Lillo, F., Tóth, B. (2018). "Linear models for the impact of order flow on prices." *Quantitative Finance*.
 
 ### Part 38 · Market Making, ETFs and the Speed Race
 - Avellaneda, M., Stoikov, S. (2008). "High-frequency trading in a limit order book." *Quantitative Finance*.
