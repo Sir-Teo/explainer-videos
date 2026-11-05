@@ -79,8 +79,8 @@ class VaR(VoiceoverScene):
         ax = g.ax
         line = curve(ax, xs, pdf, DATA_C, stroke_width=3)
         v = stats.t.ppf(0.99, nu)
-        tail = ax.get_area(ax.plot(lambda x: stats.t.pdf(x, nu), x_range=[v, 6]), x_range=[v, 6], color=ES_C,
-                           opacity=0.6)
+        tx = np.linspace(v, 6, 120)
+        tail = band(ax, tx, np.zeros(len(tx)), stats.t.pdf(tx, nu), ES_C, opacity=0.6)  # Axes.get_area breaks on 2D axes
         vl = DashedLine(ax.c2p(v, 0), ax.c2p(v, 0.3), color=VAR_C, stroke_width=3)
         q = stats.t.ppf(0.99, nu)
         es = (nu + q ** 2) / (nu - 1) * stats.t.pdf(q, nu) / 0.01
