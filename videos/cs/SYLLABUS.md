@@ -1341,37 +1341,55 @@ Ofman 1962; Harvey & van der Hoeven 2021; Bellman 1957; Edmonds 1971; Alman et a
 ### Part 20 · Randomness as a Resource (~55)
 *Story:* A coin flip can stand in for cleverness. With one, you can check a matrix product in n², find a minimum
 cut by contracting random edges, test primality in milliseconds, and count the top words of thirty novels in a few
-kilobytes. Randomness has to come from somewhere, though, and some generators hide fifteen planes.
-1. Las Vegas against Monte Carlo; amplification.
-2. Freivalds (1977), error ≤ ½ per round (proved).
-3. The **Schwartz–Zippel** lemma (proved); perfect matchings via the Tutte matrix (Lovász 1979); fingerprints.
-4. **Karger's min cut** (1993): success ≥ 2/(n(n − 1)) (proved); Karger–Stein; at most C(n, 2) min cuts as a
-   corollary.
-5. Primality: Fermat and the Carmichael numbers; **Miller–Rabin** (error ≤ ¼); AKS (2002). Part 30 needs big
-   primes.
-6. Random walks: 2-SAT in O(n²) expected (gambler's ruin); Schöning's (4/3)ⁿ for 3-SAT; Reingold's SL = L (cited).
-7. Balls into bins: max load log n/log log n, and with two choices log log n/log 2 (simulated).
-8. Bloom filters (1970): false positives (1 − e^{−kn/m})ᵏ, optimal k = (m/n) ln 2 (derived); counting and cuckoo
-   filters.
-9. Streaming: reservoir sampling (proved uniform); Misra–Gries; **Count-Min** with its (ε, δ) guarantee. The Job
-   in kilobytes. Ledger row 9.
-10. Distinct counting: Flajolet–Martin, **HyperLogLog** (error ≈ 1.04/√m), KMV.
-11. The AMS F₂ sketch (1996) from 4-wise independent signs (callback to *AI, Built* 3's Johnson–Lindenstrauss).
-12. LSH (Indyk & Motwani 1998): MinHash and SimHash; near-duplicate paragraphs in the novels.
-13. The probabilistic method: R(k, k) > 2^{k/2}; the Lovász local lemma and Moser–Tardos (2010).
-14. Derandomization:
-    - conditional expectations (MAX-CUT ≥ m/2);
-    - pairwise independence;
-    - expanders (Part 27);
-    - where random bits come from: LCGs and **RANDU's fifteen planes** in 3D, Mersenne Twister, cryptographic PRGs
-      (Part 29).
-15. Outro.
+kilobytes. Randomness has to come from somewhere, though, and some generators hide fifteen planes. The part opens
+with the Job's top twenty counted twice, from 1.9 MB and from 18.6 KB, and ends by asking whether the coins can be
+removed at all.
+1. Las Vegas against Monte Carlo: randomized quicksort's 400 runs on 2,000 keys (mean 24,761 against the exact
+   24,730); one-sided error and 2^{−k}; majority votes and Hoeffding.
+2. **Freivalds** (1977), error ≤ ½ per round, proved by deferred decisions; at n = 2,000, 24 million operations
+   against 16 billion (23 ms against BLAS's 0.13 s); one wrong entry passes 50.9%, 25.1%, 12.4%, … of 4,000 trials.
+3. The **Schwartz–Zippel** lemma (proved); a false identity against 3/|S|; an 8 × 8 Vandermonde identity; the
+   Tutte matrix (Lovász 1979) against Edmonds' blossoms on 48 random graphs; a 61-bit fingerprint of the corpus
+   (false match ≤ 1.2 × 10^{−10}).
+4. **Karger's min cut** (1993), contraction animated (one success, one failure): ≥ 2/(n(n − 1)) proved, 13.1%
+   measured against 0.83%; the 10-cycle's 45 = C(10, 2) minimum cuts; Karger–Stein.
+5. Primality: Fermat; 561 and Korselt; 43 Carmichael numbers below 10⁶; **Miller–Rabin** (561's sequence 263, 166,
+   67, 1; Rabin's ¼, attained at 9); random primes to 2,048 bits timed; AKS (2002).
+6. Random walks: Papadimitriou's 2-SAT as a gambler's ruin (≤ n², about 2n flips measured); Schöning's (4/3)ⁿ
+   against restarts measured on unique-solution formulas to n = 20; PPSZ.
+7. Balls into bins, animated with one and two choices; max loads to 10⁶ (10 against 4); the full histograms; why
+   two choices square the tail.
+8. Bloom filters (1970): 32 bits drawn with two false positives; (1 − e^{−kn/m})ᵏ and k = (m/n) ln 2 (derived); the
+   novels' vocabulary at 10 bits per word (0.815% against 0.819%); counting and cuckoo filters.
+9. Streaming: reservoir sampling (proved uniform, 50,000 trials); Misra–Gries (99 counters); **Count-Min** and its
+   (ε, δ) guarantee, measured on every word of the novels.
+10. **The Job in kilobytes**: Count-Min with conservative update and double hashing, 32 candidates in a heap, in the
+    Pebble language; every instruction emulated (1.07 billion); 18,588 bytes against 1.9 MB; ledger row 9, 1.00 s
+    against 0.81 s; the same algorithm over 20 hash functions in C (exact 25% of the time at 16 KB, 95% at 64 KB;
+    the top 20 always among the candidates).
+11. Distinct counting: Flajolet–Martin, **HyperLogLog** (error against 1.04/√m from 16 to 16,384 registers), the
+    corpus and its 4.5 million five-word phrases in 3 KB.
+12. The AMS F₂ sketch (1996) from 4-wise independent signs; the median of means; linear sketches as random
+    projections (callback to *AI, Built* 3's Johnson–Lindenstrauss).
+13. LSH: MinHash (Broder 1997, proved) and banding (Indyk & Motwani 1998), the S-curve matched by 600 planted
+    copies; near-duplicate paragraphs among 34,525 in the novels, checked by an inverted index; SimHash.
+14. The probabilistic method: K₁₇ coloured at random and by Paley; R(k, k) > 2^{k/2}; the 2023 upper bound; the
+    Lovász local lemma and Moser–Tardos (2010) on 10-SAT inside the lemma's condition.
+15. Derandomization: conditional expectations (MAX-CUT ≥ m/2, 176 of 265 edges); pairwise independence from k
+    bits; expanders (Part 56); where random bits come from: **RANDU's fifteen planes** on a rotating cube, Mersenne
+    Twister, PCG, cryptographic PRGs (Part 29), physical entropy.
+16. *Frontier*: coins removed one problem at a time (AKS; Reingold; deterministic near-linear min cut; matching in
+    quasi-NC); hardness against randomness (Nisan–Wigderson, Impagliazzo–Wigderson); PIT and circuit lower bounds
+    (Kabanets–Impagliazzo); optimal sketches and their lower bounds; open problems. Outro.
 
-*Computed:* Freivalds error rates; Karger's success rate against the bound; Miller–Rabin on Carmichael numbers;
-max loads; Bloom filters against theory; Count-Min and HLL on the novels; MinHash duplicates; RANDU.
+*Computed:* every number above, in `videos/cs/cs20/compute.py` with `explainer/cs/algo/randomized.py` and
+`explainer/cs/algo/job3.py` (tested in `tests/test_cs20_randomized.py`): Freivalds' error rates; Schwartz–Zippel and
+Tutte; Karger's success rate against the bound; Miller–Rabin's liars; walks; max loads; Bloom filters against theory;
+reservoir, Misra–Gries and Count-Min on the novels; the Job v3 emulated (ledger row 9) and swept in C; HLL, KMV and
+AMS on the novels; MinHash duplicates; Ramsey and Moser–Tardos; MAX-CUT; RANDU.
 *Visuals:* a graph contracting edge by edge; bins filling with one and two choices; **RANDU's cube rotating until the
-planes appear**; a Bloom bit array lighting up.
-*In practice:* Bloom filters in databases and caches, HyperLogLog in Redis and analytics engines, Count-Min in network monitoring, MinHash dedup in data pipelines.
+planes appear**; a Bloom bit array lighting up; HyperLogLog's registers; the LSH S-curve; K₁₇ in two colourings.
+*In practice:* Bloom filters in databases and caches, HyperLogLog in Redis and analytics engines, Count-Min in network monitoring and cache admission, MinHash dedup in data pipelines, Miller–Rabin in TLS.
 *Reading:* Motwani & Raghavan, *Randomized Algorithms*; Mitzenmacher & Upfal, *Probability and Computing*; Alon &
 Spencer, *The Probabilistic Method*; Cormode & Yi, *Small Summaries for Big Data*; Muthukrishnan, *Data Streams*;
 Knuth, TAOCP 2 ch. 3; Karger 1993; Flajolet et al. 2007; Alon, Matias & Szegedy 1996; Moser & Tardos 2010.
@@ -3278,4 +3296,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 17 | scenes (18, with the *Frontier* chapter), computations (every structure counting its work: chaining, universal hashing, linear and double hashing, Robin Hood, cuckoo and FKS perfect hashing; plain, AVL, red–black, treap, splay, persistent trees, skip lists and B-trees; binary, pairing and Fibonacci heaps under Dijkstra; union–find; tries and rank; the Job v2 hash table in the Pebble language on the emulator, an exact instruction model, a C event counter and a C replay through Part 9's caches for ledger row 8; lookups and the Job timed natively), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 18 | scenes (18, with the *Frontier* chapter), computations (every algorithm counting its work: Euler circuits, BFS, DFS, topological sort, Tarjan and Kosaraju with 2-SAT, Dijkstra, bidirectional, A*, landmarks and contraction hierarchies, Bellman–Ford, Floyd–Warshall and Johnson, Kruskal, Prim and Borůvka, Edmonds–Karp, Gale–Shapley and the Hungarian algorithm, Held–Karp, PageRank, planar colouring), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
 | 19 | scenes (18, with the *Frontier* chapter), computations (every paradigm counting its work: interval scheduling, Huffman, matroid greedy, Karatsuba, Strassen, DFT, FFT and NTT, an FFT multiplier and a million digits of π, closest pair, Fibonacci, edit distance and LCS, knapsack, matrix chains, optimal BSTs with Knuth's speedup, tree DP, n-queens, Dancing Links, maximum subarray four ways), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 20–61 | planned (this document) | — |
+| 20 | scenes (18, with the *Frontier* chapter), computations (Freivalds, Schwartz–Zippel and the Tutte matrix, fingerprints, Karger and Karger–Stein, Fermat and Miller–Rabin, random-walk SAT, balls into bins, Bloom filters, reservoir sampling, Misra–Gries and Count-Min, the Job v3 in the Pebble language emulated for ledger row 9 and swept over hash functions in C, HyperLogLog and KMV, the AMS sketch, MinHash and LSH on the novels, Ramsey colourings and Moser–Tardos, conditional expectations and RANDU), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
+| 21–61 | planned (this document) | — |
