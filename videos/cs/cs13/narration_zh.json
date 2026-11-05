@@ -1,0 +1,534 @@
+{
+ "title": "计算机科学，从零搭建 · 第13部分：编译器",
+ "chapters": {
+  "Hook": "一个会写程序的程序",
+  "History": "1. FORTRAN，以及编译器的形状",
+  "Semantic": "2. 名字、作用域与类型",
+  "IR": "3. 三地址码与控制流图",
+  "Dominators": "4. 支配者",
+  "SSA": "5. 静态单赋值",
+  "Dataflow": "6. 数据流分析与不动点",
+  "Optimize": "7. SSA 上的优化",
+  "Loops": "8. 循环",
+  "Inline": "9. 内联与别名",
+  "ISel": "10. 指令选择",
+  "RegAlloc": "11. 寄存器分配",
+  "Schedule": "12. 调度与流水线",
+  "Job": "13. 编译出来的任务",
+  "Correct": "14. 编译器对吗？",
+  "Frontier": "15. 前沿：搜索最好的程序",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "717669e3c2fc": {
+   "scene": "Hook",
+   "en": "In Part 6 we wrote the Job's inner loop by hand, in Pebble assembly. <bookmark mark='a'/> Each table entry is twelve bytes, so the loop keeps a pointer and steps it by twelve. <bookmark mark='b'/> In Part 12 we wrote the same loop in the Pebble language, as you would in C: an index, and the table indexed by it. <bookmark mark='c'/> This is what our compiler, built in this part, turns it into. It found the pointer by itself. <bookmark mark='d'/> On the first chapter of Pride and Prejudice, the hand-written program executes eight hundred and twenty-eight thousand instructions. Compiled with no optimization, the same algorithm takes four and a half million. Optimized, seven hundred and thirty thousand: twelve percent fewer than we managed by hand.",
+   "zh": "在第6部分，我们用 Pebble 汇编手写了任务的内层循环。<bookmark mark='a'/>表里每一项是十二个字节，所以循环拿着一个指针，每次把它往前挪十二。<bookmark mark='b'/>在第12部分，我们用 Pebble 语言写了同一个循环，就像用 C 写那样：一个下标，再用它去索引表。<bookmark mark='c'/>这是这一部分要搭建的编译器把它变成的样子。它自己找到了那个指针。<bookmark mark='d'/>在《傲慢与偏见》第一章上，手写的程序执行八十二万八千条指令。不加优化地编译，同样的算法要四百五十万条。优化之后，七十三万条：比我们手写的还少百分之十二。"
+  },
+  "eb8c3223df0f": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> A whole compiler, from the tree Part 12's parser builds down to Pebble machine code. <bookmark mark='b'/> The program as a graph, with dominators, the static single assignment form, and dataflow analysis as the search for a fixed point. <bookmark mark='c'/> A sequence of optimizations, each switched on in turn and measured on the Job. <bookmark mark='d'/> Register allocation as graph colouring, a hard problem in general, and the theorem that makes it easy on SSA programs. <bookmark mark='e'/> And the questions at the edge: how do we know a compiler is right, and can a machine search for the best possible program?",
+   "zh": "我们要去的地方是这样的。<bookmark mark='a'/>一个完整的编译器，从第12部分的语法分析器建出的树，一直到 Pebble 机器码。<bookmark mark='b'/>把程序看成一张图：支配者、静态单赋值形式，以及把数据流分析看作寻找不动点。<bookmark mark='c'/>一连串优化，逐个打开，每一个都在任务上测量。<bookmark mark='d'/>寄存器分配就是图着色，一般情况下是难题，而有一条定理让它在 SSA 程序上变得容易。<bookmark mark='e'/>还有边缘上的问题：我们怎么知道编译器是对的？机器能不能去搜索最好的程序？"
+  },
+  "a240f60c4674": {
+   "scene": "Hook",
+   "en": "This is Part 13 of Computer Science, Built, in Act Three, Speaking to the Machine. <bookmark mark='a'/> In this part: FORTRAN's promise, and the shape of every compiler since. Semantic analysis, three-address code and control-flow graphs. Dominators, static single assignment, and dataflow on lattices. Constant propagation, value numbering, loop optimizations and inlining. Instruction selection, register allocation and scheduling. And the Job compiled, with fuzzing, verification and superoptimization.",
+   "zh": "这是《计算机科学，从零搭建》的第13部分，属于第三幕“和机器对话”。<bookmark mark='a'/>这一部分讲：FORTRAN 的承诺，以及此后每一个编译器的形状。语义分析、三地址码和控制流图。支配者、静态单赋值，以及格上的数据流。常量传播、值编号、循环优化和内联。指令选择、寄存器分配和调度。还有编译出来的任务，以及模糊测试、验证和超级优化。"
+  },
+  "18648a79de3e": {
+   "scene": "History",
+   "en": "Chapter one. FORTRAN, and the shape of a compiler.",
+   "zh": "第一章。FORTRAN，以及编译器的形状。"
+  },
+  "7ae22a07e470": {
+   "scene": "History",
+   "en": "In the early nineteen fifties, programs were written in machine code, by hand. <bookmark mark='a'/> In 1952 Grace Hopper's A-0 system stitched together subroutines from a library by number, and she called it a compiler: it compiled a program out of pieces. <bookmark mark='b'/> But most programmers were sure that anything automatic would produce code far too slow to use. Machine time cost more than programmer time, and the experts wrote tight code. <bookmark mark='c'/> John Backus's team at IBM set out to prove them wrong. Their FORTRAN compiler for the IBM 704 was delivered in April 1957, after about eighteen person-years of work, and most of that work went into optimization. It even simulated the flow of the program to estimate which loops ran most often, and gave those loops the machine's three index registers. <bookmark mark='d'/> Backus explained why, twenty years later: if FORTRAN produced programs only half as fast as hand-coded ones, nobody would have used it. The language was the easy part. The hard part was the promise that the code would be nearly as good as an expert's. That promise is the subject of this part.",
+   "zh": "二十世纪五十年代初，程序是用机器码手写的。<bookmark mark='a'/>1952 年，格蕾丝·霍珀的 A-0 系统按编号把库里的子程序拼接起来，她把它叫作编译器：它把零件“编”成一个程序。<bookmark mark='b'/>可是大多数程序员确信，任何自动生成的代码都会慢得没法用。机器时间比程序员的时间更贵，而高手写的代码很紧凑。<bookmark mark='c'/>IBM 的约翰·巴克斯团队决心证明他们错了。他们为 IBM 704 写的 FORTRAN 编译器在 1957 年 4 月交付，花了大约十八个人年，其中大部分工作都投在优化上。它甚至模拟程序的流程，估计哪些循环跑得最多，再把机器仅有的三个变址寄存器分给这些循环。<bookmark mark='d'/>二十年后，巴克斯解释了原因：如果 FORTRAN 生成的程序只有手写程序一半快，就没有人会用它。语言是容易的部分。难的是那个承诺：代码要几乎和专家写的一样好。这个承诺，就是这一部分的主题。"
+  },
+  "f64470fd5714": {
+   "scene": "History",
+   "en": "Almost every compiler since has the same shape: three parts. <bookmark mark='a'/> The front end knows the language. It lexes and parses, as in Part 12, checks names, scopes and types, and lowers the tree into an intermediate representation, the IR. <bookmark mark='b'/> The middle end knows neither the language nor the machine. It turns the IR into a control-flow graph, analyses it, and optimizes it. <bookmark mark='c'/> The back end knows the machine. It chooses instructions, assigns registers, orders the instructions for the pipeline, and writes out machine code. <bookmark mark='d'/> Each stage is a function from one representation of the program to another, and each one must preserve the meaning.",
+   "zh": "此后几乎每一个编译器都有同样的形状：三个部分。<bookmark mark='a'/>前端懂语言。它做词法和语法分析，就像第12部分那样，检查名字、作用域和类型，再把树降低成一种中间表示，也就是 IR。<bookmark mark='b'/>中端既不懂语言也不懂机器。它把 IR 变成控制流图，分析它，优化它。<bookmark mark='c'/>后端懂机器。它选择指令、分配寄存器、为流水线安排指令顺序，最后写出机器码。<bookmark mark='d'/>每一个阶段都是从程序的一种表示到另一种表示的函数，而每一个阶段都必须保持程序的含义。"
+  },
+  "ad7d794588da": {
+   "scene": "History",
+   "en": "Why put a middle in at all? <bookmark mark='a'/> Suppose you have five languages and four machines. Compiling each language straight to each machine takes twenty compilers, and an optimization must be written twenty times. <bookmark mark='b'/> With a shared intermediate representation, each language needs only a front end and each machine a back end: nine halves, and every optimization written once, in the middle. <bookmark mark='c'/> The idea was proposed in 1958 under the name UNCOL, a universal computer-oriented language, and it took decades to work in practice. GCC made it real in 1987, and LLVM, from 2004, is the IR behind Clang, Rust, Swift and many more.",
+   "zh": "为什么要有中间这一段？<bookmark mark='a'/>假设你有五种语言、四种机器。把每种语言直接编译到每种机器，需要二十个编译器，而一个优化要写二十遍。<bookmark mark='b'/>有了共享的中间表示，每种语言只需要一个前端，每种机器只需要一个后端：九个“半个”，而每个优化只在中间写一次。<bookmark mark='c'/>这个想法在 1958 年以 UNCOL 的名字提出，意思是通用的面向计算机的语言，过了几十年才真正可行。GCC 在 1987 年把它变成现实，而 2004 年起的 LLVM，是 Clang、Rust、Swift 等许多语言背后的 IR。"
+  },
+  "62c0c369b170": {
+   "scene": "History",
+   "en": "Here is the compiler we build, and the linked-list Job of Part 12 passing through it. <bookmark mark='a'/> Two thousand two hundred characters of source become six hundred and fifty-one tokens, and a tree of three hundred and seventy-one nodes: that was Part 12. <bookmark mark='b'/> The checker assigns every name a meaning and every expression a type. Lowering produces two hundred and seven IR instructions in sixty-one basic blocks. Conversion to SSA adds twenty phi functions, a new kind of instruction we will meet in chapter five. <bookmark mark='c'/> The optimizer, at its highest level, leaves three hundred and fifteen: more than it started with, because it copies function bodies into their callers and duplicates loop tests, trading size for speed. <bookmark mark='d'/> And the back end writes two hundred and thirty-five Pebble instructions, nine hundred and fifty-six bytes. <bookmark mark='e'/> The whole compiler is about two and a half thousand lines of Python, and every number in this part comes from running it.",
+   "zh": "这是我们要搭建的编译器，以及第12部分的链表版任务穿过它的过程。<bookmark mark='a'/>两千二百多个字符的源代码变成六百五十一个记号，再变成一棵三百七十一个结点的树：这是第12部分的事。<bookmark mark='b'/>检查器给每个名字一个含义，给每个表达式一个类型。降低产生两百零七条 IR 指令，分在六十一个基本块里。转换成 SSA 又加上二十个 φ 函数，这是一种新的指令，我们在第五章会遇到。<bookmark mark='c'/>优化器在最高级别下留下三百一十五条：比开始时还多，因为它把函数体复制进调用者，还复制循环的测试，用体积换速度。<bookmark mark='d'/>后端最后写出两百三十五条 Pebble 指令，九百五十六个字节。<bookmark mark='e'/>整个编译器大约两千五百行 Python，这一部分的每个数字都来自运行它。"
+  },
+  "412d04fb2fd6": {
+   "scene": "Semantic",
+   "en": "Chapter two. Names, scopes and types.",
+   "zh": "第二章。名字、作用域与类型。"
+  },
+  "2d2b1962b21e": {
+   "scene": "Semantic",
+   "en": "The parser of Part 12 checks the grammar, but a grammar cannot check that every name was declared before it is used. <bookmark mark='a'/> That needs memory of everything declared so far, which is beyond a context-free language. So the compiler's next pass walks the tree with a symbol table. <bookmark mark='b'/> The outermost scope holds the globals and the functions, including the built-ins. Entering lookup pushes a new scope, with its parameters w and n, and then its locals as they are declared: p, q and i. <bookmark mark='c'/> When the body says head, the checker looks in the innermost scope first, finds nothing, and looks outward, to the global. A local of the same name would have shadowed it. This rule, static or lexical scope, arrived with ALGOL 60's nested blocks, and it means every use of a name is settled from the text alone, before the program runs.",
+   "zh": "第12部分的语法分析器检查文法，可是文法检查不了每个名字是否在使用之前声明过。<bookmark mark='a'/>那需要记住到目前为止声明过的一切，超出了上下文无关语言的能力。所以编译器的下一遍拿着一张符号表去走这棵树。<bookmark mark='b'/>最外层的作用域放着全局变量和函数，包括内置函数。进入 lookup 时压入一个新的作用域，里面有它的参数 w 和 n，然后是随着声明出现的局部变量：p、q 和 i。<bookmark mark='c'/>当函数体里写到 head 时，检查器先在最内层的作用域里找，找不到，就往外找，找到那个全局变量。同名的局部变量会把它遮蔽。这条规则叫静态作用域或词法作用域，随 ALGOL 60 的嵌套块而来，它意味着名字的每一次使用，在程序运行之前单凭文本就能确定。"
+  },
+  "351c299d202d": {
+   "scene": "Semantic",
+   "en": "Next, every expression gets a type. <bookmark mark='a'/> The rules are written like this: above the line, what must already be known; below, what follows. If e one and e two are integers, so is their sum. If p points to things of type T and i is an integer, then p of i is a T. If e points to a struct with a field f of type T, then e dot f is a T. <bookmark mark='b'/> The Greek gamma is the symbol table we just built. The checker applies these rules bottom-up, over the tree. <bookmark mark='c'/> Here are four programs our checker rejects, with its messages. An integer cannot hold null. A name that was never declared. A field on a pointer to an int, which has no fields. A call with the wrong number of arguments. Each would otherwise have become wrong machine code, found, if at all, by a crash. <bookmark mark='d'/> What a type system can promise, and how types can be inferred without being written, is the subject of Part 14.",
+   "zh": "接下来，每个表达式都得到一个类型。<bookmark mark='a'/>规则是这样写的：横线上方是必须已经知道的，下方是由此推出的。如果 e1 和 e2 是整数，它们的和也是整数。如果 p 指向类型为 T 的东西而 i 是整数，那么 p[i] 是一个 T。如果 e 指向一个结构体，它有一个类型为 T 的字段 f，那么 e.f 是一个 T。<bookmark mark='b'/>希腊字母 Γ 就是我们刚建好的符号表。检查器在树上自底向上地应用这些规则。<bookmark mark='c'/>这里有四个被我们的检查器拒绝的程序，以及它给出的信息。整数不能存放 null。一个从未声明过的名字。在指向 int 的指针上取字段，而 int 没有字段。参数个数不对的调用。否则，每一个都会变成错误的机器码，就算被发现，也要靠一次崩溃。<bookmark mark='d'/>类型系统能承诺什么，以及类型怎样在不写出来的情况下被推断，是第14部分的主题。"
+  },
+  "31d9c6b0870f": {
+   "scene": "Semantic",
+   "en": "The checker also decides how big each thing is, and where each part of it lives. <bookmark mark='a'/> On Pebble, integers and pointers are four bytes and must sit at addresses divisible by four; a character is one byte. A struct's fields are laid out in order, each at the next multiple of its alignment, and the struct's size is rounded up so that arrays of it stay aligned. <bookmark mark='b'/> The list Job's Node is sixteen bytes: next at zero, letters at four, length at eight, count at twelve. <bookmark mark='c'/> The array Job's Entry is twelve bytes, exactly the layout Part 6 chose by hand. <bookmark mark='d'/> From now on a field is only an offset. p dot count becomes a load from twelve bytes past p, and table of i dot length a load from four bytes past the table plus twelve times i. The names are gone; the numbers remain.",
+   "zh": "检查器还要决定每样东西有多大，以及它的每一部分放在哪里。<bookmark mark='a'/>在 Pebble 上，整数和指针是四个字节，必须放在能被四整除的地址上；字符是一个字节。结构体的字段按顺序排列，每个都放在下一个对齐倍数处，结构体的大小再向上取整，好让由它组成的数组保持对齐。<bookmark mark='b'/>链表版任务的 Node 是十六个字节：next 在零，letters 在四，length 在八，count 在十二。<bookmark mark='c'/>数组版任务的 Entry 是十二个字节，正是第6部分手工选择的布局。<bookmark mark='d'/>从此以后，字段只是一个偏移量。p.count 变成从 p 往后十二个字节处读取，table[i].length 变成从表地址加十二乘 i 再往后四个字节处读取。名字消失了，留下的是数字。"
+  },
+  "f5e248b33971": {
+   "scene": "Semantic",
+   "en": "Last, the checker records where each variable will live. <bookmark mark='a'/> Globals get fixed addresses in the data section, just as Part 11's linker laid them out. <bookmark mark='b'/> Ordinary locals become virtual registers, as many as we like; the back end decides later which real register, or which stack slot, each one gets. <bookmark mark='c'/> But if a program takes a local's address, like main's word buffer, passed to lookup by its address, then that local must live in memory, because another function may read it through the pointer. <bookmark mark='d'/> Arrays and structs live in the stack frame too. <bookmark mark='e'/> The distinction matters enormously. A local whose address is never taken is just a value: nothing outside the function can see it, so the optimizer is free to move it, copy it, or delete it.",
+   "zh": "最后，检查器记下每个变量将住在哪里。<bookmark mark='a'/>全局变量在数据段里得到固定的地址，就像第11部分的链接器安排的那样。<bookmark mark='b'/>普通的局部变量变成虚拟寄存器，要多少有多少；后端以后再决定每一个分到哪个真实寄存器，或者哪个栈槽。<bookmark mark='c'/>但如果程序取了一个局部变量的地址，比如 main 的单词缓冲区，按地址传给了 lookup，那么这个局部变量就必须住在内存里，因为另一个函数可能通过指针读它。<bookmark mark='d'/>数组和结构体也放在栈帧里。<bookmark mark='e'/>这个区别极其重要。一个从未被取地址的局部变量只是一个值：函数之外没有任何东西看得见它，所以优化器可以随意移动它、复制它，或者删掉它。"
+  },
+  "1578cc11607d": {
+   "scene": "IR",
+   "en": "Chapter three. Three-address code and the control-flow graph.",
+   "zh": "第三章。三地址码与控制流图。"
+  },
+  "9c601f4bd1c4": {
+   "scene": "IR",
+   "en": "The middle end does not work on trees. It works on a flat list of simple instructions, each doing one thing. <bookmark mark='a'/> Take s equals s plus a of i. Its tree has an assignment at the top, an addition below it, and an array index below that. <bookmark mark='b'/> Lowering walks the tree from the leaves up and gives every intermediate result a name. First scale the index: an integer is four bytes, so multiply i by four. Add that to a, for the element's address. Load from memory. Add. And assign. <bookmark mark='c'/> This is three-address code: every instruction has a result and at most two operands. <bookmark mark='d'/> The percent names are temporaries, as many as we like. They are the registers of an imaginary machine with no limit on registers, and the back end will have to fit them into Pebble's real ones.",
+   "zh": "中端不在树上工作。它处理的是一串扁平的简单指令，每条只做一件事。<bookmark mark='a'/>拿 s = s + a[i] 来说。它的树顶上是赋值，下面是加法，再下面是数组下标。<bookmark mark='b'/>降低从叶子往上走这棵树，给每个中间结果起一个名字。先换算下标：整数是四个字节，所以 i 乘以四。加到 a 上，得到元素的地址。从内存读取。相加。再赋值。<bookmark mark='c'/>这就是三地址码：每条指令有一个结果，至多两个操作数。<bookmark mark='d'/>带百分号的名字是临时变量，要多少有多少。它们是一台寄存器数量没有上限的假想机器的寄存器，后端得把它们塞进 Pebble 真实的寄存器里。"
+  },
+  "dbf45e164e11": {
+   "scene": "IR",
+   "en": "Control flow is lowered the same way. Here is a small function, total, which adds up the positive entries of an array and subtracts one for each other entry. <bookmark mark='a'/> The entry block sets s and i to zero. The while loop becomes a block that tests i against n and branches either into the body or out to the exit. <bookmark mark='b'/> The body loads a of i and tests it. The if becomes two blocks, then and else, which meet again at endif. <bookmark mark='c'/> And endif increments i and jumps back to the test. Every structured statement turns into labelled blocks and branches between them. <bookmark mark='d'/> Notice that then and else both load a of i again, as the source said. A naive translation repeats work. The optimizer will remove some of it, and we will see what it misses.",
+   "zh": "控制流也用同样的方式降低。这是一个小函数 total，它把数组中的正数加起来，其余每一项减一。<bookmark mark='a'/>入口块把 s 和 i 设为零。while 循环变成一个块，它比较 i 和 n，然后要么分支进入循环体，要么跳到出口。<bookmark mark='b'/>循环体读出 a[i] 并检验它。if 变成两个块，then 和 else，它们在 endif 处重新汇合。<bookmark mark='c'/>endif 把 i 加一，跳回测试。每一个结构化语句都变成带标号的块和块之间的分支。<bookmark mark='d'/>注意 then 和 else 都又读了一次 a[i]，就像源代码写的那样。直译会重复劳动。优化器会去掉其中一部分，我们也会看到它漏掉了什么。"
+  },
+  "923977760c71": {
+   "scene": "IR",
+   "en": "Those pieces have a name. <bookmark mark='a'/> A basic block is a straight run of instructions, entered only at its top and left only at its bottom: once the first instruction runs, they all do. To find the blocks, mark the leaders: the first instruction, every jump target, and every instruction right after a jump. Each leader starts a block. <bookmark mark='b'/> The control-flow graph has the blocks as its nodes and an edge wherever control can pass from one to the next. Frances Allen worked out this representation, and the analyses built on it, at IBM around 1970. <bookmark mark='c'/> The whole list version of the Job lowers to two hundred and seven instructions in sixty-one blocks. <bookmark mark='d'/> And a loop is a cycle in the graph. The optimizer will spend most of its effort on cycles like this one, because that is where a program spends its time.",
+   "zh": "这些片段有个名字。<bookmark mark='a'/>基本块是一段直线式的指令，只能从顶部进入，只能从底部离开：第一条指令一旦执行，其余的都会执行。要找出这些块，先标出首指令：第一条指令、每个跳转目标，以及紧跟在跳转之后的每条指令。每个首指令开始一个块。<bookmark mark='b'/>控制流图以这些块为结点，凡是控制可能从一个块走到下一个块，就连一条边。弗朗西丝·艾伦大约在 1970 年于 IBM 提出了这种表示，以及建立在它上面的分析。<bookmark mark='c'/>链表版的整个任务降低后是两百零七条指令，分在六十一个块里。<bookmark mark='d'/>循环就是图里的一个环。优化器的大部分力气都会花在这样的环上，因为程序的时间就花在那里。"
+  },
+  "1c3c5fbb7e33": {
+   "scene": "IR",
+   "en": "Industrial compilers look the same inside. <bookmark mark='a'/> Here is our body block, <bookmark mark='b'/> and here is the LLVM IR that clang produces for the same function written in C. It sign-extends the index to sixty-four bits, computes the element's address with an instruction called getelementptr, which scales by the element size for us, loads, compares and branches. The same five steps. <bookmark mark='c'/> GCC's GIMPLE, Java's bytecode and LLVM IR are all three-address code, or close to it, with a type on every value.",
+   "zh": "工业级编译器的内部也是这个样子。<bookmark mark='a'/>这是我们的循环体块，<bookmark mark='b'/>这是 clang 为用 C 写成的同一个函数生成的 LLVM IR。它把下标符号扩展到六十四位，用一条叫 getelementptr 的指令计算元素地址，它会替我们按元素大小换算，然后读取、比较、分支。同样的五步。<bookmark mark='c'/>GCC 的 GIMPLE、Java 的字节码和 LLVM IR 都是三地址码，或者接近三地址码，而且每个值都带着类型。"
+  },
+  "f0aa828eb652": {
+   "scene": "Dominators",
+   "en": "Chapter four. Dominators.",
+   "zh": "第四章。支配者。"
+  },
+  "8d87fa84e6a5": {
+   "scene": "Dominators",
+   "en": "The first thing the middle end computes about the graph is who dominates whom. A block d dominates a block n if every path from the entry to n passes through d. Whenever n runs, d has already run. <bookmark mark='a'/> Take endif. <bookmark mark='b'/> Control can reach it through then, or through else, or around the loop any number of times first. <bookmark mark='c'/> Every one of these paths passes through entry, the loop test while one, and body two. Those three dominate endif, and so does endif itself. <bookmark mark='d'/> Then five does not: there is a path round it, by else. <bookmark mark='e'/> An equivalent test: delete d from the graph. If n can no longer be reached from the entry, d dominates n. Our test suite checks the compiler's answer against exactly this definition, for every pair of blocks in the Job.",
+   "zh": "中端关于这张图算的第一件事，是谁支配谁。如果从入口到块 n 的每一条路径都经过块 d，就说 d 支配 n。只要 n 执行，d 就一定已经执行过。<bookmark mark='a'/>拿 endif 来说。<bookmark mark='b'/>控制可以经过 then 到达它，也可以经过 else，还可以先绕循环转任意多圈。<bookmark mark='c'/>这些路径每一条都经过 entry、循环测试 while1 和 body2。这三个块支配 endif，endif 自己也支配自己。<bookmark mark='d'/>then5 不支配它：有一条绕开它的路，经过 else。<bookmark mark='e'/>一个等价的检验：把 d 从图里删掉。如果从入口再也到不了 n，d 就支配 n。我们的测试集正是用这个定义，对任务里每一对块检查编译器的答案。"
+  },
+  "40fff4628096": {
+   "scene": "Dominators",
+   "en": "How does a compiler find dominators? With an equation. <bookmark mark='a'/> The entry is dominated only by itself. Any other block n is dominated by itself and by whatever dominates all of its predecessors: the intersection of their sets. <bookmark mark='b'/> The equation is circular, because of the loop: while one's set depends on endif's, which depends on while one's. So start by assuming every block is dominated by everything, and apply the equation, block after block, until nothing changes. <bookmark mark='c'/> Visit the blocks in reverse postorder, so that each comes after its predecessors, apart from back edges. Then for this function the first pass already gets every set right, and a second pass confirms it. <bookmark mark='d'/> The same holds for every function of the Job. The number of passes depends on how loops are nested, not on the size of the program. This is the simple algorithm of Cooper, Harvey and Kennedy, from 2001. Lengauer and Tarjan's algorithm of 1979 is almost linear in theory, and in practice the simple one is usually as fast. <bookmark mark='e'/> We will meet this pattern again in chapter six: an equation over sets, solved by iterating to a fixed point.",
+   "zh": "编译器怎样找出支配者？用一个方程。<bookmark mark='a'/>入口只被它自己支配。其他任何块 n 被它自己支配，也被支配它所有前驱的那些块支配：也就是前驱集合的交集。<bookmark mark='b'/>因为有循环，这个方程是循环定义的：while1 的集合依赖 endif 的集合，而 endif 的又依赖 while1 的。所以先假定每个块被一切块支配，然后一个块接一个块地应用方程，直到什么都不再变化。<bookmark mark='c'/>按逆后序访问这些块，使每个块都排在它的前驱之后，回边除外。这样对这个函数来说，第一遍就已经把每个集合都算对了，第二遍只是确认。<bookmark mark='d'/>任务里的每个函数也都是这样。遍数取决于循环怎样嵌套，而不是程序有多大。这是库珀、哈维和肯尼迪 2001 年给出的简单算法。伦高尔和塔扬 1979 年的算法在理论上几乎是线性的，而在实践中这个简单算法通常一样快。<bookmark mark='e'/>我们在第六章还会遇到这个模式：一个关于集合的方程，用迭代到不动点来求解。"
+  },
+  "b147e36df4e2": {
+   "scene": "Dominators",
+   "en": "The dominators of a block always form a chain: entry, then the loop test, then the body, and so on. <bookmark mark='a'/> So each block has a closest dominator, its immediate dominator, and drawing an edge from each block's immediate dominator to it gives a tree. <bookmark mark='b'/> Notice where endif hangs: from body two, not from then or else, because neither branch dominates it. <bookmark mark='c'/> Now d dominates n exactly when d is an ancestor of n in this tree, and a whole table of sets has become one parent pointer per block. Most of what follows is a walk over this tree.",
+   "zh": "一个块的支配者总是排成一条链：入口，然后是循环测试，然后是循环体，依此类推。<bookmark mark='a'/>所以每个块都有一个最近的支配者，也就是它的直接支配者；从每个块的直接支配者向它连一条边，就得到一棵树。<bookmark mark='b'/>注意 endif 挂在哪里：挂在 body2 下面，而不是 then 或 else 下面，因为哪个分支都不支配它。<bookmark mark='c'/>现在，d 支配 n 当且仅当 d 是 n 在这棵树里的祖先，一整张集合表变成了每个块一个父指针。接下来的大部分内容，都是在这棵树上行走。"
+  },
+  "6fe40ea57e01": {
+   "scene": "Dominators",
+   "en": "One more idea, and it is the one SSA needs. <bookmark mark='a'/> The dominance frontier of a block d is the set of blocks just beyond the region d dominates: blocks n where d dominates a predecessor of n, but not n itself. <bookmark mark='b'/> Then five's frontier is endif. Then five dominates itself, a predecessor of endif, but endif can also be reached through else. <bookmark mark='c'/> Body two's frontier is the loop test, while one, reached again around the back edge. And while one is in its own frontier: the loop header is where the loop's own path comes back to meet the path from the entry. <bookmark mark='d'/> The frontier is the first place where another path joins. Anything computed in d meets, there, whatever was computed on some path that avoided d. That is exactly where a variable might have two different values, depending on how we arrived.",
+   "zh": "再讲一个概念，正是 SSA 需要的那个。<bookmark mark='a'/>块 d 的支配边界，是紧挨在 d 支配的区域之外的那些块：d 支配 n 的某个前驱、却不支配 n 本身的那些块 n。<bookmark mark='b'/>then5 的边界是 endif。then5 支配它自己，也就是 endif 的一个前驱，但 endif 也可以经过 else 到达。<bookmark mark='c'/>body2 的边界是循环测试 while1，绕回边再次到达。而 while1 在它自己的边界里：循环头是循环自己的路径绕回来、与来自入口的路径相遇的地方。<bookmark mark='d'/>边界是另一条路径最先汇入的地方。在 d 里算出的任何东西，都在那里与某条绕开 d 的路径上算出的东西相遇。那恰好是一个变量可能有两个不同值的地方，取决于我们是怎么到达的。"
+  },
+  "6ad4761cda60": {
+   "scene": "SSA",
+   "en": "Chapter five. Static single assignment.",
+   "zh": "第五章。静态单赋值。"
+  },
+  "4ffef75cac60": {
+   "scene": "SSA",
+   "en": "In our IR the variable s is assigned in three places: in the entry, in then, and in else. To know anything about a use of s, the compiler must first work out which assignments could have produced its value. <bookmark mark='a'/> In straight-line code there is a simple cure. <bookmark mark='b'/> Give every assignment a fresh name, s one, s two, s three, and rewrite each use to the name that reaches it. <bookmark mark='c'/> Now every name is defined exactly once, and every use points at exactly one definition. Facts about s three are facts about one instruction, true wherever s three appears. <bookmark mark='d'/> The difficulty is where control flow joins. After an if, which name holds s? It depends on which branch ran.",
+   "zh": "在我们的 IR 里，变量 s 在三个地方被赋值：入口、then 和 else。要知道 s 的一次使用的任何性质，编译器首先得弄清哪些赋值可能产生了它的值。<bookmark mark='a'/>对直线式代码，有一个简单的办法。<bookmark mark='b'/>给每次赋值一个新名字，s1、s2、s3，再把每次使用改写成到达它的那个名字。<bookmark mark='c'/>现在每个名字都恰好定义一次，每次使用都恰好指向一个定义。关于 s3 的事实，就是关于一条指令的事实，在 s3 出现的任何地方都成立。<bookmark mark='d'/>困难在于控制流汇合的地方。一个 if 之后，哪个名字持有 s？这取决于执行了哪个分支。"
+  },
+  "4d3b2d42475c": {
+   "scene": "SSA",
+   "en": "SSA's answer is a new kind of instruction, the phi function. <bookmark mark='a'/> Here is total in SSA form. At endif, s dot five is defined as phi of s dot four from then, and s dot three from else. <bookmark mark='b'/> Read it as: s dot five is s dot four if control arrived from then, and s dot three if it arrived from else. A phi is not an instruction any machine has. It is a note about edges, and before the back end runs it will become copies. <bookmark mark='c'/> The loop header needs phis too. i dot two is i dot one the first time we reach the test, coming from the entry, and i dot three every later time, coming back around from endif. The same holds for s. <bookmark mark='d'/> Three phis in all, for two variables.",
+   "zh": "SSA 的回答是一种新的指令：φ 函数。<bookmark mark='a'/>这是 SSA 形式的 total。在 endif 处，s.5 被定义为 φ(来自 then 的 s.4，来自 else 的 s.3)。<bookmark mark='b'/>读作：如果控制从 then 来，s.5 就是 s.4；如果从 else 来，就是 s.3。φ 不是任何机器上的指令。它是关于边的一条注记，在后端运行之前会变成复制。<bookmark mark='c'/>循环头也需要 φ。第一次到达测试时，i.2 是从入口来的 i.1；以后每一次，是从 endif 绕回来的 i.3。s 也一样。<bookmark mark='d'/>一共三个 φ，对应两个变量。"
+  },
+  "701a51916f47": {
+   "scene": "SSA",
+   "en": "Where must the phis go? Not at every join: that would be correct but wasteful. <bookmark mark='a'/> The answer uses the previous chapter. s is assigned in the entry, in then and in else. <bookmark mark='b'/> The frontier of then is endif, and so is the frontier of else. A definition from then meets a definition from elsewhere exactly there, so endif gets a phi for s. <bookmark mark='c'/> But that phi is itself a new assignment of s, so its own frontier needs one too: the loop header, while one. <bookmark mark='d'/> i is assigned in the entry and in endif, whose frontier is while one again. <bookmark mark='e'/> Repeat until no new phi appears: the iterated dominance frontier. <bookmark mark='f'/> And keep only the phis whose variable is still live there, which is called pruned SSA. This is the algorithm of Cytron, Ferrante, Rosen, Wegman and Zadeck at IBM, published in 1991, and almost every optimizing compiler since has used it or a descendant of it.",
+   "zh": "φ 必须放在哪里？不是每个汇合点：那样虽然正确，却很浪费。<bookmark mark='a'/>答案用到上一章。s 在入口、then 和 else 里被赋值。<bookmark mark='b'/>then 的边界是 endif，else 的边界也是。来自 then 的定义恰好在那里与来自别处的定义相遇，所以 endif 得到一个关于 s 的 φ。<bookmark mark='c'/>但这个 φ 本身又是 s 的一次新赋值，所以它自己的边界也需要一个：循环头 while1。<bookmark mark='d'/>i 在入口和 endif 里被赋值，而 endif 的边界又是 while1。<bookmark mark='e'/>重复，直到不再出现新的 φ：这就是迭代支配边界。<bookmark mark='f'/>再只保留那些变量在该处仍然活跃的 φ，这叫剪枝 SSA。这是 IBM 的赛特龙、费兰特、罗森、韦格曼和扎德克 1991 年发表的算法，此后几乎每一个优化编译器都用了它或它的后代。"
+  },
+  "8d45baa22067": {
+   "scene": "SSA",
+   "en": "With the phis placed, the names are filled in by a single walk. <bookmark mark='a'/> Keep a stack of names for each variable. Entering a block, each definition pushes a fresh name, and each use takes whatever name is on top. <bookmark mark='b'/> At the end of the block, fill in this block's operand of each phi in its successors. Then visit the block's children in the dominator tree, and pop the names on the way back out. <bookmark mark='c'/> Inside then five the stack for s holds s dot one from the entry, s dot two from the header's phi, and on top s dot four, then's own definition. <bookmark mark='d'/> Why the dominator tree? Because a definition in d is available, along every path, exactly in the blocks that d dominates. The tree is the program's scope structure, recovered from its graph.",
+   "zh": "φ 放好之后，名字由一次行走填进去。<bookmark mark='a'/>给每个变量准备一个名字栈。进入一个块时，每个定义压入一个新名字，每次使用取栈顶的那个名字。<bookmark mark='b'/>在块的末尾，为它的各个后继里的每个 φ 填上来自本块的那个操作数。然后访问这个块在支配树里的子结点，返回时把名字弹出。<bookmark mark='c'/>在 then5 里，s 的栈里有来自入口的 s.1，来自循环头 φ 的 s.2，栈顶是 then 自己定义的 s.4。<bookmark mark='d'/>为什么是支配树？因为 d 中的一个定义，恰好在 d 支配的那些块里沿每条路径都可用。这棵树就是程序的作用域结构，从它的图中重新找了回来。"
+  },
+  "6ae6fd0491b9": {
+   "scene": "SSA",
+   "en": "Why go to this trouble? <bookmark mark='a'/> Because once every use has exactly one definition, the links from definitions to uses are just pointers, and a fact about a name, say that it is a constant, is true everywhere the name appears. The analyses of the next chapters can follow these links directly, instead of sweeping over every block again and again. <bookmark mark='b'/> Industrial compilers agree. This is LLVM's pass called mem2reg, run by clang on the same function written in C. Its phis sit in the same places: two at the loop header, for s and i, and one at the join after the if. <bookmark mark='c'/> And when optimization is done, the phis are taken out again: each becomes a copy placed on its incoming edge, which the register allocator will try to make disappear.",
+   "zh": "为什么要费这番工夫？<bookmark mark='a'/>因为一旦每次使用都恰好有一个定义，从定义到使用的联系就只是指针，而关于一个名字的事实，比如它是常量，在这个名字出现的任何地方都成立。后面几章的分析可以直接沿着这些联系走，而不必一遍又一遍地扫过每个块。<bookmark mark='b'/>工业级编译器也这么认为。这是 LLVM 叫作 mem2reg 的一遍，由 clang 在用 C 写成的同一个函数上运行。它的 φ 放在同样的位置：循环头两个，分别给 s 和 i，if 之后的汇合点一个。<bookmark mark='c'/>优化完成之后，φ 又被拿掉：每个变成放在入边上的一次复制，寄存器分配器会设法让它消失。"
+  },
+  "8ab2f5e6661d": {
+   "scene": "Dataflow",
+   "en": "Chapter six. Dataflow analysis and fixed points.",
+   "zh": "第六章。数据流分析与不动点。"
+  },
+  "e19ea1b1b4fc": {
+   "scene": "Dataflow",
+   "en": "The compiler's main tool for reasoning about a whole function is dataflow analysis. The first example is liveness. <bookmark mark='a'/> A variable is live at a point if some path from that point uses it before assigning it again. Its current value might still be needed. <bookmark mark='b'/> Two equations say this for every block. A variable is live at the end of b if it is live at the start of some successor. <bookmark mark='c'/> And it is live at the start of b if b uses it before assigning it, or it is live at the end and b does not assign it. <bookmark mark='d'/> Information flows backward here, from each use to the definitions before it. <bookmark mark='e'/> The answer matters for register allocation: a register holding a value that is no longer live is free for something else.",
+   "zh": "编译器对整个函数进行推理的主要工具是数据流分析。第一个例子是活跃性。<bookmark mark='a'/>如果从某一点出发的某条路径会在重新赋值之前用到一个变量，这个变量在该点就是活跃的。它当前的值可能还有用。<bookmark mark='b'/>对每个块，两个方程说出这件事。如果一个变量在某个后继的开头是活跃的，它在 b 的末尾就是活跃的。<bookmark mark='c'/>如果 b 在赋值之前用到它，或者它在末尾活跃而 b 不给它赋值，它在 b 的开头就是活跃的。<bookmark mark='d'/>这里信息是向后流动的，从每次使用流向它之前的定义。<bookmark mark='e'/>答案对寄存器分配很重要：存着一个不再活跃的值的寄存器，可以拿去放别的东西。"
+  },
+  "b103131f98eb": {
+   "scene": "Dataflow",
+   "en": "The equations refer to each other around the loop, so we solve them the way we found dominators. <bookmark mark='a'/> Start with every set empty. Visit the blocks, backward, and apply the equations; whenever a block's set grows, its predecessors must be visited again. <bookmark mark='b'/> The exit block uses s. Endif uses i. Else uses s and i. Then uses a, s and i. The body adds nothing new to that, and the loop test adds n. The entry assigns s and i, so only a and n are live on entry: they are the parameters. <bookmark mark='c'/> But the sets just grown at the loop test flow back round the loop, to endif, then and else, which all grow again. One more sweep changes nothing. <bookmark mark='d'/> Fourteen visits, twelve of which changed something, and the answer is a fixed point of the equations: apply them once more and every set stays the same.",
+   "zh": "这些方程绕着循环互相引用，所以我们用找支配者的办法来解它们。<bookmark mark='a'/>从所有集合都为空开始。向后访问各个块，应用方程；一个块的集合一旦变大，它的前驱就必须再访问一次。<bookmark mark='b'/>出口块使用 s。endif 使用 i。else 使用 s 和 i。then 使用 a、s 和 i。循环体没有带来新东西，循环测试加上 n。入口给 s 和 i 赋值，所以入口处只有 a 和 n 活跃：它们是参数。<bookmark mark='c'/>可是循环测试处刚刚变大的集合，又绕着循环流回 endif、then 和 else，它们都再次变大。再扫一遍，什么都没变。<bookmark mark='d'/>十四次访问，其中十二次改变了什么，答案是这些方程的一个不动点：再应用一次，每个集合都保持不变。"
+  },
+  "ffbc21e483b6": {
+   "scene": "Dataflow",
+   "en": "Liveness is one member of a family. <bookmark mark='a'/> Reaching definitions asks which assignments may have produced the value at a point; it flows forward and joins with union. <bookmark mark='b'/> Available expressions asks which values are surely computed already, on every path; it also flows forward, but joins with intersection, since an expression is available only if every incoming path computed it. <bookmark mark='c'/> On entry to then, i times four and a plus t eight are available: the body block computed them on the only way in. So then's own i times four is redundant, and the load after it too, if nothing stored to memory in between. <bookmark mark='d'/> May questions join with union, must questions with intersection. The machinery is the same.",
+   "zh": "活跃性只是一个家族里的一员。<bookmark mark='a'/>到达定义问：哪些赋值可能产生了某一点的值；它向前流动，用并集汇合。<bookmark mark='b'/>可用表达式问：哪些值在每条路径上都肯定已经算过；它也向前流动，但用交集汇合，因为只有每条入路径都算过，一个表达式才可用。<bookmark mark='c'/>在进入 then 时，i 乘四和 a 加 t8 是可用的：唯一的入口路径上，循环体块已经算过它们。所以 then 自己的 i 乘四是多余的，如果中间没有写内存，后面那次读取也是多余的。<bookmark mark='d'/>“可能”类的问题用并集汇合，“必然”类的问题用交集汇合。机制是一样的。"
+  },
+  "eaa1084f866c": {
+   "scene": "Dataflow",
+   "en": "Why must this iteration stop, and why is the answer right? Gary Kildall, in 1973, gave the framework. <bookmark mark='a'/> The possible facts at a point, here the sets of live variables, form a lattice. For four variables there are sixteen sets, ordered by inclusion, from the empty set at the bottom to all four at the top. <bookmark mark='b'/> The equations only ever add variables: they are monotone, so each visit moves a set up the lattice, or leaves it where it is. <bookmark mark='c'/> Endif's set went from empty, to i alone, to all four. <bookmark mark='d'/> The lattice has height four, so no set can grow more than four times, and the whole iteration must stop. The same argument works for any analysis whose facts form a lattice of finite height and whose equations are monotone.",
+   "zh": "这个迭代为什么一定会停，答案为什么是对的？加里·基尔代尔在 1973 年给出了框架。<bookmark mark='a'/>某一点上所有可能的事实，在这里就是活跃变量的集合，构成一个格。四个变量有十六个集合，按包含关系排序，底部是空集，顶部是全部四个。<bookmark mark='b'/>方程只会往集合里加变量：它们是单调的，所以每次访问要么把一个集合沿格往上推，要么让它留在原处。<bookmark mark='c'/>endif 的集合从空集变成只有 i，再变成全部四个。<bookmark mark='d'/>这个格的高度是四，所以没有哪个集合能变大四次以上，整个迭代必定停止。同样的论证适用于任何这样的分析：它的事实构成有限高度的格，它的方程是单调的。"
+  },
+  "1e38a46f3009": {
+   "scene": "Dataflow",
+   "en": "Two theorems stand behind this. <bookmark mark='a'/> Knaster and Tarski proved that a monotone function on a complete lattice has a least fixed point. Kleene's version says how to find it: start at the bottom and apply the function again and again; the climb reaches the least fixed point. <bookmark mark='b'/> For us, the function is one application of all the equations, and the bottom is every set empty. So the iteration found the smallest sets that satisfy the equations. Nothing is live without a reason. <bookmark mark='c'/> Is the fixed point the truth? The ideal answer would combine what holds along every path the program can actually take. When the equations distribute over the join, as liveness's do, the fixed point equals that ideal exactly. When they do not, as for constant propagation, it is a safe approximation: never wrong, sometimes less precise. Kam and Ullman showed this in 1977. And knowing exactly which paths can actually run is undecidable, a theme we return to in chapter nine.",
+   "zh": "这背后有两条定理。<bookmark mark='a'/>克纳斯特和塔斯基证明了：完备格上的单调函数有最小不动点。克莱尼的版本说明了怎样找到它：从底部出发，一次又一次地应用这个函数；这样往上爬，就会到达最小不动点。<bookmark mark='b'/>对我们来说，这个函数就是把所有方程应用一遍，底部就是所有集合都为空。所以迭代找到的是满足方程的最小集合。没有哪个变量是无缘无故活跃的。<bookmark mark='c'/>不动点就是真相吗？理想的答案，是把程序实际可能走的每条路径上成立的东西结合起来。当方程对汇合运算满足分配律时，比如活跃性，不动点恰好等于这个理想。不满足时，比如常量传播，它是一个安全的近似：从不出错，有时不够精确。卡姆和厄尔曼在 1977 年证明了这一点。而确切知道哪些路径真的会执行是不可判定的，我们在第九章还会回到这个主题。"
+  },
+  "2be65310d0b8": {
+   "scene": "Optimize",
+   "en": "Chapter seven. Optimizations on SSA.",
+   "zh": "第七章。SSA 上的优化。"
+  },
+  "58b7780c1140": {
+   "scene": "Optimize",
+   "en": "The first optimization asks which values are constants. It is another dataflow problem, with a different lattice. <bookmark mark='a'/> At the top, a value we have not yet seen evidence about. In the middle, every particular constant. At the bottom, a value that varies at run time. <bookmark mark='b'/> Each SSA name starts at the top and can only move down, so it changes at most twice, and the analysis must stop. <bookmark mark='c'/> A phi of three and three is three. A phi of three and four varies. And a phi of three and an input not yet seen is, for now, three: optimistic, until proved otherwise.",
+   "zh": "第一个优化问：哪些值是常量。这是另一个数据流问题，用的是另一个格。<bookmark mark='a'/>顶部是一个我们还没见到任何证据的值。中间是每一个具体的常量。底部是一个在运行时变化的值。<bookmark mark='b'/>每个 SSA 名字从顶部开始，只能往下走，所以它至多改变两次，分析必然停止。<bookmark mark='c'/>φ(3, 3) 是 3。φ(3, 4) 会变化。而 φ(3, 一个还没见到的输入) 暂时是 3：乐观，直到被证明不是为止。"
+  },
+  "b1ed11736f11": {
+   "scene": "Optimize",
+   "en": "Here is a function made for the purpose. a is four, b is a times eight, and if b is more than sixteen, c is x plus b, otherwise x minus one. <bookmark mark='a'/> In SSA form it has four blocks and a phi at the join. <bookmark mark='b'/> The analysis finds that a is four, so b is thirty-two, so the comparison is true. <bookmark mark='c'/> And it tracks which edges can execute at the same time as which values are constant. Since the comparison is always true, the edge to else is never taken: else never runs. <bookmark mark='d'/> So the phi at the join may ignore the operand arriving from else, and c dot four is simply x plus thirty-two. <bookmark mark='e'/> What remains is two instructions: x plus thirty-two, times two. Doing both jobs at once, constants and reachable code, finds more than running either one first. This is Wegman and Zadeck's algorithm, from 1991. <bookmark mark='f'/> On the Job itself it barely matters: real programs have few constants for it to find, until inlining and loop transformations expose them.",
+   "zh": "这是一个专门为此写的函数。a 是四，b 是 a 乘八；如果 b 大于十六，c 是 x 加 b，否则是 x 减一。<bookmark mark='a'/>在 SSA 形式里，它有四个块，汇合处有一个 φ。<bookmark mark='b'/>分析发现 a 是四，所以 b 是三十二，所以比较结果为真。<bookmark mark='c'/>它还同时追踪哪些边可能执行、哪些值是常量。既然比较总是为真，通往 else 的边永远不会走：else 永远不会执行。<bookmark mark='d'/>所以汇合处的 φ 可以忽略来自 else 的操作数，c.4 就是 x 加三十二。<bookmark mark='e'/>剩下的是两条指令：x 加三十二，再乘二。同时做两件事，常量和可达代码，比先做其中任何一件找到的更多。这是韦格曼和扎德克 1991 年的算法。<bookmark mark='f'/>在任务本身上，它几乎没有作用：真实程序里可供它发现的常量很少，要等内联和循环变换把它们暴露出来。"
+  },
+  "eb349bb694ad": {
+   "scene": "Optimize",
+   "en": "Two humble passes do much of the cleaning up. <bookmark mark='a'/> Copy propagation: after b equals t one, every use of b may use t one instead, and in SSA that is always safe, because neither name is ever assigned again. <bookmark mark='b'/> Dead code elimination works like a garbage collector over instructions. <bookmark mark='c'/> Mark the instructions whose effects are visible: returns, stores, calls and branches. Then mark whatever they use, and whatever those use, back along the def-use links. <bookmark mark='d'/> Anything unmarked is swept away. Once SCCP has replaced b by the constant thirty-two, nothing uses a, t one, b or c dot one any more, and they all go. <bookmark mark='e'/> Part 15 will collect garbage in memory with the same mark-and-sweep idea.",
+   "zh": "两个不起眼的遍做了大部分清理工作。<bookmark mark='a'/>复写传播：在 b = t1 之后，每次使用 b 都可以改用 t1，在 SSA 里这总是安全的，因为两个名字都不会再被赋值。<bookmark mark='b'/>死代码消除就像指令上的垃圾回收器。<bookmark mark='c'/>先标记那些效果看得见的指令：返回、写内存、调用和分支。再沿着定义-使用的联系往回，标记它们用到的，以及这些又用到的。<bookmark mark='d'/>没有标记的一律清除。一旦 SCCP 把 b 换成常量三十二，就不再有东西使用 a、t1、b 或 c.1，它们全都消失了。<bookmark mark='e'/>第15部分会用同样的标记-清除思想回收内存里的垃圾。"
+  },
+  "4fcda0d7ca25": {
+   "scene": "Optimize",
+   "en": "Next, value numbering. This little function computes i times four three times: once to index p, once for x, once for y. <bookmark mark='a'/> Give every instruction a key: its operation and the values of its operands. Walking through the code, keep a table of the keys seen so far. <bookmark mark='b'/> The second i times four has the same key as the first, so it is the same value, and its uses can use t one. The third, likewise. <bookmark mark='c'/> In SSA this is particularly simple, because a name never changes, so an entry in the table can never become stale. The global version walks the dominator tree, so that a value computed in a block is reused in every block it dominates. <bookmark mark='d'/> On the array Job this pass is worth twenty percent. Every mention of table of i recomputed i times twelve plus the table's address, and now each is computed once.",
+   "zh": "接下来是值编号。这个小函数把 i 乘四算了三遍：一遍用来索引 p，一遍给 x，一遍给 y。<bookmark mark='a'/>给每条指令一个键：它的运算和它的操作数的值。在代码中走一遍，用一张表记下见过的键。<bookmark mark='b'/>第二个 i 乘四和第一个有相同的键，所以是同一个值，它的使用可以改用 t1。第三个也一样。<bookmark mark='c'/>在 SSA 里这尤其简单，因为名字从不改变，表里的条目永远不会过期。全局版本沿着支配树走，这样一个块里算出的值，可以在它支配的每个块里重用。<bookmark mark='d'/>在数组版任务上，这一遍值百分之二十。每次提到 table[i]，都要重新计算 i 乘十二加表地址，现在每个只算一次。"
+  },
+  "05de7307d96c": {
+   "scene": "Optimize",
+   "en": "Many small rewrites are pure algebra. <bookmark mark='a'/> Multiplying by eight is a shift left by three, which is cheaper. Multiplying by one, or adding zero, does nothing. Our strength pass also moves constants to the right, so that value numbering sees four times x and x times four as the same. <bookmark mark='b'/> But machine integers are not the integers of school. Dividing by two is not a shift right by one: minus one divided by two is zero, rounding toward zero, but minus one shifted right is still minus one. x plus one is not always more than x, because it can overflow. Every rewrite rule has to be true for all four billion values of x, including the awkward ones. <bookmark mark='c'/> In chapter fourteen a solver will check such rules for all of them at once.",
+   "zh": "许多小的改写纯粹是代数。<bookmark mark='a'/>乘以八就是左移三位，而移位更便宜。乘以一，或者加零，什么也不做。我们的强度遍还会把常量挪到右边，让值编号把 4 乘 x 和 x 乘 4 看成同一个。<bookmark mark='b'/>但机器整数不是学校里的整数。除以二不等于右移一位：负一除以二是零，向零取整，而负一右移之后还是负一。x 加一并不总是大于 x，因为它可能溢出。每条改写规则都必须对 x 的全部四十多亿个值成立，包括那些别扭的值。<bookmark mark='c'/>在第十四章，一个求解器会一次性地对所有值检查这样的规则。"
+  },
+  "8104b3cb9b78": {
+   "scene": "Optimize",
+   "en": "Optimizations are run one after another, in a fixed order. <bookmark mark='a'/> Ours runs eleven passes at level two, some of them twice. <bookmark mark='b'/> The order matters, because each pass creates work for others. Constant propagation leaves copies behind, value numbering leaves dead code, and moving code out of loops creates new chances for value numbering. <bookmark mark='c'/> The best order depends on the program, and finding it is a search problem of its own, called phase ordering. <bookmark mark='d'/> Clang at level two runs eighty-eight passes, drawn from sixty different ones, in an order refined by decades of measurement. <bookmark mark='e'/> Machine learning now tunes some of these decisions, as the frontier chapter will show.",
+   "zh": "优化按固定的顺序一个接一个地运行。<bookmark mark='a'/>我们的编译器在第二级运行十一个遍，其中有些运行两次。<bookmark mark='b'/>顺序很重要，因为每个遍都会给别的遍制造工作。常量传播留下复制，值编号留下死代码，把代码移出循环又给值编号创造新的机会。<bookmark mark='c'/>最好的顺序取决于程序，找到它本身就是一个搜索问题，叫作阶段顺序问题。<bookmark mark='d'/>clang 在第二级运行八十八个遍，取自六十种不同的遍，顺序经过几十年的测量才定下来。<bookmark mark='e'/>如今机器学习在调整其中一些决定，前沿一章会讲到。"
+  },
+  "46b165f5f2f4": {
+   "scene": "Loops",
+   "en": "Chapter eight. Loops.",
+   "zh": "第八章。循环。"
+  },
+  "783b17f4735a": {
+   "scene": "Loops",
+   "en": "A program spends almost all its time in loops, so a compiler first has to find them. In a graph, that takes the dominators. <bookmark mark='a'/> A back edge is an edge from n to h where h dominates n: an edge that jumps back to something that must already have run. <bookmark mark='b'/> Its natural loop is h together with every block that can reach n without passing through h. <bookmark mark='c'/> And h is the loop's header, the only way in from outside. <bookmark mark='d'/> In the array Job's word function the compiler finds two natural loops. The outer one scans the table, ten blocks with header body five. <bookmark mark='e'/> Inside it, the inner loop compares letters, three blocks with header body twenty-two. Loops found this way nest neatly, and the innermost run most often.",
+   "zh": "程序几乎把所有时间都花在循环里，所以编译器首先得找到它们。在图里，这要用到支配者。<bookmark mark='a'/>回边是从 n 到 h 的一条边，其中 h 支配 n：一条跳回某个必定已经执行过的东西的边。<bookmark mark='b'/>它的自然循环是 h，加上所有不经过 h 就能到达 n 的块。<bookmark mark='c'/>h 是循环头，从外面进来的唯一入口。<bookmark mark='d'/>在数组版任务的 word 函数里，编译器找到两个自然循环。外层的扫描表，十个块，循环头是 body5。<bookmark mark='e'/>在它里面，内层循环比较字母，三个块，循环头是 body22。这样找到的循环整齐地嵌套，最内层的执行得最多。"
+  },
+  "704c5a70a9bd": {
+   "scene": "Loops",
+   "en": "The simplest loop transformation changes only the shape. <bookmark mark='a'/> A while loop, lowered naively, tests at the top. Each iteration runs the body, jumps back up, and tests again: two branches every time round. <bookmark mark='b'/> Inverting the loop puts a single guard in front, for the case of zero iterations, and moves the test to the bottom, where it branches straight back into the body. One branch per iteration. A C programmer would recognize this as turning a while loop into an if around a do-while. <bookmark mark='c'/> On the array Job this saves six and a half percent of all instructions, and on the list Job, twelve and a half. It also gives every loop a preheader, a block that runs once just before the loop, which the next transformation needs.",
+   "zh": "最简单的循环变换只改变形状。<bookmark mark='a'/>直接降低的 while 循环在顶部测试。每次迭代执行循环体，跳回上面，再测试一次：每转一圈两次分支。<bookmark mark='b'/>反转循环在前面放一个守卫，处理零次迭代的情况，再把测试挪到底部，在那里直接分支回循环体。每次迭代一次分支。C 程序员会认出，这是把 while 循环变成一个 if 包着的 do-while。<bookmark mark='c'/>在数组版任务上，这省下全部指令的百分之六点五，在链表版任务上省下百分之十二点五。它还给每个循环一个前置块，一个恰好在循环之前执行一次的块，下一个变换需要它。"
+  },
+  "bc50ca2532ab": {
+   "scene": "Loops",
+   "en": "Inside the outer loop, some values are the same on every iteration. <bookmark mark='a'/> An instruction is loop-invariant if each of its operands is defined outside the loop, or is itself invariant. <bookmark mark='b'/> Such an instruction can move to the preheader, computed once instead of once per table entry. In word, the compiler hoists four. The first letter of the new word. The table's address. The number of entries. And whether zero is less than n, the inner loop's first test. <bookmark mark='c'/> Loads need care. Moving a load is safe only if nothing inside the loop could store to that memory, and no call could. Here the loop contains no store at all: the one store, counting a word it found, is followed at once by a return, outside the loop. <bookmark mark='d'/> Worth eleven percent of the array Job's instructions.",
+   "zh": "在外层循环里，有些值每次迭代都一样。<bookmark mark='a'/>如果一条指令的每个操作数都在循环之外定义，或者本身是不变的，这条指令就是循环不变的。<bookmark mark='b'/>这样的指令可以挪到前置块里，只算一次，而不是每个表项算一次。在 word 里，编译器外提了四条。新单词的第一个字母。表的地址。表项的个数。以及零是否小于 n，也就是内层循环的第一次测试。<bookmark mark='c'/>读内存要小心。只有当循环里没有任何东西可能写那块内存、也没有调用可能写它时，移动读取才是安全的。这里循环里根本没有写内存：唯一的一次写，给找到的单词计数，紧接着就是返回，在循环之外。<bookmark mark='d'/>值数组版任务百分之十一的指令。"
+  },
+  "d7efe7e671ae": {
+   "scene": "Loops",
+   "en": "The biggest win in the array Job is subtler. <bookmark mark='a'/> Each time round the scan, the code still computes the address of table of i from scratch: load twelve, multiply by i, add the table's address. <bookmark mark='b'/> But i goes up by one each time, so twelve i plus the table's address goes up by exactly twelve. i is an induction variable, and the address is an induction variable derived from it. <bookmark mark='c'/> So keep the address in a register of its own, start it at the table, and add twelve each time round. Four instructions, one of them a slow multiply, become one add. This is strength reduction of induction variables, one of the oldest loop optimizations: the FORTRAN I compiler already did a version of it. <bookmark mark='d'/> On the array Job it removes over a third of all instructions. And the result is exactly the pointer we wrote by hand in Part 6, which is how the compiler came to beat us: it found our trick, and did everything else a little better.",
+   "zh": "数组版任务上最大的收益更微妙。<bookmark mark='a'/>每扫一圈，代码仍然从头计算 table[i] 的地址：载入十二，乘以 i，加上表地址。<bookmark mark='b'/>可是 i 每次加一，所以十二乘 i 加表地址每次恰好加十二。i 是一个归纳变量，而地址是由它派生的归纳变量。<bookmark mark='c'/>所以把地址放在它自己的寄存器里，从表的起点开始，每转一圈加十二。四条指令，其中一条是慢的乘法，变成一次加法。这就是归纳变量的强度削弱，最古老的循环优化之一：FORTRAN I 编译器就已经做了它的一个版本。<bookmark mark='d'/>在数组版任务上，它去掉了全部指令的三分之一以上。结果正是我们在第6部分手写的那个指针，编译器就是这样胜过我们的：它找到了我们的诀窍，其余的每件事又都做得稍好一点。"
+  },
+  "1d7959410a41": {
+   "scene": "Loops",
+   "en": "Production compilers have many more loop transformations. <bookmark mark='a'/> Unrolling copies the body several times, so the loop tests once per four iterations instead of every one, and the scheduler has more independent work to interleave; the price is more code. <bookmark mark='b'/> Vectorization goes further and does four additions in one SIMD instruction, as in Part 10. Interchange and tiling reorder nested loops to suit the cache, as in Part 9. The polyhedral model treats a loop nest as a set of integer points in a polyhedron, and its transformations as affine maps, which lets a compiler search among them. <bookmark mark='c'/> Our compiler does none of these: Pebble has no vector instructions, and the Job's loops exit as soon as they find what they want.",
+   "zh": "生产级编译器还有多得多的循环变换。<bookmark mark='a'/>循环展开把循环体复制几份，这样每四次迭代才测试一次，调度器也有更多独立的工作可以交错；代价是代码更多。<bookmark mark='b'/>向量化更进一步，用一条 SIMD 指令做四次加法，就像第10部分那样。循环交换和分块重排嵌套循环以适应缓存，就像第9部分那样。多面体模型把一个循环嵌套看作多面体里的一组整数点，把变换看作仿射映射，让编译器可以在其中搜索。<bookmark mark='c'/>我们的编译器一样都没做：Pebble 没有向量指令，而任务的循环一找到要找的东西就会退出。"
+  },
+  "d74cd60b417b": {
+   "scene": "Inline",
+   "en": "Chapter nine. Inlining and aliasing.",
+   "zh": "第九章。内联与别名。"
+  },
+  "d50b965bc340": {
+   "scene": "Inline",
+   "en": "So far every optimization has worked inside one function. But a call is a wall: the caller cannot see what the callee does. <bookmark mark='a'/> In the list Job, lookup calls same for every entry of the right length, to compare the letters. <bookmark mark='b'/> Inlining copies same's body into lookup, in place of the call, with the arguments substituted for the parameters. <bookmark mark='c'/> That saves the call itself: moving the arguments, saving registers, the jump and the return. And more importantly, the body now sits inside the caller's loop, where the other passes can see it together with everything around it. <bookmark mark='d'/> The price is code size, and a copy for every call site. Our compiler inlines only small functions that are not recursive. Clang weighs an estimated cost against a threshold for each call site. <bookmark mark='e'/> On the list Job, inlining saves four percent. The array Job has no small function in its hot loop, so nothing changes.",
+   "zh": "到目前为止，每个优化都在一个函数内部工作。可是调用是一堵墙：调用者看不见被调用者做了什么。<bookmark mark='a'/>在链表版任务里，lookup 对每个长度相符的表项调用 same 来比较字母。<bookmark mark='b'/>内联把 same 的函数体复制进 lookup，替换那次调用，用实参代换形参。<bookmark mark='c'/>这省下了调用本身：搬运参数、保存寄存器、跳转和返回。更重要的是，函数体现在位于调用者的循环之内，其他的遍可以连同它周围的一切一起看到它。<bookmark mark='d'/>代价是代码体积，每个调用点一份拷贝。我们的编译器只内联不递归的小函数。clang 对每个调用点估计一个代价，再和阈值比较。<bookmark mark='e'/>在链表版任务上，内联省下百分之四。数组版任务的热循环里没有小函数，所以什么都没变。"
+  },
+  "4c16425f31d1": {
+   "scene": "Inline",
+   "en": "Where inlining does not apply, a compiler can still reason across calls. <bookmark mark='a'/> The call graph has a node for each function and an edge for each call. main calls lookup and report; lookup calls same and the allocator; report calls printnum. <bookmark mark='b'/> Analysing the graph from the bottom up, callees before callers, gives each function a summary. <bookmark mark='c'/> same reads memory but never writes it, and calls nothing. So a call to same cannot change p dot next, and a value loaded before the call is still good after it. <bookmark mark='d'/> Our compiler keeps no summaries, so for it any call is a wall: loop-invariant code motion gives up on a loop with a call in it, until inlining removes the call. Recursion makes the call graph cyclic, and then the summaries are found, once again, by iterating to a fixed point.",
+   "zh": "在不能内联的地方，编译器仍然可以跨调用推理。<bookmark mark='a'/>调用图为每个函数设一个结点，为每次调用设一条边。main 调用 lookup 和 report；lookup 调用 same 和分配器；report 调用 printnum。<bookmark mark='b'/>自底向上地分析这张图，先被调用者、后调用者，就给每个函数得到一份摘要。<bookmark mark='c'/>same 读内存但从不写，也不调用任何东西。所以调用 same 不可能改变 p.next，调用之前读出的值，调用之后依然有效。<bookmark mark='d'/>我们的编译器不保留摘要，所以对它来说任何调用都是一堵墙：循环不变代码外提遇到带调用的循环就放弃，直到内联把调用去掉。递归让调用图出现环，这时摘要又一次要通过迭代到不动点来求得。"
+  },
+  "ba2796da0e2b": {
+   "scene": "Inline",
+   "en": "Beneath all of this lies one question. <bookmark mark='a'/> Store one through p, store two through q, then load through p. Is the answer one? Only if p and q cannot point to the same place. If they might, the compiler must load again, and it cannot move either store past the other. <bookmark mark='b'/> Compilers answer the question in several ways. By type: a store of a byte cannot change a word, which is the rule our loop pass used, and C's strict aliasing rule extends the idea to every type. By address: a local whose address is never taken cannot be reached through any pointer. By points-to analysis, which computes the set of objects each pointer might hold; Andersen's and Steensgaard's algorithms trade precision against speed. And by promise: C's restrict keyword, or Rust's references, whose rules the type system checks.",
+   "zh": "这一切的底下藏着一个问题。<bookmark mark='a'/>通过 p 写入一，通过 q 写入二，再通过 p 读取。答案是一吗？只有当 p 和 q 不可能指向同一个地方时才是。如果有可能，编译器就必须重新读取，也不能把两次写中的任何一次挪到另一次之后。<bookmark mark='b'/>编译器用几种方式回答这个问题。按类型：写一个字节不可能改变一个字，这正是我们的循环遍用的规则，而 C 的严格别名规则把这个思想推广到每一种类型。按地址：一个从未被取地址的局部变量，不可能通过任何指针访问到。按指向分析，它计算每个指针可能持有的对象集合；安德森和斯廷斯高的算法在精度和速度之间取舍。还有按承诺：C 的 restrict 关键字，或者 Rust 的引用，它们的规则由类型系统来检查。"
+  },
+  "ff327590643c": {
+   "scene": "Inline",
+   "en": "Could a clever enough compiler always know? No. <bookmark mark='a'/> Rice's theorem, from 1953, says that every nontrivial question about what a program does is undecidable. <bookmark mark='b'/> Here is the idea for aliasing. Point p at y, run some arbitrary program M on some input, then point p at x, store through p and print x. <bookmark mark='c'/> Does the store through p ever change x? Only if the store is ever reached, which is exactly when M finishes. An exact alias analysis would solve the halting problem. <bookmark mark='d'/> So every real analysis answers yes, no, or maybe, and it is sound if it treats maybe as yes. It is never wrong, only sometimes slower than necessary. The proof of Rice's theorem is in Part 25. Every optimization in this part lives with that limit: it is allowed to miss chances, and never to change the meaning.",
+   "zh": "足够聪明的编译器总能知道吗？不能。<bookmark mark='a'/>莱斯定理，1953 年，说的是：关于程序做什么的每一个非平凡问题都是不可判定的。<bookmark mark='b'/>用在别名上，思路是这样的。让 p 指向 y，在某个输入上运行任意一个程序 M，然后让 p 指向 x，通过 p 写入，再打印 x。<bookmark mark='c'/>通过 p 的这次写会改变 x 吗？只有这次写真的被执行到才会，而那恰好是 M 结束的时候。精确的别名分析就能解决停机问题。<bookmark mark='d'/>所以每个实际的分析都回答“是”“否”或“也许”，如果它把“也许”当作“是”，它就是可靠的。它从不出错，只是有时比必要的慢。莱斯定理的证明在第25部分。这一部分的每个优化都与这个极限共处：它可以错过机会，但绝不能改变含义。"
+  },
+  "76b6e0a61abc": {
+   "scene": "ISel",
+   "en": "Chapter ten. Instruction selection.",
+   "zh": "第十章。指令选择。"
+  },
+  "67b9758787b4": {
+   "scene": "ISel",
+   "en": "The back end begins by choosing machine instructions. <bookmark mark='a'/> Think of the IR for a of i as a small tree: a load, of a plus i shifted left by two. <bookmark mark='b'/> Each Pebble instruction covers a pattern in such trees, a tile. A shift by a constant. An addition. And a load, which on Pebble can also add a constant offset to its address for free. <bookmark mark='c'/> Instruction selection covers the tree with tiles, every node exactly once. Here three tiles: shift, add, load. <bookmark mark='d'/> Each tile becomes one instruction. <bookmark mark='e'/> A field access like p dot count, a load of p plus twelve, fits a single tile, because the load's offset absorbs the addition.",
+   "zh": "后端从选择机器指令开始。<bookmark mark='a'/>把 a[i] 的 IR 想象成一棵小树：对 a 加上 i 左移两位的结果做一次读取。<bookmark mark='b'/>每条 Pebble 指令覆盖这种树里的一种图案，叫作一块砖。按常数移位。加法。还有读取，它在 Pebble 上还能免费地给地址加一个常数偏移。<bookmark mark='c'/>指令选择用砖块覆盖这棵树，每个结点恰好覆盖一次。这里是三块砖：移位、加法、读取。<bookmark mark='d'/>每块砖变成一条指令。<bookmark mark='e'/>像 p.count 这样的字段访问，也就是读 p 加十二，正好是一块砖，因为读取的偏移量吸收了这次加法。"
+  },
+  "9444389626c8": {
+   "scene": "ISel",
+   "en": "How should the tiles be chosen? The simplest method is called maximal munch. <bookmark mark='a'/> Start at the root of the tree, choose the largest tile that matches there, and recurse on whatever subtrees hang below the tile's leaves. Then emit the instructions in reverse, so that operands are computed before the operations that use them. <bookmark mark='b'/> For a load from p plus twelve, the largest tile is the load with an offset, one instruction, rather than an add followed by a load. <bookmark mark='c'/> It is greedy and takes linear time, and it is what our compiler does.",
+   "zh": "砖块该怎么选？最简单的方法叫最大吞噬。<bookmark mark='a'/>从树根开始，选出在那里能匹配的最大的砖，再对挂在这块砖叶子下面的子树递归。然后倒序输出指令，让操作数先于使用它们的运算被算出。<bookmark mark='b'/>对从 p 加十二处读取，最大的砖是带偏移的读取，一条指令，而不是一次加法后面跟一次读取。<bookmark mark='c'/>它是贪心的，只花线性时间，我们的编译器就是这么做的。"
+  },
+  "311e9d743318": {
+   "scene": "ISel",
+   "en": "Greedy choices are not always the cheapest. <bookmark mark='a'/> The cheapest tiling can be found by dynamic programming: the best cost of covering the subtree at v is the minimum, over every tile that matches at v, of that tile's cost plus the best costs of the subtrees at its leaves. <bookmark mark='b'/> Computed bottom-up, each subtree is solved once, and for a fixed set of tiles the whole tree takes linear time. Aho and Johnson gave the method in 1976, and tools like iburg generate such selectors from a grammar of tiles. <bookmark mark='c'/> Maximal munch's answer is only locally optimal: no two of its tiles could merge into a cheaper one. On a simple RISC machine like Pebble, with few and uniform instructions, that is rarely worse than the true optimum. <bookmark mark='d'/> One caution: real IRs are graphs that share subexpressions, not trees, and tiling a directed acyclic graph optimally is NP-hard. So production compilers, LLVM included, cut the graph into trees or use good heuristics.",
+   "zh": "贪心的选择并不总是最便宜的。<bookmark mark='a'/>最便宜的铺砖方式可以用动态规划求出：覆盖以 v 为根的子树的最佳代价，是在 v 处能匹配的每块砖中取最小值，砖的代价加上它叶子处各子树的最佳代价。<bookmark mark='b'/>自底向上地计算，每棵子树只解一次，对一组固定的砖块，整棵树只花线性时间。阿霍和约翰逊在 1976 年给出了这个方法，iburg 之类的工具能从一部砖块文法生成这样的选择器。<bookmark mark='c'/>最大吞噬的答案只是局部最优：它的任意两块砖都不能合并成更便宜的一块。在 Pebble 这样简单的 RISC 机器上，指令少而整齐，这很少比真正的最优差。<bookmark mark='d'/>要提醒一点：真实的 IR 是共享子表达式的图，不是树，而对有向无环图做最优铺砖是 NP 难的。所以生产级编译器，包括 LLVM，会把图切成树，或者使用好的启发式。"
+  },
+  "ae33d27abb18": {
+   "scene": "ISel",
+   "en": "Here is the whole of same, the letter comparison, on the left as IR and on the right as selected Pebble instructions. <bookmark mark='a'/> Most IR instructions become one instruction each. But the loop test is two IR instructions, a comparison producing a truth value and a branch on it, and Pebble can do both at once: branch if greater or equal. The selector fuses them, and inverts the condition so that the common case falls through into the loop body. <bookmark mark='b'/> The calling convention appears too: the three arguments arrive in registers a zero to a two, and are moved into the function's own names. <bookmark mark='c'/> But the code still uses virtual registers, as many as it likes. Pebble has thirteen that the compiler may allocate. Fitting the one into the other is the next chapter, and the deepest.",
+   "zh": "这是完整的 same，也就是字母比较，左边是 IR，右边是选出的 Pebble 指令。<bookmark mark='a'/>大多数 IR 指令各变成一条指令。可是循环测试是两条 IR 指令，一次产生真值的比较，以及根据它的分支，而 Pebble 能一次做完：大于等于则分支。选择器把它们融合起来，还把条件取反，让常见情况直接落进循环体。<bookmark mark='b'/>调用约定也出现了：三个参数到达寄存器 a0 到 a2，再被搬进函数自己的名字里。<bookmark mark='c'/>但代码用的仍然是虚拟寄存器，要多少有多少。Pebble 有十三个可供编译器分配的寄存器。把前者塞进后者，是下一章的内容，也是最深的一章。"
+  },
+  "bedd6f7629bb": {
+   "scene": "RegAlloc",
+   "en": "Chapter eleven. Register allocation.",
+   "zh": "第十一章。寄存器分配。"
+  },
+  "892c096ed940": {
+   "scene": "RegAlloc",
+   "en": "After selection, total uses seventeen virtual registers. Pebble has thirteen it may allocate, and bigger functions use hundreds. Which values may share a register? <bookmark mark='a'/> Two values interfere if both are live at the same point: both still needed. Then they need different registers. Values that never live at the same time can share one. <bookmark mark='b'/> Here is total after optimization, in SSA form. Notice the strength-reduced pointer i v two, stepping by four. <bookmark mark='c'/> Draw a node for each value and an edge for each pair that interferes, and you have the interference graph: seventeen nodes, forty-one edges. <bookmark mark='d'/> For instance, s dot two, the running sum, is still live when t ten is loaded, so they interfere.",
+   "zh": "选择指令之后，total 用了十七个虚拟寄存器。Pebble 有十三个可以分配，而更大的函数会用到几百个。哪些值可以共用一个寄存器？<bookmark mark='a'/>如果两个值在同一点都活跃，也就是都还要用，它们就冲突。冲突的值需要不同的寄存器。从不同时活跃的值可以共用一个。<bookmark mark='b'/>这是优化后、SSA 形式的 total。注意经过强度削弱的指针 iv2，每次加四。<bookmark mark='c'/>为每个值画一个结点，为每对冲突的值连一条边，就得到冲突图：十七个结点，四十一条边。<bookmark mark='d'/>比如，读入 t10 时，累加和 s.2 仍然活跃，所以它们冲突。"
+  },
+  "d9e8334d61dc": {
+   "scene": "RegAlloc",
+   "en": "So the problem becomes a famous one. <bookmark mark='a'/> Give each register a colour. Assign every node a colour so that no edge joins two nodes of the same colour, and you have assigned every value a register so that no two values needed at once share one. <bookmark mark='b'/> Our allocator colours this graph with five colours. <bookmark mark='c'/> And five is the minimum, because the graph contains a clique of five: five values all live at the same moment, each adjacent to all the others.",
+   "zh": "于是问题变成了一个著名的问题。<bookmark mark='a'/>给每个寄存器一种颜色。给每个结点上色，使得没有一条边连着两个同色的结点，你就给每个值分配了一个寄存器，而且同时需要的两个值不会共用一个。<bookmark mark='b'/>我们的分配器用五种颜色给这张图着色。<bookmark mark='c'/>五是最少的，因为图里有一个五个结点的团：五个在同一时刻都活跃的值，两两相邻。"
+  },
+  "749ecbb6655b": {
+   "scene": "RegAlloc",
+   "en": "Gregory Chaitin and his colleagues at IBM built the first allocator of this kind in 1981. <bookmark mark='a'/> Simplify: suppose a node has fewer neighbours than there are registers. However its neighbours are coloured, one colour is left for it. So remove it, push it on a stack, and repeat on the smaller graph. Kempe used the same trick in 1879, in a flawed proof of the four colour theorem. <bookmark mark='b'/> If every remaining node has too many neighbours, pick one to spill: it lives in memory, stored after each definition and loaded before each use. Choose the cheapest, a value used rarely, with many neighbours, outside any loop. <bookmark mark='c'/> Select: pop the nodes back off the stack and give each a colour its neighbours do not have. <bookmark mark='d'/> Two refinements matter a great deal. Coalescing merges the two ends of a copy into one node, so the copy disappears; this is how the copies left by phis vanish. Briggs and George gave tests for when merging is safe. <bookmark mark='e'/> And rematerialization: a value that is a constant or an address need not be stored at all, only recomputed where it is needed.",
+   "zh": "IBM 的格雷戈里·蔡廷和同事在 1981 年造出了第一个这种分配器。<bookmark mark='a'/>化简：假设一个结点的邻居比寄存器少。不管它的邻居怎样着色，总会剩下一种颜色给它。所以把它拿掉，压进栈里，在更小的图上重复。肯普在 1879 年用过同样的技巧，那是四色定理的一个有缺陷的证明。<bookmark mark='b'/>如果剩下的每个结点邻居都太多，就挑一个溢出：它住在内存里，每次定义后写回，每次使用前读入。挑代价最小的，一个很少用、邻居很多、不在任何循环里的值。<bookmark mark='c'/>选色：把结点一个个从栈里弹出，给每个一种它的邻居没有的颜色。<bookmark mark='d'/>有两个改进非常重要。合并把一次复制的两端并成一个结点，这样复制就消失了；φ 留下的复制就是这样消失的。布里格斯和乔治给出了判断何时合并安全的检验。<bookmark mark='e'/>还有再物化：一个常量或地址根本不必存起来，只需在用到的地方重新算出来。"
+  },
+  "a278855754f1": {
+   "scene": "RegAlloc",
+   "en": "How good can an allocator be? <bookmark mark='a'/> Deciding whether a graph can be coloured with a given number of colours is NP-complete, one of Karp's twenty-one problems of 1972, and it stays hard even for three colours. <bookmark mark='b'/> And Chaitin showed that every graph is the interference graph of some program. Given any graph, write a program that defines a value per node and uses each pair of neighbours together. <bookmark mark='c'/> So finding the fewest registers for an arbitrary program is NP-hard, and allocators settle for heuristics. <bookmark mark='d'/> What NP-hard means, and why most people believe it really is hard, is Part 26.",
+   "zh": "分配器能做得多好？<bookmark mark='a'/>判断一张图能否用给定数目的颜色着色是 NP 完全的，这是卡普 1972 年那二十一个问题之一，而且即使只有三种颜色也仍然困难。<bookmark mark='b'/>蔡廷还证明了：每一张图都是某个程序的冲突图。给定任意一张图，写一个程序，每个结点定义一个值，每对邻居一起使用。<bookmark mark='c'/>所以为任意程序找出最少的寄存器是 NP 难的，分配器只好满足于启发式。<bookmark mark='d'/>NP 难是什么意思，以及为什么大多数人相信它真的很难，是第26部分的内容。"
+  },
+  "a555bf8dd0e4": {
+   "scene": "RegAlloc",
+   "en": "Then, in 2006, came a surprise. <bookmark mark='a'/> A graph is chordal if every cycle of four or more nodes has a chord, an edge cutting across it. <bookmark mark='b'/> Sebastian Hack and his colleagues proved, and Bouchez and Brisk independently, that the interference graph of any program in SSA form is chordal. <bookmark mark='c'/> The reason is the dominator tree again. In SSA, each value is defined once, and it is live only on a connected region below its definition: a subtree of the dominator tree. And graphs made of overlapping subtrees of a tree are always chordal. <bookmark mark='d'/> Chordal graphs are easy. Order the nodes by maximum cardinality search, colour them greedily in that order, and you use exactly as many colours as the largest clique, which is the minimum possible. In linear time. <bookmark mark='e'/> Our compiler checks it on every function of the Job. In SSA form all five graphs are chordal, and colour optimally. After the phis are turned into copies, four of the five are no longer chordal.",
+   "zh": "然后，2006 年，来了一个惊喜。<bookmark mark='a'/>如果一张图里每个四个或更多结点的环都有一条弦，也就是一条横切过去的边，这张图就是弦图。<bookmark mark='b'/>塞巴斯蒂安·哈克和同事证明了，布谢和布里斯克也独立证明了：任何 SSA 形式程序的冲突图都是弦图。<bookmark mark='c'/>原因又是支配树。在 SSA 里，每个值只定义一次，它只在定义下方一个连通的区域里活跃：支配树的一棵子树。而由一棵树的若干子树重叠构成的图总是弦图。<bookmark mark='d'/>弦图很容易。按最大势搜索给结点排序，按这个顺序贪心着色，用的颜色恰好等于最大团的大小，这是可能的最小值。而且是线性时间。<bookmark mark='e'/>我们的编译器在任务的每个函数上都检查了这一点。在 SSA 形式里，五张图全是弦图，都能最优着色。φ 变成复制之后，五张里有四张不再是弦图。"
+  },
+  "fc86e7d0eab6": {
+   "scene": "RegAlloc",
+   "en": "Here is what goes wrong. <bookmark mark='a'/> In the function same, after the phis become copies on the loop's back edge, these four values form a cycle: each interferes with the next. <bookmark mark='b'/> But neither diagonal is an edge. A cycle of four with no chord is a hole, and the graph is no longer chordal. The primed values are the copies, which overlap the originals they copy. <bookmark mark='c'/> The lesson for compiler writers is to colour while the program is still in SSA form, where it is easy, and deal with the copies afterwards, by coalescing. The libFirm compiler, Hack's own, is built this way; LLVM and GCC leave SSA first and rely on heuristics.",
+   "zh": "问题出在这里。<bookmark mark='a'/>在函数 same 里，φ 变成循环回边上的复制之后，这四个值构成一个环：每个都与下一个冲突。<bookmark mark='b'/>可是两条对角线都不是边。没有弦的四元环是一个洞，这张图不再是弦图。带撇号的值是复制出来的，它们和被复制的原值重叠。<bookmark mark='c'/>给编译器作者的教训是：趁程序还在 SSA 形式、着色还容易的时候着色，然后再通过合并处理复制。哈克自己的 libFirm 编译器就是这样搭建的；LLVM 和 GCC 先离开 SSA，再依靠启发式。"
+  },
+  "032a15b0a008": {
+   "scene": "RegAlloc",
+   "en": "How much do registers matter? We compiled the list Job with fewer and fewer registers available. <bookmark mark='a'/> With all thirteen it executes seven hundred and sixty-seven thousand instructions on the first chapter. With ten, eight, then six, the count climbs, because more copies survive and more values must be saved around calls. At five and four, values begin to spill into memory, and the count reaches one point one five million, half as much again. <bookmark mark='b'/> Notice one oddity: the single spill with thirteen registers disappears with six. The heuristics are not monotone, and real allocators show the same quirks. <bookmark mark='c'/> Just-in-time compilers, which must compile in milliseconds, often use linear scan instead, from Poletto and Sarkar in 1999. It treats each live range as an interval, sorts the intervals, and assigns registers in one pass: a little worse than colouring, and much faster.",
+   "zh": "寄存器有多重要？我们给链表版任务的可用寄存器越来越少，再编译它。<bookmark mark='a'/>有全部十三个时，它在第一章上执行七十六万七千条指令。十个、八个、再到六个，指令数一路上升，因为留下的复制更多，调用前后要保存的值也更多。到五个和四个时，值开始溢出到内存，指令数达到一百一十五万，多了一半。<bookmark mark='b'/>注意一个怪现象：十三个寄存器时的那一次溢出，到六个时反而消失了。启发式不是单调的，真实的分配器也有同样的怪癖。<bookmark mark='c'/>即时编译器必须在几毫秒内编译完，所以常常改用线性扫描，这是波莱托和萨卡 1999 年提出的。它把每个活跃范围看作一个区间，给区间排序，一遍就分配好寄存器：比着色稍差，却快得多。"
+  },
+  "c8536535f4c6": {
+   "scene": "Schedule",
+   "en": "Chapter twelve. Scheduling and the pipeline.",
+   "zh": "第十二章。调度与流水线。"
+  },
+  "4258f13b5e9d": {
+   "scene": "Schedule",
+   "en": "The last job of the back end is to choose an order for the instructions within each block. <bookmark mark='a'/> Here is the inner loop of word: compare one letter. Add, load a byte, add, load a byte, branch if equal. <bookmark mark='b'/> Draw an edge from one instruction to another when the second must wait for the first. The first add produces the address the first load uses. <bookmark mark='c'/> The branch needs both loaded bytes, and on Part 7's pipeline a load's result arrives a cycle late: a branch right after the load it depends on stalls. <bookmark mark='d'/> And one edge is different. Instruction three overwrites t three, which instruction two reads. Three must wait for two, not because of any value, but because the register allocator chose to reuse t three. A false dependence, and an example of the two phases fighting: allocate first and you constrain the schedule; schedule first and you may need more registers.",
+   "zh": "后端的最后一项工作，是为每个块里的指令选一个顺序。<bookmark mark='a'/>这是 word 的内层循环：比较一个字母。加法、读一个字节、加法、读一个字节、相等则分支。<bookmark mark='b'/>如果后一条指令必须等前一条，就从前一条向后一条连一条边。第一次加法产生第一次读取要用的地址。<bookmark mark='c'/>分支需要读出的两个字节，而在第7部分的流水线上，读取的结果晚一个周期才到：紧跟在它所依赖的读取后面的分支会停顿。<bookmark mark='d'/>还有一条边与众不同。第三条指令覆盖 t3，而第二条要读 t3。三必须等二，不是因为任何值，而是因为寄存器分配器选择了重用 t3。这是一个假依赖，也是两个阶段互相打架的例子：先分配寄存器，就约束了调度；先调度，又可能需要更多寄存器。"
+  },
+  "a11ae5d6d722": {
+   "scene": "Schedule",
+   "en": "The standard method is list scheduling. <bookmark mark='a'/> Keep a list of the instructions that are ready, because everything they wait for has been placed. Each cycle, place the ready instruction with the longest path to the end of the block, so the critical path starts as early as possible and independent work fills the gaps. Finding the very best order is NP-hard in general, and this greedy rule is what nearly everyone uses. <bookmark mark='b'/> In our block it cannot help much. Even with a spare register, removing the false dependence, the second load must still come right before the branch that needs it. A block of five instructions in a single chain has nothing to hide the delay behind. To do better, a scheduler must look across blocks, and across loop iterations.",
+   "zh": "标准的方法是列表调度。<bookmark mark='a'/>维护一张就绪指令的列表，所谓就绪，是它们等待的一切都已经安排好了。每个周期，安排到块末尾路径最长的那条就绪指令，让关键路径尽早开始，让独立的工作填补空隙。一般而言，找出最好的顺序是 NP 难的，而这条贪心规则几乎人人都在用。<bookmark mark='b'/>在我们这个块里，它帮不了多少。即使多给一个寄存器、去掉假依赖，第二次读取仍然必须紧挨在需要它的分支之前。五条指令连成一条链的块，没有任何东西可以用来掩盖延迟。要做得更好，调度器必须跨块看，跨循环迭代看。"
+  },
+  "9aaa34d79412": {
+   "scene": "Schedule",
+   "en": "How much does any of this matter? We ran the compiled Job on Part 7's pipeline, on a passage of three thousand bytes. <bookmark mark='a'/> The table shows the hand-written program, the compiled array version, the same scheduled, and the compiled list version. <bookmark mark='b'/> Scheduling removed fifty-two stalls out of eighty-three thousand: the Job's inner loops are chains of dependent loads, with nothing to interleave. <bookmark mark='c'/> And something stranger. The compiled program executes twelve percent fewer instructions than the hand-written one, yet takes twelve percent more cycles. <bookmark mark='d'/> The culprit is loop inversion. An inverted loop ends with a backward branch that is taken on every iteration but the last, and this pipeline, as Part 7 first built it, always predicts that a branch is not taken. Every iteration pays a flush.",
+   "zh": "这一切到底有多重要？我们在第7部分的流水线上，用一段三千字节的文字运行编译出来的任务。<bookmark mark='a'/>表里是手写的程序、编译出来的数组版、调度过的同一个程序，以及编译出来的链表版。<bookmark mark='b'/>调度在八万三千次停顿里去掉了五十二次：任务的内层循环是一串相互依赖的读取，没有东西可以交错。<bookmark mark='c'/>还有更奇怪的。编译出来的程序比手写的少执行百分之十二的指令，却多花百分之十二的周期。<bookmark mark='d'/>罪魁祸首是循环反转。反转后的循环以一条向后的分支结尾，除了最后一次，每次迭代都会跳转，而这条流水线，按第7部分最初的样子，总是预测分支不跳转。每次迭代都要付一次冲刷。"
+  },
+  "a07854b9abc5": {
+   "scene": "Schedule",
+   "en": "So give the pipeline the predictors Part 7 went on to build. <bookmark mark='a'/> With a two-bit counter per branch, the backward branches are learned after a couple of iterations. The compiled array Job now takes nine percent fewer cycles than the hand-written one. A tournament predictor gains a little more. <bookmark mark='b'/> The lesson is that a compiler always assumes a machine. Loop inversion is good only on a machine that predicts branches. <bookmark mark='c'/> And machines are designed for the code that compilers emit. The two evolve together, which is why a microarchitecture and its compiler are usually built by the same company.",
+   "zh": "那就给流水线装上第7部分后来造的预测器。<bookmark mark='a'/>每条分支配一个两位计数器，向后的分支转两圈就学会了。编译出来的数组版任务现在比手写的少用百分之九的周期。锦标赛预测器还能再多赚一点。<bookmark mark='b'/>教训是：编译器总是假定了一台机器。循环反转只在能预测分支的机器上才是好事。<bookmark mark='c'/>而机器又是为编译器生成的代码而设计的。两者共同演化，这就是为什么一种微体系结构和它的编译器通常出自同一家公司。"
+  },
+  "caa860e8da23": {
+   "scene": "Schedule",
+   "en": "The way past a chain inside one iteration is to overlap different iterations. <bookmark mark='a'/> Suppose each iteration loads, adds and stores. Start iteration two while iteration one is still adding, and iteration three while one stores and two adds. <bookmark mark='b'/> In the steady state, every cycle does a load for one iteration, an add for the previous one, and a store for the one before that, like the stages of Part 7's pipeline. <bookmark mark='c'/> This is software pipelining, or modulo scheduling, from Rau and Glaeser in 1981 and Monica Lam in 1988. It is essential on in-order and VLIW machines, which do exactly what the compiler says. An out-of-order core, as in Part 8, finds the same overlap by itself at run time, which is one reason static scheduling matters less on the processors in laptops and phones.",
+   "zh": "要越过一次迭代内部的依赖链，办法是让不同的迭代重叠。<bookmark mark='a'/>假设每次迭代读取、相加、写回。在第一次迭代还在相加时开始第二次，在第一次写回、第二次相加时开始第三次。<bookmark mark='b'/>进入稳定状态后，每个周期都为一次迭代读取，为前一次相加，为再前一次写回，就像第7部分流水线的各级。<bookmark mark='c'/>这就是软件流水，也叫模调度，出自 1981 年的劳与格莱泽，以及 1988 年的莫妮卡·拉姆。对顺序执行和 VLIW 机器来说它必不可少，因为这些机器完全照编译器说的做。乱序核心，就像第8部分那样，会在运行时自己找到同样的重叠，这也是静态调度在笔记本和手机的处理器上没那么重要的原因之一。"
+  },
+  "55d628296ff5": {
+   "scene": "Job",
+   "en": "Chapter thirteen. The Job, compiled.",
+   "zh": "第十三章。编译出来的任务。"
+  },
+  "053d4c946305": {
+   "scene": "Job",
+   "en": "Now the whole compiler, measured. We compiled both versions of the Job with one pass after another switched on, and counted the instructions each executes on the first chapter of Pride and Prejudice. <bookmark mark='a'/> With no optimization, every variable lives in memory, and the array Job runs four and a half million instructions. <bookmark mark='b'/> Register allocation alone cuts that by almost two thirds. <bookmark mark='c'/> Loop inversion takes a little more. Converting to SSA makes things slightly worse, because the copies it leaves behind are not all coalesced away, and constant propagation finds almost nothing. <bookmark mark='d'/> Value numbering takes a fifth. Moving invariant code out of the loop takes a tenth. <bookmark mark='e'/> And strength reduction of the table index takes over a third, landing below the dashed line: the hand-written program of Part 6. Inlining helps only the list Job, which calls same in its loop. <bookmark mark='f'/> Notice that the order of the bars is not the order of importance. Two passes, registers and induction variables, did most of the work; the others prepared the ground for them.",
+   "zh": "现在来测量整个编译器。我们把两个版本的任务编译多次，一个遍接一个遍地打开，数出每次在《傲慢与偏见》第一章上执行的指令数。<bookmark mark='a'/>不加优化时，每个变量都住在内存里，数组版任务要执行四百五十万条指令。<bookmark mark='b'/>单是寄存器分配就砍掉了将近三分之二。<bookmark mark='c'/>循环反转再拿走一点。转换成 SSA 反而让情况稍微变差，因为它留下的复制没有全部被合并掉，而常量传播几乎什么也没找到。<bookmark mark='d'/>值编号拿走五分之一。把不变代码移出循环拿走十分之一。<bookmark mark='e'/>表下标的强度削弱拿走三分之一以上，落到虚线之下：那是第6部分手写的程序。内联只对链表版任务有用，它在循环里调用 same。<bookmark mark='f'/>注意，条形的顺序并不是重要性的顺序。两个遍，寄存器和归纳变量，做了大部分工作；其他的遍为它们铺平了道路。"
+  },
+  "e3b0d343bcf8": {
+   "scene": "Job",
+   "en": "Like gcc and clang, our compiler groups its passes into levels. <bookmark mark='a'/> Level zero keeps every variable in memory, so a debugger can always find it, and runs six times as many instructions as level two. Level one allocates registers. Level two adds loop inversion, SSA and every pass we have seen. Level three adds inlining, which leaves the array Job unchanged. <bookmark mark='b'/> Against these, the hand-written program of Part 6, and its linked version from Part 11, which used a library routine for printing. The compiled program executes fewer instructions than either.",
+   "zh": "和 gcc、clang 一样，我们的编译器把它的遍分成几个级别。<bookmark mark='a'/>第零级把每个变量都放在内存里，好让调试器总能找到它，执行的指令是第二级的六倍。第一级分配寄存器。第二级加上循环反转、SSA 和我们见过的每一个遍。第三级再加上内联，数组版任务因此毫无变化。<bookmark mark='b'/>拿来对比的，是第6部分手写的程序，以及第11部分的链接版，它用一个库例程来打印。编译出来的程序比两者执行的指令都少。"
+  },
+  "d789e8573381": {
+   "scene": "Job",
+   "en": "But instructions are not time. On the out-of-order core of Part 8, on six passages of text: <bookmark mark='a'/> the compiled program executes eleven percent fewer instructions, and takes about the same number of cycles, one or two percent more. <bookmark mark='b'/> The core runs several instructions per cycle, so the hand-written program's extra instructions cost almost nothing: they run in the shadow of loads. Both programs wait on the same chain of loads, one table entry after another, and that chain is the same length however the instructions around it are written. <bookmark mark='c'/> And level zero, by comparison, is four point four times slower. Optimization matters; the last ten percent of it, on a modern core, often does not.",
+   "zh": "可是指令数不等于时间。在第8部分的乱序核心上，用六段文字测试：<bookmark mark='a'/>编译出来的程序少执行百分之十一的指令，周期数却差不多，多了百分之一到二。<bookmark mark='b'/>这个核心每个周期执行好几条指令，所以手写程序多出来的指令几乎不花代价：它们在读取的阴影里运行。两个程序都在等同一串读取，一个表项接一个表项，而不管周围的指令怎样写，这条链都一样长。<bookmark mark='c'/>相比之下，第零级要慢四点四倍。优化很重要；而在现代核心上，最后那百分之十的优化往往不重要。"
+  },
+  "13c9c90ff389": {
+   "scene": "Job",
+   "en": "So the ledger gets its sixth row. <bookmark mark='a'/> The Job compiled from the Pebble language, on one core of Part 8's machine, would take about fifty-eight seconds on all thirty novels, against fifty-seven for the hand-written program. Unoptimized, it would take over four minutes. <bookmark mark='b'/> This row is not about speed. It is FORTRAN's promise, kept: the program now comes from a readable source, with names, types and loops, and it runs as fast as our best hand-written assembly. The speed-ups to come, in Parts 16 and 17, will come from changing the algorithm, and the compiler will carry them to the machine.",
+   "zh": "于是账本有了第六行。<bookmark mark='a'/>用 Pebble 语言编译出来的任务，在第8部分机器的一个核心上，处理全部三十部小说大约要五十八秒，手写程序是五十七秒。不加优化，要四分钟以上。<bookmark mark='b'/>这一行讲的不是速度。它讲的是 FORTRAN 的承诺兑现了：程序现在来自一份可读的源代码，有名字、类型和循环，而它跑得和我们最好的手写汇编一样快。接下来的提速，在第16和第17部分，会来自改变算法，而编译器会把它们带到机器上。"
+  },
+  "6b50faa3b287": {
+   "scene": "Job",
+   "en": "The same pattern holds on a real machine. <bookmark mark='a'/> Here is the C version of the Job, from Part 10, compiled by gcc at each level and run on this computer over the whole of Pride and Prejudice. Level zero takes two hundred and fifteen milliseconds. Level one, a hundred and fifteen: registers, mostly. <bookmark mark='b'/> Levels two and three add nothing, and are even a little slower. The Job scans its table, and the scan waits on memory, which no compiler can make shorter. <bookmark mark='c'/> A real compiler, a real processor, and the same lesson.",
+   "zh": "在真实的机器上，规律也一样。<bookmark mark='a'/>这是第10部分的 C 版任务，用 gcc 在每个级别编译，在这台计算机上处理整部《傲慢与偏见》。第零级花两百一十五毫秒。第一级，一百一十五毫秒：主要是寄存器的功劳。<bookmark mark='b'/>第二级和第三级没有带来任何好处，甚至稍慢一点。任务在扫描它的表，而扫描在等内存，这是任何编译器都缩短不了的。<bookmark mark='c'/>真实的编译器，真实的处理器，同样的教训。"
+  },
+  "ffd07ac452fd": {
+   "scene": "Correct",
+   "en": "Chapter fourteen. Is the compiler right?",
+   "zh": "第十四章。编译器对吗？"
+  },
+  "fce4f549815e": {
+   "scene": "Correct",
+   "en": "A compiler bug is worse than most bugs. <bookmark mark='a'/> The source is right and the machine code is not. There is no crash and no warning, only a different answer, and the programmer will look everywhere except the compiler. <bookmark mark='b'/> Every pass must preserve the meaning of every program, <bookmark mark='c'/> and that includes strange programs no human would write, but that inlining and macros produce all the time. <bookmark mark='d'/> In C, undefined behaviour adds a twist, as Part 11 showed: the compiler may assume it never happens, so a program that relies on it can change meaning between optimization levels, and that is not a compiler bug.",
+   "zh": "编译器的错误比大多数错误都糟。<bookmark mark='a'/>源代码是对的，机器码却是错的。没有崩溃，没有警告，只有一个不同的答案，而程序员会找遍每个地方，唯独不查编译器。<bookmark mark='b'/>每个遍都必须保持每个程序的含义，<bookmark mark='c'/>其中包括那些没有人会写、却经常由内联和宏产生出来的古怪程序。<bookmark mark='d'/>在 C 里，未定义行为又添了一层曲折，就像第11部分讲过的：编译器可以假定它永远不会发生，所以依赖它的程序在不同的优化级别下可能改变含义，而那并不是编译器的错误。"
+  },
+  "ee4d8e1a2c19": {
+   "scene": "Correct",
+   "en": "How do you find such bugs? In 2011 a group at the University of Utah built Csmith. <bookmark mark='a'/> It generates random C programs, large and strange, but carefully free of undefined behaviour, so every program has exactly one correct output. <bookmark mark='b'/> Compile each with many compilers at many levels, run them all, and compare. <bookmark mark='c'/> If the outputs disagree, at least one compiler is wrong, and the program is a test case. <bookmark mark='d'/> They reported more than three hundred and twenty-five bugs in gcc and LLVM. Every compiler they tried could be made to crash or to produce wrong code, except in one place: the parts of CompCert that had been proved correct, where they found no wrong-code bugs at all.",
+   "zh": "怎样找到这样的错误？2011 年，犹他大学的一个小组造出了 Csmith。<bookmark mark='a'/>它生成随机的 C 程序，又大又怪，但小心地避开了未定义行为，所以每个程序都恰好有一个正确输出。<bookmark mark='b'/>用许多编译器、在许多级别上编译每个程序，全部运行，再比较。<bookmark mark='c'/>如果输出不一致，至少有一个编译器是错的，而这个程序就是一个测试用例。<bookmark mark='d'/>他们在 gcc 和 LLVM 里报告了三百二十五个以上的错误。他们试过的每个编译器都能被弄崩溃或生成错误的代码，只有一个地方例外：CompCert 中已经被证明正确的部分，在那里他们一个错误代码的问题都没找到。"
+  },
+  "610519b42e35": {
+   "scene": "Correct",
+   "en": "We did the same to our own compiler. <bookmark mark='a'/> A generator writes random Pebble programs, with nested loops, arrays, pointers and globals. Every loop is bounded, every index is reduced into range, and every divisor is a square plus one, so it is never zero. <bookmark mark='b'/> The reference is the IR interpreter, which runs the program with no optimizer at all. <bookmark mark='c'/> We generated two hundred and forty programs, each about eighty lines. Fifty ran too long for the interpreter's step limit and were set aside. <bookmark mark='d'/> The other hundred and ninety, compiled at all four levels and run on the emulator, gave no mismatches. <bookmark mark='e'/> That was not true while the compiler was being built. The fuzzer found that a parameter assigned in the entry block was never renamed into SSA, which broke nine programs. And it found a bug in the reference itself: the interpreter assumed that dividing by zero gives minus one, as RISC-V does, but Pebble traps. A tester is only as good as its notion of the right answer.",
+   "zh": "我们对自己的编译器做了同样的事。<bookmark mark='a'/>一个生成器写出随机的 Pebble 程序，带有嵌套循环、数组、指针和全局变量。每个循环都有界，每个下标都被约束到范围之内，每个除数都是一个平方数加一，所以永远不为零。<bookmark mark='b'/>参考答案来自 IR 解释器，它完全不经优化器就运行程序。<bookmark mark='c'/>我们生成了两百四十个程序，每个大约八十行。有五十个运行时间超出了解释器的步数上限，被放在一边。<bookmark mark='d'/>其余一百九十个，在全部四个级别上编译，在模拟器上运行，没有一个不一致。<bookmark mark='e'/>在编译器还在搭建的时候，情况并非如此。模糊测试发现：在入口块里被赋值的参数从未被改名进 SSA，这弄坏了九个程序。它还发现了参考答案本身的错误：解释器以为除以零得到负一，就像 RISC-V 那样，可是 Pebble 会陷入异常。测试者的好坏，取决于它对正确答案的理解。"
+  },
+  "268cde5bae51": {
+   "scene": "Correct",
+   "en": "Testing samples a few inputs. For the small algebraic rules of chapter seven we can do better, and check every input at once. <bookmark mark='a'/> Ask an SMT solver, here z3: is there any thirty-two-bit x for which the two sides differ? If the answer is no, the rule is proved. If yes, the solver hands back an x. <bookmark mark='b'/> Multiplying by eight is shifting by three: proved. Dividing by two is shifting right by one: false, at x equals minus one. The correct version adds the sign bit before shifting: proved. x plus one is greater than x: false at the largest integer, where it overflows. And x times three, divided by three, is x: false, at a number the solver found by itself. <bookmark mark='c'/> In 2015 the Alive project translated three hundred and thirty-four of LLVM's peephole rules into this form, and found eight that were wrong.",
+   "zh": "测试只是抽查几个输入。对第七章那些小的代数规则，我们可以做得更好，一次检查所有输入。<bookmark mark='a'/>问一个 SMT 求解器，这里用 z3：是否存在某个三十二位的 x，使两边不相等？如果答案是没有，规则就得到了证明。如果有，求解器会交回一个 x。<bookmark mark='b'/>乘以八等于左移三位：已证明。除以二等于右移一位：错，在 x 等于负一时。正确的版本在移位之前先加上符号位：已证明。x 加一大于 x：错，在最大的整数处，那里会溢出。x 乘三再除以三等于 x：错，在求解器自己找到的一个数上。<bookmark mark='c'/>2015 年，Alive 项目把 LLVM 的三百三十四条窥孔规则翻译成这种形式，发现其中八条是错的。"
+  },
+  "ca2babd45c96": {
+   "scene": "Correct",
+   "en": "These are rungs on a ladder. <bookmark mark='a'/> Differential testing finds bugs, but can never show there are none. <bookmark mark='b'/> Rule checking proves each small rewrite correct. <bookmark mark='c'/> Translation validation proves each compilation correct after the fact: a separate checker confirms that this output means the same as this input, and if it cannot, the build fails. <bookmark mark='d'/> And a verified compiler is proved correct once, for every program. Xavier Leroy's CompCert, a C compiler written and proved in the Coq proof assistant, is the landmark; Airbus uses it for flight software. <bookmark mark='e'/> How such proofs work is Part 54. And Part 55, the finale, asks the strangest question of all: Ken Thompson's compiler that lies about itself, and whether you can trust any compiler you did not write.",
+   "zh": "这些是一架梯子上的几级横档。<bookmark mark='a'/>差分测试能发现错误，但永远无法证明没有错误。<bookmark mark='b'/>规则检查证明每一条小的改写是正确的。<bookmark mark='c'/>翻译确认在事后证明每一次编译是正确的：一个独立的检查器确认这份输出和这份输入含义相同，如果确认不了，构建就失败。<bookmark mark='d'/>而经过验证的编译器只需证明一次，对所有程序都正确。泽维尔·勒鲁瓦的 CompCert，一个用 Coq 证明助手写成并证明的 C 编译器，是这方面的里程碑；空客用它来编译飞行软件。<bookmark mark='e'/>这样的证明怎样进行，是第54部分的内容。而第55部分，也就是终章，会问一个最奇怪的问题：肯·汤普森那个对自己撒谎的编译器，以及你能否信任任何一个不是你自己写的编译器。"
+  },
+  "a6f7247c1370": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: searching for the best program.",
+   "zh": "第十五章。前沿：搜索最好的程序。"
+  },
+  "5a0c1a1cfd03": {
+   "scene": "Frontier",
+   "en": "Despite the name, an optimizing compiler does not optimize. <bookmark mark='a'/> It applies rules that usually help, and nothing guarantees that the result is the best program possible. <bookmark mark='b'/> In fact no compiler can always find the best. Consider this program: one instruction that jumps to itself. It is the smallest program that runs forever and prints nothing. <bookmark mark='c'/> A compiler that always produced the smallest equivalent program would output exactly this whenever its input never halts, and so it would decide the halting problem. <bookmark mark='d'/> Andrew Appel calls this the full employment theorem for compiler writers: there will always be a better optimizer to build. But for short pieces of code, we can search.",
+   "zh": "尽管名字如此，优化编译器并不真正求最优。<bookmark mark='a'/>它应用的是通常有帮助的规则，没有任何东西保证结果是可能的最好程序。<bookmark mark='b'/>事实上，没有哪个编译器总能找到最好的。看这个程序：一条跳到自己的指令。它是永远运行、什么也不打印的最小程序。<bookmark mark='c'/>一个总能产生最小等价程序的编译器，在输入永不停机时就会恰好输出它，于是它就判定了停机问题。<bookmark mark='d'/>安德鲁·阿佩尔把这叫作编译器作者的充分就业定理：总会有更好的优化器等着人去造。不过对短小的代码片段，我们可以去搜索。"
+  },
+  "8702cac5ace9": {
+   "scene": "Frontier",
+   "en": "In 1987 Henry Massalin built the first superoptimizer. <bookmark mark='a'/> Enumerate every instruction sequence of length one, then two, then three. Run each on a few dozen test inputs, and throw away any that disagrees with the target function. <bookmark mark='b'/> Then prove the survivors correct for every input. Massalin checked his mostly by hand; we can ask z3. <bookmark mark='c'/> Ours finds the shortest Pebble programs for these small functions. Is x nonzero: one instruction. Is x equal to y: two. Clear the lowest set bit: two. <bookmark mark='d'/> Absolute value without a branch: three. Shift right by thirty-one, which gives zero or minus one; add it; exclusive-or with it. For a negative x, that subtracts one and flips every bit, which is negation. Signed division by two, correct for negative numbers: three. And the minimum of two numbers, with no branch: four, using a multiply.",
+   "zh": "1987 年，亨利·马萨林造出了第一个超级优化器。<bookmark mark='a'/>枚举长度为一的每一个指令序列，然后是二，然后是三。在几十个测试输入上运行每一个，丢掉任何与目标函数不一致的。<bookmark mark='b'/>再证明幸存者对每个输入都正确。马萨林大多是手工检查的；我们可以问 z3。<bookmark mark='c'/>我们的超级优化器为这些小函数找到了最短的 Pebble 程序。x 是否非零：一条指令。x 是否等于 y：两条。清掉最低的一位 1：两条。<bookmark mark='d'/>不用分支的绝对值：三条。右移三十一位，得到零或负一；加上它；再与它做异或。对负的 x，这相当于减一再把每一位取反，也就是取负。对负数也正确的有符号除以二：三条。不用分支的两数最小值：四条，用到一次乘法。"
+  },
+  "a135bf36da9d": {
+   "scene": "Frontier",
+   "en": "The catch is the cost. <bookmark mark='a'/> The longest search at each length: a few milliseconds for one instruction, under a second for three, and four minutes for the four-instruction minimum, on a logarithmic scale. <bookmark mark='b'/> Each new instruction can be any of twenty operations, on any pair of the registers computed so far, so each extra instruction multiplies the search by hundreds. Pruning helps: a sequence whose new value was already computed some shorter way is skipped. But brute force runs out at about five instructions, far short of a whole function.",
+   "zh": "问题在于代价。<bookmark mark='a'/>每个长度下最长的那次搜索：一条指令几毫秒，三条指令不到一秒，四条指令的最小值要四分钟，这是对数刻度。<bookmark mark='b'/>每条新指令可以是大约二十种运算中的任意一种，作用在到目前为止算出的任意一对寄存器上，所以每多一条指令，搜索量就乘以几百。剪枝有帮助：如果一个序列的新值已经用更短的方式算过，就跳过它。可是蛮力搜索大约到五条指令就到头了，离一个完整的函数还差得远。"
+  },
+  "0104fcda9373": {
+   "scene": "Frontier",
+   "en": "Smarter search goes further. <bookmark mark='a'/> STOKE, from Stanford in 2013, takes a random walk through the space of x86 programs. Each step changes one instruction, and a step is kept with a probability that depends on a cost: how wrong the program is on the tests, plus how slow it is estimated to be. Walking downhill, mostly, it found loop bodies faster than gcc at its highest level, and as fast as expert hand-written assembly. <bookmark mark='b'/> Souper, from 2017, uses an SMT solver to synthesize smaller replacements for pieces of LLVM IR, and reports what it finds as optimizations the compiler is missing. Many have since been added to LLVM by hand. <bookmark mark='c'/> And AlphaDev, from DeepMind in 2023, used reinforcement learning to search assembly programs that sort three, four and five numbers. Its routines were shorter than the human ones, and they are now in LLVM's C++ library.",
+   "zh": "更聪明的搜索能走得更远。<bookmark mark='a'/>斯坦福 2013 年的 STOKE 在 x86 程序的空间里随机游走。每一步改一条指令，按一个依赖于代价的概率决定是否保留这一步：代价是程序在测试上错得有多厉害，加上估计它有多慢。大体上一路下坡，它找到了比 gcc 最高级别更快、和专家手写汇编一样快的循环体。<bookmark mark='b'/>2017 年的 Souper 用 SMT 求解器为 LLVM IR 的片段合成更小的替代品，并把找到的东西报告为编译器漏掉的优化。其中许多后来被人手工加进了 LLVM。<bookmark mark='c'/>还有 DeepMind 2023 年的 AlphaDev，用强化学习在汇编程序中搜索给三个、四个、五个数排序的例程。它的例程比人写的更短，如今已经进入 LLVM 的 C++ 库。"
+  },
+  "5689def000c0": {
+   "scene": "Frontier",
+   "en": "A newer idea attacks the phase-ordering problem of chapter seven head on. <bookmark mark='a'/> Take a times two, times two, and four rewrite rules, all true for thirty-two-bit integers. <bookmark mark='b'/> Apply one rule at a time and the order matters. Turn the inner multiply into a shift first, and you end with two shifts; the rule that would have combined the multiplies no longer applies. <bookmark mark='c'/> Equality saturation never chooses. It keeps an e-graph, in which each class holds expressions already known to be equal. a times two and a shifted by one share a class. So do two times two, and four. <bookmark mark='d'/> The whole expression's class collects every version the rules can reach: c one times two, c one shifted by one, a times c four, and a shifted by two. Rules are applied everywhere, again and again, until nothing new appears. <bookmark mark='e'/> Then the cheapest version is extracted: a single shift by two. Tate and others introduced the idea in 2009, and the egg library of 2021 made it fast; it is now used in compilers for hardware, for floating-point accuracy, and in Cranelift, a production code generator.",
+   "zh": "一个更新的想法正面攻击第七章的阶段顺序问题。<bookmark mark='a'/>拿 a 乘二再乘二，以及四条改写规则，它们对三十二位整数都成立。<bookmark mark='b'/>一次应用一条规则，顺序就很重要。先把里面的乘法变成移位，最后会得到两次移位；本来能把两次乘法合并起来的那条规则就用不上了。<bookmark mark='c'/>等式饱和从不做选择。它维护一个 e 图，其中每个类都装着已知相等的表达式。a 乘二和 a 左移一位在同一个类里。二乘二和四也在同一个类里。<bookmark mark='d'/>整个表达式的类收集规则能到达的每一个版本：c1 乘二、c1 左移一位、a 乘 c4，以及 a 左移两位。规则在各处一遍又一遍地应用，直到不再出现新东西。<bookmark mark='e'/>然后取出最便宜的版本：一次左移两位。泰特等人在 2009 年提出了这个想法，2021 年的 egg 库让它变快；如今它被用在硬件编译器里、浮点精度改进里，还有生产级代码生成器 Cranelift 里。"
+  },
+  "e4f429127f6f": {
+   "scene": "Frontier",
+   "en": "The other direction is to learn. <bookmark mark='a'/> A compiler is full of guesses. Inline this call? Spill which value? Unroll this loop how far? Each is a hand-tuned heuristic. <bookmark mark='b'/> In 2021 Google's MLGO project replaced LLVM's inlining heuristic with a small neural network, trained by reinforcement learning to make code smaller, and later did the same for which value the register allocator evicts. <bookmark mark='c'/> It saves a few percent of code size in production. <bookmark mark='d'/> The difficulties are practical: the guess must be fast, since it runs millions of times, and it must stay good as the programs being compiled change. <bookmark mark='e'/> How such policies are trained is the subject of our companion series, AI, Built.",
+   "zh": "另一个方向是学习。<bookmark mark='a'/>编译器里充满了猜测。内联这次调用吗？溢出哪个值？这个循环展开多少？每一个都是手工调好的启发式。<bookmark mark='b'/>2021 年，谷歌的 MLGO 项目用一个小神经网络替换了 LLVM 的内联启发式，用强化学习训练它让代码变小，后来又对寄存器分配器驱逐哪个值做了同样的事。<bookmark mark='c'/>它在生产中节省了百分之几的代码体积。<bookmark mark='d'/>困难都很实际：猜测必须快，因为它要运行几百万次；还必须在被编译的程序变化时依然好用。<bookmark mark='e'/>这样的策略怎样训练，是我们的姊妹系列《AI，从零搭建》的主题。"
+  },
+  "feccfe716031": {
+   "scene": "Frontier",
+   "en": "Here is where the field stands. <bookmark mark='a'/> SSA programs colour optimally in linear time, but deciding what to spill, and which copies to coalesce, remains NP-hard even on SSA. How well can these be approximated? <bookmark mark='b'/> Extracting the cheapest program from an e-graph is NP-hard once parts can be shared; which cost models are tractable? <bookmark mark='c'/> CompCert is proved correct, but its code runs at about the speed of gcc at level one. Can a verified compiler match level three? <bookmark mark='d'/> And can we superoptimize whole loops rather than five instructions, by search, by proof, or by learning? <bookmark mark='e'/> The research problem of this part takes up the first of these.",
+   "zh": "这个领域现在的状况是这样的。<bookmark mark='a'/>SSA 程序能在线性时间内最优着色，但决定溢出什么、合并哪些复制，即使在 SSA 上仍然是 NP 难的。这些能近似到什么程度？<bookmark mark='b'/>一旦各部分可以共享，从 e 图中取出最便宜的程序就是 NP 难的；哪些代价模型是可处理的？<bookmark mark='c'/>CompCert 被证明是正确的，但它生成的代码大约只有 gcc 第一级的速度。经过验证的编译器能达到第三级吗？<bookmark mark='d'/>我们能否超级优化整个循环，而不只是五条指令，靠搜索、靠证明，还是靠学习？<bookmark mark='e'/>这一部分的研究问题，处理的是其中的第一个。"
+  },
+  "bc4b73db99d9": {
+   "scene": "Outro",
+   "en": "What we built in this part. FORTRAN's promise, and the three-part shape of every compiler since. A checker for names, scopes, types and layouts. Three-address code, basic blocks and control-flow graphs; dominators, and the dominance frontiers where SSA places its phis. Dataflow analysis, as a least fixed point on a lattice. Constant propagation, value numbering, dead code elimination, loop inversion, invariant code motion, strength reduction and inlining, each measured on the Job. Instruction selection by tiling, register allocation by colouring, and the chordal graphs that make it easy in SSA. Scheduling, and the predictor a compiler takes for granted. A fuzzer and a solver to check it all, and a superoptimizer to search for what the rules miss.",
+   "zh": "这一部分我们搭建了什么。FORTRAN 的承诺，以及此后每个编译器的三段式形状。一个检查名字、作用域、类型和布局的检查器。三地址码、基本块和控制流图；支配者，以及 SSA 放置 φ 的支配边界。数据流分析，作为格上的最小不动点。常量传播、值编号、死代码消除、循环反转、不变代码外提、强度削弱和内联，每一个都在任务上测量。用铺砖做指令选择，用着色做寄存器分配，以及让它在 SSA 上变得容易的弦图。调度，以及编译器视为理所当然的预测器。用来检查这一切的模糊测试和求解器，还有一个去搜索规则漏掉之处的超级优化器。"
+  },
+  "9f5ec17d7e30": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 14 proves what the type checker's promises are worth, and Part 15 builds the runtimes where just-in-time compilers and garbage collectors live. Parts 16 and 17 replace the Job's algorithm, and the compiler carries the gain to the machine. Graph colouring and dynamic programming return in Parts 18 and 19, and Rice's theorem and NP-hardness are proved in Parts 25 and 26. Part 41 builds the system that runs the compiler, CompCert's proof is Part 54, Ken Thompson's self-reproducing compiler is the finale, and Part 60 compiles for accelerators.",
+   "zh": "这些会在哪里再出现。第14部分证明类型检查器的承诺值多少，第15部分搭建即时编译器和垃圾回收器所在的运行时。第16和第17部分替换任务的算法，而编译器把收益带到机器上。图着色和动态规划在第18和第19部分回归，莱斯定理和 NP 难在第25和第26部分得到证明。第41部分搭建运行编译器的那个系统，CompCert 的证明是第54部分，肯·汤普森的自我复制编译器是终章，第60部分为加速器做编译。"
+  },
+  "0df4f4c0a286": {
+   "scene": "Outro",
+   "en": "In practice. Ship at level two, debug at level zero, and use level three only where a measurement says it helps. Read what the compiler produced: Compiler Explorer shows the assembly for any line of source, and gcc and clang will report which optimizations fired and which were missed. Help the optimizer with restrict, const and static, and with profile-guided and link-time optimization. Browsers and the Java and dot NET runtimes compile in tiers, interpreting first and compiling what turns out to be hot. And compiler engineering is a career of its own, now especially for GPUs and machine learning, in projects like XLA, MLIR and Triton.",
+   "zh": "在实践中。发布用第二级，调试用第零级，只在测量表明有帮助的地方用第三级。看看编译器产生了什么：Compiler Explorer 能显示任何一行源代码对应的汇编，gcc 和 clang 会报告哪些优化生效了、哪些错过了。用 restrict、const 和 static 帮助优化器，再加上剖析引导优化和链接时优化。浏览器以及 Java 和 .NET 的运行时分层编译，先解释执行，再编译那些被证明很热的代码。编译器工程本身就是一种职业，如今尤其集中在 GPU 和机器学习上，比如 XLA、MLIR 和 Triton 这些项目。"
+  },
+  "a12513f468bd": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: our value numbering never merges two loads of the same address, which the demo function showed. Teach it to, safely, measure it, and let the fuzzer judge. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是动手题：我们的值编号从不合并对同一地址的两次读取，演示函数里就能看到。教会它安全地这样做，测量它，再让模糊测试来评判。最后一道标着星号，是研究问题：它的答案还没有人知道，笔记里说明了从哪里入手。"
+  },
+  "64f83021d983": {
+   "scene": "Outro",
+   "en": "Next time. A whole programming language made of nothing but functions, Church's lambda calculus. Types that tame it, a proof that well-typed programs cannot go wrong, and types inferred without being written. Part 14, Lambda and Types.",
+   "zh": "下一次。一种完全由函数构成的编程语言，丘奇的 λ 演算。驯服它的类型，一个证明良类型程序不会出错的证明，以及不写出来也能推断的类型。第14部分，λ 与类型。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 13, The Compiler",
+ "chapters_en": {
+  "Hook": "A program that writes programs",
+  "History": "1. FORTRAN, and the shape of a compiler",
+  "Semantic": "2. Names, scopes and types",
+  "IR": "3. Three-address code and the control-flow graph",
+  "Dominators": "4. Dominators",
+  "SSA": "5. Static single assignment",
+  "Dataflow": "6. Dataflow analysis and fixed points",
+  "Optimize": "7. Optimizations on SSA",
+  "Loops": "8. Loops",
+  "Inline": "9. Inlining and aliasing",
+  "ISel": "10. Instruction selection",
+  "RegAlloc": "11. Register allocation",
+  "Schedule": "12. Scheduling and the pipeline",
+  "Job": "13. The Job, compiled",
+  "Correct": "14. Is the compiler right?",
+  "Frontier": "15. Frontier: searching for the best program",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

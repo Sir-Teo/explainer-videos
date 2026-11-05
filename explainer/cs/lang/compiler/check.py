@@ -304,7 +304,9 @@ class Checker:
             if sig is None:
                 raise TypeError_(f"in {self.f.name}: no function {e.f.id}")
             if len(e.args) != len(sig.params):
-                raise TypeError_(f"in {self.f.name}: {e.f.id} takes {len(sig.params)} arguments")
+                k = len(sig.params)
+                raise TypeError_(f"in {self.f.name}: {e.f.id} takes {k} argument{'' if k == 1 else 's'}, "
+                                 f"not {len(e.args)}")
             for a, (_, pt) in zip(e.args, sig.params):
                 at = self.expr(a)
                 if not assignable(pt, at):

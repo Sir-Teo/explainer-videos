@@ -148,7 +148,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 10 | out-of-thin-air values (the load-buffering test enumerated, with and without value speculation) and the unsolved C/C++ memory model; work-stealing constants simulated, locality and heterogeneity open; dark silicon and Landauer's floor |
 | 11 | Robson's bound with its adversary run against first fit, and the open exact worst case of first and best fit; CompCert, Cerberus and pointer provenance; CHERI capabilities, a miniature on Pebble stopping the stack smash |
 | 12 | regex matching under SETH (Backurs–Indyk), with Thompson's m × n work measured; Valiant's parsing as matrix multiplication, Lee's converse and the clique-based lower bound; Brzozowski derivatives as minimal DFAs, and their revival in real engines |
-| 13 | equality saturation; superoptimization; verified compilation; ML-guided optimization |
+| 13 | a superoptimizer rebuilt (eight functions, shortest Pebble programs proved by z3; the exponential wall measured); rewrite rules refuted with counterexamples; STOKE, Souper, AlphaDev; equality saturation and e-graphs; MLGO; spilling on SSA left open |
 | 14 | dependent and cubical type theory; gradual-typing soundness; effect handlers; Hindley–Milner's DEXPTIME-completeness |
 | 15 | pause-time lower bounds for garbage collection; meta-tracing JITs; mechanized WebAssembly |
 | 16 | smoothed analysis; lower bounds beyond comparisons; fine-grained complexity |
@@ -961,41 +961,58 @@ Interpreters*.
 ### Part 13 · The Compiler (~60)
 *Story:* In 1957 FORTRAN had to produce code as good as hand-written code, or nobody would use it. The compiler
 turns a parse tree into a graph. On that graph, optimization becomes a fixed-point computation over lattices, and
-register allocation becomes graph coloring: NP-hard in general, but solvable in polynomial time on SSA programs.
-1. History: Hopper's A-0 (1952); FORTRAN (Backus 1957, eighteen person-years).
-2. Front end, IR, middle end, back end: the Pebble compiler pipeline.
-3. Semantic analysis: scopes, symbol tables, type checking.
-4. Three-address code, basic blocks, control-flow graphs.
-5. Dominators: the iterative algorithm and dominator trees; Lengauer–Tarjan mentioned.
-6. SSA (Cytron et al. 1991): φ-functions at dominance frontiers; renaming; why SSA makes optimizations simple.
-7. Dataflow analysis:
-   - liveness, reaching definitions, available expressions;
-   - monotone frameworks on lattices (Kildall 1973);
-   - fixed points (Knaster–Tarski, Kleene), with the iteration converging on screen.
-8. Optimizations: sparse conditional constant propagation, copy propagation, DCE, value numbering, strength
-   reduction.
-9. Loops: natural loops; invariant code motion; induction variables; unrolling.
-10. Inlining and interprocedural analysis; alias analysis, which is undecidable in general (Rice).
-11. Instruction selection: tree tiling by maximal munch and by dynamic programming.
-12. Register allocation:
-    - interference graphs and Chaitin's coloring (1981), NP-hard by reduction from coloring;
-    - simplify and spill;
-    - **SSA interference graphs are chordal** (Hack et al. 2006), so they color optimally in polynomial time;
-    - linear scan.
-13. Instruction scheduling: list scheduling on the dependence DAG; software pipelining (callback to Part 8).
-14. The Job compiled from the Pebble language, unoptimized against optimized. Ledger row 5.
-15. Correctness: Csmith's compiler bugs (Yang et al. 2011); translation validation; CompCert previewed (Part 54).
-16. LLVM and MLIR; superoptimization. Outro.
+register allocation becomes graph coloring: NP-hard in general, but solvable in polynomial time on SSA programs. Our
+own compiler, about 2,500 lines, beats Part 6's hand-written Job by 12% in instructions, and finds Part 6's pointer
+by itself.
+1. History: Hopper's A-0 (1952); FORTRAN (Backus 1957, eighteen person-years, "half as fast"); front, middle and
+   back ends; M + N instead of M × N (UNCOL 1958, GCC, LLVM); the list Job through every stage, counted.
+2. Semantic analysis: scopes as a stack of symbol tables (lexical scope, ALGOL 60); typing rules as inference rules;
+   four rejected programs; struct layout and alignment (`Node` 16 bytes, `Entry` 12); globals, virtual registers,
+   address-taken locals.
+3. Three-address code, basic blocks and leaders, control-flow graphs (Allen 1970); clang's LLVM IR beside ours.
+4. Dominators: the definition checked against "delete d"; the iterative algorithm (Cooper–Harvey–Kennedy; 2 passes
+   on every function of the Job); dominator trees; dominance frontiers; Lengauer–Tarjan mentioned.
+5. SSA (Cytron et al. 1991): φ-functions at iterated dominance frontiers, pruned; renaming down the dominator tree;
+   clang's `mem2reg` places the same φs; out-of-SSA copies.
+6. Dataflow analysis: liveness iterated on screen (14 visits); reaching definitions and available expressions;
+   monotone frameworks on lattices (Kildall 1973), the lattice of subsets and its height; Knaster–Tarski and Kleene;
+   meet-over-paths and Kam & Ullman.
+7. Optimizations: the constant lattice and SCCP (Wegman & Zadeck 1991); copy propagation and DCE as mark and sweep;
+   value numbering (−20% on the array Job); algebra and its traps; phase ordering (clang `-O2`: 88 pass runs).
+8. Loops: back edges and natural loops; loop inversion and preheaders; invariant code motion with a type-based load
+   rule; induction-variable strength reduction (−36%), which rediscovers Part 6's pointer; unrolling,
+   vectorization and the polyhedral model described.
+9. Inlining; the call graph and summaries; alias analysis (type-based, address-taken, points-to, `restrict`),
+   undecidable in general (Rice; the reduction shown).
+10. Instruction selection: tiles; maximal munch; Aho–Johnson dynamic programming and iburg; DAG tiling NP-hard;
+    compare-and-branch fusion.
+11. Register allocation:
+    - interference graphs and Chaitin's coloring (1981): simplify, spill, select; Briggs/George coalescing;
+      rematerialization; NP-hard by reduction from coloring;
+    - **SSA interference graphs are chordal** (Hack et al. 2006), checked on every function of the Job, and the
+      4-hole that leaving SSA creates;
+    - the register sweep (13 → 4 registers); linear scan.
+12. Instruction scheduling: the dependence DAG and false dependences; list scheduling; on Part 7's pipeline, loop
+    inversion costs cycles without prediction and wins with it; software pipelining (callback to Part 8).
+13. The Job compiled from the Pebble language, pass by pass and level by level; on Part 8's core (11% fewer
+    instructions, the same cycles); ledger row 5; gcc `-O0` … `-O3` on this machine.
+14. Correctness: Csmith (Yang et al. 2011); our fuzzer (240 programs, 0 mismatches, and the two bugs it found while
+    the compiler was built); five rewrite rules proved or refuted by z3; Alive; translation validation; CompCert
+    previewed (Part 54).
+15. *Frontier*: the full employment theorem; a superoptimizer (Massalin 1987) rebuilt with z3 proofs; STOKE, Souper,
+    AlphaDev; equality saturation and e-graphs (egg, Cranelift); MLGO; open problems. Outro.
 
-*Computed:* our compiler with each pass switched on in turn: instructions and cycles on Pebble; fixpoint iterations;
-coloring with spills; a chordality check on SSA interference graphs.
-*Visuals:* dataflow facts flowing around the CFG as colored tokens; φs landing at dominance frontiers; the
-interference graph being colored; the code shrinking pass by pass.
-*In practice:* LLVM and GCC, JIT tiers, compiler engineering, reading optimizer output, choosing optimization levels.
+*Computed:* our compiler with each pass switched on in turn (instructions on the emulator, cycles on Parts 7 and 8);
+fixpoint iterations; coloring with spills and a register sweep; a chordality check on SSA interference graphs; a
+differential fuzzer; z3 rule checks; a superoptimizer; clang's IR and gcc's levels on this machine.
+*Visuals:* dataflow facts flowing around the CFG; φs landing at dominance frontiers; the interference graph being
+colored; the code shrinking pass by pass; an e-graph.
+*In practice:* LLVM and GCC, JIT tiers, compiler engineering, reading optimizer output (Compiler Explorer, `-Rpass`),
+choosing optimization levels, PGO and LTO.
 *Reading:* the Dragon Book; Cooper & Torczon, *Engineering a Compiler*; Appel, *Modern Compiler Implementation in
 ML*; Muchnick, *Advanced Compiler Design and Implementation*; Rastello & Bouchez, *SSA-based Compiler Design*;
 Nielson, Nielson & Hankin, *Principles of Program Analysis*; Cytron et al. 1991; Chaitin 1981; Kildall 1973; Hack et
-al. 2006; Poletto & Sarkar 1999; Lattner & Adve 2004.
+al. 2006; Poletto & Sarkar 1999; Lattner & Adve 2004; Yang et al. 2011; Massalin 1987; Willsey et al. 2021.
 
 ### Part 14 · Lambda and Types (~60)
 *Story:* Church's λ-calculus is a whole programming language made of functions alone. Types tame it. Well-typed
