@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant36.common import (ASK_C, BAD, BID_C, GOOD, HURDLE, MICRO_C, MID_C, OFI_C, PART, comma, fit_right,
-                                         load)
+from videos.quant.quant36.common import (BAD, HURDLE, MID_C, OFI_C, PART, comma, load)
 
 
 class Events(VoiceoverScene):
@@ -14,6 +13,7 @@ class Events(VoiceoverScene):
         self.hawkes(me)
         self.fit(me)
         self.critical()
+        self.cluster()
         self.signs(me)
         self.split()
         self.signature_(me)
@@ -105,6 +105,35 @@ class Events(VoiceoverScene):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def cluster(self):
+        rows = [cmath(r"\lambda(t)", r"=", r"\mu + \textstyle\sum_{t_i < t} \alpha e^{-\beta (t - t_i)}", font_size=36),
+                cmath(r"n", r"=", r"\alpha / \beta", font_size=40, colors={r"n": HURDLE}),
+                cmath(r"\mathbb E[\text{cluster size}]", r"=", r"1 + n + n^2 + \cdots = \frac{1}{1 - n}", font_size=36),
+                cmath(r"\bar\lambda", r"=", r"\frac{\mu}{1 - n}", font_size=40, colors={r"\bar\lambda": GOOD})]
+        whys = [why(r"Hawkes (1971): every event raises the rate of future events, and the boost decays"),
+                why(r"the branching ratio: the expected number of direct offspring of one event, the area under the "
+                    r"kernel"),
+                why(r"Hawkes and Oakes (1974): each background event starts a family tree of children, grandchildren "
+                    r"and so on; the family is finite on average only if $n < 1$"),
+                why(r"so the mean rate is the background rate times the mean family size; as $n \to 1$ nearly all events "
+                    r"are caused by other events")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "How to read a Hawkes process. <bookmark mark='a'/> Every event raises the rate of future events, and the "
+            "boost decays. <bookmark mark='b'/> The branching ratio is the expected number of events one event triggers "
+            "directly. <bookmark mark='c'/> Alan Hawkes and David Oakes saw the process as family trees: each background "
+            "event has children, grandchildren and so on, and a family is finite on average only when the ratio is "
+            "below one. <bookmark mark='d'/> So the mean rate is the background rate divided by one minus the ratio. Near "
+            "one, almost every trade is a reaction to another trade."
+        ) as vo:
+            step(0)
+            for k, mk in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(mk)
+                if k:
+                    step(k)
+        self.wait(0.5)
         self.clear_scene()
 
     def signs(self, me):
@@ -207,8 +236,9 @@ class Events(VoiceoverScene):
             "Why. <bookmark mark='a'/> With a one-tick spread, when the best offer is exhausted the spread opens to two "
             "ticks and the mid rises half a tick. <bookmark mark='b'/> Then a maker posts a new bid inside the gap, and "
             "the mid rises half a tick again. <bookmark mark='c'/> So a one-tick move of the price is two half-tick moves "
-            "of the mid, in the same direction. Mid prices on a large-tick book trend at the finest scale, and trade "
-            "prices bounce: which one you sample decides what you see."
+            "of the mid, in the same direction. On Bitcoin a second cause adds to it: sweeps that take several levels "
+            "arrive in bursts, this chapter's self-excitation, so successive jumps tend to continue. Mid prices trend at "
+            "the finest scale while trade prices bounce: which one you sample decides what you see."
         ) as vo:
             step(0)
             vo.wait_until("a")

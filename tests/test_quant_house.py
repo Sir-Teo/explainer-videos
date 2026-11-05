@@ -3455,3 +3455,22 @@ def test_lob_features_microprice_qr():
     assert np.all(np.diff(g) > 0) and abs(g[0] + g[-1]) < 1e-9
     sig = L.signature(np.cumsum(rng.normal(0, 1, 10000)), [1, 10])
     assert abs(sig[0] - 1) < 0.1 and abs(sig[1] - 1) < 0.2
+
+
+def test_lob_queue_fills():
+    import numpy as np
+
+    from explainer.quant.house import lob as L
+    n = 2000
+    b = {"time": np.arange(n) * 100.0, "bid": np.full(n, 100.0), "ask": np.full(n, 100.1), "bq": np.full(n, 5.0),
+         "aq": np.full(n, 5.0)}
+    # takers sell 1 BTC at the bid every 10 steps: a back-of-queue order (5 ahead) fills on the sixth trade, a front
+    # one on the first
+    tt = np.arange(5, n, 10) * 100.0 + 1
+    tr = {"time": tt, "price": np.full(len(tt), 100.0), "qty": np.ones(len(tt)), "sign": -np.ones(len(tt))}
+    back = L.queue_fills(b, tr, every=500, wait=200, after=(10,))
+    front = L.queue_fills(b, tr, every=500, wait=200, front=True, after=(10,))
+    assert back["filled"].all() and front["filled"].all()
+    assert np.all(front["steps"] < 10) and np.all((back["steps"] > 50) & (back["steps"] < 62))
+    # a flat mid: the markout of a bid filled at 100.0 is half a tick
+    assert np.allclose(back["markout"][10], 0.5)

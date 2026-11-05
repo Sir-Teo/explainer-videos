@@ -7,7 +7,6 @@ Rosenbaum 2015), the House's order-book simulator."""
 
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
@@ -70,8 +69,6 @@ def microprice_fit(b, n_imb: int = 10, max_spread: int = 2, tick: float = 0.1, s
     dM = np.r_[np.diff(M), 0.0]
     nxt = np.r_[st[1:], st[-1]]
     v = ok & np.r_[ok[1:], False]
-    moves = np.unique(np.round(dM[v & (dM != 0)] / (tick / 2)).astype(int))
-    moves = moves[np.abs(moves) <= 4]
     if symmetric:
         st_all = np.r_[st[v], (S[v] - 1) * n_imb + (n_imb - 1 - ib[v])]
         nx_all = np.r_[nxt[v], ((np.r_[S[1:], S[-1]][v]) - 1) * n_imb + (n_imb - 1 - np.r_[ib[1:], ib[-1]][v])]
@@ -85,7 +82,7 @@ def microprice_fit(b, n_imb: int = 10, max_spread: int = 2, tick: float = 0.1, s
     cnt = np.bincount(st_all, minlength=K).astype(float)
     still = k_ == 0
     np.add.at(Q, (st_all[still], nx_all[still]), 1.0)
-    mv = (~still) & (np.abs(k_) <= 4)
+    mv = ~still                                    # every mid move, of any size: B is then a stochastic matrix
     np.add.at(T, (st_all[mv], nx_all[mv]), 1.0)
     np.add.at(R1, st_all[mv], dm_all[mv])
     c = np.maximum(cnt, 1.0)
@@ -102,8 +99,29 @@ def microprice_fit(b, n_imb: int = 10, max_spread: int = 2, tick: float = 0.1, s
         acc = acc + gk
         if k == 199:
             half = acc.copy()
-    return {"n_imb": n_imb, "max_spread": max_spread, "tick": tick, "g1": G1, "g": acc, "count": cnt,
+    return {"n_imb": n_imb, "max_spread": max_spread, "tick": tick, "g1": G1, "g": acc, "count": cnt, "B": B,
             "centers": (np.arange(n_imb) + 0.5) / n_imb, "converged": float(np.max(np.abs(acc - half)))}
+
+
+def horizon_fit(b, horizon: int, n_imb: int = 10, max_spread: int = 2, tick: float = 0.1, symmetric: bool = True) -> dict:
+    """The empirical horizon adjustment: the mean mid change over the next ``horizon`` grid steps in each (imbalance
+    bucket, spread) state, mirrored like ``microprice_fit`` so it is antisymmetric. Same layout as a microprice fit,
+    so ``microprice_apply`` applies it."""
+    pb, pa = np.asarray(b["bid"], float), np.asarray(b["ask"], float)
+    I = imbalance(b)
+    M = (pb + pa) / 2
+    S = np.rint((pa - pb) / tick).astype(int)
+    ib = np.minimum((I * n_imb).astype(int), n_imb - 1)
+    ok = (S[:-horizon] >= 1) & (S[:-horizon] <= max_spread)
+    st = ((S[:-horizon] - 1) * n_imb + ib[:-horizon])[ok]
+    d = (M[horizon:] - M[:-horizon])[ok]
+    K = n_imb * max_spread
+    if symmetric:
+        st = np.r_[st, (st // n_imb) * n_imb + (n_imb - 1 - st % n_imb)]
+        d = np.r_[d, -d]
+    cnt = np.bincount(st, minlength=K).astype(float)
+    g = np.bincount(st, weights=d, minlength=K) / np.maximum(cnt, 1.0)
+    return {"n_imb": n_imb, "max_spread": max_spread, "tick": tick, "g": g, "count": cnt}
 
 
 def microprice_apply(b, fit) -> np.ndarray:
@@ -209,3 +227,74 @@ def qr_simulate(fit, n: int, seed: int = 0) -> dict:
                 qa = q
         QB[t], QA[t], Mm[t] = qb, qa, m
     return {"bq": QB, "aq": QA, "mid": Mm}
+
+
+# ---------------------------------------------------------------------------
+# Trading in the queue
+# ---------------------------------------------------------------------------
+def queue_fills(b, trades, side: str = "bid", every: int = 600, wait: int = 600, front: bool = False,
+                after=(10, 100, 600), tick: float = 0.1) -> dict:
+    """Replay a small passive order against a grid of best quotes and the trade tape.
+
+    Every ``every`` grid steps at which the spread is one tick, a negligible order joins the best ``side`` queue: at the
+    back (the whole displayed queue ahead of it) or, with ``front``, at the head. Trades by takers on the other side at
+    the order's price eat the queue from the front; net cancellations while that price is the best are taken pro rata
+    from the part ahead (Moallemi and Yuan's standard assumption); when the level vanishes from the best the order is
+    alone at its price. It is filled by the first such trade with nothing left ahead, or by any trade through its price;
+    unfilled orders are cancelled after ``wait`` steps. Returns, per order: filled, steps to fill, the initial queue,
+    and the markout (mid after ``after`` steps less the order's price, in ticks, signed so that positive is good for
+    the order), plus for unfilled orders the mid move at cancellation, signed the same way."""
+    s = 1.0 if side == "bid" else -1.0
+    px = s * np.asarray(b["bid" if side == "bid" else "ask"], float)
+    q = np.asarray(b["bq" if side == "bid" else "aq"], float)
+    m = s * mid(b)
+    spread = np.rint((np.asarray(b["ask"], float) - np.asarray(b["bid"], float)) / tick)
+    t_grid = np.asarray(b["time"], float)
+    step = float(np.median(np.diff(t_grid)))
+    tt = np.asarray(trades["time"], float)
+    tp = s * np.asarray(trades["price"], float)
+    tq = np.asarray(trades["qty"], float)
+    hit = np.asarray(trades["sign"], float) == -s          # takers selling into bids (or buying from offers)
+    tt, tp, tq = tt[hit], tp[hit], tq[hit]
+    gi = np.clip(((tt - t_grid[0]) // step).astype(np.int64), 0, len(t_grid) - 1)
+    n = len(px)
+    out = {k: [] for k in ("filled", "steps", "queue", "markout", "missed")}
+    out["markout"] = {h: [] for h in after}
+    for t0 in range(1, n - wait - max(after), every):
+        if spread[t0] != 1:
+            continue
+        p = px[t0]
+        ahead = 0.0 if front else q[t0]
+        lo, hi = np.searchsorted(gi, t0 + 1), np.searchsorted(gi, t0 + wait + 1)
+        j = lo
+        fill = None
+        for t in range(t0 + 1, t0 + wait + 1):
+            at_p = 0.0
+            through = False
+            while j < hi and gi[j] == t:
+                if tp[j] < p - 1e-9:
+                    through = True
+                elif abs(tp[j] - p) < 1e-9:
+                    at_p += tq[j]
+                j += 1
+            if at_p > ahead + 1e-12 or through:
+                fill = t
+                break
+            ahead -= at_p
+            if abs(px[t] - p) < 1e-9 and abs(px[t - 1] - p) < 1e-9:
+                net = q[t] - q[t - 1] + at_p
+                if net < 0 and q[t - 1] > 0:
+                    ahead -= min(-net, q[t - 1]) * ahead / q[t - 1]
+                ahead = min(ahead, q[t])
+            elif px[t] < p - 1e-9:
+                ahead = 0.0
+            ahead = max(ahead, 0.0)
+        out["queue"].append(q[t0])
+        out["filled"].append(fill is not None)
+        out["steps"].append((fill - t0) if fill is not None else np.nan)
+        for h in after:
+            out["markout"][h].append((m[fill + h] - p) / tick if fill is not None else np.nan)
+        out["missed"].append(np.nan if fill is not None else (m[t0 + wait] - p) / tick)
+    res = {k: np.asarray(v, float) for k, v in out.items() if k != "markout"}
+    res["markout"] = {h: np.asarray(v, float) for h, v in out["markout"].items()}
+    return res

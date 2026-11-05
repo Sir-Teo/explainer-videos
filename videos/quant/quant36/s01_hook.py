@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant36.common import (ASK_C, BAD, BID_C, GOOD, HURDLE, MICRO_C, MID_C, NET_C, OFI_C, PART, era_strip,
-                                         illustration, load)
+from videos.quant.quant36.common import (ASK_C, BID_C, MICRO_C, MID_C, PART, era_strip,
+                                         load)
 
 
 class Hook(VoiceoverScene):
@@ -14,6 +14,7 @@ class Hook(VoiceoverScene):
         self.title_card()
         self.question()
         self.claims(load("micro"), load("ofi"), load("deep"))
+        self.stakes()
         self.act()
         self.history()
         self.objectives()
@@ -61,15 +62,18 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def claims(self, m, o, d):
-        r = [x for x in m["rows"] if x["h"] == "1 s"]
-        gain = 100 * np.mean([1 - x["micro"] / x["mid"] for x in r])
+        r = [x for x in m["rows"] if x["h"] == "10 s"]
+        gain = 100 * np.mean([1 - x["emp"] / x["mid"] for x in r])
+        lean = abs(m["g"][9] / m["tick"])
         r2 = o["fits"]["10 s"][0]["r2"]
         net = d["1 s"]["network"]["test_acc"]
         lin = d["1 s"]["linear"]["test_acc"]
         cards = VGroup(
             desk_question(r"the queues predict the next tick", rf"the probability that the next move is up rises from "
                           rf"{100 * m['p_up'][0]:.0f}\% to {100 * m['p_up'][-1]:.0f}\% with the bid's share of the best "
-                          rf"queues; Stoikov's microprice cuts the one-second forecast error by {gain:.0f}\% on unseen days",
+                          rf"queues; but Stoikov's microprice, built for large-tick books, leans {lean:.0f} ticks and "
+                          rf"overshoots, while a table of mean moves cuts the ten-second error by {gain:.0f}\% on unseen "
+                          r"days",
                           width=12.4, font_size=19),
             desk_question(r"order-flow imbalance moves the price", rf"over ten seconds it explains {100 * r2:.0f}\% of "
                           r"mid changes, with an impact that falls as one over depth", width=12.4, font_size=19),
@@ -80,11 +84,38 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "What this part finds. <bookmark mark='a'/> The queues predict the next tick: the chance that the next move "
             f"is up rises from {100 * m['p_up'][0]:.0f} percent to {100 * m['p_up'][-1]:.0f} with the bid's share of the "
-            f"best queues, and Stoikov's microprice cuts the one-second forecast error by {gain:.0f} percent on days it "
-            "never saw. <bookmark mark='b'/> Order-flow imbalance moves the price: over ten seconds it explains "
+            f"best queues. But Stoikov's microprice, built for large-tick books, leans {lean:.0f} ticks on Bitcoin and "
+            "overshoots, while a plain table of mean moves cuts the ten-second forecast error by "
+            f"{gain:.0f} percent on days it never saw. <bookmark mark='b'/> Order-flow imbalance moves the price: over ten seconds it explains "
             f"{100 * r2:.0f} percent of mid changes. <bookmark mark='c'/> And deep learning, honestly measured: a "
             f"network gets the next second's direction right {100 * net:.0f} percent of the time on unseen days, a linear "
             f"rule {100 * lin:.0f}."
+        ) as vo:
+            for k_, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k_], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def stakes(self):
+        cards = VGroup(
+            desk_question(r"every strategy trades through a book", r"the monthly factor portfolios of Parts 24 to 33 "
+                          r"still buy and sell at the bid and the offer; their costs in Part 31 were the book's prices",
+                          width=12.4, font_size=19),
+            desk_question(r"the fastest desks live in it", r"market makers and high-frequency traders earn or lose "
+                          r"fractions of a tick, millions of times a day, on exactly the quantities this part measures",
+                          width=12.4, font_size=19),
+            desk_question(r"and it is where models meet reality", r"a fair price, a forecast, a simulator: each can be "
+                          r"tested here within days, on millions of observations, which makes the book a laboratory "
+                          r"for honest research", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Why it matters, even to a slow investor. <bookmark mark='a'/> Every strategy in this series trades through "
+            "a book: the monthly factor portfolios still buy at the offer and sell at the bid, and Part thirty-one's "
+            "costs were the book's prices. <bookmark mark='b'/> The fastest desks live in it, earning or losing "
+            "fractions of a tick millions of times a day. <bookmark mark='c'/> And it is where models meet reality "
+            "fastest: a fair price, a forecast or a simulator can be tested on millions of observations within days. "
+            "That makes the book a laboratory for honest research, and this part uses it as one."
         ) as vo:
             for k_, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
@@ -136,7 +167,7 @@ class Hook(VoiceoverScene):
             r"Order-flow imbalance and depth",
             r"The microprice, fitted and tested out of sample",
             r"Deep order books, and a generative book of our own with its scorecard",
-            r"For the researcher: the microprice theorem, proved",
+            r"For the researcher: the microprice theorem, proved, and where it holds",
         ], color=QC.IDEA)
         with self.voiceover(
             "The plan: the book itself, measured on Bitcoin's perpetual future; queues and the next tick, in a model and "

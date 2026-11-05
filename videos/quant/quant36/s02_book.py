@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant36.common import (ASK_C, BAD, BID_C, GOOD, HURDLE, MID_C, OFI_C, PART, fit_right, illustration,
+from videos.quant.quant36.common import (ASK_C, BAD, BID_C, GOOD, HURDLE, OFI_C, PART, illustration,
                                          load)
 
 
@@ -17,6 +17,7 @@ class Book(VoiceoverScene):
         self.data_(b)
         self.minute(b)
         self.day(b)
+        self.order_types()
         self.tick()
         self.question()
 
@@ -200,21 +201,54 @@ class Book(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def tick(self):
+    def order_types(self):
         cards = VGroup(
-            desk_question(r"large tick", r"when the tick is wide relative to the natural spread, the spread sits at one "
-                          r"tick and the queues are long: priority is everything, as here", width=12.4, font_size=19),
-            desk_question(r"small tick", r"when the tick is tiny, the spread spans many ticks and queues are short: "
-                          r"traders compete by price, and the book's shape matters more than its front", width=12.4,
+            desk_question(r"limit and market orders", r"a limit order waits in the queue at its price and supplies "
+                          r"liquidity; a market order takes the best available prices at once and demands it",
+                          width=12.4, font_size=19),
+            desk_question(r"post-only and immediate-or-cancel", r"a post-only order is rejected rather than allowed to "
+                          r"take; an immediate-or-cancel order takes what it can and leaves nothing behind", width=12.4,
                           font_size=19),
-            desk_question(r"the 2024 US amendments", r"Part 35's half-cent tick was aimed exactly at large-tick stocks, to "
-                          r"let spreads narrow below one cent", width=12.4, font_size=19),
+            desk_question(r"icebergs and stops", r"an iceberg shows only part of its size and refills from a hidden "
+                          r"reserve, joining the back of the queue each time; a stop order becomes a market order when "
+                          r"the price crosses a level, which is how falls feed on themselves", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "The vocabulary of orders. <bookmark mark='a'/> A limit order waits at its price and supplies liquidity; a "
+            "market order takes the best prices at once and demands it. <bookmark mark='b'/> A post-only order is "
+            "rejected rather than allowed to take, which is how makers protect their fees; an immediate-or-cancel order "
+            "takes what it can and leaves nothing resting. <bookmark mark='c'/> An iceberg shows only part of its size "
+            "and refills from a hidden reserve, losing its place each time. And a stop order turns into a market order "
+            "when the price crosses a level: one reason falls feed on themselves."
+        ) as vo:
+            for k, mk in enumerate(("a", "b", "c")):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def tick(self):
+        mv = load("micro")["move_med"]
+        cards = VGroup(
+            desk_question(r"large tick", r"when the tick is wide relative to the natural spread and to the price's moves, "
+                          r"the spread sits at one tick, queues are long, and the price moves rarely, one tick at a time: "
+                          r"priority is everything", width=12.4, font_size=19),
+            desk_question(r"small tick", r"when the tick is tiny, the price moves many ticks at a time, the best queues are "
+                          r"a thin slice of the book, and traders compete by price; the half-cent US tick of Part 35 was "
+                          r"aimed at the first kind of market", width=12.4, font_size=19),
+            desk_question(r"Bitcoin's perpetual: both at once", rf"a one-tick spread like the first, but moves like the "
+                          rf"second: when the mid changes between two snapshots a tenth of a second apart, the median "
+                          rf"jump is {mv:.0f} ticks (Chapter 5 shows why that matters)", width=12.4, font_size=19),
         ).arrange(DOWN, buff=0.25)
         with self.voiceover(
             "Why the tick matters. <bookmark mark='a'/> When the tick is wide compared with the spread traders would "
-            "accept, the spread sits at one tick and the queues are long: priority is everything, as on this book. "
-            "<bookmark mark='b'/> When the tick is tiny, the spread spans many ticks and traders compete on price. "
-            "<bookmark mark='c'/> The American half-cent tick of Part thirty-five was aimed at the first kind of market."
+            "accept and with the price's moves, the spread sits at one tick, the queues are long, and the price moves "
+            "rarely, one tick at a time: priority is everything. <bookmark mark='b'/> When the tick is tiny, the price "
+            "moves many ticks at once and traders compete on price. The American half-cent tick of Part thirty-five was "
+            "aimed at the first kind of market. <bookmark mark='c'/> Bitcoin's perpetual is both at once: a one-tick "
+            "spread, like the first, but when its mid changes between two snapshots a tenth of a second apart, the "
+            f"median jump is {mv:.0f} ticks. Mathieu Rosenbaum and Khalil Dayri measured tick size by exactly this "
+            "behaviour of the price, and by that measure the tick here is small. Chapter five shows why that matters."
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)

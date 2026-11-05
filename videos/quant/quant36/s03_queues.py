@@ -5,8 +5,7 @@ import math
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant36.common import (ASK_C, BAD, BID_C, GOOD, HURDLE, MICRO_C, MID_C, PART, fit_right, illustration,
-                                         load)
+from videos.quant.quant36.common import (ASK_C, BAD, BID_C, GOOD, HURDLE, MICRO_C, PART, fit_right, load)
 
 
 def p_up_theory(I):
@@ -21,6 +20,7 @@ class Queues(VoiceoverScene):
         self.race()
         self.quadrant()
         self.formula()
+        self.assumptions()
         self.data(m)
         self.why_flat(m)
         self.queue_reactive()
@@ -113,6 +113,36 @@ class Queues(VoiceoverScene):
             "the quadrant into a half-plane, where the answer is classical. <bookmark mark='b'/> The angle is set by the "
             "ratio of the queues. <bookmark mark='c'/> So the probability of an up-tick is one minus two over pi times "
             "the arctangent of offer over bid: one half when they are equal, near one when the offer is short."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def assumptions(self):
+        rows = [cmath(r"\lambda,\ \mu,\ \theta", r":", r"\text{limit orders, market orders, cancels}", font_size=34),
+                cmath(r"\text{depletion}", r"\Rightarrow", r"\text{both queues redrawn from } f", font_size=34),
+                cmath(r"\text{the price}", r"=", r"\text{a random walk in event time}", font_size=36,
+                      colors={r"\text{the price}": GOOD})]
+        whys = [why(r"each best queue gains orders at rate $\lambda$ and loses them to trades and cancellations at "
+                    r"rates $\mu$ and $\theta$, all Poisson and independent of everything else"),
+                why(r"when a queue empties the price moves a tick and both new best queues are drawn afresh, so the "
+                    r"model forgets the past at every move"),
+                why(r"Cont and de Larrard derive the time between moves, the probability of each direction, and in the "
+                    r"limit the price's volatility, all from the order rates and the size of a fresh queue")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What the model assumes. <bookmark mark='a'/> Each best queue gains limit orders at one rate and loses them "
+            "to market orders and cancellations at others, all random and independent. <bookmark mark='b'/> When a "
+            "queue empties, the price moves a tick and both new queues are drawn afresh: the model forgets everything "
+            "at each move. <bookmark mark='c'/> From that, Cont and de Larrard derive the waiting time between moves, "
+            "the direction, and in the limit the price's volatility, from nothing but order rates and the size of a "
+            "fresh queue. Keep the forgetting in mind: it is the assumption Bitcoin breaks in Chapter five."
         ) as vo:
             step(0)
             vo.wait_until("a")

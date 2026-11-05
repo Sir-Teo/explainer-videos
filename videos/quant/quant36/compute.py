@@ -12,7 +12,11 @@ The data are Binance's public best-bid/best-offer stream and aggregated trades f
 * ``ofi``        Cont-Kukanov-Stoikov order-flow imbalance against mid changes, and the impact coefficient against depth;
 * ``memory``     trade-sign autocorrelation (Lillo-Farmer), a Hawkes fit to trade arrivals, and the signature plot;
 * ``deep``       a small network on recent book states against linear rules, in and out of sample;
-* ``qr``         the queue-reactive simulator fitted to the book, and its stylized-fact scorecard against the data.
+* ``qr``         the queue-reactive simulator fitted to the book, and its stylized-fact scorecard against the data;
+* ``queue``      a small passive order replayed against the book and the trade tape: fill rates, time to fill and
+                 markouts at the back and the front of the queue (adverse selection);
+* ``research``   the microprice theorem tested: the spectrum of the fitted B, the geometric decay of B^k G1, the series
+                 against the closed form, and the drift of mid, weighted mid and microprice by imbalance on the test days.
 """
 
 from __future__ import annotations
@@ -72,13 +76,19 @@ def compute_book() -> dict:
 def compute_micro() -> dict:
     tr = _cat(TRAIN)
     fit = L.microprice_fit(tr, n_imb=10, max_spread=2, tick=TICK)
+    hfits = {h: L.horizon_fit(tr, h, n_imb=10, max_spread=2, tick=TICK) for h in (10, 100, 600)}
+    sim = _sim_book(36)
+    fs = L.microprice_fit(sim, n_imb=10, max_spread=1, tick=TICK)
     rows = []
     for d in TEST:
         b = _book(d)
         mp = L.microprice_apply(b, fit)
         for h, name in ((10, "1 s"), (100, "10 s"), (600, "1 min")):
-            rows.append({"day": d, "h": name, "mid": L.forecast_mse(b, L.mid(b), h),
-                         "wmid": L.forecast_mse(b, L.weighted_mid(b), h), "micro": L.forecast_mse(b, mp, h)})
+            hp = L.microprice_apply(b, hfits[h])
+            ok = np.isfinite(mp) & np.isfinite(hp)
+            mse = {k: L.forecast_mse(b, np.where(ok, e, np.nan), h) for k, e in
+                   (("mid", L.mid(b)), ("wmid", L.weighted_mid(b)), ("micro", mp), ("emp", hp))}
+            rows.append({"day": d, "h": name, **mse})
     # the probability that the next mid move is up, by imbalance bucket (test days)
     te = _cat(TEST)
     m = L.mid(te)
@@ -94,7 +104,30 @@ def compute_micro() -> dict:
     bins = np.minimum((I * 10).astype(int), 9)
     p_up = [float(np.mean(nxt[ok & (bins == k)] > 0)) for k in range(10)]
     return _json({"g": fit["g"], "g1": fit["g1"], "centers": fit["centers"], "count": fit["count"],
-                  "converged": fit["converged"], "rows": rows, "p_up": p_up, "tick": TICK})
+                  "converged": fit["converged"], "rows": rows, "p_up": p_up, "tick": TICK,
+                  "emp": {f"{h / 10:g} s": f_["g"] for h, f_ in hfits.items()}, "g_sim": fs["g"],
+                  "move_med": float(np.median(np.abs(np.diff(L.mid(tr)))[np.diff(L.mid(tr)) != 0]) / TICK)})
+
+
+def _sim_book(seed, n=400000):
+    """A long run of the queue-reactive simulator (fitted as in ``qr``) as a book: a large-tick market in which the
+    spread is always one tick and the mid moves half a tick when a queue empties."""
+    tr = _book(TRAIN[1])
+    unit = float(np.median(np.r_[tr["bq"], tr["aq"]]) / 4)
+    sim = L.qr_simulate(L.qr_fit(tr, unit=unit, n_q=30), n, seed=seed)
+    m = sim["mid"] * TICK / 2
+    return {"bid": m - TICK / 2, "ask": m + TICK / 2, "bq": sim["bq"], "aq": sim["aq"]}
+
+
+def _beta(b, fit, horizons):
+    """For each horizon, the slope of the mean mid change by state on the fitted adjustment g (count-weighted, through
+    the origin): one when the drift over that horizon has reached the microprice."""
+    out = []
+    for h in horizons:
+        hf = L.horizon_fit(b, h, n_imb=fit["n_imb"], max_spread=fit["max_spread"], tick=fit["tick"])
+        c, d, g = hf["count"], hf["g"], np.asarray(fit["g"])
+        out.append(float(np.sum(c * d * g) / np.sum(c * g * g)))
+    return out
 
 
 def compute_ofi() -> dict:
@@ -243,8 +276,128 @@ def compute_qr() -> dict:
                   "sim_mid": sim["mid"][:36000:10], "sim_bq": sim["bq"][:6000:10]})
 
 
+def compute_queue() -> dict:
+    after = (10, 100, 600)
+    res = {}
+    for pos in ("back", "front"):
+        parts = []
+        for d in TRAIN:
+            b = _book(d)
+            tr = data.binance_aggtrades_day("BTCUSDT", d)
+            for side in ("bid", "ask"):
+                parts.append(L.queue_fills(b, tr, side=side, every=300, wait=600, front=pos == "front", after=after,
+                                           tick=TICK))
+        f = np.concatenate([x["filled"] for x in parts]).astype(bool)
+        st = np.concatenate([x["steps"] for x in parts])
+        qq = np.concatenate([x["queue"] for x in parts])
+        mk = {h: np.concatenate([x["markout"][h] for x in parts]) for h in after}
+        ms = np.concatenate([x["missed"] for x in parts])
+        edges = np.quantile(qq, [0, 0.2, 0.4, 0.6, 0.8, 1.0])
+        by = []
+        for a, b_ in zip(edges[:-1], edges[1:]):
+            k = (qq >= a) & (qq <= b_)
+            by.append({"q": float(np.median(qq[k])), "fill": float(f[k].mean()),
+                       "mk10": float(np.nanmean(mk[100][k & f])) if (k & f).any() else float("nan")})
+        res[pos] = {"n": int(len(f)), "fill": float(f.mean()), "median_s": float(np.nanmedian(st) / 10),
+                    "markout": {f"{h / 10:g} s": float(np.nanmean(mk[h][f])) for h in after},
+                    "markout_se": {f"{h / 10:g} s": float(np.nanstd(mk[h][f]) / math.sqrt(max(f.sum(), 1)))
+                                   for h in after},
+                    "missed": float(np.nanmean(ms[~f])) if (~f).any() else float("nan"), "by_queue": by,
+                    "queue_med": float(np.median(qq))}
+    return _json(res)
+
+
+def compute_research() -> dict:
+    tr = _cat(TRAIN)
+    fit = L.microprice_fit(tr, n_imb=10, max_spread=2, tick=TICK)
+    B, g1 = np.asarray(fit["B"]), np.asarray(fit["g1"])
+    ev = np.sort(np.abs(np.linalg.eigvals(B)))[::-1]
+    # stationary law of B, and the closed form (1 - B + 1 pi')^{-1} g1
+    w, V = np.linalg.eig(B.T)
+    pi = np.real(V[:, np.argmin(np.abs(w - 1))])
+    pi = pi / pi.sum()
+    K = len(g1)
+    closed = np.linalg.solve(np.eye(K) - B + np.outer(np.ones(K), pi), g1)
+    norms, gk = [], g1.copy()
+    for k in range(41):
+        norms.append(float(np.max(np.abs(gk))))
+        gk = B @ gk
+    drift = {}
+    te = _cat(TEST)
+    S = np.rint((te["ask"] - te["bid"]) / TICK)
+    I = L.imbalance(te)
+    ests = {"mid": L.mid(te), "weighted": L.weighted_mid(te), "micro": L.microprice_apply(te, fit)}
+    bins = np.minimum((I * 10).astype(int), 9)
+    for h, name in ((1, "100 ms"), (10, "1 s")):
+        ok = (S[:-h] == 1) & np.isfinite(ests["micro"][:-h]) & np.isfinite(ests["micro"][h:])
+        drift[name] = {}
+        for k_, e in ests.items():
+            dd = (e[h:] - e[:-h]) / TICK
+            drift[name][k_] = {"mean": [float(np.mean(dd[ok & (bins[:-h] == j)])) for j in range(10)],
+                               "se": [float(np.std(dd[ok & (bins[:-h] == j)]) / math.sqrt(max(1, np.sum(ok & (bins[:-h]
+                                      == j))))) for j in range(10)]}
+            x = (I[:-h][ok] - 0.5)
+            drift[name][k_]["slope"] = float(np.polyfit(x, dd[ok], 1)[0])
+    # where the hypotheses hold: the simulator, fitted on one run and tested on another
+    sa, sb = _sim_book(1), _sim_book(2)
+    fs = L.microprice_fit(sa, n_imb=10, max_spread=1, tick=TICK)
+    Is = L.imbalance(sb)
+    bs = np.minimum((Is * 10).astype(int), 9)
+    sim_drift = {}
+    for k_, e in (("mid", L.mid(sb)), ("weighted", L.weighted_mid(sb)), ("micro", L.microprice_apply(sb, fs))):
+        dd = (e[10:] - e[:-10]) / TICK
+        sim_drift[k_] = [float(np.mean(dd[bs[:-10] == j])) for j in range(10)]
+    def markov_gap(bk):
+        """H1's testable consequence: given the state just after a mid change, the sign of the next change should not
+        depend on the sign of the last. The count-weighted mean, over post-move states, of
+        E[next sign | last up, state] - E[next sign | last down, state]."""
+        mm = L.mid(bk)
+        Sx = np.rint((bk["ask"] - bk["bid"]) / TICK).astype(int)
+        ib = np.minimum((L.imbalance(bk) * 10).astype(int), 9)
+        stx = (np.clip(Sx, 1, 2) - 1) * 10 + ib
+        mv = np.flatnonzero(np.diff(mm) != 0)
+        sg = np.sign(np.diff(mm)[mv])
+        post = stx[mv + 1]
+        last, nxt, st_ = sg[:-1], sg[1:], post[:-1]
+        tot, wsum = 0.0, 0.0
+        for x in np.unique(st_):
+            k = st_ == x
+            up, dn = k & (last > 0), k & (last < 0)
+            if up.sum() > 20 and dn.sum() > 20:
+                w = float(k.sum())
+                tot += w * (nxt[up].mean() - nxt[dn].mean())
+                wsum += w
+        return float(tot / wsum), int(len(mv))
+    mg_btc, n_btc = markov_gap(te)
+    mg_sim, n_sim = markov_gap(sb)
+    # H2 dropped: the unmirrored fit has a drift at every move, and the partial sums grow without bound
+    fa = L.microprice_fit(tr, n_imb=10, max_spread=2, tick=TICK, symmetric=False)
+    Ba, ga = np.asarray(fa["B"]), np.asarray(fa["g1"])
+    wa, Va = np.linalg.eig(Ba.T)
+    pa = np.real(Va[:, np.argmin(np.abs(wa - 1))])
+    pa = pa / pa.sum()
+    part, acc_, gk_ = [], np.zeros_like(ga), ga.copy()
+    for k in range(400):
+        acc_ = acc_ + gk_
+        gk_ = Ba @ gk_
+        if k + 1 in (10, 100, 400):
+            part.append(float(np.mean(acc_) / TICK))
+    hs_sim = [1, 3, 10, 30, 100, 300, 1000]
+    hs_btc = [1, 3, 10, 30, 100, 300, 600, 1800]
+    betas = [_beta(sb if k == 2 else _sim_book(k), fs, hs_sim) for k in (2, 3, 4, 5)]
+    ev_s = np.sort(np.abs(np.linalg.eigvals(np.asarray(fs["B"]))))[::-1]
+    return _json({"eig": ev[:5], "pi_g1": float(pi @ g1), "closed_vs_series": float(np.max(np.abs(closed - fit["g"]))),
+                  "norms": norms, "drift": drift, "g_max": float(np.max(np.abs(fit["g"]))),
+                  "sim": {"g": fs["g"][:10], "eig2": float(ev_s[1]), "drift": sim_drift, "h": hs_sim,
+                          "beta_runs": betas, "beta": np.mean(betas, 0)},
+                  "btc": {"h": hs_btc, "beta": _beta(te, fit, hs_btc)},
+                  "markov": {"btc": mg_btc, "n_btc": n_btc, "sim": mg_sim, "n_sim": n_sim},
+                  "asym": {"pi_g1_ticks": float(pa @ ga / TICK), "partial": part, "n": [10, 100, 400]}})
+
+
 ITEMS = {"book": compute_book, "micro": compute_micro, "ofi": compute_ofi, "memory": compute_memory,
-         "deep": compute_deep, "qr": compute_qr}
+         "deep": compute_deep, "qr": compute_qr, "queue": compute_queue,
+         "research": compute_research}
 
 
 if __name__ == "__main__":
