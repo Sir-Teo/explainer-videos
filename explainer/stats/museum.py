@@ -485,3 +485,19 @@ def nhanes() -> dict:
         rows = list(csv.reader(f))
     head, body = rows[0], rows[1:]
     return {h: np.array([float(r[j]) if r[j] != "" else np.nan for r in body]) for j, h in enumerate(head)}
+
+
+# Boscovich (1757): five measurements of a degree of meridian arc, in toises, at five latitudes, as tabulated by
+# S. Stigler, *The History of Statistics* (1986), ch. 1, and R. Koenker, *Quantile Regression* (2005), sec. 1.1.  The
+# ellipsoid model is arc = a + b sin^2(latitude); Boscovich fitted it by least absolute deviations.
+BOSCOVICH = [("Quito", 0.0, 56751), ("Cape of Good Hope", 33 + 18 / 60, 57037), ("Rome", 42 + 59 / 60, 56979),
+             ("Paris", 49 + 23 / 60, 57074), ("Lapland", 66 + 19 / 60, 57422)]
+
+
+def engel() -> tuple:
+    """Engel's (1857) 235 Belgian working-class households: annual income and food expenditure (Belgian francs), as
+    distributed with statsmodels (Koenker & Bassett's quantile-regression example)."""
+    import statsmodels.api as sm
+
+    d = sm.datasets.engel.load_pandas().data
+    return d["income"].to_numpy().astype(float), d["foodexp"].to_numpy().astype(float)
