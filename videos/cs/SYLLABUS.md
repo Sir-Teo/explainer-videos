@@ -1283,45 +1283,60 @@ as flashes along paths, and the min cut; Kempe chains.
 *Graph Algorithms*; Schrijver, *Combinatorial Optimization*; Dijkstra 1959; Ford & Fulkerson 1956; Tarjan 1972; Gale &
 Shapley 1962; Chen et al. 2022; Haeupler et al. 2024; Duan et al. 2025.
 
-### Part 19 · The Great Paradigms (~60)
+### Part 19 · The Great Paradigms (~50)
 *Story:* Most good algorithms come from a handful of ideas: be greedy when an exchange argument allows it, divide
 and conquer, or remember subproblems. Divide and conquer, applied to the right points (the roots of unity), gives
-the most important algorithm of the century, the FFT. The same problem solved four ways closes the part.
-1. Greedy: activity selection by an exchange argument; Huffman revisited (callback to *AI, Built* 1); where greedy
-   fails.
-2. **Matroids**: greedy is optimal exactly on matroids (Rado–Edmonds, proved); the graphic matroid is Kruskal.
-3. Karatsuba (1960), which refuted Kolmogorov's n² conjecture: three products for n^{log₂ 3}; Toom–Cook.
-4. Strassen (1969): seven products, derived; the history of ω from 2.81 to about 2.3713 (2024) **(verify)**;
-   galactic algorithms; AlphaTensor (callback to *AI, Built* 26).
-5. **The FFT, I**: coefficients against values; multiplication is pointwise on values; choosing the points as the
-   roots of unity, whose squares fall onto half as many points (the centerpiece animation).
-6. **The FFT, II**: Cooley–Tukey (1965, and Gauss c. 1805); the butterfly; bit reversal; the inverse by conjugation
-   (orthogonality of characters, proved); O(n log n).
-7. Applications: big-integer multiplication, convolution, spectra (callback to *Analysis, Built* 9);
-   Schönhage–Strassen (1971); Harvey & van der Hoeven's O(n log n) (2019); the NTT over finite fields (Part 30).
-8. Closest pair in the plane (the strip argument, with at most seven neighbours).
-9. **Dynamic programming**: Bellman (1957) and the story of the name; memoization against tabulation; DP as
-   shortest paths in a DAG.
-10. Edit distance (Wagner–Fischer), with the table filling and its traceback; LCS (Part 21 takes up diff).
-11. Knapsack's O(nW), and why that isn't polynomial (W is written in log W bits); subset sum (Part 26).
-12. Matrix chains; optimal BSTs and Knuth's O(n²) speedup (the quadrangle inequality).
-13. DP on trees and graphs: independent sets on trees; Floyd–Warshall and Bellman–Ford as DP; **Held–Karp** TSP in
-    O(n²2ⁿ) against n!.
-14. Viterbi and CYK as DP (callbacks to *AI, Built* 7 and Part 12); DP speedups (convex-hull trick, divide-and-conquer
-    optimization).
-15. Backtracking and branch-and-bound: n-queens; Sudoku as exact cover with **Dancing Links** (Knuth 2000).
-16. One problem, four paradigms: maximum subarray by brute force O(n³), divide and conquer O(n log n), and Kadane's
-    DP O(n). Outro.
+the most important algorithm of the twentieth century, the FFT. The part opens with a million digits of π and two
+million-digit numbers multiplied four ways, and closes with one problem solved four ways.
+1. Greedy: interval scheduling by earliest finish, proved by exchange; four rules on 2,000 random instances with
+   counterexamples; coins {1, 3, 4} and Kozen–Zaks; Huffman's code on the corpus's 27 symbols (4.12 bits against an
+   entropy of 4.08).
+2. **Matroids**: Whitney's axioms; the Rado–Edmonds greedy theorem (proved); forests (Kruskal) optimal 400 of 400,
+   matchings 248 of 400 (never below half).
+3. Karatsuba (1960), which refuted Kolmogorov's n² conjecture: 1234 × 5678 by three products; the recursion tree;
+   measured in Python (pure Karatsuba loses below 4,096 digits; with a 32-digit cutoff it wins from 64); CPython's
+   cutoff; Toom–Cook.
+4. Strassen (1969): the seven products; exact operation counts; the history of ω from 2.807 to 2.3713 (Alman,
+   Duan, Vassilevska Williams, Xu, Xu & Zhou 2024); galactic algorithms; against numpy's BLAS (3–5× slower, 10×
+   rounding error); AlphaTensor (callback to *AI, Built* 26).
+5. **The FFT, I**: coefficients against values; ± pairs; the roots of unity squaring onto half as many points (the
+   centerpiece animation); the algorithm in ten lines.
+6. **The FFT, II**: Gauss (c. 1805) and Cooley–Tukey (1965); the butterfly network and bit reversal; the inverse by
+   orthogonality (proved); DFT against FFT in Python (272× at 2,048 points); numpy.
+7. Multiplication by FFT: integers as polynomials; floating-point exactness measured to ten million digits; the
+   NTT modulo 119 · 2²³ + 1 (Part 30) and Python's `decimal`; Schönhage–Strassen to Harvey & van der Hoeven's
+   n log n (2019).
+8. Closest pair in the plane: the strip argument with at most seven neighbours (proved); 100,000 points in 1.3 s.
+9. **Dynamic programming**: Bellman (1957) and the story of the name; Fibonacci's call tree; memoization against
+   tabulation; DP as paths in a DAG of subproblems.
+10. Edit distance (Wagner–Fischer), the *intention*/*execution* table and traceback; LCS, `diff` (Parts 21, 41),
+    Needleman–Wunsch.
+11. Knapsack's O(nW) table; greedy by value per weight fails; the same problem with ever larger numbers
+    (pseudo-polynomial time); NP-hardness (Part 26) and Ibarra–Kim's approximation scheme.
+12. Matrix chains (15,125 against 58,000 worst); optimal BSTs and Knuth's O(n²) speedup (33× fewer steps at 200
+    keys).
+13. DP on trees (independent sets, 200,000 vertices in 0.3 s), on graphs (Bellman–Ford, Floyd–Warshall,
+    Held–Karp, DAG paths) and on sequences (Viterbi, CYK, speedups, Hirschberg).
+14. Backtracking and branch-and-bound: n-queens (2,057 nodes for eight); Sudoku as exact cover with **Dancing
+    Links** (Knuth 2000) against plain backtracking on three puzzles.
+15. One problem, four paradigms: maximum subarray by brute force O(n³), running sums O(n²), divide and conquer
+    O(n log n), and Kadane's DP O(n), timed to a million numbers.
+16. *Frontier*: the limits of the laser method (Ambainis, Filmus & Le Gall 2015; Alman & Vassilevska Williams 2018);
+    edit distance and SETH (Backurs & Indyk 2015) and its approximation (Andoni & Nosatzki 2020); lower bounds for
+    the FFT and multiplication (Morgenstern 1973; Afshani et al. 2019); open problems. Outro.
 
-*Computed:* the Karatsuba crossover on this machine; Strassen's operation counts; our FFT against the DFT; FFT
-big-number multiplication (a million digits of π by Chudnovsky's series); edit-distance tables; Held–Karp against
-brute force; Dancing Links on Sudoku.
-*Visuals:* the roots of unity squaring onto half as many points; butterflies; Strassen's seven products as colored
-blocks; DP tables with traceback arrows; matroid exchange.
-*In practice:* diff tools, bioinformatics, the FFT in audio, images and radios, dynamic programming in pricing and scheduling.
+*Computed:* every number above, in `videos/cs/cs19/compute.py` with `explainer/cs/algo/paradigms.py` (tested in
+`tests/test_cs19_paradigms.py`): a million digits of π by Chudnovsky's series; four multipliers on million-digit
+numbers; Karatsuba against school; Strassen's counts, time and error; DFT against FFT; FFT exactness; closest pair;
+DP tables; Dancing Links on Sudoku; maximum subarray four ways.
+*Visuals:* the roots of unity squaring onto half as many points; butterflies; Strassen's seven products coloured;
+DP tables with traceback; the exchange argument as swapped bars; the matroid exchange on a graph; queens and
+dancing links.
+*In practice:* diff tools, bioinformatics, the FFT in audio, images and radios, GMP and BLAS, dynamic programming in
+pricing and scheduling, SAT and constraint solvers.
 *Reading:* CLRS ch. 4, 14–15, 30; Kleinberg & Tardos ch. 4–6; Dasgupta, Papadimitriou & Vazirani, *Algorithms* ch. 2,
-5–6; Knuth, TAOCP 2 §4.3.3 and 4B; Cooley & Tukey 1965; Strassen 1969; Karatsuba & Ofman 1962; Harvey & van der
-Hoeven 2021; Bellman 1957; Edmonds 1971; Alman et al. 2024.
+5–6; Knuth, TAOCP 2 §4.3.3 and 4B; Bentley, *Programming Pearls*; Cooley & Tukey 1965; Strassen 1969; Karatsuba &
+Ofman 1962; Harvey & van der Hoeven 2021; Bellman 1957; Edmonds 1971; Alman et al. 2024.
 
 ### Part 20 · Randomness as a Resource (~55)
 *Story:* A coin flip can stand in for cleverness. With one, you can check a matrix product in n², find a minimum
@@ -3262,4 +3277,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 16 | scenes (18, with the *Frontier* chapter), computations (every sort counting its comparisons, with insertion, merge, heap, quick, Ford–Johnson, counting, radix, Timsort, quickselect and median of medians; decision trees; the Job v1 in the Pebble language on the emulator, an instruction model and a C event counter over the corpus for ledger row 7; repeated squaring, radix sort and `std::sort` timed on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 17 | scenes (18, with the *Frontier* chapter), computations (every structure counting its work: chaining, universal hashing, linear and double hashing, Robin Hood, cuckoo and FKS perfect hashing; plain, AVL, red–black, treap, splay, persistent trees, skip lists and B-trees; binary, pairing and Fibonacci heaps under Dijkstra; union–find; tries and rank; the Job v2 hash table in the Pebble language on the emulator, an exact instruction model, a C event counter and a C replay through Part 9's caches for ledger row 8; lookups and the Job timed natively), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 18 | scenes (18, with the *Frontier* chapter), computations (every algorithm counting its work: Euler circuits, BFS, DFS, topological sort, Tarjan and Kosaraju with 2-SAT, Dijkstra, bidirectional, A*, landmarks and contraction hierarchies, Bellman–Ford, Floyd–Warshall and Johnson, Kruskal, Prim and Borůvka, Edmonds–Karp, Gale–Shapley and the Hungarian algorithm, Held–Karp, PageRank, planar colouring), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
-| 19–61 | planned (this document) | — |
+| 19 | scenes (18, with the *Frontier* chapter), computations (every paradigm counting its work: interval scheduling, Huffman, matroid greedy, Karatsuba, Strassen, DFT, FFT and NTT, an FFT multiplier and a million digits of π, closest pair, Fibonacci, edit distance and LCS, knapsack, matrix chains, optimal BSTs with Knuth's speedup, tree DP, n-queens, Dancing Links, maximum subarray four ways), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 20–61 | planned (this document) | — |

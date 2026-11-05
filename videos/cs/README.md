@@ -26,8 +26,8 @@ a published source, which is cited. Schematics carry the label `schematic`, and 
 The chapter-by-chapter plan, the production standard, and the maps onto a CS degree (CS2023) and onto industry roles
 are in [`SYLLABUS.md`](SYLLABUS.md).
 
-**Status:** plan of record, draft 3 (2026-11-04: the research tier added); Parts 1–18 are built (480p previews
-reviewed, narrated masters pending), Part 19 is next (see [`SYLLABUS.md`](SYLLABUS.md) §8).
+**Status:** plan of record, draft 3 (2026-11-04: the research tier added); Parts 1–19 are built (480p previews
+reviewed, narrated masters pending), Part 20 is next (see [`SYLLABUS.md`](SYLLABUS.md) §8).
 
 ## The story
 
