@@ -3729,3 +3729,38 @@ def test_agents_herding_cascades_collusion_crowd():
     for _ in range(200):
         s, r, done = env.step(3, 1)
         assert abs(env.inv) <= env.max_inv and np.isfinite(r)
+
+
+def test_skill_arithmetic_luck_berk_green_variance_ratio():
+    from explainer.quant.house import skill as K
+    # Sharpe's arithmetic, Problem 2: Phi(-c sqrt(T) / s)
+    assert abs(K.beat_prob(0.0075, 0.04, 10) - 0.27661) < 1e-4
+    assert K.beat_prob(0.01, 0.05, 30) < K.beat_prob(0.01, 0.05, 1) < 0.5
+    # Storey: Problem 4, and the bias is upward on a population with alternatives
+    p = np.r_[np.linspace(0.001, 0.499, 700), np.linspace(0.501, 0.999, 300)]
+    assert abs(K.storey_pi0(p, 0.5) - 0.6) < 1e-12
+    pop = K.fund_population(m=4000, seed=5)
+    est = K.bsw(pop["p"], pop["t"])
+    true0 = np.mean(pop["group"] == 0)
+    assert est["pi0"] > true0 - 0.03 and abs(est["luck"] - est["pi0"] * 0.1) < 1e-12
+    # Problem 5: the skilled share subtracts pi0 gamma / 2
+    assert abs(max(0.0, 0.09 - 0.8 * 0.2 / 2) - 0.01) < 1e-12
+    # Berk and Green: with flows, net alpha does not persist; investors' mean net alpha is near zero
+    rng = np.random.default_rng(0)
+    sk = rng.normal(0.0, 0.03, 600)
+    bg = K.berk_green(sk, years=12, seed=1)
+    A, net = bg["assets"], bg["net"]
+    m = (A[2:-1] > 0) & (A[3:] > 0)  # funds with investors in both years
+    x, y = net[2:-1][m], net[3:][m]
+    assert abs(np.polyfit(x, y, 1)[0]) < 0.08 and abs(y.mean()) < 0.01
+    assert np.corrcoef(sk, bg["assets"][-1])[0, 1] > 0.6
+    # variance ratio: 1 for iid; 1 + rho for q = 2 on an AR(1)
+    e = rng.standard_normal(200_000)
+    assert abs(K.variance_ratio(e, 5) - 1) < 0.02
+    ar = np.empty_like(e)
+    ar[0] = e[0]
+    for i in range(1, len(e)):
+        ar[i] = 0.2 * ar[i - 1] + e[i]
+    assert abs(K.variance_ratio(ar, 2) - 1.2) < 0.02
+    ac = K.rolling_autocorr(ar[:5000], 1000)
+    assert np.isnan(ac[998]) and abs(np.nanmean(ac) - 0.2) < 0.03

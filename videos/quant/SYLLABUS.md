@@ -1807,19 +1807,26 @@ bound; computed for the logit game and checked against the learners and their pu
 
 ### Finale
 
-### Part 43 · Can You Beat the Market? (~60)
-1. Sharpe's arithmetic (1991); Pedersen (2018).
-2. Luck vs skill: Fama–French (2010), Barras–Scaillet–Wermers (2010), Berk–van Binsbergen (2015).
-3. Adaptive markets (Lo 2004).
-4. **The House runs**: signals, combination, sizing, execution, attribution, risk, on the sealed window, and
-   stress-tested on the market generator's paths.
-5. The Track Record, all rows; the trial counter, final; deflated Sharpes. Narration follows the numbers.
-6. The Surface's final scoreboard.
+### Part 43 · Can You Beat the Market? (~53; built)
+1. Sharpe's arithmetic (1991), proved; the zero-skill manager's chance of beating the index (theory and simulation);
+   years to significance; fees; the loser's game; Pedersen's exception (2018); Grossman–Stiglitz.
+2. Luck vs skill, on a simulated fund population where the truth is known: the best null; Barras–Scaillet–Wermers'
+   shares (π0 0.756 against 0.746); persistence. (Fund-level databases are licensed, so no real funds.)
+3. Skill, scale and money: Berk–Green (2004), simulated; skill goes to size and fees; Berk–van Binsbergen.
+4. Adaptive markets (Lo 2004), measured on 1926–2020: the daily autocorrelation (0.29 in the 1970s, −0.04 in the
+   2010s) and variance ratios; the 2013 Nobel; McLean–Pontiff.
+5. The Track Record, all 25 rows; the trial counter, final (23,560); deflated Sharpes; slope 0.555; the hold-out's own
+   luck bar (0.90, cleared by 6 rows); π0 0.24. The House's own row: an equal-risk ensemble of ten published premia,
+   registered with one trial (research 1.03, hold-out 0.76).
+6. The Surface's final scoreboard: nine models; SSVI 0.74 and rough Bergomi 0.83 best; tomorrow's check.
 7. Open problems: the equity premium; roughness; the zoo's dimension; low-SNR ML; LLM look-ahead; AI traders and
-   stability; Treasury market plumbing; climate risk.
-8. Back to Bachelier: 22 April 2020, and the fair game.
-
-*Visuals:* `HouseChart` live with money flowing; the sealed envelope opened; the timeline 1900 to now.
+   stability; Treasury market plumbing; climate risk; and what the series could not test.
+8. Back to Bachelier: 20–22 April 2020, and the fair game; the thesis of 1900.
+9. The House's journey, act by act; 10. Rule 43: the market is the default.
+Research: Storey's estimator is conservative under any dependence (linearity), its variance under independence and
+equicorrelation, the corollary for skill, BH and q-values; the Berk–Green no-persistence theorem; both checked by
+simulation. Departures from the plan: "the House runs" end to end on the sealed window was replaced by the ensemble
+row and the full Track Record; the market generator's stress paths were not run.
 
 ## 7. Phases
 

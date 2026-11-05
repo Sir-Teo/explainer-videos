@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant43.common import (ACT_C, BAD, COST_C, GOOD, HURDLE, LUCK_C, MKT_C, PART, REC_C, SKILL_C, load)
 
@@ -38,7 +40,7 @@ class Surface(VoiceoverScene):
             b = Rectangle(width=w, height=0.42, stroke_width=0, fill_color=col, fill_opacity=0.85)
             b.move_to([-2.2 + w / 2, 2.9 - 0.62 * i, 0])
             nm = label(x["model"], font_size=17, color=GREY_A).next_to(b, LEFT, buff=0.2)
-            nm.align_to([-2.4, 0, 0], RIGHT)
+            nm.align_to(np.array([-2.4, 0, 0]), RIGHT)
             v = label(rf"{x['rmse']:.2f} (Part {x['part']})", font_size=16).next_to(b, RIGHT, buff=0.15)
             bars.add(VGroup(b, nm, v))
         note_ = wrapped_label(rf"{s['unit']}, on the Surface of {s['day']}, as each part computed it", 11.0, 16,
@@ -75,7 +77,7 @@ class Surface(VoiceoverScene):
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 1.6 - 0.8 * j, 0])
-            row[0].align_to([-6.4, 0, 0], LEFT)
+            row[0].align_to(np.array([-6.4, 0, 0]), LEFT)
         o = s["oos"]
         b_in, b_out, r_in, r_out, p_in, p_out = o[0]["in"], o[0]["out"], o[1]["in"], o[1]["out"], o[2]["in"], o[2]["out"]
         with self.voiceover(

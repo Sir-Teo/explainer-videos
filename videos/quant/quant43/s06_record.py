@@ -97,7 +97,7 @@ class Record(VoiceoverScene):
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 3.2 - 0.47 * j, 0])
-            row[0].align_to([-6.6, 0, 0], LEFT)
+            row[0].align_to(np.array([-6.6, 0, 0]), LEFT)
         first = start == 0
         with self.voiceover(
             ("The rows, in the order they were opened. <bookmark mark='a'/> Part twenty-four's ten classic factors, "
@@ -167,7 +167,7 @@ class Record(VoiceoverScene):
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 2.7 - 0.6 * j, 0])
-            row[0].align_to([-6.4, 0, 0], LEFT)
+            row[0].align_to(np.array([-6.4, 0, 0]), LEFT)
         cl = fam[0]
         with self.voiceover(
             "By family. <bookmark mark='a'/> The classic factors, the most trustworthy because others chose them "
@@ -198,7 +198,7 @@ class Record(VoiceoverScene):
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 3.0 - 0.5 * j, 0])
-            row[0].align_to([-6.5, 0, 0], LEFT)
+            row[0].align_to(np.array([-6.5, 0, 0]), LEFT)
         with self.voiceover(
             "Before the hold-out, what did the counter say about the searched strategies? <bookmark mark='a'/> The "
             "deflated Sharpe ratio: the probability that the research Sharpe beats the best of that many trials of "

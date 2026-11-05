@@ -1859,3 +1859,15 @@ Frontier (2023–2026):
 - Berk, J., van Binsbergen, J. (2015). "Measuring skill in the mutual fund industry." *JFE*.
 - Pedersen, L. H. (2018). "Sharpening the arithmetic of active management." *FAJ*.
 - CME Group (April 2020). Notice on the switch to the Bachelier model for options on WTI crude oil futures.
+- Bachelier, L. (1900). "Théorie de la spéculation." *Annales scientifiques de l'École normale supérieure*.
+- Ellis, C. (1975). "The loser's game." *FAJ*.
+- Grossman, S., Stiglitz, J. (1980). "On the impossibility of informationally efficient markets." *AER*.
+- Lo, A. W., MacKinlay, A. C. (1988). "Stock market prices do not follow random walks: evidence from a simple specification test." *RFS*.
+- Benjamini, Y., Hochberg, Y. (1995). "Controlling the false discovery rate: a practical and powerful approach to multiple testing." *JRSS B*.
+- Carhart, M. (1997). "On persistence in mutual fund performance." *Journal of Finance*.
+- Efron, B., Tibshirani, R., Storey, J., Tusher, V. (2001). "Empirical Bayes analysis of a microarray experiment." *JASA*.
+- Storey, J. (2002). "A direct approach to false discovery rates." *JRSS B*.
+- Berk, J., Green, R. (2004). "Mutual fund flows and performance in rational markets." *JPE*.
+- Harvey, C., Liu, Y., Zhu, H. (2016). "... and the cross-section of expected returns." *RFS*.
+- McLean, R. D., Pontiff, J. (2016). "Does academic research destroy stock return predictability?" *Journal of Finance*.
+- Lo, A. W. (2017). *Adaptive Markets*; Pedersen, L. H. (2015). *Efficiently Inefficient*.

@@ -38,8 +38,8 @@ model because it allows a price below zero.
 quant stack. Each part adds a desk or a component: the data layer, the vol desk's surface and hedger, the rates
 curve, the XVA engine, the factor library, the ML and LLM signals, the alpha miners, the risk model and optimizer,
 the execution desk, the market maker, the crypto book, compliance and risk reports. A `HouseChart` card opens each
-part with what is built so far. **The finale runs the whole House** on data no part has touched and reports it as a
-firm would.
+part with what is built so far. **The finale opens the whole Track Record**: every registered strategy, scored once on
+the sealed 2021–25 hold-out, with every trial counted, reported as a firm would (Part 43).
 
 * **Act I, Markets and Money** (1–3): the fair game; the machinery of markets (instruments, clearing, margin,
   shorting, repo, prime brokerage, the players and the quant industry map); value, accounting and the firm.

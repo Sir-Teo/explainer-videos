@@ -172,7 +172,7 @@ class Learning(VoiceoverScene):
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):
                 cell.move_to([xs[i], 1.6 - 0.85 * j, 0])
-            row[0].align_to([-6.3, 0, 0], LEFT)
+            row[0].align_to(np.array([-6.3, 0, 0]), LEFT)
         note_ = label(r"mean P\&L per 400-step session, scored on fresh sessions", font_size=16, color=GREY_B
                       ).to_edge(DOWN, buff=0.6)
         g5 = m["cross"]["0.05"]["0.05"]["mean"]

@@ -11,6 +11,7 @@ class Open(VoiceoverScene):
         self.page2()
         self.page3()
         self.settled()
+        self.limits()
         self.method()
         self.question()
 
@@ -97,6 +98,33 @@ class Open(VoiceoverScene):
             "is not a forecast: research Sharpe ratios shrink when the envelope opens."
         ) as vo:
             for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def limits(self):
+        cards = VGroup(
+            desk_question(r"not tested: real fund records", r"Chapters 2 and 3 used a simulated population, where the "
+                          r"truth is known; fund-level databases are licensed", width=12.4, font_size=19),
+            desk_question(r"not tested: other surfaces", r"one Bitcoin options surface, on one day, with the next day "
+                          r"kept for checks; equity and rates surfaces may rank models differently", width=12.4,
+                          font_size=19),
+            desk_question(r"not tested: a long hold-out", r"five sealed years, so most rows cannot be told apart from "
+                          r"their research values or from zero", width=12.4, font_size=19),
+            desk_question(r"not tested: language models as traders", r"no downloaded model was run; Part 42 explains "
+                          r"what an honest test would need", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.22)
+        with self.voiceover(
+            "And, just as honestly, what the series could not test. <bookmark mark='a'/> Real fund records: the "
+            "databases of fund returns are licensed, so the counting of skill was checked on a simulated population, "
+            "where the truth is known, and not on real funds. <bookmark mark='b'/> Other surfaces: one Bitcoin options "
+            "surface on one day ranks models for that market, not for every market. <bookmark mark='c'/> A long "
+            "hold-out: five sealed years cannot separate most strategies from their research values, or from zero. "
+            "<bookmark mark='d'/> And language models as traders, which the series discussed but did not run. Each "
+            "is a place where the next version of this course should start."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c", "d")):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)

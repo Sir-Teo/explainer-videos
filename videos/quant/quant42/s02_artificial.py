@@ -157,7 +157,7 @@ class Artificial(VoiceoverScene):
             cells = VGroup(*[label(c, font_size=20 if j else 19, color=(cols[i] if j else QC.IDEA)) for i, c in enumerate(row)])
             for i, c in enumerate(cells):
                 c.move_to([xs[i], 2.0 - 0.8 * j, 0])
-            cells[0].align_to([-6.4, 0, 0], LEFT)
+            cells[0].align_to(np.array([-6.4, 0, 0]), LEFT)
             tab.add(cells)
         with self.voiceover(
             "The stylised facts, side by side. <bookmark mark='a'/> Excess kurtosis: "

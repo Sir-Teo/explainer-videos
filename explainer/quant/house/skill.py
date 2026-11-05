@@ -42,8 +42,8 @@ def fund_population(m: int = 2000, shares=(0.75, 0.24, 0.01), alphas=(0.0, -0.03
 
 def storey_pi0(p, lam: float = 0.5) -> float:
     """Storey (2002): the share of true nulls, from the p-values above ``lam``, which are mostly nulls:
-    pi0_hat = #{p > lam} / (m (1 - lam)). Under independence E[pi0_hat] >= pi0, because alternatives contribute
-    non-negatively to the count."""
+    pi0_hat = #{p > lam} / (m (1 - lam)). Uncapped, E[pi0_hat] >= pi0 with or without independence (linearity of
+    expectation): the alternatives only add to the count. The cap at 1 is the usual practical guard."""
     p = np.asarray(p, float)
     return float(min(1.0, np.mean(p > lam) / (1 - lam)))
 
