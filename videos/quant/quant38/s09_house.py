@@ -12,10 +12,13 @@ class House(VoiceoverScene):
         self.card()
         self.sheet(load("maker"), load("fills"), load("glft"), load("deep"), load("bcs"), load("etf"))
         self.limits()
+        self.golive()
+        self.capital()
         self.lab()
         self.lab2()
         self.lab3()
         self.lab4()
+        self.two_desks()
         self.module()
         self.test()
 
@@ -113,6 +116,48 @@ class House(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def golive(self):
+        cards = VGroup(
+            desk_question(r"replay first", r"a replay on the real tape, with fills at the House's own measured latency "
+                          r"and queue position, and markouts at 1, 10 and 60 seconds", width=12.0, font_size=19),
+            desk_question(r"then small and live", r"a minimal size with tight limits, measuring live markouts against "
+                          r"the replay's; the gap between them is the replay's error", width=12.0, font_size=19),
+            desk_question(r"then scale, slowly", r"size grows only while live markouts stay inside the replay's "
+                          r"confidence band; any drift stops it", width=12.0, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How the desk would go live. <bookmark mark='a'/> A replay first, on the real tape, with fills at the "
+            "House's own measured latency and queue position. <bookmark mark='b'/> Then small and live, with tight "
+            "limits, measuring live markouts against the replay's: the gap is the replay's error. <bookmark mark='c'/> "
+            "Then scale, slowly, and only while live markouts stay within the replay's confidence band."
+        ) as vo:
+            for k_, mk_ in enumerate(("a", "b", "c")):
+                vo.wait_until(mk_)
+                self.play(FadeIn(cards[k_], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def capital(self):
+        cards = VGroup(
+            desk_question(r"margin and collateral", r"every position needs margin at the venue or the clearing house; a "
+                          r"maker quoting many venues posts collateral at each (Part 21)", width=12.0, font_size=19),
+            desk_question(r"the worst minute, not the average day", r"capital is set by losses in a fast market, when "
+                          r"fills arrive in bursts on one side and hedges slip", width=12.0, font_size=19),
+            desk_question(r"capacity", r"a quoting desk's size is capped by its markout, its limits and its capital; the "
+                          r"House would start small and grow only on live evidence", width=12.0, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "And capital. <bookmark mark='a'/> Every position needs margin at the venue or the clearing house, and a maker "
+            "on many venues posts collateral at each. <bookmark mark='b'/> Capital is set by the worst minute, not the "
+            "average day: fills in bursts on one side, and hedges that slip. <bookmark mark='c'/> So the desk's size is "
+            "capped by its markout, its limits and its capital."
+        ) as vo:
+            for k_, mk_ in enumerate(("a", "b", "c")):
+                vo.wait_until(mk_)
+                self.play(FadeIn(cards[k_], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
     def lab(self):
         card = house_lab(r"Fill rates from the tape", M.fill_intensity, "up = np.full(nw, -np.inf)", 9, width=10.6)
         card.move_to(ORIGIN)
@@ -157,6 +202,28 @@ class House(VoiceoverScene):
         ):
             self.play(FadeIn(card))
             self.wait(1.5)
+        self.clear_scene()
+
+    def two_desks(self):
+        cards = VGroup(
+            desk_question(r"internal crossing", r"when the portfolio desk's order could trade against the market-making "
+                          r"desk's inventory, crossing it inside the House saves both the spread", width=12.0, font_size=19),
+            desk_question(r"the conflict", r"the maker sees the executor's flow; a maker that trades ahead of it would be "
+                          r"front-running its own client, the abuse rules forbid", width=12.0, font_size=19),
+            desk_question(r"the barrier", r"the two desks are separated; crossing happens only at a price fixed by the "
+                          r"public market, and compliance (Part 34) reviews every case", width=12.0, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Two desks under one roof. <bookmark mark='a'/> When the portfolio desk's order could trade against the "
+            "market-making desk's inventory, crossing it inside the House saves both sides the spread. "
+            "<bookmark mark='b'/> But the maker would see the executor's flow, and trading ahead of it would be "
+            "front-running its own client. <bookmark mark='c'/> So the desks are separated, crossing happens only at a "
+            "price fixed by the public market, and compliance reviews every case."
+        ) as vo:
+            for k_, mk_ in enumerate(("a", "b", "c")):
+                vo.wait_until(mk_)
+                self.play(FadeIn(cards[k_], shift=UP * 0.2))
+        self.wait(0.4)
         self.clear_scene()
 
     def module(self):

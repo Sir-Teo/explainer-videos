@@ -13,7 +13,11 @@ class Tape(VoiceoverScene):
         self.design()
         self.table(mk)
         self.waterfall(mk)
+        self.markout_curve(mk)
+        self.filter_effect(mk)
+        self.who_hits()
         self.slow_cost(mk)
+        self.inventory(mk)
         self.by_day(mk)
         self.fees(mk)
         self.what_missing()
@@ -128,6 +132,91 @@ class Tape(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def markout_curve(self, mk):
+        d = mk["days"]["2023-05-17"]
+        cols = {"slow": SNIPE_C, "fast": FAST_C, "fast, filtered": GOOD}
+        xs = [0, 1, 2, 3, 4]
+        labels_ = [r"at fill", r"0.1 s", r"1 s", r"10 s", r"1 min"]
+        lo = float(np.floor(min(d[n]["mk60"] for n in cols) / 5) * 5) - 5
+        g = axes([-0.3, 4.3], [lo, 2], x_length=8.0, y_length=4.2, xlabel=r"", ylabel=r"markout per fill, ticks",
+                 xticks=[], yticks=[lo, 0], yfmt=lambda v: f"{v:.0f}", font_size=15).move_to(DOWN * 0.3)
+        ax = g.ax
+        curves = VGroup()
+        for n, col in cols.items():
+            r = d[n]
+            ys = [r["half"], r["half"] + r["step"], r["mk1"], r["mk10"], r["mk60"]]
+            curves.add(VGroup(curve(ax, xs, ys, col, stroke_width=3), *[Dot(ax.c2p(a, b), radius=0.06, color=col)
+                                                                         for a, b in zip(xs, ys)]))
+        ticks = VGroup(*[label(t, font_size=15, color=GREY_A).next_to(ax.c2p(x, lo), DOWN, buff=0.15)
+                         for x, t in zip(xs, labels_)])
+        leg = legend([(c, n) for n, c in cols.items()], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.6)
+        fit_right(leg)
+        with self.voiceover(
+            "The markout over time, for the three makers. <bookmark mark='a'/> All start at plus half a tick. The slow "
+            "maker drops at once, inside the tenth of a second of its fills; the fast ones drop more slowly, over the "
+            "following seconds. <bookmark mark='b'/> After a minute, all three are below zero, the filtered one least. "
+            "Speed decides how much of the move happens before you can react; a forecast decides how much of the flow "
+            "you accept at all."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(ticks), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(Create(curves[0]), Create(curves[1]))
+            vo.wait_until("b")
+            self.play(Create(curves[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def filter_effect(self, mk):
+        d = mk["days"]["2023-05-17"]
+        f, ff = d["fast"], d["fast, filtered"]
+        rows = [cmath(r"\text{fills}", r":", rf"{f['n']:,} \to {ff['n']:,}".replace(",", "{,}"), font_size=38),
+                cmath(r"\text{markout at 1 s}", r":", rf"{f['mk1']:+.1f} \to {ff['mk1']:+.1f}", font_size=38),
+                cmath(r"\text{total}", r":", rf"{f['n'] * f['pnl_per_fill']:,.0f} \to {ff['n'] * ff['pnl_per_fill']:,.0f}\ "
+                      r"\text{ticks}".replace(",", "{,}"), font_size=36, colors={r"\text{total}": GOOD})]
+        whys = [why(r"withdrawing the side the queue imbalance threatens removes almost two-thirds of the fills"),
+                why(r"the fills it keeps are less toxic in the first second"),
+                why(r"the day's loss shrinks most from trading less; a filter is a way of declining the worst flow, not of "
+                    r"earning the spread")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What the filter does. <bookmark mark='a'/> Withdrawing the side the imbalance threatens removes almost "
+            "two-thirds of the fast maker's fills. <bookmark mark='b'/> The fills it keeps lose less in the first second. "
+            "<bookmark mark='c'/> The day's total loss shrinks mostly because it trades less. A filter is a way of "
+            "declining the worst flow, not of earning the spread."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def who_hits(self):
+        cards = VGroup(
+            desk_question(r"other venues first", r"Bitcoin's price is discovered across many exchanges and in spot; a quote "
+                          r"here is stale the moment another venue moves (Part 35's price discovery)", width=12.4,
+                          font_size=19),
+            desk_question(r"forced flow", r"liquidations of leveraged positions arrive as market orders in bursts, and "
+                          r"sweep the book in one direction (Part 35, Part 39)", width=12.4, font_size=19),
+            desk_question(r"faster makers' cancels", r"when better-informed makers withdraw first, the quotes left at the "
+                          r"touch are the slow ones, and the sweep finds them", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Who is on the other side of those fills? <bookmark mark='a'/> Traders reacting to other venues: Bitcoin's "
+            "price is discovered across many exchanges and in spot, and a quote here is stale the moment another venue "
+            "moves. <bookmark mark='b'/> Forced flow: liquidations of leveraged positions arrive as bursts of market "
+            "orders in one direction. <bookmark mark='c'/> And faster makers withdraw first, so the quotes left at the "
+            "touch when the sweep arrives are the slow ones."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
     def slow_cost(self, mk):
         d = mk["days"]["2023-05-17"]
         gap = d["fast"]["pnl_per_fill"] - d["slow"]["pnl_per_fill"]
@@ -146,6 +235,35 @@ class Tape(VoiceoverScene):
             "price. <bookmark mark='b'/> The idealised fast one escapes them, and is filled only by trades that stop at "
             f"its price. <bookmark mark='c'/> The difference, about {gap:.0f} ticks a fill, is what the speed race is "
             "about: the ability to withdraw before the price runs through you. Chapter six puts this into a model."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def inventory(self, mk):
+        d = mk["days"]["2023-05-17"]
+        rows = [cmath(r"\text{limit}", r":", r"\pm 5\ \text{units}", font_size=38),
+                cmath(r"\text{sd of inventory}", r"\approx", rf"{d['slow']['inv_sd']:.1f}\ \text{{units}}", font_size=38,
+                      colors={r"\text{sd of inventory}": INV_C}),
+                cmath(r"\text{the maker}", r":", r"\text{usually near a limit, one-sided}", font_size=36,
+                      colors={r"\text{the maker}": BAD})]
+        whys = [why(r"the replay's only inventory control"),
+                why(r"close to the limit itself: fills are not balanced; sweeps fill one side again and again"),
+                why(r"a maker pinned at its limit quotes only one side, which is exactly when the flow is one-sided: GLFT's "
+                    r"skew would lean earlier and harder")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "And its inventory. <bookmark mark='a'/> The only control is a limit of five units each way. "
+            f"<bookmark mark='b'/> The inventory's standard deviation is {d['slow']['inv_sd']:.1f} units, close to the limit "
+            "itself: sweeps fill the same side again and again. <bookmark mark='c'/> So the maker spends much of the day "
+            "pinned at a limit, quoting one side, exactly when the flow is one-sided. GLFT's skew would lean earlier and "
+            "harder."
         ) as vo:
             step(0)
             vo.wait_until("a")

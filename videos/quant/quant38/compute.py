@@ -161,13 +161,18 @@ def compute_bcs() -> dict:
         mid_ = 0.5 * (lo_ + hi_)
         lo_, hi_ = (mid_, hi_) if gap(mid_) < 0 else (lo_, mid_)
     general = 0.5 * (lo_ + hi_)
+    # check the general condition by simulation, with jumps drawn from Bitcoin's own moves (rates per second)
+    gsims = []
+    for h in np.linspace(0.1, 0.6, 11):
+        r = M.bcs_simulate_dist(float(h), lam_i_all, lam_all, allj, 5, 200000.0, seed=7)
+        gsims.append({"half": float(h), "lp": r["lp"], "sniper": r["sniper"]})
     li = float(np.mean([c["lam_i"] for c in cal]))
     lj = float(np.mean([c["lam_j"] for c in cal]))
     Jb = float(np.mean([c["J"] for c in cal]))
     return _json({"lam_i": lam_i, "lam_j": lam_j, "J": J, "s_star": s_star, "sims": sims, "byN": byN,
                   "fba": fba, "btc": {"days": cal, "lam_i": li, "lam_j": lj, "J": Jb,
                                       "half": M.bcs_spread(li, lj, Jb), "general_half": general,
-                                      "lam_all": lam_all, "mean_move": float(allj.mean())}})
+                                      "lam_all": lam_all, "mean_move": float(allj.mean()), "gsims": gsims}})
 
 
 def compute_etf() -> dict:

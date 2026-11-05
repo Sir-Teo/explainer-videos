@@ -9,9 +9,14 @@ class Business(VoiceoverScene):
         self.card()
         self.pnl()
         self.three_risks()
+        self.components()
         self.as_recap()
+        self.tradeoff()
+        self.as_numbers()
         self.glft_formula()
+        self.history_dealers()
         self.who()
+        self.flow_types()
         self.books()
         self.question()
 
@@ -79,6 +84,35 @@ class Business(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def components(self):
+        rows = [cmath(r"s", r"=", r"\text{order processing} + \text{inventory} + \text{adverse selection}", font_size=34),
+                cmath(r"\text{order processing}", r":", r"\text{fees, technology, capital}", font_size=34),
+                cmath(r"\text{inventory}", r":", r"\text{the risk of holding until the other side comes}", font_size=32,
+                      colors={r"\text{inventory}": INV_C}),
+                cmath(r"\text{adverse selection}", r":", r"\text{what informed or faster takers win}", font_size=32,
+                      colors={r"\text{adverse selection}": SNIPE_C})]
+        whys = [why(r"the classic decomposition of a spread (Stoll 1989; Huang and Stoll 1997), estimated from how prices "
+                    r"move after trades"),
+                why(r"the costs of being in business at all: exchange and clearing fees, servers, people, capital"),
+                why(r"Ho and Stoll's term: paid for carrying a position whose price may move"),
+                why(r"Glosten and Milgrom's term, and Budish, Cramton and Shim's: the part of each fill that is lost to the "
+                    r"counterparty's knowledge or speed")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "What a spread pays for. <bookmark mark='a'/> The classic decomposition, by Hans Stoll and later Roger Huang "
+            "and Stoll, has three parts. <bookmark mark='b'/> Order processing: fees, technology, capital. "
+            "<bookmark mark='c'/> Inventory: the risk of holding a position until the other side arrives. "
+            "<bookmark mark='d'/> And adverse selection: what informed or faster counterparties win. On Bitcoin's "
+            "perpetual the third part is so large that the spread cannot cover it, as the next chapter shows."
+        ) as vo:
+            step(0)
+            for k, m_ in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(m_)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
     def as_recap(self):
         rows = [cmath(r"r(q)", r"=", r"M - q\,\gamma\sigma^2 (T - t)", font_size=40, colors={r"r(q)": INV_C}),
                 cmath(r"\delta^a + \delta^b", r"=", r"\gamma\sigma^2 (T - t) + \frac{2}{\gamma}\log\!\left(1 + "
@@ -97,6 +131,62 @@ class Business(VoiceoverScene):
             "quotes fill and how much each fill earns. <bookmark mark='c'/> And it rests on one assumption: a quote at "
             "distance delta is hit at a Poisson rate A e to the minus k delta, independent of where the price goes next. "
             "Chapter three tests that assumption on the tape."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def tradeoff(self):
+        rows = [cmath(r"\text{quote at } \delta", r":", r"\text{earn } \delta \text{ per fill, at rate } A e^{-k\delta}",
+                      font_size=34),
+                cmath(r"\max_\delta", r"\ ", r"\delta\,A e^{-k\delta} \Rightarrow \delta^* = 1/k", font_size=38,
+                      colors={r"\delta\,A e^{-k\delta} \Rightarrow \delta^* = 1/k": SPREAD_C}),
+                cmath(r"\text{risk aversion}", r"\Rightarrow", r"\text{adjust for inventory around } 1/k", font_size=34)]
+        whys = [why(r"a wider quote earns more per fill and fills less often"),
+                why(r"a risk-neutral maker with no inventory concerns maximises expected revenue per unit time: the first-"
+                    r"order condition gives one over $k$"),
+                why(r"everything else in the formulas is about inventory: how far to lean the quotes to get rid of it")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The core trade-off in one line. <bookmark mark='a'/> A quote at distance delta earns delta per fill, and "
+            "fills at a rate that falls with delta. <bookmark mark='b'/> Maximise revenue per unit time and the answer is "
+            "delta equals one over k: the base term of every formula. <bookmark mark='c'/> Everything else is about "
+            "inventory: how far to lean the quotes to get rid of what has been bought."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def as_numbers(self):
+        import math
+        g, var, k, q = 0.1, 4.0, 1.5, 2
+        total = g * var + (2 / g) * math.log(1 + g / k)
+        shift = q * g * var
+        rows = [cmath(r"\gamma = 0.1,\ \sigma^2(T - t) = 4,\ k = 1.5", r"\ ", r"", font_size=34),
+                cmath(r"\delta^a + \delta^b", r"=", rf"0.4 + 20\log(1.0667) = {total:.2f}", font_size=36,
+                      colors={r"\delta^a + \delta^b": SPREAD_C}),
+                cmath(r"r(2)", r"=", rf"M - 2 \times 0.1 \times 4 = M - {shift:.1f}", font_size=38, colors={r"r(2)": INV_C})]
+        whys = [why(r"an illustrative maker: risk aversion, the variance still to bear, and the fill decay"),
+                why(r"the total spread is mostly the fill-rate term, almost $2/k$; risk adds only 0.4"),
+                why(r"holding two units, the maker centres its quotes 0.8 below the mid, to sell more and buy less")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "In numbers. <bookmark mark='a'/> An illustrative maker: risk aversion a tenth, variance still to bear of four, "
+            "and a fill decay of one and a half. <bookmark mark='b'/> The total spread is "
+            f"{total:.2f}, mostly the fill-rate term, close to two over k; the risk term adds only 0.4. "
+            "<bookmark mark='c'/> Holding two units, it centres its quotes 0.8 below the mid, to sell more and buy less."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -139,6 +229,30 @@ class Business(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def history_dealers(self):
+        cards = VGroup(
+            desk_question(r"specialists", r"the NYSE once gave each stock one specialist, with privileged information "
+                          r"about the book and an obligation to keep the market fair and orderly", width=12.4, font_size=19),
+            desk_question(r"odd eighths", r"Christie and Schultz (1994) found Nasdaq dealers almost never quoted odd "
+                          r"eighths of a dollar, keeping spreads at a quarter; investigations and a settlement followed",
+                          width=12.4, font_size=19),
+            desk_question(r"decimals and electronics", r"decimal prices in 2001 and electronic books ended both models; "
+                          r"spreads collapsed, and making markets became a contest of technology", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How we got here. <bookmark mark='a'/> The New York Stock Exchange once gave each stock a single specialist, "
+            "with privileged sight of the book and an obligation to keep the market orderly. <bookmark mark='b'/> On "
+            "Nasdaq, William Christie and Paul Schultz found in 1994 that dealers almost never quoted odd eighths of a "
+            "dollar, which kept spreads at a quarter; investigations and a large settlement followed. "
+            "<bookmark mark='c'/> Decimal prices in two thousand and one and electronic books ended both models: spreads "
+            "collapsed, and making markets became a contest of technology."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
     def who(self):
         cards = VGroup(
             desk_question(r"wholesalers", r"in US equities, a few firms internalise most retail orders off exchange, "
@@ -159,6 +273,30 @@ class Business(VoiceoverScene):
         ) as vo:
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def flow_types(self):
+        cards = VGroup(
+            desk_question(r"not all flow is equal", r"a maker's markout depends on who it trades with: retail orders are "
+                          r"small and rarely informed; a fast arbitrageur's orders are informed by construction",
+                          width=12.4, font_size=19),
+            desk_question(r"segmentation", r"wholesalers pay brokers for retail orders precisely because their markouts "
+                          r"are good; exchanges get the rest, which is why lit spreads must be wider", width=12.4,
+                          font_size=19),
+            desk_question(r"measuring it", r"markouts by counterparty type, order size and time of day are the maker's "
+                          r"most guarded statistics, and the basis of every pricing decision", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Not all flow is equal. <bookmark mark='a'/> A maker's markout depends on who it trades with: retail orders "
+            "are small and rarely informed, while a fast arbitrageur's orders are informed by construction. "
+            "<bookmark mark='b'/> That is why wholesalers pay brokers for retail orders, and why the flow left on "
+            "exchanges forces wider lit spreads. <bookmark mark='c'/> Markouts by counterparty, size and time of day are "
+            "a maker's most guarded statistics."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

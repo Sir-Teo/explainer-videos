@@ -11,6 +11,7 @@ class Hook(VoiceoverScene):
         self.question()
         self.claims(load("maker"), load("deep"), load("bcs"))
         self.stakes()
+        self.not_mm()
         self.act()
         self.history()
         self.objectives()
@@ -94,6 +95,29 @@ class Hook(VoiceoverScene):
         ) as vo:
             for k, mk_ in enumerate(("a", "b", "c")):
                 vo.wait_until(mk_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def not_mm(self):
+        cards = VGroup(
+            desk_question(r"not a bet on direction", r"a maker wants to end the day flat; its inventory is a by-product "
+                          r"of serving takers, to be shed, not a view to be held", width=12.4, font_size=19),
+            desk_question(r"not free money from the spread", r"the spread is the gross margin; adverse selection and "
+                          r"inventory are the costs, and on the busiest markets they are larger than the margin", width=12.4,
+                          font_size=19),
+            desk_question(r"not one market", r"a maker's real book is a portfolio across thousands of instruments and "
+                          r"venues, netted and hedged", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Three things market making is not. <bookmark mark='a'/> It is not a bet on direction: a maker wants to end "
+            "the day flat, and its inventory is a by-product of serving takers. <bookmark mark='b'/> It is not free money "
+            "from the spread: the spread is a gross margin, and on the busiest markets its costs are larger. "
+            "<bookmark mark='c'/> And it is not one market: a maker's real book is a portfolio across thousands of "
+            "instruments and venues, netted and hedged."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

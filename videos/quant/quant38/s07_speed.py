@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant38.common import (BAD, FAST_C, HURDLE, MAKER_C, PART, SNIPE_C, fit_right, load)
+from videos.quant.quant38.common import (BUY_C, SELL_C, BAD, FAST_C, HURDLE, MAKER_C, PART, SNIPE_C, fit_right, load)
 
 
 class Speed(VoiceoverScene):
@@ -14,9 +14,13 @@ class Speed(VoiceoverScene):
         self.model()
         self.sim(b)
         self.n_table(b)
+        self.btc_prize(load("maker"))
         self.arms()
         self.measured()
+        self.physics()
         self.remedies()
+        self.auction_example()
+        self.adoption()
         self.question()
 
     def card(self):
@@ -134,6 +138,38 @@ class Speed(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def btc_prize(self, mk):
+        d = mk["days"]["2023-05-17"]
+        rows = [cmath(r"\text{slow}", r":", rf"{d['slow']['n']:,}\ \text{{fills}} \times {d['slow']['pnl_per_fill']:.1f}".replace(",", "{,}"),
+                      font_size=34, colors={r"\text{slow}": SNIPE_C}),
+                cmath(r"\text{fast}", r":", rf"{d['fast']['n']:,}\ \text{{fills}} \times {d['fast']['pnl_per_fill']:.1f}".replace(",", "{,}"),
+                      font_size=34, colors={r"\text{fast}": FAST_C}),
+                cmath(r"\text{per unit quoted, a day}", r":", rf"\${0.1 * abs(d['slow']['n'] * d['slow']['pnl_per_fill']) / 1000:.0f}"
+                      rf"\text{{k}} \to \${0.1 * abs(d['fast']['n'] * d['fast']['pnl_per_fill']) / 1000:.0f}\text{{k lost}}",
+                      font_size=32, colors={r"\text{per unit quoted, a day}": HURDLE})]
+        whys = [why(r"17 May, the slow maker of Chapter 2"),
+                why(r"the idealised fast maker on the same day"),
+                why(r"for a maker quoting one bitcoin a side, in dollars: speed alone cuts the day's loss by more than half, "
+                    r"and still leaves a loss; the rest needs forecasts and fees")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        slow_k = 0.1 * abs(d["slow"]["n"] * d["slow"]["pnl_per_fill"]) / 1000
+        fast_k = 0.1 * abs(d["fast"]["n"] * d["fast"]["pnl_per_fill"]) / 1000
+        with self.voiceover(
+            "The same prize on Bitcoin, in dollars. <bookmark mark='a'/> Chapter two's slow maker, quoting one bitcoin a "
+            f"side, would have lost about {slow_k:.0f} thousand dollars on the seventeenth of May. <bookmark mark='b'/> "
+            f"The idealised fast one, about {fast_k:.0f} thousand. <bookmark mark='c'/> Speed alone cuts the loss by more "
+            "than half, and still leaves a loss: the rest needs forecasts and fee tiers."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def arms(self):
         rows = [cmath(r"\text{prize}", r"=", r"\lambda_J (J - \tfrac{s^*}{2}) = \lambda_I \tfrac{s^*}{2}", font_size=36),
                 cmath(r"\text{faster by } \varepsilon", r"\Rightarrow", r"\text{win every race}", font_size=36,
@@ -189,6 +225,38 @@ class Speed(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def physics(self):
+        km = 1150.0
+        c = 299792.458
+        t_air = 1000 * km / c
+        t_fibre = t_air * 1.47
+        rows = [cmath(r"\text{Chicago--New York}", r"\approx", rf"{km:,.0f}\ \text{{km}}".replace(",", "{,}"), font_size=36),
+                cmath(r"\text{light in air}", r":", rf"{t_air:.1f}\ \text{{ms one way}}", font_size=38, colors={r"\text{light in air}": FAST_C}),
+                cmath(r"\text{light in fibre}", r":", rf"{t_fibre:.1f}\ \text{{ms}}\ (n \approx 1.47)", font_size=36),
+                cmath(r"\text{the prize}", r":", rf"{t_fibre - t_air:.1f}\ \text{{ms}}", font_size=40, colors={r"\text{the prize}": HURDLE})]
+        whys = [why(r"roughly the great-circle distance between the futures exchanges near Chicago and the stock exchanges "
+                    r"near New York"),
+                why(r"the physical limit: microwave and laser links come close to it"),
+                why(r"glass slows light by its refractive index, and fibre routes are longer than the straight line"),
+                why(r"a few milliseconds, the edge that paid for towers between the two cities; a calculation, not a "
+                    r"measured route")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "The physics of the race. <bookmark mark='a'/> The futures exchanges near Chicago and the stock exchanges "
+            "near New York are about eleven hundred and fifty kilometres apart. <bookmark mark='b'/> Light in air "
+            f"covers that in about {t_air:.1f} milliseconds. <bookmark mark='c'/> In glass fibre, slowed by its "
+            f"refractive index, about {t_fibre:.1f}. <bookmark mark='d'/> The difference, under two milliseconds, is "
+            "what paid for chains of microwave towers between the two cities: a calculation from physics, not any "
+            "firm's measured route."
+        ) as vo:
+            step(0)
+            for k, m_ in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(m_)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
     def remedies(self):
         cards = VGroup(
             desk_question(r"frequent batch auctions", r"collect orders for, say, a tenth of a second, then clear them at "
@@ -206,6 +274,58 @@ class Speed(VoiceoverScene):
             "<bookmark mark='b'/> Speed bumps: IEX delays every incoming order by three hundred and fifty microseconds, "
             "and updates its own pegged orders before the delay ends. <bookmark mark='c'/> And asymmetric delays or "
             "fees, which move rents between makers and snipers."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def auction_example(self):
+        rows = [cmath(r"\text{bids}", r":", r"100.02 \times 3,\ 100.01 \times 5,\ 100.00 \times 4", font_size=32, colors={r"\text{bids}": BUY_C}),
+                cmath(r"\text{offers}", r":", r"100.00 \times 2,\ 100.01 \times 4,\ 100.03 \times 6", font_size=32,
+                      colors={r"\text{offers}": SELL_C}),
+                cmath(r"p^*", r"=", r"100.01:\ \text{demand } 8,\ \text{supply } 6 \Rightarrow 6\ \text{trade}", font_size=32,
+                      colors={r"p^*": HURDLE})]
+        whys = [why(r"all orders that arrived during the batch, sorted by price; time within the batch does not matter"),
+                why(r"the same for offers"),
+                why(r"one uniform price where demand meets supply; everyone trades at it, and the excess demand at that "
+                    r"price is rationed pro rata")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "How a batch auction clears. <bookmark mark='a'/> All the bids that arrived during the batch, sorted by "
+            "price; when they arrived within the batch does not matter. <bookmark mark='b'/> The same for offers. "
+            "<bookmark mark='c'/> One uniform price where demand meets supply, here a hundred dollars and a cent: six "
+            "units trade, everyone at the same price, and the excess demand at that price is shared out in proportion. "
+            "A microsecond earlier buys nothing."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def adoption(self):
+        cards = VGroup(
+            desk_question(r"why exchanges keep continuous trading", r"Budish, Lee and Shim (2024) argue exchanges earn "
+                          r"from selling speed (colocation, data) and have little private incentive to switch", width=12.4,
+                          font_size=19),
+            desk_question(r"costs of batching", r"fragmented liquidity if only one venue batches, the choice of interval, "
+                          r"and new games at the batch boundary", width=12.4, font_size=19),
+            desk_question(r"where batching already exists", r"opening and closing auctions, and some venues' periodic "
+                          r"auctions: the idea is old; doing it every tenth of a second is the novelty", width=12.4,
+                          font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Why it has not happened. <bookmark mark='a'/> Budish, Robin Lee and Shim argue that exchanges earn from "
+            "selling speed, colocation and data, and have little private reason to switch. <bookmark mark='b'/> Batching "
+            "has costs too: liquidity fragments if one venue batches alone, the interval must be chosen, and new games "
+            "appear at the batch boundary. <bookmark mark='c'/> And batching already exists, in opening and closing "
+            "auctions: doing it ten times a second is the novelty."
         ) as vo:
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)

@@ -203,3 +203,16 @@ def bcs_simulate(half: float, lam_invest: float, lam_jump: float, J: float, N: i
         lp -= float(np.sum(won)) * (J - half)
         snipe = float(np.sum(won)) * (J - half)
     return {"lp": lp / T, "sniper": snipe / max(N - 1, 1) / T, "n_jump": int(n_jump), "n_inv": int(n_inv)}
+
+
+def bcs_simulate_dist(half: float, lam_invest: float, lam_jump: float, jumps, N: int, T: float, seed: int = 0) -> dict:
+    """``bcs_simulate`` with random jump sizes drawn from the sample ``jumps`` (absolute sizes): a stale quote is worth
+    sniping only when the jump exceeds the half-spread, and then by the excess."""
+    rng = np.random.default_rng(seed)
+    n_inv = rng.poisson(lam_invest * T)
+    n_jump = rng.poisson(lam_jump * T)
+    J = rng.choice(np.asarray(jumps, float), n_jump)
+    gain = np.maximum(J - half, 0.0)
+    won = rng.random(n_jump) > 1.0 / N
+    lp = n_inv * half - float(np.sum(gain[won]))
+    return {"lp": lp / T, "sniper": float(np.sum(gain[won])) / max(N - 1, 1) / T}

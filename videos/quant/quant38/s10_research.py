@@ -15,11 +15,15 @@ class Research(VoiceoverScene):
         self.undercut()
         self.existence()
         self.theorem()
+        self.statics()
         self.general(b)
         self.check_sim(b)
         self.check_fba(b)
+        self.fba_logic()
         self.fba_theorem()
+        self.welfare(b)
         self.arms_formal()
+        self.check_general(b)
         self.btc(b)
         self.related()
         self.open_problems()
@@ -164,6 +168,31 @@ class Research(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def statics(self):
+        rows = [cmath(r"\frac{\partial h^*}{\partial \lambda_J}", r">", r"0", font_size=40),
+                cmath(r"\frac{\partial h^*}{\partial \lambda_I}", r"<", r"0", font_size=40),
+                cmath(r"\frac{\partial h^*}{\partial N}", r"=", r"0", font_size=40, colors={r"0": HURDLE})]
+        whys = [why(r"more frequent public news, more races, wider spreads: markets with many correlated instruments, such "
+                    r"as an ETF and its futures, are sniped most"),
+                why(r"more uninformed investors spread the sniping cost over more trades: busier markets are cheaper"),
+                why(r"the striking one: adding fast firms changes nothing for investors")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "What moves the spread. <bookmark mark='a'/> More frequent public news means more races and wider spreads: "
+            "markets tied to many correlated instruments are sniped the most. <bookmark mark='b'/> More uninformed "
+            "investors spread the cost over more trades, so busier markets are cheaper. <bookmark mark='c'/> And the "
+            "striking one: adding fast firms changes nothing for investors."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def general(self, b):
         rows = [cmath(r"\lambda_I\,h^*", r"=", r"\lambda_J\,\mathbb E\big[(|J| - h^*)^+\big]", font_size=40,
                       colors={r"\lambda_I\,h^*": HURDLE}),
@@ -252,6 +281,34 @@ class Research(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def fba_logic(self):
+        rows = [cmath(r"\text{news before the batch closes}", r"\Rightarrow", r"\text{all firms re-price}", font_size=32),
+                cmath(r"\text{many providers}", r"\Rightarrow", r"\text{Bertrand on price}", font_size=36),
+                cmath(r"s_{\text{batch}}", r"\to", r"\text{inventory and information costs only}", font_size=34,
+                      colors={r"s_{\text{batch}}": GOOD})]
+        whys = [why(r"in a batch, the order of messages within the interval is irrelevant: a provider that sees news can "
+                    r"update its quote before the auction uses it"),
+                why(r"so providers compete by undercutting each other's prices, not by racing"),
+                why(r"the sniping term vanishes except for news in the last instant of a batch; what remains is the "
+                    r"spread a world without races would have")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The logic of the batch result. <bookmark mark='a'/> Within a batch, the order of messages does not matter: a "
+            "provider that sees news updates its quote before the auction uses it. <bookmark mark='b'/> So providers "
+            "compete by undercutting each other's prices, not by racing. <bookmark mark='c'/> The sniping term vanishes, "
+            "except for news in the last instant of a batch, and what remains is the spread a world without races "
+            "would have."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def fba_theorem(self):
         rows = [cmath(r"\Pr(\text{sniped})", r"\approx", r"\frac{\delta}{\tau}", font_size=40, colors={r"\Pr(\text{sniped})": SNIPE_C}),
                 cmath(r"\frac{s^*_{\text{batch}}}{2}", r"\approx", r"\frac{\lambda_J J\,\delta/\tau}{\lambda_I + \lambda_J\,\delta/\tau}",
@@ -270,6 +327,34 @@ class Research(VoiceoverScene):
             "then gives a spread proportional to delta over tau. <bookmark mark='c'/> A microsecond against a tenth of a "
             "second is ten to the minus five: the sniping component falls by five orders of magnitude, and speed below "
             "the batch interval is worth almost nothing."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def welfare(self, b):
+        h = b["s_star"]
+        rows = [cmath(r"\text{investors' cost}", r"=", r"\lambda_I\,h^*", font_size=40),
+                cmath(r"", r"=", rf"{b['lam_i']:.0f} \times {h:.3f} = {b['lam_i'] * h:.3f}\ \text{{per unit time}}",
+                      font_size=36, colors={rf"{b['lam_i'] * h:.3f}\ \text{{per unit time}}": HURDLE}),
+                cmath(r"\text{batch}", r"\Rightarrow", r"\text{this cost} \to 0;\ \text{speed spending stops}", font_size=34,
+                      colors={r"\text{batch}": GOOD})]
+        whys = [why(r"what investors pay in the continuous market: exactly the sniping rents"),
+                why(r"in the simulation's parameters"),
+                why(r"the batch market returns the rent to investors through narrower spreads, and removes the reason to "
+                    r"spend on speed: the welfare gain is the sum of both")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "The welfare arithmetic. <bookmark mark='a'/> Investors pay lambda I times the half-spread, exactly the "
+            f"sniping rents. <bookmark mark='b'/> In the simulation's parameters, {b['lam_i'] * h:.3f} per unit of time. "
+            "<bookmark mark='c'/> A batch market returns that to investors through narrower spreads, and also removes "
+            "the reason to spend on speed. The gain is both together."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -305,6 +390,35 @@ class Research(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+    def check_general(self, b):
+        g = b["btc"]["gsims"]
+        x = np.asarray([s["half"] for s in g], float)
+        d = np.asarray([s["lp"] - s["sniper"] for s in g], float)
+        cross = float(np.interp(0, d, x))
+        top = float(np.ceil(np.abs(d).max()))
+        ax_ = axes([0.1, 0.6], [-top, top], x_length=6.4, y_length=4.4, xlabel=r"half-spread $h$, ticks",
+                   ylabel=r"$\pi_L - \pi_S$, ticks a second", xticks=[0.1, 0.3, 0.5], yticks=[-top, 0, top],
+                   yfmt=lambda v: f"{v:.0f}", font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
+        ax = ax_.ax
+        c_ = VGroup(curve(ax, x, d, MAKER_C, stroke_width=3), *[Dot(ax.c2p(a, y), radius=0.06, color=MAKER_C)
+                                                               for a, y in zip(x, d)])
+        root = DashedLine(ax.c2p(b["btc"]["general_half"], -top), ax.c2p(b["btc"]["general_half"], top), color=HURDLE,
+                          stroke_width=1.8)
+        zero = DashedLine(ax.c2p(0.1, 0), ax.c2p(0.6, 0), color=GREY_B, stroke_width=1.2)
+        with self.voiceover(
+            "Check four: the general condition, with Bitcoin's own jump sizes. Simulate the market with jumps drawn from "
+            "every real mid change and the takers' real rate. <bookmark mark='a'/> The difference between the two roles "
+            f"crosses zero at {cross:.2f} of a tick, <bookmark mark='b'/> where the condition, solved directly, puts it: "
+            f"{b['btc']['general_half']:.2f}."
+        ) as vo:
+            self.play(FadeIn(ax_), Create(zero))
+            vo.wait_until("a")
+            self.play(Create(c_))
+            vo.wait_until("b")
+            self.play(Create(root))
+        self.wait(0.4)
         self.clear_scene()
 
     def btc(self, b):

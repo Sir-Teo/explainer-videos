@@ -11,7 +11,11 @@ class Tick(VoiceoverScene):
         self.pinned()
         self.rent(b)
         self.queue_race()
+        self.pro_rata()
+        self.waiting()
         self.optimal_tick()
+        self.subtick()
+        self.who_gains()
         self.rules()
         self.question()
 
@@ -105,6 +109,60 @@ class Tick(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def pro_rata(self):
+        rows = [cmath(r"\text{time priority}", r":", r"\text{first in, first filled}", font_size=36, colors={r"\text{time priority}": FAST_C}),
+                cmath(r"\text{pro rata}", r":", r"\text{fill} \propto \text{size resting at the price}", font_size=36),
+                cmath(r"\text{pro rata}", r"\Rightarrow", r"\text{oversize orders, size races}", font_size=36,
+                      colors={r"\text{oversize orders, size races}": BAD})]
+        whys = [why(r"the rule of most stock and crypto books: speed buys position"),
+                why(r"used in some interest-rate futures: an incoming order is split across resting orders in proportion to "
+                    r"their size, often with a top-of-book allocation first"),
+                why(r"makers post far more than they want, since fills scale with size; the race moves from time to "
+                    r"size, and the displayed depth overstates what anyone intends to trade")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Another way to share a pinned spread. <bookmark mark='a'/> Time priority, the rule of most stock and crypto "
+            "books, makes speed buy position. <bookmark mark='b'/> Pro-rata matching, used in some interest-rate futures, "
+            "splits each incoming order across the resting orders in proportion to their size. <bookmark mark='c'/> Then "
+            "makers post far more than they want, because fills scale with size: the race moves from speed to size, and "
+            "displayed depth overstates what anyone intends to trade."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def waiting(self):
+        rows = [cmath(r"\text{back of the queue}", r":", r"\text{median wait } 3.2\ \text{s},\ 82\%\ \text{filled in a minute}",
+                      font_size=32),
+                cmath(r"\text{front}", r":", r"\text{median wait } 0.2\ \text{s},\ 94\%", font_size=34),
+                cmath(r"\text{priority}", r"=", r"\text{time and safety}", font_size=38, colors={r"\text{priority}": FAST_C})]
+        whys = [why(r"Part 36's replay of a passive order on Bitcoin's perpetual"),
+                why(r"the same order at the head of the line"),
+                why(r"the front fills sooner and on smaller, less informed trades: the rent of a pinned spread is "
+                    r"collected there")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Recall what the queue position is worth. <bookmark mark='a'/> In Part thirty-six's replay, an order at the "
+            "back of Bitcoin's queue waited a median of three seconds, and four in five were filled within a minute. "
+            "<bookmark mark='b'/> At the front, a fifth of a second. <bookmark mark='c'/> The front fills sooner, and on "
+            "smaller, less informed trades: that is where the rent of a pinned spread is collected."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def optimal_tick(self):
         rows = [cmath(r"\text{tick too large}", r":", r"\text{spreads too wide, queues, speed races}", font_size=34,
                       colors={r"\text{tick too large}": BAD}),
@@ -124,6 +182,59 @@ class Tick(VoiceoverScene):
             "trivial amount, so quotes flicker and the best levels thin out. <bookmark mark='c'/> Khalil Dayri and "
             "Mathieu Rosenbaum proposed choosing the tick so the average spread sits a little above one tick, where "
             "competition on price works and quotes are still worth posting."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def subtick(self):
+        rows = [cmath(r"\text{quoted}", r":", r"1\ \text{tick}", font_size=40),
+                cmath(r"\text{effective for a taker}", r"=", r"1\ \text{tick} + 2 \times \text{take fee}", font_size=34,
+                      colors={r"\text{effective for a taker}": BAD}),
+                cmath(r"\text{effective for a maker}", r"=", r"1\ \text{tick} + 2 \times \text{rebate}", font_size=34,
+                      colors={r"\text{effective for a maker}": GOOD})]
+        whys = [why(r"the price grid stops at one tick"),
+                why(r"a taker crossing both ways pays the spread and two taker fees"),
+                why(r"a maker earns the spread and two rebates: fees let the economic spread differ from the tick, which "
+                    r"is how maker-taker pricing works around a pinned spread (Part 35)")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Fees move the economic spread off the grid. <bookmark mark='a'/> The quoted spread stops at one tick. "
+            "<bookmark mark='b'/> A taker crossing both ways pays the tick and two taker fees. <bookmark mark='c'/> A "
+            "maker earns the tick and two rebates. So fees let the real price of immediacy differ from the tick, which "
+            "is how maker-taker pricing works around a pinned spread, as Part thirty-five described."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def who_gains(self):
+        rows = [cmath(r"\text{tick} \downarrow", r"\Rightarrow", r"\text{spread} \to s_{\text{natural}}", font_size=38),
+                cmath(r"\text{takers}", r":", r"\text{pay less per trade}", font_size=36, colors={r"\text{takers}": GOOD}),
+                cmath(r"\text{front-of-queue makers}", r":", r"\text{lose their rent}", font_size=34,
+                      colors={r"\text{front-of-queue makers}": BAD})]
+        whys = [why(r"once the tick no longer binds, competition sets the spread"),
+                why(r"the investors and executors of Part 37"),
+                why(r"the firms that won the queue race; displayed depth at the best also thins, since the queue's value "
+                    r"is gone, which can raise the cost of large orders")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "So who gains when the tick shrinks? <bookmark mark='a'/> Once it no longer binds, competition sets the "
+            "spread. <bookmark mark='b'/> Takers pay less per trade. <bookmark mark='c'/> The makers who won the queue "
+            "race lose their rent. And the displayed depth at the best thins out, which can make large orders costlier "
+            "even as small ones get cheaper."
         ) as vo:
             step(0)
             vo.wait_until("a")

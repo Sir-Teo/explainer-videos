@@ -14,10 +14,13 @@ class Fills(VoiceoverScene):
         self.card(g)
         self.method()
         self.curve_(f)
+        self.by_day(f)
         self.quotes(g)
         self.deep_test(d)
+        self.per_hour(d)
         self.why_far(d)
         self.assumption()
+        self.alpha_quotes()
         self.question()
 
     def card(self, g):
@@ -86,6 +89,33 @@ class Fills(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def by_day(self, f):
+        days = list(f["days"].keys())
+        hx = [-3.4, 0.0, 3.4]
+        head = VGroup(*[label(t, font_size=16, color=GREY_B) for t in (r"day", r"$A$, per second", r"$k$, per tick")])
+        tab = VGroup(head)
+        for d in days:
+            r = f["days"][d]
+            tab.add(VGroup(label(d[5:], font_size=18), MathTex(f"{r['A']:.3f}", font_size=26),
+                           MathTex(f"{r['k']:.4f}", font_size=26, color=SPREAD_C)))
+        tab.add(VGroup(label(r"pooled", font_size=18, color=HURDLE), MathTex(f"{f['A']:.3f}", font_size=26, color=HURDLE),
+                       MathTex(f"{f['k']:.4f}", font_size=26, color=HURDLE)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 1.6 - 0.85 * j, 0])
+        k0, k1 = f["days"][days[0]]["k"], f["days"][days[1]]["k"]
+        with self.voiceover(
+            "Is the fit stable? <bookmark mark='a'/> Day by day, k is "
+            f"{k0:.3f} and {k1:.3f}: the busier weekday has slower decay, because bigger sweeps reach further. The "
+            "parameters move with the market's state, so a real desk re-estimates them through the day, and its quotes "
+            "widen and narrow with them."
+        ) as vo:
+            self.play(FadeIn(tab[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
     def quotes(self, g):
         hx = [-3.8, -0.8, 2.0, 4.8]
         head = VGroup(*[label(t, font_size=16, color=GREY_B) for t in (r"risk aversion $\gamma$", r"half-spread at $q = 0$",
@@ -146,6 +176,38 @@ class Fills(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def per_hour(self, d):
+        r45 = [r for r in d["rows"] if r["delta"] == 45][0]
+        r30 = [r for r in d["rows"] if r["delta"] == 30][0]
+        r2 = [r for r in d["rows"] if r["delta"] == 2][0]
+        rows = [cmath(r"\delta = 2", r":", rf"{r2['per_hour60']:,.0f}\ \text{{ticks an hour}}".replace(",", "{,}"),
+                      font_size=36, colors={r"\delta = 2": BAD}),
+                cmath(r"\delta = 30", r":", rf"{r30['per_hour60']:+,.0f}\ \text{{ticks an hour}}".replace(",", "{,}"),
+                      font_size=36),
+                cmath(r"\delta = 45", r":", rf"{r45['per_hour60']:+,.0f}\ \text{{ticks an hour}}".replace(",", "{,}"),
+                      font_size=36, colors={r"\delta = 45": GOOD})]
+        whys = [why(r"many fills, each losing: the touch's business is volume times a negative edge"),
+                why(r"near breakeven: fewer fills, edges close to zero"),
+                why(r"rarer fills with large edges: per unit of size, about \$700 an hour in this optimistic test; a real "
+                    r"maker would share these levels with others, pay fees, and hold the inventory")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "Per hour, for one unit at each distance. <bookmark mark='a'/> Two ticks out, many fills, each losing: about "
+            f"{abs(r2['per_hour60']):,.0f} ticks an hour lost. <bookmark mark='b'/> Thirty ticks out, about break-even. "
+            f"<bookmark mark='c'/> Forty-five ticks out, about {r45['per_hour60']:,.0f} ticks an hour gained, roughly seven "
+            "hundred dollars per bitcoin of quote, in this optimistic test. Real deep levels are shared, fees are paid, "
+            "and the inventory must be carried."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def why_far(self, d):
         r45 = [r for r in d["rows"] if r["delta"] == 45][0]
         cards = VGroup(
@@ -189,6 +251,34 @@ class Fills(VoiceoverScene):
             "the wrong reason. <bookmark mark='c'/> The fix is to make fill rates depend on the state, and to add a "
             "short-term alpha, as Cartea, Jaimungal and Jason Ricci did: Part thirty-six's microprice is the obvious "
             "input."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def alpha_quotes(self):
+        rows = [cmath(r"\text{centre}", r":", r"M \to M + \hat\alpha", font_size=40, colors={r"\text{centre}": MAKER_C}),
+                cmath(r"\hat\alpha", r"=", r"\text{the expected move over the quote's life}", font_size=34),
+                cmath(r"\text{e.g.}", r":", r"\text{Part 36's per-horizon table of mean moves}", font_size=34,
+                      colors={r"\text{e.g.}": GOOD})]
+        whys = [why(r"Cartea, Jaimungal and Ricci (2014): with a short-term alpha, the optimal quotes are centred on the "
+                    r"mid plus the expected drift, then widened and skewed as before"),
+                why(r"the forecast that matters is over the time a quote is likely to rest"),
+                why(r"on Bitcoin, the table that cut the ten-second forecast error is the natural input; the microprice, "
+                    r"which overshoots here, is not")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "How alpha enters the quotes. <bookmark mark='a'/> In Cartea, Jaimungal and Ricci's model, the quotes are "
+            "centred on the mid plus the expected move, then widened and skewed as before. <bookmark mark='b'/> The "
+            "forecast that matters is over the time a quote is likely to rest. <bookmark mark='c'/> On Bitcoin, Part "
+            "thirty-six's per-horizon table of mean moves is the natural input, not the microprice, which overshoots "
+            "here."
         ) as vo:
             step(0)
             vo.wait_until("a")

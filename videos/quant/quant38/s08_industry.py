@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant38.common import (BAD, FAST_C, GOOD, PART, SPREAD_C)
+from videos.quant.quant38.common import (INV_C, BAD, FAST_C, GOOD, PART, SPREAD_C)
 
 
 class Industry(VoiceoverScene):
@@ -11,7 +11,10 @@ class Industry(VoiceoverScene):
         self.menkveld()
         self.styles()
         self.costs()
+        self.hedging()
         self.stress()
+        self.obligations()
+        self.rents()
         self.options()
         self.crypto()
         self.question()
@@ -124,6 +127,33 @@ class Industry(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def hedging(self):
+        rows = [cmath(r"\text{inventory}", r":", r"q_1, \dots, q_n\ \text{across instruments}", font_size=36,
+                      colors={r"\text{inventory}": INV_C}),
+                cmath(r"\text{hedge}", r":", r"-\beta^\top q\ \text{in an index future}", font_size=38),
+                cmath(r"\text{residual}", r":", r"\text{idiosyncratic, mean-reverting}", font_size=36,
+                      colors={r"\text{residual}": GOOD})]
+        whys = [why(r"a maker in many names accumulates small positions everywhere"),
+                why(r"the common factor is hedged at once in the most liquid instrument, Part 31's risk model in real time"),
+                why(r"what remains is small, specific to each name, and shed by skewing quotes; Menkveld's maker unwound "
+                    r"within minutes")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "How inventory is really managed. <bookmark mark='a'/> A maker in many names accumulates small positions "
+            "everywhere. <bookmark mark='b'/> The common factor is hedged at once in the most liquid instrument, an index "
+            "future: Part thirty-one's risk model in real time. <bookmark mark='c'/> What remains is small and specific "
+            "to each name, and is shed by skewing quotes, the way Menkveld's maker unwound within minutes."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
     def stress(self):
         rows = [cmath(r"\text{calm}", r":", r"\text{narrow spreads, deep books}", font_size=38, colors={r"\text{calm}": GOOD}),
                 cmath(r"\text{stress}", r":", r"\text{quotes widen or vanish}", font_size=38, colors={r"\text{stress}": BAD}),
@@ -149,6 +179,54 @@ class Industry(VoiceoverScene):
             vo.wait_until("c")
             step(2)
         self.wait(0.5)
+        self.clear_scene()
+
+    def obligations(self):
+        cards = VGroup(
+            desk_question(r"MiFID II in Europe", r"firms running algorithmic market-making strategies must sign "
+                          r"market-making agreements and quote continuously for a specified share of trading hours",
+                          width=12.4, font_size=19),
+            desk_question(r"US designated makers", r"designated market makers on some exchanges must maintain quotes "
+                          r"within set spreads; most electronic makers have only light quoting obligations", width=12.4,
+                          font_size=19),
+            desk_question(r"the trade-off", r"obligations keep liquidity in stress, but make the role costlier, so fewer "
+                          r"firms take it on; rebates and priority are the payment for the burden", width=12.4,
+                          font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Obligations, where they exist. <bookmark mark='a'/> In Europe, MiFID two requires firms running algorithmic "
+            "market-making strategies to sign agreements and quote continuously for a specified share of trading "
+            "hours. <bookmark mark='b'/> In the United States, designated market makers must keep quotes within set "
+            "spreads, but most electronic makers have only light obligations. <bookmark mark='c'/> Obligations keep "
+            "liquidity in stress but make the role costlier; rebates and priority are the payment."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def rents(self):
+        cards = VGroup(
+            desk_question(r"how large is the prize?", r"Aquilina, Budish and O'Neill scaled their London estimate to about "
+                          r"\$5 billion a year across global equity markets, as reported in their paper", width=12.4,
+                          font_size=19),
+            desk_question(r"who earns it", r"a few of the fastest firms win most races; the losers include slower makers, "
+                          r"and in the end investors, through the spread", width=12.4, font_size=19),
+            desk_question(r"what it buys", r"nothing for investors: the races reallocate money that a batch design would "
+                          r"leave with them (Chapter 6)", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How large the prize is. <bookmark mark='a'/> Aquilina, Budish and O'Neill scaled their London estimate to "
+            "roughly five billion dollars a year across the world's equity markets. <bookmark mark='b'/> A few of the "
+            "fastest firms win most of the races; the losers are slower makers and, in the end, investors. "
+            "<bookmark mark='c'/> And it buys investors nothing: the races reallocate money a batch design would leave "
+            "with them."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
         self.clear_scene()
 
     def options(self):

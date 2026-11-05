@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant38.common import (BAD, ETF_C, GOOD, HURDLE, PART, load)
+from videos.quant.quant38.common import (MAKER_C, BAD, ETF_C, GOOD, HURDLE, PART, load)
 
 
 class ETF(VoiceoverScene):
@@ -12,10 +12,14 @@ class ETF(VoiceoverScene):
         self.card()
         self.mechanics()
         self.band()
+        self.worked()
         self.who()
+        self.in_kind()
+        self.inav()
         self.march(e)
         self.discovery()
         self.fed()
+        self.leveraged()
         self.lessons()
         self.question()
 
@@ -87,6 +91,34 @@ class ETF(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
+    def worked(self):
+        p, nav, c = 80.0, 84.0, 0.02
+        gain = nav * (1 - c) - p
+        rows = [cmath(r"\text{buy shares}", r":", r"\$80.00", font_size=38),
+                cmath(r"\text{redeem, sell bonds}", r":", rf"\$84.00 \times (1 - 0.02) = \${nav * (1 - c):.2f}", font_size=36),
+                cmath(r"\text{profit}", r"=", rf"\${gain:.2f}\ \text{{a share}}", font_size=40, colors={r"\text{profit}": GOOD}),
+                cmath(r"\text{if bonds fetch } 79", r"\Rightarrow", r"\text{a loss}", font_size=36, colors={r"\text{a loss}": BAD})]
+        whys = [why(r"the pause's fund, at a discount of almost 5\%"),
+                why(r"redeem in kind, then sell the bonds at their published value less a 2\% cost of trading them"),
+                why(r"an arbitrage, on paper"),
+                why(r"but if the published value is stale and the bonds really fetch \$79, the trade loses: the discount "
+                    r"was the market's price for the bonds")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "The pause's arbitrage, worked through. <bookmark mark='a'/> Buy the shares at eighty dollars. "
+            "<bookmark mark='b'/> Redeem them for bonds, and sell the bonds at their published value less a two percent "
+            f"cost. <bookmark mark='c'/> A profit of {gain:.2f} dollars a share, on paper. <bookmark mark='d'/> But if the "
+            "published value is stale and the bonds really fetch seventy-nine, the trade loses. The discount was the "
+            "market's price for the bonds."
+        ) as vo:
+            step(0)
+            for k, m_ in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(m_)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
     def who(self):
         cards = VGroup(
             desk_question(r"two layers of makers", r"exchange market makers quote the shares all day and hedge with "
@@ -109,6 +141,61 @@ class ETF(VoiceoverScene):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def in_kind(self):
+        cards = VGroup(
+            desk_question(r"in kind and taxes", r"in the US, redeeming in kind lets a fund hand low-cost-basis securities "
+                          r"to participants instead of selling them, so fewer capital gains reach shareholders", width=12.4,
+                          font_size=19),
+            desk_question(r"custom baskets", r"since the SEC's 2019 ETF rule, funds may accept baskets that differ from "
+                          r"their holdings, which helps bond funds whose exact bonds are hard to find", width=12.4,
+                          font_size=19),
+            desk_question(r"cash creations", r"some funds create and redeem in cash, so the fund itself trades the "
+                          r"securities; the first US spot Bitcoin ETFs, approved in January 2024, were set up that way",
+                          width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "Three details that matter. <bookmark mark='a'/> Redeeming in kind lets an American fund hand over "
+            "low-cost-basis securities instead of selling them, so fewer capital gains reach shareholders. "
+            "<bookmark mark='b'/> Since the SEC's twenty nineteen ETF rule, funds may accept custom baskets that differ "
+            "from their holdings, which helps bond funds. <bookmark mark='c'/> And some funds create in cash, so the fund "
+            "itself trades the securities; the first American spot Bitcoin funds, approved in January twenty twenty-four, "
+            "were set up that way."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def inav(self):
+        rows = [cmath(r"\text{iNAV}", r":", r"\text{an indicative value, published every 15 seconds}", font_size=34,
+                      colors={r"\text{iNAV}": ETF_C}),
+                cmath(r"\text{premium}", r"=", r"P / \text{NAV} - 1", font_size=40),
+                cmath(r"\text{maker's fair value}", r":", r"\text{futures, correlated funds, the basket's live quotes}",
+                      font_size=30, colors={r"\text{maker's fair value}": MAKER_C})]
+        whys = [why(r"many exchanges publish an intraday indicative value of the basket, from the last prices of its "
+                    r"holdings"),
+                why(r"the daily premium or discount, against the official end-of-day NAV"),
+                why(r"makers do not quote off the published values; they build their own fair value from the most liquid "
+                    r"related prices, which is why they can quote a bond fund when the bonds are not trading")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "How the price is watched. <bookmark mark='a'/> Many exchanges publish an indicative value of the basket "
+            "every fifteen seconds, from its holdings' last prices. <bookmark mark='b'/> The premium is the price over "
+            "the official value, minus one. <bookmark mark='c'/> But makers do not quote off published values. They build "
+            "their own fair value from the most liquid related prices, futures and other funds, which is why they can "
+            "quote a bond fund when the bonds themselves are not trading."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def march(self, e):
@@ -195,6 +282,36 @@ class ETF(VoiceoverScene):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
+        self.clear_scene()
+
+    def leveraged(self):
+        rows = [cmath(r"\text{target}", r":", r"L \times \text{the daily return}", font_size=38),
+                cmath(r"\text{rebalance}", r"=", r"L(L - 1)\,r\,\text{AUM}", font_size=40, colors={r"\text{rebalance}": HURDLE}),
+                cmath(r"L = 3,\ r = -5\%", r":", r"\text{sell } 30\%\ \text{of AUM at the close}", font_size=34,
+                      colors={r"\text{sell } 30\%\ \text{of AUM at the close}": BAD})]
+        whys = [why(r"leveraged and inverse ETFs promise a multiple of each day's return, so their exposure must be reset "
+                    r"every day"),
+                why(r"Cheng and Madhavan (2009): the trade needed at the close is $L(L - 1)$ times the day's return times "
+                    r"assets, in the direction of the move, for both leveraged and inverse funds"),
+                why(r"a triple-leveraged fund after a 5\% fall must sell 30\% of its assets' worth of exposure: "
+                    r"predictable, procyclical flow that market makers price")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
+        with self.voiceover(
+            "A special case: leveraged and inverse funds. <bookmark mark='a'/> They promise a multiple of each day's "
+            "return, so their exposure must be reset every day. <bookmark mark='b'/> Minder Cheng and Ananth Madhavan "
+            "showed the trade at the close is L times L minus one, times the day's return, times assets, always in the "
+            "direction of the move. <bookmark mark='c'/> A triple-leveraged fund after a five percent fall must sell "
+            "thirty percent of its assets' worth of exposure: predictable, procyclical flow that market makers see "
+            "coming."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
         self.clear_scene()
 
     def lessons(self):

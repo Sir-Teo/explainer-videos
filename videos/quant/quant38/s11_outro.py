@@ -43,6 +43,8 @@ class Outro(VoiceoverScene):
     def construct(self):
         self.recap(load("maker"), load("fills"), load("glft"), load("deep"), load("bcs"), load("etf"))
         self.lessons()
+        self.formulas()
+        self.connections()
         self.desk()
         self.answers()
         self.problems()
@@ -121,6 +123,51 @@ class Outro(VoiceoverScene):
             "its fills, which depends on speed, queue position and forecasts. <bookmark mark='b'/> Models must be tested "
             "on the right thing: markouts, not fill rates. <bookmark mark='c'/> And market design sets the prize: tick "
             "size, matching rules and batch intervals decide whether firms compete on price or on speed, and who pays."
+        ) as vo:
+            for k, m_ in enumerate(("a", "b", "c")):
+                vo.wait_until(m_)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def formulas(self):
+        rows = VGroup(
+            MathTex(r"\text{edge} = \tfrac s2 + r - \mathbb E[\text{markout}]", font_size=34, color=MAKER_C),
+            MathTex(r"\lambda(\delta) = A e^{-k\delta},\quad \delta^* \approx 1/k", font_size=34, color=SPREAD_C),
+            MathTex(r"\delta^{b,a}(q) \approx \tfrac1\gamma\log(1 + \tfrac\gamma k) \pm \tfrac{2q \pm 1}{2} c", font_size=34),
+            MathTex(r"|P - \text{NAV}| \lesssim c_{\text{arbitrage}}", font_size=34, color=ETF_C),
+            MathTex(r"\tfrac{s^*}{2} = \frac{\lambda_J J}{\lambda_I + \lambda_J}\quad (\text{independent of } N)", font_size=34,
+                    color=HURDLE),
+            MathTex(r"\tfrac{s^*_{\text{batch}}}{2} \approx \frac{\lambda_J J\,\delta/\tau}{\lambda_I + \lambda_J \delta/\tau}",
+                    font_size=32, color=GOOD),
+        ).arrange(DOWN, buff=0.32)
+        head = label(r"The part on one card", font_size=34).to_edge(UP, buff=0.4)
+        rows.next_to(head, DOWN, buff=0.4)
+        with self.voiceover(
+            "The part on one card. The maker's edge. Fill rates and the base distance one over k. GLFT's quotes with "
+            "their inventory skew. The ETF's arbitrage band. The sniping spread, independent of the number of firms. "
+            "And its batch-auction version, shrunk by latency over the batch interval."
+        ):
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.5,
+                                                run_time=8))
+        self.wait(0.6)
+        self.clear_scene()
+
+    def connections(self):
+        cards = VGroup(
+            desk_question(r"backwards", r"Part 35's dealer models become a business with costs; Part 36's markouts and "
+                          r"queue value become its P\&L; Part 37's executor is its customer", width=12.4, font_size=19),
+            desk_question(r"sideways", r"Part 11's options maker and Part 12's surface are the same business in "
+                          r"another product", width=12.4, font_size=19),
+            desk_question(r"forwards", r"Part 39's automated market makers quote by formula; Part 41's crises are when "
+                          r"makers step back; Part 42's learning agents take the maker's chair", width=12.4, font_size=19),
+        ).arrange(DOWN, buff=0.25)
+        with self.voiceover(
+            "How this part connects. <bookmark mark='a'/> Backwards: Part thirty-five's dealer models become a business "
+            "with costs; Part thirty-six's markouts become its profit and loss; Part thirty-seven's executor is its "
+            "customer. <bookmark mark='b'/> Sideways: Part eleven's options maker is the same business in another "
+            "product. <bookmark mark='c'/> Forwards: Part thirty-nine's automated makers quote by formula, Part "
+            "forty-one's crises are when makers step back, and Part forty-two's learning agents take the maker's chair."
         ) as vo:
             for k, m_ in enumerate(("a", "b", "c")):
                 vo.wait_until(m_)
