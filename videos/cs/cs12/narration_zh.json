@@ -1,0 +1,434 @@
+{
+ "title": "计算机科学，从零搭建 · 第12部分：语言与自动机",
+ "chapters": {
+  "Hook": "读文本，以及一个拖垮网站的正则表达式",
+  "Languages": "1. 语言是串的集合",
+  "Regex": "2. 正则表达式与自动机",
+  "Thompson": "3. 汤普森构造",
+  "Subset": "4. 子集构造与最小化",
+  "Kleene": "5. 克莱尼定理",
+  "Pumping": "6. 正则语言做不到的事",
+  "Backtrack": "7. 回溯引擎",
+  "Lexing": "8. Pebble 语言的词法分析",
+  "Grammars": "9. 上下文无关文法",
+  "Hierarchy": "10. 栈与乔姆斯基层级",
+  "General": "11. 分析任意文法：CYK 与 Earley",
+  "TopDown": "12. 自顶向下分析",
+  "BottomUp": "13. 自底向上分析",
+  "Pebble": "14. Pebble 语言，分析完成",
+  "Frontier": "15. 前沿：分析能有多快？",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "e4a5fdbe9717": {
+   "scene": "Hook",
+   "en": "Here are six characters: a pattern. One or more a's, repeated one or more times, then a b. <bookmark mark='a'/> Ask Python whether a string of a's, with no b, matches it. The answer is obviously no. <bookmark mark='b'/> But the time it takes to say no, measured on this computer, multiplies by four for every two more a's. Twenty-eight a's take eight seconds; thirty take longer than we were willing to wait. <bookmark mark='c'/> GNU grep answers the same question for a million a's in about a millisecond. <bookmark mark='d'/> This is not a curiosity. On the second of July 2019, Cloudflare deployed one new rule to its web firewall. It contained a regular expression of this kind, and for twenty-seven minutes every processor serving its traffic, around the world, was at full load, trying to match it.",
+   "zh": "这里有六个字符：一个模式。一个或多个 a，重复一次或多次，然后是一个 b。<bookmark mark='a'/>问 Python，一串没有 b 的 a 能不能匹配它。答案显然是不能。<bookmark mark='b'/>可是在这台计算机上测量，说出“不能”所用的时间，每多两个 a 就乘以四。二十八个 a 要八秒；三十个 a 所需的时间，比我们愿意等的还长。<bookmark mark='c'/>GNU grep 对一百万个 a 回答同样的问题，大约只要一毫秒。<bookmark mark='d'/>这不是什么奇闻。2019 年 7 月 2 日，Cloudflare 给它的网络防火墙部署了一条新规则。规则里有一个这类正则表达式，结果在二十七分钟里，全世界为它处理流量的每一个处理器都满负荷运转，忙着去匹配它。"
+  },
+  "c8c528485977": {
+   "scene": "Hook",
+   "en": "And this part has a job of its own to do. <bookmark mark='a'/> Here is the Job again, written this time in a programming language: the Pebble language, which we design in this part and compile in the next. Before any compiler can translate it, something has to read it. <bookmark mark='b'/> First its characters are grouped into words, called tokens, and the rules for tokens are regular expressions. <bookmark mark='c'/> Then the tokens are fitted to a grammar, which turns a flat list into a tree. Both steps rest on one of the most beautiful theories in computer science: languages, and the machines that recognize them.",
+   "zh": "这一部分还有它自己的任务要做。<bookmark mark='a'/>这又是任务，这次用一种编程语言写成：Pebble 语言，我们在这一部分设计它，在下一部分编译它。在任何编译器翻译它之前，得先有东西读懂它。<bookmark mark='b'/>首先，它的字符被组合成词，叫作记号，而记号的规则就是正则表达式。<bookmark mark='c'/>然后，这些记号被套进一部文法，把一个扁平的列表变成一棵树。这两步都建立在计算机科学最美的理论之一上：语言，以及识别语言的机器。"
+  },
+  "788b2ee8c0af": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> Regular expressions and finite automata, and the constructions that turn each into the other. <bookmark mark='b'/> Why one pattern is instant in grep and exponential in Python. <bookmark mark='c'/> What no finite machine can ever recognize, with a proof, and the single stack that fixes it. <bookmark mark='d'/> Grammars, and four ways to parse them, from top down and from bottom up. <bookmark mark='e'/> And the Pebble language itself: its lexer, its grammar, and its parser, run on the Job.",
+   "zh": "我们要去的地方是这样的。<bookmark mark='a'/>正则表达式和有限自动机，以及把两者互相转换的构造。<bookmark mark='b'/>为什么同一个模式在 grep 里瞬间完成，在 Python 里却是指数时间。<bookmark mark='c'/>有什么是任何有限机器都永远识别不了的，附上证明，以及解决它的那一个栈。<bookmark mark='d'/>文法，以及分析文法的四种方法，自顶向下的和自底向上的。<bookmark mark='e'/>还有 Pebble 语言本身：它的词法分析器、文法和语法分析器，运行在任务上。"
+  },
+  "f9a7504c759e": {
+   "scene": "Hook",
+   "en": "This is Part 12 of Computer Science, Built, in Act Three, Speaking to the Machine. <bookmark mark='a'/> In this part: languages as sets of strings, and the difference between recognizing and parsing. Regular expressions and finite automata, with Thompson's construction, the subset construction, minimization and Kleene's theorem. The pumping lemma, and backtracking engines with their blow-up. Lexing, context-free grammars, ambiguity and pushdown automata. Seven parsing algorithms. And the Pebble language, parsed, with the open question of how fast parsing can ever be.",
+   "zh": "这是《计算机科学，从零搭建》的第12部分，属于第三幕“和机器对话”。<bookmark mark='a'/>这一部分讲：语言是串的集合，以及识别和分析的区别。正则表达式和有限自动机，包括汤普森构造、子集构造、最小化和克莱尼定理。泵引理，以及回溯引擎和它的爆炸。词法分析、上下文无关文法、歧义和下推自动机。七种语法分析算法。还有分析好的 Pebble 语言，以及分析究竟能有多快这个开放问题。"
+  },
+  "cc9ea9cedc59": {
+   "scene": "Languages",
+   "en": "Chapter one. Languages as sets of strings.",
+   "zh": "第一章。语言是串的集合。"
+  },
+  "1aaf8614b119": {
+   "scene": "Languages",
+   "en": "Computer science gives the word language a precise and very general meaning. <bookmark mark='a'/> Fix an alphabet, a finite set of symbols, say zero and one. A string is a finite sequence of them, including the empty string. A language is any set of strings at all. <bookmark mark='b'/> The binary numbers divisible by three are a language. So are the balanced strings of parentheses; the strings of some a's followed by exactly as many b's; the palindromes. <bookmark mark='c'/> And so are the valid programs of a programming language: the Job is in the language of Pebble programs, and a line with a missing parenthesis is not.",
+   "zh": "计算机科学给“语言”这个词一个精确而又非常一般的含义。<bookmark mark='a'/>取定一个字母表，一个有限的符号集合，比如零和一。串是由它们组成的有限序列，包括空串。语言就是任意一个串的集合。<bookmark mark='b'/>能被三整除的二进制数是一种语言。配对的括号串也是；若干个 a 后面跟着同样多个 b 的串也是；回文也是。<bookmark mark='c'/>编程语言的合法程序也是一种语言：任务属于 Pebble 程序这个语言，而少了一个括号的一行就不属于。"
+  },
+  "eee02c1bb8a6": {
+   "scene": "Languages",
+   "en": "There are two things we might want to do with a language. <bookmark mark='a'/> A recognizer answers a yes-or-no question: is this string in the language? <bookmark mark='b'/> A parser does more: it says how the string belongs, by building its structure. For this expression, the tree says that the multiplication happens first, and the addition last. A compiler needs the tree; but recognizing comes first, and it is already deep.",
+   "zh": "对一个语言，我们可能想做两件事。<bookmark mark='a'/>识别器回答一个是或否的问题：这个串在语言里吗？<bookmark mark='b'/>语法分析器做得更多：它说明这个串是怎样属于语言的，方法是构造出它的结构。对这个表达式，这棵树说乘法先做，加法最后做。编译器需要的是树；但识别在先，而识别本身就已经很深了。"
+  },
+  "e5fd662564cd": {
+   "scene": "Languages",
+   "en": "The question that organizes this part is: how much memory does a recognizer need? <bookmark mark='a'/> Some languages need only a fixed amount, however long the input: to check divisibility by three you only need to remember the remainder so far. That is a finite automaton, from Part 5. <bookmark mark='b'/> Balanced parentheses need more: you have to count how many are open, without limit. A single stack is enough. <bookmark mark='c'/> Some languages need memory in proportion to the input, and the most powerful machine, the Turing machine of Part 1, has unlimited memory. <bookmark mark='d'/> This ladder, which Noam Chomsky described in 1956, is the backbone of the part: what a machine can recognize depends on what it can remember.",
+   "zh": "贯穿这一部分的问题是：识别器需要多少记忆？<bookmark mark='a'/>有些语言只需要固定的记忆，不管输入多长：要检查能否被三整除，只需记住到目前为止的余数。这就是第5部分的有限自动机。<bookmark mark='b'/>配对的括号需要更多：你得数有多少个括号还开着，没有上限。一个栈就够了。<bookmark mark='c'/>有些语言需要与输入成正比的记忆，而最强大的机器，第1部分的图灵机，拥有无限的记忆。<bookmark mark='d'/>这个阶梯是诺姆·乔姆斯基 1956 年描述的，它是这一部分的脊梁：一台机器能识别什么，取决于它能记住什么。"
+  },
+  "47005870b41c": {
+   "scene": "Regex",
+   "en": "Chapter two. Regular expressions and automata.",
+   "zh": "第二章。正则表达式与自动机。"
+  },
+  "bc7da00d9ffc": {
+   "scene": "Regex",
+   "en": "A regular expression builds a language from single symbols with three operations, which Stephen Kleene wrote down in 1951 while studying models of neurons. <bookmark mark='a'/> Union: a string from either side. Concatenation: a string from the first, then one from the second. And star: any number of strings from the same expression, one after another, including none. <bookmark mark='b'/> Everything else in practical regex syntax, plus, question mark, character classes, the dot, is shorthand for these. <bookmark mark='c'/> With them we can describe binary strings ending in one; an a, then any mixture of b's and c's, then a d; the identifiers of the Pebble language; and, less obviously, the binary numbers divisible by three. Where that last one comes from is chapter five.",
+   "zh": "正则表达式用三种运算从单个符号构造出语言，这三种运算是斯蒂芬·克莱尼在 1951 年研究神经元模型时写下的。<bookmark mark='a'/>并：取自任意一边的串。连接：先取第一个的串，再接第二个的。星号：同一个表达式的任意多个串一个接一个，包括一个也没有。<bookmark mark='b'/>实用正则语法里的其他一切，加号、问号、字符类、点号，都是这些的简写。<bookmark mark='c'/>用它们，我们能描述以一结尾的二进制串；一个 a，然后是 b 和 c 的任意组合，再是一个 d；Pebble 语言的标识符；以及不那么显然的，能被三整除的二进制数。最后那个是从哪里来的，是第五章的内容。"
+  },
+  "5180d58a8d2f": {
+   "scene": "Regex",
+   "en": "And here is a machine. <bookmark mark='a'/> A finite automaton with three states, one for each possible remainder when a binary number read so far is divided by three. <bookmark mark='b'/> Reading one more bit doubles the number and adds the bit, so the remainder r becomes two r plus b, modulo three. That is the whole machine: a fixed memory of three states, however long the input. <bookmark mark='c'/> Feed it one, zero, zero, one. It moves to one, to two, to one, and back to zero, the accepting state: nine is divisible by three. Exactly the strings that the strange regular expression on the last slide describes. Is that a coincidence?",
+   "zh": "这里是一台机器。<bookmark mark='a'/>一个有三个状态的有限自动机，每个状态对应把到目前为止读到的二进制数除以三可能得到的一个余数。<bookmark mark='b'/>多读一位，就是把数翻倍再加上这一位，所以余数 r 变成二 r 加 b，再对三取模。整台机器就是这样：固定的三个状态的记忆，不管输入多长。<bookmark mark='c'/>给它输入一、零、零、一。它依次走到一、二、一，再回到零，也就是接受状态：九能被三整除。正好就是上一页那个奇怪的正则表达式所描述的串。这是巧合吗？"
+  },
+  "3931c45cb8c1": {
+   "scene": "Regex",
+   "en": "It is not. Kleene's theorem says that regular expressions and finite automata describe exactly the same languages, the regular languages. The next three chapters prove it by going round this triangle. <bookmark mark='a'/> Ken Thompson's construction turns any regular expression into a nondeterministic automaton. <bookmark mark='b'/> The subset construction, from Michael Rabin and Dana Scott, turns that into an ordinary deterministic one. <bookmark mark='c'/> And eliminating states one at a time turns any automaton back into a regular expression.",
+   "zh": "不是。克莱尼定理说，正则表达式和有限自动机描述的语言完全相同，也就是正则语言。接下来三章沿着这个三角形走一圈来证明它。<bookmark mark='a'/>肯·汤普森的构造把任何正则表达式变成一个非确定性自动机。<bookmark mark='b'/>迈克尔·拉宾和达纳·斯科特的子集构造，再把它变成普通的确定性自动机。<bookmark mark='c'/>一次消去一个状态，又能把任何自动机变回正则表达式。"
+  },
+  "fd8e64c32c55": {
+   "scene": "Thompson",
+   "en": "Chapter three. Thompson's construction.",
+   "zh": "第三章。汤普森构造。"
+  },
+  "a67b1eb6d211": {
+   "scene": "Thompson",
+   "en": "In 1968 Ken Thompson, who would go on to write Unix, published a way to run regular expressions. <bookmark mark='a'/> Build a small machine for each piece of the expression, each with one way in and one way out. A single symbol is one arrow. <bookmark mark='b'/> To concatenate, join the first machine's exit to the second's entrance, with an arrow labelled epsilon, which can be taken without reading anything. <bookmark mark='c'/> For a union, split into both machines with epsilon arrows, and merge their exits. <bookmark mark='d'/> For a star, add an arrow back to the start, and one that skips the machine altogether. <bookmark mark='e'/> Because epsilon arrows are free, the machine can be in several states at once. That makes it nondeterministic, an NFA.",
+   "zh": "1968 年，后来写出 Unix 的肯·汤普森发表了一种运行正则表达式的方法。<bookmark mark='a'/>为表达式的每一部分搭一台小机器，每台都只有一个入口和一个出口。单个符号就是一条箭头。<bookmark mark='b'/>要连接，就把第一台机器的出口接到第二台的入口，用一条标着 ε 的箭头，走它不用读任何东西。<bookmark mark='c'/>要做并，就用 ε 箭头分进两台机器，再把它们的出口汇合。<bookmark mark='d'/>要做星号，就加一条回到开头的箭头，再加一条整个跳过这台机器的箭头。<bookmark mark='e'/>因为 ε 箭头是免费的，机器可以同时处在好几个状态。这让它成为非确定性的，也就是 NFA。"
+  },
+  "2dd477d6c14f": {
+   "scene": "Thompson",
+   "en": "Here is the machine Thompson's construction builds for a b star a b b: any a's and b's, ending in a b b. <bookmark mark='a'/> Fourteen states: the star's loop on the left, then the three symbols in a row. <bookmark mark='b'/> To run it, keep the set of every state the machine could be in. At the start, that is state zero and everything reachable from it by free moves. <bookmark mark='c'/> Then for each character, move every state in the set across an arrow with that character, and add the free moves again. The set grows and shrinks, but it can never hold more than fourteen states. <bookmark mark='d'/> When the input ends, accept if the accepting state is in the set.",
+   "zh": "这是汤普森构造为 (a|b)*abb 搭出的机器：任意多个 a 和 b，以 b、b 结尾。<bookmark mark='a'/>十四个状态：左边是星号的循环，然后是排成一行的三个符号。<bookmark mark='b'/>运行它的办法，是记住机器可能所处的所有状态的集合。开始时，那是状态零，加上从它出发靠免费移动能到达的一切。<bookmark mark='c'/>然后对每个字符，把集合里的每个状态沿着标有这个字符的箭头移过去，再加上免费移动。集合时大时小，但永远不会超过十四个状态。<bookmark mark='d'/>输入结束时，如果接受状态在集合里，就接受。"
+  },
+  "a3a10aa41737": {
+   "scene": "Thompson",
+   "en": "The cost of this method is easy to bound. <bookmark mark='a'/> With m states and n characters of input, each character touches at most m states, so the time is proportional to m times n, and the machine never has to go back and try again. <bookmark mark='b'/> Thompson's own version compiled the state sets into IBM 7094 machine code inside the QED text editor, and grep, in 1973, grew out of the same line of editors. <bookmark mark='c'/> Here is our simulation, in plain Python, on the pattern from the start of the part. Ten times as many a's take about ten times as long. A hundred thousand a's take a fifth of a second, where Python's own engine needs eight seconds for twenty-eight.",
+   "zh": "这种方法的代价很容易估计。<bookmark mark='a'/>有 m 个状态、n 个输入字符，每个字符最多碰到 m 个状态，所以时间与 m 乘 n 成正比，而且机器永远不必回头重试。<bookmark mark='b'/>汤普森自己的版本在 QED 文本编辑器里把状态集合编译成 IBM 7094 的机器码，而 1973 年的 grep 出自同一系列的编辑器。<bookmark mark='c'/>这是我们用纯 Python 写的模拟，运行在本部分开头那个模式上。a 多十倍，时间大约多十倍。十万个 a 只要五分之一秒，而 Python 自己的引擎对二十八个 a 就要八秒。"
+  },
+  "7990392733e8": {
+   "scene": "Subset",
+   "en": "Chapter four. The subset construction, and minimization.",
+   "zh": "第四章。子集构造与最小化。"
+  },
+  "8171fd0bce9e": {
+   "scene": "Subset",
+   "en": "The simulation of the last chapter suggests something. At any moment the NFA is in some set of states, and which set it is in next depends only on that set and the next character. <bookmark mark='a'/> So make each set one state of a new, deterministic machine. The start state A is the set the simulation started with. <bookmark mark='b'/> From A, reading an a or a b gives two new sets, B and C; from those, more; and so on, until no new sets appear. For a b star a b b, only five of the sixteen thousand possible subsets ever turn up. <bookmark mark='c'/> A set is accepting if it contains the NFA's accepting state, here only E. This is the subset construction, published by Michael Rabin and Dana Scott in 1959; it was part of the work that won them the Turing Award.",
+   "zh": "上一章的模拟给了一个启发。在任何时刻，NFA 处在某个状态集合里，而它下一步处在哪个集合，只取决于这个集合和下一个字符。<bookmark mark='a'/>那么就把每个集合当作一台新的、确定性机器的一个状态。起始状态 A 是模拟开始时的那个集合。<bookmark mark='b'/>从 A 出发，读一个 a 或一个 b 会得到两个新集合，B 和 C；从它们出发，又有更多；如此下去，直到不再出现新的集合。对 (a|b)*abb，一万六千多个可能的子集里只出现了五个。<bookmark mark='c'/>如果一个集合包含 NFA 的接受状态，它就是接受状态，这里只有 E。这就是子集构造，迈克尔·拉宾和达纳·斯科特在 1959 年发表；正是这项工作让他们获得了图灵奖。"
+  },
+  "c3e719f6cbb1": {
+   "scene": "Subset",
+   "en": "The machine is correct, but not always as small as it could be. <bookmark mark='a'/> Two states are equivalent if every possible remaining input leads both to accept or both to reject. Edward Moore's algorithm finds them. Start by separating the accepting states from the rest. <bookmark mark='b'/> Then look at where each state's arrows go. D, on a b, reaches the accepting group; A, B and C do not. So D is different: split it off. <bookmark mark='c'/> Now B reaches D on a b, and A and C do not: split again. <bookmark mark='d'/> Now nothing splits. A and C go to the same groups on every symbol, so no string can ever tell them apart, and they merge. <bookmark mark='e'/> Four states: and the Myhill–Nerode theorem says this minimal machine is unique, the same whichever way you started.",
+   "zh": "这台机器是对的，但不一定是最小的。<bookmark mark='a'/>如果剩下的每一种可能输入都让两个状态同时接受或同时拒绝，这两个状态就是等价的。爱德华·摩尔的算法能找出它们。先把接受状态和其余状态分开。<bookmark mark='b'/>然后看每个状态的箭头指向哪里。D 读一个 b 会到达接受组；A、B、C 不会。所以 D 不同：把它分出去。<bookmark mark='c'/>现在 B 读一个 b 会到 D，而 A 和 C 不会：再分。<bookmark mark='d'/>现在什么也分不开了。A 和 C 在每个符号上都去往同样的组，所以没有任何串能区分它们，它们合并。<bookmark mark='e'/>四个状态：而迈希尔－尼罗德定理说，这台最小的机器是唯一的，不管你从哪里开始。"
+  },
+  "be40b0870982": {
+   "scene": "Subset",
+   "en": "Determinism has a price. <bookmark mark='a'/> Take the strings of zeros and ones whose n-th symbol from the end is a one. An NFA for it is tiny: it guesses when the last n symbols begin, and checks. It needs n plus one states. <bookmark mark='b'/> But the smallest deterministic machine has two to the n. We built them all here: <bookmark mark='c'/> for n equals twelve, the subset construction gives four thousand and ninety-seven states, and minimizing removes just one of them. The guess an NFA gets for free, a DFA has to pay for in memory.",
+   "zh": "确定性是有代价的。<bookmark mark='a'/>看这样的零一串：从末尾数第 n 个符号是一。它的 NFA 很小：猜最后 n 个符号从哪里开始，再检查。它只需要 n 加一个状态。<bookmark mark='b'/>但最小的确定性机器有二的 n 次方个状态。我们在这里把它们全都构造了出来：<bookmark mark='c'/>n 等于十二时，子集构造给出四千零九十七个状态，最小化只去掉其中一个。NFA 免费得到的猜测，DFA 得用记忆来付钱。"
+  },
+  "9b25bf8aea35": {
+   "scene": "Subset",
+   "en": "And no cleverer machine exists; the reason is the Myhill–Nerode theorem. <bookmark mark='a'/> Take any two different strings of n bits, and suppose they first differ at position i. <bookmark mark='b'/> Append i zeros. Now that position is exactly n-th from the end: a one in one string and a zero in the other. <bookmark mark='c'/> So one extended string is in the language and the other is not, and a machine that had reached the same state after both would give the same answer to both. It must keep them apart. <bookmark mark='d'/> Two to the n strings, every pair distinguishable: at least two to the n states. We checked every pair for n equals three.",
+   "zh": "而且不存在更聪明的机器；原因就是迈希尔－尼罗德定理。<bookmark mark='a'/>取任意两个不同的 n 位串，设它们最先在第 i 位不同。<bookmark mark='b'/>在后面补上 i 个零。现在那一位恰好是从末尾数第 n 位：一个串里是一，另一个里是零。<bookmark mark='c'/>所以一个延长后的串在语言里，另一个不在；如果机器读完两个串后到达同一个状态，它就会对两者给出同样的回答。它必须把它们分开。<bookmark mark='d'/>二的 n 次方个串，两两可区分：至少二的 n 次方个状态。我们对 n 等于三检查了每一对。"
+  },
+  "f8ad8b00741f": {
+   "scene": "Subset",
+   "en": "Real engines use a compromise. <bookmark mark='a'/> GNU grep and Google's RE2 run the NFA simulation, but remember each state set they meet, along with its transitions, so that the next time the text reaches it the step is a single table lookup. The DFA is built lazily, only where the text goes. <bookmark mark='b'/> We tried it on the first three hundred thousand characters of Pride and Prejudice, with the pattern: the n-th character back is an e. <bookmark mark='c'/> For n equals twelve, the text reaches six hundred and eighty-two of the four thousand and ninety-six possible states; for sixteen, about three thousand of sixty-five thousand. <bookmark mark='d'/> The worst case is real, but ordinary text is not the worst case, and a cache of a few thousand states is enough.",
+   "zh": "真实的引擎采用一种折中。<bookmark mark='a'/>GNU grep 和谷歌的 RE2 运行 NFA 模拟，但会记住遇到的每个状态集合及其转移，这样文本下次到达它时，这一步就只是一次查表。DFA 是惰性构造的，只建在文本走到的地方。<bookmark mark='b'/>我们在《傲慢与偏见》的前三十万个字符上试了试，模式是：往回数第 n 个字符是 e。<bookmark mark='c'/>n 等于十二时，文本到达了四千零九十六个可能状态中的六百八十二个；n 等于十六时，六万五千多个中的大约三千个。<bookmark mark='d'/>最坏情况是真实存在的，但普通的文本不是最坏情况，几千个状态的缓存就够了。"
+  },
+  "8c73c198dace": {
+   "scene": "Kleene",
+   "en": "Chapter five. Kleene's theorem.",
+   "zh": "第五章。克莱尼定理。"
+  },
+  "23578390fd9b": {
+   "scene": "Kleene",
+   "en": "Now the last side of the triangle: from any automaton, a regular expression. <bookmark mark='a'/> Take the divisible-by-three machine, and add a new start state and a new accepting state, joined by epsilon arrows. Let arrows carry whole regular expressions, not just symbols. <bookmark mark='b'/> Now remove the original states one at a time. To remove a state q, every path that went through it, from p into q and out to r, is replaced by one arrow from p to r, labelled: the way in, then q's loop any number of times, then the way out. <bookmark mark='c'/> Remove state two: the trip from one to two and back becomes a loop on one, zero, one star, zero. <bookmark mark='d'/> Remove state one: the trip from zero to one and back becomes one, then that loop starred, then one. <bookmark mark='e'/> Remove state zero: its loop becomes a star, and what is left is a single arrow carrying a single expression. <bookmark mark='f'/> That is where the strange expression of chapter two came from, and we checked it against the machine on every number up to four thousand and ninety-five.",
+   "zh": "现在是三角形的最后一条边：从任意自动机得到一个正则表达式。<bookmark mark='a'/>拿那台判断能否被三整除的机器，加上一个新的起始状态和一个新的接受状态，用 ε 箭头连上。让箭头上标着整个正则表达式，而不只是单个符号。<bookmark mark='b'/>现在一次消去一个原来的状态。要消去状态 q，每条经过它的路径，从 p 进入 q 再出去到 r，都换成一条从 p 到 r 的箭头，标签是：进来的路，然后 q 自己的循环任意多次，然后出去的路。<bookmark mark='c'/>消去状态二：从一到二再回来的那趟路，变成一上的一个循环，零、一星号、零。<bookmark mark='d'/>消去状态一：从零到一再回来的那趟路，变成一，然后那个循环加星号，再然后一。<bookmark mark='e'/>消去状态零：它的循环变成一个星号，剩下的就是一条箭头，带着一个表达式。<bookmark mark='f'/>第二章那个奇怪的表达式就是这么来的，我们拿它和机器对照，检查了四千零九十五以内的每一个数。"
+  },
+  "88e29aec2b64": {
+   "scene": "Kleene",
+   "en": "The triangle gives regular languages a remarkable sturdiness. <bookmark mark='a'/> They are closed under union, concatenation and star, by definition. <bookmark mark='b'/> They are closed under complement: take a deterministic machine and swap its accepting and rejecting states. The numbers not divisible by three are regular. <bookmark mark='c'/> And under intersection: run two machines side by side, with a pair of states as the state. <bookmark mark='d'/> None of this is obvious from the expressions themselves; try writing the complement of a b star a b b as a regular expression by hand. <bookmark mark='e'/> And because every regular language has a unique minimal DFA, questions such as whether two expressions mean the same thing can be decided by machine: minimize both and compare.",
+   "zh": "这个三角形让正则语言格外结实。<bookmark mark='a'/>它们在并、连接和星号下封闭，这是定义。<bookmark mark='b'/>它们在补运算下封闭：拿一台确定性机器，把接受和拒绝状态对调。不能被三整除的数是正则的。<bookmark mark='c'/>在交运算下也封闭：让两台机器并排运行，用一对状态作为状态。<bookmark mark='d'/>这些从表达式本身都看不出来；试试亲手把 (a|b)*abb 的补写成正则表达式。<bookmark mark='e'/>而且因为每个正则语言都有唯一的最小 DFA，像两个表达式是否表示同一件事这样的问题，可以由机器来判定：把两者都最小化，再比较。"
+  },
+  "a19a412c1bfc": {
+   "scene": "Pumping",
+   "en": "Chapter six. What regular languages cannot do.",
+   "zh": "第六章。正则语言做不到的事。"
+  },
+  "adc8a9198c8f": {
+   "scene": "Pumping",
+   "en": "Is every language regular? No, and the proof is a counting argument. <bookmark mark='a'/> Suppose a deterministic machine with p states reads a string of length p or more. After p symbols it has visited p plus one states, so by the pigeonhole principle it has been in some state twice. <bookmark mark='b'/> Call the part of the string read before the first visit x, the part between the two visits y, and the rest z. Reading y takes the machine round a loop, back to where it was. <bookmark mark='c'/> So it cannot tell the difference if we go round that loop twice, or ten times, or not at all: x y y z, and x z, end in the same state as x y z. <bookmark mark='d'/> That is the pumping lemma, from Yehoshua Bar-Hillel, Micha Perles and Eli Shamir in 1961: in a regular language, every long enough string has a short, non-empty piece near its start that can be pumped.",
+   "zh": "每个语言都是正则的吗？不是，证明是一个计数论证。<bookmark mark='a'/>设一台有 p 个状态的确定性机器读一个长度至少为 p 的串。读完 p 个符号后，它访问了 p 加一个状态，所以由鸽巢原理，它有某个状态到过两次。<bookmark mark='b'/>把第一次到达之前读的部分叫 x，两次之间的部分叫 y，其余叫 z。读 y 让机器绕一个圈，回到原处。<bookmark mark='c'/>所以如果我们绕这个圈两次、十次，或者一次也不绕，机器分不出区别：x y y z 和 x z，与 x y z 停在同一个状态。<bookmark mark='d'/>这就是泵引理，来自 1961 年的约书亚·巴尔－希勒尔、米哈·佩尔斯和埃利·沙米尔：在正则语言里，每个足够长的串在开头附近都有一小段非空的部分，可以被抽吸。"
+  },
+  "8faa68974994": {
+   "scene": "Pumping",
+   "en": "Now watch it fail. <bookmark mark='a'/> Suppose some machine with p states recognized a to the n, b to the n. Take the string of p a's followed by p b's; here p is five. <bookmark mark='b'/> The lemma says it splits into x y z with x y no longer than p, so y lies entirely inside the a's. <bookmark mark='c'/> Here are all fifteen ways to choose such a y, each pumped once more. Every one of them has more a's than b's, so it is not in the language; yet the machine would accept it. <bookmark mark='d'/> The contradiction shows that no finite automaton, of any size, recognizes this language. A finite machine cannot count without limit.",
+   "zh": "现在看它怎样失败。<bookmark mark='a'/>假设某台有 p 个状态的机器能识别 a 的 n 次方 b 的 n 次方。取 p 个 a 后面跟 p 个 b 的串；这里 p 是五。<bookmark mark='b'/>引理说，它可以切成 x y z，其中 x y 不长于 p，所以 y 完全落在 a 里面。<bookmark mark='c'/>这里是选这样一个 y 的全部十五种方式，每一种都再抽吸一次。每一个的 a 都比 b 多，所以都不在语言里；然而机器会接受它。<bookmark mark='d'/>这个矛盾说明，没有任何大小的有限自动机能识别这个语言。有限的机器不能无限制地计数。"
+  },
+  "09ee3a4d8ad3": {
+   "scene": "Pumping",
+   "en": "This has practical consequences. <bookmark mark='a'/> Balanced parentheses contain a to the n b to the n in disguise: n opening brackets must be followed by n closing ones. <bookmark mark='b'/> So no regular expression can check nested blocks in a program, or nested tags in a web page. <bookmark mark='c'/> The Myhill–Nerode theorem gives the same answer from the other side: the strings a, a a, a a a and so on all need different states, because only the right number of b's completes each one, and there are infinitely many of them. <bookmark mark='d'/> So regular expressions are exactly right for chopping a program into tokens, and exactly wrong for understanding its structure. <bookmark mark='e'/> For that, the machine needs a stack, which is chapter ten.",
+   "zh": "这有实际的后果。<bookmark mark='a'/>配对的括号里藏着 a 的 n 次方 b 的 n 次方：n 个左括号后面必须跟着 n 个右括号。<bookmark mark='b'/>所以没有正则表达式能检查程序里嵌套的块，或者网页里嵌套的标签。<bookmark mark='c'/>迈希尔－尼罗德定理从另一面给出同样的答案：串 a、aa、aaa 等等都需要不同的状态，因为只有恰当数目的 b 才能补全每一个，而它们有无穷多个。<bookmark mark='d'/>所以正则表达式恰好适合把程序切成记号，又恰好不适合理解它的结构。<bookmark mark='e'/>要理解结构，机器需要一个栈，那是第十章。"
+  },
+  "5e4597d79e5d": {
+   "scene": "Backtrack",
+   "en": "Chapter seven. Backtracking engines.",
+   "zh": "第七章。回溯引擎。"
+  },
+  "e2f8cfdc82db": {
+   "scene": "Backtrack",
+   "en": "Python, Perl, Java, JavaScript and PCRE do not simulate an automaton. They backtrack. <bookmark mark='a'/> To match a plus, plus, then b, against four a's, the engine has to decide how the outer plus groups the a's. It tries one grouping, all four a's in one group, and then looks for a b. There is none, so it backs up and tries another grouping. <bookmark mark='b'/> There are two to the n minus one ways to cut n a's into groups, and every one of them fails in exactly the same place. <bookmark mark='c'/> The backtracker has no way to know that: it tries them all, one by one. <bookmark mark='d'/> Thompson's simulation follows every grouping at once, and they collapse into the same handful of states.",
+   "zh": "Python、Perl、Java、JavaScript 和 PCRE 不模拟自动机。它们回溯。<bookmark mark='a'/>要拿 (a+)+b 去匹配四个 a，引擎得决定外层的加号怎样把 a 分组。它试一种分组，四个 a 一组，然后找 b。没有，于是它退回来，试另一种分组。<bookmark mark='b'/>把 n 个 a 切成若干组有二的 n 减一次方种方式，而每一种都在完全相同的地方失败。<bookmark mark='c'/>回溯器没有办法知道这一点：它一个一个地全部试一遍。<bookmark mark='d'/>汤普森的模拟同时跟踪所有分组，它们坍缩成同样的少数几个状态。"
+  },
+  "6daeb3b063af": {
+   "scene": "Backtrack",
+   "en": "We measured it. <bookmark mark='a'/> Our own backtracker, counting steps: they double with every a, past twenty-nine million at n equals twenty-two. Thompson's simulation on the same inputs grows in a straight line. <bookmark mark='b'/> Python's engine behaves like ours: eight seconds at twenty-eight. <bookmark mark='c'/> Perl answers instantly, because its engine remembers positions it has already tried in situations like this one: a patch added for exactly this problem, not a different algorithm. <bookmark mark='d'/> And GNU grep, which compiles the pattern to an automaton, handles a million a's in a millisecond and a half.",
+   "zh": "我们测量了它。<bookmark mark='a'/>我们自己的回溯器，数步数：每多一个 a 就翻倍，n 等于二十二时超过两千九百万步。汤普森的模拟在同样的输入上呈直线增长。<bookmark mark='b'/>Python 的引擎表现得和我们的一样：二十八个 a 要八秒。<bookmark mark='c'/>Perl 瞬间作答，因为在这种情形下，它的引擎会记住已经试过的位置：这是专门为这个问题打的补丁，而不是另一种算法。<bookmark mark='d'/>GNU grep 把模式编译成自动机，处理一百万个 a 只要一毫秒半。"
+  },
+  "32d60bd7e53f": {
+   "scene": "Backtrack",
+   "en": "The Cloudflare rule was not even exponential. <bookmark mark='a'/> At its heart was dot star, dot star, equals, dot star. On a line with no equals sign, a backtracker tries every starting point and every way of dividing the line between the two dot stars: about n cubed attempts. <bookmark mark='b'/> On this computer, Python takes a tenth of a second on a thousand characters, and nearly a minute on eight thousand: double the line, eight times the time. grep does not notice. <bookmark mark='c'/> Three years earlier, Stack Overflow went down for thirty-four minutes because a regular expression that trimmed white space met a post containing twenty thousand spaces. <bookmark mark='d'/> In 2007 Russ Cox wrote the article that brought Thompson's method back into fashion, and his RE2 library, like the regular expression engines of Go and Rust, uses automata and guarantees linear time.",
+   "zh": "Cloudflare 的规则甚至都不是指数的。<bookmark mark='a'/>它的核心是点星号、点星号、等号、点星号。在一行没有等号的文本上，回溯器尝试每一个起点，以及在两个点星号之间划分这一行的每一种方式：大约 n 的三次方次尝试。<bookmark mark='b'/>在这台计算机上，Python 对一千个字符要十分之一秒，对八千个字符将近一分钟：行长加倍，时间变成八倍。grep 毫无察觉。<bookmark mark='c'/>三年前，Stack Overflow 宕机了三十四分钟，因为一个删除空白的正则表达式遇到了一个含有两万个空格的帖子。<bookmark mark='d'/>2007 年，拉斯·考克斯写了那篇让汤普森的方法重新流行起来的文章，他的 RE2 库，以及 Go 和 Rust 的正则表达式引擎，都用自动机，保证线性时间。"
+  },
+  "e763d6ff6864": {
+   "scene": "Backtrack",
+   "en": "Why does anyone backtrack, then? <bookmark mark='a'/> Because practical regular expressions can do things regular expressions cannot. This one says: a group of two or more ones, then the same group, repeated. <bookmark mark='b'/> Run on k ones, it matches exactly when k can be split into equal groups of two or more, that is, when k is composite. It is a primality test. <bookmark mark='c'/> A back reference must repeat exactly what an earlier group matched, which no finite automaton can remember, so this is not a regular language at all. <bookmark mark='d'/> And matching with back-references is NP-complete, as Alfred Aho showed: no engine of any kind is known to do it fast. <bookmark mark='e'/> The modern answer is to use an automaton whenever the pattern allows it, and to backtrack only when it must.",
+   "zh": "那为什么还有人回溯？<bookmark mark='a'/>因为实用的正则表达式能做正则表达式做不到的事。这一个说：两个或更多个一组成的一组，然后同样的一组，重复。<bookmark mark='b'/>拿 k 个一来运行，它恰好在 k 能被分成若干个两个以上的相等组时匹配，也就是 k 是合数的时候。这是一个素性测试。<bookmark mark='c'/>回溯引用必须精确重复前面某个组匹配到的东西，这是有限自动机记不住的，所以这根本不是正则语言。<bookmark mark='d'/>而带回溯引用的匹配是 NP 完全的，阿尔弗雷德·阿霍证明了这一点：已知没有任何一种引擎能快速完成它。<bookmark mark='e'/>现代的答案是：模式允许时就用自动机，只在必须时才回溯。"
+  },
+  "513a616a6be5": {
+   "scene": "Lexing",
+   "en": "Chapter eight. Lexing the Pebble language.",
+   "zh": "第八章。Pebble 语言的词法分析。"
+  },
+  "b8524e86a75a": {
+   "scene": "Lexing",
+   "en": "The first stage of reading a program is lexing: grouping its characters into tokens, the words of the language. <bookmark mark='a'/> In the Pebble language there are seven kinds, and each is a regular expression. White space and comments, which are read and thrown away. Numbers, character literals and strings. Names. And operators and punctuation, from single characters up to the two-character operators like arrow and double equals. <bookmark mark='b'/> Keywords like while and return are read as names and then looked up in a table, which keeps the automaton small.",
+   "zh": "读程序的第一个阶段是词法分析：把字符组合成记号，也就是语言的词。<bookmark mark='a'/>Pebble 语言里有七类记号，每一类都是一个正则表达式。空白和注释，读进来然后扔掉。数、字符字面量和字符串。名字。还有运算符和标点，从单个字符到箭头、双等号这样的两字符运算符。<bookmark mark='b'/>像 while 和 return 这样的关键字先作为名字读入，再查一张表，这样自动机能保持得很小。"
+  },
+  "bb2a53dbae1a": {
+   "scene": "Lexing",
+   "en": "Where does one token end and the next begin? <bookmark mark='a'/> The rule every lexer uses is maximal munch: always take the longest token that matches. Greater-than followed by equals is one token, not two. Arrow is one token. <bookmark mark='b'/> And x minus minus greater-than y? The lexer takes x, then a minus, because no token starts minus minus; then the arrow, then y. Maximal munch is greedy, and sometimes surprising. <bookmark mark='c'/> When two rules match the same longest text, the earlier rule wins, so while is a keyword and whiles is a name. <bookmark mark='d'/> All seven rules can be run as one automaton: ninety-six NFA states, which the subset construction turns into a deterministic machine of thirty states over the characters the Job uses. That is what lex, from 1975, and its descendants generate.",
+   "zh": "一个记号在哪里结束，下一个从哪里开始？<bookmark mark='a'/>每个词法分析器都用的规则是最长匹配：总是取能匹配的最长记号。大于号后面跟等号是一个记号，不是两个。箭头是一个记号。<bookmark mark='b'/>那么 x 减减大于 y 呢？分析器取 x，然后一个减号，因为没有记号以两个减号开头；然后是箭头，然后是 y。最长匹配是贪心的，有时出人意料。<bookmark mark='c'/>当两条规则匹配同样长的文本时，前面的规则胜出，所以 while 是关键字，whiles 是名字。<bookmark mark='d'/>七条规则可以合成一台自动机来运行：九十六个 NFA 状态，子集构造把它们变成一台在任务所用字符上只有三十个状态的确定性机器。1975 年的 lex 和它的后代生成的正是这种东西。"
+  },
+  "375dccd651d6": {
+   "scene": "Lexing",
+   "en": "Here is the lexer on the Job. <bookmark mark='a'/> One line of the lookup function becomes a row of tokens, each with its kind: keywords, names, operators, punctuation. <bookmark mark='b'/> The whole program, two thousand two hundred and eighty-five characters on eighty-eight lines, becomes six hundred and fifty-one tokens, more than half of them operators and punctuation. <bookmark mark='c'/> From here on, the parser never sees a character, only tokens.",
+   "zh": "这是在任务上运行的词法分析器。<bookmark mark='a'/>lookup 函数的一行变成一排记号，每个都带着类别：关键字、名字、运算符、标点。<bookmark mark='b'/>整个程序，八十八行上的两千二百八十五个字符，变成六百五十一个记号，其中一半以上是运算符和标点。<bookmark mark='c'/>从这里开始，语法分析器再也看不到一个字符，只看到记号。"
+  },
+  "f43b6a4350e8": {
+   "scene": "Lexing",
+   "en": "One famous language breaks the clean division of labour. <bookmark mark='a'/> In Python, blocks are marked by indentation, and indentation is nesting, which, as we saw, no finite automaton can track. <bookmark mark='b'/> So Python's lexer keeps a stack of indentation levels. When a line is indented further, it pushes the new level and emits an INDENT token; when a line is indented less, it pops, emitting one DEDENT for each level it leaves. <bookmark mark='c'/> Here is Python's own tokenizer, run on a small function: three INDENTs going in, three DEDENTs coming out. To the parser, INDENT and DEDENT are simply opening and closing braces.",
+   "zh": "有一种著名的语言打破了这种干净的分工。<bookmark mark='a'/>在 Python 里，块是用缩进标记的，而缩进就是嵌套，我们已经看到，嵌套是有限自动机跟踪不了的。<bookmark mark='b'/>所以 Python 的词法分析器保存着一个缩进层级的栈。一行缩进得更深时，它压入新的层级，发出一个 INDENT 记号；一行缩进得更浅时，它弹出，每离开一层就发出一个 DEDENT。<bookmark mark='c'/>这是 Python 自己的分词器，运行在一个小函数上：进去三个 INDENT，出来三个 DEDENT。对语法分析器来说，INDENT 和 DEDENT 不过就是左花括号和右花括号。"
+  },
+  "e5a1811fd1e9": {
+   "scene": "Grammars",
+   "en": "Chapter nine. Context-free grammars.",
+   "zh": "第九章。上下文无关文法。"
+  },
+  "46deff74bbb9": {
+   "scene": "Grammars",
+   "en": "Nesting needs a more powerful description: a grammar. <bookmark mark='a'/> Here is a grammar for arithmetic expressions. It has three rules, each with alternatives separated by a bar. <bookmark mark='b'/> E, T and F are nonterminals: names for kinds of phrase, an expression, a term and a factor. Plus, times, the brackets and id are terminals: the tokens the lexer produces. A rule says that wherever its left side appears, it may be replaced by its right side, whatever surrounds it; that is what context-free means. Notice the third rule: an expression in brackets is a factor, so the grammar can nest without limit. <bookmark mark='c'/> Noam Chomsky defined such grammars in 1956 as a model of human language. Four years later John Backus and Peter Naur used the same idea to define ALGOL 60, the first major programming language defined by a formal grammar, and nearly every language since has had one.",
+   "zh": "嵌套需要更强的描述方式：文法。<bookmark mark='a'/>这是算术表达式的一部文法。它有三条规则，每条都有用竖线分开的几个选项。<bookmark mark='b'/>E、T 和 F 是非终结符：各类短语的名字，表达式、项和因子。加号、乘号、括号和 id 是终结符：词法分析器产生的记号。一条规则说，它的左边出现在哪里，就可以替换成它的右边，不管周围是什么；这就是上下文无关的意思。注意第三条规则：括号里的表达式是一个因子，所以文法可以无限地嵌套。<bookmark mark='c'/>诺姆·乔姆斯基在 1956 年把这种文法定义为人类语言的模型。四年后，约翰·巴克斯和彼得·诺尔用同样的想法定义了 ALGOL 60，第一个由形式文法定义的主要编程语言，此后几乎每种语言都有了文法。"
+  },
+  "5e6157f046cf": {
+   "scene": "Grammars",
+   "en": "To show that a string is in the language, derive it. <bookmark mark='a'/> Start from E, and rewrite one nonterminal at a time, here always the leftmost. E becomes E plus T; that E becomes T, then F, then id. Then T becomes T times F, and so on, until only tokens are left: id plus id times id. <bookmark mark='b'/> The same derivation, drawn as a tree, is the parse tree: each nonterminal's children are what it was rewritten into. <bookmark mark='c'/> And the tree is the point. Because the multiplication was built inside a T, below the plus, it binds more tightly. The grammar has encoded the precedence of the operators in its shape.",
+   "zh": "要证明一个串在语言里，就推导它。<bookmark mark='a'/>从 E 开始，每次改写一个非终结符，这里总是最左边的那个。E 变成 E 加 T；那个 E 变成 T，再变成 F，再变成 id。然后 T 变成 T 乘 F，如此下去，直到只剩下记号：id 加 id 乘 id。<bookmark mark='b'/>把同样的推导画成一棵树，就是语法树：每个非终结符的孩子，就是它被改写成的东西。<bookmark mark='c'/>而树才是关键。因为乘法是在一个 T 里面、在加号下面构造的，它结合得更紧。文法把运算符的优先级编码进了它的形状。"
+  },
+  "71e71b236c60": {
+   "scene": "Grammars",
+   "en": "A simpler grammar for the same expressions would say: an expression is two expressions joined by plus or times, or an id. <bookmark mark='a'/> But then id plus id times id has two parse trees. In one, the addition is done first; in the other, the multiplication. Two trees, two meanings, two different answers. The grammar is ambiguous. <bookmark mark='b'/> And it gets worse quickly. With more operands, the number of trees grows like the Catalan numbers: fourteen for five operands, and over fifty-eight thousand for twelve. We counted them with the CYK algorithm of chapter eleven. <bookmark mark='c'/> The layered grammar with expressions, terms and factors describes the same strings with exactly one tree each. Removing ambiguity is part of designing a language.",
+   "zh": "同样的表达式，更简单的文法会说：表达式是用加号或乘号连起来的两个表达式，或者一个 id。<bookmark mark='a'/>可这样一来，id 加 id 乘 id 就有两棵语法树。一棵里加法先做；另一棵里乘法先做。两棵树，两种含义，两个不同的答案。这部文法是有歧义的。<bookmark mark='b'/>而且情况恶化得很快。操作数越多，树的数目按卡塔兰数增长：五个操作数有十四棵，十二个就超过五万八千棵。我们用第十一章的 CYK 算法数出了它们。<bookmark mark='c'/>那部分层的、有表达式、项和因子的文法描述同样的串，每个串恰好一棵树。消除歧义是设计语言的一部分。"
+  },
+  "481964327bdc": {
+   "scene": "Grammars",
+   "en": "The most famous ambiguity in programming is the dangling else. <bookmark mark='a'/> In if c then if c then x else x, does the else belong to the inner if, or the outer one? <bookmark mark='b'/> The usual grammar allows both, and CYK finds two trees. <bookmark mark='c'/> C, Java and Pascal settle it with a rule outside the grammar: an else belongs to the nearest if. <bookmark mark='d'/> The Pebble language avoids the question by requiring braces around every branch. <bookmark mark='e'/> Can a program always detect ambiguity for us? No. Whether a context-free grammar is ambiguous is undecidable, as Cantor, Floyd, and Chomsky and Schützenberger showed in the early 1960s; we will see what that means in Part 25.",
+   "zh": "编程中最著名的歧义是悬空的 else。<bookmark mark='a'/>在 if c then if c then x else x 里，else 属于里面的 if，还是外面的 if？<bookmark mark='b'/>通常的文法两种都允许，CYK 找到两棵树。<bookmark mark='c'/>C、Java 和 Pascal 用文法之外的一条规则来解决：else 属于最近的 if。<bookmark mark='d'/>Pebble 语言要求每个分支都有花括号，从而回避了这个问题。<bookmark mark='e'/>程序能不能总是替我们检测出歧义？不能。一部上下文无关文法是否有歧义是不可判定的，康托尔、弗洛伊德，以及乔姆斯基和舒岑贝格尔在 1960 年代初证明了这一点；那是什么意思，我们在第25部分会看到。"
+  },
+  "4216be614c5a": {
+   "scene": "Hierarchy",
+   "en": "Chapter ten. Stacks, and the Chomsky hierarchy.",
+   "zh": "第十章。栈与乔姆斯基层级。"
+  },
+  "2d4f27273797": {
+   "scene": "Hierarchy",
+   "en": "Give a finite automaton one extra thing, a stack: an unbounded pile it can push symbols onto and pop them from, but only at the top. That is a pushdown automaton. <bookmark mark='a'/> For a to the n b to the n, it needs only three states. In the first, it pushes a marker for every a. <bookmark mark='b'/> Then it moves to the second state and pops a marker for every b. <bookmark mark='c'/> If the stack is back to its bottom exactly when the input runs out, there were as many b's as a's. The stack is the unbounded counter that the pumping lemma said no finite machine could have.",
+   "zh": "给有限自动机加一样东西，一个栈：一个没有上限的堆，它可以往上压入符号、再弹出来，但只能在顶上操作。这就是下推自动机。<bookmark mark='a'/>对 a 的 n 次方 b 的 n 次方，它只需要三个状态。在第一个状态里，每读一个 a 就压入一个记号。<bookmark mark='b'/>然后它转到第二个状态，每读一个 b 就弹出一个记号。<bookmark mark='c'/>如果输入用完时栈恰好回到底部，b 就和 a 一样多。这个栈就是泵引理说有限机器不可能拥有的那个无界计数器。"
+  },
+  "c9c1591fa913": {
+   "scene": "Hierarchy",
+   "en": "For finite automata, nondeterminism added convenience but no power. For pushdown automata, it adds power. <bookmark mark='a'/> To check a palindrome, push the first half and pop it against the second. But where is the middle? <bookmark mark='b'/> A nondeterministic machine guesses, and accepts if any guess works; our simulation searches all the guesses. No deterministic pushdown automaton can recognize palindromes at all. <bookmark mark='c'/> Nondeterministic pushdown automata recognize exactly the languages that context-free grammars generate. <bookmark mark='d'/> The deterministic ones recognize a smaller class, and it is exactly the class that the fast parsers of chapter thirteen can handle, which is why programming languages are designed to fall inside it.",
+   "zh": "对有限自动机，非确定性增加的是方便，不是能力。对下推自动机，它增加的是能力。<bookmark mark='a'/>要检查回文，就把前一半压进去，再拿后一半逐个弹出来比对。可中间在哪里？<bookmark mark='b'/>非确定性的机器去猜，只要有一种猜法成立就接受；我们的模拟搜索所有的猜法。没有任何确定性的下推自动机能识别回文。<bookmark mark='c'/>非确定性下推自动机识别的语言，恰好是上下文无关文法生成的语言。<bookmark mark='d'/>确定性的那些识别的是一个较小的类，它恰好是第十三章的快速分析器能处理的类，这就是为什么编程语言都被设计成落在这个类里面。"
+  },
+  "481ea4c16ef9": {
+   "scene": "Hierarchy",
+   "en": "Chomsky arranged these classes in a hierarchy, each defined by the form of its grammar rules and matched by a kind of machine. <bookmark mark='a'/> At the bottom, regular languages and finite automata: the tokens of a programming language. <bookmark mark='b'/> Then context-free languages and pushdown automata: the structure of programs. <bookmark mark='c'/> Then context-sensitive languages, recognized by machines with memory proportional to their input. A to the n b to the n c to the n lives here; a second pumping lemma shows that a single stack cannot count twice. So does the rule that a variable must be declared before it is used. <bookmark mark='d'/> And at the top, everything a Turing machine can search for. <bookmark mark='e'/> A compiler takes the hint: regular expressions for the tokens, a context-free grammar for the structure, and ordinary code, the type checker of Part 13, for the rest.",
+   "zh": "乔姆斯基把这些类排成一个层级，每一层由其文法规则的形式定义，并对应一种机器。<bookmark mark='a'/>最底层是正则语言和有限自动机：编程语言的记号。<bookmark mark='b'/>然后是上下文无关语言和下推自动机：程序的结构。<bookmark mark='c'/>再往上是上下文有关语言，由记忆与输入成正比的机器识别。a 的 n 次方 b 的 n 次方 c 的 n 次方就在这里；第二个泵引理表明，一个栈不能同时数两样东西。变量必须先声明后使用这条规则也在这里。<bookmark mark='d'/>最顶层是图灵机能搜索的一切。<bookmark mark='e'/>编译器领会了这个提示：用正则表达式处理记号，用上下文无关文法处理结构，其余的交给普通代码，也就是第13部分的类型检查器。"
+  },
+  "e079bd6b1301": {
+   "scene": "Hierarchy",
+   "en": "Real languages do not always respect the hierarchy. <bookmark mark='a'/> In C, a star b semicolon declares a pointer if a names a type, and multiplies if it does not. The grammar cannot tell; so C parsers ask the symbol table while they parse, a trick known as the lexer hack. <bookmark mark='b'/> In C plus plus, whether a less-than sign opens a template can depend on what templates compute, and templates can compute anything, so deciding how to parse C plus plus is undecidable. <bookmark mark='c'/> Perl is worse: how a slash parses depends on a function's declaration, which can depend on running code, and Jeffrey Kegler showed in 2008 that parsing Perl is undecidable too. <bookmark mark='d'/> The hierarchy is therefore a design tool. The Pebble language stays inside the context-free, LALR world on purpose.",
+   "zh": "真实的语言并不总是遵守这个层级。<bookmark mark='a'/>在 C 里，a 星号 b 分号，如果 a 是一个类型名，就声明了一个指针，否则就是乘法。文法分不出来；所以 C 的语法分析器在分析时去问符号表，这个技巧叫作“词法分析器黑客”。<bookmark mark='b'/>在 C++ 里，一个小于号是否开始一个模板，可能取决于模板计算出什么，而模板能计算任何东西，所以判定怎样分析 C++ 是不可判定的。<bookmark mark='c'/>Perl 更糟：一个斜杠怎样分析取决于某个函数的声明，而声明可能取决于运行的代码，杰弗里·凯格勒在 2008 年证明，分析 Perl 也是不可判定的。<bookmark mark='d'/>所以这个层级是一件设计工具。Pebble 语言有意待在上下文无关、LALR 的世界里。"
+  },
+  "e556bc4a400a": {
+   "scene": "General",
+   "en": "Chapter eleven. Parsing any grammar: CYK and Earley.",
+   "zh": "第十一章。分析任意文法：CYK 与 Earley。"
+  },
+  "bda884667917": {
+   "scene": "General",
+   "en": "Is there a parsing method that works for every context-free grammar? Yes, and it is dynamic programming, the subject of Part 19. <bookmark mark='a'/> First rewrite the grammar so that every rule makes either two nonterminals or one token, Chomsky normal form. <bookmark mark='b'/> Then build a triangular table. The cell in row l and column i lists every nonterminal that can derive the l tokens starting at position i. The bottom row comes straight from the tokens. <bookmark mark='c'/> Each higher cell is filled from pairs of cells below it, by splitting its span in two and looking for a rule A goes to B C. <bookmark mark='d'/> If the start symbol appears in the top cell, the whole sentence is in the language. This is the algorithm of John Cocke, Daniel Younger and Tadao Kasami, from the 1960s, and it takes time proportional to n cubed.",
+   "zh": "有没有一种对每部上下文无关文法都管用的分析方法？有，它就是动态规划，第19部分的主题。<bookmark mark='a'/>先把文法改写成每条规则要么产生两个非终结符、要么产生一个记号的形式，即乔姆斯基范式。<bookmark mark='b'/>然后构造一张三角形的表。第 l 行第 i 列的格子，列出所有能推导出从位置 i 开始的 l 个记号的非终结符。最底下一行直接来自记号。<bookmark mark='c'/>每个更高的格子都由它下面的成对格子填出：把它覆盖的范围切成两段，找一条 A 推出 B C 的规则。<bookmark mark='d'/>如果起始符号出现在最顶上的格子里，整个句子就在语言里。这是约翰·科克、丹尼尔·扬格和嵩忠雄在 1960 年代提出的算法，所需时间与 n 的三次方成正比。"
+  },
+  "8ac2d100c3bd": {
+   "scene": "General",
+   "en": "Jay Earley's parser, from 1970, is the other general method, and in practice the better one. <bookmark mark='a'/> It works from left to right, keeping a set of items: a rule, a dot showing how much of it has been seen, and the position where it started. <bookmark mark='b'/> Three operations fill each set. Predict: if the dot is before a nonterminal, add that nonterminal's rules. Scan: if the dot is before the next token, move it past. <bookmark mark='c'/> Complete: when an item is finished, advance every item that was waiting for it. <bookmark mark='d'/> After the last token, a finished start item means success. Earley's method handles any grammar at all, ambiguous or left-recursive, in cubic time at worst, and much faster on the grammars that people actually write.",
+   "zh": "杰伊·厄利 1970 年的分析器是另一种通用方法，在实践中也是更好的那一种。<bookmark mark='a'/>它从左到右工作，维护一个项的集合：一条规则，一个表示已经看到多少的点，以及它开始的位置。<bookmark mark='b'/>三种操作填满每个集合。预测：如果点在一个非终结符前面，就加入这个非终结符的规则。扫描：如果点在下一个记号前面，就把点移过去。<bookmark mark='c'/>完成：一个项结束时，把所有在等它的项都推进一步。<bookmark mark='d'/>最后一个记号之后，如果有一个完成了的起始项，就成功了。厄利的方法能处理任何文法，有歧义的或左递归的都行，最坏是三次方时间，而在人们实际编写的文法上要快得多。"
+  },
+  "c317a93ffb64": {
+   "scene": "General",
+   "en": "We measured both on sums of ids, from five tokens to sixty-five. <bookmark mark='a'/> On the layered, unambiguous grammar, Earley's parser creates a few items per token: a straight line. <bookmark mark='b'/> On the ambiguous grammar, where every split of the sum is a possible tree, the items grow much faster: two thousand three hundred at sixty-five tokens. <bookmark mark='c'/> CYK does cubic work either way. General parsing is possible, but a compiler wants something faster and simpler, for grammars designed to allow it: the next two chapters.",
+   "zh": "我们在 id 的和上测量了两者，从五个记号到六十五个。<bookmark mark='a'/>在分层的、无歧义的文法上，厄利分析器每个记号只产生几个项：一条直线。<bookmark mark='b'/>在有歧义的文法上，和的每一种切分都是一棵可能的树，项增长得快得多：六十五个记号时有两千三百个。<bookmark mark='c'/>CYK 无论哪种都做三次方的工作。通用的分析是可能的，但编译器想要更快、更简单的东西，用于专门设计得允许这样做的文法：那是接下来的两章。"
+  },
+  "59fb67dc5f3b": {
+   "scene": "TopDown",
+   "en": "Chapter twelve. Top-down parsing.",
+   "zh": "第十二章。自顶向下分析。"
+  },
+  "ac62abb30f0e": {
+   "scene": "TopDown",
+   "en": "The simplest way to write a parser is by hand, top down. <bookmark mark='a'/> Write one function for each nonterminal, which reads exactly the tokens of that kind of phrase, calling the other functions for the phrases inside it. But try it on our grammar. E is E plus T, so the function for E first calls the function for E, which calls the function for E, forever, without reading a single token. <bookmark mark='b'/> The cure is to rewrite left recursion as right recursion: an expression is a term followed by a tail of plus-terms, which may be empty. <bookmark mark='c'/> Or, as hand-written parsers really do it, as a loop: parse a term, then as long as the next token is a plus, take it and parse another term.",
+   "zh": "写语法分析器最简单的办法，是自顶向下地手写。<bookmark mark='a'/>为每个非终结符写一个函数，它恰好读入那一类短语的记号，遇到里面的短语就调用其他函数。可是在我们的文法上试试。E 是 E 加 T，所以 E 的函数首先调用 E 的函数，后者又调用 E 的函数，没完没了，一个记号也没读。<bookmark mark='b'/>药方是把左递归改写成右递归：表达式是一个项，后面跟着一串加号和项，这串可以为空。<bookmark mark='c'/>或者，像手写的分析器真正做的那样，写成一个循环：分析一个项，然后只要下一个记号是加号，就吃掉它，再分析一个项。"
+  },
+  "ce0b07040a4b": {
+   "scene": "TopDown",
+   "en": "To make the choices automatic, compute two sets. <bookmark mark='a'/> FIRST of a phrase is the set of tokens it can begin with: a term can begin with an id or an opening bracket. FOLLOW of a nonterminal is the set of tokens that can appear right after it: after an expression, a closing bracket or the end. <bookmark mark='b'/> From these, fill a table. In the row for each nonterminal and the column for each token, write the rule to use when that nonterminal is expected and that token is next. A rule that can produce nothing goes under the tokens that can follow. <bookmark mark='c'/> If every cell holds at most one rule, the parser never has to guess: the grammar is LL one, for Left to right, Leftmost derivation, one token of lookahead. The left-recursive grammar had four clashing cells.",
+   "zh": "要让选择变成自动的，就计算两个集合。<bookmark mark='a'/>一个短语的 FIRST 集，是它可能开头的记号集合：一个项可以以 id 或左括号开头。一个非终结符的 FOLLOW 集，是可能紧跟在它后面的记号集合：表达式后面可以是右括号或结尾。<bookmark mark='b'/>由此填一张表。在每个非终结符那一行、每个记号那一列，写上：期待这个非终结符、而下一个记号是它时，该用哪条规则。能什么也不产生的规则，写在能跟在后面的记号下面。<bookmark mark='c'/>如果每个格子最多一条规则，分析器就永远不必猜：这部文法是 LL(1) 的，意思是从左到右读、最左推导、向前看一个记号。左递归的那部文法有四个冲突的格子。"
+  },
+  "cf0143356a18": {
+   "scene": "TopDown",
+   "en": "Here it is running. <bookmark mark='a'/> The parser keeps a stack of what it still expects to see, starting with E. At each step, if the top is a nonterminal, the table says which rule to expand it with; if it is a token, it must match the next input token. <bookmark mark='b'/> No backtracking, no guessing: one look at the next token decides every step, so the time is linear in the input. <bookmark mark='c'/> Most hand-written compilers, including GCC and Clang for C and C plus plus, are recursive descent parsers of this kind, with a little extra lookahead where the language demands it.",
+   "zh": "这是它运行的样子。<bookmark mark='a'/>分析器维护一个栈，装着它还期待看到的东西，从 E 开始。每一步，如果栈顶是非终结符，表告诉它用哪条规则展开；如果是记号，它必须与下一个输入记号匹配。<bookmark mark='b'/>不回溯，不猜：看一眼下一个记号就决定每一步，所以时间与输入成线性。<bookmark mark='c'/>大多数手写的编译器，包括 C 和 C++ 的 GCC 与 Clang，都是这类递归下降分析器，在语言需要的地方多向前看一点。"
+  },
+  "2914d3e8173c": {
+   "scene": "TopDown",
+   "en": "Expressions with many precedence levels make long, tedious grammars: one nonterminal per level. Vaughan Pratt's method, from 1973, replaces them with numbers. <bookmark mark='a'/> Each operator gets a binding power: or binds weakest, then and, comparisons, plus and minus, times and divide, prefix operators, and strongest of all calls, indexing and field access. <bookmark mark='b'/> The whole expression parser is one loop. Parse a prefix; then, as long as the next operator binds more tightly than the caller's limit, take it and parse its right side with that operator's power as the new limit. <bookmark mark='c'/> On a plus b times c minus d, the times grabs b and c before the plus can, and the minus, at the same power as the plus, waits its turn, so subtraction groups to the left. This is the expression parser of the Pebble language, and of many real compilers.",
+   "zh": "有很多优先级的表达式会让文法又长又繁琐：每一级一个非终结符。沃恩·普拉特 1973 年的方法用数字代替了它们。<bookmark mark='a'/>每个运算符有一个绑定力：或结合得最弱，然后是与、比较、加减、乘除、前缀运算符，最强的是调用、下标和字段访问。<bookmark mark='b'/>整个表达式分析器就是一个循环。分析一个前缀；然后，只要下一个运算符结合得比调用者的界限更紧，就取下它，以这个运算符的绑定力作为新界限来分析它的右边。<bookmark mark='c'/>在 a 加 b 乘 c 减 d 上，乘号抢在加号之前抓住 b 和 c，而减号与加号的绑定力相同，等着轮到它，所以减法向左结合。这就是 Pebble 语言的表达式分析器，也是许多真实编译器的。"
+  },
+  "510913615755": {
+   "scene": "BottomUp",
+   "en": "Chapter thirteen. Bottom-up parsing.",
+   "zh": "第十三章。自底向上分析。"
+  },
+  "e74327b8a667": {
+   "scene": "BottomUp",
+   "en": "A top-down parser must choose a rule before it has seen the phrase. A bottom-up parser waits until it has seen all of it. <bookmark mark='a'/> It has two moves. Shift: push the next token onto a stack. Reduce: when the top of the stack is the complete right side of a rule, replace it by the rule's left side. <bookmark mark='b'/> Watch id times id plus id. Shift id, and reduce it to F, then to T. Now the next token is times: shift it, and the second id, and reduce T times F to T. <bookmark mark='c'/> Then the plus comes: reduce T to E, shift, and reduce the last id all the way up, until the stack holds a single E and the input is empty. Read backwards, the reductions are a rightmost derivation; the parser built the tree from the leaves up. <bookmark mark='d'/> The hard part is knowing when to reduce, and by which rule. That is what the numbers on the stack are for.",
+   "zh": "自顶向下的分析器必须在看到短语之前选定规则。自底向上的分析器要等到把它全部看完。<bookmark mark='a'/>它有两种动作。移进：把下一个记号压到栈上。归约：当栈顶是某条规则完整的右边时，把它换成这条规则的左边。<bookmark mark='b'/>看 id 乘 id 加 id。移进 id，把它归约成 F，再归约成 T。现在下一个记号是乘号：移进它，再移进第二个 id，把 T 乘 F 归约成 T。<bookmark mark='c'/>然后加号来了：把 T 归约成 E，移进，把最后一个 id 一路归约上去，直到栈里只剩一个 E，输入也空了。倒过来读，这些归约就是一个最右推导；分析器是从叶子往上建树的。<bookmark mark='d'/>难点在于知道什么时候归约、按哪条规则归约。栈上的那些数字就是干这个用的。"
+  },
+  "5950dc022b51": {
+   "scene": "BottomUp",
+   "en": "Donald Knuth showed in 1965 how to make the decision mechanical. <bookmark mark='a'/> An item is a rule with a dot in it, marking how much of the rule is already on the stack. A state is the set of all items that could be in progress at once. For our grammar there are twelve states. <bookmark mark='b'/> The remarkable fact is that the stack can be tracked by a finite automaton: the numbers on the stack are a path through these states, and the state on top says what to do. <bookmark mark='c'/> But in two of them, shown in red, a T has just been completed, and the machine cannot tell whether to reduce it, or to shift a times sign that may follow. Using no lookahead, LR zero, the grammar has conflicts.",
+   "zh": "高德纳在 1965 年展示了怎样让这个决定变得机械。<bookmark mark='a'/>项是一条带点的规则，点标出这条规则已经有多少在栈上了。状态是可能同时正在进行的所有项的集合。我们的文法有十二个状态。<bookmark mark='b'/>了不起的事实是，栈可以由一台有限自动机跟踪：栈上的数字是穿过这些状态的一条路径，栈顶的状态说明该做什么。<bookmark mark='c'/>但在其中两个状态里，就是红色的那两个，刚完成了一个 T，机器分不清该归约它，还是移进可能跟在后面的乘号。不向前看，也就是 LR(0)，这部文法有冲突。"
+  },
+  "1a3159754f25": {
+   "scene": "BottomUp",
+   "en": "The cure is to look at the next token before deciding. <bookmark mark='a'/> The simplest version, SLR, reduces by a rule only if the next token can follow the rule's left side. After a T, a times sign cannot follow an E, so the conflict disappears. <bookmark mark='b'/> Knuth's full method, LR one, carries a lookahead token inside every item. It handles every deterministic context-free language, but even this small grammar grows from twelve states to twenty-two, and real languages to thousands. <bookmark mark='c'/> Frank DeRemer's LALR merges the LR one states that contain the same items, getting back to twelve. It is strictly stronger than SLR: this grammar for assignments through pointers defeats SLR, but not LALR. <bookmark mark='d'/> LALR is the method yacc made famous in 1975, and bison still uses it today.",
+   "zh": "药方是在决定之前先看下一个记号。<bookmark mark='a'/>最简单的版本 SLR，只在下一个记号可能跟在规则左边后面时才按这条规则归约。在一个 T 之后，乘号不可能跟在 E 后面，所以冲突消失了。<bookmark mark='b'/>高德纳完整的方法 LR(1)，在每个项里带着一个向前看的记号。它能处理每一个确定性上下文无关语言，但就连这部小文法也从十二个状态涨到二十二个，真实的语言则有好几千个。<bookmark mark='c'/>弗兰克·德雷默的 LALR 把包含相同项的 LR(1) 状态合并起来，又回到十二个。它严格强于 SLR：这部经由指针赋值的文法难倒了 SLR，却难不倒 LALR。<bookmark mark='d'/>LALR 是 yacc 在 1975 年让它出名的方法，bison 至今仍在用它。"
+  },
+  "776216f29288": {
+   "scene": "BottomUp",
+   "en": "We checked our parser generator against bison, on this computer. <bookmark mark='a'/> For each grammar, bison builds exactly one state more than ours, an extra state it uses after shifting the end of input. <bookmark mark='b'/> And on the dangling else, both report the same single shift-reduce conflict. <bookmark mark='c'/> The conflict is the ambiguity from chapter nine: with an else coming after an inner if, reduce the if, or shift the else? Bison resolves it by shifting, which attaches the else to the nearest if: exactly the rule C uses.",
+   "zh": "我们在这台计算机上拿 bison 检验了我们的分析器生成器。<bookmark mark='a'/>对每部文法，bison 都恰好比我们多构造一个状态，那是它在移进输入结束符之后用的一个额外状态。<bookmark mark='b'/>在悬空 else 上，两者报告了同样的一个移进－归约冲突。<bookmark mark='c'/>这个冲突就是第九章的歧义：里面的 if 后面来了一个 else，是归约这个 if，还是移进 else？bison 用移进来解决，这会把 else 接到最近的 if 上：恰好是 C 用的规则。"
+  },
+  "f6ed63d254a4": {
+   "scene": "Pebble",
+   "en": "Chapter fourteen. The Pebble language, parsed.",
+   "zh": "第十四章。Pebble 语言，分析完成。"
+  },
+  "9710f147d582": {
+   "scene": "Pebble",
+   "en": "Now we can design the Pebble language with all of this in mind. <bookmark mark='a'/> It has structs, pointers, arrays and functions, enough to write the Job. <bookmark mark='b'/> Declarations put the name first, then its type. C does it the other way round, and pays for it: in C, a star b semicolon is either a multiplication or the declaration of a pointer, depending on whether a names a type, so a C parser has to consult the symbol table while it parses. <bookmark mark='c'/> Every statement starts with a keyword or an expression, so one token of lookahead decides what comes next. <bookmark mark='d'/> And every branch of an if is a block in braces, so there is no dangling else.",
+   "zh": "现在我们可以带着这一切来设计 Pebble 语言了。<bookmark mark='a'/>它有结构体、指针、数组和函数，足够写出任务。<bookmark mark='b'/>声明把名字放在前面，然后是类型。C 是反过来的，并为此付出代价：在 C 里，a 星号 b 分号要么是乘法，要么是一个指针的声明，取决于 a 是不是一个类型名，所以 C 的分析器在分析时必须去查符号表。<bookmark mark='c'/>每条语句都以关键字或表达式开头，所以向前看一个记号就能决定接下来是什么。<bookmark mark='d'/>if 的每个分支都是花括号里的块，所以没有悬空的 else。"
+  },
+  "b4cb575a44e3": {
+   "scene": "Pebble",
+   "en": "Here is part of the grammar of the Pebble language, written as plain context-free rules. <bookmark mark='a'/> Seventy-nine rules in all, with the expression levels spelled out for the LR tables. <bookmark mark='b'/> Our LALR construction gives a table of a hundred and forty-six states, with no conflicts at all, and even the simpler SLR method has none. Bison, given the same rules, agrees: one more state, as always, and no conflicts. <bookmark mark='c'/> And both parsers we built, the table-driven LR parser and the hand-written recursive descent parser with Pratt's method for expressions, accept all six hundred and fifty-one tokens of the Job. Two independent parsers agreeing on the same grammar is the kind of check this series relies on.",
+   "zh": "这是 Pebble 语言文法的一部分，写成普通的上下文无关规则。<bookmark mark='a'/>一共七十九条规则，为了 LR 表，把表达式的各个层级都写了出来。<bookmark mark='b'/>我们的 LALR 构造给出一张有一百四十六个状态的表，完全没有冲突，连更简单的 SLR 方法也没有。给 bison 同样的规则，它也同意：照例多一个状态，没有冲突。<bookmark mark='c'/>我们构造的两个分析器，表驱动的 LR 分析器和手写的、用普拉特方法处理表达式的递归下降分析器，都接受了任务的全部六百五十一个记号。两个独立的分析器在同一部文法上意见一致，正是这个系列所依赖的那种检验。"
+  },
+  "c9966e27ce8b": {
+   "scene": "Pebble",
+   "en": "This is what all the machinery produces. <bookmark mark='a'/> The loop at the heart of lookup, <bookmark mark='b'/> as an abstract syntax tree. The brackets, braces and semicolons are gone; they were only there to show the structure, and now the structure itself is explicit. The loop has a condition and a body; the body is an if and an assignment; the condition of the if is an and of a comparison and a call. <bookmark mark='c'/> The whole Job becomes three hundred and seventy-one nodes like these. In Part 13, the compiler walks this tree and writes Pebble machine code, replacing the assembly we have written by hand since Part 6.",
+   "zh": "这就是所有这些机制产出的东西。<bookmark mark='a'/>lookup 核心的那个循环，<bookmark mark='b'/>变成了一棵抽象语法树。括号、花括号和分号都没了；它们只是用来显示结构的，而现在结构本身是明确的。循环有一个条件和一个循环体；循环体是一个 if 和一个赋值；if 的条件是一个比较和一个调用的“与”。<bookmark mark='c'/>整个任务变成三百七十一个这样的节点。在第13部分，编译器遍历这棵树，写出 Pebble 机器码，取代我们从第6部分以来手写的汇编。"
+  },
+  "750efde38aa8": {
+   "scene": "Pebble",
+   "en": "Parsers also have to deal with programs that are wrong. <bookmark mark='a'/> Here are four broken fragments and what our parser says about each: an expression missing after an equals sign, a missing semicolon, a missing name, a missing colon. <bookmark mark='b'/> LL and LR parsers have a valuable property: they stop at the very first token that cannot be the continuation of any valid program, so they can always say exactly where the error is and what they expected instead. <bookmark mark='c'/> Explaining why, and recovering well enough to report the next error too, is more art than science.",
+   "zh": "语法分析器还得对付错误的程序。<bookmark mark='a'/>这里有四个坏掉的片段，以及我们的分析器对每一个说了什么：等号后面缺一个表达式，缺一个分号，缺一个名字，缺一个冒号。<bookmark mark='b'/>LL 和 LR 分析器有一个宝贵的性质：它们会停在第一个不可能是任何合法程序之延续的记号上，所以总能准确说出错误在哪里、本来期待什么。<bookmark mark='c'/>解释为什么，并恢复得足够好、把下一个错误也报告出来，与其说是科学，不如说是艺术。"
+  },
+  "e5e1849074c5": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. The frontier.",
+   "zh": "第十五章。前沿。"
+  },
+  "83023cea81db": {
+   "scene": "Frontier",
+   "en": "Thompson's method takes time proportional to the pattern's size times the text's length. Can anyone do fundamentally better? <bookmark mark='a'/> Our simulation behaves exactly that way: double the pattern or double the text, and the work doubles. <bookmark mark='b'/> In 1992 Gene Myers shaved off a logarithmic factor, and later work has shaved off only a little more. <bookmark mark='c'/> In 2016 Arturs Backurs and Piotr Indyk explained why. For many kinds of pattern, an algorithm substantially faster than m times n would refute the strong exponential time hypothesis: <bookmark mark='d'/> the conjecture that Boolean satisfiability cannot be solved much faster than trying all two to the n assignments, which we meet in Part 26. <bookmark mark='e'/> Their work classifies many patterns as easy or hard, but not all, and finishing the classification is open.",
+   "zh": "汤普森的方法所需的时间与模式大小乘以文本长度成正比。有人能做得根本上更好吗？<bookmark mark='a'/>我们的模拟正是这样表现的：把模式或文本加倍，工作量就加倍。<bookmark mark='b'/>1992 年，吉恩·迈尔斯削去了一个对数因子，后来的工作只再削去了一点点。<bookmark mark='c'/>2016 年，阿图尔斯·巴库尔斯和彼得·因迪克解释了原因。对许多类模式，一个大大快于 m 乘 n 的算法将推翻强指数时间假设：<bookmark mark='d'/>这个猜想认为，布尔可满足性问题不可能比尝试全部二的 n 次方种赋值快多少，我们在第26部分会遇到它。<bookmark mark='e'/>他们的工作把许多模式归为容易或困难，但不是全部，完成这个分类仍是开放问题。"
+  },
+  "7ef27124f8b5": {
+   "scene": "Frontier",
+   "en": "For context-free grammars the general methods are cubic. <bookmark mark='a'/> Our CYK confirms it: on a log-log plot its times climb with a slope close to three. <bookmark mark='b'/> In 1975 Leslie Valiant showed that the CYK table can be filled using Boolean matrix multiplication, so parsing is no harder than multiplying matrices, <bookmark mark='c'/> which can be done, in theory, in less than n to the two point three seven two. <bookmark mark='d'/> In 2002 Lillian Lee proved the converse: a substantially faster parser would give a faster way to multiply matrices. <bookmark mark='e'/> And in 2015 Amir Abboud, Arturs Backurs and Virginia Vassilevska Williams showed that no simple, combinatorial parser can beat n cubed by a polynomial factor unless a long-standing conjecture about finding cliques in graphs is false. <bookmark mark='f'/> A practical general parser that is truly faster than cubic remains out of reach.",
+   "zh": "对上下文无关文法，通用方法是三次方的。<bookmark mark='a'/>我们的 CYK 证实了这一点：在双对数坐标上，它的时间以接近三的斜率攀升。<bookmark mark='b'/>1975 年，莱斯利·瓦利安特证明，CYK 的表可以用布尔矩阵乘法来填，所以分析不比矩阵乘法更难，<bookmark mark='c'/>而矩阵乘法在理论上可以在少于 n 的二点三七二次方的时间内完成。<bookmark mark='d'/>2002 年，莉莲·李证明了反方向：一个快得多的分析器将给出一种更快的矩阵乘法。<bookmark mark='e'/>2015 年，阿米尔·阿布德、阿图尔斯·巴库尔斯和弗吉尼亚·瓦西列夫斯卡·威廉姆斯证明，除非一个关于在图中寻找团的长期猜想是错的，否则没有简单的组合式分析器能比 n 的三次方快出一个多项式因子。<bookmark mark='f'/>一个真正快于三次方的实用通用分析器，仍然遥不可及。"
+  },
+  "f5ef926f1b0c": {
+   "scene": "Frontier",
+   "en": "And an old idea has come back. <bookmark mark='a'/> In 1964 Janusz Brzozowski defined the derivative of a regular expression with respect to a character: another regular expression, for whatever must follow that character. Derive a b star a b b by a, and you get, roughly, a b star a, or nothing, then b b. <bookmark mark='b'/> Keep deriving, and only finitely many different expressions ever appear. They are the states of a deterministic automaton, built directly, with no NFA at all. On our examples, the derivatives give exactly the minimal machine every time. <bookmark mark='c'/> Derivatives came back into use around 2009 for lexer generators, were extended to whole grammars in 2011, and now drive the linear-time regular expression engine in Microsoft's .NET. A sixty-year-old idea, at the frontier of practice.",
+   "zh": "还有一个老想法回来了。<bookmark mark='a'/>1964 年，雅努什·布若佐夫斯基定义了正则表达式关于一个字符的导数：另一个正则表达式，表示这个字符之后必须跟着的东西。把 (a|b)*abb 对 a 求导，大致得到：(a|b)*a 或者什么也没有，然后是 b b。<bookmark mark='b'/>一直求导下去，只会出现有限多个不同的表达式。它们就是一台确定性自动机的状态，直接构造出来，根本不需要 NFA。在我们的例子上，导数每次都恰好给出最小的机器。<bookmark mark='c'/>导数在 2009 年前后重新用于词法分析器生成器，2011 年被推广到整部文法，如今驱动着微软 .NET 里的线性时间正则表达式引擎。一个六十年前的想法，站在实践的前沿。"
+  },
+  "ff93a636c99e": {
+   "scene": "Outro",
+   "en": "What we built in this part. Languages as sets of strings, and the machines that recognize them. Regular expressions and finite automata, joined by Thompson's construction, the subset construction and state elimination, with minimization and its two-to-the-n price. The pumping lemma, and why backtracking engines can take exponential time where an automaton takes linear. A lexer for the Pebble language. Context-free grammars, ambiguity and pushdown automata; CYK and Earley; LL one and Pratt from the top down, and LR, SLR and LALR from the bottom up, checked against bison. And the Pebble language's own grammar and parser, run on the Job.",
+   "zh": "这一部分我们搭了什么。语言是串的集合，以及识别它们的机器。正则表达式和有限自动机，由汤普森构造、子集构造和状态消去连起来，还有最小化以及它二的 n 次方的代价。泵引理，以及为什么回溯引擎可能要指数时间，而自动机只要线性时间。Pebble 语言的词法分析器。上下文无关文法、歧义和下推自动机；CYK 和 Earley；自顶向下的 LL(1) 和普拉特方法，自底向上的 LR、SLR 和 LALR，并拿 bison 检验过。还有 Pebble 语言自己的文法和分析器，运行在任务上。"
+  },
+  "626732da8a00": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 13 compiles the tree that the parser builds. Part 14 handles what a grammar cannot, such as types and declarations. CYK returns in Part 19 as dynamic programming, and finite automata in Part 21's string algorithms. Part 25 proves that ambiguity is undecidable, and Part 26 explains the NP-completeness of back-references and the hypothesis behind the frontier chapter. And every search engine of Part 47 begins by tokenizing.",
+   "zh": "这些会在哪里再出现。第13部分编译分析器构造的那棵树。第14部分处理文法管不了的东西，比如类型和声明。CYK 在第19部分作为动态规划回来，有限自动机在第21部分的字符串算法里回来。第25部分证明歧义是不可判定的，第26部分解释回溯引用的 NP 完全性，以及前沿一章背后的那个假设。第47部分的每个搜索引擎都从分词开始。"
+  },
+  "64caf2bb3f9f": {
+   "scene": "Outro",
+   "en": "In practice. Choose a regular expression engine knowing which kind it is: RE2, Go and Rust guarantee linear time, while PCRE, Python and Java backtrack. Never run a pattern supplied by a user on a backtracking engine without a time limit. Parser generators range from bison to ANTLR to tree-sitter, which reparses incrementally as you type in an editor. Most production compilers are hand-written recursive descent parsers. And parsers for data formats and network protocols are where a great many security bugs live.",
+   "zh": "在实践中。选正则表达式引擎时要知道它是哪一种：RE2、Go 和 Rust 保证线性时间，而 PCRE、Python 和 Java 会回溯。不设时间限制，永远不要在回溯引擎上运行用户提供的模式。分析器生成器从 bison 到 ANTLR 到 tree-sitter，后者在你于编辑器里打字时增量地重新分析。大多数生产环境的编译器是手写的递归下降分析器。而数据格式和网络协议的分析器，是大量安全漏洞藏身的地方。"
+  },
+  "40d27dcd58b6": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: extend the Pebble language with for loops and two new operators, through every stage, and find out whether its grammar is still LALR. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
+   "zh": "六道习题，完整解答在本部分的笔记里。随时可以暂停。第五题是一道动手题：给 Pebble 语言加上 for 循环和两个新运算符，走完每个阶段，看看它的文法是否仍然是 LALR 的。最后一道标着星号，是研究题：它的答案尚不知道，笔记里写了从哪里入手。"
+  },
+  "58f5405beafd": {
+   "scene": "Outro",
+   "en": "Next time. The tree becomes a graph, the graph is optimized as a fixed point over lattices, registers are allocated by colouring, and out comes Pebble machine code: written by a program, for the first time in this series. Part 13, The Compiler.",
+   "zh": "下一次。树变成图，图作为格上的不动点被优化，寄存器用着色来分配，然后产出 Pebble 机器码：在这个系列里第一次由程序来写。第13部分，编译器。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 12, Languages and Automata",
+ "chapters_en": {
+  "Hook": "Reading text, and a regex that took down websites",
+  "Languages": "1. Languages as sets of strings",
+  "Regex": "2. Regular expressions and automata",
+  "Thompson": "3. Thompson's construction",
+  "Subset": "4. The subset construction and minimization",
+  "Kleene": "5. Kleene's theorem",
+  "Pumping": "6. What regular languages cannot do",
+  "Backtrack": "7. Backtracking engines",
+  "Lexing": "8. Lexing the Pebble language",
+  "Grammars": "9. Context-free grammars",
+  "Hierarchy": "10. Stacks and the Chomsky hierarchy",
+  "General": "11. Parsing any grammar: CYK and Earley",
+  "TopDown": "12. Top-down parsing",
+  "BottomUp": "13. Bottom-up parsing",
+  "Pebble": "14. The Pebble language, parsed",
+  "Frontier": "15. Frontier: how fast can we parse?",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

@@ -147,7 +147,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 9 | learned replacement: insertion policies against Belady on the Job's scans (computed), Hawkeye, Glider; the tight red–blue pebble bound for matrix multiply; memory disaggregation |
 | 10 | out-of-thin-air values (the load-buffering test enumerated, with and without value speculation) and the unsolved C/C++ memory model; work-stealing constants simulated, locality and heterogeneity open; dark silicon and Landauer's floor |
 | 11 | Robson's bound with its adversary run against first fit, and the open exact worst case of first and best fit; CompCert, Cerberus and pointer provenance; CHERI capabilities, a miniature on Pebble stopping the stack smash |
-| 12 | regex matching and parsing under fine-grained hardness (SETH); Valiant's parsing-as-matrix-multiplication; derivatives |
+| 12 | regex matching under SETH (Backurs–Indyk), with Thompson's m × n work measured; Valiant's parsing as matrix multiplication, Lee's converse and the clique-based lower bound; Brzozowski derivatives as minimal DFAs, and their revival in real engines |
 | 13 | equality saturation; superoptimization; verified compilation; ML-guided optimization |
 | 14 | dependent and cubical type theory; gradual-typing soundness; effect handlers; Hindley–Milner's DEXPTIME-completeness |
 | 15 | pause-time lower bounds for garbage collection; meta-tracing JITs; mechanized WebAssembly |
@@ -212,7 +212,7 @@ teaches it. Each layer is also checked against something that does not share its
 | **Pebble-32**: the ISA, the gate-level single-cycle CPU, the fast ISA emulator, the assembler | `isa.py`, `cpu.py`, `emu.py`, `asm.py` | 6 | co-simulation of gate level against the emulator on random programs; disassembly round trips |
 | Pipeline (5-stage, cycle-accurate), branch predictors, out-of-order core (Tomasulo plus ROB), caches, multicore with MESI | `uarch/` | 7–10 | architectural state equals the emulator's after every program |
 | Object format, linker, loader, allocators, the stack smash and its defences | `link.py`, `heap.py`, `jobv1.py`, `smash.py` | 11 | relocation round trips; allocator invariants |
-| The **Pebble language** (a small C-like language with functions, arrays, structs and pointers): regex engine, lexer, LL and LR parsers, type checker, SSA compiler with optimizations and register allocation | `lang/` | 12–13 | a Python reference interpreter for the language; differential testing of compiled against interpreted code |
+| The **Pebble language** (a small C-like language with functions, arrays, structs and pointers): regex engine, lexer, LL and LR parsers, type checker, SSA compiler with optimizations and register allocation | `lang/` (`regex.py`, `automata.py`, `grammar.py`, `pebble_lang.py` in Part 12) | 12–13 | a Python reference interpreter for the language; differential testing of compiled against interpreted code |
 | The λ-core (a small ML: closures, ADTs, Hindley–Milner), bytecode VM, three garbage collectors | `lang/ml/` | 14–15 | a substitution-based reducer; GC heap invariants after every collection |
 | **PebbleOS**: traps, timer, processes, schedulers, MMU and paging, locks, a file system on a simulated disk | `os/` | 31–34 | invariants under randomized interrupt timing and crash points |
 | A relational database: SQL parser, optimizer, executor, B+ tree, WAL and recovery | `db/` | 35 | `sqlite3` from the standard library, on the same queries and data |
@@ -924,26 +924,30 @@ survey); Knuth, TAOCP 1 §2.5; Aleph One 1996; the System V ABI.
 read regular languages, and a stack is what lets a machine handle nesting. The Chomsky hierarchy orders languages by
 the memory needed to recognize them. A regex can also run in exponential time and take down a large part of the
 web.
-1. Languages as sets of strings; recognition against parsing.
-2. Regular expressions (Kleene 1951); DFAs (callback to Part 5); NFAs.
-3. Thompson's construction (1968): regex to NFA, simulated on sets of states in linear time.
-4. The subset construction, and its exponential blow-up: the language "the n-th symbol from the end is 1" needs 2ⁿ
-   states (by Myhill–Nerode).
-5. Kleene's theorem: DFA to regex by state elimination.
-6. The pumping lemma, with aⁿbⁿ not regular (proof animated); closure properties.
-7. Backtracking engines: (a+)+b blows up exponentially; ReDoS (the 2019 Cloudflare outage, cited); Cox's argument for
-   RE2; backreferences make matching NP-hard.
-8. Lexing: maximal munch; the lexer for the Pebble language.
-9. Context-free grammars (Chomsky 1956; BNF for ALGOL 60): derivations, parse trees, ambiguity (dangling else,
-   precedence).
-10. The Chomsky hierarchy, with a machine for each level: DFA, PDA, LBA, TM.
-11. Pushdown automata; CFG ⇔ PDA; the CFL pumping lemma (aⁿbⁿcⁿ); Chomsky normal form.
-12. CYK in O(n³) as dynamic programming (Part 19); Valiant's reduction to matrix multiplication; Earley's algorithm.
-13. Top-down parsing: recursive descent; LL(1) with FIRST and FOLLOW; removing left recursion; Pratt parsing.
-14. Bottom-up parsing: shift–reduce; LR(0) items and the LR automaton (Knuth 1965); SLR, LALR (yacc), LR(1);
-    conflicts.
-15. The Pebble language parsed: its grammar, its parser, its ASTs.
-16. Undecidable questions about grammars, such as ambiguity and equivalence (Part 25). Outro.
+1. Languages as sets of strings; recognition against parsing; the ladder of memory.
+2. Regular expressions (Kleene 1951); the divisible-by-3 DFA (callback to Part 5); Kleene's theorem as a triangle.
+3. Thompson's construction (1968): regex to NFA, simulated on sets of states in O(mn), measured.
+4. The subset construction (Rabin and Scott 1959) and Moore's minimization; the n-th-from-end language needs 2ⁿ
+   states (computed to n = 12; Myhill–Nerode checked); lazy determinization as grep and RE2 do it, on real text.
+5. Kleene's theorem: DFA to regex by state elimination; closure properties; decidable equivalence.
+6. The pumping lemma, with aⁿbⁿ not regular (every split enumerated); nesting is out of reach.
+7. Backtracking engines: (a+)+b measured in Python, Perl and grep; the 2019 Cloudflare and 2016 Stack Overflow
+   outages; Cox's argument for RE2; back-references (a composite-number regex) and NP-hardness.
+8. Lexing: maximal munch; the lexer for the Pebble language; Python's INDENT/DEDENT stack.
+9. Context-free grammars (Chomsky 1956; BNF for ALGOL 60): derivations, parse trees, ambiguity (Catalan counts,
+   dangling else), undecidability of ambiguity.
+10. Pushdown automata (aⁿbⁿ run; palindromes need nondeterminism); the Chomsky hierarchy; the CFL pumping lemma;
+    real languages at the edges (C's lexer hack, C++ and Perl).
+11. CYK in O(n³) as dynamic programming (Part 19); Earley's algorithm; both measured.
+12. Top-down parsing: recursive descent; LL(1) with FIRST and FOLLOW; removing left recursion; Pratt parsing.
+13. Bottom-up parsing: shift–reduce; LR(0) items and the LR automaton (Knuth 1965); SLR, LALR (yacc), LR(1);
+    conflicts; checked against bison.
+14. The Pebble language parsed: its grammar (79 rules, a conflict-free 146-state LALR table), its parser, its ASTs,
+    its error messages.
+15. *Frontier*: how fast can we parse? Thompson's O(mn) measured; Myers; Backurs and Indyk (2016) under SETH;
+    Valiant (1975), Lee (2002), Abboud–Backurs–Williams (2015); Brzozowski derivatives, which give the minimal DFA on
+    every example, and their revival (Owens–Reppy–Turon 2009, parsing with derivatives 2011, .NET 2022).
+16. Outro. (Undecidable questions about grammars are previewed in chapter 9 and proved in Part 25.)
 
 *Computed:* our Thompson regex engine against a backtracking one (timing blow-up); subset-construction sizes; CYK
 and Earley on ambiguous sentences; the LR tables for the Pebble grammar.
@@ -3160,5 +3164,6 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
 | 9 | scenes (17, with the *Frontier* chapter), computations (a cache simulator and its analyses, this machine's latency staircase, bandwidth and matrix multiply measured, the exact LRU misses of the Job's corpus scans, the Job's ledger row 3 priced on Part 8's core), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
 | 10 | scenes (17, with the *Frontier* chapter), computations (MESI and the store-buffering test simulated; false sharing, the litmus test with and without a fence, atomics and the Job in C with SIMD and threads measured on this machine; greedy schedules against Brent's bound, work stealing, scans, sorting networks checked by the 0–1 principle, bisection widths by exhaustive search; the Job on four Pebble cores, ledger row 4), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 64 min (estimate) |
-| 11 | scenes (18, with the *Frontier* chapter), computations (Pebble's linker and loader; endianness, struct layout, a jump table, ELF objects, static and dynamic linking and ASLR measured on this machine; stack depths of factorial, Ackermann and tail calls on the emulator; five allocators on Perl's 146,336-allocation trace; Knuth's rule and Robson's bound simulated; undefined behaviour under gcc; the stack smash and four defences; the Job linked from four files), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | LEN |
-| 12–61 | planned (this document) | — |
+| 11 | scenes (18, with the *Frontier* chapter), computations (Pebble's linker and loader; endianness, struct layout, a jump table, ELF objects, static and dynamic linking and ASLR measured on this machine; stack depths of factorial, Ackermann and tail calls on the emulator; five allocators on Perl's 146,336-allocation trace; Knuth's rule and Robson's bound simulated; undefined behaviour under gcc; the stack smash and four defences; the Job linked from four files), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 12 | scenes (17, with the *Frontier* chapter), computations (Thompson NFAs, the subset construction, minimization and state elimination; 2ⁿ blow-up and lazy DFAs on real text; backtracking measured in Python, Perl and grep; the Pebble language's lexer, LALR table and parser; CYK and Earley; LL(1) and LR tables checked against bison), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
+| 13–61 | planned (this document) | — |
