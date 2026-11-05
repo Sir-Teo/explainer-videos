@@ -134,8 +134,8 @@ def to_ssa(f: Func, stats: dict | None = None) -> Func:
                 ndefs[i.dst] = ndefs.get(i.dst, 0) + 1
     multi = {v for v, s in defsites.items() if len(s) > 1 or ndefs.get(v, 0) > 1}
     placed = 0
-    for v in multi:
-        work = list(defsites[v])
+    for v in sorted(multi, key=str):
+        work = sorted(defsites[v], key=str)
         has = set()
         while work:
             x = work.pop()

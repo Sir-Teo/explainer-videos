@@ -31,7 +31,7 @@ FILE_COLORS = [DATA, CTRL, YES, FUNC]
 
 def code(lines, size=18, color=CODE, buff=0.07):
     """A listing: one mono line per entry, left-aligned, indentation kept."""
-    return VGroup(*[mono(l, size, color) for l in lines]).arrange(DOWN, aligned_edge=LEFT, buff=buff)
+    return VGroup(*[mono(l if l else " ", size, color) for l in lines]).arrange(DOWN, aligned_edge=LEFT, buff=buff)
 
 
 def region(w, h, text, color, font_size=18, fill=0.18):
