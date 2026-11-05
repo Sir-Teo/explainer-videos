@@ -369,6 +369,36 @@
   "bytes": 1929835,
   "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2024-12.zip"
  },
+ "binance/futures/um/BTCUSDT/aggTrades/2023-05-16": {
+  "sha256": "cb55d99606e018e41b5f938c4586e0a60c8aa96dd227067a8bf85f5d35f8f116",
+  "bytes": 14038924,
+  "source": "https://data.binance.vision/data/futures/um/daily/aggTrades/BTCUSDT/BTCUSDT-aggTrades-2023-05-16.zip"
+ },
+ "binance/futures/um/BTCUSDT/aggTrades/2023-05-17": {
+  "sha256": "e3bf64100f9a3a0f1216a9f81bd21e6fb52cb4456d46e965405dc4bdf5ef9263",
+  "bytes": 16624874,
+  "source": "https://data.binance.vision/data/futures/um/daily/aggTrades/BTCUSDT/BTCUSDT-aggTrades-2023-05-17.zip"
+ },
+ "binance/futures/um/BTCUSDT/bookTicker/2023-05-16": {
+  "sha256": "1e51fcd332f9c901490a6e384dcd9b21943c04240180bda4903593a37bfc6262",
+  "bytes": 53816320,
+  "source": "https://data.binance.vision/data/futures/um/daily/bookTicker/BTCUSDT/BTCUSDT-bookTicker-2023-05-16.zip"
+ },
+ "binance/futures/um/BTCUSDT/bookTicker/2023-05-17": {
+  "sha256": "ab2745487914e834c77212631695491ea75b800a58169dd36bab6f936c8e71c9",
+  "bytes": 88047441,
+  "source": "https://data.binance.vision/data/futures/um/daily/bookTicker/BTCUSDT/BTCUSDT-bookTicker-2023-05-17.zip"
+ },
+ "binance/futures/um/BTCUSDT/bookTicker/2023-05-20": {
+  "sha256": "df6407598ce975aa9beda46b5c4f4c4c223a1dafc7db157dc87bb57371e7b163",
+  "bytes": 76670376,
+  "source": "https://data.binance.vision/data/futures/um/daily/bookTicker/BTCUSDT/BTCUSDT-bookTicker-2023-05-20.zip"
+ },
+ "binance/futures/um/BTCUSDT/bookTicker/2023-05-21": {
+  "sha256": "3471a79b7e396d1f72626dc2c4ef5383e72eeef8b0a179e24e6c86c8837cd44c",
+  "bytes": 87710834,
+  "source": "https://data.binance.vision/data/futures/um/daily/bookTicker/BTCUSDT/BTCUSDT-bookTicker-2023-05-21.zip"
+ },
  "binance/futures/um/fundingRate/BTCUSDT/2020-01": {
   "sha256": "7f81b2f3694d13779e7e896b69d60cd61e9444d7b9f9e90df761935e1c1b76e2",
   "bytes": 825,

@@ -170,6 +170,63 @@ def binance_klines(symbol="BTCUSDT", interval="1h", start="2021-01", end="2025-1
             "volume": a[:, 5], "trades": a[:, 6], "taker_buy": a[:, 7]}
 
 
+def _binance_daily_raw(kind: str, symbol: str, day: str, market: str) -> bytes:
+    base = f"https://data.binance.vision/data/{market}/daily/{kind}/{symbol}"
+    name = f"{symbol}-{kind}-{day}.zip"
+    path = DATA / "binance" / market / symbol / kind / name
+    url = f"{base}/{name}"
+
+    def fetch(url=url, name=name):
+        raw = _get(url)
+        want = _get(url + ".CHECKSUM").decode().split()[0]
+        if _sha(raw) != want:
+            raise RuntimeError(f"{name}: sha256 does not match Binance's published checksum")
+        return raw
+    return _cached(f"binance/{market}/{symbol}/{kind}/{day}", path, fetch, url)
+
+
+def binance_book_day(symbol: str = "BTCUSDT", day: str = "2023-05-16", market: str = "futures/um", grid_ms: int = 100) -> dict:
+    """One day of Binance's best-bid/best-offer stream (``bookTicker``), reduced to a regular grid: at every
+    ``grid_ms`` milliseconds the last best bid and ask prices and sizes (``bid``, ``ask``, ``bq``, ``aq``), and the number
+    of book updates in the interval (``updates``). ``time`` is in milliseconds. The raw file is checked against Binance's
+    published SHA-256 and the manifest; the grid is cached beside it."""
+    out = DATA / "binance" / market / symbol / "bookTicker" / f"grid_{day}_{grid_ms}ms.npz"
+    raw = _binance_daily_raw("bookTicker", symbol, day, market)
+    if out.exists():
+        z = np.load(out)
+        return {k: z[k] for k in z.files}
+    with zipfile.ZipFile(io.BytesIO(raw)) as zf:
+        with zf.open(zf.namelist()[0]) as fh:
+            a = np.loadtxt(io.TextIOWrapper(fh), delimiter=",", skiprows=1, usecols=(1, 2, 3, 4, 6))
+    t = a[:, 4]
+    t0 = float(np.floor(t[0] / 86400000) * 86400000)
+    g = ((t - t0) // grid_ms).astype(np.int64)
+    n = int(86400000 // grid_ms)
+    g = np.clip(g, 0, n - 1)
+    last = np.full(n, -1, np.int64)
+    last[g] = np.arange(len(g))
+    for i in range(1, n):                       # carry the last update forward through quiet intervals
+        if last[i] < 0:
+            last[i] = last[i - 1]
+    ok = last >= 0
+    idx = np.where(ok, last, 0)
+    res = {"time": (t0 + np.arange(n) * grid_ms)[ok], "bid": a[idx, 0][ok], "bq": a[idx, 1][ok], "ask": a[idx, 2][ok],
+           "aq": a[idx, 3][ok], "updates": np.bincount(g, minlength=n)[ok]}
+    np.savez_compressed(out, **res)
+    return res
+
+
+def binance_aggtrades_day(symbol: str = "BTCUSDT", day: str = "2023-05-16", market: str = "futures/um") -> dict:
+    """One day of Binance's aggregated trades: ``time`` (ms), ``price``, ``qty``, ``sign`` (+1 when the taker bought,
+    i.e. the buyer was not the maker). Checked against Binance's published SHA-256 and the manifest."""
+    raw = _binance_daily_raw("aggTrades", symbol, day, market)
+    with zipfile.ZipFile(io.BytesIO(raw)) as zf:
+        text = zf.read(zf.namelist()[0]).decode()
+    rows = [r.split(",") for r in text.strip().splitlines() if r and r[0].isdigit()]
+    a = np.array([[float(r[1]), float(r[2]), float(r[5]), 1.0 if r[6].strip().lower() == "true" else 0.0] for r in rows])
+    return {"time": a[:, 2], "price": a[:, 0], "qty": a[:, 1], "sign": 1 - 2 * a[:, 3]}
+
+
 BINANCE_S3 = "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision"
 _NOT_COINS = ("USDC", "BUSD", "TUSD", "PAX", "USDP", "USDS", "USDSB", "DAI", "FDUSD", "EUR", "GBP", "AUD", "TRY",
               "BRL", "UST", "SUSD", "AEUR", "EURI", "USD1", "XUSD", "RLUSD", "BFUSD", "IDRT", "BIDR", "NGN", "RUB",

@@ -3428,3 +3428,30 @@ def test_micro_kyle_gm_roll_is():
     e = rng.normal(0, 1, 20001).cumsum()
     s = M.hasbrouck_is(e + rng.normal(0, 0.3, 20001), np.r_[0, e[:-1]] + rng.normal(0, 0.3, 20001))
     assert s["is_low"][0] > 0.9
+
+
+def test_lob_features_microprice_qr():
+    import numpy as np
+
+    from explainer.quant.house import lob as L
+    b = {"bid": np.array([100.0, 100.0, 100.1, 100.1]), "ask": np.array([100.1, 100.1, 100.2, 100.2]),
+         "bq": np.array([5.0, 7.0, 3.0, 3.0]), "aq": np.array([5.0, 5.0, 6.0, 2.0])}
+    assert np.allclose(L.imbalance(b)[:2], [0.5, 7 / 12])
+    e = L.ofi(b)
+    # step 1: bid size up 2 at the same price; step 2: the bid rose (new size 3) and the ask rose (old ask size 5 left)
+    assert e[1] == 2.0 and e[2] == 3.0 + 5.0 and e[3] == (3.0 - 3.0) - (2.0 - 6.0)
+    # a synthetic book whose imbalance predicts the next move: the fitted adjustment rises with imbalance and is
+    # antisymmetric
+    rng = np.random.default_rng(0)
+    n = 40000
+    I = rng.random(n)
+    pb = np.full(n, 100.0)
+    for t in range(1, n):
+        u = rng.random()
+        pb[t] = pb[t - 1] + (0.1 if u < 0.05 * I[t - 1] else -0.1 if u < 0.05 else 0.0)
+    bk = {"bid": pb, "ask": pb + 0.1, "bq": I, "aq": 1 - I}
+    f = L.microprice_fit(bk, n_imb=10, max_spread=1, tick=0.1)
+    g = f["g"][:10]
+    assert np.all(np.diff(g) > 0) and abs(g[0] + g[-1]) < 1e-9
+    sig = L.signature(np.cumsum(rng.normal(0, 1, 10000)), [1, 10])
+    assert abs(sig[0] - 1) < 0.1 and abs(sig[1] - 1) < 0.2
