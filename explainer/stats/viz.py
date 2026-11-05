@@ -1580,3 +1580,43 @@ class DigitsBoard(VGroup):
 
     def column(self, j: int) -> VGroup:
         return VGroup(self.heads[j], self.cells[j])
+
+
+class DoseResponse(VGroup):
+    """Dose against response probability (Part 24): ``points`` are the observed proportions k/n, each a dot whose area
+    grows with its trials n, with a binomial 95% interval bar; ``curve(ginv, coef)`` draws a fitted inverse link
+    p = ginv(a + b x) across the dose range; ``mark(x, p)`` drops guide lines to the axes (an LD50)."""
+
+    def __init__(self, x, n, k, x_range, x_length=8.0, y_length=4.4, center=ORIGIN, xlabel=r"dose", xticks=None,
+                 color=None, font_size=20):
+        super().__init__()
+        from explainer.ai.viz import axes as _axes
+        from scipy import stats as _st
+
+        self.A = _axes(list(x_range), [0, 1], x_length=x_length, y_length=y_length, xlabel=xlabel,
+                       ylabel=r"proportion responding", xticks=xticks, yticks=[0, 0.25, 0.5, 0.75, 1], center=center,
+                       font_size=font_size)
+        self.ax = self.A.ax
+        self.x_range = x_range
+        x, n, k = (np.asarray(v, float) for v in (x, n, k))
+        p = k / n
+        self.dots, self.bars = VGroup(), VGroup()
+        for xi, ni, ki, pi in zip(x, n, k, p):
+            lo = _st.beta.ppf(0.025, ki, ni - ki + 1) if ki > 0 else 0.0
+            hi = _st.beta.ppf(0.975, ki + 1, ni - ki) if ki < ni else 1.0
+            self.bars.add(Line(self.ax.c2p(xi, lo), self.ax.c2p(xi, hi), color=GREY_B, stroke_width=2))
+            self.dots.add(Dot(self.ax.c2p(xi, pi), radius=0.05 + 0.012 * np.sqrt(ni), color=color or S.DATA))
+        self.add(self.A, self.bars, self.dots)
+
+    def curve(self, ginv, coef, color=None, stroke_width=3.5) -> VMobject:
+        xs = np.linspace(self.x_range[0], self.x_range[1], 200)
+        ps = np.clip(ginv(coef[0] + coef[1] * xs), 0, 1)
+        m = VMobject(stroke_color=color or S.FIT, stroke_width=stroke_width)
+        m.set_points_smoothly([self.ax.c2p(a, b) for a, b in zip(xs, ps)])
+        return m
+
+    def mark(self, x, p, color=None) -> VGroup:
+        c = color or S.ACCENT
+        return VGroup(DashedLine(self.ax.c2p(self.x_range[0], p), self.ax.c2p(x, p), color=c, stroke_width=2),
+                      DashedLine(self.ax.c2p(x, p), self.ax.c2p(x, 0), color=c, stroke_width=2),
+                      Dot(self.ax.c2p(x, p), radius=0.07, color=c))

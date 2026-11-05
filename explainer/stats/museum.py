@@ -554,3 +554,18 @@ def hubble() -> tuple:
 
     a = np.array(HUBBLE_1929, float)
     return a[:, 0], a[:, 1]
+
+
+# Bliss (1935, Ann. Appl. Biol. 22): flour beetles exposed for five hours to gaseous carbon disulphide; log10 dose
+# (mg/l), beetles exposed, beetles killed.  As distributed in the R package dobson (data "beetle"; Dobson & Barnett,
+# An Introduction to Generalized Linear Models, Table 7.2).
+BLISS_BEETLES = [(1.6907, 59, 6), (1.7242, 60, 13), (1.7552, 62, 18), (1.7842, 56, 28), (1.8113, 63, 52),
+                 (1.8369, 59, 53), (1.8610, 62, 61), (1.8839, 60, 60)]
+
+
+def bliss() -> tuple:
+    """Bliss's beetles: (log10 dose, number exposed, number killed)."""
+    import numpy as np
+
+    a = np.array(BLISS_BEETLES, float)
+    return a[:, 0], a[:, 1], a[:, 2]
