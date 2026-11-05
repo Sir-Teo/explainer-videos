@@ -468,3 +468,20 @@ def federalist() -> dict:
         a = p["author"]
         p["author"] = "DISPUTED" if p["no"] in disputed else ("JOINT" if "AND" in a else a)
     return d
+
+
+def nhanes() -> dict:
+    """NHANES 2017-2018 (CDC/NCHS, public domain), as extracted by ``tools/nhanes_extract.py``: one entry per column
+    (numpy float arrays, NaN where missing) for the 5,533 examined participants aged 18+, with the design variables
+    ``wt_mec``, ``wt_diet1``, ``strata`` and ``psu``, blood-pressure readings ``sbp1..4``/``dbp1..4``, ``bmi``, two
+    24-hour dietary recalls (``na1``/``na2`` sodium in mg, ``kcal1``/``kcal2``, ``k1`` potassium, ``diet1_ok``/
+    ``diet2_ok`` reliability codes) and the questions ``told_high`` and ``bp_meds``.  Part 20's capstone."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "nhanes_bp.csv", newline="") as f:
+        rows = list(csv.reader(f))
+    head, body = rows[0], rows[1:]
+    return {h: np.array([float(r[j]) if r[j] != "" else np.nan for r in body]) for j, h in enumerate(head)}
