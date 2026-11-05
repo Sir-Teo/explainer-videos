@@ -49,8 +49,8 @@ class Languages(VoiceoverScene):
             r[0].align_to([-6.6, 0, 0], LEFT)
             r[1].align_to([-0.6, 0, 0], LEFT)
             r[2].align_to([3.6, 0, 0], LEFT)
-        hdr = VGroup(label(r"in", font_size=18, color=YES).move_to([-0.3, 0, 0], aligned_edge=LEFT),
-                     label(r"not in", font_size=18, color=NO).move_to([3.6, 0, 0], aligned_edge=LEFT)).next_to(
+        hdr = VGroup(label(r"in $L$", font_size=18, color=YES).move_to([-0.3, 0, 0], aligned_edge=LEFT),
+                     label(r"not in $L$", font_size=18, color=NO).move_to([3.6, 0, 0], aligned_edge=LEFT)).next_to(
             g, UP, buff=0.15)
         hdr[0].align_to([-0.6, 0, 0], LEFT)
         hdr[1].align_to([3.6, 0, 0], LEFT)
