@@ -252,7 +252,8 @@ def grid_table(header, rows, widths, row_h=0.42, font_size=18, header_color=GREY
         line = []
         for c, txt in enumerate(row):
             if r > 0 and c in mono_cols:
-                m = Text(txt, font="DejaVu Sans Mono", font_size=font_size - 3, color=CODE)
+                m = (Text(txt, font="DejaVu Sans Mono", font_size=font_size - 3, color=CODE) if txt.strip()
+                     else VectorizedPoint())
             else:
                 col = header_color if r == 0 else (colors[r - 1][c] if colors else WHITE)
                 m = label(txt, font_size=font_size, color=col) if txt else VectorizedPoint()
