@@ -10,6 +10,7 @@ class Business(VoiceoverScene):
         self.pnl()
         self.three_risks()
         self.components()
+        self.gm_recall()
         self.as_recap()
         self.tradeoff()
         self.as_numbers()
@@ -107,6 +108,40 @@ class Business(VoiceoverScene):
         ) as vo:
             step(0)
             for k, m_ in enumerate(("a", "b", "c", "d")):
+                vo.wait_until(m_)
+                if k:
+                    step(k)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def gm_recall(self):
+        rows = [cmath(r"V", r"\in", r"\{V_L,\ V_H\},\ \text{each with probability } \tfrac12", font_size=34),
+                cmath(r"\text{ask}", r"=", r"\mathbb E[V \mid \text{buy}] = \bar V + \mu\,\tfrac{V_H - V_L}{2}", font_size=34,
+                      colors={r"\text{ask}": SPREAD_C}),
+                cmath(r"s", r"=", r"\mu\,(V_H - V_L)", font_size=40, colors={r"s": SPREAD_C}),
+                cmath(r"\mu = 0.2,\ V_H - V_L = 10", r"\Rightarrow", r"s = 2", font_size=34),
+                cmath(r"\tfrac s2", r"=", r"\mathbb E[\text{markout}]", font_size=40, colors={r"\mathbb E[\text{markout}]": SNIPE_C})]
+        whys = [why(r"Glosten and Milgrom (1985), met in Part 35: the value is high or low, and a fraction $\mu$ of takers "
+                    r"know which"),
+                why(r"a buy is evidence for the high value: $P(V_H \mid \text{buy}) = (1 + \mu)/2$, so a competitive maker "
+                    r"asks the value expected given a buy"),
+                why(r"the whole spread is adverse selection: no fees, no inventory risk"),
+                why(r"a fifth of takers informed, a range of ten: a spread of two"),
+                why(r"zero profit: on average the half-spread on each fill exactly pays the move that follows it")]
+        step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.3, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "Where adverse selection comes from, recalled from Part thirty-five. <bookmark mark='a'/> In Glosten and "
+            "Milgrom's model the value is high or low with equal odds, and a fraction mu of takers know which. "
+            "<bookmark mark='b'/> A buy is then evidence for the high value, so a competitive maker sets its ask at the "
+            "value expected given a buy: the average, plus mu times half the range. <bookmark mark='c'/> The spread is "
+            "mu times the range, all of it adverse selection. <bookmark mark='d'/> With a fifth of takers informed and a "
+            "range of ten, a spread of two. <bookmark mark='e'/> And the maker earns nothing on average: the half-spread "
+            "on each fill exactly pays the markout that follows. On Bitcoin's perpetual that balance is struck for the "
+            "fastest makers at the front of the queue, not for a slow one at the back, which is why the next chapter's "
+            "replay loses."
+        ) as vo:
+            step(0)
+            for k, m_ in enumerate(("a", "b", "c", "d", "e")):
                 vo.wait_until(m_)
                 if k:
                     step(k)

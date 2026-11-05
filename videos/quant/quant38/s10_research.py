@@ -408,7 +408,7 @@ class Research(VoiceoverScene):
                           stroke_width=1.8)
         zero = DashedLine(ax.c2p(0.1, 0), ax.c2p(0.6, 0), color=GREY_B, stroke_width=1.2)
         with self.voiceover(
-            "Check four: the general condition, with Bitcoin's own jump sizes. Simulate the market with jumps drawn from "
+            "Check three: the general condition, with Bitcoin's own jump sizes. Simulate the market with jumps drawn from "
             "every real mid change and the takers' real rate. <bookmark mark='a'/> The difference between the two roles "
             f"crosses zero at {cross:.2f} of a tick, <bookmark mark='b'/> where the condition, solved directly, puts it: "
             f"{b['btc']['general_half']:.2f}."
@@ -434,7 +434,7 @@ class Research(VoiceoverScene):
                     r"bind, and the excess would be the rent of Chapter 4")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Check three: Bitcoin. <bookmark mark='a'/> Treat every change of the mid between snapshots as a public jump, "
+            "Check four: Bitcoin. <bookmark mark='a'/> Treat every change of the mid between snapshots as a public jump, "
             f"with its real sizes: {bt['lam_all']:.2f} a second, averaging {bt['mean_move']:.0f} ticks. "
             "<bookmark mark='b'/> Solved against the takers' rate, the general condition gives a half-spread of about "
             f"{bt['general_half']:.2f} of a tick. <bookmark mark='c'/> Below the half tick the tick forces. A crude "

@@ -282,7 +282,7 @@ entries are named compute exceptions (≤ 12 h, resumable).
 | 33 | **deep statistical arbitrage** (CNN + transformer residual policy) |
 | 36 | DeepLOB; **a generative order-book transformer** |
 | 37 | an RL executor vs Almgren–Chriss |
-| 38 | an RL market maker vs Avellaneda–Stoikov/GLFT |
+| 38 | (moved to 42) GLFT tested on markouts instead |
 | 39 | an RL liquidity provider for concentrated liquidity |
 | 40 | CAViaR and a deep quantile network vs filtered historical simulation |
 | 42 | **multi-agent RL market makers** (collusion test); LLM-agent traders in the simulator |
@@ -1660,27 +1660,35 @@ were not used (not public), so the propagator is fitted on Bitcoin.
 *Desk:* "Trading 10% of daily volume costs 30 bp. What does 40% cost?" (√ law: 60 bp)
 *House:* the execution desk and Rule 37.
 
-### Part 38 · Market Making, ETFs and the Speed Race (~55)
-1. Inventory and adverse selection.
-2. Avellaneda–Stoikov (2008) by HJB; GLFT (2013).
-3. Alpha in quotes, toxicity, mark-outs.
-4. RL market making vs the analytic solution.
-5. Tick size and queue position.
-6. ETF market making: creation and redemption, the arbitrage band, authorized participants; bond ETFs in March
-   2020 at discounts.
-7. Latency arbitrage (Aquilina–Budish–O'Neill 2022).
-8. HFT economics (Baron–Brogaard–Hagströmer–Kirilenko 2019).
-9. Options market making at scale (Part 11) and the vol surface as the quote.
+### Part 38 · Market Making, ETFs and the Speed Race (~55; built)
+1. The maker's P&L (half-spread + rebate − markout ± inventory); spread components (Stoll; Huang–Stoll);
+   Avellaneda–Stoikov recalled from Part 11; δ* = 1/k; GLFT (2013); specialists, odd-eighths, wholesalers.
+2. A maker replayed on Bitcoin's tape (Part 36's queue model): on 17 May the slow maker loses 19.8 ticks a fill, an
+   idealised fast one 8.7, fast and filtered 4.6; never positive on three days; a tick is 0.037 bp.
+3. Fill intensities fitted to the tape (A = 0.23/s, k = 0.035/tick); GLFT's quotes about 30 ticks out; tested on
+   markouts: break-even near 30 ticks, +19.7 at 45 (an upper bound, from sweeps' overshoot); alpha in quotes
+   (Cartea–Jaimungal–Ricci 2014).
+4. Tick size and queue position: pinned spreads, the queue race, pro rata, the optimal tick (Dayri–Rosenbaum 2015),
+   the tick-size pilot and the 2024 half-cent tick.
+5. ETF market making: creation and redemption, the band, a worked arbitrage; HYG −22% to 23 March 2020 with 5.4×
+   volume; stale NAVs and full dealers; the Fed's facility; leveraged funds' rebalancing (Cheng–Madhavan).
+6. The speed race: Budish–Cramton–Shim (2015), simulated (crossing at 0.364, equal for N = 2–30); Aquilina–Budish–
+   O'Neill (2022); the physics of microwave links; batch auctions and speed bumps.
+7. HFT economics: Menkveld (2013); Baron–Brogaard–Hagströmer–Kirilenko (2019); costs, hedging, stress, obligations,
+   options makers, crypto.
+8. Rule 38: quote only what you can measure.
+Research: the sniping equilibrium (three lemmas; the theorem for any jump distribution; batch auctions scale it by
+δ/τ; welfare; the arms race as a prisoner's dilemma), checked by simulation, in batch auctions and with Bitcoin's own
+jumps (h* ≈ 0.33 tick, below the half-tick floor).
 
 *Textbooks:* Guéant; Cartea–Jaimungal–Penalva ch. 10; Lehalle–Laruelle; Gastineau *The Exchange-Traded Funds
 Manual*.
-*Trained:* the RL market maker.
-*Computed:* AS/GLFT vs simulation; mark-outs on ITCH; an ETF NAV-arbitrage simulation; latency-race statistics.
-*Visuals:* the quotes skewing with inventory; the ETF premium band.
-*Crisis:* Knight Capital (1 August 2012), fully in `trading`.
-*Firms:* Jane Street and Flow Traders (ETFs), Virtu, Citadel Securities, XTX (FX), Optiver.
-*Desk:* "You're long 1,000 shares in a falling market. How do you change your quotes?"
-*House:* the market-making desk. *Note:* the engineering is in [`trading`](../markets/trading/README.md).
+*Computed:* everything from Binance's best quotes and trades, Yahoo bars for HYG and TLT, and the sniping simulation.
+ITCH markouts were replaced by Bitcoin's (ITCH is not public). The planned RL market maker moved to Part 42, which
+trains learning makers against each other; this part tests the analytic quotes on markouts instead.
+*Crisis:* Knight Capital (1 August 2012), as reported, as the operational risk that sets Rule 38's kill switch.
+*Desk:* "How does a market maker earn a living?" (spread and rebate minus markout; at the touch on Bitcoin it does not)
+*House:* the market-making desk and Rule 38. *Note:* the engineering is in [`trading`](../markets/trading/README.md).
 
 ### Part 39 · Crypto and DeFi (~55)
 1. Blockchains and exchanges, on and off chain; 24/7 markets.

@@ -3508,3 +3508,39 @@ def test_execution_kernels_ac_latent_propagator():
     p = np.r_[0.0, np.cumsum(r)]
     g, G = E.propagator_fit(p, np.r_[eps, 1.0], n_lag=10)
     assert abs(G[1] - 1) < 0.05 and abs(G[8]) < 0.05
+
+
+def test_making_glft_fills_and_sniping():
+    import math
+
+    import numpy as np
+
+    from explainer.quant.house import making as M
+    # GLFT: with vanishing risk aversion the half-spread tends to 1/k and the skew to zero; more risk widens and skews
+    lo = M.glft(0.5, 0.04, 20.0, 1e-9)
+    hi = M.glft(0.5, 0.04, 20.0, 1e-2)
+    assert abs(lo["half_spread"] - 1 / 0.04) < 0.05 and lo["skew"] < 0.05
+    assert hi["half_spread"] > lo["half_spread"] and hi["skew"] > lo["skew"]
+    # fill intensity: a flat book and takers whose reach beyond the mid is exponential with rate k is recovered
+    rng = np.random.default_rng(3)
+    n, k = 200000, 0.08
+    b = {"time": np.arange(n) * 100.0, "bid": np.full(n, 99.95), "ask": np.full(n, 100.05)}
+    w = np.arange(0, n, 10)
+    side = rng.choice([-1.0, 1.0], len(w))
+    reach = rng.exponential(1 / k, len(w))
+    trades = {"time": w * 100.0 + 50.0, "price": 100.0 + side * reach * 0.1, "sign": side}
+    f = M.fill_intensity(b, trades, [2, 5, 10, 20, 30], horizon=10)
+    assert np.allclose(f["P"], 0.5 * np.exp(-k * np.array([2, 5, 10, 20, 30])), atol=0.01)  # one side per window
+    # BCS: the closed form, roles equal at it for any N, no prize in batch auctions
+    s = M.bcs_spread(1.0, 0.1, 4.0)
+    assert abs(s - 0.4 / 1.1) < 1e-12
+    for N in (2, 10):
+        r = M.bcs_simulate(s, 1.0, 0.1, 4.0, N, 2e5, seed=N)
+        assert abs(r["lp"] - r["sniper"]) < 0.02 * (0.4 / N) + 0.01
+    fba = M.bcs_simulate(s, 1.0, 0.1, 4.0, 5, 1e4, batch=0.1)
+    assert fba["sniper"] == 0.0 and abs(fba["lp"] - s) < 0.05
+    # random jumps: the root of lam_I h = lam_J E[(|J| - h)+] makes the roles equal; constant jumps reduce to bcs_spread
+    jumps = np.array([1.0, 5.0])
+    h = 0.5                                       # 10 h = 2 * mean((1 - h), (5 - h)) for h < 1
+    r = M.bcs_simulate_dist(h, 10.0, 2.0, jumps, 4, 2e5, seed=1)
+    assert abs(r["lp"] - r["sniper"]) < 0.05 and math.isclose(M.bcs_spread(10.0, 2.0, 3.0), 0.5)

@@ -1679,6 +1679,21 @@ Frontier (2023–2026):
 - Aquilina, M., Budish, E., O'Neill, P. (2022). "Quantifying the high-frequency trading 'arms race'." *QJE*.
 - Koont, N., Ma, Y., Pástor, Ľ., Zeng, Y. (2024). "Steering a ship in illiquid waters: active management of passive funds." *RFS* *(verify)*.
 - SEC (2013). Order in the matter of Knight Capital Americas LLC.
+- Garman, M. (1976). "Market microstructure." *JFE*.
+- Ho, T., Stoll, H. (1981). "Optimal dealer pricing under transactions and return uncertainty." *JFE*.
+- Stoll, H. (1989). "Inferring the components of the bid-ask spread: theory and empirical tests." *Journal of Finance*.
+- Christie, W., Schultz, P. (1994). "Why do NASDAQ market makers avoid odd-eighth quotes?" *Journal of Finance*.
+- Huang, R., Stoll, H. (1997). "The components of the bid-ask spread: a general approach." *RFS*.
+- Cheng, M., Madhavan, A. (2009). "The dynamics of leveraged and inverse exchange-traded funds." *J. Investment Management*.
+- Menkveld, A. (2013). "High frequency trading and the new market makers." *J. Financial Markets*.
+- Budish, E., Cramton, P., Shim, J. (2015). "The high-frequency trading arms race: frequent batch auctions as a market design response." *QJE*.
+- Dayri, K., Rosenbaum, M. (2015). "Large tick assets: implicit spread and optimal tick size." *Market Microstructure and Liquidity*.
+- Menkveld, A., Zoican, M. (2017). "Need for speed? Exchange latency and liquidity." *RFS*.
+- Budish, E., Lee, R., Shim, J. (2019). "Will the market fix the market? A theory of stock exchange competition and innovation." NBER WP.
+- Pan, K., Zeng, Y. (2019). "ETF arbitrage under liquidity mismatch." Working paper.
+- Baldauf, M., Mollner, J. (2020). "High-frequency trading and market performance." *Journal of Finance*.
+- Aramonte, S., Avalos, F. (2020). "The recent distress in corporate bond markets: cues from ETFs." *BIS Bulletin* 6.
+- Haddad, V., Moreira, A., Muir, T. (2021). "When selling becomes viral: disruptions in debt markets in the COVID-19 crisis and the Fed's response." *RFS*.
 
 ### Part 39 · Crypto and DeFi
 - Diamond, D., Dybvig, P. (1983). "Bank runs, deposit insurance, and liquidity." *JPE*.

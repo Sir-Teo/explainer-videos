@@ -15,6 +15,7 @@ class Fills(VoiceoverScene):
         self.method()
         self.curve_(f)
         self.by_day(f)
+        self.misfit(f)
         self.quotes(g)
         self.deep_test(d)
         self.per_hour(d)
@@ -74,10 +75,11 @@ class Fills(VoiceoverScene):
                     label(rf"$1/k \approx {1 / f['k']:.0f}$ ticks", font_size=18, color=GREY_A))
         st.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.4).shift(UP * 1.4)
         fit_right(st)
+        half_d = float(np.log(2) / f["k"])
         with self.voiceover(
             "On Bitcoin's perpetual. <bookmark mark='a'/> A quote half a tick from the mid is reached in about a third "
             f"of all seconds; one forty-five ticks away in about one in twenty. <bookmark mark='b'/> The fit gives k of "
-            f"{f['k']:.3f} per tick: the intensity halves only every {np.log(2) / f['k']:.0f} ticks. Beyond the first "
+            f"{f['k']:.3f} per tick: the intensity halves only every {half_d:.0f} ticks. Beyond the first "
             "tick the decay is slow, because when Bitcoin moves it moves many ticks at once, Part thirty-six's sweeps. "
             "The very first point sits above the line: the touch is special."
         ) as vo:
@@ -113,6 +115,50 @@ class Fills(VoiceoverScene):
             self.play(FadeIn(tab[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def misfit(self, f):
+        d = np.asarray(f["deltas"], float)
+        lam = np.asarray(f["lam"], float)
+        fit = f["A"] * np.exp(-f["k"] * d)
+        pick = [0, 1, 4, 7, 8, 9]
+        hx = [-4.2, -1.6, 1.0, 3.8]
+        head = VGroup(*[label(t, font_size=16, color=GREY_B) for t in (r"distance, ticks", r"measured, a second",
+                                                                         r"fitted $Ae^{-k\delta}$", r"measured / fitted")])
+        tab = VGroup(head)
+        for i in pick:
+            ratio = lam[i] / fit[i]
+            tab.add(VGroup(MathTex(f"{d[i]:g}", font_size=26), MathTex(f"{lam[i]:.3f}", font_size=26, color=SPREAD_C),
+                           MathTex(f"{fit[i]:.3f}", font_size=26),
+                           MathTex(f"{ratio:.2f}", font_size=26, color=BAD if abs(ratio - 1) > 0.1 else GREY_A)))
+        for j, row in enumerate(tab):
+            for i, cell in enumerate(row):
+                cell.move_to([hx[i], 2.3 - 0.72 * j, 0])
+        touch = 100 * (lam[0] / fit[0] - 1)
+        mid_err = 100 * float(np.mean(np.abs(lam[1:9] / fit[1:9] - 1)))
+        tail = 100 * (lam[9] / fit[9] - 1)
+        foot = wrapped_label(r"the touch is a different regime: any trade on that side reaches it; beyond one tick a fill "
+                             r"needs a sweep", 11.0, 17, GREY_A).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "How good is the exponential? <bookmark mark='a'/> Compare the measured intensity with the fitted curve at "
+            f"each distance. At half a tick, the touch, the measured rate is {touch:.0f} percent above the fit. "
+            f"<bookmark mark='b'/> From one tick to thirty, the fit is off by about {mid_err:.0f} percent on average: a "
+            f"straight line on the log scale, as the model assumes. <bookmark mark='c'/> At forty-five ticks it is {tail:.0f} "
+            "percent above again: the largest sweeps reach further than an exponential allows. <bookmark mark='d'/> So "
+            "there are two regimes. Any trade on its side reaches a quote at the touch; a quote beyond one tick needs a "
+            "sweep. The optimal distance one over k comes from the second regime, which the exponential fits well; the "
+            "first, the touch, is where most of the fills are."
+        ) as vo:
+            self.play(FadeIn(tab[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(tab[1]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[2:6]], lag_ratio=0.3))
+            vo.wait_until("c")
+            self.play(FadeIn(tab[6]))
+            vo.wait_until("d")
+            self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
 
@@ -242,15 +288,15 @@ class Fills(VoiceoverScene):
                 why(r"near the touch, being filled is news (Part 36's markouts), which the formula ignores; it is "
                     r"right about distance for the wrong reason"),
                 why(r"Cartea, Jaimungal and Ricci (2014) add short-term alpha and adverse selection to the market maker's "
-                    r"problem; Part 36's microprice is the obvious input")]
+                    r"problem; Part 36's state-dependent forecasts are the obvious input")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.55, edge=6.9)
         with self.voiceover(
             "What the model gets wrong. <bookmark mark='a'/> It assumes fills are independent of future moves: it says "
             "how often a quote fills, not what the fill implies. <bookmark mark='b'/> On the tape, a fill at the touch is "
             "news, and the price moves against the maker. The formula lands at roughly the right distance, partly for "
             "the wrong reason. <bookmark mark='c'/> The fix is to make fill rates depend on the state, and to add a "
-            "short-term alpha, as Cartea, Jaimungal and Jason Ricci did: Part thirty-six's microprice is the obvious "
-            "input."
+            "short-term alpha, as Cartea, Jaimungal and Jason Ricci did: Part thirty-six's state-dependent forecasts "
+            "are the obvious input."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -190,8 +190,9 @@ def compute_etf() -> dict:
         c = np.asarray(d["close"])[k]
         v = np.asarray(d["volume"])[k]
         base_v = float(np.median(np.asarray(d["volume"])[[i for i, x in enumerate(t) if "2019-01-01" <= x <= "2019-12-31"]]))
-        peak = int(np.argmax(c[: len(c) // 2]))
-        trough = int(np.argmin(c))
+        dd = c / np.maximum.accumulate(c) - 1          # the maximum drawdown in the window: trough after its peak
+        trough = int(np.argmin(dd))
+        peak = int(np.argmax(c[: trough + 1]))
         res[sym] = {"t": [t[i] for i in k], "close": c, "vol_x": v / base_v, "peak_date": t[k[peak]],
                     "trough_date": t[k[trough]], "drawdown": float(c[trough] / c[peak] - 1),
                     "max_vol_x": float(np.max(v / base_v))}
