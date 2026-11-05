@@ -155,3 +155,4 @@ wrapt==2.5.1
 xlrd==2.0.2
 xxhash==3.8.2
 yarl==1.25.1
+z3-solver==5.3.3.0

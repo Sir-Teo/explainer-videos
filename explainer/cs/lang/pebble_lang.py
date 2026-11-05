@@ -716,3 +716,93 @@ fn main() -> int {
     return 0;
 }
 """
+
+
+# ---------------------------------------------------------------------------
+# the Job with version 0's algorithm and data (Part 13's like-for-like comparison with the hand-written program)
+# ---------------------------------------------------------------------------
+JOB_ARRAY = r"""
+// The Job as Part 6 wrote it by hand, now in the Pebble language: a table of entries in order of first use,
+// each pointing at its letters in a pool, scanned from the start for every word.
+
+struct Entry {
+    letters: *char;
+    length: int;
+    count: int;
+}
+
+var table: [8192]Entry;
+var entries: int = 0;
+var pool: [262144]char;
+var used: int = 0;
+
+fn word(n: int) {
+    var w: *char = &pool[used];
+    var i: int = 0;
+    while i < entries {
+        if table[i].length == n {
+            var p: *char = table[i].letters;
+            var k: int = 0;
+            while k < n && p[k] == w[k] { k = k + 1; }
+            if k == n {
+                table[i].count = table[i].count + 1;
+                return;
+            }
+        }
+        i = i + 1;
+    }
+    table[entries].letters = w;
+    table[entries].length = n;
+    table[entries].count = 1;
+    entries = entries + 1;
+    used = used + n;
+}
+
+fn printnum(n: int) {
+    var digits: [12]char;
+    var k: int = 0;
+    if n == 0 { putc('0'); return; }
+    while n > 0 { digits[k] = '0' + n % 10; n = n / 10; k = k + 1; }
+    while k > 0 { k = k - 1; putc(digits[k]); }
+}
+
+fn report() {
+    var shown: int = 0;
+    while shown < 20 {
+        var best: int = 0;
+        var at: int = -1;
+        var i: int = 0;
+        while i < entries {
+            if table[i].count > best { best = table[i].count; at = i; }
+            i = i + 1;
+        }
+        if best == 0 { return; }
+        var j: int = 0;
+        while j < table[at].length { putc(table[at].letters[j]); j = j + 1; }
+        putc(' ');
+        printnum(best);
+        putc('\n');
+        table[at].count = -best;
+        shown = shown + 1;
+    }
+}
+
+fn main() -> int {
+    var n: int = 0;
+    var c: int = getc();
+    while c != -1 {
+        if c >= 'A' && c <= 'Z' { c = c + 32; }
+        if c >= 'a' && c <= 'z' {
+            pool[used + n] = c;
+            n = n + 1;
+        } else if n > 0 {
+            word(n);
+            n = 0;
+        }
+        c = getc();
+    }
+    if n > 0 { word(n); }
+    report();
+    return 0;
+}
+"""
