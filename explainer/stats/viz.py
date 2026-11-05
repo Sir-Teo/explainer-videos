@@ -1339,3 +1339,45 @@ class YulePendulum(VGroup):
         p = self.tip(t)
         side = LEFT if shock > 0 else RIGHT
         return Dot(p + side * 1.6, radius=0.06, color=color or S.ACCENT)
+
+
+class IslandMap(VGroup):
+    """The World's island (Part 18): its coastline, and its 200 towns as dots sized by population and tinted by
+    region.  ``towns`` is ``World().towns``.  ``highlight(idx, color)`` returns an animation lighting some towns (a
+    cluster sample); ``point(i)`` is town i's position on screen."""
+
+    def __init__(self, towns: dict, center=ORIGIN, scale=0.62, colors=None, max_radius=0.22, min_radius=0.03, coast=True):
+        super().__init__()
+        self.c = np.asarray(center, float)
+        self.unit = scale
+        xy, w, reg = np.asarray(towns["xy"]), np.asarray(towns["weight"]), np.asarray(towns["region"])
+        palette = colors or [S.CTRL, S.TREAT, S.ALT, S.PRIOR, S.POST, S.EST, S.FIT, S.TRUTH, S.ACCENT, S.WORLD]
+        r = min_radius + (max_radius - min_radius) * np.sqrt(w / w.max())
+        self.radii = r
+        self.dots = VGroup(*[Dot(self.point_xy(p), radius=float(rr), color=palette[int(k) % len(palette)], fill_opacity=0.8)
+                             for p, rr, k in zip(xy, r, reg)])
+        self.coast = VMobject()
+        if coast:
+            th = np.linspace(0, 2 * np.pi, 240)
+            wob = 0.86 + 0.1 * np.sin(3 * th + 0.7) + 0.05 * np.cos(5 * th)
+            c, s = np.cos(th), np.sin(th)
+            rr = wob / (np.abs(c) ** 2.6 + np.abs(s * 5 / 3.4) ** 2.6) ** (1 / 2.6) * 1.04
+            pts = [self.point_xy((5 * rk * ck / 5, 5 * rk * sk / 5)) for rk, ck, sk in zip(rr * 5, c, s)]
+            self.coast = VMobject(stroke_color=GREY_C, stroke_width=2).set_points_smoothly(pts + [pts[0]])
+        self.add(self.coast, self.dots)
+
+    def point_xy(self, p) -> np.ndarray:
+        return self.c + self.unit * np.array([p[0], p[1], 0.0])
+
+    def point(self, i: int) -> np.ndarray:
+        return self.dots[int(i)].get_center()
+
+    def highlight(self, idx, color=None, scale=1.4):
+        idx = set(int(i) for i in idx)
+        anims = []
+        for i, d in enumerate(self.dots):
+            if i in idx:
+                anims.append(d.animate.set_color(color or S.ACCENT).set_opacity(1).scale(scale))
+            else:
+                anims.append(d.animate.set_opacity(0.15))
+        return AnimationGroup(*anims)

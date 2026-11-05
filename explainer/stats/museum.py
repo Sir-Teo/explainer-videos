@@ -452,3 +452,19 @@ def co2_monthly() -> tuple:
     m = m[(m.index.year >= 1959)]
     t = m.index.year + (m.index.month - 0.5) / 12
     return t.to_numpy(), m.to_numpy()
+
+
+def federalist() -> dict:
+    """The *Federalist* papers as word counts (tools/federalist_counts.py, from Project Gutenberg's ebook 18): for each
+    of the 85 papers, ``no``, ``author`` (HAMILTON, MADISON, JAY, JOINT or DISPUTED, with the standard 12 disputed
+    papers 49-58, 62 and 63 that Mosteller & Wallace, 1964, studied), ``n_words`` and ``counts`` of Mosteller &
+    Wallace's 70 function words and some marker words (upon, whilst, while, enough, although, ...)."""
+    import json
+    from pathlib import Path
+
+    d = json.loads((Path(__file__).parent / "data" / "federalist_counts.json").read_text())
+    disputed = set(range(49, 59)) | {62, 63}
+    for p in d["papers"]:
+        a = p["author"]
+        p["author"] = "DISPUTED" if p["no"] in disputed else ("JOINT" if "AND" in a else a)
+    return d
