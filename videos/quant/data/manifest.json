@@ -22134,6 +22134,11 @@
   "bytes": 2230,
   "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2025-12.zip"
  },
+ "binance/spot/BTCUSDT/1d/assembled_2017-08_2020-12": {
+  "sha256": "0645ff1e74cd897220996670c55b82d5ff52e1f41b120d8e12f119a4da28ba42",
+  "bytes": 80864,
+  "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/BTCUSDT"
+ },
  "binance/spot/BTCUSDT/1d/assembled_2017-08_2025-12": {
   "sha256": "b3656fcdb24c0071ef6a34466664d499c913f4260b03f2879d9a4f5c506841d6",
   "bytes": 197728,
