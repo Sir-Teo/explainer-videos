@@ -1620,3 +1620,44 @@ class DoseResponse(VGroup):
         return VGroup(DashedLine(self.ax.c2p(self.x_range[0], p), self.ax.c2p(x, p), color=c, stroke_width=2),
                       DashedLine(self.ax.c2p(x, p), self.ax.c2p(x, 0), color=c, stroke_width=2),
                       Dot(self.ax.c2p(x, p), radius=0.07, color=c))
+
+
+class ShrinkagePlot(VGroup):
+    """Efron & Morris's picture of shrinkage (Part 25): one horizontal scale; the raw estimates as dots on an upper
+    line, the shrunk estimates on a middle line, and (optionally) the truths on a lower line, with arrows from each
+    raw estimate to its shrunk value and thin lines on to its truth.  ``arrows`` and ``truth_links`` are VGroups for
+    animating; ``x_of(v)`` maps a value to the screen."""
+
+    def __init__(self, raw, shrunk, truth=None, x_range=(0, 1), width=11.0, center=ORIGIN, gap=1.4, labels=None,
+                 ticks=None, fmt=None, font_size=20, colors=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        raw, shrunk = np.asarray(raw, float), np.asarray(shrunk, float)
+        c = np.asarray(center, float)
+        lo, hi = x_range
+        self.x_of = lambda v: c[0] - width / 2 + width * (np.asarray(v, float) - lo) / (hi - lo)
+        cols = colors or {"raw": S.EST, "shrunk": S.KEPT, "truth": S.TRUTH}
+        ys = {"raw": c[1] + gap, "shrunk": c[1], "truth": c[1] - gap}
+        names = labels or {"raw": "raw", "shrunk": "shrunk", "truth": "truth"}
+        self.lines = VGroup()
+        self.names = VGroup()
+        rows = ["raw", "shrunk"] + (["truth"] if truth is not None else [])
+        for r in rows:
+            self.lines.add(Line([c[0] - width / 2, ys[r], 0], [c[0] + width / 2, ys[r], 0], color=GREY_D, stroke_width=1.5))
+            self.names.add(label(names[r], font_size=font_size, color=cols[r]).next_to([c[0] - width / 2, ys[r], 0], LEFT, buff=0.25))
+        self.raw = VGroup(*[Dot([self.x_of(v), ys["raw"], 0], radius=0.07, color=cols["raw"]) for v in raw])
+        self.shrunk = VGroup(*[Dot([self.x_of(v), ys["shrunk"], 0], radius=0.07, color=cols["shrunk"]) for v in shrunk])
+        self.arrows = VGroup(*[Line([self.x_of(a), ys["raw"] - 0.08, 0], [self.x_of(b), ys["shrunk"] + 0.08, 0], color=GREY_B,
+                                    stroke_width=1.5) for a, b in zip(raw, shrunk)])
+        self.add(self.lines, self.names)
+        if truth is not None:
+            truth = np.asarray(truth, float)
+            self.truth = VGroup(*[Dot([self.x_of(v), ys["truth"], 0], radius=0.07, color=cols["truth"]) for v in truth])
+            self.truth_links = VGroup(*[DashedLine([self.x_of(b), ys["shrunk"] - 0.08, 0], [self.x_of(t), ys["truth"] + 0.08, 0],
+                                                   color=GREY_C, stroke_width=1) for b, t in zip(shrunk, truth)])
+        if ticks is not None:
+            f = fmt or (lambda v: f"{v:g}")
+            yb = ys["truth"] if truth is not None else ys["shrunk"]
+            self.ticks = VGroup(*[label(f(t), font_size=font_size - 2, color=GREY_B).move_to([self.x_of(t), yb - 0.4, 0]) for t in ticks])
+            self.add(self.ticks)

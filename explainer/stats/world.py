@@ -339,6 +339,24 @@ class World:
         return {"visits": np.where(self.adult, y, -1).astype(np.int32), "never": never & self.adult, "mu": mu}
 
     # ------------------------------------------------------------------
+    # Hospitals: a league table of death rates (Part 25)
+    # ------------------------------------------------------------------
+    N_HOSPITALS = 60
+    HOSPITAL_SD = 0.3  # SD of the hospital effects on the log odds of death
+    HOSPITAL_LOGIT = -3.2  # the typical hospital: about 4% deaths
+
+    @cached_property
+    def hospitals(self) -> dict:
+        """60 hospitals performing one operation: yearly volumes log-uniform from 15 to 900, true death probabilities
+        expit(-3.2 + u), u ~ N(0, 0.3^2), and last year's deaths ~ Binomial(volume, p)."""
+        g = self.rng("hospitals")
+        H = self.N_HOSPITALS
+        n = np.round(np.exp(g.uniform(np.log(15), np.log(900), H))).astype(int)
+        u = g.normal(0, self.HOSPITAL_SD, H)
+        p = 1 / (1 + np.exp(-(self.HOSPITAL_LOGIT + u)))
+        return {"operations": n, "u": u, "p": p, "deaths": g.binomial(n, p)}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:

@@ -569,3 +569,25 @@ def bliss() -> tuple:
 
     a = np.array(BLISS_BEETLES, float)
     return a[:, 0], a[:, 1], a[:, 2]
+
+
+# Efron & Morris (1975, JASA 70): 18 major-league hitters' first 45 at-bats of 1970 and the rest of their season, as
+# distributed in the R package pscl (data "EfronMorris"): name, hits in the first 45 at-bats, at-bats and batting
+# average over the remainder of the season.
+EFRON_MORRIS = [
+    ("Roberto Clemente", 18, 367, 0.346), ("Frank Robinson", 17, 426, 0.298), ("Frank Howard", 16, 521, 0.276),
+    ("Jay Johnstone", 15, 275, 0.222), ("Ken Berry", 14, 418, 0.273), ("Jim Spencer", 14, 466, 0.270),
+    ("Don Kessinger", 13, 586, 0.263), ("Luis Alvarado", 12, 138, 0.210), ("Ron Santo", 11, 510, 0.269),
+    ("Ron Swoboda", 11, 200, 0.230), ("Del Unser", 10, 277, 0.264), ("Billy Williams", 10, 270, 0.256),
+    ("George Scott", 10, 435, 0.303), ("Rico Petrocelli", 10, 538, 0.264), ("Ellie Rodriguez", 10, 186, 0.226),
+    ("Bert Campaneris", 9, 558, 0.285), ("Thurman Munson", 8, 408, 0.316), ("Max Alvis", 7, 70, 0.200),
+]
+
+
+def efron_morris() -> tuple:
+    """Efron & Morris's hitters: (names, hits in 45 at-bats, rest-of-season at-bats, rest-of-season average)."""
+    import numpy as np
+
+    names = [r[0] for r in EFRON_MORRIS]
+    return names, np.array([r[1] for r in EFRON_MORRIS], float), np.array([r[2] for r in EFRON_MORRIS], float), \
+        np.array([r[3] for r in EFRON_MORRIS], float)
