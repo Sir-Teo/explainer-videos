@@ -1275,15 +1275,15 @@ class Correlogram(VGroup):
 class RootPlane(VGroup):
     """The complex plane for ARMA roots (Part 17): the unit circle, the real and imaginary axes, and ``roots`` as
     dots, coloured ``inside``/``outside`` by whether they lie inside the circle (non-stationary) or outside (fine).
-    ``mark(roots)`` returns new root dots; ``circle`` and ``dots`` are the parts.  ``scale`` is the screen length of
-    one unit."""
+    ``mark(roots)`` returns new root dots; ``circle`` and ``dots`` are the parts.  ``scale`` (stored as ``unit``) is the
+    screen length of one unit."""
 
     def __init__(self, roots=(), center=ORIGIN, scale=1.2, extent=2.2, inside=None, outside=None, font_size=20):
         super().__init__()
         from explainer.analysis import label
 
         self.c = np.asarray(center, float)
-        self.scale = scale
+        self.unit = scale
         self.inside, self.outside = inside or S.RESID, outside or S.KEPT
         e = extent * scale
         self.axes_ = VGroup(Line(self.c + LEFT * e, self.c + RIGHT * e, color=GREY_C, stroke_width=1.5),
@@ -1297,7 +1297,7 @@ class RootPlane(VGroup):
 
     def point(self, z) -> np.ndarray:
         z = complex(z)
-        return self.c + self.scale * np.array([z.real, z.imag, 0.0])
+        return self.c + self.unit * np.array([z.real, z.imag, 0.0])
 
     def mark(self, roots, radius=0.09) -> VGroup:
         g = VGroup()
