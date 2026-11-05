@@ -146,7 +146,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 8 | value prediction in the limit study (computed: perfect prediction of every load +19% on the Job, a stride predictor loses at every confidence); secure speculation: an STT/NDA-style rule built into the core, blocking the gadget for 3.5%; speculative non-interference; the cost floor |
 | 9 | learned replacement: insertion policies against Belady on the Job's scans (computed), Hawkeye, Glider; the tight red–blue pebble bound for matrix multiply; memory disaggregation |
 | 10 | out-of-thin-air values (the load-buffering test enumerated, with and without value speculation) and the unsolved C/C++ memory model; work-stealing constants simulated, locality and heterogeneity open; dark silicon and Landauer's floor |
-| 11 | Robson's allocator lower bound; formal semantics of undefined behaviour; capability hardware (CHERI) |
+| 11 | Robson's bound with its adversary run against first fit, and the open exact worst case of first and best fit; CompCert, Cerberus and pointer provenance; CHERI capabilities, a miniature on Pebble stopping the stack smash |
 | 12 | regex matching and parsing under fine-grained hardness (SETH); Valiant's parsing-as-matrix-multiplication; derivatives |
 | 13 | equality saturation; superoptimization; verified compilation; ML-guided optimization |
 | 14 | dependent and cubical type theory; gradual-typing soundness; effect handlers; Hindley–Milner's DEXPTIME-completeness |
@@ -211,7 +211,7 @@ teaches it. Each layer is also checked against something that does not share its
 | Latches, flip-flops, register file, SRAM/DRAM models, FSM synthesis | `seq.py` | 5 | cycle-by-cycle reference models |
 | **Pebble-32**: the ISA, the gate-level single-cycle CPU, the fast ISA emulator, the assembler | `isa.py`, `cpu.py`, `emu.py`, `asm.py` | 6 | co-simulation of gate level against the emulator on random programs; disassembly round trips |
 | Pipeline (5-stage, cycle-accurate), branch predictors, out-of-order core (Tomasulo plus ROB), caches, multicore with MESI | `uarch/` | 7–10 | architectural state equals the emulator's after every program |
-| Object format, linker, loader, allocator | `link.py`, `alloc.py` | 11 | relocation round trips; allocator invariants |
+| Object format, linker, loader, allocators, the stack smash and its defences | `link.py`, `heap.py`, `jobv1.py`, `smash.py` | 11 | relocation round trips; allocator invariants |
 | The **Pebble language** (a small C-like language with functions, arrays, structs and pointers): regex engine, lexer, LL and LR parsers, type checker, SSA compiler with optimizations and register allocation | `lang/` | 12–13 | a Python reference interpreter for the language; differential testing of compiled against interpreted code |
 | The λ-core (a small ML: closures, ADTs, Hindley–Milner), bytecode VM, three garbage collectors | `lang/ml/` | 14–15 | a substitution-based reducer; GC heap invariants after every collection |
 | **PebbleOS**: traps, timer, processes, schedulers, MMU and paging, locks, a file system on a simulated disk | `os/` | 31–34 | invariants under randomized interrupt timing and crash points |
@@ -877,28 +877,39 @@ Parallel Algorithms and Architectures*; Valiant 1990; Dennard et al. 1974; Esmae
 function calls into a stack, its names into addresses. The linker stitches the pieces together and the loader brings
 them to life. Then one unchecked copy overwrites a return address, and the program does something its author never
 wrote.
-1. A program's life: compiler, assembler, linker, loader, process (the tower).
-2. Data in memory: bytes and words; endianness (Cohen 1980, after Swift); alignment and padding; row-major arrays;
-   pointers and pointer arithmetic.
-3. Control flow in machine code: conditionals, loops, and switch statements as jump tables.
-4. Procedures: the call stack, activation records, calling conventions (caller- and callee-saved registers), drawn
-   as recursion grows and unwinds; Ackermann's explosive stack.
-5. Tail calls; stack depth; mutual recursion.
-6. The heap:
-   - `malloc` and `free`;
-   - allocator design: free lists, boundary tags, coalescing, segregated fits, buddies;
-   - fragmentation, internal and external;
-   - Knuth's fifty-percent rule; Robson's worst-case bound.
-7. Object files: ELF sections (.text, .data, .bss), symbol tables, strong and weak symbols.
-8. Linking, step by step with Pebble's linker: symbol resolution and relocation.
-9. Static against dynamic linking; position-independent code (GOT and PLT); shared libraries; interposition.
-10. Loading: the address-space layout, `_start`, argv and envp.
-11. Exceptional control flow previewed: exceptions, signals, setjmp and longjmp (Part 31).
-12. Undefined behaviour: why it exists, and what optimizers do with it (signed overflow; a deleted null check).
-13. Buffer overflows: the stack smash (the Morris worm 1988; Aleph One 1996) on our Pebble stack, overwriting the
-    return address. Part 55 picks this up.
-14. The Job in the Pebble language, compiled by hand in this part (automatically in Part 13): frames and heap lists.
-15. Outro.
+1. A program's life: compiler, assembler, linker, loader, process; one call followed from source to a patched jump.
+2. Data in memory: bytes and words; endianness (Cohen 1980, after Swift), measured here; alignment and padding
+   (struct sizes measured); row-major arrays; pointers and pointer arithmetic.
+3. Control flow in machine code: conditionals and loops as branches (the unsigned range test); a switch compiled by
+   gcc into a jump table, its cases ending in tail calls.
+4. Procedures: the call stack, activation records, Pebble's calling convention (caller- and callee-saved registers);
+   `fact(10)`'s stack depth traced instruction by instruction; gdb's backtrace walking the same frames on this machine.
+5. Recursion: Ackermann's function on Pebble (A(3, 6): 172,233 calls, 511 frames); tail calls (1,616 bytes of stack
+   against none); guard pages, recursion limits, mutual recursion.
+6. The heap: `malloc` and `free`; free lists, boundary tags (Knuth 1968), coalescing; a real trace (Perl counting
+   *Pride and Prejudice*, 146,336 allocations, recorded through `LD_PRELOAD`).
+7. Five allocators replayed on that trace: first, next and best fit, segregated fits, buddies (Knowlton 1965);
+   fragmentation and search cost; internal against external fragmentation; ptmalloc, jemalloc, tcmalloc, mimalloc.
+8. Knuth's fifty-percent rule, proved by counting and checked by simulation; Robson's worst-case bound (1971, 1974),
+   with its adversary run against first fit.
+9. Object files: ELF sections (.text, .data, .bss, relocations), symbol tables, strong and weak symbols, read from
+   real object files with readelf; the linker's rules.
+10. Linking, step by step with Pebble's linker: symbol resolution, layout, relocation; static archives and why link
+    order matters (measured).
+11. Static against dynamic linking (measured); position-independent code (GOT and PLT, lazy binding); shared
+    libraries; interposition.
+12. Loading: `/proc/self/maps`, ASLR measured over three runs, `_start`, argv on the stack.
+13. Undefined behaviour: why it exists, and what optimizers do with it (signed overflow; a deleted null check, the
+    2009 TUN driver); sanitizers (UBSan, AddressSanitizer) catching four bugs, shadow memory, and their cost measured.
+14. The stack smash (the Morris worm 1988; Aleph One 1996) on our Pebble stack, and four defences built and run:
+    canary, no-execute stack, randomization, bounds. Part 55 picks this up.
+15. The Job, version 1: four assembly files linked by Pebble's linker, frames and a heap list, against Part 6's
+    single file.
+16. *Frontier*: bounds, semantics, capabilities. CHERI capabilities (Watson et al. 2015; Arm Morello 2022), with a
+    miniature on Pebble trapping the smash at the 65th byte; CompCert (Leroy 2006 onward), Cerberus (Memarian et al.
+    2016) and pointer provenance; the exact worst case of first and best fit, why real programs fragment so little
+    (Johnstone and Wilson 1998), use-after-free defences.
+17. Outro. (Exceptional control flow, previewed in the original plan, moves wholly to Part 31.)
 
 *Computed:* Pebble's linker and loader; first-fit, best-fit and segregated allocators on traces, with fragmentation;
 stack-depth traces.
@@ -3149,4 +3160,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
 | 9 | scenes (17, with the *Frontier* chapter), computations (a cache simulator and its analyses, this machine's latency staircase, bandwidth and matrix multiply measured, the exact LRU misses of the Job's corpus scans, the Job's ledger row 3 priced on Part 8's core), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
 | 10 | scenes (17, with the *Frontier* chapter), computations (MESI and the store-buffering test simulated; false sharing, the litmus test with and without a fence, atomics and the Job in C with SIMD and threads measured on this machine; greedy schedules against Brent's bound, work stealing, scans, sorting networks checked by the 0–1 principle, bisection widths by exhaustive search; the Job on four Pebble cores, ledger row 4), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 64 min (estimate) |
-| 11–61 | planned (this document) | — |
+| 11 | scenes (18, with the *Frontier* chapter), computations (Pebble's linker and loader; endianness, struct layout, a jump table, ELF objects, static and dynamic linking and ASLR measured on this machine; stack depths of factorial, Ackermann and tail calls on the emulator; five allocators on Perl's 146,336-allocation trace; Knuth's rule and Robson's bound simulated; undefined behaviour under gcc; the stack smash and four defences; the Job linked from four files), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | LEN |
+| 12–61 | planned (this document) | — |
