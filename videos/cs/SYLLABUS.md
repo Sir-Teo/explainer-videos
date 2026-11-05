@@ -1121,44 +1121,62 @@ Machines*; Nystrom; Ierusalimschy et al. 2005; Hölzle et al. 1991–92; Haas et
 
 ## Act IV · Algorithms
 
-### Part 16 · Counting Steps (~60)
-*Story:* The Job v0 is quadratic, and no hardware from Act II rescues it. Sorting is where computer science learned
-to count steps: recursion trees, a lower bound that comes from information, and a randomized algorithm whose average
-case, 2n ln n, is a small piece of calculus.
+### Part 16 · Counting Steps (~50)
+*Story:* The Job v0 is quadratic, and no hardware from Act II rescues it: its cost per byte rises from about 290
+cycles on 10 kB to 4,279 on the corpus. Sorting is where computer science learned to count steps: recursion trees, a
+lower bound that comes from information, and a randomized algorithm whose average case, 2n ln n, is a small piece of
+calculus.
 1. The ledger so far, and the question it raises: can thinking beat silicon?
-2. Models of computation: the RAM and the word-RAM (w ≥ log n); the pitfalls of unit cost; cell probes; Turing time
-   against RAM time (polynomially related).
-3. Asymptotic notation, precisely; the growth-rate ladder on log–log axes; Stirling's formula.
-4. Insertion sort: a loop-invariant proof; inversions, n(n − 1)/4 expected (derived).
-5. Merge sort: the recursion tree for T(n) = 2T(n/2) + n, drawn; the substitution method.
-6. The **master theorem** in its three cases, with the recursion-tree geometry; Akra–Bazzi.
-7. The **comparison lower bound**: decision trees; log₂ n! = n log₂ n − n log₂ e + O(log n); each comparison gives at
-   most one bit (callback to *AI, Built* 1); Ford–Johnson merge insertion for small n.
-8. Heapsort; heapify in O(n) (the sum Σ h/2ʰ derived).
-9. Quicksort (Hoare 1961): expected comparisons 2n ln n ≈ 1.39 n log₂ n, derived from the fact that i and j are
-   compared exactly when one of them is the first pivot chosen in their range (probability 2/(j − i + 1));
-   randomization; median-of-three; dual-pivot.
-10. Concentration of quicksort's running time (a simulated histogram, with the tail bound).
-11. Beating n log n: counting sort, radix sort, bucket sort; integer sorting on the word-RAM (Han, cited).
-12. Selection: quickselect; **median of medians** (Blum, Floyd, Pratt, Rivest & Tarjan 1973), with T(n) ≤ T(n/5) +
-    T(7n/10) + O(n) solved.
-13. Generating functions: Fibonacci and Catalan in closed form (*Concrete Mathematics*); a glimpse of analytic
-    combinatorics, with asymptotics read off singularities.
-14. Amortized analysis: aggregate, accounting and potential; the dynamic array; why the growth factor 1.5 helps memory
-    reuse.
-15. Practice: Timsort and the 2015 bug found by formal verification (de Gouw et al.); pdqsort; stability; external
-    k-way merge sort, with replacement selection's 2M runs.
-16. The Job v1, sort then count. Ledger row 7. Outro.
+2. Models of computation: the RAM and the word-RAM (w ≥ log n); the pitfall of unit cost, repeated squaring timed in
+   CPython (each step about three times the last); Turing machines, the comparison model, cell probes (Yao 1981),
+   external memory (Aggarwal & Vitter 1988).
+3. Asymptotic notation, precisely (Bachmann 1894, Knuth 1976); the growth-rate ladder on log–log axes; the largest n
+   per second, day and year at a nanosecond a step; Stirling's formula checked.
+4. Insertion sort: the loop invariant animated; inversions, n(n − 1)/4 derived and measured; binary insertion (fewer
+   comparisons, the same moves).
+5. Merge sort: merging animated, stability; the recursion tree for T(n) = 2T(n/2) + n, drawn; the substitution
+   method; comparisons against n lg n and ⌈lg n!⌉.
+6. The **master theorem** in its three cases, as level-by-level bars (Karatsuba, merge sort, a heavy combine); the
+   geometric-series proof; five recurrences; Akra–Bazzi computed.
+7. The **comparison lower bound**: insertion sort's decision tree on three keys; log₂ n! = n log₂ n − n log₂ e +
+   O(log n); each comparison gives at most one bit (callback to *AI, Built* 1); min-and-max by adversary, ⌈3n/2⌉ − 2
+   (Pohl 1972); Ford–Johnson merge insertion meets the bound for n ≤ 11 (verified exhaustively for n ≤ 8), and 30 > 29
+   at n = 12 (Wells 1965).
+8. Heapsort (Williams 1964); Floyd's heapify in O(n) (Σ h/2ʰ derived; under 2 comparisons per element measured);
+   1.8 n lg n measured; introsort.
+9. Quicksort (Hoare 1961): partition and Hoare's two pointers animated; expected comparisons 2(n + 1)Hₙ − 4n ≈
+   1.39 n log₂ n, derived from the 2/(j − i + 1) argument and measured; first element, median of three and random
+   pivots on sorted input (1,999,000 against about 21,000); dual pivot (Yaroslavskiy 2009).
+10. Concentration: the recurrence solved by telescoping; 10,000 runs at n = 1,000 (σ = 0.639 n against theory's
+    √(7 − 2π²/3) n = 0.648 n); the tails; McDiarmid & Hayward 1996.
+11. Beating n log n: counting and radix sort, radix sort animated; timed in C (ten million keys: radix sort 3.8× faster
+    than `std::sort`, 6.7× than `qsort`); Hollerith; integer sorting on the word-RAM (Han & Thorup 2002, cited).
+12. Selection: quickselect (3.36 n measured, (2 + 2 ln 2) n theory); **median of medians** (Blum, Floyd, Pratt, Rivest
+    & Tarjan 1973), T(n) ≤ T(n/5) + T(7n/10) + O(n) solved, 7.8 n measured; why groups of five (three fails, seven
+    works).
+13. Generating functions: Fibonacci and Binet, checked to n = 61; Catalan numbers from C = 1 + zC²; the singularity at
+    1/4 and 4ⁿ/(√π n^{3/2}), with the ratio computed (Flajolet & Sedgewick).
+14. Amortized analysis: the doubling array; a binary counter; aggregate, accounting and potential (Tarjan 1985);
+    factor 2 against 1.5 on a million appends, and memory reuse below the golden ratio.
+15. Practice: Timsort's comparisons on presorted data; the 2015 run-stack bug found by KeY (de Gouw et al.); pdqsort;
+    external merge sort and replacement selection (runs of 2,001 for M = 1,000).
+16. The Job v1 in the Pebble language, sort then count: 15.0 billion key comparisons against 103 million on the
+    corpus; a 24-event instruction model (within 0.5% on held-out passages) applied through a C event counter; where
+    the instructions go (half in comparison calls, a fifth in copying back); ledger row 7 (5.1 s, 11× row 5, 2.3×
+    row 4). *Frontier*: smoothed analysis measured on quicksort (Spielman & Teng 2001); integer sorting results;
+    fine-grained complexity (SETH, 3SUM, APSP; Backurs & Indyk 2015); open problems. Outro.
 
 *Computed:* comparison counts for every sort on random, sorted and adversarial input, fitted to their formulas; the
-quicksort histogram; the decision-tree bound against Ford–Johnson for n ≤ 12; timings on this machine; the Job v1.
-*Visuals:* bars with the invariant region lit; recursion trees summing level by level; a decision tree whose leaves
-are permutations; the growth ladder as the camera pulls out.
+quicksort histogram and tails; the decision-tree bound against Ford–Johnson for n ≤ 12; repeated squaring, radix
+sort, `std::sort` and `qsort` timed on this machine; the Job v1 on the emulator, its instruction model, and the full
+corpus counted by a C program.
+*Visuals:* bars with the invariant region lit; merging and partitioning with pointers; recursion trees summing level
+by level; a decision tree whose leaves are permutations; the growth ladder; radix passes; the histogram.
 *In practice:* choosing standard-library sorts, complexity arguments in code review, the first questions of a coding interview.
-*Reading:* Cormen, Leiserson, Rivest & Stein, *Introduction to Algorithms* (CLRS) ch. 1–9, 16; Knuth, TAOCP 3 ch. 5;
-Sedgewick & Flajolet, *An Introduction to the Analysis of Algorithms*; Graham, Knuth & Patashnik, *Concrete
+*Reading:* Cormen, Leiserson, Rivest & Stein, *Introduction to Algorithms* (CLRS) ch. 1–9, 16–17; Knuth, TAOCP 3 ch.
+5; Sedgewick & Flajolet, *An Introduction to the Analysis of Algorithms*; Graham, Knuth & Patashnik, *Concrete
 Mathematics*; Kleinberg & Tardos ch. 2, 5; Erickson, *Algorithms*; Flajolet & Sedgewick, *Analytic Combinatorics*;
-Hoare 1962; Blum et al. 1973; de Gouw et al. 2015.
+Hoare 1962; Blum et al. 1973; de Gouw et al. 2015; Spielman & Teng 2001.
 
 ### Part 17 · Data Structures (~60)
 *Story:* The Job is a dictionary problem: insert, look up, count. Hashing does it in expected constant time, if the
@@ -3218,4 +3236,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 13 | scenes (17, with the *Frontier* chapter), computations (our compiler pass by pass on the emulator, Part 7's pipeline and Part 8's core; dominators, SSA and liveness traces; SCCP and GVN examples; the register sweep and the chordality check; clang's LLVM IR and gcc's levels on this machine; 240 fuzzed programs; z3 rule checks; a superoptimizer; the Job's ledger row 5), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 76 min (estimate) |
 | 14 | scenes (17, with the *Frontier* chapter), computations (our λ reducer under four strategies and a lazy environment machine; Church arithmetic and Y counted in β-steps; reduction graphs with confluence checked; the STLC checker, its derivations and 5,000 random terms checked for progress and preservation; termination of random untyped terms; HM inference traced on the Job in the λ-core; free theorems tested; a propositional prover with Kripke countermodels; rustc, tsc and node on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 15 | scenes (17, with the *Frontier* chapter), computations (the λ-core's bytecode compiler and reference VM under four collectors; the VM and Cheney's collector in the Pebble language, co-simulated and priced on Part 8's core for ledger row 6; reference-count traffic, lifetimes and nurseries; tri-color marking with and without barriers; a CEK machine and a tiny Prolog; CPython, V8, HotSpot, Go, gcc and node timed and traced on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
-| 16–61 | planned (this document) | — |
+| 16 | scenes (18, with the *Frontier* chapter), computations (every sort counting its comparisons, with insertion, merge, heap, quick, Ford–Johnson, counting, radix, Timsort, quickselect and median of medians; decision trees; the Job v1 in the Pebble language on the emulator, an instruction model and a C event counter over the corpus for ledger row 7; repeated squaring, radix sort and `std::sort` timed on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 17–61 | planned (this document) | — |

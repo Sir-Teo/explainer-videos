@@ -1,0 +1,446 @@
+{
+ "title": "计算机科学，从零搭建 · 第16部分：数步数",
+ "chapters": {
+  "Hook": "思考能胜过硅片吗？",
+  "Models": "1. 什么算一步",
+  "Growth": "2. 增长的阶",
+  "Insertion": "3. 插入排序与它的不变式",
+  "Merge": "4. 归并排序与递归树",
+  "Master": "5. 主定理",
+  "Lower": "6. 比较下界",
+  "Heap": "7. 堆排序",
+  "Quick": "8. 快速排序，以及 2n ln n",
+  "Concentration": "9. 快速排序能有多走运？",
+  "Linear": "10. 突破 n log n",
+  "Select": "11. 选择与中位数的中位数",
+  "Generating": "12. 生成函数",
+  "Amortized": "13. 摊还分析",
+  "Practice": "14. 实践中的排序",
+  "Job": "15. 排好序的任务",
+  "Frontier": "16. 前沿：超越最坏情况",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "e5f22612f52c": {
+   "scene": "Hook",
+   "en": "This is the ledger: the cost of counting the words of thirty novels, row by row. <bookmark mark='a'/> Act Two made the machine faster: a pipeline, an out-of-order core, caches, four cores. Act Three made it easier to program: a compiler, a type system, a runtime, each at some cost. <bookmark mark='b'/> The best row so far is twelve seconds, on four cores. Every one of these rows ran the same algorithm. Act Four asks a different question: can thinking beat silicon?",
+   "zh": "这是账本：数三十部小说的单词所花的代价，一行接一行。<bookmark mark='a'/>第二幕让机器变快了：流水线、乱序核心、缓存、四个核心。第三幕让它更好编程：编译器、类型系统、运行时，每一样都有代价。<bookmark mark='b'/>到目前为止最好的一行是十二秒，在四个核心上。这些行跑的都是同一个算法。第四幕问一个不同的问题：思考能胜过硅片吗？"
+  },
+  "a866d843af10": {
+   "scene": "Hook",
+   "en": "Here is why the algorithm matters. <bookmark mark='a'/> The Job v0 keeps the words it has seen in a list, and for every new word it searches the list from the front. <bookmark mark='b'/> On ten kilobytes of text it costs about three hundred cycles per byte. On the whole corpus, over four thousand. The cost per byte keeps rising, because the list keeps growing: the total work grows roughly like the number of words times the number of distinct words. <bookmark mark='c'/> A faster machine moves this line down. It cannot make it flat. Only a different algorithm can, and this part builds the tools to say exactly how much better one is.",
+   "zh": "这就是算法之所以重要的原因。<bookmark mark='a'/>任务 v0 把见过的单词存在一个列表里，每来一个新词，就从头搜索这个列表。<bookmark mark='b'/>在十千字节的文本上，它每字节大约花三百个周期。在整个语料上，超过四千个。每字节的代价不断上升，因为列表在不断变长：总工作量大致按单词数乘以不同单词数增长。<bookmark mark='c'/>更快的机器能把这条线往下挪，却不能把它拉平。只有换一个算法才行，而这一部分要造出工具，准确地说出一个算法好多少。"
+  },
+  "0e4bd711d589": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> How to count the steps of an algorithm, and which steps to count. <bookmark mark='b'/> Recursion trees, and the master theorem that adds them up. <bookmark mark='c'/> A proof that no algorithm that sorts by comparing can beat n log n, a bound that comes from information. <bookmark mark='d'/> Quicksort's average cost, two n natural log n, derived from one clever observation, and a measurement of how rarely it strays from it. <bookmark mark='e'/> And the Job, sorted instead of searched: ledger row seven.",
+   "zh": "这是我们要去的地方。<bookmark mark='a'/>怎样数一个算法的步数，以及该数哪些步。<bookmark mark='b'/>递归树，以及把它们加起来的主定理。<bookmark mark='c'/>一个证明：凡是靠比较来排序的算法，都无法突破 n log n，这个界来自信息。<bookmark mark='d'/>快速排序的平均代价，2n ln n，由一个巧妙的观察推出，再测一测它有多少时候会偏离这个值。<bookmark mark='e'/>还有任务：改为排序而不是搜索，账本第七行。"
+  },
+  "c9a8129d02c8": {
+   "scene": "Hook",
+   "en": "Part 16 of Computer Science, Built: Counting Steps, the first part of Act Four, Algorithms. <bookmark mark='a'/> In this part: models of computation and asymptotic notation; insertion, merge and heap sort, recursion trees and the master theorem; the comparison lower bound; quicksort, its average and its concentration; sorting in linear time and selecting in linear time; generating functions, amortized analysis, and how sorting is really done.",
+   "zh": "《计算机科学，从零搭建》第16部分：数步数，第四幕“算法”的第一部分。<bookmark mark='a'/>这一部分讲：计算模型与渐近记号；插入排序、归并排序和堆排序，递归树与主定理；比较下界；快速排序、它的平均与它的集中性；线性时间的排序与线性时间的选择；生成函数、摊还分析，以及排序在实践中到底是怎么做的。"
+  },
+  "6f0332887a9c": {
+   "scene": "Models",
+   "en": "Chapter one. What counts as a step.",
+   "zh": "第1章。什么算一步。"
+  },
+  "8cc7e4120f9b": {
+   "scene": "Models",
+   "en": "To compare algorithms rather than machines, we need a machine simple enough to count on. <bookmark mark='a'/> The random-access machine has memory cells with addresses, and a processor that reads a cell, writes one, adds, compares or jumps, each in one step. <bookmark mark='b'/> The word-RAM adds one honest detail: a cell holds w bits, and w is at least the logarithm of the input size, so that a cell can hold an address. <bookmark mark='c'/> Pebble is such a machine, with thirty-two-bit words. <bookmark mark='d'/> From now on we count steps, not seconds, and what we prove holds on every machine of this kind, up to a constant factor.",
+   "zh": "要比较的是算法而不是机器，我们需要一台简单到可以拿来数数的机器。<bookmark mark='a'/>随机存取机有带地址的存储单元，还有一个处理器，它读一个单元、写一个单元、做加法、做比较或跳转，每样都是一步。<bookmark mark='b'/>字 RAM 再加一个诚实的细节：一个单元存 w 位，而 w 至少是输入规模的对数，这样一个单元才放得下一个地址。<bookmark mark='c'/>Pebble 就是这样一台机器，字长三十二位。<bookmark mark='d'/>从现在起，我们数的是步数而不是秒数，我们证明的东西在每一台这类机器上都成立，至多差一个常数因子。"
+  },
+  "36b43bb2c72a": {
+   "scene": "Models",
+   "en": "Why insist on words of bounded size? <bookmark mark='a'/> Square a number again and again. If every multiplication were one step, n squarings would cost n steps. But after n squarings the number has about one point six times two to the n bits. <bookmark mark='b'/> We timed each multiplication in Python on this machine. The early ones take microseconds. By the twenty-first, a single multiplication of a three-million-bit number takes a tenth of a second, and each one costs about three times the last. <bookmark mark='c'/> A model that charged one step for that could do absurd things, packing whole computations into one giant number. The word-RAM rules it out: a step works on a word, and a word is about as long as an address.",
+   "zh": "为什么非要坚持字长有界？<bookmark mark='a'/>把一个数一遍又一遍地平方。如果每次乘法都算一步，n 次平方就是 n 步。可是平方 n 次之后，这个数大约有 1.6 乘以 2 的 n 次方位。<bookmark mark='b'/>我们在这台机器上用 Python 给每次乘法计了时。开头几次只要几微秒。到第二十一次，一个三百万位的数做一次乘法要十分之一秒，而且每次大约是上一次的三倍。<bookmark mark='c'/>一个把这也算作一步的模型能干出荒唐的事，把整个计算塞进一个巨大的数里。字 RAM 排除了这种情况：一步只处理一个字，而一个字大约和一个地址一样长。"
+  },
+  "5a53f5c7928d": {
+   "scene": "Models",
+   "en": "The RAM is not the only way to count. <bookmark mark='a'/> A Turing machine, from Part 2, is much slower in absolute terms, but anything a RAM does in t steps it can do in a polynomial of t, so the two agree about what is efficient. <bookmark mark='b'/> The comparison model counts only comparisons between keys; chapter six proves its famous lower bound. <bookmark mark='c'/> The cell-probe model, from Andrew Yao, counts only memory accesses and makes computation free, which is where the strongest lower bounds for data structures come from. <bookmark mark='d'/> And the external-memory model counts transfers of whole blocks, the cost that dominates when data lives in a cache or on a disk. <bookmark mark='e'/> Each answers a different question. Choose the one that charges for what you care about.",
+   "zh": "RAM 并不是唯一的数法。<bookmark mark='a'/>第2部分的图灵机，按绝对速度要慢得多，但 RAM 用 t 步做的事，它用 t 的某个多项式步就能做到，所以两者对“什么是高效”看法一致。<bookmark mark='b'/>比较模型只数键之间的比较；第6章证明它那个著名的下界。<bookmark mark='c'/>姚期智的细胞探测模型只数内存访问，计算全免费，数据结构最强的下界就出自这里。<bookmark mark='d'/>外存模型则数整块数据的传输次数，当数据放在缓存或磁盘上时，这就是占主导的代价。<bookmark mark='e'/>每种模型回答一个不同的问题。选那个对你在意的东西收费的模型。"
+  },
+  "9db6ef798651": {
+   "scene": "Growth",
+   "en": "Chapter two. Orders of growth.",
+   "zh": "第2章。增长的阶。"
+  },
+  "29be3ca728de": {
+   "scene": "Growth",
+   "en": "Counting steps exactly is often possible, but rarely necessary. <bookmark mark='a'/> We say f is big O of g if, beyond some point, f is at most a constant times g. <bookmark mark='b'/> Omega is the same bound from below, and Theta means both: f and g grow at the same rate. Little o means f becomes negligible next to g. <bookmark mark='c'/> So three n squared plus a hundred n plus seven is Theta of n squared. The constants depend on the machine, the compiler, the programmer. The growth rate does not, which is why it is what we compare. Paul Bachmann introduced the O in 1894; Donald Knuth fixed the meanings of Omega and Theta that computer scientists use, in 1976.",
+   "zh": "精确地数步数常常是做得到的，却很少有必要。<bookmark mark='a'/>如果超过某一点之后，f 至多是 g 的常数倍，我们就说 f 是 g 的大 O。<bookmark mark='b'/>Omega 是同样的界，只是从下方；Theta 表示两者兼有：f 和 g 以相同的速度增长。小 o 表示 f 相对 g 变得可以忽略。<bookmark mark='c'/>所以 3n² + 100n + 7 是 n² 的 Theta。常数取决于机器、编译器、程序员。增长率不取决于这些，所以我们比较的是它。保罗·巴赫曼在1894年引入了 O；高德纳在1976年确定了计算机科学家所用的 Omega 和 Theta 的含义。"
+  },
+  "d13dccf1cb0a": {
+   "scene": "Growth",
+   "en": "On a log–log plot every power of n is a straight line, steeper for higher powers, and the exponential is a curve that leaves them all behind. <bookmark mark='a'/> Make it concrete with one step per nanosecond. In a second, an n log n algorithm handles forty million items; a quadratic one, thirty thousand; a cubic one, a thousand; an exponential one, twenty-nine. <bookmark mark='b'/> In a year, the exponential algorithm reaches fifty-four. <bookmark mark='c'/> That is the lesson of the ledger in one table. Hardware a thousand times faster lets a quadratic algorithm handle thirty-two times more, and an exponential one ten more items. A better algorithm changes the line itself.",
+   "zh": "在对数–对数图上，n 的每个幂次都是一条直线，次数越高越陡；而指数函数是一条曲线，把它们全都甩在后面。<bookmark mark='a'/>具体一点：每纳秒一步。一秒钟内，n log n 的算法能处理四千万个元素；平方的算法，三万个；立方的，一千个；指数的，二十九个。<bookmark mark='b'/>用一整年，指数算法也只能到五十四个。<bookmark mark='c'/>这一张表就是账本的教训。快一千倍的硬件让平方算法多处理三十二倍的数据，让指数算法多处理十个元素。更好的算法改变的是那条线本身。"
+  },
+  "afb6f7836cd3": {
+   "scene": "Growth",
+   "en": "One formula appears again and again when we count arrangements. <bookmark mark='a'/> Stirling's formula says the logarithm of n factorial is n log n minus n, plus a half log of two pi n, plus a term that vanishes. <bookmark mark='b'/> It is astonishingly accurate. At n equals ten the error is about one part in two thousand; at a thousand, about one part in a hundred million. <bookmark mark='c'/> In base two it reads: log of n factorial is n log n minus about one point four four n. Chapter six turns that into the limit on every comparison sort.",
+   "zh": "在数排列的时候，有一个公式一再出现。<bookmark mark='a'/>斯特林公式说，n 阶乘的对数等于 n log n 减 n，加上 2πn 的对数的一半，再加上一个趋于零的项。<bookmark mark='b'/>它精确得惊人。n 等于十时，误差大约是两千分之一；n 等于一千时，大约是一亿分之一。<bookmark mark='c'/>以二为底，它读作：n 阶乘的对数等于 n log n 减去大约 1.44n。第6章把它变成每一个比较排序的极限。"
+  },
+  "c691072f9a88": {
+   "scene": "Insertion",
+   "en": "Chapter three. Insertion sort and its invariant.",
+   "zh": "第3章。插入排序与它的不变式。"
+  },
+  "9a5af2feec81": {
+   "scene": "Insertion",
+   "en": "The simplest sort worth analysing is the one card players use. <bookmark mark='a'/> Take the next element, and shift larger elements right until its place opens up. <bookmark mark='b'/> Watch the green prefix: before each step, the first i elements are in order. That sentence is the loop's invariant. <bookmark mark='c'/> It is true at the start, when the prefix has one element. Each step keeps it true. And when the loop ends, with i equal to n, it says the whole array is sorted. This is induction, applied to a loop, as Robert Floyd and Tony Hoare taught; Part 54 has machines check such proofs.",
+   "zh": "最简单、又值得分析的排序，就是打牌的人用的那种。<bookmark mark='a'/>拿起下一个元素，把比它大的元素往右挪，直到腾出它的位置。<bookmark mark='b'/>看那段绿色的前缀：每一步之前，前 i 个元素都是有序的。这句话就是这个循环的不变式。<bookmark mark='c'/>开始时它成立，那时前缀只有一个元素。每一步都保持它成立。循环结束时，i 等于 n，它说的就是整个数组有序。这是用在循环上的归纳法，正如罗伯特·弗洛伊德和托尼·霍尔所教的；第54部分会让机器来检查这样的证明。"
+  },
+  "74c12c615e81": {
+   "scene": "Insertion",
+   "en": "How much work does it do? <bookmark mark='a'/> Call a pair of positions an inversion if the earlier element is larger. Each shift in the inner loop swaps one adjacent inverted pair, so it removes exactly one inversion, and the total work is the number of inversions plus n. <bookmark mark='b'/> In a random order each of the n choose two pairs is inverted with probability one half, so the expected number is n times n minus one over four. <bookmark mark='c'/> Measured over random arrays, the formula holds. <bookmark mark='d'/> On sorted input insertion sort is linear; on reversed input, and on average, quadratic. It is the right choice for small or nearly sorted arrays, which is exactly how real libraries use it.",
+   "zh": "它做了多少工作？<bookmark mark='a'/>如果一对位置中靠前的元素更大，就把这一对叫作一个逆序对。内层循环的每次挪动交换一对相邻的逆序元素，所以恰好消除一个逆序对，总工作量就是逆序对的个数加上 n。<bookmark mark='b'/>在随机顺序里，n 选 2 对中的每一对以二分之一的概率是逆序的，所以期望个数是 n 乘以 n 减一，再除以四。<bookmark mark='c'/>在随机数组上测量，公式成立。<bookmark mark='d'/>对有序的输入，插入排序是线性的；对逆序的输入，以及平均而言，是平方级的。对小数组或几乎有序的数组，它是正确的选择，真实的程序库也正是这样用它的。"
+  },
+  "b0df54114a5b": {
+   "scene": "Insertion",
+   "en": "One improvement is obvious. <bookmark mark='a'/> The prefix is sorted, so find each new element's place by binary search instead of scanning. <bookmark mark='b'/> The comparisons drop to about n log n. <bookmark mark='c'/> But the elements still have to be shifted to make room, and the shifts are still the inversions: quadratic on average. <bookmark mark='d'/> Whether that matters depends on what a step costs. When comparing is expensive, as with long strings, binary insertion wins; when moving is, it does not help. Counting steps always begins with deciding which steps to count. <bookmark mark='e'/> For twelve items it needs thirty-three comparisons in the worst case; chapter six will show that no method can use fewer than twenty-nine.",
+   "zh": "有一个改进显而易见。<bookmark mark='a'/>前缀是有序的，所以用二分查找而不是逐个扫描来找每个新元素的位置。<bookmark mark='b'/>比较次数降到大约 n log n。<bookmark mark='c'/>可是元素仍然得挪动来腾出位置，而挪动次数仍然是逆序对的个数：平均是平方级。<bookmark mark='d'/>这要不要紧，取决于一步的代价。比较很贵时，比如比较长字符串，二分插入就赢了；挪动很贵时，它就帮不上忙。数步数总是从决定数哪些步开始。<bookmark mark='e'/>对十二个元素，它在最坏情况下要三十三次比较；第6章会证明，没有哪种方法能少于二十九次。"
+  },
+  "bf9dc2541b61": {
+   "scene": "Merge",
+   "en": "Chapter four. Merge sort and the recursion tree.",
+   "zh": "第4章。归并排序与递归树。"
+  },
+  "ebeafee6851d": {
+   "scene": "Merge",
+   "en": "Everything in merge sort rests on one operation. <bookmark mark='a'/> Two lists, each already sorted. Look at the front of each, move the smaller one to the output, and advance in that list. <bookmark mark='b'/> Repeat until one list runs out, then copy the rest of the other. Each comparison places one element, so merging n elements takes at most n minus one comparisons. <bookmark mark='c'/> And if we take from the left list whenever the fronts are equal, equal keys keep their original order. That makes merge sort stable, which the Job will rely on.",
+   "zh": "归并排序的一切都建立在一个操作上。<bookmark mark='a'/>两个列表，各自已经有序。看两者的开头，把较小的那个移到输出，并在那个列表里前进一步。<bookmark mark='b'/>一直重复，直到一个列表用完，再把另一个剩下的部分抄过去。每次比较放好一个元素，所以归并 n 个元素至多需要 n − 1 次比较。<bookmark mark='c'/>如果开头相等时总从左边的列表取，相等的键就保持原来的次序。这让归并排序是稳定的，任务将依赖这一点。"
+  },
+  "3caa86822723": {
+   "scene": "Merge",
+   "en": "Merge sort, which John von Neumann wrote out in 1945, splits the array in half, sorts each half, and merges the two sorted halves in linear time. Its cost satisfies T of n equals two T of n over two plus n. <bookmark mark='a'/> Draw the recursion as a tree. The root does n work to merge. <bookmark mark='b'/> Its two children each do n over two, n in all. Four grandchildren, n over four each: n again. Every level costs n. <bookmark mark='c'/> And there are log n plus one levels, because the sizes halve until they reach one. <bookmark mark='d'/> Sum the levels: n log n plus n. A tree turned a recurrence into an addition.",
+   "zh": "归并排序由冯·诺依曼在1945年写出：把数组对半分开，对每一半排序，再在线性时间里把两个有序的一半归并起来。它的代价满足 T(n) = 2T(n/2) + n。<bookmark mark='a'/>把递归画成一棵树。根要做 n 的工作来归并。<bookmark mark='b'/>它的两个孩子各做 n/2，合起来是 n。四个孙子，各 n/4：又是 n。每一层都花 n。<bookmark mark='c'/>一共有 log n + 1 层，因为规模一路减半直到变成一。<bookmark mark='d'/>把各层加起来：n log n + n。一棵树把一个递推式变成了一道加法。"
+  },
+  "00640fe3c7cf": {
+   "scene": "Merge",
+   "en": "Trees suggest an answer; a proof confirms it. <bookmark mark='a'/> The substitution method guesses the form, c n log n, and checks that the recurrence preserves it: two copies of c times n over two log n over two, plus n, is c n log n minus c n plus n, which is at most c n log n whenever c is at least one. <bookmark mark='b'/> Our merge sort counts its comparisons. On random input it makes a little fewer than n log n; in the worst case exactly n log n minus n plus one. <bookmark mark='c'/> The last column is the floor that chapter six proves no comparison sort can go below. Merge sort is within a few percent of it.",
+   "zh": "树提示了答案；证明来确认它。<bookmark mark='a'/>代入法先猜出形式 c n log n，再检查递推式能保持它：两份 c 乘以 n/2 乘以 log(n/2)，加上 n，等于 c n log n 减 cn 加 n，只要 c 至少为一，它就不超过 c n log n。<bookmark mark='b'/>我们的归并排序会数自己的比较次数。在随机输入上，它比 n log n 略少；最坏情况下恰好是 n log n − n + 1。<bookmark mark='c'/>最后一列是第6章证明的、任何比较排序都无法低于的下限。归并排序离它只差几个百分点。"
+  },
+  "c69a380fafd3": {
+   "scene": "Master",
+   "en": "Chapter five. The master theorem.",
+   "zh": "第5章。主定理。"
+  },
+  "5fccaeaef8a6": {
+   "scene": "Master",
+   "en": "Most divide-and-conquer algorithms split a problem of size n into a pieces of size n over b, and spend f of n splitting and combining. <bookmark mark='a'/> The recursion tree has n to the log base b of a leaves, and everything depends on how f compares with that number. <bookmark mark='b'/> If f grows polynomially slower, the leaves dominate and T is Theta of the number of leaves. <bookmark mark='c'/> If f matches it, every level costs the same, and T picks up a log factor: that was merge sort. <bookmark mark='d'/> If f grows polynomially faster, and shrinks geometrically down the tree, the root dominates and T is just Theta of f. Bentley, Haken and Saxe gave the general form in 1980.",
+   "zh": "大多数分治算法把规模为 n 的问题分成 a 个规模为 n/b 的子问题，再花 f(n) 来拆分和合并。<bookmark mark='a'/>递归树有 n 的 log_b a 次方个叶子，一切都取决于 f 与这个数相比如何。<bookmark mark='b'/>如果 f 增长得慢一个多项式因子，叶子占主导，T 就是叶子数的 Theta。<bookmark mark='c'/>如果 f 与它相当，每一层花的一样多，T 多出一个对数因子：归并排序就是这样。<bookmark mark='d'/>如果 f 增长得快一个多项式因子，并且沿着树向下按几何级数缩小，根占主导，T 就是 f 的 Theta。本特利、哈肯和萨克斯在1980年给出了一般形式。"
+  },
+  "6ab73f2489e8": {
+   "scene": "Master",
+   "en": "Here are the three cases as pictures. Each bar is the total work of one level of the recursion tree, root at the top. <bookmark mark='a'/> Karatsuba's multiplication, three half-size products and linear work: each level costs one and a half times the one above. The sum is dominated by the bottom, the leaves, and the answer is n to the log base two of three, about n to the one point five eight. <bookmark mark='b'/> Merge sort: every level the same, so the sum is a level times the number of levels. <bookmark mark='c'/> And a combine step that costs n squared: each level is half the one above, a geometric series, so the root's n squared is the whole answer, up to a factor of two.",
+   "zh": "这是三种情形的图像。每一条是递归树一层的总工作量，根在最上面。<bookmark mark='a'/>卡拉楚巴乘法，三个一半规模的乘积加上线性的工作：每一层是上一层的一倍半。总和由底部、也就是叶子主导，答案是 n 的 log₂3 次方，大约 n 的 1.58 次方。<bookmark mark='b'/>归并排序：每一层都一样，所以总和是一层乘以层数。<bookmark mark='c'/>再看一个合并要花 n² 的情形：每一层是上一层的一半，一个几何级数，所以根的 n² 就是全部答案，至多差一个二倍。"
+  },
+  "c8fe08a2d8ac": {
+   "scene": "Master",
+   "en": "Why exactly three cases? <bookmark mark='a'/> Write the recursion tree as a sum: level j has a to the j subproblems, each of size n over b to the j. <bookmark mark='b'/> When f is a power of n, n to the c, level j costs n to the c times a over b to the c, to the power j. The levels form a geometric series. <bookmark mark='c'/> A geometric series is dominated by its last term if the ratio is above one, has all terms equal if the ratio is one, and is dominated by its first term if the ratio is below one. <bookmark mark='d'/> And a over b to the c is greater than one exactly when c is less than the log base b of a. The theorem's comparison is a geometric series in disguise.",
+   "zh": "为什么恰好是三种情形？<bookmark mark='a'/>把递归树写成一个和：第 j 层有 a 的 j 次方个子问题，每个规模为 n 除以 b 的 j 次方。<bookmark mark='b'/>当 f 是 n 的幂，n 的 c 次方时，第 j 层花 n 的 c 次方乘以 a 除以 b 的 c 次方，再取 j 次方。各层构成一个几何级数。<bookmark mark='c'/>公比大于一时，几何级数由最后一项主导；公比等于一时，各项都相等；公比小于一时，由第一项主导。<bookmark mark='d'/>而 a 除以 b 的 c 次方大于一，恰好当 c 小于 log_b a 时。定理里的那个比较，就是一个乔装的几何级数。"
+  },
+  "970f7414395c": {
+   "scene": "Master",
+   "en": "The theorem settles most of the recurrences an algorithms course meets. <bookmark mark='a'/> Binary search: one half-size problem and constant work, case two, log n. Merge sort, case two again. Karatsuba and Strassen's matrix multiplication, case one, where the leaves win, and their famous exponents come straight out of the log of a. And a heavy combine step, case three. <bookmark mark='b'/> When the pieces are unequal, the Akra–Bazzi method generalizes the theorem. Splitting into a third and two thirds with linear work still gives n log n, and computing the recurrence directly shows the ratio settling towards a constant.",
+   "zh": "这个定理能解决算法课上遇到的大多数递推式。<bookmark mark='a'/>二分查找：一个一半规模的问题加常数工作，情形二，log n。归并排序，又是情形二。卡拉楚巴乘法和施特拉森矩阵乘法，情形一，叶子获胜，它们那著名的指数直接来自 a 的对数。还有合并很重的情形，情形三。<bookmark mark='b'/>当子问题大小不等时，阿克拉–巴齐方法推广了这个定理。分成三分之一和三分之二、加上线性工作，仍然得到 n log n；直接计算这个递推式，可以看到比值逐渐稳定到一个常数。"
+  },
+  "106f0ddbec15": {
+   "scene": "Lower",
+   "en": "Chapter six. The comparison lower bound.",
+   "zh": "第6章。比较下界。"
+  },
+  "f22671ead31b": {
+   "scene": "Lower",
+   "en": "To prove that no sort can be faster, we need a picture of every possible sort. <bookmark mark='a'/> Run insertion sort on three keys, a, b and c. Its first move is to compare b with a. Depending on the answer it compares something else, and so on, until it knows the order. Draw every possible run as a tree: each node a comparison, each branch an outcome, each leaf the order the sort outputs. <bookmark mark='b'/> Every algorithm that sorts by comparing is such a tree, for each n. Since it must be able to output any of the three factorial, six, orders, it needs at least six leaves. A binary tree of height h has at most two to the h leaves. <bookmark mark='c'/> So some input forces at least the log of six, rounded up, three comparisons. No cleverness can avoid it.",
+   "zh": "要证明没有排序能更快，我们需要一幅囊括所有可能排序的图景。<bookmark mark='a'/>在三个键 a、b、c 上运行插入排序。它第一步比较 b 和 a。根据回答，它再比较别的，如此下去，直到知道整个次序。把每一种可能的运行画成一棵树：每个结点是一次比较，每条分支是一个结果，每片叶子是排序输出的次序。<bookmark mark='b'/>对每个 n，每个靠比较来排序的算法都是这样一棵树。因为它必须能输出三的阶乘、也就是六种次序中的任何一种，它至少需要六片叶子。高度为 h 的二叉树至多有 2 的 h 次方片叶子。<bookmark mark='c'/>所以某个输入会迫使它至少做 log 6 向上取整、也就是三次比较。再聪明也躲不开。"
+  },
+  "1e42d7d7c5fd": {
+   "scene": "Lower",
+   "en": "The same argument works for any n. <bookmark mark='a'/> A sort must distinguish n factorial orders, so its tree has height at least log n factorial, which by Stirling is n log n minus about one point four four n. <bookmark mark='b'/> Read it as information, the way AI, Built read it in its first part. A comparison has two outcomes, so it tells us at most one bit. Identifying one order among n factorial takes log n factorial bits. <bookmark mark='c'/> No comparison sort can do better, not just in the worst case, but even on average, since the average depth of a tree's leaves is at least the same logarithm. Merge sort and heapsort are optimal, up to the constant.",
+   "zh": "同样的论证对任何 n 都成立。<bookmark mark='a'/>排序必须区分 n 的阶乘种次序，所以它的树高至少是 log n!，由斯特林公式，这是 n log n 减去大约 1.44n。<bookmark mark='b'/>把它当作信息来读，就像《AI，从零构建》在第一部分里那样。一次比较有两种结果，所以至多告诉我们一比特。要从 n! 种次序中认出一种，需要 log n! 比特。<bookmark mark='c'/>没有哪个比较排序能做得更好，不只是在最坏情况下，平均来说也是如此，因为一棵树叶子的平均深度至少也是同一个对数。归并排序和堆排序在常数意义下是最优的。"
+  },
+  "384d7aeedf87": {
+   "scene": "Lower",
+   "en": "How close to the bound can a sort come, for small n? <bookmark mark='a'/> Here are the worst-case comparison counts for sorting three to twelve items. Merge sort and binary insertion fall behind the bound from five items on. <bookmark mark='b'/> Lester Ford and Selmer Johnson's merge insertion, from 1959, pairs the items, sorts the winners, and inserts the losers in a carefully chosen order, so that each binary search runs on a chain of just under a power of two. It meets the information bound exactly for every n up to eleven. We checked our implementation's worst case by running it on every order for n up to eight. <bookmark mark='c'/> At twelve, the bound says twenty-nine, and merge insertion needs thirty. Mark Wells showed in 1965, by exhaustive search, that thirty is the best any algorithm can do. The bound is a floor, not always a door.",
+   "zh": "对小的 n，排序能离这个界多近？<bookmark mark='a'/>这是对三到十二个元素排序的最坏比较次数。从五个元素起，归并排序和二分插入就落在界的后面了。<bookmark mark='b'/>莱斯特·福特和塞尔默·约翰逊1959年的归并插入：先把元素配对，对胜者排序，再按精心选择的次序插入败者，让每次二分查找都在一条长度略小于二的幂的链上进行。对直到十一的每个 n，它都恰好达到信息下界。我们把实现在 n 不超过八时的每一种次序上都跑了一遍，检查了它的最坏情况。<bookmark mark='c'/>在十二，下界说是二十九，而归并插入需要三十。马克·韦尔斯在1965年用穷举搜索证明了，三十就是任何算法所能做到的最好。下界是一层地板，却不总是一扇门。"
+  },
+  "d414f40484b3": {
+   "scene": "Lower",
+   "en": "Decision trees are one way to prove lower bounds. Another is to imagine an adversary who answers the algorithm's comparisons as unhelpfully as possible. <bookmark mark='a'/> Finding the maximum needs n minus one comparisons, because every other element must lose at least once. <bookmark mark='b'/> Finding the minimum and the maximum separately costs about two n. <bookmark mark='c'/> But compare the elements in pairs first: the winners compete for the maximum, the losers for the minimum. <bookmark mark='d'/> That is three n over two minus two comparisons. <bookmark mark='e'/> An adversary shows nothing does better. Every element except the eventual maximum must lose once, and every element except the minimum must win once: two n minus two units of information, and the adversary can always answer so that a comparison yields at most two, and usually one. <bookmark mark='f'/> Ira Pohl proved the bound tight in 1972. Problem three asks you to complete the argument.",
+   "zh": "决策树是证明下界的一种方法。另一种是想象一个对手，它尽可能不帮忙地回答算法的比较。<bookmark mark='a'/>找最大值需要 n − 1 次比较，因为其余每个元素都必须至少输一次。<bookmark mark='b'/>分别找最小值和最大值，大约要 2n 次。<bookmark mark='c'/>但先把元素两两比较：胜者去争最大值，败者去争最小值。<bookmark mark='d'/>这样是 3n/2 − 2 次比较。<bookmark mark='e'/>对手证明没有办法做得更好。除了最终的最大值，每个元素都必须输一次；除了最小值，每个元素都必须赢一次：一共 2n − 2 个信息单位，而对手总能回答得让一次比较至多给出两个，通常只给一个。<bookmark mark='f'/>艾拉·波尔在1972年证明了这个界是紧的。习题三请你补全这个论证。"
+  },
+  "eca47da760e1": {
+   "scene": "Heap",
+   "en": "Chapter seven. Heapsort.",
+   "zh": "第7章。堆排序。"
+  },
+  "6aaf6a9787d0": {
+   "scene": "Heap",
+   "en": "J. W. J. Williams invented heapsort in 1964 around a data structure that is also his: the heap. <bookmark mark='a'/> A heap is a binary tree with no pointers. Its nodes are stored in an array, level by level, so the children of position i are at two i plus one and two i plus two. <bookmark mark='b'/> It is kept in heap order: every parent is at least as large as its children. <bookmark mark='c'/> So the largest element is always at the root, and because the tree is complete, its height is the logarithm of n.",
+   "zh": "J·W·J·威廉斯在1964年发明了堆排序，围绕的数据结构也是他的发明：堆。<bookmark mark='a'/>堆是一棵没有指针的二叉树。它的结点按层存放在数组里，所以位置 i 的孩子在 2i + 1 和 2i + 2。<bookmark mark='b'/>它保持堆序：每个父结点至少和它的孩子一样大。<bookmark mark='c'/>所以最大的元素总在根上，又因为这棵树是完全的，它的高度是 n 的对数。"
+  },
+  "eb929041c180": {
+   "scene": "Heap",
+   "en": "Inserting n elements one by one would build a heap in n log n. Robert Floyd found a better way. <bookmark mark='a'/> Treat the array as a heap that is wrong everywhere, and fix it from the bottom up: sift each parent down until it is larger than its children. <bookmark mark='b'/> A node at height h costs at most two h comparisons, and only about n over two to the h plus one nodes have that height. <bookmark mark='c'/> The sum of h over two to the h converges to two, so the whole build costs at most two n comparisons: linear. Most nodes are near the bottom, where sifting is cheap. <bookmark mark='d'/> Measured, it costs under two comparisons per element at every size.",
+   "zh": "一个一个地插入 n 个元素，建堆要 n log n。罗伯特·弗洛伊德找到了更好的办法。<bookmark mark='a'/>把数组看成一个处处都不对的堆，从下往上修复它：把每个父结点往下筛，直到它比孩子都大。<bookmark mark='b'/>高度为 h 的结点至多花 2h 次比较，而高度为 h 的结点只有大约 n 除以 2 的 h+1 次方个。<bookmark mark='c'/>h 除以 2 的 h 次方之和收敛到二，所以整个建堆至多花 2n 次比较：线性的。大多数结点都在底部，那里往下筛很便宜。<bookmark mark='d'/>实测，在每种规模下，每个元素都不到两次比较。"
+  },
+  "1ad2a754d3cd": {
+   "scene": "Heap",
+   "en": "With the heap built, sorting is a loop. <bookmark mark='a'/> The maximum is at the root. Swap it to the end of the array, shrink the heap by one, and sift the new root down to restore order. <bookmark mark='b'/> Each of the n minus one rounds costs at most two log n comparisons, so heapsort is n log n even in the worst case. <bookmark mark='c'/> Measured on sixty-five thousand elements, it makes about one point eight times n log n comparisons, nearly twice merge sort. <bookmark mark='d'/> Its virtues are elsewhere. It needs no extra memory, and its worst case is guaranteed. Its weakness is the memory hierarchy: a parent and its children sit far apart in the array, so it misses the cache. <bookmark mark='e'/> That is why libraries keep it as a safety net. Introsort, used in C++'s standard library, runs quicksort, and switches to heapsort if the recursion gets too deep.",
+   "zh": "堆建好以后，排序就是一个循环。<bookmark mark='a'/>最大值在根上。把它换到数组末尾，堆缩小一个，再把新的根往下筛来恢复次序。<bookmark mark='b'/>n − 1 轮中的每一轮至多花 2 log n 次比较，所以堆排序即使在最坏情况下也是 n log n。<bookmark mark='c'/>在六万五千个元素上实测，它做了大约 1.8 倍 n log n 次比较，几乎是归并排序的两倍。<bookmark mark='d'/>它的长处在别处。它不需要额外的内存，最坏情况有保证。它的弱点是存储层次：父结点和孩子在数组里相隔很远，所以它会缓存缺失。<bookmark mark='e'/>这就是程序库把它留作安全网的原因。C++ 标准库所用的内省排序先跑快速排序，递归太深时就换成堆排序。"
+  },
+  "720a49652dd3": {
+   "scene": "Quick",
+   "en": "Chapter eight. Quicksort, and two n natural log n.",
+   "zh": "第8章。快速排序，以及 2n ln n。"
+  },
+  "17202ffe5891": {
+   "scene": "Quick",
+   "en": "Tony Hoare invented quicksort in 1959, as a visiting student in Moscow, and published it in 1961. <bookmark mark='a'/> Pick one element, the pivot. <bookmark mark='b'/> In one pass, compare every other element with it, moving the smaller ones to its left and the larger ones to its right. That costs n minus one comparisons, and afterwards the pivot is in its final place. <bookmark mark='c'/> Then sort the two sides the same way. Unlike merge sort, the work happens before the recursion, and there is nothing to combine.",
+   "zh": "托尼·霍尔在1959年发明了快速排序，那时他是莫斯科的一名访问学生，1961年发表。<bookmark mark='a'/>选一个元素，作为枢轴。<bookmark mark='b'/>用一趟扫描，把其余每个元素与它比较，较小的移到它左边，较大的移到右边。这花 n − 1 次比较，之后枢轴就在它最终的位置上。<bookmark mark='c'/>然后用同样的方法对两边排序。与归并排序不同，工作发生在递归之前，之后没有什么要合并的。"
+  },
+  "4a5fa1919710": {
+   "scene": "Quick",
+   "en": "Hoare's own partition needs no second array. <bookmark mark='a'/> Take the first element as the pivot. One pointer, i, starts at the left and moves right past elements smaller than the pivot; another, j, starts at the right and moves left past larger ones. <bookmark mark='b'/> When both have stopped, each is pointing at an element on the wrong side, so swap them, and continue. <bookmark mark='c'/> When the pointers cross, everything up to j is at most the pivot and everything after it is at least the pivot. It uses no extra memory and makes few swaps, which is part of why quicksort is fast in practice.",
+   "zh": "霍尔自己的划分不需要第二个数组。<bookmark mark='a'/>取第一个元素为枢轴。一个指针 i 从左边出发，向右越过比枢轴小的元素；另一个指针 j 从右边出发，向左越过比它大的元素。<bookmark mark='b'/>两个都停下时，各自指着一个站错了边的元素，于是交换它们，继续。<bookmark mark='c'/>两个指针交错时，j 及其左边的一切都不大于枢轴，j 右边的一切都不小于枢轴。它不用额外内存，交换次数也少，这是快速排序在实践中快的部分原因。"
+  },
+  "76502a37a054": {
+   "scene": "Quick",
+   "en": "Quicksort's average cost has a famously short derivation. <bookmark mark='a'/> Name the elements by their rank in sorted order, z one up to z n, and choose every pivot uniformly at random. <bookmark mark='b'/> Two elements z i and z j are compared at most once, and they are compared exactly when one of them is the first pivot chosen from the range between them. <bookmark mark='c'/> If some element strictly between them is chosen first, they land on opposite sides and never meet. If an element outside the range is chosen, they stay together and wait. <bookmark mark='d'/> So the probability is two out of the j minus i plus one elements in the range. <bookmark mark='e'/> Add over all pairs, and the expected number of comparisons is two times n plus one times the harmonic number, minus four n: about two n natural log n, or one point three nine n log base two n. Only thirty-nine percent above the lower bound, on average.",
+   "zh": "快速排序的平均代价有一个出了名简短的推导。<bookmark mark='a'/>按排好序后的秩给元素命名，z₁ 直到 zₙ，每个枢轴都均匀随机地选取。<bookmark mark='b'/>两个元素 zᵢ 和 zⱼ 至多被比较一次，而它们被比较，恰好当它们之一是这个区间里第一个被选为枢轴的元素。<bookmark mark='c'/>如果它们之间的某个元素先被选中，它们就落在两边，永远不会相遇。如果选中的是区间外的元素，它们就留在一起，继续等待。<bookmark mark='d'/>所以概率是区间里 j − i + 1 个元素中的两个。<bookmark mark='e'/>对所有的对求和，比较次数的期望就是 2 乘以 n + 1 乘以调和数，再减 4n：大约 2n ln n，即 1.39 n log₂ n。平均来说，只比下界高百分之三十九。"
+  },
+  "3e22f1254efc": {
+   "scene": "Quick",
+   "en": "Our quicksort counts its comparisons. <bookmark mark='a'/> Averaged over many runs with random pivots, the counts match the exact formula to within a fraction of a percent, at every size. And they sit a little above n log n: the thirty-nine percent that random pivots cost.",
+   "zh": "我们的快速排序会数自己的比较次数。<bookmark mark='a'/>用随机枢轴跑很多次取平均，在每种规模下，次数都与精确公式相差不到百分之一。它们比 n log n 略高一点：那就是随机枢轴的代价，百分之三十九。"
+  },
+  "292128ac1144": {
+   "scene": "Quick",
+   "en": "The analysis assumed random pivots. What if we take the first element, as the earliest versions did? <bookmark mark='a'/> On random input it hardly matters. On sorted input it is a disaster: every partition splits off nothing, and quicksort makes n times n minus one over two comparisons, two million for two thousand elements. <bookmark mark='b'/> And sorted input is common. The median of the first, middle and last elements fixes this case. <bookmark mark='c'/> A random pivot fixes every case at once: the expected cost no longer depends on the input at all, only on coin flips no adversary can see. <bookmark mark='d'/> Modern versions refine it further. Vladimir Yaroslavskiy's dual-pivot quicksort has sorted Java's primitive arrays since Java 7.",
+   "zh": "分析假设了随机枢轴。如果像最早的版本那样取第一个元素呢？<bookmark mark='a'/>在随机输入上几乎没有差别。在有序输入上是一场灾难：每次划分都什么也没分出去，快速排序要做 n 乘以 n − 1 再除以二次比较，两千个元素就是两百万次。<bookmark mark='b'/>而有序输入很常见。取第一个、中间和最后一个元素的中位数，能修好这种情形。<bookmark mark='c'/>随机枢轴一下子修好所有情形：期望代价完全不再取决于输入，只取决于对手看不见的抛硬币。<bookmark mark='d'/>现代版本还在进一步改进。弗拉基米尔·雅罗斯拉夫斯基的双枢轴快速排序，从 Java 7 起就一直负责 Java 基本类型数组的排序。"
+  },
+  "2f57b4a50c52": {
+   "scene": "Concentration",
+   "en": "Chapter nine. How lucky can quicksort get?",
+   "zh": "第9章。快速排序能有多走运？"
+  },
+  "dcb2f69c7f21": {
+   "scene": "Concentration",
+   "en": "Before measuring the spread, here is the classical way to get the mean, which uses no clever observation, only algebra. <bookmark mark='a'/> The pivot's rank is uniformly random, so the two sides have sizes k and n minus one minus k for a uniform k, and the expected cost is n minus one plus two over n times the sum of all smaller costs. <bookmark mark='b'/> Multiply by n, and subtract the same equation for n minus one: the sum disappears, leaving a relation between neighbours. <bookmark mark='c'/> Divide by n times n plus one and the relation telescopes. <bookmark mark='d'/> Summing it gives the same exact answer as before, two times n plus one times H n, minus four n. Two proofs, one number.",
+   "zh": "在测量离散程度之前，先看求平均值的经典方法，它不用任何巧妙的观察，只用代数。<bookmark mark='a'/>枢轴的秩是均匀随机的，所以两边的大小是 k 和 n − 1 − k，k 均匀分布，期望代价就是 n − 1 加上 2/n 乘以所有更小代价之和。<bookmark mark='b'/>乘以 n，再减去 n − 1 时的同一个方程：和式消失了，只剩下相邻两项之间的关系。<bookmark mark='c'/>除以 n 乘以 n + 1，这个关系就可以逐项相消。<bookmark mark='d'/>把它加起来，得到和之前一样的精确答案：2 乘以 n + 1 乘以 Hₙ，再减 4n。两个证明，一个数。"
+  },
+  "bb384cae7d3b": {
+   "scene": "Concentration",
+   "en": "An average is a promise about many runs. You will run your sort once. How far from the average can a single run be? <bookmark mark='a'/> We sorted the same thousand elements ten thousand times, with fresh random pivots each time, and counted comparisons. <bookmark mark='b'/> The runs pile up around the mean, which matches the exact formula. <bookmark mark='c'/> The standard deviation is about zero point six four n, as the theory predicts: the spread grows like n, while the mean grows like n log n, so relative to the mean it shrinks. <bookmark mark='d'/> The worst of ten thousand runs made fourteen and a half thousand comparisons. The worst possible run makes half a million.",
+   "zh": "平均值是对许多次运行的承诺。而你只会运行你的排序一次。单独一次运行能离平均多远？<bookmark mark='a'/>我们把同样的一千个元素排了一万次，每次都用新的随机枢轴，数比较次数。<bookmark mark='b'/>这些运行堆积在平均值周围，平均值与精确公式吻合。<bookmark mark='c'/>标准差大约是 0.64n，正如理论所预言：离散程度按 n 增长，而平均值按 n log n 增长，所以相对于平均值，它在缩小。<bookmark mark='d'/>一万次中最坏的一次做了一万四千五百次比较。理论上最坏的一次要五十万次。"
+  },
+  "184648c0109c": {
+   "scene": "Concentration",
+   "en": "How often does a run stray far? <bookmark mark='a'/> One standard deviation above the mean: fifteen percent of runs. Two: four percent. Three: under one percent. Four: two runs in a thousand. The right tail is longer than a bell curve's, but it falls fast. <bookmark mark='b'/> McDiarmid and Hayward proved how fast in 1996: the chance of exceeding the mean by any fixed fraction vanishes faster than any power of n. <bookmark mark='c'/> So a run that takes twice the average essentially never happens, whatever the input. A randomized algorithm promises a distribution rather than a bound, and Part 20, on randomness, studies the tools that measure such promises.",
+   "zh": "一次运行多常偏离得很远？<bookmark mark='a'/>比平均值高出一个标准差：百分之十五的运行。两个：百分之四。三个：不到百分之一。四个：千分之二。右尾比钟形曲线的长，但下降得很快。<bookmark mark='b'/>麦克迪尔米德和海沃德在1996年证明了有多快：超出平均值任何固定比例的概率，比 n 的任何次幂都消失得更快。<bookmark mark='c'/>所以一次花了平均值两倍的运行，无论输入是什么，基本上永远不会发生。随机算法承诺的是一个分布而不是一个界，第20部分“随机性”会研究衡量这种承诺的工具。"
+  },
+  "c0b99aed332b": {
+   "scene": "Linear",
+   "en": "Chapter ten. Beating n log n.",
+   "zh": "第10章。突破 n log n。"
+  },
+  "26774b898771": {
+   "scene": "Linear",
+   "en": "The lower bound has a condition hidden in its name: it is about comparisons. <bookmark mark='a'/> An algorithm that looks inside the keys can escape it. <bookmark mark='b'/> If the keys are small integers, counting sort counts how many times each value occurs and writes them back in order, in time proportional to n plus the range of values. <bookmark mark='c'/> Radix sort applies counting sort to one digit at a time, starting from the least significant, and because each pass is stable, the earlier passes' order survives within equal digits. <bookmark mark='d'/> Thirty-two-bit keys, eight bits at a time: four linear passes. <bookmark mark='e'/> Herman Hollerith's card sorters did this mechanically for the 1890 census, one column per pass. <bookmark mark='f'/> How fast can integers be sorted on a word-RAM in general? Han and Thorup reached n times the square root of log log n in 2002. Whether linear time is possible remains open.",
+   "zh": "这个下界的名字里藏着一个条件：它说的是比较。<bookmark mark='a'/>一个查看键的内部的算法可以逃过它。<bookmark mark='b'/>如果键是小整数，计数排序数出每个值出现几次，再按顺序写回去，用时与 n 加上值的范围成正比。<bookmark mark='c'/>基数排序把计数排序一次用在一位数字上，从最低位开始；因为每一趟都是稳定的，之前各趟的次序在这一位相等的数之间得以保留。<bookmark mark='d'/>三十二位的键，每次八位：四趟线性的扫描。<bookmark mark='e'/>赫尔曼·霍勒瑞斯的卡片分类机为1890年的人口普查机械地做了这件事，每趟一列。<bookmark mark='f'/>一般来说，在字 RAM 上整数能排多快？韩涛和托鲁普在2002年做到了 n 乘以 log log n 的平方根。线性时间是否可能，至今仍未解决。"
+  },
+  "3abc74f0a9a7": {
+   "scene": "Linear",
+   "en": "Here is radix sort on seven three-digit numbers, the example from Hollerith's machines and from the standard textbook. <bookmark mark='a'/> First, sort by the units digit alone. <bookmark mark='b'/> Then by the tens digit, keeping the previous order among equal tens. <bookmark mark='c'/> Then by the hundreds. <bookmark mark='d'/> Now the list is sorted, though no two numbers were ever compared. The stability of each pass is what makes it work: when two numbers have the same hundreds digit, their order from the tens pass survives.",
+   "zh": "这是在七个三位数上的基数排序，来自霍勒瑞斯的机器，也来自标准教科书。<bookmark mark='a'/>先只按个位排序。<bookmark mark='b'/>再按十位，十位相等的保持上一趟的次序。<bookmark mark='c'/>再按百位。<bookmark mark='d'/>现在列表有序了，可从来没有比较过任何两个数。让它成立的是每一趟的稳定性：两个数百位相同时，它们在十位那一趟的次序得以保留。"
+  },
+  "ed0d85380a0e": {
+   "scene": "Linear",
+   "en": "How much does that buy? <bookmark mark='a'/> We sorted random thirty-two-bit integers in C on this machine, a hundred thousand, a million and ten million of them. <bookmark mark='b'/> For ten million, radix sort is several times faster than C++'s std::sort, and faster again than C's qsort, which pays a function call for every comparison. Counting sort on sixteen-bit keys is faster still. <bookmark mark='c'/> The price is generality. Radix sort needs keys made of fixed-width digits and a second array; a comparison sort works on anything that can be ordered, which is why it remains the default.",
+   "zh": "这能换来多少？<bookmark mark='a'/>我们在这台机器上用 C 对随机的三十二位整数排序，十万个、一百万个和一千万个。<bookmark mark='b'/>对一千万个，基数排序比 C++ 的 std::sort 快好几倍，比 C 的 qsort 更快，后者每次比较都要付出一次函数调用。十六位键上的计数排序还要更快。<bookmark mark='c'/>代价是通用性。基数排序需要由固定宽度的数字组成的键，还要第二个数组；比较排序对任何能排序的东西都管用，所以它仍然是默认的选择。"
+  },
+  "95edde149fda": {
+   "scene": "Select",
+   "en": "Chapter eleven. Selection and the median of medians.",
+   "zh": "第11章。选择与中位数的中位数。"
+  },
+  "05ae61659eba": {
+   "scene": "Select",
+   "en": "Sorting finds every element's rank. Often we need only one: the median, or the ninety-ninth percentile. <bookmark mark='a'/> Hoare's quickselect partitions like quicksort, then recurses only into the side that contains the rank we want. <bookmark mark='b'/> A crude argument: a random pivot usually throws away at least a quarter, so the work is at most n plus three quarters of n plus nine sixteenths of n, and so on: four n. <bookmark mark='c'/> The exact expected cost for the median is two plus two log two, times n, about three point three nine n. Measured, the counts hover right there: linear, and far below sorting.",
+   "zh": "排序找出每个元素的秩。可我们常常只需要一个：中位数，或者第九十九百分位数。<bookmark mark='a'/>霍尔的快速选择像快速排序那样划分，然后只递归进入包含我们想要的那个秩的一边。<bookmark mark='b'/>一个粗略的论证：随机枢轴通常至少扔掉四分之一，所以工作量至多是 n 加四分之三 n 加十六分之九 n，如此下去：4n。<bookmark mark='c'/>求中位数的精确期望代价是 2 加 2 ln 2，乘以 n，大约 3.39n。实测的次数就在那里徘徊：线性的，远低于排序。"
+  },
+  "d7d4ab76d88e": {
+   "scene": "Select",
+   "en": "Quickselect is linear on average. Can it be linear in the worst case? In 1973, five authors, four of them Turing award winners, showed it can. <bookmark mark='a'/> Split the elements into groups of five and find each group's median. <bookmark mark='b'/> Then find the median of those medians, recursively, and use it as the pivot. <bookmark mark='c'/> It is guaranteed to be a good one: at least three tenths of the elements are smaller, and three tenths larger. <bookmark mark='d'/> So the time satisfies T of n at most T of n over five, plus T of seven n over ten, plus linear work. <bookmark mark='e'/> One fifth plus seven tenths is nine tenths, less than one, so in the recursion tree each level does at most nine tenths of the work of the level above: a geometric series, linear in total. Our implementation makes about eight comparisons per element, more than twice quickselect's average. A guarantee, bought with a constant.",
+   "zh": "快速选择平均是线性的。最坏情况下也能是线性的吗？1973年，五位作者证明了可以，其中四位是图灵奖得主。<bookmark mark='a'/>把元素分成五个一组，找出每组的中位数。<bookmark mark='b'/>再递归地找出这些中位数的中位数，用它作枢轴。<bookmark mark='c'/>它保证是个好枢轴：至少十分之三的元素比它小，十分之三比它大。<bookmark mark='d'/>所以时间满足 T(n) 不超过 T(n/5) 加 T(7n/10) 加上线性的工作。<bookmark mark='e'/>五分之一加十分之七是十分之九，小于一，所以在递归树中，每一层至多做上一层十分之九的工作：一个几何级数，总量是线性的。我们的实现每个元素大约做八次比较，是快速选择平均值的两倍多。一个保证，用一个常数买来。"
+  },
+  "12115539b451": {
+   "scene": "Select",
+   "en": "Why five? The recursion tree answers it. <bookmark mark='a'/> With groups of three, the median of medians guarantees only a third on each side, so the two recursive calls have sizes a third and two thirds. They add up to the whole, every level costs n, and the total is n log n: no better than sorting. <bookmark mark='b'/> With five, a fifth plus seven tenths is nine tenths. The levels shrink geometrically and the total is linear. <bookmark mark='c'/> Seven works too, with a larger cost per group. <bookmark mark='d'/> The rule is the one from the master theorem's geometry: divide and conquer is linear exactly when the subproblems add up to strictly less than the problem.",
+   "zh": "为什么是五？递归树给出了答案。<bookmark mark='a'/>三个一组时，中位数的中位数只能保证每边三分之一，所以两次递归调用的规模是三分之一和三分之二。它们加起来是整体，每一层花 n，总共 n log n：不比排序好。<bookmark mark='b'/>五个一组时，五分之一加十分之七是十分之九。各层按几何级数缩小，总量是线性的。<bookmark mark='c'/>七个一组也行，每组的代价更大。<bookmark mark='d'/>规则就是主定理几何图像里的那一条：分治是线性的，恰好当子问题加起来严格小于原问题。"
+  },
+  "39eda58d17cc": {
+   "scene": "Generating",
+   "en": "Chapter twelve. Generating functions.",
+   "zh": "第12章。生成函数。"
+  },
+  "c05e84e2206d": {
+   "scene": "Generating",
+   "en": "Recurrences like quicksort's are often solved by a trick from the eighteenth century: turn the whole sequence into one function. <bookmark mark='a'/> Make the Fibonacci numbers the coefficients of a power series, F of z. <bookmark mark='b'/> The recurrence, each term the sum of the two before, becomes an equation about the function itself: F equals z plus z F plus z squared F. <bookmark mark='c'/> Solve it like algebra: F is z over one minus z minus z squared, and partial fractions split it into two geometric series. <bookmark mark='d'/> Read off the coefficient, and out comes Binet's formula, with the golden ratio. We checked it against the recurrence for every n up to sixty-one.",
+   "zh": "像快速排序那样的递推式，常常用一个十八世纪的技巧来解：把整个数列变成一个函数。<bookmark mark='a'/>让斐波那契数成为一个幂级数 F(z) 的系数。<bookmark mark='b'/>递推关系，每一项是前两项之和，变成关于这个函数本身的一个方程：F = z + zF + z²F。<bookmark mark='c'/>像解代数题一样解它：F 等于 z 除以 1 − z − z²，部分分式把它拆成两个几何级数。<bookmark mark='d'/>读出系数，比内公式就出来了，里面有黄金比例。我们对直到六十一的每个 n，都拿它与递推式核对过。"
+  },
+  "a6cf07129780": {
+   "scene": "Generating",
+   "en": "A harder example. <bookmark mark='a'/> The number of binary trees with n nodes: one, one, two, five, fourteen, forty-two. These are the Catalan numbers, and they count recursion trees, bracketings and many other things. <bookmark mark='b'/> A tree is empty, or a root with two subtrees, so the generating function satisfies C equals one plus z C squared. Solve the quadratic, expand the square root, and the closed form appears: one over n plus one, times two n choose n. <bookmark mark='c'/> Even without the closed form, the function tells us how fast the numbers grow: the square root vanishes at one quarter, and that point alone fixes the growth. <bookmark mark='d'/> Four to the n, divided by the square root of pi times n to the three halves. The ratio of the true value to this approximation creeps up to one. Flajolet and Sedgewick built a whole subject, analytic combinatorics, on reading growth rates off singularities.",
+   "zh": "一个更难的例子。<bookmark mark='a'/>有 n 个结点的二叉树的个数：一、一、二、五、十四、四十二。这些是卡特兰数，它们数递归树、括号化方式，以及许多别的东西。<bookmark mark='b'/>一棵树要么是空的，要么是一个根带两棵子树，所以生成函数满足 C = 1 + zC²。解这个二次方程，展开平方根，封闭形式就出现了：1/(n+1) 乘以 2n 选 n。<bookmark mark='c'/>即使没有封闭形式，这个函数也告诉我们这些数增长得多快：平方根在四分之一处变为零，单是这一点就决定了增长。<bookmark mark='d'/>4 的 n 次方，除以根号 π 乘以 n 的二分之三次方。真实值与这个近似的比值慢慢爬向一。弗拉若莱和塞奇威克在“从奇点读出增长率”之上建立了一门学科：解析组合学。"
+  },
+  "d978a6ffb7f1": {
+   "scene": "Amortized",
+   "en": "Chapter thirteen. Amortized analysis.",
+   "zh": "第13章。摊还分析。"
+  },
+  "f82dd7168234": {
+   "scene": "Amortized",
+   "en": "Java's ArrayList, C++'s vector and Python's list all grow geometrically. Take the simplest rule, doubling. <bookmark mark='a'/> Most appends cost one step. But when the array is full, it allocates one twice as big and copies everything across: an append that costs as much as all the elements so far. <bookmark mark='b'/> The worst single append is linear. Yet the expensive ones come at sizes one, two, four, eight, and the copies add up to less than two n. Averaged over any sequence of appends, the cost is at most three per append. That is an amortized bound: not an average over random inputs, but a guarantee for every sequence.",
+   "zh": "Java 的 ArrayList、C++ 的 vector 和 Python 的 list 都按几何级数增长。取最简单的规则：加倍。<bookmark mark='a'/>大多数追加只花一步。可是数组满了的时候，它分配一个两倍大的数组，把所有东西抄过去：这次追加的代价，和到目前为止的所有元素一样多。<bookmark mark='b'/>最坏的单次追加是线性的。然而贵的那几次出现在大小为一、二、四、八的时候，复制加起来不到 2n。对任何追加序列取平均，每次追加至多花三。这是一个摊还界：不是对随机输入的平均，而是对每一个序列的保证。"
+  },
+  "a3124f80c57e": {
+   "scene": "Amortized",
+   "en": "The second standard example is a binary counter. <bookmark mark='a'/> Adding one flips the trailing ones to zeros, and the next zero to one. <bookmark mark='b'/> Counting from fifteen to sixteen flips five bits; in general, the worst increment flips them all. <bookmark mark='c'/> But the lowest bit flips every time, the next every second time, the next every fourth. Over n increments the total is less than two n, and the running total in the last column never catches up with twice the count. <bookmark mark='d'/> As a potential argument: let the potential be the number of ones. An increment that flips t ones to zero and one zero to one costs t plus one and lowers the potential by t minus one, so its amortized cost is two.",
+   "zh": "第二个标准例子是二进制计数器。<bookmark mark='a'/>加一会把末尾的一都翻成零，再把下一个零翻成一。<bookmark mark='b'/>从十五数到十六要翻五位；一般地，最坏的一次加一会把所有位都翻一遍。<bookmark mark='c'/>但最低位每次都翻，下一位每两次翻一次，再下一位每四次一次。n 次加一总共不到 2n 次翻转，最后一列的累计总数永远追不上计数的两倍。<bookmark mark='d'/>用势函数来论证：令势为一的个数。一次把 t 个一翻成零、把一个零翻成一的加一，花 t + 1，并把势降低 t − 1，所以它的摊还代价是二。"
+  },
+  "a3727409c3ad": {
+   "scene": "Amortized",
+   "en": "There are three standard ways to prove such a bound. <bookmark mark='a'/> Aggregate: add up the whole sequence. The copies are one plus two plus four, up to n, less than two n, so the total is under three n. <bookmark mark='b'/> Accounting: charge every append three units. One pays for inserting the element; two are saved, and when the array doubles, the saved units pay for copying. <bookmark mark='c'/> Potential: define a potential, two times the size minus the capacity, that rises with cheap appends and falls when the array doubles. Actual cost plus the change in potential is at most three, every time. <bookmark mark='d'/> Robert Tarjan made the method a standard tool in 1985, and the next part's splay trees and union–find depend on it.",
+   "zh": "证明这样的界有三种标准方法。<bookmark mark='a'/>聚合法：把整个序列加起来。复制次数是一加二加四，一直到 n，不到 2n，所以总数不到 3n。<bookmark mark='b'/>记账法：每次追加收三个单位。一个用来付插入这个元素；两个存起来，等数组加倍时，存下的单位用来付复制。<bookmark mark='c'/>势能法：定义一个势，两倍的大小减去容量，便宜的追加让它上升，数组加倍时它下降。实际代价加上势的变化，每次都至多是三。<bookmark mark='d'/>罗伯特·塔扬在1985年让这个方法成为标准工具，下一部分的伸展树和并查集都依赖它。"
+  },
+  "e2671cd23f70": {
+   "scene": "Amortized",
+   "en": "Any constant factor gives constant amortized cost. So why do some libraries grow by one and a half? <bookmark mark='a'/> We ran a million appends both ways. One and a half copies about twice as many elements, and grows more often. <bookmark mark='b'/> But look at the last row. With doubling, each new block is larger than all the blocks freed before it put together, so the allocator can never reuse them for the array. With a factor below the golden ratio, one point six one eight, the freed blocks eventually add up to enough, and memory is recycled. <bookmark mark='c'/> Facebook's fbvector and Microsoft's standard library chose one and a half; GCC and Clang chose two. A trade between time and memory, decided by a constant.",
+   "zh": "任何常数因子都给出常数的摊还代价。那为什么有些程序库按一倍半增长？<bookmark mark='a'/>我们用两种方式各做了一百万次追加。一倍半复制的元素大约是两倍，增长的次数也更多。<bookmark mark='b'/>但看最后一行。加倍时，每个新块都比之前释放的所有块加起来还大，所以分配器永远不能把它们重新用于这个数组。当因子小于黄金比例 1.618 时，释放的块终究会加起来够大，内存就被回收利用了。<bookmark mark='c'/>Facebook 的 fbvector 和微软的标准库选了一倍半；GCC 和 Clang 选了两倍。时间与内存之间的一种权衡，由一个常数决定。"
+  },
+  "890e3c9caf79": {
+   "scene": "Practice",
+   "en": "Chapter fourteen. Sorting in practice.",
+   "zh": "第14章。实践中的排序。"
+  },
+  "20ff8cff0f8f": {
+   "scene": "Practice",
+   "en": "Real data is rarely random. It arrives sorted, or nearly sorted, or as several sorted pieces concatenated. <bookmark mark='a'/> We counted the comparisons made by Python's own sort on a hundred thousand items. On random input it does what merge sort does. On sorted or reversed input it makes n minus one comparisons. On ten concatenated sorted runs, a few merges. <bookmark mark='b'/> That is Timsort, written by Tim Peters for Python in 2002. It scans for runs that are already in order, extends short ones with insertion sort, and merges runs of similar length so the merging stays balanced. <bookmark mark='c'/> Its descendants sort objects in Java, Android, Swift and Rust. For sorts that need not be stable, the newest standard is pattern-defeating quicksort, in Rust and Go.",
+   "zh": "真实的数据很少是随机的。它到来时是有序的，或者几乎有序，或者是几段有序的片段拼在一起。<bookmark mark='a'/>我们数了 Python 自带的排序在十万个元素上做的比较次数。在随机输入上，它和归并排序差不多。在有序或逆序的输入上，它只做 n − 1 次比较。在十段有序片段拼成的输入上，只需几次归并。<bookmark mark='b'/>这就是 Timsort，蒂姆·彼得斯在2002年为 Python 写的。它扫描已经有序的片段，用插入排序把短的片段加长，再把长度相近的片段归并起来，让归并保持平衡。<bookmark mark='c'/>它的后代在 Java、Android、Swift 和 Rust 中排序对象。对不需要稳定的排序，最新的标准是模式击败快速排序，用在 Rust 和 Go 里。"
+  },
+  "0d6fa60753a1": {
+   "scene": "Practice",
+   "en": "Even this code, among the most used in the world, hid a bug for more than a decade. <bookmark mark='a'/> Timsort keeps a stack of runs waiting to be merged, with an invariant on their lengths: each is longer than the next two together. That makes the lengths grow like Fibonacci numbers, so the stack stays short, and Java allocated it with a fixed size. <bookmark mark='b'/> In 2015 Stijn de Gouw and colleagues tried to prove Java's implementation correct with the KeY verifier, and could not: the code restored the invariant only for the top three runs, and a merge could break it further down. <bookmark mark='c'/> They built an input that overflowed the run stack and crashed the sort. The fix went into OpenJDK and into CPython. Part 54 returns to what proofs find that tests miss.",
+   "zh": "即使这段世界上最常用的代码之一，也藏着一个十多年的错误。<bookmark mark='a'/>Timsort 维护一个等待归并的片段栈，对它们的长度有一个不变式：每一段都比后面两段加起来更长。这让长度像斐波那契数那样增长，栈就保持很短，于是 Java 给它分配了固定的大小。<bookmark mark='b'/>2015年，斯泰因·德古乌和同事想用 KeY 验证器证明 Java 的实现是正确的，却证不出来：代码只对栈顶的三段恢复不变式，而一次归并可能在更下面破坏它。<bookmark mark='c'/>他们构造了一个让片段栈溢出、使排序崩溃的输入。修复进入了 OpenJDK 和 CPython。第54部分会回到证明能发现、而测试会漏掉的东西。"
+  },
+  "80e8bb6e190e": {
+   "scene": "Practice",
+   "en": "Sorting a file larger than memory changes what is expensive. <bookmark mark='a'/> Read as much as fits, sort it, and write it back as a sorted run. <bookmark mark='b'/> Then merge many runs at once, keeping one block of each in memory and a heap to pick the smallest head. <bookmark mark='c'/> A classic trick makes the runs longer than memory. Replacement selection keeps a heap of M records: output the smallest, read the next record, and if it is still at least the last output, it joins the current run. Knuth showed that on random input the runs average two M. <bookmark mark='d'/> Ours, with a thousand records of memory, made runs averaging two thousand. <bookmark mark='e'/> On sorted input it makes one run: the whole file. <bookmark mark='f'/> Fewer runs means fewer passes over the disk, which is the cost that matters in the external-memory model, and in every database's sort.",
+   "zh": "给一个比内存还大的文件排序，会改变什么是昂贵的。<bookmark mark='a'/>读入内存放得下的那么多，排好序，作为一段有序片段写回去。<bookmark mark='b'/>然后一次归并许多片段，每段在内存里留一个块，再用一个堆挑出最小的开头。<bookmark mark='c'/>有一个经典技巧能让片段比内存还长。置换选择维护一个 M 条记录的堆：输出最小的，读入下一条记录，如果它仍不小于上一次的输出，它就加入当前片段。高德纳证明了在随机输入上，片段平均长 2M。<bookmark mark='d'/>我们的实现，用一千条记录的内存，做出的片段平均长两千。<bookmark mark='e'/>在有序输入上，它只做出一段：整个文件。<bookmark mark='f'/>片段越少，扫描磁盘的趟数就越少，在外存模型里，在每个数据库的排序里，这才是要紧的代价。"
+  },
+  "f4bd34df7103": {
+   "scene": "Job",
+   "en": "Chapter fifteen. The Job, sorted.",
+   "zh": "第15章。排好序的任务。"
+  },
+  "a8ba95d50b31": {
+   "scene": "Job",
+   "en": "Now the Job, rewritten around a sort. <bookmark mark='a'/> As it reads the text it records every word as an occurrence: where its letters begin, and how many there are. <bookmark mark='b'/> Then it sorts the occurrences with a stable, bottom-up merge sort, comparing letters. <bookmark mark='c'/> After the sort, equal words are neighbours, so one pass turns each run into a count, and because the sort was stable, the first member of each run is the word's first appearance. <bookmark mark='d'/> Picking the twenty largest counts, ties broken by first appearance, gives exactly the output of version zero. It is written in the Pebble language, compiled by our compiler, and checked against the reference on every passage we ran.",
+   "zh": "现在看任务，围绕排序重写过。<bookmark mark='a'/>它一边读文本，一边把每个单词记为一次出现：它的字母从哪里开始，有几个字母。<bookmark mark='b'/>然后用一个稳定的、自底向上的归并排序给这些出现排序，比较的是字母。<bookmark mark='c'/>排序之后，相同的单词相邻，所以一趟扫描就把每一串变成一个计数；又因为排序是稳定的，每一串的第一个成员就是这个词的第一次出现。<bookmark mark='d'/>挑出最大的二十个计数，并列时按第一次出现的先后，得到的输出与版本零完全相同。它用 Pebble 语言写成，由我们的编译器编译，并在我们跑过的每一段文本上与参考实现核对过。"
+  },
+  "b86c9c707729": {
+   "scene": "Job",
+   "en": "How long would it take on all thirty novels? <bookmark mark='a'/> The table compares the two versions' work on the whole corpus. Both read four point six million words. Version zero searches its table for each one: fifteen billion key comparisons. Version one sorts: about a hundred million. <bookmark mark='b'/> To turn the counts into time, we fitted the emulator's instruction count, on thirty passages, as a linear function of the events the program performs: comparisons, letters compared, elements moved, and so on. On ten passages it had not seen, the prediction is within half a percent. <bookmark mark='c'/> A small C program counts the same events on the whole corpus, step for step, in two seconds. The model then gives ten billion instructions, which Part 8's out-of-order core runs at about two and a quarter per cycle.",
+   "zh": "在全部三十部小说上要花多久？<bookmark mark='a'/>这张表比较两个版本在整个语料上的工作量。两者都读了四百六十万个单词。版本零为每个单词搜索它的表：一百五十亿次键比较。版本一排序：大约一亿次。<bookmark mark='b'/>为了把计数换算成时间，我们在三十段文本上，把模拟器的指令数拟合成程序所执行事件的线性函数：比较次数、比较的字母数、移动的元素数，等等。在它没见过的十段文本上，预测误差在百分之零点五以内。<bookmark mark='c'/>一个小小的 C 程序在整个语料上一步不差地数出同样的事件，用了两秒。模型由此给出一百亿条指令，第8部分的乱序核心每个周期大约执行二又四分之一条。"
+  },
+  "38666d8d716c": {
+   "scene": "Job",
+   "en": "The fitted model does more than predict a total; it says where the time goes. <bookmark mark='a'/> About half of the ten billion instructions are spent calling the comparison function and returning from it, and a quarter on the letters it compares. <bookmark mark='b'/> A fifth is spent copying each merged pass from the scratch array back into the main one. Alternating the roles of the two arrays would remove that entirely: a twenty percent saving, found by counting. <bookmark mark='c'/> That is the habit this part is about: count the steps, and the counts tell you where to look.",
+   "zh": "拟合的模型不只是预测一个总数；它还说出时间花在了哪里。<bookmark mark='a'/>一百亿条指令中，大约一半花在调用比较函数和从它返回上，四分之一花在它所比较的字母上。<bookmark mark='b'/>五分之一花在把每一趟归并的结果从临时数组抄回主数组。让两个数组轮流担任角色，就能完全省掉这一步：百分之二十的节省，是数出来的。<bookmark mark='c'/>这就是这一部分要养成的习惯：数步数，计数会告诉你该往哪里看。"
+  },
+  "1210a9a9c900": {
+   "scene": "Job",
+   "en": "And so the ledger gets row seven. <bookmark mark='a'/> Sorting, then counting, on one core of Part 8's machine: about five seconds for all thirty novels. <bookmark mark='b'/> Eleven times faster than the same compiled program searching a list, and more than twice as fast as the four cores of Part 10, running the old algorithm. One idea beat every core we built. And n log n is not the end. A hash table, in Part 17, does the counting in expected linear time.",
+   "zh": "于是账本有了第七行。<bookmark mark='a'/>先排序再计数，在第8部分机器的一个核心上：全部三十部小说大约五秒。<bookmark mark='b'/>比同一个编译后的程序搜索列表快十一倍，比第10部分的四个核心跑旧算法快两倍多。一个想法胜过了我们造出的每一个核心。而 n log n 并不是终点。第17部分的哈希表能在期望线性时间里完成计数。"
+  },
+  "59a15cb52067": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. Frontier: beyond the worst case.",
+   "zh": "第16章。前沿：超越最坏情况。"
+  },
+  "edb508f9045f": {
+   "scene": "Frontier",
+   "en": "The worst case is a guarantee, and often a pessimistic one. The average assumes inputs are random, which they are not. Is there something in between? <bookmark mark='a'/> Take quicksort with the first element as pivot, on its worst input, a sorted array of two thousand keys. Now add a little random noise to every key, and measure. <bookmark mark='b'/> With no noise: two million comparisons. As the noise grows, the count falls, smoothly, all the way to the random-input average. A worst case this fragile does not survive contact with real data. <bookmark mark='c'/> Daniel Spielman and Shang-Hua Teng made this a theory in 2001: smoothed analysis measures the worst input after a random perturbation. It explained why the simplex method for linear programming, exponential in the worst case, is fast in practice, and won the Gödel Prize.",
+   "zh": "最坏情况是一个保证，而且常常是一个悲观的保证。平均情况假设输入是随机的，可它们并不是。两者之间有没有别的东西？<bookmark mark='a'/>取以第一个元素为枢轴的快速排序，放在它最坏的输入上：两千个键的有序数组。现在给每个键加一点随机噪声，然后测量。<bookmark mark='b'/>没有噪声：两百万次比较。随着噪声增大，次数平滑地下降，一直降到随机输入的平均值。这么脆弱的最坏情况，一碰到真实数据就活不下来。<bookmark mark='c'/>丹尼尔·斯皮尔曼和滕尚华在2001年把它变成了一门理论：平滑分析衡量的是经过随机扰动之后的最坏输入。它解释了为什么线性规划的单纯形法在最坏情况下是指数的，在实践中却很快，并因此获得了哥德尔奖。"
+  },
+  "4d4916a78552": {
+   "scene": "Frontier",
+   "en": "Chapter ten's question has a long history. <bookmark mark='a'/> Comparison sorts are stuck at n log n. Sorting word-sized integers on a word-RAM is not: van Emde Boas trees, Fredman and Willard's fusion trees, the first to break n log n, then n log log n, and Han and Thorup's n times the square root of log log n, in 2002. <bookmark mark='b'/> Whether n integers can always be sorted in linear time is one of the oldest open questions in algorithms.",
+   "zh": "第10章的问题有很长的历史。<bookmark mark='a'/>比较排序被困在 n log n。在字 RAM 上给字长整数排序却不是：范·埃姆德·博阿斯树，弗雷德曼和威拉德的融合树，第一个突破 n log n 的方法，然后是 n log log n，再到2002年韩涛和托鲁普的 n 乘以 log log n 的平方根。<bookmark mark='b'/>n 个整数是否总能在线性时间内排好序，是算法领域最古老的未解问题之一。"
+  },
+  "92db99e1aea1": {
+   "scene": "Frontier",
+   "en": "The other frontier asks why some polynomial algorithms resist every improvement. <bookmark mark='a'/> Fine-grained complexity starts from a few precise conjectures. The strong exponential time hypothesis says satisfiability needs nearly two to the n time. The three-sum and all-pairs shortest paths conjectures say certain quadratic and cubic algorithms are essentially optimal. <bookmark mark='b'/> Then it builds reductions that keep track of exponents. Backurs and Indyk showed in 2015 that a truly subquadratic algorithm for edit distance would break the first conjecture, which explains why forty years of effort never found one. <bookmark mark='c'/> The question is no longer whether a problem is polynomial, but which polynomial.",
+   "zh": "另一个前沿问的是，为什么有些多项式算法抵挡住了一切改进。<bookmark mark='a'/>细粒度复杂性从几个精确的猜想出发。强指数时间假说说，可满足性问题需要几乎 2 的 n 次方的时间。三数之和猜想和全源最短路径猜想说，某些平方和立方的算法本质上是最优的。<bookmark mark='b'/>然后它构造能追踪指数的归约。巴库尔斯和因迪克在2015年证明，编辑距离若有真正次平方的算法，就会推翻第一个猜想，这解释了为什么四十年的努力都没有找到一个。<bookmark mark='c'/>问题不再是一个问题是不是多项式的，而是哪一个多项式。"
+  },
+  "bf11689c8638": {
+   "scene": "Frontier",
+   "en": "Here is where the field stands. <bookmark mark='a'/> Can integers be sorted in linear time on a word-RAM? <bookmark mark='b'/> What is the exact number of comparisons needed to sort n items? It is known only for small n, and computing it is a search problem in its own right. <bookmark mark='c'/> Which of fine-grained complexity's conjectures are true, and are they secretly the same? <bookmark mark='d'/> And can a theory beyond the worst case predict how long real programs take on real data? <bookmark mark='e'/> This part's research problem takes up the first.",
+   "zh": "这就是这个领域的现状。<bookmark mark='a'/>整数能在字 RAM 上用线性时间排序吗？<bookmark mark='b'/>给 n 个元素排序需要的确切比较次数是多少？只对小的 n 知道，而计算它本身就是一个搜索问题。<bookmark mark='c'/>细粒度复杂性的猜想中哪些是真的，它们是不是暗地里是同一个？<bookmark mark='d'/>一种超越最坏情况的理论，能预测真实程序在真实数据上要跑多久吗？<bookmark mark='e'/>这一部分的研究题处理的是第一个。"
+  },
+  "33eeb2292bf9": {
+   "scene": "Outro",
+   "en": "What we built in this part. A model of computation, and the notation that ignores constants. Insertion sort with its invariant and its inversions. Merge sort and the recursion tree, and the master theorem that sums such trees. The lower bound every comparison sort obeys, and merge insertion, which meets it for small n. Quicksort's average from one probability, and ten thousand runs showing how tightly it holds. Sorting faster than n log n by reading keys, selection in linear time, generating functions, amortized analysis, and the Job, sorted, eleven times faster than before on the same core.",
+   "zh": "这一部分我们造了什么。一个计算模型，以及忽略常数的记号。插入排序，带着它的不变式和逆序对。归并排序与递归树，以及把这类树加起来的主定理。每一个比较排序都要服从的下界，以及对小的 n 能达到它的归并插入。从一个概率得到的快速排序平均值，以及显示它有多紧的一万次运行。通过读键来突破 n log n 的排序，线性时间的选择，生成函数，摊还分析，还有排好序的任务，在同一个核心上比之前快十一倍。"
+  },
+  "7db8381d7168": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 17 replaces the sort with a hash table, for ledger row eight. Part 18's graph algorithms run on heaps. Part 19 generalizes divide and conquer, and adds dynamic programming. Part 20 builds the probability tools that chapter nine only previewed. Part 21 sorts all the suffixes of a text to search it. Part 26 asks which lower bounds can be proved at all. Part 35's database sorts and joins tables larger than memory, and Part 39's MapReduce is, at heart, a distributed sort.",
+   "zh": "这些会在哪里再出现。第17部分用哈希表取代排序，得到账本第八行。第18部分的图算法跑在堆上。第19部分推广分治，并加入动态规划。第20部分造出第9章只是预览过的概率工具。第21部分为了搜索一段文本，给它所有的后缀排序。第26部分问哪些下界根本能被证明。第35部分的数据库对比内存还大的表做排序和连接，第39部分的 MapReduce 说到底就是一个分布式的排序。"
+  },
+  "0346bb3f5eed": {
+   "scene": "Outro",
+   "en": "In practice. Know your language's sort: whether it is stable, how it takes a key, what its worst case is. In code review, a loop inside a loop over the same collection is quadratic, and it is the most common performance bug there is: it is the Job v0. Interviews begin with exactly this chapter: a complexity, an invariant, a recursion tree. Sorting a large table in a database is an external merge sort. And when choosing, measure on real data, because presorted input changes the winner.",
+   "zh": "在实践中。了解你所用语言的排序：它是不是稳定的，怎样接收一个键，最坏情况是什么。在代码评审中，对同一个集合的循环套循环是平方级的，这是最常见的性能错误：它就是任务 v0。面试正是从这一章开始的：一个复杂度，一个不变式，一棵递归树。在数据库里给一张大表排序，用的是外部归并排序。还有，做选择时要在真实数据上测量，因为预先有序的输入会改变胜负。"
+  },
+  "1f7d8e5308be": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: sort the Job's words with a radix sort instead, and measure it on Pebble against the merge sort. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
+   "zh": "六道习题，完整的解答在这一部分的讲义里。在任何一道上都可以暂停。第五道是动手题：改用基数排序给任务的单词排序，在 Pebble 上与归并排序比一比。最后一道标着星号，是研究题：它的答案还不知道，讲义里说了从哪里开始。"
+  },
+  "189fde039219": {
+   "scene": "Outro",
+   "en": "Next time. The Job is really a dictionary problem: insert a word, look it up, add one. Hashing does it in expected constant time, if the hash function cannot be gamed; balanced trees guarantee their time; and union–find runs in time bounded by the inverse of Ackermann's function. Part 17, Data Structures.",
+   "zh": "下一次。任务其实是一个字典问题：插入一个词，查找它，加一。哈希能在期望常数时间里做到，只要哈希函数不能被人钻空子；平衡树保证它们的时间；并查集的运行时间以阿克曼函数的反函数为界。第17部分，数据结构。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上，也在讲义里。感谢收看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 16, Counting Steps",
+ "chapters_en": {
+  "Hook": "Can thinking beat silicon?",
+  "Models": "1. What counts as a step",
+  "Growth": "2. Orders of growth",
+  "Insertion": "3. Insertion sort and its invariant",
+  "Merge": "4. Merge sort and the recursion tree",
+  "Master": "5. The master theorem",
+  "Lower": "6. The comparison lower bound",
+  "Heap": "7. Heapsort",
+  "Quick": "8. Quicksort, and 2n ln n",
+  "Concentration": "9. How lucky can quicksort get?",
+  "Linear": "10. Beating n log n",
+  "Select": "11. Selection and the median of medians",
+  "Generating": "12. Generating functions",
+  "Amortized": "13. Amortized analysis",
+  "Practice": "14. Sorting in practice",
+  "Job": "15. The Job, sorted",
+  "Frontier": "16. Frontier: beyond the worst case",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
