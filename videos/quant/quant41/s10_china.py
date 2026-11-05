@@ -130,7 +130,7 @@ class China(VoiceoverScene):
         r2 = 100 * cb["20160107"]
         rows = [cmath(r"\text{rule}", r":", r"\text{CSI 300 down } 5\% \Rightarrow 15\text{-minute halt}", font_size=38,
                       colors={r"\text{rule}": FUND_C}),
-                cmath(r"", r"", r"\text{down } 7\% \Rightarrow \text{closed for the day}", font_size=38),
+                cmath(r"\text{then}", r":", r"\text{down } 7\% \Rightarrow \text{closed for the day}", font_size=38),
                 cmath(r"\text{4 January}", r":", rf"\text{{Shanghai }} {r1:.1f}\%,\ \text{{halted early afternoon}}", font_size=36,
                       colors={r"\text{4 January}": BAD}),
                 cmath(r"\text{7 January}", r":", rf"\text{{Shanghai }} {r2:.1f}\%,\ \text{{closed within half an hour}}",

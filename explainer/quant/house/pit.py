@@ -143,6 +143,7 @@ PARTS = {
     "trend_part32": (32, 1), "riskparity_part32": (32, 2),
     "residual_sscore_part33": (33, 1),
     "carry_basis_part39": (39, 1),
+    "house_ensemble_part43": (43, 1),
     "sestm_fomc_drift_part28": (28, 1),
 }
 

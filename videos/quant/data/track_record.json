@@ -311,6 +311,30 @@
   },
   "note": "GP-traded calm and reversal signals on Binance coins, net of the quadratic cost model, scaled to 10% research volatility"
  },
+ "house_ensemble_part43": {
+  "part": 43,
+  "research": {
+   "mean": 0.03982962840079328,
+   "vol": 0.03858916352289453,
+   "sharpe": 1.0321454202333977,
+   "sharpe_se": 0.18552268028129987,
+   "maxdd": -0.10485138752938739,
+   "n": 336,
+   "sharpe_net": 0.7063018108523619,
+   "cost_per_year": 0.012574032325294967
+  },
+  "holdout": {
+   "mean": 0.03235843826154883,
+   "vol": 0.04272871662749419,
+   "sharpe": 0.7572995590681394,
+   "sharpe_se": 0.4648280911599277,
+   "maxdd": -0.0644115966763894,
+   "n": 60,
+   "sharpe_net": 0.4630236407223005,
+   "cost_per_year": 0.012574032325294967
+  },
+  "note": "equal risk across Part 24's ten classic factors (MKT, SMB, HML, UMD, RMW, CMA, BAB, QMJ, TSMOM, VALMOM): weights proportional to 1 / each factor's 2011-2020 monthly volatility, summing to one, fixed for the hold-out; costs: the weighted sum of Part 24's cost model"
+ },
  "hrp_part30": {
   "part": 30,
   "research": {

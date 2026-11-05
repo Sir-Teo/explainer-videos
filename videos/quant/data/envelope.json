@@ -64,6 +64,10 @@
    "at": "2026-11-04",
    "code_sha256": "2e8556194bbe999a9e65b7d3d3be845b5df4920dc1a396bb55a0e719de6a0dd2"
   },
+  "house_ensemble_part43|factors/house_ensemble_monthly": {
+   "at": "2026-11-05",
+   "code_sha256": "40d5c3c4dd05e96da62fac259b27847ea095e28b183b0ed46a624af15ec09788"
+  },
   "hrp_part30|kenfrench/ff3_monthly": {
    "at": "2026-11-04",
    "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949"
@@ -485,6 +489,15 @@
    },
    "trials": 10
   },
+  "house_ensemble_part43": {
+   "code_sha256": "40d5c3c4dd05e96da62fac259b27847ea095e28b183b0ed46a624af15ec09788",
+   "params": {
+    "definition": "equal risk across Part 24's ten classic factors (MKT, SMB, HML, UMD, RMW, CMA, BAB, QMJ, TSMOM, VALMOM): weights proportional to 1 / each factor's 2011-2020 monthly volatility, summing to one, fixed for the hold-out; costs: the weighted sum of Part 24's cost model",
+    "holdout": "2021-01 to 2025-12",
+    "research": "1993-01 to 2020-12 (all ten available)"
+   },
+   "trials": 1
+  },
   "hrp_part30": {
    "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949",
    "params": {
@@ -831,6 +844,12 @@
   },
   "factors/hml_monthly": {
    "digest": "1afd38fa880769196999dbe504a0b326971abee0341d89deaaa8eaed886b1357",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/house_ensemble_monthly": {
+   "digest": "f1ca72a738c6fbcbd356bee12f16991766723f414f810cbd19dd3afb4c494024",
    "first": 20210128,
    "last": 20251228,
    "n": 60
