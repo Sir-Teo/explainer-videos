@@ -236,6 +236,52 @@ class World:
         return {"vote_blue": vote, "listed": listed, "propensity": propensity, "turnout": turnout}
 
     # ------------------------------------------------------------------
+    # Health (Part 20): salt, blood pressure, and a dietary survey
+    # ------------------------------------------------------------------
+    SODIUM_EFFECT = 1.5  # mm Hg of systolic pressure per g/day of current sodium intake, for every adult
+    MEDS_EFFECT = 12.0  # mm Hg lowered by blood-pressure medicine
+    TOLD_CUT = 0.10  # the share of sodium cut by those told their pressure is high
+
+    @cached_property
+    def health(self) -> dict:
+        """Adults only (NaN / False for children).  ``bmi`` (log-normal, median rising to about 28 in middle age);
+        usual energy intake ``kcal`` (men 2,400, women 1,800, falling after 30); usual sodium ``na_usual`` in mg (about
+        1.75 mg per kcal, times a log-normal taste factor, so it tracks energy).  Systolic pressure before any
+        diagnosis rises with age (curving upward), BMI and sodium (``SODIUM_EFFECT`` mm Hg per g), lower for women
+        under 60, plus person-level noise (SD 12).  Those with untreated pressure of 140+ are ``told_high`` with
+        probability 0.75 (others 0.04); the told cut their sodium by 10% (``TOLD_CUT``; ``na_current``) and 60% of them take
+        ``bp_meds`` (``MEDS_EFFECT`` mm Hg).  ``sbp`` is the pressure now, from current sodium and medicine.
+        Measurements: ``sbp_read`` (3 readings, each with SD 5 of noise) and two 24-hour recalls ``na_day1``/
+        ``na_day2`` and ``kcal_day1``/``kcal_day2``: current intake times day-to-day log-normal variation (SD 0.40 for
+        sodium, 0.30 for energy, correlated 0.7 within a day, since the same foods carry both)."""
+        g = self.rng("health")
+        n, ad = self.n, self.adult
+        a = self.age.astype(float)
+        female = ~self.male
+        bmi = np.exp(np.log(24.0) + 0.16 * (1 - np.exp(-(a - ADULT_AGE).clip(0) / 15.0)) + 0.19 * g.standard_normal(n))
+        kcal = np.where(self.male, 2400.0, 1800.0) * np.exp(-0.004 * (a - 30).clip(0) + 0.18 * g.standard_normal(n))
+        na_usual = 1.75 * kcal * np.exp(-0.02 + 0.2 * g.standard_normal(n))
+        base = (112.0 + 0.25 * (a - ADULT_AGE) + 0.006 * (a - ADULT_AGE) ** 2 + 0.5 * (bmi - 27.0)
+                - 5.0 * (female & (a < 60)) + 12.0 * g.standard_normal(n))
+        sbp0 = base + self.SODIUM_EFFECT * (na_usual / 1000 - 3.4)
+        told = ad & (g.random(n) < np.where(sbp0 >= 140, 0.75, 0.04))
+        na_current = na_usual * np.where(told, 1 - self.TOLD_CUT, 1.0)
+        meds = told & (g.random(n) < 0.6)
+        sbp = base + self.SODIUM_EFFECT * (na_current / 1000 - 3.4) - self.MEDS_EFFECT * meds
+        reads = sbp[:, None] + 5.0 * g.standard_normal((n, 3))
+        days = {}
+        for d in (1, 2):
+            z1 = g.standard_normal(n)
+            z2 = 0.7 * z1 + np.sqrt(1 - 0.7 ** 2) * g.standard_normal(n)
+            days[f"na_day{d}"] = na_current * np.exp(-0.40 ** 2 / 2 + 0.40 * z1)
+            days[f"kcal_day{d}"] = kcal * np.exp(-0.30 ** 2 / 2 + 0.30 * z2)
+        nan = lambda v: np.where(ad, v, np.nan)  # noqa: E731
+        out = {"bmi": nan(np.round(bmi, 1)), "kcal": nan(kcal), "na_usual": nan(na_usual), "na_current": nan(na_current),
+               "sbp": nan(sbp), "told_high": told, "bp_meds": meds, "sbp_read": np.where(ad[:, None], np.round(reads), np.nan)}
+        out.update({k: nan(np.round(v)) for k, v in days.items()})
+        return out
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
@@ -256,6 +302,8 @@ class World:
             "sd_income": lambda: float(y.std()),
             "n_adults": lambda: float(self.adult.sum()),
             "blue_share": lambda: float(self.survey["vote_blue"][self.adult].mean()),
+            "sodium_effect": lambda: float(self.SODIUM_EFFECT),
+            "mean_sbp": lambda: float(self.health["sbp"][self.adult].mean()),
             "corr_midparent_child": lambda: float(np.corrcoef((self.families["z_father"] + self.families["z_mother"]) / 2,
                                                               self.families["z_child"])[0, 1]),
         }

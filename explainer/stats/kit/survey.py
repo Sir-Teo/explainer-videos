@@ -193,3 +193,79 @@ def meng(y_pop, R) -> dict:
     neff = f / (1 - f) / rho ** 2 if rho != 0 else np.inf
     return {"error": err, "identity": float(pred), "rho": rho, "f": f, "sigma": float(sig), "n": n, "N": N,
             "n_eff": float(neff)}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Complex designs: Taylor linearization and the PSU bootstrap (Part 20)
+# ---------------------------------------------------------------------------------------------------------------------
+def _psu_totals_var(z, strata, psu) -> np.ndarray:
+    """With-replacement variance of the total of the rows of ``z`` (n x k), PSUs nested in strata:
+    sum_h n_h/(n_h - 1) sum_i (z_hi - zbar_h)(z_hi - zbar_h)', z_hi the PSU totals.  Strata with a single PSU are
+    skipped (they contribute nothing estimable)."""
+    z = np.atleast_2d(np.asarray(z, float).T).T
+    strata, psu = np.asarray(strata), np.asarray(psu)
+    k = z.shape[1]
+    V = np.zeros((k, k))
+    for h in np.unique(strata):
+        m = strata == h
+        ids = np.unique(psu[m])
+        if len(ids) < 2:
+            continue
+        tot = np.array([z[m & (psu == i)].sum(0) for i in ids])
+        d = tot - tot.mean(0)
+        V += len(ids) / (len(ids) - 1) * d.T @ d
+    return V
+
+
+def svy_mean(y, w, strata, psu) -> dict:
+    """The weighted (Hajek) mean with its linearized design-based SE; ``deff`` against an SRS of the same size."""
+    y, w = np.asarray(y, float), np.asarray(w, float)
+    W = w.sum()
+    m = float(np.sum(w * y) / W)
+    v = float(_psu_totals_var(w * (y - m) / W, strata, psu)[0, 0])
+    srs = float(np.sum(w * (y - m) ** 2) / W / len(y))
+    return {"mean": m, "se": float(np.sqrt(v)), "deff": v / srs if srs > 0 else np.nan}
+
+
+def svy_ols(X, y, w, strata, psu) -> dict:
+    """Weighted least squares with three SEs: ``se_model`` (WLS as if the weights were precisions), ``se_hc`` (HC0
+    sandwich, independent units) and ``se_design`` (Taylor linearization over strata and PSUs, as in R's survey or
+    SUDAAN).  ``X`` should include the intercept column."""
+    X, y, w = np.asarray(X, float), np.asarray(y, float), np.asarray(w, float)
+    XtWX = X.T @ (w[:, None] * X)
+    A = np.linalg.inv(XtWX)
+    b = A @ (X.T @ (w * y))
+    e = y - X @ b
+    n, p = X.shape
+    wn = w / w.mean()  # weights rescaled to mean 1, read as precisions
+    s2 = float(np.sum(wn * e ** 2) / (n - p))
+    v_model = s2 * np.linalg.inv(X.T @ (wn[:, None] * X))
+    U = X * (w * e)[:, None]  # score contributions
+    v_hc = A @ (U.T @ U) @ A
+    v_des = A @ _psu_totals_var(U, strata, psu) @ A
+    return {"b": b, "resid": e, "se_model": np.sqrt(np.diag(v_model)), "se_hc": np.sqrt(np.diag(v_hc)),
+            "se_design": np.sqrt(np.diag(v_des)), "cov_design": v_des}
+
+
+def psu_bootstrap_weights(w, strata, psu, B: int, rng: np.random.Generator) -> np.ndarray:
+    """Rao & Wu's (1988) rescaling bootstrap: in each stratum with n_h PSUs, draw n_h - 1 PSUs with replacement and
+    multiply each unit's weight by n_h/(n_h - 1) times its PSU's count.  Returns B x n replicate weights; the SD of
+    any estimate across them is its bootstrap SE."""
+    w, strata, psu = np.asarray(w, float), np.asarray(strata), np.asarray(psu)
+    out = np.empty((B, len(w)))
+    groups = []
+    for h in np.unique(strata):
+        m = strata == h
+        ids = np.unique(psu[m])
+        groups.append((ids, [np.flatnonzero(m & (psu == i)) for i in ids]))
+    for b in range(B):
+        f = np.ones(len(w))
+        for ids, members in groups:
+            nh = len(ids)
+            if nh < 2:
+                continue
+            cnt = np.bincount(rng.integers(0, nh, nh - 1), minlength=nh)
+            for c, idx in zip(cnt, members):
+                f[idx] = nh / (nh - 1) * c
+        out[b] = w * f
+    return out
