@@ -160,9 +160,11 @@ class Envelope(VoiceoverScene):
             rows.append(VGroup(label(lab, font_size=20, color=col),
                                MathTex(rf"\text{{hurdle}}\ {d['sr0'] * math.sqrt(12):.2f},\ \ \text{{DSR}}\ {d['dsr']:.2f}",
                                        font_size=26)))
+        # arrange() re-centres a group on the origin, so the rows are laid out before the table
+        w = max(r_[0].width for r_ in rows)
+        for r_ in rows:
+            r_[1].next_to(r_[0], RIGHT, buff=0.5 + w - r_[0].width)
         tab = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.3)
-        for r_ in tab:
-            r_.arrange(RIGHT, buff=0.5)
         head = MathTex(rf"\widehat{{SR}} = {h['sharpe']:.2f}\ \text{{over}}\ {T}\ \text{{months}}", font_size=30,
                        color=NET).to_edge(UP, buff=0.6)
         foot = wrapped_label(r"Part 26's deflated Sharpe ratio: the probability that the true Sharpe ratio beats the "

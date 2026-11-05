@@ -29030,7 +29030,10 @@
     "large volatility, a smile that is close to symmetric, short expiries that dominate; an equity index's skew would rank some models differently": "波动率很大，微笑接近对称，短期到期日占主导；股指的偏斜会给出不同的模型排名",
     "what it taught": "它教会了什么",
     "a scoreboard fixed before the models were built: the pricing twin of the Track Record": "在构建模型之前就固定的记分板：业绩记录在定价上的孪生兄弟",
-    "Pause and predict: after forty-three parts, what do you think are the largest questions quantitative finance still cannot answer?": "暂停并预测：经过四十三个部分，你认为量化金融仍然无法回答的最大问题是什么？"
+    "Pause and predict: after forty-three parts, what do you think are the largest questions quantitative finance still cannot answer?": "暂停并预测：经过四十三个部分，你认为量化金融仍然无法回答的最大问题是什么？",
+    "Tool 1: the clock": "工具一：时钟",
+    "15 characteristics per coin (the stock zoo has 94)": "每个币15个特征（股票动物园有94个）",
+    "Three restrictions before a signal is believed": "信号被相信之前的三条限制"
   },
   "phrases": {
     "you owe": "你欠",

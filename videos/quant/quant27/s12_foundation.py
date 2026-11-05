@@ -105,7 +105,7 @@ class Foundation(VoiceoverScene):
                   (r"synthetic candlesticks, fidelity", r"+22\%", COIN)]
         tab = VGroup()
         for j, (a, b, col) in enumerate(claims):
-            y = 1.6 - 0.75 * j
+            y = 1.95 - 0.6 * j
             row = VGroup(label(a, font_size=20, color=GREY_A) if a else VMobject(), MathTex(b, font_size=28, color=col))
             row[1].move_to([2.2, y, 0])
             if a:

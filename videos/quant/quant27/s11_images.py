@@ -101,7 +101,6 @@ class Images(VoiceoverScene):
             "weights and no need to learn the same edge twice. <bookmark mark='c'/> It is trained by cross-entropy "
             "to say whether the next five days will be up."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_) for b_ in chain], lag_ratio=0.15), Create(arrows), run_time=2)
             vo.wait_until("b")
             step(0)

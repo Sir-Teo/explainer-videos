@@ -168,7 +168,8 @@ class Limits(VoiceoverScene):
             desk_question(r"weight by value, and look at the long side", r"equal weights put the money where trading is "
                           r"hardest; short positions in illiquid assets often cannot be had at all", width=12.2,
                           font_size=20),
-        ).arrange(DOWN, buff=0.22)
+        ).arrange(DOWN, buff=0.22).shift(DOWN * 0.3)
+        head = label(r"Three restrictions before a signal is believed", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "So every machine-learned signal gets three economic restrictions before it is believed. <bookmark "
             "mark='a'/> Restrict the universe: drop the least liquid, the distressed, the turbulent months. An edge "
@@ -177,6 +178,7 @@ class Limits(VoiceoverScene):
             "by value and look at the long side alone, because equal weights put the money where trading is hardest, "
             "and the short side of an illiquid asset often cannot be had."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

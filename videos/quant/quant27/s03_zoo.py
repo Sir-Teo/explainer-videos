@@ -104,6 +104,7 @@ class Zoo(VoiceoverScene):
         note_ = note(r"each week, each characteristic is replaced by its cross-sectional rank (a missing value by the "
                      r"median, 0), as in Gu, Kelly and Xiu: the models see where a coin stands, not its raw level",
                      font_size=17, color=GREY_B).to_edge(DOWN, buff=0.35)
+        head = label(r"15 characteristics per coin (the stock zoo has 94)", font_size=28).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Fifteen characteristics per coin, the crypto analogue of the stock zoo's ninety-four. <bookmark "
             "mark='a'/> Momentum at five horizons, from the last day to the last half year. Risk: volatility, the "
@@ -113,6 +114,7 @@ class Zoo(VoiceoverScene):
             "section, scaled to run from minus one to one. A model sees where a coin stands among its peers that "
             "week, never a raw level that drifts from one year to the next."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cols], lag_ratio=0.3))
             vo.wait_until("b")

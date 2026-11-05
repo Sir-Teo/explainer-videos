@@ -68,7 +68,7 @@ class Prop(VoiceoverScene):
         c_ = VGroup(curve(ax, lags, R, PRICE_C, stroke_width=3), *[Dot(ax.c2p(a, b), radius=0.06, color=PRICE_C)
                                                                    for a, b in zip(lags, R)])
         k = int(np.argmax(R))
-        n_tr = comma(p["n"])
+        n_tr = f"{int(p['n']):,}"
         r_max = float(R.max())
         lag_max = p["lags"][k]
         with self.voiceover(

@@ -52,6 +52,7 @@ class Toolkit(VoiceoverScene):
                              rf"(autocorrelation {t['dollar']['ac_sq']:.2f} against {t['time']['ac_sq']:.2f}): sampling by "
                              r"activity tames the tails, not the volatility clustering", 12.4, 16, GREY_A).to_edge(DOWN, buff=0.35)
         foot2 = None
+        head = label(r"Tool 1: the clock", font_size=30).to_edge(UP, buff=0.45)
         with self.voiceover(
             "First, the clock. Prices are usually sampled at fixed times, a close every day. But markets do not do "
             "business at a fixed rate. <bookmark mark='a'/> Lopez de Prado's information-driven bars close each time a "
@@ -61,6 +62,7 @@ class Toolkit(VoiceoverScene):
             "several bars. But the squared returns still cluster, more than before. Sampling by activity tames the "
             "tails; it does not remove volatility clustering, and the next model still has to handle it."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(panels[0]))
             vo.wait_until("b")
