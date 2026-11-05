@@ -206,7 +206,7 @@ class Grids(VoiceoverScene):
         cpo = density(ax, xs, np.minimum(post, 7.8), POST)
         p_near = float(np.trapezoid(post[(xs > 0.4) & (xs < 0.6)], xs[(xs > 0.4) & (xs < 0.6)]))
         rows = fit_rows(VGroup(
-            label(r"a prior no table lists: \ half ``probably fair'', \ half ``no idea''", font_size=24, color=PRIOR),
+            label(r"half ``probably fair'', \ half ``no idea''", font_size=26, color=PRIOR),
             MathTex(r"\pi(p) = \tfrac12\,\text{Beta}(50, 50) + \tfrac12\,\text{Uniform}", font_size=26, color=PRIOR),
             label(r"7 of 10, \ on a grid of 999 points", font_size=24),
             label(r"the posterior has two humps", font_size=24, color=POST),

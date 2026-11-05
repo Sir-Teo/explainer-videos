@@ -162,7 +162,7 @@ class Frequency(VoiceoverScene):
 
     def sbc(self):
         rows = [
-            cmath(r"\theta^\star \sim \pi,\ \ y \sim p(y \mid \theta^\star)", r":", r"simulate a truth and data", font_size=30),
+            cmath(r"\theta^\star \sim \pi,\ \ y \sim p(y \mid \theta^\star)", r":", r"\text{simulate a truth and data}", font_size=30),
             cmath(r"\theta_1, \ldots, \theta_L \sim \pi(\theta \mid y)", r":", r"\text{draw from the computed posterior}", font_size=30),
             cmath(r"r", r"=", r"\#\{\ell : \theta_\ell < \theta^\star\}", font_size=32),
             cmath(r"\text{if correct}", r":", r"r \text{ is uniform on } 0, \ldots, L", font_size=32),
