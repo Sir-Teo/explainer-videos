@@ -571,7 +571,7 @@ ZH = {
 
     'f"The distribution behind the mean.':
         "均值背后的分布。<bookmark mark='a'/>六千位模拟的夏普为一的基金经理，止损深度为一个波动率。"
-        "<bookmark mark='b'/>均值与定理吻合，但中位数只有{med:.1f}年，而{long_share:.0f}%的基金经理坚持超过均值的两倍。"
+        "<bookmark mark='b'/>模拟均值{sim_mean:.1f}年，略高于定理的{th:.1f}年，因为四分之一天的步长会晚一些才发现回撤。中位数只有{med:.1f}年，而{long_share:.0f}%的基金经理坚持超过均值的两倍。"
         "止损时间大致服从指数分布：大多数好的基金经理因运气早早出局，少数能坚持十年。",
 
     'f"Checked by simulation.':

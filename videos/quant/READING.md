@@ -1536,8 +1536,14 @@ Frontier (2023–2026):
 - Ben-David, I., Franzoni, F., Moussawi, R. (2012). "Hedge fund stock trading in the financial crisis of 2007–2009." *RFS*.
 - CFTC (2020). Order in the matter of JPMorgan Chase & Co. (spoofing in precious metals and Treasury futures); U.S. v. Sarao (2015–2020).
 - SEBI (2025). Interim order on the Jane Street group *(allegations, contested)*.
-- Jane Street debt-offering disclosures as reported in the financial press *(verify)*.
+- Jane Street debt-offering documents as reported by Bloomberg (2024: 2023 net trading revenue about $10.6bn).
 - The industry library (Section 3).
+- Taylor, H. M. (1975). "A stopped Brownian motion formula." *Annals of Probability*.
+- Lehoczky, J. (1977). "Formulas for stopped diffusion processes with stopping times based on the maximum." *Annals of Probability*.
+- Grossman, S., Zhou, Z. (1993). "Optimal investment strategies for controlling drawdowns." *Mathematical Finance*.
+- Magdon-Ismail, M., Atiya, A., Pratap, A., Abu-Mostafa, Y. (2004). "On the maximum drawdown of a Brownian motion." *J. Applied Probability*.
+- Budish, E., Cramton, P., Shim, J. (2015). "The high-frequency trading arms race." *QJE*.
+- SEC (2013). Order in the matter of Knight Capital Americas LLC; SEC Rule 15c3-5 (2010); SEC Rule 613 (CAT).
 
 ### Part 35 · Who Trades With Whom
 - Demsetz, H. (1968). "The cost of transacting." *QJE*.

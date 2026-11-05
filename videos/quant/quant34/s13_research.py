@@ -262,8 +262,9 @@ class Research(VoiceoverScene):
         fit_right(st)
         with self.voiceover(
             "The distribution behind the mean. <bookmark mark='a'/> Six thousand simulated Sharpe-one managers with a "
-            "stop one volatility deep. <bookmark mark='b'/> The mean matches the theorem, but the median is only "
-            f"{med:.1f} years, and {long_share:.0f} percent of managers last more than twice the mean. "
+            f"stop one volatility deep. <bookmark mark='b'/> The simulated mean, {sim_mean:.1f} years, sits a little "
+            f"above the theorem's {th:.1f}, because steps of a quarter of a day notice the drawdown late. The median "
+            f"is only {med:.1f} years, and {long_share:.0f} percent of managers last more than twice the mean. "
             "The stop time is roughly exponential: most good managers are stopped early, by luck, and a few last for "
             "a decade."
         ) as vo:

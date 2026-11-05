@@ -1543,31 +1543,37 @@ configurations, a Kalman hedge ratio, Lo–MacKinlay's decomposition, a residual
 optimal band exactly and by simulation.
 *Crisis:* August 2007; the 2008 short-sale ban; LTCM's twin-share trade (1998).
 
-### Part 34 · Inside a Quant Firm (~55; industry)
-1. Business models: proprietary trading (Jane Street, HRT, Jump, XTX), market making (Citadel Securities, Virtu,
-   Optiver), multi-manager platforms (Millennium, Citadel, Balyasny, Point72), systematic funds (Renaissance, Two
-   Sigma, D. E. Shaw, AQR, Man), bank desks, and Chinese quant private funds.
-2. What has been disclosed: Virtu's S-1 (one losing day in 1,238); Jane Street's debt-offering disclosures
-   *(verify: revenue figures)*; Renaissance's Medallion returns (Zuckerman); fund letters and SEC filings.
-3. The pod model: capital allocation, drawdown stops, pass-through fees, and the talent market; the
-   Millennium–Jane Street lawsuit over an India options strategy (2024, settled).
-4. The research process: idea, data, backtest, review, incubation, capital.
-5. Risk management at a firm: limits by desk, factor exposures, liquidity, stress, kill switches.
-6. Technology: OCaml at Jane Street, kdb+/q, C++ and FPGAs, research clusters and GPUs.
-7. Compliance and surveillance: spoofing, layering, marking the close; the CAT; the cases (Sarao, J.P. Morgan's
-   $920 m spoofing settlement).
-8. The interview: probability, expected value, market-making games, estimation, coding; how to prepare.
-9. Culture and history: the firm-founding stories as told in public (Thorp, Simons, Shaw, Griffin, the Jane Street
-   founders from SIG).
+### Part 34 · Inside a Quant Firm (~55; industry; built)
+0. Hook: a Sharpe-1 manager under a 5% stop at 10% volatility lasts about four months on average.
+1. Six business models (prop trading, market making and payment for order flow, platforms, systematic funds, bank
+   desks after Volcker, China's quant private funds), public record only.
+2. What has been disclosed: Virtu's S-1 (1 losing day in 1,238 = daily Sharpe 3.15 under normality; t tails; the law
+   of large numbers); Jane Street's revenue and Medallion's returns as reported, fees checked.
+3. The pod model: sizing by volatility budget; the reported 5%/7.5% rules; pass-through fees; a simulated platform
+   (investors' Sharpe 1.90 with stops vs 1.19 without when skill varies; ~equal when it does not); selection; netting
+   risk; the Jane Street–Millennium case (2024, settled), as reported.
+4. From idea to capital: review; the House's Track Record haircut (slope 0.75); incubation; a posterior-sized ramp.
+5. Firm-level risk: layers, limits, liquidity in days, stress, crisis correlations; Knight Capital (2012); Rule
+   15c3-5; Archegos (2021).
+6. Technology: OCaml (Minsky 2011), C++/FPGAs, point-in-time data and kdb+, the light-speed floor Aurora–Carteret;
+   colocation; Budish–Cramton–Shim; reproducibility.
+7. Compliance: spoofing, layering, marking the close, wash trades; Sarao; J.P. Morgan's $920m; the CAT; detection;
+   SEBI's 2025 interim order on Jane Street (allegations, contested).
+8. The interview: computed puzzles, a market game with an informed counterparty, Kelly, a Fermi estimate, code.
+9. Founding stories as told in public (Thorp, Simons, Shaw, Griffin, Jane Street, Englander, AQR, Two Sigma);
+   survivorship.
+10. Do drawdown stops help? Six factors, six rules, against i.i.d. shuffle nulls (36 trials, not registered).
+11. Rule 34: the firm; the compliance desk.
+Research: how long a seat lasts: E[τ] = (e^{2Sδ} − 1 − 2Sδ)/(2S²) and the exponential peak (Taylor 1975; Lehoczky
+1977), proved from the reflected drawdown's Dynkin equation and the scale function; regimes; simulations; the stop's
+power as a sequential test.
 
 *Textbooks:* Narang *Inside the Black Box*; Isichenko; Paleologo; Zuckerman *The Man Who Solved the Market*;
-Patterson *The Quants*; Derman *My Life as a Quant*.
-*Computed:* the economics of a pod (Sharpe, capital, payout, stop-out probability) by simulation; the Virtu S-1
-statistic tested against a Sharpe implied by daily P&L.
-*Visuals:* `HouseChart` in full: desks, capital, risk and P&L flows.
-*Firms:* all of the above, public record only.
-*Desk:* a full mock interview segment.
-*House:* compliance and limits.
+Patterson *The Quants*; Derman *My Life as a Quant*; Thorp *A Man for All Markets*.
+*Computed:* the disclosed-statistic map; the stop-time theorem by simulation; a platform of pods; the Track Record
+haircut; factor stops against shuffles.
+*Firms:* public record only; allegations labelled.
+*House:* the compliance desk and Rule 34.
 
 ### Act VI · Market Microstructure
 
