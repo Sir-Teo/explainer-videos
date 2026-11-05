@@ -109,7 +109,7 @@ class Disclosed(VoiceoverScene):
         ys = [100 * s["lose"] for s in sims]
         g = axes([1.5, 5.5], [0, 50], x_length=7.4, y_length=4.4, xlabel=r"independent trades a day",
                  ylabel=r"losing days, \%", xticks=[2, 3, 4, 5], yticks=[0, 25, 50],
-                 xfmt=lambda u: rf"$10^{int(u)}$", font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
+                 xfmt=lambda u: f"10^{{{int(u)}}}", font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
         ax = g.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.09, color=PNL_C) for a, b in zip(xs, ys)])
         lab = VGroup(*[MathTex(rf"{b:.1f}\%", font_size=22).next_to(d_, UR, buff=0.08) for d_, b in zip(dots, ys)])

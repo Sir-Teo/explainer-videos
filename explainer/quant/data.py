@@ -138,7 +138,8 @@ def _months(start: str, end: str):
 # ---------------------------------------------------------------------------
 def binance_klines(symbol="BTCUSDT", interval="1h", start="2021-01", end="2025-12", market="spot") -> dict:
     """Candles from Binance's public archive: ``time`` (UTC seconds, the candle's open), ``open``, ``high``,
-    ``low``, ``close``, ``volume`` (base asset), ``trades``.  Each monthly file is checked against Binance's own
+    ``low``, ``close``, ``volume`` (base asset), ``trades``, ``taker_buy`` (the base volume bought by takers, so the
+    signed flow is 2 taker_buy - volume).  Each monthly file is checked against Binance's own
     published SHA-256 and against the manifest."""
     base = f"https://data.binance.vision/data/{market}/monthly/klines/{symbol}/{interval}"
     cols = []
@@ -158,15 +159,15 @@ def binance_klines(symbol="BTCUSDT", interval="1h", start="2021-01", end="2025-1
         with zipfile.ZipFile(io.BytesIO(raw)) as z:
             text = z.read(z.namelist()[0]).decode()
         rows = [r.split(",") for r in text.strip().splitlines() if r and r[0].isdigit()]
-        a = np.array([[float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]), float(r[5]), float(r[8])]
-                      for r in rows])
+        a = np.array([[float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]), float(r[5]), float(r[8]),
+                       float(r[9])] for r in rows])
         # Binance switched its spot archive from milliseconds to microseconds on 2025-01-01
         a[:, 0] = np.where(a[:, 0] > 1e14, a[:, 0] / 1e6, a[:, 0] / 1e3)
         cols.append(a)
     a = np.concatenate(cols)
     a = a[np.argsort(a[:, 0], kind="stable")]
     return {"time": a[:, 0], "open": a[:, 1], "high": a[:, 2], "low": a[:, 3], "close": a[:, 4],
-            "volume": a[:, 5], "trades": a[:, 6]}
+            "volume": a[:, 5], "trades": a[:, 6], "taker_buy": a[:, 7]}
 
 
 BINANCE_S3 = "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision"

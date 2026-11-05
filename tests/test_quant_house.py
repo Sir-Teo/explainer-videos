@@ -3406,3 +3406,25 @@ def test_firm_drawdown_stop_and_platform():
     assert 0.003 < F.binomial_upper(1, 1238) < 0.004
     p = F.platform(50, 10, 0.5, 0.5, 0.1, 0.05, 0.075, seed=0)
     assert p["fired_skill"] < p["final_skill"] + 0.5 and 0 < p["payout_share"] < 1
+
+
+def test_micro_kyle_gm_roll_is():
+    import numpy as np
+
+    from explainer.quant.house import micro as M
+    k = M.kyle_one(2.0, 1.0)
+    assert k["lambda"] == 1.0 and k["beta"] == 0.5 and k["profit"] == 1.0
+    one = M.kyle_multi(1, 1.0, 1.0)
+    assert abs(one["lambda"][0] - 0.5) < 1e-9
+    many = M.kyle_multi(64, 1.0, 1.0)
+    assert 0.95 < many["lambda"][0] < 1.0 and abs(many["Sigma"][32] - 0.5) < 0.05 and many["Sigma"][-1] < 0.05
+    a, b = M.gm_quotes(0.5, 0.0)
+    assert a == b == 0.5
+    a, b = M.gm_quotes(0.5, 0.4)
+    assert abs(a - 0.7) < 1e-12 and abs(b - 0.3) < 1e-12
+    rng = np.random.default_rng(0)
+    p = np.cumsum(rng.normal(0, 1, 40000)) + 0.5 * np.where(rng.random(40000) < 0.5, 1, -1)
+    assert abs(M.roll_spread(p) - 1.0) < 0.1
+    e = rng.normal(0, 1, 20001).cumsum()
+    s = M.hasbrouck_is(e + rng.normal(0, 0.3, 20001), np.r_[0, e[:-1]] + rng.normal(0, 0.3, 20001))
+    assert s["is_low"][0] > 0.9
