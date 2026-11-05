@@ -129,6 +129,346 @@
   "bytes": 36833,
   "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-04.zip"
  },
+ "binance/futures/um/BTCUSDT/1h/2020-05": {
+  "sha256": "1eb7de25a14b8a6c70098b866a21ba2c35f1b55c9e1c1d4dadb431cd4d3e180d",
+  "bytes": 38289,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-06": {
+  "sha256": "5f5b7ccd40facb7ddecd6019192be8de148e0aeeec8c8adc30cab3c474406c5b",
+  "bytes": 36260,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-07": {
+  "sha256": "f116be7c0a36e71f771ae4987b95e1f6d098dc0dae3b71154c12e7c390cf1a4c",
+  "bytes": 37043,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-08": {
+  "sha256": "d4dff9c958c878c00f2f3f059043612ac051fdc4117c3e9e74261db28c4f13fc",
+  "bytes": 37996,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-09": {
+  "sha256": "b210c5ecfae463aaef862ea0e6d8ccbf63430f32d6a80bad0bdeb2eef83a7165",
+  "bytes": 36859,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-10": {
+  "sha256": "753bc2e366777b40294690c5bbee38da8ec99e3157739ba0f16850c94ac92dc7",
+  "bytes": 38117,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-11": {
+  "sha256": "23694fa6fc619c159992db5325d37730a392e8ee23e9e5c375a7bfef6022fb82",
+  "bytes": 37893,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-12": {
+  "sha256": "9eca4954142f813a1ab404161b76facb56389a26fcd0b05bf93a19bf29578cb3",
+  "bytes": 39316,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-12.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-01": {
+  "sha256": "00de1eb2f3e3bc7f21b7ab321f1681385726fe7ba55306a7337acfd8f81fedfa",
+  "bytes": 40346,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-02": {
+  "sha256": "c5739d16db0aa917f9b4f196cf1dc3c9741b2889253c029571dcd2d00e83ccbb",
+  "bytes": 36379,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-03": {
+  "sha256": "518891de0fa643092cac84143c9b35a7cbcebfc75ae0846ce36c8e3adab1929f",
+  "bytes": 40163,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-04": {
+  "sha256": "0fdf8d01fa2eae368a63dcf709e6e6c5b0fd79bbe83b2f086aefbe2a7890924f",
+  "bytes": 38669,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-04.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-05": {
+  "sha256": "c209747915a1451a7b51d80d92e68332622c1dd1b9517dc7723f78cfa4f28ab9",
+  "bytes": 40697,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-06": {
+  "sha256": "5134cef4361e0819b721776da6e99f715141d122e3cfbf4be729e3dfc153ac33",
+  "bytes": 39207,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-07": {
+  "sha256": "97241c02191fd4694daf9836269e6f8ed04ef5bf858414de5a3354678552b54d",
+  "bytes": 40038,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-08": {
+  "sha256": "4c8290ad0baa9fcf37d45b893e8cae1a1e3b9ef77987a9d9abd64e44ab7deb09",
+  "bytes": 40160,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-09": {
+  "sha256": "22c55191129632daf70611af13e8f2b0f34a5e79f4876f41744a9848c43b9864",
+  "bytes": 38738,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-10": {
+  "sha256": "d3b55f8ae3689efe9bccc1d9b7082bda39fa7fa194e4c1197a63d1473ca57b4e",
+  "bytes": 40087,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-11": {
+  "sha256": "a013f6adfd3012130c0b0bc58895373ae478cd38c646ac87957b855682c7f069",
+  "bytes": 38610,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2021-12": {
+  "sha256": "f1dff81c6e322f7d5cee3c0808efd4e35b33e371f04ba613054264d9621318f1",
+  "bytes": 40053,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-12.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-01": {
+  "sha256": "5281a9c866e7d54b0a5b5e6a7dad5575ad7b96df67f05f74d614c54190ffff5f",
+  "bytes": 39953,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-02": {
+  "sha256": "b3a199287b2a8fed2c261999205d56cfd72ef9675c4b498a399601978d666228",
+  "bytes": 35964,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-03": {
+  "sha256": "f61ebcacd9a38f20b0ad89c64bbeb56baf368641fbbd6e25e987db2b96ede5ff",
+  "bytes": 39024,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-04": {
+  "sha256": "db7f9dbcc60cf68051b755346a5be32d27b0d3565cf6c02341b050a234ef44df",
+  "bytes": 37478,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-04.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-05": {
+  "sha256": "b1512041ade711819be114fee30668fbdd2783b73fa55607991ae14d1d43653f",
+  "bytes": 39107,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-06": {
+  "sha256": "1006ae5b8b4704da69f8f14fb4711d075d689fcf44cd0a98317df97953f1332d",
+  "bytes": 37922,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-07": {
+  "sha256": "72060f8608459b04817f652cbb945be28afef0ae54ccf38113911c194630c184",
+  "bytes": 38784,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-08": {
+  "sha256": "a1ad9eafd3dfecccfbc60c07de33ec2f7c33eab96f8ec04f88360b73b55dad76",
+  "bytes": 38388,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-09": {
+  "sha256": "92753ae32ed042ab7f10b90e3b9a49ddafc695c8e60eb563713855c73e2e6e82",
+  "bytes": 37283,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-10": {
+  "sha256": "d85a5f4bdbe93df2babdecf3b37f866655fa23c3fb31eeca96c3e3f6a1e9b872",
+  "bytes": 37838,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-11": {
+  "sha256": "e9b3f3b1929e3f6f255269c2d2eb564d9d9bcacbfc16651888e95765df383888",
+  "bytes": 36889,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2022-12": {
+  "sha256": "d313c2cb509cba13eff6538829245aedc993f18eff4a7bd48fe0eb6c3a9fa158",
+  "bytes": 36820,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2022-12.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-01": {
+  "sha256": "b9ac60cc3ffc1e16db96ca2314120ff7531988108ebef1733ee54234f4fedf7f",
+  "bytes": 37766,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-02": {
+  "sha256": "1ace9802f4da961db025a7b76a6171ef2c516c5307e5dee24267182f059110e0",
+  "bytes": 34682,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-03": {
+  "sha256": "35f0068cc41887ea11960c4bb10e251a404fef5ad4cb4c88699cc2419b6bc38b",
+  "bytes": 38700,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-04": {
+  "sha256": "ed6f0a84d1b2ed8f73fbdd4df10703e2ab49864fc4d657b0d8a9464a49dd4a29",
+  "bytes": 37139,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-04.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-05": {
+  "sha256": "2f278ad3ea09cc42e577ad7185de74391a1eb09b9d9836d375e2c540aef1667f",
+  "bytes": 38198,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-06": {
+  "sha256": "19bd435cdf58b426642c24a0df3b5fa755433f52a8c39f05dc5cfdeffa453aa0",
+  "bytes": 37120,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-07": {
+  "sha256": "ae9ebc03dff2bdeb805a1401b5cf1256b2b84283f5f9d92b1f454f33b223f499",
+  "bytes": 37558,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-08": {
+  "sha256": "599daa607ff593666036fe742d8272de6e0e9d284cd7d41d6585cf53baa20ca2",
+  "bytes": 37282,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-09": {
+  "sha256": "7849f82af86aabcb9a79f64d0527480f22117656a68f98280fe8b840a6ee1339",
+  "bytes": 35974,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-10": {
+  "sha256": "bbf0ef273c80f696ed9eb129a257812162487486692f124b9631ec38a924f6ae",
+  "bytes": 37679,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-11": {
+  "sha256": "26f1a2870f57925303edcf75581f0a33ff5e145c2126e15afc5fc1b400522428",
+  "bytes": 36685,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2023-12": {
+  "sha256": "5377bec9e6dc04027717836cc1c2a3789da4e4122d57e8395265a0414b766b7c",
+  "bytes": 38475,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-12.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-01": {
+  "sha256": "bf673f3d10804a951e8bac56dd2473486f113025971d43ebe5258ec40f9bfeb3",
+  "bytes": 38890,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-02": {
+  "sha256": "655ff5ac0fc570956756944c7afef4895c9bd149342f1e437de97292cbd1fe22",
+  "bytes": 36374,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-03": {
+  "sha256": "8138642b757ddf5a42207130277be4569afb4c581a0a1817be9f5f35a4415498",
+  "bytes": 39301,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-04": {
+  "sha256": "4bf3ca3574e0075c1b79f5b22c4253e26f6260f3621943205e3a8016c4c12318",
+  "bytes": 37804,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-04.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-05": {
+  "sha256": "1d607e3b26e6886ba742477bc97687f0b86c4c26ac564325dc5f1667e0362d35",
+  "bytes": 38427,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-06": {
+  "sha256": "7dba8642e56641fca2c7f3f363050ae88bf0d6c87d28e14b747fbd3267d4d3a8",
+  "bytes": 36794,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-07": {
+  "sha256": "920aacb84b2745ee8f31806a753cdc5b2d672e6814d9c50c0bf524ad45eb5611",
+  "bytes": 38700,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-08": {
+  "sha256": "8d8465eb4c8a4fd05ebc0126e4c14a217edb2039441546bf095229e975268de6",
+  "bytes": 38718,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-09": {
+  "sha256": "0a8118b3601f18ddad04a8afcf887fdc01661f66824a0ce49e0419be1f97f907",
+  "bytes": 37266,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-10": {
+  "sha256": "e3dcb9fe9d70fea19dfbdc5294044da69b9061c6f7411e99468825fac1ce8d61",
+  "bytes": 38285,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-11": {
+  "sha256": "0675e55056748489b8750cf6088a666f65dd4fd932d7ca5bd30491f5996b5f3d",
+  "bytes": 37741,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2024-12": {
+  "sha256": "b072f3147b3e390c81dcbf35830a12ff7d53a73236aa44a9eea78199502529cb",
+  "bytes": 38950,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-12.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-01": {
+  "sha256": "9ebc05c9b3d5ab3591edf65bc5c7e5dbc2f96c1efc4adc4ea198c651a99a41b1",
+  "bytes": 38915,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-02": {
+  "sha256": "077d761098eb5f2dbde65457833b9edab41ea6475284a77fcce0d4bec1bfb5cf",
+  "bytes": 34861,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-03": {
+  "sha256": "08043384c3336b0fa3eeee06e113a6f1eceb6d3fbe7b2971e9b9fa83625fdfb9",
+  "bytes": 38723,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-04": {
+  "sha256": "2adf7c1be412e43b04a128e997f4cb1e5e7f895f55b6e1bf66621807f221f274",
+  "bytes": 37389,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-04.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-05": {
+  "sha256": "2e736b9e792d5ae9d4607d7426e4530020762cb898d580b18d3fb0faf9d2ba8e",
+  "bytes": 38805,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-06": {
+  "sha256": "d1d9d5dbc540c19dd882305937f864f59ffffe3f5449a6b05b3f95efe7ca4fbc",
+  "bytes": 37374,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-07": {
+  "sha256": "3f471677b97cd3c5c21e9c1420bd7d58c1fe4041a3d2e195369277298ca01ea2",
+  "bytes": 38443,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-08": {
+  "sha256": "a240d3f766cd5c3db4e0702cf660ae54e327ec67aba169dda55abc90cae055f2",
+  "bytes": 38617,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-09": {
+  "sha256": "b15817c45e6ca13a907772591664a57e00b711fecbd4285f2a16ced3c7023019",
+  "bytes": 37022,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-10": {
+  "sha256": "b173469216acad36058ecfb0a5432471ec58b3c49032246d4d687dd3af8ae34a",
+  "bytes": 38885,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-11": {
+  "sha256": "75c4069b8ff93aa5e4064e885077426fd60f1cf6239a728b2d4ca543c0210d5a",
+  "bytes": 37564,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2025-12": {
+  "sha256": "41e977a06b7806ce1398aca5f9075befffd1e6303db891795f3b179c762709ec",
+  "bytes": 38148,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-12.zip"
+ },
  "binance/futures/um/BTCUSDT/1m/2021-01": {
   "sha256": "ba7aeda6a99e0828b39da1b0605aaefcb40882fe9d44034598c4404f8a07783f",
   "bytes": 2057786,
@@ -439,6 +779,366 @@
   "bytes": 87710834,
   "source": "https://data.binance.vision/data/futures/um/daily/bookTicker/BTCUSDT/BTCUSDT-bookTicker-2023-05-21.zip"
  },
+ "binance/futures/um/ETHUSDT/1h/2020-01": {
+  "sha256": "fb4840ec9ce7248ec4d82ce4bf3e9ca50872a3ad6b6ab4e3720f218f5f3a6021",
+  "bytes": 34389,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-01.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-02": {
+  "sha256": "10e0e094091fbc32271c19b3b0aaeaf229ed52538ca024dd133f9c34714d931a",
+  "bytes": 33463,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-02.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-03": {
+  "sha256": "36628b7275a7141048a7abbf8944ac07c9230fd055e81ff9d11beb1c229a6cd6",
+  "bytes": 35834,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-03.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-04": {
+  "sha256": "13e40f3a8414a1aca0f6ca494012c94f15cff50eed729d61c43ee4fa530f2488",
+  "bytes": 34570,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-04.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-05": {
+  "sha256": "f07e9469646e3a4ad519523c5ea6b03abd015a08cf3a5b03640b1dd0ce0c7efd",
+  "bytes": 35601,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-05.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-06": {
+  "sha256": "312490661c3b420680eb6d99616643150393e9ab65b878060fe7776557b50c5c",
+  "bytes": 34088,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-06.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-07": {
+  "sha256": "e315992b16103f4ec06168ebf6a4b7f892c1089f762b4cf51006a328e16e115f",
+  "bytes": 35287,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-07.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-08": {
+  "sha256": "6ec4b508e0fbb9a2c6d15b6faf6bdb1d7e951affc02c77fa134f610dd1ada221",
+  "bytes": 36475,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-08.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-09": {
+  "sha256": "d7199a24ab2e41e56ede3141caf6dc63ebd759e3931005c87c0062dd7705ae9d",
+  "bytes": 35551,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-09.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-10": {
+  "sha256": "d586eb0bff3c9be1476989d9cb58c45713858678ee35e57f79d47796b34a4937",
+  "bytes": 36029,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-10.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-11": {
+  "sha256": "79b4e1f55040f41563342b6dbaaa9d9b02440141e889793e3aac8df87187aaf7",
+  "bytes": 36130,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-11.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2020-12": {
+  "sha256": "7698fe1677da731dcb82ab3aa4a63e26de6086e8b7f981f57ed76acfe205529a",
+  "bytes": 37396,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-12.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-01": {
+  "sha256": "52b01b6937e57c3299003a91ec93fe8c2560b1ee6cacb24a60c110bf696b6118",
+  "bytes": 39064,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-01.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-02": {
+  "sha256": "d2833fb9bbbf66cf2f829af2c767f70283e01c3c471858a038e342798aae7d24",
+  "bytes": 35218,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-02.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-03": {
+  "sha256": "4f5a456703c8d48f947917dd7cb5f07503bd31bfdb60ec9a68b391b70f52666c",
+  "bytes": 38670,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-03.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-04": {
+  "sha256": "b522173710fb0aa70bff13c54ad6b3b889edb79b42278246796c5da7c4bfce7f",
+  "bytes": 37789,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-04.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-05": {
+  "sha256": "e43c840fdde7903f99fcbc1311e75cd6cc58b4c302c48a017100747922eefd8c",
+  "bytes": 40016,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-05.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-06": {
+  "sha256": "625a8c04b76cc9fa096599bd1498b24b28ea31d9900dfddb86995046bd6b2ebf",
+  "bytes": 38197,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-06.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-07": {
+  "sha256": "bd4ffb6a1e7eb374915222129b5270ff0e7eb94c5b355ecc75ba491e4cc7b0b9",
+  "bytes": 39189,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-07.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-08": {
+  "sha256": "56bfd83ab6a604ffb57aa318805e813c04335a08219eac63f3c4750442c1a9c9",
+  "bytes": 39246,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-08.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-09": {
+  "sha256": "e29a6a88a2c28b30651cf45e46d5b67f1bd8f8ec42812ad5b4a7a72468dfa3c6",
+  "bytes": 38083,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-09.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-10": {
+  "sha256": "515de2962ce7c53706f6dcd489b50bade65148e8d59af1d0711134a6450e912c",
+  "bytes": 39084,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-10.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-11": {
+  "sha256": "d61dcde383cefa67bd3febb54690d28db408cc7cfb4b4c99f4c00710f5e5b3ad",
+  "bytes": 37694,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-11.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2021-12": {
+  "sha256": "764bae4807411d6683b72085aeeb1bcd168654fbcb88e8f1a81a307240761c1a",
+  "bytes": 39028,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-12.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-01": {
+  "sha256": "6d96a19efda6917a3912377ef8e1a5eadc8f1a273f91afa069ae70bd679301bc",
+  "bytes": 39124,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-01.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-02": {
+  "sha256": "14f8e42d6d7696d2f622301612a8f4ba6623658732cc5840ef0582b2ee05598e",
+  "bytes": 35542,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-02.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-03": {
+  "sha256": "1b9fcc8ead1a066017e8c40617a78d1b9ee7b7fdad5f9d5353b04a59883274ce",
+  "bytes": 38896,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-03.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-04": {
+  "sha256": "45bc22bd8603876174adfd1f6273021eeaf76084629030a53cca40f379b8fb0b",
+  "bytes": 37521,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-04.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-05": {
+  "sha256": "7adea64d8d82d2017c1b7c3fcc6848f685370b524e0a1512bb443980a487f4b8",
+  "bytes": 39016,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-05.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-06": {
+  "sha256": "582aa0b2c72641cb5e93318a92beee0bbc93e968ccd10b0d89ea755a60f9fb62",
+  "bytes": 38115,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-06.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-07": {
+  "sha256": "07781d1411a4b793ca5c4daaee70c9e2c1a3200fe12c954c39b3ad6c37badd42",
+  "bytes": 39382,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-07.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-08": {
+  "sha256": "4182681e2b2fc23bbb348411ca8bdb41894609be1f94a0d9939616bf91cc9f25",
+  "bytes": 39567,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-08.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-09": {
+  "sha256": "75aa0182242ac65110a1dd1737a2062ee9815032d746a57d3191c44c15eacff2",
+  "bytes": 38290,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-09.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-10": {
+  "sha256": "04246418d55fc96753ee5b4be0718796aeb9421af40042b4e145db02e1cfaf3a",
+  "bytes": 38837,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-10.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-11": {
+  "sha256": "e2e15ddc21d24ac6c3ca56ab77f065eda88252a37f2f778505a332e31fcc5b3c",
+  "bytes": 37911,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-11.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2022-12": {
+  "sha256": "1ba6559930f09fb8bd68a6592c4059526901939317eea4db8fc2d59cf5688957",
+  "bytes": 38206,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-12.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-01": {
+  "sha256": "247b85e0a8806e139f263831445e1d7bb91f9f56e6ab32e1f285038cdd1ceff4",
+  "bytes": 38614,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-01.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-02": {
+  "sha256": "f01571f2420b9eb6486e69b884fe1572abfa59bc226c4003c9d78735c559acc5",
+  "bytes": 35138,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-02.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-03": {
+  "sha256": "4d5266f12a8a3394ee23516de99fc380e928dbdb79cbf083fd3ddc3242073790",
+  "bytes": 38991,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-03.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-04": {
+  "sha256": "4ac96035c3867e0bfeff4f2f526812ee4b73a0b87b3962bb40934e2614917395",
+  "bytes": 37617,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-04.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-05": {
+  "sha256": "a47a9fc2936bcadc99aadfe48858e7d3e31093a9321d9bc083b886b72924f568",
+  "bytes": 38504,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-05.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-06": {
+  "sha256": "fe108dc555560ded46bb0807d0c2e0bc7722900213a96e4e86bf355f84fbcafa",
+  "bytes": 37299,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-06.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-07": {
+  "sha256": "911d3674c71a561df5ca5085426e9c61195bf5669bc7da7488ec9548ae476ca1",
+  "bytes": 37939,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-07.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-08": {
+  "sha256": "74210a689eb85c8908ae05cff3297b9dc6eda76a0b41a3f9d72fdde0c14e3b2f",
+  "bytes": 37647,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-08.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-09": {
+  "sha256": "38883595a881aadfbfd8c256e5170c8b016e9927119250f5128abfba96aba9c5",
+  "bytes": 36218,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-09.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-10": {
+  "sha256": "61d6692284b406c9f9f655aef68e151a1eeb90509ddcd7f4a97233b1a002ef9e",
+  "bytes": 38084,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-10.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-11": {
+  "sha256": "d57c333ac46e779b2399c498cc8fedfbc8804deb688873585ded09aceec1fa16",
+  "bytes": 37387,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-11.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2023-12": {
+  "sha256": "8f581fcee21156d501435fc88db1d99515e6d7432fa7ae2993de3b5f95bb0069",
+  "bytes": 38764,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-12.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-01": {
+  "sha256": "2f3d1a6d9292f13b1d6cf86716cbda5b3f6119a310daed1dde5ee3d0d71e2fab",
+  "bytes": 38917,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-01.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-02": {
+  "sha256": "bde9a1b0824b212ef6cea97065543fda0fc57c33479709d34e5db995fc79af01",
+  "bytes": 36577,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-02.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-03": {
+  "sha256": "24af0ecf9db1953e8c83e94823f4aae368ff70ba54106ef121c204cb046f9e41",
+  "bytes": 39568,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-03.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-04": {
+  "sha256": "290b594fa46ef95ab9c1486e2640ce2d1894eecd4d71b79bcd30d6632ca75b9f",
+  "bytes": 38134,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-04.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-05": {
+  "sha256": "a9b42949325fd4f236c7c88b63f35d94910109218ce2db80b8e29f7a2b2d623b",
+  "bytes": 39214,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-05.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-06": {
+  "sha256": "479dced4a591035987e084dc8a5e5f3f1f2593704c0aeecdebc20c89b35c1d98",
+  "bytes": 37466,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-06.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-07": {
+  "sha256": "8cc8d8b6ef13fa0393f53690e5d569afb8a50488e4d7852e20ac22d7bcf17cf5",
+  "bytes": 39099,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-07.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-08": {
+  "sha256": "00eddbb3297515be14426119f07468846cd04dc527dbc19834dd45294740a67c",
+  "bytes": 39125,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-08.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-09": {
+  "sha256": "37bea2dbe4281fbcaa45a849b6eed4393713b7236c5cb35cff63876e96df5677",
+  "bytes": 37665,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-09.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-10": {
+  "sha256": "b4cda93568426a315e1de2fc7ca0ffb56586495680b233ffd7ce6bec11d18713",
+  "bytes": 38803,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-10.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-11": {
+  "sha256": "3e8286eb77062f7c1047ee32aa1ce98dbf42f8e8029acebe38cc1bdd33967c63",
+  "bytes": 38440,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-11.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2024-12": {
+  "sha256": "330397f0cfd0dc62253ce6cf61ec142714fe65592a9f8447e4b88ca428bb4c9c",
+  "bytes": 39614,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-12.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-01": {
+  "sha256": "99928eb8fdc5d565d317b0e9685e07fc5f9487510a39b8675d7374cfdfcbec82",
+  "bytes": 39367,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-01.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-02": {
+  "sha256": "d7466620f50bb4048080ece1deab8eb0298274413a3eb2a9f4c728536ab3c647",
+  "bytes": 35832,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-02.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-03": {
+  "sha256": "9dbad1e542ff8344fe8610450cf71d5cb98e1af2e8f2d7a31dbe8679ef263535",
+  "bytes": 39488,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-03.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-04": {
+  "sha256": "238c691129962d9fe08aaca46ea367f911e62c58a820a8e5ded371bff7f4eec4",
+  "bytes": 38095,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-04.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-05": {
+  "sha256": "201829c864a26677ad0b53df5b0491e9eab00e6f48e1a8bf5204dc7d794dd7ea",
+  "bytes": 39704,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-05.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-06": {
+  "sha256": "45763ee27ad110703c6f71d9ec80711de151b8211b14ad98cc978c4d5ede82ce",
+  "bytes": 38255,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-06.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-07": {
+  "sha256": "e9c3dcdc09de72386d465800c665169c9bb011f35d350f9ba9bc7b4d7a69876a",
+  "bytes": 39827,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-07.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-08": {
+  "sha256": "51e3ca163e71691ebb43b55d32698fc5c25506ee2e663a195d8e5863194908c2",
+  "bytes": 40225,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-08.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-09": {
+  "sha256": "9bab9763c1cb2514df907fe6e746405428c6b92cbba12ff987e4820b2a8726f0",
+  "bytes": 38299,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-09.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-10": {
+  "sha256": "6c51ad0250f4174431c659a3c78f604be087e844c6357e5feb48ba66e6bb1862",
+  "bytes": 39876,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-10.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-11": {
+  "sha256": "4b5622c5a4021b1a0bbd2d1fa754bb9d13f16b996d79b153b423bce0ec154f26",
+  "bytes": 38603,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-11.zip"
+ },
+ "binance/futures/um/ETHUSDT/1h/2025-12": {
+  "sha256": "80080e1303ab2c291e53103d703b5364ef7a3da36dff5eaf45044cca74e764ca",
+  "bytes": 39357,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-12.zip"
+ },
  "binance/futures/um/fundingRate/BTCUSDT/2020-01": {
   "sha256": "7f81b2f3694d13779e7e896b69d60cd61e9444d7b9f9e90df761935e1c1b76e2",
   "bytes": 825,
@@ -498,6 +1198,666 @@
   "sha256": "d7390f90edf54cc4ad9bbe78e2f6b291ae06ad9539f591a2d0fce445873bbd63",
   "bytes": 852,
   "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-12.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-01": {
+  "sha256": "cff916dc4b638ec3de97828e8911cd91cf7d7a3d0836ec0175869c374e66823d",
+  "bytes": 981,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-01.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-02": {
+  "sha256": "819a7b107443686adb313fc5fc223302a29f3981e1d1bd9828ad0ade65a8a8af",
+  "bytes": 956,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-02.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-03": {
+  "sha256": "2125fd300848938c7b992b8f7b7b5007d5b277a4ff1ebda7da083b40242729da",
+  "bytes": 918,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-03.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-04": {
+  "sha256": "9cd888e3b0a1954813d0062c2e60426fdc8e34a7f258f6838371ec67f535b028",
+  "bytes": 914,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-05": {
+  "sha256": "ed934afb9cf84df6ecae742e755147333a84244836a66b51523abc66dd5f63af",
+  "bytes": 960,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-05.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-06": {
+  "sha256": "7b8d9bfb8816636b800764dafb2aa2307d19166c695bfa245adbf7d01d61f766",
+  "bytes": 883,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-06.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-07": {
+  "sha256": "8ab3df641d3bcf40527491f8e26d046ad2b662d1950ead9555ad32975571b7fe",
+  "bytes": 973,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-07.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-08": {
+  "sha256": "7eb681cc45b94176f4b9192a62c3a1925d79031ba001cea2d8dec6ff6e5b9c35",
+  "bytes": 781,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-08.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-09": {
+  "sha256": "03f25a7c25eef18d5f5b5b7bb0b664cab7a210b409f37e95a54e141808a0752d",
+  "bytes": 828,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-09.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-10": {
+  "sha256": "f25820d6add687addbca3ef43bee58f70853a6da53832a0c1bc22d00dc8ec64a",
+  "bytes": 951,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-10.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-11": {
+  "sha256": "e2e6b2d7218607e7e4a38137d50f553c2cfb901275c19edf567024c1cc6de85f",
+  "bytes": 919,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-11.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2021-12": {
+  "sha256": "bf3ce484faf41d7dccfd38c5cc3d8de34d8297df30ab10784e874cc10fd1b310",
+  "bytes": 815,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-12.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-01": {
+  "sha256": "22ee19079b620f5c6d820e7d7f8bafa7fde866d89bd664863b8bd527749c12cb",
+  "bytes": 906,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-01.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-02": {
+  "sha256": "fa95088258a905c79ab79e8984d2f6f66933ec2e814dbab4ef9da89b01ab484a",
+  "bytes": 890,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-02.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-03": {
+  "sha256": "4cf0883bc07f4ed4cdd3b0d8c0d166b4d15d21e666ab752f9f44401af4d6172f",
+  "bytes": 904,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-03.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-04": {
+  "sha256": "57e2776cc68b3169fc9f8632dad67278f470cd453407a8ebe6c87963c8a31357",
+  "bytes": 926,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-05": {
+  "sha256": "bced8a5013d09742b96682e6fd01ad4456213515a03d7586ec2b1f2689af5255",
+  "bytes": 915,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-05.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-06": {
+  "sha256": "0cd0708f8903829eb46f98cf60f4b2516c986e1ccddf6620a5912b48e16baf93",
+  "bytes": 966,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-06.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-07": {
+  "sha256": "29d58cce0cd45f74c6a112039835c6d9ee5a7e60e7c38c2503beb7930453a4fe",
+  "bytes": 917,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-07.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-08": {
+  "sha256": "6f4f0c6c84c05694b4b4a5c085776730fd4059723eecd98ee6ffeb3fde4da811",
+  "bytes": 997,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-08.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-09": {
+  "sha256": "d62cd4e13009de37add446dc4f63ead4c56dcc4955a1e60f6726bcadc5a68fa9",
+  "bytes": 960,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-09.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-10": {
+  "sha256": "ad9efed10d4ca1567b865d7a158790977cec1b925395634217069df6696c8bc9",
+  "bytes": 950,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-10.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-11": {
+  "sha256": "8febe5bec1a029e993bbf27490761f8c47c32849bf7dd13441b2b2f6ec1ffb51",
+  "bytes": 1000,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-11.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2022-12": {
+  "sha256": "4218c78331bcc4dbeb5768fa112242a880971c1f2cfd1d3f32aaa26ca34069af",
+  "bytes": 982,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-12.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-01": {
+  "sha256": "05e3df32f28d0d50f4c5a280adee9368b4a66fc68c6ddca1b3277087ac0d19f5",
+  "bytes": 863,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-01.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-02": {
+  "sha256": "5227accd9aaa59f71f5e682abffb58be5f99573ed208ab968b1704c81ac11345",
+  "bytes": 808,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-02.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-03": {
+  "sha256": "ab022adff9b853d2f33cf80154e77c770f57c3392f0bbc36564b2e2cdbd0e872",
+  "bytes": 956,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-03.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-04": {
+  "sha256": "2931039d26818edc65d4faefba84945fd1ba52989dd58fb127dc3cd7a12c7fbf",
+  "bytes": 952,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-05": {
+  "sha256": "5d026fece46df86293054c8c56c2c8de575d30161b82979b11831831217a246e",
+  "bytes": 983,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-05.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-06": {
+  "sha256": "3ffdde6f1dc9c3c065d77ae43f3ba64d19d4cb76512d4bc1d541933d4fb2e6f7",
+  "bytes": 845,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-06.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-07": {
+  "sha256": "0304baed9fd407293a8a8040b30a1b68bd344803b630d33530375b421733a930",
+  "bytes": 861,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-07.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-08": {
+  "sha256": "516a8f50631c6ede6a9642f6d1590b6a22c33ba09935501d2ace8dc1396501fd",
+  "bytes": 846,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-08.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-09": {
+  "sha256": "3fd9df6fd1eef33cf5fe625c27012359bc6d64a68c109305d7b44a0354f533c2",
+  "bytes": 914,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-09.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-10": {
+  "sha256": "03105cc140150bffca834bcccbddc6cfee245e079d2df1759653243bd6e92448",
+  "bytes": 865,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-10.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-11": {
+  "sha256": "8015d2997f8d5e757ff3707ee87800ca30a74da0129daa747b64117f07bcc186",
+  "bytes": 696,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-11.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2023-12": {
+  "sha256": "8f02fdd2a2da261bbf13ab301c74bdb57fae005f19d5088e9ece5f8824c1a2a7",
+  "bytes": 810,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-12.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-01": {
+  "sha256": "3e0d30870672aa8f0f937881056e3cfd55913ae5c780cd50b33f2763aa0ba58e",
+  "bytes": 696,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-01.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-02": {
+  "sha256": "daf1e4901e3d6436d82ad60f90d007eb5300be8047cfef121007203a7212cde6",
+  "bytes": 776,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-02.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-03": {
+  "sha256": "711dcaf2a341aedfd06447b4117b540f60adb0784c5e64a313c718e4cf092bc3",
+  "bytes": 939,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-03.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-04": {
+  "sha256": "6d220b8e2815362a11d294d35dbca28568370d8295351937eceec10f2b359b85",
+  "bytes": 842,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-05": {
+  "sha256": "aef8c5fdce1493fd570b5829a72f2f17c7e459483390f25544d16c2a30be592e",
+  "bytes": 830,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-05.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-06": {
+  "sha256": "43fc4473820d1fb4fe340d1b1951a87555f6841aa352e684fa95d6adffce04c6",
+  "bytes": 721,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-06.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-07": {
+  "sha256": "acab0593c1452660ce74a6c239fb215c1192b0a9c6e8c1689e6495de40a0174b",
+  "bytes": 847,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-07.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-08": {
+  "sha256": "7003d29a43dd5f9357f838da8766834954939e22c1d80af682d9f33984f67b71",
+  "bytes": 904,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-08.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-09": {
+  "sha256": "6ef23b02392b481ef9c3855434bf3644289fb6e228b4f7d9a0dfc6d3cdff1116",
+  "bytes": 924,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-09.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-10": {
+  "sha256": "26db65ac8020d80ece35df79c254c5f7e24427529bcceeb2972748c4fe2d2707",
+  "bytes": 801,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-10.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-11": {
+  "sha256": "e1b19cccfe2cdcba48b022790789b7b01edd86c075f39bc152e44c267d43bd51",
+  "bytes": 746,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-11.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2024-12": {
+  "sha256": "069409f525ebf6370ee1c7defe475167de4b97284c5ac8e68768652968cd3dc9",
+  "bytes": 808,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-12.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-01": {
+  "sha256": "df725010d55458866eb5a47e9ee708c6796c9d7e77b14c38342cea11f381815e",
+  "bytes": 825,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-01.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-02": {
+  "sha256": "e918b90fb33df3a3317feea13807a892047f1ec86eeac100bdb7b3dd83285d46",
+  "bytes": 854,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-02.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-03": {
+  "sha256": "a3b95cfb315641fbfddc61eb32adf2a2588afb7a3973a61f464aca007ad43e3f",
+  "bytes": 938,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-03.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-04": {
+  "sha256": "01dbb7bd0135f98bd63bdde6b943cde1accc1770cabf92f68a1ec0653ced3888",
+  "bytes": 929,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-05": {
+  "sha256": "e7355e2775b88009c984db1783bb8ed6b5f24ede2b52bb764151b5722d6a5e42",
+  "bytes": 943,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-05.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-06": {
+  "sha256": "a1f4a40953740fa83ee9ad97776ff8325d1958654a67f1325614071a983819d4",
+  "bytes": 946,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-06.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-07": {
+  "sha256": "b097dff828f6e43fece23db0d3cb98042a9d7bc19693b8cbfd051d88eb973b7b",
+  "bytes": 796,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-07.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-08": {
+  "sha256": "1180129860b6e196e8d70bb9719e81573aa6b4acb423ba5ee7f82f10c836f7ab",
+  "bytes": 927,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-08.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-09": {
+  "sha256": "21dc6570fc6bffad0e7b5f9e99211b82ad07c95ab4f18c3a2daa3b95ec98344c",
+  "bytes": 941,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-09.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-10": {
+  "sha256": "9ecdedab6344fc4cdb154763266b8e09627a71c3cc5574cf868158b541c259c2",
+  "bytes": 944,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-10.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-11": {
+  "sha256": "23735400405627d610123e3a43db3e98ae7addb93459cd670e65a7659a5f081b",
+  "bytes": 941,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-11.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2025-12": {
+  "sha256": "35318b789f020b0e04c9043112480743855554e52e1d188437cbdaa67246d51d",
+  "bytes": 963,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-12.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-01": {
+  "sha256": "0ce8da3b2ee7eceb6616efa215a2a1b1aab7b5b04becebe73634a95ec0abfa90",
+  "bytes": 795,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-01.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-02": {
+  "sha256": "5a1de843dc3f098e86ca3c0979b38591d57d18664a1079588e61def93224fa06",
+  "bytes": 911,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-02.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-03": {
+  "sha256": "0b9edb31ec6aedad0248d54e89b7ea5ff3cc4ab719519751db3de334caf54303",
+  "bytes": 785,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-03.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-04": {
+  "sha256": "ce2208113358208182eaae41971fb5762e1794a04b4a606368416d08eea2d41b",
+  "bytes": 698,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-04.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-05": {
+  "sha256": "77f5790ae26f95caee52b58317ee65d13b0eeb61f73d83482fd5d3aa153ab300",
+  "bytes": 769,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-05.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-06": {
+  "sha256": "2e6af078edbe3e0df30d12d0d381652949572ce514222a257efe1f4eb145dae0",
+  "bytes": 700,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-06.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-07": {
+  "sha256": "1983ad90e1d1f98eefd2c23b9eb209d26e4e2efba2f4e8b5e662e8a7d563bc56",
+  "bytes": 774,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-07.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-08": {
+  "sha256": "d4e766270a078741387ba564103d285ad9a2c05c7e6df9ad0b03619248bb041f",
+  "bytes": 918,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-08.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-09": {
+  "sha256": "cdee5c299c22dda85a5d5449e19250f7bc66c0d52759f9de0a49cc233520510d",
+  "bytes": 807,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-09.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-10": {
+  "sha256": "47749a38b41b185d786af96bf41c796edf8ea517cf76d6d61402974c629e0239",
+  "bytes": 852,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-10.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-11": {
+  "sha256": "9b02376eaa04be4ec2e201b492ef2a3c34dc61542492c715b5cea5dec5f01d36",
+  "bytes": 889,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-11.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2020-12": {
+  "sha256": "f99267a3fef35dd201e76c8338be877fb52883376b4cd0acb890a1387de0b0d4",
+  "bytes": 901,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2020-12.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-01": {
+  "sha256": "4c18c1df8904dea9770aeba5326d26b3fa9a3ffac4891f5f7125d4be2da847c0",
+  "bytes": 1017,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-01.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-02": {
+  "sha256": "15e9a939f253a11fc1af2858bb3844f3d39019ccf7efa66a9456f0f60afba3dd",
+  "bytes": 950,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-02.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-03": {
+  "sha256": "2bcaadc8206cb8d76a26f0f3cbf97020b747545b0e75c3dd8a3b195b435478a5",
+  "bytes": 997,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-03.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-04": {
+  "sha256": "2fee34e8b9b6e828d01bab0df1c67104f7a98f3c063668c8db627b802ffa5a95",
+  "bytes": 954,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-04.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-05": {
+  "sha256": "21809ef6691a1441bd55ba4af4494a038d1a399ae0ae432e80cb41b47d71f3bd",
+  "bytes": 913,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-05.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-06": {
+  "sha256": "8e58ccf8f52c69c55754492daafadab92d4ca8c8bd027f4532582d06e9f36063",
+  "bytes": 827,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-06.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-07": {
+  "sha256": "f8f538bedf642052e428cd25f3134784de6e62a136e76f6a07ea6e79dfc9c39d",
+  "bytes": 892,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-07.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-08": {
+  "sha256": "0120b284bde23d077e1e26e5e4b56fd3e2d1d82a3a7fe0e9de26825b9fc9c0db",
+  "bytes": 857,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-08.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-09": {
+  "sha256": "4b4a94cdafbb8fea7762c266aa79b183700b7c9dcf7e981f7fdbe9372f2eec66",
+  "bytes": 826,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-09.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-10": {
+  "sha256": "4dfb8698f6951b2c66229e1c687977eae0778bb703d6268232da2ceb3e9b5e6d",
+  "bytes": 935,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-10.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-11": {
+  "sha256": "d9a7e22a237717f23d4b0505f14613359b7ea7831b23a78653a891cbbe3d521c",
+  "bytes": 838,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-11.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2021-12": {
+  "sha256": "788d5c57e7cbc8e6b94ed4d7672618a85311edf1d7f0888083410d0d3389d811",
+  "bytes": 806,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2021-12.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-01": {
+  "sha256": "9f5bd01450b05a8c5e48cdc99fa147e85c82ecf7ee7919fa543a4e6039a2b98d",
+  "bytes": 950,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-01.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-02": {
+  "sha256": "9c35e30327ac8915cc1333415b7d5018425781c81918e349d26b734525fcdfe5",
+  "bytes": 898,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-02.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-03": {
+  "sha256": "3de0714a2b2582029b32147815298b6e67e972e776ca3f68a4208823b4109404",
+  "bytes": 866,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-03.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-04": {
+  "sha256": "7c306ac8b6275a857b064916080e0b6ec502b25a4501c84c3fd2c0b077425de3",
+  "bytes": 941,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-04.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-05": {
+  "sha256": "c458330243c9d8e048ffc7168c9e3c077c01bb82b1644097a4893fee34069b78",
+  "bytes": 972,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-05.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-06": {
+  "sha256": "f6f3a69b656b91500b41501a230e663ccc3c1a65f46273595b00682d8f6fabb1",
+  "bytes": 980,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-06.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-07": {
+  "sha256": "17826e5591af8660a7fed74d60e24eee77c822cf0d901dd8af355a10a36699aa",
+  "bytes": 953,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-07.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-08": {
+  "sha256": "a2680549de5e087566f4d323b3a812c2b9863528c6bc49b0e551cb42c381bb4d",
+  "bytes": 1000,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-08.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-09": {
+  "sha256": "816e4de946d9f854cc457c86ca396b9cb49b46e80cf44941b59b9ad2124f2ef8",
+  "bytes": 1016,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-09.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-10": {
+  "sha256": "e434c29eb544cc57ff574e38685535bb7d04703aee54bc5d52f53cea372810e6",
+  "bytes": 1004,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-10.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-11": {
+  "sha256": "4f4e52f176f69e99353959d287874a4d4a135b5bb4ea85514dd5a3e65958b2d7",
+  "bytes": 987,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-11.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2022-12": {
+  "sha256": "8cd0e885d63b85ee602d80eaae956f9ee3e0e25db264eb5c74026a9ae0d71f4e",
+  "bytes": 964,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2022-12.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-01": {
+  "sha256": "5647d5978092d220eb14e11c7854d86815d0eb6204197e37b4808cc599e986f3",
+  "bytes": 819,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-01.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-02": {
+  "sha256": "7da37820c15fb08600ae668551d0b724326b8f71d761582990721059280a221b",
+  "bytes": 821,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-02.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-03": {
+  "sha256": "5110b60cbbc5f26048ce02575c26444ea2ed497baed9a5609e118359e1ca3b51",
+  "bytes": 963,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-03.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-04": {
+  "sha256": "fa3a3cf7c3b8285687ae8c8014eed8bc58ad3ceb33ccb62ff4298048213c0e6c",
+  "bytes": 945,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-04.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-05": {
+  "sha256": "bf890ea68d979942ed296b058390eb98b0b495547fee2117d3b76d5e7f629b24",
+  "bytes": 990,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-05.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-06": {
+  "sha256": "b3ddac1309f9a684f4e811776a6c09fb2239bb8d1ae0ff4bd342a1c32a5e171f",
+  "bytes": 888,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-06.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-07": {
+  "sha256": "82577976d8acd886fda84179ee38c9e7ef445732c3b6a062d6ffd2a9e3cc30bf",
+  "bytes": 861,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-07.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-08": {
+  "sha256": "cf749429c366cef3302a804b3e702937e5f1a77aeddc5b628dca7da547a8935a",
+  "bytes": 897,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-08.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-09": {
+  "sha256": "41ac7eb67a46d14d97daec4c37e8229df5ac6b165639ad4b2c54bc7374930341",
+  "bytes": 902,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-09.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-10": {
+  "sha256": "ccaf4474f0dc94adedd4330c14995f338186caa2cc9fd0d2e2c55f74cf263a5c",
+  "bytes": 849,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-10.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-11": {
+  "sha256": "153ec1450eb5d999ce253e2c7ca2e81b79a523ff52dd18b14faefab8212b999b",
+  "bytes": 699,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-11.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2023-12": {
+  "sha256": "91bdf41566cebb86c6f0e3646b0037de9c22e14ee2f592c5722c7e4a19c91119",
+  "bytes": 801,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2023-12.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-01": {
+  "sha256": "5a71469b0b363886df904e784dddefc484dd943334b1fb7454713ce4ed715a4b",
+  "bytes": 685,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-01.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-02": {
+  "sha256": "915fad950c48935f3875d88992b8d78290bc8a6fada44408e3ed14aef9a56670",
+  "bytes": 770,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-02.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-03": {
+  "sha256": "e9c1d0f3e7e3b493277c7f826afb223482d56bdc7611144d398ac10e47307907",
+  "bytes": 941,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-03.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-04": {
+  "sha256": "b54c9f05af116ccd921b32b25960ae26954c4983992d44f2390bf1de08b2c724",
+  "bytes": 834,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-04.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-05": {
+  "sha256": "8350ab4d61b12ec61539611e30809039f54814213bc4c937609360b1ff28b5e0",
+  "bytes": 836,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-05.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-06": {
+  "sha256": "def13f4a478c28b0111fb24c57f95fcee80e71982ed74f12e465d20d328e2275",
+  "bytes": 758,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-06.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-07": {
+  "sha256": "9d236281ab6430250ad2b472cbbf03812a40aed42e73c8339fc6be55a2417a82",
+  "bytes": 831,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-07.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-08": {
+  "sha256": "e17684bc761924eb5e1912c52cfa997eddeb99da303e68e28f6f37369f672b9d",
+  "bytes": 944,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-08.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-09": {
+  "sha256": "ffb6e7441053137cb7ca81cc83bcdd996612f7dbb15aa2e168a7ee521f8cbbca",
+  "bytes": 908,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-09.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-10": {
+  "sha256": "2124978c335473a5d9c0f0e9f238193d56c21ac7e250e065a36e9d1201beb049",
+  "bytes": 748,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-10.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-11": {
+  "sha256": "636a4c7c86445c2774b4eae8598c480fcbc57de7dde5d40f6937c7fac510797c",
+  "bytes": 809,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-11.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2024-12": {
+  "sha256": "11a0847e8aacb32eeb725611fda4fe6a8419c03eb0c16e14dfc3b9287e78ecc9",
+  "bytes": 837,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-12.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-01": {
+  "sha256": "88c95b99d2784a7baac529fe578563d7e05038a1b8a498b2f59bf81b216fee20",
+  "bytes": 768,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-01.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-02": {
+  "sha256": "9e116dd6754484a19ecc41ced40b8dfa7f62c33d41cdc3317336b1e1f043767f",
+  "bytes": 868,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-02.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-03": {
+  "sha256": "62464a8bfb7ba515628acb76d3e2172d33b88805faa2e701a22537c51a17d139",
+  "bytes": 934,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-03.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-04": {
+  "sha256": "7db62cb5e9f32397dacabb3d571b96397024bda3810bde0799c90f61cb773679",
+  "bytes": 940,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-04.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-05": {
+  "sha256": "996aff38f046b50510301532ac5cbdca115afca971c49cb548f50e5d70e18d99",
+  "bytes": 919,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-05.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-06": {
+  "sha256": "ae7ca242249ca3df06d1222a0c264fe83b18c4b2c19fe656e864f7d081d5e198",
+  "bytes": 928,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-06.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-07": {
+  "sha256": "5f2d840c5669ca946529c33f6df32433c5d0cd973eb4adfd40459270c460e7f8",
+  "bytes": 854,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-07.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-08": {
+  "sha256": "c3fca21c71afb4962e89f8e3d84afe5832019ed8f570ee7c7c299f2436a28b62",
+  "bytes": 922,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-08.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-09": {
+  "sha256": "2fa09df245aadc73cf43f837a72c3009fcd7d10c8c4e3db48b2d1021c331841a",
+  "bytes": 934,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-09.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-10": {
+  "sha256": "1ae86c5fb1f15d8792906b746cc7598ebe7e6e7194b74501db79c874e37d7e14",
+  "bytes": 953,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-10.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-11": {
+  "sha256": "a3a8abb219373ec1e02e8d1a47015665d180d6130cfe1df71d2fa8fc9de59e59",
+  "bytes": 956,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-11.zip"
+ },
+ "binance/futures/um/fundingRate/ETHUSDT/2025-12": {
+  "sha256": "ef9e84f53a5fa07702958c8700077c8be0a90ec8b3e25110f5611109c3c0090c",
+  "bytes": 985,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-12.zip"
  },
  "binance/spot/0GUSDT/1d/2025-09": {
   "sha256": "4b5e70edbd8bcbfd5703f7b7025b12c50531da08b1e00aee77834c597730079f",
@@ -40304,6 +41664,446 @@
   "bytes": 197728,
   "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/ETHUSDT"
  },
+ "binance/spot/ETHUSDT/1h/2019-09": {
+  "sha256": "4c2f8e47ac294e8f10726273b5a637ed172e98711915960eb5d15e71421d1ea7",
+  "bytes": 38471,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2019-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2019-10": {
+  "sha256": "546117d59598496fcb3122772c2c9bf45d0c2dd7a25a9b07bd78a9cb83ad677b",
+  "bytes": 39685,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2019-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2019-11": {
+  "sha256": "222067844687455cf1f50022f906eb19eb0001e690378f3c5a12e89dd7bdc721",
+  "bytes": 37868,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2019-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2019-12": {
+  "sha256": "c7734b09fafca18a99f4906ba33b34a37cb96b8c0f866e6b92f9e951f99f5b8d",
+  "bytes": 38826,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2019-12.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-01": {
+  "sha256": "9e0ca4d30bcb22d5c876b912b3160445d2410634d09e9584060f592c30a06402",
+  "bytes": 39551,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-01.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-02": {
+  "sha256": "1cf8a5b129d16bed072c46e158b5914247007ec7e00b489880f422c80c73afbe",
+  "bytes": 37876,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-02.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-03": {
+  "sha256": "2d80640a11d7de0eb052637d25aa95eb42602a927ad7c0be6d77a7689fbe93d3",
+  "bytes": 40856,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-03.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-04": {
+  "sha256": "0171b734b6131a542d79e35dc2ffbf886c1353574ef0983e95c4a8eb2856e56a",
+  "bytes": 39174,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-04.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-05": {
+  "sha256": "4a02d33138486434643a314ea561e274f95c9d93124763d15cbf18bf809ca771",
+  "bytes": 40466,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-05.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-06": {
+  "sha256": "d605f9ad1cc5556cfef7559f2d9e5cda0e55deba7f8ec03ea253bf8ec2f99d81",
+  "bytes": 38510,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-06.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-07": {
+  "sha256": "3a740ceed16217e109224e01ca0ce552d241bf39045d82d29f69e61f13149ff8",
+  "bytes": 40313,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-07.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-08": {
+  "sha256": "2b50f4e13ad28b1502cb99abb6e2d71048a46f207ecbd02aa4720ae1e451f703",
+  "bytes": 41392,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-08.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-09": {
+  "sha256": "1bbbb6fece1ff1f5ac8b42b8073686bc1e05e1cee404f453843a5cb5716d3a95",
+  "bytes": 40089,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-10": {
+  "sha256": "7dac6824ff1762f704b9cd6becab4282ceada67be26f0466d378341c41db0ea2",
+  "bytes": 40737,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-11": {
+  "sha256": "a1b583dd091363fa1375bced29f78f69889c6da219d1c136b9d0f9269a19158b",
+  "bytes": 40447,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2020-12": {
+  "sha256": "3928cbf56a66752d619eb438b92e0bc8cca2c8f0420237e5f5e81fdc19db13ea",
+  "bytes": 41720,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2020-12.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-01": {
+  "sha256": "01d6bb8175fb847a256ca1cc14dce06194a86c740d7edc951a5d2835aba9b577",
+  "bytes": 43823,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-01.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-02": {
+  "sha256": "f2e871ec862f36045bfa06a05210832d6b772a101a62b18bc7acddf906083b44",
+  "bytes": 39318,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-02.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-03": {
+  "sha256": "64d15bc69f1788ccfa775cea47bf2f614a2ccb4eccf66257f512c8cd99d497ad",
+  "bytes": 43093,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-03.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-04": {
+  "sha256": "299b928009158743a92860a66c75ba898243ecbdfa8ef9b346c0a7fd553bcbff",
+  "bytes": 41907,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-04.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-05": {
+  "sha256": "56707e7dbceacc194a6ecd31ea2b2a75a5c5f428182e63055217188c7e47c89d",
+  "bytes": 44688,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-05.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-06": {
+  "sha256": "e5244f5f095543d47d24a617c67292cf5daf95cc403407f5fff2fbd394580512",
+  "bytes": 42407,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-06.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-07": {
+  "sha256": "7048eb9eec2a091a3550f16870b93165eb21885ba6e217dac28682aebf248241",
+  "bytes": 43318,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-07.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-08": {
+  "sha256": "9e390848fe76625e72b8f4eac86d405ed33c79ca9d79d9af14266c54d9d215af",
+  "bytes": 43105,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-08.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-09": {
+  "sha256": "c10a61248a5c92280e35beadcfdf33220fdc0561ab1973893a4fe5a3335d3b78",
+  "bytes": 40803,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-10": {
+  "sha256": "332cdaac0de88dd2452c0ed2561f86e99ebba6f89d9db69b35aa9f52acafe805",
+  "bytes": 42076,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-11": {
+  "sha256": "fc8093a34678bd6ce4436c411127a69f245b2d5cfa6208aee67ffda504a70664",
+  "bytes": 40833,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2021-12": {
+  "sha256": "7cec67435b94112e7d1a8ec45b4d0167735102d12cb8649699aedf5018b09a80",
+  "bytes": 41944,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2021-12.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-01": {
+  "sha256": "14a3875732b7e404be2522aec94b5f17fc43f81e77c0a68fdd72980ea644ef5a",
+  "bytes": 41862,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-01.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-02": {
+  "sha256": "2c155824e909de8c1f91a41bbdc2356c29f3c16944db3982a7c912ff58083eb3",
+  "bytes": 37936,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-02.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-03": {
+  "sha256": "9af5cd5120e2942f763f0a45cec35b0a98322015d52b29884655875f8bfe361d",
+  "bytes": 41670,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-03.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-04": {
+  "sha256": "d47fd9d00967d87564a52cc7025960de98513f863a83018e9f9dd0eb5875df39",
+  "bytes": 40240,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-04.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-05": {
+  "sha256": "382390f47d0660bb3dc16aaedf7901002a2293ca7a375045b08d956208c95615",
+  "bytes": 41837,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-05.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-06": {
+  "sha256": "9fd8dabf04723354423f643b62b74ac5f1046e28f855c0e15d9eb68b5e49f559",
+  "bytes": 40835,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-06.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-07": {
+  "sha256": "87c81755af5e05b5b24182eed98582284b6896048d231a245581d76df669d4b4",
+  "bytes": 42054,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-07.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-08": {
+  "sha256": "7792ffb44dbcd7a9964ea796ffc2dc2049b5437a5a317c07b64eb4be8aac1a13",
+  "bytes": 41777,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-08.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-09": {
+  "sha256": "e64c3e782b8421fa035843584bff1ddcdee84ee1bcb06d6e154915855d6917c4",
+  "bytes": 40195,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-10": {
+  "sha256": "e0e1d08f8e089a0273e2ad62ad052b690d4082c82bf56da6f7b2c37795e2ab6f",
+  "bytes": 40772,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-11": {
+  "sha256": "109c93bc5db33562650e146c9a9332ec4496dae5021cf942f5c75317c75d16eb",
+  "bytes": 39897,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2022-12": {
+  "sha256": "6f704c3ed1be5ce404b5ca53e733e42b005308714218ff9e21d15e7cfb128f01",
+  "bytes": 40023,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2022-12.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-01": {
+  "sha256": "6a646f674ecfa736db1e6fd0c4ebaf26594806efde851f2c7081aec533714e3d",
+  "bytes": 40509,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-01.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-02": {
+  "sha256": "c23f2ce377caba0279a932cfea93701bd02c996879293c5c395eaba06a943039",
+  "bytes": 36954,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-02.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-03": {
+  "sha256": "90d268be1e0d39f7411f88ca3c0f21fe110fee7ff3c1dd054555e1fea6e22d8d",
+  "bytes": 41120,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-03.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-04": {
+  "sha256": "36598c7b9ac93706b8c9f9e6da11bc2137f605c442dab139ac35e397efcd9473",
+  "bytes": 39687,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-04.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-05": {
+  "sha256": "e03f762cd90b9a4eb6bf3499a05f4df84a71fd23f18d8b1b9c2e88eb469b0f2e",
+  "bytes": 40460,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-05.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-06": {
+  "sha256": "7ca4b8f6f6ff04f6899fe49b68df2c7b60841dfadb4a334631491af2d192bfbf",
+  "bytes": 39155,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-06.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-07": {
+  "sha256": "b141e7b3ec07f24756b1c5c27b562acfe06d331678a49c493a5fa2cba44eb97a",
+  "bytes": 39931,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-07.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-08": {
+  "sha256": "25930d0ba8280ec82b879d130071582c3ee4d5a1fbe31dc34c016b2c314d3525",
+  "bytes": 39655,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-08.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-09": {
+  "sha256": "3453dc6570a7193ab358e5a4c592439b4073028b1ab09412610d9409cf330219",
+  "bytes": 38385,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-10": {
+  "sha256": "d91229dd47c4cf53b8e326b500295a4fb9f0316faca0e2149076065bc53ae049",
+  "bytes": 40238,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-11": {
+  "sha256": "2be46057e4a5b40b4b7c6bdf5b163aa22e353048e62907e730cd471fbf3a62b5",
+  "bytes": 39562,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2023-12": {
+  "sha256": "89ec0d0b4f4ee72f4f1c2fad52ec1d94435d525bb107ae23d6f9716c77dbc428",
+  "bytes": 41082,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2023-12.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-01": {
+  "sha256": "1fdb3a8fa6b77ef30ef17ed4b71b184172ef1f812d83bd0f50bbd08e71a92057",
+  "bytes": 41245,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-01.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-02": {
+  "sha256": "f080ff288b2f7e85e78c5370a8a3258b93f85531ff96b4131c1b7889649a8ba4",
+  "bytes": 38782,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-02.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-03": {
+  "sha256": "4eb16ab0c5db15e5e0d77827f5c19c215c7ce601a5501d9563b75bda7602f46e",
+  "bytes": 42083,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-03.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-04": {
+  "sha256": "8b710fad720ae0bc75eaded37b3add95ca49122ae398f3f6e33e57e864da781e",
+  "bytes": 40291,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-04.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-05": {
+  "sha256": "0307d64f0d9ae6ff4001442a014d7b02dcbc5a003dcc36ba139f1c9695996b51",
+  "bytes": 41346,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-05.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-06": {
+  "sha256": "59ee6920bd72d93d1130c89711c93ea192bbfd5f82b548dcb0448f66450f6a06",
+  "bytes": 39586,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-06.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-07": {
+  "sha256": "83181cfcc1f1e32a542e2c220cbd58acd1c550cc64ad1e2c414e47088266aa7c",
+  "bytes": 41340,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-07.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-08": {
+  "sha256": "d908255a48978f6acb769c4b856a3307c58a8c19dbf2b3b7f10067245d5e8b89",
+  "bytes": 41335,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-08.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-09": {
+  "sha256": "bfbdda97d03abac469199120ec3c2f1305e2d5947e9155ff84dbeafe33cd4a67",
+  "bytes": 39572,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-10": {
+  "sha256": "cbb13664485b6c9a6365da7ae23299b722ab5926a6aed516add486ef501883bc",
+  "bytes": 41095,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-11": {
+  "sha256": "29cd30419b86d5dff5467a7a81d43e492aaaeb3669db216ab8badaad5fe610ec",
+  "bytes": 40916,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2024-12": {
+  "sha256": "84312b7dc2b5c903853c78d94f587ef1d24b7960d7bd95f5bfe3afc3db006203",
+  "bytes": 42106,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-12.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-01": {
+  "sha256": "f7350a6f3b51de466a0db52ba890cf296d4faeb6e84811b9606f87ad39ccf3ec",
+  "bytes": 42253,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-01.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-02": {
+  "sha256": "40c2f73850422d47ca7d044959cecc39ff3416f6e3c88f30636da4a01a0b6e31",
+  "bytes": 38410,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-02.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-03": {
+  "sha256": "dc32ecad498d19f8663633196ec84cbd480595c89aa1ae6062c0fa0b8d9bd11d",
+  "bytes": 41867,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-03.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-04": {
+  "sha256": "73f39799fae1ba4ef291c6785b934a6c817426ef8ef60e1bdf42078efd27893d",
+  "bytes": 40375,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-04.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-05": {
+  "sha256": "720a319face496acff79d8e6279b9b03f31495097d555c74daa076cd66421bee",
+  "bytes": 42206,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-05.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-06": {
+  "sha256": "780788805b48a094886590d939ef45372db2ee053aa5d464f8e135121df2b8eb",
+  "bytes": 40653,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-06.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-07": {
+  "sha256": "d5c4c2482004a49b479ff5bfbdb885b25035ace24e5f95edd8057507718df366",
+  "bytes": 42467,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-07.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-08": {
+  "sha256": "1ebdd24f8e1df5369518b721fdb0bfaaca9892ae71499b82783194573f804cad",
+  "bytes": 43041,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-08.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-09": {
+  "sha256": "f83ffff284b408574a4571e83fabc5c641e20edc71818912541cc38ec7e1be43",
+  "bytes": 40873,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-09.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-10": {
+  "sha256": "f3668059619d772ae8f7167d82666dcc6e2f88f17e6fd66a4a8098c9cd8ba042",
+  "bytes": 42832,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-10.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-11": {
+  "sha256": "3c0171cdd5eef1ece36c818ace3a07cc48e331cb9d991488a8db917bc496b78d",
+  "bytes": 41327,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-11.zip"
+ },
+ "binance/spot/ETHUSDT/1h/2025-12": {
+  "sha256": "7a7a35ce7b9be9bafa0a00c47370acc57a48329a3289c21cb19f1185f6430fdb",
+  "bytes": 42005,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-12.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-01": {
+  "sha256": "c69ea0c9b620b53f15dc5e20a1446a2f233e2d8c8dd8eaa8bf49dae92f3162c3",
+  "bytes": 1989184,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-01.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-02": {
+  "sha256": "4ee0c9bf3c53c038798df52b085156f0fae2c59406e3e1c02ade5f680a129a11",
+  "bytes": 1828792,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-02.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-03": {
+  "sha256": "e2552c2298f4b67027bfa1f7da364b0d398e96a76dae8fa2085dddf357f60a69",
+  "bytes": 2052232,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-03.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-04": {
+  "sha256": "87d0e7d1a21d72636f60cdd50557c90cc1921664596f5b4e9713c0365c3410c5",
+  "bytes": 1956086,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-04.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-05": {
+  "sha256": "fe57aa54eb3467ec40d04c1585e8019c8fb0fb2085abf28bb8e615ab5461def0",
+  "bytes": 1980623,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-05.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-06": {
+  "sha256": "c12d39ce1b3b6a47e09e4b5a1c64d39939b9b58108f2c6f87e39d544cb0430f3",
+  "bytes": 1907373,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-06.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-07": {
+  "sha256": "ad0b53a0f9b7ec4dd13c3d9c8a2f93dcbf797ea7ae40c8a109f5a275983869f2",
+  "bytes": 1920823,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-07.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-08": {
+  "sha256": "fd3f848b8ee996504745083b8b2a34e5bdf2bd388a8fc7edf426d8dc10bffe7f",
+  "bytes": 1884880,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-08.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-09": {
+  "sha256": "7bfed19a472eaa4691d1920c865d07436262e7dc9ad737509db14dc6bcc2429e",
+  "bytes": 1840420,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-09.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-10": {
+  "sha256": "e7c67fa12dd93c7bebd4a5893852b3b1b0ac3faf30ec2a590fa6c942fabf4e4d",
+  "bytes": 1958976,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-10.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-11": {
+  "sha256": "b3a5ba98d81b4bc62022d35d85d4e28c6ab7ca550d8283643191f66f6f986c66",
+  "bytes": 1960231,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-11.zip"
+ },
+ "binance/spot/ETHUSDT/1m/2023-12": {
+  "sha256": "9a0d342828ced43d17a97341234ec9d6344eba9945b5a5dccc73eabb253a83bb",
+  "bytes": 2040096,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2023-12.zip"
+ },
  "binance/spot/ETHUSDT/1m/2024-01": {
   "sha256": "2fb2c9b77365183f77e185de3578de2f3be5fefe433d7c0564f033f968d5e23c",
   "bytes": 2050101,
@@ -44983,6 +46783,11 @@
   "sha256": "d1435cb590250d3ebc777db437a6f8decdaf6e57302509257e59640c6ccad94a",
   "bytes": 123168,
   "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/FTTUSDT"
+ },
+ "binance/spot/FTTUSDT/1h/2022-11": {
+  "sha256": "0573af9635cdd63ddbf824bddbaac29c51571014a33c985e68351fa7e0b4717b",
+  "bytes": 17123,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/FTTUSDT/1h/FTTUSDT-1h-2022-11.zip"
  },
  "binance/spot/FUNUSDT/1d/2019-08": {
   "sha256": "6a0e6f3228c332db13dba49cdb7e194d306ff268a7c843255e846d211f197bcd",
@@ -64398,6 +66203,11 @@
   "sha256": "2278d1c82b0d30c74eda0e874c6c7595acd5082af4e7625e3badd31f64e5a2bc",
   "bytes": 126240,
   "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/LUNAUSDT"
+ },
+ "binance/spot/LUNAUSDT/1h/2022-05": {
+  "sha256": "70769aa8d188cade0d4cafdb28b3592688a974280a31de2d62a0b7fdbd45e4ef",
+  "bytes": 15960,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/LUNAUSDT/1h/LUNAUSDT-1h-2022-05.zip"
  },
  "binance/spot/LUNCUSDT/1d/2022-09": {
   "sha256": "3d7037ccd25c23aaddcce6d0c3c722b61a655c31a1c48500e68b95e4fcad8406",
@@ -105279,6 +107089,11 @@
   "bytes": 1952,
   "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/USARBUSDT"
  },
+ "binance/spot/USDCUSDT/1m/2023-03": {
+  "sha256": "531af60d212c8ef114340f8a216aa7ae0d9370531bcda679cdeaf305f744ccd6",
+  "bytes": 977925,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/USDCUSDT/1m/USDCUSDT-1m-2023-03.zip"
+ },
  "binance/spot/USDEBUSDT/1d/assembled_2017-08_2025-12": {
   "sha256": "0624c9a8ac1318aa2f5b344a8d9b7e3062cd81befa6062705603f0d5a874086a",
   "bytes": 1952,
@@ -105313,6 +107128,11 @@
   "sha256": "0624c9a8ac1318aa2f5b344a8d9b7e3062cd81befa6062705603f0d5a874086a",
   "bytes": 1952,
   "source": "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision/USDSOLDUSDT"
+ },
+ "binance/spot/USTUSDT/1h/2022-05": {
+  "sha256": "ad851d96b598b671d4400e57d5db3948f8d2ac350711be6108f979506effc4e2",
+  "bytes": 13012,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/USTUSDT/1h/USTUSDT-1h-2022-05.zip"
  },
  "binance/spot/USUALUSDT/1d/2024-11": {
   "sha256": "b543f847506a4755a3fc34ebb9c73378106967926f1165d3d2feb1782e1cf475",
@@ -138569,6 +140389,11 @@
   "bytes": 110934,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM"
  },
+ "yahoo/bars/GBTC/2022-01-01_2024-12-31": {
+  "sha256": "c66abd85f743b2588774fbd3e3cb1782ba6253e480f3bbb1b17fe792d4a8646b",
+  "bytes": 57008,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/GBTC"
+ },
  "yahoo/bars/GLD/2010-01-01_2020-12-31": {
   "sha256": "0bd363af37ec14cad82d32de3488eb89687acf2f1d4c19411dc128c1bf349ead",
   "bytes": 222925,
@@ -138583,6 +140408,11 @@
   "sha256": "ff10a95f2383d67dafc1251aa965189ce86c17c49eaee23002ca0f2b6e33ee31",
   "bytes": 114411,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/HYG"
+ },
+ "yahoo/bars/IBIT/2024-01-01_2024-12-31": {
+  "sha256": "e7d3b0298624a0b9ee7fcd290c4a24290dbe4779bd5fa172b6fd6c48b7f2caac",
+  "bytes": 17650,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/IBIT"
  },
  "yahoo/bars/IWC/2015-01-01_2020-12-31": {
   "sha256": "a579e804ca12f439de5cc4766fea58ffaaf87826618446eb109f751f42af2d2c",

@@ -1717,6 +1717,11 @@ Frontier (2023–2026):
 - Ackerer, D., Hugonnier, J., Jermann, U. (2024). "Perpetual futures pricing." Working paper *(verify: venue)*.
 - Budish, E. (2025). "Trust at scale: the economic limits of cryptocurrencies and blockchains." *QJE* *(verify)*.
 - SEC (2024). Order in the matter of Tai Mo Shan Limited (Terra USD).
+- Narayanan, A., Bonneau, J., Felten, E., Miller, A., Goldfeder, S. (2016). *Bitcoin and Cryptocurrency Technologies*. Princeton University Press.
+- Harvey, C. R., Ramachandran, A., Santoro, J. (2021). *DeFi and the Future of Finance*. Wiley.
+- Egorov, M. (2019). "StableSwap: efficient mechanism for stablecoin liquidity" (whitepaper).
+- Capponi, A., Jia, R. (2021). "The adoption of blockchain-based decentralized exchanges." Working paper.
+- Milionis, J., Moallemi, C., Roughgarden, T. (2023). "Automated market making and arbitrage profits in the presence of fees." arXiv.
 
 ### Part 40 · Measuring Risk
 - Sklar, A. (1959). "Fonctions de répartition à n dimensions et leurs marges."

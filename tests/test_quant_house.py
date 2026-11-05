@@ -3544,3 +3544,44 @@ def test_making_glft_fills_and_sniping():
     h = 0.5                                       # 10 h = 2 * mean((1 - h), (5 - h)) for h < 1
     r = M.bcs_simulate_dist(h, 10.0, 2.0, jumps, 4, 2e5, seed=1)
     assert abs(r["lp"] - r["sniper"]) < 0.05 and math.isclose(M.bcs_spread(10.0, 2.0, 3.0), 0.5)
+
+
+def test_defi_lvr_fees_v3_sandwich_perp():
+    import math
+
+    import numpy as np
+
+    from explainer.quant.house import defi as D
+    # impermanent loss at a doubling, and the constant-product value identity
+    assert abs(D.impermanent_loss(2.0) - (2 * math.sqrt(2) / 3 - 1)) < 1e-12
+    x, y = D.cpmm_reserves(4.0, 4.0)
+    assert abs(x * y - 4.0) < 1e-12 and abs(y / x - 4.0) < 1e-12 and abs(D.cpmm_value(4.0, 4.0) - (x * 4 + y)) < 1e-12
+    # LVR without fees: the pool's loss against rebalancing equals the exact one-step identity, and sigma^2 V / 8
+    rng = np.random.default_rng(2)
+    sig, n = 0.002, 200000
+    p = np.r_[100.0, 100.0 * np.exp(np.cumsum(sig * rng.standard_normal(n) - 0.5 * sig ** 2))]
+    r = D.arb_pool(p, 0.0, k=100.0)
+    V = D.cpmm_value(100.0, p)
+    exact = np.sum(D.lvr_step_cpmm(V[:-1], p[:-1], p[1:]))
+    assert abs(r["lvr"][-1] - exact) < 1e-8 * exact and abs(exact / np.sum(D.lvr_rate_cpmm(sig, V[:-1])) - 1) < 0.02
+    # fees with Poisson blocks: the share of blocks with a trade, and arbitrage profit = LVR x P_trade
+    dts = rng.exponential(1.0, n)
+    p = np.r_[100.0, 100.0 * np.exp(np.cumsum(sig * np.sqrt(dts) * rng.standard_normal(n) - 0.5 * sig ** 2 * dts))]
+    V = D.cpmm_value(100.0, p)
+    lvr0 = np.sum(D.lvr_step_cpmm(V[:-1], p[:-1], p[1:]))
+    rf = D.arb_pool(p, 0.003, k=100.0)
+    pt = D.p_trade_theory(0.003, sig, 1.0)
+    assert abs(rf["p_trade"] - pt) < 0.01 and abs(rf["arb"] / lvr0 - pt) < 0.02
+    assert abs((rf["rebal"][-1] - rf["lp"][-1]) - rf["arb"]) < 1e-6 * lvr0     # the LP's shortfall is the arbitrage profit
+    # concentrated liquidity: reserves vanish at the range ends, LVR is sigma^2 L sqrt(P) / 4 inside and zero outside
+    L, pa, pb = 10.0, 81.0, 121.0
+    assert abs(D.v3_reserves(L, 121.0, pa, pb)[0]) < 1e-12 and abs(D.v3_reserves(L, 81.0, pa, pb)[1]) < 1e-12
+    assert abs(D.lvr_rate_v3(0.1, L, 100.0, pa, pb) - 0.01 * 10 * 10 / 4) < 1e-12 and D.lvr_rate_v3(0.1, L, 130.0, pa, pb) == 0
+    assert abs(D.v3_efficiency(1.21) - 1 / (1 - 1 / 1.1)) < 1e-12
+    # a sandwich: the victim gets exactly its limit, and the attacker profits; no slippage, no attack
+    s = D.sandwich(1000.0, 2_000_000.0, 50_000.0, 0.01)
+    assert abs(s["victim_got"] / s["quote"] - 0.99) < 1e-6 and s["profit"] > 0
+    assert D.sandwich(1000.0, 2_000_000.0, 50_000.0, 0.0)["front"] < 1e-6
+    # perpetuals: no carry, no basis; Binance's rule returns the interest rate inside the clamp
+    assert D.perp_multiplier(3.0, 0.05, 0.05) == 1.0 and D.perp_multiplier(3.0, 0.1) > 1
+    assert np.allclose(D.binance_funding_rule([0.0, 2e-4, 2e-3]), [1e-4, 1e-4, 2e-3 - 5e-4])

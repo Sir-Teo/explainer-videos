@@ -1,5 +1,9 @@
 {
  "opened": {
+  "carry_basis_part39|binance/btc_eth_funding_8h": {
+   "at": "2026-11-05",
+   "code_sha256": "25e4176d1fbcdbacdd8e2d9d8ca24e46714b2a8f63e1cd194e6ccecbc212c6ce"
+  },
   "classic_bab_part24|factors/bab_monthly": {
    "at": "2026-11-04",
    "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
@@ -268,6 +272,17 @@
     "portfolios": "49 industries + 10 B/M deciles"
    },
    "trials": 1
+  },
+  "carry_basis_part39": {
+   "code_sha256": "25e4176d1fbcdbacdd8e2d9d8ca24e46714b2a8f63e1cd194e6ccecbc212c6ce",
+   "params": {
+    "asset": "ETH",
+    "cost": 0.0015,
+    "data": "Binance spot and USD-M perpetual hourly closes; eight-hourly funding",
+    "margin": 0.3333333333333333,
+    "rule": "always"
+   },
+   "trials": 9
   },
   "cir_mle_dtb3": {
    "code_sha256": "d4d95ce27447a96835d22f7f05301de19bf77bcc49c184ee95b7ce520e128046",
@@ -777,6 +792,12 @@
    "first": 20210101,
    "last": 20251231,
    "n": 1826
+  },
+  "binance/btc_eth_funding_8h": {
+   "digest": "646e4b44c7f5a9f98c9186ef23fae7a7f2efc9d7982bd42cc03c528f8d5d4c90",
+   "first": 20210101,
+   "last": 20251231,
+   "n": 5478
   },
   "binance/usdt_daily_returns": {
    "digest": "9ce51448677a656c7e7d670e6f6a9294a01c38e3e828be43b5d32275772db8eb",

@@ -142,6 +142,7 @@ PARTS = {
     "gp_calm_reversal_part31": (31, 1),
     "trend_part32": (32, 1), "riskparity_part32": (32, 2),
     "residual_sscore_part33": (33, 1),
+    "carry_basis_part39": (39, 1),
     "sestm_fomc_drift_part28": (28, 1),
 }
 

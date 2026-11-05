@@ -283,7 +283,7 @@ entries are named compute exceptions (≤ 12 h, resumable).
 | 36 | DeepLOB; **a generative order-book transformer** |
 | 37 | an RL executor vs Almgren–Chriss |
 | 38 | (moved to 42) GLFT tested on markouts instead |
-| 39 | an RL liquidity provider for concentrated liquidity |
+| 39 | a learned (tabular) liquidity provider for concentrated liquidity, in simulation |
 | 40 | CAViaR and a deep quantile network vs filtered historical simulation |
 | 42 | **multi-agent RL market makers** (collusion test); LLM-agent traders in the simulator |
 | 43 | the House, end to end |
@@ -1690,29 +1690,38 @@ trains learning makers against each other; this part tests the analytic quotes o
 *Desk:* "How does a market maker earn a living?" (spread and rebate minus markout; at the touch on Bitcoin it does not)
 *House:* the market-making desk and Rule 38. *Note:* the engineering is in [`trading`](../markets/trading/README.md).
 
-### Part 39 · Crypto and DeFi (~55)
-1. Blockchains and exchanges, on and off chain; 24/7 markets.
-2. CFMMs: x·y = k; the AMM as oracle (Angeris–Chitra 2020).
-3. Impermanent loss and LVR (Milionis–Moallemi–Roughgarden–Zhang 2022).
-4. Concentrated liquidity (Uniswap v3) and v4 hooks; an RL liquidity provider trained here.
-5. MEV (Daian et al. 2020); block builders.
-6. Perpetuals: funding and its no-arbitrage price (He–Manela–Ross–von Wachter 2022; Ackerer–Hugonnier–Jermann
-   *(verify)*).
-7. Cross-exchange arbitrage (Makarov–Schoar 2020).
-8. Stablecoins and runs (Diamond–Dybvig on chain).
-9. Crypto factors (Liu–Tsyvinski–Wu 2022).
-10. Spot ETFs (January 2024).
-11. Registered and opened.
+### Part 39 · Crypto and DeFi (~57; built)
+1. Blockchains and exchanges, custody, 24/7 markets, the exchange as clearing house; FTX from the public record (FTT
+   $26 to $1.23 on Binance).
+2. CFMMs: x·y = k, slippage on a 5,000 ETH pool, stableswap and weighted pools, the AMM as oracle (Angeris–Chitra
+   2020), impermanent loss.
+3. LVR (Milionis–Moallemi–Roughgarden–Zhang 2022) on ETH's 2023 minutes: 2.659% measured against σ²/8 = 2.659%;
+   break-even volume; the hedged LP as short gamma.
+4. Concentrated liquidity (Uniswap v3): efficiency, leaving the range; a learned LP (tabular, simulated) that is narrow
+   when calm and out when stormy.
+5. MEV (Daian et al. 2020), proposer-builder separation; a sandwich solved and tabulated; defences.
+6. Perpetuals: funding, Binance's rule, the no-arbitrage price (He–Manela–Ross–von Wachter 2022); six years of BTC and
+   ETH funding (37% of settlements at exactly 0.01%).
+7. The cash-and-carry book registered (9 trials) and opened: Sharpe 4.6 on 2020, 2.16 on 2021–25; the venue tail.
+8. Stablecoins and runs (Diamond–Dybvig on chain): USDC in March 2023 minute by minute; Terra's spiral; MiCA and the
+   GENIUS Act.
+9. Cross-border premiums (Makarov–Schoar 2020); GBTC's discount and the spot ETFs (January 2024); the crypto
+   cross-section (Liu–Tsyvinski–Wu 2022).
+10. Rule 39: count the risks the returns do not show.
+Research: LVR proved (envelope and Itô), an exact discrete identity, fees and Poisson blocks (the stationary
+mispricing law and P_trade, after Milionis–Moallemi–Roughgarden 2023), checked by simulation, fixed blocks and real
+ETH prices (arbitrageurs keep 2.3× the Brownian share at 0.3%).
 
 *Textbooks:* Harvey–Ramachandran–Santoro *DeFi and the Future of Finance*; Narayanan et al. *Bitcoin and
 Cryptocurrency Technologies*.
-*Trained:* the RL LP.
-*Computed:* LVR vs IL; funding and basis; cross-exchange gaps; Terra from public data.
-*Visuals:* `AMMCurve` with LVR accumulating; funding pulling the perp to spot.
-*Crisis:* Terra/LUNA (May 2022); FTX (November 2022).
-*Firms:* Jump (Terra; the SEC's 2024 settlement with its affiliate), Alameda, Wintermute.
-*Desk:* "An LP in an x·y = k pool; the price doubles. Loss vs holding?" (≈ 5.7%)
-*House:* digital assets.
+*Trained:* the learned LP (tabular, in simulation).
+*Computed:* LVR against IL on real prices; fees and blocks; funding and the premium; the carry book; USDC, UST, LUNA and
+FTT from Binance; GBTC and IBIT from Yahoo. Terra's on-chain supply was not computed (no node access); it is quoted.
+*Crisis:* Terra/LUNA (May 2022); FTX (November 2022); USDC and SVB (March 2023).
+*Firms:* Jump's affiliate Tai Mo Shan (the SEC's settled order, December 2024); Binance (2023 plea); Grayscale and
+BlackRock (the ETFs).
+*Desk:* "An LP in an x·y = k pool; the price doubles. Loss vs holding?" (≈ 5.7%; the right measure is LVR)
+*House:* the digital-assets desk and Rule 39.
 
 ### Act VII · The System
 
