@@ -1068,39 +1068,54 @@ Siek & Taha 2006; Jung et al. 2018.
 
 ### Part 15 · Runtimes (~55)
 *Story:* A program needs a runtime to live in. Environments make closures, continuations turn the stack into data,
-and a virtual machine provides a portable instruction set. The garbage collector cleans up memory while the program
-keeps running, kept correct by an invariant stated in three colors.
-1. Interpreters: SICP's eval/apply.
-2. Environments and closures; lexical against dynamic scope; the funarg problem (Moses 1970); closure conversion.
-3. Continuations and CPS: the stack made explicit; tail calls as jumps; call/cc; exceptions and generators from
-   continuations.
-4. Bytecode VMs, stack against register (Lua 5); dispatch costs and threaded code; the Pebble VM.
-5. Why garbage collection exists (McCarthy 1960).
-6. Reference counting: cycles; deferred RC; Python's hybrid.
+and a virtual machine provides a portable instruction set; we build one for the λ-core, write it in the Pebble
+language and run it on Pebble. The garbage collector cleans up memory while the program keeps running, kept correct
+by an invariant stated in three colors. The hook: the Job allocates 79 words per byte of text and never frees one.
+1. Interpreters: SICP's eval/apply; McCarthy's eval and Russell's interpreter; metacircularity; `fib(32)` on every
+   runtime on this machine (gcc, Go, HotSpot and `-Xint`, V8 and `--jitless`, CPython).
+2. Environments and closures; lexical against dynamic scope (both computed); the funarg problem (Moses 1970);
+   closure conversion (`CLOSURE`, `FREE`); flat against linked closures.
+3. Continuations and CPS: the stack made explicit (CPS factorial on our VM); tail calls as jumps (the Job's stack
+   with and without them); call/cc as an early exit on a CEK machine; exceptions and generators from continuations;
+   Peirce's law.
+4. Bytecode VMs: our 36-instruction stack machine with tagged words; `bump` compiled; the opcode mix; CPython's
+   `dis`; stack against register (Lua 5, Shi et al. 2008).
+5. The Pebble VM: the VM and Cheney's collector in the Pebble language, co-simulated with the reference count for
+   count; 47 instructions per bytecode; dispatch order; switch against threaded code measured in C.
+6. Why garbage collection exists (McCarthy 1960): reachability. Reference counting (Collins 1960): the cascade;
+   cycles, and CPython's cycle collector measured; what counting would cost the Job; deferred RC.
 7. Tracing collectors:
-   - mark–sweep and mark–compact;
-   - Cheney's copying collector (1970), animated with its two pointers;
-   - the cost model, with GC cost proportional to live data and amortized cost ~ live/(heap − live).
-8. The generational hypothesis (Ungar 1984); remembered sets and write barriers.
-9. Incremental and concurrent GC: the tri-color invariant (Dijkstra et al. 1978), strong and weak;
-   snapshot-at-the-beginning against incremental update; pause times (Go, ZGC).
-10. JITs: method against tracing; inline caches and PICs (Deutsch & Schiffman 1984; Self); hidden classes;
-    speculation and deoptimization (Hölzle 1992); tiers.
-11. Dynamic dispatch: vtables, interfaces, multiple dispatch.
-12. Implementing exceptions: zero-cost tables against setjmp.
-13. WebAssembly: a sandboxed stack machine with structured control flow, where validation is type checking.
-14. Other paradigms: logic programming (Prolog as resolution and unification, callback to *AI, Built* 2), actors
-    (Erlang), dataflow.
-15. The Job in the λ-core, garbage-collected. Ledger row 6. Outro.
+   - mark–sweep and mark–compact, animated; fragmentation; four collectors on the Job in the same memory;
+   - Cheney's copying collector (1970), traced with its two pointers;
+   - the cost model, work per allocated word ~ L/(S − L), measured against heap size.
+8. The generational hypothesis (Lieberman & Hewitt 1983, Ungar 1984), measured: 87% of the Job's objects never
+   survive a collection; nurseries of six sizes; remembered sets and write barriers, and why the λ-core needs none.
+9. Incremental and concurrent GC: the tri-color invariant (Dijkstra et al. 1978), strong and weak; a lost object,
+   move by move; Dijkstra's and Yuasa's barriers tested on 2,000 random cycles; pause times of the JVM's four
+   collectors and Go's on this machine.
+10. JITs: V8's tiers measured; inline caches against the number of shapes (Deutsch & Schiffman 1984; Self's PICs);
+    hidden classes; speculation and deoptimization traced (Hölzle 1992); tracing JITs.
+11. Dynamic dispatch: vtables measured, interfaces, multiple dispatch.
+12. Implementing exceptions: zero-cost tables against setjmp, measured.
+13. WebAssembly: a module assembled by hand and run by node; validation is type checking, and node's error.
+14. Other paradigms: Prolog as resolution and unification (append run backwards), actors (Erlang), dataflow.
+15. The Job in the λ-core, garbage-collected, on the Pebble VM: ledger row 6 (about 2.4 hours, 149× row 5; the
+    collector under 4%). *Frontier*: memory against time (Hertz & Berger 2005); minimum mutator utilization and
+    Metronome; the Futamura projections, PyPy and Truffle; warmup (Barrett et al. 2017); verified runtimes; open
+    problems. Outro.
 
-*Computed:* interpreter against VM against compiled code; mark–sweep, copying and generational collectors on
-allocation traces, with their pause distributions; inline-cache hit rates.
-*Visuals:* the heap as cells and arrows; the mark wavefront painting tri-color; Cheney's scan and free pointers; a
-closure capturing its environment frame.
-*In practice:* the JVM, V8, CPython, .NET and the Go runtime; GC tuning (pause targets, heap sizing); WebAssembly runtimes.
+*Computed:* the λ-core compiled to bytecode and run by a reference VM under copying, mark–sweep, mark–compact and
+generational collectors (work, pauses, holes, lifetimes, nursery sizes); the same VM in the Pebble language on the
+emulator and on Part 8's core; reference-count traffic; tri-color marking under a hostile mutator; a CEK machine and
+a tiny Prolog; CPython, V8, HotSpot, Go, gcc and node timed and traced on this machine.
+*Visuals:* the heap filling and emptying; eval and apply; a closure capturing its environment; the stack as a chain
+of closures; the mark wavefront and the sweep; Cheney's scan and free pointers; the tri-color loss; tiers and inline
+caches as bars.
+*In practice:* the JVM, V8, CPython, .NET and the Go runtime; GC tuning (pause targets, heap sizing); allocation
+profiling; embedded interpreters; WebAssembly runtimes.
 *Reading:* Abelson & Sussman, *SICP* ch. 4–5; Friedman & Wand, *Essentials of Programming Languages*; Appel,
 *Compiling with Continuations*; Jones, Hosking & Moss, *The Garbage Collection Handbook*; Smith & Nair, *Virtual
-Machines*; Nystrom; Ierusalimschy et al. 2005; Hölzle et al. 1991–92; Haas et al. 2017.
+Machines*; Nystrom; Ierusalimschy et al. 2005; Hölzle et al. 1991–92; Haas et al. 2017; Hertz & Berger 2005.
 
 ---
 
@@ -3202,4 +3217,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 12 | scenes (17, with the *Frontier* chapter), computations (Thompson NFAs, the subset construction, minimization and state elimination; 2ⁿ blow-up and lazy DFAs on real text; backtracking measured in Python, Perl and grep; the Pebble language's lexer, LALR table and parser; CYK and Earley; LL(1) and LR tables checked against bison), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
 | 13 | scenes (17, with the *Frontier* chapter), computations (our compiler pass by pass on the emulator, Part 7's pipeline and Part 8's core; dominators, SSA and liveness traces; SCCP and GVN examples; the register sweep and the chordality check; clang's LLVM IR and gcc's levels on this machine; 240 fuzzed programs; z3 rule checks; a superoptimizer; the Job's ledger row 5), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 76 min (estimate) |
 | 14 | scenes (17, with the *Frontier* chapter), computations (our λ reducer under four strategies and a lazy environment machine; Church arithmetic and Y counted in β-steps; reduction graphs with confluence checked; the STLC checker, its derivations and 5,000 random terms checked for progress and preservation; termination of random untyped terms; HM inference traced on the Job in the λ-core; free theorems tested; a propositional prover with Kripke countermodels; rustc, tsc and node on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
-| 15–61 | planned (this document) | — |
+| 15 | scenes (17, with the *Frontier* chapter), computations (the λ-core's bytecode compiler and reference VM under four collectors; the VM and Cheney's collector in the Pebble language, co-simulated and priced on Part 8's core for ledger row 6; reference-count traffic, lifetimes and nurseries; tri-color marking with and without barriers; a CEK machine and a tiny Prolog; CPython, V8, HotSpot, Go, gcc and node timed and traced on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
+| 16–61 | planned (this document) | — |

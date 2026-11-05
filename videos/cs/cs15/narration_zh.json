@@ -1,0 +1,424 @@
+{
+ "title": "计算机科学，从零搭建 · 第15部分：运行时",
+ "chapters": {
+  "Hook": "程序需要一个安身之处",
+  "Interpreters": "1. 解释器：eval 与 apply",
+  "Closures": "2. 环境与闭包",
+  "Continuations": "3. 续延与尾调用",
+  "Bytecode": "4. 一台字节码虚拟机",
+  "PebbleVM": "5. 跑在 Pebble 上的虚拟机",
+  "Counting": "6. 为什么要回收，以及引用计数",
+  "Tracing": "7. 追踪：标记–清除与标记–压缩",
+  "Copying": "8. 切尼的复制收集器，以及它的代价",
+  "Generations": "9. 分代",
+  "Concurrent": "10. 在程序运行时回收",
+  "JIT": "11. 即时编译器",
+  "Dispatch": "12. 动态分派与异常",
+  "Machines": "13. WebAssembly，以及别的机器",
+  "Job": "14. 带垃圾回收的任务",
+  "Frontier": "15. 前沿：运行时的极限",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "8d0dfa7443a4": {
+   "scene": "Hook",
+   "en": "In Part 14 the Job was written in the lambda core, a language of functions, lists and pairs. A language is not a program you can run, though. Something has to run it. <bookmark mark='a'/> Look at bump. Every double colon builds a new list cell, and every pair builds a new pair. <bookmark mark='b'/> And nothing in the program ever gives one back. There is no free. <bookmark mark='c'/> On the chapter of Part 7, four thousand seven hundred bytes of text, the Job allocates three hundred and seventy thousand words of memory, seventy-nine words for every byte it reads. <bookmark mark='d'/> Yet at any moment it is using at most twenty-seven thousand of them. The rest is garbage, and someone has to take it away.",
+   "zh": "在第14部分，任务是用 λ-核心写成的，一种只有函数、列表和序对的语言。可是语言并不是一个能运行的程序。总得有东西来运行它。<bookmark mark='a'/>看 bump。每个双冒号都造出一个新的列表单元，每个序对都造出一个新的序对。<bookmark mark='b'/>而程序里没有任何地方把它们还回去。根本没有 free。<bookmark mark='c'/>在第7部分的那一章上，四千七百字节的文本，任务分配了三十七万个字的内存，每读一个字节就分配七十九个字。<bookmark mark='d'/>可是任何时刻它最多只用着其中的两万七千个。其余的都是垃圾，总得有人把它们运走。"
+  },
+  "fc400b278633": {
+   "scene": "Hook",
+   "en": "This is the Job's heap as it runs, on the virtual machine this part builds. <bookmark mark='a'/> Memory fills as the program allocates. <bookmark mark='b'/> When the heap is full, the garbage collector stops the program, finds every object it can still reach, and keeps only those. The heap drops back to the live data, and the program carries on, never knowing. <bookmark mark='c'/> Eight times on this text. How the collector finds what is live, how fast it can do it, and how it can do it while the program keeps running, is half of this part.",
+   "zh": "这是任务运行时的堆，跑在这一部分搭建的虚拟机上。<bookmark mark='a'/>程序分配，内存就涨上去。<bookmark mark='b'/>堆满的时候，垃圾回收器让程序停下，找出它还能到达的每一个对象，只留下这些。堆落回到活数据的大小，程序接着运行，浑然不觉。<bookmark mark='c'/>在这段文本上一共八次。回收器怎样找到活的东西，能做得多快，又怎样在程序继续运行的同时做到，是这一部分的一半内容。"
+  },
+  "01051f78e548": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> Closures: how a function remembers the place where it was made, long after that place is gone. <bookmark mark='b'/> Continuations: the call stack, turned into a value you can hold. <bookmark mark='c'/> A bytecode virtual machine for the lambda core, written in the Pebble language and running on Pebble itself. <bookmark mark='d'/> Four garbage collectors, and the three-colour invariant that lets a collector run while the program is still changing the heap. <bookmark mark='e'/> And just-in-time compilers, which make dynamic languages fast, measured on real runtimes on this machine.",
+   "zh": "这是我们要去的地方。<bookmark mark='a'/>闭包：一个函数怎样记住它诞生的地方，即使那个地方早已消失。<bookmark mark='b'/>续延：调用栈，变成一个你能拿在手里的值。<bookmark mark='c'/>一台给 λ-核心用的字节码虚拟机，用 Pebble 语言写成，就跑在 Pebble 自己身上。<bookmark mark='d'/>四个垃圾回收器，以及那个三色不变式，它让回收器能在程序仍在改动堆的时候运行。<bookmark mark='e'/>还有即时编译器，它们让动态语言变快，并在这台机器上的真实运行时里实测。"
+  },
+  "775cef1565cf": {
+   "scene": "Hook",
+   "en": "Part 15 of Computer Science, Built: Runtimes, the last part of Act Three. We have a machine, a compiler, and a language with types. Now we give the language somewhere to live. <bookmark mark='a'/> In this part: interpreters, environments and closures; continuations and tail calls; bytecode machines and the cost of dispatch; reference counting, tracing, copying and generational collection; collecting while the program runs; and just-in-time compilers, dynamic dispatch, exceptions and WebAssembly.",
+   "zh": "《计算机科学，从零搭建》第15部分：运行时，第三幕的最后一部分。我们有了机器、编译器，还有一门带类型的语言。现在给这门语言一个安身之处。<bookmark mark='a'/>这一部分讲：解释器、环境与闭包；续延与尾调用；字节码机器与分派的代价；引用计数、追踪、复制与分代回收；在程序运行时回收；以及即时编译器、动态分派、异常和 WebAssembly。"
+  },
+  "7c42ee16cbf8": {
+   "scene": "Interpreters",
+   "en": "Chapter one. Interpreters: eval and apply.",
+   "zh": "第一章。解释器：eval 与 apply。"
+  },
+  "ae60cb6b1ac2": {
+   "scene": "Interpreters",
+   "en": "Every interpreter, from the first LISP to the JavaScript in your browser, has the same heart: two procedures that call each other. <bookmark mark='a'/> Eval takes an expression and an environment, the values of the variables in scope, and finds the expression's value. <bookmark mark='b'/> When the expression applies a function to an argument, eval evaluates both and hands them to apply. <bookmark mark='c'/> Apply runs the function's body, which means calling eval again, in a new environment where the parameter has the argument's value. <bookmark mark='d'/> Here is the core of our own interpreter for the lambda core, the one Part 14 used. Notice what it does not do: it never substitutes. Chapter one of Part 14 rewrote terms; a real interpreter keeps a table of values and looks a variable up only when it is used.",
+   "zh": "每个解释器，从最早的 LISP 到你浏览器里的 JavaScript，都有同一颗心脏：两个互相调用的过程。<bookmark mark='a'/>eval 接收一个表达式和一个环境，也就是作用域中各变量的值，求出表达式的值。<bookmark mark='b'/>当表达式把一个函数作用于一个参数时，eval 把两者都求值，交给 apply。<bookmark mark='c'/>apply 运行函数体，也就是再次调用 eval，在一个新的环境里，那里形参取实参的值。<bookmark mark='d'/>这是我们自己的 λ-核心解释器的核心，第14部分用的就是它。注意它不做什么：它从不代换。第14部分的第一章改写的是项；真正的解释器保存一张值的表，只在用到某个变量时才去查它。"
+  },
+  "e7a0cdbd71f5": {
+   "scene": "Interpreters",
+   "en": "This idea is older than almost anything else in programming languages. <bookmark mark='a'/> In 1960 John McCarthy defined LISP by writing eval in LISP itself: half a page. His student Steve Russell noticed that if he translated eval into machine code by hand, he would have a LISP interpreter, and he did. <bookmark mark='b'/> An interpreter written in the language it interprets is called metacircular, and Abelson and Sussman's textbook of 1985 built one in its fourth chapter. Alan Kay called that half page the Maxwell's equations of software. <bookmark mark='c'/> On the Job, our interpreter makes three hundred and fifty-eight thousand applications, and each one builds a new environment. <bookmark mark='d'/> That is the price of interpreting a tree: every step looks up names, copies tables and asks what kind of node it is looking at. The rest of the first half of this part removes those costs one by one.",
+   "zh": "这个想法几乎比编程语言里的一切都要古老。<bookmark mark='a'/>1960 年，约翰·麦卡锡用 LISP 本身写下 eval 来定义 LISP：半页纸。他的学生史蒂夫·拉塞尔发现，只要把 eval 手工翻译成机器码，就得到一个 LISP 解释器，他也真的这么做了。<bookmark mark='b'/>用自己所解释的语言写成的解释器叫作元循环解释器，阿贝尔森和萨斯曼1985 年的教科书在第四章就造了一个。艾伦·凯把那半页纸称为软件的麦克斯韦方程组。<bookmark mark='c'/>在任务上，我们的解释器做了三十五万八千次函数应用，每一次都建一个新环境。<bookmark mark='d'/>这就是解释一棵树的代价：每一步都要查名字、复制表格、问自己正在看的是哪种节点。这一部分的前半段把这些代价一个一个去掉。"
+  },
+  "0ca86c367bf3": {
+   "scene": "Interpreters",
+   "en": "How much does interpretation cost? We can measure it on the runtimes this machine has, running the same doubly recursive Fibonacci function, seven million calls, in each. <bookmark mark='a'/> At the top, programs compiled ahead of time: C, and Go. <bookmark mark='b'/> Then the just-in-time compilers: Java's HotSpot, and V8, the JavaScript engine in Chrome and Node. <bookmark mark='c'/> And at the bottom, the interpreters: Java and V8 with their compilers switched off, and CPython, which only interprets. The gap between the ends is a factor of more than fifty. <bookmark mark='d'/> The same language can sit on either side. JavaScript with V8's compilers is about nine times faster than the same JavaScript on V8's interpreter alone. Chapter eleven explains how.",
+   "zh": "解释要付出多少代价？我们可以在这台机器上已有的运行时里测量，让每个都运行同一个双重递归的斐波那契函数，七百万次调用。<bookmark mark='a'/>最上面是提前编译的程序：C 和 Go。<bookmark mark='b'/>然后是即时编译器：Java 的 HotSpot，以及 V8，Chrome 和 Node 里的 JavaScript 引擎。<bookmark mark='c'/>最下面是解释器：关掉编译器的Java 和 V8，以及只做解释的 CPython。两端相差五十多倍。<bookmark mark='d'/>同一门语言可以落在任何一边。开着编译器的 V8 上的 JavaScript，比只用 V8 解释器的同一段JavaScript 快大约九倍。第十一章解释其中的原因。"
+  },
+  "154c3dbe60c2": {
+   "scene": "Closures",
+   "en": "Chapter two. Environments and closures.",
+   "zh": "第二章。环境与闭包。"
+  },
+  "7d230448e683": {
+   "scene": "Closures",
+   "en": "An environment raises a question that substitution never did. <bookmark mark='a'/> Here x is one, a function f adds x to its argument, and then a new x, ten, is introduced before f is called. Which x does f see? <bookmark mark='b'/> Under lexical scope, the one in force where f was written: f of zero is one. <bookmark mark='c'/> Under dynamic scope, the one in force where f is called: ten. Both answers come from interpreters we ran; the dynamic one simply evaluates the body in the caller's environment. <bookmark mark='d'/> The first LISPs were dynamic, because that was the easy thing to build, and Emacs Lisp still is by default. ALGOL 60 and Scheme chose lexical scope, and so has nearly every language since, for one reason: you can read a function and know what its names refer to.",
+   "zh": "环境带来了一个代换从未遇到的问题。<bookmark mark='a'/>这里 x 是一，函数 f 把 x 加到它的参数上，然后在调用 f 之前又引入了一个新的 x，等于十。f 看到的是哪个 x？<bookmark mark='b'/>按词法作用域，是写下 f 的地方有效的那个：f 0 等于一。<bookmark mark='c'/>按动态作用域，是调用 f 的地方有效的那个：十。两个答案都来自我们运行的解释器；动态的那个只是在调用者的环境里求值函数体。<bookmark mark='d'/>最早的 LISP 是动态作用域，因为那样最容易实现，Emacs Lisp 默认至今仍是如此。ALGOL 60和 Scheme 选择了词法作用域，此后几乎所有语言也都这样选，理由只有一个：读一个函数，你就知道它的名字指的是什么。"
+  },
+  "481e46d4a2fc": {
+   "scene": "Closures",
+   "en": "Lexical scope has a cost, and Joel Moses named it in 1970: the funarg problem. <bookmark mark='a'/> make_adder takes n and returns a function that adds n to its argument. add five and add seven are two such functions. <bookmark mark='b'/> When make_adder returns, its stack frame, with n equal to five, is gone. <bookmark mark='c'/> But add five still needs that n, every time it is called, for as long as anyone holds it. So n cannot live on the stack. <bookmark mark='d'/> The answer, which Peter Landin called a closure in 1964, is to package the function's code together with the part of the environment it needs, as an object on the heap. Our VM runs this program and gets six and eight. And here is the first reason this part needs a garbage collector: nobody knows when add five will be dropped.",
+   "zh": "词法作用域有代价，乔尔·摩西在 1970 年给它起了名字：funarg 问题。<bookmark mark='a'/>make_adder 接收 n，返回一个把 n 加到参数上的函数。add5 和 add7 就是两个这样的函数。<bookmark mark='b'/>make_adder 返回时，它的栈帧，以及其中等于五的 n，就没有了。<bookmark mark='c'/>可是 add5 每次被调用都还需要这个 n，只要还有人拿着它。所以 n 不能放在栈上。<bookmark mark='d'/>答案是彼得·兰丁在 1964 年称为闭包的东西：把函数的代码和它需要的那部分环境打包在一起，作为堆上的一个对象。我们的虚拟机运行这个程序，得到六和八。这也是这一部分需要垃圾回收器的第一个理由：没人知道 add5 什么时候会被丢掉。"
+  },
+  "bda2bff0d24f": {
+   "scene": "Closures",
+   "en": "A compiler turns this into something a machine can run by closure conversion. <bookmark mark='a'/> Our compiler finds the free variables of every inner function, here just n. In make_adder, the CLOSURE instruction copies n into a new heap object, next to a reference to the inner function's code. <bookmark mark='b'/> Inside that code, FREE zero reads n back out of whichever closure is running. <bookmark mark='c'/> So add five and add seven are two small objects, holding five and seven, that share one block of code. <bookmark mark='d'/> Copying the values is called a flat closure. The alternative is to keep a pointer to the enclosing frame, itself on the heap: cheaper to build, slower to use, and more likely to keep garbage alive, which is why Shao and Appel studied which to choose.",
+   "zh": "编译器用闭包转换把它变成机器能运行的东西。<bookmark mark='a'/>我们的编译器找出每个内层函数的自由变量，这里只有 n。在 make_adder 里，CLOSURE 指令把 n 复制进一个新的堆对象，旁边放着内层函数代码的引用。<bookmark mark='b'/>在那段代码里，FREE 0 从正在运行的那个闭包中把 n 读出来。<bookmark mark='c'/>所以 add5 和 add7是两个小对象，分别装着五和七，共用同一块代码。<bookmark mark='d'/>复制值的做法叫扁平闭包。另一种做法是保存一个指向外层栈帧的指针，而那个栈帧本身也放在堆上：建起来更便宜，用起来更慢，也更容易让垃圾活下来，所以邵中与阿佩尔研究过该选哪种。"
+  },
+  "cc04e08e8a6b": {
+   "scene": "Continuations",
+   "en": "Chapter three. Continuations and tail calls.",
+   "zh": "第三章。续延与尾调用。"
+  },
+  "381f661087c3": {
+   "scene": "Continuations",
+   "en": "A function call does two things: it computes a value, and it remembers where to go back to. Continuation-passing style separates them. <bookmark mark='a'/> In direct style, factorial of n calls factorial of n minus one and then multiplies. The multiplication waits, in a stack frame, until the inner call returns. <bookmark mark='b'/> In CPS every function takes one more argument, k, the continuation: what to do with the answer. fact_cps never returns to multiply. It calls itself with a new continuation, a closure that will multiply by n and then pass the result to the old k. <bookmark mark='c'/> Run both on our VM for a thousand. Direct style needs a stack five thousand words deep. CPS needs five words of stack, and builds a thousand closures instead. <bookmark mark='d'/> Nothing has been saved: the waiting work has moved, from the stack into a chain of closures on the heap. But now it is data. It can be stored, inspected, called twice, or never, and compilers for Scheme and ML use exactly this form inside.",
+   "zh": "一次函数调用做两件事：算出一个值，并记住要回到哪里。续延传递风格把这两件事分开。<bookmark mark='a'/>在直接风格里，n 的阶乘调用 n 减一的阶乘，然后再做乘法。乘法在一个栈帧里等着，直到内层调用返回。<bookmark mark='b'/>在 CPS 里，每个函数多接收一个参数 k，也就是续延：拿到答案之后要做什么。fact_cps 从不返回来做乘法。它带着一个新的续延调用自己，那是一个闭包，会先乘以 n，再把结果交给原来的 k。<bookmark mark='c'/>在我们的虚拟机上对一千运行两个版本。直接风格需要五千个字深的栈。CPS 只需要五个字的栈，代价是造出一千个闭包。<bookmark mark='d'/>什么也没省下：等待的工作只是搬了家，从栈上搬到了堆上的一串闭包里。可它现在是数据了。它可以被存起来、被检查、被调用两次，或者一次也不调用，而 Scheme 和 ML 的编译器内部用的正是这种形式。"
+  },
+  "57d69a876a94": {
+   "scene": "Continuations",
+   "en": "Once nothing waits after a call, the call does not need a frame of its own. <bookmark mark='a'/> In the Job, words calls itself as the very last thing it does, once for every character of the text. A call in this position is a tail call. Our compiler marks it, and the VM reuses the caller's frame, so the call becomes a jump. <bookmark mark='b'/> We ran the Job both ways. With a new frame for every call, the stack reaches sixty-eight thousand words on one chapter, and it grows with the length of the text. <bookmark mark='c'/> With tail calls, three thousand words, however long the text. <bookmark mark='d'/> For the thirty novels the difference is between running and crashing. Scheme's standard requires proper tail calls, and functional languages depend on them; CPython and the Java virtual machine still do not provide them. Guy Steele argued in 1977 that a tail call is just a go-to that passes arguments, and he was right.",
+   "zh": "一旦调用之后没有东西在等，这次调用就不需要自己的栈帧。<bookmark mark='a'/>在任务里，words 在最后一步调用自己，文本的每个字符一次。处于这个位置的调用叫尾调用。我们的编译器标出它，虚拟机复用调用者的栈帧，于是调用就变成了一次跳转。<bookmark mark='b'/>我们用两种方式运行任务。每次调用都新开一个栈帧，在一章文本上栈就深达六万八千个字，而且随文本长度增长。<bookmark mark='c'/>用尾调用，三千个字，不管文本多长。<bookmark mark='d'/>对三十部小说来说，这是能运行和崩溃的区别。Scheme 的标准要求正确的尾调用，函数式语言依赖它；CPython 和 Java 虚拟机至今仍不提供。盖伊·斯蒂尔在 1977 年论证，尾调用不过是带参数的 go-to，他是对的。"
+  },
+  "24bbf7b00635": {
+   "scene": "Continuations",
+   "en": "If the continuation is data, a program can ask for it. <bookmark mark='a'/> Scheme's call with current continuation, call/cc, passes the rest of the program to a function, as a value k. product_exit multiplies a list's elements, but the moment it meets a zero it calls k with zero, and the multiplications still waiting are simply dropped. <bookmark mark='b'/> To run this we need a machine whose stack is data, so we built one: a CEK machine, for control, environment and continuation, from Felleisen and Friedman, with the continuation as a linked list of frames. <bookmark mark='c'/> The plain product does twelve multiplications. The one that escapes does none: it found the zero, and threw the pending work away. <bookmark mark='d'/> That is an exception, built from nothing but a continuation. Resuming a saved continuation later gives generators and coroutines. And the type of call/cc is Peirce's law, which Part 14 showed has no proof in pure functional programs. Classical logic, it turns out, is a jump.",
+   "zh": "如果续延是数据，程序就可以要它。<bookmark mark='a'/>Scheme 的“以当前续延调用”，即 call/cc，把程序的其余部分作为一个值 k 传给一个函数。product_exit 把列表的元素乘起来，但一遇到零，就用零调用 k，还在等待的乘法就这样被丢掉了。<bookmark mark='b'/>要运行它，我们需要一台栈就是数据的机器，所以我们造了一台：CEK 机，代表控制、环境和续延，来自费莱森和弗里德曼，续延是一个由栈帧组成的链表。<bookmark mark='c'/>普通的乘积做了十二次乘法。会逃逸的那个一次也没做：它找到了零，把待做的工作扔掉了。<bookmark mark='d'/>这就是一个异常，只用一个续延造出来。之后再恢复一个保存下来的续延，就得到生成器和协程。而 call/cc 的类型是皮尔士定律，第14部分证明过它在纯函数式程序里没有证明。原来，经典逻辑就是一次跳转。"
+  },
+  "665d9e7576b9": {
+   "scene": "Bytecode",
+   "en": "Chapter four. A bytecode virtual machine.",
+   "zh": "第四章。一台字节码虚拟机。"
+  },
+  "3e61db9bf8d4": {
+   "scene": "Bytecode",
+   "en": "An interpreter that walks the tree asks, at every node, what kind of node it is, and chases pointers to find the children. Compiling the tree first, into a flat list of simple instructions for an imaginary machine, removes most of that. <bookmark mark='a'/> Here is the whole instruction set of the machine we built for the lambda core: thirty-six instructions. They push values, do arithmetic, build and take apart lists and pairs, jump, and make, call and return from closures. <bookmark mark='b'/> Every value is one thirty-two-bit word. The lowest bit says what it is: odd words are integers, even words are pointers, and zero is the empty list. <bookmark mark='c'/> That one bit is what will let the garbage collector tell every pointer from every number, by looking, with no types at run time.",
+   "zh": "遍历树的解释器在每个节点都要问它是哪种节点，还要顺着指针去找子节点。先把树编译成一串扁平、简单的指令，交给一台想象中的机器，就能去掉其中大部分。<bookmark mark='a'/>这是我们给 λ-核心造的机器的全部指令集：三十六条指令。它们压入值、做算术、构造和拆开列表与序对、跳转，以及创建、调用闭包和从闭包返回。<bookmark mark='b'/>每个值都是一个三十二位的字。最低位说明它是什么：奇数字是整数，偶数字是指针，零是空列表。<bookmark mark='c'/>正是这一位，让垃圾回收器只靠看就能把每个指针和每个数区分开，运行时不需要任何类型。"
+  },
+  "1cd71583c60b": {
+   "scene": "Bytecode",
+   "en": "Here is bump, from Part 14, and the bytecode our compiler makes of it. <bookmark mark='a'/> Locals live in numbered slots: w is slot zero, table slot one. The match stores the table, tests it against the empty list with JNIL, and if it is a cell, takes it apart with HEAD and TAIL into slots for p and rest. <bookmark mark='b'/> The comparison fst p equals w is FST, LOCAL, EQ, and a conditional jump. <bookmark mark='c'/> And at the end, the recursive call, followed by a CONS that is waiting for its result. That waiting CONS is why bump, unlike words, needs a stack frame for every entry of the table it walks past. Thirty-seven instructions; the whole Job, with its driver, is under four hundred.",
+   "zh": "这是第14部分的 bump，以及我们的编译器为它生成的字节码。<bookmark mark='a'/>局部变量放在编号的槽里：w 在槽零，table 在槽一。match 把表存起来，用 JNIL 和空列表比较，如果是一个单元，就用 HEAD 和 TAIL 把它拆开，放进 p 和 rest 的槽。<bookmark mark='b'/>比较 fst p 等于 w 是 FST、LOCAL、EQ，再加一次条件跳转。<bookmark mark='c'/>最后是递归调用，后面跟着一条等待它结果的 CONS。正是这条等待的 CONS，让 bump 不像 words 那样，它走过表中的每一项都需要一个栈帧。三十七条指令；整个任务连同驱动部分不到四百条。"
+  },
+  "0605513f7868": {
+   "scene": "Bytecode",
+   "en": "Where does the time go? <bookmark mark='a'/> We counted every instruction the VM executed on a passage of thirteen hundred bytes: four hundred and sixty thousand. <bookmark mark='b'/> The biggest bar is not arithmetic or list building. It is LOCAL: pushing a local variable onto the stack. With SETLOCAL, its opposite, it is more than half of everything the machine does. <bookmark mark='c'/> A stack machine spends most of its effort shuffling values to where the next instruction can find them, and every shuffle pays the full price of an instruction: fetch it, decode it, jump to its handler.",
+   "zh": "时间花到哪里去了？<bookmark mark='a'/>我们数了虚拟机在一段一千三百字节的文本上执行的每一条指令：四十六万条。<bookmark mark='b'/>最高的柱子不是算术，也不是构造列表。是 LOCAL：把一个局部变量压到栈上。加上它的反面 SETLOCAL，超过了机器所做全部工作的一半。<bookmark mark='c'/>栈式机器把大部分力气花在把值挪到下一条指令找得到的地方，而每挪一次都要付一条完整指令的代价：取指、译码、跳到它的处理程序。"
+  },
+  "2f586d62c14e": {
+   "scene": "Bytecode",
+   "en": "Real languages make the same choice. <bookmark mark='a'/> This is CPython's bytecode for bump written in Python, printed by the dis module on this machine: LOAD_FAST, LOAD_CONST, BINARY_SUBSCR. It is a stack machine, like ours. <bookmark mark='b'/> The alternative is a register machine, where one instruction names its operands: add register one to register two into register three, instead of four stack instructions. <bookmark mark='c'/> Lua made that switch in version five in 2003, and a careful study by Shi and colleagues found a register machine executes forty-seven percent fewer instructions, for code a quarter larger. <bookmark mark='d'/> Both survive. Stack code is compact and trivial to generate, which is why the JVM, CPython and WebAssembly use it. Register code does more work per dispatch, which is why Lua, Android's Dalvik and V8's interpreter use registers.",
+   "zh": "真实的语言也做同样的选择。<bookmark mark='a'/>这是用 Python 写的 bump 在 CPython 里的字节码，由这台机器上的 dis 模块打印：LOAD_FAST、LOAD_CONST、BINARY_SUBSCR。它是一台栈式机器，和我们的一样。<bookmark mark='b'/>另一种选择是寄存器机器，一条指令直接写出它的操作数：把寄存器一加上寄存器二放进寄存器三，而不是四条栈指令。<bookmark mark='c'/>Lua 在 2003 年的第五版做了这个转换，Shi 等人的细致研究发现，寄存器机器执行的指令少百分之四十七，代码则大四分之一。<bookmark mark='d'/>两种都活了下来。栈代码紧凑、极容易生成，所以 JVM、CPython 和 WebAssembly 用它。寄存器代码每次分派做的事更多，所以 Lua、安卓的 Dalvik 和 V8 的解释器用寄存器。"
+  },
+  "694e2cb2ed14": {
+   "scene": "PebbleVM",
+   "en": "Chapter five. The VM, on Pebble.",
+   "zh": "第五章。跑在 Pebble 上的虚拟机。"
+  },
+  "6e55ea9ebd7b": {
+   "scene": "PebbleVM",
+   "en": "A virtual machine is just a program, and we have a machine and a compiler of our own. So we wrote the virtual machine in the Pebble language of Part 13, compiled it, and ran it on Pebble. <bookmark mark='a'/> Its heart is this loop. Fetch the opcode and its argument, then test the opcode against each instruction in turn, and run the matching handler. <bookmark mark='b'/> Here is the handler for CONS: if the heap is full, collect; then write a header and two fields, and push a pointer. <bookmark mark='c'/> A loader at the start reads the compiled Job, byte by byte, and then the VM reads the text. The stack, a heap of two halves, and the collector all fit in Pebble's one megabyte of memory. <bookmark mark='d'/> The Pebble language has no switch statement and no bit shifts, so dispatch is a chain of ifs, and a tag is taken apart with division and remainder. Both turn out to matter.",
+   "zh": "虚拟机不过是一个程序，而我们有自己的机器和编译器。所以我们用第13部分的 Pebble 语言写了这台虚拟机，编译它，让它跑在 Pebble 上。<bookmark mark='a'/>它的核心是这个循环。取出操作码和参数，然后把操作码依次和每条指令比较，运行匹配的处理程序。<bookmark mark='b'/>这是 CONS 的处理程序：如果堆满了，就回收；然后写一个头和两个字段，压入一个指针。<bookmark mark='c'/>开头的加载器一个字节一个字节地读入编译好的任务，然后虚拟机读入文本。栈、分成两半的堆和回收器，都装进了 Pebble 的一兆字节内存。<bookmark mark='d'/>Pebble 语言没有 switch 语句，也没有移位，所以分派是一串 if，标签要用除法和取余拆开。这两点后来都很要紧。"
+  },
+  "8fc3c7bf5ad0": {
+   "scene": "PebbleVM",
+   "en": "How do we know the Pebble VM is right? The same way Part 6 checked the processor: against a reference. We have a second implementation of the same machine, in Python, written for clarity. <bookmark mark='a'/> On the same passage, both print the same twenty words. Both execute the same four hundred and sixty thousand bytecodes. Both collect at the same moments, copy the same words, and reach the same stack depth. <bookmark mark='b'/> And the Pebble VM tells us what all of this costs on a real instruction set: twenty-two million Pebble instructions, forty-seven for every bytecode.",
+   "zh": "我们怎么知道 Pebble 虚拟机是对的？和第6部分检查处理器的方法一样：对照一个参照实现。我们有同一台机器的第二个实现，用 Python 写成，为了清晰。<bookmark mark='a'/>在同一段文本上，两者打印出同样的二十个单词。两者执行同样的四十六万条字节码。两者在同样的时刻回收，复制同样的字，栈也达到同样的深度。<bookmark mark='b'/>而 Pebble虚拟机告诉我们这一切在真实指令集上的代价：两千两百万条 Pebble 指令，每条字节码四十七条。"
+  },
+  "5c05bc78a2c3": {
+   "scene": "PebbleVM",
+   "en": "Forty-seven instructions per bytecode is a lot, and much of it is dispatch. <bookmark mark='a'/> With a chain of ifs, the order of the tests matters. Testing the most frequent opcodes first, LOCAL, then SETLOCAL, and so on, costs forty-seven instructions per bytecode. In plain opcode order, sixty. Worst first, a hundred. Same program, same answer, twice the time. <bookmark mark='b'/> Real interpreters use a jump table instead. We measured both kinds in C on this machine: a switch statement, and threaded code, where every handler ends by jumping straight to the next one. Threaded code is about fifteen percent faster here. <bookmark mark='c'/> The classic explanation is branch prediction: a switch has one indirect jump for all opcodes, threaded code has one per handler, each with its own history. Modern predictors have closed much of that gap, as Rohou and colleagues showed in 2015. The lesson of this whole series applies: measure.",
+   "zh": "每条字节码四十七条指令是很多的，其中很大一部分花在分派上。<bookmark mark='a'/>用一串 if 时，测试的顺序很重要。把最常见的操作码放在前面测试，先 LOCAL，再 SETLOCAL，依此类推，每条字节码花四十七条指令。按普通的操作码顺序，六十条。最差的放最前，一百条。同一个程序，同一个答案，时间差了一倍。<bookmark mark='b'/>真实的解释器改用跳转表。我们在这台机器上用 C 把两种都测了：一个 switch 语句，以及线索代码，每个处理程序结束时直接跳到下一个。这里线索代码快大约百分之十五。<bookmark mark='c'/>经典的解释是分支预测：switch 只有一个间接跳转供所有操作码共用，线索代码每个处理程序一个，各有各的历史。现代预测器已经把这个差距缩小了很多，鲁奥等人在 2015 年说明了这一点。这整个系列的教训在这里同样适用：去测量。"
+  },
+  "863a4f576860": {
+   "scene": "Counting",
+   "en": "Chapter six. Why collect, and counting references.",
+   "zh": "第六章。为什么要回收，以及引用计数。"
+  },
+  "f15a78fe619e": {
+   "scene": "Counting",
+   "en": "In 1960, describing LISP, John McCarthy added a few paragraphs on a new idea: reclaiming storage automatically. Which objects may a program still use? <bookmark mark='a'/> Start from the roots: the variables on the stack, and the globals. These the program can name directly. <bookmark mark='b'/> Anything reachable from a root by following pointers may still be used, so it is live. <bookmark mark='c'/> Everything else is garbage, even objects that point at each other, like f and g, if nothing live points at them. <bookmark mark='d'/> Part 11 freed memory by hand, and showed what goes wrong: forget to free, and memory leaks; free too early, and the program uses memory that now belongs to something else. A collector frees exactly the unreachable.",
+   "zh": "1960 年，约翰·麦卡锡在描述 LISP 时加了几段话，讲一个新想法：自动回收存储。程序还可能用到哪些对象？<bookmark mark='a'/>从根出发：栈上的变量和全局变量。这些是程序能直接叫出名字的。<bookmark mark='b'/>凡是从某个根顺着指针能到达的，都可能还会被用到，所以它是活的。<bookmark mark='c'/>其余的都是垃圾，即使是互相指着的对象，比如f 和 g，只要没有活的东西指向它们。<bookmark mark='d'/>第11部分手工释放内存，也展示了会出什么错：忘了释放，内存就泄漏；释放早了，程序就会用到已经属于别人的内存。回收器释放的恰好是不可达的东西。"
+  },
+  "981aa1c42dd0": {
+   "scene": "Counting",
+   "en": "The first way to find garbage came the same year, from George Collins: count. <bookmark mark='a'/> Every object keeps a count of the pointers to it. Here x points at a, a at b, b at c: one each. <bookmark mark='b'/> Copying a pointer adds one to its target; overwriting or dropping a pointer subtracts one. <bookmark mark='c'/> Now the program drops x. a's count falls to zero, so a is freed, and freeing a drops its pointer to b, which falls to zero too, and then c. <bookmark mark='d'/> Garbage disappears the instant it is made, in small steps, with no pauses. CPython, Swift, Objective-C and Rust's Rc all work this way.",
+   "zh": "找垃圾的第一种方法也出现在同一年，来自乔治·柯林斯：计数。<bookmark mark='a'/>每个对象都记着有多少指针指向它。这里 x 指向 a，a 指向 b，b 指向 c：各是一。<bookmark mark='b'/>复制一个指针，就给它的目标加一；覆盖或丢掉一个指针，就减一。<bookmark mark='c'/>现在程序丢掉了 x。a 的计数降到零，于是 a 被释放，而释放 a 又丢掉了它指向 b 的指针，b 也降到零，接着是 c。<bookmark mark='d'/>垃圾一产生就消失，一小步一小步地，没有停顿。CPython、Swift、Objective-C 和 Rust 的 Rc 都是这样工作的。"
+  },
+  "ae8da885b179": {
+   "scene": "Counting",
+   "en": "Counting has one famous weakness. <bookmark mark='a'/> Two objects that point at each other each have a count of one, even when nothing else can reach them. They are garbage, and their counts will never reach zero. <bookmark mark='b'/> We can watch this happen in CPython on this machine. Make a hundred thousand pairs of objects that point at each other, with automatic collection switched off, and then call the collector by hand. <bookmark mark='c'/> It finds almost two hundred thousand objects that reference counting had left behind: every pair except the last, which the variables x and y still hold. <bookmark mark='d'/> So CPython does both: it counts references, and it also runs a tracing collector to find cycles, itself generational, with thresholds you can read and tune. In our own VM, a recursive closure refers to itself through the SELF instruction rather than a pointer, so recursion makes no cycles at all.",
+   "zh": "计数有一个著名的弱点。<bookmark mark='a'/>两个互相指着的对象，计数都是一，即使别的什么都到达不了它们。它们是垃圾，计数却永远不会到零。<bookmark mark='b'/>我们可以在这台机器上的 CPython 里看到这一幕。造十万对互相指着的对象，关掉自动回收，再手动调用回收器。<bookmark mark='c'/>它找到了将近二十万个被引用计数漏掉的对象：除了最后一对之外的全部，最后一对还被变量 x 和 y 拿着。<bookmark mark='d'/>所以 CPython 两样都做：它计数引用，同时还运行一个追踪式回收器来找环，这个回收器本身是分代的，阈值可以读出来，也可以调整。在我们自己的虚拟机里，递归闭包通过 SELF 指令而不是指针来引用自己，所以递归根本不产生环。"
+  },
+  "31b43d65cdc3": {
+   "scene": "Counting",
+   "en": "Counting also costs, all the time. Our VM can count what reference counting would have done on the Job. <bookmark mark='a'/> A hundred and twenty-three thousand objects are allocated. Every time a pointer is pushed onto the stack, a count goes up, and later down: over a million updates. Storing pointers into new objects adds two hundred and twenty-seven thousand more. <bookmark mark='b'/> About eleven updates for every object, against a copying collector, the subject of chapter eight, which moves fewer than two hundred thousand words in all. <bookmark mark='c'/> Deutsch and Bobrow saw this in 1976 and stopped counting pointers from the stack, scanning it occasionally instead. And when several threads share objects, every update must be atomic, which is why Swift's compiler works so hard to remove them.",
+   "zh": "计数也有代价，而且时时刻刻都在付。我们的虚拟机能数出引用计数在任务上本该做多少事。<bookmark mark='a'/>一共分配了十二万三千个对象。每次把一个指针压到栈上，就有一个计数加一，之后再减一：超过一百万次更新。把指针存进新对象，又多了二十二万七千次。<bookmark mark='b'/>每个对象大约十一次更新，而第八章要讲的复制收集器，总共移动的字还不到二十万个。<bookmark mark='c'/>多伊奇和博布罗在 1976 年看到了这一点，不再计数来自栈的指针，改为偶尔扫描一下栈。而当多个线程共享对象时，每次更新都必须是原子的，这就是 Swift 的编译器那么努力去消除它们的原因。"
+  },
+  "493846e3aa03": {
+   "scene": "Tracing",
+   "en": "Chapter seven. Tracing: mark–sweep and mark–compact.",
+   "zh": "第七章。追踪：标记–清除与标记–压缩。"
+  },
+  "4a4a5941a034": {
+   "scene": "Tracing",
+   "en": "Reference counting watches every pointer all the time. The other approach, which McCarthy used in the first LISP, does nothing until memory runs out, and then looks. <bookmark mark='a'/> Here is a heap, in address order, with two roots pointing in. <bookmark mark='b'/> Mark: start from the roots and follow every pointer, setting a mark bit in each object reached. A reaches F, C reaches H. B points at D, but nothing reaches B, so neither is marked. <bookmark mark='c'/> Sweep: walk the whole heap from one end to the other. Every object without a mark is garbage; its space goes onto a free list for future allocations. <bookmark mark='d'/> Notice the costs. Marking touches only the live objects. Sweeping touches every object, live or dead.",
+   "zh": "引用计数时刻盯着每一个指针。另一种做法，麦卡锡在最早的 LISP 里用的，是在内存用完之前什么也不做，用完了再去看。<bookmark mark='a'/>这是一个堆，按地址排列，有两个根指进来。<bookmark mark='b'/>标记：从根出发，顺着每个指针，在到达的每个对象里置一个标记位。A 到达 F，C 到达 H。B 指向 D，但没有东西到达 B，所以两者都没被标记。<bookmark mark='c'/>清除：从堆的一端走到另一端。每个没有标记的对象都是垃圾；它的空间进入空闲链表，留给以后的分配。<bookmark mark='d'/>注意代价。标记只碰活的对象。清除要碰每一个对象，不管死活。"
+  },
+  "d847335e8cd1": {
+   "scene": "Tracing",
+   "en": "Sweeping has a second problem. <bookmark mark='a'/> After a sweep, the free space is scattered in holes between the live objects. <bookmark mark='b'/> Ask for five words: there are thirteen free, but no single hole bigger than three. The allocation fails, with memory to spare. This is fragmentation, the same problem Part 11's allocators fought. <bookmark mark='c'/> A tracing collector has an advantage those allocators never had: it knows every pointer, so it can move objects. Mark–compact slides the live objects down to one end, keeping their order, and rewrites every pointer to them. <bookmark mark='d'/> Now the free space is one block, and allocating is just bumping a pointer. The price is extra passes over the heap: the classic Lisp 2 algorithm takes three.",
+   "zh": "清除还有第二个问题。<bookmark mark='a'/>清除之后，空闲空间散落在活对象之间的一个个空洞里。<bookmark mark='b'/>申请五个字：空闲的有十三个，可是没有一个空洞超过三。分配失败了，明明内存还有富余。这就是碎片，第11部分的分配器对付过的同一个问题。<bookmark mark='c'/>追踪式回收器有一个那些分配器从来没有的优势：它知道每一个指针，所以它可以移动对象。标记–压缩把活对象滑到一端，保持它们的顺序，并改写指向它们的每一个指针。<bookmark mark='d'/>现在空闲空间是一整块，分配只是把一个指针往前推。代价是要多扫几遍堆：经典的 Lisp 2 算法要三遍。"
+  },
+  "2b6d653552db": {
+   "scene": "Tracing",
+   "en": "We implemented four collectors for the same VM and ran the Job under each, on the same text, in the same amount of memory. <bookmark mark='a'/> Mark–sweep collects three times and never moves anything, which is why it is the collector you can add to C, as Hans Boehm did, without the compiler's help. <bookmark mark='b'/> But at its worst the heap is shot through with thirty-five thousand holes. <bookmark mark='c'/> Mark–compact has no holes, but its passes give it the longest pause. The other two rows, copying and generational collection, are the subjects of the next two chapters, and the generational one wins on every column but one.",
+   "zh": "我们给同一台虚拟机实现了四个回收器，在同样的文本、同样大小的内存里，分别运行任务。<bookmark mark='a'/>标记–清除回收了三次，从不移动任何东西，所以它是你可以在没有编译器帮助的情况下加到 C 上的回收器，汉斯·博姆就这么做了。<bookmark mark='b'/>可是在最糟的时候，堆上布满了三万五千个空洞。<bookmark mark='c'/>标记–压缩没有空洞，但它的几遍扫描让它的停顿最长。另外两行，复制和分代回收，是接下来两章的主题，而分代的那个除了一列之外样样领先。"
+  },
+  "3c818c9cf63f": {
+   "scene": "Copying",
+   "en": "Chapter eight. Cheney's copying collector, and what it costs.",
+   "zh": "第八章。切尼的复制收集器，以及它的代价。"
+  },
+  "ce360fb659ad": {
+   "scene": "Copying",
+   "en": "In 1970 C. J. Cheney found a collector that never looks at garbage at all. <bookmark mark='a'/> Split memory into two halves. The program allocates in one, from-space. Here a pair p holds a list of three cells; the roots point at p and at the middle cell; and three other objects are dead. <bookmark mark='b'/> To collect, copy each root's object into the empty half, to-space, and leave behind, in the old copy, a forwarding address: the new location. <bookmark mark='c'/> Now two pointers do all the work. Free marks the end of to-space. Scan walks through to-space, object by object. For every field that points into from-space, copy the target to free, unless it has already been forwarded, and update the field. <bookmark mark='d'/> When scan catches up with free, every live object has been copied, and nothing else has. The garbage was never touched. The halves swap roles, and the program continues in a heap that is perfectly compacted. Breadth-first, with no stack and no recursion: two pointers.",
+   "zh": "1970 年，C. J. 切尼找到了一种从不看垃圾的回收器。<bookmark mark='a'/>把内存分成两半。程序在其中一半里分配，叫来源空间。这里一个序对 p 拿着一个有三个单元的列表；根指向 p 和中间那个单元；另有三个对象已经死了。<bookmark mark='b'/>回收时，把每个根的对象复制到空着的那一半，目标空间，并在旧副本里留下一个转发地址：新的位置。<bookmark mark='c'/>现在两个指针包揽了全部工作。free 标出目标空间的末尾。scan 一个对象一个对象地走过目标空间。每遇到一个指向来源空间的字段，就把目标复制到 free 处，除非它已经被转发过，然后更新这个字段。<bookmark mark='d'/>当 scan 追上 free，每个活对象都已复制过来，别的一个也没有。垃圾从头到尾没被碰过。两半互换角色，程序在一个完美压缩过的堆里继续运行。广度优先，不用栈，不用递归：两个指针。"
+  },
+  "7cba08f4adc4": {
+   "scene": "Copying",
+   "en": "What does copying cost? <bookmark mark='a'/> Each collection copies the live data, call it L words, and leaves the rest of the semispace, S minus L, free for the program to fill. So the work per word allocated is about L over S minus L. Garbage costs nothing at all. <bookmark mark='b'/> We ran the Job with semispaces from thirty-six thousand words up to almost four hundred thousand, and measured the words copied. The curve falls steeply: near the live data, the collector runs constantly; with room to spare, hardly at all. <bookmark mark='c'/> The dashed line is the formula, using each run's average live data. It follows the measurement. <bookmark mark='d'/> This is the central trade of garbage collection: memory for time. Give a copying collector more memory and it does less work, without limit, until it never needs to run.",
+   "zh": "复制要付出多少代价？<bookmark mark='a'/>每次回收复制活数据，记为 L 个字，半空间里剩下的 S 减 L 留给程序去填。所以每分配一个字的工作量大约是 L 除以 S 减 L。垃圾一点代价也没有。<bookmark mark='b'/>我们让任务在从三万六千个字到将近四十万个字的半空间里运行，测出复制的字数。曲线陡峭地下降：接近活数据时，回收器不停地运行；空间充裕时，几乎不运行。<bookmark mark='c'/>虚线是公式，用的是每次运行的平均活数据。它和测量吻合。<bookmark mark='d'/>这就是垃圾回收的核心交换：用内存换时间。给复制收集器更多内存，它就做更少的工作，没有上限，直到它根本不需要运行。"
+  },
+  "26f82c857e64": {
+   "scene": "Generations",
+   "en": "Chapter nine. Generations.",
+   "zh": "第九章。分代。"
+  },
+  "c33157c69854": {
+   "scene": "Generations",
+   "en": "A copying collector's work is the live data, and the live data includes objects it has copied many times before. Is there a pattern in which objects die? <bookmark mark='a'/> We tagged every object the Job allocates with the time of its birth, and recorded the last time a collection found it alive. <bookmark mark='b'/> Eighty-seven percent of the Job's objects never survive one collection. They are a word's letters reversed, a table cell about to be rebuilt by bump, a pair replaced by the next count. <bookmark mark='c'/> And the few that survive tend to survive a long time: the text itself, the table of counts. <bookmark mark='d'/> This is the generational hypothesis, proposed by Lieberman and Hewitt in 1983 and exploited by David Ungar's generation scavenging for Smalltalk in 1984. It has held for almost every language measured since.",
+   "zh": "复制收集器的工作量就是活数据，而活数据里包括它已经复制过很多次的对象。对象的死亡有规律吗？<bookmark mark='a'/>我们给任务分配的每个对象都标上出生时间，并记下回收最后一次发现它还活着是在什么时候。<bookmark mark='b'/>任务的对象中有百分之八十七一次回收也没活过。它们是一个单词反转后的字母、bump 即将重建的表单元、被下一个计数取代的序对。<bookmark mark='c'/>而少数活下来的往往活得很久：文本本身，计数表。<bookmark mark='d'/>这就是代际假说，由利伯曼和休伊特在 1983 年提出，戴维·昂格尔1984 年为 Smalltalk 设计的分代清扫利用了它。此后测量过的几乎每一种语言都符合它。"
+  },
+  "869470fa08ac": {
+   "scene": "Generations",
+   "en": "So keep the young apart. <bookmark mark='a'/> New objects are allocated in a small nursery. When it fills, a minor collection copies the few survivors out, into an old space, and the whole nursery is free again. The old space is collected, by a major collection, only when it fills. <bookmark mark='b'/> Our generational collector, on the Job, with nurseries of several sizes. A tiny nursery of a thousand words collects three hundred and sixty times, and seventy percent of its objects survive, because they were simply not given time to die. At thirty-two thousand words, only one in ten survives. <bookmark mark='c'/> In the same memory as chapter seven's comparison, the generational collector does two thirds of the copying collector's work, with a shorter longest pause. <bookmark mark='d'/> Collect the young often and cheaply; the old, rarely. Every production collector, in the JVM, in V8, in .NET, in OCaml and in GHC, is built this way.",
+   "zh": "那就把年轻的分开。<bookmark mark='a'/>新对象在一个小小的新生代里分配。新生代满了，一次小回收把少数存活者复制出去，放进老年代，整个新生代又空了出来。老年代只在它满了的时候，才由一次大回收来收拾。<bookmark mark='b'/>我们的分代回收器在任务上，用几种不同大小的新生代。只有一千个字的小新生代回收了三百六十次，它的对象有百分之七十活了下来，因为它们根本没被给足死去的时间。到三万两千个字时，只有十分之一活下来。<bookmark mark='c'/>在与第七章的比较相同的内存里，分代回收器只做了复制收集器三分之二的工作，最长停顿也更短。<bookmark mark='d'/>年轻的要常收、便宜地收；老的，难得收一次。每个生产级的回收器，在 JVM、V8、.NET、OCaml 和 GHC 里，都是这样构造的。"
+  },
+  "c0eac71b009c": {
+   "scene": "Generations",
+   "en": "There is a catch. <bookmark mark='a'/> A minor collection looks only at the roots and the nursery. If the program stores a pointer to a young object into an old one, that pointer is invisible, and the young object would be freed while still in use. <bookmark mark='b'/> So every pointer store runs a write barrier: a few extra instructions that record old-to-young pointers in a remembered set, which the minor collection treats as more roots. HotSpot and V8 divide the old space into cards and mark a card dirty when it is written. <bookmark mark='c'/> Our generational collector counts how many times the barrier was needed on the Job: zero. In the lambda core an object is never modified after it is built, so it can only point at objects older than itself. <bookmark mark='d'/> That is one reason functional languages love generational collection: they get it almost for free. Haskell, whose lazy values are overwritten when they are evaluated, is the exception that proves the rule.",
+   "zh": "这里有个陷阱。<bookmark mark='a'/>小回收只看根和新生代。如果程序把一个指向年轻对象的指针存进一个老对象，这个指针就看不见了，年轻对象会在仍被使用的时候被释放。<bookmark mark='b'/>所以每次存储指针都要运行一个写屏障：几条额外的指令，把老对象指向年轻对象的指针记进一个记忆集，小回收把它当作额外的根。HotSpot 和 V8 把老年代分成一张张卡片，被写过的卡片就标为脏。<bookmark mark='c'/>我们的分代回收器数了任务上需要屏障的次数：零。在 λ-核心里，对象一旦建成就不再修改，所以它只能指向比它更老的对象。<bookmark mark='d'/>这正是函数式语言钟爱分代回收的原因之一：它们几乎白得。Haskell 的惰性值在求值时会被覆盖，是一个印证规则的例外。"
+  },
+  "0bb9a910f330": {
+   "scene": "Concurrent",
+   "en": "Chapter ten. Collecting while the program runs.",
+   "zh": "第十章。在程序运行时回收。"
+  },
+  "4c4ab7d5a740": {
+   "scene": "Concurrent",
+   "en": "Every collector so far stops the program while it works. For a large heap the pause can be a tenth of a second or more: too long for a game, a trading system, or a web server's tail latency. To collect a little at a time, we need to describe a collection half done. <bookmark mark='a'/> Dijkstra and his colleagues did it in 1978 with three colours. White: not reached yet. Gray: reached, but its fields not yet scanned. Black: reached and scanned. <bookmark mark='b'/> Marking shades the roots gray, then repeatedly takes a gray object, shades everything it points at, and makes it black. When nothing is gray, the white objects are garbage. <bookmark mark='c'/> Those steps can be interleaved with the program's own, or run on another core beside it. But then the program is changing pointers while the collector is following them.",
+   "zh": "到目前为止的每个回收器，工作时都让程序停下来。对一个大堆来说，停顿可能长达十分之一秒甚至更多：对游戏、交易系统或网络服务器的尾延迟来说都太长了。要一点一点地回收，我们需要描述一次进行到一半的回收。<bookmark mark='a'/>迪杰斯特拉和他的同事在 1978 年用三种颜色做到了。白：还没到达。灰：已到达，但字段还没扫描。黑：已到达并已扫描。<bookmark mark='b'/>标记先把根染成灰色，然后反复取出一个灰色对象，把它指向的所有东西染灰，再把它染黑。没有灰色时，白色对象就是垃圾。<bookmark mark='c'/>这些步骤可以穿插在程序自己的步骤之间，也可以在旁边的另一个核上运行。可这样一来，回收器在顺着指针走的时候，程序也在改动指针。"
+  },
+  "c29567da1b35": {
+   "scene": "Concurrent",
+   "en": "Here is how it goes wrong. <bookmark mark='a'/> Marking is under way. The root and A are black, B is gray, C, which only B points at, is still white. <bookmark mark='b'/> Now the program runs. It copies B's pointer to C into A, which is already black. <bookmark mark='c'/> Then it deletes B's pointer to C. <bookmark mark='d'/> The collector resumes and scans B: nothing there. Marking ends with C white, so C is freed. But A, a live object, still points at it. The program will now read memory that belongs to someone else.",
+   "zh": "问题是这样出现的。<bookmark mark='a'/>标记正在进行。根和 A 是黑的，B 是灰的，只有 B 指向的 C 还是白的。<bookmark mark='b'/>这时程序运行了。它把 B 指向 C 的指针复制进 A，而 A 已经是黑的了。<bookmark mark='c'/>然后它删掉了 B 指向 C 的指针。<bookmark mark='d'/>回收器继续，扫描 B：什么也没有。标记结束时 C 是白的，于是 C 被释放。可是 A，一个活对象，仍然指着它。程序接下来会读到已经属于别人的内存。"
+  },
+  "750007b1968b": {
+   "scene": "Concurrent",
+   "en": "The loss needed two things: a black object was given a pointer to a white one, and the last path to that white object through a gray one was cut. Prevent either and nothing is lost. <bookmark mark='a'/> The strong invariant forbids the first: no black object may point at a white one. The weak invariant allows it, provided some gray object can still reach the white one. <bookmark mark='b'/> Dijkstra's barrier enforces the strong invariant: whenever the program stores a pointer to a white object, shade that object gray. Yuasa's barrier, from 1990, protects the weak one: whenever the program overwrites a pointer, shade the old target, so everything reachable when marking began will be marked. <bookmark mark='c'/> We tested all three on two thousand random collection cycles, with a mutator moving and deleting pointers between marking steps. Without a barrier, more than a third of the cycles freed a live object. With either barrier, none did. <bookmark mark='d'/> The cost is a few instructions on every pointer write, and some garbage, floating garbage, that survives until the next cycle; Yuasa's barrier, the more conservative, keeps the most.",
+   "zh": "这次丢失需要两件事：一个黑对象得到了指向白对象的指针，并且经由灰对象通往那个白对象的最后一条路被切断了。阻止其中任何一件，就什么也不会丢。<bookmark mark='a'/>强不变式禁止第一件：黑对象不能指向白对象。弱不变式允许它，只要某个灰对象仍然能到达那个白对象。<bookmark mark='b'/>迪杰斯特拉的屏障维护强不变式：每当程序存入一个指向白对象的指针，就把那个对象染灰。汤浅的屏障，1990 年提出，保护弱不变式：每当程序覆盖一个指针，就把旧目标染灰，这样标记开始时可达的一切都会被标记。<bookmark mark='c'/>我们在两千个随机的回收周期上测试了三种情况，有一个变异器在标记步骤之间移动和删除指针。没有屏障时，超过三分之一的周期释放了一个活对象。有任何一种屏障，一次也没有。<bookmark mark='d'/>代价是每次写指针多几条指令，以及一些垃圾，即浮动垃圾，要活到下一个周期；汤浅的屏障更保守，留下的最多。"
+  },
+  "71409ccc604e": {
+   "scene": "Concurrent",
+   "en": "Real runtimes make these trades every day, and we can measure them. We wrote one allocation-heavy program, sixty million allocations with a live set of two hundred thousand lists, and ran it on the Java virtual machine with four different collectors, and in Go. <bookmark mark='a'/> The serial, parallel and G1 collectors stop the program: their longest pauses are tens to hundreds of milliseconds. <bookmark mark='b'/> ZGC and Go's collector do their marking, and ZGC even its moving, while the program runs, using barriers like the ones we just tested. Their longest pauses are measured in microseconds. <bookmark mark='c'/> They are not free. The barriers run in the program's own code, and the whole run is not faster: the parallel collector, with the longest pauses but no barriers, finishes first. Throughput or latency: a collector chooses.",
+   "zh": "真实的运行时每天都在做这些取舍，我们可以测量它们。我们写了一个分配密集的程序，六千万次分配，活集合是二十万个列表，在 Java 虚拟机上用四种不同的回收器运行，又在 Go 里运行。<bookmark mark='a'/>串行、并行和 G1 回收器都让程序停下：它们最长的停顿是几十到上百毫秒。<bookmark mark='b'/>ZGC 和 Go 的回收器在程序运行的同时做标记，ZGC 连移动也是，用的就是我们刚才测试的那类屏障。它们最长的停顿以微秒计。<bookmark mark='c'/>它们不是免费的。屏障运行在程序自己的代码里，整个运行也并不更快：停顿最长但没有屏障的并行回收器最先跑完。吞吐量还是延迟：回收器要做选择。"
+  },
+  "9a82bdd252c2": {
+   "scene": "JIT",
+   "en": "Chapter eleven. Just-in-time compilers.",
+   "zh": "第十一章。即时编译器。"
+  },
+  "1dc63dcabee5": {
+   "scene": "JIT",
+   "en": "A just-in-time compiler compiles the program while it runs. Why wait? Because by then the runtime knows two things a static compiler can only guess: which code is hot, and what types actually flow through it. <bookmark mark='a'/> V8 has four tiers. Ignition, the interpreter, runs everything at first and records what it sees. Sparkplug translates bytecode straight to machine code, without optimizing. Maglev optimizes a little, quickly. TurboFan optimizes hard, for the hottest functions. <bookmark mark='b'/> We enabled them one at a time on this machine. The interpreter alone: a hundred and fifty milliseconds. The baseline compiler more than halves it. Maglev adds little for this function, and TurboFan brings it to eighteen. <bookmark mark='c'/> And V8 will tell us what it decided: here it reports compiling fib with TurboFan, concurrently, on another thread, while the interpreter kept running. <bookmark mark='d'/> It is the bet Part 9's caches made: the recent past predicts the near future, so spend the effort where the program has been spending its time.",
+   "zh": "即时编译器在程序运行时编译它。为什么要等？因为到那时，运行时知道两件静态编译器只能猜的事：哪些代码是热的，实际流过它的是什么类型。<bookmark mark='a'/>V8 有四层。Ignition，也就是解释器，一开始运行一切，并记下它看到的东西。Sparkplug 把字节码直接翻译成机器码，不做优化。Maglev 快速地做一点优化。TurboFan 为最热的函数做深度优化。<bookmark mark='b'/>我们在这台机器上一层一层地打开它们。只用解释器：一百五十毫秒。基线编译器把它减掉一半多。Maglev 对这个函数帮助不大，TurboFan 把它降到十八毫秒。<bookmark mark='c'/>V8 还会告诉我们它做了什么决定：这里它报告用 TurboFan 编译了 fib，并发地，在另一个线程上，而解释器一直在运行。<bookmark mark='d'/>这和第9部分的缓存下的是同一个赌注：最近的过去预示着不久的将来，所以把力气花在程序一直在花时间的地方。"
+  },
+  "4508b3ac7fa9": {
+   "scene": "JIT",
+   "en": "The first trick of every fast dynamic language is older than JavaScript. <bookmark mark='a'/> In getX, where is the field x? In C the compiler knows its offset. In JavaScript or Smalltalk it depends on the object, so a naive implementation searches a table on every access. <bookmark mark='b'/> Peter Deutsch and Allan Schiffman, building Smalltalk in 1984, noticed that a given line of code almost always sees the same kind of object. So the call site caches the last shape it saw and where the field was. Next time, one comparison and one load. <bookmark mark='c'/> The Self project extended this in 1991 to a small table of shapes, a polymorphic cache; beyond a few, the site gives up and goes megamorphic. <bookmark mark='d'/> We measured it in V8. The same twenty million calls of getX, on objects of one shape, then two, four, up to thirty-two. One shape: nineteen milliseconds. Thirty-two shapes: six times slower, for exactly the same work.",
+   "zh": "每一种快速的动态语言，第一个技巧都比 JavaScript 还古老。<bookmark mark='a'/>在 getX 里，字段 x 在哪里？在 C 里，编译器知道它的偏移量。在 JavaScript 或 Smalltalk里，它取决于对象，所以朴素的实现每次访问都要查一张表。<bookmark mark='b'/>彼得·多伊奇和艾伦·希夫曼在 1984 年构建 Smalltalk 时注意到，某一行代码几乎总是看到同一种对象。于是调用点缓存它上次看到的形状和字段所在的位置。下一次，一次比较加一次加载。<bookmark mark='c'/>Self 项目在 1991 年把它扩展成一张小小的形状表，即多态缓存；超过几种之后，调用点就放弃，变成超多态。<bookmark mark='d'/>我们在 V8 里测了它。同样两千万次 getX 调用，作用在一种形状的对象上，然后两种、四种，直到三十二种。一种形状：十九毫秒。三十二种形状：慢六倍，而所做的工作一模一样。"
+  },
+  "dc6770b090f1": {
+   "scene": "JIT",
+   "en": "What is a shape? In V8 it is a hidden class, called a map, and V8 can be asked about them directly. <bookmark mark='a'/> a and b were built with x and then y: same map, true. <bookmark mark='b'/> c has the same properties in the other order: a different map. And d got y later, by assignment: different again. <bookmark mark='c'/> A map records where each property lives, so an inline cache compares one map pointer instead of searching for a name. That is why JavaScript performance advice says: build your objects the same way every time. The engine is betting that you will.",
+   "zh": "形状是什么？在 V8 里它是一个隐藏类，叫作 map，而且可以直接向 V8 询问。<bookmark mark='a'/>a 和 b 都是先建 x 再建 y：同一个 map，true。<bookmark mark='b'/>c 有同样的属性，顺序相反：另一个 map。d 是后来通过赋值才有了 y：又不一样。<bookmark mark='c'/>map 记录每个属性住在哪里，所以内联缓存比较的是一个 map 指针，而不是去搜索一个名字。这就是为什么 JavaScript 的性能建议说：每次都用同样的方式构造你的对象。引擎在赌你会这么做。"
+  },
+  "fc227553a2df": {
+   "scene": "JIT",
+   "en": "The deepest trick is speculation. <bookmark mark='a'/> add is called two hundred thousand times, always with small integers. TurboFan compiles it for exactly that case: one machine addition, and a check that the arguments really are small integers. <bookmark mark='b'/> Then add is called with two strings. The check fails. V8 prints why: not a Smi, its name for a small integer. <bookmark mark='c'/> It throws the optimized code away, rebuilds the frame the interpreter would have had, and continues in the interpreter, as if nothing had happened. Later it may compile add again, for both cases. <bookmark mark='d'/> Deoptimization, worked out by Urs Hölzle and his colleagues on Self in 1992, is what allows a JIT to bet: it can always take the bet back. Tracing JITs, like LuaJIT and PyPy, take the bet further, compiling the single path a hot loop actually follows.",
+   "zh": "最深的技巧是推测。<bookmark mark='a'/>add 被调用了二十万次，参数总是小整数。TurboFan 就为这种情况编译它：一条机器加法，外加一个检查，确认参数真是小整数。<bookmark mark='b'/>然后 add 被两个字符串调用。检查失败了。V8 打印出原因：not a Smi，这是它对小整数的叫法。<bookmark mark='c'/>它把优化过的代码扔掉，重建解释器本该有的栈帧，在解释器里继续，仿佛什么都没发生。之后它可能再次编译 add，这次两种情况都顾及。<bookmark mark='d'/>去优化由乌尔斯·赫尔茨勒和他的同事 1992 年在 Self 上研究出来，正是它让 JIT 敢于下注：它随时可以把赌注收回。追踪式 JIT，比如 LuaJIT 和 PyPy，把赌注下得更远，只编译一个热循环实际走过的那一条路径。"
+  },
+  "4fbab645b7b5": {
+   "scene": "Dispatch",
+   "en": "Chapter twelve. Dynamic dispatch and exceptions.",
+   "zh": "第十二章。动态分派与异常。"
+  },
+  "2c02bd2ba77a": {
+   "scene": "Dispatch",
+   "en": "Chapter eleven's inline caches answer a question every object-oriented language asks: when the program says s arrow area, which area runs? <bookmark mark='a'/> C++ answers it with a table, as Simula did in 1967. Each object holds a hidden pointer, the vptr, to its class's virtual table, and the table holds the addresses of the class's methods. <bookmark mark='b'/> A virtual call is two loads and an indirect call: the object's table, the method's entry, then jump. <bookmark mark='c'/> We timed two hundred million calls on this machine. A direct call: half a nanosecond. A virtual call to the same class every time: about one, because the branch predictor learns the target. Alternate between two classes and it costs a little more again.",
+   "zh": "第十一章的内联缓存回答的是每种面向对象语言都要问的问题：当程序说 s 箭头 area 时，运行的是哪个 area？<bookmark mark='a'/>C++ 用一张表来回答，Simula 在 1967 年就这样做了。每个对象里藏着一个指针，vptr，指向它的类的虚函数表，表里存着这个类各个方法的地址。<bookmark mark='b'/>一次虚调用是两次加载加一次间接调用：对象的表，方法的表项，然后跳转。<bookmark mark='c'/>我们在这台机器上计时了两亿次调用。一次直接调用：半纳秒。每次都是同一个类的虚调用：大约一纳秒，因为分支预测器学会了目标。在两个类之间交替，代价又多一点。"
+  },
+  "132b82730578": {
+   "scene": "Dispatch",
+   "en": "Vtables work because a class has one fixed list of virtual methods. <bookmark mark='a'/> That is single dispatch: only the receiver's class chooses. <bookmark mark='b'/> Interfaces break the fixed list. Unrelated classes can implement the same interface, so its methods cannot sit at the same slot in every table. <bookmark mark='c'/> Java looks the method up in an interface table and caches the result at the call site, an inline cache again; Go builds a small table for each pair of a concrete type and an interface, the first time it is needed. <bookmark mark='d'/> Some languages dispatch on every argument. In Common Lisp's object system and in Julia, the method for collide is chosen by the types of both the asteroid and the ship. <bookmark mark='e'/> And languages with traits or type classes resolve most calls during compilation, where dispatch costs nothing at all.",
+   "zh": "虚函数表之所以可行，是因为一个类有一份固定的虚方法列表。<bookmark mark='a'/>这就是单分派：只有接收者的类做选择。<bookmark mark='b'/>接口打破了这份固定列表。互不相关的类可以实现同一个接口，所以它的方法不可能在每张表里都占同一个槽。<bookmark mark='c'/>Java 在接口表里查找方法，并把结果缓存在调用点，又是一个内联缓存；Go 在第一次需要时，为每一对具体类型和接口建一张小表。<bookmark mark='d'/>有些语言对每个参数都做分派。在 Common Lisp 的对象系统和 Julia 里，collide 用哪个方法，由小行星和飞船两者的类型共同决定。<bookmark mark='e'/>而有 trait 或类型类的语言，大多数调用在编译时就确定了，在那里分派完全不花代价。"
+  },
+  "8e7a6061981f": {
+   "scene": "Dispatch",
+   "en": "Chapter three built an exception from a continuation. Compiled languages implement them differently, and again we can measure the trade. <bookmark mark='a'/> A plain call costs half a nanosecond. Put it inside a try block, where nothing is ever thrown, and it costs exactly the same. <bookmark mark='b'/> That is because C++ compilers use zero-cost exceptions. Nothing happens when a try block is entered. Instead the compiler writes tables next to the code, mapping each range of instructions to its handler, and only a throw reads them, unwinding the stack one frame at a time. <bookmark mark='c'/> C's setjmp makes the opposite trade: it saves the registers on every entry, two and a half nanoseconds here, so that the jump out is cheap. <bookmark mark='d'/> And the throw itself costs about nine hundred nanoseconds, nearly two thousand plain calls. Exceptions are free if they are exceptional.",
+   "zh": "第三章用一个续延造出了异常。编译型语言的实现方式不同，我们同样可以测量其中的取舍。<bookmark mark='a'/>一次普通调用花半纳秒。把它放进一个从不抛出的 try 块里，代价分毫不差。<bookmark mark='b'/>这是因为 C++ 编译器使用零开销异常。进入 try 块时什么也不发生。编译器在代码旁边写好表格，把每一段指令映射到它的处理程序，只有 throw才去读这些表，一个栈帧一个栈帧地展开栈。<bookmark mark='c'/>C 的 setjmp 做的是相反的取舍：每次进入都保存寄存器，这里花两纳秒半，好让跳出去的那一下便宜。<bookmark mark='d'/>而 throw 本身大约花九百纳秒，将近两千次普通调用。异常只要真的是例外，就是免费的。"
+  },
+  "016b5de5f72b": {
+   "scene": "Machines",
+   "en": "Chapter thirteen. WebAssembly, and other machines.",
+   "zh": "第十三章。WebAssembly，以及别的机器。"
+  },
+  "dcfdb954d0d9": {
+   "scene": "Machines",
+   "en": "In 2017 the four major browsers shipped a new virtual machine together: WebAssembly. <bookmark mark='a'/> It is a stack machine, much like ours. Here is factorial, written in its text format. local.get pushes the argument; i64.eqz tests it for zero; i64.mul multiplies the two values on top of the stack. <bookmark mark='b'/> We assembled the binary by hand, fifty-five bytes, and node ran it: factorial of twenty, correct to the last digit. <bookmark mark='c'/> Two things set WebAssembly apart from our VM. Its values are typed, thirty-two- and sixty-four-bit integers and floats. And it has no arbitrary jumps: control flow is structured, in blocks, loops and ifs, and a branch may only go to the end of an enclosing block. That second choice is what makes the next trick possible.",
+   "zh": "2017 年，四大浏览器一起发布了一台新的虚拟机：WebAssembly。<bookmark mark='a'/>它是一台栈式机器，和我们的很像。这是用它的文本格式写的阶乘。local.get 压入参数；i64.eqz 测试它是否为零；i64.mul 把栈顶的两个值相乘。<bookmark mark='b'/>我们手工汇编出二进制，五十五个字节，node 运行了它：二十的阶乘，每一位都对。<bookmark mark='c'/>WebAssembly 有两点和我们的虚拟机不同。它的值是有类型的，三十二位和六十四位的整数与浮点数。它没有任意跳转：控制流是结构化的，由块、循环和 if 组成，分支只能跳到某个外层块的末尾。正是这第二个选择，让接下来的技巧成为可能。"
+  },
+  "3ec7b38a4b9d": {
+   "scene": "Machines",
+   "en": "Before a browser runs WebAssembly from a stranger's web page, it checks it. <bookmark mark='a'/> Here is a broken version of factorial: in the else branch, i64.mul has only one value to multiply. <bookmark mark='b'/> node refuses the module before running a single instruction: not enough arguments on the stack for i64.mul, need two, got one. <bookmark mark='c'/> This check is type checking. The validator runs over each function once, keeping a stack of types instead of values, and because control flow is structured it always knows the shape of the stack at every point. One pass, in linear time. <bookmark mark='d'/> That is what lets untrusted code run at nearly the speed of native code, in a sandbox. And WebAssembly's specification is formal enough that Conrad Watt checked its soundness by machine in 2018: progress and preservation, Part 14's theorems, protecting billions of browsers.",
+   "zh": "浏览器在运行来自陌生网页的 WebAssembly 之前，要先检查它。<bookmark mark='a'/>这是一个坏掉的阶乘：在 else 分支里，i64.mul 只有一个值可乘。<bookmark mark='b'/>node 在执行任何一条指令之前就拒绝了这个模块：i64.mul 的栈上参数不够，需要两个，只有一个。<bookmark mark='c'/>这个检查就是类型检查。验证器对每个函数走一遍，保存一个类型的栈而不是值的栈，而且因为控制流是结构化的，它在每一点都知道栈的形状。一遍，线性时间。<bookmark mark='d'/>正是这一点，让不受信任的代码能在沙箱里以接近原生代码的速度运行。而 WebAssembly 的规范足够形式化，康拉德·瓦特在 2018 年用机器检验了它的可靠性：进展与保持，第14部分的定理，保护着数十亿个浏览器。"
+  },
+  "82b0b7a26676": {
+   "scene": "Machines",
+   "en": "Not every runtime runs functions. <bookmark mark='a'/> In Prolog, a program is a set of facts and rules. These two lines define append: the empty list followed by Ys is Ys; and X followed by Xs, followed by Ys, is X followed by Zs, if Xs followed by Ys is Zs. <bookmark mark='b'/> Running a program means asking a question. Ask which X and Y append to give one, two, three, and our small Prolog engine finds all four answers, by searching. <bookmark mark='c'/> The same two lines run forwards, to join lists, or backwards, to split them. The engine underneath is resolution with backtracking, and at its heart is unification, exactly the algorithm that inferred the Job's types in Part 14. Prolog's runtime is a unification machine, and AI, Built, Part 2, meets it as logic programming.",
+   "zh": "不是每个运行时都在运行函数。<bookmark mark='a'/>在 Prolog 里，程序是一组事实和规则。这两行定义了 append：空列表后接 Ys 就是 Ys；X 后接 Xs 再后接 Ys，就是 X 后接 Zs，只要 Xs 后接 Ys 是 Zs。<bookmark mark='b'/>运行一个程序就是提一个问题。问哪些 X 和 Y 拼起来得到一、二、三，我们的小 Prolog 引擎靠搜索找到了全部四个答案。<bookmark mark='c'/>同样的两行，正着运行可以拼接列表，倒着运行可以拆分列表。下面的引擎是带回溯的消解，它的核心是合一，正是在第14部分推断出任务类型的那个算法。Prolog 的运行时是一台合一机器，《人工智能，从零搭建》第2部分把它当作逻辑编程来讲。"
+  },
+  "07754c7e650a": {
+   "scene": "Machines",
+   "en": "Two more models deserve a mention. <bookmark mark='a'/> Actors, proposed by Carl Hewitt in 1973 and built into Erlang at Ericsson in 1986, are processes that share nothing and only send each other messages. Erlang's runtime runs millions of them, each with its own small heap, so each collects its own garbage without stopping the others. <bookmark mark='b'/> And its philosophy, let it crash, restarts failed processes from a supervisor, an idea Part 50 brings to distributed systems. <bookmark mark='c'/> In dataflow, an operation runs as soon as its inputs exist. A spreadsheet is a dataflow program, so is a TensorFlow graph, and so, inside, is Part 8's out-of-order core. <bookmark mark='d'/> Each runtime is an answer to the same question: what does it mean for a program to take a step?",
+   "zh": "还有两种模型值得一提。<bookmark mark='a'/>参与者模型，由卡尔·休伊特在 1973 年提出，1986 年在爱立信被内置进 Erlang，是一些什么都不共享、只互相发送消息的进程。Erlang 的运行时运行着数百万个这样的进程，每个都有自己的小堆，所以每个都能回收自己的垃圾，而不让别的进程停下。<bookmark mark='b'/>它的哲学是“让它崩溃”：由一个监督者重启失败的进程，第50部分会把这个想法带到分布式系统中。<bookmark mark='c'/>在数据流模型里，一个操作只要输入都到齐就运行。电子表格是一个数据流程序，TensorFlow 的图也是，第8部分的乱序核心在内部同样如此。<bookmark mark='d'/>每一种运行时都是对同一个问题的回答：程序走一步，是什么意思？"
+  },
+  "59a4b1d49ee6": {
+   "scene": "Job",
+   "en": "Chapter fourteen. The Job, collected.",
+   "zh": "第十四章。带垃圾回收的任务。"
+  },
+  "380613ee65f8": {
+   "scene": "Job",
+   "en": "Now the Job, in the lambda core, on our own runtime, on our own machine. <bookmark mark='a'/> We ran the Pebble VM on the same six passages that priced rows three and five, and checked every output. A passage of twenty-four hundred bytes takes one point two million bytecodes, and sixty million Pebble instructions. <bookmark mark='b'/> How much of that is the garbage collector? We ran everything again with a heap so large that it never fills, and compared. The collector accounts for between one and five percent. <bookmark mark='c'/> Finally, the VM's own code ran on Part 8's out-of-order core, at about two instructions per cycle, which turns instructions into time.",
+   "zh": "现在，λ-核心里的任务，跑在我们自己的运行时上，跑在我们自己的机器上。<bookmark mark='a'/>我们让 Pebble 虚拟机在给第三行和第五行定价的那同样六段文本上运行，并检查了每一个输出。一段两千四百字节的文本要执行一百二十万条字节码，六千万条 Pebble 指令。<bookmark mark='b'/>其中有多少是垃圾回收器的？我们用一个大到永远填不满的堆把一切重跑了一遍，再作比较。回收器占百分之一到百分之五。<bookmark mark='c'/>最后，虚拟机自己的代码在第8部分的乱序核心上运行，每个周期大约两条指令，这就把指令换算成了时间。"
+  },
+  "ba1d36e44b3a": {
+   "scene": "Job",
+   "en": "So the ledger gets its seventh row, row six. <bookmark mark='a'/> The Job in the lambda core, interpreted by our VM and collected by Cheney's algorithm, would take about two and a half hours on the thirty novels, against fifty-eight seconds for the same algorithm compiled from the Pebble language. A hundred and fifty times slower. <bookmark mark='b'/> And the garbage collector, which this half of the part has been about, is under four percent of it. Collection is not the expense.",
+   "zh": "于是账本有了第七行，也就是第六行。<bookmark mark='a'/>λ-核心里的任务，由我们的虚拟机解释，由切尼的算法回收，在三十部小说上大约要花两个半小时，而同样的算法由 Pebble语言编译后只要五十八秒。慢了一百五十倍。<bookmark mark='b'/>而这一部分后半段一直在讲的垃圾回收器，只占其中不到百分之四。回收不是开销所在。"
+  },
+  "f7c6e22d4366": {
+   "scene": "Job",
+   "en": "Where does a factor of a hundred and fifty come from? Per byte of text, the hand-written Job of Part 6 runs a hundred and thirty-nine instructions. <bookmark mark='a'/> The lambda core runs four hundred and fifty-nine bytecodes, and each costs forty-eight Pebble instructions, most of them spent deciding which instruction it is. That is dispatch, and it is what a just-in-time compiler eliminates. <bookmark mark='b'/> The rest is representation. Every character of the text becomes a three-word list cell, and every count a pair on the heap: sixty-two words allocated for every byte read. Arrays and unboxed integers remove that. <bookmark mark='c'/> The collector itself costs under four percent, because almost everything it would have to copy has already died. <bookmark mark='d'/> And all of this still uses the same slow algorithm, a list searched from the front for every word. Part 16 stops tuning the machine and changes the algorithm.",
+   "zh": "一百五十倍是从哪里来的？对每个字节的文本，第6部分手写的任务执行一百三十九条指令。<bookmark mark='a'/>λ-核心执行四百五十九条字节码，每条花四十八条 Pebble 指令，其中大部分花在判断这是哪条指令上。这就是分派，也正是即时编译器要消除的东西。<bookmark mark='b'/>其余的是表示方式。文本的每个字符都变成一个三个字的列表单元，每个计数都是堆上的一个序对：每读一个字节分配六十二个字。数组和不装箱的整数能消除这些。<bookmark mark='c'/>回收器本身花不到百分之四，因为它本该复制的东西几乎都已经死了。<bookmark mark='d'/>而这一切用的仍然是那个慢的算法，为每个单词从头搜索一个列表。第16部分不再调教机器，而是改变算法。"
+  },
+  "f1f3c87cbfb3": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: the limits of runtimes.",
+   "zh": "第十五章。前沿：运行时的极限。"
+  },
+  "872df714f49c": {
+   "scene": "Frontier",
+   "en": "Chapter eight showed that a collector trades memory for time. How much memory? <bookmark mark='a'/> Here is our measurement again, now against the total memory as a multiple of the live data. Below about three times, the copying collector does more copying than the program does allocating. <bookmark mark='b'/> Matthew Hertz and Emery Berger measured the same trade for Java in 2005, against an oracle that frees every object at the last moment it is used. With five times the memory, a good collector was as fast as the oracle. With three times, seventeen percent slower. With twice, nearly seventy percent slower. <bookmark mark='c'/> How close a collector can get to the live data, and what it must pay in time to get there, is still an open question; partial lower bounds, such as Bendersky and Petrank's on collectors that may compact only part of the heap, are recent.",
+   "zh": "第八章说明了回收器用内存换时间。要多少内存？<bookmark mark='a'/>这又是我们的测量，现在横轴是总内存相对于活数据的倍数。低于大约三倍时，复制收集器复制的比程序分配的还多。<bookmark mark='b'/>马修·赫兹和埃默里·伯杰在 2005 年为 Java 测量了同样的交换，对照的是一个先知：在每个对象最后一次被使用的时刻就把它释放。内存有五倍时，好的回收器和先知一样快。三倍时，慢百分之十七。两倍时，慢将近百分之七十。<bookmark mark='c'/>回收器能离活数据多近，为此要在时间上付出多少，仍然是一个开放问题；部分下界，比如本德斯基和彼得兰克关于只能压缩部分堆的回收器的结果，还很新。"
+  },
+  "09023b3c4251": {
+   "scene": "Frontier",
+   "en": "Chapter ten measured pauses in microseconds. But a short longest pause is not the whole story. <bookmark mark='a'/> A thousand short pauses close together are, to the program, one long one. <bookmark mark='b'/> The right measure is minimum mutator utilization: in every window of, say, ten milliseconds, what fraction of the time does the program get? <bookmark mark='c'/> IBM's Metronome collector, by Bacon, Cheng and Rajan in 2003, schedules the collector like a real-time task and proves a bound on that fraction, <bookmark mark='d'/> provided the program's allocation rate and live data are known in advance; it has run real-time Java in industrial and military systems. <bookmark mark='e'/> A collector with bounded pauses, bounded memory and high throughput together, for every program, does not yet exist, and it is not known whether one can.",
+   "zh": "第十章测出了以微秒计的停顿。但最长停顿短，并不是故事的全部。<bookmark mark='a'/>一千次挨得很近的短停顿，对程序来说就是一次长停顿。<bookmark mark='b'/>正确的度量是最小变异器利用率：在每一个比如十毫秒的时间窗口里，程序能得到多大比例的时间？<bookmark mark='c'/>IBM 的 Metronome 回收器，由培根、程和拉詹在 2003 年提出，像调度一个实时任务那样调度回收器，并证明了这个比例的下界，<bookmark mark='d'/>前提是事先知道程序的分配速率和活数据；它在工业和军事系统里运行过实时 Java。<bookmark mark='e'/>一个对每个程序都同时做到停顿有界、内存有界和高吞吐量的回收器还不存在，也不知道是否可能存在。"
+  },
+  "ecf031b5d251": {
+   "scene": "Frontier",
+   "en": "Row six's factor of a hundred and fifty is the price of an interpreter. There is a beautiful way to remove it without writing a compiler. <bookmark mark='a'/> In 1971 Yoshihiko Futamura observed that if you specialize an interpreter to one fixed program, partially evaluating everything that depends only on the program, what remains is that program, compiled. Specialize the specializer to the interpreter, and you get a compiler. <bookmark mark='b'/> For decades this was theory. PyPy made it practical: you write an interpreter for your language, and a meta-tracing JIT traces the interpreter as it runs your hot loops. <bookmark mark='c'/> Oracle's Truffle and Graal do it by partial evaluation, and run JavaScript, Ruby, Python and R from interpreters alone. <bookmark mark='d'/> Our Pebble VM is exactly such an interpreter. How much of row six's factor such methods can recover, automatically and with guarantees, is active research.",
+   "zh": "第六行的一百五十倍，是解释器的代价。有一种很美的办法，不写编译器就能去掉它。<bookmark mark='a'/>1971 年，二村良彦注意到，如果把一个解释器针对一个固定的程序做特化，把只依赖于程序的部分全部求值掉，剩下的就是编译好的那个程序。再把特化器针对解释器做特化，就得到一个编译器。<bookmark mark='b'/>几十年来这只是理论。PyPy 让它变得实用：你为自己的语言写一个解释器，一个元追踪 JIT 在解释器运行你的热循环时追踪它。<bookmark mark='c'/>甲骨文的 Truffle 和 Graal 用部分求值做到这一点，仅凭解释器就能运行JavaScript、Ruby、Python 和 R。<bookmark mark='d'/>我们的 Pebble 虚拟机正是这样一个解释器。这类方法能自动地、有保证地收回第六行那个倍数中的多少，是正在进行的研究。"
+  },
+  "27174e88a727": {
+   "scene": "Frontier",
+   "en": "One more surprise, and a warning about measurement. <bookmark mark='a'/> The textbook story of a JIT is that a program starts slow, gets compiled, and then runs at a steady peak. <bookmark mark='b'/> In 2017 Edd Barrett and colleagues tested that story carefully, running benchmarks on seven virtual machines for thousands of iterations each, with proper statistics. <bookmark mark='c'/> Many benchmarks never reached a steady state at all, and some got slower the longer they ran. <bookmark mark='d'/> Correctness is a frontier too. WebAssembly's semantics has been checked by machine, and CakeML, an ML compiler verified in a proof assistant, includes a verified garbage collector. <bookmark mark='e'/> Runtimes whose speed can be predicted, and runtimes proved correct from bytecode to collector, remain open.",
+   "zh": "还有一个意外，也是关于测量的一个警告。<bookmark mark='a'/>JIT 的教科书故事是：程序开始时慢，然后被编译，然后以稳定的峰值运行。<bookmark mark='b'/>2017 年，埃德·巴雷特和同事们认真检验了这个故事，在七台虚拟机上把基准程序各运行了上千次迭代，并做了严格的统计。<bookmark mark='c'/>许多基准程序根本没有达到稳定状态，有些甚至越跑越慢。<bookmark mark='d'/>正确性也是前沿。WebAssembly 的语义已经由机器检验过，而 CakeML，一个在证明助手里验证过的 ML 编译器，包含一个验证过的垃圾回收器。<bookmark mark='e'/>速度可以预测的运行时，以及从字节码到回收器都被证明正确的运行时，仍然是开放的。"
+  },
+  "6caab3b0631e": {
+   "scene": "Frontier",
+   "en": "Here is where the field stands. <bookmark mark='a'/> Is there a collector with bounded pauses, a constant factor of extra memory, and constant work per word allocated, all at once, or can one prove that no collector has all three? <bookmark mark='b'/> Can compilers derived from interpreters come with guarantees about their speed? <bookmark mark='c'/> Can a JIT's performance be predicted rather than measured? <bookmark mark='d'/> And can a whole production runtime, JIT and concurrent collector included, be proved correct? <bookmark mark='e'/> This part's research problem takes up the first.",
+   "zh": "这个领域现在走到了这里。<bookmark mark='a'/>是否存在一个回收器，同时做到停顿有界、额外内存为常数倍、每分配一个字的工作量为常数，还是能证明没有回收器能三者兼得？<bookmark mark='b'/>从解释器导出的编译器，能对速度给出保证吗？<bookmark mark='c'/>JIT 的性能能被预测，而不只是被测量吗？<bookmark mark='d'/>一个完整的生产级运行时，连同 JIT 和并发回收器，能被证明正确吗？<bookmark mark='e'/>这一部分的研究问题处理第一个。"
+  },
+  "75da42b7b80e": {
+   "scene": "Outro",
+   "en": "What we built in this part. An interpreter, eval and apply, and environments instead of substitution. Closures, which carry their environment onto the heap, and closure conversion. Continuations, which turn the stack into data, and tail calls, which keep it from growing. A bytecode machine for the lambda core, written in the Pebble language and checked against a reference, count for count. Reference counting, mark–sweep, mark–compact, Cheney's copying collector and generations, all run on the Job. The tri-colour invariant and the barriers that protect it. And on real runtimes on this machine: JIT tiers, inline caches, deoptimization, vtables, zero-cost exceptions and WebAssembly.",
+   "zh": "这一部分我们造了什么。一个解释器，eval 与 apply，以及用环境代替代换。闭包，它把环境带到堆上，以及闭包转换。续延，它把栈变成数据，以及让栈不再增长的尾调用。一台给λ-核心用的字节码机器，用 Pebble 语言写成，并与参照实现逐项核对。引用计数、标记–清除、标记–压缩、切尼的复制收集器和分代回收，全都在任务上跑过。三色不变式和保护它的屏障。还有在这台机器上的真实运行时里：JIT 的分层、内联缓存、去优化、虚函数表、零开销异常和 WebAssembly。"
+  },
+  "3aab38220c21": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 16 opens Act Four by changing the Job's algorithm, for ledger row seven. Part 31's kernel gives every thread its own stack, and Part 32's virtual memory sits under every heap. Part 33 returns to atomic operations and memory barriers, the hardware relatives of the write barriers here. Part 42 opens the browser, where V8 and WebAssembly live. Part 50 brings Erlang's supervisors to whole services. Parts 54 and 55 prove compilers and runtimes correct, and Part 58 asks what a program means.",
+   "zh": "它们会在哪里再出现。第16部分开启第四幕，改变任务的算法，得到账本的第七行。第31部分的内核给每个线程一个自己的栈，第32部分的虚拟内存垫在每一个堆的下面。第33部分回到原子操作和内存屏障，它们是这里写屏障在硬件上的亲戚。第42部分打开浏览器，V8 和 WebAssembly 就住在那里。第50部分把 Erlang 的监督者带到整个服务上。第54和第55部分证明编译器和运行时的正确性，第58部分追问程序意味着什么。"
+  },
+  "af9c3902eb64": {
+   "scene": "Outro",
+   "en": "In practice. Most code you will write runs on a runtime like these: the JVM, V8, CPython, .NET or Go's. Their collectors have knobs, heap sizes and pause targets, and choosing well is a matter of the trade chapter ten measured. Allocation profilers find the objects that should not exist, and the fastest JavaScript keeps its objects the same shape. Interpreters are embedded everywhere, Lua in games, JavaScript in databases. And WebAssembly is becoming the standard sandbox for running other people's code.",
+   "zh": "实践中。你将来写的大多数代码都运行在这样的运行时上：JVM、V8、CPython、.NET 或 Go 的运行时。它们的回收器有旋钮，堆大小和停顿目标，选得好不好，就是第十章测量过的那种取舍。分配分析器能找出本不该存在的对象，最快的 JavaScript 让它的对象保持同一个形状。解释器被嵌入到各处，游戏里的 Lua，数据库里的 JavaScript。而 WebAssembly 正在成为运行别人代码的标准沙箱。"
+  },
+  "bebf947aaa06": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: give the Pebble VM a generational nursery, written in the Pebble language, and measure what it saves on the Job. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是动手题：用 Pebble 语言给 Pebble 虚拟机加一个分代的新生代，并测量它在任务上省下了多少。最后一道标着星号，是研究问题：它的答案还没有人知道，笔记里说明了从哪里入手。"
+  },
+  "9fbd37bfb4d1": {
+   "scene": "Outro",
+   "en": "Next time, Act Four begins. Seven rows of the ledger have made the machine faster, and the runtime more comfortable. The Job is still quadratic. Part 16 counts steps: merge sort and the master theorem, a lower bound on sorting that comes from information, and quicksort's average case, which is a small piece of calculus. Part 16, Counting Steps.",
+   "zh": "下一次，第四幕开始。账本的七行让机器更快，让运行时更舒适。任务仍然是二次的。第16部分计数步骤：归并排序和主定理，一个来自信息的排序下界，以及快速排序的平均情形，它是一小段微积分。第16部分，计数步骤。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 15, Runtimes",
+ "chapters_en": {
+  "Hook": "A program needs a place to live",
+  "Interpreters": "1. Interpreters: eval and apply",
+  "Closures": "2. Environments and closures",
+  "Continuations": "3. Continuations and tail calls",
+  "Bytecode": "4. A bytecode virtual machine",
+  "PebbleVM": "5. The VM, on Pebble",
+  "Counting": "6. Why collect, and counting references",
+  "Tracing": "7. Tracing: mark–sweep and mark–compact",
+  "Copying": "8. Cheney's copying collector, and what it costs",
+  "Generations": "9. Generations",
+  "Concurrent": "10. Collecting while the program runs",
+  "JIT": "11. Just-in-time compilers",
+  "Dispatch": "12. Dynamic dispatch and exceptions",
+  "Machines": "13. WebAssembly, and other machines",
+  "Job": "14. The Job, collected",
+  "Frontier": "15. Frontier: the limits of runtimes",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
