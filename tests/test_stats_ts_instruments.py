@@ -25,3 +25,14 @@ def test_pendulum_follows_the_series():
     p = YulePendulum(x, pivot=np.zeros(3), length=2.0, max_angle=0.5)
     assert np.allclose(p.at(0).bob.get_center(), [0, -2, 0])
     assert p.at(1).bob.get_center()[0] > 0 > p.at(2).bob.get_center()[0]
+
+
+def test_l1_geometry_touches_a_corner_and_the_circle():
+    from explainer.stats.viz import L1Geometry
+
+    g = L1Geometry([2.0, 0.6], Q=[[1.0, 0.3], [0.3, 1.0]])
+    b1 = g.touch(1, 1.0)
+    assert np.isclose(abs(b1[0]) + abs(b1[1]), 1.0, atol=1e-3) and abs(b1[1]) < 1e-3  # the corner (1, 0)
+    b2 = g.touch(2, 1.0)
+    assert np.isclose(np.hypot(*b2), 1.0, atol=1e-3) and b2[1] > 0.05  # ridge shrinks, keeps both
+    assert np.allclose(g.touch(1, 10.0), [2.0, 0.6])
