@@ -1506,3 +1506,31 @@ class Landscape(VGroup):
         dots = VGroup(*[Dot(p, radius=radius, color=color) for p in pts])
         steps = VGroup(*[Line(p, q, color=color, stroke_width=stroke_width) for p, q in zip(pts, pts[1:])])
         return VGroup(steps, dots)
+
+
+class LikelihoodLandscape(Landscape):
+    """A two-parameter log likelihood as contours (a ``Landscape``), with its peak, the profile ridge (the best second
+    parameter for each value of the first) and likelihood-ratio confidence regions.  ``levels_below`` are drops from
+    the maximum: 1.92 and 3.0 give the 95% profile cut and the 95% joint region (chi^2_1 / 2 and chi^2_2 / 2)."""
+
+    def __init__(self, ax, ll, x_range, y_range, levels_below=(0.5, 1.92, 3.0, 8, 20, 50), color=None, **kw):
+        ll = np.asarray(ll, float)
+        self.ll_max = float(np.nanmax(ll))
+        super().__init__(ax, ll, x_range, y_range, [self.ll_max - d for d in levels_below], color=color, **kw)
+        i, j = np.unravel_index(int(np.nanargmax(ll)), ll.shape)
+        self.peak_xy = (self.xs[j], self.ys[i])
+
+    def peak(self, color=None, radius: float = 0.09) -> Dot:
+        return Dot(self.ax.c2p(*self.peak_xy), radius=radius, color=color or S.ACCENT)
+
+    def ridge(self, color=None, stroke_width: float = 3.0) -> VMobject:
+        """The profile ridge: for each column (first parameter), the row (second parameter) of highest likelihood."""
+        rows = np.nanargmax(self.Z, axis=0)
+        pts = [self.ax.c2p(x, self.ys[r]) for x, r in zip(self.xs, rows)]
+        m = VMobject(stroke_color=color or S.ACCENT, stroke_width=stroke_width)
+        m.set_points_smoothly(pts[::3] + [pts[-1]])
+        return m
+
+    def profile(self) -> tuple:
+        """(first parameter values, profile log likelihood)."""
+        return self.xs, np.nanmax(self.Z, axis=0)

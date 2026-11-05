@@ -501,3 +501,22 @@ def engel() -> tuple:
 
     d = sm.datasets.engel.load_pandas().data
     return d["income"].to_numpy().astype(float), d["foodexp"].to_numpy().astype(float)
+
+
+# Weldon's Naples crabs (1893), the ratio of "forehead" breadth to body length for 1,000 crabs, grouped as Pearson (1894,
+# Phil. Trans. A 185) tabulated them; the copy distributed with the R package mixdist (data "pearson"), where each
+# value is the upper boundary of its interval (the first interval is open below, the last open above).
+CRAB_UPPER = [0.5835, 0.5875, 0.5915, 0.5955, 0.5995, 0.6035, 0.6075, 0.6115, 0.6155, 0.6195, 0.6235, 0.6275, 0.6315,
+              0.6355, 0.6395, 0.6435, 0.6475, 0.6515, 0.6555, 0.6595, 0.6635, 0.6675, 0.6715, 0.6755, 0.6795, 0.6835,
+              0.6875, 0.6915, float("inf")]
+CRAB_COUNT = [1, 3, 5, 2, 7, 10, 13, 19, 20, 25, 40, 31, 60, 62, 54, 74, 84, 86, 96, 85, 75, 47, 43, 24, 19, 9, 5, 0, 1]
+
+
+def crabs() -> tuple:
+    """Weldon's 1,000 crabs as (interval midpoints, counts): interior intervals are 0.004 wide, and the two open-ended
+    end intervals are given the midpoints 0.5815 and 0.6935."""
+    import numpy as np
+
+    up = np.array(CRAB_UPPER[:-1])
+    mid = np.concatenate([[up[0] - 0.002], up[:-1] + 0.002, [up[-1] + 0.002]])
+    return mid, np.array(CRAB_COUNT, float)
