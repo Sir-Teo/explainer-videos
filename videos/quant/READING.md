@@ -1748,6 +1748,19 @@ Frontier (2023–2026):
 - Fissler, T., Ziegel, J. (2016). "Higher order elicitability and Osband's principle." *Annals of Statistics*.
 - Basel Committee (2019). *Minimum Capital Requirements for Market Risk* (FRTB).
 
+- Osband, K. (1985). *Providing incentives for better cost forecasting*. PhD thesis, University of California, Berkeley.
+- Gneiting, T. (2011). "Making and evaluating point forecasts." *JASA*.
+- Acerbi, C., Székely, B. (2014). "Backtesting expected shortfall." *Risk*.
+- Embrechts, P., Puccetti, G., Rüschendorf, L. (2013). "Model uncertainty and VaR aggregation." *J. Banking & Finance*.
+- Bellini, F., Bignozzi, V. (2015). "On elicitable risk measures." *Quantitative Finance*.
+- Fissler, T., Ziegel, J. (2016). "Higher order elicitability and Osband's principle." *Annals of Statistics*.
+- Ziegel, J. (2016). "Coherence and elicitability." *Mathematical Finance*.
+- Nolde, N., Ziegel, J. (2017). "Elicitability and backtesting: perspectives for banking regulation." *Annals of Applied Statistics*.
+- Patton, A., Ziegel, J., Chen, R. (2019). "Dynamic semiparametric models for expected shortfall (and value-at-risk)." *J. Econometrics*.
+- Rockafellar, R. T., Uryasev, S. (2000). "Optimization of conditional value-at-risk." *J. Risk*.
+- Boyer, B., Gibson, M., Loretan, M. (1997). "Pitfalls in tests for changes in correlations." Federal Reserve IFDP 597.
+- JPMorgan Chase & Co. (2013). *Report of JPMorgan Chase & Co. Management Task Force regarding 2012 CIO losses*; US Senate PSI (2013), *JPMorgan Chase Whale Trades*.
+
 ### Part 41 · Leverage, Liquidity and Crises
 - Kindleberger, C. (1978). *Manias, Panics, and Crashes*; Minsky, H. (1986). *Stabilizing an Unstable Economy*.
 - Diamond, D., Dybvig, P. (1983). "Bank runs, deposit insurance, and liquidity." *JPE*.

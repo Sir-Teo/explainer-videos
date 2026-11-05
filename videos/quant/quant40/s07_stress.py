@@ -99,7 +99,7 @@ class Stress(VoiceoverScene):
                                                                          r"market return")])
         tab = VGroup(head)
         for w in x["worst10"]:
-            nm = rf"{months[(w['start'] // 100) % 100]} {w['start'] // 10000}"
+            nm = months[(w["start"] // 100) % 100] + " " + str(w["start"] // 10000)
             tab.add(VGroup(label(nm, font_size=20), MathTex(rf"{100 * w['ret']:.1f}\%", font_size=28, color=BAD)))
         for j, row in enumerate(tab):
             for i, cell in enumerate(row):

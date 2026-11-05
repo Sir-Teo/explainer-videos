@@ -3585,3 +3585,51 @@ def test_defi_lvr_fees_v3_sandwich_perp():
     # perpetuals: no carry, no basis; Binance's rule returns the interest rate inside the clamp
     assert D.perp_multiplier(3.0, 0.05, 0.05) == 1.0 and D.perp_multiplier(3.0, 0.1) > 1
     assert np.allclose(D.binance_funding_rule([0.0, 2e-4, 2e-3]), [1e-4, 1e-4, 2e-3 - 5e-4])
+
+
+def test_risk_var_es_backtests_evt_elicitability():
+    import numpy as np
+    from scipy import stats
+
+    from explainer.quant.house import risk as R
+    # closed forms
+    v, e = R.var_es_normal(0.0, 1.0, 0.99)
+    assert abs(v - 2.3263) < 1e-3 and abs(e - 2.6652) < 1e-3
+    v975, e975 = R.var_es_normal(0.0, 1.0, 0.975)
+    assert abs(e975 - v) < 0.02                       # ES 97.5% ~ VaR 99% for a normal
+    # historical ES and t's closed form agree on a large sample
+    rng = np.random.default_rng(0)
+    x = stats.t.rvs(4, size=400_000, random_state=rng)
+    hv, he = R.var_es_hist(x, 0.99)
+    tv, te = R.var_es_t(0.0, 1.0, 4.0, 0.99)
+    assert abs(hv - tv) < 0.03 and abs(he - te) < 0.06
+    # backtests under the null: correct coverage, independence, Z2 near zero
+    z = rng.standard_normal(50_000)
+    I = R.hits(z, np.full(len(z), v))
+    assert R.kupiec(I, 0.01)["p_value"] > 0.01 and R.christoffersen(I, 0.01)["p_ind"] > 0.01
+    assert abs(R.acerbi_szekely_z2(z, np.full(len(z), v), np.full(len(z), e))) < 0.1
+    assert R.traffic_light(4) == "green" and R.traffic_light(7) == "yellow" and R.traffic_light(10) == "red"
+    # GPD recovers its shape; EVT quantile at the fit
+    xi0, b0 = 0.25, 1.0
+    y = stats.genpareto.rvs(xi0, scale=b0, size=50_000, random_state=rng)
+    xi, b = R.gpd_fit(y)
+    assert abs(xi - xi0) < 0.03 and abs(b - b0) < 0.03
+    # t-copula tail dependence; Gaussian has none (by formula's nu -> infinity limit, small)
+    assert abs(R.t_copula_lambda(0.5, 4.0) - 0.2532) < 1e-3 and R.t_copula_lambda(0.5, 200.0) < 1e-3
+    # reverse stress: the scenario costs exactly the loss, at distance loss / sd
+    S = np.array([[1.0, 0.3], [0.3, 2.0]])
+    w = np.array([1.0, 0.5])
+    o = R.reverse_stress(w, S, 3.0)
+    assert abs(-w @ o["x"] - 3.0) < 1e-12 and abs(o["distance"] - 3.0 / np.sqrt(w @ S @ w)) < 1e-12
+    # rearrangement: worst VaR of Pareto(2) sums exceeds the comonotonic sum (VaR is not subadditive)
+    wv = R.worst_var_pareto(2.0, 3, 0.99, N=400)
+    assert wv["worst_lo"] > wv["comonotonic"] > wv["independent"] and wv["worst_hi"] >= wv["worst_lo"]
+    # elicitability: the pinball loss's minimiser is the quantile; FZ0's is the pair; ES's level sets are not convex
+    qs = np.linspace(-3.5, -1.5, 81)
+    best_q = qs[np.argmin([R.pinball(q, z, 0.01).mean() for q in qs])]
+    assert abs(best_q - stats.norm.ppf(0.01)) < 0.1
+    vt, et = -v, -e
+    g = [(R.fz0(vt * a, et * b_, z, 0.01).mean(), a, b_) for a in (0.9, 1.0, 1.1) for b_ in (0.9, 1.0, 1.1)]
+    assert min(g)[1:] == (1.0, 1.0)
+    m = R.mixture_var_es([1.0], [1.0], [0.0, 2.0], [0.95, 0.05], 0.5, 0.9)
+    assert abs(m["es"][0] - 1) < 1e-9 and abs(m["es"][1] - 1) < 1e-9 and abs(m["es"][2] - 1.25) < 1e-9

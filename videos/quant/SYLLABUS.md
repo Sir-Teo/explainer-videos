@@ -1725,28 +1725,33 @@ BlackRock (the ETFs).
 
 ### Act VII · The System
 
-### Part 40 · Measuring Risk (~55)
-1. RiskMetrics; VaR three ways.
-2. Coherence; VaR's failure of subadditivity; ES.
-3. Elicitability (Gneiting 2011; Fissler–Ziegel 2016).
-4. Backtests: Kupiec, Christoffersen, Acerbi–Székely.
-5. FRTB.
-6. EVT: POT, GPD, Hill; McNeil–Frey.
-7. Copulas and tail dependence; correlation pitfalls.
-8. FHS; stress and reverse stress tests.
-9. Model uncertainty: the rearrangement algorithm.
-10. Learned risk: CAViaR (Engle–Manganelli 2004) and a deep quantile network vs FHS, trained here.
-11. Liquidity-adjusted risk.
+### Part 40 · Measuring Risk (~53; built)
+1. VaR three ways and RiskMetrics on $100m of the US market (end-2007; 15 October 2008); the square root of time
+   (10-day ratio 3.4, by decade 0.89–1.34× the rule); a delta-hedged straddle book (delta-normal VaR zero).
+2. Coherence (Artzner et al.); VaR's failure of subadditivity (two bonds); ES, spectral and convex measures; Euler
+   allocation of ES.
+3. Backtests 1928–2020 for six forecasters: Kupiec, Christoffersen, the traffic light, Acerbi–Székely's Z2 with a
+   simulated null; the normal fails (2.24%, clusters), GJR-filtered HS passes.
+4. EVT: POT/GPD (ξ ≈ 0.2, stable across thresholds), Hill; McNeil–Frey; other tails (Bitcoin).
+5. Copulas and tail dependence on 49 industries (joint crashes 0.67 against the Gaussian's 0.40); a portfolio under
+   two copulas; the bias of conditional correlation; Li.
+6. Stress: historical days and ten-day windows; supervisory tests; the reverse stress test in closed form; Studer.
+7. Model uncertainty: the rearrangement algorithm (worst VaR up to ~2× the sum of VaRs); the ES bound; estimation
+   error; JPMorgan's CIO model change (2012), as reported.
+8. Learned risk: CAViaR and a quantile network trained to 1990, tested 1991–2020: neither beats GJR-filtered HS.
+9. FRTB (97.5% ES, liquidity horizons, stressed calibration, desk approval); liquidity-adjusted VaR; CCP margin.
+10. Rule 40: a risk number is a forecast.
+Research: elicitability (pinball lemma, Osband's convex level sets, ES not elicitable by construction,
+Rockafellar–Uryasev, Fissler–Ziegel with the FZ0 derivative), checked by level sets, the FZ0 grid, ranking six
+forecasters, and the power of Kupiec against Z2 when only the tail is wrong.
 
 *Textbooks:* McNeil–Frey–Embrechts *Quantitative Risk Management*; Jorion *Value at Risk*; Föllmer–Schied ch. 4;
 Hull *Risk Management and Financial Institutions*.
-*Trained:* CAViaR and a deep quantile network.
-*Computed:* VaR/ES backtests on 1926–2020 daily returns; EVT fits; rearrangement bounds.
-*Visuals:* VaR as a line, ES as the shaded mass; exceedance clusters.
-*Crisis:* 2008 exceedance clustering.
-*Firms:* bank market-risk functions; regulators.
-*Desk:* "Your 99% one-day VaR is $10 m. Ten-day? What did you assume?"
-*House:* risk reports.
+*Trained:* CAViaR and a quantile network.
+*Computed:* VaR/ES backtests on 1926–2020 daily returns; EVT fits; tail dependence; rearrangement bounds; FZ0 scores.
+*Crisis:* 2008 exception clustering; 1987; JPMorgan's CIO (2012).
+*Desk:* "Your 99% one-day VaR is $10 m. Ten-day? What did you assume?" (√10 assumes iid normal; history says 3.4×)
+*House:* the risk function's evening report and Rule 40.
 
 ### Part 41 · Leverage, Liquidity and Crises (~60)
 1. Minsky and Kindleberger.
