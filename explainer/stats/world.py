@@ -282,6 +282,63 @@ class World:
         return out
 
     # ------------------------------------------------------------------
+    # Schools: pupils clustered in schools, a school-level programme (Parts 23, 25, 26)
+    # ------------------------------------------------------------------
+    N_SCHOOLS = 400
+    SCHOOL_SD = 0.35  # SD of the school effect, in pupil-score SD units (about 100 points)
+    PUPIL_SD = 0.85  # SD of the pupil-level noise
+    SES_SCHOOL_SD = 0.45  # SD of schools' mean home background (SES)
+    SES_SLOPE = 0.30  # score per unit of a pupil's own SES
+    SES_CONTEXT = 0.15  # extra score per unit of the school's mean SES (the contextual effect)
+    PROGRAMME_EFFECT = 0.20  # the tutoring programme's effect, in score SD units
+
+    @cached_property
+    def schools(self) -> dict:
+        """400 schools, each in a town (drawn by town size), with 20 + Poisson(40) pupils.  Each school has a mean home
+        background ``ses_school`` ~ N(0, 0.45^2) and an effect u ~ N(0, 0.35^2); half the schools, chosen at random, run
+        a tutoring ``programme``.  Pupil ``ses`` = school mean + N(0, 0.9^2); ``score`` = 500 + 100 x (0.30 ses + 0.15
+        ses_school + u + 0.20 programme + N(0, 0.85^2)).  Pupil arrays are flat, with ``school`` giving each pupil's
+        school; the intraclass correlation of the score given the covariates is 0.35^2 / (0.35^2 + 0.85^2) = 0.145."""
+        g = self.rng("schools")
+        k = self.N_SCHOOLS
+        town = g.choice(N_TOWNS, size=k, p=self.towns["weight"])
+        size = 20 + g.poisson(40, k)
+        ses_school = self.SES_SCHOOL_SD * g.standard_normal(k)
+        u = self.SCHOOL_SD * g.standard_normal(k)
+        programme = np.zeros(k, bool)
+        programme[g.choice(k, k // 2, replace=False)] = True
+        school = np.repeat(np.arange(k), size)
+        ses = ses_school[school] + 0.9 * g.standard_normal(len(school))
+        z = (self.SES_SLOPE * ses + self.SES_CONTEXT * ses_school[school] + u[school]
+             + self.PROGRAMME_EFFECT * programme[school] + self.PUPIL_SD * g.standard_normal(len(school)))
+        return {"town": town, "size": size, "ses_school": ses_school, "u": u, "programme": programme,
+                "school": school, "ses": ses, "score": 500 + 100 * z}
+
+    # ------------------------------------------------------------------
+    # Doctor visits: overdispersed counts with structural zeros (Part 24)
+    # ------------------------------------------------------------------
+    VISITS_NEVER = 0.15  # share of adults (more of the young) who never see a doctor in a year
+    VISITS_K = 1.2  # negative-binomial shape among the others
+
+    @cached_property
+    def visits(self) -> dict:
+        """Adults only (-1 for children).  Visits to a doctor last year: with probability ``never`` (about 15%, falling
+        with age from 25% at 18 to 8% at 80) a structural zero; otherwise negative binomial (shape 1.2) with mean
+        exp(0.2 + 0.012 (age - 18) + 0.05 (BMI - 27) + 0.6 told_high + 0.25 female)."""
+        g = self.rng("visits")
+        a = self.age.astype(float)
+        h = self.health
+        bmi = np.nan_to_num(h["bmi"], nan=27.0)
+        female = ~self.male
+        never_p = np.clip(0.25 - 0.17 * (a - ADULT_AGE) / 62, 0.05, 0.25)
+        mu = np.exp(0.2 + 0.012 * (a - ADULT_AGE) + 0.05 * (bmi - 27) + 0.6 * h["told_high"] + 0.25 * female)
+        k = self.VISITS_K
+        y = g.negative_binomial(k, k / (k + mu))
+        never = g.random(self.n) < never_p
+        y = np.where(never, 0, y)
+        return {"visits": np.where(self.adult, y, -1).astype(np.int32), "never": never & self.adult, "mu": mu}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
