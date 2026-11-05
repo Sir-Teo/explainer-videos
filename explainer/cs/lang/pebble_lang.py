@@ -129,7 +129,7 @@ class Type:
 
     def __str__(self):
         if self.kind == "ptr":
-            return "*" + str(self.of)
+            return "*" + str(self.of) if self.of is not None else "null"
         if self.kind == "array":
             return f"[{self.n}]{self.of}"
         if self.kind == "struct":
