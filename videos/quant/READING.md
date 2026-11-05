@@ -1576,6 +1576,16 @@ Frontier (2023–2026):
 - Menkveld, A. (2016). "The economics of high-frequency trading: taking stock." *Annual Review of Financial Economics*.
 - Kirilenko, A., Kyle, A. S., Samadi, M., Tuzun, T. (2017). "The flash crash: high-frequency trading in an electronic market." *Journal of Finance*.
 - Cartea, Á., Jaimungal, S., Wang, Y. (2020). "Spoofing and price manipulation in order-driven markets." *Applied Mathematical Finance*.
+- Garman, M. (1976). "Market microstructure." *JFE*. Ho, T., Stoll, H. (1981). "Optimal dealer pricing." *JFE*.
+- Back, K. (1992). "Insider trading in continuous time." *RFS*. Back, K., Baruch, S. (2004). "Information in securities markets: Kyle meets Glosten and Milgrom." *Econometrica*.
+- Holden, C., Subrahmanyam, A. (1992). "Long-lived private information and imperfect competition." *JF*.
+- Corwin, S., Schultz, P. (2012). "A simple way to estimate bid-ask spreads from daily high and low prices." *JF*.
+- Andersen, T., Bondarenko, O. (2014). "VPIN and the flash crash." *JFM*. Duarte, J., Young, L. (2009). "Why is PIN priced?" *JFE*.
+- Zhu, H. (2014). "Do dark pools harm price discovery?" *RFS*. Yang, L., Zhu, H. (2020). "Back-running." *RFS*.
+- Aquilina, M., Budish, E., O'Neill, P. (2022). "Quantifying the high-frequency trading 'arms race'." *QJE*.
+- Collin-Dufresne, P., Fos, V. (2015). "Do prices reveal the presence of informed trading?" *JF*.
+- Hendershott, T., Jones, C., Menkveld, A. (2011). "Does algorithmic trading improve liquidity?" *JF*.
+
 
 ### Part 36 · The Limit Order Book
 - Smith, E., Farmer, J. D., Gillemot, L., Krishnamurthy, S. (2003). "Statistical theory of the continuous double auction." *Quantitative Finance*.

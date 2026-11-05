@@ -1577,26 +1577,33 @@ haircut; factor stops against shuffles.
 
 ### Act VI · Market Microstructure
 
-### Part 35 · Who Trades With Whom (~55)
-1. Garman (1976); Ho–Stoll (1981).
-2. Glosten–Milgrom (1985).
-3. Kyle (1985), λ derived.
-4. Roll (1984), Amihud (2002).
-5. PIN, VPIN and the critique.
-6. Price discovery (Hasbrouck 1995).
-7. Market structure: Reg NMS, maker–taker, dark pools, PFOF, the 2024 rules, T+1.
-8. HFT as market maker (Menkveld 2013; Brogaard et al. 2014).
-9. Manipulation: spoofing, layering, momentum ignition; detecting it in the ITCH day.
-10. The flash crash (Kirilenko et al. 2017); the Treasury flash rally (2014).
-11. Frequent batch auctions (Budish–Cramton–Shim 2015).
+### Part 35 · Who Trades With Whom (~55; built)
+1. The dealer: Garman (1976) inventory; Ho–Stoll (1981) shading; Avellaneda–Stoikov; the three components of a spread.
+2. Glosten–Milgrom (1985) derived: spread = μ at an even prior; learning in odds; lemons.
+3. Kyle (1985): λ = σ_v/(2σ_u) derived and simulated; the N-auction recursion; tightness, depth, resiliency.
+4. Roll, Corwin–Schultz and Amihud on ten ETFs: daily spread estimators fail on liquid funds; Amihud ranks liquidity
+   (slope −0.94 on dollar volume); effective, realised and impact spreads.
+5. Kyle's λ on Binance taker flow: 4.6 bp per $1m (R² 0.21), concave; persistent flow against unpredictable returns;
+   by month, hour, coin and horizon.
+6. PIN and VPIN: on Bitcoin VPIN tracks volatility (0.67) more than the true imbalance (0.09); markouts.
+7. Price discovery: Hasbrouck IS between spot and perpetual (one-minute bars too coarse; bounds 0.95 wide); the
+   funding basis.
+8. Market structure: Reg NMS, maker–taker, dark pools (Zhu 2014), segmentation, PFOF, the 2024 rules, the closing
+   auction, T+1.
+9. HFT as market maker (Menkveld 2013; Brogaard et al. 2014); sniping and its tax (Aquilina–Budish–O'Neill 2022);
+   back-running.
+10. The flash crash (Kirilenko et al. 2017); Bitcoin's daily λ; liquidation cascades; the Treasury flash rally (2014);
+    frequent batch auctions (Budish–Cramton–Shim 2015).
+11. Rule 35: know who is on the other side.
+Research: Kyle in continuous time (Kyle 1985; Back 1992): λ = σ_v/σ_u, profit σ_vσ_u, the Brownian bridge, proved by
+Kalman–Bucy and Back's value function; simulated; the discrete limit; Kyle's R² = 1 against Bitcoin's 0.21–0.32.
 
 *Textbooks:* O'Hara *Market Microstructure Theory*; Hasbrouck *Empirical Market Microstructure*;
 Foucault–Pagano–Röell *Market Liquidity*; Harris.
-*Computed:* Kyle and Glosten–Milgrom simulated; Roll, Amihud, VPIN on ITCH and Binance; a spoofing-pattern detector.
-*Visuals:* Kyle's price converging to value; the GM spread narrowing.
-*Crisis:* 6 May 2010; Navinder Sarao. *Firms:* exchanges and wholesalers.
-*Desk:* "Why does the bid-ask spread exist even with competitive, risk-neutral market makers?"
-*House:* surveillance.
+*Computed:* the dealer, Glosten–Milgrom and Kyle simulated; Roll, Amihud, Kyle's λ and VPIN on Binance and ETFs;
+Hasbrouck IS; daily λ.
+*Crisis:* 6 May 2010; 15 October 2014; May 2021 and November 2022 on Bitcoin.
+*House:* surveillance; a signed-flow feed.
 
 ### Part 36 · The Limit Order Book (~55; frontier)
 1. Queues (Cont–Stoikov–Talreja 2010); queue-reactive (Huang–Lehalle–Rosenbaum 2015).
