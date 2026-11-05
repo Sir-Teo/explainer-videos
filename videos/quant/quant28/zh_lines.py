@@ -48,7 +48,7 @@ ZH = {
 
     "The tools are older than you might think.":
         "这些工具比你想的要古老。1960年代心理学家的词典；2007年Paul Tetlock的媒体悲观情绪；2011年Loughran和McDonald的金融词典。<bookmark mark='a'/>"
-        "然后是神经网络的转向：2013年的词向量，2017年的transformer，2018年的BERT，同一年一个主题模型也打开了FOMC的会议记录；2019年的SESTM。<bookmark mark='b'/>"
+        "然后是神经网络的转向：2013年的词向量，2017年的transformer，2018年的BERT，同一年一个主题模型也打开了联邦公开市场委员会（FOMC）的会议记录；2019年的SESTM。<bookmark mark='b'/>"
         "而自2023年以来是大语言模型：FinBERT、BloombergGPT、读新闻标题的ChatGPT、会交易的智能体，以及第一批被构建得无法读到未来的模型。",
 
     "The plan: words as numbers, dictionaries and why they misread":
@@ -161,9 +161,9 @@ ZH = {
         "改动最少的四分之一为{ch['abs_low']:.1f}个基点。它不说明方向，而且大幅改写往往伴随政策行动，所以这只是相关。但交易员读声明的方式正如开篇那样：看它和上一份的差别。",
 
     "The words that carry the most weight are the ones about the future.":
-        "分量最重的词是关于未来的词。<bookmark mark='a'/>每一行是一个用语；每个刻度是一份用了它的声明。likely to be measured，来自2004年的紧缩，承诺每次四分之一个百分点；"
-        "considerable period、extended period和exceptionally low levels承诺的则相反。<bookmark mark='b'/>patient、some time、gradual：每个用语都活上几年，而它的删除本身就是新闻。"
-        "<bookmark mark='c'/>transitory，委员会对2021年通胀的说法，在当年12月被删去，到次年3月ongoing increases取而代之。词典不可能知道这些：这些用语的含义是委员会的历史赋予的。",
+        "分量最重的词是关于未来的词。<bookmark mark='a'/>每一行是一个用语；每个刻度是一份用了它的声明。“有节制的”（likely to be measured），来自2004年的紧缩，承诺每次四分之一个百分点；"
+        "“相当长一段时间”“较长时期”和“异常低的水平”承诺的则相反。<bookmark mark='b'/>“耐心”“一段时间”“渐进”：每个用语都活上几年，而它的删除本身就是新闻。"
+        "<bookmark mark='c'/>“暂时的”（transitory），委员会对2021年通胀的说法，在当年12月被删去，到次年3月“持续加息”取而代之。词典不可能知道这些：这些用语的含义是委员会的历史赋予的。",
 
     "Pause and predict. The committee drops the word patient":
         "暂停预测一下。委员会从声明中删去patient一词，其他什么都没改。两年期收益率应该往哪个方向走？",

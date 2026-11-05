@@ -44,9 +44,11 @@ class Form(VoiceoverScene):
         ax = g.ax
         bars = VGroup(*[Line(ax.c2p(a, 0), ax.c2p(a, b), color=WORD if a < 2021 else GREY_C, stroke_width=2.2)
                         for a, b in zip(x, w)])
-        tags = VGroup(*[label(t_, font_size=15, color=GREY_A).move_to(ax.c2p(a, top * 0.93))
-                        for a, t_ in ((1999.3, r"Greenspan: a paragraph"), (2008.8, r"crisis: policy tools spelled out"),
-                                      (2013.2, r"guidance by dates, then thresholds"))])
+        # each tag at its own height, above the bars of its era
+        tags = VGroup(*[label(t_, font_size=15, color=GREY_A).move_to(ax.c2p(a, top * h_))
+                        for a, h_, t_ in ((2000.6, 0.5, r"Greenspan: a paragraph"),
+                                          (2008.6, 0.8, r"crisis: policy tools spelled out"),
+                                          (2015.0, 1.08, r"guidance by dates, then thresholds"))])
         with self.voiceover(
             "Here is every statement, as a bar of its length in words. <bookmark mark='a'/> In the late 1990s a "
             f"statement was a paragraph: the median before 2002 is {f['first5']:.0f} words. <bookmark mark='b'/> The "
