@@ -520,3 +520,37 @@ def crabs() -> tuple:
     up = np.array(CRAB_UPPER[:-1])
     mid = np.concatenate([[up[0] - 0.002], up[:-1] + 0.002, [up[-1] + 0.002]])
     return mid, np.array(CRAB_COUNT, float)
+
+
+def longley() -> tuple:
+    """Longley's (1967, JASA 62) 16 years of US macroeconomic data, 1947-1962, as distributed with statsmodels: total
+    employment and six regressors (the GNP deflator, GNP, unemployment, armed forces, population, year).  Returns
+    (X with an intercept column first, y, the regressor names)."""
+    import numpy as np
+    import statsmodels.api as sm
+
+    d = sm.datasets.longley.load_pandas().data
+    names = ["GNPDEFL", "GNP", "UNEMP", "ARMED", "POP", "YEAR"]
+    X = np.column_stack([np.ones(len(d))] + [d[c].to_numpy(float) for c in names])
+    return X, d["TOTEMP"].to_numpy(float), names
+
+
+# NIST's certified Longley coefficients (Statistical Reference Datasets, linear regression, "Longley"), to 15 digits:
+# intercept, GNPDEFL, GNP, UNEMP, ARMED, POP, YEAR.
+LONGLEY_CERTIFIED = [-3482258.63459582, 15.0618722713733, -0.358191792925910e-01, -2.02022980381683,
+                     -1.03322686717359, -0.511041056535807e-01, 1829.15146461355]
+
+# Hubble (1929, PNAS 15, Table 1): 24 extragalactic nebulae, distance (megaparsecs) and radial velocity (km/s), as
+# distributed in the R package Sleuth3 (data case0701; Ramsey & Schafer, The Statistical Sleuth).
+HUBBLE_1929 = [(0.03, 170), (0.03, 290), (0.21, -130), (0.26, -70), (0.28, -185), (0.28, -220), (0.45, 200),
+               (0.50, 290), (0.50, 270), (0.63, 200), (0.80, 300), (0.90, -30), (0.90, 650), (0.90, 150), (0.90, 500),
+               (1.00, 920), (1.10, 450), (1.10, 500), (1.40, 500), (1.70, 960), (2.00, 500), (2.00, 850), (2.00, 800),
+               (2.00, 1090)]
+
+
+def hubble() -> tuple:
+    """Hubble's 24 nebulae: (distance in Mpc, velocity in km/s)."""
+    import numpy as np
+
+    a = np.array(HUBBLE_1929, float)
+    return a[:, 0], a[:, 1]

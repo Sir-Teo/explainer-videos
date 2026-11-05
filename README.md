@@ -22,7 +22,7 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 | Quantum Mechanics, Part 2 | 57 min | `python -m videos.physics.quantum2.compute && python tools/build.py quantum2` |
 | Analysis, Built (10 parts: real, complex and functional analysis; English and Chinese) | 5 h 20 min | `python -m videos.analysis.analysisN.compute && python tools/build.py analysisN` |
 | AI, Built (31 parts: [the plan](videos/ai/README.md); English and Chinese) | 30–60 min each | `python tools/make.py ai1` … `ai31`, or `--series ai` |
-| Statistics, Built (65 parts, BSc to PhD: [the plan](videos/stats/README.md), [syllabus](videos/stats/SYLLABUS.md); Parts 1–22 written, English) | 50–80 min each | `python -m videos.stats.stats22.compute && python tools/build.py stats22` |
+| Statistics, Built (65 parts, BSc to PhD: [the plan](videos/stats/README.md), [syllabus](videos/stats/SYLLABUS.md); Parts 1–23 written, English) | 50–80 min each | `python -m videos.stats.stats23.compute && python tools/build.py stats23` |
 
 ## Layout
 

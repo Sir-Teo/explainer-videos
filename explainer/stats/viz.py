@@ -1534,3 +1534,49 @@ class LikelihoodLandscape(Landscape):
     def profile(self) -> tuple:
         """(first parameter values, profile log likelihood)."""
         return self.xs, np.nanmax(self.Z, axis=0)
+
+
+class DigitsBoard(VGroup):
+    """How many digits are right (Part 23): one row per coefficient, one column per method; each cell is a bar of
+    ``max_digits`` ticks, lit up to the number of correct significant digits (green when most are right, amber
+    in between, red when almost none are).  ``column(j)`` is method j's cells, for revealing one method at a time."""
+
+    def __init__(self, names, methods, digits, max_digits: int = 15, cell_w: float = 1.9, row_h: float = 0.5,
+                 font_size: int = 22, center=ORIGIN):
+        super().__init__()
+        from explainer.analysis import label
+
+        digits = np.asarray(digits, float)  # methods x coefficients
+        self.max = max_digits
+        self.heads = VGroup(*[label(m, font_size=font_size, color=GREY_A) for m in methods])
+        self.names = VGroup(*[label(n, font_size=font_size, color=GREY_B) for n in names])
+        self.cells = VGroup()
+        name_w = max(n.width for n in self.names) + 0.35
+        for j in range(len(methods)):
+            col = VGroup()
+            for i in range(len(names)):
+                col.add(self._cell(digits[j, i], cell_w, row_h * 0.5, font_size - 4))
+            self.cells.add(col)
+        for i, n in enumerate(self.names):
+            n.move_to([-name_w / 2, -i * row_h, 0], aligned_edge=RIGHT).shift(RIGHT * (name_w / 2 - 0.2))
+        for j, col in enumerate(self.cells):
+            x = name_w + j * (cell_w + 0.35) + cell_w / 2
+            self.heads[j].move_to([x, row_h * 0.95, 0])
+            for i, c in enumerate(col):
+                c.move_to([x, -i * row_h, 0])
+        self.add(self.names, self.heads, self.cells)
+        self.move_to(center)
+
+    def _cell(self, d, w, h, font_size):
+        from explainer.analysis import label
+
+        k = int(np.floor(d + 1e-9))
+        color = S.KEPT if d >= 9 else (S.ACCENT if d >= 3 else S.BROKEN)
+        tw = (w - 0.55) / self.max
+        ticks = VGroup(*[Rectangle(width=tw * 0.8, height=h, stroke_width=0, fill_opacity=0.9 if t < k else 0.12,
+                                   fill_color=color if t < k else GREY_D) for t in range(self.max)]).arrange(RIGHT, buff=tw * 0.2)
+        num = label(f"{k}", font_size=font_size, color=color).next_to(ticks, RIGHT, buff=0.1)
+        return VGroup(ticks, num)
+
+    def column(self, j: int) -> VGroup:
+        return VGroup(self.heads[j], self.cells[j])
