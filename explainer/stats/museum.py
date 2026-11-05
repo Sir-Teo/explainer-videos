@@ -414,3 +414,5 @@ BERKELEY = {"A": (512, 313, 89, 19), "B": (353, 207, 17, 8), "C": (120, 205, 202
             "D": (138, 279, 131, 244), "E": (53, 138, 94, 299), "F": (22, 351, 24, 317)}
 # Doll & Hill (BMJ, 1950), men: smokers among 649 lung-cancer patients and 649 matched controls.
 DOLL_HILL = {"cases": 649, "cases_smokers": 647, "controls": 649, "controls_smokers": 622}
+# Laplace (1778, "Mémoire sur les probabilités"): baptisms in Paris, 1745-1770.
+PARIS_BIRTHS = {"boys": 251_527, "girls": 241_945, "years": (1745, 1770)}

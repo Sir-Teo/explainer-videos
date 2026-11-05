@@ -453,3 +453,26 @@ Translations will live in `videos/stats/statsN/narration_zh.json`, keyed by the 
 | ROC curve, area under the curve (AUC), sensitivity, false-positive rate | ROC 曲线，曲线下面积，灵敏度，假阳性率 |
 | calibration, Brier score, proper scoring rule, log score | 校准，布里尔评分，严格适当评分规则，对数评分 |
 | decision threshold, misclassification cost | 判决阈值，误分类代价 |
+
+## Glossary (Part 15)
+
+| English | 中文 |
+|---|---|
+| prior, likelihood, posterior | 先验，似然，后验 |
+| inverse probability, Bayes's rule | 逆概率，贝叶斯法则 |
+| conjugate prior, beta–binomial, gamma–Poisson, normal–normal | 共轭先验，贝塔–二项，伽马–泊松，正态–正态 |
+| pseudo-observations, precision | 伪观测，精度 |
+| posterior mean, median, mode (MAP) | 后验均值，后验中位数，后验众数（最大后验） |
+| credible interval, equal-tailed, highest posterior density (HPD) | 可信区间，等尾，最高后验密度区间 |
+| Laplace approximation | 拉普拉斯近似 |
+| posterior predictive distribution, prior predictive distribution | 后验预测分布，先验预测分布 |
+| rule of succession | 继承法则 |
+| posterior predictive check | 后验预测检验 |
+| informative, weakly informative, reference, improper prior | 信息先验，弱信息先验，参考先验，非正常先验 |
+| Jeffreys prior, sensitivity analysis | 杰弗里斯先验，敏感性分析 |
+| grid approximation, curse of dimensionality | 网格近似，维数灾难 |
+| Metropolis algorithm, proposal, acceptance rate, burn-in (warm-up) | 梅特罗波利斯算法，提议分布，接受率，预烧期 |
+| trace plot, effective sample size, reparametrization | 轨迹图，有效样本量，重参数化 |
+| simulation-based calibration | 基于模拟的校准 |
+| Bayes factor, marginal likelihood, posterior odds | 贝叶斯因子，边际似然，后验比 |
+| Lindley's paradox, Jeffreys's scale | 林德利悖论，杰弗里斯尺度 |
