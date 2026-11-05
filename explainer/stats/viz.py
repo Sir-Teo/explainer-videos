@@ -1164,3 +1164,178 @@ class BilliardTable(VGroup):
         mid = (start + end) / 2 + np.array([0, 0.25, 0])
         path = VMobject().set_points_smoothly([start, mid, end])
         return ball, MoveAlongPath(ball, path, run_time=run_time, rate_func=rate_functions.ease_out_cubic)
+
+
+class BootstrapResampler(VGroup):
+    """The bootstrap as a machine (Part 16): the sample sits as labelled tokens in a top row; ``resample(idx)``
+    copies the tokens idx[0], idx[1], ... into a bottom row (so some appear twice and some not at all), and
+    ``clear()`` removes them; ``drop(ax, stat, bin_width)`` stacks each replicate's statistic as a dot on ``ax``."""
+
+    def __init__(self, labels, center=ORIGIN, width=10.0, radius=0.22, font_size=18, row_gap=1.4, color=None, copy_color=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.n = len(labels)
+        cx, cy = center[0], center[1]
+        xs = np.linspace(-width / 2, width / 2, self.n) if self.n > 1 else np.array([0.0])
+        self.top = [np.array([cx + x, cy + row_gap / 2, 0.0]) for x in xs]
+        self.bottom = [np.array([cx + x, cy - row_gap / 2, 0.0]) for x in xs]
+        col = color or S.DATA
+        self.copy_color = copy_color or S.EST
+        self.tokens = VGroup()
+        for i, t in enumerate(labels):
+            disc = Circle(radius=radius, stroke_width=0, fill_color=col, fill_opacity=0.9)
+            txt = label(str(t), font_size=font_size, color="#101418")
+            if txt.width > 1.7 * radius:
+                txt.width = 1.7 * radius
+            self.tokens.add(VGroup(disc, txt).move_to(self.top[i]))
+        self.add(self.tokens)
+        self.copies = VGroup()
+        self.stack: dict[int, int] = {}
+        self.dots = VGroup()
+
+    def resample(self, idx, run_time=1.2, lag=0.04):
+        """Animation: copy token idx[j] to bottom slot j, for every j."""
+        new = VGroup()
+        anims = []
+        for j, i in enumerate(idx):
+            c = self.tokens[int(i)].copy()
+            c[0].set_fill(self.copy_color)
+            target = c.copy().move_to(self.bottom[j])
+            anims.append(TransformFromCopy(self.tokens[int(i)], target))
+            new.add(target)
+        self.copies = new
+        return LaggedStart(*anims, lag_ratio=lag, run_time=run_time)
+
+    def clear(self, run_time=0.4):
+        return FadeOut(self.copies, run_time=run_time)
+
+    def drop(self, ax, stat, bin_width, radius=0.05, color=None):
+        k = int(np.floor(stat / bin_width + 0.5))
+        h = self.stack.get(k, 0)
+        self.stack[k] = h + 1
+        base = ax.c2p(k * bin_width, bounds(ax)[2])
+        d = Dot(base + UP * (radius * (2 * h + 1)), radius=radius, color=color or S.EST)
+        self.dots.add(d)
+        return d
+
+
+class KernelSum(VGroup):
+    """A kernel density estimate as a sum of bumps (Part 16): one Gaussian bump of width ``h`` and area 1/n under
+    each observation on axes ``ax``, and their sum.  ``bumps`` and ``total`` are the curves; ``rug`` marks the data."""
+
+    def __init__(self, ax, x, h, grid=None, bump_color=None, total_color=None, rug_color=None):
+        super().__init__()
+        x = np.asarray(x, float)
+        x0, x1, y0, _ = bounds(ax)
+        g = np.linspace(x0, x1, 300) if grid is None else np.asarray(grid, float)
+        n = len(x)
+        self.bumps = VGroup()
+        for xi in x:
+            f = np.exp(-0.5 * ((g - xi) / h) ** 2) / (np.sqrt(2 * np.pi) * h * n)
+            self.bumps.add(VMobject(stroke_color=bump_color or GREY_B, stroke_width=1.5, stroke_opacity=0.8)
+                           .set_points_smoothly([ax.c2p(a, b) for a, b in zip(g, f)]))
+        tot = np.exp(-0.5 * ((g[:, None] - x[None, :]) / h) ** 2).sum(1) / (np.sqrt(2 * np.pi) * h * n)
+        self.values = tot
+        self.total = VMobject(stroke_color=total_color or S.EST, stroke_width=4).set_points_smoothly([ax.c2p(a, b) for a, b in zip(g, tot)])
+        self.rug = VGroup(*[Line(ax.c2p(xi, y0), ax.c2p(xi, y0) + UP * 0.18, color=rug_color or S.DATA, stroke_width=2) for xi in x])
+        self.add(self.rug, self.bumps, self.total)
+
+
+class Correlogram(VGroup):
+    """A correlogram (Part 17): one bar per lag k = 1..K for the autocorrelations ``r`` (r[0] = 1 is skipped) on axes
+    ``ax`` (x: lag, y: correlation), with dashed bands at +-``band`` (2/sqrt n) and, optionally, the theoretical values
+    as dots.  ``bars`` and ``bands`` are the parts; bars outside the bands are drawn in ``hot``."""
+
+    def __init__(self, ax, r, band=None, theory=None, color=None, hot=None, width=0.5, start=1):
+        super().__init__()
+        r = np.asarray(r, float)
+        x0, x1, y0, y1 = bounds(ax)
+        self.bars = VGroup()
+        w = ax.c2p(width, 0)[0] - ax.c2p(0, 0)[0]
+        for k in range(start, len(r)):
+            v = r[k]
+            out = band is not None and abs(v) > band
+            top, bot = ax.c2p(k, max(v, 0)), ax.c2p(k, min(v, 0))
+            h = max(1e-3, top[1] - bot[1])
+            self.bars.add(Rectangle(width=w, height=h, stroke_width=0, fill_color=(hot or S.ACCENT) if out else (color or S.EST),
+                                    fill_opacity=0.9).move_to((top + bot) / 2))
+        self.zero = Line(ax.c2p(x0, 0), ax.c2p(x1, 0), color=GREY_C, stroke_width=1.5)
+        self.bands = VGroup()
+        if band is not None:
+            for s in (band, -band):
+                self.bands.add(DashedLine(ax.c2p(x0, s), ax.c2p(x1, s), color=GREY_B, stroke_width=1.5, dash_length=0.08))
+        self.theory = VGroup()
+        if theory is not None:
+            for k in range(start, min(len(theory), len(r))):
+                self.theory.add(Dot(ax.c2p(k, theory[k]), radius=0.05, color=S.TRUTH))
+        self.add(self.zero, self.bands, self.bars, self.theory)
+
+
+class RootPlane(VGroup):
+    """The complex plane for ARMA roots (Part 17): the unit circle, the real and imaginary axes, and ``roots`` as
+    dots, coloured ``inside``/``outside`` by whether they lie inside the circle (non-stationary) or outside (fine).
+    ``mark(roots)`` returns new root dots; ``circle`` and ``dots`` are the parts.  ``scale`` is the screen length of
+    one unit."""
+
+    def __init__(self, roots=(), center=ORIGIN, scale=1.2, extent=2.2, inside=None, outside=None, font_size=20):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.c = np.asarray(center, float)
+        self.scale = scale
+        self.inside, self.outside = inside or S.RESID, outside or S.KEPT
+        e = extent * scale
+        self.axes_ = VGroup(Line(self.c + LEFT * e, self.c + RIGHT * e, color=GREY_C, stroke_width=1.5),
+                            Line(self.c + DOWN * e, self.c + UP * e, color=GREY_C, stroke_width=1.5))
+        self.circle = Circle(radius=scale, color=GREY_A, stroke_width=2.5).move_to(self.c)
+        self.labels = VGroup(label(r"Re", font_size=font_size, color=GREY_B).next_to(self.c + RIGHT * e, DOWN, buff=0.1),
+                             label(r"Im", font_size=font_size, color=GREY_B).next_to(self.c + UP * e, LEFT, buff=0.1),
+                             MathTex(r"1", font_size=font_size, color=GREY_B).next_to(self.c + RIGHT * scale, DR, buff=0.05))
+        self.dots = self.mark(roots)
+        self.add(self.axes_, self.circle, self.labels, self.dots)
+
+    def point(self, z) -> np.ndarray:
+        z = complex(z)
+        return self.c + self.scale * np.array([z.real, z.imag, 0.0])
+
+    def mark(self, roots, radius=0.09) -> VGroup:
+        g = VGroup()
+        for z in roots:
+            z = complex(z[0], z[1]) if isinstance(z, (list, tuple)) else complex(z)
+            col = self.outside if abs(z) > 1 else self.inside
+            g.add(Dot(self.point(z), radius=radius, color=col))
+        return g
+
+
+class YulePendulum(VGroup):
+    """Yule's (1927) picture of an AR(2): a pendulum, left to itself a damped swing, bombarded by boys with
+    pea-shooters.  The bob's displacement follows a series ``x`` (scaled so max |x| swings ``max_angle``); ``at(t)``
+    places it at step t; ``pea(t)`` returns a pea flying in from the side the shock e_t pushes."""
+
+    def __init__(self, x, pivot=ORIGIN, length=2.6, max_angle=0.6, color=None, bob_radius=0.18):
+        super().__init__()
+        self.x = np.asarray(x, float)
+        self.k = max_angle / max(1e-9, np.max(np.abs(self.x)))
+        self.pivot = np.asarray(pivot, float)
+        self.length = length
+        self.mount = Line(self.pivot + LEFT * 0.6, self.pivot + RIGHT * 0.6, color=GREY_B, stroke_width=4)
+        self.rod = Line(self.pivot, self.pivot + DOWN * length, color=GREY_A, stroke_width=3)
+        self.bob = Dot(self.pivot + DOWN * length, radius=bob_radius, color=color or S.EST)
+        self.add(self.mount, self.rod, self.bob)
+        self.at(0)
+
+    def tip(self, t) -> np.ndarray:
+        a = self.k * self.x[int(t)]
+        return self.pivot + self.length * np.array([np.sin(a), -np.cos(a), 0.0])
+
+    def at(self, t):
+        p = self.tip(t)
+        self.rod.put_start_and_end_on(self.pivot, p)
+        self.bob.move_to(p)
+        return self
+
+    def pea(self, t, shock: float, color=None) -> Dot:
+        p = self.tip(t)
+        side = LEFT if shock > 0 else RIGHT
+        return Dot(p + side * 1.6, radius=0.06, color=color or S.ACCENT)
