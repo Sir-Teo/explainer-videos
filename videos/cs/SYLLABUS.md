@@ -153,7 +153,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 15 | pause-time lower bounds for garbage collection; meta-tracing JITs; mechanized WebAssembly |
 | 16 | smoothed analysis; lower bounds beyond comparisons; fine-grained complexity |
 | 17 | the dynamic optimality conjecture; recent optimal open addressing and tiny pointers **(verify)**; succinct structures |
-| 18 | almost-linear max-flow (2022); negative-weight shortest paths (2022); universally optimal Dijkstra (2024) and recent sorting-barrier results **(verify)** |
+| 18 | almost-linear max-flow (2022); negative-weight shortest paths (2022); universally optimal Dijkstra (2024); directed SSSP beyond the sorting barrier (2025) |
 | 19 | the matrix-multiplication exponent ω; SETH-hardness of edit distance; the limits of the laser method |
 | 20 | derandomization (PRIMES in P; identity testing open); optimal sketches and their lower bounds |
 | 21 | compressed indexes in O(r) space; edit-distance lower bounds |
@@ -1229,45 +1229,59 @@ Structures and Network Algorithms*; Mehlhorn & Sanders, *Algorithms and Data Str
 Data Structures*; Navarro, *Compact Data Structures*; Carter & Wegman 1979; Pagh & Rodler 2004; Sleator & Tarjan
 1985; Fredman & Tarjan 1987; Farach-Colton, Krapivin & Kuszmaul 2025.
 
-### Part 18 · Graphs (~60)
+### Part 18 · Graphs (~50)
 *Story:* Euler invented the graph to walk the bridges of Königsberg. Graphs are now the shape of road maps, the
 internet, compilers and markets. Dijkstra designed his algorithm in twenty minutes at a café, and in 2024–25 it was
-proved universally optimal and also beaten. Flows and cuts turn out to be two faces of one theorem.
-1. Königsberg (1736): Eulerian circuits by degree (proved); representations and their costs.
-2. BFS: layers, unweighted shortest paths, bipartiteness.
-3. DFS: discovery and finish times, the parenthesis theorem, edge classes, the white-path theorem.
-4. Topological sort (DFS order; Kahn); DAGs in build systems, spreadsheets and Part 13's compiler.
-5. SCCs: Kosaraju, and Tarjan's one-pass low-links (animated); the condensation; 2-SAT via SCCs.
-6. Dijkstra (1956/59):
-   - correctness by invariant;
-   - heaps, and Fibonacci heaps for O(m + n log n);
-   - the wavefront spreading over a city grid.
-7. The frontier: Dijkstra is universally optimal (Haeupler et al. 2024); directed SSSP beyond the sorting barrier,
-   O(m log^{2/3} n) (Duan et al. 2025) **(verify)**.
-8. Negative edges: Bellman–Ford, negative cycles, arbitrage as a negative cycle in −log rates; distance-vector
-   routing (Part 36).
-9. All pairs: Floyd–Warshall as DP; Johnson's reweighting by potentials (proved); the min-plus product and the APSP
-   conjecture (Part 27).
-10. A* (callback to *AI, Built* 2), landmarks, contraction hierarchies (how a map app answers in microseconds).
-11. MSTs: the cut and cycle properties (proved); Kruskal (with Part 17's union–find), Prim, Borůvka (1926, for the
-    Moravian grid); randomized linear time (Karger, Klein & Tarjan).
-12. **Max-flow min-cut**: Ford–Fulkerson, residual graphs, the theorem (proved), Edmonds–Karp, push–relabel; the
-    almost-linear-time max flow (Chen et al. 2022).
-13. Matching: bipartite matching as flow; Hall's theorem and König; the Hungarian algorithm; **Gale–Shapley** (1962,
-    with stability proved) and the residency match.
-14. Easy and hard: Euler tours against Hamiltonian cycles (Part 26).
-15. PageRank (Brin & Page 1998) as a random surfer's stationary distribution, by power iteration (callback to *AI,
-    Built* 5).
-16. Planarity: Euler's V − E + F = 2; the four-color theorem (1976, verified in Coq in 2005). Outro.
+proved universally optimal and also beaten. Flows and cuts turn out to be two faces of one theorem, and the gap
+between an Euler tour and a Hamiltonian cycle is the first glimpse of P against NP.
+1. Königsberg (1736): degrees 5, 3, 3, 3; the even-degree theorem (proved) and Hierholzer's circuit in O(E);
+   adjacency lists against a matrix, measured from sparse to dense (the matrix wins at 1.5 million edges on 3,000
+   vertices).
+2. BFS: layers in a 24 × 14 maze (67 layers, a 59-cell path; Moore 1959); the queue lemma (proved, animated);
+   bipartiteness and the odd cycle that refutes it.
+3. DFS: discovery and finish times; the parenthesis and white-path theorems; tree, back, forward and cross edges;
+   a back edge is a cycle (Trémaux 1882; Hopcroft & Tarjan).
+4. Topological sort: a compiler's build graph by DFS finish order and by Kahn's queue (1962); cycles; make,
+   spreadsheets, Part 13's reverse postorder, critical paths.
+5. SCCs: Tarjan's low links, traced step by step with the stack; Kosaraju; the condensation; a 20,000-page synthetic
+   web (a core of 7,583) and Broder's bow tie; 2-SAT by the implication graph (Aspvall, Plass & Tarjan 1979).
+6. Dijkstra (1956/59): the invariant proved with the settled-set picture; Part 17's heap; the wavefront over a city of
+   2,400 intersections with arterial roads.
+7. Negative edges: Dijkstra's failure; Bellman–Ford round by round; negative cycles; arbitrage as a negative cycle
+   in −log rates (illustrative rates: JPY → GBP → EUR, +0.5%); distance-vector routing (Part 36).
+8. All pairs: Floyd–Warshall as DP; Johnson's reweighting (proved, with a worked example; 150 vertices and 231
+   negative edges, matching Floyd–Warshall); the min-plus product and the APSP conjecture (Part 27).
+9. Route planning: A* (callback to *AI, Built* 2), landmarks, contraction hierarchies; vertices settled per query on
+   4,800 intersections: Dijkstra 2,525, bidirectional 1,237, A* 657, landmarks 208, CH 113.
+10. MSTs: the cut property, proved on a worked example, and the cycle property; Kruskal with Part 17's union–find,
+    Prim/Jarník, Borůvka (1926, for the Moravian grid; 4 rounds); Karger, Klein & Tarjan.
+11. **Max-flow min-cut**: augmenting paths and the residual graph; the theorem (proved; 19 = 10 + 9); Edmonds–Karp
+    against an unlucky path choice (2 augmentations against 2,000); push–relabel.
+12. Matching: bipartite matching as flow; Hall and Kőnig; **Gale–Shapley** with stability proved; proposals against
+    n Hₙ; the Hungarian algorithm (166 against greedy's 308).
+13. Easy and hard: Hamilton's icosian game (all 30 Hamiltonian cycles of the dodecahedron); Euler against Hamilton
+    (Part 26); Held–Karp timed against brute force.
+14. PageRank (Brin & Page 1998): the random surfer's stationary distribution (callback to *AI, Built* 5); power
+    iteration on 20,000 pages (52 rounds to 10⁻¹²); rank against in-degree.
+15. Planarity: V − E + F = 2 (54 − 133 + 81); E ≤ 3V − 6 and K₅; Guthrie to Appel–Haken (1976) and Gonthier's Coq
+    proof (2005); the five-colour theorem by Kempe chains (proved, animated); our map coloured greedily with 5,
+    with 4 by backtracking, and 3 refuted by an odd wheel.
+16. *Frontier*: universally optimal Dijkstra (Haeupler, Hladík, Rozhoň, Tarjan & Tětek, FOCS 2024); directed SSSP
+    in O(m log^{2/3} n), beyond the sorting barrier (Duan, Mao, Mao, Shu & Yin, STOC 2025); negative weights in
+    near-linear time (Bernstein, Nanongkai & Wulff-Nilsen 2022); max flow in almost-linear time (Chen, Kyng, Liu,
+    Peng, Probst Gutenberg & Sachdeva 2022); open problems. Outro.
 
-*Computed:* BFS, DFS and SCC traces; Dijkstra against A* against bidirectional node counts; arbitrage detection; the
-MST algorithms; Edmonds–Karp augmentations; Gale–Shapley; PageRank on a synthetic web.
-*Visuals:* the Dijkstra wavefront; DFS as a thread through a maze with parenthesis intervals; flows as water in
-pipes, and the min cut as a slice; proposals in stable matching.
+*Computed:* every number above, in `videos/cs/cs18/compute.py` with `explainer/cs/algo/graphs.py` (tested in
+`tests/test_cs18_graphs.py`): BFS, DFS and SCC traces; the representation timings; Dijkstra, bidirectional, A*, ALT
+and CH on one city; Bellman–Ford, Floyd–Warshall and Johnson; Kruskal, Prim and Borůvka; Edmonds–Karp; Gale–Shapley
+and the Hungarian algorithm; Held–Karp; PageRank; planar colouring.
+*Visuals:* the Königsberg multigraph; the BFS flood and its queue; DFS stamps and parentheses; Tarjan's stack; the
+Dijkstra wavefront and settled-set proof; search footprints for A*, landmarks and CH; the cut-property swap; flows
+as flashes along paths, and the min cut; Kempe chains.
 *In practice:* route planning in maps, network routing, dependency graphs, social graphs, scheduling, graph databases.
 *Reading:* CLRS ch. 20–26; Kleinberg & Tardos ch. 3, 4, 7; Tarjan; Ahuja, Magnanti & Orlin, *Network Flows*; Even,
 *Graph Algorithms*; Schrijver, *Combinatorial Optimization*; Dijkstra 1959; Ford & Fulkerson 1956; Tarjan 1972; Gale &
-Shapley 1962; Chen et al. 2022; Haeupler et al. 2024.
+Shapley 1962; Chen et al. 2022; Haeupler et al. 2024; Duan et al. 2025.
 
 ### Part 19 · The Great Paradigms (~60)
 *Story:* Most good algorithms come from a handful of ideas: be greedy when an exchange argument allows it, divide
@@ -3247,4 +3261,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 15 | scenes (17, with the *Frontier* chapter), computations (the λ-core's bytecode compiler and reference VM under four collectors; the VM and Cheney's collector in the Pebble language, co-simulated and priced on Part 8's core for ledger row 6; reference-count traffic, lifetimes and nurseries; tri-color marking with and without barriers; a CEK machine and a tiny Prolog; CPython, V8, HotSpot, Go, gcc and node timed and traced on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 16 | scenes (18, with the *Frontier* chapter), computations (every sort counting its comparisons, with insertion, merge, heap, quick, Ford–Johnson, counting, radix, Timsort, quickselect and median of medians; decision trees; the Job v1 in the Pebble language on the emulator, an instruction model and a C event counter over the corpus for ledger row 7; repeated squaring, radix sort and `std::sort` timed on this machine), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 17 | scenes (18, with the *Frontier* chapter), computations (every structure counting its work: chaining, universal hashing, linear and double hashing, Robin Hood, cuckoo and FKS perfect hashing; plain, AVL, red–black, treap, splay, persistent trees, skip lists and B-trees; binary, pairing and Fibonacci heaps under Dijkstra; union–find; tries and rank; the Job v2 hash table in the Pebble language on the emulator, an exact instruction model, a C event counter and a C replay through Part 9's caches for ledger row 8; lookups and the Job timed natively), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 51 min (estimate) |
-| 18–61 | planned (this document) | — |
+| 18 | scenes (18, with the *Frontier* chapter), computations (every algorithm counting its work: Euler circuits, BFS, DFS, topological sort, Tarjan and Kosaraju with 2-SAT, Dijkstra, bidirectional, A*, landmarks and contraction hierarchies, Bellman–Ford, Floyd–Warshall and Johnson, Kruskal, Prim and Borůvka, Edmonds–Karp, Gale–Shapley and the Hungarian algorithm, Held–Karp, PageRank, planar colouring), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
+| 19–61 | planned (this document) | — |
