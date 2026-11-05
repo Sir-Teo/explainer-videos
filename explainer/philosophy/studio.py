@@ -28,6 +28,17 @@ import numpy as np
 from explainer.ai import *  # noqa: F401,F403
 from explainer.ai import zh, data_text  # noqa: F401
 from explainer.analysis import label, note, wrapped_label  # noqa: F401
+from explainer.analysis import WIDE_TEX
+
+# Transliterated Arabic, Sanskrit and Pali names (Ḥunayn, Ṛg Veda, ʿAlī) need letters pdflatex's T1 encoding lacks;
+# xelatex (the Chinese renders, whose template was copied before this) sets them from the font directly.
+_DOT_BELOW = {"1E24": "H", "1E62": "S", "1E6C": "T", "1E0C": "D", "1E92": "Z", "1E93": "z", "1E46": "N", "1E42": "M",
+              "1E5A": "R", "1E36": "L", "1E5C": r"\=R", "1E5D": r"\=r", "1E38": r"\=L", "1E39": r"\=l"}
+WIDE_TEX.add_to_preamble(
+    r"\ifdefined\XeTeXrevision\else"
+    + "".join(rf"\DeclareUnicodeCharacter{{{k}}}{{\d{{{v}}}}}" for k, v in _DOT_BELOW.items())
+    + r"\DeclareUnicodeCharacter{02BF}{\textquoteleft}\DeclareUnicodeCharacter{02BE}{\textquoteright}"
+    r"\DeclareUnicodeCharacter{1E2B}{\b{h}}\DeclareUnicodeCharacter{1E35}{\b{k}}\fi")
 
 SERIES_EN = "Philosophy, Built"
 SERIES_ZH = "哲学，从零搭建"
@@ -131,25 +142,25 @@ def series_map(current: int | None = None, done: int = 0, font_size=17, width=13
 # ---------------------------------------------------------------------------
 # (year, what) for the whole series; a part lights the years its chapters reach.  Negative years are BCE.
 TIMELINE = [
-    (-585, r"Thales"), (-500, r"Heraclitus; Confucius"), (-475, r"Parmenides"), (-450, r"Zeno's paradoxes"),
+    (-585, r"Thales"), (-500, r"Heraclitus; Confucius"), (-480, r"the Buddha"), (-475, r"Parmenides"), (-450, r"Zeno's paradoxes"),
     (-400, r"Socrates; Mozi"), (-380, r"Plato: \textit{Meno}, \textit{Republic}"), (-350, r"Aristotle's logic"),
-    (-300, r"Stoic logic; Zhuangzi"), (-280, r"the School of Names"), (150, r"Nāgārjuna"),
-    (480, r"Dignāga"), (1037, r"Avicenna"), (1078, r"Anselm"), (1095, r"al-Ghazālī"), (1270, r"Aquinas"),
-    (1305, r"Llull's \textit{Ars Magna}"), (1320, r"Ockham"), (1641, r"Descartes"), (1651, r"Hobbes"),
+    (-300, r"Stoic logic; Zhuangzi"), (-280, r"the School of Names"), (150, r"Nāgārjuna; the \textit{Nyāya Sūtra}"),
+    (480, r"Dignāga"), (830, r"the House of Wisdom, Baghdad"), (950, r"al-Fārābī"), (1037, r"Avicenna"), (1180, r"Averroes"), (1078, r"Anselm"), (1095, r"al-Ghazālī"), (1270, r"Aquinas"),
+    (1305, r"Llull's \textit{Ars Magna}"), (1320, r"Ockham"), (1641, r"Descartes"), (1651, r"Hobbes"), (1666, r"Leibniz: the art of combinations"),
     (1677, r"Spinoza's \textit{Ethics}"), (1679, r"Leibniz's characteristic"), (1685, r"\textit{Calculemus}"),
     (1689, r"Locke"), (1703, r"Leibniz on binary"), (1739, r"Hume's \textit{Treatise}"), (1763, r"Bayes"),
     (1779, r"Hume's \textit{Dialogues}"), (1781, r"Kant's \textit{Critique}"), (1785, r"Condorcet"), (1847, r"De Morgan"),
     (1854, r"Boole's \textit{Laws of Thought}"), (1880, r"Peirce: nand"), (1874, r"Cantor"), (1879, r"Frege's \textit{Begriffsschrift}"),
-    (1884, r"Frege's \textit{Grundlagen}"), (1902, r"Russell's paradox"), (1905, r"Russell: descriptions"),
+    (1884, r"Frege's \textit{Grundlagen}"), (1888, r"Dedekind's axioms"), (1902, r"Russell's paradox"), (1905, r"Russell: descriptions"),
     (1908, r"Zermelo"), (1913, r"\textit{Principia}; Sheffer's stroke"), (1921, r"Post; the \textit{Tractatus}"),
-    (1926, r"Ramsey on credence"), (1929, r"Gödel: completeness"), (1931, r"Gödel: incompleteness"),
-    (1933, r"Tarski on truth"), (1935, r"Gentzen; EPR"), (1936, r"Turing; Church"), (1941, r"Post's lattice"),
-    (1944, r"von Neumann--Morgenstern"), (1950, r"Turing's test"), (1951, r"Arrow; Quine's dogmas"),
-    (1953, r"the \textit{Investigations}"), (1955, r"Goodman's grue"), (1959, r"Kripke semantics"), (1960, r"Davis--Putnam"),
+    (1915, r"Löwenheim's theorem"), (1926, r"Ramsey on credence"), (1928, r"the \textit{Entscheidungsproblem}"), (1929, r"Gödel: completeness"), (1931, r"Gödel: incompleteness"),
+    (1933, r"Tarski on truth"), (1934, r"Skolem: nonstandard numbers"), (1935, r"Gentzen; EPR"), (1936, r"Turing; Church"), (1941, r"Post's lattice"),
+    (1944, r"von Neumann--Morgenstern"), (1948, r"Quine: `On What There Is'"), (1949, r"Jaspers: the Axial Age"), (1950, r"Turing's test"), (1951, r"Arrow; Quine's dogmas"),
+    (1953, r"the \textit{Investigations}"), (1954, r"Thomson's lamp"), (1955, r"Goodman's grue; Beth's tableaux"), (1959, r"Kripke semantics"), (1960, r"Davis--Putnam"),
     (1962, r"Kuhn"), (1963, r"Gettier; Cohen's forcing"), (1964, r"Bell's theorem"), (1965, r"Robinson: resolution"), (1968, r"Tseitin's encoding"),
-    (1969, r"Lewis: \textit{Convention}"), (1970, r"Kripke: naming"), (1971, r"Rawls; Cook"),
+    (1969, r"Lewis: \textit{Convention}; Lindström"), (1970, r"Kripke: naming"), (1971, r"Rawls; Cook"),
     (1973, r"Lewis: counterfactuals"), (1974, r"Nagel's bat"), (1975, r"Kripke on truth"), (1976, r"Lewis's triviality"),
-    (1980, r"the Chinese room"), (1984, r"Parfit"), (1985, r"AGM; Haken"), (1986, r"Lewis: worlds"),
+    (1980, r"the Chinese room; Putnam on models"), (1984, r"Parfit"), (1985, r"AGM; Haken"), (1986, r"Lewis: worlds"),
     (1995, r"the hard problem"), (1996, r"CDCL solvers"), (2000, r"Pearl's \textit{Causality}"),
     (2016, r"Pythagorean triples; fairness theorems"), (2020, r"PhilPapers survey"), (2024, r"machine-checked BB(5)"),
     (2026, r"this series"),
