@@ -1133,3 +1133,34 @@ class ChallengerDashboard(VGroup):
     def stop(self):
         for m in (self.probe, self.readout):
             m.clear_updaters()
+
+
+class BilliardTable(VGroup):
+    """Bayes's table (Part 15): a square of felt seen from above, with coordinates (u, v) in [0, 1]^2.  The hidden ball
+    W stops at some u; each later ball counts as a success if it stops left of W's line.  ``point(u, v)`` maps table
+    coordinates to the scene; ``line(u)`` draws W's line; ``roll(u, v)`` returns a ball and the animation that sends it
+    from the near cushion to (u, v) along a gentle arc."""
+
+    FELT, CUSHION = "#1F4D3A", "#6B4A2B"
+
+    def __init__(self, width: float = 6.0, height: float = 3.6, center=ORIGIN):
+        super().__init__()
+        self.w, self.h = width, height
+        self.felt = Rectangle(width=width, height=height, stroke_width=0, fill_color=self.FELT, fill_opacity=1.0)
+        self.cushion = Rectangle(width=width + 0.24, height=height + 0.24, stroke_color=self.CUSHION, stroke_width=10)
+        self.add(self.cushion, self.felt)
+        self.move_to(center)
+
+    def point(self, u, v):
+        c = self.felt.get_center()
+        return np.array([c[0] + (u - 0.5) * self.w, c[1] + (v - 0.5) * self.h, 0.0])
+
+    def line(self, u, color=None, stroke_width=3.0):
+        return DashedLine(self.point(u, 0), self.point(u, 1), color=color or S.TRUTH, stroke_width=stroke_width)
+
+    def roll(self, u, v, color=None, radius=0.09, run_time=0.8):
+        ball = Dot(self.point(0.5, -0.02), radius=radius, color=color or WHITE)
+        start, end = self.point(0.5, 0.02), self.point(u, v)
+        mid = (start + end) / 2 + np.array([0, 0.25, 0])
+        path = VMobject().set_points_smoothly([start, mid, end])
+        return ball, MoveAlongPath(ball, path, run_time=run_time, rate_func=rate_functions.ease_out_cubic)
