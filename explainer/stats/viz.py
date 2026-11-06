@@ -3381,3 +3381,38 @@ class StateEvolution(VGroup):
 
     def iterates(self, t2s, color=None, radius: float = 0.06) -> VGroup:
         return VGroup(*[Dot(self.ax.c2p(a, a), radius=radius, color=color or WHITE) for a in np.asarray(t2s, float)])
+
+
+class DepthMap(VGroup):
+    """Tukey's halfspace depth, drawn (Part 60): on axes ``ax``, the depth of every cell of a grid as a shade (deeper is
+    brighter), the depth contours as the cells' level sets, and the Tukey median, the deepest point.  ``cells(levels)``
+    draws the shaded grid, ``points(X, color)`` the data, ``mark(p, color)`` a location such as the median or the mean,
+    so robust and non-robust centres can be compared as outliers arrive."""
+
+    def __init__(self, ax, grid, depth):
+        super().__init__()
+        self.ax = ax
+        self.grid = np.asarray(grid, float)
+        self.depth = np.asarray(depth, float)
+        xs, ys = np.unique(self.grid[:, 0]), np.unique(self.grid[:, 1])
+        self.dx = (xs[1] - xs[0]) if len(xs) > 1 else 1.0
+        self.dy = (ys[1] - ys[0]) if len(ys) > 1 else 1.0
+
+    def cells(self, color=None, min_depth: float = 0.02, opacity: float = 0.9) -> VGroup:
+        g = VGroup()
+        dmax = max(self.depth.max(), 1e-9)
+        w = abs(self.ax.c2p(self.dx, 0)[0] - self.ax.c2p(0, 0)[0])
+        h = abs(self.ax.c2p(0, self.dy)[1] - self.ax.c2p(0, 0)[1])
+        for (x, y), dpt in zip(self.grid, self.depth):
+            if dpt < min_depth:
+                continue
+            g.add(Rectangle(width=w, height=h, stroke_width=0, fill_color=color or S.PRIOR,
+                            fill_opacity=opacity * (dpt / dmax) ** 1.2).move_to(self.ax.c2p(x, y)))
+        return g
+
+    def points(self, X, color=None, radius: float = 0.04) -> VGroup:
+        return VGroup(*[Dot(self.ax.c2p(a, b), radius=radius, color=color or WHITE, fill_opacity=0.85) for a, b in np.asarray(X, float)])
+
+    def mark(self, p, color=None, radius: float = 0.11) -> VGroup:
+        c = self.ax.c2p(float(p[0]), float(p[1]))
+        return VGroup(Dot(c, radius=radius, color=color or S.ACCENT), Circle(radius=radius * 1.8, color=color or S.ACCENT, stroke_width=2).move_to(c))
