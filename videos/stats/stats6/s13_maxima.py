@@ -54,10 +54,11 @@ class Maxima(VoiceoverScene):
             cmath(r"P(\max - \log n \le x)", r"\to", r"\exp\big(-e^{-x}\big)", font_size=34),
         ]
         rows[2][2].set_color(EXACT)
-        whys = [why(r"follow the maximum: \ subtract $\log n$"), why(r"$e^{-\log n} = 1/n$"),
+        whys = [why(r"i.i.d. Exp(1); $x\ge-\log n$: subtract $\log n$"), why(r"$e^{-\log n} = 1/n$"),
                 why(r"$(1 + y/n)^n \to e^y$: \ the Gumbel distribution")]
         hc = history_card(1958, r"Emil Gumbel, \ \emph{Statistics of Extremes}", r"the standard text for engineers designing for "
                           r"floods, \ droughts and gales", color=S.MUSEUM, width=5.6, font_size=22).to_edge(DOWN, buff=0.5)
+        intro = label('Follow an exponential maximum', font_size=36)
         with self.voiceover(
             "Follow it, and the limit appears. <bookmark mark='a'/> Subtract log n from the maximum of n "
             "exponentials. <bookmark mark='b'/> e to the minus log n is one over n, so the CDF becomes one minus e "
@@ -65,9 +66,12 @@ class Maxima(VoiceoverScene):
             "tends to e to the minus e to the minus x. This is the Gumbel distribution, named for Emil Gumbel, "
             "whose 1958 book taught a generation of engineers to design for floods."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             self.play(FadeIn(hc))
         self.clear_scene()
@@ -118,30 +122,34 @@ class Maxima(VoiceoverScene):
         for k, (nm, sub, key, ed, cx_, cy_, xr, ymax, c, xl) in enumerate(specs):
             cx = -4.5 + 4.5 * k
             A = axes(xr, [0, ymax], x_length=3.8, y_length=2.6, xlabel=xl, center=[cx, -0.8, 0], font_size=18)
-            h = hist_bars(A.ax, np.asarray(ed), np.clip(np.asarray(d[f"{key}_1000"]), 0, ymax), color=c, opacity=0.7)
-            cv = curve(A.ax, np.asarray(cx_), np.clip(np.asarray(cy_), 0, ymax), EXACT, 2.5)
+            h = hist_bars(A.ax, np.asarray(ed), np.asarray(d[f"{key}_1000"]), color=c, opacity=0.7)
+            cv = curve(A.ax, np.asarray(cx_), np.asarray(cy_), EXACT, 2.5)
             t = VGroup(label(nm, font_size=28, color=c), label(sub, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.1)
             t.move_to([cx, 1.7, 0])
             panels.add(VGroup(t, A, h, cv))
         tag = note(r"simulated: 20,000 maxima of 1,000 each").to_corner(DR, buff=0.25)
+        intro = label('Three domains of attraction', font_size=36)
         with self.voiceover(
             "The Gumbel isn't the only possible limit. What happens depends on the tail of the original "
             "distribution. <bookmark mark='a'/> Light tails, like the exponential or the normal, give the Gumbel, "
-            "after shifting. <bookmark mark='b'/> Heavy, power-law tails, like the Pareto, give a different law, "
+            "after appropriate centring and scaling. <bookmark mark='b'/> Heavy, power-law tails, like the Pareto, give a different law, "
             "named for Maurice Fréchet: here the maximum must be scaled, not shifted, by root n for a Pareto with "
             "index two, and its limit has a power-law tail of its own. <bookmark mark='c'/> And a distribution with "
-            "a hard ceiling, like the uniform, gives a third, a reversed Weibull: the maximum creeps up to the "
+            "an endpoint with a power-law approach, as for the uniform or beta, gives a third, a reversed Weibull: the maximum creeps up to the "
             "ceiling, and its distance below it, times n, has an exponential limit."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(panels[k]))
         self.clear_scene()
 
     def gev(self):
-        thm = theorem_card(r"Fisher--Tippett--Gnedenko", r"if $(\max_i X_i - b_n)/a_n$ converges to a non-degenerate law, \ it is the "
-                           r"generalized extreme value law \ $G(x) = \exp\big\{-[1 + \xi(x - \mu)/\sigma]^{-1/\xi}\big\}$",
+        thm = theorem_card(r"Fisher--Tippett--Gnedenko", r"for i.i.d. $X_i$, $a_n>0$: if $(\max_i X_i - b_n)/a_n$ converges to a non-degenerate law, \ it is the "
+                           r"GEV law ($\sigma>0$, $1+\xi(x-\mu)/\sigma>0$): $G(x) = \exp\big\{-[1 + \xi(x - \mu)/\sigma]^{-1/\xi}\big\}$",
                            who=r"Fisher \& Tippett 1928; \ Gnedenko 1943", color=S.ACCENT, width=10.4, font_size=24).to_edge(UP, buff=0.5)
         rows = VGroup(
             MathTex(r"\xi > 0:\ \text{Fr\'echet (heavy tails)}", font_size=30, color=S.POST),

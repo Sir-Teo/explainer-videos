@@ -7,7 +7,7 @@ import numpy as np
 from explainer.stats import *  # noqa: F403
 from explainer.stats import museum  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import clipped_segments, load  # noqa: F401
 
 PART = 6
 
@@ -32,10 +32,19 @@ def normal_pdf(x, mu=0.0, sd=1.0):
 
 
 def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0) -> VMobject:
-    pts = [ax.c2p(a, b) for a, b in zip(xs, ys) if np.isfinite(b)]
     m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
-    m.set_points_as_corners(pts)
+    previous = None
+    for start, end in clipped_segments(xs, ys, bounds(ax)):
+        if previous is None or not np.allclose(previous, start, atol=1e-12, rtol=0):
+            m.start_new_path(ax.c2p(*start))
+        m.add_line_to(ax.c2p(*end))
+        previous = end
     return m
+
+
+def curve(ax, xs, ys, color=WHITE, stroke_width=2.5, opacity=1.0) -> VMobject:
+    """Sampled curves use the same honest viewport clipping as running paths."""
+    return polyline(ax, xs, ys, color, stroke_width, opacity)
 
 
 def pmf_bars(ax, ks, ps, color, width=0.8, opacity=0.8) -> VGroup:

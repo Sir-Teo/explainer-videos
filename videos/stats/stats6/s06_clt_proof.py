@@ -33,8 +33,9 @@ class CLTProof(VoiceoverScene):
         whys = [why(r"standardize each term: \ $E Y = 0$, \ $E Y^2 = 1$"), why(r"independence: \ the expectation of a product "
                                                                               r"factors (Part 3)"),
                 why(r"so we need $\log M_Y$ near $0$")]
+        intro = label('Proving the CLT with an MGF near zero', font_size=36)
         with self.voiceover(
-            "Here is the theorem: for independent, identically distributed variables with a finite variance, the "
+            "Here is the theorem: for independent, identically distributed variables with finite positive variance, the "
             "standardized sum converges in distribution to the standard normal. We'll prove it assuming a little "
             "more, that the moment generating function exists near zero. <bookmark mark='a'/> Standardize each term "
             "first: Y has mean zero and variance one, and Z n is the sum of the Y's divided by root n. "
@@ -43,9 +44,12 @@ class CLTProof(VoiceoverScene):
             "the MGF of Y at t over root n, raised to the n-th power. <bookmark mark='c'/> Take logarithms. Everything "
             "now depends on the log-MGF of Y at a point that's approaching zero."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.6, buff=0.8, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -121,12 +125,12 @@ class CLTProof(VoiceoverScene):
         self.clear_scene()
 
     def assumed(self):
-        thm = theorem_card(r"Lindeberg--L\'evy central limit theorem", r"$X_i$ i.i.d.\ with mean $\mu$ and variance $\sigma^2 < \infty$: "
+        thm = theorem_card(r"Lindeberg--L\'evy central limit theorem", r"$X_i$ i.i.d.\ with mean $\mu$ and variance $0<\sigma^2 < \infty$: "
                            r"\ $\dfrac{S_n - n\mu}{\sigma\sqrt n} \xrightarrow{d} N(0, 1)$", who=r"no MGF needed", color=EXACT,
                            width=8.4, font_size=26).to_edge(UP, buff=0.5)
         rows = VGroup(
             label(r"our proof assumed an MGF near $0$: \ the lognormal and Student's $t$ have none", font_size=24, color=BOUND),
-            label(r"the repair: \ characteristic functions $E e^{itX}$ (Part 3) always exist; \ the same three lines work", font_size=24),
+            label(r"the repair: \ characteristic functions $E e^{itX}$ (Part 3) always exist; \ $\varphi_Y(u)=1-u^2/2+o(u^2)$ is enough", font_size=24),
             label(r"terms not identically distributed: \ Lyapunov (1901), \ Lindeberg's condition (1922)", font_size=24),
             label(r"no single term may dominate: \ Feller (1935) showed Lindeberg's condition is then necessary", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(thm, DOWN, buff=0.5)
@@ -138,12 +142,11 @@ class CLTProof(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The full theorem needs only a finite variance. <bookmark mark='b'/> Our proof "
             "assumed more: an MGF near zero. The lognormal's MGF is infinite for every positive t, and so is Student's t's, so the "
-            "proof as given doesn't cover them, though the theorem does. <bookmark mark='c'/> The repair is to "
+            "proof as given doesn't cover them, though the theorem covers the lognormal and Student laws with more than two degrees of freedom. <bookmark mark='c'/> The repair is to "
             "replace e to the t X by e to the i t X: the characteristic function of Part 3, which always exists, "
-            "since its size is one. The same three lines of expansion go through. <bookmark mark='d'/> Nor do the "
+            "since its size is one. Finite variance gives a second-order expansion with a remainder smaller than u squared; no third or fourth moment is needed. Levy's continuity theorem then supplies convergence in distribution. <bookmark mark='d'/> Nor do the "
             "terms need to be identically distributed. Aleksandr Lyapunov proved a version in 1901, and Jarl "
-            "Lindeberg found the right condition in 1922: roughly, that no single term contributes a noticeable "
-            "share of the variance. <bookmark mark='e'/> William Feller showed in 1935 that, when no term dominates, "
+            "Lindeberg found the right condition in 1922: the normalized sum of variance contributions from terms whose magnitude exceeds epsilon times the total standard deviation must vanish for every positive epsilon. This is stronger than saying no single term dominates the variance. <bookmark mark='e'/> William Feller showed in 1935 that, when no term dominates, "
             "Lindeberg's condition is also necessary. Part 43 proves all of it."
         ) as vo:
             vo.wait_until("a")
@@ -165,7 +168,7 @@ class CLTProof(VoiceoverScene):
             "<bookmark mark='a'/> The name comes from George Pólya, who in 1920 called it the central limit theorem "
             "of probability: central as in of central importance. <bookmark mark='b'/> It had taken almost two "
             "centuries, from de Moivre's coins, through Laplace, to Lyapunov, Lindeberg, Lévy and Feller, who "
-            "pinned down exactly when it holds. Every confidence interval and every test in the next fifteen parts leans "
+            "pinned down exactly when it holds. Many asymptotic confidence intervals and tests in the next fifteen parts lean "
             "on it."
         ) as vo:
             vo.wait_until("a")

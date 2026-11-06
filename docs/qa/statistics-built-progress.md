@@ -5,9 +5,9 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 ## Current checkpoint
 
-Parts 1–3 have received chapter-by-chapter English source reviews and visual repair passes. All 48 current English endpoint captures are free of runtime, clipping and blank-beat warnings. Parts 1 and 2 each have six native 1080p cases; Part 3 has seven. Part 1 has four silent motion checks, and Parts 2 and 3 each have two. Representative narrated previews have six, six and seven clean signal/alignment checks respectively. The combined statistics/QA suite passes 554 tests and five subtests. [Part 1 evidence](evidence/stats1-polish-20261106/README.md) and [Part 2 evidence](evidence/stats2-polish-20261106/README.md), and [Part 3 evidence](evidence/stats3-polish-20261106/README.md).
+Parts 1–3 have received chapter-by-chapter English source reviews and visual repair passes. All 48 current English endpoint captures are free of runtime, clipping and blank-beat warnings. Parts 1 and 2 each have six native 1080p cases; Part 3 has seven. Part 1 has four silent motion checks, and Parts 2 and 3 each have two. Representative narrated previews have six, six and seven clean signal/alignment checks respectively. The combined statistics/QA suite passes 565 tests and five subtests. [Part 1 evidence](evidence/stats1-polish-20261106/README.md) and [Part 2 evidence](evidence/stats2-polish-20261106/README.md), and [Part 3 evidence](evidence/stats3-polish-20261106/README.md).
 
-Parts 4 and 5 have completed their scientific source correction passes. Part 4's final visual checks are in progress, and Part 5's first visual sweep is queued.
+Parts 4 and 5 have completed their scientific source correction passes. Part 4's final visual checks are in progress, and Part 5's first visual sweep is running. Part 6's scientific source repairs and seven reference checks are complete; its visual sweep is running.
 
 No part is signed off for bilingual production. The branch has zero `narration_zh.json` tables and no `stats_text_zh.json`; full narrated masters and continuous listening/playback remain separate gates. Existing translation warnings remain visible.
 
@@ -30,7 +30,7 @@ No part is signed off for bilingual production. The branch has zero `narration_z
 | 3 | `stats3` | 16 | English source/visual pass complete; production gates open |
 | 4 | `stats4` | 14 | Scientific source corrections complete; visual verification in progress |
 | 5 | `stats5` | 16 | Scientific source corrections complete; visual verification pending |
-| 6 | `stats6` | 15 | Not yet reviewed chapter by chapter |
+| 6 | `stats6` | 15 | Scientific source corrections complete; visual verification in progress |
 | 7 | `stats7` | 13 | Not yet reviewed chapter by chapter |
 | 8 | `stats8` | 14 | Not yet reviewed chapter by chapter |
 | 9 | `stats9` | 13 | Not yet reviewed chapter by chapter |

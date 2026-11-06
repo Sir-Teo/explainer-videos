@@ -9,7 +9,7 @@ PROBLEMS = [
     r"Use moment generating functions to show that $\mathrm{Binomial}(n, \lambda/n) \to \mathrm{Poisson}(\lambda)$ in distribution.",
     r"$X_1, \dots, X_n$ are i.i.d.\ exponential with rate $\lambda$. \ Find the limiting distribution of $\sqrt n\,(1/\bar X_n - \lambda)$.",
     r"$U_1, \dots, U_n$ are i.i.d.\ uniform on $(0, 1)$. \ Show $n\,(1 - \max_i U_i) \to \mathrm{Exp}(1)$ in distribution.",
-    r"Show that $\sqrt n(\bar X_n - \mu)/S_n \to N(0, 1)$ needs only a finite variance, \ naming each theorem you use.",
+    r"Show that $\sqrt n(\bar X_n - \mu)/S_n \to N(0, 1)$ for i.i.d. data needs only finite positive variance, \ naming each theorem you use.",
 ]
 
 
@@ -73,16 +73,19 @@ class Outro(VoiceoverScene):
             (r"heavy tails, stable laws", [30, 60]),
             (r"extreme values, return levels", [22, 39, 40]),
         ], font_size=22)
+        intro = label('Where these limit theorems return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Consistency is the first property we ask of every estimator, "
-            "from Part 9 on. The central limit theorem stands behind every interval and test in the next fifteen "
+            "from Part 9 on. The central limit theorem stands behind many asymptotic intervals and tests in the next fifteen "
             "parts, and Part 43 proves it in full. Its speed returns with the bootstrap. The delta method gives the "
             "standard errors of almost every estimator you'll meet. Slutsky's theorem is used every time a nuisance "
             "parameter is estimated. Concentration inequalities are the language of high-dimensional statistics and "
             "learning theory. And heavy tails and extremes return with robust statistics and with spatial and "
             "survival models."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3),
                       run_time=6.0)
         self.clear_scene()

@@ -10,8 +10,7 @@ a median of 1,207 lb, against a true 1,198. From there the part builds:
 - the inequalities that make averaging work: Markov, Chebyshev and Jensen;
 - the weak law, with Bernoulli's 1713 urn;
 - the kinds of convergence;
-- the central limit theorem, seen by exact convolution and on a Galton board, then proved by moment generating
-  functions;
+- the central limit theorem, seen by exact convolution and on a Galton board, then proved under an MGF-near-zero assumption, with the finite-variance characteristic-function extension stated;
 - the normal approximation and the continuity correction;
 - the speed of the CLT, which for the World's Pareto-tailed incomes is alarmingly slow;
 - the delta method and Slutsky's theorem;
@@ -24,7 +23,7 @@ levels are the Museum's (`museum.OX_*`, `museum.BERNOULLI`, `museum.PORTPIRIE`);
 (seed 1662); everything else is a seeded simulation or an exact calculation, and is tagged as such.
 
 **Built in this part:** the Galton board (`GaltonBoard` in
-[`explainer/stats/viz.py`](../../../explainer/stats/viz.py)). Balls fall through rows of pegs, bouncing left or
+[`explainer/stats/viz.py`](../../../../explainer/stats/viz.py)). Balls fall through rows of pegs, bouncing left or
 right, and stack in bins:
 - `drops(scene, bits)` animates balls along their zig-zag paths, each landing on the current pile;
 - `bars(counts)` draws the pile for when there are too many balls to animate;
@@ -48,7 +47,7 @@ python tools/lecture_length.py stats6 --floor 50
 | 1 | Markov, Chebyshev, Jensen | Markov by the step under the line; tested on the World's incomes; Chebyshev from Markov; the three-point law that attains it; Jensen by chords, with the World's geometric and arithmetic mean incomes. | at 3× mean: 2.3% vs bound 33%; 2σ: heights 3.5%, incomes 1.7% vs 25%; geometric mean 39.6k < 49.5k |
 | 2 | The weak law | Chebyshev's three-line proof; 40 coin paths in the √n funnel; the count of extra heads wanders (no gambler's compensation); Bernoulli's golden theorem and his 25,550 against modern bounds. | Chebyshev 600,600; Bernoulli 25,550; Hoeffding 9,503; normal 6,498; exact 6,520 |
 | 3 | Kinds of convergence | In probability, in distribution, almost surely; the mirror X_n = −X; the typewriter sequence; the strong law, seen in 2,000 sequences; the hierarchy. | outside 0.5 ± 0.02 after toss 10,000: 1 sequence in 2,000 |
-| 4 | The CLT, seen | Exact convolution powers of a lopsided law on {0,…,5}; cumulants: skewness/√n, kurtosis/n; the Galton board; uniform, exponential and lopsided sums of 30. | sup\|F_n − Φ\|: 0.198 (n = 1) → 0.012 (n = 30) |
+| 4 | The CLT, seen | Exact convolution powers of a lopsided law on {0,…,5}; cumulants: skewness/√n, kurtosis/n; the Galton board; uniform, exponential and lopsided sums of 30. | sup\|F_n − Φ\|: 0.298 (n = 1) → 0.031 (n = 30) |
 | 5 | The CLT, proved | M_Y(t/√n)^n; the cumulant expansion; Curtiss's continuity theorem; n log M(t/√n) → t²/2 drawn for the exponential and the lopsided law; Lindeberg–Lévy, Lyapunov, Lindeberg, Feller; Pólya's name. | — |
 | 6 | Using it | De Moivre's 1733 pamphlet; the local approximation; the continuity correction; a rare-event binomial where the Poisson wins. | P(S = 50) 0.0796 vs 0.0798; P(S ≥ 60) 0.0284 exact, 0.0228 plain, 0.0287 corrected; p = 0.03: 0.081 exact, 0.071 normal, 0.084 Poisson |
 | 7 | Is thirty enough? | Means of heights (normal at n = 5) and of incomes (skewed at n = 1,000); t-interval coverage; Berry–Esseen with Shevtsova's constant; the skewness/√n rule. | income coverage 87.4% (n = 5), 89.5% (30), 92.9% (1,000), misses almost all low; lognormal BE bound 0.219 vs actual 0.029 at n = 30 |
@@ -59,6 +58,12 @@ python tools/lecture_length.py stats6 --floor 50
 | 12 | The law of maxima | F^n; max − log n → Gumbel, derived and simulated; the three families (Gumbel, Fréchet, reversed Weibull); the GEV and Fisher–Tippett–Gnedenko. | — |
 | 13 | Floods and return levels | The 1953 North Sea flood and the Delta Committee; Port Pirie's 65 annual maxima; the GEV fit by maximum likelihood; return levels; the profile likelihood of the 100-year level; van Dantzig's economic dike height. | (μ, σ, ξ) = (3.875, 0.198, −0.050); z₁₀₀ = 4.69 m, 95% profile interval [4.49, 5.26]; z₁₀₀₀₀ = 5.34 m |
 | 14 | Outro | Recap, payoffs, problems, references, the Transcript, Part 7's question. | — |
+
+The displayed CDF distances check both sides of every jump, without a continuity correction. Monte Carlo CDF distances are empirical diagnostics. Histogram densities retain omitted tails in their denominators; path segments leave the viewport rather than flattening onto its edge.
+
+The World is a finite population and has finite moments of every order. Its income-tail generator uses an unbounded Pareto model with index 2.1, which has finite variance but no third moment. These are separate laws: the finite World's Berry--Esseen bound is valid but trivial at the shown sample sizes. The lognormal reference population is a fixed simulation of two million values.
+
+The CLT concerns central deviations; fixed tail probabilities require concentration or large-deviation arguments. Stable and extreme-value limits require non-degenerate limits and appropriate centring/scaling. Return levels and the approximate profile interval assume the fitted stationary annual-maxima model; they do not incorporate all uncertainty in dependence, climate changes or the tail family.
 
 ## Sources
 
@@ -129,7 +134,7 @@ P(n(1 − max U_i) > x) = P(max U_i < 1 − x/n) = (1 − x/n)^n → e^{−x}.
 
 So the limit is Exp(1): the reversed Weibull family, with shape 1.
 
-**6. The t statistic, theorem by theorem.**
+**6. The t statistic, theorem by theorem.** Assume i.i.d. observations with finite positive variance.
 
 *Solution.*
 - **CLT:** Z_n = √n(X̄ − μ)/σ → N(0, 1) in distribution.
@@ -138,7 +143,7 @@ So the limit is Exp(1): the reversed Weibull family, with shape 1.
   Continuous mapping again (x ↦ σ/√x, continuous at σ² > 0) gives σ/S_n → 1 in probability.
 - **Slutsky:** T_n = Z_n · (σ/S_n) → N(0, 1) · 1 = N(0, 1).
 
-No normality was used; only a finite, non-zero variance.
+The weak law for X² needs only its finite first moment E X², not E X⁴. No normality was used; i.i.d. sampling with finite, non-zero variance.
 
 ## Where it comes back
 

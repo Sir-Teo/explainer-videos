@@ -41,6 +41,7 @@ class Convergence(VoiceoverScene):
                       label(r"the strong law: \ almost surely", font_size=26, color=S.PRIOR))
         for s_, d_ in zip(side, dfs):
             s_.move_to([3.8, d_.get_center()[1], 0])
+        intro = label('Three meanings of convergence', font_size=36)
         with self.voiceover(
             "A sequence of numbers converges if it gets and stays close to its limit. For random variables there "
             "are several ways to say that, and the difference matters. <bookmark mark='a'/> In probability: the "
@@ -50,8 +51,11 @@ class Convergence(VoiceoverScene):
             "deliver. <bookmark mark='c'/> Almost surely: for almost every outcome of the whole infinite experiment, "
             "the sequence of numbers it produces converges. That's the strong law."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(dfs[k], shift=RIGHT * 0.2), FadeIn(side[k]))
         self.clear_scene()
 
@@ -106,7 +110,7 @@ class Convergence(VoiceoverScene):
         nlab = MathTex(r"n = 1", font_size=30).move_to([0, 2.4, 0])
         hits = VGroup()
         strip_y = -1.4
-        title = label(r"$X_n(\omega) = 1$ if $\omega$ is under block $n$, \ else $0$", font_size=26).move_to([0, 3.3, 0])
+        title = label(r"$0\le\omega<1$: $X_n(\omega) = 1$ if $\omega$ is under block $n$, \ else $0$", font_size=26).move_to([0, 3.3, 0])
         rows = VGroup(label(r"$P(X_n = 1) = $ the block's width $\to 0$: \ $X_n \to 0$ in probability", font_size=24, color=SIM),
                       label(r"but every $\omega$ is hit once in every sweep: \ $X_n(\omega) = 1$ infinitely often", font_size=24,
                             color=BOUND),
@@ -115,7 +119,7 @@ class Convergence(VoiceoverScene):
         cap = label(r"$X_n(\omega)$:", font_size=24, color=GREY_B).move_to([x0 - 0.8, strip_y, 0])
         with self.voiceover(
             "And convergence in probability is weaker than almost sure convergence. Here's the classic example, "
-            "sometimes called the typewriter. <bookmark mark='a'/> Pick a random point omega in the unit interval. "
+            "sometimes called the typewriter. <bookmark mark='a'/> Pick a uniform random point omega in the unit interval. "
             "A block sweeps across the interval: first one block the whole width, then two halves in turn, then four "
             "quarters, then eight eighths. X n is one if omega is under the n-th block. <bookmark mark='b'/> The "
             "blocks shrink, so the chance that X n is one goes to zero: X n converges to zero in probability. "
@@ -158,7 +162,7 @@ class Convergence(VoiceoverScene):
         c_late = VGroup(polyline(ax, np.log10(ms), late, S.PRIOR, 3), *[Dot(ax.c2p(np.log10(m), v), radius=0.06, color=S.PRIOR)
                                                                          for m, v in zip(ms, late)])
         leg = legend([(SIM, r"outside $\tfrac12 \pm 0.02$ \emph{at} toss $m$"),
-                      (S.PRIOR, r"outside it \emph{at any toss after} $m$")], font_size=22).move_to([3.9, 1.8, 0])
+                      (S.PRIOR, r"outside it \emph{after} $m$ through toss 20,000")], font_size=22).move_to([3.9, 1.8, 0])
         thm = theorem_card(r"The strong law", r"if $X_i$ are i.i.d.\ with $E|X| < \infty$, \ then $\bar X_n \to \mu$ almost "
                            r"surely", who=r"Borel 1909 (coins); \ Kolmogorov, 1930s (general)", color=S.PRIOR, width=5.6,
                            font_size=22).move_to([3.9, -0.6, 0])
@@ -168,7 +172,7 @@ class Convergence(VoiceoverScene):
             "For averages, the stronger statement is also true. <bookmark mark='a'/> Toss two thousand coins twenty "
             "thousand times each. In blue, the share of sequences whose running share of heads is outside a half, "
             "plus or minus point oh two, at toss m: the weak law says this goes to zero. <bookmark mark='b'/> In "
-            "purple, the share that stray outside at any toss after m, ever again. That's a much bigger event, but "
+            "purple, the share that stray outside after m but before our finite run ends. The corresponding infinite-horizon probability goes to zero by the strong law. That's a much bigger event, but "
             "it goes to zero too: after ten thousand tosses, only one sequence in two thousand leaves the band again "
             "before the run ends. <bookmark mark='c'/> That's the strong law of large numbers: almost every sequence "
             "eventually stays inside any band. Émile Borel proved it for coins in 1909 and Andrey Kolmogorov in "
@@ -193,22 +197,25 @@ class Convergence(VoiceoverScene):
         arr = VGroup(Arrow(AS.get_right(), P.get_left() + UP * 0.2, buff=0.1, color=GREY_B),
                      Arrow(L2.get_right(), P.get_left() + DOWN * 0.2, buff=0.1, color=GREY_B),
                      Arrow(P.get_right(), D.get_left(), buff=0.1, color=GREY_B))
-        notes = VGroup(note(r"Markov"), note(r"Chebyshev, \ as in the weak law"), note(r"the converse fails: \ the mirror"))
+        notes = VGroup(note(r"bounded convergence of indicators"), note(r"Chebyshev, \ as in the weak law"), note(r"the converse fails: \ the mirror"))
         notes[0].next_to(arr[0], UP, buff=0.05).shift(RIGHT * 0.3)
         notes[1].next_to(arr[1].get_center(), DR, buff=0.12)
         notes[2].next_to(D, DOWN, buff=0.25)
         no = label(r"the typewriter: \ in probability, \ not almost surely", font_size=22, color=BOUND).to_edge(DOWN, buff=1.0)
         exc = label(r"one exception: \ in distribution to a \emph{constant} implies in probability", font_size=22,
                     color=GREY_A).to_edge(DOWN, buff=0.5)
+        intro = label('How the modes of convergence relate', font_size=36)
         with self.voiceover(
             "Here's how they fit together. <bookmark mark='a'/> Almost sure convergence implies convergence in "
             "probability. <bookmark mark='b'/> So does convergence in mean square, that the expected squared distance "
             "goes to zero, by Chebyshev's argument. <bookmark mark='c'/> And convergence in probability implies "
             "convergence in distribution. <bookmark mark='d'/> None of the arrows reverses: the mirror and the "
-            "typewriter are the counterexamples. With one useful exception: if the limit is a constant, convergence "
+            "typewriter give two counterexamples. For convergence in probability without mean-square convergence, take square root n times the indicator that a uniform U is below one over n: the event gets rare but its expected square stays one. With one useful exception: if the limit is a constant, convergence "
             "in distribution does imply convergence in probability, and chapter nine will use that."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(AS), FadeIn(P), GrowArrow(arr[0]), FadeIn(notes[0]))
             vo.wait_until("b")
             self.play(FadeIn(L2), GrowArrow(arr[1]), FadeIn(notes[1]))
