@@ -1165,3 +1165,19 @@ def prostate_z() -> tuple:
 
     d = np.loadtxt(Path(__file__).parent / "data" / "prostate_z.csv", delimiter=",", skiprows=1)
     return d[:, 0], d[:, 1]
+
+
+def breast_cancer() -> tuple:
+    """Wolberg, Street & Mangasarian's (1995) Wisconsin diagnostic breast cancer data: 569 fine-needle aspirates, 30
+    features of the cell nuclei in the digitized image (the mean, standard error and worst value of ten
+    measurements), and the diagnosis (1 = malignant, 212 cases; 0 = benign, 357), as distributed with scikit-learn.
+    Returns (X, y, names)."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "breast_cancer.csv", newline="") as f:
+        rows = list(csv.reader(f))
+    body = np.array([[float(v) for v in r] for r in rows[1:]])
+    return body[:, :30], body[:, 30].astype(int), rows[0][:30]
