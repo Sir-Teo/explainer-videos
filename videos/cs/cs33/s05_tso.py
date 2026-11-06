@@ -143,7 +143,9 @@ class Tso(VoiceoverScene):
                   rf"\\ and stale data: \ {mp['pso']['mp']}", font_size=19, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.5).align_to(tab, UP)
         if notes.get_right()[0] > 6.9:
-            notes.width = 6.9 - notes.get_left()[0]
+            left = notes.get_left()[0]
+            notes.scale((6.9 - left) / notes.width).align_to(tab, UP)
+            notes.shift(RIGHT * (left - notes.get_left()[0]))
         with self.voiceover(
             "Here is the whole picture. <bookmark mark='a'/> Under sequential consistency, Lamport's name for simple "
             "interleaving, Peterson is safe with no fences. <bookmark mark='b'/> Under total store order it breaks, "
