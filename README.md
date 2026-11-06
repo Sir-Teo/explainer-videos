@@ -3,7 +3,7 @@
 Math, physics, ML and markets explainers in the style of 3Blue1Brown, built entirely in code with
 [Manim Community](https://www.manim.community/) and narrated by a local neural voice. Only the code is stored here;
 every video builds from source. Each video lives in `videos/<series>/<name>/` with its own README (outline and sources); the series are
-`ai`, `analysis`, `physics`, `math`, `ml` and `markets`. Videos are always addressed by name (`tools/build.py quantum`).
+`ai`, `analysis`, `philosophy`, `physics`, `math`, `ml` and `markets`. Videos are always addressed by name (`tools/build.py quantum`).
 
 | Video | Length | Build |
 |---|---|---|
@@ -22,12 +22,13 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 | Quantum Mechanics, Part 2 | 57 min | `python -m videos.physics.quantum2.compute && python tools/build.py quantum2` |
 | Analysis, Built (10 parts: real, complex and functional analysis; English and Chinese) | 5 h 20 min | `python -m videos.analysis.analysisN.compute && python tools/build.py analysisN` |
 | AI, Built (31 parts: [the plan](videos/ai/README.md); English and Chinese) | 30–60 min each | `python tools/make.py ai1` … `ai31`, or `--series ai` |
+| Philosophy, Built (42 parts, from logic to ethics: [the plan](videos/philosophy/README.md); English and Chinese) | 50–65 min each | `python -m videos.philosophy.philosophyN.compute && python tools/build.py philosophyN` |
 
 ## Layout
 
 ```
 explainer/   shared toolkit: style, TTS, voiceover, language tables, paths (explainer/paths.py finds a video by name)
-videos/      one package per video, grouped by series: ai/ analysis/ physics/ math/ ml/ markets/
+videos/      one package per video, grouped by series: ai/ analysis/ philosophy/ physics/ math/ ml/ markets/
 tools/       build, narration, QA, publishing scripts (run from the repo root)
 docs/        CREDITS.md
 renders/ published/ media/ .cache/   generated, git-ignored
@@ -82,7 +83,9 @@ python tools/package_uploads.py                                    # YouTube / B
 
 Chinese narration lives in `videos/analysis/analysisN/narration_zh.json`, on-screen text in `videos/analysis/analysis_text_zh.json`
 (`tools/collect_text.py --check`); terms in `videos/analysis/ANALYSIS_ZH_GUIDE.md`. *AI, Built* works the same way (`aiN`,
-`videos/ai/ai_text_zh.json`, `videos/ai/AI_ZH_GUIDE.md`; `tools/package_uploads.py --series ai`).
+`videos/ai/ai_text_zh.json`, `videos/ai/AI_ZH_GUIDE.md`; `tools/package_uploads.py --series ai`). *Philosophy, Built*
+(`philosophyN`) keeps its Chinese narration table in `videos/philosophy/philosophyN/zh_lines.py`, on-screen text in
+`videos/philosophy/philosophy_text_zh.json`, and terms in `videos/philosophy/PHILOSOPHY_ZH_GUIDE.md`.
 
 ## Rebuilding everything on your own computer
 
