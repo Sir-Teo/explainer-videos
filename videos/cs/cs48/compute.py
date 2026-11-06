@@ -20,6 +20,7 @@ Items:
     btree       random against time-ordered keys in a B+ tree: fill, splits, pages touched
     curves      Z-order and Hilbert curves on an 8x8 grid; locality and ranges per query rectangle
     geohash     two cities' geohashes
+    learned     a learned index (piecewise-linear, bounded error) against a B+ tree's inner nodes
     jobsvc      the Job as a service: p50 and p99 against load, with and without a cache
 """
 
@@ -98,6 +99,11 @@ def compute_jobsvc() -> dict:
     from explainer.cs.design import keys as K
     return {"plain": K.job_service(), "cached": K.job_service(cache_size=300,
                                                                 qps_list=(5, 20, 60, 95, 150, 200, 250))}
+
+
+def compute_learned() -> dict:
+    from explainer.cs.design import keys as K
+    return K.learned_experiment()
 
 
 ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
