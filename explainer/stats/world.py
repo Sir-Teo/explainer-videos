@@ -356,6 +356,34 @@ class World:
         p = 1 / (1 + np.exp(-(self.HOSPITAL_LOGIT + u)))
         return {"operations": n, "u": u, "p": p, "deaths": g.binomial(n, p)}
 
+    N_GENES = 5000
+    GENE_PATIENTS = 25  # per group
+    GENE_NONNULL = 250
+    GENE_BLOCK = 25  # genes per pathway
+    GENE_RHO = 0.3  # within-pathway correlation
+
+    @cached_property
+    def genes(self) -> dict:
+        """The World's gene-expression study (Part 33): 5,000 genes measured on 25 patients and 25 healthy controls.
+        Genes come in 200 pathways of 25, correlated 0.3 within a pathway (one shared factor each).  250 genes, in 10
+        pathways, are truly differentially expressed, with effects (in SD units) uniform on 0.5 to 1.5 and a random
+        sign; the other 4,750 are null.  Returns the expression matrix x (50 x 5000), group (1 = patient), the true
+        effects delta and the nonnull mask."""
+        g = self.rng("genes")
+        m, n, B = self.N_GENES, 2 * self.GENE_PATIENTS, self.GENE_BLOCK
+        nb = m // B
+        f = g.standard_normal((n, nb))
+        x = np.sqrt(self.GENE_RHO) * np.repeat(f, B, axis=1) + np.sqrt(1 - self.GENE_RHO) * g.standard_normal((n, m))
+        group = np.r_[np.ones(self.GENE_PATIENTS, int), np.zeros(self.GENE_PATIENTS, int)]
+        blocks = g.choice(nb, self.GENE_NONNULL // B, replace=False)
+        nonnull = np.zeros(m, bool)
+        for b in blocks:
+            nonnull[b * B:(b + 1) * B] = True
+        delta = np.zeros(m)
+        delta[nonnull] = g.uniform(0.5, 1.5, nonnull.sum()) * g.choice([-1.0, 1.0], nonnull.sum())
+        x = x + group[:, None] * delta[None, :]
+        return {"x": x, "group": group, "delta": delta, "nonnull": nonnull, "pathway": np.repeat(np.arange(nb), B)}
+
     # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
