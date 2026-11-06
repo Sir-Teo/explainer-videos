@@ -227,7 +227,7 @@ TIMELINE = [
     (1963, r"Hodges--Lehmann; kriging named; the 6-MP trial"),
     (1964, r"the \emph{Federalist} decided; Nadaraya--Watson; Huber"),
     (1970, r"Box--Jenkins; Hastings; the representer theorem; ridge; Tobler's first law; H\'ajek's convolution theorem; Davis--Kahan; Robbins's confidence sequences"),
-    (1971, r"NHANES; REML; breakdown; Brown's admissibility; Strawderman's prior; VC dimension"),
+    (1971, r"NHANES; REML; breakdown; Brown's admissibility; Strawderman's prior; VC dimension; Lorden's criterion"),
     (1967, r"Huber's sandwich; Longley; Reinsch's spline; Marchenko--Pastur; Welch's spectra; Lilliefors's test; Dudley's chaining"),
     (1954, r"the Salk vaccine trial; Chernoff's boundary; Daniels's saddlepoint; Page's CUSUM"),
     (1955, r"Basu's theorem; Wigner's semicircle"),

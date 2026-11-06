@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–57 are written in English (12–16 chapters each):
+**Status: in production.** Parts 1–58 are written in English (12–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -57,7 +57,8 @@
 - *Statistical Learning Theory*, about 50.8 minutes, with `statkit.slt`, the shatterer (`Shatterer`) and the Wisconsin breast cancer data;
 - *The Qualifying Exam*, about 50.7 minutes, with `statkit.qual`, the PhD problem bank, the proof map (`ProofMap`), Snow's Table IX and Newcomb's light;
 - *Inference After Selection*, about 50.2 minutes, with `statkit.selective`, the selection window (`SelectionWindow`), the World's gene study, Stamey's prostate data, the prostate microarray, the breast cancer data, Old Faithful and Newcomb;
-- *Distribution-Free Inference*, about 50.9 minutes, with `statkit.dfree`, the rank strip (`RankStrip`), NHANES and the breast cancer data.
+- *Distribution-Free Inference*, about 50.9 minutes, with `statkit.dfree`, the rank strip (`RankStrip`), NHANES and the breast cancer data;
+- *Anytime-Valid Inference and Adaptive Experiments*, about 70.3 minutes, with `statkit.sequential`, the confidence funnel (`ConfidenceFunnel`), CAST, the Nile and the World's A/B platform.
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
