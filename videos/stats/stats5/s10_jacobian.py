@@ -33,15 +33,18 @@ class Jacobian(VoiceoverScene):
                   font_size=32),
         ]
         rows[1][0].set_color(COND)
-        whys = [why(r"probability in the small square $=$ probability in its image"), why(r"Part 3's rule, \ with a determinant")]
+        whys = [why(r"$g$ smooth and one-to-one, $\det J\ne0$: conserve probability"), why(r"Part 3's rule, \ with a determinant")]
+        intro = label('Conserve probability under a transformation', font_size=36)
         with self.voiceover(
             "Part 3 changed variables in one dimension and previewed the Jacobian. Here's the full picture. "
             "<bookmark mark='a'/> A transformation g maps a tiny square of area d A <bookmark mark='b'/> to a tiny "
             "parallelogram whose area is the absolute determinant of the Jacobian matrix times d A. "
             "<bookmark mark='c'/> Probability is conserved, so the density must shrink where areas grow: "
-            "<bookmark mark='d'/> the new density is the old one at the preimage, times the Jacobian of the inverse."
+            "<bookmark mark='d'/> for a smooth one-to-one map with nonzero determinant, the new density is the old one at the preimage, times the absolute Jacobian determinant of the inverse. For multiple preimages we sum their contributions."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(sq), FadeIn(la))
             vo.wait_until("b")
             self.play(GrowArrow(arr), FadeIn(al), TransformFromCopy(sq, par), FadeIn(lb))
@@ -70,16 +73,19 @@ class Jacobian(VoiceoverScene):
         whys = [why(r"add a coordinate to make the map invertible"), why(r"a shear keeps areas"),
                 why(r"integrate it out: \ the convolution")]
         tag = note(r"simulated: 40,000 pairs of uniforms").to_corner(DL, buff=0.3)
+        intro = label('A sum as a change of variables', font_size=36)
         with self.voiceover(
             "The distribution of a sum is a change of variables in disguise. <bookmark mark='a'/> Map the pair of "
             "uniforms to their sum and the first one: a shear, which keeps areas, so the Jacobian is one. "
             "<bookmark mark='b'/> Integrate out the extra coordinate, and the density of the sum is the "
             "convolution of the two densities, Part 2's polynomial multiplication, for continuous variables. "
             "<bookmark mark='c'/> For two uniforms it's a triangle, peaking at one: forty thousand simulated sums "
-            "fill it exactly."
+            "approximate it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.9, x=2.6, buff=0.55, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             step(1, transform=False)
             vo.wait_until("b")
@@ -95,8 +101,7 @@ class Jacobian(VoiceoverScene):
                  yticks=[0, 0.1, 0.2, 0.3], center=[-3.0, -0.8, 0])
         ax = A.ax
         ed = np.linspace(-6, 6, 61)
-        frac_in = len(r) / 20000
-        h = hist_bars(ax, ed, np.histogram(r, ed)[0] / (len(r) * np.diff(ed)) * min(1.0, frac_in) * 0.9, color=SIM)
+        h = hist_bars(ax, ed, np.histogram(r, ed)[0] / (len(r) * np.diff(ed)), color=SIM)
         xs = np.linspace(-6, 6, 300)
         cc = curve(ax, xs, 1 / (np.pi * (1 + xs ** 2)), EXACT, 3)
         rows = [
@@ -106,6 +111,7 @@ class Jacobian(VoiceoverScene):
         rows[1][4].set_color(EXACT)
         whys = [why(r"$z_1 = r z_2$: \ Jacobian $|z_2|$"), why(r"the Cauchy, \ Part 3's lighthouse")]
         tag = note(r"simulated: 40,000 ratios (shown within $\pm 6$)").to_corner(DL, buff=0.3)
+        intro = label('The ratio of two normals', font_size=36)
         with self.voiceover(
             "One more, with a famous answer. <bookmark mark='a'/> Take the ratio of two independent standard normals. "
             "Map the pair to the ratio and the denominator; now the Jacobian is the absolute value of the "
@@ -113,8 +119,10 @@ class Jacobian(VoiceoverScene):
             "r squared: the Cauchy, Part 3's lighthouse, met from a different direction. A ratio of two perfectly "
             "ordinary variables has no mean at all, which is one reason ratios are dangerous statistics."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.9, x=2.4, buff=0.6, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -142,6 +150,7 @@ class Jacobian(VoiceoverScene):
                       label(r"in 3D: \ Maxwell's distribution of molecular speeds", font_size=22, color=GREY_B))
         info.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -1.6, 0])
         tag = note(r"simulated: 20,000 points").to_corner(DR, buff=0.3)
+        intro = label('A normal radius: the Rayleigh law', font_size=36)
         with self.voiceover(
             "Polar coordinates give one more classic. <bookmark mark='a'/> How far from the centre does a "
             "two-dimensional standard normal point land? Change to polar coordinates; the area element is r d r d "
@@ -151,8 +160,10 @@ class Jacobian(VoiceoverScene):
             "room near the centre. In three dimensions the same calculation gives Maxwell's distribution of "
             "molecular speeds."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.9, x=0.4, buff=0.6, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

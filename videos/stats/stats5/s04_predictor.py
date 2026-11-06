@@ -74,18 +74,22 @@ class Predictor(VoiceoverScene):
         ]
         rows[3][2].set_color(COND)
         whys = [why(r"$m(X) = E[Y \mid X]$; \ add and subtract"), why(r"expand"),
-                why(r"condition on $X$: \ the cross term vanishes"), why(r"equality only for $g = m$")]
+                why(r"condition on $X$: \ the cross term vanishes"), why(r"$Y,g(X)\in L^2$; equality iff $g(X)=m(X)$ almost surely")]
+        intro = label('The conditional mean minimizes squared error', font_size=36)
         with self.voiceover(
-            "The proof is Part 1's Pythagoras, one level up. <bookmark mark='a'/> Write m of X for the conditional "
+            "Assume Y and the competing predictor have finite second moments. The proof is Part 1's Pythagoras, one level up. <bookmark mark='a'/> Write m of X for the conditional "
             "mean, and compare any other predictor g of X. Add and subtract m. <bookmark mark='b'/> Expand the "
             "square: three terms. <bookmark mark='c'/> The cross term vanishes: condition on X, and the error Y minus "
             "m of X averages to zero for every value of X, whatever function of X it's multiplied by. "
             "<bookmark mark='d'/> So any predictor's error is the conditional mean's error plus something "
-            "nonnegative. The conditional mean is the best predictor, uniquely."
+            "nonnegative. The conditional mean is the best predictor, uniquely up to events of probability zero."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.8, buff=0.55, edge=6.9)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=k in (1, 3))
         self.clear_scene()
 
@@ -100,6 +104,7 @@ class Predictor(VoiceoverScene):
                    r"overall mean", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.8)
         if ex.width > 12.6:
             ex.width = 12.6
+        intro = label('Average the conditional means', font_size=36)
         with self.voiceover(
             "One property of conditional expectation is used more than any other. <bookmark mark='a'/> The average "
             "of the conditional means is the overall mean: the tower property, or the law of total expectation. "
@@ -107,8 +112,10 @@ class Predictor(VoiceoverScene):
             "<bookmark mark='c'/> Average the World's age-by-age mean incomes, weighting each age by how many adults "
             "have it, and you recover the overall mean exactly. We'll lean on this in every part that conditions."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=1.8, x=-0.4, buff=0.8, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)
@@ -135,6 +142,7 @@ class Predictor(VoiceoverScene):
                      label(r"the error is $\perp$ every $h(X)$: \ that was the cross term", font_size=24, color=GREY_A),
                      label(r"made rigorous with measure theory: \ Part 44", font_size=22, color=GREY_B))
         txt.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, 0.4, 0])
+        intro = label('Prediction as a projection', font_size=36)
         with self.voiceover(
             "And here's the picture behind the proof. <bookmark mark='a'/> In the inner-product space of random "
             "variables, the functions of X form a subspace, drawn as a plane. <bookmark mark='b'/> Y is a vector off "
@@ -144,8 +152,10 @@ class Predictor(VoiceoverScene):
             "projects onto the smaller subspace of linear functions; conditional expectation projects onto all "
             "functions. Part 44 builds this properly, with measure theory."
         ) as vo:
+            self.play(FadeIn(intro))
             self.add(ns)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.add(pl)
             self.play(NSpace.reveal(pl), FadeIn(pll))
             vo.wait_until("b")

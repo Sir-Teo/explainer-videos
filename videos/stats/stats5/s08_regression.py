@@ -31,19 +31,23 @@ class RegressionToMean(VoiceoverScene):
         q = label(r"is the population becoming more average? \ no: \ its spread does not shrink", font_size=26, color=S.ACCENT)
         q.to_edge(DOWN, buff=0.7)
         tag = simulated_tag()
+        intro = label("The World's tallest mid-parents", font_size=36)
         with self.voiceover(
             "Regression to the mean appears in the World too. <bookmark mark='a'/> Take the tallest tenth of "
             f"mid-parents: on average {d['mid_dev']:.1f} centimetres above the mean. <bookmark mark='b'/> Their sons are "
-            f"tall, but only {d['ch_dev']:.1f} centimetres above average. <bookmark mark='c'/> The ratio is the "
+            f"tall, but only {d['ch_dev']:.1f} centimetres above average. <bookmark mark='c'/> The ratio is close to the "
             "regression slope. <bookmark mark='d'/> Does that mean the population is converging to the average, "
             "generation by generation? No: the World's sons are just as spread out as their fathers. Galton was "
             "puzzled by exactly this. The resolution is that regression is not a force; it's a property of a "
             "conditional mean when the correlation is imperfect."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(rows[k] if k < 2 else VGroup(rows[2], rows[3]), shift=RIGHT * 0.2))
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
+                self.play(FadeIn((VGroup(rows[0], rows[1]), rows[2], rows[3])[k], shift=RIGHT * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(q))
         self.clear_scene()
@@ -76,8 +80,8 @@ class RegressionToMean(VoiceoverScene):
             "the tallest children instead. <bookmark mark='b'/> Their parents were tall too, but less extreme: the "
             "parents regress toward their generation's mean. <bookmark mark='c'/> If regression were a biological "
             "force pulling families toward the average, it couldn't act backwards in time. It's simply what happens "
-            "whenever two variables are imperfectly correlated: select on one being extreme, and the other will "
-            "usually be less so. It's the shape of the ellipse."
+            "for a bivariate Gaussian: select on one being extreme in standard units, and the other will on average "
+            "be less so. It's the shape of the ellipse."
         ) as vo:
             self.play(FadeIn(A), FadeIn(pts, lag_ratio=0.001), FadeIn(src))
             vo.wait_until("a")
@@ -108,12 +112,12 @@ class RegressionToMean(VoiceoverScene):
             if r.width > 6.4:
                 r.width = 6.4
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.0, 0.2, 0])  # re-align after clamping
-        tag = note(r"simulated: 10,000 people, \ skill and luck independent standard normals").to_corner(DR, buff=0.3)
+        tag = note(r"simulated: 10,000 people, \ $(\text{skill}+\text{luck})/\sqrt2$; independent standard-normal components").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Regression to the mean fools people constantly. <bookmark mark='a'/> Suppose a test score is skill plus "
             "luck, in equal measure. Ten thousand people take two tests; their scores correlate at about a half. "
-            "<bookmark mark='b'/> The top tenth on the first test averaged two point four standard deviations above "
-            "the mean. On the second test they fall to about one point two. <bookmark mark='c'/> The bottom tenth "
+            f"<bookmark mark='b'/> The top tenth on the first test averaged {d['best_t1']:.2f} standard deviations above "
+            f"the mean. On the second test they fall to about {d['best_t2']:.2f}. <bookmark mark='c'/> The bottom tenth "
             "improve by the same amount. Nobody changed; the luck that put them in the extreme group didn't repeat. "
             "<bookmark mark='d'/> That's the sophomore slump, the magazine-cover jinx, and the false success of any "
             "treatment given to the people who did worst, who would have improved anyway. Part 35's randomized "
@@ -138,6 +142,7 @@ class RegressionToMean(VoiceoverScene):
         cite = note(r"D. Kahneman, \emph{Thinking, Fast and Slow} (2011), ch.~17; \ Tversky \& Kahneman (1974)").to_edge(DOWN, buff=0.5)
         moral = label(r"to learn whether something works, \ compare with what would have happened anyway", font_size=28,
                       color=S.ACCENT).move_to([0, -1.4, 0])
+        intro = label("Kahneman's flight instructors", font_size=36)
         with self.voiceover(
             "Daniel Kahneman told a story about this. <bookmark mark='a'/> Lecturing to flight instructors in the "
             "Israeli Air Force, he said praise works better than punishment. An instructor objected: whenever he "
@@ -147,7 +152,9 @@ class RegressionToMean(VoiceoverScene):
             "instructor says. <bookmark mark='c'/> The moral reaches through the whole degree: to learn whether "
             "something works, you must compare with what would have happened anyway."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite))
             vo.wait_until("c")
             self.play(FadeIn(moral))
@@ -162,11 +169,12 @@ class RegressionToMean(VoiceoverScene):
         for r in rows:
             r[2].set_color(COND)
             r[4].set_color(S.RESID)
-        whys = [why(r"Eve's law, \ for the regression"), why(r"Galton's table")]
+        whys = [why(r"OLS variance decomposition: residual $\perp$ fitted value"), why(r"Galton's table")]
         txt = VGroup(label(r"regression shrinks the predictable part toward the mean,", font_size=26),
                      label(r"and the unpredictable part spreads it out again:", font_size=26),
-                     label(r"the spread of heights stays the same, \ generation after generation", font_size=26, color=S.ACCENT))
+                     label(r"regression alone does not force a shrinking population spread", font_size=26, color=S.ACCENT))
         txt.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.7)
+        intro = label('Regression need not shrink the population', font_size=36)
         with self.voiceover(
             "Galton's own puzzle was this: if children regress toward the mean, why doesn't the population become "
             "more uniform every generation? Eve's law answers it. <bookmark mark='a'/> A child's height is the "
@@ -174,10 +182,12 @@ class RegressionToMean(VoiceoverScene):
             "<bookmark mark='b'/> In Galton's data, the predictable part has shrunk to a variance of about one point "
             "three, but the residual adds five, and together they give back the children's full variance. "
             "<bookmark mark='c'/> Regression pulls the predictable part toward the mean, and fresh, unpredictable "
-            "variation spreads it out again: the spread of heights stays the same, generation after generation."
+            "variation spreads it out again: there is no necessary shrinking of the population spread. The table itself is not evidence about many generations."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.4, buff=0.7, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

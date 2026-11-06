@@ -60,6 +60,7 @@ class Joint(VoiceoverScene):
         for r in rows:
             r[1].set_color(GREY_B)
         src = historical_tag(r"Galton (1886), grouped into 4 $\times$ 4 bands")
+        intro = label('Three distributions in one table', font_size=36)
         with self.voiceover(
             "With two variables there are three different distributions in one table. <bookmark mark='a'/> Group "
             "Galton's children into four bands of mid-parent height and four of child height, and divide by nine "
@@ -70,8 +71,10 @@ class Joint(VoiceoverScene):
             "conditional distribution of the child's height, given the tallest parents. It's Part 2's conditioning, "
             "keep a slice and renormalize, applied to a table."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(src))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.04), FadeIn(rl), FadeIn(cl), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(marg_r), FadeIn(rows[1]))
@@ -86,7 +89,7 @@ class Joint(VoiceoverScene):
         d = load("slicer")
         gs = GaussianSlicer([d["mx"], d["my"]], d["S"], (154, 185), (152, 200), center=(-2.2, -1.9, 0))
         objs = gs.objects()
-        info = VGroup(label(r"the World's fathers and sons: \ a bivariate normal fit", font_size=24, color=WORLD),
+        info = VGroup(label(r"the World's mid-parents and sons: \ a bivariate normal fit", font_size=24, color=WORLD),
                       MathTex(r"f(x, y) = \frac{1}{2\pi\sqrt{\det\Sigma}}\, e^{-\frac12 (\mathbf z - \boldsymbol\mu)^\top \Sigma^{-1} "
                               r"(\mathbf z - \boldsymbol\mu)}", font_size=28),
                       label(r"height of the surface: \ density; \ volume under it: \ $1$", font_size=22, color=GREY_B))
@@ -98,7 +101,7 @@ class Joint(VoiceoverScene):
                      label(r"son", font_size=22, color=GREY_B).move_to([-5.6, -2.2, 0]))
         tag = simulated_tag(rf"simulated: the World's {fmt_int(d['n'])} sons")
         with self.voiceover(
-            "For continuous variables the table becomes a surface. <bookmark mark='a'/> Here's the joint density of "
+            "For continuous variables the table becomes a surface. <bookmark mark='a'/> Here's a fitted model of the joint density of "
             "mid-parent height and a son's height in the World, as a bivariate normal: the height of the surface over "
             "each point is the density there, and the volume underneath is one. <bookmark mark='b'/> Turn it around. "
             "It's a ridge, running diagonally, because tall parents go with tall sons; seen from above, its contour "
@@ -143,7 +146,7 @@ class Joint(VoiceoverScene):
             "not one. <bookmark mark='c'/> Divide by that area, and the slice is rescaled into the conditional "
             "density of the son's height, given the parents. <bookmark mark='d'/> Do it at a hundred and seventy, "
             "and at a hundred and sixty-two. Three slices, three conditional distributions, and the computed means "
-            "and standard deviations match what the World's actual families show at those heights. "
+            "and standard deviations can be compared with the nearby families in the World; the Gaussian is an approximation. "
             "<bookmark mark='e'/> Notice two things: every slice of a Gaussian is a Gaussian, and they all have the "
             "same width. Only the centre moves as x changes, and it moves along a straight line. That straight "
             "line is the birth of regression, and chapter six proves it."
@@ -175,6 +178,7 @@ class Joint(VoiceoverScene):
         whys = [why(r"slice either way"), why(r"Part 2's Bayes, \ for densities: \ Part 15")]
         indep = label(r"independent \ $\iff$ \ $f(x, y) = f_X(x) f_Y(y)$ \ $\iff$ \ every slice has the same shape", font_size=26,
                       color=S.ACCENT).to_edge(DOWN, buff=0.7)
+        intro = label('Slice either way: Bayes for densities', font_size=36)
         with self.voiceover(
             "Two facts follow at once. <bookmark mark='a'/> The joint density can be sliced either way: as the "
             "marginal of x times the conditional of y given x, or the other way round. <bookmark mark='b'/> Equate "
@@ -182,8 +186,10 @@ class Joint(VoiceoverScene):
             "variables are independent exactly when the joint density factors into its marginals, which means every "
             "renormalized slice is the same: knowing x tells you nothing about y."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.0, x=-0.6, buff=0.8, edge=6.9)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             step(0, transform=False)
             vo.wait_until("b")
             step(1, transform=False)

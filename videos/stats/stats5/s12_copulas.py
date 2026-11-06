@@ -28,22 +28,26 @@ class Copulas(VoiceoverScene):
             cmath(r"F(x, y)", r"=", r"C\big(F_X(x),\ F_Y(y)\big)", font_size=38),
         ]
         rows[2][2].set_color(S.ACCENT)
-        whys = [why(r"each margin uniform: \ the probability integral transform"), why(r"the copula: \ a joint law on the square"),
+        whys = [why(r"continuous margins: the probability integral transform"), why(r"the copula: \ a joint law on the square"),
                 why(r"Sklar (1959): \ every joint law splits this way")]
         rank = label(r"the copula keeps only the \emph{ranks}: \ Spearman and Kendall measure it (chapter 13)", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.7)
+        intro = label('Separate continuous margins from dependence', font_size=36)
         with self.voiceover(
             "A joint distribution mixes two things: the shape of each variable on its own, and the way they move "
-            "together. Copulas pull them apart. <bookmark mark='a'/> Pass each variable through its own CDF. Each "
+            "together. Copulas pull them apart. <bookmark mark='a'/> Pass each variable through its own CDF. With continuous margins each "
             "becomes uniform: Part 3's probability integral transform. <bookmark mark='b'/> What's left is a joint "
             "distribution on the unit square, with uniform margins: the copula. <bookmark mark='c'/> Abe Sklar proved "
             "in 1959 that every joint distribution is its copula applied to its margins, so you can choose the "
-            "margins and the dependence separately. <bookmark mark='d'/> The copula depends only on ranks, which is "
+            "margins and the dependence separately. The copula is unique for continuous margins; discrete margins need extra care, and the raw CDF transform need not be uniform. <bookmark mark='d'/> The copula depends only on ranks, which is "
             "why the rank correlations of chapter thirteen are properties of it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.6, edge=6.9)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(rank))
@@ -59,8 +63,8 @@ class Copulas(VoiceoverScene):
             A = axes([0, 1], [0, 1], x_length=3.6, y_length=3.6, xticks=[0, 1], yticks=[0, 1], center=[-4.4 + 4.4 * k, 0.0, 0])
             ax = A.ax
             pts = scatter(ax, uv[:, 0], uv[:, 1], color=col, radius=0.016, opacity=0.6)
-            lo = Square(side_length=ax.c2p(0.12, 0)[0] - ax.c2p(0, 0)[0], stroke_color=WHITE, stroke_width=1.5).move_to(ax.c2p(0.06, 0.06))
-            hi = Square(side_length=ax.c2p(0.12, 0)[0] - ax.c2p(0, 0)[0], stroke_color=WHITE, stroke_width=1.5).move_to(ax.c2p(0.94, 0.94))
+            lo = Square(side_length=ax.c2p(0.05, 0)[0] - ax.c2p(0, 0)[0], stroke_color=WHITE, stroke_width=1.5).move_to(ax.c2p(0.025, 0.025))
+            hi = Square(side_length=ax.c2p(0.05, 0)[0] - ax.c2p(0, 0)[0], stroke_color=WHITE, stroke_width=1.5).move_to(ax.c2p(0.975, 0.975))
             t = label(nm, font_size=28, color=col).next_to(A, UP, buff=0.2)
             st = VGroup(MathTex(rf"\tau = {c['tau']:.2f}", font_size=24),
                         MathTex(rf"\text{{lower tail }} {c['lower']:.2f},\ \text{{upper }} {c['upper']:.2f}", font_size=22, color=GREY_A))
@@ -70,20 +74,24 @@ class Copulas(VoiceoverScene):
                      font_size=22, color=GREY_B).to_edge(DOWN, buff=0.35)
         if expl.width > 12.8:
             expl.width = 12.8
-        tag = note(r"simulated: 4,000 draws each").to_corner(UR, buff=0.3)
+        tag = note(r"simulated: 1,500 of 4,000 shown; summaries use all draws").to_corner(UR, buff=0.3)
+        intro = label('The same Kendall correlation, different tails', font_size=36)
         with self.voiceover(
             "Same strength of dependence, different shapes. <bookmark mark='a'/> Three copulas, each with a Kendall "
             "rank correlation of one half. The Gaussian copula is symmetric. <bookmark mark='b'/> The Clayton copula "
-            "clusters tightly in the lower-left corner: when one variable is very low, the other almost always is too. "
+            "clusters tightly in the lower-left corner: when one variable is very low, the other does with high probability too. "
             "<bookmark mark='c'/> The Gumbel copula does the same in the upper-right. <bookmark mark='d'/> Measure "
             "the tails directly: given that one variable is in its bottom five percent, how often is the other? For "
             f"the Gaussian about {d['gauss']['lower']:.2f}; for Clayton {d['clayton']['lower']:.2f}. And as the "
             "threshold goes further out, the Gaussian's tail dependence goes to zero, while Clayton's stays "
             "positive. The same correlation can hide very different behaviour in a crisis."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 p = panels[k]
                 self.play(FadeIn(p[0]), FadeIn(p[4]), FadeIn(p[1], lag_ratio=0.001), FadeIn(p[5][0]))
             vo.wait_until("d")
@@ -96,7 +104,7 @@ class Copulas(VoiceoverScene):
                           r"\emph{Journal of Fixed Income}: \ the Gaussian copula becomes the standard way to price bundles of "
                           r"mortgages and corporate debt", color=S.MUSEUM, width=8.4, font_size=24).move_to([0, 1.4, 0])
         rows = VGroup(label(r"one correlation number for every pair of borrowers", font_size=26),
-                      label(r"and a copula with no tail dependence: \ joint defaults in a crash made to look vanishingly rare",
+                      label(r"zero asymptotic tail dependence; finite-threshold joint risk still depends on correlations and margins",
                             font_size=26, color=S.RESID),
                       label(r"in 2007--08, \ correlated defaults arrived together", font_size=26, color=GREY_A))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hc, DOWN, buff=0.45)
@@ -105,17 +113,19 @@ class Copulas(VoiceoverScene):
                 r.width = 12.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hc, DOWN, buff=0.45)  # re-align after clamping
         cite = note(r"see D. MacKenzie \& T. Spears, ``The formula that killed Wall Street?'' (2014)").to_edge(DOWN, buff=0.35)
+        intro = label('Tail assumptions and financial risk', font_size=36)
         with self.voiceover(
             "This mattered in the real world. <bookmark mark='a'/> In 2000 David Li showed how to price bundles of "
             "loans with a Gaussian copula, and it became the industry's standard tool for collateralized debt. "
             "<bookmark mark='b'/> It summarized the dependence between borrowers by a single correlation, and the "
-            "Gaussian copula has no tail dependence, so simultaneous defaults in a crash looked extraordinarily "
-            "unlikely. <bookmark mark='c'/> In the financial crisis of 2007 and 2008, defaults arrived together. "
+            "Gaussian copula has zero asymptotic tail dependence when correlations are below one. That does not make finite-threshold joint defaults negligible; their probability depends on correlations and default rates. Static assumptions, calibration and how the model was used could still understate systemic risk. <bookmark mark='c'/> In the financial crisis of 2007 and 2008, defaults arrived together. "
             "Historians of finance argue about how much the formula itself was to blame, as against how it was used; "
-            "but the mathematical lesson is plain. Correlation describes the middle of a distribution, and risk lives "
+            "but the mathematical lesson is plain. One correlation number cannot determine tail behaviour, where much risk lives "
             "in the tails."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[:2]))
@@ -143,7 +153,8 @@ class Copulas(VoiceoverScene):
         marg = label(r"margins chosen freely: \ exponential and lognormal", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.75)
         take = label(r"Kendall's $\tau$ survives every step, \ to the last digit; \ Pearson's $r$ does not", font_size=24,
                      color=S.ACCENT).to_edge(DOWN, buff=0.3)
-        tag = note(r"simulated: 1,500 pairs").to_corner(UR, buff=0.25)
+        tag = note(r"simulated: 900 of 1,500 shown; off-panel points omitted; summaries use all").to_corner(UR, buff=0.25)
+        intro = label('Simulate dependence, then choose margins', font_size=36)
         with self.voiceover(
             "Sklar's theorem is also a recipe for simulation. <bookmark mark='a'/> Draw pairs from a bivariate normal "
             "with correlation point seven. <bookmark mark='b'/> Pass each coordinate through the normal CDF. Now "
@@ -154,8 +165,10 @@ class Copulas(VoiceoverScene):
             "Part 3's probability integral transform run backwards in two dimensions, is how risk models and simulation studies build joint "
             "distributions with realistic margins."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(panels[0]))
             vo.wait_until("b")
             self.play(GrowArrow(arr[0]), FadeIn(panels[1]))

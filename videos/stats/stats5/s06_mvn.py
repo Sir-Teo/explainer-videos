@@ -39,18 +39,18 @@ class MVN(VoiceoverScene):
                               r"standard normals: \ $\mathbf X \sim N(\boldsymbol\mu, \Sigma)$, \ $\Sigma = AA^\top$", color=S.ACCENT,
                               width=6.0, font_size=24).move_to([3.4, 2.3, 0])
         rows = VGroup(MathTex(r"A = " + mat_tex_(A_), font_size=30), MathTex(r"\Sigma = AA^\top = " + mat_tex_(Sg), font_size=30, color=S.ACCENT),
-                      MathTex(r"\text{sample covariance: }" + mat_tex_(np.asarray(d["emp"])), font_size=26, color=SIM))
+                      MathTex(r"\text{covariance of 2,500 draws (1,200 shown): }" + mat_tex_(np.asarray(d["emp"])), font_size=22, color=SIM))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.4, -0.4, 0])
         dens = MathTex(r"f(\mathbf x) = (2\pi)^{-p/2}\det(\Sigma)^{-1/2} e^{-\frac12(\mathbf x - \boldsymbol\mu)^\top\Sigma^{-1}(\mathbf x - "
                        r"\boldsymbol\mu)}", font_size=26).to_edge(DOWN, buff=0.35).shift(RIGHT * 2.6)
-        dw = label(r"Part 3's change of variables, \ with Part 4's Jacobian $|\det A|$", font_size=20, color=GREY_B).next_to(dens, UP, buff=0.12)
+        dw = label(r"$\Sigma\succ0$: change of variables, Jacobian $|\det A|$", font_size=20, color=GREY_B).next_to(dens, UP, buff=0.12)
         with self.voiceover(
             "Galton's ellipses belong to one distribution, and it has a simple definition. <bookmark mark='a'/> "
             "Start with independent standard normals: a round cloud. <bookmark mark='b'/> Multiply by a matrix A "
             "and add a vector mu. <bookmark mark='c'/> The cloud stretches, turns and moves, and its circles become "
             "ellipses. That's the multivariate normal: any affine image of independent standard normals. Its "
             "covariance is A A transpose, by Part 4's rule, and the sample covariance of the simulated points "
-            "agrees. <bookmark mark='d'/> Its density follows from the change of variables: the inverse of Sigma in "
+            "agrees. <bookmark mark='d'/> When Sigma is positive definite, its density follows from the change of variables: the inverse of Sigma in "
             "the exponent, and the square root of its determinant, the Jacobian, in front."
         ) as vo:
             self.play(FadeIn(frame), FadeIn(dots, lag_ratio=0.001), Create(circ))
@@ -82,6 +82,7 @@ class MVN(VoiceoverScene):
                 r.width = 12.8
         crm = label(r"Cram\'er--Wold: \ a vector is multivariate normal \ iff \ every linear combination is normal", font_size=26,
                     color=S.ACCENT).to_edge(DOWN, buff=0.7)
+        intro = label('Properties of a joint Gaussian', font_size=36)
         with self.voiceover(
             "From the definition, everything follows. <bookmark mark='a'/> An affine image of a multivariate normal "
             "is again multivariate normal, with covariance B Sigma B transpose. <bookmark mark='b'/> So the marginals "
@@ -91,8 +92,11 @@ class MVN(VoiceoverScene):
             "multivariate normal exactly when every linear combination of its coordinates is normal, a consequence "
             "of the Cramér–Wold device that Part 6 will use."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
             vo.wait_until("e")
             self.play(FadeIn(crm))
@@ -119,7 +123,7 @@ class MVN(VoiceoverScene):
             "There's one trap. <bookmark mark='a'/> Remember the random-sign pair from chapter two: X standard normal, "
             "Y equal to X times a random sign. Y is standard normal too, and they're uncorrelated. "
             "<bookmark mark='b'/> But they're dependent, since the size of Y is the size of X. <bookmark mark='c'/> And "
-            "the pair isn't jointly normal: X plus Y is exactly zero half the time, and no normal variable does that. "
+            "the pair isn't jointly normal: X plus Y is exactly zero half the time, while its variance is positive, which rules out even a degenerate normal law. "
             "<bookmark mark='d'/> Two normals need not be jointly normal. When they are, the special property holds: "
             "uncorrelated means independent, because a diagonal covariance makes the density factor."
         ) as vo:
@@ -146,7 +150,7 @@ class MVN(VoiceoverScene):
         rows = VGroup(
             MathTex(r"d_M^2 = (\mathbf X - \boldsymbol\mu)^\top \Sigma^{-1} (\mathbf X - \boldsymbol\mu) = \|\mathbf Z\|^2 \sim \chi^2_p",
                     font_size=28),
-            label(r"so: \ a QQ plot of squared Mahalanobis distances against $\chi^2_p$ \ checks multivariate normality", font_size=24,
+            label(r"so: \ a QQ plot of squared Mahalanobis distances against $\chi^2_p$ \ checks radial fit; does not establish joint normality", font_size=24,
                   color=GREY_A),
             label(r"Part 1's QQ plot, \ in $p$ dimensions at once", font_size=24, color=S.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.9, 0.6, 0])
@@ -158,10 +162,10 @@ class MVN(VoiceoverScene):
         with self.voiceover(
             "How would you check that data are multivariate normal? <bookmark mark='a'/> Whiten them: the squared "
             "Mahalanobis distance of a multivariate normal vector is the squared length of the underlying standard "
-            "normal, so it's chi-squared with p degrees of freedom. <bookmark mark='b'/> So sort the squared "
-            "distances and plot them against chi-squared quantiles: Part 1's QQ plot, now testing p dimensions at "
+            "normal, so it's chi-squared with p degrees of freedom. <bookmark mark='b'/> With known mean and covariance, sort the squared "
+            "distances and plot them against chi-squared quantiles: Part 1's QQ plot, now checking radial fit in p dimensions at "
             "once. <bookmark mark='c'/> For four thousand simulated three-dimensional normal vectors, the points lie "
-            "on the diagonal. Curvature at the top would signal heavy tails or outliers, which Part 30 hunts."
+            "near the diagonal. This diagnostic alone cannot establish joint normality: directions matter too. Fitting the mean and covariance also changes the finite-sample reference. Curvature can flag tail mismatch or outliers, which Part 30 hunts."
         ) as vo:
             self.play(FadeIn(A), Create(diag), FadeIn(tag))
             vo.wait_until("a")
