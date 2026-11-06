@@ -51,18 +51,18 @@ class Payments(VoiceoverScene):
                        label(dollars(0), font_size=24, color=YES)).arrange(DOWN, buff=0.12)
         total.next_to(acc, RIGHT, buff=0.6)
         rows = [[f"pay-{i + 1}", *[dollars(v, True) for v in ln], r"0"] for i, ln in enumerate(lines)]
-        tab = grid_table([r"journal entry", *names, r"sum"], rows, widths=[2.6, 2.4, 2.4, 2.2, 1.4], row_h=0.55,
-                         font_size=20, mono_cols=(0,))
+        tab = grid_table([r"journal entry", *names, r"sum"], rows, widths=[2.6, 2.4, 2.4, 2.2, 1.4], row_h=0.7,
+                         font_size=23, mono_cols=(0,))
         tab.next_to(acc, DOWN, buff=0.6).set_x(0)
         for r in (1, 2):
             tab.cells[r][4].set_color(YES)
-        ill = note(r"amounts illustrative; \ integers in cents", font_size=16).next_to(tab, DOWN, buff=0.15)
+        ill = note(r"amounts illustrative; \ integers in cents", font_size=16).next_to(tab, DOWN, buff=0.35)
         notes = VGroup(
             wrapped_label(r"each entry's lines sum to zero, \ so by induction \ (Part 2) \ the whole ledger does: \ "
                           r"money is moved, \ never made or lost", 12.4, font_size=20, color=YES),
             wrapped_label(r"entries are only appended; \ a mistake is corrected by a new, \ reversing entry, \ so the "
                           r"history is the audit trail", 12.4, font_size=20, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(ill, DOWN, buff=0.6).set_x(0)
         with self.voiceover(
             "A payment system is first of all a ledger, kept the way accountants have kept books for five hundred "
             "years. <bookmark mark='a'/> Every payment is a journal entry with several lines: fifty dollars leave the "
@@ -171,8 +171,8 @@ class Payments(VoiceoverScene):
                 [r"journal entries posted", f"{nv['entries']:,}", f"{idm['entries']:,}"],
                 [r"payments charged twice", f"{nv['double_charges']:,}", f"{idm['double_charges']:,}"],
                 [r"sum of all balances", f"{nv['sum']}", f"{idm['sum']}"]]
-        tab = grid_table([r"", r"without keys", r"with idempotency keys"], rows, widths=[4.4, 3.2, 3.8],
-                         row_h=0.6, font_size=21, mono_cols=())
+        tab = grid_table([r"", r"without keys", r"with idempotency keys"], rows, widths=[4.6, 3.4, 4.0],
+                         row_h=0.72, font_size=24, mono_cols=())
         tab.next_to(head, DOWN, buff=0.5)
         for r in (2, 3):
             tab.cells[r][1].set_color(NO)
@@ -219,18 +219,18 @@ class Payments(VoiceoverScene):
         st = {}
         for i, n in enumerate(main):
             st[n] = tag_box(n, color=YES if n == r"settled" else DATA, size=17, w=2.3, h=0.65).move_to(
-                [-4.8 + i * 3.2, 1.2, 0])
+                [-4.8 + i * 3.2, 0.8, 0])
         for n, i in side.items():
             st[n] = tag_box(n, color=NO if n == r"declined" else LAM, size=17, w=2.3, h=0.65).move_to(
-                [-4.8 + i * 3.2 + 1.6, -0.3, 0])
+                [-4.8 + i * 3.2 + 1.6, -0.8, 0])
         arrows = VGroup(*[Arrow(st[a].get_right(), st[b].get_left(), buff=0.08, color=GREY_C, stroke_width=2,
                                 max_tip_length_to_length_ratio=0.15) for a, b in zip(main, main[1:])])
         for n, i in side.items():
             arrows.add(Arrow(st[main[i]].get_bottom(), st[n].get_top(), buff=0.08, color=GREY_C, stroke_width=2,
                              max_tip_length_to_length_ratio=0.2))
-        posts = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(arrows[k], UP, buff=0.12) for k, t in
-                         enumerate([r"hold placed", r"money moves", r"cash arrives"])])
-        token = Dot(radius=0.13, color=HEAD).move_to(st[r"created"].get_top() + UP * 0.3)
+        posts = VGroup(*[label(t, font_size=17, color=GREY_B).next_to(st[main[k + 1]], UP, buff=0.15) for k, t in
+                         enumerate([r"a hold placed", r"money moves", r"cash arrives"])])
+        token = Dot(radius=0.13, color=HEAD).move_to(st[r"created"].get_top() + UP * 0.75)
         notes = VGroup(
             wrapped_label(r"transitions only go forward, \ and each one is a compare-and-set on the current state: \ "
                           r"a duplicate ``capture'' finds the payment already captured and does nothing", 12.4,
@@ -252,7 +252,7 @@ class Payments(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(token))
             for k, n in enumerate(main[1:]):
-                self.play(token.animate.move_to(st[n].get_top() + UP * 0.3), FadeIn(posts[k]), run_time=0.9)
+                self.play(token.animate.move_to(st[n].get_top() + UP * 0.75), FadeIn(posts[k]), run_time=0.9)
                 self.play(Indicate(st[n], color=HEAD), run_time=0.5)
             vo.wait_until("b")
             self.play(FadeIn(notes[0]))
@@ -272,8 +272,8 @@ class Payments(VoiceoverScene):
             body = VGroup(*[VGroup(mono(k, size=15, color=GREY_A), label(dollars(v), font_size=18, color=WHITE))
                             .arrange(RIGHT, buff=0.35) for k, v in rows]).arrange(DOWN, buff=0.22, aligned_edge=LEFT)
             return VGroup(t, body).arrange(DOWN, buff=0.25)
-        left = col(r"our ledger", ours, DATA).move_to([-4.6, 0.8, 0])
-        right = col(r"the processor's settlement file", theirs, LAM).move_to([-0.4, 0.8, 0])
+        left = col(r"our ledger", ours, DATA).scale(1.3).move_to([-4.9, 0.5, 0])
+        right = col(r"the processor's settlement file", theirs, LAM).scale(1.3).move_to([-0.4, 0.5, 0])
         links = VGroup()
         for i in range(4):
             ok = ours[i] == theirs[i]
