@@ -104,8 +104,9 @@ class Integrity(VoiceoverScene):
             "the East: blue for preventable disease, red for wounds, grey for everything else. "
             "<bookmark mark='b'/> In the first year, "
             f"{money(dis[:12].sum())} soldiers died of disease and {money(wou[:12].sum())} of wounds. In the worst "
-            f"month, January 1855, disease alone was killing at a rate of {rd.max():.0f} per thousand per year: at "
-            "that pace the whole army would have died of it within the year. <bookmark mark='c'/> In March 1855 a "
+            f"month, January 1855, disease alone was killing at an annualized rate of {rd.max():.0f} per thousand "
+            "soldier-years. That is a rate of deaths per exposure time, not a probability of dying within a year. "
+            "<bookmark mark='c'/> In March 1855 a "
             "sanitary commission arrived, cleaned the water and the drains. The second year's rose is drawn to the "
             f"same scale: {money(dis[12:].sum())} deaths from disease. <bookmark mark='d'/> Nightingale chose area, "
             "not radius, deliberately: double the radius and the wedge looks four times as bad. She wanted the "
@@ -134,7 +135,7 @@ class Integrity(VoiceoverScene):
         def ribbon(seq, col):
             """A band through the points, as wide as the army at each one (Minard's flow)."""
             P = np.array([[X(q[0]), Y(q[1])] for q in seq])
-            W = np.array([0.04 + 0.75 * q[2] / top for q in seq])
+            W = np.array([0.75 * q[2] / top for q in seq])
             left, right = [], []
             for i in range(len(P)):
                 d0 = P[i] - P[i - 1] if i > 0 else P[1] - P[0]
@@ -162,12 +163,12 @@ class Integrity(VoiceoverScene):
                         label(rf"Moscow: \ {fmt_int(moscow)}", font_size=22, color=ADV).move_to([X(37.0), Y(56.0), 0]),
                         label(rf"{fmt_int(end)}", font_size=22, color=RET).move_to([X(24.6), Y(54.0), 0]))
         src = historical_tag(r"Minard (1869); \ data via Wilkinson, \emph{The Grammar of Graphics}")
-        cap = label(r"width $\propto$ survivors \qquad tan: \ advance \qquad grey: \ retreat", font_size=22,
+        cap = label(r"width $\propto$ troops remaining \qquad tan: \ advance \qquad grey: \ retreat", font_size=22,
                     color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "And the picture often called the best statistical graphic ever drawn. <bookmark mark='a'/> In 1869 "
             "Charles Joseph Minard, a retired French engineer, mapped Napoleon's invasion of Russia in 1812. The "
-            "band follows the army's route; its width is the number of men still alive. "
+            "band follows the army's route; its width is the number of troops remaining in each column. "
             f"<bookmark mark='b'/> The main column set out {money(start)} strong. <bookmark mark='c'/> It reached "
             f"Moscow with {money(moscow)}. <bookmark mark='d'/> And the grey band is the retreat, through the "
             f"Russian winter, narrowing to {money(end)}. <bookmark mark='e'/> Six variables on one flat page: the "
@@ -198,6 +199,13 @@ class Integrity(VoiceoverScene):
             a0 -= ang
         pie.move_to([-3.6, -0.3, 0])
         names = "ABCDE"
+        pie_labels = VGroup()
+        a0 = PI / 2
+        for name, v in zip(names, vals):
+            ang = TAU * v / vals.sum()
+            pie_labels.add(label(name, font_size=26).move_to(
+                pie.get_center() + 1.45 * np.array([np.cos(a0 - ang / 2), np.sin(a0 - ang / 2), 0])))
+            a0 -= ang
         A = axes([0, 5.6], [0, 25], x_length=5.0, y_length=4.0, yticks=[0, 10, 20], center=[3.4, -0.4, 0])
         ax = A.ax
         bars = VGroup()
@@ -225,16 +233,17 @@ class Integrity(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag), FadeIn(q))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s_) for s_ in pie], lag_ratio=0.2))
+            self.play(LaggedStart(*[FadeIn(s_) for s_ in pie], lag_ratio=0.2), FadeIn(pie_labels))
             vo.wait_until("b")
             self.play(FadeIn(A), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.15), FadeIn(bl))
             vo.wait_until("c")
-            self.play(pie.animate.scale(0.7).shift(UP * 0.3 + LEFT * 0.3), A.animate.shift(LEFT * 2.6),
+            self.play(VGroup(pie, pie_labels).animate.scale(0.7).shift(UP * 0.3 + LEFT * 0.3), A.animate.shift(LEFT * 2.6),
                       bars.animate.shift(LEFT * 2.6), bl.animate.shift(LEFT * 2.6))
             self.play(FadeIn(rh), LaggedStart(*[FadeIn(r, shift=LEFT * 0.1) for r in rank], lag_ratio=0.15))
         self.clear_scene()
 
     def lie_factor(self):
+        head = label(r"A truncated baseline magnifies differences", font_size=32).to_edge(UP, buff=0.35)
         A1 = axes([0, 3], [97, 100.5], x_length=4.0, y_length=4.2, yticks=[97, 98, 99, 100], center=[-3.6, -0.5, 0])
         A2 = axes([0, 3], [0, 105], x_length=4.0, y_length=4.2, yticks=[0, 25, 50, 75, 100], center=[3.0, -0.5, 0])
 
@@ -267,11 +276,12 @@ class Integrity(VoiceoverScene):
             "quantity it's often right. But a bar's length is a claim about an amount, and bars should start at "
             "zero."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(A1), FadeIn(t1), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b1], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(A2), FadeIn(t2), LaggedStart(*[GrowFromEdge(b, DOWN) for b in b2], lag_ratio=0.3))
             vo.wait_until("c")
-            self.play(Write(eq))
+            self.play(FadeOut(head), Write(eq))
             self.play(FadeIn(val))
         self.clear_scene()

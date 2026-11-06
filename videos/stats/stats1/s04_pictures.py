@@ -57,7 +57,8 @@ class Pictures(VoiceoverScene):
         ax = self.A.ax
         edges = np.arange(140, 206, 5.0)
         x60 = np.asarray(d["dots"])
-        counts60 = np.histogram(x60, edges)[0]
+        # These bars receive the rounded dots already visible on screen.
+        counts60 = np.histogram(np.round(x60), edges)[0]
         B = axes([140, 205], [0, 70], x_length=11.0, y_length=4.0, xlabel=r"height (cm)", ylabel=r"count",
                  xticks=[140, 150, 160, 170, 180, 190, 200], yticks=[0, 20, 40, 60], center=[0, -0.6, 0])
         bx = B.ax
@@ -185,8 +186,13 @@ class Pictures(VoiceoverScene):
                                                                                         buff=0.25)
         bg = BackgroundRectangle(card, color=BACKGROUND, fill_opacity=0.9, buff=0.2)
         cardg = VGroup(bg, card).scale(0.8).to_corner(UR, buff=0.25)
-        pop = curve(ax, d["grid"], d["pop_density"], S.TRUTH, 4, smooth=True)
-        plab = label(r"the population", font_size=26, color=S.TRUTH).next_to(ax.c2p(186, 0.03), UP, buff=0.1)
+        world = load("world")
+        edges = np.asarray(world["height_hist_edges"])
+        centers = (edges[:-1] + edges[1:]) / 2
+        visible = (centers >= bounds(ax)[0]) & (centers <= bounds(ax)[1])
+        pop = curve(ax, centers[visible],
+                    (np.asarray(world["height_hist"]) / np.diff(edges))[visible], S.TRUTH, 4)
+        plab = label(r"population, 1 cm bins", font_size=26, color=S.TRUTH).next_to(ax.c2p(186, 0.03), UP, buff=0.1)
         why_n = label(r"why $n^{-1/3}$? \ Part 29", font_size=24, color=GREY_B).next_to(cardg, DOWN, buff=0.15)
         with self.voiceover(
             "There are rules of thumb for the width. <bookmark mark='a'/> Sturges, in 1926, chose the number of bins "
@@ -196,8 +202,9 @@ class Pictures(VoiceoverScene):
             f"times n to the minus one third: {d['h_scott']:.1f} and {d['h_fd']:.1f} centimetres. That curious "
             "power, minus one third, comes from balancing the two kinds of error, and we'll derive it. "
             "<bookmark mark='c'/> And because this sample came from the World, we can do what's impossible in "
-            "real life: lay the population itself over the picture. Here it is in gold. The histogram of two hundred "
-            "people is an estimate of this curve, and you can see both how good it is and where chance pushed it "
+            "real life: lay the whole population's histogram, in one-centimetre bins, over the picture. Here it is "
+            "in gold, with the bin centres joined. The histogram of two hundred people estimates this shape, "
+            "and you can see both how good it is and where chance pushed it "
             "around."
         ) as vo:
             self.play(FadeIn(bg), FadeIn(card[0]))

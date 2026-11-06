@@ -1,0 +1,222 @@
+{
+  "scope": "Initial mixed-source endpoint pass while repairs were being made; diagnostic findings only, not final-source approval.",
+  "records": [
+    {
+      "scene": "Center",
+      "status": "needs-review",
+      "frames": 23,
+      "warning_counts": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "Correlation",
+      "status": "needs-review",
+      "frames": 21,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 27
+      },
+      "issues": []
+    },
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 15,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 107
+      },
+      "issues": []
+    },
+    {
+      "scene": "Integrity",
+      "status": "needs-review",
+      "frames": 19,
+      "warning_counts": {
+        "blank-narration-beat": 1,
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "issues": [
+        {
+          "kind": "blank-narration-beat",
+          "frame": "015_00216.8s.png",
+          "reason": "narrated-hold-2.7s"
+        }
+      ]
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 8,
+      "warning_counts": {
+        "blank-narration-beat": 1,
+        "narration-translation": 5,
+        "untranslated-on-screen": 63,
+        "source-changed-during-render": 1
+      },
+      "issues": [
+        {
+          "kind": "blank-narration-beat",
+          "frame": "001_00064.7s.png",
+          "reason": "narrated-hold-2.7s"
+        }
+      ]
+    },
+    {
+      "scene": "Pictures",
+      "status": "needs-review",
+      "frames": 19,
+      "warning_counts": {
+        "input-changed-during-render": 3,
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      },
+      "issues": []
+    },
+    {
+      "scene": "Populations",
+      "status": "needs-review",
+      "frames": 15,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "QQ",
+      "status": "needs-review",
+      "frames": 19,
+      "warning_counts": {
+        "blank-narration-beat": 1,
+        "narration-translation": 5,
+        "untranslated-on-screen": 32,
+        "source-changed-during-render": 1
+      },
+      "issues": [
+        {
+          "kind": "blank-narration-beat",
+          "frame": "006_00056.7s.png",
+          "reason": "narrated-hold-1.9s"
+        }
+      ]
+    },
+    {
+      "scene": "Quantiles",
+      "status": "needs-review",
+      "frames": 20,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 29,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "Random",
+      "status": "needs-review",
+      "frames": 11,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 15,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "SameStats",
+      "status": "needs-review",
+      "frames": 8,
+      "warning_counts": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 32,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "Shape",
+      "status": "needs-review",
+      "frames": 19,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 16,
+      "warning_counts": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 30
+      },
+      "issues": []
+    },
+    {
+      "scene": "Spread",
+      "status": "needs-review",
+      "frames": 20,
+      "warning_counts": {
+        "text-outside-frame": 2,
+        "narration-translation": 5,
+        "untranslated-on-screen": 29,
+        "source-changed-during-render": 1
+      },
+      "issues": [
+        {
+          "kind": "text-outside-frame",
+          "frame": "009_00109.6s.png",
+          "text": "person 2",
+          "bounds": [
+            -8.009298159102634,
+            -7.106735959102633,
+            -2.4312236589618528,
+            -2.2170269089618526
+          ]
+        },
+        {
+          "kind": "text-outside-frame",
+          "frame": "010_00116.8s.png",
+          "text": "person 2",
+          "bounds": [
+            -8.009298159102634,
+            -7.106735959102633,
+            -2.4312236589618528,
+            -2.2170269089618526
+          ]
+        }
+      ]
+    },
+    {
+      "scene": "TheWorld",
+      "status": "needs-review",
+      "frames": 16,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 43,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    },
+    {
+      "scene": "Transform",
+      "status": "needs-review",
+      "frames": 17,
+      "warning_counts": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 22,
+        "source-changed-during-render": 1
+      },
+      "issues": []
+    }
+  ]
+}

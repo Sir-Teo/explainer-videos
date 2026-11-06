@@ -88,7 +88,7 @@ class Spread(VoiceoverScene):
         m = float(x.mean())
         proj = np.full(3, m - c)
         res = v - proj
-        ns = NSpace(scale=0.72, center=[-3.4, -1.5, 0], angle=-0.7, tilt=0.4, axis_len=6.0,
+        ns = NSpace(scale=0.55, center=[-2.9, -1.4, 0], angle=-0.7, tilt=0.4, axis_len=6.0,
                     axis_labels=[r"person 1", r"person 2", r"person 3"])
         diag = ns.line([1, 1, 1], extent=7.0, color=GREY_B)
         dlab = ns.point_label(label(r"all equal: \ $c\,\mathbf 1$", font_size=22, color=GREY_B), [4.2, 4.2, 4.2], offset=(-0.9, 0.35))

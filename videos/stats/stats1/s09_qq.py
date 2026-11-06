@@ -4,6 +4,7 @@ import numpy as np
 from scipy import stats
 
 from videos.stats.stats1.common import *  # noqa: F403
+from videos.stats.stats1.compute import qq_demo
 
 
 class QQ(VoiceoverScene):
@@ -22,9 +23,8 @@ class QQ(VoiceoverScene):
 
     def build(self):
         d = load("qq")
-        x = np.asarray(d["men_x"])[::20]
+        z, x = qq_demo(d["men_x"])
         n = len(x)
-        z = stats.norm.ppf((np.arange(1, n + 1) - 0.5) / n)
         # left: the standard normal with its n quantiles; right: the QQ plot
         N = axes([-3, 3], [0, 0.45], x_length=5.0, y_length=2.4, xlabel=r"standard normal $z$", xticks=[-2, 0, 2],
                  center=[-3.2, 1.6, 0])
@@ -72,6 +72,7 @@ class QQ(VoiceoverScene):
         self.clear_scene()
 
     def why_straight(self):
+        head = label(r"Normal quantiles form a line", font_size=34).to_edge(UP, buff=0.35)
         rows = [
             cmath(r"X", r"=", r"\mu + \sigma Z", font_size=40, colors={r"\mu + \sigma Z": S.TRUTH}),
             cmath(r"P(X \le \mu + \sigma z)", r"=", r"P(Z \le z)", font_size=40),
@@ -92,6 +93,7 @@ class QQ(VoiceoverScene):
             "shape is right, the line's intercept and slope estimate them. And the same argument works for any "
             "family that's just one shape shifted and stretched."
         ) as vo:
+            self.play(FadeIn(head))
             step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.2, buff=0.6)
             vo.wait_until("a")
             step(0)
@@ -160,11 +162,15 @@ class QQ(VoiceoverScene):
         ax = P.ax
         keep = (x >= lo - pad) & (x <= hi + pad)
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=color) for a, b in zip(z[keep], x[keep])])
-        ref = Line(ax.c2p(-3.0, max(med - 3.0 * sc, lo - pad)), ax.c2p(3.0, min(med + 3.0 * sc, hi + pad)),
+        zlo = max(-3.0, (lo - pad - med) / sc)
+        zhi = min(3.0, (hi + pad - med) / sc)
+        ref = Line(ax.c2p(zlo, med + zlo * sc), ax.c2p(zhi, med + zhi * sc),
                    color=GREY_B, stroke_width=2)
         t = label(title, font_size=26, color=color).next_to(P, UP, buff=0.2)
         y = label(ylab, font_size=20, color=GREY_B).next_to(P, DOWN, buff=0.55)
-        return VGroup(P, ref, dots, t, y)
+        omitted = label(rf"{len(x) - int(keep.sum())} extreme points off scale", font_size=17,
+                        color=GREY_B).next_to(t, UP, buff=0.08)
+        return VGroup(P, ref, dots, t, y, omitted)
 
     def curvature(self):
         pa = self.panel("men", r"men's heights", [-4.6, -0.2, 0], r"straight: \ a bell", S.EST)
@@ -187,11 +193,11 @@ class QQ(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(pa[0]), Create(pa[1]), FadeIn(pa[2], lag_ratio=0.005), FadeIn(pa[3]), FadeIn(pa[4]))
+            self.play(FadeIn(pa[0]), Create(pa[1]), FadeIn(pa[2], lag_ratio=0.005), FadeIn(pa[3:]))
             vo.wait_until("b")
-            self.play(FadeIn(pb[0]), Create(pb[1]), FadeIn(pb[2], lag_ratio=0.005), FadeIn(pb[3]), FadeIn(pb[4]))
+            self.play(FadeIn(pb[0]), Create(pb[1]), FadeIn(pb[2], lag_ratio=0.005), FadeIn(pb[3:]))
             vo.wait_until("c")
-            self.play(FadeIn(pc[0]), Create(pc[1]), FadeIn(pc[2], lag_ratio=0.005), FadeIn(pc[3]), FadeIn(pc[4]))
+            self.play(FadeIn(pc[0]), Create(pc[1]), FadeIn(pc[2], lag_ratio=0.005), FadeIn(pc[3:]))
             vo.wait_until("d")
             self.play(*[Indicate(p[2], color=WHITE, scale_factor=1.03) for p in (pa, pb, pc)])
         self.clear_scene()

@@ -1,0 +1,22 @@
+{
+  "part": "stats1",
+  "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
+  "tests": {
+    "command": "python -m pytest tests/test_stats*.py tests/test_qa*.py -q",
+    "passed": 540,
+    "subtests_passed": 5,
+    "warnings": 15
+  },
+  "english_endpoints": 16,
+  "native_1080_endpoints": 6,
+  "silent_motion_chapters": 4,
+  "narrated_center_seconds": 234,
+  "center_audio_lines": 6,
+  "center_audio_issues": 0,
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

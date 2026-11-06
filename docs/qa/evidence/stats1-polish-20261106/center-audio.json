@@ -1,0 +1,84 @@
+{
+ "video": "stats1",
+ "scene": "Center",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 6,
+ "lines": [
+  {
+   "raw": "Chapter four. The centre as an optimization.",
+   "spoken": "Chapter four. The centre as an optimization.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f153e46c081e90c7.wav",
+   "duration": 3.475,
+   "tokens": 7,
+   "peak": 0.442779541015625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "If you had to replace nine numbers by one, which would you choose? <bookmark mark='a'/> Here are nine incomes from the World, in thousands, each in its own lane. Pick a candidate centre, c, and measure how far it is from each income. <bookmark mark='b'/> Legendre's answer, in 1805, and Gauss's, was to square those distances and add them up, and choose the c that makes the total as small as possible. <bookmark mark='c'/> Slide c, and watch the total. It falls, reaches a bottom, and rises again. <bookmark mark='d'/> Where is the bottom? Differentiate: the derivative is minus twice the sum of the deviations. Set it to zero, and c must be the ordinary average. <bookmark mark='e'/> The mean is the answer to an optimization problem. Here it's 52.8 thousand. And notice where it sits: to the right of seven of the nine people, pulled there by one large income.",
+   "spoken": "If you had to replace nine numbers by one, which would you choose? Here are nine incomes from the World, in thousands, each in its own lane. Pick a candidate centre, c, and measure how far it is from each income. Legendre's answer, in 1805, and Gauss's, was to square those distances and add them up, and choose the c that makes the total as small as possible. Slide c, and watch the total. It falls, reaches a bottom, and rises again. Where is the bottom? Differentiate: the derivative is minus twice the sum of the deviations. Set it to zero, and c must be the ordinary average. The mean is the answer to an optimization problem. Here it's 52.8 thousand. And notice where it sits: to the right of seven of the nine people, pulled there by one large income.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d0c62a33e4ab5b1b.wav",
+   "duration": 46.5,
+   "tokens": 141,
+   "peak": 0.613128662109375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Now change the loss. <bookmark mark='a'/> Instead of squared distances, add up the plain distances, the absolute values. Laplace preferred this one. <bookmark mark='b'/> Its derivative is easy to read off the picture: every income to the left of c pulls the total up as c moves right, one unit per unit, and every income to the right pulls it down. Away from an observation, the slope is the number on the left minus the number on the right. At an observation the two one-sided slopes can differ. <bookmark mark='c'/> It's a tug of war. The total keeps falling while more people are on the right, and reaches a minimum when neither side holds more than half: <bookmark mark='d'/> at the middle observation, the median, 36.4 thousand. <bookmark mark='e'/> The median doesn't care how far away people are, only which side they're on. Make the richest person three times richer, and the median doesn't move. The mean does.",
+   "spoken": "Now change the loss. Instead of squared distances, add up the plain distances, the absolute values. Laplace preferred this one. Its derivative is easy to read off the picture: every income to the left of c pulls the total up as c moves right, one unit per unit, and every income to the right pulls it down. Away from an observation, the slope is the number on the left minus the number on the right. At an observation the two one-sided slopes can differ. It's a tug of war. The total keeps falling while more people are on the right, and reaches a minimum when neither side holds more than half: at the middle observation, the median, 36.4 thousand. The median doesn't care how far away people are, only which side they're on. Make the richest person three times richer, and the median doesn't move. The mean does.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c434c6deba13dafe.wav",
+   "duration": 48.6,
+   "tokens": 148,
+   "peak": 0.611572265625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Squares and absolute values are two members of one family. <bookmark mark='a'/> Raise the distances to a power p at least one, add them up, and minimize. p equals one gives the median; p equals two gives the mean. <bookmark mark='b'/> Here's the whole family on two hundred incomes. Start at p equals one, at the median, 41.7 thousand. <bookmark mark='c'/> As p grows, far-away incomes count for more and more, and the centre is dragged toward them: 55.0 at p equals two, and then far past anything typical. <bookmark mark='d'/> As p goes to infinity only the two most extreme incomes matter, and the centre becomes the midrange, halfway between the smallest and the largest: 201.4 thousand, an income almost nobody has. <bookmark mark='e'/> The choice of a centre is a choice of a loss: how much do you mind being far from the people who are far away?",
+   "spoken": "Squares and absolute values are two members of one family. Raise the distances to a power p at least one, add them up, and minimize. p equals one gives the median; p equals two gives the mean. Here's the whole family on two hundred incomes. Start at p equals one, at the median, 41.7 thousand. As p grows, far-away incomes count for more and more, and the centre is dragged toward them: 55.0 at p equals two, and then far past anything typical. As p goes to infinity only the two most extreme incomes matter, and the centre becomes the midrange, halfway between the smallest and the largest: 201.4 thousand, an income almost nobody has. The choice of a centre is a choice of a loss: how much do you mind being far from the people who are far away?",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c7dd87023b9fb7ca.wav",
+   "duration": 48.175,
+   "tokens": 140,
+   "peak": 0.65350341796875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The mode answers a different question: which value occurs most often? It minimizes the number of exact mismatches. <bookmark mark='a'/> For continuously measured heights, exact repeats are rare, so that rule alone gives no useful unique centre. Instead, choose a window and find where it holds the most observations. Here a five-centimetre window is most crowded at 168.2 centimetres. <bookmark mark='b'/> Change the window width, and the answer can change, just as changing histogram bins changes the picture. A mode estimate needs a scale as well as data.",
+   "spoken": "The mode answers a different question: which value occurs most often? It minimizes the number of exact mismatches. For continuously measured heights, exact repeats are rare, so that rule alone gives no useful unique centre. Instead, choose a window and find where it holds the most observations. Here a five-centimetre window is most crowded at 168.2 centimetres. Change the window width, and the answer can change, just as changing histogram bins changes the picture. A mode estimate needs a scale as well as data.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/871fb2776adaf5f6.wav",
+   "duration": 31.75,
+   "tokens": 84,
+   "peak": 0.798095703125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Seeing the mean as a minimum pays off immediately. <bookmark mark='a'/> Here are six bedtimes, from twenty to eleven at night to half past one in the morning. What's the average bedtime? <bookmark mark='b'/> Write them as hours after midnight and average the numbers, and you get 11:58: about noon. That's absurd: nobody here goes to bed at noon. The numbers wrapped around midnight, and the formula didn't know. <bookmark mark='c'/> But the mean was never really the formula; it was the point that minimizes the total squared distance. On a clock, distance is the distance around the circle. Minimize that, and the centre is 11:58 pm, two minutes before midnight. <bookmark mark='d'/> This is the Fréchet mean, after Maurice Fréchet, and it works for anything you can measure distances between: directions, shapes, networks, whole probability distributions. We'll meet it again in Part 61.",
+   "spoken": "Seeing the mean as a minimum pays off immediately. Here are six bedtimes, from twenty to eleven at night to half past one in the morning. What's the average bedtime? Write them as hours after midnight and average the numbers, and you get 11:58: about noon. That's absurd: nobody here goes to bed at noon. The numbers wrapped around midnight, and the formula didn't know. But the mean was never really the formula; it was the point that minimizes the total squared distance. On a clock, distance is the distance around the circle. Minimize that, and the centre is 11:58 pm, two minutes before midnight. This is the Fréchet mean, after Maurice Fréchet, and it works for anything you can measure distances between: directions, shapes, networks, whole probability distributions. We'll meet it again in Part 61.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4a02383186a643ab.wav",
+   "duration": 49.175,
+   "tokens": 136,
+   "peak": 0.675933837890625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats1/en/Center/result.json",
+ "input_sha256": "dedf09a7762bf322f2a407872a66878e7a90961eb4bc018dc52f355348edeab9"
+}

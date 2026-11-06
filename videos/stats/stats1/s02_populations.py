@@ -126,13 +126,14 @@ class Populations(VoiceoverScene):
                             Dot(ax.c2p(m, y), radius=0.05, color=S.EST)))
         cap = label(rf"20 samples of 25: \ {d['n_cover']} intervals catch $\theta$", font_size=26,
                     color=GREY_A).next_to(A, DOWN, buff=0.2)
-        preview = note(r"a preview: \ intervals are built in Part 11").to_corner(UR, buff=0.3)
+        preview = note(r"normal approximation, targeting 95\%; \ intervals are built in Part 11").to_corner(UR, buff=0.3)
         board = coverage_board([], placeholders=6, font_size=24)
         with self.voiceover(
             "That's what statistics promises: not the answer, but an honest statement of how often you'll be "
             "wrong. <bookmark mark='a'/> The classic form is an interval: a range computed from the sample, built so "
-            "that it captures theta in, say, ninety-five percent of samples. Here are twenty samples, each with its "
-            f"interval. <bookmark mark='b'/> {d['n_cover']} of these twenty catch the gold line; the red ones miss. "
+            "that it captures theta in, say, ninety-five percent of samples. Here are twenty samples, each with a "
+            "normal-approximation interval targeting that rate. Its actual coverage is something to check, not "
+            f"assume. <bookmark mark='b'/> {d['n_cover']} of these twenty catch the gold line; the red ones miss. "
             "<bookmark mark='c'/> A promise like ninety-five percent can be checked, but only if you know the truth. "
             "So the series keeps a scoreboard, the Coverage Board. Every interval and every test we meet will be "
             "run thousands of times on a population whose truth we know, and the board records whether the "

@@ -1,0 +1,66 @@
+{
+  "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
+  "scope": "1920x1080 English silent endpoints",
+  "records": [
+    {
+      "scene": "Center",
+      "frames": 23,
+      "image_size": [
+        1920,
+        1080
+      ],
+      "sheet": "center-1080-sheet.png",
+      "status": "needs-review"
+    },
+    {
+      "scene": "Correlation",
+      "frames": 21,
+      "image_size": [
+        1920,
+        1080
+      ],
+      "sheet": "correlation-1080-sheet.png",
+      "status": "needs-review"
+    },
+    {
+      "scene": "Integrity",
+      "frames": 19,
+      "image_size": [
+        1920,
+        1080
+      ],
+      "sheet": "integrity-1080-sheet.png",
+      "status": "needs-review"
+    },
+    {
+      "scene": "QQ",
+      "frames": 18,
+      "image_size": [
+        1920,
+        1080
+      ],
+      "sheet": "qq-1080-sheet.png",
+      "status": "needs-review"
+    },
+    {
+      "scene": "Quantiles",
+      "frames": 20,
+      "image_size": [
+        1920,
+        1080
+      ],
+      "sheet": "quantiles-1080-sheet.png",
+      "status": "needs-review"
+    },
+    {
+      "scene": "Spread",
+      "frames": 20,
+      "image_size": [
+        1920,
+        1080
+      ],
+      "sheet": "spread-1080-sheet.png",
+      "status": "needs-review"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "fingerprint": "5326591e610633b46f8c99cb2086cc65ae1a2c97b918d23c2cf40cf68586beef",
+  "scope": "English silent animation endpoints; no production approval",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 107
+      }
+    },
+    {
+      "scene": "Populations",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      }
+    },
+    {
+      "scene": "TheWorld",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 43
+      }
+    },
+    {
+      "scene": "Pictures",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      }
+    },
+    {
+      "scene": "Center",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 29
+      }
+    },
+    {
+      "scene": "Spread",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 29
+      }
+    },
+    {
+      "scene": "Quantiles",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 30
+      }
+    },
+    {
+      "scene": "Shape",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      }
+    },
+    {
+      "scene": "QQ",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 35
+      }
+    },
+    {
+      "scene": "Transform",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 22
+      }
+    },
+    {
+      "scene": "Correlation",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 27
+      }
+    },
+    {
+      "scene": "SameStats",
+      "status": "needs-review",
+      "frames": 8,
+      "warnings": {
+        "narration-translation": 4,
+        "untranslated-on-screen": 32
+      }
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 16,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 30
+      }
+    },
+    {
+      "scene": "Integrity",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      }
+    },
+    {
+      "scene": "Random",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 15
+      }
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 8,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 63
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from videos.stats.stats1.common import *  # noqa: F403
+from videos.stats.stats1.compute import correlation_cloud
 
 POS, NEG = S.EST, S.RESID
 
@@ -23,7 +24,7 @@ class Correlation(VoiceoverScene):
         self.play(FadeOut(card))
 
     def axes_(self, center=(-2.4, -0.3, 0), w=7.4, h=5.6):
-        return axes([162, 190], [156, 196], x_length=w, y_length=h, xlabel=r"mid-parent height (cm)",
+        return axes([150, 192], [154, 200], x_length=w, y_length=h, xlabel=r"mid-parent height (cm)",
                     ylabel=r"adult child (cm)", xticks=[165, 170, 175, 180, 185, 190],
                     yticks=[160, 170, 180, 190], center=list(center))
 
@@ -34,8 +35,8 @@ class Correlation(VoiceoverScene):
         ax = A.ax
         mx, my = mid.mean(), ch.mean()
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=S.DATA) for a, b in zip(mid, ch)])
-        vx = DashedLine(ax.c2p(mx, 156), ax.c2p(mx, 196), color=GREY_B, stroke_width=2)
-        hy = DashedLine(ax.c2p(162, my), ax.c2p(190, my), color=GREY_B, stroke_width=2)
+        vx = DashedLine(ax.c2p(mx, 154), ax.c2p(mx, 200), color=GREY_B, stroke_width=2)
+        hy = DashedLine(ax.c2p(150, my), ax.c2p(192, my), color=GREY_B, stroke_width=2)
         prod = (mid - mx) * (ch - my)
         q = d["quad"]
         signs = VGroup(MathTex("+", font_size=60, color=POS).move_to(ax.c2p(187, 193)),
@@ -104,8 +105,8 @@ class Correlation(VoiceoverScene):
                     axis_labels=[r"obs.\ 1", r"obs.\ 2", r"obs.\ 3"])
         vx = ns.vector(xc, color=S.EST)
         vy = ns.vector(yc, color=MEDIAN)
-        lx = ns.point_label(MathTex(r"\mathbf x - \bar x\mathbf 1", font_size=28, color=S.EST), xc, offset=(0.4, 0.25))
-        ly = ns.point_label(MathTex(r"\mathbf y - \bar y\mathbf 1", font_size=28, color=MEDIAN), yc, offset=(0.2, 0.45))
+        lx = ns.point_label(MathTex(r"\mathbf x - \bar x\mathbf 1", font_size=28, color=S.EST), xc, offset=(0.5, -0.15))
+        ly = ns.point_label(MathTex(r"\mathbf y - \bar y\mathbf 1", font_size=28, color=MEDIAN), yc, offset=(-0.3, 0.45))
 
         def arc():
             u, w = xc / np.linalg.norm(xc), yc / np.linalg.norm(yc)
@@ -176,15 +177,14 @@ class Correlation(VoiceoverScene):
         g = np.random.Generator(np.random.PCG64(11))
         for k, rr in enumerate((-1.0, -0.5, 0.0, 0.5, 0.9, 1.0)):
             n = 60
-            a = g.standard_normal(n)
-            b = rr * a + np.sqrt(max(1 - rr * rr, 0)) * g.standard_normal(n)
+            a, b = correlation_cloud(rr, n, g)
+            scale = 0.68 / max(abs(a).max(), abs(b).max())
             box = Square(1.5, stroke_color=GREY_D, stroke_width=1)
-            pts = VGroup(*[Dot([0.22 * u, 0.22 * v, 0], radius=0.02, color=S.DATA) for u, v in zip(a, b)
-                           if abs(u) < 3.2 and abs(v) < 3.2])
+            pts = VGroup(*[Dot([scale * u, scale * v, 0], radius=0.02, color=S.DATA) for u, v in zip(a, b)])
             cap = MathTex(rf"r = {rr:g}", font_size=24, color=S.ACCENT).next_to(box, DOWN, buff=0.1)
             pics.add(VGroup(box, pts.move_to(box), cap))
         pics.arrange(RIGHT, buff=0.35).to_edge(DOWN, buff=0.5)
-        ptag = note(r"illustrative: computed draws").next_to(pics, UP, buff=0.1).align_to(pics, RIGHT)
+        ptag = note(r"illustrative: draws rescaled to the displayed sample $r$").next_to(pics, UP, buff=0.1).align_to(pics, RIGHT)
         with self.voiceover(
             "The geometry also proves the most important fact about r: it always lies between minus one and one. "
             "<bookmark mark='a'/> The length of u minus t times v can't be negative, whatever t is. "
@@ -216,7 +216,7 @@ class Correlation(VoiceoverScene):
         A = self.axes_(center=(-2.6, -0.3, 0))
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=S.DATA) for a, b in zip(mid, ch)])
-        cut = DashedLine(ax.c2p(mid[tall].min(), 156), ax.c2p(mid[tall].min(), 196), color=S.ACCENT, stroke_width=2)
+        cut = DashedLine(ax.c2p(mid[tall].min(), 154), ax.c2p(mid[tall].min(), 200), color=S.ACCENT, stroke_width=2)
         b, a0 = np.polyfit(mid, ch, 1)
         fit = Line(ax.c2p(163, a0 + b * 163), ax.c2p(189, a0 + b * 189), color=S.EST, stroke_width=4)
         bt, at = np.polyfit(mid[tall], ch[tall], 1)
