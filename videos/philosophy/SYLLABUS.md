@@ -1696,3 +1696,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 16 · Evidence by Numbers | scenes, English and Chinese narration and text, QA | ~51 min |
 | 17 · Cause | scenes, English and Chinese narration and text, QA | ~54 min |
 | 18 · Theories and Reality | scenes, English and Chinese narration and text, QA | ~51 min |
+| 19 · Life | scenes, English and Chinese narration and text, QA | ~51 min |
