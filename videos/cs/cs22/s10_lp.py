@@ -178,9 +178,9 @@ class Lp(VoiceoverScene):
         head = label(r"The same idea: \ the smallest enclosing circle", font_size=32).to_edge(UP, buff=0.3)
         dots_ = VGroup(*[Dot(T(p), radius=0.06, color=GREY_B) for p in P])
         circ = Circle(radius=0.01, color=HEAD, stroke_width=2.5).move_to(T(P[0]))
-        rows = [[words(r["n"]), words(r["rebuilt"]), f"{3 * r['ln_n']:.0f}", f"{r['seconds'] * 1000:.1f} ms"]
+        rows = [[words(r["n"]), words(r["rebuilt"]), f"{3 * (r['ln_n'] + 0.5772):.0f}", f"{r['seconds'] * 1000:.1f} ms"]
                 for r in d["rows"]]
-        tab = grid_table([r"points", r"rebuilt", r"$3 \ln n$", r"time"], rows, widths=[1.7, 1.3, 1.3, 1.6],
+        tab = grid_table([r"points", r"rebuilt", r"$3 H_n$", r"time"], rows, widths=[1.7, 1.3, 1.3, 1.6],
                          row_h=0.42, font_size=19, mono_cols=(), colors=[[WHITE, NO, GREY_A, YES]] * len(rows))
         side = VGroup(
             label(r"add the points in random order; \\ if a point is outside the circle, \\ the new circle passes "
@@ -203,9 +203,9 @@ class Lp(VoiceoverScene):
             "circle must pass through it. <bookmark mark='b'/> Finding that circle is the same problem one level "
             "down, with one point fixed on the boundary, and then two. <bookmark mark='c'/> A circle is fixed by at "
             "most three points, so backwards analysis says the i-th point breaks it with probability at most three "
-            "over i. <bookmark mark='d'/> We counted: a hundred thousand points rebuilt the circle only twenty-nine "
-            "times, within three times the natural logarithm, and the whole computation took half a second in "
-            "Python. <bookmark mark='e'/> Emo Welzl's algorithm runs in expected linear time, and Megiddo had found "
+            "over i, and the expected number of rebuilds is at most three times the harmonic number. <bookmark "
+            "mark='d'/> We counted: a hundred thousand points rebuilt the circle only twenty-nine times, near that "
+            "average, and the whole computation took half a second in Python. <bookmark mark='e'/> Emo Welzl's algorithm runs in expected linear time, and Megiddo had found "
             "a deterministic one in 1983."
         ) as vo:
             self.play(FadeIn(head), FadeIn(dots_))
