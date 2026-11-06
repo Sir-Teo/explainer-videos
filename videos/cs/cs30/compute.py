@@ -14,7 +14,8 @@ Items:
     mitm        Mallory between Alice and Bob
     rsa         2048-bit key generation (candidates tried, seconds), CRT against plain decryption, malleability, OAEP
     oracle      Bleichenbacher's attack on a 256-bit and a 384-bit key: queries and the shrinking interval
-    factoring   Pollard's rho and our quadratic sieve on semiprimes of 10 to 34 digits; one rho walk; a QS relation
+    factoring   Pollard's rho and our quadratic sieve on semiprimes of 10 to 34 digits; a QS relation
+    rhowalk     one rho walk mod the hidden factor, with its tail and cycle
     dlog        baby-step giant-step timings; Pohlig-Hellman on a smooth p - 1 against a safe prime; index calculus
     curves      the F_97 point cloud, a generator's multiples, P-256 and X25519 vectors and timings
     ecdsa       RFC 6979's vector; two signatures with one nonce, and the key recovered
@@ -176,6 +177,27 @@ def compute_factoring() -> dict:
     return {"rows": rows, "walk": walk[:tail + cyc + 1], "tail": tail, "cycle": cyc, "p": pp, "n_walk": pp * qq,
             "qs_n": n20, "qs_factor": g, "qs_stats": {k: v for k, v in st.items() if k != "example"},
             "qs_example": {"x": x, "value": x * x - n20, "factors": ex}}
+
+
+def compute_rhowalk() -> dict:
+    """x -> x^2 + 1 mod n = 1009 * 1000003, from 4, watched mod the hidden factor 1009: a tail of 7 and a cycle of 14."""
+    p, q = 1009, 1000003
+    n = p * q
+    walk = P.rho_walk(n, p, c=1, x0=4, steps=40)
+    seen = {}
+    for i, v in enumerate(walk):
+        if v in seen:
+            tail, cyc = seen[v], i - seen[v]
+            break
+        seen[v] = i
+    full, x = [], 4
+    for _ in range(tail + cyc + 1):
+        full.append(x)
+        x = (x * x + 1) % n
+    import math as _m
+    g = _m.gcd(abs(full[tail + cyc] - full[tail]), n)
+    return {"p": p, "q": q, "n": n, "walk": walk[:tail + cyc + 1], "tail": tail, "cycle": cyc,
+            "x_full": [str(v) for v in full], "gcd": g}
 
 
 def compute_dlog() -> dict:
