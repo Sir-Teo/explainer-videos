@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Arma(VoiceoverScene):
@@ -29,17 +29,19 @@ class Arma(VoiceoverScene):
 
         def path(p):
             x = np.zeros(n)
+            x[0] = eps[0] / np.sqrt(1 - p ** 2)
             for t in range(1, n):
                 x[t] = p * x[t - 1] + eps[t]
             return x
 
-        g = axes([0, n], [-12, 12], x_length=7.4, y_length=3.4, xticks=[], yticks=[-10, 0, 10],
+        extent = max(np.max(np.abs(path(p))) for p in np.linspace(0, 0.99, 300)) * 1.05
+        g = axes([0, n], [-extent, extent], x_length=7.4, y_length=3.4, xticks=[], yticks=[-10, 0, 10],
                  ylabel=r"$x_t = \phi\,x_{t-1} + \varepsilon_t$ (simulated, the same shocks)", font_size=16)
         g.to_edge(LEFT, buff=0.5).shift(UP * 0.9)
         ga = axes([0, 21], [0, 1], x_length=4.4, y_length=2.4, xticks=[1, 10, 20], yticks=[0, 0.5, 1],
                   xlabel=r"lag $k$", ylabel=r"autocorrelation $\rho_k = \phi^k$", font_size=16)
         ga.to_edge(RIGHT, buff=0.5).align_to(g, UP)
-        line = always_redraw(lambda: curve(g.ax, np.arange(n), np.clip(path(phi.get_value()), -12, 12), VOL,
+        line = always_redraw(lambda: curve(g.ax, np.arange(n), path(phi.get_value()), VOL,
                                            stroke_width=2))
         bars = always_redraw(lambda: VGroup(*[Line(ga.ax.c2p(k, 0), ga.ax.c2p(k, phi.get_value() ** k), stroke_width=6,
                                                    color=VOL) for k in range(1, 21)]))
@@ -60,7 +62,7 @@ class Arma(VoiceoverScene):
             "path smooths, and its autocorrelation decays geometrically, phi to the power of the lag. <bookmark "
             "mark='b'/> At zero point nine the series wanders in long swings, and its variance has grown five-fold. "
             "<bookmark mark='c'/> At zero point nine nine, a shock takes almost seventy steps to lose half its effect. "
-            "It is a ball on a spring, kicked by shocks. While phi is below one the series is stationary: its "
+            "It is a ball on a spring, kicked by shocks. For absolute phi below one, with a stationary start and independent unit-variance shocks, the series is stationary: its "
             "mean and variance stay put, and its correlations depend only on the lag."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ga), FadeIn(ro))
@@ -85,17 +87,15 @@ class Arma(VoiceoverScene):
                   font_size=38),
             cmath(r"\gamma_k", r"=", r"\mathbb{E}[x_t x_{t-k}] = \phi^k\gamma_0,\qquad \rho_k = \phi^k", font_size=38),
             cmath(r"\mathbb{E}_t x_{t+h}", r"=", r"\phi^h x_t,\qquad h_{1/2} = \ln\tfrac12 / \ln\phi", font_size=38),
-            cmath(r"Q", r"=", r"T(T+2)\sum_{k=1}^{m}\frac{\hat\rho_k^2}{T-k}\ \sim\ \chi^2_m", font_size=38),
+            cmath(r"Q", r"=", r"T(T+2)\sum_{k=1}^{m}\frac{\hat\rho_k^2}{T-k}\ \overset{a}{\sim}\ \chi^2_m", font_size=38),
         ]
         whys = [why(r"substitute the recursion into itself; the sum converges when $|\phi| < 1$"),
                 why(r"the shocks are independent: variances add; a geometric series"),
                 why(r"multiply by $x_{t-k}$ and take expectations: the shock $\varepsilon_t$ is new"),
-                why(r"iterate the recursion forward; future shocks have mean zero"),
-                why(r"Ljung and Box (1978): under white noise the squared autocorrelations add up to a chi-squared")]
+                why(r"iterate forward; the half-life shown requires $0<\phi<1$"),
+                why(r"Ljung--Box: asymptotic under suitable white-noise assumptions; fitted ARMA residuals use $m-p-q$ df")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-2.6, buff=0.5, edge=6.9)
-        wold = wrapped_label(r"Wold (1938): every stationary series is a moving average of its past surprises, "
-                             r"$x_t = \sum_k \psi_k \varepsilon_{t-k}$. ARMA($p,q$) writes $\psi$ with a few numbers: "
-                             r"$\phi(L)\,x_t = \theta(L)\,\varepsilon_t$.", 12.4, 22, ALT).to_edge(DOWN, buff=0.4)
+        wold = wrapped_label('Wold (1938): a centered, purely nondeterministic covariance-stationary series has $x_t=\\sum_k\\psi_k\\varepsilon_{t-k}$. ARMA uses $\\phi(L)x_t=\\theta(L)\\varepsilon_t$.', 12.4, 22, ALT).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Why those numbers. Substitute the recursion into itself, and the series is a weighted sum of all past "
             "shocks, with weights phi to the k. <bookmark mark='a'/> Shocks are independent, so their variances add: "
@@ -103,8 +103,8 @@ class Arma(VoiceoverScene):
             "k steps back and take expectations: the autocorrelation is phi to the k. <bookmark mark='c'/> Iterate "
             "forward, and the forecast decays toward the mean at the same rate, which gives the half-life. <bookmark "
             "mark='d'/> To test whether anything is left, Greta Ljung and George Box summed the squared "
-            "autocorrelations of the residuals: a chi-squared under white noise. <bookmark mark='e'/> And Herman Wold "
-            "proved in 1938 that every stationary series is a moving average of its past surprises; ARMA writes those "
+            "autocorrelations of the residuals: asymptotically chi-squared under suitable white-noise assumptions; adjust the degrees of freedom for fitted ARMA residuals. <bookmark mark='e'/> And Herman Wold "
+            "proved in 1938 that every centered, purely nondeterministic covariance-stationary series is a moving average of its past surprises; ARMA writes those "
             "weights compactly."
         ) as vo:
             step(0)
@@ -148,14 +148,14 @@ class Arma(VoiceoverScene):
                                       nodes[(i + 1) % 3].get_center() - 0.5 * (nodes[(i + 1) % 3].get_center() - nodes[i].get_center()) / 2,
                                       angle=-0.6, color=GREY_B, stroke_width=3) for i in range(3)])
         cap = wrapped_label(r"Box and Jenkins (1970): read the shape of the ACF and PACF, fit by least squares, test "
-                            r"the residuals; loop until they are white noise", 5.6, 20, GREY_A)
+                            r"the residuals; loop while checking the remaining dependence", 5.6, 20, GREY_A)
         cap.next_to(VGroup(nodes, arrows), DOWN, buff=0.5)
         with self.voiceover(
             "How do you tell which model you have? By the fingerprints. An autoregression's autocorrelations decay "
             "slowly, but its partial autocorrelations, the correlation left after accounting for shorter lags, stop "
             "dead after lag p. A moving average is the mirror image: its autocorrelations stop after lag q. <bookmark "
             "mark='a'/> Box and Jenkins turned that into a loop. Identify a candidate from the fingerprints, estimate "
-            "it, check the residuals with the Ljung-Box test, and go round again until nothing is left. The spectrum "
+            "it, check the residuals with the Ljung-Box test, and look for remaining dependence; passing one test does not prove independence. The spectrum "
             "carries the same information in frequency; this part stays in time."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(p_) for p_ in grid], lag_ratio=0.3, run_time=3))
@@ -194,7 +194,7 @@ class Arma(VoiceoverScene):
         for r_ in tab:
             r_.arrange(RIGHT, buff=0.6)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        head = label(r"AIC on log VIX (lower is better)", font_size=20, color=GREY_A)
+        head = label(r"conditional-Gaussian AIC on log VIX (candidate set)", font_size=20, color=GREY_A)
         lb = a["lb"]
         side = VGroup(head, tab,
                       label(rf"best: ARMA({best['p']},{best['q']}); Ljung--Box on its residuals: "
@@ -205,14 +205,14 @@ class Arma(VoiceoverScene):
         side.to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
         if side.width > 6.4:
             side.scale_to_fit_width(6.4)
-        pc = pause_card(r"As $\phi \to 1$, what happens to the variance and the half-life?", width=6.2, font_size=22)
+        pc = predict(r"As $\phi \to 1$, what happens to the variance and the half-life?", width=6.2, font_size=22)
         pc.to_corner(DL, buff=0.35)
         ratio = lb["sq"]["Q"] / lb["r"]["Q"]
         with self.voiceover(
             "Let the Akaike criterion choose among candidates. "
-            f"ARMA({best['p']},{best['q']}) wins, but its residuals still fail the Ljung-Box test: the VIX remembers longer than any small ARMA, a hint of the long memory HAR will capture. <bookmark mark='a'/> "
+            f"ARMA({best['p']},{best['q']}) wins, but its residuals still fail the Ljung-Box test: serial dependence remains in this limited candidate set; that alone does not establish long memory. <bookmark mark='a'/> "
             "Last, Ljung-Box on ninety-four years of daily returns: "
-            f"Q is {lb['r']['Q']:.0f}, a small but real autocorrelation. On squared "
+            f"Q is {lb['r']['Q']:.0f}, a raw Ljung--Box statistic whose usual calibration needs stronger assumptions than zero correlation under changing volatility. On squared "
             f"returns, Q is {lb['sq']['Q']:,.0f}, about {ratio:.0f} times larger. The level barely remembers; the "
             "size remembers enormously. <bookmark mark='b'/> Pause and predict: as phi goes to one, what happens to "
             "the variance and the half-life? Both go to infinity, and that is the next chapter."

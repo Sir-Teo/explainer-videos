@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Series(VoiceoverScene):
@@ -29,26 +29,28 @@ class Series(VoiceoverScene):
         rng = np.random.default_rng(4)
         n, m = 300, 60
         E = rng.standard_normal((m, n))
-        W = np.cumsum(E, 1)
+        W = np.column_stack([np.zeros(m), np.cumsum(E[:, 1:], 1)])
         A = np.zeros((m, n))
+        A[:, 0] = E[:, 0] / np.sqrt(1 - 0.8 ** 2)
         for t in range(1, n):
             A[:, t] = 0.8 * A[:, t - 1] + E[:, t]
         tt = np.arange(n)
-        mk = lambda tex, col: axes([0, n], [-45, 45], x_length=5.8, y_length=3.6, xticks=[], yticks=[-30, 0, 30],  # noqa: E731
+        extent = 1.05 * max(np.max(np.abs(W)), np.max(np.abs(A)))
+        mk = lambda tex, col: axes([0, n], [-extent, extent], x_length=5.8, y_length=3.6, xticks=[], yticks=[-30, 0, 30],  # noqa: E731
                                    font_size=14, ylabel=tex)
         g1, g2 = mk(r"$x_t = 0.8\,x_{t-1} + \varepsilon_t$: 60 paths (simulated)", VOL), \
             mk(r"$x_t = x_{t-1} + \varepsilon_t$: 60 paths (simulated)", RET)
         VGroup(g1, g2).arrange(RIGHT, buff=0.8).shift(UP * 0.5)
-        f1 = path_fan(g1.ax, tt, np.clip(A, -45, 45), VOL, opacity=0.3)
-        f2 = path_fan(g2.ax, tt, np.clip(W, -45, 45), RET, opacity=0.3)
+        f1 = path_fan(g1.ax, tt, A, VOL, opacity=0.3)
+        f2 = path_fan(g2.ax, tt, W, RET, opacity=0.3)
         env = VGroup(curve(g2.ax, tt, 2 * np.sqrt(tt), BAD, stroke_width=3), curve(g2.ax, tt, -2 * np.sqrt(tt), BAD, stroke_width=3))
         e1 = VGroup(curve(g1.ax, tt, np.full(n, 2 / np.sqrt(1 - 0.64)), GOOD, stroke_width=3),
                     curve(g1.ax, tt, np.full(n, -2 / np.sqrt(1 - 0.64)), GOOD, stroke_width=3))
-        c1 = label(r"variance $\sigma^2/(1-\phi^2)$: a band", font_size=20, color=GOOD).next_to(g1, DOWN, buff=0.2)
-        c2 = label(r"variance $t\sigma^2$: a funnel $\pm 2\sqrt{t}$", font_size=20, color=BAD).next_to(g2, DOWN, buff=0.2)
+        c1 = label(r"pointwise $\pm2$ SD: constant width", font_size=20, color=GOOD).next_to(g1, DOWN, buff=0.2)
+        c2 = label(r"pointwise $\pm2\sqrt{t}$ SD envelope", font_size=20, color=BAD).next_to(g2, DOWN, buff=0.2)
         with self.voiceover(
-            "Let phi reach one, and the spring snaps. On the left, sixty stationary paths, inside a band. <bookmark mark='a'/> On the right, sixty random walks from the same shocks. Every "
-            "shock is permanent, and the paths fan out in a funnel that widens like the square root of t. This is a unit root, and log prices have one."
+            "Let phi reach one, and the spring snaps. On the left, sixty stationary paths with constant-width pointwise two-standard-deviation bands; these are not bounds on whole paths. <bookmark mark='a'/> On the right, sixty random walks from the same shocks. Every "
+            "shock is permanent, and the paths fan out in a funnel that widens like the square root of t. This is a unit root, a useful benchmark for log prices rather than a fact established for every price series."
         ) as vo:
             self.play(FadeIn(g1), Create(f1, lag_ratio=0.02), run_time=2.5)
             self.play(Create(e1), FadeIn(c1))
@@ -62,8 +64,9 @@ class Series(VoiceoverScene):
         edges = np.asarray(u["edges"])
         w = edges[1] - edges[0]
         hists = [np.asarray(h, float) for h in u["hists"]]
-        dens = [h / (h.sum() * w) for h in hists]
-        g = axes([-5, 3], [0, 0.6], x_length=8.6, y_length=4.2, xticks=[-4, -2.86, -1.64, 0, 2],
+        dens = [h / (count * w) for h, count in zip(hists, u["snaps"])]
+        density_top = 1.1 * max(float(d[1:-1].max()) for d in dens)
+        g = axes([-5, 3], [0, density_top], x_length=8.6, y_length=4.2, xticks=[-4, -2.86, -1.64, 0, 2],
                  xfmt=lambda v: f"{v:g}", yticks=[], xlabel=r"Dickey--Fuller $t$-statistic on a true random walk ($T = 500$)",
                  font_size=17).to_edge(LEFT, buff=0.5).shift(DOWN * 0.1)
         ax = g.ax
@@ -71,12 +74,12 @@ class Series(VoiceoverScene):
         def hist(d):
             return VGroup(*[Rectangle(width=ax.c2p(w, 0)[0] - ax.c2p(0, 0)[0], height=max(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1], 0.001),
                                       stroke_width=0, fill_color=RET, fill_opacity=0.75).move_to(
-                ax.c2p(e + w / 2, v / 2)) for e, v in zip(edges[:-1], d)])
+                ax.c2p(e + w / 2, v / 2)) for e, v in zip(edges[1:-2], d[1:-1])])
 
         h = hist(dens[0])
         xs = np.linspace(-5, 3, 200)
         normal = DashedVMobject(curve(ax, xs, np.exp(-xs ** 2 / 2) / np.sqrt(2 * np.pi), GREY_A, stroke_width=3), num_dashes=60)
-        nlab = label(r"$N(0,1)$, what a $t$-statistic should be", font_size=18, color=GREY_A).next_to(ax.c2p(1.2, 0.42), RIGHT, buff=0.05)
+        nlab = label(r"$N(0,1)$ reference; tail bins omitted", font_size=18, color=GREY_A).next_to(ax.c2p(1.2, 0.42), RIGHT, buff=0.05)
         cnt = MathTex(rf"{u['snaps'][0]:,}".replace(",", "{,}") + r"\text{ walks}", font_size=30).to_corner(UR, buff=0.6)
         q05 = u["q05"]
         line = DashedLine(ax.c2p(q05, 0), ax.c2p(q05, 0.55), color=BAD, stroke_width=3)
@@ -87,7 +90,7 @@ class Series(VoiceoverScene):
             label(r"Dickey and Fuller (1979); MacKinnon's tables: $-2.86$", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.3)
         with self.voiceover(
-            "To test for a unit root, regress the change on yesterday's level and look at the coefficient's "
+            "To test for a unit root, regress the change on a constant and yesterday's level and look at the coefficient's "
             "t-statistic. Under the unit root it is not normal. Watch. Twenty thousand simulated random walks, each regressed, their "
             "t-statistics piling up. <bookmark mark='a'/> The pile sits to the left of the normal curve and is skewed. "
             f"Its mean is about {u['mean']:.1f}, not zero, and {100 * u['share_below_1645']:.0f} percent of the walks "
@@ -107,26 +110,24 @@ class Series(VoiceoverScene):
 
     def derive(self):
         rows = [
-            cmath(r"\sum x_{t-1}\varepsilon_t", r"=", r"\tfrac12\Big(x_T^2 - \sum\varepsilon_t^2\Big)", font_size=36),
-            cmath(r"T^{-1/2}\,x_{\lfloor rT\rfloor}", r"\Rightarrow", r"\sigma W(r)", font_size=36),
-            cmath(r"T(\hat\rho - 1)", r"=", r"\frac{T^{-1}\sum x_{t-1}\varepsilon_t}{T^{-2}\sum x_{t-1}^2} \Rightarrow "
-                  r"\frac{\tfrac12\big(W(1)^2 - 1\big)}{\int_0^1 W(r)^2\,dr}", font_size=36),
-            cmath(r"t_{DF}", r"\Rightarrow", r"\frac{\tfrac12\big(W(1)^2 - 1\big)}{\sqrt{\int_0^1 W(r)^2\,dr}}", font_size=36),
-            cmath(r"\Pr\big(W(1)^2 < 1\big)", r"=", r"0.68", font_size=36),
+            cmath(r"\sum (x_{t-1}-\bar x_-)\varepsilon_t", r"=", r"\tfrac12(x_T^2-\sum\varepsilon_t^2)-\bar x_-x_T", font_size=32),
+            cmath(r"T^{-1/2}x_{\lfloor rT\rfloor}", r"\Rightarrow", r"\sigma W(r),\quad W_\mu(r)=W(r)-\int_0^1W(s)ds", font_size=32),
+            cmath(r"T(\hat\rho-1)", r"\Rightarrow", r"\frac{\int_0^1W_\mu\,dW}{\int_0^1W_\mu^2\,dr}", font_size=36),
+            cmath(r"t_{DF}", r"\Rightarrow", r"\frac{\int_0^1W_\mu\,dW}{\sqrt{\int_0^1W_\mu^2\,dr}}", font_size=36),
+            cmath(r"\int_0^1W_\mu\,dW", r"=", r"\tfrac12(W(1)^2-1)-W(1)\int_0^1W(r)dr", font_size=32),
         ]
-        whys = [why(r"square $x_t = x_{t-1} + \varepsilon_t$ and add up: the sum telescopes"),
-                why(r"Donsker: a scaled random walk is a Brownian motion"),
-                why(r"continuous mapping; $T^{-1}\sum\varepsilon_t^2 \to \sigma^2$"),
-                why(r"the same limit, divided by the standard error"),
-                why(r"so the numerator is usually negative: the distribution is skewed left")]
+        whys = [why(r"$x_0=0$, iid mean-zero finite-variance shocks; fitting a constant centers the lagged level"),
+                why(r"Donsker and demeaning: the fitted-constant case used in the simulation"),
+                why(r"continuous mapping; the centered denominator has a random Brownian limit"),
+                why(r"divide by the standard error: this is not a normal reference law"),
+                why(r"the constant changes both limits; no-trend and trend specifications have different tables")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-2.4, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Why it is not normal. Square the walk and add up: the cross term telescopes. <bookmark mark='a'/> "
-            "Scale the walk by the square root of T, and Donsker's theorem turns it into a Brownian motion. "
+            "Why it is not normal. Fit a constant, as in the simulation. Square the walk, telescope, and subtract the lagged-level mean times the final level. <bookmark mark='a'/> "
+            "Scale the walk by the square root of T, and Donsker's theorem turns it into a Brownian motion; demeaning the regressor gives W mu. "
             "<bookmark mark='b'/> So the estimated coefficient, scaled by T, converges to a ratio of two random "
             "quantities built from that Brownian path, <bookmark mark='c'/> and so does the t-statistic. "
-            "<bookmark mark='d'/> The numerator is a half of W of one squared minus one, and W of one squared is "
-            "below one about two thirds of the time. The statistic leans left, as the simulation drew."
+            "<bookmark mark='d'/> The numerator also subtracts the final Brownian value times its path average. This is the fitted-constant Dickey--Fuller law, which matches the simulation. Adding a trend changes it again."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -155,20 +156,20 @@ class Series(VoiceoverScene):
         A = u["adf"]
         names = [("btc", "Bitcoin, log price 2017--20"), ("us", "US market, log index 1926--2020"),
                  ("y10", "10-year Treasury yield 1962--2020"), ("vix", "log VIX 1990--2020")]
-        outs = [f"{n_:<34s} t = {A[k]['t']:6.2f}   {'reject' if A[k]['reject_5pct'] else 'unit root'}"
+        outs = [f"{n_:<34s} t = {A[k]['t']:6.2f}   {'reject' if A[k]['reject_5pct'] else 'not rejected'}"
                 for k, n_ in names]
-        pc = pause_card(r"The 10-year yield cannot go to infinity. Does it have a unit root?", width=5.6, font_size=22)
+        pc = predict(r"The 10-year yield cannot go to infinity. Does it have a unit root?", width=5.6, font_size=22)
         pc.to_corner(UR, buff=0.3)
         y10_line = ("The ten-year yield: over sixty years the test cannot tell it from a random walk. Bounded in "
-                    "principle, a unit root in practice: tests have little power when phi is close to one."
-                    if not A["y10"]["reject_5pct"] else "The ten-year yield: the test rejects, the yield is pulled back.")
-        vix_line = ("it rejects decisively: fear mean-reverts." if A["vix"]["reject_5pct"] else
+                    "principle, non-rejection is not proof of a unit root; tests have little power when phi is close to one."
+                    if not A["y10"]["reject_5pct"] else "The ten-year yield: the unit-root null is rejected for this specification.")
+        vix_line = ("this specification rejects the unit-root null decisively." if A["vix"]["reject_5pct"] else
                     "even it does not reject a unit root.")
         with self.voiceover(
             f"Lab. The House's test: regress the change on a constant, yesterday's level and five lagged changes, and "
             f"compare the t-statistic with minus two point eight six. Run it on four series. <bookmark mark='a'/> Pause "
             f"and predict first: the ten-year Treasury yield can't go to infinity. Does it have a unit root? <bookmark "
-            f"mark='b'/> Bitcoin's log price and the stock market's log index: unit roots, as expected. {y10_line} As "
+            f"mark='b'/> Bitcoin's log price and the stock market's log index: the unit-root null is not rejected. {y10_line} As "
             f"for the VIX: {vix_line}"
         ) as vo:
             self.play(FadeIn(card))
@@ -193,7 +194,7 @@ class Series(VoiceoverScene):
         g2 = axes([50, 2000], [-2.5, 0.5], x_length=5.6, y_length=1.9, xticks=[50, 1000, 2000], yticks=[-2, -1, 0],
                   xlabel=r"$T$", ylabel=r"fitted slope, one pair of independent walks", font_size=15)
         g2.next_to(g, DOWN, buff=0.4).align_to(g, LEFT)
-        sline = curve(g2.ax, np.arange(50, 2001, 25)[:len(sl)], np.clip(sl, -2.5, 0.5), FC, stroke_width=3)
+        sline = curve(g2.ax, np.arange(50, 2001, 25)[:len(sl)], sl, FC, stroke_width=3)
         bl, bd = s["btc_levels"], s["btc_diffs"]
         side = VGroup(
             label(r"2{,}000 pairs of independent random walks ($T = 500$):", font_size=21, color=GREY_A),

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 # Brini (2026), arXiv 2607.05291, Table 6: average QLIKE loss ratio to log-HAR over 50 assets, one day ahead (h = 1).
 # Data from the paper (below 1 beats log-HAR); read on arxiv.org/html/2607.05291, November 2026.
@@ -72,8 +72,7 @@ class Frontier(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
         with self.voiceover(
             "Since 2024, foundation models promise to forecast any time series without training on it. Chronos, from "
-            "Abdul Fatir Ansari and colleagues at Amazon, shows the idea: turn numbers into a language. <bookmark mark='a'/> Take a window of the series, here Bitcoin's daily volatility before "
-            "the crash, and divide by its average size, so every series lives on the same scale. <bookmark mark='b'/> "
+            "Abdul Fatir Ansari and colleagues at Amazon, shows the idea: turn numbers into a language. <bookmark mark='a'/> Take a window of the series, here Bitcoin's daily volatility through the twelfth of March, including the crash, and divide by its average size, so every series lives on the same scale. <bookmark mark='b'/> "
             "Cut the scaled range into bins, and each day becomes a token, one of a fixed vocabulary. The series is now "
             "a sentence. <bookmark mark='c'/> A transformer is trained, on a huge corpus of other series, to predict "
             "the next token, exactly as a language model predicts the next word. Its output is a probability for every "
@@ -99,17 +98,19 @@ class Frontier(VoiceoverScene):
         ck = list(f["ckpts"])
         keys = [str(k) for k in ck]
         true = f["next_true"]
+        prob_hi = 1.15 * max(float(np.max(snaps[key]["p"])) for key in keys)
 
         def frame(i):
             k = keys[min(i, len(keys) - 1)]
             p = np.asarray(snaps[k]["p"])
             sc = snaps[k]["s"]
             x = cen * sc
-            g = axes([0, 0.15], [0, max(float(p.max()) * 1.15, 0.05)], x_length=4.8, y_length=3.0, xticks=[0, 0.05, 0.10, 0.15],
+            xmax = np.ceil(1.05 * max(float(x.max()), float(true)) * np.sqrt(365)) / np.sqrt(365)
+            g = axes([0, xmax], [0, prob_hi], x_length=4.8, y_length=3.0, xticks=list(np.linspace(0, xmax, 4)), xlabel=r"annualized volatility",
                      xfmt=lambda v: f"{100 * v * np.sqrt(365):.0f}\\%" if v else "0", yticks=[], font_size=13,
                      ylabel=rf"forecast for 13 March 2020 after {int(k):,} steps".replace(",", "{,}"))
-            bars = VGroup(*[Line(g.ax.c2p(a, 0), g.ax.c2p(a, b), stroke_width=2, color=VOL) for a, b in zip(x, p) if a <= 0.15])
-            tl = DashedLine(g.ax.c2p(min(true, 0.15), 0), g.ax.c2p(min(true, 0.15), float(p.max()) * 1.1), color=BAD, stroke_width=3)
+            bars = VGroup(*[Line(g.ax.c2p(a, 0), g.ax.c2p(a, b), stroke_width=2, color=VOL) for a, b in zip(x, p)])
+            tl = DashedLine(g.ax.c2p(true, 0), g.ax.c2p(true, prob_hi * 0.95), color=BAD, stroke_width=3)
             return VGroup(g, bars, tl)
 
         sstep = [int(np.argmin(np.abs(steps - c))) for c in ck]
@@ -120,12 +121,7 @@ class Frontier(VoiceoverScene):
                     rf"context {f['context']} days".replace(",", "{,}"), font_size=18, color=GREY_B).to_edge(DOWN, buff=0.5)
         red = label(r"red: what happened on 13 March", font_size=18, color=BAD).next_to(cap, UP, buff=0.15)
         with self.voiceover(
-            "The published models are not installed here, so the House built a toy one the same way, small enough "
-            "for an ordinary processor. Its corpus is synthetic volatility series from four families, with random "
-            "parameters. It never sees a market. <bookmark mark='a'/> Watch it learn, three seeds. On the left, its forecast distribution for the "
-            "thirteenth of March 2020, the day after the crash, read from the sixty-four days before it, at each "
-            "checkpoint. At first, a smear across all bins. Then it learns that volatility clusters: the mass moves "
-            "toward the recent level, and a right tail grows."
+            """The published models are not installed here, so the House built a tokenizer-inspired toy: token embeddings and a one-hidden-layer numpy MLP, not a transformer or a replication of Chronos. Its training corpus is synthetic volatility from four families. <bookmark mark='a'/> Watch three seeds learn. The forecast for March thirteenth uses sixty-four days through March twelfth, including the crash; it does not anticipate that crash. The token probabilities learn persistence from the synthetic corpus."""
         ) as vo:
             self.play(FadeIn(rp), FadeIn(cap), FadeIn(red))
             vo.wait_until("a")
@@ -137,15 +133,15 @@ class Frontier(VoiceoverScene):
         t = np.asarray(f["test_t"])
         k = 365 ** 0.5
         v, q1, q5, q9 = (np.asarray(f[x]) * k for x in ("test_v", "q10", "q50", "q90"))
-        g = axes([2020, 2021], [0, 2.5], x_length=8.0, y_length=3.6, xticks=[2020, 2020.25, 2020.5, 2020.75, 2021],
+        g = axes([2020, 2021], [0, 6.2], x_length=8.0, y_length=3.6, xticks=[2020, 2020.25, 2020.5, 2020.75, 2021],
                  xfmt=lambda u: {0: "Jan", 1: "Apr", 2: "Jul", 3: "Oct", 4: "Jan"}[round((u - 2020) * 4)],
                  yticks=[0, 1, 2], yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"Bitcoin 2020: the toy model's 10--90\% fan, a day ahead",
                  font_size=15).to_edge(UP, buff=0.6).to_edge(LEFT, buff=0.5)
         tr = ValueTracker(1)
-        fan = always_redraw(lambda: band(g.ax, t[:int(tr.get_value()) + 1], np.clip(q1[:int(tr.get_value()) + 1], 0, 2.5),
-                                         np.clip(q9[:int(tr.get_value()) + 1], 0, 2.5), VOL, 0.35))
-        med = tracing(g.ax, t, np.clip(q5, 0, 2.5), tr, VOL, stroke_width=2)
-        dots = always_redraw(lambda: VGroup(*[Dot(g.ax.c2p(a, min(b, 2.5)), radius=0.025, color=RET)
+        fan = always_redraw(lambda: band(g.ax, t[:int(tr.get_value()) + 1], q1[:int(tr.get_value()) + 1],
+                                         q9[:int(tr.get_value()) + 1], VOL, 0.35))
+        med = tracing(g.ax, t, q5, tr, VOL, stroke_width=2)
+        dots = always_redraw(lambda: VGroup(*[Dot(g.ax.c2p(a, b), radius=0.025, color=RET)
                                                for a, b in zip(t[:int(tr.get_value()) + 1], v[:int(tr.get_value()) + 1])]))
         dm = f["dm_vs_loghar"]
         res = VGroup(
@@ -155,7 +151,7 @@ class Frontier(VoiceoverScene):
             MathTex(rf"\text{{seeds: }}" + r",\ ".join(f"{q:.3f}" for q in f["seed_qlike"]) +
                     rf";\ \ \text{{inside the 80\% fan: }}{100 * f['cover80']:.0f}\%\text{{ of days}}", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(g, DOWN, buff=0.4).align_to(g, LEFT)
-        pc = pause_card(r"A model trained on synthetic series, never on Bitcoin: better or worse than four least-squares "
+        pc = predict(r"A model trained on synthetic series, never on Bitcoin: better or worse than four least-squares "
                         r"coefficients?", width=4.6, font_size=20).to_corner(UR, buff=0.3)
         tt = dm["t"]
         if tt < -2:
@@ -173,7 +169,7 @@ class Frontier(VoiceoverScene):
             f"to Bitcoin itself. Better or worse? <bookmark mark='a'/> Point the frozen model at 2020, one day at a time. "
             f"The fan is its ten-to-ninety percent forecast band; the dots are what happened. <bookmark mark='b'/> Its "
             f"QLIKE is {f['qlike']:.3f}, against log-HAR's {f['qlike_loghar']:.3f}. {verdict} And its fan contains the "
-            f"outcome on {100 * f['cover80']:.0f} percent of days, against eighty promised."
+            f"outcome on {100 * f['cover80']:.0f} percent of days, against a nominal eighty-percent interval; empirical coverage is not guaranteed."
         ) as vo:
             self.play(FadeIn(pc), FadeIn(g))
             vo.wait_until("a")
@@ -212,13 +208,7 @@ class Frontier(VoiceoverScene):
             label(r"data from the paper; not run here", font_size=16, color=GREY_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "What do the real models do? Alessio Brini's comparison of July 2026 ran nine foundation models zero-shot against eight econometric ones on fifty assets. Here is one row of his "
-            "results, the day-ahead loss of each model relative to log-HAR, averaged over assets, as published. "
-            "<bookmark mark='a'/> Only IBM's Tiny Time Mixers, a model of about a million parameters, beats log-HAR, "
-            "and narrowly. Chronos-Bolt and TimesFM are about nine to twelve percent worse. <bookmark mark='b'/> Much of the edge that "
-            "remains disappears after a Mincer-Zarnowitz recalibration, and the best forecast is an average of TTM and "
-            "log-HAR. His conclusion: the choice of architecture matters more than the choice between foundation and "
-            "econometric models. And a pretrained corpus may contain the test years."
+            """What do the real models do? Brini's July 2026 benchmark compares nine foundation models and eight econometric models on fifty assets. These are published day-ahead per-asset QLIKE ratios averaged across assets. <bookmark mark='a'/> TTM has the best displayed ratio. Sundial and HAR are also narrowly below log-HAR at one day; TTM is the only foundation model ahead across all three reported horizons. <bookmark mark='b'/> The paper's recalibration diagnoses scale effects, and combining TTM with log-HAR performs well on this benchmark. These results are not universal rankings; pretrained data can overlap evaluation periods."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[3]))
             self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in bars], lag_ratio=0.08), Create(one))
@@ -239,7 +229,7 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "The frontier in one screen: the foundation models of 2024 and 2025, and the volatility papers. Machine "
             "learning helps HAR one day ahead on the Dow's stocks; networks pooled across stocks generalise. <bookmark "
-            "mark='a'/> In finance, TimesFM needs fine-tuning, pretraining on financial data helps, and Kronos reports "
+            "mark='a'/> In the cited financial benchmarks, fine-tuning TimesFM helps, pretraining on financial data helps, and Kronos reports "
             "gains on its own benchmark. The honest summary: on volatility, log-HAR is still the bar to clear."
             " Every model here was scored over calm and stormy days alike. Next, the stormiest: March 2020."
         ) as vo:

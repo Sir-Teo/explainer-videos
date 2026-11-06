@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Hook(VoiceoverScene):
@@ -22,8 +22,7 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"The river under the noise")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part seven. Time series and volatility. Part one found that returns are nearly unpredictable, but their "
-            "size is not. This part builds the models that forecast it, and puts them in a race."
+            "Part seven. Time series and volatility. Part one found weak linear dependence in returns, and stronger persistence in their size. This part builds the models that forecast it, and puts them in a race."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -34,27 +33,27 @@ class Hook(VoiceoverScene):
         n = len(t) // k
         tb = t[:n * k].reshape(n, k).mean(1)
         rms = np.sqrt((a[:n * k].reshape(n, k) ** 2).mean(1))
-        gr = axes([1926, 2021], [0, 1.0], x_length=12.0, y_length=4.0, xticks=[1930, 1950, 1970, 1990, 2010],
+        gr = axes([1926, 2021], [0, 1.2], x_length=12.0, y_length=4.0, xticks=[1930, 1950, 1970, 1990, 2010],
                   xfmt=lambda u: f"{int(u)}", yticks=[0, 0.5, 1.0], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                  ylabel=r"size of the US market's daily moves, annualised (each bar: 20 trading days)",
+                  ylabel='US daily moves, annualized; each bar: 4 sampled days across about 20 trading days',
                   font_size=16).move_to(DOWN * 0.6)
         ax = gr.ax
         hi = float(np.quantile(rms, 0.995))
         bars = VGroup()
         for x, v in zip(tb, rms):
             f = float(np.clip(v / 0.45, 0, 1))
-            bars.add(Line(ax.c2p(x, 0), ax.c2p(x, min(v, 1.0)), stroke_width=2.2,
+            bars.add(Line(ax.c2p(x, 0), ax.c2p(x, v), stroke_width=2.2,
                           color=interpolate_color(ManimColor(GREY_D), ManimColor(BAD), f)))
-        glow = curve(ax, t, np.clip(np.asarray(g["vol_ann"]), 0, 1.0), VOL, stroke_width=3)
+        glow = curve(ax, t, np.asarray(g["vol_ann"]), VOL, stroke_width=3)
         tags = VGroup(*[label(s, font_size=18, color=BAD).next_to(ax.c2p(x, min(y, 0.95)), UP, buff=0.08)
                         for s, x, y in ((r"1929--33", 1932, 0.72), (r"1987", 1987.8, 0.62), (r"2008", 2008.8, 0.66),
                                         (r"2020", 2020.2, 0.72))])
         src = real_data(r"Kenneth French's daily US market return, July 1926 -- December 2020 (" +
                         f"{g['n']:,}".replace(",", "{,}") + r" days)")
-        q = pause_card(r"Tomorrow's sign: can you forecast it? Tomorrow's size?", width=6.8, font_size=24)
+        q = predict(r"Tomorrow's sign: can you forecast it? Tomorrow's size?", width=6.8, font_size=24)
         q.to_corner(UR, buff=0.3)
         with self.voiceover(
-            "Almost a century of the American market, each bar the size of a month's daily moves. <bookmark mark='a'/> Big moves do not arrive alone. They come in clusters: the early nineteen "
+            "Almost a century of the American market, each bar the RMS of four daily observations sampled every five trading days, roughly one bar per trading month. <bookmark mark='a'/> Big moves do not arrive alone. They come in clusters: the early nineteen "
             "thirties, 1987, 2008, March 2020. Benoit Mandelbrot saw it in cotton prices in 1963: large changes tend to "
             "be followed by large changes, of either sign. <bookmark mark='b'/> So, pause and predict. Can you "
             "forecast tomorrow's sign? And can you forecast tomorrow's size? <bookmark mark='c'/> The bright line is "
@@ -95,11 +94,7 @@ class Hook(VoiceoverScene):
                     rf"\rho_{{250}}(|r|) = {a['acf']['abs'][250]:.2f}", font_size=26, color=VOL),
         ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The data answer. Correlate each day's return with the return a lag earlier. <bookmark mark='a'/> The "
-            f"bars sit almost on zero: at lag one, {r_[0]:.2f}, and nothing after. Direction has no memory worth "
-            "trading. <bookmark mark='b'/> Now do the same with the size of the move, the absolute return. At lag "
-            f"one the correlation is {ab[0]:.2f}, and it decays slowly: a hundred trading days later it is still "
-            f"{ab[-1]:.2f}. Size has a long memory, and every model in this part exploits it."
+            f"""The data answer. Correlate each day's return with an earlier return. <bookmark mark='a'/> Linear correlations in this US sample are small: lag one is {r_[0]:.2f}. That does not prove directions are unpredictable or rule out trading signals. <bookmark mark='b'/> For absolute returns, lag one is {ab[0]:.2f}, still {ab[-1]:.2f} a hundred trading days later. Magnitudes show much stronger persistence; slow sample decay alone does not establish mathematical long memory."""
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(band_))
             vo.wait_until("a")
@@ -114,28 +109,24 @@ class Hook(VoiceoverScene):
         y = np.exp(np.asarray(k["y"])) * np.sqrt(365)
         m = np.exp(np.asarray(k["m"])) * np.sqrt(365)
         td, r = np.asarray(dly["t"]), np.asarray(dly["r"])
-        g1 = axes([2017.6, 2021], [-0.3, 0.3], x_length=10.0, y_length=2.4, ylabel=r"Bitcoin's daily return",
+        g1 = axes([2017.6, 2021], [-0.6, 0.6], x_length=10.0, y_length=2.4, ylabel=r"Bitcoin's daily return",
                   xticks=[], yticks=[-0.2, 0, 0.2], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16)
-        g2 = axes([2017.6, 2021], [0, 3.5], x_length=10.0, y_length=2.6, ylabel=r"Bitcoin's volatility, annualised",
+        g2 = axes([2017.6, 2021], [0, 6.2], x_length=10.0, y_length=2.6, ylabel=r"Bitcoin's volatility, annualised",
                   xticks=[2018, 2019, 2020, 2021], xfmt=lambda u: f"{int(u)}", yticks=[0, 1, 2, 3],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16)
         VGroup(g1, g2).arrange(DOWN, buff=0.45).move_to(DOWN * 0.2)
         a1, a2 = g1.ax, g2.ax
-        bars = VGroup(*[Line(a1.c2p(tt, 0), a1.c2p(tt, np.clip(v, -0.25, 0.25)), stroke_width=1.2, color=RET)
+        bars = VGroup(*[Line(a1.c2p(tt, 0), a1.c2p(tt, v), stroke_width=1.2, color=RET)
                         for tt, v in zip(td, r)])
-        dots = VGroup(*[Dot(a2.c2p(tt, min(v, 3.5)), radius=0.018, color=RET).set_opacity(0.55) for tt, v in zip(t, y)])
+        dots = VGroup(*[Dot(a2.c2p(tt, v), radius=0.018, color=RET).set_opacity(0.55) for tt, v in zip(t, y)])
         tr = ValueTracker(0.0)
-        riv = tracing(a2, t, np.clip(m, 0, 3.5), tr, VOL, stroke_width=4)
+        riv = tracing(a2, t, m, tr, VOL, stroke_width=4)
         side = label(r"Kalman-filtered log volatility: signal-to-noise " + f"{z['kalman_snr']:.2f}", font_size=19,
                      color=VOL).next_to(g2, UP, buff=0.05).align_to(g2, RIGHT)
         src = real_data(r"Binance BTCUSDT one-minute candles, Aug.\ 2017 -- Dec.\ 2020; realized variance from 5-minute "
                         r"returns")
         with self.voiceover(
-            "The same holds in a market that never closes. Here are three and a half years of Bitcoin, one bar a "
-            "day. <bookmark mark='a'/> Each day's volatility from five-minute returns, one dot a day, jumps around. <bookmark mark='b'/> Now run a filter through it, day by day, that keeps a belief "
-            "about the slow level and nudges it toward each new dot. A river appears: quiet in early 2019, flooding "
-            "in March 2020. You can't forecast the next day's direction, but you can forecast how big its move is "
-            "likely to be, and every option price, risk limit and position size depends on doing it well."
+            """The same holds in a market that never closes. Three and a half years of Bitcoin, one bar per day. <bookmark mark='a'/> Five-minute returns give a daily volatility measurement, one noisy dot. <bookmark mark='b'/> A Kalman filter tracks a slower level. Its parameters use the full sample, so this river is a retrospective illustration. Conditional risk can be forecast without predicting each day's direction, and option prices, risk limits and position sizes depend on those forecasts."""
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.001, run_time=2.5))
             vo.wait_until("a")

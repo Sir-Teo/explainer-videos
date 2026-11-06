@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 def _bell(ax, m, v, col, scale=1.0, sw=3):
-    xs = np.linspace(-5.2, -1.8, 220)
+    xs = np.linspace(-5.4, -1.0, 220)
     return curve(ax, xs, scale * np.exp(-0.5 * (xs - m) ** 2 / v) / np.sqrt(2 * np.pi * v), col, stroke_width=sw)
 
 
@@ -32,7 +32,7 @@ class Kalman(VoiceoverScene):
         y, m, mp = np.asarray(k["y"]), np.asarray(k["m"]), np.asarray(k["m_prior"])
         Pp, P, K = np.asarray(k["P_prior"]), np.asarray(k["P"]), np.asarray(k["K"])
         r = k["r"]
-        g = axes([-5.2, -1.8], [0, 3.2], x_length=8.0, y_length=3.6, xticks=[-5, -4, -3, -2],
+        g = axes([-5.4, -1.0], [0, 3.2], x_length=8.0, y_length=3.6, xticks=[-5, -4, -3, -2],
                  xfmt=lambda u: f"{100 * np.exp(u) * np.sqrt(365):.0f}\\%",
                  xlabel=r"Bitcoin's volatility today (log scale, annualised)", yticks=[], font_size=16).to_edge(UP, buff=0.6)
         ax = g.ax
@@ -45,8 +45,7 @@ class Kalman(VoiceoverScene):
             "Kalman's filter of 1960 does for a continuous hidden state what Hamilton's jars do for a discrete one. Hold a belief about today's hidden log volatility: a bell curve, its "
             "centre the best guess, its width the uncertainty. <bookmark mark='a'/> Predict: overnight the hidden "
             "level may have drifted, so the bell widens. <bookmark mark='b'/> Observe: today's realized volatility "
-            "arrives, a measurement with its own, wider bell of noise. <bookmark mark='c'/> Update: multiply the two "
-            "bells. The product is narrower than either, and its centre moves a fraction K of the way toward the "
+            "arrives, a measurement with its own, wider bell of noise. <bookmark mark='c'/> Update: multiply and normalize the two bells under independent Gaussian state and measurement noise. The posterior is narrower than either, and its centre moves a fraction K of the way toward the "
             "measurement. K is the Kalman gain. <bookmark mark='d'/> Day after day: widen, observe, pull and narrow."
         ) as vo:
             self.play(FadeIn(g), Create(prior), FadeIn(leg[0]))
@@ -67,7 +66,7 @@ class Kalman(VoiceoverScene):
             for i in range(i0 + 1, i0 + 6):
                 self.play(FadeOut(dot), FadeOut(meas), FadeOut(arr), FadeOut(kl), Transform(prior, _bell(ax, mp[i], Pp[i], VOL)),
                           FadeOut(post), run_time=0.35)
-                dot = Dot(ax.c2p(np.clip(y[i], -5.2, -1.8), 0), radius=0.08, color=RET)
+                dot = Dot(ax.c2p(y[i], 0), radius=0.08, color=RET)
                 meas = _bell(ax, y[i], r, RET)
                 post = _bell(ax, m[i], P[i], GOOD, sw=4)
                 arr = Arrow(ax.c2p(mp[i], 2.9), ax.c2p(m[i], 2.9), buff=0, color=GOOD, stroke_width=4,
@@ -87,7 +86,7 @@ class Kalman(VoiceoverScene):
             cmath(r"P^- = P^+ + q,\ P^+ = (1 - K)P^-", r"\Rightarrow", r"p^2 - \tfrac{q}{r}p - \tfrac{q}{r} = 0,\ \ K = \frac{p}{1 + p}",
                   font_size=34),
         ]
-        whys = [why(r"the hidden level drifts by $w_t$ (variance $q$), the measurement adds $v_t$ (variance $r$): predict"),
+        whys = [why(r"independent Gaussian state and measurement noise, variances $q,r$: predict"),
                 why(r"Bayes: the prior times the likelihood of the measurement"),
                 why(r"complete the square: precisions add, and the mean moves by a fraction $K$"),
                 why(r"in steady state the widening and the narrowing balance; $p = P^-/r$")]
@@ -99,7 +98,7 @@ class Kalman(VoiceoverScene):
         line = curve(g.ax, np.log10(qr), gain, VOL, stroke_width=3)
         pt = Dot(g.ax.c2p(np.log10(k["snr"]), k["K_ss"]), radius=0.09, color=BAD)
         pl = label(rf"Bitcoin: $q/r = {k['snr']:.2f}$, $K = {k['K_ss']:.2f}$", font_size=20, color=BAD).next_to(pt, RIGHT, buff=0.15)
-        pc = pause_card(r"If the measurement gets noisier ($r$ up), does the belief move more or less toward each dot?",
+        pc = predict(r"If the measurement gets noisier ($r$ up), does the belief move more or less toward each dot?",
                         width=5.6, font_size=21).to_corner(DR, buff=0.35)
         with self.voiceover(
             "The derivation. The hidden level drifts with variance q, the measurement adds noise r, and predicting adds q. <bookmark mark='a'/> Bayes multiplies the prior by the likelihood of "
@@ -137,16 +136,16 @@ class Kalman(VoiceoverScene):
             "    return out",
         ], source="explainer/quant/house/vol.py", width=6.8).to_corner(UL, buff=0.3)
         t, y, m, P = (np.asarray(k[x]) for x in ("t", "y", "m", "P"))
-        g = axes([2017.6, 2021], [-5.2, -1.8], x_length=6.0, y_length=3.0, xticks=[2018, 2019, 2020, 2021],
+        g = axes([2017.6, 2021], [-5.4, -1.0], x_length=6.0, y_length=3.0, xticks=[2018, 2019, 2020, 2021],
                  xfmt=lambda u: f"{int(u)}", yticks=[-5, -4, -3, -2], font_size=14,
                  ylabel=r"log volatility, Bitcoin", yfmt=lambda u: f"{u:g}").to_corner(DR, buff=0.4)
         tr = ValueTracker(0)
-        dots = VGroup(*[Dot(g.ax.c2p(a, np.clip(b, -5.2, -1.8)), radius=0.015, color=RET).set_opacity(0.6) for a, b in zip(t, y)])
+        dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.015, color=RET).set_opacity(0.6) for a, b in zip(t, y)])
         bd = band(g.ax, t, m - 2 * np.sqrt(P), m + 2 * np.sqrt(P), VOL, 0.3)
         line = tracing(g.ax, t, m, tr, VOL, stroke_width=3)
         with self.voiceover(
             "Lab. Here is the House's filter: four lines inside a loop, widen, gain, pull, narrow. The noise variances "
-            "q and r are fitted by maximum likelihood, the filter's own forecast errors scoring each guess. <bookmark "
+            "q and r are estimated, and initial variance is set, using the full research sample, so this is a retrospective filtered illustration, not a real-time backtest. <bookmark "
             "mark='a'/> Run it on Bitcoin's daily log volatility, and the river from the start of this part draws "
             "itself, with its band of uncertainty."
         ) as vo:
@@ -167,15 +166,15 @@ class Kalman(VoiceoverScene):
             cmath(r"\ln r_t^2", r"=", r"h_t + \ln z_t^2,\quad \mathbb{E}\ln z^2 = -1.27,\ \operatorname{Var}\ln z^2 = \tfrac{\pi^2}{2}",
                   font_size=36),
         ]
-        whys = [why(r"stochastic volatility: the log variance is a hidden autoregression"),
+        whys = [why('stationary Gaussian latent AR(1), $|\\phi|<1$, with independent Gaussian state innovations'),
                 why(r"the squared return is its noisy measurement; treat $\ln\chi^2_1$ as Gaussian: quasi-likelihood")]
         step = ladder(self, rows, whys, keep=2, top=3.3, x=-2.2, buff=0.5, edge=6.9)
         t = np.asarray(k["us_t"])
-        g = axes([1926, 2021], [0, 1.0], x_length=7.4, y_length=3.0, xticks=[1930, 1960, 1990, 2020],
+        g = axes([1926, 2021], [0, 1.1], x_length=7.4, y_length=3.0, xticks=[1930, 1960, 1990, 2020],
                  xfmt=lambda u: f"{int(u)}", yticks=[0, 0.5, 1.0], yfmt=lambda u: f"{100 * u:.0f}\\%",
                  ylabel=r"US market volatility, annualised", font_size=15).to_corner(DL, buff=0.4)
-        lg = curve(g.ax, t, np.clip(k["garch_vol"], 0, 1), FC, stroke_width=2)
-        ls = curve(g.ax, t, np.clip(k["sv_vol"], 0, 1), ALT, stroke_width=2)
+        lg = curve(g.ax, t, k["garch_vol"], FC, stroke_width=2)
+        ls = curve(g.ax, t, k["sv_vol"], ALT, stroke_width=2)
         leg = legend([(ALT, r"stochastic volatility, smoothed"), (FC, r"GARCH (next chapter)")], font_size=18)
         side = VGroup(leg,
                       MathTex(rf"\phi = {sv['phi']:.3f},\ \sigma_\eta = {sv['sigma_eta']:.3f}", font_size=28, color=ALT),
@@ -188,8 +187,8 @@ class Kalman(VoiceoverScene):
         with self.voiceover(
             f"The same filter gives a model of volatility. Let the log variance be a hidden autoregression: stochastic "
             f"volatility. <bookmark mark='a'/> The squared return is a very noisy measurement of it. Take logs, and the "
-            f"noise has a known mean and variance. Andrew Harvey, Esther Ruiz and Neil Shephard treated it as Gaussian "
-            f"in 1994, and the Kalman filter gives the likelihood. <bookmark mark='b'/> On ninety-four years of daily "
+            f"under standard-normal return shocks the log squared noise has these known moments. Andrew Harvey, Esther Ruiz and Neil Shephard treated it as Gaussian "
+            f"in 1994, and the Kalman filter gives a Gaussian quasi-likelihood for the non-Gaussian log chi-squared noise. <bookmark mark='b'/> On ninety-four years of daily "
             f"returns, phi is {sv['phi']:.3f}: a half-life of about {sv['half_life']:.0f} trading days. The smoothed volatility "
             f"tracks the GARCH model of the next chapter {track} Two very different models, one hidden river."
         ) as vo:
@@ -207,20 +206,20 @@ class Kalman(VoiceoverScene):
         rows = [
             cmath(r"J_t", r"=", r"\frac{\phi\,P_{t|t}}{P_{t+1|t}}", font_size=34),
             cmath(r"m_{t|T}", r"=", r"m_{t|t} + J_t\big(m_{t+1|T} - m_{t+1|t}\big)", font_size=34),
-            cmath(r"\bar\sigma", r"=", r"e^{\mu/2}\sqrt{252}", font_size=34),
+            cmath(r"\operatorname{median}(\sigma_t)", r"=", r"e^{\mu/2}\sqrt{252}", font_size=34),
         ]
         whys = [why(r"how much tomorrow's revision should move today's estimate"),
                 why(r"Rauch, Tung and Striebel (1965): run backwards, correcting each day with what came later"),
-                why(r"the long-run level of the hidden log variance, as an annual volatility")]
+                why(r"the stationary median annual volatility; the mean also includes a lognormal variance adjustment")]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.6, buff=0.55, edge=6.9)
-        res = MathTex(rf"\mu = {sv['mu']:.2f}\ \Rightarrow\ \bar\sigma = {100 * lr:.1f}\%\text{{ a year}}", font_size=32,
+        res = MathTex(rf"\mu = {sv['mu']:.2f}\ \Rightarrow\ \operatorname{{median}}(\sigma) = {100 * lr:.1f}\%\text{{ a year}}", font_size=32,
                       color=ALT).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "The filter answers with what was known each day; the smoothed path drawn a moment ago used hindsight. "
+            "Conditional on fitted parameters, the filter uses observations only up to each day; the smoothed path drawn a moment ago used hindsight. "
             "Herbert Rauch, Frank Tung and Charlotte Striebel's smoother of 1965 runs the filter backwards: <bookmark "
             "mark='a'/> each day's estimate is corrected by the surprise in the next day's smoothed value, weighted "
             "by how much the two are linked. <bookmark mark='b'/> The model also has a long-run level, the mean of the "
-            f"hidden log variance: {sv['mu']:.2f}, which is an annual volatility of about {100 * lr:.0f} percent. That "
+            f"hidden log variance: {sv['mu']:.2f}, which gives stationary median annual volatility of about {100 * lr:.0f} percent, not the unconditional mean. That "
             "is below the market's average volatility, because the average of a log sits below the log of the "
             "average: the typical day is calmer than the average day. For forecasting, use the filter; for history, "
             "the smoother."

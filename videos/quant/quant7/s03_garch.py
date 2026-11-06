@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Garch(VoiceoverScene, ThreeDScene):
@@ -35,7 +35,7 @@ class Garch(VoiceoverScene, ThreeDScene):
         box = VGroup(Line([-5.6, top, 0], [-5.6, top - H, 0]), Line([-5.6, top - H, 0], [-3.6, top - H, 0]),
                      Line([-3.6, top - H, 0], [-3.6, top, 0])).set_stroke(GREY_B, 4).shift(DOWN * 0.6)
         floor = top - H - 0.6
-        scale = H / 3.0
+        scale = H / (1.05 * max(h.max(), w / (1 - a - b)))
         tr = ValueTracker(0)
         water = always_redraw(lambda: Rectangle(width=1.92, height=max(scale * h[int(tr.get_value())], 0.01), stroke_width=0,
                                                 fill_color=VOL, fill_opacity=0.7).move_to([-4.6, floor + scale * h[int(tr.get_value())] / 2, 0]))
@@ -48,10 +48,11 @@ class Garch(VoiceoverScene, ThreeDScene):
         leak = VGroup(Arrow([-3.55, floor + 0.3, 0], [-2.9, floor - 0.1, 0], buff=0, color=BAD, stroke_width=3),
                       label(r"leak: keeps $\beta$", font_size=18, color=BAD).move_to([-2.6, floor - 0.35, 0]))
         splash = label(r"splash $\alpha r_t^2$", font_size=18, color=RET).move_to([-4.6, top + 0.15, 0])
-        g = axes([0, n], [-4.5, 4.5], x_length=7.2, y_length=3.0, xticks=[], yticks=[-4, 0, 4], font_size=14,
+        rmax = 1.05 * float(np.max(np.abs(r)))
+        g = axes([0, n], [-rmax, rmax], x_length=7.2, y_length=3.0, xticks=[], yticks=[-4, 0, 4], font_size=14,
                  ylabel=r"each day's return, drawn with size $\propto\sqrt{\text{level}}$ (simulated, US parameters)")
         g.to_edge(RIGHT, buff=0.4).shift(DOWN * 0.6)
-        bars = VGroup(*[Line(g.ax.c2p(i, 0), g.ax.c2p(i, np.clip(r[i], -4.5, 4.5)), stroke_width=1.6, color=RET)
+        bars = VGroup(*[Line(g.ax.c2p(i, 0), g.ax.c2p(i, r[i]), stroke_width=1.6, color=RET)
                         for i in range(n)])
         with self.voiceover(
             "Robert Engle, on a sabbatical at the London School of Economics, wanted to model how uncertain British "
@@ -61,8 +62,7 @@ class Garch(VoiceoverScene, ThreeDScene):
             "Each night it keeps a fraction beta and leaks the rest. <bookmark mark='b'/> Each "
             "day a return is drawn, its size in proportion to the square root of the water level, and it splashes "
             "alpha times its square back in. <bookmark mark='c'/> Run it. A high level makes big returns, big returns "
-            "make big splashes, and clusters appear by themselves. The level always drifts back to where the inflow "
-            "balances the leak: the long-run variance."
+            "make big splashes, and clusters appear by themselves. With positive omega, nonnegative coefficients and alpha plus beta below one, the conditional expected level reverts to the finite long-run variance; individual paths keep receiving shocks."
         ) as vo:
             self.play(FadeIn(hist))
             vo.wait_until("a")
@@ -91,11 +91,11 @@ class Garch(VoiceoverScene, ThreeDScene):
                   font_size=36),
         ]
         whys = [why(r"the definition: Bollerslev (1986) added yesterday's variance to Engle's ARCH"),
-                why(r"take expectations: $\mathbb{E}r^2 = \mathbb{E}\sigma^2$; the bucket's balance"),
+                why(r"$\omega>0$, $\alpha,\beta\ge0$, $\alpha+\beta<1$, $\mathbb{E}_{t-1}z_t^2=1$: take expectations"),
                 why(r"unroll: an exponentially weighted average of past squares, above a floor"),
                 why(r"Gaussian densities multiplied day by day: the prediction-error decomposition"),
                 why(r"the tower property: deviations from the long run decay at the rate $\alpha + \beta$"),
-                why(r"substitute $\sigma^2 = r^2 - \nu$: GARCH is an ARMA(1,1) for squared returns")]
+                why(r"substitute $\sigma^2=r^2-\nu$; covariance-ARMA interpretation also needs finite fourth moments")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-2.0, buff=0.5, edge=6.9)
         with self.voiceover(
             "The equations behind the bucket. Today's return is the volatility times a standard shock, and in 1986 Tim "
@@ -103,9 +103,9 @@ class Garch(VoiceoverScene, ThreeDScene):
             "mark='a'/> Take expectations, and the long-run level is omega over one minus alpha minus beta. "
             "<bookmark mark='b'/> Unroll the recursion: the variance is an exponentially weighted average of all past "
             "squared returns, sitting above a floor. <bookmark mark='c'/> To fit it, write the Gaussian density of "
-            "each day's return given its variance and multiply across days: the log-likelihood. <bookmark mark='d'/> "
+            "each day's return given its variance and multiply across days: the likelihood if shocks are normal, a quasi-likelihood otherwise. <bookmark mark='d'/> "
             "Forecasts revert to the long run at the rate alpha plus beta, <bookmark mark='e'/> and rewritten, GARCH "
-            "is an ARMA model for squared returns, which is why the last chapter's Ljung-Box test on squares failed so "
+            "has an ARMA identity for squared returns, with finite fourth moments needed for a covariance-ARMA interpretation. This helps explain why the last chapter's Ljung-Box test on squares failed so "
             "badly."
         ) as vo:
             step(0)
@@ -137,13 +137,14 @@ class Garch(VoiceoverScene, ThreeDScene):
             "    return 0.5 * np.sum(np.log(2*np.pi*h) + r**2 / h)",
         ], source="explainer/quant/house/vol.py", width=6.6).to_corner(UL, buff=0.3)
         t, v, ab = np.asarray(g["t"]), np.asarray(g["vol_ann"]), np.asarray(g["absr_ann"])
-        gr = axes([1926, 2021], [0, 1.0], x_length=6.4, y_length=2.8, ylabel=r"US market volatility, annualised",
+        vmax = 1.05 * float(max(v.max(), ab.max()))
+        gr = axes([1926, 2021], [0, vmax], x_length=6.4, y_length=2.8, ylabel=r"US market volatility, annualised",
                   xticks=[1930, 1960, 1990, 2020], xfmt=lambda u: f"{int(u)}", yticks=[0, 0.5, 1.0],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15).to_corner(DR, buff=0.4)
-        dots = curve(gr.ax, t, np.clip(ab, 0, 1.0), RET, stroke_width=1).set_stroke(opacity=0.3)
+        dots = curve(gr.ax, t, ab, RET, stroke_width=1).set_stroke(opacity=0.3)
         tr = ValueTracker(0)
-        line = tracing(gr.ax, t, np.clip(v, 0, 1.0), tr, VOL, stroke_width=2.5)
-        pc = pause_card(rf"$\alpha + \beta = {us['garch']['persistence']:.3f}$. After a shock, how many days until "
+        line = tracing(gr.ax, t, v, tr, VOL, stroke_width=2.5)
+        pc = predict(rf"$\alpha + \beta = {us['garch']['persistence']:.3f}$. After a shock, how many days until "
                         r"half of it is gone?", width=5.4, font_size=21).to_corner(UR, buff=0.3)
         with self.voiceover(
             "Lab. The House's GARCH is five lines of recursion and one line of likelihood; the optimiser does the "
@@ -195,10 +196,9 @@ class Garch(VoiceoverScene, ThreeDScene):
         ro = always_redraw(lambda: MathTex(rf"\alpha = {P[int(k.get_value())][0]:.3f},\ \beta = {P[int(k.get_value())][1]:.3f},"
                                            rf"\ \ \log L = {LL[int(k.get_value())]:,.0f}".replace(",", "{,}"), font_size=28,
                                            color=YELLOW).to_corner(UL, buff=0.35))
-        tag = label(r"log-likelihood over $\alpha$ and $\alpha + \beta$, $\omega$ by variance targeting; the optimiser's path",
+        tag = label(r"relative log likelihood / 1000, floor $-4$; iterates projected to grid; readout uses actual iterates",
                     font_size=19, color=GREY_A).to_edge(DOWN, buff=0.3)
-        ewma = wrapped_label(r"RiskMetrics' EWMA (1994) is GARCH with $\omega = 0$, $\alpha + \beta = 1$: a bucket "
-                             r"with no tap and no leak, so no long-run level (Technical Document, 4th ed., 1996, sec.\ 5.2)",
+        ewma = wrapped_label("RiskMetrics' EWMA is GARCH with $\\omega=0$, $\\alpha+\\beta=1$: no fixed variance-reversion target (Technical Document, 4th ed., 1996, sec.\\ 5.2)",
                              5.2, 19, ALT).to_corner(UR, buff=0.3)
         self.set_camera_orientation(phi=62 * DEGREES, theta=-125 * DEGREES, zoom=0.7)
         self.add_fixed_in_frame_mobjects(tag)
@@ -212,10 +212,9 @@ class Garch(VoiceoverScene, ThreeDScene):
             "<bookmark mark='a'/> Start from a poor guess and let a simplex search climb. It races up the steep "
             f"persistence slope, then crawls across alpha, through {gl['n_iter']} iterations, to the peak at alpha "
             f"{P[-1][0]:.3f} and beta {P[-1][1]:.3f}. <bookmark mark='b'/> The hill is steep across persistence and "
-            "broad along alpha: the sum, alpha plus beta, is pinned down four or five times more tightly than either "
-            "alone. <bookmark mark='c'/> And "
+            "broad along alpha: the geometry shows different sensitivities in these coordinates. A precision ratio would require a curvature or robust covariance calculation. <bookmark mark='c'/> And "
             "J.P. Morgan's RiskMetrics exponential average sits at the far edge of the landscape: persistence "
-            "exactly one, no tap and no leak, so it never reverts to a long-run level."
+            "exactly one, no tap and no net expected leak, so it never reverts to a long-run level."
             " Next: GARCH's many children."
         ) as vo:
             self.play(Create(ax3), FadeIn(surf), *[m.animate.set_opacity(1) for m in (tag, *alabs)], run_time=2)

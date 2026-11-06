@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar, predict
 
 
 class Har(VoiceoverScene):
@@ -42,7 +42,7 @@ class Har(VoiceoverScene):
             cmath(r"RV - BV", r"\to", r"\textstyle\sum_{s\le 1}J_s^2", font_size=30),
             cmath(r"z", r"=", r"\frac{(RV - BV)/RV}{\sqrt{(\tfrac{\pi^2}{4} + \pi - 5)\tfrac1n\max(1, TQ/BV^2)}}", font_size=30),
         ]
-        whys = [why(r"$\mathbb{E}|z| = \sqrt{2/\pi}$; a jump meets an $O(\sqrt{\Delta})$ neighbour", font_size=19),
+        whys = [why(r"noise-free limit with isolated finite-activity jumps; $\mathbb{E}|z|=\sqrt{2/\pi}$", font_size=19),
                 why(r"the jumps' contribution", font_size=19),
                 why(r"Barndorff-Nielsen and Shephard (2006): $N(0,1)$ without jumps", font_size=19)]
         grp = VGroup(*[VGroup(r_, w_).arrange(DOWN, aligned_edge=LEFT, buff=0.08) for r_, w_ in zip(rows, whys)])
@@ -50,13 +50,13 @@ class Har(VoiceoverScene):
         if grp.width > 5.3:
             grp.scale_to_fit_width(5.3).to_edge(RIGHT, buff=0.3)
         res = VGroup(
-            MathTex(rf"\text{{days with a jump at }}1\%: {100 * s['jump_share_1pct']:.0f}\%", font_size=26, color=BAD),
+            MathTex(rf"\text{{nominal jump detections at }}1\%: {100 * s['jump_share_1pct']:.0f}\%", font_size=26, color=BAD),
             MathTex(rf"\text{{at }}0.1\%: {100 * s['jump_share_01pct']:.0f}\%", font_size=26, color=BAD),
             MathTex(rf"\text{{12 March 2020: }} z = {s['z_0312']:.2f}", font_size=26, color=VOL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.35)
         storm = s["z_0312"] < 2.326
-        verdict = ("Not a jump: the whole day was a storm, every five minutes violent, so the bipower measure saw it all."
-                   if storm else "A jump, by the test.")
+        verdict = ("The nominal test does not detect a jump. That does not prove there were no jumps; finite sampling and noise matter."
+                   if storm else "The nominal test rejects the continuous-path null, subject to its assumptions.")
         with self.voiceover(
             f"Realized variance counts jumps too: one sudden move, one giant square. Ole Barndorff-Nielsen and Neil Shephard "
             f"found a measure that ignores it. <bookmark mark='a'/> Instead of squaring each return, multiply its size "
@@ -85,13 +85,13 @@ class Har(VoiceoverScene):
         eq[4].set_color(RET)
         eq[5].set_color(GOOD)
         tt = np.asarray(h["cascade_t"])
-        g = axes([2019, 2020], [0, 2.0], x_length=6.0, y_length=3.0, ylabel=r"Bitcoin's volatility in 2019",
+        g = axes([2019, 2020], [0, 2.7], x_length=6.0, y_length=3.0, ylabel=r"Bitcoin's volatility in 2019",
                  xticks=[2019, 2019.5, 2020], xfmt=lambda u: {2019: "Jan", 2019.5: "Jul", 2020: "Jan"}[round(u * 2) / 2],
                  yticks=[0, 1.0, 2.0], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15).to_corner(DL, buff=0.45)
         ax = g.ax
-        cd = curve(ax, tt, np.clip(h["cascade_d"], 0, 2.0), BAD, stroke_width=1.2).set_stroke(opacity=0.7)
-        cw = curve(ax, tt, np.clip(h["cascade_w"], 0, 2.0), RET, stroke_width=2.5)
-        cm = curve(ax, tt, np.clip(h["cascade_m"], 0, 2.0), GOOD, stroke_width=4)
+        cd = curve(ax, tt, h["cascade_d"], BAD, stroke_width=1.2).set_stroke(opacity=0.7)
+        cw = curve(ax, tt, h["cascade_w"], RET, stroke_width=2.5)
+        cm = curve(ax, tt, h["cascade_m"], GOOD, stroke_width=4)
         lags = np.arange(1, 23)
         hw, gw = np.asarray(hr["har_w"]), np.asarray(hr["garch_w"])
         g2 = axes([0, 23], [0, 0.45], x_length=5.6, y_length=2.6, xticks=[1, 5, 22], yticks=[0, 0.2, 0.4],
@@ -112,15 +112,7 @@ class Har(VoiceoverScene):
         leg3 = legend([(WHITE, r"Bitcoin"), (VOL, r"fitted log-HAR, simulated"), (FC, r"AR(1), same lag-1")], font_size=17)
         leg3.next_to(g3, DOWN, buff=0.15).align_to(g3, LEFT)
         with self.voiceover(
-            "With a measured variance every day, forecasting becomes a regression. Fulvio Corsi's HAR model of 2009 "
-            "predicts tomorrow's realized variance from three averages: yesterday, the last week and the last month. "
-            "<bookmark mark='a'/> The story is a market of traders at different horizons, each reacting at their own "
-            "scale: yesterday jumps around, the month moves slowly. <bookmark mark='b'/> Expand the averages and HAR is "
-            "an autoregression on twenty-two lags with tied weights: a staircase. GARCH-style memory, a single "
-            "exponential, dies off much faster. <bookmark mark='c'/> And the data side with the staircase. The "
-            "autocorrelation of Bitcoin's log realized variance decays slowly, like a power law. Simulate the fitted "
-            "log-HAR and it follows. An autoregression of order one with the same first lag falls off a cliff. Three "
-            "averages mimic long memory."
+            """With a measured variance every day, forecasting becomes a regression. Corsi's HAR uses yesterday and trailing five- and twenty-two-observation averages. Those are stock-market trading-week and month conventions; Bitcoin trades every calendar day. <bookmark mark='a'/> The averages move at different speeds. <bookmark mark='b'/> Expanding them gives an AR-twenty-two with tied staircase weights. <bookmark mark='c'/> The fitted log-HAR can mimic slow sample autocorrelation decay over these horizons; it does not establish true power-law memory."""
         ) as vo:
             self.play(FadeIn(eq))
             vo.wait_until("a")
@@ -161,9 +153,9 @@ class Har(VoiceoverScene):
             "Lab. The House's HAR: three columns, the day, the week's average and the month's, and least squares. "
             "<bookmark mark='a'/> Fitted on Bitcoin through 2019, yesterday and the month carry the weight: "
             f"{b[1]:.2f} and {b[3]:.2f}, with the week near zero, and an R squared of {h['HAR']['r2']:.2f}. "
-            "<bookmark mark='b'/> But are the coefficients stable? Refit on a rolling year, and watch them as the "
+            "<bookmark mark='b'/> But are the coefficients stable? Refit on 252 rolling Bitcoin observations, about eight months, and watch them as the "
             "window slides from 2018 to the end of 2020. Yesterday's weight stays near a half, but the week and the "
-            "month trade places: one year of data cannot tell them apart, because the two averages move together."
+            "month trade places: this short window has difficulty distinguishing them, because the two averages move together."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -185,7 +177,7 @@ class Har(VoiceoverScene):
             cmath(r"b_{d,t}", r"=", r"b_d + b_q\sqrt{RQ_t}", font_size=34),
         ]
         whys = [why(r"the measurement error of the last chapter's CLT"),
-                why(r"errors in variables: a noisy regressor's coefficient is attenuated"),
+                why('scalar classical independent measurement error: attenuation illustration, not the exact multivariate HAR formula'),
                 why(r"HARQ (Bollerslev, Patton and Quaedvlieg 2016): trust yesterday less when it was noisy; $b_q < 0$")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-2.4, buff=0.55, edge=6.9)
         bq, tq = h["HARQ"]["beta"], h["HARQ"]["t"]
@@ -198,20 +190,13 @@ class Har(VoiceoverScene):
             wrapped_label(r"HAR-CJ (Andersen, Bollerslev and Diebold 2007) gives the continuous and the jump parts their "
                           r"own coefficients; log-HAR fits the logarithm, which tames the spikes", 11.0, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        pc = pause_card(r"If yesterday's RV was measured very noisily, should HAR trust it more or less?", width=5.4,
+        pc = predict(r"If yesterday's RV was measured very noisily, should HAR trust it more or less?", width=5.4,
                         font_size=21).to_corner(UR, buff=0.3)
         sig = abs(tq[4]) > 2
         verdict = ("and on Bitcoin it is significant." if sig else
                    "the sign is right, but on three years of Bitcoin it is not significant.")
         with self.voiceover(
-            f"Pause and predict: if yesterday's realized variance was measured with a lot of noise, should the model trust "
-            f"it more or less? <bookmark mark='a'/> Less. Realized variance is the true variance plus a measurement error "
-            f"whose size the realized quarticity tells us. <bookmark mark='b'/> A noisy regressor's coefficient is pulled "
-            f"toward zero, and by more on noisier days. <bookmark mark='c'/> So Tim Bollerslev, Andrew Patton and Rogier "
-            f"Quaedvlieg let the daily coefficient shrink when the quarticity is high: HARQ. The coefficient comes out "
-            f"negative, as it should, {verdict} <bookmark mark='d'/> Two cousins: HAR-CJ gives jumps their own coefficient, "
-            f"and log-HAR fits the logarithm. Remember log-HAR: it will matter in the race."
-            " HAR's three horizons imitate long memory. Next: is volatility rough?"
+            f"""Pause and predict: if yesterday's realized variance is noisy, should the model trust it less? <bookmark mark='a'/> Quarticity helps estimate measurement uncertainty. <bookmark mark='b'/> Scalar classical independent measurement error gives attenuation; this is not an exact multivariate HAR law. <bookmark mark='c'/> HARQ lets the daily coefficient adjust with quarticity. Here it is negative but weakly estimated, {verdict} <bookmark mark='d'/> HAR-CJ treats jumps separately, and log-HAR fits logs. Next: roughness."""
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

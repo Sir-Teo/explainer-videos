@@ -23,39 +23,30 @@ class House(VoiceoverScene):
     def module(self, env, env2):
         chart = house_chart(PART, lit=("data",)).scale(0.5).to_edge(UP, buff=0.15)
         rows = [
-            (r"\texttt{realized\_variance}, \texttt{bipower\_variation}, \texttt{signature\_plot}", r"measures from intraday prices"),
-            (r"\texttt{two\_scale\_rv}, \texttt{realized\_kernel}, \texttt{bns\_jump\_z}", r"noise-robust measures; the jump test"),
-            (r"\texttt{garch\_fit}, \texttt{garch\_t\_fit}, \texttt{news\_impact}, \texttt{nelson\_elog}", r"the GARCH zoo by likelihood"),
-            (r"\texttt{dcc\_fit}, \texttt{sv\_qml}", r"dynamic correlation; stochastic volatility"),
-            (r"\texttt{har\_fit}, \texttt{har\_cj}, \texttt{forecast}", r"HAR, HARQ, HAR-CJ; the desk's forecast"),
-            (r"\texttt{markov\_switching}, \texttt{hamilton\_filter}, \texttt{kalman\_states}", r"hidden regimes and hidden levels"),
-            (r"\texttt{ljung\_box}, \texttt{arma\_fit}, \texttt{adf}, \texttt{df\_simulate}", r"identification and unit roots"),
-            (r"\texttt{engle\_granger}, \texttt{ecm\_fit}, \texttt{johansen}", r"cointegration"),
-            (r"\texttt{qlike}, \texttt{diebold\_mariano}, \texttt{mincer\_zarnowitz}, \texttt{model\_confidence\_set}",
-             r"scoring forecasts"),
-            (r"\texttt{vol\_target}, \texttt{vra}", r"how the industry uses them"),
+            ("realized_variance, bipower_variation", r"measures from intraday prices"),
+            ("two_scale_rv, realized_kernel", r"noise-robust measures; the jump test"),
+            ("garch_fit, garch_t_fit", r"the GARCH zoo by likelihood"),
+            ("dcc_fit, sv_qml", r"dynamic correlation; stochastic volatility"),
+            ("har_fit, forecast", r"HAR, HARQ, HAR-CJ; the desk's forecast"),
+            ("markov_switching, kalman_states", r"hidden regimes and hidden levels"),
+            ("arma_fit, adf", r"identification and unit roots"),
+            ("engle_granger, johansen", r"cointegration"),
+            ("qlike, diebold_mariano", r"scoring forecasts"),
+            ("vol_target, vra", r"how the industry uses them"),
         ]
-        tab = VGroup(*[VGroup(label(a, font_size=18, color=QC.HOUSE), label(b, font_size=17, color=GREY_A)).arrange(
-            RIGHT, buff=0.4) for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        tab = VGroup(*[VGroup(data_text(a, font="DejaVu Sans Mono", font_size=18, color=QC.HOUSE),
+                              label(b, font_size=18, color=GREY_A)).arrange(RIGHT, buff=0.4)
+                       for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         for r_ in tab:
-            r_[1].align_to(tab, LEFT).shift(RIGHT * 8.4)
+            r_[1].align_to(tab, LEFT).shift(RIGHT * 7.8)
         tab.next_to(chart, DOWN, buff=0.25)
         if tab.width > 13.2:
             tab.scale_to_fit_width(13.2)
-        rule = wrapped_label(r"Rule 8: every forecast is scored out of sample, against a simple benchmark, with a loss "
-                             r"that is robust to noise in what it is judged against. Part 7 registered "
-                             rf"{env2['part7_trials']} models; the series' trial counter reads {env2['trials']}.",
-                             12.6, 21, QC.HOUSE).to_edge(DOWN, buff=0.25)
+        rule = wrapped_label(
+            f"Rule 8 is prospective; this reused 2020 comparison is exploratory. Part 7: {env2['part7_trials']} "
+            f"registrations; {env2['trials']} trials through this part.", 12.6, 21, QC.HOUSE).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "The House's data desk now carries a volatility forecaster, the engine the volatility desk will run on "
-            "when it opens in Part ten. <bookmark mark='a'/> Measures from intraday prices, corrected for noise, with "
-            "a jump test. The GARCH family by likelihood, with fat tails and asymmetry, dynamic correlation and "
-            "stochastic volatility. HAR and its cousins. Regimes and the Kalman filter. Identification, unit roots and "
-            "cointegration. And the scoring rules, each checked against simulated data with a known answer. "
-            "<bookmark mark='b'/> The eighth rule: every forecast is scored out of sample, against a simple "
-            "benchmark, with a loss that stays honest when the target is measured with noise. Every model in this "
-            f"part was registered before it was scored, {env2['part7_trials']} in all, and the series' trial counter "
-            f"now reads {env2['trials']}."
+            f"""The House's data desk now carries a volatility forecaster. <bookmark mark='a'/> Intraday measures, noise corrections, GARCH, stochastic volatility, HAR, hidden states, cointegration and scoring tools. <bookmark mark='b'/> Rule eight is the prospective standard. This 2020 comparison was reused, with later entrants recorded; it was not wholly prospective. The registry counts {env2['part7_trials']} trials here, and {env2['trials']} through this part. The separate 2021-onward holdout remains sealed."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))
@@ -89,10 +80,10 @@ class House(VoiceoverScene):
         shape = ("rises with the horizon: the market was calmer than its long-run level, and GARCH expects it to "
                  "revert upward." if up else "falls with the horizon: volatility is expected to revert down.")
         with self.voiceover(
-            f"Lab. This is how a desk calls it: the forecaster, iterating log-HAR forward with the log-normal correction. "
+            f"Lab. This is how a desk calls it: a recursive plug-in log-HAR illustration with a constant residual-variance correction, not exact multi-step lognormal moments. "
             f"On the last day of the research window, the thirty-first of December 2020, it says Bitcoin's volatility "
             f"tomorrow is about {100 * h['btc_next']:.0f} percent a year, and {100 * h['btc_month']:.0f} percent over "
-            f"the next month. <bookmark mark='a'/> For the American market, GARCH's term structure {shape}"
+            f"the next 22 Bitcoin calendar days, as annualized RMS volatility. <bookmark mark='a'/> For the American market, GARCH's term structure {shape}"
         ) as vo:
             self.play(FadeIn(card))
             lab_run(self, card, outs[:2], run_time=1.6)
@@ -108,10 +99,10 @@ class House(VoiceoverScene):
 
     def rule(self):
         items = [
-            (r"out of sample", r"a test year never touched while models were chosen; validation data for every choice"),
+            (r"out of sample", r"prospective goal: untouched test data; this reused 2020 comparison is exploratory"),
             (r"against a benchmark", r"HAR and log-HAR: four coefficients that any new model must beat"),
-            (r"with a robust loss", r"QLIKE ranks forecasts correctly against a noisy realized variance"),
-            (r"with a test", r"Diebold--Mariano for pairs; the model confidence set for many"),
+            (r"with a robust loss", r"QLIKE ranking robustness needs a positive conditionally unbiased variance proxy"),
+            (r"with a test", r"DM under its conditions; nested models may need CW; joint inference needs care"),
             (r"registered", r"every model counted by the trial counter before its score is seen"),
         ]
         rows = VGroup(*[VGroup(label(a, font_size=26, color=QC.HOUSE), label(b, font_size=21, color=GREY_A))
@@ -119,11 +110,7 @@ class House(VoiceoverScene):
         head = label(r"Rule 8, in five parts", font_size=34).to_edge(UP, buff=0.5)
         rows.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "Rule eight, unpacked, because every later desk inherits it. Out of sample: the test year stays sealed "
-            "while models are chosen. Against a benchmark: HAR and log-HAR, four coefficients a new model must beat. "
-            "<bookmark mark='a'/> With a robust loss: QLIKE, because the target is measured with noise. With a test: "
-            "Diebold and Mariano for two models, the confidence set for many. And registered: every model is counted "
-            "before its score is seen, so that a lucky search cannot pass for a discovery."
+            """Rule eight, unpacked, as the prospective standard. Keep evaluation data untouched while choosing models, compare with simple benchmarks, and use loss and inference appropriate to the proxy and nesting. <bookmark mark='a'/> This chapter's 2020 comparison was reused and later entrants counted, so its rankings are exploratory. QLIKE robustness requires a positive conditionally unbiased variance proxy. DM and the confidence set have regularity conditions; nested squared-error comparisons may need Clark--West. Registrations expose search history, and the separate 2021-onward holdout stays sealed."""
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:2]], lag_ratio=0.4))
             vo.wait_until("a")

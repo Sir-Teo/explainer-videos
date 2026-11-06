@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Industry(VoiceoverScene):
@@ -45,21 +45,13 @@ class Industry(VoiceoverScene):
         leg = legend([(BAD, (rf"RMSE of daily variance: lowest at the grid's edge, {lams[0]:.2f}" if at_edge else
                              rf"RMSE of daily variance: best at {ind['lam_rmse']:.3f}")),
                       (GOOD, rf"QLIKE, weekly: best at {ind['lam_qlike']:.3f}")], font_size=17).next_to(g, UP, buff=0.15)
-        pc = pause_card(r"Why one $\lambda$ for some 480 series, instead of 480 $\lambda$s?", width=5.4, font_size=21)
+        pc = predict(r"Why one $\lambda$ for some 480 series, instead of 480 $\lambda$s?", width=5.4, font_size=21)
         pc.to_corner(UR, buff=0.3)
         edge = ind["lam_rmse"] <= lams[0] + 1e-9
-        rmse_line = ("the squared error wants an even faster decay, at the edge of our grid, because it is dominated "
-                     "by a few crash days" if edge else f"the squared error picks {ind['lam_rmse']:.2f}")
+        rmse_line = ("daily-variance RMSE is smallest at the left edge of our grid; this does not locate the optimum outside it" if edge else f"the squared error picks {ind['lam_rmse']:.2f}")
         qlike_line = f"It picks {ind['lam_qlike']:.2f}, J.P. Morgan's number."
         with self.voiceover(
-            f"In October 1994 J.P. Morgan published RiskMetrics and gave its data away. Its volatility model is the exponential "
-            f"average: tomorrow's variance is zero point nine four times today's forecast plus zero point zero six times "
-            f"today's squared return. One decay factor for every series, zero point nine four for daily forecasts, zero "
-            f"point nine seven for monthly, chosen by the forecast error across hundreds of series. In 2010 MSCI bought "
-            f"the business for about one and a half billion dollars. <bookmark mark='a'/> Pause and predict: why one lambda "
-            f"for everything? Because a covariance matrix built from one decay factor stays consistent and positive definite; "
-            f"four hundred and eighty different ones would not. <bookmark mark='b'/> Our replica on the American market "
-            f"from 1990: {rmse_line}; and QLIKE? {qlike_line}"
+            f"""In October 1994 J.P. Morgan published RiskMetrics. Its daily variance recursion uses decay point nine four; point nine seven was used for monthly forecasts. MSCI acquired the business in 2010. <bookmark mark='a'/> A common decay preserves positive semidefiniteness, with positive definiteness under suitable initialization. Arbitrary entrywise decays can break it; structured heterogeneous models can still be valid. <bookmark mark='b'/> In our US-market grid, {rmse_line}. Weekly QLIKE: {qlike_line} Both the loss and horizon differ, so this is not an isolated experiment on loss functions."""
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -79,19 +71,19 @@ class Industry(VoiceoverScene):
             label(r"MSCI, \textit{Market Factor: Not Just For Show}, Dec.\ 2011", font_size=16, color=GREY_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UL, buff=0.35)
         rows = [cmath(r"B_t^2", r"=", r"\frac1K\sum_k\Big(\frac{f_{kt}}{\sigma_{kt}}\Big)^2,\quad "
-                      r"\lambda_t^2 = \text{EWMA}(B^2),\quad \sigma'_{kt} = \lambda_t\sigma_{kt}", font_size=30)]
+                      r"\lambda_t^2 = \operatorname{EWMA}_{t-1}(B^2),\quad \sigma'_{kt} = \lambda_t\sigma_{kt}", font_size=30)]
         rows[0].next_to(quote, DOWN, buff=0.4).align_to(quote, LEFT)
         rl = label(r"our replica in that spirit (not MSCI's published formula); our half-lives", font_size=17, color=GREY_B)
         rl.next_to(rows[0], DOWN, buff=0.1).align_to(rows[0], LEFT)
         t, lam = np.asarray(ind["vra_t"]), np.asarray(ind["vra"])
         g = axes([1926, 2021], [0, 3], x_length=6.0, y_length=2.8, xticks=[1930, 1960, 1990, 2020], xfmt=lambda u: f"{int(u)}",
                  yticks=[0, 1, 2, 3], ylabel=r"$\lambda_t$ on the ten size deciles", font_size=15).to_corner(DR, buff=0.4)
-        line = curve(g.ax, t, np.clip(lam, 0, 3), FC, stroke_width=1.8)
+        line = curve(g.ax, t, lam, FC, stroke_width=1.8)
         one = DashedLine(g.ax.c2p(1926, 1), g.ax.c2p(2021, 1), color=GREY_B, stroke_width=2)
         pk = ind["vra_peaks"]
         res = MathTex(rf"\text{{QLIKE: }} {ind['q_raw']:.3f} \to {ind['q_adj']:.3f}", font_size=28, color=GOOD)
         res.next_to(g, UP, buff=0.15)
-        vra_line = ("It lowers the out-of-sample QLIKE: one number corrects the whole model's lag."
+        vra_line = ("It lowers this historical QLIKE; the multiplier uses only prior-day standardized returns, after initialization."
                     if ind["q_adj"] < ind["q_raw"] else "Here it does not improve QLIKE.")
         with self.voiceover(
             f"Factor risk models face this at scale. MSCI's Barra US equity model of 2011, by MSCI's account, estimates "
@@ -122,28 +114,22 @@ class Industry(VoiceoverScene):
         t, w = np.asarray(ind["vt_t"]), np.asarray(ind["vt_w"])
         g = axes([1927, 2021], [0, 3], x_length=6.0, y_length=2.2, xticks=[1930, 1960, 1990, 2020], xfmt=lambda u: f"{int(u)}",
                  yticks=[0, 1, 2, 3], ylabel=r"position in the US market, 10\% target", font_size=14).to_corner(DL, buff=0.4)
-        wl = curve(g.ax, t, np.clip(w, 0, 3), GOOD, stroke_width=1.5)
+        wl = curve(g.ax, t, w, GOOD, stroke_width=1.5)
         a, b = ind["vt_scaled"], ind["vt_plain"]
         cells = [VectorizedPoint(), label(r"plain", font_size=20, color=GREY_B), label(r"targeted", font_size=20, color=GREY_B),
                  label(r"Sharpe", font_size=22), MathTex(f"{b['sharpe']:.2f}", font_size=28), MathTex(f"{a['sharpe']:.2f}", font_size=28, color=GOOD),
                  label(r"worst 1\% of days, mean", font_size=22), MathTex(rf"{100 * b['es1']:.2f}\%", font_size=28),
                  MathTex(rf"{100 * a['es1']:.2f}\%", font_size=28, color=GOOD),
-                 label(r"max drawdown (log)", font_size=22), MathTex(f"{b['maxdd_log']:.2f}", font_size=28),
+                 label('max additive drawdown', font_size=22), MathTex(f"{b['maxdd_log']:.2f}", font_size=28),
                  MathTex(f"{a['maxdd_log']:.2f}", font_size=28, color=GOOD)]
         tab = VGroup(*cells).arrange_in_grid(rows=4, cols=3, buff=(0.45, 0.18), col_alignments="lrr").to_corner(DR, buff=0.5)
         note_ = label(r"French's market excess return 1927--2020; the plain market scaled to the same volatility",
                       font_size=16, color=GREY_C).next_to(tab, DOWN, buff=0.15).align_to(tab, RIGHT)
         vt_line = (f"The Sharpe ratio rises from {b['sharpe']:.2f} to {a['sharpe']:.2f}, the worst days are milder, and "
-                   "the deepest drawdown is much shallower. A forecast does not need to predict direction to make "
-                   "money; it only needs to know when to be small." if a["sharpe"] > b["sharpe"] else
+                   "the deepest drawdown is much shallower. This descriptive example improves gross risk-adjusted performance without a directional forecasting signal; costs and another period could change it." if a["sharpe"] > b["sharpe"] else
                    "Here the Sharpe ratio does not improve.")
         with self.voiceover(
-            f"Trend followers lean heavily on volatility forecasts. In 2018 Campbell Harvey and colleagues at Man AHL "
-            f"scaled each asset to a ten percent volatility target: risk assets got better Sharpe ratios, and left tails "
-            f"shrank for everything. Tobias Moskowitz, Yao Hua Ooi and Lasse Pedersen sized every futures position in "
-            f"their time-series momentum study to forty percent volatility, from an exponential average with a sixty-day "
-            f"centre of mass. <bookmark mark='a'/> Our replica, on ninety-four years of the American market. The position "
-            f"breathes: small in the Depression and in 2008, levered in calm decades. {vt_line}"
+            f"""Trend followers lean heavily on volatility forecasts. Harvey and coauthors studied volatility scaling; Moskowitz, Ooi and Pedersen used a sixty-day center-of-mass estimate for sizing. <bookmark mark='a'/> Our descriptive US example uses a two-day lag, a ten-times leverage cap, and a ten-percent volatility target. It is gross of trading and funding costs. The plain benchmark is rescaled to the same full-period volatility after the fact. {vt_line} The drawdown is on cumulative simple excess returns, not compounded or log wealth."""
         ) as vo:
             self.play(FadeIn(hist))
             vo.wait_until("a")
@@ -154,11 +140,11 @@ class Industry(VoiceoverScene):
 
     def options(self, ind):
         t, vx, fr = (np.asarray(ind[k]) for k in ("vix_t", "vix", "fwd_rv"))
-        g = axes([1990, 2021], [0, 90], x_length=7.4, y_length=3.6, xticks=[1990, 2000, 2010, 2020], xfmt=lambda u: f"{int(u)}",
+        g = axes([1990, 2021], [0, 105], x_length=7.4, y_length=3.6, xticks=[1990, 2000, 2010, 2020], xfmt=lambda u: f"{int(u)}",
                  yticks=[0, 30, 60, 90], ylabel=r"the VIX against the next month's realized volatility (\%)", font_size=15)
         g.to_edge(LEFT, buff=0.5).shift(UP * 0.4)
-        lr = curve(g.ax, t, np.clip(fr, 0, 90), RET, stroke_width=1.3)
-        lv = curve(g.ax, t, np.clip(vx, 0, 90), ALT, stroke_width=1.6)
+        lr = curve(g.ax, t, fr, RET, stroke_width=1.3)
+        lv = curve(g.ax, t, vx, ALT, stroke_width=1.6)
         leg = legend([(ALT, r"VIX (Cboe): implied, 30 days"), (RET, r"realized over the next 21 trading days")], font_size=17)
         leg.next_to(g, DOWN, buff=0.15).align_to(g, LEFT)
         mzv, mzg, en = ind["mz_vix"], ind["mz_garch"], ind["encompass"]
@@ -174,17 +160,9 @@ class Industry(VoiceoverScene):
                           r"(Bollerslev, Hood, Huss and Pedersen 2018) runs HAR-type models across asset classes",
                           5.0, 17, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(RIGHT, buff=0.3)
-        both_line = ("Together, both stay significant: the market's forecast and the model's each know something the "
-                     "other does not." if en["t_garch"] > 2 and en["t_vix"] > 2 else "Together, one of them adds nothing.")
+        both_line = ("Both coefficients are significant in this in-sample HAC regression; that is not independent forecast validation." if en["t_garch"] > 2 and en["t_vix"] > 2 else "At least one coefficient is not significant here; non-rejection does not establish no incremental information.")
         with self.voiceover(
-            f"Options desks have a forecast handed to them: the implied volatility in option prices. The VIX, Cboe's thirty-day "
-            f"index for the S and P five hundred, against what the market then delivered over the next month. <bookmark "
-            f"mark='a'/> The VIX sits above realized volatility on {100 * ind['share_vix_above']:.0f} percent of days, "
-            f"by {ind['vrp_mean']:.0f} volatility points on average: option buyers pay an insurance premium, the variance "
-            f"risk premium, which Peter Carr and Liuren Wu measured in 2009. <bookmark mark='b'/> As a forecast of next "
-            f"month, the VIX alone explains {100 * mzv['r2']:.0f} percent of the variance, GARCH alone {100 * mzg['r2']:.0f}. "
-            f"{both_line} Parts eleven and twelve trade on that gap."
-            " Next: the House's forecaster, put together."
+            f"""Options desks have a forecast in prices. VIX is the S-and-P-five-hundred's thirty-calendar-day implied index; our realized proxy uses French's broader US market over 21 trading days. <bookmark mark='a'/> VIX exceeds that proxy on {100 * ind['share_vix_above']:.0f} percent of observations, by {ind['vrp_mean']:.0f} volatility points on average. This gap does not identify a variance risk premium: expectations, squares, horizons and index alignment matter. <bookmark mark='b'/> Retrospective regression R squared is {100 * mzv['r2']:.0f} percent for VIX and {100 * mzg['r2']:.0f} for GARCH. {both_line} GARCH parameters fit pre-1990, but demeaning uses the research sample; overlapping outcomes use HAC errors. These are descriptive associations, not a fresh point-in-time validation."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), Create(lr), Create(lv), run_time=2.5)
             vo.wait_until("a")

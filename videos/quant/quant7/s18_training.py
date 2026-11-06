@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 def _pad(curves):
@@ -46,9 +46,8 @@ class Training(VoiceoverScene):
             "Three networks, each reading the last twenty-two days of log realized variance. An LSTM's gated memory cell is a learned, data-dependent exponential average, like GARCH unrolled. "
             "<bookmark mark='a'/> A small transformer looks at all twenty-two days at once and weights them by "
             "attention: a learned version of HAR's averages. <bookmark mark='b'/> All three forecast the logarithm, "
-            "so mapping back to variance needs the log-normal correction. <bookmark mark='c'/> And the third, after "
-            "Rafael Reisenhofer, Xandro Bayer and Nikolaus Hautsch, is HARNet: its filters and weights start "
-            "exactly at the log-HAR model, and training can only move it away if the data ask. <bookmark mark='d'/> "
+            "so we use a working lognormal back-transform calibrated from validation residuals, not an exact conditional mean without distributional assumptions. <bookmark mark='c'/> And the third, after "
+            "Rafael Reisenhofer, Xandro Bayer and Nikolaus Hautsch, is HARNet: its filters and weights start at the training-window log-HAR fit, which differs from the race baseline fitted through December, and optimization then adjusts it using the training loss. <bookmark mark='d'/> "
             "Same data, same early stopping, five seeds each."
         ) as vo:
             step(0)
@@ -66,15 +65,16 @@ class Training(VoiceoverScene):
     def _frame_fn(self, t, name, col, keys):
         vt = np.asarray(t["val_t"])
         y = np.asarray(t["val_lrv"])
-        lo, hi = float(np.quantile(y, 0.01)) - 0.5, float(np.quantile(y, 0.99)) + 0.5
+        all_values = np.concatenate([y] + [np.asarray(v) for v in t[name]["snaps"].values()])
+        lo, hi = float(all_values.min()) - 0.3, float(all_values.max()) + 0.3
 
         def frame(i):
             k = keys[min(i, len(keys) - 1)]
             g = axes([vt[0], vt[-1]], [lo, hi], x_length=5.0, y_length=3.2, xticks=[], yticks=[], font_size=14,
                      ylabel=rf"validation, H2 2019: log RV (dots), {name} (line), epoch {k}")
             p = np.asarray(t[name]["snaps"][k])
-            dots = VGroup(*[Dot(g.ax.c2p(a, np.clip(b, lo, hi)), radius=0.025, color=RET) for a, b in zip(vt, y)])
-            return VGroup(g, dots, curve(g.ax, vt, np.clip(p, lo, hi), col, stroke_width=3))
+            dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.025, color=RET) for a, b in zip(vt, y)])
+            return VGroup(g, dots, curve(g.ax, vt, p, col, stroke_width=3))
         return frame
 
     def replay(self, t, name, col):
@@ -89,15 +89,14 @@ class Training(VoiceoverScene):
         rp.to_edge(UP, buff=0.6)
         marks = VGroup(*[Dot(rp.ax.c2p(e, float(V[s, min(e, V.shape[1] - 1)])), radius=0.06, color=YELLOW)
                          for s, e in enumerate(t[name]["best_epoch"])])
-        cap = label(r"yellow: each seed's best epoch; training stops 30 epochs later", font_size=18, color=GREY_B)
+        cap = label("yellow: each seed's best epoch; stopping after about 30 non-improving epochs", font_size=18, color=GREY_B)
         cap.next_to(rp, DOWN, buff=0.3)
         with self.voiceover(
             f"Watch the {name} learn. On the right, the validation loss for each of the five seeds, the spread as a band. "
             "On the left, the network's forecasts for the second half of 2019 at each checkpoint, against what "
-            "happened. <bookmark mark='a'/> At epoch zero the forecast is a flat line: the network knows nothing. "
+            "happened. <bookmark mark='a'/> At epoch zero this randomly initialized forecast is nearly flat. "
             "Within five epochs it has found the level, within twenty the slow swings. Then validation stops "
-            f"improving, and each seed stops on its own schedule: the first seed's best epoch is {be}. Daily "
-            "volatility has little more to teach a network than its level and its persistence."
+            f"improving, and each seed stops on its own schedule: the first seed's best epoch is {be}. This small-data experiment mostly learns level and persistence; it does not bound what larger datasets or models can learn."
         ) as vo:
             self.play(FadeIn(rp))
             vo.wait_until("a")
@@ -116,19 +115,15 @@ class Training(VoiceoverScene):
         for i, (n_, c_) in enumerate(names):
             y = 2.5 - i
             q = np.asarray(t[n_]["seed_qlike"])
-            dots = VGroup(*[Dot(ax.c2p(np.clip(v, 0.34, 0.44), y), radius=0.09, color=c_) for v in q])
-            rng_ = Line(ax.c2p(np.clip(q.min(), 0.34, 0.44), y), ax.c2p(np.clip(q.max(), 0.34, 0.44), y), color=c_, stroke_width=3)
+            dots = VGroup(*[Dot(ax.c2p(v, y), radius=0.09, color=c_) for v in q])
+            rng_ = Line(ax.c2p(q.min(), y), ax.c2p(q.max(), y), color=c_, stroke_width=3)
             rows.add(VGroup(label(n_, font_size=22, color=c_).next_to(ax.c2p(0.34, y), LEFT, buff=0.3), rng_, dots))
-        pc = pause_card(r"Five seeds, same data, same architecture. Will they agree on 2020?", width=6.4, font_size=22)
+        pc = predict(r"Five seeds, same data, same architecture. Will they agree on 2020?", width=6.4, font_size=22)
         pc.to_edge(UP, buff=0.5)
         sp = {n_: (min(t[n_]["seed_qlike"]), max(t[n_]["seed_qlike"])) for n_, _ in names}
         wide = (sp["Transformer"][1] - sp["Transformer"][0]) / (sp["LSTM"][1] - sp["LSTM"][0])
         with self.voiceover(
-            "Pause and predict: five seeds, the same data, the same architecture. Will they agree about 2020? "
-            "<bookmark mark='a'/> Not quite. Each dot is one seed's score over the test year. The LSTM's seeds range "
-            f"from {sp['LSTM'][0]:.3f} to {sp['LSTM'][1]:.3f}; the transformer's spread is {wide:.1f} times as wide. Which seed you "
-            "happened to draw is itself a trial, which is why the race averages the five. <bookmark mark='b'/> "
-            "HARNet's seeds sit on top of each other: starting from HAR, they barely move."
+            f"""Pause and predict: five seeds, the same data and architecture. Will their 2020 scores agree? <bookmark mark='a'/> The LSTM ranges from {sp['LSTM'][0]:.3f} to {sp['LSTM'][1]:.3f}; the transformer's spread is {wide:.1f} times as wide. Picking a winning seed would add selection freedom. This registered protocol fixes five seeds and averages them, rather than counting a selected seed as a new discovery. <bookmark mark='b'/> HARNet's seeds are much closer, starting from the log-HAR structure."""
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")
@@ -157,7 +152,7 @@ class Training(VoiceoverScene):
         with self.voiceover(
             "HARNet's replay looks different. Its first frame is already log-HAR's forecast, and its validation loss "
             f"starts at {v0:.3f}, where the others needed twenty epochs to arrive. <bookmark mark='a'/> Training "
-            f"lowers it only to {vb:.3f}, and stops within a handful of epochs. The learned filters stay close to "
+            f"lowers it only to {vb:.3f}, with its best epoch early; training then continues until the patience rule stops it. The final left panel shows retained best weights, while the right curve shows the full stopping path. The learned filters stay close to "
             "where they started: yesterday still dominates, as Reisenhofer and his coauthors found on stock indices. "
             "The network is a microscope on HAR: it confirms the structure rather than replacing it."
         ) as vo:
@@ -183,13 +178,7 @@ class Training(VoiceoverScene):
                      font_size=19).to_corner(UR, buff=0.5)
         gap = float(va[-1] - va[be])
         with self.voiceover(
-            "Why stop early? Here are both losses for one seed. The training loss keeps falling: given enough epochs "
-            "the network will memorise the noise in six hundred and seventy-five days. <bookmark mark='a'/> The "
-            f"validation loss, on days the network never trains on, bottoms out at epoch {be} and then drifts up by "
-            f"{gap:.3f} as it starts to fit noise. <bookmark mark='b'/> So the House keeps the weights from the best "
-            "validation epoch and stops thirty epochs later. Early stopping is a form of regularisation: the half-year "
-            "of validation data decides how complex the network is allowed to become, and the test year stays sealed."
-            " Next: the race."
+            f"""Why stop early? Training loss keeps falling, which can eventually overfit. <bookmark mark='a'/> This seed's validation loss bottoms at epoch {be}, then rises by {gap:.3f}; that is evidence for stopping here, not proof of memorizing particular noise. <bookmark mark='b'/> Keep the best validation weights and stop after about thirty non-improving epochs. Networks train through June 2019 and validate on the second half. Classical baselines fit through December. 2020 is excluded from gradients and early stopping, but later reused for comparisons and added models. The separate 2021-onward envelope remains sealed."""
         ) as vo:
             self.play(FadeIn(g), Create(lt), FadeIn(leg[0]), run_time=2)
             vo.wait_until("a")

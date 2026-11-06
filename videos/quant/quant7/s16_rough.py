@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Rough(VoiceoverScene):
@@ -42,14 +42,7 @@ class Rough(VoiceoverScene):
         ]
         eqs = VGroup(*rows_eq).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "How rough is the river? Here are two simulated paths. The lower one is ordinary Brownian motion, with "
-            "Hurst exponent a half. <bookmark mark='a'/> Zoom in four times and rescale, then four times again: it "
-            "looks the same at every scale, moderately jagged. <bookmark mark='b'/> The upper one has a Hurst "
-            "exponent of zero point one. It is far rougher, and it too looks the same at every zoom. <bookmark "
-            "mark='c'/> The exponent can be read from data: the average absolute change over a lag delta, raised to a "
-            "power q, grows like delta to the q H. In 2018 Jim Gatheral, Thibault Jaisson and Mathieu Rosenbaum "
-            "measured it on the realized volatility of thousands of days of stock indices, and found H near zero "
-            "point one: volatility is rough."
+            """How rough is the river? Two simulated paths, with H one half below. <bookmark mark='a'/> These min-max-rescaled panels compare shapes, not estimate H. <bookmark mark='b'/> H point one is more jagged; self-similarity means equality in law. <bookmark mark='c'/> Gatheral, Jaisson and Rosenbaum found H near point one on realized-volatility proxies. Noise, smoothing and finite scales remain alternative explanations for latent volatility."""
         ) as vo:
             self.play(FadeIn(rows[1][0]), FadeIn(cap))
             vo.wait_until("a")
@@ -94,19 +87,12 @@ class Rough(VoiceoverScene):
             label(r"a power-law kernel over the whole past; HAR's three steps are a cheap approximation. Part 14 builds "
                   r"the models.", font_size=19, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(UP, buff=0.35)  # above both charts, clear of H
-        pc = pause_card(r"If $H = 0.5$, what slope would the $q = 2$ line have?", width=4.4, font_size=20).to_corner(UR, buff=0.3)
+        pc = predict(r"If $H = 0.5$, what slope would the $q = 2$ line have?", width=4.4, font_size=20).to_corner(UR, buff=0.3)
         rough = b["H"] < 0.25
         verdict = ("Rough, as Gatheral, Jaisson and Rosenbaum found on equity indices."
                    if rough else "Smoother than the equity-index result.")
         with self.voiceover(
-            f"Lab. The House's estimator is eight lines: for each power q, the slope of log m against log delta; then "
-            f"H is the slope of those slopes against q.  <bookmark mark='a'/> On simulated paths with H of zero point "
-            f"one it returns about {s1.mean():.2f}; with a half, about {s5.mean():.2f}. <bookmark mark='b'/> Now Bitcoin's "
-            f"own daily log realized volatility, {len(ro['lv']):,} days. Five parallel lines, one per q, and their slopes "
-            f"on a straight line through the origin. H comes out at {b['H']:.2f}. {verdict} <bookmark mark='c'/> Pause "
-            f"and predict: with H of a half, what slope would the q equals two line have? One: that is ordinary diffusion. "
-            f"<bookmark mark='d'/> Roughness changes forecasting: the best predictor weights the whole past with a power-law "
-            f"kernel, and HAR's staircase is a cheap approximation of it."
+            f"""Lab. The House's estimator fits moment slopes across lags and powers q. <bookmark mark='a'/> Simulated H point one and one half return about {s1.mean():.2f} and {s5.mean():.2f}. <bookmark mark='b'/> On {len(ro['lv']):,} Bitcoin log-realized-volatility observations, H is {b['H']:.2f}. {verdict} This proxy estimate does not establish latent roughness. <bookmark mark='c'/> At H one half and q two, the slope is one. <bookmark mark='d'/> An idealized Gaussian rough model gives a power-law predictor; HAR approximates it over finite horizons."""
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -136,21 +122,12 @@ class Rough(VoiceoverScene):
         whys = [why(r"fractional Brownian motion: the covariance that makes it self-similar with exponent $H$"),
                 why(r"two successive increments: negatively correlated when $H < \tfrac12$, the path keeps turning back"),
                 why(r"the variance of a change grows like $\Delta^{2H}$: fast at short lags when $H$ is small"),
-                why(r"rough volatility's signature in option prices (Part 14): the skew explodes as maturity shrinks")]
+                why('short-maturity skew law under suitable rough-model, leverage and regularity assumptions (Part 14)')]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.8, buff=0.5, edge=6.9)
         res = MathTex(rf"H = {H:.2f}:\ \operatorname{{corr}}(\Delta_1, \Delta_2) = {rho:+.2f}", font_size=32, color=BAD)
         res.to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "What does H measure? Fractional Brownian motion is defined by its covariance, built so that zooming in by "
-            "any factor and rescaling by that factor to the power H gives the same process. <bookmark mark='a'/> Two "
-            "successive changes are then correlated, two to the power two H minus one, minus one: zero for ordinary "
-            "Brownian motion, negative when H is below a half. <bookmark mark='b'/> A rough path keeps turning back on "
-            "itself, and its variance over a short lag is large relative to a long one. <bookmark mark='c'/> With "
-            f"Bitcoin's H of {H:.2f}, successive changes in log volatility have a correlation of about {rho:.2f}. "
-            "<bookmark mark='d'/> In option prices the same exponent shows up as an at-the-money skew that steepens "
-            "like maturity to the power H minus a half, without bound for short options: Part fourteen's rough "
-            "volatility models are built on it."
-            " Before racing the models, we need a fair way to score them. Next."
+            f"""What does H measure? Fractional Brownian scaling holds in distribution, not as identical segments. <bookmark mark='a'/> Its adjacent-increment correlation is two to the power two H minus one, minus one. <bookmark mark='b'/> That is negative for H below one half. <bookmark mark='c'/> At estimated H {H:.2f}, this model implies {rho:.2f}; it is not a directly measured Bitcoin increment correlation. <bookmark mark='d'/> Suitable rough-volatility, leverage and regularity assumptions yield the short-maturity skew law. Next: scoring."""
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar, predict
 
 
 class Scoring(VoiceoverScene):
@@ -63,7 +63,7 @@ class Scoring(VoiceoverScene):
             "The true variance is one. Slide the forecast, and draw the average loss against the proxy. With the truth as the proxy, both losses are smallest at one. "
             "<bookmark mark='b'/> Now make the proxy noisier: a realized variance, then five returns, then a single "
             "squared return. The squared error on volatility slides its minimum to the left, to "
-            f"{am:.2f}: it rewards forecasts that are too low. <bookmark mark='c'/> QLIKE's minimum does not move. That "
+            f"variance forecast {am:.2f}, corresponding to volatility near its square root: it targets a different quantity. <bookmark mark='c'/> QLIKE's minimum does not move. That "
             "is Andrew Patton's 2011 result, and the sliding is the proof by picture."
         ) as vo:
             self.play(FadeIn(hl))
@@ -97,13 +97,7 @@ class Scoring(VoiceoverScene):
                 why(r"Diebold and Mariano (1995): a $t$-test on the loss difference, Newey--West variance (Part 6)")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-2.2, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Why QLIKE is robust. It is the Gaussian log-likelihood with the forecast as the variance. <bookmark "
-            "mark='a'/> Differentiate its expectation: it is zero exactly when the forecast equals the conditional "
-            "mean of the proxy. <bookmark mark='b'/> An unbiased proxy has the true variance as its mean, so the noise "
-            "adds a constant to every model's expected loss and leaves the ranking alone. <bookmark mark='c'/> The "
-            "squared error on volatility fails because a square root is concave: the root of a noisy proxy is biased "
-            "low. <bookmark mark='d'/> To compare two models, Francis Diebold and Roberto Mariano test whether the "
-            "average difference in their losses is zero, with a variance that allows for autocorrelation."
+            """Why QLIKE is robust. Compare positive forecasts measurable to the same information set, using a positive conditionally unbiased variance proxy and finite expected losses. <bookmark mark='a'/> Differentiating expected QLIKE targets conditional mean variance. <bookmark mark='b'/> Proxy noise changes expected losses by a forecast-independent term, preserving rankings under those conditions. <bookmark mark='c'/> Taking the square root changes the target through Jensen's inequality. <bookmark mark='d'/> Diebold--Mariano compares average loss differences using a long-run variance. Its normal reference needs a suitable loss-difference CLT and positive finite long-run variance; reused test data and model selection require extra care."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -134,7 +128,7 @@ class Scoring(VoiceoverScene):
         sub = label(r"candidates: the truth, $0.8\times$ the truth, $1.2\times$ the truth, a 60-day average", font_size=19,
                     color=GREY_B)
         grp = VGroup(head, sub, tab).arrange(DOWN, buff=0.35).move_to(UP * 0.4)
-        pc = pause_card(r"Judged against squared returns, which wins under MAE: the true variance, or 80\% of it?",
+        pc = predict(r"Judged against squared returns, which wins under MAE: the true volatility, or 80\% of it?",
                         width=7.4, font_size=22).to_edge(DOWN, buff=0.35)
         w = T["MAE on volatility"]["squared return"]["winner"]
         verdict = ("80 percent of it. The absolute error on volatility rewards the forecast that is too low, and so does "
@@ -175,10 +169,7 @@ class Scoring(VoiceoverScene):
                            color=VOL), rows).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DR, buff=0.4)
         dm = r2["dm_vs_loghar"]
         with self.voiceover(
-            "Lab. The House's scoring tools: QLIKE in one line, and the Diebold-Mariano statistic with a Newey-West "
-            "variance. They will judge the race. <bookmark mark='a'/> Is a forecast calibrated? Mincer and Zarnowitz regress the outcome on the forecast: ideally, intercept zero and slope one. On the 2020 test year, HAR's slope is close to one; the "
-            f"log-based forecasts have slopes near {mz['log-HAR']['b']:.1f}: they are too timid on the big days, "
-            "because the logarithm compresses the spikes."
+            f"""Lab. The House's scoring tools: QLIKE and Diebold--Mariano with a Newey--West variance. Here comparisons are exploratory after reuse of the 2020 sample. <bookmark mark='a'/> Mincer--Zarnowitz calibration requires intercept zero and slope one. Log-HAR's fitted slope is about {mz['log-HAR']['b']:.1f}; that association alone does not identify its cause. Any recalibration must fit on training or validation observations and face fresh outcomes."""
         ) as vo:
             self.play(FadeIn(card))
             lab_run(self, card, [f"DM, HAR against log-HAR, 2020: t = {dm['HAR']['t']:+.2f}"], run_time=1.0)
@@ -206,8 +197,7 @@ class Scoring(VoiceoverScene):
         surv = r2["mcs"]["survivors"]
         out25 = [k for k in order if pv[k] < 0.25]
         side = VGroup(
-            wrapped_label(r"Hansen, Lunde and Nason (2011): drop the worst model while equal accuracy is rejected; "
-                          r"what remains contains the best with 90\% confidence", 4.6, 19, GREY_A),
+            wrapped_label('Hansen--Lunde--Nason (2011): nominal coverage within a fixed candidate set under valid bootstrap conditions; selection needs separate treatment', 4.6, 19, GREY_A),
             label(rf"at 90\%: {len(surv)} of {len(order)} survive", font_size=22, color=YELLOW),
             label(rf"at 75\%: " + ", ".join(out25) + r" out", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3)
@@ -216,12 +206,7 @@ class Scoring(VoiceoverScene):
                    "percent confidence." if len(surv) == len(order) else
                    "The set shrinks to the models listed in yellow.")
         with self.voiceover(
-            f"Last, many models at once. Peter Hansen, Asger Lunde and James Nason built the model confidence set: eliminate "
-            f"the worst model while equal accuracy is rejected. What survives contains the best model with ninety percent "
-            f"confidence. <bookmark mark='a'/> On the race we are about to run, {verdict} <bookmark mark='b'/> Loosen "
-            f"the level to seventy-five percent and {out_txt} drop out. Hold on to that humility when the leaderboard "
-            f"appears."
-            " The race includes networks. Next: how they are trained."
+            f"""Last, many models at once. The Hansen--Lunde--Nason model confidence set repeatedly tests equal predictive accuracy and removes a worst model. Nominal coverage concerns a best model within a fixed candidate set, under valid dependence and bootstrap assumptions. It is not a guarantee after adaptive model selection. <bookmark mark='a'/> Here, {verdict} <bookmark mark='b'/> At seventy-five percent, {out_txt} drop out. Next: training the networks."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(side[0]))
             vo.wait_until("a")

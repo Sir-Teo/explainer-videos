@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar, predict
 
 
 class Realized(VoiceoverScene):
@@ -48,7 +48,7 @@ class Realized(VoiceoverScene):
 
         rows = [row(k, c) for k, c in ((30, VOL), (10, FC), (5, GOOD), (1, BAD))]
         base = Line([-5.6, base_y, 0], [5.6, base_y, 0], color=GREY_C, stroke_width=2)
-        ro = MathTex(rf"\textstyle\sum r_i^2:\ {100 * rows[0][1]:.0f}\%\text{{ a year}}", font_size=34, color=VOL).to_edge(DOWN, buff=0.4)
+        ro = MathTex(rf"\sqrt{{365\sum r_i^2}}:\ {100 * rows[0][1]:.0f}\%\text{{ a year}}", font_size=34, color=VOL).to_edge(DOWN, buff=0.4)
         cap = label(r"each square: one interval's return, squared (side $|r_i|$, area $r_i^2$)", font_size=19,
                     color=GREY_A).next_to(base, DOWN, buff=0.15)
         names = [r"every 30 minutes", r"every 10 minutes", r"every 5 minutes", r"every minute"]
@@ -59,7 +59,7 @@ class Realized(VoiceoverScene):
             "into half-hours. Each half-hour's return gets a square, with side the size of the move and area its "
             "square. Add up the areas: that is realized variance. <bookmark mark='b'/> Cut finer, ten minutes, five "
             "minutes: the squares multiply six-fold and shrink, while their total moves far less. <bookmark mark='c'/> In the limit "
-            "it is the quadratic variation of Part five, the integral of the instantaneous variance over the day. "
+            "it is the quadratic variation of Part five, integrated variance for continuous noise-free prices, with squared jumps added if present. "
             "Andersen, Bollerslev, Diebold and Labys built on this around 2000: volatility becomes observable. <bookmark mark='d'/> At every minute, though, "
             "the total creeps up again. Why?"
         ) as vo:
@@ -70,13 +70,13 @@ class Realized(VoiceoverScene):
             vo.wait_until("b")
             cur = rows[0][0]
             for k in (1, 2):
-                r2 = MathTex(rf"\textstyle\sum r_i^2:\ {100 * rows[k][1]:.0f}\%\text{{ a year}}", font_size=34,
+                r2 = MathTex(rf"\sqrt{{365\sum r_i^2}}:\ {100 * rows[k][1]:.0f}\%\text{{ a year}}", font_size=34,
                              color=[VOL, FC, GOOD, BAD][k]).move_to(ro)
                 self.play(ReplacementTransform(cur, rows[k][0]), Transform(ro, r2),
                           Transform(nm, label(names[k], font_size=24, color=[VOL, FC, GOOD, BAD][k]).move_to(nm)), run_time=1.5)
                 cur = rows[k][0]
             vo.wait_until("d")
-            r2 = MathTex(rf"\textstyle\sum r_i^2:\ {100 * rows[3][1]:.0f}\%\text{{ a year}}", font_size=34, color=BAD).move_to(ro)
+            r2 = MathTex(rf"\sqrt{{365\sum r_i^2}}:\ {100 * rows[3][1]:.0f}\%\text{{ a year}}", font_size=34, color=BAD).move_to(ro)
             self.play(ReplacementTransform(cur, rows[3][0]), Transform(ro, r2),
                       Transform(nm, label(names[3], font_size=24, color=BAD).move_to(nm)), run_time=1.5)
         self.wait(0.3)
@@ -106,10 +106,10 @@ class Realized(VoiceoverScene):
                     rf"60\text{{ min }} {100 * s19[-1]:.0f}\%", font_size=26, color=GOOD),
             MathTex(rf"\text{{whole sample: }}{100 * sall[0]:.0f}\%,\ {100 * sall[3]:.0f}\%,\ {100 * sall[-1]:.0f}\%",
                     font_size=26, color=ALT),
-            wrapped_label(rf"noise variance per minute $\hat\eta^2 = RV_{{1}}/2n$: median ${s['eta2_median'] * 1e8:.0f}\times 10^{{-8}}$",
+            wrapped_label(rf"noise-dominance proxy $\hat\eta^2 = RV_{{1}}/2n$: median ${s['eta2_median'] * 1e8:.0f}\times 10^{{-8}}$",
                           5.2, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
-        pc = pause_card(r"Sampling every second gives 86{,}400 returns a day. Better than every 5 minutes?", width=5.2,
+        pc = predict(r"Sampling every second gives 86{,}400 returns a day. Better than every 5 minutes?", width=5.2,
                         font_size=21).next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
             "Build the answer point by point. For every day of 2019, compute realized volatility at a sampling "
@@ -142,11 +142,11 @@ class Realized(VoiceoverScene):
             cmath(r"r_i = r_i^* + u_i - u_{i-1}", r"\Rightarrow", r"\mathbb{E}RV_n = IV + 2n\eta^2", font_size=34),
             cmath(r"MSE(n) \approx 4n^2\eta^4 + \frac{2\,IQ}{n}", r"\Rightarrow", r"n^* = \Big(\frac{IQ}{4\eta^4}\Big)^{1/3}",
                   font_size=34),
-            cmath(r"TSRV", r"=", r"\overline{RV}^{(K)} - \frac{\bar n}{n}RV^{(all)}", font_size=34),
+            cmath(r"TSRV", r"=", r"\frac{\overline{RV}^{(K)}-(\bar n/n)RV^{(all)}}{1-\bar n/n}", font_size=34),
             cmath(r"RK", r"=", r"\gamma_0 + \sum_{h=1}^{H}k\Big(\frac{h}{H+1}\Big)(\gamma_h + \gamma_{-h})", font_size=34),
         ]
-        whys = [why(r"quadratic variation (Part 5): the squares converge to the integrated variance"),
-                why(r"Barndorff-Nielsen and Shephard (2002): an error band from the realized quarticity"),
+        whys = [why(r"continuous noise-free semimartingale: RV converges to IV; jumps add squared jump sizes"),
+                why(r"BNS CLT under regularity: formal continuous/noise-free band, not noise- or jump-robust"),
                 why(r"iid noise $u$ of variance $\eta^2$: each return gains $2\eta^2$, cross terms vanish"),
                 why(r"bias squared plus variance, set the derivative to zero (Bandi and Russell 2008)"),
                 why(r"Zhang, Mykland and A\"it-Sahalia (2005): average $K$ sparse grids, subtract the noise from the dense one"),
@@ -156,17 +156,7 @@ class Realized(VoiceoverScene):
         res = MathTex(rf"\text{{Bitcoin, per day: }} n^* \Rightarrow \Delta^* \approx {s['nstar_min_median']:.0f}\text{{ minutes "
                       rf"(median; quartiles }}{q[0]:.0f}\text{{--}}{q[1]:.0f})", font_size=28, color=GOOD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The theory. The sum of squares converges to the integrated variance, <bookmark "
-            "mark='a'/> with an error, derived by Barndorff-Nielsen and Shephard in 2002, that shrinks like one over "
-            "root n and is estimated from fourth powers. <bookmark "
-            "mark='b'/> Now add noise to every observed price. Each observed return gains the difference of two noise "
-            "terms, and summing n squares adds two n times the noise variance: a bias that grows with n. <bookmark "
-            "mark='c'/> Bias against error: minimising the sum gives an optimal number of samples, Federico Bandi and "
-            f"Jeffrey Russell's rule. For Bitcoin it says sample about every {s['nstar_min_median']:.0f} minutes. "
-            "<bookmark mark='d'/> Or keep all the data and remove the bias: the two-scale estimator averages several "
-            "sparse grids and subtracts the noise measured on the dense one, <bookmark mark='e'/> and the realized "
-            "kernel adds back the autocovariances the noise creates. Pre-averaging, spot volatility and irregular "
-            "sampling extend these ideas."
+            f"""The theory. Under continuous, noise-free semimartingale assumptions, squares converge to integrated variance; jumps would add their squared sizes. <bookmark mark='a'/> With regularity, the BNS error scales as one over root n, estimated from quarticity. <bookmark mark='b'/> Independent exogenous price noise adds bias two n eta squared. <bookmark mark='c'/> A two-term MSE approximation balances that bias against sampling error. Our one-minute noise proxy also contains efficient variation, so the {s['nstar_min_median']:.0f}-minute plug-in is illustrative, not a validated optimum. <bookmark mark='d'/> TSRV combines sparse and dense grids; the displayed finite-sample denominator matches our code. <bookmark mark='e'/> Realized kernels use autocovariances to cancel noise under their assumptions. Pre-averaging and irregular sampling extend the toolbox."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -196,20 +186,20 @@ class Realized(VoiceoverScene):
         labs = VGroup(*[Tex(r"\begin{tabular}{c}" + n_ + r"\end{tabular}", font_size=15,
                             color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1) for i, (_, n_, _) in enumerate(names)])
         t, rv, se = (np.asarray(s[k]) for k in ("clt_t", "clt_rv", "clt_se"))
-        vol, lo, hi = (np.sqrt(np.maximum(v, 1e-12) * 365) for v in (rv, rv - 1.96 * se, rv + 1.96 * se))
-        g2 = axes([2019, 2020], [0, 2.0], x_length=6.0, y_length=3.0, xticks=[2019, 2019.5, 2020],
+        vol, lo, hi = (np.sqrt(np.maximum(v, 0.0) * 365) for v in (rv, rv - 1.96 * se, rv + 1.96 * se))
+        g2 = axes([2019, 2020], [0, float(hi.max()) * 1.05], x_length=6.0, y_length=3.0, xticks=[2019, 2019.5, 2020],
                   xfmt=lambda u: {2019: "Jan", 2019.5: "Jul", 2020: "Jan"}[round(u * 2) / 2], yticks=[0, 1, 2],
                   yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"2019, each day: RV with its 95\% band (BNS)", font_size=15)
         g2.to_corner(UR, buff=0.5).shift(DOWN * 0.2)
-        bd = band(g2.ax, t, np.clip(lo, 0, 2), np.clip(hi, 0, 2), VOL, 0.3)
-        ln = curve(g2.ax, t, np.clip(vol, 0, 2), VOL, stroke_width=1.6)
+        bd = band(g2.ax, t, lo, hi, VOL, 0.3)
+        ln = curve(g2.ax, t, vol, VOL, stroke_width=1.6)
         rel = float(np.median(1.96 * se / rv))
         src = real_data(rf"Binance BTCUSDT one-minute candles; {z['n_days']:,} days".replace(",", "{,}"))
         with self.voiceover(
             "On three and a half years of Bitcoin: one-minute sums give an average volatility of "
             f"{100 * z['vol_rv1']:.0f} percent, five-minute sums {100 * z['vol_rv5']:.0f}. <bookmark mark='a'/> The two "
             f"noise-corrected estimators, using every minute, land near {100 * z['vol_tsrv']:.0f}. Bipower variation, next chapter, is lower still. <bookmark mark='b'/> And each day's measure "
-            "comes with an error band from the central limit theorem: with five-minute returns, the half-width is "
+            "uses a formal continuous, noise-free CLT band; it ignores noise and jumps, with negative variance lower bounds truncated at zero: with five-minute returns, the half-width is "
             f"typically {100 * rel:.0f} percent of the variance. Realized variance is a measurement, not the truth, and "
             "that will matter when forecasts are scored against it."
             " Next: the simplest model built on that measurement, and still one of the strongest."

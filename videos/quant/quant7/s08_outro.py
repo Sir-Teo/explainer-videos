@@ -9,33 +9,25 @@ DESK = [
      r"constant variance; wrong when volatility mean-reverts (use the GARCH term structure), when returns are "
      r"autocorrelated, and for quantiles of fat-tailed returns"),
     (r"You regress one price on another and get $t = 24$. What do you check first?",
-     r"whether both have unit roots (ADF); if so, test the residual for one (Engle--Granger, critical value about "
-     r"$-3.34$, not $-2.86$), or regress changes on changes"),
+     'assess I(1) as a working model: non-rejection is not proof; EG residual tests need their own critical values (about $-3.34$ for two variables, a constant and no trend)'),
     (r"A new volatility model beats GARCH on mean squared error over a year that includes March 2020. Convinced?",
-     r"no: one day can decide an MSE race; score with QLIKE, compare with a Diebold--Mariano test against HAR, and "
-     r"check the result without the crisis weeks"),
+     'a crash day can dominate MSE; compare simple benchmarks with suitable loss, nesting-aware inference and fresh validation'),
     (r"A GARCH fit gives $\alpha + \beta = 1$. Is the process stationary?",
-     r"not covariance-stationary (the variance is infinite), but strictly stationary: Nelson (1990) needs only "
-     r"$\mathbb{E}\ln(\alpha z^2 + \beta) < 0$, which Jensen gives whenever $\alpha + \beta \le 1$"),
+     'positive $\\omega$ and $\\alpha+\\beta=1$ preclude finite stationary variance; strict Jensen needs $\\alpha>0$, nonconstant squared iid shocks and log integrability'),
 ]
 
 PROBLEMS = [
     r"For GARCH(1,1), $\sigma^2_{t+1} = \omega + \alpha r_t^2 + \beta\sigma_t^2$, derive the $h$-step forecast "
     r"$\mathbb{E}_t[\sigma^2_{t+h}] = \bar\sigma^2 + (\alpha + \beta)^{h-1}(\sigma^2_{t+1} - \bar\sigma^2)$ and the "
     r"half-life of a shock.",
-    r"Show that GARCH(1,1) implies ARMA(1,1) for $r_t^2$, and that its kurtosis exceeds 3 whenever $\alpha > 0$.",
-    r"With prices observed with iid noise of variance $\eta^2$, show that $\mathbb{E}[RV_n] = \int\sigma^2 dt + "
-    r"2n\eta^2$; minimise $4n^2\eta^4 + 2IQ/n$ to find Bandi and Russell's optimal $n^*$.",
-    r"Show that QLIKE, $L(\hat h, h) = h/\hat h - \log(h/\hat h) - 1$, is minimized in expectation at "
-    r"$\hat h = \mathbb{E}[h]$, so that a noisy but unbiased proxy ranks forecasts correctly (Patton 2011).",
+    'Derive the squared-return ARMA identity and the Gaussian GARCH fourth-moment condition; when finite, derive its kurtosis.',
+    'Under continuous prices and independent iid price noise, derive the $2n\\eta^2$ bias and minimize the illustrative MSE $4n^2\\eta^4+2IQ/n$.',
+    'With positive conditionally unbiased proxies, measurable forecasts and finite losses, derive the QLIKE target $\\hat h=E[h\\mid\\mathcal F]$ and ranking robustness.',
     r"Write the Kalman filter for a local-level model and show that its steady-state gain depends only on the "
     r"signal-to-noise ratio.",
-    r"For a random walk with $x_0 = 0$, show that $T(\hat\rho - 1) \Rightarrow \tfrac12(W(1)^2 - 1)/\int_0^1 W^2$, "
-    r"and that $\Pr(W(1)^2 < 1) \approx 0.68$.",
-    r"(qual) Nested models, squared loss, the extra slope zero: show $\mathbb E[e_2^2 - e_1^2] \approx \mathbb E[(\hat y_1 - "
-    r"\hat y_2)^2] > 0$, so DM is centred below zero.",
-    r"(qual) One extra regressor, recursive OLS from $R$: show the mean squared forecast gap over $P$ forecasts is about "
-    r"$\sigma^2\ln(1 + P/R)/P$.",
+    'For a random walk fitted with a constant and no trend, derive the coefficient and DF $t$ limits using $W_\\mu=W-\\int_0^1 W$ and $A=\\frac12(W(1)^2-1)-W(1)\\int_0^1W$.',
+    '(qual) Under the stated nested-model orthogonality approximation, show $\\mathbb E[e_2^2-e_1^2]\\approx\\mathbb E[(\\hat y_1-\\hat y_2)^2]>0$ and explain the DM bias.',
+    '(qual) In the idealized one-regressor case, derive the mean squared forecast-gap approximation $\\sigma^2\\ln(1+P/R)/P$.',
 ]
 
 
@@ -54,20 +46,19 @@ class Outro(VoiceoverScene):
         best = min(r2["names"], key=lambda k: sc[k]["qlike"])
         f = load("foundation")
         items = [
-            (r"size has a long memory and direction almost none: Ljung--Box on squares dwarfs returns", VOL),
+            ('magnitudes show stronger persistence; low return autocorrelation does not prove unpredictability', VOL),
             (rf"unrelated random walks regressed on each other: $|t| > 2$ in {100 * s['rej_levels']:.0f}\% of pairs; "
              r"the Dickey--Fuller distribution leans left", BAD),
-            (rf"Bitcoin's spot and perpetual are cointegrated (basis half-life {c['half_life_days']:.1f} days); Treasury "
-             r"yields share common trends", GOOD),
+            (rf"working I(1) model: EG rejects a residual unit root (basis half-life {c['half_life_days']:.1f} days); Treasury "
+             r"yield-rank conclusions depend on specification", GOOD),
             (r"hidden states: Hamilton's jars and Kalman's bells; stochastic volatility by quasi-likelihood", ALT),
             (rf"94 years of US stocks: GARCH persistence {g['us']['garch']['persistence']:.3f}; fat tails, and bad news "
              r"counts more", FC),
             (r"the stock--bond correlation changed sign around 2000", ALT),
-            (rf"Bitcoin's volatility measured properly: {100 * z['vol_tsrv']:.0f}\%; noise, jumps and roughness measured", VOL),
-            (r"score with QLIKE: it ranks correctly against a noisy target", GOOD),
-            (rf"the race: {best} first, log-HAR within noise; a toy foundation model and the literature agree the bar "
-             r"is high", GOOD),
-            (r"$\sqrt{T}$ assumes volatility stands still; it mean-reverts", BAD),
+            (rf"Bitcoin's noise-corrected average volatility: {100 * z['vol_tsrv']:.0f}\%; noisy proxies, jumps and rough scaling require interpretation", VOL),
+            ('QLIKE ranking robustness needs positive conditionally unbiased proxies and finite expectations', GOOD),
+            (rf"the race: {best} first in this reused sample; log-HAR remains a useful benchmark; published rankings depend on model and horizon", GOOD),
+            ('the constant-variance $\\sqrt{T}$ rule omits mean reversion and autocovariances', BAD),
         ]
         rows = VGroup()
         for i, (t, col) in enumerate(items, 1):
@@ -80,14 +71,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.4:
             rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part seven in ten lines. Size has a long memory; direction has almost none. Wandering series fool "
-            "regressions, and the random-walk test has its own lopsided distribution. Real ties are cointegration. "
-            "Volatility is a slow hidden state. A century of the American market gives a GARCH with persistence near "
-            "one, fat tails and asymmetry. The stock-bond correlation changed sign. Measured properly, volatility comes "
-            "with noise, jumps and roughness. Scored "
-            f"honestly, with QLIKE, the race went to {best}, within noise of log-HAR, and neither our toy foundation "
-            "model nor the published ones clearly beat it. And the square-root-of-time rule assumes volatility "
-            "stands still. It doesn't."
+            f"""Part seven in ten lines. Magnitudes have strong persistence; low return autocorrelation does not prove unpredictability. Unit-root inference depends on deterministic terms. Cointegration concerns stationary combinations. Hidden-state models and GARCH describe volatility differently. Correlations move. Realized measures contain noise and jumps; proxy roughness needs interpretation. In this reused 2020 comparison {best} leads QLIKE, without clear evidence over log-HAR. Published foundation results depend on model and horizon. Variance aggregation needs covariance and horizon assumptions."""
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=18))
@@ -99,12 +83,7 @@ class Outro(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Four desk questions. One percent a day is about two point two a week and sixteen a year, if volatility stays put. <bookmark mark='a'/> A "
-            "t-statistic of twenty-four between two prices: check first for unit roots, and test the residual with "
-            "the right critical values. <bookmark mark='b'/> A model that wins on squared error over a year with "
-            "a crash in it may have won on one day. Score it with QLIKE, and test it against HAR. <bookmark "
-            "mark='c'/> And alpha plus beta equal to one: the variance is infinite, but the process is still strictly "
-            "stationary, by Nelson's condition. Full solutions are in the notes."
+            """Four desk questions. One percent daily scales to about two point two over five trading days and sixteen over 252, under constant variance and zero autocovariances. <bookmark mark='a'/> A t-statistic between prices: check integration and use appropriate residual-test critical values. <bookmark mark='b'/> A crash can dominate a squared-error ranking. Compare sensible benchmarks with appropriate loss and inference. <bookmark mark='c'/> At alpha plus beta one, positive omega gives no finite unconditional variance; strict stationarity needs Nelson's log condition. Strict Jensen needs positive alpha and nonconstant squared shocks. Solutions are in the notes."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -159,10 +138,7 @@ class Outro(VoiceoverScene):
              r"Reisenhofer et al.\ (2022); Ansari et al.\ (2024); Das et al.\ (2024); Ekambaram et al.\ (2024); Brini (2026)",
              r"RiskMetrics TD (1996); Moskowitz, Ooi and Pedersen (2012); Harvey et al.\ (2018); Carr and Wu (2009)"])
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on. Every number was computed by the "
-            "series' own code from public data: Kenneth French's daily market returns, the St. Louis Fed's Treasury "
-            "yields and the VIX, and one-minute Bitcoin prices from Binance; the foundation-model comparison is "
-            "quoted from the paper."
+            """The textbook chapters this part covers, and the papers it draws on. Empirical examples use the series' own code and public data: French's market returns, FRED yields and VIX, and Binance prices. Simulations have fixed seeds. The published foundation-model comparison is explicitly quoted from the paper."""
         ):
             self.play(FadeIn(card))
             self.wait(3)

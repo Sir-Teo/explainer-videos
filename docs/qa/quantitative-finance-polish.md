@@ -25,7 +25,8 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 4 | Visual pass complete; full production-voice listening pending |
 | 5 | Visual pass complete; full production-voice listening pending |
 | 6 | Visual pass complete; full production-voice listening pending |
-| 7–43 | Pending; do not infer approval from historical build notes |
+| 7 | In progress: time-series/volatility audit and data restoration |
+| 8–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 

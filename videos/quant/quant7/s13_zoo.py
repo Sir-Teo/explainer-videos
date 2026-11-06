@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import vol
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, predict
 
 
 class Zoo(VoiceoverScene):
@@ -41,7 +41,7 @@ class Zoo(VoiceoverScene):
         l2 = VGroup(l2t, Arrow(l2t.get_left() + LEFT * 0.05, ax.c2p(0.55, 0.52), buff=0.05, color=BAD, stroke_width=2.5,
                                max_tip_length_to_length_ratio=0.06),
                     label(r"explosive", font_size=19, color=GREY_B).move_to(ax.c2p(0.2, 1.22)))
-        l3 = label(r"$\mathbb{E}\ln(\alpha z^2 + \beta) = 0$ (Nelson 1990)", font_size=19, color=BAD).next_to(ax.c2p(0.42, 0.98), UR, buff=0.05)
+        l3 = label(r"$\mathbb{E}\ln(\alpha z^2 + \beta) = 0$ (Nelson 1990)", font_size=19, color=BAD).move_to(gp.get_top() + UP * 0.35)
         us, btc = gl["us"], gl["btc"]
         d1 = Dot(ax.c2p(us[1], us[2]), radius=0.08, color=FC)
         d2 = Dot(ax.c2p(btc[1], btc[2]), radius=0.08, color=ALT)
@@ -49,8 +49,8 @@ class Zoo(VoiceoverScene):
         t1 = label(r"US stocks", font_size=18, color=FC).next_to(d1, UP, buff=0.3)
         t2 = label(r"Bitcoin", font_size=18, color=ALT).next_to(d2, DOWN, buff=0.12)
         q1, q2 = Dot(ax.c2p(0.3, 0.75), radius=0.07, color=WHITE), Dot(ax.c2p(0.25, 0.80), radius=0.07, color=WHITE)
-        pc = pause_card(r"$\alpha = 0.30$, $\beta = 0.75$: the sum is 1.05. Does the variance explode? And at "
-                        r"$\alpha = 0.25$, $\beta = 0.80$?", width=5.4, font_size=21).to_edge(RIGHT, buff=0.4).shift(UP * 1.6)
+        pc = predict(r"$\alpha = 0.30$, $\beta = 0.75$: the sum is 1.05. Does a stationary law exist? And at "
+                        r"$\alpha = 0.25$, $\beta = 0.80$?", width=5.4, font_size=21).to_corner(UR, buff=0.4).shift(DOWN * 0.7)
         ans = VGroup(MathTex(rf"\mathbb{{E}}\ln(0.30z^2 + 0.75) = {gl['e_03_075']:+.4f}", font_size=28, color=GOOD),
                      MathTex(rf"\mathbb{{E}}\ln(0.25z^2 + 0.80) = {gl['e_025_080']:+.4f}", font_size=28, color=BAD),
                      label(r"Gauss--Hermite quadrature, $z \sim N(0,1)$", font_size=17, color=GREY_B))
@@ -63,10 +63,10 @@ class Zoo(VoiceoverScene):
         with self.voiceover(
             f"Every GARCH is a point on this plane. Below alpha plus beta equal to one, the variance is finite. <bookmark "
             f"mark='a'/> The American market sits just under the line, Bitcoin a little further in. <bookmark mark='b'/> "
-            f"What happens above it? Daniel Nelson showed in 1990 that the variance need not explode. The process settles "
+            f"What happens above it? Daniel Nelson showed in 1990 that a strictly stationary law can exist even with infinite unconditional variance. The process settles "
             f"down whenever the average of the log of alpha z squared plus beta is negative, and that boundary, in red, "
             f"lies beyond the line. <bookmark mark='c'/> Pause and predict. Alpha zero point three and beta zero point "
-            f"seven five add up to one point zero five; so do zero point two five and zero point eight. Does either explode? "
+            f"seven five add up to one point zero five; so do zero point two five and zero point eight. Which has a stationary law under the stated Gaussian shocks? "
             f"<bookmark mark='d'/> {verdict}"
         ) as vo:
             self.play(FadeIn(gp), FadeIn(tri), Create(ig), FadeIn(l1))
@@ -92,19 +92,18 @@ class Zoo(VoiceoverScene):
             cmath(r"\ln\sigma_t^2", r"=", r"\omega + \alpha(|z_{t-1}| - \mathbb{E}|z|) + \gamma z_{t-1} + \beta\ln\sigma_{t-1}^2",
                   font_size=34),
         ]
-        whys = [why(r"unroll the recursion with $r_{t-1}^2 = \sigma_{t-1}^2 z_{t-1}^2$"),
+        whys = [why(r"$\omega>0$, $\alpha,\beta\ge0$; iid nondegenerate shocks, unit variance and log integrability"),
                 why(r"the law of large numbers: the product shrinks geometrically iff the limit is negative (Nelson 1990)"),
-                why(r"Jensen: so IGARCH, $\alpha + \beta = 1$, is strictly stationary"),
-                why(r"the score has mean zero whenever $\mathbb{E}z^2 = 1$, Gaussian or not: QMLE (Bollerslev--Wooldridge 1992)"),
-                why(r"GJR (Glosten, Jagannathan, Runkle 1993): falls add $\gamma$; persistence $\alpha + \gamma/2 + \beta$"),
-                why(r"EGARCH (Nelson 1991): the log variance, so no positivity constraints; $\gamma < 0$ for asymmetry")]
+                why(r"strict Jensen for $\alpha>0$ and nonconstant $z^2$: stationary IGARCH can have infinite variance"),
+                why(r"$\mathbb{E}_{t-1}z_t^2=1$ gives a zero-mean score; consistency and normal standard errors need further conditions"),
+                why(r"GJR: falls add $\gamma$; $\alpha+\gamma/2+\beta$ assumes symmetric shocks"),
+                why(r"EGARCH: log variance guarantees positivity; stationarity still needs restrictions")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.8, buff=0.5, edge=6.9)
         with self.voiceover(
             "Why. Unrolled, the variance is a sum of products of random factors. <bookmark "
             "mark='a'/> By the law of large numbers, a long product behaves like the exponential of k times the "
             "average log factor, so the sum converges exactly when that average is negative. <bookmark mark='b'/> By "
-            "Jensen's inequality the average log is below the log of the average, so even integrated GARCH, alpha "
-            "plus beta equal to one, is strictly stationary. <bookmark mark='c'/> And the Gaussian likelihood's score has mean zero whenever the shocks have unit variance, whatever their shape. So the estimates stay consistent under fat tails, with sandwich standard errors: "
+            "Jensen's inequality the average log is below the log of the average, so with positive alpha and nonconstant squared shocks, integrated GARCH can be strictly stationary despite infinite variance. <bookmark mark='c'/> And the Gaussian likelihood's score has mean zero under unit conditional shock variance. Identification and ergodic regularity can give consistency; normal sandwich standard errors additionally require finite score variance, which very heavy tails can violate: "
             "Tim Bollerslev and Jeffrey Wooldridge, 1992. <bookmark mark='d'/> And two members of the zoo give bad "
             "news its own weight: GJR adds a term only after falls, <bookmark mark='e'/> and Nelson's EGARCH models "
             "the log of the variance, with a signed term."
@@ -153,8 +152,7 @@ class Zoo(VoiceoverScene):
             "Black noticed in 1976 that volatility rises more after falls. Fit GJR to the American market and the "
             f"parabola tilts: a fall raises tomorrow's variance {(a + gam) / a:.0f} times as much as a rise. <bookmark "
             "mark='b'/> EGARCH, working in logs, bends it differently, and both fit far better than the symmetric "
-            "model. <bookmark mark='c'/> Bitcoin, with no corporate leverage behind it, shows the same tilt: the effect "
-            "is about fear as much as balance sheets."
+            "model. <bookmark mark='c'/> Bitcoin, with no corporate leverage behind it, shows the same tilt: corporate leverage cannot be the only possible explanation, but this fit alone does not identify the cause."
         ) as vo:
             self.play(FadeIn(gp), Create(line), FadeIn(name))
             vo.wait_until("a")
@@ -175,13 +173,14 @@ class Zoo(VoiceoverScene):
     def tails(self, gl):
         qq = gl["qq"]
         emp, nor, tt = (np.asarray(qq[k]) for k in ("emp", "normal", "t"))
-        g = axes([-8, 8], [-8, 8], x_length=4.8, y_length=4.8, xticks=[-6, -3, 0, 3, 6], yticks=[-6, -3, 0, 3, 6],
+        extent = 1.05 * max(np.max(np.abs(a)) for a in (emp, nor, tt))
+        g = axes([-extent, extent], [-extent, extent], x_length=4.8, y_length=4.8, xticks=[-6, -3, 0, 3, 6], yticks=[-6, -3, 0, 3, 6],
                  xlabel=r"model quantile", ylabel=r"quantile of $r_t/\hat\sigma_t$ (GARCH residuals)", font_size=15)
         g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
-        diag = DashedLine(ax.c2p(-8, -8), ax.c2p(8, 8), color=GREY_B, stroke_width=2)
-        dn = VGroup(*[Dot(ax.c2p(x, np.clip(y, -8, 8)), radius=0.035, color=BAD) for x, y in zip(nor, emp)])
-        dt = VGroup(*[Dot(ax.c2p(x, np.clip(y, -8, 8)), radius=0.035, color=GOOD) for x, y in zip(tt, emp)])
+        diag = DashedLine(ax.c2p(-extent, -extent), ax.c2p(extent, extent), color=GREY_B, stroke_width=2)
+        dn = VGroup(*[Dot(ax.c2p(x, y), radius=0.035, color=BAD) for x, y in zip(nor, emp)])
+        dt = VGroup(*[Dot(ax.c2p(x, y), radius=0.035, color=GOOD) for x, y in zip(tt, emp)])
         tg = gl["t_garch"]
         side = VGroup(
             legend([(BAD, r"against the normal"), (GOOD, rf"against Student-$t$, $\nu = {tg['nu']:.1f}$")], font_size=20),

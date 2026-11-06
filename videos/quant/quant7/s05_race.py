@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
+from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar, predict
 
 MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "log-HAR": GOOD, "LSTM": ALT,
            "Transformer": ALT, "HARNet": RET}
@@ -41,8 +41,8 @@ class Race(VoiceoverScene):
         w = lambda n: (x1 - x0) * n / tot  # noqa: E731
         segs = VGroup()
         cols = [GREY_B, ALT, GOOD]
-        names = [rf"train: Aug.\ 2017 -- Jun.\ 2019 ({n_tr} days)", rf"validate: 2019 H2 ({n_va})",
-                 rf"test: 2020 ({n_te})"]
+        names = [rf"NN train: Aug.\ 2017 -- Jun.\ 2019 ({n_tr} days)", rf"validate: 2019 H2 ({n_va})",
+                 rf"evaluation: 2020 ({n_te})"]
         x = x0
         for n, c, nm in zip((n_tr, n_va, n_te), cols, names):
             rect = Rectangle(width=w(n), height=0.45, stroke_width=0, fill_color=c, fill_opacity=0.6)
@@ -71,10 +71,7 @@ class Race(VoiceoverScene):
                           VOL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).align_to(tab, UP)
         with self.voiceover(
-            "Hansen and Lunde's question, asked of Bitcoin: does anything beat a GARCH(1,1)? On the Deutschmark-dollar "
-            "rate, nothing did; on IBM's stock, models with the leverage effect won. <bookmark mark='a'/> Here is our "
-            "race. Fit to June 2019, validate on the second half, test on all of 2020, untouched until the end. <bookmark mark='b'/> The first seven contestants. RiskMetrics' exponential average; GARCH and GJR, which see daily returns; HAR and HARQ, which see realized variance; and the two networks, five seeds averaged. "
-            "Everyone forecasts the same thing, tomorrow's realized variance, and is scored by QLIKE."
+            """Hansen and Lunde's question, asked of Bitcoin: does anything beat GARCH? Their currency and stock results differed. <bookmark mark='a'/> Networks train through June 2019 and validate on the second half; classical models fit through December. We evaluate 2020 retrospectively: later entrants were added after results and counted. <bookmark mark='b'/> EWMA, GARCH and GJR see daily returns; HAR and HARQ see realized variance; networks average five seeds. All predict next-day realized variance, scored by QLIKE."""
         ) as vo:
             self.play(FadeIn(side[0]))
             vo.wait_until("a")
@@ -118,8 +115,8 @@ class Race(VoiceoverScene):
         mse_order = sorted(names, key=lambda k: sc[k]["mse"])
         assert order[0] == LATE and dml["LSTM"]["t"] > 0, "the narration below describes this outcome"
         side = VGroup(
-            wrapped_label(r"$t$: Diebold--Mariano against HAR (Newey--West variance); below $-2$ beats HAR by more than "
-                          r"luck", 4.0, 19, GREY_A),
+            wrapped_label(r"$t$: exploratory DM against HAR, with HAC variance; normal cutoffs need suitable assumptions and separate handling of selection"
+                          r"", 4.0, 19, GREY_A),
             wrapped_label(r"added after the first results, and counted: HAR on the log of realized variance, which is "
                           r"what the networks forecast", 4.0, 20, GOOD),
             MathTex(rf"\text{{LSTM against log-HAR: }} t = {dml['LSTM']['t']:+.1f}", font_size=26, color=ALT),
@@ -139,7 +136,7 @@ class Race(VoiceoverScene):
             "Logs tame the spikes that dominate a least-squares fit. So, after seeing these results, we added one "
             "more contestant, and the trial counter counts it: HAR again, four coefficients, fitted to the logarithm. "
             f"<bookmark mark='d'/> It comes first. Against log-HAR, the LSTM's t-statistic is {dml['LSTM']['t']:.1f}, "
-            "in log-HAR's favour: no evidence that the network adds anything beyond the log. <bookmark mark='e'/> White dots: single seeds."
+            "in log-HAR's favour: no clear evidence of an improvement in this sample, rather than proof of no additional signal. <bookmark mark='e'/> White dots: single seeds."
             " <bookmark mark='f'/> And score the same forecasts by "
             f"squared error, and the order changes: {mse_order[0]} comes first. A race is only as honest as its "
             "loss function."
@@ -166,7 +163,7 @@ class Race(VoiceoverScene):
         cum = np.asarray(r2["cum"])
         ct = np.asarray(r2["cum_t"])
         i12 = int(r2["i12"])
-        hi = 1.0
+        hi = float(cum.max()) * 1.12
         x0, wmax = -2.6, 7.6
         k = ValueTracker(0)
 
@@ -177,7 +174,7 @@ class Race(VoiceoverScene):
             g = VGroup()
             for rank, j in enumerate(order):
                 y = 2.3 - rank * 0.55
-                w = wmax * min(v[j], hi) / hi
+                w = wmax * v[j] / hi
                 n_ = names[j]
                 g.add(Rectangle(width=max(w, 0.02), height=0.4, stroke_width=0, fill_color=MODEL_C[n_], fill_opacity=0.85)
                       .move_to([x0 + w / 2, y, 0]),
@@ -186,9 +183,9 @@ class Race(VoiceoverScene):
             return g
 
         b = always_redraw(bars)
-        date = always_redraw(lambda: label(rf"2020, day {1 + 2 * int(k.get_value())}: running mean QLIKE (lower is better)",
+        date = always_redraw(lambda: label(rf"{ct[int(k.get_value())]:.3f}: running mean QLIKE (lower is better)",
                                            font_size=22, color=GREY_A).to_edge(UP, buff=0.4))
-        pc = pause_card(r"Which model leads before March?", width=4.2, font_size=20).to_corner(DR, buff=0.3)
+        pc = predict(r"Which model leads before March?", width=4.2, font_size=20).to_corner(DR, buff=0.3)
         lead0 = names[int(np.argmin(cum[i12 - 1]))]
         lead1 = names[int(np.argmin(cum[-1]))]
         with self.voiceover(
@@ -228,9 +225,9 @@ class Race(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(rows, DOWN, buff=0.6)
         if -2 < t < 0:
             verdict = (f"By the smallest of margins, and well within noise: the Diebold-Mariano statistic is {t:.1f}. "
-                       "The network found nothing beyond the log.")
+                       "There is no clear evidence of improvement here; non-rejection does not establish equivalence.")
         elif t <= -2:
-            verdict = "It beats log-HAR by more than luck: the network found something beyond the log."
+            verdict = "The nominal test favors HARNet here, subject to dependence assumptions and reuse of the evaluation sample."
         else:
             verdict = "It does not beat log-HAR."
         mcs_line = ("As the last chapter warned, it keeps every model: one year cannot crown a winner." if len(mcs["survivors"]) == len(r2["names"]) else
@@ -250,23 +247,22 @@ class Race(VoiceoverScene):
         t = np.asarray(r["test_t"])
         rv = np.asarray(r["test_rv"])
         har, gar = np.asarray(r["test_loghar"]), np.asarray(r["test_garch"])
-        g = axes([2020, 2021], [0, 2.5], x_length=10.4, y_length=4.4,
+        g = axes([2020, 2021], [0, 6.2], x_length=10.4, y_length=4.4,
                  xticks=[2020, 2020.25, 2020.5, 2020.75, 2021],
                  xfmt=lambda u: {0: "Jan", 1: "Apr", 2: "Jul", 3: "Oct", 4: "Jan"}[round((u - 2020) * 4)],
                  yticks=[0, 0.5, 1.0, 1.5, 2.0, 2.5], yfmt=lambda u: f"{100 * u:.0f}\\%",
                  ylabel=r"Bitcoin's daily volatility in 2020, annualised", font_size=17).move_to(DOWN * 0.3)
         ax = g.ax
-        dots = VGroup(*[Dot(ax.c2p(tt, min(v, 2.5)), radius=0.03, color=BAD).set_opacity(0.7) for tt, v in zip(t, rv)])
-        lg = curve(ax, t, np.clip(gar, 0, 2.5), FC, stroke_width=2.5)
-        lh = curve(ax, t, np.clip(har, 0, 2.5), GOOD, stroke_width=2.5)
+        dots = VGroup(*[Dot(ax.c2p(tt, v), radius=0.03, color=BAD).set_opacity(0.7) for tt, v in zip(t, rv)])
+        lg = curve(ax, t, gar, FC, stroke_width=2.5)
+        lh = curve(ax, t, har, GOOD, stroke_width=2.5)
         leg = legend([(BAD, r"realized"), (FC, r"GARCH, the day before"), (GOOD, r"log-HAR, the day before")], font_size=19)
         leg.next_to(g, UP, buff=0.1).align_to(g, RIGHT)
-        src = real_data(r"Binance BTCUSDT one-minute candles; models fitted to June 2019, tested on 2020")
+        src = real_data('Binance BTCUSDT; NN train to Jun. 2019, validate H2; classical fits to Dec.; retrospective 2020 comparison')
         with self.voiceover(
             "Here is the whole test year. Each dot is a day's realized volatility. GARCH, which sees only closing "
             "prices, follows slowly and overshoots after big days. <bookmark mark='a'/> Log-HAR, reading the whole "
-            "day's path, tracks the level more closely. Neither forecasts the spikes: no model can. The skill in "
-            "volatility forecasting is the level, not the surprises."
+            "day's path, tracks the level more closely. These fitted models miss the largest realized spikes; that does not prove no model or information could improve the forecast. A conditional risk forecast predicts a distribution or level, rather than every realized surprise."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.005,
                                                                        run_time=2))
@@ -289,14 +285,7 @@ class Race(VoiceoverScene):
         one = DashedLine(ax.c2p(0, 1), ax.c2p(len(names), 1), color=GOOD, stroke_width=3)
         best_cal = min(names, key=lambda k: abs(mz[k]["b"] - 1))
         with self.voiceover(
-            "One more check on the race: calibration. Regress each day's realized variance on the forecast. A "
-            "calibrated forecast has a slope of one. <bookmark mark='a'/> The best calibrated is "
-            f"{best_cal}, with a slope of {mz[best_cal]['b']:.2f}. The models built on logarithms, which win on "
-            f"QLIKE, have slopes near {mz['log-HAR']['b']:.1f}: on the big days realized variance moves more than "
-            "they predicted. A desk would fix that with a one-line recalibration, the same correction Brini found "
-            "erased much of the foundation models' edge. Ranking and calibration are different questions, and an "
-            "honest report answers both."
-            " Next: the largest models of all, foundation models, and the frontier."
+            f"""One more check on the race: calibration. Mincer--Zarnowitz targets intercept zero and slope one. <bookmark mark='a'/> The slope closest to one here is {best_cal}, at {mz[best_cal]['b']:.2f}; this does not make it best calibrated on every criterion. Log-HAR's slope is {mz['log-HAR']['b']:.1f}. Fit any correction on earlier training or validation data and check fresh outcomes. Same-sample recalibration is a diagnosis, not validated predictive improvement. Next: foundation models."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), Create(one))
             vo.wait_until("a")

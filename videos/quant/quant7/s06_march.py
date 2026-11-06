@@ -49,18 +49,18 @@ class March(VoiceoverScene):
     def day_before(self, race):
         names = list(race["names"])
         m = race["march12"]
-        vmax = 5.0
+        vmax = 1.12 * max(race["march12"].values())
         g = axes([0, len(names)], [0, vmax], x_length=7.6, y_length=4.4, xticks=[], yticks=[0, 1, 2, 3, 4, 5],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"forecast of 12 March's volatility, made on the 11th",
                  font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.15)
         ax = g.ax
-        bars = VGroup(*[tbar(ax, i + 0.5, min(m[k], vmax), MODEL_C[k], width=0.6) for i, k in enumerate(names)])
+        bars = VGroup(*[tbar(ax, i + 0.5, m[k], MODEL_C[k], width=0.6) for i, k in enumerate(names)])
         vals = VGroup(*[MathTex(f"{100 * m[k]:.0f}\\%", font_size=22, color=MODEL_C[k]).next_to(b, UP, buff=0.05)
                         for k, b in zip(names, bars)])
         labs = VGroup(*[label({"Transformer": r"Transf.", "log-HAR": r"log-HAR"}.get(k, k), font_size=16, color=GREY_A).next_to(
             ax.c2p(i + 0.5, 0), DOWN, buff=0.1) for i, k in enumerate(names)])
         real = m["realized"]
-        top = min(real, vmax)
+        top = real
         rl = DashedLine(ax.c2p(0, top), ax.c2p(len(names), top), color=BAD, stroke_width=3)
         rlab = MathTex(rf"\text{{realized on 12 March: }} {100 * real:.0f}\%" + (r"\ (\text{off the chart})"
                                                                                  if real > vmax else ""),
@@ -69,19 +69,11 @@ class March(VoiceoverScene):
         side = VGroup(
             wrapped_label(rf"every model forecast {100 * min(m[k] for k in names):.0f}--{100 * max(m[k] for k in names):.0f}\%: "
                           r"a volatile day, not this one", 4.5, 21, GREY_A),
-            wrapped_label(r"no model can forecast the day the shock arrives; the test is how fast it reacts the day "
-                          r"after", 4.5, 21, GREY_A),
-            wrapped_label(r"forecasts are of the variance, so one 40\% day inside a calm month swamps every loss "
-                          r"function; QLIKE (Patton 2011) punishes under-forecasts more than MSE, and stays consistent "
-                          r"when the target is noisy", 4.5, 20, VOL),
+            wrapped_label('these fitted models missed this magnitude; that does not establish impossibility for other models or information', 4.5, 21, GREY_A),
+            wrapped_label('large days can dominate variance squared errors; QLIKE has different scale and asymmetry, with ranking robustness under the stated proxy conditions', 4.5, 20, VOL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            f"Here is what each model said on the eleventh of March, about the twelfth. The highest, {best}, forecast "
-            f"an annualised volatility of {100 * m[best]:.0f} percent. <bookmark mark='a'/> What happened was "
-            f"{100 * real:.0f} percent. <bookmark mark='b'/> No model, classical or neural, saw the day coming, and "
-            "none could have: the shock was news, not a pattern in the past. What a forecaster can do is react the "
-            "next day, and the realized models, which see the whole intraday path, react fastest. <bookmark mark='c'/> "
-            "A day like this also dominates any average of squared errors. That is why the race was scored with QLIKE."
+            f"""Here is what each model said on March eleventh about the twelfth. The highest, {best}, forecast {100 * m[best]:.0f} percent annualized volatility. <bookmark mark='a'/> Realized volatility was {100 * real:.0f} percent. <bookmark mark='b'/> These fitted models missed the magnitude; that does not establish impossibility for every model or information set. Realized measures let them react after the event. <bookmark mark='c'/> Large days can dominate variance squared errors. QLIKE changes their scale and asymmetry, but remains sensitive to extremes; ranking robustness requires the proxy assumptions from scoring."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.15),
                       LaggedStart(*[FadeIn(v) for v in vals], lag_ratio=0.15), FadeIn(side[0]))
@@ -98,14 +90,14 @@ class March(VoiceoverScene):
         t = np.asarray(race["window_t"])
         rv = np.asarray(race["window_rv"])
         fc = race["window_fc"]
-        g2 = axes([2020 + 31 / 365, 2020 + 120 / 365], [0, 3.0], x_length=9.0, y_length=4.4,
+        g2 = axes([2020 + 31 / 365, 2020 + 120 / 365], [0, 6.2], x_length=9.0, y_length=4.4,
                   xticks=[2020 + 31 / 365, 2020 + 60 / 365, 2020 + 91 / 365, 2020 + 120 / 365],
                   xfmt=lambda u: {32: r"1\ Feb", 61: r"1\ Mar", 92: r"1\ Apr", 121: r"30\ Apr"}[round((u - 2020) * 365) + 1],
                   yticks=[0, 1, 2, 3], yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"Bitcoin's volatility, annualised",
                   font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         a2 = g2.ax
-        dots = VGroup(*[Dot(a2.c2p(tt, min(v, 3.0)), radius=0.045, color=BAD) for tt, v in zip(t, rv)])
-        lines = {k: curve(a2, t, np.clip(np.asarray(fc[k]), 0, 3.0), MODEL_C[k], stroke_width=3)
+        dots = VGroup(*[Dot(a2.c2p(tt, v), radius=0.045, color=BAD) for tt, v in zip(t, rv)])
+        lines = {k: curve(a2, t, np.asarray(fc[k]), MODEL_C[k], stroke_width=3)
                  for k in ("GARCH", "HAR", "log-HAR")}
         leg = legend([(BAD, r"realized (5-minute)"), (FC, r"GARCH"), (VOL, r"HAR"), (GOOD, r"log-HAR")], font_size=19)
         leg.next_to(g2, RIGHT, buff=0.4).align_to(g2, UP)
@@ -142,7 +134,7 @@ class March(VoiceoverScene):
                       font_size=32).next_to(q, DOWN, buff=0.3)
         g = axes([0, 252], [0, 1.0], x_length=7.4, y_length=3.6, xticks=[1, 21, 63, 126, 252],
                  xfmt=lambda u: {1: "1d", 21: "1m", 63: "3m", 126: "6m", 252: "1y"}[int(u)], yticks=[0, 0.25, 0.5, 0.75, 1.0],
-                 yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"US stocks: forecast volatility over the next $T$ days",
+                 yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"annualized RMS: $\sqrt{(252/T)\sum_{h=1}^T E_t\sigma_{t+h}^2}$",
                  font_size=16).to_edge(LEFT, buff=0.6).to_edge(DOWN, buff=0.5)
         ax = g.ax
         l_sq = curve(ax, T, sq, BAD, stroke_width=3)
@@ -161,18 +153,7 @@ class March(VoiceoverScene):
                           r"variance", 4.4, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).align_to(g, DOWN)
         with self.voiceover(
-            "If daily returns are independent with constant volatility, variances add, and volatility grows with the "
-            "square root of time: two point two percent over a week, sixteen over a year. <bookmark mark='a'/> On "
-            "the thirteenth of March 2020, GARCH put the next day's volatility of the American market at "
-            f"{100 * s['spot_vol']:.0f} percent a year. The square-root rule carries that forward forever. "
-            "<bookmark mark='b'/> Pause and predict: what does GARCH say for the average over the next year? It does "
-            "not carry the spike forward: volatility mean-reverts toward its long-run "
-            f"{100 * un:.0f} percent, so the average over the coming year is {100 * gv[-1]:.0f}. "
-            "<bookmark mark='c'/> The rule also fails when returns are autocorrelated, and for the tails: ten-day "
-            "value at risk is not the one-day figure times the square root of ten when returns are fat-tailed, a "
-            "point Part forty returns to. RiskMetrics' own technical document warned that the rule assumes constant "
-            "variance. This is the term structure of volatility, and Part ten will read it from option prices."
-            " Next: how volatility forecasts are used for money."
+            f"""If daily returns have constant variance and zero autocovariances, variances add: one percent daily gives about two point two over five trading days and sixteen over 252. <bookmark mark='a'/> The graph annualizes each horizon: cumulative standard deviation is the square root of summed expected variances; multiply by root 252 over T to get this RMS scale. The constant-variance rule is therefore flat here. <bookmark mark='b'/> GARCH starts at {100 * s['spot_vol']:.0f} percent and gives horizon-average annualized volatility {100 * gv[-1]:.0f} over a year, toward long-run {100 * un:.0f}. <bookmark mark='c'/> Autocovariances change variance aggregation, and quantiles need distributional assumptions. This physical-measure GARCH term structure also differs from risk-neutral option-implied volatility, which contains risk premia."""
         ) as vo:
             self.play(FadeIn(ans))
             vo.wait_until("a")

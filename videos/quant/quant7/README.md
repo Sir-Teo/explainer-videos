@@ -1,12 +1,13 @@
 # Quant, Built — Part 7: Time Series and Volatility
 
 Part 7 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), in Act II, the Mathematical Toolkit. Returns are nearly unpredictable; their size is
-not. This part is a lecture course on the models that forecast it, from Yule's autoregression to time-series
-foundation models, with every model fitted or trained on screen and judged out of sample.
+[the syllabus](../SYLLABUS.md)), in Act II, the Mathematical Toolkit. Return autocorrelations in these samples
+are small; magnitudes show stronger persistence. This part builds models for conditional risk, from autoregression to
+foundation models. The reused 2020 comparison is retrospective, with later entrants explicitly counted; the separate
+2021-onward holdout stays sealed.
 
-Every number is computed by the series' own code ([`compute.py`](compute.py), the House's
-[`vol`](../../../explainer/quant/house/vol.py) module, tested in `tests/test_quant_house.py`) from public data:
+Empirical examples use the series' code ([`compute.py`](compute.py), the House's
+[`vol`](../../../explainer/quant/house/vol.py), tested in `tests/test_quant_house.py`) and public sources:
 Kenneth French's daily and monthly market returns and size deciles, FRED's Treasury yields (DTB3, DGS5, DGS10) and
 VIX (VIXCLS), and Binance's one-minute, daily and perpetual-futures prices for Bitcoin. Simulations are seeded and
 labeled on screen. Published results we did not run (the foundation-model comparison) are labeled as data from the
@@ -17,7 +18,7 @@ paper.
 ## Chapters (about 60 minutes)
 
 * **The river under the noise.** A century of the US market's daily moves, clusters lighting up (1929–33, 1987,
-  2008, 2020); pause and predict: sign or size? The autocorrelation of returns is 0.05 at lag 1 and nothing after;
+  2008, 2020); pause and predict: sign or size? The autocorrelation of returns is 0.05 at lag 1 with small linear correlations thereafter;
   of absolute returns 0.31 at lag 1, still 0.14 at lag 100 and 0.12 at lag 250 (24,896 days). Bitcoin's river drawn
   live by a Kalman filter. History: Yule 1927, Kalman 1960, Box–Jenkins 1970, Dickey–Fuller 1979, Engle 1982,
   Bollerslev 1986, Engle–Granger 1987, Hamilton 1989, RiskMetrics 1994, the 2003 Nobel, Corsi 2009, roughness 2018,
@@ -25,13 +26,12 @@ paper.
 * **1. Stationarity, ARMA and Box–Jenkins.** An AR(1) on a slider (φ = 0 → 0.99) with its ACF and variance; weak
   stationarity; the derivation (MA(∞) form, variance, ACF, forecast and half-life, Ljung–Box); Wold; ACF/PACF
   fingerprints; the identify–estimate–check loop. **Lab:** `ar_fit` on log VIX 1990–2020 (7,810 days): φ = 0.982,
-  half-life 39 days; AIC picks ARMA(2,1), whose residuals still fail Ljung–Box (Q₂₀ = 43): long memory. Ljung–Box
+  half-life 39 days; AIC picks ARMA(2,1), whose residuals still fail Ljung–Box (Q₂₀ = 43): residual serial dependence within the tested candidate set, not proof of long memory. Ljung–Box
   on 94 years of returns: Q = 179; on squared returns Q = 14,593.
 * **2. Unit roots and spurious regression.** Sixty stationary paths in a band against sixty random walks in a √t
   funnel. 20,000 simulated Dickey–Fuller t-statistics stream into a histogram left of N(0,1): mean −1.54, 46% below
-  −1.645, 5% point −2.89. The limit derived (telescoping, Donsker, continuous mapping; P(W(1)² < 1) = 0.68).
-  **Lab:** `adf` (5 lags): Bitcoin's log price t = −0.93, the US log index 0.64, the 10-year yield −1.03 (a unit root
-  in practice), log VIX −6.48 (rejects). Granger–Newbold: 89% false rejections in levels, 5% in differences, median
+  −1.645, 5% point −2.89. The limit derived (telescoping, Donsker and demeaning for the fitted-constant specification).
+  **Lab:** `adf` (5 lags): Bitcoin's log price t = −0.93, the US log index 0.64, the 10-year yield −1.03 (non-rejection, not proof of a unit root), log VIX −6.48 (rejects). Granger–Newbold: 89% false rejections in levels, 5% in differences, median
   R² 0.17; Phillips (1986): median |t| grows from 3.0 at T = 50 to 20.1 at T = 2,000. Bitcoin on the US market: t = 24
   in levels, 6.7 in changes.
 * **3. Cointegration.** Murray's (1994) drunk and her dog, simulated: ADF −0.95 on her position, −11.5 on the gap.
@@ -41,8 +41,7 @@ paper.
   axes 95.2%, 4.7% and 0.15% of the variance; trace statistics 68.0, 8.0, 2.0 against 29.8, 15.5, 3.8: rank 1, two
   common trends, the leash a curvature-like combination (−0.36, 1, −0.74).
 * **4. Hidden regimes.** Hamilton's filter as two jars of belief, predicted and updated month by month through 1929,
-  then over the century; the filter, durations and stationary share derived. EM replay: the log-likelihood converges
-  within five iterations. Calm +12%/13%/55 months, storm −15%/36%/10 months, 16% of the time in the storm. Pause:
+  then over the century; the filter, durations and stationary share derived. EM replay: most log-likelihood gain occurs early, with convergence continuing to a local solution. Calm +12%/13%/55 months, storm −15%/36%/10 months, 16% of the time in the storm. Pause:
   one −8% month moves the storm probability from 0.02 to 0.09.
 * **5. The Kalman filter and stochastic volatility.** The belief bell: predict (widen), observe, update (product of
   bells, gain K). Derivation by completing the square; the steady-state gain K(q/r); Bitcoin q/r = 0.38, K = 0.45.
@@ -53,24 +52,23 @@ paper.
   for r², derived. **Lab:** `garch_filter` and its likelihood: α = 0.105, β = 0.884, log L 84,088, half-life 63
   days. **3D replay:** the variance-targeted likelihood surface over α and the persistence α + β (0.84 to 0.999, all
   stationary), a simplex search racing up the persistence slope and crawling across α in 66 iterations to (0.104,
-  0.884); persistence is pinned about five times more tightly than α or β; EWMA at the far edge α + β = 1.
+  0.884); coordinate slopes differ; precision requires a covariance calculation; EWMA at the far edge α + β = 1.
 * **7. The GARCH zoo.** The (α, β) plane: the covariance-stationary triangle and Nelson's (1990) strict-stationarity
   boundary beyond it; pause: α + β = 1.05 both times, E ln(αz² + β) = −0.0074 (0.30, 0.75: stationary) and
-  +0.0084 (0.25, 0.80: explosive). Derived: the unrolled product, the LLN argument, Jensen (IGARCH strictly
-  stationary), the QMLE score. News-impact curves morph GARCH → GJR (a fall raises variance 4× a rise; log L 84,336)
+  +0.0084 (0.25, 0.80: explosive). Derived: the unrolled product, the LLN argument, strict Jensen (nondegenerate IGARCH can be strictly stationary with infinite variance), the QMLE score. News-impact curves morph GARCH → GJR (a fall raises variance 4× a rise; log L 84,336)
   → EGARCH (84,342); Bitcoin γ = 0.14. Fat tails: GARCH residuals' kurtosis 7.8; Student-t ν = 5.6, log L +911.
 * **8. Correlations that move.** One stock–bond covariance ellipse per year 1962–2020, breathing and tilting, with a
   correlation dial. VEC 51 million, BEKK 25,050, DCC 302 parameters for 100 assets; the DCC recursion and two-step
-  likelihood; a = 0.029, b = 0.969; EWMA overlay. Pause: a 60/40 model assuming ρ = +0.3 in 2010 said 12.5%; the
+  likelihood; a = 0.027, b = 0.969; EWMA overlay. Pause: a 60/40 model assuming ρ = +0.3 in 2010 said 12.5%; the
   correlation was −0.49 and the portfolio's volatility 9.9%.
 * **9. Realized volatility.** One wild Bitcoin day (26 June 2019) cut into squares at 30, 10, 5 and 1 minutes. The
   signature plot built point by point: in 2019, 1-minute RV reads 1.6% more than 5-minute; over the whole sample, 10%.
   Derived: RV → IV, the BNS CLT, the noise bias 2nη², Bandi–Russell's n* (median Δ* ≈ 9 minutes), TSRV, realized
   kernel. Averages: 106% (1-min), 96% (5-min), 93% (TSRV and kernel), 92% (bipower); the daily CLT band.
 * **10. Jumps and HAR.** Squares against bipower rectangles; the BNS (2006) ratio test: 27% of days jump at 1%, 16%
-  at 0.1%; 12 March 2020 has z = 0.05: a storm, not a jump. HAR as an AR(22) staircase against GARCH's geometric
+  at 0.1%; 12 March 2020 has z = 0.05: no jump detected by this nominal test, not proof of no jump. HAR as an AR(22) staircase against GARCH's geometric
   weights; the ACF of log RV against the simulated log-HAR and an AR(1). **Lab:** `har_fit`: b_d 0.41, b_w 0.03,
-  b_m 0.43, R² 0.38; the rolling-year replay (the week and month trade places). HARQ attenuation derived; b_q = −3.0
+  b_m 0.43, R² 0.38; the rolling-252-observation replay (about eight Bitcoin months) (the week and month trade places). HARQ attenuation derived; b_q = −3.0
   (t −0.7); HAR-CJ jump coefficient 1.50; log-HAR.
 * **11. Is volatility rough?** fBm with H = 0.1 and 0.5, zoomed twice. **Lab:** `log_rv_scaling` recovers H = 0.11
   and 0.50 on simulated paths; Bitcoin's log RV gives H = 0.13. The RFSV predictor's power-law kernel; HAR as its
@@ -84,7 +82,7 @@ paper.
   log-HAR): 1,233, 2,625 and 111 parameters. Training replays with five-seed bands and the validation forecasts at
   epochs 0, 5, 10, 20, 40 and best; seed spreads (LSTM 0.366–0.378, transformer 0.401–0.433, HARNet 0.359–0.362);
   HARNet starts at validation loss 0.272 and ends at 0.270.
-* **14. The race.** Train to June 2019, validate H2 2019, test 2020. A live leaderboard: EWMA leads until 11 March,
+* **14. The race.** Networks train to June 2019 and validate H2; classical fits use all of 2019. The reused 2020 comparison is retrospective. A live leaderboard: EWMA leads until 11 March,
   12 March reshuffles everything. QLIKE: HARNet 0.360, log-HAR 0.363, LSTM 0.371, transformer 0.410, HARQ 0.426, HAR
   0.427, GJR 0.444, GARCH 0.452, EWMA 0.512; DM t against log-HAR: HARNet −0.99, LSTM +1.46. On MSE, GJR first. The
   2020 overlay.
@@ -98,11 +96,11 @@ paper.
   1990–2020, RMSE best at the grid edge 0.85, QLIKE at 0.94. Barra USE4's longer correlation half-life and
   volatility regime adjustment (MSCI's words); our replica on ten size deciles peaks at 2.1 (1929–33), 2.7 (1987),
   2.2 (2020); QLIKE 1.70 → 1.66. Volatility targeting (Harvey et al. 2018; MOP 2012's 40% target and 60-day centre
-  of mass): on the US market 1927–2020 at 10%, Sharpe 0.44 → 0.58, worst-1% mean −2.78% → −2.55%, max drawdown (log)
+  of mass): on the US market 1927–2020 at 10%, Sharpe 0.44 → 0.58, worst-1% mean −2.78% → −2.55%, maximum drawdown of additive cumulative simple excess returns
   1.04 → 0.67. The VIX above next-month realized on 85% of days (by 4.1 points); R² 0.52 (VIX), 0.50 (GARCH); both
   significant together (t 7.2 and 3.2).
 * **18. The volatility forecaster.** The module table; Rule 8; eleven models registered in this part, the series' trial
-  counter at 305. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
+  counter at 307. **Lab:** `forecast` on 31 Dec 2020: Bitcoin 91% tomorrow, 84% over 22 days; the US term structure
   9.1% (1 day) → 15.3% (1 year), long run 17.6%.
 * **For the researcher: comparing nested forecasts.** Why Diebold–Mariano fails when one model nests another (the population differential is zero; estimation noise makes $E[\bar d] < 0$; Clark and McCracken's non-standard limit), and Clark and West's (2007) adjusted MSPE. Simulation (2,000 runs, $R$ = 100, $P$ = 200, a persistent regressor): with the null true DM rejects 0.4% at a nominal 5% (mean −0.84), CW 2.9% (−0.35); power at a slope of 0.05: 1.0% against 8.0%; at 0.1: 3.6% against 25.4%. Bitcoin's RV, recursive 2019–2020: HAR over one lag MSE ratio 1.013, DM −0.23, CW 0.82; HARQ over HAR 1.654 (March 2020), both −1.05. Three open problems.
 * **Recap, four desk questions, eight problems (two at qualifying-exam level), payoffs, references.**
@@ -171,7 +169,7 @@ slower. The network runs are cached one file per seed in `.cache/quant7/training
 
 **What a production run with the real foundation models would add.** Chronos-Bolt, TimesFM 2.5, TTM-r2 and Moirai
 were not installed in this environment (and installing them was not possible here), so chapter 15 shows the published
-comparison (Brini 2026) and a toy model of the same design trained here. A production run would add their zero-shot
+comparison (Brini 2026) and a tokenizer-inspired embedding MLP trained here, rather than a transformer replication. A production run would add their zero-shot
 forecasts of Bitcoin's 2020 realized variance from the same 2017–2019 context, scored by the same QLIKE, DM, MZ and MCS
 as the race, with model revisions and weight hashes recorded, and a check that their pretraining corpora exclude 2020
 market data (the leakage caveat on screen).
@@ -192,7 +190,7 @@ market data (the leakage caveat on screen).
    proxy (Patton 2011), compare against HAR rather than a weak benchmark, use a Diebold–Mariano test with a HAC
    variance and a model confidence set, and check that the ranking survives without the crisis weeks.
 4. **A GARCH fit gives α + β = 1. Is the process stationary?** Not covariance-stationary: the unconditional variance
-   ω/(1 − α − β) is infinite. But it is strictly stationary: unrolling gives σ_t² = ω Σ_k Π_{j≤k}(αz²_{t−j} + β),
+   ω/(1 − α − β) is infinite. With positive α, nonconstant squared iid shocks and log integrability, it can be strictly stationary: unrolling gives σ_t² = ω Σ_k Π_{j≤k}(αz²_{t−j} + β),
    which converges when E ln(αz² + β) < 0 (Nelson 1990), and by Jensen E ln(αz² + β) < ln E(αz² + β) = ln(α + β) = 0.
    Forecasts of the variance never revert (the RiskMetrics EWMA is this case with ω = 0).
 
@@ -222,22 +220,23 @@ market data (the leakage caveat on screen).
    P⁻ = P + Q, uses the gain K = P⁻/(P⁻ + R), and updates P = (1 − K)P⁻. In steady state KP⁻ = Q, and P⁻ solves
    P⁻² − QP⁻ − QR = 0. Dividing by R² and writing q = Q/R gives p = P⁻/R = (q + √(q² + 4q))/2 and K = p/(p + 1),
    a function of q alone. For Bitcoin's q = 0.38, K ≈ 0.45.
-6. **The Dickey–Fuller limit.** With x_t = x_{t−1} + ε_t and x_0 = 0, squaring gives x_t² = x²_{t−1} + 2x_{t−1}ε_t + ε_t²,
-   so Σx_{t−1}ε_t = ½(x_T² − Σε_t²). By Donsker, T^{−1/2}x_{⌊rT⌋} ⇒ σW(r), hence T^{−1}Σx_{t−1}ε_t ⇒ ½σ²(W(1)² − 1)
-   and T^{−2}Σx²_{t−1} ⇒ σ²∫₀¹W(r)²dr; by continuous mapping T(ρ̂ − 1) ⇒ ½(W(1)² − 1)/∫W². Since W(1) ~ N(0, 1),
-   P(W(1)² < 1) = P(|Z| < 1) ≈ 0.683, so the numerator is negative two times out of three and the distribution is
-   skewed left (chapter 2's simulation: 5% point −2.89 with a constant).
+6. **The Dickey–Fuller limit with a constant.** Assume x₀ = 0 and iid mean-zero finite-variance shocks.
+   Let x̄₋ be the mean lagged level. The centered numerator is Σ(xₜ₋₁ − x̄₋)εₜ = ½(x_T² − Σεₜ²) − x̄₋x_T.
+   Write Wμ(r) = W(r) − ∫₀¹W(s)ds and A = ½(W(1)² − 1) − W(1)∫₀¹W(r)dr. Donsker and continuous mapping give
+   T(ρ̂ − 1) ⇒ A/∫Wμ² and t_DF ⇒ A/√∫Wμ². The notation ∫Wμ dW abbreviates this explicit path functional,
+   rather than an ordinary adapted Itô integrand. This matches the fitted-constant/no-trend simulation. The uncentered
+   no-intercept law differs; adding a deterministic trend changes the law and critical values again.
 
 7. **(qual) Why DM leans small.** Under the null the big model's forecast is $\hat y_2 = \hat y_1 + g$, where the gap $g$
-   is a function of the estimated extra coefficients and the regressors at $t$, both known before the shock
-   $\varepsilon_{t+1}$. Then $e_2 = e_1 - g$ and $e_2^2 - e_1^2 = g^2 - 2ge_1$; since $E[g\,e_1] = E[g\,\varepsilon_{t+1}] +
+   is the full fitted forecast difference, including refitted common coefficients and regressors at $t$, known before the shock
+   $\varepsilon_{t+1}$. Then $e_2 = e_1 - g$ and $e_2^2 - e_1^2 = g^2 - 2ge_1$; under additional estimation and orthogonality conditions, $E[g\,e_1] = E[g\,\varepsilon_{t+1}] +
    E[g(\text{model 1's estimation error})] \approx 0$ to first order, $E[e_2^2 - e_1^2] \approx E[g^2] > 0$. So $E\bar d =
    E[e_1^2 - e_2^2] < 0$: the statistic is centred below zero, and Clark and West's $f = e_1^2 - (e_2^2 - g^2)$ is centred
    near zero.
 8. **(qual) How much.** With one extra regressor of variance $\sigma_x^2$, the recursive slope estimate at time $t$ has
    variance $\approx \sigma^2/(t\sigma_x^2)$, so $E[g_t^2] \approx \sigma_x^2 \cdot \sigma^2/(t\sigma_x^2) = \sigma^2/t$.
    Averaging over $t = R, \dots, R + P - 1$: $\frac{\sigma^2}{P}\sum 1/t \approx \sigma^2\ln(1 + P/R)/P$. With $R$ = 100 and
-   $P$ = 200: $1.10\sigma^2/200$ per forecast, a penalty no real gain of $R^2$ below about half a percent overcomes.
+   $P$ = 200: $1.10\sigma^2/200$ per forecast, an order-of-magnitude estimation penalty in this idealized example, not a universal detection threshold.
 
 **The research chapter's pause question.** DM $= -0.02/0.03 = -0.67$, favouring the small model; CW's mean is $-0.02 +
 0.05 = 0.03$, so with a similar standard error CW $\approx 1.0$: it leans to the big model, without significance.
@@ -258,7 +257,7 @@ market data (the leakage caveat on screen).
   [`../data/manifest.json`](../data/manifest.json).
 * Kenneth French's daily market and size-decile returns and monthly factors, 1926–2020; FRED DTB3, DGS5, DGS10 and
   VIXCLS. The hold-out from 2021 is sealed.
-* Registered with the trial counter before scoring: the forecasting race (8 models; log-HAR added after the first
+* Recorded in the trial registry (the 2020 comparison includes retrospective additions): the forecasting race (8 models; log-HAR added after the first
   results and counted), HARNet (1) and the toy foundation model (2: a PyTorch version registered first and never scored, then the numpy version that was).
 * Facts checked for this expansion: Murray (1994) is *The American Statistician* 48(1):37–39 (Crossref); Moskowitz,
   Ooi and Pedersen's 40% target and 60-day centre of mass (the *JFE* paper's text); MSCI's descriptions of USE4's
@@ -270,8 +269,8 @@ market data (the leakage caveat on screen).
 
 # 量化金融，从零搭建 — 第7部分：时间序列与波动率
 
-收益几乎无法预测，但收益的大小可以。本部分是一门关于预测它的模型的课程，从尤尔的自回归一直讲到时间序列基础模型；每个模型都在屏幕上拟合或训练，
-并在样本外接受评判。所有数字都由本系列自己的代码根据公开数据算出；没有运行、直接引用的结果（基础模型的比较）标注为论文数据。
+收益的线性自相关较小，幅度的持续性更强；低自相关不证明不可预测。本部分是一门关于预测它的模型的课程，从尤尔的自回归一直讲到时间序列基础模型；每个模型都在屏幕上拟合或训练，
+并作回顾性预测评估；2020年曾用于追加模型，另一个2021年起的保留集仍封存。实证示例由本系列代码按公开数据计算，模拟固定种子；没有运行、直接引用的结果（基础模型的比较）标注为论文数据。
 
 *讲的是方法，不构成投资建议。*
 
@@ -320,11 +319,12 @@ Aït-Sahalia–Jacod，Andersen等（2006）手册章节，CLM第12章，QRM，�
 5. **卡尔曼增益。** 对x_t = x_{t−1} + w_t、y_t = x_t + v_t，方差分别为Q与R，滤波器先预测P⁻ = P + Q，用增益K = P⁻/(P⁻ + R)，
    再更新P = (1 − K)P⁻。稳态时KP⁻ = Q，且P⁻满足P⁻² − QP⁻ − QR = 0。除以R²并记q = Q/R，得p = P⁻/R = (q + √(q² + 4q))/2，
    K = p/(p + 1)，只是q的函数。比特币的q = 0.38给出K ≈ 0.45。
-6. **迪基–富勒极限。** 对x_t = x_{t−1} + ε_t、x_0 = 0，平方得x_t² = x²_{t−1} + 2x_{t−1}ε_t + ε_t²，所以Σx_{t−1}ε_t = ½(x_T² − Σε_t²)。
-   由唐斯克定理T^{−1/2}x_{⌊rT⌋} ⇒ σW(r)，于是T^{−1}Σx_{t−1}ε_t ⇒ ½σ²(W(1)² − 1)，T^{−2}Σx²_{t−1} ⇒ σ²∫₀¹W(r)²dr；由连续映射，
-   T(ρ̂ − 1) ⇒ ½(W(1)² − 1)/∫W²。由于W(1) ~ N(0, 1)，P(W(1)² < 1) = P(|Z| < 1) ≈ 0.683，所以分子三次中有两次为负，分布左偏
-   （第2章的模拟：带常数项时5%分位点为−2.89）。
-7. **（资格考试）为什么DM偏向小模型。** 原假设下$\hat y_2 = \hat y_1 + g$，$g$在冲击之前已知；$e_2^2 - e_1^2 = g^2 - 2ge_1$，一阶近似下
+6. **带常数项的迪基–富勒极限。** 假设x₀ = 0、冲击独立同分布、均值零且方差有限。记x̄₋为滞后水平的样本均值，
+   则Σ(xₜ₋₁ − x̄₋)εₜ = ½(x_T² − Σεₜ²) − x̄₋x_T。令Wμ = W − ∫₀¹W、A = ½(W(1)² − 1) − W(1)∫₀¹W，
+   得T(ρ̂ − 1) ⇒ A/∫Wμ²，t_DF ⇒ A/√∫Wμ²。∫Wμ dW只是这个显式路径函数的简写，不是普通适应性Itô被积过程。
+   这与带常数、无趋势的模拟一致。无截距和带趋势的检验有不同极限与临界值。
+
+7. **（资格考试）为什么DM偏向小模型。** 原假设下$\hat y_2 = \hat y_1 + g$，$g$在冲击之前已知；$e_2^2 - e_1^2 = g^2 - 2ge_1$，还需估计误差的正交等条件才能作一阶近似
    $E[ge_1] \approx 0$，所以$E[e_2^2 - e_1^2] \approx E[g^2] > 0$：统计量中心低于零，而克拉克–韦斯特的$f = e_1^2 - (e_2^2 - g^2)$中心接近零。
 8. **（资格考试）偏多少。** 一个额外回归变量时，$E[g_t^2] \approx \sigma^2/t$；在$t = R, \dots, R + P - 1$上平均得约$\sigma^2\ln(1 + P/R)/P$。
 
@@ -332,3 +332,67 @@ Aït-Sahalia–Jacod，Andersen等（2006）手册章节，CLM第12章，QRM，�
 
 迪博尔德–马里亚诺（1995）；参数估计误差（West 1996）；嵌套模型极限（Clark与McCracken 2001；McCracken 2007）；Clark与West（2006、2007）；
 条件预测能力（Giacomini与White 2006）；模型置信集（Hansen、Lunde与Nason 2011）。开放问题：多个嵌套与非嵌套模型的联合推断；方法与模型之辨；非二次损失。
+
+
+## Interpretation and scope
+
+The registered computations, data checksums and experiment history are preserved. The as-of-Part-7 trial count is
+307 (296 through Part 6 plus eleven here); later parts' registrations are excluded. No 2021-onward holdout was opened.
+The 2020 comparison is exploratory because results informed later additions. Networks use June training/H2 validation;
+classical baselines fit all 2019. HARNet's initial log-HAR fit therefore differs from the displayed race baseline.
+
+DCC's exact multi-step Q recursion includes a EₜRₜ₊ₕ₋₁ term because standardized shock covariance is R, not Q.
+The a+b half-life is a linearized persistence summary, not an exact normalized-correlation forecast identity.
+The displayed parameter count excludes the correlation target entries. Annual covariance ellipses are one-SD return
+contours. The 60/40 comparison fixes realized marginal volatilities and changes correlation retrospectively.
+
+GARCH long-run variance assumes positive omega, nonnegative alpha/beta, sum below one and conditional unit shock
+variance. Its squared-return ARMA identity is algebraic; a covariance-ARMA interpretation needs finite fourth moments.
+Strict Jensen for IGARCH needs positive alpha and nonconstant squared shocks. QMLE consistency and asymptotic normal
+sandwich errors require distinct regularity and moment assumptions. In SV, exp(mu/2) is stationary median volatility;
+mean volatility also includes exp(Var(h)/8), and RMS volatility exp(Var(h)/4).
+
+Realized-variance CLTs and jump tests need their noise/continuity/regularity assumptions. Non-detection does not establish
+no jumps. The sampling-rate calculation is a two-term MSE illustration with a noise-dominance proxy; it is not a validated
+optimum. TSRV includes the finite-sample divisor 1−nbar/n. Rough scaling measured on an RV proxy does not prove latent
+roughness; the adjacent-increment correlation is fBm-implied. QLIKE ranking robustness requires positive conditionally
+unbiased proxies, measurable forecasts and integrability. Normal DM and bootstrap MCS statements need their dependence,
+estimation and fixed-candidate-set assumptions. Non-rejection is neither equivalence nor proof of no useful signal.
+
+Bitcoin's 5/22 observations and rolling 252 days are trading-market conventions, not calendar weeks/months/years.
+The House's 22-day log-HAR term forecast is a recursive plug-in approximation, not exact multi-step lognormal moments.
+The horizon graph shows annualized RMS from averaged conditional variances, not cumulative horizon standard deviation.
+Physical-measure GARCH forecasts and risk-neutral option-implied volatility differ.
+
+Industry P&L comparisons are gross of trading/funding costs with a two-day position lag and leverage cap ten; the plain
+benchmark is matched to full-period volatility after the fact. Drawdown is additive cumulative simple excess-return
+drawdown, despite the legacy cache field name maxdd_log. The VIX gap uses a broader US-market realized proxy with an
+approximate horizon match and is not an identified variance risk premium. Encompassing regressions are retrospective;
+pre-1990 GARCH parameters do not remove full-research-sample demeaning. Overlapping outcomes use HAC errors.
+
+Brini (2026), Table 6, reports average per-asset loss ratios. Sundial and HAR are also just below log-HAR at h=1;
+TTM is the only foundation model ahead at all three reported horizons. The local synthetic toy is a token-embedding
+MLP, not a transformer or Chronos replication. Its March-13 context already includes the March-12 crash. Its interval
+is nominal; realized coverage is not guaranteed. Same-sample recalibration diagnoses scale rather than validating a
+new forecast. Nested-comparison research must account for re-estimated common coefficients and the cross term in the
+exact identity e₂²−e₁²=δ²−2e₁δ. Future-innovation independence alone is insufficient to discard that cross term.
+
+## 解释与适用范围
+
+原登记计算、数据校验与实验历史保留，未打开2021年起的保留集。本部分累计307次试验；2020年比较曾复用，属于探索性。
+网络训练至2019年6月、下半年验证，传统基线拟合全年。DCC多步Q预测必须包含期望R项，a+b半衰期仅为线性化持续性摘要。
+QMLE一致性与正态标准误有不同矩条件；IGARCH严格詹森结论需alpha为正且平方冲击非恒定。SV的exp(mu/2)是平稳中位波动率，
+不是均值。RV区间和跳跃检验依赖无噪声、连续性等条件；未检出不证明没有跳跃。TSRV含1−nbar/n分母，采样最优值只是近似演示。
+代理的粗糙缩放不能直接证明潜在粗糙性；QLIKE、DM、MCS须满足各自的代理、依赖、估计和固定候选集条件。
+比特币5/22期不是日历周月，252日约八个月；22日递归log-HAR是插件近似。期限图展示预期方差平均后的年化均方根。
+业界示例未扣成本，普通基准事后匹配波动率；回撤是累计简单超额收益的回撤。VIX与未来实现波动率的差不直接识别方差风险溢价，
+回顾性涵盖回归不等于新预测验证。论文TTM的结论限于所述基准；本地玩具是词元嵌入MLP，3月13日上下文已含12日危机。
+嵌套比较的delta包含共同系数重新估计，恒等式的交叉项不能只凭未来新息独立而忽略。
+
+
+The screen's API table lists representative pairs; the House module contains the complete toolkit. Trial counts use
+the registered model/protocol units, including an abandoned foundation-model attempt. The fixed five-seed neural
+averages are one protocol per architecture; selecting a winning seed would create an additional selection choice.
+The toy's probability snapshots share fixed axes, and the DF histogram includes the tallest early Monte Carlo bars
+while omitting contaminated tail bins. The Kalman bells use data coordinates rather than the axes wrapper's internal
+range. EWMA has no fixed variance-reversion target; the bucket metaphor refers to no net expected leak.
