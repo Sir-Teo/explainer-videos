@@ -197,7 +197,7 @@ class Feed(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(ring), Create(spokes), FadeIn(star))
             vo.wait_until("a")
-            self.play(FadeIn(cg))
+            self.play(FadeOut(star), FadeIn(cg))
             self.play(ChangeDecimalToValue(counter, f["max_followers"]),
                       LaggedStart(*[Indicate(d, color=HEAD, scale_factor=1.6) for d in ring], lag_ratio=0.05),
                       run_time=3)
@@ -218,12 +218,12 @@ class Feed(VoiceoverScene):
         names = [r"push all"] + [rf"pull\\$\geq${num(r['threshold'])}" for r in rows[1:]] + [r"pull all"]
         ops = [r["total"] for r in rows] + [f["pull_reads"]]
         cols = [HEAD, KERN, KERN, KERN, YES]
-        c1 = bar_chart(ops, names, cols, height=2.5, bar_w=0.6, gap=0.5, log=True, vmax=1e9,
+        c1 = bar_chart(ops, names, cols, height=3.0, bar_w=0.6, gap=0.5, log=True, vmax=1e9,
                        fmt_=lambda v: mega(v), font_size=17)
         t1 = label(r"operations a day \ (log scale)", font_size=18, color=GREY_A)
         g1 = VGroup(t1, c1).arrange(DOWN, buff=0.3)
         fan = [r["max_fanout_per_post"] for r in rows]
-        c2 = bar_chart(fan, names[:4], cols[:4], height=2.5, bar_w=0.6, gap=0.5, log=True, vmax=1e5,
+        c2 = bar_chart(fan, names[:4], cols[:4], height=3.0, bar_w=0.6, gap=0.5, log=True, vmax=1e5,
                        fmt_=lambda v: num(v), font_size=17)
         t2 = label(r"the worst fan-out of one post \ (log scale)", font_size=18, color=GREY_A)
         g2 = VGroup(t2, c2).arrange(DOWN, buff=0.3)

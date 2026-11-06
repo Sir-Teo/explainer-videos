@@ -37,15 +37,15 @@ class Crawler(VoiceoverScene):
                  rf"$\geq$ {c['hosts_needed_busy']:.0f} hosts busy at once"],
                 [r"URLs seen", r"a Bloom filter, \ 1\% false positives",
                  rf"{c['bloom_bits_per_url']:.1f} bits a URL, \ {c['bloom_bytes_1pct'] / 1e9:.1f} GB"]]
-        tab = grid_table([r"quantity", r"assumption", r"result"], rows, widths=[3.0, 4.6, 4.6], row_h=0.55,
-                         font_size=19, mono_cols=())
+        tab = grid_table([r"quantity", r"assumption", r"result"], rows, widths=[3.2, 5.0, 4.6], row_h=0.66,
+                         font_size=22, mono_cols=())
         tab.next_to(head, DOWN, buff=0.45)
         for r in range(1, len(rows) + 1):
             tab.cells[r][2].set_color(HEAD)
         for r in (5, 6):
             tab.cells[r][2].set_color(NO)
-        foot = wrapped_label(r"the speed is easy; \ the manners and the memory are the design", 12.4, font_size=21,
-                             color=WHITE).next_to(tab, DOWN, buff=0.4)
+        foot = wrapped_label(r"the speed is easy; \ the manners and the memory are the design", 12.4, font_size=24,
+                             color=WHITE).next_to(tab, DOWN, buff=0.5)
         note_ = note(r"assumptions illustrative; \ the arithmetic is the crawler instrument's", font_size=16).to_edge(
             DOWN, buff=0.3)
         with self.voiceover(

@@ -314,8 +314,8 @@ class Links(VoiceoverScene):
         after = label(rf"with it: \ {pr['rank_with_farm']}th of {pr['pages']}", font_size=19, color=NO)
         after.next_to([xl + 0.35, Y(pr["rank_with_farm"]), 0], RIGHT, buff=0.15)
         lines = VGroup(
-            wrapped_label(r"\texttt{rel=\"nofollow\"} \ (2005): \ a site marks links it does not vouch for, \ such "
-                          r"as those in comments", 12.4, font_size=19, color=WHITE),
+            wrapped_label(r"the \texttt{nofollow} attribute \ (2005): \ a site marks links it does not vouch "
+                          r"for, \ such as those in comments", 12.4, font_size=19, color=WHITE),
             wrapped_label(r"TrustRank \ (Gy\"ongyi, Garcia-Molina and Pedersen, 2004): \ teleport only to pages "
                           r"people have checked, \ so rank flows from trusted seeds", 12.4, font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.3)

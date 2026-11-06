@@ -418,8 +418,8 @@ class Boolean(VoiceoverScene):
                     + r" and ".join(str(shifted[k]) for k in match), font_size=20, color=YES).next_to(
             left, DOWN, buff=0.35).align_to(left, LEFT)
         body = [[rf"\texttt{{{k}}}", f"{v['all_words_docs']:,}", f"{v['phrase_docs']:,}"] for k, v in ph.items()]
-        tab = grid_table([r"phrase", r"all the words", r"the phrase"], body, widths=[3.0, 1.9, 1.6], row_h=0.5,
-                         font_size=20, mono_cols=())
+        tab = grid_table([r"phrase", r"all the words", r"the phrase"], body, widths=[3.3, 2.0, 1.7], row_h=0.6,
+                         font_size=22, mono_cols=())
         tab.next_to(head, DOWN, buff=0.6).to_edge(RIGHT, buff=0.35)
         for i in range(1, len(body) + 1):
             tab.cells[i][2].set_color(YES)

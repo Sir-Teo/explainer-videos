@@ -53,7 +53,7 @@ class Balancing(VoiceoverScene):
         for t, w, c in segs:
             r = Rectangle(width=w, height=0.75, stroke_color=c, stroke_width=2, fill_color=c, fill_opacity=0.12)
             packet.add(VGroup(r, label(t, font_size=20, color=WHITE).move_to(r)))
-        packet.arrange(RIGHT, buff=0).move_to([0, 0.75, 0])
+        packet.arrange(RIGHT, buff=0).move_to([0, 0.45, 0])
         pl = label(r"one request, \ as it crosses the network", font_size=18, color=GREY_B).next_to(packet, UP,
                                                                                                   buff=0.15)
         b4 = Brace(packet[:2], UP, buff=0.55, color=HEAD)
@@ -68,7 +68,7 @@ class Balancing(VoiceoverScene):
                           font_size=19, color=HEAD),
             wrapped_label(r"L7: \ NGINX, \ Envoy, \ HAProxy: \ more work per request, \ far more control", 6.0,
                           font_size=19, color=YES),
-        ).arrange(RIGHT, buff=0.6, aligned_edge=UP).to_edge(DOWN, buff=0.45)
+        ).arrange(RIGHT, buff=0.6, aligned_edge=UP).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "A load balancer stands in front of many servers and decides which one gets each piece of work. It can "
             "decide at two levels. <bookmark mark='a'/> A layer-four balancer reads only addresses and ports, and "
@@ -80,9 +80,10 @@ class Balancing(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(packet), FadeIn(pl))
             vo.wait_until("a")
-            self.play(GrowFromCenter(b4), FadeIn(l4), packet[2:].animate.set_opacity(0.35))
+            inner = packet[2:].copy()
+            self.play(GrowFromCenter(b4), FadeIn(l4), packet[2:].animate.fade(0.7))
             vo.wait_until("b")
-            self.play(packet[2:].animate.set_opacity(1), GrowFromCenter(b7), FadeIn(l7))
+            self.play(Transform(packet[2:], inner), GrowFromCenter(b7), FadeIn(l7))
             vo.wait_until("c")
             self.play(FadeIn(ex))
         self.wait(0.4)
@@ -222,11 +223,11 @@ class Balancing(VoiceoverScene):
         for i, p in enumerate(prefs):
             nums = VGroup(*[mono(f"{v}", size=18, color=GREY_A) for v in p]).arrange(RIGHT, buff=0.26)
             rows.add(VGroup(label(rf"B{i}", font_size=20, color=bcol[i]), nums).arrange(RIGHT, buff=0.35))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-4.4, 1.75, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-4.4, 1.45, 0])
         rt = label(r"each backend's order of preference over the slots", font_size=18, color=GREY_B).next_to(
             rows, UP, buff=0.2).align_to(rows, LEFT)
         slots = VGroup(*[Square(side_length=cw, stroke_color=GREY_C, stroke_width=1.5) for _ in range(M)]).arrange(
-            RIGHT, buff=0.08).move_to([-4.4, -0.35, 0])
+            RIGHT, buff=0.08).move_to([-4.4, -0.7, 0])
         idx = VGroup(*[mono(f"{k}", size=15, color=GREY_B).next_to(slots[k], UP, buff=0.1) for k in range(M)])
         st = label(r"the lookup table", font_size=18, color=GREY_B).next_to(idx, UP, buff=0.12)
         fills = VGroup()
@@ -245,7 +246,7 @@ class Balancing(VoiceoverScene):
                                                      f"{m['ring']['max_over_mean']:.2f}"]],
                          widths=[3.3, 1.5, 1.5], row_h=0.6, font_size=20, colors=[[WHITE, NO, YES],
                                                                                   [WHITE, YES, NO]], mono_cols=())
-        res.move_to([3.6, 1.2, 0])
+        res.move_to([3.6, 0.9, 0])
         sp = m["slots_per_backend"]
         rnote = wrapped_label(rf"20 backends, \ 50,000 keys, \ a table of 65,537 slots: \ each backend owns "
                               rf"{sp['min']:,} or {sp['max']:,}; \ one removed, \ so {100 * m['removed_share']:.0f}\% "
@@ -326,14 +327,15 @@ class Balancing(VoiceoverScene):
                 self.play(FadeIn(fails[rnd]), *[p.animate.set_opacity(0) for p in probes], run_time=0.3)
                 for p in probes:
                     p.move_to(lb[0].get_right()).set_opacity(1)
-            self.play(servers[dead].animate.set_opacity(0.25), links[dead].animate.set_opacity(0.1))
+            self.play(servers[dead].animate.fade(0.75), links[dead].animate.fade(0.85))
             vo.wait_until("b")
             self.play(FadeIn(notes[1]), LaggedStart(*[FadeIn(e) for e in errs], lag_ratio=0.4))
-            self.play(servers[bad].animate.set_opacity(0.25), links[bad].animate.set_opacity(0.1))
+            keep_s, keep_l = servers[bad].copy(), links[bad].copy()
+            self.play(servers[bad].animate.fade(0.75), links[bad].animate.fade(0.85))
             vo.wait_until("c")
             self.play(FadeIn(notes[2]))
             vo.wait_until("d")
-            self.play(FadeIn(notes[3]), servers[bad].animate.set_opacity(1), links[bad].animate.set_opacity(1),
+            self.play(FadeIn(notes[3]), Transform(servers[bad], keep_s), Transform(links[bad], keep_l),
                       FadeOut(errs))
         self.wait(0.4)
         self.clear_scene()

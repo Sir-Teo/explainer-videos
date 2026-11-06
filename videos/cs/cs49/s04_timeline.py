@@ -186,13 +186,13 @@ class Timeline(VoiceoverScene):
         cur2 = [i for i in after if i < p1[-1]][:page]  # cursor: everything older than the last one seen
         dup = [i for i in off2 if i in p1]
 
-        def result(title, seq, color, x):
+        def result(title, seq, color, x, mark=False):
             t = label(title, font_size=18, color=color)
-            chips = VGroup(*[post_chip(str(i), NO if (color == NO and i in dup) else color, h=h, size=16)
+            chips = VGroup(*[post_chip(str(i), (NO if i in dup else GREY_A) if mark else color, h=h, size=16)
                             for i in seq]).arrange(DOWN, buff=0.05)
             return VGroup(t, chips).arrange(DOWN, buff=0.15).move_to([x, 0.6, 0])
         r1 = result(r"page 1", p1, GREY_A, -2.4)
-        ro = result(r"page 2 by offset 4", off2, NO, -4.9)
+        ro = result(r"page 2 by offset 4", off2, NO, -4.9, mark=True)
         rc = result(rf"page 2 after \texttt{{{p1[-1]}}}", cur2, YES, 2.6)
         bo = wrapped_label(rf"{len(dup)} posts shown twice; \ and the server still walks past the first rows to "
                            r"skip them \ (Part 43)", 3.0, font_size=17, color=NO).next_to(ro, DOWN, buff=0.25)
