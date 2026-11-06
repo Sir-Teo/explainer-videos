@@ -228,6 +228,7 @@ class Independence(VoiceoverScene):
             label(r"the World's tests, \ a family's two cot deaths: \ check it, don't assume it", font_size=30,
                   color=S.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        intro = label("Independence is a claim to check", font_size=36)
         with self.voiceover(
             "So independence is a strong and specific claim, not a default. <bookmark mark='a'/> It's a product "
             "rule. <bookmark mark='b'/> For many events, it must hold for every subcollection, not just in pairs. "
@@ -236,7 +237,10 @@ class Independence(VoiceoverScene):
             "<bookmark mark='d'/> Two screening tests, two deaths in one family: whenever a calculation multiplies "
             "probabilities, ask whether independence has been checked, or only assumed."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(lines[k], shift=RIGHT * 0.2))
         self.clear_scene()

@@ -1,0 +1,30 @@
+{
+  "fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
+  "scope": "English silent checks; no listening or bilingual production approval",
+  "records": [
+    {
+      "scene": "Axioms_motion",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats2/en/Axioms_motion/result.json",
+      "input_sha256": "a0d30f3e7578154fb805e5fde9f66f8dc77b452fd6e488d219dafca61a54221d",
+      "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 361 s\n",
+      "movie": "renders/qa/series/stats2/en/Axioms_motion/media/videos/480p15/Axioms.mp4"
+    },
+    {
+      "scene": "Variables_motion",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats2/en/Variables_motion/result.json",
+      "input_sha256": "b4883a45f221a5f8ce7217e166e3641d9742bef82c65866c922b90b5f184bce3",
+      "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n",
+      "movie": "renders/qa/series/stats2/en/Variables_motion/media/videos/480p15/Variables.mp4"
+    }
+  ]
+}

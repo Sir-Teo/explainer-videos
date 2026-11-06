@@ -1,0 +1,182 @@
+{
+  "fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
+  "scope": "English silent checks; no listening or bilingual production approval",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats2/en/Hook/result.json",
+      "input_sha256": "1e6336d76ccf0a7629597be419c17d84276c470340106315b318153d40f1b403"
+    },
+    {
+      "scene": "BeforeAxioms",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats2/en/BeforeAxioms/result.json",
+      "input_sha256": "11d43b646a62b66beb94aabaf1af7616ac4c0c39c0c5e22a185bdf8f1468ee78"
+    },
+    {
+      "scene": "Counting",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 24
+      },
+      "input_record": "renders/qa/series/stats2/en/Counting/result.json",
+      "input_sha256": "71b0cf7cba7ddde26bf0d903467555dbb3ee86abd7d849d209df61639bff5fc3"
+    },
+    {
+      "scene": "Bertrand",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats2/en/Bertrand/result.json",
+      "input_sha256": "d959ff66da4b7bce47bc86c5ade9eba6e9d29299bd403fa87de730543219b825"
+    },
+    {
+      "scene": "Axioms",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats2/en/Axioms/result.json",
+      "input_sha256": "1acc1dc3ea2a15511e2ef6df438bd692bc719c518ea746d71515eb5f1bbc9eb9"
+    },
+    {
+      "scene": "Conditioning",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats2/en/Conditioning/result.json",
+      "input_sha256": "1075be535fd430a46e3b78de7305636112a0279e1f1863c1a21ceadad4393a68"
+    },
+    {
+      "scene": "Bayes",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats2/en/Bayes/result.json",
+      "input_sha256": "879dac5f72e0ff625687060c699cfe216816fdb4c04106dcb3cc6c130e253d41"
+    },
+    {
+      "scene": "Prosecutor",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats2/en/Prosecutor/result.json",
+      "input_sha256": "c32edea68bd8045d51c92805c90b97b3553de16e3345d91ed3b884a682f21366"
+    },
+    {
+      "scene": "Monty",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats2/en/Monty/result.json",
+      "input_sha256": "ebcc0f59b4aa69f8a31c04d948d66ff40f016ebad33cb505e09052801f7db4b1"
+    },
+    {
+      "scene": "Independence",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 33
+      },
+      "input_record": "renders/qa/series/stats2/en/Independence/result.json",
+      "input_sha256": "48e2374018f980b781cbea83f1e0589c83e72df658cb633ad826b332121e30f1"
+    },
+    {
+      "scene": "Variables",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats2/en/Variables/result.json",
+      "input_sha256": "89c3677438e775a03b20d2fb80a07411f50db11410273bda347383f5c1db392e"
+    },
+    {
+      "scene": "Expectation",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats2/en/Expectation/result.json",
+      "input_sha256": "cf8a80567d8aa9fc79f98d44e3d8062ed516726a2f8bbb7ea4adf6640ebc1687"
+    },
+    {
+      "scene": "Variance",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats2/en/Variance/result.json",
+      "input_sha256": "4aa246a47556bd493886d170738390a30163962f93730f8e1a42f2671d2f3844"
+    },
+    {
+      "scene": "Generating",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 23
+      },
+      "input_record": "renders/qa/series/stats2/en/Generating/result.json",
+      "input_sha256": "e04e26749c53bcc81b44c923019b346a172963e6abd3ebd215d2ffbd15f9e5d8"
+    },
+    {
+      "scene": "Meaning",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats2/en/Meaning/result.json",
+      "input_sha256": "a7f9fd025db0e7d79c62b64ac383936bab771d1b7618e81f98c458e1414bbb0a"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 8,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats2/en/Outro/result.json",
+      "input_sha256": "c2479def56c01745f6f6002a36a1b644a8ac843bbf5517bacf665c4d7ccded07"
+    }
+  ]
+}

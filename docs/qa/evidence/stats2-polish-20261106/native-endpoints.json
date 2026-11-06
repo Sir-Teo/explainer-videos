@@ -1,0 +1,72 @@
+{
+  "fingerprint": "4a08e6a148252b995e58db4d55cb30ea8697a46f0aa090a826302b50e905b2f0",
+  "scope": "English silent checks; no listening or bilingual production approval",
+  "records": [
+    {
+      "scene": "Axioms",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/native1080/stats2/en/Axioms/result.json",
+      "input_sha256": "e97e25ad80f6f6ca8ed7b8a07d0247be17ac799876ce18057f9d1744e4d9e6b9"
+    },
+    {
+      "scene": "Bayes",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/native1080/stats2/en/Bayes/result.json",
+      "input_sha256": "a9417a2289f826db94f12fd69531af77214bf1e62aedb1f656559823d1e1fe68"
+    },
+    {
+      "scene": "Prosecutor",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats2/en/Prosecutor/result.json",
+      "input_sha256": "f4c2af1923db2bed632054e83b6244e92f69e3255eb791bc8e8f76143bebbfb2"
+    },
+    {
+      "scene": "Monty",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/native1080/stats2/en/Monty/result.json",
+      "input_sha256": "a4add3b8930a22dec8a8b14d5b35ca9f7abf06e5244446235b47aba7800394e0"
+    },
+    {
+      "scene": "Variables",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats2/en/Variables/result.json",
+      "input_sha256": "81f80d375c7c30c31dc5143418652d6a694c9ecd716ff04a7675d32cff6b0f30"
+    },
+    {
+      "scene": "Variance",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats2/en/Variance/result.json",
+      "input_sha256": "95f2a1d5933bd5f4dc9d9d81862b7c6acab23fa70ffa15c91c72b3eab35d4cc7"
+    }
+  ]
+}

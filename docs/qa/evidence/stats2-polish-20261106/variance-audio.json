@@ -1,0 +1,84 @@
+{
+ "video": "stats2",
+ "scene": "Variance",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 6,
+ "lines": [
+  {
+   "raw": "Chapter twelve. Variance, and a game worth infinity.",
+   "spoken": "Chapter twelve. Variance, and a game worth infinity.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/b7567fd2ac050bc1.wav",
+   "duration": 3.775,
+   "tokens": 8,
+   "peak": 0.364105224609375,
+   "issues": [],
+   "elapsed": 10.82,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Expectation is the centre. With a finite second moment, variance measures the spread around it, as it did for data in Part 1. <bookmark mark='a'/> The variance of X is the expected squared distance from its mean, mu. <bookmark mark='b'/> Expand the square and use linearity: expected X squared, minus two mu times the expectation of X, plus mu squared. <bookmark mark='c'/> The expectation of X is mu, so this collapses to the shortcut: the mean of the square minus the square of the mean. <bookmark mark='d'/> For one die the mean of the square is ninety-one sixths and the mean is seven halves, so the variance is thirty-five twelfths. <bookmark mark='e'/> Its square root, the standard deviation, about one point seven, is in the same units as the die.",
+   "spoken": "Expectation is the centre. With a finite second moment, variance measures the spread around it, as it did for data in Part 1. The variance of X is the expected squared distance from its mean, mu. Expand the square and use linearity: expected X squared, minus two mu times the expectation of X, plus mu squared. The expectation of X is mu, so this collapses to the shortcut: the mean of the square minus the square of the mean. For one die the mean of the square is ninety-one sixths and the mean is seven halves, so the variance is thirty-five twelfths. Its square root, the standard deviation, about one point seven, is in the same units as the die.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a2fef72b89b3614c.wav",
+   "duration": 40.55,
+   "tokens": 120,
+   "peak": 0.543975830078125,
+   "issues": [],
+   "elapsed": 23.86,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Variances of sums are where independence earns its keep. <bookmark mark='a'/> In general the variance of a sum is the sum of the variances plus twice the covariance, which measures how X and Y move together. <bookmark mark='b'/> For independent variables every covariance is zero, so variances simply add: n independent copies have n times the variance. <bookmark mark='c'/> Ten dice: ten times thirty-five twelfths, as the engine confirms by convolving ten dice exactly. <bookmark mark='d'/> So the standard deviation of a sum grows only like root n, and the standard deviation of an average shrinks like one over root n. That's the sigma over root n we met at the end of Part 1, now derived; Part 6 turns it into the law of large numbers.",
+   "spoken": "Variances of sums are where independence earns its keep. In general the variance of a sum is the sum of the variances plus twice the covariance, which measures how X and Y move together. For independent variables every covariance is zero, so variances simply add: n independent copies have n times the variance. Ten dice: ten times thirty-five twelfths, as the engine confirms by convolving ten dice exactly. So the standard deviation of a sum grows only like root n, and the standard deviation of an average shrinks like one over root n. That's the sigma over root n we met at the end of Part 1, now derived; Part 6 turns it into the law of large numbers.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/41034ea6877f2fde.wav",
+   "duration": 42.325,
+   "tokens": 119,
+   "peak": 0.56781005859375,
+   "issues": [],
+   "elapsed": 26.77,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Now a game that broke the theory of expectation, or seemed to. <bookmark mark='a'/> It was posed by Nicolaus Bernoulli in 1713, and his cousin Daniel published the most famous analysis of it in 1738, in the journal of the academy at St. Petersburg. <bookmark mark='b'/> Toss a fair coin until it lands heads. If the first head comes on toss k, you win two to the k ducats: two if it's the first toss, four if the second, eight if the third, doubling each time. <bookmark mark='c'/> How much would you pay to play? Pascal and Huygens would say: the expected prize. <bookmark mark='d'/> Each term of the expectation is a probability of one over two to the k times a prize of two to the k: one ducat. Infinitely many terms of one. The expected prize is infinite. Yet almost nobody would pay even twenty ducats.",
+   "spoken": "Now a game that broke the theory of expectation, or seemed to. It was posed by Nicolaus Bernoulli in 1713, and his cousin Daniel published the most famous analysis of it in 1738, in the journal of the academy at St. Petersburg. Toss a fair coin until it lands heads. If the first head comes on toss k, you win two to the k ducats: two if it's the first toss, four if the second, eight if the third, doubling each time. How much would you pay to play? Pascal and Huygens would say: the expected prize. Each term of the expectation is a probability of one over two to the k times a prize of two to the k: one ducat. Infinitely many terms of one. The expected prize is infinite. Yet almost nobody would pay even twenty ducats.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3838e112bcdbf563.wav",
+   "duration": 46.125,
+   "tokens": 140,
+   "peak": 0.48016357421875,
+   "issues": [],
+   "elapsed": 29.48,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "What actually happens if you play, again and again? <bookmark mark='a'/> Here are a million simulated games, and the average prize so far, with the number of games on a doubling scale. <bookmark mark='b'/> The average never settles. It drifts upward, jumping whenever a long run of tails pays out a huge prize, and the biggest of the million paid 4,194,304 ducats. <bookmark mark='c'/> William Feller showed that the average of n games, divided by the base-two logarithm of n, converges to one in probability. That describes typical growth, with occasional much larger excursions; it is not a promise that every running path hugs this line. An infinite expectation doesn't mean infinite winnings. It means there's no average for the averages to settle down to, and the law of averages in Part 6 will need a finite mean.",
+   "spoken": "What actually happens if you play, again and again? Here are a million simulated games, and the average prize so far, with the number of games on a doubling scale. The average never settles. It drifts upward, jumping whenever a long run of tails pays out a huge prize, and the biggest of the million paid 4,194,304 ducats. William Feller showed that the average of n games, divided by the base-two logarithm of n, converges to one in probability. That describes typical growth, with occasional much larger excursions; it is not a promise that every running path hugs this line. An infinite expectation doesn't mean infinite winnings. It means there's no average for the averages to settle down to, and the law of averages in Part 6 will need a finite mean.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0feb3abb7fd0a76a.wav",
+   "duration": 49.475,
+   "tokens": 132,
+   "peak": 0.685394287109375,
+   "issues": [],
+   "elapsed": 29.98,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Daniel Bernoulli's own answer changed economics. <bookmark mark='a'/> A ducat means less to a rich man than to a poor one, he argued, so we should value money by its logarithm: each doubling of wealth adds the same amount of satisfaction. <bookmark mark='b'/> The expected logarithm of the prize is the sum of k over two to the k, which is exactly two. <bookmark mark='c'/> So the game is worth the sure amount whose logarithm is two: four ducats. This is the certainty equivalent of the prize alone, not an entry fee. A player's willingness to pay depends on initial wealth: compare the expected log of wealth minus the fee plus the prize with the log of starting wealth. <bookmark mark='d'/> The expectation of money is not the value of money. Two centuries later the idea became expected utility theory, and the logarithm became Kelly's rule for sizing bets.",
+   "spoken": "Daniel Bernoulli's own answer changed economics. A ducat means less to a rich man than to a poor one, he argued, so we should value money by its logarithm: each doubling of wealth adds the same amount of satisfaction. The expected logarithm of the prize is the sum of k over two to the k, which is exactly two. So the game is worth the sure amount whose logarithm is two: four ducats. This is the certainty equivalent of the prize alone, not an entry fee. A player's willingness to pay depends on initial wealth: compare the expected log of wealth minus the fee plus the prize with the log of starting wealth. The expectation of money is not the value of money. Two centuries later the idea became expected utility theory, and the logarithm became Kelly's rule for sizing bets.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0baef24b0b32ecc8.wav",
+   "duration": 49.3,
+   "tokens": 141,
+   "peak": 0.851043701171875,
+   "issues": [],
+   "elapsed": 33.65,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats2/en/Variance/result.json",
+ "input_sha256": "4aa246a47556bd493886d170738390a30163962f93730f8e1a42f2671d2f3844"
+}
