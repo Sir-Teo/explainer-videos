@@ -92,7 +92,8 @@ class Replication(VoiceoverScene):
         line = trace(ax, pts, NO, width=3)
         dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.07, color=NO) for x, y in pts])
         vals = VGroup(*[label(rf"{100 * y:.1f}\%" if y < 0.01 else rf"{100 * y:.0f}\%", font_size=17, color=NO)
-                        .next_to(ax.c2p(x, y), UR, buff=0.08) for x, y in pts if x in (0, 100, 500)])
+                        .next_to(ax.c2p(x, y), RIGHT if x == 0 else UR, buff=0.12)
+                        for x, y in pts if x in (0, 100, 500)])
         setup = wrapped_label(rf"Part 39's simulation: \ followers apply a write after {L['lag_ms']} ms on average; "
                               rf"\ the next read goes to any of {L['followers'] + 1} replicas", 5.4, font_size=19,
                               color=GREY_A)
@@ -206,9 +207,10 @@ class Replication(VoiceoverScene):
         def msg(xa, a, xb, b, text, color, side=UP):
             ar = Arrow([xa, lanes[a], 0], [xb, lanes[b], 0], buff=0.05, color=color, stroke_width=2.2,
                        max_tip_length_to_length_ratio=0.1)
-            t = label(text, font_size=17, color=color).next_to(ar.get_center(), side, buff=0.08).shift(RIGHT * 0.45)
+            t = label(text, font_size=17, color=color).next_to(ar.get_center(), side, buff=0.15)
             return VGroup(ar, t)
-        grant_a = msg(-4.1, "lock", -3.8, "A", r"lease, \ token 33", LAM)
+        grant_a = msg(-4.1, "lock", -3.8, "A", r"lease, \ token 33", LAM, side=RIGHT)
+        grant_a[1].next_to(grant_a[0].get_end(), UP, buff=0.12)
         write_a = msg(-3.3, "A", -2.8, "store", r"write, \ 33", KERN, side=RIGHT)
         pause = VGroup(Rectangle(width=5.4, height=0.3, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9)
                        .move_to([-0.1, lanes["A"], 0]))
@@ -216,7 +218,7 @@ class Replication(VoiceoverScene):
         expire = VGroup(Line([-1.0, lanes["lock"] - 0.2, 0], [-1.0, lanes["lock"] + 0.2, 0], color=NO,
                              stroke_width=3),
                         label(r"lease expires", font_size=17, color=NO).move_to([-1.0, lanes["lock"] + 0.38, 0]))
-        grant_b = msg(-0.4, "lock", 0.0, "B", r"token 34", LAM)
+        grant_b = msg(-0.4, "lock", 0.0, "B", r"token 34", LAM, side=RIGHT)
         write_b = msg(0.7, "B", 1.1, "store", r"write, \ 34", DATA, side=RIGHT)
         seen = label(r"largest token seen: \ 34", font_size=18, color=YES).move_to([2.6, lanes["store"] - 0.45, 0])
         write_a2 = msg(3.4, "A", 4.6, "store", r"write, \ 33", KERN, side=RIGHT)
@@ -288,7 +290,7 @@ class Replication(VoiceoverScene):
                          colors=[[WHITE, HEAD, NO, YES]] * 3, mono_cols=())
         tab.move_to([3.6, 1.0, 0])
         tl = wrapped_label(rf"Part 39: \ two regions, \ each writing one key {w['rate']:.0f} times a second; \ "
-                           r"skew: \ America's clock fast by", 6.2, font_size=18, color=GREY_A).next_to(
+                           r"clock skew: \ how far America's clock runs fast", 6.2, font_size=18, color=GREY_A).next_to(
             tab, UP, buff=0.25).align_to(tab, LEFT)
         notes = VGroup(
             wrapped_label(r"LWW drops half of every concurrent pair; \ with skew it also drops writes that had "
