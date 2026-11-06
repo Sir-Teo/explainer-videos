@@ -30,7 +30,21 @@ class RabinKarp(VoiceoverScene):
                   color=HEAD),
             label(r"Part 20's fingerprints: \ with a random base, \ two different windows collide with probability "
                   r"$\le (m-1)/p$ \ (Schwartz--Zippel)", font_size=20, color=GREY_A),
-        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.35)
+        digits, m, p = "2359023141526739921", 5, 13
+        strip = VGroup(*[VGroup(Square(side_length=0.48, stroke_color=GREY_B, stroke_width=1.5), mono(c, 22, WHITE))
+                         for c in digits]).arrange(RIGHT, buff=0)
+        for c in strip:
+            c[1].move_to(c[0])
+        strip.to_edge(DOWN, buff=1.05)
+        win = SurroundingRectangle(VGroup(*strip[0:m]), color=YES, buff=0.03, stroke_width=3)
+
+        def tag(i):
+            v = int(digits[i:i + m])
+            return label(rf"${v} \bmod {p} = {v % p}$", font_size=22, color=YES if v % p == 31415 % p else LAM
+                         ).next_to(VGroup(*strip[i:i + m]), DOWN, buff=0.15)
+        pt = label(rf"looking for $31415$: \ $31415 \bmod {p} = {31415 % p}$ \ (base $b = 10$, \ $m = {m}$)",
+                   font_size=19, color=GREY_A).next_to(strip, UP, buff=0.2)
         with self.voiceover(
             "Richard Karp and Michael Rabin, in 1987, used Part 20's fingerprints. <bookmark mark='a'/> Read each "
             "window of m characters as a number in base b, modulo a prime p, and compare it with the pattern's "
@@ -44,9 +58,28 @@ class RabinKarp(VoiceoverScene):
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(lines[0]), FadeIn(lines[1]))
-            for mk, ln in zip("bcde", lines[2:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+            t = tag(0)
+            self.play(FadeIn(strip), FadeIn(pt), Create(win), FadeIn(t))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[2], shift=UP * 0.1))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[3], shift=UP * 0.1))
+            for i in range(1, 8):
+                nt = tag(i)
+                self.play(win.animate.move_to(VGroup(*strip[i:i + m])), Transform(t, nt), run_time=0.45)
+                if digits[i:i + m] == "31415":
+                    self.play(Indicate(win, color=YES), run_time=0.6)
+            vo.wait_until("d")
+            self.play(FadeIn(lines[4], shift=UP * 0.1))
+            for i in range(8, len(digits) - m + 1):
+                nt = tag(i)
+                self.play(win.animate.move_to(VGroup(*strip[i:i + m])), Transform(t, nt), run_time=0.3)
+                if digits[i:i + m] != "31415" and int(digits[i:i + m]) % p == 31415 % p:
+                    self.play(Indicate(win, color=NO), run_time=0.5)
+                if digits[i:i + m] == "31415":
+                    self.play(Indicate(win, color=YES), run_time=0.6)
+            vo.wait_until("e")
+            self.play(FadeIn(lines[5], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

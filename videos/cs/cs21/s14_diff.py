@@ -24,20 +24,7 @@ class Diff(VoiceoverScene):
         d = load("diff")
         a, b = d["ex_a"], d["ex_b"]
         head = label(r"The edit graph", font_size=34).to_edge(UP, buff=0.3)
-        s = 0.72
-        X0, Y0 = -6.0, 2.2
-
-        def P(x, y):
-            return np.array([X0 + x * s, Y0 - y * s, 0])
-        grid = VGroup()
-        for x in range(len(a) + 1):
-            grid.add(Line(P(x, 0), P(x, len(b)), color=GREY_D, stroke_width=1))
-        for y in range(len(b) + 1):
-            grid.add(Line(P(0, y), P(len(a), y), color=GREY_D, stroke_width=1))
-        diag = VGroup(*[Line(P(x, y), P(x + 1, y + 1), color=YES, stroke_width=2)
-                        for x in range(len(a)) for y in range(len(b)) if a[x] == b[y]])
-        top = VGroup(*[mono(c, 20, DATA).move_to(P(x + 0.5, -0.45)) for x, c in enumerate(a)])
-        left = VGroup(*[mono(c, 20, LAM).move_to(P(-0.45, y + 0.5)) for y, c in enumerate(b)])
+        P, grid, diag, top, left = _graph(a, b)
         path, x, y = [P(0, 0)], 0, 0
         for op, _ in d["ex_ops"]:
             if op == "=":
@@ -86,21 +73,49 @@ class Diff(VoiceoverScene):
         self.clear_scene()
 
     def greedy(self):
+        d = load("diff")
+        a, b = d["ex_a"], d["ex_b"]
         head = label(r"$O(ND)$: \ follow the diagonals", font_size=34).to_edge(UP, buff=0.35)
+        P, grid, diag, top, left = _graph(a, b)
+        diag.set_stroke(opacity=0.5)
+        ks = VGroup()
+        for k in range(-4, 6):
+            at = P(k, 0) + np.array([-0.2, 0.2, 0]) if k >= 0 else P(0, -k) + np.array([-0.2, 0.2, 0])
+            if k >= 0:
+                at = at + UP * 0.45
+            else:
+                at = at + LEFT * 0.45
+            ks.add(mono(str(k), 13, GREY_B).move_to(at))
+        fronts = _fronts(a, b)
+        cols = color_gradient([LAM, HEAD], len(fronts))
+        layers = []
+        for D, pts in enumerate(fronts):
+            g = VGroup()
+            pts = [q for q in pts if q[2][0] <= len(a) and q[2][1] <= len(b)]
+            for st, mid, en in pts:
+                if D:
+                    g.add(Line(P(*st), P(*mid), color=cols[D], stroke_width=3))
+                if en != mid:
+                    g.add(Line(P(*mid), P(*en), color=cols[D], stroke_width=5))
+                g.add(Dot(P(*en), radius=0.07, color=cols[D]))
+            g.add(mono(f"D={D}", 15, cols[D]).next_to(P(*pts[-1][2]), DR, buff=0.05))
+            layers.append(g)
         lines = VGroup(
-            label(r"number the diagonals $k = x - y$; \ a path with $D$ edits ends on a diagonal in $[-D, D]$",
-                  font_size=22, color=WHITE),
-            label(r"for $D = 0, 1, 2, \dots$: \ on each diagonal, \ keep only the \textbf{furthest-reaching} path",
-                  font_size=22, color=LAM),
-            label(r"extend it from the best neighbour by one edit, \ then slide down free diagonals as far as "
-                  r"possible \ (a \textbf{snake})", font_size=22, color=YES),
-            label(r"stop when a path reaches the corner: \ $O((n + m) D)$ time, \ fast when the files are similar",
-                  font_size=22, color=HEAD),
-            label(r"patience diff \ (Bram Cohen): \ anchor first on lines that appear once in each file", font_size=21,
-                  color=GREY_A),
-            label(r"three-way merge: \ diff each side against the common ancestor; \ conflicts where both changed",
-                  font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
+            label(r"number the diagonals $k = x - y$; \\ a path with $D$ edits ends on a diagonal in $[-D, D]$",
+                  font_size=21, color=WHITE),
+            label(r"for $D = 0, 1, 2, \dots$: \ on each diagonal, \\ keep only the \textbf{furthest-reaching} path",
+                  font_size=21, color=LAM),
+            label(r"extend it from the best neighbour by one edit, \\ then slide down free diagonals \ "
+                  r"(a \textbf{snake})", font_size=21, color=YES),
+            label(r"stop when a path reaches the corner: \\ $O((n + m) D)$ time, \ fast when the files are similar",
+                  font_size=21, color=HEAD),
+            label(r"patience diff \ (Bram Cohen): \\ anchor first on lines that appear once in each file",
+                  font_size=20, color=GREY_A),
+            label(r"three-way merge: \ diff each side against the ancestor; \\ conflicts where both changed",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        lines.width = min(lines.width, 6.4)
+        lines.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         with self.voiceover(
             "Dijkstra's algorithm would work, but Myers found something better in 1986. <bookmark mark='a'/> "
             "Number the diagonals by x minus y. A path with D edits can only end on diagonals from minus D to D. "
@@ -113,10 +128,24 @@ class Diff(VoiceoverScene):
             "And three-way merge, the heart of git merge, diffs both branches against their common ancestor and "
             "reports a conflict only where both changed the same lines."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, ln in zip("abcdef", lines):
-                vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+            self.play(FadeIn(head), FadeIn(grid), FadeIn(diag), FadeIn(top), FadeIn(left))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1), FadeIn(ks))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1], shift=UP * 0.1))
+            for g in layers[:3]:
+                self.play(Create(g), run_time=1.0)
+            vo.wait_until("c")
+            self.play(FadeIn(lines[2], shift=UP * 0.1))
+            for g in layers[3:-1]:
+                self.play(Create(g), run_time=1.0)
+            vo.wait_until("d")
+            self.play(FadeIn(lines[3], shift=UP * 0.1), Create(layers[-1]))
+            self.play(Flash(P(len(a), len(b)), color=HEAD))
+            vo.wait_until("e")
+            self.play(FadeIn(lines[4], shift=UP * 0.1))
+            vo.wait_until("f")
+            self.play(FadeIn(lines[5], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -125,12 +154,12 @@ class Diff(VoiceoverScene):
         rows = d["rows"]
         head = label(rf"This course's syllabus, \ {d['revisions']} versions", font_size=32).to_edge(UP, buff=0.35)
         show = [r for r in rows if r["D"] > 0][:]
-        ax = Axes(x_range=[0, len(show) + 1, 5], y_range=[0, 3.5, 1], x_length=7.6, y_length=3.4,
-                  axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=0.9).shift(DOWN * 0.2)
+        ax = Axes(x_range=[0, len(show) + 1, 5], y_range=[0, 3.5, 1], x_length=6.2, y_length=3.4,
+                  axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         bars = VGroup()
         for k, r in enumerate(show):
             h = np.log10(r["D"])
-            b = Rectangle(width=0.2, height=max(h * 3.4 / 3.5, 0.03), stroke_width=0,
+            b = Rectangle(width=0.16, height=max(h * 3.4 / 3.5, 0.03), stroke_width=0,
                           fill_color=YES if r["D"] == r["git"] else HEAD, fill_opacity=0.85)
             b.move_to(ax.c2p(k + 1, 0) + UP * b.height / 2)
             bars.add(b)
@@ -141,16 +170,16 @@ class Diff(VoiceoverScene):
         first = rows[0]
         diffs = sum(1 for r in rows if r["git"] != r["D"])
         side = VGroup(
-            label(rf"the first rewrite: \ {words(first['D'])} edits between {words(first['n'])} and "
+            label(rf"the first rewrite: \ {words(first['D'])} edits \\ between {words(first['n'])} and "
                   rf"{words(first['m'])} lines, \ {first['seconds']:.2f} s", font_size=20, color=WHITE),
             label(r"most commits change a few lines: \ milliseconds", font_size=20, color=YES),
-            label(r"each $D$ checked against $n + m - 2\,\mathrm{LCS}$ \ (quadratic DP): \ minimal", font_size=20,
+            label(r"each $D$ checked against $n + m - 2\,\mathrm{LCS}$ \\ (quadratic DP): \ minimal", font_size=20,
                   color=LAM),
-            label(rf"\texttt{{git diff --minimal}} was 2--4 lines longer on {diffs} of {len(rows)}: \ its "
+            label(rf"\texttt{{git diff --minimal}} was 2--4 lines longer \\ on {diffs} of {len(rows)}: \ its "
                   r"preprocessing is a heuristic", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        if side.width > 5.4:
-            side.width = 5.4
+        if side.width > 5.6:
+            side.width = 5.6
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             f"We ran our Myers diff on every change to this course's own syllabus, {d['revisions']} versions of a "
@@ -174,3 +203,44 @@ class Diff(VoiceoverScene):
             self.play(FadeIn(side[3]))
         self.wait(0.3)
         self.clear_scene()
+
+
+def _graph(a, b, s=0.72, X0=-6.0, Y0=2.2):
+    def P(x, y):
+        return np.array([X0 + x * s, Y0 - y * s, 0])
+    grid = VGroup()
+    for x in range(len(a) + 1):
+        grid.add(Line(P(x, 0), P(x, len(b)), color=GREY_D, stroke_width=1))
+    for y in range(len(b) + 1):
+        grid.add(Line(P(0, y), P(len(a), y), color=GREY_D, stroke_width=1))
+    diag = VGroup(*[Line(P(x, y), P(x + 1, y + 1), color=YES, stroke_width=2)
+                    for x in range(len(a)) for y in range(len(b)) if a[x] == b[y]])
+    top = VGroup(*[mono(c, 20, DATA).move_to(P(x + 0.5, -0.45)) for x, c in enumerate(a)])
+    left = VGroup(*[mono(c, 20, LAM).move_to(P(-0.45, y + 0.5)) for y, c in enumerate(b)])
+    return P, grid, diag, top, left
+
+
+def _fronts(a, b):
+    """Myers' furthest-reaching D-paths: for each D, a list of (start, after the edit, end of the snake)."""
+    n, m = len(a), len(b)
+    V, out = {1: 0}, []
+    for D in range(n + m + 1):
+        pts = []
+        for k in range(-D, D + 1, 2):
+            if k == -D or (k != D and V[k - 1] < V[k + 1]):
+                x0 = V[k + 1]
+                y0, x = x0 - (k + 1), x0
+            else:
+                x0 = V[k - 1]
+                y0, x = x0 - (k - 1), x0 + 1
+            y = x - k
+            mid = (x, y)
+            while x < n and y < m and a[x] == b[y]:
+                x, y = x + 1, y + 1
+            V[k] = x
+            pts.append(((x0, y0) if D else (0, 0), mid, (x, y)))
+            if x >= n and y >= m:
+                out.append(pts)
+                return out
+        out.append(pts)
+    return out

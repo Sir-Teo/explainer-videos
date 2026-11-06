@@ -23,6 +23,7 @@ class Naive(VoiceoverScene):
     def construct(self):
         self.card()
         self.slide()
+        self.why()
         self.worst()
 
     def card(self):
@@ -77,6 +78,45 @@ class Naive(VoiceoverScene):
         ):
             self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.25))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def why(self):
+        d = load("naive")
+        head = label(r"Why English is kind to the naive method", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"an alignment compares character $j + 1$ only if the first $j$ matched", font_size=22, color=WHITE),
+            MathTex(r"\frac{\text{comparisons}}{n} \;=\; \sum_{j=0}^{m-1} \Pr[\text{the text matches } p_1 \dots p_j "
+                    r"\text{ here}] \;=\; 1 + f(p_1) + f(p_1 p_2) + \cdots", font_size=32, color=LAM),
+            label(r"$f(w)$: \ the frequency of the string $w$ in the text; \ it falls fast as $w$ grows", font_size=20,
+                  color=GREY_A),
+        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
+        if lines[1].width > 12.4:
+            lines[1].width = 12.4
+        rows = [[r["pattern"], f"{r['predicted']:.4f}", f"{r['per_char']:.4f}"] for r in d["rows"]]
+        tab = grid_table([r"pattern", r"predicted from frequencies", r"measured"], rows, widths=[4.4, 4.2, 2.4],
+                         row_h=0.42, font_size=20, mono_cols=(0,), colors=[[DATA, LAM, YES]] * len(rows))
+        tab.next_to(lines, DOWN, buff=0.45).set_x(0)
+        foot = label(r"\texttt{the}: \ 1 for every position, \ plus 7\% of positions where \texttt{t} matches, \ plus "
+                     r"the \texttt{th}'s", font_size=20, color=HEAD).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "Why is English so kind? <bookmark mark='a'/> At each alignment, the second character is compared only "
+            "if the first matched, the third only if the first two did, and so on. <bookmark mark='b'/> So the "
+            "comparisons per position are one, plus the frequency of the pattern's first letter, plus the frequency "
+            "of its first two letters, and so on. Those frequencies fall quickly: few positions in a novel begin "
+            "with Q, and fewer with Qu. <bookmark mark='c'/> Computed from the novels' own frequencies, the formula "
+            "predicts the measured counts to the fourth decimal place. <bookmark mark='d'/> The word the costs "
+            "most, because t begins seven percent of all positions and t h two percent more."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            vo.wait_until("a")
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1]), FadeIn(lines[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
+                      LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.25))
+            vo.wait_until("d")
+            self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()
 

@@ -13,6 +13,7 @@ class AhoCorasick(VoiceoverScene):
     def construct(self):
         self.card()
         self.trie()
+        self.build()
         self.measured()
 
     def card(self):
@@ -27,28 +28,7 @@ class AhoCorasick(VoiceoverScene):
         head = label(r"A trie of the patterns, \ with failure links", font_size=34).to_edge(UP, buff=0.35)
         pats = label(r"patterns: \ \texttt{he}, \ \texttt{she}, \ \texttt{his}, \ \texttt{hers}", font_size=22,
                      color=GREY_A).next_to(head, DOWN, buff=0.2)
-        nodes = {}
-        for s, (x, y) in POS.items():
-            out = d["out"][s]
-            col = YES if out else DATA
-            c = Circle(radius=0.28, color=col, stroke_width=2.5 if out else 2).move_to([x, y - 0.5, 0])
-            nodes[s] = VGroup(c, mono(str(s), 16, WHITE).move_to(c))
-        edges = VGroup()
-        for s, ch, t in d["edges"]:
-            a = Arrow(nodes[s].get_center(), nodes[t].get_center(), buff=0.3, stroke_width=2.2, color=DATA,
-                      max_tip_length_to_length_ratio=0.12)
-            edges.add(VGroup(a, mono(ch, 16, DATA).move_to(a.get_center() + UP * 0.18)))
-        fails = VGroup()
-        for s, f in enumerate(d["fail"]):
-            if s and f:
-                arc = CurvedArrow(nodes[s].get_center() + DOWN * 0.28, nodes[f].get_center() + DOWN * 0.28,
-                                  angle=-0.6, color=HEAD, stroke_width=1.8, tip_length=0.14)
-                fails.add(arc)
-        outs = VGroup()
-        for s, o in enumerate(d["out"]):
-            if o:
-                outs.add(label(r", ".join(rf"\texttt{{{w}}}" for w in o), font_size=17, color=YES).next_to(
-                    nodes[s], UP, buff=0.08))
+        nodes, edges, fails, outs = _trie(d)
         side = VGroup(
             label(r"follow the trie while characters match", font_size=20, color=DATA),
             label(r"on a mismatch, \ follow the \textbf{failure link}: \\ the longest proper suffix still in the "
@@ -80,6 +60,69 @@ class AhoCorasick(VoiceoverScene):
             self.play(FadeIn(outs), FadeIn(side[2]))
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def build(self):
+        head = label(r"Building the failure links, \ level by level", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"breadth-first from the root: \\ each link points to a shallower state, \ already done",
+                  font_size=21, color=WHITE),
+            label(r"child $t$ of $s$ by character $c$: \\ follow $s$'s links until a state has a $c$-child",
+                  font_size=21, color=HEAD),
+            MathTex(r"\mathrm{fail}(t) = \mathrm{goto}\big(\mathrm{fail}^{(k)}(s),\ c\big)", font_size=34, color=LAM),
+            label(r"\texttt{she}: \ \texttt{sh} links to \texttt{h}, \ and \texttt{h} has an \texttt{e}-child: \\ "
+                  r"$\mathrm{fail}(\texttt{she}) = \texttt{he}$", font_size=21, color=YES),
+            label(r"outputs are inherited along the link: \\ $\mathrm{out}(t) \mathrel{{+}{=}} \mathrm{out}(\mathrm{fail}(t))$",
+                  font_size=21, color=WHITE),
+            label(r"total work: \ linear in the patterns' total length, \\ by KMP's amortized argument", font_size=21,
+                  color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        lines.width = min(lines.width, 6.4)
+        lines.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
+        d = load("ac")["tiny_trie"]
+        nodes, edges, fails, outs = _trie(d)
+        tree = VGroup(*nodes.values(), edges)
+        allf = VGroup(fails, outs)
+        VGroup(tree, allf).scale(0.62).move_to(LEFT * 4.1 + DOWN * 0.3)
+        depth = {0: 0, 1: 1, 3: 1, 2: 2, 6: 2, 4: 2, 8: 3, 7: 3, 5: 3, 9: 4}
+        arcs = {}
+        k = 0
+        for s_, f in enumerate(d["fail"]):
+            if s_ and f:
+                arcs[s_] = fails[k]
+                k += 1
+        e12 = next(e for e, (s_, ch, t) in zip(edges, d["edges"]) if (s_, t) == (1, 2))
+        with self.voiceover(
+            "How are the failure links found? <bookmark mark='a'/> Breadth-first, level by level from the root. A "
+            "failure link always points to a shallower state, so by the time we reach a state, every state its link "
+            "could need has been done. <bookmark mark='b'/> For a child t of state s, reached by character c, start "
+            "from s's own failure link and keep following links until reaching a state that has a c child; <bookmark "
+            "mark='c'/> t's link is that child. <bookmark mark='d'/> For s h e: s h links to h, and h has an e "
+            "child, so s h e links to h e. <bookmark mark='e'/> Each state also inherits the outputs of the state it "
+            "links to, which is how she reports he. <bookmark mark='f'/> The total work is linear in the total "
+            "length of the patterns, by the same amortized argument as Knuth–Morris–Pratt."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tree))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1))
+            for lv in (1, 2, 3, 4):
+                ss = [s_ for s_, dp in depth.items() if dp == lv]
+                anims = [Indicate(nodes[s_][0], color=HEAD, scale_factor=1.25) for s_ in ss]
+                anims += [Create(arcs[s_]) for s_ in ss if s_ in arcs and s_ != 5]
+                self.play(*anims, run_time=0.8)
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1], shift=UP * 0.1))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[2], shift=UP * 0.1))
+            vo.wait_until("d")
+            self.play(FadeIn(lines[3], shift=UP * 0.1), Indicate(nodes[4][0], color=YES), Indicate(arcs[4], color=YES))
+            self.play(Indicate(nodes[1][0], color=YES), Indicate(e12, color=YES))
+            self.play(Create(arcs[5]), Indicate(nodes[2][0], color=YES))
+            vo.wait_until("e")
+            self.play(FadeIn(lines[4], shift=UP * 0.1), FadeIn(outs))
+            vo.wait_until("f")
+            self.play(FadeIn(lines[5], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -124,3 +167,29 @@ class AhoCorasick(VoiceoverScene):
             self.play(FadeIn(uses))
         self.wait(0.3)
         self.clear_scene()
+
+
+def _trie(d):
+    nodes = {}
+    for s, (x, y) in POS.items():
+        out = d["out"][s]
+        col = YES if out else DATA
+        c = Circle(radius=0.28, color=col, stroke_width=2.5 if out else 2).move_to([x, y - 0.5, 0])
+        nodes[s] = VGroup(c, mono(str(s), 16, WHITE).move_to(c))
+    edges = VGroup()
+    for s, ch, t in d["edges"]:
+        a = Arrow(nodes[s].get_center(), nodes[t].get_center(), buff=0.3, stroke_width=2.2, color=DATA,
+                  max_tip_length_to_length_ratio=0.12)
+        edges.add(VGroup(a, mono(ch, 16, DATA).move_to(a.get_center() + UP * 0.18)))
+    fails = VGroup()
+    for s, f in enumerate(d["fail"]):
+        if s and f:
+            arc = CurvedArrow(nodes[s].get_center() + DOWN * 0.28, nodes[f].get_center() + DOWN * 0.28,
+                              angle=-0.6, color=HEAD, stroke_width=1.8, tip_length=0.14)
+            fails.add(arc)
+    outs = VGroup()
+    for s, o in enumerate(d["out"]):
+        if o:
+            outs.add(label(r", ".join(rf"\texttt{{{w}}}" for w in o), font_size=17, color=YES).next_to(
+                nodes[s], UP, buff=0.08))
+    return nodes, edges, fails, outs

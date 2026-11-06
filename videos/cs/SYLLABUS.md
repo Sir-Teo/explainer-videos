@@ -1394,45 +1394,66 @@ planes appear**; a Bloom bit array lighting up; HyperLogLog's registers; the LSH
 Spencer, *The Probabilistic Method*; Cormode & Yi, *Small Summaries for Big Data*; Muthukrishnan, *Data Streams*;
 Knuth, TAOCP 2 ch. 3; Karger 1993; Flajolet et al. 2007; Alon, Matias & Szegedy 1996; Moser & Tardos 2010.
 
-### Part 21 · Strings (~55)
+### Part 21 · Strings (~50)
 *Story:* Text is the oldest data. Searching it efficiently led to automata built from patterns, then to indexes of
 every suffix, then to a reversible transform that sorts a book into compressible runs and lets you search the
-compressed result. Each `git diff` runs a shortest-path algorithm on a grid.
-1. Matching: naive O(nm) and its worst cases.
-2. Rabin–Karp: rolling hashes mod p and their collision probability.
-3. **KMP** (1977): the failure function as an automaton (callback to Part 12); amortized linear time (proved).
-4. Boyer–Moore: bad-character and good-suffix rules; sublinear on average (why grep is fast).
-5. Aho–Corasick (1975): many patterns at once, with failure links in a trie.
-6. Suffix tries and **suffix trees** (Weiner 1973; Ukkonen 1995, sketched); longest repeats; generalized trees for
-   LCS.
-7. **Suffix arrays** (Manber & Myers 1990): prefix doubling; SA-IS in linear time (sketched); LCP arrays (Kasai);
-   O(m log n) search.
-8. **The Burrows–Wheeler transform** (1994): the rotation matrix; why it clusters characters; invertibility via LF
-   mapping (proved, animated); move-to-front; bzip2.
-9. The **FM-index** (Ferragina & Manzini 2000): backward search in compressed space; genome aligners; the novels
-   indexed.
-10. Compression:
-    - LZ77 and LZ78/LZW;
-    - LZ is asymptotically optimal for stationary ergodic sources;
-    - DEFLATE as LZ77 plus Huffman (callback to *AI, Built* 1);
-    - ANS (Duda) and zstd.
-11. Alignment: Needleman–Wunsch, Smith–Waterman, affine gaps, BLAST; **no O(n^{2−ε}) edit distance under SETH**
-    (Backurs & Indyk 2015; Part 27).
-12. **Myers' diff** (1986): the O(ND) algorithm on the edit graph (diagonals and snakes); patience diff; three-way
-    merge.
-13. Rolling hashes at scale: content-defined chunking; rsync (Tridgell 1996); dedup.
-14. Periodicity: Fine–Wilf; Manacher; Lyndon words. Outro.
+compressed result. Each `git diff` runs a shortest-path algorithm on a grid. The part opens with Queequeg found four
+ways in the 25 MB of novels, from 24,974,844 character comparisons down to 16 rank queries.
+1. Matching, naive: about one comparison per character on English (1 + f(p₁) + f(p₁p₂) + ⋯ predicts the measured
+   cost to four decimals); the worst case (n − m + 1)m, 99 million comparisons at n = 10⁵, m = 10³.
+2. **Rabin–Karp** (1987): the rolling window animated on digits (one hit, one spurious); collisions ≤ (m − 1)/p by
+   Schwartz–Zippel; Queequeg in *Moby-Dick* with moduli from 101 (12,042 false alarms against n/p = 12,056) to 10⁹.
+3. **KMP** (1977): borders and the shift animated; the failure table as Part 12's automaton, run over a text; ≤ 2n
+   comparisons (proved, amortized); the worst case of chapter 1 in 199,901 comparisons.
+4. **Boyer–Moore** (1977): compare from the right; bad character and good suffix (ANPANMAN, a shift of 6);
+   comparisons per character against pattern length on *Moby-Dick* (KMP ≈ 1, Boyer–Moore ≈ 1/m, Horspool on top);
+   Queequeg in 3,500,231 comparisons; why grep is fast.
+5. **Aho–Corasick** (1975): the trie of he, she, his, hers with failure links built level by level; 45 character
+   names in one pass over the corpus (231 states, 25.5 million steps, against 1.1 billion characters read separately).
+6. **Suffix trees**: banana$ and a walk for ana; Ukkonen's suffix links and open leaves drawn on the tree; the deepest
+   branching node; *Moby-Dick*'s 741 billion distinct substrings; 10–20 bytes per character.
+7. **Suffix arrays** (Manber & Myers 1990): sorted suffixes and the block for t; prefix doubling as a rank table on
+   banana$; SA-IS and Kasai's LCP; all 24,971,556 suffixes of the novels in 105 s (100 MB); Queequeg's 253 in 167
+   comparisons; the longest repeat (383 characters of chapter headings).
+8. **The Burrows–Wheeler transform** (1994): rotations sorted; LF arrows walking banana$ back out (proved; all of
+   *Moby-Dick* inverted exactly); what precedes he, hi and ho in *Moby-Dick* (72% t before he); nH_k for every k
+   (Manzini 2001); 578,682 runs, move-to-front, bzip2 against zlib.
+9. The **FM-index** (Ferragina & Manzini 2000): backward search for ana; wavelet trees and Jacobson's rank; the
+   novels indexed (counts in a fraction of a millisecond; our teaching index larger than the text, bzip2 of L 7.1 MB).
+10. Compression, part one: LZ77 arcs over *A Tale of Two Cities*; DEFLATE's alphabets, buckets and lazy matching;
+    an LZ78 parse drawn; Ziv–Lempel universality; our LZ77 + Huffman within 6% of zlib -9 on three novels, against
+    LZW, bzip2 and xz.
+11. Compression, part two: Huffman's whole bits against skewed sources (rANS 0.287 against 0.286 bits at p = 0.95);
+    **ANS** (Duda) worked on four symbols; H₀, H₁, H₂ = 4.44, 3.48, 2.81 bits: compression is prediction; zstd.
+12. Alignment: Needleman–Wunsch on intention/execution with its traceback; Smith–Waterman lining up two versions of
+    the Monte Cristo letter word for word (90,000 cells, score 322); Gotoh's three tables; BLAST and seeds; **no
+    O(n^{2−ε}) edit distance under SETH** (Backurs & Indyk 2015; Part 27).
+13. **Myers' diff** (1986): the edit graph of ABCABBA against CBABAC; the furthest-reaching D-paths drawn for D = 0 … 5;
+    patience diff, three-way merge; every revision of this syllabus diffed (all minimal; git's `--minimal` 2–4 lines
+    longer on 8 of 26).
+14. rsync and chunking: 24 bytes inserted into *Moby-Dick* (297 of 595 fixed blocks survive); rsync's rolling
+    checksum (593 blocks found, 3,257 literal bytes); content-defined chunks drawn (120 chunks, one new, 14 KB).
+15. Periodicity: Fine–Wilf with periods 5 and 8 drawn (tight at 11); Manacher over 19.4 million letters (*able was I
+    ere I saw Elba*, Lenehan in *Ulysses*); Lyndon words and Duval.
+16. *Frontier*: BWT runs drawn for the novels against 27 versions of this syllabus (n/r = 2.3 against 48; xz 63×);
+    the r-index (Gagie, Navarro & Prezza 2018); r = O(z log² n) (Kempa & Kociumaka 2020); the quadratic wall and its
+    escapes; open problems. Outro.
 
-*Computed:* comparison counts for each matcher on the novels; the suffix array and BWT of a chapter; FM-index
-queries; our LZ77-plus-Huffman compressor against zlib; Myers' diff on revisions of this repository's own files;
-rsync chunking.
-*Visuals:* the KMP automaton; the BWT's rotation matrix sorting, with its clustered last column; LF arrows walking
-the text back out; snakes in the edit graph; LZ back-references as arcs over the text.
+*Computed:* every number above, in `videos/cs/cs21/compute.py` with `explainer/cs/algo/strings.py` (tested in
+`tests/test_cs21_strings.py`): every matcher's comparisons on the novels; Aho–Corasick over the corpus; the suffix
+array, LCP and longest repeats of all 25 MB; the BWT of *Moby-Dick* inverted, its runs, MTF entropy and contexts; the
+FM-index of the novels; our LZ77 + Huffman, LZW and rANS against zlib, bzip2 and xz; Smith–Waterman on the Monte
+Cristo letters; Myers' diff on this file's history, checked against LCS and git; rsync and content-defined chunking;
+Manacher over the corpus; BWT runs of the syllabus versions.
+*Visuals:* the KMP shift and automaton; Boyer–Moore's skips; the Aho–Corasick trie and its links; suffix trees with
+suffix links; the BWT's rotation matrix and LF arrows; context bars; the wavelet tree; LZ back-references as arcs;
+the ANS state table; alignment tables with tracebacks; Myers' D-paths in the edit graph; fixed blocks against
+content-defined chunks; BWT run strips.
 *In practice:* grep and ripgrep, gzip, zstd and bzip2, genome alignment, git diff, rsync and deduplicating backups.
 *Reading:* Gusfield, *Algorithms on Strings, Trees, and Sequences*; Crochemore, Hancart & Lecroq, *Algorithms on
-Strings*; Mäkinen, Belazzougui, Cunial & Tomescu, *Genome-Scale Algorithm Design*; Navarro; Salomon & Motta,
-*Handbook of Data Compression*; Knuth, Morris & Pratt 1977; Burrows & Wheeler 1994; Ferragina & Manzini 2000; Ziv &
-Lempel 1977–78; Myers 1986.
+Strings*; Mäkinen, Belazzougui, Cunial & Tomescu, *Genome-Scale Algorithm Design*; Navarro, *Compact Data
+Structures*; Salomon & Motta, *Handbook of Data Compression*; Knuth, Morris & Pratt 1977; Burrows & Wheeler 1994;
+Ferragina & Manzini 2000; Ziv & Lempel 1977–78; Myers 1986; Gagie, Navarro & Prezza 2018.
 
 ### Part 22 · Geometry (~55)
 *Story:* Geometry looks easy until a computer gets it wrong: a floating-point orientation test can say a point lies
@@ -3297,4 +3318,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 18 | scenes (18, with the *Frontier* chapter), computations (every algorithm counting its work: Euler circuits, BFS, DFS, topological sort, Tarjan and Kosaraju with 2-SAT, Dijkstra, bidirectional, A*, landmarks and contraction hierarchies, Bellman–Ford, Floyd–Warshall and Johnson, Kruskal, Prim and Borůvka, Edmonds–Karp, Gale–Shapley and the Hungarian algorithm, Held–Karp, PageRank, planar colouring), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
 | 19 | scenes (18, with the *Frontier* chapter), computations (every paradigm counting its work: interval scheduling, Huffman, matroid greedy, Karatsuba, Strassen, DFT, FFT and NTT, an FFT multiplier and a million digits of π, closest pair, Fibonacci, edit distance and LCS, knapsack, matrix chains, optimal BSTs with Knuth's speedup, tree DP, n-queens, Dancing Links, maximum subarray four ways), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 20 | scenes (18, with the *Frontier* chapter), computations (Freivalds, Schwartz–Zippel and the Tutte matrix, fingerprints, Karger and Karger–Stein, Fermat and Miller–Rabin, random-walk SAT, balls into bins, Bloom filters, reservoir sampling, Misra–Gries and Count-Min, the Job v3 in the Pebble language emulated for ledger row 9 and swept over hash functions in C, HyperLogLog and KMV, the AMS sketch, MinHash and LSH on the novels, Ramsey colourings and Moser–Tardos, conditional expectations and RANDU), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
-| 21–61 | planned (this document) | — |
+| 21 | scenes (18, with the *Frontier* chapter), computations (naive, Rabin–Karp, KMP, Boyer–Moore and Horspool counting their comparisons on the novels; Aho–Corasick over the corpus; suffix trees, the suffix array and LCP of all 25 MB; the BWT of *Moby-Dick* inverted and its contexts; the FM-index of the novels; LZ77 + Huffman, LZW and rANS against zlib, bzip2 and xz; Needleman–Wunsch and Smith–Waterman; Myers' diff on this syllabus's history; rsync and content-defined chunking; Manacher over the corpus; BWT runs of repetitive text), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 22–61 | planned (this document) | — |

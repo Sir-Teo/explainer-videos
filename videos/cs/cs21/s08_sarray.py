@@ -10,6 +10,7 @@ class SuffixArray(VoiceoverScene):
         self.sorted_()
         self.build()
         self.measured()
+        self.repeats()
 
     def card(self):
         card = chapter_card(7, r"Suffix arrays", r"What if we just sort the suffixes?", lit=(1990,),
@@ -67,21 +68,80 @@ class SuffixArray(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+    def repeats(self):
+        r = load("repeats")
+        d = load("sa")
+        head = label(r"The longest repeat in thirty novels", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"the longest repeated substring: \ the largest value in the LCP array", font_size=22, color=WHITE),
+            label(r"for the whole corpus, \ comparing neighbouring suffixes in numpy, \ doubling the length checked",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, buff=0.2).next_to(head, DOWN, buff=0.4)
+        txt = r["text"].replace("\n", " / ")[:150]
+        box = VGroup(label(rf"{r['length']} characters:", font_size=22, color=HEAD),
+                     mono(txt[:75], 16, YES), mono(txt[75:150] + " ...", 16, YES)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                         buff=0.12)
+        box.next_to(lines, DOWN, buff=0.45)
+        notes = VGroup(
+            label(r"a table of contents, \ overlapping itself: \ the list of chapter numbers repeats from one place to "
+                  r"the next", font_size=20, color=WHITE),
+            label(rf"in \textit{{Moby-Dick}} alone: \ {d['md_repeat_len']} characters, \ a chapter title printed twice",
+                  font_size=20, color=GREY_A),
+            label(r"real prose almost never repeats: \ novelists don't copy themselves, \ which chapter 13 of Part 20 "
+                  r"found too", font_size=20, color=LAM),
+        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "With the suffix array and its LCP array, the longest repeated substring is simply the largest common "
+            "prefix of two neighbours. <bookmark mark='a'/> For the whole corpus we computed it by comparing "
+            "neighbouring suffixes in numpy, doubling the length checked each round. <bookmark mark='b'/> The "
+            f"winner is {r['length']} characters long, and it is not prose: it is a run of chapter headings, "
+            "Chapter one, Chapter two, Chapter three, overlapping a copy of itself a few hundred characters later. "
+            "<bookmark mark='c'/> In Moby-Dick alone, the longest repeat is a chapter title printed twice. Real "
+            "prose almost never repeats, as Part 20's search for near-duplicates found too."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(box), FadeIn(notes[0]))
+            vo.wait_until("c")
+            self.play(FadeIn(notes[1]), FadeIn(notes[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
     def build(self):
         head = label(r"Building it: \ prefix doubling", font_size=34).to_edge(UP, buff=0.35)
+        w = "banana$"
+        n = len(w)
+        r = [0 if c == "$" else ord(c) for c in w]
+        r = _dense(r)
+        ranks = [r]
+        k = 1
+        while len(set(r)) < n:
+            r = _dense([(r[i], r[i + k] if i + k < n else -1) for i in range(n)])
+            ranks.append(r)
+            k *= 2
+        hdr = [r"$i$", r"suffix"] + [rf"rank$_{{{2 ** j}}}$" for j in range(len(ranks))]
+        rows = [[str(i), w[i:]] + [str(rk[i]) for rk in ranks] for i in range(n)]
+        tab = grid_table(hdr, rows, widths=[0.6, 1.8] + [1.15] * len(ranks), row_h=0.42, font_size=20,
+                         mono_cols=(0, 1), colors=[[GREY_B, DATA] + [LAM, YES, HEAD, HEAD][:len(ranks)]] * n)
+        tab.to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        colv = [VGroup(*[tab.cells[r_][c] for r_ in range(n + 1)]) for c in range(len(hdr))]
         lines = VGroup(
-            label(r"rank every suffix by its first character", font_size=22, color=WHITE),
-            label(r"rank by the first $2k$ characters \ = \ sort the pairs $(\text{rank}_k(i),\ \text{rank}_k(i + k))$",
-                  font_size=22, color=LAM),
-            label(r"$k = 1, 2, 4, 8, \dots$ \ until every rank is different: \ $O(n \log n)$ with radix sort", font_size=22,
-                  color=WHITE),
-            label(r"SA-IS \ (Nong, \ Zhang and Chan, \ 2009): \ linear time, \ by sorting a sample of suffixes "
-                  r"recursively", font_size=22, color=HEAD),
-            label(r"the \textbf{LCP array}: \ common prefix of each sorted neighbour pair, \ in linear time \ (Kasai et "
-                  r"al., 2001)", font_size=22, color=YES),
-            label(r"suffix array + LCP array \ = \ everything the suffix tree answered \ (Abouelhoda, Kurtz and "
+            label(r"rank every suffix by its first character", font_size=21, color=WHITE),
+            label(r"rank by the first $2k$ characters \ = \\ sort the pairs $(\text{rank}_k(i),\ \text{rank}_k(i + k))$",
+                  font_size=21, color=LAM),
+            label(r"$k = 1, 2, 4, 8, \dots$ \ until every rank is different: \\ $O(n \log n)$ with radix sort",
+                  font_size=21, color=WHITE),
+            label(r"SA-IS \ (Nong, \ Zhang and Chan, \ 2009): \ linear time, \\ by sorting a sample of suffixes "
+                  r"recursively", font_size=21, color=HEAD),
+            label(r"the \textbf{LCP array}: \ common prefix of each sorted \\ neighbour pair, \ in linear time \ "
+                  r"(Kasai et al., 2001)", font_size=21, color=YES),
+            label(r"suffix array + LCP array \ = \ everything the suffix tree \\ answered \ (Abouelhoda, Kurtz and "
                   r"Ohlebusch, 2004)", font_size=20, color=GREY_A),
-        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        lines.width = min(lines.width, 6.6)
+        lines.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         with self.voiceover(
             "How do you sort twenty-five million suffixes, each up to twenty-five million characters long? "
             "<bookmark mark='a'/> Rank them first by one character. <bookmark mark='b'/> Then notice that ranking "
@@ -94,8 +154,14 @@ class SuffixArray(VoiceoverScene):
             "showed how to compute in linear time. <bookmark mark='f'/> With both arrays, every question the "
             "suffix tree answered can be answered again, in a quarter of the memory."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, ln in zip("abcdef", lines):
+            self.play(FadeIn(head), FadeIn(colv[0]), FadeIn(colv[1]), FadeIn(tab.rule))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1), FadeIn(colv[2]))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1], shift=UP * 0.1), FadeIn(colv[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[2], shift=UP * 0.1), *[FadeIn(c) for c in colv[4:]])
+            for mk, ln in zip("def", lines[3:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
@@ -136,3 +202,9 @@ class SuffixArray(VoiceoverScene):
             self.play(FadeIn(lcp))
         self.wait(0.3)
         self.clear_scene()
+
+
+def _dense(keys):
+    order = sorted(set(keys))
+    at = {k: j for j, k in enumerate(order)}
+    return [at[k] for k in keys]

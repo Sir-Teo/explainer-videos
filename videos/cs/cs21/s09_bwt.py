@@ -18,6 +18,7 @@ class Bwt(VoiceoverScene):
         self.matrix()
         self.invert()
         self.runs()
+        self.context()
 
     def card(self):
         card = chapter_card(8, r"The Burrows--Wheeler transform", r"Can sorting make a book more compressible?",
@@ -47,8 +48,8 @@ class Bwt(VoiceoverScene):
             label(r"each character of $L$ \textbf{precedes} its row's rotation in the text", font_size=21, color=WHITE),
             label(r"rows that start alike sit together, \ so the characters before them cluster", font_size=21,
                   color=HEAD),
-            label(r"\textit{he} \dots\ is preceded by \textit{t}, \ \textit{s}, \ \textit{w}: \ in English, \ long runs of "
-                  r"\textit{t}", font_size=21, color=LAM),
+            label(r"in \textit{Moby-Dick}, \ 72\% of the rows beginning \texttt{he} \\ end in \texttt{t}: \ long runs "
+                  r"of \texttt{t}", font_size=21, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         if side.width > 6.2:
             side.width = 6.2
@@ -60,8 +61,8 @@ class Bwt(VoiceoverScene):
             "<bookmark mark='c'/> The last column is the transform: a n n b, end marker, a a. <bookmark mark='d'/> "
             "Each character in the last column is the one that comes just before its row in the text. Rows "
             "that begin alike are sorted next to each other, <bookmark mark='e'/> so the characters before them "
-            "cluster too. <bookmark mark='f'/> In English, every row beginning h e is preceded by t, s or w, "
-            "and the sorted text has long runs of the same letter."
+            "cluster too. <bookmark mark='f'/> In Moby-Dick, nearly three in four of the rows beginning h e end "
+            "in t, so the sorted text has long runs of the same letter."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -145,6 +146,68 @@ class Bwt(VoiceoverScene):
             self.play(FadeIn(side[3]))
             vo.wait_until("e")
             self.play(FadeIn(side[4]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def context(self):
+        e = load("entropy")
+        head = label(r"Why sorting helps: \ contexts", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"rows are sorted by what \textbf{follows}; \ $L$ holds what \textbf{precedes}", font_size=22, color=WHITE),
+            label(r"so $L$ is the text's characters grouped by their right context: \ all the characters before "
+                  r"\texttt{he}, \ then before \texttt{hi}, \ \dots", font_size=22, color=LAM),
+            label(r"within a group, \ one or two characters dominate: \ a predictable stream", font_size=22, color=YES),
+            MathTex(r"|\,\text{BWT compressed}\,| \;\approx\; n\,H_k \quad \text{for every } k \text{ at once}",
+                    font_size=34, color=HEAD),
+            label(rf"\textit{{Moby-Dick}}: \ $H_0 = {e['h0']:.2f}$, \ $H_1 = {e['h1']:.2f}$, \ $H_2 = {e['h2']:.2f}$ "
+                  r"bits per character \ (chapter 11)", font_size=20, color=GREY_A),
+            label(r"Manzini (2001): \ BWT + move-to-front + an order-0 coder stays within a constant of $nH_k$", font_size=20,
+                  color=GREY_A),
+        ).arrange(DOWN, buff=0.26)
+        lines[:3].arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.4)
+        lines[3:].arrange(DOWN, buff=0.26).to_edge(DOWN, buff=0.4)
+        ctx = load("bwt")["ctx"]
+        pal = {"t": YES, " ": GREY_B, "w": DATA, "s": LAM, "c": HEAD, "T": CTRL}
+        groups = VGroup()
+        for c in ("he", "hi", "ho"):
+            tot = ctx[c]["total"]
+            bar = VGroup()
+            for k, (ch, v) in enumerate(ctx[c]["top"]):
+                w_ = 8.4 * v / tot
+                col = pal.get(ch, GREY_D)
+                seg = Rectangle(width=w_, height=0.42, stroke_width=0, fill_color=col, fill_opacity=0.85)
+                lab = mono("␣" if ch == " " else ch, 16, BLACK if w_ > 0.3 else col)
+                bar.add(VGroup(seg, lab))
+            bar.arrange(RIGHT, buff=0.02)
+            for seg, lab in bar:
+                lab.move_to(seg)
+            name = label(rf"before \texttt{{{c}}}", font_size=19, color=WHITE)
+            pct = label(rf"{words(tot)} rows; \ {100 * ctx[c]['top'][0][1] / tot:.0f}\% \texttt{{"
+                        rf"{'space' if ctx[c]['top'][0][0] == ' ' else ctx[c]['top'][0][0]}}}", font_size=17,
+                        color=GREY_A)
+            groups.add(VGroup(name, bar, pct).arrange(RIGHT, buff=0.25))
+        groups.arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(DOWN * 0.15)
+        with self.voiceover(
+            "Why does sorting make text more predictable? <bookmark mark='a'/> The rows are sorted by what follows "
+            "each position, and the last column holds what precedes it. <bookmark mark='b'/> So the transform lists "
+            "the text's characters grouped by their context: first everything that comes before h e, then everything "
+            "before h i, and so on. <bookmark mark='c'/> Inside each group one or two characters dominate. Before h "
+            "e it is mostly t. <bookmark mark='d'/> A simple coder that adapts to the current group therefore pays "
+            "about the k-th order entropy, the cost of predicting each character from the k characters next to it, "
+            "and it does so for every k at once, without being told k. <bookmark mark='e'/> For Moby-Dick that is "
+            "four point four bits with no context, three and a half with one character, two point eight with two. "
+            "<bookmark mark='f'/> Giovanni Manzini made this precise in 2001."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1], shift=UP * 0.1), LaggedStart(*[FadeIn(g) for g in groups], lag_ratio=0.4))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[2], shift=UP * 0.1), *[Indicate(g[1][0], color=YES) for g in groups])
+            for mk, ln in zip("def", lines[3:]):
+                vo.wait_until(mk)
+                self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

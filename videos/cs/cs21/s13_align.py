@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
+from explainer.cs.algo import strings as SA
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
@@ -9,6 +10,7 @@ class Align(VoiceoverScene):
         self.card()
         self.global_()
         self.local()
+        self.affine()
         self.scale()
 
     def card(self):
@@ -38,12 +40,31 @@ class Align(VoiceoverScene):
                     r"\end{cases}", font_size=30, color=LAM),
             label(r"match $+1$, \ mismatch $-1$, \ gap $-1$", font_size=20, color=GREY_A),
             label(rf"\texttt{{{a}}} against \texttt{{{b}}}: \ score {d['nw_score']}", font_size=21, color=YES),
-            label(r"biology scores with substitution matrices \ (PAM, \ BLOSUM) \ and \textbf{affine gaps}: \ "
-                  r"opening a gap costs more than extending it \ (Gotoh, \ 1982)", font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
+            label(r"biology: \ substitution matrices \ (PAM, \ BLOSUM) \\ and \textbf{affine gaps}: \ "
+                  r"opening a gap costs more \\ than extending it", font_size=20, color=HEAD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         if side.width > 6.6:
             side.width = 6.6
             side.to_edge(RIGHT, buff=0.4)
+        cells = {}
+        k = 0
+        for i in range(len(a) + 1):
+            for j in range(len(b) + 1):
+                cells[i, j] = grid[k]
+                k += 1
+        i, j, path, top_s, bot_s = len(a), len(b), [(len(a), len(b))], [], []
+        while i or j:
+            if i and j and S[i][j] == S[i - 1][j - 1] + (1 if a[i - 1] == b[j - 1] else -1):
+                top_s.append(a[i - 1]); bot_s.append(b[j - 1]); i -= 1; j -= 1  # noqa: E702
+            elif i and S[i][j] == S[i - 1][j] - 1:
+                top_s.append(a[i - 1]); bot_s.append("-"); i -= 1  # noqa: E702
+            else:
+                top_s.append("-"); bot_s.append(b[j - 1]); j -= 1  # noqa: E702
+            path.append((i, j))
+        top_s, bot_s = top_s[::-1], bot_s[::-1]
+        boxes = VGroup(*[SurroundingRectangle(cells[c], color=HEAD, buff=0.04, stroke_width=1.8) for c in path[::-1]])
+        aln = _aligned_rows(list(zip(top_s, bot_s)), 40, 22)[0]
+        aln.next_to(VGroup(grid, left), DOWN, buff=0.35).align_to(left, LEFT)
         with self.voiceover(
             "Part 19's edit distance becomes, in biology, an alignment. <bookmark mark='a'/> Saul Needleman and "
             "Christian Wunsch, in 1970, filled the same table, but with scores to maximize: a reward for matching "
@@ -60,6 +81,8 @@ class Align(VoiceoverScene):
             self.play(FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("c")
             self.play(FadeIn(side[3]), Indicate(grid[-1], color=YES))
+            self.play(LaggedStart(*[Create(x) for x in boxes], lag_ratio=0.12), run_time=1.6)
+            self.play(FadeIn(aln))
             vo.wait_until("d")
             self.play(FadeIn(side[4]))
         self.wait(0.3)
@@ -76,14 +99,27 @@ class Align(VoiceoverScene):
             label(r"the answer is the best cell anywhere, \ traced back to its first nonzero", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.35)
-        xa = d["sw_x_part"][:150].replace("\n", " ")
-        ya = d["sw_y_part"][:150].replace("\n", " ")
-        A = label(r"\textit{" + _esc(xa) + r"}", font_size=18, color=DATA)
-        B = label(r"\textit{" + _esc(ya) + r"}", font_size=18, color=YES)
-        for t in (A, B):
-            if t.width > 12.8:
-                t.width = 12.8
-        VGroup(A, B).arrange(DOWN, buff=0.3).next_to(lines, DOWN, buff=0.45)
+        xs, ys = d["sw_x_part"].split(), d["sw_y_part"].split()
+        M = SA.needleman_wunsch(xs, ys)
+        i, j, pairs = len(xs), len(ys), []
+        while i or j:
+            if i and j and M[i, j] == M[i - 1, j - 1] + (1 if xs[i - 1] == ys[j - 1] else -1):
+                pairs.append((xs[i - 1], ys[j - 1])); i -= 1; j -= 1  # noqa: E702
+            elif i and M[i, j] == M[i - 1, j] - 1:
+                pairs.append((xs[i - 1], "")); i -= 1  # noqa: E702
+            else:
+                pairs.append(("", ys[j - 1])); j -= 1  # noqa: E702
+        pairs = pairs[::-1][:44]
+        rows_ = _aligned_rows(pairs, 96, 16)
+        A = VGroup(*rows_).arrange(DOWN, buff=0.32, aligned_edge=LEFT)
+        if A.width > 12.8:
+            A.width = 12.8
+        A.next_to(lines, DOWN, buff=0.45).set_x(0)
+        B = VGroup(
+            label(r"top: \ the first version", font_size=18, color=NO),
+            label(r"bottom: \ the second, \ reworded", font_size=18, color=YES),
+            label(r"grey: \ the same word", font_size=18, color=GREY_A),
+        ).arrange(RIGHT, buff=0.8).next_to(A, DOWN, buff=0.35)
         cap = label(rf"the anonymous letter in \textit{{The Count of Monte Cristo}}, \ two of its versions: \ "
                     rf"{words(d['cells'])} cells, \ best score {d['sw_best']}", font_size=20, color=HEAD
                     ).to_edge(DOWN, buff=0.5)
@@ -102,6 +138,36 @@ class Align(VoiceoverScene):
             self.play(FadeIn(lines[2]))
             vo.wait_until("c")
             self.play(FadeIn(A), FadeIn(B), FadeIn(cap))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def affine(self):
+        head = label(r"Affine gaps: \ three tables instead of one", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"a gap of length $\ell$ costs $o + e\,\ell$: \ opening is expensive, \ extending is cheap", font_size=22,
+                  color=WHITE),
+            label(r"one table can't tell whether the cell to the left was already inside a gap", font_size=22,
+                  color=NO),
+            MathTex(r"M(i,j) = s(a_i, b_j) + \max\{M, X, Y\}(i-1, j-1)", font_size=32, color=LAM),
+            MathTex(r"X(i,j) = \max\{\, M(i-1, j) - o - e,\ \ X(i-1, j) - e \,\}", font_size=32, color=DATA),
+            MathTex(r"Y(i,j) = \max\{\, M(i, j-1) - o - e,\ \ Y(i, j-1) - e \,\}", font_size=32, color=YES),
+            label(r"Gotoh (1982): \ still $O(nm)$; \ Hirschberg's trick (Part 19) brings the memory to $O(n + m)$",
+                  font_size=22, color=HEAD),
+        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
+        with self.voiceover(
+            "Real gaps are not independent. <bookmark mark='a'/> Biology, and diff, prefer one long gap to many short "
+            "ones, so a gap of length l costs an opening charge plus a small charge per character. <bookmark "
+            "mark='b'/> A single table can't price that, because a cell doesn't know whether its neighbour was "
+            "already inside a gap. <bookmark mark='c'/> Osamu Gotoh's solution keeps three tables: M for alignments "
+            "ending in a pair of characters, <bookmark mark='d'/> X for those ending in a gap in one string, "
+            "<bookmark mark='e'/> and Y for a gap in the other. Moving within X or Y costs only the extension; "
+            "entering them from M pays the opening. <bookmark mark='f'/> The time is still the product of the "
+            "lengths, and Hirschberg's divide-and-conquer trick from Part 19 brings the memory down to linear."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, ln in zip("abcdef", lines):
+                vo.wait_until(mk)
+                self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -136,8 +202,34 @@ class Align(VoiceoverScene):
         self.clear_scene()
 
 
-def _esc(t):
-    for a, b in (("\\", ""), ("&", r"\&"), ("%", r"\%"), ("$", r"\$"), ("#", r"\#"), ("_", r"\_"), ("{", ""), ("}", ""),
-                 ("~", ""), ("^", ""), ('"', "")):
-        t = t.replace(a, b)
-    return t
+def _span(t, col):
+    t = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return f'<span foreground="{col}">{t}</span>'
+
+
+def _aligned_rows(pairs, width, size, sep=" "):
+    """Two monospaced lines per row, one per string, padded so that aligned tokens sit in the same columns."""
+    rows, cur = [], []
+    used = 0
+    for u, v in pairs:
+        w = max(len(u), len(v), 1)
+        if cur and used + w > width:
+            rows.append(cur)
+            cur, used = [], 0
+        cur.append((u, v, w))
+        used += w + len(sep)
+    if cur:
+        rows.append(cur)
+    out = VGroup()
+    for r in rows:
+        top, bot = [], []
+        for u, v, w in r:
+            same = u == v
+            cu = GREY_A if same else (NO if u else GREY_D)
+            cv = GREY_A if same else (YES if v else GREY_D)
+            top.append(_span((u or "·" * len(v)).ljust(w), cu))
+            bot.append(_span((v or "·" * len(u)).ljust(w), cv))
+        lines = VGroup(*[MarkupText(_span(sep, GREY_A).join(x), font="DejaVu Sans Mono", font_size=size)
+                         for x in (top, bot)]).arrange(DOWN, buff=0.12, aligned_edge=LEFT)
+        out.add(lines)
+    return out

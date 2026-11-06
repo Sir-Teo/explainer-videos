@@ -77,7 +77,17 @@ class Entropy(VoiceoverScene):
                   font_size=22, color=WHITE),
             label(r"Duda (2009--2014): \ as tight as arithmetic coding, \ as fast as Huffman; \ zstd, \ LZFSE, \ JPEG XL",
                   font_size=22, color=HEAD),
-        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.35)
+        f, c, M = {"a": 3, "b": 1}, {"a": 0, "b": 3}, 4
+        x, rows = 4, []
+        for sym in "aaba":
+            x2 = (x // f[sym]) * M + (x % f[sym]) + c[sym]
+            rows.append([sym, f"{x} → {x2}", f"{np.log2(x2) - np.log2(x):.2f}", f"{np.log2(M / f[sym]):.2f}"])
+            x = x2
+        tab = grid_table([r"symbol", r"$x \to x'$", r"bits added", r"$\log_2(1/p)$"], rows, widths=[1.3, 2.0, 1.6, 1.6],
+                         row_h=0.36, font_size=19, mono_cols=(0, 1), colors=[[DATA, WHITE, YES, LAM]] * len(rows))
+        cap = label(r"$M = 4$: \ $f_a = 3$, \ $f_b = 1$; \ start at $x = 4$", font_size=18, color=GREY_A)
+        VGroup(tab, cap.next_to(tab, DOWN, buff=0.15)).to_edge(DOWN, buff=0.3).set_x(0)
         with self.voiceover(
             "Arithmetic coding solved this in the 1970s by treating the whole message as one number, but it was "
             "slow. <bookmark mark='a'/> Jarek Duda's asymmetric numeral systems keep the message as a single "
@@ -94,6 +104,10 @@ class Entropy(VoiceoverScene):
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))
+                if mk == "b":
+                    self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(cap))
+                if mk == "d":
+                    self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.4))
         self.wait(0.3)
         self.clear_scene()
 

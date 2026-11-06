@@ -19,6 +19,7 @@ class BoyerMoore(VoiceoverScene):
         self.card()
         self.skip()
         self.rules()
+        self.good_suffix()
         self.measured()
 
     def card(self):
@@ -104,6 +105,52 @@ class BoyerMoore(VoiceoverScene):
             for mk, ln in zip("abcde", lines):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def good_suffix(self):
+        head = label(r"The good-suffix rule, \ on \texttt{ANPANMAN}", font_size=34).to_edge(UP, buff=0.35)
+        text = "QQANPAKMANPANMAN"
+        pat = "ANPANMAN"
+        T = row(text, GREY_B).move_to(UP * 1.4)
+        x0 = T[0].get_left()[0]
+        P = row(pat, DATA)
+        P.move_to([x0 + 2 * CW + P.width / 2, 0.7, 0])
+        lines = VGroup(
+            label(r"compared from the right: \ \texttt{MAN} matched, \ then a mismatch", font_size=22, color=WHITE),
+            label(r"the text there ends in \texttt{MAN}: \ the next alignment must put a \texttt{MAN} of the pattern "
+                  r"under it", font_size=22, color=LAM),
+            label(r"the pattern's other \texttt{MAN}-like suffix: \ \texttt{AN} at its start, \ a border", font_size=22,
+                  color=HEAD),
+            label(r"so shift $8 - 2 = 6$, \ not 1: \ the table depends on the pattern alone", font_size=22, color=YES),
+            label(r"bad character helps when the alphabet is large; \ good suffix when the pattern repeats itself",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, buff=0.28).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "The good-suffix rule deserves an example. <bookmark mark='a'/> Here the pattern ANPANMAN is lined up "
+            "under the text, and comparing from the right, M A N matched before a mismatch. <bookmark mark='b'/> "
+            "Whatever the next possible alignment is, the text there still ends in M A N, so the pattern must "
+            "have a matching piece under it. <bookmark mark='c'/> ANPANMAN has no other M A N, but its prefix A N "
+            "is a suffix of M A N, a border again, so the pattern can slide until that A N lines up. <bookmark "
+            "mark='d'/> That is a shift of six instead of one, and here it lands on a match; and the whole table is computed from the pattern "
+            "before the search starts. <bookmark mark='e'/> On English the bad-character rule does most of the "
+            "work, because the alphabet is large; on DNA, with four letters, the good-suffix rule earns its keep."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(T), FadeIn(P))
+            vo.wait_until("a")
+            for k in (7, 6, 5):
+                self.play(P[k][0].animate.set_fill(YES, 0.4), T[2 + k][0].animate.set_fill(YES, 0.4), run_time=0.3)
+            self.play(P[4][0].animate.set_fill(NO, 0.5), T[6][0].animate.set_fill(NO, 0.5), run_time=0.3)
+            self.play(FadeIn(lines[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[2]))
+            vo.wait_until("d")
+            self.play(P.animate.shift(RIGHT * 6 * CW), FadeIn(lines[3]))
+            self.play(P.animate.set_color(YES))
+            vo.wait_until("e")
+            self.play(FadeIn(lines[4]))
         self.wait(0.3)
         self.clear_scene()
 
