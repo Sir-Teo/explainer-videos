@@ -24,7 +24,7 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 3 | Visual pass complete; full production-voice listening pending |
 | 4 | Visual pass complete; full production-voice listening pending |
 | 5 | Visual pass complete; full production-voice listening pending |
-| 6 | In progress: econometrics audit and bilingual layout checks |
+| 6 | Visual pass complete; full production-voice listening pending |
 | 7–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
@@ -97,7 +97,8 @@ Local review artifacts (git-ignored):
 - `media/quant1/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: actual narrated English
   opening sample.
 
-The completed visual passes for Parts 2–4 are recorded below. Parts 5–43 remain pending.
+The completed visual passes for later parts are recorded below; the queue above
+shows the current status.
 
 
 ## Part 2: The Machinery of Markets
@@ -453,3 +454,71 @@ Audio QA now records the actual language-dependent voice. Mandarin Kokoro uses
 `zf_001`; its within-sentence character times are estimated, and passing their
 monotonicity checks does not establish word-level forced alignment or listening
 approval. The earlier signal-check scope remains unchanged.
+
+### Part 6 continuation: final motion and display audit
+
+The complete first motion pass exposed a two-second near-empty first-row reveal
+in the research chapter; the refreshed OLS motion exposed the same issue after
+its camera reset. Their first equations now write in 0.4 seconds, and the research
+transition is shorter. The review then checked the remaining display clamps
+against the actual cached observations, rather than accepting plausible-looking
+endpoints.
+
+The OLS/FWL pane now includes every raw and residual point, and its axis labels
+change when the observations become residuals. The Stambaugh pane includes all
+900 displayed draws at every shown sample length and states that its centre uses
+all 4,000 draws. Fama--MacBeth's moving cross-section omits observations outside
+its stated plot window and intersects the actual fitted line with that window;
+it no longer moves points or line endpoints onto the borders. Its three-cloud
+decomposition pane includes the complete clouds and month means.
+
+The IV histograms had density peaks as high as 12.15 capped at 6; their shared
+scale now extends to 13 and preserves the full peaks. The bootstrap histogram's
+reveal uses the final sample size as its denominator, includes the negative
+draws, and has room for the final 4.15 peak. The out-of-sample slope band includes
+its full interval, and the DML nuisance-error pane includes its 4.614 maximum.
+These are display changes to existing cached results. The computations, data
+manifest, registrations, sealed envelope and track record remain unchanged.
+
+The deterministic bounds audit is saved in
+`renders/qa/quant6/display_audit.json`. All 109 narration entries remain covered
+in Chinese, and the final narration estimate is 63.1 minutes. Seven additional
+English research speech samples pass waveform/token-time checks. The refreshed
+bilingual and motion receipt gates are still running at this checkpoint.
+
+### Part 6: completed visual pass
+
+All 21 English and 21 Chinese narration-beat checks and all 21 English silent
+motion checks pass against source fingerprint
+`5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658`,
+with current input signatures and zero automated warnings. Every chapter's
+bilingual contact sheets and all 21 forty-frame playback sheets were visually
+reviewed. Changed sheets were rechecked, including the final unit-root reveal;
+all silent clips have zero blank/sparse holds of at least 1.5 seconds.
+
+The [compact evidence record](quant6-polish-evidence.json) records the 63 receipt
+hashes, computed-input hashes, test logs, protocol checks and audio sample scope.
+All 37 compute items were restored normally from checksum-verified public inputs.
+The 239-test House/inference run and subsequent seven focused display/inference
+checks pass. All 109 narration source entries have Chinese coverage, and the
+speech estimate is 63.1 minutes. The computation file, data manifest, envelope
+and track record are unchanged from the Part 6 checkpoint; the cumulative trial
+count remains 296, with no additional trial or hold-out opening in this pass.
+
+All 16 English speech samples (Hook, MLE and Research) and five Mandarin opening
+samples pass waveform/token-time checks using the current narration. The actual
+English narrated opening is 191.53 seconds and has no blank/sparse hold of at
+least 1.5 seconds; its 32-frame sheet was reviewed. Mandarin uses Kokoro `zf_001`
+with estimated character times. These checks do not certify pronunciation or
+continuous listening. Full production-voice listening and synchronization remain
+pending, as for the preceding completed visual passes.
+
+Local review artifacts (git-ignored):
+
+- `renders/quant6_polished_silent.mp4`: English 480p15 preview, approximately
+  71.7 minutes, with 21 embedded chapters and English subtitles; `.srt` and
+  `.chapters.txt` files sit alongside it.
+- `media/quant6/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: actual narrated
+  English opening.
+- `renders/qa/series/quant6/{en,zh}/`: chapter receipts, images, text captures,
+  speech reports and English silent clips.

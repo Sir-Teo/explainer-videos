@@ -1,0 +1,970 @@
+{
+  "video": "quant6",
+  "base_commit": "72651fd0",
+  "source_commit": "ab95d92509da2a4cb38e68d7493c3bd785c50f88",
+  "source_fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+  "data_inputs": {
+    ".cache/quant6/boot_coverage.json": {
+      "sha256": "8c80cf13c9c5b1418a645d812e59ee66de53f99b53b442906c43d125489947c2",
+      "bytes": 332
+    },
+    ".cache/quant6/boot_coverage.npz": null,
+    ".cache/quant6/boot_demo.json": {
+      "sha256": "d6b9c84589094005001a05848b85f039b5d07f53cb585e047654d0f23f3a7fd2",
+      "bytes": 89991
+    },
+    ".cache/quant6/boot_demo.npz": null,
+    ".cache/quant6/bootstrap.json": {
+      "sha256": "5a398ef646e99e3d321597f5799a636231268b214720d2a69eacc0eefe8ef498",
+      "bytes": 44817
+    },
+    ".cache/quant6/bootstrap.npz": null,
+    ".cache/quant6/designs.json": {
+      "sha256": "6d443c8a683ec62c82ef9180987d12c4989c1d3ab4f307d2db30bf9f14982078",
+      "bytes": 102874
+    },
+    ".cache/quant6/designs.npz": null,
+    ".cache/quant6/dml.json": {
+      "sha256": "6ab44579c87ffb3d487304fdb3ae7cc7dcdfa45833867d7dc2d72b8dc9b0e8f7",
+      "bytes": 2790
+    },
+    ".cache/quant6/dml.npz": null,
+    ".cache/quant6/dml_demo.json": {
+      "sha256": "018dc7da09df87d64643b0e861a4bd49473986a25548c489cd95f554eabe2e94",
+      "bytes": 70388
+    },
+    ".cache/quant6/dml_demo.npz": null,
+    ".cache/quant6/dml_lambda.json": {
+      "sha256": "c21c267cb099203f8a067ed2936a70a2bc09d1f884601772edac4ec465f01cf5",
+      "bytes": 6400
+    },
+    ".cache/quant6/dml_lambda.npz": null,
+    ".cache/quant6/ellipse.json": {
+      "sha256": "351f74953bb135df6a00c2fb68c5e28d0c1afdf9e22eed8777211df88cad7b8d",
+      "bytes": 645
+    },
+    ".cache/quant6/ellipse_path.json": {
+      "sha256": "7a33f6d123f8d57054e8a85d8828813696970ee20518511e9b269ebf7870d2d7",
+      "bytes": 62092
+    },
+    ".cache/quant6/ellipse_path.npz": null,
+    ".cache/quant6/envelope.json": {
+      "sha256": "b256f50f560ccdb4d363992184ec2103127f41702f0c1c2ab471b76e212b43c5",
+      "bytes": 1940
+    },
+    ".cache/quant6/envelope.npz": null,
+    ".cache/quant6/event.json": {
+      "sha256": "dc95e3661c68f99b64d8d545bde5ca4902fd19b0dff43775fd16c976d9bc5417",
+      "bytes": 2274
+    },
+    ".cache/quant6/event.npz": null,
+    ".cache/quant6/fdr_sim.json": {
+      "sha256": "7e3a83421caa2b64351747de4d6db4e04683c0c70966bddfcf51a2770d100533",
+      "bytes": 45311
+    },
+    ".cache/quant6/fdr_sim.npz": null,
+    ".cache/quant6/fomc.json": {
+      "sha256": "197fff39aee4583fd504dc039b836b92deb4df3f1cd71692735c429a25b006dd",
+      "bytes": 64720
+    },
+    ".cache/quant6/fomc.npz": null,
+    ".cache/quant6/gibbs.json": {
+      "sha256": "935526d84e947ef47125755af733b1f5ec6c0dddd37ae09a6a7f05c016d9da17",
+      "bytes": 125887
+    },
+    ".cache/quant6/gibbs.npz": null,
+    ".cache/quant6/gmm.json": {
+      "sha256": "3b1c690da313abfe3f5b2483e90507536edf10fbe10a319c00022a7632bab33a",
+      "bytes": 367
+    },
+    ".cache/quant6/gmm.npz": null,
+    ".cache/quant6/gmm_mc.json": {
+      "sha256": "9a3c22290dba1b99ef19c441b02ae76b76b4b8aa1d958a00406e29fcd8db647b",
+      "bytes": 26633
+    },
+    ".cache/quant6/gmm_mc.npz": null,
+    ".cache/quant6/gmm_surface.json": {
+      "sha256": "6b4e8034788c732517449e23b92fc7f5a5127bf880347cc3b385266bba8a7379",
+      "bytes": 90744
+    },
+    ".cache/quant6/gmm_surface.npz": null,
+    ".cache/quant6/gmm_toy.json": {
+      "sha256": "1afd2aea45a10f969682326f9c2ba2ee5989234fb411c03448aa447d49e7ad2f",
+      "bytes": 448
+    },
+    ".cache/quant6/gmm_toy.npz": null,
+    ".cache/quant6/hac.json": {
+      "sha256": "e01c898b940b284a30513a86ce0f90273991fad0f06efa29266fbe42280a51b3",
+      "bytes": 6679
+    },
+    ".cache/quant6/hac.npz": null,
+    ".cache/quant6/har_size.json": {
+      "sha256": "93a573719d84c92d94122b96b1d248d5c80a8e5e873a182ba53525608c86325f",
+      "bytes": 1624
+    },
+    ".cache/quant6/har_size.npz": null,
+    ".cache/quant6/ivx.json": {
+      "sha256": "2e3454b8848209c31254249530e563e45e669ebc4f198450ac3887868ed0f053",
+      "bytes": 1157
+    },
+    ".cache/quant6/ivx.npz": null,
+    ".cache/quant6/lookahead.json": {
+      "sha256": "9f18900449ad8e40836d5c11dde4b9b0be68c1bd661e6021055a1a8897489d93",
+      "bytes": 27174
+    },
+    ".cache/quant6/lookahead.npz": null,
+    ".cache/quant6/mle.json": {
+      "sha256": "5314e66cb2fb1ffd7ae5c4ff546c42ea8c2664afc48eba7eb6b69f8b3d402361",
+      "bytes": 49129
+    },
+    ".cache/quant6/mle.npz": null,
+    ".cache/quant6/multiple.json": {
+      "sha256": "be6cc508a94646c9f2bfd3cd26248d2dd54fac19ba888d6dedb974d11c4942fd",
+      "bytes": 4051
+    },
+    ".cache/quant6/multiple.npz": null,
+    ".cache/quant6/ols_fwl.json": {
+      "sha256": "c6c06a2632dbba0b431e2c95e041132cd2474ad17b90449b3f6ea29195fc5814",
+      "bytes": 28437
+    },
+    ".cache/quant6/ols_fwl.npz": null,
+    ".cache/quant6/oos.json": {
+      "sha256": "9980b06651d2f5a96adff6efcabb20f483f4dba1445946fdbb6c771511f08bf0",
+      "bytes": 113541
+    },
+    ".cache/quant6/oos.npz": null,
+    ".cache/quant6/overlap.json": {
+      "sha256": "14b1ea4584b63bff3d9c2b578848355c6a130be5cb530bb5583a9de41fad4e7a",
+      "bytes": 110367
+    },
+    ".cache/quant6/overlap.npz": null,
+    ".cache/quant6/panel.json": {
+      "sha256": "05881ad857a9bd0a8a2ea5d2fc31220e1618a75fba45a7830163ce0a389c2792",
+      "bytes": 669
+    },
+    ".cache/quant6/panel.npz": null,
+    ".cache/quant6/panel_fe.json": {
+      "sha256": "ead55f882b712a619007668d8730579bf826640cd4e7e13a798598245caa3d7b",
+      "bytes": 2217255
+    },
+    ".cache/quant6/panel_fe.npz": null,
+    ".cache/quant6/petersen.json": {
+      "sha256": "6efa1929d3c8f437cd64ff8de3ca792027be3e9aa46037b6ed04fbf84cd42de9",
+      "bytes": 6387
+    },
+    ".cache/quant6/petersen.npz": null,
+    ".cache/quant6/predreg_theory.json": {
+      "sha256": "948964dffe5c029c79d7455d7019470c502242d6ecc608deaaa76ea18d92b739",
+      "bytes": 2172
+    },
+    ".cache/quant6/predreg_theory.npz": null,
+    ".cache/quant6/shrinkage.json": {
+      "sha256": "073c0be7283118c019a339bae208f2ce8a7683aa9332bcffbc31a539433ea4b2",
+      "bytes": 3412
+    },
+    ".cache/quant6/shrinkage.npz": null,
+    ".cache/quant6/snr.json": {
+      "sha256": "879be846563c6467d794f5c4482764233ced9fe5fa26417784b15318350c8a32",
+      "bytes": 14347
+    },
+    ".cache/quant6/snr.npz": null,
+    ".cache/quant6/stambaugh.json": {
+      "sha256": "498e8c1025a3302f013d8474c795b6ff069bac609d0abcb4d80f80cb578d717f",
+      "bytes": 197976
+    },
+    ".cache/quant6/stambaugh.npz": null,
+    ".cache/quant6/stambaugh_cloud.json": {
+      "sha256": "8caad2eb53af9b0b8cebe69e4b0afc66c824579a8e060cb6189ee2de28ff0c79",
+      "bytes": 312218
+    },
+    ".cache/quant6/stambaugh_cloud.npz": null,
+    ".cache/quant6/twopass.json": {
+      "sha256": "9640cd8d71257101860a5c3a9e64ab00102f1ae1a66ea49f2f7f92c7c2201902",
+      "bytes": 3805
+    },
+    ".cache/quant6/twopass_inference_v2.json": {
+      "sha256": "0689f7f4f30f90dcb616c9e0a2be323e772760971dbac57f5a716cfecf9ebc34",
+      "bytes": 4002
+    },
+    ".cache/quant6/twopass_inference_v2.npz": null
+  },
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "manual_visual_review": {
+    "english_endpoint_chapters": 21,
+    "chinese_endpoint_chapters": 21,
+    "english_playback_contact_sheets": 21,
+    "method": "Narration-beat contact sheets and 40 sampled playback frames per chapter, with focused native-frame rechecks of repaired layouts and transitions.",
+    "focused_repairs": [
+      "HAC question clears formulas",
+      "Complete MLE and alpha-beta ellipses",
+      "Chinese event statistic and Bayesian error readout fit",
+      "DML labels follow residual coordinates; score and remainder remain readable",
+      "RD and DML observations remain inside expanded viewing ranges without clamping",
+      "DiD negative-weight highlights retain numerical heights",
+      "Research captions, derivation rows and question cards fit in both languages",
+      "Roadmap, camera resets and Euler puzzle avoid empty or sparse holds"
+    ]
+  },
+  "audio_note": "Waveform and token-time checks do not certify pronunciation or continuous listening. Mandarin zf_001 within-sentence character times are estimated, not forced word alignment.",
+  "opening_sample": {
+    "path": "media/quant6/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 191.53333333333092,
+    "narration_lines": 5,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "sha256": "1ffbe516bc8ee7055e406f23a5591873c94229c598fd96551567c0ae116ae3d6",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\n"
+  },
+  "additional_checks": {
+    "computed_items": 37,
+    "zh_narration_coverage": "109/109",
+    "narration_minutes_estimate": 63.1,
+    "tests": [
+      {
+        "log": "renders/qa/quant6/tests.log",
+        "passed": 239
+      },
+      {
+        "log": "renders/qa/quant6/repair_tests.log",
+        "passed": 7
+      },
+      {
+        "log": "renders/qa/quant6/final_focused_tests.log",
+        "passed": 7
+      }
+    ],
+    "display_audit": {
+      "path": "renders/qa/quant6/display_audit.json",
+      "sha256": "d145e1d18d54fad867da19390e24bf07f1f04c8744f73ea03a1d196af79f5620"
+    },
+    "fixed_risk_aversion_check": {
+      "path": "renders/qa/quant6/mean_variance_assumptions.json",
+      "sha256": "053743ac67601f22d2bb06f0c858e8a60e0f5fe0e5f304c4cf91492cf82a7ef3"
+    },
+    "protocol": {
+      "unchanged_since_base": [
+        "videos/quant/quant6/compute.py",
+        "videos/quant/data/manifest.json",
+        "videos/quant/data/envelope.json",
+        "videos/quant/data/track_record.json"
+      ],
+      "part6_cumulative_trials": 296,
+      "additional_trials": 0,
+      "holdouts_opened": 0
+    }
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 193.31283333333337,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Hook/result.json",
+        "receipt_sha256": "6dc00f79cf7b67350acec49040eb8ffba9c82ce379bd606615e8028db080a13a"
+      },
+      {
+        "scene": "OLS",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 195.28695833333336,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/OLS/result.json",
+        "receipt_sha256": "8927471e98f5b68d20e3f077095670d8c28a4231875abacb02aac52faadc023e"
+      },
+      {
+        "scene": "HAC",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 237.30175000000003,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/HAC/result.json",
+        "receipt_sha256": "3137cd2274966cf39f76832c7069198ced3a488c3e52903fba9d887a6548a40b"
+      },
+      {
+        "scene": "Cluster",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 188.13508333333337,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Cluster/result.json",
+        "receipt_sha256": "1971ebae4bd377ad3bbf72a1f343cca8de19939f13bf8228357b37d80d0907db"
+      },
+      {
+        "scene": "FamaMacBeth",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 268.20545833333335,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/FamaMacBeth/result.json",
+        "receipt_sha256": "f6307c82814ab566d1aee2314c2e817a59f339968c34ff8cd1c09bab2d486177"
+      },
+      {
+        "scene": "Stambaugh",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 184.46287500000003,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Stambaugh/result.json",
+        "receipt_sha256": "7d60ac86ca16922295614c0584ee186d65e18b59c2b34fdbf8d22ebceafb9faa"
+      },
+      {
+        "scene": "OutOfSample",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 187.84254166666668,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/OutOfSample/result.json",
+        "receipt_sha256": "9caf432f149c6292cd1404892244ccfc6557ae5de45a59ccf492cfbd256cee06"
+      },
+      {
+        "scene": "MLE",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 200.03137500000003,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/MLE/result.json",
+        "receipt_sha256": "aed16d98469be7565b41ca084fab58bef805582de327ac6980a2d52a0fc16017"
+      },
+      {
+        "scene": "GMM",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 208.74995833333332,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/GMM/result.json",
+        "receipt_sha256": "e30c35be3f95ec9809c1f54fcc2f98959cd5f7802ec70f4c36bb998351162674"
+      },
+      {
+        "scene": "Euler",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 213.94983333333334,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Euler/result.json",
+        "receipt_sha256": "08ca468a04ca8e6b8287dbbbe0d977a21debccdc6a7459e286d5bd3542d51f0e"
+      },
+      {
+        "scene": "Event",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 228.11470833333337,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Event/result.json",
+        "receipt_sha256": "8e0f2f73922001d303473c6eb0b989e67a751d9711e5eac30b27e438fbf7b70c"
+      },
+      {
+        "scene": "Bootstrap",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 216.7832916666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Bootstrap/result.json",
+        "receipt_sha256": "bf86a54508dbb3099a35e57b5b1b20ebd61fd08a63251b86d392f2a5939d8b68"
+      },
+      {
+        "scene": "Bayes",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 217.99991666666668,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Bayes/result.json",
+        "receipt_sha256": "391a3c60739345308e8968e77275b6d6f523fd68c5f9ee273174d940b5e9e858"
+      },
+      {
+        "scene": "Many",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 189.69062500000004,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Many/result.json",
+        "receipt_sha256": "28bdfdc4566193eb20c8bf515527e63d7c93a3a606a24418b017cad6f8ab732e"
+      },
+      {
+        "scene": "Designs",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 236.7887916666667,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Designs/result.json",
+        "receipt_sha256": "0f04df12b9353d393606aaf2788767be3195388cb33f36a4912137b9eb8fa81e"
+      },
+      {
+        "scene": "DML",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 197.26475000000005,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/DML/result.json",
+        "receipt_sha256": "2fee0db2a4915988f53c5cd0d90cd597b5acf21e2defb346e39c3a30f77abdbb"
+      },
+      {
+        "scene": "SNR",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 184.02766666666668,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/SNR/result.json",
+        "receipt_sha256": "999c91ff06a1c500fdc9b5232b0bd4299953caf6536acdf1c053eef21e92685d"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 195.25729166666673,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Industry/result.json",
+        "receipt_sha256": "7c6bb3244e75bd1a729c615af5b5cad43c14c60e3f13487a11c27dfa22bc4fd8"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 152.0517916666667,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Frontier/result.json",
+        "receipt_sha256": "08c1d878263b790e97107a96f67c1582d53ee0b3f537d50a7c4a95c8d9a89cba"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 214.84429166666672,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Research/result.json",
+        "receipt_sha256": "a1477ce4b024f62965816f55e82734d3cfa9eb38dcaceb718bf541a5b3ebce62"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 197.4924166666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Outro/result.json",
+        "receipt_sha256": "7c1aa9980f8c14ac1918763df95c343da6e655948eca9f6a2366413f4fb6b0e7"
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 217.37891666666673,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Hook/result.json",
+        "receipt_sha256": "7772379109b4c48ef51965082c126ff669a06a04c9f5d92f383e2f1ac3e6e8cc"
+      },
+      {
+        "scene": "OLS",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 203.84870833333335,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/OLS/result.json",
+        "receipt_sha256": "5417fcc289550d6810b6b44537effa9651e32d2cfb8cb5b31de2cca51ea138c2"
+      },
+      {
+        "scene": "HAC",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 259.47895833333325,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/HAC/result.json",
+        "receipt_sha256": "2483dccb149b04217444378edca416fb11bd6ce0472c1703457500277bd74e55"
+      },
+      {
+        "scene": "Cluster",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 211.63012500000002,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Cluster/result.json",
+        "receipt_sha256": "c37d5714ac825fd77b37c4faae81b8074f663f29ea9d4f0b76b72e5c9568043a"
+      },
+      {
+        "scene": "FamaMacBeth",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 287.70216666666664,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/FamaMacBeth/result.json",
+        "receipt_sha256": "331dbc7e1089dc8e8aee6f5801a25b6530b8a911f27ad76d021c7097a6bbae0c"
+      },
+      {
+        "scene": "Stambaugh",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 200.5231666666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Stambaugh/result.json",
+        "receipt_sha256": "bad27524d1bce481abd00f645a4482171301c7790cdf67e3029b52f64f58ab1e"
+      },
+      {
+        "scene": "OutOfSample",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 209.4185,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/OutOfSample/result.json",
+        "receipt_sha256": "7da7a0b38beb6264b7781c6a82d0f53d8ce998ff1242131ba25c3176a382d8e5"
+      },
+      {
+        "scene": "MLE",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 196.60225000000003,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/MLE/result.json",
+        "receipt_sha256": "54118cf11c4dad02271be8cb7fa54f4a700896a4be7af3f016660131076b3c9d"
+      },
+      {
+        "scene": "GMM",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 204.47662500000004,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/GMM/result.json",
+        "receipt_sha256": "2a717fc2598affbcb6883f5fb625593d3298c3fc7cdb0c94ee9213c0e3145b3a"
+      },
+      {
+        "scene": "Euler",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 223.0196666666667,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Euler/result.json",
+        "receipt_sha256": "986d01610f56b356afb6886bc126039476515778d178e5305ccc6f6d9dac71d9"
+      },
+      {
+        "scene": "Event",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 241.9219583333334,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Event/result.json",
+        "receipt_sha256": "3a2a6aa3fc753dd86cbeb65f39bc942d618457fb49f1a5193b6d5ce8c94c33df"
+      },
+      {
+        "scene": "Bootstrap",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 223.75804166666668,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Bootstrap/result.json",
+        "receipt_sha256": "528f5aa53519b6a1a8ede81c2e86df43761ecd9a5ee61e73cfde2050dd109f67"
+      },
+      {
+        "scene": "Bayes",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 212.18595833333336,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Bayes/result.json",
+        "receipt_sha256": "75f9b852b7ffee1d109b6b50e0911fe48a03d4d9ab933699419d2116a7ec5388"
+      },
+      {
+        "scene": "Many",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 207.40912500000005,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Many/result.json",
+        "receipt_sha256": "a1cca1ce21f89e207d359b02cdcda9c82a53daa9a45fa2a8da67ad53bbd8de8d"
+      },
+      {
+        "scene": "Designs",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 252.16158333333337,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Designs/result.json",
+        "receipt_sha256": "d14a5034f5a6de6d503e62881ef10beee245c3aea2939175038843ac6d5ae353"
+      },
+      {
+        "scene": "DML",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 211.11266666666668,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/DML/result.json",
+        "receipt_sha256": "dd0224f1da513545e3d65bb9fe82d97dfce714cba04c66865afbf7ae3aa27f1a"
+      },
+      {
+        "scene": "SNR",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 182.2964166666667,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/SNR/result.json",
+        "receipt_sha256": "eef82d27bc2093e38f92071cb71a776e9348bb185f1e32bfc16802051d5d65f9"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 216.43712500000004,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Industry/result.json",
+        "receipt_sha256": "406bf54ad5145a7603a6be62ee95c9a9424a6c4b97dac59c6e31a1aceddba5db"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 180.50229166666668,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Frontier/result.json",
+        "receipt_sha256": "89bdd5d5c5c34b568f978b680df1d502d17da375ba7e821fe3466dfd771a07d5"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 214.55104166666672,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Research/result.json",
+        "receipt_sha256": "8a00c50a533524f8ba49761fc42f2e240806bf49f747e558f17d75aaac0c83c3"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 235.3475833333334,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/zh/Outro/result.json",
+        "receipt_sha256": "8e8ee41ee475d888d16e1530fe5b82df30b4047ad27a6c61db546735567fc76a"
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 193.06666666666436,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Hook_motion/result.json",
+        "receipt_sha256": "c853c531a20773dabacaeca46934233ea94dc7f050f6005c0cb4d1d71c9c16de",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 193 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 193 s\n"
+      },
+      {
+        "scene": "OLS",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 194.9999999999998,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/OLS_motion/result.json",
+        "receipt_sha256": "750874ef84ea4a62432bc37d5d411749568e616b4f58336de56a2e9fd4979cbe",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\n"
+      },
+      {
+        "scene": "HAC",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 236.9999999999993,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/HAC_motion/result.json",
+        "receipt_sha256": "6a8f0033a6703895ad61103c2473f89109035b7787483be5207b43c17c63a1fd",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 237 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 237 s\n"
+      },
+      {
+        "scene": "Cluster",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 187.86666666666562,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Cluster_motion/result.json",
+        "receipt_sha256": "742faa576b8cabf9393da3bdae93044df28ec34a4ecdf73cd0b5c893588b48b2",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\n"
+      },
+      {
+        "scene": "FamaMacBeth",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 267.86666666666514,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/FamaMacBeth_motion/result.json",
+        "receipt_sha256": "ed1a23407f335d3a25a941fef2d081d4d81056d3a253dcd9bddfdb36ed92c9f4",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\n"
+      },
+      {
+        "scene": "Stambaugh",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 184.26666666666583,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Stambaugh_motion/result.json",
+        "receipt_sha256": "04383614aab53717d71ddfc163a4047197629d13bce7b856a24c48cce108f50c",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
+      },
+      {
+        "scene": "OutOfSample",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 187.60000000000034,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/OutOfSample_motion/result.json",
+        "receipt_sha256": "54696dd1103ca587e6eacfeda4f98492ad5ca256afde5fc60ead6789284db67b",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 188 s\n"
+      },
+      {
+        "scene": "MLE",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 199.8666666666669,
+        "frames": 13,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/MLE_motion/result.json",
+        "receipt_sha256": "8b8b288a5f1712692028003356ae716f29800406559b5407a7a1c20133fd5753",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\n"
+      },
+      {
+        "scene": "GMM",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 208.53333333333254,
+        "frames": 15,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/GMM_motion/result.json",
+        "receipt_sha256": "2afab20e3c4b9fff18f0a403206d35834cd2b28043d2c2c42b4346958b2ba08a",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 208 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 208 s\n"
+      },
+      {
+        "scene": "Euler",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 213.73333333333116,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Euler_motion/result.json",
+        "receipt_sha256": "98945a388001d5c28be6d237e4e4032256e8b4a5ec766340684444582a3c5f34",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\n"
+      },
+      {
+        "scene": "Event",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 227.79999999999762,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Event_motion/result.json",
+        "receipt_sha256": "4cd39ad4a8512a384eaccb643247d8ea4e5ccbb36a2eca2d4e7ff9580ec45600",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\n"
+      },
+      {
+        "scene": "Bootstrap",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 216.46666666666647,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Bootstrap_motion/result.json",
+        "receipt_sha256": "8120258247bbd2055c358a576e9a7314144c595e6b00c3630846e02d5a46e05d",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
+      },
+      {
+        "scene": "Bayes",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 217.79999999999745,
+        "frames": 11,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Bayes_motion/result.json",
+        "receipt_sha256": "d7d99fb4c038632716f1dab74830e1b115bf19f51b26d381b27da196170e58db",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\n"
+      },
+      {
+        "scene": "Many",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 189.39999999999935,
+        "frames": 16,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Many_motion/result.json",
+        "receipt_sha256": "385e6089fa7f1cdc2f4dfcf34742e67839365bbe8657b6206bcb1f151d67d869",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\n"
+      },
+      {
+        "scene": "Designs",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 236.39999999999827,
+        "frames": 19,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Designs_motion/result.json",
+        "receipt_sha256": "bf17f2521c32c6efd4f9c86e290fee696c64fe29a3071ac73f14784ee4ef033e",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
+      },
+      {
+        "scene": "DML",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 197.066666666665,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/DML_motion/result.json",
+        "receipt_sha256": "a58642095a2fa76cfdc55f4da89b4f7b71b88fcef48599c957338a48a78c8994",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 197 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 197 s\n"
+      },
+      {
+        "scene": "SNR",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 183.799999999999,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/SNR_motion/result.json",
+        "receipt_sha256": "ad24c396ebfadb48794f3a4fe189ad7cc43b46c04f0ae4e63dd35476ac2606dc",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 194.93333333333334,
+        "frames": 10,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Industry_motion/result.json",
+        "receipt_sha256": "25049db654d4d4f0ab889021506c32d40ef9676c484c6769b0eda65823908289",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 195 s\n"
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 151.93333333333322,
+        "frames": 12,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Frontier_motion/result.json",
+        "receipt_sha256": "679eb8397b788c514b7c4542f7a59dd576bf6beb3e9d7563af6e72006b547228",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\n"
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 214.3333333333322,
+        "frames": 17,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Research_motion/result.json",
+        "receipt_sha256": "031d895349ef8beba3690fded6f2d211d3ae9c4c0949960696fee79e78358d84",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\n"
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "5722809185048e1f436d9ec506a54749ab517aa4d42f972f59dac9b266a18658",
+        "duration": 197.06666666666635,
+        "frames": 14,
+        "warnings": [],
+        "receipt": "renders/qa/series/quant6/en/Outro_motion/result.json",
+        "receipt_sha256": "777fdc55654368809e402300126d1ae3ce57d6b9f180de84f544b3c4f063a14d",
+        "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 197 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 197 s\n"
+      }
+    ]
+  },
+  "audio": [
+    {
+      "scene": "Hook",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant6/en/Hook/audio_result.json",
+      "report_sha256": "976c6e5b06f574fdc736dcff8adbe03f69695e62d984e9c3fa2594cda8605340"
+    },
+    {
+      "scene": "MLE",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 4,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant6/en/MLE/audio_result.json",
+      "report_sha256": "7cb758a0f804686e08eb6e5b5fe238bd1cc1bfe2bfb9857414d623f03aa96fb5"
+    },
+    {
+      "scene": "Research",
+      "lang": "en",
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 7,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant6/en/Research/audio_result.json",
+      "report_sha256": "3a189af25b027da2a78401d0114e57bf500a2a64c80411b46665133ebdd07613"
+    },
+    {
+      "scene": "Hook",
+      "lang": "zh",
+      "backend": "kokoro",
+      "voice": "zf_001",
+      "lines": 5,
+      "issues": [],
+      "source_current": true,
+      "report": "renders/qa/series/quant6/zh/Hook/audio_result.json",
+      "report_sha256": "b5d4f232c5048ae79e4d17bb0540b08bc7445ed87bd499864992187d3ee2740c"
+    }
+  ],
+  "preview": {
+    "path": "renders/quant6_polished_silent.mp4",
+    "seconds": 4301.825813,
+    "chapters": 21,
+    "sha256": "025b8ee52891879e1b24e8f38e32fec77b8ec2e7e595103ff4617cc8e4ea9f87",
+    "narration": "silent timing estimate"
+  }
+}
