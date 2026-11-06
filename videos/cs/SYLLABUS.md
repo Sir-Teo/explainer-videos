@@ -1577,49 +1577,56 @@ everyday tools of real code and of interviews: prefix sums, Fenwick and segment 
 stacks, bit tricks. It then turns to algorithm engineering, where a textbook hash table, sort or binary search
 becomes ten times faster by respecting the caches, branch predictors and SIMD units of Act II. Theory meets the
 machine, and the ledger gets its native row.
-1. Hook: two correct implementations with the same big-O differ by 20× on this machine (measured).
-2. Prefix sums and difference arrays; 2D integral images (callback to *AI, Built* 6's Viola–Jones); O(1) range sums.
-3. **Fenwick trees** (1994): the lowbit trick i & −i; O(log n) update and query, proved from binary representations,
-   with each node's responsibility range drawn.
-4. **Segment trees**: range queries over any monoid; lazy propagation; persistence, briefly.
-5. Range minimum and LCA:
-   - sparse tables with O(1) queries (by idempotence);
-   - LCA by Euler tour plus RMQ, and by binary lifting;
-   - the Cartesian-tree equivalence of RMQ and LCA (Bender & Farach-Colton 2000).
-6. Two pointers and sliding windows: invariants that only move forward (amortized O(n)); monotonic deques for the
-   sliding-window maximum; monotonic stacks (next greater element, largest rectangle in a histogram).
-7. Binary search on the answer (monotone predicates); galloping search; ternary search.
-8. Bits:
-   - popcount and the lowest set bit; Gray codes (callback to Part 4);
-   - submask enumeration (Σ 3ⁿ);
-   - bitset DP and **the Four Russians** (word-level parallelism: transitive closure and LCS in O(n²/w)).
-9. Meet in the middle (subset sum in 2^{n/2}); square-root decomposition; Mo's algorithm.
-10. Algorithm engineering I, layouts: binary search over a sorted array, an Eytzinger layout and a B-tree-like
-    layout (measured on this machine, Khuong & Morin 2017); branchless search (callback to Parts 7–8).
-11. Algorithm engineering II, SIMD and hashing: vectorized scanning (the Job's tokenizer; simdjson's ideas); Swiss-table
-    metadata bytes; chaining against open addressing in practice (measured).
-12. Sorting in practice: the radix-against-comparison crossover (measured); vectorized and parallel sorts (vqsort,
-    IPS⁴o, cited).
-13. Benchmarking honestly:
-    - warm-up and variance; confidence intervals;
-    - measurement bias: environment size and link order change results (Mytkowicz et al. 2009);
-    - dead-code elimination in microbenchmarks.
-14. Problem solving as a craft: Pólya's heuristics; reducing to a known problem; the coding-interview repertoire
-    mapped to the series' parts (a card).
-15. The Job, engineered: a SIMD tokenizer and a Swiss-table-style map, natively, against Part 17's textbook version.
-    Ledger row 10. Outro.
+1. Hook: an array and a shuffled linked list, both O(n), 5× apart at a thousand elements and 143× at sixteen million
+   (measured).
+2. Prefix sums and difference arrays; the integral image (Crow 1984; Viola–Jones, *AI, Built* 6); the parallel scan
+   (Hillis–Steele, Blelloch).
+3. **Fenwick trees** (1994): the lowbit trick i & −i; responsibility ranges drawn; both loops proved logarithmic; four
+   structures timed (52 ns against 142 for a segment tree and 130–155 µs for the naive ones).
+4. **Segment trees**: covering nodes; a four-number node for the maximum subarray; lazy propagation (57 nodes against
+   17,552 elements); persistence.
+5. Range minimum and LCA: the sparse table (idempotence); LCA by Euler tour and by binary lifting; the Cartesian tree
+   (Bender & Farach-Colton 2000; Fischer & Heun).
+6. Two pointers: the sliding-window maximum's deque; the longest stretch without a repeat; monotonic stacks (next
+   greater element, the largest rectangle in a histogram).
+7. Searching: binary search on the answer; a binary search to trust (invariants, half-open ranges, Bloch's overflow);
+   galloping (Bentley & Yao 1976); ternary search.
+8. Bits: popcount, the lowest set bit, Gray codes; submask enumeration (exactly 3ⁿ); **the Four Russians** in C,
+   bitset closure (10×) and bit-parallel LCS (103×).
+9. Meet in the middle (Horowitz & Sahni 1974); square-root decomposition; Mo's order.
+10. Algorithm engineering I, layouts: sorted, branch-free, Eytzinger with prefetch and a 16-key B-tree layout with
+    AVX-512 (Khuong & Morin 2017), 1 K to 64 M keys (908 against 184 ns); branch prediction measured (5.3 against
+    0.9 ns per element).
+11. Algorithm engineering II: an AVX2 word scan (8.8×); auto-vectorization; Swiss-style tables against linear probing
+    and `std::unordered_map` (66, 171 and 82 ns at 7/8 full).
+12. Sorting in practice: introsort, pdqsort and Timsort; the radix crossover at about 64 keys and 3.5× at 16 M; the
+    top 20 of 16 M (a heap, 94× faster than sorting).
+13. Benchmarking honestly: warm-up and spread over thirty runs; environment size (Mytkowicz et al. 2009; Stabilizer);
+    dead-code elimination.
+14. Problem solving as a craft: Pólya's four steps on a worked problem with a stress test; the interview repertoire
+    mapped to the series' parts.
+15. The Job, engineered: an AVX2 tokenizer, word-at-a-time hashing and a Swiss-style table with inline keys, natively,
+    against Part 17's C (155 against 75 ms); Amdahl's law; ledger row 10, the first measured on real hardware.
+16. *Frontier*: a learned index over the corpus's word offsets (PGM-style; 64 segments, 1.5× faster than binary
+    search); ski rental with predictions (consistency and robustness); the theory–practice gap (external memory,
+    cache-oblivious); open problems. Outro.
 
-*Computed:* Fenwick and segment-tree operation counts; the RMQ structures; monotonic-deque traces; Four Russians
-speedups; search layouts and branchless search timed on this machine; hash-map variants; the radix crossover; the
-run-to-run distribution of a benchmark.
-*Visuals:* Fenwick responsibility ranges as bars by lowbit; a segment tree lighting its covering nodes; a sliding
-window with its deque; a tree folding into an Eytzinger array; benchmark distributions as strips of dots.
+*Computed:* every number above, in `videos/cs/cs24/compute.py` with `explainer/cs/algo/practice.py` (tested in
+`tests/test_cs24_practice.py` against brute force): the structures' operation counts; and native C and C++
+benchmarks, each checked against a reference before it is timed: array against list, four range structures,
+search layouts, branches, SIMD word finding, vectorization, three hash tables, radix against comparison sort, top-k,
+benchmark spread and layout bias, dead code, the Job engineered, a learned index. Ski rental with predictions in
+Python.
+*Visuals:* Fenwick responsibility ranges as bars by lowbit; a segment tree lighting its covering nodes; the sparse
+table's windows; an Euler tour; a Cartesian tree; a sliding window with its deque; a histogram's best rectangle; a
+sorted array against its Eytzinger layout; a word's letters as a bitmask; a Swiss-table group; benchmark
+distributions as strips of dots; Amdahl's bars; the ledger's tenth row.
 *In practice:* the data structures inside databases, search engines, game engines and trading systems; the core
 repertoire of coding interviews; performance work on hot paths.
 *Reading:* Skiena, *The Algorithm Design Manual*; Bentley, *Programming Pearls*; Warren, *Hacker's Delight*;
 Laaksonen, *Guide to Competitive Programming*; Halim & Halim, *Competitive Programming*; Müller-Hannemann & Schirra
 (eds.), *Algorithm Engineering*; Fenwick 1994; Bender & Farach-Colton 2000; Khuong & Morin 2017; Mytkowicz et al.
-2009; Langdale & Lemire 2019 (simdjson).
+2009; Langdale & Lemire 2019 (simdjson); Kraska et al. 2018; Ferragina & Vinciguerra 2020.
 
 ---
 
@@ -3358,4 +3365,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 21 | scenes (18, with the *Frontier* chapter), computations (naive, Rabin–Karp, KMP, Boyer–Moore and Horspool counting their comparisons on the novels; Aho–Corasick over the corpus; suffix trees, the suffix array and LCP of all 25 MB; the BWT of *Moby-Dick* inverted and its contexts; the FM-index of the novels; LZ77 + Huffman, LZW and rANS against zlib, bzip2 and xz; Needleman–Wunsch and Smith–Waterman; Myers' diff on this syllabus's history; rsync and content-defined chunking; Manacher over the corpus; BWT runs of repetitive text), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 22 | scenes (17, with the *Frontier* chapter), computations (Kettner's grid and adaptive predicates; Jarvis, Graham, the monotone chain, quickhull and Chan counting their work; Bentley–Ottmann; ear clipping and Fisk's colouring; Fortune's sweep; Delaunay by insertion, by Lawson's flips and by the lifting map; the EMST; Seidel's LP and Welzl's circle; kd-trees and trapezoidal maps; distance concentration, NSW and HNSW; a ham-sandwich cut; configuration spaces, visibility graphs and an RRT; 3SUM as collinearity), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 23 | scenes (16, with the *Frontier* chapter), computations (Chvátal's LP as a 3D polytope with the simplex walk and its tableaux; a transportation problem; the dual's family of bounds, shadow prices and complementary slackness; Klee–Minty pivots under three rules, perturbed cubes and random LPs; an ellipsoid run and the central path; total unimodularity checked; knapsack branch and bound and the FPTAS; vertex and set cover against brute force; Held–Karp, the double tree, Christofides–Serdyukov, nearest neighbour and 2-opt; Goemans–Williamson against exact MAX-CUT; ski rental and paging on the Job's trace; multiplicative weights and a zero-sum game; gradient descent against Newton; random-polytope diameters against Hirsch), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 24–61 | planned (this document) | — |
+| 24 | scenes (17, with the *Frontier* chapter), computations (prefix sums and integral images; Fenwick and segment trees with operation counts; sparse tables, Euler-tour LCA, binary lifting and Cartesian trees; the sliding-window deque and monotonic stacks; binary search on the answer and galloping; submasks; meet in the middle and Mo's order; native C and C++ benchmarks for array against list, range structures, search layouts, branches, SIMD word finding, vectorization, hash tables, radix sort, top-k, benchmark noise and dead code; the Job engineered for ledger row 10; a learned index; ski rental with predictions), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 25–61 | planned (this document) | — |

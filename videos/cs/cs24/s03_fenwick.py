@@ -94,8 +94,8 @@ class Fenwick(VoiceoverScene):
             "<bookmark mark='b'/> An update adds the lowest set bit, which pushes that bit at least one place to the "
             "left, so it too takes at most log n steps, and it visits exactly the cells whose ranges contain i. "
             "<bookmark mark='c'/> The two loops read the same binary representation in opposite directions. "
-            "<bookmark mark='d'/> Measured on random operations, the cells touched grow by one for every doubling of "
-            "n, about half of log n on average, because a random number has half its bits set."
+            "<bookmark mark='d'/> Measured on random operations, the cells touched grow by one each time n is "
+            "multiplied by four: about half of log n on average, because a random number has half its bits set."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abc", lines):

@@ -73,18 +73,18 @@ class Hook(VoiceoverScene):
         r16 = next(r for r in rows if r["logn"] == 16)
         r24 = rows[-1]
         side = VGroup(
-            label(rf"$n = {words(rows[0]['n'])}$: \ {rows[0]['ratio']:.0f}$\times$ apart \ (everything fits in L1)",
+            label(rf"$n = {words(rows[0]['n'])}$: \ {rows[0]['ratio']:.0f}$\times$ apart \\ (everything fits in L1)",
                   font_size=21, color=WHITE),
             label(rf"$n = {words(r16['n'])}$: \ {r16['ratio']:.0f}$\times$", font_size=21, color=HEAD),
-            label(rf"$n = {words(r24['n'])}$: \ {r24['ratio']:.0f}$\times$ \ ({r24['list_ns']:.0f} ns a node, \ "
+            label(rf"$n = {words(r24['n'])}$: \ {r24['ratio']:.0f}$\times$ \\ ({r24['list_ns']:.0f} ns a node, \ "
                   rf"{r24['array_ns']:.1f} ns an element)", font_size=21, color=NO),
-            label(r"big-O hides the constant, \ and here the constant is the memory hierarchy \ (Part 9)",
+            label(r"big-O hides the constant, \\ and here the constant is \\ the memory hierarchy \ (Part 9)",
                   font_size=21, color=YES),
-            label(rf"{h['cpu']}; \ gcc \texttt{{-O2}}", font_size=17, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).to_edge(RIGHT, buff=0.35)
-        if side.width > 5.4:
-            side.width = 5.4
-            side.to_edge(RIGHT, buff=0.35)
+            label(rf"{h['cpu']} \\ gcc \texttt{{-O2}}", font_size=16, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+        if side.width > 5.2:
+            side.width = 5.2
+            side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "Here they are, timed on the machine that made this video. <bookmark mark='a'/> With a thousand "
             "elements everything fits in the first-level cache, and the list is already five times slower. "

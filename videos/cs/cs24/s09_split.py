@@ -26,7 +26,7 @@ class Splitting(VoiceoverScene):
         lt = label(r"first half: \ all $2^{n/2}$ subset sums", font_size=21, color=DATA).move_to(L)
         rt = label(r"second half: \ all $2^{n/2}$ sums, \ \textbf{sorted}", font_size=21, color=LAM).move_to(R)
         arrow = Arrow(L.get_right(), R.get_left(), buff=0.1, color=YES)
-        al = label(r"for each $s$: \ binary-search $t - s$", font_size=19, color=YES).next_to(arrow, UP, buff=0.12)
+        al = label(r"for each $s$: \ binary-search $t - s$", font_size=19, color=YES).next_to(VGroup(L, R), UP, buff=0.1)
         notes = VGroup(
             label(r"\textbf{subset sum}: \ does some subset of $n$ numbers add up to $t$? \ NP-complete \ (Part 26)",
                   font_size=22, color=WHITE),

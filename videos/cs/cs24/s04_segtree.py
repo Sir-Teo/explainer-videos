@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, cells_row, grid_table, load, mono, words)
 
 
-def seg_layout(n, top=2.3, width=12.0, dy=1.05):
+def seg_layout(n, top=2.45, width=12.0, dy=0.88):
     """Node k of a segment tree over n leaves (n a power of two): its centre and width."""
     pos = {}
     depth = int(math.log2(n))

@@ -23,12 +23,12 @@ class Simd(VoiceoverScene):
         t = load("simd")["token"]
         head = label(r"Finding words, \ 32 bytes at a time", font_size=34).to_edge(UP, buff=0.3)
         text = "It was the best of times, it wa"
-        cw = 0.36
+        cw = 0.34
         cells = VGroup(*[VGroup(Rectangle(width=cw, height=0.46, stroke_color=GREY_D, stroke_width=1),
                                 mono(ch if ch != " " else "_", 18, WHITE)) for ch in text])
         for c in cells:
             c[1].move_to(c[0])
-        cells.arrange(RIGHT, buff=0).next_to(head, DOWN, buff=0.5)
+        cells.arrange(RIGHT, buff=0).next_to(head, DOWN, buff=0.5).shift(RIGHT * 0.9)
         is_l = [ch.isalpha() for ch in text]
         bits = VGroup(*[mono("1" if b else "0", 18, YES if b else GREY_C).next_to(c, DOWN, buff=0.12)
                         for b, c in zip(is_l, cells)])
@@ -80,10 +80,10 @@ class Simd(VoiceoverScene):
         o1, o3 = v["o1"], v["o3"]
         head = label(r"Letting the compiler vectorize", font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"\texttt{y[i] = a * x[i] + y[i]}", f"{o1['saxpy']:.2f}", f"{o3['saxpy']:.2f}",
-                 f"{o1['saxpy'] / o3['saxpy']:.1f}$\times$"],
-                [r"\texttt{s += x[i]}", f"{o1['isum']:.2f}", f"{o3['isum']:.2f}", f"{o1['isum'] / o3['isum']:.1f}$\times$"],
-                [r"\texttt{x[i] += x[i - 1]}", f"{o1['prefix']:.2f}", f"{o3['prefix']:.2f}",
-                 f"{o1['prefix'] / o3['prefix']:.1f}$\times$"]]
+                 rf"{o1['saxpy'] / o3['saxpy']:.1f}$\times$"],
+                [r"\texttt{s += x[i]}", rf"{o1['isum']:.2f}", f"{o3['isum']:.2f}", rf"{o1['isum'] / o3['isum']:.1f}$\times$"],
+                [r"\texttt{x[i] += x[i - 1]}", rf"{o1['prefix']:.2f}", f"{o3['prefix']:.2f}",
+                 rf"{o1['prefix'] / o3['prefix']:.1f}$\times$"]]
         tab = grid_table([r"loop \ (65,536 elements)", r"\texttt{-O1}, \ ns", r"\texttt{-O3 -march=native}",
                           r"speedup"], rows, widths=[4.8, 2.0, 3.4, 1.6], row_h=0.48, font_size=21, mono_cols=(),
                          colors=[[YES] * 4, [YES] * 4, [NO] * 4])

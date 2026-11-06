@@ -121,15 +121,15 @@ class Searching(VoiceoverScene):
         tab = grid_table([r"answer $d$ places away", r"galloping probes", r"binary search probes"], rows,
                          widths=[3.2, 2.6, 3.0], row_h=0.38, font_size=20, mono_cols=(),
                          colors=[[WHITE, YES, GREY_A]] * len(rows))
-        tab.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        tab.next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.5)
         notes = VGroup(
-            label(r"probe $1, 2, 4, 8, \ldots$ places ahead until you pass the target, \ then binary-search the last "
-                  r"gap", font_size=21, color=WHITE),
-            label(r"cost $\approx 2 \log_2 d$, \ not $\log_2 n$: \ Bentley and Yao (1976)", font_size=21, color=YES),
-            label(rf"on {words(d['n'])} keys \ it wins while $d$ is below about $\sqrt n$", font_size=21, color=HEAD),
-            label(r"used where searches are local: \ merging sorted runs \ (Timsort), \ intersecting posting lists \ "
+            label(r"probe $1, 2, 4, 8, \ldots$ places ahead \\ until you pass the target, \\ then binary-search the "
+                  r"last gap", font_size=21, color=WHITE),
+            label(r"cost $\approx 2 \log_2 d$, \ not $\log_2 n$: \\ Bentley and Yao (1976)", font_size=21, color=YES),
+            label(rf"on {words(d['n'])} keys \ it wins \\ while $d$ is below about $\sqrt n$", font_size=21, color=HEAD),
+            label(r"used where searches are local: \\ merging sorted runs \ (Timsort), \\ intersecting posting lists \ "
                   r"(Part 47)", font_size=21, color=LAM),
-            label(r"\textbf{ternary search}: \ for the peak of a unimodal function, \ discard a third each step",
+            label(r"\textbf{ternary search}: \ for the peak of a \\ unimodal function, \ discard a third each step",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).next_to(tab, RIGHT, buff=0.5).align_to(tab, UP)
         room = 7.0 - notes.get_left()[0]
