@@ -16,11 +16,13 @@ import random
 
 
 def ftl(blocks: int = 256, pages: int = 64, op: float = 0.28, writes: float = 8.0, policy: str = "greedy",
-        hot: tuple[float, float] | None = None, trim: float = 0.0, seed: int = 0, sample: int = 0) -> dict:
+        hot: tuple[float, float] | None = None, trim: float = 0.0, seed: int = 0, sample: int = 0,
+        pattern: str = "random") -> dict:
     """Simulate ``writes`` x (logical capacity) random page writes after the drive is filled once.
 
     ``op``: over-provisioning, spare / user capacity.  ``policy``: "greedy" (the block with fewest valid pages) or
-    "fifo" (the oldest).  ``hot`` = (fraction of writes, fraction of logical pages): skewed traffic.  ``trim``: a
+    "fifo" (the oldest).  ``pattern`` "sequential": the host rewrites its pages in order, as a log or a zoned
+    drive's host does (whole erase blocks die together).  ``hot`` = (fraction of writes, fraction of logical pages): skewed traffic.  ``trim``: a
     fraction of logical pages the file system has freed and trimmed (never written again).  Returns the write
     amplification, the erase counts, and (with ``sample``) the free-block count over time."""
     rng = random.Random(seed)
@@ -97,7 +99,9 @@ def ftl(blocks: int = 256, pages: int = 64, op: float = 0.28, writes: float = 8.
     n = int(writes * L)
     hot_n = int(live_L * hot[1]) if hot else 0
     for i in range(n):
-        if hot and rng.random() < hot[0]:
+        if pattern == "sequential":
+            lp = i % live_L
+        elif hot and rng.random() < hot[0]:
             lp = rng.randrange(hot_n)
         elif hot:
             lp = hot_n + rng.randrange(live_L - hot_n)

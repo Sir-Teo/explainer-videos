@@ -46,14 +46,20 @@ class HDD:
     def cyl(self, block: int) -> int:
         return min(self.cylinders - 1, block * self.cylinders // self.blocks)
 
+    def track_blocks(self, bs: int = 1024) -> int:
+        """Blocks that pass under the head in one turn."""
+        return int(self.mb_s * 1e6 * self.rev_ms / 1e3 / bs)
+
     def trace_time(self, blocks: list[int], bs: int = 1024, start: int | None = None) -> dict:
-        """Time to read ``blocks`` in this order: a block right after the last one costs only its transfer;
-        anything else a seek, half a turn on average, and the transfer.  Returns ms, and how many jumps."""
+        """Time to read ``blocks`` in this order: the next block costs only its transfer, and a block a little
+        further on along the same turn costs the time for the gap to pass under the head; anything else, a seek,
+        half a turn on average, and the transfer.  (No read-ahead cache.)  Returns ms, and how many jumps."""
         t = seeks = 0
         prev = start
+        track = self.track_blocks(bs)
         for b in blocks:
-            if prev is not None and b == prev + 1:
-                t += self.transfer(bs)
+            if prev is not None and 0 < b - prev <= track // 2:
+                t += self.transfer(bs) * (b - prev)
             else:
                 d = 0 if prev is None else self.cyl(b) - self.cyl(prev)
                 t += (self.seek(d) if prev is not None else self.avg_seek()) + self.rev_ms / 2 + self.transfer(bs)
