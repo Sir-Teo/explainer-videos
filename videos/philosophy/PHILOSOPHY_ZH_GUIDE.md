@@ -123,6 +123,11 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Mohists, School of Names | 墨家，名家 |
 | Nyāya | 正理派 |
 | the Master Argument | 主论证 |
+| justified true belief; Gettier case; false lemma; defeater | 得到辩护的真信念；盖蒂尔案例；假引理；挫败者 |
+| reliabilism; the generality problem; sensitivity; safety | 可靠主义；普遍性问题；敏感性；安全性 |
+| luminous; anti-luminosity; margin for error; the KK principle | 透明的；反透明性；误差余量；KK原则 |
+| closure; contextualism; subject-sensitive invariantism | 封闭性；语境主义；主体敏感的不变论 |
+| foundationalism; coherentism; infinitism | 基础主义；融贯论；无穷主义 |
 
 ## Names
 
@@ -139,3 +144,6 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Fine, Williamson, Sorensen, Wright, Sainsbury | 法恩，威廉森，索伦森，赖特，塞恩斯伯里 |
 | Birkhoff, von Neumann, Putnam, Dummett | 伯克霍夫，冯·诺依曼，普特南，达米特 |
 | Ann, Bo, Cy, Di (the example people) | 安，博，赛，迪 |
+| Gettier, Nozick, Sosa, Goldman, Zagzebski | 盖蒂尔，诺齐克，索萨，戈德曼，扎格泽博斯基 |
+| Pritchard, DeRose, Dretske, Lehrer, BonJour, Greco, Lackey | 普理查德，德罗斯，德雷斯克，雷勒，邦茹，格雷科，拉基 |
+| Dharmottara, Zhuangzi, Sextus Empiricus | 法上，庄子，塞克斯都·恩披里柯 |
