@@ -57,10 +57,13 @@ class DML(VoiceoverScene):
             MathTex(rf"\text{{slope of }} y \text{{ on }} d: {dm['slope_raw']:.2f}", font_size=28, color=BAD),
             MathTex(rf"\text{{residual on residual: }} {dm['slope_res']:.2f}", font_size=28, color=GOOD),
             label(r"each point's $\hat m$, $\hat\ell$ learned on the other four folds", font_size=19, color=GREY_A),
+            wrapped_label(r"Causal interpretation assumes no unobserved confounding and a valid partially linear model.",
+                          5.2, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "Machine learning enters causal inference through a careful door. A treatment d moves an outcome y by "
-            "theta, but many controls X drive both. A simulated sample with a planted theta of zero point three, "
+            "theta, but many controls X drive both. A causal interpretation still assumes no unobserved confounding "
+            "and a valid partially linear model; cross-fitting does not establish those assumptions. A simulated sample with a planted theta of zero point three, "
             f"coloured by the first control. <bookmark mark='a'/> The raw slope is {dm['slope_raw']:.2f}, "
             f"{dm['slope_raw'] / 0.3:.0f} times too large. <bookmark mark='b'/> Chernozhukov and coauthors' double machine "
             "learning, from 2018, learns the outcome given the controls and the treatment given the controls, and "
@@ -68,7 +71,7 @@ class DML(VoiceoverScene):
             f"{dm['slope_res']:.2f}. <bookmark mark='d'/> And each point's predictions come from models fitted on the other "
             "folds."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]), LaggedStart(*[FadeIn(p) for p in dots],
+            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[5]), LaggedStart(*[FadeIn(p) for p in dots],
                                                                               lag_ratio=0.002, run_time=2))
             vo.wait_until("a")
             self.play(Create(raw), FadeIn(side[2]))
@@ -91,7 +94,7 @@ class DML(VoiceoverScene):
                       font_size=34, colors=C_),
                 cmath(r"\partial_\eta\, \mathbb{E}[\psi(W; \theta_0, \eta)]\big|_{\eta_0}", r"=", r"0", font_size=36,
                       colors=C_),
-                cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"Z_n + R_n", font_size=36, colors=C_),
+                cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"Z_n + R_n + o_p(1)", font_size=36, colors=C_),
                 cmath(r"R_n", r"=", r"O_p\big(\sqrt n\,a_n(a_n+b_n)\big)", font_size=36, colors=C_),
                 cmath(r"\text{plug-in:}\ \ \hat\theta", r"=", r"\frac{\sum d\,(y - \hat g(X))}{\sum d^2}"
                       r"\ \Rightarrow\ \text{error} \propto \|\hat g - g\|", font_size=34, colors=C_)]

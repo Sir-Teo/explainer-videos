@@ -395,10 +395,10 @@ ZH = {
     'Chapter fifteen. Double machine learning.':
         '第15章。双重机器学习。',
     'f"Machine learning enters causal inference through a careful door.':
-        "机器学习小心地走进因果推断的大门。处理d使结果y变化theta，但许多控制变量X同时驱动两者。一个植入theta为零点三的模拟样本，按第一个控制变量着色。<bookmark mark='a'"
-        "/>原始斜率是{dm['slope_raw']:.2f}，大了{dm['slope_raw'] / 0.3:.0f}倍。<bookmark mark='b'/>切尔诺茹科夫及其合作者2018"
-        "年的双重机器学习，学习给定控制变量时的结果，以及给定控制变量时的处理，然后把两者都减掉：每个点都滑进残差点云。<bookmark mark='c'/>残差对残差：{dm['slope_res"
-        "']:.2f}。<bookmark mark='d'/>每个点的预测都来自在其他折上拟合的模型。",
+        '机器学习小心地走进因果推断的大门。处理d使结果y变化theta，但许多控制变量X同时驱动两者。因果解释仍假设不存在未观测混杂，且部分线性模型有效；交叉拟合不能证明这些假设。一个植入theta为零点三的'
+        "模拟样本，按第一个控制变量着色。<bookmark mark='a'/>原始斜率是{dm['slope_raw']:.2f}，大了{dm['slope_raw'] / 0.3:.0f}倍。<bookm"
+        "ark mark='b'/>切尔诺茹科夫及其合作者2018年的双重机器学习，学习给定控制变量时的结果，以及给定控制变量时的处理，然后把两者都减掉：每个点都滑进残差点云。<bookmark mark='"
+        "c'/>残差对残差：{dm['slope_res']:.2f}。<bookmark mark='d'/>每个点的预测都来自在其他折上拟合的模型。",
     'Why residualise both?':
         "为什么两边都要取残差？估计量求解的是残差对残差的得分方程：残差结果减theta乘残差处理，再乘以残差处理，平均为零。<bookmark mark='a'/>这个得分满足内曼正交性：在真值处对两个学到的"
         "函数求它均值的导数，得到零。学到的函数中的小误差不会推动它，至少在一阶上。<bookmark mark='b'/>所以误差是通常的正态项，加上一个二阶余项：处理模型误差乘以结果模型误差与处理模型误差之"

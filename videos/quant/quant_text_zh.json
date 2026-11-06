@@ -29590,7 +29590,8 @@
     "\\text{Gibbs } 3.9,\\ \\text{EB } 3.8": "\\text{Gibbs } 3.9,\\ \\text{经验贝叶斯 } 3.8",
     "$\\beta$ axis: a co-movement under a constant-parameter model": "$\\beta$轴：常参数模型下的协动",
     "$\\beta$ axis: a co-movement": "$\\beta$轴：协动",
-    "Separate excess-return model: population moments, mean-variance investor, fixed risk aversion; $S$ is an excess-return Sharpe ratio (Campbell--Thompson 2008)": "另一个超额收益模型：总体矩已知，均值–方差投资者，固定风险厌恶系数；$S$是超额收益夏普比率（坎贝尔–汤普森，2008）。"
+    "Separate excess-return model: population moments, mean-variance investor, fixed risk aversion; $S$ is an excess-return Sharpe ratio (Campbell--Thompson 2008)": "另一个超额收益模型：总体矩已知，均值–方差投资者，固定风险厌恶系数；$S$是超额收益夏普比率（坎贝尔–汤普森，2008）。",
+    "Causal interpretation assumes no unobserved confounding and a valid partially linear model.": "因果解释假设不存在未观测混杂，且部分线性模型有效。"
   },
   "phrases": {
     "you owe": "你欠",

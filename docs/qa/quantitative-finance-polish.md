@@ -421,3 +421,10 @@ case the expected-return gain is 10.1101%, while expected conditional variance
 also increases by that proportion. The English/Chinese narration and caption
 now make this distinction. This is a closed-form teaching check, with no new
 market experiment, strategy registration or hold-out access.
+
+The DML lesson now explicitly conditions a causal interpretation on no unobserved
+confounding and a valid partially linear model. Cross-fitting supplies neither
+assumption. Its displayed expansion separates the second-order bias remainder
+from other `o_p(1)` terms, while retaining the corrected treatment-error-squared
+term and the faster-than-quarter-rate condition. This change requires fresh
+bilingual frame and narration captures before final acceptance.
