@@ -23,6 +23,11 @@ Items:
     alloc       a buddy allocator under random traffic; slab against buddy for small objects
     protect     paged PebbleOS: a write to code, a wild read, a read of the kernel, a growing heap
     virt        PebbleOS unmodified on a trap-and-emulate hypervisor: exits by kind; nested-walk counts
+    dirty       LRU on the Job's trace with dirty bits: evictions that must write back first
+    competitive the cyclic adversary; LRU with 2h frames against OPT with h, and Sleator and Tarjan's bound
+    buddyinfo   this machine's buddy free lists
+    pebblevm    PebbleOS with and without paging: kernel size, the pipeline's cost, lazy against eager
+    kernelmap   this machine's Meltdown status (whether its kernel needs KPTI)
     containers  this machine: a new PID namespace with unshare; this process's namespaces and cgroups
     frontier    TLB reach for real TLBs and page sizes; huge pages on the staircase
 """
@@ -288,15 +293,16 @@ def compute_tlb() -> dict:
     from videos.cs.cs31.compute import TOK
     t = _pipeline_tape()
     rows = []
-    for size, asid in ((4, False), (8, False), (16, False), (32, False), (64, False), (16, True), (64, True)):
+    for size, asid, q in ((4, False, None), (8, False, None), (16, False, None), (32, False, None), (64, False, None),
+                          (16, False, 500), (16, True, 500), (64, False, 500), (64, True, 500)):
         procs = [V.user_vm("tok", TOK, stdout="pipe"), V.user_vm("job", J.JOB_HASH, stdin="pipe")]
-        m = V.boot_vm(procs, tape=t, tlb_size=size)
+        m = V.boot_vm(procs, tape=t, tlb_size=size, **({"quantum": q} if q else {}))
         m.asid = asid
         m.run(500_000_000)
         assert bytes(m.output) == PR.job_reference(t)
         r = V.report_vm(m)
         acc = r["tlb_hits"] + r["tlb_misses"]
-        rows.append({"size": size, "asid": asid, "hits": r["tlb_hits"], "misses": r["tlb_misses"],
+        rows.append({"size": size, "asid": asid, "quantum": q or 20000, "hits": r["tlb_hits"], "misses": r["tlb_misses"],
                      "miss_rate": r["tlb_misses"] / acc, "walk_refs": r["walk_refs"], "accesses": acc,
                      "flushes": r["flushes"], "page_faults": r["page_faults"], "frames": r["frames_used"],
                      "eager": r["eager_frames"], "steps": r["steps"], "switches": r["switches"]})
@@ -354,7 +360,7 @@ def compute_belady() -> dict:
             "fifo4": fifo_steps(4), "clock": clk, "clock_string": [1, 2, 3, 1, 4, 5, 2, 1, 6, 3]}
 
 
-def _job_trace(page_bits=10):
+def _job_trace(page_bits=10, writes=False):
     from explainer.cs.algo import job2 as J
     from explainer.cs.pebble.emu import Machine
     from videos.cs.cs17.compute import _passages
@@ -363,24 +369,32 @@ def _job_trace(page_bits=10):
         def __post_init__(self):
             super().__post_init__()
             self.pages = []
+            self.w = []
 
         def load(self, a, s, signed_=False):
             if a < (1 << 20):
                 self.pages.append(a >> page_bits)
+                self.w.append(False)
             return super().load(a, s, signed_)
 
         def store(self, a, s, v):
             if a < (1 << 20):
                 self.pages.append(a >> page_bits)
+                self.w.append(True)
             super().store(a, s, v)
     c = J.compile_job()
     t = _passages()[-12]
     m = TM(image=c.program.image, tape=t)
     m.run(200_000_000)
-    tr = []
-    for p in m.pages:
+    tr, wr = [], []
+    for p, w in zip(m.pages, m.w):
         if not tr or tr[-1] != p:
             tr.append(p)
+            wr.append(w)
+        elif w:
+            wr[-1] = True
+    if writes:
+        return tr, wr, len(t), len(m.pages)
     return tr, len(t), len(m.pages)
 
 
@@ -506,6 +520,92 @@ def compute_containers() -> dict:
     host_pids = len([p for p in os.listdir("/proc") if p.isdigit()])
     return {"inside": out.stdout.strip().splitlines(), "ok": out.returncode == 0, "ns": links, "cgroup": cg,
             "host_pids": host_pids}
+
+
+def compute_kernelmap() -> dict:
+    vul = {}
+    base = Path("/sys/devices/system/cpu/vulnerabilities")
+    for n in ("meltdown", "spectre_v1", "spectre_v2"):
+        f = base / n
+        vul[n] = f.read_text().strip() if f.exists() else "unknown"
+    return {"vulnerabilities": vul, "cpu": _cpu()}
+
+
+def compute_pebblevm() -> dict:
+    """PebbleOS with and without paging: kernel size, and the pipeline's instructions, faults and frames."""
+    from explainer.cs.algo import job2 as J
+    from explainer.cs.os import kernel as K
+    from explainer.cs.os import vmos as V
+    from explainer.cs.pebble import programs as PR
+    from explainer.cs.pebble.asm import assemble
+    from videos.cs.cs31.compute import TOK
+
+    def ninstr(src):
+        return assemble(src).labels["kend"] // 4
+    procs = [K.user("tok", TOK, 0, stdout="pipe"), K.user("job", J.JOB_HASH, 1, stdin="pipe")]
+    t = _pipeline_tape()
+    n = K.boot(procs, tape=t)
+    n.run(500_000_000)
+    out = {"native_steps": n.steps, "bytes": len(t), "kernel": ninstr(K.kernel_source(procs)),
+           "kernel_vm": ninstr(K.kernel_source(procs, vm={"nextframe": 0, "frame_end": 1}))}
+    for lazy in (True, False):
+        vp = [V.user_vm("tok", TOK, stdout="pipe"), V.user_vm("job", J.JOB_HASH, stdin="pipe")]
+        m = V.boot_vm(vp, tape=t, lazy=lazy)
+        m.run(500_000_000)
+        assert bytes(m.output) == PR.job_reference(t)
+        r = V.report_vm(m)
+        out["lazy" if lazy else "eager"] = {"steps": m.steps, "page_faults": r["page_faults"],
+                                            "frames": r["frames_used"], "eager": r["eager_frames"],
+                                            "pages": {p.name: (p.hi - p.lo) // 4096 for p in vp}}
+    return out
+
+
+def compute_dirty() -> dict:
+    """LRU on the Job's trace with dirty bits: how many evictions must first write the page back."""
+    from collections import OrderedDict
+    tr, wr, _, _ = _job_trace(writes=True)
+    rows = []
+    for k in (4, 8, 16, 24):
+        mem, faults, ev, dirty = OrderedDict(), 0, 0, 0
+        for p, w in zip(tr, wr):
+            if p in mem:
+                mem.move_to_end(p)
+                mem[p] = mem[p] or w
+                continue
+            faults += 1
+            if len(mem) == k:
+                _, d = mem.popitem(last=False)
+                ev += 1
+                dirty += d
+            mem[p] = w
+        rows.append({"k": k, "faults": faults, "evictions": ev, "dirty": dirty})
+    written = len({p for p, w in zip(tr, wr) if w})
+    return {"rows": rows, "pages": len(set(tr)), "written_pages": written, "refs": len(tr)}
+
+
+def compute_competitive() -> dict:
+    """Sleator and Tarjan: the cyclic adversary, and LRU with k frames against OPT with h on the Job's trace."""
+    from explainer.cs.os import paging as P
+    cyc = [i % 4 for i in range(120)]
+    cyclic = {p: P.faults(cyc, 3, p) for p in ("lru", "fifo", "opt")}
+    tr, _, _ = _job_trace()
+    rows = []
+    for h in (2, 4, 8, 16):
+        k = 2 * h
+        lru, opt = P.faults(tr, k, "lru"), P.faults(tr, h, "opt")
+        rows.append({"h": h, "k": k, "lru_k": lru, "opt_h": opt, "ratio": lru / opt, "bound": k / (k - h + 1)})
+    return {"cyclic": cyclic, "cyc_len": len(cyc), "rows": rows}
+
+
+def compute_buddyinfo() -> dict:
+    """This machine's buddy free lists (the Normal zone): free blocks of each order."""
+    rows = {}
+    for ln in Path("/proc/buddyinfo").read_text().splitlines():
+        f = ln.split()
+        rows[f[3]] = [int(x) for x in f[4:]]
+    z = rows.get("Normal") or max(rows.values(), key=sum)
+    return {"zone": "Normal" if "Normal" in rows else "largest", "counts": z,
+            "free_mib": [c * (4 << k) / 1024 for k, c in enumerate(z)]}
 
 
 def compute_frontier() -> dict:
