@@ -3148,3 +3148,62 @@ class Shatterer(VGroup):
                 dot = Circle(radius=0.07, stroke_color=off, stroke_width=2.5).move_to(self._to(p, centre))
             g.add(dot)
         return g
+
+
+class ProofMap(VGroup):
+    """A proof, mapped (Part 55): the moves of a proof as a chain of boxes joined by arrows, each tagged with the part
+    of the course whose tool it uses.  ``steps`` is a list of (text, part) pairs; the chain wraps onto a second row
+    after ``per_row`` boxes.  ``light(k)`` returns an animation lighting box k and its tag; ``done()`` one that turns
+    the whole chain the colour of a kept promise.  ``boxes``, ``tags`` and ``arrows`` give the pieces."""
+
+    def __init__(self, steps, width: float = 12.6, per_row: int = 4, font_size: int = 20, color=None, box_h: float = 1.05):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.color = color or S.ACCENT
+        n = len(steps)
+        rows = [steps[i:i + per_row] for i in range(0, n, per_row)]
+        gap = 0.45
+        bw = (width - gap * (per_row - 1)) / per_row
+        self.boxes, self.tags, self.arrows, self.texts = VGroup(), VGroup(), VGroup(), VGroup()
+        for r, row in enumerate(rows):
+            for c, (text, part) in enumerate(row):
+                x = -width / 2 + bw / 2 + c * (bw + gap)
+                y = -r * (box_h + 0.75)
+                box = RoundedRectangle(width=bw, height=box_h, corner_radius=0.12, stroke_color=GREY_C, stroke_width=1.8,
+                                       fill_color="#10141d", fill_opacity=0.9).move_to([x, y, 0])
+                t = label(text, font_size=font_size)
+                if t.width > bw - 0.25:
+                    t.width = bw - 0.25
+                if t.height > box_h - 0.2:
+                    t.height = box_h - 0.2
+                t.move_to(box)
+                tag = label(rf"Part {part}" if isinstance(part, int) else part, font_size=16, color=GREY_B)
+                tag.next_to(box, DOWN, buff=0.08)
+                self.boxes.add(box)
+                self.texts.add(t)
+                self.tags.add(tag)
+        for k in range(n - 1):
+            a, b = self.boxes[k], self.boxes[k + 1]
+            if abs(a.get_y() - b.get_y()) < 1e-6:
+                ar = Arrow(a.get_right(), b.get_left(), buff=0.05, stroke_width=2.5, color=GREY_C, max_tip_length_to_length_ratio=0.35)
+            else:  # wrap: from the end of one row down to the start of the next
+                p0 = a.get_bottom() + DOWN * 0.32
+                ar = VGroup(Line(a.get_bottom() + DOWN * 0.3, p0, stroke_width=2.5, color=GREY_C).set_opacity(0),
+                            Arrow(p0 + LEFT * 0.0, b.get_top() + UP * 0.02, buff=0.05, stroke_width=2.5, color=GREY_C,
+                                  max_tip_length_to_length_ratio=0.08))
+            self.arrows.add(ar)
+        self.add(self.boxes, self.texts, self.tags, self.arrows)
+        self.move_to(ORIGIN)
+
+    def light(self, k: int, color=None) -> Animation:
+        c = color or self.color
+        anims = [self.boxes[k].animate.set_stroke(c, width=3).set_fill(c, opacity=0.16), self.tags[k].animate.set_color(c)]
+        if k > 0:
+            anims.append(self.arrows[k - 1].animate.set_color(c))
+        return AnimationGroup(*anims)
+
+    def done(self, color=None) -> Animation:
+        c = color or S.KEPT
+        return AnimationGroup(*[b.animate.set_stroke(c, width=3).set_fill(c, opacity=0.14) for b in self.boxes],
+                              *[a.animate.set_color(c) for a in self.arrows], *[t.animate.set_color(c) for t in self.tags])
