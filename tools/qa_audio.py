@@ -47,7 +47,7 @@ def main():
             continue
         p, evidence = max(records, key=lambda pair: pair[0].stat().st_mtime_ns)
         report = {"video": args.video, "scene": scene, "lang": args.lang,
-                  "backend": tts.BACKEND, "voice": tts.VOICE,
+                  "backend": tts.BACKEND, "voice": tts._voice(),
                   "input_record": str(p.relative_to(ROOT)),
                   "input_sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
                   "source_current": evidence.get("fingerprint") == fingerprint(args.video)
@@ -102,7 +102,7 @@ def main():
                             candidate = json.loads(entry)
                         except json.JSONDecodeError:
                             continue  # a server may be appending its next lead
-                        if (candidate.get("lang") == args.lang and candidate.get("voice") == tts.VOICE
+                        if (candidate.get("lang") == args.lang and candidate.get("voice") == report["voice"]
                                 and candidate.get("text") and candidate["text"] in actual_spoken):
                             leads[candidate["text"]] = candidate
                 result["asr_review_leads"] = list(leads.values())
