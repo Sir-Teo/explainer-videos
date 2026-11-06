@@ -117,7 +117,9 @@ class BSDE(VoiceoverScene):
         for val, col, txt in ((b["pde"], GOOD, r"nonlinear PDE"), (b["bs_r"], UNDER, r"Black--Scholes at $r$"),
                               (b["bs_R"], OVER, r"Black--Scholes at $R$")):
             ln = DashedLine(ax.c2p(np.log10(3000), val), ax.c2p(np.log10(500000), val), color=col, stroke_width=2)
-            lines.add(VGroup(ln, label(txt + f": {val:.3f}", font_size=17, color=col).next_to(ln, RIGHT, buff=0.1)))
+            ref_label = label(txt + f": {val:.3f}", font_size=17, color=col)
+            ref_label.next_to(ln, UP, buff=0.1).align_to(ln, RIGHT)
+            lines.add(VGroup(ln, ref_label))
         pts = VGroup(*[VGroup(Line(ax.c2p(np.log10(n), m - 2 * s), ax.c2p(np.log10(n), m + 2 * s), color=VALUE,
                                    stroke_width=3), Dot(ax.c2p(np.log10(n), m), radius=0.06, color=VALUE))
                        for n, m, s in zip(ns, means, sds)])
