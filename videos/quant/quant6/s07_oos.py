@@ -31,8 +31,8 @@ class OutOfSample(VoiceoverScene):
         sp = np.asarray(o["slope_path"])
         ts = np.asarray(o["t"])
         ds = np.asarray(o["predictors"]["dividend yield"]["dsse"])
-        g1 = axes([1927, 2021], [-0.01, 0.025], x_length=10.6, y_length=2.4, ylabel=r"slope on the log dividend "
-                  r"yield, chronological refit ($\pm 2$ Newey--West s.e.)", xticks=[], yticks=[0, 0.01, 0.02],
+        g1 = axes([1927, 2021], [-0.025, 0.032], x_length=10.6, y_length=2.4, ylabel=r"slope on the log dividend "
+                  r"yield, chronological refit ($\pm 2$ Newey--West s.e.)", xticks=[], yticks=[-0.02, 0, 0.02],
                   font_size=15).to_edge(UP, buff=0.55)
         a1 = g1.ax
         lo, hi = float(ds.min()) * 1.1, max(float(ds.max()), 0.0005) + 0.001
@@ -52,7 +52,7 @@ class OutOfSample(VoiceoverScene):
             if m.sum() < 2:
                 return VGroup()
             x, b, s = sp[m, 0], sp[m, 1], sp[m, 2]
-            return VGroup(band(a1, x, np.clip(b - 2 * s, -0.01, 0.025), np.clip(b + 2 * s, -0.01, 0.025), ALT, 0.2),
+            return VGroup(band(a1, x, b - 2 * s, b + 2 * s, ALT, 0.2),
                           curve(a1, x, b, ALT, stroke_width=3))
 
         def bottom():
@@ -66,7 +66,7 @@ class OutOfSample(VoiceoverScene):
                 c = GOOD if y[i] >= y[i - 1] else BAD
                 segs.add(Line(a2.c2p(x[i - 1], y[i - 1]), a2.c2p(x[i], y[i]), color=c, stroke_width=3))
             return segs
-        cur = always_redraw(lambda: DashedLine(a1.c2p(now.get_value(), 0.025), a2.c2p(now.get_value(), lo),
+        cur = always_redraw(lambda: DashedLine(a1.c2p(now.get_value(), 0.032), a2.c2p(now.get_value(), lo),
                                                color=WHITE, stroke_width=1.5, stroke_opacity=0.6))
         yr = always_redraw(lambda: MathTex(rf"{int(now.get_value())}", font_size=30, color=WHITE).next_to(
             g1, UP, buff=0.0).align_to(g1, RIGHT))

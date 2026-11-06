@@ -61,13 +61,17 @@ class FamaMacBeth(VoiceoverScene):
         def cross():
             t = int(min(max(k.get_value(), 1), T)) - 1
             m = (Y[t] > -9) & (X[t] > -9)
-            x, y = np.clip(X[t][m], -0.6, 1.0), np.clip(Y[t][m], -0.25, 0.25)
-            dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=DATA_C) for a, b in zip(x, y)])
+            x, y = X[t][m], Y[t][m]
+            dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=DATA_C) for a, b in zip(x, y)
+                            if -0.6 <= a <= 1.0 and -0.25 <= b <= 0.25])
             b = sl[t]
             a = Y[t][m].mean() - b * X[t][m].mean()
-            xs = np.array([-0.6, 1.0])
-            ys = np.clip(a + b * xs, -0.25, 0.25)
-            line = Line(ax.c2p(xs[0], ys[0]), ax.c2p(xs[1], ys[1]), color=EST, stroke_width=3)
+            x0, x1 = -0.6, 1.0
+            if abs(b) > 1e-12:
+                ylo, yhi = sorted(((-0.25 - a) / b, (0.25 - a) / b))
+                x0, x1 = max(x0, ylo), min(x1, yhi)
+            line = (Line(ax.c2p(x0, a + b * x0), ax.c2p(x1, a + b * x1), color=EST, stroke_width=3)
+                    if x0 <= x1 and -0.25 <= a + b * (x0 + x1) / 2 <= 0.25 else VGroup())
             d = dates[t]
             lab = MathTex(rf"{d // 100}\text{{-}}{d % 100:02d}:\ \hat\gamma_{{1t}} = {b:+.3f}", font_size=24,
                           color=EST).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
@@ -77,7 +81,7 @@ class FamaMacBeth(VoiceoverScene):
             t = int(min(max(k.get_value(), 1), T))
             vals = sl[:t]
             hb = hist_bars(hax, vals, edges, EST, density=False)
-            peak = max(max(np.histogram(np.clip(vals, -0.3, 0.3), edges)[0]), 1)
+            peak = max(max(np.histogram(vals, edges)[0]), 1)
             hb.stretch_to_fit_height(max(3.2 * min(peak / 120, 1.0), 0.02), about_edge=DOWN).align_to(
                 hax.c2p(0, 0), DOWN)
             mean = float(vals.mean())
@@ -90,7 +94,9 @@ class FamaMacBeth(VoiceoverScene):
                          font_size=24, color=WHITE).next_to(h, UP, buff=0.15)
             return VGroup(hb, band_, mk, ro)
         cm, hm = always_redraw(cross), always_redraw(hist)
-        src = real_data(r"Kenneth French's 49 industries, monthly 1928--2020; signal: months $t-12$ to $t-2$")
+        src = wrapped_label(r"Kenneth French's 49 industries, 1928--2020; signal: $t-12$ to $t-2$. "
+                            r"Plot windows omit outliers; fits and summaries use the full sample.",
+                            12.8, 17, GREY_B).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             'Fama and MacBeth, in 1973, turned a panel into a time series. Each month, take the cross-section: '
             "forty-nine industries, past-year return across, next month's return up, and fit a line: did this "
@@ -134,24 +140,24 @@ class FamaMacBeth(VoiceoverScene):
     def resolve(self, fe, p):
         ex = fe["examples"]
         cols = [DATA_C, ALT, QC.Q]
-        g = axes([-0.7, 1.4], [-0.2, 0.3], x_length=6.2, y_length=4.4, xlabel=r"past-year return",
+        g = axes([-0.8, 2.6], [-0.4, 0.55], x_length=6.2, y_length=4.4, xlabel=r"past-year return",
                  ylabel=r"next month's return", xticks=[-0.5, 0, 0.5, 1.0], yticks=[-0.1, 0, 0.1, 0.2], font_size=16)
         g.to_edge(LEFT, buff=0.5).shift(DOWN * 0.25)
         ax = g.ax
         clouds, means = VGroup(), VGroup()
         for e, c in zip(ex, cols):
             x, y = np.asarray(e["x"]), np.asarray(e["y"])
-            clouds.add(VGroup(*[Dot(ax.c2p(np.clip(a, -0.7, 1.4), np.clip(b, -0.2, 0.3)), radius=0.04, color=c)
+            clouds.add(VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=c)
                                 for a, b in zip(x, y)]))
             means.add(Dot(ax.c2p(x.mean(), y.mean()), radius=0.09, color=c))
-        xs = np.array([-0.65, 1.35])
+        xs = np.array([-0.75, 2.5])
         within = Line(ax.c2p(xs[0], fe["within"] * xs[0]), ax.c2p(xs[1], fe["within"] * xs[1]), color=GOOD,
                       stroke_width=4)
         mx, my = np.asarray(fe["mx"]), np.asarray(fe["my"])
         cx, cy = mx.mean(), my.mean()
         between = Line(ax.c2p(xs[0], cy + fe["between"] * (xs[0] - cx)), ax.c2p(xs[1], cy + fe["between"] * (xs[1] - cx)),
                        color=BAD, stroke_width=4)
-        allmeans = VGroup(*[Dot(ax.c2p(np.clip(a, -0.7, 1.4), np.clip(b, -0.2, 0.3)), radius=0.018, color=GREY_B,
+        allmeans = VGroup(*[Dot(ax.c2p(a, b), radius=0.018, color=GREY_B,
                                 fill_opacity=0.5) for a, b in zip(mx[::3], my[::3])])
         pooled = Line(ax.c2p(xs[0], cy + fe["pooled"] * (xs[0] - cx)), ax.c2p(xs[1], cy + fe["pooled"] * (xs[1] - cx)),
                       color=WHITE, stroke_width=3)

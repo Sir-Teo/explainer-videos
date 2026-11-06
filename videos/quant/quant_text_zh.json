@@ -29620,7 +29620,11 @@
     "Show that pooled OLS with month fixed effects equals the Fama--MacBeth average weighted by each month's within-month sum of squared centred $x$, and that pooled OLS without them averages the within and between slopes.": "证明：含月份固定效应的混合OLS，等于按各月中心化$x$的平方和加权的法玛–麦克白均值；不含月份固定效应时，还混合了月内与月间斜率。",
     "(qual) With $\\rho = 1 + c/T$, show $T(\\hat\\rho - \\rho) \\Rightarrow \\int_0^1 J_c\\,dW/\\int_0^1 J_c^2$, $dJ_c = cJ_c\\,dt + dW$ (no intercept), from the FCLT for near-integrated processes.": "（进阶）令$\\rho=1+c/T$；由近单位根过程的函数型中心极限定理，证明$T(\\hat\\rho-\\rho)\\Rightarrow\\int_0^1J_c\\,dW/\\int_0^1J_c^2$，其中$dJ_c=cJ_c\\,dt+dW$（无截距）。",
     "(qual) With $\\phi = -1$ and $\\rho = 1$, show $t_{\\hat\\beta} = -\\tau_{DF}$, and use Chapter 5's simulation tools to estimate the size of a nominal 5\\% one-sided test.": "（进阶）当$\\phi=-1$、$\\rho=1$时，证明$t_{\\hat\\beta}=-\\tau_{DF}$；用第5章的模拟工具估计名义5\\%单侧检验的实际拒绝率。",
-    "J = 20.0, 4 df, nominal p = 0.0005": "J = 20.0，自由度 4，名义 p = 0.0005"
+    "J = 20.0, 4 df, nominal p = 0.0005": "J = 20.0，自由度 4，名义 p = 0.0005",
+    "SMB residual after removing the market": "剔除市场后的SMB残差",
+    "return residual after removing the market": "剔除市场后的回报残差",
+    "900 points shown; centre uses all 4{,}000 samples": "显示900个点；中心使用全部4{,}000个样本",
+    "Kenneth French's 49 industries, 1928--2020; signal: $t-12$ to $t-2$. Plot windows omit outliers; fits and summaries use the full sample.": "肯尼斯·弗伦奇的49个行业，1928--2020年；信号：$t-12$至$t-2$月。图窗省略范围外的点；拟合与统计量使用完整样本。"
   },
   "phrases": {
     "you owe": "你欠",

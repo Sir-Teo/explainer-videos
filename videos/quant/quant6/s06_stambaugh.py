@@ -24,8 +24,8 @@ class Stambaugh(VoiceoverScene):
         self.play(FadeOut(c))
 
     def cloud(self, c, s):
-        g = axes([-0.35, 0.12], [-0.3, 0.42], x_length=6.6, y_length=5.0, xlabel=r"$\hat\rho - \rho$: error in the "
-                 r"predictor's persistence", ylabel=r"$\hat\beta - \beta$: error in the slope", xticks=[-0.3, -0.2, -0.1, 0, 0.1],
+        g = axes([-0.65, 0.12], [-0.3, 0.42], x_length=6.6, y_length=5.0, xlabel=r"$\hat\rho - \rho$: error in the "
+                 r"predictor's persistence", ylabel=r"$\hat\beta - \beta$: error in the slope", xticks=[-0.6, -0.4, -0.2, 0, 0.1],
                  yticks=[-0.2, 0, 0.2, 0.4], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         Ts = ["50", "75", "100", "150"]
@@ -33,7 +33,7 @@ class Stambaugh(VoiceoverScene):
         def cloud_of(T, n=900):
             d = c["T"][T]
             x, y = np.asarray(d["drho"])[:n], np.asarray(d["dbeta"])[:n]
-            return VGroup(*[Dot(ax.c2p(np.clip(a, -0.35, 0.12), np.clip(b, -0.3, 0.42)), radius=0.018, color=DATA_C,
+            return VGroup(*[Dot(ax.c2p(a, b), radius=0.018, color=DATA_C,
                                 fill_opacity=0.55) for a, b in zip(x, y)])
 
         def centre_of(T):
@@ -46,7 +46,7 @@ class Stambaugh(VoiceoverScene):
         tl = MathTex(rf"\text{{slope }} \phi = \sigma_{{uv}}/\sigma_v^2 = {phi:.2f}", font_size=24, color=ALT).next_to(
             ax.c2p(xs[0], phi * xs[0]), RIGHT, buff=0.1).shift(UP * 0.25)
         zero_v = DashedLine(ax.c2p(0, -0.3), ax.c2p(0, 0.42), color=GREY_C, stroke_width=1.5)
-        zero_h = DashedLine(ax.c2p(-0.35, 0), ax.c2p(0.12, 0), color=GREY_C, stroke_width=1.5)
+        zero_h = DashedLine(ax.c2p(-0.65, 0), ax.c2p(0.12, 0), color=GREY_C, stroke_width=1.5)
         mx, my = centre_of("50")
         ctr = Dot(ax.c2p(mx, my), radius=0.09, color=EST)
         proj_v = DashedLine(ax.c2p(mx, my), ax.c2p(0, my), color=EST, stroke_width=2.5)
@@ -63,6 +63,7 @@ class Stambaugh(VoiceoverScene):
         head = VGroup(
             label(r"a world where the yield predicts nothing:", font_size=21, color=GREY_A),
             MathTex(rf"\beta = 0,\ \rho = {c['rho']},\ \mathrm{{corr}}(u, v) = {c['corr']}", font_size=26),
+            wrapped_label(r"900 points shown; centre uses all 4{,}000 samples", 5.2, 18, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         side = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
         with self.voiceover(

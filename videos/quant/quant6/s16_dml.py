@@ -156,7 +156,7 @@ class DML(VoiceoverScene):
         g1 = axes([L[0], L[-1]], [0.2, 1.2], x_length=6.0, y_length=3.2, xlabel=r"ridge penalty $\lambda$ (log scale)",
                   ylabel=r"$\hat\theta$, 5 seeds", xticks=[-2, 0, 2, 4], xfmt=lambda v: f"10^{{{int(v)}}}",
                   yticks=[0.3, 0.6, 0.9, 1.2], font_size=15).to_edge(LEFT, buff=0.6).shift(DOWN * 0.6)
-        g2 = axes([L[0], L[-1]], [0.9, 4.6], x_length=4.6, y_length=2.6, xlabel=r"$\lambda$ (log scale)",
+        g2 = axes([L[0], L[-1]], [0.9, 4.8], x_length=4.6, y_length=2.6, xlabel=r"$\lambda$ (log scale)",
                   ylabel=r"out-of-fold error of the learners", xticks=[-2, 0, 2, 4], xfmt=lambda v: f"10^{{{int(v)}}}",
                   yticks=[1, 2, 3, 4], font_size=14).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.6)
         a1, a2 = g1.ax, g2.ax
@@ -165,10 +165,10 @@ class DML(VoiceoverScene):
 
         def draw():
             j = int(min(max(k.get_value(), 1), len(L) - 1)) + 1
-            return VGroup(seed_band(a1, L[:j], np.minimum(pl[:, :j], 1.2), BAD),
-                          seed_band(a1, L[:j], np.minimum(dm[:, :j], 1.2), GOOD),
-                          seed_band(a2, L[:j], np.minimum(ml[:, :j], 4.6), ALT, stroke_width=2.5),
-                          seed_band(a2, L[:j], np.minimum(mm[:, :j], 4.6), EST, stroke_width=2.5))
+            return VGroup(seed_band(a1, L[:j], pl[:, :j], BAD),
+                          seed_band(a1, L[:j], dm[:, :j], GOOD),
+                          seed_band(a2, L[:j], ml[:, :j], ALT, stroke_width=2.5),
+                          seed_band(a2, L[:j], mm[:, :j], EST, stroke_width=2.5))
         dr = always_redraw(draw)
         leg1 = legend([(BAD, r"naive plug-in"), (GOOD, r"double ML"), (WHITE, r"truth")], font_size=17).next_to(
             g1, UP, buff=0.15).align_to(g1, LEFT)

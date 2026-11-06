@@ -38,13 +38,13 @@ class Designs(VoiceoverScene):
         dag = VGroup(z, xx, yy, u, lbl, arrows).scale(0.9).to_corner(UL, buff=0.5)
         panels = VGroup()
         for name, title in (("weak", r"weak instrument"), ("strong", r"strong instrument")):
-            g = axes([-1.0, 2.0], [0, 6], x_length=4.6, y_length=2.2, xticks=[0, 0.5, 1.0], yticks=[], font_size=14,
+            g = axes([-1.0, 2.0], [0, 13], x_length=4.6, y_length=2.2, xticks=[0, 0.5, 1.0], yticks=[], font_size=14,
                      xlabel=r"estimated effect (truth 0.5)")
             ax = g.ax
             edges = np.linspace(-1, 2, 46)
-            h_iv = hist_bars(ax, d[name]["iv"], edges, GOOD, opacity=0.7, cap=6)
-            h_ols = hist_bars(ax, d[name]["ols"], edges, BAD, opacity=0.5, cap=6)
-            truth = DashedLine(ax.c2p(0.5, 0), ax.c2p(0.5, 6), color=WHITE, stroke_width=2)
+            h_iv = hist_bars(ax, d[name]["iv"], edges, GOOD, opacity=0.7)
+            h_ols = hist_bars(ax, d[name]["ols"], edges, BAD, opacity=0.5)
+            truth = DashedLine(ax.c2p(0.5, 0), ax.c2p(0.5, 13), color=WHITE, stroke_width=2)
             t = label(rf"{title}: first-stage $F \approx {d[name]['F']:.0f}$", font_size=19, color=GREY_A).next_to(
                 g, UP, buff=0.05)
             panels.add(VGroup(g, h_ols, h_iv, truth, t))

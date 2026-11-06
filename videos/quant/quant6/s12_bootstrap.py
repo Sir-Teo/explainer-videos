@@ -138,14 +138,14 @@ class Bootstrap(VoiceoverScene):
                         width=7.0, font_size=17).to_corner(UL, buff=0.3)
         outs = [f"stationary_bootstrap(mkt, sharpe, 12, B=800)",
                 f"se = {b['se_stationary']:.3f}   (iid {b['se_iid_boot']:.3f}, Lo {b['se_iid']:.3f})"]
-        g = axes([0.0, 0.9], [0, 4.2], x_length=5.0, y_length=3.0, xlabel=r"bootstrap Sharpe ratios, annual",
+        g = axes([-0.1, 0.9], [0, 4.5], x_length=5.0, y_length=3.0, xlabel=r"bootstrap Sharpe ratios, annual",
                  xticks=[0, 0.4, 0.8], yticks=[], font_size=15).to_corner(DR, buff=0.4)
         ax = g.ax
         st, iid = np.asarray(d["stationary"]), np.asarray(d["iid"])
-        edges = np.linspace(0, 0.9, 37)
+        edges = np.linspace(-0.1, 0.9, 41)
         n = ValueTracker(2)
-        hs = always_redraw(lambda: hist_bars(ax, st[:int(n.get_value())], edges, EST, opacity=0.65, cap=4.2))
-        hi = hist_bars(ax, iid, edges, BAD, opacity=0.35, cap=4.2)
+        hs = always_redraw(lambda: hist_bars(ax, st[:int(n.get_value())], edges, EST, opacity=0.65, total=len(st)))
+        hi = hist_bars(ax, iid, edges, BAD, opacity=0.35)
         leg = legend([(EST, rf"stationary, se {d['se_st']:.3f}"), (BAD, rf"iid, se {d['se_iid']:.3f}")],
                      font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         with self.voiceover(

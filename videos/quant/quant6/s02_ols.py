@@ -114,7 +114,7 @@ class OLS(VoiceoverScene, ThreeDScene):
             "covariance. <bookmark mark='d'/> Only if omega is a constant times the identity does it collapse to "
             'the textbook formula. Every standard error in this part is a claim about the filling.'
         ) as vo:
-            step(0)
+            step(0, run_time=0.4)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -128,16 +128,15 @@ class OLS(VoiceoverScene, ThreeDScene):
 
     def fwl(self, f):
         smb, y, rx, ry = (np.asarray(f[k]) for k in ("smb", "y", "rx", "ry"))
-        g = axes([-0.16, 0.16], [-0.25, 0.25], x_length=6.0, y_length=4.6, xlabel=r"size factor (SMB), monthly",
-                 ylabel=r"tobacco's excess return, monthly", xticks=[-0.1, 0, 0.1], yticks=[-0.2, 0, 0.2],
+        g = axes([-0.21, 0.39], [-0.26, 0.37], x_length=6.0, y_length=4.6, xlabel=r"size factor (SMB), monthly",
+                 ylabel=r"tobacco's excess return, monthly", xticks=[-0.2, 0, 0.2], yticks=[-0.2, 0, 0.2],
                  font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.25)
         ax = g.ax
-        clip = lambda v, a: float(np.clip(v, -a, a))  # noqa: E731
-        dots = VGroup(*[Dot(ax.c2p(clip(a, 0.16), clip(b, 0.25)), radius=0.025, color=DATA_C, fill_opacity=0.7)
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.025, color=DATA_C, fill_opacity=0.7)
                         for a, b in zip(smb, y)])
-        xs = np.linspace(-0.15, 0.15, 10)
+        xs = np.linspace(-0.20, 0.38, 10)
         fit_raw = curve(ax, xs, np.mean(y) + f["alone"] * (xs - np.mean(smb)), ALT, stroke_width=3)
-        targets = [ax.c2p(clip(a, 0.16), clip(b, 0.25)) for a, b in zip(rx, ry)]
+        targets = [ax.c2p(a, b) for a, b in zip(rx, ry)]
         fit_res = curve(ax, xs, f["fwl"] * xs, EST, stroke_width=3.5)
         b, se_n, se_w = f["beta"], f["se_naive"], f["se_white"]
         side = VGroup(
@@ -175,7 +174,12 @@ class OLS(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.003, run_time=1.5))
             self.play(Create(fit_raw), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
+            residual_x = label(r"SMB residual after removing the market", font_size=19, color=GREY_A)
+            residual_y = label(r"return residual after removing the market", font_size=19, color=GREY_A)
+            residual_x.move_to(g.xlabel)
+            residual_y.move_to(g.ylabel).align_to(ax, LEFT)
             self.play(FadeIn(side[2]), FadeOut(fit_raw),
+                      Transform(g.xlabel, residual_x), Transform(g.ylabel, residual_y),
                       *[d.animate.move_to(t) for d, t in zip(dots, targets)], run_time=3)
             vo.wait_until("b")
             self.play(Create(fit_res), FadeIn(side[3]))

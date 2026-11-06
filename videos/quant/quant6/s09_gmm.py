@@ -60,7 +60,8 @@ class GMM(VoiceoverScene):
         cg = axes([0, 6], [0, 1.2], x_length=4.4, y_length=1.5, xticks=[0, 2, 4, 6], yticks=[], font_size=14,
                   xlabel=r"$\chi^2_1$").next_to(side, DOWN, buff=0.4)
         xs = np.linspace(0.02, 6, 120)
-        dens = curve(cg.ax, xs, np.minimum(sst.chi2.pdf(xs, 1), 1.2), GREY_B, stroke_width=2)
+        xs = xs[sst.chi2.pdf(xs, 1) <= 1.2]
+        dens = curve(cg.ax, xs, sst.chi2.pdf(xs, 1), GREY_B, stroke_width=2)
         jm = Line(cg.ax.c2p(t["J"], 0), cg.ax.c2p(t["J"], 1.1), color=ALT, stroke_width=4)
         with self.voiceover(
             "Many theories give no likelihood, only averages that should be zero: moment conditions. Lars Peter Hansen "
