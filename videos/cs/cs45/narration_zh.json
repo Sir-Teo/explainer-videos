@@ -208,15 +208,15 @@
    "en": "We gave it a load that jumps from forty to a hundred requests a second. At sixty percent utilization, the right size is about seventeen servers. <bookmark mark='a'/> With a delay of one step and a gain of three tenths, it overshoots to eighteen, and settles. <bookmark mark='b'/> With a three-step delay, a gain of two tenths still settles, after overshooting to twenty-five. <bookmark mark='c'/> At one half, it never settles, swinging between about five servers and a hundred. <bookmark mark='d'/> At a gain of one, Kubernetes' rule, it slams between one server and the quota of two hundred. Only the gain changed.",
    "zh": "我们给它一个负载，从每秒40个请求跳到100个。在60%的利用率下，合适的规模大约是17台服务器。<bookmark mark='a'/>延迟1步、增益0.3时，它超调到18台，然后稳定下来。<bookmark mark='b'/>延迟3步时，增益0.2仍然能稳定下来，但先超调到25台。<bookmark mark='c'/>增益为0.5时，它永远稳定不下来，在大约5台和100台之间来回摆动。<bookmark mark='d'/>增益为1，也就是 Kubernetes 的规则时，它在1台服务器和200台的配额之间猛烈来回撞击。变的只有增益。"
   },
-  "e29ab123b578": {
+  "51ce7bc1f360": {
    "scene": "Autoscale",
-   "en": "The swing follows from the delay. <bookmark mark='a'/> Near the right size, each step corrects the error by K times the error as it was d steps ago. So once the fleet is big enough, the controller keeps adding, because it acts on old measurements. <bookmark mark='b'/> The error dies away only while K stays below twice the cosine of d pi over two d plus one: below two with no delay, below one with one step, and below about forty-five hundredths with three. <bookmark mark='c'/> Our four runs land exactly where the curve predicts. As Maxwell found for steam-engine governors in 1868, the more a loop lags, the gentler it must be.",
-   "zh": ""
+   "en": "Here is why. <bookmark mark='a'/> Near the right size, each step corrects the error by K times the error as it was d steps ago. So once the fleet is big enough, the controller keeps adding, because it acts on old measurements. <bookmark mark='b'/> The error dies away only while K stays below twice the cosine of d pi over two d plus one: below two with no delay, below one with one step, and below about forty-five hundredths with three. <bookmark mark='c'/> Our four runs land exactly where the curve predicts. As Maxwell found for steam-engine governors in 1868, the more a loop lags, the gentler it must be.",
+   "zh": "原因在这里。<bookmark mark='a'/>在合适规模附近，每一步修正的误差，是 K 乘以 d 步之前的误差。所以即使机群已经足够大，控制器还在继续增加，因为它依据的是旧的测量。<bookmark mark='b'/>只有当 K 保持在 dπ 除以 2d 加 1 的余弦的2倍以下时，误差才会逐渐消失：没有延迟时要小于2，延迟1步时要小于1，延迟3步时要小于约0.45。<bookmark mark='c'/>我们的四次运行，恰好落在曲线预测的位置。正如麦克斯韦（Maxwell）在1868年研究蒸汽机调速器时发现的那样：回路滞后得越多，它就必须越温和。"
   },
-  "32f4c3091d5e": {
+  "bedf77494ef3": {
    "scene": "Autoscale",
-   "en": "A controller needs a target, and queueing theory supplies it. <bookmark mark='a'/> Model the pool as Part 31's queue, now with c servers. Requests arrive at rate lambda; with k servers busy they finish at k times mu, never more than c mu. <bookmark mark='b'/> Balancing the flow across each step gives a to the k over k factorial up to c, then a geometric tail with ratio rho, the load per server. <bookmark mark='c'/> Summing the tail gives Agner Erlang's formula of 1917 for the chance of waiting, and the mean wait follows. <bookmark mark='d'/> Two servers with one erlang of load: a request waits a third of the time.",
-   "zh": ""
+   "en": "Queueing theory supplies the target. <bookmark mark='a'/> Model the pool as Part 31's queue, now with c servers. Requests arrive at rate lambda; with k servers busy they finish at k times mu. <bookmark mark='b'/> Balancing the flow across each step gives a to the k over k factorial up to c, then a geometric tail with ratio rho, the load per server. <bookmark mark='c'/> Summing the tail gives Agner Erlang's formula of 1917 for the chance of waiting, and the mean wait follows. <bookmark mark='d'/> Two servers with one erlang of load: a request waits a third of the time.",
+   "zh": "排队论给出了目标。<bookmark mark='a'/>把服务器池建模为第31部分的队列，只是现在有 c 台服务器。请求以速率 λ 到达；有 k 台服务器在忙时，请求以 k 乘以 μ 的速率完成。<bookmark mark='b'/>在每一级之间平衡流量，得到：直到 c 为止，是 a 的 k 次方除以 k 的阶乘，之后是一条公比为 ρ 的几何尾部，ρ 就是每台服务器的负载。<bookmark mark='c'/>把尾部求和，就得到 Agner Erlang 在1917年给出的等待概率公式，平均等待时间也随之得出。<bookmark mark='d'/>两台服务器、1爱尔朗的负载：一个请求有三分之一的时候需要等待。"
   },
   "a0cc596e17c5": {
    "scene": "Autoscale",
