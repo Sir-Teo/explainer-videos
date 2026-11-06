@@ -332,8 +332,8 @@ class Storage(VoiceoverScene):
         with self.voiceover(
             "Now compare schemes. <bookmark mark='a'/> One copy is lost with a two percent chance a "
             "year: under two nines. Each failure a scheme can absorb multiplies the mean time by "
-            "thousands, because a repair takes a day and a disk lasts decades: two copies give five "
-            "and a half nines, three give nine and a half. <bookmark mark='b'/> Erasure codes do "
+            "thousands, because a repair takes a day and a disk lasts decades: two copies give about five "
+            "point seven nines, three about nine point four. <bookmark mark='b'/> Erasure codes do "
             "better for less: six data fragments plus three of parity reach eleven nines, at one and "
             "a half times the data. <bookmark mark='c'/> Amazon designs S3 for eleven nines: store "
             "ten million objects, and expect to lose one about every ten thousand years. <bookmark "
