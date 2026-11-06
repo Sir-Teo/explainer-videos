@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs51.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, image, load
 
 
-def tile(title, body, col, w=4.2, h=3.0):
+def tile(title, body, col, w=4.2, h=3.4):
     frame = RoundedRectangle(width=w, height=h, corner_radius=0.15, stroke_color=col, stroke_width=2, fill_color=BG,
                              fill_opacity=1)
     t = label(title, font_size=22, color=col)
-    b = wrapped_label(body, w - 0.4, font_size=18, color=GREY_A)
+    b = wrapped_label(body, w - 0.4, font_size=19, color=GREY_A)
     VGroup(t, b).arrange(DOWN, buff=0.3).move_to(frame)
     return VGroup(frame, t, b)
 
@@ -34,20 +34,20 @@ class Frontier(VoiceoverScene):
         p = load("path")
         c = {r["spp"]: r for r in p["convergence"]["rows"]}
         head = label(r"A few samples, \ then clean up", font_size=36).to_edge(UP, buff=0.3)
-        a = image(d["noisy"], height=3.0)
-        b = image(d["denoised"], height=3.0)
-        r = image(p["reference"], height=3.0)
-        Group(a, b, r).arrange(RIGHT, buff=0.4).next_to(head, DOWN, buff=0.45)
-        ca = label(rf"16 paths: \ error {d['rmse_surfaces_before']:.3f}", font_size=18, color=NO).next_to(a, DOWN,
+        a = image(d["noisy"], height=3.7)
+        b = image(d["denoised"], height=3.7)
+        r = image(p["reference"], height=3.7)
+        Group(a, b, r).arrange(RIGHT, buff=0.4).move_to(UP * 0.55)
+        ca = label(rf"16 paths: \ error {d['rmse_surfaces_before']:.3f}", font_size=20, color=NO).next_to(a, DOWN,
                                                                                                     buff=0.15)
-        cb = label(rf"denoised: \ {d['rmse_surfaces_after']:.3f}", font_size=18, color=YES).next_to(b, DOWN,
+        cb = label(rf"denoised: \ {d['rmse_surfaces_after']:.3f}", font_size=20, color=YES).next_to(b, DOWN,
                                                                                                buff=0.15)
-        cr = label(rf"reference \ (256 paths: \ {c[256]['rmse_surfaces']:.3f})", font_size=18, color=GREY_A).next_to(
+        cr = label(rf"reference \ (256 paths: \ {c[256]['rmse_surfaces']:.3f})", font_size=20, color=GREY_A).next_to(
             r, DOWN, buff=0.15)
         notes = wrapped_label(r"real time adds three ideas: \ ray-tracing hardware that walks the BVH \ (2018); \ "
                               r"reusing samples across pixels and frames \ (ReSTIR, \ Bitterli et al. \ 2020); \ "
-                              r"and learned denoisers and upscalers", 12.4, font_size=19, color=WHITE).to_edge(
-            DOWN, buff=0.4)
+                              r"and learned denoisers and upscalers", 12.4, font_size=21, color=WHITE).to_edge(
+            DOWN, buff=0.5)
         with self.voiceover(
             "A film frame can take hours. A game has sixteen milliseconds. <bookmark mark='a'/> The gap is closed "
             "first by taking very few samples: here our own image at sixteen paths a pixel, still noisy. "
@@ -77,7 +77,7 @@ class Frontier(VoiceoverScene):
                  r"blended by a rasterizer, \ fitted to photos; \ real time", HEAD),
             tile(r"what is lost", r"no explicit materials or lights: \ hard to edit, \ relight or verify; \ physics "
                  r"enters only through the training data", NO),
-        ).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=0.6)
+        ).arrange(RIGHT, buff=0.3).move_to(UP * 0.4)
         foot = wrapped_label(r"both are the rendering of this part run in reverse: \ given pictures, \ find the scene "
                              r"\ (\textit{AI, Built} \ 22)", 12.4, font_size=21, color=WHITE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
