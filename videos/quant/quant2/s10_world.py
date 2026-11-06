@@ -95,11 +95,11 @@ class World(VoiceoverScene):
                           Dot(a, radius=0.07, color=LOSS), Dot(b, radius=0.07, color=GREY_B))
         sp = always_redraw(spring_m)
         rows = [
-            MathTex(r"r^o_t = \operatorname{clip}(r_t + c_{t-1},\ \pm L)", font_size=32),
+            MathTex(r"r^o_t = \operatorname{clip}(r_t + c_{t-1},\ \ln(1-L),\ln(1+L))", font_size=32),
             MathTex(r"c_t = r_t + c_{t-1} - r^o_t", font_size=32),
             MathTex(r"\Rightarrow\ \operatorname{Cov}(r^o_t, r^o_{t+1}) > 0", font_size=32, color=QC.IDEA),
         ]
-        whys = [why(r"the observed move is capped at the limit $L$", font_size=19),
+        whys = [why(r"log-return bounds corresponding to a $\pm L$ price limit", font_size=19),
                 why(r"the part that couldn't trade rolls into tomorrow", font_size=19),
                 why(r"so a limit day is followed by more of the same", font_size=19)]
         stack = VGroup(*[VGroup(r_, w).arrange(DOWN, aligned_edge=LEFT, buff=0.08) for r_, w in zip(rows, whys)])
@@ -121,6 +121,7 @@ class World(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(lt, lo, sp)
+            self.play(k.animate.set_value(7), run_time=2, rate_func=linear)
             vo.wait_until("a")
             self.play(k.animate.set_value(n - 1), run_time=8, rate_func=linear)
             vo.wait_until("b")
@@ -152,12 +153,12 @@ class World(VoiceoverScene):
                     rf"{100 * np.mean(res['0.10']['at_limit']):.1f}\%\ \text{{of days}}", font_size=26, color=LOSS),
             MathTex(rf"\pm 20\%:\ \text{{AC1}} = {np.mean(res['0.20']['ac1']):.2f},\ "
                     rf"{100 * np.mean(res['0.20']['at_limit']):.1f}\%\ \text{{of days}}", font_size=26, color=QC.IDEA),
-            label(r"a signal no one could trade: at the limit, the queue doesn't clear", font_size=21, color=GREY_A),
+            label(r"a queued order may not fill: backtests must model execution at the limit", font_size=21, color=GREY_A),
             label(r"the House's data desk stores each market's rules beside its prices", font_size=21, color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 0.4)
-        q = desk_question(r"A stock closes limit-up with buyers queued. What is tomorrow's expected return, and can you "
-                          r"trade it?", r"positive, since the limit stopped the price short; but the queue didn't clear, so nobody "
-                          r"bought at that close", width=6.0, font_size=19).to_corner(DR, buff=0.3)
+        q = desk_question(r"In this carry-over model, a stock closes limit-up with buyers queued. What is tomorrow's "
+                          r"expected return, and can you trade it?", r"positive in this model; a fill depends on available "
+                          r"sell orders and queue priority", width=6.0, font_size=19).to_corner(DR, buff=0.3)
         src = note(r"simulated: daily vol 3\%, jumps on 5\% of days (12\% s.d.), 5,000 days, 8 seeds", font_size=15)
         src.to_edge(DOWN, buff=0.1)
         with self.voiceover(
@@ -166,16 +167,15 @@ class World(VoiceoverScene):
             f"should be. With ten percent limits the autocorrelation is {np.mean(res['0.10']['ac1']):.2f}, from a stock that is "
             f"at its limit on only {100 * np.mean(res['0.10']['at_limit']):.0f} percent of days; at twenty percent, "
             f"{np.mean(res['0.20']['ac1']):.2f}. A backtest would see momentum. But on a limit-up day the buy queue doesn't "
-            "clear, and nobody gets filled at that price. <bookmark mark='b'/> So the House's data desk stores each market's "
-            "rules beside its prices, and no backtest may buy a stock that couldn't be bought. A question: limit-up close, "
-            "buyers queued. Tomorrow's expected return, and can you trade it? <bookmark mark='z'/> Positive: the limit "
-            "stopped the price before it reached its new value, so part of the move comes tomorrow. But you can't "
-            "trade it: the queue at the limit didn't clear, and a backtest that buys at that close buys shares nobody "
-            "got. Next: the firms that run this machine, and who pays whom."
+            "clear, and an order joining its back may not fill. <bookmark mark='b'/> The House stores market rules beside "
+            "prices and models execution. A question: in this carry-over model, a limit-up close with buyers queued. "
+            "Tomorrow's expected return, and can you trade it? <bookmark mark='z'/> Positive in this model: some price "
+            "adjustment is deferred. But don't assume a fill. Some orders can trade at the limit while later ones wait; "
+            "a backtest needs execution evidence. Next: the firms running the machine."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(bars), run_time=0.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.4))
+            self.play(Indicate(bars[2], color=LOSS))
             self.play(FadeIn(txt[:3]))
             vo.wait_until("b")
             q.answer.set_opacity(0)

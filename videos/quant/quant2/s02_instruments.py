@@ -76,7 +76,7 @@ class Instruments(VoiceoverScene):
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
         ax = g.ax
         t = ValueTracker(0)
-        clean = tracing(ax, days, np.full(len(days), CLEAN), t, RATE, stroke_width=3)
+        clean = curve(ax, days, np.full(len(days), CLEAN), RATE, stroke_width=3)
         dl = tracing(ax, days, dirty, t, QC.IDEA, stroke_width=3)
         wedge = always_redraw(lambda: band(ax, days[:int(t.get_value()) + 1], np.full(int(t.get_value()) + 1, CLEAN),
                                            dirty[:int(t.get_value()) + 1], QC.IDEA, 0.18)
@@ -111,12 +111,12 @@ class Instruments(VoiceoverScene):
             "these contracts the simplest is the future, and it already holds the central idea of this series: a "
             "price set by what it costs to build the same thing another way."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
+            self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(stack[:2]))
             self.add(clean, dl, wedge)
             vo.wait_until("a")
             self.play(t.animate.set_value(365), run_time=6, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(stack))
+            self.play(FadeIn(stack[2:]))
             vo.wait_until("y")
             q.answer.set_opacity(0)
             self.play(FadeOut(stack), FadeIn(q))

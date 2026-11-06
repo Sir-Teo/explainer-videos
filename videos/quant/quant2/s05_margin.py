@@ -138,8 +138,8 @@ class Margin(VoiceoverScene, ThreeDScene):
         res = VGroup(
             MathTex(rf"\text{{1 March}}\ \${m['entry']:,.0f}\ \to\ \text{{13 March}}\ \${m['min_price']:,.0f}".replace(",", "{,}"),
                     font_size=28, color=BTC),
-            wrapped_label(rf"the 2x account ends \${-m['runs']['2']['left']:.0f} below zero: a loss the exchange's "
-                          r"insurance fund absorbs", 5.6, 20, GREY_A),
+            wrapped_label(rf"hourly-close simulator: the 2x account ends \${-m['runs']['2']['left']:.0f} below zero; "
+                          r"not a reconstruction of the exchange's actual liquidation", 5.6, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.35)
         src = real_data(r"Binance USD-M BTCUSDT perpetual, hourly, with 8-hourly funding; maintenance 0.5\%",
                         corner=DL)
@@ -147,13 +147,13 @@ class Margin(VoiceoverScene, ThreeDScene):
         i3 = m["runs"]["3"]["liq_index"]
         i2 = m["runs"]["2"]["liq_index"]
         with self.voiceover(
-            f"A real test, hour by hour. On the first of March 2020 Bitcoin was at {m['entry']:,.0f} dollars. Three traders "
+            f"A teaching simulation on real hourly closes. On the first of March 2020 Bitcoin was at {m['entry']:,.0f} dollars. Three model accounts "
             "go long one coin each on a perpetual, at ten, three and two times leverage: dashed lines for their liquidation "
             "prices, and on the right, each account's equity. <bookmark mark='a'/> On the ninth of March the price slips "
             "under the first line: the ten-times account is gone. <bookmark mark='b'/> On the twelfth, Part one's crisis, the "
             "three-times account goes that evening, and early on the thirteenth, at "
-            f"{m['min_price']:,.0f} dollars, even two times is closed out, below zero: a hole for the exchange's insurance "
-            "fund. <bookmark mark='c'/> Within weeks Bitcoin was back above seven thousand. None of them saw it."
+            f"{m['min_price']:,.0f} dollars, even two times closes below zero in this simulator. Real exchanges monitor "
+            "mark prices much more often and have their own liquidation rules; this is not an actual insurance-fund loss. <bookmark mark='c'/> Within weeks Bitcoin was back above seven thousand. None of these accounts saw it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(zero), FadeIn(head), LaggedStart(*[Create(x) for x in hl]))
             self.add(line, ledger)
@@ -219,9 +219,10 @@ class Margin(VoiceoverScene, ThreeDScene):
                      color=QC.IDEA).to_edge(DOWN, buff=1.7)
         pq = desk_question(r"Go from 5x to 10x. Does the distance to liquidation halve, or worse? And the chance?",
                            width=8.0, font_size=22).to_edge(DOWN, buff=0.25)
+        summary = VGroup(rows[2].copy(), whys[2].copy(), ex, pq).arrange(DOWN, buff=0.35).move_to(ORIGIN)
         with self.voiceover(
             "How likely is liquidation before it happens? Measure the distance to the liquidation price in log terms. "
-            "<bookmark mark='a'/> For a Brownian log price, the reflection principle says the chance of touching it within H "
+            "<bookmark mark='a'/> For a driftless Brownian log price with constant volatility and a fixed barrier, the reflection principle says the chance of touching it within H "
             "days is twice the chance of ending below it. <bookmark mark='b'/> So it is two Phi of minus d over sigma root H. "
             f"At five times, d is {q['d5']:.2f}; at ten, {q['d10']:.2f}, less than half. Predict what that does to the odds."
         ) as vo:
@@ -230,8 +231,7 @@ class Margin(VoiceoverScene, ThreeDScene):
             step(1)
             vo.wait_until("b")
             step(2)
-            self.play(FadeIn(ex))
-            self.play(FadeIn(pq))
+            self.play(*[FadeOut(m) for m in self.mobjects], FadeIn(summary))
         self.wait(0.6)
         self.clear_scene()
 
@@ -305,7 +305,6 @@ class Margin(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(FadeIn(cap[1:]))
             self.move_camera(theta=-150 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
-        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
-                         added_anims=[FadeOut(VGroup(ax, surf, form, sl, pin)), FadeOut(hint), FadeOut(cap),
-                                      FadeOut(src)], run_time=1.2)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, surf, form, sl, pin)), FadeOut(hint), FadeOut(cap), FadeOut(src), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
+        self.clear()

@@ -12,7 +12,7 @@ described from the public record, with allegations labelled as allegations.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 64 minutes)
+## Chapters (about 65 minutes)
 
 * **What happens when you press buy?** A trade's life with a collateral clock; 27–28 January 2021 from the SEC staff
   report: NSCC's intraday calls of $6.9 bn on 36 members ($2.1 bn mark-to-market, $4.8 bn special charge), $25.5 bn
@@ -45,7 +45,7 @@ described from the public record, with allegations labelled as allegations.
   settlement conveyor: a volatility spike to 400% multiplies the deposit 6.8×; T+2 → T+1 cuts it 50% for one-way flow
   but 30% for two-way flow; the real T+1 after-action numbers (clearing fund −$2.4 bn, −20%; affirmation 73% → ~95%).
 * **8. Margin and liquidation.** IM/VM/maintenance; P_liq = P₀(1 − 1/L)/(1 − m); March 2020 run live hour by hour with
-  three accounts' equity (10× on 9 March, 3× on 12 March, 2× on 13 March at $4,063, $271 below zero); lab:
+  three simulated accounts' equity (10× on 9 March, 3× on 12 March, 2× on 13 March at $4,063, $271 below zero); lab:
   `margin_account`; funding 17% a year in 2020; the reflection principle P = 2Φ(−d/σ√H); 3D: the empirical
   liquidation surface over leverage × horizon from BTC hourly lows 2020–25 against the formula (10×, 19 days: 37% in
   data, 50% by the formula; fat tails at short horizons, drift at long ones).
@@ -73,18 +73,19 @@ described from the public record, with allegations labelled as allegations.
   Harris–Gurel, Chang–Hong–Liskovich, Pavlova–Sikorskaya, Greenwood–Sammon; a simulated regression discontinuity (true
   jump 1.5%, recovered at every bandwidth, s.d. 0.12 → 0.45 points as the bandwidth shrinks).
 * **16. Markets around the world.** US, EU/UK T+1 (11 Oct 2027), Japan, India (SEBI: 93% FY22–24, 91% FY25), China
-  (T+1, ±10%/±20%, 2024 rules); the price-limit spring; simulated limits create AC1 0.12 at ±10% (0.04 at ±20%).
+  (T+1, ±10%/±20%, 2024 rules); the price-limit spring (log returns clipped at $\ln(1-L)$ and $\ln(1+L)$); simulated limits create AC1 0.12 at ±10% (0.03 at ±20%).
 * **17. Industry: who runs the machine.** The money map; firm files (CME, Virtu, Robinhood, Citadel Securities),
   the basis trade, regulators (SEC, FCA, SEBI's Jane Street interim order: allegations); the quant map and roles.
 * **18. Frontier, 2023 to 2026.** Six papers and the rule changes (T+1, Rule 612's delay, Treasury clearing, 13f-2 and
   10c-1a, EU/UK T+1).
-* **For the researcher: backtesting a margin model.** Kupiec's likelihood ratio and Wilks's $\chi^2_1$ limit, proved by a second-order expansion; at 250 days the exact size of the nominal 5% test is 9.5% (it rejects 0 and 7 or more breaches; 12 distinct values), 5.5% at 1,000 days; the Basel traffic light puts a correct model in yellow or red 10.8% of years. Christoffersen's Markov independence and conditional-coverage tests. Simulated GARCH(1,1): a constant margin with the right long-run variance is breached 1.5% of days and fails $\text{LR}_{uc}$ 54% of the time but $\text{LR}_{ind}$ only 26%; EWMA 8% and 6%. The US market 1926–2020 (24,876 days): EWMA breached 2.1% of days ($\text{LR}_{ind}$ 34), the constant margin 1.9% with 195 breaches in the 1930s ($\text{LR}_{ind}$ 94). Three open problems (duration tests; backtesting expected shortfall; estimation error).
+* **For the researcher: backtesting a margin model.** Kupiec's likelihood ratio and Wilks's $\chi^2_1$ limit, proved by a second-order expansion; at 250 days the exact size of the nominal 5% test is 9.5% (it rejects 0 and 7 or more breaches; 251 possible breach counts, concentrated near zero), 5.5% at 1,000 days; the Basel traffic light puts a correct model in yellow or red 10.8% of years. Christoffersen's Markov independence and conditional-coverage tests. Simulated GARCH(1,1): a constant margin with the right long-run variance is breached 1.5% of days and fails $\text{LR}_{uc}$ 54% of the time but $\text{LR}_{ind}$ only 26%; EWMA 8% and 6%. The US market 1926–2020 (24,876 days): EWMA breached 2.1% of days ($\text{LR}_{ind}$ 34), the constant margin 1.9% with 195 breaches in the 1930s ($\text{LR}_{ind}$ 94). Three open problems (duration tests; backtesting expected shortfall; estimation error).
 * **The funding desk; recap, desk questions, problems.**
 
 ## Build it
 
 ```bash
-python -m videos.quant.quant2.compute                     # every number, cached in .cache/quant2/ (~6 CPU-minutes)
+python -m videos.quant.quant2.compute backtest_theory limits --force  # refresh these changed examples, including old caches
+python -m videos.quant.quant2.compute                     # every other number, cached in .cache/quant2/ (~6 CPU-minutes)
 EXPLAINER_TTS=silent python tools/qa_scene.py quant2 Margin  # one chapter, silent, with a contact sheet
 python tools/make.py quant2                               # English and Chinese
 ```
@@ -164,11 +165,34 @@ netting; D'Avolio (2002), p. 271–272; the SIFMA–ICI–DTCC T+1 after-action 
 7. **(qual) Christoffersen.** The Markov likelihood is $(1 - \pi_{01})^{n_{00}}\pi_{01}^{n_{01}}(1 - \pi_{11})^{n_{10}}
    \pi_{11}^{n_{11}}$; each factor is a Bernoulli likelihood, so $\hat\pi_{01} = n_{01}/(n_{00} + n_{01})$ and $\hat\pi_{11} =
    n_{11}/(n_{10} + n_{11})$. Independence is the one restriction $\pi_{01} = \pi_{11}$, so Wilks gives $\chi^2_1$ (with
-   $p$ interior, the chain ergodic and both rows' counts growing). For 4 breaches in 250 days, three in a row:
+   $p$ interior, the chain ergodic and both rows' counts growing). For breaches on days 40, 100, 101 and 102 out of 250 days:
    $n_{01} = 2$, $n_{11} = 2$, $n_{10} = 2$, $n_{00} = 243$, $\hat\pi_{01} = 0.008$, $\hat\pi_{11} = 0.5$;
    $\text{LR}_{uc} = 0.77$ (the count is fine), $\text{LR}_{ind} = 12.2$, $\text{LR}_{cc} = 13.0$ ($p$ = 0.002):
    independence rejects. With so few breaches the $\chi^2$ approximation is rough, and an exact or simulated $p$-value
    is better.
+
+## Interpretation boundaries
+
+- Market orders seek immediate execution; liquidity shortages and trading halts can
+  prevent a complete fill. A limit order bounds the execution price rather than
+  guaranteeing one price or a fill. Priority rules vary by venue.
+- Cash-and-carry equality is derived for frictionless forwards with fixed funding,
+  shorting available and no default. Deterministic rates connect it to futures;
+  stochastic rates, funding frictions and settlement details need additional care.
+- March 2020's hourly-close margin accounts are teaching simulations on real prices.
+  Their negative balances do not reconstruct actual exchange liquidations or
+  insurance-fund payouts. The reflection formula assumes a driftless Brownian log
+  price, constant volatility and a fixed barrier, with no fees or funding changes.
+- In the historical margin backtest, constant volatility is estimated from the full
+  research sample. It is a hindsight benchmark, not an out-of-sample trading rule.
+
+Autocorrelation alone does not identify return smoothing or true volatility. The
+two-month worked inference assumes iid underlying returns and normalized
+nonnegative smoothing weights.
+
+At a binding price limit, some orders can execute while the remaining queue waits.
+Backtests must establish queue priority and available liquidity rather than assume
+that every order fills, or that none can fill.
 
 ## For the researcher
 
@@ -203,7 +227,7 @@ netting; D'Avolio (2002), p. 271–272; the SIFMA–ICI–DTCC T+1 after-action 
 # 量化金融，从零搭建 — 第2部分：市场的机器
 
 本部分跟随一笔交易从按下按钮直到结算，并测量市场的“管道”对每个交易者做了什么：期货与持有成本、订单簿、集合竞价与交易商、清算与结算、
-保证金（真实崩盘中的强平，以及确定保证金的模型）、卖空、回购与折扣率、主经纪商、费用与平滑收益、指数，以及世界各地市场的规则。
+保证金（用真实崩盘价格模拟强平，以及确定保证金的模型）、卖空、回购与折扣率、主经纪商、费用与平滑收益、指数，以及世界各地市场的规则。
 所有数字都由本系列自己的代码根据公开数据或注明模型的模拟算出；公司和事件取自公开记录，指控均注明为指控。
 
 *讲的是方法，不构成投资建议。*
@@ -248,7 +272,7 @@ T+1的实际效果）。8. 保证金与强平（2020年3月逐小时、反射原
    其平方以及$\text{LR}_{uc}$都趋于$\chi^2_1$。
 7. **（资格考试）克里斯托弗森检验。** 马尔可夫似然的每个因子都是伯努利似然，所以$\hat\pi_{01} = n_{01}/(n_{00} + n_{01})$，
    $\hat\pi_{11} = n_{11}/(n_{10} + n_{11})$；独立性是一个约束$\pi_{01} = \pi_{11}$，由威尔克斯定理得$\chi^2_1$。250天内4次击穿、
-   其中三次连续：$n_{01} = 2$，$n_{11} = 2$，$n_{10} = 2$，$n_{00} = 243$；$\text{LR}_{uc} = 0.77$，$\text{LR}_{ind} = 12.2$，
+   设击穿发生在第40、100、101和102天：$n_{01} = 2$，$n_{11} = 2$，$n_{10} = 2$，$n_{00} = 243$；$\text{LR}_{uc} = 0.77$，$\text{LR}_{ind} = 12.2$，
    $\text{LR}_{cc} = 13.0$（$p$ = 0.002）：独立性检验拒绝。击穿这么少时卡方近似很粗糙，最好用精确或模拟的$p$值。
 
 ## 数据与复现
@@ -261,3 +285,7 @@ FRED（新增SOFR1、SOFR25、SOFR75、SOFR99）；肯尼斯·弗伦奇数据库
 两个似然比都依赖威尔克斯定理（1938）；检验来自库皮耶克（1995）和克里斯托弗森（1998）。它们的渐近理论需要很多次击穿：$p$ = 1%、
 $T$ = 250时只有约2.5次，所以实践中应改用精确的二项分布（或模拟的马尔可夫分布）。开放问题：对现实中更长滞后的聚集有功效的检验；
 预期短缺的回测；考虑保证金参数估计误差的推断。
+
+补充边界：市价单并不保证全部成交，限价单限定的是成交价格边界。持有成本等式先在固定融资利率、无摩擦、可卖空且无违约的远期模型下推导；利率确定时可联系到期货。2020年3月的逐小时收盘价模拟并非交易所实际强平或保险基金赔付的重建。反射公式要求无漂移、恒定波动率的布朗运动对数价格和固定边界。历史保证金回测中的固定波动率用全研究样本估计，是事后基准而非样本外交易规则。250天的击穿次数共有251个可能值；模拟样本只观察到其中一部分，不代表理论分布只有那些值。
+
+自相关本身并不能确定收益被平滑，或确定真实波动率。两个月的推算要求真实收益独立同分布，且平滑权重非负、和为1。涨跌停价上可以有部分订单成交，剩余队伍继续等待；回测应结合排队优先级和可得流动性，不能假定全部成交，也不能一概认定无人能够成交。

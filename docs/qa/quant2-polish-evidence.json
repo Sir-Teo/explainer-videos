@@ -1,0 +1,764 @@
+{
+  "video": "quant2",
+  "base_commit": "1fcf7571ba6d83f43dd42e2ef9d308a424a14eb9",
+  "source_fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+  "data_inputs": {
+    ".cache/quant2/auction.json": {
+      "sha256": "2df533984c0766d8ebbd71189424ea28a84ead2dd1a27107c3941da39af53506",
+      "bytes": 86
+    },
+    ".cache/quant2/auction.npz": {
+      "sha256": "7064e77ca33c06fc07943c9bd9531f4cfc41fe53d684b9d3a97ac436553ce308",
+      "bytes": 4453
+    },
+    ".cache/quant2/auction_live.json": {
+      "sha256": "3397e7ade87600b675ce3145daf2e60b373f219f16b5ae1703b33da864e7174e",
+      "bytes": 126
+    },
+    ".cache/quant2/auction_live.npz": {
+      "sha256": "4fcca57758d8ad4c5b77aa6be8cc28ccc8f2c881bf563a8a0f0e8807b7eaaee3",
+      "bytes": 4020
+    },
+    ".cache/quant2/backtest_theory.json": {
+      "sha256": "8d6c3074e4e4d4f4f020d8d5dcae82e80fbbd92926bf4d9a5e864b7b0bea11fa",
+      "bytes": 3015
+    },
+    ".cache/quant2/backtest_theory.npz": null,
+    ".cache/quant2/basis.json": {
+      "sha256": "ef52f8982f0ed80b9045418b76c50db6c7474be98c4620855fc7d6852a500468",
+      "bytes": 916
+    },
+    ".cache/quant2/basis.npz": {
+      "sha256": "08eadcd6f6a3c4bec66b7ec7d2f33a87584d3819cf62c2086eb84814cd144e72",
+      "bytes": 19792
+    },
+    ".cache/quant2/book.json": {
+      "sha256": "e60ece778f48e78cc53ffd06e1e48cd1bec5c34fbb638a9e16bcf20b5ead88f0",
+      "bytes": 498
+    },
+    ".cache/quant2/book.npz": {
+      "sha256": "88f141cffc3e9a989d68a5e202725b12025e280496b5e7a5a5bb944f2554db37",
+      "bytes": 3812
+    },
+    ".cache/quant2/duffie_zhu.json": {
+      "sha256": "21a46d70fd323e981cbbedf2b31f0d4579b40385a2ad5a9b92fa1bb273d77294",
+      "bytes": 217
+    },
+    ".cache/quant2/duffie_zhu.npz": {
+      "sha256": "3a7ef613c0a5f3b78795c860318f579581555a75d0830417fc84a77f5bb8a472",
+      "bytes": 2473
+    },
+    ".cache/quant2/fees.json": {
+      "sha256": "cf78e537aa99c6cfe3161c2783a10e882a231cd93d994505be2afd8b8bdf2b2f",
+      "bytes": 208
+    },
+    ".cache/quant2/fees.npz": {
+      "sha256": "7285c769189195c9d05f983c4da1ef08d21c266232b7c76b6bea76be320891ea",
+      "bytes": 4952
+    },
+    ".cache/quant2/fire_sale.json": {
+      "sha256": "015cc686d53d62de0c9672b0d2fdd17eb3192862aa56db23bb016400bfba9120",
+      "bytes": 7458
+    },
+    ".cache/quant2/fire_sale.npz": {
+      "sha256": "5c49e2f128e4a49816d6d2fe8a312ae7e21ca58ff2b626d7509bb21d8cac48ec",
+      "bytes": 223
+    },
+    ".cache/quant2/funding.json": {
+      "sha256": "f2d04d91f658ed08b441b67bff6be3bdb0312de809ac7b60eb0fd475a68586e2",
+      "bytes": 195
+    },
+    ".cache/quant2/funding.npz": {
+      "sha256": "1a7206c49ac223a0af0ce4124289ee7437727c4bdeb27e122f1bbfa73ea5490c",
+      "bytes": 16716
+    },
+    ".cache/quant2/glm.json": {
+      "sha256": "7ae0e175dba7ec4528c5d7d7edb7bb83136072bd61e87be74f0dfc8b6e5ef758",
+      "bytes": 245
+    },
+    ".cache/quant2/glm.npz": {
+      "sha256": "6f93df15834a07a7df2fcdc0d14a8103f28312b609b944ad225344aec2b1375d",
+      "bytes": 6849
+    },
+    ".cache/quant2/hedge.json": {
+      "sha256": "53d0b052d8dc0095494058f5fd9622ddcbf75f6d04b077cc89e4ac287244b7e4",
+      "bytes": 7935
+    },
+    ".cache/quant2/hedge.npz": {
+      "sha256": "6b4fb195f3522333a70dbe0357abeac64be17f8dfb5a9b81d892ae4da6797438",
+      "bytes": 9406
+    },
+    ".cache/quant2/imodel.json": {
+      "sha256": "997973a9fb70aaacdb10895435075d6857e3766958c65c9fca1c4bf65a55e0f0",
+      "bytes": 1113
+    },
+    ".cache/quant2/imodel.npz": {
+      "sha256": "ae1513b772adebe9b3ef2198ab7b9882cc5254da11786b6c8a69ba24e90f9e7f",
+      "bytes": 10923
+    },
+    ".cache/quant2/index_rd.json": {
+      "sha256": "97f7ad9d0f80401f71d9d9723ae5c5835a2be9676497e0879b64964f7c94d3d5",
+      "bytes": 212
+    },
+    ".cache/quant2/index_rd.npz": {
+      "sha256": "ff6d6ae0d1487892d07ad274725e1616f15cf40b944cc0252064c881bdccb86f",
+      "bytes": 1472
+    },
+    ".cache/quant2/industry.json": {
+      "sha256": "f0606d2ea05f60dbdac11a51a0d0da3776b289724809a5f4d254815d33733599",
+      "bytes": 423
+    },
+    ".cache/quant2/industry.npz": null,
+    ".cache/quant2/limits.json": {
+      "sha256": "faec60639323d76065677d976254ef13155256f2d0fd51fc0dc3ad46b09eab20",
+      "bytes": 1186
+    },
+    ".cache/quant2/limits.npz": {
+      "sha256": "627433a17acfbdba326e0d9964381219431f00d1987ca985ad1ff85a3710dab2",
+      "bytes": 2095
+    },
+    ".cache/quant2/liq_surface.json": {
+      "sha256": "31073bd6e0de04a37a50eb7395add56fa20e243aa382fe7c505ec28974089921",
+      "bytes": 271
+    },
+    ".cache/quant2/liq_surface.npz": {
+      "sha256": "3c840386e6383e5232bfebd36a1de38b70fac335f4765281ed7807a21eb7bc47",
+      "bytes": 31964
+    },
+    ".cache/quant2/margin.json": {
+      "sha256": "f9159168539ab4738fe69c5c0bb97adc33576094e1044eecad24fa5777f9d91f",
+      "bytes": 46900
+    },
+    ".cache/quant2/margin.npz": {
+      "sha256": "aa2326db5f3b3cb4a42b5bc76f507e8eb962831d24c37ae62982e61d23b3ee1e",
+      "bytes": 5887
+    },
+    ".cache/quant2/netting.json": {
+      "sha256": "e50841a15ff39b89d4f0fde433083a684c97ce792fec666e763590eb9c14cfa1",
+      "bytes": 160
+    },
+    ".cache/quant2/netting.npz": {
+      "sha256": "7bc9d0610f5d850f084fd639ff6fe6dc809661fa4b3776b213f3441252218191",
+      "bytes": 4899
+    },
+    ".cache/quant2/repo.json": {
+      "sha256": "96232bec97d6e0bcb4fc70faa0dca56c29973c7b9a585ca93c5c86d5aa69d6bf",
+      "bytes": 10109
+    },
+    ".cache/quant2/repo.npz": null,
+    ".cache/quant2/reserve_curve.json": {
+      "sha256": "92ab25879fb466f1d9fa9d5101664de2f0a6ef9e94e095dabc3ea8e03bcb6a92",
+      "bytes": 681
+    },
+    ".cache/quant2/reserve_curve.npz": {
+      "sha256": "7dbf2b79e56bcb845e2f77092904af0ed850575194f1816c17800d2ff11bdba3",
+      "bytes": 12257
+    },
+    ".cache/quant2/rfq.json": {
+      "sha256": "63a7ee35ce42b4c17e3153a24b5d99336652e53513b80e44046c0677a11016b5",
+      "bytes": 2740
+    },
+    ".cache/quant2/rfq.npz": {
+      "sha256": "96e2dd8db78d66837b025036861dcb19184aa08cabe291641d65c9687843ce37",
+      "bytes": 2242
+    },
+    ".cache/quant2/settlement.json": {
+      "sha256": "38da33a98bf355d753aba944a2530af40f32113ceb06b833eb46ff0ab7260b71",
+      "bytes": 113042
+    },
+    ".cache/quant2/settlement.npz": {
+      "sha256": "bb2acfd6f82b05aa1ae37da8fa33f82e86d612f7e084023609690cc23d854096",
+      "bytes": 621
+    },
+    ".cache/quant2/sofr_fan.json": {
+      "sha256": "63a9228d466f600edec51ddb43471bcf9c51d5984257c522961ea62ffe00cec9",
+      "bytes": 5352
+    },
+    ".cache/quant2/sofr_fan.npz": null,
+    ".cache/quant2/spiral.json": {
+      "sha256": "4160769fcdee888a924429ca5b4dc02b12d5897dbca164644cbabde7ca680731",
+      "bytes": 2368
+    },
+    ".cache/quant2/spiral.npz": null,
+    ".cache/quant2/squeeze.json": {
+      "sha256": "befcb4aa0618de07699e5d1674a8fdbe9057256e06501184ccedc10709d80059",
+      "bytes": 13003
+    },
+    ".cache/quant2/squeeze.npz": {
+      "sha256": "d16429ffdf43c4f3d1471391ff6615175acdbf2ee00cb6b5553dc01929fe9276",
+      "bytes": 1354
+    },
+    ".cache/quant2/waterfall.json": {
+      "sha256": "0251ded3503ac27adcee1c9f398ae8b52021bdb4671e2bf929c9e95ba4732c66",
+      "bytes": 347
+    },
+    ".cache/quant2/waterfall.npz": {
+      "sha256": "a866baf2ce22e36e348cba934bc45f20e9521d11bd0182da340d8e41914923a5",
+      "bytes": 299
+    }
+  },
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "audio_note": "Signal and alignment checks do not certify pronunciation; full production-voice listening remains pending.",
+  "opening_sample": {
+    "path": "media/quant2/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 127.5999999999989,
+    "narration_lines": 6,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 128 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 128 s\n",
+    "scene_source_sha256": "b2ffedc2745f819d566fac38b34672e02a7964f3821966b5db26a51189da4712"
+  },
+  "additional_checks": {
+    "zh_narration_coverage": "124/124",
+    "narration_minutes_estimate": 64.8,
+    "tests": [
+      {
+        "command": "python -m pytest tests/test_quant_house.py -k 'kupiec or christoffersen or ewma_margin or netting_bounds' -q",
+        "passed": 5
+      },
+      {
+        "command": "python -m pytest tests/test_quant2_compute.py -q",
+        "passed": 1
+      }
+    ]
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 133.4924583333334,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Instruments",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 212.4035833333334,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Futures",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 279.6684166666667,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "Orders",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 240.24620833333336,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Auction",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 207.47770833333337,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Dealers",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 196.27033333333335,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Clearing",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 238.4739166666667,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Settlement",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 227.11658333333335,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Margin",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 260.39241666666663,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "MarginModel",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 234.9276666666667,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Short",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 251.34429166666672,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Repo",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 200.3387916666667,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 177.68320833333337,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Prime",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 204.25545833333334,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Business",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 235.87766666666673,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Index",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 207.82025000000002,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "World",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 189.44437500000004,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 198.68137500000003,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 151.65366666666668,
+        "frames": 9,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 330.0961666666666,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 177.22395833333337,
+        "frames": 12,
+        "warnings": []
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 135.8185416666667,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Instruments",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 204.93825000000004,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Futures",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 253.58587500000004,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "Orders",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 243.39175000000003,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Auction",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 203.17083333333335,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Dealers",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 193.73129166666666,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Clearing",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 244.95225000000005,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Settlement",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 215.8510416666667,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Margin",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 261.015,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "MarginModel",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 237.24291666666667,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Short",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 241.33595833333337,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Repo",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 200.287125,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 181.73362500000005,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Prime",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 198.35687500000003,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Business",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 244.32658333333336,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Index",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 214.1534166666667,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "World",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 192.31383333333335,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 199.3626666666667,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 153.333625,
+        "frames": 9,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 340.39866666666654,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 181.77195833333334,
+        "frames": 12,
+        "warnings": []
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 133.13333333333247,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Instruments",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 212.1999999999991,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Futures",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 279.39999999999674,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "Orders",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 239.93333333333115,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Auction",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 207.26666666666566,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Dealers",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 196.06666666666516,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Clearing",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 238.06666666666501,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Settlement",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 226.86666666666486,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Margin",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 260.06666666666285,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "MarginModel",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 234.6666666666644,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Short",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 251.0666666666655,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Repo",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 200.06666666666558,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 177.33333333333283,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Prime",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 204.06666666666533,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Business",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 235.4666666666649,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Index",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 207.5999999999995,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "World",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 189.19999999999885,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 198.39999999999918,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 151.5333333333331,
+        "frames": 9,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 329.4666666666652,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "600f3bc74b4fa5908940772dd516fe4076c90d9d69f8f3acf30ca4e8eeab472b",
+        "duration": 176.7333333333328,
+        "frames": 12,
+        "warnings": []
+      }
+    ]
+  },
+  "audio": {
+    "Hook": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "issues": []
+    },
+    "Margin": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 7,
+      "issues": []
+    },
+    "Research": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 9,
+      "issues": []
+    }
+  },
+  "preview": {
+    "path": "renders/quant2_polished_silent.mp4",
+    "seconds": 4548.592185999999,
+    "bytes": 37428714
+  }
+}

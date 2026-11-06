@@ -1,7 +1,7 @@
 # Quant, Built: sequential polish and QA
 
 Source branch: `quantitative-finance`, starting at `20b4e7e0`.
-Working branch: `polish/quantitative-finance`.
+Part 1 branch: `polish/quantitative-finance`; Part 2 branch: `polish/quant2`.
 The pass was rebased onto `11c5c9d4` to preserve the concurrent Part 31 work and
 shared axis-label fix; final checks use that updated base.
 
@@ -16,7 +16,8 @@ pass. A successful render is not, by itself, visual approval.
 | Parts | Status in this pass |
 | --- | --- |
 | 1 | Visual pass complete; full production-voice listening pending |
-| 2–43 | Pending; do not infer approval from historical build notes |
+| 2 | Visual pass complete; full production-voice listening pending |
+| 3–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -88,5 +89,64 @@ Local review artifacts (git-ignored):
 - `media/quant1/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: actual narrated English
   opening sample.
 
-Part 2 is next in the sequential visual pass. Parts 2–43 have not been approved
-by this pass.
+Part 2's completed visual pass is recorded below. Parts 3–43 remain pending.
+
+
+## Part 2: The Machinery of Markets
+
+Visual pass complete on `polish/quant2`, stacked on the Part 1 review branch:
+
+- Replace a simulated sample's distinct-value count with the full 251 possible
+  annual breach counts; compute exact rejection probability over the full support.
+- Fix Kupiec's all-breaches endpoint (`0 log 0`) and add boundary regression tests.
+- Add a magnified breach cluster and worked count/independence comparison after
+  the research pause, with explicit dates so transition counts are unambiguous.
+- State execution, venue-priority, carry-pricing and reflection-model assumptions.
+- Distinguish simulated hourly-close account deficits from actual exchange losses,
+  and full-sample constant volatility from a forecast available at the time.
+- Match spoken return-smoothing weights to the model and shorten the opening.
+- Keep the hedge valley within valid correlations, and convert simple price limits
+  to log-return bounds before clipping the price-limit simulation.
+- Keep content visible during the bond-price explanation and research transitions.
+- Separate small waterfall-layer callouts, stage the liquidation prediction after
+  its derivation, and remove empty camera-reset time between 3D and 2D material.
+- Keep replay children matched across checkpoints and extend the right regression
+  fit across its full data range.
+- State the smoothing assumptions and allow for partial fills at price limits.
+  Describe EWMA as improved but still oversized; its historical independence
+  statistic still rejects.
+- Trim repeated introductions and recap narration to keep the expanded lecture
+  within the syllabus's 55–65-minute target.
+
+Validation: all 21 English and 21 Chinese narration-beat frame checks pass, and all
+21 English silent playback checks pass, with zero automated warnings. Their contact
+sheets were visually reviewed. All 124 narration source lines have Chinese coverage;
+six focused funding and numerical-example tests pass. The narration estimate is
+64.8 minutes, within the syllabus's 55–65-minute target.
+
+The [compact evidence record](quant2-polish-evidence.json) captures the final source
+fingerprint, data hashes, 63 scene receipts and three speech reports. All 22 sampled
+English lines (Hook, Margin and Research) pass signal and alignment checks. The
+actual 128-second narrated Hook sample matches the final narration and has no blank
+or sparse-screen dead air. These checks do not certify pronunciation; full
+production-voice listening and synchronization remain pending. Chinese coverage is
+narration-beat frame QA rather than whole-part narrated playback.
+
+Local review artifacts (git-ignored): `renders/quant2_polished_silent.mp4`, an English
+480p15 preview (75:49 including animation and pauses) with 21 embedded chapters and
+English subtitles, plus its `.srt` and
+`.chapters.txt`; and `media/quant2/narrated_qa/videos/s01_hook/480p15/Hook.mp4`, the
+actual narrated English opening sample. Part 3 is next in the sequential visual pass.
+
+Reproduce Part 2 from the repository root (refresh the two changed cache items):
+
+```bash
+python -m videos.quant.quant2.compute backtest_theory limits --force
+python -m videos.quant.quant2.compute
+python tools/qa_series.py quant2 --cached-only --resume --timeout 1200
+python tools/qa_series.py quant2 --lang zh --cached-only --resume --timeout 1200
+python tools/qa_series.py quant2 --motion --cached-only --resume --timeout 1800
+python tools/zh_lines.py quant2 --todo
+python tools/lecture_length.py quant2 --floor 50
+EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant2 --only Hook Margin Research
+```

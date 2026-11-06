@@ -186,7 +186,8 @@ def kupiec(breaches: int, T: int, p: float = 0.01) -> dict:
     x, T = int(breaches), int(T)
     ph = x / T
     ll0 = (T - x) * np.log(1 - p) + x * np.log(p)
-    ll1 = (T - x) * np.log(1 - ph) + (x * np.log(ph) if x > 0 else 0.0)
+    # At either boundary the absent outcome contributes 0 log 0 = 0.
+    ll1 = ((T - x) * np.log1p(-ph) if x < T else 0.0) + (x * np.log(ph) if x > 0 else 0.0)
     lr = float(-2 * (ll0 - ll1))
     return {"rate": ph, "LR": lr, "p_value": float(chi2.sf(lr, 1))}
 

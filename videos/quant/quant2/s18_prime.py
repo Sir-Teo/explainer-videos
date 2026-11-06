@@ -113,6 +113,7 @@ class Prime(VoiceoverScene):
                           price.animate.set_value(-(j + 1) * lam * q), GrowFromEdge(lbars[j], DOWN), run_time=1.0)
             self.play(FadeIn(lt))
             vo.wait_until("b")
+            self.play(FadeOut(lbars), FadeOut(lt))
             step(0)
             step(1)
             step(2)

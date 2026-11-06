@@ -859,11 +859,11 @@ def compute_limits() -> dict:
             c = 0.0
             for t in range(n):
                 want = r[t] + c
-                ro[t] = np.clip(want, -L, L)
+                ro[t] = np.clip(want, np.log1p(-L), np.log1p(L))
                 c = want - ro[t]
             acs.append(float(np.corrcoef(ro[:-1], ro[1:])[0, 1]))
             acs_true.append(float(np.corrcoef(r[:-1], r[1:])[0, 1]))
-            at_lim.append(float(np.mean(np.abs(ro) >= L - 1e-12)))
+            at_lim.append(float(np.mean((ro <= np.log1p(-L) + 1e-12) | (ro >= np.log1p(L) - 1e-12))))
         res[f"{L:.2f}"] = {"ac1": acs, "ac1_true": acs_true, "at_limit": at_lim}
     n = 40
     r = rng0.normal(0, 0.03, n)
@@ -872,7 +872,7 @@ def compute_limits() -> dict:
     c = 0.0
     for t in range(n):
         want = r[t] + c
-        ro[t] = np.clip(want, -0.10, 0.10)
+        ro[t] = np.clip(want, np.log(0.90), np.log(1.10))
         c = want - ro[t]
     return {"res": res, "true_path": np.cumsum(r), "obs_path": np.cumsum(ro), "r": r, "ro": ro}
 
@@ -897,11 +897,11 @@ def compute_backtest_theory() -> dict:
     for T in (250, 1000):
         x = rng.binomial(T, p, M)
         lr = np.array([funding.kupiec(int(k), T, p)["LR"] for k in x])
-        exact = {k: funding.kupiec(k, T, p)["LR"] for k in range(0, 40)}
-        pk = st.binom.pmf(np.arange(40), T, p)
-        rej = [k for k in range(40) if exact[k] > 3.841]
+        exact = np.array([funding.kupiec(k, T, p)["LR"] for k in range(T + 1)])
+        pk = st.binom.pmf(np.arange(T + 1), T, p)
+        rej = exact > st.chi2.ppf(0.95, 1)
         out["size"][str(T)] = {"sim": float(np.mean(lr > 3.841)), "exact": float(pk[rej].sum()),
-                               "support": int(len(set(np.round(lr, 6)))), "lr_hist": np.histogram(lr, 30, (0, 12))[0],
+                               "count_support": T + 1, "lr_hist": np.histogram(lr, 30, (0, 12))[0],
                                "pmf": st.binom.pmf(np.arange(16), T, p)}
     out["traffic"] = {"green_max": 4, "red_min": 10, "p_yellow_or_worse": float(st.binom.sf(4, 250, p)),
                       "p_red": float(st.binom.sf(9, 250, p))}

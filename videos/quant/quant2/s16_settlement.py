@@ -57,8 +57,8 @@ class Settlement(VoiceoverScene):
             "member's unsettled positions; on top come mark-to-market calls, special charges for volatile names, and the "
             "excess capital premium when a member's risk outgrows its capital: the charge of January 2021."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(x) for x in items], lag_ratio=0.4),
-                      LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.4), run_time=4)
+            self.play(FadeIn(items), run_time=0.5)
+            self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.4), run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(defs[0]), FadeIn(defs[1]))
             vo.wait_until("b")

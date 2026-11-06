@@ -166,7 +166,7 @@ class Index(VoiceoverScene):
             for m, col in ((lo, TRADE), (hi, QC.IDEA)):
                 if m.sum() >= 2:
                     c = np.polyfit(cx[m] - 1000, by[m], 1)
-                    xs = np.array([cx[m].min(), 1000])
+                    xs = np.array([cx[m].min(), 1000] if col == TRADE else [1000, cx[m].max()])
                     out.add(Line(ax.c2p(xs[0], np.polyval(c, xs[0] - 1000)), ax.c2p(xs[1], np.polyval(c, 0)),
                                  color=col, stroke_width=4))
             return out

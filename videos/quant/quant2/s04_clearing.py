@@ -231,11 +231,17 @@ class Clearing(VoiceoverScene):
         scale = H / sum(sizes)
         col = VGroup()
         y = -2.9
+        label_floor = -3.5
         for (name, c), s in zip(LAYERS, sizes):
             h = max(s * scale, 0.12)
             r_ = Rectangle(width=1.8, height=h, stroke_width=1, stroke_color=GREY_D, fill_color=c, fill_opacity=0.75)
             r_.move_to([-3.5, y + h / 2, 0])
-            col.add(VGroup(r_, label(name, font_size=19, color=c).next_to(r_, LEFT, buff=0.2)))
+            text = label(name, font_size=19, color=c).next_to(r_, LEFT, buff=0.35)
+            # Small resource layers still need readable, separate callouts.
+            text.set_y(max(r_.get_y(), label_floor))
+            label_floor = text.get_y() + max(text.height + 0.12, 0.36)
+            leader = Line(text.get_right() + RIGHT * 0.06, r_.get_left(), color=c, stroke_width=1)
+            col.add(VGroup(r_, text, leader))
             y += h
         named = np.asarray(w["layers_named"], float)
         sig = w["named_sigmas"]

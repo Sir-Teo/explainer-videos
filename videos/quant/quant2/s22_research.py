@@ -35,9 +35,8 @@ class Research(VoiceoverScene):
     def card(self):
         c = research_card(r"Backtesting a margin model", r"What can a count of breaches prove, and what can it not?",
                           part=PART)
-        with self.voiceover("For the researcher: the statistics behind Chapter 9's backtest. A margin model promises to "
-                            "be breached on one day in a hundred. What can a count of breaches prove, and what can it "
-                            "not?"):
+        with self.voiceover("For the researcher: backtesting Chapter 9's margin model. It promises one breach in a hundred days. Can "
+                            "a count tell us whether it works?"):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -95,7 +94,7 @@ class Research(VoiceoverScene):
         s250, s1000, tr = t["size"]["250"], t["size"]["1000"], t["traffic"]
         side = VGroup(
             MathTex(rf"\text{{nominal 5\%, actual}}:\ {100 * s250['exact']:.1f}\%", font_size=24, color=LOSS),
-            MathTex(rf"\text{{distinct values of LR}}:\ {s250['support']}", font_size=22),
+            MathTex(rf"x \in \{{0,\ldots,250\}}:\ {s250['count_support']}\ \text{{possible counts}}", font_size=22),
             MathTex(rf"T = 1{{,}}000:\ {100 * s1000['exact']:.1f}\%", font_size=22),
             MathTex(rf"\text{{Basel yellow or red}}:\ {100 * tr['p_yellow_or_worse']:.1f}\%", font_size=22, color=QC.DELTA),
             wrapped_label(r"red bars: counts the $\chi^2$ test rejects (0, and 7 or more); amber: the Basel traffic "
@@ -107,14 +106,15 @@ class Research(VoiceoverScene):
             "But a year of trading is two hundred and fifty days, and a breach count is a small whole number. "
             "<bookmark mark='a'/> These are the exact chances of each count for a correct model. The chi-squared "
             "test rejects at zero breaches and at seven or more, and those counts together have probability nine and a "
-            "half percent, almost twice the nominal five. The statistic can take only twelve values; the asymptotics "
-            "have not arrived. At a thousand days the size is five and a half percent. <bookmark mark='b'/> The "
+            "half percent, almost twice the nominal five. There are two hundred and fifty-one possible counts, but "
+            "most probability sits on just a few small ones. Discreteness still matters. At a thousand days the size "
+            "is five and a half percent. <bookmark mark='b'/> The "
             "Basel traffic light, which counts breaches in a year, puts a correct model in its yellow zone or worse "
             "about one year in nine. That is a design choice, not an accident: a regulator prefers false alarms."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(bars[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.05), FadeIn(side[:3]))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars[1:]], lag_ratio=0.05), FadeIn(side[:3]))
             vo.wait_until("b")
             self.play(FadeIn(side[3:]))
         self.wait(0.4)
@@ -180,16 +180,16 @@ class Research(VoiceoverScene):
                     r"normal shocks; 99\% one-day margins", font_size=15, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "How well do the tests see? Simulate four years of daily returns with clustered volatility. <bookmark "
-            "mark='a'/> An EWMA margin is rejected about as often as a correct model should be. A constant margin with "
+            "mark='a'/> The EWMA count test rejects about eight percent, above the nominal five. A constant margin with "
             "exactly the right long-run variance is breached one and a half percent of the time, because clustered "
             "volatility fattens the tails, and the count test catches it about half the time. <bookmark mark='b'/> "
             "But the independence test, built for exactly this failure, catches it only one time in four. A breach "
             "after a breach is six percent likely instead of one, and four years still hold too few breaches to "
             "show it. This low power is the test's well-known weakness."
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(foot))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(foot))
             vo.wait_until("a")
-            self.play(FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(extra[0]))
+            self.play(FadeIn(tab[2]), FadeIn(extra[0]))
             vo.wait_until("b")
             self.play(FadeIn(extra[1]))
         self.wait(0.4)
@@ -222,16 +222,18 @@ class Research(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.3).shift(UP * 1.0)
         fit_right(side)
         with self.voiceover(
-            "Ninety-five years of the American market settle it. <bookmark mark='a'/> The constant margin's breaches "
+            "Ninety-five years of the American market give a historical stress test. The constant margin uses the "
+            "full sample's volatility, so it is a hindsight benchmark, not a tradable forecast. <bookmark mark='a'/> Its breaches "
             "pile into the 1930s and the 2000s: almost two hundred in one decade, six in another. <bookmark mark='b'/> "
-            "The EWMA margin spreads them across the decades, so most of the timing failure is gone. But both fail "
+            "EWMA reduces clustering, but the independence test still rejects. Both also fail "
             "the count: the EWMA margin is breached on two percent of days, not one, because a normal quantile is too "
             "thin for real tails, and breaches still cluster a little. The fix the industry uses is a fatter-tailed "
             "quantile or filtered historical simulation, and Part 40 returns to it."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(labs))
+            self.play(FadeIn(g), FadeIn(labs), FadeIn(side[1]),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars[1::2]], lag_ratio=0.08))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars[1::2]], lag_ratio=0.08), FadeIn(side[1]))
+            self.play(Indicate(bars[3], color=CONST))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars[0::2]], lag_ratio=0.08), FadeIn(side[0]),
                       FadeIn(side[2]))
@@ -259,19 +261,67 @@ class Research(VoiceoverScene):
             "jointly with the quantile. How best to backtest it is still argued. <bookmark mark='c'/> And the "
             "margin's own parameters are estimated, so even under the model the breaches are not exactly coin flips."
         ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                if k:
+                    self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
     def question(self):
-        q = ask(r"a margin model shows 4 breaches in 250 days, three of them on consecutive days. Compute $\text{LR}_{uc}$ "
+        q = ask(r"a 1\% margin model has breaches on days 40, 100, 101 and 102 of 250. Compute $\text{LR}_{uc}$ "
                 r"and the transition counts $n_{ij}$. Which test, if any, rejects it?")
+        q.move_to(ORIGIN)
         with self.voiceover(
-            "Pause and predict. A margin model is breached four times in two hundred and fifty days, three of them on "
-            "consecutive days. Compute the count statistic and the transition counts. Which test, if any, rejects it?"
+            "Pause and predict. A one-percent margin model is breached on days forty, one hundred, one hundred and one, "
+            "and one hundred and two, out of two hundred and fifty. Compute the count statistic and the transition "
+            "counts. Which test, if any, rejects it?"
         ):
             self.play(FadeIn(q))
+        self.wait(0.5)
+        self.clear_scene()
+        self.answer()
+
+    def answer(self):
+        from explainer.quant.house import funding
+
+        hits = np.zeros(250, dtype=int)
+        hits[[39, 99, 100, 101]] = 1
+        result = funding.christoffersen(hits, 0.01)
+        title = label(r"Same count, different timing", font_size=34, color=QC.IDEA).to_edge(UP, buff=0.35)
+        # Magnify the cluster: the quiet days immediately before and after it matter too.
+        dots = VGroup(*[Dot(radius=0.10, color=LOSS if day in (100, 101, 102) else GREY_C)
+                        for day in range(98, 105)]).arrange(RIGHT, buff=0.65).move_to(UP * 1.9)
+        days = VGroup(*[MathTex(str(day), font_size=20).next_to(dot, DOWN, buff=0.12)
+                        for day, dot in zip(range(98, 105), dots)])
+        zoom = label(r"zoom: days 98--104; the fourth breach is on day 40", font_size=18, color=GREY_A)
+        zoom.next_to(dots, UP, buff=0.22)
+        count = VGroup(
+            label(r"Count: 4 in 250", font_size=25, color=CCP),
+            MathTex(rf"\hat p = 0.016,\quad \text{{LR}}_{{uc}} = {result['LR_uc']:.2f}", font_size=27),
+            label(r"below 3.84: do not reject at 5\%", font_size=20, color=GAIN),
+        ).arrange(DOWN, buff=0.25).move_to(LEFT * 3.3 + DOWN * 0.5)
+        timing = VGroup(
+            label(r"Timing: 249 transitions", font_size=25, color=CONST),
+            MathTex(r"(n_{ij}) = \begin{pmatrix}243 & 2\\2 & 2\end{pmatrix}", font_size=31),
+            MathTex(rf"\hat\pi_{{01}} = 2/245,\quad \hat\pi_{{11}} = 2/4", font_size=25),
+            MathTex(rf"\text{{LR}}_{{ind}} = {result['LR_ind']:.2f} > 3.84", font_size=27, color=LOSS),
+        ).arrange(DOWN, buff=0.20).move_to(RIGHT * 3.2 + DOWN * 0.55)
+        caveat = wrapped_label(r"The asymptotic independence test rejects. With only four breaches, use a simulated "
+                               r"null distribution to check the small-sample conclusion.", 11.8, 20, GREY_A)
+        caveat.to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "The count is fine: four in two hundred and fifty gives a likelihood ratio of zero point seven seven. "
+            "<bookmark mark='a'/> Of two hundred and forty-nine transitions, two enter a breach, two leave one, and "
+            "two connect consecutive breaches. The next-day rate jumps from two in two hundred and forty-five to two "
+            "in four. <bookmark mark='b'/> Independence rejects: twelve point two exceeds three point eight four. "
+            "With four breaches, check against a simulated null distribution."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(dots), FadeIn(days), FadeIn(zoom), FadeIn(count))
+            vo.wait_until("a")
+            self.play(FadeIn(timing[:3]))
+            vo.wait_until("b")
+            self.play(FadeIn(timing[3]), FadeIn(caveat))
         self.wait(0.5)
         self.clear_scene()

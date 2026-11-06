@@ -124,7 +124,7 @@ class Crisis(VoiceoverScene):
             "own liquidity needs, and the price of cash rises steeply. That's a demand curve for reserves, and it can be "
             "measured."
         ) as vo:
-            self.play(FadeIn(g), Create(line), run_time=3)
+            self.play(FadeIn(g), FadeIn(line), run_time=0.6)
             self.play(FadeIn(low), FadeIn(ll))
             vo.wait_until("a")
             self.play(FadeIn(right))

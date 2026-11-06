@@ -30,10 +30,10 @@ class Orders(VoiceoverScene):
 
     def types(self):
         cards = VGroup(
-            definition_card(r"Market order", r"Buy or sell now, at whatever the book offers. Certain to trade; "
-                            r"the price is not certain.", width=4.2, color=LOSS, font_size=21),
+            definition_card(r"Market order", r"Seek immediate execution at available prices. Neither the price nor "
+                            r"a complete fill is guaranteed.", width=4.2, color=LOSS, font_size=21),
             definition_card(r"Limit order", r"Buy at this price or lower, sell at this price or higher. The price is "
-                            r"certain; trading is not. It waits in the book.", width=4.2, color=GAIN, font_size=21),
+                            r"bounded; trading is not guaranteed. It can rest in the book.", width=4.2, color=GAIN, font_size=21),
             definition_card(r"Stop order", r"Becomes a market order once the price reaches a trigger: used to cut "
                             r"losses, and, in a crash, adds to the selling.", width=4.2, color=QC.IDEA, font_size=21),
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP).move_to(UP * 1.3)
@@ -42,19 +42,19 @@ class Orders(VoiceoverScene):
                   r"the rest), FOK (all now or nothing)", font_size=21),
             label(r"hidden and iceberg orders show part or none of their size; at the same price they wait behind "
                   r"displayed orders", font_size=21),
-            label(r"precedence: price first, then visibility, then time", font_size=24, color=QC.HOUSE),
+            label(r"a common equity-book rule: price, visibility, then time; venue rules differ", font_size=24, color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(cards, DOWN, buff=0.5)
         if more.width > 13.0:
             more.scale_to_fit_width(13.0)
         with self.voiceover(
             "Two kinds of order do almost all the work. A market order says: trade now, at whatever price is there. It is "
-            "certain to trade and uncertain about the price. <bookmark mark='a'/> A limit order says: buy at this price or "
-            "lower, sell at this price or higher. The price is certain; the trade is not, and it waits in the book. A stop "
+            "urgent, but a halt or missing liquidity can prevent a fill. <bookmark mark='a'/> A limit order says: buy at this price or "
+            "lower, sell at this price or higher. It bounds the price, not the chance of a trade, and can wait in the book. A stop "
             "order waits for a trigger price, then becomes a market order: a way to cut a loss, and, when many trigger at "
             "once, a way to deepen a crash. <bookmark mark='b'/> Orders also say how long they live: for the day, until "
             "cancelled, immediate-or-cancel, or fill-or-kill. And some hide: an iceberg shows a slice of its size, a hidden "
             "order shows none, and for that privilege it queues behind every displayed order at its price. The rule of the "
-            "book is price first, then visibility, then time."
+            "equity book is often price first, then visibility, then time. Other venues may use different priority rules."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -117,7 +117,7 @@ class Orders(VoiceoverScene):
             row(r"\bar p", r"=", r"a + \frac{\delta}{2}\Big(\frac{Q}{d} - 1\Big)"),
             row(r"\bar p - m", r"=", r"\frac{s}{2} + \frac{\delta}{2}\Big(\frac{Q}{d} - 1\Big)"),
         ]
-        whys = [why(r"depth $d$ at every tick $\delta$ above the best ask $a$: price priority", font_size=20),
+        whys = [why(r"uniform depth $d$ at each tick; $Q/d$ whole levels consumed, $Q \ge d$", font_size=20),
                 why(r"the average of an arithmetic series", font_size=20),
                 why(r"cost against the mid $m$: half the spread, plus the walk; effective spread $2|\bar p - m|$",
                     font_size=20)]
@@ -136,7 +136,7 @@ class Orders(VoiceoverScene):
         sb = seed_band(ax, Q, W, QC.IDEA)
         ul = DashedLine(ax.c2p(Q[0], uni[0]), ax.c2p(Q[-1], uni[-1]), color=GREY_B, stroke_width=2.5)
         leg = legend([(QC.IDEA, r"zero-intelligence book, 4 seeds"),
-                      (GREY_B, rf"uniform depth $d = {float(bk['depth'][0]):.1f}$ (the formula)")], font_size=19)
+                      (GREY_B, rf"whole-level approximation, $d = {float(bk['depth'][0]):.1f}$")], font_size=19)
         leg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.4)
         concave = W.mean(0)[-1] < uni[-1]
         walk_note = ("the front is thin and deeper levels thicker, so cost bends: impact is concave, as in real books."
@@ -192,14 +192,15 @@ class Orders(VoiceoverScene):
                           r"What happens to the spread and the queues?", r"the spread can halve, but depth at the best price thins and "
                           r"stepping ahead of a queue costs half a cent: small orders gain, large ones may not", width=6.0, font_size=21)
         q.next_to(rule, DOWN, buff=0.35).align_to(rule, LEFT)
+        keep_in_frame(VGroup(rule, q), 0.4)
         src = note(r"SEC Release 34-101070 (2024); exemptive orders 34-104172 (2025) and 34-105656 (2026)",
                    font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             f"More market orders relative to limit orders widen the spread: about {np.mean(sp['0.5']):.0f}, "
             f"{np.mean(sp['1.0']):.0f}, then {np.mean(sp['2.0']):.0f} ticks. <bookmark mark='a'/> The tick itself is a rule. "
             "In 2024 the SEC amended Rule 612: stocks with average spreads of a cent and a half or less would quote in "
-            "half-pennies, and access fees were cut from thirty to ten hundredths of a cent. Compliance was due today, in "
-            "November 2026; in June the SEC moved it to November 2027. <bookmark mark='b'/> A question: halve the tick on a "
+            "half-pennies, and access fees were cut from thirty to ten hundredths of a cent. Compliance was scheduled for "
+            "November 2026; in June 2026 the SEC moved it to November 2027. <bookmark mark='b'/> A question: halve the tick on a "
             "stock with a one-tick spread and long queues. What happens? <bookmark mark='z'/> The spread can halve, "
             "but fewer orders sit at each finer price, so the depth at the best quote thins, and anyone can step ahead "
             "of the queue for half a cent. Small orders pay less; large ones may not. The book trades all day, but the "

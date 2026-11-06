@@ -156,9 +156,9 @@ class Repo(VoiceoverScene):
             f"to four, {means[1]:.1f}; to six, {means[2]:.1f}. Small shocks are amplified most, and every case ends about "
             f"{100 * np.mean(drops):.0f} percent lower. <bookmark mark='b'/> The House's code is the loop itself."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(dots), run_time=0.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05, run_time=3))
+            self.play(Indicate(dots[:8], color=QC.IDEA))
             vo.wait_until("b")
             self.play(FadeIn(card))
             lab(self, card, [f"h 2% -> 3%: total/first = {means[0]:.2f}",

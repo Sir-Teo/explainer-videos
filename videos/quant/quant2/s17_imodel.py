@@ -266,7 +266,7 @@ class MarginModel(VoiceoverScene):
                          r"percentage point in days; leveraged pension hedges faced collateral calls they met by "
                          r"selling gilts, until the Bank of England stepped in to buy.", width=5.8, font_size=18)
         VGroup(c1, c2).arrange(DOWN, buff=0.2).next_to(apc, DOWN, buff=0.25).align_to(apc, LEFT)
-        q = desk_question(r"A faster-reacting margin model: is the market safer?", r"the CCP is; its members get "
+        q = desk_question(r"A faster-reacting margin model: is the market safer?", r"it can track risk faster, but members get "
                           r"their biggest calls on the worst day", width=6.0, font_size=20)
         q.to_corner(DL, buff=0.3)
         with self.voiceover(
@@ -276,7 +276,7 @@ class MarginModel(VoiceoverScene):
             "weight on stressed history, or a ten-year floor. <bookmark mark='b'/> When calls outrun markets, things break: "
             "LME nickel in March 2022, trading suspended and trades cancelled, later fined; British pension funds' gilt "
             "hedges that September, until the Bank of England bought. <bookmark mark='y'/> So, is a faster margin model safer? "
-            "<bookmark mark='z'/> For the clearing house, yes; for the market, not always. Its members get their "
+            "<bookmark mark='z'/> It can track changing risk faster, but it can also amplify funding stress. Its members get their "
             "biggest calls on the worst day, when cash is scarcest. Hence the dampers. Margin lets you buy with "
             "borrowed money; the mirror image is selling what you have borrowed."
         ) as vo:

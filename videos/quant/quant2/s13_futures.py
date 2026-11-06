@@ -43,7 +43,7 @@ class Futures(VoiceoverScene, ThreeDScene):
             row(r"F_0", r"=", r"S_0 e^{(r-q)T}"),
             row(r"\hat r - \hat q", r"=", r"\frac{\ln(F_t/S_t)}{T-t}"),
         ]
-        whys = [why(r"cash-and-carry: the coin is bought with borrowed money and sold forward"),
+        whys = [why(r"idealization: frictionless carry, fixed funding rate, no counterparty default"),
                 why(r"no risk, no money down: this must not be positive"),
                 why(r"no arbitrage both ways: reverse carry shorts the coin, lends, buys forward"),
                 why(r"an asset yielding $q$: hold $e^{-qT}$ units, reinvest the yield"),
@@ -53,7 +53,8 @@ class Futures(VoiceoverScene, ThreeDScene):
                       r"\text{a year}".replace(",", "{,}"), font_size=34, color=QC.IDEA).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             f"On the tenth of February 2021 the March Bitcoin future on Binance traded {100 * r['basis']:.1f} percent above "
-            f"the coin, with {r['days']:.0f} days to go. A forecast? No: a price for carrying the coin. "
+            f"the coin, with {r['days']:.0f} days to go. Start with an ideal forward: frictionless trading, "
+            "unlimited borrowing and shorting at a fixed rate, and no default. Futures share this price when rates are deterministic. "
             "<bookmark mark='a'/> Borrow cash, buy the coin, sell it forward at F nought: no money down. "
             "<bookmark mark='b'/> At expiry deliver it and repay the loan. That profit is riskless, so it can't be positive. "
             "<bookmark mark='c'/> Run it in reverse and the inequality flips: the forward is spot grown at the interest rate. "
@@ -62,8 +63,9 @@ class Futures(VoiceoverScene, ThreeDScene):
             "by leveraged longs to whoever bought the coin and sold the future."
         ) as vo:
             self.play(FadeIn(fact))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=QC.IDEA))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -124,6 +126,7 @@ class Futures(VoiceoverScene, ThreeDScene):
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(leg), FadeIn(src))
             self.add(ls, lf, la, cnt, gap)
+            self.play(k.animate.set_value(len(t) * 0.15), run_time=3, rate_func=linear)
             vo.wait_until("a")
             self.play(k.animate.set_value(len(t) * 0.75), run_time=7, rate_func=linear)
             self.play(FadeIn(res))
@@ -159,9 +162,11 @@ class Futures(VoiceoverScene, ThreeDScene):
             "scale by the sizes; for a stock portfolio, use its beta; and roll the hedge from one expiry to the next."
         ) as vo:
             self.play(FadeIn(head))
+            step(0)
             for i, mk in enumerate("abcde"):
                 vo.wait_until(mk)
-                step(i)
+                if i:
+                    step(i)
         self.wait(0.4)
         self.clear_scene()
 
@@ -175,8 +180,7 @@ class Futures(VoiceoverScene, ThreeDScene):
             return min(1 - 2 * h * rho / K_RATIO + h * h / K_RATIO ** 2, 1.3)
         surf = loss_surface(ax, f, (0, 1.6), (0, 1.0), resolution=(32, 24), z_lo=0, z_hi=1.3)
         floor = VMobject(stroke_color=QC.HOUSE, stroke_width=5).set_points_as_corners(
-            [ax.c2p(K_RATIO * r_, r_, 1 - r_ * r_) + OUT * 0.03 for r_ in np.linspace(0, 1 / K_RATIO * 1.33, 40)
-             if K_RATIO * r_ <= 1.6])
+            [ax.c2p(K_RATIO * r_, r_, 1 - r_ * r_) + OUT * 0.03 for r_ in np.linspace(0, 1, 40)])
         rho0 = 0.8
         ball_h = ValueTracker(0.05)
         ball = always_redraw(lambda: Dot3D(ax.c2p(ball_h.get_value(), rho0, f(ball_h.get_value(), rho0)) + OUT * 0.08,
@@ -213,10 +217,9 @@ class Futures(VoiceoverScene, ThreeDScene):
             self.play(Create(floor), FadeIn(cap))
             self.move_camera(theta=-28 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
         ball.clear_updaters()
-        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
-                         added_anims=[FadeOut(VGroup(ax, surf, floor, slice_, ball)), FadeOut(hint), FadeOut(cap),
-                                      FadeOut(params)], run_time=1.2)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ax, surf, floor, slice_, ball)), FadeOut(hint), FadeOut(cap), FadeOut(params), run_time=0.4)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
+        self.clear()
 
     def hedge_lab(self, h):
         card = lab_card(r"the minimum-variance hedge", [

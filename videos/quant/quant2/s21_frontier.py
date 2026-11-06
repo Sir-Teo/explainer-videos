@@ -123,7 +123,7 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "And the plumbing is being rebuilt as we watch. Filled dots are in force, hollow ones pending. American "
             "settlement went to T plus one in May 2024, and the clearing fund fell a fifth. <bookmark mark='a'/> The "
-            "half-penny tick, adopted in 2024, was due today, the second of November 2026; in June the SEC moved it "
+            "half-penny tick, adopted in 2024, was scheduled for the second of November 2026; in June 2026 the SEC moved it "
             "to November 2027. <bookmark mark='b'/> Treasuries, the market behind every repo in this part, move into "
             "central clearing: cash trades by the end of this year, repo by the middle of next. Duffie argued at "
             "Jackson Hole in 2023 for exactly that, with all-to-all trading, to make the market more resilient. "

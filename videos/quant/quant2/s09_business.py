@@ -152,7 +152,7 @@ class Business(VoiceoverScene):
         src.to_edge(DOWN, buff=0.12)
         with self.voiceover(
             "Funds holding illiquid assets mark them with stale or averaged prices. Grey is a fund's true monthly return; gold "
-            "what it reports: half this month, a third of last, a fifth of the one before. <bookmark mark='a'/> The report is "
+            "what it reports: fifty percent of this month, thirty percent of last, twenty percent of the one before. <bookmark mark='a'/> The report is "
             f"a shadow, same mean, less wiggle, and its Sharpe ratio rises {gl['inflate']:.2f} times with no skill at all. "
             "<bookmark mark='b'/> It happens in plain indices: the smallest decile of American stocks had daily "
             f"autocorrelation {gl['ac1']['early']['small']:.2f} before 1990, {gl['ac1']['late']['small']:.2f} since."
@@ -218,9 +218,11 @@ class Business(VoiceoverScene):
             g.add(Star(n=5, outer_radius=0.13, color=YELLOW, fill_opacity=1).move_to(tri(th)))
             for s in range(len(paths)):
                 g.add(Dot(tri(paths[s, j]), radius=0.06, color=QC.HOUSE))
-            if i == len(ck) - 1:
-                for s in range(len(moms)):
-                    g.add(Dot(tri(moms[s]), radius=0.05, color=GREY_B))
+            # Keep matching children across checkpoints: adding these only at
+            # the end made Transform pair labels with dots during the replay.
+            for s in range(len(moms)):
+                g.add(Dot(tri(moms[s]), radius=0.05, color=GREY_B)
+                      .set_opacity(1 if i == len(ck) - 1 else 0))
             return g
         rp = TrainingReplay(steps, err, frame, ck, ylabel=r"distance to the true $\theta$", xlabel=r"BFGS iteration",
                             color=QC.HOUSE, left=LEFT * 3.4 + DOWN * 0.2, right=RIGHT * 3.4 + UP * 0.8, x_length=4.6,
@@ -233,16 +235,16 @@ class Business(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.35)
         leg = legend([(QC.HOUSE, r"likelihood fits, 5 seeds"), (GREY_B, r"moment estimator (baseline)"),
                       (YELLOW, r"the true $\theta$")], font_size=17).to_corner(UL, buff=0.35)
-        q = desk_question(r"A fund's monthly returns have autocorrelation 0.4. Is its true volatility higher or lower "
-                          r"than reported, and by how much?", r"higher: if each return is spread over two months, reported "
+        q = desk_question(r"Assume iid true returns are smoothed over two months. Reported autocorrelation is 0.4. "
+                          r"How does true volatility compare with reported volatility?", r"higher: if each return is spread over two months, reported "
                           r"volatility is about $0.75\times$ the truth", width=8.6, font_size=24).move_to(DOWN * 0.4)
         with self.voiceover(
             "Undo it: fit the weights by maximum likelihood on five simulated funds of six hundred months. Each dot is a "
             "seed's estimate on the triangle of weights; the star is the truth. <bookmark mark='a'/> Every seed walks to the "
             "star in a few iterations; the moment estimator, grey, lands close too. <bookmark mark='b'/> On the smallest "
             f"decile before 1990, the fit puts {100 * sm[0]:.0f} percent of the weight on the current month: Sharpe inflated "
-            f"{gl['small_inflate']:.2f} times. <bookmark mark='y'/> A question: "
-            "autocorrelation point four. Is the true volatility higher or lower? <bookmark mark='z'/> Higher. If each "
+            f"{gl['small_inflate']:.2f} times. <bookmark mark='y'/> Assume independent true returns are smoothed over two months: "
+            "reported autocorrelation point four. Is true volatility higher or lower? <bookmark mark='z'/> Higher. If each "
             "month's return is spread over two months, the reported volatility is about three quarters of the truth, "
             "so the true one is a third higher, and the Sharpe ratio a quarter lower. Much of the buy side's money "
             "simply tracks an index. Next: what an index is, and what being in one does to a price."

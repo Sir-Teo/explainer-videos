@@ -1081,6 +1081,16 @@ def test_ewma_margin_constant_returns_and_lambda_fit():
     assert k["LR"] == pytest.approx(0.0, abs=1e-9) and k["p_value"] == pytest.approx(1.0)
 
 
+@pytest.mark.parametrize("hits", [0, 250])
+def test_kupiec_boundary_counts(hits):
+    from explainer.quant.house import funding
+    with np.errstate(divide="raise", invalid="raise"):
+        result = funding.kupiec(hits, 250, 0.01)
+    null_likelihood = (250 - hits) * np.log(0.99) + hits * np.log(0.01)
+    assert result["LR"] == pytest.approx(-2 * null_likelihood)
+    assert np.isfinite(result["p_value"])
+
+
 def test_netting_bounds_on_random_graphs_and_waterfall():
     from explainer.quant.house import funding
     rng = np.random.default_rng(4)

@@ -28,7 +28,7 @@ PROBLEMS = [
     r"(qual) Show $\text{LR}_{uc} = (\hat p - p)^2/(p(1 - p)/T) + o_p(1)$ under $H_0$, and hence $\text{LR}_{uc} "
     r"\Rightarrow \chi^2_1$.",
     r"(qual) Derive the Markov MLEs $\hat\pi_{01}, \hat\pi_{11}$ and show $\text{LR}_{ind} \Rightarrow \chi^2_1$; "
-    r"evaluate it for 4 breaches in 250 days, three in a row.",
+    r"evaluate it for breaches on days 40, 100, 101 and 102 out of 250 days.",
 ]
 
 
@@ -64,11 +64,10 @@ class Outro(VoiceoverScene):
                              r"when the exchange would close it out. New: margin follows the EWMA model, not a "
                              r"constant.", 12.4, 22, QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The House's second desk, treasury and funding, is built and tested. It keeps margin accounts, knows the odds of "
-            "liquidation, and sizes and backtests margin. <bookmark mark='a'/> It nets, runs auctions and waterfalls, hedges "
-            "with futures, charges for borrowing shares, plays out spirals and fire sales, and charges fees. "
-            "<bookmark mark='b'/> And it adds Rule 3: every backtest pays its funding, margin and fees, and is closed out when "
-            "the exchange would close it."
+            "The House's second desk, treasury and funding, is built and tested. It maintains margin accounts and "
+            "fits and backtests margin. <bookmark mark='a'/> It also handles netting, auctions, hedges, borrowing and"
+            " fees. <bookmark mark='b'/> Rule 3: every backtest pays funding, margin and fees, with liquidation under"
+            " its stated rules."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(LaggedStart(*[FadeIn(i) for i in items[:2]], lag_ratio=0.3))
@@ -87,7 +86,7 @@ class Outro(VoiceoverScene):
             (rf"netting only shrinks obligations, $M \le B \le G$: {100 * n['saved']:.0f}\% of a simulated day "
              r"removed", CCP),
             (r"a CCP's waterfall protects survivors; settlement deposits scale with volatility and days", CCP),
-            (r"margin is marked daily, and liquidation odds follow the reflection principle (fat tails aside)", BTC),
+            (r"a driftless Brownian log price gives reflection-principle liquidation odds; real paths can differ", BTC),
             (r"margin models arrive after the loss: procyclical, from 1987 to 2020", LOSS),
             (r"shorts pay a fee and face squeezes once short interest outruns the free float", LOSS),
             (rf"haircuts are leverage limits that spiral; on 17 Sep 2019 SOFR's 99th percentile hit {k17['SOFR99']:.0f}\%",
@@ -105,14 +104,11 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Part two in ten lines. A future is the spot price carried forward, and its best hedge ratio is rho times a ratio "
-            "of volatilities. The book is queues, impatience pays half the spread plus the walk, and an auction picks the "
-            "price that trades the most. Netting can only shrink obligations, and a clearing house's waterfall protects the "
-            "members who didn't fail; settlement deposits scale with volatility and with the days to settle. The odds of "
-            "liquidation follow the reflection principle, fat tails aside, and margin models arrive after the loss. Shorts "
-            "pay to borrow and face squeezes once short interest outruns the free float. Haircuts are leverage limits that "
-            "spiral. Fees compound, and smoothed returns flatter. And index demand, price limits and each market's rules move "
-            "prices and the statistics we measure."
+            "Part two in ten lines. Prices come with a mechanism and a cost: carry, spreads, collateral and fees. "
+            "Netting shrinks obligations; clearing concentrates the remaining risk. A driftless Brownian log-price "
+            "model gives benchmark liquidation odds. Margin calls can amplify stress. Borrowed shares can be "
+            "recalled, haircuts can rise, and selling first can hurt everyone else. Smoothed returns flatter "
+            "performance. Index demand and market rules change both prices and their measured statistics."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -161,9 +157,8 @@ class Outro(VoiceoverScene):
             (r"fees, costs and smoothed returns in every backtest", [26, 30, 43]),
         ])
         with self.voiceover(
-            "Where this comes back: margin and funding in Parts seventeen, thirty-nine and forty-one; the book and auctions in "
-            "thirty-five to thirty-seven; clearing in twenty-one; repo and the basis in eighteen and twenty-two; and fees and "
-            "smoothing in every backtest from twenty-six on."
+            "Where this comes back: funding and margin in hedging and crises; books and auctions in execution; "
+            "clearing in credit; and fees and smoothing in every backtest. The card gives the part numbers."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -184,9 +179,9 @@ class Outro(VoiceoverScene):
              r"Fung and Hsieh (1997); Getmansky, Lo and Makarov (2004); Bogousslavsky and Muravyev (2023); Pinter (2023)",
              r"SEC staff report on early 2021 (October 2021); SEC Rule 612 (2024); SEBI F\&O studies (2023--25)"])
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers and reports it draws on. Every number in it was "
-            "computed from public data by the series' own code: Binance's Bitcoin futures and funding rates, the "
-            "St. Louis Fed's money-market rates, and Kenneth French's market returns."
+            "These are the textbook chapters, papers and primary reports behind this part. Computed examples use "
+            "public market data or explicitly labelled simulations; disclosed firm figures come from the cited "
+            "reports."
         ):
             self.play(FadeIn(card))
             self.wait(3)
@@ -197,9 +192,8 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 3, Value, Accounting and the Firm", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The House now has two desks: data, and funding. <bookmark mark='a'/> Next, Part three: value, "
-            "accounting and the firm. What a share is a claim on, how companies report it, and the accounting "
-            "signals that became the first factors."
+            "The House now has two desks: data and treasury. <bookmark mark='a'/> Next, Part three: value, accounting"
+            " and the firm. What does a share claim, and what do company accounts reveal?"
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")
