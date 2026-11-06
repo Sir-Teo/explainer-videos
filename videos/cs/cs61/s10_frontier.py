@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs61.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 
@@ -27,15 +29,16 @@ class Frontier(VoiceoverScene):
         tower = VGroup(*[Rectangle(width=2.2 - 0.12 * i, height=0.32, stroke_color=GREY_C, stroke_width=1.2,
                                    fill_color=GREY_E, fill_opacity=1) for i in range(10)]).arrange(UP, buff=0.04)
         tower.to_edge(DOWN, buff=0.5)
-        rng = np.random.default_rng(5)
+        # three tiers of the sky, staggered so that no two labels meet and the lowest tier clears the tower
+        slots = [(x, 2.55) for x in (-5.1, -1.7, 1.7, 5.1)] + [(x, 1.45) for x in (-3.4, 0.0, 3.4)] + \
+                [(x, 0.4) for x in (-5.4, -2.7, 2.7, 5.4)]
         stars = VGroup()
         for i, r in enumerate(rows):
-            x = -6.0 + 12.0 * (i + 0.5) / len(rows) + rng.uniform(-0.3, 0.3)
-            y = 2.2 - 1.6 * ((i * 7) % len(rows)) / len(rows) + rng.uniform(-0.2, 0.2)
+            x, y = slots[i % len(slots)]
             s = Star(n=5, outer_radius=0.12, color=COLS[i % 6], fill_opacity=1).move_to([x, y, 0])
             t = label(r["problem"], font_size=15, color=COLS[i % 6]).next_to(s, DOWN, buff=0.08)
-            if t.width > 2.2:
-                t.width = 2.2
+            if t.width > 2.6:
+                t.width = 2.6
             parts = ", ".join(str(p) for p in r["parts"])
             pl = label(rf"Part{'s' if len(r['parts']) > 1 else ''} {parts}; \ since {r['since']}", font_size=12,
                        color=GREY_B).next_to(t, DOWN, buff=0.04)
@@ -75,10 +78,28 @@ class Frontier(VoiceoverScene):
                                      rf"{rec['steps']} steps", 5.6, font_size=19, color=GREY_A),
                        note(r"checked far beyond, \ by large distributed searches", font_size=16)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.25)
-        VGroup(left, right).arrange(RIGHT, buff=1.0, aligned_edge=UP).next_to(head, DOWN, buff=0.7)
+        VGroup(left, right).arrange(RIGHT, buff=1.0, aligned_edge=UP).next_to(head, DOWN, buff=0.5)
+
+        def records(rows, xkey, ykey, ymax, col, ylab):
+            ax = Axes(x_range=[0, 6.2, 1], y_range=[0, ymax, ymax / 4], x_length=5.2, y_length=2.2,
+                      axis_config={"color": GREY_D, "include_ticks": False})
+            pts = [ax.c2p(math.log10(r[xkey]), r[ykey]) for r in rows]
+            stair = VMobject(color=col, stroke_width=2.5).set_points_as_corners(
+                [p for a, b in zip(pts, pts[1:] + [ax.c2p(6.2, rows[-1][ykey])]) for p in (a, [b[0], a[1], 0])])
+            dots = VGroup(*[Dot(p, radius=0.045, color=col) for p in pts])
+            xt = VGroup(*[label(rf"$10^{{{k}}}$", font_size=14, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.08)
+                          for k in range(0, 7, 2)])
+            yt = label(ylab, font_size=15, color=GREY_B).next_to(ax, UP, buff=0.08).align_to(ax, LEFT)
+            return VGroup(ax, xt, yt, stair, dots)
+
+        gplot = records(g["records"], "n", "p", 650, HEAD, r"smallest prime needed, \ each new record")
+        cplot = records(c["records"], "n", "steps", 560, YES, r"steps to reach 1, \ each new record")
+        gplot.next_to(left, DOWN, buff=0.4).align_to(left, LEFT)
+        cplot.next_to(right, DOWN, buff=0.4).align_to(right, LEFT)
+        VGroup(gplot, cplot).align_to(VGroup(gplot, cplot), DOWN)
         foot = wrapped_label(r"small cases never prove a theorem about all numbers, \ but they find counterexamples, "
                              r"\ suggest patterns, \ and tell you where a proof must work hardest", 12.4, font_size=21,
-                             color=WHITE).to_edge(DOWN, buff=0.6)
+                             color=WHITE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "One honest way to start is with the small cases. <bookmark mark='a'/> Goldbach conjectured in 1742 that "
             f"every even number above two is a sum of two primes. Our sieve checks every even number up to "
@@ -91,9 +112,11 @@ class Frontier(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(left))
+            self.play(FadeIn(left), FadeIn(gplot[:3]))
+            self.play(Create(gplot[3]), FadeIn(gplot[4]), run_time=2)
             vo.wait_until("b")
-            self.play(FadeIn(right))
+            self.play(FadeIn(right), FadeIn(cplot[:3]))
+            self.play(Create(cplot[3]), FadeIn(cplot[4]), run_time=2)
             vo.wait_until("c")
             self.play(FadeIn(foot))
         self.wait(0.4)

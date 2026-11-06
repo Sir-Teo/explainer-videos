@@ -29,9 +29,9 @@ class Outro(VoiceoverScene):
                            (59, r"Distributed Computing Theory", r"what many processes can compute", LAM),
                            (60, r"Domain-Specific Hardware", r"machines built for one job", KERN),
                            (61, r"Doing Research", r"how results are made", NO)):
-            rows.add(VGroup(label(rf"{n}", font_size=24, color=c), label(t, font_size=22, color=WHITE),
-                            label(d, font_size=19, color=GREY_A)).arrange(RIGHT, buff=0.4))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.6)
+            rows.add(VGroup(label(rf"{n}", font_size=28, color=c), label(t, font_size=26, color=WHITE),
+                            label(d, font_size=21, color=GREY_A)).arrange(RIGHT, buff=0.4))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).move_to(DOWN * 0.2)
         with self.voiceover(
             "The last act went past the degree, to the first year of research. <bookmark mark='a'/> Eigenvalues that "
             "know a graph's shape; theorems about when learning is possible; three meanings for every program; the "
