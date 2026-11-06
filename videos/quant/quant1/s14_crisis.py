@@ -162,7 +162,9 @@ class Crisis(VoiceoverScene):
                   color=QC.IDEA),
             label(r"The same arithmetic for 19 October 1987 is in Part 10.", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.2).next_to(pair, DOWN, buff=0.6)
-        VGroup(pair, lesson).scale(1.12).move_to(ORIGIN)
+        # The two 6.3-unit cards already fill the safe width; enlarging them
+        # crops their borders even while their text remains inside the frame.
+        VGroup(pair, lesson).move_to(ORIGIN)
         keep_in_frame(VGroup(pair, lesson), 0.3)
         with self.voiceover(
             "Measure them as this part has taught. Against the market's own volatility over the year before, the "

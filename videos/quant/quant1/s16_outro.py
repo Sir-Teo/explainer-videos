@@ -48,8 +48,8 @@ class Outro(VoiceoverScene):
             (r"well-anticipated prices are martingales (Samuelson): the tower property", QC.IDEA),
             (r"small stocks' weekly echo: real in the data, gone once trading was fast", QC.IDEA),
             (r"heavy tails with a cubic law; 101 days beyond $5\sigma$ where a bell curve expects none", TAIL),
-            (r"volatility clusters, and falls bring storms: a martingale, not a random walk", VOL),
-            (r"the variance exists; the kurtosis is at the mercy of one day", TAIL),
+            (r"volatility clusters, and falls bring storms: independent returns fail", VOL),
+            (r"finite variance fits the evidence; kurtosis is at the mercy of one day", TAIL),
             (r"markets are just inefficient enough to pay for information; in-sample results can fool you", QC.IDEA),
             (r"$\mathbb Q$ prices insurance, $\mathbb P$ is what happens; options bound expected returns", QQ),
             (r"no betting system beats a fair game; information can (Thorp)", QC.HOUSE),
@@ -67,7 +67,7 @@ class Outro(VoiceoverScene):
             "is the average return minus half the variance, so leverage has a peak. Well-anticipated prices are "
             "martingales, by the tower property. Small stocks once had a weekly echo, and it vanished when trading "
             "became fast. Returns have heavy tails, with an exponent near three. Volatility clusters, and falls "
-            "bring storms, so the market is a martingale but not a random walk. The variance exists; the kurtosis "
+            "bring storms: returns are not independent. Finite variance fits the evidence; the kurtosis "
             "is at the mercy of a single day. Markets are just inefficient enough to pay for information, and "
             "in-sample predictability can fool you. The risk-neutral world prices insurance; the real world is what "
             "happens. And no betting system can beat a fair game, though information can."

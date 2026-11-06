@@ -1,6 +1,8 @@
 # Quant, Built (量化金融，从零搭建)
 
-*Plan of record, draft 2. No part is written yet.*
+*Course plan, draft 2. All 43 parts have source implementations; build history is in
+[`PROGRESS.md`](PROGRESS.md), and the sequential polish pass is tracked in
+[`../../docs/qa/quantitative-finance-polish.md`](../../docs/qa/quantitative-finance-polish.md).*
 - [`SYLLABUS.md`](SYLLABUS.md): the standard, the devices, the threads, the model zoo, the data, all 43 parts
   chapter by chapter, and the phases.
 - [`READING.md`](READING.md): every textbook the series covers and the parts each maps to, coverage maps for the
@@ -129,8 +131,8 @@ CRSP, OptionMetrics, TAQ and metaorder records are not free. Where a part needs 
 
 ## Shared code and the Chinese edition
 
-- `explainer/quant/` will hold the instruments and re-export *AI, Built*'s lecture cards and visual helpers.
-- `explainer/quant/house/` will hold the House library, tested by `tests/test_quant_house.py`.
+- `explainer/quant/` holds the instruments and re-exports *AI, Built*'s lecture cards and visual helpers.
+- `explainer/quant/house/` holds the House library, tested by `tests/test_quant_house.py`.
 - Text helpers and the derivation ladder are the analysis series' (`explainer.analysis`).
 - Chinese narration goes in `videos/quant/quantN/narration_zh.json`, on-screen text in
   `videos/quant/quant_text_zh.json`, and terms in `QUANT_ZH_GUIDE.md` (Phase 0). The Chinese edition carries the

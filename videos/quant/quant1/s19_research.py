@@ -110,8 +110,9 @@ class Research(VoiceoverScene):
 
         with self.voiceover(
             "But Chapter 6 showed that returns are not independent: their size clusters. <bookmark mark='a'/> "
-            "Weaken the assumption to a martingale difference, unpredictable in direction but with a size that can "
-            "be forecast. <bookmark mark='b'/> Each sample autocorrelation is still centred at zero, but its variance "
+            "Weaken the assumption to a martingale difference, with zero conditional mean but a size that can "
+            "be forecast. <bookmark mark='b'/> Under Lo and MacKinlay's symmetry and regularity conditions, each "
+            "sample autocorrelation is still centred at zero, but its variance "
             "is now delta k, the correlation of squared moves k periods apart, scaled. With clustering, delta k is "
             "above one: in the House's GARCH model the theory gives four and a half at the first lag, decaying "
             "slowly. Even four hundred thousand simulated returns estimate it at only three, because that estimate's "
@@ -126,6 +127,7 @@ class Research(VoiceoverScene):
             step(1)
             self.play(FadeIn(g), Create(one), Create(thl), FadeIn(thlab), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.1))
             vo.wait_until("c")
+            self.play(*[FadeOut(m) for m in (g, one, thl, thlab, dots)])
             step(2)
         self.wait(0.5)
         self.clear_scene()
@@ -134,7 +136,7 @@ class Research(VoiceoverScene):
         qs = t["q"]
         n_q = len(qs)
         g = axes([-0.6, 3 * n_q - 0.4], [0, 0.4], x_length=10.0, y_length=4.0, xlabel=r"",
-                 ylabel=r"rejection rate of a nominal 5\% test, random walk true", xticks=[],
+                 ylabel=r"rejection rate, zero autocorrelation (5\% nominal)", xticks=[],
                  yticks=[0, 0.05, 0.1, 0.2, 0.3, 0.4], yfmt=lambda v: rf"{100 * v:.0f}\%", font_size=13).move_to(
             DOWN * 0.3 + LEFT * 0.6)
         ax = g.ax
@@ -159,9 +161,9 @@ class Research(VoiceoverScene):
         g_s, gt_s = t["size"]["garch"], t["size"]["garch_t5"]
         with self.voiceover(
             "Does it matter? Simulate. <bookmark mark='a'/> Two thousand paths of fifteen hundred returns each, the "
-            "length of thirty years of weekly data, with the walk true. For independent normal returns, both tests "
-            "reject at their nominal five percent. <bookmark mark='b'/> With clustered volatility, the iid test rejects a true "
-            "random walk about one time in six, and with fat-tailed shocks one time in four, at every horizon. The "
+            "length of thirty years of weekly data, with zero return autocorrelation in every model. For independent normal returns, both tests "
+            "reject at their nominal five percent. <bookmark mark='b'/> With clustered volatility, the iid test rejects the true "
+            "zero-autocorrelation null about one time in six, and with fat-tailed shocks one time in four, at every horizon. The "
             "robust test stays at five or six percent."
         ) as vo:
             self.play(FadeIn(g), Create(nominal), FadeIn(leg), FadeIn(foot))
@@ -217,8 +219,9 @@ class Research(VoiceoverScene):
             "in three; at point two, almost always. Chapter 4's small stocks of 1962 to 85, at about point three, "
             "could not have hidden."
         ) as vo:
+            self.play(FadeIn(side))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3), FadeIn(side))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 
@@ -247,9 +250,9 @@ class Research(VoiceoverScene):
             "half the iid one, three point seven against eight and a half: much of the later evidence was volatility, "
             "not memory. The market and the large stocks show nothing either way."
         ) as vo:
-            self.play(FadeIn(tab[0]))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(foot))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3), FadeIn(foot))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[2:]], lag_ratio=0.3))
         self.wait(0.4)
         self.clear_scene()
 
@@ -274,7 +277,9 @@ class Research(VoiceoverScene):
             "laws of long overlapping sums are non-standard. <bookmark mark='c'/> And testing many horizons at once is "
             "a multiple test: which q to report is itself a choice the counter of Part 26 should see."
         ) as vo:
-            for k, mk in enumerate(("a", "b", "c")):
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            for k, mk in ((1, "b"), (2, "c")):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
@@ -283,10 +288,29 @@ class Research(VoiceoverScene):
     def question(self):
         q = ask(r"a weekly series of 1{,}500 returns gives $\operatorname{VR}(4) = 1.10$. Compute the iid $z$. If $\delta_1 "
                 r"= \delta_2 = \delta_3 = 2$, what is $z^*$?")
+        q.set_y(2.5)
         with self.voiceover(
             "Pause and predict. Fifteen hundred weekly returns give a variance ratio at four of one point one. "
             "Compute the iid z. If the first three deltas are all two, what is z star?"
         ):
             self.play(FadeIn(q))
+        self.wait(3)
+        iid = MathTex(r"z = \frac{\sqrt{1500}\,(1.10 - 1)}{\sqrt{3.5}} \approx 2.07",
+                      font_size=38, color=VOL).move_to(UP * 0.7)
+        robust = MathTex(r"z^* = \frac{z}{\sqrt{2}} \approx 1.46", font_size=38, color=REAL).next_to(iid, DOWN, buff=0.5)
+        verdict = label(r"At 5\%: iid rejects; the robust test does not", font_size=27, color=QC.IDEA).next_to(
+            robust, DOWN, buff=0.5)
+        with self.voiceover(
+            "At q of four, the iid asymptotic variance is three point five. Plug in fifteen hundred returns and "
+            "a variance ratio of one point one: z is about two point zero seven, just past the two-sided five "
+            "percent threshold. <bookmark mark='a'/> If every delta is two, the variance doubles, so divide z "
+            "by the square root of two. The robust statistic is one point four six. <bookmark mark='b'/> The "
+            "same data no longer reject. Accounting for clustered volatility can change the conclusion."
+        ) as vo:
+            self.play(Write(iid))
+            vo.wait_until("a")
+            self.play(Write(robust))
+            vo.wait_until("b")
+            self.play(FadeIn(verdict))
         self.wait(0.5)
         self.clear_scene()

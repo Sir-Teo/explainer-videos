@@ -93,7 +93,7 @@ class Aggregation(VoiceoverScene):
             MathTex(rf"\text{{year}}\ {k[8]:.1f}\ \ (94\ \text{{years: a noisy number}})", font_size=28, color=REAL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
         why_ = wrapped_label(r"slower than independent sums would allow: the clusters of chapter 6 make neighbouring "
-                             r"days move together in size", 5.2, 21, GREY_A).next_to(pts, DOWN, buff=0.4).align_to(leg, LEFT)
+                             r"days move together in size", 4.3, 21, GREY_A).next_to(pts, DOWN, buff=0.4).align_to(leg, LEFT)
         with self.voiceover(
             "The kurtosis, horizon by horizon. <bookmark mark='a'/> "
             f"{k[0]:.1f} for a day, {k[4]:.1f} for a month, {k[7]:.1f} for half a year. It falls, as the central "

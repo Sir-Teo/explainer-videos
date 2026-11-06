@@ -92,14 +92,15 @@ class House(VoiceoverScene):
         cells.next_to(bar, DOWN, buff=0.7)
         if cells.width > 13.2:
             cells.scale_to_fit_width(13.2)
-        rule2 = wrapped_label(r"Rule 2: a strategy is registered first (the hash of its code, its parameters, the "
-                              r"number of things tried), then the envelope is opened for it, once. Whatever it says is "
-                              r"shown.", 12.4, 23, WHITE).to_edge(DOWN, buff=0.45)
+        rule2 = wrapped_label(r"Rule 2: register strategy code, parameters and trial count before testing the "
+                              r"hold-out once. Hashes identify the data; they do not prevent peeking.",
+                              12.4, 23, WHITE).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The second rule is a sealed envelope. Every statistic of stocks and Bitcoin in this part used data up "
-            "to the last day of 2020, and so will every piece of research in this series. <bookmark mark='a'/> The "
-            "five years since, 2021 to 2025, are sealed. Their fingerprints were recorded today, so no one, "
-            "including the author, can quietly look and adjust. <bookmark mark='b'/> When a strategy is ready, in "
+            "The second rule is a sealed envelope. Return-predictability research uses data up to the last day "
+            "of 2020. Chapter ten's dated options illustration uses later history; it is not a strategy test. "
+            "<bookmark mark='a'/> The five years from 2021 to 2025 are held out for strategy evaluation. Their "
+            "fingerprints identify the exact dataset; a hash cannot stop anyone looking. The protection is the "
+            "research protocol: register first and test once. <bookmark mark='b'/> When a strategy is ready, in "
             "Parts twenty-four to forty-three, it is registered first: the fingerprint of its code, its "
             "parameters, and how many things were tried to find it. Then the envelope is opened for it, once, and "
             "the result is shown, whatever it is."

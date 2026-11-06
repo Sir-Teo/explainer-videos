@@ -66,7 +66,7 @@ class History(VoiceoverScene):
         Y = r["yearly"]
         n, m = Y.shape
         sd1 = r["sd1"]
-        g = axes([0, m - 1], [-0.75, 0.75], x_length=9.6, y_length=5.0, xlabel=r"trading days into the year",
+        g = axes([0, m - 1], [-0.75, 0.75], x_length=8.4, y_length=5.0, xlabel=r"trading days into the year",
                  ylabel=r"log return since the start of the year", xticks=[0, 63, 126, 189, 252],
                  yticks=[-0.6, -0.3, 0, 0.3, 0.6], yfmt=lambda v: f"{100 * v:+.0f}\\%" if v else "0", font_size=18)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)

@@ -6,12 +6,15 @@ describes prices, and measures the answer on ninety-four years of the US stock m
 of Bitcoin options. Every number is computed by the series' own code ([`compute.py`](compute.py), the House library in
 [`explainer/quant/house`](../../../explainer/quant/house)) from public data: Kenneth French's daily market and
 size-decile returns, Binance's Bitcoin prices, and Deribit's option trades (the Surface). Statistics of stocks and
-Bitcoin use data up to 31 December 2020 only: the later years are sealed (chapter 14). Schematics and simulations
-are labeled on screen.
+Bitcoin used for return-predictability research stop at 31 December 2020: later years are held out for strategy
+evaluation (chapter 16). Chapter 10's dated options illustration uses December 2025 quotes and trailing Bitcoin
+history; it is descriptive, not a strategy test. Hashes identify the frozen data; preregistration and a single
+recorded test, rather than hashes themselves, protect the evaluation protocol. Schematics and simulations are
+labeled on screen.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 53 minutes)
+## Chapters (about 58 minutes, narration estimate)
 
 * **Which one is real?** Four one-year charts: three Gaussian random walks with the market's mean and volatility, and
   the US market in 1997. The charts look alike; the daily returns don't: 27 October 1997, −6.6%, a 6.8σ day that a
@@ -25,7 +28,9 @@ are labeled on screen.
   1926: $1 became $8,642 (1×), $209,604 (2×), $255,193 (3×, after losing 98.7% by July 1932); growth is a parabola in
   leverage with its peak at (μ − r)/σ² ≈ 2.6 (Kelly, Part 8).
 * **3. The random walk.** Cowles (1933), Kendall (1953), Osborne (1959); Samuelson's proof (1965) by the tower
-  property; a fair price at work (twenty coin tosses); martingale against random walk.
+  property; a fair price at work (twenty coin tosses); martingale against random walk. An asymmetric tree checks
+  the distinction: a 90% chance of gaining 1 and a 10% chance of losing 9 have zero expected change. A martingale
+  need not have equally likely signs, and low return autocorrelation alone does not establish the martingale property.
 * **4. Testing the walk.** Autocorrelation and the variance ratio, VR(q) = 1 + 2Σ(1 − k/q)ρₖ; Lo and MacKinlay
   (1988) replicated on French's size deciles over their exact sample (6 Sept 1962 – 26 Dec 1985, 1,215 weeks): the
   smallest decile's weekly autocorrelation +0.35, VR(16) = 2.57, z* ≈ 9–11; the largest decile a random walk;
@@ -55,7 +60,8 @@ are labeled on screen.
   active management (1991); the industry firm file (market makers and proprietary traders, systematic funds,
   multi-manager platforms, banks and asset managers), from the public record.
 * **12. Beating the dealer.** The doubling system (3,000 sessions; ruin 0.10%, mean −0.02 ± 0.07 over 200,000);
-  the optional stopping theorem and three stopping rules; Thorp's card counting (six-deck shoes, Hi-Lo true
+  the optional stopping theorem with a fixed deadline and three stopping rules (all capped at 200 tosses;
+  almost-sure eventual stopping alone is insufficient); Thorp's card counting (six-deck shoes, Hi-Lo true
   counts: 27% of hands favour the player; flat bets −0.50%, bets of 1–8 by count +0.08% of the money bet); Princeton
   Newport Partners (19.1% before fees, 15.1% after, against 10.2% for the S&P 500, 1969–1988, as Thorp reports).
 * **13. March 2020.** The crisis file: the US market on 16 March 2020 (−12.0%, 8.7σ against its own past year;
@@ -142,11 +148,26 @@ The Martin–Nagel item (`nagel`) is the slow one: 300 simulated markets, about 
   asymptotically uncorrelated.
   Asymmetric GARCH (leverage) can violate it; then the covariances between $\hat\rho_j$ and $\hat\rho_k$ must be kept.
 * **Simplifications.** The video drops the $O_p(1/n)$ bias terms (the House's implementation keeps Lo and MacKinlay's
-  small-sample corrections) and treats $\hat\delta_k$ as consistent; it is, under a finite eighth moment.
+  small-sample corrections). Under stationarity and ergodicity, a finite fourth moment suffices for consistency of
+  $\hat\delta_k$. A finite eighth moment is sufficient for finite estimator variance; it is not a requirement for
+  consistency. In the simulated Gaussian GARCH model, the fourth moment exists but the eighth does not, making
+  the estimator's variance infinite and its convergence slow.
+* **Stress-test boundary.** The GARCH run with standardized $t_5$ shocks has
+  $E[z^4]=9$ and $E[(0.86+0.12z^2)^2]=1.0756>1$, so its fourth moment does not
+  exist. Its observed rejection rates are a finite-sample stress test outside the
+  finite-fourth-moment theorem, not a guarantee of asymptotic size control.
 * **Reading.** Bartlett (1946); Lo and MacKinlay (1988, 1989); Richardson and Stock (1989); Chow and Denning (1993);
   Davis and Mikosch (1998); Choi (1999); Kim (2006); Charles and Darné (2009), a survey.
 * **Open problems.** Variance-ratio inference with infinite fourth moments; horizons that grow with the sample;
   choosing $q$ without a multiple-testing penalty.
+  The long-horizon card concerns $q/n$ remaining non-negligible. Merely allowing $q$ to grow slowly does not
+  rule out normal approximations under suitable additional rate conditions.
+
+**Worked check.** At $q=4$, the iid asymptotic variance is $3.5$. With $n=1500$ and
+$\operatorname{VR}(4)=1.10$, $z=\sqrt{1500}(0.10)/\sqrt{3.5}\approx2.07$.
+If $\delta_1=\delta_2=\delta_3=2$, the robust variance doubles, giving
+$z^*=z/\sqrt2\approx1.46$. At the two-sided 5% normal threshold of 1.96, the iid
+calculation rejects and the robust calculation does not.
 
 ## Data and reproducibility
 
@@ -165,9 +186,13 @@ The Martin–Nagel item (`nagel`) is the slow one: 300 simulated markets, about 
 
 本系列量化金融课程共43部分，这是第一幕“市场与货币”的第一部分。它问的是：一场纯粹的机会游戏，能在多大程度上描述价格？
 答案在94年的美国股市、比特币以及一天上午的比特币期权上测量出来。所有数字都由本系列自己的代码根据公开数据算出。股票和比特币的
-统计只使用2020年12月31日之前的数据，之后的年份被封存（第14章）。
+收益可预测性研究只使用2020年12月31日之前的数据，之后的年份留作策略评估（第16章）。第10章按日期展示的期权示例使用2025年的报价
+和此前的比特币历史，它是描述性示例，不是策略检验。哈希标识数据，并不能阻止偷看；评估的保护来自事先登记和只检验一次的流程。
 
 *讲的是方法，不构成投资建议。*
+
+第3章用一个不对称的树图区分均值与方向：90%的概率赚1元，10%的概率亏9元，期望变动仍为零。
+鞅不要求涨跌概率各半；收益的自相关很小，也不能单独证明价格是鞅。
 
 ## 交易台问题与解答
 
@@ -212,3 +237,12 @@ The Martin–Nagel item (`nagel`) is the slow one: 300 simulated markets, about 
 研究章节的定理是Lo与MacKinlay（1988）的定理1–3：独立同分布下的极限，以及鞅差下（要求其对称性假设H4）的异方差稳健极限。
 非对称GARCH（杠杆效应）可能违反该假设，此时必须保留$\hat\rho_j$与$\hat\rho_k$之间的协方差。开放问题：四阶矩无穷时的方差比推断；
 随样本增长的期限；在不付出多重检验代价的情况下选择$q$。
+长时间跨度卡片指$q/n$不可忽略的情形；仅仅让$q$缓慢增长，并不排除在额外的增长率条件下使用正态近似。
+
+压力测试的边界：标准化$t_5$冲击满足$E[z^4]=9$，这里的GARCH参数给出
+$E[(0.86+0.12z^2)^2]=1.0756>1$，因此四阶矩不存在。该模型中测得的拒绝率是定理假设之外的有限样本压力测试，
+并不保证渐近检验水平正确。
+
+数值检验：$q=4$时，独立同分布的渐近方差为3.5。取$n=1500$、$\operatorname{VR}(4)=1.10$，
+$z=\sqrt{1500}(0.10)/\sqrt{3.5}\approx2.07$。若前三个$\delta_k$都为2，稳健方差翻倍，
+$z^*=z/\sqrt2\approx1.46$。双侧5%的正态临界值为1.96，因此前者拒绝原假设，后者不拒绝。

@@ -1,0 +1,497 @@
+{
+  "video": "quant1",
+  "base_commit": "11c5c9d4def6a8f7b6176c7b58b359d5b0adf7e4",
+  "source_fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 184.08875000000003,
+        "frames": 7,
+        "warnings": []
+      },
+      {
+        "scene": "History",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 159.69808333333336,
+        "frames": 9,
+        "warnings": []
+      },
+      {
+        "scene": "Returns",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 248.88137500000002,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Walk",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 272.0665416666667,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Testing",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 205.83695833333334,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Tails",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 244.63695833333338,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Clusters",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 169.1221666666667,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Aggregation",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 190.9499166666667,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Mandelbrot",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 205.85729166666667,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Efficient",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 237.5073333333334,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "TwoWorlds",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 244.17029166666669,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "OtherSide",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 209.1202916666667,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Thorp",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 255.84062500000005,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 158.81658333333334,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 215.47766666666672,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 149.90920833333334,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 329.49049999999994,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 159.22583333333336,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 197.63508333333334,
+        "frames": 9,
+        "warnings": []
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 189.77550000000005,
+        "frames": 7,
+        "warnings": []
+      },
+      {
+        "scene": "History",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 165.84058333333334,
+        "frames": 9,
+        "warnings": []
+      },
+      {
+        "scene": "Returns",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 244.16145833333334,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Walk",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 282.3301250000003,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Testing",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 217.0091666666667,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Tails",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 238.890625,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Clusters",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 174.57437500000003,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Aggregation",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 186.89175000000003,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Mandelbrot",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 210.89758333333336,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Efficient",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 269.43129166666665,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "TwoWorlds",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 255.5847083333333,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "OtherSide",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 215.24412500000003,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Thorp",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 247.4777916666667,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 161.03941666666668,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 206.4440833333334,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 157.87666666666667,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 316.99395833333335,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 176.44520833333337,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 213.8452083333334,
+        "frames": 9,
+        "warnings": []
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 183.79999999999887,
+        "frames": 7,
+        "warnings": []
+      },
+      {
+        "scene": "History",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 159.4666666666656,
+        "frames": 9,
+        "warnings": []
+      },
+      {
+        "scene": "Returns",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 248.5333333333314,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Walk",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 272.7999999999971,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Testing",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 205.53333333333256,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Tails",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 244.39999999999876,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Clusters",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 168.93333333333297,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Aggregation",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 190.6666666666661,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Mandelbrot",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 205.53333333333234,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Efficient",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 237.2666666666653,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "TwoWorlds",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 243.86666666666554,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "OtherSide",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 208.86666666666605,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Thorp",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 255.59999999999948,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Crisis",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 158.6666666666663,
+        "frames": 11,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 215.19999999999894,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 149.66666666666657,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 328.93333333333123,
+        "frames": 23,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 158.93333333333288,
+        "frames": 10,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "a8000fed686cb865b6ef18f7acdfa51d6387f5ad8da7aabdebda2410fe073265",
+        "duration": 197.26666666666569,
+        "frames": 9,
+        "warnings": []
+      }
+    ]
+  },
+  "audio": {
+    "Hook": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 5,
+      "issues": []
+    },
+    "Walk": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "issues": []
+    },
+    "Research": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 10,
+      "issues": []
+    }
+  },
+  "preview": {
+    "path": "renders/quant1_polished_silent.mp4",
+    "seconds": 4033.9317069999993,
+    "bytes": 28791119
+  },
+  "audio_note": "Kokoro emitted word-count/tokenization warnings on some technical Research lines; signal and alignment checks passed. Pronunciation and full production-voice listening remain unreviewed."
+}

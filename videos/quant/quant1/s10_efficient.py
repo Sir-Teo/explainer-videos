@@ -106,14 +106,15 @@ class Efficient(VoiceoverScene):
                             r"possible at all; they also make prices noisy. ``We might define an efficient market as "
                             r"one in which price is within a factor of 2 of value.''", width=9.6, font_size=25)
         card.move_to(UP * 0.6)
-        tie = wrapped_label(r"no-trade theorems (Milgrom and Stokey, 1982): rational traders with the same beliefs "
-                            r"would never trade with each other; someone else must be on the other side (chapter 11)",
+        tie = wrapped_label(r"Milgrom--Stokey (1982): from a Pareto-efficient allocation, common priors and "
+                            r"common-knowledge rationality rule out trade based on private information alone",
                             10.0, 22, GREY_A).next_to(card, DOWN, buff=0.5)
         with self.voiceover(
             "Six years later Fischer Black, of Black and Scholes, gave the other half of the answer in his "
-            "presidential address, called Noise. If everyone were rational and had the same information, no one "
-            "would ever trade with anyone else: why buy from someone who knows what you know and wants to sell? "
-            "Trade needs noise: people who trade on things they believe are information but aren't. Noise makes "
+            "presidential address, called Noise. With a common prior and an efficient initial allocation, "
+            "rational traders cannot create trade from private information alone. Risk sharing, liquidity needs "
+            "and different beliefs also matter. Black emphasized noise: people who trade on things they believe "
+            "are information but aren't. Noise makes "
             "markets liquid, and it also makes prices noisy. With characteristic dryness Black suggested we call a "
             "market efficient if the price is within a factor of two of value. <bookmark mark='a'/> Who that noise "
             "comes from, and who profits from it, is chapter eleven."

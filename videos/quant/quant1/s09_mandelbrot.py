@@ -80,7 +80,7 @@ class Mandelbrot(VoiceoverScene):
                       (CAU, r"Cauchy, a stable law ($\alpha = 1$)")], font_size=21)
         leg.to_edge(RIGHT, buff=0.35).shift(UP * 1.8)
         note_ = wrapped_label(r"each simulated series: the market's length, scale and mean; the same random seed "
-                              r"every render", 4.4, 18, GREY_B).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+                              r"every render", 3.6, 18, GREY_B).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         end = MathTex(rf"{100 * m['sd_real'][-1]:.1f}\%", font_size=30, color=REAL)
         end.next_to(ax.c2p(2021, np.log10(m["sd_real"][-1])), RIGHT, buff=0.1)
         with self.voiceover(
@@ -90,8 +90,9 @@ class Mandelbrot(VoiceoverScene):
             "does: every so often a single draw is so large that it resets the estimate, and it climbs forever. "
             "<bookmark mark='c'/> The market, in blue, behaves like the bell curve here: after the turbulence of "
             f"the 1930s its standard deviation settles near {100 * m['sd_real'][-1]:.0f} percent a year and stays "
-            "there. The variance exists. On that, Mandelbrot was wrong, and later studies, measuring the tail "
-            "exponent near three and the thinning of tails with the horizon, agreed."
+            "there. This supports a finite variance, rather than proving one from a finite sample. Later studies, "
+            "measuring a tail exponent near three and thinning tails at longer horizons, also favoured finite "
+            "variance over Mandelbrot's stable-law model."
         ) as vo:
             self.play(FadeIn(g), FadeIn(note_))
             vo.wait_until("a")
@@ -145,7 +146,7 @@ class Mandelbrot(VoiceoverScene):
         nums = MathTex(rf"\text{{kurtosis}}\ {m['kurt_all']:.1f}\ \longrightarrow\ {m['kurt_no87']:.1f}\ "
                        rf"\text{{without that day}}", font_size=36).next_to(grp, DOWN, buff=0.5)
         take = VGroup(
-            label(r"variance: exists; estimate it, but expect it to move (Part 7)", font_size=26, color=REAL),
+            label(r"finite variance: supported by the evidence; volatility still moves (Part 7)", font_size=26, color=REAL),
             label(r"kurtosis: unreliable; measure tails with an exponent, or directly (Part 40)", font_size=26,
                   color=TAIL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(nums, DOWN, buff=0.6)
@@ -155,7 +156,7 @@ class Mandelbrot(VoiceoverScene):
             "day, the 19th of October 1987. <bookmark mark='a'/> Remove that day and the kurtosis drops from "
             f"{m['kurt_all']:.1f} to {m['kurt_no87']:.1f}. A statistic that one day can move by a fifth is a "
             "description of that day, not of the market. <bookmark mark='b'/> So the verdict on Mandelbrot is "
-            "split. The variance exists, and the series can use it, carefully, because it moves over time. The "
+            "split. The evidence supports using a finite variance, carefully, because volatility moves over time. The "
             "fourth moment is a different matter: tails should be measured as tails, with an exponent or directly, "
             "and that is how Part forty will measure risk."
             " If returns are this hard to pin down, can anyone predict them? Next: efficient markets."

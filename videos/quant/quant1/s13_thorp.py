@@ -64,10 +64,11 @@ class Thorp(VoiceoverScene):
         self.clear_scene()
 
     def stopping(self, b):
-        thm = theorem_card(r"The optional stopping theorem (Doob)", r"For a martingale $X$ and a stopping rule $\tau$ "
-                           r"that can't see the future and doesn't run forever (or bets that are bounded), "
-                           r"$\mathbb E[X_\tau] = X_0$. No rule for when to stop, or how much to bet, turns a fair game "
-                           r"into a favourable one.", width=11.4, font_size=24).to_edge(UP, buff=0.45)
+        thm = theorem_card(r"The optional stopping theorem (Doob)", r"For an integrable martingale $X$ and a "
+                           r"stopping time $\tau \le N$ for a fixed deadline $N$, "
+                           r"$\mathbb E[X_\tau] = \mathbb E[X_0]$. Unbounded stopping times need additional "
+                           r"integrability conditions: eventually stopping with probability one is not enough.",
+                           width=11.4, font_size=24).to_edge(UP, buff=0.45)
         cells = [label(r"stop when up", font_size=24, color=GREY_A), label(r"chance of reaching it", font_size=24,
                                                                               color=GREY_A),
                  label(r"average result", font_size=24, color=GREY_A), label(r"worst result", font_size=24,
@@ -83,7 +84,9 @@ class Thorp(VoiceoverScene):
         foot.next_to(tab, DOWN, buff=0.3)
         with self.voiceover(
             "This is a theorem, and its name is the optional stopping theorem. For a martingale, any stopping rule "
-            "that can't see the future and can't go on forever leaves the expected value where it started. "
+            "that can't see the future and must stop by a fixed deadline leaves the expected value where it "
+            "started. Eventually stopping with probability one is not enough without extra integrability "
+            "conditions. Here every game ends by two hundred tosses, even if the target is never reached. "
             "<bookmark mark='a'/> Quit when you're one dollar up: you get there ninety-four times in a hundred, and "
             "your average result is still zero, because the other six times hurt. Quit at three, quit at ten: "
             "different shapes, the same zero. The same mathematics that made prices unpredictable in chapter three "

@@ -19,6 +19,7 @@ class Walk(VoiceoverScene):
         self.proof()
         self.coins()
         self.nuance()
+        self.mean_not_direction()
 
     def card(self):
         c = chapter_card(3, r"The random walk", r"If prices are fair, why are they unpredictable?",
@@ -164,9 +165,9 @@ class Walk(VoiceoverScene):
     def nuance(self):
         dm = definition_card(r"Martingale", r"$\mathbb E_t[P_{t+1}] = P_t$: the expected next value is the current "
                              r"one. The \emph{size} of the moves may change over time, and they need not be "
-                             r"independent; they only cannot be predicted in direction.", width=6.2, color=REAL)
-        dr = definition_card(r"Random walk", r"$P_{t+1} = P_t + \varepsilon_{t+1}$, the $\varepsilon$ independent "
-                             r"and identically distributed: a stricter claim. Every day is the same kind of day.",
+                             r"independent; the conditional mean change is zero.", width=6.2, color=REAL)
+        dr = definition_card(r"Random walk (zero drift)", r"$P_{t+1} = P_t + \varepsilon_{t+1}$, the $\varepsilon$ independent "
+                             r"and identically distributed with mean zero: a stricter claim. Every day is the same kind of day.",
                              width=6.2, color=GAUSS, kind=r"Definition")
         pair = VGroup(dm, dr).arrange(RIGHT, buff=0.45, aligned_edge=UP).shift(UP * 1.3)
         caveats = VGroup(
@@ -181,8 +182,8 @@ class Walk(VoiceoverScene):
         with self.voiceover(
             "Two words are easy to confuse, and the difference is the rest of this part. A martingale only says the "
             "expected next value is today's value. The size of the moves can change, calm weeks and wild weeks, and "
-            "moves can depend on each other in every way except direction. <bookmark mark='a'/> A random walk is a "
-            "stronger claim: every move independent, and drawn from the same distribution, so every day is the "
+            "moves can depend on the past as long as their conditional mean is zero. <bookmark mark='a'/> A zero-drift random walk is a "
+            "stronger claim: every move independent, and drawn from the same zero-mean distribution, so every day is the "
             "same kind of day. Samuelson proved the first, not the second. <bookmark mark='b'/> Two refinements "
             "will follow us. Stocks are expected to rise, because holding them is risky, so the fair game is the "
             "price after allowing for that expected return; making that precise takes Parts four, nine and "
@@ -195,4 +196,40 @@ class Walk(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in caveats], lag_ratio=0.5, run_time=3))
         self.wait(0.4)
+        self.clear_scene()
+
+    def mean_not_direction(self):
+        title = label(r"A fair mean can hide an uneven bet", font_size=34, color=QC.IDEA).to_edge(UP, buff=0.45)
+        start = Circle(radius=0.6, color=REAL).move_to(LEFT * 5)
+        start_value = MathTex("100", font_size=36).move_to(start)
+        up = Circle(radius=0.6, color=GAIN).move_to(LEFT * 1.8 + UP * 1.6)
+        down = Circle(radius=0.6, color=LOSS).move_to(LEFT * 1.8 + DOWN * 1.6)
+        up_value = MathTex("101", font_size=36, color=GAIN).move_to(up)
+        down_value = MathTex("91", font_size=36, color=LOSS).move_to(down)
+        branches = VGroup(Line(start.get_right(), up.get_left(), color=GAIN),
+                          Line(start.get_right(), down.get_left(), color=LOSS))
+        probs = VGroup(MathTex(r"90\%", font_size=30, color=GAIN).next_to(branches[0], UP, buff=0.1),
+                       MathTex(r"10\%", font_size=30, color=LOSS).next_to(branches[1], DOWN, buff=0.1))
+        question = wrapped_label(r"Pause and predict: is this a fair game?", 6.1, 29, QC.IDEA).move_to(RIGHT * 3.5 + UP * 1.7)
+        mean = MathTex(r"0.9\,(+1) + 0.1\,(-9) = 0", font_size=34).move_to(RIGHT * 3.4 + UP * 0.2)
+        answer = wrapped_label(r"Zero expected change.\quad A 90\% chance of rising.", 6.0, 27, REAL).next_to(mean, DOWN, buff=0.55)
+        assumption = note(r"illustrative one-step market; repeat independent increments of $+1$ or $-9$",
+                          font_size=20, color=GREY_B).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "A quick check before we move on. Start at a hundred. With probability ninety percent the next price "
+            "is a hundred and one. With probability ten percent it is ninety-one. <bookmark mark='a'/> "
+            "Pause and predict: is this a fair game? <bookmark mark='b'/> Nine chances of gaining one balance one "
+            "chance of losing nine. The expected change is zero, so this is a martingale step, even though you "
+            "can correctly predict a rise nine times out of ten. Fair does not mean equally likely to rise or "
+            "fall. It means the conditional average change is zero. Predicting the sign and earning an expected "
+            "profit are different questions."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(start), FadeIn(start_value), FadeIn(assumption))
+            self.play(Create(branches[0]), FadeIn(up), FadeIn(up_value), FadeIn(probs[0]))
+            self.play(Create(branches[1]), FadeIn(down), FadeIn(down_value), FadeIn(probs[1]))
+            vo.wait_until("a")
+            self.play(FadeIn(question))
+            vo.wait_until("b")
+            self.play(Write(mean))
+            self.play(FadeIn(answer))
         self.clear_scene()

@@ -57,7 +57,8 @@ class Tails(VoiceoverScene):
             "the real returns have a taller, narrower peak. More quiet days than a bell curve allows. "
             "<bookmark mark='b'/> On a log scale, which magnifies the rare events, the truth comes out. The bell "
             "curve, the grey parabola, falls off a cliff: beyond five standard deviations it expects almost "
-            "nothing. The real returns keep going, past ten, out to the edge of the chart. <bookmark mark='c'/> "
+            "nothing. The real returns stay far above it, right out to the edge of this six-sigma view. "
+            "The next table counts even larger days. <bookmark mark='c'/> "
             f"One number summarizes it: the excess kurtosis, zero for a bell curve, is {t['kurt']:.1f} for the "
             "market. Quiet days, and then, rarely, enormous ones."
         ) as vo:

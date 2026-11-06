@@ -79,19 +79,20 @@ class Clusters(VoiceoverScene):
             MathTex(rf"\rho_{{250}}(|r|) = {c['acf_abs'][-1]:.2f}", font_size=30, color=VOL),
             MathTex(rf"\rho_k(|r|) \approx k^{{-{c['beta']:.2f}}}", font_size=30, color=VOL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to(leg, DOWN, buff=0.45).align_to(leg, LEFT)
-        lesson = wrapped_label(r"uncorrelated, but not independent: a martingale, not a random walk", 4.3, 24,
+        lesson = wrapped_label(r"Little linear return memory; persistent memory in volatility", 3.2, 24,
                                QC.IDEA).next_to(facts, DOWN, buff=0.4).align_to(leg, LEFT)
         with self.voiceover(
             "Clustering can be measured. The blue line is the autocorrelation of returns themselves, lag by lag "
-            "out to a year: inside the grey band of noise almost everywhere. The direction of tomorrow's move is "
-            "not predictable from today's, just as Samuelson said. <bookmark mark='a'/> The teal line is the "
+            "out to a year: inside the grey band of noise almost everywhere. This finds little linear memory in "
+            "returns; it cannot rule out every nonlinear forecast. <bookmark mark='a'/> The teal line is the "
             "autocorrelation of the size of the move, the absolute return. "
             f"{c['acf_abs'][0]:.2f} at one day, and still {c['acf_abs'][-1]:.2f} a year later. It decays slowly, "
             f"roughly like the lag to the power minus {c['beta']:.2f}, a long memory. <bookmark mark='c'/> Shuffle "
             "the days into random order, the grey line, and the memory is gone: it was in the order, not in the "
             "days. <bookmark mark='d'/> Bitcoin, in orange, clusters too, with a shorter memory. "
-            "<bookmark mark='e'/> So the market is a martingale but not a random walk: the direction is "
-            "unpredictable, the size is not. Robert Engle's model of exactly this, ARCH, won him a Nobel prize, and "
+            "<bookmark mark='e'/> So the data reject independent, identical returns: their size has memory. "
+            "This is compatible with a martingale, but autocorrelation alone cannot prove one. Robert Engle's "
+            "model of clustered volatility, ARCH, won him a Nobel prize, and "
             "it is the subject of Part seven."
         ) as vo:
             self.play(FadeIn(g), FadeIn(band))

@@ -34,7 +34,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from explainer.paths import video_dir  # noqa: E402
+# Import explainer only after a worker selects its language and TTS backend.
+# The package initializer captures both settings, even for explainer.paths.
 OUT = ROOT / "renders" / "qa" / "series"
 
 
@@ -63,6 +64,8 @@ def visible_text_bounds(m, camera=None):
 
 
 def fingerprint(video):
+    from explainer.paths import video_dir
+
     files = sorted((ROOT / "explainer").rglob("*.py"))
     series = video_dir(video).parent
     files += sorted(p for p in series.iterdir() if p.suffix in (".py", ".json"))
@@ -150,7 +153,7 @@ def worker(args):
                       EXPLAINER_COLLECT_TEXT="" if args.motion else str(text_record),
                       PYTHONWARNINGS="ignore", OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1")
     from manim import MathTex, Tex, Text, config, tempconfig
-    from explainer.paths import video_package
+    from explainer.paths import video_dir, video_package
     from explainer.voiceover import VoiceoverScene
 
     result = {"video": args.video, "scene": args.worker, "lang": args.lang, "status": "running",

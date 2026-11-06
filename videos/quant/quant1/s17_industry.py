@@ -92,7 +92,9 @@ class Industry(VoiceoverScene):
             bars_.add(Rectangle(width=p1[0] - p0[0], height=max(p1[1] - p0[1], 0.01), stroke_width=0, fill_color=REAL,
                                 fill_opacity=0.8).move_to([(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2, 0]))
         xs = np.linspace(-5.3, -1, 120)
-        gl = curve(ax, xs, np.log10(np.exp(-xs ** 2 / 2) / np.sqrt(2 * np.pi)), GAUSS, stroke_width=3)
+        log_density = np.log10(np.exp(-xs ** 2 / 2) / np.sqrt(2 * np.pi))
+        visible = log_density >= -6
+        gl = curve(ax, xs[visible], log_density[visible], GAUSS, stroke_width=3)
 
         def vline(x, col):
             return DashedLine(ax.c2p(-x, -6), ax.c2p(-x, -0.3), color=col, stroke_width=2.5)
