@@ -55,12 +55,12 @@ class Hook(VoiceoverScene):
         head = label(r"Two ways to make a picture", font_size=36).to_edge(UP, buff=0.3)
         left = image(b["image"], height=3.0)
         right = image(w["image"], height=3.0)
-        Group(left, right).arrange(RIGHT, buff=1.2).next_to(head, DOWN, buff=0.5)
+        Group(left, right).arrange(RIGHT, buff=1.6).next_to(head, DOWN, buff=0.5)
         l1 = wrapped_label(r"\textbf{rasterization}: \ project each triangle onto the screen, \ then fill the pixels "
-                           r"it covers \ (games, \ interfaces, \ this video's own text)", 5.4, font_size=19,
+                           r"it covers \ (games, \ interfaces, \ this video's own text)", 4.6, font_size=19,
                            color=DATA).next_to(left, DOWN, buff=0.3)
         r1 = wrapped_label(rf"\textbf{{ray tracing}}: \ follow light backward from the eye into the scene \ "
-                           rf"({w['counts']['total']:,} rays for this {w['W']} $\times$ {w['H']} image)", 5.4,
+                           rf"({w['counts']['total']:,} rays for this {w['W']} $\times$ {w['H']} image)", 4.6,
                            font_size=19, color=HEAD).next_to(right, DOWN, buff=0.3)
         hist = note(r"Sutherland's Sketchpad drew lines on a screen in 1963; \ Whitted traced recursive rays in 1980",
                     font_size=16).to_edge(DOWN, buff=0.3)
