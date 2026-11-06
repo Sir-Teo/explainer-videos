@@ -3386,33 +3386,80 @@ class StateEvolution(VGroup):
 class DepthMap(VGroup):
     """Tukey's halfspace depth, drawn (Part 60): on axes ``ax``, the depth of every cell of a grid as a shade (deeper is
     brighter), the depth contours as the cells' level sets, and the Tukey median, the deepest point.  ``cells(levels)``
-    draws the shaded grid, ``points(X, color)`` the data, ``mark(p, color)`` a location such as the median or the mean,
+    draws the shaded grid, ``dots(X, color)`` the data, ``mark(p, color)`` a location such as the median or the mean,
     so robust and non-robust centres can be compared as outliers arrive."""
 
     def __init__(self, ax, grid, depth):
         super().__init__()
         self.ax = ax
         self.grid = np.asarray(grid, float)
-        self.depth = np.asarray(depth, float)
+        self.dvals = np.asarray(depth, float)
         xs, ys = np.unique(self.grid[:, 0]), np.unique(self.grid[:, 1])
         self.dx = (xs[1] - xs[0]) if len(xs) > 1 else 1.0
         self.dy = (ys[1] - ys[0]) if len(ys) > 1 else 1.0
 
     def cells(self, color=None, min_depth: float = 0.02, opacity: float = 0.9) -> VGroup:
         g = VGroup()
-        dmax = max(self.depth.max(), 1e-9)
+        dmax = max(self.dvals.max(), 1e-9)
         w = abs(self.ax.c2p(self.dx, 0)[0] - self.ax.c2p(0, 0)[0])
         h = abs(self.ax.c2p(0, self.dy)[1] - self.ax.c2p(0, 0)[1])
-        for (x, y), dpt in zip(self.grid, self.depth):
+        for (x, y), dpt in zip(self.grid, self.dvals):
             if dpt < min_depth:
                 continue
             g.add(Rectangle(width=w, height=h, stroke_width=0, fill_color=color or S.PRIOR,
                             fill_opacity=opacity * (dpt / dmax) ** 1.2).move_to(self.ax.c2p(x, y)))
         return g
 
-    def points(self, X, color=None, radius: float = 0.04) -> VGroup:
+    def dots(self, X, color=None, radius: float = 0.04) -> VGroup:
         return VGroup(*[Dot(self.ax.c2p(a, b), radius=radius, color=color or WHITE, fill_opacity=0.85) for a, b in np.asarray(X, float)])
 
     def mark(self, p, color=None, radius: float = 0.11) -> VGroup:
         c = self.ax.c2p(float(p[0]), float(p[1]))
         return VGroup(Dot(c, radius=radius, color=color or S.ACCENT), Circle(radius=radius * 1.8, color=color or S.ACCENT, stroke_width=2).move_to(c))
+
+
+class TransportFlow(VGroup):
+    """Mass moving along Wasserstein geodesics (Part 61): on axes ``ax``, a source cloud X matched to a target cloud Y
+    by a permutation (an optimal assignment, or any other pairing).  ``cloud(t)`` is McCann's displacement
+    interpolation (1 - t) x_i + t y_perm(i), ``paths()`` the straight segments each particle travels, ``flow(t)`` an
+    updater-free cloud to Transform between times, and ``plan(P, ...)`` draws a coupling matrix as a heat grid, so the
+    linear program's sparse plan and Sinkhorn's blurred one can be compared cell by cell."""
+
+    def __init__(self, ax, X, Y, perm=None):
+        super().__init__()
+        self.ax = ax
+        self.X = np.asarray(X, float)
+        self.Y = np.asarray(Y, float)
+        self.perm = np.arange(len(self.X)) if perm is None else np.asarray(perm, int)
+
+    def positions(self, t: float) -> np.ndarray:
+        return (1 - t) * self.X + t * self.Y[self.perm]
+
+    def cloud(self, t: float, color=None, radius: float = 0.04, opacity: float = 0.9, colors=None) -> VGroup:
+        P = self.positions(t)
+        cols = colors if colors is not None else [color or WHITE] * len(P)
+        return VGroup(*[Dot(self.ax.c2p(a, b), radius=radius, color=c, fill_opacity=opacity) for (a, b), c in zip(P, cols)])
+
+    def paths(self, color=None, stroke_width: float = 1.0, opacity: float = 0.35, every: int = 1) -> VGroup:
+        g = VGroup()
+        for i in range(0, len(self.X), every):
+            a, b = self.X[i], self.Y[self.perm[i]]
+            g.add(Line(self.ax.c2p(*a), self.ax.c2p(*b), color=color or GREY_B, stroke_width=stroke_width, stroke_opacity=opacity))
+        return g
+
+    def total_cost(self, p: float = 2.0) -> float:
+        return float(np.mean(np.linalg.norm(self.X - self.Y[self.perm], axis=1) ** p))
+
+    @staticmethod
+    def plan(P, cell: float = 0.18, color=None, gamma: float = 0.5) -> VGroup:
+        """A coupling matrix as a grid of squares, opacity proportional to (P_ij / max P)^gamma."""
+        P = np.asarray(P, float)
+        n, m = P.shape
+        mx = max(P.max(), 1e-300)
+        g = VGroup()
+        for i in range(n):
+            for j in range(m):
+                v = (P[i, j] / mx) ** gamma
+                g.add(Square(side_length=cell, stroke_width=0.3, stroke_color=GREY_D, fill_color=color or S.ACCENT,
+                             fill_opacity=float(v)).move_to(np.array([j * cell, -i * cell, 0])))
+        return g.move_to(ORIGIN)
