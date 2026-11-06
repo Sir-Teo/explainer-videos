@@ -1455,40 +1455,63 @@ Strings*; Mäkinen, Belazzougui, Cunial & Tomescu, *Genome-Scale Algorithm Desig
 Structures*; Salomon & Motta, *Handbook of Data Compression*; Knuth, Morris & Pratt 1977; Burrows & Wheeler 1994;
 Ferragina & Manzini 2000; Ziv & Lempel 1977–78; Myers 1986; Gagie, Navarro & Prezza 2018.
 
-### Part 22 · Geometry (~55)
+### Part 22 · Geometry (~50)
 *Story:* Geometry looks easy until a computer gets it wrong: a floating-point orientation test can say a point lies
 on both sides of a line. Get the predicates right and beautiful structure follows. Voronoi diagrams grow as a
-parabolic beach line, and every Delaunay triangulation is the shadow of a convex hull on a paraboloid.
-1. The primitive: orientation as the sign of a determinant (an area). Robustness: floating-point orientation fails
-   (the Kettner et al. grids, computed); Shewchuk's adaptive exact predicates.
-2. Convex hulls: Jarvis O(nh), Graham O(n log n), monotone chain; the Ω(n log n) lower bound by reduction from
-   sorting (proved); Chan's O(n log h) (1996); quickhull; 3D.
-3. The sweep line: Bentley–Ottmann (1979), with its event queue and status structure animated.
-4. Triangulating polygons: **the art gallery theorem** (Chvátal 1975; Fisk's three-coloring proof); monotone pieces;
-   ear clipping.
-5. Voronoi diagrams; **Fortune's sweep** (1986) and its beach line of parabolas.
-6. Delaunay triangulations: the empty circle; max–min angle; Lawson flips terminate; duality with Voronoi.
-7. **The lifting map**: Delaunay = the lower hull of points lifted to z = x² + y² (a 3D tour). The in-circle test as a
-   4 × 4 determinant falls out of it.
-8. Randomized incremental construction and backwards analysis: expected O(n log n) Delaunay.
-9. Low-dimensional LP: Seidel's randomized algorithm (1991); Megiddo's linear time for fixed d.
-10. Range searching: kd-trees (Bentley 1975), with O(√n + k) queries; range trees and fractional cascading;
-    interval and segment trees.
-11. Point location with trapezoidal maps.
-12. High dimensions: the curse; LSH (callback to Part 20); graph-based ANN (HNSW).
-13. Duality and arrangements; the ham-sandwich theorem.
-14. Uses: configuration spaces and Minkowski sums in robot motion planning; Ruppert's meshing; BVHs (Part 51).
-    Outro.
+parabolic beach line, and every Delaunay triangulation is the shadow of a convex hull on a paraboloid. The part opens
+with one orientation test asked three ways in double precision and getting three answers.
+1. The primitive: orientation as a signed area; why rounding fails and Shewchuk's error bound; Kettner's grid computed
+   (11,972 wrong signs of 65,536); adaptive predicates measured (exact stage needed 0% on random input, 70% on nearly
+   collinear input; float wrong 3,713 times in 20,000 there).
+2. Convex hulls: Graham's scan animated; Jarvis, Graham, monotone chain, quickhull and Chan counting their work on
+   10,000 points in a square, a disk and on a circle; the Ω(n log n) lower bound by lifting to a parabola (proved);
+   Chan's O(n log h) with binary-search tangents and squaring guesses; Kirkpatrick–Seidel.
+3. The sweep line: Bentley–Ottmann animated with its status and events; events exactly 2n + k, 19,812 pair tests
+   against 4.5 million pairs at n = 3,000; Chazelle–Edelsbrunner.
+4. **The art gallery theorem**: Chvátal's comb; Fisk's three-colouring proof animated; ear clipping; random 60-gons
+   (17.3 guards against the bound of 20); monotone pieces, Chazelle's linear time, NP- and ∃ℝ-hardness.
+5. Voronoi diagrams; **Fortune's sweep** animated with its beach line of parabolas; circle events exactly 2n − 2 − h,
+   checked against the lifting map up to n = 2,000.
+6. Delaunay triangulations: the empty circle; duality with Voronoi; Lawson's flips animated (17 flips, smallest angle
+   0.48° to 4.81°, Sibson); the Euclidean MST inside the Delaunay edges (Shamos–Hoey), checked against Prim on 32
+   million pairs.
+7. **The lifting map**: a 3D tour of the paraboloid, the lower hull, and a circle lifting to a plane; the in-circle
+   test as a 4 × 4 determinant; why Lawson's flips stop; the Voronoi diagram as an upper envelope; checked against
+   scipy.
+8. Randomized incremental construction and **backwards analysis**: one insertion's conflicts; expected degree < 6 by
+   Euler; 8.6–8.9 triangles per point in random order, 874,107 for 1,600 points in a bad order.
+9. Seidel's LP animated (the optimum moves three times in nine); Pr ≤ 2/i measured against 2H_n up to 10⁵; Megiddo;
+   Welzl's smallest enclosing circle animated and measured.
+10. Range searching: a kd-tree built level by level; queries below √n + k up to 300,000 points; range trees,
+    fractional cascading, interval and segment trees, R-trees.
+11. Point location: Dobkin–Lipton slabs; the trapezoidal map (3n + 1, hit on every random map); Mulmuley and
+    Seidel's randomized search structure; Kirkpatrick.
+12. High dimensions: distance concentration measured to d = 1,000; a kd-tree visiting 100% of its nodes at d = 24;
+    LSH (callback to Part 20); a navigable small world and **HNSW** built (99.7% recall for 182 distance computations
+    against 20,000).
+13. Duality and arrangements; the zone theorem; a ham-sandwich cut (Stone–Tukey; Lo–Matoušek–Steiger).
+14. Motion planning: Minkowski sums and configuration space; the visibility graph and Dijkstra; an RRT grown in the
+    same space (1.29× the optimum on average); Reif, Canny, sampling planners; BVHs (Part 51).
+15. *Frontier*: exact geometric computation and its price (124×); symbolic perturbation and snap rounding; 3SUM as
+    collinearity of (a, a³), drawn and checked; Gajentaan–Overmars; LSH's optimal exponents, data-dependent hashing,
+    Indyk–Xu on graph indexes; open problems (3SUM, Hopcroft's problem, guarantees for navigable graphs). Outro.
 
-*Computed:* floating-point orientation failure maps; hull counts and timings; Bentley–Ottmann events; Fortune frames;
-Delaunay via the lifting map, cross-checked against scipy's hull; kd-tree visits; Fisk's guards.
-*Visuals:* the speckled failure grid near a line; Fortune's beach line; Delaunay rising onto the paraboloid; sweep
-events.
-*In practice:* GIS and maps, CAD, robot motion planning, mesh generation for simulation, collision detection in games.
+*Computed:* every number above, in `videos/cs/cs22/compute.py` with `explainer/cs/algo/geometry.py` (tested in
+`tests/test_cs22_geometry.py`): Kettner's grid and the adaptive filter's rates and costs; five hulls counting their
+work; Bentley–Ottmann against brute force; ear clipping and Fisk's colouring; Fortune's sweep; Delaunay three ways
+(incremental, Lawson, Fortune) against scipy's lifted hull; the EMST over Delaunay against Prim; Seidel's LP against
+scipy; Welzl; kd-tree visits; trapezoid counts; distance concentration, kd-trees against dimension, NSW and HNSW
+recall; a ham-sandwich cut; configuration spaces, the visibility graph and an RRT; 3SUM as collinearity.
+*Visuals:* the speckled grid of wrong signs; Graham's stack; the sweep's status; Fisk's three colours; Fortune's
+beach line drawing the diagram; Lawson's flips; the paraboloid in 3D; conflicts and the star-shaped hole; Seidel's
+optimum moving; kd-tree cells; trapezoids; HNSW's layers; points and dual lines; a robot sliding among grown
+obstacles, and a random tree exploring; the cubic of 3SUM.
+*In practice:* GIS and maps (PostGIS, S2), CAD and meshing (CGAL, Triangle), robot motion planning (OMPL), collision
+detection and rasterization in graphics, vector search (FAISS, pgvector).
 *Reading:* de Berg, Cheong, van Kreveld & Overmars, *Computational Geometry: Algorithms and Applications*; Preparata &
 Shamos; O'Rourke, *Computational Geometry in C*; Devadoss & O'Rourke, *Discrete and Computational Geometry*;
-Edelsbrunner, *Geometry and Topology for Mesh Generation*; Shewchuk 1997; Kettner et al. 2008; Fortune 1987; Seidel
-1991; Chan 1996.
+Edelsbrunner, *Geometry and Topology for Mesh Generation*; LaValle, *Planning Algorithms*; Shewchuk 1997; Kettner et
+al. 2008; Fortune 1987; Seidel 1991, 1993; Chan 1996; Malkov & Yashunin 2016.
 
 ### Part 23 · Optimization (~60)
 *Story:* Many problems are "choose the best point of a polytope." The simplex method walks the polytope's edges.
@@ -3319,4 +3342,5 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 19 | scenes (18, with the *Frontier* chapter), computations (every paradigm counting its work: interval scheduling, Huffman, matroid greedy, Karatsuba, Strassen, DFT, FFT and NTT, an FFT multiplier and a million digits of π, closest pair, Fibonacci, edit distance and LCS, knapsack, matrix chains, optimal BSTs with Knuth's speedup, tree DP, n-queens, Dancing Links, maximum subarray four ways), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
 | 20 | scenes (18, with the *Frontier* chapter), computations (Freivalds, Schwartz–Zippel and the Tutte matrix, fingerprints, Karger and Karger–Stein, Fermat and Miller–Rabin, random-walk SAT, balls into bins, Bloom filters, reservoir sampling, Misra–Gries and Count-Min, the Job v3 in the Pebble language emulated for ledger row 9 and swept over hash functions in C, HyperLogLog and KMV, the AMS sketch, MinHash and LSH on the novels, Ramsey colourings and Moser–Tardos, conditional expectations and RANDU), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 55 min (estimate) |
 | 21 | scenes (18, with the *Frontier* chapter), computations (naive, Rabin–Karp, KMP, Boyer–Moore and Horspool counting their comparisons on the novels; Aho–Corasick over the corpus; suffix trees, the suffix array and LCP of all 25 MB; the BWT of *Moby-Dick* inverted and its contexts; the FM-index of the novels; LZ77 + Huffman, LZW and rANS against zlib, bzip2 and xz; Needleman–Wunsch and Smith–Waterman; Myers' diff on this syllabus's history; rsync and content-defined chunking; Manacher over the corpus; BWT runs of repetitive text), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
-| 22–61 | planned (this document) | — |
+| 22 | scenes (17, with the *Frontier* chapter), computations (Kettner's grid and adaptive predicates; Jarvis, Graham, the monotone chain, quickhull and Chan counting their work; Bentley–Ottmann; ear clipping and Fisk's colouring; Fortune's sweep; Delaunay by insertion, by Lawson's flips and by the lifting map; the EMST; Seidel's LP and Welzl's circle; kd-trees and trapezoidal maps; distance concentration, NSW and HNSW; a ham-sandwich cut; configuration spaces, visibility graphs and an RRT; 3SUM as collinearity), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 50 min (estimate) |
+| 23–61 | planned (this document) | — |
