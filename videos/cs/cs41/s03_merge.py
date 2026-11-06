@@ -119,8 +119,8 @@ class Merge(VoiceoverScene):
         rb = VGroup(*[commit_dot(YES).move_to([-0.6 + i * 1.2, -1.9, 0]) for i in range(2)])
         rbl = VGroup(Line(main[3].get_center(), rb[0].get_center(), color=GREY_C),
                      Line(rb[0].get_center(), rb[1].get_center(), color=GREY_C))
-        rl = label(r"rebase: \ the same diffs replayed on the new tip; \ new commits, \ new names, \ a straight "
-                   r"line", font_size=18, color=YES).next_to(rb, RIGHT, buff=0.2)
+        rl = wrapped_label(r"rebase: \ the same diffs replayed on the new tip; \ new commits, \ new names, \ a "
+                           r"straight line", 5.6, font_size=18, color=YES).next_to(rb, RIGHT, buff=0.25)
         lines = VGroup(
             wrapped_label(r"\textbf{cherry-pick} applies one commit's diff somewhere else, \ as a new commit", 12.4,
                           font_size=21, color=WHITE),
@@ -154,11 +154,15 @@ class Merge(VoiceoverScene):
         good = label(r"good", font_size=16, color=YES).next_to(bar, LEFT, buff=0.1)
         bad = label(r"bad", font_size=16, color=NO).next_to(bar, RIGHT, buff=0.1)
         marks = VGroup()
+        shown = []
         for k, t in enumerate(ex["tested"]):
             x = x0 + t / 1000 * w
-            marks.add(VGroup(Line([x, 1.82, 0], [x, 2.18, 0], color=NO if t >= ex["first_bad"] else YES,
-                                  stroke_width=3),
-                             label(f"{k + 1}", font_size=12, color=GREY_A).move_to([x, 2.35 + 0.18 * (k % 2), 0])))
+            tick = Line([x, 1.82, 0], [x, 2.18, 0], color=NO if t >= ex["first_bad"] else YES, stroke_width=3)
+            if all(abs(x - s0) > 0.3 for s0 in shown):      # later tests crowd together: label the first few only
+                shown.append(x)
+                marks.add(VGroup(tick, label(f"{k + 1}", font_size=14, color=GREY_A).move_to([x, 2.38, 0])))
+            else:
+                marks.add(tick)
         found = label(rf"commit {ex['first_bad']} of 1{{,}}000 introduced the bug: \ found in {ex['steps']} tests",
                       font_size=21, color=HEAD).next_to(bar, DOWN, buff=0.5)
         rows = [[f"{r['commits']:,}", f"{r['steps']}"] for r in b["rows"]]
@@ -246,18 +250,57 @@ class Merge(VoiceoverScene):
 
     def painting(self):
         head = label(r"Finding the merge base", font_size=36).to_edge(UP, buff=0.3)
+        # a small history: main c0..c5 (tip A), a branch d1..d3 from c2 (tip B); dates order the walk
+        pos = {"c0": (-6.0, 1.0), "c1": (-4.8, 1.0), "c2": (-3.6, 1.0), "c3": (-2.4, 1.0), "c4": (-1.2, 1.0),
+               "c5": (1.2, 1.0), "d1": (-1.8, -0.2), "d2": (-0.6, -0.2), "d3": (0.6, -0.2)}
+        parents = {"c1": ["c0"], "c2": ["c1"], "c3": ["c2"], "c4": ["c3"], "c5": ["c4"], "d1": ["c2"],
+                   "d2": ["d1"], "d3": ["d2"]}
+        date = {"c0": 0, "c1": 1, "c2": 2, "c3": 3, "c4": 4, "c5": 6, "d1": 3.5, "d2": 4.5, "d3": 5.5}
+        dots = {k: Dot([x, y, 0], radius=0.17, color=GREY_D) for k, (x, y) in pos.items()}
+        edges = VGroup(*[Line(dots[c].get_center(), dots[q].get_center(), color=GREY_C, stroke_width=2)
+                         for c, ps in parents.items() for q in ps])
+        tips = VGroup(label(r"A", font_size=22, color=DATA).next_to(dots["c5"], UP, buff=0.12),
+                      label(r"B", font_size=22, color=LAM).next_to(dots["d3"], DOWN, buff=0.12))
+        # the walk, computed: a queue ordered newest first; paint flags A, B, stale
+        paint = {"c5": {"A"}, "d3": {"B"}}
+        queue = ["c5", "d3"]
+        steps, result = [], None
+        while queue and any("stale" not in paint[q] for q in queue):
+            queue.sort(key=lambda k: -date[k])
+            cur = queue.pop(0)
+            flags = paint[cur]
+            if {"A", "B"} <= flags and "stale" not in flags:
+                result = cur
+                flags = flags | {"stale"}
+            for q in parents.get(cur, []):
+                new = paint.setdefault(q, set()) | flags
+                paint[q] = new
+                if q not in queue:
+                    queue.append(q)
+            steps.append((cur, {k: set(v) for k, v in paint.items()}))
+
+        def col(fl):
+            if "stale" in fl:
+                return GREY_B
+            if {"A", "B"} <= fl:
+                return YES
+            return DATA if "A" in fl else (LAM if "B" in fl else GREY_D)
         lines = VGroup(
             wrapped_label(r"walk back from both commits at once, \ newest first, \ painting each commit with the "
-                          r"side or sides that reach it", 12.4, font_size=23, color=WHITE),
+                          r"side or sides that reach it", 12.4, font_size=20, color=WHITE),
             wrapped_label(r"a commit painted by \textit{both} is a common ancestor; \ paint its ancestors "
                           r"``stale'' so that they are not reported too; \ stop when only stale commits remain", 12.4,
-                          font_size=23, color=YES),
+                          font_size=20, color=YES),
             wrapped_label(r"the cost is the commits since the branches parted, \ not the whole history; \ "
                           r"\textbf{commit-graph} files with generation numbers \ (2018) \ let git stop even "
-                          r"earlier", 12.4, font_size=23, color=HEAD),
+                          r"earlier", 12.4, font_size=20, color=HEAD),
             wrapped_label(r"the same search answers \texttt{git log A..B} \ (what B has that A lacks) \ and decides "
-                          r"whether a push is a fast-forward", 12.4, font_size=23, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(head, DOWN, buff=0.55)
+                          r"whether a push is a fast-forward", 12.4, font_size=20, color=LAM),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.4)
+        legend = VGroup(*[VGroup(Dot(radius=0.09, color=c), label(t, font_size=16, color=c)).arrange(RIGHT, buff=0.1)
+                          for t, c in ((r"reached from A", DATA), (r"from B", LAM), (r"from both", YES),
+                                       (r"stale", GREY_B))]).arrange(RIGHT, buff=0.45).move_to([0, 2.15, 0])
+        ring = Circle(radius=0.3, color=YES, stroke_width=4, fill_opacity=0)
         with self.voiceover(
             "How does git find merge bases quickly in a history of millions of commits? <bookmark mark='a'/> It walks "
             "backwards from both commits at once, newest first, painting each commit it reaches with the side or "
@@ -268,8 +311,17 @@ class Merge(VoiceoverScene):
             "earlier still. <bookmark mark='d'/> The same walk answers which commits one branch has that another "
             "lacks, and whether a push only moves a branch forward."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abcd", lines):
+            self.play(FadeIn(head), Create(edges), *[FadeIn(d) for d in dots.values()], FadeIn(tips), FadeIn(legend))
+            self.play(dots["c5"].animate.set_color(DATA), dots["d3"].animate.set_color(LAM))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0]))
+            for cur, pt in steps:
+                self.play(Indicate(dots[cur], scale_factor=1.3, color=WHITE), run_time=0.45)
+                self.play(*[dots[k].animate.set_color(col(f)) for k, f in pt.items()], run_time=0.45)
+            vo.wait_until("b")
+            ring.move_to(dots[result])
+            self.play(FadeIn(lines[1]), Create(ring))
+            for mk, l in zip("cd", lines[2:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l))
         self.wait(0.4)

@@ -25,17 +25,38 @@ class Delivery(VoiceoverScene):
 
     def strategies(self):
         head = label(r"Releasing a little at a time", font_size=36).to_edge(UP, buff=0.3)
+        W, y = 10.0, 1.6
+        frame = Rectangle(width=W, height=0.55, stroke_color=GREY_B, stroke_width=1.5).move_to([0, y, 0])
+        share = ValueTracker(0.0)
+
+        def new_bar():
+            w = max(0.001, W * share.get_value())
+            return Rectangle(width=w, height=0.55, stroke_width=0, fill_color=YES, fill_opacity=0.85).move_to(
+                [-W / 2 + w / 2, y, 0])
+        old_bar = Rectangle(width=W, height=0.55, stroke_width=0, fill_color=DATA, fill_opacity=0.55).move_to(
+            [0, y, 0])
+        nb = always_redraw(new_bar)
+        pct = always_redraw(lambda: label(rf"{100 * share.get_value():.0f}\% \ of requests on the new version",
+                                          font_size=20, color=YES).next_to(frame, DOWN, buff=0.2))
+        users = label(r"all requests", font_size=18, color=GREY_B).next_to(frame, UP, buff=0.15)
+        stages = VGroup(*[label(t, font_size=18, color=HEAD).move_to([-W / 2 + W * f, y + 0.6, 0])
+                          for t, f in ((r"1\%", 0.01), (r"5\%", 0.05), (r"25\%", 0.25), (r"100\%", 1.0))])
+        flag = VGroup(RoundedRectangle(width=0.9, height=0.45, corner_radius=0.22, stroke_color=LAM, fill_color=BG,
+                                       fill_opacity=1), Dot(radius=0.15, color=LAM))
+        flag[1].move_to(flag[0].get_left() + RIGHT * 0.23)
+        flag_l = label(r"a feature flag: \ off", font_size=18, color=LAM).next_to(flag, RIGHT, buff=0.2)
+        flag_g = VGroup(flag, flag_l).move_to([0, -0.35, 0])
         lines = VGroup(
             wrapped_label(r"\textbf{blue/green}: \ run the new version beside the old, \ switch the traffic at once, "
-                          r"\ switch back if it fails", 12.4, font_size=23, color=DATA),
+                          r"\ switch back if it fails", 12.4, font_size=20, color=DATA),
             wrapped_label(r"\textbf{canary}: \ send a small share of traffic to the new version and compare it with "
-                          r"the old \ (the miners' bird, \ which showed the gas first)", 12.4, font_size=23,
+                          r"the old \ (the miners' bird, \ which showed the gas first)", 12.4, font_size=20,
                           color=YES),
             wrapped_label(r"\textbf{progressive rollout}: \ 1\%, \ 5\%, \ 25\%, \ 100\%, \ with automatic rollback "
-                          r"at any stage", 12.4, font_size=23, color=HEAD),
+                          r"at any stage", 12.4, font_size=20, color=HEAD),
             wrapped_label(r"\textbf{feature flags}: \ ship code switched off, \ turn it on for some users later: \ "
-                          r"deploying and releasing become separate decisions", 12.4, font_size=23, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(head, DOWN, buff=0.55)
+                          r"deploying and releasing become separate decisions", 12.4, font_size=20, color=LAM),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "A merged change is not yet running for anyone. Delivering it safely means never betting everything on "
             "one moment. <bookmark mark='a'/> Blue-green deployment runs the new version beside the old and switches "
@@ -46,10 +67,24 @@ class Delivery(VoiceoverScene):
             "new code switched off, to be turned on for some users later, so that deploying code and releasing a "
             "feature become separate decisions."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abcd", lines):
-                vo.wait_until(mk)
-                self.play(FadeIn(l))
+            self.play(FadeIn(head), FadeIn(old_bar), Create(frame), FadeIn(users))
+            self.add(nb, pct)
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0]))
+            self.play(share.animate.set_value(1.0), run_time=1.0)
+            self.play(share.animate.set_value(0.0), run_time=1.0)
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1]), share.animate.set_value(0.01))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[2]), FadeIn(stages))
+            for f in (0.05, 0.25, 1.0):
+                self.play(share.animate.set_value(f), run_time=1.2)
+                self.wait(0.3)
+            vo.wait_until("d")
+            self.play(FadeIn(lines[3]), FadeIn(flag_g))
+            self.play(flag[1].animate.move_to(flag[0].get_right() + LEFT * 0.23).set_color(YES),
+                      Transform(flag_l, label(r"a feature flag: \ on for 5\% of users", font_size=18,
+                                              color=LAM).next_to(flag, RIGHT, buff=0.2).align_to(flag_l, LEFT)))
         self.wait(0.4)
         self.clear_scene()
 
@@ -173,15 +208,30 @@ class Delivery(VoiceoverScene):
         lines = VGroup(
             wrapped_label(r"\textbf{Knight Capital}, \ 1 August 2012: \ new trading code reused an old feature flag; \ "
                           r"one of eight servers had not received the new code, \ so the flag woke up code dead for "
-                          r"nine years", 12.4, font_size=22, color=NO),
+                          r"nine years", 12.4, font_size=20, color=NO),
             wrapped_label(r"in 45 minutes it sent millions of unintended orders and lost about \$440 million: \ the "
-                          r"firm needed rescue within days \ (SEC order, 2013)", 12.4, font_size=22, color=NO),
+                          r"firm needed rescue within days \ (SEC order, 2013)", 12.4, font_size=20, color=NO),
             wrapped_label(r"the lessons are this part's: \ deploy the same artifact everywhere and verify it, \ remove "
                           r"dead code and retired flags, \ roll out gradually, \ and keep an automatic stop", 12.4,
-                          font_size=22, color=YES),
+                          font_size=20, color=YES),
             wrapped_label(r"flags are debt: \ every flag doubles the states the code can be in \ --- \ track them, \ and "
-                          r"delete them once the rollout is done", 12.4, font_size=22, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).next_to(head, DOWN, buff=0.55)
+                          r"delete them once the rollout is done", 12.4, font_size=20, color=HEAD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.4)
+        servers = VGroup()
+        for i in range(8):
+            ok = i != 7
+            r = RoundedRectangle(width=1.25, height=1.0, corner_radius=0.1, stroke_color=YES if ok else NO,
+                                 stroke_width=2, fill_color=BG, fill_opacity=1)
+            t = VGroup(label(rf"server {i + 1}", font_size=16, color=GREY_A),
+                       label(r"new code" if ok else r"old code", font_size=16, color=YES if ok else NO)).arrange(
+                DOWN, buff=0.08).move_to(r)
+            servers.add(VGroup(r, t))
+        servers.arrange(RIGHT, buff=0.22).next_to(head, DOWN, buff=0.5)
+        flag_l = label(r"the reused flag switched on \ $\to$ \ a function dead since 2003", font_size=18,
+                       color=NO).next_to(servers[7], DOWN, buff=0.2).align_to(servers[7], RIGHT)
+        orders = VGroup(*[Arrow(servers[7].get_bottom() + DOWN * 0.55, servers[7].get_bottom() + DOWN * 0.55 +
+                                LEFT * (1.2 + 0.5 * j), buff=0, stroke_width=2, color=NO,
+                                max_tip_length_to_length_ratio=0.15) for j in range(4)])
         with self.voiceover(
             "Delivery failures can be very expensive. <bookmark mark='a'/> On the first of August 2012, Knight "
             "Capital deployed new trading code that reused an old feature flag. One of its eight servers had not "
@@ -194,7 +244,12 @@ class Delivery(VoiceoverScene):
             "must be tracked and removed when their rollout is over."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, l in zip("abcd", lines):
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(sv) for sv in servers], lag_ratio=0.15), FadeIn(lines[0]))
+            self.play(Indicate(servers[7], color=NO), FadeIn(flag_l))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1]), LaggedStart(*[GrowArrow(o) for o in orders], lag_ratio=0.2))
+            for mk, l in zip("cd", lines[2:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l))
         self.wait(0.4)

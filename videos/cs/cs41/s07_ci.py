@@ -8,7 +8,7 @@ class Ci(VoiceoverScene):
     def construct(self):
         self.card()
         self.trunk()
-        self.queue()
+        self.merge_queue()
         self.selection()
         self.savings()
 
@@ -20,7 +20,7 @@ class Ci(VoiceoverScene):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
-    def queue(self):
+    def merge_queue(self):
         q = load("queue")
         head = label(r"A merge queue", font_size=36).to_edge(UP, buff=0.3)
         bs = (1, 4, 16, 64)
