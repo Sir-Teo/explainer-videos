@@ -76,8 +76,8 @@ Published historical quantities are attributed observations rather than outputs 
   converging to the Breeden–Litzenberger density (mass 0.99999, mean = the forward); the derivation; slope and
   curvature riding along the call curve. **Lab:** `static_checks`: 7 negative butterflies among 40 raw-trade strikes,
   7 on the Surface's median quotes, 0 on the SVI fit.
-* **13. The density on the Surface.** The SVI fit replayed (`TrainingReplay`, error 3.76 → 0.156 vol points in about
-  25 evaluations) with its density; SVI, calendar and Lee conditions; all 7 expiries from 9 to 289 days as a 3D ridge
+* **13. The density on the Surface.** The SVI fit replayed (`FullRangeReplay`, error 3.76 → 0.156 vol points across
+  fresh fits with increasing function-evaluation budgets from a common initialization) with its density; SVI, calendar and Lee conditions; all 7 expiries from 9 to 289 days as a 3D ridge
   (standard deviation 7.8% → 32% of spot; skewness −0.29 at 16 days, +0.31 at 289; 0 calendar violations); four
   specifications at 107 days with vega-weighted RMSE no larger than 0.7 vol points (not every quote): valid-candidate downside tail integrals range from 9.79% to 10.25%; the spline's
   density has negative curvature, so its positive-part integral of 12.03% is invalid as a Q probability (Shikhman et al. 2026: 95 of 126 pricing directions numerically null).
