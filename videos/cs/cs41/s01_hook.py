@@ -54,12 +54,13 @@ class Hook(VoiceoverScene):
                      label(r"git 2.43", font_size=20, color=GREY_B))
         grid.add(hdr)
         for n, a, b in zip(names, ours, real):
-            grid.add(VGroup(label(n, font_size=20, color=WHITE), mono(a, size=15, color=YES if a == b else NO),
-                            mono(b, size=15, color=GREY_A)))
+            grid.add(VGroup(label(n, font_size=20, color=WHITE), mono(a[:20] + "...", size=17,
+                                                                     color=YES if a == b else NO),
+                            mono(b[:20] + "...", size=17, color=GREY_A)))
         for row in grid:
             row[0].move_to([-5.0, 0, 0])
-            row[1].move_to([-0.3, 0, 0])
-            row[2].move_to([4.6, 0, 0])
+            row[1].move_to([-0.6, 0, 0])
+            row[2].move_to([4.0, 0, 0])
         for i, row in enumerate(grid):
             row.shift(UP * (1.9 - i * 0.6))
         foot = wrapped_label(r"every object is named by the SHA-1 of its content \ (Part 29): \ write the same files "

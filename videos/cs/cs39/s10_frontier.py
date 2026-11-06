@@ -168,7 +168,7 @@ class Frontier(VoiceoverScene):
         rows = [[r"one copy, \ serial", f"{ok['txns']:,}", f"{ok['cyclic_components']}", f"{ok['txns_in_cycles']}"],
                 [r"reads from a lagging replica", f"{st['txns']:,}", f"{st['cyclic_components']}",
                  f"{st['txns_in_cycles']}"]]
-        tab = grid_table([r"store", r"transactions", r"cycles", r"transactions in cycles"], rows,
+        tab = grid_table([r"store", r"transactions", r"cycles found", r"transactions in cycles"], rows,
                          widths=[4.6, 2.4, 1.6, 3.4], row_h=0.48, font_size=21, mono_cols=())
         tab.move_to([0, -1.35, 0])
         tab.cells[1][2].set_color(YES)
