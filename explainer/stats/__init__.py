@@ -280,7 +280,7 @@ TIMELINE = [
     (2016, r"the ASA on $p$-values; target trials; NNGP; the polyhedral lemma; efficient robust means; ICP; transportability; zCDP; DP-SGD; the fairness impossibility theorem"),
     (2017, r"same stats, different graphs; Stan; temperature scaling; SHAP; E-values; SafeBayes; list decoding; Wasserstein GANs; transport ranks; exposure mappings; R\'enyi DP; counterfactual fairness"),
     (2018, r"double machine learning; robust bias correction; causal forests; randomized selective inference; exact ridge risk; label shift; proximal inference; EWM; NOTEARS; multicalibration"),
-    (2019, r"models as approximations; CQR; weighted conformal; the inflated logistic MLE; ImageNet rebuilt; MoM tournaments; the surrogate index"),
+    (2019, r"models as approximations; CQR; weighted conformal; the inflated logistic MLE; ImageNet rebuilt; MoM tournaments; the surrogate index; ADEMP simulation protocols"),
     (2020, r"Bayesian workflow; best subset vs lasso; adaptive prediction sets; robustness values; benign overfitting; universal inference"),
     (2021, r"jackknife+; adaptive conformal; Goodman-Bacon; Callaway--Sant'Anna; synthetic DiD; missingness graphs; the salt substitute trial; testing by betting; adaptive weighting; transport-map rates"),
     (2022, r"tF; post-clustering inference; e-BH; ridgeless risk; Gaussian DP; the 2020 Census's TopDown"),
