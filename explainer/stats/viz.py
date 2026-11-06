@@ -1992,3 +1992,41 @@ class DistanceMap(VGroup):
         self.labels = VGroup(*[label(names[i], font_size=font_size, color=GREY_A).next_to(P(Rb[i]), UP, buff=0.06)
                                for i in label_idx]) if names is not None else VGroup()
         self.add(self.roads, self.truth, self.residuals, self.rebuilt, self.labels)
+
+
+class PhantomPanel(Group):
+    """The phantom (Part 32): an image (a 2-D array, such as the Shepp--Logan phantom or a reconstruction of it) drawn
+    as greyscale pixels at nearest-neighbour resampling, in a thin frame with a caption.  ``lo``/``hi`` fix the grey
+    scale so that panels can be compared; ``tint`` maps the scale from the background to a colour instead of white.
+    ``image``, ``frame`` and ``caption`` are the parts; ``panel_for(arr)`` builds a matching image for a Transform."""
+
+    def __init__(self, arr, size: float = 2.6, caption: str | None = None, lo: float | None = None,
+                 hi: float | None = None, tint=None, font_size: int = 20, center=ORIGIN, frame_color=None,
+                 caption_color=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.size, self.lo, self.hi, self.tint = size, lo, hi, tint
+        self.image = self.panel_for(arr)
+        self.image.move_to(center)
+        self.frame = SurroundingRectangle(self.image, buff=0.03, stroke_color=frame_color or GREY_D, stroke_width=1.5)
+        self.add(self.image, self.frame)
+        self.caption = VGroup()
+        if caption:
+            self.caption = label(caption, font_size=font_size, color=caption_color or GREY_A).next_to(self.frame, DOWN, buff=0.15)
+            self.add(self.caption)
+
+    def panel_for(self, arr) -> ImageMobject:
+        a = np.asarray(arr, float)
+        lo = float(np.min(a)) if self.lo is None else self.lo
+        hi = float(np.max(a)) if self.hi is None else self.hi
+        v = np.clip((a - lo) / max(hi - lo, 1e-12), 0, 1)
+        bg = np.array([0x0b, 0x0e, 0x13], float) / 255
+        top = np.array(ManimColor(self.tint).to_rgb()) if self.tint is not None else np.ones(3)
+        rgb = bg[None, None, :] * (1 - v[..., None]) + top[None, None, :] * v[..., None]
+        img = ImageMobject((rgb * 255).astype(np.uint8))
+        img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+        img.height = self.size
+        if hasattr(self, "image"):
+            img.move_to(self.image)
+        return img

@@ -1136,3 +1136,19 @@ def usarrests() -> tuple:
 
     return [r[0] for r in USARRESTS], np.array([r[1:] for r in USARRESTS], float), ["murder", "assault", "urban", "rape"]
 
+
+
+def diabetes() -> tuple:
+    """Efron, Hastie, Johnstone & Tibshirani's (2004) diabetes data, the LARS paper's example: 442 patients, ten
+    baseline variables (age, sex, body-mass index, mean blood pressure and six blood serum measurements: total
+    cholesterol, LDL, HDL, total/HDL, log triglycerides, glucose), and a quantitative measure of disease progression
+    one year later.  Unstandardized, as distributed with scikit-learn (``diabetes_data_raw``).  Returns (X, y, names)."""
+    import csv
+    from pathlib import Path
+
+    import numpy as np
+
+    with open(Path(__file__).parent / "data" / "diabetes.csv", newline="") as f:
+        rows = list(csv.reader(f))
+    head, body = rows[0], np.array([[float(v) for v in r] for r in rows[1:]])
+    return body[:, :10], body[:, 10], head[:10]
