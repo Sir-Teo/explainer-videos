@@ -71,7 +71,7 @@ class Research(VoiceoverScene):
         whys = [why(r"bet a fixed multiple $c$ of the plug-in: a parabola in $c$"),
                 why(r"known-$\sigma$ expected-CE oracle among fixed multiples: $c^*=0.76$ at $\theta=0.4,T=20$ and $0.44$ at $T=5$"),
                 why(r"the oracle $c^*$ gives nonnegative expected CE, strictly positive if $\theta\ne0$; arbitrary shrinkage has no such guarantee")]
-        step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.3, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.3, buff=0.5, edge=6.9)
         thm = theorem_card(r"Optimal scaling under parameter uncertainty", wrapped_label(
             r"here $c^*$ maximizes expected CE across estimation samples, with known $\sigma$ and true $\theta$; this differs from maximizing unconditional expected utility. Kan--Zhou study related multi-asset parameter-risk portfolio combinations", 10.6, 20, GREY_A),
             who=r"Kan and Zhou (2007), \textit{JFQA} 42; earlier Brown (1976), Klein and Bawa (1976)", width=11.6,
