@@ -49,6 +49,21 @@ def user_asm_vm(name: str, src: str, stdin: str = "tape", stdout: str = "console
     return _proc(name, p, stdin, stdout)
 
 
+def threads_vm(name: str, src: str, n: int, data: str = "", stdin: str = "tape", stdout: str = "console",
+               stack_pages: int = 4) -> list[K.Proc]:
+    """Part 33: ``n`` threads of one assembly program in **one** address space.  Each is its own PCB (registers,
+    pc, its own stack: thread k's stack top is k * ``stack_pages`` pages below the region's top), but all share the
+    page table, so they share code, data and heap."""
+    import dataclasses
+    p = user_asm_vm(f"{name}0", src, stdin, stdout, data)
+    out = [p]
+    for k in range(1, n):
+        q = dataclasses.replace(p, name=f"{name}{k}", hi=p.hi - k * stack_pages * PAGE)
+        q.code, q.eager, q.parent = p.code, p.eager, p
+        out.append(q)
+    return out
+
+
 def boot_vm(procs: list[K.Proc], tape: bytes = b"", quantum: int = K.QUANTUM, tlb_size: int = 16,
             lazy: bool = True, trace: bool = False) -> VMMachine:
     nxt = [FRAME_BASE]
@@ -59,6 +74,11 @@ def boot_vm(procs: list[K.Proc], tape: bytes = b"", quantum: int = K.QUANTUM, tl
         return a
     layout = []
     for p in procs:
+        par = getattr(p, "parent", None)
+        if par is not None:          # a thread: its parent's tables, and a stack page of its own
+            p.root, p.l2 = par.root, par.l2
+            layout.append((p, {p.hi - PAGE: (b"", PTE_V | PTE_U | PTE_R | PTE_W)}))
+            continue
         p.root, p.l2 = frame(), frame()
         pages = {}
         n = (len(p.image) + PAGE - 1) // PAGE

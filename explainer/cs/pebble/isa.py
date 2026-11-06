@@ -23,8 +23,10 @@ Later parts add the extensions the syllabus lists.  Part 7 adds ``mul mulh div r
 multiplier and divider, wired into the pipeline; ``BASE`` is the 34 instructions of Part 6, which the gate-level
 CPU implements).  Part 31 adds the privileged extension, ``PRIV``: ``ecall`` (trap into the kernel), ``eret`` (return
 from a trap), and ``csrr``/``csrw`` (read and write a control register, named in ``CSR``), which only
-:class:`explainer.cs.os.machine.OSMachine` executes; still reserved are ``cas amoadd`` (Parts 10 and 33).  Opcode 0
-is illegal, so a jump into zeroed memory stops the machine.
+:class:`explainer.cs.os.machine.OSMachine` executes.  Part 33 adds the atomic extension, ``AMO``, on the two opcodes
+Part 6 reserved: ``cas rd, rs1, rs2`` (compare-and-swap: t = mem[rs1]; if t == rd then mem[rs1] = rs2; rd = t, all
+one indivisible step) and ``amoadd rd, rs1, rs2`` (t = mem[rs1]; mem[rs1] = t + rs2; rd = t).  Opcode 0 is
+illegal, so a jump into zeroed memory stops the machine.
 """
 
 from __future__ import annotations
@@ -57,7 +59,11 @@ M_EXT = ("mul", "mulh", "div", "rem")
 PRIV = {48: ("ecall", "J"), 49: ("eret", "J"), 50: ("csrr", "I"), 51: ("csrw", "I")}
 PRIV_OPS = tuple(m for m, _ in PRIV.values())
 ALL_OPS = OPS | PRIV
-RESERVED = {52: "cas", 53: "amoadd"}
+RESERVED = {52: "cas", 53: "amoadd"}      # as Part 6 left them; Part 33 fills both
+# the atomic extension (Part 33): also kept out of OPS, so Part 6's tables are unchanged
+AMO = {52: ("cas", "R"), 53: ("amoadd", "R")}
+A_EXT = tuple(m for m, _ in AMO.values())
+ALL_OPS = ALL_OPS | AMO
 OPCODE = {m: op for op, (m, _) in ALL_OPS.items()}
 FORMAT = {m: f for _, (m, f) in ALL_OPS.items()}
 # control registers (Part 31): csrr rd, name  /  csrw name, rs

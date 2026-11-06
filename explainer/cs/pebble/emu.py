@@ -14,7 +14,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .isa import IO_BASE, IO_CONSOLE, IO_CYCLES, IO_TAPE, MASK, NREGS, OPS, decode, sext
+from .isa import (
+    AMO,
+    IO_BASE,
+    IO_CONSOLE,
+    IO_CYCLES,
+    IO_TAPE,
+    MASK,
+    NREGS,
+    OPS,
+    decode,
+    sext,
+)
 
 
 class MachineError(RuntimeError):
@@ -117,7 +128,7 @@ class Machine:
                 raise MachineError(f"bad pc {pc:#x}")
             w = self.word(pc)
             op = (w >> 26) & 0x3F
-            if op not in OPS:
+            if op not in OPS and op not in AMO:
                 raise MachineError(f"illegal instruction {w:#010x} at pc {pc:#x}")
             i = decode(w)
             d = (i.op, i.rd, i.rs1, i.rs2, i.imm, w)
@@ -204,6 +215,15 @@ class Machine:
             nxt = (a + imm) & MASK & ~3
         elif op == "lui":
             wr = imm << 10
+        elif op == "cas":                 # one step: nothing can come between the load and the store
+            t = self.load(a, 4)
+            if t == R[rd]:
+                self.store(a, 4, b)
+            wr = t
+        elif op == "amoadd":
+            t = self.load(a, 4)
+            self.store(a, 4, t + b)
+            wr = t
         elif op == "halt":
             self.halted = True
             nxt = pc
