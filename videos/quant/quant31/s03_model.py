@@ -271,8 +271,8 @@ class Model(VoiceoverScene):
         for j, k in enumerate(names):
             b, se = m["bias"][k]
             col = GOOD if abs(b - 1) <= 2 * se else BAD
-            tab.add(VGroup(label(k, font_size=20, color=GREY_A).move_to([hx[0], -0.9 - 0.5 * j, 0]),
-                           MathTex(rf"{b:.2f}", font_size=28, color=col).move_to([hx[1], -0.9 - 0.5 * j, 0])))
+            tab.add(VGroup(label(k, font_size=20, color=GREY_A).move_to([hx[0], -1.9 - 0.45 * j, 0]),
+                           MathTex(rf"{b:.2f}", font_size=28, color=col).move_to([hx[1], -1.9 - 0.45 * j, 0])))
         vf = m["bias"]["volatility factor"][0]
         ew = m["bias"]["equal-weighted coins"][0]
         with self.voiceover(

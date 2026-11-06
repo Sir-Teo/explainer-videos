@@ -480,10 +480,23 @@ def axes(x_range, y_range, x_length=6.0, y_length=3.6, xlabel="", ylabel="", xti
     g = VGroup(ax)
     xfmt = xfmt or (lambda v: (f"10^{{{int(v)}}}" if log_x else f"{v:g}"))
     yfmt = yfmt or (lambda v: f"{v:g}")
-    for v in (xticks if xticks is not None else []):
-        g.add(MathTex(xfmt(v), font_size=font_size, color=GREY_B).next_to(ax.c2p(v, y_range[0]), DOWN, buff=0.12))
-    for v in (yticks if yticks is not None else []):
-        g.add(MathTex(yfmt(v), font_size=font_size, color=GREY_B).next_to(ax.c2p(x_range[0], v), LEFT, buff=0.12))
+    def ticks(vals, fmt):
+        # a range that ends at zero would print the same tick twice, or as "-0"; keep each label once
+        out, seen = [], set()
+        for v in (vals if vals is not None else []):
+            v = v + 0.0 if isinstance(v, float) else v
+            t = fmt(v)
+            if t.lstrip("+-") in ("0", "0.0", "0.00", "0.000") and t[0] in "+-":
+                t = t[1:]
+            if t not in seen:
+                seen.add(t)
+                out.append((v, t))
+        return out
+
+    for v, t in ticks(xticks, xfmt):
+        g.add(MathTex(t, font_size=font_size, color=GREY_B).next_to(ax.c2p(v, y_range[0]), DOWN, buff=0.12))
+    for v, t in ticks(yticks, yfmt):
+        g.add(MathTex(t, font_size=font_size, color=GREY_B).next_to(ax.c2p(x_range[0], v), LEFT, buff=0.12))
     if xlabel:
         xl = label(xlabel, font_size=font_size + 2, color=GREY_A)
         xl.next_to(ax, DOWN, buff=0.5 if xticks is not None else 0.2)

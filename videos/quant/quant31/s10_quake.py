@@ -77,9 +77,9 @@ class Quake(VoiceoverScene):
         d = np.asarray(q["days"], int)
         cum = 100 * np.asarray(q["cum"], float)
         x = np.arange(len(d))
-        lo, hi = float(np.floor(cum.min())), float(np.ceil(cum.max()))
+        lo, hi = float(np.floor(cum.min())) + 0.0, float(np.ceil(cum.max())) + 0.0   # + 0.0 turns -0 into 0
         g = axes([0, len(d) - 1], [lo, hi], x_length=7.6, y_length=4.4, xlabel=r"July--August 2007, trading days",
-                 ylabel=r"cumulative return, \%", xticks=[], yticks=[lo, 0, hi], font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
+                 ylabel=r"cumulative return, \%", xticks=[], yticks=sorted({lo, 0.0, hi}), font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
         ax = g.ax
         line = curve(ax, x, cum, IC_C, stroke_width=3)
         i6 = int(np.searchsorted(d, 20070806))
