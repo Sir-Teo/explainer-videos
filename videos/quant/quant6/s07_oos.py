@@ -107,7 +107,7 @@ class OutOfSample(VoiceoverScene):
         whys = [why(r"the benchmark is the running historical mean, not zero; negative means the mean won"),
                 why(r"Goyal and Welch's picture: the curve rises while the predictor is ahead"),
                 wrapped_label(r"Separate excess-return model: population moments, mean-variance investor, fixed "
-                              r"risk; $S$ is an excess-return Sharpe ratio (Campbell--Thompson 2008)", 11.8, 20, GREY_B)]
+                              r"risk aversion; $S$ is an excess-return Sharpe ratio (Campbell--Thompson 2008)", 11.8, 20, GREY_B)]
         step = ladder(self, rows[:2], whys[:2], keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.8)
         rows[2].move_to(UP * 1.2)
         whys[2].next_to(rows[2], DOWN, buff=0.4)
@@ -118,7 +118,7 @@ class OutOfSample(VoiceoverScene):
             "the historical mean's. The running mean is itself estimated; negative means it won. <bookmark "
             "mark='a'/> The cumulative difference rises while the predictor gains. <bookmark mark='b'/> A "
             'separate result from Campbell and Thompson concerns a mean-variance investor forecasting excess '
-            'returns, with known population moments and a fixed-risk comparison. Its gain depends on the '
+            'returns, with known population moments and risk aversion held fixed. Its gain depends on the '
             'population predictive R-squared and the excess-return Sharpe ratio, not directly on a measured '
             "backtest R-squared. <bookmark mark='c'/> In a stylized example, a monthly Sharpe of point one and "
             'population R-squared of point zero zero one give about a ten percent proportional gain. Our '

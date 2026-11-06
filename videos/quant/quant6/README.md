@@ -55,7 +55,7 @@ the real-world measure P.
   rather than a reconstruction of the data available to an investor at each date. R²_OS: dividend yield −0.32%,
   earnings yield −0.16%, CAPE −0.03%, 10-year yield −0.23%, inflation +0.35% (the only positive one of five tried).
   The legacy Campbell–Thompson column is omitted because its sign restriction was selected using the full sample.
-  The separate population mean–variance gain formula is taught with a stylized example, rather than treating a noisy
+  The separate population mean–variance gain formula is taught with a stylized example, holding risk aversion fixed rather than portfolio volatility. It avoids treating a noisy
   forecast score for real log total returns as an investable gain estimate.
 * **7. Maximum likelihood** (`s08_mle`). Student t on 24,896 daily market returns (1926–2020): Newton from ν = 27
   reaches ν̂ = 2.45, σ̂ = 0.575%, in 6 steps (the iterates are replayed on the 3D likelihood hill). se(ν̂): inverse

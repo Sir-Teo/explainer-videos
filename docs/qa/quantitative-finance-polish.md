@@ -413,3 +413,11 @@ Bilingual frame and English motion acceptance remain in progress. Some interim
 translation warnings arose when a worker imported source before an edit and then
 checked translations after that edit; those receipts are not accepted as final.
 The final source-fingerprint/input gate must be satisfied after the repairs finish.
+
+The out-of-sample population gain example holds **risk aversion** fixed, rather
+than holding portfolio volatility fixed. Its formula follows from weights
+`mu/(gamma*sigma^2)` and `(mu+x)/(gamma*sigma_epsilon^2)`. In the shown stylized
+case the expected-return gain is 10.1101%, while expected conditional variance
+also increases by that proportion. The English/Chinese narration and caption
+now make this distinction. This is a closed-form teaching check, with no new
+market experiment, strategy registration or hold-out access.
