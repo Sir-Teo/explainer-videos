@@ -2962,3 +2962,49 @@ class TangentSpace(VGroup):
         dash = DashedLine(self.to_screen(v), self.to_screen(p), color=GREY_B, stroke_width=2.5, dash_length=0.08)
         foot = self.arrow(p, color=color or S.KEPT)
         return VGroup(dash, foot)
+
+
+class LowerBoundPacking(VGroup):
+    """The lower-bound workbench (Part 50): hypotheses drawn as points in a schematic parameter space.  ``place(xy)``
+    places them; ``separation(r)`` draws the radius-r discs around them (disjoint discs: a 2r-separated packing, so any
+    estimator must be r away from all but one); ``confusion(i, j)`` joins two hypotheses the data cannot tell apart; and
+    ``hypercube(m)`` draws the 2^m vertices of Assouad's cube, in a projection, with edges between neighbours."""
+
+    def __init__(self, center=(0.0, 0.0, 0.0), scale: float = 1.0):
+        super().__init__()
+        self.c = np.asarray(center, float)
+        self.k = scale
+        self.xy = np.zeros((0, 2))
+
+    def _p(self, v) -> np.ndarray:
+        return self.c + self.k * np.array([v[0], v[1], 0.0])
+
+    def place(self, xy, color=None, radius: float = 0.08) -> VGroup:
+        self.xy = np.asarray(xy, float)
+        return VGroup(*[Dot(self._p(v), radius=radius, color=color or S.ACCENT) for v in self.xy])
+
+    def separation(self, r: float, color=None, opacity: float = 0.12) -> VGroup:
+        return VGroup(*[Circle(radius=self.k * r, stroke_color=color or S.EST, stroke_width=1.5, fill_color=color or S.EST,
+                               fill_opacity=opacity).move_to(self._p(v)) for v in self.xy])
+
+    def confusion(self, i: int, j: int, color=None) -> DashedLine:
+        return DashedLine(self._p(self.xy[i]), self._p(self.xy[j]), color=color or S.RESID, stroke_width=2.5)
+
+    def hypercube(self, m: int = 3, size: float = 2.0, color=None) -> VGroup:
+        """Vertices of {0,1}^m projected to the plane (m <= 4), with edges between vertices that differ in one coordinate."""
+        dirs = np.array([[1.0, 0.0], [0.0, 1.0], [0.55, 0.35], [-0.35, 0.55]])[:m] * size
+        verts = []
+        for b in range(2 ** m):
+            bits = np.array([(b >> i) & 1 for i in range(m)], float)
+            verts.append(bits @ dirs)
+        verts = np.array(verts)
+        verts -= verts.mean(axis=0)
+        self.xy = verts
+        edges = VGroup()
+        for a in range(2 ** m):
+            for i in range(m):
+                b = a ^ (1 << i)
+                if b > a:
+                    edges.add(Line(self._p(verts[a]), self._p(verts[b]), color=color or GREY_B, stroke_width=1.8))
+        dots = VGroup(*[Dot(self._p(v), radius=0.08, color=color or S.ACCENT) for v in verts])
+        return VGroup(edges, dots)
