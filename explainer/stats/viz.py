@@ -1959,3 +1959,36 @@ class EstimatorRail(VGroup):
     def stop(self):
         for m in [self.probe, *self.markers]:
             m.clear_updaters()
+
+
+class DistanceMap(VGroup):
+    """The map from distances (Part 31): true positions as hollow rings and, after classical MDS and a Procrustes
+    alignment, the rebuilt positions as dots joined to their rings by residual segments.  ``truth``, ``rebuilt``,
+    ``residuals`` and ``roads`` (optional edge list) are the parts; ``labels`` names chosen points.  Coordinates are
+    data units mapped into a box of the given width centred at ``center`` (aspect kept)."""
+
+    def __init__(self, truth, rebuilt, width: float = 7.0, height: float = 5.0, center=ORIGIN, edges=None, names=None,
+                 label_idx=(), truth_color=None, dot_color=None, font_size=18, dot_radius=0.05, sizes=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        T, Rb = np.asarray(truth, float), np.asarray(rebuilt, float)
+        allp = np.vstack([T, Rb])
+        lo, hi = allp.min(0), allp.max(0)
+        s = min(width / (hi[0] - lo[0] + 1e-9), height / (hi[1] - lo[1] + 1e-9))
+        mid = (lo + hi) / 2
+        c = np.asarray(center, float)
+
+        def P(v):
+            return np.array([c[0] + s * (v[0] - mid[0]), c[1] + s * (v[1] - mid[1]), 0.0])
+
+        self.P = P
+        rad = (np.full(len(T), dot_radius) if sizes is None else dot_radius * (0.6 + 2.5 * np.sqrt(np.asarray(sizes) / np.max(sizes))))
+        self.roads = VGroup(*[Line(P(T[i]), P(T[j]), color=GREY_D, stroke_width=1) for i, j in (edges or [])])
+        self.truth = VGroup(*[Circle(radius=r * 1.6, stroke_color=truth_color or S.TRUTH, stroke_width=1.5).move_to(P(v))
+                              for v, r in zip(T, rad)])
+        self.rebuilt = VGroup(*[Dot(P(v), radius=r, color=dot_color or S.EST) for v, r in zip(Rb, rad)])
+        self.residuals = VGroup(*[Line(P(a), P(b), color=S.RESID, stroke_width=1.2) for a, b in zip(T, Rb)])
+        self.labels = VGroup(*[label(names[i], font_size=font_size, color=GREY_A).next_to(P(Rb[i]), UP, buff=0.06)
+                               for i in label_idx]) if names is not None else VGroup()
+        self.add(self.roads, self.truth, self.residuals, self.rebuilt, self.labels)
