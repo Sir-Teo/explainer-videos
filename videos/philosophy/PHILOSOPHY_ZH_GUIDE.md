@@ -101,6 +101,14 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | nihilism | 虚无论 |
 | the liar | 说谎者 |
 | revenge | 复仇 |
+| the truth-teller; the surprise exam; the knower | 真话者；突击考试；知者悖论 |
+| grounded, ungrounded, paradoxical | 有根的，无根的，悖论的 |
+| inclosure schema; dialetheism | 闭包模式；双面真理论 |
+| propositions as types; proof assistant | 命题即类型；证明助手 |
+| platonism, logicism, formalism, intuitionism | 柏拉图主义，逻辑主义，形式主义，直觉主义 |
+| structuralism, fictionalism, indispensability | 结构主义，虚构主义，不可或缺性 |
+| Hume's principle; Basic Law V; abstraction principle | 休谟原则；基本定律V；抽象原则 |
+| impredicative, predicative; univalence | 非直谓的，直谓的；泛等 |
 
 ## Traditions and terms
 
