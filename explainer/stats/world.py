@@ -659,6 +659,48 @@ class World:
                 "statin": statin}
 
     # ------------------------------------------------------------------
+    # Missingness (Part 41): one survey sample, three masks with known mechanisms
+    # ------------------------------------------------------------------
+    MISSING_N = 2000
+
+    @cached_property
+    def missing(self) -> dict:
+        """A survey of 2,000 adults (Part 41) asking age, sex, region, BMI, blood pressure and income.  Income is
+        withheld by about 30% of respondents under three mechanisms, each with its true probabilities: ``mcar`` (a coin),
+        ``mar`` (younger people and two regions answer less: logistic in age and region, which are always seen) and
+        ``mnar`` (the better-off refuse: logistic in log income itself).  ``sbp`` is also missing for 15%, more often
+        for the young (MAR)."""
+        g = self.rng("missing")
+        pool = np.flatnonzero(self.adult)
+        idx = np.sort(g.choice(pool, self.MISSING_N, replace=False))
+        n = self.MISSING_N
+        age = self.age[idx].astype(float)
+        region = self.region[idx]
+        li = np.log(self.income[idx])
+        bmi, sbp = self.health["bmi"][idx], self.health["sbp"][idx]
+
+        def rate_logit(z, rate):
+            lo, hi = -30.0, 30.0
+            for _ in range(100):
+                mid = (lo + hi) / 2
+                if np.mean(1 / (1 + np.exp(-(mid + z)))) > rate:
+                    hi = mid
+                else:
+                    lo = mid
+            return 1 / (1 + np.exp(-((lo + hi) / 2 + z)))
+
+        p_mcar = np.full(n, 0.3)
+        z_mar = -0.04 * (age - 45) + 0.8 * np.isin(region, [3, 8])
+        p_mar = rate_logit(z_mar, 0.3)
+        z_mnar = 1.6 * (li - li.mean()) / li.std()
+        p_mnar = rate_logit(z_mnar, 0.3)
+        p_sbp = rate_logit(-0.05 * (age - 45), 0.15)
+        u = g.random((4, n))
+        return {"idx": idx, "age": age, "male": self.male[idx], "region": region, "log_income": li, "bmi": bmi, "sbp": sbp,
+                "p_mcar": p_mcar, "p_mar": p_mar, "p_mnar": p_mnar, "p_sbp": p_sbp,
+                "mcar": u[0] < p_mcar, "mar": u[1] < p_mar, "mnar": u[2] < p_mnar, "sbp_miss": u[3] < p_sbp}
+
+    # ------------------------------------------------------------------
     # Sampling and the truth
     # ------------------------------------------------------------------
     def sample(self, n: int, among: np.ndarray | None = None, seed: int = 0) -> np.ndarray:
