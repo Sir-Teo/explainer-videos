@@ -24,7 +24,8 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 3 | Visual pass complete; full production-voice listening pending |
 | 4 | Visual pass complete; full production-voice listening pending |
 | 5 | Visual pass complete; full production-voice listening pending |
-| 6–43 | Pending; do not infer approval from historical build notes |
+| 6 | In progress: econometrics audit and bilingual layout checks |
+| 7–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -314,3 +315,9 @@ python tools/zh_lines.py quant5 --todo
 python tools/lecture_length.py quant5 --floor 50
 EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant5 --only Hook Representation Research
 ```
+
+## Part 6: Financial Econometrics
+
+In progress directly on `quantitative-finance`. Preserve all seven legacy registered computations and record one retrospective inference correction separately. The corrected Shanken covariance avoids counting the factor variance twice; the GRS statistic uses consistent divisor-T covariances. Three independent checks cover the zero-premium limit, residual-variance inflation, and the single-asset identity with the squared intercept t-statistic. Together with the econometrics and protocol checks, seven focused tests pass. The cumulative Part 6 trial count is 296; all previous registrations, seals and openings are preserved, with no new hold-out opening.
+
+The source and visuals are still being revised. The original 36 compute items and the corrective inference item are available; full bilingual frame, playback, speech and narrated QA remain pending.

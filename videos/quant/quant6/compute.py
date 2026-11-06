@@ -616,6 +616,40 @@ def compute_twopass() -> dict:
 
 
 # ---------------------------------------------------------------------------
+def compute_twopass_inference_v2() -> dict:
+    """Retrospective inferential correction, keeping the registered fit unchanged."""
+    from videos.quant.quant6.inference import grs_test, shanken_covariance
+
+    code = (inspect.getsource(shanken_covariance) + inspect.getsource(grs_test)
+            + inspect.getsource(compute_twopass_inference_v2))
+    pit.register("capm_two_pass_inference_v2", code,
+                 {"legacy": "capm_two_pass", "window": "196307-202012",
+                  "correction": "Shanken factor component and GRS divisor-T covariances"}, trials=1)
+    legacy = CACHE.load("twopass")
+    ind = data.ken_french_industries(49)
+    bm = data.ken_french_sorts("BE-ME")
+    ff = data.ken_french_factors_monthly()
+    assert np.array_equal(ind["date"], ff["date"]) and np.array_equal(bm["date"], ff["date"])
+    m = (ff["date"] >= 196307) & (ff["date"] <= 202012)
+    dec = [bm["columns"].index(c) for c in ["Lo 10", "2-Dec", "3-Dec", "4-Dec", "5-Dec", "6-Dec", "7-Dec", "8-Dec",
+                                           "9-Dec", "Hi 10"]]
+    R = np.column_stack([ind["returns"][m], bm["returns"][m][:, dec]]) - ff["rf"][m][:, None]
+    R = R[:, np.all(np.isfinite(R), axis=0)]
+    f = ff["mkt_rf"][m]
+    tp = econ.two_pass(R, f)
+    np.testing.assert_allclose(tp["lambda"], legacy["lambda"], rtol=1e-12, atol=1e-14)
+    np.testing.assert_allclose(tp["betas"][:, 0], legacy["betas"], rtol=1e-12, atol=1e-14)
+    T = len(f)
+    Vfm = np.cov(tp["slopes"].T, ddof=1) / T
+    Vsh = shanken_covariance(Vfm, np.atleast_2d(np.var(f, ddof=1)), tp["lambda"][1:], T)
+    se = np.sqrt(np.diag(Vsh))
+    g = grs_test(R, f)
+    return _json({**legacy, "se_shanken": se, "t_shanken": tp["lambda"] / se,
+                  "grs_F": g["F"], "grs_p": g["p"], "grs_df": g["df"],
+                  "legacy_grs_F": legacy["grs_F"], "legacy_se_shanken": legacy["se_shanken"],
+                  "correction": "Retrospective inference correction; fitted coefficients unchanged"})
+
+
 def compute_stambaugh_cloud() -> dict:
     s = CACHE.load("stambaugh")
     rho, corr, sd_u, sd_v = s["sim_rho"], s["sim_corr"], s["sd_u"], s["sd_v"]
@@ -1268,6 +1302,8 @@ ITEMS = {"predreg_theory": compute_predreg_theory, "overlap": compute_overlap, "
          "boot_coverage": compute_boot_coverage, "gibbs": compute_gibbs, "fdr_sim": compute_fdr_sim,
          "designs": compute_designs, "dml_lambda": compute_dml_lambda, "ellipse_path": compute_ellipse_path,
          "dml_demo": compute_dml_demo}
+
+ITEMS["twopass_inference_v2"] = compute_twopass_inference_v2
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

@@ -124,6 +124,7 @@ PARTS = {
     "capm_two_pass": (6, 1), "industry_capm_alphas": (6, 2), "industry_momentum_panel": (6, 3),
     "fomc_announcement_days": (6, 4), "turn_of_month_event": (6, 5), "lookahead_rotation_toy": (6, 6),
     "shiller_oos_predictors": (6, 7),
+    "capm_two_pass_inference_v2": (6, 8),
     "btc_vol_race_2020": (7, 1), "btc_vol_harnet_2020": (7, 2), "btc_vol_toy_tsfm_2020": (7, 3),
     "btc_vol_toy_tsfm_np_2020": (7, 4),
     "kelly_us_split": (8, 1), "myopic_loss_aversion_us": (8, 2), "vol_target_us_market": (8, 3),

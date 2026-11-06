@@ -297,6 +297,15 @@
    },
    "trials": 1
   },
+  "capm_two_pass_inference_v2": {
+   "code_sha256": "8ec07d2b939648e8f0b9dca05db90d1d05d824dda112a716710098f77f422e7a",
+   "params": {
+    "correction": "Shanken factor component and GRS divisor-T covariances",
+    "legacy": "capm_two_pass",
+    "window": "196307-202012"
+   },
+   "trials": 1
+  },
   "carry_basis_part39": {
    "code_sha256": "25e4176d1fbcdbacdd8e2d9d8ca24e46714b2a8f63e1cd194e6ccecbc212c6ce",
    "params": {
