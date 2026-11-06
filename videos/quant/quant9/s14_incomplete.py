@@ -137,7 +137,7 @@ class Incomplete(VoiceoverScene):
             " With two states, the segment of measures shrinks to a single point, and the interval to "
             "a single price: that is chapter six."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -200,12 +200,7 @@ class Incomplete(VoiceoverScene):
             wrapped_label(r"more states never close the gap; more traded assets do (next chapter)", 4.4, 20, Q_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Do more states close the gap? A call at today's price on grids of two to thirty-three "
-            "states. <bookmark mark='a'/> Two states: a point. Three or more: the same interval every "
-            "time, since only the extremes bind. <bookmark mark='b'/> A model picks one price inside; "
-            "adding traded assets, not states, closes the gap."
-            f" Black and Scholes at twenty percent volatility gives {inc['bs']:.3f}: one choice among "
-            "infinitely many inside."
+            f"Do more states close the gap? A call at today's price on grids of two to thirty-three states. <bookmark mark='a'/> Two states: a point. Three or more: the same interval every time, since only the extremes bind. <bookmark mark='b'/> A model picks one price inside; adding traded assets, not states, closes the gap. Black and Scholes at twenty percent volatility gives {inc['bs']:.3f}: one choice among infinitely many inside. The added states stay between the same fixed extremes, which is why this example has the same bounds. The Black-Scholes number is a benchmark inside this interval; its unbounded continuum distribution is not the finite grid distribution."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(xl), FadeIn(side[0]))
             vo.wait_until("a")

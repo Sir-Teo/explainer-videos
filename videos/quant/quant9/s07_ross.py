@@ -58,17 +58,9 @@ class Ross(VoiceoverScene):
                 why(r"Perron--Frobenius: an irreducible non-negative matrix has exactly one positive eigenvector", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Option prices give Q. Can they give P, what the market really believes? Stephen Ross "
-            "claimed in 2015 that they can. Options reveal the price of moving from state i to state "
-            "j: the real transition probability times the discount factor. <bookmark mark='a'/> Ross "
-            "assumed the discount factor is a discount rate times a ratio of one function of the "
-            "state, like a representative investor's marginal utility. <bookmark mark='b'/> Then real "
-            "probabilities are rescaled state prices. <bookmark mark='c'/> Rows must sum to one, so "
-            "the function's reciprocal is an eigenvector of the state-price matrix. <bookmark "
-            "mark='d'/> Perron and Frobenius: a matrix like this has exactly one positive "
-            "eigenvector. So P is pinned down, from prices alone."
+            "Option prices give Q. Can they give P, what the market really believes? Stephen Ross claimed in 2015 that they can. Options reveal the price of moving from state i to state j: the real transition probability times the discount factor. <bookmark mark='a'/> Ross assumed the discount factor is a discount rate times a ratio of one function of the state, like a representative investor's marginal utility. <bookmark mark='b'/> Then real probabilities are rescaled state prices. <bookmark mark='c'/> Rows must sum to one, so the function's reciprocal is an eigenvector of the state-price matrix. <bookmark mark='d'/> Perron and Frobenius: a matrix like this has exactly one positive eigenvector. So P is pinned down, from prices alone. Recovery here assumes a strictly positive finite-state transition-price matrix and a transition-independent pricing kernel. A cross-section at one current state does not supply the whole transition matrix. Perron-Frobenius identifies a unique positive eigenvector only up to scale; the physical interpretation relies on the kernel restriction."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -181,16 +173,9 @@ class Ross(VoiceoverScene):
                     r"cannot tell (Borovi\v{c}ka, Hansen and Scheinkman 2016)", 21)]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.9, edge=6.9)
         with self.voiceover(
-            "Borovička, Hansen and Scheinkman explained why in 2016. The discount factor factors into "
-            "a transient part, Ross's shape, times a permanent martingale. <bookmark mark='a'/> The "
-            "eigenvector finds the transient part, and returns P tilted by the permanent one: the "
-            "measure with the long bond as numeraire, as Martin and Ross, and Qin and Linetsky, "
-            "showed. <bookmark mark='c'/> Recovery is right exactly when there is no permanent part, "
-            "and prices cannot tell."
-            " In plain words: if consumption grows, marginal utility has a trend, and prices alone "
-            "cannot separate that trend from probabilities."
+            """Borovička, Hansen and Scheinkman explain the identification problem. The stochastic discount factor can contain a permanent martingale component in addition to the state-function ratio. <bookmark mark='a'/> Perron recovery then identifies a long-term pricing measure tilted from physical probabilities, not physical probabilities automatically. Relating it to a long-bond numeraire needs further long-term factorization conditions. <bookmark mark='c'/> A nontrivial permanent risk adjustment is invisible to this recovery restriction. The pessimistic tilt in our example is model-specific; neither pessimism nor a consumption trend is a universal consequence. State prices alone cannot separate probabilities from all possible discount factors."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("c")
@@ -220,10 +205,7 @@ class Ross(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
         src = illustration(r"simulated economies, seeded")
         with self.voiceover(
-            "How fast does it go wrong? Turn the permanent part up from zero, here and in "
-            f"{sw['n_econ']} random economies. <bookmark mark='a'/> At zero, recovery is exact in all "
-            f"of them; the error then grows smoothly, to a median of {sw['err_med'][-1]:.3f}. There is "
-            "no safe threshold."
+            f"How fast does it go wrong? Turn the permanent part up from zero, here and in {sw['n_econ']} random economies. <bookmark mark='a'/> At zero, recovery is exact in all of them; the error then grows smoothly, to a median of {sw['err_med'][-1]:.3f}. There is no safe threshold. This sweep describes the fixed family of synthetic economies, not a theorem that every permanent component produces monotone error or a pessimistic tilt."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")

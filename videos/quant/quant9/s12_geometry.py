@@ -50,8 +50,9 @@ class Geometry(VoiceoverScene, ThreeDScene):
         p = ValueTracker(100.0)
 
         def psi_at(v):
-            v = float(np.clip(v, prices[0], prices[-1]))
-            return np.array([np.interp(v, prices, psi[:, j]) for j in range(3)])
+            grid = np.r_[80.0, prices, 125.0]
+            values = np.vstack(([1.0, 0.0, 0.0], psi, [0.0, 0.0, 1.0]))
+            return np.array([np.interp(v, grid, values[:, j]) for j in range(3)])
 
         def line():
             d = unit(p.get_value() - S3)
@@ -61,7 +62,7 @@ class Geometry(VoiceoverScene, ThreeDScene):
 
         def plane():
             v = p.get_value()
-            if v >= 124.5:
+            if v > 125.0 + 1e-9:
                 return VGroup()
             d = unit(v - S3)
             n = unit(psi_at(v))
@@ -88,10 +89,11 @@ class Geometry(VoiceoverScene, ThreeDScene):
         pr = VGroup(label(r"stock price today", font_size=24, color=FWD), price).arrange(RIGHT, buff=0.2)
         comps = VGroup(*[DecimalNumber(0.3, num_decimal_places=3, font_size=28, color=Q_C) for _ in range(3)])
         for j, c_ in enumerate(comps):
-            c_.add_updater(pinned(lambda j=j: psi_at(p.get_value())[j] if p.get_value() < 124.5 else 0.0))
+            c_.add_updater(pinned(lambda j=j: psi_at(p.get_value())[j]))
         ps = VGroup(MathTex(r"\psi =", font_size=30, color=Q_C), comps[0], comps[1], comps[2]).arrange(RIGHT, buff=0.18)
+        ps.add_updater(lambda m: m.set_opacity(1.0 if p.get_value() <= 125.0 + 1e-9 else 0.0))
         st_ok = label(r"a separating plane exists", font_size=22, color=Q_C)
-        st_bad = label(r"no positive normal: arbitrage", font_size=22, color=ARB)
+        st_bad = wrapped_label(r"no strictly positive normal: arbitrage", 3.0, 20, ARB)
         panel = VGroup(pr, ps, st_ok).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UR, buff=0.35)
         st_bad.move_to(st_ok, aligned_edge=LEFT)
         line_note = label(r"blue line: payoffs of portfolios that cost nothing today", font_size=20, color=FWD)
@@ -112,7 +114,7 @@ class Geometry(VoiceoverScene, ThreeDScene):
             " Why a line? Two assets and one price constraint: the portfolios that cost nothing form a "
             "one-dimensional family, so their payoffs form a line through the origin."
         ) as vo:
-            self.play(FadeIn(names), Create(ax), run_time=2)
+            self.play(FadeIn(names), Create(ax), run_time=0.6)
             vo.wait_until("a")
             self.play(FadeIn(faces), FadeIn(orth))
             vo.wait_until("b")
@@ -123,15 +125,7 @@ class Geometry(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(ps), FadeIn(st_ok))
             self.begin_ambient_camera_rotation(rate=0.12)
         with self.voiceover(
-            "Raise the stock's price. The line turns, the plane turns with it, and the normal's third "
-            "component shrinks. <bookmark mark='a'/> At a hundred and twenty-five it reaches zero: "
-            "the plane lies on a face of the corner. <bookmark mark='b'/> Past it, no plane exists: "
-            "the line pierces the corner, and shorting the stock against bonds pays in every state, "
-            "for nothing. <bookmark mark='c'/> That normal is a vector of state prices, the price "
-            "today of a dollar in each state. Separation by a positive normal and no arbitrage are "
-            "the same thing."
-            " At a hundred and thirty, the free payoff is fifty, thirty and five: positive in every "
-            "state."
+            """Raise the stock's price. The line and the plane turn. The normal's first two components shrink while the third rises. <bookmark mark='a'/> At a hundred and twenty-five, the state prices are zero, zero, one: a weak normal, on a face of the corner. <bookmark mark='b'/> Beyond it there is no strictly positive separating normal. Shorting the stock against bonds gives a free payoff positive in every state. <bookmark mark='c'/> At a hundred and thirty that payoff is fifty, thirty and five. Strictly positive state prices and no arbitrage are equivalent here; a normal with zero entries alone is not enough."""
         ) as vo:
             self.play(p.animate.set_value(124.0), run_time=vo.until("a"), rate_func=smooth)
             self.play(p.animate.set_value(125.0), FadeOut(st_ok), FadeIn(st_bad), run_time=1.2)
@@ -141,15 +135,15 @@ class Geometry(VoiceoverScene, ThreeDScene):
             self.play(p.animate.set_value(100.0), FadeOut(st_bad), FadeIn(st_ok), run_time=3.0)
         self.stop_ambient_camera_rotation()
         self.wait(0.3)
-        for m in (price, *comps):
+        for m in (price, ps, *comps):
             m.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, faces, L, PL)), FadeOut(names), FadeOut(orth),
-                                      FadeOut(panel), FadeOut(line_note)], run_time=1.5)
+                                      FadeOut(panel), FadeOut(line_note)], run_time=0.5)
         L.clear_updaters()
         PL.clear_updaters()
         self.remove(L, PL)
-        self.clear_scene()
+        self.clear_scene(run_time=0.1)
 
     def algebra(self):
         rows = [cmath(r"Z", r"=", r"\{\,D^\top\theta \;:\; \theta\cdot p = 0\,\}", font_size=38, colors={r"Z": FWD}),
@@ -163,23 +157,13 @@ class Geometry(VoiceoverScene, ThreeDScene):
                 why(r"the definition: a free payoff that is never negative and not zero"),
                 why(r"the plane contains the line: its normal is orthogonal to every free payoff"),
                 why(r"orthogonal complements: $D\psi$ is orthogonal to every $\theta$ with $\theta\cdot p = 0$, so it is a "
-                    r"multiple of $p$; rescale. Chapter 4 proves such a $\psi > 0$ exists exactly when there is no "
+                    r"multiple of $p$; the bank asset gives $\lambda=\sum\psi_i>0$, so rescale. Chapter 4 proves such a $\psi > 0$ exists exactly when there is no "
                     r"arbitrage")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.8, buff=0.6, edge=6.9)
         with self.voiceover(
-            "In symbols. D holds the payoffs, a row per asset, a column per state; p the prices. The "
-            "free payoffs are D transpose theta for portfolios theta that cost nothing. <bookmark "
-            "mark='a'/> An arbitrage is a free payoff in the corner, other than zero. <bookmark "
-            "mark='b'/> The plane with normal psi contains the line when psi is orthogonal to every "
-            "free payoff. <bookmark mark='c'/> Then D psi is orthogonal to every costless portfolio, "
-            "so it is a multiple of the prices; rescale, and D psi equals p. The next chapter proves "
-            "a positive psi exists exactly when there is no arbitrage."
-            " Check it at a price of a hundred, where the normal is five thirteenths, four "
-            "thirteenths, four thirteenths: five thirteenths of eighty, plus four thirteenths of a "
-            "hundred, plus four thirteenths of a hundred and twenty-five, is exactly a hundred, and "
-            "the three sum to one, the bond's price."
+            "In symbols. D holds the payoffs, a row per asset, a column per state; p the prices. The free payoffs are D transpose theta for portfolios theta that cost nothing. <bookmark mark='a'/> An arbitrage is a free payoff in the corner, other than zero. <bookmark mark='b'/> The plane with normal psi contains the line when psi is orthogonal to every free payoff. <bookmark mark='c'/> Then D psi is orthogonal to every costless portfolio, so it is a multiple of the prices; rescale, and D psi equals p. The next chapter proves a positive psi exists exactly when there is no arbitrage. Check it at a price of a hundred, where the normal is five thirteenths, four thirteenths, four thirteenths: five thirteenths of eighty, plus four thirteenths of a hundred, plus four thirteenths of a hundred and twenty-five, is exactly a hundred, and the three sum to one, the bond's price. The bank asset pays one and costs one, so lambda equals the sum of the positive components of psi and is positive. Rescaling by lambda is therefore legitimate. The bank asset also turns a negative initial cost into a zero-cost positive payoff."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -202,7 +186,6 @@ class Geometry(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(answer_under(card, r"yes: short a share, hold 125 in bonds; cost 0, payoff $(45, 25, 0)$. "
-                                                r"The normal has $\psi_3 = 0$: state prices must be strictly "
-                                                r"positive")))
+                                                r"Here $\psi=(0,0,1)$ is the only state-price vector: no strictly positive vector exists")))
         self.wait(0.4)
         self.clear_scene()

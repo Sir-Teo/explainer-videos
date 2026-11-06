@@ -988,10 +988,12 @@ def train_nsde(real, L=32, iters=1200, batch=256, lr=3e-3, depth=4, seed=0, ever
 # ---------------------------------------------------------------------------
 def mot_neural(x, mu, y, nu, cost, steps=3000, gamma=2000.0, width=32, lr=3e-3, seed=0, log_every=25,
                snapshots=(), grid=None):
-    """The upper MOT bound by learning its dual: u, v and h are small networks, and the constraint
+    """A neural penalty approximation to the upper MOT dual: u, v and h are small networks, and the constraint
     u(x) + v(y) + h(x)(y - x) >= c(x, y) is enforced by a penalty (gamma / 2) E_{mu x nu}[(c - u - v - h (y - x))_+^2].
-    Full batch over the grid (x_i, y_j) with weights mu_i nu_j.  Returns the trace of the dual objective
-    E_mu[u] + E_nu[v] (the bound), the penalized loss and the largest violation, and at ``snapshots`` the hedge on
+    Full batch over the grid (x_i, y_j) with weights mu_i nu_j. Returns the trace of the raw dual cost
+    E_mu[u] + E_nu[v], the penalized loss and the weighted mean positive shortfall (not the largest violation).
+    The legacy ``bound`` field stores raw cost, which is not a certified upper bound unless hedge dominance is
+    established. The ``violation`` field is the final weighted mean shortfall. At ``snapshots`` it returns the hedge on
     ``grid`` (u(x) + v(y) + h(x)(y - x) on a (len(grid[0]), len(grid[1])) mesh)."""
     import torch
 

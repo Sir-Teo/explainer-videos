@@ -758,6 +758,7 @@ Industry and limits of arbitrage:
 - SEC staff (2021), *Staff report on equity and options market structure conditions in early 2021* (GameStop).
 
 Frontier (2023–2026):
+- Eckstein, S., Kupper, M. (2019 online; 2021 issue). "Computation of optimal transport and related hedging problems via penalization and neural networks." *Applied Mathematics & Optimization* 83:639–667. DOI:10.1007/s00245-019-09558-1. The Part 9 neural dual is a pedagogical penalty illustration, not a replication of the full Neufeld–Sester empirical study.
 - Neufeld, A., Sester, J. (2023). "A deep learning approach to data-driven model-free pricing and to martingale optimal transport." *IEEE Trans. Information Theory* 69(5):3172–3189.
 - Neufeld, A., Papapantoleon, A., Xiang, Q. (2023). "Model-free bounds for multi-asset options using option-implied information and their exact computation." *Management Science* 69(4):2051–2068.
 - Heston, S., Jacobs, K., Kim, H. J. (2023). "The pricing kernel in options." FEDS 2023-053, Federal Reserve Board.
@@ -766,7 +767,7 @@ Frontier (2023–2026):
 - Guyon, J. (2024). "Dispersion-constrained martingale Schrödinger problems and the exact joint S&P 500/VIX smile calibration puzzle." *Finance and Stochastics* 28(1):27–79.
 - Horvath, F. (2025). "Arbitrage-based recovery." *JFE* 163:103969.
 - Bartl, D., Beiglböck, M., Pammer, G. (2026). "The Wasserstein space of stochastic processes." *J. Eur. Math. Soc.* 28(1):393–454.
-- Shikhman, L. J., Galarnyk, M., Dash, A., Welsh, N. A. (2026). "Inverse learning of latent risk-neutral densities from irregular option quotes." ICAIF 2026; arXiv:2607.27188.
+- Shikhman, L. J., Galarnyk, M., Dash, A., Welsh, N. A. (2026). "Inverse learning of latent risk-neutral densities from irregular option quotes." ICAIF 2026 (forthcoming 14–17 November; preprint v3 dated 15 October 2026); arXiv:2607.27188.
 
 ### Part 10 · Black–Scholes–Merton
 - Sprenkle, C. (1961). "Warrant prices as indicators of expectations and preferences." *Yale Economic Essays*; Boness, A. J. (1964). "Elements of a theory of stock-option value." *JPE*.

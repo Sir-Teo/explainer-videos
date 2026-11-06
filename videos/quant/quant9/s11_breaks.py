@@ -41,18 +41,9 @@ class Breaks(VoiceoverScene):
                 why(r"read parity backwards: option prices reveal the fee (Ofek, Richardson and Whitelaw 2004)", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Parity assumed you can sell short, and shorting means borrowing the share, for a fee h "
-            "when shares are scarce. Redo the replication. A is a call plus a bond paying the strike: "
-            "worth the larger of stock and strike. <bookmark mark='a'/> B is a put plus a fraction of "
-            "a share, lent out; the fee grows it to one share by expiry. <bookmark mark='b'/> Same "
-            "payoff, same price: the fee acts like a dividend. <bookmark mark='c'/> Read backwards, "
-            "option prices reveal the fee. Ofek, Richardson and Whitelaw showed in 2004 that parity's "
-            "violations sit where shorting is hardest. They are not free money; they are a price."
-            " A worked number: a share at fifty-five, with a fee of thirty percent a year and three "
-            "months to go, enters parity as fifty-five times e to the minus point oh seven five: "
-            "about fifty-one, not fifty-five."
+            "Parity assumed you can sell short, and shorting means borrowing the share, for a fee h when shares are scarce. Redo the replication. A is a call plus a bond paying the strike: worth the larger of stock and strike. <bookmark mark='a'/> B is a put plus a fraction of a share, lent out; the fee grows it to one share by expiry. <bookmark mark='b'/> Same payoff, same price: the fee acts like a dividend. <bookmark mark='c'/> Read backwards, option prices reveal the fee. Ofek, Richardson and Whitelaw showed in 2004 that parity's violations sit where shorting is hardest. They are not free money; they are a price. A worked number: a share at fifty-five, with a fee of thirty percent a year and three months to go, enters parity as fifty-five times e to the minus point oh seven five: about fifty-one, not fifty-five. The equality is an idealized lending-yield model: the yield must be tradable and reinvestable in shares. Real borrowing and lending terms differ, shares can be recalled, and constraints generally give price bounds. The inferred h is a conditional parity diagnostic, not a uniquely identified fee."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -173,7 +164,7 @@ class Breaks(VoiceoverScene):
             "box pays ten for sure, so it costs ten times e to the minus point oh four, about nine "
             "sixty-one; buying it is lending at four percent."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")

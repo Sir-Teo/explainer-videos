@@ -65,21 +65,10 @@ class StatePrices(VoiceoverScene):
                 why(r"the density of $Q$ with respect to $P$ is the discount factor, normalized: $Q$ is $P$ reweighted", 21)]
         step = ladder(self, rows, whys, keep=3, top=1.6, x=-0.6, buff=0.4, edge=6.9)
         with self.voiceover(
-            "Name that normal. Kenneth Arrow, in 1964, imagined a security paying one unit in a "
-            "single state: its price is the state price, and any payoff is a bundle of them. "
-            "<bookmark mark='a'/> Multiply and divide by each state's real probability: a price is an "
-            "expectation of payoff times m, the stochastic discount factor. <bookmark mark='b'/> The "
-            "bond pays one everywhere, so the state prices sum to one over one plus r. <bookmark "
-            "mark='c'/> Rescale them to sum to one: a probability, Q, and prices are discounted "
-            "Q-expectations, as Stephen Ross wrote in 1978. <bookmark mark='d'/> Q's density against "
-            "P is the discount factor, normalized. Q is not a forecast: it is P reweighted."
-            " A worked example with the state prices at a stock price of a hundred: five thirteenths, "
-            "four thirteenths, four thirteenths. At zero rates they already sum to one, so this Q is "
-            "the same three numbers, and a call struck at a hundred, paying twenty-five only in the "
-            "boom, is worth four thirteenths of twenty-five, about seven point seven."
+            "Name that normal. Kenneth Arrow, in 1964, imagined a security paying one unit in a single state: its price is the state price, and any payoff is a bundle of them. <bookmark mark='a'/> Multiply and divide by each state's real probability: a price is an expectation of payoff times m, the stochastic discount factor. <bookmark mark='b'/> The bond pays one everywhere, so the state prices sum to one over one plus r. <bookmark mark='c'/> Rescale them to sum to one: a probability, Q, and prices are discounted Q-expectations, as Stephen Ross wrote in 1978. <bookmark mark='d'/> Q's density against P is the discount factor, normalized. Q is not a forecast: it is P reweighted. A worked example with the state prices at a stock price of a hundred: five thirteenths, four thirteenths, four thirteenths. At zero rates they already sum to one, so this Q is the same three numbers, and a call struck at a hundred, paying twenty-five only in the boom, is priced under this selected Q at four thirteenths of twenty-five, about seven point seven. The displayed state-price vector is one selected positive extension of stock and bond prices. Under this chosen Q the call has the quoted expectation; its price is not uniquely implied until enough claims trade to complete the market."
         ) as vo:
             self.play(FadeIn(h))
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -127,20 +116,12 @@ class StatePrices(VoiceoverScene):
             MathTex(rf"m = ({m[0]:.2f},\ {m[1]:.2f},\ {m[2]:.2f})", font_size=28, color=ARB),
             MathTex(rf"Q = ({q[0]:.3f},\ {q[1]:.3f},\ {q[2]:.3f})", font_size=28, color=Q_C),
             MathTex(rf"\mathbb{{E}}^P[S_1] = {PI @ S3:.2f},\ \ \mathbb{{E}}^Q[S_1] = {q @ S3:.2f}", font_size=28),
-            wrapped_label(r"the crash state's bar grows: the market pays more for a dollar there than its probability "
-                          r"alone would say; under $Q$ the stock earns exactly the riskless rate (here zero)", 4.6, 20,
+            wrapped_label(r"this selected pricing extension raises the crash weight; other positive vectors also price stock and bond. Under each $Q$, the mean stock return equals the bank rate", 4.6, 20,
                           GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"$P$ illustrative; state prices from chapter 3's market at a stock price of 100, $r = 0$")
         with self.voiceover(
-            "As one animation: three states, crash, flat, boom; amber bars are made-up real "
-            "probabilities under which the stock should rise. <bookmark mark='a'/> Divide state "
-            f"prices by them: the discount factor is {m[0]:.2f} in the crash, below one elsewhere. A "
-            "dollar in a crash is dear. <bookmark mark='b'/> Renormalize and the bars turn purple: Q. "
-            "The crash bar grew, the boom bar shrank, and under Q the stock is expected to stay at a "
-            "hundred."
-            " And the discount factor's average under P is the bond's price, one over one plus r: here "
-            "exactly one."
+            f"As one animation: three states, crash, flat, boom; amber bars are made-up real probabilities under which the stock should rise. <bookmark mark='a'/> Divide state prices by them: the discount factor is {m[0]:.2f} in the crash, below one elsewhere. A dollar in a crash is dear. <bookmark mark='b'/> Renormalize and the bars turn purple: Q. The crash bar grew, the boom bar shrank, and under Q the stock is expected to stay at a hundred. And the discount factor's average under P is the bond's price, one over one plus r: here exactly one. This is one convenient positive state-price choice, not a unique market-implied crash-state price in this incomplete market."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(stage[0]), FadeIn(src), *[FadeIn(b_) for b_ in bs_],
                       FadeIn(nums))
@@ -190,14 +171,7 @@ class StatePrices(VoiceoverScene):
                           r"chapter 3's line pierced the corner", 4.8, 20, ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Here Q is not unique. The triangle holds every probability on three states. <bookmark "
-            "mark='a'/> The measures that price the stock form the purple segment, from five ninths "
-            "on the crash and four ninths on the boom, to everything on the flat state. <bookmark "
-            "mark='b'/> Raise the price: the segment slides to the boom corner, shrinks to a point at "
-            "a hundred and twenty-five, and leaves the triangle at the same price where the free "
-            "payoffs pierced the corner."
-            " Every point on the segment prices the bond and the stock correctly; the points disagree "
-            "only about claims the two assets cannot build."
+            "Here Q is not unique. The triangle holds every probability on three states. <bookmark mark='a'/> The measures that price the stock form the purple segment, from five ninths on the crash and four ninths on the boom, to everything on the flat state. <bookmark mark='b'/> Raise the price: the segment slides to the boom corner, shrinks to a point at a hundred and twenty-five, and leaves the triangle at the same price where the free payoffs pierced the corner. Every point on the segment prices the bond and the stock correctly; the points disagree only about claims the two assets cannot build. Only the strictly positive part of this segment gives measures equivalent to our full-support physical probability. At 125 the remaining weak vector is zero, zero, one; it prices assets but is not equivalent and does not rule out arbitrage."
         ) as vo:
             self.play(FadeIn(tri_g), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -218,7 +192,7 @@ class StatePrices(VoiceoverScene):
         top = max(q.max(), p_.max())
         g1 = axes([0.8, 1.25], [0, 1.05], x_length=5.6, y_length=2.4, ylabel=r"densities at expiry (scaled)",
                   xticks=[], yticks=[], font_size=16)
-        g2 = axes([0.8, 1.25], [0, 2.2], x_length=5.6, y_length=2.6, ylabel=r"$m = q / p$, the pricing kernel",
+        g2 = axes([0.8, 1.25], [0, max(2.2, float(hi.max()) * 1.05)], x_length=5.6, y_length=2.6, ylabel=r"$q/p$: normalized density-ratio illustration",
                   xlabel=r"bitcoin price at expiry, over the forward", xticks=[0.8, 0.9, 1.0, 1.1, 1.2],
                   yticks=[0, 1, 2], font_size=16)
         VGroup(g1, g2).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
@@ -226,36 +200,24 @@ class StatePrices(VoiceoverScene):
         pc = curve(g1.ax, x, p_ / top, P_C, stroke_width=4)
         leg = legend([(Q_C, r"$q$: the Surface's 16-day density"), (P_C, r"$p$: 16-day returns, 2021--2025")],
                      font_size=17).move_to(g1.ax.c2p(1.13, 0.85))
-        bd = band(g2.ax, x, np.clip(lo, 0, 2.2), np.clip(hi, 0, 2.2), ARB, 0.2)
-        mc = curve(g2.ax, x, np.clip(m, 0, 2.2), ARB, stroke_width=4)
+        bd = band(g2.ax, x, lo, hi, ARB, 0.2)
+        mc = curve(g2.ax, x, m, ARB, stroke_width=4)
         one = DashedLine(g2.ax.c2p(0.8, 1), g2.ax.c2p(1.25, 1), color=GREY_C, stroke_width=1.5)
-        right = ("falls steeply in the up states, beyond the band's reach of the peak" if k["right_sig"] else
-                 "falls in the up states, but within the band")
-        left = ("and rises again in the down states, as theory says it should" if k["rising_left"] else
-                "but does not rise in the down states, as a decreasing kernel would; the band there is wide")
+        right = "declines on the right in this fitted illustration"
+        left = "pointwise bands resample historical P only; current conditional P and Q-fit uncertainty are not identified"
         side = VGroup(
             label(rf"{k['n_windows']} windows of {k['h_days']} days", font_size=22, color=P_C),
             wrapped_label(rf"the kernel peaks near {k['peak_x']:.2f} times the forward, at {k['peak_m']:.2f}; it {right}",
                           4.6, 20, ARB),
             wrapped_label(left, 4.6, 20, GREY_A),
-            wrapped_label(r"a hump instead of a falling curve is the ``pricing kernel puzzle'' (Jackwerth 2000), "
-                          r"found in index options and in bitcoin's", 4.6, 19, GREY_B),
+            wrapped_label(r"the hump resembles the pricing-kernel puzzle; monotonicity needs economic assumptions. This historical density ratio is not an identified conditional discount factor", 4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"$q$: Deribit, 10 Dec 2025 (the Surface); $p$: Binance BTCUSDT daily closes, Apr 2021--Nov 2025, "
                         r"Gaussian kernel; band: 1,000 stationary-bootstrap draws (5--95\%)")
         verdict = ("It has a hump: it rises toward the forward and falls away above it, beyond the band. "
                    if k["shape"] == "hump" else "It falls from left to right, as theory says. ")
         with self.voiceover(
-            "Now a real discount factor. Q: the Surface's density for Bitcoin sixteen days out. P: "
-            f"sixteen-day returns over four and a half years, {k['n_windows']} windows, smoothed. "
-            "<bookmark mark='a'/> Their ratio is the pricing kernel, with a band from a thousand "
-            "resamples. <bookmark mark='b'/> "
-            f"{verdict}"
-            "A risk-averse investor would make it fall everywhere; a hump is the pricing kernel "
-            "puzzle Jens Jackwerth found in 2000. <bookmark mark='c'/> And the band is wide: P is the "
-            "hard half of the ratio."
-            f" Sixteen-day returns had a standard deviation of {100 * k['vol_ret']:.0f} percent over "
-            "the sample."
+            f"""Now an observational density-ratio illustration. Q is a fitted sixteen-day option density. The denominator is a historical unconditional KDE from {k['n_windows']} non-overlapping return windows, shifted to today's price. <bookmark mark='a'/> Their ratio is q over p. A stochastic discount factor would also include discounting and needs the appropriate conditional physical distribution. <bookmark mark='b'/> The fitted curve has a hump, resembling the pricing-kernel puzzle. Risk aversion alone does not imply monotonicity in stock price without further economic assumptions. <bookmark mark='c'/> The five-to-ninety-five-percent pointwise bands resample historical P only, holding the Q fit fixed. They omit Q-fit and regime uncertainty. Comparing a selected peak with an endpoint is not a simultaneous significance test, and overlapping bands do not prove a flat left side."""
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(qc), FadeIn(leg[0]))
             self.play(Create(pc), FadeIn(leg[1]), FadeIn(side[0]))

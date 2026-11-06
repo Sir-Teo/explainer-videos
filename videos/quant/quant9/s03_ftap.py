@@ -34,10 +34,7 @@ class FTAP(VoiceoverScene):
                          who=r"Harrison and Kreps (1979); the lemma: Farkas (1902), Stiemke (1915)", color=Q_C,
                          width=10.6, font_size=26).move_to(UP * 0.4)
         with self.voiceover(
-            "The theorem. With one period and finitely many states, there is no arbitrage if and only "
-            "if there are strictly positive state prices that price every asset. <bookmark mark='a'/> "
-            "Harrison and Kreps stated it in 1979; underneath is a lemma of Farkas from 1902, in "
-            "Stiemke's strictly positive form of 1915."
+            "The theorem. With one period and finitely many states, there is no arbitrage if and only if there are strictly positive state prices that price every asset. <bookmark mark='a'/> Harrison and Kreps stated it in 1979; underneath is a lemma of Farkas from 1902, in Stiemke's strictly positive form of 1915. Assume frictionless unrestricted long and short positions, a positive bank asset, and positive physical probability for every listed state. In general price space, use the relative interior of the payoff cone."
         ) as vo:
             self.play(FadeIn(t, shift=UP * 0.2))
             vo.wait_until("a")
@@ -65,19 +62,9 @@ class FTAP(VoiceoverScene):
                     r"payoffs", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "The easy direction. If positive state prices exist, any portfolio that never loses and "
-            "sometimes wins has a positive price: a sum of non-negative terms, one positive. "
-            "<bookmark mark='a'/> The hard direction. Collect every portfolio's cost, with a minus "
-            "sign, and its payoffs: a subspace L. No arbitrage says L touches the non-negative "
-            "orthant only at zero. <bookmark mark='b'/> So L misses the simplex, which is compact and "
-            "convex, and a hyperplane separates them; a linear function bounded on a subspace "
-            "vanishes on it, so the normal lambda is orthogonal to L and strictly positive. <bookmark "
-            "mark='c'/> Write that out for every portfolio and divide by lambda's first entry: prices "
-            "are payoffs times strictly positive state prices."
-            " Strict positivity is the whole content. A state price of zero would let a payoff that is "
-            "positive only in that state cost nothing: an arbitrage."
+            """The easy direction. If strictly positive state prices exist, every attainable non-negative nonzero payoff has a positive price. <bookmark mark='a'/> For the converse, collect minus cost and payoffs in a subspace L. No arbitrage means L meets the non-negative orthant only at zero. <bookmark mark='b'/> Separate L from the compact simplex. A linear function bounded on a subspace vanishes there; its normal lambda has every component positive. <bookmark mark='c'/> Divide by lambda's positive first entry to obtain strictly positive state prices. Existence is the key: an incomplete market can have both a weak state-price vector with zeros and a strictly positive one, without arbitrage. A zero-priced state-only payoff is an arbitrage only if that payoff is attainable."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -152,7 +139,7 @@ class FTAP(VoiceoverScene):
                 "        if not enter: return T, basis       # optimal",
                 "        j = enter[0]                 # Bland's rule: never cycles",
                 "        ratio = T[:, -1] / T[:, j]   # where T[:, j] > 0",
-                "        i = argmin(ratio)            # who leaves the basis",
+                "        i = min_ratio_tie_by_basis(ratio, basis)  # full Bland rule",
                 "        T[i] /= T[i, j]; eliminate(T, column=j, row=i)",
                 "        basis[i] = j; trace.append(objective)",
             ], source="explainer/quant/house/arbitrage.py", width=7.6, font_size=17).to_corner(UL, buff=0.3)
@@ -192,16 +179,7 @@ class FTAP(VoiceoverScene):
         lp = MathTex(r"\max\ t\ \ \text{s.t.}\ \ D\psi = p,\ \ \psi \ge t\,\mathbf{1}", font_size=28, color=Q_C)
         lp.next_to(leg, DOWN, buff=0.2)
         with self.voiceover(
-            "The House decides it by linear programming: maximize the smallest state price, t, "
-            "keeping prices equal to payoffs times state prices. Here is the teaching simplex that "
-            "solves it. <bookmark mark='a'/> Start from artificial variables, then pivot: the "
-            "lowest-numbered column with negative reduced cost enters, Bland's rule, so it never "
-            "cycles; the ratio test picks who leaves. <bookmark mark='b'/> At a stock price of a "
-            f"hundred, {len(st100)} pivots drive the artificials to zero, and the smallest state price "
-            f"is {x100[3]:.3f}. <bookmark mark='c'/> At a hundred and thirty, after {len(st130)} "
-            "pivots it is stuck: no state prices. The stuck tableau's duals are the certificate: a "
-            "hundred and twenty-five in bonds, short one share, costing minus five and paying "
-            "forty-five, twenty-five or zero. Farkas's lemma, run by a machine."
+            f"The House decides it by linear programming: maximize the smallest state price, t, keeping prices equal to payoffs times state prices. Here is the teaching simplex that solves it. <bookmark mark='a'/> Start from artificial variables, then pivot: the lowest-numbered column with negative reduced cost enters, Bland's rule, so it never cycles; the ratio test picks who leaves. <bookmark mark='b'/> At a stock price of a hundred, {len(st100)} pivots drive the artificials to zero, and the smallest state price is {x100[3]:.3f}. <bookmark mark='c'/> At a hundred and thirty, after {len(st130)} pivots it is stuck: no state prices. The stuck tableau's duals are the certificate: a hundred and twenty-five in bonds, short one share, costing minus five and paying forty-five, twenty-five or zero. Farkas's lemma, run by a machine. Bland also resolves equal minimum ratios by the smallest basic-variable index; the entering rule alone is not the full anti-cycling rule."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g), FadeIn(lp))
             vo.wait_until("a")
@@ -225,17 +203,12 @@ class FTAP(VoiceoverScene):
         self.clear_scene()
 
     def predict(self):
-        card = pause_at(r"Split the states more finely: add a state between every two. For which stock prices between "
-                        r"80 and 125 does the program stop finding state prices?")
+        card = pause_at(r"Add only interior states. Can no-arbitrage fail at a stock price strictly between 80 and 125?")
         with self.voiceover(
-            "Pause and predict. Add a state between every two. For which stock prices between eighty "
-            "and a hundred and twenty-five does the program stop finding state prices? <bookmark "
-            "mark='a'/> None: new states add arrows between the extremes, so the cone never shrinks."
-            " The theorem's prices go by three names. Next: state prices, the discount factor, and Q."
+            """Pause and predict. Add only states between the existing extremes. Can no arbitrage fail for a stock price strictly between eighty and a hundred and twenty-five? <bookmark mark='a'/> No. The finite-state convex hull is unchanged and an interior price still admits strictly positive state prices. At eighty or a hundred and twenty-five only weak boundary vectors exist, and there is arbitrage. The open interval matters."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(answer_under(card, r"none: new states add arrows between the extremes, so the cone never "
-                                                r"shrinks; only the worst and best payoffs matter")))
+            self.play(FadeIn(answer_under(card, r"no: adding only interior states leaves the open no-arbitrage interval $(80,125)$ unchanged; endpoints remain arbitrages")))
         self.wait(0.4)
         self.clear_scene()

@@ -35,12 +35,7 @@ class Parity(VoiceoverScene):
                              color=Q_C, width=6.0, kind=r"Corollary")
         VGroup(d, lo).arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(UP * 0.3)
         with self.voiceover(
-            "A definition first. An arbitrage costs nothing or less today, can never lose, and "
-            "sometimes wins. <bookmark mark='a'/> The law of one price follows: if two portfolios pay "
-            "the same in every state but cost different amounts, buy the cheap one, sell the dear "
-            "one, and keep the difference."
-            " Notice what the definition does not need: no probabilities, no model of the stock, not "
-            "even agreement about what will happen. Only today's prices, and the list of states."
+            "A definition first. An arbitrage costs nothing or less today, can never lose, and sometimes wins. <bookmark mark='a'/> The law of one price follows: if two portfolios pay the same in every state but cost different amounts, buy the cheap one, sell the dear one, and keep the difference. Notice what the definition does not need: no probabilities, no model of the stock, not even agreement about what will happen. Only today's prices, and the list of states. Assume frictionless financing and executable long and short trades, matching dates and settlement, and positive probability for each relevant state. The positive bank asset lets a strictly negative cost be reinvested into a positive terminal payoff."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")
@@ -68,20 +63,10 @@ class Parity(VoiceoverScene):
         whys = [side_why(r"split at $K$: above it the call pays and the put is worthless; below, the reverse", 5.6),
                 side_why(r"the right side is bought today with one share and a loan of $K e^{-rT}$; by the law of one "
                          r"price the two sides cost the same (Stoll 1969)", 5.6),
-                side_why(r"Deribit's options are paid in bitcoin: divide every dollar price by the forward $F$, the "
-                         r"price of the unit (chapter 11)", 5.6)]
+                side_why(r"inverse BTC options: $\tilde C-\tilde P=D_{BTC}(1-K/F)$. Here assume $D_{BTC}=1$; dollar parity uses both USD and BTC discount factors", 5.6)]
         step = ladder(self, rows, whys, keep=3, top=3.3, x=3.6, buff=0.5, edge=6.9)
         with self.voiceover(
-            "Now build parity. Payoffs at expiry against the stock price: a long call is a hockey "
-            "stick bending up at the strike. <bookmark mark='a'/> A short put bends down. <bookmark "
-            "mark='b'/> Add them: the kinks cancel, and what is left is a straight line, the stock "
-            "minus the strike, a forward, in every state. <bookmark mark='c'/> That line can also be "
-            "bought with one share and a loan of the discounted strike. Same payoff, same price: call "
-            "minus put equals stock minus discounted strike. <bookmark mark='d'/> On Deribit, where "
-            "prices are in bitcoin, divide by the forward: one minus K over F."
-            " A worked example: with the stock at a hundred and three and a strike of a hundred, at "
-            "zero rates the right side is three. At four percent for a year it would be a hundred and "
-            "three minus ninety-six point oh eight, about six point nine two."
+            "Now build parity. Payoffs at expiry against the stock price: a long call is a hockey stick bending up at the strike. <bookmark mark='a'/> A short put bends down. <bookmark mark='b'/> Add them: the kinks cancel, and what is left is a straight line, the stock minus the strike, a forward, in every state. <bookmark mark='c'/> That line can also be bought with one share and a loan of the discounted strike. Same payoff, same price: call minus put equals stock minus discounted strike. <bookmark mark='d'/> For inverse Bitcoin options with zero Bitcoin interest, the corresponding parity is one minus K over F. A worked example: with the stock at a hundred and three and a strike of a hundred, at zero rates the right side is three. At four percent for a year it would be a hundred and three minus ninety-six point oh eight, about six point nine two. The inverse-Bitcoin formula assumes a unit Bitcoin discount factor. In general it is that factor times one minus K over F, rather than a simple division of every spot dollar price by F."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(leg[0]), Create(call),
                       FadeIn(note(r"Bj\"ork, ch.\ 10; Hull, ch.\ 11; Stoll (1969)", font_size=17).to_corner(DR, buff=0.25)))
@@ -90,7 +75,7 @@ class Parity(VoiceoverScene):
             vo.wait_until("b")
             self.play(Transform(call.copy(), fwd), Transform(sput.copy(), fwd), FadeIn(leg[2]), run_time=2)
             self.add(fwd)
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("c")
             step(1)
             vo.wait_until("d")
@@ -100,8 +85,8 @@ class Parity(VoiceoverScene):
 
     def ledger(self):
         K, S0 = 100.0, 103.0
-        g = axes([60, 140], [-45, 45], x_length=6.6, y_length=4.4, xlabel=r"stock price at expiry, $S_T$",
-                 ylabel=r"payoff of the package", xticks=[60, 100, 140], yticks=[-40, 0, 40], font_size=17)
+        g = axes([60, 140], [-45, 115], x_length=6.6, y_length=4.4, xlabel=r"stock price at expiry, $S_T$",
+                 ylabel=r"payoff of the package", xticks=[60, 100, 140], yticks=[-40, 0, 50, 100], font_size=17)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.25)
         ax = g.ax
         xs = np.linspace(60, 140, 161)
@@ -122,9 +107,9 @@ class Parity(VoiceoverScene):
         side = VGroup(head, rows, Line(LEFT, RIGHT * 3.2, color=GREY_C), tot).arrange(DOWN, aligned_edge=LEFT,
                                                                                       buff=0.22)
         side.to_edge(RIGHT, buff=0.7).shift(UP * 0.6)
-        cur = curve(ax, xs, np.clip(sums[0], -45, 45), legs[0][3], stroke_width=4)
+        cur = curve(ax, xs, sums[0], legs[0][3], stroke_width=4)
         g_ = np.random.default_rng(1)
-        ST = np.clip(S0 * np.exp(0.3 * g_.standard_normal(200) - 0.045), 61, 139)
+        ST = np.linspace(61, 139, 200)  # illustrative price grid, not a simulated distribution
         dots = VGroup(*[Dot(ax.c2p(s, 30 + 12 * g_.random()), radius=0.035, color=WHITE).set_opacity(0.8) for s in ST])
         landed = VGroup(*[Dot(ax.c2p(s, 1), radius=0.035, color=Q_C) for s in ST])
         res = wrapped_label(r"200 possible prices at expiry: every one lands on $+1$. No state of the world is left "
@@ -142,7 +127,7 @@ class Parity(VoiceoverScene):
             self.play(Create(cur), FadeIn(rows[0]))
             for i, mk in ((1, "b"), (2, "c"), (3, "d")):
                 vo.wait_until(mk)
-                self.play(Transform(cur, curve(ax, xs, np.clip(sums[i], -45, 45), legs[i][3] if i < 3 else Q_C,
+                self.play(Transform(cur, curve(ax, xs, sums[i], legs[i][3] if i < 3 else Q_C,
                                                stroke_width=4)), FadeIn(rows[i]), run_time=1.3)
             self.play(FadeIn(side[2]), FadeIn(tot))
             vo.wait_until("e")
@@ -201,27 +186,19 @@ class Parity(VoiceoverScene):
         leg = legend([(FWD, r"from option parity (dots)"), (QC.IMPLIED, r"dated futures, traded (squares)")],
                      font_size=19).next_to(g, UP, buff=0.05).align_to(g, LEFT)
         gp50, gmax = fb["gap_p50"], fb["gap_max"]
-        verdict = (r"the two forwards agree to within the width of a quote: this is the cash-and-carry check"
-                   if gmax < 10 else r"the two forwards disagree by more than a quote is wide: a basis trade")
+        verdict = r"observed median-price consistency; simultaneous executable bid--ask prices are not tested"
         side = VGroup(
             label(rf"{fb['n_trades']:,} futures trades, same hours".replace(",", "{,}"), font_size=22, color=QC.IMPLIED),
             wrapped_label(rf"{fb['n_matched']} expiries have both: median gap {gp50:.1f} bp of price, largest "
                           rf"{gmax:.1f} bp", 4.6, 21, WHITE),
             wrapped_label(verdict, 4.6, 20, Q_C),
-            wrapped_label(r"a future is a forward settled daily; a forward above the index is crypto's own interest "
-                          r"rate, paid by leveraged buyers (Part 2's funding rate)", 4.6, 19, GREY_A),
+            wrapped_label(r"futures settle daily; futures and forwards can differ with stochastic funding. The observed basis reflects carry and market conditions, not an identified pure interest rate", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Deribit BTC options and futures trades, 10 December 2025, 00:00--12:00 UTC")
-        tail = ("They agree to within a quote's width; if they did not, cash-and-carry traders would close the gap."
-                if gmax < 10 else "That is wider than a quote: the basis between the two markets is itself a trade.")
+        tail = ("These are comparisons of observations over the same hours. Without simultaneous executable "
+                "bid and ask prices, financing and fees, this is not a demonstrated cash-and-carry profit.")
         with self.voiceover(
-            "Is that forward real? Deribit lists futures on the same expiries, and the House fetched "
-            f"all {fb['n_trades']:,} futures trades from the same hours. <bookmark mark='a'/> Dots: "
-            "the forwards option parity implies; squares: where the dated futures traded. On the "
-            f"{fb['n_matched']} expiries with both, the median gap is {gp50:.1f} basis points, the "
-            f"largest {gmax:.1f}. <bookmark mark='b'/> {tail}"
-            f" The perpetual contract, which never expires, traded within {fb['perp']['basis_bp']:.1f} "
-            "basis points of the index over the same hours."
+            f"Is that forward real? Deribit lists futures on the same expiries, and the House fetched all {fb['n_trades']:,} futures trades from the same hours. <bookmark mark='a'/> Dots: the forwards option parity implies; squares: where the dated futures traded. On the {fb['n_matched']} expiries with both, the median gap is {gp50:.1f} basis points, the largest {gmax:.1f}. <bookmark mark='b'/> {tail} The perpetual contract, which never expires, traded within {fb['perp']['basis_bp']:.1f} basis points of the index over the same hours. The Bitcoin discount factor is assumed one. Trade times differ, so this is an observational consistency check, not an executable arbitrage test."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")

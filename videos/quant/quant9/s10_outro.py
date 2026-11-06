@@ -5,14 +5,12 @@ from videos.quant.quant9.common import ALT, ARB, CALL, FWD, HEDGE, PART, PUT, Q_
 
 DESK = [
     (r"Call 10, put 7, strike 100, spot 103, no rates. Arbitrage?",
-     r"no: $C - P = 3 = S - K$. At a put of 6, buy it, sell the call, buy the stock and borrow 99: the package pays 100 "
-     r"for sure, a riskless 1; at a put of 8, do the reverse"),
+     r"parity is consistent: $C-P=3=S-K$. At put 6: buy put, sell call, buy stock, borrow 99; cost 0, payoff 1. At put 8: reverse, lend 100; receive 1 today, terminal payoff 0"),
     (r"A box spread on strikes 100 and 110, one year, with rates at 4\%. What should it cost, and what is it?",
      r"$10\,e^{-0.04} \approx 9.61$: it pays 10 in every state, so it is a loan; quoted cheaper, you lend through it, "
      r"dearer, you borrow. With American options it is not riskless (Robinhood, 2019)"),
     (r"Price a digital that pays 1 if $S_T > 100$, given calls at 99.5 and 100.5 priced 6.20 and 5.70.",
-     r"a call spread divided by its width: $(6.20 - 5.70)/1 = 0.50$, the slope of the call curve; exact as the "
-     r"strikes close in, since $-\partial C/\partial K = e^{-rT} Q(S_T > K)$"),
+     r"the 1-wide call spread costs $(6.20-5.70)/1=0.50$, an approximation, not an identified digital price. At a continuity strike, the narrow-spread limit is $-C^{\prime}(K)=e^{-rT}Q(S_T>K)$"),
     (r"A parent company trades below the value of its stake in a listed subsidiary. Is it an arbitrage?",
      r"not a riskless one: the short leg must be borrowed and can be recalled, convergence may take longer than your "
      r"funding, and the link can be severed (Palm and 3Com; Mitchell, Pulvino and Stafford 2002)"),
@@ -60,23 +58,17 @@ class Outro(VoiceoverScene):
             (r"\texttt{mot\_bounds}, \texttt{mot\_dual}, \texttt{entropic\_mot}", r"model-free bounds and their hedges"),
             (r"\texttt{power\_iteration}, \texttt{ross\_recovery}", r"Perron--Frobenius on state prices, with its caveat"),
         ]
-        tab = VGroup(*[VGroup(label(a, font_size=19, color=QC.HOUSE), label(b, font_size=18, color=GREY_A)).arrange(
+        tab = VGroup(*[VGroup(data_text(a.replace(r"\texttt{", "").replace("}", "").replace(r"\_", "_"), font_size=18, color=QC.HOUSE), wrapped_label(b, 6.2, 18, GREY_A)).arrange(
             RIGHT, buff=0.4) for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
         for r_ in tab:
             r_[1].align_to(tab, LEFT).shift(RIGHT * 6.2)
         tab.next_to(chart, DOWN, buff=0.3)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
-        rule = wrapped_label(r"Rule 10: no model is fitted to a surface that fails the arbitrage checker; it is repaired "
-                             r"or rejected first, and a model whose prices fail it is rejected too.  "
-                             rf"The trial counter still reads {env['trials']}: this part tested no strategy.", 12.4, 22,
-                             QC.HOUSE).to_edge(DOWN, buff=0.3)
+        rule = wrapped_label(r"Rule 10: check fitted prices and input consistency under explicit assumptions; repair or reject flagged surfaces. Sampled checks are not a market-wide certificate. "
+                             rf"Existing trials: {env['trials']}; no new registrations or holdouts in this part.", 12.4, 21, QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The House's arbitrage checker now holds this part's tools: <bookmark mark='a'/> parity "
-            "and the forward from trades; the theorem as a linear program; super-replication; the "
-            "static and calendar checks; model-free bounds and their hedges; and Ross recovery, with "
-            "its warning label. <bookmark mark='b'/> Rule ten: no model is fitted to a surface that "
-            f"fails them. No strategy was tested, so the trial counter reads {env['trials']}."
+            f"""The House's arbitrage checker holds the tools: <bookmark mark='a'/> parity diagnostics; state prices and super-replication; sampled static and calendar checks; finite-grid transport bounds; and Ross recovery with its assumptions. <bookmark mark='b'/> Rule ten is to check fitted prices and input consistency, repair or reject flagged surfaces, and distinguish numerical diagnostics from executable arbitrage. This part restores existing computations and retrospective score illustrations. The counter is {env['trials']}, with no new registered trial or holdout opened."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))
@@ -92,16 +84,16 @@ class Outro(VoiceoverScene):
         items = [
             (rf"parity holds on {p['n_pairs']} bitcoin option pairs to {p['trade_p50']:.1f} bp, and its forward matches "
              rf"the futures to {fb['gap_p50']:.1f} bp", FWD),
-            (r"where shorting is costly, parity prices the cost (Palm, GameStop); a box is a loan, if European", ARB),
+            (r"borrowing constraints modify parity bounds; European boxes reproduce a fixed payment under matching terms", ARB),
             (r"no arbitrage $\iff$ strictly positive state prices: a separating plane, proved and found by a simplex", Q_C),
             (r"state prices, the discount factor and $Q$ are one object in three units; $Q$ is $P$ reweighted", Q_C),
             (r"two states replicate (the tree); three leave an interval, a linear program and its dual", HEDGE),
-            (r"options complete the market; without them, super-replication is Black--Scholes at the widest volatility",
+            (r"enough independent calls span a finite state space; the displayed convex uncertain-volatility example uses the upper volatility",
              HEDGE),
             (r"continuous time needs admissibility and NFLVR; strict local martingales are bubbles", ALT),
-            (r"any positive asset can be the numeraire: $N(d_1)$, Margrabe, bitcoin as the unit", ALT),
-            (rf"butterflies build the density; its tails depend on the fit (a 30\% fall: "
-             rf"{100 * sp['down30_spread']:.1f} points of spread)", CALL),
+            (r"positive tradable numeraires need $N/B$ to be a true martingale: $N(d_1)$, Margrabe, bitcoin", ALT),
+            (rf"BL curvature is a measure; valid-candidate tail integrals vary (down 30\%: "
+             rf"{100 * (max(s['down30'] for s in sp['specs'] if s['neg_mass'] <= 1e-4) - min(s['down30'] for s in sp['specs'] if s['neg_mass'] <= 1e-4)):.1f} points of spread)", CALL),
             (rf"Ross recovery needs an untestable assumption; vanilla prices bound exotics with no model: "
              rf"[{fine['lower']:.3f}, {fine['upper']:.3f}] on the finest grid", CALL),
         ]
@@ -114,16 +106,11 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Part nine in ten lines. Parity holds to basis points and matches the futures. Where "
-            "shorting is costly, parity prices the cost. No arbitrage means positive state prices. "
-            "State prices, the discount factor and Q are one object. Two states replicate; three "
-            "leave an interval. Options complete the market. Continuous time needs admissibility and "
-            "allows bubbles. Any asset can be the unit. Butterflies build the density, whose tails "
-            "depend on the fit. And Ross recovery rests on an untestable assumption, while vanilla "
-            "prices bound exotic ones."
+            """Part nine in ten lines. Parity diagnoses matching payoff prices under trading assumptions. Borrowing constraints modify the bounds. Finite-state no arbitrage means existence of strictly positive state prices. Those prices define discount factors and Q once P is specified. Complete models replicate; incomplete models give intervals. Enough independent payoffs complete a finite market. Continuous time needs admissibility and NFLVR. Numeraire changes require a mean-one density. Option curvature identifies a measure under a full price curve, while finite quotes need fitting assumptions. Recovery needs a kernel restriction, and transport gives conditional bounds for specified marginals."""
         ):
-            self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
-                                                 run_time=20))
+            self.play(FadeIn(title), *[FadeIn(r_) for r_ in rows[:3]], run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[3:]],
+                                  lag_ratio=0.4, run_time=12))
         self.wait(0.5)
         self.clear_scene()
 
@@ -132,13 +119,7 @@ class Outro(VoiceoverScene):
         if cards.height > 7.6:
             cards.scale_to_fit_height(7.6)
         with self.voiceover(
-            "Four desk questions. The call at ten and the put at seven: no arbitrage, both sides are "
-            "three. <bookmark mark='a'/> The box between a hundred and a hundred and ten, one year, "
-            "four percent rates: about nine sixty-one, a loan, and not riskless with American "
-            "options. <bookmark mark='b'/> A digital from two calls: the call spread divided by its "
-            "width, the slope of the call curve. <bookmark mark='c'/> And a negative stub is not a "
-            "riskless arbitrage: the short leg can be recalled, and convergence can outlast your "
-            "funding. Full solutions are in the notes."
+            """Four desk questions. The call at ten and put at seven satisfy parity: both sides are three. This checks that relation under matching trading assumptions. <bookmark mark='a'/> A European box paying ten in one year at four percent costs about nine sixty-one; American exercise can disrupt the fixed payment. <bookmark mark='b'/> The one-wide call spread costs point five. It approximates a digital; two finite quotes do not identify its exact price. At a continuity strike, narrowing the spread gives minus the call slope, including discounting. <bookmark mark='c'/> A negative stub is not a riskless executable trade when borrowing, recall, funding horizon and event risk prevent the hedge. The notes give the assumptions and calculations."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -207,8 +188,7 @@ class Outro(VoiceoverScene):
         if card.height > 7.6:
             card.scale_to_fit_height(7.6)
         with self.voiceover(
-            "The textbooks and papers. Every number was computed by the House from a day of Deribit "
-            "trades."
+            """The textbooks and papers provide the theorem assumptions and published observations. Numerical examples use existing, seeded computations; market illustrations use the registered data sources."""
         ):
             self.play(FadeIn(card))
             self.wait(4)

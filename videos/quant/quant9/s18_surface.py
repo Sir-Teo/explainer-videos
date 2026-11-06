@@ -3,10 +3,10 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, PART, PUT, Q_C, answer_under, load, pause_at, real_data)
+from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, PART, PUT, Q_C, FullRangeReplay, answer_under, load, pause_at, real_data)
 
 SPEC_COL = {"svi": Q_C, "spline": QC.IMPLIED, "mix2": CALL, "mix3": FWD}
-SPEC_NAME = {"svi": r"SVI", "spline": r"cubic spline in volatility", "mix2": r"two log-normals", "mix3": r"three log-normals"}
+SPEC_NAME = {"svi": r"SVI", "spline": r"spline: positive part only (invalid fit)", "mix2": r"two log-normals", "mix3": r"three log-normals"}
 
 
 class DensitySurface(VoiceoverScene, ThreeDScene):
@@ -48,27 +48,19 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             VGroup(g1, g2).arrange(DOWN, buff=0.35)
             dots = VGroup(*[Dot(g1.ax.c2p(a, b), radius=0.03, color=WHITE) for a, b in zip(kq, ivq)
                             if -0.7 <= a <= 0.6 and 0.3 <= b <= 1.0])  # only the quotes inside the axes
-            fitc = curve(g1.ax, kk, np.clip(s["iv"], 0.3, 1.0), Q_C, stroke_width=3)
+            fitc = curve(g1.ax, kk, s["iv"], Q_C, stroke_width=3)
             ok = (Kg > 0.4 * F) & (Kg < 1.9 * F)
-            dc = curve(g2.ax, Kg[ok], np.clip(np.asarray(s["dens"])[ok], 0, dmax * 1.1), Q_C, stroke_width=3)
+            dc = curve(g2.ax, Kg[ok], np.asarray(s["dens"])[ok], Q_C, stroke_width=3)
             return VGroup(g1, g2, dots, fitc, dc)
 
-        rp = TrainingReplay(steps, rmse, frame, cks, ylabel=r"vega-weighted error, vol points",
-                            xlabel=r"function evaluations", log_y=True, color=Q_C, left=LEFT * 3.5 + DOWN * 0.2,
+        rp = FullRangeReplay(steps, rmse, frame, cks, ylabel=r"vega-weighted error, vol points",
+                            xlabel=r"function-evaluation budget", log_y=True, color=Q_C, left=LEFT * 3.5 + DOWN * 0.2,
                             right=RIGHT * 3.4 + DOWN * 0.2)
         head = label(rf"fitting SVI to the {fit['T'] * 365:.0f}-day expiry, {fit['expiry']}", font_size=26).to_edge(UP,
                                                                                                              buff=0.3)
         src = real_data(r"the Surface; \texttt{least\_squares} rerun with a growing budget")
         with self.voiceover(
-            "The density is only as good as the smile it comes from, so watch the House fit one. "
-            f"White dots: the Surface's implied volatilities {fit['T'] * 365:.0f} days out; purple: "
-            "Gatheral's SVI smile from a rough guess; below, the density it implies. <bookmark "
-            "mark='a'/> In the first steps the smile swings, and the density with it, lopsided, "
-            "double-humped. <bookmark mark='b'/> Within about twenty-five evaluations the error "
-            f"settles at {rmse[-1]:.2f} vol points and the density stops moving. It inherits every "
-            "wobble of the fit."
-            " The five parameters are a level, a slope, a skew, a shift and a curvature: five numbers "
-            "that compress the whole expiry."
+            f"The density is only as good as the smile it comes from, so watch the House fit one. White dots: the Surface's implied volatilities {fit['T'] * 365:.0f} days out; purple: Gatheral's SVI smile from a rough guess; below, the density it implies. <bookmark mark='a'/> In the first steps the smile swings, and the density with it, lopsided, double-humped. <bookmark mark='b'/> Within about twenty-five evaluations the error settles at {rmse[-1]:.2f} vol points and the density stops moving. It inherits every wobble of the fit. The five parameters are a level, a slope, a skew, a shift and a curvature: five numbers that compress the whole expiry. Each point is a fresh fit from the same initialization with a larger evaluation budget; after convergence the solver may use fewer evaluations than that cap. The replay is indexed by budget."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), FadeIn(src))
             vo.wait_until("a")
@@ -90,15 +82,9 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
                 why(r"Lee's moment formula bounds the wings' slope; Part 12 derives it", 21)]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-0.8, buff=0.5, edge=6.9)
         with self.voiceover(
-            "The coordinates: total implied variance against log-moneyness. <bookmark mark='a'/> SVI "
-            "is a hyperbola there, five parameters. <bookmark mark='b'/> Price every strike on the "
-            "smile and differentiate twice. <bookmark mark='c'/> Across expiries, total variance must "
-            "not fall with maturity, or a calendar spread is free. <bookmark mark='d'/> And Lee's "
-            "bound limits the wings. Part twelve proves both."
-            " Raw SVI can still allow a butterfly arbitrage in the wings; Gatheral and Jacquier's "
-            "surface version, SSVI, rules out both kinds, and Part twelve fits it."
+            "The coordinates: total implied variance against log-moneyness. <bookmark mark='a'/> SVI is a hyperbola there, five parameters. <bookmark mark='b'/> Price every strike on the smile and differentiate twice. <bookmark mark='c'/> Across expiries, total variance must not fall with maturity, or a calendar spread is free. <bookmark mark='d'/> And Lee's bound limits the wings. Part twelve proves both. Raw SVI can still allow a butterfly arbitrage in the wings; Gatheral and Jacquier's surface version, SSVI, has parameter restrictions that can rule out both kinds, and Part twelve fits it. Calendar monotonicity here is at fixed forward moneyness under deterministic carry and the normalization used. Lee wing slopes are necessary constraints, not a full butterfly certificate. SSVI parameter restrictions can ensure both types of no arbitrage; arbitrary raw SVI parameters cannot."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -152,15 +138,11 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
                 f"protection against falls; the longest leans right, {k1:.2f}, as a spreading log-normal does, "
                 f"since a price can fall only to zero but rise without limit." if k0 < 0 < k1 else
                 f"Their skewness goes from {k0:.2f} at the shortest to {k1:.2f} at the longest.")
-        verdict = (f"and the checker finds no calendar arbitrage between any two neighbours."
+        verdict = ("and the checker flags no violation at the sampled moneyness points between neighboring expiries."
                    if term["calendar_total"] == 0 else
                    f"and the checker flags {term['calendar_total']} calendar violations, which the House repairs first.")
         with self.voiceover(
-            f"Now every expiry of the Surface at once: {len(R)} of them, from {R[0]['T'] * 365:.0f} days to "
-            f"{Tmax:.0f}, each fitted and differentiated, standing in three dimensions. <bookmark mark='a'/> Walk "
-            f"along maturity. The ridges widen, because uncertainty grows with time: the standard deviation goes from "
-            f"{100 * R[0]['sd']:.0f} percent of today's price to {100 * R[-1]['sd']:.0f}. {lean}"
-            f" <bookmark mark='b'/> Total variance rises with maturity at every moneyness, {verdict}"
+            f"Now every expiry of the Surface at once: {len(R)} of them, from {R[0]['T'] * 365:.0f} days to {Tmax:.0f}, each fitted and differentiated, standing in three dimensions. <bookmark mark='a'/> Walk along maturity. The ridges widen, because uncertainty grows with time: the standard deviation goes from {100 * R[0]['sd']:.0f} percent of today's price to {100 * R[-1]['sd']:.0f}. {lean} <bookmark mark='b'/> Total variance rises with maturity at the checked moneyness points, {verdict} Each ridge is separately normalized to its own peak, so heights are not comparable densities. These are sampled calendar checks, not a global certificate of every wing and maturity."
         ) as vo:
             self.play(Create(ax), FadeIn(names), run_time=1.5)
             self.play(LaggedStart(*[Create(r_) for r_ in ridges], lag_ratio=0.3), FadeIn(floors), run_time=3)
@@ -169,7 +151,7 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(info))
             self.move_camera(theta=-55 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
-                         added_anims=[FadeOut(VGroup(ax, ridges, floors)), FadeOut(names), FadeOut(info)], run_time=1.5)
+                         added_anims=[FadeOut(VGroup(ax, ridges, floors)), FadeOut(names), FadeOut(info)], run_time=0.5)
         self.clear_scene()
 
     def specs(self, sp):
@@ -177,6 +159,8 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
         F = sp["F"]
         ok = (Kg > 0.35 * F) & (Kg < 1.9 * F)
         top = max(np.asarray(s["dens"])[ok].max() for s in sp["specs"]) * 1.1
+        valid = [s for s in sp["specs"] if s["neg_mass"] <= 1e-4]
+        spread = max(s["down30"] for s in valid) - min(s["down30"] for s in valid)
         g = axes([0.35 * F, 1.9 * F], [0, top], x_length=7.0, y_length=4.4, xlabel=r"bitcoin at expiry (\$)",
                  ylabel=r"risk-neutral density", xticks=[50000, 100000, 150000], xfmt=lambda u: f"{u / 1000:.0f}k",
                  yticks=[], font_size=16)
@@ -188,31 +172,23 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
         cl = label(r"30\% below the forward", font_size=17, color=ARB).next_to(ax.c2p(0.7 * F, top), DOWN, buff=0.1)
         rows = VGroup(*[VGroup(Line(ORIGIN, RIGHT * 0.35, color=SPEC_COL[s["name"]], stroke_width=5),
                                label(SPEC_NAME[s["name"]], font_size=19, color=SPEC_COL[s["name"]]),
-                               MathTex(rf"{s['rmse']:.2f}\ \text{{vol pts}},\ \ Q(\text{{down }}30\%) = "
+                               MathTex(rf"{s['rmse']:.2f}\ \text{{RMSE pts}},\ \ I(\text{{down }}30\%) = "
                                        rf"{100 * s['down30']:.1f}\%", font_size=22, color=SPEC_COL[s["name"]])).arrange(
             RIGHT, buff=0.15) for s in sp["specs"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         neg = [s for s in sp["specs"] if s["neg_mass"] > 1e-4]
         side = VGroup(
             rows,
-            wrapped_label(rf"every fit is within {sp['rmse_max']:.1f} vol points of every quote; the crash "
-                          rf"probability spreads over {100 * sp['down30_spread']:.1f} percentage points", 5.0, 20, WHITE),
+            wrapped_label(rf"weighted RMSEs are at most {sp['rmse_max']:.1f} vol points; valid-fit tail "
+                          rf"integrals span {100 * spread:.1f} percentage points", 5.0, 20, WHITE),
             wrapped_label((rf"the spline's density goes negative ({100 * neg[0]['neg_mass']:.1f}\% of mass): it fails "
-                           rf"the checker" if neg else r"all four pass the static checks"), 5.0, 20, ARB if neg else CALL),
+                           rf"the checker" if neg else r"all four have no negative curvature on the checked grid"), 5.0, 20, ARB if neg else CALL),
             wrapped_label(r"Shikhman et al.\ (2026): in their conditioning analysis, 95 of 126 pricing directions are "
                           r"numerically null: very different densities give the same prices", 5.0, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3)
         src = real_data(rf"the Surface, {sp['expiry']}; each specification fitted to the same quotes")
         neg_line = (" The spline's density even dips below zero, so the checker rejects it." if neg else "")
         with self.voiceover(
-            f"How much of that density do the prices really pin down? Fit the same {sp['T'] * 365:.0f}-day quotes "
-            "four ways: SVI, a cubic spline through the volatilities, and mixtures of two and of three log-normal "
-            "distributions. <bookmark mark='a'/> In the middle the four densities nearly coincide. Every one "
-            f"matches the quotes to within {sp['rmse_max']:.1f} vol points. <bookmark mark='b'/> In the left tail "
-            "they part. The risk-neutral probability of a fall of thirty percent or more ranges over "
-            f"{100 * sp['down30_spread']:.1f} percentage points across the four fits.{neg_line} "
-            "<bookmark mark='c'/> A 2026 paper by Lennon Shikhman and coauthors makes this precise: accurate prices "
-            "need not pin the density, because many directions in density space barely move any price. Read a "
-            "crash probability off an option surface, and report the specification band with it."
+            f"""How much of a density do the quotes pin down? Fit the same {sp['T'] * 365:.0f}-day observations with SVI, a volatility spline, and mixtures of two and three lognormals. <bookmark mark='a'/> Their vega-weighted RMSEs are at most {sp['rmse_max']:.1f} volatility points; that is not a maximum error for every quote. <bookmark mark='b'/> The spline has negative curvature, so it is not a probability density. Its plotted curve is only the stored positive part, and its tail integral is not a valid probability. Among the other fitted candidates, the thirty-percent downside integrals span {100 * spread:.2f} percentage points on the finite integration grid. <bookmark mark='c'/> Shikhman and coauthors' 2026 numerical conditioning analysis illustrates why accurate option prices need not identify a latent density. Finite quotes, numerical integration and extrapolation leave specification uncertainty; this illustration does not certify any fit globally."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[Create(c_) for c_ in cv], lag_ratio=0.3), FadeIn(rows),
                       run_time=3)
@@ -226,17 +202,12 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
         self.clear_scene()
 
     def predict(self):
-        card = pause_at(r"Four fits price every quote to within a vol point. Should their crash probabilities agree?")
+        card = pause_at(r"Four fits have small weighted RMSE. Must their crash probabilities agree?")
         with self.voiceover(
-            "Pause and predict. Four fits price every quote to within a vol point. Should their crash probabilities "
-            "agree? <bookmark mark='a'/> Not necessarily. The quotes stop where trading stops; beyond the last "
-            "strike, every specification extrapolates in its own way, and the tail probability is mostly "
-            "extrapolation."
-            " This is Q's density. Can we recover P's? Next: Ross recovery."
+            """Pause and predict. Four fits have small weighted quote RMSE. Must their crash probabilities agree? <bookmark mark='a'/> No. Finite quotes and a weighted average error do not identify a unique tail. Extrapolation matters, and any fit with negative density must be rejected rather than assigned a crash probability. These are Q candidates, not physical crash forecasts."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(answer_under(card, r"no: beyond the last traded strike each specification extrapolates, "
-                                                r"and the tail is mostly extrapolation")))
+            self.play(FadeIn(answer_under(card, r"no: finite quotes and extrapolation leave tail uncertainty; reject negative densities before comparing probabilities")))
         self.wait(0.4)
         self.clear_scene()

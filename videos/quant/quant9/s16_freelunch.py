@@ -50,7 +50,7 @@ class FreeLunch(VoiceoverScene):
             "ruin, the wealth first falls below minus k with probability one over one plus k. Half "
             "the paths go below minus one."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -69,17 +69,40 @@ class FreeLunch(VoiceoverScene):
         ax = g.ax
         win = DashedLine(ax.c2p(0, 1), ax.c2p(1, 1), color=CALL, stroke_width=2)
         k = ValueTracker(0.0)
-        draws = [np.asarray(d) for d in f["draw"]]
+        draws, times, finished = [], [], []
+        for raw, stop in zip(f["draw"], f["draw_stop"]):
+            row = np.asarray(raw)
+            clocks = clock[:len(row)]
+            hit = stop < 3000 or row[-1] >= 1.0
+            if hit:
+                # Cached visual grid has dt=.02; append a schematic barrier endpoint at the stored grid hit.
+                hit_clock = 0.02 * stop
+                if clocks[-1] < hit_clock:
+                    row, clocks = np.r_[row, 1.0], np.r_[clocks, hit_clock]
+                else:
+                    row = row.copy()
+                    row[-1] = 1.0
+            draws.append(row)
+            times.append(1 - np.exp(-clocks))
+            finished.append(hit)
 
         def fan():
             v = k.get_value()
             out = VGroup()
-            for d in draws:
+            for d, ts, hit in zip(draws, times, finished):
                 n = len(d)
                 m = max(2, int(min(v, 1.0) * n))
-                pts = [ax.c2p(tt[i], np.clip(d[i], -6.5, 1.6)) for i in range(m)]
-                col = CALL if m >= n and d[-1] >= 0.99 else FWD
-                out.add(VMobject(stroke_width=1.3, stroke_color=col, stroke_opacity=0.45).set_points_as_corners(pts))
+                col = CALL if m >= n and hit else FWD
+                segment = []
+                for i in range(m):
+                    if -6.5 <= d[i] <= 1.6:
+                        segment.append(ax.c2p(ts[i], d[i]))
+                    else:
+                        if len(segment) > 1:
+                            out.add(VMobject(stroke_width=1.3, stroke_color=col, stroke_opacity=0.45).set_points_as_corners(segment))
+                        segment = []
+                if len(segment) > 1:
+                    out.add(VMobject(stroke_width=1.3, stroke_color=col, stroke_opacity=0.45).set_points_as_corners(segment))
             return out
 
         FAN = always_redraw(fan)
@@ -89,7 +112,7 @@ class FreeLunch(VoiceoverScene):
             v = min(k.get_value(), 1.0)
             cur = np.array([d[:max(2, int(v * len(d)))].min() for d in draws])
             bins = np.linspace(-6.5, 0, 14)
-            h, _ = np.histogram(np.clip(cur, -6.49, 0), bins)
+            h, _ = np.histogram(cur, bins)
             x0 = ax.get_left()[0] - 0.2
             out = VGroup()
             for i, c in enumerate(h):
@@ -112,22 +135,14 @@ class FreeLunch(VoiceoverScene):
                     font_size=26, color=PUT),
             MathTex(rf"\text{{below }} -10:\ {100 * fr['10']:.1f}\%\ \ (\text{{theory }} {100 * ex['10']:.1f}\%)",
                     font_size=26, color=PUT),
-            wrapped_label(r"every path that finishes ends at $+1$ (green); none ends below", 3.8, 19, CALL),
+            wrapped_label(r"green: schematic $+1$ stop at cached grid-hit time; 17/120 paths remain unhit by visual clock 60", 3.8, 19, CALL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3)
         floor = DashedLine(ax.c2p(0, -1), ax.c2p(1, -1), color=ARB, stroke_width=3)
         fl = label(r"admissible: wealth must stay above $-a$ (here $a = 1$)", font_size=19, color=ARB).next_to(
             ax.c2p(0.02, -1), DOWN, buff=0.1, aligned_edge=LEFT)
-        src = illustration(r"simulated: Brownian motion on the clock $\ln T/(T - t)$, bridge-corrected crossings")
+        src = illustration(r"simulated, finite clock; bridge-corrected crossings; excursions and histogram losses below $-6.5$ omitted")
         with self.voiceover(
-            "A hundred and twenty doublers. <bookmark mark='a'/> One by one they reach plus one and "
-            "stop, in green, while the histogram of their worst losses grows a tail that keeps going. "
-            f"<bookmark mark='b'/> Over {f['n']:,} simulated doublers, {100 * fr['1']:.1f} percent "
-            f"fell below minus one, theory a half; {100 * fr['10']:.1f} percent below minus ten, "
-            "theory one in eleven. <bookmark mark='c'/> The fix: admissible strategies, whose wealth "
-            "never falls below some minus a. With a floor at minus one, half the doublers are stopped "
-            "out."
-            " The admissible doubler, stopped at minus one or plus one, wins half the time and loses "
-            "half the time: a fair game again."
+            f"A hundred and twenty doublers. <bookmark mark='a'/> One by one they reach plus one and stop, in green, while the histogram of their worst losses grows a tail that keeps going. <bookmark mark='b'/> Over {f['n']:,} simulated doublers, {100 * fr['1']:.1f} percent fell below minus one, theory a half; {100 * fr['10']:.1f} percent below minus ten, theory one in eleven. <bookmark mark='c'/> The fix: admissible strategies, whose wealth never falls below some minus a. With a floor at minus one, half the doublers are stopped out. The admissible doubler, stopped at minus one or plus one, wins half the time and loses half the time: a fair game again. The displayed paths use discrete grid hits; we append schematic barrier endpoints at those stored times. Seventeen of the hundred and twenty have not hit by visual clock sixty. In the separate twenty-thousand-path run, some paths remain unhit at its finite maximum clock. Bridge-corrected crossing and minimum statistics retain finite-step and joint-correction approximation error. Almost-sure eventual success is a continuous infinite-clock statement."
         ) as vo:
             self.play(FadeIn(g), Create(win), FadeIn(src), FadeIn(hl))
             self.add(FAN, H)
@@ -215,18 +230,10 @@ class FreeLunch(VoiceoverScene):
             MathTex(rf"T = 4:\ \text{{simulated }} {b['4.0']['mc']:.4f},\ \text{{exact }} {b['4.0']['exact']:.4f}",
                     font_size=26, color=Q_C),
             MathTex(r"C - P = \mathbb{E}[S_T] - K \ne S_0 - K", font_size=30, color=ARB),
-            wrapped_label(r"a strict local martingale satisfies NFLVR, yet the asset is worth more than its "
-                          r"discounted payoff: a bubble, and put--call parity fails (Cox and Hobson 2005)", 4.6, 19, ARB),
+            wrapped_label(r"a strict local martingale can satisfy NFLVR. Minimal expectation option prices need not satisfy stock-price parity; collateral and admissibility conventions matter (Cox and Hobson 2005)", 4.6, 19, ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "One strange object lives inside it. Let a price be one over the distance of a "
-            "three-dimensional Brownian motion from the origin: locally a fair game, no drift. "
-            "<bookmark mark='a'/> But the mean sinks, as a few paths spike near the origin: at time "
-            f"one, {b['1.0']['exact']:.3f} exactly, {b['1.0']['mc']:.4f} from two million paths. A "
-            "strict local martingale. <bookmark mark='b'/> No free lunch, yet the asset trades above "
-            "its expected value: a bubble, and parity fails. Cox and Hobson priced such options in "
-            "2005."
-            f" At time four the mean has sunk to {b['4.0']['exact']:.3f}."
+            f"""One strange object lives inside the theorem. Start a three-dimensional Brownian motion at one, zero, zero, and take the reciprocal of its distance from the origin. This positive driftless price is a strict local martingale. <bookmark mark='a'/> Its expected value falls below its initial value, exactly as the formula and existing simulation show. Spikes beyond the plot window are omitted rather than flattened. <bookmark mark='b'/> This can satisfy NFLVR while the stock trades above its terminal expectation, a bubble. If calls and puts are assigned their minimal expectation prices, their difference uses expected terminal stock, not today's stock price. Universal parity failure does not follow: collateral and admissibility conventions determine which option prices and trades are available."""
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(side[0]))
             self.play(LaggedStart(*[Create(p_) for p_ in fan], lag_ratio=0.01), run_time=3)

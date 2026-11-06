@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.zh_text import verbatim
-from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, HEDGE, PART, Q_C, answer_under, load, pause_at,
+from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, HEDGE, PART, Q_C, FullRangeReplay, answer_under, load, pause_at,
                                         real_data)
 
 
@@ -19,9 +19,9 @@ class MOTConverge(VoiceoverScene):
         self.predict()
 
     def card(self):
-        c = chapter_card(16, r"Model-free bounds, computed and converging", r"How much do the bounds depend on how "
+        c = chapter_card(16, r"Finite-grid bounds and numerical sensitivity", r"How much do the bounds depend on how "
                          r"we compute them?", part=PART)
-        with self.voiceover("Chapter sixteen. Model-free bounds, computed and converging."):
+        with self.voiceover("""Chapter sixteen. Finite-grid bounds and numerical sensitivity."""):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -41,15 +41,7 @@ class MOTConverge(VoiceoverScene):
                 f"lower = {m['lower']:.4f}   upper = {m['upper']:.4f}   ({n1 * n2:,} unknowns)",
                 f"lognormal model: {m['model']:.4f}"]
         with self.voiceover(
-            "Here is the House's code for those bounds, a few lines around a linear-programming "
-            "solver: one unknown for every pair of prices, rows that fix the two marginals, and one "
-            "row per first-date price that makes the second price a fair game. <bookmark mark='a'/> "
-            "Minimize the claim's expected payoff, then maximize it. On the Surface's two expiries, "
-            f"with {n1} and {n2} atoms, that is {n1 * n2:,} unknowns, and HiGHS returns the band "
-            f"{m['lower']:.3f} to {m['upper']:.3f} in under a second."
-            " The House checks convex order before every solve: without it the program is infeasible, "
-            "and that infeasibility is itself a certificate of a calendar arbitrage between the two "
-            "expiries."
+            f"""Here is the existing linear program for the finite, forward-normalized marginals. One unknown per price pair; rows impose each marginal and the martingale constraint. <bookmark mark='a'/> Minimize and maximize the normalized claim. The {n1} by {n2} support gives {n1 * n2:,} unknowns and bounds {m['lower']:.3f} to {m['upper']:.3f}. Convex-order checks describe these discretized fitted marginals. Infeasibility would flag their inconsistency, rather than automatically proving an executable arbitrage in asynchronous market quotes."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -92,23 +84,14 @@ class MOTConverge(VoiceoverScene):
             MathTex(rf"{rows[0]['atoms1']}\times{rows[0]['atoms2']}:\ [{lo[0]:.3f},\ {up[0]:.3f}]", font_size=26, color=ALT),
             MathTex(rf"{rows[-1]['atoms1']}\times{rows[-1]['atoms2']}:\ [{lo[-1]:.3f},\ {up[-1]:.3f}]", font_size=26,
                     color=ALT),
-            wrapped_label((r"the band widens as the grid refines: a coarse grid hides extreme joinings, so it "
-                           r"understates the range" if widen else r"the band narrows as the grid refines"),
-                          4.2, 20, GREY_A),
-            wrapped_label(rf"the last two grids differ by {1e3 * abs(up[-1] - up[-2]):.1f} and "
-                          rf"{1e3 * abs(lo[-1] - lo[-2]):.1f} thousandths: converging", 4.2, 20, Q_C),
+            wrapped_label(r"non-nested grids change the marginals; widening is observed, not a monotonicity theorem", 4.2, 20, GREY_A),
+            wrapped_label(rf"last-grid changes: {1e3 * abs(up[-1] - up[-2]):.1f} and {1e3 * abs(lo[-1] - lo[-2]):.1f} thousandths; no continuum error certificate", 4.2, 20, Q_C),
             wrapped_label(r"every grid's marginals are checked for convex order before solving", 4.2, 18, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         tail = ("It widens: a coarse grid cannot represent the most extreme joinings. " if widen else
                 "It narrows as the grid refines. ")
         with self.voiceover(
-            "But the band depends on the grid. Refine it from nine by twenty-five atoms to eighty-one "
-            f"by three hundred and sixty-one, checking convex order each time. <bookmark mark='a'/> {tail}"
-            f"From {lo[0]:.3f} to {up[0]:.3f} on the coarsest grid, to {lo[-1]:.3f} to {up[-1]:.3f} on "
-            "the finest, the last two nearly agreeing. <bookmark mark='b'/> Chapter fifteen's band "
-            "was a little narrow; the log-normal still sits inside. Report a bound with its grid."
-            " Each finer grid lets the joining put mass on more extreme pairs of prices, so the upper "
-            "bound creeps up and the lower down, and the increments shrink."
+            f"""The band depends on the discretization. Refine the existing grids from nine by twenty-five to eighty-one by three hundred and sixty-one atoms. <bookmark mark='a'/> The computed endpoints move from {lo[0]:.3f}, {up[0]:.3f} to {lo[-1]:.3f}, {up[-1]:.3f}. These are non-nested re-binnings with changed marginal measures, so their feasible sets are not ordered. <bookmark mark='b'/> The last two grids nearly agree in this example. That is a sensitivity check, not a proof of monotone convergence or a continuum error bound. The ATM lognormal proxy happens to lie inside; it does not reproduce both full fitted marginals and need not be a feasible calibrated model."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(ticks), Create(ml), FadeIn(mll))
             self.add(W)
@@ -139,17 +122,9 @@ class MOTConverge(VoiceoverScene):
                     r"$\varepsilon \to 0$ the value tends to the linear program's", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "A second method scales to far bigger problems. Add a small penalty for the joining's "
-            "distance from independence, an entropy with weight epsilon. <bookmark mark='a'/> The "
-            "best joining then has an explicit exponential form, the dual variables in the exponent. "
-            "<bookmark mark='b'/> Each u, holding the others fixed, has a closed form, a log of a "
-            "sum, and so does each v: Sinkhorn's matrix scaling. <bookmark mark='c'/> The martingale "
-            "multiplier h has no closed form, but each one is a single-variable root, a Newton step. "
-            "Cycle through the three, shrink epsilon, and the value approaches the program's."
-            " The penalty also makes the problem strictly concave, so the solution is unique and moves "
-            "smoothly with the data."
+            "A second method scales to far bigger problems. Add a small penalty for the joining's distance from independence, an entropy with weight epsilon. <bookmark mark='a'/> The best joining then has an explicit exponential form, the dual variables in the exponent. <bookmark mark='b'/> Each u, holding the others fixed, has a closed form, a log of a sum, and so does each v: Sinkhorn's matrix scaling. <bookmark mark='c'/> The martingale multiplier h has no closed form, but each one is a single-variable root, a Newton step. Cycle through the three, shrink epsilon, and the value approaches the program's. The penalty also makes the problem strictly concave, so the solution is unique; smooth sensitivity additionally needs regularity away from degeneracies. These finite-grid formulas assume positive reference masses and a nonempty feasible set; a fully converged entropy problem has a unique optimizer. Finite coordinate iterations have residual errors, and shrinking epsilon does not by itself prove that a finite run has converged."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -185,7 +160,7 @@ class MOTConverge(VoiceoverScene):
             eps = label(rf"$\varepsilon = {runs[j]['eps']:g}$", font_size=22, color=Q_C).next_to(a, UP, buff=0.05)
             return VGroup(a, dots, eps)
 
-        rp = TrainingReplay(steps, vals, frame, ck, ylabel=r"transport value (upper side)",
+        rp = FullRangeReplay(steps, vals, frame, ck, ylabel=r"raw iterate payoff (may be infeasible)",
                             xlabel=r"coordinate-ascent sweeps, $\varepsilon$ shrinking", color=Q_C,
                             left=LEFT * 3.6 + DOWN * 0.2, right=RIGHT * 3.2 + DOWN * 0.2)
         lp = DashedLine(rp.ax.c2p(steps[0], m["upper"]), rp.ax.c2p(steps[-1], m["upper"]), color=HEDGE, stroke_width=2)
@@ -193,18 +168,11 @@ class MOTConverge(VoiceoverScene):
         finals = VGroup(*[MathTex(rf"\varepsilon = {r['eps']:g}:\ {r['value']:.4f}", font_size=22, color=Q_C)
                           for r in runs]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         finals.next_to(rp.g, DOWN, buff=0.35).align_to(rp.g, LEFT)
+        guide = wrapped_label(r"left: final couplings in a central window; right: iteration payoffs after initialization (constraints may be violated)", 12.4, 18, GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Shrink epsilon from a tenth to three thousandths. The joining starts as a soft blur. "
-            "<bookmark mark='a'/> It sharpens toward the program's sparse extreme joining, and the "
-            f"value climbs: {runs[0]['value']:.4f}, {runs[1]['value']:.4f}, {runs[2]['value']:.4f}, "
-            f"{runs[3]['value']:.4f}, against {m['upper']:.4f}. <bookmark mark='b'/> Always below, "
-            "because the penalty pulls toward independence. In many dimensions, this is how bounds "
-            "are computed."
-            " At epsilon a tenth the joining is nearly independent and the value is "
-            f"{runs[0]['value']:.3f}, far from the bound; the gap shrinks roughly in proportion to "
-            "epsilon."
+            f"For the existing upper-side runs, shrink epsilon from a tenth to three thousandths. <bookmark mark='a'/> The plotted quantity is unpenalized expected payoff, not the entropy-adjusted objective. Its values are {runs[0]['value']:.4f}, {runs[1]['value']:.4f}, {runs[2]['value']:.4f}, and {runs[3]['value']:.4f}, versus the LP's {m['upper']:.4f}. <bookmark mark='b'/> At termination the largest L1 marginal error across these runs is {max((r['trace'][-1][2] for r in runs)):.1e}, and the largest L1 martingale error is {max((r['trace'][-1][3] for r in runs)):.1e}. Feasible couplings cannot exceed the LP maximum; finite tolerances still matter. Independence itself generally violates the martingale condition, even though the entropy reference is the product measure. The replay omits the unconstrained zero-iteration initialization and starts at the next logged sweep. Every remaining stored payoff is shown without percentile clipping; early infeasible iterates can exceed the LP value. The left-hand snapshots are final couplings for each epsilon, not all intermediate iterates."
         ) as vo:
-            self.play(FadeIn(rp), Create(lp), FadeIn(lpl))
+            self.play(FadeIn(rp), Create(lp), FadeIn(lpl), FadeIn(guide))
             vo.wait_until("a")
             rp.play(self, run_time=max(vo.until("b") - 0.5, 5.0))
             self.play(FadeIn(finals))
@@ -214,14 +182,10 @@ class MOTConverge(VoiceoverScene):
     def predict(self):
         card = pause_at(r"As the grid gets finer, can a model-free upper bound go down?")
         with self.voiceover(
-            "Pause and predict. As the grid gets finer, can the upper bound fall? <bookmark "
-            "mark='a'/> A little, since rebinning changes the marginals; mostly the band widens "
-            "toward its limit."
-            " Next: how arbitrage is traded, and why it is limited."
+            """Pause and predict. Can a finer grid give a lower upper endpoint? <bookmark mark='a'/> Yes. These re-binnings change the marginal measures, so no ordering follows. Monotonicity would need nested feasible sets with otherwise identical inputs. Report the discretization and numerical residuals."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(answer_under(card, r"a little, since rebinning changes the marginals; mostly finer grids "
-                                                r"admit more extreme joinings, and the band widens toward its limit")))
+            self.play(FadeIn(answer_under(card, r"yes: changed marginals give non-nested feasible sets; no monotonicity or continuum error bound follows")))
         self.wait(0.4)
         self.clear_scene()

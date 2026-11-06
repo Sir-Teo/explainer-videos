@@ -51,19 +51,11 @@ class MOT(VoiceoverScene, ThreeDScene):
                           r"(Strassen 1965)")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=3.6, buff=0.55, edge=6.95)
         with self.voiceover(
-            "A claim on the price at two dates depends on how they are joined, which vanilla prices "
-            "don't reveal. Here are the call curves at the Surface's two expiries. <bookmark "
-            "mark='a'/> Over all joinings, the claim's price has a highest and lowest value. "
-            "<bookmark mark='b'/> A joining must match both densities and be a martingale. <bookmark "
-            "mark='c'/> One exists exactly when the later call curve lies above the earlier, "
-            "Strassen's theorem of 1965, as here. The rest is a linear program: martingale optimal "
-            "transport."
-            f" Here the earlier marginal has {len(x)} atoms and the later {len(y)}, so the program has "
-            f"{len(x) * len(y):,} unknowns."
+            f"A claim on the price at two dates depends on how they are joined, which vanilla prices don't reveal. Here are the call curves at the Surface's two expiries. <bookmark mark='a'/> Over all joinings, the claim's price has a highest and lowest value. <bookmark mark='b'/> A joining must match both densities and be a martingale. <bookmark mark='c'/> One exists exactly when the later call curve lies above the earlier, Strassen's theorem of 1965, as here. The rest is a linear program: martingale optimal transport. Here the earlier marginal has {len(x)} atoms and the later {len(y)}, so the program has {len(x) * len(y):,} unknowns. Here X equals S1 over F1, and Y equals S2 over F2. We assume deterministic carry and a common pricing measure making these forward-normalized variables a martingale. The claim is absolute Y over X minus one, not raw S2 over S1 minus one. The SVI marginals are truncated, renormalized, discretized and rescaled to unit mean; these are conditional finite-grid bounds."
         ) as vo:
             self.play(FadeIn(g), Create(k1), Create(k2), FadeIn(lg))
             vo.wait_until("a")
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -93,18 +85,9 @@ class MOT(VoiceoverScene, ThreeDScene):
                          r"control problem: the hedger chooses the delta through time", width=5.6, font_size=19)
         t.to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Its dual is a trading strategy. Multipliers: u for the first density, v for the second, "
-            "h for the martingale condition. <bookmark mark='a'/> As trades: options on the first "
-            "date paying u, on the second paying v, and h of the underlying held in between, at least "
-            "the claim whatever happens. <bookmark mark='b'/> Weak duality: integrate against any "
-            "joining; the trading term averages to zero. <bookmark mark='c'/> Strong duality, "
-            "Beiglböck, Henry-Labordère and Penkner, 2013: the highest model price is the cheapest "
-            "model-free super-hedge. Galichon, Henry-Labordère and Touzi made the dual a control "
-            "problem in continuous time."
-            " So any static portfolio of options that dominates the claim, plus any delta, costs at "
-            "least the price under every martingale model."
+            "Its dual is a trading strategy. Multipliers: u for the first density, v for the second, h for the martingale condition. <bookmark mark='a'/> As trades: options on the first date paying u, on the second paying v, and h of the underlying held in between, at least the claim whatever happens. <bookmark mark='b'/> Weak duality: integrate against any joining; the trading term averages to zero. <bookmark mark='c'/> Strong duality, Beiglböck, Henry-Labordère and Penkner, 2013: the highest model price is the cheapest model-free super-hedge. Galichon, Henry-Labordère and Touzi made the dual a control problem in continuous time. So any static portfolio of options that dominates the claim, plus any delta, costs at least the price under every martingale model. Finite feasible linear programs have exact strong duality. Continuum versions require integrability, support and admissibility conditions. The displayed dual certifies this discrete support."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -121,7 +104,7 @@ class MOT(VoiceoverScene, ThreeDScene):
         u, v, h = (np.asarray(up[k]) for k in ("u", "v", "h"))
         pi = np.asarray(up["pi"])
         X0, X1, Y0, Y1 = 0.7, 1.4, 0.5, 1.8
-        Z1 = 1.0
+        Z1 = 3.5
 
         def pay(a, b):
             return abs(b / a - 1)
@@ -134,26 +117,26 @@ class MOT(VoiceoverScene, ThreeDScene):
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
         ax.shift(DOWN * 0.3)
         lift = ValueTracker(0.6)
-        P = Surface(lambda a, b: ax.c2p(a, b, min(pay(a, b), Z1)), u_range=[X0, X1], v_range=[Y0, Y1],
+        P = Surface(lambda a, b: ax.c2p(a, b, pay(a, b)), u_range=[X0, X1], v_range=[Y0, Y1],
                     resolution=(18, 22), fill_opacity=0.55, checkerboard_colors=[PUT, interpolate_color(
                         ManimColor(PUT), ManimColor(BACKGROUND), 0.3)], stroke_width=0.3, stroke_color=PUT)
 
         def hsurf():
             dz = lift.get_value()
-            return Surface(lambda a, b: ax.c2p(a, b, float(np.clip(hedge(a, b) + dz, 0, Z1 + 0.6))),
+            return Surface(lambda a, b: ax.c2p(a, b, hedge(a, b) + dz),
                            u_range=[X0, X1], v_range=[Y0, Y1], resolution=(14, 16), fill_opacity=0.35,
                            checkerboard_colors=[HEDGE, interpolate_color(ManimColor(HEDGE), ManimColor(BACKGROUND), 0.4)],
                            stroke_width=0.3, stroke_color=HEDGE)
 
         H = always_redraw(hsurf)
-        cont = VGroup(*[Dot3D(ax.c2p(x[i], y[j], min(pay(x[i], y[j]), Z1)), radius=0.05, color=Q_C, resolution=(4, 4))
+        cont = VGroup(*[Dot3D(ax.c2p(x[i], y[j], pay(x[i], y[j])), radius=0.05, color=Q_C, resolution=(4, 4))
                         for i in range(len(x)) for j in range(len(y)) if pi[i, j] > 1e-4 and X0 <= x[i] <= X1
                         and Y0 <= y[j] <= Y1])
         floor = VGroup(*[Dot(ax.c2p(x[i], y[j], 0), radius=0.03 + 0.12 * np.sqrt(pi[i, j] / pi.max()), color=Q_C)
                          .set_opacity(0.7) for i in range(len(x)) for j in range(len(y))
                          if pi[i, j] > 1e-4 and X0 <= x[i] <= X1 and Y0 <= y[j] <= Y1])
-        names = VGroup(label(r"red: the claim $|S_2/S_1 - 1|$", font_size=22, color=PUT),
-                       label(r"gold: the hedge $u(S_1) + v(S_2) + h(S_1)(S_2 - S_1)$", font_size=22, color=HEDGE),
+        names = VGroup(label(r"red: $|Y/X-1|$, $X=S_1/F_1$, $Y=S_2/F_2$", font_size=22, color=PUT),
+                       label(r"gold: interpolated $u(X)+v(Y)+h(X)(Y-X)$", font_size=22, color=HEDGE),
                        label(r"purple: where the dearest model puts its mass", font_size=22, color=Q_C)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.3)
         axn = label(r"axes: $S_1/F_1$ across, $S_2/F_2$ deep, payoff up", font_size=19, color=GREY_B).to_corner(DL,
@@ -164,14 +147,7 @@ class MOT(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(names, axn, val)
         self.remove(names, axn, val)
         with self.voiceover(
-            "The dual in three dimensions. The floor is every pair of prices; the red surface is the "
-            "claim, a valley along the diagonal. <bookmark mark='a'/> The gold surface is the optimal "
-            "hedge from the program's dual, starting high. <bookmark mark='b'/> Lower it: it rests on "
-            "the claim without crossing. Its cost is the upper bound. <bookmark mark='c'/> And the "
-            "purple dots, where the most expensive model puts its mass, sit exactly where it touches: "
-            "complementary slackness, seen."
-            " Off the contact set the hedge is strictly above the claim: money left on the table in "
-            "states the extreme model never visits."
+            "The dual in three dimensions. The floor is every pair of prices; the red surface is the claim, a valley along the diagonal. <bookmark mark='a'/> The gold surface is the optimal hedge from the program's dual, starting high. <bookmark mark='b'/> Lower it: the hedge dominates the claim at the discrete support points, giving the finite-grid upper bound. The interpolated surface can cross between those points. <bookmark mark='c'/> And the purple dots, where the most expensive model puts its mass, sit exactly where it touches: complementary slackness, seen. Off the contact set the hedge is strictly above the claim: money left on the table in states the extreme model never visits. The surfaces interpolate a discrete hedge over a central window. Exact dominance and complementary slackness are certified at LP support points; interpolation is illustrative and does not certify the continuum."
         ) as vo:
             self.play(Create(ax), FadeIn(names[0]), FadeIn(axn), run_time=1.5)
             self.play(Create(P), run_time=2.5)
@@ -189,13 +165,12 @@ class MOT(VoiceoverScene, ThreeDScene):
         H.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
                          added_anims=[FadeOut(VGroup(ax, P, H, cont, floor)), FadeOut(names), FadeOut(axn),
-                                      FadeOut(val)], run_time=1.5)
+                                      FadeOut(val)], run_time=0.5)
         self.clear_scene()
 
     def bounds(self, m, cl):
         lo, up, model = m["lower"], m["upper"], m["model"]
-        g = axes([0.10, 0.24], [0, 1], x_length=6.4, y_length=1.2, xlabel=r"forward-start straddle, as a fraction of "
-                 r"the price at the first expiry", xticks=[0.10, 0.14, 0.18, 0.22], yticks=[], font_size=16)
+        g = axes([0.10, 0.24], [0, 1], x_length=6.4, y_length=1.2, xlabel=r"unit-notional normalized return straddle: $|Y/X-1|$", xticks=[0.10, 0.14, 0.18, 0.22], yticks=[], font_size=16)
         g.to_edge(UP, buff=0.7).to_edge(LEFT, buff=0.8)
         ax = g.ax
         band_ = Rectangle(width=ax.c2p(up, 0)[0] - ax.c2p(lo, 0)[0], height=0.5, stroke_width=0, fill_color=ALT,
@@ -210,8 +185,8 @@ class MOT(VoiceoverScene, ThreeDScene):
                                                                  rf"{cl['straddle']['upper']:.4f}]", ALT),
                            (r"forward-start call $(R - 1)^+$", rf"[{cl['fwd_call']['lower']:.4f},\ "
                                                                rf"{cl['fwd_call']['upper']:.4f}]", CALL),
-                           (r"$(S_2 - S_1)^2$", rf"[{cl['sq']['lower']:.5f},\ {cl['sq']['upper']:.5f}]", Q_C),
-                           (r"$(\ln S_2/S_1)^2$", rf"[{cl['logsq']['lower']:.4f},\ {cl['logsq']['upper']:.4f}]", FWD))])
+                           (r"$(Y-X)^2$", rf"[{cl['sq']['lower']:.5f},\ {cl['sq']['upper']:.5f}]", Q_C),
+                           (r"$(\ln(Y/X))^2$", rf"[{cl['logsq']['lower']:.4f},\ {cl['logsq']['upper']:.4f}]", FWD))])
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(g, DOWN, buff=1.0).align_to(g, LEFT)
         side = VGroup(
             wrapped_label(r"the forward-start call's band is exactly half the straddle's: $(R - 1)^+ = \tfrac12(|R - 1| "
@@ -221,13 +196,7 @@ class MOT(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.6)
         src = real_data(r"densities from the Surface, 25 and 81 atoms; the House's \texttt{mot\_bounds} (HiGHS)")
         with self.voiceover(
-            f"The numbers. The forward-start straddle lies between {lo:.3f} and {up:.3f} of the first "
-            f"price. <bookmark mark='a'/> Independent log-normal returns say {model:.3f}: inside, as "
-            "they must be. <bookmark mark='b'/> The forward-start call's band is exactly half the "
-            "straddle's, and the squared change has a band of zero width. <bookmark mark='c'/> Hobson "
-            "found the first bound of this kind in 1998, for the lookback."
-            f" The squared log return is different: its band, {cl['logsq']['lower']:.4f} to "
-            f"{cl['logsq']['upper']:.4f}, is open, because it is not a difference of moments."
+            f"""The numbers for the normalized claim. The straddle bounds are {lo:.3f} and {up:.3f}. <bookmark mark='a'/> An ATM-forward-variance lognormal proxy gives {model:.3f}. It happens to lie inside but does not match the full marginals, so inclusion is not guaranteed. <bookmark mark='b'/> With positive X, integrability, and E of Y given X equal to X, Y over X minus one has zero expectation. The forward-start call's extrema are therefore half the straddle's. With finite second moments, the squared change equals the difference of the marginal second moments. <bookmark mark='c'/> The squared log-ratio has a nonzero-width range, {cl['logsq']['lower']:.4f} to {cl['logsq']['upper']:.4f}. These are closed finite-grid optimization bounds, distinct from the equivalent-measure open pricing interval for a nonreplicable claim."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(band_), FadeIn(bl), FadeIn(bu))
             vo.wait_until("a")
@@ -240,18 +209,13 @@ class MOT(VoiceoverScene, ThreeDScene):
         self.clear_scene()
 
     def predict(self, cl):
-        card = pause_at(r"Why is the band for $(S_2 - S_1)^2$ a single number?")
+        card = pause_at(r"Why is the band for $(Y-X)^2$ a single number?")
         with self.voiceover(
-            "Pause and predict. Why is the squared change a single number? <bookmark mark='a'/> For "
-            "any martingale its value is the difference of the two second moments, and the vanillas "
-            "fix both."
-            " So the square's band has width zero, and any dealer quoting a different price can be "
-            "arbitraged with vanillas alone."
-            " Next: those bounds, computed on real data."
+            """Pause and predict. Why is the normalized squared change a single number? <bookmark mark='a'/> With finite second moments, the martingale identity gives expected Y squared minus expected X squared, fixed by the marginals. A replicating expression uses those two static square payoffs plus a dynamic position of minus two X between dates. Static vanillas alone do not replicate the cross term. All prices here are conditional on the stated normalized finite support and executable-payoff assumptions. Next: numerical sensitivity of these bounds."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(answer_under(card, rf"$\mathbb{{E}}[(S_2 - S_1)^2] = \mathbb{{E}}[S_2^2] - \mathbb{{E}}[S_1^2]$ for "
+            self.play(FadeIn(answer_under(card, rf"$\mathbb{{E}}[(Y-X)^2] = \mathbb{{E}}[Y^2] - \mathbb{{E}}[X^2]$ for "
                                                 rf"any martingale: both marginals fix it ({cl['sq_exact']:.5f})")))
         self.wait(0.4)
         self.clear_scene()

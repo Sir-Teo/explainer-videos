@@ -36,17 +36,10 @@ class Continuous(VoiceoverScene):
         cards.arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.9)
         foot = MathTex(r"\frac{S_t}{B_t} = \mathbb{E}^Q\!\left[\frac{S_T}{B_T}\,\Big|\,\mathcal{F}_t\right]", font_size=40,
                        color=Q_C).next_to(cards, DOWN, buff=0.6)
-        fn = wrapped_label(r"in continuous time a strategy is self-financing when its gains are the stochastic integral "
-                           r"$\int \theta\, dS$; the theorem then needs admissible strategies (chapter 10)", 11.0, 21,
+        fn = wrapped_label(r"NFLVR gives an equivalent local martingale measure; lower-bounded wealth is a supermartingale. The expectation equality above needs a true martingale (as in our GBM example)", 11.0, 21,
                            GREY_A).next_to(foot, DOWN, buff=0.35)
         with self.voiceover(
-            "The theorem grew up. Harrison and Kreps, 1979: many dates, no arbitrage if and only if "
-            "an equivalent martingale measure exists. <bookmark mark='a'/> Harrison and Pliska, 1981: "
-            "continuous trading, gains as stochastic integrals, and complete exactly when the measure "
-            "is unique. <bookmark mark='b'/> Continuous time adds a caution about which strategies "
-            "are allowed; that is the next chapter."
-            " Under Q the discounted stock is a martingale, and so is the discounted value of every "
-            "self-financing portfolio: that is why replication and expectation give the same price."
+            """The theorem grew up. In finite frictionless markets, no arbitrage is equivalent to an equivalent martingale measure. <bookmark mark='a'/> In continuous time the general locally bounded semimartingale theorem uses no free lunch with vanishing risk and an equivalent local martingale measure. Completeness and uniqueness require a specified filtration and claim class. <bookmark mark='b'/> A lower-bounded admissible discounted wealth process is generally a supermartingale, not automatically a true martingale. Replication agrees with expectation when the replicated discounted value is a true martingale with the required integrability. Our constant-coefficient Black-Scholes example has these properties."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -70,21 +63,12 @@ class Continuous(VoiceoverScene):
                 why(r"discount by the bank account $B_t = e^{rt}$: the product rule", 21),
                 why(r"absorb the excess drift into the noise: $\lambda$ is the market price of risk", 21),
                 why(r"Girsanov: under this density, $W^Q$ is a Brownian motion", 21),
-                why(r"price with $P$-paths and weights, or with $Q$-paths; the weights' second moment sets the Monte Carlo "
-                    r"cost (square the exponential, Gaussian moment generating function)", 21)]
+                why(r"constant coefficients give a mean-one density; weight dispersion affects efficiency, while the weighted payoff variance determines pricing error", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Continuous-time state prices come from Girsanov's theorem. The stock grows at mu under "
-            "P. <bookmark mark='a'/> Discounted, it drifts at mu minus r. <bookmark mark='b'/> Fold "
-            "the excess drift into the noise, shifted by lambda, the market price of risk: the "
-            "discounted stock becomes a martingale. <bookmark mark='c'/> Girsanov: the new noise is "
-            "Brownian under this exponential density. <bookmark mark='d'/> So a price is a weighted "
-            "P-expectation, or a plain Q-expectation; the weights' second moment sets the Monte Carlo "
-            "cost."
-            " For our numbers, ten percent drift and twenty-five percent volatility, lambda is zero "
-            "point four: each unit of risk earns zero point four units of excess return."
+            "Continuous-time state prices come from Girsanov's theorem. The stock grows at mu under P. <bookmark mark='a'/> Discounted, it drifts at mu minus r. <bookmark mark='b'/> Fold the excess drift into the noise, shifted by lambda, the market price of risk: the discounted stock becomes a martingale. <bookmark mark='c'/> Girsanov: the new noise is Brownian under this exponential density. <bookmark mark='d'/> So a price is a weighted P-expectation, or a plain Q-expectation; the weights' second moment sets the Monte Carlo cost. For our numbers, ten percent drift and twenty-five percent volatility, lambda is zero point four: each unit of risk earns zero point four units of excess return. Assume a finite horizon, constant sigma greater than zero, and the bank account starting at one. Constant lambda satisfies Novikov, so the density has mean one. Pricing equality here is for integrable claims in this complete Brownian model. The variance of the weighted payoff, not the weight alone, determines Monte Carlo error."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -98,7 +82,7 @@ class Continuous(VoiceoverScene):
 
     def reweight(self, g):
         t, paths, Z = np.asarray(g["t"]), np.asarray(g["paths"]), np.asarray(g["Zp"])
-        gr = axes([0, 1.0], [40, 220], x_length=7.4, y_length=4.8, xlabel=r"time (years)", ylabel=r"stock price",
+        gr = axes([0, 1.0], [30, 285], x_length=7.4, y_length=4.8, xlabel=r"time (years)", ylabel=r"stock price",
                   xticks=[0, 0.5, 1.0], yticks=[50, 100, 150, 200], font_size=16)
         gr.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = gr.ax
@@ -113,7 +97,7 @@ class Continuous(VoiceoverScene):
                 sw = (1 - a) * 1.2 + a * (0.4 + 3.0 * z)
                 col = interpolate_color(ManimColor(P_C), ManimColor(Q_C), a)
                 m = VMobject(stroke_width=sw, stroke_color=col, stroke_opacity=op)
-                m.set_points_as_corners([ax.c2p(x, min(y, 220)) for x, y in zip(t, row)])
+                m.set_points_as_corners([ax.c2p(x, y) for x, y in zip(t, row)])
                 out.add(m)
             return out
 
@@ -125,10 +109,12 @@ class Continuous(VoiceoverScene):
         s0 = DashedLine(ax.c2p(0, 100), ax.c2p(1, 100), color=GREY_B, stroke_width=1.5)
         ST = np.asarray(g["ST"])
         Zs = np.asarray(g["Z"])
-        bins = np.linspace(40, 220, 37)
-        hp, _ = np.histogram(np.clip(ST, 40, 219), bins)
-        hq, _ = np.histogram(np.clip(ST, 40, 219), bins, weights=Zs)
-        hp, hq = hp / hp.max(), hq / hq.max()
+        bins = np.linspace(30, 285, 40)
+        hp, _ = np.histogram(ST, bins)
+        hq, _ = np.histogram(ST, bins, weights=Zs)
+        hq = hq / Zs.sum() * len(ST)
+        scale = max(hp.max(), hq.max())
+        hp, hq = hp / scale, hq / scale
 
         def side():
             a = w.get_value()
@@ -148,15 +134,7 @@ class Continuous(VoiceoverScene):
                                                                                                   aligned_edge=LEFT)
         src = illustration(rf"simulated: $\mu = {100 * g['mu']:.0f}\%$, $\sigma = {100 * g['sigma']:.0f}\%$, $r = 0$")
         with self.voiceover(
-            "Here is what a change of measure looks like. A hundred and fifty stock paths under the "
-            "real measure, with ten percent drift a year; their average, the thick line, climbs, and "
-            "on the right, where they end. <bookmark mark='a'/> Now move no path. Give each one the "
-            "weight Girsanov prescribes, which depends only on where its noise ended: paths that rose "
-            "a lot thin out, paths that fell thicken. <bookmark mark='b'/> The weighted average "
-            "flattens onto today's price: under Q the stock is a fair game. The histogram of endings "
-            "slides from P to Q. Nothing about the paths changed, only how much each one counts."
-            " The Q-density is the P-density times the weight, and its mean is today's price, a "
-            "hundred."
+            "Here is what a change of measure looks like. A hundred and fifty stock paths under the real measure, with ten percent drift a year; their average, the thick line, climbs, and on the right, where they end. <bookmark mark='a'/> Now move no path. Give each one the weight Girsanov prescribes, which depends only on where its noise ended: paths that rose a lot thin out, paths that fell thicken. <bookmark mark='b'/> The weighted average flattens onto today's price: under Q the stock is a fair game. The histogram of endings slides from P to Q. Nothing about the paths changed, only how much each one counts. The Q-density is the P-density times the weight, and its mean is today's price, a hundred. Stroke widths rescale weights by their largest value for visibility. The two terminal histograms use one common probability scale and include all simulated observations. The terminal histograms use twenty thousand stored terminal observations; the visible fan and its weighted average use a hundred and fifty paths. That finite average need not be exactly flat."
         ) as vo:
             self.add(F_, mean)
             self.play(FadeIn(gr), Create(s0), FadeIn(lab[0]), FadeIn(ml), FadeIn(src))
@@ -188,14 +166,7 @@ class Continuous(VoiceoverScene):
         head = label(rf"{g['n']:,} simulated paths, an at-the-money call".replace(",", "{,}"), font_size=28).to_edge(UP, buff=0.5)
         tail = ("Within two standard errors. " if abs(z) < 2 else "More than two standard errors away: worth a second look. ")
         with self.voiceover(
-            f"With {g['n']:,} paths, the plain average payoff is {g['price_naive']:.2f}: the wrong "
-            f"price, ignoring risk. <bookmark mark='a'/> Weighted, {g['price_weighted']:.2f}, standard "
-            f"error {g['se']:.3f}, against Black and Scholes' {g['bs']:.2f}. "
-            f"{tail}"
-            f"<bookmark mark='b'/> The effective sample is {100 * g['ess']:.1f} percent of the paths; "
-            f"the formula predicted {100 * g['ess_pred']:.1f}."
-            " The unweighted average is too high because under P the stock drifts up ten percent a "
-            "year: it prices the call as if that drift were free."
+            f"With {g['n']:,} paths, the plain average payoff is {g['price_naive']:.2f}: the wrong price, ignoring risk. <bookmark mark='a'/> Weighted, {g['price_weighted']:.2f}, standard error {g['se']:.3f}, against Black and Scholes' {g['bs']:.2f}. {tail}<bookmark mark='b'/> The effective sample is {100 * g['ess']:.1f} percent of the paths; the formula predicted {100 * g['ess_pred']:.1f}. The unweighted average is too high because under P the stock drifts up ten percent a year: it prices the call as if that drift were free. The effective-sample formula is the large-sample relative limit; finite samples fluctuate."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]))
             vo.wait_until("a")

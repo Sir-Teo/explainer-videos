@@ -35,20 +35,14 @@ class Hook(VoiceoverScene):
                 cmath(r"10 - 7", r"=", r"103 - 100", font_size=40, colors={r"10 - 7": CALL})]
         whys = [why(r"a call minus a put pays $S_T - K$ in every state: exactly a forward; so it must cost what a "
                     r"forward costs (Stoll 1969)"),
-                why(r"both sides are 3: no arbitrage. At a put price of 6, buy the put, sell the call, buy the stock, "
-                    r"borrow 99: lock in 1")]
+                why(r"both sides are 3: parity is consistent. At put 6: buy put, sell call, buy stock, borrow 99; cost 0, payoff 1")]
         step = ladder(self, rows, whys, keep=2, top=1.0, x=-0.6, buff=0.95, edge=6.9)
         with self.voiceover(
-            "A desk interview question. A call costs ten and a put seven, both struck at a hundred, "
-            "same expiry. The stock is at a hundred and three, and rates are zero. Is there an "
-            "arbitrage? <bookmark mark='a'/> Own the call and sell the put: at expiry you get the "
-            "stock minus a hundred, whatever happens. That is a forward, so the two must cost the "
-            "same: put-call parity, from Hans Stoll in 1969. <bookmark mark='b'/> Both sides are "
-            "three: no arbitrage. At a put of six, you would lock in a dollar for nothing."
+            "A desk interview question. A call costs ten and a put seven, both struck at a hundred, same expiry. The stock is at a hundred and three, and rates are zero. Is there an arbitrage? <bookmark mark='a'/> Own the call and sell the put: at expiry you get the stock minus a hundred, whatever happens. That is a forward, so the two must cost the same: put-call parity, from Hans Stoll in 1969. <bookmark mark='b'/> Both sides are three: no parity arbitrage. At a put of six, you would lock in a dollar for nothing. This establishes consistency of this parity relation under frictionless matching settlement assumptions; it does not certify every possible market trade."
         ) as vo:
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("a")
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("b")
             step(1)
         self.wait(0.4)
@@ -68,25 +62,15 @@ class Hook(VoiceoverScene):
                         for t, r, k in zip(T, rate, n)])
         side = VGroup(
             MathTex(r"C - P = 1 - \frac{K}{F}", font_size=36, color=CALL),
-            wrapped_label(r"Deribit's options are paid in bitcoin; a call and a put at one strike, traded within ten "
-                          r"minutes, reveal the forward $F$", 4.4, 20, GREY_A),
+            wrapped_label(r"inverse BTC parity assumes $D_{BTC}=1$; call--put observations within ten minutes imply a forward $F$", 4.4, 20, GREY_A),
             label(rf"{p['n_pairs']} pairs on 10 December 2025", font_size=24, color=FWD),
             wrapped_label(rf"they agree with their expiry's median to {p['trade_p50']:.1f} basis points "
                           rf"(half of them), {p['trade_p90']:.1f} (nine in ten)", 4.4, 20, GREY_A),
-            wrapped_label(r"the rate rises from 3\% to almost 5\% a year: crypto's own interest rate, set by "
-                          r"leveraged longs paying to borrow (Part 2's funding rate)", 4.4, 20, Q_C),
+            wrapped_label(r"observed annualized forward basis: about 3\% to 5\%; carry and market conditions, with $D_{BTC}=1$ assumed", 4.4, 20, Q_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Deribit BTC option trades, 10 December 2025, 00:00--12:00 UTC (the Surface)")
         with self.voiceover(
-            "Parity is also how traders read the market. On Deribit, the largest Bitcoin options "
-            "exchange, options are paid in Bitcoin, and every call and put at one strike, traded "
-            "within ten minutes, reveals the forward price. <bookmark mark='a'/> On the day of our "
-            f"Surface there were {p['n_pairs']} such pairs, and half agree with their expiry's median "
-            f"to {p['trade_p50']:.1f} basis points. <bookmark mark='b'/> And the forwards imply an "
-            "interest rate rising from three percent a year to almost five: Bitcoin's own rate, the "
-            "funding rate of Part two."
-            " Every number in this part is computed by the House from that one morning of trades, and "
-            "you can rerun every one."
+            f"""Parity also lets us compare observed prices. On Deribit, inverse Bitcoin options satisfy the displayed parity when the Bitcoin discount factor is one. Calls and puts at the same strike and expiry are paired within ten minutes. <bookmark mark='a'/> The Surface day gives {p['n_pairs']} pairs, half within {p['trade_p50']:.1f} basis points of the expiry's median implied forward. These are asynchronous observations, not a simultaneous bid-ask arbitrage test. <bookmark mark='b'/> The observed annualized forward basis rises from about three to five percent, reflecting carry and market conditions. This part combines existing market observations, seeded numerical examples and separately cited published facts. It registers no new strategy trial."""
         ) as vo:
             self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             self.play(FadeIn(g))
@@ -171,7 +155,7 @@ class Hook(VoiceoverScene):
         card = objectives_card([
             r"Parity proved by replication, checked against Bitcoin futures, and where it breaks",
             r"The fundamental theorem in one period: seen in 3D, proved, and decided by a simplex",
-            r"State prices, the discount factor and $Q$; Bitcoin's pricing kernel",
+            r"State prices, discount factors and $Q$; a Bitcoin density-ratio illustration",
             r"The binomial tree: replication, the hedge, convergence to Black--Scholes",
             r"Incomplete markets: super-replication as a linear program and its dual",
             r"Continuous time: Girsanov as reweighting; free lunches, doubling and bubbles",
@@ -187,16 +171,15 @@ class Hook(VoiceoverScene):
             "inside option prices; Ross recovery; model-free bounds; and how the industry trades all "
             "of it."
         ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=14))
+            self.play(FadeIn(card.head), *[FadeIn(r) for r in card.rows[:3]], run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[3:]],
+                                  lag_ratio=0.4, run_time=8))
         self.play(FadeOut(card))
 
     def house(self):
         chart = house_chart(PART, lit=("data",))
         with self.voiceover(
-            "In the House, this part builds the arbitrage checker. <bookmark mark='a'/> Every surface "
-            "the House reads passes through it before any model is fitted, starting with the "
-            "volatility desk next part."
+            """In the House, this part builds the arbitrage checker. <bookmark mark='a'/> It diagnoses parity and shape inconsistencies under explicit assumptions. Fitting, repairing and checking a surface are iterative; sampled diagnostics do not certify an entire market free of executable arbitrage."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))

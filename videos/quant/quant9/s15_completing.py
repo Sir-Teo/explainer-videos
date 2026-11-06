@@ -62,15 +62,7 @@ class Completing(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         src = illustration(r"33 states, log-normal weights as the true $Q$; each call priced under it")
         with self.voiceover(
-            "Options close the gap in real markets. Thirty-three states, and a digital paying one "
-            f"above one point one. With stock and bond alone, it is worth between {r0['lower']:.2f} "
-            f"and {r0['upper']:.2f}: almost nothing is known. <bookmark mark='a'/> Now let calls "
-            "trade, one strike at a time, each adding a hinge to what the market can build. <bookmark "
-            f"mark='b'/> One call: {r1['lower']:.2f} to {r1['upper']:.2f}. Ten calls: "
-            f"{rl['lower']:.2f} to {rl['upper']:.2f}, around the true {true:.2f}. Stephen Ross proved "
-            "in 1976 that options on enough strikes complete the market."
-            " Why do calls help? Each new strike adds a hinge, a new direction in the space of "
-            "payoffs, so the super-replication lid can bend to follow the claim more closely."
+            f"Options close the gap in real markets. Thirty-three states, and a digital paying one above one point one. With stock and bond alone, it is worth between {r0['lower']:.2f} and {r0['upper']:.2f}: almost nothing is known. <bookmark mark='a'/> Now let calls trade, one strike at a time, each adding a hinge to what the market can build. <bookmark mark='b'/> One call: {r1['lower']:.2f} to {r1['upper']:.2f}. Ten calls: {rl['lower']:.2f} to {rl['upper']:.2f}, around the true {true:.2f}. Stephen Ross proved in 1976 that options on enough strikes complete the market. Why do calls help? Each new strike adds a hinge, a new direction in the space of payoffs, so the super-replication lid can bend to follow the claim more closely. This is a 33-state model. Enough independent call payoffs can span its finite payoff space; finitely many calls do not generally complete a continuous-state market. The closed bars are superhedging limits, with equivalent-measure prices in the interior unless a claim is replicated."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in st], lag_ratio=0.03), Create(dig), FadeIn(dl),
                       FadeIn(h), FadeIn(src), run_time=2.5)
@@ -131,7 +123,7 @@ class Completing(VoiceoverScene):
             "and Scholes at the top of the band for convex claims, and at the bottom for concave "
             "ones."       ) as vo:
             self.play(FadeIn(tree), FadeIn(src))
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")

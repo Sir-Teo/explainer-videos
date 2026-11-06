@@ -26,16 +26,11 @@ class Numeraire(VoiceoverScene):
         self.play(FadeOut(c))
 
     def theorem(self):
-        t = theorem_card(r"Change of numeraire", r"Any asset $N$ with a strictly positive price can be the unit of "
-                         r"account. There is a measure $Q^N$ under which every price divided by $N$ is a martingale, "
-                         r"with $\frac{dQ^N}{dQ} = \frac{N_T / N_0}{B_T / B_0}$.",
+        t = theorem_card(r"Change of numeraire", r"Let $N>0$ be tradable and $N/B$ a true $Q$-martingale. Then $\frac{dQ^N}{dQ}=\frac{N_T/N_0}{B_T/B_0}$ defines an equivalent measure. Appropriately integrable discounted prices become martingales in units of $N$.",
                          who=r"Geman, El Karoui and Rochet (1995); Jamshidian (1989) for the bond", color=Q_C,
                          width=10.4, font_size=25).move_to(UP * 0.5)
         with self.voiceover(
-            "So far prices were measured in units of the bank account. Any asset with a strictly "
-            "positive price can be the unit instead, with its own martingale measure. <bookmark "
-            "mark='a'/> Geman, El Karoui and Rochet made this a general tool in 1995, after "
-            "Jamshidian's bond numeraire of 1989."
+            """So far prices were measured in units of the bank account. A strictly positive tradable asset can serve instead if its discounted price is a true martingale, so the proposed density has mean one. <bookmark mark='a'/> With suitable integrability this gives pricing in the new unit. Geman, El Karoui and Rochet made this a general tool in 1995. A strict local martingale, such as the previous bubble, does not meet the mean-one requirement automatically."""
         ) as vo:
             self.play(FadeIn(t, shift=UP * 0.2))
             vo.wait_until("a")
@@ -59,15 +54,9 @@ class Numeraire(VoiceoverScene):
                     r"(Girsanov with $\sigma$): $N(d_1)$ and $N(d_2)$ are one event's probability under two measures", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Two lines. A price divided by the numeraire is an expectation under its measure; divided "
-            "by the bank account, under Q. <bookmark mark='a'/> Both hold for every claim, so the "
-            "measures differ by the numeraires' relative growth. <bookmark mark='b'/> Use it on a "
-            "call: the share you receive minus the strike you pay, if in the money. <bookmark "
-            "mark='c'/> The strike part is a Q-probability; the share part, in units of shares, a "
-            "probability under the stock's measure. <bookmark mark='d'/> There the log-price drifts a "
-            "full sigma squared higher: N of d one and N of d two are one event seen in two units."
+            "Two lines. A price divided by the numeraire is an expectation under its measure; divided by the bank account, under Q. <bookmark mark='a'/> Both hold for every claim, so the measures differ by the numeraires' relative growth. <bookmark mark='b'/> Use it on a call: the share you receive minus the strike you pay, if in the money. <bookmark mark='c'/> The strike part is a Q-probability; the share part, in units of shares, a probability under the stock's measure. <bookmark mark='d'/> There the log-price drifts a full sigma squared higher: N of d one and N of d two are one event seen in two units. Here the equalities concern replicable claims whose discounted values are true martingales. The displayed normal probabilities use a non-dividend-paying constant-volatility stock."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -163,7 +152,7 @@ class Numeraire(VoiceoverScene):
             "asset's own, thirty percent; with correlation one it would be zero, and the option at "
             "the money worthless."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -174,10 +163,14 @@ class Numeraire(VoiceoverScene):
         self.clear_scene()
 
     def bitcoin(self, n):
+        spot = load("kernel")["S"]  # Surface median index, already restored
+        forward_mean = n["usd"] / n["btc"]  # mean of the normalized finite-grid density
+        df_usd = spot / forward_mean  # chosen consistent discount; BTC discount is one
+        spot_pv = spot * n["btc"]
         items = VGroup(
             cmath(r"P(t, T)", r":", r"\text{the }T\text{-forward measure: forwards are martingales (Part 19)}",
                   font_size=30),
-            cmath(r"A(t)", r":", r"\text{the annuity measure: swap rates are martingales, swaptions are Black (Part 19)}",
+            cmath(r"A(t)", r":", r"\text{annuity measure; Black needs a lognormal swap-rate assumption (Part 19)}",
                   font_size=30),
             cmath(r"\text{BTC}", r":", r"\text{Deribit's unit: a price in BTC is an expectation under the bitcoin "
                   r"measure}", font_size=30, colors={r"\text{BTC}": Q_C}),
@@ -186,28 +179,24 @@ class Numeraire(VoiceoverScene):
             items.scale_to_fit_width(13)
         res = VGroup(
             label(rf"the Surface's 107-day call struck at {n['K_btc']:,.0f}".replace(",", "{,}"), font_size=24),
-            MathTex(rf"\text{{in dollars: }}\ \mathbb{{E}}^Q[(S_T - K)^+] = \${n['usd']:,.0f}".replace(",", "{,}"),
+            MathTex(rf"\text{{forward dollar value: }}\ \mathbb{{E}}^Q[(S_T - K)^+] = \${n['usd']:,.0f}".replace(",", "{,}"),
                     font_size=30, color=CALL),
             MathTex(rf"\text{{in bitcoin: }}\ \mathbb{{E}}^{{Q^{{BTC}}}}[(S_T - K)^+/S_T] = {n['btc']:.4f}\ \text{{BTC}}",
                     font_size=30, color=Q_C),
-            MathTex(rf"{n['btc']:.4f} \times F = \${n['btc_times_F']:,.0f}".replace(",", "{,}"), font_size=30, color=Q_C),
+            MathTex(rf"D_{{USD}}=S_0/F_{{\rm grid}}={df_usd:.5f},\quad D_{{BTC}}=1", font_size=27, color=GREY_A),
+            MathTex(rf"C_{{USD}}(0)=S_0 C_{{BTC}}\approx\${spot_pv:,.0f}".replace(",", "{,}"), font_size=30, color=Q_C),
             MathTex(rf"Q(S_T > K) = {n['Q_itm']:.3f},\quad Q^{{BTC}}(S_T > K) = {n['QB_itm']:.3f}", font_size=28,
                     color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(items, DOWN, buff=0.5)
         src = real_data(r"the Surface's density for 27 March 2026 (chapter 12)")
         with self.voiceover(
-            "The bond as numeraire gives the T-forward measure, the annuity the swap measure; Part "
-            "nineteen uses both. <bookmark mark='a'/> And Deribit's unit is Bitcoin. The Surface's "
-            f"hundred-and-seven-day call costs {n['usd']:,.0f} dollars as a Q-expectation, and "
-            f"{n['btc']:.4f} Bitcoin under the Bitcoin measure. <bookmark mark='b'/> Times the "
-            "forward, the same dollars. The two measures disagree on the chance of finishing in the "
-            f"money, {n['Q_itm']:.2f} against {n['QB_itm']:.2f}, and agree on the price."
+            f"""The bond gives the forward measure, and the annuity gives the swap measure. Black's swaption formula additionally needs a lognormal swap-rate model. <bookmark mark='a'/> For Bitcoin, this fitted finite-grid example gives an undiscounted dollar forward value of {n['usd']:,.0f}, and a Bitcoin premium of {n['btc']:.4f}. They are not the same spot-dollar amount. <bookmark mark='b'/> Choose a Bitcoin discount factor of one and a consistent dollar discount factor of {df_usd:.5f}, using the fitted grid mean. Multiplying the Bitcoin premium by today's spot, {spot:,.0f}, gives the dollar present value, {spot_pv:,.0f}. Multiplying by the fitted forward mean instead gives the undiscounted forward value. The ITM probabilities differ, {n['Q_itm']:.2f} versus {n['QB_itm']:.2f}, while discounted prices agree after conversion into the same current unit. These discount choices illustrate the identity rather than estimate both currency curves independently."""
         ) as vo:
             self.play(LaggedStart(*[FadeIn(i_) for i_ in items[:2]], lag_ratio=0.4))
             vo.wait_until("a")
             self.play(FadeIn(items[2]), FadeIn(res[0]), FadeIn(res[1]), FadeIn(res[2]), FadeIn(src))
             vo.wait_until("b")
-            self.play(FadeIn(res[3]), FadeIn(res[4]))
+            self.play(FadeIn(res[3]), FadeIn(res[4]), FadeIn(res[5]))
         self.wait(0.3)
         self.clear_scene()
 

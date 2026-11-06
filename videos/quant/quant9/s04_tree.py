@@ -62,18 +62,7 @@ class Tree(VoiceoverScene):
         res = MathTex(rf"\Delta = {o['Delta']:.1f},\ \ B = {o['B']:.0f},\ \ V_0 = {o['V']:.0f},\ \ q = {o['q']:.1f}",
                       font_size=30, color=Q_C).to_corner(DR, buff=0.4)
         with self.voiceover(
-            "Cox, Ross and Rubinstein made the theorem computable in 1979. One step: a stock at a "
-            "hundred goes to a hundred and twenty or eighty; a call at a hundred pays twenty or "
-            "nothing: two points in the plane. <bookmark mark='a'/> Shares plus a bond make a "
-            "straight line, and exactly one passes through both points: the replicating portfolio. "
-            "<bookmark mark='b'/> Its height at today's price is the call's price, ten: buy half a "
-            "share, borrow forty. <bookmark mark='c'/> In symbols: match both states, subtract, "
-            "substitute. <bookmark mark='d'/> The price is a weighted average of the payoffs. "
-            "<bookmark mark='e'/> The weight q comes from the moves and the rate alone, no one's "
-            "probability of an up move, and it lies in zero to one exactly when there is no "
-            "arbitrage."
-            " Check the hedge: in the up state half a share is worth sixty, minus the forty owed, "
-            "twenty; in the down state, forty minus forty, zero. Both payoffs, exactly."
+            "Cox, Ross and Rubinstein made the theorem computable in 1979. One step: a stock at a hundred goes to a hundred and twenty or eighty; a call at a hundred pays twenty or nothing: two points in the plane. <bookmark mark='a'/> Shares plus a bond make a straight line, and exactly one passes through both points: the replicating portfolio. <bookmark mark='b'/> Its height at today's price is the call's price, ten: buy half a share, borrow forty. <bookmark mark='c'/> In symbols: match both states, subtract, substitute. <bookmark mark='d'/> The price is a weighted average of the payoffs. <bookmark mark='e'/> The weight q comes from the moves and the rate alone, no one's probability of an up move, and it lies in zero to one exactly when there is no arbitrage. Check the hedge: in the up state half a share is worth sixty, minus the forty owed, twenty; in the down state, forty minus forty, zero. Both payoffs, exactly. Both branches have positive physical probability, frictionless rebalancing is allowed, and the bank return lies strictly between down and up. Thus q is strictly between zero and one; an endpoint is not enough."
         ) as vo:
             self.play(FadeIn(g), FadeIn(up), FadeIn(dn), FadeIn(lab))
             vo.wait_until("a")
@@ -81,7 +70,7 @@ class Tree(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(here), FadeIn(val), FadeIn(vl), FadeIn(res))
             vo.wait_until("c")
-            step(0)
+            step(0, run_time=0.15)
             step(1)
             vo.wait_until("d")
             step(2)

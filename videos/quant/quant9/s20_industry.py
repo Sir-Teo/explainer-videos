@@ -42,16 +42,7 @@ class Industry(VoiceoverScene):
         src = note(r"Haddad, Moreira and Muir (2021), ``When selling becomes viral'', \textit{RFS} 34(11)", font_size=17,
                    color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Who enforces the law of one price? An ETF's shares and its holdings both trade all day. "
-            "Authorized participants, large dealers, create shares by delivering the basket when the "
-            "fund is dear, and redeem them when it is cheap; the SEC standardized this in 2019. "
-            "<bookmark mark='a'/> It works until the arbitrageurs' capital is the constraint. In "
-            "March 2020 the most liquid bond funds traded at large discounts to their holdings, "
-            "larger for safer bonds, as Haddad, Moreira and Muir documented: investors sold what was "
-            "easiest to sell, and dealers' balance sheets were full."
-            " A worked example: if a fund trades one percent above its basket, an authorized "
-            "participant buys the basket, delivers it for new shares and sells them, earning the one "
-            "percent less its costs, and the selling pushes the price back."
+            "Who enforces the law of one price? An ETF's shares and its holdings both trade all day. Authorized participants, large dealers, create shares by delivering the basket when the fund is dear, and redeem them when it is cheap; the SEC standardized this in 2019. <bookmark mark='a'/> It works until the arbitrageurs' capital is the constraint. In March 2020 the most liquid bond funds traded at large discounts to their holdings, larger for safer bonds, as Haddad, Moreira and Muir documented: investors sold what was easiest to sell, and dealers' balance sheets were full. A worked example: if a fund trades one percent above its basket, an authorized participant buys the basket, delivers it for new shares and sells them, earning the one percent less its costs, and the selling pushes the price back. Bond ETF holdings may have stale or estimated marks, creation baskets can differ from published holdings, and costs and balance-sheet constraints matter. A reported discount to NAV is not automatically an executable arbitrage."
         ) as vo:
             self.play(FadeIn(f, shift=UP * 0.2))
             vo.wait_until("a")
@@ -76,13 +67,7 @@ class Industry(VoiceoverScene):
                              rf"forward and the futures agreed to {fb['gap_p50']:.1f} basis points: the cash-and-carry "
                              rf"desks had already done their work", 11.6, 21, Q_C).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The box spread as a business. At the New York Fed, van Binsbergen, Diamond and Van "
-            "Tassel found box rates thirty-five basis points above Treasuries on average, 1996 to "
-            "2023. <bookmark mark='a'/> The gap is Treasuries' convenience yield, about forty basis "
-            "points by van Binsbergen, Diamond and Grotteria, and it quadrupled in the financial "
-            "crisis. <bookmark mark='b'/> A fund now lends through boxes: BOXX, launched at the end "
-            "of 2022, held eight billion dollars by September 2025, its annual report says. <bookmark "
-            f"mark='c'/> And chapter one's crypto version agreed to {fb['gap_p50']:.1f} basis points."
+            f"The box spread as a business. At the New York Fed, van Binsbergen, Diamond and Van Tassel found box rates thirty-five basis points above Treasuries on average, 1996 to 2023. <bookmark mark='a'/> The gap is Treasuries' convenience yield, about forty basis points by van Binsbergen, Diamond and Grotteria, and it quadrupled in the financial crisis. <bookmark mark='b'/> A fund now lends through boxes: BOXX, launched at the end of 2022, held eight billion dollars by September 2025, its annual report says. <bookmark mark='c'/> And chapter one's crypto version agreed to {fb['gap_p50']:.1f} basis points. The thirty-five-basis-point estimate is a specific 1996-to-April-2023 sample; the roughly forty-point figure is a separate study, not an identical estimate. Collateral, taxes, settlement and trading costs differ. Our crypto comparison uses asynchronous observations."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -107,11 +92,7 @@ class Industry(VoiceoverScene):
                          font_size=18),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.4)
         with self.voiceover(
-            "Trades certain to converge, that don't on time. Royal Dutch and Shell split one company "
-            "sixty to forty, yet strayed from that ratio by nine and a half percent on average from "
-            "1980 to 1995. <bookmark mark='a'/> Negative stubs: in thirty percent, the link was cut "
-            "first. <bookmark mark='b'/> Parity violations sit where shorting is hardest. The trades "
-            "exist; the capital to hold them is what is missing."
+            """Convergence trades with funding and event risk. Royal Dutch and Shell's economic split was sixty to forty, yet the reported mean absolute deviation from parity was about nine and a half percent over 1980 to 1995. <bookmark mark='a'/> Negative-stub trades face an additional hazard: Mitchell, Pulvino and Stafford report that the relevant link was severed before convergence in about thirty percent of their sample. <bookmark mark='b'/> Borrow availability, recall, capital and event risk can prevent a theoretically attractive price relation from being a riskless executable trade."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -124,10 +105,14 @@ class Industry(VoiceoverScene):
     def limits(self, sv):
         ex = sv["examples"]["1.0"]
         T = sv["T"]
-        g1 = axes([0, T], [-0.02, 0.09], x_length=5.6, y_length=2.4, ylabel=r"the mispricing $D_t$",
+        d_lo = min(-0.02, min(min(e["D"]) for e in ex) * 1.1)
+        d_hi = max(0.09, max(max(e["D"]) for e in ex) * 1.1)
+        c_lo = min(0.0, min(min(e["cap"]) for e in ex) * 1.1)
+        c_hi = max(1.6, max(max(e["cap"]) for e in ex) * 1.1)
+        g1 = axes([0, T], [d_lo, d_hi], x_length=5.6, y_length=2.4, ylabel=r"the mispricing $D_t$",
                   xticks=[], yticks=[0, 0.04, 0.08], yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=15)
-        g2 = axes([0, T], [0, 1.6], x_length=5.6, y_length=2.4, ylabel=r"the fund's capital", xlabel=r"period",
-                  xticks=[0, 10, 20], yticks=[0.5, 1.0, 1.5], font_size=15)
+        g2 = axes([0, T], [c_lo, c_hi], x_length=5.6, y_length=2.4, ylabel=r"the fund's capital", xlabel=r"period",
+                  xticks=[0, 10, 20], yticks=np.linspace(c_lo, c_hi, 5).round(2).tolist(), font_size=15)
         VGroup(g1, g2).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
         fl = DashedLine(g2.ax.c2p(0, sv["floor"]), g2.ax.c2p(T, sv["floor"]), color=ARB, stroke_width=2)
         fll = label(r"margin floor", font_size=16, color=ARB).next_to(g2.ax.c2p(T, sv["floor"]), UP, buff=0.05).shift(LEFT * 0.6)
@@ -142,7 +127,7 @@ class Industry(VoiceoverScene):
                 n = min(len(D), int(v) + 1)
                 if n >= 2:
                     out.add(curve(g1.ax, np.arange(n), D[:n], c, stroke_width=3),
-                            curve(g2.ax, np.arange(n), np.minimum(cap[:n], 1.6), c, stroke_width=3))
+                            curve(g2.ax, np.arange(n), cap[:n], c, stroke_width=3))
                 if e["dead"] and v >= len(D) - 1:
                     out.add(Cross(scale_factor=0.12, stroke_color=ARB).move_to(g2.ax.c2p(len(cap) - 1, cap[-1])))
             return out
@@ -166,16 +151,7 @@ class Industry(VoiceoverScene):
         verdict = ("without flows, none are liquidated. " if rows[0]["p_liq"] == 0 else
                    f"even without flows, {100 * rows[0]['p_liq']:.1f} percent are liquidated. ")
         with self.voiceover(
-            "Shleifer and Vishny, The Limits of Arbitrage, 1997: arbitrageurs invest other people's "
-            "money, judged on recent returns. Simulate it: a mispricing certain to close by period "
-            "twenty, a levered fund, and investors who pull a times any loss. <bookmark mark='a'/> "
-            "When the mispricing widens, capital is withdrawn, and at the margin floor the fund is "
-            "liquidated, missing the convergence it was right about. <bookmark mark='b'/> A thousand "
-            "paths each: "
-            f"{verdict}"
-            f"With flows equal to the loss, {100 * r1['p_liq']:.1f} percent; twice the loss, {100 * rows[-1]['p_liq']:.1f}. "
-            "<bookmark mark='c'/> And liquidations come when the mispricing is widest: arbitrage is "
-            "limited by funding, not insight."
+            f"Shleifer and Vishny, The Limits of Arbitrage, 1997: arbitrageurs invest other people's money, judged on recent returns. Simulate it: a mispricing certain to close by period twenty, a levered fund, and investors who pull a times any loss. <bookmark mark='a'/> When the mispricing widens, capital is withdrawn, and at the margin floor the fund is liquidated, missing the convergence it was right about. <bookmark mark='b'/> A thousand paths each: {verdict}With flows equal to the loss, {100 * r1['p_liq']:.1f} percent; twice the loss, {100 * rows[-1]['p_liq']:.1f}. <bookmark mark='c'/> And liquidations come when the mispricing is widest: arbitrage is limited by funding, not insight. Convergence by period twenty is imposed by this stylized simulation. These liquidation percentages are conditional on its fixed parameters, not empirical estimates or proof of a general causal magnitude. The three illustrated paths use their full stored price-gap and capital ranges; the table summarizes separate fixed simulated paths."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(fl), FadeIn(fll), FadeIn(side[0]), FadeIn(src))
             self.add(Pth)
@@ -193,11 +169,7 @@ class Industry(VoiceoverScene):
     def ltcm(self):
         c = crisis_card(
             r"1998", r"Long-Term Capital Management",
-            r"Founded in February 1994 by John Meriwether, it ran convergence and relative-value trades: returns of "
-            r"20\%, 43\%, 41\% and 17\% in 1994--97. At the end of 1997 it held about \$30 of debt for every \$1 of "
-            r"capital. In August 1998, after Russia's default, it lost 44\% of its value in one month. On 23 September "
-            r"the New York Fed convened fourteen firms, which put up \$3.625 billion for 90\% of the fund; no Federal "
-            r"Reserve money was used.",
+            r"Founded in 1994, LTCM ran convergence trades: reported net annual returns of 20\%, 43\%, 41\% and 17\% in 1994--97. Reported assets of \$129bn against \$4.8bn equity imply about 27 times assets/equity. After Russia\'s default it lost 44\% in August 1998. On 23 September, fourteen firms convened by the New York Fed provided \$3.625bn for 90\% of the fund; no Federal Reserve money was used.",
             stats=[(r"\$4.8\text{bn}", r"equity capital, 1 Jan.\ 1998"), (r"\$129\text{bn}", r"balance-sheet "
                                                                                            r"assets, end 1997"),
                    (r"\$1.3\text{tn}", r"OTC derivatives notional, end 1997")],
@@ -211,7 +183,7 @@ class Industry(VoiceoverScene):
             "returned twenty, forty-three, forty-one and seventeen percent, trading spreads it "
             "expected to converge. The President's Working Group reported four point eight billion "
             "dollars of equity at the start of 1998 against a hundred and twenty-nine billion of "
-            "assets, twenty-eight to one. <bookmark mark='a'/> After Russia's default, spreads "
+            "assets, about twenty-seven times assets to equity. <bookmark mark='a'/> After Russia's default, spreads "
             "widened; it lost forty-four percent in August. On the twenty-third of September fourteen "
             "firms, convened by the New York Fed, put up three point six billion for ninety percent "
             "of the fund. No Fed money was used. Part forty-one tells the story."

@@ -27,16 +27,16 @@ class Density(VoiceoverScene):
 
     def fly(self):
         K, h = 100.0, 10.0
-        g = axes([70, 130], [-0.5, 12], x_length=6.2, y_length=4.2, xlabel=r"price at expiry", ylabel=r"payoff",
-                 xticks=[90, 100, 110], yticks=[0, 10], font_size=17)
+        g = axes([70, 130], [-22, 42], x_length=6.2, y_length=4.2, xlabel=r"price at expiry", ylabel=r"payoff",
+                 xticks=[90, 100, 110], yticks=[-20, 0, 20, 40], font_size=17)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         xs = np.linspace(70, 130, 241)
         legs = [np.maximum(xs - (K - h), 0), -2 * np.maximum(xs - K, 0), np.maximum(xs - (K + h), 0)]
         cum = np.cumsum(legs, axis=0)
-        c1 = curve(ax, xs, np.clip(cum[0], -0.5, 12), CALL, stroke_width=4)
-        c2 = curve(ax, xs, np.clip(cum[1], -0.5, 12), ALT, stroke_width=4)
-        c3 = curve(ax, xs, np.clip(cum[2], -0.5, 12), Q_C, stroke_width=5)
+        c1 = curve(ax, xs, cum[0], CALL, stroke_width=4)
+        c2 = curve(ax, xs, cum[1], ALT, stroke_width=4)
+        c3 = curve(ax, xs, cum[2], Q_C, stroke_width=5)
         tri = Polygon(ax.c2p(90, 0), ax.c2p(100, 10), ax.c2p(110, 0), stroke_width=0, fill_color=Q_C, fill_opacity=0.3)
         side = VGroup(
             MathTex(r"C(K - h) - 2C(K) + C(K + h)", font_size=34, color=Q_C),
@@ -107,12 +107,7 @@ class Density(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hr, DOWN, buff=0.35).align_to(hr, LEFT)
         src = real_data(rf"the Surface, expiry {b['expiry']}, {b['T'] * 365:.0f} days")
         with self.voiceover(
-            "Tile the strike axis with butterflies on the Surface, sixteen days out. Each bar is a "
-            "butterfly's price over its width squared. <bookmark mark='a'/> Halve the width, and "
-            "again: the bars thin and their tops converge to a smooth curve. <bookmark mark='b'/> The "
-            "risk-neutral density, Breeden and Litzenberger's limit of 1978. It integrates to "
-            f"{b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward."
-            " No model was used: only call prices at many strikes."
+            f"Tile the strike axis with butterflies on the Surface, sixteen days out. Each bar is a butterfly's price over its width squared. <bookmark mark='a'/> Halve the width, and again: the bars thin and their tops converge to a smooth curve. <bookmark mark='b'/> The risk-neutral density, Breeden and Litzenberger's limit of 1978. It integrates to {b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward. The identity uses call prices; this numerical reconstruction also uses the fitted SVI specification. The derivative identity is model independent, but these calls are interpolated and extrapolated with SVI. Finite quotes alone do not uniquely determine a density. We use zero discounting for this illustration. Here the Surface dollar curves are undiscounted forward values: inverse Bitcoin premiums times the fitted forward. They are not spot-dollar premiums. A dollar present value also needs the dollar discount factor."
         ) as vo:
             self.play(FadeIn(g), FadeIn(B), FadeIn(hr), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")
@@ -138,21 +133,12 @@ class Density(VoiceoverScene):
                 why(r"differentiate under the integral (Leibniz); the boundary term vanishes at $s = K$: a digital", 21),
                 why(r"once more: the density (Breeden and Litzenberger 1978)", 21),
                 why(r"Taylor: the butterfly is the second difference", 21),
-                why(r"static no-arbitrage is exactly: calls decreasing, no steeper than the bond, and convex in the "
-                    r"strike; no negative call spread, no negative butterfly", 21)]
+                why(r"necessary shape conditions: decreasing, convex calls with slopes in $[-e^{-rT},0]$; add payoff bounds and correct endpoint limits for a full characterization", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The proof is two derivatives. A call is the discounted expectation of its payoff. "
-            "<bookmark mark='a'/> Differentiate in the strike: minus the discounted probability of "
-            "ending above it, a digital's price. <bookmark mark='b'/> Again: the density. <bookmark "
-            "mark='c'/> And the butterfly over h squared is the second difference, so it converges to "
-            "it. <bookmark mark='d'/> Static no-arbitrage is exactly: calls fall with the strike, no "
-            "faster than the bond, and bend upward."
-            " A worked example: if the call spread between strikes ninety-nine and a hundred and one "
-            "costs one point one, the probability of finishing above a hundred is about one point one "
-            "over two, point five five, before discounting."
+            "The proof is two derivatives. A call is the discounted expectation of its payoff. <bookmark mark='a'/> Differentiate in the strike: minus the discounted probability of ending above it, a digital's price. <bookmark mark='b'/> Again: the density. <bookmark mark='c'/> And the butterfly over h squared is the second difference, so it converges to it. <bookmark mark='d'/> Static no-arbitrage is exactly: calls fall with the strike, no  A worked example: if the call spread between strikes ninety-nine and a hundred and one costs one point one, the probability of finishing above a hundred is about one point one over two, point five five, before discounting. These density formulas assume an absolutely continuous terminal law and enough smoothness. In general the second strike derivative is a measure, and at atoms the digital uses one-sided derivatives. Decreasing convex calls and slope bounds also need the payoff bounds and correct endpoint limits for a full static no-arbitrage characterization. In the call-spread example divide by the discount factor to infer a probability."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -170,7 +156,7 @@ class Density(VoiceoverScene):
         e = d["expiries"][0]
         K, q = np.asarray(e["K"]), np.asarray(e["density"])
         g1 = axes([0.75 * F, 1.3 * F], [0, Cf[Kf >= 0.75 * F].max() * 1.05], x_length=6.4, y_length=2.7,
-                  ylabel=r"call price $C(K)$ (\$)", xticks=[], yticks=[0, 10000, 20000], yfmt=lambda u: f"{u / 1000:.0f}k",
+                  ylabel=r"forward call value $C(K)$ (\$)", xticks=[], yticks=[0, 10000, 20000], yfmt=lambda u: f"{u / 1000:.0f}k",
                   font_size=15)
         ok = (K > 0.75 * F) & (K < 1.3 * F)
         g2 = axes([0.75 * F, 1.3 * F], [0, q[ok].max() * 1.15], x_length=6.4, y_length=2.4, ylabel=r"density $q(K)$",

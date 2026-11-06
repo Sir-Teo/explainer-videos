@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, HEDGE, PART, Q_C, answer_under, load, pause_at,
+from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, HEDGE, PART, Q_C, FullRangeReplay, answer_under, load, pause_at,
                                         real_data)
 
 
@@ -25,9 +25,7 @@ class Frontier(VoiceoverScene):
 
     def transport(self):
         cards = VGroup(
-            history_card(2023, r"Neufeld and Sester, \textit{IEEE Trans.\ Inf.\ Theory}", r"neural networks for "
-                         r"model-free pricing and martingale optimal transport: the dual's functions as networks, the "
-                         r"constraint as a penalty", width=4.3, font_size=18),
+            history_card(2023, r"Neufeld and Sester, \textit{IEEE Trans.\ Inf.\ Theory}", r"learn model-free bounds from quotes; also fixed-marginal MOT. Earlier neural penalty methods: Eckstein and Kupper", width=4.3, font_size=18),
             history_card(2023, r"Hasenbichler, Joseph, Loeper, Ob\l\'oj and Pammer", r"the martingale Sinkhorn "
                          r"algorithm: the martingale closest to Brownian motion between two marginals, in any "
                          r"dimension (arXiv 2310.13797, revised 2026)", width=4.3, font_size=18),
@@ -36,16 +34,7 @@ class Frontier(VoiceoverScene):
                          width=4.3, font_size=18),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.4)
         with self.voiceover(
-            "Most of the recent work is in martingale optimal transport. In 2023 Ariel Neufeld and "
-            "Julian Sester replaced the dual's functions with neural networks and the hedging "
-            "constraint with a penalty, so the bounds scale to many assets and dates. <bookmark "
-            "mark='a'/> Manuel Hasenbichler, Benjamin Joseph, Grégoire Loeper, Jan Obłój and Gudmund "
-            "Pammer built a martingale version of Sinkhorn's algorithm, for the martingale closest to "
-            "Brownian motion between two marginals, in any dimension. <bookmark mark='b'/> And Linn "
-            "Engström, Sigrid Källblad and Johan Karlsson handle many marginals at once, enough to "
-            "bound lookback and Asian options. Here is the first of these ideas, trained."
-            " The common thread: the bound is a linear program in principle, and the frontier is about "
-            "solving it when the space of paths is far too large to write down."
+            """Three directions in recent transport work. Neufeld and Sester's 2023 paper learns model-free bounds from market inputs, with offline training for fast online pricing, and also studies fixed-marginal MOT. Neural penalty methods build on earlier work, including Eckstein and Kupper. <bookmark mark='a'/> Hasenbichler, Joseph, Loeper, Obloj and Pammer develop martingale Sinkhorn for a martingale closest to Brownian motion between marginals, under the paper's moment and feasibility assumptions. <bookmark mark='b'/> Engstrom, Kallblad and Karlsson exploit sequential structure and entropy regularization for many marginals, including lookback and Asian examples. Our next computation illustrates a neural dual penalty solver; it is not a reproduction of a paper's full empirical study."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -85,35 +74,26 @@ class Frontier(VoiceoverScene):
             t = label(rf"step {snaps[i]:,}".replace(",", "{,}"), font_size=20, color=Q_C).next_to(a, UP, buff=0.05)
             return VGroup(a, cells, t)
 
-        rp = TrainingReplay(steps, L, frame, snaps, ylabel=r"the learned upper bound", xlabel=r"training step",
+        rp = FullRangeReplay(steps, L, frame, snaps, ylabel=r"raw dual cost (not a certified bound)", xlabel=r"training step",
                             color=Q_C, left=LEFT * 3.6 + DOWN * 0.3, right=RIGHT * 3.2 + DOWN * 0.3)
         lpl = DashedLine(rp.ax.c2p(steps[0], lp), rp.ax.c2p(steps[-1], lp), color=CALL, stroke_width=2)
         lpt = MathTex(rf"\text{{LP}}\ {lp:.4f}", font_size=22, color=CALL).next_to(lpl, DOWN, buff=0.08).align_to(lpl, RIGHT)
-        key = label(r"gold: hedge just above the claim; bright gold: touching; red: below it (penalized)", font_size=17,
+        key = label(r"display window only; gold: above claim; red: constraint violation (penalized)", font_size=17,
                     color=GREY_A).to_edge(DOWN, buff=0.25)
         gaps = nm["gap_pct"]
         # one row, between the chart and the colour key at the bottom
-        res = VGroup(*[MathTex(rf"\text{{seed }} {i}:\ {b:.4f}\ (+{g:.2f}\%)", font_size=21, color=Q_C)
+        res = VGroup(*[MathTex(rf"\text{{seed }} {i}:\ {b:.4f}\ ({g:+.2f}\%)", font_size=21, color=Q_C)
                        for i, (b, g) in enumerate(zip(nm["bounds"], gaps))]).arrange(RIGHT, buff=0.4)
         res.next_to(key, UP, buff=0.25)
         head = label(rf"three networks ($u$, $v$, $h$), {nm['steps']:,} steps, three seeds".replace(",", "{,}"),
                      font_size=24).to_edge(UP, buff=0.3)
-        above = all(g > 0 for g in gaps)
-        verdict = (f"All three land just above the program's bound, by {min(gaps):.2f} to {max(gaps):.2f} percent: "
-                   "smooth networks cannot draw the hedge's kinks exactly. " if above else
-                   f"They land within {max(abs(g) for g in gaps):.2f} percent of the program's bound, on both sides: "
-                   "a penalized constraint is not a guarantee. ")
+        deficits = [r["violation"] for r in runs]
+        verdict = (f"Raw dual costs differ from the LP by {min(gaps):.2f} to {max(gaps):.2f} percent. "
+                   f"Weighted mean positive shortfalls range from {min(deficits):.5f} to {max(deficits):.5f}. "
+                   "These are not maximum violations and do not certify a superhedge. "
+                   "The run does not isolate approximation, optimization and penalty errors. ")
         with self.voiceover(
-            "The House trains a neural dual on chapter fifteen's problem. Three small networks: u and "
-            "v for the options at each date, h for the delta held in between. The loss is the hedge's "
-            "cost plus a penalty wherever the hedge falls below the claim. <bookmark mark='a'/> On "
-            "the left, the hedge minus the claim over the grid of price pairs: red where it is below, "
-            "gold above, brightest where it just touches. On the right, the bound it implies, three "
-            "seeds, against the linear program's line. <bookmark mark='b'/> At first the hedge is far "
-            "too expensive, then too cheap and red, then it settles onto the claim. "
-            f"{verdict}"
-            "<bookmark mark='c'/> In one dimension the linear program wins: exact, and faster. The "
-            "networks matter where the program cannot go, dozens of assets and dates."
+            f"""The House restores the existing neural dual illustration. Three networks represent u and v for static payoffs and h for the position between dates. The loss is raw hedge cost plus a weighted squared-shortfall penalty. <bookmark mark='a'/> On the left, a central-window sample of hedge minus claim: red is a violation, gold is above. On the right, raw costs for all three fixed seeds, on their full stored range. <bookmark mark='b'/> The initial costs are below the LP value. Penalty optimization then overshoots to much higher costs before returning toward the LP. {verdict}<bookmark mark='c'/> For this small finite problem, the linear program is exact and faster. Neural approximations may help in larger problems, with separate feasibility and optimization checks. Neither a small weighted average shortfall nor a dense sampled window certifies the full continuum."""
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), Create(lpl), FadeIn(lpt), FadeIn(key))
             vo.wait_until("a")
@@ -133,30 +113,17 @@ class Frontier(VoiceoverScene):
                          r"up to 60 assets", width=4.3, font_size=17),
             history_card(2026, r"Bartl, Beiglb\"ock and Pammer, \textit{JEMS}", r"the adapted Wasserstein distance on "
                          r"processes: martingales form a closed, geodesically convex subspace", width=4.3, font_size=17),
-            history_card(2023, r"Heston, Jacobs and Kim (Federal Reserve)", r"options alone cannot tell pricing kernels "
-                         r"apart; monotonicity and path-independence, from recovery theory, remove the anomalies",
+            history_card(2023, r"Heston, Jacobs and Kim (Federal Reserve)", r"kernels with different economic properties can fit options similarly; economic restrictions improve identification in their empirical model",
                          width=4.3, font_size=17),
             history_card(2025, r"Horvath, \textit{JFE}", r"arbitrage-based recovery: one maturity's state prices, "
                          r"26 years of S\&P 500 options (chapter 14)", width=4.3, font_size=17),
-            history_card(2026, r"Shikhman, Galarnyk, Dash and Welsh, ICAIF", r"inverse learning of risk-neutral "
+            history_card(2026, r"Shikhman et al., ICAIF 2026 (forthcoming)", r"inverse learning of risk-neutral "
                          r"densities: accurate prices need not pin the density (chapter 13)", width=4.3, font_size=17),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.3)).move_to(ORIGIN)
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Beyond transport. Julien Guyon, in 2024, solved a famous puzzle, fitting the S&P 500 and "
-            "VIX smiles jointly: there is no joint arbitrage exactly when a calibrating martingale "
-            "measure exists, and he finds the closest one with a Sinkhorn-type algorithm. <bookmark "
-            "mark='a'/> Ariel Neufeld, Antonis Papapantoleon and Qikun Xiang proved a fundamental "
-            "theorem for multi-asset bounds and solved them as semi-infinite linear programs, up to "
-            "sixty assets. <bookmark mark='b'/> Daniel Bartl, Mathias Beiglböck and Gudmund Pammer "
-            "built a geometry on stochastic processes in which the martingales form a closed, convex "
-            "set. <bookmark mark='c'/> And on the pricing kernel, Steven Heston, Kris Jacobs and "
-            "Hyung Joo Kim showed that options alone cannot tell kernels apart, while recovery-style "
-            "constraints remove the anomalies. The theorem is nearly fifty years old, and still a "
-            "live field."
-            " And in recovery and densities, Horvath's 2025 paper and the work of Shikhman and "
-            "coauthors, which you met in chapters fourteen and thirteen."
+            """Beyond transport: Guyon's 2024 framework studies joint SPX and VIX calibration and the associated no-arbitrage feasibility problem under its stated constraints. <bookmark mark='a'/> Neufeld, Papapantoleon and Xiang derive multi-asset superhedging bounds and give semi-infinite programming computations, including examples with sixty assets. <bookmark mark='b'/> Bartl, Beiglbock and Pammer develop adapted Wasserstein geometry, including closedness and geodesic convexity of martingales in their process space. <bookmark mark='c'/> Heston, Jacobs and Kim find low statistical power to distinguish economically different kernels from option fits. Monotonicity and path-independence restrictions resolve anomalies within their empirical models. Horvath's recovery study and Shikhman and coauthors' inverse-density analysis are further examples; each conclusion depends on its model, data and assumptions."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -169,14 +136,12 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def predict(self):
-        card = pause_at(r"Why is a neural network's dual only approximately an upper bound?")
+        card = pause_at(r"When does a neural dual cost become a certified upper bound?")
         with self.voiceover(
-            "Pause and predict. Why is the neural dual only approximately an upper bound? <bookmark "
-            "mark='a'/> The constraint is penalized, not enforced; certify the hedge on a fine grid."
+            """Pause and predict. When is a neural dual cost a certified upper bound? <bookmark mark='a'/> Only after establishing hedge dominance on the claim's full support. A penalty does not enforce the constraint. Checking every pair in a finite support can certify that discrete problem; a dense sample alone does not certify a continuum."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(answer_under(card, r"the constraint is penalized, not enforced: the hedge may dip below the "
-                                                r"claim; certify by checking it on a fine grid")))
+            self.play(FadeIn(answer_under(card, r"penalty alone gives no bound; certify all finite-support pairs, or prove interpolation and tail control for a continuum")))
         self.wait(0.4)
         self.clear_scene()

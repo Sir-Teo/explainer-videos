@@ -19,7 +19,7 @@ SCENES = [
     ("s18_surface", "DensitySurface", "13. The density on the Surface"),
     ("s07_ross", "Ross", "14. Ross recovery, and its critique"),
     ("s08_mot", "MOT", "15. Bounds without a model"),
-    ("s19_motconv", "MOTConverge", "16. Model-free bounds, computed and converging"),
+    ("s19_motconv", "MOTConverge", "16. Finite-grid bounds and numerical sensitivity"),
     ("s20_industry", "Industry", "17. How arbitrage is traded, and why it is limited"),
     ("s21_frontier", "Frontier", "18. The frontier, 2023 to 2026"),
     ("s22_research", "Research", "For the researcher: arbitrage with frictions"),
