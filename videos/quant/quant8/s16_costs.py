@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 class Costs(VoiceoverScene):
@@ -68,16 +68,7 @@ class Costs(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cnt, DOWN, buff=0.5).align_to(cnt, LEFT)
         src = illustration(r"simulation: one market, weekly, 15 years; band from dynamic programming")
         with self.voiceover(
-            "Merton's investor trades every instant to hold a constant fraction. If every trade costs one percent of the "
-            "amount traded, that is ruinous: continuous rebalancing has infinite turnover. What should she do? "
-            "<bookmark mark='a'/> Draw her wealth as a point in a plane: dollars in bonds across, dollars in stocks up. "
-            "Merton's rule is a ray from the origin: every point on it has the same stock share. <bookmark mark='b'/> With "
-            "costs, the ray opens into a wedge. Inside it, do nothing. When the market pushes the point to an edge, trade "
-            "just enough to stay on the edge, never back to the middle. <bookmark mark='c'/> Watch fifteen years of one "
-            "market. The point wanders freely inside the wedge, and each flash at an edge is a tiny trade. Count them "
-            "against an investor who goes back to the ray every week. <bookmark mark='d'/> The wedge trades "
-            f"{100 * w['turn_band']:.1f} percent of wealth a year; staying on the ray, {100 * w['turn_ray']:.0f} percent. "
-            "Mathematically the point is a diffusion reflected at the edges of a cone."
+            f"Merton's investor trades every instant to hold a constant fraction. If every trade costs one percent of the amount traded, that is ruinous: continuous rebalancing has infinite turnover. What should she do? <bookmark mark='a'/> Draw her wealth as a point in a plane: dollars in bonds across, dollars in stocks up. Merton's rule is a ray from the origin: every point on it has the same stock share. <bookmark mark='b'/> With costs, the ray opens into a wedge. Inside it, do nothing. When the market pushes the point to an edge, trade just enough to stay on the edge, never back to the middle. <bookmark mark='c'/> Watch fifteen years of one market. The point wanders freely inside the wedge, and each flash at an edge is a tiny trade. Count them against an investor who goes back to the ray every week. <bookmark mark='d'/> The wedge trades {100 * w['turn_band']:.1f} percent of wealth a year; staying on the ray, {100 * w['turn_ray']:.0f} percent. Mathematically the point is a diffusion reflected at the edges of a cone. The path uses weekly trades with a band computed by a monthly finite-horizon approximation. It illustrates the wedge; it is not an exact simulation of the continuous singular-control optimum."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
@@ -98,16 +89,14 @@ class Costs(VoiceoverScene):
 
     def derive(self):
         rows = [cmath(r"dx = -(1+\varepsilon)\,dL + (1-\varepsilon)\,dU", r",\quad", r"dy = dL - dU", font_size=32),
-                cmath(r"\max\Big\{\mathcal{L}V,\ V_y - (1+\varepsilon)V_x,\ (1-\varepsilon)V_x - V_y\Big\}", r"=", r"0",
+                cmath(r"\max\Big\{V_t+\mathcal{L}V,\ V_y - (1+\varepsilon)V_x,\ (1-\varepsilon)V_x - V_y\Big\}", r"=", r"0",
                       font_size=32, colors={r"0": VALUE}),
-                cmath(r"V(x, y)", r"=", r"(x + y)^{1-\gamma}\, v(\pi),\qquad \pi = \frac{y}{x + y}", font_size=32,
-                      colors={r"V(x, y)": VALUE}),
+                cmath(r"V(t,x,y)", r"=", r"(x + y)^{1-\gamma}\, v(t,\pi),\qquad \pi = \frac{y}{x + y}", font_size=32,
+                      colors={r"V(t,x,y)": VALUE}),
                 cmath(r"\pi_\pm", r"\approx", r"\pi^* \pm \Big(\frac{3}{2\gamma}\,\pi^{*2}(1-\pi^*)^2\,\varepsilon\Big)^{1/3}",
                       font_size=34, colors={r"\pi_\pm": KELLY})]
-        whys = [why(r"the controls are cumulative purchases $L$ and sales $U$, paying $\varepsilon$ on each dollar: a "
-                    r"singular control", font_size=21),
-                why(r"a variational inequality: in each region one term binds: no trade ($\mathcal{L}V = 0$), buy, or "
-                    r"sell", font_size=21),
+        whys = [why(r"trade increments only: $L,U$ are mid-price dollar purchases/sales; market drift and diffusion are in $\mathcal L$", font_size=21),
+                why(r"finite-horizon terminal-wealth formulation: no trade $V_t+\mathcal LV=0$, or a binding buy/sell gradient constraint", font_size=21),
                 why(r"homogeneity: only the stock share matters; the wedge is a band in $\pi$", font_size=21),
                 why(r"small costs: the half-width grows like $\varepsilon^{1/3}$, the loss in welfare like "
                     r"$\varepsilon^{2/3}$ (Janecek and Shreve 2004; Rogers 2004)", font_size=21)]
@@ -126,7 +115,7 @@ class Costs(VoiceoverScene):
             "Andrew Norman constructed the solution in 1990; and Steven Shreve and Mete Soner proved it in 1994, as a viscosity "
             "solution, with the tools of chapter four."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -162,8 +151,7 @@ class Costs(VoiceoverScene):
             "paying the cost, before the market moves; the shares whose best move is to stay put are the band. "
             "<bookmark mark='a'/> At one percent the band runs from "
             f"{100 * rows[2]['lo']:.1f} to {100 * rows[2]['hi']:.1f} percent: a half-width of {100 * rows[2]['half']:.1f} "
-            f"points against the cube-root rule's {100 * rows[2]['asym']:.1f}, narrower because the solver trades only "
-            "monthly."
+            f"points against the cube-root rule's {100 * rows[2]['asym']:.1f}, for this monthly finite-horizon grid and approximate proportional-cost rule. Grid, timing and cost approximations can all contribute to the difference."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -184,7 +172,7 @@ class Costs(VoiceoverScene):
         leg = legend([(KELLY, r"$\varepsilon^{1/3}$ rule"), (VALUE, r"dynamic programming, monthly")], font_size=18)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         g1 = d["g1"]
-        q = pause_card(r"Costs double. Does the band double?", width=5.0, font_size=22).to_edge(RIGHT, buff=0.4).shift(
+        q = predict(r"Costs double. Does the band double?", width=5.0, font_size=22).to_edge(RIGHT, buff=0.4).shift(
             UP * 2.0)
         ans = MathTex(r"\times\, 2^{1/3} \approx 1.26", font_size=36, color=KELLY).next_to(q, DOWN, buff=0.25)
         res = VGroup(
@@ -197,8 +185,7 @@ class Costs(VoiceoverScene):
                     rf"{100 * g1['merton']['turnover']:.0f}\%\text{{ a year}}", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ans, DOWN, buff=0.5).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Pause and predict: if costs double, does the band double? <bookmark mark='a'/> No: it grows by the cube root "
-            "of two, about a quarter. <bookmark mark='b'/> Is the band worth it? For a log-utility investor paying one "
+            "Pause and predict: if costs double, does the band double? <bookmark mark='a'/> To leading order for small costs, the half-width grows by the cube root of two, about a quarter; this is not an exact finite-cost law. <bookmark mark='b'/> Is the band worth it? For a log-utility investor paying one "
             f"percent and trading quarterly, the band, {100 * g1['lo']:.0f} to {100 * g1['hi']:.0f} percent, grows "
             f"{100 * g1['gain']:.2f} percent a year faster after costs than rebalancing to Merton, with "
             f"{100 * g1['band']['turnover']:.0f} percent turnover instead of {100 * g1['merton']['turnover']:.0f}."

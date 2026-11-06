@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, load, real_data
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, load, real_data
 
 ALPHA, LAM, GAM_G = 0.88, 2.25, 0.61  # Tversky and Kahneman (1992)
 
@@ -38,15 +38,15 @@ class Behaviour(VoiceoverScene):
         a = VGroup(label(r"Choice 1:\quad A: \$1 million for sure \quad or \quad B: 10\%: \$5m, 89\%: \$1m, 1\%: nothing",
                          font_size=22),
                    label(r"Choice 2:\quad C: 11\%: \$1m \quad or \quad D: 10\%: \$5m", font_size=22),
-                   label(r"most people choose A and D", font_size=26, color=KELLY),
-                   wrapped_label(r"but B and D are A and C with the same 89\% chance of \$1m removed from both; "
+                   label(r"a commonly observed pattern: A and D", font_size=26, color=KELLY),
+                   wrapped_label(r"C and D come from A and B by replacing a common 89\% chance of \$1m with zero; "
                                  r"independence says the order cannot flip (Allais 1953)", 12.0, 22, OVER),
                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
             "Does anyone actually choose by expected utility? In 1953 Maurice Allais offered two choices. A sure million, "
             "or ten percent of five million, eighty-nine of one million, one of nothing: most take the sure million. Eleven "
             "percent of a million, or ten percent of five: most take the five. <bookmark mark='a'/> But the second pair is "
-            "the first with the same eighty-nine percent chance removed from both. Independence says the order cannot flip; "
+            "A and B with their common eighty-nine percent chance of a million replaced by zero in both. Independence says the order cannot flip; "
             "people flip it."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(x) for x in a[:3]], lag_ratio=0.6, run_time=4))
@@ -80,9 +80,9 @@ class Behaviour(VoiceoverScene):
         with self.voiceover(
             "Kahneman and Tversky's prospect theory, 1979, and its cumulative form, 1992, makes three changes. "
             "<bookmark mark='a'/> Value is measured from a reference point, concave for gains, convex for losses, with a "
-            "kink: a loss hurts about two and a quarter times as much as an equal gain pleases. <bookmark mark='b'/> "
+            "kink: the illustrative parameter makes the loss side two and a quarter times as steep in magnitude. These are fitted example parameters, not universal constants. <bookmark mark='b'/> "
             "Probabilities are weighted, so the extremes count for more, ranked from the tails inward. "
-            "<bookmark mark='c'/> In markets: winners sold too early, losers held too long, lottery-like stocks overpriced."
+            "<bookmark mark='c'/> Related models study holding losers, selling winners and demand for lottery-like payoffs; those interpretations do not by themselves establish market causation."
         ) as vo:
             self.play(FadeIn(g1), Create(ref))
             vo.wait_until("a")
@@ -99,19 +99,19 @@ class Behaviour(VoiceoverScene):
         vs, vb = np.asarray(m["stocks"]), np.asarray(m["bills"])
         r1, r24 = np.asarray(m["ret1"]), np.asarray(m["ret24"])
         # left: the S-curve with the monthly return histogram under it; right: CPT value against the evaluation period
-        g1 = axes([-0.6, 1.2], [-1.2, 1.0], x_length=5.4, y_length=4.0, xlabel=r"return over the evaluation period",
+        g1 = axes([-0.9, 1.6], [-1.2, 1.0], x_length=5.4, y_length=4.0, xlabel=r"return over the evaluation period",
                   ylabel=r"prospect value", xticks=[-0.5, 0, 0.5, 1], xfmt=lambda u: f"{100 * u:.0f}\\%", yticks=[],
                   font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
         ax = g1.ax
-        xs = np.linspace(-0.6, 1.2, 301)
+        xs = np.linspace(-0.9, 1.6, 301)
         vv = v(xs)
         inn = (vv >= -1.2) & (vv <= 1.0)  # the curve only inside the axes: no flat runs along the edges
         sc = curve(ax, xs[inn], vv[inn], VALUE, stroke_width=3)
-        bins = np.linspace(-0.6, 1.2, 46)
+        bins = np.linspace(-0.9, 1.6, 46)
 
         def hist(r_, col):
-            h, _ = np.histogram(np.clip(r_, -0.6, 1.19), bins=bins)
-            h = h / h.max() * 0.9
+            h, _ = np.histogram(r_, bins=bins)
+            h = h / len(r_) * 3.0
             grp = VGroup()
             for i, hh in enumerate(h):
                 if hh <= 0:
@@ -136,16 +136,16 @@ class Behaviour(VoiceoverScene):
             RIGHT * 0.7)
         leg = legend([(KELLY, r"US stocks"), (GREY_B, r"T-bills")], font_size=18).next_to(g2, UP, buff=0.05).align_to(
             g2, LEFT)
-        q = pause_card(r"If you looked at your portfolio every five years instead of every month, would a loss-averse "
+        q = predict(r"If you looked at your portfolio every five years instead of every month, would a loss-averse "
                        r"investor hold more stocks or fewer?", width=6.4, font_size=20).to_edge(UP, buff=0.3)
-        src = real_data(r"French monthly 1926--2020, overlapping windows; TK (1992) parameters; registered test")
+        src = real_data(r"French 1926--2020, overlapping nominal returns; reference zero, illustrative TK parameters; displayed histogram window, shared frequency scale")
         with self.voiceover(
             "Benartzi and Thaler proposed in 1995 that stocks are shunned because people check them too often. Pause and "
             "predict: looking every five years instead of every month, would a loss-averse investor hold more stocks, or "
             "fewer? <bookmark mark='a'/> The House's registered test, on ninety-four years of US returns. Over a month, half "
             "the returns sit on the steep loss side of the curve; over two years, the distribution slides into gains. "
             "<bookmark mark='b'/> Score stocks and bills every h months: bills win for short periods, and the curves cross "
-            f"at {cross} months. Benartzi and Thaler found about a year, against bonds. <bookmark mark='c'/> So: more. How "
+            f"at {cross} months. Benartzi and Thaler found about a year, against bonds. <bookmark mark='c'/> This pure-stock versus bill comparison does not solve the optimal mixed allocation or the uncomputed five-year case. How "
             "often you look is itself a decision."
         ) as vo:
             self.play(FadeIn(q))
@@ -182,16 +182,11 @@ class Behaviour(VoiceoverScene):
                     font_size=20)]
         step = ladder(self, rows, whys, keep=4, top=1.6, x=-0.8, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Second, people dislike unknown odds apart from risk: Ellsberg's urn, 1961, and Gilboa and Schmeidler's theory, "
-            "1989: choose the action whose worst plausible model is best. <bookmark mark='a'/> Applied to Merton by Pascal "
-            "Maenhout in 2004, after Hansen and Sargent: nature may lower the stock's drift, paying an entropy cost. "
-            "<bookmark mark='b'/> The inner minimum is a parabola. <bookmark mark='c'/> With Maenhout's scaling, the bigger "
-            "your stake, the more pessimistic the worst case. <bookmark mark='d'/> The result is Merton with gamma plus "
-            "theta: doubt acts like extra risk aversion."
+            "Second, people dislike unknown odds apart from risk: Ellsberg's urn, 1961, and Gilboa and Schmeidler's theory, 1989: choose the action whose worst plausible model is best. <bookmark mark='a'/> Applied to Merton by Pascal Maenhout in 2004, after Hansen and Sargent: nature may lower the stock's drift, paying an entropy cost. <bookmark mark='b'/> The inner minimum is a parabola. <bookmark mark='c'/> With Maenhout's scaling, the bigger your stake, the more pessimistic the worst case. <bookmark mark='d'/> The result is Merton with gamma plus theta: doubt acts like extra risk aversion. The gamma-plus-theta result uses this particular homothetic entropy penalty. Theta here measures ambiguity; it is not the Sharpe-ratio symbol used elsewhere."
         ) as vo:
             self.play(FadeIn(urn))
             vo.wait_until("a")
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -214,7 +209,7 @@ class Behaviour(VoiceoverScene):
         fan = VGroup(*[DashedLine(ax.c2p(0, ex + d), ax.c2p(1.0, ex + d), color=GREY_D, stroke_width=1.2)
                        for d in np.linspace(-0.06, 0.02, 9)])
         nature = curve(ax, pis, ex - th * pis * s ** 2, OVER, stroke_width=4)
-        best = curve(ax, (np.linspace(0, 0.10, 50)) / (gam * s ** 2), np.linspace(0, 0.10, 50), UNDER,
+        best = curve(ax, pis, gam * s ** 2 * pis, UNDER,
                      stroke_width=4)
         pt = Dot(ax.c2p(row["pi"], ex - th * row["pi"] * s ** 2), color=KELLY, radius=0.1)
         leg = legend([(OVER, r"nature's worst case, given $\pi$"), (UNDER, r"the investor's Merton response, given "
@@ -234,12 +229,7 @@ class Behaviour(VoiceoverScene):
             MathTex(rf"\text{{no doubt: }}{100 * rf['pi_plain']:.0f}\%", font_size=26, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The game on US numbers, gamma three: in red, nature's worst drift for each position; in blue, the investor's "
-            f"Merton response to each drift. <bookmark mark='a'/> They cross at {100 * row['pi']:.0f} percent, against "
-            f"{100 * rf['pi_plain']:.0f} with no doubt. <bookmark mark='b'/> How much doubt? Only what the data cannot rule "
-            "out: choose theta so the worst case would be mistaken for the estimate twenty percent of the time in "
-            f"ninety-four years of data. Then theta is {th:.1f}."
-            " Next: the equations behind robust preferences and the American put alike: backward SDEs."
+            f"The game on US numbers, gamma three: in red, nature's worst drift for each position; in blue, the investor's Merton response to each drift. <bookmark mark='a'/> They cross at {100 * row['pi']:.0f} percent, against {100 * rf['pi_plain']:.0f} with no doubt. <bookmark mark='b'/> How much doubt? Choose a calibration convention: choose theta so the worst case would be mistaken for the estimate twenty percent of the time in ninety-four years of data. Then theta is {th:.1f}. Next: the equations behind robust preferences and the American put alike: backward SDEs. Detection error is an equal-prior normal likelihood-test error for constant drifts and known volatility: Phi of minus the absolute drift difference times square-root years over twice sigma. Twenty percent is a chosen calibration, not an empirically established plausibility boundary."
         ) as vo:
             self.play(FadeIn(g), FadeIn(fan), FadeIn(leg))
             self.play(Create(nature), Create(best), run_time=2)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 def heat(P, lo=0.0, hi=2.4, size=0.13):
@@ -51,19 +51,13 @@ class RL(VoiceoverScene):
                     r"$\gamma = 1$)", font_size=21),
                 why(r"the policy gradient: push up the log-probability of actions that did better than expected",
                     font_size=21),
-                why(r"advantage from a one-step error of a learned critic: it carries only this step's market noise, "
-                    r"not the whole future's", font_size=21),
-                why(r"proximal policy optimization (Schulman et al.\ 2017): limit how far one update moves the policy "
-                    r"(\textit{AI, Built} Part 26)", font_size=21)]
+                why(r"one-step TD advantage: lower-horizon noise, but a learned critic can introduce bias", font_size=21),
+                why(r"PPO (Schulman et al.\ 2017): clips a surrogate objective; no hard bound on updates, ratios or KL divergence", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Now a learner with no equation. Merton as a Markov decision process: the state is time and log wealth, the "
-            "action a fraction, the reward each quarter's log growth. <bookmark mark='a'/> The policy gradient raises the "
-            "probability of actions that did better than expected. <bookmark mark='b'/> Better than expected is a one-step "
-            "advantage from a learned critic, carrying one quarter's noise instead of a decade's. <bookmark mark='c'/> PPO, "
-            "from Part twenty-six of the AI series, clips each update."
+            """Now a learner given the simulated market and reward, but not Merton's analytic optimum. State: time and log wealth. Action: a fraction. Reward: quarterly log growth, with a numerical floor when gross wealth becomes nonpositive. <bookmark mark='a'/> The policy-gradient expression averages action scores over state visits. <bookmark mark='b'/> A one-step TD advantage uses a learned critic, which can introduce bias. <bookmark mark='c'/> PPO clips its surrogate objective; it does not enforce a hard bound on every policy update or on KL divergence."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -78,7 +72,7 @@ class RL(VoiceoverScene):
             "for n in range(steps):                     # roll out a batch",
             "    a = Normal(pol(s), explore).sample()   # a fraction",
             "    gross = 1 + r*dt + a*(R - r*dt)        # the market moves",
-            "    rew = log(gross); lw += rew",
+            "    rew = log(max(gross, 1e-6)); lw += rew",
             "delta = Rw + v_next - v                    # one-step TD advantage",
             "adv = (delta - delta.mean()) / delta.std()",
             "for _ in range(epochs):",
@@ -88,16 +82,12 @@ class RL(VoiceoverScene):
             "    (l_pol + l_val).backward(); opt.step()",
         ], source="explainer/quant/house/control.py: ppo_merton", width=9.0, font_size=17).to_edge(UP, buff=0.3)
         fin = ps["finals"]
-        outs = [f"seed {i}: mean fraction {100 * f:.0f}%   growth shortfall {100 * sh:.3f}%/yr"
+        outs = [f"seed {i}: mean fraction {100 * f:.0f}%   continuous-growth proxy gap {100 * sh:.3f}%/yr"
                 for i, (f, sh) in enumerate(zip(fin, ps["shortfall"]))]
-        outs.append(f"optimum (quarterly): {100 * ps['discrete']:.0f}%   closed form (continuous): "
+        outs.append(f"finite-quadrature benchmark: {100 * ps['discrete']:.0f}%   closed form (continuous): "
                     f"{100 * ps['merton']:.0f}%")
         with self.voiceover(
-            "Lab five: roll out a thousand and twenty-four ten-year episodes, compute advantages, take clipped steps, three "
-            "hundred times. <bookmark mark='a'/> Five seeds end between "
-            f"{100 * min(fin):.0f} and {100 * max(fin):.0f} percent, against the optimum of {100 * ps['discrete']:.0f}; the "
-            f"worst gives up only {100 * max(ps['shortfall']):.2f} percent a year. The objective is that flat near the top, "
-            "which is why it is hard to learn."
+            f"""Lab five: a thousand and twenty-four ten-year episodes per iteration, three hundred iterations. Actions are unbounded Gaussian fractions; gross wealth is floored at one millionth. That is a numerical simulator, not an admissibility theorem for leveraged GBM. <bookmark mark='a'/> Five seeds finish with mean fractions from {100 * min(fin):.0f} to {100 * max(fin):.0f} percent. The finite-quadrature benchmark is {100 * ps['discrete']:.0f} percent. The displayed gap, at most {100 * max(ps['shortfall']):.2f} percent a year, compares continuous-growth formulas at mean fractions. It does not measure the full learned policy's quarterly performance."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -127,15 +117,14 @@ class RL(VoiceoverScene):
                             xlabel=r"PPO iteration", color=ALT)
         tgt = DashedLine(rp.ax.c2p(0, ps["discrete"]), rp.ax.c2p(steps[-1], ps["discrete"]), color=KELLY,
                          stroke_width=2.5)
-        tl = MathTex(rf"\text{{optimum }}{100 * ps['discrete']:.0f}\%", font_size=24, color=KELLY).next_to(
-            tgt, DOWN, buff=0.08).align_to(tgt, RIGHT)
+        tl = MathTex(rf"\text{{quadrature reference }}{100 * ps['discrete']:.0f}\%", font_size=24, color=KELLY).next_to(
+            tgt, UP, buff=0.08).set_y(2.9).align_to(tgt, RIGHT)
         src = illustration(r"300 iterations $\times$ 1{,}024 ten-year quarterly episodes, 5 seeds, one CPU thread each")
         with self.voiceover(
             "Here is the training, scrubbed checkpoint by checkpoint. On the right, the average fraction the policy chooses, "
-            "for five seeds, the band showing their spread, against the optimum. On the left, the policy itself, over time "
-            "and wealth, at the same checkpoint. <bookmark mark='a'/> It starts at fifty percent everywhere. It climbs, "
-            "overshoots on some seeds, and wanders around the optimum, because the gradient's signal is a fraction of a "
-            "percent a year inside an eighteen percent market. The map flattens: by the end the fraction barely depends on "
+            "for five seeds, the band showing their spread, against the finite-quadrature reference. On the left, the policy itself, over time "
+            "and wealth, at the same checkpoint. <bookmark mark='a'/> It starts near fifty percent. It climbs, "
+            "overshoots on some seeds, and wanders around the reference, in this fixed training protocol. The map flattens: by the end the fraction barely depends on "
             "time or wealth, which is what Merton's theorem says, though the learner never heard of it."
         ) as vo:
             self.play(FadeIn(rp), Create(tgt), FadeIn(tl), FadeIn(src))
@@ -159,7 +148,7 @@ class RL(VoiceoverScene):
                     Line(ax.c2p(hi, hi), ax.c2p(3.0, hi), color=VALUE, stroke_width=4))
         band = Polygon(ax.c2p(lo, 0.5), ax.c2p(hi, 0.5), ax.c2p(hi, 3.0), ax.c2p(lo, 3.0), stroke_width=0,
                        fill_color=VALUE, fill_opacity=0.12)
-        learned = VGroup(*[curve(ax, gp, np.clip(f_, 0.5, 3.0), ALT, stroke_width=2.5).set_stroke(opacity=0.8)
+        learned = VGroup(*[curve(ax, gp, f_, ALT, stroke_width=2.5).set_stroke(opacity=0.8)
                            for f_ in fin])
         leg = legend([(VALUE, r"dynamic programming: the band"), (ALT, r"PPO, 5 seeds (mid-horizon)"),
                       (GREY_C, r"do nothing")], font_size=17).next_to(g, UP, buff=0.18).align_to(g, LEFT)
@@ -176,14 +165,14 @@ class RL(VoiceoverScene):
                                                                     col_alignments="lrr")
         tab.to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         se = pc["band"]["se"]
-        q = pause_card(r"With a 1\% cost on every trade, will the agent learn to do nothing inside a band?", width=3.6,
+        q = predict(r"With a 1\% cost on every trade, will the agent learn to do nothing inside a band?", width=3.6,
                        font_size=19).next_to(tab, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)  # wider than the table
         edges = [e for e in pc["edges"] if e[0] is not None]
         close = len(edges) >= 3 and all(abs(e[0] - lo) < 0.15 and abs(e[1] - hi) < 0.15 for e in edges)
         beats = bool(np.median(pg) > pc["merton"]["growth"])
-        src = illustration(r"log utility, 1\% cost, quarterly, 10 years; all rules scored on the same 200{,}000 markets")
+        src = illustration(r"log utility, 1\% cost, quarterly; target clipped to $[0,4]$, gross/cost factors floored at $10^{-6}$; paired 200{,}000-market evaluation")
         with self.voiceover(
-            "Now a problem with no formula: a one percent cost on every trade. The dynamic program says: a band from "
+            "Now add trading costs: a one percent cost on every trade. The dynamic program says: a band from "
             f"{100 * lo:.0f} to {100 * hi:.0f} percent, do nothing inside, trade to the edge outside. Pause and predict: "
             "will the learner find it? <bookmark mark='a'/> Five learned policies, against the band."
         ) as vo:
@@ -200,7 +189,7 @@ class RL(VoiceoverScene):
             f"{100 * pc['merton']['growth']:.2f} for rebalancing to Merton every quarter and "
             f"{100 * pc['band']['growth']:.2f} for the band. The band's edge over the learners is "
             f"{100 * (pc['band']['growth'] - np.median(pg)):.2f} percent a year, and each episode is a decade of an "
-            "eighteen percent market: at this budget that signal sits under the noise. Next: who sizes bets for a living."
+            "eighteen percent market: these five seeds and this training budget did not recover the dynamic-programming policy. Next: who sizes bets for a living."
         ) as vo:
             self.play(FadeOut(q), LaggedStart(*[FadeIn(VGroup(*r_)) for r_ in cells], lag_ratio=0.3, run_time=3))
         self.wait(0.4)

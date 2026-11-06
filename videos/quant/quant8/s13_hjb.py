@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 MU, R, SIG, GAM, FLOOR = 0.08, 0.02, 0.18, 3.0, 0.6
 
@@ -49,21 +49,9 @@ class HJB(VoiceoverScene):
                     r"the Sharpe ratio (Merton 1969)", font_size=21)]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.6, buff=0.95, edge=6.9)
         with self.voiceover(
-            "Shrink Bellman's period to an instant. Over a short interval of length h, the value now is the best expected "
-            "value at the end of the interval: the same principle. <bookmark mark='a'/> Expand that future value with Itô's "
-            "formula from Part five. It is today's value, plus a drift integral, the time derivative plus the generator of "
-            "wealth under the chosen fraction, plus a stochastic integral against the Brownian motion. "
-            "<bookmark mark='b'/> The stochastic integral has mean zero. Subtract today's value from both sides and divide "
-            "by h. <bookmark mark='c'/> Let h go to zero, and the average of the integrand becomes its value now: zero "
-            "equals the time derivative plus the supremum, over the fraction, of the drift of wealth times V x plus half the "
-            "variance times V x x. This is the Hamilton-Jacobi-Bellman equation, with utility as its terminal condition. "
-            "<bookmark mark='d'/> The thing inside the supremum is a parabola in pi. When V is concave its vertex is the "
-            "maximum, and the first-order condition gives the fraction. <bookmark mark='e'/> Now guess a power of wealth "
-            "times a function of time. The x derivatives become multiples of V, the supremum becomes a number, and the "
-            "equation collapses to an ordinary differential equation for f, equal to one at the end. The fraction is "
-            "Merton's: the excess return over gamma times the variance."
+            "Shrink Bellman's period to an instant. Over a short interval of length h, the value now is the best expected value at the end of the interval: the same principle. <bookmark mark='a'/> Expand that future value with Itô's formula from Part five. It is today's value, plus a drift integral, the time derivative plus the generator of wealth under the chosen fraction, plus a stochastic integral against the Brownian motion. <bookmark mark='b'/> The stochastic integral has mean zero. Subtract today's value from both sides and divide by h. <bookmark mark='c'/> Let h go to zero, and the average of the integrand becomes its value now: zero equals the time derivative plus the supremum, over the fraction, of the drift of wealth times V x plus half the variance times V x x. This is the Hamilton-Jacobi-Bellman equation, with utility as its terminal condition. <bookmark mark='d'/> The thing inside the supremum is a parabola in pi. When V is concave its vertex is the maximum, and the first-order condition gives the fraction. <bookmark mark='e'/> Now guess a power of wealth times a function of time. The x derivatives become multiples of V, the supremum becomes a number, and the equation collapses to an ordinary differential equation for f, equal to one at the end. The fraction is Merton's: the excess return over gamma times the variance. This formal derivation assumes smooth value, valid dynamic programming and admissible control processes over the interval. The stochastic integral needs localization and sufficient integrability to have zero expectation."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -118,7 +106,7 @@ class HJB(VoiceoverScene):
         txt = VGroup(label(r"no floor: the parabola keeps its vertex", font_size=22, color=GREY_A),
                      label(r"a floor: the vertex slides to 0 as wealth nears it", font_size=22, color=OVER)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(gw, DOWN, buff=1.0).align_to(gw, LEFT)
-        q = pause_card(r"Double $\sigma$. What happens to the Merton fraction?", width=5.6, font_size=22).next_to(
+        q = predict(r"Double $\sigma$. What happens to the Merton fraction?", width=5.6, font_size=22).next_to(
             txt, DOWN, buff=0.5).align_to(gw, LEFT)
         with self.voiceover(
             "Here is the maximum as a picture: at every wealth, the bracket, divided by the positive number one minus "
@@ -157,14 +145,7 @@ class HJB(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25), who=r"Fleming and Rishel (1975); Pham ch.\ 3; Bj\"ork",
             width=12.2, color=VALUE).move_to(ORIGIN)
         with self.voiceover(
-            "We guessed the answer. Why is the guess right? The verification theorem. Suppose a smooth function w solves "
-            "the HJB equation and equals utility at the end. Take any strategy at all and apply Itô's formula to w along "
-            "its wealth. <bookmark mark='a'/> Utility at the end equals w today, plus a drift integral, plus a stochastic "
-            "integral. The HJB says the drift is at most zero for every strategy, because zero is the supremum; so utility "
-            "at the end is at most w today plus a martingale. Take expectations: no strategy can beat w. For the maximizer "
-            "the drift is exactly zero, so it attains w. Therefore w is the value function, and the maximizer is optimal. "
-            "<bookmark mark='b'/> The fine print is the martingale condition, which rules out doubling strategies, and the "
-            "smoothness of w. When w is not smooth the argument breaks, and the next chapter repairs it."
+            """We guessed a smooth solution. Verification turns it into a value function under suitable growth and integrability conditions. Apply Itô along any admissible wealth process. <bookmark mark='a'/> HJB makes the drift nonpositive. If localization and uniform integrability justify expectations at the terminal time, expected utility is at most today's candidate value. An admissible, well-posed feedback attaining the supremum has zero drift and reaches that value. Thus it is optimal. <bookmark mark='b'/> Smoothness, the stochastic-integral condition, terminal limits and admissibility all matter; a martingale condition alone is not a general exclusion of doubling strategies. The next chapter handles nonsmooth value functions."""
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -176,12 +157,12 @@ class HJB(VoiceoverScene):
 
     def solve(self, h):
         y, pi = np.asarray(h["y"]), np.asarray(h["pi"])
-        g = axes([-2, 2], [0.55, 0.68], x_length=6.0, y_length=2.6, xlabel=r"log wealth",
+        g = axes([-2, 2], [min(0.55, float(pi.min()) - 0.01), max(0.68, float(pi.max()) + 0.01)], x_length=6.0, y_length=2.6, xlabel=r"log wealth",
                  ylabel=r"the solver's fraction at $t = 0$", xticks=[-2, -1, 0, 1, 2], yticks=[0.56, 0.6, 0.64, 0.68],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.7).to_edge(UP, buff=0.8)
         ax = g.ax
         ref = DashedLine(ax.c2p(-2, h["pi_merton"]), ax.c2p(2, h["pi_merton"]), color=KELLY, stroke_width=2)
-        ln = curve(ax, y, np.clip(pi, 0.55, 0.68), VALUE, stroke_width=4)
+        ln = curve(ax, y, pi, VALUE, stroke_width=4)
         pc = np.asarray(h["pass_counts"])
         bars = VGroup()
         bg = axes([0.5, len(pc) + 0.5], [0, max(pc) * 1.15], x_length=4.0, y_length=1.6,

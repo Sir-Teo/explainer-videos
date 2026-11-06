@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 class Stopping(VoiceoverScene):
@@ -41,18 +41,16 @@ class Stopping(VoiceoverScene):
                     r"least the average of its neighbours: the least concave majorant (Dynkin 1963)", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Some decisions are not how much, but when: exercise an option, sell a house, stop searching. Let g be what you "
-            "get if you stop at time n. Laurie Snell's answer, from 1952, is backward induction again: at the deadline you "
+            "Some decisions are not how much, but when: exercise an option, sell a house, stop searching. For the finite-horizon theorem, let g be an adapted integrable reward, and all stopping times be bounded by the deadline. Laurie Snell's answer, from 1952, is backward induction again: at the deadline you "
             "must stop; before it, take the better of stopping now and the expected value of waiting. <bookmark mark='a'/> "
             "That makes U a supermartingale, drifting down on average, lying above g, and induction from the deadline shows "
             "it is the smallest such process. <bookmark mark='b'/> Stop the first time U touches g. Until then the maximum "
             "picks the waiting term, so U stopped there is a martingale, and by optional sampling its value today is the "
-            "expected payoff of the rule: nothing does better. <bookmark mark='c'/> Now a case you can see: a random walk "
-            "stepping left or right with equal chances, with no deadline. The value of waiting one step is the average of the "
+            "expected payoff of the rule: nothing does better. <bookmark mark='c'/> Now a case you can see: a symmetric random walk on the finite grid zero to twenty, stopped at the absorbing endpoints, with no fixed deadline. The value of waiting one step is the average of the "
             "two neighbours, and the smallest function above g that is at least the average of its neighbours is the "
             "smallest concave function above g."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -83,7 +81,7 @@ class Stopping(VoiceoverScene):
         lights = VGroup(*[Dot(ax.c2p(x, g[x]), radius=0.12, color=KELLY) for x in range(N + 1) if stop[x]])
         st_l = label(r"stop where the rope touches a peg; wait where it hangs above", font_size=22, color=KELLY)
         st_l.to_corner(UL, buff=0.5)
-        q = pause_card(r"Which pegs will the rope touch?", width=4.4, font_size=22).to_corner(UR, buff=0.4)  # the counter that takes this corner arrives as the card leaves
+        q = predict(r"Which pegs will the rope touch?", width=4.4, font_size=22).to_corner(UR, buff=0.4)  # the counter that takes this corner arrives as the card leaves
         with self.voiceover(
             "A payoff for every position, a skyline of pegs. Pause and predict: which pegs will the value touch? "
             "<bookmark mark='a'/> Value iteration: start at the payoff, and replace each value by the larger of its peg and "
@@ -115,7 +113,10 @@ class Stopping(VoiceoverScene):
             "def concave_majorant(g):     # upper hull; a, b = the last two points kept",
             "    hull = []",
             "    for i in range(len(g)):",
-            "        while len(hull) >= 2 and (b-a)*(g[i]-g[a]) >= (g[b]-g[a])*(i-a): hull.pop()",
+            "        while len(hull) >= 2:",
+            "            a, b = hull[-2:]",
+            "            if (b-a)*(g[i]-g[a]) < (g[b]-g[a])*(i-a): break",
+            "            hull.pop()",
             "        hull.append(i)",
             "    return interp(arange(len(g)), hull, g[hull])",
         ], source="explainer/quant/house/control.py", width=8.2, font_size=18).to_edge(UP, buff=0.35)
@@ -156,12 +157,7 @@ class Stopping(VoiceoverScene):
                           GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "A classic with a famous answer: the secretary problem. A hundred candidates arrive in random order. You can rank "
-            "each against those already seen, but must accept or reject on the spot, and win only with the very best. "
-            "<bookmark mark='a'/> The Snell envelope says: reject a fixed number, then take the first candidate better than "
-            f"all of them. Reject about {q['best_k']}, a hundred over e, and you choose the best "
-            f"{100 * q['best_p']:.0f} percent of the time: one over e, however many candidates there are."
-            " In continuous time the stopping rule becomes a boundary. Next: the American put."
+            f"""The secretary problem: a known hundred candidates arrive in uniformly random order, with distinct ranks. Compare each with those already seen, then accept or reject immediately; there is no recall, and success means selecting the best. <bookmark mark='a'/> The optimal rule rejects a fixed number, then takes the first record. For a hundred candidates the best cutoff is {q['best_k']}, with success probability {100 * q['best_p']:.1f} percent. As the number grows, the optimal rejected fraction and success probability tend to one over e. That is an asymptotic limit, not an exact probability at every finite n. Next: continuous-time exercise boundaries."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
             vo.wait_until("a")

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 class MFG(VoiceoverScene):
@@ -42,16 +42,9 @@ class MFG(VoiceoverScene):
                     r"mean-field game, a race to sell first", font_size=20)]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-0.4, buff=0.95, edge=6.9)
         with self.voiceover(
-            "Now many traders face each other. In a mean-field game each player solves a control problem backwards, "
-            "taking the crowd as given, while the crowd moves forwards, driven by everyone's choices. Lasry and Lions, and "
-            "Huang, Malhamé and Caines, introduced it in 2006. <bookmark mark='a'/> A case with a closed form: N funds each "
-            "sell a block by time T; selling fast costs a premium, and everyone's selling pushes the price down. "
-            "<bookmark mark='b'/> A plan's cost depends on the others' average selling rate. <bookmark mark='c'/> The best "
-            "response solves an Euler-Lagrange equation. <bookmark mark='d'/> Consistency, the others do the same, gives one "
-            "linear equation. <bookmark mark='e'/> Alone, sell in a straight line; in a crowd, sell in a rush, before the "
-            "others' selling lands in the price."
+            "Now many traders face each other. In a mean-field game each player solves a control problem backwards, taking the crowd as given, while the crowd moves forwards, driven by everyone's choices. Lasry and Lions, and Huang, Malhamé and Caines, introduced it in 2006. <bookmark mark='a'/> A case with a closed form: N funds each sell a block by time T; selling fast costs a premium, and everyone's selling pushes the price down. <bookmark mark='b'/> A plan's cost depends on the others' average selling rate. <bookmark mark='c'/> The best response solves an Euler-Lagrange equation. <bookmark mark='d'/> Consistency, the others do the same, gives one linear equation. <bookmark mark='e'/> With zero inventory penalty, alone sell in a straight line; in a crowd, sell in a rush, before the others' selling lands in the price. This example uses deterministic symmetric open-loop plans, inventory one initially and zero at the deadline. The straight-line single-agent schedule assumes zero inventory penalty."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -69,7 +62,8 @@ class MFG(VoiceoverScene):
         reps = m["replay"]
         g = axes([0, 1], [0, 1.0], x_length=5.6, y_length=3.6, xlabel=r"time", ylabel=r"inventory $Q$ (from 1)",
                  xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], font_size=15).to_edge(LEFT, buff=0.5).shift(DOWN * 0.4)
-        g2 = axes([0, 1], [0, 2.4], x_length=5.6, y_length=3.6, xlabel=r"time", ylabel=r"the crowd's selling rate $m$",
+        rate_hi = max(2.4, 1.05 * max(float(np.max(r["m"])) for r in reps))
+        g2 = axes([0, 1], [0, rate_hi], x_length=5.6, y_length=3.6, xlabel=r"time", ylabel=r"the crowd's selling rate $m$",
                   xticks=[0, 0.5, 1], yticks=[0, 1, 2], font_size=15).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.4)
         arr1 = Arrow(g.get_corner(UR) + LEFT * 0.2 + UP * 0.35, g.get_corner(UL) + RIGHT * 0.4 + UP * 0.35, color=VALUE,
                      buff=0, stroke_width=3)
@@ -79,20 +73,16 @@ class MFG(VoiceoverScene):
         a2 = label(r"the crowd: rolled forwards", font_size=18, color=ALT).next_to(arr2, UP, buff=0.05)
         closed = curve(g.ax, t, np.asarray(m["runs"]["inf"]["closed"]), GREY_B, stroke_width=2)
         cm = -np.gradient(np.asarray(m["runs"]["inf"]["closed"]), t)
-        closed_m = curve(g2.ax, t, np.clip(cm, 0, 2.4), GREY_B, stroke_width=2)
+        closed_m = curve(g2.ax, t, cm, GREY_B, stroke_width=2)
 
         def fr(i):
             return VGroup(curve(g.ax, t, np.asarray(reps[i]["Q"]), VALUE, stroke_width=4),
-                          curve(g2.ax, t, np.clip(np.asarray(reps[i]["m"]), 0, 2.4), ALT, stroke_width=4),
+                          curve(g2.ax, t, np.asarray(reps[i]["m"]), ALT, stroke_width=4),
                           MathTex(rf"\text{{iteration }} {i + 1}", font_size=28, color=GREY_A).to_edge(UP, buff=0.4))
 
         cur = fr(0)
         with self.voiceover(
-            "How does a crowd find that equilibrium? One answer is fictitious play. On the left, a trader's plan, solved "
-            "backwards from the deadline; on the right, the crowd's selling rate, rolled forwards. Start by assuming the crowd "
-            "does nothing. <bookmark mark='a'/> The best response to a passive crowd is a straight line. Then let the crowd "
-            "adopt that plan, and respond again; each round mixes half of the new crowd into the old. The curves overshoot, "
-            "then settle, round by round, onto the grey equilibrium, where the plan produces exactly the crowd it assumed."
+            "How does a crowd find that equilibrium? One answer is damped best-response iteration. On the left, a trader's plan, solved backwards from the deadline; on the right, the crowd's selling rate, rolled forwards. Start by assuming the crowd does nothing. <bookmark mark='a'/> The best response to a passive crowd is a straight line. Then let the crowd adopt that plan, and respond again; each round mixes half of the new crowd into the old. The curves overshoot, then settle, round by round, onto the grey equilibrium, where the plan produces exactly the crowd it assumed. Here each response is mixed half-and-half with the previous plan, a damped fixed-point iteration rather than the classical history-average fictitious-play algorithm. Convergence shown is for this parameter instance."
         ) as vo:
             self.play(FadeIn(g), FadeIn(g2), GrowArrow(arr1), FadeIn(a1), GrowArrow(arr2), FadeIn(a2), FadeIn(closed),
                       FadeIn(closed_m))
@@ -105,7 +95,7 @@ class MFG(VoiceoverScene):
         self.clear_scene()
 
     def lab(self, m):
-        card = lab_card(r"fictitious play", [
+        card = lab_card(r"damped best-response iteration", [
             "def mfg_liquidation(N, kappa, eta, phi, T, n, iters, damping):",
             "    A = tridiag(2*eta/h**2, -4*eta/h**2 - 2*phi, 2*eta/h**2)",
             "    share = 1 - 1/N if isfinite(N) else 1.0",
@@ -170,7 +160,7 @@ class MFG(VoiceoverScene):
         # faint trails for one trader in eight, drawn as the dots move: the journey stays on screen after they arrive
         trails = VGroup(*[curve(g2.ax, tc + jit[j], Qc[:, j], ALT, stroke_width=1.0).set_stroke(opacity=0.22)
                           for j in range(0, Qc.shape[1], 8)])
-        q = pause_card(r"You know 9 other funds are selling the same stock this week. Sell faster or slower than "
+        q = predict(r"You know 9 other funds are selling the same stock this week. Sell faster or slower than "
                        r"alone?", width=5.4, font_size=20).to_edge(UP, buff=0.3)
         foot = wrapped_label(r"Cardaliaguet and Lehalle (2018): trade crowding as a mean-field game of controls; Carlin, "
                              r"Lobo and Viswanathan (2007): predatory trading among a few; Lacker and Zariphopoulou "

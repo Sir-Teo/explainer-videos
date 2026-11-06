@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
 
 
 def glass(share, color_top, label_text, x):
@@ -68,7 +68,7 @@ class Merton(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(g, DOWN, buff=0.5).align_to(g, LEFT)
         src = illustration(rf"simulation: $\mu = 8\%$, $r = 2\%$, $\sigma = 18\%$; {rb['n']:,} thirty-year paths".replace(
             ",", "{,}"))
-        q = pause_card(r"Stocks just fell 20\%. Does Merton buy or sell?", width=5.0, font_size=22).next_to(
+        q = predict(r"Stocks just fell 20\%. Does Merton buy or sell?", width=5.0, font_size=22).next_to(
             g, DOWN, buff=0.4).align_to(g, LEFT)
         with self.voiceover(
             "The last two chapters found Merton's answer two ways: hold a constant fraction, the excess return over gamma "
@@ -92,8 +92,7 @@ class Merton(VoiceoverScene):
             f"{100 * (rb['ce_mix'] - rb['ce_bh']):.2f} percent a year in certainty-equivalent terms, and buy-and-hold ends "
             "with a stock share that depends on luck."
             if better else
-            f"Buy-and-hold comes out ahead over {rb['n']:,} simulated markets, which is noise: for gamma three the theory "
-            "says it cannot be better."
+            f"Buy-and-hold comes out ahead over {rb['n']:,} simulated markets, in this Monte Carlo estimate. Sampling error and monthly versus continuous rebalancing must be assessed before comparing with the continuous-time theorem."
         ):
             self.play(FadeIn(side[1]), FadeIn(side[2]))
         for mob in (gm, gb, path):
@@ -113,14 +112,9 @@ class Merton(VoiceoverScene):
                     r"not what is in it; Part 30 builds that fund")]
         step = ladder(self, rows, whys, keep=2, top=2.6, x=-1.0, buff=1.2, edge=6.9)
         with self.voiceover(
-            "With many stocks the derivation is the same, with a vector of fractions and a covariance matrix. The parabola "
-            "becomes a quadratic form, and its vertex is the inverse covariance matrix times the excess returns, over gamma. "
-            "<bookmark mark='a'/> Factor it. The direction of that vector does not depend on gamma at all: every investor, "
-            "cautious or bold, holds the same mix of risky assets, and risk aversion only decides how much of it to hold "
-            "against the bond. That is Merton's mutual-fund theorem, the continuous-time cousin of Tobin's separation; Part "
-            "thirty builds that fund from data."
+            "With many stocks the derivation is the same, with a vector of fractions and a covariance matrix. The parabola becomes a quadratic form, and its vertex is the inverse covariance matrix times the excess returns, over gamma. <bookmark mark='a'/> Factor it. The direction of that vector does not depend on gamma at all: every investor, cautious or bold, holds the same mix of risky assets, and risk aversion only decides how much of it to hold against the bond. That is Merton's mutual-fund theorem, the continuous-time cousin of Tobin's separation; Part thirty builds that fund from data. This separation uses constant coefficients, a positive-definite covariance matrix and frictionless unconstrained trading. A portfolio normalized to weights summing to one also requires a nonzero sum of inverse-covariance times excess returns."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
         self.wait(0.4)
@@ -151,16 +145,7 @@ class Merton(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French: US market excess return and T-bill, monthly, July 1926 -- December 2020")
         with self.voiceover(
-            "Now put in the American market's history: an excess return of "
-            f"{100 * m['excess']:.1f} percent a year over Treasury bills, and a volatility of {100 * m['sigma']:.1f}. "
-            f"<bookmark mark='b'/> An investor with log utility should hold {100 * f[0]:.0f} percent of wealth in stocks, "
-            f"borrowing to do it. With gamma three, {100 * f[2]:.0f} percent; with gamma ten, {100 * f[-1]:.0f}. "
-            "<bookmark mark='c'/> But the excess return is the least certain number in finance. After ninety-four years its "
-            f"standard error is still {100 * m['se_excess']:.1f} percent a year, as Merton himself pointed out in 1980, and "
-            "the bars show what that does to the answer: for gamma three, anything from "
-            f"{100 * lo[2]:.0f} to {100 * hi[2]:.0f} percent. Variances are estimated well; means are not. The formula is "
-            "exact; its inputs are not. Chapter thirteen meets an investor who takes that doubt seriously."
-            " Merton also asked how fast to spend. Next: consumption, and a second way to solve the problem."
+            f"Now put in the American market's history: an excess return of {100 * m['excess']:.1f} percent a year over Treasury bills, and a volatility of {100 * m['sigma']:.1f}. <bookmark mark='b'/> An investor with log utility should hold {100 * f[0]:.0f} percent of wealth in stocks, borrowing to do it. With gamma three, {100 * f[2]:.0f} percent; with gamma ten, {100 * f[-1]:.0f}. <bookmark mark='c'/> But the excess return is the least certain number in finance. After ninety-four years its standard error is still {100 * m['se_excess']:.1f} percent a year, as Merton himself pointed out in 1980, and the bars show what that does to the answer: for gamma three, anything from {100 * lo[2]:.0f} to {100 * hi[2]:.0f} percent. Variances are estimated well; means are not. The formula is exact; its inputs are not. Chapter thirteen meets an investor who takes that doubt seriously. Merton also asked how fast to spend. Next: consumption, and a second way to solve the problem. These fractions use full-sample historical moments retrospectively. The error bars use a nominal independent-return standard-error approximation, not a prospective recommendation or a complete measure of model risk."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(ol), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             vo.wait_until("b")

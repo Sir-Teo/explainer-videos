@@ -2,7 +2,7 @@
 
 Part 8 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the last part of Act II, the Mathematical Toolkit. Part 7 forecast how much the market
-will move; this part asks how much to bet, and when to stop. It is a lecture of about 55 minutes in nineteen chapters
+will move; this part asks how much to bet, and when to stop. It is a lecture of about 67 minutes in nineteen chapters
 plus a hook and an outro, built to replace the stochastic-control and portfolio-choice chapters of a graduate course:
 
 * expected utility (the vNM axioms), risk aversion and the Arrow–Pratt premium, derived;
@@ -17,18 +17,22 @@ plus a hook and an outro, built to replace the stochastic-control and portfolio-
 * BSDEs with two interest rates, a mean-field liquidation game, and PPO on Merton's problem with and without costs;
 * how funds, syndicates and desks size bets, and the 2023–2026 frontier.
 
-Every number is computed by the series' own code ([`compute.py`](compute.py), the House's
+Numerical illustrations are computed by the series' code ([`compute.py`](compute.py), the House's
 [`control`](../../../explainer/quant/house/control.py) module, tested against closed forms in
 `tests/test_quant_house.py`), from Kenneth French's US market returns (monthly and daily, 1926–2020) and from seeded
-simulations, labelled on screen.
+simulations, labelled on screen. Historical facts and published results are attributed quotations, distinct from those computations.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 63 minutes)
+The numerical protocols and market-trial registrations are unchanged. There are 46 existing compute items and 310 cumulative trials through Part 8, including three registrations in this part. No sealed 2021-onward holdout is opened by this pass. The examples are retrospective illustrations; a registration count does not certify an untouched prospective test.
+
+The mathematical results state their model conditions. Bellman myopia uses iid stationary opportunities, CRRA terminal utility and wealth-independent constraints. Smooth HJB verification requires admissibility and integrability; viscosity convergence requires comparison, stability, monotonicity, consistency and valid boundary treatment. Monthly no-trade grids, weekly nominal drawdown cushions and floored PPO simulators approximate different control problems. The original Grossman–Zhou drawdown constraint is on discounted wealth; its logarithmic cushion multiplier is correct and remains unchanged.
+
+## Chapters (about 67 minutes)
 
 * **How much to bet, and how we got here.** Haghani and Dewey (2016) gave 61 people $25 and a 60% coin at even odds;
-  about 30% went bust. *Live:* 160 players in each of four columns flip the same coin 300 times on a log-wealth axis
-  (all in: 91% bust; 40%: 18% bust, 74% at the cap; 20%: 96% at the cap, none bust). Kelly's curve g(f) with 20,000
+  about 30% went bust. *Live:* 160 independent coin sequences are paired across four fraction columns for 300 flips on a log-wealth axis
+  (all in: 91% bust; 40%: 18% bust, 74% at the cap; 20%: 96% at the cap, none hit the one-cent threshold in this sample). Kelly's curve g(f) with 20,000
   players per fraction (20%: 94% reach $250, none bust; 100%: 87% bust). The history, 1738–2017, as one tree rooted in
   expected utility; objectives; the House.
 * **1. Utility and risk aversion.** St Petersburg; the vNM axioms card. *Visual:* the gamble as two weights on the
@@ -53,7 +57,7 @@ simulations, labelled on screen.
   ranges from 63% to 95% (10th–90th percentile). Mutual-fund separation. US data: 238% at γ = 1, 79% at γ = 3, with
   ±2 SE from 42% to 116%.
 * **6. Consumption, and the martingale method.** Merton (1971) derived: ν = 3.0% (log), 3.57% (γ = 3), 2.90% for a
-  more patient investor (ρ = 1%); the finite-life rate rises from 4.7% to everything. Cox–Huang / KLS: X_T = (yξ_T)^{-1/γ},
+  more patient investor (ρ = 1%); the finite-life instantaneous consumption/wealth rate starts at 4.7% and diverges like 1/(T−t); the plot omits rates above 30% a year. Cox–Huang / KLS: X_T = (yξ_T)^{-1/γ},
   a power claim on the stock. *Live:* 2,000 daily-rebalanced investors land on the static curve (largest gap 0.34%).
 * **7. Transaction costs (Lab 2).** *Live:* the wealth point diffusing in the Davis–Norman wedge, reflected at its
   edges (35 trades in 15 years; turnover 0.9% a year against 24% for weekly rebalancing). Singular control, the
@@ -63,7 +67,7 @@ simulations, labelled on screen.
   than quarterly rebalancing to Merton net of costs, with 10% turnover against 44%.
 * **8. Kelly and Breiman.** Kelly (1956); Shannon showed Thorp the paper in 1960; Thorp's partnership from 3 November
   1969 compounded at about 20% a year, standard deviation about 6%, through May 1998 (Thorp 2006). Kelly derived for the
-  coin and the stock; Breiman's theorem proved by the strong law. *Live:* fans at ½, 1, 2 × Kelly for 40 years with
+  coin and the stock; the strong-law proof for distinct fixed fractions with integrable iid log returns and a strictly positive growth gap. *Live:* fans at ½, 1, 2 × Kelly for 40 years with
   the time-average lines (growth 6.2%, 7.6%, 2.0% = the cash rate). Breiman's race: Kelly ahead of 2× Kelly in 70% of
   markets at 10 years and 95% at 100; ahead of ½ Kelly in 60% and 80%. US realized growth: 100% at 9.7%, the best
   218% at 12.6%; 348% ruined by September 1931.
@@ -73,7 +77,7 @@ simulations, labelled on screen.
   draw. The registered split-sample test (198% chosen on 1926–1972 grew 13.4% a year afterwards). The LTCM crisis
   file ($129bn of assets on $4.7bn, 28:1, $1.3tn notional; −44% in August 1998; $3.6bn from fourteen firms), and a volatility slider: Kelly leverage 100 → 11 as volatility triples; 28:1 becomes 2.5 × Kelly.
 * **10. Samuelson's objection, and ergodicity.** Kelly ends richer than the γ = 3 Merton investor 64%/87% of the time
-  at 10/100 years, yet its CE growth is −3.6% vs +3.9% a year; the CE growth rate derived. *Live:* Peters' coin, the
+  at 10/100 years, yet its CE log rate is −3.6% vs +3.9% a year; the CE growth rate derived. *Live:* Peters' coin, the
   histogram of 100,000 players flipping 60 times, with the mean running right and the median left; 82% lose money.
   Peters (2019), Meder et al. (2021), Doctor–Wakker–Wang (2020), Toda (2023). Kelly stakes 25% (+0.62% a flip).
 * **11. Optimal stopping: the Snell envelope (Lab 3).** Snell's recursion, supermartingale, optional sampling, and the
@@ -89,34 +93,34 @@ simulations, labelled on screen.
 * **14. Backward SDEs.** Definition, the linear case = Black–Scholes, Bergman's two-rate driver, the comparison
   theorem, Gobet–Lemor–Warin. *Replay:* regression clouds stepping backwards over 20,000 paths to Y0 = 1.219, above
   both Black–Scholes prices (1.050 at 1%, 0.605 at 6%); convergence to the PDE's 1.230.
-* **15. Mean-field games (Lab 4).** The liquidation game derived: 2ηQ″ + κ(N−1)/N Q′ − 2φQ = 0. *Replay:* fictitious
-  play, plan backwards and crowd forwards, settling on the equilibrium. *Lab:* `mfg_liquidation`: residual below
+* **15. Mean-field games (Lab 4).** The deterministic symmetric open-loop liquidation game, hard initial/terminal inventory constraints and zero inventory penalty in the plotted example: 2ηQ″ + κ(N−1)/N Q′ − 2φQ = 0. *Replay:* damped best-response
+  iteration, plan backwards and crowd forwards, settling on the equilibrium. *Lab:* `mfg_liquidation`: residual below
   10^-12 in 48 rounds; share sold in the first fifth (κT/2η = 2): 20% alone, 28.7% (N = 2), 36.2% (N = 10), 38.1%
   (mean field), matching the closed form to 10^-7. A crowd of 500 traders with different blocks.
 * **16. Reinforcement learning (Lab 5).** The MDP, policy gradient, one-step advantages, the PPO clip. *Lab:* the core
-  of `ppo_merton`; five seeds end at 169–184% against the quarterly optimum of 184%, giving up at most 0.04% a year.
+  of `ppo_merton`; five seeds end with mean fractions 162–184% against a finite-quadrature benchmark of 184%. The reported ≤0.09% annual gap is a continuous-growth proxy evaluated at mean fractions, not the full learned policy's quarterly performance. Gaussian actions are unbounded and gross wealth is floored at 10⁻⁶; this is a numerical surrogate, not the exact admissible leveraged-GBM problem.
   *Replay:* `TrainingReplay` of the five seeds with the policy map. *Costs:* `ppo_rebalance` (ε = 1%, five seeds) does
-  not find the band: it trades part of the way, leaving a strip of about 5 points alone; net growth 7.27–7.33% a year
+  not find the band: it trades part of the way, leaving a strip of about 5 points alone; net growth 7.30–7.34% a year
   against 7.42% for the DP band and 7.13% for quarterly rebalancing to Merton (all on the same 200,000 markets).
 * **17. Who sizes bets for a living.** Thorp's 1994 sports test ($50,000 → $123,000 profit in 101 days); Benter's
   fractional Kelly; Berlekamp and Axcom (Medallion's sizing is not public); NBIM's 1.25-point tracking-error limit;
   Bridgewater's All Weather; Millennium's drawdown rules as reported by the WSJ (via Business Insider, 2024).
-  *Experiments:* Grossman–Zhou at α = 0.8 vs Kelly (worst drawdown 17% vs 99%; median growth 3.6% vs 7.4%); volatility
-  targeting on French daily data (registered): Sharpe 0.51 vs 0.44, alpha 3.5% a year (t = 2.9), exposure 0.01–10.5.
+  *Experiments:* a Grossman–Zhou-inspired nominal-wealth cushion at α = 0.8 vs Kelly (worst drawdown 17% vs 99%; median growth 3.6% vs 7.4%); volatility
+  targeting on French daily data (registered): Sharpe 0.51 vs 0.44, gross alpha 3.5% a year (homoskedastic OLS t = 2.9, not HAC), exposure 0.01–10.5. Its full-sample average-weight normalization uses hindsight despite the lagged variance signal; funding and trading costs are omitted.
   Almgren–Chriss and Almgren et al. (2005); Haghani and White (2023).
 * **18. The frontier, 2023–2026.** A graph of the part's chapters with each paper lighting the edge it builds (list
   below).
 * **19. The sizing module.** The new House functions; the sizing pipeline (Kelly 238% → half 119%; the robust fraction at a 20% detection error, 145%, is not smaller; the
-  band; the drawdown floor; recompute on volatility); Rule 9 extended. The trial counter reads 308 (this part
+  band; the drawdown floor; recompute on volatility); Rule 9 extended. The trial counter reads 310 (this part
   registered three tests).
 * **For the researcher: estimation risk in Merton's rule.** The plug-in fraction μ̂/(γσ²), with μ̂ ~ N(μ, σ²/T), has
   expected certainty equivalent (θ² − 1/T)/(2γ): estimation costs exactly 1/(2γT) a year, and the plug-in loses
   against cash in expectation when T < 1/θ² (6¼ years at a Sharpe ratio of 0.4). Scaling by c gives a parabola with
-  vertex c* = Tθ²/(Tθ² + 1) (Kan and Zhou 2007): 0.44 at five years, 0.76 at twenty; fractional Kelly as optimal
+  vertex c* = Tθ²/(Tθ² + 1) (a known-volatility, expected-CE oracle; related to parameter-risk work including Kan and Zhou 2007): 0.44 at five years, 0.76 at twenty; fractional Kelly as optimal
   shrinkage. Simulation (20,000 monthly histories per horizon, both moments estimated, γ = 1, θ = 0.4): plug-in
   −3.7/2.5/5.4/7.0% a year at 5/10/20/50 years (the chi-squared-corrected formula gives −3.4/2.6/5.4/7.0), half
-  3.2/4.7/5.4/5.7, an estimated multiple ĉ −0.9/2.3/4.4/6.5, c* known 3.6/4.9/6.1/7.1; the plug-in loses to cash in
-  39% of five-year histories. The US market, expanding window from 1926–35, scored July 1936 to December 2020 at
+  3.2/4.7/5.4/5.7, an estimated multiple ĉ −0.9/2.3/4.4/6.5, analytic known-σ c* column 3.6/4.9/6.1/7.1 (other columns simulate estimated σ); the plug-in loses to cash in
+  39% of five-year histories. The US market, expanding window from July 1926–June 1936, scored July 1936 to December 2020 at
   γ = 2: plug-in CE 4.9%, half 3.0%, ĉ 4.2%, 100% market 5.6%, full-sample Merton (hindsight) 6.2%; the Sharpe ratio
   after 1936 was 0.52 (0.44 over the century). Three open problems; pause: θ = 0.3 over 25 years gives c* = 0.69.
 * **Recap, four desk questions, nine problems (two at qualifying-exam level), payoffs, references.**
@@ -128,9 +132,9 @@ simulations, labelled on screen.
 | Lab 1 | ch 2 | `bellman_merton`: Merton by dynamic programming |
 | Lab 2 | ch 7 | `no_trade_band`: the Davis–Norman band by DP |
 | Lab 3 | ch 11 | `snell_envelope` against `concave_majorant` |
-| Lab 4 | ch 15 | `mfg_liquidation`: fictitious play |
+| Lab 4 | ch 15 | `mfg_liquidation`: damped best-response iteration |
 | Lab 5 | ch 16 | the core of `ppo_merton` |
-| Replays | ch 2, 11, 14, 15, 16 | backward slabs; the rope; regression clouds; fictitious play; PPO (5 seeds, `TrainingReplay`) |
+| Replays | ch 2, 11, 14, 15, 16 | backward slabs; the rope; regression clouds; damped best-response iteration; PPO (5 seeds, `TrainingReplay`) |
 | Live simulations | hook, ch 5, 6, 7, 8, 10, 17 | coin columns; rebalancing glasses; martingale scatter; the wedge; Kelly fans; Peters' histogram; drawdown floor |
 | 3D | ch 2 | the policy surface built backwards |
 
@@ -232,12 +236,12 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 
 1. **Kelly for any odds.** g(f) = p log(1 + bf) + q log(1 − f). g′(f) = pb/(1 + bf) − q/(1 − f) = 0 gives
    pb(1 − f) = q(1 + bf), so f* = (pb − q)/b = p − q/b. For a small edge, expand to second order:
-   g(f) ≈ f(pb − q) − f²(pb² + q)/2. This is zero again at f ≈ 2(pb − q)/(pb² + q), which for b = 1 is 2(p − q) = 2f*.
+   g(f) ≈ f(pb − q) − f²(pb² + q)/2. This is zero again at f ≈ 2(pb − q)/(pb² + q). Near fair odds pb² + q ≈ b, so this is approximately 2(pb − q)/b = 2f*.
 2. **Merton's value function.** HJB: V_t + max_π {(r + π(μ − r))wV_w + ½π²σ²w²V_ww} = 0. Substitute
    V = e^{a(T−t)}w^{1−γ}/(1 − γ), so that V_t = −aV, wV_w = (1 − γ)V and w²V_ww = −γ(1 − γ)V. Dividing by (1 − γ)V,
    the HJB becomes −a/(1 − γ) + max_π {r + π(μ − r) − ½γπ²σ²} = 0. The maximum is at π* = (μ − r)/(γσ²), where it
    equals r + (μ − r)²/(2γσ²). So a = (1 − γ)(r + (μ − r)²/(2γσ²)), and V(T) = u(w).
-3. **Fractional Kelly.** Excess growth is g(f) − r = f(μ − r) − ½f²σ², maximized at f* = (μ − r)/σ² with
+3. **Fractional Kelly in constant-coefficient, continuously rebalanced GBM.** Excess growth is g(f) − r = f(μ − r) − ½f²σ², maximized at f* = (μ − r)/σ² with
    g* − r = (μ − r)²/(2σ²). At f = cf* it is c(μ − r)²/σ² − ½c²(μ − r)²/σ² = (2c − c²)(g* − r). The volatility is
    cf*σ. At c = ½: 75% of the growth and half the volatility. At c = 2: none of the growth and twice the volatility.
 4. **The secretary.** If the best candidate is at position j > k, the rule picks them exactly when the best of the
@@ -260,8 +264,8 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 8. **(qual) The cost of an estimated edge.** CE(π) = πμ − ½γπ²σ². With π = cμ̂/(γσ²), E[π]μ = cμ²/(γσ²) = cθ²/γ and
    ½γσ²E[π²] = c²E[μ̂²]/(2γσ²) = c²(μ² + σ²/T)/(2γσ²) = c²(θ² + 1/T)/(2γ). So E CE = [cθ² − ½c²(θ² + 1/T)]/γ. At c = 1
    this is (θ² − 1/T)/(2γ), negative exactly when T < 1/θ². The derivative in c vanishes at c* = θ²/(θ² + 1/T) =
-   Tθ²/(Tθ² + 1), where E CE = (θ²/2γ)·c* > 0. With θ = 0.4, T = 5, γ = 1: plug-in −2.0%, c* = 0.44 earning 3.6%.
-9. **(qual) Estimating the variance too.** For iid normal returns (n − 1)s²/σ² ~ χ²_k with k = n − 1, independent of
+   Tθ²/(Tθ² + 1), where E CE = (θ²/2γ)·c* ≥ 0, strictly positive for θ ≠ 0. With θ = 0.4, T = 5, γ = 1: plug-in −2.0%, c* = 0.44 earning 3.6%.
+9. **(qual) Estimating the variance too.** For iid normal returns and n > 5, (n − 1)s²/σ² ~ χ²_k with k = n − 1, independent of
    μ̂. For X ~ χ²_k, E[1/X] = 1/(k − 2) and E[1/X²] = 1/((k − 2)(k − 4)), so E[σ²/s²] = (n − 1)/(n − 3) = a₁ and
    E[σ⁴/s⁴] = (n − 1)²/((n − 3)(n − 5)) = a₂. With π̂ = μ̂/(γs²), E CE = [a₁θ² − ½a₂(θ² + 1/T)]/γ. For 60 months,
    a₁ = 59/57 = 1.035 and a₂ = 3481/3135 = 1.110, so at θ = 0.4: 1.035 × 0.16 − 1.110 × 0.18 = −3.4% a year, against
@@ -270,12 +274,12 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 ## For the researcher
 
 * **The theorems.** Klein and Bawa (1976) and Brown (1976) on estimation risk; Kan and Zhou (2007), "Optimal
-  Portfolio Choice with Parameter Uncertainty," *JFQA* 42(3), for the optimal scaling and the three-fund rule;
+  Portfolio Choice with Parameter Uncertainty," *JFQA* 42(3), for related multi-asset portfolio combinations under parameter uncertainty;
   Barberis (2000) on learning and the horizon; MacLean, Thorp and Ziemba (eds., 2011) on fractional Kelly.
 * **Simplifications.** One risky asset, iid normal returns, a constant scaling chosen with the true θ; the
-  certainty-equivalent criterion rather than finite-horizon utility. Many assets are Part 30.
-* **Open problems.** A feasible scaling rule that dominates for all θ and T; shrinkage and window length chosen
-  together when the edge drifts; the exact cost to Kelly growth under fat tails and volatility clustering.
+  expected CE across estimation samples, rather than unconditional expected utility; σ is known in the oracle derivation, and θ = 0 gives CE = 0. Many assets are Part 30.
+* **Open problems.** Compare feasible scaling rules under an explicit loss, strategy class and parameter range; shrinkage and window length chosen
+  together when the edge drifts; model-specific estimation costs to Kelly growth under fat tails and volatility clustering.
 
 ## Data and reproducibility
 
@@ -297,7 +301,7 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
   strategy was employed throughout", about 470 races a year, a track take of about 19%, four of five seasons
   profitable). Berlekamp: Wikipedia and the University of California Senate memorial (Bell Labs under Kelly in 1960 and
   1962; control of Axcom in 1989). NBIM: the fund's risk-management page (a 1.25-percentage-point limit on expected
-  relative volatility; about 0.3 at 30 June 2026). Bridgewater: "The All Weather Story" (launched 1996; "equal risk on
+  relative volatility). Bridgewater: "The All Weather Story" (launched 1996; "equal risk on
   each scenario"; "leverage is an implementation tool"). Millennium: reported by the *Wall Street Journal*, as relayed
   by *Business Insider* (October 2024); the firm declined to comment; a report, not a disclosure. Almgren et al.:
   "Equity market impact," *Risk* 18(7), 2005 (Citigroup's US equity trades). Haghani and White, *The Missing
@@ -310,7 +314,7 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 
 # 量化金融，从零搭建 — 第8部分：决策与控制
 
-第7部分预测了市场会动多大，本部分问该下多大的注、何时停止。这是一场约55分钟的讲座，十九章加开场和结尾，可以替代研究生课程中随机控制与组合选择的相应章节：
+第7部分预测了市场会动多大，本部分问该下多大的注、何时停止。这是一场约67分钟的讲座，十九章加开场和结尾，可以替代研究生课程中随机控制与组合选择的相应章节：
 
 * 期望效用（冯·诺伊曼-摩根斯坦公理）、风险厌恶，推导阿罗-普拉特溢价；
 * 贝尔曼递推，从动态规划原理和伊藤公式推导HJB方程，验证定理，以及黏性解（为什么单调格式收敛）；
@@ -322,13 +326,17 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 * 双利率下的BSDE、平均场清仓博弈，以及有无交易成本时默顿问题上的PPO；
 * 基金、投注团队和交易台如何定仓位，以及2023至2026年的前沿。
 
-所有数字都由本系列自己的代码算出：历史部分用肯尼斯·弗伦奇的美国市场收益（月度与日度，1926–2020），其余用带种子的模拟，并在屏幕上标明。
+数值示例由本系列代码计算；历史事实与论文结果则是注明来源的引用：历史部分用肯尼斯·弗伦奇的美国市场收益（月度与日度，1926–2020），其余用带种子的模拟，并在屏幕上标明。
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约63分钟）
+既有数值协议与市场试验登记保持不变：46个计算项目，第8部分累计310次试验，其中本部分登记3项。本次不打开2021年起封存样本。事后示例的登记计数，不等于未经使用的前瞻检验。
 
-* **该下多大的注，以及我们如何走到这里。** 哈加尼和杜威（2016）的硬币游戏，约30%的人输光。现场模拟：四列各160名玩家同抛一枚硬币300次（全押91%输光；押40%有18%输光；押20%有96%达到上限、无人输光）。凯利曲线；1738–2017年的历史，以期望效用为根的一棵树。
+贝尔曼短视结论需要独立同分布机会、CRRA终端效用和不依赖财富的约束。光滑HJB验证需要可容许性与可积条件；黏性格式收敛需要比较原理、稳定性、单调性、一致性与适当边界。月度不交易网格、每周名义财富缓冲与带下限的PPO模拟器近似不同问题。Grossman–Zhou原理论约束贴现财富；对数效用的缓冲乘数正确，保持不变。
+
+## 各章（约67分钟）
+
+* **该下多大的注，以及我们如何走到这里。** 哈加尼和杜威（2016）的硬币游戏，约30%的人输光。现场模拟：160条独立硬币序列在四种比例间配对、各抛300次（全押91%输光；押40%有18%输光；押20%有96%达到上限、无人输光）。凯利曲线；1738–2017年的历史，以期望效用为根的一棵树。
 * **1. 效用与风险厌恶。** 公理卡片；赌博作为挂在效用曲线上的两个砝码，确定性等价86.6（对数效用）；伽马旋钮实时弯曲曲线（伽马为3时67.1，为30时51.2）。推导阿罗-普拉特；精确值对比近似值；拉宾的警告。
 * **2. 贝尔曼原理（实验一）。** 三期树上的倒向归纳；幂效用下的短视性。实验：`bellman_merton`，处处62%（默顿61.7%）。回放：带下限问题的策略曲面在三维中一片片倒着搭建，财富为1时的最优比例从25%走到31%；与投资组合保险的最大差距0.005。
 * **3. HJB方程与验证定理。** 推导HJB；哈密顿量是比例的抛物线，无下限时顶点不动，有下限时滑向零；验证定理。有限差分加策略迭代（400 × 401）：比例与默顿相差0.002个百分点以内，价值误差0.07%。
@@ -337,17 +345,17 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 * **6. 消费与鞅方法。** 推导默顿（1971）：ν = 3.0%（对数）、3.57%（伽马3）、更有耐心时2.90%；有限寿命下从4.7%升到全部。考克斯-黄 / KLS：终值是股票的幂次权益；2,000名每日再平衡的投资者落在静态曲线上（最大差距0.34%）。
 * **7. 交易成本（实验二）。** 戴维斯-诺曼楔形中被反射的财富点（15年35笔交易，年换手0.9%对24%）。奇异控制、变分不等式、ε^{1/3}渐近。实验：`no_trade_band`，伽马3、按月：成本0.1%、0.5%、1%、2%时区间为59.4–64.0%、57.2–66.2%、55.8–67.8%、54.0–69.6%。对数效用、1%、按季：区间158–202%，扣成本后每年比按季再平衡到默顿多增长0.29%，换手10%对44%。
 * **8. 凯利与布雷曼。** 凯利（1956）；香农1960年把论文给了索普；索普的合伙企业自1969年11月3日起到1998年5月每年复利约20%、标准差约6%（Thorp 2006）。推导与证明。现场：½、1、2倍凯利的扇形与时间平均线（6.2%、7.6%、2.0%即现金利率）。布雷曼的赛跑：10年/100年后凯利领先2倍凯利70%/95%，领先半凯利60%/80%。美国实现增长：100%为9.7%，最优218%为12.6%。
-* **9. 分数凯利、估计风险与LTCM。** 推导(2c − c²)；优势高估k倍：全凯利在k = 2时增长为零，半凯利在k = 4；本特的警告。自助法最优比例云（90%在116%–302%之间）。登记过的样本分割检验。LTCM危机档案；波动率三倍时凯利杠杆从100降到11。
+* **9. 分数凯利、估计风险与LTCM。** 推导(2c − c²)；优势高估k倍：常系数GBM中全凯利在k = 2时超额对数增长为零，半凯利在k = 4；本特的警告。自助法最优比例云（90%在116%–302%之间）。登记过的样本分割检验。LTCM危机档案；波动率三倍时凯利杠杆从100降到11。
 * **10. 萨缪尔森的反驳与遍历性。** 凯利更富的概率64%/87%，但确定性等价增长−3.6%对+3.9%；推导。现场：十万名玩家的彼得斯硬币直方图，82%亏钱；Peters、Meder等、Doctor–Wakker–Wang、Toda。凯利押25%（每次+0.62%）。
 * **11. 最优停止：斯内尔包络（实验三）。** 价值迭代像绳子拉紧搭在21根木桩上（226次扫描）；实验：与上凸包相差5 × 10^-14。秘书问题（37 → 37.1%）。
 * **12. 光滑粘合。** 麦基恩永续看跌期权：β = 1.11，b* = 52.6，V(100) = 23.21；40年二叉树给出52.5和23.01。利率升到7%时b* = 60.9。
 * **13. 前景理论与模糊性。** 阿莱悖论；累积前景理论；登记检验：股票的前景价值在18个月的评估周期上超过国库券。埃尔斯伯格、吉尔博阿-施迈德勒、汉森-萨金特；推导梅恩豪特的稳健默顿：检测误差20%时θ = 1.9、比例48%；10%时θ = 4.4、32%；无怀疑79%。
 * **14. 倒向随机微分方程。** 回放：两万条路径上的回归点云一步步倒推，Y0 = 1.219，高于两个Black–Scholes价格（1.050和0.605）；收敛到PDE的1.230。
-* **15. 平均场博弈（实验四）。** 推导清仓博弈；虚拟博弈回放；实验：48轮残差低于10^-12；前五分之一时间卖出：单独20%、两家28.7%、十家36.2%、平均场38.1%。
-* **16. 强化学习（实验五）。** 五个种子最终在169%–184%（季度最优184%），最多每年少赚0.04%；`TrainingReplay`回放。有成本时：PPO没有找到区间，净增长7.27–7.33%，区间7.42%，按季再平衡到默顿7.13%。
-* **17. 谁以定仓位为生。** 索普1994年的体育投注测试；本特的分数凯利；伯利坎普与Axcom（大奖章的仓位方法未公开）；挪威主权基金1.25个百分点的跟踪误差上限；桥水全天候；据《华尔街日报》报道的千禧年回撤规则。格罗斯曼-周对凯利（最大回撤17%对99%）；波动率目标（夏普0.51对0.44，阿尔法每年3.5%，t = 2.9）。
+* **15. 平均场博弈（实验四）。** 推导清仓博弈；每轮混合一半的阻尼最佳响应回放；实验：48轮残差低于10^-12；前五分之一时间卖出：单独20%、两家28.7%、十家36.2%、平均场38.1%。
+* **16. 强化学习（实验五）。** 五个种子最终平均比例162%–184%，有限求积基准184%。不超过每年0.09%的差距是平均比例处的连续增长代理，不是完整策略的季度绩效；模拟器有财富下限；`TrainingReplay`回放。有成本时：PPO没有找到区间，净增长7.30–7.34%，区间7.42%，按季再平衡到默顿7.13%。
+* **17. 谁以定仓位为生。** 索普1994年的体育投注测试；本特的分数凯利；伯利坎普与Axcom（大奖章的仓位方法未公开）；挪威主权基金1.25个百分点的跟踪误差上限；桥水全天候；据《华尔街日报》报道的千禧年回撤规则。格罗斯曼-周启发的每周名义缓冲对凯利（最大回撤17%对99%）；波动率目标（夏普0.51对0.44，阿尔法每年3.5%，t = 2.9）。
 * **18. 前沿，2023–2026。** 各章构成一张图，每篇论文点亮它所建立的那条边。
-* **19. 仓位模块。** 新函数；定仓位流程（凯利238% → 一半119%；20%检测误差下的稳健比例145%并不更小）；扩展的第九条规则；试验计数器308。
+* **19. 仓位模块。** 新函数；定仓位流程（凯利238% → 一半119%；20%检测误差下的稳健比例145%并不更小）；扩展的第九条规则；试验计数器310。
 * **写给研究者：默顿规则中的估计风险。** 代入比例μ̂/(γσ²)（μ̂ ~ N(μ, σ²/T)）的确定性等价期望为(θ² − 1/T)/(2γ)：估计每年恰好花掉1/(2γT)；T < 1/θ²时（夏普0.4时为6¼年）期望上不如现金。乘以c得到一条抛物线，顶点c* = Tθ²/(Tθ² + 1)（Raymond Kan与周国富2007）：五年0.44，二十年0.76；分数凯利即最优收缩。模拟（每个期限20,000条月度历史，两个矩都估计，γ = 1，θ = 0.4）：代入规则在5/10/20/50年为每年−3.7/2.5/5.4/7.0%（卡方修正后的公式为−3.4/2.6/5.4/7.0），一半3.2/4.7/5.4/5.7，估计倍数ĉ为−0.9/2.3/4.4/6.5，已知c*为3.6/4.9/6.1/7.1；五年历史中39%代入规则不如现金。美国市场，扩展窗口从1926–35年开始，1936年7月至2020年12月计分，γ = 2：代入4.9%，一半3.0%，ĉ 4.2%，全仓市场5.6%，全样本默顿（事后）6.2%；1936年后的夏普比率0.52（整个世纪0.44）。三个开放问题；暂停题：25年、θ = 0.3时c* = 0.69。
 * **回顾、四道交易台问题、九道习题（两道为资格考试水平）、应用、参考文献。**
 
@@ -370,11 +378,11 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 
 1. **任意赔率下的凯利。** g(f) = p log(1 + bf) + q log(1 − f)。令g′(f) = pb/(1 + bf) − q/(1 − f) = 0，得pb(1 − f) = q(1 + bf)，
    即f* = (pb − q)/b = p − q/b。小优势时展开到二阶：g(f) ≈ f(pb − q) − f²(pb² + q)/2，在f ≈ 2(pb − q)/(pb² + q)处再次为零，
-   b = 1时即2(p − q) = 2f*。
+   接近公平赔率时pb² + q ≈ b，因此近似为2(pb − q)/b = 2f*。
 2. **默顿的价值函数。** HJB方程为V_t + max_π {(r + π(μ − r))wV_w + ½π²σ²w²V_ww} = 0。代入V = e^{a(T−t)}w^{1−γ}/(1 − γ)，
    则V_t = −aV，wV_w = (1 − γ)V，w²V_ww = −γ(1 − γ)V。除以(1 − γ)V后，HJB化为−a/(1 − γ) + max_π {r + π(μ − r) − ½γπ²σ²} = 0。
    最大值在π* = (μ − r)/(γσ²)处取得，等于r + (μ − r)²/(2γσ²)。所以a = (1 − γ)(r + (μ − r)²/(2γσ²))，且V(T) = u(w)。
-3. **分数凯利。** 超额增长g(f) − r = f(μ − r) − ½f²σ²，在f* = (μ − r)/σ²处取最大，此时g* − r = (μ − r)²/(2σ²)。
+3. **常系数、连续再平衡GBM中的分数凯利。** 超额增长g(f) − r = f(μ − r) − ½f²σ²，在f* = (μ − r)/σ²处取最大，此时g* − r = (μ − r)²/(2σ²)。
    在f = cf*处它等于(2c − c²)(g* − r)，波动率为cf*σ。c = ½时得到75%的增长和一半的波动率；c = 2时增长为零，波动率翻倍。
 4. **秘书问题。** 若最佳者在位置j > k，当且仅当前j − 1人中最好的那位落在前k人之中时规则会选中他，概率为k/(j − 1)。
    所以P(k) = (k/n)Σ_{j=k+1}^{n} 1/(j − 1)。记x = k/n，这是x∫_x^1 dt/t = −x log x的黎曼和。其导数−log x − 1在x = 1/e处为零，
@@ -391,14 +399,14 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
    单独一家（a = 0，直线）为20%，两家（aT = 1）为28.7%。
 8. **（资格考试）估计优势的代价。** CE(π) = πμ − ½γπ²σ²。取π = cμ̂/(γσ²)，则E[π]μ = cθ²/γ，½γσ²E[π²] = c²(μ² + σ²/T)/(2γσ²) =
    c²(θ² + 1/T)/(2γ)，所以E CE = [cθ² − ½c²(θ² + 1/T)]/γ。c = 1时为(θ² − 1/T)/(2γ)，恰在T < 1/θ²时为负。对c求导为零得
-   c* = Tθ²/(Tθ² + 1)，此时E CE = (θ²/2γ)·c* > 0。θ = 0.4、T = 5、γ = 1时：代入规则−2.0%，c* = 0.44，挣3.6%。
-9. **（资格考试）方差也要估计。** 独立同分布正态收益下(n − 1)s²/σ² ~ χ²_k，k = n − 1，且与μ̂独立。X ~ χ²_k时E[1/X] = 1/(k − 2)，
+   c* = Tθ²/(Tθ² + 1)，此时E CE = (θ²/2γ)·c* ≥ 0，θ非零时严格为正。θ = 0.4、T = 5、γ = 1时：代入规则−2.0%，c* = 0.44，挣3.6%。
+9. **（资格考试）方差也要估计。** n > 5且独立同分布正态收益时，(n − 1)s²/σ² ~ χ²_k，k = n − 1，且与μ̂独立。X ~ χ²_k时E[1/X] = 1/(k − 2)，
    E[1/X²] = 1/((k − 2)(k − 4))，所以E[σ²/s²] = (n − 1)/(n − 3) = a₁，E[σ⁴/s⁴] = (n − 1)²/((n − 3)(n − 5)) = a₂。
    π̂ = μ̂/(γs²)时E CE = [a₁θ² − ½a₂(θ² + 1/T)]/γ。60个月时a₁ = 1.035，a₂ = 1.110，θ = 0.4时为1.035 × 0.16 − 1.110 × 0.18 =
    每年−3.4%，σ已知时为−2.0%；模拟给出−3.7% ± 0.1%。
 
 ## 写给研究者
 
-* **定理。** 克莱因与巴瓦（1976）、布朗（1976）论估计风险；Raymond Kan与周国富（2007），《参数不确定性下的最优组合选择》，*JFQA* 42(3)，给出最优缩放与三基金规则；巴伯里斯（2000）论学习与投资期限；麦克莱恩、索普与津巴（编，2011）论分数凯利。
-* **简化。** 单一风险资产，独立同分布正态收益，用真实θ选的常数缩放；用确定性等价而非有限期限效用作准则。多资产见第30部分。
-* **开放问题。** 对所有θ和T都占优的可行缩放规则；优势漂移时同时选择收缩与窗口长度；肥尾与波动率聚集下估计对凯利增长的确切代价。
+* **定理。** 克莱因与巴瓦（1976）、布朗（1976）论估计风险；Raymond Kan与周国富（2007），《参数不确定性下的最优组合选择》，*JFQA* 42(3)，研究多资产参数不确定性下的相关组合规则；巴伯里斯（2000）论学习与投资期限；麦克莱恩、索普与津巴（编，2011）论分数凯利。
+* **简化。** 单一风险资产，独立同分布正态收益，用真实θ选的常数缩放；以估计样本之间的平均CE作准则，不等于无条件期望效用；真值推导假设波动率已知。多资产见第30部分。
+* **开放问题。** 在指定损失、策略类与参数范围下比较可行缩放规则；优势漂移时同时选择收缩与窗口长度；指定肥尾与波动聚集模型下，估计对凯利增长的代价。

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import BAD, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, BAD, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 def zigzag(x, kinks):
@@ -49,10 +49,10 @@ class Viscosity(VoiceoverScene):
             wrapped_label(r"which one is ``the'' solution? (it is the distance to the boundary, $1 - |x|$, the value "
                           r"of the fastest exit)", 4.6, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.3)
-        q = pause_card(r"Which zig-zag will a computer find?", width=4.6, font_size=22).to_corner(DR, buff=0.3)
+        q = predict(r"Which zig-zag will a computer find?", width=4.6, font_size=22).to_corner(DR, buff=0.3)
         with self.voiceover(
             "The verification theorem needed a smooth value function. Real problems break that. A floor, a choice between "
-            "stopping and waiting, any maximum of two functions: each puts a kink in the value, a point where the second "
+            "stopping and waiting, a maximum of crossing branches: these can put a kink in the value, a point where the second "
             "derivative in the HJB equation does not exist. <bookmark mark='a'/> The simplest example shows how bad it gets. "
             "Ask for a function whose slope is plus or minus one everywhere on the interval, and zero at both ends. No smooth "
             "function does it. A tent does it, everywhere except its peak; so does a tent with a notch; so do infinitely many "
@@ -130,21 +130,12 @@ class Viscosity(VoiceoverScene):
             theorem_card(r"Comparison", r"a subsolution below the boundary data stays below a supersolution above it; "
                          r"so there is at most one viscosity solution", who=r"Crandall, Ishii and Lions (1992); "
                          r"Fleming and Soner, ch.\ 2", width=6.2, color=VALUE),
-            theorem_card(r"Barles--Souganidis (1991)", r"a numerical scheme that is monotone, stable and consistent "
-                         r"converges to the viscosity solution", who=r"\textit{Asymptotic Analysis} 4", width=6.2,
+            theorem_card(r"Barles--Souganidis (1991)", r"if the limiting PDE has comparison: monotone, stable, consistent schemes with suitable boundary treatment converge", who=r"\textit{Asymptotic Analysis} 4", width=6.2,
                          color=KELLY),
         ).arrange(RIGHT, buff=0.4, aligned_edge=UP).to_edge(UP, buff=0.6)
-        foot = wrapped_label(r"the value function of a control problem is always a viscosity solution of its HJB "
-                             r"equation (Lions 1983; Pham ch.\ 4; Touzi ch.\ 5--6): the dynamic programming principle "
-                             r"is exactly the touching test", 12.0, 21, GREY_A).next_to(cards, DOWN, buff=0.6)
+        foot = wrapped_label(r"under suitable continuity, dynamic-programming and boundary hypotheses, the control value is a viscosity solution of HJB (Pham ch.\ 4; Touzi ch.\ 5--6)", 12.0, 21, GREY_A).next_to(cards, DOWN, buff=0.6)
         with self.voiceover(
-            "Two theorems make this the right notion. The comparison principle: a subsolution that starts below a "
-            "supersolution stays below it, so there can be only one viscosity solution. And the value function of a control "
-            "problem is always a viscosity solution of its HJB equation, smooth or not: the dynamic programming principle is "
-            "the touching test. <bookmark mark='a'/> The third is the one engineers use. Guy Barles and Panagiotis "
-            "Souganidis proved in 1991 that a numerical scheme that is monotone, stable and consistent converges to the "
-            "viscosity solution. Monotone means that raising the value at a neighbour can only raise the update. The next "
-            "experiment shows what happens without it."
+            """The comparison principle, when it holds for the PDE and its boundary conditions, orders subsolutions below supersolutions and gives uniqueness. Under suitable continuity, dynamic-programming and boundary assumptions, the control value is a viscosity solution of HJB. <bookmark mark='a'/> Barles and Souganidis proved convergence for monotone, stable, consistent approximation schemes when the limiting equation has comparison, with the required boundary treatment. Monotone means the update preserves order in neighbouring values. Each hypothesis matters; consistency by itself does not imply convergence."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2), FadeIn(foot))
             vo.wait_until("a")
@@ -165,7 +156,7 @@ class Viscosity(VoiceoverScene):
         k = ValueTracker(0)
 
         def prof(g, arr, col):
-            return always_redraw(lambda: curve(g.ax, x, np.where(np.abs(arr[int(k.get_value())]) < 1.38,
+            return always_redraw(lambda: curve(g.ax, x, np.where((arr[int(k.get_value())] >= -0.38) & (arr[int(k.get_value())] <= 1.38),
                                                                  arr[int(k.get_value())], np.nan), col, stroke_width=3.5))
 
         pu, pc = prof(gs[0], up, GOOD), prof(gs[1], ce, OVER)
@@ -187,18 +178,9 @@ class Viscosity(VoiceoverScene):
         side = wrapped_label(r"the floor solver of chapter 2 takes a maximum of averages of the next values with "
                              r"positive weights: monotone, which is why it converged", 5.2, 19, GREY_A).next_to(
             tab, RIGHT, buff=0.6)
-        src = illustration(r"$u_t + |u_x| = 1$ from $u = 0$, marched to $t = 6$")
+        src = illustration(r"$u_t+|u_x|=1$, $u(0)=0$, to $t=6$; central excursions outside the display window are omitted")
         with self.voiceover(
-            "Test it. March the equation, u t plus the size of u x equals one, forward in time from zero until it settles. "
-            "On the left, an upwind scheme that looks at each neighbour from the side the information comes from: monotone. "
-            "On the right, the textbook central difference: consistent, but not monotone. <bookmark mark='a'/> The upwind "
-            "profile rises like water filling a tent and stops exactly at the distance function. The central profile develops "
-            "teeth between neighbouring nodes, and the teeth grow. <bookmark mark='b'/> On every grid the upwind error is at "
-            f"the level of rounding. The central error reaches ten to the {int(np.log10(grid['321']['central']))} on the "
-            "finest grid: refining makes it worse. <bookmark mark='c'/> Consistency is not enough. Monotonicity is what makes a "
-            "grid converge to the right kink, and it is why chapter two's solver, a maximum of positively weighted averages, "
-            "found portfolio insurance."
-            " With the tools in place, the classic problem. Next: Merton's."
+            f"Test it. March the equation, u t plus the size of u x equals one, forward in time from zero until it settles. On the left, an upwind scheme that looks at each neighbour from the side the information comes from: monotone. On the right, the textbook central difference: consistent, but not monotone. <bookmark mark='a'/> The upwind profile rises like water filling a tent and stops exactly at the distance function. The central profile develops teeth between neighbouring nodes, and the teeth grow. <bookmark mark='b'/> On every grid the upwind error is at the level of rounding. The central error reaches ten to the {int(np.log10(grid['321']['central']))} on the finest grid: refining makes it worse. <bookmark mark='c'/> Consistency is not enough. Monotonicity is what makes a grid converge to the right kink, and it is why chapter two's solver, a maximum of positively weighted averages, found portfolio insurance. With the tools in place, the classic problem. Next: Merton's. The central-scheme plot uses a fixed display window: excursions beyond it are omitted; the error readout retains their full size."
         ) as vo:
             self.play(*[FadeIn(g) for g in gs], FadeIn(heads), FadeIn(tent), FadeIn(src))
             self.add(pu, pc, tlab)

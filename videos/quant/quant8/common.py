@@ -30,3 +30,7 @@ def tbar(ax, x, t, color, width=0.5, lo=0.0):
     w = ax.c2p(width, 0)[0] - ax.c2p(0, 0)[0]
     return Rectangle(width=w, height=max(abs(top[1] - bot[1]), 0.01), stroke_width=0, fill_color=color,
                      fill_opacity=0.85).move_to((top + bot) / 2)
+
+
+def predict(text: str, width=10.5, font_size=26):
+    return wrapped_label(rf"Pause and predict: {text}", width, font_size, QC.IDEA).to_edge(DOWN, buff=0.3)

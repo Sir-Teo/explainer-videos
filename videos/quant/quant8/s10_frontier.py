@@ -20,8 +20,7 @@ PAPERS = [  # (edge, title, what it found)
                     r"2602.13544", r"a closed-form Gaussian policy that does not depend on wealth"),
     (("DP", "RL"), r"Huh, Jeon, Koo and Lim (2025), ``Breaking the Dimensional Barrier for Constrained Dynamic "
                    r"Portfolio Choice'', arXiv 2501.12600",
-     r"Pontryagin's principle steers deep learning to constrained optima with a hundred assets, where grids stop at a "
-     r"handful"),
+     r"Pontryagin-guided neural methods: constrained numerical examples up to a hundred assets; tensor grids scale exponentially"),
     (("DP", "RL"), r"Huh and Koo (2026), arXiv 2601.03175", r"parameter uncertainty in high dimensions; a model-free "
                                                             r"PPO baseline ``remains far from the targets''"),
     (("MFG", "RL"), r"Lauri\`ere, Perrin, P\'erolat et al., ``Learning in Mean Field Games: A Survey'', arXiv 2205.12944",
@@ -29,7 +28,7 @@ PAPERS = [  # (edge, title, what it found)
     (("STOP", "BSDE"), r"Chee, Frikha and Li (2026), ``A Monotone Limit Approach to Entropy-Regularized American "
                        r"Options'', arXiv 2602.18062", r"exploration meets reflected BSDEs, with convergence rates"),
     (("KELLY", "RL"), r"Toda (2023), ``Ergodicity Economics is Pseudoscience'', arXiv 2306.03275",
-     r"the sharpest critique of the ergodicity programme of chapter 10"),
+     r"a critique of the ergodicity programme of chapter 10"),
 ]
 
 
@@ -87,9 +86,7 @@ class Frontier(VoiceoverScene):
             vo.wait_until("a")
             show(0)
         with self.voiceover(
-            "Min Dai, Yuchao Dong, Jia and Zhou showed that the best randomized policy for Merton's problem has "
-            "Merton's fraction as its mean, so an actor-critic learner can find it from data without ever estimating "
-            "the expected return, the input chapter five called the least certain number in finance."
+            "Min Dai, Yuchao Dong, Jia and Zhou showed that the best randomized policy for Merton's problem has Merton's fraction as its mean, so an actor-critic learner can find it from data without ever estimating the expected return, the input chapter five called the least certain number in finance. Avoiding an explicit drift estimate does not remove statistical uncertainty; the claim is specific to the randomized-control model and objective."
         ):
             show(1)
         with self.voiceover(
@@ -105,13 +102,12 @@ class Frontier(VoiceoverScene):
         ):
             show(3)
         with self.voiceover(
-            "And Huh and Koo's 2026 follow-up, with parameter uncertainty, reports that a model-free PPO baseline "
-            "remains far from the targets: chapter sixteen's experience, at scale."
+            """Huh and Koo's 2026 follow-up studies parameter uncertainty and reports that its model-free PPO baseline remains far from the targets in that model and protocol. This is a benchmark result, not a universal limit on reinforcement learning."""
         ):
             show(4)
         with self.voiceover(
             "For crowds, a survey by Mathieu Laurière and colleagues maps how agents can learn mean-field equilibria "
-            "without a model, the way our fictitious play did with one."
+            "without a model, the way our damped best-response example did with one."
         ):
             show(5)
         with self.voiceover(
@@ -123,7 +119,7 @@ class Frontier(VoiceoverScene):
             "And on the Kelly branch, Alexis Akira Toda's 2023 critique of ergodicity economics keeps chapter ten's argument "
             "open. Notice the pattern: almost every edge is a learning method meeting a classical structure, the HJB, the "
             "boundary, the fixed point, and the structure is what makes the learning work. Each of these was checked at its "
-            "source; none of it is yet textbook material."
+            "source; their assumptions and numerical settings differ."
             " Next: the House's sizing module, put together."
         ):
             show(7)

@@ -5,9 +5,8 @@ from videos.quant.quant8.common import ALT, BAD, GOOD, KELLY, OVER, PART, UNDER,
 
 DESK = [
     (r"A coin lands heads 60\% of the time; you may bet any fraction of your wealth at even odds, again and again. "
-     r"What fraction?",
-     r"Kelly: $f^* = p - q = 20\%$, growing about 2\% a flip; at 40\% you no longer grow. With a cap and a time limit, "
-     r"slightly less does as well (in 300 flips with a \$250 cap, 10\% and 20\% both reach it about 94\% of the time)"),
+     r"What fraction maximizes uncapped long-run log growth?",
+     r"Kelly: $f^* = p - q = 20\%$, growing about 2\% a flip; at 40\% exact log growth is slightly negative. In the separate 300-flip simulation with a \$250 cap, 10\% and 20\% both reach it about 94\% of the time"),
     (r"A strategy has a Sharpe ratio of 1 at 10\% volatility. What leverage does Kelly suggest, and would you use it?",
      r"$f^* = (\mu - r)/\sigma^2 = SR/\sigma = 10$. No: four years of a Sharpe of 1 has a standard error near 0.6 (Part "
      r"6), and the volatility can triple (LTCM); half Kelly or less, recomputed as volatility changes"),
@@ -25,7 +24,7 @@ PROBLEMS = [
     r"growth is zero again at about $2f^*$.",
     r"Write the HJB equation for Merton's problem and show that $V = e^{a(T - t)}\,w^{1-\gamma}/(1 - \gamma)$ solves "
     r"it with $\pi^* = (\mu - r)/(\gamma\sigma^2)$; find $a$.",
-    r"Show that betting $c$ times the Kelly fraction gives $(2c - c^2)$ of Kelly's excess growth with $c$ times its "
+    r"For continuously rebalanced constant-coefficient GBM, show that betting $c$ times Kelly gives $(2c - c^2)$ of Kelly's excess growth with $c$ times its "
     r"volatility.",
     r"Show that the secretary rule's success probability tends to $-x\log x$ with $x = k/n$, maximized at $x = 1/e$.",
     r"In Peters' coin (+50\%, $-40\%$), what fraction of wealth should you stake each flip, and at what growth rate?",
@@ -54,17 +53,16 @@ class Outro(VoiceoverScene):
     def recap(self, c, m, k, d, mf, ps):
         items = [
             (r"a 60\% coin at even odds: bet 20\%; at 100\%, most players go bust", OVER),
-            (r"utility turns a gamble into a certainty equivalent; the premium is $\frac12\gamma\sigma^2$", VALUE),
+            (r"small fair dollar gamble: risk premium $\approx\gamma\sigma_{\$}^2/(2W)$; relative premium $\approx\gamma\sigma_R^2/2$", VALUE),
             (r"Bellman solves backwards; the HJB is its continuous form; verification proves the guess", VALUE),
-            (r"kinks need viscosity solutions, and grids need monotone schemes", VALUE),
+            (r"nonsmooth HJB: viscosity comparison; monotone, stable, consistent schemes with valid boundary treatment", VALUE),
             (rf"Merton: {100 * m['fraction'][2]:.0f}\% in US stocks at $\gamma = 3$, with wide error bands; spend a "
              r"constant share", KELLY),
             (rf"costs open a no-trade band, {100 * d['rows'][2]['lo']:.0f}--{100 * d['rows'][2]['hi']:.0f}\% at 1\%, "
              r"growing like $\varepsilon^{1/3}$", KELLY),
-            (r"Kelly wins eventually (Breiman), slowly; overestimate the edge twofold and it earns nothing", KELLY),
+            (r"fixed-fraction Kelly beats lower-growth rivals eventually under the model; twice Kelly has zero excess growth in GBM", KELLY),
             (r"Samuelson: growth is not utility; stopping is a rope over pegs, and smooth fit finds the boundary", ALT),
-            (rf"a liquidating crowd sells {100 * mf['runs']['inf']['share_fifth']:.0f}\% in the first fifth; PPO finds "
-             r"Merton, and struggles with costs", GOOD),
+            (rf"a liquidating crowd sells {100 * mf['runs']['inf']['share_fifth']:.0f}\% in the first fifth; PPO nears the reference and struggles with costs", GOOD),
             (r"in practice: fractional Kelly, risk budgets, drawdown floors, volatility targeting", QC.FIRM),
         ]
         rows = VGroup()
@@ -76,16 +74,10 @@ class Outro(VoiceoverScene):
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
         with self.voiceover(
-            "Part eight in ten lines. Bet twenty percent on the sixty percent coin. The premium for risk is half gamma times "
-            "the variance. Bellman solves backwards, the HJB is its continuous form, and verification proves the guess. "
-            "Kinks need viscosity solutions and monotone grids. Merton holds "
-            f"{100 * m['fraction'][2]:.0f} percent in stocks at gamma three, with wide error bars, and spends a constant "
-            "share. Costs open a band growing like the cube root of the cost. Kelly wins eventually, slowly, and earns "
-            "nothing on an edge overestimated twofold. Growth is not utility; stopping is a rope over pegs. A crowd sells "
-            "in a rush, and a learner finds Merton. And funds bet fractions inside risk budgets."
+            f"""Part eight in ten lines. Twenty percent maximizes uncapped log growth for the sixty-percent coin; forty percent has slightly negative growth. A small fair dollar gamble has approximate risk premium gamma times dollar variance over twice wealth. Bellman and smooth verification need admissibility; nonsmooth HJB uses viscosity comparison and suitable convergent schemes. Merton's full-sample US plug-in at gamma three is {100 * m['fraction'][2]:.0f} percent, with nominal error bars. Small costs open a band with a cube-root leading order. Fixed-fraction Kelly eventually beats strictly lower-growth fractions under the model; expected utility can prefer less risk at every horizon. Stopping, robust control, backward equations and crowd games need their stated assumptions. Our PPO checks are numerical benchmarks, with simulator floors. Practical sizing combines forecasts and risk constraints, without guarantees against jumps."""
         ):
-            self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
-                                                 run_time=14))
+            self.play(FadeIn(title), FadeIn(rows[0]), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[1:]], lag_ratio=0.6, run_time=10))
         self.wait(0.5)
         self.clear_scene()
 
@@ -164,9 +156,7 @@ class Outro(VoiceoverScene):
              r"Pardoux and Peng (1990); El Karoui, Peng and Quenez (1997); Lasry and Lions (2007); Huang, Malham\'e "
              r"and Caines (2006); Schulman et al.\ (2017); Jia and Zhou (2023); Grossman and Zhou (1993)"], font_size=19)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on; the full list, with the frontier "
-            "papers, is in the notes. Every number was computed by the series' own code: Kenneth French's market "
-            "returns for the history, and seeded simulations, labelled on screen, for the rest."
+            """The textbook chapters and papers are listed in the notes. Numerical illustrations use our code, public French market returns, and simulations with fixed seeds. Historical anecdotes and published results are quotations with sources, not computations from those datasets."""
         ):
             self.play(FadeIn(card))
             self.wait(4)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, tbar
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, tbar
 
 
 class Hook(VoiceoverScene):
@@ -30,7 +30,7 @@ class Hook(VoiceoverScene):
 
     def game(self, c):
         q = desk_question(r"You have \$25 and a coin that lands heads 60\% of the time. For 30 minutes you may bet any "
-                          r"amount on either side, at even odds, as often as you like; winnings are capped at \$250. "
+                          r"amount on either side, at even odds, as often as you like; final wealth is capped at \$250. "
                           r"How much do you bet each time?", width=10.6, font_size=28).to_edge(UP, buff=0.5)
         facts = VGroup(
             label(r"Haghani and Dewey (2016) gave this game to 61 people trained in finance and economics.",
@@ -39,10 +39,7 @@ class Hook(VoiceoverScene):
             label(r"Many over-bet, some bet erratically, some even bet on tails.", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(q, DOWN, buff=0.6)
         with self.voiceover(
-            "Here is a game. You get twenty-five dollars and a coin that lands heads sixty percent of the time. For half "
-            "an hour you may bet any amount, on either side, at even odds, as often as you like, up to winnings of two "
-            "hundred and fifty dollars. How much do you bet? <bookmark mark='a'/> In 2016 Victor Haghani and Richard Dewey "
-            "gave this game to sixty-one people trained in finance and economics. About thirty percent of them went bust."
+            """Here is a game. You get twenty-five dollars and a coin that lands heads sixty percent of the time. For half an hour, you may bet any amount on either side at even odds, as often as you like, with a maximum cash payout of two hundred and fifty dollars. How much do you bet? <bookmark mark='a'/> In 2016 Victor Haghani and Richard Dewey gave this game to sixty-one people trained in finance and economics. About thirty percent lost their entire bankroll."""
         ) as vo:
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("a")
@@ -85,7 +82,7 @@ class Hook(VoiceoverScene):
         num = Integer(0, font_size=34, color=GREY_A)
         cnt = VGroup(label(r"flip", font_size=28, color=GREY_A), num).arrange(RIGHT, buff=0.2).to_corner(UR, buff=0.5)
         num.add_updater(lambda m: m.set_value(int(tk.get_value())))
-        q = pause_card(r"Before the flips: which column goes bust most often, 40\% or 100\%? And does 40\% grow at "
+        q = predict(r"Before the flips: which column goes bust most often, 40\% or 100\%? And does 40\% grow at "
                        r"all?", width=3.4, font_size=20).to_edge(RIGHT, buff=0.3)
         q.set_y(1.2)  # beside the chart, under the flip counter, above where the results will appear
         b = L["by_fraction"]
@@ -93,12 +90,9 @@ class Hook(VoiceoverScene):
                              rf"{100 * b[f]['p_bust']:.0f}\% bust", font_size=20, color=c_)
                        for f, c_ in zip(fr, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         res.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.6)
-        src = illustration(r"simulation: 160 players per column, the same 300 coin flips for all")
+        src = illustration(r"simulation: 160 independent sequences, paired across columns; 300 flips; bust = below 1 cent")
         with self.voiceover(
-            "Let the game play itself first. A hundred and sixty players in each of four columns see the same coin; each "
-            "column stakes a different fraction of wealth on every flip: ten, twenty, forty or a hundred percent. "
-            "<bookmark mark='a'/> Pause and predict: which column goes bust most often, forty or a hundred? Does forty "
-            "grow at all? <bookmark mark='b'/> Three hundred flips, on a log scale."
+            """Let the game play itself first. Each column has a hundred and sixty players. Independent coin sequences are paired across the four fractions: ten, twenty, forty or a hundred percent. This is a three-hundred-flip illustration, with wealth capped at two hundred and fifty dollars and absorbed below one cent. <bookmark mark='a'/> Pause and predict: which column hits the bust threshold most often, forty or a hundred? Does forty grow without the cap? <bookmark mark='b'/> Three hundred flips, on a log scale."""
         ) as vo:
             self.play(FadeIn(g), Create(cap), FadeIn(capl), Create(start), FadeIn(startl), FadeIn(heads), FadeIn(src))
             self.add(dots)
@@ -111,10 +105,7 @@ class Hook(VoiceoverScene):
         dots.clear_updaters()
         num.clear_updaters()
         with self.voiceover(
-            f"All in was wiped out: {100 * b['1.0']['p_bust']:.0f} percent went bust, because one tail takes everything. "
-            "At forty percent the typical player barely grows, and the cap rescues most of them; still "
-            f"{100 * b['0.4']['p_bust']:.0f} percent went bust. At twenty percent, {100 * b['0.2']['p_cap']:.0f} percent "
-            "reached the cap and nobody went bust."
+            f"""All in: {100 * b['1.0']['p_bust']:.0f} percent went bust, because one tail takes everything. At forty percent, uncapped expected log growth is slightly negative; {100 * b['0.4']['p_cap']:.0f} percent nevertheless reached the absorbing cap and {100 * b['0.4']['p_bust']:.0f} percent hit the lower threshold. At twenty percent, {100 * b['0.2']['p_cap']:.0f} percent reached the cap and none hit that threshold in this sample. A fraction below one never makes positive wealth exactly zero in a finite number of flips."""
         ):
             self.play(LaggedStart(*[FadeIn(r_, shift=LEFT * 0.2) for r_ in res], lag_ratio=0.4, run_time=3))
         self.wait(0.4)
@@ -150,12 +141,7 @@ class Hook(VoiceoverScene):
         k100 = c["by_fraction"]["1.00"]
         src = illustration(r"simulation: 300 flips, 20{,}000 players per fraction")
         with self.voiceover(
-            "The answer is older than the game. Bet a fraction f each time, and wealth grows at p log of one plus f, plus "
-            "q log of one minus f, per flip. <bookmark mark='a'/> The curve peaks at p minus q, twenty percent: the Kelly "
-            "criterion, from 1956. At twice that, forty percent, growth stops; beyond it, a sure edge makes you poorer. "
-            "<bookmark mark='b'/> With twenty thousand players per fraction: at twenty percent, "
-            f"{100 * k20['p_cap']:.0f} percent reach the cap and none go bust; all in, {100 * k100['p_bust']:.0f} percent "
-            "go bust."
+            f"""The log-growth answer is older than the game. At a fixed fraction f, uncapped growth per flip is p log one plus f, plus q log one minus f. <bookmark mark='a'/> It peaks at p minus q, twenty percent: Kelly's 1956 criterion. At forty percent, exact expected log growth is already minus point two four five percent per flip. The second zero is near, but below, twice Kelly. The cap and finite horizon define a different objective. <bookmark mark='b'/> In twenty thousand simulated players per fraction, {100 * k20['p_cap']:.0f} percent at twenty percent reach the cap and none hit the one-cent threshold; all in, {100 * k100['p_bust']:.0f} percent go bust. These are sample frequencies."""
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(line), FadeIn(eq), run_time=2)
             vo.wait_until("a")
@@ -245,8 +231,8 @@ class Hook(VoiceoverScene):
             "Merton's problem with consumption and trading costs. Kelly, proved and criticized. When to stop, and how "
             "people really decide. Backward equations, crowds and a learning machine. And how funds size bets in practice."
         ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=10))
+            self.play(FadeIn(card.head), FadeIn(card.rows[0]), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows[1:]], lag_ratio=0.5, run_time=8))
         self.play(FadeOut(card))
 
     def house(self):

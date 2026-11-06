@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import control as C
-from videos.quant.quant8.common import BAD, GOOD, KELLY, PART, VALUE, load
+from videos.quant.quant8.common import predict, BAD, GOOD, KELLY, PART, VALUE, load
 
 
 class Utility(VoiceoverScene):
@@ -40,12 +40,7 @@ class Utility(VoiceoverScene):
         VGroup(sp, ax).arrange(RIGHT, buff=0.35, aligned_edge=UP).to_edge(UP, buff=0.5)
         thm.next_to(VGroup(sp, ax), DOWN, buff=0.5)
         with self.voiceover(
-            "In 1738 Daniel Bernoulli looked at a game with an infinite expected payout, a pot that doubles until a coin "
-            "lands heads, that nobody would pay much to play. His answer: value money by a utility, the logarithm of "
-            "wealth. <bookmark mark='a'/> In 1944 von Neumann and Morgenstern made it a theorem. If your preferences among "
-            "gambles are complete, transitive, continuous, and independent, meaning that mixing two gambles with the same "
-            "third never reverses their order, <bookmark mark='b'/> then you prefer A to B exactly when A has the larger "
-            "expected utility."
+            "In 1738 Daniel Bernoulli looked at a game with an infinite expected payout, a pot that doubles until a coin lands heads, that nobody would pay much to play. His answer: value money by a utility, the logarithm of wealth. <bookmark mark='a'/> In 1944 von Neumann and Morgenstern made it a theorem. If your preferences among gambles are complete, transitive, continuous, and independent, meaning that mixing two gambles with the same third never reverses their order, <bookmark mark='b'/> then you prefer A to B exactly when A has the larger expected utility. This is the standard representation for finite lotteries; extensions to unbounded outcomes need additional regularity and integrability."
         ) as vo:
             self.play(FadeIn(sp, shift=UP * 0.2))
             vo.wait_until("a")
@@ -113,7 +108,7 @@ class Utility(VoiceoverScene):
         def scaled(gm):
             f = lambda x: C.crra(x, gm)  # noqa: E731
             y = (f(w) - f(50.0)) / (f(150.0) - f(50.0))
-            return np.where(y < -0.6, np.nan, np.minimum(y, 1.4))
+            return np.where((y < -0.6) | (y > 1.4), np.nan, y)
 
         crv = always_redraw(lambda: curve(ax, w, scaled(float(np.exp(lg.get_value()))), VALUE, stroke_width=4))
         chord = Line(ax.c2p(50, 0), ax.c2p(150, 1), color=GREY_B, stroke_width=2)
@@ -148,7 +143,7 @@ class Utility(VoiceoverScene):
             "poor. Scale the curve so the two outcomes stay at zero and one: then the chord never moves, and only the bend "
             "changes. <bookmark mark='a'/> Turn the dial. As gamma rises the curve bends harder, and the certainty equivalent "
             f"slides left: {ces[i3]:.1f} at gamma three, and at thirty, {ces[-1]:.1f}, barely above the worst outcome. "
-            "<bookmark mark='b'/> Surveys and laboratory choices put most people's gamma between one and ten."
+            "<bookmark mark='b'/> Gamma is positive for risk aversion; its empirical estimate depends strongly on the setting and model."
         ) as vo:
             self.play(FadeIn(g), Create(chord), FadeIn(ends), FadeIn(mid), FadeIn(eq), FadeIn(why_))
             self.add(crv, hl, vl, cd, read)
@@ -179,13 +174,9 @@ class Utility(VoiceoverScene):
                 why(r"divide by $W$: relative risk aversion $\gamma$; for CRRA it is the constant $\gamma$")]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.9, buff=0.6, edge=6.9)
         with self.voiceover(
-            "What is the bend worth in money? Pratt in 1964 and Arrow in 1965: define the premium pi so that a fair gamble "
-            "is as bad as losing pi for sure. <bookmark mark='a'/> Expand the left side to second order; the mean is zero, "
-            "so half the variance times u double prime remains. <bookmark mark='b'/> Expand the right side to first order. "
-            "<bookmark mark='c'/> Equate: the premium is half the variance times the absolute risk aversion. "
-            "<bookmark mark='d'/> Divide by wealth, and relative risk aversion appears: for power utility, exactly gamma."
+            "What is the bend worth in money? Pratt in 1964 and Arrow in 1965: define the premium pi so that a fair gamble is as bad as losing pi for sure. <bookmark mark='a'/> Expand the left side to second order; the mean is zero, so half the variance times u double prime remains. <bookmark mark='b'/> Expand the right side to first order. <bookmark mark='c'/> Equate: the premium is half the variance times the absolute risk aversion. <bookmark mark='d'/> Divide by wealth, and relative risk aversion appears: for power utility, exactly gamma. This is a local approximation for a small mean-zero gamble and sufficiently smooth utility, with the remainder controlled. Dollar variance gives a dollar premium; return variance gives the premium relative to wealth."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -212,7 +203,7 @@ class Utility(VoiceoverScene):
         tab.to_edge(UP, buff=0.7)
         g3 = [r_ for r_ in rows if r_["gamma"] == 3.0 and r_["stake"] == 50.0][0]
         g1 = [r_ for r_ in rows if r_["gamma"] == 1.0 and r_["stake"] == 50.0][0]
-        q = pause_card(r"$\gamma = 3$, wealth 100, the 50-or-150 flip: would you pay more or less than 20 to avoid it?",
+        q = predict(r"$\gamma = 3$, wealth 100, the 50-or-150 flip: would you pay more or less than 20 to avoid it?",
                        width=8.4, font_size=24).next_to(tab, DOWN, buff=0.5)
         ans = label(rf"more: the certainty equivalent is {u['ce_g3']:.1f}, so the premium is {100 - u['ce_g3']:.1f}",
                     font_size=24, color=KELLY).next_to(q, DOWN, buff=0.3)

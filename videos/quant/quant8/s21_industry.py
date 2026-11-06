@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
 
 
 class Industry(VoiceoverScene):
@@ -40,8 +40,8 @@ class Industry(VoiceoverScene):
                       r"Interned at Bell Labs in 1960 and 1962 under John Kelly. In 1989 he took control of Axcom, which "
                       r"ran the trading of Jim Simons's Medallion Fund, and reworked its system with Simons, Sandor "
                       r"Straus and Henry Laufer.",
-                      numbers=[(r"55.9\%", r"net, 1990 (as reported)")],
-                      source=r"Wikipedia, ``Elwyn Berlekamp''; UC Senate memorial", width=4.3, font_size=19)
+                      numbers=[],
+                      source=r"UC Senate, Elwyn Berlekamp memorial", width=4.3, font_size=19)
         VGroup(a, b, c).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(ORIGIN)
         if VGroup(a, b, c).width > 13.6:
             VGroup(a, b, c).scale_to_fit_width(13.6)
@@ -67,7 +67,7 @@ class Industry(VoiceoverScene):
         rows = VGroup(
             VGroup(label(r"Norway's oil fund (NBIM)", font_size=24, color=QC.FIRM),
                    wrapped_label(r"the mandate caps expected relative volatility (tracking error) at 1.25 percentage "
-                                 r"points; NBIM reports about 0.3 (mid-2026)", 8.4, 20, GREY_A)),
+                                 r"points", 8.4, 20, GREY_A)),
             VGroup(label(r"Bridgewater All Weather (1996)", font_size=24, color=QC.FIRM),
                    wrapped_label(r"``put equal risk on each scenario'' of four economic environments; ``leverage is an "
                                  r"implementation tool''", 8.4, 20, GREY_A)),
@@ -88,18 +88,10 @@ class Industry(VoiceoverScene):
         math = VGroup(
             MathTex(r"\pi_t = \pi^*\,\frac{W_t - \alpha M_t}{W_t},\qquad M_t = \max_{s \le t} W_s", font_size=34,
                     color=KELLY),
-            wrapped_label(r"Grossman and Zhou (1993): never lose more than $1 - \alpha$ from the peak; hold Merton's "
-                          r"fraction of the cushion above a floor that ratchets up with the high-water mark: chapter "
-                          r"2's floor, moving", 12.0, 20, GREY_A),
+            wrapped_label(r"log-utility continuous discounted-wealth theory: Kelly times the drawdown cushion. The following weekly nominal-wealth simulation is an illustration, not a discrete-trading guarantee", 12.0, 20, GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Most institutions work inside risk budgets, which are control constraints. Norway's oil fund caps its expected "
-            "volatility relative to its benchmark at one and a quarter points; Bridgewater's All Weather, from 1996, puts "
-            "equal risk on four economic environments. <bookmark mark='a'/> As reported by the Wall Street Journal in 2024, "
-            "a Millennium manager who loses five percent has capital halved, and at seven and a half is likely let go; the "
-            "firm did not comment. <bookmark mark='b'/> Grossman and Zhou solved the drawdown problem in 1993: never fall "
-            "below a fraction alpha of the peak by holding Merton's fraction of the cushion above it: chapter two's floor, "
-            "ratcheting up."
+            "Most institutions work inside risk budgets, which are control constraints. Norway's oil fund caps its expected volatility relative to its benchmark at one and a quarter points; Bridgewater's All Weather, from 1996, puts equal risk on four economic environments. <bookmark mark='a'/> As reported by the Wall Street Journal in 2024, a Millennium manager who loses five percent has capital halved, and at seven and a half is likely let go; the firm did not comment. <bookmark mark='b'/> Grossman and Zhou solved the drawdown problem in 1993: never fall below a fraction alpha of the peak by holding Merton's fraction of the cushion above it: chapter two's floor, ratcheting up. The logarithmic Grossman-Zhou result constrains discounted wealth in a continuous diffusion. Our following weekly simulation uses a nominal-wealth cushion inspired by it; discrete trading and jumps need not preserve the floor."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")
@@ -112,8 +104,10 @@ class Industry(VoiceoverScene):
     def drawdown(self, d):
         sk, sg, sm = (np.asarray(d[k]) for k in ("sample_k", "sample_g", "sample_m"))
         n = sk.shape[1]
-        t = np.linspace(0, d["years"], n)
-        g = axes([0, d["years"]], [-1.0, 1.6], x_length=7.4, y_length=4.4, xlabel=r"years",
+        t = (4 * np.arange(n) + 1) / 52  # cached after weeks 1, 5, 9, ...
+        display_lo = np.floor(min(sk[0].min(), sg[0].min(), (sm[0] + np.log10(d["alpha"])).min()))
+        display_hi = np.ceil(max(sk[0].max(), sg[0].max(), sm[0].max()))
+        g = axes([0, d["years"]], [display_lo, display_hi], x_length=7.4, y_length=4.4, xlabel=r"years",
                  ylabel=r"wealth (log scale)", xticks=[0, 10, 20, 30], yticks=[-1, 0, 1], yfmt=lambda u: f"10^{{{int(u)}}}",
                  font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -121,11 +115,11 @@ class Industry(VoiceoverScene):
 
         def tr(arr, col, sw, dash=False):
             return always_redraw(lambda: VMobject(stroke_color=col, stroke_width=sw, stroke_opacity=0.5 if dash else 1)
-                                 .set_points_as_corners([ax.c2p(t[j], float(np.clip(arr[j], -1, 1.6)))
+                                 .set_points_as_corners([ax.c2p(t[j], float(arr[j]))
                                                          for j in range(0, int(tk.get_value()) + 1)]))
 
         lines = [tr(sk[0], OVER, 2.5), tr(sg[0], UNDER, 3.5), tr(sm[0] + np.log10(d["alpha"]), UNDER, 1.5, True)]
-        leg = legend([(OVER, r"Kelly, unconstrained"), (UNDER, r"Grossman--Zhou, $\alpha = 0.8$"),
+        leg = legend([(OVER, r"Kelly, unconstrained"), (UNDER, r"GZ-inspired nominal cushion, $\alpha=0.8$"),
                       (GREY_B, r"faint: its floor, 80\% of the peak")], font_size=17).next_to(g, UP, buff=0.2).align_to(
             g, LEFT)
         res = VGroup(
@@ -135,16 +129,11 @@ class Industry(VoiceoverScene):
             MathTex(rf"\text{{median growth: Kelly }}{100 * d['median_growth_kelly']:.1f}\%,\ \text{{GZ }}"
                     rf"{100 * d['median_growth_gz']:.1f}\%", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 1.2)
-        q = pause_card(r"A pod is down 4.9\% against a 5\% limit. What does the Grossman--Zhou investor do with her "
+        q = predict(r"A pod is down 4.9\% against a 5\% limit. What does the Grossman--Zhou investor do with her "
                        r"stock fraction?", width=4.6, font_size=19).next_to(res, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)
         src = illustration(r"simulation: $\mu - r = 6\%$, $\sigma = 18\%$; Kelly fraction 185\%")
         with self.voiceover(
-            "One path each: Kelly in red, Grossman and Zhou with a floor at eighty percent of the peak in blue. As she "
-            "falls toward the floor she sells, and she never touches it. <bookmark mark='a'/> Over two thousand paths, "
-            f"Kelly's worst drawdown is {100 * d['worst_dd_kelly']:.0f} percent, hers {100 * d['worst_dd_gz']:.0f}. The "
-            f"price: {100 * d['median_growth_gz']:.1f} percent median growth against {100 * d['median_growth_kelly']:.1f}. "
-            "<bookmark mark='b'/> Pause and predict: down four point nine against a five percent limit? Hold almost "
-            "nothing: the cushion is a tenth of a percent."
+            f"One path each: Kelly in red, Grossman and Zhou with a floor at eighty percent of the peak in blue. As she falls toward the floor she sells, and on this illustrated path she stays above it. <bookmark mark='a'/> Over two thousand paths, Kelly's worst drawdown is {100 * d['worst_dd_kelly']:.0f} percent, hers {100 * d['worst_dd_gz']:.0f}. The price: {100 * d['median_growth_gz']:.1f} percent median growth against {100 * d['median_growth_kelly']:.1f}. <bookmark mark='b'/> Pause and predict: down four point nine against a five percent limit? Hold almost nothing: the cushion is a tenth of a percent. This nominal weekly illustration is not the exact discounted-wealth optimization. No breach in these sampled paths is not a guarantee."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(*lines)
@@ -162,11 +151,11 @@ class Industry(VoiceoverScene):
         w = np.asarray(v["w"])
         d = np.asarray(v["dates"])
         yrs = d // 100 + (d % 100 - 1) / 12
-        g = axes([1926, 2021], [0, 4], x_length=7.4, y_length=3.4, xlabel=r"year",
-                 ylabel=r"exposure to the US market (average 1)", xticks=[1930, 1960, 1990, 2020], yticks=[0, 1, 2, 3, 4],
+        g = axes([1926, 2021], [0, np.ceil(w.max() * 1.05)], x_length=7.4, y_length=3.4, xlabel=r"year",
+                 ylabel=r"exposure to the US market (average 1)", xticks=[1930, 1960, 1990, 2020], yticks=[0, 3, 6, 9],
                  font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
         ax = g.ax
-        line = curve(ax, yrs, np.clip(w, 0, 4), ALT, stroke_width=1.6)
+        line = curve(ax, yrs, w, ALT, stroke_width=1.6)
         one = DashedLine(ax.c2p(1926, 1), ax.c2p(2021, 1), color=GREY_C, stroke_width=1.5)
         better = v["sr_scaled"] > v["sr_mkt"]
         side = VGroup(
@@ -178,16 +167,13 @@ class Industry(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         src = real_data(r"Kenneth French daily, 1926--2020; registered with the trial counter")
         with self.voiceover(
-            "Volatility targeting is Merton's rule with a moving volatility: exposure proportional to one over forecast "
-            "variance. Moreira and Muir tested it in 2017; the House redid the test on ninety-four years of daily data, "
-            "registered first."
+            """Volatility targeting here scales exposure by inverse lagged realized variance. Moreira and Muir studied related rules in 2017. This existing registered historical calculation uses ninety-four years of French data. Although the variance signal is lagged, exposure is normalized to average one using the full sample, so the whole procedure uses hindsight. Gross returns omit trading and funding costs."""
         ):
             self.play(FadeIn(g), Create(one), FadeIn(src), FadeIn(side[0]))
             self.play(Create(line), run_time=3)
         with self.voiceover(
             f"It helped: a Sharpe ratio of {v['sr_scaled']:.2f} against {v['sr_mkt']:.2f}, and an alpha of "
-            f"{100 * v['alpha']:.1f} percent a year, t of {v['alpha_t']:.1f}. Volatility clusters and returns do not keep "
-            "pace; but the exposure swings are wild, and real funds cap them."
+            f"{100 * v['alpha']:.1f} percent a year, t of {v['alpha_t']:.1f}. The displayed t statistic is the cached homoskedastic OLS reference, not a HAC statistic; this association does not establish a causal mechanism; but the exposure swings are wild, and real funds cap them."
             if better else
             f"It did not help here: a Sharpe ratio of {v['sr_scaled']:.2f} against {v['sr_mkt']:.2f}."
         ):

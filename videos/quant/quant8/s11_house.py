@@ -21,22 +21,20 @@ class House(VoiceoverScene):
     def module(self, env):
         chart = house_chart(PART, lit=("data",)).scale(0.55).to_edge(UP, buff=0.15)
         rows = [
-            (r"\texttt{crra}, \texttt{certainty\_equivalent}, \texttt{pratt\_premium}", r"utility and the price of risk"),
-            (r"\texttt{bellman\_merton}, \texttt{hjb\_fd\_merton}", r"Merton by dynamic programming and by the HJB"),
-            (r"\texttt{eikonal\_march}", r"monotone and non-monotone schemes, side by side"),
-            (r"\texttt{merton\_consumption\_rate}, \texttt{no\_trade\_band}", r"spending, and the band of trading costs"),
-            (r"\texttt{kelly\_binary}, \texttt{realized\_growth}", r"Kelly, and growth measured on history"),
-            (r"\texttt{snell\_envelope}, \texttt{concave\_majorant}, \texttt{perpetual\_put}", r"stopping, three ways"),
-            (r"\texttt{cpt\_value}, \texttt{robust\_fraction}, \texttt{theta\_for\_detection}",
-             r"prospect theory, and doubt"),
-            (r"\texttt{bsde\_regression}, \texttt{mfg\_liquidation}", r"nonlinear pricing, and the crowd"),
-            (r"\texttt{ppo\_merton}, \texttt{ppo\_rebalance}, \texttt{grossman\_zhou\_fraction}",
-             r"learners checked against answers; drawdown floors"),
+            ("crra, certainty_equivalent", r"preferences and money values"),
+            ("bellman_merton, hjb_fd_merton", r"dynamic programming and HJB"),
+            ("no_trade_band, merton_fraction", r"costs and spending"),
+            ("kelly_binary, realized_growth", r"Kelly and historical growth"),
+            ("snell_envelope, perpetual_put", r"stopping and smooth fit"),
+            ("cpt_value, robust_fraction", r"prospect theory and doubt"),
+            ("bsde_regression, mfg_liquidation", r"nonlinear pricing and the crowd"),
+            ("ppo_merton, ppo_rebalance", r"learners checked against benchmarks"),
         ]
-        tab = VGroup(*[VGroup(label(a, font_size=18, color=QC.HOUSE), label(b, font_size=17, color=GREY_A)).arrange(
-            RIGHT, buff=0.4) for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.11)
+        tab = VGroup(*[VGroup(data_text(a, font="DejaVu Sans Mono", font_size=18, color=QC.HOUSE),
+                              label(b, font_size=18, color=GREY_A)).arrange(RIGHT, buff=0.4)
+                       for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         for r_ in tab:
-            r_[1].align_to(tab, LEFT).shift(RIGHT * 7.4)
+            r_[1].align_to(tab, LEFT).shift(RIGHT * 7.0)
         tab.next_to(chart, DOWN, buff=0.25)
         if tab.width > 13.2:
             tab.scale_to_fit_width(13.2)
@@ -67,25 +65,25 @@ class House(VoiceoverScene):
             MathTex(rf"\text{{3. doubt (}}\theta = {th1:.2f}\text{{, 20\% detection error): }}"
                     rf"{100 * rob_kelly:.0f}\%", font_size=30, color=ALT),
             MathTex(r"\text{4. trade only outside the no-trade band}", font_size=30, color=VALUE),
-            MathTex(r"\text{5. a drawdown budget as a Grossman--Zhou floor}", font_size=30, color=OVER),
+            MathTex(r"\text{5. a GZ-inspired nominal drawdown cushion}", font_size=30, color=OVER),
             MathTex(r"\text{6. recompute whenever the volatility forecast moves}", font_size=30, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.6)
-        rule = wrapped_label(r"Rule 9: no position above the Kelly fraction of its estimated edge; the default is half, "
+        rule = wrapped_label(r"Rule 9 (illustrative House governance): estimated Kelly is a reference cap, not a universal optimal bound; default to half, "
                              r"or the robust fraction if smaller; rebalance only outside the no-trade band; a drawdown "
-                             rf"budget is a Grossman--Zhou floor. The trial counter reads {env['trials']}.", 12.4, 22,
+                             rf"budget uses a GZ-inspired nominal cushion; discrete trading and jumps can breach it. The trial counter reads {env['trials']}.", 12.4, 22,
                              QC.HOUSE).to_edge(DOWN, buff=0.35)
+        guide = wrapped_label(r"Separate model rules combined in one illustrative pipeline", 12.4, 22, GREY_A).set_y(-1.3)
         with self.voiceover(
             "Here is how the House sizes a position, on the US market's own numbers, with log utility as the ceiling. "
             f"Kelly on the estimated edge: {100 * kel:.0f} percent, more than twice levered. <bookmark mark='a'/> Half of it, "
             f"for the doubt in the estimate: {50 * kel:.0f}. The robust fraction, with doubt calibrated to a twenty percent "
             f"detection error, is {100 * rob_kelly:.0f} percent; the House takes the smaller of the two. "
-            "<bookmark mark='b'/> Then trade only when the position leaves its no-trade band; cap losses with a drawdown "
-            "floor that ratchets up; and recompute whenever the volatility forecast moves, so that a calm-market size never "
-            "meets a storm. <bookmark mark='c'/> That is rule nine. This part registered three tests on the House's data, the "
+            "<bookmark mark='b'/> Then trade only when the position leaves its no-trade band; apply a nominal drawdown "
+            "floor that ratchets up; and recompute whenever the volatility forecast moves, while recognizing that forecast updates cannot prevent sudden jumps. This is an illustrative governance pipeline, not a jointly optimal control solution or a drawdown guarantee. <bookmark mark='c'/> That is rule nine. This part registered three tests on the House's data, the "
             "split-sample Kelly fraction, myopic loss aversion and volatility targeting, and the trial counter now reads "
             f"{env['trials']}."
         ) as vo:
-            self.play(FadeIn(steps_[0]))
+            self.play(FadeIn(steps_[0]), FadeIn(guide), run_time=0.5)
             vo.wait_until("a")
             self.play(FadeIn(steps_[1]), FadeIn(steps_[2]))
             vo.wait_until("b")

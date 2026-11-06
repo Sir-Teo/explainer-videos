@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data, tbar
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data, tbar
 
 
 class Kelly(VoiceoverScene):
@@ -61,19 +61,12 @@ class Kelly(VoiceoverScene):
                 why(r"the vertex of that parabola: Merton's fraction at $\gamma = 1$; the Kelly growth is half the "
                     r"squared Sharpe ratio", font_size=21),
                 why(r"$\log W_n$ is a sum of i.i.d.\ log-returns: the strong law of large numbers", font_size=21),
-                why(r"Breiman (1961): any rival with lower $g$ falls behind by a factor that grows exponentially; the "
-                    r"general case (any strategy) holds too", font_size=21)]
+                why(r"distinct fixed fractions with integrable i.i.d. log returns and $g(f^*)>g(f)$: an exponential growth gap; general strategies need additional qualifications", font_size=21)]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=0.4, buff=0.9, edge=6.9)
         with self.voiceover(
-            "For the coin, set the derivative of the growth rate to zero: the Kelly fraction is p minus q. "
-            "<bookmark mark='a'/> For a stock, Itô's formula makes log wealth's drift a parabola in f. "
-            "<bookmark mark='b'/> Its vertex is excess return over variance, Merton at gamma one, earning half the squared "
-            "Sharpe ratio above cash. <bookmark mark='c'/> Now why it wins. Log wealth is a sum of independent terms, so "
-            "by the strong law, log wealth over n converges to g. <bookmark mark='d'/> Against any rival the wealth ratio "
-            "grows like e to the n times the gap in growth rates: it goes to infinity. Breiman proved this in 1961, for "
-            "every rival strategy."
+            """For the coin, set the growth derivative to zero: the Kelly fraction is p minus q. <bookmark mark='a'/> For a continuously rebalanced stock in a constant-coefficient diffusion, Itô makes log wealth's drift a parabola. <bookmark mark='b'/> Its vertex is excess return over variance, Merton at gamma one, with excess growth half the squared Sharpe ratio. <bookmark mark='c'/> For fixed coin fractions with integrable independent and identically distributed log returns, the strong law makes log wealth over n converge to g. <bookmark mark='d'/> Against a distinct fixed fraction with strictly lower growth, the wealth ratio diverges exponentially. An identical rival is an immediate exception to any claim about every strategy. Breiman's broader results need their own strategy and market assumptions."""
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -89,8 +82,8 @@ class Kelly(VoiceoverScene):
         t = np.asarray(L["t"])
         fans = L["fans"]
         keys, cols = ["0.5", "1.0", "2.0"], [UNDER, KELLY, OVER]
-        g = axes([0, 40], [-1.5, 3.0], x_length=8.4, y_length=5.0, xlabel=r"years", ylabel=r"wealth (log scale)",
-                 xticks=[0, 10, 20, 30, 40], yticks=[-1, 0, 1, 2, 3], yfmt=lambda u: f"10^{{{int(u)}}}", font_size=16)
+        g = axes([0, 40], [-5, 4], x_length=8.4, y_length=5.0, xlabel=r"years", ylabel=r"wealth (log scale)",
+                 xticks=[0, 10, 20, 30, 40], yticks=[-4, -2, 0, 2, 4], yfmt=lambda u: f"10^{{{int(u)}}}", font_size=16)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
         tk = ValueTracker(0)
@@ -99,31 +92,30 @@ class Kelly(VoiceoverScene):
         def fan(key, col):
             P = np.asarray(fans[key]["paths"])[:30]
             # each path ends where it first leaves the axes, instead of running flat along the edge
-            out = (P < -1.5) | (P > 3.0)
-            last = [int(np.argmax(o)) if o.any() else P.shape[1] - 1 for o in out]
+            last = [P.shape[1] - 1 for _ in P]
 
             def pts(row, end):
                 js = list(range(0, min(max(int(tk.get_value()), 1), end) + 1, 3))
                 if len(js) < 2:
                     js = [0, 1]
-                return [ax.c2p(t[j], float(np.clip(row[j], -1.5, 3.0))) for j in js]
+                return [ax.c2p(t[j], float(row[j])) for j in js]
             return always_redraw(lambda: VGroup(*[
                 VMobject(stroke_color=col, stroke_width=1.0, stroke_opacity=0.25).set_points_as_corners(pts(row, end))
                 for row, end in zip(P, last)]))
 
         def med(key, col):
-            m = np.clip(np.asarray(fans[key]["median"]), -1.5, 3.0)
+            m = np.asarray(fans[key]["median"])
             return always_redraw(lambda: VMobject(stroke_color=col, stroke_width=4).set_points_as_corners(
                 [ax.c2p(t[j], m[j]) for j in range(0, max(int(tk.get_value()), 1) + 1, 3)]))
 
         fs = [fan(k_, c_) for k_, c_ in zip(keys, cols)]
         ms = [med(k_, c_) for k_, c_ in zip(keys, cols)]
-        avg = VGroup(*[DashedLine(ax.c2p(0, 0), ax.c2p(40, min(40 * fans[k_]["g"] / np.log(10), 3.0)), color=c_,
+        avg = VGroup(*[DashedLine(ax.c2p(0, 0), ax.c2p(40, 40 * fans[k_]["g"] / np.log(10)), color=c_,
                                   stroke_width=2.5) for k_, c_ in zip(keys, cols)])
         leg = legend([(c_, rf"{float(k_):g}$\times$ Kelly ({100 * fans[k_]['f']:.0f}\%): $g = "
                        rf"{100 * fans[k_]['g']:.1f}\%$") for k_, c_ in zip(keys, cols)], font_size=18)
         leg.to_corner(UR, buff=0.4)
-        q = pause_card(r"At twice Kelly, what is the median growth rate?", width=4.2, font_size=21).next_to(
+        q = predict(r"At twice Kelly, what is the median growth rate?", width=4.2, font_size=21).next_to(
             leg, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)  # the card is wider than the legend: keep it in frame
         ans = wrapped_label(rf"the cash rate, {100 * L['r']:.0f}\%: no excess growth at all, though its luckiest paths "
                             r"are the richest", 4.2, 19, OVER).next_to(q, DOWN, buff=0.25).align_to(q, LEFT)

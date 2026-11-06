@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
+from videos.quant.quant8.common import predict, ALT, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
 
 
 class LTCM(VoiceoverScene):
@@ -28,7 +28,7 @@ class LTCM(VoiceoverScene):
                 cmath(r"\hat\mu - r = k(\mu - r)", r"\ \Rightarrow\ ", r"\hat f = c\,k\,f^*,\qquad g - r = (2ck - c^2k^2)"
                       r"\,\big(g(f^*) - r\big)", font_size=30)]
         whys = [why(r"bet $c$ times Kelly: substitute $f = c f^*$ into the growth parabola", font_size=21),
-                why(r"use $f^*\sigma^2 = \mu - r$: the same curve for every asset. $c = \frac12$ keeps 75\% of the growth "
+                why(r"use $f^*\sigma^2 = \mu - r$: the same curve in this constant-coefficient, continuously rebalanced GBM model. $c = \frac12$ keeps 75\% of the growth "
                     r"at half the volatility; $c = 2$ earns nothing", font_size=21),
                 why(r"overestimate the edge $k$-fold: you bet $ck$ times true Kelly. Full Kelly earns nothing at $k = 2$, "
                     r"half Kelly at $k = 4$", font_size=21)]
@@ -43,14 +43,14 @@ class LTCM(VoiceoverScene):
             quote.scale_to_fit_width(13.0)
         with self.voiceover(
             "Practitioners rarely bet full Kelly. Bet c times Kelly and substitute: <bookmark mark='a'/> the excess growth "
-            "is two c minus c squared times Kelly's, for every asset. Half Kelly keeps three quarters of the growth at half "
+            "is two c minus c squared times Kelly's, in this constant-coefficient, continuously rebalanced GBM model. Half Kelly keeps three quarters of the growth at half "
             f"the volatility, and halves wealth from a peak within ten years {100 * m['0.5']['p_dd50']:.0f} percent of the "
             f"time, against {100 * m['1.0']['p_dd50']:.0f} for full Kelly. <bookmark mark='b'/> The deeper reason: overestimate "
-            "the edge k-fold and full Kelly on the estimate is k times Kelly on the truth; at two, it earns nothing. "
+            "the edge k-fold and full Kelly on the estimate is k times Kelly on the truth; at two, its expected excess log growth is zero, assuming the variance was known correctly. "
             "<bookmark mark='c'/> William Benter, who ran a Hong Kong racing syndicate, wrote exactly that in 1994, and bet a "
             "half or a third of Kelly."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -103,7 +103,7 @@ class LTCM(VoiceoverScene):
             MathTex(rf"\text{{hindsight best }}{100 * k['split_f2']:.0f}\%\to{100 * k['split_g2_best']:.1f}\%",
                     font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g, DOWN, buff=0.5).align_to(g, LEFT)
-        q = pause_card(r"You estimate a Sharpe ratio of 1; the truth is 0.5. Full or half Kelly on your estimate?",
+        q = predict(r"You estimate a Sharpe ratio of 1; the truth is 0.5. Full or half Kelly on your estimate?",
                        width=5.6, font_size=20).next_to(leg, DOWN, buff=0.3).align_to(g2, LEFT)
         src = real_data(r"Kenneth French, monthly 1926--2020; 400 block-bootstrap histories", corner=DL)
         with self.voiceover(
@@ -194,13 +194,7 @@ class LTCM(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"illustration: an assumed trade, not LTCM's books")
         with self.voiceover(
-            "Why so dangerous? An illustration, not the fund's books: a trade earning one percent a year with one percent "
-            f"volatility has a Kelly leverage of {l_['kelly_before']:.0f}, so twenty-eight to one looks cautious. "
-            "<bookmark mark='a'/> But Kelly leverage falls with the square of volatility. At "
-            f"{cross:.1f} times the calm volatility, twenty-eight is full Kelly; at three times, it is "
-            f"{28 / l_['kelly_after']:.1f} times Kelly, past the line where growth is zero. <bookmark mark='b'/> Sizing is "
-            "only as good as the volatility forecast."
-            " Kelly has a famous critic. Next: Samuelson's objection."
+            f"Why so dangerous? An illustration, not the fund's books: a trade earning one percent a year with one percent volatility has a Kelly leverage of {l_['kelly_before']:.0f}, so twenty-eight to one looks cautious. <bookmark mark='a'/> But Kelly leverage falls with the square of volatility. At {cross:.1f} times the calm volatility, twenty-eight is full Kelly; at three times, it is {28 / l_['kelly_after']:.1f} times Kelly, past the line where growth is zero. <bookmark mark='b'/> Sizing is only as good as the volatility forecast. Kelly has a famous critic. Next: Samuelson's objection. Assets-to-equity leverage at LTCM is not the same risk measure as a single-trade Kelly fraction. Holding the excess drift fixed is part of this illustration; liquidity and tail dependence are not reduced to a volatility dial."
         ) as vo:
             self.play(FadeIn(g), Create(lt), FadeIn(ltl), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             self.add(dot)

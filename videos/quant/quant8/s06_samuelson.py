@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 class Samuelson(VoiceoverScene):
@@ -45,14 +45,7 @@ class Samuelson(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"$\mu - r = 6\%$, $\sigma = 18\%$, $r = 2\%$; closed forms, checked by simulation")
         with self.voiceover(
-            "Kelly's admirers argued that everyone with a long horizon should maximize growth, since Kelly eventually wins. "
-            "Paul Samuelson called it a fallacy, and in 1979 replied in words of one syllable, all but the last. "
-            "<bookmark mark='a'/> Compare Kelly with the gamma-three Merton fraction: "
-            f"{100 * s['f_kelly']:.0f} percent against {100 * s['f_merton']:.0f}. Kelly ends richer more and more often: "
-            f"{100 * p[list(T).index(10)]:.0f} percent of the time after ten years, {100 * p[list(T).index(100)]:.0f} after a "
-            "hundred. <bookmark mark='b'/> But in that investor's own utility Kelly is worse at every horizon: its "
-            f"certainty equivalent shrinks {100 * abs(s['ce_rate_kelly']):.1f} percent a year while Merton's grows "
-            f"{100 * s['ce_rate_merton']:.1f}. Usually ahead is not better."
+            f"""Kelly's admirers argued that every long-horizon investor should maximize growth. Paul Samuelson challenged that in 1979. <bookmark mark='a'/> Compare fixed fractions in our diffusion: Kelly at {100 * s['f_kelly']:.0f} percent and gamma-three Merton at {100 * s['f_merton']:.0f}. Kelly ends richer in {100 * p[list(T).index(10)]:.0f} percent of markets after ten years and {100 * p[list(T).index(100)]:.0f} after a hundred. <bookmark mark='b'/> Yet for that investor, Kelly's certainty-equivalent annual log rate is {100 * s['ce_rate_kelly']:.1f} percent, against Merton's positive {100 * s['ce_rate_merton']:.1f}. These are log rates, not arithmetic percentage changes in wealth. Being ahead more often does not maximize this investor's expected utility."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(title), FadeIn(src))
             vo.wait_until("a")
@@ -64,7 +57,7 @@ class Samuelson(VoiceoverScene):
         self.clear_scene()
 
     def derive(self):
-        rows = [cmath(r"\log W_T", r"\sim", r"N\big(mT,\ s^2T\big),\quad m = r + f(\mu - r) - \tfrac12 f^2\sigma^2,\ "
+        rows = [cmath(r"\log(W_T/W_0)", r"\sim", r"N\big(mT,\ s^2T\big),\quad m = r + f(\mu - r) - \tfrac12 f^2\sigma^2,\ "
                       r"s = f\sigma", font_size=30),
                 cmath(r"\mathrm{CE}", r"=", r"\big(\mathbb{E}\,W_T^{1-\gamma}\big)^{\frac{1}{1-\gamma}} = "
                       r"W_0\,e^{\left(m + \frac12(1-\gamma)s^2\right)T}", font_size=30, colors={r"\mathrm{CE}": VALUE}),
@@ -88,7 +81,7 @@ class Samuelson(VoiceoverScene):
             "Kelly investor, unless gamma is one; Kelly's near-certain lead is bought with rare losses that a cautious "
             "investor weighs more heavily than all the small gains."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -101,9 +94,9 @@ class Samuelson(VoiceoverScene):
     def ergodic(self, e, L):
         bins = np.asarray(L["bins"])
         H = np.asarray(L["hist"])
-        g = axes([-6, 6], [0, 0.32], x_length=7.4, y_length=3.8, xlabel=r"wealth after $t$ flips (log scale)",
+        g = axes([-6, 6], [0, 1.05], x_length=7.4, y_length=3.8, xlabel=r"wealth after $t$ flips (log scale)",
                  ylabel=r"share of 100{,}000 players", xticks=[-4, -2, 0, 2, 4], xfmt=lambda u: f"10^{{{int(u)}}}",
-                 yticks=[0, 0.1, 0.2, 0.3], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.6)
+                 yticks=[0, 0.25, 0.5, 0.75, 1.0], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16).to_edge(LEFT, buff=0.6)
         g.shift(DOWN * 0.3)
         ax = g.ax
         tk = ValueTracker(0)
@@ -113,51 +106,51 @@ class Samuelson(VoiceoverScene):
             k = int(tk.get_value())
             grp = VGroup()
             for i, h in enumerate(H[k]):
-                if h <= 0:
+                if h <= 0 or i in (0, len(H[k]) - 1):
                     continue
-                a, b = ax.c2p(bins[i], 0), ax.c2p(bins[i] + width, min(h, 0.32))
+                a, b = ax.c2p(bins[i], 0), ax.c2p(bins[i] + width, h)
                 grp.add(Rectangle(width=b[0] - a[0] - 0.01, height=max(b[1] - a[1], 0.005), stroke_width=0,
                                   fill_color=VALUE, fill_opacity=0.75).move_to((a + b) / 2))
             return grp
 
         hg = always_redraw(hist)
         mean_l = always_redraw(lambda: DashedLine(ax.c2p(L["log_mean"][int(tk.get_value())], 0),
-                                                  ax.c2p(L["log_mean"][int(tk.get_value())], 0.32), color=KELLY,
+                                                  ax.c2p(L["log_mean"][int(tk.get_value())], 1.05), color=KELLY,
                                                   stroke_width=3))
         med_l = always_redraw(lambda: DashedLine(ax.c2p(L["log_median"][int(tk.get_value())], 0),
-                                                 ax.c2p(L["log_median"][int(tk.get_value())], 0.32), color=OVER,
+                                                 ax.c2p(L["log_median"][int(tk.get_value())], 1.05), color=OVER,
                                                  stroke_width=3))
         tn = Integer(0, font_size=30, color=GREY_A)
         tn.add_updater(lambda m: m.set_value(int(tk.get_value())))
         tl = VGroup(label(r"flip", font_size=24, color=GREY_A), tn).arrange(RIGHT, buff=0.15).next_to(g, UP, buff=0.1)
         tl.align_to(g, RIGHT)
-        leg = legend([(KELLY, r"the average player: $\times 1.05$ a flip"),
-                      (OVER, r"the typical (median) player: $\times\sqrt{1.5 \times 0.6} \approx 0.95$")],
+        leg = legend([(KELLY, r"sample mean (theory: $\times1.05$ a flip)"),
+                      (OVER, r"sample median (long-run factor: $\sqrt{1.5\times0.6}\approx0.95$)")],
                      font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         side = VGroup(
             label(r"heads: $+50\%$, tails: $-40\%$", font_size=24),
             label(rf"after 60 flips, {100 * e['share_below_1']:.0f}\% have lost money", font_size=21, color=OVER),
             label(rf"the richest 1\% hold {100 * e['share_of_wealth_top1pct']:.0f}\% of the wealth", font_size=21,
                   color=GREY_A),
-            wrapped_label(r"Peters (2019): wealth is not ergodic; its time average is the log growth: Kelly. Meder et "
+            wrapped_label(r"Peters (2019): ensemble mean wealth and long-time average log returns answer different questions. Meder et "
                           r"al.\ (2021): subjects' risk taking shifted toward the time-optimal one when the dynamics "
                           r"were multiplicative", 4.4, 18, VALUE),
             wrapped_label(r"replies: Doctor, Wakker and Wang (2020): log utility under another name; Toda (2023): a "
                           r"sharp critique of ``ergodicity economics''", 4.4, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
-        q = pause_card(r"What fraction of your wealth should you stake on this coin each flip?", width=4.4,
-                       font_size=20).to_edge(RIGHT, buff=0.35).to_edge(DOWN, buff=0.3)
-        src = illustration(r"simulation: 100{,}000 players, 60 flips")
+        q = predict(r"What fraction of your wealth should you stake on this coin each flip?", width=4.4,
+                       font_size=20).to_edge(RIGHT, buff=0.35).set_y(-2.65)
+        src = illustration(r"simulation: 100{,}000 players, 60 flips; clipped edge bins omitted (at most 0.33\% of mass)")
         with self.voiceover(
             "A modern form: heads, wealth rises fifty percent; tails, it falls forty. The average gain is five percent a "
             "toss. Give the coin to a hundred thousand players. <bookmark mark='a'/> The average runs right, carried by a "
             "lucky few; the median drifts left, since a head and a tail multiply wealth by point nine. After sixty flips "
             f"{100 * e['share_below_1']:.0f} percent have lost money. <bookmark mark='b'/> Ole Peters argues expected value "
-            "misses this: the time average is log growth, Kelly. Meder and colleagues found in 2021 that people's risk "
+            "misses this: the long-time average of log returns gives growth; it is not the time average of wealth. Meder and colleagues found in 2021 that people's risk "
             "taking shifted that way under multiplicative gambles; economists reply it is log utility by another name, and "
-            "Alexis Akira Toda's 2023 critique is sharper still. <bookmark mark='c'/> Pause and predict: what fraction "
+            "Alexis Akira Toda's 2023 paper critiques this interpretation. <bookmark mark='c'/> Pause and predict: what fraction "
             f"should you stake? <bookmark mark='d'/> Kelly says {100 * L['kelly_stake']:.0f} percent, growing about "
-            f"{100 * L['kelly_growth']:.1f} percent a flip: a losing game, staked partially, wins."
+            f"{100 * L['kelly_growth']:.1f} percent a flip: negative full-stake log growth becomes positive at a quarter stake."
             " So far the question was how much. Next: when, the problem of optimal stopping."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(src), FadeIn(leg), FadeIn(tl))

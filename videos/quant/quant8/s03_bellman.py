@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, KELLY, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, KELLY, PART, UNDER, VALUE, illustration, load
 
 
 class Bellman(VoiceoverScene, ThreeDScene):
@@ -54,20 +54,10 @@ class Bellman(VoiceoverScene, ThreeDScene):
             r_.scale(0.95)
         step = ladder(self, rows, whys, keep=4, top=3.3, x=1.2, buff=0.45, edge=6.9)
         with self.voiceover(
-            "Most financial decisions are made again tomorrow, with whatever today's decision led to. Richard Bellman's "
-            "principle of optimality, from 1957, says an optimal plan remains optimal from wherever it has led. So start at "
-            "the end, where the value of wealth is just its utility, and work backwards one period at a time. "
-            "<bookmark mark='a'/> At each node, try every fraction pi in the stock, average next period's value over what "
-            "the stock might do, and keep the best. That is the Bellman recursion, and it is all a computer needs. "
-            "<bookmark mark='b'/> With power utility we can also do it by hand. Guess that tomorrow's value is a power of "
-            "wealth too, times a number. <bookmark mark='c'/> Substitute: wealth factors out of the maximum, because a power "
-            "of a product is a product of powers, and what is left is the expected power of one period's growth. "
-            "<bookmark mark='d'/> So the best fraction is the same at every wealth and every date. The investor is myopic: "
-            "she can ignore the horizon and decide one period at a time. Jan Mossin and Paul Samuelson proved this in 1968 "
-            "and 1969, and it is the reason a long-horizon investor with power utility needs no forecast of her own future."
+            """Richard Bellman's principle of optimality says that an optimal plan remains optimal in the states it reaches, under the information and admissibility rules of the model. Work backward from terminal utility. <bookmark mark='a'/> At each node choose a feasible stock fraction to maximize expected next-period value. <bookmark mark='b'/> Here returns are independent across dates with the same opportunity set, utility is CRRA, gross wealth stays positive, and fraction constraints do not depend on wealth. Guess a power of wealth times a time coefficient. <bookmark mark='c'/> Wealth factors out of the one-period maximum. <bookmark mark='d'/> Under these assumptions the optimal fraction is independent of wealth and horizon. Stochastic investment opportunities can add hedging demand, so CRRA alone does not establish myopia."""
         ) as vo:
             self.play(Create(edges), *[FadeIn(nd) for nd in nodes], FadeIn(tags), run_time=1.5)
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             for n in range(3, -1, -1):
                 self.play(nodes[n].animate.set_color(VALUE), run_time=0.45)
@@ -209,7 +199,7 @@ class Bellman(VoiceoverScene, ThreeDScene):
                           r"floor's present value); dots: the grid solver", 4.2, 20, GREY_A),
             label(rf"largest gap: {np.nanmax(np.abs(P - Q)):.3f}", font_size=22, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UR, buff=0.4)
-        q = pause_card(r"As the deadline nears with wealth just above the floor, does the stock fraction rise or fall?",
+        q = predict(r"As the deadline nears with wealth just above the floor, does the stock fraction rise or fall?",
                        width=5.0, font_size=21).to_corner(DR, buff=0.35)
         with self.voiceover(
             "Slice it at three dates. <bookmark mark='a'/> The solver invests Merton's fraction of the cushion, the wealth "

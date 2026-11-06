@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import control as C
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import predict, ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
 
 
 class SmoothFit(VoiceoverScene):
@@ -29,8 +29,7 @@ class SmoothFit(VoiceoverScene):
                 cmath(r"V_b(S)", r"=", r"(K - b)\Big(\frac{S}{b}\Big)^{-\beta}", font_size=32, colors={r"V_b(S)": VALUE}),
                 cmath(r"\frac{d}{db}(K - b)\,b^{\beta} = 0", r"\ \Rightarrow\ ", r"b^* = \frac{\beta K}{1 + \beta}"
                       r"\iff V_{b^*}'(b^*) = -1", font_size=32, colors={r"b^* = \frac{\beta K}{1 + \beta}": KELLY})]
-        whys = [why(r"a perpetual put (no expiry), held while $S$ is above the exercise level $b$: It\^o and no "
-                    r"arbitrage give the Black--Scholes equation without $V_t$", font_size=21),
+        whys = [why(r"no-dividend GBM under $Q$, $r,\sigma>0$, $0<b<K$, $S>b$: the perpetual Black--Scholes equation", font_size=21),
                 why(r"try a power: $\frac12\sigma^2 k(k-1) + rk - r = 0$ has roots $1$ and $-\beta$; the put must vanish "
                     r"as $S \to \infty$", font_size=21),
                 why(r"value matching: at $S = b$ you exercise and get $K - b$ (McKean 1965)", font_size=21),
@@ -48,7 +47,7 @@ class SmoothFit(VoiceoverScene):
             "is the same as asking the value to leave the payoff with the payoff's own slope, minus one, with no kink: smooth "
             f"fit. With five percent rates and thirty percent volatility, the boundary is {p['b_star']:.1f}."
         ) as vo:
-            step(0)
+            step(0, run_time=0.15)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
@@ -72,13 +71,12 @@ class SmoothFit(VoiceoverScene):
         bdot = always_redraw(lambda: Dot(ax.c2p(b.get_value(), K - b.get_value()), color=KELLY, radius=0.09))
         hund = always_redraw(lambda: Dot(ax.c2p(100, float(C.perpetual_put_value(100.0, K, r, s, b.get_value()))),
                                          color=UNDER, radius=0.08))
-        g2 = axes([30, 95], [10, 25], x_length=4.6, y_length=2.6, xlabel=r"exercise level $b$",
+        g2 = axes([30, 95], [0, 25], x_length=4.6, y_length=2.6, xlabel=r"exercise level $b$",
                   ylabel=r"value at $S = 100$", xticks=[40, 60, 80], yticks=[15, 20, 25], font_size=15)
         g2.to_corner(UR, buff=0.5)
         bg, vb = np.asarray(p["b_grid"]), np.asarray(p["v_of_b"])
-        vcurve = curve(g2.ax, bg, np.clip(vb, 10, 25), UNDER, stroke_width=3)
-        vdot = always_redraw(lambda: Dot(g2.ax.c2p(b.get_value(), float(np.clip(
-            C.perpetual_put_value(100.0, K, r, s, b.get_value()), 10, 25))), color=UNDER, radius=0.08))
+        vcurve = curve(g2.ax, bg, vb, UNDER, stroke_width=3)
+        vdot = always_redraw(lambda: Dot(g2.ax.c2p(b.get_value(), float(C.perpetual_put_value(100.0, K, r, s, b.get_value()))), color=UNDER, radius=0.08))
         gap = DecimalNumber(-beta * (K - 32.0) / 32.0 + 1, num_decimal_places=2, include_sign=True, font_size=30,
                             color=KELLY)
         gap.add_updater(lambda m: m.set_value(-beta * (K - b.get_value()) / b.get_value() + 1))
@@ -89,13 +87,13 @@ class SmoothFit(VoiceoverScene):
             MathTex(rf"\text{{40-year tree: }} {p['tree_boundary0']:.1f},\ \ {p['tree_price']:.2f}", font_size=28,
                     color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(gl, DOWN, buff=0.4).align_to(gl, LEFT)
-        q = pause_card(r"Rates rise. Does the exercise boundary move up or down?", width=4.8, font_size=20).next_to(
+        q = predict(r"Rates rise. Does the exercise boundary move up or down?", width=4.8, font_size=20).next_to(
             res, DOWN, buff=0.35).align_to(gl, LEFT)
         with self.voiceover(
             "Watch the choice. The grey line is the payoff; the blue curve is the value of the rule 'exercise the first time "
             "the stock falls to b', for a level we can slide. <bookmark mark='a'/> With a low level the curve meets the payoff "
-            "at a kink, coming in too flat; the readout is the gap between the two slopes. Raise the level and the value at a "
-            "hundred rises; raise it too far and the curve meets the payoff too steeply, and the value falls again. "
+            "at a kink, coming in too steeply; the readout is the gap between the two slopes. Raise the level and the value at a "
+            "hundred rises; raise it too far and the curve meets the payoff too flatly, and the value falls again. "
             f"<bookmark mark='b'/> The best level, {bs:.1f}, is exactly where the gap closes and the curve kisses the payoff. "
             f"The put is worth {p['v100']:.2f}. A forty-year binomial tree that knows nothing of smooth fit puts its boundary "
             f"at {p['tree_boundary0']:.1f} and its price at {p['tree_price']:.2f}. <bookmark mark='c'/> Pause and predict: if "
@@ -142,12 +140,12 @@ class SmoothFit(VoiceoverScene):
             label(r"one year: $K = 100$, $\sigma = 30\%$, $r = 5\%$", font_size=21, color=GREY_A),
             MathTex(rf"\text{{American: }} {a['american']:.2f},\ \ \text{{European: }} {a['european']:.2f}", font_size=28,
                     color=VALUE),
-            MathTex(r"\min\big(-V_t - \mathcal{L}V,\ V - g\big) = 0", font_size=32, color=KELLY),
+            MathTex(r"\min\big(-V_t - \mathcal{L}V + rV,\ V - g\big) = 0", font_size=32, color=KELLY),
             wrapped_label(r"the variational inequality: a viscosity solution (chapter 4), and the value of a reflected "
                           r"BSDE (El Karoui et al.\ 1997; chapter 14). Part 10 prices it, Part 16 by simulation", 4.4,
                           19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
-        src = illustration(r"a 500-step CRR tree (the House's \texttt{trees})")
+        src = illustration(r"500-step CRR tree; displayed boundary smoothed over 25 nodes; $\mathcal L=rS\partial_S+\frac12\sigma^2S^2\partial_{SS}$")
         with self.voiceover(
             "With an expiry, the boundary rises toward the strike as time runs out. <bookmark mark='a'/> The right to "
             f"choose when is worth {a['american'] - a['european']:.2f} on a one-year put. <bookmark mark='b'/> In general "
