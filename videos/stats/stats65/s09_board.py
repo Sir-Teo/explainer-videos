@@ -29,7 +29,7 @@ class FullBoard(LectureMixin, VoiceoverScene):
              (r"\text{verdict}", r":", r"\text{kept, \ conservative, \ broken}", 40),
              (r"\text{now}", r":", rf"{f['n']} \ \text{{rows, \ {f['parts']} parts}}", 40)],
             [r"Part 1", r"nominal level", r"three Monte Carlo SEs", r"the degree"],
-            colors=[(2, HONC)])
+            colors=[(3, S.ACCENT)])
 
     def mosaic(self):
         f = load("fullboard")
