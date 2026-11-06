@@ -1848,3 +1848,59 @@ class CriterionBench(VGroup):
         g.fit, g.pen, g.dots, g.ring, g.best = fit, pen, dots, ring, best
         g.add(fit, pen, dots, ring)
         return g
+
+
+class SplineSpectrum(VGroup):
+    """A smoother's spectrum (Part 29): the Demmler--Reinsch basis of a smoothing spline, its first ``k`` eigenvectors
+    drawn as small curves stacked down the left (smoothest at the top), and on the right one bar per eigenvector
+    showing the shrinkage factor 1/(1 + lam d_j) the spline applies to that component.  ``bars(lam)`` rebuilds the bars
+    for another lambda, so the dial can be turned; the null-space components (constants, lines) always pass at 1."""
+
+    def __init__(self, t, U, d, lam: float, k: int = 8, width: float = 9.0, height: float = 5.2, center=ORIGIN,
+                 curve_color=None, bar_color=None, font_size=20):
+        super().__init__()
+        from explainer.analysis import label
+
+        t = np.asarray(t, float)
+        self.d = np.asarray(d, float)
+        self.k = k
+        self.U = np.asarray(U, float)
+        c = np.asarray(center, float)
+        row_h = height / k
+        cw = width * 0.55
+        self.curves = VGroup()
+        self.tags = VGroup()
+        t0, t1 = t.min(), t.max()
+        for j in range(k):
+            u = self.U[:, j]
+            u = u / (np.max(np.abs(u)) + 1e-12)
+            y_mid = c[1] + height / 2 - (j + 0.5) * row_h
+            x = c[0] - width / 2 + (t - t0) / (t1 - t0) * cw
+            pts = [[a, y_mid + 0.38 * row_h * b, 0] for a, b in zip(x, u)]
+            m = VMobject(stroke_color=curve_color or S.FIT, stroke_width=2.5).set_points_as_corners(pts)
+            self.curves.add(m)
+            self.tags.add(label(rf"$u_{{{j + 1}}}$", font_size=font_size, color=GREY_B).next_to([x[0], y_mid, 0], LEFT, buff=0.15))
+        self.bar_x0 = c[0] - width / 2 + cw + 0.6
+        self.bar_w = width - cw - 0.8
+        self.row_h = row_h
+        self.top = c[1] + height / 2
+        self.bar_color = bar_color or S.ACCENT
+        self.frame = VGroup(*[Line([self.bar_x0, self.top - (j + 0.5) * row_h, 0],
+                                   [self.bar_x0 + self.bar_w, self.top - (j + 0.5) * row_h, 0], color=GREY_D, stroke_width=1)
+                              for j in range(k)])
+        self.head = VGroup(label(r"basis function", font_size=font_size, color=GREY_A).next_to([c[0] - width / 2 + cw / 2, self.top, 0], UP, buff=0.12),
+                           label(r"kept: \ $1/(1 + \lambda d_j)$", font_size=font_size, color=GREY_A).next_to([self.bar_x0 + self.bar_w / 2, self.top, 0], UP, buff=0.12))
+        self.add(self.head, self.tags, self.curves, self.frame)
+        self.stack = self.bars(lam)
+        self.add(self.stack)
+
+    def bars(self, lam: float) -> VGroup:
+        g = VGroup()
+        for j in range(self.k):
+            s = 1 / (1 + lam * max(self.d[j], 0.0))
+            y = self.top - (j + 0.5) * self.row_h
+            r = Rectangle(width=max(self.bar_w * s, 1e-3), height=self.row_h * 0.5, stroke_width=0, fill_color=self.bar_color,
+                          fill_opacity=0.85)
+            r.move_to([self.bar_x0 + self.bar_w * s / 2, y, 0])
+            g.add(r)
+        return g
