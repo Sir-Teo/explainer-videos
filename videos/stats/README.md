@@ -1,6 +1,6 @@
 # Statistics, Built (统计学，从零搭建)
 
-**Status: in production.** Parts 1–28 are written in English (12–16 chapters each):
+**Status: in production.** Parts 1–29 are written in English (12–16 chapters each):
 - *The Shape of Data*, about an hour;
 - *Chance, Counted*, about 74 minutes, with the exact probability engine `explainer/stats/prob.py`;
 - *The Family of Distributions*, about 55 minutes, with the family-tree instrument `FamilyTree`;
@@ -28,7 +28,8 @@
 - *Borrowing Strength: Shrinkage and Mixed Models*, about 51 minutes, with `statkit.shrink`, `statkit.mixed`, the shrinkage plot (`ShrinkagePlot`), the World's hospitals and Efron and Morris's hitters;
 - *Bayesian Data Analysis*, about 51 minutes, with `statkit.bayes` II, the τ explorer (`TauExplorer`), Rubin's eight schools and the PEAR data;
 - *Bayesian Computation*, about 51 minutes, with `statkit.ppl` (a probabilistic programming language with NUTS), the puck on the surface (`PuckSurface`) and the eight schools' funnel;
-- *Which Model?*, about 50 minutes, with `statkit.select`, the model-selection bench (`CriterionBench`) and Stamey's prostate data.
+- *Which Model?*, about 50 minutes, with `statkit.select`, the model-selection bench (`CriterionBench`) and Stamey's prostate data;
+- *Smoothing*, about 50 minutes, with `statkit.smooth`, the spline spectrum (`SplineSpectrum`), Old Faithful, the motorcycle crash and New York's ozone.
 
 Their instruments are in `explainer/stats/`; narration and the Chinese edition follow. The chapter-by-chapter plan and the production standard are in [`SYLLABUS.md`](SYLLABUS.md).
 
