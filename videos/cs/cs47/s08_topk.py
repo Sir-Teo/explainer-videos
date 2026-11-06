@@ -155,12 +155,12 @@ class Topk(VoiceoverScene):
                           font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, -0.2, 0])
         with self.voiceover(
-            "Better to know, before scoring a passage, the most it could score. <bookmark mark='a'/> When the index "
-            "is built, store with each term the largest contribution it makes to any passage. Chapter five's "
-            "saturation caps it anyway; the stored maximum is tighter. <bookmark mark='b'/> Suppose theta is two "
-            "point six. A passage with only captain and ship scores at most two, so it cannot enter the top ten and "
-            "need not be scored. <bookmark mark='c'/> Only passages with ahab can. Turtle and Flood's max-score, in "
-            "1995, used exactly this: terms whose bounds together cannot reach theta never propose a candidate."
+            "Better to know, before scoring, the most a passage could score. <bookmark mark='a'/> When the index is "
+            "built, store with each term the largest contribution it makes to any passage. Chapter five's saturation "
+            "caps it anyway; the stored maximum is tighter. <bookmark mark='b'/> Suppose theta is two point six. A "
+            "passage with only captain and ship scores at most two, so it cannot enter the top ten and need not be "
+            "scored. <bookmark mark='c'/> Only passages with ahab can. Turtle and Flood's max-score, in 1995, used "
+            "exactly this: terms whose bounds together cannot reach theta never propose a candidate."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(names), FadeIn(ill))
             vo.wait_until("a")
@@ -228,8 +228,8 @@ class Topk(VoiceoverScene):
             "their bounds in that order: the first cursor where the sum passes theta is the pivot. "
             "<bookmark mark='b'/> No earlier document can reach theta, so every earlier cursor jumps straight to the "
             "pivot document, with chapter three's skip pointers or galloping. <bookmark mark='c'/> When they all land"
-            " on it, that document is scored in full. Here four of thirteen documents are scored: exactly those "
-            "containing ahab."
+            " on it, that document is scored in full. Here four of thirteen documents are scored: exactly those with "
+            "ahab."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows), FadeIn(th), *[FadeIn(c) for c in cursors.values()])
             vo.wait_until("a")
