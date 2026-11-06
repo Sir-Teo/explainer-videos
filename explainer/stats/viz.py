@@ -3577,3 +3577,66 @@ class Leaderboard(VGroup):
     def shift(self, new_est) -> list:
         new = np.asarray(new_est, float)[self.order]
         return [self.ax.c2p(e, self.y(k)) for k, e in enumerate(new)]
+
+
+class BoardMosaic(VGroup):
+    """The whole degree's Coverage Board as one picture (Part 65): every row a small tile, stacked in a column above
+    its part, coloured by verdict (kept green, conservative blue, broken red).  ``tiles()`` draws them, ``axis()`` the
+    parts along the bottom with the stage boundaries, ``part(p)`` one part's column, ``verdict(v)`` every tile with
+    that verdict, and ``counts()`` the totals."""
+
+    COLORS = {"kept": S.KEPT, "conservative": S.EST, "broken": S.RESID}
+
+    def __init__(self, rows, width: float = 12.4, tile_h: float = 0.16, gap: float = 0.03, n_parts: int = 65,
+                 center=ORIGIN):
+        super().__init__()
+        self.rows = list(rows)
+        self.n_parts = n_parts
+        self.col_w = width / n_parts
+        self.tile_h, self.gap = tile_h, gap
+        self.x0 = -width / 2
+        self.center = np.asarray(center, float)
+        self._tiles, self._by_part, self._by_verdict = VGroup(), {}, {}
+        height = {}
+        order = {"kept": 0, "conservative": 1, "broken": 2}
+        for r in sorted(self.rows, key=lambda r: (r["part"], order.get(r["verdict"], 3))):
+            p = r["part"]
+            k = height.get(p, 0)
+            height[p] = k + 1
+            t = Rectangle(width=self.col_w - gap, height=tile_h - gap, stroke_width=0,
+                          fill_color=self.COLORS.get(r["verdict"], GREY_B), fill_opacity=0.9)
+            t.move_to(self.center + np.array([self.x0 + (p - 0.5) * self.col_w, (k + 0.5) * tile_h, 0]))
+            self._tiles.add(t)
+            self._by_part.setdefault(p, VGroup()).add(t)
+            self._by_verdict.setdefault(r["verdict"], VGroup()).add(t)
+        self.max_h = max(height.values()) * tile_h if height else 0
+
+    def tiles(self) -> VGroup:
+        return self._tiles
+
+    def part(self, p: int) -> VGroup:
+        return self._by_part.get(p, VGroup())
+
+    def verdict(self, v: str) -> VGroup:
+        return self._by_verdict.get(v, VGroup())
+
+    def axis(self, stages=((1, 10), (11, 20), (21, 42), (43, 55), (56, 65)), names=None, font_size: int = 18) -> VGroup:
+        from explainer.analysis import label
+
+        names = names or [r"BSc I", r"BSc II", r"MSc", r"PhD core", r"research"]
+        g = VGroup()
+        y = self.center[1] - 0.08
+        base = Line(self.center + np.array([self.x0, -0.04, 0]), self.center + np.array([self.x0 + self.n_parts * self.col_w, -0.04, 0]),
+                    color=GREY_C, stroke_width=1.5)
+        g.add(base)
+        for (a, b), nm in zip(stages, names):
+            xa, xb = self.x0 + (a - 1) * self.col_w, self.x0 + b * self.col_w
+            g.add(Line([xa, y - 0.05, 0], [xa, y - 0.2, 0], color=GREY_C, stroke_width=1.5))
+            g.add(label(nm, font_size=font_size, color=GREY_B).move_to([(xa + xb) / 2, y - 0.3, 0]))
+        return g
+
+    def counts(self) -> dict:
+        out = {}
+        for r in self.rows:
+            out[r["verdict"]] = out.get(r["verdict"], 0) + 1
+        return out
