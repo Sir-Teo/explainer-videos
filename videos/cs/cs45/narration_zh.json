@@ -1,0 +1,475 @@
+{
+ "title": "计算机科学，从零搭建 · 第45部分：云",
+ "chapters": {
+  "Hook": "计算成为公用事业",
+  "Warehouse": "1. 仓库级计算机",
+  "Microvm": "2. 缩小了的虚拟机",
+  "Containers": "3. 容器",
+  "Orchestration": "4. 编排与调和",
+  "Packing": "5. 调度即装箱",
+  "Autoscale": "6. 自动伸缩即控制",
+  "Serverless": "7. 无服务器",
+  "Storage": "8. 对象存储与十一个九",
+  "Network": "9. 云网络",
+  "Iac": "10. 基础设施即代码",
+  "Tenancy": "11. 邻居、区域与故障域",
+  "Bill": "12. 成本、碳排放，以及那项任务的账单",
+  "Frontier": "13. 前沿：调度、隔离与能耗",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "957f4f258f80": {
+   "scene": "Hook",
+   "en": "In 1961, at a celebration of MIT's centennial, John McCarthy predicted that computing might one day be organized as a public utility, like the telephone system. <bookmark mark='a'/> Time-sharing came first, many terminals on one mainframe. Then decades in which a company bought its servers, or rented space for them in someone else's building. <bookmark mark='b'/> In 2006 Amazon began selling storage by the gigabyte-month, with S3, and computers by the hour, with EC2. <bookmark mark='c'/> Today a computer can be rented by the second, and a function can be billed per request.",
+   "zh": "1961年，在麻省理工学院百年校庆的一次活动上，约翰·麦卡锡（John McCarthy）预言，计算也许有一天会像电话系统一样，被组织成一种公用事业。<bookmark mark='a'/>先到来的是分时：许多终端共用一台大型机。接着是几十年里，公司自己购买服务器，或者在别人的楼里租一块地方来放它们。<bookmark mark='b'/>2006年，亚马逊开始按“吉字节·月”出售存储，这就是 S3；又按小时出售计算机，这就是 EC2。<bookmark mark='c'/>今天，一台计算机可以按秒租用，一个函数可以按请求计费。"
+  },
+  "ed3eb86a9348": {
+   "scene": "Hook",
+   "en": "Under the word cloud is a physical hierarchy. <bookmark mark='a'/> A region is a few buildings some distance apart. A building draws tens of megawatts and holds tens of thousands of servers. A rack holds a few dozen of them, sharing a switch and a power feed. <bookmark mark='b'/> A server is sliced into virtual machines, and a virtual machine runs containers, which are processes with walls around them. <bookmark mark='c'/> Every layer is a scheduling problem and a failure domain, and this part goes down through all of them.",
+   "zh": "在“云”这个词的下面，是一套实体的层级。<bookmark mark='a'/>一个区域是相隔一段距离的几栋建筑。一栋建筑耗电几十兆瓦，容纳几万台服务器。一个机架容纳其中几十台，它们共用一台交换机和一路供电。<bookmark mark='b'/>一台服务器被切分成若干虚拟机，一台虚拟机里运行着容器，而容器就是四周砌了墙的进程。<bookmark mark='c'/>每一层都是一个调度问题，也是一个故障域，这一部分会一路向下，穿过所有这些层。"
+  },
+  "45001e426300": {
+   "scene": "Hook",
+   "en": "And the Job gets a price. <bookmark mark='a'/> Counting the words of our thirty novels takes 1.4 seconds on one core of the machine that renders this video. <bookmark mark='b'/> Rented as a server at Amazon's list price, billed by the second with a one-minute minimum, that costs about 0.16 cents. At a typical spot discount, about a third of that. Split across sixteen functions billed by the gigabyte-second, it costs about three thousandths of a cent. <bookmark mark='c'/> The prices are list prices for one region, dated, and they leave things out. But the shape is the point: in the cloud, every design decision in this series has a bill attached.",
+   "zh": "那项任务也有了价格。<bookmark mark='a'/>在渲染这个视频的机器上，用一个核数完我们那三十部小说的词，要1.4秒。<bookmark mark='b'/>按亚马逊的标价租一台服务器，按秒计费、最少计一分钟，这大约要0.16美分。按典型的竞价实例折扣，大约是它的三分之一。把它拆给十六个函数、按吉字节秒计费，大约要千分之三美分。<bookmark mark='c'/>这些价格是某一个区域的标价，注明了日期，而且漏掉了一些东西。但重点在于形状：在云里，这个系列中的每一个设计决策都附带着一张账单。"
+  },
+  "08c8e920de65": {
+   "scene": "Hook",
+   "en": "This is Part 45 of Computer Science, Built, and the start of Act Nine, Systems at Scale. <bookmark mark='a'/> We will open the warehouse-scale computer and its power bill; shrink virtual machines into micro-VMs and processes into containers; watch control loops reconcile what is with what should be; pack containers into machines, a problem that is NP-hard; scale a service as a feedback controller; derive where the famous eleven nines of storage durability come from; and price it all.",
+   "zh": "这是计算机科学，从零搭建，第45部分，也是第九幕“大规模系统”的开始。<bookmark mark='a'/>我们会打开仓库级计算机和它的电费账单；把虚拟机缩小成微型虚拟机，把进程缩小成容器；看控制回路如何把现状调和成应有的样子；把容器装进机器，这是一个 NP 难问题；把服务的伸缩当作一个反馈控制器来做；推导出存储那著名的十一个九的持久性从何而来；最后给这一切定价。"
+  },
+  "ee40c0c0bb49": {
+   "scene": "Warehouse",
+   "en": "Chapter one. The warehouse-scale computer.",
+   "zh": "第一章：仓库级计算机。"
+  },
+  "c13d6f52ab7f": {
+   "scene": "Warehouse",
+   "en": "In 2009 Luiz Barroso and Urs Hölzle gave the modern datacentre its name: a warehouse-scale computer. <bookmark mark='a'/> The building is one computer: tens of thousands of servers, one owner, a few very large services programmed as a whole. <bookmark mark='b'/> Its unit is the rack, a few dozen servers under a switch, sharing a power feed, and racks stand in long rows. <bookmark mark='c'/> The rows face each other in pairs. Cold air is delivered between their fronts; the servers' fans pull it through, and hot air leaves from the backs into a separate, contained aisle that returns it to the cooling units.",
+   "zh": "2009年，Luiz Barroso 和 Urs Hölzle 给现代数据中心起了名字：仓库级计算机。<bookmark mark='a'/>整栋建筑就是一台计算机：几万台服务器，一个所有者，几个非常大的服务被当作一个整体来编程。<bookmark mark='b'/>它的单元是机架，也就是一台交换机下的几十台服务器，共用一路供电；机架排成长长的一列又一列。<bookmark mark='c'/>这些列两两相对。冷空气被送进它们正面之间的通道；服务器的风扇把冷气抽过机身，热空气从背面排出，进入一条单独封闭的通道，再被送回制冷设备。"
+  },
+  "babb0eb9b677": {
+   "scene": "Warehouse",
+   "en": "Under the floor plan is a power plan. <bookmark mark='a'/> Electricity from the grid is stepped down by transformers, then passes through an uninterruptible power supply, power distribution units, the rack, and each server's own supply. Every conversion loses a little as heat. <bookmark mark='b'/> If the grid fails, batteries carry the load for the seconds until diesel generators start. <bookmark mark='c'/> A building is designed for a fixed power, and its transformers, generators and cooling all scale with it, so the scarce resource is watts, not floor space. <bookmark mark='d'/> And because thousands of servers almost never peak at once, as Xiaobo Fan, Wolf-Dietrich Weber and Luiz Barroso measured in 2007, operators install more servers than the ratings allow, and cap power when the total comes too close.",
+   "zh": "平面图之下，是一张供电图。<bookmark mark='a'/>来自电网的电先由变压器降压，然后依次经过不间断电源、配电单元、机架，以及每台服务器自己的电源。每一次转换都会以热的形式损失一点。<bookmark mark='b'/>如果电网断电，电池会撑住负载几秒钟，直到柴油发电机启动。<bookmark mark='c'/>一栋建筑是按固定的功率设计的，它的变压器、发电机和制冷都随这个功率而定，所以稀缺的资源是瓦特，而不是占地面积。<bookmark mark='d'/>而且，正如 Xiaobo Fan、Wolf-Dietrich Weber 和 Luiz Barroso 在2007年测得的那样，几千台服务器几乎从不同时达到峰值，所以运营者安装的服务器比额定值允许的更多，并在总功率太接近上限时给功率封顶。"
+  },
+  "336977dfcee1": {
+   "scene": "Warehouse",
+   "en": "Power also explains a quieter waste. <bookmark mark='a'/> In 2007 Barroso and Hölzle observed that servers spend most of their time between ten and fifty percent busy, yet an idle server drew about half its peak power. <bookmark mark='b'/> Draw it as a straight line, from half power idle to full power flat out. At thirty percent busy the server draws 65 percent of its peak, and does less than half the work per watt it manages flat out. <bookmark mark='c'/> Their remedy was energy proportionality, power that falls with load, like the dashed line. Servers have improved, but idle is still far from free.",
+   "zh": "电力还解释了一种更不显眼的浪费。<bookmark mark='a'/>2007年，Barroso 和 Hölzle 观察到，服务器大部分时间的忙碌程度在10%到50%之间，可一台空闲的服务器却要消耗大约一半的峰值功率。<bookmark mark='b'/>把它画成一条直线：从空闲时的一半功率，到满负荷时的全部功率。在30%的忙碌程度下，这台服务器消耗峰值功率的65%，而每瓦特完成的工作还不到满负荷时的一半。<bookmark mark='c'/>他们的补救办法是能耗比例性：让功率随负载一起下降，就像那条虚线。服务器已经有所改进，但空闲仍然远不是免费的。"
+  },
+  "0a06e89da320": {
+   "scene": "Warehouse",
+   "en": "The building has an overhead too. <bookmark mark='a'/> Power usage effectiveness, defined by The Green Grid in 2007, is the power entering the building divided by the power reaching the computing equipment; one would be perfect. <bookmark mark='b'/> The Uptime Institute's surveys put the industry average at about two and a half in 2007, and about one point six in 2023. <bookmark mark='c'/> Google reported one point one for its fleet in 2023. <bookmark mark='d'/> At two and a half, sixty percent of the electricity never reached a computer; at one point one, nine percent. But the ratio measures the building, not the work: an idle server in an efficient building is still idle.",
+   "zh": "这栋建筑本身也有开销。<bookmark mark='a'/>电源使用效率，由 The Green Grid 在2007年定义，是进入建筑的功率除以到达计算设备的功率；1 就是完美。<bookmark mark='b'/>Uptime Institute 的调查显示，行业平均值在2007年约为2.5，在2023年约为1.6。<bookmark mark='c'/>谷歌报告，它的整个机群在2023年是1.1。<bookmark mark='d'/>在2.5时，60%的电从来没有到达计算机；在1.1时，是9%。但这个比值衡量的是建筑，而不是工作：一台空闲的服务器，放在高效的建筑里，也照样是空闲的。"
+  },
+  "79cc767d3ab1": {
+   "scene": "Warehouse",
+   "en": "At this scale, failure stops being an event and becomes a rate. <bookmark mark='a'/> Here are two thousand servers in fifty racks, each failing on average once in three years, an assumption for the picture: nearly two failures a day. Watch a month go by; the software around each red server has already moved on. <bookmark mark='b'/> Failures also come in groups. When a rack's switch or power feed fails, all forty servers vanish at once, and likewise for a power unit, a cooling zone, a building. <bookmark mark='c'/> These nested failure domains decide where copies may live. <bookmark mark='d'/> Part 34 met disks replaced at two to four percent a year, and Part 39 a cluster's first year. So recovery is designed in: chapter eight spreads storage across failure domains, and chapter eleven spreads services across zones.",
+   "zh": "到了这个规模，故障不再是一个事件，而变成了一个速率。<bookmark mark='a'/>这里是五十个机架里的两千台服务器，每台平均三年出一次故障，这是为了画图所作的假设：差不多每天两次故障。看一个月过去；每台红色服务器周围的软件早已继续往前走了。<bookmark mark='b'/>故障也会成群出现。一个机架的交换机或供电出故障时，全部四十台服务器同时消失；一个配电单元、一个制冷区、一栋建筑也是如此。<bookmark mark='c'/>这些层层嵌套的故障域，决定了副本可以放在哪里。<bookmark mark='d'/>第34部分见过每年要更换2%到4%的磁盘，第39部分见过一个集群的第一年。所以恢复是事先设计进去的：第八章把存储分散到各个故障域，第十一章把服务分散到各个可用区。"
+  },
+  "467131a1806e": {
+   "scene": "Microvm",
+   "en": "Chapter two. Virtual machines, shrunk.",
+   "zh": "第二章：缩小了的虚拟机。"
+  },
+  "59a218fbafcf": {
+   "scene": "Microvm",
+   "en": "Part 32 built a hypervisor by trap and emulate. On Linux today the work is split in two. <bookmark mark='a'/> KVM, in the kernel since 2007, uses the processor's virtualization mode: a guest's code runs directly on the processor, and only its exits come to the kernel. <bookmark mark='b'/> Everything else a guest expects of a machine, disks, network cards, clock, firmware, is pretended by an ordinary user process, the virtual machine monitor; the classic one is QEMU, begun by Fabrice Bellard in 2003. <bookmark mark='c'/> When the guest touches a device, it exits to KVM, KVM hands the access to the monitor, and the monitor emulates the device and resumes the guest.",
+   "zh": "第32部分用陷入并模拟搭建了一个虚拟机监控器。今天在 Linux 上，这项工作被一分为二。<bookmark mark='a'/>KVM 从2007年起就在内核里，它使用处理器的虚拟化模式：客户机的代码直接在处理器上运行，只有它的退出才会来到内核。<bookmark mark='b'/>客户机期望一台机器具备的其他一切，磁盘、网卡、时钟、固件，都由一个普通的用户进程假装出来，这就是虚拟机监视程序（VMM）；经典的一个是 QEMU，由 Fabrice Bellard 在2003年开始编写。<bookmark mark='c'/>当客户机碰到一个设备时，它退出到 KVM，KVM 把这次访问交给监视程序，监视程序模拟这个设备，再让客户机继续运行。"
+  },
+  "4634ba8d1c6b": {
+   "scene": "Microvm",
+   "en": "That monitor is where the weight is. <bookmark mark='a'/> A general-purpose monitor can pretend to be almost any PC: firmware, a PCI bus, graphics, USB, sound, many disk controllers and network cards, even a floppy drive. Each is code that reads values a hostile guest controls. <bookmark mark='b'/> In 2015 the bug called VENOM, in QEMU's emulated floppy controller, let a guest break out to the host, on servers that had never seen a floppy. <bookmark mark='c'/> Amazon's Firecracker, open source since 2018 and described by Alexandru Agache and colleagues in 2020, keeps five devices: a virtio network card and disk, a socket to the host, a serial console, and a scrap of keyboard controller, used only to stop the machine. It began from Google's crosvm, and is written in Rust.",
+   "zh": "分量就在这个监视程序里。<bookmark mark='a'/>一个通用的监视程序几乎可以假装成任何一台 PC：固件、PCI 总线、显卡、USB、声卡、许多种磁盘控制器和网卡，甚至软盘驱动器。每一样都是一段代码，读取的值由一个怀有敌意的客户机控制。<bookmark mark='b'/>2015年，一个叫 VENOM 的漏洞，藏在 QEMU 模拟的软盘控制器里，让客户机突破到了主机上，而这些服务器从来没见过软盘。<bookmark mark='c'/>亚马逊的 Firecracker，2018年开源，Alexandru Agache 和同事在2020年描述了它，它只保留五种设备：一块 virtio 网卡和一块 virtio 磁盘、一个通往主机的套接字、一个串行控制台，以及一小块键盘控制器，只用来关机。它起步于谷歌的 crosvm，用 Rust 编写。"
+  },
+  "4679861a28c1": {
+   "scene": "Microvm",
+   "en": "<bookmark mark='a'/> A general-purpose virtual machine runs firmware, a boot loader, a kernel that probes a whole PC's worth of hardware, and an init system, and takes seconds. <bookmark mark='b'/> On that scale a microVM is a sliver. <bookmark mark='c'/> Magnify it: the monitor loads the kernel straight into memory, with no firmware; the kernel finds a handful of virtio devices; and a minimal init starts the user's code. The Firecracker project reports as little as a hundred and twenty-five milliseconds to user code, under five mebibytes of memory overhead each, and up to a hundred and fifty new microVMs a second on one host. <bookmark mark='d'/> Faster still: since 2022, Lambda's SnapStart skips booting, restoring a snapshot of a machine that booted earlier.",
+   "zh": "<bookmark mark='a'/>一台通用的虚拟机要运行固件、引导加载程序、一个探测整台 PC 硬件的内核，以及一个 init 系统，要花好几秒。<bookmark mark='b'/>在这个尺度上，一台微型虚拟机只是细细的一条。<bookmark mark='c'/>把它放大：监视程序把内核直接装进内存，没有固件；内核找到少数几个 virtio 设备；一个最小的 init 启动用户的代码。Firecracker 项目报告说，到运行用户代码最快只要125毫秒，每台的内存开销不到5 MiB，一台主机上每秒最多能新建150台微型虚拟机。<bookmark mark='d'/>还能更快：从2022年起，Lambda 的 SnapStart 干脆跳过启动，直接恢复一台早先启动好的机器的快照。"
+  },
+  "d9e1b2d686bf": {
+   "scene": "Microvm",
+   "en": "Why give a function a whole virtual machine? <bookmark mark='a'/> When Lambda launched, it isolated customers from each other with virtualization, and one customer's functions from each other with containers, so every customer needed virtual machines of their own. <bookmark mark='b'/> With Firecracker, every function gets its own microVM, and functions of different customers share a host safely, densely packed, a bin-packing problem for chapter five. <bookmark mark='c'/> The walls are layered. Code that escapes a function must still break the guest kernel; then KVM or the small device model; and then the Firecracker process itself, which a jailer starts in an empty file tree, in its own namespaces and control groups, behind a filter that allows only the few system calls it needs.",
+   "zh": "为什么要给一个函数一整台虚拟机？<bookmark mark='a'/>Lambda 刚推出时，用虚拟化把客户彼此隔离，用容器把同一个客户的各个函数彼此隔离，所以每个客户都需要自己专属的虚拟机。<bookmark mark='b'/>有了 Firecracker，每个函数都有自己的微型虚拟机，不同客户的函数可以安全地共用一台主机，紧密地装在一起，这是第五章的装箱问题。<bookmark mark='c'/>墙是一层套一层的。逃出函数的代码还得攻破客户机内核；然后是 KVM 或那个小小的设备模型；然后是 Firecracker 进程本身，它由一个 jailer 启动，待在一棵空的文件树里，有自己的命名空间和控制组，外面还有一个过滤器，只放行它需要的那几个系统调用。"
+  },
+  "5650d387de7c": {
+   "scene": "Microvm",
+   "en": "Isolation comes in grades. <bookmark mark='a'/> A process shares everything with its neighbours. A container, as Part 32 showed, shares one kernel and its four hundred and fifty or so system calls. Google's gVisor, of 2018, answers those calls with a second kernel in user space. A microVM shares only KVM and a small device model; Kata Containers, from 2017, runs containers inside them. A full virtual machine pretends to be a whole PC. <bookmark mark='b'/> Each step right buys stronger walls with start-up time and memory. <bookmark mark='c'/> Next, we open the container.",
+   "zh": "隔离分成不同的等级。<bookmark mark='a'/>一个进程与它的邻居共享一切。一个容器，正如第32部分所展示的，共享一个内核，以及它大约450个系统调用。谷歌2018年的 gVisor，用用户空间里的第二个内核来回应这些调用。一台微型虚拟机只共享 KVM 和一个小小的设备模型；2017年的 Kata Containers 就把容器放在微型虚拟机里运行。一台完整的虚拟机要假装成一整台 PC。<bookmark mark='b'/>每向右一步，都用启动时间和内存，换来更坚固的墙。<bookmark mark='c'/>接下来，我们打开容器。"
+  },
+  "7b48f8196c6e": {
+   "scene": "Containers",
+   "en": "Chapter three. Containers.",
+   "zh": "第三章：容器。"
+  },
+  "eb43d05f681c": {
+   "scene": "Containers",
+   "en": "Part 32 took a container apart. <bookmark mark='a'/> It is a group of ordinary processes on one kernel. Namespaces decide what they can see: their own process numbers, so that the first is number one, their own host name, network interfaces and file tree. <bookmark mark='b'/> Outside, the host sees the same process as number four thousand two hundred and forty-two. <bookmark mark='c'/> Control groups decide how much the processes may use, and an image provides the files they run.",
+   "zh": "第32部分拆开过一个容器。<bookmark mark='a'/>它是同一个内核上的一组普通进程。命名空间决定它们能看到什么：它们自己的进程号，所以第一个就是1号；它们自己的主机名、网络接口和文件树。<bookmark mark='b'/>在外面，主机看到的同一个进程是4242号。<bookmark mark='c'/>控制组决定这些进程能用多少，而一个镜像提供它们运行的文件。"
+  },
+  "51206c96244b": {
+   "scene": "Containers",
+   "en": "Control groups turn limits into arithmetic. <bookmark mark='a'/> This group may use fifty thousand microseconds of processor time in every period of a hundred thousand: half a processor. <bookmark mark='b'/> A busy process inside runs for fifty milliseconds, and then the scheduler stops it until the next period begins. <bookmark mark='c'/> A request that arrives just then waits, for no reason visible inside the container: a limit has become a tail latency, as in Part 39. <bookmark mark='d'/> Memory is harsher. The group may hold two hundred and fifty-six mebibytes. When it needs more and the kernel cannot reclaim enough, the out-of-memory killer ends a process in the group, and chapter four's orchestrator restarts it. <bookmark mark='e'/> The same files limit the number of processes and the rate of disk traffic.",
+   "zh": "控制组把限制变成了算术。<bookmark mark='a'/>这个组在每100000微秒的周期里，可以使用50000微秒的处理器时间：也就是半个处理器。<bookmark mark='b'/>里面一个繁忙的进程运行50毫秒，然后调度器让它停下，直到下一个周期开始。<bookmark mark='c'/>恰好在这时到来的请求只能等待，而在容器里面看不出任何原因：一个限制变成了尾延迟，就像第39部分那样。<bookmark mark='d'/>内存更严厉。这个组最多可以占用256 MiB。当它需要更多、而内核又回收不出足够的内存时，内存不足杀手（OOM killer）就会结束组里的一个进程，然后第四章的编排器把它重新启动。<bookmark mark='e'/>同样那些文件，还能限制进程的数量和磁盘读写的速率。"
+  },
+  "89e2f32576ab": {
+   "scene": "Containers",
+   "en": "The files come from an image, and an image is content-addressed, like Part 41's git objects. <bookmark mark='a'/> Each Dockerfile step that writes files makes a layer: an archive of exactly what it added or changed, named by the SHA-256 hash of its bytes. <bookmark mark='b'/> A manifest lists the layers' names in order, and the image is named by the manifest's hash, so one name vouches for every byte: a Merkle tree again. <bookmark mark='c'/> Change one line of the application and rebuild. Only the last layer has new contents, so only it and the manifest get new names; the layers below come from the build cache. <bookmark mark='d'/> That is why a Dockerfile copies the code last: a step reruns only when its inputs change, as in Part 41's build graphs.",
+   "zh": "这些文件来自一个镜像，而镜像是内容寻址的，就像第41部分的 git 对象。<bookmark mark='a'/>Dockerfile 里每个写入文件的步骤都会产生一层：一个归档，恰好装着它新增或改动的东西，以它字节的 SHA-256 哈希命名。<bookmark mark='b'/>一份清单（manifest）按顺序列出各层的名字，而镜像以清单的哈希命名，所以一个名字就为每一个字节作了担保：又是一棵默克尔树。<bookmark mark='c'/>改动应用程序的一行，再重新构建。只有最后一层有新内容，所以只有它和清单得到新名字；下面那些层都来自构建缓存。<bookmark mark='d'/>这就是为什么 Dockerfile 最后才复制代码：一个步骤只有在它的输入改变时才会重新运行，就像第41部分的构建图那样。"
+  },
+  "31cdd8e08374": {
+   "scene": "Containers",
+   "en": "How do the layers become one file tree? <bookmark mark='a'/> Linux's overlay file system, merged in 2014, stacks them, and the container sees their union. Where two layers hold the same path, the higher one wins. <bookmark mark='b'/> Reading a file falls through to the highest layer that has it. <bookmark mark='c'/> On top sits one writable layer for each container. The first write to a file copies it up from below, and changes the copy: Part 32's copy-on-write, applied to files. <bookmark mark='d'/> Deleting a file cannot change a read-only layer, so the upper layer records a whiteout that hides it. <bookmark mark='e'/> A hundred containers from one image share the read-only layers, on disk and in the page cache, and each pays only for what it writes.",
+   "zh": "这些层怎样变成一棵文件树？<bookmark mark='a'/>Linux 的 overlay 文件系统，2014年合入内核，把它们叠在一起，容器看到的是它们的并集。两层里有同一个路径时，上面那层胜出。<bookmark mark='b'/>读一个文件，会一路往下，落到拥有它的最高那一层。<bookmark mark='c'/>最上面，是每个容器各自的一个可写层。第一次写一个文件时，会先把它从下面复制上来，再修改这份副本：这是第32部分的写时复制，用在了文件上。<bookmark mark='d'/>删除一个文件改不了只读层，所以上层记下一个 whiteout 标记，把它遮住。<bookmark mark='e'/>同一个镜像起的一百个容器，在磁盘上和页缓存里共享这些只读层，每个容器只为自己写入的东西付出代价。"
+  },
+  "3a7994ce5916": {
+   "scene": "Containers",
+   "en": "Content addressing pays again when images move. <bookmark mark='a'/> A registry stores each blob once, under its hash, and an image is only a manifest that points at blobs. Our images share their lower layers. <bookmark mark='b'/> A machine that already ran version one pulls version two by fetching the manifest, comparing names, and downloading the single layer it lacks, checking it against its hash as Part 41's store did. <bookmark mark='c'/> In 2015 Docker and others founded the Open Container Initiative, which standardized the image format and the runtime, so an image built with one tool runs under any compliant runtime, such as runc. Every orchestrator in the next chapter starts here: pull, unpack, and start a process with walls.",
+   "zh": "镜像移动的时候，内容寻址又一次带来回报。<bookmark mark='a'/>镜像仓库把每个数据块（blob）按它的哈希只存一次，而一个镜像只是一份指向这些数据块的清单。我们的镜像共享下面那些层。<bookmark mark='b'/>一台已经运行过版本1的机器，拉取版本2时，先取回清单，比较名字，然后只下载它缺的那一层，并像第41部分的存储那样，用哈希来校验它。<bookmark mark='c'/>2015年，Docker 和其他公司成立了开放容器倡议（Open Container Initiative），它把镜像格式和运行时都标准化了，所以用一种工具构建的镜像，可以在任何合规的运行时下运行，比如 runc。下一章里的每个编排器都从这里出发：拉取，解包，然后启动一个带墙的进程。"
+  },
+  "b0f3eb543785": {
+   "scene": "Orchestration",
+   "en": "Chapter four. Orchestration and reconciliation.",
+   "zh": "第四章：编排与调和。"
+  },
+  "584e5b38c0f9": {
+   "scene": "Orchestration",
+   "en": "Google ran its services on a cluster manager called Borg for more than a decade before Abhishek Verma and his colleagues described it in 2015. <bookmark mark='a'/> A Borg cell is a set of machines managed as one, about ten thousand in the median cell. A Borgmaster, replicated five times and kept consistent with Paxos, decides where tasks run, and an agent on every machine, the Borglet, starts them and reports back. <bookmark mark='b'/> Kubernetes, open-sourced by Google in 2014, was built by people who had worked on Borg, and its pieces map onto Borg's almost one for one: a pod is a task, and a kubelet is a Borglet.",
+   "zh": "谷歌在一个叫 Borg 的集群管理器上运行它的服务十多年之后，Abhishek Verma 和他的同事才在2015年描述了它。<bookmark mark='a'/>一个 Borg 单元是一组作为整体来管理的机器，中位数的单元大约有一万台。一个 Borgmaster 复制五份，用 Paxos 保持一致，它决定任务在哪里运行；每台机器上有一个代理，叫 Borglet，负责启动任务并回报情况。<bookmark mark='b'/>Kubernetes 由谷歌在2014年开源，构建它的人曾经参与过 Borg，它的组件几乎一一对应着 Borg 的组件：一个 pod 就是一个任务，一个 kubelet 就是一个 Borglet。"
+  },
+  "973afcc2294e": {
+   "scene": "Orchestration",
+   "en": "The idea that makes this work is to say what you want, not how to get it. <bookmark mark='a'/> An imperative script says: start the web server on machine three, then seven, then two. If machine seven dies halfway, the script cannot tell what state the world is in. <bookmark mark='b'/> A declarative specification says only: there should be five replicas of this image. <bookmark mark='c'/> The system stores that goal, observes what is running, and acts on the difference. Because the goal is written down, and not the steps, any controller, after any crash, can look again and work out what remains.",
+   "zh": "让这一切行得通的想法是：说出你想要什么，而不是怎样得到它。<bookmark mark='a'/>一个命令式的脚本说：在3号机器上启动 Web 服务器，然后是7号，然后是2号。如果7号机器中途死掉，脚本就无从知道世界处于什么状态。<bookmark mark='b'/>一份声明式的规约只说：这个镜像应该有5个副本。<bookmark mark='c'/>系统存下这个目标，观察正在运行的东西，然后针对两者的差异采取行动。因为写下来的是目标，而不是步骤，所以任何控制器，在任何一次崩溃之后，都能重新看一遍，算出还剩下什么要做。"
+  },
+  "5e72723a2310": {
+   "scene": "Orchestration",
+   "en": "Each kind of object has a controller, and each controller is the same small loop. <bookmark mark='a'/> Read what is wanted. Observe what is there. Too few pods: start one. Too many: stop one. Sleep, and repeat. <bookmark mark='b'/> Here five replicas are running, and two crash. <bookmark mark='c'/> On its next pass the loop sees three where five are wanted, and starts replacements until the counts agree. <bookmark mark='d'/> The loop never asks what happened, only what is different now. That makes it idempotent: running it twice, or restarting it after a crash, does no harm.",
+   "zh": "每一种对象都有一个控制器，而每个控制器都是同一个小小的循环。<bookmark mark='a'/>读出想要的是什么。观察实际有什么。pod 太少：启动一个。太多：停掉一个。睡一会儿，然后重复。<bookmark mark='b'/>这里有5个副本在运行，其中2个崩溃了。<bookmark mark='c'/>下一轮，循环看到想要5个、却只有3个，于是启动替代者，直到数目一致。<bookmark mark='d'/>这个循环从不问发生了什么，只问现在有什么不同。这让它是幂等的：运行两次，或者在崩溃后重启它，都没有害处。"
+  },
+  "88a2b444cbb5": {
+   "scene": "Orchestration",
+   "en": "There are two ways to write a controller, and the difference shows when messages go astray. <bookmark mark='a'/> We simulated five replicas whose pods crash two at a time, at steps twelve and twenty-five. An edge-triggered controller reacts to events: each pod died message starts a replacement. But some messages are dropped. At the second crash one is lost, and the controller stays at four replicas forever, because nothing makes it look again. <bookmark mark='b'/> A level-triggered controller compares the goal with the world on every pass. It starts slowly, one pod per step, but after each crash it is short for a single step, whatever was lost. <bookmark mark='c'/> Kubernetes' controllers work this way: an event is only a hint to look sooner.",
+   "zh": "控制器有两种写法，消息走丢的时候，差别就显出来了。<bookmark mark='a'/>我们模拟了5个副本，它们的 pod 每次崩溃两个，分别在第12步和第25步。边沿触发的控制器对事件作出反应：每一条“pod 已死”的消息都会启动一个替代者。但有些消息会被丢掉。第二次崩溃时丢了一条，控制器就永远停在4个副本，因为没有任何东西让它再去看一眼。<bookmark mark='b'/>电平触发的控制器每一轮都比较目标和现实。它起步较慢，每步一个 pod，但每次崩溃之后，无论丢了什么，它都只短缺一步。<bookmark mark='c'/>Kubernetes 的控制器就是这样工作的：一个事件只是一个提示，让它早点去看。"
+  },
+  "4e0dbb2c428c": {
+   "scene": "Orchestration",
+   "en": "All of this rests on one durable record of what is wanted. <bookmark mark='a'/> You write the goal to the API server, the only component that talks to storage. It keeps every object in etcd, a key-value store replicated by Raft, from Part 38, so every write is committed by a majority: three members survive one failure, five survive two. <bookmark mark='b'/> Controllers and node agents never talk to one another; each watches the API server for the objects it cares about. <bookmark mark='c'/> Every object carries a version, so an update based on a stale read is refused, like a compare-and-swap. <bookmark mark='d'/> Even the scheduler is a controller: it watches for pods with no machine, and binds each to a node. How it chooses is the next chapter.",
+   "zh": "这一切都建立在一份关于“想要什么”的持久记录之上。<bookmark mark='a'/>你把目标写给 API 服务器，它是唯一与存储打交道的组件。它把每个对象都保存在 etcd 里，这是一个用第38部分的 Raft 复制的键值存储，所以每次写入都由多数派提交：三个成员能挺过一次故障，五个能挺过两次。<bookmark mark='b'/>控制器和节点代理彼此从不交谈；每一个都盯着 API 服务器上它关心的那些对象。<bookmark mark='c'/>每个对象都带着一个版本号，所以基于过时读取的更新会被拒绝，就像一次比较并交换。<bookmark mark='d'/>就连调度器也是一个控制器：它盯着那些还没有机器的 pod，把每一个绑定到一个节点上。它怎样选择，是下一章的内容。"
+  },
+  "325e9d3163cd": {
+   "scene": "Packing",
+   "en": "Chapter five. Scheduling as bin packing.",
+   "zh": "第五章：调度即装箱。"
+  },
+  "3681d7c3e040": {
+   "scene": "Packing",
+   "en": "Once a pod has no machine, the scheduler must choose one. <bookmark mark='a'/> This is bin packing: items of sizes between zero and one, bins of size one, and as few bins as possible. <bookmark mark='b'/> The simplest sensible rule is first fit: each item goes into the first machine with room. <bookmark mark='c'/> Here it fills three machines exactly, and the fourth can be switched off. <bookmark mark='d'/> A real scheduler filters out the machines that cannot take the container, then scores the rest: one rule spreads work out, another packs machines full.",
+   "zh": "一个 pod 一旦还没有机器，调度器就必须给它选一台。<bookmark mark='a'/>这就是装箱问题：物品的大小在0到1之间，箱子的大小是1，要用尽可能少的箱子。<bookmark mark='b'/>最简单而又合理的规则是首次适应：每个物品放进第一台还有空间的机器。<bookmark mark='c'/>在这里，它恰好装满了三台机器，第四台可以关掉。<bookmark mark='d'/>真实的调度器先筛掉那些容纳不了这个容器的机器，再给其余的机器打分：一条规则把工作分散开，另一条规则把机器装满。"
+  },
+  "9fd09e4069ba": {
+   "scene": "Packing",
+   "en": "Recall partition, from Part 26: can some numbers be split into two halves with equal sums? <bookmark mark='a'/> Divide each by half the total, and ask whether the items fit in two bins. Three, one, one, two, two and one total ten; three, one and one make five, and so do two, two and one. <bookmark mark='b'/> Three, three, three and one also total ten, but nothing makes five: a third bin is needed. <bookmark mark='c'/> So a fast packer would solve partition, and bin packing is NP-hard. Telling two bins from three is already hard, so no fast algorithm can promise better than one and a half times the optimum, unless P equals NP.",
+   "zh": "回忆第26部分的划分问题：能不能把一些数分成和相等的两半？<bookmark mark='a'/>把每个数除以总和的一半，再问这些物品能否装进两个箱子。3、1、1、2、2、1，总和是10；3、1、1凑成5，2、2、1也是。<bookmark mark='b'/>3、3、3、1的总和也是10，但没有哪几个能凑成5：需要第三个箱子。<bookmark mark='c'/>所以一个快速的装箱程序就能解决划分问题，于是装箱是 NP 难的。区分两个箱子和三个箱子就已经很难了，所以除非 P 等于 NP，否则没有快速算法能保证好于最优解的1.5倍。"
+  },
+  "329ecf48c926": {
+   "scene": "Packing",
+   "en": "We packed random instances with four classic rules, and compared each with the exact optimum, found by branch and bound. <bookmark mark='a'/> Next fit, which keeps only one machine open, used about a quarter more machines than needed on average, and half as many again at worst. <bookmark mark='b'/> First fit and best fit, which look back at every machine, came within about eight percent. <bookmark mark='c'/> First fit decreasing, which sorts the work largest first, came within one percent. <bookmark mark='d'/> Sorting wins, because large items placed early leave gaps that small ones can fill.",
+   "zh": "我们用四条经典规则装了一批随机实例，并把每条规则与精确的最优解作比较，最优解由分支定界求出。<bookmark mark='a'/>下次适应只保持一台机器开着，平均比所需多用约四分之一的机器，最坏时多出一半。<bookmark mark='b'/>首次适应和最佳适应会回头查看每一台机器，与最优解相差约8%以内。<bookmark mark='c'/>降序首次适应先把工作从大到小排序，与最优解相差1%以内。<bookmark mark='d'/>排序胜出，因为先放下的大物品留下的空隙，可以由小物品来填。"
+  },
+  "ffd35168af10": {
+   "scene": "Packing",
+   "en": "A proof says how badly a rule can do. <bookmark mark='a'/> Give next fit halves alternating with tiny items. Each half closes the machine before it, so sixteen items take eight machines; the optimum pairs the halves and gathers the tiny items, in five. <bookmark mark='b'/> As the family grows, the ratio climbs towards two. <bookmark mark='c'/> It can never pass two: any two neighbouring machines hold more than one machine's worth, or the second's first item would have fitted. <bookmark mark='d'/> For first fit decreasing, David Johnson proved in 1973 a bound of eleven ninths of the optimum plus four; in 2007 György Dósa found the tight constant, six ninths.",
+   "zh": "一个证明能说出一条规则最坏会有多糟。<bookmark mark='a'/>给下次适应一串大小为一半的物品，与极小的物品交替出现。每个一半都会关闭它前面那台机器，所以16个物品要占8台机器；最优解把一半两两配对，再把极小的物品聚在一起，只用5台。<bookmark mark='b'/>随着这一族实例变大，比值向2攀升。<bookmark mark='c'/>它永远不会超过2：任何两台相邻的机器装的总量都超过一台机器的容量，否则第二台的第一个物品就能放进第一台了。<bookmark mark='d'/>对于降序首次适应，David Johnson 在1973年证明了一个界：最优解的九分之十一再加4；2007年，György Dósa 找到了紧的常数，九分之六。"
+  },
+  "4f1b465cfbed": {
+   "scene": "Packing",
+   "en": "Real containers ask for more than one thing. <bookmark mark='a'/> Our two hundred containers each need some processor and some memory, and a machine is full when either runs out: this is vector bin packing. The total demand says at least thirty-nine machines. <bookmark mark='b'/> First fit, sorting by each job's larger demand, used forty-three, about nine-tenths busy in both resources. <bookmark mark='c'/> Sorted by processor alone, it used sixty-three, about sixty percent busy: the memory-hungry jobs came last, when machines had memory but no processor to spare. Packing well means mixing the two kinds.",
+   "zh": "真实的容器需要的不止一样东西。<bookmark mark='a'/>我们的200个容器，每个都需要一些处理器和一些内存，只要其中一样用完，机器就满了：这就是向量装箱。总需求表明至少要39台机器。<bookmark mark='b'/>首次适应按每个作业较大的那项需求排序，用了43台，两种资源都大约九成繁忙。<bookmark mark='c'/>只按处理器排序，它用了63台，大约60%繁忙：吃内存的作业排在最后，那时机器还有内存，却没有多余的处理器了。要装得好，就得把两类混在一起。"
+  },
+  "639b799a59c9": {
+   "scene": "Packing",
+   "en": "The other half of scheduling is deciding who gives way. <bookmark mark='a'/> Borg gives every job a priority: production work that serves users, and batch work that can wait. <bookmark mark='b'/> Here a full machine of batch tasks meets a production task. <bookmark mark='c'/> The scheduler preempts the lowest-priority task, which goes back into the queue to be placed elsewhere; Kubernetes' priority classes do the same. <bookmark mark='d'/> Batch work also fills capacity that production reserved but is not using. <bookmark mark='e'/> The payoff: in the Borg paper, keeping the two kinds on separate machines would have needed twenty to thirty percent more of them.",
+   "zh": "调度的另一半，是决定谁让路。<bookmark mark='a'/>Borg 给每个作业一个优先级：为用户服务的生产工作，以及可以等待的批处理工作。<bookmark mark='b'/>这里，一台装满批处理任务的机器遇上了一个生产任务。<bookmark mark='c'/>调度器抢占优先级最低的任务，它回到队列里，等着被放到别处；Kubernetes 的优先级类也是这样做的。<bookmark mark='d'/>批处理工作还会填满生产工作预留了、却没有用上的容量。<bookmark mark='e'/>回报是：根据 Borg 论文，如果把这两类工作放在不同的机器上，需要多出20%到30%的机器。"
+  },
+  "344506e032d2": {
+   "scene": "Autoscale",
+   "en": "Chapter six. Autoscaling as control.",
+   "zh": "第六章：自动伸缩即控制。"
+  },
+  "7489de490a8c": {
+   "scene": "Autoscale",
+   "en": "An autoscaler watches how busy the servers are, and adds or removes some: a feedback loop. <bookmark mark='a'/> Load arrives; the servers share it, which sets their utilization; the controller measures that, and starts or stops servers. But the measurement is late, and a new server takes time to boot, so the controller acts on the past. <bookmark mark='b'/> Kubernetes' horizontal pod autoscaler multiplies the replicas by measured over target utilization, rounded up. <bookmark mark='c'/> Ours moves a fraction K of the way, from a measurement d steps old. K equal to one is Kubernetes' rule.",
+   "zh": "自动伸缩器观察服务器有多忙，然后增加或减少一些服务器：这是一个反馈回路。<bookmark mark='a'/>负载到来；服务器分担它，这决定了它们的利用率；控制器测量利用率，然后启动或停止服务器。但测量是滞后的，新服务器启动也需要时间，所以控制器是在根据过去行动。<bookmark mark='b'/>Kubernetes 的水平 Pod 自动伸缩器，把副本数乘以测得的利用率与目标利用率之比，再向上取整。<bookmark mark='c'/>我们的控制器每次只走完差距的一个比例 K，依据的是 d 步之前的测量。K 等于1，就是 Kubernetes 的规则。"
+  },
+  "db4d849139a2": {
+   "scene": "Autoscale",
+   "en": "We gave it a load that jumps from forty to a hundred requests a second. At sixty percent utilization, the right size is about seventeen servers. <bookmark mark='a'/> With a delay of one step and a gain of three tenths, it overshoots to eighteen, and settles. <bookmark mark='b'/> With a three-step delay, a gain of two tenths still settles, after overshooting to twenty-five. <bookmark mark='c'/> At one half, it never settles, swinging between about five servers and a hundred. <bookmark mark='d'/> At a gain of one, Kubernetes' rule, it slams between one server and the quota of two hundred. Only the gain changed.",
+   "zh": "我们给它一个负载，从每秒40个请求跳到100个。在60%的利用率下，合适的规模大约是17台服务器。<bookmark mark='a'/>延迟1步、增益0.3时，它超调到18台，然后稳定下来。<bookmark mark='b'/>延迟3步时，增益0.2仍然能稳定下来，但先超调到25台。<bookmark mark='c'/>增益为0.5时，它永远稳定不下来，在大约5台和100台之间来回摆动。<bookmark mark='d'/>增益为1，也就是 Kubernetes 的规则时，它在1台服务器和200台的配额之间猛烈来回撞击。变的只有增益。"
+  },
+  "e29ab123b578": {
+   "scene": "Autoscale",
+   "en": "The swing follows from the delay. <bookmark mark='a'/> Near the right size, each step corrects the error by K times the error as it was d steps ago. So once the fleet is big enough, the controller keeps adding, because it acts on old measurements. <bookmark mark='b'/> The error dies away only while K stays below twice the cosine of d pi over two d plus one: below two with no delay, below one with one step, and below about forty-five hundredths with three. <bookmark mark='c'/> Our four runs land exactly where the curve predicts. As Maxwell found for steam-engine governors in 1868, the more a loop lags, the gentler it must be.",
+   "zh": ""
+  },
+  "32f4c3091d5e": {
+   "scene": "Autoscale",
+   "en": "A controller needs a target, and queueing theory supplies it. <bookmark mark='a'/> Model the pool as Part 31's queue, now with c servers. Requests arrive at rate lambda; with k servers busy they finish at k times mu, never more than c mu. <bookmark mark='b'/> Balancing the flow across each step gives a to the k over k factorial up to c, then a geometric tail with ratio rho, the load per server. <bookmark mark='c'/> Summing the tail gives Agner Erlang's formula of 1917 for the chance of waiting, and the mean wait follows. <bookmark mark='d'/> Two servers with one erlang of load: a request waits a third of the time.",
+   "zh": ""
+  },
+  "a0cc596e17c5": {
+   "scene": "Autoscale",
+   "en": "Now size pools of very different scales with one promise: a short mean wait, and at most one request in five waiting at all. <bookmark mark='a'/> Ten erlangs of load need fourteen servers, only seventy-one percent busy. A thousand erlangs need one thousand and thirty-four, ninety-seven percent busy. <bookmark mark='b'/> The spare capacity grows like the square root of the load: Halfin and Whitt's square-root staffing, from 1981. <bookmark mark='c'/> So one big shared pool needs far fewer idle servers, in proportion, than many small ones. That is the economy of scale behind the cloud itself.",
+   "zh": "现在，用同一个承诺来确定规模差别极大的各个服务器池：平均等待很短，并且最多五分之一的请求需要等待。<bookmark mark='a'/>10爱尔朗的负载需要14台服务器，忙碌程度只有71%。1000爱尔朗的负载需要1034台，忙碌程度达到97%。<bookmark mark='b'/>富余的容量随负载的平方根增长：这就是 Halfin 和 Whitt 在1981年提出的平方根配置法则。<bookmark mark='c'/>所以按比例来说，一个大的共享池所需的空闲服务器，远远少于许多小池子。这就是云本身背后的规模经济。"
+  },
+  "f0ae8034fc92": {
+   "scene": "Autoscale",
+   "en": "Even a well-tuned reactive loop is late. <bookmark mark='a'/> It sees the load after a measurement window, and its servers arrive a boot time after that, so every rising morning it runs short. <bookmark mark='b'/> But most load repeats, by the day and by the week. Predictive scaling, which the big clouds now offer, forecasts the next hours from past weeks and starts machines a boot time ahead. <bookmark mark='c'/> The reactive loop stays as a backstop for surprises. The next chapter shrinks the boot itself, and Part 50 returns to planning for the peaks.",
+   "zh": "即使是调得很好的被动响应式回路，也是滞后的。<bookmark mark='a'/>它要过一个测量窗口才看到负载，它的服务器还要再过一个启动时间才到位，所以每个负载上升的早晨，它都不够用。<bookmark mark='b'/>但大多数负载是会重复的，按天重复，也按周重复。各大云如今提供的预测式伸缩，根据过去几周的数据预测接下来几个小时，并提前一个启动时间开启机器。<bookmark mark='c'/>被动响应式回路保留下来，作为应对意外的后备。下一章会缩短启动本身，第50部分会再回到为峰值做规划的问题。"
+  },
+  "d461a2d1ba6f": {
+   "scene": "Serverless",
+   "en": "Chapter seven. Serverless.",
+   "zh": "第七章：无服务器。"
+  },
+  "edf544d2c1cd": {
+   "scene": "Serverless",
+   "en": "In 2014 Amazon launched Lambda, and with it a new contract. <bookmark mark='a'/> You do not rent a machine at all. You upload a function and name the events that should run it: a web request, a file arriving in storage, a message on a queue, a timer. <bookmark mark='b'/> For each event the platform finds or starts an instance, runs the function, and bills the milliseconds it ran. <bookmark mark='c'/> With no events there are no instances and no bill: it scales to zero. <bookmark mark='d'/> The price of that freedom is statelessness. An instance may vanish at any moment, so anything that must last goes to storage or a database, and functions talk to each other through them. Jonas and colleagues at Berkeley, in 2019, predicted that this style would come to dominate cloud computing, and catalogued these limits.",
+   "zh": "2014年，亚马逊推出了 Lambda，随之而来的是一种新的契约。<bookmark mark='a'/>你根本不租机器。你上传一个函数，并指明哪些事件应该运行它：一个 Web 请求、一个到达存储的文件、队列上的一条消息、一个定时器。<bookmark mark='b'/>对每个事件，平台找到或启动一个实例，运行这个函数，并按它运行的毫秒数计费。<bookmark mark='c'/>没有事件，就没有实例，也没有账单：它可以缩容到零。<bookmark mark='d'/>这种自由的代价是无状态。实例随时可能消失，所以任何必须持久保存的东西都要放进存储或数据库，函数之间也通过它们来通信。伯克利的 Jonas 和同事们在2019年预言，这种风格将会主导云计算，并列举了这些限制。"
+  },
+  "4eeae346a0d4": {
+   "scene": "Serverless",
+   "en": "What does the per-millisecond bill buy? <bookmark mark='a'/> A server is billed for every second it exists, busy or idle. A function is billed only while it runs. <bookmark mark='b'/> At Amazon's 2024 list prices, a hundred milliseconds at half a gigabyte costs eighty-three cents per million calls in compute, plus twenty cents per million in request fees. <bookmark mark='c'/> Now keep a small server completely busy, two hundred requests every second. Its hourly price is spread over seven hundred and twenty thousand requests: about thirteen cents per million. <bookmark mark='d'/> So a function costs nearly eight times as much per request as a busy server. It wins whenever the server would be idle more than about eighty-seven percent of the time, below about twenty-six requests a second, the break-even chapter twelve plots. Serverless is a bet on low utilization.",
+   "zh": "按毫秒计费能买到什么？<bookmark mark='a'/>服务器在存在的每一秒都要计费，无论忙还是闲。函数只在运行时计费。<bookmark mark='b'/>按亚马逊2024年的标价，一次运行100毫秒、配置0.5 GB 内存的调用，每百万次的计算费用是83美分，另加每百万次20美分的请求费。<bookmark mark='c'/>现在让一台小服务器完全忙碌起来，每秒200个请求。它每小时的价格分摊到72万个请求上：每百万次大约13美分。<bookmark mark='d'/>所以按每个请求算，函数的成本差不多是忙碌服务器的8倍。只要服务器有超过大约87%的时间处于空闲，也就是每秒低于大约26个请求，函数就更划算，第十二章会画出这个盈亏平衡点。无服务器是在押注低利用率。"
+  },
+  "c9f75ed7dc45": {
+   "scene": "Serverless",
+   "en": "The catch is the first request. <bookmark mark='a'/> When an event arrives and no instance is warm, the platform must start one: boot a micro-VM, as in chapter two, start the language runtime, and run the function's own initialization, loading its libraries. That is a cold start, and it can take far longer than the request itself. <bookmark mark='b'/> So platforms keep an instance alive for a while after each request. With a short keep-alive, six of these twelve requests start cold. <bookmark mark='c'/> With a longer one, only two do, but memory sits reserved and idle almost all hour, and somebody pays for it. <bookmark mark='d'/> Shahrad and colleagues, studying Azure Functions in 2020, found that invocation rates differ between applications by many orders of magnitude, so no single timeout suits them all; their policy learns each application's typical idle times. Users fight back, paying to keep instances warm, or restoring them from snapshots.",
+   "zh": "难点在第一个请求。<bookmark mark='a'/>当一个事件到达而没有热实例时，平台必须启动一个：像第二章那样启动一台微虚拟机，启动语言运行时，再运行函数自己的初始化代码，加载它的库。这就是冷启动，它可能比请求本身耗时长得多。<bookmark mark='b'/>所以平台会在每个请求之后让实例再存活一段时间。保活时间短的时候，这12个请求中有6个是冷启动。<bookmark mark='c'/>保活时间长一些，只有2个是冷启动，但内存几乎整个小时都被预留着闲置，总得有人为它付钱。<bookmark mark='d'/>Shahrad 和同事们在2020年研究 Azure Functions 时发现，不同应用的调用频率相差许多个数量级，所以没有哪一个超时时间适合所有应用；他们的策略会学习每个应用典型的空闲时间。用户也会反击：花钱让实例保持热状态，或者从快照中恢复实例。"
+  },
+  "5720cc1acfda": {
+   "scene": "Serverless",
+   "en": "How many instances does a function need? <bookmark mark='a'/> Part 31's law of John Little answers: the number in flight is the arrival rate times the time each request spends. <bookmark mark='b'/> At the break-even rate of about twenty-six requests a second, each lasting a tenth of a second, that is between two and three instances on average, and more in a burst. <bookmark mark='c'/> At a thousand requests a second it is a hundred. <bookmark mark='d'/> Platforms cap this. Amazon's default is a thousand concurrent executions per account in each region, so a hundred-millisecond function tops out near ten thousand requests a second, and requests beyond the cap are throttled, refused for the caller to retry. An invocation runs fifteen minutes at most. <bookmark mark='e'/> And the limit that bites first is often behind the function: a thousand instances, each with its own connection, can swamp a database that expected a few dozen.",
+   "zh": "一个函数需要多少个实例？<bookmark mark='a'/>第31部分中 John Little 的法则，也就是利特尔法则，给出了答案：在途的请求数，等于到达率乘以每个请求停留的时间。<bookmark mark='b'/>在大约每秒26个请求的盈亏平衡速率下，每个请求持续0.1秒，平均就是2到3个实例，突发时会更多。<bookmark mark='c'/>每秒1000个请求时，就是100个。<bookmark mark='d'/>平台对此设了上限。亚马逊的默认值是每个账户在每个区域最多1000个并发执行，所以一个100毫秒的函数最多大约每秒1万个请求，超过上限的请求会被限流，也就是被拒绝，由调用方重试。一次调用最多运行15分钟。<bookmark mark='e'/>而最先触及的限制，往往在函数的后面：1000个实例，每个都有自己的连接，可能压垮一个原本只预期几十个连接的数据库。"
+  },
+  "da12b21b8019": {
+   "scene": "Storage",
+   "en": "Chapter eight. Object storage and eleven nines.",
+   "zh": "第八章：对象存储与十一个九。"
+  },
+  "46afa0a7963c": {
+   "scene": "Storage",
+   "en": "Clouds sell storage in three shapes. <bookmark mark='a'/> Block storage is a disk: numbered blocks, read and written in place, attached to one machine; Part 34's disk, over the network. <bookmark mark='b'/> File storage adds names in a hierarchy, and lets programs open a file, seek and overwrite bytes in the middle, with locking for sharing. <bookmark mark='c'/> Object storage gives most of that up. A bucket maps keys to whole objects, which you put, get or delete over HTTP. Nothing is edited in place, and the slashes in a key are just characters. <bookmark mark='d'/> In return it scales almost without limit, and it is cheap: about two point three cents a gigabyte a month, at Amazon's 2024 list price.",
+   "zh": "云以三种形态出售存储。<bookmark mark='a'/>块存储就是一块磁盘：编了号的块，原地读写，挂载在一台机器上；也就是第34部分的磁盘，只是隔着网络。<bookmark mark='b'/>文件存储加上了层次结构中的名字，允许程序打开一个文件，定位并改写中间的字节，还提供用于共享的加锁。<bookmark mark='c'/>对象存储放弃了其中的大部分。一个存储桶把键映射到完整的对象，你通过 HTTP 对它们执行 put、get 或 delete。没有任何东西能原地修改，键里的斜杠也只是普通字符。<bookmark mark='d'/>作为回报，它几乎可以无限扩展，而且很便宜：按亚马逊2024年的标价，每 GB 每月大约2.3美分。"
+  },
+  "7f51e97708fd": {
+   "scene": "Storage",
+   "en": "What does a read see? <bookmark mark='a'/> A writer's put succeeds, and then a reader asks for the object. <bookmark mark='b'/> For its first fourteen years, S3 showed a brand-new key at once in most cases, but an overwrite or delete could take a while to appear: eventual consistency, from Part 39. <bookmark mark='c'/> In December 2020, Amazon made every read strongly consistent: once a put or delete succeeds, every later get and listing reflects it. <bookmark mark='d'/> Each update to a key is atomic, the later of two racing writers wins, and there are no transactions across keys. Part 46 builds whole tables on exactly these guarantees.",
+   "zh": "一次读取会看到什么？<bookmark mark='a'/>写入者的 put 成功了，然后一个读取者请求这个对象。<bookmark mark='b'/>在最初的14年里，S3 在大多数情况下会立刻显示一个全新的键，但覆盖写或删除可能要过一阵子才能显现：这就是第39部分的最终一致性。<bookmark mark='c'/>2020年12月，亚马逊让每一次读取都变成强一致的：一旦 put 或 delete 成功，之后的每一次 get 和列举都会反映它。<bookmark mark='d'/>对一个键的每次更新都是原子的，两个竞争的写入者中较晚的那个获胜，而且没有跨键的事务。第46部分正是在这些保证之上构建出完整的表。"
+  },
+  "bf931d976b4f": {
+   "scene": "Storage",
+   "en": "How can an object outlive its disks? <bookmark mark='a'/> Cut it into ten data fragments and compute four of parity with a Reed–Solomon code, from Part 28: any ten of the fourteen rebuild it. <bookmark mark='b'/> Then scatter the fragments across failure domains, here two to a rack in seven racks, so that no disk, rack or power feed holds too many. <bookmark mark='c'/> A disk fails; the system rebuilds its fragment elsewhere from ten survivors. <bookmark mark='d'/> Even a whole rack lost, with two more disks, leaves ten, and the object survives. <bookmark mark='e'/> Three full copies tolerate only two losses and store three times the data; this code tolerates four, at one point four times.",
+   "zh": "一个对象怎么能比它的磁盘活得更久？<bookmark mark='a'/>把它切成10个数据分片，再用第28部分的 Reed–Solomon 码计算出4个校验分片：14个中的任意10个都能重建它。<bookmark mark='b'/>然后把分片分散到不同的故障域，这里是7个机架、每个机架2个，这样没有哪块磁盘、哪个机架或哪路供电持有太多分片。<bookmark mark='c'/>一块磁盘坏了；系统用10个幸存的分片，在别处重建它的那个分片。<bookmark mark='d'/>即使丢了整个机架，再加上另外两块磁盘，也还剩10个，对象依然存活。<bookmark mark='e'/>三个完整副本只能容忍两次损失，并且要存储三倍的数据；这种编码能容忍四次，只用1.4倍。"
+  },
+  "8086f818ed3c": {
+   "scene": "Storage",
+   "en": "How long until data is lost? <bookmark mark='a'/> Model it as a Markov chain whose state counts the failed fragments. Each live one fails at rate lambda, two percent a year here, independently; a failed one is repaired at rate mu, in about a day. <bookmark mark='b'/> For three copies, the chain moves right at three lambda, then two lambda, then lambda, and the last state loses the data. <bookmark mark='c'/> From each damaged state, repair pulls it back. <bookmark mark='d'/> The expected time to climb each step, allowing for repairs that send us back, obeys this recurrence, and the mean time to data loss is the sum of the steps. <bookmark mark='e'/> For three copies: about 2.7 billion years. <bookmark mark='f'/> A simulation of the same chain, with exaggerated rates, agrees within two percent.",
+   "zh": "要过多久数据才会丢失？<bookmark mark='a'/>把它建模为一条马尔可夫链，状态记录失效分片的数目。每个存活的分片以速率 λ 独立地失效，这里是每年2%；失效的分片以速率 μ 修复，大约需要一天。<bookmark mark='b'/>对于三副本，这条链先以3λ、再以2λ、再以 λ 的速率向右移动，最后一个状态就是数据丢失。<bookmark mark='c'/>从每一个受损的状态，修复都会把它拉回来。<bookmark mark='d'/>攀登每一级所需的期望时间，考虑到那些把我们送回去的修复，满足这个递推式，而数据丢失前的平均时间就是各级之和。<bookmark mark='e'/>对于三副本：大约27亿年。<bookmark mark='f'/>用夸大了的速率对同一条链做模拟，结果相差不到2%。"
+  },
+  "c63b1ed72103": {
+   "scene": "Storage",
+   "en": "Now compare schemes. <bookmark mark='a'/> One copy is lost with a two percent chance a year: under two nines. Each failure a scheme can absorb multiplies the mean time by thousands, because a repair takes a day and a disk lasts decades: two copies give about five point seven nines, three about nine point four. <bookmark mark='b'/> Erasure codes do better for less: six data fragments plus three of parity reach eleven nines, at one and a half times the data. <bookmark mark='c'/> Amazon designs S3 for eleven nines: store ten million objects, and expect to lose one about every ten thousand years. <bookmark mark='d'/> But all of this assumes independent failures. Chapter thirteen shows what happens when they are not.",
+   "zh": "现在来比较各种方案。<bookmark mark='a'/>一个副本每年有2%的概率丢失：不到两个九。一个方案每多吸收一次故障，平均时间就乘以几千，因为修复只要一天，而磁盘能用几十年：两副本大约5.7个九，三副本大约9.4个九。<bookmark mark='b'/>纠删码用更少的代价做得更好：6个数据分片加3个校验分片，达到十一个九，只用1.5倍的数据。<bookmark mark='c'/>亚马逊把 S3 设计为十一个九：存储1000万个对象，预计大约每1万年丢失一个。<bookmark mark='d'/>但这一切都假设故障是独立的。第十三章会展示，当它们不独立时会发生什么。"
+  },
+  "9c5a67743e9b": {
+   "scene": "Network",
+   "en": "Chapter nine. Cloud networking.",
+   "zh": "第九章：云网络。"
+  },
+  "df538e5bafef": {
+   "scene": "Network",
+   "en": "Every tenant in the warehouse wants what looks like its own private network. <bookmark mark='a'/> A virtual private cloud gives it one: an address range of its choosing, here ten dot zero dot zero dot zero slash sixteen in Part 36's notation, cut into subnets, one in each zone. <bookmark mark='b'/> A route table decides where packets go: anything inside the range stays local, and everything else goes to a gateway to the internet. <bookmark mark='c'/> Security groups are firewalls attached to each machine's virtual network card. They are stateful, so the reply to an allowed connection is allowed back. <bookmark mark='d'/> None of these wires exists. Two tenants can both choose ten dot zero dot one dot five, on the same physical network, and never see each other's packets. How?",
+   "zh": "仓库里的每个租户，都想要一张看起来属于自己的私有网络。<bookmark mark='a'/>虚拟私有云给了它一张：一个由它自己选择的地址段，这里用第36部分的记法是 10.0.0.0/16，再切分成子网，每个可用区一个。<bookmark mark='b'/>路由表决定数据包去哪里：地址段内的一切都留在本地，其余一切都送往通向互联网的网关。<bookmark mark='c'/>安全组是挂在每台机器虚拟网卡上的防火墙。它们是有状态的，所以一个被允许的连接，它的回复也会被放行。<bookmark mark='d'/>这些线缆没有一根真实存在。两个租户可以都选择 10.0.1.5，在同一张物理网络上，却永远看不到对方的数据包。这是怎么做到的？"
+  },
+  "5acaf7444a2b": {
+   "scene": "Network",
+   "en": "The answer is encapsulation, Part 36's idea of a packet carried inside another. <bookmark mark='a'/> A virtual machine sends an ordinary packet, from ten dot zero dot one dot five to ten dot zero dot two dot seven. Those addresses mean nothing to the physical network. <bookmark mark='b'/> The host's virtual switch looks up where that destination lives: for this tenant, it is a virtual machine on another physical host. <bookmark mark='c'/> So it wraps the packet in a new one, addressed to that host, with a small header naming the tenant's network. In the VXLAN standard of 2014 that header is eight bytes, with a twenty-four-bit network number, room for about sixteen million networks. <bookmark mark='d'/> The receiving host unwraps it and hands it to the right tenant's machine. Every packet carries about fifty extra bytes, which is why such networks often allow slightly smaller packets. <bookmark mark='e'/> The mapping is the control plane, kept true by controllers like chapter four's. Amazon runs the data path on its own network cards; Google in software on every host.",
+   "zh": "答案是封装，也就是第36部分中把一个数据包装在另一个数据包里传送的思想。<bookmark mark='a'/>一台虚拟机发出一个普通的数据包，从 10.0.1.5 发往 10.0.2.7。这些地址对物理网络毫无意义。<bookmark mark='b'/>主机上的虚拟交换机查找这个目的地在哪里：对这个租户来说，它是另一台物理主机上的一台虚拟机。<bookmark mark='c'/>于是它把这个数据包包进一个新的数据包，发往那台主机，并带上一个标明该租户网络的小报头。在2014年的 VXLAN 标准里，这个报头是8字节，其中有一个24位的网络号，可以容纳大约1600万张网络。<bookmark mark='d'/>接收端主机把它拆开，交给正确租户的机器。每个数据包都多带大约50字节，这就是为什么这类网络通常只允许稍小一点的数据包。<bookmark mark='e'/>这个映射就是控制平面，由第四章那样的控制器来保持它的正确。亚马逊在自己的网卡上运行数据路径，谷歌则在每台主机上用软件运行。"
+  },
+  "3e3b1c5d2903": {
+   "scene": "Network",
+   "en": "A service needs one address in front of many machines. <bookmark mark='a'/> A managed load balancer is that address. It spreads connections across healthy backends, checks each one's health, and stops sending new work to any that fail. It can balance by connection, at layer four, or read each HTTP request, at layer seven. <bookmark mark='b'/> Google's Maglev, described in 2016, does this in software on ordinary machines, hashing each connection so that its packets keep reaching the same backend even as balancers come and go. <bookmark mark='c'/> To go global, clouds use anycast. The same address is announced, through BGP, from many sites at once, and the internet's routers carry each client to whichever is nearest by their routing. The DNS root servers and content delivery networks work this way, and Part 48 builds the rest.",
+   "zh": "一个服务需要在许多机器前面放一个地址。<bookmark mark='a'/>托管的负载均衡器就是这个地址。它把连接分散到健康的后端上，检查每个后端的健康状况，并停止向任何失效的后端发送新的工作。它可以在第四层按连接来均衡，也可以在第七层读取每个 HTTP 请求。<bookmark mark='b'/>谷歌在2016年描述的 Maglev，用软件在普通机器上做这件事，它对每个连接做哈希，使得即使负载均衡器来来去去，这个连接的数据包也一直到达同一个后端。<bookmark mark='c'/>为了走向全球，云使用任播。同一个地址通过 BGP 同时从许多站点通告出去，互联网的路由器按照它们的路由，把每个客户端带到最近的那个站点。DNS 根服务器和内容分发网络就是这样工作的，其余部分由第48部分来构建。"
+  },
+  "a4e03539f60c": {
+   "scene": "Network",
+   "en": "Finally, the line on the bill that surprises people. <bookmark mark='a'/> Moving data into a cloud is free. Moving it out to the internet, at Amazon's 2024 list price, costs nine cents a gigabyte, about ninety dollars a terabyte before volume discounts. Traffic between zones is billed too. <bookmark mark='b'/> Compare storing it, at two point three cents a gigabyte a month. Sending an object out once costs as much as keeping it for nearly four months. <bookmark mark='c'/> Our thirty novels, twenty-five megabytes, would cost about a fifth of a cent to download: harmless for one reader, not for millions. <bookmark mark='d'/> So data has gravity. Computation moves to where the data is, caches near the users absorb repeated downloads, as Part 48 will show, and the cost of leaving is one reason customers stay.",
+   "zh": "最后，是账单上让人吃惊的那一行。<bookmark mark='a'/>把数据搬进云是免费的。把它搬出去到互联网上，按亚马逊2024年的标价，每 GB 要9美分，在批量折扣之前大约每 TB 90美元。可用区之间的流量也要计费。<bookmark mark='b'/>对比一下存储它的价格：每 GB 每月2.3美分。把一个对象发送出去一次的花费，相当于把它保存将近4个月。<bookmark mark='c'/>我们那30本小说，25 MB，下载一次大约花费五分之一美分：对一个读者无害，对几百万个读者就不是了。<bookmark mark='d'/>所以数据有引力。计算移动到数据所在的地方，靠近用户的缓存吸收重复的下载，正如第48部分将会展示的；而离开的代价，也是客户留下来的一个原因。"
+  },
+  "6379e82f7fb9": {
+   "scene": "Iac",
+   "en": "Chapter ten. Infrastructure as code.",
+   "zh": "第十章：基础设施即代码。"
+  },
+  "1e2c9afb0e0c": {
+   "scene": "Iac",
+   "en": "Cloud resources can be made by hand, by clicking through a web console. <bookmark mark='a'/> A network, then a subnet inside it, then a database. It works once. But nobody can say afterwards who clicked what, and nobody can build the same thing again in another region. <bookmark mark='b'/> Infrastructure as code writes the desired state down instead: every network, database and service, with its settings and the other resources it uses, in a file. <bookmark mark='c'/> The file lives in version control, so a change to production is a commit: it gets a plan, a review and an apply, like any other change to code. <bookmark mark='d'/> Mark Burgess's CFEngine did this for the configuration of machines in 1993; CloudFormation in 2011 and Terraform in 2014 did it for whole clouds.",
+   "zh": "云资源可以手工创建，在网页控制台里一路点下去。<bookmark mark='a'/>先建一个网络，再在里面建一个子网，然后是一个数据库。这样做一次是行得通的。但事后没人说得清是谁点了什么，也没人能在另一个区域把同样的东西再建一遍。<bookmark mark='b'/>基础设施即代码则把期望的状态写下来：每一个网络、数据库和服务，连同它的设置和它用到的其他资源，都写在一个文件里。<bookmark mark='c'/>这个文件放在版本控制里，所以对生产环境的一次修改就是一次提交：它要经过计划、评审和应用，和任何其他代码修改一样。<bookmark mark='d'/>1993年，Mark Burgess 的 CFEngine 为机器的配置做到了这一点；2011年的 CloudFormation 和2014年的 Terraform，则为整片云做到了这一点。"
+  },
+  "c65f6f6816c0": {
+   "scene": "Iac",
+   "en": "How does a tool turn that file into a cloud? It compares two descriptions. <bookmark mark='a'/> On one side, what exists: Terraform keeps a state file of everything it has made, and refreshes it from the cloud's own interface. On the other, what the code declares. <bookmark mark='b'/> Match them by name. The network and the subnet agree, so nothing happens to them. The database exists but is too small, so it is updated. The queue and the service are declared but missing, so they are created. And the old cache exists but is no longer declared, so it is destroyed. <bookmark mark='c'/> That diff is the plan: two to add, one to change, one to destroy. It is printed and reviewed before anything is touched, and a line that says destroy next to a database is exactly what reviewers look for.",
+   "zh": "工具是怎样把那个文件变成一片云的？它比较两份描述。<bookmark mark='a'/>一边是现有的东西：Terraform 维护一个状态文件，记录它创建过的一切，并通过云自己的接口刷新它。另一边是代码声明的东西。<bookmark mark='b'/>按名字把它们一一配对。网络和子网两边一致，所以它们什么都不会发生。数据库存在，但太小了，所以要更新它。队列和服务已经声明了，却不存在，所以要创建它们。而旧的缓存存在，却不再被声明，所以要销毁它。<bookmark mark='c'/>这份差异就是计划：新增两个，修改一个，销毁一个。在动任何东西之前，它会被打印出来并经过评审；而在数据库旁边写着“销毁”的那一行，正是评审者要找的东西。"
+  },
+  "803ba5f55043": {
+   "scene": "Iac",
+   "en": "The plan says what to do, but not in what order. <bookmark mark='a'/> The references in the code say that: the service uses the subnet, the database and the queue; the database lives in the subnet; the subnet in the network. They form a directed acyclic graph. <bookmark mark='b'/> The tool applies changes in topological order, the algorithm of Part 18, so that nothing is created before what it needs. First the database grows; then the queue appears; only then the service, which uses both. Destroys go the other way, each resource before what it uses, and our planner runs them after everything else, so the old cache goes last. <bookmark mark='c'/> And because the database and the queue do not depend on each other, they can be changed at the same time. It is Part 41's build system again, with machines and networks where the files were.",
+   "zh": "计划说明了要做什么，却没说按什么次序做。<bookmark mark='a'/>次序由代码里的引用给出：服务用到子网、数据库和队列；数据库位于子网中；子网位于网络中。它们构成一个有向无环图。<bookmark mark='b'/>工具按拓扑顺序应用这些修改，用的就是第18部分的算法，这样任何东西都不会在它所需要的东西之前被创建。先是数据库扩容；然后队列出现；最后才是同时用到这两者的服务。销毁则反过来，每个资源都在它所用的东西之前销毁；我们的规划器把销毁放在所有其他操作之后执行，所以旧缓存最后才去掉。<bookmark mark='c'/>而且，因为数据库和队列彼此不依赖，它们可以同时修改。这又是第41部分的构建系统，只是原来是文件的地方，换成了机器和网络。"
+  },
+  "51740347f0f6": {
+   "scene": "Iac",
+   "en": "Code and cloud agree only until someone changes the cloud directly. <bookmark mark='a'/> After apply, all three agree: the code, the state file and the real database. <bookmark mark='b'/> Then, during an incident, someone makes the database bigger by hand, in the console. The cloud has drifted from the code, and nothing says so. <bookmark mark='c'/> The next plan refreshes its state from the cloud, finds the difference, and proposes to undo it: a change nobody wrote. <bookmark mark='d'/> Someone must decide: apply, and put it back, or edit the code to keep it. <bookmark mark='e'/> Teams run the plan on a schedule and alert on any difference. A Kubernetes controller, from chapter four, is the same idea run without stopping: it reconciles the level, again and again, and drift lasts seconds.",
+   "zh": "代码和云保持一致，只到有人直接修改云为止。<bookmark mark='a'/>应用之后，三者是一致的：代码、状态文件，还有真实的数据库。<bookmark mark='b'/>然后，在一次事故中，有人在控制台里手工把数据库调大了。云已经偏离了代码，发生了漂移，而没有任何东西报告这一点。<bookmark mark='c'/>下一次计划从云中刷新它的状态，发现了差异，并提议把它撤销：一项没人写过的修改。<bookmark mark='d'/>必须有人做决定：要么应用，把它改回去；要么修改代码，把它保留下来。<bookmark mark='e'/>团队会定时运行计划，一有差异就报警。第四章的 Kubernetes 控制器，就是同一个想法不停地运行：它对着当前的状态一遍又一遍地调和，漂移只会持续几秒钟。"
+  },
+  "9aec17d0618a": {
+   "scene": "Iac",
+   "en": "Drift has a deeper cure: never change a running machine at all. <bookmark mark='a'/> A server that is patched in place collects history. One got patch seven and an edit by hand; its twin got patch eight and a hotfix. Both are called web servers, and no two are the same: snowflakes, that nobody could build again. <bookmark mark='b'/> Immutable infrastructure bakes everything into an image, and every machine starts from it unchanged. <bookmark mark='c'/> To change anything, build a new image, start new machines from it, and retire the old ones, one at a time. To roll back, point at the old image again. <bookmark mark='d'/> Because images are content-addressed, as in chapter three and Part 41, a name means exactly one set of bytes, and every machine started from it is the same.",
+   "zh": "漂移还有一个更根本的治法：永远不去修改一台正在运行的机器。<bookmark mark='a'/>一台就地打补丁的服务器会积攒历史。一台打了第七号补丁，还被人手工改过；它的孪生兄弟打了第八号补丁和一个热修复。两台都叫 Web 服务器，却没有两台是一样的：它们是雪花服务器，谁也没法再建出一台来。<bookmark mark='b'/>不可变基础设施把一切都烘焙进一个镜像，每台机器都从它原样启动。<bookmark mark='c'/>要改任何东西，就构建一个新镜像，用它启动新机器，再把旧机器一台一台地退役。要回滚，就重新指向旧镜像。<bookmark mark='d'/>因为镜像是内容寻址的，就像第三章和第41部分那样，一个名字恰好对应一组字节，从它启动的每一台机器都是一样的。"
+  },
+  "672c56850a9e": {
+   "scene": "Tenancy",
+   "en": "Chapter eleven. Neighbours, regions and failure domains.",
+   "zh": "第十一章：邻居、区域与故障域。"
+  },
+  "820e079a9c04": {
+   "scene": "Tenancy",
+   "en": "A virtual machine gets its own cores and memory, but not everything on the chip is divided. <bookmark mark='a'/> Here two tenants share one processor. Each has two cores with private caches; the last-level cache and the memory bus are shared, and tenant A's working set fits. <bookmark mark='b'/> Then tenant B streams through gigabytes. Its lines push A's out of the shared cache, Part 9's misses return, and A slows down although A changed nothing: a noisy neighbour. <bookmark mark='c'/> Newer processors can divide these too. Intel's cache allocation technology gives each tenant its own ways of the cache, and memory bandwidth allocation limits its share of the bus.",
+   "zh": "一台虚拟机有自己的核心和内存，但芯片上并不是所有东西都被分开了。<bookmark mark='a'/>这里，两个租户共用一个处理器。每个租户有两个核心，带私有缓存；末级缓存和内存总线是共享的，而租户 A 的工作集放得下。<bookmark mark='b'/>接着，租户 B 流式地读过好几 GB 的数据。它的缓存行把 A 的缓存行挤出了共享缓存，第9部分的未命中又回来了，A 变慢了，尽管 A 什么都没改：这就是吵闹的邻居。<bookmark mark='c'/>更新的处理器也能把这些分开。Intel 的缓存分配技术给每个租户分配缓存中属于它自己的那几路，而内存带宽分配则限制它在总线上的份额。"
+  },
+  "1958088bbb7c": {
+   "scene": "Tenancy",
+   "en": "How does a cluster notice? <bookmark mark='a'/> Google's CPI-squared, described by Xiao Zhang and colleagues in 2013, watches each task's cycles per instruction, which climb when its data keeps missing the cache, and learns the usual value for each job on each kind of machine. <bookmark mark='b'/> When a task strays far above it, the system looks for the neighbour whose CPU use rose at the same moment, <bookmark mark='c'/> caps it, and the victim recovers. <bookmark mark='d'/> Variation is measurable: Jörg Schad and colleagues found in 2010 that the same EC2 instance type ran the same benchmark at different speeds, and in a fan-out, as Part 39 showed, variation becomes the tail.",
+   "zh": "集群怎么察觉到这一点？<bookmark mark='a'/>Google 的 CPI 平方，由 Xiao Zhang 和同事在2013年描述，它监视每个任务的每条指令周期数，当任务的数据不断在缓存中未命中时，这个值就会上升；它还学习每个作业在每种机器上的通常值。<bookmark mark='b'/>当一个任务远远高出这个值时，系统就去找那个在同一时刻 CPU 使用率上升的邻居，<bookmark mark='c'/>给它设上限，受害者就恢复了。<bookmark mark='d'/>这种差异是可以测量的：Jörg Schad 和同事在2010年发现，同一种 EC2 实例类型运行同一个基准测试，速度却各不相同；而在扇出中，正如第39部分所示，差异就变成了长尾。"
+  },
+  "1b1c56b83d02": {
+   "scene": "Tenancy",
+   "en": "A shared cache also leaks. <bookmark mark='a'/> In prime and probe, the attacker fills every set of the cache with its own lines. <bookmark mark='b'/> Then the victim runs. A table lookup at an address that depends on a secret evicts one of the attacker's lines. <bookmark mark='c'/> The attacker times reading its lines again: one set is slow, so it knows where the victim looked. <bookmark mark='d'/> In 2006 Dag Arne Osvik, Adi Shamir and Eran Tromer recovered AES keys this way, and in 2009 Thomas Ristenpart and colleagues showed how to place a virtual machine beside a chosen target in Amazon's cloud. Defences keep tenants off shared cores, partition caches, and use code whose memory accesses do not depend on secrets.",
+   "zh": "共享的缓存还会泄露信息。<bookmark mark='a'/>在“填充与探测”（prime and probe）中，攻击者用自己的缓存行把缓存的每一组都填满。<bookmark mark='b'/>然后受害者运行。一次查表，查的地址取决于一个秘密，它把攻击者的一个缓存行逐出了。<bookmark mark='c'/>攻击者再读一遍自己的缓存行，并且计时：有一组很慢，于是它就知道受害者查的是哪里。<bookmark mark='d'/>2006年，Dag Arne Osvik、Adi Shamir 和 Eran Tromer 用这种方法恢复出了 AES 密钥；2009年，Thomas Ristenpart 和同事展示了如何在 Amazon 的云中，把一台虚拟机放到选定的目标旁边。防御的办法是：不让租户共用核心，对缓存进行分区，以及使用内存访问不依赖于秘密的代码。"
+  },
+  "d8ea0a1d706b": {
+   "scene": "Tenancy",
+   "en": "Clouds are built around failures that come together. <bookmark mark='a'/> A region is a metropolitan area with several availability zones. Amazon describes its zones as separate buildings with their own power and networking, many kilometres apart but within a hundred kilometres of each other: far enough not to fail together, near enough to replicate synchronously. <bookmark mark='b'/> Each level is a failure domain, a set of things that fail together. <bookmark mark='c'/> A host loses a disk, or panics. <bookmark mark='d'/> A rack shares a power feed and a switch. <bookmark mark='e'/> A zone can lose power or cooling. <bookmark mark='f'/> And in February 2017 a mistyped command took Amazon S3 in Northern Virginia down for about four hours.",
+   "zh": "云是围绕会一起发生的故障构建起来的。<bookmark mark='a'/>一个区域是一个都市圈，里面有几个可用区。Amazon 把它的可用区描述为各自独立的建筑，有自己的电力和网络，彼此相距许多公里，但都在100公里之内：远到不会一起出故障，近到可以同步复制。<bookmark mark='b'/>每一层都是一个故障域，也就是一组会一起出故障的东西。<bookmark mark='c'/>一台主机会坏掉一块磁盘，或者内核崩溃。<bookmark mark='d'/>一个机架共用一路供电和一台交换机。<bookmark mark='e'/>一个可用区可能断电，或者失去冷却。<bookmark mark='f'/>而在2017年2月，一条输错的命令让北弗吉尼亚的 Amazon S3 宕机了大约4个小时。"
+  },
+  "39e136932e83": {
+   "scene": "Tenancy",
+   "en": "Placement turns failure domains into availability. <bookmark mark='a'/> Chapter eight's code cuts an object into fourteen fragments, any ten of which rebuild it. Put two in each of seven racks. <bookmark mark='b'/> One rack fails: twelve remain. A second: ten, still enough. Only a third rack down at once loses the object; with all fourteen in one rack, the first would. <bookmark mark='c'/> The same rule protects Part 38's Raft. Five replicas spread two, two and one across three zones survive the loss of any zone: three of five is still a majority. <bookmark mark='d'/> Spread three and two across two zones, and losing the larger leaves two: no majority. <bookmark mark='e'/> Schedulers call this a spread constraint; it pulls against chapter five's packing.",
+   "zh": "放置把故障域变成了可用性。<bookmark mark='a'/>第八章的编码把一个对象切成14个分片，其中任意10个就能重建它。在7个机架里各放两个。<bookmark mark='b'/>一个机架坏了：还剩12个。第二个：剩10个，仍然够用。只有同时坏掉第三个机架，才会丢失这个对象；而如果14个分片都在同一个机架里，第一次故障就会丢失它。<bookmark mark='c'/>同样的规则也保护着第38部分的 Raft。5个副本按两个、两个、一个分布在3个可用区里，失去任何一个可用区都能挺过去：5个里剩3个，仍然是多数派。<bookmark mark='d'/>如果按三个和两个分布在两个可用区里，失去较大的那个就只剩两个：没有多数派。<bookmark mark='e'/>调度器把这叫作分散约束；它和第五章的装箱是相互拉扯的。"
+  },
+  "68fb2be51ed3": {
+   "scene": "Tenancy",
+   "en": "Regions are also legal boundaries. <bookmark mark='a'/> Under the European Union's General Data Protection Regulation, applied since 2018, personal data may leave the European Economic Area only for a country judged adequate, or under specific safeguards. <bookmark mark='b'/> European data moves freely between European regions; a copy in the United States needs a legal basis, and in 2020 the Court of Justice of the European Union, in the case called Schrems Two, struck down the Privacy Shield framework. <bookmark mark='c'/> Light in fibre covers about two hundred kilometres a millisecond, so a write confirmed across an ocean waits tens of milliseconds. Replication between regions is usually asynchronous, and a regional failover can lose the last seconds of writes.",
+   "zh": "区域也是法律上的边界。<bookmark mark='a'/>根据欧盟自2018年起施行的《通用数据保护条例》，个人数据只有去往被认定为保护充分的国家，或者在特定的保障措施之下，才能离开欧洲经济区。<bookmark mark='b'/>欧洲的数据可以在欧洲的各个区域之间自由流动；而放在美国的一份副本就需要法律依据；2020年，欧盟法院在被称为 Schrems II 的案件中，推翻了“隐私盾”框架。<bookmark mark='c'/>光在光纤中每毫秒大约传播200公里，所以一次要跨越大洋才能确认的写入，要等几十毫秒。区域之间的复制通常是异步的，一次区域级的故障转移，可能会丢掉最后几秒的写入。"
+  },
+  "93f770458a56": {
+   "scene": "Bill",
+   "en": "Chapter twelve. Cost, carbon, and the Job's bill.",
+   "zh": "第十二章：成本、碳排放，以及那项任务的账单。"
+  },
+  "10b52f5e5b81": {
+   "scene": "Bill",
+   "en": "When is paying per request cheaper than renting a machine? <bookmark mark='a'/> Take a function that runs for 100 milliseconds with half a gigabyte of memory. At Amazon's list prices, a million calls cost about 1.03 dollars, so its monthly bill grows in proportion to the traffic. <bookmark mark='b'/> A server costs the same every month whether it is busy or idle, here one small instance able to handle two hundred requests a second. <bookmark mark='c'/> The lines cross near 26 requests a second of steady traffic. Below that, and for anything bursty or rare, functions win; above it, a machine kept busy is cheaper, often by a wide margin. The answer depends on utilization, which is chapter five's bin packing again.",
+   "zh": "什么时候按请求付费，比租一台机器更便宜？<bookmark mark='a'/>拿一个运行100毫秒、带半 GB 内存的函数来说。按 Amazon 的标价，100万次调用大约花费1.03美元，所以它每个月的账单与流量成正比地增长。<bookmark mark='b'/>一台服务器无论忙闲，每个月的费用都一样，这里是一台小型实例，每秒能处理200个请求。<bookmark mark='c'/>两条线在每秒大约26个请求的稳定流量处相交。低于这个值，以及任何突发的或很少出现的流量，函数更划算；高于它，一台保持繁忙的机器更便宜，往往便宜得多。答案取决于利用率，这又是第五章的装箱问题。"
+  },
+  "d6041195fc5b": {
+   "scene": "Bill",
+   "en": "Providers sell their spare capacity cheaply, as spot instances, on the condition that they can take it back at short notice. <bookmark mark='a'/> We modelled a ten-hour batch job on spot machines priced at a typical discount, interrupted on average once every ten hours. <bookmark mark='b'/> Without checkpoints, every interruption sends the job back to the start: it takes 17 hours on average, and costs more than half of the on-demand price anyway. <bookmark mark='c'/> With a checkpoint every half hour or so, it finishes in under eleven hours for just over a third of the on-demand cost. <bookmark mark='d'/> The best interval balances the cost of checkpointing against the work lost on interruption; John Young's rule of 1974, the square root of twice the checkpoint cost over the failure rate, gives 38 minutes, close to what the simulation finds.",
+   "zh": "云服务商把闲置的容量便宜地卖出去，叫作竞价实例，条件是它们可以在很短的通知之后把容量收回。<bookmark mark='a'/>我们模拟了一个在竞价机器上运行的10小时批处理作业，价格按典型的折扣计算，平均每10小时被中断一次。<bookmark mark='b'/>没有检查点时，每次中断都会让作业回到起点：它平均要花17小时，而且无论如何都要花掉按需价格的一半以上。<bookmark mark='c'/>每隔半小时左右做一次检查点，它不到11小时就能完成，费用只比按需价格的三分之一多一点。<bookmark mark='d'/>最佳的间隔，要在做检查点的代价和中断时丢失的工作之间取得平衡；John Young 1974年的规则，即两倍的检查点代价除以故障率，再开平方，给出38分钟，接近模拟找到的结果。"
+  },
+  "bd79656db8ed": {
+   "scene": "Bill",
+   "en": "The ledger gets row sixteen. <bookmark mark='a'/> The Job split across sixteen functions in the cloud: less than a tenth of a second of wall-clock time, if the text is already waiting in storage and the functions are warm, and a bill of about three thousandths of a cent. <bookmark mark='b'/> For the first time the ledger needs a second column. A design is now judged by what it costs to run, as well as how fast it runs.",
+   "zh": "账本添上了第16行。<bookmark mark='a'/>那项任务拆分到云中的16个函数上：如果文本已经在存储里等着，函数也已经预热，墙钟时间不到十分之一秒，账单大约是千分之三美分。<bookmark mark='b'/>账本第一次需要第二列。现在评判一个设计，除了看它跑得多快，还要看它运行起来花多少钱。"
+  },
+  "d8953b8e07dc": {
+   "scene": "Bill",
+   "en": "Behind every bill is energy. <bookmark mark='a'/> The International Energy Agency estimated that datacentres used roughly one to one and a half percent of the world's electricity in 2022, and the growth of AI is pushing that up. <bookmark mark='b'/> Efficiency starts with the building: power usage effectiveness is total power divided by the power that reaches the computers, and the best fleets report about one point one. <bookmark mark='c'/> The grid's carbon intensity changes through the day, so flexible work, a nightly batch job, can be moved to the hours or the regions where the grid is cleanest. <bookmark mark='d'/> And the cheapest energy is the computation you never run: every row of the ledger that made the Job faster also made it smaller.",
+   "zh": "每一份账单的背后都是能源。<bookmark mark='a'/>国际能源署估计，2022年数据中心大约用掉了全世界电力的1%到1.5%，而 AI 的增长正在把这个比例推高。<bookmark mark='b'/>效率从建筑本身开始：电能使用效率是总功率除以到达计算机的功率，最好的机群报告的数值大约是1.1。<bookmark mark='c'/>电网的碳强度在一天之中不断变化，所以灵活的工作，比如每晚的批处理作业，可以挪到电网最清洁的时段或区域去做。<bookmark mark='d'/>而最便宜的能源，是你从来没有运行的计算：账本上每一行让那项任务变快的改进，也都让它变小了。"
+  },
+  "a9278c67b76d": {
+   "scene": "Frontier",
+   "en": "Chapter thirteen, the frontier. How close to optimal can a cloud run?",
+   "zh": "第十三章，前沿：一片云能运行得离最优多近？"
+  },
+  "75604bc57f59": {
+   "scene": "Frontier",
+   "en": "Chapter eight derived durability from independent failures. The frontier is what that assumption hides. <bookmark mark='a'/> A ten-plus-four Reed–Solomon code, with fragments failing independently, gives about 13 nines a year. <bookmark mark='b'/> Now let whole racks fail instead, each about once in twenty years, taking a day to repair. With two fragments in each of seven racks, the data is lost only when three racks are down at once, and durability falls to about 7 nines. <bookmark mark='c'/> Put every fragment in one rack, and a single rack failure loses the data: barely more than one nine. <bookmark mark='d'/> Real durability is decided by correlated failures, a power feed, a firmware update pushed everywhere, a bug in every replica at once. Measuring and modelling those is still an open problem.",
+   "zh": "第八章在故障相互独立的前提下推导出了持久性。前沿就是这个假设所掩盖的东西。<bookmark mark='a'/>一个10加4的 Reed–Solomon 码，在分片各自独立出故障的情况下，每年大约能达到13个九。<bookmark mark='b'/>现在改成整个机架出故障，每个机架大约20年坏一次，修复要一天。在7个机架里各放两个分片，只有当3个机架同时宕机时，数据才会丢失，持久性降到大约7个九。<bookmark mark='c'/>把所有分片都放进一个机架，一次机架故障就会丢失数据：只比一个九多一点点。<bookmark mark='d'/>真实的持久性是由相关故障决定的：一路供电，一次推送到所有地方的固件更新，一个同时存在于每个副本里的 bug。测量这些故障并为它们建模，仍然是一个开放问题。"
+  },
+  "deb50bed309f": {
+   "scene": "Frontier",
+   "en": "Chapter five's heuristics show how much knowing the future is worth. <bookmark mark='a'/> First fit decreasing, which sorts every item before packing, came within 1 percent of the optimum on our instances; next fit, which never looks back, 24 percent. But a real scheduler is online: requests arrive one at a time, and nobody says how long a virtual machine will live. <bookmark mark='b'/> A new line of theory, learning-augmented algorithms, starting with Thodoris Lykouris and Sergei Vassilvitskii in 2018, gives an algorithm a model's predictions and proves two things: that it is near optimal when the predictions are right, and never much worse than the classical guarantee when they are wrong. <bookmark mark='c'/> In practice, schedulers now predict how long each virtual machine will run, so that machines can be packed with work that finishes together, and be emptied, repaired or switched off.",
+   "zh": "第五章的启发式算法，显示了预知未来值多少。<bookmark mark='a'/>降序首次适应在装箱之前先把所有物品排好序，在我们的实例上，它与最优解的差距在1%以内；下次适应从不回头看，差距是24%。但真实的调度器是在线的：请求一个接一个地到达，也没人告诉你一台虚拟机会存活多久。<bookmark mark='b'/>一条新的理论路线，即学习增强算法，始于2018年的 Thodoris Lykouris 和 Sergei Vassilvitskii，它给算法提供一个模型的预测，并证明两件事：预测正确时，它接近最优；预测错误时，它也绝不会比经典的保证差很多。<bookmark mark='c'/>实践中，调度器现在会预测每台虚拟机会运行多久，这样就能把会一起结束的工作装进同一批机器，再把这些机器腾空、修理或者关掉。"
+  },
+  "64b48e729558": {
+   "scene": "Frontier",
+   "en": "Isolation is the cloud's other frontier. <bookmark mark='a'/> Confidential computing has the processor encrypt a virtual machine's memory with keys the hypervisor never sees, so that a tenant need not trust the provider's own software, and can check by remote attestation what it is running on. <bookmark mark='b'/> Against that stand side channels: tenants sharing a core, a cache or memory bandwidth can measure each other, as Parts 8 and 9 showed, and every defence costs speed. <bookmark mark='c'/> And hardware is coming apart: memory and accelerators pooled across a rack, which wastes less but adds new latencies and new ways to fail. <bookmark mark='d'/> Isolation that is provable, cheap and complete at the same time remains open. Verified kernels exist, which Part 54 will meet, and fast hypervisors exist, but not yet both at once at the scale of a cloud.",
+   "zh": "隔离是云的另一个前沿。<bookmark mark='a'/>机密计算让处理器用虚拟机监控程序永远看不到的密钥，来加密虚拟机的内存，这样租户就不必信任云服务商自己的软件，还能通过远程证明，检查自己运行在什么东西上面。<bookmark mark='b'/>与之对立的是侧信道：共用一个核心、一块缓存或者内存带宽的租户，能够互相测量，正如第8和第9部分所示，而每一种防御都要付出速度的代价。<bookmark mark='c'/>而且硬件正在被拆开：内存和加速器在整个机架的范围内池化，这样浪费更少，却带来了新的延迟和新的故障方式。<bookmark mark='d'/>同时做到可证明、低成本而又完整的隔离，仍然是一个开放问题。经过验证的内核已经有了，第54部分会讲到；快速的虚拟机监控程序也有了；但在云的规模上，还没有二者兼得的。"
+  },
+  "d130c7b82af6": {
+   "scene": "Frontier",
+   "en": "Open problems. <bookmark mark='a'/> Durability models calibrated on real correlated failures, and data placements that provably limit them. <bookmark mark='b'/> Online packing in several dimensions when jobs also leave, with and without predictions. <bookmark mark='c'/> Autoscaling controllers for services that are delayed, noisy and coupled to one another, with guarantees of stability. <bookmark mark='d'/> And carbon-optimal scheduling: placing work in time and space to minimize emissions while meeting deadlines. <bookmark mark='e'/> This part's research problem asks for an online algorithm that packs jobs of unknown lifetime into machines with several resources, using predictions, near optimal when they are accurate and robust when they are not.",
+   "zh": "开放问题。<bookmark mark='a'/>用真实的相关故障校准过的持久性模型，以及能被证明可以限制这些故障的数据放置方案。<bookmark mark='b'/>在作业也会离开的情况下，多个维度上的在线装箱，无论有没有预测。<bookmark mark='c'/>为有延迟、有噪声、彼此耦合的服务设计的自动伸缩控制器，并且带有稳定性的保证。<bookmark mark='d'/>以及碳最优的调度：在时间和空间上安排工作，在满足截止期限的同时，让排放最小。<bookmark mark='e'/>这一部分的研究题，要求一个在线算法，利用预测，把寿命未知的作业装进具有多种资源的机器里，预测准确时接近最优，预测不准时依然稳健。"
+  },
+  "1f42e2fce274": {
+   "scene": "Outro",
+   "en": "What we built in this part. Control loops that compare what should be with what is and close the gap, and stay correct when events are lost. Scheduling as bin packing, NP-hard, with heuristics that come within a few percent of optimal when they can sort the work first. Autoscalers as feedback controllers, which settle or oscillate depending on their gain and their delay, and Erlang's formula for how many servers a queue needs. Durability derived from a Markov chain, and the correlated failures that decide it in practice. And a bill for everything. One idea runs through it: the cloud is the series' ideas at the scale of buildings, with a price on every decision.",
+   "zh": "这一部分我们搭建了什么。控制回路：比较应有的状态和现有的状态，弥合两者的差距，并且在事件丢失时依然正确。调度即装箱，它是 NP 困难的，而那些能先把工作排好序的启发式算法，离最优只差几个百分点。自动伸缩器即反馈控制器，它是趋于稳定还是来回振荡，取决于它的增益和它的延迟；还有爱尔朗（Erlang）公式，告诉你一个队列需要多少台服务器。从马尔可夫链推导出的持久性，以及在实践中决定持久性的相关故障。还有一份账单，涵盖一切。一个想法贯穿始终：云就是这个系列的种种想法放大到建筑物的规模，而每一个决定都有价格。"
+  },
+  "e23974a0b995": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 46 builds logs, streams and warehouses on this infrastructure. Part 47 runs a search engine across thousands of machines. Parts 48 and 49 design whole systems from load balancers, caches and queues. Part 50 keeps them running, with service-level objectives and capacity plans. And Part 60 opens the accelerators that now fill the datacentre.",
+   "zh": "它们会在哪里再出现。第46部分在这套基础设施上构建日志、流和数据仓库。第47部分在成千上万台机器上运行一个搜索引擎。第48和第49部分用负载均衡器、缓存和队列设计完整的系统。第50部分让它们持续运行，靠的是服务等级目标和容量规划。而第60部分会打开如今塞满数据中心的加速器。"
+  },
+  "df64295b28de": {
+   "scene": "Outro",
+   "en": "In practice. Declare the state you want in code, let controllers converge on it, and never fix production by hand. Size containers from measurements, and pack them by every resource, not just processor time. Scale with modest gain and short measurement delays, quickly up and slowly down. Spread replicas across zones and racks, and test restoring your data, not just backing it up. And tag every resource with its owner, run batch work on spot capacity with checkpoints, and watch the cost of moving data out.",
+   "zh": "实践中。用代码声明你想要的状态，让控制器向它收敛，永远不要手工修补生产环境。根据测量结果确定容器的大小，并按每一种资源来装箱，而不只是处理器时间。伸缩时用适中的增益和较短的测量延迟，扩容要快，缩容要慢。把副本分散到各个可用区和机架上，并且要测试数据的恢复，而不只是备份。还有，给每个资源打上它的所有者标签，用带检查点的竞价容量运行批处理工作，并留意把数据移出去的成本。"
+  },
+  "b62e4817fd00": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: give our reconciler a second kind of resource that depends on the first, and show that it converges in the right order after random deletions. The last, marked with a star, is a research problem: packing jobs whose lifetimes are unknown, helped by predictions that may be wrong.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是一道动手题：给我们的调和器加上第二种资源，它依赖于第一种，并证明在随机删除之后，它能按正确的次序收敛。最后一道，标着星号，是一道研究题：为寿命未知的作业装箱，借助可能出错的预测。"
+  },
+  "2b61f45b6e12": {
+   "scene": "Outro",
+   "en": "Next time, Part 46: logs, streams and warehouses. Every company's data ends up in an append-only log and a column-oriented warehouse, with stream processors in between computing answers continuously, and the hard part is time: events that arrive late, out of order and more than once. The Job becomes a live top twenty over a stream of novels.",
+   "zh": "下一次，第46部分：日志、流与数据仓库。每家公司的数据最后都会进入一个只追加的日志和一个列式的数据仓库，中间是流处理器，持续地计算答案；而难点在于时间：事件会迟到，会乱序，还会不止一次地到达。那项任务变成了在一条小说流上实时更新的前20名。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文，列在屏幕上，也在笔记里。感谢收看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 45, The Cloud",
+ "chapters_en": {
+  "Hook": "Computing as a utility",
+  "Warehouse": "1. The warehouse-scale computer",
+  "Microvm": "2. Virtual machines, shrunk",
+  "Containers": "3. Containers",
+  "Orchestration": "4. Orchestration and reconciliation",
+  "Packing": "5. Scheduling as bin packing",
+  "Autoscale": "6. Autoscaling as control",
+  "Serverless": "7. Serverless",
+  "Storage": "8. Object storage and eleven nines",
+  "Network": "9. Cloud networking",
+  "Iac": "10. Infrastructure as code",
+  "Tenancy": "11. Neighbours, regions and failure domains",
+  "Bill": "12. Cost, carbon, and the Job's bill",
+  "Frontier": "13. Frontier: scheduling, isolation and energy",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
