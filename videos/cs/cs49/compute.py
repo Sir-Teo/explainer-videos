@@ -13,7 +13,7 @@ Items:
     bloom       a Bloom filter at 9.6 bits per URL: measured false positives against theory
     dispatch    greedy nearest-driver against batched assignment: mean and worst pickup distance
     abr         rate-based, buffer-based and RobustMPC bitrate adaptation on bandwidth traces
-    ledger      double-entry payments with and without idempotency keys: double charges, the zero-sum invariant
+    payments    double-entry payments with and without idempotency keys: double charges, the zero-sum invariant
     ot          operational transformation: convergence with and without transformation
     rga         collaborative editing with Part 39's sequence CRDT: convergence across three users
     quorum      Dynamo-style quorums (N, R, W): probability of a stale read (Part 39's PBS model)
@@ -61,7 +61,7 @@ def compute_abr() -> dict:
     return C.abr_experiment()
 
 
-def compute_ledger() -> dict:
+def compute_payments() -> dict:
     from explainer.cs.design import cases as C
     return {"idempotent": C.ledger(), "naive": C.ledger(idempotent=False)}
 

@@ -60,11 +60,11 @@ class Video(VoiceoverScene):
         hour_top = lad[-1] * 3600 / 8 / 1000
         hour_all = sum(lad) * 3600 / 8 / 1000
         nap = VGroup(
-            wrapped_label(rf"an hour watched at the top rung: \ {lad[-1]:g} Mbit/s $\times$ 3600 s $=$ "
-                          rf"\textbf{{{hour_top:.1f} GB}} of transfer", 5.4, font_size=19, color=HEAD),
+            wrapped_label(rf"an hour watched at the top rung: \ {lad[-1]:g} Mbit/s $\times$ 3600 s $\div$ 8 $=$ "
+                          rf"\textbf{{{hour_top:.1f} GB}} of transfer", 12.4, font_size=21, color=HEAD),
             wrapped_label(rf"an hour stored at every rung: \ {sum(lad):g} Mbit/s in all $=$ "
-                          rf"\textbf{{{hour_all:.1f} GB}}", 5.4, font_size=19, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(manifest, DOWN, buff=0.45).align_to(manifest, LEFT)
+                          rf"\textbf{{{hour_all:.1f} GB}}", 12.4, font_size=21, color=WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45).to_edge(LEFT, buff=0.6)
         ill = note(r"ladder typical, \ illustrative", font_size=16).next_to(names, UP, buff=0.15).align_to(names,
                                                                                                          LEFT)
         with self.voiceover(
@@ -172,7 +172,8 @@ class Video(VoiceoverScene):
                                                                                                          buff=0.6)
         bw = VMobject(color=GREY_C, stroke_width=1.5).set_points_as_corners(
             [top.ax.c2p(3 * i, min(v, 8)) for i, v in enumerate(a["trace"]) if 3 * i <= T])
-        bwl = label(r"bandwidth", font_size=15, color=GREY_B).next_to(top.ax.c2p(T, 7.5), LEFT, buff=0.05)
+        bwl = label(r"bandwidth", font_size=15, color=GREY_B).next_to(top.ax.c2p(T, 8), UP, buff=0.08).shift(
+            LEFT * 0.6)
 
         def rate(p, col):
             pts = [(t, r) for t, _, r in tl[p] if t <= T]
@@ -230,7 +231,7 @@ class Video(VoiceoverScene):
                                  ("rebuffer_s", r"stalled, \ seconds", lambda v: f"{v:.1f}"),
                                  ("switches", r"quality switches", lambda v: f"{v:.0f}")):
             ch = bar_chart([p[k][key] for k, _, _ in order], [n for _, n, _ in order], [c for _, _, c in order],
-                           height=2.2, bar_w=0.6, gap=0.35, fmt_=fmt_, font_size=18)
+                           height=3.0, bar_w=0.6, gap=0.35, fmt_=fmt_, font_size=18)
             t = label(title, font_size=19, color=WHITE).next_to(ch, UP, buff=0.3)
             charts.add(VGroup(t, ch))
         charts.arrange(RIGHT, buff=1.1, aligned_edge=DOWN).next_to(head, DOWN, buff=0.5)
@@ -243,7 +244,7 @@ class Video(VoiceoverScene):
             wrapped_label(r"Dobrian et al. \ (2011): \ of the quality metrics they measured, \ the time spent "
                           r"rebuffering hurt viewers' engagement most: \ the objective's weights are a product "
                           r"decision", 12.4, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(cap, DOWN, buff=0.45)
         with self.voiceover(
             "We ran all three on five synthetic ten-minute traces. <bookmark mark='a'/> Mean quality: rate-based two "
             "point three three megabits a second, buffer-based two point six six, MPC two point seven nine. "

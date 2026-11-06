@@ -187,7 +187,7 @@ class Dispatch(VoiceoverScene):
         greedy = VGroup(arc("A", "D1", NO), arc("B", "D2", NO))
         best = VGroup(arc("D2", "A", YES), arc("D1", "B", YES))
         gl = label(r"greedy: \ A arrives first and takes the nearest driver; \ B gets the far one", font_size=18,
-                   color=NO).next_to(road, DOWN, buff=1.05).set_x(-0.9)
+                   color=NO).next_to(road, DOWN, buff=1.35).set_x(-0.9)
         bl = label(r"batched: \ match both at once; \ the total is smaller", font_size=18, color=YES)
         bl.next_to(gl, DOWN, buff=0.12).align_to(gl, LEFT)
         ill = note(r"illustrative", font_size=16).next_to(road, RIGHT, buff=0.2)
@@ -244,9 +244,8 @@ class Dispatch(VoiceoverScene):
         short = ArcBetweenPoints(nodes["a"].get_center(), nodes["b"].get_center(), angle=-PI / 3, color=HEAD,
                                  stroke_width=3)
         sl = label(r"shortcut a--b: \ 6", font_size=17, color=HEAD).next_to(short, UP, buff=0.08)
-        lift = label(r"more important: \ higher", font_size=16, color=GREY_B).next_to(nodes["b"], RIGHT, buff=0.25)
-        ill = note(r"a five-node road, \ illustrative", font_size=16).next_to(VGroup(*nodes.values()), DOWN,
-                                                                             buff=0.6)
+        ill = note(r"a five-node road, \ illustrative; \ height = importance", font_size=16)
+        ill.next_to(VGroup(*nodes.values()), DOWN, buff=0.6)
         notes = VGroup(
             wrapped_label(r"preprocess: \ remove the least important junction, \ v; \ if the shortest path between "
                           r"its neighbours ran through it, \ add a shortcut with the same length", 5.3, font_size=19,
@@ -269,7 +268,7 @@ class Dispatch(VoiceoverScene):
             "Part 18 measured, such a query settles a small fraction of the junctions that plain Dijkstra would."
         ) as vo:
             self.play(FadeIn(head), Create(edges), *[FadeIn(n) for n in nodes.values()], FadeIn(nl), FadeIn(wl),
-                      FadeIn(ill), FadeIn(lift))
+                      FadeIn(ill))
             vo.wait_until("a")
             self.play(nodes["v"].animate.set_color(GREY_D), edges[1].animate.set_stroke(GREY_D, opacity=0.4),
                       edges[2].animate.set_stroke(GREY_D, opacity=0.4), FadeIn(notes[0]))
@@ -292,9 +291,9 @@ class Dispatch(VoiceoverScene):
         demand2 = A.plot(lambda q: 12 - 0.8 * q, x_range=[2.5, 10], color=NO)
         eq1 = Dot(A.c2p(5, 5), color=WHITE)
         eq2 = Dot(A.c2p(6.875, 6.5), color=NO)
-        sl = label(r"supply: \ drivers", font_size=17, color=DATA).next_to(A.c2p(10, 9), LEFT, buff=0.1)
-        dl = label(r"demand", font_size=17, color=HEAD).next_to(A.c2p(9.0, 1.8), UP, buff=0.1)
-        d2l = label(r"a concert ends", font_size=17, color=NO).next_to(A.c2p(9.5, 4.4), UP, buff=0.12)
+        sl = label(r"supply: \ drivers", font_size=17, color=DATA).next_to(A.c2p(8.5, 7.8), UL, buff=0.05)
+        dl = label(r"demand", font_size=17, color=HEAD).next_to(A.c2p(8, 2.6), DL, buff=0.05)
+        d2l = label(r"a concert ends", font_size=17, color=NO).next_to(A.c2p(4, 8.8), UR, buff=0.05)
         ill = note(r"curves illustrative", font_size=16).next_to(ax, DOWN, buff=0.1)
         notes = VGroup(
             wrapped_label(r"in each cell, \ every minute or two, \ compare open requests with free drivers", 5.6,
