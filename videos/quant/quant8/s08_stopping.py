@@ -31,7 +31,7 @@ class Stopping(VoiceoverScene):
                       r"\sup_{\tau}\mathbb{E}\,g_\tau", font_size=30, colors={r"\tau^* = \min\{n : U_n = g_n\}": KELLY}),
                 cmath(r"U(x)", r"=", r"\max\big(g(x),\ \tfrac12 U(x - 1) + \tfrac12 U(x + 1)\big)", font_size=30,
                       colors={r"U(x)": VALUE})]
-        whys = [why(r"backward induction: at each date, the better of stopping now and the value of waiting (Snell 1952)",
+        whys = [why(r"finite $N$, integrable adapted rewards, trivial $\mathcal F_0$: backward induction (Snell 1952)",
                     font_size=21),
                 why(r"so $U$ is a supermartingale above $g$, and by induction from $N$ the smallest one: the Snell "
                     r"envelope", font_size=21),
@@ -41,14 +41,7 @@ class Stopping(VoiceoverScene):
                     r"least the average of its neighbours: the least concave majorant (Dynkin 1963)", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Some decisions are not how much, but when: exercise an option, sell a house, stop searching. For the finite-horizon theorem, let g be an adapted integrable reward, and all stopping times be bounded by the deadline. Laurie Snell's answer, from 1952, is backward induction again: at the deadline you "
-            "must stop; before it, take the better of stopping now and the expected value of waiting. <bookmark mark='a'/> "
-            "That makes U a supermartingale, drifting down on average, lying above g, and induction from the deadline shows "
-            "it is the smallest such process. <bookmark mark='b'/> Stop the first time U touches g. Until then the maximum "
-            "picks the waiting term, so U stopped there is a martingale, and by optional sampling its value today is the "
-            "expected payoff of the rule: nothing does better. <bookmark mark='c'/> Now a case you can see: a symmetric random walk on the finite grid zero to twenty, stopped at the absorbing endpoints, with no fixed deadline. The value of waiting one step is the average of the "
-            "two neighbours, and the smallest function above g that is at least the average of its neighbours is the "
-            "smallest concave function above g."
+            """For the finite-horizon stopping theorem, take an integrable adapted reward, a finite deadline N, and trivial initial information. At N stop; earlier, compare stopping with conditional expected continuation. <bookmark mark='a'/> Backward induction makes Snell's U the smallest supermartingale above the reward. <bookmark mark='b'/> At the first contact U equals g. Until contact, the stopped U is a martingale. The stopping time is bounded by N, so optional sampling gives the optimal expected payoff. <bookmark mark='c'/> Our visible random-walk example instead has no fixed deadline: it lives on the finite grid zero to twenty and must stop at absorbing endpoints. Under these boundary and integrability conditions, its value is the least concave majorant of the reward on that grid."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")

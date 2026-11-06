@@ -29860,7 +29860,9 @@
     "Kenneth French's market excess return, monthly; each month's weight uses only earlier data, starting with July 1926--June 1936 and scored 1936-07 to 2020-12; CE: mean less $\\gamma/2$ times variance, annualized. The realized Sharpe ratio after 1936 was 0.52": "French美国市场超额收益，月度；每月仓位仅用先前数据，初始窗口为1926年7月至1936年6月，评分1936-07至2020-12；CE为年化均值减$\\gamma/2$乘方差。1936年后实现夏普0.52。",
     "$c^*$ needs the true $\\theta$; plug-in estimates of it are noisy, and comparisons of feasible scaling rules depend on the allowed class, loss and prior across $\\theta$ and $T$": "$c^*$需要真实$\\theta$；代入估计有噪声，可行缩放规则的比较依赖策略类、损失、先验以及$\\theta,T$范围。",
     "with fat tails, volatility clustering and a long horizon, the cost of estimation in Kelly growth needs a specified return model and estimation rule; the Gaussian calculation does not automatically extend": "肥尾、波动聚集和长期限下，凯利增长的估计代价需要具体收益模型和估计规则，不能自动沿用高斯计算。",
-    "finite-horizon policy gradient under differentiation/integrability conditions: sum action scores times true advantages": "可交换微分与期望且可积时，有限期限策略梯度为各期动作得分乘真实优势之和"
+    "finite-horizon policy gradient under differentiation/integrability conditions: sum action scores times true advantages": "可交换微分与期望且可积时，有限期限策略梯度为各期动作得分乘真实优势之和",
+    "20{,}000 monthly histories per dot; mean and variance both estimated. Inverse chi-squared moments adjust the formula (Problem 9).": "每点20{,}000条月度历史，均值和方差均估计；卡方逆矩给出修正公式（第9题）。",
+    "finite $N$, integrable adapted rewards, trivial $\\mathcal F_0$: backward induction (Snell 1952)": "有限$N$、适应可积奖励、平凡初始信息$\\mathcal F_0$：向后归纳（Snell 1952）"
   },
   "phrases": {
     "you owe": "你欠",

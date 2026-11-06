@@ -47,7 +47,7 @@ class Research(VoiceoverScene):
                 why(r"known-$\sigma$ expected CE: estimation costs $1/(2\gamma T)$; negative relative to cash when $T<1/\theta^2=6.25$ years at $\theta=0.4$")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.3, buff=0.46, edge=6.9)
         with self.voiceover(
-            "Start with one risky asset. <bookmark mark='a'/> The plug-in rule is Merton's fraction with the true mean excess return replaced by its sample average over T years. Keep the volatility known for now. <bookmark mark='b'/> Score any fraction by its certainty equivalent under the truth: the mean it earns, less half gamma times its variance. <bookmark mark='c'/> Substitute the estimate. Write theta for the Sharpe ratio. The expected square of the estimated mean is the true mean squared plus the sampling variance, and that is the whole story: the noise enters squared, so it never averages away. The expected certainty equivalent is theta squared minus one over T, over two gamma. <bookmark mark='d'/> The best possible is theta squared over two gamma. Estimation costs exactly one over two gamma T a year. With a Sharpe ratio of point four, one over theta squared is six and a quarter years: on less history than that, the plug-in has negative expected CE relative to cash. Here CE is the exact constant-fraction GBM annual CRRA certainty-equivalent log rate above cash. Averaging it across estimation samples does not maximize unconditional expected utility, and a negative CE score is not a claim of negative expected arithmetic profit."
+            """Start with one risky asset and known volatility. <bookmark mark='a'/> Replace the mean excess return in Merton's fraction by its Gaussian estimate from T years. <bookmark mark='b'/> CE is the exact annual CRRA certainty-equivalent log rate above cash for a constant fraction in GBM. Averaging this score across estimated means is a different criterion from unconditional expected utility. <bookmark mark='c'/> The estimated mean's second moment is the true mean squared plus sigma squared over T. At fixed T, averaging over estimates retains that variance penalty: expected CE is theta squared minus one over T, divided by twice gamma. <bookmark mark='d'/> The oracle score is theta squared over twice gamma, so estimation costs one over twice gamma T. At theta point four, the plug-in's expected CE is negative below six and a quarter years. Negative CE does not imply negative expected arithmetic profit."""
         ) as vo:
             step(0, run_time=0.15)
             vo.wait_until("a")
@@ -112,19 +112,11 @@ class Research(VoiceoverScene):
         fit_right(leg)
         cross = Dot(ax.c2p(1 / t["theta"] ** 2, 0), radius=0.08, color=BAD)
         cl = MathTex(r"T = 1/\theta^2", font_size=20, color=BAD).next_to(cross, DOWN + RIGHT, buff=0.08)
-        side = wrapped_label(r"20{,}000 simulated histories per dot, monthly returns, both moments estimated; the dot at "
-                             r"five years sits 1.5 points lower because $\mathbb E[\sigma^4/s^4] = 1.11$ on 60 months",
-                             3.4, 14, GREY_A).next_to(leg, DOWN, buff=0.3)
+        side = wrapped_label(r"20{,}000 monthly histories per dot; mean and variance both estimated. Inverse chi-squared moments adjust the formula (Problem 9).",
+                             3.4, 17, GREY_A).next_to(leg, DOWN, buff=0.3)
         fit_right(side)
         with self.voiceover(
-            "Here are the three rules against the length of the history. <bookmark mark='a'/> The plug-in, in red, "
-            "starts deep below zero, crosses it at six and a quarter years, and creeps towards the best possible from "
-            "below. <bookmark mark='b'/> Half the plug-in wins until about twenty years, then loses, because once the "
-            "estimate is good it bets too little. <bookmark mark='c'/> The optimal multiple, if we knew theta, beats "
-            "both everywhere. <bookmark mark='d'/> And the white dots are simulations, estimating the volatility as "
-            "well. They sit on the formula, except at five years, where the noise in the estimated variance costs "
-            "another point and a half; the exact correction uses the inverse moments of a chi-squared, and it is "
-            "the second qualifying problem."
+            """These curves use known volatility. <bookmark mark='a'/> The plug-in crosses zero at six and a quarter years, then approaches the oracle score from below. <bookmark mark='b'/> Half the plug-in beats full below about nineteen years, then gives up too much growth as estimation improves. <bookmark mark='c'/> The gold oracle uses the true Sharpe ratio and is at least as good as either fixed choice under this same expected-CE criterion. <bookmark mark='d'/> White dots estimate volatility as well as the mean. They are close to the known-volatility formula at long histories; at five years the extra variance-estimation penalty is visible. Under iid normal returns with enough observations, inverse chi-squared moments give the adjusted formula in problem nine."""
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(top), FadeIn(leg[0]))
             vo.wait_until("a")
@@ -158,14 +150,7 @@ class Research(VoiceoverScene):
                              r"the last column: the share of histories whose plug-in bet loses against cash", 12.0, 16,
                              GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The simulations in a table. <bookmark mark='a'/> At five years, the plug-in loses almost four percent a "
-            "year in expectation, and in thirty-nine percent of histories it does worse than cash. Half the plug-in "
-            "earns over three percent. <bookmark mark='b'/> By fifty years the plug-in is nearly level with the optimal "
-            "multiple, within a point of the best possible, and half has fallen behind. <bookmark mark='c'/> The tempting fix is to estimate the "
-            "optimal multiple from the same data. Look at the purple column: at five years it is better than the "
-            "plug-in, but it loses to plain half at every horizon up to twenty years. The estimated multiple is "
-            "itself noisy, and it is largest exactly when the edge has been overestimated. Shrinkage that must be "
-            "estimated is a much weaker tool than shrinkage you know."
+            f"""The table mixes two explicitly labelled calculations: estimated-variance simulations, and an analytic known-volatility oracle column. <bookmark mark='a'/> At five years the plug-in's mean CE is {100 * t['sims']['5']['plug']:.1f} percent, half's is {100 * t['sims']['5']['half']:.1f}, and {100 * t['sims']['5']['p_negative_ce']:.0f} percent of plug-in estimates have negative true CE. These are CE scores, not arithmetic profits. <bookmark mark='b'/> At fifty years the plug-in is close to the oracle column and half has fallen behind. <bookmark mark='c'/> The purple estimated scaling uses the same data. It increases with squared estimated Sharpe and is itself noisy. In these simulations it underperforms plain half at the displayed horizons through twenty years; knowing an oracle scaling is different from estimating it."""
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(foot))
             vo.wait_until("a")
