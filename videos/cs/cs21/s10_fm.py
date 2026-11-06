@@ -8,6 +8,7 @@ class FmIndex(VoiceoverScene):
     def construct(self):
         self.card()
         self.backward()
+        self.wavelet()
         self.measured()
 
     def card(self):
@@ -66,6 +67,64 @@ class FmIndex(VoiceoverScene):
                 box = box or nb
             vo.wait_until("e")
             self.play(FadeIn(res))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def wavelet(self):
+        head = label(r"Rank queries in compressed space: \ the wavelet tree", font_size=32).to_edge(UP, buff=0.3)
+        L = "annb$aa"
+
+        def bits(s, left):
+            return "".join("0" if c in left else "1" for c in s)
+        root_bits = bits(L, "$a")
+        lsub = "".join(c for c in L if c in "$a")
+        rsub = "".join(c for c in L if c in "bn")
+        nodes = VGroup(
+            VGroup(mono(L, 26, YES), mono(root_bits, 26, DATA), label(r"$\{\$, a\}$ \ vs \ $\{b, n\}$", font_size=18,
+                                                                     color=GREY_A)).arrange(DOWN, buff=0.1),
+            VGroup(mono(lsub, 24, WHITE), mono(bits(lsub, "$"), 24, DATA), label(r"$\$$ \ vs \ $a$", font_size=18,
+                                                                               color=GREY_A)).arrange(DOWN, buff=0.1),
+            VGroup(mono(rsub, 24, WHITE), mono(bits(rsub, "b"), 24, DATA), label(r"$b$ \ vs \ $n$", font_size=18,
+                                                                               color=GREY_A)).arrange(DOWN, buff=0.1),
+        )
+        nodes[0].move_to(UP * 1.4 + LEFT * 2.6)
+        nodes[1].move_to(DOWN * 0.6 + LEFT * 4.4)
+        nodes[2].move_to(DOWN * 0.6 + LEFT * 0.8)
+        edges = VGroup(Line(nodes[0].get_bottom(), nodes[1].get_top(), color=GREY_B),
+                       Line(nodes[0].get_bottom(), nodes[2].get_top(), color=GREY_B))
+        side = VGroup(
+            label(r"split the alphabet in half; \\ one bit per character says which half", font_size=22, color=WHITE),
+            label(r"recurse on each half: \\ $\log_2 \sigma$ levels of bit vectors", font_size=22, color=WHITE),
+            label(r"$\mathrm{rank}_n(L, i)$: \ a binary rank at each level, \\ following $n$ down", font_size=22,
+                  color=LAM),
+            label(r"binary rank in $O(1)$ with $o(n)$ extra bits \\ (Jacobson, \ 1989)", font_size=22, color=HEAD),
+            label(r"compress the bit vectors, \ or shape the tree \\ by frequency \ (Huffman): \ about $nH_k$ bits in all",
+                  font_size=22, color=YES),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
+        if side.width > 6.2:
+            side.width = 6.2
+            side.to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "Real FM-indexes answer rank queries without storing the transform as bytes. <bookmark mark='a'/> A "
+            "wavelet tree splits the alphabet in two and writes one bit per character: zero for the first half, one "
+            "for the second. <bookmark mark='b'/> Then it does the same, recursively, for the characters of each "
+            "half: log sigma levels of bit vectors. <bookmark mark='c'/> To count the n's before position i, ask "
+            "how many ones come before i at the top, follow that count into the right child, and ask again. "
+            "<bookmark mark='d'/> Guy Jacobson showed in 1989 how to answer a binary rank in constant time with only "
+            "a sliver of extra bits. <bookmark mark='e'/> Compress the bit vectors, or shape the tree like a Huffman "
+            "code, and the whole index takes about the compressed size of the text."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(nodes[0]), FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(Create(edges), FadeIn(nodes[1]), FadeIn(nodes[2]), FadeIn(side[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]), Indicate(nodes[0][1], color=LAM), Indicate(nodes[2][1], color=LAM))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3]))
+            vo.wait_until("e")
+            self.play(FadeIn(side[4]))
         self.wait(0.3)
         self.clear_scene()
 

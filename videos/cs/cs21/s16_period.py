@@ -23,15 +23,17 @@ class Period(VoiceoverScene):
         head = label(r"Periods", font_size=36).to_edge(UP, buff=0.35)
         w = "abaababaaba"
         per = St.periods(w.encode())
-        cells = VGroup(*[VGroup(Square(side_length=0.55, stroke_color=DATA, stroke_width=1.5), mono(c, 24, WHITE))
+        cells = VGroup(*[VGroup(Square(side_length=0.62, stroke_color=DATA, stroke_width=1.5), mono(c, 26, WHITE))
                          for c in w]).arrange(RIGHT, buff=0)
         for c in cells:
             c[1].move_to(c[0])
-        cells.next_to(head, DOWN, buff=0.5)
+        cells.move_to(UP * 1.15)
         arcs5 = VGroup(*[ArcBetweenPoints(cells[i].get_top(), cells[i + 5].get_top(), angle=-0.8, color=YES,
                                           stroke_width=1.6) for i in range(len(w) - 5)])
         arcs8 = VGroup(*[ArcBetweenPoints(cells[i].get_bottom(), cells[i + 8].get_bottom(), angle=0.6, color=HEAD,
                                           stroke_width=1.6) for i in range(len(w) - 8)])
+        t5 = mono("p = 5", 18, YES).next_to(arcs5, UP, buff=0.08)
+        t8 = mono("p = 8", 18, HEAD).next_to(arcs8, DOWN, buff=0.08)
         lines = VGroup(
             label(rf"$p$ is a period if $s_i = s_{{i+p}}$ wherever both exist: \ \texttt{{{w}}} has periods "
                   rf"{', '.join(str(p) for p in per)}", font_size=21, color=WHITE),
@@ -57,7 +59,8 @@ class Period(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")
-            self.play(Create(arcs5), Create(arcs8), FadeIn(lines[0]))
+            self.play(Create(arcs5), FadeIn(t5), FadeIn(lines[0]))
+            self.play(Create(arcs8), FadeIn(t8))
             for mk, ln in zip("bcde", lines[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))

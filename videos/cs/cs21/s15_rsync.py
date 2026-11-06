@@ -66,7 +66,17 @@ class Rsync(VoiceoverScene):
                   rf"bytes sent", font_size=24, color=HEAD),
             label(r"Tridgell and Mackerras (1996); \ the same idea as Rabin--Karp, \ chapter 2", font_size=20,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.4)
+        n, W = 40, 11.6
+        bw = W / n - 0.02
+        blocks = VGroup(*[Rectangle(width=bw, height=0.4, stroke_width=0, fill_color=DATA, fill_opacity=0.75)
+                          for _ in range(n)]).arrange(RIGHT, buff=0.02)
+        lit = Rectangle(width=0.1, height=0.4, stroke_width=0, fill_color=HEAD, fill_opacity=1)
+        bar = VGroup(*blocks[:n // 2], lit, *blocks[n // 2:]).arrange(RIGHT, buff=0.02).move_to(DOWN * 2.55)
+        win = Rectangle(width=bw + 0.06, height=0.56, stroke_color=YES, stroke_width=3).move_to(blocks[0])
+        win.shift(LEFT * 0.12)
+        cap = label(r"the new file: \ every old block found again \ (blue), \ plus a few literal bytes \ (yellow)",
+                    font_size=19, color=GREY_A).next_to(bar, DOWN, buff=0.15)
         with self.voiceover(
             "Andrew Tridgell and Paul Mackerras's rsync, from 1996, fixes this with a rolling hash. <bookmark "
             "mark='a'/> The receiver hashes each of its blocks twice, once weakly and once strongly, and sends the "
@@ -78,10 +88,20 @@ class Rsync(VoiceoverScene):
             "three kilobytes had to be sent as literal text."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, ln in zip("abcde", lines[:5]):
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[1], shift=UP * 0.1), FadeIn(bar[:n // 2]), FadeIn(bar[n // 2 + 1:]),
+                      FadeIn(win))
+            self.play(win.animate.shift(RIGHT * 0.12), run_time=0.6)
+            self.play(Indicate(blocks[0], color=YES), win.animate.move_to(blocks[1]), run_time=0.8)
+            self.play(win.animate.move_to(blocks[2]), run_time=0.5)
+            for mk, ln in zip("cd", lines[2:4]):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))
-            self.play(FadeIn(lines[5]))
+            vo.wait_until("e")
+            self.play(win.animate.move_to(lit).stretch_to_fit_width(0.5), FadeIn(lit), FadeIn(lines[4]), FadeIn(cap))
+            self.play(FadeOut(win), FadeIn(lines[5]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -91,7 +111,7 @@ class Rsync(VoiceoverScene):
         lines = VGroup(
             label(r"rsync needs the old file's hashes; \ a backup of a million files can't afford them", font_size=22,
                   color=WHITE),
-            label(r"instead, \ let the \textbf{content} choose the cut points: \ cut wherever a rolling hash of the "
+            label(r"instead, \ let the \textbf{content} choose the cut points: \\ cut wherever a rolling hash of the "
                   r"last few bytes ends in 13 zeros", font_size=22, color=LAM),
             label(r"an insertion moves only the cuts near it: \ the chunks after it are cut in the same places",
                   font_size=22, color=YES),
@@ -100,7 +120,25 @@ class Rsync(VoiceoverScene):
                   color=HEAD),
             label(r"store each chunk once, \ by its hash: \ LBFS (2001), \ restic, \ Borg, \ Dropbox, \ and data "
                   r"deduplication everywhere", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.55)
+        )
+        lines[:3].arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
+        lines[3:].arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.45)
+        W = 12.4
+
+        def chunks(sizes, red=()):
+            tot = sum(sizes)
+            g = VGroup()
+            for k, z in enumerate(sizes):
+                col = NO if k in red else DATA
+                g.add(Rectangle(width=max(W * z / tot - 0.012, 0.006), height=0.45, stroke_width=0, fill_color=col,
+                                fill_opacity=1.0 if k in red else (0.85 if k % 2 else 0.5)))
+            return g.arrange(RIGHT, buff=0.012)
+        old_c = chunks(d["cdc_sizes_old"]).move_to(DOWN * 0.45)
+        new_c = chunks(d["cdc_sizes_new"], set(d["cdc_new_idx"])).move_to(DOWN * 1.45)
+        lo = label(r"the old file, \ cut where the content says", font_size=18, color=GREY_A).next_to(old_c, UP,
+                                                                                                  buff=0.1)
+        ln = label(r"the new file: \ the same cuts, \ except around the insertion", font_size=18,
+                   color=GREY_A).next_to(new_c, DOWN, buff=0.1)
         with self.voiceover(
             "rsync needs the old file's block hashes, and a backup system with millions of files can't afford to "
             "keep them all. <bookmark mark='a'/> Content-defined chunking turns the idea around. Let the content "
@@ -113,8 +151,15 @@ class Rsync(VoiceoverScene):
             "file sync work."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
-            for mk, ln in zip("abcd", lines[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[1], shift=UP * 0.1), FadeIn(lo),
+                      LaggedStart(*[FadeIn(c) for c in old_c], lag_ratio=0.02), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(lines[2], shift=UP * 0.1), FadeIn(new_c), FadeIn(ln))
+            vo.wait_until("c")
+            self.play(FadeIn(lines[3], shift=UP * 0.1), *[Indicate(new_c[k], color=NO, scale_factor=1.6)
+                                                         for k in d["cdc_new_idx"]])
+            vo.wait_until("d")
+            self.play(FadeIn(lines[4], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

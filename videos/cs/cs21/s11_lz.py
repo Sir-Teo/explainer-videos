@@ -10,6 +10,7 @@ class Lz(VoiceoverScene):
     def construct(self):
         self.card()
         self.arcs()
+        self.deflate()
         self.lz78()
         self.measured()
 
@@ -73,6 +74,40 @@ class Lz(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+    def deflate(self):
+        head = label(r"Inside DEFLATE", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"literals and match lengths share one alphabet of 286 symbols; \ distances have 30", font_size=22,
+                  color=WHITE),
+            label(r"large lengths and distances are buckets plus extra bits: \ distance 1{,}000 is bucket 19 plus 8 bits",
+                  font_size=22, color=GREY_A),
+            label(r"each block carries its own two Huffman codes, \ themselves Huffman-coded", font_size=22, color=LAM),
+            label(r"\textbf{lazy matching}: \ before taking a match, \ check whether the next position starts a "
+                  r"longer one", font_size=22, color=YES),
+            label(r"levels 1--9 trade chain length and laziness for speed; \ decompression is always fast: \ "
+                  r"copy bytes", font_size=22, color=HEAD),
+            label(r"Katz (1993), \ for PKZIP; \ RFC 1951 (1996); \ inside zip, \ gzip, \ PNG and HTTP", font_size=20,
+                  color=GREY_A),
+        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
+        with self.voiceover(
+            "DEFLATE, the format inside zip and gzip, puts Lempel–Ziv and Huffman together. <bookmark mark='a'/> "
+            "Literal bytes and match lengths share one alphabet of two hundred and eighty-six symbols, and distances "
+            "have their own thirty. <bookmark mark='b'/> Big values are coded as a bucket plus a few extra raw bits, "
+            "so that the Huffman alphabets stay small. <bookmark mark='c'/> Each block of output carries its own "
+            "pair of Huffman codes, which are themselves compressed. <bookmark mark='d'/> The compressor's cleverest "
+            "trick is lazy matching: before committing to a match, it checks whether starting one character later "
+            "would give a longer one. That is the main thing our simple version lacks. <bookmark mark='e'/> The "
+            "levels from one to nine trade how hard the compressor searches against speed, while decompression is "
+            "always quick, little more than copying bytes. <bookmark mark='f'/> Phil Katz designed it in 1993 for "
+            "PKZIP; it was standardized in 1996 and has been everywhere since."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, ln in zip("abcdef", lines):
+                vo.wait_until(mk)
+                self.play(FadeIn(ln, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
     def lz78(self):
         head = label(r"LZ78 and LZW: \ grow a dictionary of phrases", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
@@ -85,7 +120,34 @@ class Lz(VoiceoverScene):
             label(r"Ziv and Lempel's theorem: \ for any stationary ergodic source, \ the bits per character tend to "
                   r"the entropy rate", font_size=22, color=YES),
             label(r"universal: \ no model of the source is needed, \ only enough text", font_size=22, color=HEAD),
-        ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.6)
+        )
+        lines[:2].arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
+        lines[2:].arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.5)
+        text = "abababababababab"
+        book, i, parse = {"": 0}, 0, []
+        while i < len(text):
+            w = ""
+            while i + len(w) < len(text) and w + text[i + len(w)] in book:
+                w += text[i + len(w)]
+            c = text[i + len(w)] if i + len(w) < len(text) else ""
+            parse.append((w + c, book[w], c))
+            if c:
+                book[w + c] = len(book)
+            i += len(w) + 1
+        chips = VGroup()
+        for k, (ph, ref, c) in enumerate(parse):
+            box = VGroup(*[VGroup(Square(side_length=0.5, stroke_color=LAM, stroke_width=1.5), mono(ch, 22, WHITE))
+                           for ch in ph]).arrange(RIGHT, buff=0)
+            for b_ in box:
+                b_[1].move_to(b_[0])
+            num = mono(str(k + 1), 15, HEAD).next_to(box, UP, buff=0.1)
+            out = mono(f"({ref},{c})" if c else f"({ref})", 15, YES).next_to(box, DOWN, buff=0.12)
+            chips.add(VGroup(box, num, out))
+        chips.arrange(RIGHT, buff=0.18, aligned_edge=UP).move_to(DOWN * 0.1)
+        if chips.width > 13.0:
+            chips.width = 13.0
+        cap = label(r"above: \ the phrase's number; \ below: \ what is written, \ (earlier phrase, next character)",
+                    font_size=18, color=GREY_A).next_to(chips, DOWN, buff=0.3)
         with self.voiceover(
             "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. "
             "Read the longest phrase already in it, write down its number, and add that phrase plus the next "
@@ -97,7 +159,10 @@ class Lz(VoiceoverScene):
             "mark='e'/> The method is universal. It needs no model of the text, only enough of it."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, ln in zip("abcde", lines):
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1))
+            self.play(LaggedStart(*[FadeIn(c) for c in chips], lag_ratio=0.35), FadeIn(cap), run_time=3.0)
+            for mk, ln in zip("bcde", lines[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)

@@ -105,7 +105,10 @@ def compute_naive() -> dict:
     rows = []
     for p in (b"the", b"whale", b"Queequeg", b"Elizabeth Bennet", b"it was the best of times"):
         pos, cmp = S.naive_fast(t, p)
-        rows.append({"pattern": p.decode(), "m": len(p), "hits": len(pos), "cmp": cmp, "per_char": cmp / len(t)})
+        # predicted: an alignment compares character j + 1 exactly when the first j matched
+        pred = sum(t.count(p[:j]) if j else len(t) for j in range(len(p))) / len(t)
+        rows.append({"pattern": p.decode(), "m": len(p), "hits": len(pos), "cmp": cmp, "per_char": cmp / len(t),
+                     "predicted": pred})
         print(rows[-1])
     worst = []
     for n, m in ((1000, 10), (1000, 100), (10000, 100), (100000, 1000)):
@@ -302,7 +305,17 @@ def compute_bwt() -> dict:
             "chapter_text_sample": chap[:300].decode(errors="replace"), "mtf_zero_share": z / len(mtf),
             "md_n": len(full), "md_runs": S.runs(Lf), "h0_text": S.entropy(np.frombuffer(full, dtype=np.uint8)),
             "h0_mtf": S.entropy(mtf_f), "bz2_text": len(bz2.compress(full, 9)), "zlib_text": len(zlib.compress(full, 9)),
-            "bz2_bwt": len(bz2.compress(Lf, 9)), "inverse_ok": S.inverse_bwt(Lf) == full}
+            "bz2_bwt": len(bz2.compress(Lf, 9)), "inverse_ok": S.inverse_bwt(Lf) == full, "ctx": _contexts(full)}
+
+
+def _contexts(full: bytes) -> dict:
+    """What precedes a two-letter context in Moby-Dick: the groups the transform lays side by side."""
+    from collections import Counter
+    out = {}
+    for c in ("he", "hi", "ho"):
+        cnt = Counter(full[m.start() - 1] for m in re.finditer(c.encode(), full) if m.start())
+        out[c] = {"total": sum(cnt.values()), "top": [[chr(k), v] for k, v in cnt.most_common(6)]}
+    return out
 
 
 def compute_fm() -> dict:
@@ -512,7 +525,9 @@ def compute_rsync() -> dict:
     return {"n": len(d), "insert": 24, "block": B, "fixed_blocks": len(fixed_new), "fixed_reused": fixed_reused,
             "rsync_matched": matched, "rsync_literal": literal, "cdc_chunks": len(cuts_o), "cdc_new": len(new_chunks),
             "cdc_mean": float(sizes.mean()), "cdc_min": int(sizes.min()), "cdc_max": int(sizes.max()),
-            "cdc_new_bytes": int(sum(np.diff([0] + cuts_n)[k] for k in new_chunks))}
+            "cdc_new_bytes": int(sum(np.diff([0] + cuts_n)[k] for k in new_chunks)),
+            "cdc_sizes_old": [int(x) for x in sizes], "cdc_sizes_new": [int(x) for x in np.diff([0] + cuts_n)],
+            "cdc_new_idx": [int(k) for k in new_chunks], "mid": mid}
 
 
 def compute_period() -> dict:
@@ -543,7 +558,35 @@ def compute_period() -> dict:
     return {"palindrome": pal, "pal_len": ln, "t_manacher": t_m, "scanned": len(letters),
             "where": t.lower().find(pal[:12].encode()) if False else None,
             "periods": per, "lyndon": lyn, "versions": len(revs), "vers_n": len(vers), "vers_runs": S.runs(Lv),
-            "novel_runs": S.runs(Ln), "vers_bz2": len(bz2.compress(vers, 9)), "vers_xz": len(lzma.compress(vers))}
+            "novel_runs": S.runs(Ln), "vers_bz2": len(bz2.compress(vers, 9)), "vers_xz": len(lzma.compress(vers)),
+            "novel_strip": _strip(Ln), "vers_strip": _strip(Lv)}
+
+
+def _strip(L: bytes, width: int = 480) -> list:
+    """Run lengths of a typical window of the transform, for drawing: [character, length] pairs. The window is the
+    one, of 400 evenly spaced, whose number of runs is closest to the transform's average."""
+    target = width * _bwt_runs(L) / len(L)
+
+    def runs_of(w):
+        out = []
+        for c in w:
+            if out and out[-1][0] == c:
+                out[-1][1] += 1
+            else:
+                out.append([c, 1])
+        return out
+    best = None
+    for k in range(400):
+        i = (len(L) - width) * k // 400
+        r = runs_of(L[i:i + width])
+        if best is None or abs(len(r) - target) < abs(len(best) - target):
+            best = r
+    return best
+
+
+def _bwt_runs(L: bytes) -> int:
+    from explainer.cs.algo import strings as S
+    return S.runs(L)
 
 
 ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}

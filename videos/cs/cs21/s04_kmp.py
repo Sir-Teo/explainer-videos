@@ -42,7 +42,21 @@ class Kmp(VoiceoverScene):
             label(r"shift the pattern so that border lines up, \ and continue from there: \ the text pointer never "
                   r"moves back", font_size=22, color=HEAD),
             label(r"for \texttt{ababa}: \ the border \texttt{aba}, \ so fail $= 3$", font_size=22, color=LAM),
-        ).arrange(DOWN, buff=0.28).to_edge(DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.24).to_edge(DOWN, buff=0.4)
+        txt = "ababab" + pat[4:]
+
+        def row(w, col):
+            g = VGroup(*[VGroup(Square(side_length=0.5, stroke_color=col, stroke_width=1.5), mono(c, 22, WHITE))
+                         for c in w]).arrange(RIGHT, buff=0)
+            for c in g:
+                c[1].move_to(c[0])
+            return g
+        T = row(txt, GREY_B).move_to(UP * 0.85)
+        Pp = row(pat, DATA).next_to(T, DOWN, buff=0.12).align_to(T, LEFT)
+        tl = label(r"text", font_size=18, color=GREY_B).next_to(T, LEFT, buff=0.25)
+        pl = label(r"pattern", font_size=18, color=DATA).next_to(Pp, LEFT, buff=0.25)
+        ptr = Arrow(T[5].get_top() + UP * 0.45, T[5].get_top(), buff=0.02, color=HEAD, stroke_width=3,
+                    max_tip_length_to_length_ratio=0.35)
         with self.voiceover(
             "Suppose j characters of the pattern have matched, and the next one fails. <bookmark mark='a'/> The "
             "naive method slides one place and re-reads text it has already seen. But those j characters of text "
@@ -56,13 +70,22 @@ class Kmp(VoiceoverScene):
             "the same idea on the pattern against itself."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), FadeIn(idx))
-            self.play(FadeIn(lines[0]))
+            self.play(FadeIn(lines[0]), FadeIn(T), FadeIn(Pp), FadeIn(tl), FadeIn(pl), FadeIn(ptr))
+            self.play(*[T[k][0].animate.set_fill(YES, 0.35) for k in range(5)],
+                      *[Pp[k][0].animate.set_fill(YES, 0.35) for k in range(5)],
+                      T[5][0].animate.set_fill(NO, 0.5), Pp[5][0].animate.set_fill(NO, 0.5))
             vo.wait_until("a")
             self.play(FadeIn(lines[1]))
             vo.wait_until("b")
             self.play(FadeIn(lines[2]), FadeIn(fl), FadeIn(flab))
+            self.play(*[T[k][0].animate.set_fill(LAM, 0.5) for k in (2, 3, 4)],
+                      *[Pp[k][0].animate.set_fill(LAM, 0.5) for k in (0, 1, 2)])
             vo.wait_until("c")
             self.play(FadeIn(lines[3]))
+            self.play(*[Pp[k][0].animate.set_fill(BLACK, 0) for k in range(3, 7)], run_time=0.5)
+            self.play(Pp.animate.shift(RIGHT * 1.0), pl.animate.shift(RIGHT * 1.0), run_time=1.5)
+            self.play(Indicate(ptr, color=HEAD), T[5][0].animate.set_fill(YES, 0.35),
+                      Pp[3][0].animate.set_fill(YES, 0.35))
             vo.wait_until("d")
             self.play(FadeIn(lines[4]), Indicate(fl[4], color=LAM))
         self.wait(0.3)

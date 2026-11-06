@@ -40,7 +40,20 @@ class Frontier(VoiceoverScene):
             label(r"a pangenome: \ thousands of human genomes, \ each 99.9\% like the others", font_size=22, color=LAM),
             label(r"an FM-index costs about $nH_k$ bits: \ it compresses \textit{statistics}, \ not repetition",
                   font_size=22, color=NO),
-        ).arrange(DOWN, buff=0.28).next_to(tab, DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.4)
+        pal = [DATA, LAM, YES, HEAD, CTRL, GREY_B]
+
+        def strip(runs):
+            tot = sum(n_ for _, n_ in runs)
+            g = VGroup(*[Rectangle(width=12.0 * n_ / tot, height=0.34, stroke_width=0, fill_color=pal[c % len(pal)],
+                                   fill_opacity=0.9) for c, n_ in runs]).arrange(RIGHT, buff=0)
+            return g
+        s1, s2 = strip(d["novel_strip"]), strip(d["vers_strip"])
+        l1 = label(rf"480 characters of the novels' transform: \ {len(d['novel_strip'])} runs", font_size=18,
+                   color=GREY_A)
+        l2 = label(rf"480 characters of the syllabus versions' transform: \ {len(d['vers_strip'])} runs",
+                   font_size=18, color=YES)
+        VGroup(l1, s1, l2, s2).arrange(DOWN, buff=0.1).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
             "The frontier concerns texts that repeat themselves. <bookmark mark='a'/> Count the runs in the "
             "Burrows–Wheeler transform, r. For six and a half megabytes of the novels, there are about two "
@@ -55,6 +68,8 @@ class Frontier(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.5))
+            self.play(FadeIn(l1), Create(s1), run_time=1.5)
+            self.play(FadeIn(l2), Create(s2), run_time=1.0)
             for mk, n_ in zip("bcde", notes):
                 vo.wait_until(mk)
                 self.play(FadeIn(n_))
