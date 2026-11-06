@@ -1712,3 +1712,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 32 · Free Will | scenes, English and Chinese narration and text, QA | ~50 min |
 | 33 · Rational Choice | scenes, English and Chinese narration and text, QA | ~57 min |
 | 34 · Games and the Social Contract | scenes, English and Chinese narration and text, QA | ~50 min |
+| 35 · The Right and the Good | scenes, English and Chinese narration and text, QA | ~50 min |

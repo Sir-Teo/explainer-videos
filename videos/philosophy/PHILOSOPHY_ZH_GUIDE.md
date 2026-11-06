@@ -216,3 +216,12 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Nāgasena, Milinda, Vasubandhu, Nāgārjuna, Śāntideva, Nyāya | 那先，弥兰陀王，世亲，龙树，寂天，正理派 |
 | Barcan (Marcus), Plantinga, Stalnaker, Chalmers, Jackson, Yablo, Gendler, Hawthorne, Salmon, Soames, Nolan, Berto, Jago | 巴肯（马库斯），普兰丁格，斯塔尔纳克，查默斯，杰克逊，亚布罗，根德勒，霍桑，萨蒙，索姆斯，诺兰，贝尔托，贾戈 |
 | Martin, Mumford, Bird, Wachter, Ustun, Sato, Humphrey, Pierre, Paderewski | 马丁，芒福德，伯德，瓦赫特，乌斯顿，佐藤，汉弗莱，皮埃尔，帕德雷夫斯基 |
+| Savage, Allais, Ellsberg, Kelly, Buchak, Nozick (Newcomb), Joyce, Ahmed | 萨维奇，阿莱，埃尔斯伯格，凯利，布查克，诺齐克（纽科姆），乔伊斯，艾哈迈德 |
+| Nash, Axelrod, Rapoport, Ostrom, Skyrms, Shapley, Vickrey, Myerson, Roth, Gauthier, Binmore | 纳什，阿克塞尔罗德，拉波波特，奥斯特罗姆，斯科姆斯，沙普利，维克里，迈尔森，罗斯，高蒂尔，宾莫尔 |
+| Bentham, Mill, Sidgwick, Harsanyi, Diamond, Hare, Hooker, Smart, Singer, Scheffler, Murphy | 边沁，密尔，西季威克，海萨尼，戴蒙德，黑尔，胡克，斯马特，辛格，谢弗勒，墨菲 |
+| Ross, Rachels, Quinn, Kagan, Foot, Thomson, Kamm, Scanlon, Taurek, Voorhoeve, Korsgaard, O'Neill | 罗斯，雷切尔斯，奎因，卡根，富特，汤姆森，卡姆，斯坎伦，陶雷克，福尔霍夫，科斯加德，奥尼尔 |
+| Dancy, McKeever, Ridge, Gilligan, Noddings, Held, Williams, Railton, Wolf, MacAskill | 丹西，麦基弗，里奇，吉利根，诺丁斯，赫尔德，威廉斯，雷尔顿，沃尔夫，麦卡斯基尔 |
+| Arrhenius, Huemer, Tännsjö, Broome, Narveson, McMahan, Benatar, Meacham, Temkin | 阿伦尼乌斯，休默，滕斯舍，布鲁姆，纳维森，麦克马汉，贝纳塔，米查姆，特姆金 |
+| Ramsey, Stern, Nordhaus, Weitzman, Thorstad, Greaves, Ord, Wilkinson, Beckstead, Basu, Mitra | 拉姆齐，斯特恩，诺德豪斯，魏茨曼，索斯塔德，格里夫斯，奥德，威尔金森，贝克斯特德，巴苏，米特拉 |
+| Moore, Ayer, Stevenson, Blackburn, Gibbard, Geach, Schroeder, Mackie, Street, Schurz | 摩尔，艾耶尔，史蒂文森，布莱克本，吉巴德，吉奇，施罗德，麦基，斯特里特，舒尔茨 |
+| Haidt, Greene, Mikhail, Mencius, Xunzi, Gaozi, Mozi, Ivanhoe, Van Norden | 海特，格林，米哈伊尔，孟子，荀子，告子，墨子，艾文贺，万百安 |
