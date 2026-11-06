@@ -89,7 +89,8 @@ class Kv(VoiceoverScene):
             "Every node is equal, and the cluster grows a machine at a time. <bookmark mark='e'/> On a napkin, a "
             "billion two-kilobyte values, three copies, on half-full one-terabyte disks, need twelve machines."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(nap), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])), FadeIn(ill),
+                      *[FadeIn(VGroup(*tab.cells[r][:2])) for r in range(1, len(rows) + 1)])
             vo.wait_until("a")
             self.play(FadeIn(reqs[0]))
             vo.wait_until("b")
@@ -99,9 +100,8 @@ class Kv(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(reqs[2]))
             vo.wait_until("e")
-            self.play(FadeIn(nap), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])), FadeIn(ill))
-            self.play(LaggedStart(*[FadeIn(VGroup(*tab.cells[r])) for r in range(1, len(rows) + 1)],
-                                  lag_ratio=0.4), run_time=2)
+            self.play(LaggedStart(*[FadeIn(tab.cells[r][2]) for r in range(1, len(rows) + 1)], lag_ratio=0.4),
+                      run_time=2)
         self.wait(0.4)
         self.clear_scene()
 
@@ -313,7 +313,8 @@ class Kv(VoiceoverScene):
                                max_tip_length_to_length_ratio=0.12)
                          for a, b in ((0, 1), (1, 2), (1, 3), (2, 4), (3, 4))])
         via = VGroup(label(r"via Y", font_size=16, color=DATA).next_to(edges[1], UP, buff=0.02),
-                     label(r"via Z: \ pen removed", font_size=16, color=LAM).next_to(edges[2], DOWN, buff=0.02))
+                     label(r"via Z: \ pen removed", font_size=16, color=LAM).next_to(
+                         edges[2].point_from_proportion(0.3), DL, buff=0.05))
         sib = wrapped_label(r"neither descends from the other: \ a get returns both \ (\textbf{siblings}); \ the cart "
                             r"merges them by union, \ so the removed pen comes back", 3.0, font_size=18,
                             color=HEAD).move_to([5.25, 1.55, 0])
