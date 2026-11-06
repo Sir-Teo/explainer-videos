@@ -29,7 +29,7 @@ LAM = "#9b8cd6"
 KERN = "#d98c5f"        # the kernel, wherever it appears
 
 JOBC = {"A": DATA, "B": HEAD, "C": YES, "D": LAM, "kernel": KERN, "switch": GREY_D, "tok": DATA, "job": HEAD,
-        "H1": NO, "H2": COST, "I": YES, "a": DATA, "b": HEAD, "c": YES, "hog": NO, "gamer": HEAD,
+        "H1": NO, "H2": LAM, "I": YES, "a": DATA, "b": HEAD, "c": YES, "hog": NO, "gamer": HEAD,
         "meteo": DATA, "bus": YES, "comms": NO, "good": YES, "halter": NO, "scribbler": COST}
 
 
@@ -45,9 +45,11 @@ def gantt(segments, t0, t1, width=11.0, h=0.5, colors=None, lanes=None, font=18,
     bars = VGroup()
     rows = {n: i for i, n in enumerate(lanes)} if lanes else None
     x0 = -width / 2
+    anchor = Dot([x0, 0, 0], radius=0.001).set_opacity(0)
 
-    def x(t):
+    def x0_(t):
         return x0 + (t - t0) * sx
+    x = x0_
     for a, b, n in segments:
         if b <= t0 or a >= t1:
             continue
@@ -70,7 +72,12 @@ def gantt(segments, t0, t1, width=11.0, h=0.5, colors=None, lanes=None, font=18,
                                                                              aligned_edge=RIGHT)
             g.lane_labels.add(t)
         g.add(g.lane_labels)
-    g.x = x
+    g.add(anchor)
+
+    def xnow(t):
+        return anchor.get_center()[0] + (t - t0) * sx * (g.bars.width / max(g._w0, 1e-9) if g._w0 else 1.0)
+    g._w0 = bars.width
+    g.x = xnow
     g.t0, g.t1 = t0, t1
     return g
 

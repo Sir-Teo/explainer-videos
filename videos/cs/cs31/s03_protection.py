@@ -27,18 +27,18 @@ class Protection(VoiceoverScene):
                 ("halt", r"an instruction: \ stop the machine, \ or reprogram its devices", NO),
                 ("sw   t1, 0x100(zero)", r"memory: \ overwrite the kernel, \ or another program", HEAD),
                 ("loop: j loop", r"time: \ never give the processor back", LAM)):
-            rows.add(VGroup(mono(code_, 22, color), label(what, font_size=22, color=WHITE)))
+            rows.add(VGroup(mono(code_, 26, color), label(what, font_size=26, color=WHITE)))
         for r in rows:
             r[1].next_to(r[0], RIGHT, buff=0.5)
-            r[1].shift(RIGHT * (4.2 - r[0].width))
-        rows.arrange(DOWN, buff=0.45, aligned_edge=LEFT).next_to(head, DOWN, buff=0.7)
+            r[1].shift(RIGHT * (4.8 - r[0].width))
+        rows.arrange(DOWN, buff=0.6, aligned_edge=LEFT).next_to(head, DOWN, buff=0.8)
         lines = VGroup(
             label(rf"on the bare Pebble of Parts 6--30, \ a program's \texttt{{halt}} ends everything: \ the machine "
                   rf"stopped after {p['bare_halted_at']} instructions", font_size=21, color=NO),
             label(r"so three things must be taken away from programs: \ some \textbf{instructions}, \ most of "
                   r"\textbf{memory}, \ and control of \textbf{time}", font_size=21, color=YES),
             label(r"and the kernel must be the only way to get them back", font_size=21, color=HEAD),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.2).next_to(rows, DOWN, buff=0.9)
         with self.voiceover(
             "Before time-sharing, the one program running owned the machine, and could do anything. With several "
             "programs at once, any one of them can ruin everybody's day, in three ways. <bookmark mark='a'/> By an "

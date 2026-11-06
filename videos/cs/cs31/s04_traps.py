@@ -94,14 +94,13 @@ class Traps(VoiceoverScene):
                           ("handle", r"do it"), ("restore", r"restore, \ \texttt{eret}")):
             lines = [r[1] for r in rows if r[2] == ph]
             show = lines[:5] + (["..."] if len(lines) > 6 else []) + (lines[-1:] if len(lines) > 5 else [])
-            body = VGroup(*[mono(s, 15, PH[ph] if s != "..." else GREY_C) for s in show]).arrange(
-                DOWN, aligned_edge=LEFT, buff=0.07)
-            t = label(rf"{title}: \ {counts.get(ph, 0)}", font_size=19, color=PH[ph])
+            body = VGroup(*[mono(s, 18, PH[ph] if s != "..." else GREY_C) for s in show]).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.09)
+            t = label(rf"{title}: \ {counts.get(ph, 0)}", font_size=22, color=PH[ph])
             cols.add(VGroup(t, body).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
-        cols.arrange(RIGHT, buff=0.35, aligned_edge=UP).next_to(strip, DOWN, buff=0.45)
-        fit_right(cols, 6.8)
-        if cols.get_left()[0] < -6.8:
-            cols.scale_to_fit_width(13.4).next_to(strip, DOWN, buff=0.45)
+        cols.arrange(RIGHT, buff=0.4, aligned_edge=UP).next_to(strip, DOWN, buff=0.5)
+        if cols.width > 13.2:
+            cols.scale_to_fit_width(13.2).next_to(strip, DOWN, buff=0.5)
         total = n
         lines = VGroup(
             label(rf"{total} kernel instructions \ (and the \texttt{{ecall}}) \ to return one number", font_size=22,
@@ -181,7 +180,7 @@ class Traps(VoiceoverScene):
         d = load("trap")
         head = label(r"So programs buffer", font_size=36).to_edge(UP, buff=0.3)
         reads = d["reads"]
-        g = log_axes([0, 6, 1], [-2, 3, 1], x_length=6.2, y_length=3.8, x_label=r"bytes per \texttt{read} call",
+        g = log_axes([0, 6, 1], [-2, 3, 1], x_length=5.6, y_length=3.8, x_label=r"bytes per \texttt{read} call",
                      y_label=r"nanoseconds per byte").to_edge(LEFT, buff=1.0).shift(DOWN * 0.3)
         ax = g.ax
         cv = curve(ax, [math.log10(b) for b, _, _ in reads], [math.log10(ns) for _, ns, _ in reads], DATA)
@@ -190,12 +189,12 @@ class Traps(VoiceoverScene):
         notes = VGroup(
             label(rf"one byte per call: \ {reads[0][1]:.0f} ns a byte", font_size=21, color=NO),
             label(rf"4 KiB per call: \ {reads[6][1]:.2f} ns a byte", font_size=21, color=YES),
-            label(r"the cost per call is fixed; \ spread it over more bytes", font_size=21, color=WHITE),
-            label(rf"\texttt{{wc}} on 8 MiB: \ {rd} \texttt{{read}} calls \ (16 KiB each), \ "
+            label(r"the cost per call is fixed; \\ spread it over more bytes", font_size=21, color=WHITE),
+            label(rf"\texttt{{wc}} on 8 MiB: \ {rd} \texttt{{read}} calls \ (16 KiB each); \\ "
                   rf"{d['strace_total']} system calls in all \ (\texttt{{strace -c}})", font_size=21, color=HEAD),
-            label(r"C's \texttt{getc} is a macro over a buffer; \ so is our PebbleOS library: \ 4 KiB per "
+            label(r"C's \texttt{getc} is a macro over a buffer; \\ so is our PebbleOS library: \ 4 KiB per "
                   r"\texttt{read}", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
+        ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.7).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
             "Because each call has a fixed cost, programs ask for as much as they can at once. <bookmark mark='a'/> "

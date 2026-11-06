@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, curve, load)
 
 
-def era(year, name, lines, color, w=2.45, h=3.3):
+def era(year, name, lines, color, w=2.5, h=4.3):
     r = RoundedRectangle(width=w, height=h, corner_radius=0.15, stroke_color=color, stroke_width=2, fill_color=BG,
                          fill_opacity=1)
-    yr = label(str(year), font_size=30, color=color).move_to(r.get_top() + DOWN * 0.35)
-    nm = label(name, font_size=22, color=WHITE).next_to(yr, DOWN, buff=0.12)
-    body = VGroup(*[label(t, font_size=16, color=GREY_A) for t in lines]).arrange(DOWN, buff=0.1)
+    yr = label(str(year), font_size=34, color=color).move_to(r.get_top() + DOWN * 0.4)
+    nm = label(name, font_size=25, color=WHITE).next_to(yr, DOWN, buff=0.14)
+    body = VGroup(*[label(t, font_size=19, color=GREY_A) for t in lines]).arrange(DOWN, buff=0.14)
     if body.width > w - 0.25:
         body.scale_to_fit_width(w - 0.25)
     body.next_to(nm, DOWN, buff=0.22)
@@ -89,15 +89,16 @@ class History(VoiceoverScene):
         flat = DashedLine(ax.c2p(0, S), ax.c2p(60, S), color=GREY_B, stroke_width=1.5)
         slope = DashedLine(ax.c2p((S + Z) / S, S), ax.c2p(60, 60 * S - Z), color=NO, stroke_width=2)
         knee = Dot(ax.c2p(h["nstar"], S), color=HEAD, radius=0.07)
-        kl = label(rf"$N^* = (S + Z)/S = {h['nstar']:.0f}$", font_size=19, color=HEAD).next_to(knee, UP, buff=0.15)
+        kl = label(rf"$N^* = (S + Z)/S = {h['nstar']:.0f}$", font_size=19, color=HEAD).next_to(knee, DOWN + RIGHT,
+                                                                                               buff=0.12)
         notes = VGroup(
-            label(rf"each user: \ think $Z = {Z:.0f}$ s, \ then ask for $S = {S}$ s of processor", font_size=20,
+            label(rf"each user: \ think $Z = {Z:.0f}$ s, \\ then ask for $S = {S}$ s of processor", font_size=20,
                   color=WHITE),
-            label(r"simulated: \ the processor shared equally among the waiting jobs", font_size=20, color=YES),
+            label(r"simulated: \ the processor shared equally \\ among the waiting jobs", font_size=20, color=YES),
             label(r"few users: \ nobody waits; \ $R \approx S$", font_size=20, color=GREY_A),
-            label(r"past $N^*$: \ the processor is always busy; \ each extra user adds $S$ for \textbf{everyone}: "
+            label(r"past $N^*$: \ the processor is always busy; \\ each extra user adds $S$ for \textbf{everyone}: "
                   r"\ $R = NS - Z$", font_size=20, color=NO),
-            label(rf"and the law $R = N/X - Z$ holds exactly: \ at $N = 40$, \ ${rows[8]['R']:.2f}$ against "
+            label(rf"the law $R = N/X - Z$ holds: \\ at $N = 40$, \ ${rows[8]['R']:.2f}$ against "
                   rf"${rows[8]['law']:.2f}$", font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.55).align_to(ax, UP)
         for n_ in notes:
