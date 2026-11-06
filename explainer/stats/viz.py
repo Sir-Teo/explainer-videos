@@ -1904,3 +1904,58 @@ class SplineSpectrum(VGroup):
             r.move_to([self.bar_x0 + self.bar_w * s / 2, y, 0])
             g.add(r)
         return g
+
+
+class EstimatorRail(VGroup):
+    """The estimator rail (Part 30): a sample as dots on a number line, and below it one marker per location
+    estimator (mean, median, Hodges--Lehmann, Huber, ...), each on its own track.  One observation follows the tracker
+    ``z``; every marker is recomputed each frame, so dragging a point out to sea shows which estimators follow it.
+    ``estimators``: list of (name, function, colour).  Call ``stop()`` before clearing the scene."""
+
+    def __init__(self, x, estimators, x_range, index: int = -1, width: float = 10.0, center=ORIGIN, track_gap=0.42,
+                 font_size=20, dot_color=None):
+        super().__init__()
+        from explainer.analysis import label
+
+        self.x = np.asarray(x, float).copy()
+        self.i = index % len(self.x)
+        self.z = ValueTracker(self.x[self.i])
+        self.x0, self.x1 = x_range
+        self.rail_w = width
+        c = np.asarray(center, float)
+        self.left = c[0] - width / 2
+        self.y_data = c[1] + track_gap * (len(estimators) + 1) / 2
+        self.axis = NumberLine(x_range=[self.x0, self.x1, (self.x1 - self.x0) / 10], length=width, include_numbers=False,
+                               color=GREY_C).move_to([c[0], self.y_data - 0.25, 0])
+        self.ticks = VGroup(*[label(f"{v:g}", font_size=font_size - 4, color=GREY_B).next_to(self.axis.n2p(v), DOWN, buff=0.1)
+                              for v in np.linspace(self.x0, self.x1, 6)])
+        col = dot_color or S.DATA
+        jitter = np.random.default_rng(3).uniform(-0.08, 0.08, len(self.x))
+        self.others = VGroup(*[Dot([self.X(v), self.y_data + jitter[k], 0], radius=0.05, color=col, fill_opacity=0.7)
+                               for k, v in enumerate(self.x) if k != self.i])
+        self.probe = always_redraw(lambda: Dot([self.X(self.z.get_value()), self.y_data, 0], radius=0.09, color=S.ACCENT))
+        self.tracks, self.markers, self.names = VGroup(), VGroup(), VGroup()
+        self.estimators = estimators
+        for k, (name, fn, colr) in enumerate(estimators):
+            y = self.y_data - 0.75 - k * track_gap
+            self.tracks.add(Line([self.left, y, 0], [self.left + self.rail_w, y, 0], color=GREY_D, stroke_width=1))
+            self.names.add(label(name, font_size=font_size, color=colr).next_to([self.left, y, 0], LEFT, buff=0.2))
+            self.markers.add(always_redraw(lambda fn=fn, y=y, colr=colr: Triangle(color=colr, fill_opacity=1, stroke_width=0)
+                                           .scale(0.09).rotate(PI).move_to([self.X(fn(self.data())), y, 0])))
+        self.add(self.axis, self.ticks, self.others, self.probe, self.tracks, self.names, self.markers)
+
+    def X(self, v):
+        v = min(max(v, self.x0), self.x1)
+        return self.left + (v - self.x0) / (self.x1 - self.x0) * self.rail_w
+
+    def data(self):
+        y = self.x.copy()
+        y[self.i] = self.z.get_value()
+        return y
+
+    def drag(self, value, run_time=3.0):
+        return self.z.animate(run_time=run_time).set_value(value)
+
+    def stop(self):
+        for m in [self.probe, *self.markers]:
+            m.clear_updaters()
