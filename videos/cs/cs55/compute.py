@@ -21,6 +21,7 @@ Items:
     ddc         diverse double-compiling on a clean and a trojaned compiler
     repro       reproducible builds: normalized against unnormalized
     job         ledger row 20: the Job as one line of Python on this machine
+    open        the open problems the series met (shared with Part 61)
 """
 
 from __future__ import annotations
@@ -112,6 +113,11 @@ def compute_job() -> dict:
     CACHE.dir.mkdir(parents=True, exist_ok=True)
     (CACHE.dir / "ledger.json").write_text(json.dumps(led, indent=1))
     return {"timing": {k: v for k, v in t.items() if k != "times"}, "times": t["times"], "ledger": led}
+
+
+def compute_open() -> dict:
+    from explainer.cs.research.method import open_problems
+    return {"rows": open_problems()}
 
 
 ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
