@@ -173,6 +173,14 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | special composition question; nihilism; universalism; organicism; composition as identity; problem of the many | 特殊组合问题；虚无主义；普遍主义；有机体论；组合即同一；众多问题 |
 | metaontology; quantifier variance; grounding; fundamentality; priority monism; mereotopology | 元本体论；量词变异；奠基；基础性；优先一元论；部分拓扑学 |
 | description logic; concept, role; TBox, ABox; subsumption; tableau; open-world assumption; rigidity | 描述逻辑；概念，角色；TBox，ABox；包含；表列；开放世界假设；刚性 |
+| numerical, qualitative identity; Leibniz's law; identity of indiscernibles (PII); absolutely, relatively, weakly discernible | 数目的同一，性质的同一；莱布尼茨律；不可辨别者的同一性（PII）；绝对、相对、弱可辨别 |
+| endurance (endurantism); perdurance (perdurantism); stage theory; temporal part; worm; temporary intrinsics | 持存（持存论）；延续（延续论）；阶段论；时间部分；蠕虫；暂时的内在性质 |
+| sortal; relative identity; criterion of identity; closest continuer; connectedness; continuity; Relation R; fission; fusion | 类词；相对同一；同一性标准；最近延续者；关联性；连续性；关系R；裂变；融合 |
+| animalism; quasi-memory; teletransporter; no-self (anattā); five aggregates; two truths | 动物论；准记忆；远程传送机；无我；五蕴；二谛 |
+| de re, de dicto; rigid designator; description theory; causal picture of reference; necessary a posteriori; contingent a priori | 从物，从言；严格指示词；摹状词理论；指称的因果图景；后天必然；先天偶然 |
+| modal realism; counterpart; counterpart theory; ersatz world; state description; alien property; actualism; recombination | 模态实在论；对应体；对应体理论；替代世界（ersatz）；状态描述；异质性质；现实主义；重组 |
+| Barcan formula; necessitism; contingentism; conceivability; primary, secondary intension; two-dimensional semantics | 巴肯公式；必然主义；偶然主义；可设想性；第一、第二内涵；二维语义学 |
+| real definition; hyperintensional; impossible world; counterpossible; disposition; fink; mask; counterfactual explanation; distribution semantics | 实在定义；超内涵的；不可能世界；反可能条件句；倾向；反转器（fink）；遮蔽（mask）；反事实解释；分布语义 |
 
 ## Names
 
@@ -204,3 +212,7 @@ computed lines as templates with the source's placeholders spelled exactly), fil
 | Kimura, Millikan, Cummins, Godfrey-Smith, Axelrod, Nowak, Schrödinger, Langton, Chan | 木村资生，米利肯，卡明斯，戈弗雷-史密斯，阿克塞尔罗德，诺瓦克，薛定谔，兰顿，伯特·陈 |
 | Meinong, Goodman, Armstrong, Leśniewski, van Inwagen, Sider, Schaffer, Hirsch, Thomasson | 迈农，古德曼，阿姆斯特朗，列希涅夫斯基，范因瓦根，赛德，谢弗，赫希，托马森 |
 | Boolos, Geach, Unger, Rodriguez-Pereyra, Varzi, Guarino, Welty | 布洛斯，吉奇，昂格尔，罗德里格斯-佩雷拉，瓦尔齐，瓜里诺，韦尔蒂 |
+| Butler, Reid, Black, Evans, Gibbard, Wiggins, Parfit, Shoemaker, Olson, Nagel, Nozick, Chisholm, Metzinger, Siderits | 巴特勒，里德，布莱克，埃文斯，吉巴德，威金斯，帕菲特，舒梅克，奥尔森，内格尔，诺齐克，齐硕姆，梅青格尔，西德里茨 |
+| Nāgasena, Milinda, Vasubandhu, Nāgārjuna, Śāntideva, Nyāya | 那先，弥兰陀王，世亲，龙树，寂天，正理派 |
+| Barcan (Marcus), Plantinga, Stalnaker, Chalmers, Jackson, Yablo, Gendler, Hawthorne, Salmon, Soames, Nolan, Berto, Jago | 巴肯（马库斯），普兰丁格，斯塔尔纳克，查默斯，杰克逊，亚布罗，根德勒，霍桑，萨蒙，索姆斯，诺兰，贝尔托，贾戈 |
+| Martin, Mumford, Bird, Wachter, Ustun, Sato, Humphrey, Pierre, Paderewski | 马丁，芒福德，伯德，瓦赫特，乌斯顿，佐藤，汉弗莱，皮埃尔，帕德雷夫斯基 |

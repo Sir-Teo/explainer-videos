@@ -1698,3 +1698,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 18 · Theories and Reality | scenes, English and Chinese narration and text, QA | ~51 min |
 | 19 · Life | scenes, English and Chinese narration and text, QA | ~51 min |
 | 20 · What There Is | scenes, English and Chinese narration and text, QA | ~51 min |
+| 21 · Identity and Persistence | scenes, English and Chinese narration and text, QA | ~51 min |
