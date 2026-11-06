@@ -85,12 +85,12 @@ class Dense(VoiceoverScene):
             "Everything so far matches words. <bookmark mark='a'/> A query about a voyage on the ocean scores zero "
             "against a passage about a ship at sea, because they share no terms. <bookmark mark='b'/> Dense "
             "retrieval moves the problem into geometry. An encoder, the embeddings of AI, Built Part 24, maps "
-            "every passage to a vector, once, offline; at query time it maps the query too, and relevance is a "
+            "every passage to a vector, once, offline, and the query at query time; relevance is a "
             "dot product. <bookmark mark='c'/> Related passages land near each other, and retrieval "
             "becomes nearest-neighbour search. <bookmark mark='d'/> Our own vectors are a stand-in: tf-idf "
             f"projected down to {dim} dimensions by a random matrix, the trick of Part 20. They keep the geometry "
-            "of words, not of meaning; a trained encoder, such as Karpukhin and colleagues' of 2020, learns "
-            "meaning from examples."
+            "of words, not of meaning; a trained encoder, like the dense passage retriever of Karpukhin and "
+            "colleagues in 2020, learns meaning from examples."
         ) as vo:
             self.play(FadeIn(head), Create(frame), FadeIn(dots), FadeIn(names), FadeIn(ill))
             vo.wait_until("a")
@@ -114,10 +114,11 @@ class Dense(VoiceoverScene):
         head = label(r"Product quantization", font_size=36).to_edge(UP, buff=0.3)
         cw = 0.18
         rng = random.Random(5)
-        cells = VGroup(*[Rectangle(width=cw, height=0.5, stroke_width=0.5, stroke_color=BG,
-                                   fill_color=interpolate_color(ManimColor(DATA), ManimColor(LAM), rng.random()), fill_opacity=0.9)
+        c0, c1 = ManimColor(DATA), ManimColor(LAM)
+        cells = VGroup(*[Rectangle(width=cw, height=0.6, stroke_width=0.5, stroke_color=BG,
+                                   fill_color=interpolate_color(c0, c1, rng.random()), fill_opacity=0.9)
                          for _ in range(dim)]).arrange(RIGHT, buff=0)
-        cells.next_to(head, DOWN, buff=0.75)
+        cells.next_to(head, DOWN, buff=1.0)
         top_l = label(rf"one passage vector: \ {dim} floats, \ {row8['float_bytes']} bytes", font_size=19,
                       color=DATA).next_to(cells, UP, buff=0.15)
         groups = VGroup(*[VGroup(*cells[j * s:(j + 1) * s]) for j in range(m)])
@@ -125,7 +126,7 @@ class Dense(VoiceoverScene):
         braces = VGroup(*[Brace(g, DOWN, buff=0.05, color=GREY_B) for g in groups])
         code_boxes = VGroup(*[tag_box(f"{c}", color=HEAD, size=16, w=s * cw - 0.06, h=0.42) for c in codes])
         for b, g in zip(code_boxes, groups):
-            b.next_to(g, DOWN, buff=0.55)
+            b.next_to(g, DOWN, buff=0.7)
         code_l = wrapped_label(rf"{m} sub-vectors of {s} dimensions, \ each replaced by the number of its nearest "
                                rf"centroid \ (one byte: \ 256 centroids): \ {row8['bytes']} bytes", 12.4,
                                font_size=19, color=HEAD).next_to(code_boxes, DOWN, buff=0.25)
@@ -138,9 +139,9 @@ class Dense(VoiceoverScene):
                           rf"${m} \times 256$ numbers; \ each passage's distance is then {m} lookups and adds", 5.9,
                           font_size=19, color=YES),
         )
-        notes[0].next_to(code_l, DOWN, buff=0.4).to_edge(LEFT, buff=0.5)
+        notes[0].next_to(code_l, DOWN, buff=0.6).to_edge(LEFT, buff=0.5)
         notes[1].next_to(notes[0], DOWN, buff=0.3).align_to(notes[0], LEFT)
-        notes[2].next_to(code_l, DOWN, buff=0.4).to_edge(RIGHT, buff=0.5)
+        notes[2].next_to(code_l, DOWN, buff=0.6).to_edge(RIGHT, buff=0.5)
         ill = label(r"codes illustrative", font_size=16, color=GREY_B).next_to(top_l, RIGHT, buff=0.5)
         with self.voiceover(
             f"A float vector per passage costs {row8['float_bytes']} bytes; a billion passages would need "
@@ -177,7 +178,7 @@ class Dense(VoiceoverScene):
         names = [rf"{r['bytes']} bytes" for r in rows]
         chart = bar_chart(vals, names, [GREY_B, DATA, LAM, YES], height=3.2, bar_w=0.85, gap=0.55, vmax=1.0,
                           fmt_=lambda v: rf"{100 * v:.0f}\%", font_size=19)
-        chart.move_to([-3.4, -0.3, 0])
+        chart.move_to([-3.4, -0.9, 0])
         exact = DashedLine(chart.bars[0].get_bottom() + UP * 3.2 + LEFT * 0.5,
                            chart.bars[-1].get_bottom() + UP * 3.2 + RIGHT * 0.5, color=GREY_B)
         cap = label(r"recall of the true top ten, \ per query", font_size=19, color=GREY_A).next_to(exact, UP,
@@ -224,8 +225,8 @@ class Dense(VoiceoverScene):
         x0 = -6.4
         ys = {L: -2.75 + (L) * 1.3 for L in range(top + 1)}
         shown = {top: 4, 2: 10, 1: 22, 0: 48}           # dots drawn per level (illustrative layout)
-        pts = _pts(shown[0], 11)
-        qp = (0.82, 0.25)
+        pts = _pts(shown[0], 3)
+        qp = (0.85, 0.7)
 
         def at(L, uv):
             u, v = uv
@@ -236,8 +237,8 @@ class Dense(VoiceoverScene):
                          stroke_width=1.2, fill_color=GREY_E, fill_opacity=0.25)
             planes.add(pl)
             dots_by[L] = VGroup(*[Dot(at(L, pts[i]), radius=0.045, color=GREY_A) for i in range(shown[L])])
-        lab = VGroup(*[label(rf"level {L}: \ {lv[L]:,} points", font_size=17, color=GREY_A).next_to(
-            at(L, (1, 0.5)), RIGHT, buff=0.15) for L in range(top + 1)])
+        lab = VGroup(*[label(rf"level {L}: \ {lv[L]:,} points", font_size=18, color=GREY_A).next_to(
+            at(L, (1, 1)), RIGHT, buff=0.15).shift(DOWN * H / 2) for L in range(top + 1)])
         qs = VGroup(*[Star(n=5, outer_radius=0.1, color=HEAD, fill_opacity=1).move_to(at(L, qp))
                       for L in range(top + 1)])
         # greedy descent: on each level walk to the neighbour closest to the query, then drop a level
@@ -255,7 +256,7 @@ class Dense(VoiceoverScene):
             if L > 0:
                 drops.add(DashedLine(at(L, pts[cur]), at(L - 1, pts[cur]), color=YES, stroke_width=1.5))
         entry = Circle(radius=0.11, color=YES, stroke_width=3).move_to(at(top, pts[0]))
-        rows = [[f"{r['ef']}", rf"{100 * r['recall10']:.0f}\%", f"{r['distance_calls']:.0f}"] for r in h["rows"]]
+        rows = [[f"{r['ef']}", rf"{100 * r['recall10']:.0f}\%", f"{r['distance_calls']:,.0f}"] for r in h["rows"]]
         tab = grid_table([r"beam width", r"recall", r"distances"], rows, widths=[1.5, 1.2, 1.5], row_h=0.4,
                          font_size=18, mono_cols=())
         tab.move_to([4.6, 1.5, 0])
