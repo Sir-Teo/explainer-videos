@@ -22,11 +22,11 @@ class Optional(VoiceoverScene):
         c = chapter_card(6, r"Optional stopping, proved", r"When does stopping leave a fair game fair?", part=PART)
         with self.voiceover("Chapter six. Optional stopping, proved."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def proof(self):
         th = theorem_card(r"Optional stopping",
-                          r"$M$ a martingale, $\tau$ a stopping time, finite. Then $\mathbb{E}M_\tau = M_0$ if (a) "
+                          r"$M$ a martingale with constant $M_0$, $\tau$ a finite stopping time. Then $\mathbb{E}M_\tau = M_0$ if (a) "
                           r"$\tau \le N$; or (b) $|M_{\tau \wedge n}| \le K$; or (c) $\mathbb{E}\tau < \infty$ and "
                           r"$|\Delta M| \le c$. In general: if $\{M_{\tau \wedge n}\}$ is uniformly integrable.",
                           who=r"Doob", color=MART, width=11.6, font_size=23).to_edge(UP, buff=0.3)
@@ -72,7 +72,7 @@ class Optional(VoiceoverScene):
     def balance(self, f):
         H = f["hists"]
         keys = ["10", "100", "1000", "10000"]
-        edges = np.arange(-150.5, 2.5, 3)
+        edges = np.asarray(H[keys[0]]["edges"], float)
         centers = (edges[:-1] + edges[1:]) / 2
         g = axes([-150, 4], [0, 1.0], x_length=10.0, y_length=3.8, xlabel=r"$S_{\tau_1 \wedge n}$: where the stopped walk "
                  r"is at step $n$", ylabel=r"share of 10{,}000 walks (square root scale)", xticks=[-150, -100, -50, 0],
@@ -82,14 +82,15 @@ class Optional(VoiceoverScene):
 
         def hist(k):
             h = np.asarray(H[k]["hist"], float)
-            h = h / h.sum()
+            h = h / H[k]["paths"]
             grp = VGroup()
-            for c_, v in zip(centers, h):
+            for i, (c_, v) in enumerate(zip(centers, h)):
                 if v <= 0:
                     continue
                 top, bot = ax.c2p(c_, np.sqrt(v)), ax.c2p(c_, 0)
                 col = QC.IDEA if c_ > 0 else LOSS
-                grp.add(Rectangle(width=ax.c2p(2.6, 0)[0] - ax.c2p(0, 0)[0], height=max(top[1] - bot[1], 0.01),
+                width = 0.87 * (edges[i + 1] - edges[i])
+                grp.add(Rectangle(width=ax.c2p(width, 0)[0] - ax.c2p(0, 0)[0], height=max(top[1] - bot[1], 0.01),
                                   stroke_width=0, fill_color=col, fill_opacity=0.85).move_to((top + bot) / 2))
             return grp
 
@@ -103,18 +104,23 @@ class Optional(VoiceoverScene):
                            rf"\text{{ lowest }} {H[k]['min']}", font_size=30).next_to(g, DOWN, buff=0.9)
 
         cur, ful, cap = hist(keys[0]), fulcrum(keys[0]), caption(keys[0])
-        verdict = MathTex(r"n = \infty:\ S_{\tau_1} = 1 \text{ always: the mean jumps from 0 to 1}", font_size=32,
+        verdict = MathTex(r"n \to \infty:\ S_{\tau_1} = 1 \text{ a.s., but } \mathbb{E}S_{\tau_1 \wedge n}=0", font_size=30,
                           color=LOSS).next_to(cap, DOWN, buff=0.3)
+        overflow = wrapped_label(r"All paths retained; the leftmost bin includes positions below $-150$. "
+                                  r"The readout uses the full, unclipped sample mean; its population value is zero.",
+                                  12.2, 18, GREY_B).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Watch the mass escape. These are the positions of ten thousand stopped walks at step n. Gold is the "
             "spike at plus one, the walks that have already won; red is the rest, still below zero. A fulcrum sits "
             "at the mean. <bookmark mark='a'/> As n grows, the gold spike swallows almost everything, while a thin red "
-            "tail slides further and further to the left. The balance holds: the mean stays at zero, because the few "
-            "walks deep in the tail weigh more and more. <bookmark mark='b'/> In the limit the tail has left the "
-            "frame, every walk is at one, and the mean jumps to one. That jump is uniform integrability failing, and "
+            "tail slides further and further to the left. The population mean stays zero; the displayed sample mean "
+            "fluctuates. The leftmost bin retains the off-screen tail, and the readout uses unclipped positions. "
+            "<bookmark mark='b'/> In the almost-sure limit the walk is at one, whose expectation is one. "
+            "The expectations before the limit stay zero. That failure to interchange limit and expectation is "
+            "uniform integrability failing, and "
             "it is the loophole the doubling system lives in."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(cur), FadeIn(ful), FadeIn(cap))
+            self.play(FadeIn(g), FadeIn(cur), FadeIn(ful), FadeIn(cap), FadeIn(overflow))
             vo.wait_until("a")
             for k in keys[1:]:
                 self.play(Transform(cur, hist(k)), Transform(ful, fulcrum(k)), Transform(cap, caption(k)), run_time=2)
@@ -164,8 +170,9 @@ class Optional(VoiceoverScene):
             "Optional stopping also computes, by Bob Li's trick of 1980. How long until two heads in a row? Before "
             "every toss a new gambler bets a dollar on heads at fair odds, and lets winnings ride on heads again. "
             "<bookmark mark='a'/> When heads, heads appears, gambler four holds four dollars and gambler five holds "
-            "two. <bookmark mark='b'/> The casino took a dollar a toss and paid six. Its net is a martingale with "
-            "bounded steps, so on average it balances: six tosses."
+            "two. <bookmark mark='b'/> Independent pairs have a one-in-four chance of HH, giving a geometric "
+            "tail and finite expected waiting time. Now bounded-step optional stopping balances the casino's "
+            "takings, one dollar a toss, against its payout of six: six tosses on average."
         ) as vo:
             self.play(FadeIn(tosses[0]), FadeIn(rows[0]))
             vo.wait_until("a")

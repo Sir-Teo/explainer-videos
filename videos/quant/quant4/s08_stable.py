@@ -23,7 +23,7 @@ class Stable(VoiceoverScene):
         c = chapter_card(14, r"Heavy tails as stable laws", r"What shape survives adding up?", lit=(1963,), part=PART)
         with self.voiceover("Chapter fourteen. Heavy tails, as stable laws."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def laws(self):
         x = np.linspace(-6, 6, 241)
@@ -49,11 +49,11 @@ class Stable(VoiceoverScene):
         VGroup(leg, side).arrange(DOWN, aligned_edge=LEFT, buff=0.5).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "Part one measured how heavy the tails of returns are. Here is the family of distributions Benoit "
-            "Mandelbrot proposed for them. The central limit theorem says that sums of many small independent pieces "
-            "look Gaussian. Paul Lévy asked, in the 1920s, which shapes survive being added up at all: if you sum "
+            "Mandelbrot proposed for them. The iid central limit theorem says that normalized sums of independent copies "
+            "look Gaussian when the variance is finite. Paul Lévy asked which shapes survive being added up: if you sum "
             "independent copies, you get the same shape, only wider. <bookmark mark='a'/> The answer is the stable "
             "family, indexed by alpha between zero and two. Alpha equal to two is the Gaussian. Below two, the tails "
-            "fall like a power of x, so slowly that the variance is infinite. Alpha equal to one is the Cauchy. "
+            "fall like a power of x, so slowly that the variance is infinite. The symmetric alpha-one member is Cauchy. "
             "<bookmark mark='b'/> In 1963 Mandelbrot fitted cotton prices with alpha near one point seven, and in "
             "1965 Eugene Fama's thesis found alphas below two for the thirty stocks of the Dow. If they were right, "
             "volatility would not exist as a number, and the whole of option pricing would need rebuilding."
@@ -118,7 +118,7 @@ class Stable(VoiceoverScene):
                       r"e^{-n|ct|^\alpha} = \varphi(n^{1/\alpha}t)", font_size=38),
                 cmath(r"\log\big(-\log|\varphi(t)|^2\big)", r"=", r"\log(2c^\alpha) + \alpha \log|t|", font_size=40,
                       colors={r"\log(2c^\alpha) + \alpha \log|t|": Q_C})]
-        whys = [why(r"stability: a sum of $n$ copies is one copy, stretched by $n^{1/\alpha}$"),
+        whys = [why(r"independent copies of a symmetric, zero-location stable law; other location parameters require centering"),
                 why(r"characteristic functions multiply under independent sums; this one is the symmetric stable law"),
                 why(r"take logs twice: a straight line in $\log t$ whose slope is $\alpha$ (Koutrouvelis 1980)")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.0, buff=0.62, edge=6.9)
@@ -131,10 +131,9 @@ class Stable(VoiceoverScene):
         circ = Circle(radius=1.1, color=GREY_C, stroke_width=1.5).to_corner(DR, buff=0.7).shift(UP * 0.1)
         tk = ValueTracker(0.0)
         phi = np.asarray(us["phi"])
-        vec = always_redraw(lambda: Arrow(circ.get_center(), circ.get_center() + RIGHT * 1.1 * at_index(phi, tk)
-                                          .__float__(), buff=0, color=QC.IDEA, stroke_width=4)
-                            .rotate(at_index(t, tk) * 2.0, about_point=circ.get_center()))
-        clab = wrapped_label(r"$\hat\varphi(t) = \frac1n \sum_j e^{itr_j}$: its length shrinks as $t$ grows", 3.0, 18,
+        vec = always_redraw(lambda: Arrow(circ.get_center(), circ.get_center() + RIGHT * 1.1 * float(at_index(phi, tk)),
+                                          buff=0, color=QC.IDEA, stroke_width=4))
+        clab = wrapped_label(r"Length $=|\hat\varphi(t)|$ for median/IQR-standardized returns; no phase is shown", 3.0, 18,
                              GREY_A).next_to(circ, DOWN, buff=0.2)
         dots_us = VGroup(*[Dot(ax.c2p(np.log(a), b), radius=0.05, color=P_C) for a, b in zip(t, us["y"])])
         dots_g = VGroup(*[Dot(ax.c2p(np.log(a), b), radius=0.05, color=MART) for a, b in zip(t, ga["y"])])
@@ -151,11 +150,13 @@ class Stable(VoiceoverScene):
                    "function, which weighs the whole body, gives a larger alpha. A true stable law would give one "
                    "answer.")
         with self.voiceover(
-            "Stability says the sum of n copies is one copy stretched by n to the one over alpha. <bookmark mark='a'/> "
+            "For a symmetric, zero-location stable law, the sum of n independent copies is one copy stretched "
+            "by n to the one over alpha. <bookmark mark='a'/> "
             "Characteristic functions turn sums into products, and e to the minus c t to the alpha is its own "
             "nth power, stretched: the symmetric stable law, the limit of sums with power tails below two. <bookmark "
             "mark='b'/> Take logs twice and alpha is a slope, Koutrouvelis's estimator. <bookmark mark='c'/> "
-            "Average e to the i t r over every daily return: the arrow's length, a dot per t. The Gaussian control "
+            "Average e to the i t r over median and IQR-standardized returns. The arrow shows only the modulus; "
+            "the displayed bootstrap resamples individual days and ignores serial dependence. The Gaussian control "
             f"gives {ga['alpha']:.2f}; the American market, {us['alpha']:.2f}. {verdict}"
         ) as vo:
             step(0)
@@ -185,7 +186,7 @@ class Stable(VoiceoverScene):
 
         nll = np.array([pad(np.minimum.accumulate([row[4] for row in r_["log"]])) for r_ in runs])
         alph = np.array([pad([row[0] for row in r_["log"]]) for r_ in runs])
-        nll = nll - nll[:, -1:].min()
+        nll = nll - nll[:, -1:]
         steps = np.arange(T)
         ck = [0, 5, 15, 30, 60, T - 1]
 
@@ -201,7 +202,7 @@ class Stable(VoiceoverScene):
                                stroke_width=1.5))
             return grp
 
-        rp = TrainingReplay(steps, nll, frame, ck, ylabel=r"best negative log-likelihood so far (minus the final)",
+        rp = TrainingReplay(steps, nll, frame, ck, ylabel=r"best NLL so far, relative to each run's final value",
                             xlabel=r"evaluations", color=QC.IDEA)
         head = label(r"Maximum likelihood for $(\alpha, \beta, \text{scale}, \text{location})$, Nelder--Mead from the "
                      r"Gaussian corner; three random 1{,}500-day samples", font_size=20, color=GREY_A).to_edge(UP, buff=0.3)
@@ -217,11 +218,12 @@ class Stable(VoiceoverScene):
                                  "samples: the likelihood, which listens to every day, prefers a lighter tail than "
                                  "the quantiles do.")
         with self.voiceover(
-            "A third estimator, the most careful: maximum likelihood, the stable density computed numerically "
+            "A third estimator: a finite-budget likelihood search, with the stable density computed numerically "
             "for every candidate. Watch it learn. Each evaluation tries a new alpha, beta, scale and location, "
             "starting from the Gaussian corner, alpha near two. <bookmark mark='a'/> On the right, the best fit "
             "so far; on the left, the alpha being tried, for three random samples of fifteen hundred days. The "
-            f"search wanders, then settles. <bookmark mark='b'/> It ends at alpha {np.mean(a_):.2f} on average. "
+            f"search has a budget of a hundred fifty evaluations per sample; convergence to a global optimum is "
+            f"not established. <bookmark mark='b'/> It ends at alpha {np.mean(a_):.2f} on average. "
             f"{verdict}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp))
@@ -245,19 +247,22 @@ class Stable(VoiceoverScene):
         decays = ku[-1] < ku[0] / 2
         side = VGroup(
             legend([(P_C, r"US daily, summed over $h$ days"), (MART, r"Gaussian control")], font_size=20),
-            label(r"a stable law keeps its shape under sums: the kurtosis would not fall", font_size=20, color=GREY_A),
+            wrapped_label(r"An iid stable law keeps its standardized distribution under sums. "
+                          r"For $\alpha<2$, variance and the fourth moment diverge, so standardized kurtosis is undefined.", 4.6, 20, GREY_A),
             MathTex(rf"h = 1: {ku[0]:.1f} \quad h = 60: {ku[-1]:.1f}", font_size=30, color=P_C),
-            wrapped_label(r"finite variance: the generalized CLT is not needed; Part 1's tail exponent near 3 and "
-                          r"changing volatility (Parts 7, 13) explain the shape", 4.6, 20, LOSS),
+            wrapped_label(r"Falling sample kurtosis is descriptive, not proof of finite variance. "
+                          r"Part 1's tail evidence and changing volatility provide further context.", 4.6, 20, LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        verdict = ("It falls, unevenly but clearly: the tails thin out as days are added, as they must if the variance "
-                   "is finite. So the variance exists." if decays else
+        verdict = ("The sample kurtosis falls substantially. This suggests changing shape across horizons, "
+                   "but does not prove that the population variance is finite." if decays else
                    "It falls only a little, which on its own cannot settle the question.")
         with self.voiceover(
-            "The simplest test: if daily returns were stable, sums over more days would keep their shape, and "
-            "the kurtosis would not fall. <bookmark mark='a'/> The Gaussian control sits at zero. The market "
-            f"starts at {ku[0]:.0f} for one day. {verdict} The centre looks stable, the tails are truncated, as "
-            "Mantegna and Stanley said, and much of the shape is volatility that changes over time, the subject "
+            "A descriptive check: iid stable sums keep their standardized distribution. Below alpha two, population "
+            "variance and the fourth moment diverge, so standardized kurtosis is undefined. This sample-kurtosis "
+            "plot is descriptive, not a calibrated stability test. "
+            "<bookmark mark='a'/> The Gaussian control is near zero. The market "
+            f"starts at {ku[0]:.0f} for one day. {verdict} A stable-looking centre need not imply stable tails. "
+            "Changing volatility also affects aggregation, the subject "
             "of Parts seven and thirteen."
             " Heavy tails make classical tests fragile. Next: a test that holds whenever you look, built from a fair game."
         ) as vo:

@@ -19,7 +19,7 @@ class Stopping(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter five. Stopping times, and the walk that always wins."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def bell(self, f):
         path = np.concatenate([[0], np.asarray(f["short_paths"][3])[:100]])
@@ -131,7 +131,7 @@ class Stopping(VoiceoverScene):
         k_show = len(P)
         n = P.shape[1]
         g = axes([0, n], [-30, 4], x_length=6.2, y_length=4.0, xlabel=r"steps", ylabel=rf"{k_show} fair walks, "
-                 r"frozen at $+1$", xticks=[0, 100, 200, 300], yticks=[-30, -15, 0, 1], font_size=16)
+                 r"frozen at $+1$; view floor $-30$", xticks=[0, 100, 200, 300], yticks=[-30, -15, 0, 1], font_size=16)
         g.to_corner(UL, buff=0.5).shift(DOWN * 0.3)
         ax = g.ax
         tk = ValueTracker(0.0)
@@ -139,15 +139,16 @@ class Stopping(VoiceoverScene):
 
         def walk_mob():
             t = tk.get_value()
-            grp = VGroup()
+            lines, dots = VGroup(), VGroup()
             for i in range(k_show):
                 stop = T[i] if T[i] > 0 else n
                 m = int(np.clip(min(t, stop), 1, n))
                 pts = [ax.c2p(0, 0)] + [ax.c2p(j + 1, max(P[i, j], -30)) for j in range(m)]
-                grp.add(VMobject(stroke_width=1.0, stroke_color=P_C, stroke_opacity=0.35).set_points_as_corners(pts))
-                if T[i] > 0 and T[i] <= t:
-                    grp.add(Dot(ax.c2p(T[i], 1), radius=0.035, color=QC.IDEA))
-            return grp
+                lines.add(VMobject(stroke_width=1.0, stroke_color=P_C, stroke_opacity=0.35,
+                                   fill_opacity=0).set_points_as_corners(pts))
+                dots.add(Dot(ax.c2p(max(T[i], 0), 1), radius=0.035, color=QC.IDEA)
+                         .set_opacity(float(T[i] > 0 and T[i] <= t)))
+            return VGroup(lines, dots)
 
         fan = always_redraw(walk_mob)
         counter = readout(r"\text{reached } +1\text{ so far:}", lambda: 100 * float(np.mean((T > 0) & (T <= tk.get_value()))),

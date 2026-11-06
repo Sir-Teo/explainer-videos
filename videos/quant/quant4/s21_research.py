@@ -28,7 +28,7 @@ class Research(VoiceoverScene):
                             "the theorem that says how far a fair walk wanders, and what an always-valid test must pay "
                             "for it."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def lil(self):
         thm = theorem_card(r"The law of the iterated logarithm", VGroup(
@@ -37,8 +37,8 @@ class Research(VoiceoverScene):
                     color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25), who=r"Khinchin (1924); Kolmogorov (1929); "
             r"Hartman and Wintner (1941)", width=10.2, font_size=24).move_to(UP * 0.6)
         notes_ = VGroup(
-            why(r"the central limit theorem says $S_t/\sqrt t$ is about $N(0, 1)$ at any one $t$; the LIL says how far it "
-                r"goes over all $t$: past $\sqrt{2\log\log t}$, infinitely often, and no further"),
+            why(r"For every $\epsilon>0$, the $(1-\epsilon)$ envelope is crossed infinitely often; "
+                r"the $(1+\epsilon)$ envelope only finitely often. The exact envelope is not decided by the limsup alone."),
             why(r"so $|S_t| > 1.96\sqrt t$ happens for some $t$ with probability one: a fixed-sample test, read forever, "
                 r"always rejects a true null"),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
@@ -48,8 +48,9 @@ class Research(VoiceoverScene):
         with self.voiceover(
             "The theorem is Khinchin's, from 1924. <bookmark mark='a'/> A sum of independent fair steps, divided by the "
             "square root of two t log log t, has a lim sup of exactly one. <bookmark mark='b'/> The central limit "
-            "theorem describes the walk at any one time. This describes it over all times: it crosses root two log log "
-            "t standard deviations infinitely often, and almost never goes further. And because log log t grows "
+            "theorem describes the walk at one time. The limsup describes all times: every envelope slightly below "
+            "this scale is crossed infinitely often, and every envelope slightly above it only finitely often. "
+            "It does not settle crossing of the exact envelope. Because log log t grows "
             "without bound, the walk eventually crosses one point nine six standard deviations, or any fixed number, "
             "with probability one."
         ) as vo:
@@ -71,8 +72,8 @@ class Research(VoiceoverScene):
                       colors={r"\Pr\big(\max_{t \le t_{k+1}} S_t \ge x_k\big)": MART}),
                 cmath(r"\textstyle\sum_k (\cdot)", r"<", r"\infty\ \ \text{when}\ \theta < (1 + \epsilon)^2", font_size=30,
                       colors={r"\textstyle\sum_k (\cdot)": GAIN})]
-        whys = [why(r"Doob's maximal inequality applied to the submartingale $e^{\lambda S_t}$ with the best $\lambda = x/n$ "
-                    r"(Gaussian steps; sub-Gaussian ones give the same bound): the running maximum has a Gaussian tail"),
+        whys = [why(r"This proof assumes Gaussian or conditional 1-sub-Gaussian steps. "
+                    r"The general finite-variance LIL needs additional truncation arguments."),
                 why(r"check only at geometric times, with a boundary a little above the LIL's"),
                 why(r"over the whole block $(t_k, t_{k+1}]$, $\max S_t \ge x_k$ is needed for any crossing of $x(t)$ there; "
                     r"the bound is a power of $k$"),
@@ -80,7 +81,8 @@ class Research(VoiceoverScene):
                     r"The matching lower bound uses the second Borel--Cantelli lemma on independent block increments")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.3, buff=0.42, edge=6.9)
         with self.voiceover(
-            "The upper half of the proof is a martingale argument, Part 4's whole toolkit in four lines. <bookmark "
+            "For Gaussian or one-sub-Gaussian steps, the upper half has a short martingale proof. The general "
+            "finite-variance result needs additional truncation. <bookmark "
             "mark='a'/> Doob's maximal inequality, applied to the exponential martingale with the best exponent, gives "
             "the running maximum of the walk a Gaussian tail. <bookmark mark='b'/> Check only at geometric times, theta "
             "to the k, against a boundary a little above the law's. <bookmark mark='c'/> The chance the walk crosses "
@@ -89,7 +91,7 @@ class Research(VoiceoverScene):
             "crossed. The matching lower half uses the second Borel-Cantelli lemma on the independent increments "
             "between blocks."
         ) as vo:
-            step(0)
+            step(0, run_time=0.5)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
@@ -113,19 +115,21 @@ class Research(VoiceoverScene):
 
     def peeking(self, t):
         g, lines, al = self._crossplot(t, [("fixed", FIX)], r"null paths that have crossed by $t$")
+        mark_index = int(np.searchsorted(t["marks"], 2500))
+        mark_time = int(t["marks"][mark_index])
         side = VGroup(
-            MathTex(rf"t = 2{{,}}500:\ {100 * t['fixed']['crossed'][int(np.searchsorted(t['marks'], 2500))]:.0f}\%",
+            MathTex(rf"t = {mark_time:,}:\ {100 * t['fixed']['crossed'][mark_index]:.0f}\%".replace(",", "{,}"),
                     font_size=26, color=FIX),
             MathTex(rf"t = 100{{,}}000:\ {100 * t['fixed']['final']:.0f}\%", font_size=26, color=FIX),
             wrapped_label(rf"{t['M']} random walks of N(0, 1) steps, the null true; red: the fixed-sample boundary "
-                          r"$1.96\sqrt t$, checked at every step. Chapter 15's experiment, run forty times longer", 3.4, 15,
+                          r"$1.96\sqrt t$, checked from step 1. Chapter 15 instead uses coin steps and starts at 20.", 3.4, 15,
                           GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3)
         fit_right(side)
         with self.voiceover(
             "See it happen. <bookmark mark='a'/> A thousand fair walks, each checked at every step against the "
-            "fixed-sample boundary, one point nine six root t. The share that has crossed climbs past Chapter 15's "
-            "number at two thousand five hundred steps and keeps climbing. <bookmark mark='b'/> By a hundred "
+            "fixed-sample boundary, one point nine six root t, starting at step one. This uses Gaussian rather "
+            "than Chapter fifteen's coin steps. The share that has crossed keeps climbing. <bookmark mark='b'/> By a hundred "
             "thousand steps it is three quarters. The law of the iterated logarithm says it reaches one, but slowly: "
             "log log t is less than two and a half at a hundred thousand."
         ) as vo:
@@ -147,7 +151,7 @@ class Research(VoiceoverScene):
                       colors={r"\Pr(\exists t:\ M_t \ge 1/\alpha)": MART}),
                 cmath(r"|S_t|", r"\ge", r"\sqrt{(t + \rho)\log\tfrac{t + \rho}{\rho\,\alpha^2}}", font_size=32,
                       colors={r"|S_t|": MIX})]
-        whys = [why(r"for each $\lambda$, a nonnegative martingale with mean one (Chapter 12's exponential martingale)"),
+        whys = [why(r"Gaussian steps give a mean-one martingale; conditional 1-sub-Gaussian steps give a supermartingale"),
                 why(r"Robbins (1970): mix over $\lambda \sim N(0, 1/\rho)$; a mixture of martingales is a martingale, and the "
                     r"Gaussian integral is done by completing the square"),
                 why(r"Ville's inequality (Chapter 15): a nonnegative martingale started at one exceeds $1/\alpha$ ever, with "
@@ -157,14 +161,15 @@ class Research(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.3, buff=0.42, edge=6.9)
         with self.voiceover(
             "How should a test look forever and stay honest? Herbert Robbins answered in 1970. <bookmark mark='a'/> "
-            "For each lambda, the exponential of lambda S minus lambda squared t over two is a nonnegative martingale "
-            "with mean one. <bookmark mark='b'/> Average it over a normal distribution of lambdas. The average is "
+            "For Gaussian null steps, the exponential of lambda S minus lambda squared t over two is a mean-one "
+            "martingale; conditional one-sub-Gaussian steps give the same bound through a supermartingale. "
+            "<bookmark mark='b'/> Average it over a normal distribution of lambdas. The average is "
             "still a martingale, and completing the square does the integral in closed form. <bookmark mark='c'/> "
             "Ville's inequality bounds the chance it ever reaches one over alpha by alpha. <bookmark mark='d'/> Solve "
             "for the walk, and the result is a boundary that holds at every time at once: it grows like the square "
             "root of t log t, a little faster than the law of the iterated logarithm allows a true walk to go."
         ) as vo:
-            step(0)
+            step(0, run_time=0.5)
             vo.wait_until("a")
             self.wait(0.1)
             vo.wait_until("b")
@@ -192,8 +197,8 @@ class Research(VoiceoverScene):
         fit_right(side)
         with self.voiceover(
             "Now the same thousand walks against the always-valid boundaries. <bookmark mark='a'/> Robbins's mixture, "
-            "and a stitched boundary that Howard, Ramdas, McAuliffe and Sekhon built in 2021 from many mixtures, one "
-            "for each geometric block of time. <bookmark mark='b'/> Over a hundred thousand steps, the mixture is crossed "
+            "and a stitched boundary built by allocating error across exponential bounds on geometric time blocks, "
+            "as in Howard, Ramdas, McAuliffe and Sekhon in 2021. <bookmark mark='b'/> Over a hundred thousand steps, the mixture is crossed "
             "by about five percent of the walks, within the sampling error of a thousand paths, and the stitched "
             "boundary by fewer than one percent. The guarantee holds whenever the test is read, because it was built "
             "for every time at once."
@@ -209,16 +214,16 @@ class Research(VoiceoverScene):
 
     def widths(self, t):
         w = t["width"]
-        mk = np.log10(np.asarray(w["t"], float))
-        top = max(max(w["mix"]), max(w["stitched"])) * 1.1
-        g = axes([0, 5], [0, top], x_length=8.4, y_length=4.0, xlabel=r"steps, $t$",
-                 ylabel=r"boundary in standard deviations, $b(t)/\sqrt t$", xticks=[0, 1, 2, 3, 4, 5],
+        keep = np.asarray(w["t"], float) >= 100
+        mk = np.log10(np.asarray(w["t"], float)[keep])
+        g = axes([2, 5], [0, 6], x_length=8.4, y_length=4.0, xlabel=r"steps, $t$ (view starts at 100)",
+                 ylabel=r"boundary in standard deviations, $b(t)/\sqrt t$", xticks=[2, 3, 4, 5],
                  yticks=[0, 2, 4, 6], font_size=13, log_x=True).move_to(LEFT * 1.4 + DOWN * 0.3)
         ax = g.ax
-        lines = VGroup(curve(ax, mk, np.asarray(w["fixed"]), FIX, stroke_width=3),
-                       curve(ax, mk, np.asarray(w["mix"]), MIX, stroke_width=3),
-                       curve(ax, mk, np.asarray(w["stitched"]), ST, stroke_width=3),
-                       curve(ax, mk[mk > 0.5], np.asarray(w["lil"])[mk > 0.5], WHITE, stroke_width=2))
+        lines = VGroup(curve(ax, mk, np.asarray(w["fixed"])[keep], FIX, stroke_width=3),
+                       curve(ax, mk, np.asarray(w["mix"])[keep], MIX, stroke_width=3),
+                       curve(ax, mk, np.asarray(w["stitched"])[keep], ST, stroke_width=3),
+                       curve(ax, mk, np.asarray(w["lil"])[keep], WHITE, stroke_width=2))
         leg = legend([(FIX, r"fixed: 1.96, valid once"), (MIX, r"mixture: $\sim\sqrt{\log t}$"),
                       (ST, r"stitched: $\sim\sqrt{\log\log t}$"), (WHITE, r"the LIL: $\sqrt{2\log\log t}$")],
                      font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.4)
@@ -229,9 +234,8 @@ class Research(VoiceoverScene):
             "log t. The stitched boundary widens like the square root of log log t, the law of the iterated "
             "logarithm's own rate, in white, which no always-valid boundary can beat. <bookmark mark='b'/> But rates "
             "are asymptotic. At a hundred thousand steps the mixture is three point six standard deviations and the "
-            "stitched boundary four point three: over any horizon a trader will see, the mixture is narrower, and the "
-            "stitched boundary wins only far beyond it. Either way, about twice the fixed width is the cost of being "
-            "allowed to stop whenever you like."
+            "stitched boundary four point three with these tuning choices. Their ordering depends on the time "
+            "horizon and tuning; this comparison is not a universal optimum. Both pay extra width for simultaneous coverage."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")
@@ -260,19 +264,53 @@ class Research(VoiceoverScene):
             "zero, whatever the distribution', the theory of e-values is still being written. <bookmark mark='c'/> And "
             "returns are neither light-tailed nor independent; boundaries for them are recent, and loose."
         ) as vo:
+            self.play(FadeIn(cards[0]))
             for k, mk in enumerate(("a", "b", "c")):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                if k:
+                    self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
     def question(self):
         q = pause_card(r"with $\rho = 100$ and $\alpha = 5\%$, how many standard deviations is Robbins's boundary at "
-                       r"$t = 100$, and at $t = 10{,}000$? Compare with 1.96.")
+                       r"$t = 100$, and at $t = 10{,}000$? Compare with 1.96.").move_to(ORIGIN)
         with self.voiceover(
             "Pause and predict. With rho of a hundred and alpha of five percent, how many standard deviations is "
             "Robbins's boundary at a hundred steps, and at ten thousand? Compare with one point nine six."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)
+        self.clear_scene()
+        self.answer()
+
+    def answer(self):
+        rho, alpha = 100.0, 0.05
+        times = (100, 10000)
+        widths = [np.sqrt((1 + rho / t) * np.log((t + rho) / (rho * alpha ** 2))) for t in times]
+        title = label(r"Robbins's boundary in standard deviations", font_size=34, color=MIX).to_edge(UP, buff=0.45)
+        formula = MathTex(r"\frac{b(t)}{\sqrt t}=\sqrt{\left(1+\frac{\rho}{t}\right)"
+                          r"\log\frac{t+\rho}{\rho\alpha^2}},\quad \rho=100,\ \alpha=0.05",
+                          font_size=32).next_to(title, DOWN, buff=0.4)
+        rows = VGroup()
+        for i, (text, value, color) in enumerate(((r"fixed, one look", 1.96, FIX),
+                                                 (r"t=100", widths[0], MIX), (r"t=10{,}000", widths[1], MIX))):
+            y = 0.25 - i * 1.05
+            lab = label(text, font_size=24, color=color).move_to(LEFT * 5 + UP * y)
+            bar = Rectangle(width=6 * value / 4, height=0.45, stroke_width=0, fill_color=color,
+                            fill_opacity=0.85).move_to(LEFT * 2.8 + UP * y, aligned_edge=LEFT)
+            number = MathTex(f"{value:.2f}", font_size=30, color=color).next_to(bar, RIGHT, buff=0.2)
+            rows.add(VGroup(lab, bar, number))
+        with self.voiceover(
+            "Reveal the comparison. Divide the boundary by root t. <bookmark mark='a'/> At a hundred steps, "
+            "the square root of two times log eight hundred is about three point six six standard deviations. "
+            "<bookmark mark='b'/> At ten thousand, the answer is about three point two seven. Both exceed "
+            "one point nine six because they protect repeated looks. The normalized width need not increase "
+            "monotonically at these early times; rho tunes where the boundary is efficient."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(formula), FadeIn(rows[0]))
+            for i, mark in enumerate(("a", "b"), 1):
+                vo.wait_until(mark)
+                self.play(FadeIn(rows[i][0]), GrowFromEdge(rows[i][1], LEFT), FadeIn(rows[i][2]))
+        self.wait(0.4)
         self.clear_scene()

@@ -25,8 +25,8 @@ The expansion (each item's docstring says what it computes): ``condexp`` (the ma
 ``martingales``, ``systems`` (six betting systems), ``firstpassage`` (10,000 walks to 100,000 steps), ``patterns``,
 ``doubling``, ``nikkei_doubling`` (schematic), ``ruin_duration``, ``polya`` (and upcrossings), ``drift_posterior``,
 ``ivey_sim``, ``esscher``, ``radon``, ``kakutani``, ``ecf`` (and aggregation), ``stable_mle`` (resumable, the longest:
-about 15 minutes), ``peeking_curve``, ``learner`` (resumable), ``confseq``, ``casino``, ``beliefs``, ``ebh``,
-``numeraire``, ``envelope_ons``.
+about 15 minutes), ``peeking_curve``, ``learner`` (resumable), ``confseq_valid`` (corrected bounded confidence sequence), ``casino``, ``beliefs``, ``ebh``,
+``numeraire``, ``envelope_ons``, ``envelope_confseq_valid`` (the separately registered correction).
 """
 
 from __future__ import annotations
@@ -200,6 +200,7 @@ def compute_peeking() -> dict:
     n_paths, n = 2000, 2500
     t_reject, e_reject, t_first, e_max = 0, 0, [], []
     show_t, show_e = [], []
+    show_indices = np.r_[np.arange(0, n, 10), n - 1]
     for k in range(n_paths):
         x = rng.choice([-0.5, 0.5], n)
         cs = np.cumsum(x)
@@ -214,10 +215,11 @@ def compute_peeking() -> dict:
         if hist.max() >= 20:
             e_reject += 1
         if k < 30:
-            show_t.append(z[::10])
-            show_e.append(np.log10(hist[1:][::10]))
+            show_t.append(z[show_indices])
+            show_e.append(np.log10(hist[1:][show_indices]))
     return _json({"n": n, "paths": n_paths, "t_reject": t_reject / n_paths, "e_reject": e_reject / n_paths,
-                  "show_z": show_t, "show_loge": show_e, "e_max_median": float(np.median(e_max))})
+                  "show_z": show_t, "show_loge": show_e, "show_days": show_indices + 1,
+                  "e_max_median": float(np.median(e_max))})
 
 
 # ---------------------------------------------------------------------------
@@ -362,6 +364,15 @@ def compute_systems() -> dict:
                   "demo_stakes": martingale.system_stakes("martingale", demo)})
 
 
+def _firstpassage_histogram(v) -> dict:
+    """Keep the +1 atom, zero and all left-overflow mass in distinct display bins."""
+    v = np.asarray(v, int)
+    edges = np.r_[np.arange(-150.5, -0.5, 3), -0.5, 0.5, 1.5]
+    return {"frac_hit": float((v == 1).mean()), "mean": float(v.mean()),
+            "hist": np.histogram(np.clip(v, -150, 1), bins=edges)[0], "edges": edges,
+            "paths": int(len(v)), "below_view": float((v < -150).mean()), "min": int(v.min())}
+
+
 def compute_firstpassage() -> dict:
     """tau_1 = first time a fair walk reaches +1: 10,000 walks followed to 100,000 steps (in chunks), and 400 short
     walks for the screen.  P(tau > n) against the exact reflection-principle value; the running mean of tau; the
@@ -403,9 +414,7 @@ def compute_firstpassage() -> dict:
     hists = {}
     for c in checks[:4]:
         v = S_at[c]
-        hists[str(c)] = {"frac_hit": float((v == 1).mean()), "mean": float(v.mean()),
-                         "hist": np.histogram(np.clip(v, -150, 1), bins=np.arange(-150.5, 2.5, 3))[0],
-                         "min": int(v.min())}
+        hists[str(c)] = _firstpassage_histogram(v)
     hit_low = lowest[tau <= N]
     # 400 short walks for the screen (hit times and paths up to 300 steps)
     rs = np.random.default_rng(42)
@@ -565,8 +574,9 @@ def compute_drift_posterior() -> dict:
     sd = 1 / np.sqrt(prec)
     t = _frac(d)
     step = 21
-    return _json({"t": t[::step], "mean_ann": (mean * 252)[::step], "lo_ann": ((mean - 1.96 * sd) * 252)[::step],
-                  "hi_ann": ((mean + 1.96 * sd) * 252)[::step], "end_mean": float(mean[-1] * 252),
+    show = np.unique(np.r_[np.arange(0, len(d), step), len(d) - 1])
+    return _json({"t": t[show], "mean_ann": (mean * 252)[show], "lo_ann": ((mean - 1.96 * sd) * 252)[show],
+                  "hi_ann": ((mean + 1.96 * sd) * 252)[show], "end_mean": float(mean[-1] * 252),
                   "end_half": float(1.96 * sd[-1] * 252), "sample_mean": float(r.mean() * 252),
                   "half_1936": float(1.96 * sd[np.searchsorted(d, 19360101)] * 252),
                   "half_1976": float(1.96 * sd[np.searchsorted(d, 19760101)] * 252)})
@@ -849,6 +859,26 @@ def compute_confseq() -> dict:
                   "n": int(len(r))})
 
 
+def compute_confseq_valid() -> dict:
+    """Corrected bounded betting interval; preserve the legacy registered function and cache."""
+    result = compute_confseq()
+    result["method"] = "predictable one-sided bets; alpha/2 each; outward grid brackets"
+    result["assumption"] = "one common conditional mean for log returns clipped to [-0.2, 0.2]"
+    result["grid_step_bp"] = 4.0
+    return result
+
+
+def compute_envelope_confseq_valid() -> dict:
+    """Record the corrected confidence construction separately; do not open or overwrite a hold-out."""
+    code = "\n".join(inspect.getsource(f) for f in (compute_confseq, compute_confseq_valid, martingale.betting_cs))
+    record = pit.register("btc_mean_confseq_bounded_v2", code,
+                          {"data": "Binance BTCUSDT 1d", "start": 2018, "through": 20201231,
+                           "clipped_log_return_bounds": [-0.2, 0.2], "alpha": 0.05,
+                           "grid": [0.3, 0.7, 401], "correction": "bounded bets and continuous-mean brackets"},
+                          trials=1)
+    return _json({"registered": {"btc_mean_confseq_bounded_v2": record}, "trials": pit.trials_so_far()})
+
+
 def compute_casino() -> dict:
     """The house's side of even-money roulette bets (European wheel): P(the house is behind after N unit bets),
     exactly (binomial), by the normal approximation, and Azuma's bound exp(-(N/37)^2 / (2N)).  And the spread of a
@@ -1030,8 +1060,10 @@ ITEMS = {"doob": compute_doob, "measure": compute_measure, "ruin": compute_ruin,
          "nikkei_doubling": compute_nikkei_doubling, "ruin_duration": compute_ruin_duration, "polya": compute_polya,
          "drift_posterior": compute_drift_posterior, "ivey_sim": compute_ivey_sim, "esscher": compute_esscher,
          "radon": compute_radon, "kakutani": compute_kakutani, "ecf": compute_ecf, "stable_mle": compute_stable_mle,
-         "peeking_curve": compute_peeking_curve, "learner": compute_learner, "confseq": compute_confseq,
-         "casino": compute_casino, "beliefs": compute_beliefs, "ebh": compute_ebh, "numeraire": compute_numeraire, "envelope_ons": compute_envelope_ons, "lil_theory": compute_lil_theory}
+         "peeking_curve": compute_peeking_curve, "learner": compute_learner, "confseq_valid": compute_confseq_valid,
+         "casino": compute_casino, "beliefs": compute_beliefs, "ebh": compute_ebh, "numeraire": compute_numeraire,
+         "envelope_ons": compute_envelope_ons, "envelope_confseq_valid": compute_envelope_confseq_valid,
+         "lil_theory": compute_lil_theory}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

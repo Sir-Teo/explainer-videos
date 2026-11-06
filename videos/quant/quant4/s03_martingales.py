@@ -38,11 +38,11 @@ class Martingales(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter three. Martingales: Ville's fair games."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def definition(self):
         d = definition_card(r"Martingale", r"A process $M_0, M_1, \dots$ that is known at each time ($M_n$ depends only "
-                            r"on $\mathcal{F}_n$), has a finite mean, and whose best forecast of tomorrow is today: "
+                            r"on $\mathcal{F}_n$), satisfies $\mathbb E|M_n|<\infty$, and whose forecast of tomorrow is today: "
                             r"$\mathbb{E}[M_{n+1} \mid \mathcal{F}_n] = M_n$.", width=8.6, color=MART, font_size=25)
         h = history_card(1939, r"Jean Ville, \textit{\'Etude critique de la notion de collectif}",
                          r"named fair games after the ``martingale'', the gamblers' doubling system; Joseph Doob built "
@@ -51,7 +51,7 @@ class Martingales(VoiceoverScene):
             label(r"examples", font_size=24, color=GREY_A),
             MathTex(r"\text{a gambler's wealth in a fair game}", font_size=28),
             MathTex(r"S_n^2 - n \quad \text{for a walk of } \pm 1 \text{ steps}", font_size=28),
-            MathTex(r"\mathbb{E}[X \mid \mathcal{F}_n] \quad \text{for any } X\text{: Doob's martingale}", font_size=28,
+            MathTex(r"\mathbb{E}[X \mid \mathcal{F}_n],\ X\in L^1:\ \text{Doob's martingale}", font_size=28,
                     color=MART),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         VGroup(d, h, ex).arrange(DOWN, buff=0.4).move_to(ORIGIN)
@@ -62,7 +62,7 @@ class Martingales(VoiceoverScene):
             "which borrowed it from the most famous betting system, the martingale, in which you double your stake "
             "after every loss. Joseph Doob read Ville and built the theory. <bookmark mark='b'/> Examples: a "
             "gambler's wealth in a fair game. The square of a random walk minus the number of steps. And, from the "
-            "previous chapter, the conditional expectation of anything, as information arrives: Doob's martingale."
+            "previous chapter, the conditional expectation of any integrable variable as information arrives: Doob's martingale."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")
@@ -87,8 +87,8 @@ class Martingales(VoiceoverScene):
                     r"(a casino's customer), a submartingale up"),
                 why(r"$\xi = \pm 1$ fair, independent of the past; so $S_n^2 - n$ is a martingale"),
                 why(r"the moment generating function of $\pm 1$ is $\cosh\theta$: the exponential martingale"),
-                why(r"the tower property: Doob's martingale of forecasts"),
-                why(r"Jensen: a convex function of a martingale is a submartingale")]
+                why(r"the tower property, for integrable $X$: Doob's martingale of forecasts"),
+                why(r"Jensen: convex $\varphi$, with $\varphi(M_n)$ integrable, gives a submartingale")]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-0.8, buff=0.36, edge=6.9)
         with self.voiceover(
             "Fair, unfavourable and favourable games have names. If tomorrow's forecast is at most today, a "
@@ -100,7 +100,7 @@ class Martingales(VoiceoverScene):
             "or minus one step; dividing by it gives the exponential martingale, which chapter five uses to time the "
             "walk. <bookmark mark='c'/> The forecast of anything, refined as information arrives, is a martingale "
             "by the tower property. <bookmark mark='d'/> And Jensen's inequality turns a convex function of a "
-            "martingale into a submartingale."
+            "martingale into a submartingale when the transformed values remain integrable."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -201,8 +201,9 @@ class Martingales(VoiceoverScene):
             MathTex(rf"\mathbb{{E}}(S_{{50}} - 2)^+ = {call[-1]:.2f}", font_size=30, color=QC.OPTION),
             MathTex(rf"\mathbb{{E}}|S_{{50}}| = {absm[-1]:.2f} \approx \sqrt{{2 \cdot 50/\pi}} = {np.sqrt(100 / np.pi):.2f}",
                     font_size=28, color=P_C),
-            wrapped_label(r"a forward is a martingale under the pricing measure, so a call on it is a submartingale: "
-                          r"longer-dated calls are worth more (calendar spreads $\ge 0$, Part 12)", 4.6, 20, GREY_A),
+            wrapped_label(r"For the same integrable martingale and fixed convex payoff, undiscounted expectations "
+                          r"increase with observation time. Market calendar comparisons also require consistent "
+                          r"forwards, strikes and discounting (Part 12).", 4.6, 20, GREY_A),
             wrapped_label(r"Markov $\ne$ martingale: Markov is about memory, martingale about the mean; a biased walk is "
                           r"Markov but not a martingale", 4.6, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
@@ -211,7 +212,8 @@ class Martingales(VoiceoverScene):
         with self.voiceover(
             "That last fact has a price. A call on the walk struck at two pays a convex function, so its value can "
             f"only rise with time. <bookmark mark='a'/> Watch it grow to {call[-1]:.2f} after fifty steps, simulated "
-            "walks landing on the exact curve: in Part nine, longer-dated calls are worth more for this reason. "
+            "walks landing on the exact curve. This is one martingale, one fixed strike and no discounting. "
+            "Calendar constraints for market calls need consistent forwards and discount factors. "
             "<bookmark mark='b'/> Is the absolute value of the walk a martingale? No, a submartingale; its mean grows "
             f"like the square root of two n over pi, {absm[-1]:.2f} at fifty. <bookmark mark='c'/> And Markov is not "
             "martingale: Markov is about memory, martingale about the mean."
@@ -225,9 +227,9 @@ class Martingales(VoiceoverScene):
             l_abs.clear_updaters()
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05), FadeIn(side[1]), FadeIn(side[3]))
             vo.wait_until("b")
-            self.play(FadeIn(side[2]), FadeIn(pred.move_to(ax.c2p(12, 4.6))))  # under the axis title, above the curves
+            self.play(FadeOut(side[3]), FadeIn(side[2]), FadeIn(pred.next_to(side[2], DOWN, buff=0.3).align_to(side, LEFT)))
             vo.wait_until("c")
-            self.play(FadeIn(side[4]))
+            self.play(FadeOut(pred), FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 

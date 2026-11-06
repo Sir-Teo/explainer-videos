@@ -18,8 +18,8 @@ class House(VoiceoverScene):
     def construct(self):
         l = load("learner")
         e = load("eprocess")
-        cs = load("confseq")
-        env = load("envelope_ons")
+        cs = load("confseq_valid")
+        env = load("envelope_confseq_valid")
         self.card()
         self.derive()
         self.replay(l)
@@ -32,7 +32,7 @@ class House(VoiceoverScene):
         c = chapter_card(16, r"Learning to bet", r"How fast can a bettor find an edge?", part=PART)
         with self.voiceover("Chapter sixteen. Learning to bet."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def derive(self):
         rows = [cmath(r"W_t = \prod_{s \le t} (1 + \lambda_s x_s)", r",", r"\quad \lambda_s \in \mathcal{F}_{s-1},\ "
@@ -45,26 +45,29 @@ class House(VoiceoverScene):
                 cmath(r"z_t = \frac{x_t}{1 + \lambda_t x_t},\ A_t = 1 + \sum z^2", r"\Rightarrow",
                       r"\lambda_{t+1} = \operatorname{clip}\Big(\lambda_t + \frac{2}{2 - \log 3}\frac{z_t}{A_t}\Big)",
                       font_size=34, colors={r"\lambda_{t+1} = \operatorname{clip}\Big(\lambda_t + \frac{2}{2 - \log 3}\frac{z_t}{A_t}\Big)": MART}),
-                cmath(r"C_t", r"=", r"\{m : W_t(m) < 1/\alpha\}", font_size=40, colors={r"\{m : W_t(m) < 1/\alpha\}": Q_C})]
-        whys = [why(r"a bettor's wealth; under $H_0: \mathbb{E}[x_t \mid \mathcal{F}_{t-1}] = 0$ a nonnegative martingale "
+                cmath(r"C_t", r"=", r"\bigcap_{s\le t}\{m: W_s^+(m)<2/\alpha,\ W_s^-(m)<2/\alpha\}", font_size=34,
+                      colors={r"\bigcap_{s\le t}\{m: W_s^+(m)<2/\alpha,\ W_s^-(m)<2/\alpha\}": Q_C})]
+        whys = [why(r"$|x_t|\le1$; under $H_0: \mathbb{E}[x_t \mid \mathcal{F}_{t-1}] = 0$ a nonnegative martingale "
                     r"(chapter 4), so Ville applies whatever the stakes"),
-                why(r"Taylor: the growth rate is a parabola in the stake; its top is Kelly's fraction (Part 8)"),
+                why(r"second-order Taylor approximation for small bets and edges; optimize within the allowed stake range"),
                 why(r"time to reach 20 at the best stake; a daily Sharpe of 0.05, about 0.8 a year, needs about 2{,}400 "
                     r"days"),
                 why(r"online Newton step (Cutkosky and Orabona 2018): learn the stake from the bettor's own gradients"),
-                why(r"test every mean $m$ at once and keep the survivors: a confidence sequence, valid at all times")]
+                why(r"a common conditional mean, bounded observations, $\alpha/2$ per direction; round grid crossings outward")]
         step = ladder(self, rows, whys, keep=4, top=3.15, x=-0.6, buff=0.38, edge=6.9)
         with self.voiceover(
             "The House's monitor bets a fixed menu of stakes. Can a bettor learn its stake instead? Its wealth "
             "multiplies by one plus stake times outcome, each stake chosen from the past, so under the null of mean "
             "zero it is a nonnegative martingale, and Ville's inequality holds for any rule at all. "
-            "<bookmark mark='a'/> What the rule decides is speed. Expected log growth is a parabola in the stake, "
-            "peaking at the Kelly fraction, the edge over the second moment. <bookmark mark='b'/> At the peak, "
-            "reaching twenty takes two log twenty over the squared daily Sharpe ratio: a daily point zero five, about "
-            "point eight a year, needs about two thousand four hundred days, nearly ten years, for a perfect bettor. "
+            "<bookmark mark='a'/> What the rule decides is speed. A second-order approximation makes expected log "
+            "growth a parabola, peaking at edge over second moment if that stake is allowed. <bookmark mark='b'/> "
+            "For a small stationary edge, log twenty divided by approximate growth gives about two thousand four "
+            "hundred days at daily Sharpe point zero five. This is a growth-rate estimate for an oracle; actual "
+            "hitting times are random. "
             "<bookmark mark='c'/> A real bettor learns the stake online, here by an online Newton step on its own log "
-            "wealth. <bookmark mark='d'/> And betting against every candidate mean at once, the means no bettor has "
-            "beaten form a confidence sequence, valid at every moment simultaneously."
+            "wealth. <bookmark mark='d'/> For the confidence sequence, use bounded observations with a common "
+            "conditional mean. Give each one-sided bettor half the error budget and retain all past constraints. "
+            "Rounding numerical grid crossings outward also covers means between grid points."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -79,7 +82,7 @@ class House(VoiceoverScene):
         self.clear_scene()
 
     def replay(self, l):
-        steps = np.asarray(l["steps"], float)
+        steps = np.asarray(l["steps"], float) + 1  # saved indices become completed-day counts
         lam, lw = np.asarray(l["lam"]), np.asarray(l["logw"])
         kelly = l["kelly"]
         ck = [0, 25, 50, 100, 200, 350, len(steps) - 1]
@@ -103,14 +106,14 @@ class House(VoiceoverScene):
             kt = label(rf"gold: Kelly $= {kelly:.3f}$", font_size=18, color=QC.IDEA).next_to(txt, DOWN, buff=0.1)
             return VGroup(dial, ticks, gold, needle, txt, kt)
 
-        rp = TrainingReplay(steps, lw, frame, ck, ylabel=r"$\log_{10}$ wealth of the ONS bettor", xlabel=r"days",
+        rp = TrainingReplay(steps, lw, frame, [float(steps[j]) for j in ck], ylabel=r"$\log_{10}$ wealth of the ONS bettor", xlabel=r"days",
                             color=MART)
-        line20 = DashedLine(rp.ax.c2p(0, np.log10(20)), rp.ax.c2p(steps[-1], np.log10(20)), color=LOSS, stroke_width=2)
-        head = label(r"10{,}000 days of a strategy with a daily Sharpe of 0.05 (simulated); the stake learns",
-                     font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
-        cross = l["cross_day"]
+        line20 = DashedLine(rp.ax.c2p(steps[0], np.log10(20)), rp.ax.c2p(steps[-1], np.log10(20)), color=LOSS, stroke_width=2)
+        head = label(r"10{,}000 simulated days; daily Sharpe 0.05; replay every 20 days through day 9{,}981",
+                     font_size=21, color=GREY_A).to_edge(UP, buff=0.3)
+        cross = l["cross_day"] + 1 if l["cross_day"] is not None else None
         crossing = (f"It crosses twenty on day {cross:,}, against about {l['theory_days']:,.0f} for a bettor who knew "
-                    "the edge from the start." if cross else "It has not reached twenty within ten thousand days.")
+                    "the edge from the start." if cross is not None else "It has not reached twenty within ten thousand days.")
         with self.voiceover(
             "Watch one learner. A strategy with a true daily Sharpe ratio of point zero five, simulated for ten "
             "thousand days. On the left, the bettor's stake as a needle on a dial, with Kelly's fraction marked "
@@ -131,7 +134,7 @@ class House(VoiceoverScene):
                   ylabel=r"share flagged within 10{,}000 days", xticks=[0, 1, 2, 3],
                   xfmt=lambda v: f"{edges[int(v)]:g}", yticks=[0, 0.05, 0.5, 1], font_size=15)
         g2 = axes([-0.5, 3.5], [0, 10000], x_length=5.6, y_length=3.4, xlabel=r"daily Sharpe of the strategy",
-                  ylabel=r"median days to flag (10{,}000 = never)", xticks=[0, 1, 2, 3],
+                  ylabel=r"seed median flag time; 10{,}000 = no flag", xticks=[0, 1, 2, 3],
                   xfmt=lambda v: f"{edges[int(v)]:g}", yticks=[0, 5000, 10000], font_size=15)
         VGroup(g1, g2).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.9)
         alpha_line = DashedLine(g1.ax.c2p(-0.5, 0.05), g1.ax.c2p(3.5, 0.05), color=LOSS, stroke_width=1.5)
@@ -150,18 +153,19 @@ class House(VoiceoverScene):
         med = {k: float(np.mean([r_["median"] for r_ in G[f"{k}|0.05"]])) for k, _, _ in KINDS}
         null_ok = all(max(r_["rate"] for r_ in G[f"{k}|0.0"]) <= 0.08 for k, _, _ in KINDS if k != "kelly")
         ons_wins = med["ons"] < med["mixture"]
-        promise = "Ville's promise, kept." if null_ok else "close to Ville's promise."
+        promise = ("consistent with the theoretical bound up to Monte Carlo variation." if null_ok
+                   else "the small-seed estimates vary around the bound; they do not prove calibration.")
         verdict = ("At a Sharpe of point zero five the learner beats the House's fixed menu." if ons_wins else
                    "At a Sharpe of point zero five, the surprise: the House's fixed menu of stakes is faster than the "
                    "learners. A small edge gives the learner little signal to learn from, while the menu already "
-                   "holds a stake close to the right one. Learning pays at larger edges, or when the edge drifts.")
+                   "holds a stake close to the right one. This experiment does not establish a universal ranking.")
         with self.voiceover(
             "Now a fair race. Four bettors: the House's fixed menu, the online Newton learner, a second learner "
             "called aGRAPA that plugs in running estimates of the edge, and an oracle that knows the true edge. "
             "Four strategies, from no edge at all to a daily Sharpe of point one; eight seeds of a hundred runs "
             "each, drawn as bars from the lowest seed to the highest. <bookmark mark='a'/> With no edge, every "
             f"bettor flags at most about five percent of the runs: {promise} <bookmark mark='b'/> With an edge, "
-            f"the oracle is fastest, as it must be, at {med['kelly']:,.0f} days in the median for a Sharpe of "
+            f"the oracle is fastest in this experiment, averaging {med['kelly']:,.0f} days across the seed medians at Sharpe "
             f"point zero five. {verdict}"
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(alpha_line), FadeIn(leg))
@@ -193,8 +197,8 @@ class House(VoiceoverScene):
         grid = VGroup(*head, *[c for r_ in rows for c in r_]).arrange_in_grid(rows=5, cols=3, buff=(0.7, 0.25),
                                                                                col_alignments="lcc")
         grid.to_edge(UP, buff=0.8)
-        note_ = wrapped_label(r"the date each bettor's wealth first reached 20; same bets, same data; the ONS tests "
-                              r"are registered with the House (four more trials)", 11.0, 20, GREY_B).next_to(
+        note_ = wrapped_label(r"First crossing dates of registered historical scores. The estimated-centering, "
+                              r"clipping and retrospective warm-up caveats of chapter 15 still apply.", 11.0, 20, GREY_B).next_to(
             grid, DOWN, buff=0.4)
         src = real_data(r"Kenneth French's daily US market; Binance BTCUSDT daily; research window to 2020")
         same = all(bool(e[k]["cross"]) == bool(R[k]["cross"]) for k in R)
@@ -213,11 +217,12 @@ class House(VoiceoverScene):
         late = [k for k in ("20000101", "btc") if e[k]["cross"] or R[k]["cross"]]
         late_txt = ("Since 2000, and on Bitcoin since 2018, neither bettor ever does." if not late else
                     "Since 2000 or on Bitcoin, at least one bettor crosses.")
-        verdict = ("The learner reaches the same verdicts as the menu, in every market." if same else
-                   "The two bettors disagree on at least one market, so the verdict there depends on the bettor.")
+        verdict = ("The two historical scores have the same crossing pattern in these windows." if same else
+                   "The historical crossing pattern depends on the bettor in at least one window.")
         with self.voiceover(
-            "Back to the hook's question, now with the learner. The bet is the same: today keeps yesterday's "
-            f"sign. <bookmark mark='a'/> {timing} <bookmark mark='b'/> {late_txt} <bookmark mark='c'/> {verdict}"
+            "Back to the hook's historical diagnostic, now with a learner on the same transformed outcomes. "
+            f"Chapter fifteen's calibration caveats still apply. <bookmark mark='a'/> {timing} "
+            f"<bookmark mark='b'/> {late_txt} <bookmark mark='c'/> {verdict}"
         ) as vo:
             self.play(FadeIn(VGroup(*head)), FadeIn(src))
             vo.wait_until("a")
@@ -228,7 +233,7 @@ class House(VoiceoverScene):
     def confidence(self, cs):
         t = np.asarray(cs["t"])
         lo, hi, mu = (np.asarray(cs[k], float) for k in ("lo_bp", "hi_bp", "mean_bp"))
-        g = axes([2018, 2021], [-150, 150], x_length=7.0, y_length=4.4, ylabel=r"Bitcoin's mean daily log return, "
+        g = axes([2018, 2021], [-150, 150], x_length=7.0, y_length=4.4, ylabel=r"mean of clipped Bitcoin log returns, "
                  r"basis points", xticks=[2018, 2019, 2020, 2021], xfmt=lambda v: f"{int(v)}",
                  yticks=[-150, -50, 0, 50, 150], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         ax = g.ax
@@ -242,20 +247,23 @@ class House(VoiceoverScene):
         lm = tracing(ax, t, np.clip(mu, -150, 150), tk, WHITE, stroke_width=2)
         zero = DashedLine(ax.c2p(2018, 0), ax.c2p(2021, 0), color=GREY_C, stroke_width=1.5)
         side = VGroup(
-            label(r"95\% confidence sequence, valid at every day at once", font_size=22, color=Q_C),
+            wrapped_label(r"95\% confidence sequence under one common conditional mean of bounded observations", 4.4, 22, Q_C),
             label(r"white: the running mean", font_size=20, color=GREY_A),
             MathTex(rf"\text{{end of 2020: }} [{cs['end'][0]:.0f}, {cs['end'][1]:.0f}]\ \text{{bp}}", font_size=30,
                     color=Q_C),
-            wrapped_label(r"returns clipped to $\pm 20\%$ to make them bounded (Waudby-Smith and Ramdas 2024)", 4.4, 18,
+            wrapped_label(r"Log returns clipped to $[-0.2,0.2]$; 4 bp grid with outward brackets. "
+                          r"The view clips bands at $\pm150$ bp. The mean assumption is a working model.", 4.4, 18,
                           GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
-        verdict = ("It still covers zero: three years of Bitcoin cannot tell its mean from nothing." if cs["covers0"]
+        verdict = ("It includes zero, so this construction does not reject zero under the stated model." if cs["covers0"]
                    else "It has left zero behind.")
         with self.voiceover(
-            "And the confidence sequence. Here is Bitcoin's mean daily return, estimated as the days arrive from "
-            "2018. The band is the set of means that no bettor has yet beaten, at ninety-five percent, and unlike "
-            "an ordinary confidence interval it is valid on every day at once, so you may watch it as long as "
-            "you like. <bookmark mark='a'/> It narrows as the evidence grows. At the end of 2020 it runs from "
+            "And the corrected confidence sequence. Clip daily log returns to minus point two through point two. "
+            "Assume these bounded observations share one conditional mean. Under that model, predictable "
+            "one-sided bets give ninety-five percent coverage simultaneously over time; the grid bounds are "
+            "rounded outward. This does not establish that Bitcoin satisfies the mean assumption. "
+            "<bookmark mark='a'/> The display clips early wide bands at a hundred fifty basis points. "
+            "At the end of 2020 the interval runs from "
             f"{cs['end'][0]:.0f} to {cs['end'][1]:.0f} basis points a day. {verdict}"
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(side[:2]), FadeIn(side[3]))
@@ -284,10 +292,12 @@ class House(VoiceoverScene):
         rule = wrapped_label(r"Rule 5: a claim that something beats a fair game is tested with an e-process, valid "
                              r"whenever it is checked; the stake may be learned.", 12.0, 24, QC.HOUSE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "In the House the learner is ten lines, tested to keep false alarms under five percent. "
+            "In the House the learner is ten lines. Its false-alarm guarantee requires bounded outcomes, "
+            "past-only stakes and a correctly specified conditional-mean null. "
             f"<bookmark mark='a'/> On the simulated strategy its stake settles near {l['lam_end']:.2f}. "
             f"<bookmark mark='b'/> The trial counter reads {env['trials']}, and Rule five gains a clause: the stake "
-            "may be learned."
+            "may be learned. The corrected confidence sequence has a separate registration; the legacy record "
+            "is preserved and no sealed hold-out was opened."
             " Next: the people who live on these ideas: casinos, bookmakers, markets and testers."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))

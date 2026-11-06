@@ -21,13 +21,13 @@ class Doob(VoiceoverScene):
         c = chapter_card(11, r"Doob's decomposition", r"How much of a price is predictable?", part=PART)
         with self.voiceover("Chapter eleven. Doob's decomposition."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def theorem(self, d):
         th = theorem_card(r"Doob decomposition",
                           r"Any adapted process with finite means splits, uniquely, as $X_n = X_0 + A_n + M_n$: $A$ is "
                           r"predictable (each step known one period ahead), $A_n = \sum_{k \le n} \mathbb{E}[X_k - X_{k-1} "
-                          r"\mid \mathcal{F}_{k-1}]$, and $M$ is a martingale.", who=r"Doob (1953)", color=DRIFT,
+                          r"\mid \mathcal{F}_{k-1}]$, and $M$ is a martingale; $A_0=M_0=0$.", who=r"Doob (1953)", color=DRIFT,
                           width=9.6, font_size=24).to_edge(UP, buff=0.4)
         x, A, M = (np.asarray(d[k]) for k in ("coin_x", "coin_A", "coin_M"))
         n = np.arange(len(x))
@@ -73,10 +73,12 @@ class Doob(VoiceoverScene):
         yr = always_redraw(lambda: MathTex(rf"{int(at_index(t, tk))}", font_size=36, color=P_C).next_to(
             ax.c2p(1926, 10), RIGHT, buff=0.2))
         side = VGroup(
-            legend([(P_C, r"log wealth $X$"), (DRIFT, r"predictable drift $A$"), (MART, r"martingale $M$")], font_size=21),
+            legend([(P_C, r"log wealth $X$"), (DRIFT, r"estimated drift $\widehat A$"),
+                    (MART, r"forecast residual $\widehat M$")], font_size=21),
             MathTex(rf"{d['X_end']:.2f}", r"=", rf"{d['A_end']:.2f}", r"+", rf"{d['M_end']:.2f}", font_size=36),
             label(rf"\$1 became \${np.exp(d['X_end']):,.0f}".replace(",", "{,}"), font_size=22, color=GREY_A),
-            wrapped_label(r"drift as known each day: the average daily return up to the day before", 4.2, 20, GREY_B),
+            wrapped_label(r"Expanding-mean forecast after a retrospective 250-day initialization. "
+                          r"This algebraic split does not establish a martingale residual.", 4.2, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5)
         side[1][0].set_color(P_C)
         side[1][2].set_color(DRIFT)
@@ -84,13 +86,13 @@ class Doob(VoiceoverScene):
         src = real_data(r"Kenneth French's daily US market (value-weighted, with dividends), July 1926 -- December 2020")
         with self.voiceover(
             "Now the market. Here is the logarithm of a dollar invested in the American market in 1926, with "
-            "dividends reinvested. <bookmark mark='a'/> Split it the way Doob says. For the predictable part, use "
-            "what an investor could have known each day: the average daily return up to the day before. Add those "
-            "forecasts up. <bookmark mark='b'/> What's left is the martingale, the market's surprises. "
+            "dividends reinvested. <bookmark mark='a'/> Illustrate the decomposition with an estimated drift: "
+            "an expanding mean after a retrospective two-hundred-fifty-day initialization. Add those forecasts up. "
+            "<bookmark mark='b'/> What remains is a forecast residual. It is a martingale only if the forecasts "
+            "equal the true conditional means, which this chart does not establish. "
             f"<bookmark mark='c'/> By the end of 2020 a dollar had become about {np.exp(d['X_end']):,.0f}. Of the "
-            "nine log points it gained, a little over seven were the predictable drift, and under two were luck. "
-            "Over decades the drift dominates; over a day or a year, the martingale does, which is why the drift is so "
-            "hard to see."
+            "nine log points, this chosen forecast assigns a little over seven to estimated drift and under two "
+            "to the residual. That is an algebraic attribution, not an identified split between skill and luck."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0][0]))
             self.add(lx, yr)
@@ -109,7 +111,7 @@ class Doob(VoiceoverScene):
     def square(self, d):
         t = np.asarray(d["t"])
         M2, A2, qv = (np.asarray(d[k]) for k in ("M2", "A2", "qv"))
-        g = axes([1926, 2021], [0, 5], x_length=8.0, y_length=4.4, ylabel=r"squared martingale and its compensator",
+        g = axes([1926, 2021], [0, 5], x_length=8.0, y_length=4.4, ylabel=r"squared residual and variance forecasts",
                  xticks=[1930, 1960, 1990, 2020], xfmt=lambda u: f"{int(u)}", yticks=[0, 1, 2, 3, 4, 5], font_size=18)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
@@ -120,18 +122,18 @@ class Doob(VoiceoverScene):
             legend([(MART, r"$M_n^2$"), (DRIFT, r"$\sum$ each day's variance forecast"),
                     (WHITE, r"$\sum$ realized squared surprises")], font_size=21),
             MathTex(rf"{d['A2_end']:.3f}\ \text{{vs}}\ {d['qv_end']:.3f}", font_size=34),
-            wrapped_label(r"$M^2$ minus its compensator is a martingale: the variance is the predictable part of the "
-                          r"square. Part 5 calls the realized sum the quadratic variation, and builds It\^o's calculus "
-                          r"on it.", 4.4, 21, GREY_A),
+            wrapped_label(r"For a square-integrable martingale, $M^2-\langle M\rangle$ is a martingale. "
+                          r"Here the residual and EWMA variances are estimates, with a retrospective warm-up; "
+                          r"close totals do not prove that model.", 4.4, 21, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Doob's decomposition has a second use. Square the martingale. A squared fair game is not fair: it drifts "
-            "up, because surprises of either sign add to it. <bookmark mark='a'/> Its predictable part is the sum of "
-            "each day's variance forecast, here a simple weighted average of recent squared surprises, known the day "
-            "before. <bookmark mark='b'/> And the sum of the squared surprises that actually happened, day by day, "
-            "lands almost exactly on it: two point eight nine against two point eight nine. <bookmark mark='c'/> The "
-            "variance is the predictable part of the square. Part five calls that realized sum the quadratic "
-            "variation, and builds the whole of Itô's calculus on it."
+            "For a square-integrable martingale, subtracting the sum of true conditional increment variances "
+            "makes its square a martingale. This market example uses estimated residuals. <bookmark mark='a'/> "
+            "The green line adds EWMA variance forecasts, initialized retrospectively over sixty days. "
+            "<bookmark mark='b'/> Their total is close to the realized squared residuals: two point eight nine "
+            "against two point eight nine. Close totals are a numerical comparison, not proof of correct "
+            "conditional variances. <bookmark mark='c'/> Part five distinguishes predictable and realized "
+            "quadratic variation when building Itô's calculus."
         ) as vo:
             self.play(FadeIn(g), Create(lm), FadeIn(side[0][0]), run_time=2)
             vo.wait_until("a")
@@ -157,7 +159,7 @@ class Doob(VoiceoverScene):
         whys = [why(r"by construction: $A$ adds up each step's forecast, so what is left has forecast zero"),
                 why(r"uniqueness: a difference that is both predictable and a martingale is known in advance and has "
                     r"mean-zero steps, so its steps are zero"),
-                why(r"apply it to $M^2$: $\mathbb{E}[\Delta(M^2) \mid \mathcal{F}] = \mathbb{E}[(\Delta M)^2 \mid "
+                why(r"for square-integrable $M$: $\mathbb{E}[\Delta(M^2) \mid \mathcal{F}] = \mathbb{E}[(\Delta M)^2 \mid "
                     r"\mathcal{F}]$; the predictable quadratic variation"),
                 why(r"the drift is a forecast, so it depends on what you know")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.8, buff=0.75, edge=6.9)

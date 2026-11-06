@@ -1,0 +1,785 @@
+{
+  "video": "quant4",
+  "base_commit": "42ab3bc604e5fbbae7dc930f08c070b176306ee4",
+  "source_fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+  "data_inputs": {
+    ".cache/quant4/beliefs.json": {
+      "sha256": "843b9a1e51346c4d6e61352fa3143317e287b4555dc2db77ccd6288189e88b4c",
+      "bytes": 129
+    },
+    ".cache/quant4/beliefs.npz": null,
+    ".cache/quant4/casino.json": {
+      "sha256": "8cc3f06a3afdf28b28077230d4cb2ce753aea336f0a61aa69cd8ef3614a60d99",
+      "bytes": 889
+    },
+    ".cache/quant4/casino.npz": null,
+    ".cache/quant4/condexp.json": {
+      "sha256": "12d8ddd9f7e0285a0b85452af5bacdc6fb7d2d97b1b7b78901a203586b24152c",
+      "bytes": 30000
+    },
+    ".cache/quant4/condexp.npz": null,
+    ".cache/quant4/confseq_valid.json": {
+      "sha256": "ed58acbc82c20adfcf4bfb3a4bd9cecc0d9be6e3848e012c12335e7350320679",
+      "bytes": 94293
+    },
+    ".cache/quant4/confseq_valid.npz": null,
+    ".cache/quant4/doob.json": {
+      "sha256": "c2fdb4ffc92d1a2f9248712f796152e38af599194ffa6607fe4cbd00de492a2a",
+      "bytes": 228848
+    },
+    ".cache/quant4/doob.npz": null,
+    ".cache/quant4/doubling.json": {
+      "sha256": "25074b614e90a81919a92e2db584901496c9dc1777cd5b11a913ff18274bcce0",
+      "bytes": 263835
+    },
+    ".cache/quant4/doubling.npz": null,
+    ".cache/quant4/drift_posterior.json": {
+      "sha256": "4f0e2d9907ecdea38c9c4928053e0b71f0f5e6430f655dd263532119fdde97ee",
+      "bytes": 107499
+    },
+    ".cache/quant4/drift_posterior.npz": null,
+    ".cache/quant4/ebh.json": {
+      "sha256": "dfba5954c010b2d70d6d205e648158fe3bf6b1f590ca4a0b475f473a828ba552",
+      "bytes": 89294
+    },
+    ".cache/quant4/ebh.npz": null,
+    ".cache/quant4/ecf.json": {
+      "sha256": "3f62d370c8f66e56fb8ba87d848d8a6087da4bfb3ad0c12a13b93ce85562ac65",
+      "bytes": 3177
+    },
+    ".cache/quant4/ecf.npz": null,
+    ".cache/quant4/envelope_confseq_valid.json": {
+      "sha256": "90f3e8cd20617cb6b41f3a1d00b282a98ceaed1efc6316415ea071fe368d0985",
+      "bytes": 473
+    },
+    ".cache/quant4/envelope_confseq_valid.npz": null,
+    ".cache/quant4/eprocess.json": {
+      "sha256": "e68c53f195f804e4771de95e144522496ef9dd392a4241dd8892e729a7d129e6",
+      "bytes": 431235
+    },
+    ".cache/quant4/eprocess.npz": null,
+    ".cache/quant4/esscher.json": {
+      "sha256": "07152de641e5c5d96a7a72e875366e7b5aca4ed893a722cd6a5abb26a7c1e8ab",
+      "bytes": 2961
+    },
+    ".cache/quant4/esscher.npz": null,
+    ".cache/quant4/firstpassage.json": {
+      "sha256": "e656b54de13d339c7f358859c87a9be6811c3794af4f3d0a1c9d417b4a2f0737",
+      "bytes": 258637
+    },
+    ".cache/quant4/firstpassage.npz": null,
+    ".cache/quant4/ivey_sim.json": {
+      "sha256": "b5506f3597a0f51d1904f11e53a6b8180950cca24a6c3aac150758559d676051",
+      "bytes": 37539
+    },
+    ".cache/quant4/ivey_sim.npz": null,
+    ".cache/quant4/kakutani.json": {
+      "sha256": "6f1d5d6b69d575b5b20845da1bbad591137d9dd41e6fe5ef22c7d583400ce91c",
+      "bytes": 993555
+    },
+    ".cache/quant4/kakutani.npz": null,
+    ".cache/quant4/learner.json": {
+      "sha256": "d753d5ed26d40e6952fb0ad5daee0eb8e60a6a87e94a3ef98faa75e4ecbd95ec",
+      "bytes": 33704
+    },
+    ".cache/quant4/learner.npz": null,
+    ".cache/quant4/lil_theory.json": {
+      "sha256": "6ec03dc574dd921f9d3fd1739bf5324566ee67591b7493e0a3ea64dd870a216b",
+      "bytes": 5497
+    },
+    ".cache/quant4/lil_theory.npz": null,
+    ".cache/quant4/martingales.json": {
+      "sha256": "8accb9734f2474be5f77e1f932fb9b0dfa6aec825342d38826eb83a6d4c6a757",
+      "bytes": 3932
+    },
+    ".cache/quant4/martingales.npz": null,
+    ".cache/quant4/measure.json": {
+      "sha256": "963574ad421782074c53a4272a432a4f03ebef6322ccf492790e1b207cc6d373",
+      "bytes": 576225
+    },
+    ".cache/quant4/measure.npz": null,
+    ".cache/quant4/nikkei.json": {
+      "sha256": "1135ba5684a8df64bb5320fd4a2229d74788291b8b2e758d94712724f4b219ab",
+      "bytes": 8801
+    },
+    ".cache/quant4/nikkei.npz": null,
+    ".cache/quant4/nikkei_doubling.json": {
+      "sha256": "49127ab31fc2d959e14ec31a8921184bddc614b41cf83b81b2a0e73ce2c8f8db",
+      "bytes": 20416
+    },
+    ".cache/quant4/nikkei_doubling.npz": null,
+    ".cache/quant4/numeraire.json": {
+      "sha256": "02a1da2fbae0f5660c1c2687f8e5a114353f98e3e2bbfe8ef8907c13ff81682a",
+      "bytes": 14940
+    },
+    ".cache/quant4/numeraire.npz": null,
+    ".cache/quant4/patterns.json": {
+      "sha256": "5de2c3b270857a6bcf8d495c1f5f904f82d014f3a2258a93d487e2fc8a6f4597",
+      "bytes": 1738
+    },
+    ".cache/quant4/patterns.npz": null,
+    ".cache/quant4/peeking.json": {
+      "sha256": "932ff627c1ca8be579de7e3302135737ecf708d46fc116b012e4ec7de9d22464",
+      "bytes": 360554
+    },
+    ".cache/quant4/peeking.npz": null,
+    ".cache/quant4/peeking_curve.json": {
+      "sha256": "b647ed9bfa8f06d21e410bb84a4be49520e2aa026a7b33b0eebed8d96ceb7475",
+      "bytes": 2758
+    },
+    ".cache/quant4/peeking_curve.npz": null,
+    ".cache/quant4/polya.json": {
+      "sha256": "feba0f21987643dcbec75d2d5934aff196e4e1e247241e5ecb23e5ba2d19aa3d",
+      "bytes": 488784
+    },
+    ".cache/quant4/polya.npz": null,
+    ".cache/quant4/radon.json": {
+      "sha256": "b72ade87c2688b64d7bfbb21f90c3ae45ac04e4d1dadc16e01a99ac6de71ee9d",
+      "bytes": 31533
+    },
+    ".cache/quant4/radon.npz": null,
+    ".cache/quant4/ruin.json": {
+      "sha256": "336eb6c38f41d5e4b368f7e10051628552e056f7ae236a6505e89b4366f20434",
+      "bytes": 7296
+    },
+    ".cache/quant4/ruin.npz": null,
+    ".cache/quant4/ruin_duration.json": {
+      "sha256": "166eb0f7d58e27005a94b0030798a5afeb9971abd86fdd292c15246ec9d1df03",
+      "bytes": 1041229
+    },
+    ".cache/quant4/ruin_duration.npz": null,
+    ".cache/quant4/stable.json": {
+      "sha256": "509d68a99309fa5a505ab18fb1de95e680a7660bfc2d22703c9f239129aaf7e7",
+      "bytes": 2384
+    },
+    ".cache/quant4/stable.npz": null,
+    ".cache/quant4/stable_mle.json": {
+      "sha256": "718fb03b8fe8522ddcd5a7dab31ba130de97e205fd5cc2dfc8fa6178bf2ddbf7",
+      "bytes": 44954
+    },
+    ".cache/quant4/stable_mle.npz": null,
+    ".cache/quant4/systems.json": {
+      "sha256": "e5c4b4a52d3409342974e54fc5b17525be86675596d7b26a826bb9f7f40454ae",
+      "bytes": 91957
+    },
+    ".cache/quant4/systems.npz": null
+  },
+  "scope": "English and Chinese narration-beat frames; English silent 480p15 playback; CPU speech samples",
+  "production_listening": "pending",
+  "manual_visual_review": {
+    "english_endpoint_chapters": 21,
+    "chinese_endpoint_chapters": 21,
+    "english_playback_contact_sheets": 21,
+    "updated_visuals_reviewed": [
+      "English casino example transitions to calculation and question without bottom clipping",
+      "Chinese information question below sample-space row",
+      "English payoff question below absolute-value readout with clear gap",
+      "English frontier legend above plots, separate from the terminal and question",
+      "English stable-law standardized kurtosis is undefined",
+      "English stopping-walk view floor is labelled",
+      "English stable-law caption and aggregation curves checked in current receipt frames",
+      "System curtain reveal inspected at intermediate tosses, with each stake set before its card turns",
+      "English and Chinese ONS replay: full wealth curve through completed day9981 and threshold crossing completed day2542",
+      "ONS actual playback frame at111.598s shows full sampled curve, step9981 and correct threshold line",
+      "EN/ZH Radon singular title corrected; a focused follow-up lowers camera zoom to clear the tall bars",
+      "English/Chinese singular Radon title and zoom leave clear space above the bars",
+      "English/Chinese exit-time proof heading is clear above lowered derivation rows",
+      "Final Radon playback at119.226s: singular-diagonal title is correct and clear of the bars",
+      "Final English and Chinese Convergence endpoint frames both show9.5% plus/minus2.0%, matching the summary",
+      "Final Convergence playback at206.881s has matching9.5% estimates in the moving readout and summary",
+      "Final Ruin playback at50.017s shows the proof heading before the equation; at125s it has faded before the simulation. Current scan has zero blank or sparse intervals >=1.5s."
+    ],
+    "method": "Narration-beat contact sheets and sampled playback frames, with focused rechecks of changed layouts and transitions."
+  },
+  "audio_note": "Signal and alignment checks do not certify pronunciation; full production-voice listening remains pending.",
+  "opening_sample": {
+    "path": "media/quant4/narrated_qa/videos/s01_hook/480p15/Hook.mp4",
+    "seconds": 163.46666666666485,
+    "narration_lines": 6,
+    "backend": "kokoro",
+    "voice": "af_heart",
+    "narration_matches_current_source": true,
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 164 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 164 s\n",
+    "scene_source_sha256": "2e21ad1fabf2771fd76bc333d47ac996ba1512369956775d708ff808e2af1f89"
+  },
+  "additional_checks": {
+    "zh_narration_coverage": "150/150",
+    "narration_minutes_estimate": 63.6,
+    "tests": [
+      {
+        "command": "python -m pytest tests/test_quant4_betting_cs.py tests/test_quant4_firstpassage_display.py tests/test_quant_house.py -k 'quant4 or martingale_tools or envelope_seals or trial_counter' -q",
+        "passed": 10
+      },
+      {
+        "command": "python -m pytest tests/test_quant_house.py::test_martingale_part4_expansion -q",
+        "passed": 1
+      },
+      {
+        "command": "EXPLAINER_TTS=silent python -m pytest tests/test_plain_cjk_wrap.py -q",
+        "passed": 4
+      }
+    ],
+    "plain_chinese_width_comparisons": "6 actual TeX layouts match the existing greedy oracle",
+    "ons_replay_clock": {
+      "samples": 500,
+      "completed_days": [
+        1,
+        9981
+      ],
+      "first_crossing_day": 2542
+    },
+    "drift_replay_includes_final_observation": true
+  },
+  "registration_correction": {
+    "new_key": "btc_mean_confseq_bounded_v2",
+    "additional_trials": 1,
+    "part4_trials": 232,
+    "prior_entries_unchanged": true,
+    "holdouts_opened": 0,
+    "method": "Two one-sided predictable bounded wealths, alpha/2 each, continuous inversion bracketed outward",
+    "assumptions": "bounded observations with one common conditional mean; not established for market returns",
+    "legacy_compute_function_preserved": true,
+    "final_bitcoin_interval_bp": [
+      -28,
+      40
+    ],
+    "grid_step_bp": 4
+  },
+  "records": {
+    "en_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 172.47575000000006,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Information",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 217.92029166666669,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Projection",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 220.15733333333336,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Martingales",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 209.61104166666667,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "System",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 191.65362500000006,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Stopping",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 191.09620833333335,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Optional",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 220.75912500000004,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Doubling",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 164.90175000000005,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Barings",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 182.49808333333334,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Ruin",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 191.17395833333336,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Convergence",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 208.98133333333337,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Doob",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 223.27395833333338,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "Measure",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 253.44062500000004,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Radon",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 194.68883333333335,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Stable",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 265.9591666666667,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Betting",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 228.48691666666673,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 287.409125,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 269.69425,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 172.981375,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 349.25354166666654,
+        "frames": 25,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 200.95904166666668,
+        "frames": 10,
+        "warnings": []
+      }
+    ],
+    "zh_frames": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 197.24175000000008,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Information",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 217.32900000000006,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Projection",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 223.87775000000005,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "Martingales",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 201.9185416666667,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "System",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 199.23479166666672,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Stopping",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 180.84058333333334,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Optional",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 222.43008333333336,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Doubling",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 161.85220833333335,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Barings",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 183.2568333333334,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Ruin",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 181.5010416666667,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Convergence",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 194.44175,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Doob",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 226.26383333333337,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "Measure",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 244.13012500000005,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Radon",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 195.0848333333334,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Stable",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 262.769625,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Betting",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 248.92658333333338,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 287.9172916666667,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 281.58125,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 203.68020833333338,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 341.8056666666665,
+        "frames": 26,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 216.08362500000007,
+        "frames": 11,
+        "warnings": []
+      }
+    ],
+    "en_motion": [
+      {
+        "scene": "Hook",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 172.13333333333145,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Information",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 217.7333333333323,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Projection",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 219.93333333333217,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Martingales",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 209.33333333333144,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "System",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 191.33333333333178,
+        "frames": 15,
+        "warnings": []
+      },
+      {
+        "scene": "Stopping",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 190.7999999999984,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Optional",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 220.53333333333242,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Doubling",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 164.73333333333233,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Barings",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 182.1999999999993,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Ruin",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 190.933333333332,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Convergence",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 208.66666666666515,
+        "frames": 14,
+        "warnings": []
+      },
+      {
+        "scene": "Doob",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 222.9999999999985,
+        "frames": 21,
+        "warnings": []
+      },
+      {
+        "scene": "Measure",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 253.1999999999982,
+        "frames": 19,
+        "warnings": []
+      },
+      {
+        "scene": "Radon",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 194.4666666666649,
+        "frames": 13,
+        "warnings": []
+      },
+      {
+        "scene": "Stable",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 265.73333333333113,
+        "frames": 16,
+        "warnings": []
+      },
+      {
+        "scene": "Betting",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 228.13333333333102,
+        "frames": 17,
+        "warnings": []
+      },
+      {
+        "scene": "House",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 287.13333333333156,
+        "frames": 18,
+        "warnings": []
+      },
+      {
+        "scene": "Industry",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 269.26666666666586,
+        "frames": 20,
+        "warnings": []
+      },
+      {
+        "scene": "Frontier",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 172.79999999999924,
+        "frames": 12,
+        "warnings": []
+      },
+      {
+        "scene": "Research",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 348.7333333333306,
+        "frames": 25,
+        "warnings": []
+      },
+      {
+        "scene": "Outro",
+        "status": "passed",
+        "fingerprint": "92622bc7276c1aef6b9737aba705f859ff4f4ab9e953032141c4a3a10b144006",
+        "duration": 200.53333333333225,
+        "frames": 10,
+        "warnings": []
+      }
+    ]
+  },
+  "audio": {
+    "Hook": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 6,
+      "issues": []
+    },
+    "House": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 7,
+      "issues": []
+    },
+    "Research": {
+      "backend": "kokoro",
+      "voice": "af_heart",
+      "lines": 10,
+      "issues": []
+    }
+  },
+  "preview": {
+    "path": "renders/quant4_polished_silent.mp4",
+    "seconds": 4611.324217,
+    "bytes": 40246418
+  }
+}

@@ -29,7 +29,7 @@ class Projection(VoiceoverScene, ThreeDScene):
                          part=PART)
         with self.voiceover("Chapter two. Conditional expectation is a projection."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def definition(self):
         cols = {r"\mathbb{E}[X \mid \mathcal{G}]": MART, r"Y": MART}
@@ -46,21 +46,22 @@ class Projection(VoiceoverScene, ThreeDScene):
                 cmath(r"\varphi\big(\mathbb{E}[X \mid \mathcal{G}]\big)", r"\le",
                       r"\mathbb{E}[\varphi(X) \mid \mathcal{G}]; \quad \sigma(X) \perp \mathcal{G} \Rightarrow "
                       r"\mathbb{E}[X \mid \mathcal{G}] = \mathbb{E}X", font_size=34)]
-        whys = [why(r"Kolmogorov's definition: computable from $\mathcal{G}$, and the right average on every event of "
+        whys = [why(r"For $X,Y\in L^1$: computable from $\mathcal{G}$, and the right average on every event of "
                     r"$\mathcal{G}$"),
-                why(r"on a partition, take $A = B_j$: the average over each block"),
-                why(r"true for $Z = \mathbf{1}_A$ by the definition, so for sums of them, and their limits"),
+                why(r"on a positive-probability partition block, take $A = B_j$: its weighted average"),
+                why(r"for $X,Z\in L^2$: extend the indicator identity by approximation"),
                 why(r"expand the square: the cross term is the line above, so $Y$ is the closest point (Pythagoras)"),
-                why(r"taking out what is known: check the definition with $Z\mathbf{1}_A$"),
+                why(r"$Z$ is measurable and bounded, or $ZX$ is integrable: check with $Z\mathbf{1}_A$"),
                 why(r"the tower: both sides satisfy the definition on every $A \in \mathcal{H} \subset \mathcal{G}$"),
-                why(r"Jensen, from the supporting lines of a convex $\varphi$; independent information is no information")]
+                why(r"convex $\varphi$, with $\varphi(X)$ integrable: supporting lines give Jensen; independence gives the mean")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.62, edge=6.9)
         head = label(r"Kolmogorov's conditional expectation", font_size=30, color=GREY_A).to_edge(UP, buff=0.25)
         with self.voiceover(
             "What is the best forecast of tomorrow's return, given today's? Kolmogorov's definition answers it. Y is "
             "the conditional expectation of X given G if Y can be computed from G and has the same average as X on "
             "every event of G. <bookmark mark='a'/> On a partition, apply it block by block: Y is the average of X "
-            "over each block. <bookmark mark='b'/> The error, X minus Y, is uncorrelated with anything computable "
+            "over each positive-probability block. <bookmark mark='b'/> For square-integrable variables, the error, "
+            "X minus Y, is orthogonal to every square-integrable variable computable "
             "from G: true for indicators by the definition, so for their sums and limits. <bookmark mark='c'/> "
             "Expand the squared distance from X to any computable Z, and the cross term vanishes: Pythagoras. So Y "
             "is the closest computable variable, the best forecast in mean square. <bookmark mark='d'/> What is "
@@ -87,7 +88,7 @@ class Projection(VoiceoverScene, ThreeDScene):
 
     def picture(self, c):
         ax = ThreeDAxes(x_range=[0, 2.5, 0.5], y_range=[0, 2.0, 0.5], z_range=[0, 1.2, 0.5], x_length=6.0,
-                        y_length=4.8, z_length=2.9,
+                        y_length=4.8, z_length=2.88,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False, "include_tip": False})
         ax.shift(LEFT * 1.6 + DOWN * 0.4)
         o = ax.c2p(0, 0, 0)
@@ -190,19 +191,19 @@ class Projection(VoiceoverScene, ThreeDScene):
             leg,
             label(r"$\mathcal{G}$ = the sign of yesterday: two blocks", font_size=20, color=INFO),
             MathTex(rf"\rho_1:\ {e0['rho1']:.3f},\ {e1['rho1']:.3f},\ {e2['rho1']:.3f}", font_size=28),
-            label(r"bars: 95\% of 200 block-bootstrap resamples", font_size=18, color=GREY_B),
-            wrapped_label(r"since 2000 the projection has turned around: after a down day the best forecast is up", 4.6,
+            label(r"95\% percentile ranges; 200 resamples of 20-day blocks", font_size=18, color=GREY_B),
+            wrapped_label(r"Retrospective group means, fitted within each era; after down days the 2000--20 sample mean is positive", 4.6,
                           20, MART),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's daily US market, July 1926 -- December 2020")
         with self.voiceover(
-            "Now the market. Let the information be one bit: was yesterday up or down? The conditional expectation "
-            "of today's return is then two numbers, the average after up days and the average after down days. "
+            "Now the market. Let the information be one bit: was yesterday up or down? Estimate the two conditional "
+            "means by retrospective group averages within each era; these are not out-of-sample forecasts. "
             f"<bookmark mark='a'/> From 1926 to 1974: {e0['up']:.1f} basis points after an up day, {e0['down']:.1f} "
             "after a down day. Yesterday's sign was today's sign, on average. From 1975 to 1999, the same pattern, "
             f"{e1['up']:.1f} against {e1['down']:.1f}. <bookmark mark='b'/> Since 2000 it has turned around: {e2['up']:.1f} "
             f"after an up day and {e2['down']:.1f} after a down day. The white bars are how far each number moves "
-            f"when we resample the years in blocks: {verdict} This is the hook's gambler, as a projection."
+            f"when we resample twenty-day blocks: {verdict} This is the hook's historical structure, viewed as a projection."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(zero), FadeIn(side[1]), FadeIn(xl))
             vo.wait_until("a")

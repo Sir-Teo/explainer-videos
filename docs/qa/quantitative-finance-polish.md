@@ -2,7 +2,7 @@
 
 Source branch: `quantitative-finance`, starting at `20b4e7e0`.
 Part 1 branch: `polish/quantitative-finance`; Part 2 branch: `polish/quant2`;
-Part 3 branch: `polish/quant3`.
+Part 3 branch: `polish/quant3`; Part 4 branch: `polish/quant4`.
 The pass was rebased onto `11c5c9d4` to preserve the concurrent Part 31 work and
 shared axis-label fix; final checks use that updated base.
 
@@ -19,7 +19,8 @@ pass. A successful render is not, by itself, visual approval.
 | 1 | Visual pass complete; full production-voice listening pending |
 | 2 | Visual pass complete; full production-voice listening pending |
 | 3 | Visual pass complete; full production-voice listening pending |
-| 4–43 | Pending; do not infer approval from historical build notes |
+| 4 | Visual pass complete; full production-voice listening pending |
+| 5–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -91,7 +92,7 @@ Local review artifacts (git-ignored):
 - `media/quant1/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: actual narrated English
   opening sample.
 
-The completed visual passes for Parts 2 and 3 are recorded below. Parts 4–43 remain pending.
+The completed visual passes for Parts 2–4 are recorded below. Parts 5–43 remain pending.
 
 
 ## Part 2: The Machinery of Markets
@@ -201,7 +202,7 @@ Local review artifacts (git-ignored): `renders/quant3_polished_silent.mp4`, an E
 480p15 preview (75:58 including animation and pauses) with 21 embedded chapters
 and English subtitles; its `.srt` and `.chapters.txt`; and
 `media/quant3/narrated_qa/videos/s01_hook/480p15/Hook.mp4`, the narrated opening
-sample. Part 4 is next in the sequential visual pass.
+sample. Part 4’s visual pass is recorded below.
 
 ```bash
 SEC_USER_AGENT='explainer-videos research bot' python -m videos.quant.quant3.compute
@@ -212,4 +213,69 @@ python -m pytest tests/test_quant3_valuation_examples.py tests/test_quant_house.
 python tools/zh_lines.py quant3 --todo
 python tools/lecture_length.py quant3 --floor 50
 EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant3 --only Hook Duration Research
+```
+
+
+## Part 4: Martingales and Measure
+
+Visual pass complete on `polish/quant4`, stacked on Part 3:
+
+- Correct the bounded betting confidence sequence: avoid candidate-specific clipping,
+  use predictable one-sided stakes, split the error budget and bracket continuous
+  means outward from the numerical grid. State its constant conditional-mean model.
+- Preserve the original registration and add `btc_mean_confseq_bounded_v2` as one
+  corrective trial. All previous registrations, sealed dataset hashes and hold-out
+  opening records remain unchanged; the Part 4 trial counter becomes 232.
+- Restore the optional-stopping histogram's missing +1 atom and left-overflow mass,
+  using the full sample's mean rather than the displayed histogram's truncated mean.
+- Map ONS replay checkpoints to completed days: show the full sampled curve through
+  day 9,981 and its first crossing on day 2,542. The registered simulation is unchanged.
+- Include the final observation in the drift-history replay, so its final 9.5% estimate
+  matches the summary. Distinguish Gaussian credible bands from confidence sequences.
+- Identify estimated market drift and residuals as diagnostics requiring calibration;
+  state integrability, boundedness and stopping-time conditions for the theorems.
+- Correct the LIL envelope statement, Gaussian proof scope and observation times;
+  add a staged, worked boundary comparison. Correct the frontier's 21-day review
+  schedule and known-variance z tests; average full seed FDPs without clipping them.
+- Qualify stable-law moments, likelihood-search convergence, calendar comparisons,
+  bold play, historical casino figures and the pricing-measure illustrations.
+- Give questions and legends separate space, switch the singular-measure title when
+  its model changes, and show context before the exit-time derivation begins.
+- Update Chinese narration and captions. Speed plain Chinese wrapping with monotone
+  prefix search while preserving the original greedy line breaks and TeX fallback.
+
+Validation: all 21 English and 21 Chinese narration-beat frame checks pass, as do
+all 21 English silent playback checks, with zero automated warnings. Every receipt
+matches the final source fingerprint and input signatures. Narration-beat contact
+sheets and sampled playback frames were visually reviewed, with focused rechecks
+of changed layouts and transitions. Fifteen focused numerical, envelope, martingale
+and wrapping tests pass; six actual Chinese TeX layouts match the original greedy
+wrapping oracle. Chinese narration covers 150/150 source lines; the narration
+estimate is 63.6 minutes. All 23 sampled English lines (Hook, House and Research)
+pass signal and alignment checks. The actual 163-second narrated opening matches
+the final narration and has zero blank or sparse-screen intervals of at least 1.5s.
+
+The [compact evidence record](quant4-polish-evidence.json) captures source and input
+hashes, all scene receipts, review scope and current speech reports. Signal and
+alignment checks do not certify pronunciation; technical speech warnings remain
+listening leads. Full production-voice listening and synchronization remain pending.
+Chinese coverage is narration-beat frame QA rather than whole-part narrated playback.
+
+Local review artifacts (git-ignored): `renders/quant4_polished_silent.mp4`, an English
+480p15 preview (76:51 including animation and pauses) with 21 embedded chapters
+and English subtitles; its `.srt` and `.chapters.txt`; and
+`media/quant4/narrated_qa/videos/s01_hook/480p15/Hook.mp4`, the narrated opening sample.
+Part 5 is next in the sequential visual pass.
+
+```bash
+python -m videos.quant.quant4.compute
+python tools/qa_series.py quant4 --cached-only --resume --timeout 1500
+python tools/qa_series.py quant4 --lang zh --cached-only --resume --timeout 1800
+python tools/qa_series.py quant4 --motion --cached-only --resume --timeout 1800
+python -m pytest tests/test_quant4_betting_cs.py tests/test_quant4_firstpassage_display.py tests/test_quant_house.py -k 'quant4 or martingale_tools or envelope_seals or trial_counter' -q
+python -m pytest tests/test_quant_house.py::test_martingale_part4_expansion -q
+EXPLAINER_TTS=silent python -m pytest tests/test_plain_cjk_wrap.py -q
+python tools/zh_lines.py quant4 --todo
+python tools/lecture_length.py quant4 --floor 50
+EXPLAINER_TTS=kokoro EXPLAINER_VOICE=af_heart python tools/qa_audio.py quant4 --only Hook House Research
 ```

@@ -31,8 +31,8 @@ class Industry(VoiceoverScene):
         card = firm_card(r"The casino: a portfolio of martingales with a drift",
                          r"Every bet is a supermartingale for the player. Nevada's statewide roulette \textit{hold}, "
                          r"what the tables keep of the cash exchanged for chips, was 17.34\% in 2024, against an edge of "
-                         r"5.26\% per spin on a double-zero wheel: chips are bet again and again. Table limits keep the "
-                         r"bets bounded, which is when optional stopping holds.",
+                         r"5.26\% per spin on a double-zero wheel. Comparing hold with this assumed edge suggests "
+                         r"chip turnover; bounded stakes alone do not establish optional stopping.",
                          numbers=[(r"17.34\%", r"Nevada roulette hold, 2024"),
                                   (r"18.84\%", r"monthly average, 2004--Feb.\ 2026"),
                                   (r"3.15", r"its monthly s.d., points"),
@@ -43,19 +43,21 @@ class Industry(VoiceoverScene):
         calc = VGroup(
             MathTex(r"\text{hold} \approx \text{edge} \times \frac{\text{amount wagered}}{\text{chips bought}}",
                     font_size=32),
-            MathTex(rf"\frac{{17.34\%}}{{5.26\%}} \approx {ca['turnover']:.1f}\ \text{{bets per dollar of chips}}",
+            MathTex(rf"\frac{{17.34\%}}{{5.26\%}} \approx {ca['turnover']:.1f}\ \text{{implied wager/drop ratio}}",
                     font_size=32, color=QC.IDEA),
         ).arrange(DOWN, buff=0.2).next_to(card, DOWN, buff=0.35)
         pred = desk_question(r"Roulette's edge is 5.26\%. Why do Nevada's tables report a hold near 17\%?",
-                             rf"Chips are re-bet: about {ca['turnover']:.1f} times per dollar bought, at 5.26\% each.",
+                             rf"Under a constant 5.26\% edge, implied wager/drop is about {ca['turnover']:.1f}; "
+                             r"observed hold also reflects bet mix and luck.",
                              width=7.6, font_size=20).next_to(calc, DOWN, buff=0.3)
         with self.voiceover(
             "A casino is a portfolio of martingales with a drift in its favour. <bookmark mark='a'/> Nevada's "
             "roulette tables kept seventeen point three four percent of the cash exchanged for chips in 2024, by the "
             "University of Nevada's figures. <bookmark mark='b'/> Yet a double-zero wheel's edge is five point two "
-            "six percent. The gap is chapter four's tax per unit staked: the edge times how often each dollar of "
-            f"chips is bet, about {ca['turnover']:.1f} times. <bookmark mark='c'/> Table limits keep the bets bounded, "
-            "so optional stopping holds."
+            "six percent. Under that constant-edge approximation, hold divided by edge implies wagered dollars "
+            f"per dollar of drop, about {ca['turnover']:.1f}; this is not a direct count of bets. "
+            "<bookmark mark='c'/> Table limits bound stakes, but optional stopping also needs its stopping-time "
+            "or integrability conditions. A limit alone is insufficient."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -63,6 +65,8 @@ class Industry(VoiceoverScene):
             self.play(FadeIn(calc[0]))
             self.play(FadeIn(calc[1]))
             vo.wait_until("c")
+            self.play(FadeOut(card), calc.animate.shift(UP * 1.4))
+            pred.next_to(calc, DOWN, buff=0.3)
             self.play(FadeIn(pred, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
@@ -91,23 +95,24 @@ class Industry(VoiceoverScene):
             MathTex(r"P(\text{loss}) \le \exp\!\Big(-\frac{(\text{edge}\cdot N)^2}{2N}\Big)", font_size=30),
             MathTex(rf"N = 10^4:\ {r4['exact']:.4f}\ (\text{{simulated }} {ca['sims']['10000']:.4f})", font_size=26,
                     color=MART),
-            wrapped_label(r"Azuma (1967): a martingale with bounded steps rarely strays far; the bound is loose, but it "
-                          r"needs nothing beyond the bound on each bet", 4.6, 19, GREY_A),
+            wrapped_label(r"Hoeffding--Azuma: centered one-unit outcomes have conditional range length 2, "
+                          r"with the stated fixed drift. The binomial answer additionally assumes iid spins.", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         spread = VGroup(
             label(rf"luck alone would give the observed 3.15-point monthly s.d.\ only if a month had about "
                   rf"{ca['need_even']:,.0f} equal even-money bets".replace(",", "{,}"), font_size=19, color=GREY_B),
         ).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "How sure is the house? Its result is a martingale with a drift and bounded steps, and Kazuoki Azuma's "
-            "inequality of 1967 bounds the chance that such a martingale strays far from its drift. "
+            "How sure is the house in this fixed-unit model? Subtract the known drift. The centered outcomes "
+            "have conditional range length two, so a Hoeffding-Azuma bound applies. "
             "<bookmark mark='a'/> For even-money bets on a single-zero wheel the house is behind after a hundred "
             f"bets about {100 * rows[0]['exact']:.0f} percent of the time, after ten thousand bets "
             f"{100 * r4['exact']:.2f} percent, and after a hundred thousand, essentially never. Azuma's bound is "
-            "looser than the exact answer, but it needs nothing except a cap on each bet. <bookmark mark='b'/> The "
+            "looser than the iid binomial answer. Its assumptions are bounded conditional ranges and the stated "
+            "conditional drift, not just a cap on bets. <bookmark mark='b'/> The "
             "monthly hold still swings by three points. Spin-by-spin luck would explain that only if a whole month "
-            f"were about {ca['need_even']:,.0f} equal bets; real tables see far more, so the swing comes from unequal "
-            "bets, a few high rollers, and how often chips are re-bet."
+            f"were about {ca['need_even']:,.0f} equal bets. Unequal stakes, high rollers and turnover can matter; "
+            "this toy calculation does not identify how much each caused the observed variation."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[1]))
             vo.wait_until("a")
@@ -167,8 +172,8 @@ class Industry(VoiceoverScene):
                                r"dollars'', as reported by Bloomberg Businessweek (2018)", 12.4, 19, GREY_A)
         benter.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Bookmakers run the same business on sport. In 2017 Kaunitz, Zhong and Kreiner took the average of many "
-            "bookmakers' odds as the probability and bet where one book offered better: a three and a half percent "
+            "Bookmakers run the same business on sport. In 2017 Kaunitz, Zhong and Kreiner used consensus odds to "
+            "estimate probabilities and bet where an offered price looked favourable: a three and a half percent "
             "return over fifty-six thousand backtested bets, and a profit with real money, until the bookmakers "
             "began, in their words, to severely limit their accounts. <bookmark mark='a'/> Flutter reports that its "
             "American sportsbook kept seven point nine percent of fifty-one billion dollars staked in 2024. "
@@ -197,8 +202,9 @@ class Industry(VoiceoverScene):
         eq = rows[0].next_to(cards, RIGHT, buff=0.4).align_to(cards, UP)
         if eq.get_right()[0] > 6.9:
             eq.scale_to_fit_width(6.9 - eq.get_left()[0])
-        eqn = wrapped_label(r"a Bayesian's belief is a martingale, so its squared movement must equal the uncertainty it "
-                            r"resolves (Augenblick and Rabin, \textit{QJE} 2021; chapter 11's $\langle M \rangle$)", 5.8,
+        eqn = wrapped_label(r"A coherent Bayesian belief is a martingale under its model. Market prices can also "
+                            r"reflect risk premia, liquidity and fees; applying this belief benchmark needs assumptions "
+                            r"(Augenblick--Rabin, QJE 2021).", 5.8,
                             19, GREY_A).next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
         g = axes([0, 2], [0, 1.6], x_length=4.6, y_length=2.6, ylabel=r"movement $\div$ uncertainty resolved",
                  xticks=[], yticks=[0, 1.0, 1.5], font_size=15).next_to(eqn, DOWN, buff=0.45).align_to(eq, LEFT)
@@ -218,8 +224,9 @@ class Industry(VoiceoverScene):
                              r"stronger for takers (B\"urgi, Deng and Whelan, CESifo WP 12122)", 6.4, 18, GREY_B)
         find.next_to(cards, DOWN, buff=0.3).align_to(cards, LEFT)
         with self.voiceover(
-            "Prediction markets sell the martingale directly: a contract paying one dollar if an event happens, its "
-            "price read as a probability. In 2024 Judge Jia Cobb held that the CFTC had exceeded its authority in "
+            "Prediction markets trade contracts paying a dollar if an event happens. Their prices are often "
+            "read as probabilities, though risk premia and trading frictions can separate prices from beliefs. "
+            "In 2024 Judge Jia Cobb held that the CFTC had exceeded its authority in "
             "barring Kalshi's contracts on control of Congress, and the appeals court declined to stay her ruling. "
             "Polymarket's presidential market traded nearly three point seven billion dollars, as reported by The "
             "Block. <bookmark mark='a'/> Is such a price a martingale? Ned Augenblick and Matthew Rabin turned "
@@ -251,16 +258,16 @@ class Industry(VoiceoverScene):
             history_card(2022, r"Lindon, Sanden and Shirikian, KDD 2022",
                          r"anytime-valid tests for canary releases at Netflix", width=11.0),
         ).arrange(DOWN, buff=0.3).to_edge(UP, buff=0.4)
-        desk = wrapped_label(r"on trading desks, watching a strategy's decay with sequential tests (CUSUM, e-processes) "
-                             r"is standard practice; no firm-specific method is on the public record", 11.0, 21, GREY_A)
+        desk = wrapped_label(r"Sequential monitoring can be adapted to strategy decay; the null, dependence "
+                             r"and calibration must match the application. Firm implementations can differ.", 11.0, 21, GREY_A)
         desk.to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Testing while you watch is old, and now industrial. Abraham Wald's sequential probability ratio test, "
             "from the war years, watched chapter twelve's likelihood ratio and stopped as soon as the evidence "
             "sufficed. <bookmark mark='a'/> Optimizely's always-valid p-values serve website experiments that people "
             "check every hour, and Netflix uses anytime-valid tests to decide, while a new version rolls out, whether "
-            "it is safe. <bookmark mark='b'/> On trading desks, watching a strategy for decay with sequential tests is "
-            "standard practice, though no firm has published its own method."
+            "it is safe. <bookmark mark='b'/> Such monitoring can be adapted to strategy decay when its null and "
+            "dependence assumptions are appropriate. Implementation and calibration are application-specific."
             " Last, the frontier."
         ) as vo:
             self.play(FadeIn(cards[0]))

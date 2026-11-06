@@ -20,7 +20,7 @@ class Radon(VoiceoverScene, ThreeDScene):
                          r"another?", part=PART)
         with self.voiceover("Chapter thirteen. Radon-Nikodym, and the singular infinite."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def derive(self):
         rows = [cmath(r"Q \ll P", r"\Rightarrow", r"\exists\, L \ge 0:\ Q(A) = \mathbb{E}_P[L\,\mathbf{1}_A]", font_size=38,
@@ -36,13 +36,13 @@ class Radon(VoiceoverScene, ThreeDScene):
                       font_size=34, colors={r"\prod_k \rho_k > 0 \Rightarrow P \sim Q,": MART})]
         whys = [why(r"Radon (1913), Nikodym (1930): if $Q$ gives no weight to what $P$ calls impossible, $Q$ has a "
                     r"density with respect to $P$"),
-                why(r"on the dyadic grid of chapter 1: a cell's two children carry the parent's $Q$-mass between them"),
+                why(r"on generating dyadic partitions of Borel $[0,1]$: a cell's children carry its $Q$-mass between them"),
                 why(r"a nonnegative martingale converges (chapter 10); absolute continuity makes it uniformly integrable "
                     r"(Williams, ch.\ 14)"),
                 why(r"equivalence: absolutely continuous both ways; ``$V_0 = 0$, $V_T \ge 0$ surely, $>0$ possibly'' "
                     r"is the same statement under every equivalent measure (Part 9)"),
-                why(r"Kakutani (1948): infinite products of coins are either equivalent or mutually singular, "
-                    r"nothing in between")]
+                why(r"Kakutani (1948): independent product laws with equivalent coordinates, $0<p_k,q_k<1$; "
+                    r"the positive/zero affinity product gives the dichotomy")]
         step = ladder(self, rows, whys, keep=4, top=3.15, x=-0.8, buff=0.38, edge=6.9)
         with self.voiceover(
             "When can one probability be written as another, reweighted? The Radon-Nikodym theorem: whenever Q gives "
@@ -52,8 +52,9 @@ class Radon(VoiceoverScene, ThreeDScene):
             "nonnegative, so it converges, by chapter ten; absolute continuity makes it uniformly integrable, and "
             "the limit is the density. <bookmark mark='c'/> Measures absolutely continuous both ways are "
             "equivalent: they share their impossible events, and an arbitrage is defined by impossible events alone, "
-            "so equivalent measures agree on it. <bookmark mark='d'/> On infinite coin sequences there is a sharp "
-            "dichotomy, Shizuo Kakutani's of 1948: equivalent or completely singular, as a product of affinities "
+            "so equivalent measures agree on it. <bookmark mark='d'/> For independent coin product laws with "
+            "every coordinate probability strictly between zero and one, Kakutani's dichotomy applies: "
+            "equivalent or completely singular, as a product of affinities "
             "stays positive or not."
         ) as vo:
             step(0)
@@ -97,18 +98,20 @@ class Radon(VoiceoverScene, ThreeDScene):
                        resolution=(16, 16), fill_opacity=0.75, checkerboard_colors=[Q_C, MART], stroke_width=0.3)
         head = label(r"$P$ uniform on the square; $Q$ with density $(1 + 2xy)/1.5$", font_size=24,
                      color=GREY_A).to_edge(UP, buff=0.3)
+        singular_head = label(r"$P$ uniform on the square; $Q$ uniform on the diagonal (singular)",
+                              font_size=24, color=LOSS).move_to(head)
         side = VGroup(
             label(r"bar height $= Q(\text{cell}) / P(\text{cell})$", font_size=22, color=Q_C),
             MathTex(r"2 \times 2 \to 4 \times 4 \to \dots \to 16 \times 16", font_size=28),
             label(rf"each parent is the average of its four children (to {r['martingale_err']:.0e})", font_size=19,
                   color=GREY_B),
-            label(r"singular $Q$ (all its mass on the diagonal): bars $2^n$ high on the diagonal, 0 elsewhere",
+            label(r"singular $Q$: height $2^n$ on the diagonal; vertical view rescaled from 0--2.2 to 0--16",
                   font_size=19, color=LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DR, buff=0.35)
         for s_ in side:
             if s_.width > 5.0:
                 s_.scale_to_fit_width(5.0)
-        for mob in (head, side):
+        for mob in (head, singular_head, side):
             self.add_fixed_in_frame_mobjects(mob)
             self.remove(mob)
         self.set_camera_orientation(phi=62 * DEGREES, theta=-50 * DEGREES, zoom=0.85)
@@ -133,7 +136,8 @@ class Radon(VoiceoverScene, ThreeDScene):
             self.play(FadeOut(cur), FadeIn(surf), run_time=2)
             vo.wait_until("b")
             self.stop_ambient_camera_rotation()
-            self.play(FadeOut(surf), FadeIn(side[3]))
+            self.move_camera(zoom=0.75, added_anims=[FadeOut(surf), FadeOut(head),
+                                                       FadeIn(singular_head), FadeIn(side[3])], run_time=0.8)
             sing = None
             for n in range(1, 5):
                 k = 2 ** n
@@ -167,7 +171,7 @@ class Radon(VoiceoverScene, ThreeDScene):
                             color=LOSS),
                     MathTex(rf"\textstyle\prod \rho_k = 10^{{{C['log10_affinity_prod']:.1f}}} \to 0:\ P \perp Q",
                             font_size=26, color=LOSS)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g1, DOWN, buff=0.35)
-        r2 = VGroup(MathTex(rf"\text{{mean }} L_{{10{{,}}000}} = {F['mean_L']:.3f};\ \text{{all }} {100 * F['frac_pos']:.0f}\% > 0",
+        r2 = VGroup(MathTex(rf"\text{{mean }} L_{{10{{,}}000}} = {F['mean_L']:.3f};\ {100 * F['frac_pos']:.0f}\% > 10^{{-3}}",
                             font_size=26, color=MART),
                     MathTex(rf"\textstyle\prod \rho_k = {10 ** F['log10_affinity_prod']:.3f} > 0:\ P \sim Q", font_size=26,
                             color=MART)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g2, DOWN, buff=0.35)

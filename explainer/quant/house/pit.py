@@ -119,6 +119,7 @@ PARTS = {
     "earnings_forecaster_part3": (3, 4),
     "btc_mean_confseq": (4, 1), "sign_continuation_ons": (4, 2), "sign_continuation_eprocess_btc": (4, 3),
     "sign_continuation_eprocess_us": (4, 4),
+    "btc_mean_confseq_bounded_v2": (4, 5),
     "cir_mle_dtb3": (5, 1), "btc_hawkes_large_moves": (5, 2), "btc_rough_hurst": (5, 3), "btc_nsde_generator": (5, 4),
     "capm_two_pass": (6, 1), "industry_capm_alphas": (6, 2), "industry_momentum_panel": (6, 3),
     "fomc_announcement_days": (6, 4), "turn_of_month_event": (6, 5), "lookahead_rotation_toy": (6, 6),

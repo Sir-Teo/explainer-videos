@@ -18,7 +18,7 @@ PAPERS = [
            r"nonparametric two-sample testing by betting: has the distribution changed?"),
     (2024, r"Gr\"unwald, de Heide and Koolen, \textit{JRSS B} 86(5)", r"safe testing: e-values with optional "
            r"continuation, read before the Royal Statistical Society"),
-    (2024, r"Gr\"unwald, \textit{PNAS} 121(39)", r"beyond Neyman--Pearson: e-values allow a data-driven $\alpha$"),
+    (2024, r"Gr\"unwald, \textit{PNAS} 121(39)", r"post-hoc decisions with e-values: guarantees must match the decision rule"),
     (2024, r"Larsson, Ramdas and Ruf, arXiv:2402.18810", r"the numeraire e-variable: the log-optimal test is "
            r"finance's numeraire portfolio"),
     (2025, r"Fischer and Ramdas, \textit{JRSS B}", r"sequential Monte Carlo testing by betting: anytime-valid "
@@ -42,7 +42,7 @@ class Frontier(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter eighteen. The frontier: anytime-valid inference, from 2023 to 2026."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def papers(self):
         rows = VGroup()
@@ -65,8 +65,9 @@ class Frontier(VoiceoverScene):
             "it. Waudby-Smith and Ramdas estimated means by betting, the confidence sequences of chapter sixteen, "
             "and Shekhar and Ramdas tested whether two distributions differ. <bookmark mark='b'/> Grünwald, de Heide "
             "and Koolen's safe testing was read before the Royal Statistical Society in 2024, and Grünwald showed "
-            "that e-values let you choose the significance level after seeing the data. <bookmark mark='c'/> "
-            "Larsson, Ramdas and Ruf showed that the best e-variable is finance's numéraire portfolio; Fischer and "
+            "post-hoc decision guarantees with e-values. A data-chosen level must not be read as an ordinary "
+            "pre-fixed type-I error bound. <bookmark mark='c'/> "
+            "Larsson, Ramdas and Ruf linked log-optimal e-variables for specified hypothesis classes to numéraire portfolios; Fischer and "
             "Ramdas made permutation tests anytime-valid, which matters for backtests; and in 2025 Ramdas and Wang "
             "collected it all in a monograph."
         ) as vo:
@@ -88,25 +89,27 @@ class Frontier(VoiceoverScene):
         ax = g.ax
         tk = ValueTracker(0.0)
         ln = tracing(ax, d, w, tk, QC.IDEA, stroke_width=3.5)
-        l1 = label(r"Part 8: the numeraire (Kelly) portfolio", font_size=28, color=DRIFT)
-        l2 = label(r"Part 4: the numeraire e-variable", font_size=28, color=MART)
+        l1 = label(r"Part 8: a restricted Kelly bet", font_size=28, color=DRIFT)
+        l2 = label(r"Part 4: the same wealth as a test", font_size=28, color=MART)
         l1.to_corner(UR, buff=0.5)
         l2.move_to(l1).align_to(l1, RIGHT)
         side = VGroup(
-            MathTex(rf"\lambda^* = \arg\max_\lambda \mathbb{{E}}\log(1 + \lambda x) = {nu['lam']:.3f}", font_size=28),
-            wrapped_label(r"log-optimal wealth: the fastest growth (Kelly), and the most powerful e-value against "
-                          r"``no edge'' (Larsson, Ramdas and Ruf)", 4.8, 19, GREY_A),
+            MathTex(rf"\widehat\lambda = \arg\max_{{\lambda\in[0,0.5]}} \widehat{{\mathbb E}}_{{alt}}"
+                    rf"\log(1 + \lambda x) = {nu['lam']:.3f}", font_size=27),
+            wrapped_label(r"Grid optimization over fixed linear stakes under a simulated alternative. "
+                          r"This illustrates log growth; it does not establish optimality over all e-values "
+                          r"or uniformly greatest finite-sample power.", 4.8, 19, GREY_A),
             wrapped_label(r"one object, two names: Parts 4, 8 and 9 meet here", 4.8, 21, QC.IDEA),
         )
         if side[0].width > 4.8:
             side[0].scale_to_fit_width(4.8)
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(l1, DOWN, buff=0.5).align_to(l1, RIGHT)
         with self.voiceover(
-            "That last bridge deserves a picture. Here is the wealth of a bettor who stakes the log-optimal fraction "
-            "on a strategy with a small edge. <bookmark mark='a'/> In Part eight it is called the Kelly, or numéraire, "
-            "portfolio: the strategy that grows fastest. <bookmark mark='b'/> Read it again as a test of the claim "
-            "that there is no edge, and it is the most powerful e-value there is: the numéraire e-variable. The same "
-            "curve, under two names. Testing by betting and investing by betting are one mathematics."
+            "That bridge deserves a picture. On simulated bounded outcomes, choose a fixed linear stake from a "
+            "grid between zero and one half, maximizing estimated expected log growth under the alternative. "
+            "<bookmark mark='a'/> This is a restricted Kelly illustration. <bookmark mark='b'/> Under a conditional "
+            "mean-zero null the same wealth is a valid test. General numéraire theory studies log-optimal e-values "
+            "for specified null and alternative classes; it does not promise uniformly greatest finite-sample power."
         ) as vo:
             self.play(FadeIn(g))
             self.add(ln)
@@ -123,19 +126,19 @@ class Frontier(VoiceoverScene):
         days = np.asarray(eb["days"], float)
         fe, fb = np.asarray(eb["fdp_e"]), np.asarray(eb["fdp_b"])
         de, dbb = np.asarray(eb["disc_e"], float), np.asarray(eb["disc_b"], float)
-        g1 = axes([0, 2520], [0, 0.6], x_length=5.4, y_length=3.0, xlabel=r"days watched",
-                  ylabel=r"false discovery proportion (20 seeds)", xticks=[0, 1260, 2520], yticks=[0, 0.1, 0.3, 0.6],
+        g1 = axes([0, 2520], [0, 1], x_length=5.4, y_length=3.0, xlabel=r"days; reviews every 21 days",
+                  ylabel=r"mean FDP and min--max over 20 seeds", xticks=[0, 1260, 2520], yticks=[0, 0.1, 0.5, 1],
                   font_size=14)
         g2 = axes([0, 2520], [0, 30], x_length=5.4, y_length=3.0, xlabel=r"days watched", ylabel=r"discoveries",
                   xticks=[0, 1260, 2520], yticks=[0, 10, 20, 30], font_size=14)
         VGroup(g1, g2).arrange(RIGHT, buff=0.9).to_edge(UP, buff=0.7)
         tenp = DashedLine(g1.ax.c2p(0, 0.1), g1.ax.c2p(2520, 0.1), color=GREY_B, stroke_width=1.5)
-        sb_e = seed_band(g1.ax, days, np.clip(fe, 0, 0.6), MART)
-        sb_b = seed_band(g1.ax, days, np.clip(fb, 0, 0.6), LOSS)
+        sb_e = seed_band(g1.ax, days, fe, MART)
+        sb_b = seed_band(g1.ax, days, fb, LOSS)
         de_l = curve(g2.ax, days, de.mean(0), MART, stroke_width=3)
         db_l = curve(g2.ax, days, dbb.mean(0), LOSS, stroke_width=3)
-        leg = legend([(MART, r"e-BH on ONS e-processes"), (LOSS, r"BH on each day's $t$-test p-values")], font_size=18)
-        leg.next_to(VGroup(g1, g2), DOWN, buff=0.25)
+        leg = legend([(MART, r"e-BH on ONS e-processes"), (LOSS, r"BH on one-sided known-variance $z$ p-values")], font_size=18)
+        leg.arrange(RIGHT, buff=0.65).to_edge(UP, buff=0.15)
         card = lab_card(r"e-BH", [
             "def e_bh(e, alpha=0.1):",
             "    e = np.asarray(e, float); K = len(e)",
@@ -144,12 +147,13 @@ class Frontier(VoiceoverScene):
             "    return order[: ok.max() + 1] if len(ok) else order[:0]",
         ], source="explainer/quant/house/martingale.py", width=6.6, font_size=17).to_corner(DL, buff=0.3)
         res = VGroup(
-            MathTex(rf"\text{{stop at the first day with}} \ge 10 \text{{ discoveries:}}", font_size=24),
+            MathTex(rf"\text{{first 21-day review with}} \ge 10 \text{{ discoveries:}}", font_size=24),
             MathTex(rf"\text{{FDR: e-BH }} {100 * eb['stop_e']:.1f}\%,\ \text{{BH }} {100 * eb['stop_b']:.1f}\%",
                     font_size=26, color=QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.4)
-        pred = desk_question(r"Monitor 200 strategies daily; does e-BH's guarantee survive peeking?",
-                             r"Yes: an e-process stopped at any time is still an e-value, and e-BH needs nothing more.",
+        pred = desk_question(r"Does e-BH survive a common stopping rule based on all 200 strategies?",
+                             r"Yes, if each process is valid in the joint filtration. Reported FDRs use 20 seeds; "
+                             r"no action by the horizon contributes FDP zero.",
                              width=5.6, font_size=19).next_to(res, UP, buff=0.25).align_to(res, RIGHT)
         e_ok = eb["stop_e"] <= 0.1
         b_bad = eb["stop_b"] > 0.1
@@ -159,14 +163,15 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "Finally the frontier at work on a desk problem. Two hundred strategies are watched every day for ten "
             "years; twenty have a true daily Sharpe of point zero eight, the rest none. Each is monitored by a "
-            "learning e-process, and every day the desk applies e-BH, Wang and Ramdas's rule, at ten percent. "
+            "learning e-process; the desk reviews e-BH every twenty-one trading days at ten percent. "
             "<bookmark mark='a'/> The rule is five lines: sort the e-values, and reject the largest k whose values "
             "clear the number of strategies over alpha times k. <bookmark mark='b'/> On the left, the false "
             "discovery proportion over twenty seeds; on the right, discoveries. The ordinary approach, Benjamini and "
-            "Hochberg on each day's t-test p-values, finds more, and faster. <bookmark mark='c'/> But a desk peeks: "
-            f"suppose it acts on the first day it has ten discoveries. Then {verdict} <bookmark mark='d'/> Does "
-            "e-BH's guarantee survive peeking? Yes: an e-process stopped at any time is still an e-value, and e-BH "
-            "needs nothing more. Part twenty-six builds its backtesting on this."
+            "Hochberg on one-sided known-variance z p-values, finds more and faster. <bookmark mark='c'/> Suppose "
+            f"each method acts at its first review with ten discoveries. In these twenty seeds, {verdict} "
+            "No action by the horizon counts as zero false discovery proportion. <bookmark mark='d'/> "
+            "The guarantee at a common stopping time requires each e-process to be valid in the joint filtration. "
+            "That condition holds in this independent-strategy simulation; the numerical average is not a proof."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(tenp), FadeIn(leg))
             vo.wait_until("a")

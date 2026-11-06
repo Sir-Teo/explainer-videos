@@ -34,7 +34,7 @@ class Barings(VoiceoverScene):
                          lit=(1995,), part=PART)
         with self.voiceover("Chapter eight. Doubling down: Barings, 1995."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def file(self):
         card = crisis_card(r"26 February 1995", r"Barings",
@@ -49,7 +49,7 @@ class Barings(VoiceoverScene):
                    r"Australia, \textit{Bulletin}, November 1995; FIA (2020)", font_size=17)
         VGroup(card, src).arrange(DOWN, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
-            "In February 1995 the doubling system broke a bank. Barings, Britain's oldest merchant bank, founded in "
+            "In February 1995 escalating derivatives exposures and concealed losses broke a bank. Barings, founded in "
             "1762, failed after a single trader in Singapore, Nick Leeson, lost about eight hundred and thirty "
             "million pounds, more than twice the bank's capital. For about two and a half years he had hidden his "
             "losses in an error account numbered eight eight eight eight eight. The Dutch bank ING bought what was "
@@ -93,9 +93,9 @@ class Barings(VoiceoverScene):
         with self.voiceover(
             "Here is the Nikkei through those months. Leeson was long Nikkei futures, and had sold options that paid "
             "him as long as the index stayed calm. <bookmark mark='a'/> On the seventeenth of January an earthquake "
-            f"struck Kobe. Within a week the index had fallen {abs(week):.0f} percent. <bookmark mark='b'/> He did what "
-            "the doubling system prescribes: as the market fell, he bought more, to win everything back on the "
-            "rebound. The rebound did not come in time. <bookmark mark='c'/> On the twenty-sixth of February Barings "
+            f"struck Kobe. Within a week the index had fallen {abs(week):.0f} percent. <bookmark mark='b'/> Leeson "
+            "increased exposure while seeking to recover losses. This resembles doubling, but his actual futures "
+            "and options book was not the binary rule shown next. <bookmark mark='c'/> On the twenty-sixth of February Barings "
             "failed, and the next day the Nikkei fell again."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))

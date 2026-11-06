@@ -19,7 +19,7 @@ class Doubling(VoiceoverScene):
                          lit=(1981,), part=PART)
         with self.voiceover("Chapter seven. Doubling, and admissible strategies."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def derive(self):
         rows = [cmath(r"\text{unlimited credit:}\ M_\tau", r"=", r"M_0 + 1 \quad \text{always}, \quad \mathbb{E}\tau = 2",
@@ -94,7 +94,7 @@ class Doubling(VoiceoverScene):
             MathTex(rf"\text{{theory: }} 1 - (1023/1024)^{{3000}} = {100 * d['frac_ruined_theory']:.1f}\%", font_size=26,
                     color=GREY_A),
             MathTex(rf"\text{{mean wait for first ruin: }} {d['first_ruin_mean']:,.0f}".replace(",", "{,}"), font_size=26),
-            wrapped_label(rf"the House's \texttt{{doubling()}} on real coin flips: ruin {100 * d['check_ruin']:.2f}\% per "
+            wrapped_label(rf"the House's \texttt{{doubling()}} on simulated fair flips: ruin {100 * d['check_ruin']:.2f}\% per "
                           rf"session vs.\ $2^{{-10}} = {100 * d['check_theory']:.2f}\%$", 5.0, 18, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35).shift(UP * 0.2)  # beside the fan, not on it
         pred = desk_question(r"With a bankroll of 1{,}023, how many sessions until the first ruin, on average?",
@@ -125,12 +125,12 @@ class Doubling(VoiceoverScene):
 
     def admissible(self):
         d = definition_card(r"Admissible strategy",
-                            r"A self-financing strategy whose wealth never falls below some fixed $-c$: $V_t \ge -c$ "
-                            r"for all $t$. Under a martingale measure $Q$ its wealth is then a supermartingale, so "
+                            r"A self-financing, stochastically integrable strategy whose discounted wealth satisfies "
+                            r"$V_t\ge-c$ for fixed $c$. In a local-martingale market under $Q$, wealth is a supermartingale, so "
                             r"$\mathbb{E}_Q V_T \le V_0$: no free lunch.", width=10.4, color=Q_C, font_size=24)
         h1 = history_card(1981, r"Harrison and Pliska, ``Martingales and stochastic integrals in the theory of "
-                          r"continuous trading''", r"prices are martingales under an equivalent measure exactly when "
-                          r"admissible strategies cannot make something from nothing", width=10.4)
+                          r"continuous trading''", r"martingale measures, stochastic integration and admissibility "
+                          r"connect pricing to absence of arbitrage", width=10.4)
         h2 = history_card(1988, r"Dybvig and Huang, \textit{Review of Financial Studies} 1(4)",
                           r"a lower bound on wealth (a credit constraint) is what rules out doubling in continuous time",
                           width=10.4)
@@ -138,8 +138,8 @@ class Doubling(VoiceoverScene):
                               r"rare large loss (Part 11). The staircase and the cliff.", 10.4, 22, LOSS)
         VGroup(d, h1, h2, short).arrange(DOWN, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
-            "In continuous time doubling is worse: betting ever faster, a doubler with unlimited credit can make any "
-            "sum in a finite time. Finance closes the loophole with one rule: a strategy is admissible if its wealth "
+            "In idealized continuous-time models allowing infinitely many bets before a deadline, unlimited credit "
+            "permits doubling constructions. Finance restricts admissible strategies: discounted wealth "
             "never falls below some fixed floor. <bookmark mark='a'/> Michael Harrison and Stanley Pliska showed in "
             "1981 that when prices are martingales under an equivalent measure, admissible strategies cannot make "
             "something from nothing: their wealth is a supermartingale. <bookmark mark='b'/> Philip Dybvig and "

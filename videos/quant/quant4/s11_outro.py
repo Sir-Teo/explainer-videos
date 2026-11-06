@@ -9,7 +9,7 @@ DESK = [
     (r"How many tosses of a fair coin do you expect before you see two heads in a row?",
      r"6: let a gambler arrive before each toss and bet on HH at fair odds; the casino's total payout when HH appears "
      r"is $4 + 2 = 6$, and its takings equal the number of tosses"),
-    (r"You have \$100 at a European roulette table and need \$200 tonight. How do you bet?",
+    (r"In the classic target-before-ruin model, compare \$100 aiming for \$200: one all-in bet or one-unit bets?",
      r"all on red, once: $18/37 \approx 48.6\%$; one dollar at a time gives under 0.5\%"),
     (r"Penney's game: you pick HHT, I pick THH. Who wins, and how often?",
      r"THH, with probability $3/4$: unless the first two tosses are HH, any HHT must be preceded by THH"),
@@ -26,7 +26,7 @@ PROBLEMS = [
     r"sessions before ruin.",
     r"For coins $p = 0.5$ and $q = 0.6$, show $\mathbb{E}_P[L_n] = 1$ but $\tfrac{1}{n}\log L_n \to -D(P\,\|\,Q)$. "
     r"Compute $D$ and predict the median of $L_{300}$.",
-    r"Prove Ville's inequality from optional stopping at $\min(\tau, n)$. Why does a $t$-test checked every day "
+    r"Prove Ville's inequality from optional stopping at $\min(\tau, n)$. Why does a fixed $z$ cutoff checked every day "
     r"eventually reject a true null with probability one?",
     r"P\'olya's urn from one red and one blue ball: show $P(R_n = k) = 1/(n + 1)$ for $k = 1, \dots, n + 1$, so the "
     r"limit of the red fraction is Uniform$(0, 1)$.",
@@ -56,13 +56,13 @@ class Outro(VoiceoverScene):
             (r"the martingale transform: no predictable stake beats a fair game; roulette taxes every system 1/37", MART),
             (r"stopping times; optional stopping proved; the walk that always wins has $\mathbb{E}\tau = \infty$", MART),
             (r"doubling needs unbounded credit: admissibility forbids it; Barings found it in account 88888", LOSS),
-            (r"ruin $a/b$ and duration $a(b - a)$; bold play is optimal against you (Dubins--Savage)", LOSS),
+            (r"ruin $a/b$ and duration $a(b - a)$; bold play optimizes the classic subfair target-before-ruin model", LOSS),
             (r"bounded martingales converge: upcrossings, P\'olya's urn, L\'evy's learning", INFO),
             (r"Doob: drift plus martingale, and the drift depends on the filtration (Ivey)", DRIFT),
             (r"change of measure moves weight, not paths; Esscher's $Q$ fattens the crash tail", Q_C),
             (r"Radon--Nikodym by martingales; Kakutani: infinite coins are equivalent or singular", Q_C),
-            (r"returns are not stable: estimators disagree and kurtosis falls with the horizon", P_C),
-            (rf"Ville: a daily $t$-test rejects {100 * self.p['t_reject']:.0f}\%, an e-process "
+            (r"stable fits disagree and sample kurtosis changes with horizon: evidence, not a moment-existence proof", P_C),
+            (rf"Ville: repeated fixed-$z$ checks reject {100 * self.p['t_reject']:.0f}\%, an e-process "
              rf"{100 * self.p['e_reject']:.0f}\%; bettors learn, e-BH survives peeking", MART),
         ]
         rows = VGroup()
@@ -80,12 +80,12 @@ class Outro(VoiceoverScene):
             "Part four in twelve lines. A sigma-algebra is the set of questions you can answer, and conditional "
             "expectation is a projection onto it. A martingale's forecast of tomorrow is today. No predictable stake "
             "turns a fair game favourable, and roulette taxes every system the same. Optional stopping holds with "
-            "bounded bets, and fails for the walk that always wins, which takes forever on average. Doubling needs "
+            "its stopping-time and integrability conditions; bounded bets alone do not suffice. Doubling needs "
             "unbounded credit, which finance forbids and Barings found in a hidden account. Ruin is a over b, and "
-            "bold play is best against you. Martingales that stay bounded converge. Doob splits a price into drift "
+            "bold play solves the classic subfair target-before-ruin model. Martingales that stay bounded converge. Doob splits a process into drift "
             "and martingale, and the drift depends on what you know. A change of measure moves weight, not paths, "
-            "and martingales build the Radon-Nikodym derivative. Returns are not stable laws. And a test you check "
-            "every day must be an e-process: it can learn its bets, and it survives peeking."
+            "and martingales build the Radon-Nikodym derivative. The stable-fit diagnostics are evidence, not "
+            "proof of finite population moments. Properly calibrated e-processes allow learned stakes and repeated looks."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -101,7 +101,8 @@ class Outro(VoiceoverScene):
             "Five desk questions. A martingale starts at one and stops at zero or three: the chance it hits three is "
             "a third, by optional stopping. <bookmark mark='a'/> The expected number of fair tosses until two heads "
             "in a row is six, by the casino of gamblers. <bookmark mark='b'/> With a hundred dollars at a European "
-            "roulette table and a need for two hundred tonight, put it all on red, once. <bookmark mark='c'/> In "
+            "roulette table in the classic target-before-ruin model, one all-in red bet has higher success "
+            "probability than one-unit bets. <bookmark mark='c'/> In "
             "Penney's game, if you choose heads, heads, tails, I choose tails, heads, heads and win three times in "
             "four. <bookmark mark='d'/> And a fair walk stopped the first time it is up one takes, on average, "
             "forever. Full solutions are in the notes."

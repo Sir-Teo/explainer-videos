@@ -32,7 +32,7 @@ class Information(VoiceoverScene, MovingCameraScene):
                          part=PART)
         with self.voiceover("Chapter one. Information: sigma-algebras and filtrations."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def filtration(self):
         w = 1.32
@@ -145,10 +145,10 @@ class Information(VoiceoverScene, MovingCameraScene):
                           for b in range(2) for y in (-0.6, -2.9)])
         pred = desk_question(r"Is ``the number of heads in the first two tosses is even'' an $\mathcal{F}_1$ event?",
                              r"No: it needs the second toss, so it is in $\mathcal{F}_2$ but not $\mathcal{F}_1$.",
-                             width=6.0, font_size=22).to_corner(UR, buff=0.4)  # it takes the definitions' place
+                             width=6.0, font_size=22).to_corner(UR, buff=0.4).shift(DOWN * 0.8)  # it takes the definitions' place
         with self.voiceover(
-            "Make that precise. A sigma-algebra is the collection of yes-or-no questions you can answer, closed under "
-            "not, and, and or: if you can answer two questions, you can answer their combinations. After n tosses "
+            "Make that precise. A sigma-algebra contains the whole space and is closed under complements and "
+            "countable unions. In this finite example, questions combine with not, and, and or. After n tosses "
             "the answerable events are exactly the unions of the blocks: each block is either in or out, so there "
             "are two to the power two to the n of them. Two before any toss, four after one, sixteen after two, two "
             "hundred and fifty-six after three. <bookmark mark='a'/> A random variable is measurable with respect to "
@@ -156,7 +156,8 @@ class Information(VoiceoverScene, MovingCameraScene):
             "on every block. The first toss's outcome passes: its bars are flat on each half. <bookmark mark='b'/> "
             "The number of heads fails: inside each block it still varies. A process whose value at every time is "
             "measurable at that time is called adapted; prices are adapted to the market's information, and a "
-            "strategy must be too. <bookmark mark='c'/> Check yourself: is the event that the first two tosses hold "
+            "strategy's wealth must be too; the stake for the next toss must already be known before that toss. "
+            "<bookmark mark='c'/> Check yourself: is the event that the first two tosses hold "
             "an even number of heads in F one? No. It needs the second toss, so it lives in F two."
         ) as vo:
             self.play(FadeIn(cells), Create(blocks), FadeIn(deck[:2]))
@@ -189,8 +190,9 @@ class Information(VoiceoverScene, MovingCameraScene):
         lab1 = MathTex(r"1", font_size=28, color=GREY_B).next_to(bar, DOWN, buff=0.15).align_to(bar, RIGHT)
         map_ = MathTex(r"\omega = (\omega_1, \omega_2, \dots) \;\mapsto\; \sum_k \omega_k\, 2^{-k} \in [0, 1]",
                        font_size=34).to_edge(UP, buff=0.6)
-        cap = label(r"fair tosses $\leftrightarrow$ length on $[0,1]$ (Lebesgue measure): a block after $n$ tosses has "
-                    r"length $2^{-n}$", font_size=22, color=GREY_A).next_to(map_, DOWN, buff=0.25)
+        cap = wrapped_label(r"Fair tosses map to Lebesgue measure: an $n$-toss block has length $2^{-n}$. "
+                            r"The two expansions at dyadic endpoints are a null exception.",
+                            12.2, 22, GREY_A).next_to(map_, DOWN, buff=0.25)
         kol = history_card(1933, r"Kolmogorov, \textit{Grundbegriffe der Wahrscheinlichkeitsrechnung}",
                            r"a probability space $(\Omega, \mathcal{F}, P)$: $P$ countably additive on a $\sigma$-algebra "
                            r"of events; conditional expectation defined for any $\sigma$-algebra", width=7.2)

@@ -190,6 +190,26 @@
    },
    "trials": 1
   },
+  "btc_mean_confseq_bounded_v2": {
+   "code_sha256": "137f93939eb39e8e15bc517e86e500ac8107735acb5a306ec6419f8e4b64c6a3",
+   "params": {
+    "alpha": 0.05,
+    "clipped_log_return_bounds": [
+     -0.2,
+     0.2
+    ],
+    "correction": "bounded bets and continuous-mean brackets",
+    "data": "Binance BTCUSDT 1d",
+    "grid": [
+     0.3,
+     0.7,
+     401
+    ],
+    "start": 2018,
+    "through": 20201231
+   },
+   "trials": 1
+  },
   "btc_nsde_generator": {
    "code_sha256": "9e4f5af75c181a3fc64ce5c3870a970e1eaad5c1ea53ab25ecd289332fd85acc",
    "params": {

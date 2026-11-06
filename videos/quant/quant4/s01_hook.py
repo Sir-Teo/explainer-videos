@@ -29,7 +29,7 @@ class Hook(VoiceoverScene):
 
     def betting(self, e):
         old, new = e["19260701"], e["20000101"]
-        g = axes([1926, 2021], [-2, 105], x_length=6.4, y_length=4.4, ylabel=r"wealth from \$1, betting since 1926",
+        g = axes([1926, 2021], [-2, 105], x_length=6.4, y_length=4.4, ylabel=r"historical diagnostic score, 1926 start",
                  xticks=[1930, 1960, 1990, 2020], xfmt=lambda x: f"{int(x)}", yticks=[0, 25, 50, 75, 100],
                  yfmt=lambda u: rf"10^{{{int(u)}}}" if u else "1", font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
         ax = g.ax
@@ -48,12 +48,13 @@ class Hook(VoiceoverScene):
         i29 = int(np.argmax(l0 >= np.log10(20)))
         dot29 = Dot(ax.c2p(t0[i29], l0[i29]), radius=0.07, color=YELLOW)
         side = VGroup(
-            label(r"each day, bet that today's return keeps yesterday's sign", font_size=21, color=GREY_A),
+            wrapped_label(r"yesterday's sign times centred, scaled, clipped returns; a mixture of both betting directions",
+                          5.2, 21, GREY_A),
             MathTex(rf"\text{{from 1926: }} 10^{{{int(np.log10(old['max']))}}}\text{{; past 20 in Feb.\ 1929}}",
                     font_size=28, color=P_C),
             MathTex(rf"\text{{from 2000: at most }} {new['max']:.1f}", font_size=28, color=MART),
-            wrapped_label(r"20 is the line: a fair game reaches it with probability at most 5\%, however often you "
-                          r"look", 5.2, 20, QC.LOSS),
+            wrapped_label(r"Theorem: a calibrated nonnegative test martingale reaches 20 with probability at most 5\%. "
+                          r"These retrospective scores need additional modeling checks (chapter 15).", 5.2, 20, QC.LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         for m_ in side:
             if m_.width > 5.4:
@@ -67,15 +68,14 @@ class Hook(VoiceoverScene):
             ax.c2p(1926, 100), RIGHT, buff=0.2))
         head = always_redraw(lambda: glow_dot(ax.c2p(at_index(t0, tk), at_index(l0, tk)), color=P_C, radius=0.05))
         with self.voiceover(
-            "Here is a gambler who bets against the American stock market, every day since 1926, on one thing: that "
-            "today's return will have the same sign as yesterday's. The bets are sized with care and never risk "
-            "everything. <bookmark mark='a'/> If the market were a fair game for this bet, the gambler's wealth "
-            "would be a martingale, and a theorem from 1939 says it would almost never reach twenty times its "
-            "start, however long we watched. It reached twenty in February 1929, and went on to ten to the "
-            "hundredth. In the old market, yesterday's sign really did predict today's. "
+            "Here is a historical betting score using yesterday's sign and transformed American market returns. "
+            "<bookmark mark='a'/> A calibrated nonnegative test martingale has at most a five-percent chance of "
+            "ever reaching twenty. This score uses estimated centering, clipping and a retrospective scale "
+            "initialization; chapter fifteen checks why those choices matter. It crossed twenty in February "
+            "1929 and eventually reached roughly ten to the hundredth. "
             "<bookmark mark='b'/> Start the same gambler in 2000, and the wealth wanders and never reaches twenty. "
-            "<bookmark mark='c'/> This is testing by betting: a way to ask whether a market is fair that stays "
-            "honest no matter how often you look. By the end of this part you will know why it works."
+            "<bookmark mark='c'/> The contrast motivates testing by betting. By the end you will know when its "
+            "anytime guarantee applies, and when a historical score alone does not supply it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), Create(bar0))
             self.add(live0, year, head)
@@ -238,8 +238,9 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("data",))
         with self.voiceover(
-            "In the House, this part adds a monitor to the data desk: an e-process that can watch any strategy or "
-            "any market every day, and raise its hand only when the evidence is real. <bookmark mark='a'/> The "
+            "In the House, this part adds a monitor to the data desk: an e-process for "
+            "a specified bounded-outcome model over time, with a false-alarm guarantee when its null is correctly "
+            "calibrated. <bookmark mark='a'/> The "
             "research desk will inherit it, when it starts testing hundreds of ideas at once."
         ) as vo:
             self.play(FadeIn(chart))

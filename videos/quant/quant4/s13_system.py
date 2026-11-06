@@ -25,7 +25,7 @@ class System(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter four. You can't beat the system."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def derive(self):
         cols = {r"H_k": DRIFT, r"H_{n+1}": DRIFT}

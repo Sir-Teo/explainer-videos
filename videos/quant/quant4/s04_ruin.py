@@ -23,7 +23,7 @@ class Ruin(VoiceoverScene):
                          part=PART)
         with self.voiceover("Chapter nine. Gambler's ruin, and bold play."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def derive(self):
         rows = [cmath(r"\mathbb{E}[X_\tau]", r"=", r"X_0", font_size=42, colors={r"X_0": MART}),
@@ -33,15 +33,16 @@ class Ruin(VoiceoverScene):
                 cmath(r"\Big(\tfrac{q}{p}\Big)^{X_n}\ \text{is a martingale}", r"\;\Rightarrow\;",
                       r"P(\text{hit } b) = \frac{1 - (q/p)^a}{1 - (q/p)^b}", font_size=36,
                       colors={r"P(\text{hit } b) = \frac{1 - (q/p)^a}{1 - (q/p)^b}": P_C})]
-        whys = [why(r"a fair walk from $a$, stopped at $0$ or $b$: the steps are bounded, so optional stopping holds"),
+        whys = [why(r"a fair unit-step walk, $0<a<b$ integers; exit is a.s. finite and stopped wealth stays in $[0,b]$"),
                 why(r"the walk ends at one barrier or the other"),
                 why(r"the gambler's ruin, solved in one line"),
-                why(r"a biased game, win probability $p$, $q = 1 - p$ (de Moivre's trick)")]
+                why(r"$0<p<1$, $p\ne q=1-p$; for $p=q$ use the limit $a/b$ (de Moivre's trick)")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-2.4, buff=0.75, edge=6.9)
         with self.voiceover(
             "Optional stopping solves the oldest problem in probability in one line. A gambler starts with a units "
-            "in a fair game and stops on reaching b or going broke. The steps are bounded, so the expected wealth at "
-            "the end equals the start. <bookmark mark='a'/> At the end the wealth is either b or zero. "
+            "in a fair unit-step game and stops on reaching b or going broke. The stopped wealth stays between "
+            "zero and b, and exit is almost surely finite, so optional stopping applies. <bookmark mark='a'/> "
+            "At the end the wealth is either b or zero. "
             "<bookmark mark='b'/> So the chance of reaching b first is a over b. <bookmark mark='c'/> If the game is "
             "biased, with win probability p, the trick, due to de Moivre, is to find a different martingale: q over "
             "p raised to the power of the wealth. The same argument gives the general formula."
@@ -76,7 +77,8 @@ class Ruin(VoiceoverScene):
             "reach a hundred. In a fair game your chance is a half: a straight line. <bookmark mark='a'/> On a "
             "European roulette wheel, betting on red, you win eighteen times in thirty-seven, an edge against you of "
             "only one thirty-seventh. Yet the chance of doubling fifty units falls to six percent. On an American "
-            "wheel, with its extra zero, to half a percent. A small edge, repeated, is a certainty."
+            "wheel, with its extra zero, to half a percent. Many small bets expose the bankroll repeatedly "
+            "to the edge; failure is very likely here, though not certain."
         ) as vo:
             self.play(FadeIn(g), Create(lines[0]), FadeIn(leg[0]))
             vo.wait_until("a")
@@ -108,18 +110,18 @@ class Ruin(VoiceoverScene):
             MathTex(rf"100 \text{{ units: }} {100 * timid[units.index(100)]:.2f}\%", font_size=30, color=P_C),
             label(r"bold play: everything on one spin", font_size=22, color=DRIFT),
             MathTex(rf"18/37 = {100 * bold:.1f}\%", font_size=30, color=DRIFT),
-            wrapped_label(r"Dubins and Savage (1965), \textit{How to Gamble If You Must}: in a game against you, bold "
-                          r"play is optimal", 4.6, 21, GREY_A),
+            wrapped_label(r"Dubins--Savage: the classic subfair, even-money target-before-ruin model, "
+                          r"with freely divisible stakes, no table limit and no hard deadline", 4.6, 21, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "So if you must double your money tonight at a roulette table, how should you bet? Bet one unit at a "
+            "Compare ways to reach twice a starting bankroll before ruin, without a deadline or table limit. "
+            "Bet one unit at a "
             "time from a bankroll of a hundred, and your chance of doubling it is under half a percent; from five "
             "hundred units, about one in five hundred billion. The edge has more spins to work. "
             "<bookmark mark='a'/> Put everything on red once, and the chance is eighteen in thirty-seven, nearly "
             "forty-nine percent. <bookmark mark='b'/> Lester Dubins and Leonard Savage proved in 1965 that in a game "
-            "biased against you, bold play is optimal: expose the money to the edge as few times as possible. It is "
-            "the mirror image of the lesson for anyone with an edge: bet small and often, and let the law of large "
-            "numbers work for you, which is Part eight's Kelly criterion."
+            "biased against you, bold play is optimal for this target-before-ruin objective under the classic "
+            "stake assumptions. Maximizing expected log growth is a different objective; Part eight studies Kelly."
         ) as vo:
             self.play(FadeIn(g), FadeIn(xl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.15),
                       FadeIn(side[:2]))
@@ -136,11 +138,12 @@ class Ruin(VoiceoverScene):
                 cmath(r"\mathbb{E}\tau", r"=", r"(b - a)^2\,\tfrac{a}{b} + a^2\,\tfrac{b - a}{b}", font_size=40),
                 cmath(r"\mathbb{E}\tau", r"=", r"a\,(b - a) = 50 \cdot 50 = 2{,}500", font_size=40,
                       colors={r"a\,(b - a) = 50 \cdot 50 = 2{,}500": MART})]
-        whys = [why(r"$S_n^2 - n$ is a martingale (chapter 3), started at 0 with barriers $-a$ and $b - a$; bounded "
-                    r"steps and $\mathbb{E}\tau < \infty$: condition (c)"),
+        whys = [why(r"first stop $S_n^2-n$ at $\tau\wedge n$; bounded positions bound $\mathbb E(\tau\wedge n)$. "
+                    r"Monotone convergence then gives finite $\mathbb E\tau$ and the identity."),
                 why(r"$S_\tau$ is $b - a$ with probability $a/b$ and $-a$ otherwise"),
                 why(r"from 50, aiming for 100: two and a half thousand bets")]
-        step = ladder(self, rows, whys, keep=3, top=3.2, x=-2.0, buff=0.6, edge=6.9)
+        head = label(r"Expected time to reach a boundary", font_size=30, color=P_C).to_edge(UP, buff=0.3)
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.0, buff=0.6, edge=6.9)
         n_show = 60
         paths = [np.asarray(p_, float) for p_ in F["paths"][:n_show]]
         T = max(len(p_) for p_ in paths)
@@ -181,6 +184,7 @@ class Ruin(VoiceoverScene):
         verdict = (f"Four thousand simulated games average {F['mean']:,.0f}, within sampling error of the formula."
                    if ok else f"Four thousand simulated games average {F['mean']:,.0f}, a little off the formula: "
                               "the long games are rare and dominate the average.")
+        self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
             "How long does it take? Use chapter three's other martingale, the walk squared minus the steps, started "
             "at zero between barriers at minus a and b minus a. Its expected value at the end is zero. <bookmark "
@@ -198,7 +202,7 @@ class Ruin(VoiceoverScene):
             step(2)
             vo.wait_until("c")
             # keep only the answer, at the top, and give the lower half to the sixty games
-            self.play(FadeOut(VGroup(rows[0], whys[0], rows[1], whys[1])),
+            self.play(FadeOut(head), FadeOut(VGroup(rows[0], whys[0], rows[1], whys[1])),
                       VGroup(rows[2], whys[2]).animate.to_edge(UP, buff=0.45))
             self.play(FadeIn(g))
             self.add(live, cnt)

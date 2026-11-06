@@ -23,11 +23,11 @@ class Betting(VoiceoverScene):
                          r"day?", part=PART)
         with self.voiceover("Chapter fifteen. Ville's inequality, and testing by betting."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def ville(self):
         th = theorem_card(r"Ville's inequality",
-                          r"If $W_0 = 1, W_1, W_2, \dots$ is a nonnegative martingale, then for any $\alpha$, "
+                          r"If $W_0 = 1, W_1, W_2, \dots$ is a nonnegative supermartingale, then for $0<\alpha<1$, "
                           r"$P\big(W_n \ge 1/\alpha \text{ for some } n\big) \le \alpha$.", who=r"Ville (1939)",
                           color=MART, width=9.0, font_size=26).to_edge(UP, buff=0.5)
         rows = VGroup(
@@ -35,7 +35,7 @@ class Betting(VoiceoverScene):
             label(r"a gambler starts with \$1 and bets, never more than they have", font_size=24, color=GREY_A),
             label(r"under the null the wealth $W$ is a nonnegative martingale: an \textbf{e-process}", font_size=24,
                   color=MART),
-            label(r"reject when $W \ge 20$: wrong at most 5\% of the time, however often you look and whenever you stop",
+            label(r"under a true null, the chance of any false alarm at $W\ge20$ is at most 5\% over all time",
                   font_size=24, color=QC.LOSS),
             wrapped_label(r"Shafer and Vovk, \textit{Probability and Finance: It's Only a Game!} (2001); Ramdas, "
                           r"Gr\"unwald, Vovk and Shafer, ``Game-theoretic statistics and safe anytime-valid inference'' "
@@ -61,13 +61,13 @@ class Betting(VoiceoverScene):
 
     def peeking(self, p, pc):
         n = p["n"]
-        g1 = axes([0, n], [-4, 4], x_length=5.6, y_length=3.6, xlabel=r"days", ylabel=r"$t$-statistic, checked daily",
+        g1 = axes([0, n], [-4, 4], x_length=5.6, y_length=3.6, xlabel=r"days", ylabel=r"known-variance $z$, checked daily",
                   xticks=[0, 1000, 2000], yticks=[-4, -2, 0, 2, 4], font_size=16)
         g2 = axes([0, n], [-2, 2], x_length=5.6, y_length=3.6, xlabel=r"days", ylabel=r"e-process (log scale)",
                   xticks=[0, 1000, 2000], yticks=[-2, -1, 0, 1, 2], yfmt=lambda u: f"{10 ** u:g}", font_size=16)
         VGroup(g1, g2).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.9)
         a1, a2 = g1.ax, g2.ax
-        k = np.arange(0, n, 10)[: len(p["show_z"][0])]
+        k = np.asarray(p["show_days"], float)
         tk = ValueTracker(0.0)
         zs = VGroup(*[tracing(a1, k, np.clip(np.asarray(z), -4, 4), tk, P_C, stroke_width=1.3)
                       for z in p["show_z"]])
@@ -84,12 +84,14 @@ class Betting(VoiceoverScene):
         b2 = DashedLine(a2.c2p(0, np.log10(20)), a2.c2p(n, np.log10(20)), color=LOSS, stroke_width=2)
         r1 = MathTex(rf"\text{{ever rejects: }} {100 * p['t_reject']:.0f}\%", font_size=34, color=LOSS).next_to(g1, DOWN, buff=0.4)
         r2 = MathTex(rf"\text{{ever rejects: }} {100 * p['e_reject']:.1f}\%", font_size=34, color=MART).next_to(g2, DOWN, buff=0.4)
-        cap = label(rf"{p['paths']:,} fair games of {n:,} days each; 30 shown".replace(",", "{,}"), font_size=21,
-                    color=GREY_B).to_edge(DOWN, buff=0.5)
+        cap = wrapped_label(rf"{p['paths']:,} fair coin games of {n:,} steps; 30 shown; checks begin at step 20. "
+                            r"Paths are clipped to the displayed axes.".replace(",", "{,}"), 12.4, 20,
+                            GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Why does that matter? Because people look. Simulate two thousand perfectly fair games, each twenty-five "
-            "hundred days long, about ten years of trading. Each day, test whether the game is fair with an ordinary "
-            "t-test at the five percent level. <bookmark mark='a'/> The statistic wanders, and sooner or later "
+            "hundred days long. Starting on day twenty, compare a known-variance z statistic with plus or minus "
+            "one point nine six, the nominal five-percent normal cutoff. For coin data that cutoff is a normal "
+            "approximation. <bookmark mark='a'/> The statistic wanders, and sooner or later "
             f"crosses the line. Half of these fair games, {100 * p['t_reject']:.0f} percent, are declared unfair at "
             "some point, just because someone checked every day. <bookmark mark='b'/> Now watch an e-process on the "
             f"same games. It reaches twenty in {100 * p['e_reject']:.1f} percent of them, under five, as Ville "
@@ -133,23 +135,24 @@ class Betting(VoiceoverScene):
         leg = legend(items, font_size=20)
         side = VGroup(
             leg,
-            wrapped_label(r"the bet: today's return keeps yesterday's sign, with stakes sized by yesterday's volatility "
-                          r"and capped, against the null that it can't be predicted", 4.6, 20, GREY_A),
-            wrapped_label(r"the old index's positive autocorrelation (stale prices of small stocks, Part 1) was real; "
-                          r"since 2000 there is nothing this bettor can collect", 4.6, 20, GREY_A),
+            wrapped_label(r"Historical diagnostic scores: estimated centering, clipped outcomes and a retrospective "
+                          r"60-day scale initialization. The chart does not establish a calibrated null.", 4.6, 20, GREY_A),
+            wrapped_label(r"Ville needs the actual bounded outcome to have conditional mean zero and every stake "
+                          r"and scale to be predictable. A zero raw-return mean does not survive clipping in general.", 4.6, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
         src = real_data(r"Kenneth French's daily US market; Binance BTCUSDT daily; the House's \texttt{EProcess}; "
-                        r"curves clipped at $10^6$")
+                        r"diagnostic curves displayed only between $10^{-1}$ and $10^6$")
         with self.voiceover(
-            "Back to the opening gambler, now as a test. The null hypothesis: yesterday's sign doesn't predict today's "
-            "return. The bettor stakes a little each day on continuation or on reversal, sized by yesterday's "
-            "volatility and capped, and the House's e-process mixes many such bettors. <bookmark mark='a'/> Started "
+            "Back to the opening historical scores. The mixture bets on transformed, demeaned returns using "
+            "yesterday's sign. Estimated centering and clipping define a particular null; the first sixty days "
+            "also initialize the scale retrospectively. These charts therefore do not certify the theorem's "
+            "five-percent calibration for a raw-return martingale. <bookmark mark='a'/> Started "
             "in 1926, it passes twenty within three years. Started in 1975, within fifteen months: the index's "
-            "returns still kept their sign, partly because small stocks traded rarely, the stale prices of Part one. "
+            "returns had positive serial association, consistent with Part one's stale-price explanation. "
             "<bookmark mark='b'/> Started in 2000 it never gets there, and neither does a bettor on Bitcoin from 2018. "
-            "<bookmark mark='c'/> Each of these verdicts is valid at every moment along the way, and it would have "
-            "been valid had we stopped looking at any point. That is what anytime-valid means, and it is why the "
-            "House's monitor is an e-process."
+            "<bookmark mark='c'/> Non-crossing does not prove fairness. The exact anytime guarantee requires "
+            "conditionally mean-zero bounded outcomes and past-only calibration. Clipping a skewed mean-zero "
+            "return can change its mean, so checking that assumption is part of building a valid test."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(bar), FadeIn(side[1]))
             vo.wait_until("a")
@@ -169,7 +172,7 @@ class Betting(VoiceoverScene):
                 cmath(r"P\big(\sup_n W_n \ge c\big)", r"\le", r"\frac{1}{c} \quad (c = 1/\alpha:\ \le \alpha)", font_size=40,
                       colors={r"\frac{1}{c} \quad (c = 1/\alpha:\ \le \alpha)": MART}),
                 cmath(r"E \ge 0,\ \mathbb{E}_{H_0}E \le 1", r"\Rightarrow", r"P(E \ge 1/\alpha) \le \alpha; \quad "
-                      r"p \mapsto \kappa p^{\kappa - 1} \text{ is an e-value}", font_size=36),
+                      r"\kappa p^{\kappa - 1} \text{ is an e-value},\ 0<\kappa<1", font_size=34),
                 cmath(r"\limsup_n \frac{|S_n|}{\sqrt{2n\log\log n}}", r"=", r"1 \;\Rightarrow\; |z_n| > 1.96 "
                       r"\text{ infinitely often}", font_size=36, colors={r"1 \;\Rightarrow\; |z_n| > 1.96 \text{ infinitely often}": LOSS})]
         whys = [why(r"the first time the gambler's wealth reaches $c$: a stopping time"),
@@ -178,7 +181,7 @@ class Betting(VoiceoverScene):
                 why(r"let $n \to \infty$: Ville's inequality (1939), the maximal inequality of a nonnegative martingale"),
                 why(r"an e-value is one bet's payoff: Markov's inequality; any p-value can be calibrated into one "
                     r"(Vovk and Wang 2021)"),
-                why(r"the law of the iterated logarithm: a $t$-test checked forever rejects a true null with probability one")]
+                why(r"iid mean-zero, finite-variance steps: the fixed $z$ threshold is crossed eventually almost surely")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.7, edge=6.9)
         with self.voiceover(
             "The proof uses only what you have. Let tau be the first time wealth reaches c. <bookmark mark='a'/> "
@@ -214,8 +217,8 @@ class Betting(VoiceoverScene):
                           for i in range(2)])
         loop = CurvedArrow(players[2].get_bottom() + DOWN * 0.1, players[0].get_bottom() + DOWN * 0.1, angle=-0.6,
                            color=GREY_C)
-        claim = wrapped_label(r"a probability statement is a claim that Skeptic cannot multiply its capital by a large "
-                              r"factor; the forecasts are valid exactly when no strategy gets rich against them",
+        claim = wrapped_label(r"Forecaster commits to betting prices; Skeptic uses nonnegative capital. "
+                              r"Large capital provides evidence against those commitments, with explicit error thresholds.",
                               11.4, 23, QC.IDEA).to_edge(DOWN, buff=0.5)
         hist = history_card(2001, r"Shafer and Vovk, \textit{Probability and Finance: It's Only a Game!}",
                             r"probability built on betting instead of measure; \textit{Game-Theoretic Foundations for "
@@ -223,7 +226,7 @@ class Betting(VoiceoverScene):
         with self.voiceover(
             "Shafer and Vovk rebuilt probability as a game. <bookmark mark='a'/> Forecaster announces prices, "
             "Skeptic bets against them without risking more than it has, Reality moves. <bookmark mark='b'/> "
-            "Forecasts are good exactly when no strategy gets rich against them."
+            "Large capital is evidence against Forecaster's commitments, with a threshold controlling false alarms."
             " The skeptic still has to choose its bets. Next: learning them."
         ) as vo:
             self.play(FadeIn(hist))

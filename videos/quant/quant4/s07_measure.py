@@ -23,7 +23,7 @@ class Measure(VoiceoverScene):
         c = chapter_card(12, r"Change of measure", r"What if the coin were different?", lit=(1981,), part=PART)
         with self.voiceover("Chapter twelve. Change of measure."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def table(self):
         outs = ["".join(o) for o in itertools.product("HT", repeat=3)]
@@ -56,8 +56,8 @@ class Measure(VoiceoverScene):
             "world by world. This ratio, L, is the Radon-Nikodym derivative of Q with respect to P. "
             "<bookmark mark='b'/> It converts one into the other: any expectation under Q is an expectation under P "
             "of the variable reweighted by L. And because Q's probabilities add up to one, L averages to one under P. "
-            "This is the whole of the change of measure. In Part nine the second measure will be the one in which "
-            "every asset earns the riskless rate, and prices will be expectations under it."
+            "Part nine uses an equivalent pricing measure under which discounted traded gains are martingales, "
+            "subject to its market assumptions."
         ) as vo:
             self.play(FadeIn(VGroup(*cells[:4])), LaggedStart(*[FadeIn(VGroup(*r[:3])) for r in rows], lag_ratio=0.15))
             vo.wait_until("a")
@@ -128,16 +128,15 @@ class Measure(VoiceoverScene):
         whys = [why(r"the density process: a Doob martingale under $P$, the likelihood ratio of the first $n$ tosses"),
                 why(r"Bayes' rule for conditional expectations: check the definition on each $A \in \mathcal{F}_n$"),
                 why(r"discrete Girsanov: the same paths, a new drift; the martingale part is reweighted, not moved"),
-                why(r"the Esscher transform (1932): tilt by $e^{\theta R}$, with $\theta$ chosen so every asset earns the "
-                    r"riskless rate (Gerber and Shiu 1994)")]
+                why(r"Esscher (1932): tilt by $e^{\theta R}$; matching one expected gross return is not a joint dynamic pricing model")]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.6, buff=0.42, edge=6.9)
         with self.voiceover(
             "Over time the change of measure is a process: the likelihood ratio of the first n tosses, a Doob "
             "martingale under P. <bookmark mark='a'/> Conditional expectations under Q are those under P, reweighted "
             "and divided by the density so far: Bayes' rule. <bookmark mark='b'/> The drift changes: the walk minus "
             "two q minus one per step is a Q-martingale, Girsanov on a coin. <bookmark mark='c'/> On real returns, "
-            "Fredrik Esscher's 1932 choice tilts by an exponential of the return, so that every asset earns the "
-            "riskless rate under Q."
+            "Esscher's method tilts by an exponential. Matching one asset's expected gross return is a one-period "
+            "illustration, not a demonstration that every asset has the required conditional expectation."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -195,8 +194,8 @@ class Measure(VoiceoverScene):
             "likely. <bookmark mark='a'/> Now change the measure to the sixty-percent coin. No path moves. Each path "
             "is simply redrawn with a thickness proportional to its likelihood ratio: walks with many heads grow "
             "heavy, walks with many tails fade. <bookmark mark='b'/> The visible centre of the fan swings upward, and "
-            "the distribution at the end slides with it. A change of measure moves weight, not paths, which is why "
-            "anything that is impossible stays impossible, and anything possible stays possible."
+            "the distribution at the end slides with it. Equivalent finite-horizon measures reweight paths and "
+            "preserve null sets both ways. One-way absolute continuity would not give that two-way preservation."
         ) as vo:
             self.play(FadeIn(g), FadeIn(fan), FadeIn(dp), FadeIn(side[0]))
             vo.wait_until("a")
@@ -234,18 +233,20 @@ class Measure(VoiceoverScene):
         ], source="explainer/quant/house/martingale.py", width=6.4).to_corner(UR, buff=0.35)
         leg = legend([(P_C, r"$P$: the days as they came"), (Q_C, r"$Q$: the Esscher measure")], font_size=18)
         leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
-        src = real_data(r"Kenneth French's daily US market and riskless rate, 1926--2020")
+        src = real_data(r"Ken French, 1926--2020; fitted one-period tilt, not an identified market pricing measure; "
+                        r"tail observations pooled into the edge bins")
         pred = desk_question(r"Under $Q$, are crash days more or less likely than under $P$?",
                              rf"More: the worst 1\% of days carry {100 * es['tail_q']:.2f}\% of $Q$'s weight.",
                              width=5.6, font_size=20)
         with self.voiceover(
-            "Let us find Q for the American market: every day since 1926 a possible world. The House searches for the "
-            "tilt that makes the reweighted market earn the riskless rate. <bookmark mark='a'/> Theta is "
+            "Build one illustrative Q on historical days. Fit an exponential tilt in sample so expected gross "
+            "market return matches the sample riskless-return target. This does not identify a unique pricing "
+            "measure or a dynamic model. <bookmark mark='a'/> Theta is "
             f"{es['theta']:.2f}: Q leans toward bad days. The mean daily log return falls from {es['mean_p']:.2f} "
             f"basis points to {es['mean_q']:.2f}. <bookmark mark='b'/> The weight went into the left tail: the worst "
             f"one percent of days carry {100 * es['tail_q']:.2f} percent of Q's weight. <bookmark mark='c'/> So under "
-            "Q crash days are more likely. That is what the premium pays for, and Part nine prices options in this "
-            "world."
+            "this fitted Q bad days receive more weight. That property of the chosen tilt does not change "
+            "physical crash probabilities or establish the market's risk premium."
             " How far can a change of measure go? Next: the Radon–Nikodym theorem, and where it breaks."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))

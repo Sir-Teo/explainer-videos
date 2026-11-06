@@ -434,24 +434,52 @@ class AGrapaBettor:
 
 
 def betting_cs(x, grid, alpha: float = 0.05, lo: float = 0.0, hi: float = 1.0) -> dict:
-    """A betting confidence sequence for the mean of ``x`` (values in [lo, hi]): for every candidate mean m on
-    ``grid``, an ONS bettor bets on x - m in both directions (half the wealth each way); C_t is the set of m whose
-    wealth has never reached 1/alpha.  Valid at all times at once (Waudby-Smith and Ramdas 2024).  Returns the lower
-    and upper ends of C_t for each t."""
+    """A continuous-mean confidence sequence for bounded observations.
+
+    Assume E[X_t | F_{t-1}] = mu for one common mu and lo <= X_t <= hi.
+    Predictable, nonnegative stakes bet on both signs of (X_t - m)/(hi-lo),
+    without clipping or candidate-dependent normalization. Each direction has
+    error budget alpha/2. Its wealth is monotone in m, so rounding the grid
+    crossings OUTWARD encloses the continuous inversion, even when mu is not
+    on the supplied grid. Endpoints lo and hi are always included.
+
+    Stakes use a past-only variance estimate; their choice affects power, not
+    validity. This is the predictable betting construction of Waudby-Smith and
+    Ramdas (2024), rather than a claim that market returns have a constant mean.
+    """
     x = np.asarray(x, float)
     grid = np.asarray(grid, float)
-    up, dn = ONSBettor(len(grid)), ONSBettor(len(grid))
-    alive = np.ones(len(grid), bool)
+    if not (np.isfinite(lo) and np.isfinite(hi) and lo < hi and 0 < alpha < 1):
+        raise ValueError("require finite lo < hi and 0 < alpha < 1")
+    if x.ndim != 1 or not np.isfinite(x).all() or np.any((x < lo) | (x > hi)):
+        raise ValueError("observations must be a finite vector within [lo, hi]")
+    if (grid.ndim != 1 or not len(grid) or not np.isfinite(grid).all()
+            or np.any((grid < lo) | (grid > hi))):
+        raise ValueError("mean grid must be a nonempty finite vector within [lo, hi]")
+    grid = np.unique(np.r_[lo, grid, hi])
+    log_up, log_dn = np.zeros(len(grid)), np.zeros(len(grid))
+    threshold = np.log(2 / alpha)
+    running_sum, squared_errors = 0.0, 0.25
+    lower_so_far, upper_so_far = lo, hi
     lower, upper = np.empty(len(x)), np.empty(len(x))
     for t, v in enumerate(x):
-        # scale x - m into (-1, 1): divide by the largest possible distance from m
-        sc_up = (v - grid) / np.maximum(hi - grid, 1e-9)
-        sc_dn = (grid - v) / np.maximum(grid - lo, 1e-9)
-        w = 0.5 * up.update(np.clip(sc_up, -0.999, 0.999)) + 0.5 * dn.update(np.clip(sc_dn, -0.999, 0.999))
-        alive &= w < 1 / alpha
-        idx = np.flatnonzero(alive)
-        lower[t] = grid[idx[0]] if len(idx) else np.nan
-        upper[t] = grid[idx[-1]] if len(idx) else np.nan
+        variance_forecast = squared_errors / (t + 1)
+        stake = min(0.5, np.sqrt(2 * threshold / ((t + 1) * variance_forecast)))
+        centered = (v - grid) / (hi - lo)
+        log_up += np.log1p(stake * centered)
+        log_dn += np.log1p(-stake * centered)
+        # W_up decreases in m; W_dn increases in m. Keep the rejected neighbour
+        # as an outer bracket, so finite grid resolution cannot cause undercoverage.
+        survives_up = np.flatnonzero(log_up < threshold)
+        survives_dn = np.flatnonzero(log_dn < threshold)
+        lower_so_far = max(lower_so_far, grid[max(int(survives_up[0]) - 1, 0)])
+        upper_so_far = min(upper_so_far, grid[min(int(survives_dn[-1]) + 1, len(grid) - 1)])
+        lower[t], upper[t] = ((lower_so_far, upper_so_far) if lower_so_far <= upper_so_far
+                            else (np.nan, np.nan))
+        normalized = (v - lo) / (hi - lo)
+        forecast = running_sum / t if t else 0.5
+        squared_errors += (normalized - forecast) ** 2
+        running_sum += normalized
     return {"lower": lower, "upper": upper}
 
 

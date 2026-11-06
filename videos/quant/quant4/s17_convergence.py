@@ -20,7 +20,7 @@ class Convergence(VoiceoverScene):
         c = chapter_card(10, r"Martingales converge", r"Can a fair game wander forever?", part=PART)
         with self.voiceover("Chapter ten. Martingales converge."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.play(FadeOut(c), run_time=0.4)
 
     def trader(self, p):
         w = np.asarray(p["walk"], float)
@@ -55,7 +55,8 @@ class Convergence(VoiceoverScene):
             "to b; buy one unit when the martingale dips below a, sell when it rises above b. <bookmark mark='a'/> "
             "Each completed round trip, an upcrossing, earns at least b minus a; the only loss is on a last trade "
             "still open. <bookmark mark='b'/> But the stake is decided from the past, so by chapter four the trader "
-            "plays a fair game. Its profit cannot grow on average, so the upcrossings cannot pile up without limit."
+            "plays a fair game. A uniform bound on the martingale's mean absolute size then bounds expected "
+            "upcrossings. Without that extra bound, an ordinary fair walk can keep crossing forever."
         ) as vo:
             self.play(FadeIn(g), FadeIn(bandm), Create(la), Create(lb), FadeIn(g2), FadeIn(rule))
             self.add(path, pl, cnt)
@@ -75,13 +76,14 @@ class Convergence(VoiceoverScene):
                       colors={r"(b - a)\,\mathbb{E}U_n \le \mathbb{E}(M_n - a)^-": MART}),
                 cmath(r"\sup_n \mathbb{E}|M_n| < \infty", r"\Rightarrow",
                       r"U_\infty[a, b] < \infty \ \ \forall a < b \text{ rational} \Rightarrow M_n \to M_\infty", font_size=36),
-                cmath(r"L_n \to 0,\ \mathbb{E}L_n = 1", r":", r"\text{UI} \iff L^1 \iff M_n = \mathbb{E}[M_\infty \mid \mathcal{F}_n]",
+                cmath(r"M_n\to M_\infty\ \text{a.s.}", r":", r"\text{UI} \iff L^1 \iff M_n = \mathbb{E}[M_\infty \mid \mathcal{F}_n]",
                       font_size=36, colors={r"\text{UI} \iff L^1 \iff M_n = \mathbb{E}[M_\infty \mid \mathcal{F}_n]": LOSS})]
         whys = [why(r"each upcrossing earns at least $b - a$; the open trade loses at most $(M_n - a)^-$"),
                 why(r"a supermartingale transform has non-positive mean (chapter 4): Doob's upcrossing lemma"),
                 why(r"finitely many crossings of every rational band: no room to oscillate (Doob's forward convergence "
                     r"theorem)"),
-                why(r"convergence need not keep the mean (chapter 12); uniform integrability is exactly what does")]
+                why(r"for an $L^1$-bounded martingale: UI, $L^1$ convergence and this representation are equivalent. "
+                    r"Chapter 12's $L_n\to0$ with mean 1 is not UI.")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.72, edge=6.9)
         head = label(r"Williams, ch.\ 11 and 13--14", font_size=22, color=GREY_B).to_edge(UP, buff=0.25)
         with self.voiceover(
@@ -192,7 +194,7 @@ class Convergence(VoiceoverScene):
             MathTex(rf"\pm\ \text{{after 50 years: }} {100 * dp['half_1976']:.1f}\%", font_size=26),
             MathTex(rf"\text{{2020: }} {100 * dp['end_mean']:.1f}\% \pm {100 * dp['end_half']:.1f}\%", font_size=28,
                     color=MART),
-            wrapped_label(r"the drift is learnable only over decades (Merton 1980): it narrows like $1/\sqrt{t}$", 4.4, 19,
+            wrapped_label(r"This plug-in model's uncertainty shrinks slowly with accumulated information (Merton 1980)", 4.4, 19,
                           GREY_B),
         )
         for s_ in side[:2]:
@@ -200,16 +202,18 @@ class Convergence(VoiceoverScene):
                 s_.scale_to_fit_width(4.6)
         # placed after the scaling, so the column's left edge is where its new width puts it
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.5)
-        src = real_data(r"Kenneth French's daily US market; prior $N(0, (10\text{ bp})^2)$ a day; daily variance known "
-                        r"from an EWMA the day before")
+        src = real_data(r"Ken French; model-based Gaussian credible bands with plug-in EWMA variances and "
+                        r"retrospective 60-day initialization; not a time-uniform confidence sequence")
         with self.voiceover(
             "Lévy's upward theorem: a forecast refined by information converges to what full information would say. "
             "That is learning. A Bayesian estimates the market's mean return, from a prior centred on zero, updating "
-            "every day since 1926; its estimate is a Doob martingale under the model. <bookmark mark='a'/> The band "
+            "under a working Gaussian model; the illustration plugs in EWMA variances and initializes them "
+            "retrospectively over sixty days. Its credible band is not a calibrated confidence sequence for "
+            "actual market returns. <bookmark mark='a'/> The model band "
             f"narrows like one over the square root of time: plus or minus {100 * dp['half_1936']:.0f} percent a year "
             f"after ten years, {100 * dp['half_1976']:.1f} after fifty. <bookmark mark='b'/> By 2020: "
-            f"{100 * dp['end_mean']:.1f} percent a year, give or take {100 * dp['end_half']:.1f}. Drifts are learnable "
-            "only over decades, as Robert Merton warned in 1980."
+            f"{100 * dp['end_mean']:.1f} percent a year, give or take {100 * dp['end_half']:.1f}. This history and "
+            "model illustrate Merton's warning that estimating drift can be slow."
             " Prices are not martingales: they drift. Next: how to split any process into a fair game plus a drift."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[:2]))
