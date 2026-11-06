@@ -1308,3 +1308,50 @@ def us_macro() -> dict:
     out = {c: d[c].to_numpy().astype(float) for c in d.columns}
     out["t"] = out["year"] + (out["quarter"] - 1) / 4
     return out
+
+
+def _csv(name):
+    import csv
+    from pathlib import Path
+
+    with open(Path(__file__).parent / "data" / name, newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def meuse() -> dict:
+    """Topsoil heavy metals at 155 sites in a flood plain of the river Meuse near Stein, the Netherlands (Rikken & van
+    Rijn 1993; Burrough & McDonnell 1998), from R's sp package (GPL >= 2): coordinates in metres (RDH), zinc,
+    cadmium, copper and lead (ppm), elevation, normalized distance to the river (``dist``), flood frequency class and
+    soil type."""
+    import numpy as np
+
+    rows = _csv("meuse.csv")
+    return {k: np.array([float(r[k]) for r in rows]) for k in rows[0]}
+
+
+def meuse_grid() -> dict:
+    """sp's 40 m prediction grid for Meuse (3,103 nodes): x, y, dist, ffreq, soil."""
+    import numpy as np
+
+    rows = _csv("meuse_grid.csv")
+    return {k: np.array([float(r[k]) for r in rows]) for k in rows[0]}
+
+
+def meuse_river():
+    """The outline of the river Meuse near the sampled area (sp's ``meuse.riv``), metres, as an (n, 2) array."""
+    import numpy as np
+
+    rows = _csv("meuse_river.csv")
+    return np.array([[float(r["x"]), float(r["y"])] for r in rows])
+
+
+def snow_map() -> dict:
+    """Snow's (1855) map of the Broad Street outbreak, digitized by Tobler (HistData's ``Snow.deaths`` and
+    ``Snow.pumps``, GPL): the 578 deaths (``deaths``, x and y in the map's units) and the 13 pumps (``pumps``: labels
+    and coordinates)."""
+    import numpy as np
+
+    rows = _csv("snow_map.csv")
+    d = np.array([[float(r["x"]), float(r["y"])] for r in rows if r["kind"] == "death"])
+    p = [r for r in rows if r["kind"] == "pump"]
+    return {"deaths": d, "pumps": {"label": [r["label"] for r in p], "xy": np.array([[float(r["x"]), float(r["y"])] for r in p])}}
