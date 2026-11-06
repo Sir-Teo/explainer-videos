@@ -1694,3 +1694,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 14 · Changing Your Mind | scenes, English and Chinese narration and text, QA | ~49 min |
 | 15 · The Problem of Induction | scenes, English and Chinese narration and text, QA | ~52 min |
 | 16 · Evidence by Numbers | scenes, English and Chinese narration and text, QA | ~51 min |
+| 17 · Cause | scenes, English and Chinese narration and text, QA | ~54 min |
