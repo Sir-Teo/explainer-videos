@@ -71,8 +71,8 @@ class Ltr(VoiceoverScene):
         n_q = len(ev["rows"])
         head = label(r"Ranking as learning", font_size=36).to_edge(UP, buff=0.3)
         pair = VGroup(tag_box(r"query", color=DATA, size=17, h=0.45), label(r"$+$", font_size=26),
-                      tag_box(r"passage", color=LAM, size=17, h=0.45)).arrange(RIGHT, buff=0.2)
-        pair.move_to([-5.2, 0.6, 0])
+                      tag_box(r"passage", color=LAM, size=17, h=0.45)).arrange(DOWN, buff=0.15)
+        pair.move_to([-5.6, 0.6, 0])
         feats = [(r"BM25", 0.8, DATA), (r"tf-idf cosine", 0.6, DATA), (r"phrase match", 0.3, HEAD),
                  (r"terms close together", 0.5, HEAD), (r"passage length", 0.4, GREY_B),
                  (r"PageRank \ (web)", 0.7, KERN), (r"clicks \ (web)", 0.55, LAM)]
@@ -83,7 +83,8 @@ class Ltr(VoiceoverScene):
             b.move_to([-0.15 + v, y, 0])
             t = label(name, font_size=19, color=c).move_to([-0.3, y, 0], aligned_edge=RIGHT)
             bars.add(VGroup(t, b))
-        a1 = Arrow(pair.get_right(), [bars.get_left()[0], pair.get_y(), 0], buff=0.12, color=GREY_B, stroke_width=2)
+        fbrace = Brace(bars, LEFT, buff=0.12, color=GREY_B)
+        a1 = Arrow(pair.get_right(), fbrace.get_left(), buff=0.12, color=GREY_B, stroke_width=2)
         model = module_box(r"model $f$", YES, w=1.8, h=0.75).move_to([3.0, bars.get_y(), 0])
         a2 = Arrow(bars.get_right(), model.get_left(), buff=0.15, color=GREY_B, stroke_width=2)
         score = label(r"a score; \ sort", font_size=19, color=YES).next_to(model, RIGHT, buff=0.25)
@@ -108,8 +109,8 @@ class Ltr(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(pair))
             vo.wait_until("a")
-            self.play(GrowArrow(a1), LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.2), FadeIn(ill),
-                      run_time=2.5)
+            self.play(GrowArrow(a1), GrowFromCenter(fbrace), LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.2),
+                      FadeIn(ill), run_time=2.5)
             vo.wait_until("b")
             self.play(GrowArrow(a2), FadeIn(model), FadeIn(lines[0]))
             vo.wait_until("c")
@@ -257,9 +258,9 @@ class Ltr(VoiceoverScene):
 
         def tree(feat, col):
             root = tag_box(feat, color=col, size=17, h=0.42)
-            l1 = tag_box(r"+0.4", color=YES, size=16, h=0.38)
-            l2 = tag_box(r"-0.2", color=NO, size=16, h=0.38)
-            leaves = VGroup(l1, l2).arrange(RIGHT, buff=0.2).next_to(root, DOWN, buff=0.4)
+            l1 = mono(r"+0.4", size=17, color=YES)
+            l2 = mono(r"-0.2", size=17, color=NO)
+            leaves = VGroup(l1, l2).arrange(RIGHT, buff=0.3).next_to(root, DOWN, buff=0.4)
             ed = VGroup(Line(root.get_bottom(), l1.get_top(), color=GREY_C, stroke_width=1.5),
                         Line(root.get_bottom(), l2.get_top(), color=GREY_C, stroke_width=1.5))
             return VGroup(root, leaves, ed)
@@ -268,19 +269,19 @@ class Ltr(VoiceoverScene):
         f0 = label(r"$f(x) \;=\;$", font_size=26)
         dots = label(r"$+ \cdots$", font_size=24)
         expr = VGroup(f0, plus[0], trees[0], plus[1], trees[1], plus[2], trees[2], dots).arrange(RIGHT, buff=0.15)
-        if expr.width > 7.6:
-            expr.scale_to_fit_width(7.6)
-        expr.move_to([2.95, 1.3, 0])
+        if expr.width > 9.4:
+            expr.scale_to_fit_width(9.4)
+        expr.move_to([2.0, 1.3, 0])
         ill = label(r"illustrative: \ scores, \ trees, \ and each tree fitting the lambdas exactly", font_size=16,
                     color=GREY_B).next_to(expr, DOWN, buff=0.25)
         lines = VGroup(
             wrapped_label(r"gradient boosting \ (\textit{AI, Built} \ Part 6): \ each round fits a small regression "
-                          r"tree to the current lambdas, \ over the features, \ and adds it, \ shrunk by $\eta$", 6.9,
+                          r"tree to the current lambdas, \ over the features, \ and adds it, \ shrunk by $\eta$", 8.6,
                           font_size=19, color=WHITE),
             wrapped_label(r"an ensemble of lambda-gradient models won the Yahoo! \ Learning to Rank Challenge \ "
-                          r"(2010); \ LightGBM and XGBoost ship it as an objective today", 6.9, font_size=19,
+                          r"(2010); \ LightGBM and XGBoost ship it as an objective today", 8.6, font_size=19,
                           color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.95, -1.55, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.2, -1.55, 0])
         last = "one, the ideal order" if nd[2] > 0.999 else f"{nd[2]:.2f}"
         with self.voiceover(
             "Lambdas are gradients, and AI, Built Part 6 showed what to do with gradients over tabular features: "
