@@ -131,7 +131,7 @@ class Theorem(LectureMixin, VoiceoverScene):
             "weight is large enough to make the interval infinite, as chapter five will show. <bookmark mark='d'/> So the "
             "two-sided statement needs a bound on the largest normalized weight, the same overlap condition that Part "
             "thirty-six's propensity weights need. That refinement is left for the discussion.",
-            [(r"\text{upper}", r":", r"\le \tilde Q(\text{cover}) + \mathrm{TV}", 40),
+            [(r"\text{upper}", r":", r"\text{coverage} \le \tilde Q(\text{cover}) + \mathrm{TV}", 40),
              (r"\tilde Q(\text{cover})", r":", r"\text{can exceed } 1 - \alpha \text{ a lot}", 40),
              (r"\text{needs}", r":", r"\text{a bound on the largest weight}", 40),
              (r"\text{overlap}", r":", r"\text{Part 36's condition again}", 40)],
