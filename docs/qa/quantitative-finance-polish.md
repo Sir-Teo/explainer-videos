@@ -13,6 +13,8 @@ silent animation playback and its dead-air scan. Silent playback estimates speec
 timing; narrated production masters need a separate listening and synchronization
 pass. A successful render is not, by itself, visual approval.
 
+Delivery workflow: continue directly on `quantitative-finance`. Commit and push completed parts to that branch; do not create additional pull requests. Parts 1–5 below retain their original review-branch history.
+
 ## Queue
 
 | Parts | Status in this pass |
