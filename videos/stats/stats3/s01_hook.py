@@ -58,7 +58,8 @@ class Hook(VoiceoverScene):
         d = load("horsekick")
         k, n = d["k"], d["n"]
         A = axes([-0.6, 4.6], [0, 120], x_length=7.4, y_length=4.6, xlabel=r"deaths in a corps-year",
-                 ylabel=r"number of corps-years", xticks=[0, 1, 2, 3, 4], yticks=[0, 50, 100], center=[-1.8, -0.3, 0])
+                 ylabel=r"number of corps-years", xticks=[0, 1, 2, 3, 4], yticks=[0, 50, 100],
+                 xfmt=lambda k: "4+" if k == 4 else str(int(k)), center=[-1.8, -0.3, 0])
         ax = A.ax
         bars = pmf_bars(ax, k, n, DATA, width=0.6)
         vals = VGroup(*[MathTex(str(v), font_size=28, color=DATA).next_to(b, UP, buff=0.1) for v, b in zip(n, bars)])
@@ -115,8 +116,8 @@ class Hook(VoiceoverScene):
             "shapes keep appearing: the Poisson for rare events, the bell curve for measurements, the exponential "
             "for waiting times? <bookmark mark='b'/> The answer is that the distributions of probability are not a "
             "zoo but a family, and every member is related to the others by an operation: a sum, a limit, a "
-            "transformation, a mixture. <bookmark mark='c'/> Here is the family tree, still dark. Each arrow is a "
-            "derivation. By the end of this part, we'll have derived every one of them, and lit the whole tree."
+            "transformation, a mixture. <bookmark mark='c'/> Here is the family tree, still dark. Each arrow names a "
+            "relationship. We will derive central examples, map the others, and identify the limit results whose full proofs come later."
         ) as vo:
             self.play(FadeIn(intro))
             vo.wait_until("a")

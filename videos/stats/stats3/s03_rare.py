@@ -66,8 +66,8 @@ class Rare(VoiceoverScene, TreeMixin):
         d = load("rare")
         ks = np.asarray(d["ks"])
         pois = np.asarray(d["pois"])
-        A = axes([-0.6, 10.6], [0, 0.42], x_length=8.4, y_length=4.4, xlabel=r"$k$", xticks=list(range(0, 11)),
-                 yticks=[0, 0.2, 0.4], center=[-1.4, -0.4, 0])
+        A = axes([-0.6, 10.6], [0, 0.42], x_length=7.4, y_length=4.4, xlabel=r"$k$", xticks=list(range(0, 11)),
+                 yticks=[0, 0.2, 0.4], center=[-2.5, -0.4, 0])
         ax = A.ax
         dots = pmf_dots(ax, ks, pois, EXACT, radius=0.08)
         rows = d["rows"]
