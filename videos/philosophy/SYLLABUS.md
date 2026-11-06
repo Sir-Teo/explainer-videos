@@ -1706,3 +1706,4 @@ and a Reasoner library of perhaps 20–30k lines with its tests. Expect one part
 | 26 · The Quantum Puzzle | scenes, English and Chinese narration and text, QA | ~51 min |
 | 27 · Sense and Reference | scenes, English and Chinese narration and text, QA | ~55 min |
 | 28 · Meaning in Use | scenes, English and Chinese narration and text, QA | ~52 min |
+| 29 · Being and Time-Consciousness | scenes, English and Chinese narration and text, QA | ~64 min |
