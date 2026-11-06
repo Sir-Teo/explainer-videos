@@ -2820,3 +2820,32 @@ class NeymanSlices(VGroup):
             panel.move_to([-width / 2 + (i + 0.5) * pw, 0, 0], aligned_edge=DOWN)
             self.panels.add(panel)
         self.add(self.panels)
+
+
+class RiskBump(VGroup):
+    """The risk-bump explorer (Part 47): scaled risk n E(T - theta)^2 against theta (or the local parameter h) on axes
+    ``ax``, with the information bound drawn as a line.  ``curve(xs, risk)`` adds one estimator's risk;
+    ``bound(level)`` draws the bound; ``peak(xs, risk)`` marks where a curve is highest, the bump that superefficiency
+    pays for."""
+
+    def __init__(self, ax):
+        super().__init__()
+        self.ax = ax
+
+    def bound(self, level: float = 1.0, color=None) -> DashedLine:
+        x0, x1, _, _ = bounds(self.ax)
+        return DashedLine(self.ax.c2p(x0, level), self.ax.c2p(x1, level), color=color or GREY_B, stroke_width=2.5)
+
+    def curve(self, xs, risk, color=None, stroke_width: float = 4, ymax: float | None = None) -> VMobject:
+        xs, r = np.asarray(xs, float), np.asarray(risk, float)
+        _, _, y0, y1 = bounds(self.ax)
+        top = y1 if ymax is None else ymax
+        m = VMobject(stroke_color=color or S.EST, stroke_width=stroke_width)
+        m.set_points_as_corners([self.ax.c2p(a, min(b, top)) for a, b in zip(xs, r)])
+        return m
+
+    def peak(self, xs, risk, color=None, radius: float = 0.1) -> Dot:
+        xs, r = np.asarray(xs, float), np.asarray(risk, float)
+        i = int(np.argmax(r))
+        _, _, _, y1 = bounds(self.ax)
+        return Dot(self.ax.c2p(xs[i], min(r[i], y1)), radius=radius, color=color or S.RESID)
