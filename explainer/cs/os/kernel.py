@@ -1,4 +1,4 @@
-"""PebbleOS (Part 31): a kernel of about two hundred Pebble instructions.
+"""PebbleOS (Part 31): a kernel of under three hundred Pebble instructions.
 
     procs = [user("tok", TOK, 0, stdout="pipe"), user("job", JOB_HASH, 1, stdin="pipe")]
     m = boot(procs, tape=text)          # an OSMachine with the kernel at 0 and each process in its own region

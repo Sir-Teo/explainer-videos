@@ -13,6 +13,7 @@ Items:
     protect     four processes, three misbehaving (halt, a store into the kernel, an endless loop): who survives
     trap        one getpid system call traced through the kernel, phase by phase; this machine's call, system call
                 and vDSO costs; read() with buffers of 1 byte to 1 MiB; strace -c of wc
+    process     the memory of the job's process, region by region; the PCB's fields
     switch      PebbleOS's yield ping-pong; a pipe ping-pong between two processes on this machine
     fork        fork, fork + exec, posix_spawn, and fork with 64 MiB to 1 GiB resident; a 25-line shell, run
     sched       FCFS's convoy, SJF, SRTF and RR on the textbook workloads; a random workload; the quantum sweep
@@ -428,6 +429,25 @@ def compute_fork() -> dict:
     return {"fork_exit_us": v["fork_exit"], "fork_exec_us": v["fork_exec"], "spawn_us": v["spawn"], "mem": mem,
             "shell_src": SHELL_C.strip().splitlines(), "shell_out": r.stdout, "shell_lines": len(SHELL_C.strip()
                                                                                             .splitlines())}
+
+
+def compute_process() -> dict:
+    """The memory of one PebbleOS process (the job), region by region, and its PCB's fields."""
+    from explainer.cs.algo import job2 as J
+    from explainer.cs.os import kernel as K
+    p = K.user("job", J.JOB_HASH, 1, stdin="pipe")
+    L = p.labels
+    main = L["main"] if "main" in L else min(v for k, v in L.items() if not k.startswith("_") and k not in
+                                              ("alloc",) and v > L["__out"])
+    parts = [("library", p.lo, L["__in"]), ("buffers", L["__in"], L["__out"] + 4100),
+             ("compiled code", L["__out"] + 4100, L["_brk"]), ("globals", L["_brk"], L["_heap"]),
+             ("free", L["_heap"], p.hi - 4096), ("stack", p.hi - 4096, p.hi)]
+    fields = [("state", "ready, running, blocked, exited"), ("registers", "r1 .. r15, saved at every trap"),
+              ("pc", "where it resumes"), ("lo, hi", "its memory"), ("pid", "its number"),
+              ("stdin, stdout", "the tape, the console, or the pipe"),
+              ("counters", "dispatches, system calls, timer ticks")]
+    return {"lo": p.lo, "hi": p.hi, "parts": parts, "image": len(p.image), "fields": fields, "pcb_bytes": K.PCB,
+            "nproc": K.NPROC, "main": main}
 
 
 def compute_sched() -> dict:
